@@ -821,15 +821,15 @@ EVT_BEGIN(tou_07_init_evt)
     END_IF
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_30_01_AIR_DUCT_ENTRANCE)
-        SET_VALUE(LF(0), 0)
-        CASE_LESS(STG3_34_RETURN_TO_ROGUEPORT)
-        SET_VALUE(LF(0), 1)
-        CASE_DEFAULT
-        IF_INT_EQUAL(GSWF_TOU_07_VENT_REOPENED, 0)
             SET_VALUE(LF(0), 0)
-        ELSE
+        CASE_LESS(STG3_34_RETURN_TO_ROGUEPORT)
             SET_VALUE(LF(0), 1)
-        END_IF
+        CASE_DEFAULT
+            IF_INT_EQUAL(GSWF_TOU_07_VENT_REOPENED, 0)
+                SET_VALUE(LF(0), 0)
+            ELSE
+                SET_VALUE(LF(0), 1)
+            END_IF
     END_SWITCH
     IF_INT_EQUAL(LF(0), 0)
         CALL(evt_run_case_evt, CASE_HAMMER_2, 1, STRING("win_kabe"), 0, PTR(evt_dakuto), 0)
@@ -847,16 +847,16 @@ EVT_BEGIN(tou_07_init_evt)
         SET_VALUE(GSWF_GLITZ_PIT_MATCH_JUST_ENDED, 0)
         SWITCH(GSW_STORY_PROGRESS)
             CASE_BETWEEN(STG3_00_WELCOME_TO_GLITZVILLE, STG3_12_THE_MINI_YOSHI_EGG)
-            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
-            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
-            CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
+                CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
+                CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
+                CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
             CASE_GREATER_OR_EQUAL(STG3_33_PEACH_THE_SECRET_WEAPON)
-            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
-            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
-            CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
+                CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
+                CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
+                CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
             CASE_DEFAULT
-            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU1"))
-            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
+                CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU1"))
+                CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
         END_SWITCH
         IF_INT_LESS(GSW_STORY_PROGRESS, STG3_30_A_NEW_CHAMPION)
             SPAWN_EVENT(evt_champion)
@@ -889,17 +889,17 @@ EVT_BEGIN(tou_07_init_evt)
     ELSE
         SWITCH(GSW_STORY_PROGRESS)
             CASE_BETWEEN(STG3_00_WELCOME_TO_GLITZVILLE, STG3_20_MAJORS_10TH_PLACE)
-            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
+                CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
 #if VERSION <= VERSION_DEMO_JP
-            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
+                CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
 #else
-            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
+                CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
 #endif
-            CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
+                CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
             CASE_DEFAULT
-            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU1"))
-            CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
-            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
+                CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU1"))
+                CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
+                CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
         END_SWITCH
     END_IF
 #if VERSION >= VERSION_JP

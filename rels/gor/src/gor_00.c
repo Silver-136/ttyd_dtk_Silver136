@@ -493,8 +493,8 @@ static void alpha_tev(MapTevCallbackInfo* info) {
 static EVT_BEGIN(mony_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG2_44_FINDING_DON_PIANTA, STG2_45_DAUGHTER_LOCATED)
-        CALL(evt_npc_set_ry, STRING("me"), 90)
-        CALL(evt_npc_set_position, STRING("me"), 130, 15, 250)
+            CALL(evt_npc_set_ry, STRING("me"), 90)
+            CALL(evt_npc_set_position, STRING("me"), 130, 15, 250)
     END_SWITCH
     RETURN
 EVT_END()
@@ -509,9 +509,9 @@ EVT_BEGIN(gor_00_mony_regl)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG5_64_03_F_F_ARRIVE)
 #if VERSION >= VERSION_US
-        WAIT_WHILE(GF(15))
+            WAIT_WHILE(GF(15))
 #endif
-        CALL_CHILD(mony_run_away)
+            CALL_CHILD(mony_run_away)
     END_SWITCH
     RETURN
 EVT_END()
@@ -590,13 +590,13 @@ EVT_END()
 static EVT_BEGIN(mony_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG2_44_FINDING_DON_PIANTA)
-        CALL_CHILD(mony_peton_talk)
+            CALL_CHILD(mony_peton_talk)
         CASE_EQUAL(STG2_45_DAUGHTER_LOCATED)
-        IF_INT_EQUAL(GSWF_GOR_00_RUNAWAYS_SECRET_KEPT, 0)
-            CALL(evt_msg_print, 0, STRING("mac_2_087"), 0, STRING("me"))
-        ELSE
-            CALL(evt_msg_print, 0, STRING("mac_2_085"), 0, STRING("me"))
-        END_IF
+            IF_INT_EQUAL(GSWF_GOR_00_RUNAWAYS_SECRET_KEPT, 0)
+                CALL(evt_msg_print, 0, STRING("mac_2_087"), 0, STRING("me"))
+            ELSE
+                CALL(evt_msg_print, 0, STRING("mac_2_085"), 0, STRING("me"))
+            END_IF
     END_SWITCH
     RETURN
 EVT_END()
@@ -608,8 +608,8 @@ EVT_END()
 static EVT_BEGIN(peton_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG2_44_FINDING_DON_PIANTA, STG2_45_DAUGHTER_LOCATED)
-        CALL(evt_npc_set_ry, STRING("me"), 270)
-        CALL(evt_npc_set_position, STRING("me"), 185, 15, 250)
+            CALL(evt_npc_set_ry, STRING("me"), 270)
+            CALL(evt_npc_set_position, STRING("me"), 185, 15, 250)
     END_SWITCH
     RETURN
 EVT_END()
@@ -624,9 +624,9 @@ EVT_BEGIN(gor_00_peton_regl)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG5_64_03_F_F_ARRIVE)
 #if VERSION >= VERSION_US
-        WAIT_WHILE(GF(15))
+            WAIT_WHILE(GF(15))
 #endif
-        CALL_CHILD(peton_run_away)
+            CALL_CHILD(peton_run_away)
     END_SWITCH
     RETURN
 EVT_END()
@@ -641,13 +641,13 @@ EVT_END()
 static EVT_BEGIN(peton_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG2_44_FINDING_DON_PIANTA)
-        CALL_CHILD(mony_peton_talk)
+            CALL_CHILD(mony_peton_talk)
         CASE_EQUAL(STG2_45_DAUGHTER_LOCATED)
-        IF_INT_EQUAL(GSWF_GOR_00_RUNAWAYS_SECRET_KEPT, 0)
-            CALL(evt_msg_print, 0, STRING("mac_2_087_01"), 0, STRING("me"))
-        ELSE
-            CALL(evt_msg_print, 0, STRING("mac_2_085_01"), 0, STRING("me"))
-        END_IF
+            IF_INT_EQUAL(GSWF_GOR_00_RUNAWAYS_SECRET_KEPT, 0)
+                CALL(evt_msg_print, 0, STRING("mac_2_087_01"), 0, STRING("me"))
+            ELSE
+                CALL(evt_msg_print, 0, STRING("mac_2_085_01"), 0, STRING("me"))
+            END_IF
     END_SWITCH
     RETURN
 EVT_END()
@@ -660,11 +660,11 @@ EVT_END()
 static EVT_BEGIN(marco_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG4_32_CHATTING_WITH_FLAVIO, STG4_END_OFF_TO_THE_KEYS)
-        CALL(evt_npc_set_ry, STRING("me"), 90)
-        CALL(evt_npc_set_position, STRING("me"), 77, 51, 110)
-        CALL(evt_npc_entry, STRING("第三部下"), STRING("c_zako_n")) // an X-Naut grunt who reports the ship infiltration
-        CALL(evt_npc_set_tribe, STRING("第三部下"), STRING("第三勢力部下"))
-        CALL(evt_npc_set_position, STRING("第三部下"), 0, -1000, 0)
+            CALL(evt_npc_set_ry, STRING("me"), 90)
+            CALL(evt_npc_set_position, STRING("me"), 77, 51, 110)
+            CALL(evt_npc_entry, STRING("第三部下"), STRING("c_zako_n")) // an X-Naut grunt who reports the ship infiltration
+            CALL(evt_npc_set_tribe, STRING("第三部下"), STRING("第三勢力部下"))
+            CALL(evt_npc_set_position, STRING("第三部下"), 0, -1000, 0)
     END_SWITCH
     RETURN
 EVT_END()
@@ -727,130 +727,130 @@ static EVT_BEGIN(marco_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG4_32_CHATTING_WITH_FLAVIO)
 
-        // Chapter 4: the partner steps aside while Flavio addresses Mario.
-        CALL(evt_party_stop, 0)
-        BEGIN_INLINE_EVENT
-            CALL(evt_party_get_pos, 0, LW(0), LW(1), LW(2))
-            IF_INT_LESS_OR_EQUAL(LW(1), 45)
-                CALL(evt_party_jump_pos, 0, 75, 15, 166, 500, 0, -1000)
-            END_IF
-            CALL(evt_party_move_pos2, 0, 120, 135, FLOAT(60.0f))
-            CALL(evt_party_set_dir, 0, 270, 200)
-        END_INLINE_EVENT
+            // Chapter 4: the partner steps aside while Flavio addresses Mario.
+            CALL(evt_party_stop, 0)
+            BEGIN_INLINE_EVENT
+                CALL(evt_party_get_pos, 0, LW(0), LW(1), LW(2))
+                IF_INT_LESS_OR_EQUAL(LW(1), 45)
+                    CALL(evt_party_jump_pos, 0, 75, 15, 166, 500, 0, -1000)
+                END_IF
+                CALL(evt_party_move_pos2, 0, 120, 135, FLOAT(60.0f))
+                CALL(evt_party_set_dir, 0, 270, 200)
+            END_INLINE_EVENT
 
-        // Flavio announces a problem with the crew; a rough sailor offers an idea.
-        CALL(evt_msg_print, 0, STRING("mac_4_030"), 0, STRING("me"))
-        CALL(evt_mario_set_pose, STRING("M_I_2"))
-        WAIT_MS(800)
-        CALL(evt_msg_print, 0, STRING("mac_4_031"), 0, STRING("me"))
-        CALL(evt_msg_print, 0, STRING("mac_4_032"), 0, STRING("ガラの悪い水夫"))
-        CALL(evt_cam3d_evt_set, 110, 170, 472, 110, 110, 127, 500, EASING_SINE_IN_OUT)
-        WAIT_MS(800)
-        CALL(evt_msg_print, 0, STRING("mac_4_033"), 0, STRING("ガラの悪い水夫"))
-        CALL(evt_npc_set_ry, STRING("me"), 90)
-        CALL(evt_msg_print, 0, STRING("mac_4_034"), 0, STRING("me"))
-        CALL(evt_cam3d_evt_set, 160, 170, 472, 160, 110, 127, 500, EASING_SINE_IN_OUT)
-        WAIT_MS(800)
+            // Flavio announces a problem with the crew; a rough sailor offers an idea.
+            CALL(evt_msg_print, 0, STRING("mac_4_030"), 0, STRING("me"))
+            CALL(evt_mario_set_pose, STRING("M_I_2"))
+            WAIT_MS(800)
+            CALL(evt_msg_print, 0, STRING("mac_4_031"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("mac_4_032"), 0, STRING("ガラの悪い水夫"))
+            CALL(evt_cam3d_evt_set, 110, 170, 472, 110, 110, 127, 500, EASING_SINE_IN_OUT)
+            WAIT_MS(800)
+            CALL(evt_msg_print, 0, STRING("mac_4_033"), 0, STRING("ガラの悪い水夫"))
+            CALL(evt_npc_set_ry, STRING("me"), 90)
+            CALL(evt_msg_print, 0, STRING("mac_4_034"), 0, STRING("me"))
+            CALL(evt_cam3d_evt_set, 160, 170, 472, 160, 110, 127, 500, EASING_SINE_IN_OUT)
+            WAIT_MS(800)
 
-        // The sailor suggests a legendary sailor living in Rogueport, and Flavio decides to recruit him.
-        CALL(evt_msg_print, 0, STRING("mac_4_035"), 0, STRING("ガラの悪い水夫"))
-        CALL(evt_cam3d_evt_set, 60, 170, 472, 60, 110, 127, 500, EASING_SINE_IN_OUT)
-        WAIT_MS(800)
-        CALL(evt_msg_print, 0, STRING("mac_4_036"), 0, STRING("me"))
-        CALL(evt_cam3d_evt_set, 95, 207, 763, 95, 89, 98, 0, EASING_SINE_IN_OUT)
-        WAIT_FRAMES(1)
-        CALL(evt_npc_set_ry, STRING("me"), 270)
-        WAIT_MS(600)
-        CALL(evt_npc_set_ry, STRING("me"), 90)
-        WAIT_MS(600)
-        CALL(evt_npc_set_ry, STRING("me"), 270)
-        WAIT_MS(600)
-        CALL(evt_npc_set_ry, STRING("me"), 90)
-        WAIT_MS(900)
+            // The sailor suggests a legendary sailor living in Rogueport, and Flavio decides to recruit him.
+            CALL(evt_msg_print, 0, STRING("mac_4_035"), 0, STRING("ガラの悪い水夫"))
+            CALL(evt_cam3d_evt_set, 60, 170, 472, 60, 110, 127, 500, EASING_SINE_IN_OUT)
+            WAIT_MS(800)
+            CALL(evt_msg_print, 0, STRING("mac_4_036"), 0, STRING("me"))
+            CALL(evt_cam3d_evt_set, 95, 207, 763, 95, 89, 98, 0, EASING_SINE_IN_OUT)
+            WAIT_FRAMES(1)
+            CALL(evt_npc_set_ry, STRING("me"), 270)
+            WAIT_MS(600)
+            CALL(evt_npc_set_ry, STRING("me"), 90)
+            WAIT_MS(600)
+            CALL(evt_npc_set_ry, STRING("me"), 270)
+            WAIT_MS(600)
+            CALL(evt_npc_set_ry, STRING("me"), 90)
+            WAIT_MS(900)
 
-        // Flavio hands the negotiating to Mario while the crew shouts their agreement.
-        CALL(evt_msg_print, 0, STRING("mac_4_037"), 0, STRING("me"))
-        CALL(evt_npc_set_ry, STRING("me"), 270)
-        BEGIN_INLINE_EVENT
-            CALL(evt_msg_print, 0, STRING("mac_4_038"), 0, STRING("ガラの悪い水夫"))
-        END_INLINE_EVENT
-        BEGIN_INLINE_EVENT
-            WAIT_MS(500)
-            CALL(evt_msg_print, 0, STRING("mac_4_039"), 0, STRING("オドオド水夫"))
-        END_INLINE_EVENT
-        BEGIN_INLINE_EVENT
-            WAIT_MS(1500)
-            CALL(evt_msg_print, 0, STRING("mac_4_041"), 0, STRING("水夫Ｄ"))
-        END_INLINE_EVENT
-        BEGIN_INLINE_EVENT
-            WAIT_MS(2000)
-            CALL(evt_msg_togelr, 0)
-            CALL(evt_msg_print, 0, STRING("mac_4_043_01"), 0, STRING("店長"))
-        END_INLINE_EVENT
-        BEGIN_INLINE_EVENT
-            WAIT_MS(2500)
-            CALL(evt_msg_print, 0, STRING("mac_4_042"), 0, STRING("水夫ボム兵Ｃ"))
-        END_INLINE_EVENT
-        BEGIN_INLINE_EVENT
-            WAIT_MS(3000)
-            CALL(evt_msg_print, 0, STRING("mac_4_043"), 0, STRING("めがね水夫"))
-        END_INLINE_EVENT
-        BEGIN_INLINE_EVENT
-            WAIT_MS(3500)
-            CALL(evt_msg_togelr, 0)
-            CALL(evt_msg_print, 0, STRING("mac_4_043_02"), 0, STRING("店員"))
-        END_INLINE_EVENT
-        WAIT_MS(4500)
-        CALL(evt_npc_set_ry, STRING("me"), 90)
-        WAIT_MS(300)
+            // Flavio hands the negotiating to Mario while the crew shouts their agreement.
+            CALL(evt_msg_print, 0, STRING("mac_4_037"), 0, STRING("me"))
+            CALL(evt_npc_set_ry, STRING("me"), 270)
+            BEGIN_INLINE_EVENT
+                CALL(evt_msg_print, 0, STRING("mac_4_038"), 0, STRING("ガラの悪い水夫"))
+            END_INLINE_EVENT
+            BEGIN_INLINE_EVENT
+                WAIT_MS(500)
+                CALL(evt_msg_print, 0, STRING("mac_4_039"), 0, STRING("オドオド水夫"))
+            END_INLINE_EVENT
+            BEGIN_INLINE_EVENT
+                WAIT_MS(1500)
+                CALL(evt_msg_print, 0, STRING("mac_4_041"), 0, STRING("水夫Ｄ"))
+            END_INLINE_EVENT
+            BEGIN_INLINE_EVENT
+                WAIT_MS(2000)
+                CALL(evt_msg_togelr, 0)
+                CALL(evt_msg_print, 0, STRING("mac_4_043_01"), 0, STRING("店長"))
+            END_INLINE_EVENT
+            BEGIN_INLINE_EVENT
+                WAIT_MS(2500)
+                CALL(evt_msg_print, 0, STRING("mac_4_042"), 0, STRING("水夫ボム兵Ｃ"))
+            END_INLINE_EVENT
+            BEGIN_INLINE_EVENT
+                WAIT_MS(3000)
+                CALL(evt_msg_print, 0, STRING("mac_4_043"), 0, STRING("めがね水夫"))
+            END_INLINE_EVENT
+            BEGIN_INLINE_EVENT
+                WAIT_MS(3500)
+                CALL(evt_msg_togelr, 0)
+                CALL(evt_msg_print, 0, STRING("mac_4_043_02"), 0, STRING("店員"))
+            END_INLINE_EVENT
+            WAIT_MS(4500)
+            CALL(evt_npc_set_ry, STRING("me"), 90)
+            WAIT_MS(300)
 
-        // Flavio sends Mario to find Bobbery; the story advances.
-        CALL(evt_msg_print, 0, STRING("mac_4_044"), 0, STRING("me"))
-        CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
-        CALL(evt_party_run, 0)
-        SET_VALUE(GSW_STORY_PROGRESS, STG4_33_MEET_BOBBERY)
+            // Flavio sends Mario to find Bobbery; the story advances.
+            CALL(evt_msg_print, 0, STRING("mac_4_044"), 0, STRING("me"))
+            CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
+            CALL(evt_party_run, 0)
+            SET_VALUE(GSW_STORY_PROGRESS, STG4_33_MEET_BOBBERY)
         CASE_EQUAL(STG4_33_MEET_BOBBERY)
-        IF_INT_EQUAL(GSWF_GOR_BOBBERY_FIRST_DENIAL_HEARD, 0)
-            CALL(evt_msg_print, 0, STRING("mac_4_045"), 0, STRING("me"))
-        ELSE
-            CALL(evt_msg_print, 0, STRING("mac_4_045_01"), 0, STRING("me"))
-        END_IF
+            IF_INT_EQUAL(GSWF_GOR_BOBBERY_FIRST_DENIAL_HEARD, 0)
+                CALL(evt_msg_print, 0, STRING("mac_4_045"), 0, STRING("me"))
+            ELSE
+                CALL(evt_msg_print, 0, STRING("mac_4_045_01"), 0, STRING("me"))
+            END_IF
 
         // Flavio nags Mario after Bobbery refused.
         CASE_LESS(STG4_36_BOBBERYS_DECISION)
-        CALL(evt_msg_print, 0, STRING("mac_4_045_02"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("mac_4_045_02"), 0, STRING("me"))
 
         // Bobbery is aboard: Flavio announces the voyage.
         CASE_EQUAL(STG4_37_TO_THE_PORT)
 #if VERSION >= VERSION_JP
-        SPAWN_EVENT(marco_party_move)
+            SPAWN_EVENT(marco_party_move)
 #endif
-        IF_INT_EQUAL(GSWF_GOR_FLAVIO_SET_SAIL_TALK_DONE, 1)
-            CALL(evt_msg_print, 0, STRING("mac_4_091"), 0, STRING("me"))
-            GOTO(100)
-        END_IF
+            IF_INT_EQUAL(GSWF_GOR_FLAVIO_SET_SAIL_TALK_DONE, 1)
+                CALL(evt_msg_print, 0, STRING("mac_4_091"), 0, STRING("me"))
+                GOTO(100)
+            END_IF
 
-        // Flavio hails Mario and says the cargo is loaded.
-        CALL(evt_msg_print, 0, STRING("mac_4_089"), 0, STRING("me"))
-        CALL(evt_npc_reverse_ry, STRING("me"))
-        WAIT_MS(500)
-        CALL(evt_npc_reverse_ry, STRING("me"))
-        WAIT_MS(500)
-        CALL(evt_msg_print, 0, STRING("mac_4_090"), 0, STRING("me"))
-        SET_VALUE(GSWF_GOR_FLAVIO_SET_SAIL_TALK_DONE, 1)
-        LABEL(100)
+            // Flavio hails Mario and says the cargo is loaded.
+            CALL(evt_msg_print, 0, STRING("mac_4_089"), 0, STRING("me"))
+            CALL(evt_npc_reverse_ry, STRING("me"))
+            WAIT_MS(500)
+            CALL(evt_npc_reverse_ry, STRING("me"))
+            WAIT_MS(500)
+            CALL(evt_msg_print, 0, STRING("mac_4_090"), 0, STRING("me"))
+            SET_VALUE(GSWF_GOR_FLAVIO_SET_SAIL_TALK_DONE, 1)
+            LABEL(100)
 
-        // Ask whether Mario is ready to sail.
-        CALL(evt_msg_select, 0, STRING("mac_4_090_yesno"))
-        IF_INT_EQUAL(LW(0), 1)
-            CALL(evt_msg_print_add, 0, STRING("mac_4_092"))
-            RETURN
-        END_IF
+            // Ask whether Mario is ready to sail.
+            CALL(evt_msg_select, 0, STRING("mac_4_090_yesno"))
+            IF_INT_EQUAL(LW(0), 1)
+                CALL(evt_msg_print_add, 0, STRING("mac_4_092"))
+                RETURN
+            END_IF
 
-        // Mario is ready: the music fades and the departure scene starts.
-        CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
-        CALL(evt_msg_continue)
-        SPAWN_EVENT(shukko_event)
+            // Mario is ready: the music fades and the departure scene starts.
+            CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
+            CALL(evt_msg_continue)
+            SPAWN_EVENT(shukko_event)
     END_SWITCH
     RETURN
 EVT_END()
@@ -879,21 +879,21 @@ static EVT_BEGIN(garawaru_init)
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG0_04_GOOMBELLA_ASSAULTED)
-        CALL(evt_npc_set_ry, STRING("me"), 90)
-        CALL(evt_npc_set_position, STRING("me"), -200, 15, -175)
+            CALL(evt_npc_set_ry, STRING("me"), 90)
+            CALL(evt_npc_set_position, STRING("me"), -200, 15, -175)
         CASE_EQUAL(STG4_15_07_BOWSER_ACTION_STAGE)
-        CALL(evt_npc_set_position, STRING("me"), 0, -1000, 0)
-        CALL(evt_npc_set_ry, STRING("me"), 90)
-        CALL(evt_npc_change_interrupt, STRING("me"), 1, 0)
-        CALL(evt_npc_restart_regular_event, STRING("me"))
+            CALL(evt_npc_set_position, STRING("me"), 0, -1000, 0)
+            CALL(evt_npc_set_ry, STRING("me"), 90)
+            CALL(evt_npc_change_interrupt, STRING("me"), 1, 0)
+            CALL(evt_npc_restart_regular_event, STRING("me"))
         CASE_BETWEEN(STG4_32_CHATTING_WITH_FLAVIO, STG4_END_OFF_TO_THE_KEYS)
-        CALL(evt_npc_set_ry, STRING("me"), 270)
-        CALL(evt_npc_set_position, STRING("me"), 160, 73, 135)
+            CALL(evt_npc_set_ry, STRING("me"), 270)
+            CALL(evt_npc_set_position, STRING("me"), 160, 73, 135)
         CASE_LESS(STG4_END_OFF_TO_THE_KEYS)
-        CALL(evt_npc_set_ry, STRING("me"), 90)
-        CALL(evt_npc_set_position, STRING("me"), -200, 15, -200)
+            CALL(evt_npc_set_ry, STRING("me"), 90)
+            CALL(evt_npc_set_position, STRING("me"), -200, 15, -200)
         CASE_DEFAULT
-        CALL(evt_npc_set_position, STRING("me"), 0, -1000, 0)
+            CALL(evt_npc_set_position, STRING("me"), 0, -1000, 0)
     END_SWITCH
     RETURN
 EVT_END()
@@ -907,27 +907,27 @@ EVT_END()
 static EVT_BEGIN(garawaru_regl)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG0_07_GOOMBELLA_JOINS)
-        IF_INT_EQUAL(GSWF_GOR_00_GOOMBELLA_ASSAULT_STARTED, 1)
-            RETURN
-        END_IF
-        LOOP(0)
-            CALL(evt_npc_move_position, STRING("me"), 450, -175, 0, FLOAT(40.0f), 0)
-            WAIT_MS(1000)
-            CALL(evt_npc_move_position, STRING("me"), -200, -175, 0, FLOAT(40.0f), 0)
             IF_INT_EQUAL(GSWF_GOR_00_GOOMBELLA_ASSAULT_STARTED, 1)
-                BREAK_LOOP
+                RETURN
             END_IF
-            WAIT_MS(1000)
-            IF_INT_EQUAL(GSWF_GOR_00_GOOMBELLA_ASSAULT_STARTED, 1)
-                BREAK_LOOP
-            END_IF
-        END_LOOP
-        CALL(evt_npc_set_ry, STRING("me"), 90)
+            LOOP(0)
+                CALL(evt_npc_move_position, STRING("me"), 450, -175, 0, FLOAT(40.0f), 0)
+                WAIT_MS(1000)
+                CALL(evt_npc_move_position, STRING("me"), -200, -175, 0, FLOAT(40.0f), 0)
+                IF_INT_EQUAL(GSWF_GOR_00_GOOMBELLA_ASSAULT_STARTED, 1)
+                    BREAK_LOOP
+                END_IF
+                WAIT_MS(1000)
+                IF_INT_EQUAL(GSWF_GOR_00_GOOMBELLA_ASSAULT_STARTED, 1)
+                    BREAK_LOOP
+                END_IF
+            END_LOOP
+            CALL(evt_npc_set_ry, STRING("me"), 90)
         CASE_LESS(STG4_32_CHATTING_WITH_FLAVIO)
-        CALL_CHILD(garawaru_urouro2)
+            CALL_CHILD(garawaru_urouro2)
         CASE_BETWEEN(STG4_32_CHATTING_WITH_FLAVIO, STG4_END_OFF_TO_THE_KEYS)
         CASE_GREATER(STG4_END_OFF_TO_THE_KEYS)
-        CALL_CHILD(garawaru_urouro2)
+            CALL_CHILD(garawaru_urouro2)
     END_SWITCH
     RETURN
 EVT_END()
@@ -939,23 +939,23 @@ EVT_END()
 static EVT_BEGIN(garawaru_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG0_07_GOOMBELLA_JOINS)
-        CALL(evt_msg_print, 0, STRING("gor_00_06_01"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_06_01"), 0, STRING("me"))
         CASE_LESS(STG1_17_FATHER_SON_REUNITED)
-        CALL(evt_msg_print, 0, STRING("gor_00_06_02"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_06_02"), 0, STRING("me"))
         CASE_LESS(STG2_25_AFTER_THE_BOSS_BATTLE)
-        CALL(evt_msg_print, 0, STRING("gor_00_06_03"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_06_03"), 0, STRING("me"))
         CASE_LESS(STG3_32_BOSS_BATTLE)
-        CALL(evt_msg_print, 0, STRING("gor_00_06_04"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_06_04"), 0, STRING("me"))
         CASE_LESS(STG4_15_05_PEACH_X_NAUT_PHD_REPORT)
-        CALL(evt_msg_print, 0, STRING("gor_00_06_05"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_06_05"), 0, STRING("me"))
         CASE_LESS(STG4_31_FRANKLYS_HOUSE_STG_4)
-        CALL(evt_msg_print, 0, STRING("gor_00_06_06"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_06_06"), 0, STRING("me"))
         CASE_LESS(STG4_32_CHATTING_WITH_FLAVIO)
-        CALL(evt_msg_print, 0, STRING("gor_00_06_07"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_06_07"), 0, STRING("me"))
         CASE_LESS(STG4_37_TO_THE_PORT)
-        CALL(evt_msg_print, 0, STRING("gor_00_06_08"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_06_08"), 0, STRING("me"))
         CASE_LESS(STG4_END_OFF_TO_THE_KEYS)
-        CALL(evt_msg_print, 0, STRING("mac_4_025"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("mac_4_025"), 0, STRING("me"))
     END_SWITCH
     RETURN
 EVT_END()
@@ -967,8 +967,8 @@ EVT_END()
 static EVT_BEGIN(megane_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG4_32_CHATTING_WITH_FLAVIO, STG4_END_OFF_TO_THE_KEYS)
-        CALL(evt_npc_set_ry, STRING("me"), 270)
-        CALL(evt_npc_set_position, STRING("me"), 220, 71, 80)
+            CALL(evt_npc_set_ry, STRING("me"), 270)
+            CALL(evt_npc_set_position, STRING("me"), 220, 71, 80)
     END_SWITCH
     RETURN
 EVT_END()
@@ -982,7 +982,7 @@ EVT_END()
 static EVT_BEGIN(megane_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG4_32_CHATTING_WITH_FLAVIO, STG4_END_OFF_TO_THE_KEYS)
-        CALL(evt_msg_print, 0, STRING("mac_4_029"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("mac_4_029"), 0, STRING("me"))
     END_SWITCH
     RETURN
 EVT_END()
@@ -995,19 +995,19 @@ EVT_END()
 static EVT_BEGIN(odoodo_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG0_07_GOOMBELLA_JOINS)
-        CALL(evt_npc_set_ry, STRING("me"), 90)
-        CALL(evt_npc_set_position, STRING("me"), -225, 15, -400)
+            CALL(evt_npc_set_ry, STRING("me"), 90)
+            CALL(evt_npc_set_position, STRING("me"), -225, 15, -400)
         CASE_EQUAL(STG4_15_07_BOWSER_ACTION_STAGE)
-        CALL(evt_npc_set_ry, STRING("me"), 90)
-        CALL(evt_npc_set_position, STRING("me"), -208, 15, 192)
-        CALL(evt_npc_change_interrupt, STRING("me"), 1, 0)
-        CALL(evt_npc_restart_regular_event, STRING("me"))
+            CALL(evt_npc_set_ry, STRING("me"), 90)
+            CALL(evt_npc_set_position, STRING("me"), -208, 15, 192)
+            CALL(evt_npc_change_interrupt, STRING("me"), 1, 0)
+            CALL(evt_npc_restart_regular_event, STRING("me"))
         CASE_BETWEEN(STG4_32_CHATTING_WITH_FLAVIO, STG4_END_OFF_TO_THE_KEYS)
-        CALL(evt_npc_set_ry, STRING("me"), 90)
-        CALL(evt_npc_set_position, STRING("me"), 34, 77, 40)
+            CALL(evt_npc_set_ry, STRING("me"), 90)
+            CALL(evt_npc_set_position, STRING("me"), 34, 77, 40)
         CASE_DEFAULT
-        CALL(evt_npc_set_ry, STRING("me"), 90)
-        CALL(evt_npc_set_position, STRING("me"), -200, 15, -400)
+            CALL(evt_npc_set_ry, STRING("me"), 90)
+            CALL(evt_npc_set_position, STRING("me"), -200, 15, -400)
     END_SWITCH
     RETURN
 EVT_END()
@@ -1022,9 +1022,9 @@ static EVT_BEGIN(odoodo_regl)
         CASE_BETWEEN(STG4_32_CHATTING_WITH_FLAVIO, STG4_END_OFF_TO_THE_KEYS)
         CASE_EQUAL(STG5_58_FAIR_WINDS)
         CASE_GREATER_OR_EQUAL(STG1_00_PETAL_MEADOWS)
-        CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
-        CALL(urouro_init_func, STRING("me"), LW(0), LW(2), FLOAT(100.0f), FLOAT(30.0f), 0)
-        CALL(urouro_main_func, STRING("me"))
+            CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
+            CALL(urouro_init_func, STRING("me"), LW(0), LW(2), FLOAT(100.0f), FLOAT(30.0f), 0)
+            CALL(urouro_main_func, STRING("me"))
     END_SWITCH
     RETURN
 EVT_END()
@@ -1036,31 +1036,31 @@ EVT_END()
 static EVT_BEGIN(odoodo_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG0_07_GOOMBELLA_JOINS)
-        CALL(evt_msg_print, 0, STRING("gor_00_05_01"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_05_01"), 0, STRING("me"))
         CASE_LESS(STG1_17_FATHER_SON_REUNITED)
-        CALL(evt_msg_print, 0, STRING("gor_00_05_02"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_05_02"), 0, STRING("me"))
         CASE_LESS(STG2_25_AFTER_THE_BOSS_BATTLE)
-        CALL(evt_msg_print, 0, STRING("gor_00_05_03"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_05_03"), 0, STRING("me"))
         CASE_LESS(STG3_32_BOSS_BATTLE)
-        CALL(evt_msg_print, 0, STRING("gor_00_05_04"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_05_04"), 0, STRING("me"))
         CASE_LESS(STG4_15_05_PEACH_X_NAUT_PHD_REPORT)
-        CALL(evt_msg_print, 0, STRING("gor_00_05_05"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_05_05"), 0, STRING("me"))
         CASE_LESS(STG4_31_FRANKLYS_HOUSE_STG_4)
-        CALL(evt_msg_print, 0, STRING("gor_00_05_06"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_05_06"), 0, STRING("me"))
         CASE_LESS(STG4_32_CHATTING_WITH_FLAVIO)
-        CALL(evt_msg_print, 0, STRING("gor_00_05_07"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_05_07"), 0, STRING("me"))
         CASE_LESS(STG4_37_TO_THE_PORT)
-        CALL(evt_msg_print, 0, STRING("gor_00_05_08"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_05_08"), 0, STRING("me"))
         CASE_LESS(STG4_END_OFF_TO_THE_KEYS)
-        CALL(evt_msg_print, 0, STRING("mac_4_024"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("mac_4_024"), 0, STRING("me"))
         CASE_LESS(STG6_54_WELCOME_BACK)
-        CALL(evt_msg_print, 0, STRING("gor_00_05_09"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_05_09"), 0, STRING("me"))
         CASE_LESS(STG7_20_LORD_CRUMP_DEFEATED)
-        CALL(evt_msg_print, 0, STRING("gor_00_05_10"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_05_10"), 0, STRING("me"))
         CASE_LESS(STG8_16_THE_RETURN_OF_THE_QUEEN)
-        CALL(evt_msg_print, 0, STRING("gor_00_05_11"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_05_11"), 0, STRING("me"))
         CASE_DEFAULT
-        CALL(evt_msg_print, 0, STRING("gor_00_05_12"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_05_12"), 0, STRING("me"))
     END_SWITCH
     RETURN
 EVT_END()
@@ -1088,8 +1088,8 @@ EVT_END()
 static EVT_BEGIN(odoodo_ani_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG5_59_ROGUEPORT_DOCK)
-        CALL(evt_npc_set_ry, STRING("me"), 90)
-        CALL(evt_npc_set_position, STRING("me"), -200, 15, -200)
+            CALL(evt_npc_set_ry, STRING("me"), 90)
+            CALL(evt_npc_set_position, STRING("me"), -200, 15, -200)
     END_SWITCH
     RETURN
 EVT_END()
@@ -1101,7 +1101,7 @@ EVT_END()
 static EVT_BEGIN(odoodo_ani_regl)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG5_58_FAIR_WINDS)
-        CALL_CHILD(odoodo_ani_urouro)
+            CALL_CHILD(odoodo_ani_urouro)
     END_SWITCH
     RETURN
 EVT_END()
@@ -1113,13 +1113,13 @@ EVT_END()
 static EVT_BEGIN(odoodo_ani_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_54_WELCOME_BACK)
-        CALL(evt_msg_print, 0, STRING("gor_00_07_09"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_07_09"), 0, STRING("me"))
         CASE_LESS(STG7_20_LORD_CRUMP_DEFEATED)
-        CALL(evt_msg_print, 0, STRING("gor_00_07_10"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_07_10"), 0, STRING("me"))
         CASE_LESS(STG8_16_THE_RETURN_OF_THE_QUEEN)
-        CALL(evt_msg_print, 0, STRING("gor_00_07_11"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_07_11"), 0, STRING("me"))
         CASE_GREATER_OR_EQUAL(STG8_16_THE_RETURN_OF_THE_QUEEN)
-        CALL(evt_msg_print, 0, STRING("gor_00_07_12"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_07_12"), 0, STRING("me"))
     END_SWITCH
     RETURN
 EVT_END()
@@ -1131,13 +1131,13 @@ EVT_END()
 static EVT_BEGIN(suifu_a_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG4_15_07_BOWSER_ACTION_STAGE)
-        CALL(evt_npc_set_position, STRING("me"), 0, -1000, 0)
-        CALL(evt_npc_set_ry, STRING("me"), 90)
-        CALL(evt_npc_change_interrupt, STRING("me"), 1, 0)
-        CALL(evt_npc_restart_regular_event, STRING("me"))
+            CALL(evt_npc_set_position, STRING("me"), 0, -1000, 0)
+            CALL(evt_npc_set_ry, STRING("me"), 90)
+            CALL(evt_npc_change_interrupt, STRING("me"), 1, 0)
+            CALL(evt_npc_restart_regular_event, STRING("me"))
         CASE_DEFAULT
-        CALL(evt_npc_set_ry, STRING("me"), 90)
-        CALL(evt_npc_set_position, STRING("me"), -215, 15, 0)
+            CALL(evt_npc_set_ry, STRING("me"), 90)
+            CALL(evt_npc_set_position, STRING("me"), -215, 15, 0)
     END_SWITCH
     RETURN
 EVT_END()
@@ -1151,9 +1151,9 @@ static EVT_BEGIN(suifu_a_regl)
         CASE_BETWEEN(STG4_32_CHATTING_WITH_FLAVIO, STG4_END_OFF_TO_THE_KEYS)
         CASE_EQUAL(STG5_58_FAIR_WINDS)
         CASE_DEFAULT
-        CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
-        CALL(urouro_init_func, STRING("me"), LW(0), LW(2), FLOAT(100.0f), FLOAT(30.0f), 0)
-        CALL(urouro_main_func, STRING("me"))
+            CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
+            CALL(urouro_init_func, STRING("me"), LW(0), LW(2), FLOAT(100.0f), FLOAT(30.0f), 0)
+            CALL(urouro_main_func, STRING("me"))
     END_SWITCH
     RETURN
 EVT_END()
@@ -1165,33 +1165,33 @@ EVT_END()
 static EVT_BEGIN(suifu_a_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG0_07_GOOMBELLA_JOINS)
-        CALL(evt_msg_print, 0, STRING("gor_00_03_01"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_03_01"), 0, STRING("me"))
         CASE_LESS(STG1_17_FATHER_SON_REUNITED)
-        CALL(evt_msg_print, 0, STRING("gor_00_03_02"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_03_02"), 0, STRING("me"))
         CASE_LESS(STG2_25_AFTER_THE_BOSS_BATTLE)
-        CALL(evt_msg_print, 0, STRING("gor_00_03_03"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_03_03"), 0, STRING("me"))
         CASE_LESS(STG3_32_BOSS_BATTLE)
-        CALL(evt_msg_print, 0, STRING("gor_00_03_04"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_03_04"), 0, STRING("me"))
         CASE_LESS(STG4_15_05_PEACH_X_NAUT_PHD_REPORT)
-        CALL(evt_msg_print, 0, STRING("gor_00_03_05"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_03_05"), 0, STRING("me"))
         CASE_LESS(STG4_31_FRANKLYS_HOUSE_STG_4)
-        CALL(evt_msg_print, 0, STRING("gor_00_03_06"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_03_06"), 0, STRING("me"))
         CASE_LESS(STG4_32_CHATTING_WITH_FLAVIO)
-        CALL(evt_msg_print, 0, STRING("gor_00_03_07"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_03_07"), 0, STRING("me"))
         CASE_LESS(STG4_33_MEET_BOBBERY)
-        CALL(evt_msg_print, 0, STRING("gor_00_03_08"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_03_08"), 0, STRING("me"))
         CASE_LESS(STG4_37_TO_THE_PORT)
-        CALL(evt_msg_print, 0, STRING("gor_00_03_08_01"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_03_08_01"), 0, STRING("me"))
         CASE_LESS(STG4_END_OFF_TO_THE_KEYS)
-        CALL(evt_msg_print, 0, STRING("gor_00_03_08_02"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_03_08_02"), 0, STRING("me"))
         CASE_LESS(STG6_54_WELCOME_BACK)
-        CALL(evt_msg_print, 0, STRING("gor_00_03_09"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_03_09"), 0, STRING("me"))
         CASE_LESS(STG7_20_LORD_CRUMP_DEFEATED)
-        CALL(evt_msg_print, 0, STRING("gor_00_03_10"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_03_10"), 0, STRING("me"))
         CASE_LESS(STG8_16_THE_RETURN_OF_THE_QUEEN)
-        CALL(evt_msg_print, 0, STRING("gor_00_03_11"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_03_11"), 0, STRING("me"))
         CASE_DEFAULT
-        CALL(evt_msg_print, 0, STRING("gor_00_03_12"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_03_12"), 0, STRING("me"))
     END_SWITCH
     RETURN
 EVT_END()
@@ -1203,16 +1203,16 @@ EVT_END()
 static EVT_BEGIN(suifu_b_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG0_07_GOOMBELLA_JOINS)
-        CALL(evt_npc_set_ry, STRING("me"), 270)
-        CALL(evt_npc_set_position, STRING("me"), 0, -1000, 0)
+            CALL(evt_npc_set_ry, STRING("me"), 270)
+            CALL(evt_npc_set_position, STRING("me"), 0, -1000, 0)
         CASE_EQUAL(STG4_15_07_BOWSER_ACTION_STAGE)
-        CALL(evt_npc_set_position, STRING("me"), -191, 15, 36)
-        CALL(evt_npc_set_ry, STRING("me"), 90)
-        CALL(evt_npc_change_interrupt, STRING("me"), 1, 0)
-        CALL(evt_npc_restart_regular_event, STRING("me"))
+            CALL(evt_npc_set_position, STRING("me"), -191, 15, 36)
+            CALL(evt_npc_set_ry, STRING("me"), 90)
+            CALL(evt_npc_change_interrupt, STRING("me"), 1, 0)
+            CALL(evt_npc_restart_regular_event, STRING("me"))
         CASE_DEFAULT
-        CALL(evt_npc_set_ry, STRING("me"), 90)
-        CALL(evt_npc_set_position, STRING("me"), 0, 15, -300)
+            CALL(evt_npc_set_ry, STRING("me"), 90)
+            CALL(evt_npc_set_position, STRING("me"), 0, 15, -300)
     END_SWITCH
     RETURN
 EVT_END()
@@ -1226,9 +1226,9 @@ static EVT_BEGIN(suifu_b_regl)
         CASE_BETWEEN(STG4_32_CHATTING_WITH_FLAVIO, STG4_END_OFF_TO_THE_KEYS)
         CASE_EQUAL(STG5_58_FAIR_WINDS)
         CASE_GREATER_OR_EQUAL(STG1_00_PETAL_MEADOWS)
-        CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
-        CALL(urouro_init_func, STRING("me"), LW(0), LW(2), FLOAT(100.0f), FLOAT(30.0f), 0)
-        CALL(urouro_main_func, STRING("me"))
+            CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
+            CALL(urouro_init_func, STRING("me"), LW(0), LW(2), FLOAT(100.0f), FLOAT(30.0f), 0)
+            CALL(urouro_main_func, STRING("me"))
     END_SWITCH
     RETURN
 EVT_END()
@@ -1237,33 +1237,33 @@ EVT_END()
 static EVT_BEGIN(suifu_b_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG0_07_GOOMBELLA_JOINS)
-        CALL(evt_msg_print, 0, STRING("gor_00_04_01"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_04_01"), 0, STRING("me"))
         CASE_LESS(STG1_17_FATHER_SON_REUNITED)
-        CALL(evt_msg_print, 0, STRING("gor_00_04_02"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_04_02"), 0, STRING("me"))
         CASE_LESS(STG2_25_AFTER_THE_BOSS_BATTLE)
-        CALL(evt_msg_print, 0, STRING("gor_00_04_03"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_04_03"), 0, STRING("me"))
         CASE_LESS(STG3_32_BOSS_BATTLE)
-        CALL(evt_msg_print, 0, STRING("gor_00_04_04"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_04_04"), 0, STRING("me"))
         CASE_LESS(STG4_15_05_PEACH_X_NAUT_PHD_REPORT)
-        CALL(evt_msg_print, 0, STRING("gor_00_04_05"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_04_05"), 0, STRING("me"))
         CASE_LESS(STG4_31_FRANKLYS_HOUSE_STG_4)
-        CALL(evt_msg_print, 0, STRING("gor_00_04_06"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_04_06"), 0, STRING("me"))
         CASE_LESS(STG4_32_CHATTING_WITH_FLAVIO)
-        CALL(evt_msg_print, 0, STRING("gor_00_04_07"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_04_07"), 0, STRING("me"))
         CASE_LESS(STG4_33_MEET_BOBBERY)
-        CALL(evt_msg_print, 0, STRING("gor_00_04_08"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_04_08"), 0, STRING("me"))
         CASE_LESS(STG4_37_TO_THE_PORT)
-        CALL(evt_msg_print, 0, STRING("gor_00_04_08_01"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_04_08_01"), 0, STRING("me"))
         CASE_LESS(STG4_END_OFF_TO_THE_KEYS)
-        CALL(evt_msg_print, 0, STRING("gor_00_04_08_02"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_04_08_02"), 0, STRING("me"))
         CASE_LESS(STG6_54_WELCOME_BACK)
-        CALL(evt_msg_print, 0, STRING("gor_00_04_09"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_04_09"), 0, STRING("me"))
         CASE_LESS(STG7_20_LORD_CRUMP_DEFEATED)
-        CALL(evt_msg_print, 0, STRING("gor_00_04_10"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_04_10"), 0, STRING("me"))
         CASE_LESS(STG8_16_THE_RETURN_OF_THE_QUEEN)
-        CALL(evt_msg_print, 0, STRING("gor_00_04_11"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_04_11"), 0, STRING("me"))
         CASE_DEFAULT
-        CALL(evt_msg_print, 0, STRING("gor_00_04_12"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_04_12"), 0, STRING("me"))
     END_SWITCH
     RETURN
 EVT_END()
@@ -1272,7 +1272,7 @@ EVT_END()
 static EVT_BEGIN(suifu_d_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG4_32_CHATTING_WITH_FLAVIO, STG4_END_OFF_TO_THE_KEYS)
-        CALL(evt_npc_set_position, STRING("me"), 125, 49, 20)
+            CALL(evt_npc_set_position, STRING("me"), 125, 49, 20)
     END_SWITCH
     RETURN
 EVT_END()
@@ -1307,16 +1307,16 @@ static EVT_BEGIN(suifubomb_a_init)
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG0_07_GOOMBELLA_JOINS)
-        CALL(evt_npc_set_ry, STRING("me"), 90)
-        CALL(evt_npc_set_position, STRING("me"), -215, 15, 175)
+            CALL(evt_npc_set_ry, STRING("me"), 90)
+            CALL(evt_npc_set_position, STRING("me"), -215, 15, 175)
         CASE_EQUAL(STG4_15_07_BOWSER_ACTION_STAGE)
-        CALL(evt_npc_set_position, STRING("me"), -160, 15, 207)
-        CALL(evt_npc_set_ry, STRING("me"), 90)
-        CALL(evt_npc_change_interrupt, STRING("me"), 1, 0)
-        CALL(evt_npc_restart_regular_event, STRING("me"))
+            CALL(evt_npc_set_position, STRING("me"), -160, 15, 207)
+            CALL(evt_npc_set_ry, STRING("me"), 90)
+            CALL(evt_npc_change_interrupt, STRING("me"), 1, 0)
+            CALL(evt_npc_restart_regular_event, STRING("me"))
         CASE_DEFAULT
-        CALL(evt_npc_set_ry, STRING("me"), 90)
-        CALL(evt_npc_set_position, STRING("me"), -215, 15, -150)
+            CALL(evt_npc_set_ry, STRING("me"), 90)
+            CALL(evt_npc_set_position, STRING("me"), -215, 15, -150)
     END_SWITCH
     RETURN
 EVT_END()
@@ -1328,12 +1328,12 @@ EVT_END()
 static EVT_BEGIN(suifubomb_a_regl)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG0_07_GOOMBELLA_JOINS)
-        CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
-        CALL(urouro_init_func, STRING("me"), LW(0), LW(2), FLOAT(100.0f), FLOAT(30.0f), 0)
-        CALL(urouro_main_func, STRING("me"))
+            CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
+            CALL(urouro_init_func, STRING("me"), LW(0), LW(2), FLOAT(100.0f), FLOAT(30.0f), 0)
+            CALL(urouro_main_func, STRING("me"))
         CASE_BETWEEN(STG4_32_CHATTING_WITH_FLAVIO, STG4_END_OFF_TO_THE_KEYS)
         CASE_DEFAULT
-        CALL_CHILD(suifubomb_a_urouro2)
+            CALL_CHILD(suifubomb_a_urouro2)
     END_SWITCH
     RETURN
 EVT_END()
@@ -1374,42 +1374,42 @@ static EVT_BEGIN(suifubomb_a_talk)
     END_IF
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG0_07_GOOMBELLA_JOINS)
-        CALL(evt_msg_print, 0, STRING("gor_00_01_01"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_01_01"), 0, STRING("me"))
         CASE_LESS(STG1_17_FATHER_SON_REUNITED)
-        CALL(evt_msg_print, 0, STRING("gor_00_01_02"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_01_02"), 0, STRING("me"))
         CASE_LESS(STG2_25_AFTER_THE_BOSS_BATTLE)
-        CALL(evt_msg_print, 0, STRING("gor_00_01_03"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_01_03"), 0, STRING("me"))
         CASE_LESS(STG3_32_BOSS_BATTLE)
-        CALL(evt_msg_print, 0, STRING("gor_00_01_04"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_01_04"), 0, STRING("me"))
         CASE_LESS(STG4_15_05_PEACH_X_NAUT_PHD_REPORT)
-        CALL(evt_msg_print, 0, STRING("gor_00_01_05"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_01_05"), 0, STRING("me"))
         CASE_LESS(STG4_31_FRANKLYS_HOUSE_STG_4)
-        CALL(evt_msg_print, 0, STRING("gor_00_01_06"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_01_06"), 0, STRING("me"))
         CASE_LESS(STG4_32_CHATTING_WITH_FLAVIO)
 #if VERSION < VERSION_US
-        CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
+            CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
 #endif
-        CALL(evt_msg_print, 0, STRING("gor_00_01_07"), 0, STRING("me"))
-        CALL(evt_mario_set_pose, STRING("M_I_2"))
-        WAIT_MS(1000)
-        CALL(evt_msg_print, 0, STRING("gor_00_01_07_01"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_01_07"), 0, STRING("me"))
+            CALL(evt_mario_set_pose, STRING("M_I_2"))
+            WAIT_MS(1000)
+            CALL(evt_msg_print, 0, STRING("gor_00_01_07_01"), 0, STRING("me"))
 #if VERSION < VERSION_US
-        CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_POSE_LOCK)
+            CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_POSE_LOCK)
 #endif
         CASE_LESS(STG4_33_MEET_BOBBERY)
-        CALL(evt_msg_print, 0, STRING("gor_00_01_08"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_01_08"), 0, STRING("me"))
         CASE_LESS(STG4_37_TO_THE_PORT)
-        CALL(evt_msg_print, 0, STRING("gor_00_01_08_01"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_01_08_01"), 0, STRING("me"))
         CASE_LESS(STG4_END_OFF_TO_THE_KEYS)
-        CALL(evt_msg_print, 0, STRING("gor_00_01_08_02"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_01_08_02"), 0, STRING("me"))
         CASE_LESS(STG6_54_WELCOME_BACK)
-        CALL(evt_msg_print, 0, STRING("gor_00_01_09"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_01_09"), 0, STRING("me"))
         CASE_LESS(STG7_20_LORD_CRUMP_DEFEATED)
-        CALL(evt_msg_print, 0, STRING("gor_00_01_10"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_01_10"), 0, STRING("me"))
         CASE_LESS(STG8_16_THE_RETURN_OF_THE_QUEEN)
-        CALL(evt_msg_print, 0, STRING("gor_00_01_11"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_01_11"), 0, STRING("me"))
         CASE_DEFAULT
-        CALL(evt_msg_print, 0, STRING("gor_00_01_12"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_01_12"), 0, STRING("me"))
     END_SWITCH
     RETURN
 EVT_END()
@@ -1451,27 +1451,27 @@ EVT_END()
 static EVT_BEGIN(suifubomb_b_regl)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG0_07_GOOMBELLA_JOINS)
-        IF_INT_EQUAL(GSWF_GOR_00_GOOMBELLA_ASSAULT_STARTED, 1)
-            RETURN
-        END_IF
-        LOOP(0)
-            CALL(evt_npc_move_position, STRING("me"), 0, -350, 0, FLOAT(40.0f), 0)
-            WAIT_MS(1000)
-            CALL(evt_npc_move_position, STRING("me"), -250, -350, 0, FLOAT(40.0f), 0)
             IF_INT_EQUAL(GSWF_GOR_00_GOOMBELLA_ASSAULT_STARTED, 1)
-                BREAK_LOOP
+                RETURN
             END_IF
-            WAIT_MS(1000)
-            IF_INT_EQUAL(GSWF_GOR_00_GOOMBELLA_ASSAULT_STARTED, 1)
-                BREAK_LOOP
-            END_IF
-        END_LOOP
-        CALL(evt_npc_set_ry, STRING("me"), 90)
+            LOOP(0)
+                CALL(evt_npc_move_position, STRING("me"), 0, -350, 0, FLOAT(40.0f), 0)
+                WAIT_MS(1000)
+                CALL(evt_npc_move_position, STRING("me"), -250, -350, 0, FLOAT(40.0f), 0)
+                IF_INT_EQUAL(GSWF_GOR_00_GOOMBELLA_ASSAULT_STARTED, 1)
+                    BREAK_LOOP
+                END_IF
+                WAIT_MS(1000)
+                IF_INT_EQUAL(GSWF_GOR_00_GOOMBELLA_ASSAULT_STARTED, 1)
+                    BREAK_LOOP
+                END_IF
+            END_LOOP
+            CALL(evt_npc_set_ry, STRING("me"), 90)
         CASE_LESS(STG4_32_CHATTING_WITH_FLAVIO)
-        CALL_CHILD(suifubomb_b_urouro2)
+            CALL_CHILD(suifubomb_b_urouro2)
         CASE_BETWEEN(STG4_32_CHATTING_WITH_FLAVIO, STG4_END_OFF_TO_THE_KEYS)
         CASE_GREATER(STG4_END_OFF_TO_THE_KEYS)
-        CALL_CHILD(suifubomb_b_urouro2)
+            CALL_CHILD(suifubomb_b_urouro2)
     END_SWITCH
     RETURN
 EVT_END()
@@ -1480,33 +1480,33 @@ EVT_END()
 static EVT_BEGIN(suifubomb_b_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG0_07_GOOMBELLA_JOINS)
-        CALL(evt_msg_print, 0, STRING("gor_00_02_01"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_02_01"), 0, STRING("me"))
         CASE_LESS(STG1_17_FATHER_SON_REUNITED)
-        CALL(evt_msg_print, 0, STRING("gor_00_02_02"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_02_02"), 0, STRING("me"))
         CASE_LESS(STG2_25_AFTER_THE_BOSS_BATTLE)
-        CALL(evt_msg_print, 0, STRING("gor_00_02_03"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_02_03"), 0, STRING("me"))
         CASE_LESS(STG3_32_BOSS_BATTLE)
-        CALL(evt_msg_print, 0, STRING("gor_00_02_04"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_02_04"), 0, STRING("me"))
         CASE_LESS(STG4_15_05_PEACH_X_NAUT_PHD_REPORT)
-        CALL(evt_msg_print, 0, STRING("gor_00_02_05"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_02_05"), 0, STRING("me"))
         CASE_LESS(STG4_31_FRANKLYS_HOUSE_STG_4)
-        CALL(evt_msg_print, 0, STRING("gor_00_02_06"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_02_06"), 0, STRING("me"))
         CASE_LESS(STG4_32_CHATTING_WITH_FLAVIO)
-        CALL(evt_msg_print, 0, STRING("gor_00_02_07"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_02_07"), 0, STRING("me"))
         CASE_LESS(STG4_33_MEET_BOBBERY)
-        CALL(evt_msg_print, 0, STRING("gor_00_02_08"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_02_08"), 0, STRING("me"))
         CASE_LESS(STG4_37_TO_THE_PORT)
-        CALL(evt_msg_print, 0, STRING("gor_00_02_08_01"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_02_08_01"), 0, STRING("me"))
         CASE_LESS(STG4_END_OFF_TO_THE_KEYS)
-        CALL(evt_msg_print, 0, STRING("gor_00_02_08_02"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_02_08_02"), 0, STRING("me"))
         CASE_LESS(STG6_54_WELCOME_BACK)
-        CALL(evt_msg_print, 0, STRING("gor_00_02_09"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_02_09"), 0, STRING("me"))
         CASE_LESS(STG7_20_LORD_CRUMP_DEFEATED)
-        CALL(evt_msg_print, 0, STRING("gor_00_02_10"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_02_10"), 0, STRING("me"))
         CASE_LESS(STG8_16_THE_RETURN_OF_THE_QUEEN)
-        CALL(evt_msg_print, 0, STRING("gor_00_02_11"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_02_11"), 0, STRING("me"))
         CASE_DEFAULT
-        CALL(evt_msg_print, 0, STRING("gor_00_02_12"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("gor_00_02_12"), 0, STRING("me"))
     END_SWITCH
     RETURN
 EVT_END()
@@ -1515,7 +1515,7 @@ EVT_END()
 static EVT_BEGIN(suifubomb_c_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG4_32_CHATTING_WITH_FLAVIO, STG4_END_OFF_TO_THE_KEYS)
-        CALL(evt_npc_set_position, STRING("me"), 140, 15, 200)
+            CALL(evt_npc_set_position, STRING("me"), 140, 15, 200)
     END_SWITCH
     RETURN
 EVT_END()
@@ -1534,15 +1534,15 @@ EVT_END()
 static EVT_BEGIN(sanders_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG4_32_CHATTING_WITH_FLAVIO, STG4_END_OFF_TO_THE_KEYS)
-        CALL(evt_npc_entry, STRING("サンダース"), STRING("c_bomt_n")) // Admiral Bobbery
-        CALL(evt_npc_set_tribe, STRING("サンダース"), STRING("サンダース"))
-        CALL(evt_npc_set_ry, STRING("サンダース"), 90)
-        CALL(evt_npc_change_interrupt, STRING("サンダース"), 6, PTR(sanders_talk))
-        IF_INT_EQUAL(GSW_STORY_PROGRESS, STG4_37_TO_THE_PORT)
-            CALL(evt_npc_set_position, STRING("サンダース"), 100, 50, 80)
-        ELSE
-            CALL(evt_npc_set_position, STRING("サンダース"), 0, -1000, 0)
-        END_IF
+            CALL(evt_npc_entry, STRING("サンダース"), STRING("c_bomt_n")) // Admiral Bobbery
+            CALL(evt_npc_set_tribe, STRING("サンダース"), STRING("サンダース"))
+            CALL(evt_npc_set_ry, STRING("サンダース"), 90)
+            CALL(evt_npc_change_interrupt, STRING("サンダース"), 6, PTR(sanders_talk))
+            IF_INT_EQUAL(GSW_STORY_PROGRESS, STG4_37_TO_THE_PORT)
+                CALL(evt_npc_set_position, STRING("サンダース"), 100, 50, 80)
+            ELSE
+                CALL(evt_npc_set_position, STRING("サンダース"), 0, -1000, 0)
+            END_IF
     END_SWITCH
     RETURN
 EVT_END()
@@ -1561,8 +1561,8 @@ static EVT_BEGIN(korutesu_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG9_01_END_CREDITS)
         CASE_GREATER_OR_EQUAL(STG5_58_FAIR_WINDS)
-        CALL(evt_npc_set_ry, STRING("me"), 270)
-        CALL(evt_npc_set_position, STRING("me"), 210, 40, 92)
+            CALL(evt_npc_set_ry, STRING("me"), 270)
+            CALL(evt_npc_set_position, STRING("me"), 210, 40, 92)
     END_SWITCH
     RETURN
 EVT_END()
@@ -1593,13 +1593,13 @@ EVT_END()
 EVT_BEGIN(tentyou_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG4_32_CHATTING_WITH_FLAVIO, STG4_END_OFF_TO_THE_KEYS)
-        CALL(evt_npc_entry, STRING("店長"), STRING("c_gshop_m")) // Thriff T. (Toad Bros. Bazaar)
-        CALL(evt_npc_set_tribe, STRING("店長"), STRING("店員男"))
-        CALL(evt_npc_set_ry, STRING("店長"), 90)
-        CALL(evt_npc_set_position, STRING("店長"), -12, 128, 40)
-        CALL(evt_npc_change_interrupt, STRING("店長"), 6, PTR(tentyou_talk))
+            CALL(evt_npc_entry, STRING("店長"), STRING("c_gshop_m")) // Thriff T. (Toad Bros. Bazaar)
+            CALL(evt_npc_set_tribe, STRING("店長"), STRING("店員男"))
+            CALL(evt_npc_set_ry, STRING("店長"), 90)
+            CALL(evt_npc_set_position, STRING("店長"), -12, 128, 40)
+            CALL(evt_npc_change_interrupt, STRING("店長"), 6, PTR(tentyou_talk))
 #if VERSION >= VERSION_JP
-        CALL(evt_npc_flag_onoff, 1, STRING("店長"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
+            CALL(evt_npc_flag_onoff, 1, STRING("店長"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
 #endif
     END_SWITCH
     RETURN
@@ -1609,7 +1609,7 @@ EVT_END()
 static EVT_BEGIN(tentyou_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG4_32_CHATTING_WITH_FLAVIO, STG4_END_OFF_TO_THE_KEYS)
-        CALL(evt_msg_print, 0, STRING("mac_4_029_01"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("mac_4_029_01"), 0, STRING("me"))
     END_SWITCH
     RETURN
 EVT_END()
@@ -1621,13 +1621,13 @@ EVT_END()
 EVT_BEGIN(tenin_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG4_32_CHATTING_WITH_FLAVIO, STG4_END_OFF_TO_THE_KEYS)
-        CALL(evt_npc_entry, STRING("店員"), STRING("c_gshop_w")) // a Toad of the Keelhaul Key crew
-        CALL(evt_npc_set_tribe, STRING("店員"), STRING("店員女"))
-        CALL(evt_npc_set_ry, STRING("店員"), 90)
-        CALL(evt_npc_set_position, STRING("店員"), -30, 128, 120)
-        CALL(evt_npc_change_interrupt, STRING("店員"), 6, PTR(tenin_talk))
+            CALL(evt_npc_entry, STRING("店員"), STRING("c_gshop_w")) // a Toad of the Keelhaul Key crew
+            CALL(evt_npc_set_tribe, STRING("店員"), STRING("店員女"))
+            CALL(evt_npc_set_ry, STRING("店員"), 90)
+            CALL(evt_npc_set_position, STRING("店員"), -30, 128, 120)
+            CALL(evt_npc_change_interrupt, STRING("店員"), 6, PTR(tenin_talk))
 #if VERSION >= VERSION_JP
-        CALL(evt_npc_flag_onoff, 1, STRING("店員"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
+            CALL(evt_npc_flag_onoff, 1, STRING("店員"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
 #endif
     END_SWITCH
     RETURN
@@ -1637,7 +1637,7 @@ EVT_END()
 static EVT_BEGIN(tenin_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG4_32_CHATTING_WITH_FLAVIO, STG4_END_OFF_TO_THE_KEYS)
-        CALL(evt_msg_print, 0, STRING("mac_4_029_02"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("mac_4_029_02"), 0, STRING("me"))
     END_SWITCH
     RETURN
 EVT_END()
@@ -1695,9 +1695,9 @@ static EVT_BEGIN(mokorim_init)
     CALL_CHILD(npc_init_evt)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG0_15_THE_PEDESTAL, STG3_END_TO_STAGE_4)
-        CALL(evt_npc_set_position, STRING("me"), 525, 15, -270)
+            CALL(evt_npc_set_position, STRING("me"), 525, 15, -270)
         CASE_GREATER_OR_EQUAL(STG6_56_ROGUEPORT_STATION)
-        CALL(evt_npc_set_position, STRING("me"), 525, 15, -270)
+            CALL(evt_npc_set_position, STRING("me"), 525, 15, -270)
     END_SWITCH
     CALL(evt_npc_set_ry, STRING("me"), 270)
     RETURN
@@ -1708,209 +1708,209 @@ static EVT_BEGIN(mokorim_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG0_15_THE_PEDESTAL, STG3_END_TO_STAGE_4)
 
-        // Lumpy has already received three investments: he only thanks Mario.
-        IF_INT_EQUAL(GSW_GOR_LUMPY_INVESTMENT_COUNT, 3)
-            CALL(evt_msg_print, 0, STRING("salari_before_010"), 0, 0)
-            RETURN
-        END_IF
+            // Lumpy has already received three investments: he only thanks Mario.
+            IF_INT_EQUAL(GSW_GOR_LUMPY_INVESTMENT_COUNT, 3)
+                CALL(evt_msg_print, 0, STRING("salari_before_010"), 0, 0)
+                RETURN
+            END_IF
 
-        // The camera frames Lumpy.
-        CALL(evt_cam3d_evt_set, 500, 120, 90, 500, 55, -280, 800, EASING_SINE_IN_OUT)
-        WAIT_MS(800)
+            // The camera frames Lumpy.
+            CALL(evt_cam3d_evt_set, 500, 120, 90, 500, 55, -280, 800, EASING_SINE_IN_OUT)
+            WAIT_MS(800)
 
-        // First meeting: Lumpy recognizes Mario, introduces himself and asks for an investment (danger music
-        // plays).
-        IF_INT_EQUAL(GSWF_GOR_LUMPY_FIRST_TALK_DONE, 0)
-            SET_VALUE(GSWF_GOR_LUMPY_FIRST_TALK_DONE, 1)
-            CALL(evt_snd_bgmoff, PSND_PAUSE)
-            CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_EVT_DANGER3"))
-            SET_VALUE(LF(15), 1)
-            CALL(evt_msg_print, 0, STRING("salari_before_000"), 0, 0)
-            CALL(evt_mario_set_pose, STRING("M_N_2"))
-            WAIT_MS(500)
-            CALL(evt_mario_set_pose, STRING("M_S_1"))
-            CALL(evt_msg_print, 0, STRING("salari_before_001"), 0, 0)
-            CALL(evt_mario_set_pose, STRING("M_N_1"))
-            WAIT_MS(500)
-            CALL(evt_msg_print, 0, STRING("salari_before_002"), 0, 0)
-            CALL(evt_mario_set_pose, STRING("M_I_Z"))
-            WAIT_MS(500)
-        ELSE
-
-            // Later visits: Lumpy repeats his dream of striking oil.
-            CALL(evt_msg_print, 0, STRING("salari_before_003"), 0, 0)
-            CALL(evt_mario_set_pose, STRING("M_I_Z"))
-            WAIT_MS(500)
-        END_IF
-#if VERSION <= VERSION_DEMO_JP
-        CALL(evt_unitwin_alloc)
-#else
-        CALL(evt_unitwin_alloc, 0)
-#endif
-        CALL(unitwincoin_disp_onoff, 1)
-        CALL(evt_msg_print, 0, STRING("salari_before_004"), 0, 0)
-        CALL(evt_msg_select, 0, STRING("salari_before_005"))
-        IF_INT_EQUAL(LW(0), 0)
-
-            // Mario agrees: if he has 100 coins Lumpy jumps for joy, the investment count rises and the coins
-            // are paid.
-            CALL(evt_pouch_get_coin, LW(0))
-            IF_INT_GREATER_OR_EQUAL(LW(0), 100)
-                CALL(evt_msg_continue)
-                CALL(evt_mario_set_pose, STRING("M_I_2"))
+            // First meeting: Lumpy recognizes Mario, introduces himself and asks for an investment (danger music
+            // plays).
+            IF_INT_EQUAL(GSWF_GOR_LUMPY_FIRST_TALK_DONE, 0)
+                SET_VALUE(GSWF_GOR_LUMPY_FIRST_TALK_DONE, 1)
+                CALL(evt_snd_bgmoff, PSND_PAUSE)
+                CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_EVT_DANGER3"))
+                SET_VALUE(LF(15), 1)
+                CALL(evt_msg_print, 0, STRING("salari_before_000"), 0, 0)
+                CALL(evt_mario_set_pose, STRING("M_N_2"))
                 WAIT_MS(500)
                 CALL(evt_mario_set_pose, STRING("M_S_1"))
+                CALL(evt_msg_print, 0, STRING("salari_before_001"), 0, 0)
+                CALL(evt_mario_set_pose, STRING("M_N_1"))
+                WAIT_MS(500)
+                CALL(evt_msg_print, 0, STRING("salari_before_002"), 0, 0)
+                CALL(evt_mario_set_pose, STRING("M_I_Z"))
+                WAIT_MS(500)
+            ELSE
+
+                // Later visits: Lumpy repeats his dream of striking oil.
+                CALL(evt_msg_print, 0, STRING("salari_before_003"), 0, 0)
+                CALL(evt_mario_set_pose, STRING("M_I_Z"))
+                WAIT_MS(500)
+            END_IF
+#if VERSION <= VERSION_DEMO_JP
+            CALL(evt_unitwin_alloc)
+#else
+            CALL(evt_unitwin_alloc, 0)
+#endif
+            CALL(unitwincoin_disp_onoff, 1)
+            CALL(evt_msg_print, 0, STRING("salari_before_004"), 0, 0)
+            CALL(evt_msg_select, 0, STRING("salari_before_005"))
+            IF_INT_EQUAL(LW(0), 0)
+
+                // Mario agrees: if he has 100 coins Lumpy jumps for joy, the investment count rises and the coins
+                // are paid.
+                CALL(evt_pouch_get_coin, LW(0))
+                IF_INT_GREATER_OR_EQUAL(LW(0), 100)
+                    CALL(evt_msg_continue)
+                    CALL(evt_mario_set_pose, STRING("M_I_2"))
+                    WAIT_MS(500)
+                    CALL(evt_mario_set_pose, STRING("M_S_1"))
+                    CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
+                    LOOP(2)
+                        CALL(evt_npc_jump_position_nohit, STRING("me"), LW(0), LW(1), LW(2), 200, 10)
+                        WAIT_FRAMES(1)
+                    END_LOOP
+                    ADD(GSW_GOR_LUMPY_INVESTMENT_COUNT, 1)
+                    IF_INT_EQUAL(GSW_GOR_LUMPY_INVESTMENT_COUNT, 3)
+                        CALL(evt_msg_print, 0, STRING("salari_before_007"), 0, 0)
+                    ELSE
+                        CALL(evt_msg_print, 0, STRING("salari_before_006"), 0, 0)
+                    END_IF
+                    CALL(evt_pouch_add_coin, -100)
+                    CALL(unitwincoin_wait)
+                ELSE
+
+                    // Mario cannot afford it.
+                    CALL(evt_mario_set_pose, STRING("M_S_1"))
+                    CALL(evt_msg_print_add, 0, STRING("salari_before_009"))
+                END_IF
+            ELSE
+
+                // Mario refuses.
+                CALL(evt_msg_continue)
+                CALL(evt_mario_set_pose, STRING("M_N_B"))
+                WAIT_MS(500)
+                CALL(evt_mario_set_pose, STRING("M_S_1"))
+                CALL(evt_msg_print, 0, STRING("salari_before_008"), 0, 0)
+            END_IF
+
+            // Close the coin display and return the camera.
+            CALL(unitwincoin_disp_onoff, 0)
+            CALL(evt_unitwin_free)
+            CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
+            WAIT_MS(500)
+
+        // After the Rogueport station chapter: Lumpy has returned from the desert.
+        CASE_GREATER_OR_EQUAL(STG6_56_ROGUEPORT_STATION)
+
+            // First return visit: Lumpy reveals he struck oil and shares his story.
+            IF_INT_EQUAL(GSWF_GOR_LUMPY_REPAYMENT_DONE, 0)
+                SET_VALUE(GSWF_GOR_LUMPY_REPAYMENT_DONE, 1)
+                CALL(evt_cam3d_evt_set, 500, 120, 90, 500, 55, -280, 800, EASING_SINE_IN_OUT)
+                WAIT_MS(800)
+                CALL(evt_msg_print, 0, STRING("salari_after_000"), 0, 0)
+                CALL(evt_mario_set_pose, STRING("M_N_2"))
+                WAIT_MS(500)
+                CALL(evt_mario_set_pose, STRING("M_S_1"))
+                CALL(evt_cam3d_evt_set, 515, 105, 5, 515, 55, -280, 800, EASING_SINE_IN_OUT)
+                WAIT_MS(800)
+                CALL(evt_msg_print, 0, STRING("salari_after_000_1"), 0, 0)
+                CALL(evt_cam3d_evt_set, 515, 90, -70, 515, 55, -280, 800, EASING_SINE_IN_OUT)
+                WAIT_MS(800)
+                CALL(evt_msg_print, 0, STRING("salari_after_000_2"), 0, 0)
                 CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
                 LOOP(2)
                     CALL(evt_npc_jump_position_nohit, STRING("me"), LW(0), LW(1), LW(2), 200, 10)
                     WAIT_FRAMES(1)
                 END_LOOP
-                ADD(GSW_GOR_LUMPY_INVESTMENT_COUNT, 1)
-                IF_INT_EQUAL(GSW_GOR_LUMPY_INVESTMENT_COUNT, 3)
-                    CALL(evt_msg_print, 0, STRING("salari_before_007"), 0, 0)
-                ELSE
-                    CALL(evt_msg_print, 0, STRING("salari_before_006"), 0, 0)
-                END_IF
-                CALL(evt_pouch_add_coin, -100)
-                CALL(unitwincoin_wait)
-            ELSE
-
-                // Mario cannot afford it.
+                CALL(evt_msg_print, 0, STRING("salari_after_001"), 0, 0)
+#if VERSION >= VERSION_JP
+                CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+                CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_SURPRISED1"), LW(0), LW(1), LW(2), 0)
+#endif
+                CALL(evt_mario_set_pose, STRING("M_N_7"))
+                WAIT_MS(500)
                 CALL(evt_mario_set_pose, STRING("M_S_1"))
-                CALL(evt_msg_print_add, 0, STRING("salari_before_009"))
-            END_IF
-        ELSE
+                CALL(evt_cam3d_evt_set, 500, 120, 90, 500, 55, -280, 800, EASING_SINE_IN_OUT)
+                WAIT_MS(800)
 
-            // Mario refuses.
-            CALL(evt_msg_continue)
-            CALL(evt_mario_set_pose, STRING("M_N_B"))
-            WAIT_MS(500)
-            CALL(evt_mario_set_pose, STRING("M_S_1"))
-            CALL(evt_msg_print, 0, STRING("salari_before_008"), 0, 0)
-        END_IF
-
-        // Close the coin display and return the camera.
-        CALL(unitwincoin_disp_onoff, 0)
-        CALL(evt_unitwin_free)
-        CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
-        WAIT_MS(500)
-
-        // After the Rogueport station chapter: Lumpy has returned from the desert.
-        CASE_GREATER_OR_EQUAL(STG6_56_ROGUEPORT_STATION)
-
-        // First return visit: Lumpy reveals he struck oil and shares his story.
-        IF_INT_EQUAL(GSWF_GOR_LUMPY_REPAYMENT_DONE, 0)
-            SET_VALUE(GSWF_GOR_LUMPY_REPAYMENT_DONE, 1)
-            CALL(evt_cam3d_evt_set, 500, 120, 90, 500, 55, -280, 800, EASING_SINE_IN_OUT)
-            WAIT_MS(800)
-            CALL(evt_msg_print, 0, STRING("salari_after_000"), 0, 0)
-            CALL(evt_mario_set_pose, STRING("M_N_2"))
-            WAIT_MS(500)
-            CALL(evt_mario_set_pose, STRING("M_S_1"))
-            CALL(evt_cam3d_evt_set, 515, 105, 5, 515, 55, -280, 800, EASING_SINE_IN_OUT)
-            WAIT_MS(800)
-            CALL(evt_msg_print, 0, STRING("salari_after_000_1"), 0, 0)
-            CALL(evt_cam3d_evt_set, 515, 90, -70, 515, 55, -280, 800, EASING_SINE_IN_OUT)
-            WAIT_MS(800)
-            CALL(evt_msg_print, 0, STRING("salari_after_000_2"), 0, 0)
-            CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
-            LOOP(2)
-                CALL(evt_npc_jump_position_nohit, STRING("me"), LW(0), LW(1), LW(2), 200, 10)
-                WAIT_FRAMES(1)
-            END_LOOP
-            CALL(evt_msg_print, 0, STRING("salari_after_001"), 0, 0)
-#if VERSION >= VERSION_JP
-            CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-            CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_SURPRISED1"), LW(0), LW(1), LW(2), 0)
-#endif
-            CALL(evt_mario_set_pose, STRING("M_N_7"))
-            WAIT_MS(500)
-            CALL(evt_mario_set_pose, STRING("M_S_1"))
-            CALL(evt_cam3d_evt_set, 500, 120, 90, 500, 55, -280, 800, EASING_SINE_IN_OUT)
-            WAIT_MS(800)
-
-            // Mario had invested: Lumpy repays with a bonus (300, 500/600 or 999 coins by number of
-            // investments).
-            IF_INT_GREATER(GSW_GOR_LUMPY_INVESTMENT_COUNT, 0)
-                CALL(evt_msg_print, 0, STRING("salari_after_002"), 0, 0)
-                SWITCH(GSW_GOR_LUMPY_INVESTMENT_COUNT)
-                    CASE_EQUAL(1)
-                    SET_VALUE(LW(0), 300)
-                    CASE_EQUAL(2)
-
-                    // The two-investment payout is 600 coins in US and 500 in JP.
-#if VERSION >= VERSION_US
-                    SET_VALUE(LW(0), 600)
-#else
-                    SET_VALUE(LW(0), 500)
-#endif
-                    CASE_EQUAL(3)
-                    SET_VALUE(LW(0), 999)
-                END_SWITCH
-#if VERSION <= VERSION_DEMO_JP
-                CALL(evt_unitwin_alloc)
-#else
-                CALL(evt_unitwin_alloc, 0)
-#endif
-                CALL(unitwincoin_disp_onoff, 1)
-                CALL(evt_msg_print_insert, 0, STRING("salari_after_003"), 0, 0, LW(0))
-                CALL(evt_pouch_add_coin, LW(0))
-                CALL(unitwincoin_wait)
-                CALL(unitwincoin_disp_onoff, 0)
-                CALL(evt_unitwin_free)
-                CALL(evt_msg_print, 0, STRING("salari_after_004"), 0, 0)
-            ELSE
-
-                // Mario never invested: Lumpy just tells his story.
-                CALL(evt_msg_print, 0, STRING("salari_after_005"), 0, 0)
-            END_IF
-            CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
-        ELSE
-
-            // Repeat visits: Lumpy offers to read from his oil-hunt journal.
-            CALL(evt_msg_print, 0, STRING("salari_after_006"), 0, 0)
-            CALL(evt_msg_select, 0, STRING("salari_after_006_1"))
-            IF_INT_EQUAL(LW(0), 0)
-
-                // Mario picks diary topics, one entry at a time, until he stops listening.
-                LOOP(0)
-                    CALL(evt_msg_print_add, 0, STRING("salari_after_007"))
-                    CALL(evt_msg_select, 0, STRING("salari_after_008"))
-                    CALL(evt_msg_continue)
-#if VERSION >= VERSION_JP
-                    CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_TALK_POSE)
-#endif
-                    SWITCH(LW(0))
-                        CASE_EQUAL(0)
-                        CALL(evt_msg_print, 0, STRING("salari_after_009"), 0, 0)
+                // Mario had invested: Lumpy repays with a bonus (300, 500/600 or 999 coins by number of
+                // investments).
+                IF_INT_GREATER(GSW_GOR_LUMPY_INVESTMENT_COUNT, 0)
+                    CALL(evt_msg_print, 0, STRING("salari_after_002"), 0, 0)
+                    SWITCH(GSW_GOR_LUMPY_INVESTMENT_COUNT)
                         CASE_EQUAL(1)
-                        CALL(evt_msg_print, 0, STRING("salari_after_010"), 0, 0)
+                            SET_VALUE(LW(0), 300)
                         CASE_EQUAL(2)
-                        CALL(evt_msg_print, 0, STRING("salari_after_011"), 0, 0)
-                        CASE_EQUAL(3)
-                        CALL(evt_msg_print, 0, STRING("salari_after_012"), 0, 0)
-                        CASE_EQUAL(4)
-                        CALL(evt_msg_print, 0, STRING("salari_after_013"), 0, 0)
-                        CASE_EQUAL(5)
-                        CALL(evt_msg_print, 0, STRING("salari_after_014"), 0, 0)
-                        CASE_EQUAL(6)
-                        CALL(evt_msg_print, 0, STRING("salari_after_015"), 0, 0)
-                    END_SWITCH
-#if VERSION >= VERSION_JP
-                    CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_TALK_POSE)
+
+                            // The two-investment payout is 600 coins in US and 500 in JP.
+#if VERSION >= VERSION_US
+                            SET_VALUE(LW(0), 600)
+#else
+                            SET_VALUE(LW(0), 500)
 #endif
-                    CALL(evt_msg_print, 0, STRING("salari_after_016"), 0, 0)
-                    CALL(evt_msg_select, 0, STRING("salari_after_017"))
-                    IF_INT_EQUAL(LW(0), 0)
-                    ELSE
-                        CALL(evt_msg_print_add, 0, STRING("salari_after_018"))
-                        BREAK_LOOP
-                    END_IF
-                END_LOOP
+                        CASE_EQUAL(3)
+                            SET_VALUE(LW(0), 999)
+                    END_SWITCH
+#if VERSION <= VERSION_DEMO_JP
+                    CALL(evt_unitwin_alloc)
+#else
+                    CALL(evt_unitwin_alloc, 0)
+#endif
+                    CALL(unitwincoin_disp_onoff, 1)
+                    CALL(evt_msg_print_insert, 0, STRING("salari_after_003"), 0, 0, LW(0))
+                    CALL(evt_pouch_add_coin, LW(0))
+                    CALL(unitwincoin_wait)
+                    CALL(unitwincoin_disp_onoff, 0)
+                    CALL(evt_unitwin_free)
+                    CALL(evt_msg_print, 0, STRING("salari_after_004"), 0, 0)
+                ELSE
+
+                    // Mario never invested: Lumpy just tells his story.
+                    CALL(evt_msg_print, 0, STRING("salari_after_005"), 0, 0)
+                END_IF
+                CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
             ELSE
-                CALL(evt_msg_print_add, 0, STRING("salari_after_018"))
+
+                // Repeat visits: Lumpy offers to read from his oil-hunt journal.
+                CALL(evt_msg_print, 0, STRING("salari_after_006"), 0, 0)
+                CALL(evt_msg_select, 0, STRING("salari_after_006_1"))
+                IF_INT_EQUAL(LW(0), 0)
+
+                    // Mario picks diary topics, one entry at a time, until he stops listening.
+                    LOOP(0)
+                        CALL(evt_msg_print_add, 0, STRING("salari_after_007"))
+                        CALL(evt_msg_select, 0, STRING("salari_after_008"))
+                        CALL(evt_msg_continue)
+#if VERSION >= VERSION_JP
+                        CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_TALK_POSE)
+#endif
+                        SWITCH(LW(0))
+                            CASE_EQUAL(0)
+                                CALL(evt_msg_print, 0, STRING("salari_after_009"), 0, 0)
+                            CASE_EQUAL(1)
+                                CALL(evt_msg_print, 0, STRING("salari_after_010"), 0, 0)
+                            CASE_EQUAL(2)
+                                CALL(evt_msg_print, 0, STRING("salari_after_011"), 0, 0)
+                            CASE_EQUAL(3)
+                                CALL(evt_msg_print, 0, STRING("salari_after_012"), 0, 0)
+                            CASE_EQUAL(4)
+                                CALL(evt_msg_print, 0, STRING("salari_after_013"), 0, 0)
+                            CASE_EQUAL(5)
+                                CALL(evt_msg_print, 0, STRING("salari_after_014"), 0, 0)
+                            CASE_EQUAL(6)
+                                CALL(evt_msg_print, 0, STRING("salari_after_015"), 0, 0)
+                        END_SWITCH
+#if VERSION >= VERSION_JP
+                        CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_TALK_POSE)
+#endif
+                        CALL(evt_msg_print, 0, STRING("salari_after_016"), 0, 0)
+                        CALL(evt_msg_select, 0, STRING("salari_after_017"))
+                        IF_INT_EQUAL(LW(0), 0)
+                        ELSE
+                            CALL(evt_msg_print_add, 0, STRING("salari_after_018"))
+                            BREAK_LOOP
+                        END_IF
+                    END_LOOP
+                ELSE
+                    CALL(evt_msg_print_add, 0, STRING("salari_after_018"))
+                END_IF
             END_IF
-        END_IF
     END_SWITCH
 
     // Restore the normal music if the danger music was started.
@@ -1935,8 +1935,8 @@ EVT_END()
 static EVT_BEGIN(luigi_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG5_43_X_NAUTS_RETREAT, STG6_53_THE_REAL_GARNET_STAR)
-        CALL(evt_npc_set_position, STRING("me"), 420, 15, -210)
-        CALL(evt_npc_set_ry_lr, STRING("me"), 0)
+            CALL(evt_npc_set_position, STRING("me"), 420, 15, -210)
+            CALL(evt_npc_set_ry_lr, STRING("me"), 0)
     END_SWITCH
     RETURN
 EVT_END()
@@ -1971,12 +1971,12 @@ static NpcSetupInfo luigiEnt[] = {
 static EVT_BEGIN(luigi_npcEnt)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG5_43_X_NAUTS_RETREAT, STG6_53_THE_REAL_GARNET_STAR)
-        CALL(evt_npc_entry, STRING("ルイージ"), STRING("c_luigi"))
-        CALL(evt_npc_set_tribe, STRING("ルイージ"), STRING("ルイージ"))
-        CALL(evt_npc_setup, PTR(luigiEnt))
-        CALL(evt_npc_entry, STRING("ラクガン"), STRING("c_lp_pansy"))
-        CALL(evt_npc_set_tribe, STRING("ラクガン"), STRING("ラクガン"))
-        CALL(evt_npc_setup, PTR(rakganEnt))
+            CALL(evt_npc_entry, STRING("ルイージ"), STRING("c_luigi"))
+            CALL(evt_npc_set_tribe, STRING("ルイージ"), STRING("ルイージ"))
+            CALL(evt_npc_setup, PTR(luigiEnt))
+            CALL(evt_npc_entry, STRING("ラクガン"), STRING("c_lp_pansy"))
+            CALL(evt_npc_set_tribe, STRING("ラクガン"), STRING("ラクガン"))
+            CALL(evt_npc_setup, PTR(rakganEnt))
     END_SWITCH
     RETURN
 EVT_END()
@@ -5901,31 +5901,31 @@ static EVT_BEGIN(tsumini)
             CALL(funeflag_reset)
             SWITCH(GSW_STORY_PROGRESS)
                 CASE_BETWEEN(STG4_32_CHATTING_WITH_FLAVIO, STG4_END_OFF_TO_THE_KEYS)
-                CALL(evt_npc_flag_onoff, 1, STRING("マルコ"), NPC_FLAG_NO_DRAW)
-                CALL(evt_npc_flag_onoff, 1, STRING("ガラの悪い水夫"), NPC_FLAG_NO_DRAW)
-                CALL(evt_npc_flag_onoff, 1, STRING("オドオド水夫"), NPC_FLAG_NO_DRAW)
-                CALL(evt_npc_flag_onoff, 1, STRING("めがね水夫"), NPC_FLAG_NO_DRAW)
-                CALL(evt_npc_flag_onoff, 1, STRING("サンダース"), NPC_FLAG_NO_DRAW)
-                CALL(evt_npc_flag_onoff, 1, STRING("水夫Ｄ"), NPC_FLAG_NO_DRAW)
-                CALL(evt_npc_flag_onoff, 1, STRING("店長"), NPC_FLAG_NO_DRAW)
-                CALL(evt_npc_flag_onoff, 1, STRING("店員"), NPC_FLAG_NO_DRAW)
+                    CALL(evt_npc_flag_onoff, 1, STRING("マルコ"), NPC_FLAG_NO_DRAW)
+                    CALL(evt_npc_flag_onoff, 1, STRING("ガラの悪い水夫"), NPC_FLAG_NO_DRAW)
+                    CALL(evt_npc_flag_onoff, 1, STRING("オドオド水夫"), NPC_FLAG_NO_DRAW)
+                    CALL(evt_npc_flag_onoff, 1, STRING("めがね水夫"), NPC_FLAG_NO_DRAW)
+                    CALL(evt_npc_flag_onoff, 1, STRING("サンダース"), NPC_FLAG_NO_DRAW)
+                    CALL(evt_npc_flag_onoff, 1, STRING("水夫Ｄ"), NPC_FLAG_NO_DRAW)
+                    CALL(evt_npc_flag_onoff, 1, STRING("店長"), NPC_FLAG_NO_DRAW)
+                    CALL(evt_npc_flag_onoff, 1, STRING("店員"), NPC_FLAG_NO_DRAW)
                 CASE_DEFAULT
-                CALL(evt_npc_flag_onoff, 1, STRING("コルテス"), NPC_FLAG_NO_DRAW)
+                    CALL(evt_npc_flag_onoff, 1, STRING("コルテス"), NPC_FLAG_NO_DRAW)
             END_SWITCH
         ELSE
             CALL(funeflag_load)
             SWITCH(GSW_STORY_PROGRESS)
                 CASE_BETWEEN(STG4_32_CHATTING_WITH_FLAVIO, STG4_END_OFF_TO_THE_KEYS)
-                CALL(evt_npc_flag_onoff, 0, STRING("マルコ"), NPC_FLAG_NO_DRAW)
-                CALL(evt_npc_flag_onoff, 0, STRING("ガラの悪い水夫"), NPC_FLAG_NO_DRAW)
-                CALL(evt_npc_flag_onoff, 0, STRING("オドオド水夫"), NPC_FLAG_NO_DRAW)
-                CALL(evt_npc_flag_onoff, 0, STRING("めがね水夫"), NPC_FLAG_NO_DRAW)
-                CALL(evt_npc_flag_onoff, 0, STRING("サンダース"), NPC_FLAG_NO_DRAW)
-                CALL(evt_npc_flag_onoff, 0, STRING("水夫Ｄ"), NPC_FLAG_NO_DRAW)
-                CALL(evt_npc_flag_onoff, 0, STRING("店長"), NPC_FLAG_NO_DRAW)
-                CALL(evt_npc_flag_onoff, 0, STRING("店員"), NPC_FLAG_NO_DRAW)
+                    CALL(evt_npc_flag_onoff, 0, STRING("マルコ"), NPC_FLAG_NO_DRAW)
+                    CALL(evt_npc_flag_onoff, 0, STRING("ガラの悪い水夫"), NPC_FLAG_NO_DRAW)
+                    CALL(evt_npc_flag_onoff, 0, STRING("オドオド水夫"), NPC_FLAG_NO_DRAW)
+                    CALL(evt_npc_flag_onoff, 0, STRING("めがね水夫"), NPC_FLAG_NO_DRAW)
+                    CALL(evt_npc_flag_onoff, 0, STRING("サンダース"), NPC_FLAG_NO_DRAW)
+                    CALL(evt_npc_flag_onoff, 0, STRING("水夫Ｄ"), NPC_FLAG_NO_DRAW)
+                    CALL(evt_npc_flag_onoff, 0, STRING("店長"), NPC_FLAG_NO_DRAW)
+                    CALL(evt_npc_flag_onoff, 0, STRING("店員"), NPC_FLAG_NO_DRAW)
                 CASE_DEFAULT
-                CALL(evt_npc_flag_onoff, 0, STRING("コルテス"), NPC_FLAG_NO_DRAW)
+                    CALL(evt_npc_flag_onoff, 0, STRING("コルテス"), NPC_FLAG_NO_DRAW)
             END_SWITCH
         END_IF
         IF_INT_EQUAL(GF(13), 1)
@@ -6034,19 +6034,19 @@ static EVT_BEGIN(epilogue_npc_entry)
     CALL(get_yoshi_color, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(0)
-        SET_VALUE(LW(0), STRING("c_babyyoshi"))
+            SET_VALUE(LW(0), STRING("c_babyyoshi"))
         CASE_EQUAL(1)
-        SET_VALUE(LW(0), STRING("c_babyyoshi2"))
+            SET_VALUE(LW(0), STRING("c_babyyoshi2"))
         CASE_EQUAL(2)
-        SET_VALUE(LW(0), STRING("c_babyyoshi3"))
+            SET_VALUE(LW(0), STRING("c_babyyoshi3"))
         CASE_EQUAL(3)
-        SET_VALUE(LW(0), STRING("c_babyyoshi4"))
+            SET_VALUE(LW(0), STRING("c_babyyoshi4"))
         CASE_EQUAL(4)
-        SET_VALUE(LW(0), STRING("c_babyyoshi5"))
+            SET_VALUE(LW(0), STRING("c_babyyoshi5"))
         CASE_EQUAL(5)
-        SET_VALUE(LW(0), STRING("c_babyyoshi6"))
+            SET_VALUE(LW(0), STRING("c_babyyoshi6"))
         CASE_EQUAL(6)
-        SET_VALUE(LW(0), STRING("c_babyyoshi7"))
+            SET_VALUE(LW(0), STRING("c_babyyoshi7"))
     END_SWITCH
     CALL(evt_npc_entry, STRING("チビヨッシー"), LW(0))
     CALL(evt_npc_set_tribe, STRING("チビヨッシー"), STRING("ヨッシー"))
@@ -6876,42 +6876,42 @@ EVT_BEGIN(gor_00_init_evt)
 
         // Choose the background music and ambient sound for the current story stage.
         CASE_BETWEEN(STG0_00_PROLOGUE, STG0_03_TO_ROGUEPORT)
-        IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG0_02_MARIOS_HOUSE)
-            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
-        ELSE
-            CALL(evt_snd_bgmon_f, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_STG0_GOR1"), 2000)
-        END_IF
+            IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG0_02_MARIOS_HOUSE)
+                CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
+            ELSE
+                CALL(evt_snd_bgmon_f, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_STG0_GOR1"), 2000)
+            END_IF
 #if VERSION >= VERSION_JP
-        CALL(evt_snd_bgm_scope, 0, 1)
+            CALL(evt_snd_bgm_scope, 0, 1)
 #endif
-        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR0"))
-        CASE_BETWEEN(STG0_04_GOOMBELLA_ASSAULTED, STG0_06_1000_X_NAUTS_AFTER)
-        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_DANGER4"))
-        CALL(evt_snd_envoff, PSND_FADEOUT)
-        CASE_EQUAL(STG4_15_07_BOWSER_ACTION_STAGE)
-        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_KUPPA1"))
-        CALL(evt_snd_bgm_scope, 0, 1)
-        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("ENV_STG0_GOR0"))
-        CASE_EQUAL(STG8_END_AFTER_THE_BATTLE)
-        CALL(evt_bero_get_entername, LW(0))
-        IF_STR_EQUAL(LW(0), STRING("epilogue2"))
-            CALL(evt_snd_bgmon_f, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_ENDING2"), 800)
-            CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(8))
-            CALL(evt_snd_envoff, PSND_FADEOUT)
-        ELSE
-            CALL(evt_snd_bgmon_f, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_ENDING2"), 800)
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR0"))
-        END_IF
+        CASE_BETWEEN(STG0_04_GOOMBELLA_ASSAULTED, STG0_06_1000_X_NAUTS_AFTER)
+            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_DANGER4"))
+            CALL(evt_snd_envoff, PSND_FADEOUT)
+        CASE_EQUAL(STG4_15_07_BOWSER_ACTION_STAGE)
+            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_KUPPA1"))
+            CALL(evt_snd_bgm_scope, 0, 1)
+            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("ENV_STG0_GOR0"))
+        CASE_EQUAL(STG8_END_AFTER_THE_BATTLE)
+            CALL(evt_bero_get_entername, LW(0))
+            IF_STR_EQUAL(LW(0), STRING("epilogue2"))
+                CALL(evt_snd_bgmon_f, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_ENDING2"), 800)
+                CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(8))
+                CALL(evt_snd_envoff, PSND_FADEOUT)
+            ELSE
+                CALL(evt_snd_bgmon_f, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_ENDING2"), 800)
+                CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR0"))
+            END_IF
         CASE_EQUAL(STG5_58_FAIR_WINDS)
-        CALL(evt_snd_bgmon_f, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_STG0_GOR1"), 2000)
-        CALL(evt_snd_bgmoff, PSND_QUICK | PSND_SILENT | PSND_SILENT_LEVEL(7))
-        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR0"))
+            CALL(evt_snd_bgmon_f, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_STG0_GOR1"), 2000)
+            CALL(evt_snd_bgmoff, PSND_QUICK | PSND_SILENT | PSND_SILENT_LEVEL(7))
+            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR0"))
         CASE_DEFAULT
-        IF_INT_NOT_EQUAL(GSWF_MUJ_SAILING_TO_ROGUEPORT, 1)
-            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
-            CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(7))
-        END_IF
-        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR0"))
+            IF_INT_NOT_EQUAL(GSWF_MUJ_SAILING_TO_ROGUEPORT, 1)
+                CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
+                CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(7))
+            END_IF
+            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR0"))
     END_SWITCH
 
     // Set up the doors, NPCs, ships and the save block.
@@ -6977,73 +6977,73 @@ EVT_BEGIN(gor_00_init_evt)
     // Start the story scene that belongs to the current stage.
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG0_02_MARIOS_HOUSE)
-        CALL_CHILD(enter_gorotsuki_town_init)
-        SPAWN_EVENT(enter_gorotsuki_town)
+            CALL_CHILD(enter_gorotsuki_town_init)
+            SPAWN_EVENT(enter_gorotsuki_town)
         CASE_EQUAL(STG0_03_TO_ROGUEPORT)
-        CALL_CHILD(enter_gorotsuki_town_init)
-        SET_VALUE(LW(0), 1)
-        SPAWN_EVENT(christine_osoware)
+            CALL_CHILD(enter_gorotsuki_town_init)
+            SET_VALUE(LW(0), 1)
+            SPAWN_EVENT(christine_osoware)
         CASE_EQUAL(STG0_04_GOOMBELLA_ASSAULTED)
-        CALL_CHILD(enter_gorotsuki_town_init)
-        CALL_CHILD(christine_osoware_setup)
+            CALL_CHILD(enter_gorotsuki_town_init)
+            CALL_CHILD(christine_osoware_setup)
 #if VERSION >= VERSION_US
-        CALL(evt_nannpc_init, PTR(nannpc_entry_data), 0, 0, 0, 400)
+            CALL(evt_nannpc_init, PTR(nannpc_entry_data), 0, 0, 0, 400)
 #else
-        CALL(evt_nannpc_init, PTR(nannpc_entry_data), 0, 0, 0, 1000)
+            CALL(evt_nannpc_init, PTR(nannpc_entry_data), 0, 0, 0, 1000)
 #endif
-        CALL(evt_nannpc_set_subfunc, 1, PTR(nannpc_ext_main_sub_fast))
-        SET_VALUE(LW(0), 1)
-        SPAWN_EVENT(gundan1000tai_beforebattle)
+            CALL(evt_nannpc_set_subfunc, 1, PTR(nannpc_ext_main_sub_fast))
+            SET_VALUE(LW(0), 1)
+            SPAWN_EVENT(gundan1000tai_beforebattle)
         CASE_EQUAL(STG0_05_1000_X_NAUTS_BEFORE)
-        CALL_CHILD(enter_gorotsuki_town_init)
+            CALL_CHILD(enter_gorotsuki_town_init)
 #if VERSION >= VERSION_US
-        CALL(evt_nannpc_init, PTR(nannpc_entry_data), 0, 0, 0, 400)
+            CALL(evt_nannpc_init, PTR(nannpc_entry_data), 0, 0, 0, 400)
 #else
-        CALL(evt_nannpc_init, PTR(nannpc_entry_data), 0, 0, 0, 1000)
+            CALL(evt_nannpc_init, PTR(nannpc_entry_data), 0, 0, 0, 1000)
 #endif
-        CALL(evt_nannpc_set_subfunc, 1, PTR(nannpc_ext_main_sub_fast))
-        SET_VALUE(LW(0), 1)
-        SPAWN_EVENT(gundan1000tai_afterbattle)
+            CALL(evt_nannpc_set_subfunc, 1, PTR(nannpc_ext_main_sub_fast))
+            SET_VALUE(LW(0), 1)
+            SPAWN_EVENT(gundan1000tai_afterbattle)
 
         // Chapter 4 Bowser interlude.
         CASE_EQUAL(STG4_15_07_BOWSER_ACTION_STAGE)
-        CALL(evt_mario_kill_party, 0)
-        CALL(evt_npc_entry, STRING("houki"), STRING("c_kamek_be")) // Kammy Koopa's broom
-        CALL(evt_npc_set_anim, STRING("houki"), STRING("H_2"))
-        CALL(evt_npc_flag_onoff, 1, STRING("houki"), NPC_FLAG_NO_HIT)
-        CALL(evt_npc_flag_onoff, 1, STRING("houki"), NPC_FLAG_NO_CULL)
-        CALL(evt_npc_set_position, STRING("houki"), 0, -1000, 0)
-        CALL(evt_npc_set_ry, STRING("houki"), 90)
-        SPAWN_EVENT(gor_00_koopa_evt)
+            CALL(evt_mario_kill_party, 0)
+            CALL(evt_npc_entry, STRING("houki"), STRING("c_kamek_be")) // Kammy Koopa's broom
+            CALL(evt_npc_set_anim, STRING("houki"), STRING("H_2"))
+            CALL(evt_npc_flag_onoff, 1, STRING("houki"), NPC_FLAG_NO_HIT)
+            CALL(evt_npc_flag_onoff, 1, STRING("houki"), NPC_FLAG_NO_CULL)
+            CALL(evt_npc_set_position, STRING("houki"), 0, -1000, 0)
+            CALL(evt_npc_set_ry, STRING("houki"), 90)
+            SPAWN_EVENT(gor_00_koopa_evt)
 
         // Between Chapters 3 and 4's departure, the Chapter 4 ship is shown at the pier.
         CASE_BETWEEN(STG3_34_RETURN_TO_ROGUEPORT, STG4_END_OFF_TO_THE_KEYS)
-        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_fune_c"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_hitobj_onoff, STRING("A_fune_C"), 1, 1)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_fune_c"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_hitobj_onoff, STRING("A_fune_C"), 1, 1)
 
         // The ending: the epilogue on the dock, or its short second scene when arriving from the credits.
         CASE_EQUAL(STG8_END_AFTER_THE_BATTLE)
-        CALL(evt_mario_kill_party, 0)
-        CALL(evt_bero_get_entername, LW(0))
-        IF_STR_EQUAL(LW(0), STRING("epilogue2"))
-            CALL_CHILD(epilogue_npc_entry2)
-            SPAWN_EVENT(epilogue_evt2)
-        ELSE
-            CALL_CHILD(epilogue_npc_entry)
-            SPAWN_EVENT(epilogue_evt)
-        END_IF
+            CALL(evt_mario_kill_party, 0)
+            CALL(evt_bero_get_entername, LW(0))
+            IF_STR_EQUAL(LW(0), STRING("epilogue2"))
+                CALL_CHILD(epilogue_npc_entry2)
+                SPAWN_EVENT(epilogue_evt2)
+            ELSE
+                CALL_CHILD(epilogue_npc_entry)
+                SPAWN_EVENT(epilogue_evt)
+            END_IF
 
         // Chapter 5: Mario returns from Keelhaul Key.
         CASE_EQUAL(STG5_58_FAIR_WINDS)
 #if VERSION <= VERSION_DEMO_JP
-        CALL_CHILD(gor_muj_ship_init)
+            CALL_CHILD(gor_muj_ship_init)
 #endif
-        SPAWN_EVENT(gorotsuki_kikan)
+            SPAWN_EVENT(gorotsuki_kikan)
 
         // After the credits: the return to Rogueport.
         CASE_EQUAL(STG9_01_END_CREDITS)
-        CALL_CHILD(return_gorotsuki_town_init)
-        SPAWN_EVENT(return_gorotsuki_town)
+            CALL_CHILD(return_gorotsuki_town_init)
+            SPAWN_EVENT(return_gorotsuki_town)
     END_SWITCH
 
     // Late in the game, handle a ship arriving at the dock.

@@ -534,13 +534,13 @@ static EVT_BEGIN(attack_event)
         END_IF
         SWITCH(LW(0))
             CASE_EQUAL(0)
-            CALL_CHILD(normal_attack_event)
+                CALL_CHILD(normal_attack_event)
             CASE_EQUAL(1)
-            CALL_CHILD(guard_event)
+                CALL_CHILD(guard_event)
             CASE_EQUAL(2)
-            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_CHARGED, 1)
-            SET_VALUE(LW(9), PTR(&weapon_togezo_charge))
-            CALL_CHILD(charge_event)
+                CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_CHARGED, 1)
+                SET_VALUE(LW(9), PTR(&weapon_togezo_charge))
+                CALL_CHILD(charge_event)
         END_SWITCH
     END_IF
     LABEL(99)
@@ -637,23 +637,23 @@ static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_togezo_attack), 0, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
-        GOTO(90)
+            GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_LUCKY)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
+            GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_DODGY)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
+            GOTO(90)
         CASE_EQUAL(PRECHECK_MISS)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
+            GOTO(90)
         CASE_EQUAL(PRECHECK_HIT)
-        GOTO(91)
+            GOTO(91)
         CASE_END
         CASE_DEFAULT
-        GOTO(98)
+            GOTO(98)
         CASE_END
     END_SWITCH
 

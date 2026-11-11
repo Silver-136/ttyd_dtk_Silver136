@@ -43,7 +43,7 @@ static EVT_BEGIN(shopmaster_pig_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG4_10_DOOPLISS_BATTLE)
         CASE_DEFAULT
-        CALL(evt_npc_set_position, STRING("ブタお店の主人"), 0, -2000, 0)
+            CALL(evt_npc_set_position, STRING("ブタお店の主人"), 0, -2000, 0)
     END_SWITCH
     RETURN
 EVT_END()
@@ -55,11 +55,11 @@ EVT_END()
 static EVT_BEGIN(shopmaster_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG4_10_DOOPLISS_BATTLE)
-        CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
-        CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_VOICE_PIG1"), LW(0), LW(1), LW(2), 0)
-        CALL(evt_msg_print, 0, STRING("stg4_gra_17"), 0, STRING("me"))
+            CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
+            CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_VOICE_PIG1"), LW(0), LW(1), LW(2), 0)
+            CALL(evt_msg_print, 0, STRING("stg4_gra_17"), 0, STRING("me"))
         CASE_DEFAULT
-        CALL(evt_msg_print, 0, STRING("stg4_gra_18"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg4_gra_18"), 0, STRING("me"))
     END_SWITCH
     RETURN
 EVT_END()

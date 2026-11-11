@@ -94,11 +94,11 @@ static BeroEntry bero_entry_data[] = {
 static EVT_BEGIN(chibitoge_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG2_26_PRAISE_FROM_THE_PUNI)
-        IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 1)
-            IF_INT_EQUAL(GSWF_MRI_04_BABY_JABBI_GIFT_THIS_VISIT, 0)
-                CALL(evt_npc_set_position, STRING("me"), -120, 0, -15)
+            IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 1)
+                IF_INT_EQUAL(GSWF_MRI_04_BABY_JABBI_GIFT_THIS_VISIT, 0)
+                    CALL(evt_npc_set_position, STRING("me"), -120, 0, -15)
+                END_IF
             END_IF
-        END_IF
     END_SWITCH
     RETURN
 EVT_END()
@@ -541,14 +541,14 @@ EVT_BEGIN(mri_04_init_evt)
     CALL_CHILD(evt_sub_kusa_access_entry)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG2_12_RIVAL_ARRIVAL)
-        CALL(evt_snd_bgmoff, PSND_FADEOUT)
-        CALL(evt_snd_envoff, PSND_FADEOUT)
+            CALL(evt_snd_bgmoff, PSND_FADEOUT)
+            CALL(evt_snd_envoff, PSND_FADEOUT)
         CASE_BETWEEN(STG2_23_TIME_BOMB_ACTIVATED, STG2_23_01_X_NAUT_BATTLE)
-        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_DANGER4"))
-        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_MRI9"))
+            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_DANGER4"))
+            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_MRI9"))
         CASE_DEFAULT
-        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG2_MRI1"))
-        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_MRI5"))
+            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG2_MRI1"))
+            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_MRI5"))
     END_SWITCH
     CALL(evt_mobj_itembox, STRING("mobj_box00"), -155, 0, 35, MOBJ_ITEMBOX_NORMAL, 0, PTR(item_mri_04), GSWF_MRI_04_ULTRA_SHROOM_CHEST)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_12_RIVAL_ARRIVAL)

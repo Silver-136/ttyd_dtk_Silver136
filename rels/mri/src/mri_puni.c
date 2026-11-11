@@ -7894,33 +7894,33 @@ EVT_BEGIN(mri_puni_init)
     CALL_CHILD(mri_puni_init_dvd)
     SWITCH(4124967296)
         CASE_LESS(STG2_10_SECRET_ENTRANCE_REVEALED)
-        RETURN
+            RETURN
         CASE_GREATER_OR_EQUAL(STG9_00_EPILOGUE)
-        RETURN
+            RETURN
         CASE_EQUAL(STG8_15_GRODUS)
-        CALL(evt_sub_get_mapname, LW(0))
-        IF_STR_NOT_EQUAL(LW(0), STRING("mri_00"))
-            RETURN
-        END_IF
-        SET_VALUE(LF(0), 0)
-        CALL(evt_bero_get_entername, LW(0))
-        IF_STR_EQUAL(LW(0), STRING("sekai_yami1"))
-            SET_VALUE(LF(0), 1)
-        END_IF
-        IF_STR_EQUAL(LW(0), STRING("minnnanokoe"))
-            SET_VALUE(LF(0), 1)
-        END_IF
-        IF_INT_EQUAL(LF(0), 0)
-            RETURN
-        END_IF
+            CALL(evt_sub_get_mapname, LW(0))
+            IF_STR_NOT_EQUAL(LW(0), STRING("mri_00"))
+                RETURN
+            END_IF
+            SET_VALUE(LF(0), 0)
+            CALL(evt_bero_get_entername, LW(0))
+            IF_STR_EQUAL(LW(0), STRING("sekai_yami1"))
+                SET_VALUE(LF(0), 1)
+            END_IF
+            IF_STR_EQUAL(LW(0), STRING("minnnanokoe"))
+                SET_VALUE(LF(0), 1)
+            END_IF
+            IF_INT_EQUAL(LF(0), 0)
+                RETURN
+            END_IF
         CASE_BETWEEN(STG2_26_PRAISE_FROM_THE_PUNI, STG8_14_01_QUEENS_CHAMBER)
-        CALL(evt_sub_get_mapname, LW(0))
-        IF_STR_NOT_EQUAL(LW(0), STRING("mri_00"))
-            RETURN
-        END_IF
-        IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 1)
-            RETURN
-        END_IF
+            CALL(evt_sub_get_mapname, LW(0))
+            IF_STR_NOT_EQUAL(LW(0), STRING("mri_00"))
+                RETURN
+            END_IF
+            IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 1)
+                RETURN
+            END_IF
         CASE_DEFAULT
     END_SWITCH
     CALL(evt_make_texbuf)

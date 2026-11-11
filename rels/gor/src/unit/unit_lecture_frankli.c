@@ -273,97 +273,198 @@ static EVT_BEGIN(phase_event)
     SWITCH(LW(0))
         CASE_EQUAL(0)
 
-        // Step 0, before the player's phase: Frankly introduces the Jump action command
-        // and asks Mario to jump on an enemy.
-        CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_BEFORE_PLAYER)
-        IF_INT_NOT_EQUAL(LW(0), 0)
-            CALL(btlevtcmd_StopWaitEvent, UNIT_ID_MARIO)
-            CALL(btlevtcmd_AnimeChangePose, UNIT_ID_MARIO, 1, STRING("M_S_1"))
-            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, LECTURE_FRANKLI_WORK_STEP, 1)
-            CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
-            CALL(evt_btl_camera_set_moveto, 0, 0, 58, 256, 0, 41, 0, 30, 11)
-            WAIT_MS(500)
-            CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
-            CALL(btlevtcmd_SetTalkPose, UNIT_ID_SELF, STRING("T_1"))
-            CALL(btlevtcmd_SetStayPose, UNIT_ID_SELF, STRING("S_1"))
-            CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("mac_0_b_t2_000"), 0, -2)
-            CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
-            CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
-            CALL(btlevtcmd_onoff_battleflag, 1, BATTLE_FLAG_LECTURE_JUMP)
-            CALL(btlevtcmd_StartWaitEvent, UNIT_ID_MARIO)
-            RETURN
-        END_IF
+            // Step 0, before the player's phase: Frankly introduces the Jump action command
+            // and asks Mario to jump on an enemy.
+            CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_BEFORE_PLAYER)
+            IF_INT_NOT_EQUAL(LW(0), 0)
+                CALL(btlevtcmd_StopWaitEvent, UNIT_ID_MARIO)
+                CALL(btlevtcmd_AnimeChangePose, UNIT_ID_MARIO, 1, STRING("M_S_1"))
+                CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, LECTURE_FRANKLI_WORK_STEP, 1)
+                CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
+                CALL(evt_btl_camera_set_moveto, 0, 0, 58, 256, 0, 41, 0, 30, 11)
+                WAIT_MS(500)
+                CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
+                CALL(btlevtcmd_SetTalkPose, UNIT_ID_SELF, STRING("T_1"))
+                CALL(btlevtcmd_SetStayPose, UNIT_ID_SELF, STRING("S_1"))
+                CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("mac_0_b_t2_000"), 0, -2)
+                CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
+                CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
+                CALL(btlevtcmd_onoff_battleflag, 1, BATTLE_FLAG_LECTURE_JUMP)
+                CALL(btlevtcmd_StartWaitEvent, UNIT_ID_MARIO)
+                RETURN
+            END_IF
         CASE_EQUAL(2)
 
-        // Step 2, after Mario's jump: Frankly points out the NICE rating,
-        // then asks Goombella to take her turn and she answers.
-        CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_AFTER_PLAYER)
-        IF_INT_NOT_EQUAL(LW(0), 0)
-            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, LECTURE_FRANKLI_WORK_STEP, 3)
-            CALL(btlevtcmd_StopWaitEvent, UNIT_ID_MARIO)
-            CALL(btlevtcmd_AnimeChangePose, UNIT_ID_MARIO, 1, STRING("M_S_1"))
-            CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
-            CALL(btlevtcmd_SetTalkPose, UNIT_ID_SELF, STRING("T_1"))
-            CALL(btlevtcmd_SetStayPose, UNIT_ID_SELF, STRING("S_1"))
-            CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("mac_0_b_t2_003"), 0, -2)
-            BEGIN_SIBLING_EVENT_GET_ID(LW(0))
-                CALL(evt_sub_intpl_init, EASING_CUBIC_OUT, 0, 180, 20)
-                LOOP(21)
-                    CALL(evt_sub_intpl_get_value)
-                    CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, LW(0), 0)
-                    WAIT_FRAMES(1)
-                END_LOOP
-                CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 180, 0)
-            END_SIBLING_EVENT
-            CALL(btlevtcmd_WaitEventEnd, LW(0))
-            CALL(btlevtcmd_SetTalkPose, UNIT_ID_SELF, STRING("T_1"))
-            CALL(btlevtcmd_SetStayPose, UNIT_ID_SELF, STRING("S_1"))
-            CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("mac_0_b_t2_004"), 0, -2)
-            CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, LECTURE_FRANKLI_WORK_CHRISTINE, LW(3))
-            CALL(btlevtcmd_StopWaitEvent, LW(3))
-            CALL(btlevtcmd_SetTalkPose, LW(3), STRING("PKR_T_1"))
-            CALL(btlevtcmd_SetStayPose, LW(3), STRING("PKR_S_1"))
-            CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("mac_0_b_t2_005"), 0, LW(3))
-            CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
-            CALL(btlevtcmd_StartWaitEvent, UNIT_ID_MARIO)
-            BEGIN_INLINE_EVENT
-                CALL(evt_sub_intpl_init, EASING_CUBIC_OUT, 180, 0, 20)
-                LOOP(21)
-                    CALL(evt_sub_intpl_get_value)
-                    CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, LW(0), 0)
-                    WAIT_FRAMES(1)
-                END_LOOP
-                CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
-            END_INLINE_EVENT
-            RETURN
-        END_IF
+            // Step 2, after Mario's jump: Frankly points out the NICE rating,
+            // then asks Goombella to take her turn and she answers.
+            CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_AFTER_PLAYER)
+            IF_INT_NOT_EQUAL(LW(0), 0)
+                CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, LECTURE_FRANKLI_WORK_STEP, 3)
+                CALL(btlevtcmd_StopWaitEvent, UNIT_ID_MARIO)
+                CALL(btlevtcmd_AnimeChangePose, UNIT_ID_MARIO, 1, STRING("M_S_1"))
+                CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
+                CALL(btlevtcmd_SetTalkPose, UNIT_ID_SELF, STRING("T_1"))
+                CALL(btlevtcmd_SetStayPose, UNIT_ID_SELF, STRING("S_1"))
+                CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("mac_0_b_t2_003"), 0, -2)
+                BEGIN_SIBLING_EVENT_GET_ID(LW(0))
+                    CALL(evt_sub_intpl_init, EASING_CUBIC_OUT, 0, 180, 20)
+                    LOOP(21)
+                        CALL(evt_sub_intpl_get_value)
+                        CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, LW(0), 0)
+                        WAIT_FRAMES(1)
+                    END_LOOP
+                    CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 180, 0)
+                END_SIBLING_EVENT
+                CALL(btlevtcmd_WaitEventEnd, LW(0))
+                CALL(btlevtcmd_SetTalkPose, UNIT_ID_SELF, STRING("T_1"))
+                CALL(btlevtcmd_SetStayPose, UNIT_ID_SELF, STRING("S_1"))
+                CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("mac_0_b_t2_004"), 0, -2)
+                CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, LECTURE_FRANKLI_WORK_CHRISTINE, LW(3))
+                CALL(btlevtcmd_StopWaitEvent, LW(3))
+                CALL(btlevtcmd_SetTalkPose, LW(3), STRING("PKR_T_1"))
+                CALL(btlevtcmd_SetStayPose, LW(3), STRING("PKR_S_1"))
+                CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("mac_0_b_t2_005"), 0, LW(3))
+                CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
+                CALL(btlevtcmd_StartWaitEvent, UNIT_ID_MARIO)
+                BEGIN_INLINE_EVENT
+                    CALL(evt_sub_intpl_init, EASING_CUBIC_OUT, 180, 0, 20)
+                    LOOP(21)
+                        CALL(evt_sub_intpl_get_value)
+                        CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, LW(0), 0)
+                        WAIT_FRAMES(1)
+                    END_LOOP
+                    CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
+                END_INLINE_EVENT
+                RETURN
+            END_IF
         CASE_EQUAL(4)
 
-        // Step 4, before the player's phase: Frankly explains the Guard action command Mario just did.
-        CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_BEFORE_PLAYER)
-        IF_INT_NOT_EQUAL(LW(0), 0)
-            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, LECTURE_FRANKLI_WORK_STEP, 5)
-            CALL(btlevtcmd_StopWaitEvent, UNIT_ID_MARIO)
-            CALL(btlevtcmd_AnimeChangePose, UNIT_ID_MARIO, 1, STRING("M_S_1"))
-            CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
-            CALL(btlevtcmd_SetTalkPose, UNIT_ID_SELF, STRING("T_1"))
-            CALL(btlevtcmd_SetStayPose, UNIT_ID_SELF, STRING("S_1"))
-            CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("mac_0_b_t2_007"), 0, -2)
-            CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
-            CALL(btlevtcmd_onoff_battleflag, 0, BATTLE_FLAG_LECTURE_JUMP)
-            CALL(btlevtcmd_onoff_battleflag, 1, BATTLE_FLAG_LECTURE_HAMMER)
-            RETURN
-        END_IF
+            // Step 4, before the player's phase: Frankly explains the Guard action command Mario just did.
+            CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_BEFORE_PLAYER)
+            IF_INT_NOT_EQUAL(LW(0), 0)
+                CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, LECTURE_FRANKLI_WORK_STEP, 5)
+                CALL(btlevtcmd_StopWaitEvent, UNIT_ID_MARIO)
+                CALL(btlevtcmd_AnimeChangePose, UNIT_ID_MARIO, 1, STRING("M_S_1"))
+                CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
+                CALL(btlevtcmd_SetTalkPose, UNIT_ID_SELF, STRING("T_1"))
+                CALL(btlevtcmd_SetStayPose, UNIT_ID_SELF, STRING("S_1"))
+                CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("mac_0_b_t2_007"), 0, -2)
+                CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
+                CALL(btlevtcmd_onoff_battleflag, 0, BATTLE_FLAG_LECTURE_JUMP)
+                CALL(btlevtcmd_onoff_battleflag, 1, BATTLE_FLAG_LECTURE_HAMMER)
+                RETURN
+            END_IF
         CASE_EQUAL(6)
 
-        // Step 6, after the attack: Frankly praises the Action Command,
-        // then asks Goombella to attack Mario once more for the Superguard lesson.
-        CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_AFTER_PLAYER)
-        IF_INT_NOT_EQUAL(LW(0), 0)
-            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, LECTURE_FRANKLI_WORK_STEP, 7)
-            CALL(btlevtcmd_StopWaitEvent, UNIT_ID_MARIO)
-            CALL(btlevtcmd_AnimeChangePose, UNIT_ID_MARIO, 1, STRING("M_S_1"))
-            BEGIN_SIBLING_EVENT_GET_ID(LW(0))
+            // Step 6, after the attack: Frankly praises the Action Command,
+            // then asks Goombella to attack Mario once more for the Superguard lesson.
+            CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_AFTER_PLAYER)
+            IF_INT_NOT_EQUAL(LW(0), 0)
+                CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, LECTURE_FRANKLI_WORK_STEP, 7)
+                CALL(btlevtcmd_StopWaitEvent, UNIT_ID_MARIO)
+                CALL(btlevtcmd_AnimeChangePose, UNIT_ID_MARIO, 1, STRING("M_S_1"))
+                BEGIN_SIBLING_EVENT_GET_ID(LW(0))
+                    CALL(evt_sub_intpl_init, EASING_CUBIC_OUT, 180, 0, 20)
+                    LOOP(21)
+                        CALL(evt_sub_intpl_get_value)
+                        CALL(btlevtcmd_SetRotate, UNIT_ID_LECTURE, 0, LW(0), 0)
+                        WAIT_FRAMES(1)
+                    END_LOOP
+                    CALL(btlevtcmd_SetRotate, UNIT_ID_LECTURE, 0, 0, 0)
+                END_SIBLING_EVENT
+                CALL(btlevtcmd_WaitEventEnd, LW(0))
+                CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
+                CALL(btlevtcmd_SetTalkPose, UNIT_ID_SELF, STRING("T_1"))
+                CALL(btlevtcmd_SetStayPose, UNIT_ID_SELF, STRING("S_1"))
+                CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("mac_0_b_t2_011"), 0, -2)
+                BEGIN_SIBLING_EVENT_GET_ID(LW(0))
+                    CALL(evt_sub_intpl_init, EASING_CUBIC_OUT, 0, 180, 20)
+                    LOOP(21)
+                        CALL(evt_sub_intpl_get_value)
+                        CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, LW(0), 0)
+                        WAIT_FRAMES(1)
+                    END_LOOP
+                    CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 180, 0)
+                END_SIBLING_EVENT
+                CALL(btlevtcmd_WaitEventEnd, LW(0))
+                CALL(btlevtcmd_SetTalkPose, UNIT_ID_SELF, STRING("T_1"))
+                CALL(btlevtcmd_SetStayPose, UNIT_ID_SELF, STRING("S_1"))
+                CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("mac_0_b_t2_012"), 0, -2)
+                CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, LECTURE_FRANKLI_WORK_CHRISTINE, LW(3))
+                CALL(btlevtcmd_StopWaitEvent, LW(3))
+                CALL(btlevtcmd_SetTalkPose, LW(3), STRING("PKR_T_1"))
+                CALL(btlevtcmd_SetStayPose, LW(3), STRING("PKR_S_1"))
+                CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("mac_0_b_t2_013"), 0, LW(3))
+                CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
+                CALL(btlevtcmd_StartWaitEvent, UNIT_ID_MARIO)
+                BEGIN_INLINE_EVENT
+                    CALL(evt_sub_intpl_init, EASING_CUBIC_OUT, 180, 0, 20)
+                    LOOP(21)
+                        CALL(evt_sub_intpl_get_value)
+                        CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, LW(0), 0)
+                        WAIT_FRAMES(1)
+                    END_LOOP
+                    CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
+                END_INLINE_EVENT
+                RETURN
+            END_IF
+        CASE_EQUAL(8)
+
+            // Step 8, before the player's phase: Frankly explains the Superguard
+            // and offers more practice (a yes or no choice).
+            CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_BEFORE_PLAYER)
+            IF_INT_NOT_EQUAL(LW(0), 0)
+                CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, LECTURE_FRANKLI_WORK_STEP, 9)
+                CALL(btlevtcmd_onoff_battleflag, 0, BATTLE_FLAG_LECTURE_HAMMER)
+                CALL(btlevtcmd_onoff_battleflag, 1, BATTLE_FLAG_LECTURE_FREE)
+                CALL(btlevtcmd_StopWaitEvent, UNIT_ID_MARIO)
+                CALL(btlevtcmd_AnimeChangePose, UNIT_ID_MARIO, 1, STRING("M_S_1"))
+                CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
+                CALL(btlevtcmd_SetTalkPose, UNIT_ID_SELF, STRING("T_1"))
+                CALL(btlevtcmd_SetStayPose, UNIT_ID_SELF, STRING("S_1"))
+                CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("mac_0_b_t2_016"), 0, -2)
+                CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
+                CALL(evt_btl_camera_set_moveto, 0, 0, 58, 256, 0, 41, 0, 30, 11)
+                WAIT_MS(500)
+                CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("mac_0_b_t2_017"), 0, -2)
+                CALL(evt_msg_select, 0, STRING("mac_0_b_t2_018"))
+                IF_INT_EQUAL(LW(0), 0)
+                    CALL(evt_msg_print_add, 0, STRING("mac_0_b_t2_019"))
+                    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
+                    CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
+                    RETURN
+                ELSE
+                    CALL(evt_msg_print_add, 0, STRING("mac_0_b_t2_020"))
+                    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
+                    CALL(btlevtcmd_onoff_battleflag, 1, BATTLE_FLAG_INTERRUPT_STOP)
+                    RETURN
+                END_IF
+            END_IF
+        CASE_EQUAL(9)
+
+            // Step 9, before the player's phase: Frankly's feedback on Mario's guard try (nicely done,
+            // a little early or a little late).
+            CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_BEFORE_PLAYER)
+            IF_INT_NOT_EQUAL(LW(0), 0)
+                CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
+                CALL(btlevtcmd_GetUnitWork, UNIT_ID_LECTURE, LECTURE_FRANKLI_WORK_GUARD_RESULT, LW(0))
+                SWITCH(LW(0))
+                    CASE_EQUAL(4)
+                        CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("mac_0_b_t2_021"), 0, -2)
+                    CASE_EQUAL(5)
+                        CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("mac_0_b_t2_022"), 0, -2)
+                    CASE_EQUAL(6)
+                        CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("mac_0_b_t2_023"), 0, -2)
+                    CASE_EQUAL(7)
+                        CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("mac_0_b_t2_021"), 0, -2)
+                END_SWITCH
+                CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
+                RETURN
+            END_IF
+
+            // Step 9, after the player's phase: the same feedback on Mario's attack try.
+            CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_AFTER_PLAYER)
+            IF_INT_NOT_EQUAL(LW(0), 0)
                 CALL(evt_sub_intpl_init, EASING_CUBIC_OUT, 180, 0, 20)
                 LOOP(21)
                     CALL(evt_sub_intpl_get_value)
@@ -371,120 +472,19 @@ static EVT_BEGIN(phase_event)
                     WAIT_FRAMES(1)
                 END_LOOP
                 CALL(btlevtcmd_SetRotate, UNIT_ID_LECTURE, 0, 0, 0)
-            END_SIBLING_EVENT
-            CALL(btlevtcmd_WaitEventEnd, LW(0))
-            CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
-            CALL(btlevtcmd_SetTalkPose, UNIT_ID_SELF, STRING("T_1"))
-            CALL(btlevtcmd_SetStayPose, UNIT_ID_SELF, STRING("S_1"))
-            CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("mac_0_b_t2_011"), 0, -2)
-            BEGIN_SIBLING_EVENT_GET_ID(LW(0))
-                CALL(evt_sub_intpl_init, EASING_CUBIC_OUT, 0, 180, 20)
-                LOOP(21)
-                    CALL(evt_sub_intpl_get_value)
-                    CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, LW(0), 0)
-                    WAIT_FRAMES(1)
-                END_LOOP
-                CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 180, 0)
-            END_SIBLING_EVENT
-            CALL(btlevtcmd_WaitEventEnd, LW(0))
-            CALL(btlevtcmd_SetTalkPose, UNIT_ID_SELF, STRING("T_1"))
-            CALL(btlevtcmd_SetStayPose, UNIT_ID_SELF, STRING("S_1"))
-            CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("mac_0_b_t2_012"), 0, -2)
-            CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, LECTURE_FRANKLI_WORK_CHRISTINE, LW(3))
-            CALL(btlevtcmd_StopWaitEvent, LW(3))
-            CALL(btlevtcmd_SetTalkPose, LW(3), STRING("PKR_T_1"))
-            CALL(btlevtcmd_SetStayPose, LW(3), STRING("PKR_S_1"))
-            CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("mac_0_b_t2_013"), 0, LW(3))
-            CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
-            CALL(btlevtcmd_StartWaitEvent, UNIT_ID_MARIO)
-            BEGIN_INLINE_EVENT
-                CALL(evt_sub_intpl_init, EASING_CUBIC_OUT, 180, 0, 20)
-                LOOP(21)
-                    CALL(evt_sub_intpl_get_value)
-                    CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, LW(0), 0)
-                    WAIT_FRAMES(1)
-                END_LOOP
-                CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
-            END_INLINE_EVENT
-            RETURN
-        END_IF
-        CASE_EQUAL(8)
-
-        // Step 8, before the player's phase: Frankly explains the Superguard
-        // and offers more practice (a yes or no choice).
-        CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_BEFORE_PLAYER)
-        IF_INT_NOT_EQUAL(LW(0), 0)
-            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, LECTURE_FRANKLI_WORK_STEP, 9)
-            CALL(btlevtcmd_onoff_battleflag, 0, BATTLE_FLAG_LECTURE_HAMMER)
-            CALL(btlevtcmd_onoff_battleflag, 1, BATTLE_FLAG_LECTURE_FREE)
-            CALL(btlevtcmd_StopWaitEvent, UNIT_ID_MARIO)
-            CALL(btlevtcmd_AnimeChangePose, UNIT_ID_MARIO, 1, STRING("M_S_1"))
-            CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
-            CALL(btlevtcmd_SetTalkPose, UNIT_ID_SELF, STRING("T_1"))
-            CALL(btlevtcmd_SetStayPose, UNIT_ID_SELF, STRING("S_1"))
-            CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("mac_0_b_t2_016"), 0, -2)
-            CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
-            CALL(evt_btl_camera_set_moveto, 0, 0, 58, 256, 0, 41, 0, 30, 11)
-            WAIT_MS(500)
-            CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("mac_0_b_t2_017"), 0, -2)
-            CALL(evt_msg_select, 0, STRING("mac_0_b_t2_018"))
-            IF_INT_EQUAL(LW(0), 0)
-                CALL(evt_msg_print_add, 0, STRING("mac_0_b_t2_019"))
-                CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
+                CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
+                CALL(btlevtcmd_GetUnitWork, UNIT_ID_LECTURE, LECTURE_FRANKLI_WORK_ATTACK_RESULT, LW(0))
+                SWITCH(LW(0))
+                    CASE_EQUAL(1)
+                        CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("mac_0_b_t2_021"), 0, -2)
+                    CASE_EQUAL(2)
+                        CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("mac_0_b_t2_022"), 0, -2)
+                    CASE_EQUAL(3)
+                        CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("mac_0_b_t2_023"), 0, -2)
+                END_SWITCH
                 CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
                 RETURN
-            ELSE
-                CALL(evt_msg_print_add, 0, STRING("mac_0_b_t2_020"))
-                CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
-                CALL(btlevtcmd_onoff_battleflag, 1, BATTLE_FLAG_INTERRUPT_STOP)
-                RETURN
             END_IF
-        END_IF
-        CASE_EQUAL(9)
-
-        // Step 9, before the player's phase: Frankly's feedback on Mario's guard try (nicely done,
-        // a little early or a little late).
-        CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_BEFORE_PLAYER)
-        IF_INT_NOT_EQUAL(LW(0), 0)
-            CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
-            CALL(btlevtcmd_GetUnitWork, UNIT_ID_LECTURE, LECTURE_FRANKLI_WORK_GUARD_RESULT, LW(0))
-            SWITCH(LW(0))
-                CASE_EQUAL(4)
-                CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("mac_0_b_t2_021"), 0, -2)
-                CASE_EQUAL(5)
-                CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("mac_0_b_t2_022"), 0, -2)
-                CASE_EQUAL(6)
-                CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("mac_0_b_t2_023"), 0, -2)
-                CASE_EQUAL(7)
-                CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("mac_0_b_t2_021"), 0, -2)
-            END_SWITCH
-            CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
-            RETURN
-        END_IF
-
-        // Step 9, after the player's phase: the same feedback on Mario's attack try.
-        CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_AFTER_PLAYER)
-        IF_INT_NOT_EQUAL(LW(0), 0)
-            CALL(evt_sub_intpl_init, EASING_CUBIC_OUT, 180, 0, 20)
-            LOOP(21)
-                CALL(evt_sub_intpl_get_value)
-                CALL(btlevtcmd_SetRotate, UNIT_ID_LECTURE, 0, LW(0), 0)
-                WAIT_FRAMES(1)
-            END_LOOP
-            CALL(btlevtcmd_SetRotate, UNIT_ID_LECTURE, 0, 0, 0)
-            CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
-            CALL(btlevtcmd_GetUnitWork, UNIT_ID_LECTURE, LECTURE_FRANKLI_WORK_ATTACK_RESULT, LW(0))
-            SWITCH(LW(0))
-                CASE_EQUAL(1)
-                CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("mac_0_b_t2_021"), 0, -2)
-                CASE_EQUAL(2)
-                CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("mac_0_b_t2_022"), 0, -2)
-                CASE_EQUAL(3)
-                CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("mac_0_b_t2_023"), 0, -2)
-            END_SWITCH
-            CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
-            RETURN
-        END_IF
     END_SWITCH
     RETURN
 EVT_END()
@@ -620,11 +620,11 @@ EVT_BEGIN(lecAttackEvent_Jump)
             CALL(btlevtcmd_AcGetOutputParam, 0, LW(0))
             SWITCH(LW(0))
                 CASE_EQUAL(3)
-                CALL(btlevtcmd_SetUnitWork, UNIT_ID_LECTURE, LECTURE_FRANKLI_WORK_ATTACK_RESULT, 1)
+                    CALL(btlevtcmd_SetUnitWork, UNIT_ID_LECTURE, LECTURE_FRANKLI_WORK_ATTACK_RESULT, 1)
                 CASE_EQUAL(1)
-                CALL(btlevtcmd_SetUnitWork, UNIT_ID_LECTURE, LECTURE_FRANKLI_WORK_ATTACK_RESULT, 2)
+                    CALL(btlevtcmd_SetUnitWork, UNIT_ID_LECTURE, LECTURE_FRANKLI_WORK_ATTACK_RESULT, 2)
                 CASE_EQUAL(2)
-                CALL(btlevtcmd_SetUnitWork, UNIT_ID_LECTURE, LECTURE_FRANKLI_WORK_ATTACK_RESULT, 3)
+                    CALL(btlevtcmd_SetUnitWork, UNIT_ID_LECTURE, LECTURE_FRANKLI_WORK_ATTACK_RESULT, 3)
             END_SWITCH
         END_IF
     END_IF
@@ -910,11 +910,11 @@ EVT_BEGIN(lecAttackEvent_Hammer)
         CALL(btlevtcmd_AcGetOutputParam, 2, LW(0))
         SWITCH(LW(0))
             CASE_EQUAL(3)
-            CALL(btlevtcmd_SetUnitWork, UNIT_ID_LECTURE, LECTURE_FRANKLI_WORK_ATTACK_RESULT, 1)
+                CALL(btlevtcmd_SetUnitWork, UNIT_ID_LECTURE, LECTURE_FRANKLI_WORK_ATTACK_RESULT, 1)
             CASE_EQUAL(1)
-            CALL(btlevtcmd_SetUnitWork, UNIT_ID_LECTURE, LECTURE_FRANKLI_WORK_ATTACK_RESULT, 2)
+                CALL(btlevtcmd_SetUnitWork, UNIT_ID_LECTURE, LECTURE_FRANKLI_WORK_ATTACK_RESULT, 2)
             CASE_EQUAL(2)
-            CALL(btlevtcmd_SetUnitWork, UNIT_ID_LECTURE, LECTURE_FRANKLI_WORK_ATTACK_RESULT, 3)
+                CALL(btlevtcmd_SetUnitWork, UNIT_ID_LECTURE, LECTURE_FRANKLI_WORK_ATTACK_RESULT, 3)
         END_SWITCH
     END_IF
 

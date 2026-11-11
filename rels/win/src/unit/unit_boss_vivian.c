@@ -429,48 +429,48 @@ static EVT_BEGIN(dead_event)
     CALL(btlevtcmd_WaitAttackEnd)
     SWITCH(GW(11))
         CASE_EQUAL(0)
-        SWITCH(GW(12))
-            CASE_EQUAL(0)
-            CASE_EQUAL(1)
-            LOOP(0)
-                IF_INT_EQUAL(GW(12), 2)
-                    BREAK_LOOP
-                END_IF
-                WAIT_FRAMES(1)
-            END_LOOP
-            GOTO(99)
-            CASE_EQUAL(2)
-        END_SWITCH
+            SWITCH(GW(12))
+                CASE_EQUAL(0)
+                CASE_EQUAL(1)
+                    LOOP(0)
+                        IF_INT_EQUAL(GW(12), 2)
+                            BREAK_LOOP
+                        END_IF
+                        WAIT_FRAMES(1)
+                    END_LOOP
+                    GOTO(99)
+                CASE_EQUAL(2)
+            END_SWITCH
         CASE_EQUAL(1)
-        LOOP(0)
-            IF_INT_EQUAL(GW(11), 2)
-                BREAK_LOOP
-            END_IF
-            WAIT_FRAMES(1)
-        END_LOOP
-        GOTO(99)
-        CASE_EQUAL(2)
-        SWITCH(GW(12))
-            CASE_EQUAL(0)
-            CASE_EQUAL(1)
             LOOP(0)
-                IF_INT_EQUAL(GW(12), 2)
+                IF_INT_EQUAL(GW(11), 2)
                     BREAK_LOOP
                 END_IF
                 WAIT_FRAMES(1)
             END_LOOP
             GOTO(99)
-            CASE_EQUAL(2)
-            CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
-            CALL_CHILD(btl_vivian_zoom)
-            CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("btl_majo3_13"), 0, -2)
-            CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
-            GOTO(90)
-        END_SWITCH
-        SWITCH(GW(12))
-            CASE_EQUAL(0)
-            CASE_DEFAULT
-        END_SWITCH
+        CASE_EQUAL(2)
+            SWITCH(GW(12))
+                CASE_EQUAL(0)
+                CASE_EQUAL(1)
+                    LOOP(0)
+                        IF_INT_EQUAL(GW(12), 2)
+                            BREAK_LOOP
+                        END_IF
+                        WAIT_FRAMES(1)
+                    END_LOOP
+                    GOTO(99)
+                CASE_EQUAL(2)
+                    CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
+                    CALL_CHILD(btl_vivian_zoom)
+                    CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("btl_majo3_13"), 0, -2)
+                    CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
+                    GOTO(90)
+            END_SWITCH
+            SWITCH(GW(12))
+                CASE_EQUAL(0)
+                CASE_DEFAULT
+            END_SWITCH
     END_SWITCH
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
     CALL(btlevtcmd_SetTalkPose, UNIT_ID_SELF, STRING("PTR_D_1"))
@@ -507,14 +507,14 @@ static EVT_BEGIN(unison_phase_event)
             WAIT_MS(500)
             SWITCH(LW(4))
                 CASE_EQUAL(0)
-                SET_VALUE(LW(0), 55)
-                SET_VALUE(LW(2), 0)
+                    SET_VALUE(LW(0), 55)
+                    SET_VALUE(LW(2), 0)
                 CASE_EQUAL(1)
-                SET_VALUE(LW(0), 105)
-                SET_VALUE(LW(2), 10)
+                    SET_VALUE(LW(0), 105)
+                    SET_VALUE(LW(2), 10)
                 CASE_EQUAL(2)
-                SET_VALUE(LW(0), 155)
-                SET_VALUE(LW(2), 20)
+                    SET_VALUE(LW(0), 155)
+                    SET_VALUE(LW(2), 20)
             END_SWITCH
             SET_VALUE(LW(1), 0)
             CALL(btlevtcmd_SetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -552,24 +552,24 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(0)
-        SET_VALUE(LW(9), PTR(&weapon_vivian_kagenuke_attack1))
-        CALL_CHILD(kagenuke_attack_event)
-        CASE_EQUAL(1)
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, 2)
-        SET_VALUE(LW(9), PTR(&weapon_vivian_flame_attack1))
-        CALL_CHILD(flame_attack_event)
-        CASE_EQUAL(2)
-        SET_VALUE(LW(1), 70)
-        ADD(LW(1), 30)
-        SUBTRACT(LW(1), 1)
-        CALL(evt_sub_random, LW(1), LW(0))
-        IF_INT_LESS(LW(0), 70)
             SET_VALUE(LW(9), PTR(&weapon_vivian_kagenuke_attack1))
             CALL_CHILD(kagenuke_attack_event)
-        ELSE
+        CASE_EQUAL(1)
+            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, 2)
             SET_VALUE(LW(9), PTR(&weapon_vivian_flame_attack1))
             CALL_CHILD(flame_attack_event)
-        END_IF
+        CASE_EQUAL(2)
+            SET_VALUE(LW(1), 70)
+            ADD(LW(1), 30)
+            SUBTRACT(LW(1), 1)
+            CALL(evt_sub_random, LW(1), LW(0))
+            IF_INT_LESS(LW(0), 70)
+                SET_VALUE(LW(9), PTR(&weapon_vivian_kagenuke_attack1))
+                CALL_CHILD(kagenuke_attack_event)
+            ELSE
+                SET_VALUE(LW(9), PTR(&weapon_vivian_flame_attack1))
+                CALL_CHILD(flame_attack_event)
+            END_IF
     END_SWITCH
     CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
@@ -617,23 +617,23 @@ static EVT_BEGIN(kagenuke_attack_event)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
-        GOTO(90)
+            GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_LUCKY)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
+            GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_DODGY)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
+            GOTO(90)
         CASE_EQUAL(PRECHECK_MISS)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
+            GOTO(90)
         CASE_EQUAL(PRECHECK_HIT)
-        GOTO(91)
+            GOTO(91)
         CASE_END
         CASE_DEFAULT
-        GOTO(98)
+            GOTO(98)
         CASE_END
     END_SWITCH
     LABEL(90)
@@ -684,23 +684,23 @@ static EVT_BEGIN(flame_attack_event)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
-        GOTO(90)
+            GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_LUCKY)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
+            GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_DODGY)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
+            GOTO(90)
         CASE_EQUAL(PRECHECK_MISS)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
+            GOTO(90)
         CASE_EQUAL(PRECHECK_HIT)
-        GOTO(91)
+            GOTO(91)
         CASE_END
         CASE_DEFAULT
-        GOTO(98)
+            GOTO(98)
         CASE_END
     END_SWITCH
     LABEL(90)

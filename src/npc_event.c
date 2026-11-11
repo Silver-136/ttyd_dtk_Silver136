@@ -406,107 +406,107 @@ EVT_BEGIN(enemy_2d_common_dead_event)
     SWITCH(LW(0))
         // Stomped: an enemy in mid-air scores and flips off screen.
         CASE_FLAG(KPA_ENCOUNT_STOMP)
-        IF_INT_EQUAL(LW(15), 0)
+            IF_INT_EQUAL(LW(15), 0)
+                CALL(evt_npc_calc_score, STRING("me"))
+                SPAWN_EVENT(_2d_dead_rotate_event)
+                CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
+                CALL(_2d_get_dead_jump_offset, STRING("me"), LW(3))
+                ADD(LW(0), LW(3))
+                CALL(_2d_dead_jump, STRING("me"), LW(0), LW(1), LW(2), 600, FLOAT(40.0f), FLOAT(0.0f), -300)
+
+            // Stomped flat on the ground: it lies squashed for half a second,
+            // then sways down off screen like a falling leaf.
+            ELSE
+                CALL(evt_npc_calc_score, STRING("me"))
+                CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_GRAVITY)
+                CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_AUTO_MOVE_ANIM)
+                CALL(evt_npc_status_onoff, 0, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
+                CALL(evt_npc_set_talk_anim, STRING("me"))
+                CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
+                SUBTRACT(LW(1), 5)
+                CALL(evt_npc_set_position, STRING("me"), LW(0), LW(1), LW(2))
+                WAIT_FRAMES(30)
+                CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
+                BEGIN_SIBLING_EVENT
+                    LOOP(30)
+                        CALL(evt_npc_add_rotate, STRING("me"), 0, 0, 1)
+                        WAIT_FRAMES(1)
+                    END_LOOP
+                END_SIBLING_EVENT
+                SUBTRACT(LW(0), 40)
+                SUBTRACT(LW(1), 20)
+                CALL(evt_npc_glide_position, STRING("me"), LW(0), LW(1), LW(2), 500, 0, -10, 4, 0)
+                LOOP(0)
+                    BEGIN_SIBLING_EVENT
+                        LOOP(60)
+                            CALL(evt_npc_add_rotate, STRING("me"), 0, 0, -1)
+                            WAIT_FRAMES(1)
+                        END_LOOP
+                    END_SIBLING_EVENT
+                    CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
+                    ADD(LW(0), 80)
+                    SUBTRACT(LW(1), 20)
+                    CALL(evt_npc_glide_position, STRING("me"), LW(0), LW(1), LW(2), 1000, 0, -10, 4, 0)
+                    BEGIN_SIBLING_EVENT
+                        LOOP(60)
+                            CALL(evt_npc_add_rotate, STRING("me"), 0, 0, 1)
+                            WAIT_FRAMES(1)
+                        END_LOOP
+                    END_SIBLING_EVENT
+                    CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
+                    SUBTRACT(LW(0), 80)
+                    SUBTRACT(LW(1), 20)
+                    CALL(evt_npc_glide_position, STRING("me"), LW(0), LW(1), LW(2), 1000, 0, -10, 4, 0)
+                    IF_INT_LESS_OR_EQUAL(LW(1), -200)
+                        BREAK_LOOP
+                    END_IF
+                END_LOOP
+            END_IF
+
+        // Hit by fire: scores with the fire combo and flips off screen.
+        CASE_FLAG(KPA_ENCOUNT_FIRE)
+            CALL(evt_npc_calc_score, STRING("me"))
+            SPAWN_EVENT(_2d_dead_rotate_event)
+            CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_DARKEN)
+            CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
+            CALL(_2d_get_dead_jump_offset, STRING("me"), LW(3))
+            ADD(LW(0), LW(3))
+            CALL(_2d_dead_jump, STRING("me"), LW(0), LW(1), LW(2), 600, FLOAT(40.0f), FLOAT(65.0f), -300)
+
+        // Bowser's star (4), a map object bumped from below (8) and lava (16, darkened) also flip it off screen with a
+        // score call (npcCalcScore gives 0 for lava); the goal pole (32) flips it without a score.
+        CASE_FLAG(KPA_ENCOUNT_STAR)
             CALL(evt_npc_calc_score, STRING("me"))
             SPAWN_EVENT(_2d_dead_rotate_event)
             CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
             CALL(_2d_get_dead_jump_offset, STRING("me"), LW(3))
             ADD(LW(0), LW(3))
-            CALL(_2d_dead_jump, STRING("me"), LW(0), LW(1), LW(2), 600, FLOAT(40.0f), FLOAT(0.0f), -300)
-
-        // Stomped flat on the ground: it lies squashed for half a second,
-        // then sways down off screen like a falling leaf.
-        ELSE
-            CALL(evt_npc_calc_score, STRING("me"))
-            CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_GRAVITY)
-            CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_AUTO_MOVE_ANIM)
-            CALL(evt_npc_status_onoff, 0, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
-            CALL(evt_npc_set_talk_anim, STRING("me"))
-            CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
-            SUBTRACT(LW(1), 5)
-            CALL(evt_npc_set_position, STRING("me"), LW(0), LW(1), LW(2))
-            WAIT_FRAMES(30)
-            CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
-            BEGIN_SIBLING_EVENT
-                LOOP(30)
-                    CALL(evt_npc_add_rotate, STRING("me"), 0, 0, 1)
-                    WAIT_FRAMES(1)
-                END_LOOP
-            END_SIBLING_EVENT
-            SUBTRACT(LW(0), 40)
-            SUBTRACT(LW(1), 20)
-            CALL(evt_npc_glide_position, STRING("me"), LW(0), LW(1), LW(2), 500, 0, -10, 4, 0)
-            LOOP(0)
-                BEGIN_SIBLING_EVENT
-                    LOOP(60)
-                        CALL(evt_npc_add_rotate, STRING("me"), 0, 0, -1)
-                        WAIT_FRAMES(1)
-                    END_LOOP
-                END_SIBLING_EVENT
-                CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
-                ADD(LW(0), 80)
-                SUBTRACT(LW(1), 20)
-                CALL(evt_npc_glide_position, STRING("me"), LW(0), LW(1), LW(2), 1000, 0, -10, 4, 0)
-                BEGIN_SIBLING_EVENT
-                    LOOP(60)
-                        CALL(evt_npc_add_rotate, STRING("me"), 0, 0, 1)
-                        WAIT_FRAMES(1)
-                    END_LOOP
-                END_SIBLING_EVENT
-                CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
-                SUBTRACT(LW(0), 80)
-                SUBTRACT(LW(1), 20)
-                CALL(evt_npc_glide_position, STRING("me"), LW(0), LW(1), LW(2), 1000, 0, -10, 4, 0)
-                IF_INT_LESS_OR_EQUAL(LW(1), -200)
-                    BREAK_LOOP
-                END_IF
-            END_LOOP
-        END_IF
-
-        // Hit by fire: scores with the fire combo and flips off screen.
-        CASE_FLAG(KPA_ENCOUNT_FIRE)
-        CALL(evt_npc_calc_score, STRING("me"))
-        SPAWN_EVENT(_2d_dead_rotate_event)
-        CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_DARKEN)
-        CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
-        CALL(_2d_get_dead_jump_offset, STRING("me"), LW(3))
-        ADD(LW(0), LW(3))
-        CALL(_2d_dead_jump, STRING("me"), LW(0), LW(1), LW(2), 600, FLOAT(40.0f), FLOAT(65.0f), -300)
-
-        // Bowser's star (4), a map object bumped from below (8) and lava (16, darkened) also flip it off screen with a
-        // score call (npcCalcScore gives 0 for lava); the goal pole (32) flips it without a score.
-        CASE_FLAG(KPA_ENCOUNT_STAR)
-        CALL(evt_npc_calc_score, STRING("me"))
-        SPAWN_EVENT(_2d_dead_rotate_event)
-        CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
-        CALL(_2d_get_dead_jump_offset, STRING("me"), LW(3))
-        ADD(LW(0), LW(3))
-        CALL(_2d_dead_jump, STRING("me"), LW(0), LW(1), LW(2), 600, FLOAT(40.0f), FLOAT(65.0f), -300)
+            CALL(_2d_dead_jump, STRING("me"), LW(0), LW(1), LW(2), 600, FLOAT(40.0f), FLOAT(65.0f), -300)
         CASE_FLAG(KPA_ENCOUNT_GOAL_POLE)
-        SPAWN_EVENT(_2d_dead_rotate_event)
-        CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
-        CALL(_2d_get_dead_jump_offset, STRING("me"), LW(3))
-        ADD(LW(0), LW(3))
-        CALL(_2d_dead_jump, STRING("me"), LW(0), LW(1), LW(2), 600, FLOAT(40.0f), FLOAT(65.0f), -300)
+            SPAWN_EVENT(_2d_dead_rotate_event)
+            CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
+            CALL(_2d_get_dead_jump_offset, STRING("me"), LW(3))
+            ADD(LW(0), LW(3))
+            CALL(_2d_dead_jump, STRING("me"), LW(0), LW(1), LW(2), 600, FLOAT(40.0f), FLOAT(65.0f), -300)
         CASE_FLAG(KPA_ENCOUNT_MOBJ)
-        CALL(evt_npc_calc_score, STRING("me"))
-        SPAWN_EVENT(_2d_dead_rotate_event)
-        CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
-        CALL(_2d_get_dead_jump_offset, STRING("me"), LW(3))
-        ADD(LW(0), LW(3))
-        CALL(_2d_dead_jump, STRING("me"), LW(0), LW(1), LW(2), 600, FLOAT(40.0f), FLOAT(65.0f), -300)
+            CALL(evt_npc_calc_score, STRING("me"))
+            SPAWN_EVENT(_2d_dead_rotate_event)
+            CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
+            CALL(_2d_get_dead_jump_offset, STRING("me"), LW(3))
+            ADD(LW(0), LW(3))
+            CALL(_2d_dead_jump, STRING("me"), LW(0), LW(1), LW(2), 600, FLOAT(40.0f), FLOAT(65.0f), -300)
         CASE_FLAG(KPA_ENCOUNT_MAGMA)
-        CALL(evt_npc_calc_score, STRING("me"))
-        SPAWN_EVENT(_2d_dead_rotate_event)
-        CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_DARKEN)
-        CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
-        CALL(_2d_get_dead_jump_offset, STRING("me"), LW(3))
-        ADD(LW(0), LW(3))
-        CALL(_2d_dead_jump, STRING("me"), LW(0), LW(1), LW(2), 600, FLOAT(40.0f), FLOAT(65.0f), -300)
+            CALL(evt_npc_calc_score, STRING("me"))
+            SPAWN_EVENT(_2d_dead_rotate_event)
+            CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_DARKEN)
+            CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
+            CALL(_2d_get_dead_jump_offset, STRING("me"), LW(3))
+            ADD(LW(0), LW(3))
+            CALL(_2d_dead_jump, STRING("me"), LW(0), LW(1), LW(2), 600, FLOAT(40.0f), FLOAT(65.0f), -300)
 
         // Anything else: a short pause only.
         CASE_DEFAULT
-        WAIT_MS(500)
+            WAIT_MS(500)
     END_SWITCH
     CALL(evt_npc_return_interrupt, STRING("me"))
     RETURN

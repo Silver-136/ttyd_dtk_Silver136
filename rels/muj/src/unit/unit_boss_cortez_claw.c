@@ -306,19 +306,19 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
-        GOTO(90)
+            GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_LUCKY)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
+            GOTO(90)
         CASE_EQUAL(PRECHECK_DODGY)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
+            GOTO(90)
         CASE_EQUAL(PRECHECK_MISS)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
+            GOTO(90)
         CASE_DEFAULT
-        GOTO(91)
+            GOTO(91)
     END_SWITCH
 
     // The swing misses: the Hook waits for its current animation to finish.

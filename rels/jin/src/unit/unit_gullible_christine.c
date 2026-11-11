@@ -265,31 +265,31 @@ static EVT_BEGIN(dead_event_christine)
     CALL(btlevtcmd_WaitAttackEnd)
     SWITCH(GW(19))
         CASE_EQUAL(0)
-        CALL_CHILD(gparty_zoom_christine)
-        CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("stg4_jin_26_03_kur"), 0, -2)
-        CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKR_D_3"))
+            CALL_CHILD(gparty_zoom_christine)
+            CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("stg4_jin_26_03_kur"), 0, -2)
+            CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKR_D_3"))
 #if VERSION >= VERSION_JP
-        CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_DIE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
+            CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_DIE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
 #endif
-        WAIT_MS(500)
-        CALL_CHILD(fmario_zoom_christine)
-        CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("stg4_jin_26_04"), 0, GW(16))
-        WAIT_MS(200)
+            WAIT_MS(500)
+            CALL_CHILD(fmario_zoom_christine)
+            CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("stg4_jin_26_04"), 0, GW(16))
+            WAIT_MS(200)
         CASE_EQUAL(1)
-        CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKR_D_3"))
+            CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKR_D_3"))
 #if VERSION >= VERSION_JP
-        CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_DIE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
+            CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_DIE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
 #endif
-        LOOP(0)
-            IF_INT_EQUAL(GW(19), 2)
-                BREAK_LOOP
-            END_IF
-            WAIT_FRAMES(1)
-        END_LOOP
+            LOOP(0)
+                IF_INT_EQUAL(GW(19), 2)
+                    BREAK_LOOP
+                END_IF
+                WAIT_FRAMES(1)
+            END_LOOP
         CASE_EQUAL(2)
-        CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKR_D_3"))
+            CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKR_D_3"))
 #if VERSION >= VERSION_JP
-        CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_DIE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
+            CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_DIE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
 #endif
     END_SWITCH
     CALL(btlevtcmd_KillUnit, UNIT_ID_SELF, 1)
@@ -349,10 +349,10 @@ static EVT_BEGIN(attack_event_christine)
     CALL(btlevtcmd_DrawLots, LW(0), 2, 80, 20)
     SWITCH(LW(0))
         CASE_EQUAL(0)
-        SET_VALUE(LW(11), 0)
+            SET_VALUE(LW(11), 0)
         CASE_EQUAL(1)
-        CALL(evt_sub_random, 4, LW(11))
-        ADD(LW(11), 1)
+            CALL(evt_sub_random, 4, LW(11))
+            ADD(LW(11), 1)
     END_SWITCH
     SET_VALUE(LW(10), 0)
 
@@ -371,7 +371,7 @@ static EVT_BEGIN(attack_event_christine)
         CASE_END
         CASE_EQUAL(PRECHECK_HIT)
         CASE_DEFAULT
-        WAIT_MS(1000)
+            WAIT_MS(1000)
     END_SWITCH
 
     // Wind-up: she crouches (PKR_A_2B) and then jumps (PKR_J_1A) with a Goomba jump cry.

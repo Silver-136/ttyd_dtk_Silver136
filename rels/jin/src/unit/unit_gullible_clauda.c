@@ -241,35 +241,35 @@ static EVT_BEGIN(dead_event_clauda)
     CALL(btlevtcmd_WaitAttackEnd)
     SWITCH(GW(19))
         CASE_EQUAL(0)
-        CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
-        CALL(evt_btl_camera_set_moveto, 0, 130, 58, 228, 130, 38, -20, 30, 11)
-        WAIT_FRAMES(37)
-        CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("stg4_jin_26_03_win"), 0, -2)
-        CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PWD_D_3"))
+            CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
+            CALL(evt_btl_camera_set_moveto, 0, 130, 58, 228, 130, 38, -20, 30, 11)
+            WAIT_FRAMES(37)
+            CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("stg4_jin_26_03_win"), 0, -2)
+            CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PWD_D_3"))
 #if VERSION >= VERSION_JP
-        CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_DIE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
+            CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_DIE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
 #endif
-        WAIT_MS(500)
-        CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
-        CALL(evt_btl_camera_set_moveto, 0, 90, 58, 228, 90, 38, -20, 30, 11)
-        WAIT_FRAMES(37)
-        CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("stg4_jin_26_04"), 0, GW(16))
-        WAIT_MS(200)
+            WAIT_MS(500)
+            CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
+            CALL(evt_btl_camera_set_moveto, 0, 90, 58, 228, 90, 38, -20, 30, 11)
+            WAIT_FRAMES(37)
+            CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("stg4_jin_26_04"), 0, GW(16))
+            WAIT_MS(200)
         CASE_EQUAL(1)
-        CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PWD_D_3"))
+            CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PWD_D_3"))
 #if VERSION >= VERSION_JP
-        CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_DIE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
+            CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_DIE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
 #endif
-        LOOP(0)
-            IF_INT_EQUAL(GW(19), 2)
-                BREAK_LOOP
-            END_IF
-            WAIT_FRAMES(1)
-        END_LOOP
+            LOOP(0)
+                IF_INT_EQUAL(GW(19), 2)
+                    BREAK_LOOP
+                END_IF
+                WAIT_FRAMES(1)
+            END_LOOP
         CASE_EQUAL(2)
-        CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PWD_D_3"))
+            CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PWD_D_3"))
 #if VERSION >= VERSION_JP
-        CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_DIE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
+            CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_DIE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
 #endif
     END_SWITCH
     CALL(btlevtcmd_KillUnit, UNIT_ID_SELF, 1)

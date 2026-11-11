@@ -243,9 +243,9 @@ EVT_BEGIN(kpa_00_init_evt)
     CALL(evt_npc_setup, PTR(npcEnt))
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG1_19_PEACH_TEC)
-        SPAWN_EVENT(kpa_00_first_evt)
+            SPAWN_EVENT(kpa_00_first_evt)
         CASE_EQUAL(STG1_19_01_BOWSER_BOWSER_CASTLE)
-        SPAWN_EVENT(kpa_00_fly_evt)
+            SPAWN_EVENT(kpa_00_fly_evt)
     END_SWITCH
     RETURN
 EVT_END()

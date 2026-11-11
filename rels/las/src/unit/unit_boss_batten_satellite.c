@@ -265,16 +265,16 @@ static EVT_BEGIN(dmg_counter_event)
     CALL(btlevtcmd_OnUnitFlag, LW(10), BATTLE_UNIT_FLAG_SHOW_HP)
     SWITCH(LW(0))
         CASE_EQUAL(43)
-        CALL(evt_snd_sfxon, STRING("SFX_BTL_ATTACK_MISS3"), 0)
-        SET_VALUE(LW(14), POSE_TYPE_DAMAGE_TOP_SPIKY)
+            CALL(evt_snd_sfxon, STRING("SFX_BTL_ATTACK_MISS3"), 0)
+            SET_VALUE(LW(14), POSE_TYPE_DAMAGE_TOP_SPIKY)
         CASE_OR_EQUAL(46)
         CASE_OR_EQUAL(49)
         CASE_OR_EQUAL(50)
         CASE_OR_EQUAL(54)
-        SET_VALUE(LW(14), POSE_TYPE_DAMAGE_FIRE)
+            SET_VALUE(LW(14), POSE_TYPE_DAMAGE_FIRE)
         CASE_END
         CASE_DEFAULT
-        SET_VALUE(LW(14), POSE_TYPE_DAMAGE)
+            SET_VALUE(LW(14), POSE_TYPE_DAMAGE)
     END_SWITCH
     CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), LW(14))
     BEGIN_SIBLING_EVENT
@@ -431,23 +431,23 @@ static EVT_BEGIN(batten_satellite_attack_attack_event)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
-        GOTO(90)
+            GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_LUCKY)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
+            GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_DODGY)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
+            GOTO(90)
         CASE_EQUAL(PRECHECK_MISS)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
+            GOTO(90)
         CASE_EQUAL(PRECHECK_HIT)
-        GOTO(91)
+            GOTO(91)
         CASE_END
         CASE_DEFAULT
-        GOTO(98)
+            GOTO(98)
         CASE_END
     END_SWITCH
 

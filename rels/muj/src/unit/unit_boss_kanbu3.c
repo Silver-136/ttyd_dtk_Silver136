@@ -385,11 +385,11 @@ static EVT_BEGIN(damage_event)
                 CALL(btlevtcmd_GetDamageCode, UNIT_ID_SELF, LW(0))
                 SWITCH(LW(0))
                     CASE_EQUAL(24)
-                    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_DAMAGE_FIRE)
+                        CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_DAMAGE_FIRE)
                     CASE_EQUAL(25)
-                    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_DAMAGE_FIRE)
+                        CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_DAMAGE_FIRE)
                     CASE_DEFAULT
-                    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("D_1"))
+                        CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("D_1"))
                 END_SWITCH
 #else
                 CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("D_1"))
@@ -514,39 +514,39 @@ static EVT_BEGIN(dead_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_GROUP, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(0)
-        CALL(btlevtcmd_WaitAttackEnd)
+            CALL(btlevtcmd_WaitAttackEnd)
 
-        // Lord Crump has been defeated for the first time: the group of X-Nauts in play runs away.
-        CALL(check_exist_group, LW(0))
-        IF_INT_NOT_EQUAL(LW(0), -1)
-            CALL(btlevtcmd_GetUnitWork, LW(0), ZAKO_GROUP1_WORK_DYING, LW(1))
-            IF_INT_NOT_EQUAL(LW(1), 0)
-                WAIT_FRAMES(180)
+            // Lord Crump has been defeated for the first time: the group of X-Nauts in play runs away.
+            CALL(check_exist_group, LW(0))
+            IF_INT_NOT_EQUAL(LW(0), -1)
+                CALL(btlevtcmd_GetUnitWork, LW(0), ZAKO_GROUP1_WORK_DYING, LW(1))
+                IF_INT_NOT_EQUAL(LW(1), 0)
+                    WAIT_FRAMES(180)
+                END_IF
             END_IF
-        END_IF
-        CALL(check_exist_group, LW(0))
-        IF_INT_NOT_EQUAL(LW(0), -1)
+            CALL(check_exist_group, LW(0))
+            IF_INT_NOT_EQUAL(LW(0), -1)
 
-            // Group 1 is called off (group 2, in the next case, flees as the ceiling rises).
-            CALL(zakogun_escape1)
-            CALL(btlevtcmd_KillUnit, LW(0), 0)
-        END_IF
+                // Group 1 is called off (group 2, in the next case, flees as the ceiling rises).
+                CALL(zakogun_escape1)
+                CALL(btlevtcmd_KillUnit, LW(0), 0)
+            END_IF
         CASE_END
         CASE_EQUAL(1)
-        CALL(btlevtcmd_WaitAttackEnd)
-        CALL(check_exist_group, LW(0))
-        IF_INT_NOT_EQUAL(LW(0), -1)
-            CALL(btlevtcmd_GetUnitWork, LW(0), ZAKO_GROUP2_WORK_DYING, LW(1))
-            IF_INT_NOT_EQUAL(LW(1), 0)
-                WAIT_FRAMES(180)
+            CALL(btlevtcmd_WaitAttackEnd)
+            CALL(check_exist_group, LW(0))
+            IF_INT_NOT_EQUAL(LW(0), -1)
+                CALL(btlevtcmd_GetUnitWork, LW(0), ZAKO_GROUP2_WORK_DYING, LW(1))
+                IF_INT_NOT_EQUAL(LW(1), 0)
+                    WAIT_FRAMES(180)
+                END_IF
             END_IF
-        END_IF
-        CALL(check_exist_group, LW(0))
-        IF_INT_NOT_EQUAL(LW(0), -1)
-            CALL(up_ceil)
-            CALL(zakogun_escape2)
-            CALL(btlevtcmd_KillUnit, LW(0), 0)
-        END_IF
+            CALL(check_exist_group, LW(0))
+            IF_INT_NOT_EQUAL(LW(0), -1)
+                CALL(up_ceil)
+                CALL(zakogun_escape2)
+                CALL(btlevtcmd_KillUnit, LW(0), 0)
+            END_IF
         CASE_END
     END_SWITCH
 
@@ -662,19 +662,19 @@ static EVT_BEGIN(call_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_GROUP, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(0)
-        IF_INT_EQUAL(LW(15), -1)
-            GOTO(10)
-        END_IF
+            IF_INT_EQUAL(LW(15), -1)
+                GOTO(10)
+            END_IF
         CASE_END
         CASE_EQUAL(1)
-        IF_INT_EQUAL(LW(15), -1)
-            GOTO(10)
-        END_IF
+            IF_INT_EQUAL(LW(15), -1)
+                GOTO(10)
+            END_IF
         CASE_END
         CASE_EQUAL(2)
-        IF_INT_EQUAL(LW(15), -1)
-            GOTO(10)
-        END_IF
+            IF_INT_EQUAL(LW(15), -1)
+                GOTO(10)
+            END_IF
         CASE_END
     END_SWITCH
     SET_VALUE(LW(0), 0)
@@ -684,29 +684,29 @@ static EVT_BEGIN(call_event)
     SWITCH(LW(0))
         CASE_EQUAL(0)
 
-        // He beckons (C_1) and the X-Nauts answer his call.
-        CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_KANBU_CALL_BACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-        CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("C_1"))
-        WAIT_FRAMES(16)
-        CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_KANBU_CALL_BACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-        CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("C_1"))
+            // He beckons (C_1) and the X-Nauts answer his call.
+            CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_KANBU_CALL_BACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
+            CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("C_1"))
+            WAIT_FRAMES(16)
+            CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_KANBU_CALL_BACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
+            CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("C_1"))
         CASE_END
         CASE_EQUAL(1)
-        CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_KANBU_CALL_ON1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-        CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("C_2"))
-        WAIT_FRAMES(16)
-        CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_KANBU_CALL_ON1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-        CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("C_2"))
-        WAIT_FRAMES(16)
-        CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_KANBU_CALL_ON1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-        CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("C_2"))
+            CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_KANBU_CALL_ON1"), EVT_NULLPTR, 0, EVT_NULLPTR)
+            CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("C_2"))
+            WAIT_FRAMES(16)
+            CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_KANBU_CALL_ON1"), EVT_NULLPTR, 0, EVT_NULLPTR)
+            CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("C_2"))
+            WAIT_FRAMES(16)
+            CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_KANBU_CALL_ON1"), EVT_NULLPTR, 0, EVT_NULLPTR)
+            CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("C_2"))
         CASE_END
         CASE_EQUAL(2)
-        CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_KANBU_CALL_BACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-        CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("C_1"))
-        WAIT_FRAMES(16)
-        CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_KANBU_CALL_BACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-        CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("C_1"))
+            CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_KANBU_CALL_BACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
+            CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("C_1"))
+            WAIT_FRAMES(16)
+            CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_KANBU_CALL_BACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
+            CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("C_1"))
         CASE_END
     END_SWITCH
     BEGIN_INLINE_EVENT
@@ -719,35 +719,35 @@ static EVT_BEGIN(call_event)
         // Which group comes depends on how far the battle has gone.
         SWITCH(LW(0))
             CASE_EQUAL(0)
-            CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
-            SUBTRACT(LW(0), 80)
-            SUBTRACT(LW(2), 20)
+                CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
+                SUBTRACT(LW(0), 80)
+                SUBTRACT(LW(2), 20)
 
-            // Group 1 arrives (group 2 comes with the ceiling coming down, group 3 is the crowd of 500).
-            CALL(btlevtcmd_SpawnUnit, LW(3), PTR(&entry_group1), 0)
-            CALL(btlevtcmd_SetPos, LW(3), LW(0), LW(1), LW(2))
-            CALL(btlevtcmd_SetHomePos, LW(3), LW(0), LW(1), LW(2))
-            CALL(zakogun_ext_init1)
-            WAIT_FRAMES(120)
+                // Group 1 arrives (group 2 comes with the ceiling coming down, group 3 is the crowd of 500).
+                CALL(btlevtcmd_SpawnUnit, LW(3), PTR(&entry_group1), 0)
+                CALL(btlevtcmd_SetPos, LW(3), LW(0), LW(1), LW(2))
+                CALL(btlevtcmd_SetHomePos, LW(3), LW(0), LW(1), LW(2))
+                CALL(zakogun_ext_init1)
+                WAIT_FRAMES(120)
             CASE_END
             CASE_EQUAL(1)
-            CALL(zakogun_ext_init2)
-            CALL(btlevtcmd_SpawnUnit, LW(0), PTR(&entry_group2), 0)
-            CALL(btlevtcmd_SetPos, LW(0), 0, 80, 0)
-            CALL(btlevtcmd_SetHomePos, LW(0), 0, 80, 0)
-            CALL(down_ceil)
-            WAIT_FRAMES(60)
+                CALL(zakogun_ext_init2)
+                CALL(btlevtcmd_SpawnUnit, LW(0), PTR(&entry_group2), 0)
+                CALL(btlevtcmd_SetPos, LW(0), 0, 80, 0)
+                CALL(btlevtcmd_SetHomePos, LW(0), 0, 80, 0)
+                CALL(down_ceil)
+                WAIT_FRAMES(60)
             CASE_END
             CASE_EQUAL(2)
-            CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
-            SUBTRACT(LW(0), 80)
-            SUBTRACT(LW(2), 20)
-            CALL(btlevtcmd_SpawnUnit, LW(3), PTR(&entry_group3), 0)
-            CALL(btlevtcmd_SetPos, LW(3), LW(0), LW(1), LW(2))
-            CALL(btlevtcmd_SetHomePos, LW(3), LW(0), LW(1), LW(2))
-            CALL(evt_snd_sfxon, STRING("SFX_BOSS_TEAM_3RD_MOVE2"), 0)
-            CALL(zakogun_ext_init3)
-            WAIT_FRAMES(120)
+                CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
+                SUBTRACT(LW(0), 80)
+                SUBTRACT(LW(2), 20)
+                CALL(btlevtcmd_SpawnUnit, LW(3), PTR(&entry_group3), 0)
+                CALL(btlevtcmd_SetPos, LW(3), LW(0), LW(1), LW(2))
+                CALL(btlevtcmd_SetHomePos, LW(3), LW(0), LW(1), LW(2))
+                CALL(evt_snd_sfxon, STRING("SFX_BOSS_TEAM_3RD_MOVE2"), 0)
+                CALL(zakogun_ext_init3)
+                WAIT_FRAMES(120)
             CASE_END
         END_SWITCH
     END_IF
@@ -1010,23 +1010,23 @@ static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), 0, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
-        GOTO(90)
+            GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_LUCKY)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
+            GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_DODGY)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
+            GOTO(90)
         CASE_EQUAL(PRECHECK_MISS)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
+            GOTO(90)
         CASE_EQUAL(PRECHECK_HIT)
-        GOTO(91)
+            GOTO(91)
         CASE_END
         CASE_DEFAULT
-        GOTO(98)
+            GOTO(98)
         CASE_END
 
         // He misses and comes down on the spot; some miss results play a target avoid pose.

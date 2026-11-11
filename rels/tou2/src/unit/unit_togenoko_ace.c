@@ -689,22 +689,22 @@ static EVT_BEGIN(attack_event)
         CALL(evt_sub_random, 99, LW(11))
         SWITCH(LW(10))
             CASE_EQUAL(1)
-            IF_INT_LESS(LW(11), 0)
-                CALL_CHILD(friend_event)
-                GOTO(99)
-            END_IF
+                IF_INT_LESS(LW(11), 0)
+                    CALL_CHILD(friend_event)
+                    GOTO(99)
+                END_IF
             CASE_END
             CASE_EQUAL(2)
-            IF_INT_LESS(LW(11), 0)
-                CALL_CHILD(friend_event)
-                GOTO(99)
-            END_IF
+                IF_INT_LESS(LW(11), 0)
+                    CALL_CHILD(friend_event)
+                    GOTO(99)
+                END_IF
             CASE_END
             CASE_EQUAL(3)
-            IF_INT_LESS(LW(11), 0)
-                CALL_CHILD(friend_event)
-                GOTO(99)
-            END_IF
+                IF_INT_LESS(LW(11), 0)
+                    CALL_CHILD(friend_event)
+                    GOTO(99)
+                END_IF
             CASE_END
         END_SWITCH
 
@@ -805,23 +805,23 @@ static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), 0, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
-        GOTO(90)
+            GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_LUCKY)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
+            GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_DODGY)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
+            GOTO(90)
         CASE_EQUAL(PRECHECK_MISS)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
+            GOTO(90)
         CASE_EQUAL(PRECHECK_HIT)
-        GOTO(91)
+            GOTO(91)
         CASE_END
         CASE_DEFAULT
-        GOTO(98)
+            GOTO(98)
         CASE_END
     END_SWITCH
 
@@ -966,23 +966,23 @@ static EVT_BEGIN(shell_attack_event)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
-        GOTO(90)
+            GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_LUCKY)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
+            GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_DODGY)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
+            GOTO(90)
         CASE_EQUAL(PRECHECK_MISS)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
+            GOTO(90)
         CASE_EQUAL(PRECHECK_HIT)
-        GOTO(91)
+            GOTO(91)
         CASE_END
         CASE_DEFAULT
-        GOTO(98)
+            GOTO(98)
         CASE_END
     END_SWITCH
 

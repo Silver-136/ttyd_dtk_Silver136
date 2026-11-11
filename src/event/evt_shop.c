@@ -1026,11 +1026,11 @@ static EVT_BEGIN(buy_evt)
 #if VERSION >= VERSION_US
     SWITCH(LW(0))
         CASE_EQUAL(LANGUAGE_JP)
-        CALL(evt_msg_print_insert, 0, LW(14), 0, LW(9), LW(11), LW(13))
+            CALL(evt_msg_print_insert, 0, LW(14), 0, LW(9), LW(11), LW(13))
         CASE_DEFAULT
-        CALL(evt_msg_fmt_int, 0, LW(14), LW(14), LW(13))
-        CALL(evt_msg_fmt_str, 1, LW(14), LW(14), LW(11))
-        CALL(evt_msg_print, MSG_PRINT_DIRECT_TEXT, LW(14), 0, LW(9))
+            CALL(evt_msg_fmt_int, 0, LW(14), LW(14), LW(13))
+            CALL(evt_msg_fmt_str, 1, LW(14), LW(14), LW(11))
+            CALL(evt_msg_print, MSG_PRINT_DIRECT_TEXT, LW(14), 0, LW(9))
     END_SWITCH
 #else
     IF_INT_NOT_EQUAL(LW(0), LANGUAGE_JP)
@@ -1112,10 +1112,10 @@ static EVT_BEGIN(buy_evt)
             CALL(evt_sub_get_language, LW(0))
             SWITCH(LW(0))
                 CASE_EQUAL(LANGUAGE_JP)
-                CALL(evt_msg_print_insert, 0, LW(14), 0, LW(9), LW(2))
+                    CALL(evt_msg_print_insert, 0, LW(14), 0, LW(9), LW(2))
                 CASE_DEFAULT
-                CALL(evt_msg_fmt_str, 0, LW(14), LW(14), LW(2))
-                CALL(evt_msg_print, MSG_PRINT_DIRECT_TEXT, LW(14), 0, LW(9))
+                    CALL(evt_msg_fmt_str, 0, LW(14), LW(14), LW(2))
+                    CALL(evt_msg_print, MSG_PRINT_DIRECT_TEXT, LW(14), 0, LW(9))
                 CASE_END
             END_SWITCH
 #else
@@ -1284,10 +1284,10 @@ EVT_BEGIN(shopper_talk_evt)
             CALL(evt_sub_get_language, LW(0))
             SWITCH(LW(0))
                 CASE_EQUAL(LANGUAGE_JP)
-                CALL(evt_msg_print_insert, 0, LW(14), 0, 0, LW(2))
+                    CALL(evt_msg_print_insert, 0, LW(14), 0, 0, LW(2))
                 CASE_DEFAULT
-                CALL(evt_msg_fmt_str, 0, LW(14), LW(14), LW(2))
-                CALL(evt_msg_print, MSG_PRINT_DIRECT_TEXT, LW(14), 0, 0)
+                    CALL(evt_msg_fmt_str, 0, LW(14), LW(14), LW(2))
+                    CALL(evt_msg_print, MSG_PRINT_DIRECT_TEXT, LW(14), 0, 0)
             END_SWITCH
 #else
             CALL(evt_msg_print_insert, 0, LW(14), 0, 0, LW(2))
@@ -1300,16 +1300,16 @@ EVT_BEGIN(shopper_talk_evt)
             SWITCH(LW(0))
                 CASE_EQUAL(LANGUAGE_JP)
 #if VERSION == VERSION_EU
-                CALL(evt_msg_print_add_insert, 0, LW(14), LW(2))
+                    CALL(evt_msg_print_add_insert, 0, LW(14), LW(2))
 #else
-                CALL(evt_msg_print_insert, 0, LW(14), 0, 0, LW(2))
+                    CALL(evt_msg_print_insert, 0, LW(14), 0, 0, LW(2))
 #endif
                 CASE_DEFAULT
-                CALL(evt_msg_fmt_str, 0, LW(14), LW(14), LW(2))
+                    CALL(evt_msg_fmt_str, 0, LW(14), LW(14), LW(2))
 #if VERSION == VERSION_EU
-                CALL(evt_msg_print_add, 1, LW(14))
+                    CALL(evt_msg_print_add, 1, LW(14))
 #else
-                CALL(evt_msg_print, MSG_PRINT_DIRECT_TEXT, LW(14), 0, 0)
+                    CALL(evt_msg_print, MSG_PRINT_DIRECT_TEXT, LW(14), 0, 0)
 #endif
             END_SWITCH
 #else
@@ -1332,18 +1332,18 @@ EVT_BEGIN(shopper_talk_evt)
     CALL(shop_flag_onoff, 0, SHOP_FLAG_TALKING)
     SWITCH(LW(0))
         CASE_EQUAL(0)
-        CALL(get_msg, LW(10), 5, LW(14))
-        CALL(evt_msg_print_add, 0, LW(14))
+            CALL(get_msg, LW(10), 5, LW(14))
+            CALL(evt_msg_print_add, 0, LW(14))
         CASE_EQUAL(1)
-        CALL_CHILD(sell_evt)
+            CALL_CHILD(sell_evt)
         CASE_EQUAL(2)
-        CALL_CHILD(keep_evt)
+            CALL_CHILD(keep_evt)
         CASE_EQUAL(3)
-        CALL_CHILD(unkeep_evt)
+            CALL_CHILD(unkeep_evt)
         CASE_EQUAL(4)
-        CALL_CHILD(point_evt)
+            CALL_CHILD(point_evt)
         CASE_EQUAL(5)
-        CALL(evt_msg_continue)
+            CALL(evt_msg_continue)
     END_SWITCH
     CALL(evt_mario_key_onoff, 1)
     RETURN
@@ -1410,11 +1410,11 @@ static EVT_BEGIN(sell_evt)
 #if VERSION >= VERSION_US
     SWITCH(LW(0))
         CASE_EQUAL(LANGUAGE_JP)
-        CALL(evt_msg_print_insert, 0, LW(14), 0, STRING("me"), LW(2), LW(3))
+            CALL(evt_msg_print_insert, 0, LW(14), 0, STRING("me"), LW(2), LW(3))
         CASE_DEFAULT
-        CALL(evt_msg_fmt_int, 0, LW(14), LW(14), LW(3))
-        CALL(evt_msg_fmt_str, 1, LW(14), LW(14), LW(2))
-        CALL(evt_msg_print, MSG_PRINT_DIRECT_TEXT, LW(14), 0, STRING("me"))
+            CALL(evt_msg_fmt_int, 0, LW(14), LW(14), LW(3))
+            CALL(evt_msg_fmt_str, 1, LW(14), LW(14), LW(2))
+            CALL(evt_msg_print, MSG_PRINT_DIRECT_TEXT, LW(14), 0, STRING("me"))
     END_SWITCH
 #else
     IF_INT_NOT_EQUAL(LW(0), LANGUAGE_JP)
@@ -1487,10 +1487,10 @@ EVT_BEGIN(keep_evt)
     CALL(evt_sub_get_language, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(LANGUAGE_JP)
-        CALL(evt_msg_print_add_insert, 0, LW(14), LW(1))
+            CALL(evt_msg_print_add_insert, 0, LW(14), LW(1))
         CASE_DEFAULT
-        CALL(evt_msg_fmt_int, 0, LW(14), LW(14), LW(1))
-        CALL(evt_msg_print_add, MSG_PRINT_DIRECT_TEXT, LW(14))
+            CALL(evt_msg_fmt_int, 0, LW(14), LW(14), LW(1))
+            CALL(evt_msg_print_add, MSG_PRINT_DIRECT_TEXT, LW(14))
     END_SWITCH
 #else
     CALL(evt_msg_print_add_insert, 0, LW(14), LW(1))

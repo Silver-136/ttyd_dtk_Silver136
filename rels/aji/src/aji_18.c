@@ -215,41 +215,41 @@ EVT_BEGIN(evt_machine)
 #endif
     SWITCH(LW(10))
         CASE_EQUAL(ITEM_CARD_KEY_0x1D)
-        IF_INT_EQUAL(LW(0), 0)
-            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kagi1_aka"), MAP_OBJ_FLAG_HIDDEN)
-            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kagi1_mid"), MAP_OBJ_FLAG_HIDDEN)
-            SET_VALUE(GSWF_AJI_18_CARD_KEY_SLOT_1_FILLED, 1)
-            CALL(evt_pouch_remove_item, LW(10), LW(1))
-            CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-            CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_DOOR_UNLOCK1"), LW(0), LW(1), LW(2), 0)
-            CALL(evt_exit_case_evt)
-        ELSE
-            CALL(evt_msg_print, 0, STRING("stg7_aji_67_01"), 0, 0)
-        END_IF
+            IF_INT_EQUAL(LW(0), 0)
+                CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kagi1_aka"), MAP_OBJ_FLAG_HIDDEN)
+                CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kagi1_mid"), MAP_OBJ_FLAG_HIDDEN)
+                SET_VALUE(GSWF_AJI_18_CARD_KEY_SLOT_1_FILLED, 1)
+                CALL(evt_pouch_remove_item, LW(10), LW(1))
+                CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+                CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_DOOR_UNLOCK1"), LW(0), LW(1), LW(2), 0)
+                CALL(evt_exit_case_evt)
+            ELSE
+                CALL(evt_msg_print, 0, STRING("stg7_aji_67_01"), 0, 0)
+            END_IF
         CASE_EQUAL(ITEM_CARD_KEY_0x1E)
-        IF_INT_EQUAL(LW(0), 1)
-            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kagi2_aka"), MAP_OBJ_FLAG_HIDDEN)
-            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kagi2_mid"), MAP_OBJ_FLAG_HIDDEN)
-            SET_VALUE(GSWF_AJI_18_CARD_KEY_SLOT_2_FILLED, 1)
-            CALL(evt_pouch_remove_item, LW(10), LW(1))
-            CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-            CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_DOOR_UNLOCK1"), LW(0), LW(1), LW(2), 0)
-            CALL(evt_exit_case_evt)
-        ELSE
-            CALL(evt_msg_print, 0, STRING("stg7_aji_67_01"), 0, 0)
-        END_IF
+            IF_INT_EQUAL(LW(0), 1)
+                CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kagi2_aka"), MAP_OBJ_FLAG_HIDDEN)
+                CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kagi2_mid"), MAP_OBJ_FLAG_HIDDEN)
+                SET_VALUE(GSWF_AJI_18_CARD_KEY_SLOT_2_FILLED, 1)
+                CALL(evt_pouch_remove_item, LW(10), LW(1))
+                CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+                CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_DOOR_UNLOCK1"), LW(0), LW(1), LW(2), 0)
+                CALL(evt_exit_case_evt)
+            ELSE
+                CALL(evt_msg_print, 0, STRING("stg7_aji_67_01"), 0, 0)
+            END_IF
         CASE_EQUAL(ITEM_CARD_KEY_0x1F)
-        IF_INT_EQUAL(LW(0), 2)
-            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kagi3_aka"), MAP_OBJ_FLAG_HIDDEN)
-            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kagi3_mid"), MAP_OBJ_FLAG_HIDDEN)
-            SET_VALUE(GSWF_AJI_18_CARD_KEY_SLOT_3_FILLED, 1)
-            CALL(evt_pouch_remove_item, LW(10), LW(1))
-            CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-            CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_DOOR_UNLOCK1"), LW(0), LW(1), LW(2), 0)
-            CALL(evt_exit_case_evt)
-        ELSE
-            CALL(evt_msg_print, 0, STRING("stg7_aji_67_01"), 0, 0)
-        END_IF
+            IF_INT_EQUAL(LW(0), 2)
+                CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kagi3_aka"), MAP_OBJ_FLAG_HIDDEN)
+                CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kagi3_mid"), MAP_OBJ_FLAG_HIDDEN)
+                SET_VALUE(GSWF_AJI_18_CARD_KEY_SLOT_3_FILLED, 1)
+                CALL(evt_pouch_remove_item, LW(10), LW(1))
+                CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+                CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_DOOR_UNLOCK1"), LW(0), LW(1), LW(2), 0)
+                CALL(evt_exit_case_evt)
+            ELSE
+                CALL(evt_msg_print, 0, STRING("stg7_aji_67_01"), 0, 0)
+            END_IF
         CASE_DEFAULT
     END_SWITCH
     IF_INT_EQUAL(GSWF_AJI_18_CARD_KEY_SLOT_1_FILLED, 1)
@@ -419,37 +419,37 @@ EVT_BEGIN(aji_18_init_evt)
     // Between Lord Crump's defeat and the story point after the Moon, the east exit is locked again.
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG7_20_LORD_CRUMP_DEFEATED, STG7_25_00_1_BOWSER_POSHLEY_SANCTUM)
-        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("e_bero"), 0, PTR(key_lock_koujyou), 0)
-        SET_VALUE(LW(0), STRING("e_bero"))
-        CALL_CHILD(bero_case_switch_off)
-        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_lights1_m"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_lights1_r"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("e_bero"), 0, PTR(key_lock_koujyou), 0)
+            SET_VALUE(LW(0), STRING("e_bero"))
+            CALL_CHILD(bero_case_switch_off)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_lights1_m"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_lights1_r"), MAP_OBJ_FLAG_HIDDEN)
     END_SWITCH
 
     // In that stretch, entering from the east door restores a missing partner, heals (where differs by version,
     // below) and starts evt_koopa_after.
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG7_20_LORD_CRUMP_DEFEATED, STG7_25_00_1_BOWSER_POSHLEY_SANCTUM)
-        CALL(evt_bero_get_entername, LW(0))
-        IF_STR_EQUAL(LW(0), STRING("e_bero"))
-            CALL(evt_mario_get_party, LW(15))
-            IF_INT_EQUAL(LW(15), 0)
-                CALL(evt_mario_set_party, 0, 1)
-                CALL(evt_party_run, 0)
+            CALL(evt_bero_get_entername, LW(0))
+            IF_STR_EQUAL(LW(0), STRING("e_bero"))
+                CALL(evt_mario_get_party, LW(15))
+                IF_INT_EQUAL(LW(15), 0)
+                    CALL(evt_mario_set_party, 0, 1)
+                    CALL(evt_party_run, 0)
 #if VERSION >= VERSION_US
-            END_IF
+                END_IF
 #endif
 
-            // US and PAL recovery is outside the missing-partner branch; JP and the early demos keep it inside.
-            CALL(evt_pouch_mario_recovery)
-                CALL(evt_pouch_all_party_recovery)
+                // US and PAL recovery is outside the missing-partner branch; JP and the early demos keep it inside.
+                CALL(evt_pouch_mario_recovery)
+                    CALL(evt_pouch_all_party_recovery)
 #if VERSION >= VERSION_US
-            CALL(evt_sub_status_gauge_force_update)
+                CALL(evt_sub_status_gauge_force_update)
 #else
-            END_IF
+                END_IF
 #endif
-            SPAWN_EVENT(evt_koopa_after)
-        END_IF
+                SPAWN_EVENT(evt_koopa_after)
+            END_IF
     END_SWITCH
 
     // Monitor for STG7_25_THE_LAST_MAIL before applying the emergency blend.

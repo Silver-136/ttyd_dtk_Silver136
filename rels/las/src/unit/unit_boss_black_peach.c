@@ -2008,23 +2008,23 @@ static EVT_BEGIN(peack_attack_black_thunder)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_peach_black_thunder_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
-        GOTO(90)
+            GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_LUCKY)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
+            GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_DODGY)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
+            GOTO(90)
         CASE_EQUAL(PRECHECK_MISS)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
+            GOTO(90)
         CASE_EQUAL(PRECHECK_HIT)
-        GOTO(91)
+            GOTO(91)
         CASE_END
         CASE_DEFAULT
-        GOTO(98)
+            GOTO(98)
         CASE_END
     END_SWITCH
     LABEL(90)
@@ -2151,23 +2151,23 @@ EVT_BEGIN(peack_attack_dark_drag)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_peach_dark_drag_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
-        GOTO(90)
+            GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_LUCKY)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
+            GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_DODGY)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
+            GOTO(90)
         CASE_EQUAL(PRECHECK_MISS)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
+            GOTO(90)
         CASE_EQUAL(PRECHECK_HIT)
-        GOTO(91)
+            GOTO(91)
         CASE_END
         CASE_DEFAULT
-        GOTO(98)
+            GOTO(98)
         CASE_END
     END_SWITCH
 
@@ -2338,25 +2338,25 @@ static EVT_BEGIN(peack_attack_drain)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_peach_drain_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
-        GOTO(90)
+            GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_LUCKY)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
+            GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_DODGY)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
+            GOTO(90)
         CASE_EQUAL(PRECHECK_MISS)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
+            GOTO(90)
         CASE_EQUAL(PRECHECK_HIT)
-        GOTO(91)
+            GOTO(91)
         CASE_END
         CASE_DEFAULT
-        // BUG: this script has no LABEL(98): evtSearchLabel resumes at this GOTO's argument word, which runs
-        // as SET_SPD with the next command word as its value, and the script goes on after the GOTO.
-        GOTO(98)
+            // BUG: this script has no LABEL(98): evtSearchLabel resumes at this GOTO's argument word, which runs
+            // as SET_SPD with the next command word as its value, and the script goes on after the GOTO.
+            GOTO(98)
         CASE_END
     END_SWITCH
 
@@ -2421,32 +2421,32 @@ static EVT_BEGIN(peach_attack_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(0)
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, 1)
-        CALL_CHILD(peack_attack_black_thunder)
-        CASE_EQUAL(1)
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, 2)
-        CALL_CHILD(peack_attack_black_energy)
-        CASE_EQUAL(2)
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, 3)
-        CALL_CHILD(peack_attack_dark_drag)
-        CASE_EQUAL(3)
-        CALL(btlevtcmd_DrawLots, LW(0), 4, 100, 30, 30, 30)
-        CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_DEFENSE_UP, LW(1))
-        IF_INT_EQUAL(LW(1), 1)
-            IF_INT_EQUAL(LW(0), 1)
-                SET_VALUE(LW(0), 0)
-            END_IF
-        END_IF
-        SWITCH(LW(0))
-            CASE_EQUAL(0)
+            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, 1)
             CALL_CHILD(peack_attack_black_thunder)
-            CASE_EQUAL(1)
+        CASE_EQUAL(1)
+            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, 2)
             CALL_CHILD(peack_attack_black_energy)
-            CASE_EQUAL(2)
-            CALL_CHILD(peack_attack_drain)
-            CASE_EQUAL(3)
+        CASE_EQUAL(2)
+            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, 3)
             CALL_CHILD(peack_attack_dark_drag)
-        END_SWITCH
+        CASE_EQUAL(3)
+            CALL(btlevtcmd_DrawLots, LW(0), 4, 100, 30, 30, 30)
+            CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_DEFENSE_UP, LW(1))
+            IF_INT_EQUAL(LW(1), 1)
+                IF_INT_EQUAL(LW(0), 1)
+                    SET_VALUE(LW(0), 0)
+                END_IF
+            END_IF
+            SWITCH(LW(0))
+                CASE_EQUAL(0)
+                    CALL_CHILD(peack_attack_black_thunder)
+                CASE_EQUAL(1)
+                    CALL_CHILD(peack_attack_black_energy)
+                CASE_EQUAL(2)
+                    CALL_CHILD(peack_attack_drain)
+                CASE_EQUAL(3)
+                    CALL_CHILD(peack_attack_dark_drag)
+            END_SWITCH
     END_SWITCH
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
@@ -3059,61 +3059,61 @@ static EVT_BEGIN(queen_phase_event)
     END_IF
     SWITCH(GW(11))
         CASE_EQUAL(0)
-        IF_INT_GREATER(GW(12), 200)
-            CALL(queen_get_aud_num, LW(0))
-            IF_INT_GREATER_OR_EQUAL(LW(0), 1)
-                SET_VALUE(GW(11), 3)
-                SET_VALUE(GW(14), 1)
+            IF_INT_GREATER(GW(12), 200)
+                CALL(queen_get_aud_num, LW(0))
+                IF_INT_GREATER_OR_EQUAL(LW(0), 1)
+                    SET_VALUE(GW(11), 3)
+                    SET_VALUE(GW(14), 1)
 
-                // With the counter above 200 and an audience present, she drains the audience's HP.
-                CALL_CHILD(queen_hp_drain_evt)
-            ELSE
-                CALL_CHILD(queen_hp_drain_evt_miss)
+                    // With the counter above 200 and an audience present, she drains the audience's HP.
+                    CALL_CHILD(queen_hp_drain_evt)
+                ELSE
+                    CALL_CHILD(queen_hp_drain_evt_miss)
+                END_IF
+                CALL_CHILD(queen_last_attack_message_evt)
+                BREAK_SWITCH
             END_IF
-            CALL_CHILD(queen_last_attack_message_evt)
-            BREAK_SWITCH
-        END_IF
-        IF_INT_GREATER(GW(12), 100)
-            CALL_CHILD(queen_next_attack_message_evt)
-            BREAK_SWITCH
-        END_IF
-        IF_INT_GREATER(GW(12), 0)
-            CALL_CHILD(queen_first_attack_message_evt)
-            BREAK_SWITCH
-        END_IF
+            IF_INT_GREATER(GW(12), 100)
+                CALL_CHILD(queen_next_attack_message_evt)
+                BREAK_SWITCH
+            END_IF
+            IF_INT_GREATER(GW(12), 0)
+                CALL_CHILD(queen_first_attack_message_evt)
+                BREAK_SWITCH
+            END_IF
         CASE_EQUAL(1)
-        CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_BEFORE_PLAYER)
-        IF_INT_EQUAL(LW(0), 1)
+            CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_BEFORE_PLAYER)
+            IF_INT_EQUAL(LW(0), 1)
 
-            // Respawn missing big hands before the player phase.
-            CALL_CHILD(queen_hand_big_life_check_evt)
-        END_IF
-        CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_AFTER_PLAYER)
-        IF_INT_EQUAL(LW(0), 1)
-            CALL(evt_sub_random, 100, LW(0))
-            IF_INT_LESS_OR_EQUAL(LW(0), 50)
-                CALL_CHILD(queen_change_hand_small_evt)
-                BREAK_SWITCH
+                // Respawn missing big hands before the player phase.
+                CALL_CHILD(queen_hand_big_life_check_evt)
             END_IF
-        END_IF
+            CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_AFTER_PLAYER)
+            IF_INT_EQUAL(LW(0), 1)
+                CALL(evt_sub_random, 100, LW(0))
+                IF_INT_LESS_OR_EQUAL(LW(0), 50)
+                    CALL_CHILD(queen_change_hand_small_evt)
+                    BREAK_SWITCH
+                END_IF
+            END_IF
         CASE_EQUAL(2)
-        CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_BEFORE_PLAYER)
-        IF_INT_EQUAL(LW(0), 1)
-            CALL_CHILD(queen_hand_small_life_check_evt)
-        END_IF
-        CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_AFTER_PLAYER)
-        IF_INT_EQUAL(LW(0), 1)
-            CALL(evt_sub_random, 100, LW(0))
-            IF_INT_LESS_OR_EQUAL(LW(0), 50)
-                CALL_CHILD(queen_change_hand_big_evt)
-                BREAK_SWITCH
+            CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_BEFORE_PLAYER)
+            IF_INT_EQUAL(LW(0), 1)
+                CALL_CHILD(queen_hand_small_life_check_evt)
             END_IF
-        END_IF
+            CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_AFTER_PLAYER)
+            IF_INT_EQUAL(LW(0), 1)
+                CALL(evt_sub_random, 100, LW(0))
+                IF_INT_LESS_OR_EQUAL(LW(0), 50)
+                    CALL_CHILD(queen_change_hand_big_evt)
+                    BREAK_SWITCH
+                END_IF
+            END_IF
         CASE_EQUAL(3)
-        CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_ENEMY)
-        IF_INT_EQUAL(LW(0), 1)
-            SET_VALUE(GW(11), 2)
-        END_IF
+            CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_ENEMY)
+            IF_INT_EQUAL(LW(0), 1)
+                SET_VALUE(GW(11), 2)
+            END_IF
     END_SWITCH
     LABEL(99)
     RETURN
@@ -3154,23 +3154,23 @@ static EVT_BEGIN(queen_attack_black_thunder)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_peach_black_thunder_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
-        GOTO(90)
+            GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_LUCKY)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
+            GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_DODGY)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
+            GOTO(90)
         CASE_EQUAL(PRECHECK_MISS)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
+            GOTO(90)
         CASE_EQUAL(PRECHECK_HIT)
-        GOTO(91)
+            GOTO(91)
         CASE_END
         CASE_DEFAULT
-        GOTO(98)
+            GOTO(98)
         CASE_END
     END_SWITCH
     LABEL(90)
@@ -3344,23 +3344,23 @@ EVT_BEGIN(queen_attack_black_wave)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_peach_black_wave_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
-        GOTO(90)
+            GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_LUCKY)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
+            GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_DODGY)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
+            GOTO(90)
         CASE_EQUAL(PRECHECK_MISS)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
+            GOTO(90)
         CASE_EQUAL(PRECHECK_HIT)
-        GOTO(91)
+            GOTO(91)
         CASE_END
         CASE_DEFAULT
-        GOTO(95)
+            GOTO(95)
         CASE_END
     END_SWITCH
 
@@ -3508,23 +3508,23 @@ EVT_BEGIN(queen_attack_bress1)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_peach_black_sigh_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
-        GOTO(90)
+            GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_LUCKY)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
+            GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_DODGY)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
+            GOTO(90)
         CASE_EQUAL(PRECHECK_MISS)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
+            GOTO(90)
         CASE_EQUAL(PRECHECK_HIT)
-        GOTO(91)
+            GOTO(91)
         CASE_END
         CASE_DEFAULT
-        GOTO(95)
+            GOTO(95)
         CASE_END
     END_SWITCH
 
@@ -3618,23 +3618,23 @@ EVT_BEGIN(queen_attack_bress2)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_peach_black_temptation_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
-        GOTO(90)
+            GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_LUCKY)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
+            GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_DODGY)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
+            GOTO(90)
         CASE_EQUAL(PRECHECK_MISS)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
+            GOTO(90)
         CASE_EQUAL(PRECHECK_HIT)
-        GOTO(91)
+            GOTO(91)
         CASE_END
         CASE_DEFAULT
-        GOTO(95)
+            GOTO(95)
         CASE_END
     END_SWITCH
 
@@ -3729,23 +3729,23 @@ EVT_BEGIN(queen_attack_bress3)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_peach_black_poison_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
-        GOTO(90)
+            GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_LUCKY)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
+            GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_DODGY)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
+            GOTO(90)
         CASE_EQUAL(PRECHECK_MISS)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
+            GOTO(90)
         CASE_EQUAL(PRECHECK_HIT)
-        GOTO(91)
+            GOTO(91)
         CASE_END
         CASE_DEFAULT
-        GOTO(95)
+            GOTO(95)
         CASE_END
     END_SWITCH
 
@@ -3792,70 +3792,70 @@ static EVT_BEGIN(queen_attack_event)
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, LW(0))
         SWITCH(LW(0))
             CASE_EQUAL(0)
-            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, 3)
-            CALL_CHILD(queen_attack_black_thunder)
+                CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, 3)
+                CALL_CHILD(queen_attack_black_thunder)
             CASE_EQUAL(1)
-            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, 3)
-            CALL_CHILD(queen_attack_black_energy)
+                CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, 3)
+                CALL_CHILD(queen_attack_black_energy)
             CASE_EQUAL(3)
 #if VERSION <= VERSION_DEMO_JP
-            CALL(btlevtcmd_DrawLots, LW(0), 4, 100, 30, 30, 30)
+                CALL(btlevtcmd_DrawLots, LW(0), 4, 100, 30, 30, 30)
 #else
-            CALL(btlevtcmd_DrawLots, LW(0), 4, 100, 20, 30, 30)
+                CALL(btlevtcmd_DrawLots, LW(0), 4, 100, 20, 30, 30)
 #endif
-            SWITCH(LW(0))
-                CASE_EQUAL(0)
-                CALL_CHILD(queen_attack_black_thunder)
-                CASE_EQUAL(1)
-                CALL_CHILD(queen_attack_bress1)
-                CASE_EQUAL(2)
-                CALL_CHILD(queen_attack_bress2)
-                CASE_EQUAL(3)
-                CALL_CHILD(queen_attack_bress3)
-            END_SWITCH
+                SWITCH(LW(0))
+                    CASE_EQUAL(0)
+                        CALL_CHILD(queen_attack_black_thunder)
+                    CASE_EQUAL(1)
+                        CALL_CHILD(queen_attack_bress1)
+                    CASE_EQUAL(2)
+                        CALL_CHILD(queen_attack_bress2)
+                    CASE_EQUAL(3)
+                        CALL_CHILD(queen_attack_bress3)
+                END_SWITCH
         END_SWITCH
         GOTO(99)
     END_IF
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(0)
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, 1)
-        CALL_CHILD(queen_attack_black_thunder)
-        CASE_EQUAL(1)
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, 2)
-        CALL_CHILD(queen_attack_charge)
-        CASE_EQUAL(2)
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, 3)
-        CALL_CHILD(queen_attack_black_wave)
-        CASE_EQUAL(3)
-#if VERSION <= VERSION_DEMO_JP
-        CALL(btlevtcmd_DrawLots, LW(0), 6, 100, 50, 50, 30, 30, 30)
-#elif VERSION >= VERSION_US
-        CALL(btlevtcmd_DrawLots, LW(0), 6, 100, 50, 60, 20, 30, 30)
-#else
-        CALL(btlevtcmd_DrawLots, LW(0), 6, 100, 50, 30, 20, 30, 30)
-#endif
-        CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_DEFENSE_UP, LW(1))
-        IF_INT_EQUAL(LW(1), 1)
-            IF_INT_EQUAL(LW(0), 1)
-                SET_VALUE(LW(0), 0)
-            END_IF
-        END_IF
-        SWITCH(LW(0))
-            CASE_EQUAL(0)
+            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, 1)
             CALL_CHILD(queen_attack_black_thunder)
-            CASE_EQUAL(1)
-            CALL_CHILD(queen_attack_black_energy)
-            CASE_EQUAL(2)
+        CASE_EQUAL(1)
             CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, 2)
             CALL_CHILD(queen_attack_charge)
-            CASE_EQUAL(3)
-            CALL_CHILD(queen_attack_bress1)
-            CASE_EQUAL(4)
-            CALL_CHILD(queen_attack_bress2)
-            CASE_EQUAL(5)
-            CALL_CHILD(queen_attack_bress3)
-        END_SWITCH
+        CASE_EQUAL(2)
+            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, 3)
+            CALL_CHILD(queen_attack_black_wave)
+        CASE_EQUAL(3)
+#if VERSION <= VERSION_DEMO_JP
+            CALL(btlevtcmd_DrawLots, LW(0), 6, 100, 50, 50, 30, 30, 30)
+#elif VERSION >= VERSION_US
+            CALL(btlevtcmd_DrawLots, LW(0), 6, 100, 50, 60, 20, 30, 30)
+#else
+            CALL(btlevtcmd_DrawLots, LW(0), 6, 100, 50, 30, 20, 30, 30)
+#endif
+            CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_DEFENSE_UP, LW(1))
+            IF_INT_EQUAL(LW(1), 1)
+                IF_INT_EQUAL(LW(0), 1)
+                    SET_VALUE(LW(0), 0)
+                END_IF
+            END_IF
+            SWITCH(LW(0))
+                CASE_EQUAL(0)
+                    CALL_CHILD(queen_attack_black_thunder)
+                CASE_EQUAL(1)
+                    CALL_CHILD(queen_attack_black_energy)
+                CASE_EQUAL(2)
+                    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, 2)
+                    CALL_CHILD(queen_attack_charge)
+                CASE_EQUAL(3)
+                    CALL_CHILD(queen_attack_bress1)
+                CASE_EQUAL(4)
+                    CALL_CHILD(queen_attack_bress2)
+                CASE_EQUAL(5)
+                    CALL_CHILD(queen_attack_bress3)
+            END_SWITCH
     END_SWITCH
     LABEL(99)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
@@ -4139,23 +4139,23 @@ static EVT_BEGIN(queen_hand_1_press_attack)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_peach_black_press_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
-        GOTO(90)
+            GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_LUCKY)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
+            GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_DODGY)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
+            GOTO(90)
         CASE_EQUAL(PRECHECK_MISS)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
+            GOTO(90)
         CASE_EQUAL(PRECHECK_HIT)
-        GOTO(91)
+            GOTO(91)
         CASE_END
         CASE_DEFAULT
-        GOTO(98)
+            GOTO(98)
         CASE_END
     END_SWITCH
 
@@ -4271,23 +4271,23 @@ static EVT_BEGIN(queen_hand_1_drain_attack)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_peach_drain_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
-        GOTO(90)
+            GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_LUCKY)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
+            GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_DODGY)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
+            GOTO(90)
         CASE_EQUAL(PRECHECK_MISS)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
+            GOTO(90)
         CASE_EQUAL(PRECHECK_HIT)
-        GOTO(91)
+            GOTO(91)
         CASE_END
         CASE_DEFAULT
-        GOTO(98)
+            GOTO(98)
         CASE_END
     END_SWITCH
 
@@ -4358,11 +4358,11 @@ static EVT_BEGIN(queen_hand_1_attack_event)
 #endif
     SWITCH(LW(0))
         CASE_EQUAL(0)
-        SET_VALUE(LW(10), STRING("m_h_1"))
-        CALL_CHILD(queen_hand_1_press_attack)
+            SET_VALUE(LW(10), STRING("m_h_1"))
+            CALL_CHILD(queen_hand_1_press_attack)
         CASE_EQUAL(1)
-        SET_VALUE(LW(10), STRING("m_h_1"))
-        CALL_CHILD(queen_hand_1_drain_attack)
+            SET_VALUE(LW(10), STRING("m_h_1"))
+            CALL_CHILD(queen_hand_1_drain_attack)
     END_SWITCH
     LABEL(99)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
@@ -4455,11 +4455,11 @@ static EVT_BEGIN(queen_hand_2_attack_event)
 #endif
     SWITCH(LW(0))
         CASE_EQUAL(0)
-        SET_VALUE(LW(10), STRING("m_h_2"))
-        CALL_CHILD(queen_hand_1_press_attack)
+            SET_VALUE(LW(10), STRING("m_h_2"))
+            CALL_CHILD(queen_hand_1_press_attack)
         CASE_EQUAL(1)
-        SET_VALUE(LW(10), STRING("m_h_2"))
-        CALL_CHILD(queen_hand_1_drain_attack)
+            SET_VALUE(LW(10), STRING("m_h_2"))
+            CALL_CHILD(queen_hand_1_drain_attack)
     END_SWITCH
     LABEL(99)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
@@ -4573,23 +4573,23 @@ EVT_BEGIN(queen_hand_small_drag_attack)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_peach_dark_drag_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
-        GOTO(90)
+            GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_LUCKY)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
+            GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_DODGY)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
+            GOTO(90)
         CASE_EQUAL(PRECHECK_MISS)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
+            GOTO(90)
         CASE_EQUAL(PRECHECK_HIT)
-        GOTO(91)
+            GOTO(91)
         CASE_END
         CASE_DEFAULT
-        GOTO(98)
+            GOTO(98)
         CASE_END
     END_SWITCH
 
@@ -4702,20 +4702,20 @@ static EVT_BEGIN(queen_hand_small_1000hand_attack)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_peach_dark_drag_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
-        GOTO(90)
+            GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_LUCKY)
-        GOTO(90)
+            GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_DODGY)
-        GOTO(90)
+            GOTO(90)
         CASE_EQUAL(PRECHECK_MISS)
-        GOTO(90)
+            GOTO(90)
         CASE_EQUAL(PRECHECK_HIT)
-        GOTO(91)
+            GOTO(91)
         CASE_END
         CASE_DEFAULT
-        GOTO(98)
+            GOTO(98)
         CASE_END
     END_SWITCH
     LABEL(90)
@@ -4724,12 +4724,12 @@ static EVT_BEGIN(queen_hand_small_1000hand_attack)
             CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
             CASE_END
             CASE_EQUAL(PRECHECK_LUCKY)
-            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
+                CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
             CASE_END
             CASE_EQUAL(PRECHECK_DODGY)
-            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
+                CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
             CASE_EQUAL(PRECHECK_MISS)
-            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
+                CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         END_SWITCH
         WAIT_MS(500)
     END_LOOP
@@ -4794,9 +4794,9 @@ static EVT_BEGIN(queen_hand_small_attack_event)
 #endif
     SWITCH(LW(0))
         CASE_EQUAL(0)
-        CALL_CHILD(queen_hand_small_1000hand_attack)
+            CALL_CHILD(queen_hand_small_1000hand_attack)
         CASE_EQUAL(1)
-        CALL_CHILD(queen_hand_small_drag_attack)
+            CALL_CHILD(queen_hand_small_drag_attack)
     END_SWITCH
     LABEL(99)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)

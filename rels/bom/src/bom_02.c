@@ -401,19 +401,19 @@ static EVT_BEGIN(evt_kime_pose)
     SWITCH(LW(0))
         CASE_EQUAL(0)
         CASE_EQUAL(1)
-        CALL(evt_party_set_pose, 0, STRING("PKR_Y_1"))
+            CALL(evt_party_set_pose, 0, STRING("PKR_Y_1"))
         CASE_EQUAL(2)
-        CALL(evt_party_set_pose, 0, STRING("PNK_Y_1"))
+            CALL(evt_party_set_pose, 0, STRING("PNK_Y_1"))
         CASE_EQUAL(3)
-        CALL(evt_party_set_pose, 0, STRING("Y_1"))
+            CALL(evt_party_set_pose, 0, STRING("Y_1"))
         CASE_EQUAL(4)
-        CALL(evt_party_set_pose, 0, STRING("PYS_Y_1"))
+            CALL(evt_party_set_pose, 0, STRING("PYS_Y_1"))
         CASE_EQUAL(5)
-        CALL(evt_party_set_pose, 0, STRING("PWD_Y_1"))
+            CALL(evt_party_set_pose, 0, STRING("PWD_Y_1"))
         CASE_EQUAL(6)
-        CALL(evt_party_set_pose, 0, STRING("PTR_Y_1"))
+            CALL(evt_party_set_pose, 0, STRING("PTR_Y_1"))
         CASE_EQUAL(7)
-        CALL(evt_party_set_pose, 0, STRING("PCH_Y_1"))
+            CALL(evt_party_set_pose, 0, STRING("PCH_Y_1"))
     END_SWITCH
     RETURN
 EVT_END()
@@ -541,7 +541,7 @@ EVT_END()
 static EVT_BEGIN(init_soncho)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG7_04_BACK_ONLINE)
-        CALL(evt_npc_set_position, STRING("me"), 120, 0, 265)
+            CALL(evt_npc_set_position, STRING("me"), 120, 0, 265)
     END_SWITCH
     RETURN
 EVT_END()
@@ -558,140 +558,140 @@ static EVT_BEGIN(talk_soncho)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_71_01)
-        CALL(evt_msg_print, 0, STRING("stg7_bom_20_00"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg7_bom_20_00"), 0, STRING("me"))
         CASE_LESS(STG7_02_MAYOR_BOB)
-        CALL(evt_mario_get_party, LW(0))
-        IF_INT_NOT_EQUAL(LW(0), 3)
-            IF_INT_EQUAL(GSWF_BOM_MAYOR_FIRST_TALK_DONE, 0)
-                SET_VALUE(GSWF_BOM_MAYOR_FIRST_TALK_DONE, 1)
+            CALL(evt_mario_get_party, LW(0))
+            IF_INT_NOT_EQUAL(LW(0), 3)
+                IF_INT_EQUAL(GSWF_BOM_MAYOR_FIRST_TALK_DONE, 0)
+                    SET_VALUE(GSWF_BOM_MAYOR_FIRST_TALK_DONE, 1)
 
-                // First conversation: Mario asks about the cannon and the mayor denies there is one.
-                CALL(evt_msg_print, 0, STRING("stg7_bom_20"), 0, STRING("me"))
-                WAIT_MS(300)
-                CALL(evt_mario_set_pose, STRING("M_I_2"))
-                WAIT_MS(800)
-                CALL(evt_mario_set_pose, STRING("M_S_1"))
-                CALL(evt_msg_print, 0, STRING("stg7_bom_21"), 0, STRING("me"))
-            ELSE
-                CALL(evt_msg_print, 0, STRING("stg7_bom_21_01"), 0, STRING("me"))
+                    // First conversation: Mario asks about the cannon and the mayor denies there is one.
+                    CALL(evt_msg_print, 0, STRING("stg7_bom_20"), 0, STRING("me"))
+                    WAIT_MS(300)
+                    CALL(evt_mario_set_pose, STRING("M_I_2"))
+                    WAIT_MS(800)
+                    CALL(evt_mario_set_pose, STRING("M_S_1"))
+                    CALL(evt_msg_print, 0, STRING("stg7_bom_21"), 0, STRING("me"))
+                ELSE
+                    CALL(evt_msg_print, 0, STRING("stg7_bom_21_01"), 0, STRING("me"))
 #if VERSION >= VERSION_JP
-                CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_NO_HIT)
+                    CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_NO_HIT)
 #endif
-                RETURN
-            END_IF
-            WAIT_MS(300)
-            CALL(evt_party_stop, 0)
-            WAIT_MS(300)
-            CALL(evt_party_move_pos2, 0, 80, 300, FLOAT(60.0f))
-            CALL(evt_party_set_dir_npc, 0, STRING("me"))
-            CALL(evt_msg_print_party, STRING("stg7_bom_22"))
-            WAIT_MS(300)
-            CALL(evt_msg_print, 0, STRING("stg7_bom_23"), 0, STRING("me"))
-            CALL(evt_party_run, 0)
-        ELSE
-            BEGIN_INLINE_EVENT
-                CALL(evt_party_move_pos, 0, 50, 280, 500)
-                CALL(evt_party_set_dir_npc, 0, STRING("me"))
-            END_INLINE_EVENT
-            CALL(evt_mario_mov_pos, 70, 260, 500)
-            CALL(evt_mario_set_dir, 90, 200, 0)
-            CALL(evt_set_dir_to_target, STRING("me"), STRING("mario"))
-            IF_INT_EQUAL(GSWF_BOM_MAYOR_FIRST_TALK_DONE, 0)
-                SET_VALUE(GSWF_BOM_MAYOR_FIRST_TALK_DONE, 1)
-                CALL(evt_msg_print, 0, STRING("stg7_bom_20"), 0, STRING("me"))
+                    RETURN
+                END_IF
                 WAIT_MS(300)
-                CALL(evt_mario_set_pose, STRING("M_I_2"))
-                WAIT_MS(800)
-                CALL(evt_mario_set_pose, STRING("M_S_1"))
-                CALL(evt_msg_print, 0, STRING("stg7_bom_21"), 0, STRING("me"))
+                CALL(evt_party_stop, 0)
+                WAIT_MS(300)
+                CALL(evt_party_move_pos2, 0, 80, 300, FLOAT(60.0f))
+                CALL(evt_party_set_dir_npc, 0, STRING("me"))
+                CALL(evt_msg_print_party, STRING("stg7_bom_22"))
+                WAIT_MS(300)
+                CALL(evt_msg_print, 0, STRING("stg7_bom_23"), 0, STRING("me"))
+                CALL(evt_party_run, 0)
             ELSE
-                CALL(evt_msg_print, 0, STRING("stg7_bom_21_01"), 0, STRING("me"))
+                BEGIN_INLINE_EVENT
+                    CALL(evt_party_move_pos, 0, 50, 280, 500)
+                    CALL(evt_party_set_dir_npc, 0, STRING("me"))
+                END_INLINE_EVENT
+                CALL(evt_mario_mov_pos, 70, 260, 500)
+                CALL(evt_mario_set_dir, 90, 200, 0)
+                CALL(evt_set_dir_to_target, STRING("me"), STRING("mario"))
+                IF_INT_EQUAL(GSWF_BOM_MAYOR_FIRST_TALK_DONE, 0)
+                    SET_VALUE(GSWF_BOM_MAYOR_FIRST_TALK_DONE, 1)
+                    CALL(evt_msg_print, 0, STRING("stg7_bom_20"), 0, STRING("me"))
+                    WAIT_MS(300)
+                    CALL(evt_mario_set_pose, STRING("M_I_2"))
+                    WAIT_MS(800)
+                    CALL(evt_mario_set_pose, STRING("M_S_1"))
+                    CALL(evt_msg_print, 0, STRING("stg7_bom_21"), 0, STRING("me"))
+                ELSE
+                    CALL(evt_msg_print, 0, STRING("stg7_bom_21_01"), 0, STRING("me"))
+                END_IF
+                CALL(evt_party_stop, 0)
+                WAIT_MS(300)
+                CALL(evt_party_move_pos2, 0, 80, 300, FLOAT(60.0f))
+                CALL(evt_party_set_dir_npc, 0, STRING("me"))
+
+                // The partner scolds the mayor for lying, and the mayor explains the rules (stg7_bom_24 to 32_02).
+                CALL(evt_msg_print, 0, STRING("stg7_bom_24"), 0, STRING("party"))
+                WAIT_MS(300)
+                CALL(evt_eff_fukidashi, FUKIDASHI_AT_NPC, 0, STRING("me"), 0, 0, 0, 0, 0, 0, 0, 60)
+                WAIT_MS(1000)
+                CALL(evt_cam3d_evt_set, 90, 105, 611, 90, 45, 266, 500, EASING_SINE_IN_OUT)
+                WAIT_MS(500)
+                CALL(evt_msg_print, 0, STRING("stg7_bom_25"), 0, STRING("party"))
+                WAIT_MS(300)
+                CALL(evt_msg_print, 0, STRING("stg7_bom_26"), 0, STRING("me"))
+                WAIT_MS(300)
+                CALL(evt_msg_print, 0, STRING("stg7_bom_27"), 0, STRING("party"))
+                WAIT_MS(300)
+                CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
+                CALL(evt_npc_jump_position_nohit, STRING("me"), LW(0), LW(1), LW(2), 300, FLOAT(20.0f))
+                CALL(evt_msg_print, 0, STRING("stg7_bom_28"), 0, STRING("me"))
+                WAIT_MS(300)
+                CALL(evt_msg_print, 0, STRING("stg7_bom_29"), 0, STRING("party"))
+                WAIT_MS(300)
+
+                // The cannon can only be fired with the permission of Goldbob and General White.
+                CALL(evt_msg_print, 0, STRING("stg7_bom_30"), 0, STRING("me"))
+                WAIT_MS(300)
+                CALL(evt_msg_print, 0, STRING("stg7_bom_31"), 0, STRING("party"))
+                WAIT_MS(300)
+                CALL(evt_msg_print, 0, STRING("stg7_bom_32"), 0, STRING("me"))
+                WAIT_MS(300)
+                CALL(evt_msg_print, 0, STRING("stg7_bom_32_02"), 0, STRING("party"))
+                WAIT_MS(300)
+                CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+                CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_NOD1_2"), LW(0), LW(1), LW(2), 0)
+                CALL(evt_mario_set_pose, STRING("M_N_2"))
+                WAIT_MS(500)
+                CALL(evt_mario_set_pose, STRING("M_S_1"))
+
+                // The mayor tells Mario to come back once he has found them; the story advances.
+                CALL(evt_msg_print, 0, STRING("stg7_bom_33"), 0, STRING("me"))
+                SET_VALUE(GSW_STORY_PROGRESS, STG7_02_MAYOR_BOB)
+                CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
+                CALL(evt_party_run, 0)
             END_IF
-            CALL(evt_party_stop, 0)
-            WAIT_MS(300)
-            CALL(evt_party_move_pos2, 0, 80, 300, FLOAT(60.0f))
-            CALL(evt_party_set_dir_npc, 0, STRING("me"))
-
-            // The partner scolds the mayor for lying, and the mayor explains the rules (stg7_bom_24 to 32_02).
-            CALL(evt_msg_print, 0, STRING("stg7_bom_24"), 0, STRING("party"))
-            WAIT_MS(300)
-            CALL(evt_eff_fukidashi, FUKIDASHI_AT_NPC, 0, STRING("me"), 0, 0, 0, 0, 0, 0, 0, 60)
-            WAIT_MS(1000)
-            CALL(evt_cam3d_evt_set, 90, 105, 611, 90, 45, 266, 500, EASING_SINE_IN_OUT)
-            WAIT_MS(500)
-            CALL(evt_msg_print, 0, STRING("stg7_bom_25"), 0, STRING("party"))
-            WAIT_MS(300)
-            CALL(evt_msg_print, 0, STRING("stg7_bom_26"), 0, STRING("me"))
-            WAIT_MS(300)
-            CALL(evt_msg_print, 0, STRING("stg7_bom_27"), 0, STRING("party"))
-            WAIT_MS(300)
-            CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
-            CALL(evt_npc_jump_position_nohit, STRING("me"), LW(0), LW(1), LW(2), 300, FLOAT(20.0f))
-            CALL(evt_msg_print, 0, STRING("stg7_bom_28"), 0, STRING("me"))
-            WAIT_MS(300)
-            CALL(evt_msg_print, 0, STRING("stg7_bom_29"), 0, STRING("party"))
-            WAIT_MS(300)
-
-            // The cannon can only be fired with the permission of Goldbob and General White.
-            CALL(evt_msg_print, 0, STRING("stg7_bom_30"), 0, STRING("me"))
-            WAIT_MS(300)
-            CALL(evt_msg_print, 0, STRING("stg7_bom_31"), 0, STRING("party"))
-            WAIT_MS(300)
-            CALL(evt_msg_print, 0, STRING("stg7_bom_32"), 0, STRING("me"))
-            WAIT_MS(300)
-            CALL(evt_msg_print, 0, STRING("stg7_bom_32_02"), 0, STRING("party"))
-            WAIT_MS(300)
-            CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-            CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_NOD1_2"), LW(0), LW(1), LW(2), 0)
-            CALL(evt_mario_set_pose, STRING("M_N_2"))
-            WAIT_MS(500)
-            CALL(evt_mario_set_pose, STRING("M_S_1"))
-
-            // The mayor tells Mario to come back once he has found them; the story advances.
-            CALL(evt_msg_print, 0, STRING("stg7_bom_33"), 0, STRING("me"))
-            SET_VALUE(GSW_STORY_PROGRESS, STG7_02_MAYOR_BOB)
-            CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
-            CALL(evt_party_run, 0)
-        END_IF
 
         // Reminders: the mayor asks whether Mario forgot who to meet, and what has been done so far depends on
         // the two permissions.
         CASE_LESS(STG7_03_GOLDBOB)
-        SET_VALUE(LW(0), 0)
-        IF_INT_EQUAL(GSWF_PIK_GOLDBOB_PERMISSION_GIVEN, 1)
-            ADD(LW(0), 1)
-        END_IF
-        IF_INT_EQUAL(GSWF_BOM_GENERAL_WHITE_AGREED, 1)
-            ADD(LW(0), 1)
-        END_IF
-        SWITCH(LW(0))
-            CASE_EQUAL(0)
-            CALL(evt_msg_print, 0, STRING("stg7_bom_34"), 0, STRING("me"))
-            CALL(evt_msg_select, 0, STRING("stg7_bom_34_yn"))
-            IF_INT_EQUAL(LW(0), 0)
-                CALL(evt_msg_print_add, 0, STRING("stg7_bom_38"))
-            ELSE
-                CALL(evt_msg_print_add, 0, STRING("stg7_bom_37"))
+            SET_VALUE(LW(0), 0)
+            IF_INT_EQUAL(GSWF_PIK_GOLDBOB_PERMISSION_GIVEN, 1)
+                ADD(LW(0), 1)
             END_IF
-            CASE_EQUAL(1)
-            IF_INT_EQUAL(GSWF_PIK_GOLDBOB_PERMISSION_GIVEN, 0)
+            IF_INT_EQUAL(GSWF_BOM_GENERAL_WHITE_AGREED, 1)
+                ADD(LW(0), 1)
+            END_IF
+            SWITCH(LW(0))
+                CASE_EQUAL(0)
+                    CALL(evt_msg_print, 0, STRING("stg7_bom_34"), 0, STRING("me"))
+                    CALL(evt_msg_select, 0, STRING("stg7_bom_34_yn"))
+                    IF_INT_EQUAL(LW(0), 0)
+                        CALL(evt_msg_print_add, 0, STRING("stg7_bom_38"))
+                    ELSE
+                        CALL(evt_msg_print_add, 0, STRING("stg7_bom_37"))
+                    END_IF
+                CASE_EQUAL(1)
+                    IF_INT_EQUAL(GSWF_PIK_GOLDBOB_PERMISSION_GIVEN, 0)
 
-                // Hints about where to find Goldbob and General White (stg7_bom_38_01 and 38_02).
-                CALL(evt_msg_print, 0, STRING("stg7_bom_38_01"), 0, STRING("me"))
-            END_IF
-            IF_INT_EQUAL(GSWF_BOM_GENERAL_WHITE_AGREED, 0)
-                IF_INT_EQUAL(GSWF_USU_GENERAL_WHITE_HINT_HEARD, 0)
-                    CALL(evt_msg_print, 0, STRING("stg7_bom_38_02"), 0, STRING("me"))
-                ELSE
+                        // Hints about where to find Goldbob and General White (stg7_bom_38_01 and 38_02).
+                        CALL(evt_msg_print, 0, STRING("stg7_bom_38_01"), 0, STRING("me"))
+                    END_IF
+                    IF_INT_EQUAL(GSWF_BOM_GENERAL_WHITE_AGREED, 0)
+                        IF_INT_EQUAL(GSWF_USU_GENERAL_WHITE_HINT_HEARD, 0)
+                            CALL(evt_msg_print, 0, STRING("stg7_bom_38_02"), 0, STRING("me"))
+                        ELSE
 
-                    // Once the Twilight Town hint has been heard (GSWF_USU_GENERAL_WHITE_HINT_HEARD), White's
-                    // wandering scene runs instead.
-                    CALL_CHILD(urotuku_white)
-                END_IF
-            END_IF
-        END_SWITCH
+                            // Once the Twilight Town hint has been heard (GSWF_USU_GENERAL_WHITE_HINT_HEARD), White's
+                            // wandering scene runs instead.
+                            CALL_CHILD(urotuku_white)
+                        END_IF
+                    END_IF
+            END_SWITCH
         CASE_LESS(STG7_04_BACK_ONLINE)
-        CALL_CHILD(evt_taihou)
+            CALL_CHILD(evt_taihou)
     END_SWITCH
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_NO_HIT)
     RETURN
@@ -804,16 +804,16 @@ static EVT_BEGIN(talk_murabito_e)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_71_01)
 
-        // Otherwise his remarks change with the story.
-        CALL(evt_msg_print, 0, STRING("stg7_bom_10_00"), 0, STRING("me"))
+            // Otherwise his remarks change with the story.
+            CALL(evt_msg_print, 0, STRING("stg7_bom_10_00"), 0, STRING("me"))
         CASE_LESS(STG7_04_BACK_ONLINE)
-        CALL(evt_msg_print, 0, STRING("stg7_bom_10"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg7_bom_10"), 0, STRING("me"))
         CASE_LESS(STG7_05_THE_CANNON)
-        CALL(evt_msg_print, 0, STRING("stg7_bom_10_1"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg7_bom_10_1"), 0, STRING("me"))
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
-        CALL(evt_msg_print, 0, STRING("stg7_bom_11"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg7_bom_11"), 0, STRING("me"))
         CASE_DEFAULT
-        CALL(evt_msg_print, 0, STRING("stg7_bom_11_1"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg7_bom_11_1"), 0, STRING("me"))
     END_SWITCH
     RETURN
 EVT_END()
@@ -831,15 +831,15 @@ EVT_END()
 static EVT_BEGIN(talk_murabito_f)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_71_01)
-        CALL(evt_msg_print, 0, STRING("stg7_bom_12_00"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg7_bom_12_00"), 0, STRING("me"))
         CASE_LESS(STG7_04_BACK_ONLINE)
-        CALL(evt_msg_print, 0, STRING("stg7_bom_12"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg7_bom_12"), 0, STRING("me"))
         CASE_LESS(STG7_05_THE_CANNON)
-        CALL(evt_msg_print, 0, STRING("stg7_bom_12_1"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg7_bom_12_1"), 0, STRING("me"))
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
-        CALL(evt_msg_print, 0, STRING("stg7_bom_13"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg7_bom_13"), 0, STRING("me"))
         CASE_DEFAULT
-        CALL(evt_msg_print, 0, STRING("stg7_bom_13_1"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg7_bom_13_1"), 0, STRING("me"))
     END_SWITCH
     RETURN
 EVT_END()
@@ -879,15 +879,15 @@ static EVT_BEGIN(talk_murabito_g)
     END_IF
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_71_01)
-        CALL(evt_msg_print, 0, STRING("stg7_bom_14_00"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg7_bom_14_00"), 0, STRING("me"))
         CASE_LESS(STG7_04_BACK_ONLINE)
-        CALL(evt_msg_print, 0, STRING("stg7_bom_14"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg7_bom_14"), 0, STRING("me"))
         CASE_LESS(STG7_05_THE_CANNON)
-        CALL(evt_msg_print, 0, STRING("stg7_bom_14_1"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg7_bom_14_1"), 0, STRING("me"))
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
-        CALL(evt_msg_print, 0, STRING("stg7_bom_15"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg7_bom_15"), 0, STRING("me"))
         CASE_DEFAULT
-        CALL(evt_msg_print, 0, STRING("stg7_bom_15_1"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg7_bom_15_1"), 0, STRING("me"))
     END_SWITCH
     RETURN
 EVT_END()
@@ -939,15 +939,15 @@ static EVT_BEGIN(talk_murabito_h)
     END_IF
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_71_01)
-        CALL(evt_msg_print, 0, STRING("stg7_bom_16_00"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg7_bom_16_00"), 0, STRING("me"))
         CASE_LESS(STG7_04_BACK_ONLINE)
-        CALL(evt_msg_print, 0, STRING("stg7_bom_16"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg7_bom_16"), 0, STRING("me"))
         CASE_LESS(STG7_05_THE_CANNON)
-        CALL(evt_msg_print, 0, STRING("stg7_bom_16_1"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg7_bom_16_1"), 0, STRING("me"))
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
-        CALL(evt_msg_print, 0, STRING("stg7_bom_17"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg7_bom_17"), 0, STRING("me"))
         CASE_DEFAULT
-        CALL(evt_msg_print, 0, STRING("stg7_bom_17_1"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg7_bom_17_1"), 0, STRING("me"))
     END_SWITCH
     RETURN
 EVT_END()
@@ -964,15 +964,15 @@ EVT_END()
 static EVT_BEGIN(talk_murabito_i)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_71_01)
-        CALL(evt_msg_print, 0, STRING("stg7_bom_18_00"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg7_bom_18_00"), 0, STRING("me"))
         CASE_LESS(STG7_04_BACK_ONLINE)
-        CALL(evt_msg_print, 0, STRING("stg7_bom_18"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg7_bom_18"), 0, STRING("me"))
         CASE_LESS(STG7_05_THE_CANNON)
-        CALL(evt_msg_print, 0, STRING("stg7_bom_18_1"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg7_bom_18_1"), 0, STRING("me"))
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
-        CALL(evt_msg_print, 0, STRING("stg7_bom_19"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg7_bom_19"), 0, STRING("me"))
         CASE_DEFAULT
-        CALL(evt_msg_print, 0, STRING("stg7_bom_19_1"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg7_bom_19_1"), 0, STRING("me"))
     END_SWITCH
     RETURN
 EVT_END()
@@ -1498,11 +1498,11 @@ EVT_END()
 static EVT_BEGIN(kiza_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG7_02_MAYOR_BOB)
-        CALL(evt_msg_print, 0, STRING("stg7_bom_19_01"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg7_bom_19_01"), 0, STRING("me"))
         CASE_LESS(STG7_04_BACK_ONLINE)
-        CALL(evt_msg_print, 0, STRING("stg7_bom_19_02"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg7_bom_19_02"), 0, STRING("me"))
         CASE_DEFAULT
-        CALL(evt_msg_print, 0, STRING("stg7_bom_19_03"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg7_bom_19_03"), 0, STRING("me"))
     END_SWITCH
     RETURN
 EVT_END()
@@ -1959,7 +1959,7 @@ EVT_BEGIN(bom_02_init_evt)
     CALL(evt_npc_setup, PTR(npcEnt))
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG7_00_START, STG7_05_THE_CANNON)
-        CALL_CHILD(kiza_entry)
+            CALL_CHILD(kiza_entry)
     END_SWITCH
     CALL(evt_shop_setup, PTR(obj_list), PTR(goods_list), PTR(&shopper_data), PTR(trade_list))
     CALL(evt_kinopio_setup, PTR(&kino_dt))

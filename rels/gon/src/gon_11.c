@@ -1117,13 +1117,13 @@ EVT_BEGIN(gon_11_init_evt)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG1_16_HOOKTAIL)
         CASE_DEFAULT
-        CALL_CHILD(evt_bero_info_run)
+            CALL_CHILD(evt_bero_info_run)
     END_SWITCH
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG1_16_HOOKTAIL)
-        CALL(evt_snd_bgmoff, PSND_FADEOUT)
+            CALL(evt_snd_bgmoff, PSND_FADEOUT)
         CASE_DEFAULT
-        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG1_GON1"))
+            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG1_GON1"))
     END_SWITCH
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG1_GON4"))
     CALL(evt_snd_set_rev_mode, 2)

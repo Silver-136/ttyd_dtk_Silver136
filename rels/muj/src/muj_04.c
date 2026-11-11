@@ -616,7 +616,7 @@ EVT_BEGIN(muj_04_init_evt)
     CALL(evt_run_case_evt, CASE_HAMMER, 1, STRING("A_hai_yasi"), 0, PTR(yashi_yure), 0)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG5_12_FLAVIO_PA_PATCH)
-        SPAWN_EVENT(sanders_funto)
+            SPAWN_EVENT(sanders_funto)
     END_SWITCH
     CALL(evt_hit_damage_return_set, PTR(hitDmgRetPoints))
     CALL_CHILD(evt_gazigazi_entry)

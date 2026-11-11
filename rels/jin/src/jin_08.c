@@ -221,20 +221,20 @@ EVT_BEGIN(oumu_talk)
 #endif
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG4_15_03_THE_RUBY_STAR)
-        SWITCH(LSW_JIN_08_PARROT_TALK_COUNT)
-            CASE_EQUAL(0)
-            CALL(evt_msg_print, 0, STRING("stg4_jin_40"), 0, STRING("オウム"))
-            ADD(LSW_JIN_08_PARROT_TALK_COUNT, 1)
-            CASE_EQUAL(1)
-            CALL(evt_msg_print, 0, STRING("stg4_jin_41"), 0, STRING("オウム"))
-            ADD(LSW_JIN_08_PARROT_TALK_COUNT, 1)
-            CASE_EQUAL(2)
-            CALL(evt_msg_print, 0, STRING("stg4_jin_42"), 0, STRING("オウム"))
-        END_SWITCH
+            SWITCH(LSW_JIN_08_PARROT_TALK_COUNT)
+                CASE_EQUAL(0)
+                    CALL(evt_msg_print, 0, STRING("stg4_jin_40"), 0, STRING("オウム"))
+                    ADD(LSW_JIN_08_PARROT_TALK_COUNT, 1)
+                CASE_EQUAL(1)
+                    CALL(evt_msg_print, 0, STRING("stg4_jin_41"), 0, STRING("オウム"))
+                    ADD(LSW_JIN_08_PARROT_TALK_COUNT, 1)
+                CASE_EQUAL(2)
+                    CALL(evt_msg_print, 0, STRING("stg4_jin_42"), 0, STRING("オウム"))
+            END_SWITCH
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
-        CALL(evt_msg_print, 0, STRING("stg4_jin_48_01"), 0, STRING("オウム"))
+            CALL(evt_msg_print, 0, STRING("stg4_jin_48_01"), 0, STRING("オウム"))
         CASE_DEFAULT
-        CALL(evt_msg_print, 0, STRING("stg4_jin_48_01_1"), 0, STRING("オウム"))
+            CALL(evt_msg_print, 0, STRING("stg4_jin_48_01_1"), 0, STRING("オウム"))
     END_SWITCH
     RETURN
 EVT_END()

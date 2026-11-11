@@ -251,33 +251,100 @@ EVT_BEGIN(evt_memcard_check)
         SWITCH(LW(0))
             // Loaded: the game may start.
             CASE_EQUAL(0)
-            CALL(evt_msg_print_add, 0, STRING("msg_mcard_lord_finish"))
-            SET_VALUE(GF(0), 1)
+                CALL(evt_msg_print_add, 0, STRING("msg_mcard_lord_finish"))
+                SET_VALUE(GF(0), 1)
 
             // No card, or some other device in Slot A: offer to play without saving.
             CASE_EQUAL(CARD_RESULT_NOCARD)
-            CALL(evt_msg_print_add, 0, STRING("msg_mcard_nocard"))
-            CALL_CHILD(evt_memcard_nosave)
+                CALL(evt_msg_print_add, 0, STRING("msg_mcard_nocard"))
+                CALL_CHILD(evt_memcard_nosave)
             CASE_EQUAL(CARD_RESULT_WRONGDEVICE)
-            CALL(evt_msg_print_add, 0, STRING("msg_mcard_different_card"))
-            CALL_CHILD(evt_memcard_nosave)
+                CALL(evt_msg_print_add, 0, STRING("msg_mcard_different_card"))
+                CALL_CHILD(evt_memcard_nosave)
 
-            // Corrupted card: offer to format it (asking twice), then to create a save file;
-            // any refusal (and, in the early demos, any failure) offers to play without saving.
+                // Corrupted card: offer to format it (asking twice), then to create a save file;
+                // any refusal (and, in the early demos, any failure) offers to play without saving.
 #if VERSION <= VERSION_DEMO_JP
             CASE_OR_EQUAL(-13)
             CASE_OR_EQUAL(-6)
 #else
             CASE_OR_EQUAL(CARD_RESULT_ENCODING)
             CASE_OR_EQUAL(CARD_RESULT_BROKEN)
-            CALL(memcard_watch_start)
+                CALL(memcard_watch_start)
 #endif
-            CALL(evt_msg_print_add, MSG_PRINT_DIRECT_TEXT, STRING("<scrl_auto><once_stop>"))
-            CALL(evt_msg_print_add, 0, STRING("msg_mcard_format"))
-            CALL(evt_msg_select, 0, STRING("msg_mcard_yesno2"))
-            IF_INT_EQUAL(LW(0), 0)
-                CALL(evt_msg_print_add, 0, STRING("msg_mcard_format_alldelete"))
+                CALL(evt_msg_print_add, MSG_PRINT_DIRECT_TEXT, STRING("<scrl_auto><once_stop>"))
+                CALL(evt_msg_print_add, 0, STRING("msg_mcard_format"))
                 CALL(evt_msg_select, 0, STRING("msg_mcard_yesno2"))
+                IF_INT_EQUAL(LW(0), 0)
+                    CALL(evt_msg_print_add, 0, STRING("msg_mcard_format_alldelete"))
+                    CALL(evt_msg_select, 0, STRING("msg_mcard_yesno2"))
+                    IF_INT_EQUAL(LW(0), 0)
+#if VERSION >= VERSION_JP
+                        CALL(memcard_watch_chk, LW(0))
+                        IF_INT_EQUAL(LW(0), 1)
+                            CALL(evt_msg_print_add, 0, STRING("msg_out_mcard_warnning"))
+                            CALL_CHILD(evt_memcard_nosave)
+                            BREAK_SWITCH
+                        END_IF
+#endif
+                        CALL(evt_msg_print_add, 0, STRING("msg_mcard_format_warning"))
+                        CALL(memcard_format)
+                        CALL(memcard_code, LW(0))
+                        IF_INT_NOT_EQUAL(LW(0), 0)
+                            CALL(evt_msg_print_add, 0, STRING("msg_mcard_format_miss"))
+#if VERSION <= VERSION_DEMO_JP
+                            CALL_CHILD(evt_memcard_nosave)
+#else
+                            SET_VALUE(LF(10), 1)
+#endif
+                            ELSE
+                            CALL(evt_msg_print_add, 0, STRING("msg_mcard_format_finish"))
+                            CALL(evt_msg_print_add, 0, STRING("msg_mcard_make_data"))
+                            CALL(evt_msg_select, 0, STRING("msg_mcard_yesno"))
+                            IF_INT_EQUAL(LW(0), 0)
+#if VERSION >= VERSION_JP
+                                CALL(memcard_watch_chk, LW(0))
+                                IF_INT_EQUAL(LW(0), 1)
+                                    CALL(evt_msg_print_add, 0, STRING("msg_out_mcard_warnning"))
+                                    CALL_CHILD(evt_memcard_nosave)
+                                    BREAK_SWITCH
+                                END_IF
+#endif
+                                CALL(evt_msg_print_add, 0, STRING("msg_mcard_make_data_warning"))
+                                CALL(memcard_create)
+                                CALL(memcard_code, LW(0))
+                                IF_INT_NOT_EQUAL(LW(0), 0)
+                                    CALL(evt_msg_print_add, 0, STRING("msg_mcard_make_data_miss"))
+#if VERSION <= VERSION_DEMO_JP
+                                    CALL_CHILD(evt_memcard_nosave)
+#else
+                                    SET_VALUE(LF(10), 1)
+#endif
+                                    ELSE
+                                    CALL(evt_msg_print_add, 0, STRING("msg_mcard_make_data_finish"))
+                                    CALL(evt_msg_continue)
+                                    SET_VALUE(GF(0), 1)
+                                END_IF
+                                ELSE
+                                CALL_CHILD(evt_memcard_nosave)
+                            END_IF
+                        END_IF
+                        ELSE
+                        CALL_CHILD(evt_memcard_nosave)
+                    END_IF
+                    ELSE
+                    CALL_CHILD(evt_memcard_nosave)
+                END_IF
+            CASE_END
+            // No save file on the card: offer to create one.
+#if VERSION <= VERSION_DEMO_JP
+            CASE_EQUAL(-4)
+#else
+            CASE_EQUAL(CARD_RESULT_NOFILE)
+                CALL(memcard_watch_start)
+#endif
+                CALL(evt_msg_print_add, 0, STRING("msg_mcard_make_data"))
+                CALL(evt_msg_select, 0, STRING("msg_mcard_yesno"))
                 IF_INT_EQUAL(LW(0), 0)
 #if VERSION >= VERSION_JP
                     CALL(memcard_watch_chk, LW(0))
@@ -287,113 +354,46 @@ EVT_BEGIN(evt_memcard_check)
                         BREAK_SWITCH
                     END_IF
 #endif
-                    CALL(evt_msg_print_add, 0, STRING("msg_mcard_format_warning"))
-                    CALL(memcard_format)
+                    CALL(evt_msg_print_add, 0, STRING("msg_mcard_make_data_warning"))
+                    CALL(memcard_create)
                     CALL(memcard_code, LW(0))
                     IF_INT_NOT_EQUAL(LW(0), 0)
-                        CALL(evt_msg_print_add, 0, STRING("msg_mcard_format_miss"))
+                        CALL(evt_msg_print_add, 0, STRING("msg_mcard_make_data_miss"))
 #if VERSION <= VERSION_DEMO_JP
                         CALL_CHILD(evt_memcard_nosave)
 #else
                         SET_VALUE(LF(10), 1)
 #endif
                         ELSE
-                        CALL(evt_msg_print_add, 0, STRING("msg_mcard_format_finish"))
-                        CALL(evt_msg_print_add, 0, STRING("msg_mcard_make_data"))
-                        CALL(evt_msg_select, 0, STRING("msg_mcard_yesno"))
-                        IF_INT_EQUAL(LW(0), 0)
-#if VERSION >= VERSION_JP
-                            CALL(memcard_watch_chk, LW(0))
-                            IF_INT_EQUAL(LW(0), 1)
-                                CALL(evt_msg_print_add, 0, STRING("msg_out_mcard_warnning"))
-                                CALL_CHILD(evt_memcard_nosave)
-                                BREAK_SWITCH
-                            END_IF
-#endif
-                            CALL(evt_msg_print_add, 0, STRING("msg_mcard_make_data_warning"))
-                            CALL(memcard_create)
-                            CALL(memcard_code, LW(0))
-                            IF_INT_NOT_EQUAL(LW(0), 0)
-                                CALL(evt_msg_print_add, 0, STRING("msg_mcard_make_data_miss"))
-#if VERSION <= VERSION_DEMO_JP
-                                CALL_CHILD(evt_memcard_nosave)
-#else
-                                SET_VALUE(LF(10), 1)
-#endif
-                                ELSE
-                                CALL(evt_msg_print_add, 0, STRING("msg_mcard_make_data_finish"))
-                                CALL(evt_msg_continue)
-                                SET_VALUE(GF(0), 1)
-                            END_IF
-                            ELSE
-                            CALL_CHILD(evt_memcard_nosave)
-                        END_IF
+                        CALL(evt_msg_print_add, 0, STRING("msg_mcard_make_data_finish"))
+                        CALL(evt_msg_continue)
+                        SET_VALUE(GF(0), 1)
                     END_IF
                     ELSE
                     CALL_CHILD(evt_memcard_nosave)
                 END_IF
-                ELSE
-                CALL_CHILD(evt_memcard_nosave)
-            END_IF
-            CASE_END
-            // No save file on the card: offer to create one.
-#if VERSION <= VERSION_DEMO_JP
-            CASE_EQUAL(-4)
-#else
-            CASE_EQUAL(CARD_RESULT_NOFILE)
-            CALL(memcard_watch_start)
-#endif
-            CALL(evt_msg_print_add, 0, STRING("msg_mcard_make_data"))
-            CALL(evt_msg_select, 0, STRING("msg_mcard_yesno"))
-            IF_INT_EQUAL(LW(0), 0)
-#if VERSION >= VERSION_JP
-                CALL(memcard_watch_chk, LW(0))
-                IF_INT_EQUAL(LW(0), 1)
-                    CALL(evt_msg_print_add, 0, STRING("msg_out_mcard_warnning"))
-                    CALL_CHILD(evt_memcard_nosave)
-                    BREAK_SWITCH
-                END_IF
-#endif
-                CALL(evt_msg_print_add, 0, STRING("msg_mcard_make_data_warning"))
-                CALL(memcard_create)
-                CALL(memcard_code, LW(0))
-                IF_INT_NOT_EQUAL(LW(0), 0)
-                    CALL(evt_msg_print_add, 0, STRING("msg_mcard_make_data_miss"))
-#if VERSION <= VERSION_DEMO_JP
-                    CALL_CHILD(evt_memcard_nosave)
-#else
-                    SET_VALUE(LF(10), 1)
-#endif
-                    ELSE
-                    CALL(evt_msg_print_add, 0, STRING("msg_mcard_make_data_finish"))
-                    CALL(evt_msg_continue)
-                    SET_VALUE(GF(0), 1)
-                END_IF
-                ELSE
-                CALL_CHILD(evt_memcard_nosave)
-            END_IF
             CASE_OR_EQUAL(CARD_RESULT_NOENT)
             CASE_OR_EQUAL(CARD_RESULT_INSSPACE)
-            CALL(evt_msg_print_add, MSG_PRINT_DIRECT_TEXT, STRING("<scrl_auto><once_stop>"))
-            CALL(evt_msg_print_add, 0, STRING("msg_mcard_nospace"))
-            CALL(evt_msg_print_add, 0, STRING("msg_gc_mcard_open"))
-            CALL(evt_msg_select, 0, STRING("msg_mcard_yesno2"))
-            IF_INT_EQUAL(LW(0), 0)
-                CALL(memcard_ipl)
-            ELSE
-                CALL_CHILD(evt_memcard_nosave)
-            END_IF
+                CALL(evt_msg_print_add, MSG_PRINT_DIRECT_TEXT, STRING("<scrl_auto><once_stop>"))
+                CALL(evt_msg_print_add, 0, STRING("msg_mcard_nospace"))
+                CALL(evt_msg_print_add, 0, STRING("msg_gc_mcard_open"))
+                CALL(evt_msg_select, 0, STRING("msg_mcard_yesno2"))
+                IF_INT_EQUAL(LW(0), 0)
+                    CALL(memcard_ipl)
+                ELSE
+                    CALL_CHILD(evt_memcard_nosave)
+                END_IF
             CASE_END
 #if VERSION >= VERSION_JP
             CASE_EQUAL(CARD_RESULT_NOPERM)
-            CALL(evt_msg_print_add, 0, STRING("msg_mcard_different_savedata_2"))
-            CALL_CHILD(evt_memcard_nosave)
+                CALL(evt_msg_print_add, 0, STRING("msg_mcard_different_savedata_2"))
+                CALL_CHILD(evt_memcard_nosave)
 #endif
 
             // Damaged card: it cannot be used.
             CASE_DEFAULT
-            CALL(evt_msg_print_add, 0, STRING("msg_mcard_damage"))
-            CALL_CHILD(evt_memcard_nosave)
+                CALL(evt_msg_print_add, 0, STRING("msg_mcard_damage"))
+                CALL_CHILD(evt_memcard_nosave)
         END_SWITCH
 #if VERSION >= VERSION_JP
         CALL(memcard_watch_end, LW(0))
@@ -596,31 +596,107 @@ EVT_BEGIN(evt_memcard_save)
     // not the original card, no space (offer the Memory Card Screen) or a damaged card.
     SWITCH(LW(0))
         CASE_EQUAL(0)
-        CALL(evt_msg_print_add, 0, STRING("msg_mcard_save_finish"))
-        RETURN
+            CALL(evt_msg_print_add, 0, STRING("msg_mcard_save_finish"))
+            RETURN
         CASE_EQUAL(CARD_RESULT_NOCARD)
-        CALL(evt_msg_print_add, MSG_PRINT_DIRECT_TEXT, STRING("<scrl_auto><once_stop>"))
-        CALL(evt_msg_print_add, 0, STRING("msg_mcard_nocard"))
-        CALL(evt_msg_print_add, 0, STRING("msg_mcard_save_miss"))
+            CALL(evt_msg_print_add, MSG_PRINT_DIRECT_TEXT, STRING("<scrl_auto><once_stop>"))
+            CALL(evt_msg_print_add, 0, STRING("msg_mcard_nocard"))
+            CALL(evt_msg_print_add, 0, STRING("msg_mcard_save_miss"))
         CASE_EQUAL(CARD_RESULT_WRONGDEVICE)
-        CALL(evt_msg_print_add, MSG_PRINT_DIRECT_TEXT, STRING("<scrl_auto><once_stop>"))
-        CALL(evt_msg_print_add, 0, STRING("msg_mcard_different_card"))
-        CALL(evt_msg_print_add, 0, STRING("msg_mcard_save_miss"))
+            CALL(evt_msg_print_add, MSG_PRINT_DIRECT_TEXT, STRING("<scrl_auto><once_stop>"))
+            CALL(evt_msg_print_add, 0, STRING("msg_mcard_different_card"))
+            CALL(evt_msg_print_add, 0, STRING("msg_mcard_save_miss"))
 #if VERSION <= VERSION_DEMO_JP
         CASE_OR_EQUAL(-13)
         CASE_OR_EQUAL(-6)
 #else
         CASE_OR_EQUAL(CARD_RESULT_ENCODING)
         CASE_OR_EQUAL(CARD_RESULT_BROKEN)
-        CALL(memcard_watch_start)
+            CALL(memcard_watch_start)
 #endif
-        CALL(evt_msg_print_add, MSG_PRINT_DIRECT_TEXT, STRING("<scrl_auto><once_stop>"))
-        CALL(evt_msg_print_add, 0, STRING("msg_mcard_format"))
-        CALL(evt_msg_select, 0, STRING("msg_mcard_yesno2"))
-        IF_INT_EQUAL(LW(0), 0)
-            CALL(evt_msg_print_add, 0, STRING("msg_mcard_format_alldelete"))
+            CALL(evt_msg_print_add, MSG_PRINT_DIRECT_TEXT, STRING("<scrl_auto><once_stop>"))
+            CALL(evt_msg_print_add, 0, STRING("msg_mcard_format"))
             CALL(evt_msg_select, 0, STRING("msg_mcard_yesno2"))
             IF_INT_EQUAL(LW(0), 0)
+                CALL(evt_msg_print_add, 0, STRING("msg_mcard_format_alldelete"))
+                CALL(evt_msg_select, 0, STRING("msg_mcard_yesno2"))
+                IF_INT_EQUAL(LW(0), 0)
+#if VERSION >= VERSION_JP
+                    CALL(memcard_watch_chk, LW(0))
+                    IF_INT_EQUAL(LW(0), 1)
+                        CALL(evt_msg_print_add, 0, STRING("msg_out_mcard_warnning"))
+                        BREAK_SWITCH
+                    END_IF
+#endif
+                    CALL(evt_msg_print_add, 0, STRING("msg_mcard_format_warning"))
+                    CALL(memcard_format)
+                    CALL(memcard_code, LW(0))
+                    IF_INT_NOT_EQUAL(LW(0), 0)
+                        CALL(evt_msg_print_add, 0, STRING("msg_mcard_format_miss"))
+#if VERSION <= VERSION_DEMO_JP
+                        CALL(evt_msg_print_add, 0, STRING("msg_mcard_save_miss"))
+#else
+                        SET_VALUE(LF(11), 1)
+#endif
+                        ELSE
+                        CALL(evt_msg_print_add, 0, STRING("msg_mcard_format_finish"))
+                        CALL(evt_msg_print_add, 0, STRING("msg_mcard_make_data"))
+                        CALL(evt_msg_select, 0, STRING("msg_mcard_yesno"))
+                        IF_INT_EQUAL(LW(0), 0)
+                            CALL(evt_msg_print_add, 0, STRING("msg_mcard_make_data_warning"))
+#if VERSION >= VERSION_JP
+                            CALL(memcard_watch_chk, LW(0))
+                            IF_INT_EQUAL(LW(0), 1)
+                                CALL(evt_msg_print_add, 0, STRING("msg_out_mcard_warnning"))
+                                BREAK_SWITCH
+                            END_IF
+#endif
+                            CALL(memcard_create)
+                            CALL(memcard_code, LW(0))
+                            IF_INT_NOT_EQUAL(LW(0), 0)
+                                CALL(evt_msg_print_add, 0, STRING("msg_mcard_make_data_miss"))
+#if VERSION <= VERSION_DEMO_JP
+                                CALL(evt_msg_print_add, 0, STRING("msg_mcard_save_miss"))
+#else
+                                SET_VALUE(LF(11), 1)
+#endif
+                                ELSE
+                                CALL(evt_msg_print_add, 0, STRING("msg_mcard_make_data_finish"))
+                                CALL(evt_msg_print_add, 0, STRING("msg_mcard_save_warnning"))
+                                CALL(memcard_write)
+                                CALL(memcard_code, LW(0))
+                                IF_INT_EQUAL(LW(0), 0)
+                                    CALL(evt_msg_print_add, 0, STRING("msg_mcard_save_finish"))
+                                    RETURN
+                                ELSE
+#if VERSION <= VERSION_DEMO_JP
+                                    CALL(evt_msg_print_add, 0, STRING("msg_mcard_save_miss"))
+#else
+                                    SET_VALUE(LF(11), 1)
+#endif
+                                END_IF
+                            END_IF
+                            ELSE
+                            CALL(evt_msg_print_add, 0, STRING("msg_mcard_save_miss"))
+                        END_IF
+                    END_IF
+                    ELSE
+                    CALL(evt_msg_print_add, 0, STRING("msg_mcard_save_miss"))
+                END_IF
+                ELSE
+                CALL(evt_msg_print_add, 0, STRING("msg_mcard_save_miss"))
+            END_IF
+        CASE_END
+#if VERSION <= VERSION_DEMO_JP
+        CASE_EQUAL(-4)
+#else
+        CASE_EQUAL(CARD_RESULT_NOFILE)
+            CALL(memcard_watch_start)
+#endif
+            CALL(evt_msg_print_add, 0, STRING("msg_mcard_make_data"))
+            CALL(evt_msg_select, 0, STRING("msg_mcard_yesno"))
+            IF_INT_EQUAL(LW(0), 0)
+                CALL(evt_msg_print_add, 0, STRING("msg_mcard_make_data_warning"))
 #if VERSION >= VERSION_JP
                 CALL(memcard_watch_chk, LW(0))
                 IF_INT_EQUAL(LW(0), 1)
@@ -628,144 +704,68 @@ EVT_BEGIN(evt_memcard_save)
                     BREAK_SWITCH
                 END_IF
 #endif
-                CALL(evt_msg_print_add, 0, STRING("msg_mcard_format_warning"))
-                CALL(memcard_format)
+                CALL(memcard_create)
                 CALL(memcard_code, LW(0))
                 IF_INT_NOT_EQUAL(LW(0), 0)
-                    CALL(evt_msg_print_add, 0, STRING("msg_mcard_format_miss"))
+                    CALL(evt_msg_print_add, 0, STRING("msg_mcard_make_data_miss"))
 #if VERSION <= VERSION_DEMO_JP
                     CALL(evt_msg_print_add, 0, STRING("msg_mcard_save_miss"))
 #else
                     SET_VALUE(LF(11), 1)
 #endif
                     ELSE
-                    CALL(evt_msg_print_add, 0, STRING("msg_mcard_format_finish"))
-                    CALL(evt_msg_print_add, 0, STRING("msg_mcard_make_data"))
-                    CALL(evt_msg_select, 0, STRING("msg_mcard_yesno"))
+                    CALL(evt_msg_print_add, 0, STRING("msg_mcard_make_data_finish"))
+                    CALL(evt_msg_print_add, 0, STRING("msg_mcard_save_warnning"))
+                    CALL(memcard_write)
+                    CALL(memcard_code, LW(0))
                     IF_INT_EQUAL(LW(0), 0)
-                        CALL(evt_msg_print_add, 0, STRING("msg_mcard_make_data_warning"))
-#if VERSION >= VERSION_JP
-                        CALL(memcard_watch_chk, LW(0))
-                        IF_INT_EQUAL(LW(0), 1)
-                            CALL(evt_msg_print_add, 0, STRING("msg_out_mcard_warnning"))
-                            BREAK_SWITCH
-                        END_IF
-#endif
-                        CALL(memcard_create)
-                        CALL(memcard_code, LW(0))
-                        IF_INT_NOT_EQUAL(LW(0), 0)
-                            CALL(evt_msg_print_add, 0, STRING("msg_mcard_make_data_miss"))
+                        CALL(evt_msg_print_add, 0, STRING("msg_mcard_save_finish"))
+                        RETURN
+                    ELSE
 #if VERSION <= VERSION_DEMO_JP
-                            CALL(evt_msg_print_add, 0, STRING("msg_mcard_save_miss"))
-#else
-                            SET_VALUE(LF(11), 1)
-#endif
-                            ELSE
-                            CALL(evt_msg_print_add, 0, STRING("msg_mcard_make_data_finish"))
-                            CALL(evt_msg_print_add, 0, STRING("msg_mcard_save_warnning"))
-                            CALL(memcard_write)
-                            CALL(memcard_code, LW(0))
-                            IF_INT_EQUAL(LW(0), 0)
-                                CALL(evt_msg_print_add, 0, STRING("msg_mcard_save_finish"))
-                                RETURN
-                            ELSE
-#if VERSION <= VERSION_DEMO_JP
-                                CALL(evt_msg_print_add, 0, STRING("msg_mcard_save_miss"))
-#else
-                                SET_VALUE(LF(11), 1)
-#endif
-                            END_IF
-                        END_IF
-                        ELSE
                         CALL(evt_msg_print_add, 0, STRING("msg_mcard_save_miss"))
+#else
+                        SET_VALUE(LF(11), 1)
+#endif
                     END_IF
                 END_IF
                 ELSE
                 CALL(evt_msg_print_add, 0, STRING("msg_mcard_save_miss"))
             END_IF
-            ELSE
-            CALL(evt_msg_print_add, 0, STRING("msg_mcard_save_miss"))
-        END_IF
-        CASE_END
-#if VERSION <= VERSION_DEMO_JP
-        CASE_EQUAL(-4)
-#else
-        CASE_EQUAL(CARD_RESULT_NOFILE)
-        CALL(memcard_watch_start)
-#endif
-        CALL(evt_msg_print_add, 0, STRING("msg_mcard_make_data"))
-        CALL(evt_msg_select, 0, STRING("msg_mcard_yesno"))
-        IF_INT_EQUAL(LW(0), 0)
-            CALL(evt_msg_print_add, 0, STRING("msg_mcard_make_data_warning"))
-#if VERSION >= VERSION_JP
-            CALL(memcard_watch_chk, LW(0))
-            IF_INT_EQUAL(LW(0), 1)
-                CALL(evt_msg_print_add, 0, STRING("msg_out_mcard_warnning"))
-                BREAK_SWITCH
-            END_IF
-#endif
-            CALL(memcard_create)
-            CALL(memcard_code, LW(0))
-            IF_INT_NOT_EQUAL(LW(0), 0)
-                CALL(evt_msg_print_add, 0, STRING("msg_mcard_make_data_miss"))
-#if VERSION <= VERSION_DEMO_JP
-                CALL(evt_msg_print_add, 0, STRING("msg_mcard_save_miss"))
-#else
-                SET_VALUE(LF(11), 1)
-#endif
-                ELSE
-                CALL(evt_msg_print_add, 0, STRING("msg_mcard_make_data_finish"))
-                CALL(evt_msg_print_add, 0, STRING("msg_mcard_save_warnning"))
-                CALL(memcard_write)
-                CALL(memcard_code, LW(0))
-                IF_INT_EQUAL(LW(0), 0)
-                    CALL(evt_msg_print_add, 0, STRING("msg_mcard_save_finish"))
-                    RETURN
-                ELSE
-#if VERSION <= VERSION_DEMO_JP
-                    CALL(evt_msg_print_add, 0, STRING("msg_mcard_save_miss"))
-#else
-                    SET_VALUE(LF(11), 1)
-#endif
-                END_IF
-            END_IF
-            ELSE
-            CALL(evt_msg_print_add, 0, STRING("msg_mcard_save_miss"))
-        END_IF
         CASE_EQUAL(CARD_RESULT_NOPERM)
-        CALL(evt_msg_print_add, 0, STRING("msg_mcard_different_savedata"))
-        CALL(evt_msg_print_add, 0, STRING("msg_mcard_save_miss"))
+            CALL(evt_msg_print_add, 0, STRING("msg_mcard_different_savedata"))
+            CALL(evt_msg_print_add, 0, STRING("msg_mcard_save_miss"))
         CASE_OR_EQUAL(CARD_RESULT_NOENT)
         CASE_OR_EQUAL(CARD_RESULT_INSSPACE)
-        CALL(evt_msg_print_add, MSG_PRINT_DIRECT_TEXT, STRING("<scrl_auto><once_stop>"))
-        CALL(evt_msg_print_add, 0, STRING("msg_mcard_nospace"))
+            CALL(evt_msg_print_add, MSG_PRINT_DIRECT_TEXT, STRING("<scrl_auto><once_stop>"))
+            CALL(evt_msg_print_add, 0, STRING("msg_mcard_nospace"))
 #if VERSION >= VERSION_JP
-        IF_INT_EQUAL(LW(10), 23)
+            IF_INT_EQUAL(LW(10), 23)
 #endif
-            CALL(evt_msg_print_add, 0, STRING("msg_gc_mcard_open"))
-            CALL(evt_msg_select, 0, STRING("msg_mcard_yesno2"))
-            IF_INT_NOT_EQUAL(LW(0), 0)
-                CALL(evt_msg_print_add, 0, STRING("msg_mcard_save_miss"))
-            ELSE
-                CALL(evt_msg_print_add, 0, STRING("msg_gc_mcard_nosave"))
+                CALL(evt_msg_print_add, 0, STRING("msg_gc_mcard_open"))
                 CALL(evt_msg_select, 0, STRING("msg_mcard_yesno2"))
                 IF_INT_NOT_EQUAL(LW(0), 0)
                     CALL(evt_msg_print_add, 0, STRING("msg_mcard_save_miss"))
                 ELSE
-                    CALL(memcard_ipl)
+                    CALL(evt_msg_print_add, 0, STRING("msg_gc_mcard_nosave"))
+                    CALL(evt_msg_select, 0, STRING("msg_mcard_yesno2"))
+                    IF_INT_NOT_EQUAL(LW(0), 0)
+                        CALL(evt_msg_print_add, 0, STRING("msg_mcard_save_miss"))
+                    ELSE
+                        CALL(memcard_ipl)
+                    END_IF
+                ELSE
+                    CALL(evt_msg_print_add, 0, STRING("msg_mcard_save_miss"))
                 END_IF
-            ELSE
+#if VERSION >= VERSION_JP
+                ELSE
                 CALL(evt_msg_print_add, 0, STRING("msg_mcard_save_miss"))
             END_IF
-#if VERSION >= VERSION_JP
-            ELSE
-            CALL(evt_msg_print_add, 0, STRING("msg_mcard_save_miss"))
-        END_IF
 #endif
         CASE_END
         CASE_DEFAULT
-        CALL(evt_msg_print_add, 0, STRING("msg_mcard_damage"))
-        CALL(evt_msg_print_add, 0, STRING("msg_mcard_save_miss"))
+            CALL(evt_msg_print_add, 0, STRING("msg_mcard_damage"))
+            CALL(evt_msg_print_add, 0, STRING("msg_mcard_save_miss"))
     END_SWITCH
 #if VERSION >= VERSION_JP
     CALL(memcard_watch_end)

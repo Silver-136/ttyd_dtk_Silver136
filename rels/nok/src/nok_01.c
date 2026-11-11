@@ -163,15 +163,15 @@ EVT_END()
 static EVT_BEGIN(nokonoko_G_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG1_06_01_GOLD_FUZZY)
-        CALL(evt_msg_print, 0, STRING("stg1_nok_20"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg1_nok_20"), 0, 0)
         CASE_LESS(STG1_17_FATHER_SON_REUNITED)
-        CALL(evt_msg_print, 0, STRING("stg1_nok_20_01"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg1_nok_20_01"), 0, 0)
         CASE_LESS(STG1_31_FRANKLYS_HOUSE_STG_1)
-        CALL(evt_msg_print, 0, STRING("stg1_nok_21"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg1_nok_21"), 0, 0)
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
-        CALL(evt_msg_print, 0, STRING("stg1_nok_21_1"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg1_nok_21_1"), 0, 0)
         CASE_DEFAULT
-        CALL(evt_msg_print, 0, STRING("stg1_nok_21_1_1"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg1_nok_21_1_1"), 0, 0)
     END_SWITCH
     RETURN
 EVT_END()
@@ -191,17 +191,17 @@ EVT_END()
 static EVT_BEGIN(nokonoko_H_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG1_06_01_GOLD_FUZZY)
-        CALL(evt_msg_print, 0, STRING("stg1_nok_22"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg1_nok_22"), 0, 0)
         CASE_LESS(STG1_17_FATHER_SON_REUNITED)
-        CALL(evt_msg_print, 0, STRING("stg1_nok_22_01"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg1_nok_22_01"), 0, 0)
         CASE_LESS(STG1_31_FRANKLYS_HOUSE_STG_1)
-        CALL(evt_msg_print, 0, STRING("stg1_nok_23"), 0, 0)
-        CALL(evt_msg_select, 0, STRING("stg1_nok_23_yesno"))
-        CALL(evt_msg_print_add, 0, STRING("stg1_nok_23_01"))
+            CALL(evt_msg_print, 0, STRING("stg1_nok_23"), 0, 0)
+            CALL(evt_msg_select, 0, STRING("stg1_nok_23_yesno"))
+            CALL(evt_msg_print_add, 0, STRING("stg1_nok_23_01"))
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
-        CALL(evt_msg_print, 0, STRING("stg1_nok_23_01_1"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg1_nok_23_01_1"), 0, 0)
         CASE_DEFAULT
-        CALL(evt_msg_print, 0, STRING("stg1_nok_23_01_1_1"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg1_nok_23_01_1_1"), 0, 0)
     END_SWITCH
     RETURN
 EVT_END()
@@ -218,15 +218,15 @@ EVT_END()
 static EVT_BEGIN(nokonoko_I_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG1_06_01_GOLD_FUZZY)
-        CALL(evt_msg_print, 0, STRING("stg1_nok_24"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg1_nok_24"), 0, 0)
         CASE_LESS(STG1_17_FATHER_SON_REUNITED)
-        CALL(evt_msg_print, 0, STRING("stg1_nok_24_01"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg1_nok_24_01"), 0, 0)
         CASE_LESS(STG1_31_FRANKLYS_HOUSE_STG_1)
-        CALL(evt_msg_print, 0, STRING("stg1_nok_25"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg1_nok_25"), 0, 0)
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
-        CALL(evt_msg_print, 0, STRING("stg1_nok_25_1"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg1_nok_25_1"), 0, 0)
         CASE_DEFAULT
-        CALL(evt_msg_print, 0, STRING("stg1_nok_25_1_1"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg1_nok_25_1_1"), 0, 0)
     END_SWITCH
     RETURN
 EVT_END()
@@ -303,7 +303,7 @@ static EVT_BEGIN(monban_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG1_03_PETALBURG_GATEKEEPER)
         CASE_DEFAULT
-        CALL(evt_npc_set_position, STRING("me"), 370, 0, -76)
+            CALL(evt_npc_set_position, STRING("me"), 370, 0, -76)
     END_SWITCH
     RETURN
 EVT_END()
@@ -315,19 +315,19 @@ EVT_END()
 static EVT_BEGIN(monban_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG1_02_TALKING_WITH_KROOP)
-        CALL(evt_msg_print, 0, STRING("stg1_nok_26"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg1_nok_26"), 0, 0)
         CASE_LESS(STG1_03_PETALBURG_GATEKEEPER)
-        CALL_CHILD(open_gate)
+            CALL_CHILD(open_gate)
         CASE_LESS(STG1_06_01_GOLD_FUZZY)
-        CALL(evt_msg_print, 0, STRING("stg1_nok_31_01_00"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg1_nok_31_01_00"), 0, 0)
         CASE_LESS(STG1_17_FATHER_SON_REUNITED)
-        CALL(evt_msg_print, 0, STRING("stg1_nok_31_01_01"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg1_nok_31_01_01"), 0, 0)
         CASE_LESS(STG1_31_FRANKLYS_HOUSE_STG_1)
-        CALL(evt_msg_print, 0, STRING("stg1_nok_31_02_1"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg1_nok_31_02_1"), 0, 0)
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
-        CALL(evt_msg_print, 0, STRING("stg1_nok_31_02_2"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg1_nok_31_02_2"), 0, 0)
         CASE_DEFAULT
-        CALL(evt_msg_print, 0, STRING("stg1_nok_31_02_2_1"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg1_nok_31_02_2_1"), 0, 0)
     END_SWITCH
     RETURN
 EVT_END()
@@ -341,10 +341,10 @@ static EVT_BEGIN(nokotarou_init)
     CALL_CHILD(npc_init_evt)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG1_06_01_GOLD_FUZZY)
-        CALL(evt_npc_set_position, STRING("me"), -35, 65, -425)
-        CALL(evt_npc_set_ry, STRING("me"), 90)
+            CALL(evt_npc_set_position, STRING("me"), -35, 65, -425)
+            CALL(evt_npc_set_ry, STRING("me"), 90)
         CASE_DEFAULT
-        CALL(evt_npc_set_position, STRING("me"), 0, -1000, 0)
+            CALL(evt_npc_set_position, STRING("me"), 0, -1000, 0)
     END_SWITCH
     RETURN
 EVT_END()
@@ -352,13 +352,13 @@ EVT_END()
 static EVT_BEGIN(nokotarou_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG1_02_TALKING_WITH_KROOP)
-        CALL(evt_msg_print, 0, STRING("stg1_nok_27"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg1_nok_27"), 0, 0)
         CASE_LESS(STG1_03_PETALBURG_GATEKEEPER)
-        CALL(evt_msg_print, 0, STRING("stg1_nok_27_01"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg1_nok_27_01"), 0, 0)
         CASE_LESS(STG1_04_BALD_CLEFT)
-        CALL(evt_msg_print, 0, STRING("stg1_nok_31"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg1_nok_31"), 0, 0)
         CASE_DEFAULT
-        CALL(evt_msg_print, 0, STRING("stg1_nok_31_01"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg1_nok_31_01"), 0, 0)
     END_SWITCH
     RETURN
 EVT_END()
@@ -371,8 +371,8 @@ static EVT_BEGIN(nokopapa_init)
     CALL_CHILD(npc_init_evt)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER(STG1_16_HOOKTAIL)
-        CALL(evt_npc_set_position, STRING("me"), 92, 50, -308)
-        CALL(evt_npc_set_ry, STRING("me"), 270)
+            CALL(evt_npc_set_position, STRING("me"), 92, 50, -308)
+            CALL(evt_npc_set_ry, STRING("me"), 270)
     END_SWITCH
     RETURN
 EVT_END()
@@ -386,25 +386,25 @@ static EVT_BEGIN(nokopapa_talk)
     CALL(evt_mario_get_party, LW(0))
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG4_00_WELCOME_TO_STAGE_4)
-        IF_INT_EQUAL(LW(0), 2)
-            CALL(evt_msg_print, 0, STRING("stg1_nok_79"), 0, 0)
-        ELSE
-            CALL(evt_msg_print, 0, STRING("stg1_nok_80"), 0, 0)
-        END_IF
+            IF_INT_EQUAL(LW(0), 2)
+                CALL(evt_msg_print, 0, STRING("stg1_nok_79"), 0, 0)
+            ELSE
+                CALL(evt_msg_print, 0, STRING("stg1_nok_80"), 0, 0)
+            END_IF
         CASE_LESS(STG7_20_LORD_CRUMP_DEFEATED)
-        IF_INT_EQUAL(LW(0), 2)
-            CALL(evt_msg_print, 0, STRING("stg1_nok_81"), 0, 0)
-        ELSE
-            CALL(evt_msg_print, 0, STRING("stg1_nok_82"), 0, 0)
-        END_IF
+            IF_INT_EQUAL(LW(0), 2)
+                CALL(evt_msg_print, 0, STRING("stg1_nok_81"), 0, 0)
+            ELSE
+                CALL(evt_msg_print, 0, STRING("stg1_nok_82"), 0, 0)
+            END_IF
         CASE_LESS(STG8_END_AFTER_THE_BATTLE)
-        IF_INT_EQUAL(LW(0), 2)
-            CALL(evt_msg_print, 0, STRING("stg1_nok_83"), 0, 0)
-        ELSE
-            CALL(evt_msg_print, 0, STRING("stg1_nok_84"), 0, 0)
-        END_IF
+            IF_INT_EQUAL(LW(0), 2)
+                CALL(evt_msg_print, 0, STRING("stg1_nok_83"), 0, 0)
+            ELSE
+                CALL(evt_msg_print, 0, STRING("stg1_nok_84"), 0, 0)
+            END_IF
         CASE_DEFAULT
-        CALL(evt_msg_print, 0, STRING("stg1_nok_84_1"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg1_nok_84_1"), 0, 0)
     END_SWITCH
     RETURN
 EVT_END()
@@ -425,15 +425,15 @@ static EVT_BEGIN(nokonoko_K_talk)
     END_IF
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG1_06_01_GOLD_FUZZY)
-        CALL(evt_msg_print, 0, STRING("stg1_nok_32"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg1_nok_32"), 0, 0)
         CASE_LESS(STG1_17_FATHER_SON_REUNITED)
-        CALL(evt_msg_print, 0, STRING("stg1_nok_32_01"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg1_nok_32_01"), 0, 0)
         CASE_LESS(STG1_31_FRANKLYS_HOUSE_STG_1)
-        CALL(evt_msg_print, 0, STRING("stg1_nok_33"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg1_nok_33"), 0, 0)
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
-        CALL(evt_msg_print, 0, STRING("stg1_nok_33_1"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg1_nok_33_1"), 0, 0)
         CASE_DEFAULT
-        CALL(evt_msg_print, 0, STRING("stg1_nok_33_1_1"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg1_nok_33_1_1"), 0, 0)
     END_SWITCH
     RETURN
 EVT_END()
@@ -601,30 +601,30 @@ EVT_BEGIN(boss_noko_talk)
     // If neither request branch returns, his talk follows the story.
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG1_02_TALKING_WITH_KROOP)
-        CALL_CHILD(boss_noko_open_gate)
+            CALL_CHILD(boss_noko_open_gate)
         CASE_LESS(STG1_08_OPENING_THE_PATH)
-        IF_INT_EQUAL(GSWF_HEI_SUN_STONE_TAKEN, 1)
-            IF_INT_EQUAL(GSWF_HEI_MOON_STONE_TAKEN, 1)
+            IF_INT_EQUAL(GSWF_HEI_SUN_STONE_TAKEN, 1)
+                IF_INT_EQUAL(GSWF_HEI_MOON_STONE_TAKEN, 1)
 
-                // After the Sun Stone and Moon Stone errand he congratulates Mario.
-                CALL(evt_msg_print, 0, STRING("stg1_nok_56"), 0, 0)
-                RETURN
+                    // After the Sun Stone and Moon Stone errand he congratulates Mario.
+                    CALL(evt_msg_print, 0, STRING("stg1_nok_56"), 0, 0)
+                    RETURN
+                END_IF
             END_IF
-        END_IF
-        CALL(evt_msg_print, 0, STRING("stg1_nok_47"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg1_nok_47"), 0, 0)
         CASE_LESS(STG1_17_FATHER_SON_REUNITED)
-        CALL(evt_msg_print, 0, STRING("stg1_nok_56_01"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg1_nok_56_01"), 0, 0)
         CASE_LESS(STG1_31_FRANKLYS_HOUSE_STG_1)
-        CALL(evt_msg_print, 0, STRING("stg1_nok_57"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg1_nok_57"), 0, 0)
 #if VERSION >= VERSION_JP
         CASE_EQUAL(STG7_02_MAYOR_BOB)
-        SET_VALUE(GSWF_NOK_GENERAL_WHITE_HINT_HEARD, 1)
-        CALL(evt_msg_print, 0, STRING("stg1_nok_57_1_00"), 0, 0)
+            SET_VALUE(GSWF_NOK_GENERAL_WHITE_HINT_HEARD, 1)
+            CALL(evt_msg_print, 0, STRING("stg1_nok_57_1_00"), 0, 0)
 #endif
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
-        CALL(evt_msg_print, 0, STRING("stg1_nok_57_1"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg1_nok_57_1"), 0, 0)
         CASE_DEFAULT
-        CALL(evt_msg_print, 0, STRING("stg1_nok_57_1_1"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg1_nok_57_1_1"), 0, 0)
     END_SWITCH
     RETURN
 EVT_END()
@@ -650,98 +650,98 @@ EVT_END()
 static EVT_BEGIN(nokorin_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG1_06_01_GOLD_FUZZY)
-        IF_INT_EQUAL(GSWF_NOK_KOOPIE_KOO_FIRST_TALK_DONE, 0)
-            SET_VALUE(GSWF_NOK_KOOPIE_KOO_FIRST_TALK_DONE, 1)
+            IF_INT_EQUAL(GSWF_NOK_KOOPIE_KOO_FIRST_TALK_DONE, 0)
+                SET_VALUE(GSWF_NOK_KOOPIE_KOO_FIRST_TALK_DONE, 1)
 
-            // Koopie Koo introduces herself to Mario.
-            CALL(evt_msg_print, 0, STRING("stg1_nok_64"), 0, 0)
-            CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-            CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_NOD1_5"), LW(0), LW(1), LW(2), 0)
-            CALL(evt_mario_set_pose, STRING("M_N_2"))
-            WAIT_MS(300)
-            CALL(evt_mario_set_pose, STRING("M_S_1"))
-            CALL(evt_msg_print, 0, STRING("stg1_nok_64_01"), 0, 0)
-        ELSE
+                // Koopie Koo introduces herself to Mario.
+                CALL(evt_msg_print, 0, STRING("stg1_nok_64"), 0, 0)
+                CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+                CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_NOD1_5"), LW(0), LW(1), LW(2), 0)
+                CALL(evt_mario_set_pose, STRING("M_N_2"))
+                WAIT_MS(300)
+                CALL(evt_mario_set_pose, STRING("M_S_1"))
+                CALL(evt_msg_print, 0, STRING("stg1_nok_64_01"), 0, 0)
+            ELSE
 
-            // She confides her worries about her boyfriend Koops.
-            CALL(evt_msg_print, 0, STRING("stg1_nok_65"), 0, 0)
-            IF_INT_EQUAL(GSWF_NOK_KOOPIE_KOO_CONFESSION_SEEN, 0)
-                SET_VALUE(GSWF_NOK_KOOPIE_KOO_CONFESSION_SEEN, 1)
-                WAIT_MS(500)
-                CALL(evt_eff_fukidashi, FUKIDASHI_AT_NPC, STRING("a"), STRING("me"), 0, 0, 0, 0, 0, 0, 0, 60)
-                WAIT_MS(1200)
-                CALL(evt_msg_print, 0, STRING("stg1_nok_66"), 0, 0)
+                // She confides her worries about her boyfriend Koops.
+                CALL(evt_msg_print, 0, STRING("stg1_nok_65"), 0, 0)
+                IF_INT_EQUAL(GSWF_NOK_KOOPIE_KOO_CONFESSION_SEEN, 0)
+                    SET_VALUE(GSWF_NOK_KOOPIE_KOO_CONFESSION_SEEN, 1)
+                    WAIT_MS(500)
+                    CALL(evt_eff_fukidashi, FUKIDASHI_AT_NPC, STRING("a"), STRING("me"), 0, 0, 0, 0, 0, 0, 0, 60)
+                    WAIT_MS(1200)
+                    CALL(evt_msg_print, 0, STRING("stg1_nok_66"), 0, 0)
+                END_IF
             END_IF
-        END_IF
         CASE_LESS(STG1_07_KOOPS_JOINS)
-        CALL(evt_msg_print, 0, STRING("stg1_nok_66_01"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg1_nok_66_01"), 0, 0)
         CASE_LESS(STG1_17_FATHER_SON_REUNITED)
-        IF_INT_EQUAL(GSWF_NOK_KOOPIE_KOO_BLESSING_DONE, 0)
-            CALL(evt_mario_get_party, LW(0))
-            IF_INT_EQUAL(LW(0), 2)
-                SET_VALUE(GSWF_NOK_KOOPIE_KOO_BLESSING_DONE, 1)
+            IF_INT_EQUAL(GSWF_NOK_KOOPIE_KOO_BLESSING_DONE, 0)
+                CALL(evt_mario_get_party, LW(0))
+                IF_INT_EQUAL(LW(0), 2)
+                    SET_VALUE(GSWF_NOK_KOOPIE_KOO_BLESSING_DONE, 1)
 
-                // Koops is in the party: she apologizes to him, asks Mario to look after him and hops away.
-                CALL(evt_msg_print, 0, STRING("stg1_nok_67"), 0, 0)
-                CALL(evt_msg_print, 0, STRING("stg1_nok_68"), 0, 0)
-                CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
-                CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_NO_HIT | NPC_FLAG_GRAVITY)
-                CALL(evt_npc_move_position, STRING("me"), -85, -300, 0, FLOAT(60.0f), 1)
-                CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_NO_HIT | NPC_FLAG_GRAVITY)
+                    // Koops is in the party: she apologizes to him, asks Mario to look after him and hops away.
+                    CALL(evt_msg_print, 0, STRING("stg1_nok_67"), 0, 0)
+                    CALL(evt_msg_print, 0, STRING("stg1_nok_68"), 0, 0)
+                    CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
+                    CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_NO_HIT | NPC_FLAG_GRAVITY)
+                    CALL(evt_npc_move_position, STRING("me"), -85, -300, 0, FLOAT(60.0f), 1)
+                    CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_NO_HIT | NPC_FLAG_GRAVITY)
+                ELSE
+                    CALL(evt_msg_print, 0, STRING("stg1_nok_70"), 0, 0)
+                END_IF
             ELSE
-                CALL(evt_msg_print, 0, STRING("stg1_nok_70"), 0, 0)
-            END_IF
-        ELSE
-            CALL(evt_mario_get_party, LW(0))
-            IF_INT_EQUAL(LW(0), 2)
-                CALL(evt_msg_print, 0, STRING("stg1_nok_69"), 0, 0)
-            ELSE
-                CALL(evt_msg_print, 0, STRING("stg1_nok_70"), 0, 0)
+                CALL(evt_mario_get_party, LW(0))
+                IF_INT_EQUAL(LW(0), 2)
+                    CALL(evt_msg_print, 0, STRING("stg1_nok_69"), 0, 0)
+                ELSE
+                    CALL(evt_msg_print, 0, STRING("stg1_nok_70"), 0, 0)
+                END_IF
             END_IF
         END_IF
-    END_IF
     CASE_LESS(STG2_00_BOGGLY_WOODS)
-    CALL(evt_mario_get_party, LW(0))
-    IF_INT_EQUAL(LW(0), 2)
+        CALL(evt_mario_get_party, LW(0))
+        IF_INT_EQUAL(LW(0), 2)
 
-        // Before chapter 2: she cheers Koops on.
-        CALL(evt_msg_print, 0, STRING("stg1_nok_71"), 0, 0)
-    ELSE
-        CALL(evt_msg_print, 0, STRING("stg1_nok_72"), 0, 0)
-    END_IF
+            // Before chapter 2: she cheers Koops on.
+            CALL(evt_msg_print, 0, STRING("stg1_nok_71"), 0, 0)
+        ELSE
+            CALL(evt_msg_print, 0, STRING("stg1_nok_72"), 0, 0)
+        END_IF
     CASE_LESS(STG4_00_WELCOME_TO_STAGE_4)
-    CALL(evt_mario_get_party, LW(0))
-    IF_INT_EQUAL(LW(0), 2)
-        CALL(evt_msg_print, 0, STRING("stg1_nok_73"), 0, 0)
-    ELSE
-        CALL(evt_msg_print, 0, STRING("stg1_nok_74"), 0, 0)
-    END_IF
+        CALL(evt_mario_get_party, LW(0))
+        IF_INT_EQUAL(LW(0), 2)
+            CALL(evt_msg_print, 0, STRING("stg1_nok_73"), 0, 0)
+        ELSE
+            CALL(evt_msg_print, 0, STRING("stg1_nok_74"), 0, 0)
+        END_IF
     CASE_LESS(STG7_00_START)
-    CALL(evt_mario_get_party, LW(0))
-    IF_INT_EQUAL(LW(0), 2)
-        CALL(evt_msg_print, 0, STRING("stg1_nok_75"), 0, 0)
-    ELSE
-        CALL(evt_msg_print, 0, STRING("stg1_nok_76"), 0, 0)
-    END_IF
+        CALL(evt_mario_get_party, LW(0))
+        IF_INT_EQUAL(LW(0), 2)
+            CALL(evt_msg_print, 0, STRING("stg1_nok_75"), 0, 0)
+        ELSE
+            CALL(evt_msg_print, 0, STRING("stg1_nok_76"), 0, 0)
+        END_IF
     CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
-    CALL(evt_mario_get_party, LW(0))
-    IF_INT_EQUAL(LW(0), 2)
+        CALL(evt_mario_get_party, LW(0))
+        IF_INT_EQUAL(LW(0), 2)
 
-        // The late game: she wonders whether Koops has changed.
-        CALL(evt_msg_print, 0, STRING("stg1_nok_77"), 0, 0)
-    ELSE
-        CALL(evt_msg_print, 0, STRING("stg1_nok_78"), 0, 0)
-    END_IF
+            // The late game: she wonders whether Koops has changed.
+            CALL(evt_msg_print, 0, STRING("stg1_nok_77"), 0, 0)
+        ELSE
+            CALL(evt_msg_print, 0, STRING("stg1_nok_78"), 0, 0)
+        END_IF
     CASE_DEFAULT
 #if (VERSION == VERSION_US || VERSION == VERSION_DEMO_US_2) // PAL has the JP line
-    CALL(evt_mario_get_party, LW(0))
-    IF_INT_EQUAL(LW(0), 2)
-        CALL(evt_msg_print, 0, STRING("stg1_nok_77"), 0, 0)
-    ELSE
-        CALL(evt_msg_print, 0, STRING("stg1_nok_78"), 0, 0)
-    END_IF
+        CALL(evt_mario_get_party, LW(0))
+        IF_INT_EQUAL(LW(0), 2)
+            CALL(evt_msg_print, 0, STRING("stg1_nok_77"), 0, 0)
+        ELSE
+            CALL(evt_msg_print, 0, STRING("stg1_nok_78"), 0, 0)
+        END_IF
 #else
-    CALL(evt_msg_print, 0, STRING("stg1_nok_78_01"), 0, 0)
+        CALL(evt_msg_print, 0, STRING("stg1_nok_78_01"), 0, 0)
 #endif
     END_SWITCH
     RETURN
@@ -755,13 +755,13 @@ EVT_END()
 static EVT_BEGIN(odoriko_1_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG1_06_01_GOLD_FUZZY)
-        CALL(evt_msg_print, 0, STRING("stg1_nok_34"), 0, STRING("踊り子１"))
-        CALL(evt_msg_print, 0, STRING("stg1_nok_35"), 0, STRING("踊り子２"))
-        CALL(evt_msg_print, 0, STRING("stg1_nok_36"), 0, STRING("踊り子３"))
+            CALL(evt_msg_print, 0, STRING("stg1_nok_34"), 0, STRING("踊り子１"))
+            CALL(evt_msg_print, 0, STRING("stg1_nok_35"), 0, STRING("踊り子２"))
+            CALL(evt_msg_print, 0, STRING("stg1_nok_36"), 0, STRING("踊り子３"))
         CASE_DEFAULT
-        CALL(evt_msg_print, 0, STRING("stg1_nok_36_01"), 0, STRING("踊り子１"))
-        CALL(evt_msg_print, 0, STRING("stg1_nok_36_02"), 0, STRING("踊り子２"))
-        CALL(evt_msg_print, 0, STRING("stg1_nok_36_03"), 0, STRING("踊り子３"))
+            CALL(evt_msg_print, 0, STRING("stg1_nok_36_01"), 0, STRING("踊り子１"))
+            CALL(evt_msg_print, 0, STRING("stg1_nok_36_02"), 0, STRING("踊り子２"))
+            CALL(evt_msg_print, 0, STRING("stg1_nok_36_03"), 0, STRING("踊り子３"))
     END_SWITCH
     RETURN
 EVT_END()
@@ -785,13 +785,13 @@ EVT_END()
 static EVT_BEGIN(odoriko_2_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG1_06_01_GOLD_FUZZY)
-        CALL(evt_msg_print, 0, STRING("stg1_nok_34"), 0, STRING("踊り子１"))
-        CALL(evt_msg_print, 0, STRING("stg1_nok_35"), 0, STRING("踊り子２"))
-        CALL(evt_msg_print, 0, STRING("stg1_nok_36"), 0, STRING("踊り子３"))
+            CALL(evt_msg_print, 0, STRING("stg1_nok_34"), 0, STRING("踊り子１"))
+            CALL(evt_msg_print, 0, STRING("stg1_nok_35"), 0, STRING("踊り子２"))
+            CALL(evt_msg_print, 0, STRING("stg1_nok_36"), 0, STRING("踊り子３"))
         CASE_DEFAULT
-        CALL(evt_msg_print, 0, STRING("stg1_nok_36_01"), 0, STRING("踊り子１"))
-        CALL(evt_msg_print, 0, STRING("stg1_nok_36_02"), 0, STRING("踊り子２"))
-        CALL(evt_msg_print, 0, STRING("stg1_nok_36_03"), 0, STRING("踊り子３"))
+            CALL(evt_msg_print, 0, STRING("stg1_nok_36_01"), 0, STRING("踊り子１"))
+            CALL(evt_msg_print, 0, STRING("stg1_nok_36_02"), 0, STRING("踊り子２"))
+            CALL(evt_msg_print, 0, STRING("stg1_nok_36_03"), 0, STRING("踊り子３"))
     END_SWITCH
     RETURN
 EVT_END()
@@ -815,13 +815,13 @@ EVT_END()
 static EVT_BEGIN(odoriko_3_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG1_06_01_GOLD_FUZZY)
-        CALL(evt_msg_print, 0, STRING("stg1_nok_34"), 0, STRING("踊り子１"))
-        CALL(evt_msg_print, 0, STRING("stg1_nok_35"), 0, STRING("踊り子２"))
-        CALL(evt_msg_print, 0, STRING("stg1_nok_36"), 0, STRING("踊り子３"))
+            CALL(evt_msg_print, 0, STRING("stg1_nok_34"), 0, STRING("踊り子１"))
+            CALL(evt_msg_print, 0, STRING("stg1_nok_35"), 0, STRING("踊り子２"))
+            CALL(evt_msg_print, 0, STRING("stg1_nok_36"), 0, STRING("踊り子３"))
         CASE_DEFAULT
-        CALL(evt_msg_print, 0, STRING("stg1_nok_36_01"), 0, STRING("踊り子１"))
-        CALL(evt_msg_print, 0, STRING("stg1_nok_36_02"), 0, STRING("踊り子２"))
-        CALL(evt_msg_print, 0, STRING("stg1_nok_36_03"), 0, STRING("踊り子３"))
+            CALL(evt_msg_print, 0, STRING("stg1_nok_36_01"), 0, STRING("踊り子１"))
+            CALL(evt_msg_print, 0, STRING("stg1_nok_36_02"), 0, STRING("踊り子２"))
+            CALL(evt_msg_print, 0, STRING("stg1_nok_36_03"), 0, STRING("踊り子３"))
     END_SWITCH
     RETURN
 EVT_END()

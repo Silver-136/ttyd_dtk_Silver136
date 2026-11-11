@@ -254,20 +254,20 @@ static EVT_BEGIN(evt_powan)
     SWITCH(LW(0))
         CASE_EQUAL(1)
 
-        // Mario's partner comments.
-        CALL(evt_msg_print, 0, STRING("stg6_pik_07_0"), 0, STRING("party"))
+            // Mario's partner comments.
+            CALL(evt_msg_print, 0, STRING("stg6_pik_07_0"), 0, STRING("party"))
         CASE_EQUAL(2)
-        CALL(evt_msg_print, 0, STRING("stg6_pik_07_1"), 0, STRING("party"))
+            CALL(evt_msg_print, 0, STRING("stg6_pik_07_1"), 0, STRING("party"))
         CASE_EQUAL(4)
-        CALL(evt_msg_print, 0, STRING("stg6_pik_07_2"), 0, STRING("party"))
+            CALL(evt_msg_print, 0, STRING("stg6_pik_07_2"), 0, STRING("party"))
         CASE_EQUAL(5)
-        CALL(evt_msg_print, 0, STRING("stg6_pik_07_3"), 0, STRING("party"))
+            CALL(evt_msg_print, 0, STRING("stg6_pik_07_3"), 0, STRING("party"))
         CASE_EQUAL(6)
-        CALL(evt_msg_print, 0, STRING("stg6_pik_07_4"), 0, STRING("party"))
+            CALL(evt_msg_print, 0, STRING("stg6_pik_07_4"), 0, STRING("party"))
         CASE_EQUAL(3)
-        CALL(evt_msg_print, 0, STRING("stg6_pik_07_5"), 0, STRING("party"))
+            CALL(evt_msg_print, 0, STRING("stg6_pik_07_5"), 0, STRING("party"))
         CASE_EQUAL(7)
-        CALL(evt_msg_print, 0, STRING("stg6_pik_07_6"), 0, STRING("party"))
+            CALL(evt_msg_print, 0, STRING("stg6_pik_07_6"), 0, STRING("party"))
     END_SWITCH
     WAIT_MS(500)
     CALL(evt_snd_bgmoff, PSND_PAUSE)
@@ -303,20 +303,20 @@ static EVT_BEGIN(evt_powan)
     SWITCH(LW(0))
         CASE_EQUAL(1)
 
-        // Mario's partner comments again.
-        CALL(evt_msg_print, 0, STRING("stg6_pik_09_0"), 0, STRING("party"))
+            // Mario's partner comments again.
+            CALL(evt_msg_print, 0, STRING("stg6_pik_09_0"), 0, STRING("party"))
         CASE_EQUAL(2)
-        CALL(evt_msg_print, 0, STRING("stg6_pik_09_1"), 0, STRING("party"))
+            CALL(evt_msg_print, 0, STRING("stg6_pik_09_1"), 0, STRING("party"))
         CASE_EQUAL(4)
-        CALL(evt_msg_print, 0, STRING("stg6_pik_09_2"), 0, STRING("party"))
+            CALL(evt_msg_print, 0, STRING("stg6_pik_09_2"), 0, STRING("party"))
         CASE_EQUAL(5)
-        CALL(evt_msg_print, 0, STRING("stg6_pik_09_3"), 0, STRING("party"))
+            CALL(evt_msg_print, 0, STRING("stg6_pik_09_3"), 0, STRING("party"))
         CASE_EQUAL(6)
-        CALL(evt_msg_print, 0, STRING("stg6_pik_09_4"), 0, STRING("party"))
+            CALL(evt_msg_print, 0, STRING("stg6_pik_09_4"), 0, STRING("party"))
         CASE_EQUAL(3)
-        CALL(evt_msg_print, 0, STRING("stg6_pik_09_5"), 0, STRING("party"))
+            CALL(evt_msg_print, 0, STRING("stg6_pik_09_5"), 0, STRING("party"))
         CASE_EQUAL(7)
-        CALL(evt_msg_print, 0, STRING("stg6_pik_09_6"), 0, STRING("party"))
+            CALL(evt_msg_print, 0, STRING("stg6_pik_09_6"), 0, STRING("party"))
     END_SWITCH
     WAIT_MS(500)
 
@@ -354,8 +354,8 @@ EVT_END()
 static EVT_BEGIN(init_powan)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG6_50_THE_SANCTUM_MANAGER)
-        CALL(evt_npc_set_position, STRING("me"), 165, 20, -190)
-        CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)
+            CALL(evt_npc_set_position, STRING("me"), 165, 20, -190)
+            CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)
     END_SWITCH
     RETURN
 EVT_END()
@@ -503,37 +503,37 @@ static EVT_BEGIN(miyageya_talk)
     END_IF
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_71_01)
-        CALL(evt_msg_print, 0, STRING("stg7_pik_clear_02"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg7_pik_clear_02"), 0, STRING("me"))
         CASE_BETWEEN(STG7_20_LORD_CRUMP_DEFEATED, STG7_25_THE_LAST_MAIL)
-        IF_INT_EQUAL(LSWF_PIK_01_SOUVENIR_NPC_SCREAMED, 0)
-            CALL(evt_npc_set_force_regl_anim, STRING("me"), STRING("KNF_S_2"))
-            CALL(evt_npc_set_anim, STRING("me"), STRING("KNF_S_1"))
-            CALL(evt_npc_set_autotalkpose, STRING("me"), STRING("KNF_S_2"), STRING("KNF_T_2"))
+            IF_INT_EQUAL(LSWF_PIK_01_SOUVENIR_NPC_SCREAMED, 0)
+                CALL(evt_npc_set_force_regl_anim, STRING("me"), STRING("KNF_S_2"))
+                CALL(evt_npc_set_anim, STRING("me"), STRING("KNF_S_1"))
+                CALL(evt_npc_set_autotalkpose, STRING("me"), STRING("KNF_S_2"), STRING("KNF_T_2"))
 
-            // During the Bowser interlude he reacts to Bowser.
-            CALL(evt_msg_print, 0, STRING("kpa_stg7_004"), 0, STRING("me"))
-            CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_TALK_POSE)
-            SET_VALUE(LSWF_PIK_01_SOUVENIR_NPC_SCREAMED, 1)
-        ELSE
-            CALL(evt_msg_print, 0, STRING("kpa_stg7_004_1"), 0, STRING("me"))
-        END_IF
+                // During the Bowser interlude he reacts to Bowser.
+                CALL(evt_msg_print, 0, STRING("kpa_stg7_004"), 0, STRING("me"))
+                CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_TALK_POSE)
+                SET_VALUE(LSWF_PIK_01_SOUVENIR_NPC_SCREAMED, 1)
+            ELSE
+                CALL(evt_msg_print, 0, STRING("kpa_stg7_004_1"), 0, STRING("me"))
+            END_IF
         CASE_DEFAULT
-        CALL(chk_luigi_color, LW(0))
-        IF_INT_EQUAL(LW(0), 0)
-            IF_INT_LESS_OR_EQUAL(GSW_STORY_PROGRESS, STG8_END_AFTER_THE_BATTLE)
-                CALL(evt_msg_print, 0, STRING("stg7_pik_clear_03"), 0, STRING("me"))
+            CALL(chk_luigi_color, LW(0))
+            IF_INT_EQUAL(LW(0), 0)
+                IF_INT_LESS_OR_EQUAL(GSW_STORY_PROGRESS, STG8_END_AFTER_THE_BATTLE)
+                    CALL(evt_msg_print, 0, STRING("stg7_pik_clear_03"), 0, STRING("me"))
+                ELSE
+                    CALL(evt_msg_print, 0, STRING("stg7_pik_clear_03_0"), 0, STRING("me"))
+                END_IF
             ELSE
-                CALL(evt_msg_print, 0, STRING("stg7_pik_clear_03_0"), 0, STRING("me"))
+                IF_INT_EQUAL(GSWF_TROUBLE_DONE(TROUBLE_I_WANNA_MEET_LUIGI), 0)
+                    CALL(evt_msg_print, 0, STRING("stg7_pik_clear_03_1"), 0, STRING("me"))
+                ELSE
+                    CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
+                    CALL(evt_npc_jump_position_nohit, STRING("me"), LW(0), LW(1), LW(2), 200, 10)
+                    CALL(evt_msg_print, 0, STRING("stg7_pik_clear_03_2"), 0, STRING("me"))
+                END_IF
             END_IF
-        ELSE
-            IF_INT_EQUAL(GSWF_TROUBLE_DONE(TROUBLE_I_WANNA_MEET_LUIGI), 0)
-                CALL(evt_msg_print, 0, STRING("stg7_pik_clear_03_1"), 0, STRING("me"))
-            ELSE
-                CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
-                CALL(evt_npc_jump_position_nohit, STRING("me"), LW(0), LW(1), LW(2), 200, 10)
-                CALL(evt_msg_print, 0, STRING("stg7_pik_clear_03_2"), 0, STRING("me"))
-            END_IF
-        END_IF
     END_SWITCH
     RETURN
 EVT_END()
@@ -547,7 +547,7 @@ static EVT_BEGIN(miyageya_init)
     CALL(evt_npc_set_position, STRING("me"), -270, -5, 260)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG7_20_LORD_CRUMP_DEFEATED, STG7_25_THE_LAST_MAIL)
-        CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_AUTO_MOVE_ANIM)
+            CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_AUTO_MOVE_ANIM)
     END_SWITCH
     CALL(evt_npc_change_interrupt, STRING("me"), 6, PTR(miyageya_talk))
     RETURN
@@ -600,64 +600,64 @@ EVT_BEGIN(konarikin_talk)
                 SWITCH(GSW_TROUBLE_WORK(0))
                     CASE_EQUAL(0)
 
-                    // He may ask for a Shroom Cake, a Keelhaul Mango or a Fright Mask, depending on Mario's
-                    // first answer.
-                    CALL(evt_pouch_check_item, ITEM_SHROOM_CAKE, LW(0))
-                    IF_INT_GREATER(LW(0), 0)
-                        CALL(evt_msg_print, 0, STRING("irai_29_05"), 0, 0)
+                        // He may ask for a Shroom Cake, a Keelhaul Mango or a Fright Mask, depending on Mario's
+                        // first answer.
+                        CALL(evt_pouch_check_item, ITEM_SHROOM_CAKE, LW(0))
+                        IF_INT_GREATER(LW(0), 0)
+                            CALL(evt_msg_print, 0, STRING("irai_29_05"), 0, 0)
 #if VERSION <= VERSION_DEMO_JP
-                        CALL(evt_win_item_select, PTR(iri_29_item_tbl1), LW(0))
+                            CALL(evt_win_item_select, PTR(iri_29_item_tbl1), LW(0))
 #else
-                        CALL(evt_win_item_select, 0, PTR(iri_29_item_tbl1), LW(0), 0)
+                            CALL(evt_win_item_select, 0, PTR(iri_29_item_tbl1), LW(0), 0)
 #endif
-                        IF_INT_NOT_EQUAL(LW(0), -1)
-                            CALL(evt_pouch_remove_item, ITEM_SHROOM_CAKE, LW(0))
-                            CALL(evt_msg_print, 0, STRING("irai_29_08"), 0, 0)
-                            CALL(evt_item_entry, STRING("pre"), ITEM_PRESENT, 0, -1000, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
-                            CALL(evt_item_get_item, STRING("pre"))
-                            CALL(evt_item_get_item_end_wait, STRING("pre"))
+                            IF_INT_NOT_EQUAL(LW(0), -1)
+                                CALL(evt_pouch_remove_item, ITEM_SHROOM_CAKE, LW(0))
+                                CALL(evt_msg_print, 0, STRING("irai_29_08"), 0, 0)
+                                CALL(evt_item_entry, STRING("pre"), ITEM_PRESENT, 0, -1000, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
+                                CALL(evt_item_get_item, STRING("pre"))
+                                CALL(evt_item_get_item_end_wait, STRING("pre"))
+                            END_IF
+                        ELSE
+                            CALL(evt_msg_print, 0, STRING("irai_29_02"), 0, 0)
                         END_IF
-                    ELSE
-                        CALL(evt_msg_print, 0, STRING("irai_29_02"), 0, 0)
-                    END_IF
                     CASE_EQUAL(1)
-                    CALL(evt_pouch_check_item, ITEM_KEEL_MANGO, LW(0))
-                    IF_INT_GREATER(LW(0), 0)
-                        CALL(evt_msg_print, 0, STRING("irai_29_06"), 0, 0)
+                        CALL(evt_pouch_check_item, ITEM_KEEL_MANGO, LW(0))
+                        IF_INT_GREATER(LW(0), 0)
+                            CALL(evt_msg_print, 0, STRING("irai_29_06"), 0, 0)
 #if VERSION <= VERSION_DEMO_JP
-                        CALL(evt_win_item_select, PTR(iri_29_item_tbl2), LW(0))
+                            CALL(evt_win_item_select, PTR(iri_29_item_tbl2), LW(0))
 #else
-                        CALL(evt_win_item_select, 0, PTR(iri_29_item_tbl2), LW(0), 0)
+                            CALL(evt_win_item_select, 0, PTR(iri_29_item_tbl2), LW(0), 0)
 #endif
-                        IF_INT_NOT_EQUAL(LW(0), -1)
-                            CALL(evt_pouch_remove_item, ITEM_KEEL_MANGO, LW(0))
-                            CALL(evt_msg_print, 0, STRING("irai_29_09"), 0, 0)
-                            CALL(evt_item_entry, STRING("pre"), ITEM_PRESENT, 0, -1000, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
-                            CALL(evt_item_get_item, STRING("pre"))
-                            CALL(evt_item_get_item_end_wait, STRING("pre"))
+                            IF_INT_NOT_EQUAL(LW(0), -1)
+                                CALL(evt_pouch_remove_item, ITEM_KEEL_MANGO, LW(0))
+                                CALL(evt_msg_print, 0, STRING("irai_29_09"), 0, 0)
+                                CALL(evt_item_entry, STRING("pre"), ITEM_PRESENT, 0, -1000, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
+                                CALL(evt_item_get_item, STRING("pre"))
+                                CALL(evt_item_get_item_end_wait, STRING("pre"))
+                            END_IF
+                        ELSE
+                            CALL(evt_msg_print, 0, STRING("irai_29_03"), 0, 0)
                         END_IF
-                    ELSE
-                        CALL(evt_msg_print, 0, STRING("irai_29_03"), 0, 0)
-                    END_IF
                     CASE_EQUAL(2)
-                    CALL(evt_pouch_check_item, ITEM_FRIGHT_MASK, LW(0))
-                    IF_INT_GREATER(LW(0), 0)
-                        CALL(evt_msg_print, 0, STRING("irai_29_07"), 0, 0)
+                        CALL(evt_pouch_check_item, ITEM_FRIGHT_MASK, LW(0))
+                        IF_INT_GREATER(LW(0), 0)
+                            CALL(evt_msg_print, 0, STRING("irai_29_07"), 0, 0)
 #if VERSION <= VERSION_DEMO_JP
-                        CALL(evt_win_item_select, PTR(iri_29_item_tbl3), LW(0))
+                            CALL(evt_win_item_select, PTR(iri_29_item_tbl3), LW(0))
 #else
-                        CALL(evt_win_item_select, 0, PTR(iri_29_item_tbl3), LW(0), 0)
+                            CALL(evt_win_item_select, 0, PTR(iri_29_item_tbl3), LW(0), 0)
 #endif
-                        IF_INT_NOT_EQUAL(LW(0), -1)
-                            CALL(evt_pouch_remove_item, ITEM_FRIGHT_MASK, LW(0))
-                            CALL(evt_msg_print, 0, STRING("irai_29_10"), 0, 0)
-                            CALL(evt_item_entry, STRING("pre"), ITEM_PRESENT, 0, -1000, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
-                            CALL(evt_item_get_item, STRING("pre"))
-                            CALL(evt_item_get_item_end_wait, STRING("pre"))
+                            IF_INT_NOT_EQUAL(LW(0), -1)
+                                CALL(evt_pouch_remove_item, ITEM_FRIGHT_MASK, LW(0))
+                                CALL(evt_msg_print, 0, STRING("irai_29_10"), 0, 0)
+                                CALL(evt_item_entry, STRING("pre"), ITEM_PRESENT, 0, -1000, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
+                                CALL(evt_item_get_item, STRING("pre"))
+                                CALL(evt_item_get_item_end_wait, STRING("pre"))
+                            END_IF
+                        ELSE
+                            CALL(evt_msg_print, 0, STRING("irai_29_04"), 0, 0)
                         END_IF
-                    ELSE
-                        CALL(evt_msg_print, 0, STRING("irai_29_04"), 0, 0)
-                    END_IF
                 END_SWITCH
             END_IF
         ELSE
@@ -697,23 +697,23 @@ EVT_BEGIN(konarikin_talk)
     CALL(evt_npc_set_autotalkpose, STRING("mario"), STRING("KPA_S_1"), STRING("KPA_T_1"))
     SWITCH(LW(0))
         CASE_EQUAL(0)
-        CALL(evt_msg_print, 0, STRING("kpa_stg7_006"), 0, STRING("mario"))
-        CALL(evt_npc_set_autotalkpose, STRING("me"), STRING("C_1"), STRING("T_4"))
-        CALL(evt_msg_print, 0, STRING("kpa_stg7_007"), 0, STRING("me"))
-        CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT)
-        CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_AUTO_MOVE_ANIM)
-        CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
-        CALL(evt_npc_set_anim, STRING("me"), STRING("R_2"))
-        CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
-        CALL(evt_snd_sfxon_3d, STRING("SFX_KUPPA_KONARIKIN_ESCAPE1"), LW(0), LW(1), LW(2), 0)
-        CALL(evt_npc_move_position, STRING("me"), -200, 380, 0, FLOAT(150.0f), 0)
-        CALL(evt_npc_set_position, STRING("me"), 0, -1000, 0)
+            CALL(evt_msg_print, 0, STRING("kpa_stg7_006"), 0, STRING("mario"))
+            CALL(evt_npc_set_autotalkpose, STRING("me"), STRING("C_1"), STRING("T_4"))
+            CALL(evt_msg_print, 0, STRING("kpa_stg7_007"), 0, STRING("me"))
+            CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT)
+            CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_AUTO_MOVE_ANIM)
+            CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
+            CALL(evt_npc_set_anim, STRING("me"), STRING("R_2"))
+            CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
+            CALL(evt_snd_sfxon_3d, STRING("SFX_KUPPA_KONARIKIN_ESCAPE1"), LW(0), LW(1), LW(2), 0)
+            CALL(evt_npc_move_position, STRING("me"), -200, 380, 0, FLOAT(150.0f), 0)
+            CALL(evt_npc_set_position, STRING("me"), 0, -1000, 0)
         CASE_EQUAL(1)
-        CALL(evt_msg_print, 0, STRING("kpa_stg7_008"), 0, STRING("mario"))
-        CALL(evt_msg_print, 0, STRING("kpa_stg7_009"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("kpa_stg7_008"), 0, STRING("mario"))
+            CALL(evt_msg_print, 0, STRING("kpa_stg7_009"), 0, STRING("me"))
         CASE_EQUAL(2)
-        CALL(evt_msg_print, 0, STRING("kpa_stg7_010"), 0, STRING("mario"))
-        CALL(evt_msg_print, 0, STRING("kpa_stg7_011"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("kpa_stg7_010"), 0, STRING("mario"))
+            CALL(evt_msg_print, 0, STRING("kpa_stg7_011"), 0, STRING("me"))
     END_SWITCH
     RETURN
 EVT_END()
@@ -832,13 +832,13 @@ EVT_END()
 static EVT_BEGIN(takun4_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_70_THOUSAND_YEAR_DOOR)
-        CALL(evt_msg_print, 0, STRING("stg7_pik_clear_04"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg7_pik_clear_04"), 0, STRING("me"))
         CASE_BETWEEN(STG7_20_LORD_CRUMP_DEFEATED, STG7_25_THE_LAST_MAIL)
-        CALL(evt_msg_print, 0, STRING("kpa_stg7_011_7_1"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("kpa_stg7_011_7_1"), 0, STRING("me"))
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
-        CALL(evt_msg_print, 0, STRING("stg7_pik_clear_05"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg7_pik_clear_05"), 0, STRING("me"))
         CASE_DEFAULT
-        CALL(evt_msg_print, 0, STRING("stg7_pik_clear_05_1"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg7_pik_clear_05_1"), 0, STRING("me"))
     END_SWITCH
     RETURN
 EVT_END()
@@ -851,9 +851,9 @@ static EVT_BEGIN(takun5_init)
     CALL(evt_npc_flag_onoff, 1, STRING("ターくん５"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG7_20_LORD_CRUMP_DEFEATED, STG7_25_THE_LAST_MAIL)
-        CALL(evt_npc_set_position, STRING("ターくん５"), 0, -1000, 0)
+            CALL(evt_npc_set_position, STRING("ターくん５"), 0, -1000, 0)
         CASE_DEFAULT
-        CALL(evt_npc_flag_onoff, 1, STRING("ターくん５"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)
+            CALL(evt_npc_flag_onoff, 1, STRING("ターくん５"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)
     END_SWITCH
     RETURN
 EVT_END()
@@ -865,11 +865,11 @@ EVT_END()
 static EVT_BEGIN(takun5_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_70_THOUSAND_YEAR_DOOR)
-        CALL(evt_msg_print, 0, STRING("stg7_pik_clear_06"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg7_pik_clear_06"), 0, STRING("me"))
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
-        CALL(evt_msg_print, 0, STRING("stg7_pik_clear_07"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg7_pik_clear_07"), 0, STRING("me"))
         CASE_DEFAULT
-        CALL(evt_msg_print, 0, STRING("stg7_pik_clear_07_1"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg7_pik_clear_07_1"), 0, STRING("me"))
     END_SWITCH
     RETURN
 EVT_END()
@@ -882,9 +882,9 @@ static EVT_BEGIN(takun6_init)
     CALL(evt_npc_flag_onoff, 1, STRING("ターくん６"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG7_20_LORD_CRUMP_DEFEATED, STG7_25_THE_LAST_MAIL)
-        CALL(evt_npc_set_position, STRING("ターくん６"), 0, -1000, 0)
+            CALL(evt_npc_set_position, STRING("ターくん６"), 0, -1000, 0)
         CASE_DEFAULT
-        CALL(evt_npc_flag_onoff, 1, STRING("ターくん６"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)
+            CALL(evt_npc_flag_onoff, 1, STRING("ターくん６"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)
     END_SWITCH
     RETURN
 EVT_END()
@@ -896,11 +896,11 @@ EVT_END()
 static EVT_BEGIN(takun6_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_70_THOUSAND_YEAR_DOOR)
-        CALL(evt_msg_print, 0, STRING("stg7_pik_clear_08"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg7_pik_clear_08"), 0, STRING("me"))
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
-        CALL(evt_msg_print, 0, STRING("stg7_pik_clear_09"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg7_pik_clear_09"), 0, STRING("me"))
         CASE_DEFAULT
-        CALL(evt_msg_print, 0, STRING("stg7_pik_clear_09_1"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg7_pik_clear_09_1"), 0, STRING("me"))
     END_SWITCH
     RETURN
 EVT_END()

@@ -297,7 +297,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_LECTURE, LECTURE_FRANKLI_WORK_STEP, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(3)
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_LECTURE, LECTURE_FRANKLI_WORK_STEP, 4)
+            CALL(btlevtcmd_SetUnitWork, UNIT_ID_LECTURE, LECTURE_FRANKLI_WORK_STEP, 4)
     END_SWITCH
     RETURN
 EVT_END()
@@ -453,62 +453,62 @@ static EVT_BEGIN(lecture_zutsuki_attack_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_LECTURE, LECTURE_FRANKLI_WORK_STEP, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(3)
-        CALL(btlevtcmd_SetTalkPose, UNIT_ID_LECTURE, STRING("T_1"))
-        CALL(btlevtcmd_SetStayPose, UNIT_ID_LECTURE, STRING("S_1"))
+            CALL(btlevtcmd_SetTalkPose, UNIT_ID_LECTURE, STRING("T_1"))
+            CALL(btlevtcmd_SetStayPose, UNIT_ID_LECTURE, STRING("S_1"))
 
-        // Guard lesson: he asks Mario to press the A button as she lands, and waits for it.
+            // Guard lesson: he asks Mario to press the A button as she lands, and waits for it.
 #if VERSION <= VERSION_DEMO_JP
-        CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("mac_0_b_t2_006"), 0, UNIT_ID_LECTURE)
+            CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("mac_0_b_t2_006"), 0, UNIT_ID_LECTURE)
 #else
-        CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("mac_0_b_t2_006"), 0, -6)
-        WAIT_FRAMES(1)
-#endif
-        LABEL(11)
-        CALL(btlevtcmd_PadCheckTrigger, 0, PAD_BUTTON_A, LW(0))
-        IF_INT_EQUAL(LW(0), 0)
+            CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("mac_0_b_t2_006"), 0, -6)
             WAIT_FRAMES(1)
-            GOTO(11)
-        END_IF
-#if VERSION >= VERSION_JP
-        WAIT_MS(50)
 #endif
-        BEGIN_INLINE_EVENT
+            LABEL(11)
+            CALL(btlevtcmd_PadCheckTrigger, 0, PAD_BUTTON_A, LW(0))
+            IF_INT_EQUAL(LW(0), 0)
+                WAIT_FRAMES(1)
+                GOTO(11)
+            END_IF
+#if VERSION >= VERSION_JP
+            WAIT_MS(50)
+#endif
+            BEGIN_INLINE_EVENT
+#if VERSION >= VERSION_JP
+                WAIT_MS(100)
+#endif
+                CALL(evt_msg_continue)
+            END_INLINE_EVENT
 #if VERSION >= VERSION_JP
             WAIT_MS(100)
-#endif
-            CALL(evt_msg_continue)
-        END_INLINE_EVENT
-#if VERSION >= VERSION_JP
-        WAIT_MS(100)
 #endif
         CASE_EQUAL(7)
-        CALL(btlevtcmd_SetTalkPose, UNIT_ID_LECTURE, STRING("T_1"))
-        CALL(btlevtcmd_SetStayPose, UNIT_ID_LECTURE, STRING("S_1"))
+            CALL(btlevtcmd_SetTalkPose, UNIT_ID_LECTURE, STRING("T_1"))
+            CALL(btlevtcmd_SetStayPose, UNIT_ID_LECTURE, STRING("S_1"))
 
-        // Superguard lesson: he asks for the B button instead, and waits for it.
+            // Superguard lesson: he asks for the B button instead, and waits for it.
 #if VERSION <= VERSION_DEMO_JP
-        CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("mac_0_b_t2_014"), 0, UNIT_ID_LECTURE)
+            CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("mac_0_b_t2_014"), 0, UNIT_ID_LECTURE)
 #else
-        CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("mac_0_b_t2_014"), 0, -6)
-        WAIT_FRAMES(1)
-#endif
-        LABEL(12)
-        CALL(btlevtcmd_PadCheckTrigger, 0, PAD_BUTTON_B, LW(0))
-        IF_INT_EQUAL(LW(0), 0)
+            CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("mac_0_b_t2_014"), 0, -6)
             WAIT_FRAMES(1)
-            GOTO(12)
-        END_IF
-#if VERSION >= VERSION_JP
-        WAIT_MS(50)
 #endif
-        BEGIN_INLINE_EVENT
+            LABEL(12)
+            CALL(btlevtcmd_PadCheckTrigger, 0, PAD_BUTTON_B, LW(0))
+            IF_INT_EQUAL(LW(0), 0)
+                WAIT_FRAMES(1)
+                GOTO(12)
+            END_IF
+#if VERSION >= VERSION_JP
+            WAIT_MS(50)
+#endif
+            BEGIN_INLINE_EVENT
+#if VERSION >= VERSION_JP
+                WAIT_MS(100)
+#endif
+                CALL(evt_msg_continue)
+            END_INLINE_EVENT
 #if VERSION >= VERSION_JP
             WAIT_MS(100)
-#endif
-            CALL(evt_msg_continue)
-        END_INLINE_EVENT
-#if VERSION >= VERSION_JP
-        WAIT_MS(100)
 #endif
     END_SWITCH
     BEGIN_INLINE_EVENT
@@ -522,10 +522,10 @@ static EVT_BEGIN(lecture_zutsuki_attack_event)
     SWITCH(LW(0))
         CASE_EQUAL(3)
 
-        // The pressed buttons are recorded for the lecture.
-        CALL(_config_key_record, PAD_BUTTON_A)
+            // The pressed buttons are recorded for the lecture.
+            CALL(_config_key_record, PAD_BUTTON_A)
         CASE_EQUAL(7)
-        CALL(_config_key_record, PAD_BUTTON_B)
+            CALL(_config_key_record, PAD_BUTTON_B)
     END_SWITCH
 
     // The hit is resolved with the lesson's guard result and stored for Frankly.
@@ -535,11 +535,11 @@ static EVT_BEGIN(lecture_zutsuki_attack_event)
     SWITCH(LW(0))
         CASE_EQUAL(0)
         CASE_EQUAL(1)
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_LECTURE, LECTURE_FRANKLI_WORK_GUARD_RESULT, 4)
+            CALL(btlevtcmd_SetUnitWork, UNIT_ID_LECTURE, LECTURE_FRANKLI_WORK_GUARD_RESULT, 4)
         CASE_EQUAL(2)
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_LECTURE, LECTURE_FRANKLI_WORK_GUARD_RESULT, 5)
+            CALL(btlevtcmd_SetUnitWork, UNIT_ID_LECTURE, LECTURE_FRANKLI_WORK_GUARD_RESULT, 5)
         CASE_EQUAL(3)
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_LECTURE, LECTURE_FRANKLI_WORK_GUARD_RESULT, 6)
+            CALL(btlevtcmd_SetUnitWork, UNIT_ID_LECTURE, LECTURE_FRANKLI_WORK_GUARD_RESULT, 6)
     END_SWITCH
     ADD(LW(10), 1)
 

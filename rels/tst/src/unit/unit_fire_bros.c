@@ -448,23 +448,23 @@ static EVT_BEGIN(damage_check_sub)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(6), 0, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
-        GOTO(90)
+            GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_LUCKY)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
+            GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_DODGY)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
+            GOTO(90)
         CASE_EQUAL(PRECHECK_MISS)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
+            GOTO(90)
         CASE_EQUAL(PRECHECK_HIT)
-        GOTO(91)
+            GOTO(91)
         CASE_END
         CASE_DEFAULT
-        GOTO(98)
+            GOTO(98)
         CASE_END
     END_SWITCH
     LABEL(90)
@@ -600,47 +600,47 @@ EVT_BEGIN(fire_move_event)
             CALL(btlevtcmd_GetPartsPos, UNIT_ID_SELF, LW(15), LW(0), LW(12), LW(13))
             SWITCH(LW(10))
                 CASE_EQUAL(0)
-                CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(11), LW(12), LW(13))
-                IF_INT_GREATER_OR_EQUAL(LW(9), 0)
-                    IF_INT_LESS_OR_EQUAL(LW(0), LW(11))
-                        BREAK_SWITCH
+                    CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(11), LW(12), LW(13))
+                    IF_INT_GREATER_OR_EQUAL(LW(9), 0)
+                        IF_INT_LESS_OR_EQUAL(LW(0), LW(11))
+                            BREAK_SWITCH
+                        END_IF
+                    ELSE
+                        IF_INT_GREATER_OR_EQUAL(LW(0), LW(11))
+                            BREAK_SWITCH
+                        END_IF
                     END_IF
-                ELSE
-                    IF_INT_GREATER_OR_EQUAL(LW(0), LW(11))
-                        BREAK_SWITCH
-                    END_IF
-                END_IF
-                IF_INT_EQUAL(LW(14), 0)
+                    IF_INT_EQUAL(LW(14), 0)
 
-                    // When the fireball reaches the target it either hits and vanishes, or is dodged and flies on.
-                    CALL_CHILD(damage_check_no_last)
-                ELSE
-                    CALL_CHILD(damage_check_last)
-                END_IF
-                IF_INT_EQUAL(LW(0), 1)
-                    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, LW(15), kHidden)
-                    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, LW(15), kNoShadow)
-                    SET_VALUE(LW(10), 2)
-                ELSE
-                    SET_VALUE(LW(10), 1)
-                END_IF
+                        // When the fireball reaches the target it either hits and vanishes, or is dodged and flies on.
+                        CALL_CHILD(damage_check_no_last)
+                    ELSE
+                        CALL_CHILD(damage_check_last)
+                    END_IF
+                    IF_INT_EQUAL(LW(0), 1)
+                        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, LW(15), kHidden)
+                        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, LW(15), kNoShadow)
+                        SET_VALUE(LW(10), 2)
+                    ELSE
+                        SET_VALUE(LW(10), 1)
+                    END_IF
                 CASE_END
                 CASE_EQUAL(1)
-                CALL(btlevtcmd_GetPartsPos, UNIT_ID_SELF, LW(15), LW(11), LW(12), LW(13))
-                IF_INT_GREATER_OR_EQUAL(LW(11), 250)
-                    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, LW(15), kHidden)
-                    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, LW(15), kNoShadow)
-                    SET_VALUE(LW(10), 2)
-                END_IF
-                IF_INT_LESS_OR_EQUAL(LW(11), -250)
-                    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, LW(15), kHidden)
-                    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, LW(15), kNoShadow)
-                    SET_VALUE(LW(10), 2)
-                END_IF
+                    CALL(btlevtcmd_GetPartsPos, UNIT_ID_SELF, LW(15), LW(11), LW(12), LW(13))
+                    IF_INT_GREATER_OR_EQUAL(LW(11), 250)
+                        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, LW(15), kHidden)
+                        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, LW(15), kNoShadow)
+                        SET_VALUE(LW(10), 2)
+                    END_IF
+                    IF_INT_LESS_OR_EQUAL(LW(11), -250)
+                        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, LW(15), kHidden)
+                        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, LW(15), kNoShadow)
+                        SET_VALUE(LW(10), 2)
+                    END_IF
                 CASE_END
                 CASE_EQUAL(2)
-                CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, LW(15), PARTS_WORK_DONE, 1)
-                BREAK_LOOP
+                    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, LW(15), PARTS_WORK_DONE, 1)
+                    BREAK_LOOP
                 CASE_END
             END_SWITCH
         END_LOOP

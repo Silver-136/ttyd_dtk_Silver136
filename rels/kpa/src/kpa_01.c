@@ -402,11 +402,11 @@ EVT_BEGIN(kpa_01_syuppatu_evt)
     CALL(evt_msg_continue)
     SWITCH(LW(0))
         CASE_EQUAL(0)
-        CALL(evt_npc_set_autotalkpose, STRING("mario"), STRING("KPA_S_1"), STRING("KPA_T_1"))
-        CALL(evt_msg_print, 0, STRING("kpa_stg1_033"), 0, STRING("mario"))
+            CALL(evt_npc_set_autotalkpose, STRING("mario"), STRING("KPA_S_1"), STRING("KPA_T_1"))
+            CALL(evt_msg_print, 0, STRING("kpa_stg1_033"), 0, STRING("mario"))
         CASE_EQUAL(1)
-        CALL(evt_npc_set_autotalkpose, STRING("mario"), STRING("KPA_S_1"), STRING("KPA_T_1"))
-        CALL(evt_msg_print, 0, STRING("kpa_stg1_033_1"), 0, STRING("mario"))
+            CALL(evt_npc_set_autotalkpose, STRING("mario"), STRING("KPA_S_1"), STRING("KPA_T_1"))
+            CALL(evt_msg_print, 0, STRING("kpa_stg1_033_1"), 0, STRING("mario"))
     END_SWITCH
     SET_VALUE(LSWF_KPA_01_MSG_CUE, 0)
     BEGIN_INLINE_EVENT_GET_ID(LW(0))
@@ -1183,24 +1183,24 @@ EVT_BEGIN(kpa_01_init_evt)
     CALL_CHILD(shan_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG1_19_PEACH_TEC)
-        SPAWN_EVENT(kpa_01_touzyo_evt)
-        SPAWN_EVENT(kpa_01_pos_check)
-        CASE_EQUAL(STG1_19_01_BOWSER_BOWSER_CASTLE)
-        CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(7))
-        CALL(evt_bero_get_entername, LW(0))
-        IF_STR_EQUAL(LW(0), STRING("player"))
-            CALL(evt_mario_set_pos, -700, 0, 0)
-            CALL(evt_mario_set_dir, 90, 0, 0)
+            SPAWN_EVENT(kpa_01_touzyo_evt)
             SPAWN_EVENT(kpa_01_pos_check)
-        ELSE
-            CALL(evt_mario_set_pos, 625, 30, 0)
-            CALL(evt_mario_set_dir, 90, 0, 0)
-            BEGIN_INLINE_EVENT
-                CALL(evt_seq_wait, SEQ_GAME)
-                WAIT_MS(300)
-                SPAWN_EVENT(kpa_01_syuppatu_evt)
-            END_INLINE_EVENT
-        END_IF
+        CASE_EQUAL(STG1_19_01_BOWSER_BOWSER_CASTLE)
+            CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(7))
+            CALL(evt_bero_get_entername, LW(0))
+            IF_STR_EQUAL(LW(0), STRING("player"))
+                CALL(evt_mario_set_pos, -700, 0, 0)
+                CALL(evt_mario_set_dir, 90, 0, 0)
+                SPAWN_EVENT(kpa_01_pos_check)
+            ELSE
+                CALL(evt_mario_set_pos, 625, 30, 0)
+                CALL(evt_mario_set_dir, 90, 0, 0)
+                BEGIN_INLINE_EVENT
+                    CALL(evt_seq_wait, SEQ_GAME)
+                    WAIT_MS(300)
+                    SPAWN_EVENT(kpa_01_syuppatu_evt)
+                END_INLINE_EVENT
+            END_IF
     END_SWITCH
     RETURN
 #if VERSION <= VERSION_DEMO_JP

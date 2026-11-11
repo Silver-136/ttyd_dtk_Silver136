@@ -393,19 +393,19 @@ EVT_END()
 static EVT_BEGIN(bonbaba_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG8_03_THE_PALACE_GARDEN)
-        CALL(evt_npc_set_position, STRING("me"), 100, 10, 45)
-        CALL(evt_npc_set_ry, STRING("me"), 0)
-        CALL(evt_npc_pera_onoff, STRING("me"), 0)
-        CALL(evt_npc_set_scale, STRING("me"), FLOAT(1.2998047f), FLOAT(1.2998047f), FLOAT(1.2998047f))
-        CASE_GREATER_OR_EQUAL(STG8_04_GLOOMTAIL)
-        IF_INT_EQUAL(GSWF_LAS_09_VISITED_AFTER_GLOOMTAIL, 0)
-            CALL(evt_npc_set_position, STRING("me"), 0, 0, -100)
+            CALL(evt_npc_set_position, STRING("me"), 100, 10, 45)
             CALL(evt_npc_set_ry, STRING("me"), 0)
             CALL(evt_npc_pera_onoff, STRING("me"), 0)
             CALL(evt_npc_set_scale, STRING("me"), FLOAT(1.2998047f), FLOAT(1.2998047f), FLOAT(1.2998047f))
-            CALL(evt_npc_set_anim, STRING("me"), STRING("GNB_H_3"))
-            CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT)
-        END_IF
+        CASE_GREATER_OR_EQUAL(STG8_04_GLOOMTAIL)
+            IF_INT_EQUAL(GSWF_LAS_09_VISITED_AFTER_GLOOMTAIL, 0)
+                CALL(evt_npc_set_position, STRING("me"), 0, 0, -100)
+                CALL(evt_npc_set_ry, STRING("me"), 0)
+                CALL(evt_npc_pera_onoff, STRING("me"), 0)
+                CALL(evt_npc_set_scale, STRING("me"), FLOAT(1.2998047f), FLOAT(1.2998047f), FLOAT(1.2998047f))
+                CALL(evt_npc_set_anim, STRING("me"), STRING("GNB_H_3"))
+                CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT)
+            END_IF
     END_SWITCH
     RETURN
 EVT_END()
@@ -577,15 +577,15 @@ EVT_BEGIN(las_26_init_evt)
     END_IF
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG8_03_THE_PALACE_GARDEN)
-        CALL(evt_hitobj_onoff, STRING("baba"), 1, 0)
-        CASE_GREATER_OR_EQUAL(STG8_04_GLOOMTAIL)
-        IF_INT_EQUAL(GSWF_LAS_09_VISITED_AFTER_GLOOMTAIL, 0)
-            CALL(evt_hitobj_onoff, STRING("baba"), 1, 1)
-        ELSE
             CALL(evt_hitobj_onoff, STRING("baba"), 1, 0)
-        END_IF
+        CASE_GREATER_OR_EQUAL(STG8_04_GLOOMTAIL)
+            IF_INT_EQUAL(GSWF_LAS_09_VISITED_AFTER_GLOOMTAIL, 0)
+                CALL(evt_hitobj_onoff, STRING("baba"), 1, 1)
+            ELSE
+                CALL(evt_hitobj_onoff, STRING("baba"), 1, 0)
+            END_IF
         CASE_DEFAULT
-        CALL(evt_hitobj_onoff, STRING("baba"), 1, 0)
+            CALL(evt_hitobj_onoff, STRING("baba"), 1, 0)
     END_SWITCH
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG8_04_GLOOMTAIL)
         CALL(evt_mobj_itembox, STRING("box"), 270, 0, 178, MOBJ_ITEMBOX_NORMAL, 0, PTR(box_evt), GSWF_LAS_26_STAR_KEY_CHEST)

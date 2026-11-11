@@ -752,35 +752,35 @@ static EVT_BEGIN(btlataudevtMarioHammer)
     CALL(_get_mario_hammer_lv, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(2)
-        SET_VALUE(LW(0), STRING("M_H_5A"))
-        SET_VALUE(LW(1), STRING("M_H_5B"))
+            SET_VALUE(LW(0), STRING("M_H_5A"))
+            SET_VALUE(LW(1), STRING("M_H_5B"))
 #if VERSION <= VERSION_DEMO_JP
-        SET_VALUE(LW(2), STRING("M_H_15"))
+            SET_VALUE(LW(2), STRING("M_H_15"))
 #else
-        SET_VALUE(LW(2), STRING("M_H_14"))
+            SET_VALUE(LW(2), STRING("M_H_14"))
 #endif
         CASE_EQUAL(3)
-        SET_VALUE(LW(0), STRING("M_H_9A"))
-        SET_VALUE(LW(1), STRING("M_H_9B"))
+            SET_VALUE(LW(0), STRING("M_H_9A"))
+            SET_VALUE(LW(1), STRING("M_H_9B"))
 #if VERSION <= VERSION_DEMO_JP
-        SET_VALUE(LW(2), STRING("M_H_14"))
+            SET_VALUE(LW(2), STRING("M_H_14"))
 #else
-        SET_VALUE(LW(2), STRING("M_H_15"))
+            SET_VALUE(LW(2), STRING("M_H_15"))
 #endif
         CASE_DEFAULT
-        SET_VALUE(LW(0), STRING("M_H_1A"))
-        SET_VALUE(LW(1), STRING("M_H_1B"))
-        SET_VALUE(LW(2), STRING("M_H_13"))
+            SET_VALUE(LW(0), STRING("M_H_1A"))
+            SET_VALUE(LW(1), STRING("M_H_1B"))
+            SET_VALUE(LW(2), STRING("M_H_13"))
     END_SWITCH
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, LW(0))
     CALL(_get_mario_hammer_lv, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(2)
-        CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_MARIO_HAMMER_HOLD2"), EVT_NULLPTR, 0, EVT_NULLPTR)
+            CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_MARIO_HAMMER_HOLD2"), EVT_NULLPTR, 0, EVT_NULLPTR)
         CASE_EQUAL(1)
-        CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_MARIO_HAMMER_HOLD1"), EVT_NULLPTR, 0, EVT_NULLPTR)
+            CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_MARIO_HAMMER_HOLD1"), EVT_NULLPTR, 0, EVT_NULLPTR)
         CASE_DEFAULT
-        CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_MARIO_HAMMER_HOLD3"), EVT_NULLPTR, 0, EVT_NULLPTR)
+            CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_MARIO_HAMMER_HOLD3"), EVT_NULLPTR, 0, EVT_NULLPTR)
     END_SWITCH
     WAIT_MS(500)
 
@@ -790,11 +790,11 @@ static EVT_BEGIN(btlataudevtMarioHammer)
     CALL(_get_mario_hammer_lv, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(2)
-        CALL(evt_snd_sfxon, STRING("SFX_MARIO_HAMMER_SWING2"), 0)
+            CALL(evt_snd_sfxon, STRING("SFX_MARIO_HAMMER_SWING2"), 0)
         CASE_EQUAL(1)
-        CALL(evt_snd_sfxon, STRING("SFX_MARIO_HAMMER_SWING1"), 0)
+            CALL(evt_snd_sfxon, STRING("SFX_MARIO_HAMMER_SWING1"), 0)
         CASE_DEFAULT
-        CALL(evt_snd_sfxon, STRING("SFX_MARIO_HAMMER_SWING3"), 0)
+            CALL(evt_snd_sfxon, STRING("SFX_MARIO_HAMMER_SWING3"), 0)
     END_SWITCH
 
     // The hammer lands: ground-thump sound, the audience member is struck and the camera shakes.
@@ -803,11 +803,11 @@ static EVT_BEGIN(btlataudevtMarioHammer)
     CALL(_get_mario_hammer_lv, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(2)
-        CALL(evt_snd_sfxon, STRING("SFX_MARIO_HAMMER_HIT_GROUND3"), 0)
+            CALL(evt_snd_sfxon, STRING("SFX_MARIO_HAMMER_HIT_GROUND3"), 0)
         CASE_EQUAL(1)
-        CALL(evt_snd_sfxon, STRING("SFX_MARIO_HAMMER_HIT_GROUND2"), 0)
+            CALL(evt_snd_sfxon, STRING("SFX_MARIO_HAMMER_HIT_GROUND2"), 0)
         CASE_DEFAULT
-        CALL(evt_snd_sfxon, STRING("SFX_MARIO_HAMMER_HIT_GROUND1"), 0)
+            CALL(evt_snd_sfxon, STRING("SFX_MARIO_HAMMER_HIT_GROUND1"), 0)
     END_SWITCH
     CALL(_attack_aud, LW(3), 0)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)

@@ -133,8 +133,8 @@ static USER_FUNC(suifu_option_init_func) {
 static EVT_BEGIN(megane_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG5_31_FOUR_EYES, STG5_32_CORTEZS_WARNING)
-        CALL(evt_npc_set_position, STRING("me"), -455, 25, -40)
-        CALL(evt_npc_set_ry, STRING("me"), 90)
+            CALL(evt_npc_set_position, STRING("me"), -455, 25, -40)
+            CALL(evt_npc_set_ry, STRING("me"), 90)
     END_SWITCH
     RETURN
 EVT_END()

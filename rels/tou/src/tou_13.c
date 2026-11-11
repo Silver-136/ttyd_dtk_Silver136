@@ -150,40 +150,40 @@ EVT_END()
 EVT_BEGIN(tou_13_init_evt)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG3_00_WELCOME_TO_GLITZVILLE, STG3_12_THE_MINI_YOSHI_EGG)
-        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
+            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
 #if VERSION <= VERSION_DEMO_JP
-        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
+            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
 #else
-        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU7"))
+            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU7"))
 #endif
-        CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
+            CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
         CASE_GREATER_OR_EQUAL(STG3_33_PEACH_THE_SECRET_WEAPON)
-        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
+            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
 #if VERSION <= VERSION_DEMO_JP
-        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
+            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
 #else
-        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU7"))
+            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU7"))
 #endif
-        CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
+            CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
         CASE_DEFAULT
-        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU1"))
-        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU7"))
-        CALL(evt_snd_set_rev_mode, 2)
+            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU1"))
+            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU7"))
+            CALL(evt_snd_set_rev_mode, 2)
     END_SWITCH
     SET_VALUE(LW(0), PTR(bero_data))
     CALL(evt_bero_get_info)
     CALL_CHILD(evt_bero_info_run)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_30_04_AIR_DUCT_EXIT)
-        SET_VALUE(LF(0), 0)
-        CASE_LESS(STG3_34_RETURN_TO_ROGUEPORT)
-        SET_VALUE(LF(0), 1)
-        CASE_DEFAULT
-        IF_INT_EQUAL(GSWF_TOU_13_DUCT_EXIT_REOPENED, 0)
             SET_VALUE(LF(0), 0)
-        ELSE
+        CASE_LESS(STG3_34_RETURN_TO_ROGUEPORT)
             SET_VALUE(LF(0), 1)
-        END_IF
+        CASE_DEFAULT
+            IF_INT_EQUAL(GSWF_TOU_13_DUCT_EXIT_REOPENED, 0)
+                SET_VALUE(LF(0), 0)
+            ELSE
+                SET_VALUE(LF(0), 1)
+            END_IF
     END_SWITCH
     IF_INT_EQUAL(LF(0), 0)
         CALL(evt_run_case_evt, CASE_HAMMER_2, 1, STRING("deguti"), 0, PTR(evt_dakuto), 0)

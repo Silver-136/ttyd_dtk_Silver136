@@ -245,18 +245,18 @@ EVT_BEGIN(majinaisi_table_talk)
         SET_VALUE(LF(0), 0)
         SWITCH(LW(0))
             CASE_LESS_OR_EQUAL(-1800)
-            SET_VALUE(LF(0), 1)
+                SET_VALUE(LF(0), 1)
             CASE_LESS_OR_EQUAL(-360)
-            ADD_FLOAT(LW(0), LW(2))
-            ADD_FLOAT(LW(1), LW(3))
-            IF_INT_GREATER(LW(3), LW(2))
-                ADD_FLOAT(LW(3), LW(4))
-            ELSE
-                SET_FLOAT_VALUE(LW(3), LW(2))
-            END_IF
+                ADD_FLOAT(LW(0), LW(2))
+                ADD_FLOAT(LW(1), LW(3))
+                IF_INT_GREATER(LW(3), LW(2))
+                    ADD_FLOAT(LW(3), LW(4))
+                ELSE
+                    SET_FLOAT_VALUE(LW(3), LW(2))
+                END_IF
             CASE_DEFAULT
-            ADD_FLOAT(LW(0), LW(2))
-            ADD_FLOAT(LW(2), LW(4))
+                ADD_FLOAT(LW(0), LW(2))
+                ADD_FLOAT(LW(2), LW(4))
         END_SWITCH
         IF_INT_EQUAL(LF(0), 1)
             BREAK_LOOP

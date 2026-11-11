@@ -233,11 +233,11 @@ static EvtWord hikaru_yuka_init[] = {
     CALL(evt_sub_random, 300, LW(0))
     SWITCH(LW(0))
         CASE_LESS(100)
-        SET_VALUE(GW(10), 0)
+            SET_VALUE(GW(10), 0)
         CASE_LESS(200)
-        SET_VALUE(GW(10), 1)
+            SET_VALUE(GW(10), 1)
         CASE_DEFAULT
-        SET_VALUE(GW(10), 2)
+            SET_VALUE(GW(10), 2)
     END_SWITCH
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_seq_wait, SEQ_GAME)

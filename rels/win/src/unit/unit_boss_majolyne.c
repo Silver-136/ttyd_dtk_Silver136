@@ -519,42 +519,42 @@ EVT_BEGIN(majo_unison_phase_event)
         CALL(btlevtcmd_GetUnitWork, GW(10), MAJO_WORK_NEXT_LINE_POS, LW(6))
         SWITCH(LW(6))
             CASE_EQUAL(0)
-            CALL(btlevtcmd_GetHp, GW(10), LW(0))
-            SET_VALUE(LW(3), 1)
+                CALL(btlevtcmd_GetHp, GW(10), LW(0))
+                SET_VALUE(LW(3), 1)
             CASE_EQUAL(1)
-            CALL(btlevtcmd_GetHp, GW(10), LW(1))
-            SET_VALUE(LW(4), 1)
+                CALL(btlevtcmd_GetHp, GW(10), LW(1))
+                SET_VALUE(LW(4), 1)
             CASE_EQUAL(2)
-            CALL(btlevtcmd_GetHp, GW(10), LW(2))
-            SET_VALUE(LW(5), 1)
+                CALL(btlevtcmd_GetHp, GW(10), LW(2))
+                SET_VALUE(LW(5), 1)
         END_SWITCH
     END_IF
     IF_INT_EQUAL(GW(12), 0)
         CALL(btlevtcmd_GetUnitWork, GW(9), MAJO_WORK_NEXT_LINE_POS, LW(6))
         SWITCH(LW(6))
             CASE_EQUAL(0)
-            CALL(btlevtcmd_GetHp, GW(9), LW(0))
-            SET_VALUE(LW(3), 2)
+                CALL(btlevtcmd_GetHp, GW(9), LW(0))
+                SET_VALUE(LW(3), 2)
             CASE_EQUAL(1)
-            CALL(btlevtcmd_GetHp, GW(9), LW(1))
-            SET_VALUE(LW(4), 2)
+                CALL(btlevtcmd_GetHp, GW(9), LW(1))
+                SET_VALUE(LW(4), 2)
             CASE_EQUAL(2)
-            CALL(btlevtcmd_GetHp, GW(9), LW(2))
-            SET_VALUE(LW(5), 2)
+                CALL(btlevtcmd_GetHp, GW(9), LW(2))
+                SET_VALUE(LW(5), 2)
         END_SWITCH
     END_IF
     IF_INT_EQUAL(GW(11), 0)
         CALL(btlevtcmd_GetUnitWork, GW(8), MAJO_WORK_NEXT_LINE_POS, LW(6))
         SWITCH(LW(6))
             CASE_EQUAL(0)
-            CALL(btlevtcmd_GetHp, GW(8), LW(0))
-            SET_VALUE(LW(3), 3)
+                CALL(btlevtcmd_GetHp, GW(8), LW(0))
+                SET_VALUE(LW(3), 3)
             CASE_EQUAL(1)
-            CALL(btlevtcmd_GetHp, GW(8), LW(1))
-            SET_VALUE(LW(4), 3)
+                CALL(btlevtcmd_GetHp, GW(8), LW(1))
+                SET_VALUE(LW(4), 3)
             CASE_EQUAL(2)
-            CALL(btlevtcmd_GetHp, GW(8), LW(2))
-            SET_VALUE(LW(5), 3)
+                CALL(btlevtcmd_GetHp, GW(8), LW(2))
+                SET_VALUE(LW(5), 3)
         END_SWITCH
     END_IF
 
@@ -565,45 +565,45 @@ EVT_BEGIN(majo_unison_phase_event)
     // the weakest slot 2; defeated sisters are skipped.
     SWITCH(LW(0))
         CASE_EQUAL(1)
-        IF_INT_EQUAL(GW(13), 0)
-            CALL(btlevtcmd_SetUnitWork, GW(10), MAJO_WORK_NEXT_LINE_POS, 0)
-        END_IF
+            IF_INT_EQUAL(GW(13), 0)
+                CALL(btlevtcmd_SetUnitWork, GW(10), MAJO_WORK_NEXT_LINE_POS, 0)
+            END_IF
         CASE_EQUAL(2)
-        IF_INT_EQUAL(GW(12), 0)
-            CALL(btlevtcmd_SetUnitWork, GW(9), MAJO_WORK_NEXT_LINE_POS, 0)
-        END_IF
+            IF_INT_EQUAL(GW(12), 0)
+                CALL(btlevtcmd_SetUnitWork, GW(9), MAJO_WORK_NEXT_LINE_POS, 0)
+            END_IF
         CASE_EQUAL(3)
-        IF_INT_EQUAL(GW(11), 0)
-            CALL(btlevtcmd_SetUnitWork, GW(8), MAJO_WORK_NEXT_LINE_POS, 0)
-        END_IF
+            IF_INT_EQUAL(GW(11), 0)
+                CALL(btlevtcmd_SetUnitWork, GW(8), MAJO_WORK_NEXT_LINE_POS, 0)
+            END_IF
     END_SWITCH
     SWITCH(LW(1))
         CASE_EQUAL(1)
-        IF_INT_EQUAL(GW(13), 0)
-            CALL(btlevtcmd_SetUnitWork, GW(10), MAJO_WORK_NEXT_LINE_POS, 1)
-        END_IF
+            IF_INT_EQUAL(GW(13), 0)
+                CALL(btlevtcmd_SetUnitWork, GW(10), MAJO_WORK_NEXT_LINE_POS, 1)
+            END_IF
         CASE_EQUAL(2)
-        IF_INT_EQUAL(GW(12), 0)
-            CALL(btlevtcmd_SetUnitWork, GW(9), MAJO_WORK_NEXT_LINE_POS, 1)
-        END_IF
+            IF_INT_EQUAL(GW(12), 0)
+                CALL(btlevtcmd_SetUnitWork, GW(9), MAJO_WORK_NEXT_LINE_POS, 1)
+            END_IF
         CASE_EQUAL(3)
-        IF_INT_EQUAL(GW(11), 0)
-            CALL(btlevtcmd_SetUnitWork, GW(8), MAJO_WORK_NEXT_LINE_POS, 1)
-        END_IF
+            IF_INT_EQUAL(GW(11), 0)
+                CALL(btlevtcmd_SetUnitWork, GW(8), MAJO_WORK_NEXT_LINE_POS, 1)
+            END_IF
     END_SWITCH
     SWITCH(LW(2))
         CASE_EQUAL(1)
-        IF_INT_EQUAL(GW(13), 0)
-            CALL(btlevtcmd_SetUnitWork, GW(10), MAJO_WORK_NEXT_LINE_POS, 2)
-        END_IF
+            IF_INT_EQUAL(GW(13), 0)
+                CALL(btlevtcmd_SetUnitWork, GW(10), MAJO_WORK_NEXT_LINE_POS, 2)
+            END_IF
         CASE_EQUAL(2)
-        IF_INT_EQUAL(GW(12), 0)
-            CALL(btlevtcmd_SetUnitWork, GW(9), MAJO_WORK_NEXT_LINE_POS, 2)
-        END_IF
+            IF_INT_EQUAL(GW(12), 0)
+                CALL(btlevtcmd_SetUnitWork, GW(9), MAJO_WORK_NEXT_LINE_POS, 2)
+            END_IF
         CASE_EQUAL(3)
-        IF_INT_EQUAL(GW(11), 0)
-            CALL(btlevtcmd_SetUnitWork, GW(8), MAJO_WORK_NEXT_LINE_POS, 2)
-        END_IF
+            IF_INT_EQUAL(GW(11), 0)
+                CALL(btlevtcmd_SetUnitWork, GW(8), MAJO_WORK_NEXT_LINE_POS, 2)
+            END_IF
     END_SWITCH
     RETURN
 EVT_END()
@@ -628,14 +628,14 @@ static EVT_BEGIN(unison_phase_event)
             WAIT_MS(500)
             SWITCH(LW(4))
                 CASE_EQUAL(0)
-                SET_VALUE(LW(0), 55)
-                SET_VALUE(LW(2), 0)
+                    SET_VALUE(LW(0), 55)
+                    SET_VALUE(LW(2), 0)
                 CASE_EQUAL(1)
-                SET_VALUE(LW(0), 105)
-                SET_VALUE(LW(2), 10)
+                    SET_VALUE(LW(0), 105)
+                    SET_VALUE(LW(2), 10)
                 CASE_EQUAL(2)
-                SET_VALUE(LW(0), 155)
-                SET_VALUE(LW(2), 20)
+                    SET_VALUE(LW(0), 155)
+                    SET_VALUE(LW(2), 20)
             END_SWITCH
             SET_VALUE(LW(1), 0)
             CALL(btlevtcmd_SetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -800,89 +800,89 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(0)
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, 1)
-        SET_VALUE(LW(9), PTR(&weapon_majolyne_kagenuke_attack1))
-        CALL_CHILD(kagenuke_attack_event)
-        CASE_EQUAL(1)
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, 2)
-        SET_VALUE(LW(9), PTR(&weapon_majolyne_powder_attack2))
-        CALL_CHILD(powder_attack_check)
-        CALL_CHILD(powder_attack_event)
-        CASE_EQUAL(2)
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, 4)
-        SET_VALUE(LW(9), PTR(&weapon_majolyne_powder_attack1))
-        CALL_CHILD(powder_attack_check)
-        CALL_CHILD(powder_attack_event)
-        CASE_EQUAL(3)
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, 4)
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_BLIZZARD_WAIT, 2)
-        SET_VALUE(LW(9), PTR(&weapon_majolyne_blizzard_attack1))
-        CALL_CHILD(blizzard_attack_event)
-        CASE_EQUAL(4)
-
-        // After the opening, build the roll-range size from 40,
-        // plus 20 for each powder still useful and 20 for the blizzard once she is
-        // angry and its cooldown is over; selection below still uses fixed cutoffs.
-        SET_VALUE(LW(14), 40)
-        SET_VALUE(LW(9), PTR(&weapon_majolyne_powder_attack1))
-        CALL_CHILD(powder_attack_check)
-        IF_INT_NOT_EQUAL(LW(3), -1)
-            SET_VALUE(LW(10), LW(3))
-            SET_VALUE(LW(11), LW(4))
-            CALL(btlevtcmd_CheckStatus, LW(3), STATUS_HUGE, LW(0))
-            IF_INT_EQUAL(LW(0), 0)
-                ADD(LW(14), 20)
-            END_IF
-        END_IF
-        SET_VALUE(LW(9), PTR(&weapon_majolyne_powder_attack2))
-        CALL_CHILD(powder_attack_check)
-        IF_INT_NOT_EQUAL(LW(3), -1)
-            SET_VALUE(LW(12), LW(3))
-            SET_VALUE(LW(13), LW(4))
-            CALL(btlevtcmd_CheckStatus, LW(3), STATUS_TINY, LW(0))
-            IF_INT_EQUAL(LW(0), 0)
-                ADD(LW(14), 20)
-            END_IF
-        END_IF
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, MAJO_WORK_LOW_HP_ATTACK, LW(2))
-        IF_INT_NOT_EQUAL(LW(2), 0)
-            CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_BLIZZARD_WAIT, LW(0))
-            IF_INT_EQUAL(LW(0), 0)
-                ADD(LW(14), 20)
-            END_IF
-        END_IF
-        SUBTRACT(LW(14), 1)
-
-        // Roll the die and run the chosen attack.
-        // BUG: the cutoffs below are fixed (40/60/80) while LW(14) only grew for useful moves, so a powder can be
-        // chosen whose target is missing (LW(10..13) unset) or already Huge/Tiny, and a useful move can be cut off.
-        CALL(evt_sub_random, LW(14), LW(0))
-        SET_VALUE(LW(1), 40)
-        IF_INT_LESS(LW(0), LW(1))
+            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, 1)
             SET_VALUE(LW(9), PTR(&weapon_majolyne_kagenuke_attack1))
             CALL_CHILD(kagenuke_attack_event)
-            GOTO(90)
-        END_IF
-        ADD(LW(1), 20)
-        IF_INT_LESS(LW(0), LW(1))
-            SET_VALUE(LW(9), PTR(&weapon_majolyne_powder_attack1))
-            SET_VALUE(LW(3), LW(10))
-            SET_VALUE(LW(4), LW(11))
-            CALL_CHILD(powder_attack_event)
-            GOTO(90)
-        END_IF
-        ADD(LW(1), 20)
-        IF_INT_LESS(LW(0), LW(1))
+        CASE_EQUAL(1)
+            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, 2)
             SET_VALUE(LW(9), PTR(&weapon_majolyne_powder_attack2))
-            SET_VALUE(LW(3), LW(12))
-            SET_VALUE(LW(4), LW(13))
+            CALL_CHILD(powder_attack_check)
             CALL_CHILD(powder_attack_event)
-            GOTO(90)
-        ELSE
+        CASE_EQUAL(2)
+            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, 4)
+            SET_VALUE(LW(9), PTR(&weapon_majolyne_powder_attack1))
+            CALL_CHILD(powder_attack_check)
+            CALL_CHILD(powder_attack_event)
+        CASE_EQUAL(3)
+            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, 4)
             CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_BLIZZARD_WAIT, 2)
             SET_VALUE(LW(9), PTR(&weapon_majolyne_blizzard_attack1))
             CALL_CHILD(blizzard_attack_event)
-        END_IF
+        CASE_EQUAL(4)
+
+            // After the opening, build the roll-range size from 40,
+            // plus 20 for each powder still useful and 20 for the blizzard once she is
+            // angry and its cooldown is over; selection below still uses fixed cutoffs.
+            SET_VALUE(LW(14), 40)
+            SET_VALUE(LW(9), PTR(&weapon_majolyne_powder_attack1))
+            CALL_CHILD(powder_attack_check)
+            IF_INT_NOT_EQUAL(LW(3), -1)
+                SET_VALUE(LW(10), LW(3))
+                SET_VALUE(LW(11), LW(4))
+                CALL(btlevtcmd_CheckStatus, LW(3), STATUS_HUGE, LW(0))
+                IF_INT_EQUAL(LW(0), 0)
+                    ADD(LW(14), 20)
+                END_IF
+            END_IF
+            SET_VALUE(LW(9), PTR(&weapon_majolyne_powder_attack2))
+            CALL_CHILD(powder_attack_check)
+            IF_INT_NOT_EQUAL(LW(3), -1)
+                SET_VALUE(LW(12), LW(3))
+                SET_VALUE(LW(13), LW(4))
+                CALL(btlevtcmd_CheckStatus, LW(3), STATUS_TINY, LW(0))
+                IF_INT_EQUAL(LW(0), 0)
+                    ADD(LW(14), 20)
+                END_IF
+            END_IF
+            CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, MAJO_WORK_LOW_HP_ATTACK, LW(2))
+            IF_INT_NOT_EQUAL(LW(2), 0)
+                CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_BLIZZARD_WAIT, LW(0))
+                IF_INT_EQUAL(LW(0), 0)
+                    ADD(LW(14), 20)
+                END_IF
+            END_IF
+            SUBTRACT(LW(14), 1)
+
+            // Roll the die and run the chosen attack.
+            // BUG: the cutoffs below are fixed (40/60/80) while LW(14) only grew for useful moves, so a powder can be
+            // chosen whose target is missing (LW(10..13) unset) or already Huge/Tiny, and a useful move can be cut off.
+            CALL(evt_sub_random, LW(14), LW(0))
+            SET_VALUE(LW(1), 40)
+            IF_INT_LESS(LW(0), LW(1))
+                SET_VALUE(LW(9), PTR(&weapon_majolyne_kagenuke_attack1))
+                CALL_CHILD(kagenuke_attack_event)
+                GOTO(90)
+            END_IF
+            ADD(LW(1), 20)
+            IF_INT_LESS(LW(0), LW(1))
+                SET_VALUE(LW(9), PTR(&weapon_majolyne_powder_attack1))
+                SET_VALUE(LW(3), LW(10))
+                SET_VALUE(LW(4), LW(11))
+                CALL_CHILD(powder_attack_event)
+                GOTO(90)
+            END_IF
+            ADD(LW(1), 20)
+            IF_INT_LESS(LW(0), LW(1))
+                SET_VALUE(LW(9), PTR(&weapon_majolyne_powder_attack2))
+                SET_VALUE(LW(3), LW(12))
+                SET_VALUE(LW(4), LW(13))
+                CALL_CHILD(powder_attack_event)
+                GOTO(90)
+            ELSE
+                CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_BLIZZARD_WAIT, 2)
+                SET_VALUE(LW(9), PTR(&weapon_majolyne_blizzard_attack1))
+                CALL_CHILD(blizzard_attack_event)
+            END_IF
     END_SWITCH
     LABEL(90)
     CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
@@ -936,23 +936,23 @@ static EVT_BEGIN(kagenuke_attack_event)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
-        GOTO(90)
+            GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_LUCKY)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
+            GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_DODGY)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
+            GOTO(90)
         CASE_EQUAL(PRECHECK_MISS)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
+            GOTO(90)
         CASE_EQUAL(PRECHECK_HIT)
-        GOTO(91)
+            GOTO(91)
         CASE_END
         CASE_DEFAULT
-        GOTO(98)
+            GOTO(98)
         CASE_END
     END_SWITCH
     LABEL(90)
@@ -1015,23 +1015,23 @@ static EVT_BEGIN(blizzard_attack_event)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
-        GOTO(90)
+            GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_LUCKY)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
+            GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_DODGY)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
+            GOTO(90)
         CASE_EQUAL(PRECHECK_MISS)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
+            GOTO(90)
         CASE_EQUAL(PRECHECK_HIT)
-        GOTO(91)
+            GOTO(91)
         CASE_END
         CASE_DEFAULT
-        GOTO(98)
+            GOTO(98)
         CASE_END
     END_SWITCH
     LABEL(90)
@@ -1104,25 +1104,25 @@ static EVT_BEGIN(powder_attack_event)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
-        GOTO(90)
+            GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_LUCKY)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
+            GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_DODGY)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
+            GOTO(90)
         CASE_EQUAL(PRECHECK_MISS)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
+            GOTO(90)
         CASE_EQUAL(PRECHECK_HIT)
-        GOTO(91)
+            GOTO(91)
         CASE_END
         CASE_DEFAULT
-        // BUG: this script has no LABEL(98): evtSearchLabel resumes at this GOTO's argument word, which runs
-        // as SET_SPD with the next command word as its value, and the script goes on after the GOTO.
-        GOTO(98)
+            // BUG: this script has no LABEL(98): evtSearchLabel resumes at this GOTO's argument word, which runs
+            // as SET_SPD with the next command word as its value, and the script goes on after the GOTO.
+            GOTO(98)
         CASE_END
     END_SWITCH
     LABEL(90)

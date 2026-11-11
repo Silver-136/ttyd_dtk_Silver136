@@ -81,11 +81,11 @@ static EVT_BEGIN(vivian_init)
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_STOP_FOR_EVENT)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG2_01_A_SIREN_ARGUMENT, STG2_05_02_FLURRIE_REQUEST)
-        CALL(evt_npc_set_position, STRING("me"), -535, 0, -30)
-        CALL(evt_npc_set_force_regl_anim, STRING("me"), STRING("PTR_S_3"))
-        CALL(evt_npc_set_autotalkpose, STRING("me"), STRING("PTR_S_3"), STRING("PTR_T_3"))
+            CALL(evt_npc_set_position, STRING("me"), -535, 0, -30)
+            CALL(evt_npc_set_force_regl_anim, STRING("me"), STRING("PTR_S_3"))
+            CALL(evt_npc_set_autotalkpose, STRING("me"), STRING("PTR_S_3"), STRING("PTR_T_3"))
         CASE_BETWEEN(STG2_06_THE_SKETCH, STG2_07_MARIO_VS_SHADOW_SIRENS)
-        CALL(evt_npc_set_position, STRING("me"), -535, 0, -30)
+            CALL(evt_npc_set_position, STRING("me"), -535, 0, -30)
     END_SWITCH
     RETURN
 EVT_END()
@@ -104,7 +104,7 @@ static EVT_BEGIN(maririn_init)
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_STOP_FOR_EVENT)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG2_01_A_SIREN_ARGUMENT, STG2_07_MARIO_VS_SHADOW_SIRENS)
-        CALL(evt_npc_set_position, STRING("me"), -495, 0, -60)
+            CALL(evt_npc_set_position, STRING("me"), -495, 0, -60)
     END_SWITCH
     RETURN
 EVT_END()
@@ -124,7 +124,7 @@ static EVT_BEGIN(majorin_init)
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_STOP_FOR_EVENT)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG2_01_A_SIREN_ARGUMENT, STG2_07_MARIO_VS_SHADOW_SIRENS)
-        CALL(evt_npc_set_position, STRING("me"), -455, 0, -30)
+            CALL(evt_npc_set_position, STRING("me"), -455, 0, -30)
     END_SWITCH
     RETURN
 EVT_END()

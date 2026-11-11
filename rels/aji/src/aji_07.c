@@ -202,15 +202,15 @@ static EVT_BEGIN(tensou_ride)
     // last mail.
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG7_25_THE_LAST_MAIL)
-        SET_VALUE(GSWF_AJI_TELEPORT_TO_TIK_PENDING, 1)
-        CALL(evt_bero_mapchange, STRING("tik_00"), 0)
+            SET_VALUE(GSWF_AJI_TELEPORT_TO_TIK_PENDING, 1)
+            CALL(evt_bero_mapchange, STRING("tik_00"), 0)
 
         // Only this exact story checkpoint selects the alternate destination.
         CASE_EQUAL(STG7_25_THE_LAST_MAIL)
-        CALL(evt_bero_mapchange, STRING("moo_04"), 0)
+            CALL(evt_bero_mapchange, STRING("moo_04"), 0)
         CASE_DEFAULT
-        SET_VALUE(GSWF_AJI_TELEPORT_TO_TIK_PENDING, 1)
-        CALL(evt_bero_mapchange, STRING("tik_00"), 0)
+            SET_VALUE(GSWF_AJI_TELEPORT_TO_TIK_PENDING, 1)
+            CALL(evt_bero_mapchange, STRING("tik_00"), 0)
     END_SWITCH
     CALL(evt_exit_case_evt)
     RETURN

@@ -65,10 +65,10 @@ EvtWord mri_06_init_evt[207];
 static EVT_BEGIN(rival_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG2_26_PRAISE_FROM_THE_PUNI)
-        IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 1)
-            CALL(evt_npc_set_position, STRING("me"), 390, 0, 15)
-            CALL(evt_npc_set_ry_lr, STRING("me"), 0)
-        END_IF
+            IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 1)
+                CALL(evt_npc_set_position, STRING("me"), 390, 0, 15)
+                CALL(evt_npc_set_ry_lr, STRING("me"), 0)
+            END_IF
     END_SWITCH
     RETURN
 EVT_END()
@@ -77,9 +77,9 @@ EVT_END()
 static EVT_BEGIN(rival_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
-        CALL(evt_msg_print, 0, STRING("stg2_mri_re_021"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg2_mri_re_021"), 0, STRING("me"))
         CASE_DEFAULT
-        CALL(evt_msg_print, 0, STRING("stg2_mri_re_021_1"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg2_mri_re_021_1"), 0, STRING("me"))
     END_SWITCH
     RETURN
 EVT_END()
@@ -91,10 +91,10 @@ EVT_END()
 static EVT_BEGIN(puni_6_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG2_26_PRAISE_FROM_THE_PUNI)
-        IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 1)
-            CALL(evt_npc_set_position, STRING("me"), 390, 0, -35)
-            CALL(evt_npc_set_ry_lr, STRING("me"), 0)
-        END_IF
+            IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 1)
+                CALL(evt_npc_set_position, STRING("me"), 390, 0, -35)
+                CALL(evt_npc_set_ry_lr, STRING("me"), 0)
+            END_IF
     END_SWITCH
     RETURN
 EVT_END()
@@ -103,9 +103,9 @@ EVT_END()
 static EVT_BEGIN(puni_6_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
-        CALL(evt_msg_print, 0, STRING("stg2_mri_re_022"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg2_mri_re_022"), 0, STRING("me"))
         CASE_DEFAULT
-        CALL(evt_msg_print, 0, STRING("stg2_mri_re_022_1"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg2_mri_re_022_1"), 0, STRING("me"))
     END_SWITCH
     RETURN
 EVT_END()
@@ -117,10 +117,10 @@ EVT_END()
 static EVT_BEGIN(puni_7_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG2_26_PRAISE_FROM_THE_PUNI)
-        IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 1)
-            CALL(evt_npc_set_position, STRING("me"), -350, -310, 100)
-            CALL(evt_npc_set_ry, STRING("me"), 90)
-        END_IF
+            IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 1)
+                CALL(evt_npc_set_position, STRING("me"), -350, -310, 100)
+                CALL(evt_npc_set_ry, STRING("me"), 90)
+            END_IF
     END_SWITCH
     RETURN
 EVT_END()
@@ -129,9 +129,9 @@ EVT_END()
 static EVT_BEGIN(puni_7_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
-        CALL(evt_msg_print, 0, STRING("stg2_mri_re_023"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg2_mri_re_023"), 0, STRING("me"))
         CASE_DEFAULT
-        CALL(evt_msg_print, 0, STRING("stg2_mri_re_023_1"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg2_mri_re_023_1"), 0, STRING("me"))
     END_SWITCH
     RETURN
 EVT_END()
@@ -143,9 +143,9 @@ EVT_END()
 static EVT_BEGIN(puni_8_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG2_26_PRAISE_FROM_THE_PUNI)
-        IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 1)
-            CALL(evt_npc_set_position, STRING("me"), -380, 0, 10)
-        END_IF
+            IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 1)
+                CALL(evt_npc_set_position, STRING("me"), -380, 0, 10)
+            END_IF
     END_SWITCH
     RETURN
 EVT_END()
@@ -154,9 +154,9 @@ EVT_END()
 static EVT_BEGIN(puni_8_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
-        CALL(evt_msg_print, 0, STRING("stg2_mri_re_024"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg2_mri_re_024"), 0, STRING("me"))
         CASE_DEFAULT
-        CALL(evt_msg_print, 0, STRING("stg2_mri_re_024_1"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg2_mri_re_024_1"), 0, STRING("me"))
     END_SWITCH
     RETURN
 EVT_END()
@@ -168,10 +168,10 @@ EVT_END()
 static EVT_BEGIN(puni_9_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG2_26_PRAISE_FROM_THE_PUNI)
-        IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 1)
-            CALL(evt_npc_set_position, STRING("me"), 330, -310, 45)
-            CALL(evt_npc_set_ry_lr, STRING("me"), 0)
-        END_IF
+            IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 1)
+                CALL(evt_npc_set_position, STRING("me"), 330, -310, 45)
+                CALL(evt_npc_set_ry_lr, STRING("me"), 0)
+            END_IF
     END_SWITCH
     RETURN
 EVT_END()
@@ -180,9 +180,9 @@ EVT_END()
 static EVT_BEGIN(puni_9_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
-        CALL(evt_msg_print, 0, STRING("stg2_mri_re_025"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg2_mri_re_025"), 0, STRING("me"))
         CASE_DEFAULT
-        CALL(evt_msg_print, 0, STRING("stg2_mri_re_025_1"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg2_mri_re_025_1"), 0, STRING("me"))
     END_SWITCH
     RETURN
 EVT_END()
@@ -194,9 +194,9 @@ EVT_END()
 static EVT_BEGIN(puni_10_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG2_26_PRAISE_FROM_THE_PUNI)
-        IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 1)
-            CALL(evt_npc_set_position, STRING("me"), -120, -310, 50)
-        END_IF
+            IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 1)
+                CALL(evt_npc_set_position, STRING("me"), -120, -310, 50)
+            END_IF
     END_SWITCH
     RETURN
 EVT_END()
@@ -216,9 +216,9 @@ EVT_END()
 static EVT_BEGIN(puni_10_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
-        CALL(evt_msg_print, 0, STRING("stg2_mri_re_026"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg2_mri_re_026"), 0, STRING("me"))
         CASE_DEFAULT
-        CALL(evt_msg_print, 0, STRING("stg2_mri_re_026_1"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg2_mri_re_026_1"), 0, STRING("me"))
     END_SWITCH
     RETURN
 EVT_END()
@@ -230,9 +230,9 @@ EVT_END()
 static EVT_BEGIN(puni_11_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG2_26_PRAISE_FROM_THE_PUNI)
-        IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 1)
-            CALL(evt_npc_set_position, STRING("me"), -190, -310, 125)
-        END_IF
+            IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 1)
+                CALL(evt_npc_set_position, STRING("me"), -190, -310, 125)
+            END_IF
     END_SWITCH
     RETURN
 EVT_END()
@@ -252,9 +252,9 @@ EVT_END()
 static EVT_BEGIN(puni_11_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
-        CALL(evt_msg_print, 0, STRING("stg2_mri_re_027"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg2_mri_re_027"), 0, STRING("me"))
         CASE_DEFAULT
-        CALL(evt_msg_print, 0, STRING("stg2_mri_re_027_1"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg2_mri_re_027_1"), 0, STRING("me"))
     END_SWITCH
     RETURN
 EVT_END()
@@ -715,11 +715,11 @@ EVT_BEGIN(mri_06_init_evt)
     CALL_CHILD(evt_sub_kusa_access_entry)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG2_23_TIME_BOMB_ACTIVATED, STG2_23_01_X_NAUT_BATTLE)
-        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_DANGER4"))
-        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_MRI9"))
+            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_DANGER4"))
+            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_MRI9"))
         CASE_DEFAULT
-        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG2_MRI1"))
-        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_MRI1"))
+            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG2_MRI1"))
+            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_MRI1"))
     END_SWITCH
     CALL(evt_mobj_save_blk, STRING("mobj_save"), -250, -249, -100, PTR(mri_puni_save), 0)
     CALL(evt_map_playanim, STRING("mizu_01"), MAP_ANIM_PLAY_LOOP, 0)

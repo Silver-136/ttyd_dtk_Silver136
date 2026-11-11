@@ -110,11 +110,11 @@ EVT_BEGIN(subsetevt_dead)
     CALL(btlevtcmd_GetUnitKind, LW(10), LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(UNIT_MARIO)
-        GOTO(0)
+            GOTO(0)
         CASE_BETWEEN(UNIT_GOOMBELLA, UNIT_MS_MOWZ)
-        GOTO(0)
+            GOTO(0)
         CASE_DEFAULT
-        GOTO(1)
+            GOTO(1)
     END_SWITCH
     LABEL(0)
     CALL(btlevtcmd_CheckAttribute, LW(10), kFloating, LW(0))
@@ -138,170 +138,170 @@ EVT_BEGIN(subsetevt_dead)
     SWITCH(LW(0))
         CASE_EQUAL(UNIT_MARIO)
 
-        // Mario: his Life Shroom revival (data-table event 51) when one saves him, else his KO event 49.
-        CALL(btlevtcmd_ClearAllStatus, LW(10))
-        CALL(btlevtcmd_CheckDamageCode, LW(10), DAMAGE_RESULT_REVIVAL, LW(1))
-        IF_INT_NOT_EQUAL(LW(1), 0)
-            CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_EMERGENCY_REVIVAL_EVENT)
-        ELSE
-            CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_DEAD_EVENT)
-        END_IF
-        CASE_BETWEEN(UNIT_GOOMBELLA, UNIT_MS_MOWZ)
-
-        // A partner saved by a Life Shroom runs its own revival event if it has one, else the one below.
-        CALL(btlevtcmd_CheckDamageCode, LW(10), DAMAGE_RESULT_REVIVAL, LW(1))
-        IF_INT_NOT_EQUAL(LW(1), 0)
+            // Mario: his Life Shroom revival (data-table event 51) when one saves him, else his KO event 49.
             CALL(btlevtcmd_ClearAllStatus, LW(10))
-            CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), UNIT_DATA_EMERGENCY_REVIVAL_EVENT)
-            IF_INT_NOT_EQUAL(LW(0), 0)
+            CALL(btlevtcmd_CheckDamageCode, LW(10), DAMAGE_RESULT_REVIVAL, LW(1))
+            IF_INT_NOT_EQUAL(LW(1), 0)
                 CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_EMERGENCY_REVIVAL_EVENT)
             ELSE
-                // The partner keels over, the Life Shroom icon shows above it and the Shroom is used up.
+                CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_DEAD_EVENT)
+            END_IF
+        CASE_BETWEEN(UNIT_GOOMBELLA, UNIT_MS_MOWZ)
+
+            // A partner saved by a Life Shroom runs its own revival event if it has one, else the one below.
+            CALL(btlevtcmd_CheckDamageCode, LW(10), DAMAGE_RESULT_REVIVAL, LW(1))
+            IF_INT_NOT_EQUAL(LW(1), 0)
+                CALL(btlevtcmd_ClearAllStatus, LW(10))
+                CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), UNIT_DATA_EMERGENCY_REVIVAL_EVENT)
+                IF_INT_NOT_EQUAL(LW(0), 0)
+                    CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_EMERGENCY_REVIVAL_EVENT)
+                ELSE
+                    // The partner keels over, the Life Shroom icon shows above it and the Shroom is used up.
+                    CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), POSE_TYPE_KO)
+                    BEGIN_SIBLING_EVENT
+                        CALL(btlevtcmd_AnimeWaitPlayComplete, LW(10), LW(11))
+                        CALL(btlevtcmd_snd_se, LW(10), STRING("SFX_PARTY_BATTLE_DIE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
+                    END_SIBLING_EVENT
+                    WAIT_FRAMES(60)
+                    CALL(btlevtcmd_ClearAllStatus, LW(10))
+                    CALL(btlevtcmd_ConsumeItemReserve, LW(10), ITEM_LIFE_SHROOM)
+                    BEGIN_SIBLING_EVENT
+                        CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
+                        ADD(LW(1), 40)
+                        CALL(btlevtcmd_DispItemIcon, LW(0), LW(1), LW(2), ITEM_LIFE_SHROOM, 90)
+                    END_SIBLING_EVENT
+                    WAIT_FRAMES(90)
+#if VERSION >= VERSION_JP
+
+                    // In JP and later the partner's event 67 also runs (Koops uses it to stand upright).
+                    CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), UNIT_DATA_REVIVE_EVENT)
+                    IF_INT_NOT_EQUAL(LW(0), 0)
+                        CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_REVIVE_EVENT)
+                    END_IF
+#endif
+
+                    // The partner gets back up with 10 HP, the recovery sparkle shows and it hops back to idle.
+                    CALL(btlevtcmd_OnOffStatus, LW(10), STATUS_DEAD, 0, 0, 0)
+                    CALL(btlevtcmd_SetHp, LW(10), 0)
+                    CALL(btlevtcmd_RecoverHp, LW(10), LW(11), 10)
+                    CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
+                    ADD(LW(1), 30)
+                    CALL(evt_eff, 0, STRING("recovery"), 0, LW(0), LW(1), LW(2), 10, 0, 0, 0, 0, 0, 0, 0)
+                    WAIT_MS(2000)
+                    CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), POSE_TYPE_RUN)
+                    CALL(btlevtcmd_JumpSetting, LW(10), 0, FLOAT(0.0f), FLOAT(0.69921875f))
+                    CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
+                    CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 20, MOVE_SOUND_FROM_TABLE)
+                    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
+                END_IF
+                ELSE
+                // No Life Shroom: the partner runs its KO event and falls over.
+                CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), UNIT_DATA_DEAD_EVENT)
+                IF_INT_NOT_EQUAL(LW(0), 0)
+                    CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_DEAD_EVENT)
+                ELSE
+                END_IF
+                CALL(btlevtcmd_KillUnit, LW(10), 1)
+                CALL(btlevtcmd_GetBodyId, UNIT_ID_SELF, LW(11))
                 CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), POSE_TYPE_KO)
                 BEGIN_SIBLING_EVENT
                     CALL(btlevtcmd_AnimeWaitPlayComplete, LW(10), LW(11))
                     CALL(btlevtcmd_snd_se, LW(10), STRING("SFX_PARTY_BATTLE_DIE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
                 END_SIBLING_EVENT
-                WAIT_FRAMES(60)
-                CALL(btlevtcmd_ClearAllStatus, LW(10))
-                CALL(btlevtcmd_ConsumeItemReserve, LW(10), ITEM_LIFE_SHROOM)
-                BEGIN_SIBLING_EVENT
-                    CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
-                    ADD(LW(1), 40)
-                    CALL(btlevtcmd_DispItemIcon, LW(0), LW(1), LW(2), ITEM_LIFE_SHROOM, 90)
-                END_SIBLING_EVENT
-                WAIT_FRAMES(90)
-#if VERSION >= VERSION_JP
 
-                // In JP and later the partner's event 67 also runs (Koops uses it to stand upright).
-                CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), UNIT_DATA_REVIVE_EVENT)
-                IF_INT_NOT_EQUAL(LW(0), 0)
-                    CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_REVIVE_EVENT)
+                // A KO'd partner standing in front of Mario swaps places with him, as long as Mario still has HP.
+                CALL(btlevtcmd_GetHomePos, LW(10), LW(0), LW(1), LW(2))
+                CALL(btlevtcmd_GetPartnerId, LW(10), LW(4))
+                CALL(btlevtcmd_GetHomePos, LW(4), LW(6), LW(7), LW(8))
+                IF_INT_LESS(LW(0), 0)
+                    MULTIPLY(LW(0), -1)
                 END_IF
-#endif
-
-                // The partner gets back up with 10 HP, the recovery sparkle shows and it hops back to idle.
-                CALL(btlevtcmd_OnOffStatus, LW(10), STATUS_DEAD, 0, 0, 0)
-                CALL(btlevtcmd_SetHp, LW(10), 0)
-                CALL(btlevtcmd_RecoverHp, LW(10), LW(11), 10)
-                CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
-                ADD(LW(1), 30)
-                CALL(evt_eff, 0, STRING("recovery"), 0, LW(0), LW(1), LW(2), 10, 0, 0, 0, 0, 0, 0, 0)
-                WAIT_MS(2000)
-                CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), POSE_TYPE_RUN)
-                CALL(btlevtcmd_JumpSetting, LW(10), 0, FLOAT(0.0f), FLOAT(0.69921875f))
-                CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
-                CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 20, MOVE_SOUND_FROM_TABLE)
-                CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
-            END_IF
-            ELSE
-            // No Life Shroom: the partner runs its KO event and falls over.
-            CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), UNIT_DATA_DEAD_EVENT)
-            IF_INT_NOT_EQUAL(LW(0), 0)
-                CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_DEAD_EVENT)
-            ELSE
-            END_IF
-            CALL(btlevtcmd_KillUnit, LW(10), 1)
-            CALL(btlevtcmd_GetBodyId, UNIT_ID_SELF, LW(11))
-            CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), POSE_TYPE_KO)
-            BEGIN_SIBLING_EVENT
-                CALL(btlevtcmd_AnimeWaitPlayComplete, LW(10), LW(11))
-                CALL(btlevtcmd_snd_se, LW(10), STRING("SFX_PARTY_BATTLE_DIE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-            END_SIBLING_EVENT
-
-            // A KO'd partner standing in front of Mario swaps places with him, as long as Mario still has HP.
-            CALL(btlevtcmd_GetHomePos, LW(10), LW(0), LW(1), LW(2))
-            CALL(btlevtcmd_GetPartnerId, LW(10), LW(4))
-            CALL(btlevtcmd_GetHomePos, LW(4), LW(6), LW(7), LW(8))
-            IF_INT_LESS(LW(0), 0)
-                MULTIPLY(LW(0), -1)
-            END_IF
-            IF_INT_LESS(LW(6), 0)
-                MULTIPLY(LW(6), -1)
-            END_IF
-            IF_INT_LESS(LW(0), LW(6))
-                WAIT_MS(500)
-                CALL(_check_at_dm_event_wait, UNIT_ID_MARIO)
-                CALL(btlevtcmd_GetHp, UNIT_ID_MARIO, LW(0))
-                IF_INT_GREATER(LW(0), 0)
-                    CALL_CHILD(btldefaultevt_ChangePosition)
+                IF_INT_LESS(LW(6), 0)
+                    MULTIPLY(LW(6), -1)
+                END_IF
+                IF_INT_LESS(LW(0), LW(6))
+                    WAIT_MS(500)
+                    CALL(_check_at_dm_event_wait, UNIT_ID_MARIO)
+                    CALL(btlevtcmd_GetHp, UNIT_ID_MARIO, LW(0))
+                    IF_INT_GREATER(LW(0), 0)
+                        CALL_CHILD(btldefaultevt_ChangePosition)
+                    END_IF
                 END_IF
             END_IF
-        END_IF
         CASE_DEFAULT
-        // Enemies: a Life Shroom revival runs the unit's own event 51 when it has one.
-        CALL(btlevtcmd_CheckDamageCode, LW(10), DAMAGE_RESULT_REVIVAL, LW(1))
-        IF_INT_NOT_EQUAL(LW(1), 0)
-            CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), UNIT_DATA_EMERGENCY_REVIVAL_EVENT)
-            IF_INT_NOT_EQUAL(LW(0), 0)
-                CALL(btlevtcmd_ClearAllStatus, LW(10))
-                CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_EMERGENCY_REVIVAL_EVENT)
-            ELSE
-                // The standard enemy revival: the enemy spins and tips over, and the Life Shroom icon shows.
-                CALL(btlevtcmd_OnUnitFlag, LW(10), BATTLE_UNIT_FLAG_HIDE_HELD_ITEM)
-                SET_VALUE(LW(0), 48)
-                LABEL(5)
-                WAIT_FRAMES(1)
-                CALL(btlevtcmd_AddRotate, LW(10), 0, -15, 0)
-                SUBTRACT(LW(0), 1)
-                IF_INT_GREATER(LW(0), 0)
-                    GOTO(5)
-                END_IF
-                CALL(btlevtcmd_SetRotate, LW(10), 0, 0, 0)
-                CALL(btlevtcmd_SetRotateOffset, LW(10), 0, 0, 0)
-                SET_VALUE(LW(0), 30)
-                LABEL(6)
-                WAIT_FRAMES(1)
-                CALL(btlevtcmd_AddRotate, LW(10), 3, 0, 0)
-                SUBTRACT(LW(0), 1)
-                IF_INT_GREATER(LW(0), 0)
-                    GOTO(6)
-                END_IF
-                CALL(btlevtcmd_ClearAllStatus, LW(10))
-                CALL(btlevtcmd_ConsumeItemReserve, LW(10), ITEM_LIFE_SHROOM)
-                BEGIN_SIBLING_EVENT
-                    CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
-                    ADD(LW(1), 40)
-                    CALL(btlevtcmd_DispItemIcon, LW(0), LW(1), LW(2), ITEM_LIFE_SHROOM, 120)
-                END_SIBLING_EVENT
-                WAIT_FRAMES(90)
+            // Enemies: a Life Shroom revival runs the unit's own event 51 when it has one.
+            CALL(btlevtcmd_CheckDamageCode, LW(10), DAMAGE_RESULT_REVIVAL, LW(1))
+            IF_INT_NOT_EQUAL(LW(1), 0)
+                CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), UNIT_DATA_EMERGENCY_REVIVAL_EVENT)
+                IF_INT_NOT_EQUAL(LW(0), 0)
+                    CALL(btlevtcmd_ClearAllStatus, LW(10))
+                    CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_EMERGENCY_REVIVAL_EVENT)
+                ELSE
+                    // The standard enemy revival: the enemy spins and tips over, and the Life Shroom icon shows.
+                    CALL(btlevtcmd_OnUnitFlag, LW(10), BATTLE_UNIT_FLAG_HIDE_HELD_ITEM)
+                    SET_VALUE(LW(0), 48)
+                    LABEL(5)
+                    WAIT_FRAMES(1)
+                    CALL(btlevtcmd_AddRotate, LW(10), 0, -15, 0)
+                    SUBTRACT(LW(0), 1)
+                    IF_INT_GREATER(LW(0), 0)
+                        GOTO(5)
+                    END_IF
+                    CALL(btlevtcmd_SetRotate, LW(10), 0, 0, 0)
+                    CALL(btlevtcmd_SetRotateOffset, LW(10), 0, 0, 0)
+                    SET_VALUE(LW(0), 30)
+                    LABEL(6)
+                    WAIT_FRAMES(1)
+                    CALL(btlevtcmd_AddRotate, LW(10), 3, 0, 0)
+                    SUBTRACT(LW(0), 1)
+                    IF_INT_GREATER(LW(0), 0)
+                        GOTO(6)
+                    END_IF
+                    CALL(btlevtcmd_ClearAllStatus, LW(10))
+                    CALL(btlevtcmd_ConsumeItemReserve, LW(10), ITEM_LIFE_SHROOM)
+                    BEGIN_SIBLING_EVENT
+                        CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
+                        ADD(LW(1), 40)
+                        CALL(btlevtcmd_DispItemIcon, LW(0), LW(1), LW(2), ITEM_LIFE_SHROOM, 120)
+                    END_SIBLING_EVENT
+                    WAIT_FRAMES(90)
 
-                // The enemy rights itself, recovers 10 HP with the recovery sparkle, hops up and idles again.
-                SET_VALUE(LW(0), 30)
-                LABEL(7)
-                WAIT_FRAMES(1)
-                CALL(btlevtcmd_AddRotate, LW(10), -3, 0, 0)
-                SUBTRACT(LW(0), 1)
-                IF_INT_GREATER(LW(0), 0)
-                    GOTO(7)
-                END_IF
-                CALL(btlevtcmd_OnOffStatus, LW(10), STATUS_DEAD, 0, 0, 0)
-                CALL(btlevtcmd_SetHp, LW(10), 0)
-                CALL(btlevtcmd_RecoverHp, LW(10), LW(11), 10)
-                CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
-                ADD(LW(1), 30)
-                CALL(evt_eff, 0, STRING("recovery"), 0, LW(0), LW(1), LW(2), 10, 0, 0, 0, 0, 0, 0, 0)
-                WAIT_MS(2000)
-                CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), POSE_TYPE_RUN)
-                CALL(btlevtcmd_JumpSetting, LW(10), 0, FLOAT(0.0f), FLOAT(0.69921875f))
-                CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
-                CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 20, MOVE_SOUND_FROM_TABLE)
-                CALL(btlevtcmd_OffUnitFlag, LW(10), BATTLE_UNIT_FLAG_HIDE_HELD_ITEM)
+                    // The enemy rights itself, recovers 10 HP with the recovery sparkle, hops up and idles again.
+                    SET_VALUE(LW(0), 30)
+                    LABEL(7)
+                    WAIT_FRAMES(1)
+                    CALL(btlevtcmd_AddRotate, LW(10), -3, 0, 0)
+                    SUBTRACT(LW(0), 1)
+                    IF_INT_GREATER(LW(0), 0)
+                        GOTO(7)
+                    END_IF
+                    CALL(btlevtcmd_OnOffStatus, LW(10), STATUS_DEAD, 0, 0, 0)
+                    CALL(btlevtcmd_SetHp, LW(10), 0)
+                    CALL(btlevtcmd_RecoverHp, LW(10), LW(11), 10)
+                    CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
+                    ADD(LW(1), 30)
+                    CALL(evt_eff, 0, STRING("recovery"), 0, LW(0), LW(1), LW(2), 10, 0, 0, 0, 0, 0, 0, 0)
+                    WAIT_MS(2000)
+                    CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), POSE_TYPE_RUN)
+                    CALL(btlevtcmd_JumpSetting, LW(10), 0, FLOAT(0.0f), FLOAT(0.69921875f))
+                    CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
+                    CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 20, MOVE_SOUND_FROM_TABLE)
+                    CALL(btlevtcmd_OffUnitFlag, LW(10), BATTLE_UNIT_FLAG_HIDE_HELD_ITEM)
 #if VERSION >= VERSION_US
-                CALL(btlevtcmd_OffUnitFlag, LW(10), BATTLE_UNIT_FLAG_STOLEN_ITEM)
+                    CALL(btlevtcmd_OffUnitFlag, LW(10), BATTLE_UNIT_FLAG_STOLEN_ITEM)
 #endif
-                CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
-            END_IF
-        ELSE
-            // No Life Shroom: the enemy's own KO event 49, else the standard spin-and-smoke defeat.
-            CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), UNIT_DATA_DEAD_EVENT)
-            IF_INT_NOT_EQUAL(LW(0), 0)
-                CALL(btlevtcmd_ClearAllStatus, LW(10))
-                CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_DEAD_EVENT)
+                    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
+                END_IF
             ELSE
-                CALL_CHILD(subsetevt_dead_core)
+                // No Life Shroom: the enemy's own KO event 49, else the standard spin-and-smoke defeat.
+                CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), UNIT_DATA_DEAD_EVENT)
+                IF_INT_NOT_EQUAL(LW(0), 0)
+                    CALL(btlevtcmd_ClearAllStatus, LW(10))
+                    CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_DEAD_EVENT)
+                ELSE
+                    CALL_CHILD(subsetevt_dead_core)
+                END_IF
             END_IF
-        END_IF
     END_SWITCH
     RETURN
 EVT_END()
@@ -742,64 +742,64 @@ EVT_BEGIN(subsetevt_damage)
         CALL(btlevtcmd_GetDamageCode, LW(10), LW(0))
         SWITCH(LW(0))
             CASE_EQUAL(DAMAGE_CODE_NORMAL)
-            CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), LW(14))
-            WAIT_MS(1000)
-            IF_INT_NOT_EQUAL(LW(15), -1)
-                CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), LW(15))
-                WAIT_FRAMES(30)
-            END_IF
-            RETURN
+                CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), LW(14))
+                WAIT_MS(1000)
+                IF_INT_NOT_EQUAL(LW(15), -1)
+                    CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), LW(15))
+                    WAIT_FRAMES(30)
+                END_IF
+                RETURN
             CASE_DEFAULT
-            // The miss sound plays and the unit shudders for 24 frames.
-            CALL(evt_snd_sfxon, STRING("SFX_BTL_ATTACK_MISS2"), 0)
-            CALL(btlevtcmd_SetDispOffset, LW(10), -2, 0, 0)
-            WAIT_FRAMES(1)
-            CALL(btlevtcmd_SetDispOffset, LW(10), -1, 0, 0)
-            WAIT_FRAMES(1)
-            CALL(btlevtcmd_SetDispOffset, LW(10), 0, 0, 0)
-            WAIT_FRAMES(1)
-            CALL(btlevtcmd_SetDispOffset, LW(10), -2, 0, 0)
-            WAIT_FRAMES(1)
-            CALL(btlevtcmd_SetDispOffset, LW(10), -4, 0, 0)
-            WAIT_FRAMES(1)
-            CALL(btlevtcmd_SetDispOffset, LW(10), -2, 0, 0)
-            WAIT_FRAMES(1)
-            CALL(btlevtcmd_SetDispOffset, LW(10), 0, 0, 0)
-            WAIT_FRAMES(1)
-            CALL(btlevtcmd_SetDispOffset, LW(10), -1, 0, 0)
-            WAIT_FRAMES(1)
-            CALL(btlevtcmd_SetDispOffset, LW(10), -2, 0, 0)
-            WAIT_FRAMES(1)
-            CALL(btlevtcmd_SetDispOffset, LW(10), -1, 0, 0)
-            WAIT_FRAMES(1)
-            CALL(btlevtcmd_SetDispOffset, LW(10), 0, 0, 0)
-            WAIT_FRAMES(1)
-            CALL(btlevtcmd_SetDispOffset, LW(10), -1, 0, 0)
-            WAIT_FRAMES(1)
-            CALL(btlevtcmd_SetDispOffset, LW(10), -3, 0, 0)
-            WAIT_FRAMES(1)
-            CALL(btlevtcmd_SetDispOffset, LW(10), -1, 0, 0)
-            WAIT_FRAMES(1)
-            CALL(btlevtcmd_SetDispOffset, LW(10), 0, 0, 0)
-            WAIT_FRAMES(1)
-            CALL(btlevtcmd_SetDispOffset, LW(10), -1, 0, 0)
-            WAIT_FRAMES(1)
-            CALL(btlevtcmd_SetDispOffset, LW(10), -2, 0, 0)
-            WAIT_FRAMES(1)
-            CALL(btlevtcmd_SetDispOffset, LW(10), -1, 0, 0)
-            WAIT_FRAMES(1)
-            CALL(btlevtcmd_SetDispOffset, LW(10), 0, 0, 0)
-            WAIT_FRAMES(1)
-            CALL(btlevtcmd_SetDispOffset, LW(10), 0, 0, 0)
-            WAIT_FRAMES(1)
-            CALL(btlevtcmd_SetDispOffset, LW(10), -1, 0, 0)
-            WAIT_FRAMES(1)
-            CALL(btlevtcmd_SetDispOffset, LW(10), -1, 0, 0)
-            WAIT_FRAMES(1)
-            CALL(btlevtcmd_SetDispOffset, LW(10), 0, 0, 0)
-            WAIT_FRAMES(1)
-            CALL(btlevtcmd_SetDispOffset, LW(10), 0, 0, 0)
-            WAIT_FRAMES(1)
+                // The miss sound plays and the unit shudders for 24 frames.
+                CALL(evt_snd_sfxon, STRING("SFX_BTL_ATTACK_MISS2"), 0)
+                CALL(btlevtcmd_SetDispOffset, LW(10), -2, 0, 0)
+                WAIT_FRAMES(1)
+                CALL(btlevtcmd_SetDispOffset, LW(10), -1, 0, 0)
+                WAIT_FRAMES(1)
+                CALL(btlevtcmd_SetDispOffset, LW(10), 0, 0, 0)
+                WAIT_FRAMES(1)
+                CALL(btlevtcmd_SetDispOffset, LW(10), -2, 0, 0)
+                WAIT_FRAMES(1)
+                CALL(btlevtcmd_SetDispOffset, LW(10), -4, 0, 0)
+                WAIT_FRAMES(1)
+                CALL(btlevtcmd_SetDispOffset, LW(10), -2, 0, 0)
+                WAIT_FRAMES(1)
+                CALL(btlevtcmd_SetDispOffset, LW(10), 0, 0, 0)
+                WAIT_FRAMES(1)
+                CALL(btlevtcmd_SetDispOffset, LW(10), -1, 0, 0)
+                WAIT_FRAMES(1)
+                CALL(btlevtcmd_SetDispOffset, LW(10), -2, 0, 0)
+                WAIT_FRAMES(1)
+                CALL(btlevtcmd_SetDispOffset, LW(10), -1, 0, 0)
+                WAIT_FRAMES(1)
+                CALL(btlevtcmd_SetDispOffset, LW(10), 0, 0, 0)
+                WAIT_FRAMES(1)
+                CALL(btlevtcmd_SetDispOffset, LW(10), -1, 0, 0)
+                WAIT_FRAMES(1)
+                CALL(btlevtcmd_SetDispOffset, LW(10), -3, 0, 0)
+                WAIT_FRAMES(1)
+                CALL(btlevtcmd_SetDispOffset, LW(10), -1, 0, 0)
+                WAIT_FRAMES(1)
+                CALL(btlevtcmd_SetDispOffset, LW(10), 0, 0, 0)
+                WAIT_FRAMES(1)
+                CALL(btlevtcmd_SetDispOffset, LW(10), -1, 0, 0)
+                WAIT_FRAMES(1)
+                CALL(btlevtcmd_SetDispOffset, LW(10), -2, 0, 0)
+                WAIT_FRAMES(1)
+                CALL(btlevtcmd_SetDispOffset, LW(10), -1, 0, 0)
+                WAIT_FRAMES(1)
+                CALL(btlevtcmd_SetDispOffset, LW(10), 0, 0, 0)
+                WAIT_FRAMES(1)
+                CALL(btlevtcmd_SetDispOffset, LW(10), 0, 0, 0)
+                WAIT_FRAMES(1)
+                CALL(btlevtcmd_SetDispOffset, LW(10), -1, 0, 0)
+                WAIT_FRAMES(1)
+                CALL(btlevtcmd_SetDispOffset, LW(10), -1, 0, 0)
+                WAIT_FRAMES(1)
+                CALL(btlevtcmd_SetDispOffset, LW(10), 0, 0, 0)
+                WAIT_FRAMES(1)
+                CALL(btlevtcmd_SetDispOffset, LW(10), 0, 0, 0)
+                WAIT_FRAMES(1)
         END_SWITCH
     END_IF
     RETURN
@@ -818,35 +818,35 @@ EVT_BEGIN(subsetevt_counter_damage)
             CASE_OR_EQUAL(DAMAGE_CODE_COUNTER_TOP_SPIKY)
             CASE_OR_EQUAL(DAMAGE_CODE_COUNTER_PREEMPTIVE_SPIKY)
             CASE_OR_EQUAL(DAMAGE_CODE_COUNTER_FRONT_SPIKY)
-            CALL(btlevtcmd_GetUnitKind, LW(10), LW(2))
-            IF_INT_EQUAL(LW(2), UNIT_MARIO)
-                CALL(btlevtcmd_GetPos, LW(10), LW(2), LW(3), LW(4))
-                CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_DAMAGED1"), LW(2), LW(3), LW(4), 0)
-            END_IF
+                CALL(btlevtcmd_GetUnitKind, LW(10), LW(2))
+                IF_INT_EQUAL(LW(2), UNIT_MARIO)
+                    CALL(btlevtcmd_GetPos, LW(10), LW(2), LW(3), LW(4))
+                    CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_DAMAGED1"), LW(2), LW(3), LW(4), 0)
+                END_IF
             CASE_END
         END_SWITCH
     END_SIBLING_EVENT
     SWITCH(LW(0))
         CASE_EQUAL(DAMAGE_CODE_COUNTER_TOP_SPIKY)
-        CALL(evt_snd_sfxon, STRING("SFX_BTL_ATTACK_MISS3"), 0)
-        SET_VALUE(LW(14), POSE_TYPE_DAMAGE_TOP_SPIKY)
+            CALL(evt_snd_sfxon, STRING("SFX_BTL_ATTACK_MISS3"), 0)
+            SET_VALUE(LW(14), POSE_TYPE_DAMAGE_TOP_SPIKY)
 #if VERSION <= VERSION_DEMO_JP
         CASE_OR_EQUAL(DAMAGE_CODE_COUNTER_FIERY)
 #else
         CASE_EQUAL(DAMAGE_CODE_COUNTER_FIERY)
-        CALL(btlevtcmd_GetUnitKind, LW(10), LW(2))
-        IF_INT_EQUAL(LW(2), UNIT_MARIO)
-            CALL(btlevtcmd_snd_se, LW(10), STRING("SFX_VOICE_MARIO_DAMAGED1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-        END_IF
-        SET_VALUE(LW(14), POSE_TYPE_DAMAGE_FIRE)
+            CALL(btlevtcmd_GetUnitKind, LW(10), LW(2))
+            IF_INT_EQUAL(LW(2), UNIT_MARIO)
+                CALL(btlevtcmd_snd_se, LW(10), STRING("SFX_VOICE_MARIO_DAMAGED1"), EVT_NULLPTR, 0, EVT_NULLPTR)
+            END_IF
+            SET_VALUE(LW(14), POSE_TYPE_DAMAGE_FIRE)
 #endif
         CASE_OR_EQUAL(DAMAGE_CODE_COUNTER_EXPLOSIVE)
         CASE_OR_EQUAL(DAMAGE_CODE_COUNTER_VOLATILE_EXPLOSIVE)
         CASE_OR_EQUAL(DAMAGE_CODE_COUNTER_HOLD_FAST)
-        SET_VALUE(LW(14), POSE_TYPE_DAMAGE_FIRE)
+            SET_VALUE(LW(14), POSE_TYPE_DAMAGE_FIRE)
         CASE_END
         CASE_DEFAULT
-        SET_VALUE(LW(14), POSE_TYPE_DAMAGE)
+            SET_VALUE(LW(14), POSE_TYPE_DAMAGE)
     END_SWITCH
     CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), LW(14))
     BEGIN_SIBLING_EVENT
@@ -1144,14 +1144,14 @@ EVT_BEGIN(subsetevt_shot_damage_kaiten)
     CALL(btlevtcmd_PreCheckDamage, LW(10), LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
         CASE_EQUAL(PRECHECK_MISS)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         CASE_EQUAL(PRECHECK_LUCKY)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         CASE_EQUAL(PRECHECK_DODGY)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         CASE_EQUAL(PRECHECK_INTANGIBLE)
         CASE_EQUAL(PRECHECK_HIT)
-        CALL(btlevtcmd_CheckDamage, LW(10), LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
+            CALL(btlevtcmd_CheckDamage, LW(10), LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
         CASE_DEFAULT
     END_SWITCH
     GOTO(10)
@@ -1281,14 +1281,14 @@ EVT_BEGIN(subsetevt_shot_damage_ultra)
     CALL(btlevtcmd_PreCheckDamage, LW(10), LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(PRECHECK_MISS)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         CASE_EQUAL(PRECHECK_LUCKY)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         CASE_EQUAL(PRECHECK_DODGY)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         CASE_EQUAL(PRECHECK_INTANGIBLE)
         CASE_EQUAL(PRECHECK_HIT)
-        CALL(btlevtcmd_CheckDamage, LW(10), LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(0))
+            CALL(btlevtcmd_CheckDamage, LW(10), LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(0))
         CASE_DEFAULT
     END_SWITCH
     GOTO(31)
@@ -1433,15 +1433,15 @@ EVT_BEGIN(subsetevt_swallow_shot_damage)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_PARTNER, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
         CASE_EQUAL(PRECHECK_MISS)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         CASE_EQUAL(PRECHECK_LUCKY)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         CASE_EQUAL(PRECHECK_DODGY)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         CASE_EQUAL(PRECHECK_INTANGIBLE)
         CASE_EQUAL(PRECHECK_HIT)
-        CALL(btlevtcmd_CheckDamage, UNIT_ID_PARTNER, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT | DAMAGE_RESULT_GULP, LW(5))
-        GOTO(50)
+            CALL(btlevtcmd_CheckDamage, UNIT_ID_PARTNER, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT | DAMAGE_RESULT_GULP, LW(5))
+            GOTO(50)
         CASE_DEFAULT
     END_SWITCH
     LABEL(20)

@@ -769,9 +769,9 @@ static EVT_BEGIN(negotiation_event)
     CALL(btlevtcmd_GetUnitKind, UNIT_ID_PARTNER, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(UNIT_GOOMBELLA)
-        CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("stg1_gon_30_01"), 0, -4)
+            CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("stg1_gon_30_01"), 0, -4)
         CASE_EQUAL(UNIT_KOOPS)
-        CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("stg1_gon_30_02"), 0, -4)
+            CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("stg1_gon_30_02"), 0, -4)
     END_SWITCH
 
     // She laughs at their gullibility (stg1_gon_30_03), then admits things look bad and that she had better
@@ -934,9 +934,9 @@ static EVT_BEGIN(negotiation_event)
                 SWITCH(LW(11))
                     CASE_EQUAL(0)
                     CASE_EQUAL(1)
-                    SET_VALUE(LW(11), -1)
+                        SET_VALUE(LW(11), -1)
                     CASE_DEFAULT
-                    SET_VALUE(LW(11), -1)
+                        SET_VALUE(LW(11), -1)
                 END_SWITCH
             END_IF
             CALL(evt_audience_jump_position_firstsp, LW(0), LW(1), LW(2), LW(3), LW(6), FLOAT(0.5f))
@@ -1052,9 +1052,9 @@ static EVT_BEGIN(negotiation_event)
     CALL(btlevtcmd_GetUnitKind, UNIT_ID_PARTNER, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(UNIT_GOOMBELLA)
-        CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("stg1_gon_31_00_kur"), 0, -4)
+            CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("stg1_gon_31_00_kur"), 0, -4)
         CASE_EQUAL(UNIT_KOOPS)
-        CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("stg1_gon_31_00_nok"), 0, -4)
+            CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("stg1_gon_31_00_nok"), 0, -4)
     END_SWITCH
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_EVENT, BTL_CAM_MODE_FREE)
     CALL(evt_btl_camera_set_moveto, 1, 40, 98, 686, 57, 125, 182, 1, 0)
@@ -1080,9 +1080,9 @@ static EVT_BEGIN(negotiation_event)
     CALL(btlevtcmd_GetUnitKind, UNIT_ID_PARTNER, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(UNIT_GOOMBELLA)
-        CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("stg1_gon_31_02"), 0, -4)
+            CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("stg1_gon_31_02"), 0, -4)
         CASE_EQUAL(UNIT_KOOPS)
-        CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("stg1_gon_31_03"), 0, -4)
+            CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("stg1_gon_31_03"), 0, -4)
     END_SWITCH
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
 
@@ -1421,17 +1421,17 @@ EVT_BEGIN(gonbaba_damage_sub_event)
     // gag (stg1_gon_22).
     SWITCH(LW(0))
         CASE_EQUAL(0)
-        CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_EVENT, BTL_CAM_MODE_FREE)
-        CALL(evt_btl_camera_set_moveto, 1, 93, 160, 536, 93, 123, 25, 20, 0)
-        WAIT_FRAMES(20)
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_MESSAGE_STEP, 1)
-        CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("stg1_gon_21"), 0, -2)
+            CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_EVENT, BTL_CAM_MODE_FREE)
+            CALL(evt_btl_camera_set_moveto, 1, 93, 160, 536, 93, 123, 25, 20, 0)
+            WAIT_FRAMES(20)
+            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_MESSAGE_STEP, 1)
+            CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("stg1_gon_21"), 0, -2)
         CASE_EQUAL(1)
-        CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_EVENT, BTL_CAM_MODE_FREE)
-        CALL(evt_btl_camera_set_moveto, 1, 93, 160, 536, 93, 123, 25, 20, 0)
-        WAIT_FRAMES(20)
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_MESSAGE_STEP, 2)
-        CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("stg1_gon_22"), 0, -2)
+            CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_EVENT, BTL_CAM_MODE_FREE)
+            CALL(evt_btl_camera_set_moveto, 1, 93, 160, 536, 93, 123, 25, 20, 0)
+            WAIT_FRAMES(20)
+            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_MESSAGE_STEP, 2)
+            CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("stg1_gon_22"), 0, -2)
     END_SWITCH
 
     // The camera returns to normal and she goes back to her usual pose.
@@ -1641,18 +1641,18 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(0)
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, 1)
-        CALL_CHILD(firebreath_attack_event)
-        CASE_EQUAL(1)
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, 2)
-        CALL_CHILD(fumituke_attack_event)
-        CASE_DEFAULT
-        CALL(evt_sub_random, 99, LW(0))
-        IF_INT_LESS(LW(0), 50)
-            CALL_CHILD(fumituke_attack_event)
-        ELSE
+            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, 1)
             CALL_CHILD(firebreath_attack_event)
-        END_IF
+        CASE_EQUAL(1)
+            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, 2)
+            CALL_CHILD(fumituke_attack_event)
+        CASE_DEFAULT
+            CALL(evt_sub_random, 99, LW(0))
+            IF_INT_LESS(LW(0), 50)
+                CALL_CHILD(fumituke_attack_event)
+            ELSE
+                CALL_CHILD(firebreath_attack_event)
+            END_IF
     END_SWITCH
     RETURN
 EVT_END()
@@ -1716,21 +1716,21 @@ static EVT_BEGIN(fumituke_attack_event)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_gonbaba_fumituke_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
-        GOTO(90)
+            GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_LUCKY)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
+            GOTO(90)
         CASE_EQUAL(PRECHECK_DODGY)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
+            GOTO(90)
         CASE_EQUAL(PRECHECK_MISS)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
+            GOTO(90)
         CASE_EQUAL(PRECHECK_HIT)
-        GOTO(91)
+            GOTO(91)
         CASE_DEFAULT
-        GOTO(97)
+            GOTO(97)
     END_SWITCH
     LABEL(90)
     GOTO(97)
@@ -1848,25 +1848,25 @@ static EVT_BEGIN(firebreath_attack_event)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_gonbaba_firebreath_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
-        GOTO(90)
+            GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_LUCKY)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
+            GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_DODGY)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
+            GOTO(90)
         CASE_EQUAL(PRECHECK_MISS)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
+            GOTO(90)
         CASE_EQUAL(PRECHECK_HIT)
-        GOTO(91)
+            GOTO(91)
         CASE_END
         CASE_DEFAULT
-        // BUG: this script has no LABEL(98): evtSearchLabel resumes at this GOTO's argument word, which runs
-        // as SET_SPD with the next command word as its value, and the script goes on after the GOTO.
-        GOTO(98)
+            // BUG: this script has no LABEL(98): evtSearchLabel resumes at this GOTO's argument word, which runs
+            // as SET_SPD with the next command word as its value, and the script goes on after the GOTO.
+            GOTO(98)
         CASE_END
     END_SWITCH
     LABEL(90)

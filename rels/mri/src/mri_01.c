@@ -263,12 +263,12 @@ static USER_FUNC(elder_talk_sub_fadeoff) {
 static EVT_BEGIN(guide_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG3_33_04_PEACH_BACK_TO_TEC, STG3_33_06_BOWSER_TREASURE)
-        CALL(evt_npc_change_interrupt, STRING("me"), 6, 0)
+            CALL(evt_npc_change_interrupt, STRING("me"), 6, 0)
         CASE_GREATER_OR_EQUAL(STG2_26_PRAISE_FROM_THE_PUNI)
-        IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 1)
-            CALL(evt_npc_set_position, STRING("me"), -20, 0, 40)
-            CALL(evt_npc_set_ry, STRING("me"), 270)
-        END_IF
+            IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 1)
+                CALL(evt_npc_set_position, STRING("me"), -20, 0, 40)
+                CALL(evt_npc_set_ry, STRING("me"), 270)
+            END_IF
     END_SWITCH
     RETURN
 EVT_END()
@@ -277,9 +277,9 @@ EVT_END()
 static EVT_BEGIN(guide_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
-        CALL(evt_msg_print, 0, STRING("stg2_mri_re_002"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg2_mri_re_002"), 0, STRING("me"))
         CASE_DEFAULT
-        CALL(evt_msg_print, 0, STRING("stg2_mri_re_002_1"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg2_mri_re_002_1"), 0, STRING("me"))
     END_SWITCH
     RETURN
 EVT_END()
@@ -292,11 +292,11 @@ EVT_END()
 static EVT_BEGIN(rival_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG2_12_RIVAL_ARRIVAL, STG2_13_MS_MOWZ)
-        CALL(evt_npc_set_position, STRING("me"), -5, 0, 70)
+            CALL(evt_npc_set_position, STRING("me"), -5, 0, 70)
         CASE_EQUAL(STG2_14_PUNI_ELDER_FREED)
-        CALL(evt_npc_set_position, STRING("me"), -20, 0, 38)
+            CALL(evt_npc_set_position, STRING("me"), -20, 0, 38)
         CASE_BETWEEN(STG3_33_04_PEACH_BACK_TO_TEC, STG3_33_06_BOWSER_TREASURE)
-        CALL(evt_npc_change_interrupt, STRING("me"), 6, 0)
+            CALL(evt_npc_change_interrupt, STRING("me"), 6, 0)
     END_SWITCH
     RETURN
 EVT_END()
@@ -316,14 +316,14 @@ EVT_END()
 static EVT_BEGIN(elder_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG2_14_PUNI_ELDER_FREED, STG2_22_LORD_CRUMP_APPEARS)
-        CALL(evt_npc_set_position, STRING("me"), -78, 0, 38)
-        CASE_BETWEEN(STG3_33_04_PEACH_BACK_TO_TEC, STG3_33_06_BOWSER_TREASURE)
-        CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
-        CALL(evt_npc_change_interrupt, STRING("me"), 6, 0)
-        CASE_GREATER_OR_EQUAL(STG2_26_PRAISE_FROM_THE_PUNI)
-        IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 1)
             CALL(evt_npc_set_position, STRING("me"), -78, 0, 38)
-        END_IF
+        CASE_BETWEEN(STG3_33_04_PEACH_BACK_TO_TEC, STG3_33_06_BOWSER_TREASURE)
+            CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
+            CALL(evt_npc_change_interrupt, STRING("me"), 6, 0)
+        CASE_GREATER_OR_EQUAL(STG2_26_PRAISE_FROM_THE_PUNI)
+            IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 1)
+                CALL(evt_npc_set_position, STRING("me"), -78, 0, 38)
+            END_IF
     END_SWITCH
     RETURN
 EVT_END()
@@ -432,114 +432,114 @@ static EVT_BEGIN(elder_talk_sub)
     SWITCH(LW(0))
         CASE_EQUAL(0)
 
-        // Plain greeting: she reminds Mario the Crystal Star is at the bottom of the tree.
-        CALL(evt_msg_print_add, 0, STRING("stg2_mri_e15_28"))
+            // Plain greeting: she reminds Mario the Crystal Star is at the bottom of the tree.
+            CALL(evt_msg_print_add, 0, STRING("stg2_mri_e15_28"))
         CASE_EQUAL(1)
-        CALL(elder_talk_sub_punicheck, LW(0))
-        SWITCH(LW(0))
-            CASE_EQUAL(0)
+            CALL(elder_talk_sub_punicheck, LW(0))
+            SWITCH(LW(0))
+                CASE_EQUAL(0)
 
-            // Lost Punies: if any are lost the Elder calls them back with a loud shout and a camera zoom;
-            // otherwise she says none are missing, or that everyone is trapped in a cell.
-            CALL(evt_msg_print_add, 0, STRING("stg2_mri_e15_23"))
+                    // Lost Punies: if any are lost the Elder calls them back with a loud shout and a camera zoom;
+                    // otherwise she says none are missing, or that everyone is trapped in a cell.
+                    CALL(evt_msg_print_add, 0, STRING("stg2_mri_e15_23"))
+                    CALL(evt_cam3d_evt_set, -75, 77, 303, -75, 25, 7, 500, EASING_SINE_IN_OUT)
+                    WAIT_MS(1000)
+                    CALL(evt_npc_set_autotalkpose, STRING("me"), STRING("S_1"), STRING("T_2"))
+                    WAIT_FRAMES(1)
+                    SET_VALUE(GF(0), 1)
+                    BEGIN_INLINE_EVENT
+                        CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
+                        CALL(evt_snd_sfxon_3d, STRING("SFX_STG2_CHOUROU_CALL_PUNI1"), LW(0), LW(1), LW(2), 0)
+                        CALL(evt_cam3d_evt_set, -75, 85, 351, -75, 25, 7, 100, EASING_SINE_IN_OUT)
+                        WAIT_MS(100)
+                        CALL(evt_cam3d_evt_set, -75, 77, 303, -75, 25, 7, 100, EASING_SINE_IN_OUT)
+                        WAIT_MS(100)
+                        CALL(evt_cam3d_evt_set, -75, 85, 351, -75, 25, 7, 100, EASING_SINE_IN_OUT)
+                        WAIT_MS(100)
+                        CALL(evt_cam3d_evt_set, -75, 77, 303, -75, 25, 7, 100, EASING_SINE_IN_OUT)
+                        WAIT_MS(100)
+                        CALL(evt_cam3d_evt_set, -75, 85, 351, -75, 25, 7, 100, EASING_SINE_IN_OUT)
+                        WAIT_MS(100)
+                        CALL(evt_cam3d_evt_set, -75, 77, 303, -75, 25, 7, 100, EASING_SINE_IN_OUT)
+                        WAIT_MS(100)
+                        SET_VALUE(GF(0), 0)
+                    END_INLINE_EVENT
+                    BEGIN_INLINE_EVENT
+                        CALL(evt_env_blur_on, 1, 600)
+                    END_INLINE_EVENT
+                    CALL(evt_msg_print, 0, STRING("stg2_mri_e15_24"), 0, STRING("me"))
+                    WAIT_WHILE(GF(0))
+                    WAIT_MS(500)
+                    CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
+                    CALL(evt_mario_set_dir, 270, 200, 0)
+                    WAIT_MS(500)
+                    CALL_CHILD(puni_return)
+                    WAIT_MS(2000)
+                    CALL(evt_npc_set_autotalkpose, STRING("me"), STRING("S_1"), STRING("T_1"))
+                    WAIT_FRAMES(1)
+                    CALL(evt_msg_print, 0, STRING("stg2_mri_e15_25"), 0, STRING("me"))
+                CASE_EQUAL(1)
+                    CALL(evt_msg_print_add, 0, STRING("stg2_mri_e15_26"))
+                CASE_EQUAL(2)
+                    CALL(evt_msg_print_add, 0, STRING("stg2_mri_e15_27"))
+            END_SWITCH
+        CASE_EQUAL(2)
+            CALL(evt_msg_continue)
+            CALL(evt_puni_all_movestop, 1)
+            CALL(evt_party_stop, 0)
             CALL(evt_cam3d_evt_set, -75, 77, 303, -75, 25, 7, 500, EASING_SINE_IN_OUT)
             WAIT_MS(1000)
-            CALL(evt_npc_set_autotalkpose, STRING("me"), STRING("S_1"), STRING("T_2"))
-            WAIT_FRAMES(1)
-            SET_VALUE(GF(0), 1)
-            BEGIN_INLINE_EVENT
-                CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
-                CALL(evt_snd_sfxon_3d, STRING("SFX_STG2_CHOUROU_CALL_PUNI1"), LW(0), LW(1), LW(2), 0)
-                CALL(evt_cam3d_evt_set, -75, 85, 351, -75, 25, 7, 100, EASING_SINE_IN_OUT)
-                WAIT_MS(100)
-                CALL(evt_cam3d_evt_set, -75, 77, 303, -75, 25, 7, 100, EASING_SINE_IN_OUT)
-                WAIT_MS(100)
-                CALL(evt_cam3d_evt_set, -75, 85, 351, -75, 25, 7, 100, EASING_SINE_IN_OUT)
-                WAIT_MS(100)
-                CALL(evt_cam3d_evt_set, -75, 77, 303, -75, 25, 7, 100, EASING_SINE_IN_OUT)
-                WAIT_MS(100)
-                CALL(evt_cam3d_evt_set, -75, 85, 351, -75, 25, 7, 100, EASING_SINE_IN_OUT)
-                WAIT_MS(100)
-                CALL(evt_cam3d_evt_set, -75, 77, 303, -75, 25, 7, 100, EASING_SINE_IN_OUT)
-                WAIT_MS(100)
-                SET_VALUE(GF(0), 0)
-            END_INLINE_EVENT
-            BEGIN_INLINE_EVENT
-                CALL(evt_env_blur_on, 1, 600)
-            END_INLINE_EVENT
-            CALL(evt_msg_print, 0, STRING("stg2_mri_e15_24"), 0, STRING("me"))
-            WAIT_WHILE(GF(0))
-            WAIT_MS(500)
-            CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
-            CALL(evt_mario_set_dir, 270, 200, 0)
-            WAIT_MS(500)
-            CALL_CHILD(puni_return)
-            WAIT_MS(2000)
-            CALL(evt_npc_set_autotalkpose, STRING("me"), STRING("S_1"), STRING("T_1"))
-            WAIT_FRAMES(1)
-            CALL(evt_msg_print, 0, STRING("stg2_mri_e15_25"), 0, STRING("me"))
-            CASE_EQUAL(1)
-            CALL(evt_msg_print_add, 0, STRING("stg2_mri_e15_26"))
-            CASE_EQUAL(2)
-            CALL(evt_msg_print_add, 0, STRING("stg2_mri_e15_27"))
-        END_SWITCH
-        CASE_EQUAL(2)
-        CALL(evt_msg_continue)
-        CALL(evt_puni_all_movestop, 1)
-        CALL(evt_party_stop, 0)
-        CALL(evt_cam3d_evt_set, -75, 77, 303, -75, 25, 7, 500, EASING_SINE_IN_OUT)
-        WAIT_MS(1000)
 
-        // "I love you": the Elder is offended and launches into a long story about how she became the Puni
-        // elder.
-        CALL(evt_msg_print, 0, STRING("stg2_mri_e15_29"), 0, STRING("me"))
-        CALL(elder_talk_sub_fadeoff, 0)
-        CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 255, 0, 1500)
-        LOOP(0)
-            CALL(evt_sub_intpl_msec_get_value)
-            CALL(evt_map_set_blend, 0, LW(0), LW(0), LW(0), 255)
-            IF_INT_EQUAL(LW(1), 0)
-                BREAK_LOOP
-            END_IF
-            WAIT_FRAMES(1)
-        END_LOOP
-        CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
-        CALL(evt_msg_print, 0, STRING("stg2_mri_e15_30"), 0, STRING("me"))
-        SET_VALUE(GF(3), 0)
-        BEGIN_INLINE_EVENT
+            // "I love you": the Elder is offended and launches into a long story about how she became the Puni
+            // elder.
+            CALL(evt_msg_print, 0, STRING("stg2_mri_e15_29"), 0, STRING("me"))
+            CALL(elder_talk_sub_fadeoff, 0)
+            CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 255, 0, 1500)
             LOOP(0)
-                CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-                CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_SLEEP1"), LW(0), LW(1), LW(2), 0)
-                WAIT_FRAMES(140)
-                IF_INT_EQUAL(GF(3), 1)
+                CALL(evt_sub_intpl_msec_get_value)
+                CALL(evt_map_set_blend, 0, LW(0), LW(0), LW(0), 255)
+                IF_INT_EQUAL(LW(1), 0)
                     BREAK_LOOP
                 END_IF
+                WAIT_FRAMES(1)
             END_LOOP
-        END_INLINE_EVENT
-        CALL(evt_mario_sleep_on)
-        CALL(evt_party_sleep_on, 0)
-        CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 255, 1500)
-        LOOP(0)
-            CALL(evt_sub_intpl_msec_get_value)
-            CALL(evt_map_set_blend, 0, LW(0), LW(0), LW(0), 255)
-            IF_INT_EQUAL(LW(1), 0)
-                BREAK_LOOP
-            END_IF
-            WAIT_FRAMES(1)
-        END_LOOP
-        CALL(elder_talk_sub_fadeoff, 1)
-        CALL(evt_msg_print, 0, STRING("stg2_mri_e15_31"), 0, STRING("me"))
-        SET_VALUE(GF(3), 1)
-        CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-        CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_AWAKE1"), LW(0), LW(1), LW(2), 0)
-        CALL(evt_mario_sleep_off)
-        CALL(evt_party_sleep_off, 0)
-        WAIT_MS(500)
-        CALL(evt_mario_set_pose, STRING("M_N_2"))
-        WAIT_MS(1000)
-        CALL(evt_party_run, 0)
-        CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
-        CALL(evt_puni_all_movestop, 0)
+            CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg2_mri_e15_30"), 0, STRING("me"))
+            SET_VALUE(GF(3), 0)
+            BEGIN_INLINE_EVENT
+                LOOP(0)
+                    CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+                    CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_SLEEP1"), LW(0), LW(1), LW(2), 0)
+                    WAIT_FRAMES(140)
+                    IF_INT_EQUAL(GF(3), 1)
+                        BREAK_LOOP
+                    END_IF
+                END_LOOP
+            END_INLINE_EVENT
+            CALL(evt_mario_sleep_on)
+            CALL(evt_party_sleep_on, 0)
+            CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 255, 1500)
+            LOOP(0)
+                CALL(evt_sub_intpl_msec_get_value)
+                CALL(evt_map_set_blend, 0, LW(0), LW(0), LW(0), 255)
+                IF_INT_EQUAL(LW(1), 0)
+                    BREAK_LOOP
+                END_IF
+                WAIT_FRAMES(1)
+            END_LOOP
+            CALL(elder_talk_sub_fadeoff, 1)
+            CALL(evt_msg_print, 0, STRING("stg2_mri_e15_31"), 0, STRING("me"))
+            SET_VALUE(GF(3), 1)
+            CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+            CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_AWAKE1"), LW(0), LW(1), LW(2), 0)
+            CALL(evt_mario_sleep_off)
+            CALL(evt_party_sleep_off, 0)
+            WAIT_MS(500)
+            CALL(evt_mario_set_pose, STRING("M_N_2"))
+            WAIT_MS(1000)
+            CALL(evt_party_run, 0)
+            CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
+            CALL(evt_puni_all_movestop, 0)
     END_SWITCH
     RETURN
 EVT_END()
@@ -619,15 +619,15 @@ static EVT_BEGIN(elder_talk)
     END_IF
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG2_15_11_PUNIES, STG2_26_PRAISE_FROM_THE_PUNI)
-        IF_INT_EQUAL(GSWF_MRI_01_ELDER_TIP_SEEN, 0)
-            CALL(evt_msg_print, 0, STRING("stg2_mri_e15_28"), 0, STRING("me"))
-        ELSE
-            CALL_CHILD(elder_talk_sub)
-        END_IF
+            IF_INT_EQUAL(GSWF_MRI_01_ELDER_TIP_SEEN, 0)
+                CALL(evt_msg_print, 0, STRING("stg2_mri_e15_28"), 0, STRING("me"))
+            ELSE
+                CALL_CHILD(elder_talk_sub)
+            END_IF
         CASE_BETWEEN(STG2_26_PRAISE_FROM_THE_PUNI, STG8_END_AFTER_THE_BATTLE)
-        CALL(evt_msg_print, 0, STRING("stg2_mri_re_001"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg2_mri_re_001"), 0, STRING("me"))
         CASE_DEFAULT
-        CALL(evt_msg_print, 0, STRING("stg2_mri_re_001_1"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg2_mri_re_001_1"), 0, STRING("me"))
     END_SWITCH
     RETURN
 EVT_END()
@@ -636,10 +636,10 @@ static EVT_BEGIN(puni_1_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG3_33_04_PEACH_BACK_TO_TEC, STG3_33_06_BOWSER_TREASURE)
         CASE_GREATER_OR_EQUAL(STG2_26_PRAISE_FROM_THE_PUNI)
-        IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 1)
-            CALL(evt_npc_set_position, STRING("me"), -280, 0, 10)
-            CALL(evt_npc_set_ry, STRING("me"), 270)
-        END_IF
+            IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 1)
+                CALL(evt_npc_set_position, STRING("me"), -280, 0, 10)
+                CALL(evt_npc_set_ry, STRING("me"), 270)
+            END_IF
     END_SWITCH
     RETURN
 EVT_END()
@@ -658,19 +658,19 @@ EVT_BEGIN(puni_1_talk)
 #else
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG7_02_MAYOR_BOB, STG7_02_MAYOR_BOB)
-        IF_INT_EQUAL(GSWF_TOU_GENERAL_WHITE_HINT_HEARD, 0)
+            IF_INT_EQUAL(GSWF_TOU_GENERAL_WHITE_HINT_HEARD, 0)
 #endif
-            CALL(evt_msg_print, 0, STRING("stg2_mri_re_000"), 0, STRING("me"))
-            ELSE
-            CALL(evt_msg_print, 0, STRING("stg2_mri_re_000_1"), 0, STRING("me"))
-            SET_VALUE(GSWF_MRI_GENERAL_WHITE_HINT_HEARD, 1)
-        END_IF
+                CALL(evt_msg_print, 0, STRING("stg2_mri_re_000"), 0, STRING("me"))
+                ELSE
+                CALL(evt_msg_print, 0, STRING("stg2_mri_re_000_1"), 0, STRING("me"))
+                SET_VALUE(GSWF_MRI_GENERAL_WHITE_HINT_HEARD, 1)
+            END_IF
 #if VERSION >= VERSION_JP
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
-        CALL(evt_msg_print, 0, STRING("stg2_mri_re_000"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg2_mri_re_000"), 0, STRING("me"))
 #endif
         CASE_DEFAULT
-        CALL(evt_msg_print, 0, STRING("stg2_mri_re_000_1_1"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg2_mri_re_000_1_1"), 0, STRING("me"))
     END_SWITCH
     RETURN
 EVT_END()
@@ -680,10 +680,10 @@ static EVT_BEGIN(puni_2_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG3_33_04_PEACH_BACK_TO_TEC, STG3_33_06_BOWSER_TREASURE)
         CASE_GREATER_OR_EQUAL(STG2_26_PRAISE_FROM_THE_PUNI)
-        IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 1)
-            CALL(evt_npc_set_position, STRING("me"), 340, 0, 100)
-            CALL(evt_npc_set_ry, STRING("me"), 270)
-        END_IF
+            IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 1)
+                CALL(evt_npc_set_position, STRING("me"), 340, 0, 100)
+                CALL(evt_npc_set_ry, STRING("me"), 270)
+            END_IF
     END_SWITCH
     RETURN
 EVT_END()
@@ -692,9 +692,9 @@ EVT_END()
 static EVT_BEGIN(puni_2_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
-        CALL(evt_msg_print, 0, STRING("stg2_mri_re_017"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg2_mri_re_017"), 0, STRING("me"))
         CASE_DEFAULT
-        CALL(evt_msg_print, 0, STRING("stg2_mri_re_017_1"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg2_mri_re_017_1"), 0, STRING("me"))
     END_SWITCH
     RETURN
 EVT_END()
@@ -727,11 +727,11 @@ EVT_END()
 static EVT_BEGIN(sister_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG3_33_04_PEACH_BACK_TO_TEC, STG3_33_06_BOWSER_TREASURE)
-        CALL(evt_npc_change_interrupt, STRING("me"), 6, 0)
+            CALL(evt_npc_change_interrupt, STRING("me"), 6, 0)
         CASE_GREATER_OR_EQUAL(STG2_26_PRAISE_FROM_THE_PUNI)
-        IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 1)
-            CALL(evt_npc_set_position, STRING("me"), 100, 0, -10)
-        END_IF
+            IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 1)
+                CALL(evt_npc_set_position, STRING("me"), 100, 0, -10)
+            END_IF
     END_SWITCH
     SET_VALUE(GF(10), 0)
     SET_VALUE(GF(11), 0)
@@ -769,9 +769,9 @@ static EVT_BEGIN(sister_talk)
     END_IF
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
-        CALL(evt_msg_print, 0, STRING("stg2_mri_re_003"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg2_mri_re_003"), 0, STRING("me"))
         CASE_DEFAULT
-        CALL(evt_msg_print, 0, STRING("stg2_mri_re_016_1"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg2_mri_re_016_1"), 0, STRING("me"))
     END_SWITCH
     CALL(evt_msg_select, 0, STRING("stg2_mri_re_004"))
     IF_INT_EQUAL(LW(0), 0)
@@ -3802,14 +3802,14 @@ EVT_BEGIN(mri_01_init_evt)
     SPAWN_EVENT(mri_waterfall_effect)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG2_23_TIME_BOMB_ACTIVATED, STG2_23_01_X_NAUT_BATTLE)
-        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_DANGER4"))
-        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_MRI9"))
+            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_DANGER4"))
+            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_MRI9"))
         CASE_BETWEEN(STG3_33_04_PEACH_BACK_TO_TEC, STG3_33_05_BOWSER_THE_GREAT_TREE)
-        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG2_PUNI1"))
-        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("ENV_STG2_MRI3"))
+            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG2_PUNI1"))
+            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("ENV_STG2_MRI3"))
         CASE_DEFAULT
-        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG2_MRI1"))
-        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_MRI3"))
+            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG2_MRI1"))
+            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_MRI3"))
     END_SWITCH
     IF_INT_EQUAL(LF(0), 0)
         CALL(evt_mobj_save_blk, STRING("mobj_save"), 330, 60, -25, PTR(mri_puni_save), 0)

@@ -562,22 +562,22 @@ static EVT_BEGIN(damage_check_event_sub)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), 0, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
-        GOTO(90)
+            GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_LUCKY)
-        GOTO(90)
+            GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_DODGY)
-        GOTO(90)
+            GOTO(90)
         CASE_EQUAL(PRECHECK_MISS)
-        GOTO(90)
+            GOTO(90)
         CASE_EQUAL(PRECHECK_HIT)
-        GOTO(91)
+            GOTO(91)
         CASE_END
         CASE_DEFAULT
-        // BUG: the script has no LABEL(98): evtSearchLabel falls back to the GOTO's own argument, run as opcode 98
-        // (SET_SPD, reading the next word as the speed), and the script goes on to LABEL(90) as for a miss.
-        GOTO(98)
+            // BUG: the script has no LABEL(98): evtSearchLabel falls back to the GOTO's own argument, run as opcode 98
+            // (SET_SPD, reading the next word as the speed), and the script goes on to LABEL(90) as for a miss.
+            GOTO(98)
         CASE_END
     END_SWITCH
     LABEL(90)

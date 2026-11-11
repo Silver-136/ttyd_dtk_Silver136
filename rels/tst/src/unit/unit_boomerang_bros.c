@@ -320,25 +320,25 @@ static EVT_BEGIN(damage_check_sub)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(6), 0, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
-        GOTO(90)
+            GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_LUCKY)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
+            GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_DODGY)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
+            GOTO(90)
         CASE_EQUAL(PRECHECK_MISS)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
+            GOTO(90)
         CASE_EQUAL(PRECHECK_HIT)
-        GOTO(91)
+            GOTO(91)
         CASE_END
         CASE_DEFAULT
-        // BUG: the script has no LABEL(98): evtSearchLabel falls back to the GOTO's own argument, run as opcode 98
-        // (SET_SPD, reading the next word as the speed), and the script goes on to LABEL(90) as for a miss.
-        GOTO(98)
+            // BUG: the script has no LABEL(98): evtSearchLabel falls back to the GOTO's own argument, run as opcode 98
+            // (SET_SPD, reading the next word as the speed), and the script goes on to LABEL(90) as for a miss.
+            GOTO(98)
         CASE_END
     END_SWITCH
     LABEL(90)
@@ -416,83 +416,83 @@ EVT_BEGIN(boomerang_move_event)
             END_IF
             SWITCH(LW(9))
                 CASE_EQUAL(0)
-                CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET1, LW(3))
-                CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET1_PART, LW(4))
-                IF_INT_EQUAL(LW(3), -1)
-                    SET_VALUE(LW(9), 1)
-                    BREAK_SWITCH
-                END_IF
-                CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(11), LW(12), LW(13))
-                IF_INT_GREATER_OR_EQUAL(LW(10), LW(11))
-                    BREAK_SWITCH
-                END_IF
+                    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET1, LW(3))
+                    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET1_PART, LW(4))
+                    IF_INT_EQUAL(LW(3), -1)
+                        SET_VALUE(LW(9), 1)
+                        BREAK_SWITCH
+                    END_IF
+                    CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(11), LW(12), LW(13))
+                    IF_INT_GREATER_OR_EQUAL(LW(10), LW(11))
+                        BREAK_SWITCH
+                    END_IF
 
-                // On the way out it strikes the first target as it passes.
-                CALL_CHILD(damage_check_no_last)
-                SET_VALUE(LW(9), 1)
-                CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET1_HIT, LW(0))
+                    // On the way out it strikes the first target as it passes.
+                    CALL_CHILD(damage_check_no_last)
+                    SET_VALUE(LW(9), 1)
+                    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET1_HIT, LW(0))
                 CASE_END
                 CASE_EQUAL(1)
-                CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET2, LW(3))
-                CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET2_PART, LW(4))
-                IF_INT_EQUAL(LW(3), -1)
-                    SET_VALUE(LW(9), 2)
-                    BREAK_SWITCH
-                END_IF
-                CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(11), LW(12), LW(13))
-                IF_INT_GREATER_OR_EQUAL(LW(10), LW(11))
-                    BREAK_SWITCH
-                END_IF
+                    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET2, LW(3))
+                    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET2_PART, LW(4))
+                    IF_INT_EQUAL(LW(3), -1)
+                        SET_VALUE(LW(9), 2)
+                        BREAK_SWITCH
+                    END_IF
+                    CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(11), LW(12), LW(13))
+                    IF_INT_GREATER_OR_EQUAL(LW(10), LW(11))
+                        BREAK_SWITCH
+                    END_IF
 
-                // Then it strikes the second target.
-                CALL_CHILD(damage_check_no_last)
-                SET_VALUE(LW(9), 2)
-                CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET2_HIT, LW(0))
+                    // Then it strikes the second target.
+                    CALL_CHILD(damage_check_no_last)
+                    SET_VALUE(LW(9), 2)
+                    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET2_HIT, LW(0))
                 CASE_END
                 CASE_EQUAL(2)
-                CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET2, LW(3))
-                CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET2_PART, LW(4))
-                IF_INT_EQUAL(LW(3), -1)
-                    SET_VALUE(LW(9), 3)
-                    BREAK_SWITCH
-                END_IF
-                CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(11), LW(12), LW(13))
-                IF_INT_LESS(LW(10), LW(11))
-                    BREAK_SWITCH
-                END_IF
-                CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET2_HIT, LW(0))
-                IF_INT_EQUAL(LW(14), 0)
+                    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET2, LW(3))
+                    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET2_PART, LW(4))
+                    IF_INT_EQUAL(LW(3), -1)
+                        SET_VALUE(LW(9), 3)
+                        BREAK_SWITCH
+                    END_IF
+                    CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(11), LW(12), LW(13))
+                    IF_INT_LESS(LW(10), LW(11))
+                        BREAK_SWITCH
+                    END_IF
+                    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET2_HIT, LW(0))
+                    IF_INT_EQUAL(LW(14), 0)
 
-                    // On the way back it strikes the second target again.
-                    CALL_CHILD(damage_check_no_last)
-                ELSE
-                    CALL_CHILD(damage_check_last)
-                END_IF
-                SET_VALUE(LW(9), 3)
+                        // On the way back it strikes the second target again.
+                        CALL_CHILD(damage_check_no_last)
+                    ELSE
+                        CALL_CHILD(damage_check_last)
+                    END_IF
+                    SET_VALUE(LW(9), 3)
                 CASE_END
                 CASE_EQUAL(3)
-                CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET1, LW(3))
-                CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET1_PART, LW(4))
-                IF_INT_EQUAL(LW(3), -1)
-                    SET_VALUE(LW(9), 4)
-                    BREAK_SWITCH
-                END_IF
-                CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(11), LW(12), LW(13))
-                IF_INT_LESS(LW(10), LW(11))
-                    BREAK_SWITCH
-                END_IF
-                CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET1_HIT, LW(0))
-                IF_INT_EQUAL(LW(14), 0)
+                    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET1, LW(3))
+                    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET1_PART, LW(4))
+                    IF_INT_EQUAL(LW(3), -1)
+                        SET_VALUE(LW(9), 4)
+                        BREAK_SWITCH
+                    END_IF
+                    CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(11), LW(12), LW(13))
+                    IF_INT_LESS(LW(10), LW(11))
+                        BREAK_SWITCH
+                    END_IF
+                    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET1_HIT, LW(0))
+                    IF_INT_EQUAL(LW(14), 0)
 
-                    // And finally the first target again.
-                    CALL_CHILD(damage_check_no_last)
-                ELSE
-                    CALL_CHILD(damage_check_last)
-                END_IF
-                SET_VALUE(LW(9), 4)
+                        // And finally the first target again.
+                        CALL_CHILD(damage_check_no_last)
+                    ELSE
+                        CALL_CHILD(damage_check_last)
+                    END_IF
+                    SET_VALUE(LW(9), 4)
                 CASE_END
                 CASE_EQUAL(4)
-                BREAK_LOOP
+                    BREAK_LOOP
                 CASE_END
             END_SWITCH
             LABEL(10)
@@ -714,25 +714,25 @@ EVT_BEGIN(normal_attack_event_confuse)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_boomerang_bros_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
-        GOTO(90)
+            GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_LUCKY)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
+            GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_DODGY)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
+            GOTO(90)
         CASE_EQUAL(PRECHECK_MISS)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
+            GOTO(90)
         CASE_EQUAL(PRECHECK_HIT)
-        GOTO(91)
+            GOTO(91)
         CASE_END
         CASE_DEFAULT
-        // BUG: the script has no LABEL(98): evtSearchLabel falls back to the GOTO's own argument, run as opcode 98
-        // (SET_SPD, reading the next word as the speed), and the script goes on to LABEL(90) as for a miss.
-        GOTO(98)
+            // BUG: the script has no LABEL(98): evtSearchLabel falls back to the GOTO's own argument, run as opcode 98
+            // (SET_SPD, reading the next word as the speed), and the script goes on to LABEL(90) as for a miss.
+            GOTO(98)
         CASE_END
     END_SWITCH
     LABEL(90)
@@ -826,25 +826,25 @@ EVT_BEGIN(renzoku_attack_event_confuse)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_boomerang_bros_renzoku_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
-        GOTO(90)
+            GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_LUCKY)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
+            GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_DODGY)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
+            GOTO(90)
         CASE_EQUAL(PRECHECK_MISS)
-        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
-        GOTO(90)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
+            GOTO(90)
         CASE_EQUAL(PRECHECK_HIT)
-        GOTO(91)
+            GOTO(91)
         CASE_END
         CASE_DEFAULT
-        // BUG: the script has no LABEL(98): evtSearchLabel falls back to the GOTO's own argument, run as opcode 98
-        // (SET_SPD, reading the next word as the speed), and the script goes on to LABEL(90) as for a miss.
-        GOTO(98)
+            // BUG: the script has no LABEL(98): evtSearchLabel falls back to the GOTO's own argument, run as opcode 98
+            // (SET_SPD, reading the next word as the speed), and the script goes on to LABEL(90) as for a miss.
+            GOTO(98)
         CASE_END
     END_SWITCH
     LABEL(90)

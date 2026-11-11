@@ -3201,81 +3201,81 @@ EVT_BEGIN(las_29_init_evt)
     CALL_CHILD(shuryolight_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG8_15_GRODUS)
-        CALL(evt_bero_get_entername, LW(15))
-        IF_STR_EQUAL(LW(15), STRING("minnnanokoe"))
-            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG8_VOICE1"))
-            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS8"))
-            CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
+            CALL(evt_bero_get_entername, LW(15))
+            IF_STR_EQUAL(LW(15), STRING("minnnanokoe"))
+                CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG8_VOICE1"))
+                CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS8"))
+                CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
 #if VERSION >= VERSION_JP
-            CALL(evt_snd_set_rev_mode, 2)
+                CALL(evt_snd_set_rev_mode, 2)
 #endif
-            CALL(rousoku_init, 1)
-            SPAWN_EVENT(shuryolight_delete)
-            SPAWN_EVENT(last_evt_3_2)
-        END_IF
-        IF_STR_EQUAL(LW(15), STRING("starstone"))
-            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG8_WITCH"))
-            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS8"))
+                CALL(rousoku_init, 1)
+                SPAWN_EVENT(shuryolight_delete)
+                SPAWN_EVENT(last_evt_3_2)
+            END_IF
+            IF_STR_EQUAL(LW(15), STRING("starstone"))
+                CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG8_WITCH"))
+                CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS8"))
 #if VERSION >= VERSION_JP
-            CALL(evt_snd_set_rev_mode, 2)
+                CALL(evt_snd_set_rev_mode, 2)
 #endif
-            CALL(rousoku_init, 1)
-            SPAWN_EVENT(shuryolight_delete)
-            SPAWN_EVENT(last_evt_3_1)
-        END_IF
-        IF_STR_EQUAL(LW(15), STRING("sekai_yami2"))
-            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG8_WITCH"))
-            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS8"))
+                CALL(rousoku_init, 1)
+                SPAWN_EVENT(shuryolight_delete)
+                SPAWN_EVENT(last_evt_3_1)
+            END_IF
+            IF_STR_EQUAL(LW(15), STRING("sekai_yami2"))
+                CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG8_WITCH"))
+                CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS8"))
 #if VERSION <= VERSION_DEMO_JP
-            CALL(rousoku_init, 1)
-            CALL_CHILD(last_evt_3_npc_entry)
+                CALL(rousoku_init, 1)
+                CALL_CHILD(last_evt_3_npc_entry)
 #else
-            CALL(evt_snd_set_rev_mode, 2)
-            CALL(rousoku_init, 1)
+                CALL(evt_snd_set_rev_mode, 2)
+                CALL(rousoku_init, 1)
 #if VERSION < VERSION_US
-            CALL_CHILD(last_evt_3_npc_entry)
+                CALL_CHILD(last_evt_3_npc_entry)
 #endif
 #endif
-            SPAWN_EVENT(last_evt_3)
-        END_IF
-        IF_STR_EQUAL(LW(15), STRING("sekai_yami1"))
-            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG8_WITCH"))
-            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS8"))
+                SPAWN_EVENT(last_evt_3)
+            END_IF
+            IF_STR_EQUAL(LW(15), STRING("sekai_yami1"))
+                CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG8_WITCH"))
+                CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS8"))
 #if VERSION >= VERSION_JP
-            CALL(evt_snd_set_rev_mode, 2)
+                CALL(evt_snd_set_rev_mode, 2)
 #endif
-            CALL(rousoku_init, 1)
-            SPAWN_EVENT(last_evt_2)
-        END_IF
-        IF_STR_EQUAL(LW(15), STRING("w_bero"))
-            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS8"))
+                CALL(rousoku_init, 1)
+                SPAWN_EVENT(last_evt_2)
+            END_IF
+            IF_STR_EQUAL(LW(15), STRING("w_bero"))
+                CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS8"))
 #if VERSION >= VERSION_JP
-            CALL(evt_snd_set_rev_mode, 2)
+                CALL(evt_snd_set_rev_mode, 2)
 #endif
-            CALL(rousoku_init, 0)
-            SPAWN_EVENT(last_evt_1)
-        END_IF
+                CALL(rousoku_init, 0)
+                SPAWN_EVENT(last_evt_1)
+            END_IF
         CASE_EQUAL(STG8_16_THE_RETURN_OF_THE_QUEEN)
-        CALL(evt_snd_bgmoff, PSND_FADEOUT)
-        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS8"))
+            CALL(evt_snd_bgmoff, PSND_FADEOUT)
+            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS8"))
 #if VERSION >= VERSION_JP
-        CALL(evt_snd_set_rev_mode, 2)
+            CALL(evt_snd_set_rev_mode, 2)
 #endif
-        CALL(evt_party_stop, 0)
-        CALL(rousoku_init, 1)
-        SPAWN_EVENT(last_evt_4)
+            CALL(evt_party_stop, 0)
+            CALL(rousoku_init, 1)
+            SPAWN_EVENT(last_evt_4)
         CASE_DEFAULT
-        CALL(evt_snd_bgmoff, PSND_FADEOUT)
-        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS8"))
+            CALL(evt_snd_bgmoff, PSND_FADEOUT)
+            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS8"))
 #if VERSION >= VERSION_JP
-        CALL(evt_snd_set_rev_mode, 2)
+            CALL(evt_snd_set_rev_mode, 2)
 #endif
-        CALL_CHILD(evt_bero_info_run)
-        CALL(rousoku_init, 0)
-        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kabekesu"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_o_hikari"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_hakahuta"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_map_fog_onoff, 0)
+            CALL_CHILD(evt_bero_info_run)
+            CALL(rousoku_init, 0)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kabekesu"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_o_hikari"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_hakahuta"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_map_fog_onoff, 0)
     END_SWITCH
     RETURN
 EVT_END()

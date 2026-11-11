@@ -1603,19 +1603,19 @@ static EVT_BEGIN(evt_meet_moamoa)
     CALL(evt_mario_get_party, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(1)
-        CALL(evt_msg_print, 0, STRING("stg6_eki_02_0"), 0, STRING("party"))
+            CALL(evt_msg_print, 0, STRING("stg6_eki_02_0"), 0, STRING("party"))
         CASE_EQUAL(2)
-        CALL(evt_msg_print, 0, STRING("stg6_eki_02_1"), 0, STRING("party"))
+            CALL(evt_msg_print, 0, STRING("stg6_eki_02_1"), 0, STRING("party"))
         CASE_EQUAL(4)
-        CALL(evt_msg_print, 0, STRING("stg6_eki_02_2"), 0, STRING("party"))
+            CALL(evt_msg_print, 0, STRING("stg6_eki_02_2"), 0, STRING("party"))
         CASE_EQUAL(5)
-        CALL(evt_msg_print, 0, STRING("stg6_eki_02_3"), 0, STRING("party"))
+            CALL(evt_msg_print, 0, STRING("stg6_eki_02_3"), 0, STRING("party"))
         CASE_EQUAL(6)
-        CALL(evt_msg_print, 0, STRING("stg6_eki_02_4"), 0, STRING("party"))
+            CALL(evt_msg_print, 0, STRING("stg6_eki_02_4"), 0, STRING("party"))
         CASE_EQUAL(3)
-        CALL(evt_msg_print, 0, STRING("stg6_eki_02_5"), 0, STRING("party"))
+            CALL(evt_msg_print, 0, STRING("stg6_eki_02_5"), 0, STRING("party"))
         CASE_EQUAL(7)
-        CALL(evt_msg_print, 0, STRING("stg6_eki_02_6"), 0, STRING("party"))
+            CALL(evt_msg_print, 0, STRING("stg6_eki_02_6"), 0, STRING("party"))
     END_SWITCH
     BEGIN_INLINE_EVENT
         CALL(evt_snd_bgmoff, PSND_PAUSE)
@@ -1635,19 +1635,19 @@ static EVT_BEGIN(evt_meet_moamoa)
     CALL(evt_mario_get_party, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(1)
-        CALL(evt_msg_print, 0, STRING("stg6_eki_03_0"), 0, STRING("party"))
+            CALL(evt_msg_print, 0, STRING("stg6_eki_03_0"), 0, STRING("party"))
         CASE_EQUAL(2)
-        CALL(evt_msg_print, 0, STRING("stg6_eki_03_1"), 0, STRING("party"))
+            CALL(evt_msg_print, 0, STRING("stg6_eki_03_1"), 0, STRING("party"))
         CASE_EQUAL(4)
-        CALL(evt_msg_print, 0, STRING("stg6_eki_03_2"), 0, STRING("party"))
+            CALL(evt_msg_print, 0, STRING("stg6_eki_03_2"), 0, STRING("party"))
         CASE_EQUAL(5)
-        CALL(evt_msg_print, 0, STRING("stg6_eki_03_3"), 0, STRING("party"))
+            CALL(evt_msg_print, 0, STRING("stg6_eki_03_3"), 0, STRING("party"))
         CASE_EQUAL(6)
-        CALL(evt_msg_print, 0, STRING("stg6_eki_03_4"), 0, STRING("party"))
+            CALL(evt_msg_print, 0, STRING("stg6_eki_03_4"), 0, STRING("party"))
         CASE_EQUAL(3)
-        CALL(evt_msg_print, 0, STRING("stg6_eki_03_5"), 0, STRING("party"))
+            CALL(evt_msg_print, 0, STRING("stg6_eki_03_5"), 0, STRING("party"))
         CASE_EQUAL(7)
-        CALL(evt_msg_print, 0, STRING("stg6_eki_03_6"), 0, STRING("party"))
+            CALL(evt_msg_print, 0, STRING("stg6_eki_03_6"), 0, STRING("party"))
     END_SWITCH
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
@@ -1856,18 +1856,18 @@ EVT_BEGIN(evt_elv_down)
         CASE_LESS(STG6_40_SWATTING_SMORGS)
         CASE_EQUAL(STG6_40_SWATTING_SMORGS)
 #endif
-        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_lever"), 0, PTR(evt_origami), GW(10))
+            CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_lever"), 0, PTR(evt_origami), GW(10))
 #if VERSION <= VERSION_DEMO_JP
-        ELSE
+            ELSE
 #else
         CASE_DEFAULT
 #endif
-        CALL(evt_mapobj_rotate, 1, STRING("s_lever"), 0, 0, -80)
+            CALL(evt_mapobj_rotate, 1, STRING("s_lever"), 0, 0, -80)
 #if VERSION <= VERSION_DEMO_JP
-    END_IF
-    IF_INT_LESS(GSW_STORY_PROGRESS, STG6_40_SWATTING_SMORGS)
-        CALL(evt_del_case_evt, 0, GW(10))
-    END_IF
+        END_IF
+        IF_INT_LESS(GSW_STORY_PROGRESS, STG6_40_SWATTING_SMORGS)
+            CALL(evt_del_case_evt, 0, GW(10))
+        END_IF
 #else
     END_SWITCH
 #endif

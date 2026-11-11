@@ -232,18 +232,18 @@ static EVT_BEGIN(evt_sharin_main)
     SET_FLOAT_VALUE(LW(10), FLOAT(0.0f))
     SWITCH(LW(1))
         CASE_EQUAL(0)
-        SET_FLOAT_VALUE(LW(11), FLOAT(23.889648f))
+            SET_FLOAT_VALUE(LW(11), FLOAT(23.889648f))
         CASE_EQUAL(1)
-        SET_FLOAT_VALUE(LW(11), FLOAT(31.139648f))
+            SET_FLOAT_VALUE(LW(11), FLOAT(31.139648f))
         CASE_EQUAL(2)
-        SET_FLOAT_VALUE(LW(11), FLOAT(55.01953f))
+            SET_FLOAT_VALUE(LW(11), FLOAT(55.01953f))
     END_SWITCH
     LOOP(0)
         SWITCH(LW(2))
             CASE_EQUAL(0)
-            SET_FLOAT_VALUE(LW(9), GW(0))
+                SET_FLOAT_VALUE(LW(9), GW(0))
             CASE_EQUAL(1)
-            SET_FLOAT_VALUE(LW(9), GW(1))
+                SET_FLOAT_VALUE(LW(9), GW(1))
         END_SWITCH
         DIVIDE_FLOAT(LW(9), LW(11))
         MULTIPLY_FLOAT(LW(9), FLOAT(57.29492f))
@@ -297,18 +297,18 @@ static EVT_BEGIN(evt_clank_main)
     SET_FLOAT_VALUE(LW(10), FLOAT(0.0f))
     SWITCH(LW(1))
         CASE_EQUAL(0)
-        SET_FLOAT_VALUE(LW(11), FLOAT(23.889648f))
+            SET_FLOAT_VALUE(LW(11), FLOAT(23.889648f))
         CASE_EQUAL(1)
-        SET_FLOAT_VALUE(LW(11), FLOAT(31.139648f))
+            SET_FLOAT_VALUE(LW(11), FLOAT(31.139648f))
         CASE_EQUAL(2)
-        SET_FLOAT_VALUE(LW(11), FLOAT(55.01953f))
+            SET_FLOAT_VALUE(LW(11), FLOAT(55.01953f))
     END_SWITCH
     LOOP(0)
         SWITCH(LW(2))
             CASE_EQUAL(0)
-            SET_FLOAT_VALUE(LW(9), GW(0))
+                SET_FLOAT_VALUE(LW(9), GW(0))
             CASE_EQUAL(1)
-            SET_FLOAT_VALUE(LW(9), GW(1))
+                SET_FLOAT_VALUE(LW(9), GW(1))
         END_SWITCH
         DIVIDE_FLOAT(LW(9), LW(11))
         MULTIPLY_FLOAT(LW(9), FLOAT(57.29492f))
@@ -1222,118 +1222,118 @@ static EVT_BEGIN(talk_papa_taihou_kyoka)
     DEBUG_PUT_REG(LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(-1)
-        CALL(evt_msg_print_add, 0, STRING("stg7_pik_06"))
+            CALL(evt_msg_print_add, 0, STRING("stg7_pik_06"))
         CASE_EQUAL(0)
-        CALL(evt_msg_print_add, 0, STRING("stg7_pik_08"))
+            CALL(evt_msg_print_add, 0, STRING("stg7_pik_08"))
         CASE_EQUAL(1)
-        CALL(evt_pouch_get_coin, LW(0))
-        IF_INT_LESS(LW(0), 1)
-            CALL(evt_msg_print_add, 0, STRING("stg7_pik_07"))
-        ELSE
-            CALL(evt_msg_print_add, 0, STRING("stg7_pik_09"))
-        END_IF
+            CALL(evt_pouch_get_coin, LW(0))
+            IF_INT_LESS(LW(0), 1)
+                CALL(evt_msg_print_add, 0, STRING("stg7_pik_07"))
+            ELSE
+                CALL(evt_msg_print_add, 0, STRING("stg7_pik_09"))
+            END_IF
         CASE_EQUAL(2)
-        CALL(evt_pouch_get_coin, LW(0))
-        IF_INT_LESS(LW(0), 64)
-            CALL(evt_msg_print_add, 0, STRING("stg7_pik_07"))
-        ELSE
-            CALL(evt_msg_print_add, 0, STRING("stg7_pik_10"))
-        END_IF
+            CALL(evt_pouch_get_coin, LW(0))
+            IF_INT_LESS(LW(0), 64)
+                CALL(evt_msg_print_add, 0, STRING("stg7_pik_07"))
+            ELSE
+                CALL(evt_msg_print_add, 0, STRING("stg7_pik_10"))
+            END_IF
         CASE_EQUAL(3)
-        CALL(evt_pouch_get_coin, LW(0))
-        IF_INT_LESS(LW(0), 1)
-            CALL(evt_msg_print_add, 0, STRING("stg7_pik_07"))
-        ELSE
-            CALL(evt_msg_print_add, 0, STRING("stg7_pik_11"))
-            CALL(evt_msg_select, 0, STRING("stg7_pik_11_yn"))
-            IF_INT_EQUAL(LW(0), 1)
-                CALL(evt_msg_print_add, 0, STRING("stg7_pik_06"))
-                CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
-                RETURN
-            END_IF
-            CALL(evt_msg_print_add, 0, STRING("stg7_pik_12"))
-            CALL(evt_msg_select, 0, STRING("stg7_pik_11_yn"))
-            IF_INT_EQUAL(LW(0), 1)
-                CALL(evt_msg_print_add, 0, STRING("stg7_pik_06"))
-                CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
-                RETURN
-            END_IF
-            CALL(evt_msg_print_add, 0, STRING("stg7_pik_13"))
-            CALL(evt_msg_select, 0, STRING("stg7_pik_11_yn"))
-            IF_INT_EQUAL(LW(0), 1)
-                CALL(evt_msg_print_add, 0, STRING("stg7_pik_06"))
-                CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
-                RETURN
-            END_IF
-            CALL(evt_msg_print_add, 0, STRING("stg7_pik_14"))
-            CALL(evt_msg_select, 0, STRING("stg7_pik_11_yn"))
-            IF_INT_EQUAL(LW(0), 1)
-                CALL(evt_msg_print_add, 0, STRING("stg7_pik_06"))
-                CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
-                RETURN
-            END_IF
-            CALL(evt_msg_print_add, 0, STRING("stg7_pik_15"))
-            CALL(evt_msg_select, 0, STRING("stg7_pik_11_yn"))
-            IF_INT_EQUAL(LW(0), 1)
-                CALL(evt_msg_print_add, 0, STRING("stg7_pik_06"))
-                CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
-                RETURN
-            END_IF
-
-            // Mario agrees to hand over all his coins.
-            CALL(evt_msg_print_add, 0, STRING("stg7_pik_16"))
-            CALL(evt_pouch_get_coin, LW(10))
-            MULTIPLY(LW(10), -1)
-            CALL(evt_pouch_add_coin, LW(10))
-            CALL(evt_sub_status_gauge_force_open)
-            LOOP(0)
-                CALL(evt_sub_status_gauge_check_update, LW(0))
-                IF_INT_EQUAL(LW(0), 0)
-                    BREAK_LOOP
+            CALL(evt_pouch_get_coin, LW(0))
+            IF_INT_LESS(LW(0), 1)
+                CALL(evt_msg_print_add, 0, STRING("stg7_pik_07"))
+            ELSE
+                CALL(evt_msg_print_add, 0, STRING("stg7_pik_11"))
+                CALL(evt_msg_select, 0, STRING("stg7_pik_11_yn"))
+                IF_INT_EQUAL(LW(0), 1)
+                    CALL(evt_msg_print_add, 0, STRING("stg7_pik_06"))
+                    CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
+                    RETURN
                 END_IF
-                WAIT_FRAMES(1)
-            END_LOOP
-            WAIT_MS(500)
-            CALL(evt_sub_status_gauge_force_close)
-            CALL(evt_msg_print, 0, STRING("stg7_pik_17"), 0, STRING("ナリキンパパ"))
-
-            // Goldbob gives Mario the Goldbob Guide and returns the coins.
-            CALL(evt_item_entry, STRING("a"), ITEM_GOLDBOB_GUIDE, 0, -1000, 0, ITEM_TYPE_STILL, -1, 0)
-            CALL(evt_item_get_item, STRING("a"))
-            CALL(evt_item_get_item_end_wait, STRING("a"))
-            WAIT_MS(500)
-            CALL(evt_msg_print, 0, STRING("stg7_pik_18"), 0, STRING("ナリキンパパ"))
-            MULTIPLY(LW(10), -1)
-            CALL(evt_pouch_add_coin, LW(10))
-            CALL(evt_sub_status_gauge_force_open)
-            LOOP(0)
-                CALL(evt_sub_status_gauge_check_update, LW(0))
-                IF_INT_EQUAL(LW(0), 0)
-                    BREAK_LOOP
+                CALL(evt_msg_print_add, 0, STRING("stg7_pik_12"))
+                CALL(evt_msg_select, 0, STRING("stg7_pik_11_yn"))
+                IF_INT_EQUAL(LW(0), 1)
+                    CALL(evt_msg_print_add, 0, STRING("stg7_pik_06"))
+                    CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
+                    RETURN
                 END_IF
-                WAIT_FRAMES(1)
-            END_LOOP
-            WAIT_MS(500)
-            CALL(evt_sub_status_gauge_force_close)
+                CALL(evt_msg_print_add, 0, STRING("stg7_pik_13"))
+                CALL(evt_msg_select, 0, STRING("stg7_pik_11_yn"))
+                IF_INT_EQUAL(LW(0), 1)
+                    CALL(evt_msg_print_add, 0, STRING("stg7_pik_06"))
+                    CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
+                    RETURN
+                END_IF
+                CALL(evt_msg_print_add, 0, STRING("stg7_pik_14"))
+                CALL(evt_msg_select, 0, STRING("stg7_pik_11_yn"))
+                IF_INT_EQUAL(LW(0), 1)
+                    CALL(evt_msg_print_add, 0, STRING("stg7_pik_06"))
+                    CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
+                    RETURN
+                END_IF
+                CALL(evt_msg_print_add, 0, STRING("stg7_pik_15"))
+                CALL(evt_msg_select, 0, STRING("stg7_pik_11_yn"))
+                IF_INT_EQUAL(LW(0), 1)
+                    CALL(evt_msg_print_add, 0, STRING("stg7_pik_06"))
+                    CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
+                    RETURN
+                END_IF
+
+                // Mario agrees to hand over all his coins.
+                CALL(evt_msg_print_add, 0, STRING("stg7_pik_16"))
+                CALL(evt_pouch_get_coin, LW(10))
+                MULTIPLY(LW(10), -1)
+                CALL(evt_pouch_add_coin, LW(10))
+                CALL(evt_sub_status_gauge_force_open)
+                LOOP(0)
+                    CALL(evt_sub_status_gauge_check_update, LW(0))
+                    IF_INT_EQUAL(LW(0), 0)
+                        BREAK_LOOP
+                    END_IF
+                    WAIT_FRAMES(1)
+                END_LOOP
+                WAIT_MS(500)
+                CALL(evt_sub_status_gauge_force_close)
+                CALL(evt_msg_print, 0, STRING("stg7_pik_17"), 0, STRING("ナリキンパパ"))
+
+                // Goldbob gives Mario the Goldbob Guide and returns the coins.
+                CALL(evt_item_entry, STRING("a"), ITEM_GOLDBOB_GUIDE, 0, -1000, 0, ITEM_TYPE_STILL, -1, 0)
+                CALL(evt_item_get_item, STRING("a"))
+                CALL(evt_item_get_item_end_wait, STRING("a"))
+                WAIT_MS(500)
+                CALL(evt_msg_print, 0, STRING("stg7_pik_18"), 0, STRING("ナリキンパパ"))
+                MULTIPLY(LW(10), -1)
+                CALL(evt_pouch_add_coin, LW(10))
+                CALL(evt_sub_status_gauge_force_open)
+                LOOP(0)
+                    CALL(evt_sub_status_gauge_check_update, LW(0))
+                    IF_INT_EQUAL(LW(0), 0)
+                        BREAK_LOOP
+                    END_IF
+                    WAIT_FRAMES(1)
+                END_LOOP
+                WAIT_MS(500)
+                CALL(evt_sub_status_gauge_force_close)
 #if VERSION >= VERSION_US
-            CALL(pik_00_statuswin_force_off)
+                CALL(pik_00_statuswin_force_off)
 #endif
-            CALL(evt_msg_print, 0, STRING("stg7_pik_19"), 0, STRING("ナリキンパパ"))
+                CALL(evt_msg_print, 0, STRING("stg7_pik_19"), 0, STRING("ナリキンパパ"))
 
-            // His approval of the cannon is recorded.
-            SET_VALUE(GSWF_PIK_GOLDBOB_PERMISSION_GIVEN, 1)
-            SET_VALUE(LW(0), 0)
-            IF_INT_EQUAL(GSWF_PIK_GOLDBOB_PERMISSION_GIVEN, 1)
-                ADD(LW(0), 1)
+                // His approval of the cannon is recorded.
+                SET_VALUE(GSWF_PIK_GOLDBOB_PERMISSION_GIVEN, 1)
+                SET_VALUE(LW(0), 0)
+                IF_INT_EQUAL(GSWF_PIK_GOLDBOB_PERMISSION_GIVEN, 1)
+                    ADD(LW(0), 1)
+                END_IF
+                IF_INT_EQUAL(GSWF_BOM_GENERAL_WHITE_AGREED, 1)
+                    ADD(LW(0), 1)
+                END_IF
+                IF_INT_EQUAL(LW(0), 2)
+                    // If General White has also been woken, the story advances.
+                    SET_VALUE(GSW_STORY_PROGRESS, STG7_03_GOLDBOB)
+                END_IF
             END_IF
-            IF_INT_EQUAL(GSWF_BOM_GENERAL_WHITE_AGREED, 1)
-                ADD(LW(0), 1)
-            END_IF
-            IF_INT_EQUAL(LW(0), 2)
-                // If General White has also been woken, the story advances.
-                SET_VALUE(GSW_STORY_PROGRESS, STG7_03_GOLDBOB)
-            END_IF
-        END_IF
     END_SWITCH
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     RETURN
@@ -1386,17 +1386,17 @@ static EVT_BEGIN(talk_papa)
     END_IF
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_54_WELCOME_BACK)
-        CALL(evt_msg_print, 0, STRING("stg6_pik_01"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg6_pik_01"), 0, 0)
         CASE_LESS(STG7_02_MAYOR_BOB)
-        CALL(evt_msg_print, 0, STRING("stg7_pik_19_01_1"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg7_pik_19_01_1"), 0, 0)
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
-        IF_INT_EQUAL(GSWF_PIK_GOLDBOB_PERMISSION_GIVEN, 0)
-            CALL_CHILD(talk_papa_taihou_kyoka)
-        ELSE
-            CALL(evt_msg_print, 0, STRING("stg7_pik_19_01"), 0, 0)
-        END_IF
+            IF_INT_EQUAL(GSWF_PIK_GOLDBOB_PERMISSION_GIVEN, 0)
+                CALL_CHILD(talk_papa_taihou_kyoka)
+            ELSE
+                CALL(evt_msg_print, 0, STRING("stg7_pik_19_01"), 0, 0)
+            END_IF
         CASE_DEFAULT
-        CALL(evt_msg_print, 0, STRING("stg7_pik_19_01_2"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg7_pik_19_01_2"), 0, 0)
     END_SWITCH
     RETURN
 EVT_END()
@@ -1524,22 +1524,22 @@ static EVT_BEGIN(talk_mama)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_54_WELCOME_BACK)
 
-        // With no request pending, her talk follows the story.
-        CALL(evt_msg_print, 0, STRING("stg6_pik_02"), 0, 0)
+            // With no request pending, her talk follows the story.
+            CALL(evt_msg_print, 0, STRING("stg6_pik_02"), 0, 0)
         CASE_LESS(STG7_02_MAYOR_BOB)
-        CALL(evt_msg_print, 0, STRING("stg7_pik_21_1"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg7_pik_21_1"), 0, 0)
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
-        IF_INT_EQUAL(GSWF_PIK_GOLDBOB_PERMISSION_GIVEN, 0)
-            IF_INT_EQUAL(GSWF_PIK_GOLDBOB_CANNON_TALK_DONE, 0)
-                CALL(evt_msg_print, 0, STRING("stg7_pik_21_1"), 0, 0)
+            IF_INT_EQUAL(GSWF_PIK_GOLDBOB_PERMISSION_GIVEN, 0)
+                IF_INT_EQUAL(GSWF_PIK_GOLDBOB_CANNON_TALK_DONE, 0)
+                    CALL(evt_msg_print, 0, STRING("stg7_pik_21_1"), 0, 0)
+                ELSE
+                    CALL(evt_msg_print, 0, STRING("stg7_pik_20"), 0, 0)
+                END_IF
             ELSE
-                CALL(evt_msg_print, 0, STRING("stg7_pik_20"), 0, 0)
+                CALL(evt_msg_print, 0, STRING("stg7_pik_21"), 0, 0)
             END_IF
-        ELSE
-            CALL(evt_msg_print, 0, STRING("stg7_pik_21"), 0, 0)
-        END_IF
         CASE_DEFAULT
-        CALL(evt_msg_print, 0, STRING("stg7_pik_21_2"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg7_pik_21_2"), 0, 0)
     END_SWITCH
     RETURN
 EVT_END()
@@ -1565,21 +1565,21 @@ EVT_END()
 static EVT_BEGIN(talk_konari)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_54_WELCOME_BACK)
-        CALL(evt_msg_print, 0, STRING("stg6_pik_03"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg6_pik_03"), 0, 0)
         CASE_LESS(STG7_02_MAYOR_BOB)
-        CALL(evt_msg_print, 0, STRING("stg7_pik_23_1"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg7_pik_23_1"), 0, 0)
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
-        IF_INT_EQUAL(GSWF_PIK_GOLDBOB_PERMISSION_GIVEN, 0)
-            IF_INT_EQUAL(GSWF_PIK_GOLDBOB_CANNON_TALK_DONE, 0)
-                CALL(evt_msg_print, 0, STRING("stg7_pik_23_1"), 0, 0)
+            IF_INT_EQUAL(GSWF_PIK_GOLDBOB_PERMISSION_GIVEN, 0)
+                IF_INT_EQUAL(GSWF_PIK_GOLDBOB_CANNON_TALK_DONE, 0)
+                    CALL(evt_msg_print, 0, STRING("stg7_pik_23_1"), 0, 0)
+                ELSE
+                    CALL(evt_msg_print, 0, STRING("stg7_pik_22"), 0, 0)
+                END_IF
             ELSE
-                CALL(evt_msg_print, 0, STRING("stg7_pik_22"), 0, 0)
+                CALL(evt_msg_print, 0, STRING("stg7_pik_23"), 0, 0)
             END_IF
-        ELSE
-            CALL(evt_msg_print, 0, STRING("stg7_pik_23"), 0, 0)
-        END_IF
         CASE_DEFAULT
-        CALL(evt_msg_print, 0, STRING("stg7_pik_23_2"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg7_pik_23_2"), 0, 0)
     END_SWITCH
     RETURN
 EVT_END()
@@ -1672,17 +1672,17 @@ static EVT_BEGIN(talk_madam)
     END_IF
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_70_THOUSAND_YEAR_DOOR)
-        CALL(evt_msg_print, 0, STRING("stg6_pik_04"), 0, 0)
-        CASE_DEFAULT
-        IF_INT_EQUAL(GSWF_PIK_MADAM_GOLD_RING_RETURNED, 0)
             CALL(evt_msg_print, 0, STRING("stg6_pik_04"), 0, 0)
-        ELSE
-            IF_INT_LESS_OR_EQUAL(GSW_STORY_PROGRESS, STG8_END_AFTER_THE_BATTLE)
-                CALL(evt_msg_print, 0, STRING("stg7_pik_clear_01"), 0, 0)
+        CASE_DEFAULT
+            IF_INT_EQUAL(GSWF_PIK_MADAM_GOLD_RING_RETURNED, 0)
+                CALL(evt_msg_print, 0, STRING("stg6_pik_04"), 0, 0)
             ELSE
-                CALL(evt_msg_print, 0, STRING("stg7_pik_clear_01_1"), 0, 0)
+                IF_INT_LESS_OR_EQUAL(GSW_STORY_PROGRESS, STG8_END_AFTER_THE_BATTLE)
+                    CALL(evt_msg_print, 0, STRING("stg7_pik_clear_01"), 0, 0)
+                ELSE
+                    CALL(evt_msg_print, 0, STRING("stg7_pik_clear_01_1"), 0, 0)
+                END_IF
             END_IF
-        END_IF
     END_SWITCH
     RETURN
 EVT_END()
@@ -2031,12 +2031,12 @@ static EVT_BEGIN(evt_pik_00_arrival)
     CALL(evt_snd_bgm_scope, 0, 0)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_49_POSHLEY_HEIGHTS)
-        SET_VALUE(GSWF_RSH_EVENT_ENTRY_PENDING, 1)
-        CALL(evt_bero_mapchange, STRING("rsh_02_a"), 0)
+            SET_VALUE(GSWF_RSH_EVENT_ENTRY_PENDING, 1)
+            CALL(evt_bero_mapchange, STRING("rsh_02_a"), 0)
         CASE_LESS(STG6_54_WELCOME_BACK)
-        CALL(evt_bero_mapchange, STRING("rsh_01_a"), STRING("w_bero"))
+            CALL(evt_bero_mapchange, STRING("rsh_01_a"), STRING("w_bero"))
         CASE_DEFAULT
-        CALL(evt_bero_mapchange, STRING("rsh_02_a"), STRING("pik_touchaku"))
+            CALL(evt_bero_mapchange, STRING("rsh_02_a"), STRING("pik_touchaku"))
     END_SWITCH
     RETURN
 EVT_END()

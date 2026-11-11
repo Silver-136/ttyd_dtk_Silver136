@@ -194,9 +194,9 @@ EVT_BEGIN(bom_00_init_evt)
     IF_INT_EQUAL(GSWF_BOM_FIRST_ARRIVAL_DONE, 0)
         SWITCH(GSW_STORY_PROGRESS)
             CASE_LESS(STG6_71_01)
-            SPAWN_EVENT(first_evt2)
+                SPAWN_EVENT(first_evt2)
             CASE_DEFAULT
-            SPAWN_EVENT(first_evt)
+                SPAWN_EVENT(first_evt)
         END_SWITCH
     ELSE
         IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG6_71_01)

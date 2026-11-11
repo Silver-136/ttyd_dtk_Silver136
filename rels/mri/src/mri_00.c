@@ -385,23 +385,23 @@ EVT_END()
 static EVT_BEGIN(guide_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG2_02_TO_THE_GREAT_TREE, STG2_03_THE_GREAT_TREE)
-        CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_TALK_TURN)
-        CALL(evt_npc_set_position, STRING("me"), 135, 0, -70)
-        CALL(evt_npc_set_ry, STRING("me"), 90)
-        CASE_EQUAL(STG2_03_01_SEALED_ENTRANCE)
-        CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_TALK_TURN)
-        CALL(evt_npc_set_position, STRING("me"), 10, 155, -220)
-        CALL(evt_npc_set_ry, STRING("me"), 90)
-        CASE_EQUAL(STG2_10_SECRET_ENTRANCE_REVEALED)
-        IF_INT_EQUAL(GSWF_MRI_00_PUNIO_LEFT_WITH_MARIO, 0)
-            CALL(evt_npc_set_position, STRING("me"), 140, 0, -140)
+            CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_TALK_TURN)
+            CALL(evt_npc_set_position, STRING("me"), 135, 0, -70)
             CALL(evt_npc_set_ry, STRING("me"), 90)
-        END_IF
+        CASE_EQUAL(STG2_03_01_SEALED_ENTRANCE)
+            CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_TALK_TURN)
+            CALL(evt_npc_set_position, STRING("me"), 10, 155, -220)
+            CALL(evt_npc_set_ry, STRING("me"), 90)
+        CASE_EQUAL(STG2_10_SECRET_ENTRANCE_REVEALED)
+            IF_INT_EQUAL(GSWF_MRI_00_PUNIO_LEFT_WITH_MARIO, 0)
+                CALL(evt_npc_set_position, STRING("me"), 140, 0, -140)
+                CALL(evt_npc_set_ry, STRING("me"), 90)
+            END_IF
         CASE_GREATER_OR_EQUAL(STG2_25_05_BOWSER_PETALBURG)
-        IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 0)
-            CALL(evt_npc_set_position, STRING("me"), -34, 0, 177)
-            CALL(evt_npc_set_ry, STRING("me"), 270)
-        END_IF
+            IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 0)
+                CALL(evt_npc_set_position, STRING("me"), -34, 0, 177)
+                CALL(evt_npc_set_ry, STRING("me"), 270)
+            END_IF
     END_SWITCH
     RETURN
 EVT_END()
@@ -414,17 +414,17 @@ EVT_END()
 static EVT_BEGIN(guide_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG2_03_THE_GREAT_TREE)
-        SPAWN_EVENT(seal_bigtree)
+            SPAWN_EVENT(seal_bigtree)
         CASE_EQUAL(STG2_03_01_SEALED_ENTRANCE)
-        SPAWN_EVENT(seal_bigtree2)
+            SPAWN_EVENT(seal_bigtree2)
         CASE_EQUAL(STG2_10_SECRET_ENTRANCE_REVEALED)
-        CALL(evt_msg_print, 0, STRING("stg2_mri_e10_05"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg2_mri_e10_05"), 0, STRING("me"))
 #if VERSION <= VERSION_DEMO_JP
         CASE_EQUAL(STG2_26_PRAISE_FROM_THE_PUNI)
 #else
         CASE_GREATER_OR_EQUAL(STG2_26_PRAISE_FROM_THE_PUNI)
 #endif
-        CALL(evt_msg_print, 0, STRING("stg2_mri_e26_00_07"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg2_mri_e26_00_07"), 0, STRING("me"))
     END_SWITCH
     RETURN
 EVT_END()
@@ -436,10 +436,10 @@ EVT_END()
 static EVT_BEGIN(rival_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG2_25_05_BOWSER_PETALBURG)
-        IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 0)
-            CALL(evt_npc_set_position, STRING("me"), 38, 0, 143)
-            CALL(evt_npc_set_ry, STRING("me"), 270)
-        END_IF
+            IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 0)
+                CALL(evt_npc_set_position, STRING("me"), 38, 0, 143)
+                CALL(evt_npc_set_ry, STRING("me"), 270)
+            END_IF
     END_SWITCH
     RETURN
 EVT_END()
@@ -457,12 +457,12 @@ EVT_END()
 static EVT_BEGIN(chibitoge_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG2_25_05_BOWSER_PETALBURG)
-        IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 0)
-            IF_INT_NOT_EQUAL(GSWF_MRI_JABBLE_JOINED, 0)
-                CALL(evt_npc_set_position, STRING("me"), 50, 0, 191)
-                CALL(evt_npc_set_ry, STRING("me"), 270)
+            IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 0)
+                IF_INT_NOT_EQUAL(GSWF_MRI_JABBLE_JOINED, 0)
+                    CALL(evt_npc_set_position, STRING("me"), 50, 0, 191)
+                    CALL(evt_npc_set_ry, STRING("me"), 270)
+                END_IF
             END_IF
-        END_IF
     END_SWITCH
     RETURN
 EVT_END()
@@ -491,10 +491,10 @@ EVT_END()
 static EVT_BEGIN(sister_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG2_25_05_BOWSER_PETALBURG)
-        IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 0)
-            CALL(evt_npc_set_position, STRING("me"), -10, 0, 121)
-            CALL(evt_npc_set_ry, STRING("me"), 270)
-        END_IF
+            IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 0)
+                CALL(evt_npc_set_position, STRING("me"), -10, 0, 121)
+                CALL(evt_npc_set_ry, STRING("me"), 270)
+            END_IF
     END_SWITCH
     RETURN
 EVT_END()
@@ -509,10 +509,10 @@ EVT_END()
 static EVT_BEGIN(elder_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG2_25_05_BOWSER_PETALBURG)
-        IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 0)
-            CALL(evt_npc_set_position, STRING("me"), 10, 0, 214)
-            CALL(evt_npc_set_ry, STRING("me"), 270)
-        END_IF
+            IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 0)
+                CALL(evt_npc_set_position, STRING("me"), 10, 0, 214)
+                CALL(evt_npc_set_ry, STRING("me"), 270)
+            END_IF
     END_SWITCH
     RETURN
 EVT_END()
@@ -541,9 +541,9 @@ EVT_END()
 static EVT_BEGIN(fabio_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
-        CALL(evt_msg_print, 0, STRING("irai_28_006"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("irai_28_006"), 0, 0)
         CASE_DEFAULT
-        CALL(evt_msg_print, 0, STRING("irai_28_006_1"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("irai_28_006_1"), 0, 0)
     END_SWITCH
     RETURN
 EVT_END()
@@ -1858,13 +1858,13 @@ EVT_BEGIN(mri_00_init_evt)
     END_IF
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG2_25_05_BOWSER_PETALBURG)
-        IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 0)
+            IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 0)
 #endif
-            BEGIN_INLINE_EVENT
-                CALL(evt_puni_wait_systemmode, 2)
-                SPAWN_EVENT(mario_see_you_init)
-            END_INLINE_EVENT
-        END_IF
+                BEGIN_INLINE_EVENT
+                    CALL(evt_puni_wait_systemmode, 2)
+                    SPAWN_EVENT(mario_see_you_init)
+                END_INLINE_EVENT
+            END_IF
 #if VERSION >= VERSION_JP
     END_SWITCH
 #endif
@@ -1968,16 +1968,16 @@ EVT_BEGIN(mri_00_init_evt)
     SWITCH(LW(0))
         CASE_OR_EQUAL(0)
         CASE_OR_EQUAL(1)
-        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("J_kan"), MAP_OBJ_FLAG_DISABLED)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("J_kan"), MAP_OBJ_FLAG_DISABLED)
         CASE_END
         CASE_EQUAL(2)
-        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("D_kan"), MAP_OBJ_FLAG_DISABLED)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("D_kan"), MAP_OBJ_FLAG_DISABLED)
         CASE_EQUAL(3)
-        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("F_kan"), MAP_OBJ_FLAG_DISABLED)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("F_kan"), MAP_OBJ_FLAG_DISABLED)
         CASE_EQUAL(4)
-        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("Sp_kan"), MAP_OBJ_FLAG_DISABLED)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("Sp_kan"), MAP_OBJ_FLAG_DISABLED)
         CASE_EQUAL(5)
-        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("I_kan"), MAP_OBJ_FLAG_DISABLED)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("I_kan"), MAP_OBJ_FLAG_DISABLED)
     END_SWITCH
 #endif
     RETURN

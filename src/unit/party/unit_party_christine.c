@@ -516,7 +516,7 @@ static EVT_BEGIN(partyChristineAttack_NormalAttack)
         CASE_END
         CASE_EQUAL(PRECHECK_HIT)
         CASE_DEFAULT
-        WAIT_MS(1000)
+            WAIT_MS(1000)
     END_SWITCH
 
     // First bonk only: she crouches before the jump, with the stylish window.
@@ -910,7 +910,7 @@ static EVT_BEGIN(partyChristineAttack_RenzokuAttack)
         CASE_END
         CASE_EQUAL(PRECHECK_HIT)
         CASE_DEFAULT
-        WAIT_MS(1000)
+            WAIT_MS(1000)
     END_SWITCH
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKR_J_1A"))
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_FLIP_ANGLE, 0)
@@ -1004,20 +1004,20 @@ static EVT_BEGIN(partyChristineAttack_RenzokuAttack)
                         CALL(btlevtcmd_ACRGetResult, LW(6), LW(7))
                         SWITCH(LW(6))
                             CASE_GREATER_OR_EQUAL(2)
-                            CALL(btlevtcmd_CommandGetWeaponAddress, UNIT_ID_SELF, LW(0))
-                            CALL(btlevtcmd_AudienceDeclareAcrobatResult, LW(0), 1, 0, 0, 0)
-                            LOOP(15)
-                                CALL(btlevtcmd_AddRotate, UNIT_ID_SELF, 0, 24, 0)
-                                CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_FLIP_ANGLE, LW(0))
-                                CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(1))
-                                IF_INT_GREATER_OR_EQUAL(LW(1), 0)
-                                    ADD(LW(0), -24)
-                                ELSE
-                                    ADD(LW(0), 24)
-                                END_IF
-                                CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_FLIP_ANGLE, LW(0))
-                                WAIT_FRAMES(1)
-                            END_LOOP
+                                CALL(btlevtcmd_CommandGetWeaponAddress, UNIT_ID_SELF, LW(0))
+                                CALL(btlevtcmd_AudienceDeclareAcrobatResult, LW(0), 1, 0, 0, 0)
+                                LOOP(15)
+                                    CALL(btlevtcmd_AddRotate, UNIT_ID_SELF, 0, 24, 0)
+                                    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_FLIP_ANGLE, LW(0))
+                                    CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(1))
+                                    IF_INT_GREATER_OR_EQUAL(LW(1), 0)
+                                        ADD(LW(0), -24)
+                                    ELSE
+                                        ADD(LW(0), 24)
+                                    END_IF
+                                    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_FLIP_ANGLE, LW(0))
+                                    WAIT_FRAMES(1)
+                                END_LOOP
                             CASE_DEFAULT
                         END_SWITCH
                     END_IF
@@ -1206,45 +1206,45 @@ static EVT_BEGIN(partyChristineAttack_Kiss)
     SWITCH(LW(0))
         CASE_LESS_OR_EQUAL(-3)
 #if VERSION <= VERSION_DEMO_JP
-        SET_VALUE(LW(0), 30)
-        SET_VALUE(LW(1), 10)
+            SET_VALUE(LW(0), 30)
+            SET_VALUE(LW(1), 10)
         CASE_EQUAL(-2)
-        SET_VALUE(LW(0), 27)
-        SET_VALUE(LW(1), 27)
+            SET_VALUE(LW(0), 27)
+            SET_VALUE(LW(1), 27)
         CASE_EQUAL(-1)
-        SET_VALUE(LW(0), 25)
+            SET_VALUE(LW(0), 25)
 #else
-        SET_VALUE(LW(0), 27)
-        SET_VALUE(LW(1), 20)
+            SET_VALUE(LW(0), 27)
+            SET_VALUE(LW(1), 20)
         CASE_EQUAL(-2)
-        SET_VALUE(LW(0), 25)
-        SET_VALUE(LW(1), 28)
+            SET_VALUE(LW(0), 25)
+            SET_VALUE(LW(1), 28)
         CASE_EQUAL(-1)
-        SET_VALUE(LW(0), 23)
+            SET_VALUE(LW(0), 23)
 #endif
-        SET_VALUE(LW(1), 30)
+            SET_VALUE(LW(1), 30)
         CASE_EQUAL(0)
-        SET_VALUE(LW(0), 23)
-        SET_VALUE(LW(1), 30)
+            SET_VALUE(LW(0), 23)
+            SET_VALUE(LW(1), 30)
         CASE_EQUAL(1)
 #if VERSION <= VERSION_DEMO_JP
-        SET_VALUE(LW(0), 20)
-        SET_VALUE(LW(1), 30)
+            SET_VALUE(LW(0), 20)
+            SET_VALUE(LW(1), 30)
         CASE_EQUAL(2)
-        SET_VALUE(LW(0), 20)
-        SET_VALUE(LW(1), 32)
+            SET_VALUE(LW(0), 20)
+            SET_VALUE(LW(1), 32)
         CASE_DEFAULT
-        SET_VALUE(LW(0), 20)
-        SET_VALUE(LW(1), 35)
+            SET_VALUE(LW(0), 20)
+            SET_VALUE(LW(1), 35)
 #else
-        SET_VALUE(LW(0), 23)
-        SET_VALUE(LW(1), 30)
+            SET_VALUE(LW(0), 23)
+            SET_VALUE(LW(1), 30)
         CASE_EQUAL(2)
-        SET_VALUE(LW(0), 23)
-        SET_VALUE(LW(1), 30)
+            SET_VALUE(LW(0), 23)
+            SET_VALUE(LW(1), 30)
         CASE_DEFAULT
-        SET_VALUE(LW(0), 23)
-        SET_VALUE(LW(1), 32)
+            SET_VALUE(LW(0), 23)
+            SET_VALUE(LW(1), 32)
 #endif
     END_SWITCH
 

@@ -465,68 +465,68 @@ static EVT_BEGIN(evt_machibuse)
     // He offers to give Mario's name back if he guesses his real name; the lines depend on the story stage.
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG4_11_02_WAITING_DOOPLISS)
-        CALL(evt_msg_print, 0, STRING("stg4_gra_03"), 0, STRING("にせマリオ"))
+            CALL(evt_msg_print, 0, STRING("stg4_gra_03"), 0, STRING("にせマリオ"))
         CASE_LESS(STG4_13_VIVIAN_JOINS)
-        CALL(evt_msg_print, 0, STRING("stg4_gra_09"), 0, STRING("にせマリオ"))
+            CALL(evt_msg_print, 0, STRING("stg4_gra_09"), 0, STRING("にせマリオ"))
         CASE_LESS(STG4_13_02_WAITING_DOOPLISS_2)
-        CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-        SUBTRACT(LW(0), 15)
-        ADD(LW(2), 30)
-        CALL(evt_party_move_pos2, 0, LW(0), LW(2), FLOAT(70.0f))
-        WAIT_MS(500)
-        CALL(evt_party_stop, 0)
-        WAIT_MS(300)
-        CALL(evt_msg_print_party, STRING("stg4_gra_06"))
-        CALL(evt_msg_print, 0, STRING("stg4_gra_07"), 0, STRING("にせマリオ"))
-        CALL(evt_party_run, 0)
+            CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+            SUBTRACT(LW(0), 15)
+            ADD(LW(2), 30)
+            CALL(evt_party_move_pos2, 0, LW(0), LW(2), FLOAT(70.0f))
+            WAIT_MS(500)
+            CALL(evt_party_stop, 0)
+            WAIT_MS(300)
+            CALL(evt_msg_print_party, STRING("stg4_gra_06"))
+            CALL(evt_msg_print, 0, STRING("stg4_gra_07"), 0, STRING("にせマリオ"))
+            CALL(evt_party_run, 0)
         CASE_DEFAULT
-        CALL(evt_msg_print, 0, STRING("stg4_gra_09"), 0, STRING("にせマリオ"))
+            CALL(evt_msg_print, 0, STRING("stg4_gra_09"), 0, STRING("にせマリオ"))
     END_SWITCH
 
     // The name-entry screen opens; a right guess plays name_seikai, takes The Letter P away and ends the
     // scene.
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG4_13_04_THE_LETTER_P)
-        SET_VALUE(LW(0), NAMEENT_DOOPLISS)
-        CALL_CHILD(evt_nameent)
-        WAIT_MS(300)
+            SET_VALUE(LW(0), NAMEENT_DOOPLISS)
+            CALL_CHILD(evt_nameent)
+            WAIT_MS(300)
         CASE_DEFAULT
-        SET_VALUE(LW(0), NAMEENT_DOOPLISS_P)
-        CALL_CHILD(evt_nameent)
-        WAIT_MS(300)
+            SET_VALUE(LW(0), NAMEENT_DOOPLISS_P)
+            CALL_CHILD(evt_nameent)
+            WAIT_MS(300)
 #if VERSION >= VERSION_US
-        CALL(evt_sub_get_language, LW(1))
-        SWITCH(LW(1))
-            CASE_EQUAL(LANGUAGE_JP)
-            SET_VALUE(LW(2), STRING("ランペル"))
-            CASE_OR_EQUAL(LANGUAGE_US)
-            CASE_OR_EQUAL(6)
-            SET_VALUE(LW(2), STRING("Doopliss"))
-            CASE_END
-            CASE_EQUAL(LANGUAGE_IT)
-            SET_VALUE(LW(2), STRING("Rampel"))
-            CASE_DEFAULT
-            SET_VALUE(LW(2), STRING("Rumpel"))
-        END_SWITCH
-        IF_STR_EQUAL(LW(0), LW(2))
+            CALL(evt_sub_get_language, LW(1))
+            SWITCH(LW(1))
+                CASE_EQUAL(LANGUAGE_JP)
+                    SET_VALUE(LW(2), STRING("ランペル"))
+                CASE_OR_EQUAL(LANGUAGE_US)
+                CASE_OR_EQUAL(6)
+                    SET_VALUE(LW(2), STRING("Doopliss"))
+                CASE_END
+                CASE_EQUAL(LANGUAGE_IT)
+                    SET_VALUE(LW(2), STRING("Rampel"))
+                CASE_DEFAULT
+                    SET_VALUE(LW(2), STRING("Rumpel"))
+            END_SWITCH
+            IF_STR_EQUAL(LW(0), LW(2))
 #else
-        IF_STR_EQUAL(LW(0), STRING("ランペル"))
+            IF_STR_EQUAL(LW(0), STRING("ランペル"))
 #endif
-            CALL_CHILD(name_seikai)
-            SET_VALUE(GSW_STORY_PROGRESS, STG4_14_NAME_GUESSING)
-            CALL(evt_pouch_remove_item, ITEM_THE_LETTER_P, LW(0))
-            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG4_GRA1"))
-            CALL(evt_snd_envoff, PSND_FADEOUT | PSND_SLOT(1))
-            CALL(evt_snd_envon, PSND_CONTINUE | PSND_FADEIN, 0)
-            CALL(evt_gra_vivian_pose_set, 1, STRING("PTR_S_1"))
-            CALL(evt_gra_vivian_pose_set, 2, STRING("PTR_W_1"))
-            CALL(evt_gra_vivian_pose_set, 3, STRING("PTR_R_1"))
-            CALL(evt_gra_vivian_pose_set, 7, STRING("PTR_T_1"))
-            CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_POSE_LOCK)
-            CALL(evt_mario_key_onoff, 1)
-            CALL(evt_party_run, 0)
-            RETURN
-        END_IF
+                CALL_CHILD(name_seikai)
+                SET_VALUE(GSW_STORY_PROGRESS, STG4_14_NAME_GUESSING)
+                CALL(evt_pouch_remove_item, ITEM_THE_LETTER_P, LW(0))
+                CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG4_GRA1"))
+                CALL(evt_snd_envoff, PSND_FADEOUT | PSND_SLOT(1))
+                CALL(evt_snd_envon, PSND_CONTINUE | PSND_FADEIN, 0)
+                CALL(evt_gra_vivian_pose_set, 1, STRING("PTR_S_1"))
+                CALL(evt_gra_vivian_pose_set, 2, STRING("PTR_W_1"))
+                CALL(evt_gra_vivian_pose_set, 3, STRING("PTR_R_1"))
+                CALL(evt_gra_vivian_pose_set, 7, STRING("PTR_T_1"))
+                CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_POSE_LOCK)
+                CALL(evt_mario_key_onoff, 1)
+                CALL(evt_party_run, 0)
+                RETURN
+            END_IF
     END_SWITCH
 
     // A wrong guess: Doopliss mocks it and attacks, starting the fight.
@@ -539,10 +539,10 @@ static EVT_BEGIN(evt_machibuse)
     // or on to the next trail screen (gra_01).
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG4_11_02_WAITING_DOOPLISS)
-        SET_VALUE(GSW_STORY_PROGRESS, STG4_11_02_WAITING_DOOPLISS)
+            SET_VALUE(GSW_STORY_PROGRESS, STG4_11_02_WAITING_DOOPLISS)
         CASE_LESS(STG4_13_VIVIAN_JOINS)
         CASE_LESS(STG4_13_02_WAITING_DOOPLISS_2)
-        SET_VALUE(GSW_STORY_PROGRESS, STG4_13_02_WAITING_DOOPLISS_2)
+            SET_VALUE(GSW_STORY_PROGRESS, STG4_13_02_WAITING_DOOPLISS_2)
     END_SWITCH
     CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_POSE_LOCK)
     CALL(evt_gra_vivian_pose_set, 1, STRING("PTR_S_4"))
@@ -675,7 +675,7 @@ EVT_BEGIN(gra_00_init_evt)
     END_IF
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG4_11_SUPERBOMBBOMB_LOST, STG4_13_04_THE_LETTER_P)
-        SPAWN_EVENT(evt_machibuse)
+            SPAWN_EVENT(evt_machibuse)
     END_SWITCH
     RETURN
 EVT_END()

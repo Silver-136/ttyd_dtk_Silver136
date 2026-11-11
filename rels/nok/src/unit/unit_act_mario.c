@@ -405,11 +405,11 @@ static EVT_BEGIN(_act_target_enemy)
     CALL(evt_sub_random, 2, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(0)
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_TERESA1_ID, LW(3))
+            CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_TERESA1_ID, LW(3))
         CASE_EQUAL(1)
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_TERESA2_ID, LW(3))
+            CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_TERESA2_ID, LW(3))
         CASE_DEFAULT
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATMIC_TERESA_ID, LW(3))
+            CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATMIC_TERESA_ID, LW(3))
     END_SWITCH
     CALL(btlevtcmd_GetBodyId, LW(3), LW(4))
     RETURN
@@ -423,9 +423,9 @@ static EVT_BEGIN(_act_target_mario)
     CALL(evt_sub_random, 1, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(0)
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_MARIO_ID, LW(3))
+            CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_MARIO_ID, LW(3))
         CASE_DEFAULT
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_CLAUDA_ID, LW(3))
+            CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_CLAUDA_ID, LW(3))
     END_SWITCH
     CALL(btlevtcmd_GetBodyId, LW(3), LW(4))
     RETURN

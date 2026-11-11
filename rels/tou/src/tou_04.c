@@ -584,11 +584,11 @@ EVT_BEGIN(move_g)
     SET_VALUE(LF(0), 0)
     SWITCH(LW(0))
         CASE_EQUAL(3)
-        SET_VALUE(LF(0), 1)
+            SET_VALUE(LF(0), 1)
         CASE_EQUAL(4)
-        SET_VALUE(LF(0), 1)
+            SET_VALUE(LF(0), 1)
         CASE_EQUAL(5)
-        SET_VALUE(LF(0), 1)
+            SET_VALUE(LF(0), 1)
     END_SWITCH
     CALL(evt_npc_get_position, STRING("me"), LW(10), LW(11), LW(12))
 #if VERSION >= VERSION_JP
@@ -718,32 +718,32 @@ EVT_END()
 static EVT_BEGIN(talk_g_1)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_06_1ST_MATCH)
-        CALL(evt_msg_print, 0, STRING("stg3_tou_39"), 0, 0)
-        CASE_BETWEEN(STG3_20_01_SUPER_HAMMER, STG3_20_03_THE_YELLOW_BLOCK)
-        CALL(evt_msg_print, 0, STRING("stg3_tou_297_13"), 0, 0)
-        IF_INT_LESS(GSW_STORY_PROGRESS, STG3_20_02_BACK_TO_THE_MINORS)
-            CALL_CHILD(move_g_1_dokimasu)
-        END_IF
-        CASE_EQUAL(STG3_31_GRUBBAS_PLANS)
-        CALL(evt_msg_print, 0, STRING("stg3_tou_96_01"), 0, 0)
-        CASE_LESS(STG3_34_RETURN_TO_ROGUEPORT)
-        CALL(evt_tou_get_ranking, LW(0))
-        IF_INT_LESS_OR_EQUAL(LW(0), 10)
-            CALL(evt_msg_print, 0, STRING("stg3_tou_96"), 0, 0)
-        ELSE
-            CALL(evt_msg_print, 0, STRING("stg3_tou_95"), 0, 0)
-        END_IF
-        CASE_DEFAULT
-        IF_INT_EQUAL(GSWF_TOU_REMATCH_REGISTERED, 0)
             CALL(evt_msg_print, 0, STRING("stg3_tou_39"), 0, 0)
-        ELSE
+        CASE_BETWEEN(STG3_20_01_SUPER_HAMMER, STG3_20_03_THE_YELLOW_BLOCK)
+            CALL(evt_msg_print, 0, STRING("stg3_tou_297_13"), 0, 0)
+            IF_INT_LESS(GSW_STORY_PROGRESS, STG3_20_02_BACK_TO_THE_MINORS)
+                CALL_CHILD(move_g_1_dokimasu)
+            END_IF
+        CASE_EQUAL(STG3_31_GRUBBAS_PLANS)
+            CALL(evt_msg_print, 0, STRING("stg3_tou_96_01"), 0, 0)
+        CASE_LESS(STG3_34_RETURN_TO_ROGUEPORT)
             CALL(evt_tou_get_ranking, LW(0))
             IF_INT_LESS_OR_EQUAL(LW(0), 10)
                 CALL(evt_msg_print, 0, STRING("stg3_tou_96"), 0, 0)
             ELSE
                 CALL(evt_msg_print, 0, STRING("stg3_tou_95"), 0, 0)
             END_IF
-        END_IF
+        CASE_DEFAULT
+            IF_INT_EQUAL(GSWF_TOU_REMATCH_REGISTERED, 0)
+                CALL(evt_msg_print, 0, STRING("stg3_tou_39"), 0, 0)
+            ELSE
+                CALL(evt_tou_get_ranking, LW(0))
+                IF_INT_LESS_OR_EQUAL(LW(0), 10)
+                    CALL(evt_msg_print, 0, STRING("stg3_tou_96"), 0, 0)
+                ELSE
+                    CALL(evt_msg_print, 0, STRING("stg3_tou_95"), 0, 0)
+                END_IF
+            END_IF
     END_SWITCH
     RETURN
 EVT_END()
@@ -754,24 +754,24 @@ static EVT_BEGIN(move_g_1)
     END_IF
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_04_GONZALES_IS_BORN)
-        IF_INT_EQUAL(GSWF_TOU_JOLENE_ESCORT_TO_MINORS, 1)
-            SET_VALUE(LW(0), 0)
-            CALL_CHILD(move_g)
-        END_IF
+            IF_INT_EQUAL(GSWF_TOU_JOLENE_ESCORT_TO_MINORS, 1)
+                SET_VALUE(LW(0), 0)
+                CALL_CHILD(move_g)
+            END_IF
         CASE_LESS(STG3_34_RETURN_TO_ROGUEPORT)
-        CALL(evt_tou_get_ranking, LW(0))
-        IF_INT_GREATER(LW(0), 10)
-            SET_VALUE(LW(0), 0)
-            CALL_CHILD(move_g)
-        END_IF
-        CASE_DEFAULT
-        IF_INT_EQUAL(GSWF_TOU_REMATCH_REGISTERED, 1)
             CALL(evt_tou_get_ranking, LW(0))
             IF_INT_GREATER(LW(0), 10)
                 SET_VALUE(LW(0), 0)
                 CALL_CHILD(move_g)
             END_IF
-        END_IF
+        CASE_DEFAULT
+            IF_INT_EQUAL(GSWF_TOU_REMATCH_REGISTERED, 1)
+                CALL(evt_tou_get_ranking, LW(0))
+                IF_INT_GREATER(LW(0), 10)
+                    SET_VALUE(LW(0), 0)
+                    CALL_CHILD(move_g)
+                END_IF
+            END_IF
     END_SWITCH
     RETURN
 EVT_END()
@@ -798,20 +798,20 @@ EVT_END()
 static EVT_BEGIN(talk_g_2)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_06_1ST_MATCH)
-        CALL(evt_msg_print, 0, STRING("stg3_tou_38"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg3_tou_38"), 0, 0)
         CASE_EQUAL(STG3_31_GRUBBAS_PLANS)
-        CALL(evt_msg_print, 0, STRING("stg3_tou_94_01"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg3_tou_94_01"), 0, 0)
         CASE_EQUAL(STG3_21_1ST_MATCH_WITH_RAWK_HAWK)
-        IF_INT_EQUAL(GSWF_TOU_RAWK_HAWK_OPENING_SEEN, 0)
-            CALL(evt_msg_print, 0, STRING("stg3_tou_423_01"), 0, 0)
-            CALL(evt_mario_set_pose, STRING("M_I_Y"))
-            CALL(evt_msg_print, 0, STRING("stg3_tou_423_02"), 0, 0)
-            CALL(evt_mario_set_pose, STRING("M_S_1"))
-        ELSE
-            CALL(evt_msg_print, 0, STRING("stg3_tou_94"), 0, 0)
-        END_IF
+            IF_INT_EQUAL(GSWF_TOU_RAWK_HAWK_OPENING_SEEN, 0)
+                CALL(evt_msg_print, 0, STRING("stg3_tou_423_01"), 0, 0)
+                CALL(evt_mario_set_pose, STRING("M_I_Y"))
+                CALL(evt_msg_print, 0, STRING("stg3_tou_423_02"), 0, 0)
+                CALL(evt_mario_set_pose, STRING("M_S_1"))
+            ELSE
+                CALL(evt_msg_print, 0, STRING("stg3_tou_94"), 0, 0)
+            END_IF
         CASE_DEFAULT
-        CALL(evt_msg_print, 0, STRING("stg3_tou_94"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg3_tou_94"), 0, 0)
     END_SWITCH
     RETURN
 EVT_END()
@@ -875,13 +875,13 @@ static EVT_BEGIN(talk_g_3)
     CALL(evt_tou_get_ranking, LW(0))
     SWITCH(LW(0))
         CASE_LESS(1)
-        CALL(evt_msg_print, 0, STRING("stg3_tou_99"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg3_tou_99"), 0, 0)
         CASE_LESS(11)
-        CALL(evt_msg_print, 0, STRING("stg3_tou_98"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg3_tou_98"), 0, 0)
         CASE_EQUAL(163)
-        CALL(evt_msg_print, 0, STRING("stg3_tou_99_01"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg3_tou_99_01"), 0, 0)
         CASE_DEFAULT
-        CALL(evt_msg_print, 0, STRING("stg3_tou_40"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg3_tou_40"), 0, 0)
     END_SWITCH
     RETURN
 EVT_END()
@@ -902,13 +902,13 @@ static EVT_BEGIN(move_g_3)
     CALL(evt_tou_get_ranking, LW(0))
     SWITCH(LW(0))
         CASE_LESS(1)
-        IF_INT_EQUAL(GSWF_TOU_JOLENE_ESCORT_TO_CHAMP_ROOM, 1)
+            IF_INT_EQUAL(GSWF_TOU_JOLENE_ESCORT_TO_CHAMP_ROOM, 1)
+                SET_VALUE(LW(0), 2)
+                CALL_CHILD(move_g)
+            END_IF
+        CASE_LESS(11)
             SET_VALUE(LW(0), 2)
             CALL_CHILD(move_g)
-        END_IF
-        CASE_LESS(11)
-        SET_VALUE(LW(0), 2)
-        CALL_CHILD(move_g)
         CASE_DEFAULT
     END_SWITCH
     RETURN
@@ -945,9 +945,9 @@ EVT_BEGIN(init_g_4)
         SET_VALUE(LF(2), 0)
         SWITCH(GSW_TROUBLE_ACCEPTED)
             CASE_EQUAL(13)
-            SET_VALUE(LF(0), 1)
+                SET_VALUE(LF(0), 1)
             CASE_EQUAL(23)
-            SET_VALUE(LF(0), 1)
+                SET_VALUE(LF(0), 1)
         END_SWITCH
         IF_INT_EQUAL(LF(0), 1)
             SET_VALUE(LF(1), GSWF_TOU_04_GUARD_4_LET_IN_TROUBLE)
@@ -997,97 +997,97 @@ EVT_BEGIN(talk_g_4)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_03_GRUBBA)
 
-        // He steps aside, out of the doorway; in JP and later, the passage to Grubba's office is enabled for Mario.
-        CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-        CALL(evt_npc_get_position, STRING("me"), LW(3), LW(4), LW(5))
-        IF_INT_EQUAL(LW(3), -350)
-            CALL(evt_msg_print, 0, STRING("stg3_tou_42"), 0, 0)
+            // He steps aside, out of the doorway; in JP and later, the passage to Grubba's office is enabled for Mario.
+            CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+            CALL(evt_npc_get_position, STRING("me"), LW(3), LW(4), LW(5))
+            IF_INT_EQUAL(LW(3), -350)
+                CALL(evt_msg_print, 0, STRING("stg3_tou_42"), 0, 0)
 #if VERSION >= VERSION_JP
-            CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT)
+                CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT)
 #endif
-            CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
-            IF_INT_LESS(LW(0), LW(3))
-                ADD(LW(3), 50)
-                CALL(evt_npc_move_position, STRING("me"), LW(3), LW(5), 0, FLOAT(80.0f), 1)
-                CALL(evt_npc_set_ry, STRING("me"), 270)
+                CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
+                IF_INT_LESS(LW(0), LW(3))
+                    ADD(LW(3), 50)
+                    CALL(evt_npc_move_position, STRING("me"), LW(3), LW(5), 0, FLOAT(80.0f), 1)
+                    CALL(evt_npc_set_ry, STRING("me"), 270)
+                ELSE
+                    ADD(LW(3), -50)
+                    CALL(evt_npc_move_position, STRING("me"), LW(3), LW(5), 0, FLOAT(80.0f), 1)
+                    CALL(evt_npc_set_ry, STRING("me"), 90)
+                END_IF
+                CALL(memoryRY)
+#if VERSION >= VERSION_JP
+                CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_NO_HIT)
+                SET_VALUE(LW(0), 5)
+                CALL_CHILD(bero_case_switch_on)
+#endif
             ELSE
-                ADD(LW(3), -50)
-                CALL(evt_npc_move_position, STRING("me"), LW(3), LW(5), 0, FLOAT(80.0f), 1)
-                CALL(evt_npc_set_ry, STRING("me"), 90)
+                // On later visits he only tells Mario to go talk to Mr. Grubba.
+                CALL(evt_msg_print, 0, STRING("stg3_tou_42_01"), 0, 0)
             END_IF
-            CALL(memoryRY)
-#if VERSION >= VERSION_JP
-            CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_NO_HIT)
-            SET_VALUE(LW(0), 5)
-            CALL_CHILD(bero_case_switch_on)
-#endif
-        ELSE
-            // On later visits he only tells Mario to go talk to Mr. Grubba.
-            CALL(evt_msg_print, 0, STRING("stg3_tou_42_01"), 0, 0)
-        END_IF
 
         // Across the following story branches, the guard sends Mario to Grubba, says he ran by toward the ring,
         // or that the office is closed to visitors.
         CASE_LESS(STG3_04_GONZALES_IS_BORN)
-        CALL(evt_msg_print, 0, STRING("stg3_tou_42_01"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg3_tou_42_01"), 0, 0)
         CASE_EQUAL(STG3_31_GRUBBAS_PLANS)
-        CALL(evt_msg_print, 0, STRING("stg3_tou_102_02"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg3_tou_102_02"), 0, 0)
         CASE_LESS(STG3_34_RETURN_TO_ROGUEPORT)
-        CALL(evt_msg_print, 0, STRING("stg3_tou_102_01"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg3_tou_102_01"), 0, 0)
         CASE_DEFAULT
-        // After the return to Rogueport the guard stands at his post: he welcomes Mario back to the league
-        // or waves him in to see Ms. Jolene.
-        CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
-        IF_INT_EQUAL(LW(0), -350)
-            SWITCH(GSW_TROUBLE_ACCEPTED)
-                CASE_EQUAL(13)
-                CALL(evt_msg_print, 0, STRING("stg3_tou_re_311"), 0, 0)
-                SET_VALUE(GSWF_TOU_04_GUARD_4_LET_IN_TROUBLE, 1)
-                CASE_EQUAL(23)
-                CALL(evt_msg_print, 0, STRING("stg3_tou_re_311"), 0, 0)
-                SET_VALUE(GSWF_TOU_04_GUARD_4_LET_IN_TROUBLE, 1)
-                CASE_DEFAULT
-                IF_INT_EQUAL(GSWF_TOU_REMATCH_REGISTERED, 0)
-                    CALL(evt_msg_print, 0, STRING("stg3_tou_re_310"), 0, 0)
-                    SET_VALUE(GSWF_TOU_04_GUARD_4_LET_IN_REMATCH, 1)
-                ELSE
-                    CALL(evt_msg_print, 0, STRING("stg3_tou_re_314"), 0, 0)
-                    RETURN
-                END_IF
-            END_SWITCH
+            // After the return to Rogueport the guard stands at his post: he welcomes Mario back to the league
+            // or waves him in to see Ms. Jolene.
+            CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
+            IF_INT_EQUAL(LW(0), -350)
+                SWITCH(GSW_TROUBLE_ACCEPTED)
+                    CASE_EQUAL(13)
+                        CALL(evt_msg_print, 0, STRING("stg3_tou_re_311"), 0, 0)
+                        SET_VALUE(GSWF_TOU_04_GUARD_4_LET_IN_TROUBLE, 1)
+                    CASE_EQUAL(23)
+                        CALL(evt_msg_print, 0, STRING("stg3_tou_re_311"), 0, 0)
+                        SET_VALUE(GSWF_TOU_04_GUARD_4_LET_IN_TROUBLE, 1)
+                    CASE_DEFAULT
+                        IF_INT_EQUAL(GSWF_TOU_REMATCH_REGISTERED, 0)
+                            CALL(evt_msg_print, 0, STRING("stg3_tou_re_310"), 0, 0)
+                            SET_VALUE(GSWF_TOU_04_GUARD_4_LET_IN_REMATCH, 1)
+                        ELSE
+                            CALL(evt_msg_print, 0, STRING("stg3_tou_re_314"), 0, 0)
+                            RETURN
+                        END_IF
+                END_SWITCH
 
-            // He steps aside and opens the way to the office.
-            CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-            CALL(evt_npc_get_position, STRING("me"), LW(3), LW(4), LW(5))
+                // He steps aside and opens the way to the office.
+                CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+                CALL(evt_npc_get_position, STRING("me"), LW(3), LW(4), LW(5))
 #if VERSION >= VERSION_JP
-            CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT)
+                CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT)
 #endif
-            CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
-            IF_INT_LESS(LW(0), LW(3))
-                ADD(LW(3), 50)
-                CALL(evt_npc_move_position, STRING("me"), LW(3), LW(5), 0, FLOAT(80.0f), 1)
-                CALL(evt_npc_set_ry, STRING("me"), 270)
+                CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
+                IF_INT_LESS(LW(0), LW(3))
+                    ADD(LW(3), 50)
+                    CALL(evt_npc_move_position, STRING("me"), LW(3), LW(5), 0, FLOAT(80.0f), 1)
+                    CALL(evt_npc_set_ry, STRING("me"), 270)
+                ELSE
+                    ADD(LW(3), -50)
+                    CALL(evt_npc_move_position, STRING("me"), LW(3), LW(5), 0, FLOAT(80.0f), 1)
+                    CALL(evt_npc_set_ry, STRING("me"), 90)
+                END_IF
+                CALL(memoryRY)
+#if VERSION >= VERSION_JP
+                CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_NO_HIT)
+#endif
+                SET_VALUE(LW(0), 5)
+                CALL_CHILD(bero_case_switch_on)
             ELSE
-                ADD(LW(3), -50)
-                CALL(evt_npc_move_position, STRING("me"), LW(3), LW(5), 0, FLOAT(80.0f), 1)
-                CALL(evt_npc_set_ry, STRING("me"), 90)
+                SWITCH(GSW_TROUBLE_ACCEPTED)
+                    CASE_EQUAL(13)
+                        CALL(evt_msg_print, 0, STRING("stg3_tou_re_313"), 0, 0)
+                    CASE_EQUAL(23)
+                        CALL(evt_msg_print, 0, STRING("stg3_tou_re_313"), 0, 0)
+                    CASE_DEFAULT
+                        CALL(evt_msg_print, 0, STRING("stg3_tou_re_312"), 0, 0)
+                END_SWITCH
             END_IF
-            CALL(memoryRY)
-#if VERSION >= VERSION_JP
-            CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_NO_HIT)
-#endif
-            SET_VALUE(LW(0), 5)
-            CALL_CHILD(bero_case_switch_on)
-        ELSE
-            SWITCH(GSW_TROUBLE_ACCEPTED)
-                CASE_EQUAL(13)
-                CALL(evt_msg_print, 0, STRING("stg3_tou_re_313"), 0, 0)
-                CASE_EQUAL(23)
-                CALL(evt_msg_print, 0, STRING("stg3_tou_re_313"), 0, 0)
-                CASE_DEFAULT
-                CALL(evt_msg_print, 0, STRING("stg3_tou_re_312"), 0, 0)
-            END_SWITCH
-        END_IF
     END_SWITCH
     RETURN
 EVT_END()
@@ -1116,20 +1116,20 @@ static EVT_BEGIN(move_g_4)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_03_GRUBBA)
         CASE_LESS(STG3_06_1ST_MATCH)
-        SET_VALUE(LW(0), 3)
-        CALL_CHILD(move_g)
+            SET_VALUE(LW(0), 3)
+            CALL_CHILD(move_g)
         CASE_EQUAL(STG3_30_04_AIR_DUCT_EXIT)
-        CALL(evt_bero_get_entername, LW(0))
-        IF_STR_EQUAL(LW(0), STRING("s_bero_5"))
-            CALL(evt_npc_set_position, STRING("me"), -400, 0, -530)
-            CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
-            CALL(evt_mario_key_onoff, 0)
-            CALL(evt_npc_move_position, STRING("me"), -350, -530, 0, FLOAT(80.0f), 1)
-            CALL(evt_mario_key_onoff, 1)
-        END_IF
+            CALL(evt_bero_get_entername, LW(0))
+            IF_STR_EQUAL(LW(0), STRING("s_bero_5"))
+                CALL(evt_npc_set_position, STRING("me"), -400, 0, -530)
+                CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
+                CALL(evt_mario_key_onoff, 0)
+                CALL(evt_npc_move_position, STRING("me"), -350, -530, 0, FLOAT(80.0f), 1)
+                CALL(evt_mario_key_onoff, 1)
+            END_IF
         CASE_BETWEEN(STG3_31_GRUBBAS_PLANS, STG3_33_06_BOWSER_TREASURE)
-        SET_VALUE(LW(0), 3)
-        CALL_CHILD(move_g)
+            SET_VALUE(LW(0), 3)
+            CALL_CHILD(move_g)
     END_SWITCH
     RETURN
 EVT_END()
@@ -1166,11 +1166,11 @@ static EVT_BEGIN(talk_g_6)
     CALL(evt_tou_get_ranking, LW(0))
     SWITCH(LW(0))
         CASE_LESS(1)
-        CALL(evt_msg_print, 0, STRING("stg3_tou_101"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg3_tou_101"), 0, 0)
         CASE_EQUAL(163)
-        CALL(evt_msg_print, 0, STRING("stg3_tou_102_00"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg3_tou_102_00"), 0, 0)
         CASE_DEFAULT
-        CALL(evt_msg_print, 0, STRING("stg3_tou_102"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg3_tou_102"), 0, 0)
     END_SWITCH
     RETURN
 EVT_END()
@@ -1188,13 +1188,13 @@ static EVT_BEGIN(move_g_6)
     CALL(evt_tou_get_ranking, LW(0))
     SWITCH(LW(0))
         CASE_LESS(1)
-        SET_VALUE(LW(0), 5)
-        CALL_CHILD(move_g)
-        CASE_DEFAULT
-        IF_INT_EQUAL(GSWF_TOU_GRUBBA_WALK_TALK_PENDING, 1)
             SET_VALUE(LW(0), 5)
             CALL_CHILD(move_g)
-        END_IF
+        CASE_DEFAULT
+            IF_INT_EQUAL(GSWF_TOU_GRUBBA_WALK_TALK_PENDING, 1)
+                SET_VALUE(LW(0), 5)
+                CALL_CHILD(move_g)
+            END_IF
     END_SWITCH
     RETURN
 EVT_END()
@@ -1209,11 +1209,11 @@ EVT_END()
 static EVT_BEGIN(talk_g_7)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_06_1ST_MATCH)
-        CALL(evt_msg_print, 0, STRING("stg3_tou_40"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg3_tou_40"), 0, 0)
         CASE_EQUAL(STG3_31_GRUBBAS_PLANS)
-        CALL(evt_msg_print, 0, STRING("stg3_tou_100_01"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg3_tou_100_01"), 0, 0)
         CASE_DEFAULT
-        CALL(evt_msg_print, 0, STRING("stg3_tou_100"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg3_tou_100"), 0, 0)
     END_SWITCH
     RETURN
 EVT_END()
@@ -1233,15 +1233,15 @@ EVT_END()
 static EVT_BEGIN(talk_g_8)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_06_1ST_MATCH)
-        CALL(evt_msg_print, 0, STRING("stg3_tou_38"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg3_tou_38"), 0, 0)
         CASE_EQUAL(STG3_21_1ST_MATCH_WITH_RAWK_HAWK)
-        IF_INT_EQUAL(GSWF_TOU_RAWK_HAWK_OPENING_SEEN, 0)
-            CALL(evt_msg_print, 0, STRING("stg3_tou_423_03"), 0, 0)
-        ELSE
-            CALL(evt_msg_print, 0, STRING("stg3_tou_94"), 0, 0)
-        END_IF
+            IF_INT_EQUAL(GSWF_TOU_RAWK_HAWK_OPENING_SEEN, 0)
+                CALL(evt_msg_print, 0, STRING("stg3_tou_423_03"), 0, 0)
+            ELSE
+                CALL(evt_msg_print, 0, STRING("stg3_tou_94"), 0, 0)
+            END_IF
         CASE_DEFAULT
-        CALL(evt_msg_print, 0, STRING("stg3_tou_94"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg3_tou_94"), 0, 0)
     END_SWITCH
     RETURN
 EVT_END()
@@ -1264,17 +1264,17 @@ EVT_END()
 static EVT_BEGIN(talk_g_9)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_06_1ST_MATCH)
-        CALL(evt_msg_print, 0, STRING("stg3_tou_39"), 0, 0)
-        CASE_EQUAL(STG3_31_GRUBBAS_PLANS)
-        CALL(evt_msg_print, 0, STRING("stg3_tou_97_01"), 0, 0)
-        CASE_LESS(STG3_34_RETURN_TO_ROGUEPORT)
-        CALL(evt_msg_print, 0, STRING("stg3_tou_97"), 0, 0)
-        CASE_DEFAULT
-        IF_INT_EQUAL(GSWF_TOU_REMATCH_REGISTERED, 0)
             CALL(evt_msg_print, 0, STRING("stg3_tou_39"), 0, 0)
-        ELSE
+        CASE_EQUAL(STG3_31_GRUBBAS_PLANS)
+            CALL(evt_msg_print, 0, STRING("stg3_tou_97_01"), 0, 0)
+        CASE_LESS(STG3_34_RETURN_TO_ROGUEPORT)
             CALL(evt_msg_print, 0, STRING("stg3_tou_97"), 0, 0)
-        END_IF
+        CASE_DEFAULT
+            IF_INT_EQUAL(GSWF_TOU_REMATCH_REGISTERED, 0)
+                CALL(evt_msg_print, 0, STRING("stg3_tou_39"), 0, 0)
+            ELSE
+                CALL(evt_msg_print, 0, STRING("stg3_tou_97"), 0, 0)
+            END_IF
     END_SWITCH
     RETURN
 EVT_END()
@@ -1295,11 +1295,11 @@ EVT_END()
 static EVT_BEGIN(init_g_10)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG3_21_1ST_MATCH_WITH_RAWK_HAWK)
-        IF_INT_EQUAL(GSWF_TOU_RAWK_HAWK_OPENING_SEEN, 0)
-            CALL(evt_npc_set_position, STRING("me"), -550, 0, 530)
-        END_IF
+            IF_INT_EQUAL(GSWF_TOU_RAWK_HAWK_OPENING_SEEN, 0)
+                CALL(evt_npc_set_position, STRING("me"), -550, 0, 530)
+            END_IF
         CASE_EQUAL(STG3_31_GRUBBAS_PLANS)
-        CALL(evt_npc_set_position, STRING("me"), -550, 0, 530)
+            CALL(evt_npc_set_position, STRING("me"), -550, 0, 530)
     END_SWITCH
     RETURN
 EVT_END()
@@ -1307,11 +1307,11 @@ EVT_END()
 static EVT_BEGIN(talk_g_10)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG3_21_1ST_MATCH_WITH_RAWK_HAWK)
-        IF_INT_EQUAL(GSWF_TOU_RAWK_HAWK_OPENING_SEEN, 0)
-            CALL(evt_msg_print, 0, STRING("stg3_tou_102_03"), 0, STRING("me"))
-        END_IF
+            IF_INT_EQUAL(GSWF_TOU_RAWK_HAWK_OPENING_SEEN, 0)
+                CALL(evt_msg_print, 0, STRING("stg3_tou_102_03"), 0, STRING("me"))
+            END_IF
         CASE_EQUAL(STG3_31_GRUBBAS_PLANS)
-        CALL(evt_msg_print, 0, STRING("stg3_tou_102_04"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg3_tou_102_04"), 0, STRING("me"))
     END_SWITCH
     RETURN
 EVT_END()
@@ -1324,11 +1324,11 @@ EVT_END()
 static EVT_BEGIN(init_g_11)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG3_21_1ST_MATCH_WITH_RAWK_HAWK)
-        IF_INT_EQUAL(GSWF_TOU_RAWK_HAWK_OPENING_SEEN, 0)
-            CALL(evt_npc_set_position, STRING("me"), 550, 0, 530)
-        END_IF
+            IF_INT_EQUAL(GSWF_TOU_RAWK_HAWK_OPENING_SEEN, 0)
+                CALL(evt_npc_set_position, STRING("me"), 550, 0, 530)
+            END_IF
         CASE_EQUAL(STG3_31_GRUBBAS_PLANS)
-        CALL(evt_npc_set_position, STRING("me"), 550, 0, 530)
+            CALL(evt_npc_set_position, STRING("me"), 550, 0, 530)
     END_SWITCH
     CALL(evt_npc_set_ry, STRING("me"), 0)
     RETURN
@@ -1337,11 +1337,11 @@ EVT_END()
 static EVT_BEGIN(talk_g_11)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG3_21_1ST_MATCH_WITH_RAWK_HAWK)
-        IF_INT_EQUAL(GSWF_TOU_RAWK_HAWK_OPENING_SEEN, 0)
-            CALL(evt_msg_print, 0, STRING("stg3_tou_102_03"), 0, STRING("me"))
-        END_IF
+            IF_INT_EQUAL(GSWF_TOU_RAWK_HAWK_OPENING_SEEN, 0)
+                CALL(evt_msg_print, 0, STRING("stg3_tou_102_03"), 0, STRING("me"))
+            END_IF
         CASE_EQUAL(STG3_31_GRUBBAS_PLANS)
-        CALL(evt_msg_print, 0, STRING("stg3_tou_102_04"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg3_tou_102_04"), 0, STRING("me"))
     END_SWITCH
     RETURN
 EVT_END()
@@ -1368,17 +1368,17 @@ static EVT_BEGIN(init_brots)
             SWITCH(LW(0))
                 CASE_LESS(5)
                 CASE_LESS(19)
-                CALL(evt_sub_random, 4, LW(1))
-                SWITCH(LW(1))
-                    CASE_EQUAL(0)
-                    CALL(evt_npc_set_position, STRING("me"), -525, 0, 225)
-                    CASE_EQUAL(1)
-                    CALL(evt_npc_set_position, STRING("me"), -175, 0, -475)
-                    CASE_EQUAL(2)
-                    CALL(evt_npc_set_position, STRING("me"), 525, 0, -175)
-                    CASE_DEFAULT
-                    CALL(evt_npc_set_position, STRING("me"), 525, 0, 425)
-                END_SWITCH
+                    CALL(evt_sub_random, 4, LW(1))
+                    SWITCH(LW(1))
+                        CASE_EQUAL(0)
+                            CALL(evt_npc_set_position, STRING("me"), -525, 0, 225)
+                        CASE_EQUAL(1)
+                            CALL(evt_npc_set_position, STRING("me"), -175, 0, -475)
+                        CASE_EQUAL(2)
+                            CALL(evt_npc_set_position, STRING("me"), 525, 0, -175)
+                        CASE_DEFAULT
+                            CALL(evt_npc_set_position, STRING("me"), 525, 0, 425)
+                    END_SWITCH
             END_SWITCH
         END_IF
 #if VERSION >= VERSION_JP
@@ -1467,21 +1467,21 @@ static EVT_BEGIN(talk_brots)
         CALL(evt_msg_select, 1, LW(0))
         SWITCH(LW(0))
             CASE_EQUAL(0)
-            CALL(evt_msg_print, 0, STRING("stg3_tou_hushigi_11"), 0, 0)
+                CALL(evt_msg_print, 0, STRING("stg3_tou_hushigi_11"), 0, 0)
             CASE_EQUAL(1)
-            CALL(evt_msg_print, 0, STRING("stg3_tou_hushigi_12"), 0, 0)
+                CALL(evt_msg_print, 0, STRING("stg3_tou_hushigi_12"), 0, 0)
             CASE_EQUAL(2)
-            CALL(evt_msg_print, 0, STRING("stg3_tou_hushigi_13"), 0, 0)
+                CALL(evt_msg_print, 0, STRING("stg3_tou_hushigi_13"), 0, 0)
             CASE_EQUAL(3)
-            CALL(evt_msg_print, 0, STRING("stg3_tou_hushigi_14"), 0, 0)
+                CALL(evt_msg_print, 0, STRING("stg3_tou_hushigi_14"), 0, 0)
             CASE_EQUAL(4)
-            CALL(evt_msg_print, 0, STRING("stg3_tou_hushigi_15"), 0, 0)
+                CALL(evt_msg_print, 0, STRING("stg3_tou_hushigi_15"), 0, 0)
             CASE_EQUAL(5)
-            CALL(evt_msg_print, 0, STRING("stg3_tou_hushigi_16"), 0, 0)
+                CALL(evt_msg_print, 0, STRING("stg3_tou_hushigi_16"), 0, 0)
             CASE_EQUAL(6)
-            CALL(evt_msg_print, 0, STRING("stg3_tou_hushigi_17"), 0, 0)
+                CALL(evt_msg_print, 0, STRING("stg3_tou_hushigi_17"), 0, 0)
             CASE_DEFAULT
-            CALL(evt_msg_print, 0, STRING("stg3_tou_hushigi_08"), 0, 0)
+                CALL(evt_msg_print, 0, STRING("stg3_tou_hushigi_08"), 0, 0)
         END_SWITCH
     END_IF
     SET_VALUE(GSWF_TOU_04_SEVEN_WONDERS_HEARD, 1)
@@ -1983,7 +1983,7 @@ static EVT_BEGIN(evt_gardman)
     SET_VALUE(GSWF_TOU_04_GUARD_1_ESCORT_UNUSED, 0)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_05_MATCH)
-        SET_VALUE(GSW_STORY_PROGRESS, STG3_05_MATCH)
+            SET_VALUE(GSW_STORY_PROGRESS, STG3_05_MATCH)
         CASE_DEFAULT
     END_SWITCH
     CALL(evt_bero_mapchange, STRING("tou_03"), 0)
@@ -2530,25 +2530,25 @@ EVT_BEGIN(tou_04_init_evt)
         IF_INT_EQUAL(LW(1), 0)
             SWITCH(GSW_STORY_PROGRESS)
                 CASE_BETWEEN(STG3_00_WELCOME_TO_GLITZVILLE, STG3_12_THE_MINI_YOSHI_EGG)
-                CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
+                    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
 #if VERSION <= VERSION_DEMO_JP
-                CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
+                    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
 #else
-                CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU4"))
+                    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU4"))
 #endif
-                CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
+                    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
                 CASE_GREATER_OR_EQUAL(STG3_33_PEACH_THE_SECRET_WEAPON)
-                CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
+                    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
 #if VERSION <= VERSION_DEMO_JP
-                CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
+                    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
 #else
-                CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU4"))
+                    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU4"))
 #endif
-                CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
+                    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
                 CASE_DEFAULT
-                CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU1"))
-                CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
-                CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU4"))
+                    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU1"))
+                    CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
+                    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU4"))
             END_SWITCH
         ELSE
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG3_GANCE1"))
@@ -2634,21 +2634,21 @@ EVT_BEGIN(tou_04_init_evt)
         CASE_LESS(STG3_03_GRUBBA)
 #endif
         CASE_LESS(STG3_04_GONZALES_IS_BORN)
-        SET_VALUE(LW(0), 5)
-        CALL_CHILD(bero_case_switch_on)
+            SET_VALUE(LW(0), 5)
+            CALL_CHILD(bero_case_switch_on)
         CASE_DEFAULT
-        CALL(evt_tou_get_ranking, LW(0))
-        SWITCH(LW(0))
-            CASE_LESS(1)
-            SET_VALUE(LW(0), 3)
-            CALL_CHILD(bero_case_switch_on)
-            CASE_LESS(11)
-            SET_VALUE(LW(0), 6)
-            CALL_CHILD(bero_case_switch_on)
-            CASE_DEFAULT
-            SET_VALUE(LW(0), 7)
-            CALL_CHILD(bero_case_switch_on)
-        END_SWITCH
+            CALL(evt_tou_get_ranking, LW(0))
+            SWITCH(LW(0))
+                CASE_LESS(1)
+                    SET_VALUE(LW(0), 3)
+                    CALL_CHILD(bero_case_switch_on)
+                CASE_LESS(11)
+                    SET_VALUE(LW(0), 6)
+                    CALL_CHILD(bero_case_switch_on)
+                CASE_DEFAULT
+                    SET_VALUE(LW(0), 7)
+                    CALL_CHILD(bero_case_switch_on)
+            END_SWITCH
     END_SWITCH
 
     // Enable the side exits by default, then apply special access for the minor-league return,

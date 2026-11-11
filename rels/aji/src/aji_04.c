@@ -686,56 +686,56 @@ static EVT_BEGIN(kuizu_sekizou)
             DEBUG_PUT_REG(LW(14))
             SWITCH(LW(14))
                 CASE_LESS(4)
-                SET_VALUE(LW(0), 360)
-                SET_VALUE(LW(1), 500)
-                SET_VALUE(LW(2), STRING("DOSN2"))
-                SPAWN_EVENT(sekizou_kaiten2)
-                WAIT_MS(500)
-                SPAWN_EVENT(sekizou_talk)
+                    SET_VALUE(LW(0), 360)
+                    SET_VALUE(LW(1), 500)
+                    SET_VALUE(LW(2), STRING("DOSN2"))
+                    SPAWN_EVENT(sekizou_kaiten2)
+                    WAIT_MS(500)
+                    SPAWN_EVENT(sekizou_talk)
 #if VERSION <= VERSION_DEMO_JP
-                CALL(evt_msg_print, 0, STRING("stg7_aji_22"), 0, 0)
+                    CALL(evt_msg_print, 0, STRING("stg7_aji_22"), 0, 0)
 #else
-                CALL(evt_msg_print, 0, STRING("stg7_aji_22"), PTR(kuti_callback), 0)
+                    CALL(evt_msg_print, 0, STRING("stg7_aji_22"), PTR(kuti_callback), 0)
 #endif
                 CASE_EQUAL(4)
-                SET_VALUE(LW(0), 360)
-                SET_VALUE(LW(1), 500)
-                SET_VALUE(LW(2), STRING("DOSN2"))
-                SPAWN_EVENT(sekizou_kaiten2)
-                WAIT_MS(500)
-                SPAWN_EVENT(sekizou_talk)
+                    SET_VALUE(LW(0), 360)
+                    SET_VALUE(LW(1), 500)
+                    SET_VALUE(LW(2), STRING("DOSN2"))
+                    SPAWN_EVENT(sekizou_kaiten2)
+                    WAIT_MS(500)
+                    SPAWN_EVENT(sekizou_talk)
 #if VERSION <= VERSION_DEMO_JP
-                CALL(evt_msg_print, 0, STRING("stg7_aji_23"), 0, 0)
+                    CALL(evt_msg_print, 0, STRING("stg7_aji_23"), 0, 0)
 #else
-                CALL(evt_msg_print, 0, STRING("stg7_aji_23"), PTR(kuti_callback), 0)
+                    CALL(evt_msg_print, 0, STRING("stg7_aji_23"), PTR(kuti_callback), 0)
 #endif
-                SET_VALUE(LF(1), 1)
+                    SET_VALUE(LF(1), 1)
                 CASE_EQUAL(5)
-                SET_VALUE(LW(0), 1080)
-                SET_VALUE(LW(1), 1000)
-                SET_VALUE(LW(2), STRING("DOSN2"))
-                SPAWN_EVENT(sekizou_kaiten)
-                WAIT_MS(1000)
-                SPAWN_EVENT(sekizou_talk)
+                    SET_VALUE(LW(0), 1080)
+                    SET_VALUE(LW(1), 1000)
+                    SET_VALUE(LW(2), STRING("DOSN2"))
+                    SPAWN_EVENT(sekizou_kaiten)
+                    WAIT_MS(1000)
+                    SPAWN_EVENT(sekizou_talk)
 #if VERSION <= VERSION_DEMO_JP
-                CALL(evt_msg_print, 0, STRING("stg7_aji_24"), 0, 0)
+                    CALL(evt_msg_print, 0, STRING("stg7_aji_24"), 0, 0)
 #else
-                CALL(evt_msg_print, 0, STRING("stg7_aji_24"), PTR(kuti_callback), 0)
+                    CALL(evt_msg_print, 0, STRING("stg7_aji_24"), PTR(kuti_callback), 0)
 #endif
-                CALL_CHILD(offscreen_to_normal)
-                CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))
-                CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI1"))
-                CALL(evt_msg_toge, MSG_TOGE_AT_POS, 95, 65, 0)
-                SPAWN_EVENT(sekizou_talk)
+                    CALL_CHILD(offscreen_to_normal)
+                    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))
+                    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI1"))
+                    CALL(evt_msg_toge, MSG_TOGE_AT_POS, 95, 65, 0)
+                    SPAWN_EVENT(sekizou_talk)
 #if VERSION <= VERSION_DEMO_JP
-                CALL(evt_msg_print, 0, STRING("stg7_aji_25"), 0, 0)
-                BREAK_LOOP
+                    CALL(evt_msg_print, 0, STRING("stg7_aji_25"), 0, 0)
+                    BREAK_LOOP
             END_SWITCH
         ELSE
             SPAWN_EVENT(quiz_ng)
 #else
-                CALL(evt_msg_print, 0, STRING("stg7_aji_25"), PTR(kuti_callback), 0)
-                BREAK_LOOP
+                    CALL(evt_msg_print, 0, STRING("stg7_aji_25"), PTR(kuti_callback), 0)
+                    BREAK_LOOP
             END_SWITCH
             CALL_CHILD(quiz_ok)
         ELSE
@@ -759,148 +759,148 @@ static EVT_BEGIN(kuizu_sekizou)
             DEBUG_PUT_REG(LW(15))
             SWITCH(LW(15))
                 CASE_EQUAL(1)
-                SPAWN_EVENT(sekizou_talk)
+                    SPAWN_EVENT(sekizou_talk)
 #if VERSION <= VERSION_DEMO_JP
-                CALL(evt_msg_print, 0, STRING("stg7_aji_26"), 0, 0)
+                    CALL(evt_msg_print, 0, STRING("stg7_aji_26"), 0, 0)
                 CASE_EQUAL(2)
-                SPAWN_EVENT(sekizou_talk)
-                CALL(evt_msg_print, 0, STRING("stg7_aji_27"), 0, 0)
+                    SPAWN_EVENT(sekizou_talk)
+                    CALL(evt_msg_print, 0, STRING("stg7_aji_27"), 0, 0)
 #else
-                CALL(evt_msg_print, 0, STRING("stg7_aji_26"), PTR(kuti_callback), 0)
+                    CALL(evt_msg_print, 0, STRING("stg7_aji_26"), PTR(kuti_callback), 0)
                 CASE_EQUAL(2)
-                SPAWN_EVENT(sekizou_talk)
-                CALL(evt_msg_print, 0, STRING("stg7_aji_27"), PTR(kuti_callback), 0)
+                    SPAWN_EVENT(sekizou_talk)
+                    CALL(evt_msg_print, 0, STRING("stg7_aji_27"), PTR(kuti_callback), 0)
 #endif
-                SET_VALUE(LF(1), 1)
+                    SET_VALUE(LF(1), 1)
                 CASE_EQUAL(3)
-                SPAWN_EVENT(sekizou_talk)
+                    SPAWN_EVENT(sekizou_talk)
 #if VERSION <= VERSION_DEMO_JP
-                CALL(evt_msg_print, 0, STRING("stg7_aji_28"), 0, 0)
-                CALL_CHILD(offscreen_to_normal)
-                CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))
-                CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI1"))
+                    CALL(evt_msg_print, 0, STRING("stg7_aji_28"), 0, 0)
+                    CALL_CHILD(offscreen_to_normal)
+                    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))
+                    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI1"))
 #else
-                CALL(evt_msg_print, 0, STRING("stg7_aji_28"), PTR(kuti_callback), 0)
-                CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
-                CALL_CHILD(offscreen_to_normal)
+                    CALL(evt_msg_print, 0, STRING("stg7_aji_28"), PTR(kuti_callback), 0)
+                    CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
+                    CALL_CHILD(offscreen_to_normal)
 #endif
-                SET_VALUE(LW(0), 360)
-                SET_VALUE(LW(1), 500)
-                SET_VALUE(LW(2), STRING("DOSN"))
-                SPAWN_EVENT(sekizou_kaiten2)
-                WAIT_MS(250)
-                CALL(evt_msg_toge, MSG_TOGE_AT_POS, 95, 65, 0)
-                SPAWN_EVENT(sekizou_talk)
+                    SET_VALUE(LW(0), 360)
+                    SET_VALUE(LW(1), 500)
+                    SET_VALUE(LW(2), STRING("DOSN"))
+                    SPAWN_EVENT(sekizou_kaiten2)
+                    WAIT_MS(250)
+                    CALL(evt_msg_toge, MSG_TOGE_AT_POS, 95, 65, 0)
+                    SPAWN_EVENT(sekizou_talk)
 #if VERSION <= VERSION_DEMO_JP
-                CALL(evt_msg_print, 0, STRING("stg7_aji_29"), 0, 0)
-                CALL(evt_npc_set_position, STRING("バリアーン１"), 50, 250, -50)
-                CALL(evt_npc_set_position, STRING("バリアーン２"), 50, 250, 50)
-                BEGIN_INLINE_EVENT
-                    CALL(evt_npc_jump_position_nohit, STRING("バリアーン１"), 50, 20, -50, 300, 0)
+                    CALL(evt_msg_print, 0, STRING("stg7_aji_29"), 0, 0)
+                    CALL(evt_npc_set_position, STRING("バリアーン１"), 50, 250, -50)
+                    CALL(evt_npc_set_position, STRING("バリアーン２"), 50, 250, 50)
+                    BEGIN_INLINE_EVENT
+                        CALL(evt_npc_jump_position_nohit, STRING("バリアーン１"), 50, 20, -50, 300, 0)
 #else
-                CALL(evt_msg_print, 0, STRING("stg7_aji_29"), PTR(kuti_callback), 0)
+                    CALL(evt_msg_print, 0, STRING("stg7_aji_29"), PTR(kuti_callback), 0)
 #if VERSION >= VERSION_US
-                CALL(evt_npc_set_position, STRING("バリアーン１"), 50, 200, -50)
-                CALL(evt_npc_set_position, STRING("バリアーン２"), 50, 200, 50)
-                CALL(evt_npc_flag_onoff, 1, STRING("バリアーン１"), NPC_FLAG_INSTANT_TURN)
-                CALL(evt_npc_flag_onoff, 1, STRING("バリアーン２"), NPC_FLAG_INSTANT_TURN)
-                CALL(evt_npc_set_stay_anim, STRING("バリアーン１"))
-                CALL(evt_npc_set_stay_anim, STRING("バリアーン２"))
-                WAIT_FRAMES(10)
+                    CALL(evt_npc_set_position, STRING("バリアーン１"), 50, 200, -50)
+                    CALL(evt_npc_set_position, STRING("バリアーン２"), 50, 200, 50)
+                    CALL(evt_npc_flag_onoff, 1, STRING("バリアーン１"), NPC_FLAG_INSTANT_TURN)
+                    CALL(evt_npc_flag_onoff, 1, STRING("バリアーン２"), NPC_FLAG_INSTANT_TURN)
+                    CALL(evt_npc_set_stay_anim, STRING("バリアーン１"))
+                    CALL(evt_npc_set_stay_anim, STRING("バリアーン２"))
+                    WAIT_FRAMES(10)
 #else
-                CALL(evt_npc_set_position, STRING("バリアーン１"), 50, 250, -50)
-                CALL(evt_npc_set_position, STRING("バリアーン２"), 50, 250, 50)
+                    CALL(evt_npc_set_position, STRING("バリアーン１"), 50, 250, -50)
+                    CALL(evt_npc_set_position, STRING("バリアーン２"), 50, 250, 50)
 #endif
-                BEGIN_INLINE_EVENT
+                    BEGIN_INLINE_EVENT
 #if VERSION >= VERSION_US
-                    CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 200, 20, 300)
-                    LOOP(0)
-                        CALL(evt_sub_intpl_msec_get_value)
-                        CALL(evt_npc_set_position, STRING("バリアーン１"), 50, LW(0), -50)
-                        WAIT_FRAMES(1)
-                        IF_INT_EQUAL(LW(1), 0)
-                            BREAK_LOOP
-                        END_IF
-                    END_LOOP
+                        CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 200, 20, 300)
+                        LOOP(0)
+                            CALL(evt_sub_intpl_msec_get_value)
+                            CALL(evt_npc_set_position, STRING("バリアーン１"), 50, LW(0), -50)
+                            WAIT_FRAMES(1)
+                            IF_INT_EQUAL(LW(1), 0)
+                                BREAK_LOOP
+                            END_IF
+                        END_LOOP
 #else
-                    CALL(evt_npc_jump_position_nohit, STRING("バリアーン１"), 50, 20, -50, 300, 0)
+                        CALL(evt_npc_jump_position_nohit, STRING("バリアーン１"), 50, 20, -50, 300, 0)
 #endif
 #endif
-                    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0048828125f), FLOAT(0.0f), 200)
-                END_INLINE_EVENT
-                WAIT_MS(300)
-                BEGIN_INLINE_EVENT
+                        CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0048828125f), FLOAT(0.0f), 200)
+                    END_INLINE_EVENT
+                    WAIT_MS(300)
+                    BEGIN_INLINE_EVENT
 #if VERSION >= VERSION_US
-                    CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 200, 20, 300)
-                    LOOP(0)
-                        CALL(evt_sub_intpl_msec_get_value)
-                        CALL(evt_npc_set_position, STRING("バリアーン２"), 50, LW(0), 50)
-                        WAIT_FRAMES(1)
-                        IF_INT_EQUAL(LW(1), 0)
-                            BREAK_LOOP
-                        END_IF
-                    END_LOOP
+                        CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 200, 20, 300)
+                        LOOP(0)
+                            CALL(evt_sub_intpl_msec_get_value)
+                            CALL(evt_npc_set_position, STRING("バリアーン２"), 50, LW(0), 50)
+                            WAIT_FRAMES(1)
+                            IF_INT_EQUAL(LW(1), 0)
+                                BREAK_LOOP
+                            END_IF
+                        END_LOOP
 #else
-                    CALL(evt_npc_jump_position_nohit, STRING("バリアーン２"), 50, 20, 50, 300, 0)
+                        CALL(evt_npc_jump_position_nohit, STRING("バリアーン２"), 50, 20, 50, 300, 0)
 #endif
-                    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0048828125f), FLOAT(0.0f), 200)
-                END_INLINE_EVENT
-                WAIT_MS(300)
-                WAIT_MS(500)
+                        CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0048828125f), FLOAT(0.0f), 200)
+                    END_INLINE_EVENT
+                    WAIT_MS(300)
+                    WAIT_MS(500)
 #if VERSION <= VERSION_DEMO_JP
-                CALL(evt_msg_toge, MSG_TOGE_AT_POS, 95, 65, 0)
-                SPAWN_EVENT(sekizou_talk)
-                CALL(evt_msg_print, 0, STRING("stg7_aji_30"), 0, 0)
+                    CALL(evt_msg_toge, MSG_TOGE_AT_POS, 95, 65, 0)
+                    SPAWN_EVENT(sekizou_talk)
+                    CALL(evt_msg_print, 0, STRING("stg7_aji_30"), 0, 0)
 #else
 #if VERSION >= VERSION_US
-                CALL(evt_npc_flag_onoff, 0, STRING("バリアーン１"), NPC_FLAG_INSTANT_TURN)
-                CALL(evt_npc_flag_onoff, 0, STRING("バリアーン２"), NPC_FLAG_INSTANT_TURN)
+                    CALL(evt_npc_flag_onoff, 0, STRING("バリアーン１"), NPC_FLAG_INSTANT_TURN)
+                    CALL(evt_npc_flag_onoff, 0, STRING("バリアーン２"), NPC_FLAG_INSTANT_TURN)
 #endif
-                CALL(evt_msg_toge, MSG_TOGE_AT_POS, 95, 65, 0)
-                SPAWN_EVENT(sekizou_talk)
-                CALL(evt_msg_print, 0, STRING("stg7_aji_30"), PTR(kuti_callback), 0)
+                    CALL(evt_msg_toge, MSG_TOGE_AT_POS, 95, 65, 0)
+                    SPAWN_EVENT(sekizou_talk)
+                    CALL(evt_msg_print, 0, STRING("stg7_aji_30"), PTR(kuti_callback), 0)
 #endif
-                CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
-                CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-                BEGIN_INLINE_EVENT
-                    CALL(evt_npc_move_position, STRING("バリアーン１"), LW(0), LW(2), 1000, 0, 0)
-                END_INLINE_EVENT
-                WAIT_MS(100)
-                BEGIN_INLINE_EVENT
-                    CALL(evt_npc_move_position, STRING("バリアーン２"), LW(0), LW(2), 1000, 0, 0)
-                END_INLINE_EVENT
-                WAIT_MS(100)
-                CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
-                CALL(evt_mario_set_pose, STRING("M_N_7"))
-                WAIT_MS(500)
-                CALL(evt_npc_set_link, STRING("バリアーン１"), STRING("バリアーン２"))
-                CALL(evt_npc_set_battle_info, STRING("バリアーン１"), 15)
-                CALL(evt_npc_battle_start, STRING("バリアーン１"))
-                CALL(evt_npc_wait_battle_end)
-                CALL(evt_mario_set_pose, STRING("M_S_1"))
-                CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_POSE_LOCK)
+                    CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
+                    CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+                    BEGIN_INLINE_EVENT
+                        CALL(evt_npc_move_position, STRING("バリアーン１"), LW(0), LW(2), 1000, 0, 0)
+                    END_INLINE_EVENT
+                    WAIT_MS(100)
+                    BEGIN_INLINE_EVENT
+                        CALL(evt_npc_move_position, STRING("バリアーン２"), LW(0), LW(2), 1000, 0, 0)
+                    END_INLINE_EVENT
+                    WAIT_MS(100)
+                    CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
+                    CALL(evt_mario_set_pose, STRING("M_N_7"))
+                    WAIT_MS(500)
+                    CALL(evt_npc_set_link, STRING("バリアーン１"), STRING("バリアーン２"))
+                    CALL(evt_npc_set_battle_info, STRING("バリアーン１"), 15)
+                    CALL(evt_npc_battle_start, STRING("バリアーン１"))
+                    CALL(evt_npc_wait_battle_end)
+                    CALL(evt_mario_set_pose, STRING("M_S_1"))
+                    CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_POSE_LOCK)
 #if VERSION >= VERSION_JP
-                CALL(evt_snd_bgmon_f, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_STG7_DUN2"), 2000)
-                CALL(evt_snd_envon_f, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI1"), 2000)
+                    CALL(evt_snd_bgmon_f, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_STG7_DUN2"), 2000)
+                    CALL(evt_snd_envon_f, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI1"), 2000)
 #endif
-                CALL(evt_npc_set_position, STRING("バリアーン１"), 0, -1000, 0)
-                CALL(evt_npc_set_position, STRING("バリアーン２"), 0, -1000, 0)
-                WAIT_MS(1000)
-                CALL(evt_cam3d_evt_set, -189, 72, 207, 219, 69, -80, 2300, EASING_SINE_IN_OUT)
-                WAIT_MS(300)
-                SET_VALUE(LW(0), 1080)
-                SET_VALUE(LW(1), 1500)
-                SET_VALUE(LW(2), STRING("DOSN"))
-                CALL_CHILD(sekizou_kaiten)
-                CALL(evt_msg_toge, MSG_TOGE_AT_POS, 95, 65, 0)
-                SPAWN_EVENT(sekizou_talk)
+                    CALL(evt_npc_set_position, STRING("バリアーン１"), 0, -1000, 0)
+                    CALL(evt_npc_set_position, STRING("バリアーン２"), 0, -1000, 0)
+                    WAIT_MS(1000)
+                    CALL(evt_cam3d_evt_set, -189, 72, 207, 219, 69, -80, 2300, EASING_SINE_IN_OUT)
+                    WAIT_MS(300)
+                    SET_VALUE(LW(0), 1080)
+                    SET_VALUE(LW(1), 1500)
+                    SET_VALUE(LW(2), STRING("DOSN"))
+                    CALL_CHILD(sekizou_kaiten)
+                    CALL(evt_msg_toge, MSG_TOGE_AT_POS, 95, 65, 0)
+                    SPAWN_EVENT(sekizou_talk)
 #if VERSION <= VERSION_DEMO_JP
-                CALL(evt_msg_print, 0, STRING("stg7_aji_31"), 0, 0)
-                BREAK_LOOP
+                    CALL(evt_msg_print, 0, STRING("stg7_aji_31"), 0, 0)
+                    BREAK_LOOP
             END_SWITCH
 #else
-                CALL(evt_msg_print, 0, STRING("stg7_aji_31"), PTR(kuti_callback), 0)
-                BREAK_LOOP
+                    CALL(evt_msg_print, 0, STRING("stg7_aji_31"), PTR(kuti_callback), 0)
+                    BREAK_LOOP
             END_SWITCH
             CALL_CHILD(UNK_0x00022be8)
 #endif

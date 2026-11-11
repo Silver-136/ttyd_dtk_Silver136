@@ -1516,13 +1516,13 @@ EVT_BEGIN(marioAttackEvent_BakuGame)
     WAIT_FRAMES(5)
     SWITCH(LW(0))
         CASE_EQUAL(0)
-        CALL_CHILD(hitCheck_MarioTeam)
+            CALL_CHILD(hitCheck_MarioTeam)
         CASE_END
         CASE_EQUAL(1)
-        CALL_CHILD(hitCheck_EnemyTeam)
+            CALL_CHILD(hitCheck_EnemyTeam)
         CASE_END
         CASE_EQUAL(2)
-        CALL_CHILD(hitCheck_AudienceTeam)
+            CALL_CHILD(hitCheck_AudienceTeam)
         CASE_END
     END_SWITCH
     LABEL(99)

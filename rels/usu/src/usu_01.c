@@ -234,17 +234,17 @@ EVT_END()
 static EVT_BEGIN(villagerF_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG4_10_DOOPLISS_BATTLE)
-        CALL(evt_msg_print, 0, STRING("stg4_usu_82"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg4_usu_82"), 0, STRING("me"))
         CASE_LESS(STG4_16_LEAVING_TWILIGHT_TOWN)
-        CALL(evt_msg_print, 0, STRING("stg4_usu_30"), 0, STRING("me"))
-        CALL(evt_msg_select, 0, STRING("stg4_usu_30_yn"))
-        CALL(evt_msg_print_add, 0, STRING("stg4_usu_30_00"))
+            CALL(evt_msg_print, 0, STRING("stg4_usu_30"), 0, STRING("me"))
+            CALL(evt_msg_select, 0, STRING("stg4_usu_30_yn"))
+            CALL(evt_msg_print_add, 0, STRING("stg4_usu_30_00"))
         CASE_LESS(STG4_31_FRANKLYS_HOUSE_STG_4)
-        CALL(evt_msg_print, 0, STRING("stg4_usu_84"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg4_usu_84"), 0, STRING("me"))
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
-        CALL(evt_msg_print, 0, STRING("stg4_usu_84_1"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg4_usu_84_1"), 0, STRING("me"))
         CASE_DEFAULT
-        CALL(evt_msg_print, 0, STRING("stg4_usu_84_1_1"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg4_usu_84_1_1"), 0, STRING("me"))
     END_SWITCH
     RETURN
 EVT_END()
@@ -262,17 +262,17 @@ EVT_END()
 static EVT_BEGIN(villagerG_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG4_10_DOOPLISS_BATTLE)
-        CALL(evt_msg_print, 0, STRING("stg4_usu_85"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg4_usu_85"), 0, STRING("me"))
         CASE_LESS(STG4_16_LEAVING_TWILIGHT_TOWN)
-        CALL(evt_msg_print, 0, STRING("stg4_usu_86"), 0, STRING("me"))
-        CALL(evt_msg_select, 0, STRING("stg4_usu_86_yn"))
-        CALL(evt_msg_print_add, 0, STRING("stg4_usu_86_00"))
+            CALL(evt_msg_print, 0, STRING("stg4_usu_86"), 0, STRING("me"))
+            CALL(evt_msg_select, 0, STRING("stg4_usu_86_yn"))
+            CALL(evt_msg_print_add, 0, STRING("stg4_usu_86_00"))
         CASE_LESS(STG4_31_FRANKLYS_HOUSE_STG_4)
-        CALL(evt_msg_print, 0, STRING("stg4_usu_87"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg4_usu_87"), 0, STRING("me"))
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
-        CALL(evt_msg_print, 0, STRING("stg4_usu_87_1"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg4_usu_87_1"), 0, STRING("me"))
         CASE_DEFAULT
-        CALL(evt_msg_print, 0, STRING("stg4_usu_87_1_1"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg4_usu_87_1_1"), 0, STRING("me"))
     END_SWITCH
     RETURN
 EVT_END()
@@ -290,15 +290,15 @@ EVT_END()
 static EVT_BEGIN(villagerH_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG4_10_DOOPLISS_BATTLE)
-        CALL(evt_msg_print, 0, STRING("stg4_usu_88"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg4_usu_88"), 0, STRING("me"))
         CASE_LESS(STG4_16_LEAVING_TWILIGHT_TOWN)
-        CALL(evt_msg_print, 0, STRING("stg4_usu_89"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg4_usu_89"), 0, STRING("me"))
         CASE_LESS(STG4_31_FRANKLYS_HOUSE_STG_4)
-        CALL(evt_msg_print, 0, STRING("stg4_usu_90"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg4_usu_90"), 0, STRING("me"))
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
-        CALL(evt_msg_print, 0, STRING("stg4_usu_90_1"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg4_usu_90_1"), 0, STRING("me"))
         CASE_DEFAULT
-        CALL(evt_msg_print, 0, STRING("stg4_usu_90_1_1"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg4_usu_90_1_1"), 0, STRING("me"))
     END_SWITCH
     RETURN
 EVT_END()
@@ -311,7 +311,7 @@ static EVT_BEGIN(villagerI_init)
     CALL(evt_npc_flag_onoff, 1, STRING("村人Ｉ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG4_10_DOOPLISS_BATTLE)
-        CALL(evt_npc_set_position, STRING("村人Ｉ"), 0, -2000, 0)
+            CALL(evt_npc_set_position, STRING("村人Ｉ"), 0, -2000, 0)
         CASE_DEFAULT
     END_SWITCH
     RETURN
@@ -323,7 +323,7 @@ static EVT_BEGIN(villagerI_pig_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG4_10_DOOPLISS_BATTLE)
         CASE_DEFAULT
-        CALL(evt_npc_set_position, STRING("ブタ村人Ｉ"), 0, -2000, 0)
+            CALL(evt_npc_set_position, STRING("ブタ村人Ｉ"), 0, -2000, 0)
     END_SWITCH
     RETURN
 EVT_END()
@@ -332,17 +332,17 @@ EVT_END()
 static EVT_BEGIN(villagerI_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG4_10_DOOPLISS_BATTLE)
-        CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
-        CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_VOICE_PIG1"), LW(0), LW(1), LW(2), 0)
-        CALL(evt_msg_print, 0, STRING("stg4_usu_91"), 0, STRING("me"))
+            CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
+            CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_VOICE_PIG1"), LW(0), LW(1), LW(2), 0)
+            CALL(evt_msg_print, 0, STRING("stg4_usu_91"), 0, STRING("me"))
         CASE_LESS(STG4_16_LEAVING_TWILIGHT_TOWN)
-        CALL(evt_msg_print, 0, STRING("stg4_usu_92"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg4_usu_92"), 0, STRING("me"))
         CASE_LESS(STG4_31_FRANKLYS_HOUSE_STG_4)
-        CALL(evt_msg_print, 0, STRING("stg4_usu_93"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg4_usu_93"), 0, STRING("me"))
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
-        CALL(evt_msg_print, 0, STRING("stg4_usu_93_1"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg4_usu_93_1"), 0, STRING("me"))
         CASE_DEFAULT
-        CALL(evt_msg_print, 0, STRING("stg4_usu_93_1_1"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg4_usu_93_1_1"), 0, STRING("me"))
     END_SWITCH
     RETURN
 EVT_END()
@@ -355,7 +355,7 @@ static EVT_BEGIN(villagerJ_init)
     CALL(evt_npc_flag_onoff, 1, STRING("村人Ｊ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG4_10_DOOPLISS_BATTLE)
-        CALL(evt_npc_set_position, STRING("村人Ｊ"), 0, -2000, 0)
+            CALL(evt_npc_set_position, STRING("村人Ｊ"), 0, -2000, 0)
         CASE_DEFAULT
     END_SWITCH
     RETURN
@@ -367,7 +367,7 @@ static EVT_BEGIN(villagerJ_pig_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG4_10_DOOPLISS_BATTLE)
         CASE_DEFAULT
-        CALL(evt_npc_set_position, STRING("ブタ村人Ｊ"), 0, -2000, 0)
+            CALL(evt_npc_set_position, STRING("ブタ村人Ｊ"), 0, -2000, 0)
     END_SWITCH
     RETURN
 EVT_END()
@@ -376,17 +376,17 @@ EVT_END()
 static EVT_BEGIN(villagerJ_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG4_10_DOOPLISS_BATTLE)
-        CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
-        CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_VOICE_PIG1"), LW(0), LW(1), LW(2), 0)
-        CALL(evt_msg_print, 0, STRING("stg4_usu_94"), 0, STRING("me"))
+            CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
+            CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_VOICE_PIG1"), LW(0), LW(1), LW(2), 0)
+            CALL(evt_msg_print, 0, STRING("stg4_usu_94"), 0, STRING("me"))
         CASE_LESS(STG4_16_LEAVING_TWILIGHT_TOWN)
-        CALL(evt_msg_print, 0, STRING("stg4_usu_95"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg4_usu_95"), 0, STRING("me"))
         CASE_LESS(STG4_31_FRANKLYS_HOUSE_STG_4)
-        CALL(evt_msg_print, 0, STRING("stg4_usu_96"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg4_usu_96"), 0, STRING("me"))
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
-        CALL(evt_msg_print, 0, STRING("stg4_usu_96_1"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg4_usu_96_1"), 0, STRING("me"))
         CASE_DEFAULT
-        CALL(evt_msg_print, 0, STRING("stg4_usu_96_1_1"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg4_usu_96_1_1"), 0, STRING("me"))
     END_SWITCH
     RETURN
 EVT_END()
@@ -402,11 +402,11 @@ static EVT_BEGIN(shop_man_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG4_10_DOOPLISS_BATTLE)
         CASE_LESS(STG4_16_LEAVING_TWILIGHT_TOWN)
-        CALL(evt_npc_set_position, STRING("店の主人"), -125, 0, -475)
-        CALL(evt_npc_set_ry, STRING("店の主人"), 90)
-        CALL(evt_npc_flag_onoff, 1, STRING("店の主人"), NPC_FLAG_RESUME_AFTER_TALK)
+            CALL(evt_npc_set_position, STRING("店の主人"), -125, 0, -475)
+            CALL(evt_npc_set_ry, STRING("店の主人"), 90)
+            CALL(evt_npc_flag_onoff, 1, STRING("店の主人"), NPC_FLAG_RESUME_AFTER_TALK)
         CASE_DEFAULT
-        CALL(evt_npc_set_position, STRING("店の主人"), -130, 0, -480)
+            CALL(evt_npc_set_position, STRING("店の主人"), -130, 0, -480)
     END_SWITCH
     RETURN
 EVT_END()
@@ -418,11 +418,11 @@ EVT_END()
 static EVT_BEGIN(shop_man_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG4_16_LEAVING_TWILIGHT_TOWN)
-        CALL(evt_msg_print, 0, STRING("stg4_usu_61_5"), 0, STRING("店の主人"))
+            CALL(evt_msg_print, 0, STRING("stg4_usu_61_5"), 0, STRING("店の主人"))
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
-        CALL(evt_msg_print, 0, STRING("stg4_usu_61_6"), 0, STRING("店の主人"))
+            CALL(evt_msg_print, 0, STRING("stg4_usu_61_6"), 0, STRING("店の主人"))
         CASE_DEFAULT
-        CALL(evt_msg_print, 0, STRING("stg4_usu_61_7"), 0, STRING("店の主人"))
+            CALL(evt_msg_print, 0, STRING("stg4_usu_61_7"), 0, STRING("店の主人"))
     END_SWITCH
     RETURN
 EVT_END()
@@ -436,57 +436,57 @@ EVT_END()
 static EVT_BEGIN(shop_woman_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG4_03_SHOP_KEY)
-        IF_INT_EQUAL(GSWF_USU_01_SHOP_WIFE_FIRST_TALK_DONE, 0)
-            CALL(evt_msg_print, 0, STRING("stg4_usu_52"), 0, STRING("me"))
-            WAIT_MS(200)
-            CALL(evt_mario_set_pose, STRING("M_I_2"))
-            WAIT_MS(1000)
-            CALL(evt_msg_print, 0, STRING("stg4_usu_53"), 0, STRING("me"))
-            CALL(evt_mario_set_pose, STRING("M_I_N"))
-            WAIT_MS(1000)
-            CALL(evt_mario_set_pose, STRING("M_S_1"))
-            BEGIN_INLINE_EVENT_GET_ID(LW(10))
-                CALL(sleep_voice)
-            END_INLINE_EVENT
-            SET_VALUE(GF(0), 0)
-            CALL(evt_msg_print, 0, STRING("stg4_usu_54"), 0, STRING("me"))
-            BEGIN_INLINE_EVENT
+            IF_INT_EQUAL(GSWF_USU_01_SHOP_WIFE_FIRST_TALK_DONE, 0)
+                CALL(evt_msg_print, 0, STRING("stg4_usu_52"), 0, STRING("me"))
+                WAIT_MS(200)
+                CALL(evt_mario_set_pose, STRING("M_I_2"))
+                WAIT_MS(1000)
+                CALL(evt_msg_print, 0, STRING("stg4_usu_53"), 0, STRING("me"))
+                CALL(evt_mario_set_pose, STRING("M_I_N"))
+                WAIT_MS(1000)
+                CALL(evt_mario_set_pose, STRING("M_S_1"))
+                BEGIN_INLINE_EVENT_GET_ID(LW(10))
+                    CALL(sleep_voice)
+                END_INLINE_EVENT
+                SET_VALUE(GF(0), 0)
+                CALL(evt_msg_print, 0, STRING("stg4_usu_54"), 0, STRING("me"))
+                BEGIN_INLINE_EVENT
+                    CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+                    CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_YAWN1"), LW(0), LW(1), LW(2), 0)
+                    CALL(evt_mario_set_pose, STRING("M_I_5"))
+                    WAIT_MS(1000)
+                    CALL(evt_mario_set_pose, STRING("M_N_5A"))
+                    WAIT_MS(1000)
+                    SET_VALUE(GF(0), 1)
+                END_INLINE_EVENT
+                CALL(evt_msg_continue)
+                LOOP(0)
+                    WAIT_FRAMES(1)
+                    IF_INT_EQUAL(GF(0), 1)
+                        BREAK_LOOP
+                    END_IF
+                END_LOOP
+                DELETE_EVENT(LW(10))
+                CALL(evt_snd_sfxoff, GW(10))
+                WAIT_MS(200)
                 CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-                CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_YAWN1"), LW(0), LW(1), LW(2), 0)
-                CALL(evt_mario_set_pose, STRING("M_I_5"))
-                WAIT_MS(1000)
-                CALL(evt_mario_set_pose, STRING("M_N_5A"))
-                WAIT_MS(1000)
-                SET_VALUE(GF(0), 1)
-            END_INLINE_EVENT
-            CALL(evt_msg_continue)
-            LOOP(0)
-                WAIT_FRAMES(1)
-                IF_INT_EQUAL(GF(0), 1)
-                    BREAK_LOOP
-                END_IF
-            END_LOOP
-            DELETE_EVENT(LW(10))
-            CALL(evt_snd_sfxoff, GW(10))
-            WAIT_MS(200)
-            CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-            CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_AWAKE1"), LW(0), LW(1), LW(2), 0)
-            CALL(evt_mario_set_pose, STRING("M_N_5B"))
-            WAIT_MS(600)
-            CALL(evt_mario_set_pose, STRING("M_N_2"))
-            WAIT_MS(600)
-            CALL(evt_msg_print, 0, STRING("stg4_usu_55"), 0, STRING("me"))
-            SET_VALUE(GSWF_USU_01_SHOP_WIFE_FIRST_TALK_DONE, 1)
-        ELSE
-            CALL(evt_msg_print, 0, STRING("stg4_usu_56"), 0, STRING("me"))
-        END_IF
+                CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_AWAKE1"), LW(0), LW(1), LW(2), 0)
+                CALL(evt_mario_set_pose, STRING("M_N_5B"))
+                WAIT_MS(600)
+                CALL(evt_mario_set_pose, STRING("M_N_2"))
+                WAIT_MS(600)
+                CALL(evt_msg_print, 0, STRING("stg4_usu_55"), 0, STRING("me"))
+                SET_VALUE(GSWF_USU_01_SHOP_WIFE_FIRST_TALK_DONE, 1)
+            ELSE
+                CALL(evt_msg_print, 0, STRING("stg4_usu_56"), 0, STRING("me"))
+            END_IF
         CASE_LESS(STG4_04_STORAGE_ROOM_UNLOCKED)
-        CALL(evt_msg_print, 0, STRING("stg4_usu_58"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg4_usu_58"), 0, STRING("me"))
         CASE_LESS(STG4_10_DOOPLISS_BATTLE)
-        CALL(evt_msg_print, 0, STRING("stg4_usu_58_01"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg4_usu_58_01"), 0, STRING("me"))
         CASE_DEFAULT
-        CALL(evt_msg_print, 0, STRING("stg4_usu_59"), 0, STRING("me"))
-        CALL(evt_msg_continue)
+            CALL(evt_msg_print, 0, STRING("stg4_usu_59"), 0, STRING("me"))
+            CALL(evt_msg_continue)
     END_SWITCH
     RETURN
 EVT_END()
@@ -500,12 +500,12 @@ static EVT_BEGIN(kizayarou_init)
     CALL(evt_npc_flag_onoff, 1, STRING("キザ野郎"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG4_10_DOOPLISS_BATTLE)
-        CALL(evt_npc_set_position, STRING("キザ野郎"), 0, -2000, 0)
+            CALL(evt_npc_set_position, STRING("キザ野郎"), 0, -2000, 0)
         CASE_LESS(STG4_16_LEAVING_TWILIGHT_TOWN)
-        CALL(evt_npc_set_position, STRING("キザ野郎"), -100, 0, -450)
-        CALL(evt_npc_flag_onoff, 1, STRING("キザ野郎"), NPC_FLAG_RESUME_AFTER_TALK)
+            CALL(evt_npc_set_position, STRING("キザ野郎"), -100, 0, -450)
+            CALL(evt_npc_flag_onoff, 1, STRING("キザ野郎"), NPC_FLAG_RESUME_AFTER_TALK)
         CASE_DEFAULT
-        CALL(evt_npc_set_position, STRING("キザ野郎"), 0, -2000, 0)
+            CALL(evt_npc_set_position, STRING("キザ野郎"), 0, -2000, 0)
     END_SWITCH
     RETURN
 EVT_END()
@@ -518,7 +518,7 @@ static EVT_BEGIN(kizayarou_pig_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG4_10_DOOPLISS_BATTLE)
         CASE_DEFAULT
-        CALL(evt_npc_set_position, STRING("ブタキザ野郎"), 0, -2000, 0)
+            CALL(evt_npc_set_position, STRING("ブタキザ野郎"), 0, -2000, 0)
     END_SWITCH
     RETURN
 EVT_END()
@@ -532,11 +532,11 @@ EVT_END()
 static EVT_BEGIN(kizayarou_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG4_10_DOOPLISS_BATTLE)
-        CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
-        CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_VOICE_PIG1"), LW(0), LW(1), LW(2), 0)
-        CALL(evt_msg_print, 0, STRING("stg4_usu_61_00"), 0, STRING("me"))
+            CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
+            CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_VOICE_PIG1"), LW(0), LW(1), LW(2), 0)
+            CALL(evt_msg_print, 0, STRING("stg4_usu_61_00"), 0, STRING("me"))
         CASE_DEFAULT
-        CALL(evt_msg_print, 0, STRING("stg4_usu_61"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg4_usu_61"), 0, STRING("me"))
     END_SWITCH
     RETURN
 EVT_END()
@@ -614,9 +614,9 @@ static EVT_BEGIN(aunt_init)
     CALL(evt_npc_flag_onoff, 1, STRING("おばさん"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG4_10_DOOPLISS_BATTLE)
-        IF_INT_EQUAL(GSWF_USU_01_AUNT_TURNED_INTO_PIG, 1)
-            CALL(evt_npc_set_position, STRING("おばさん"), 0, -2000, 0)
-        END_IF
+            IF_INT_EQUAL(GSWF_USU_01_AUNT_TURNED_INTO_PIG, 1)
+                CALL(evt_npc_set_position, STRING("おばさん"), 0, -2000, 0)
+            END_IF
     END_SWITCH
     RETURN
 EVT_END()
@@ -625,11 +625,11 @@ static EVT_BEGIN(aunt_pig_init)
     CALL(evt_npc_flag_onoff, 1, STRING("ブタおばさん"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG4_10_DOOPLISS_BATTLE)
-        IF_INT_EQUAL(GSWF_USU_01_AUNT_TURNED_INTO_PIG, 0)
-            CALL(evt_npc_set_position, STRING("ブタおばさん"), 0, -2000, 0)
-        END_IF
+            IF_INT_EQUAL(GSWF_USU_01_AUNT_TURNED_INTO_PIG, 0)
+                CALL(evt_npc_set_position, STRING("ブタおばさん"), 0, -2000, 0)
+            END_IF
         CASE_DEFAULT
-        CALL(evt_npc_set_position, STRING("ブタおばさん"), 0, -2000, 0)
+            CALL(evt_npc_set_position, STRING("ブタおばさん"), 0, -2000, 0)
     END_SWITCH
     RETURN
 EVT_END()
@@ -1008,104 +1008,104 @@ EVT_BEGIN(aunt_talk)
     // Trouble 20 is not active: her words depend on how far the story has gone.
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG4_10_DOOPLISS_BATTLE)
-        IF_INT_EQUAL(GSWF_USU_01_AUNT_TURNED_INTO_PIG, 0)
-            // Before the Doopliss fight, first talk: she says she can't buy food for the children since her
-            // husband turned into a pig (stg4_usu_62), and they pipe up.
-            CALL(evt_msg_print, 0, STRING("stg4_usu_62"), 0, STRING("me"))
-            CALL_CHILD(childABC_talk_01)
-            WAIT_MS(1400)
+            IF_INT_EQUAL(GSWF_USU_01_AUNT_TURNED_INTO_PIG, 0)
+                // Before the Doopliss fight, first talk: she says she can't buy food for the children since her
+                // husband turned into a pig (stg4_usu_62), and they pipe up.
+                CALL(evt_msg_print, 0, STRING("stg4_usu_62"), 0, STRING("me"))
+                CALL_CHILD(childABC_talk_01)
+                WAIT_MS(1400)
 
-            // She begs for spare food (stg4_usu_66) with a yes/no menu;
-            // a food item from Mario's pouch earns a Shooting Star (stg4_usu_68).
-            CALL(evt_msg_print, 0, STRING("stg4_usu_66"), 0, STRING("me"))
-            CALL(evt_msg_select, 0, STRING("stg4_usu_66_yn"))
-            CALL(evt_msg_continue)
-            WAIT_FRAMES(1)
-            CALL(evt_pouch_get_haveitemcnt, LW(1))
-            IF_INT_EQUAL(LW(1), 0)
-                SET_VALUE(LW(0), 1)
-            END_IF
-            IF_INT_EQUAL(LW(0), 0)
-                CALL(get_item_list, LW(0))
-                LOOP(0)
+                // She begs for spare food (stg4_usu_66) with a yes/no menu;
+                // a food item from Mario's pouch earns a Shooting Star (stg4_usu_68).
+                CALL(evt_msg_print, 0, STRING("stg4_usu_66"), 0, STRING("me"))
+                CALL(evt_msg_select, 0, STRING("stg4_usu_66_yn"))
+                CALL(evt_msg_continue)
+                WAIT_FRAMES(1)
+                CALL(evt_pouch_get_haveitemcnt, LW(1))
+                IF_INT_EQUAL(LW(1), 0)
+                    SET_VALUE(LW(0), 1)
+                END_IF
+                IF_INT_EQUAL(LW(0), 0)
+                    CALL(get_item_list, LW(0))
+                    LOOP(0)
 #if VERSION <= VERSION_DEMO_JP
-                    CALL(evt_win_item_select, LW(0), LW(1))
+                        CALL(evt_win_item_select, LW(0), LW(1))
 #else
-                    CALL(evt_win_item_select, 0, LW(0), LW(1), 0)
+                        CALL(evt_win_item_select, 0, LW(0), LW(1), 0)
 #endif
-                    IF_INT_NOT_EQUAL(LW(1), -1)
-                        CALL(check_tabemono, LW(1), LW(2))
-                        IF_INT_EQUAL(LW(2), 1)
-                            CALL(evt_pouch_remove_item, LW(1), LW(2))
-                            BREAK_LOOP
+                        IF_INT_NOT_EQUAL(LW(1), -1)
+                            CALL(check_tabemono, LW(1), LW(2))
+                            IF_INT_EQUAL(LW(2), 1)
+                                CALL(evt_pouch_remove_item, LW(1), LW(2))
+                                BREAK_LOOP
+                            ELSE
+                                CALL(evt_msg_print, 0, STRING("stg4_usu_67"), 0, 0)
+                            END_IF
                         ELSE
-                            CALL(evt_msg_print, 0, STRING("stg4_usu_67"), 0, 0)
+                            BREAK_LOOP
                         END_IF
+                        WAIT_FRAMES(1)
+                    END_LOOP
+                    CALL(delete_item_list, LW(0))
+                    IF_INT_NOT_EQUAL(LW(1), -1)
+                        CALL(evt_msg_print, 0, STRING("stg4_usu_68"), 0, STRING("me"))
+                        CALL(evt_item_entry, STRING("orei"), ITEM_SHOOTING_STAR, 0, 0, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
+                        CALL(evt_item_get_item, STRING("orei"))
+                        CALL(evt_item_get_item_end_wait, STRING("orei"))
+                        CALL(evt_msg_print, 0, STRING("stg4_usu_69"), 0, STRING("me"))
                     ELSE
-                        BREAK_LOOP
+                        CALL(evt_msg_print, 0, STRING("stg4_usu_70"), 0, STRING("me"))
                     END_IF
-                    WAIT_FRAMES(1)
-                END_LOOP
-                CALL(delete_item_list, LW(0))
-                IF_INT_NOT_EQUAL(LW(1), -1)
-                    CALL(evt_msg_print, 0, STRING("stg4_usu_68"), 0, STRING("me"))
-                    CALL(evt_item_entry, STRING("orei"), ITEM_SHOOTING_STAR, 0, 0, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
-                    CALL(evt_item_get_item, STRING("orei"))
-                    CALL(evt_item_get_item_end_wait, STRING("orei"))
-                    CALL(evt_msg_print, 0, STRING("stg4_usu_69"), 0, STRING("me"))
                 ELSE
                     CALL(evt_msg_print, 0, STRING("stg4_usu_70"), 0, STRING("me"))
                 END_IF
-            ELSE
-                CALL(evt_msg_print, 0, STRING("stg4_usu_70"), 0, STRING("me"))
-            END_IF
 
-            // The temple bell tolls and she turns into a pig in a puff of smoke;
-            // the children scream (stg4_usu_71 to 73).
-            WAIT_MS(500)
-            CALL(evt_snd_sfxon, STRING("SFX_STG4_TEMPLE_BELL1"), 0)
-            WAIT_MS(2000)
-            CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
-            CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_CHANGE_PIG1"), LW(0), LW(1), LW(2), 0)
-            BEGIN_INLINE_EVENT
-                ADD(LW(2), 20)
-                CALL(evt_eff, 0, STRING("kemuri_test"), 7, LW(0), LW(1), LW(2), FLOAT(1.5f), 0, 0, 0, 0, 0, 0, 0)
-            END_INLINE_EVENT
-            WAIT_MS(300)
-            CALL(evt_npc_set_position, STRING("ブタおばさん"), LW(0), LW(1), LW(2))
-            CALL(evt_npc_set_position, STRING("me"), 0, -2000, 0)
-            CALL(evt_npc_get_reglid, STRING("ブタおばさん"), LW(0))
-            DELETE_EVENT(LW(0))
-            CALL(evt_npc_restart_regular_event, STRING("ブタおばさん"))
-            BEGIN_INLINE_EVENT
-                CALL(evt_msg_print, 0, STRING("stg4_usu_71"), 0, STRING("子供Ａ"))
-            END_INLINE_EVENT
-            BEGIN_INLINE_EVENT
-                WAIT_MS(400)
-                CALL(evt_msg_print, 0, STRING("stg4_usu_72"), 0, STRING("子供Ｂ"))
-            END_INLINE_EVENT
-            BEGIN_INLINE_EVENT
-                WAIT_MS(600)
-                CALL(evt_msg_print, 0, STRING("stg4_usu_73"), 0, STRING("子供Ｃ"))
-            END_INLINE_EVENT
-            SET_VALUE(GSWF_USU_01_AUNT_TURNED_INTO_PIG, 1)
-        ELSE
-            // As a pig she only oinks (stg4_usu_73_01).
-            CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
-            CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_VOICE_PIG1"), LW(0), LW(1), LW(2), 0)
-            CALL(evt_msg_print, 0, STRING("stg4_usu_73_01"), 0, STRING("me"))
-        END_IF
+                // The temple bell tolls and she turns into a pig in a puff of smoke;
+                // the children scream (stg4_usu_71 to 73).
+                WAIT_MS(500)
+                CALL(evt_snd_sfxon, STRING("SFX_STG4_TEMPLE_BELL1"), 0)
+                WAIT_MS(2000)
+                CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
+                CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_CHANGE_PIG1"), LW(0), LW(1), LW(2), 0)
+                BEGIN_INLINE_EVENT
+                    ADD(LW(2), 20)
+                    CALL(evt_eff, 0, STRING("kemuri_test"), 7, LW(0), LW(1), LW(2), FLOAT(1.5f), 0, 0, 0, 0, 0, 0, 0)
+                END_INLINE_EVENT
+                WAIT_MS(300)
+                CALL(evt_npc_set_position, STRING("ブタおばさん"), LW(0), LW(1), LW(2))
+                CALL(evt_npc_set_position, STRING("me"), 0, -2000, 0)
+                CALL(evt_npc_get_reglid, STRING("ブタおばさん"), LW(0))
+                DELETE_EVENT(LW(0))
+                CALL(evt_npc_restart_regular_event, STRING("ブタおばさん"))
+                BEGIN_INLINE_EVENT
+                    CALL(evt_msg_print, 0, STRING("stg4_usu_71"), 0, STRING("子供Ａ"))
+                END_INLINE_EVENT
+                BEGIN_INLINE_EVENT
+                    WAIT_MS(400)
+                    CALL(evt_msg_print, 0, STRING("stg4_usu_72"), 0, STRING("子供Ｂ"))
+                END_INLINE_EVENT
+                BEGIN_INLINE_EVENT
+                    WAIT_MS(600)
+                    CALL(evt_msg_print, 0, STRING("stg4_usu_73"), 0, STRING("子供Ｃ"))
+                END_INLINE_EVENT
+                SET_VALUE(GSWF_USU_01_AUNT_TURNED_INTO_PIG, 1)
+            ELSE
+                // As a pig she only oinks (stg4_usu_73_01).
+                CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
+                CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_VOICE_PIG1"), LW(0), LW(1), LW(2), 0)
+                CALL(evt_msg_print, 0, STRING("stg4_usu_73_01"), 0, STRING("me"))
+            END_IF
         CASE_LESS(STG4_16_LEAVING_TWILIGHT_TOWN)
 
-        // After the Doopliss fight she gives story text: thanks for restoring the village
-        // (stg4_usu_77), then comments by progress.
-        CALL(evt_msg_print, 0, STRING("stg4_usu_77"), 0, STRING("me"))
+            // After the Doopliss fight she gives story text: thanks for restoring the village
+            // (stg4_usu_77), then comments by progress.
+            CALL(evt_msg_print, 0, STRING("stg4_usu_77"), 0, STRING("me"))
         CASE_LESS(STG4_31_FRANKLYS_HOUSE_STG_4)
-        CALL(evt_msg_print, 0, STRING("stg4_usu_78"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg4_usu_78"), 0, STRING("me"))
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
-        CALL(evt_msg_print, 0, STRING("stg4_usu_81_1"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg4_usu_81_1"), 0, STRING("me"))
         CASE_DEFAULT
-        CALL(evt_msg_print, 0, STRING("stg4_usu_81_4_1"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg4_usu_81_4_1"), 0, STRING("me"))
     END_SWITCH
     RETURN
 EVT_END()
@@ -1120,17 +1120,17 @@ EVT_END()
 static EVT_BEGIN(childA_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG4_10_DOOPLISS_BATTLE)
-        IF_INT_EQUAL(GSWF_USU_01_AUNT_TURNED_INTO_PIG, 1)
-            CALL(evt_msg_print, 0, STRING("stg4_usu_74"), 0, STRING("me"))
-        ELSE
-            CALL_CHILD(childABC_talk_01)
-        END_IF
+            IF_INT_EQUAL(GSWF_USU_01_AUNT_TURNED_INTO_PIG, 1)
+                CALL(evt_msg_print, 0, STRING("stg4_usu_74"), 0, STRING("me"))
+            ELSE
+                CALL_CHILD(childABC_talk_01)
+            END_IF
         CASE_LESS(STG4_31_FRANKLYS_HOUSE_STG_4)
-        CALL_CHILD(childABC_talk_02)
+            CALL_CHILD(childABC_talk_02)
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
-        CALL_CHILD(childABC_talk_03)
+            CALL_CHILD(childABC_talk_03)
         CASE_DEFAULT
-        CALL_CHILD(childABC_talk_04)
+            CALL_CHILD(childABC_talk_04)
     END_SWITCH
     RETURN
 EVT_END()
@@ -1145,17 +1145,17 @@ EVT_END()
 static EVT_BEGIN(childB_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG4_10_DOOPLISS_BATTLE)
-        IF_INT_EQUAL(GSWF_USU_01_AUNT_TURNED_INTO_PIG, 1)
-            CALL(evt_msg_print, 0, STRING("stg4_usu_75"), 0, STRING("me"))
-        ELSE
-            CALL_CHILD(childABC_talk_01)
-        END_IF
+            IF_INT_EQUAL(GSWF_USU_01_AUNT_TURNED_INTO_PIG, 1)
+                CALL(evt_msg_print, 0, STRING("stg4_usu_75"), 0, STRING("me"))
+            ELSE
+                CALL_CHILD(childABC_talk_01)
+            END_IF
         CASE_LESS(STG4_31_FRANKLYS_HOUSE_STG_4)
-        CALL_CHILD(childABC_talk_02)
+            CALL_CHILD(childABC_talk_02)
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
-        CALL_CHILD(childABC_talk_03)
+            CALL_CHILD(childABC_talk_03)
         CASE_DEFAULT
-        CALL_CHILD(childABC_talk_04)
+            CALL_CHILD(childABC_talk_04)
     END_SWITCH
     RETURN
 EVT_END()
@@ -1170,17 +1170,17 @@ EVT_END()
 static EVT_BEGIN(childC_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG4_10_DOOPLISS_BATTLE)
-        IF_INT_EQUAL(GSWF_USU_01_AUNT_TURNED_INTO_PIG, 1)
-            CALL(evt_msg_print, 0, STRING("stg4_usu_76"), 0, STRING("me"))
-        ELSE
-            CALL_CHILD(childABC_talk_01)
-        END_IF
+            IF_INT_EQUAL(GSWF_USU_01_AUNT_TURNED_INTO_PIG, 1)
+                CALL(evt_msg_print, 0, STRING("stg4_usu_76"), 0, STRING("me"))
+            ELSE
+                CALL_CHILD(childABC_talk_01)
+            END_IF
         CASE_LESS(STG4_31_FRANKLYS_HOUSE_STG_4)
-        CALL_CHILD(childABC_talk_02)
+            CALL_CHILD(childABC_talk_02)
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
-        CALL_CHILD(childABC_talk_03)
+            CALL_CHILD(childABC_talk_03)
         CASE_DEFAULT
-        CALL_CHILD(childABC_talk_04)
+            CALL_CHILD(childABC_talk_04)
     END_SWITCH
     RETURN
 EVT_END()
@@ -1193,13 +1193,13 @@ static EVT_BEGIN(gatekeeper_init)
     CALL(evt_npc_flag_onoff, 1, STRING("門番"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG4_02_DINGE)
-        SET_VALUE(LW(0), STRING("e_bero"))
-        CALL_CHILD(bero_case_switch_off)
-        CALL(evt_npc_set_position, STRING("門番"), 400, 0, -55)
+            SET_VALUE(LW(0), STRING("e_bero"))
+            CALL_CHILD(bero_case_switch_off)
+            CALL(evt_npc_set_position, STRING("門番"), 400, 0, -55)
         CASE_LESS(STG4_10_DOOPLISS_BATTLE)
-        CALL(evt_npc_set_position, STRING("門番"), 0, -2000, 0)
+            CALL(evt_npc_set_position, STRING("門番"), 0, -2000, 0)
         CASE_DEFAULT
-        CALL(evt_npc_set_position, STRING("門番"), 400, 0, -55)
+            CALL(evt_npc_set_position, STRING("門番"), 400, 0, -55)
     END_SWITCH
     RETURN
 EVT_END()
@@ -1212,11 +1212,11 @@ static EVT_BEGIN(gatekeeper_pig_init)
     CALL(evt_npc_flag_onoff, 1, STRING("ブタ門番"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG4_02_DINGE)
-        CALL(evt_npc_set_position, STRING("ブタ門番"), 0, -2000, 0)
+            CALL(evt_npc_set_position, STRING("ブタ門番"), 0, -2000, 0)
         CASE_LESS(STG4_10_DOOPLISS_BATTLE)
-        CALL(evt_npc_set_position, STRING("ブタ門番"), 400, 0, -55)
+            CALL(evt_npc_set_position, STRING("ブタ門番"), 400, 0, -55)
         CASE_DEFAULT
-        CALL(evt_npc_set_position, STRING("ブタ門番"), 0, -2000, 0)
+            CALL(evt_npc_set_position, STRING("ブタ門番"), 0, -2000, 0)
     END_SWITCH
     RETURN
 EVT_END()
@@ -1233,40 +1233,40 @@ EVT_END()
 static EVT_BEGIN(gatekeeper_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG4_01_00_GATEKEEPER_CONVERSATION)
-        CALL(evt_mario_mov_pos2, 350, -50, 120)
-        WAIT_FRAMES(1)
-        CALL(evt_mario_set_dir, 90, 300, 0)
-        CALL(evt_party_move_behind_mario, 0)
-        CALL(evt_cam3d_evt_set, 372, 124, 321, 372, 57, -61, 500, EASING_SINE_IN_OUT)
-        WAIT_MS(500)
-        CALL(evt_npc_set_ry, STRING("me"), 270)
-        CALL(evt_msg_print, 0, STRING("stg4_usu_44"), 0, STRING("me"))
-        CALL(evt_cam3d_evt_set, 342, 124, 321, 342, 57, -61, 500, EASING_SINE_IN_OUT)
-        WAIT_MS(500)
-        CALL(evt_party_stop, 0)
-        WAIT_MS(200)
-        CALL(evt_msg_print_party, STRING("stg4_usu_45"))
-        CALL(evt_party_run, 0)
-        CALL(evt_cam3d_evt_off, 1000, EASING_SINE_IN_OUT)
-        SPAWN_EVENT(village_chief_change_pig_event)
-        SET_VALUE(GSW_STORY_PROGRESS, STG4_01_00_GATEKEEPER_CONVERSATION)
-        RETURN
+            CALL(evt_mario_mov_pos2, 350, -50, 120)
+            WAIT_FRAMES(1)
+            CALL(evt_mario_set_dir, 90, 300, 0)
+            CALL(evt_party_move_behind_mario, 0)
+            CALL(evt_cam3d_evt_set, 372, 124, 321, 372, 57, -61, 500, EASING_SINE_IN_OUT)
+            WAIT_MS(500)
+            CALL(evt_npc_set_ry, STRING("me"), 270)
+            CALL(evt_msg_print, 0, STRING("stg4_usu_44"), 0, STRING("me"))
+            CALL(evt_cam3d_evt_set, 342, 124, 321, 342, 57, -61, 500, EASING_SINE_IN_OUT)
+            WAIT_MS(500)
+            CALL(evt_party_stop, 0)
+            WAIT_MS(200)
+            CALL(evt_msg_print_party, STRING("stg4_usu_45"))
+            CALL(evt_party_run, 0)
+            CALL(evt_cam3d_evt_off, 1000, EASING_SINE_IN_OUT)
+            SPAWN_EVENT(village_chief_change_pig_event)
+            SET_VALUE(GSW_STORY_PROGRESS, STG4_01_00_GATEKEEPER_CONVERSATION)
+            RETURN
         CASE_LESS(STG4_01_THE_MAYORS_A_PIG)
-        CALL(evt_msg_print, 0, STRING("stg4_usu_45_01"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg4_usu_45_01"), 0, STRING("me"))
         CASE_LESS(STG4_02_DINGE)
-        CALL(evt_msg_print, 0, STRING("stg4_usu_46"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg4_usu_46"), 0, STRING("me"))
         CASE_LESS(STG4_10_DOOPLISS_BATTLE)
-        CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
-        CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_VOICE_PIG1"), LW(0), LW(1), LW(2), 0)
-        CALL(evt_msg_print, 0, STRING("stg4_usu_48"), 0, STRING("me"))
+            CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
+            CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_VOICE_PIG1"), LW(0), LW(1), LW(2), 0)
+            CALL(evt_msg_print, 0, STRING("stg4_usu_48"), 0, STRING("me"))
         CASE_LESS(STG4_16_LEAVING_TWILIGHT_TOWN)
-        CALL(evt_msg_print, 0, STRING("stg4_usu_49"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg4_usu_49"), 0, STRING("me"))
         CASE_LESS(STG4_31_FRANKLYS_HOUSE_STG_4)
-        CALL(evt_msg_print, 0, STRING("stg4_usu_49_1"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg4_usu_49_1"), 0, STRING("me"))
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
-        CALL(evt_msg_print, 0, STRING("stg4_usu_49_2"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg4_usu_49_2"), 0, STRING("me"))
         CASE_DEFAULT
-        CALL(evt_msg_print, 0, STRING("stg4_usu_49_2_1"), 0, STRING("me"))
+            CALL(evt_msg_print, 0, STRING("stg4_usu_49_2_1"), 0, STRING("me"))
     END_SWITCH
     RETURN
 EVT_END()
@@ -1309,19 +1309,19 @@ EVT_END()
 static EVT_BEGIN(musume_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG4_10_DOOPLISS_BATTLE)
-        CALL(evt_npc_get_position, STRING("ブタ３人娘Ａ"), LW(0), LW(1), LW(2))
-        CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_VOICE_PIG1"), LW(0), LW(1), LW(2), 0)
-        CALL(evt_msg_print, 0, STRING("stg4_usu_148_1_01"), 0, STRING("ブタ３人娘Ａ"))
-        CALL(evt_npc_get_position, STRING("ブタ３人娘Ｂ"), LW(0), LW(1), LW(2))
-        CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_VOICE_PIG1"), LW(0), LW(1), LW(2), 0)
-        CALL(evt_msg_print, 0, STRING("stg4_usu_148_1_02"), 0, STRING("ブタ３人娘Ｂ"))
-        CALL(evt_npc_get_position, STRING("ブタ３人娘Ｃ"), LW(0), LW(1), LW(2))
-        CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_VOICE_PIG1"), LW(0), LW(1), LW(2), 0)
-        CALL(evt_msg_print, 0, STRING("stg4_usu_148_1_03"), 0, STRING("ブタ３人娘Ｃ"))
+            CALL(evt_npc_get_position, STRING("ブタ３人娘Ａ"), LW(0), LW(1), LW(2))
+            CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_VOICE_PIG1"), LW(0), LW(1), LW(2), 0)
+            CALL(evt_msg_print, 0, STRING("stg4_usu_148_1_01"), 0, STRING("ブタ３人娘Ａ"))
+            CALL(evt_npc_get_position, STRING("ブタ３人娘Ｂ"), LW(0), LW(1), LW(2))
+            CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_VOICE_PIG1"), LW(0), LW(1), LW(2), 0)
+            CALL(evt_msg_print, 0, STRING("stg4_usu_148_1_02"), 0, STRING("ブタ３人娘Ｂ"))
+            CALL(evt_npc_get_position, STRING("ブタ３人娘Ｃ"), LW(0), LW(1), LW(2))
+            CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_VOICE_PIG1"), LW(0), LW(1), LW(2), 0)
+            CALL(evt_msg_print, 0, STRING("stg4_usu_148_1_03"), 0, STRING("ブタ３人娘Ｃ"))
         CASE_LESS(STG4_15_05_PEACH_X_NAUT_PHD_REPORT)
-        CALL(evt_msg_print, 0, STRING("stg4_usu_148_1_04"), 0, STRING("３人娘Ａ"))
-        CALL(evt_msg_print, 0, STRING("stg4_usu_148_1_05"), 0, STRING("３人娘Ｂ"))
-        CALL(evt_msg_print, 0, STRING("stg4_usu_148_1_06"), 0, STRING("３人娘Ｃ"))
+            CALL(evt_msg_print, 0, STRING("stg4_usu_148_1_04"), 0, STRING("３人娘Ａ"))
+            CALL(evt_msg_print, 0, STRING("stg4_usu_148_1_05"), 0, STRING("３人娘Ｂ"))
+            CALL(evt_msg_print, 0, STRING("stg4_usu_148_1_06"), 0, STRING("３人娘Ｃ"))
     END_SWITCH
     RETURN
 EVT_END()
@@ -1980,59 +1980,59 @@ static EVT_BEGIN(usu01_crowFG_talk_event)
             SWITCH(GSW_STORY_PROGRESS)
                 CASE_LESS(STG4_14_NAME_GUESSING)
 
-                // Before the name guessing, crow F says the Mario with the mayor is really the
-                // villain and crow G adds that only a soul locked under Creepy Steeple knows
-                // his name (stg4_usu_137 to 140).
-                CALL(evt_msg_print, 0, STRING("stg4_usu_137"), 0, STRING("カラスＦ"))
-                CALL(evt_msg_print, 0, STRING("stg4_usu_138"), 0, STRING("カラスＧ"))
-                CALL(evt_msg_print, 0, STRING("stg4_usu_139"), 0, STRING("カラスＦ"))
-                CALL(evt_msg_print, 0, STRING("stg4_usu_140"), 0, STRING("カラスＧ"))
-                CALL_CHILD(cam_down)
+                    // Before the name guessing, crow F says the Mario with the mayor is really the
+                    // villain and crow G adds that only a soul locked under Creepy Steeple knows
+                    // his name (stg4_usu_137 to 140).
+                    CALL(evt_msg_print, 0, STRING("stg4_usu_137"), 0, STRING("カラスＦ"))
+                    CALL(evt_msg_print, 0, STRING("stg4_usu_138"), 0, STRING("カラスＧ"))
+                    CALL(evt_msg_print, 0, STRING("stg4_usu_139"), 0, STRING("カラスＦ"))
+                    CALL(evt_msg_print, 0, STRING("stg4_usu_140"), 0, STRING("カラスＧ"))
+                    CALL_CHILD(cam_down)
 
-                // The first time, Vivian and Mario step aside and she proposes searching under Creepy Steeple
-                // for the villain's real name (stg4_usu_149_viv, 150_viv).
-                IF_INT_EQUAL(GSWF_USU_01_CROWS_FG_PARTNER_TALK_DONE, 0)
-                    CALL(evt_party_cont_onoff, 0, 1)
-                    LOOP(0)
-                        CALL(evt_party_get_status, 6, LW(0))
-                        IF_INT_EQUAL(LW(0), 0)
-                            BREAK_LOOP
-                        END_IF
+                    // The first time, Vivian and Mario step aside and she proposes searching under Creepy Steeple
+                    // for the villain's real name (stg4_usu_149_viv, 150_viv).
+                    IF_INT_EQUAL(GSWF_USU_01_CROWS_FG_PARTNER_TALK_DONE, 0)
+                        CALL(evt_party_cont_onoff, 0, 1)
+                        LOOP(0)
+                            CALL(evt_party_get_status, 6, LW(0))
+                            IF_INT_EQUAL(LW(0), 0)
+                                BREAK_LOOP
+                            END_IF
+                            WAIT_FRAMES(1)
+                        END_LOOP
+                        WAIT_MS(400)
+                        CALL(evt_party_stop, 0)
+                        CALL(evt_party_move_pos2, 0, 280, 350, FLOAT(80.0f))
                         WAIT_FRAMES(1)
-                    END_LOOP
-                    WAIT_MS(400)
-                    CALL(evt_party_stop, 0)
-                    CALL(evt_party_move_pos2, 0, 280, 350, FLOAT(80.0f))
-                    WAIT_FRAMES(1)
-                    CALL(evt_party_set_dir, 0, 270, 200)
-                    CALL(evt_mario_set_dir, 90, 200, 0)
-                    WAIT_MS(300)
-                    CALL(evt_msg_print_party, STRING("stg4_usu_149"))
-                    WAIT_MS(300)
-                    CALL(evt_mario_set_pose, STRING("M_N_2"))
-                    WAIT_MS(500)
-                    CALL(evt_mario_set_pose, STRING("M_S_1"))
-                    CALL(evt_msg_print_party, STRING("stg4_usu_150"))
-                    WAIT_MS(300)
-                    SET_VALUE(GSWF_USU_01_CROWS_FG_PARTNER_TALK_DONE, 1)
-                    CALL(evt_party_cont_onoff, 0, 0)
-                    CALL(evt_party_run, 0)
-                END_IF
+                        CALL(evt_party_set_dir, 0, 270, 200)
+                        CALL(evt_mario_set_dir, 90, 200, 0)
+                        WAIT_MS(300)
+                        CALL(evt_msg_print_party, STRING("stg4_usu_149"))
+                        WAIT_MS(300)
+                        CALL(evt_mario_set_pose, STRING("M_N_2"))
+                        WAIT_MS(500)
+                        CALL(evt_mario_set_pose, STRING("M_S_1"))
+                        CALL(evt_msg_print_party, STRING("stg4_usu_150"))
+                        WAIT_MS(300)
+                        SET_VALUE(GSWF_USU_01_CROWS_FG_PARTNER_TALK_DONE, 1)
+                        CALL(evt_party_cont_onoff, 0, 0)
+                        CALL(evt_party_run, 0)
+                    END_IF
                 CASE_LESS(STG4_31_FRANKLYS_HOUSE_STG_4)
 
-                // Later the crows gossip about Peach being kidnapped again (stg4_usu_141 and 142),
-                // repeated in new versions after Franklys's house (142_1, 142_2) and after the ending (142_2_1, 142_2_2).
-                CALL(evt_msg_print, 0, STRING("stg4_usu_141"), 0, STRING("カラスＦ"))
-                CALL(evt_msg_print, 0, STRING("stg4_usu_142"), 0, STRING("カラスＧ"))
-                CALL_CHILD(cam_down)
+                    // Later the crows gossip about Peach being kidnapped again (stg4_usu_141 and 142),
+                    // repeated in new versions after Franklys's house (142_1, 142_2) and after the ending (142_2_1, 142_2_2).
+                    CALL(evt_msg_print, 0, STRING("stg4_usu_141"), 0, STRING("カラスＦ"))
+                    CALL(evt_msg_print, 0, STRING("stg4_usu_142"), 0, STRING("カラスＧ"))
+                    CALL_CHILD(cam_down)
                 CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
-                CALL(evt_msg_print, 0, STRING("stg4_usu_142_1"), 0, STRING("カラスＦ"))
-                CALL(evt_msg_print, 0, STRING("stg4_usu_142_2"), 0, STRING("カラスＧ"))
-                CALL_CHILD(cam_down)
+                    CALL(evt_msg_print, 0, STRING("stg4_usu_142_1"), 0, STRING("カラスＦ"))
+                    CALL(evt_msg_print, 0, STRING("stg4_usu_142_2"), 0, STRING("カラスＧ"))
+                    CALL_CHILD(cam_down)
                 CASE_DEFAULT
-                CALL(evt_msg_print, 0, STRING("stg4_usu_142_2_1"), 0, STRING("カラスＦ"))
-                CALL(evt_msg_print, 0, STRING("stg4_usu_142_2_2"), 0, STRING("カラスＧ"))
-                CALL_CHILD(cam_down)
+                    CALL(evt_msg_print, 0, STRING("stg4_usu_142_2_1"), 0, STRING("カラスＦ"))
+                    CALL(evt_msg_print, 0, STRING("stg4_usu_142_2_2"), 0, STRING("カラスＧ"))
+                    CALL_CHILD(cam_down)
             END_SWITCH
 
             // Controls come back; GW(0) keeps the crows quiet until usu01_check_vivian resets it.
@@ -2153,25 +2153,25 @@ static EVT_BEGIN(usu01_crowHI_talk_event)
             SWITCH(GSW_STORY_PROGRESS)
                 CASE_LESS(STG4_14_NAME_GUESSING)
 
-                // Before the name guessing, crow H tells crow I that her oldest, Ronnie,
-                // is taking his SATs (stg4_usu_143) and crow I is impressed (144).
-                CALL(evt_msg_print, 0, STRING("stg4_usu_143"), 0, STRING("カラスＨ"))
-                CALL(evt_msg_print, 0, STRING("stg4_usu_144"), 0, STRING("カラスＩ"))
+                    // Before the name guessing, crow H tells crow I that her oldest, Ronnie,
+                    // is taking his SATs (stg4_usu_143) and crow I is impressed (144).
+                    CALL(evt_msg_print, 0, STRING("stg4_usu_143"), 0, STRING("カラスＨ"))
+                    CALL(evt_msg_print, 0, STRING("stg4_usu_144"), 0, STRING("カラスＩ"))
                 CASE_LESS(STG4_31_FRANKLYS_HOUSE_STG_4)
 
-                // Later, crow H says he is even going to a test prep center (145) and crow I thinks about a
-                // college fund for little Billy (146).
-                CALL(evt_msg_print, 0, STRING("stg4_usu_145"), 0, STRING("カラスＨ"))
-                CALL(evt_msg_print, 0, STRING("stg4_usu_146"), 0, STRING("カラスＩ"))
+                    // Later, crow H says he is even going to a test prep center (145) and crow I thinks about a
+                    // college fund for little Billy (146).
+                    CALL(evt_msg_print, 0, STRING("stg4_usu_145"), 0, STRING("カラスＨ"))
+                    CALL(evt_msg_print, 0, STRING("stg4_usu_146"), 0, STRING("カラスＩ"))
                 CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
 
-                // After Franklys's house, crow H laments that Ronnie did poorly on his SATs (146_1) and crow
-                // I consoles her (146_2); the last lines follow the ending.
-                CALL(evt_msg_print, 0, STRING("stg4_usu_146_1"), 0, STRING("カラスＨ"))
-                CALL(evt_msg_print, 0, STRING("stg4_usu_146_2"), 0, STRING("カラスＩ"))
+                    // After Franklys's house, crow H laments that Ronnie did poorly on his SATs (146_1) and crow
+                    // I consoles her (146_2); the last lines follow the ending.
+                    CALL(evt_msg_print, 0, STRING("stg4_usu_146_1"), 0, STRING("カラスＨ"))
+                    CALL(evt_msg_print, 0, STRING("stg4_usu_146_2"), 0, STRING("カラスＩ"))
                 CASE_DEFAULT
-                CALL(evt_msg_print, 0, STRING("stg4_usu_146_2_1"), 0, STRING("カラスＨ"))
-                CALL(evt_msg_print, 0, STRING("stg4_usu_146_2_2"), 0, STRING("カラスＩ"))
+                    CALL(evt_msg_print, 0, STRING("stg4_usu_146_2_1"), 0, STRING("カラスＨ"))
+                    CALL(evt_msg_print, 0, STRING("stg4_usu_146_2_2"), 0, STRING("カラスＩ"))
             END_SWITCH
             CALL_CHILD(cam_down)
 
@@ -2292,18 +2292,18 @@ static EVT_BEGIN(usu01_crowJ_talk_event)
             SWITCH(GSW_STORY_PROGRESS)
                 CASE_LESS(STG4_14_NAME_GUESSING)
 
-                // Before the name guessing, crow J laments that the twilit world is
-                // full of pain (stg4_usu_147).
-                CALL(evt_msg_print, 0, STRING("stg4_usu_147"), 0, STRING("カラスＪ"))
+                    // Before the name guessing, crow J laments that the twilit world is
+                    // full of pain (stg4_usu_147).
+                    CALL(evt_msg_print, 0, STRING("stg4_usu_147"), 0, STRING("カラスＪ"))
                 CASE_LESS(STG4_31_FRANKLYS_HOUSE_STG_4)
 
-                // Later it finds small sparks of hope in the gloom (stg4_usu_148),
-                // then (after Franklys's house) decides to go on an epic journey (148_1 and 148_1_1).
-                CALL(evt_msg_print, 0, STRING("stg4_usu_148"), 0, STRING("カラスＪ"))
+                    // Later it finds small sparks of hope in the gloom (stg4_usu_148),
+                    // then (after Franklys's house) decides to go on an epic journey (148_1 and 148_1_1).
+                    CALL(evt_msg_print, 0, STRING("stg4_usu_148"), 0, STRING("カラスＪ"))
                 CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
-                CALL(evt_msg_print, 0, STRING("stg4_usu_148_1"), 0, STRING("カラスＪ"))
+                    CALL(evt_msg_print, 0, STRING("stg4_usu_148_1"), 0, STRING("カラスＪ"))
                 CASE_DEFAULT
-                CALL(evt_msg_print, 0, STRING("stg4_usu_148_1_1"), 0, STRING("カラスＪ"))
+                    CALL(evt_msg_print, 0, STRING("stg4_usu_148_1_1"), 0, STRING("カラスＪ"))
             END_SWITCH
 
             // Camera returns, Mario's controls come back and the partner is released.
@@ -3698,13 +3698,13 @@ EVT_BEGIN(usu_01_init_evt)
     // The three young women appear as pigs before the Doopliss fight and as dancers until the Peach report.
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG4_00_WELCOME_TO_STAGE_4, STG4_10_DOOPLISS_BATTLE)
-        CALL_CHILD(musume_a_pig_entry)
-        CALL_CHILD(musume_b_pig_entry)
-        CALL_CHILD(musume_c_pig_entry)
+            CALL_CHILD(musume_a_pig_entry)
+            CALL_CHILD(musume_b_pig_entry)
+            CALL_CHILD(musume_c_pig_entry)
         CASE_BETWEEN(STG4_10_DOOPLISS_BATTLE, STG4_15_05_PEACH_X_NAUT_PHD_REPORT)
-        CALL_CHILD(musume_a_entry)
-        CALL_CHILD(musume_b_entry)
-        CALL_CHILD(musume_c_entry)
+            CALL_CHILD(musume_a_entry)
+            CALL_CHILD(musume_b_entry)
+            CALL_CHILD(musume_c_entry)
     END_SWITCH
     IF_INT_LESS(GSW_STORY_PROGRESS, STG4_04_STORAGE_ROOM_UNLOCKED)
         CALL(evt_mobj_lock, STRING("usu_00_lock"), ITEM_SHOP_KEY, FLOAT(-263.5f), FLOAT(10.099609f), FLOAT(-432.0498f), 135, PTR(lock_item_check), PTR(unlock), GSWF_USU_01_STOREROOM_UNLOCKED)

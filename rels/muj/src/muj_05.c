@@ -271,16 +271,16 @@ EVT_END()
 static EVT_BEGIN(sanders_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG5_15_RUNAWAY_SAILORS)
-        CALL(evt_npc_set_tribe, STRING("me"), STRING("サンダースへろへろ"))
+            CALL(evt_npc_set_tribe, STRING("me"), STRING("サンダースへろへろ"))
         CASE_BETWEEN(STG5_15_RUNAWAY_SAILORS, STG5_17_WINE_OBTAINED)
-        CALL(evt_npc_set_position, STRING("me"), -114, 22, 22)
-        CALL(evt_npc_set_tribe, STRING("me"), STRING("サンダースへろへろ"))
+            CALL(evt_npc_set_position, STRING("me"), -114, 22, 22)
+            CALL(evt_npc_set_tribe, STRING("me"), STRING("サンダースへろへろ"))
         CASE_EQUAL(STG5_18_BOBBERY_RESCUE_2)
-        CALL(evt_npc_reaction_flag_onoff, 1, STRING("me"), NPC_REACTION_HAMMER)
-        CALL(evt_npc_change_interrupt, STRING("me"), 8, PTR(sanders_nakama))
-        CALL(evt_npc_set_position, STRING("me"), -114, 22, 22)
-        CALL(evt_npc_set_tribe, STRING("me"), STRING("サンダースねむる"))
-        CALL(evt_npc_flag_onoff, 0, STRING("サンダース"), NPC_FLAG_TALK_POSE)
+            CALL(evt_npc_reaction_flag_onoff, 1, STRING("me"), NPC_REACTION_HAMMER)
+            CALL(evt_npc_change_interrupt, STRING("me"), 8, PTR(sanders_nakama))
+            CALL(evt_npc_set_position, STRING("me"), -114, 22, 22)
+            CALL(evt_npc_set_tribe, STRING("me"), STRING("サンダースねむる"))
+            CALL(evt_npc_flag_onoff, 0, STRING("サンダース"), NPC_FLAG_TALK_POSE)
     END_SWITCH
     RETURN
 EVT_END()
@@ -317,58 +317,58 @@ EVT_END()
 static EVT_BEGIN(sanders_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG5_15_RUNAWAY_SAILORS, STG5_17_WINE_OBTAINED)
-        CALL(evt_pouch_check_item, ITEM_CHUCKOLA_COLA, LW(0))
-        IF_INT_EQUAL(LW(0), 0)
-            CALL(evt_msg_print, 0, STRING("stg5_muj_34_03"), 0, STRING("me"))
-        ELSE
+            CALL(evt_pouch_check_item, ITEM_CHUCKOLA_COLA, LW(0))
+            IF_INT_EQUAL(LW(0), 0)
+                CALL(evt_msg_print, 0, STRING("stg5_muj_34_03"), 0, STRING("me"))
+            ELSE
 #if VERSION <= VERSION_DEMO_JP
-            CALL(evt_win_item_select, PTR(itemsel_table01), LW(0))
+                CALL(evt_win_item_select, PTR(itemsel_table01), LW(0))
 #else
-            CALL(evt_win_item_select, 0, PTR(itemsel_table01), LW(0), 0)
+                CALL(evt_win_item_select, 0, PTR(itemsel_table01), LW(0), 0)
 #endif
-            IF_INT_EQUAL(LW(0), -1)
-                RETURN
+                IF_INT_EQUAL(LW(0), -1)
+                    RETURN
+                END_IF
+                CALL(evt_pouch_remove_item, ITEM_CHUCKOLA_COLA, LW(0))
+                SPAWN_EVENT(sanders_talk_sub)
             END_IF
-            CALL(evt_pouch_remove_item, ITEM_CHUCKOLA_COLA, LW(0))
-            SPAWN_EVENT(sanders_talk_sub)
-        END_IF
         CASE_EQUAL(STG5_18_BOBBERY_RESCUE_2)
-        IF_INT_EQUAL(GSWF_MUJ_05_BOBBERY_FIRST_TALK_DONE, 0)
-            CALL(evt_msg_print, 0, STRING("stg5_muj_47"), 0, STRING("me"))
-            BEGIN_INLINE_EVENT
-                CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-                CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_QUESTION1"), LW(0), LW(1), LW(2), 0)
-            END_INLINE_EVENT
-            CALL(evt_eff_fukidashi, FUKIDASHI_AT_MARIO, STRING(""), 0, 1, 0, 0, 0, 0, 0, 0, 60)
-            CALL(evt_eff_fukidashi, FUKIDASHI_AT_PARTNER, STRING(""), 0, 1, 0, 0, 0, 0, 0, 0, 60)
-            WAIT_MS(1000)
-            SET_VALUE(GSWF_MUJ_05_BOBBERY_FIRST_TALK_DONE, 1)
-        ELSE
-            CALL(evt_msg_print, 0, STRING("stg5_muj_48"), 0, STRING("me"))
-            BEGIN_INLINE_EVENT
-                SET_VALUE(LW(0), 32000)
-                CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 3000)
-                LOOP(100)
-                    SUBTRACT(LW(0), 300)
-                    CALL(evt_snd_bgm_freq, 0, LW(0))
-                    WAIT_MS(50)
-                END_LOOP
-            END_INLINE_EVENT
-            BEGIN_INLINE_EVENT
-                CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-                CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_FIND1"), LW(0), LW(1), LW(2), 0)
-            END_INLINE_EVENT
-            CALL(evt_eff_fukidashi, FUKIDASHI_AT_MARIO, STRING(""), 0, 0, 0, 0, 0, 0, 0, 0, 60)
-            CALL(evt_eff_fukidashi, FUKIDASHI_AT_PARTNER, STRING(""), 0, 0, 0, 0, 0, 0, 0, 0, 60)
-            WAIT_MS(1000)
+            IF_INT_EQUAL(GSWF_MUJ_05_BOBBERY_FIRST_TALK_DONE, 0)
+                CALL(evt_msg_print, 0, STRING("stg5_muj_47"), 0, STRING("me"))
+                BEGIN_INLINE_EVENT
+                    CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+                    CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_QUESTION1"), LW(0), LW(1), LW(2), 0)
+                END_INLINE_EVENT
+                CALL(evt_eff_fukidashi, FUKIDASHI_AT_MARIO, STRING(""), 0, 1, 0, 0, 0, 0, 0, 0, 60)
+                CALL(evt_eff_fukidashi, FUKIDASHI_AT_PARTNER, STRING(""), 0, 1, 0, 0, 0, 0, 0, 0, 60)
+                WAIT_MS(1000)
+                SET_VALUE(GSWF_MUJ_05_BOBBERY_FIRST_TALK_DONE, 1)
+            ELSE
+                CALL(evt_msg_print, 0, STRING("stg5_muj_48"), 0, STRING("me"))
+                BEGIN_INLINE_EVENT
+                    SET_VALUE(LW(0), 32000)
+                    CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 3000)
+                    LOOP(100)
+                        SUBTRACT(LW(0), 300)
+                        CALL(evt_snd_bgm_freq, 0, LW(0))
+                        WAIT_MS(50)
+                    END_LOOP
+                END_INLINE_EVENT
+                BEGIN_INLINE_EVENT
+                    CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+                    CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_FIND1"), LW(0), LW(1), LW(2), 0)
+                END_INLINE_EVENT
+                CALL(evt_eff_fukidashi, FUKIDASHI_AT_MARIO, STRING(""), 0, 0, 0, 0, 0, 0, 0, 0, 60)
+                CALL(evt_eff_fukidashi, FUKIDASHI_AT_PARTNER, STRING(""), 0, 0, 0, 0, 0, 0, 0, 0, 60)
+                WAIT_MS(1000)
 #if VERSION >= VERSION_JP
-            CALL(evt_party_stop, 0)
+                CALL(evt_party_stop, 0)
 #endif
-            CALL(evt_msg_print_party, STRING("stg5_muj_49"))
+                CALL(evt_msg_print_party, STRING("stg5_muj_49"))
 #if VERSION >= VERSION_JP
-            CALL(evt_party_run, 0)
+                CALL(evt_party_run, 0)
 #endif
-        END_IF
+            END_IF
     END_SWITCH
     RETURN
 EVT_END()
@@ -376,11 +376,11 @@ EVT_END()
 static EVT_BEGIN(marco_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG5_18_03_MARCOS_JEWEL)
-        CALL(evt_npc_set_position, STRING("me"), 279, 0, -67)
-        CALL(evt_npc_set_ry, STRING("me"), 90)
-        IF_INT_EQUAL(GSWF_MUJ_05_FLAVIO_HUMMING_STOPPED, 0)
-            SPAWN_EVENT_GET_ID(PTR(marco_hanauta), GW(2))
-        END_IF
+            CALL(evt_npc_set_position, STRING("me"), 279, 0, -67)
+            CALL(evt_npc_set_ry, STRING("me"), 90)
+            IF_INT_EQUAL(GSWF_MUJ_05_FLAVIO_HUMMING_STOPPED, 0)
+                SPAWN_EVENT_GET_ID(PTR(marco_hanauta), GW(2))
+            END_IF
     END_SWITCH
     RETURN
 EVT_END()
@@ -397,51 +397,51 @@ EVT_END()
 static EVT_BEGIN(marco_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG5_18_03_MARCOS_JEWEL)
-        IF_INT_EQUAL(GSWF_MUJ_05_FLAVIO_HUMMING_STOPPED, 0)
-            DELETE_EVENT(GW(2))
-            CALL(evt_msg_close, STRING("stg5_muj_93_02_00"))
-        END_IF
-        SET_VALUE(GSWF_MUJ_05_FLAVIO_HUMMING_STOPPED, 1)
-        IF_INT_EQUAL(GSWF_MUJ_05_SKULL_GEM_PLACED, 0)
-            CALL(evt_pouch_check_item, ITEM_SKULL_GEM, LW(0))
-            IF_INT_EQUAL(LW(0), 0)
-                IF_INT_EQUAL(GSWF_MUJ_05_FLAVIO_FAVOR_ASKED, 0)
-                    CALL(evt_msg_print, 0, STRING("stg5_muj_93_02"), 0, STRING("マルコ"))
-                    IF_INT_EQUAL(GSWF_MUJ_05_SKULL_ROCK_EXAMINED, 0)
-                        RETURN
+            IF_INT_EQUAL(GSWF_MUJ_05_FLAVIO_HUMMING_STOPPED, 0)
+                DELETE_EVENT(GW(2))
+                CALL(evt_msg_close, STRING("stg5_muj_93_02_00"))
+            END_IF
+            SET_VALUE(GSWF_MUJ_05_FLAVIO_HUMMING_STOPPED, 1)
+            IF_INT_EQUAL(GSWF_MUJ_05_SKULL_GEM_PLACED, 0)
+                CALL(evt_pouch_check_item, ITEM_SKULL_GEM, LW(0))
+                IF_INT_EQUAL(LW(0), 0)
+                    IF_INT_EQUAL(GSWF_MUJ_05_FLAVIO_FAVOR_ASKED, 0)
+                        CALL(evt_msg_print, 0, STRING("stg5_muj_93_02"), 0, STRING("マルコ"))
+                        IF_INT_EQUAL(GSWF_MUJ_05_SKULL_ROCK_EXAMINED, 0)
+                            RETURN
+                        END_IF
+                        CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
+                        CALL(evt_mario_set_pose, STRING("M_I_2"))
+                        WAIT_MS(1000)
+                        CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_POSE_LOCK)
                     END_IF
-                    CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
-                    CALL(evt_mario_set_pose, STRING("M_I_2"))
-                    WAIT_MS(1000)
-                    CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_POSE_LOCK)
+                    SET_VALUE(GSWF_MUJ_05_FLAVIO_FAVOR_ASKED, 1)
+                    CALL(evt_msg_print, 0, STRING("stg5_muj_93_03"), 0, STRING("マルコ"))
+                    CALL(evt_msg_select, 0, STRING("stg5_muj_93_03_select"))
+                    SWITCH(LW(0))
+                        CASE_EQUAL(0)
+                            CALL(evt_msg_print_add, 0, STRING("stg5_muj_93_03_01"))
+                        CASE_EQUAL(1)
+                            CALL(evt_msg_print_add, 0, STRING("stg5_muj_93_03_02"))
+                        CASE_EQUAL(2)
+                            CALL(evt_msg_print_add, 0, STRING("stg5_muj_93_03_03"))
+                            CALL(evt_item_entry, STRING("jewel"), ITEM_SKULL_GEM, 0, -1000, 0, ITEM_TYPE_STILL, -1, 0)
+                            CALL(evt_item_flag_on, STRING("jewel"), ITEM_FLAG_NO_TOUCH_GET)
+                            CALL(evt_item_get_item, STRING("jewel"))
+                    END_SWITCH
+                ELSE
+                    CALL(evt_msg_print, 0, STRING("stg5_muj_93_05"), 0, STRING("マルコ"))
                 END_IF
-                SET_VALUE(GSWF_MUJ_05_FLAVIO_FAVOR_ASKED, 1)
-                CALL(evt_msg_print, 0, STRING("stg5_muj_93_03"), 0, STRING("マルコ"))
-                CALL(evt_msg_select, 0, STRING("stg5_muj_93_03_select"))
-                SWITCH(LW(0))
-                    CASE_EQUAL(0)
-                    CALL(evt_msg_print_add, 0, STRING("stg5_muj_93_03_01"))
-                    CASE_EQUAL(1)
-                    CALL(evt_msg_print_add, 0, STRING("stg5_muj_93_03_02"))
-                    CASE_EQUAL(2)
-                    CALL(evt_msg_print_add, 0, STRING("stg5_muj_93_03_03"))
-                    CALL(evt_item_entry, STRING("jewel"), ITEM_SKULL_GEM, 0, -1000, 0, ITEM_TYPE_STILL, -1, 0)
-                    CALL(evt_item_flag_on, STRING("jewel"), ITEM_FLAG_NO_TOUCH_GET)
-                    CALL(evt_item_get_item, STRING("jewel"))
-                END_SWITCH
             ELSE
-                CALL(evt_msg_print, 0, STRING("stg5_muj_93_05"), 0, STRING("マルコ"))
+                IF_INT_EQUAL(GW(12), 0)
+                    CALL(evt_msg_print, 0, STRING("stg5_muj_93_06"), 0, STRING("マルコ"))
+                ELSE
+                    CALL(evt_msg_print, 0, STRING("stg5_muj_93_07"), 0, STRING("マルコ"))
+                    SET_VALUE(GW(12), 0)
+                END_IF
             END_IF
-        ELSE
-            IF_INT_EQUAL(GW(12), 0)
-                CALL(evt_msg_print, 0, STRING("stg5_muj_93_06"), 0, STRING("マルコ"))
-            ELSE
-                CALL(evt_msg_print, 0, STRING("stg5_muj_93_07"), 0, STRING("マルコ"))
-                SET_VALUE(GW(12), 0)
-            END_IF
-        END_IF
         CASE_EQUAL(STG5_19_GEMS_AND_JINGLES)
-        CALL(evt_msg_print, 0, STRING("stg5_muj_93_09"), 0, STRING("マルコ"))
+            CALL(evt_msg_print, 0, STRING("stg5_muj_93_09"), 0, STRING("マルコ"))
     END_SWITCH
     RETURN
 EVT_END()
@@ -1513,14 +1513,14 @@ static KusaAccess kusa_tbl[] = {
 EVT_BEGIN(muj_05_init_evt)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG5_13_BOBBERY_THE_BRIDGE)
-        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_DANGER4"))
-        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG5_MUJ7"))
+            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_DANGER4"))
+            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG5_MUJ7"))
         CASE_EQUAL(STG5_18_BOBBERY_RESCUE_2)
-        CALL(evt_snd_bgmoff, PSND_FADEOUT)
-        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG5_MUJ7"))
+            CALL(evt_snd_bgmoff, PSND_FADEOUT)
+            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG5_MUJ7"))
         CASE_DEFAULT
-        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG5_MUJ1"))
-        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG5_MUJ7"))
+            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG5_MUJ1"))
+            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG5_MUJ7"))
     END_SWITCH
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
@@ -1535,13 +1535,13 @@ EVT_BEGIN(muj_05_init_evt)
     SPAWN_EVENT(hammer_event)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG5_13_BOBBERY_THE_BRIDGE)
-        IF_INT_EQUAL(GSWF_MUJ_05_BOBBERY_FIRST_SCENE_SEEN, 0)
-            SPAWN_EVENT(muj_05_first)
-        END_IF
-        SPAWN_EVENT(sanders_kyushutsu)
-        SPAWN_EVENT(yure_yashi)
+            IF_INT_EQUAL(GSWF_MUJ_05_BOBBERY_FIRST_SCENE_SEEN, 0)
+                SPAWN_EVENT(muj_05_first)
+            END_IF
+            SPAWN_EVENT(sanders_kyushutsu)
+            SPAWN_EVENT(yure_yashi)
         CASE_EQUAL(STG5_18_02_FLAVIOS_FAVOR_2)
-        SPAWN_EVENT(marco_and_jewel)
+            SPAWN_EVENT(marco_and_jewel)
     END_SWITCH
     SPAWN_EVENT(dokuroiwa_init)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG5_63_KEELHAUL_ANYTIME)

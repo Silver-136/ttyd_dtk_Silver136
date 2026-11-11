@@ -695,21 +695,21 @@ EVT_BEGIN(all_party_lecture)
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
     SWITCH(LW(9))
         CASE_EQUAL(1)
-        CALL(evt_msg_print, 0, STRING("lecture_friends_00"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("lecture_friends_00"), 0, 0)
         CASE_EQUAL(2)
-        CALL(evt_msg_print, 0, STRING("lecture_friends_04"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("lecture_friends_04"), 0, 0)
         CASE_EQUAL(5)
-        CALL(evt_msg_print, 0, STRING("lecture_friends_07"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("lecture_friends_07"), 0, 0)
         CASE_EQUAL(4)
-        CALL(evt_pouch_get_yoshiname, LW(0))
-        CALL(evt_msg_print_insert, 0, STRING("lecture_friends_09"), 0, 0, LW(0))
+            CALL(evt_pouch_get_yoshiname, LW(0))
+            CALL(evt_msg_print_insert, 0, STRING("lecture_friends_09"), 0, 0, LW(0))
         CASE_EQUAL(6)
-        CALL(evt_msg_print, 0, STRING("lecture_friends_12"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("lecture_friends_12"), 0, 0)
         CASE_EQUAL(3)
-        CALL(evt_msg_print, 0, STRING("lecture_friends_15"), 0, 0)
-        CALL(evt_eff_softdelete, STRING("sunlight"))
+            CALL(evt_msg_print, 0, STRING("lecture_friends_15"), 0, 0)
+            CALL(evt_eff_softdelete, STRING("sunlight"))
         CASE_EQUAL(7)
-        CALL(evt_msg_print, 0, STRING("lecture_friends_17"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("lecture_friends_17"), 0, 0)
     END_SWITCH
 
     // The fanfare is cut off if still playing and the field music resumes.
@@ -762,9 +762,9 @@ EVT_BEGIN(all_party_lecture)
     // Goombella and Ms. Mowz get a special demonstration setup.
     SWITCH(LW(9))
         CASE_EQUAL(1)
-        CALL_CHILD(christine_party_lecture_init)
+            CALL_CHILD(christine_party_lecture_init)
         CASE_EQUAL(7)
-        CALL_CHILD(chuchulina_party_lecture_init)
+            CALL_CHILD(chuchulina_party_lecture_init)
     END_SWITCH
 
     // Mario blinks out and in while the lecture stage is prepared.
@@ -783,9 +783,9 @@ EVT_BEGIN(all_party_lecture)
     // Goombella demonstrates her Tattle on a Goomba, or Ms. Mowz sniffs out a treasure box, on the stage.
     SWITCH(LW(9))
         CASE_EQUAL(1)
-        CALL_CHILD(christine_party_lecture)
+            CALL_CHILD(christine_party_lecture)
         CASE_EQUAL(7)
-        CALL_CHILD(chuchulina_party_lecture)
+            CALL_CHILD(chuchulina_party_lecture)
     END_SWITCH
 
     // Mario and the partner flicker in turn as the stage ends.
@@ -1002,17 +1002,17 @@ EVT_BEGIN(hammer_lv3_juyoitem_lecture)
             IF_INT_EQUAL(LW(12), 0)
                 SWITCH(LW(7))
                     CASE_EQUAL(0)
-                    CALL(lect_push_b_check, LW(7))
-                    IF_INT_NOT_EQUAL(LW(7), 0)
-                        DELETE_EVENT(LW(11))
-                        SPAWN_EVENT_GET_ID(PTR(hammer_lv3_juyoitem_lecture_sub02), LW(11))
-                    END_IF
+                        CALL(lect_push_b_check, LW(7))
+                        IF_INT_NOT_EQUAL(LW(7), 0)
+                            DELETE_EVENT(LW(11))
+                            SPAWN_EVENT_GET_ID(PTR(hammer_lv3_juyoitem_lecture_sub02), LW(11))
+                        END_IF
                     CASE_EQUAL(1)
-                    CALL(lect_push_b_check, LW(7))
-                    IF_INT_EQUAL(LW(7), 0)
-                        DELETE_EVENT(LW(11))
-                        SPAWN_EVENT_GET_ID(PTR(hammer_lv3_juyoitem_lecture_sub01), LW(11))
-                    END_IF
+                        CALL(lect_push_b_check, LW(7))
+                        IF_INT_EQUAL(LW(7), 0)
+                            DELETE_EVENT(LW(11))
+                            SPAWN_EVENT_GET_ID(PTR(hammer_lv3_juyoitem_lecture_sub01), LW(11))
+                        END_IF
                 END_SWITCH
             ELSE
                 IF_INT_LESS_OR_EQUAL(LW(7), 1)
@@ -1196,11 +1196,11 @@ EVT_BEGIN(all_juyoitem_lecture_rel)
     CALL(evt_npc_sound_data_set, STRING("キノピコ"), STRING("SFX_FLD_NPC_KINOPIO_MOVE1L"), STRING("SFX_FLD_NPC_KINOPIO_MOVE1R"), EVT_NULLPTR, EVT_NULLPTR, EVT_NULLPTR)
     SWITCH(LW(10))
         CASE_EQUAL(11)
-        CALL_CHILD(hammer_lv3_juyoitem_lecture_init)
+            CALL_CHILD(hammer_lv3_juyoitem_lecture_init)
     END_SWITCH
     SWITCH(LW(10))
         CASE_EQUAL(11)
-        CALL_CHILD(hammer_lv3_juyoitem_lecture)
+            CALL_CHILD(hammer_lv3_juyoitem_lecture)
     END_SWITCH
     LOOP(6)
         CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_HIDE)

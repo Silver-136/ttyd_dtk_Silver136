@@ -481,11 +481,11 @@ EVT_END()
 static EVT_BEGIN(init_gans)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_03_GRUBBA)
-        CALL(evt_npc_set_position, STRING("me"), 120, 0, 0)
-        CALL(evt_npc_set_ry, STRING("me"), 270)
+            CALL(evt_npc_set_position, STRING("me"), 120, 0, 0)
+            CALL(evt_npc_set_ry, STRING("me"), 270)
         CASE_LESS(STG3_04_GONZALES_IS_BORN)
-        CALL(evt_npc_set_position, STRING("me"), 120, 0, 0)
-        CALL(evt_npc_set_ry, STRING("me"), 270)
+            CALL(evt_npc_set_position, STRING("me"), 120, 0, 0)
+            CALL(evt_npc_set_ry, STRING("me"), 270)
     END_SWITCH
     RETURN
 EVT_END()
@@ -561,8 +561,8 @@ static EVT_BEGIN(init_kinoshikowa)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_32_BOSS_BATTLE)
         CASE_DEFAULT
-        CALL(evt_npc_set_position, STRING("キノシコワ"), 127, 0, 7)
-        CALL(evt_npc_set_ry, STRING("キノシコワ"), 270)
+            CALL(evt_npc_set_position, STRING("キノシコワ"), 127, 0, 7)
+            CALL(evt_npc_set_ry, STRING("キノシコワ"), 270)
     END_SWITCH
     RETURN
 EVT_END()
@@ -683,7 +683,7 @@ static EVT_BEGIN(talk_kinoshikowa)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_32_BOSS_BATTLE)
         CASE_DEFAULT
-        CALL(evt_msg_print, 0, STRING("stg3_tou_re_008"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg3_tou_re_008"), 0, 0)
     END_SWITCH
     RETURN
 EVT_END()
@@ -1298,14 +1298,14 @@ static EVT_BEGIN(evt_nozoki)
         CALL(evt_msg_togelr, 2)
         SWITCH(LW(0))
             CASE_EQUAL(0)
-            CALL(evt_msg_print, 0, STRING("stg3_tou_323_kur"), 0, 0)
-            CALL(evt_msg_print, 0, STRING("stg3_tou_325"), 0, STRING("ガンス"))
+                CALL(evt_msg_print, 0, STRING("stg3_tou_323_kur"), 0, 0)
+                CALL(evt_msg_print, 0, STRING("stg3_tou_325"), 0, STRING("ガンス"))
             CASE_EQUAL(1)
-            CALL(evt_msg_print, 0, STRING("stg3_tou_324_kur"), 0, 0)
-            CALL(evt_msg_print, 0, STRING("stg3_tou_325_01"), 0, STRING("ガンス"))
+                CALL(evt_msg_print, 0, STRING("stg3_tou_324_kur"), 0, 0)
+                CALL(evt_msg_print, 0, STRING("stg3_tou_325_01"), 0, STRING("ガンス"))
             CASE_EQUAL(2)
-            CALL(evt_msg_print, 0, STRING("stg3_tou_324_01_kur"), 0, 0)
-            CALL(evt_msg_print, 0, STRING("stg3_tou_325_02"), 0, STRING("ガンス"))
+                CALL(evt_msg_print, 0, STRING("stg3_tou_324_01_kur"), 0, 0)
+                CALL(evt_msg_print, 0, STRING("stg3_tou_325_02"), 0, STRING("ガンス"))
         END_SWITCH
 
         // Grubba shrugs it off, goes back to the ring and leaves the office.
@@ -1577,24 +1577,24 @@ EVT_BEGIN(tou_05_init_evt)
         IF_INT_EQUAL(LW(0), 0)
             SWITCH(GSW_STORY_PROGRESS)
                 CASE_BETWEEN(STG3_00_WELCOME_TO_GLITZVILLE, STG3_12_THE_MINI_YOSHI_EGG)
-                CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
+                    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
 #if VERSION <= VERSION_DEMO_JP
-                CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
+                    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
 #else
-                CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
+                    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
 #endif
-                CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
+                    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
                 CASE_GREATER_OR_EQUAL(STG3_33_PEACH_THE_SECRET_WEAPON)
-                CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
+                    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
 #if VERSION <= VERSION_DEMO_JP
-                CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
+                    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
 #else
-                CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
+                    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
 #endif
-                CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
+                    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
                 CASE_DEFAULT
-                CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU1"))
-                CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
+                    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU1"))
+                    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
             END_SWITCH
         END_IF
     END_IF
@@ -1603,15 +1603,15 @@ EVT_BEGIN(tou_05_init_evt)
     // STG3_34_RETURN_TO_ROGUEPORT, and after that only once GSWF_TOU_13_DUCT_EXIT_REOPENED is set.
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_30_04_AIR_DUCT_EXIT)
-        SET_VALUE(LF(0), 0)
-        CASE_LESS(STG3_34_RETURN_TO_ROGUEPORT)
-        SET_VALUE(LF(0), 1)
-        CASE_DEFAULT
-        IF_INT_EQUAL(GSWF_TOU_13_DUCT_EXIT_REOPENED, 0)
             SET_VALUE(LF(0), 0)
-        ELSE
+        CASE_LESS(STG3_34_RETURN_TO_ROGUEPORT)
             SET_VALUE(LF(0), 1)
-        END_IF
+        CASE_DEFAULT
+            IF_INT_EQUAL(GSWF_TOU_13_DUCT_EXIT_REOPENED, 0)
+                SET_VALUE(LF(0), 0)
+            ELSE
+                SET_VALUE(LF(0), 1)
+            END_IF
     END_SWITCH
     IF_INT_EQUAL(LF(0), 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("haikikau_1"), MAP_OBJ_FLAG_HIDDEN)

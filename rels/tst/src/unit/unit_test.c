@@ -288,7 +288,7 @@ static EVT_BEGIN(attack_event)
         CASE_END
         CASE_EQUAL(PRECHECK_HIT)
         CASE_DEFAULT
-        WAIT_MS(1000)
+            WAIT_MS(1000)
     END_SWITCH
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 30, -1)

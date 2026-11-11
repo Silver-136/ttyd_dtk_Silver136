@@ -1292,19 +1292,19 @@ EVT_BEGIN(evt_damage_pose)
     SWITCH(LW(0))
         CASE_EQUAL(0)
         CASE_EQUAL(1)
-        CALL(evt_party_set_pose, 0, STRING("PKR_D_3"))
+            CALL(evt_party_set_pose, 0, STRING("PKR_D_3"))
         CASE_EQUAL(2)
-        CALL(evt_party_set_pose, 0, STRING("PNK_D_3"))
+            CALL(evt_party_set_pose, 0, STRING("PNK_D_3"))
         CASE_EQUAL(3)
-        CALL(evt_party_set_pose, 0, STRING("D_3"))
+            CALL(evt_party_set_pose, 0, STRING("D_3"))
         CASE_EQUAL(4)
-        CALL(evt_party_set_pose, 0, STRING("PYS_D_3"))
+            CALL(evt_party_set_pose, 0, STRING("PYS_D_3"))
         CASE_EQUAL(5)
-        CALL(evt_party_set_pose, 0, STRING("PWD_D_3"))
+            CALL(evt_party_set_pose, 0, STRING("PWD_D_3"))
         CASE_EQUAL(6)
-        CALL(evt_party_set_pose, 0, STRING("PTR_D_3"))
+            CALL(evt_party_set_pose, 0, STRING("PTR_D_3"))
         CASE_EQUAL(7)
-        CALL(evt_party_set_pose, 0, STRING("PCH_D_3"))
+            CALL(evt_party_set_pose, 0, STRING("PCH_D_3"))
     END_SWITCH
     RETURN
 EVT_END()
@@ -1319,19 +1319,19 @@ static EVT_BEGIN(evt_kime_pose)
     SWITCH(LW(0))
         CASE_EQUAL(0)
         CASE_EQUAL(1)
-        CALL(evt_party_set_pose, 0, STRING("PKR_Y_1"))
+            CALL(evt_party_set_pose, 0, STRING("PKR_Y_1"))
         CASE_EQUAL(2)
-        CALL(evt_party_set_pose, 0, STRING("PNK_Y_1"))
+            CALL(evt_party_set_pose, 0, STRING("PNK_Y_1"))
         CASE_EQUAL(3)
-        CALL(evt_party_set_pose, 0, STRING("Y_1"))
+            CALL(evt_party_set_pose, 0, STRING("Y_1"))
         CASE_EQUAL(4)
-        CALL(evt_party_set_pose, 0, STRING("PYS_Y_1"))
+            CALL(evt_party_set_pose, 0, STRING("PYS_Y_1"))
         CASE_EQUAL(5)
-        CALL(evt_party_set_pose, 0, STRING("PWD_Y_1"))
+            CALL(evt_party_set_pose, 0, STRING("PWD_Y_1"))
         CASE_EQUAL(6)
-        CALL(evt_party_set_pose, 0, STRING("PTR_Y_1"))
+            CALL(evt_party_set_pose, 0, STRING("PTR_Y_1"))
         CASE_EQUAL(7)
-        CALL(evt_party_set_pose, 0, STRING("PCH_Y_1"))
+            CALL(evt_party_set_pose, 0, STRING("PCH_Y_1"))
     END_SWITCH
     RETURN
 EVT_END()
@@ -1362,10 +1362,10 @@ EVT_BEGIN(npc_entry)
     SET_VALUE(LF(0), 0)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG3_01_ARENA_INTRO_1F, STG3_30_04_AIR_DUCT_EXIT)
-        SET_VALUE(LF(0), 1)
+            SET_VALUE(LF(0), 1)
         CASE_LESS(STG3_32_BOSS_BATTLE)
         CASE_DEFAULT
-        SET_VALUE(LF(0), 1)
+            SET_VALUE(LF(0), 1)
     END_SWITCH
     IF_INT_EQUAL(LF(0), 1)
         IF_INT_EQUAL(GSWF_GLITZ_PIT_MATCH_RESERVED, 0)
@@ -1375,26 +1375,26 @@ EVT_BEGIN(npc_entry)
                     CALL(evt_sub_random, 3000, LW(10))
                     SWITCH(LW(10))
                         CASE_LESS(1000)
-                        SET_VALUE(LW(0), PTR("c_bomhey"))
-                        SET_VALUE(LW(1), PTR(/*("\203{\203\200\225\272")*/("\203{\203\200\225\272")))
+                            SET_VALUE(LW(0), PTR("c_bomhey"))
+                            SET_VALUE(LW(1), PTR(/*("\203{\203\200\225\272")*/("\203{\203\200\225\272")))
                         CASE_LESS(2000)
-                        SET_VALUE(LW(0), PTR("c_kuribo"))
-                        SET_VALUE(LW(1), PTR(/*("\203N\203\212\203{\201[")*/("\203N\203\212\203{\201[")))
+                            SET_VALUE(LW(0), PTR("c_kuribo"))
+                            SET_VALUE(LW(1), PTR(/*("\203N\203\212\203{\201[")*/("\203N\203\212\203{\201[")))
                         CASE_DEFAULT
-                        SET_VALUE(LW(0), PTR("c_kmoon_wb"))
-                        SET_VALUE(LW(1), STRING(/*"モノクロクロクモーン"*/"\203\202\203m\203N\203\215\203N\203\215\203N\203\202\201[\203\223"))
+                            SET_VALUE(LW(0), PTR("c_kmoon_wb"))
+                            SET_VALUE(LW(1), STRING(/*"モノクロクロクモーン"*/"\203\202\203m\203N\203\215\203N\203\215\203N\203\202\201[\203\223"))
                     END_SWITCH
                     CALL(evt_sub_random, 3000, LW(10))
                     SWITCH(LW(10))
                         CASE_LESS(1000)
-                        SET_VALUE(LW(2), PTR("c_bomhey"))
-                        SET_VALUE(LW(3), PTR(/*("\203{\203\200\225\272")*/("\203{\203\200\225\272")))
+                            SET_VALUE(LW(2), PTR("c_bomhey"))
+                            SET_VALUE(LW(3), PTR(/*("\203{\203\200\225\272")*/("\203{\203\200\225\272")))
                         CASE_LESS(2000)
-                        SET_VALUE(LW(2), PTR("c_kuribo"))
-                        SET_VALUE(LW(3), PTR(/*("\203N\203\212\203{\201[")*/("\203N\203\212\203{\201[")))
+                            SET_VALUE(LW(2), PTR("c_kuribo"))
+                            SET_VALUE(LW(3), PTR(/*("\203N\203\212\203{\201[")*/("\203N\203\212\203{\201[")))
                         CASE_DEFAULT
-                        SET_VALUE(LW(2), PTR("c_kmoon_wb"))
-                        SET_VALUE(LW(3), PTR(/*("\203\202\203m\203N\203\215\203N\203\215\203N\203\202\201[\203\223")*/("\203\202\203m\203N\203\215\203N\203\215\203N\203\202\201[\203\223")))
+                            SET_VALUE(LW(2), PTR("c_kmoon_wb"))
+                            SET_VALUE(LW(3), PTR(/*("\203\202\203m\203N\203\215\203N\203\215\203N\203\202\201[\203\223")*/("\203\202\203m\203N\203\215\203N\203\215\203N\203\202\201[\203\223")))
                     END_SWITCH
                     IF_STR_NOT_EQUAL(LW(0), LW(2))
                         BREAK_LOOP
@@ -1405,32 +1405,32 @@ EVT_BEGIN(npc_entry)
                     CALL(evt_sub_random, 4000, LW(10))
                     SWITCH(LW(10))
                         CASE_LESS(1000)
-                        SET_VALUE(LW(0), PTR("c_chorobon"))
-                        SET_VALUE(LW(1), PTR(/*("\203`\203\207\203\215\203{\203\223")*/("\203`\203\207\203\215\203{\203\223")))
+                            SET_VALUE(LW(0), PTR("c_chorobon"))
+                            SET_VALUE(LW(1), PTR(/*("\203`\203\207\203\215\203{\203\223")*/("\203`\203\207\203\215\203{\203\223")))
                         CASE_LESS(2000)
-                        SET_VALUE(LW(0), PTR("c_monban_t"))
-                        SET_VALUE(LW(1), PTR(/*("\203_\201[\203N\203L\201[\203p\201[")*/("\203_\201[\203N\203L\201[\203p\201[")))
+                            SET_VALUE(LW(0), PTR("c_monban_t"))
+                            SET_VALUE(LW(1), PTR(/*("\203_\201[\203N\203L\201[\203p\201[")*/("\203_\201[\203N\203L\201[\203p\201[")))
                         CASE_LESS(3000)
-                        SET_VALUE(LW(0), PTR("c_togedaruma"))
-                        SET_VALUE(LW(1), PTR(/*("\203g\203Q\203_\203\213\203}\201[")*/("\203g\203Q\203_\203\213\203}\201[")))
+                            SET_VALUE(LW(0), PTR("c_togedaruma"))
+                            SET_VALUE(LW(1), PTR(/*("\203g\203Q\203_\203\213\203}\201[")*/("\203g\203Q\203_\203\213\203}\201[")))
                         CASE_DEFAULT
-                        SET_VALUE(LW(0), PTR("c_wanwan_a"))
-                        SET_VALUE(LW(1), PTR(/*("\203o\201[\203X\203g\203\217\203\223\203\217\203\223")*/("\203o\201[\203X\203g\203\217\203\223\203\217\203\223")))
+                            SET_VALUE(LW(0), PTR("c_wanwan_a"))
+                            SET_VALUE(LW(1), PTR(/*("\203o\201[\203X\203g\203\217\203\223\203\217\203\223")*/("\203o\201[\203X\203g\203\217\203\223\203\217\203\223")))
                     END_SWITCH
                     CALL(evt_sub_random, 4000, LW(10))
                     SWITCH(LW(10))
                         CASE_LESS(1000)
-                        SET_VALUE(LW(2), PTR("c_chorobon"))
-                        SET_VALUE(LW(3), PTR(/*("\203`\203\207\203\215\203{\203\223")*/("\203`\203\207\203\215\203{\203\223")))
+                            SET_VALUE(LW(2), PTR("c_chorobon"))
+                            SET_VALUE(LW(3), PTR(/*("\203`\203\207\203\215\203{\203\223")*/("\203`\203\207\203\215\203{\203\223")))
                         CASE_LESS(2000)
-                        SET_VALUE(LW(2), PTR("c_monban_t"))
-                        SET_VALUE(LW(3), PTR(/*("\203_\201[\203N\203L\201[\203p\201[")*/("\203_\201[\203N\203L\201[\203p\201[")))
+                            SET_VALUE(LW(2), PTR("c_monban_t"))
+                            SET_VALUE(LW(3), PTR(/*("\203_\201[\203N\203L\201[\203p\201[")*/("\203_\201[\203N\203L\201[\203p\201[")))
                         CASE_LESS(3000)
-                        SET_VALUE(LW(2), PTR("c_togedaruma"))
-                        SET_VALUE(LW(3), PTR(/*("\203g\203Q\203_\203\213\203}\201[")*/("\203g\203Q\203_\203\213\203}\201[")))
+                            SET_VALUE(LW(2), PTR("c_togedaruma"))
+                            SET_VALUE(LW(3), PTR(/*("\203g\203Q\203_\203\213\203}\201[")*/("\203g\203Q\203_\203\213\203}\201[")))
                         CASE_DEFAULT
-                        SET_VALUE(LW(2), PTR("c_wanwan_a"))
-                        SET_VALUE(LW(3), PTR(/*("\203o\201[\203X\203g\203\217\203\223\203\217\203\223")*/("\203o\201[\203X\203g\203\217\203\223\203\217\203\223")))
+                            SET_VALUE(LW(2), PTR("c_wanwan_a"))
+                            SET_VALUE(LW(3), PTR(/*("\203o\201[\203X\203g\203\217\203\223\203\217\203\223")*/("\203o\201[\203X\203g\203\217\203\223\203\217\203\223")))
                     END_SWITCH
                     IF_STR_NOT_EQUAL(LW(0), LW(2))
                         BREAK_LOOP
@@ -1470,34 +1470,34 @@ EVT_BEGIN(npc_entry)
             IF_INT_EQUAL(GSW_GLITZ_PIT_OPPONENT, 11)
                 SWITCH(LW(1))
                     CASE_EQUAL(0)
-                    SET_VALUE(LW(2), STRING(/*"敵３"*/"\223G\202R"))
+                        SET_VALUE(LW(2), STRING(/*"敵３"*/"\223G\202R"))
                     CASE_EQUAL(1)
-                    SET_VALUE(LW(2), STRING(/*"敵４"*/"\223G\202S"))
+                        SET_VALUE(LW(2), STRING(/*"敵４"*/"\223G\202S"))
                     CASE_EQUAL(2)
-                    SET_VALUE(LW(2), STRING(/*"敵１"*/"\223G\202P"))
+                        SET_VALUE(LW(2), STRING(/*"敵１"*/"\223G\202P"))
                     CASE_EQUAL(3)
-                    SET_VALUE(LW(2), STRING(/*"敵２"*/"\223G\202Q"))
+                        SET_VALUE(LW(2), STRING(/*"敵２"*/"\223G\202Q"))
                     CASE_EQUAL(4)
-                    SET_VALUE(LW(2), STRING(/*"敵５"*/"\223G\202T"))
+                        SET_VALUE(LW(2), STRING(/*"敵５"*/"\223G\202T"))
                     CASE_DEFAULT
-                    DEBUG_PUT_MSG(STRING(/*"おかしい"*/"\202\250\202\251\202\265\202\242"))
-                    BREAK_LOOP
+                        DEBUG_PUT_MSG(STRING(/*"おかしい"*/"\202\250\202\251\202\265\202\242"))
+                        BREAK_LOOP
                 END_SWITCH
             ELSE
                 SWITCH(LW(1))
                     CASE_EQUAL(0)
-                    SET_VALUE(LW(2), STRING(/*"敵１"*/"\223G\202P"))
+                        SET_VALUE(LW(2), STRING(/*"敵１"*/"\223G\202P"))
                     CASE_EQUAL(1)
-                    SET_VALUE(LW(2), STRING(/*"敵２"*/"\223G\202Q"))
+                        SET_VALUE(LW(2), STRING(/*"敵２"*/"\223G\202Q"))
                     CASE_EQUAL(2)
-                    SET_VALUE(LW(2), STRING(/*"敵３"*/"\223G\202R"))
+                        SET_VALUE(LW(2), STRING(/*"敵３"*/"\223G\202R"))
                     CASE_EQUAL(3)
-                    SET_VALUE(LW(2), STRING(/*"敵４"*/"\223G\202S"))
+                        SET_VALUE(LW(2), STRING(/*"敵４"*/"\223G\202S"))
                     CASE_EQUAL(4)
-                    SET_VALUE(LW(2), STRING(/*"敵５"*/"\223G\202T"))
+                        SET_VALUE(LW(2), STRING(/*"敵５"*/"\223G\202T"))
                     CASE_DEFAULT
-                    DEBUG_PUT_MSG(STRING(/*"おかしい"*/"\202\250\202\251\202\265\202\242"))
-                    BREAK_LOOP
+                        DEBUG_PUT_MSG(STRING(/*"おかしい"*/"\202\250\202\251\202\265\202\242"))
+                        BREAK_LOOP
                 END_SWITCH
             END_IF
             CALL(evt_tou_get_fighter_tribe, GSW_GLITZ_PIT_OPPONENT, LW(1), LW(3), LW(4))
@@ -1518,11 +1518,11 @@ EVT_BEGIN(npc_entry)
                 IF_INT_EQUAL(GSW_GLITZ_PIT_OPPONENT, 2)
                     SWITCH(LW(1))
                         CASE_EQUAL(0)
-                        SET_VALUE(LW(0), 0)
-                        SPAWN_EVENT(burst_chain_entry)
+                            SET_VALUE(LW(0), 0)
+                            SPAWN_EVENT(burst_chain_entry)
                         CASE_EQUAL(1)
-                        SET_VALUE(LW(0), 1)
-                        SPAWN_EVENT(burst_chain_entry)
+                            SET_VALUE(LW(0), 1)
+                            SPAWN_EVENT(burst_chain_entry)
                     END_SWITCH
                 END_IF
             END_INLINE_EVENT
@@ -1907,20 +1907,20 @@ EVT_END()
 static EVT_BEGIN(evt_teki_nyuujyou)
     SWITCH(LW(1))
         CASE_EQUAL(0)
-        SET_VALUE(LW(3), 70)
-        SET_VALUE(LW(4), 0)
+            SET_VALUE(LW(3), 70)
+            SET_VALUE(LW(4), 0)
         CASE_EQUAL(1)
-        SET_VALUE(LW(3), 40)
-        SET_VALUE(LW(4), 25)
+            SET_VALUE(LW(3), 40)
+            SET_VALUE(LW(4), 25)
         CASE_EQUAL(2)
-        SET_VALUE(LW(3), 20)
-        SET_VALUE(LW(4), -25)
+            SET_VALUE(LW(3), 20)
+            SET_VALUE(LW(4), -25)
         CASE_EQUAL(3)
-        SET_VALUE(LW(3), 60)
-        SET_VALUE(LW(4), 0)
+            SET_VALUE(LW(3), 60)
+            SET_VALUE(LW(4), 0)
         CASE_EQUAL(4)
-        SET_VALUE(LW(3), 80)
-        SET_VALUE(LW(4), -25)
+            SET_VALUE(LW(3), 80)
+            SET_VALUE(LW(4), -25)
     END_SWITCH
     SET_VALUE(LW(5), 450)
     ADD(LW(5), LW(3))
@@ -1945,25 +1945,25 @@ EVT_END()
 EVT_BEGIN(evt_teki_nyuujyou_default)
     SWITCH(LW(1))
         CASE_EQUAL(0)
-        IF_INT_EQUAL(LW(2), 1)
-            SET_VALUE(LW(3), 70)
-            SET_VALUE(LW(4), 0)
-        ELSE
-            SET_VALUE(LW(3), 50)
-            SET_VALUE(LW(4), 0)
-        END_IF
+            IF_INT_EQUAL(LW(2), 1)
+                SET_VALUE(LW(3), 70)
+                SET_VALUE(LW(4), 0)
+            ELSE
+                SET_VALUE(LW(3), 50)
+                SET_VALUE(LW(4), 0)
+            END_IF
         CASE_EQUAL(1)
-        SET_VALUE(LW(3), 90)
-        SET_VALUE(LW(4), 25)
+            SET_VALUE(LW(3), 90)
+            SET_VALUE(LW(4), 25)
         CASE_EQUAL(2)
-        SET_VALUE(LW(3), 70)
-        SET_VALUE(LW(4), -25)
+            SET_VALUE(LW(3), 70)
+            SET_VALUE(LW(4), -25)
         CASE_EQUAL(3)
-        SET_VALUE(LW(3), 110)
-        SET_VALUE(LW(4), 0)
+            SET_VALUE(LW(3), 110)
+            SET_VALUE(LW(4), 0)
         CASE_EQUAL(4)
-        SET_VALUE(LW(3), 130)
-        SET_VALUE(LW(4), -25)
+            SET_VALUE(LW(3), 130)
+            SET_VALUE(LW(4), -25)
     END_SWITCH
     CALL(tribe_chk, LW(0), STRING(/*"カメック緑空"*/"\203J\203\201\203b\203N\227\316\213\363"), LW(5))
     IF_INT_EQUAL(LW(5), 1)
@@ -2004,73 +2004,73 @@ EVT_END()
 static EVT_BEGIN(burst_chain_entry)
     SWITCH(LW(0))
         CASE_EQUAL(0)
-        CALL(evt_npc_entry, STRING("\215\2750_0"), STRING("c_wanwan_a")) // chain link 1 of 5 of the Red Chomp fighter, team slot 1
-        CALL(evt_npc_entry, STRING("\215\2750_1"), STRING("c_wanwan_a")) // chain link 2 of 5 of the Red Chomp fighter, team slot 1
-        CALL(evt_npc_entry, STRING("\215\2750_2"), STRING("c_wanwan_a")) // chain link 3 of 5 of the Red Chomp fighter, team slot 1
-        CALL(evt_npc_entry, STRING("\215\2750_3"), STRING("c_wanwan_a")) // chain link 4 of 5 of the Red Chomp fighter, team slot 1
-        CALL(evt_npc_entry, STRING("\215\2750_4"), STRING("c_wanwan_a")) // chain link 5 of 5 of the Red Chomp fighter, team slot 1
-        CALL(evt_npc_set_anim, STRING("\215\2750_0"), STRING("WAN_S_1B"))
-        CALL(evt_npc_set_anim, STRING("\215\2750_1"), STRING("WAN_S_1B"))
-        CALL(evt_npc_set_anim, STRING("\215\2750_2"), STRING("WAN_S_1B"))
-        CALL(evt_npc_set_anim, STRING("\215\2750_3"), STRING("WAN_S_1B"))
-        CALL(evt_npc_set_anim, STRING("\215\2750_4"), STRING("WAN_S_1B"))
-        CALL(evt_npc_flag_onoff, 1, STRING("\215\2750_0"), 1074003968)
-        CALL(evt_npc_flag_onoff, 1, STRING("\215\2750_1"), 1074003968)
-        CALL(evt_npc_flag_onoff, 1, STRING("\215\2750_2"), 1074003968)
-        CALL(evt_npc_flag_onoff, 1, STRING("\215\2750_3"), 1074003968)
-        CALL(evt_npc_flag_onoff, 1, STRING("\215\2750_4"), 1074003968)
-        CALL(burst_chain, STRING("\223G\202P"), 0)
+            CALL(evt_npc_entry, STRING("\215\2750_0"), STRING("c_wanwan_a")) // chain link 1 of 5 of the Red Chomp fighter, team slot 1
+            CALL(evt_npc_entry, STRING("\215\2750_1"), STRING("c_wanwan_a")) // chain link 2 of 5 of the Red Chomp fighter, team slot 1
+            CALL(evt_npc_entry, STRING("\215\2750_2"), STRING("c_wanwan_a")) // chain link 3 of 5 of the Red Chomp fighter, team slot 1
+            CALL(evt_npc_entry, STRING("\215\2750_3"), STRING("c_wanwan_a")) // chain link 4 of 5 of the Red Chomp fighter, team slot 1
+            CALL(evt_npc_entry, STRING("\215\2750_4"), STRING("c_wanwan_a")) // chain link 5 of 5 of the Red Chomp fighter, team slot 1
+            CALL(evt_npc_set_anim, STRING("\215\2750_0"), STRING("WAN_S_1B"))
+            CALL(evt_npc_set_anim, STRING("\215\2750_1"), STRING("WAN_S_1B"))
+            CALL(evt_npc_set_anim, STRING("\215\2750_2"), STRING("WAN_S_1B"))
+            CALL(evt_npc_set_anim, STRING("\215\2750_3"), STRING("WAN_S_1B"))
+            CALL(evt_npc_set_anim, STRING("\215\2750_4"), STRING("WAN_S_1B"))
+            CALL(evt_npc_flag_onoff, 1, STRING("\215\2750_0"), 1074003968)
+            CALL(evt_npc_flag_onoff, 1, STRING("\215\2750_1"), 1074003968)
+            CALL(evt_npc_flag_onoff, 1, STRING("\215\2750_2"), 1074003968)
+            CALL(evt_npc_flag_onoff, 1, STRING("\215\2750_3"), 1074003968)
+            CALL(evt_npc_flag_onoff, 1, STRING("\215\2750_4"), 1074003968)
+            CALL(burst_chain, STRING("\223G\202P"), 0)
         CASE_EQUAL(1)
-        CALL(evt_npc_entry, STRING("\215\2751_0"), STRING("c_wanwan_a")) // chain link 1 of 5 of the Red Chomp fighter, team slot 2
-        CALL(evt_npc_entry, STRING("\215\2751_1"), STRING("c_wanwan_a")) // chain link 2 of 5 of the Red Chomp fighter, team slot 2
-        CALL(evt_npc_entry, STRING("\215\2751_2"), STRING("c_wanwan_a")) // chain link 3 of 5 of the Red Chomp fighter, team slot 2
-        CALL(evt_npc_entry, STRING("\215\2751_3"), STRING("c_wanwan_a")) // chain link 4 of 5 of the Red Chomp fighter, team slot 2
-        CALL(evt_npc_entry, STRING("\215\2751_4"), STRING("c_wanwan_a")) // chain link 5 of 5 of the Red Chomp fighter, team slot 2
-        CALL(evt_npc_set_anim, STRING("\215\2751_0"), STRING("WAN_S_1B"))
-        CALL(evt_npc_set_anim, STRING("\215\2751_1"), STRING("WAN_S_1B"))
-        CALL(evt_npc_set_anim, STRING("\215\2751_2"), STRING("WAN_S_1B"))
-        CALL(evt_npc_set_anim, STRING("\215\2751_3"), STRING("WAN_S_1B"))
-        CALL(evt_npc_set_anim, STRING("\215\2751_4"), STRING("WAN_S_1B"))
-        CALL(evt_npc_flag_onoff, 1, STRING("\215\2751_0"), 1074003968)
-        CALL(evt_npc_flag_onoff, 1, STRING("\215\2751_1"), 1074003968)
-        CALL(evt_npc_flag_onoff, 1, STRING("\215\2751_2"), 1074003968)
-        CALL(evt_npc_flag_onoff, 1, STRING("\215\2751_3"), 1074003968)
-        CALL(evt_npc_flag_onoff, 1, STRING("\215\2751_4"), 1074003968)
-        CALL(burst_chain, STRING("\223G\202Q"), 1)
+            CALL(evt_npc_entry, STRING("\215\2751_0"), STRING("c_wanwan_a")) // chain link 1 of 5 of the Red Chomp fighter, team slot 2
+            CALL(evt_npc_entry, STRING("\215\2751_1"), STRING("c_wanwan_a")) // chain link 2 of 5 of the Red Chomp fighter, team slot 2
+            CALL(evt_npc_entry, STRING("\215\2751_2"), STRING("c_wanwan_a")) // chain link 3 of 5 of the Red Chomp fighter, team slot 2
+            CALL(evt_npc_entry, STRING("\215\2751_3"), STRING("c_wanwan_a")) // chain link 4 of 5 of the Red Chomp fighter, team slot 2
+            CALL(evt_npc_entry, STRING("\215\2751_4"), STRING("c_wanwan_a")) // chain link 5 of 5 of the Red Chomp fighter, team slot 2
+            CALL(evt_npc_set_anim, STRING("\215\2751_0"), STRING("WAN_S_1B"))
+            CALL(evt_npc_set_anim, STRING("\215\2751_1"), STRING("WAN_S_1B"))
+            CALL(evt_npc_set_anim, STRING("\215\2751_2"), STRING("WAN_S_1B"))
+            CALL(evt_npc_set_anim, STRING("\215\2751_3"), STRING("WAN_S_1B"))
+            CALL(evt_npc_set_anim, STRING("\215\2751_4"), STRING("WAN_S_1B"))
+            CALL(evt_npc_flag_onoff, 1, STRING("\215\2751_0"), 1074003968)
+            CALL(evt_npc_flag_onoff, 1, STRING("\215\2751_1"), 1074003968)
+            CALL(evt_npc_flag_onoff, 1, STRING("\215\2751_2"), 1074003968)
+            CALL(evt_npc_flag_onoff, 1, STRING("\215\2751_3"), 1074003968)
+            CALL(evt_npc_flag_onoff, 1, STRING("\215\2751_4"), 1074003968)
+            CALL(burst_chain, STRING("\223G\202Q"), 1)
         CASE_EQUAL(6)
-        CALL(evt_npc_entry, STRING("\215\2750_0"), STRING("c_wanwan_a"))
-        CALL(evt_npc_entry, STRING("\215\2750_1"), STRING("c_wanwan_a"))
-        CALL(evt_npc_entry, STRING("\215\2750_2"), STRING("c_wanwan_a"))
-        CALL(evt_npc_entry, STRING("\215\2750_3"), STRING("c_wanwan_a"))
-        CALL(evt_npc_entry, STRING("\215\2750_4"), STRING("c_wanwan_a"))
-        CALL(evt_npc_set_anim, STRING("\215\2750_0"), STRING("WAN_S_1B"))
-        CALL(evt_npc_set_anim, STRING("\215\2750_1"), STRING("WAN_S_1B"))
-        CALL(evt_npc_set_anim, STRING("\215\2750_2"), STRING("WAN_S_1B"))
-        CALL(evt_npc_set_anim, STRING("\215\2750_3"), STRING("WAN_S_1B"))
-        CALL(evt_npc_set_anim, STRING("\215\2750_4"), STRING("WAN_S_1B"))
-        CALL(evt_npc_flag_onoff, 1, STRING("\215\2750_0"), 1074003968)
-        CALL(evt_npc_flag_onoff, 1, STRING("\215\2750_1"), 1074003968)
-        CALL(evt_npc_flag_onoff, 1, STRING("\215\2750_2"), 1074003968)
-        CALL(evt_npc_flag_onoff, 1, STRING("\215\2750_3"), 1074003968)
-        CALL(evt_npc_flag_onoff, 1, STRING("\215\2750_4"), 1074003968)
-        CALL(burst_chain, STRING("\221I\216\3501"), 0)
+            CALL(evt_npc_entry, STRING("\215\2750_0"), STRING("c_wanwan_a"))
+            CALL(evt_npc_entry, STRING("\215\2750_1"), STRING("c_wanwan_a"))
+            CALL(evt_npc_entry, STRING("\215\2750_2"), STRING("c_wanwan_a"))
+            CALL(evt_npc_entry, STRING("\215\2750_3"), STRING("c_wanwan_a"))
+            CALL(evt_npc_entry, STRING("\215\2750_4"), STRING("c_wanwan_a"))
+            CALL(evt_npc_set_anim, STRING("\215\2750_0"), STRING("WAN_S_1B"))
+            CALL(evt_npc_set_anim, STRING("\215\2750_1"), STRING("WAN_S_1B"))
+            CALL(evt_npc_set_anim, STRING("\215\2750_2"), STRING("WAN_S_1B"))
+            CALL(evt_npc_set_anim, STRING("\215\2750_3"), STRING("WAN_S_1B"))
+            CALL(evt_npc_set_anim, STRING("\215\2750_4"), STRING("WAN_S_1B"))
+            CALL(evt_npc_flag_onoff, 1, STRING("\215\2750_0"), 1074003968)
+            CALL(evt_npc_flag_onoff, 1, STRING("\215\2750_1"), 1074003968)
+            CALL(evt_npc_flag_onoff, 1, STRING("\215\2750_2"), 1074003968)
+            CALL(evt_npc_flag_onoff, 1, STRING("\215\2750_3"), 1074003968)
+            CALL(evt_npc_flag_onoff, 1, STRING("\215\2750_4"), 1074003968)
+            CALL(burst_chain, STRING("\221I\216\3501"), 0)
         CASE_EQUAL(7)
-        CALL(evt_npc_entry, STRING("\215\2751_0"), STRING("c_wanwan_a"))
-        CALL(evt_npc_entry, STRING("\215\2751_1"), STRING("c_wanwan_a"))
-        CALL(evt_npc_entry, STRING("\215\2751_2"), STRING("c_wanwan_a"))
-        CALL(evt_npc_entry, STRING("\215\2751_3"), STRING("c_wanwan_a"))
-        CALL(evt_npc_entry, STRING("\215\2751_4"), STRING("c_wanwan_a"))
-        CALL(evt_npc_set_anim, STRING("\215\2751_0"), STRING("WAN_S_1B"))
-        CALL(evt_npc_set_anim, STRING("\215\2751_1"), STRING("WAN_S_1B"))
-        CALL(evt_npc_set_anim, STRING("\215\2751_2"), STRING("WAN_S_1B"))
-        CALL(evt_npc_set_anim, STRING("\215\2751_3"), STRING("WAN_S_1B"))
-        CALL(evt_npc_set_anim, STRING("\215\2751_4"), STRING("WAN_S_1B"))
-        CALL(evt_npc_flag_onoff, 1, STRING("\215\2751_0"), 1074003968)
-        CALL(evt_npc_flag_onoff, 1, STRING("\215\2751_1"), 1074003968)
-        CALL(evt_npc_flag_onoff, 1, STRING("\215\2751_2"), 1074003968)
-        CALL(evt_npc_flag_onoff, 1, STRING("\215\2751_3"), 1074003968)
-        CALL(evt_npc_flag_onoff, 1, STRING("\215\2751_4"), 1074003968)
-        CALL(burst_chain, STRING("\221I\216\3502"), 1)
+            CALL(evt_npc_entry, STRING("\215\2751_0"), STRING("c_wanwan_a"))
+            CALL(evt_npc_entry, STRING("\215\2751_1"), STRING("c_wanwan_a"))
+            CALL(evt_npc_entry, STRING("\215\2751_2"), STRING("c_wanwan_a"))
+            CALL(evt_npc_entry, STRING("\215\2751_3"), STRING("c_wanwan_a"))
+            CALL(evt_npc_entry, STRING("\215\2751_4"), STRING("c_wanwan_a"))
+            CALL(evt_npc_set_anim, STRING("\215\2751_0"), STRING("WAN_S_1B"))
+            CALL(evt_npc_set_anim, STRING("\215\2751_1"), STRING("WAN_S_1B"))
+            CALL(evt_npc_set_anim, STRING("\215\2751_2"), STRING("WAN_S_1B"))
+            CALL(evt_npc_set_anim, STRING("\215\2751_3"), STRING("WAN_S_1B"))
+            CALL(evt_npc_set_anim, STRING("\215\2751_4"), STRING("WAN_S_1B"))
+            CALL(evt_npc_flag_onoff, 1, STRING("\215\2751_0"), 1074003968)
+            CALL(evt_npc_flag_onoff, 1, STRING("\215\2751_1"), 1074003968)
+            CALL(evt_npc_flag_onoff, 1, STRING("\215\2751_2"), 1074003968)
+            CALL(evt_npc_flag_onoff, 1, STRING("\215\2751_3"), 1074003968)
+            CALL(evt_npc_flag_onoff, 1, STRING("\215\2751_4"), 1074003968)
+            CALL(burst_chain, STRING("\221I\216\3502"), 1)
     END_SWITCH
     RETURN
 EVT_END()
@@ -2120,32 +2120,32 @@ static EVT_BEGIN(evt_match)
 #endif
     SWITCH(GSW_GLITZ_PIT_OPPONENT)
         CASE_EQUAL(19)
-        IF_INT_EQUAL(GSWF_TOU_GOOMBA_BROS_OPENING_SEEN, 0)
-            SET_VALUE(GSWF_TOU_GOOMBA_BROS_OPENING_SEEN, 1)
-            CALL_CHILD(evt_kurikuri_opening)
-        ELSE
-            CALL_CHILD(evt_default_opening)
-        END_IF
-        CASE_EQUAL(10)
-        IF_INT_EQUAL(GSWF_TOU_ARMORED_HARRIERS_OPENING_SEEN, 0)
-            SET_VALUE(GSWF_TOU_ARMORED_HARRIERS_OPENING_SEEN, 1)
-            CALL_CHILD(evt_shinemon_opening)
-        ELSE
-            CALL_CHILD(evt_default_opening)
-        END_IF
-        CASE_EQUAL(0)
-        IF_INT_EQUAL(GSWF_TOU_RAWK_HAWK_OPENING_SEEN, 0)
-            SET_VALUE(GSWF_TOU_RAWK_HAWK_OPENING_SEEN, 1)
-            IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
-                CALL_CHILD(evt_champ_opening)
+            IF_INT_EQUAL(GSWF_TOU_GOOMBA_BROS_OPENING_SEEN, 0)
+                SET_VALUE(GSWF_TOU_GOOMBA_BROS_OPENING_SEEN, 1)
+                CALL_CHILD(evt_kurikuri_opening)
             ELSE
-                CALL_CHILD(evt_champ_opening_re)
+                CALL_CHILD(evt_default_opening)
             END_IF
-        ELSE
-            CALL_CHILD(evt_default_opening)
-        END_IF
+        CASE_EQUAL(10)
+            IF_INT_EQUAL(GSWF_TOU_ARMORED_HARRIERS_OPENING_SEEN, 0)
+                SET_VALUE(GSWF_TOU_ARMORED_HARRIERS_OPENING_SEEN, 1)
+                CALL_CHILD(evt_shinemon_opening)
+            ELSE
+                CALL_CHILD(evt_default_opening)
+            END_IF
+        CASE_EQUAL(0)
+            IF_INT_EQUAL(GSWF_TOU_RAWK_HAWK_OPENING_SEEN, 0)
+                SET_VALUE(GSWF_TOU_RAWK_HAWK_OPENING_SEEN, 1)
+                IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
+                    CALL_CHILD(evt_champ_opening)
+                ELSE
+                    CALL_CHILD(evt_champ_opening_re)
+                END_IF
+            ELSE
+                CALL_CHILD(evt_default_opening)
+            END_IF
         CASE_DEFAULT
-        CALL_CHILD(evt_default_opening)
+            CALL_CHILD(evt_default_opening)
     END_SWITCH
 
     // The battle itself, under the match's special rule;
@@ -2209,32 +2209,32 @@ static EVT_BEGIN(evt_match)
     IF_INT_EQUAL(LW(0), BATTLE_RESULT_WIN)
         SWITCH(GSW_GLITZ_PIT_OPPONENT)
             CASE_EQUAL(19)
-            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_FF_ENV_TOU2"))
-            IF_INT_EQUAL(GSWF_TOU_GOOMBA_BROS_FIRST_WIN, 0)
-                SET_VALUE(GSWF_TOU_GOOMBA_BROS_FIRST_WIN, 1)
-                CALL_CHILD(evt_kurikuri_win)
-            ELSE
-                CALL_CHILD(evt_default_win)
-            END_IF
+                CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_FF_ENV_TOU2"))
+                IF_INT_EQUAL(GSWF_TOU_GOOMBA_BROS_FIRST_WIN, 0)
+                    SET_VALUE(GSWF_TOU_GOOMBA_BROS_FIRST_WIN, 1)
+                    CALL_CHILD(evt_kurikuri_win)
+                ELSE
+                    CALL_CHILD(evt_default_win)
+                END_IF
             CASE_EQUAL(10)
-            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_FF_ENV_TOU2"))
-            IF_INT_EQUAL(GSWF_TOU_ARMORED_HARRIERS_FIRST_WIN, 0)
-                SET_VALUE(GSWF_TOU_ARMORED_HARRIERS_FIRST_WIN, 1)
-                CALL_CHILD(evt_shinemon_win)
-            ELSE
-                CALL_CHILD(evt_default_win)
-            END_IF
+                CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_FF_ENV_TOU2"))
+                IF_INT_EQUAL(GSWF_TOU_ARMORED_HARRIERS_FIRST_WIN, 0)
+                    SET_VALUE(GSWF_TOU_ARMORED_HARRIERS_FIRST_WIN, 1)
+                    CALL_CHILD(evt_shinemon_win)
+                ELSE
+                    CALL_CHILD(evt_default_win)
+                END_IF
             CASE_EQUAL(0)
-            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_FF_ENV_TOU3"))
-            IF_INT_EQUAL(GSWF_TOU_RAWK_HAWK_FIRST_WIN, 0)
-                SET_VALUE(GSWF_TOU_RAWK_HAWK_FIRST_WIN, 1)
-                CALL_CHILD(evt_champ_win)
-            ELSE
-                CALL_CHILD(evt_default_win)
-            END_IF
+                CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_FF_ENV_TOU3"))
+                IF_INT_EQUAL(GSWF_TOU_RAWK_HAWK_FIRST_WIN, 0)
+                    SET_VALUE(GSWF_TOU_RAWK_HAWK_FIRST_WIN, 1)
+                    CALL_CHILD(evt_champ_win)
+                ELSE
+                    CALL_CHILD(evt_default_win)
+                END_IF
             CASE_DEFAULT
-            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_FF_ENV_TOU2"))
-            CALL_CHILD(evt_default_win)
+                CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_FF_ENV_TOU2"))
+                CALL_CHILD(evt_default_win)
         END_SWITCH
 
         // Update the ranking; a win at rank 7 or rank 5 can set off the Iron Clefts' or Bowser's ambush.
@@ -2257,13 +2257,13 @@ static EVT_BEGIN(evt_match)
             CALL(evt_tou_get_ranking, LW(0))
             SWITCH(LW(0))
                 CASE_EQUAL(7)
-                IF_INT_EQUAL(GSWF_TOU_RANK_7_MAIL_DONE, 0)
-                    CALL_CHILD(evt_random_battle)
-                END_IF
+                    IF_INT_EQUAL(GSWF_TOU_RANK_7_MAIL_DONE, 0)
+                        CALL_CHILD(evt_random_battle)
+                    END_IF
                 CASE_EQUAL(5)
-                IF_INT_EQUAL(GSWF_TOU_RANK_5_BOWSER_EVENT_DONE, 0)
-                    CALL_CHILD(evt_random_battle2)
-                END_IF
+                    IF_INT_EQUAL(GSWF_TOU_RANK_5_BOWSER_EVENT_DONE, 0)
+                        CALL_CHILD(evt_random_battle2)
+                    END_IF
             END_SWITCH
             ELSE
             IF_INT_EQUAL(LW(10), 1)
@@ -2277,13 +2277,13 @@ static EVT_BEGIN(evt_match)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_FF_ENV_TOU2"))
         SWITCH(GSW_GLITZ_PIT_OPPONENT)
             CASE_EQUAL(19)
-            CALL_CHILD(evt_kurikuri_lose)
+                CALL_CHILD(evt_kurikuri_lose)
             CASE_EQUAL(10)
-            CALL_CHILD(evt_shinemon_lose)
+                CALL_CHILD(evt_shinemon_lose)
             CASE_EQUAL(0)
-            CALL_CHILD(evt_champ_lose)
+                CALL_CHILD(evt_champ_lose)
             CASE_DEFAULT
-            CALL_CHILD(evt_default_lose)
+                CALL_CHILD(evt_default_lose)
         END_SWITCH
         IF_INT_EQUAL(GSW_GLITZ_PIT_OPPONENT, 10)
             IF_INT_LESS(GSW_TOU_ARMORED_HARRIERS_LOSS_COUNT, 100)
@@ -2307,11 +2307,11 @@ static EVT_BEGIN(evt_match)
     CALL(snd_sfx_stop)
     SWITCH(LW(10))
         CASE_LESS(1)
-        CALL(evt_bero_mapchange, STRING("tou_07"), 0)
+            CALL(evt_bero_mapchange, STRING("tou_07"), 0)
         CASE_LESS(11)
-        CALL(evt_bero_mapchange, STRING("tou_08"), 0)
+            CALL(evt_bero_mapchange, STRING("tou_08"), 0)
         CASE_DEFAULT
-        CALL(evt_bero_mapchange, STRING("tou_10"), 0)
+            CALL(evt_bero_mapchange, STRING("tou_10"), 0)
     END_SWITCH
     RETURN
 EVT_END()
@@ -3407,25 +3407,25 @@ EVT_BEGIN(evt_default_opening)
     CALL(evt_tou_get_fighter_num, GSW_GLITZ_PIT_OPPONENT, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(1)
-        CALL(evt_npc_set_position, STRING("\223G\202P"), 350, 0, 0)
+            CALL(evt_npc_set_position, STRING("\223G\202P"), 350, 0, 0)
         CASE_EQUAL(2)
-        CALL(evt_npc_set_position, STRING("\223G\202P"), 350, 0, 0)
-        CALL(evt_npc_set_position, STRING("\223G\202Q"), 390, 0, 25)
+            CALL(evt_npc_set_position, STRING("\223G\202P"), 350, 0, 0)
+            CALL(evt_npc_set_position, STRING("\223G\202Q"), 390, 0, 25)
         CASE_EQUAL(3)
-        CALL(evt_npc_set_position, STRING("\223G\202P"), 350, 0, 0)
-        CALL(evt_npc_set_position, STRING("\223G\202Q"), 390, 0, 25)
-        CALL(evt_npc_set_position, STRING("\223G\202R"), 370, 0, -25)
+            CALL(evt_npc_set_position, STRING("\223G\202P"), 350, 0, 0)
+            CALL(evt_npc_set_position, STRING("\223G\202Q"), 390, 0, 25)
+            CALL(evt_npc_set_position, STRING("\223G\202R"), 370, 0, -25)
         CASE_EQUAL(4)
-        CALL(evt_npc_set_position, STRING("\223G\202P"), 350, 0, 0)
-        CALL(evt_npc_set_position, STRING("\223G\202Q"), 390, 0, 25)
-        CALL(evt_npc_set_position, STRING("\223G\202R"), 370, 0, -25)
-        CALL(evt_npc_set_position, STRING("\223G\202S"), 410, 0, 0)
+            CALL(evt_npc_set_position, STRING("\223G\202P"), 350, 0, 0)
+            CALL(evt_npc_set_position, STRING("\223G\202Q"), 390, 0, 25)
+            CALL(evt_npc_set_position, STRING("\223G\202R"), 370, 0, -25)
+            CALL(evt_npc_set_position, STRING("\223G\202S"), 410, 0, 0)
         CASE_EQUAL(5)
-        CALL(evt_npc_set_position, STRING("\223G\202P"), 350, 0, 0)
-        CALL(evt_npc_set_position, STRING("\223G\202Q"), 390, 0, 25)
-        CALL(evt_npc_set_position, STRING("\223G\202R"), 370, 0, -25)
-        CALL(evt_npc_set_position, STRING("\223G\202S"), 410, 0, 0)
-        CALL(evt_npc_set_position, STRING("\223G\202T"), 430, 0, -25)
+            CALL(evt_npc_set_position, STRING("\223G\202P"), 350, 0, 0)
+            CALL(evt_npc_set_position, STRING("\223G\202Q"), 390, 0, 25)
+            CALL(evt_npc_set_position, STRING("\223G\202R"), 370, 0, -25)
+            CALL(evt_npc_set_position, STRING("\223G\202S"), 410, 0, 0)
+            CALL(evt_npc_set_position, STRING("\223G\202T"), 430, 0, -25)
     END_SWITCH
     CALL(evt_cam3d_evt_set, 0, 585, 1310, 0, 400, -145, 0, EASING_SINE_IN_OUT)
 
@@ -3483,15 +3483,15 @@ EVT_BEGIN(evt_default_opening)
             END_IF
             SWITCH(LW(4))
                 CASE_EQUAL(0)
-                SET_VALUE(LW(0), STRING("\223G\202P"))
+                    SET_VALUE(LW(0), STRING("\223G\202P"))
                 CASE_EQUAL(1)
-                SET_VALUE(LW(0), STRING("\223G\202Q"))
+                    SET_VALUE(LW(0), STRING("\223G\202Q"))
                 CASE_EQUAL(2)
-                SET_VALUE(LW(0), STRING("\223G\202R"))
+                    SET_VALUE(LW(0), STRING("\223G\202R"))
                 CASE_EQUAL(3)
-                SET_VALUE(LW(0), STRING("\223G\202S"))
+                    SET_VALUE(LW(0), STRING("\223G\202S"))
                 CASE_EQUAL(4)
-                SET_VALUE(LW(0), STRING("\223G\202T"))
+                    SET_VALUE(LW(0), STRING("\223G\202T"))
             END_SWITCH
             SET_VALUE(LW(1), LW(4))
             SET_VALUE(LW(2), LW(3))
@@ -3525,17 +3525,17 @@ EVT_BEGIN(evt_default_opening)
         CALL(evt_tou_get_ranking, LW(1))
         SWITCH(LW(1))
             CASE_EQUAL(0)
-            IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
-                SET_VALUE(LW(1), STRING("stg3_tou_378"))
-            ELSE
-                SET_VALUE(LW(1), STRING("stg3_tou_re_266"))
-            END_IF
+                IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
+                    SET_VALUE(LW(1), STRING("stg3_tou_378"))
+                ELSE
+                    SET_VALUE(LW(1), STRING("stg3_tou_re_266"))
+                END_IF
             CASE_EQUAL(1)
-            IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
-                SET_VALUE(LW(1), STRING("stg3_tou_377"))
-            ELSE
-                SET_VALUE(LW(1), STRING("stg3_tou_re_265"))
-            END_IF
+                IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
+                    SET_VALUE(LW(1), STRING("stg3_tou_377"))
+                ELSE
+                    SET_VALUE(LW(1), STRING("stg3_tou_re_265"))
+                END_IF
         END_SWITCH
         CALL(evt_msg_print, 0, LW(1), 0, LW(0))
     ELSE
@@ -3588,34 +3588,34 @@ EVT_BEGIN(evt_default_opening)
     CALL(evt_tou_get_fighter_info, GSW_GLITZ_PIT_OPPONENT, LW(0), LW(1))
     SWITCH(LW(1))
         CASE_EQUAL(3)
-        CALL(evt_cam3d_evt_set, 65, 183, 263, 65, 135, -8, 0, EASING_LINEAR)
+            CALL(evt_cam3d_evt_set, 65, 183, 263, 65, 135, -8, 0, EASING_LINEAR)
         CASE_DEFAULT
-        CALL(evt_cam3d_evt_set, 60, 143, 263, 60, 95, -8, 0, EASING_LINEAR)
+            CALL(evt_cam3d_evt_set, 60, 143, 263, 60, 95, -8, 0, EASING_LINEAR)
     END_SWITCH
     WAIT_FRAMES(1)
     CALL(evt_tou_get_ranking, LW(2))
     CALL(evt_tou_get_fighter_battle_msg, GSW_GLITZ_PIT_OPPONENT, LW(0), LW(1))
     SWITCH(GSW_GLITZ_PIT_OPPONENT)
         CASE_EQUAL(10)
-        SWITCH(GSW_STORY_PROGRESS)
-            CASE_BETWEEN(STG3_20_MAJORS_10TH_PLACE, STG3_34_RETURN_TO_ROGUEPORT)
-            SET_VALUE(LW(0), STRING("stg3_tou_118_37"))
-            CASE_GREATER_OR_EQUAL(STG3_34_RETURN_TO_ROGUEPORT)
-            IF_INT_LESS_OR_EQUAL(LW(2), 10)
-                SET_VALUE(LW(0), STRING("stg3_tou_118_37"))
-            END_IF
-        END_SWITCH
+            SWITCH(GSW_STORY_PROGRESS)
+                CASE_BETWEEN(STG3_20_MAJORS_10TH_PLACE, STG3_34_RETURN_TO_ROGUEPORT)
+                    SET_VALUE(LW(0), STRING("stg3_tou_118_37"))
+                CASE_GREATER_OR_EQUAL(STG3_34_RETURN_TO_ROGUEPORT)
+                    IF_INT_LESS_OR_EQUAL(LW(2), 10)
+                        SET_VALUE(LW(0), STRING("stg3_tou_118_37"))
+                    END_IF
+            END_SWITCH
         CASE_EQUAL(0)
-        SWITCH(GSW_STORY_PROGRESS)
-            CASE_LESS(STG3_34_RETURN_TO_ROGUEPORT)
-            IF_INT_EQUAL(LW(2), 1)
-                SET_VALUE(LW(0), STRING("stg3_tou_400_00"))
-            END_IF
-            CASE_DEFAULT
-            IF_INT_EQUAL(LW(2), 1)
-                SET_VALUE(LW(0), STRING("stg3_tou_re_287"))
-            END_IF
-        END_SWITCH
+            SWITCH(GSW_STORY_PROGRESS)
+                CASE_LESS(STG3_34_RETURN_TO_ROGUEPORT)
+                    IF_INT_EQUAL(LW(2), 1)
+                        SET_VALUE(LW(0), STRING("stg3_tou_400_00"))
+                    END_IF
+                CASE_DEFAULT
+                    IF_INT_EQUAL(LW(2), 1)
+                        SET_VALUE(LW(0), STRING("stg3_tou_re_287"))
+                    END_IF
+            END_SWITCH
     END_SWITCH
     WAIT_MS(300)
     CALL(evt_msg_print, 0, LW(0), 0, STRING("\223G\202P"))
@@ -3667,25 +3667,25 @@ EVT_BEGIN(evt_default_win)
         SWITCH(LW(1))
             CASE_EQUAL(0)
 #if VERSION >= VERSION_US
-            SET_VALUE(LW(2), STRING("敵１"))
+                SET_VALUE(LW(2), STRING("敵１"))
             CASE_EQUAL(1)
-            SET_VALUE(LW(2), STRING("敵２"))
+                SET_VALUE(LW(2), STRING("敵２"))
             CASE_EQUAL(2)
-            SET_VALUE(LW(2), STRING("敵３"))
+                SET_VALUE(LW(2), STRING("敵３"))
             CASE_EQUAL(3)
-            SET_VALUE(LW(2), STRING("敵４"))
+                SET_VALUE(LW(2), STRING("敵４"))
             CASE_EQUAL(4)
-            SET_VALUE(LW(2), STRING("敵５"))
+                SET_VALUE(LW(2), STRING("敵５"))
 #else
-            SET_VALUE(LW(2), STRING("\223G\202P"))
+                SET_VALUE(LW(2), STRING("\223G\202P"))
             CASE_EQUAL(1)
-            SET_VALUE(LW(2), STRING("\223G\202Q"))
+                SET_VALUE(LW(2), STRING("\223G\202Q"))
             CASE_EQUAL(2)
-            SET_VALUE(LW(2), STRING("\223G\202R"))
+                SET_VALUE(LW(2), STRING("\223G\202R"))
             CASE_EQUAL(3)
-            SET_VALUE(LW(2), STRING("\223G\202S"))
+                SET_VALUE(LW(2), STRING("\223G\202S"))
             CASE_EQUAL(4)
-            SET_VALUE(LW(2), STRING("\223G\202T"))
+                SET_VALUE(LW(2), STRING("\223G\202T"))
 #endif
         END_SWITCH
         CALL(confupose, LW(2), LW(3))
@@ -3783,22 +3783,22 @@ static EVT_BEGIN(evt_default_lose)
     CALL(evt_tou_get_fighter_info, GSW_GLITZ_PIT_OPPONENT, LW(0), LW(1))
     SWITCH(LW(1))
         CASE_EQUAL(3)
-        CALL(evt_cam3d_evt_set, 65, 183, 263, 65, 135, -8, 0, EASING_LINEAR)
+            CALL(evt_cam3d_evt_set, 65, 183, 263, 65, 135, -8, 0, EASING_LINEAR)
         CASE_DEFAULT
-        CALL(evt_cam3d_evt_set, 60, 143, 263, 60, 95, -8, 0, EASING_LINEAR)
+            CALL(evt_cam3d_evt_set, 60, 143, 263, 60, 95, -8, 0, EASING_LINEAR)
     END_SWITCH
     WAIT_FRAMES(1)
     CALL(evt_tou_get_fighter_battle_msg, GSW_GLITZ_PIT_OPPONENT, LW(0), LW(1))
     SWITCH(GSW_GLITZ_PIT_OPPONENT)
         CASE_EQUAL(10)
-        SWITCH(GSW_STORY_PROGRESS)
-            CASE_BETWEEN(STG3_20_MAJORS_10TH_PLACE, STG3_34_RETURN_TO_ROGUEPORT)
-            SET_VALUE(LW(0), STRING("stg3_tou_118_38"))
-            CASE_GREATER_OR_EQUAL(STG3_34_RETURN_TO_ROGUEPORT)
-            IF_INT_LESS_OR_EQUAL(LW(2), 10)
-                SET_VALUE(LW(0), STRING("stg3_tou_118_38"))
-            END_IF
-        END_SWITCH
+            SWITCH(GSW_STORY_PROGRESS)
+                CASE_BETWEEN(STG3_20_MAJORS_10TH_PLACE, STG3_34_RETURN_TO_ROGUEPORT)
+                    SET_VALUE(LW(0), STRING("stg3_tou_118_38"))
+                CASE_GREATER_OR_EQUAL(STG3_34_RETURN_TO_ROGUEPORT)
+                    IF_INT_LESS_OR_EQUAL(LW(2), 10)
+                        SET_VALUE(LW(0), STRING("stg3_tou_118_38"))
+                    END_IF
+            END_SWITCH
     END_SWITCH
 #if VERSION >= VERSION_US
     CALL(evt_msg_print, 0, LW(1), 0, STRING("敵１"))
@@ -5365,58 +5365,31 @@ EVT_BEGIN(evt_watch_match)
         SWITCH(LW(0))
             // Each in turn charges, leaps across the ring and lands a hit, then backs off.
             CASE_EQUAL(0)
-            CALL(evt_npc_move_position, STRING("\221I\216\3501"), -30, 0, 0, FLOAT(200.0f), 0)
-            CALL(evt_npc_jump_position_nohit, STRING("\221I\216\3501"), 20, 60, 0, 500, 30)
-            CALL(evt_npc_jump_position_nohit, STRING("\221I\216\3501"), 80, 70, 0, 500, 60)
-            CALL(evt_eff, 0, STRING("hit"), 0, 80, 80, 0, FLOAT(1.0f), 3, 0, 0, 0, 0, 0, 0)
-            CALL(evt_snd_sfxon_3d, STRING("SFX_STG3_FIGHTING3"), 80, 80, 0, 0)
-            CALL(evt_npc_jump_position_nohit, STRING("\221I\216\3501"), 60, 60, 0, 500, 30)
-            CALL(evt_npc_jump_position_nohit, STRING("\221I\216\3501"), 30, 60, 0, 300, 20)
-            CALL(evt_npc_move_position, STRING("\221I\216\3501"), -80, 0, 0, FLOAT(200.0f), 0)
-            CALL(evt_npc_move_position, STRING("\221I\216\3502"), 30, 0, 0, FLOAT(200.0f), 0)
-            CALL(evt_npc_jump_position_nohit, STRING("\221I\216\3502"), -20, 60, 0, 500, 30)
-            CALL(evt_npc_jump_position_nohit, STRING("\221I\216\3502"), -80, 70, 0, 500, 60)
-            CALL(evt_eff, 0, STRING("hit"), 0, -80, 80, 0, FLOAT(1.0f), 3, 0, 0, 0, 0, 0, 0)
-            CALL(evt_snd_sfxon_3d, STRING("SFX_STG3_FIGHTING3"), -80, 80, 0, 0)
-            CALL(evt_npc_jump_position_nohit, STRING("\221I\216\3502"), -60, 60, 0, 500, 30)
-            CALL(evt_npc_jump_position_nohit, STRING("\221I\216\3502"), -30, 60, 0, 300, 20)
-            CALL(evt_npc_move_position, STRING("\221I\216\3502"), 80, 0, 0, FLOAT(200.0f), 0)
+                CALL(evt_npc_move_position, STRING("\221I\216\3501"), -30, 0, 0, FLOAT(200.0f), 0)
+                CALL(evt_npc_jump_position_nohit, STRING("\221I\216\3501"), 20, 60, 0, 500, 30)
+                CALL(evt_npc_jump_position_nohit, STRING("\221I\216\3501"), 80, 70, 0, 500, 60)
+                CALL(evt_eff, 0, STRING("hit"), 0, 80, 80, 0, FLOAT(1.0f), 3, 0, 0, 0, 0, 0, 0)
+                CALL(evt_snd_sfxon_3d, STRING("SFX_STG3_FIGHTING3"), 80, 80, 0, 0)
+                CALL(evt_npc_jump_position_nohit, STRING("\221I\216\3501"), 60, 60, 0, 500, 30)
+                CALL(evt_npc_jump_position_nohit, STRING("\221I\216\3501"), 30, 60, 0, 300, 20)
+                CALL(evt_npc_move_position, STRING("\221I\216\3501"), -80, 0, 0, FLOAT(200.0f), 0)
+                CALL(evt_npc_move_position, STRING("\221I\216\3502"), 30, 0, 0, FLOAT(200.0f), 0)
+                CALL(evt_npc_jump_position_nohit, STRING("\221I\216\3502"), -20, 60, 0, 500, 30)
+                CALL(evt_npc_jump_position_nohit, STRING("\221I\216\3502"), -80, 70, 0, 500, 60)
+                CALL(evt_eff, 0, STRING("hit"), 0, -80, 80, 0, FLOAT(1.0f), 3, 0, 0, 0, 0, 0, 0)
+                CALL(evt_snd_sfxon_3d, STRING("SFX_STG3_FIGHTING3"), -80, 80, 0, 0)
+                CALL(evt_npc_jump_position_nohit, STRING("\221I\216\3502"), -60, 60, 0, 500, 30)
+                CALL(evt_npc_jump_position_nohit, STRING("\221I\216\3502"), -30, 60, 0, 300, 20)
+                CALL(evt_npc_move_position, STRING("\221I\216\3502"), 80, 0, 0, FLOAT(200.0f), 0)
 
             // They clash in the middle, then trade one to five more blows while chasing across the ring.
             CASE_EQUAL(1)
-            BEGIN_INLINE_EVENT_GET_ID(LW(12))
-                CALL(evt_npc_move_position, STRING("\221I\216\3501"), -10, 0, 300, 0, 0)
-            END_INLINE_EVENT
-            CALL(evt_npc_move_position, STRING("\221I\216\3502"), 10, 0, 300, 0, 0)
-            CALL(evt_eff, 0, STRING("hit"), 1, 0, 80, 0, FLOAT(1.0f), 3, 0, 0, 0, 0, 0, 0)
-            CALL(evt_snd_sfxon_3d, STRING("SFX_STG3_FIGHTING3"), 0, 80, 0, 0)
-            WAIT_MS(100)
-            LOOP(0)
-                IS_EVENT_RUNNING(LW(12), LW(13))
-                IF_INT_EQUAL(LW(13), 0)
-                    BREAK_LOOP
-                END_IF
-                WAIT_FRAMES(1)
-            END_LOOP
-            CALL(evt_sub_random, 4, LW(10))
-            ADD(LW(10), 1)
-            LOOP(LW(10))
-                CALL(evt_sub_random, 100, LW(0))
-                IF_INT_LESS(LW(0), 50)
-                    BEGIN_INLINE_EVENT_GET_ID(LW(12))
-                        CALL(evt_npc_move_position, STRING("\221I\216\3501"), -140, 0, 800, 0, 0)
-                    END_INLINE_EVENT
-                    CALL(evt_npc_move_position, STRING("\221I\216\3502"), -120, 0, 800, 0, 0)
-                    CALL(evt_eff, 0, STRING("hit"), 0, -130, 80, 0, FLOAT(1.0f), 3, 0, 0, 0, 0, 0, 0)
-                    CALL(evt_snd_sfxon_3d, STRING("SFX_STG3_FIGHTING3"), -130, 80, 0, 0)
-                ELSE
-                    BEGIN_INLINE_EVENT_GET_ID(LW(12))
-                        CALL(evt_npc_move_position, STRING("\221I\216\3501"), 120, 0, 800, 0, 0)
-                    END_INLINE_EVENT
-                    CALL(evt_npc_move_position, STRING("\221I\216\3502"), 140, 0, 800, 0, 0)
-                    CALL(evt_eff, 0, STRING("hit"), 0, 130, 80, 0, FLOAT(1.0f), 3, 0, 0, 0, 0, 0, 0)
-                    CALL(evt_snd_sfxon_3d, STRING("SFX_STG3_FIGHTING3"), 130, 80, 0, 0)
-                END_IF
+                BEGIN_INLINE_EVENT_GET_ID(LW(12))
+                    CALL(evt_npc_move_position, STRING("\221I\216\3501"), -10, 0, 300, 0, 0)
+                END_INLINE_EVENT
+                CALL(evt_npc_move_position, STRING("\221I\216\3502"), 10, 0, 300, 0, 0)
+                CALL(evt_eff, 0, STRING("hit"), 1, 0, 80, 0, FLOAT(1.0f), 3, 0, 0, 0, 0, 0, 0)
+                CALL(evt_snd_sfxon_3d, STRING("SFX_STG3_FIGHTING3"), 0, 80, 0, 0)
                 WAIT_MS(100)
                 LOOP(0)
                     IS_EVENT_RUNNING(LW(12), LW(13))
@@ -5425,60 +5398,87 @@ EVT_BEGIN(evt_watch_match)
                     END_IF
                     WAIT_FRAMES(1)
                 END_LOOP
-            END_LOOP
-            BEGIN_INLINE_EVENT_GET_ID(LW(12))
-                CALL(evt_npc_jump_position_nohit, STRING("\221I\216\3501"), -80, 60, 0, 500, 30)
-            END_INLINE_EVENT
-            CALL(evt_npc_jump_position_nohit, STRING("\221I\216\3502"), 80, 60, 0, 500, 30)
-            WAIT_MS(100)
-            LOOP(0)
-                IS_EVENT_RUNNING(LW(12), LW(13))
-                IF_INT_EQUAL(LW(13), 0)
-                    BREAK_LOOP
-                END_IF
-                WAIT_FRAMES(1)
-            END_LOOP
+                CALL(evt_sub_random, 4, LW(10))
+                ADD(LW(10), 1)
+                LOOP(LW(10))
+                    CALL(evt_sub_random, 100, LW(0))
+                    IF_INT_LESS(LW(0), 50)
+                        BEGIN_INLINE_EVENT_GET_ID(LW(12))
+                            CALL(evt_npc_move_position, STRING("\221I\216\3501"), -140, 0, 800, 0, 0)
+                        END_INLINE_EVENT
+                        CALL(evt_npc_move_position, STRING("\221I\216\3502"), -120, 0, 800, 0, 0)
+                        CALL(evt_eff, 0, STRING("hit"), 0, -130, 80, 0, FLOAT(1.0f), 3, 0, 0, 0, 0, 0, 0)
+                        CALL(evt_snd_sfxon_3d, STRING("SFX_STG3_FIGHTING3"), -130, 80, 0, 0)
+                    ELSE
+                        BEGIN_INLINE_EVENT_GET_ID(LW(12))
+                            CALL(evt_npc_move_position, STRING("\221I\216\3501"), 120, 0, 800, 0, 0)
+                        END_INLINE_EVENT
+                        CALL(evt_npc_move_position, STRING("\221I\216\3502"), 140, 0, 800, 0, 0)
+                        CALL(evt_eff, 0, STRING("hit"), 0, 130, 80, 0, FLOAT(1.0f), 3, 0, 0, 0, 0, 0, 0)
+                        CALL(evt_snd_sfxon_3d, STRING("SFX_STG3_FIGHTING3"), 130, 80, 0, 0)
+                    END_IF
+                    WAIT_MS(100)
+                    LOOP(0)
+                        IS_EVENT_RUNNING(LW(12), LW(13))
+                        IF_INT_EQUAL(LW(13), 0)
+                            BREAK_LOOP
+                        END_IF
+                        WAIT_FRAMES(1)
+                    END_LOOP
+                END_LOOP
+                BEGIN_INLINE_EVENT_GET_ID(LW(12))
+                    CALL(evt_npc_jump_position_nohit, STRING("\221I\216\3501"), -80, 60, 0, 500, 30)
+                END_INLINE_EVENT
+                CALL(evt_npc_jump_position_nohit, STRING("\221I\216\3502"), 80, 60, 0, 500, 30)
+                WAIT_MS(100)
+                LOOP(0)
+                    IS_EVENT_RUNNING(LW(12), LW(13))
+                    IF_INT_EQUAL(LW(13), 0)
+                        BREAK_LOOP
+                    END_IF
+                    WAIT_FRAMES(1)
+                END_LOOP
 
             // They leap at each other and collide in mid-air, then fall back to their corners.
             CASE_DEFAULT
-            BEGIN_INLINE_EVENT_GET_ID(LW(12))
-                CALL(evt_npc_move_position, STRING("\221I\216\3501"), -40, 0, 500, 0, 0)
-            END_INLINE_EVENT
-            CALL(evt_npc_move_position, STRING("\221I\216\3502"), 40, 0, 500, 0, 0)
-            WAIT_MS(100)
-            LOOP(0)
-                IS_EVENT_RUNNING(LW(12), LW(13))
-                IF_INT_EQUAL(LW(13), 0)
-                    BREAK_LOOP
-                END_IF
-                WAIT_FRAMES(1)
-            END_LOOP
-            BEGIN_INLINE_EVENT_GET_ID(LW(12))
-                CALL(evt_npc_jump_position_nohit, STRING("\221I\216\3501"), -10, 100, 0, 400, 30)
-            END_INLINE_EVENT
-            CALL(evt_npc_jump_position_nohit, STRING("\221I\216\3502"), 10, 100, 0, 400, 30)
-            CALL(evt_eff, 0, STRING("hit"), 2, 0, 120, 0, FLOAT(1.0f), 3, 0, 0, 0, 0, 0, 0)
-            CALL(evt_snd_sfxon_3d, STRING("SFX_STG3_FIGHTING3"), 0, 120, 0, 0)
-            WAIT_MS(100)
-            LOOP(0)
-                IS_EVENT_RUNNING(LW(12), LW(13))
-                IF_INT_EQUAL(LW(13), 0)
-                    BREAK_LOOP
-                END_IF
-                WAIT_FRAMES(1)
-            END_LOOP
-            BEGIN_INLINE_EVENT_GET_ID(LW(12))
-                CALL(evt_npc_jump_position_nohit, STRING("\221I\216\3501"), -80, 60, 0, 500, 30)
-            END_INLINE_EVENT
-            CALL(evt_npc_jump_position_nohit, STRING("\221I\216\3502"), 80, 60, 0, 500, 30)
-            WAIT_MS(100)
-            LOOP(0)
-                IS_EVENT_RUNNING(LW(12), LW(13))
-                IF_INT_EQUAL(LW(13), 0)
-                    BREAK_LOOP
-                END_IF
-                WAIT_FRAMES(1)
-            END_LOOP
+                BEGIN_INLINE_EVENT_GET_ID(LW(12))
+                    CALL(evt_npc_move_position, STRING("\221I\216\3501"), -40, 0, 500, 0, 0)
+                END_INLINE_EVENT
+                CALL(evt_npc_move_position, STRING("\221I\216\3502"), 40, 0, 500, 0, 0)
+                WAIT_MS(100)
+                LOOP(0)
+                    IS_EVENT_RUNNING(LW(12), LW(13))
+                    IF_INT_EQUAL(LW(13), 0)
+                        BREAK_LOOP
+                    END_IF
+                    WAIT_FRAMES(1)
+                END_LOOP
+                BEGIN_INLINE_EVENT_GET_ID(LW(12))
+                    CALL(evt_npc_jump_position_nohit, STRING("\221I\216\3501"), -10, 100, 0, 400, 30)
+                END_INLINE_EVENT
+                CALL(evt_npc_jump_position_nohit, STRING("\221I\216\3502"), 10, 100, 0, 400, 30)
+                CALL(evt_eff, 0, STRING("hit"), 2, 0, 120, 0, FLOAT(1.0f), 3, 0, 0, 0, 0, 0, 0)
+                CALL(evt_snd_sfxon_3d, STRING("SFX_STG3_FIGHTING3"), 0, 120, 0, 0)
+                WAIT_MS(100)
+                LOOP(0)
+                    IS_EVENT_RUNNING(LW(12), LW(13))
+                    IF_INT_EQUAL(LW(13), 0)
+                        BREAK_LOOP
+                    END_IF
+                    WAIT_FRAMES(1)
+                END_LOOP
+                BEGIN_INLINE_EVENT_GET_ID(LW(12))
+                    CALL(evt_npc_jump_position_nohit, STRING("\221I\216\3501"), -80, 60, 0, 500, 30)
+                END_INLINE_EVENT
+                CALL(evt_npc_jump_position_nohit, STRING("\221I\216\3502"), 80, 60, 0, 500, 30)
+                WAIT_MS(100)
+                LOOP(0)
+                    IS_EVENT_RUNNING(LW(12), LW(13))
+                    IF_INT_EQUAL(LW(13), 0)
+                        BREAK_LOOP
+                    END_IF
+                    WAIT_FRAMES(1)
+                END_LOOP
         END_SWITCH
     END_LOOP
     RETURN
@@ -5495,17 +5495,17 @@ static EVT_BEGIN(evt_kyaku_1)
     CALL(evt_mario_set_dir_npc, STRING("kyaku1"))
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_04_GONZALES_IS_BORN)
-        CALL(evt_msg_print, 0, STRING("stg3_tou_119"), 0, STRING("kyaku1"))
-        CASE_DEFAULT
-        CALL(evt_tou_get_ranking, LW(10))
-        SWITCH(LW(10))
-            CASE_GREATER(10)
             CALL(evt_msg_print, 0, STRING("stg3_tou_119"), 0, STRING("kyaku1"))
-            CASE_GREATER(0)
-            CALL(evt_msg_print, 0, STRING("stg3_tou_120"), 0, STRING("kyaku1"))
-            CASE_DEFAULT
-            CALL(evt_msg_print, 0, STRING("stg3_tou_121"), 0, STRING("kyaku1"))
-        END_SWITCH
+        CASE_DEFAULT
+            CALL(evt_tou_get_ranking, LW(10))
+            SWITCH(LW(10))
+                CASE_GREATER(10)
+                    CALL(evt_msg_print, 0, STRING("stg3_tou_119"), 0, STRING("kyaku1"))
+                CASE_GREATER(0)
+                    CALL(evt_msg_print, 0, STRING("stg3_tou_120"), 0, STRING("kyaku1"))
+                CASE_DEFAULT
+                    CALL(evt_msg_print, 0, STRING("stg3_tou_121"), 0, STRING("kyaku1"))
+            END_SWITCH
     END_SWITCH
     CALL(evt_mario_key_onoff, 1)
     RETURN
@@ -5518,17 +5518,17 @@ static EVT_BEGIN(evt_kyaku_2)
     CALL(evt_mario_set_dir_npc, STRING("kyaku2"))
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_04_GONZALES_IS_BORN)
-        CALL(evt_msg_print, 0, STRING("stg3_tou_122"), 0, STRING("kyaku2"))
-        CASE_DEFAULT
-        CALL(evt_tou_get_ranking, LW(10))
-        SWITCH(LW(10))
-            CASE_GREATER(10)
             CALL(evt_msg_print, 0, STRING("stg3_tou_122"), 0, STRING("kyaku2"))
-            CASE_GREATER(0)
-            CALL(evt_msg_print, 0, STRING("stg3_tou_123"), 0, STRING("kyaku2"))
-            CASE_DEFAULT
-            CALL(evt_msg_print, 0, STRING("stg3_tou_124"), 0, STRING("kyaku2"))
-        END_SWITCH
+        CASE_DEFAULT
+            CALL(evt_tou_get_ranking, LW(10))
+            SWITCH(LW(10))
+                CASE_GREATER(10)
+                    CALL(evt_msg_print, 0, STRING("stg3_tou_122"), 0, STRING("kyaku2"))
+                CASE_GREATER(0)
+                    CALL(evt_msg_print, 0, STRING("stg3_tou_123"), 0, STRING("kyaku2"))
+                CASE_DEFAULT
+                    CALL(evt_msg_print, 0, STRING("stg3_tou_124"), 0, STRING("kyaku2"))
+            END_SWITCH
     END_SWITCH
     CALL(evt_mario_key_onoff, 1)
     RETURN
@@ -5541,17 +5541,17 @@ static EVT_BEGIN(evt_kyaku_3)
     CALL(evt_mario_set_dir_npc, STRING("kyaku3"))
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_04_GONZALES_IS_BORN)
-        CALL(evt_msg_print, 0, STRING("stg3_tou_125"), 0, STRING("kyaku3"))
-        CASE_DEFAULT
-        CALL(evt_tou_get_ranking, LW(10))
-        SWITCH(LW(10))
-            CASE_GREATER(10)
             CALL(evt_msg_print, 0, STRING("stg3_tou_125"), 0, STRING("kyaku3"))
-            CASE_GREATER(0)
-            CALL(evt_msg_print, 0, STRING("stg3_tou_126"), 0, STRING("kyaku3"))
-            CASE_DEFAULT
-            CALL(evt_msg_print, 0, STRING("stg3_tou_127"), 0, STRING("kyaku3"))
-        END_SWITCH
+        CASE_DEFAULT
+            CALL(evt_tou_get_ranking, LW(10))
+            SWITCH(LW(10))
+                CASE_GREATER(10)
+                    CALL(evt_msg_print, 0, STRING("stg3_tou_125"), 0, STRING("kyaku3"))
+                CASE_GREATER(0)
+                    CALL(evt_msg_print, 0, STRING("stg3_tou_126"), 0, STRING("kyaku3"))
+                CASE_DEFAULT
+                    CALL(evt_msg_print, 0, STRING("stg3_tou_127"), 0, STRING("kyaku3"))
+            END_SWITCH
     END_SWITCH
     CALL(evt_mario_key_onoff, 1)
     RETURN
@@ -5567,25 +5567,25 @@ static EVT_BEGIN(evt_kyaku_4)
     CALL(evt_mario_set_dir_npc, STRING("kyaku4"))
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_04_GONZALES_IS_BORN)
-        CALL(evt_msg_print, 0, STRING("stg3_tou_128"), 0, STRING("kyaku4"))
-        CALL(evt_msg_select, 0, STRING("stg3_tou_128_01"))
-        CALL(evt_msg_print_add, 0, STRING("stg3_tou_128_02"))
-        CASE_DEFAULT
-        CALL(evt_tou_get_ranking, LW(10))
-        SWITCH(LW(10))
-            CASE_GREATER(10)
             CALL(evt_msg_print, 0, STRING("stg3_tou_128"), 0, STRING("kyaku4"))
             CALL(evt_msg_select, 0, STRING("stg3_tou_128_01"))
             CALL(evt_msg_print_add, 0, STRING("stg3_tou_128_02"))
-            CASE_GREATER(0)
-            CALL(evt_msg_print, 0, STRING("stg3_tou_129"), 0, STRING("kyaku4"))
-            CALL(evt_msg_select, 0, STRING("stg3_tou_129_01"))
-            CALL(evt_msg_print_add, 0, STRING("stg3_tou_129_02"))
-            CASE_DEFAULT
-            CALL(evt_msg_print, 0, STRING("stg3_tou_130"), 0, STRING("kyaku4"))
-            CALL(evt_msg_select, 0, STRING("stg3_tou_130_01"))
-            CALL(evt_msg_print_add, 0, STRING("stg3_tou_130_02"))
-        END_SWITCH
+        CASE_DEFAULT
+            CALL(evt_tou_get_ranking, LW(10))
+            SWITCH(LW(10))
+                CASE_GREATER(10)
+                    CALL(evt_msg_print, 0, STRING("stg3_tou_128"), 0, STRING("kyaku4"))
+                    CALL(evt_msg_select, 0, STRING("stg3_tou_128_01"))
+                    CALL(evt_msg_print_add, 0, STRING("stg3_tou_128_02"))
+                CASE_GREATER(0)
+                    CALL(evt_msg_print, 0, STRING("stg3_tou_129"), 0, STRING("kyaku4"))
+                    CALL(evt_msg_select, 0, STRING("stg3_tou_129_01"))
+                    CALL(evt_msg_print_add, 0, STRING("stg3_tou_129_02"))
+                CASE_DEFAULT
+                    CALL(evt_msg_print, 0, STRING("stg3_tou_130"), 0, STRING("kyaku4"))
+                    CALL(evt_msg_select, 0, STRING("stg3_tou_130_01"))
+                    CALL(evt_msg_print_add, 0, STRING("stg3_tou_130_02"))
+            END_SWITCH
     END_SWITCH
     CALL(evt_mario_key_onoff, 1)
     RETURN
@@ -5601,17 +5601,17 @@ static EVT_BEGIN(evt_kyaku_5)
     CALL(evt_mario_set_dir_npc, STRING("kyaku1"))
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_04_GONZALES_IS_BORN)
-        CALL(evt_msg_print, 0, STRING("stg3_tou_131"), 0, STRING("kyaku1"))
-        CASE_DEFAULT
-        CALL(evt_tou_get_ranking, LW(10))
-        SWITCH(LW(10))
-            CASE_GREATER(10)
             CALL(evt_msg_print, 0, STRING("stg3_tou_131"), 0, STRING("kyaku1"))
-            CASE_GREATER(0)
-            CALL(evt_msg_print, 0, STRING("stg3_tou_132"), 0, STRING("kyaku1"))
-            CASE_DEFAULT
-            CALL(evt_msg_print, 0, STRING("stg3_tou_133"), 0, STRING("kyaku1"))
-        END_SWITCH
+        CASE_DEFAULT
+            CALL(evt_tou_get_ranking, LW(10))
+            SWITCH(LW(10))
+                CASE_GREATER(10)
+                    CALL(evt_msg_print, 0, STRING("stg3_tou_131"), 0, STRING("kyaku1"))
+                CASE_GREATER(0)
+                    CALL(evt_msg_print, 0, STRING("stg3_tou_132"), 0, STRING("kyaku1"))
+                CASE_DEFAULT
+                    CALL(evt_msg_print, 0, STRING("stg3_tou_133"), 0, STRING("kyaku1"))
+            END_SWITCH
     END_SWITCH
     CALL(evt_mario_key_onoff, 1)
     RETURN
@@ -5627,17 +5627,17 @@ static EVT_BEGIN(evt_kyaku_6)
     CALL(evt_mario_set_dir_npc, STRING("kyaku2"))
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_04_GONZALES_IS_BORN)
-        CALL(evt_msg_print, 0, STRING("stg3_tou_134"), 0, STRING("kyaku2"))
-        CASE_DEFAULT
-        CALL(evt_tou_get_ranking, LW(10))
-        SWITCH(LW(10))
-            CASE_GREATER(10)
             CALL(evt_msg_print, 0, STRING("stg3_tou_134"), 0, STRING("kyaku2"))
-            CASE_GREATER(0)
-            CALL(evt_msg_print, 0, STRING("stg3_tou_135"), 0, STRING("kyaku2"))
-            CASE_DEFAULT
-            CALL(evt_msg_print, 0, STRING("stg3_tou_136"), 0, STRING("kyaku2"))
-        END_SWITCH
+        CASE_DEFAULT
+            CALL(evt_tou_get_ranking, LW(10))
+            SWITCH(LW(10))
+                CASE_GREATER(10)
+                    CALL(evt_msg_print, 0, STRING("stg3_tou_134"), 0, STRING("kyaku2"))
+                CASE_GREATER(0)
+                    CALL(evt_msg_print, 0, STRING("stg3_tou_135"), 0, STRING("kyaku2"))
+                CASE_DEFAULT
+                    CALL(evt_msg_print, 0, STRING("stg3_tou_136"), 0, STRING("kyaku2"))
+            END_SWITCH
     END_SWITCH
     CALL(evt_mario_key_onoff, 1)
     RETURN
@@ -5653,17 +5653,17 @@ static EVT_BEGIN(evt_kyaku_7)
     CALL(evt_mario_set_dir_npc, STRING("kyaku3"))
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_04_GONZALES_IS_BORN)
-        CALL(evt_msg_print, 0, STRING("stg3_tou_137"), 0, STRING("kyaku3"))
-        CASE_DEFAULT
-        CALL(evt_tou_get_ranking, LW(10))
-        SWITCH(LW(10))
-            CASE_GREATER(10)
             CALL(evt_msg_print, 0, STRING("stg3_tou_137"), 0, STRING("kyaku3"))
-            CASE_GREATER(0)
-            CALL(evt_msg_print, 0, STRING("stg3_tou_138"), 0, STRING("kyaku3"))
-            CASE_DEFAULT
-            CALL(evt_msg_print, 0, STRING("stg3_tou_139"), 0, STRING("kyaku3"))
-        END_SWITCH
+        CASE_DEFAULT
+            CALL(evt_tou_get_ranking, LW(10))
+            SWITCH(LW(10))
+                CASE_GREATER(10)
+                    CALL(evt_msg_print, 0, STRING("stg3_tou_137"), 0, STRING("kyaku3"))
+                CASE_GREATER(0)
+                    CALL(evt_msg_print, 0, STRING("stg3_tou_138"), 0, STRING("kyaku3"))
+                CASE_DEFAULT
+                    CALL(evt_msg_print, 0, STRING("stg3_tou_139"), 0, STRING("kyaku3"))
+            END_SWITCH
     END_SWITCH
     CALL(evt_mario_key_onoff, 1)
     RETURN
@@ -5679,25 +5679,25 @@ static EVT_BEGIN(evt_kyaku_8)
     CALL(evt_mario_set_dir_npc, STRING("kyaku4"))
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_04_GONZALES_IS_BORN)
-        CALL(evt_msg_print, 0, STRING("stg3_tou_140"), 0, STRING("kyaku4"))
-        CALL(evt_msg_select, 0, STRING("stg3_tou_140_01"))
-        CALL(evt_msg_print_add, 0, STRING("stg3_tou_140_02"))
-        CASE_DEFAULT
-        CALL(evt_tou_get_ranking, LW(10))
-        SWITCH(LW(10))
-            CASE_GREATER(10)
             CALL(evt_msg_print, 0, STRING("stg3_tou_140"), 0, STRING("kyaku4"))
             CALL(evt_msg_select, 0, STRING("stg3_tou_140_01"))
             CALL(evt_msg_print_add, 0, STRING("stg3_tou_140_02"))
-            CASE_GREATER(0)
-            CALL(evt_msg_print, 0, STRING("stg3_tou_141"), 0, STRING("kyaku4"))
-            CALL(evt_msg_select, 0, STRING("stg3_tou_141_01"))
-            CALL(evt_msg_print_add, 0, STRING("stg3_tou_141_02"))
-            CASE_DEFAULT
-            CALL(evt_msg_print, 0, STRING("stg3_tou_142"), 0, STRING("kyaku4"))
-            CALL(evt_msg_select, 0, STRING("stg3_tou_142_01"))
-            CALL(evt_msg_print_add, 0, STRING("stg3_tou_142_02"))
-        END_SWITCH
+        CASE_DEFAULT
+            CALL(evt_tou_get_ranking, LW(10))
+            SWITCH(LW(10))
+                CASE_GREATER(10)
+                    CALL(evt_msg_print, 0, STRING("stg3_tou_140"), 0, STRING("kyaku4"))
+                    CALL(evt_msg_select, 0, STRING("stg3_tou_140_01"))
+                    CALL(evt_msg_print_add, 0, STRING("stg3_tou_140_02"))
+                CASE_GREATER(0)
+                    CALL(evt_msg_print, 0, STRING("stg3_tou_141"), 0, STRING("kyaku4"))
+                    CALL(evt_msg_select, 0, STRING("stg3_tou_141_01"))
+                    CALL(evt_msg_print_add, 0, STRING("stg3_tou_141_02"))
+                CASE_DEFAULT
+                    CALL(evt_msg_print, 0, STRING("stg3_tou_142"), 0, STRING("kyaku4"))
+                    CALL(evt_msg_select, 0, STRING("stg3_tou_142_01"))
+                    CALL(evt_msg_print_add, 0, STRING("stg3_tou_142_02"))
+            END_SWITCH
     END_SWITCH
     CALL(evt_mario_key_onoff, 1)
     RETURN
@@ -5749,7 +5749,7 @@ EVT_BEGIN(evt_kyaku_check)
             CASE_EQUAL(1)
             CASE_EQUAL(2)
             CASE_DEFAULT
-            SET_VALUE(LW(1), 0)
+                SET_VALUE(LW(1), 0)
         END_SWITCH
 #endif
         IF_INT_EQUAL(LW(1), 1)
@@ -5781,14 +5781,14 @@ EVT_BEGIN(tou_03_init_evt)
     // Ambience: silence during Grubba's finale, otherwise the arena crowd noise.
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG3_31_GRUBBAS_PLANS)
-        CALL(evt_snd_bgmoff, PSND_FADEOUT)
-        CALL(evt_snd_envoff, PSND_FADEOUT)
-        CASE_DEFAULT
-        BEGIN_INLINE_EVENT
+            CALL(evt_snd_bgmoff, PSND_FADEOUT)
             CALL(evt_snd_envoff, PSND_FADEOUT)
-            WAIT_MS(1000)
-            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU3"))
-        END_INLINE_EVENT
+        CASE_DEFAULT
+            BEGIN_INLINE_EVENT
+                CALL(evt_snd_envoff, PSND_FADEOUT)
+                WAIT_MS(1000)
+                CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU3"))
+            END_INLINE_EVENT
     END_SWITCH
 
     // Map setup: the upper level hidden unless Mario came in by the upper door, stage lights, crowd and monitor.
@@ -5827,25 +5827,25 @@ EVT_BEGIN(tou_03_init_evt)
     CALL_CHILD(npc_entry)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_01_ARENA_INTRO_1F)
-        SET_VALUE(LW(0), PTR(bero_data))
-        CALL(evt_bero_get_info)
-        CALL_CHILD(bero_case_entry)
+            SET_VALUE(LW(0), PTR(bero_data))
+            CALL(evt_bero_get_info)
+            CALL_CHILD(bero_case_entry)
         CASE_DEFAULT
-        SET_VALUE(LW(0), PTR(bero_data))
-        CALL(evt_bero_get_info)
-        CALL_CHILD(evt_bero_info_run)
+            SET_VALUE(LW(0), PTR(bero_data))
+            CALL(evt_bero_get_info)
+            CALL_CHILD(evt_bero_info_run)
     END_SWITCH
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_01_ARENA_INTRO_1F)
-        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
-        CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
-        SPAWN_EVENT(evt_tougi)
+            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
+            CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
+            SPAWN_EVENT(evt_tougi)
         CASE_EQUAL(STG3_31_GRUBBAS_PLANS)
-        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("door_2_a"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("door_2_b"), MAP_OBJ_FLAG_HIDDEN)
-        SET_VALUE(LW(0), STRING("s_bero_1"))
-        CALL_CHILD(bero_case_switch_off)
-        SPAWN_EVENT(evt_boss)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("door_2_a"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("door_2_b"), MAP_OBJ_FLAG_HIDDEN)
+            SET_VALUE(LW(0), STRING("s_bero_1"))
+            CALL_CHILD(bero_case_switch_off)
+            SPAWN_EVENT(evt_boss)
     END_SWITCH
     IF_INT_EQUAL(GSWF_TOU_POISON_CAKE_EATEN, 1)
         IF_INT_EQUAL(GSWF_TOU_POISON_CAKE_RECOVERED, 0)
@@ -5881,14 +5881,14 @@ EVT_BEGIN(tou_03_init_evt)
     ELSE
         SWITCH(GSW_STORY_PROGRESS)
             CASE_BETWEEN(STG3_01_ARENA_INTRO_1F, STG3_30_04_AIR_DUCT_EXIT)
-            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
-            CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
-            SPAWN_EVENT(evt_watch_match)
+                CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
+                CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
+                SPAWN_EVENT(evt_watch_match)
             CASE_LESS(STG3_32_BOSS_BATTLE)
             CASE_DEFAULT
-            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
-            CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
-            SPAWN_EVENT(evt_watch_match)
+                CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
+                CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
+                SPAWN_EVENT(evt_watch_match)
         END_SWITCH
     END_IF
 

@@ -305,9 +305,9 @@ EVT_BEGIN(aji_00_init_evt)
     SWITCH(GSW_STORY_PROGRESS)
         // Replace the west exit with a message throughout this story interval.
         CASE_BETWEEN(STG7_25_THE_LAST_MAIL, STG8_END_AFTER_THE_BATTLE)
-        SET_VALUE(LW(0), STRING("w_bero"))
-        CALL_CHILD(bero_case_switch_off)
-        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("w_bero"), 0, PTR(evt_door_msg), 0)
+            SET_VALUE(LW(0), STRING("w_bero"))
+            CALL_CHILD(bero_case_switch_off)
+            CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("w_bero"), 0, PTR(evt_door_msg), 0)
     END_SWITCH
     RETURN
 EVT_END()

@@ -365,30 +365,30 @@ static EVT_BEGIN(teresa_oidasare_evt)
     SWITCH(LW(0))
         CASE_EQUAL(0)
         CASE_DEFAULT
-        BEGIN_INLINE_EVENT
-            WAIT_MS(300)
-            CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 370, 70, 800)
-            LOOP(0)
-                CALL(evt_sub_intpl_msec_get_value)
-                CALL(evt_party_set_pos, 0, 72, LW(0), -155)
-                WAIT_FRAMES(1)
-                IF_INT_EQUAL(LW(1), 0)
-                    BREAK_LOOP
-                END_IF
-            END_LOOP
-            CALL(evt_mario_get_party, LW(0))
-            SWITCH(LW(0))
-                CASE_EQUAL(1)
-                CALL(evt_party_set_pose, 0, STRING("PKR_D_1"))
-                CASE_EQUAL(2)
-                CALL(evt_party_set_pose, 0, STRING("PNK_D_1"))
-                CASE_EQUAL(4)
-                CALL(evt_party_set_pose, 0, STRING("PYS_D_1"))
-                CASE_EQUAL(5)
-                CALL(evt_party_set_pose, 0, STRING("PWD_D_1"))
-            END_SWITCH
-            CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.009765625f), FLOAT(0.0f), 50)
-        END_INLINE_EVENT
+            BEGIN_INLINE_EVENT
+                WAIT_MS(300)
+                CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 370, 70, 800)
+                LOOP(0)
+                    CALL(evt_sub_intpl_msec_get_value)
+                    CALL(evt_party_set_pos, 0, 72, LW(0), -155)
+                    WAIT_FRAMES(1)
+                    IF_INT_EQUAL(LW(1), 0)
+                        BREAK_LOOP
+                    END_IF
+                END_LOOP
+                CALL(evt_mario_get_party, LW(0))
+                SWITCH(LW(0))
+                    CASE_EQUAL(1)
+                        CALL(evt_party_set_pose, 0, STRING("PKR_D_1"))
+                    CASE_EQUAL(2)
+                        CALL(evt_party_set_pose, 0, STRING("PNK_D_1"))
+                    CASE_EQUAL(4)
+                        CALL(evt_party_set_pose, 0, STRING("PYS_D_1"))
+                    CASE_EQUAL(5)
+                        CALL(evt_party_set_pose, 0, STRING("PWD_D_1"))
+                END_SWITCH
+                CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.009765625f), FLOAT(0.0f), 50)
+            END_INLINE_EVENT
     END_SWITCH
     CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 360, 60, 800)
     LOOP(0)
@@ -411,10 +411,10 @@ static EVT_BEGIN(teresa_oidasare_evt)
     SWITCH(LW(0))
         CASE_EQUAL(0)
         CASE_DEFAULT
-        BEGIN_INLINE_EVENT
-            CALL(evt_party_get_pos, 0, LW(7), LW(8), LW(9))
-            CALL(evt_party_jump_pos, 0, LW(7), LW(8), LW(9), 300, 0, 10)
-        END_INLINE_EVENT
+            BEGIN_INLINE_EVENT
+                CALL(evt_party_get_pos, 0, LW(7), LW(8), LW(9))
+                CALL(evt_party_jump_pos, 0, LW(7), LW(8), LW(9), 300, 0, 10)
+            END_INLINE_EVENT
     END_SWITCH
     CALL(evt_mario_set_pose, STRING("M_U_3"))
     WAIT_MS(300)
@@ -422,13 +422,13 @@ static EVT_BEGIN(teresa_oidasare_evt)
     CALL(evt_mario_get_party, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(1)
-        CALL(evt_party_set_pose, 0, STRING("PKR_S_1"))
+            CALL(evt_party_set_pose, 0, STRING("PKR_S_1"))
         CASE_EQUAL(2)
-        CALL(evt_party_set_pose, 0, STRING("PNK_S_1"))
+            CALL(evt_party_set_pose, 0, STRING("PNK_S_1"))
         CASE_EQUAL(4)
-        CALL(evt_party_set_pose, 0, STRING("PYS_S_1"))
+            CALL(evt_party_set_pose, 0, STRING("PYS_S_1"))
         CASE_EQUAL(5)
-        CALL(evt_party_set_pose, 0, STRING("PWD_S_1"))
+            CALL(evt_party_set_pose, 0, STRING("PWD_S_1"))
     END_SWITCH
 
     // Control returns and the Steeple door is switched on again.

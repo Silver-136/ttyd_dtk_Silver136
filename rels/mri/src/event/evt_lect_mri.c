@@ -838,11 +838,11 @@ EVT_BEGIN(all_juyoitem_lecture_rel)
     CALL(evt_npc_sound_data_set, STRING("キノピコ"), STRING("SFX_FLD_NPC_KINOPIO_MOVE1L"), STRING("SFX_FLD_NPC_KINOPIO_MOVE1R"), EVT_NULLPTR, EVT_NULLPTR, EVT_NULLPTR)
     SWITCH(LW(10))
         CASE_EQUAL(7)
-        CALL_CHILD(boots_lv2_juyoitem_lecture_init)
+            CALL_CHILD(boots_lv2_juyoitem_lecture_init)
     END_SWITCH
     SWITCH(LW(10))
         CASE_EQUAL(7)
-        CALL_CHILD(boots_lv2_juyoitem_lecture)
+            CALL_CHILD(boots_lv2_juyoitem_lecture)
     END_SWITCH
     LOOP(6)
         CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_HIDE)

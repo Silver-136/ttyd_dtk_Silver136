@@ -424,19 +424,19 @@ static EVT_BEGIN(yoshi_color)
     CALL(getYoshiColor, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(0)
-        SET_VALUE(LW(0), STRING("c_babyyoshi"))
+            SET_VALUE(LW(0), STRING("c_babyyoshi"))
         CASE_EQUAL(1)
-        SET_VALUE(LW(0), STRING("c_babyyoshi2"))
+            SET_VALUE(LW(0), STRING("c_babyyoshi2"))
         CASE_EQUAL(2)
-        SET_VALUE(LW(0), STRING("c_babyyoshi3"))
+            SET_VALUE(LW(0), STRING("c_babyyoshi3"))
         CASE_EQUAL(3)
-        SET_VALUE(LW(0), STRING("c_babyyoshi4"))
+            SET_VALUE(LW(0), STRING("c_babyyoshi4"))
         CASE_EQUAL(4)
-        SET_VALUE(LW(0), STRING("c_babyyoshi5"))
+            SET_VALUE(LW(0), STRING("c_babyyoshi5"))
         CASE_EQUAL(5)
-        SET_VALUE(LW(0), STRING("c_babyyoshi6"))
+            SET_VALUE(LW(0), STRING("c_babyyoshi6"))
         CASE_EQUAL(6)
-        SET_VALUE(LW(0), STRING("c_babyyoshi7"))
+            SET_VALUE(LW(0), STRING("c_babyyoshi7"))
     END_SWITCH
     CALL(evt_npc_entry, STRING("ヨッシー"), LW(0))
     CALL(evt_npc_set_tribe, STRING("ヨッシー"), STRING("ヨッシー"))
@@ -865,9 +865,9 @@ EVT_END()
 static EVT_BEGIN(ranperu_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG4_10_DOOPLISS_BATTLE)
-        CALL(evt_npc_set_position, STRING("me"), 110, 695, -85)
+            CALL(evt_npc_set_position, STRING("me"), 110, 695, -85)
         CASE_DEFAULT
-        CALL(evt_npc_set_position, STRING("me"), 0, -1000, 0)
+            CALL(evt_npc_set_position, STRING("me"), 0, -1000, 0)
     END_SWITCH
     RETURN
 EVT_END()
@@ -879,11 +879,11 @@ EVT_END()
 static EVT_BEGIN(nisemario_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG4_10_DOOPLISS_BATTLE)
-        CALL(evt_npc_set_position, STRING("me"), -8, 670, 81)
-        BREAK_SWITCH
+            CALL(evt_npc_set_position, STRING("me"), -8, 670, 81)
+            BREAK_SWITCH
         CASE_DEFAULT
-        CALL(evt_npc_set_position, STRING("me"), 0, -1000, 0)
-        BREAK_SWITCH
+            CALL(evt_npc_set_position, STRING("me"), 0, -1000, 0)
+            BREAK_SWITCH
     END_SWITCH
     RETURN
 EVT_END()
@@ -963,8 +963,8 @@ EVT_BEGIN(jin_04_jumpstand)
         SWITCH(GSW_STORY_PROGRESS)
             CASE_OR_EQUAL(STG4_09_05_LOCK)
             CASE_OR_EQUAL(STG4_14_NAME_GUESSING)
-            CALL(evt_cam3d_evt_set, -55, 790, 438, -55, 727, 79, 600, EASING_SINE_IN_OUT)
-            CALL(evt_mario_key_onoff, 0)
+                CALL(evt_cam3d_evt_set, -55, 790, 438, -55, 727, 79, 600, EASING_SINE_IN_OUT)
+                CALL(evt_mario_key_onoff, 0)
             CASE_END
         END_SWITCH
         CALL(evt_mario_key_onoff, 0)
@@ -1031,16 +1031,16 @@ EVT_END()
 EVT_BEGIN(jin_04_init_evt)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG4_10_DOOPLISS_BATTLE)
-        CALL(evt_snd_bgmoff, PSND_FADEOUT)
+            CALL(evt_snd_bgmoff, PSND_FADEOUT)
 #if VERSION <= VERSION_DEMO_JP
-        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG4_JIN1"))
-        CALL(evt_snd_set_rev_mode, 2)
+            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG4_JIN1"))
+            CALL(evt_snd_set_rev_mode, 2)
 #else
-        CALL(evt_snd_envoff, PSND_FADEOUT)
+            CALL(evt_snd_envoff, PSND_FADEOUT)
 #endif
         CASE_DEFAULT
-        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG4_JIN1"))
-        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG4_JIN1"))
+            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG4_JIN1"))
+            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG4_JIN1"))
 #if VERSION >= VERSION_JP
     END_SWITCH
 #endif
@@ -1058,20 +1058,20 @@ EVT_BEGIN(jin_04_init_evt)
     CALL(evt_mobj_jumpstand_red, 0, STRING("mobj_jump"), -75, 450, 100, PTR(jin_04_jumpstand), 0)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG4_10_DOOPLISS_BATTLE)
-        CALL(evt_run_case_evt, CASE_STAND_ON, 1, STRING("a_yuka"), 0, PTR(ranperu_toujou), 0)
+            CALL(evt_run_case_evt, CASE_STAND_ON, 1, STRING("a_yuka"), 0, PTR(ranperu_toujou), 0)
         CASE_EQUAL(STG4_14_NAME_GUESSING)
-        CALL_CHILD(yoshi_color)
-        CALL(evt_run_case_evt, CASE_STAND_ON, 1, STRING("a_yuka"), 0, PTR(ranperu_lastbattle), 0)
+            CALL_CHILD(yoshi_color)
+            CALL(evt_run_case_evt, CASE_STAND_ON, 1, STRING("a_yuka"), 0, PTR(ranperu_lastbattle), 0)
         CASE_EQUAL(STG4_10_DOOPLISS_BATTLE)
-        CALL_CHILD(yoshi_color)
-        SET_VALUE(LW(0), 1)
-        SPAWN_EVENT(irekawatta_mario)
+            CALL_CHILD(yoshi_color)
+            SET_VALUE(LW(0), 1)
+            SPAWN_EVENT(irekawatta_mario)
         CASE_EQUAL(STG4_15_DOOPLISS_BATTLE_2)
-        CALL(evt_mario_key_onoff, 0)
-        BEGIN_INLINE_EVENT
-            CALL(evt_seq_wait, SEQ_GAME)
-            SPAWN_EVENT(hontonosugata_mario)
-        END_INLINE_EVENT
+            CALL(evt_mario_key_onoff, 0)
+            BEGIN_INLINE_EVENT
+                CALL(evt_seq_wait, SEQ_GAME)
+                SPAWN_EVENT(hontonosugata_mario)
+            END_INLINE_EVENT
     END_SWITCH
     RETURN
 EVT_END()

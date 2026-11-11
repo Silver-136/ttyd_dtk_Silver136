@@ -60,9 +60,9 @@ EvtWord mri_11_init_evt[192];
 static EVT_BEGIN(toge_7_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG2_26_PRAISE_FROM_THE_PUNI)
-        IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 1)
-            CALL(evt_npc_set_position, STRING("me"), -220, 0, 110)
-        END_IF
+            IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 1)
+                CALL(evt_npc_set_position, STRING("me"), -220, 0, 110)
+            END_IF
     END_SWITCH
     RETURN
 EVT_END()
@@ -74,13 +74,13 @@ EVT_END()
 static EVT_BEGIN(toge_7_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
-        CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
-        CALL(evt_msg_print, 0, STRING("stg2_mri_re_040"), 0, 0)
-        CALL(evt_msg_print, 0, STRING("stg2_mri_re_041"), 0, STRING("me"))
+            CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg2_mri_re_040"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg2_mri_re_041"), 0, STRING("me"))
         CASE_DEFAULT
-        CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
-        CALL(evt_msg_print, 0, STRING("stg2_mri_re_040_1"), 0, 0)
-        CALL(evt_msg_print, 0, STRING("stg2_mri_re_041_1"), 0, STRING("me"))
+            CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg2_mri_re_040_1"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg2_mri_re_041_1"), 0, STRING("me"))
     END_SWITCH
     RETURN
 EVT_END()
@@ -92,9 +92,9 @@ EVT_END()
 static EVT_BEGIN(toge_8_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG2_26_PRAISE_FROM_THE_PUNI)
-        IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 1)
-            CALL(evt_npc_set_position, STRING("me"), -75, 0, -100)
-        END_IF
+            IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 1)
+                CALL(evt_npc_set_position, STRING("me"), -75, 0, -100)
+            END_IF
     END_SWITCH
     RETURN
 EVT_END()
@@ -106,13 +106,13 @@ EVT_END()
 static EVT_BEGIN(toge_8_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
-        CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
-        CALL(evt_msg_print, 0, STRING("stg2_mri_re_042"), 0, 0)
-        CALL(evt_msg_print, 0, STRING("stg2_mri_re_043"), 0, STRING("me"))
+            CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg2_mri_re_042"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg2_mri_re_043"), 0, STRING("me"))
         CASE_DEFAULT
-        CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
-        CALL(evt_msg_print, 0, STRING("stg2_mri_re_042_1"), 0, 0)
-        CALL(evt_msg_print, 0, STRING("stg2_mri_re_043_1"), 0, STRING("me"))
+            CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg2_mri_re_042_1"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg2_mri_re_043_1"), 0, STRING("me"))
     END_SWITCH
     RETURN
 EVT_END()
@@ -124,9 +124,9 @@ EVT_END()
 static EVT_BEGIN(toge_9_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG2_26_PRAISE_FROM_THE_PUNI)
-        IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 1)
-            CALL(evt_npc_set_position, STRING("me"), 70, 0, 80)
-        END_IF
+            IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 1)
+                CALL(evt_npc_set_position, STRING("me"), 70, 0, 80)
+            END_IF
     END_SWITCH
     RETURN
 EVT_END()
@@ -138,13 +138,13 @@ EVT_END()
 static EVT_BEGIN(toge_9_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
-        CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
-        CALL(evt_msg_print, 0, STRING("stg2_mri_re_044"), 0, 0)
-        CALL(evt_msg_print, 0, STRING("stg2_mri_re_045"), 0, STRING("me"))
+            CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg2_mri_re_044"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg2_mri_re_045"), 0, STRING("me"))
         CASE_DEFAULT
-        CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
-        CALL(evt_msg_print, 0, STRING("stg2_mri_re_044_1"), 0, 0)
-        CALL(evt_msg_print, 0, STRING("stg2_mri_re_045_1"), 0, STRING("me"))
+            CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg2_mri_re_044_1"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg2_mri_re_045_1"), 0, STRING("me"))
     END_SWITCH
     RETURN
 EVT_END()
@@ -156,9 +156,9 @@ EVT_END()
 static EVT_BEGIN(toge_10_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG2_26_PRAISE_FROM_THE_PUNI)
-        IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 1)
-            CALL(evt_npc_set_position, STRING("me"), 180, 0, 60)
-        END_IF
+            IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 1)
+                CALL(evt_npc_set_position, STRING("me"), 180, 0, 60)
+            END_IF
     END_SWITCH
     RETURN
 EVT_END()
@@ -181,13 +181,13 @@ EVT_END()
 static EVT_BEGIN(toge_10_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
-        CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
-        CALL(evt_msg_print, 0, STRING("stg2_mri_re_046"), 0, 0)
-        CALL(evt_msg_print, 0, STRING("stg2_mri_re_047"), 0, STRING("me"))
+            CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg2_mri_re_046"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg2_mri_re_047"), 0, STRING("me"))
         CASE_DEFAULT
-        CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
-        CALL(evt_msg_print, 0, STRING("stg2_mri_re_046_1"), 0, 0)
-        CALL(evt_msg_print, 0, STRING("stg2_mri_re_047_1"), 0, STRING("me"))
+            CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg2_mri_re_046_1"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg2_mri_re_047_1"), 0, STRING("me"))
     END_SWITCH
     RETURN
 EVT_END()
@@ -199,9 +199,9 @@ EVT_END()
 static EVT_BEGIN(toge_11_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG2_26_PRAISE_FROM_THE_PUNI)
-        IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 1)
-            CALL(evt_npc_set_position, STRING("me"), -70, 0, -35)
-        END_IF
+            IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 1)
+                CALL(evt_npc_set_position, STRING("me"), -70, 0, -35)
+            END_IF
     END_SWITCH
     RETURN
 EVT_END()
@@ -224,13 +224,13 @@ EVT_END()
 static EVT_BEGIN(toge_11_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
-        CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
-        CALL(evt_msg_print, 0, STRING("stg2_mri_re_048"), 0, 0)
-        CALL(evt_msg_print, 0, STRING("stg2_mri_re_049"), 0, STRING("me"))
+            CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg2_mri_re_048"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg2_mri_re_049"), 0, STRING("me"))
         CASE_DEFAULT
-        CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
-        CALL(evt_msg_print, 0, STRING("stg2_mri_re_048_1"), 0, 0)
-        CALL(evt_msg_print, 0, STRING("stg2_mri_re_049_1"), 0, STRING("me"))
+            CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg2_mri_re_048_1"), 0, 0)
+            CALL(evt_msg_print, 0, STRING("stg2_mri_re_049_1"), 0, STRING("me"))
     END_SWITCH
     RETURN
 EVT_END()
@@ -699,11 +699,11 @@ EVT_BEGIN(mri_11_init_evt)
     CALL_CHILD(evt_sub_kusa_access_entry)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG2_23_TIME_BOMB_ACTIVATED, STG2_23_01_X_NAUT_BATTLE)
-        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_DANGER4"))
-        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_MRI9"))
+            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_DANGER4"))
+            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_MRI9"))
         CASE_DEFAULT
-        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG2_MRI1"))
-        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_MRI8"))
+            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG2_MRI1"))
+            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_MRI8"))
     END_SWITCH
     CALL(evt_map_playanim, STRING("mizu_01"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("mizu_02"), MAP_ANIM_PLAY_LOOP, 0)
