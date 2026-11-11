@@ -2225,6 +2225,11 @@ static void msgWindow_Main(WindowEntry* window) {
                 msgWinNextPage(window);
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_MESSAGE_Z1 | PSND_SFX_BYPASS_MUTE));
             }
+            // BUG (JP and the early demos, fixed in US by the one-key-per-frame else): B and Z pressed in the same
+            // frame are both handled. B sets the last page and REVIEW_DOWN, then Z steps back from the last page
+            // and sets REVIEW_UP. When the window was two or more pages back, that page lies further down than the
+            // current scroll position, so REVIEW_UP's test (scrollPos >= target) never passes and nothing else
+            // leaves the state: the window never closes.
 #if VERSION >= VERSION_US
             else // US and later: one key per frame
 #endif

@@ -318,6 +318,10 @@ void cardCopy2Main(s32 slot) {
     memcpy(&_jdt.readFlags, &save->data.informant, sizeof(InformantReadFlags));
     gp->resetType = 0;
     gp->resetButtonDown = 0;
+    // BUG (JP and the early demos, fixed in US here and in cardWrite): softResetWait is not cleared on save or on
+    // load. A file saved while the soft-reset buttons were held keeps softResetWait set, its old softResetTimeout
+    // and the held buttons (gp->button); after this copy, viPostCallback's reset check sees them before the next
+    // key read, finds the timeout long past and soft-resets, so the file resets the game every time it is loaded.
 #if VERSION >= VERSION_US
     gp->softResetWait = 0;
 #endif

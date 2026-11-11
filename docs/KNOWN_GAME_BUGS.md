@@ -19,6 +19,16 @@ Each entry names the file and the function (or script) that holds the bug, with 
 | `src/driver/msgdrv.c`, `msgAnalize` (the `<select>` tag's `sscanf`) | both | The format has five `%hd` but only four pointers follow, so a `<select>` tag with a fifth number writes it through whatever is in the next argument register. |
 | `src/driver/lightdrv.c`, `lightEntry` (the `name_0000` loop) | both | When the name is taken, the loop formats `uniqueName` from `name` and then points `name` at `uniqueName`; on a second clash `sprintf` reads its own output buffer, so the suffixes stack up (and the copy overlaps). |
 
+## Softlocks and unusable saves
+
+Reported by Zephiles (2026-11-11) and checked against the code.
+
+| Where | Versions | Bug |
+|---|---|---|
+| `src/driver/msgdrv.c`, `msgWindow_Main` (`MSG_WIN_STATE_REVIEW_KEY_WAIT`) | JP and the early demos (fixed in US) | While paging back through a message, several buttons are handled in the same frame. With the window two or more pages back, B and Z together set the last page and then step back one page into `REVIEW_UP`, whose scroll test never passes for a page further down; nothing leaves that state and the window never closes. |
+| `src/manager/cardmgr.c`, `cardWrite` and `cardCopy2Main` (`gp->softResetWait`) | JP and the early demos (fixed in US) | Neither saving nor loading clears `softResetWait`. A file saved while the soft-reset buttons were held keeps the flag, its old timeout and the held buttons, so right after loading it the reset check (`viPostCallback`) soft-resets the game, every time. |
+| `src/mario/mario.c`, `marioCheckMenuDisable` (the Vivian test) | JP and the early demos (fixed in US) | While Mario hides in Vivian's shadow the pause menu is allowed even when a script is using Vivian (`PARTY_FLAG_IS_EVT_USE`), so it can open in the middle of that script. |
+
 ## Wrong logic
 
 | Where | Versions | Bug |
@@ -28,6 +38,7 @@ Each entry names the file and the function (or script) that holds the bug, with 
 | `src/event/evt_mobj.c`, `mobj_lock` (the `pouchCheckItem` result) | JP and the early demos (fixed in US) | For locks with a key list (only `mobj_lock01` in `rels/mri/src/mri_03.c`), the key lock stores the *count* of the key the player holds (from `pouchCheckItem`) instead of its id, and passes that count to `pouchRemoveItem` as an item id. Holding one key removes item id 1. |
 | `src/driver/itemdrv.c`, `itemEntry` (the full-table fallback) | JP and the early demos (fixed in US) | With every item slot in use, only the first slot is checked for a replaceable coin, flower or heart, so a replaceable item in any other slot is never freed for the new one. |
 | `src/driver/npcdrv.c`, `fbatRecoverItems` and `npcGetBackItemEntry` (`itemFlagOn(itemEntry(...))`) | JP (fixed in US) | `itemEntry` returns NULL when no item slot is free, and the result goes straight to `itemFlagOn`, which dereferences it. |
+| `src/mario/mario.c`, `marioFBattlePost` (no partner re-placement before US) | JP and the early demos (fixed in US) | A partner put out after a battle keeps the spot `partyEntry` took from `partyGetAppearPos2` without checking its result: with no follower only the spot behind Mario is tried, and when its wall or floor test fails the partner is still placed at Mario's position or 30 units behind him. US re-places it with `partyGetAppearPos`, which also tries his sides and front. Reported by Zephiles (2026-11-11). |
 | `src/countdown.c`, `countDownSaveReStart` | JP and the early demos (fixed in US) | Once the saved time is past the limit, `limit - ms` is negative and the unsigned compare sees a huge value, so the countdown is not set back to its restart time. |
 | `src/mario/mario_sbr.c`, `marioAdjustMoveDir` | JP and the early demos (fixed in US) | Facing left or right, Mario's move direction is set from 90 degrees in both cases, not 180 and 0 like his display direction. |
 | `src/party/party_motion.c`, `party_motion_jump` (the step limit) | JP and the early demos (fixed in US) | The step limit uses the signed height difference, so for a target below the partner it is negative and the jump distance is clamped to a negative value. |

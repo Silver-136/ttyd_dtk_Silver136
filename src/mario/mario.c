@@ -530,6 +530,9 @@ BOOL marioCheckMenuDisable(void) {
         }
     }
 #else
+    // BUG (JP and the early demos, fixed in US above): while Mario hides in Vivian's shadow the menu is allowed
+    // even when a script is using Vivian (PARTY_FLAG_IS_EVT_USE): this returns before the marioKeyDisable test
+    // below, so the pause menu can open in the middle of that script.
     if (vivianGetStatus() && vivianGetStatus() == VIVIAN_STATUS_HIDDEN) {
         return FALSE;
     }
@@ -654,6 +657,11 @@ void marioFBattlePost(void) {
     partyCtrlOn();
     if (wp->currMotionId == MARIO_MOTION_HAMMER) {
 #else
+    // BUG (JP and the early demos, fixed in US by the block below): a partner put out after the battle
+    // (battle_seq_end's marioPartyEntry, then partyEntry) keeps the spot partyEntry took from partyGetAppearPos2
+    // without checking its result. With no follower that spot is only tried behind Mario; when its wall or floor
+    // test fails, the partner is still placed at Mario's position or 30 units behind him. US and later re-place
+    // it here with partyGetAppearPos, which also tries his sides and front.
 #if VERSION >= VERSION_US
     party = partyGetPtr(marioGetPartyId());
     if (party) {
