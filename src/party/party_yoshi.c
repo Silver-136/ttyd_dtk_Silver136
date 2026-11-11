@@ -251,8 +251,10 @@ void reset_all_ofs(PartyEntry* party) {
     }
 }
 
-/** Switches Yoshi's use motion unless he is still moving under Mario to mount (motion 5); FALSE if refused. */
-// Descriptive name (inline helper; not in the symbol maps).
+/**
+ * Switches Yoshi's use motion unless he is still moving under Mario to mount (motion 5); FALSE if refused.
+ * Descriptive name (inline helper; not in the symbol maps).
+ */
 static inline u32 chgMotion(PartyEntry* party, u8 motion) {
     if (party->useMotionId == 5) {
         return FALSE;
@@ -264,8 +266,8 @@ static inline u32 chgMotion(PartyEntry* party, u8 motion) {
 /**
  * Applies one frame of ride gravity: starts the fall curve the first time,
  * then integrates the jerk and acceleration into party->gravity, capped at -15 per frame.
+ * Descriptive name (inline helper; not in the symbol maps).
  */
-// Descriptive name (inline helper; not in the symbol maps).
 static inline void fall(PartyEntry* party) {
     if (!(party->flags & PARTY_FLAG_IS_FALLING)) {
         party->flags |= PARTY_FLAG_IS_FALLING;

@@ -369,8 +369,8 @@ static inline void jumpSfx(MarioWork* mario) {
 /**
  * Turns camera y-follow back on when the mot_jumpNpc bounce ends on gon_10 (Hooktail Castle),
  * where it would otherwise stay off. US and later only.
+ * Descriptive name (not in the symbol maps).
  */
-// Descriptive name (not in the symbol maps).
 void mot_jumpNpc_post(void) {
     MarioWork* mario = marioGetPtr();
     if (!strcmp(gp->currentMapName, "gon_10") && (mario->dispFlags & MARIO_DISP_FLAG_CAM_FOLLOW_Y_OFF)) {

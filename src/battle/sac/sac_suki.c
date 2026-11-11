@@ -620,8 +620,8 @@ static void disp_2D(CameraId cam, void* param) {
 /**
  * Draws button idx of the previous round's row (side 0, 80 pixels higher) or the current row (side 1),
  * with the pressed icon for buttons already entered.
+ * Descriptive name (not in the symbol maps).
  */
-// Descriptive name (not in the symbol maps).
 #if VERSION >= VERSION_JP
 void _disp_2D(s32 side, s32 idx) {
     SukiWork* w = get_ptr();

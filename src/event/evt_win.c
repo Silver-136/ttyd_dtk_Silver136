@@ -239,16 +239,20 @@ static void unitwin_fmt(char* buf, const char* name, s32 n) {
 }
 #endif
 
-/** Help window update: runs the shared help-window logic. */
-// Descriptive name (not in the symbol maps); placeholder unk_8017597c, JP 0x8017597C. See docs/NAME_PROVENANCE.md.
+/**
+ * Help window update: runs the shared help-window logic.
+ * Descriptive name (not in the symbol maps); placeholder unk_8017597c, JP 0x8017597C. See docs/NAME_PROVENANCE.md.
+ */
 #if VERSION >= VERSION_JP
 void unitwin_help_main(WinMgrEntry* entry) {
     winMgrHelpMain(entry);
 }
 #endif
 
-/** Help window draw: shows the description of the item at the selected counter slot. */
-// Descriptive name (not in the symbol maps); placeholder unk_801758fc, JP 0x801758FC. See docs/NAME_PROVENANCE.md.
+/**
+ * Help window draw: shows the description of the item at the selected counter slot.
+ * Descriptive name (not in the symbol maps); placeholder unk_801758fc, JP 0x801758FC. See docs/NAME_PROVENANCE.md.
+ */
 #if VERSION >= VERSION_JP
 void unitwin_help_disp(WinMgrEntry* entry) {
     UnitWinWork* wp = _wp;
@@ -265,8 +269,8 @@ void unitwin_help_disp(WinMgrEntry* entry) {
  * Draws the shop-point window: the points label and the count,
  * which steps a tenth of the way to Mario's shop points each frame.
  * The label icon differs between Japanese (language 0) and other text.
+ * Descriptive name (not in the symbol maps); placeholder unk_80175710, JP 0x80175710. See docs/NAME_PROVENANCE.md.
  */
-// Descriptive name (not in the symbol maps); placeholder unk_80175710, JP 0x80175710. See docs/NAME_PROVENANCE.md.
 #if VERSION >= VERSION_JP
 void unitwin_point_disp(WinMgrEntry* entry) {
     UnitWinWork* wp = _wp;
@@ -566,8 +570,8 @@ USER_FUNC(unitwincoin_wait) {
 /**
  * Shows (args[0] nonzero) or hides the lottery ticket number (from evt_lottery) in the unit window;
  * it is drawn only while the lottery reports a ticket.
+ * Descriptive name (not in the symbol maps); placeholder unk_8017524c, JP 0x8017524C. See docs/NAME_PROVENANCE.md.
  */
-// Descriptive name (not in the symbol maps); placeholder unk_8017524c, JP 0x8017524C. See docs/NAME_PROVENANCE.md.
 #if VERSION >= VERSION_JP
 USER_FUNC(unitwin_lottery_disp_onoff) {
     s32 on = evtGetValue(event, event->args[0]);
@@ -584,8 +588,8 @@ USER_FUNC(unitwin_lottery_disp_onoff) {
 /**
  * Tells the counter whether the purchase script finished with a sale:
  * args[0] is the unit window work, args[1] nonzero marks the slot sold so its item disappears.
+ * Descriptive name (not in the symbol maps); placeholder unk_801751f8, JP 0x801751F8. See docs/NAME_PROVENANCE.md.
  */
-// Descriptive name (not in the symbol maps); placeholder unk_801751f8, JP 0x801751F8. See docs/NAME_PROVENANCE.md.
 #if VERSION >= VERSION_JP
 USER_FUNC(unitwin_set_bought) {
     EvtWord* args = event->args;

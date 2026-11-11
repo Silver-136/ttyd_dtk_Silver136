@@ -290,8 +290,8 @@ void marioRollFixOn(void) {
 /**
  * 1 when Mario could not unroll right now (locked, under a ceiling, not on the ground,
  * or walls too close around him); the item menu refuses items then.
+ * Descriptive name (not in the symbol maps); placeholder unk_8009fcbc, JP 0x8009FCBC. See docs/NAME_PROVENANCE.md.
  */
-// Descriptive name (not in the symbol maps); placeholder unk_8009fcbc, JP 0x8009FCBC. See docs/NAME_PROVENANCE.md.
 s32 marioRollCancelDisable(void) {
     MarioWork* mario = marioGetPtr();
     if (mario->mot.roll.flags & ROLL_FLAG_FIX) {
@@ -380,8 +380,8 @@ void marioForceRollAnime(void) {
 /**
  * Starts unrolling (sub-motion 0x14) if Mario is in Tube Mode and could stand up here; returns 1 if it started.
  * Used by evt_mario when a script needs Mario out of Tube Mode (JP and later).
+ * Descriptive name (not in the symbol maps); placeholder unk_8009f9c8, JP 0x8009F9C8. See docs/NAME_PROVENANCE.md.
  */
-// Descriptive name (not in the symbol maps); placeholder unk_8009f9c8, JP 0x8009F9C8. See docs/NAME_PROVENANCE.md.
 s32 marioRollTryCancel(void) {
     s32 ret = 0;
     MarioWork* mario = marioGetPtr();

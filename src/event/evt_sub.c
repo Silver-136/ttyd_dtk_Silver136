@@ -1859,8 +1859,10 @@ USER_FUNC(evt_sub_status_gauge_check_update) {
 }
 
 #if VERSION >= VERSION_US
-/** Makes the status bar refresh its numbers at once. Not in JP or the early demos. */
-// Descriptive name (not in the symbol maps).
+/**
+ * Makes the status bar refresh its numbers at once. Not in JP or the early demos.
+ * Descriptive name (not in the symbol maps).
+ */
 USER_FUNC(evt_sub_status_gauge_force_update) {
     statusWinForceUpdate();
     return EVT_RETURN_DONE;

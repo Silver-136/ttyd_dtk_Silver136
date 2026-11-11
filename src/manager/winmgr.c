@@ -259,8 +259,8 @@ USER_FUNC(evt_win_party_lankup_chk) {
  * sets args[0] to 1 when at least two partners have joined,
  * one of them can still be ranked up (same limit as evt_win_party_lankup_chk) and one has a rank to give;
  * otherwise 0.
+ * Descriptive name (not in the symbol maps); placeholder unk_802399f8, JP 0x802399F8. See docs/NAME_PROVENANCE.md.
  */
-// Descriptive name (not in the symbol maps); placeholder unk_802399f8, JP 0x802399F8. See docs/NAME_PROVENANCE.md.
 #if VERSION >= VERSION_JP
 USER_FUNC(evt_win_party_lankdown_chk) {
     PouchData* pouch;

@@ -181,8 +181,8 @@ void nokonoko_move(PartyEntry* party) {
  * Aborts Koops's Shell Toss when Mario gets hurt (called from the damage motion in JP and later):
  * stops the shell-spin sound, restores his flags and standing height and puts him back into follow mode
  * unless he is in run mode 8 or 13.
+ * Descriptive name (not in the symbol maps); placeholder unk_800cd9a0, JP 0x800CD9A0. See docs/NAME_PROVENANCE.md.
  */
-// Descriptive name (not in the symbol maps); placeholder unk_800cd9a0, JP 0x800CD9A0. See docs/NAME_PROVENANCE.md.
 void nokonoko_use_cancel(void) {
     PartyEntry* party;
     marioGetPtr();

@@ -1771,8 +1771,8 @@ static void sort_4_1_func(WindowWork* wp) {
 /**
  * qqsort compare for the equipped badge list (WinBadgeEnt) by name;
  * names go through pouchHiraToKata so hiragana and katakana sort together.
+ * Descriptive name (not in the symbol maps).
  */
-// Descriptive name (not in the symbol maps).
 s32 compare_func4_1(const void* a, const void* b) {
     char buf1[128];
     char buf2[128];
@@ -1784,8 +1784,7 @@ s32 compare_func4_1(const void* a, const void* b) {
     return strcmp(buf1, buf2);
 }
 
-/** Reverse of compare_func4_1. */
-// Descriptive name (not in the symbol maps).
+/** Reverse of compare_func4_1. Descriptive name (not in the symbol maps). */
 s32 compare_func4_1_r(const void* a, const void* b) {
     char buf1[128];
     char buf2[128];
@@ -1797,8 +1796,10 @@ s32 compare_func4_1_r(const void* a, const void* b) {
     return strcmp(buf2, buf1);
 }
 
-/** qqsort compare for the equipped badge list by the item table's type_sort_order. */
-// Descriptive name (not in the symbol maps).
+/**
+ * qqsort compare for the equipped badge list by the item table's type_sort_order.
+ * Descriptive name (not in the symbol maps).
+ */
 s32 compare_func4_2(const void* a, const void* b) {
     s16 ia = itemDataTable[(s16)((WinBadgeEnt*)a)->id].type_sort_order;
     s16 ib = itemDataTable[(s16)((WinBadgeEnt*)b)->id].type_sort_order;
@@ -1811,8 +1812,7 @@ s32 compare_func4_2(const void* a, const void* b) {
     return 0;
 }
 
-/** Reverse of compare_func4_2. */
-// Descriptive name (not in the symbol maps).
+/** Reverse of compare_func4_2. Descriptive name (not in the symbol maps). */
 s32 compare_func4_2_r(const void* a, const void* b) {
     s16 ia = itemDataTable[(s16)((WinBadgeEnt*)a)->id].type_sort_order;
     s16 ib = itemDataTable[(s16)((WinBadgeEnt*)b)->id].type_sort_order;
@@ -2961,8 +2961,8 @@ void winRootBgCaptureDisp(CameraId unused, void* param) {
 /**
  * Draws the frame captured by winRootBgCaptureDisp full screen as the menu's backdrop,
  * queued each frame by winRootMain, so the field can stay switched off while the menu is open.
+ * Descriptive name (not in the symbol maps); placeholder unk_8014d338, JP 0x8014D338. See docs/NAME_PROVENANCE.md.
  */
-// Descriptive name (not in the symbol maps); placeholder unk_8014d338, JP 0x8014D338. See docs/NAME_PROVENANCE.md.
 #if VERSION >= VERSION_JP
 void winRootBgDrawDisp(CameraId unused, void* param) {
     WindowWork* bg = param;

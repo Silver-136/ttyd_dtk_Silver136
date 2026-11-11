@@ -126,8 +126,8 @@ static void shipMove(void);
 /**
  * Facing bit of the boat (motShip flag 2) for the partner follow code in party.c,
  * which seats the partners on the matching side; 0 when no boat work is allocated.
+ * Descriptive name (not in the symbol maps).
  */
-// Descriptive name (not in the symbol maps).
 s32 marioShipGetDir(void) {
     marioGetPtr();
     if (marioGetPtr()->motStruct != NULL) {

@@ -451,8 +451,10 @@ static BOOL itemGetNokoCheck(ItemEntry* entry) {
 #endif
 }
 
-/** Returns TRUE while any item is in its get sequence (mode 2); NPC updates, shops and menus wait on it. */
-// Descriptive name (not in the symbol maps).
+/**
+ * Returns TRUE while any item is in its get sequence (mode 2); NPC updates, shops and menus wait on it.
+ * Descriptive name (not in the symbol maps).
+ */
 BOOL itemPickUpFromFieldCheck(void) {
     ItemWork* wp = itemGetWork();
     ItemEntry* entry;

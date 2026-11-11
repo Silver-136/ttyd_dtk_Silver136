@@ -110,8 +110,8 @@ USER_FUNC(evt_gor_msg_cat_free) {
  * the message named args[1] and args[2], in a map-allocated buffer,
  * and writes the buffer's address into args[3].
  * Used to put fixed text around a looked-up message in Rogueport scripts.
+ * Descriptive name (not in the symbol maps); placeholder unk_gor_0000041c, JP gor .text+0x350. See docs/NAME_PROVENANCE.md.
  */
-// Descriptive name (not in the symbol maps); placeholder unk_gor_0000041c, JP gor .text+0x350. See docs/NAME_PROVENANCE.md.
 #if VERSION >= VERSION_JP
 /**
  * Script helper (Japanese release and later): builds one string out of args[0],
@@ -201,8 +201,8 @@ USER_FUNC(evt_goki_sub_intpl_get_value) {
 /**
  * Script helper (Japanese release and later): remembers the sound effect id args[0] of Mario's snoring
  * so it can be stopped later (-1 for none).
+ * Descriptive name (not in the symbol maps); placeholder unk_gor_00000104, JP gor .text+0x38. See docs/NAME_PROVENANCE.md.
  */
-// Descriptive name (not in the symbol maps); placeholder unk_gor_00000104, JP gor .text+0x38. See docs/NAME_PROVENANCE.md.
 #if VERSION >= VERSION_JP
 /**
  * Script helper (Japanese release and later): remembers the sound effect id args[0] of Mario's snoring
@@ -217,8 +217,8 @@ USER_FUNC(evt_gor_inemuri_snd_set) {
 /**
  * Script helper (Japanese release and later): stops the snoring sound effect saved by evt_gor_inemuri_snd_set,
  * if any.
+ * Descriptive name (not in the symbol maps); placeholder unk_gor_000000cc, JP gor .text+0x0. See docs/NAME_PROVENANCE.md.
  */
-// Descriptive name (not in the symbol maps); placeholder unk_gor_000000cc, JP gor .text+0x0. See docs/NAME_PROVENANCE.md.
 #if VERSION >= VERSION_JP
 /**
  * Script helper (Japanese release and later): stops the snoring sound effect saved by evt_gor_inemuri_snd_set,

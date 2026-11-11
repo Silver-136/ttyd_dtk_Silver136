@@ -33,8 +33,8 @@ static s32 vivian_cancel_req;
 /**
  * Re-applies Mario's sunk-into-the-shadow look (the "p_bibi" paper pose M_B_3 / PM_B_1, held at frame 24)
  * when mario.c refreshes his animation during the Vivian motion. Not in the early demos.
+ * Descriptive name (not in the symbol maps).
  */
-// Descriptive name (not in the symbol maps).
 void marioForceVivianAnime(void) {
     // FAKE: padding constant kept in .sdata2 by explicit_zero_data and the (void)& use; removing it changes the section layout
     static const u32 gap_09_8041DF6C_sdata2 = 0;
@@ -216,8 +216,8 @@ void partyVivianTailStart(PartyEntry* party) {
  * Whether party.c draws Vivian's shadow tail this frame:
  * only for Vivian, with the tail not hidden, on screen,
  * and not while Fahr Outpost's bom_01 has parked her at y = -1000.
+ * Descriptive name (not in the symbol maps).
  */
-// Descriptive name (not in the symbol maps).
 BOOL vivianDisplayTailCheck(PartyEntry* party) {
     if (party->currentMemberId != PARTY_VIVIAN) {
         return FALSE;

@@ -57,8 +57,8 @@ void partyResetTouchWallCt(void) {
 /**
  * Makes the partner follow at close distance and keep up with Mario's speed;
  * evt_mario door and pipe moves turn it on while Mario walks through.
+ * Descriptive name (not in the symbol maps).
  */
-// Descriptive name (not in the symbol maps).
 #if VERSION >= VERSION_JP
 
 void partyFollowCloseOn(PartyEntry* party) {
@@ -66,8 +66,7 @@ void partyFollowCloseOn(PartyEntry* party) {
 }
 #endif
 
-/** Back to normal follow distance after a door or pipe move (evt_mario). */
-// Descriptive name (not in the symbol maps).
+/** Back to normal follow distance after a door or pipe move (evt_mario). Descriptive name (not in the symbol maps). */
 #if VERSION >= VERSION_JP
 
 void partyFollowCloseOff(PartyEntry* party) {
@@ -365,8 +364,8 @@ void party_motion_stay(PartyEntry* party) {
  * Motion 0 of the wait move mode: stands, clears the footmarks on entry
  * and goes back to run mode 2 once Mario is over 31 units away;
  * then the same floor, talk and Ms. Mowz handling as party_motion_stay.
+ * Descriptive name (not in the symbol maps); placeholder unk_8014bbc8, JP 0x8014BBC8. See docs/NAME_PROVENANCE.md.
  */
-// Descriptive name (not in the symbol maps); placeholder unk_8014bbc8, JP 0x8014BBC8. See docs/NAME_PROVENANCE.md.
 #if VERSION >= VERSION_JP
 
 void party_motion_wait(PartyEntry* party) {
@@ -425,8 +424,8 @@ void party_motion_wait(PartyEntry* party) {
 /**
  * Head and floor probe for a walking partner: snaps it to the floor, flags shallow water and damage floors,
  * falls (motion 3) or splashes when there is none, and jumps off objects that cannot be stood on.
+ * Descriptive name (not in the symbol maps); placeholder unk_8014ba3c, JP 0x8014BA3C. See docs/NAME_PROVENANCE.md.
  */
-// Descriptive name (not in the symbol maps); placeholder unk_8014ba3c, JP 0x8014BA3C. See docs/NAME_PROVENANCE.md.
 #if VERSION >= VERSION_JP
 
 void partyWalkChkGnd(PartyEntry* party) {
@@ -582,8 +581,8 @@ static inline void partyFlyHeadCheck(PartyEntry* party) {
  * JP and later: keeps a flying partner at Mario's height or the floor's,
  * whichever is higher (faster when below the floor), and hands floors with attribute 0x800 to run mode 13.
  * US and later also push it down from las_10's ceilings.
+ * Descriptive name (not in the symbol maps); placeholder unk_8014b824, JP 0x8014B824. See docs/NAME_PROVENANCE.md.
  */
-// Descriptive name (not in the symbol maps); placeholder unk_8014b824, JP 0x8014B824. See docs/NAME_PROVENANCE.md.
 #if VERSION >= VERSION_JP
 
 void partyFlyAdjustY(PartyEntry* party) {

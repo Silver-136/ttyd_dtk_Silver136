@@ -903,8 +903,10 @@ s32 kpaGetAttackMode(void) {
     return marioGetPtr()->kpaWork->attackState != KPA_ATTACK_NONE;
 }
 
-/** Removes the fire breath effect and stops its sound. Called by the kpa map scripts. */
-// Descriptive name (not in the symbol maps); placeholder unk_801f8cd0, JP 0x801F8CD0. See docs/NAME_PROVENANCE.md.
+/**
+ * Removes the fire breath effect and stops its sound. Called by the kpa map scripts.
+ * Descriptive name (not in the symbol maps); placeholder unk_801f8cd0, JP 0x801F8CD0. See docs/NAME_PROVENANCE.md.
+ */
 void kpaFireDelete(void) {
     if (fireefp) {
         effSoftDelete(fireefp);

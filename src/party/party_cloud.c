@@ -285,8 +285,8 @@ f32 cloudGetBreathDist(void) {
  * Lets Flurrie follow and bob again after a cutscene froze her,
  * and puts her back in her standing pose (PWD_S_1).
  * Called by the evt_party_cloud_lock_animations_on_off script helper (US and later).
+ * Descriptive name (not in the symbol maps).
  */
-// Descriptive name (not in the symbol maps).
 void cloudLockAnimationsOff(PartyEntry* party) {
     party->work.cloud.lockAnims = 0;
     partyChgPose(party, "PWD_S_1");
@@ -295,8 +295,8 @@ void cloudLockAnimationsOff(PartyEntry* party) {
 /**
  * Freezes Flurrie for a cutscene: cloud_move stops following and bobbing, and she takes pose PWD_Z_1.
  * Called by the evt_party_cloud_lock_animations_on_off script helper (US and later).
+ * Descriptive name (not in the symbol maps).
  */
-// Descriptive name (not in the symbol maps).
 void cloudLockAnimationsOn(PartyEntry* party) {
     party->work.cloud.lockAnims = 1;
     partyChgPose(party, "PWD_Z_1");
@@ -430,8 +430,8 @@ void cloud_use(PartyEntry* party) {
  * The gust itself: Flurrie moves beside Mario over 4 frames,
  * then blows while X is held (or for actionTime ms when a script started it),
  * casting the rays map objects and NPCs read; 200 ms after release she goes back to following.
+ * Descriptive name (not in the symbol maps).
  */
-// Descriptive name (not in the symbol maps).
 void _cloud_use(PartyEntry* party) {
 #endif
     MarioWork* mario = party->playerPtr;

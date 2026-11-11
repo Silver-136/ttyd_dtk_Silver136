@@ -859,8 +859,8 @@ static inline void partyChgRunMo(PartyEntry* party);
  * gets off a ride (11) unless she is leaving, ends the hello pop-out (4) back into following,
  * shows the shadow again after riding Yoshi (12), ends her ability (3),
  * and drops the paper slit from waiting/following.
+ * Descriptive name (not in the symbol maps).
  */
-// Descriptive name (not in the symbol maps).
 #if VERSION <= VERSION_DEMO_JP
 /** the early demos only leave the hello state (4) and run the post function (3) on a run-mode change */
 static inline void partyLeaveRunMode(PartyEntry* party) {

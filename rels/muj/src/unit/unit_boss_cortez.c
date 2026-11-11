@@ -2979,8 +2979,10 @@ static USER_FUNC(_cortez_check_drain_audience) {
     return EVT_RETURN_DONE;
 }
 
-/** Script helper: writes the current volume of sound effect args[0] to args[1]. */
-// Descriptive name (not in the symbol maps); placeholder unk_muj_0000652c, JP muj .text+0x6468. See docs/NAME_PROVENANCE.md.
+/**
+ * Script helper: writes the current volume of sound effect args[0] to args[1].
+ * Descriptive name (not in the symbol maps); placeholder unk_muj_0000652c, JP muj .text+0x6468. See docs/NAME_PROVENANCE.md.
+ */
 #if VERSION >= VERSION_JP
 USER_FUNC(_cortez_get_sfx_vol) {
     EvtWord* args = event->args;

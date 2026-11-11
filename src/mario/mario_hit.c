@@ -2637,8 +2637,8 @@ HitEntry* dou10_yoko_yari2(f32* out) {
 /**
  * Spear check on dou_10 for tube mode (mario.c): unfiltered rays 40 along +z from 10 ahead of and behind Mario;
  * a hit becomes hitobjFront, and mario.c hurts him if it has the spike attribute 0x800.
+ * Descriptive name (not in the symbol maps).
  */
-// Descriptive name (not in the symbol maps).
 #if VERSION >= VERSION_JP
 
 HitEntry* dou10_yoko_yari3(void) {

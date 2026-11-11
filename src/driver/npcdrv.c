@@ -3893,8 +3893,8 @@ BOOL npcCheckBlow(NpcEntry* npc) {
 /**
  * TRUE while a field battle mode other than off, normal or 8 is active (talk, battle, menu, ...),
  * so item pick-ups and case events wait.
+ * Descriptive name (not in the symbol maps).
  */
-// Descriptive name (not in the symbol maps).
 BOOL fbatPreventMarioEventChk(void) {
     s32 mode = gp->fbatData->mode;
     if (mode != 0 && mode != 1 && mode != 8) {

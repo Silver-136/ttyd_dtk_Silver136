@@ -2566,8 +2566,8 @@ static void stg8_15_init(void) {
  * Story point STG9_02 "Return to Rogueport" (gor_00):
  * after the ending, marks Trouble 16 solved and has Ms. Mowz join.
  * Not used in the early demos, whose STG9_02 entry has no setup.
+ * Descriptive name (not in the symbol maps).
  */
-// Descriptive name (not in the symbol maps).
 void stg9_02_init(void) {
     swSet(GSWF_TROUBLE_16_SOLVED);
     partyJoin(PARTY_MS_MOWZ);

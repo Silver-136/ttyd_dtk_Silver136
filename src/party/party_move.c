@@ -824,8 +824,10 @@ static inline f32 partyChkUpdSpd(PartyEntry* party) {
     return partyUpdSpd2(party);
 }
 
-/** Sets targetSpeed (0 = stop); when nonzero requests an easing step unless forced to move, jumping, falling or climbing a step. Returns spd. */
-// Descriptive name (not in the symbol maps); placeholder unk_800c93d0, JP 0x800C93D0. See docs/NAME_PROVENANCE.md.
+/**
+ * Sets targetSpeed (0 = stop); when nonzero requests an easing step unless forced to move, jumping, falling or climbing a step. Returns spd.
+ * Descriptive name (not in the symbol maps); placeholder unk_800c93d0, JP 0x800C93D0. See docs/NAME_PROVENANCE.md.
+ */
 #if VERSION >= VERSION_JP
 
 f32 partySetTargetSpd(PartyEntry* party, f32 spd) {
@@ -842,8 +844,8 @@ f32 partySetTargetSpd(PartyEntry* party, f32 spd) {
 /**
  * Sets both targetSpeed and moveSpeed at once to spd scaled by Mario's playerGravity (0.75 in shallow water),
  * with no easing. Returns spd.
+ * Descriptive name (not in the symbol maps); placeholder unk_800c9398, JP 0x800C9398. See docs/NAME_PROVENANCE.md.
  */
-// Descriptive name (not in the symbol maps); placeholder unk_800c9398, JP 0x800C9398. See docs/NAME_PROVENANCE.md.
 #if VERSION >= VERSION_JP
 
 f32 partyForceSetSpd(PartyEntry* party, f32 spd) {
@@ -857,8 +859,8 @@ f32 partyForceSetSpd(PartyEntry* party, f32 spd) {
 /**
  * One speed-easing step for this frame (partyUpdSpd) unless the partner is forced to move or is jumping,
  * falling or climbing a step; returns moveSpeed. Koops and Ms. Mowz call it from their walks.
+ * Descriptive name (not in the symbol maps); placeholder unk_800c92c4, JP 0x800C92C4. See docs/NAME_PROVENANCE.md.
  */
-// Descriptive name (not in the symbol maps); placeholder unk_800c92c4, JP 0x800C92C4. See docs/NAME_PROVENANCE.md.
 #if VERSION >= VERSION_JP
 
 f32 partyUpdMoveSpd(PartyEntry* party) {
@@ -869,8 +871,10 @@ f32 partyUpdMoveSpd(PartyEntry* party) {
 }
 #endif
 
-/** Plays the partner landing sound (0x928) at the partner, when a jump or fall ends (party_motion.c). */
-// Descriptive name (not in the symbol maps).
+/**
+ * Plays the partner landing sound (0x928) at the partner, when a jump or fall ends (party_motion.c).
+ * Descriptive name (not in the symbol maps).
+ */
 #if VERSION >= VERSION_JP
 
 void partyPlaySfxPartyLanding1(PartyEntry* party) {
@@ -949,8 +953,8 @@ void partyWalkSe(PartyEntry* party, s32 arg) {
  * Puts the partner in its standing pose (1), or the sleep pose (6) while Mario is deeply asleep
  * or PARTY_FLAG_SLEEP_ON is set. Ms. Mowz keeps her pose while chuchu_searchObject finds something to sniff out.
  * Does nothing in run mode 0.
+ * Descriptive name (not in the symbol maps); placeholder unk_800c9044, JP 0x800C9044. See docs/NAME_PROVENANCE.md.
  */
-// Descriptive name (not in the symbol maps); placeholder unk_800c9044, JP 0x800C9044. See docs/NAME_PROVENANCE.md.
 #if VERSION >= VERSION_JP
 
 void partyChgStayPose(PartyEntry* party) {
@@ -1005,8 +1009,8 @@ void partyMoveAnime(PartyEntry* party, f32 spd) {
  * Turns the partner's sprite to face Mario on screen:
  * displayDirectionTarget 180 when Mario is on its left in the camera's view, else 0.
  * Used by evt_mario.c and party_motion.c.
+ * Descriptive name (not in the symbol maps); placeholder unk_800c8e74, JP 0x800C8E74. See docs/NAME_PROVENANCE.md.
  */
-// Descriptive name (not in the symbol maps); placeholder unk_800c8e74, JP 0x800C8E74. See docs/NAME_PROVENANCE.md.
 #if VERSION >= VERSION_JP
 
 void partySetDispDirToMario(PartyEntry* party) {
@@ -1024,8 +1028,8 @@ void partySetDispDirToMario(PartyEntry* party) {
 /**
  * TRUE when hit belongs to a map object a partner must not stand on (the objNames list: chests, jump stands,
  * Save and Heart Blocks, switches). party_motion.c then hops the partner off it (partyGetAppearPos5).
+ * Descriptive name (not in the symbol maps); placeholder unk_800c8dd0, JP 0x800C8DD0. See docs/NAME_PROVENANCE.md.
  */
-// Descriptive name (not in the symbol maps); placeholder unk_800c8dd0, JP 0x800C8DD0. See docs/NAME_PROVENANCE.md.
 #if VERSION >= VERSION_JP
 
 BOOL partyChkNoStandMobj(HitEntry* hit) {

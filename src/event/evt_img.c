@@ -231,8 +231,7 @@ USER_FUNC(evt_img_set_color) {
     return EVT_RETURN_DONE;
 }
 
-/** Sets the draw order value of image args[0] to the float args[1]. */
-// Descriptive name (not in the symbol maps).
+/** Sets the draw order value of image args[0] to the float args[1]. Descriptive name (not in the symbol maps). */
 USER_FUNC(evt_img_set_z) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);

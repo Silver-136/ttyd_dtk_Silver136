@@ -396,8 +396,8 @@ static USER_FUNC(evt_rankingReInit) {
  * Script helper (no arguments): resets the Glitz Pit to its starting state.
  * Removes item 0x41 from the pouch, clears the lost flag of fighters 0 to 19
  * and the first-match/champion/title-match/last-opponent flags, then rebuilds the ranking.
+ * Descriptive name (not in the symbol maps); placeholder unk_tou_00002e24, JP tou .text+0x2D60. See docs/NAME_PROVENANCE.md.
  */
-// Descriptive name (not in the symbol maps); placeholder unk_tou_00002e24, JP tou .text+0x2D60. See docs/NAME_PROVENANCE.md.
 #if VERSION >= VERSION_JP
 USER_FUNC(evt_rankingReset) {
     s32 i;
@@ -1410,8 +1410,10 @@ USER_FUNC(evt_tou_print_ranking) {
 }
 
 #if VERSION >= VERSION_US
-/** Script helper: args[0] receives 1 if Mario's key input or control is currently disabled, else 0. */
-// Descriptive name (not in the symbol maps); placeholder unk_tou_000005d0, JP tou .text+0x50C. See docs/NAME_PROVENANCE.md.
+/**
+ * Script helper: args[0] receives 1 if Mario's key input or control is currently disabled, else 0.
+ * Descriptive name (not in the symbol maps); placeholder unk_tou_000005d0, JP tou .text+0x50C. See docs/NAME_PROVENANCE.md.
+ */
 USER_FUNC(tou_mario_keyoff_check) {
     EvtWord* args = event->args;
 
@@ -2839,8 +2841,10 @@ static USER_FUNC(chk) {
     return EVT_RETURN_DONE;
 }
 
-/** Script helper: waits until Mario has been idle, walking or dashing (and not locked out) for 241 frames in total. */
-// Descriptive name (not in the symbol maps); placeholder unk_tou_0000063c, JP tou .text+0x578. See docs/NAME_PROVENANCE.md.
+/**
+ * Script helper: waits until Mario has been idle, walking or dashing (and not locked out) for 241 frames in total.
+ * Descriptive name (not in the symbol maps); placeholder unk_tou_0000063c, JP tou .text+0x578. See docs/NAME_PROVENANCE.md.
+ */
 // Accumulate 241 eligible checks; ineligible controls or motions pause rather than reset the count.
 #if VERSION >= VERSION_JP
 USER_FUNC(tou_mario_free_wait) {
@@ -2866,8 +2870,10 @@ USER_FUNC(tou_mario_talk_end_wait) {
     return marioGetPtr()->currMotionId != MARIO_MOTION_TALK ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }
 #else
-/** Script helper: args[0] receives 1 if Mario's key input or control is currently disabled, else 0. */
-// Descriptive name (not in the symbol maps); placeholder unk_tou_000005d0, JP tou .text+0x50C. See docs/NAME_PROVENANCE.md.
+/**
+ * Script helper: args[0] receives 1 if Mario's key input or control is currently disabled, else 0.
+ * Descriptive name (not in the symbol maps); placeholder unk_tou_000005d0, JP tou .text+0x50C. See docs/NAME_PROVENANCE.md.
+ */
 #if VERSION >= VERSION_JP
 USER_FUNC(tou_mario_keyoff_check) {
     EvtWord* args = event->args;

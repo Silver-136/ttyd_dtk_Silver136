@@ -94,8 +94,8 @@ void marioBottomless(void) {
 /**
  * Saves where Mario respawns after falling out of the map:
  * an entrance (evt_bero.c) or the boat's landing spot, 37 units above the given point.
+ * Descriptive name (not in the symbol maps).
  */
-// Descriptive name (not in the symbol maps).
 #if VERSION >= VERSION_JP
 
 void marioSetBottomlessRespawnPosOnBeroEntry(f32 x, f32 y, f32 z) {
@@ -107,8 +107,10 @@ void marioSetBottomlessRespawnPosOnBeroEntry(f32 x, f32 y, f32 z) {
 }
 #endif
 
-/** Saves the bottomless-pit respawn point as given; set from seq_mapchange.c to 10 above Mario on map entry. */
-// Descriptive name (not in the symbol maps).
+/**
+ * Saves the bottomless-pit respawn point as given; set from seq_mapchange.c to 10 above Mario on map entry.
+ * Descriptive name (not in the symbol maps).
+ */
 #if VERSION >= VERSION_JP
 
 void marioSetBottomlessRespawnPos(f32 x, f32 y, f32 z) {
@@ -123,8 +125,8 @@ void marioSetBottomlessRespawnPos(f32 x, f32 y, f32 z) {
 /**
  * Makes falling out of the map reload the current map at its entrance instead of respawning;
  * set when Mario enters a map as the boat.
+ * Descriptive name (not in the symbol maps).
  */
-// Descriptive name (not in the symbol maps).
 #if VERSION >= VERSION_JP
 
 void marioReloadMapOnBottomlessOn(void) {
@@ -133,8 +135,10 @@ void marioReloadMapOnBottomlessOn(void) {
 }
 #endif
 
-/** Goes back to respawning at the saved point after a fall; cleared when the boat lands. */
-// Descriptive name (not in the symbol maps).
+/**
+ * Goes back to respawning at the saved point after a fall; cleared when the boat lands.
+ * Descriptive name (not in the symbol maps).
+ */
 #if VERSION >= VERSION_JP
 
 void marioReloadMapOnBottomlessOff(void) {
@@ -546,8 +550,8 @@ void marioGetStick(f32* dir, f32* mag) {
 /**
  * How far the main stick is pushed: 0 neutral, 1 a little, 2 past radius 55;
  * partner walking picks its walk or run pose from it.
+ * Descriptive name (not in the symbol maps).
  */
-// Descriptive name (not in the symbol maps).
 s32 marioGetMovementSpeed(void) {
     MarioWork* mario = marioGetPtr();
     s8 x = mario->wStickDir1;

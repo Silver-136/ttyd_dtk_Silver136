@@ -22,8 +22,8 @@ void systemErrorHandler(OSError error, OSContext* context, u32 dsisr, u32 dar);
 /**
  * Installs systemErrorHandler for the DSI, ISI and program exceptions (bad data access, bad instruction fetch,
  * illegal instruction). Called once from marioStInit.
+ * Descriptive name (not in the symbol maps).
  */
-// Descriptive name (not in the symbol maps).
 void setupErrorHandler(void) {
     OSSetErrorHandler(OS_ERROR_DSI, (OSErrorHandler)systemErrorHandler);
     OSSetErrorHandler(OS_ERROR_ISI, (OSErrorHandler)systemErrorHandler);
@@ -39,8 +39,8 @@ void setupErrorHandler(void) {
  * US and later scroll the text upward, scale it 0.8 wide and 1.0 high instead of 0.5 by 0.5,
  * and halt once it has scrolled off.
  * Debug mode (-1) comes from the title-screen button code X, B, R, B, Y, L (seq_title.c).
+ * Descriptive name (not in the symbol maps).
  */
-// Descriptive name (not in the symbol maps).
 void systemErrorHandler(OSError error, OSContext* context, u32 dsisr, u32 dar) {
     // registers
     signed char* textBase;

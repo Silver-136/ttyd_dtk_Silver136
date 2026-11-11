@@ -215,8 +215,8 @@ void __memFree(HEAP_TYPE heap, void* ptr) {
 /**
  * US and later: carves a 0x64000-byte sub-heap out of the map heap for the battle's own map allocations (battle.c
  * allocates from it). Called when a battle starts (seq_battle); replaces JP's fixed battle heap.
+ * Descriptive name (not in the symbol maps).
  */
-// Descriptive name (not in the symbol maps).
 void battleMapAlloc(void) {
     MapAllocEntry* entry;
     u32 size;
@@ -230,8 +230,10 @@ void battleMapAlloc(void) {
     entry->inuse = 0;
 }
 
-/** US and later: returns the battle map sub-heap to the map heap when the battle ends (seq_battle). */
-// Descriptive name (not in the symbol maps).
+/**
+ * US and later: returns the battle map sub-heap to the map heap when the battle ends (seq_battle).
+ * Descriptive name (not in the symbol maps).
+ */
 void battleMapFree(void) {
     (_mapFree)(mapalloc_base_ptr, R_battlemapalloc_base_ptr);
     R_battlemapalloc_base_ptr = NULL;

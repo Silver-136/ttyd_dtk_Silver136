@@ -1945,8 +1945,8 @@ static USER_FUNC(fune_eff) {
  * Script helper: bends a ship position (GW(0), GW(1), GW(2)) onto a large circle of radius 6000
  * so the ship follows the curve of the horizon,
  * writing the result to LW(7) to LW(9) and the added heading to LW(0).
+ * Descriptive name (not in the symbol maps); placeholder unk_muj_00004328, JP muj .text+0x4264. See docs/NAME_PROVENANCE.md.
  */
-// Descriptive name (not in the symbol maps); placeholder unk_muj_00004328, JP muj .text+0x4264. See docs/NAME_PROVENANCE.md.
 #if VERSION >= VERSION_JP
 USER_FUNC(fune_curve_pos) {
     f32 x = evtGetFloat(event, GW(0));

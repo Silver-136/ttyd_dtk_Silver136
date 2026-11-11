@@ -73,8 +73,8 @@ USER_FUNC(evt_party_dispflg_onoff) {
 /**
  * Sets or clears PartyTrigFlags bits on a partner slot.
  * args: slot (0 = active partner, else follower), the mask (literal), on/off.
+ * Descriptive name (not in the symbol maps); placeholder unk_800e71bc, JP 0x800E71BC. See docs/NAME_PROVENANCE.md.
  */
-// Descriptive name (not in the symbol maps); placeholder unk_800e71bc, JP 0x800E71BC. See docs/NAME_PROVENANCE.md.
 USER_FUNC(evt_party_trigflg_onoff) {
     PartyEntry* p;
     int mask;
@@ -1101,8 +1101,7 @@ USER_FUNC(evt_party_cloud_breathout) {
 
 #if VERSION >= VERSION_US
 
-/** US and later only. */
-// Descriptive name (not in the symbol maps).
+/** US and later only. Descriptive name (not in the symbol maps). */
 USER_FUNC(evt_party_cloud_lock_animations_on_off) {
     PartyEntry* p;
     EvtWord* args = event->args;

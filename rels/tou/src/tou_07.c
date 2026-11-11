@@ -96,8 +96,10 @@ USER_FUNC(tou_07_mario_keyoff_check) {
 }
 #endif
 
-/** Script helper: re-enables sound effects (clears the SFX mute flag). */
-// Descriptive name (not in the symbol maps); placeholder unk_tou_00006bd8, JP tou .text+0x6B14. See docs/NAME_PROVENANCE.md.
+/**
+ * Script helper: re-enables sound effects (clears the SFX mute flag).
+ * Descriptive name (not in the symbol maps); placeholder unk_tou_00006bd8, JP tou .text+0x6B14. See docs/NAME_PROVENANCE.md.
+ */
 #if VERSION >= VERSION_JP
 USER_FUNC(tou_07_snd_on) {
     psndClearFlag(PSND_FLAG_MUTE_SFX);
@@ -105,8 +107,10 @@ USER_FUNC(tou_07_snd_on) {
 }
 #endif
 
-/** Script helper: mutes sound effects (sets the SFX mute flag), used while Mario sleeps in the bed. */
-// Descriptive name (not in the symbol maps); placeholder unk_tou_00006c00, JP tou .text+0x6B3C. See docs/NAME_PROVENANCE.md.
+/**
+ * Script helper: mutes sound effects (sets the SFX mute flag), used while Mario sleeps in the bed.
+ * Descriptive name (not in the symbol maps); placeholder unk_tou_00006c00, JP tou .text+0x6B3C. See docs/NAME_PROVENANCE.md.
+ */
 #if VERSION >= VERSION_JP
 USER_FUNC(tou_07_snd_off) {
     psndSetFlag(PSND_FLAG_MUTE_SFX);
@@ -929,8 +933,10 @@ static USER_FUNC(paper_on) {
     return EVT_RETURN_BLOCK;
 }
 
-/** Script helper: hides the belt item's icon. */
-// Descriptive name (not in the symbol maps); placeholder unk_tou_00006cfc, JP tou .text+0x6C38. See docs/NAME_PROVENANCE.md.
+/**
+ * Script helper: hides the belt item's icon.
+ * Descriptive name (not in the symbol maps); placeholder unk_tou_00006cfc, JP tou .text+0x6C38. See docs/NAME_PROVENANCE.md.
+ */
 #if VERSION >= VERSION_JP
 USER_FUNC(tou_07_icon_off) {
     iconFlagOn(itemNameToPtr("belt")->name, ICON_FLAG_HIDDEN);
@@ -941,8 +947,8 @@ USER_FUNC(tou_07_icon_off) {
 /**
  * Script helper: moves the belt's star stone effect ("belt")
  * and the belt NPC (ベルト) to camera 7 (CAMERA_3D_EFFECTB).
+ * Descriptive name (not in the symbol maps); placeholder unk_tou_00006d34, JP tou .text+0x6C70. See docs/NAME_PROVENANCE.md.
  */
-// Descriptive name (not in the symbol maps); placeholder unk_tou_00006d34, JP tou .text+0x6C70. See docs/NAME_PROVENANCE.md.
 #if VERSION >= VERSION_JP
 USER_FUNC(tou_07_belt_camid) {
     EffectEntry* eff = effNameToPtr("belt");

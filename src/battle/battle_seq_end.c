@@ -1468,8 +1468,10 @@ USER_FUNC(_set_initial_upgrade_cursor_position) {
     return 2;
 }
 
-/** US and later: draws the select_HPFPBP prompt (choose one to upgrade) in a window near the bottom of the screen. */
-// Descriptive name (not in the symbol maps).
+/**
+ * US and later: draws the select_HPFPBP prompt (choose one to upgrade) in a window near the bottom of the screen.
+ * Descriptive name (not in the symbol maps).
+ */
 void _draw_select_one_to_upgrade_text(CameraId camId, void* param) {
     const char* msg;
     u16 lines;
@@ -1491,8 +1493,8 @@ void _draw_select_one_to_upgrade_text(CameraId camId, void* param) {
 /**
  * US and later script helper: queues _draw_select_one_to_upgrade_text for one frame;
  * the level-up show calls it every frame until the first stick press.
+ * Descriptive name (not in the symbol maps).
  */
-// Descriptive name (not in the symbol maps).
 USER_FUNC(_display_select_one_to_upgrade_text) {
     dispEntry(CAMERA_2D, 900.0f, DISP_MODE_ALPHA_TEST, _draw_select_one_to_upgrade_text, _battleWorkPointer);
     return 2;

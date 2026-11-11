@@ -228,8 +228,8 @@ void _unresolved(void) {
 /**
  * Map TEV callback that makes a model draw as a flat white silhouette:
  * it replaces the colour of the stage before the callback's stage with solid white (colour inputs 0, 0, 0 and 1).
+ * Descriptive name (not in the symbol maps); placeholder unk_end_00002508, JP end .text+0x2444. See docs/NAME_PROVENANCE.md.
  */
-// Descriptive name (not in the symbol maps); placeholder unk_end_00002508, JP end .text+0x2444. See docs/NAME_PROVENANCE.md.
 void end_silhouette_tev(MapTevCallbackInfo* info) {
     GXSetTevColorIn(info->tevStage - 1, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ONE);
 }
@@ -238,8 +238,8 @@ void end_silhouette_tev(MapTevCallbackInfo* info) {
  * Animation GX callback used with the silhouette:
  * sets opaque drawing with the alpha test at 0x80 and depth writes on, so the silhouettes have clean edges,
  * and records the display mode for the animation driver.
+ * Descriptive name (not in the symbol maps); placeholder unk_end_00002494, JP end .text+0x23D0. See docs/NAME_PROVENANCE.md.
  */
-// Descriptive name (not in the symbol maps); placeholder unk_end_00002494, JP end .text+0x23D0. See docs/NAME_PROVENANCE.md.
 void end_silhouette_rendermode(s32 wXluStage) {
     animGetPtr()->currDispMode = wXluStage;
     GXSetBlendMode(GX_BM_NONE, GX_BL_ONE, GX_BL_ZERO, GX_LO_CLEAR);
@@ -252,8 +252,8 @@ void end_silhouette_rendermode(s32 wXluStage) {
  * Draw callback for one parade character (CreditActor):
  * draws its pose three times as a solid white silhouette (three animation draw passes)
  * unless the roll has ended (GF(10) set).
+ * Descriptive name (not in the symbol maps); placeholder unk_end_000023ac, JP end .text+0x22E8. See docs/NAME_PROVENANCE.md.
  */
-// Descriptive name (not in the symbol maps); placeholder unk_end_000023ac, JP end .text+0x22E8. See docs/NAME_PROVENANCE.md.
 void end_credit_npc_disp(CameraId cameraId, void* param) {
     CreditActor* actor = param;
 
@@ -273,8 +273,8 @@ void end_credit_npc_disp(CameraId cameraId, void* param) {
  * before sending the next one: 0 for a character with its own script,
  * 1 for a normal silhouette (about 2 seconds), and in the Japanese release
  * and later 2 for the Gazigazi (a longer 6 second wait). Out-of-range numbers give 0.
+ * Descriptive name (not in the symbol maps); placeholder unk_end_000022e8, JP end .text+0x2224. See docs/NAME_PROVENANCE.md.
  */
-// Descriptive name (not in the symbol maps); placeholder unk_end_000022e8, JP end .text+0x2224. See docs/NAME_PROVENANCE.md.
 USER_FUNC(evt_end_credit_npc_get_wait_type) {
     EvtWord* args = event->args;
     u32 id = evtGetValue(event, args[0]);
@@ -970,8 +970,8 @@ USER_FUNC(evt_end_credit_npc_preload) {
  * draws the picture selected by GW(11) from ending.tpl in the position given by GW(12), with the fade alpha.
  * The Japanese release and later also draw the overlay picture and the cross-blend of end_image_blend_loop;
  * for picture 9 they show the version where Ms. Mowz was met with Koops if that flag is set.
+ * Descriptive name (not in the symbol maps); placeholder unk_end_00001324, JP end .text+0x1260. See docs/NAME_PROVENANCE.md.
  */
-// Descriptive name (not in the symbol maps); placeholder unk_end_00001324, JP end .text+0x1260. See docs/NAME_PROVENANCE.md.
 void end_image_disp(CameraId cameraId, void* param) {
     s32 i;
     f32 w;
@@ -1683,15 +1683,19 @@ const char* end_moa_ext_anim = "c_n_moa_a";
 const char* end_moa_ext_pose = "S_1";
 #endif
 
-/** Script helper: queues the ending picture draw callback (end_image_disp) for this frame. */
-// Descriptive name (not in the symbol maps); placeholder unk_end_000012e0, JP end .text+0x121C. See docs/NAME_PROVENANCE.md.
+/**
+ * Script helper: queues the ending picture draw callback (end_image_disp) for this frame.
+ * Descriptive name (not in the symbol maps); placeholder unk_end_000012e0, JP end .text+0x121C. See docs/NAME_PROVENANCE.md.
+ */
 USER_FUNC(evt_end_image_disp_entry) {
     dispEntry(CAMERA_3D, 0.0f, DISP_MODE_CUSTOM_LAST, end_image_disp, NULL);
     return 0;
 }
 
-/** Script helper: sets the opacity (0 to 255) of the ending picture to args[0]. */
-// Descriptive name (not in the symbol maps); placeholder unk_end_000012a4, JP end .text+0x11E0. See docs/NAME_PROVENANCE.md.
+/**
+ * Script helper: sets the opacity (0 to 255) of the ending picture to args[0].
+ * Descriptive name (not in the symbol maps); placeholder unk_end_000012a4, JP end .text+0x11E0. See docs/NAME_PROVENANCE.md.
+ */
 USER_FUNC(evt_end_image_set_alpha) {
     end_wp->alpha = evtGetValue(event, event->args[0]);
     return 2;
@@ -2078,8 +2082,8 @@ USER_FUNC(end_bgm_wait_stop) {
 /**
  * Script helper: turns the NPC named by args[0] into a solid white silhouette by hooking the silhouette TEV callback
  * and GX callback into its animation pose.
+ * Descriptive name (not in the symbol maps); placeholder unk_end_00000938, JP end .text+0x874. See docs/NAME_PROVENANCE.md.
  */
-// Descriptive name (not in the symbol maps); placeholder unk_end_00000938, JP end .text+0x874. See docs/NAME_PROVENANCE.md.
 USER_FUNC(evt_end_npc_silhouette_on) {
     NpcEntry* npc = npcNameToPtr((const char*)evtGetValue(event, event->args[0]));
 
