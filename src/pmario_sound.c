@@ -11427,21 +11427,12 @@ BOOL psndENVOn_f_d(u32 flags, const char* name, u32 fadetime, s32 unused) {
         *env = 0;
     }
     for (;; list++) {
-#if VERSION <= VERSION_DEMO_JP
         if (list->id == PSENV_COUNT) {
             break;
         }
         if (list->id != id) {
             continue;
         }
-#else
-        if (list->id == PSENV_COUNT) {
-            break;
-        }
-        if (list->id != id) {
-            continue;
-        }
-#endif
         e = searchEmptyPSENV();
         if (e == NULL) {
             continue;
