@@ -96,7 +96,7 @@ EvtWord subset_attack_ready_jump_event[2];
 /**
  * KO reaction for a unit (LW(10) = unit, LW(11) = part) whose HP reached 0.
  * Mario and the partners first walk home.
- * Mario then runs his data-table event 51 when a Life Shroom revives him (damage code bit 0x800), else event 49.
+ * Mario then runs his data-table event 51 when a Life Shroom revives him (DAMAGE_RESULT_REVIVAL), else event 49.
  * A partner with a Life Shroom keels over, uses it up and gets back up with 10 HP;
  * otherwise it is KO'd and, when it stood in front, swaps places with Mario.
  * Enemies revived by a Life Shroom spin down, show it and recover 10 HP;
@@ -133,7 +133,7 @@ EVT_BEGIN(subsetevt_dead)
     LABEL(1)
 
     // The unit is marked KO'd.
-    CALL(btlevtcmd_OnOffStatus, LW(10), STATUS_INSTANT_KILL, 1, 1, 1)
+    CALL(btlevtcmd_OnOffStatus, LW(10), STATUS_DEAD, 1, 1, 1)
     CALL(btlevtcmd_GetUnitKind, LW(10), LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(UNIT_MARIO)
@@ -181,7 +181,7 @@ EVT_BEGIN(subsetevt_dead)
 #endif
 
                 // The partner gets back up with 10 HP, the recovery sparkle shows and it hops back to idle.
-                CALL(btlevtcmd_OnOffStatus, LW(10), STATUS_INSTANT_KILL, 0, 0, 0)
+                CALL(btlevtcmd_OnOffStatus, LW(10), STATUS_DEAD, 0, 0, 0)
                 CALL(btlevtcmd_SetHp, LW(10), 0)
                 CALL(btlevtcmd_RecoverHp, LW(10), LW(11), 10)
                 CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
@@ -275,7 +275,7 @@ EVT_BEGIN(subsetevt_dead)
                 IF_INT_GREATER(LW(0), 0)
                     GOTO(7)
                 END_IF
-                CALL(btlevtcmd_OnOffStatus, LW(10), STATUS_INSTANT_KILL, 0, 0, 0)
+                CALL(btlevtcmd_OnOffStatus, LW(10), STATUS_DEAD, 0, 0, 0)
                 CALL(btlevtcmd_SetHp, LW(10), 0)
                 CALL(btlevtcmd_RecoverHp, LW(10), LW(11), 10)
                 CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
@@ -893,12 +893,12 @@ EVT_BEGIN(btldefaultevt_ChangePosition)
     CALL(evt_snd_sfxon, STRING("SFX_BTL_POS_CHANGE1"), 0)
     CALL(btlevtcmd_GetPartnerId, UNIT_ID_SELF, LW(3))
     CALL(btlevtcmd_GetBodyId, UNIT_ID_SELF, LW(5))
-    CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_INSTANT_KILL, LW(0))
+    CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_DEAD, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, LW(5), POSE_TYPE_RUN)
     END_IF
     CALL(btlevtcmd_GetBodyId, LW(3), LW(5))
-    CALL(btlevtcmd_CheckStatus, LW(3), STATUS_INSTANT_KILL, LW(0))
+    CALL(btlevtcmd_CheckStatus, LW(3), STATUS_DEAD, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_AnimeChangePoseType, LW(3), LW(5), POSE_TYPE_RUN)
     END_IF
@@ -1643,7 +1643,7 @@ EVT_END()
 
 #if VERSION >= VERSION_JP
 EVT_BEGIN(subsetevt_check_target_movable)
-    CALL(btlevtcmd_CheckStatus, LW(3), STATUS_INSTANT_KILL, LW(0))
+    CALL(btlevtcmd_CheckStatus, LW(3), STATUS_DEAD, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         SET_VALUE(LW(0), 0)
         RETURN

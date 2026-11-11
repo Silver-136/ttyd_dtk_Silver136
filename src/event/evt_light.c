@@ -11,7 +11,6 @@
 #include "party.h"
 
 /** BOOL on */
-// BOOL on
 USER_FUNC(evt_light_charalight_all_onoff) {
     s32 i;
 
@@ -28,7 +27,6 @@ USER_FUNC(evt_light_charalight_all_onoff) {
 }
 
 /** BOOL on */
-// BOOL on
 USER_FUNC(evt_light_mario_lighting_onoff) {
     BOOL on;
     MarioWork* mario;
@@ -48,7 +46,6 @@ USER_FUNC(evt_light_mario_lighting_onoff) {
 }
 
 /** BOOL on */
-// BOOL on
 USER_FUNC(evt_light_party_lighting_onoff) {
     BOOL on;
     PartyEntry* party;
@@ -64,7 +61,6 @@ USER_FUNC(evt_light_party_lighting_onoff) {
 }
 
 /** BOOL on, const char* npcName */
-// BOOL on, const char* npcName
 USER_FUNC(evt_light_npc_lighting_onoff) {
     EvtWord* args = event->args;
     BOOL on;
@@ -81,7 +77,6 @@ USER_FUNC(evt_light_npc_lighting_onoff) {
 }
 
 /** const char* lightName, const char* mapobjName, s32 mode */
-// const char* lightName, const char* mapobjName, s32 mode
 USER_FUNC(evt_light_bind_mapobj) {
     EvtWord* args = event->args;
     const char* lightName;

@@ -576,8 +576,8 @@ void mot_plane(void) {
 #define PI 3.1415927f
 
 /**
- * TRUE when the floor under the plane has one of the attributes 0x38 (0x8 and the plane panel bits 0x10/0x20);
- * over such a floor flyMain speeds the plane up (to 2) and keeps its dive limit at -22.
+ * TRUE when the floor under the plane has one of the attributes 0x38 (0x8, HIT_ATTR_PLANE_PANEL_R and
+ * HIT_ATTR_PLANE_PANEL_L); over such a floor flyMain speeds the plane up (to 2) and keeps its dive limit at -22.
  */
 // Original name and size (0x4c) from the JP demo map (UNUSED there: every call is inlined).
 BOOL checkAirPort(void) {

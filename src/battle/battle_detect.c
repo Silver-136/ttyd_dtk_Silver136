@@ -41,7 +41,7 @@ static void _btlSamplingEnemy(BattleWorkWeaponTargets* d) {
     }
     for (i = 0; i < BATTLE_UNIT_MAX; i++) {
         BattleUnit* unit = BattleGetUnitPtr(wp, i);
-        if (unit && !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL) && !(unit->attributeFlags & kUnitNeverTargetable)) {
+        if (unit && !BtlUnit_CheckStatus(unit, STATUS_DEAD) && !(unit->attributeFlags & kUnitNeverTargetable)) {
             part = unit->parts;
             np2 = unit->kindParams->numParts & 0xFF;
             for (j = 0; j < np2; j++) {

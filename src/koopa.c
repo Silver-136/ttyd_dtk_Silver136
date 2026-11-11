@@ -131,7 +131,7 @@ s32 kpaNoHitEnemyCheck(void) {
     return marioGetPtr()->kpaNoHitTimer;
 }
 
-/** TRUE while Bowser is invincible (muteki) from a star (KpaWork flag 0x10000). */
+/** TRUE while Bowser is invincible (muteki) from a star (KPA_WORK_FLAG_MUTEKI). */
 s32 kpaMutekiCheck(void) {
     return (marioGetPtr()->kpaWork->flags & KPA_WORK_FLAG_MUTEKI) != 0;
 }

@@ -377,7 +377,7 @@ static BattleUnitKindPart parts[] = {
 /**
  * Init script of the Bandit: registers its wait, attack,
  * damage and confusion handlers (confusion reuses the attack script), sets its run and walk sounds,
- * and picks the carrying-loot pose table if unit flag 0x40000000 (it has stolen something) is already set,
+ * and picks the carrying-loot pose table if BATTLE_UNIT_FLAG_STOLEN_ITEM (it has stolen something) is already set,
  * otherwise the normal one.
  */
 static EVT_BEGIN(init_event)
@@ -412,7 +412,7 @@ EVT_END()
 
 /**
  * Attack script of the Bandit.
- * If it already carries loot (unit flag 0x40000000) it runs escape_event and leaves the battle.
+ * If it already carries loot (BATTLE_UNIT_FLAG_STOLEN_ITEM) it runs escape_event and leaves the battle.
  * Otherwise it checks for an item use, always uses the plain attack while confused,
  * and else draws a random number to choose between the plain attack (a roll of 0-224 under 25, 25 in 225) and the steal attack.
  */
@@ -603,7 +603,7 @@ EVT_END()
  * The Bandit's steal attack: the same run-up and dash as the plain attack.
  * If it lands and the action command result is 3 or less, _steal_item takes something from the target;
  * on success it shows btl_msg_steal_item_lost, the stolen item's icon flies off,
- * it flags itself as carrying loot (unit flag 0x40000000), laughs and switches to the loot-holding poses.
+ * it flags itself as carrying loot (BATTLE_UNIT_FLAG_STOLEN_ITEM), laughs and switches to the loot-holding poses.
  * If nothing was taken it just bows, then returns home.
  */
 static EVT_BEGIN(_borodo_steal_attack)
@@ -858,7 +858,7 @@ EVT_BEGIN(_borodo_emergency_revival_event)
     IF_INT_GREATER(LW(0), 0)
         GOTO(7)
     END_IF
-    CALL(btlevtcmd_OnOffStatus, LW(10), STATUS_INSTANT_KILL, 0, 0, 0)
+    CALL(btlevtcmd_OnOffStatus, LW(10), STATUS_DEAD, 0, 0, 0)
     CALL(btlevtcmd_SetHp, LW(10), 0)
     CALL(btlevtcmd_RecoverHp, LW(10), LW(11), 10)
     CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))

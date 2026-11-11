@@ -5,7 +5,6 @@
 #include "manager/evtmgr_cmd.h"
 
 /** BOOL on */
-// BOOL on
 USER_FUNC(evt_bg_disp_onoff) {
     if (evtGetValue(event, *event->args)) {
         bgDispOn();
@@ -16,7 +15,6 @@ USER_FUNC(evt_bg_disp_onoff) {
 }
 
 /** u8 r, u8 g, u8 b, u8 a */
-// u8 r, u8 g, u8 b, u8 a
 USER_FUNC(evt_bg_set_color) {
     EvtWord* args = event->args;
     s32 r, g, b, a;
@@ -30,7 +28,6 @@ USER_FUNC(evt_bg_set_color) {
 }
 
 /** BOOL off */
-// BOOL off
 USER_FUNC(evt_bg_auto_scroll_onoff) {
     if (evtGetValue(event, *event->args)) {
         bgAutoScrollOff();
@@ -41,7 +38,6 @@ USER_FUNC(evt_bg_auto_scroll_onoff) {
 }
 
 /** f32 x, f32 y */
-// f32 x, f32 y
 USER_FUNC(evt_bg_set_scrl_offset) {
     EvtWord* args = event->args;
     f32 x, y;

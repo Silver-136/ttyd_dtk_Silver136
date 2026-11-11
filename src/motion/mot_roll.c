@@ -279,7 +279,7 @@ static void zoomOff(void) {
     m->camShiftRate.z = 0.004f;
 }
 
-/** Locks Tube Mode on (roll flag 0x200) so Mario cannot unroll; only while in the roll motion. */
+/** Locks Tube Mode on (ROLL_FLAG_FIX) so Mario cannot unroll; only while in the roll motion. */
 void marioRollFixOn(void) {
     MarioWork* mario = marioGetPtr();
     if (mario->currMotionId == MARIO_MOTION_ROLL) {
@@ -324,7 +324,7 @@ s32 marioRollKeyDisable(void) {
 }
 
 /**
- * Marks the roll as script-driven (roll flag 0x100);
+ * Marks the roll as script-driven (ROLL_FLAG_EVT);
  * set by evt_mario_jump_pos while it moves Mario in Tube Mode.
  */
 void setRollEvtFlag(void) {
@@ -339,7 +339,7 @@ void clrRollEvtFlag(void) {
 }
 
 /**
- * 1 while a script is moving Mario in Tube Mode (roll flag 0x100);
+ * 1 while a script is moving Mario in Tube Mode (ROLL_FLAG_EVT);
  * mario.c and mario_motion.c then skip the player-driven movement.
  */
 s32 getRollEvtFlag(void) {

@@ -346,8 +346,8 @@ EVT_END()
 
 /**
  * Damage handler for when the Frost Piranha was hurt by a counter:
- * plays PKF_D_1 for a second, and unless the hit knocked it out (damage flag 0x200) without a Life Shroom revive
- * (0x800) it burrows back to its place with return_event.
+ * plays PKF_D_1 for a second, and unless the hit knocked it out (DAMAGE_RESULT_ZERO_HP) without a Life Shroom
+ * revive (DAMAGE_RESULT_REVIVAL) it burrows back to its place with return_event.
  */
 static EVT_BEGIN(counter_damage_event)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKF_D_1"))

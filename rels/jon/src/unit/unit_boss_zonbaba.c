@@ -620,7 +620,7 @@ static EVT_BEGIN(battle_entry_event)
 EVT_END()
 
 /**
- * Init script of Bonetail: marks the unit with flag 0x1000000, registers the wait, phase,
+ * Init script of Bonetail: marks the unit with BATTLE_UNIT_FLAG_SOLID_MODEL, registers the wait, phase,
  * attack and damage handlers, uses the default confusion handler,
  * sets part 1 as the talking body and its base scale to (1.3, 1.3, 0.5), clears UNIT_WORK_HP_STAGE (stage 0),
  * sets unit work 1 to 2 (recoveries left), clears UNIT_WORK_RECOVER_TALK_DONE (has spoken the recovery line)

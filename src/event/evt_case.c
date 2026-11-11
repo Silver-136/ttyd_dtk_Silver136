@@ -81,7 +81,6 @@ USER_FUNC(evt_run_case_evt) {
 }
 
 /** same as evt_run_case_evt, but with priority 20 */
-// same as evt_run_case_evt, but with priority 20
 USER_FUNC(evt_run_case_evt_bero) {
     EvtWord* args = event->args;
     s32 conditionId;
@@ -119,7 +118,6 @@ USER_FUNC(evt_exit_case_evt) {
 }
 
 /** BOOL keepEvent, s32 caseId */
-// BOOL keepEvent, s32 caseId
 USER_FUNC(evt_del_case_evt) {
     EvtWord* args = event->args;
     BOOL keepEvent;
@@ -139,7 +137,6 @@ USER_FUNC(evt_del_case_evt) {
 }
 
 /** s32 caseId, s32 index, s32 value */
-// s32 caseId, s32 index, s32 value
 USER_FUNC(evt_set_case_wrk) {
     EvtWord* args = event->args;
     s32 caseId, index, value;

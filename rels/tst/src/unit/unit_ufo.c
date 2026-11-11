@@ -152,7 +152,7 @@ EVT_END()
 
 /**
  * Damage reaction of the test UFO: plays the common damage reaction with the hurt pose.
- * On the last hit of a move (damage flag 0x100) it first stops the UFO in place (btlevtcmd_UFODamageOn)
+ * On the last hit of a move (DAMAGE_RESULT_FINAL_HIT) it first stops the UFO in place (btlevtcmd_UFODamageOn)
  * and afterwards sends it flying away (btlevtcmd_UFOEscapeOn). The words after its RETURN are never reached.
  */
 static EVT_BEGIN(damage_event)

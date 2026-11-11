@@ -344,7 +344,7 @@ static PoseTableEntry pose_table_3[] = {
     {POSE_TYPE_DIZZY, "K_1"},
     {POSE_TYPE_POISON, "X_1"},
     {POSE_TYPE_CONFUSE, "K_1"},
-    // BUG: FREEZE again in the slot of the seventh pose status (STATUS_INSTANT_KILL); the lookup takes the first
+    // BUG: FREEZE again in the slot of the seventh pose status (STATUS_DEAD); the lookup takes the first
     // match, so the Z_ entry here and in the seven tables below is never used and a KO'd unit gets its NORMAL pose.
     {POSE_TYPE_FREEZE, "Z_1"},
     {POSE_TYPE_NORMAL, "S_1"},

@@ -74,7 +74,7 @@ EvtWord btldefaultevt_DefendParty[7];
  * Standard damage reaction that unit damage scripts call with LW(10) = unit and LW(11) = part:
  * plays the reaction for the damage pattern and damage code (hurt pose, Gale Force and Fright blow-away, slaps,
  * counters, guards, lucky and dodged misses, using the unit's data-table events where it has them), then the KO,
- * the backfire (damage code bit 0x4000) or the guard return,
+ * the backfire (DAMAGE_RESULT_BACKFIRE) or the guard return,
  * and finally walks or floats the unit back to its home position and restarts its wait event.
  */
 EVT_BEGIN(btldefaultevt_Damage)

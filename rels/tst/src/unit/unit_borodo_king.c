@@ -264,7 +264,7 @@ static BattleUnitKindPart parts[] = {
 /**
  * Init script of the Bandit: registers its wait, attack, damage and confusion handlers,
  * sets the running and walking sounds, and picks the pose table with the stolen-item bag
- * when the unit flag 0x40000000 (it carries a stolen item) is already set.
+ * when BATTLE_UNIT_FLAG_STOLEN_ITEM (it carries a stolen item) is already set.
  */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
@@ -300,7 +300,7 @@ static EVT_BEGIN(phase_event)
 EVT_END()
 
 /**
- * Chooses the Big Bandit's action: if it carries a stolen item (unit flag 0x40000000) it runs away with it
+ * Chooses the Big Bandit's action: if it carries a stolen item (BATTLE_UNIT_FLAG_STOLEN_ITEM) it runs away with it
  * (escape_event); otherwise it uses an item when the item check selects one, a confused Bandit makes a plain attack,
  * and normally it makes the plain attack (_borodo_normal_attack) about 35% of the time
  * and the stealing attack (_borodo_steal_attack) otherwise.
@@ -496,7 +496,7 @@ EVT_END()
  * The Bandit's stealing attack: it runs at the target and bumps it like the plain attack;
  * on a hit the target did not Guard or Superguard (guard result LW(7) 3 or less),
  * _steal_item takes coins or a held item (LW(8) = the item, LW(9) = its icon),
- * which flies out of the target while btl_msg_steal_item_lost is announced and sets the unit flag 0x40000000,
+ * which flies out of the target while btl_msg_steal_item_lost is announced and sets BATTLE_UNIT_FLAG_STOLEN_ITEM,
  * and the Bandit laughs (SFX_ENM_BORODO_LAUGH1) and switches to the pose table showing the loot.
  * If nothing was stolen it sulks (SFX_ENM_BORODO_INCLINE1) and walks home.
  */
@@ -709,7 +709,7 @@ EVT_END()
 
 /**
  * Idle event of the Bandit: uses the plain pose table,
- * or the one showing the stolen item bag if the unit flag 0x40000000 is set, and shows the matching idle pose.
+ * or the one showing the stolen item bag if BATTLE_UNIT_FLAG_STOLEN_ITEM is set, and shows the matching idle pose.
  */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_CheckUnitFlag, UNIT_ID_SELF, BATTLE_UNIT_FLAG_STOLEN_ITEM, LW(0))

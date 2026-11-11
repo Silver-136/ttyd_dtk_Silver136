@@ -181,7 +181,7 @@ EVT_END()
 /**
  * Item-box script for the chest at "box": gives Mario the elevator key (ITEM_ELEVATOR_KEY_0x1B)
  * and sets the story progress to STG7_09_ELEVATOR_KEY_A_LIT_FLOOR.
- * It then clears the shock flag 0x800 on A_no01 and on every panel (all_flag_off), so the floor no longer hurts,
+ * It then clears HIT_ATTR_SPIKES (the shock) on A_no01 and on every panel (all_flag_off), so the floor no longer hurts,
  * and swaps the floor models yukayu1 and yukayu2 five times, ending with yukayu2 and "ato" shown.
  */
 static EVT_BEGIN(evt_box)

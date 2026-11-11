@@ -358,8 +358,8 @@ EVT_END()
 /**
  * Damage handler for when the Fuzzy was hit by a counter attack:
  * resets its scale, runs the shared counter-damage script,
- * and unless the hit knocked it out (damage flag 0x200) without a Life Shroom revive (0x800) it hops back home
- * with return_event.
+ * and unless the hit knocked it out (DAMAGE_RESULT_ZERO_HP) without a Life Shroom revive (DAMAGE_RESULT_REVIVAL)
+ * it hops back home with return_event.
  */
 static EVT_BEGIN(counter_damage_event)
     CALL(btlevtcmd_SetScale, UNIT_ID_SELF, FLOAT(1.0f), FLOAT(1.0f), FLOAT(1.0f))

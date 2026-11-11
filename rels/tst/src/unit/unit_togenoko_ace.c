@@ -549,7 +549,7 @@ static EVT_BEGIN(dmg_avoid_counter_thorn_head_event)
 EVT_END()
 
 /**
- * Run when a hit flips the Dark Koopatrol (data table entry 13, damage flag 0x200000):
+ * Run when a hit flips the Dark Koopatrol (data table entry 13, DAMAGE_RESULT_FLIPPED):
  * swaps in the turned defence, resistance, data
  * and pose tables (the guarding-turned poses if it was in its shell,
  * UNIT_WORK_GUARD), sets the flipped status flag with an over-turn count of 2, switches off its spike counter,

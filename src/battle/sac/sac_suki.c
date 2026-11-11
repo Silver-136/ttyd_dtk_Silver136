@@ -903,7 +903,7 @@ EVT_BEGIN(marioAttackEvent_Suki)
     // A knocked-out partner is left out; with no enemy to target the move ends at once.
     CALL(btlevtcmd_GetUnitId, UNIT_ID_PARTNER, LW(14))
     CALL(btlevtcmd_GetBodyId, LW(14), LW(15))
-    CALL(btlevtcmd_CheckStatus, LW(14), STATUS_INSTANT_KILL, LW(0))
+    CALL(btlevtcmd_CheckStatus, LW(14), STATUS_DEAD, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         SET_VALUE(LW(14), -1)
     END_IF

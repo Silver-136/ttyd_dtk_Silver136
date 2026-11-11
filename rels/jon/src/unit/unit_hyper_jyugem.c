@@ -295,7 +295,7 @@ EVT_END()
 /**
  * Damage script of the Dark Lakitu. While it is not holding an egg it just takes the default damage.
  * While it is holding one (UNIT_WORK_HOLD set), a hit that damages it,
- * or one after which it has STATUS_INSTANT_KILL, STATUS_SLEEP, STATUS_DIZZY, STATUS_CONFUSE, STATUS_ELECTRIC, STATUS_FREEZE or STATUS_STOP (KO, Sleep, Dizzy, Confuse, Electric, Freeze, Stop),
+ * or one after which it has STATUS_DEAD, STATUS_SLEEP, STATUS_DIZZY, STATUS_CONFUSE, STATUS_ELECTRIC, STATUS_FREEZE or STATUS_STOP (KO, Sleep, Dizzy, Confuse, Electric, Freeze, Stop),
  * makes it drop the egg: the egg part is thrown away behind it,
  * the holding state and counter attribute are cleared and its pose table is restored
  * before the default damage runs.
@@ -321,7 +321,7 @@ static EVT_BEGIN(damage_event)
 
         // Holding an egg: a hit that damages it, or leaves it knocked out, asleep, dizzy, confused, shocked,
         // frozen or stopped, makes it drop the egg.
-        CALL(btlevtcmd_CheckStatus, LW(10), STATUS_INSTANT_KILL, LW(14))
+        CALL(btlevtcmd_CheckStatus, LW(10), STATUS_DEAD, LW(14))
         OR(LW(15), LW(14))
         CALL(btlevtcmd_CheckStatus, LW(10), STATUS_SLEEP, LW(14))
         OR(LW(15), LW(14))
@@ -412,7 +412,7 @@ static EVT_BEGIN(damage_event)
 EVT_END()
 
 /**
- * Before the player's phase, on every turn but the first, if the Dark Lakitu can act and is not in STATUS_INSTANT_KILL, STATUS_DIZZY,
+ * Before the player's phase, on every turn but the first, if the Dark Lakitu can act and is not in STATUS_DEAD, STATUS_DIZZY,
  * STATUS_CONFUSE or STATUS_ELECTRIC (KO, Dizzy, Confuse, Electric), it has a 50 percent chance to pick up an egg:
  * it plays JGM_A_1 and A_2 with the hold sounds, sets UNIT_WORK_HOLD and counter attribute 1 (top-spiky) on part 1,
  * switches to the holding pose table and raises its hit offset by 20.
@@ -426,7 +426,7 @@ static EVT_BEGIN(unison_phase_event)
     IF_INT_EQUAL(LW(0), 1)
         GOTO(99)
     END_IF
-    CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_INSTANT_KILL, LW(0))
+    CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_DEAD, LW(0))
     IF_INT_EQUAL(LW(0), 1)
         GOTO(99)
     END_IF
@@ -590,7 +590,7 @@ EVT_END()
 /**
  * The Dark Lakitu's egg throw: if it is not already holding an egg it takes one (JGM_A_1 and A_2),
  * then throws it (SFX_ENM_JUGEM_THROW1) in an arc at the target and the target takes the damage.
- * If UNIT_WORK_REBOUND_SPAWN is set and the target guarded the egg (damage flag 0x40000) the
+ * If UNIT_WORK_REBOUND_SPAWN is set and the target guarded the egg (DAMAGE_RESULT_GUARD) the
  * egg also bounces to a free spot and hatches a Sky-Blue Spiny there (togezo_copy_status copies its size
  * status).
  * Otherwise the egg drops to the floor further past the target and is hidden.

@@ -209,6 +209,7 @@ static EVT_BEGIN(tree_evt)
     END_LOOP
     RETURN
 EVT_END()
+
 EVT_BEGIN(evt_sub_tree_access_entry)
     SET_INT_READ_ADDR(LW(0))
     LOOP(0)
@@ -249,6 +250,7 @@ static EVT_BEGIN(kusa_evt)
     END_LOOP
     RETURN
 EVT_END()
+
 EVT_BEGIN(evt_sub_kusa_access_entry)
     SET_INT_READ_ADDR(LW(0))
     LOOP(0)

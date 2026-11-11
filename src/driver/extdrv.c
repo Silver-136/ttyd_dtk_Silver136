@@ -534,8 +534,8 @@ void extLoadShadowMtx(Mtx mtx) {
 }
 
 /**
- * Draws a round shadow under every pose that has one (flag 4 clear), in reverse sort order;
- * poses with flag 0x10 have theirs dropped to their own shadow height.
+ * Draws a round shadow under every pose that has one (EXT_POSE_FLAG_NO_SHADOW clear), in reverse sort order;
+ * poses with EXT_POSE_FLAG_SHADOW_POS have theirs dropped to their own shadow height.
  */
 void extDrawShadow(void) {
     ExtdrvWork* wp = extGetWork();

@@ -984,7 +984,7 @@ static s32 scissor_damage(EventEntry* evt, BOOL first) {
         if (unit != NULL && BtlUnit_GetBelong(unit) == ALLIANCE_ENEMY) {
             BattleUnitPart* part = BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit));
             s32 res;
-            if (BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL) != 1 && !(part->attributes & kClone) && !(part->attributes & kImmuneToDamageAndStatus) &&
+            if (BtlUnit_CheckStatus(unit, STATUS_DEAD) != 1 && !(part->attributes & kClone) && !(part->attributes & kImmuneToDamageAndStatus) &&
 #if VERSION <= VERSION_DEMO_JP
                 !(part->attributes & kNotTargetable) && *(s8*)part->defenseAttr != DEFENSE_ATTR_IMMUNE_EXCEPT_GULP) {
 #else
@@ -1201,7 +1201,7 @@ static void scissor_disp_control(CameraId camera, void* param) {
         if (BtlUnit_GetBelong(unit) != 1) {
             continue;
         }
-        if (BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
+        if (BtlUnit_CheckStatus(unit, STATUS_DEAD)) {
             continue;
         }
         if (BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit))->attributes & kNotTargetable) {

@@ -180,7 +180,7 @@ static BattleDataEntry data_table[] = {
 /**
  * Init script of a Mini-X-Yux satellite: registers its wait, unison-phase,
  * attack and damage handlers (confusion uses the default handler),
- * sets the unit flags 0x300000 and starts the idle event.
+ * sets BATTLE_UNIT_FLAG_FLOAT_CAPABLE | BATTLE_UNIT_FLAG_FLOAT_ACTIVE and starts the idle event.
  */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))

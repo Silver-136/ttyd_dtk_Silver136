@@ -251,10 +251,10 @@ static EVT_BEGIN(init_event_patapata)
 EVT_END()
 
 /**
- * Run when a hit grounds the flying Dark Paratroopa (data table entry 14, damage flag 0x400000):
+ * Run when a hit grounds the flying Dark Paratroopa (data table entry 14, DAMAGE_RESULT_GROUNDED):
  * it loses its floating and winged attributes and falls to the ground,
  * turning into a Dark Koopa (parts, pose table and data table replaced, kind changed to 156 = 0x9C,
- * unit flag 4 set, its wait, attack, damage and confusion events and walk sounds replaced).
+ * BATTLE_UNIT_FLAG_KIND_CHANGED set, its wait, attack, damage and confusion events and walk sounds replaced).
  * If this was the first hit of the attack (hpDamageCount at most 1) it lands on its feet;
  * on a later hit of the same attack it falls onto its back and runs dmg_turn_event.
  */

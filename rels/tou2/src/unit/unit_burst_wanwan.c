@@ -749,6 +749,7 @@ static EVT_BEGIN(wait_sound_event2)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_WAN_WAIT4"), LW(11), 0, EVT_NULLPTR)
     RETURN
 EVT_END()
+
 static USER_FUNC(chain_main) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;

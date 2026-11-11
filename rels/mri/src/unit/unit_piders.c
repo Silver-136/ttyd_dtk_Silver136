@@ -290,7 +290,7 @@ static USER_FUNC(piders_draw_yarn) {
 
 /**
  * Counts the Pider units (kinds 0x1B and 0xA4) that are in the battle
- * and not knocked out (STATUS_INSTANT_KILL, instant KO), and returns the number in args[0].
+ * and not knocked out (STATUS_DEAD, instant KO), and returns the number in args[0].
  */
 static USER_FUNC(piders_get_num) {
     BattleUnit* unit;
@@ -301,7 +301,7 @@ static USER_FUNC(piders_get_num) {
 
     for (i = 0; i < 64; i++) {
         unit = wp->units[i];
-        if (unit != NULL && (unit->currentKind == UNIT_PIDER || unit->currentKind == UNIT_ARANTULA) && !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
+        if (unit != NULL && (unit->currentKind == UNIT_PIDER || unit->currentKind == UNIT_ARANTULA) && !BtlUnit_CheckStatus(unit, STATUS_DEAD)) {
             num++;
         }
     }
@@ -311,7 +311,7 @@ static USER_FUNC(piders_get_num) {
 
 /**
  * Returns in args[1] the position in the group order of Pider args[0],
- * counting the Piders not knocked out (STATUS_INSTANT_KILL) up to and including it.
+ * counting the Piders not knocked out (STATUS_DEAD) up to and including it.
  */
 static USER_FUNC(piders_get_zyun) {
     s32 id;
@@ -327,7 +327,7 @@ static USER_FUNC(piders_get_zyun) {
     for (i = 0; i < 64; i++) {
         unit = wp->units[i];
         if (unit != NULL && (unit->currentKind == UNIT_PIDER || unit->currentKind == UNIT_ARANTULA)) {
-            if (!BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
+            if (!BtlUnit_CheckStatus(unit, STATUS_DEAD)) {
                 order++;
             }
             if (unit->unitId == id) {
@@ -353,7 +353,7 @@ static USER_FUNC(piders_get_first_pos_attr) {
     // find the first living pider
     for (i = 0; i < 64; i++) {
         unit = wp->units[i];
-        if (unit != NULL && (unit->currentKind == UNIT_PIDER || unit->currentKind == UNIT_ARANTULA) && !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
+        if (unit != NULL && (unit->currentKind == UNIT_PIDER || unit->currentKind == UNIT_ARANTULA) && !BtlUnit_CheckStatus(unit, STATUS_DEAD)) {
             break;
         }
     }
@@ -775,7 +775,7 @@ static EVT_BEGIN(move_kuuchu_event)
 EVT_END()
 
 /**
- * Unison-phase event: before the player phase, if the Pider is not knocked out (STATUS_INSTANT_KILL) and can act,
+ * Unison-phase event: before the player phase, if the Pider is not knocked out (STATUS_DEAD) and can act,
  * it moves down (move_kuutei_event) or up (move_kuuchu_event).
  * The first Pider in order always switches. With an odd number of Piders the others take the first one's new
  * height; with an even number the odd-placed ones take it and the even-placed ones the other height.
@@ -785,7 +785,7 @@ static EVT_BEGIN(unison_phase_event)
     IF_INT_EQUAL(LW(0), 0)
         GOTO(99)
     END_IF
-    CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_INSTANT_KILL, LW(0))
+    CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_DEAD, LW(0))
     IF_INT_EQUAL(LW(0), 1)
         GOTO(99)
     END_IF

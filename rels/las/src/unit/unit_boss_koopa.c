@@ -493,7 +493,7 @@ static EVT_BEGIN(entry_event)
 EVT_END()
 
 /**
- * Damage event of Bowser: when the hit defeats him (damage flag 0x400) sets GW(10) = 1 (he is going down;
+ * Damage event of Bowser: when the hit defeats him (DAMAGE_RESULT_DEATH) sets GW(10) = 1 (he is going down;
  * Kammy's
  * scripts check it), then runs the default damage handling for every hit.
  */
@@ -568,12 +568,12 @@ static EVT_BEGIN(dead_event)
 EVT_END()
 
 /**
- * Phase event of Bowser: skipped while he is knocked out (STATUS_INSTANT_KILL, instant KO).
+ * Phase event of Bowser: skipped while he is knocked out (STATUS_DEAD, instant KO).
  * Before the player phase (after turn 1), while he can act, it handles his leaning state (UNIT_WORK_LEANING).
  * After the player phase it runs harf_hp_event so he can speak when his HP gets low.
  */
 static EVT_BEGIN(phase_event)
-    CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_INSTANT_KILL, LW(0))
+    CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_DEAD, LW(0))
     IF_INT_EQUAL(LW(0), 1)
         GOTO(99)
     END_IF

@@ -274,7 +274,7 @@ static USER_FUNC(piders_get_num) {
 
     for (i = 0; i < 64; i++) {
         unit = wp->units[i];
-        if (unit != NULL && (unit->currentKind == UNIT_PIDER || unit->currentKind == UNIT_ARANTULA) && !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
+        if (unit != NULL && (unit->currentKind == UNIT_PIDER || unit->currentKind == UNIT_ARANTULA) && !BtlUnit_CheckStatus(unit, STATUS_DEAD)) {
             num++;
         }
     }
@@ -300,7 +300,7 @@ static USER_FUNC(piders_get_zyun) {
     for (i = 0; i < 64; i++) {
         unit = wp->units[i];
         if (unit != NULL && (unit->currentKind == UNIT_PIDER || unit->currentKind == UNIT_ARANTULA)) {
-            if (!BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
+            if (!BtlUnit_CheckStatus(unit, STATUS_DEAD)) {
                 order++;
             }
             if (unit->unitId == id) {
@@ -326,7 +326,7 @@ static USER_FUNC(piders_get_first_pos_attr) {
     // find the first living pider
     for (i = 0; i < 64; i++) {
         unit = wp->units[i];
-        if (unit != NULL && (unit->currentKind == UNIT_PIDER || unit->currentKind == UNIT_ARANTULA) && !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
+        if (unit != NULL && (unit->currentKind == UNIT_PIDER || unit->currentKind == UNIT_ARANTULA) && !BtlUnit_CheckStatus(unit, STATUS_DEAD)) {
             break;
         }
     }
@@ -757,7 +757,7 @@ EVT_END()
 
 /**
  * Unison-phase script: in the phase before the player's turn,
- * unless it is instantly KO'd (STATUS_INSTANT_KILL) or cannot act,
+ * unless it is KO'd (STATUS_DEAD) or cannot act,
  * the Pider changes height with move_kuuchu_event (air) or move_kuutei_event (ground).
  * The first living Pider (turn order 1 from piders_get_zyun) switches to the other height.
  * The others read piders_get_first_pos_attr (the first Pider's height state, UNIT_WORK_LOWERED,
@@ -769,7 +769,7 @@ static EVT_BEGIN(unison_phase_event)
     IF_INT_EQUAL(LW(0), 0)
         GOTO(99)
     END_IF
-    CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_INSTANT_KILL, LW(0))
+    CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_DEAD, LW(0))
     IF_INT_EQUAL(LW(0), 1)
         GOTO(99)
     END_IF
@@ -860,7 +860,7 @@ EVT_END()
  * Resolves one web ball (part LW(7)) at the target LW(3), LW(4) with the weapon in LW(9):
  * on a miss the ball flies on and is hidden (results 2, 3 and 6 also start the target's avoid animation);
  * on a hit the ball is hidden, the guard result is applied and the damage dealt,
- * with the last-hit flag (0x100) when LW(8) is 1.
+ * with the last-hit flag (DAMAGE_RESULT_FINAL_HIT) when LW(8) is 1.
  * When LW(10) is 1 it also marks that target as hit in unit work 11 to 13 (the slot of its entry in work 5 to 7
  * plus 6).
  */

@@ -827,7 +827,7 @@ static void main_enemy_sub(BattleUnit* unit, s32* n) {
                     if (part->attributes & kClone) {
                         continue;
                     }
-                    if (!(unit->attributeFlags & kInactive) && !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
+                    if (!(unit->attributeFlags & kInactive) && !BtlUnit_CheckStatus(unit, STATUS_DEAD)) {
                         BtlUnit_SetAnimType(part, POSE_TYPE_DAMAGE);
                     }
                     effSmallStarEntry(0, 2, xc, unit->position.y, unit->position.z, 0.0f, -1.0f, 0.0f);
@@ -838,7 +838,7 @@ static void main_enemy_sub(BattleUnit* unit, s32* n) {
                     if (unit->attributeFlags & kInactive) {
                         continue;
                     }
-                    if (BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
+                    if (BtlUnit_CheckStatus(unit, STATUS_DEAD)) {
                         continue;
                     }
                     w->enemyRot[*n] = 20.0f;
@@ -857,7 +857,7 @@ static void main_enemy_sub(BattleUnit* unit, s32* n) {
     if (unit->position.y < unit->homePosition.y) {
         unit->position.y = unit->homePosition.y;
         w->enemyVel[*n].y = 0.0f;
-        if (!(unit->attributeFlags & kInactive) && !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
+        if (!(unit->attributeFlags & kInactive) && !BtlUnit_CheckStatus(unit, STATUS_DEAD)) {
             unit->rotation.z = 0.0f;
             w->enemyRot[*n] = 0.0f;
         }

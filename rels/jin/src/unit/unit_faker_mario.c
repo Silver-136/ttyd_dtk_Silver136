@@ -799,7 +799,7 @@ EVT_END()
 
 /**
  * Damage event of the fake Mario in the second battle:
- * a hit with damage flag 0x400 (the hit that defeats him) sets GW(19) to 1,
+ * a hit with DAMAGE_RESULT_DEATH (the hit that defeats him) sets GW(19) to 1,
  * then the default damage handling runs.
  * The partner doubles' death events read GW(19) (0 still standing, 1 defeated, 2 fallen over after
  * dead_event_fmario) to choose between their exchange with him and waiting for his fall.

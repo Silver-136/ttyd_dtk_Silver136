@@ -827,7 +827,7 @@ EVT_END()
 
 /**
  * Enter script of s_bero_1 (from the lobby tou_02):
- * starts a side event that waits for BeroEXEC bit 0x10000 (evt_bero_exec_wait) and
+ * starts a side event that waits for BERO_EXEC_ENTRY_DONE (evt_bero_exec_wait) and
  * then swings the door pair door_2_a / door_2_b open (open_main), and sets LW(0) = 0 so the normal walk-in runs.
  */
 static EVT_BEGIN(s1_open)
@@ -891,7 +891,7 @@ EVT_END()
 
 /**
  * Enter script of s_bero_2 (from the lobby tou_02):
- * starts a side event that waits for BeroEXEC bit 0x10000 (evt_bero_exec_wait) and
+ * starts a side event that waits for BERO_EXEC_ENTRY_DONE (evt_bero_exec_wait) and
  * then swings the door pair door_3_a / door_3_b open (open_main), and sets LW(0) = 0 so the normal walk-in runs.
  */
 static EVT_BEGIN(s2_open)

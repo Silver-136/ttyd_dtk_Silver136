@@ -76,7 +76,7 @@ static inline NanNPC* nanNPCSearch(char* name) {
 /**
  * Moves crowd NPC npc by its move vector, sliding off map collision:
  * a hit reflects the motion off the wall and pushes the NPC clear; without a hit the move vector is scaled by 0.6.
- * NPCs with flag 0x8 move without collision.
+ * NPCs with NANNPC_FLAG_NO_HIT move without collision.
  */
 static inline void nanNPCHitMove(NanNPC* npc, f32 mag) {
     s32 clear;
@@ -152,7 +152,7 @@ static inline void nanNPCHitMove(NanNPC* npc, f32 mag) {
 #pragma opt_dead_assignments off
 /**
  * Crowd behaviour pass, installed by map rels (muj_00, dou_11) as sub function 2:
- * NPCs with flag 0x4 push each other apart when closer than their size,
+ * NPCs with NANNPC_FLAG_WALK push each other apart when closer than their size,
  * are pulled back towards their target position, and then move with collision (speed capped).
  */
 void nanNPCOption(void) {
@@ -251,7 +251,7 @@ void nannpc_ext_AlphaLoadTev(void) {
 
 /**
  * Draws the crowd.
- * With work flag 0x1 each NPC's sprite is drawn separately, sorted by Z and tinted by its colour;
+ * With NANNPC_WORK_DEPTH_SORT each NPC's sprite is drawn separately, sorted by Z and tinted by its colour;
  * otherwise extdrv draws all the poses in one batch.
  */
 static void nannpc_ext_disp() {
@@ -327,7 +327,7 @@ void nannpc_ext_main_sub() {
  * Fuller per-frame update maps install as sub function 1:
  * runs each NPC's func, steps its animation table (offset per NPC so the crowd does not animate in step),
  * and copies texture, direction and position to its extdrv pose;
- * flag 0x2 hides the NPC by moving it 1000 units down.
+ * NANNPC_FLAG_HIDDEN hides the NPC by moving it 1000 units down.
  */
 void nannpc_ext_main_sub_fast() {
     s32 i;
@@ -373,7 +373,7 @@ static void nannpc_ext_main() {
 
 /**
  * Registers the crowd's draw and shadow callbacks with dispdrv each frame;
- * the sprites go in render mode 1, or 2 with work flag 0x1.
+ * the sprites go in render mode 1, or 2 with NANNPC_WORK_DEPTH_SORT.
  */
 static void nannpc_ext_dispent() {
     if (!(nanNPCWork->flags & NANNPC_WORK_DEPTH_SORT)) {
@@ -784,7 +784,7 @@ USER_FUNC(evt_nannpc_set_func) {
     return EVT_RETURN_DONE;
 }
 
-/** Pins crowd NPC args[0]'s shadow to height args[1] (pose flag 0x10). */
+/** Pins crowd NPC args[0]'s shadow to height args[1] (EXT_POSE_FLAG_SHADOW_POS). */
 USER_FUNC(evt_nannpc_set_shadow_position) {
     EvtWord* args = event->args;
     char* name = (char*)evtGetValue(event, args[0]);

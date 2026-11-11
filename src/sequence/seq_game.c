@@ -12,7 +12,6 @@
 //.sbss
 static OSTime none_key;
 
-/** .sdata */
 //.sdata
 static EVT_BEGIN(maku_spread)
     WAIT_MS(2000)
@@ -20,7 +19,7 @@ static EVT_BEGIN(maku_spread)
     RETURN
 EVT_END()
 
-/** Enters the field sequence: records the time (none_key, otherwise unused here) and clears system level flag 0x10. */
+/** Field sequence entry: records the time (none_key, otherwise unused here), clears SYSTEM_LEVEL_NO_FIELD_BATTLE. */
 void seq_gameInit(SequenceWork* wp) {
     none_key = OSGetTime();
     gp->systemLevelFlags &= ~SYSTEM_LEVEL_NO_FIELD_BATTLE;

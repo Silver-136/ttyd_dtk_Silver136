@@ -30,7 +30,7 @@
 
 // Statuses that select the unit's pose, in priority order (_GetStatusPoseType)
 static s32 _status_pose_table[] = {
-    STATUS_INSTANT_KILL,
+    STATUS_DEAD,
 #if VERSION <= VERSION_DEMO_JP
     STATUS_SLEEP,
 #endif
@@ -307,7 +307,7 @@ StatusEffectType _GetStatusPoseType(BattleUnit* unit) {
     StatusEffectType type;
 
     if (unit->attributeFlags & kInactive) {
-        return STATUS_INSTANT_KILL;
+        return STATUS_DEAD;
     }
     while (1) {
         type = *table;
@@ -1128,7 +1128,7 @@ static void floatOffsetControl(BattleUnitPart* part) {
         active = FALSE;
     } else if (!(unit->flags & BATTLE_UNIT_FLAG_FLOAT_ACTIVE)) {
         active = FALSE;
-    } else if (BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
+    } else if (BtlUnit_CheckStatus(unit, STATUS_DEAD)) {
         active = FALSE;
     }
     if (active) {

@@ -1016,8 +1016,8 @@ EVT_END()
 
 /**
  * Damage handler while it hangs on the ceiling:
- * runs the default damage script, and unless the hit knocked it out (damage flag 0x200) without a Life Shroom
- * revive (0x800) it runs ceil_fall_ready_event when it took damage while still on the ceiling, so it falls.
+ * runs the default damage script, and unless the hit knocked it out (DAMAGE_RESULT_ZERO_HP) without a Life Shroom
+ * revive (DAMAGE_RESULT_REVIVAL) it runs ceil_fall_ready_event when it took damage while on the ceiling, so it falls.
  */
 static EVT_BEGIN(damage_event_ceil)
     SET_VALUE(LW(10), UNIT_ID_SELF)

@@ -2047,7 +2047,7 @@ static USER_FUNC(kamec_get_bunsin) {
 
 /**
  * Script helper.
- * Counts the enemy-side units (alliance 1) that do not have STATUS_INSTANT_KILL, and stores the number in args[0].
+ * Counts the enemy-side units (alliance 1) that do not have STATUS_DEAD, and stores the number in args[0].
  */
 static USER_FUNC(kamec_get_live_num) {
     s32 i;
@@ -2058,7 +2058,7 @@ static USER_FUNC(kamec_get_live_num) {
 
     for (i = 0; i < 64; i++) {
         unit = wp->units[i];
-        if (unit != NULL && unit->alliance == ALLIANCE_ENEMY && !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
+        if (unit != NULL && unit->alliance == ALLIANCE_ENEMY && !BtlUnit_CheckStatus(unit, STATUS_DEAD)) {
             num++;
         }
     }

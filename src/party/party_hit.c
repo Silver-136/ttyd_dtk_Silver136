@@ -874,7 +874,7 @@ HitEntry* partySearchFrontWall(PartyEntry* party, Vec* pos, f32 dist, f32 ang) {
 
     sincosf(&sn, &cs, ang);
 #if VERSION >= VERSION_US
-    // US and later: in paper mode (flag 0x1000) the partner checks walls with a width of 6
+    // US and later: in paper mode (PARTY_FLAG_PAPER_MODE) the partner checks walls with a width of 6
     w = party->width;
     if (party->flags & PARTY_FLAG_PAPER_MODE) {
         w = 6.0f;

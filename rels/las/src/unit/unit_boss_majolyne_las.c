@@ -568,7 +568,7 @@ static EVT_BEGIN(init_event)
 EVT_END()
 
 /**
- * Damage event of Beldam: when the hit defeats her (damage flag 0x400) sets GW(11) = 1 (she is going down; the
+ * Damage event of Beldam: when the hit defeats her (DAMAGE_RESULT_DEATH) sets GW(11) = 1 (she is going down; the
  * other Sirens' scripts check it), then runs the default damage handling for every hit.
  */
 static EVT_BEGIN(damage_event)

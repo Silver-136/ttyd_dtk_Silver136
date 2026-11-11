@@ -52,7 +52,6 @@ USER_FUNC(evt_npc_entry) {
 }
 
 /** const char* lookupName, s32 slaveId, const char* animName, s32 retIndex, void* deadEvent */
-// const char* lookupName, s32 slaveId, const char* animName, s32 retIndex, void* deadEvent
 USER_FUNC(evt_npc_slave_entry) {
     EvtWord* args = event->args;
     const char* name;
@@ -107,7 +106,6 @@ USER_FUNC(evt_npc_delete) {
 }
 
 /** const char* lookupName */
-// const char* lookupName
 USER_FUNC(evt_npc_check_delete) {
     const char* name;
     NpcEntry* npc;
@@ -121,7 +119,6 @@ USER_FUNC(evt_npc_check_delete) {
 }
 
 /** BOOL inBattle, s32 evtIndex */
-// BOOL inBattle, s32 evtIndex
 USER_FUNC(evt_npc_get_ReactionOfLivingBody) {
     EvtWord* args = event->args;
     s32 index, value;
@@ -135,7 +132,6 @@ USER_FUNC(evt_npc_get_ReactionOfLivingBody) {
 }
 
 /** NpcSetupInfo* setuplist */
-// NpcSetupInfo* setuplist
 USER_FUNC(evt_npc_setup) {
     NpcSetupInfo *setuplist, *setup;
     EventEntry* newEvt;
@@ -220,7 +216,6 @@ USER_FUNC(evt_npc_setup) {
 }
 
 /** const char* lookupName, f32 x, f32 y, f32 z */
-// const char* lookupName, f32 x, f32 y, f32 z
 USER_FUNC(evt_npc_set_position) {
     EvtWord* args = event->args;
     const char* name;
@@ -240,7 +235,6 @@ USER_FUNC(evt_npc_set_position) {
 }
 
 /** const char* lookupName, f32 width */
-// const char* lookupName, f32 width
 USER_FUNC(evt_npc_set_width) {
     EvtWord* args = event->args;
     const char* name;
@@ -253,7 +247,6 @@ USER_FUNC(evt_npc_set_width) {
 }
 
 /** const char* lookupName, f32 height */
-// const char* lookupName, f32 height
 USER_FUNC(evt_npc_set_height) {
     EvtWord* args = event->args;
     const char* name;
@@ -266,7 +259,6 @@ USER_FUNC(evt_npc_set_height) {
 }
 
 /** const char* lookupName, s32 evtStoreIndex */
-// const char* lookupName, s32 evtStoreIndex
 USER_FUNC(evt_npc_get_height) {
     EvtWord* args = event->args;
     const char* name;
@@ -281,7 +273,6 @@ USER_FUNC(evt_npc_get_height) {
 }
 
 /** const char* lookupName, f32 x, f32 y, f32 z */
-// const char* lookupName, f32 x, f32 y, f32 z
 USER_FUNC(evt_npc_set_scale) {
     EvtWord* args = event->args;
     const char* name;
@@ -300,7 +291,6 @@ USER_FUNC(evt_npc_set_scale) {
 }
 
 /** const char* lookupName, s32 xStoreIndex, s32 yStoreIndex, s32 zStoreIndex */
-// const char* lookupName, s32 xStoreIndex, s32 yStoreIndex, s32 zStoreIndex
 USER_FUNC(evt_npc_get_scale) {
     EvtWord* args = event->args;
     const char* name;
@@ -319,7 +309,6 @@ USER_FUNC(evt_npc_get_scale) {
 }
 
 /** const char* lookupName, s32 xStoreIndex, s32 yStoreIndex, s32 zStoreIndex */
-// const char* lookupName, s32 xStoreIndex, s32 yStoreIndex, s32 zStoreIndex
 USER_FUNC(evt_npc_get_position) {
     EvtWord* args = event->args;
     const char* name;
@@ -338,7 +327,6 @@ USER_FUNC(evt_npc_get_position) {
 }
 
 /** const char* lookupName, s32 xStoreIndex, s32 yStoreIndex, s32 zStoreIndex */
-// const char* lookupName, s32 xStoreIndex, s32 yStoreIndex, s32 zStoreIndex
 USER_FUNC(evt_npc_get_home_position) {
     EvtWord* args = event->args;
     const char* name;
@@ -376,7 +364,6 @@ USER_FUNC(evt_npc_set_home_position) {
 }
 
 /** const char* lookupName, s32 xStoreIndex, s32 yStoreIndex, s32 zStoreIndex */
-// const char* lookupName, s32 xStoreIndex, s32 yStoreIndex, s32 zStoreIndex
 USER_FUNC(evt_npc_get_rotate) {
     EvtWord* args = event->args;
     const char* name;
@@ -972,7 +959,6 @@ USER_FUNC(evt_npc_glide_position) {
 }
 
 /** const char* lookupName */
-// const char* lookupName
 USER_FUNC(evt_npc_return_interrupt) {
     EvtWord* args = event->args;
     const char* name;
@@ -1141,7 +1127,6 @@ USER_FUNC(evt_npc_homing_target) {
 }
 
 /** intplGetValue, but for a normalized t in [0, 1] */
-// intplGetValue, but for a normalized t in [0, 1]
 static f32 _intplGetFloat(s32 mode, f32 t) {
     f32 v, u, c;
     f32 r;
@@ -1204,7 +1189,6 @@ static f32 _intplGetFloat(s32 mode, f32 t) {
 }
 
 /** const char* lookupName, f32 ry */
-// const char* lookupName, f32 ry
 USER_FUNC(evt_npc_set_ry) {
     EvtWord* args = event->args;
     const char* name;
@@ -1217,7 +1201,6 @@ USER_FUNC(evt_npc_set_ry) {
 }
 
 /** const char* lookupName, f32 side (0 = left of camera, else right) */
-// const char* lookupName, f32 side (0 = left of camera, else right)
 USER_FUNC(evt_npc_set_ry_lr) {
     EvtWord* args = event->args;
     const char* name;
@@ -1240,7 +1223,6 @@ USER_FUNC(evt_npc_set_ry_lr) {
 }
 
 /** const char* lookupName */
-// const char* lookupName
 USER_FUNC(evt_npc_reverse_ry) {
     EvtWord* args = event->args;
     const char* name;
@@ -1253,7 +1235,6 @@ USER_FUNC(evt_npc_reverse_ry) {
 }
 
 /** const char* lookupName, s32 dirStoreIndex */
-// const char* lookupName, s32 dirStoreIndex
 USER_FUNC(evt_npc_get_dir) {
     EvtWord* args = event->args;
     const char* name;
@@ -1266,7 +1247,6 @@ USER_FUNC(evt_npc_get_dir) {
 }
 
 /** const char* lookupName, const char* animName */
-// const char* lookupName, const char* animName
 USER_FUNC(evt_npc_set_anim) {
     EvtWord* args = event->args;
     const char* name;
@@ -1325,7 +1305,6 @@ USER_FUNC(evt_npc_set_paper) {
 }
 
 /** const char* lookupName, const char* paperAnim */
-// const char* lookupName, const char* paperAnim
 USER_FUNC(evt_npc_set_paper_anim) {
     EvtWord* args = event->args;
     const char* name;
@@ -1338,7 +1317,6 @@ USER_FUNC(evt_npc_set_paper_anim) {
 }
 
 /** const char* lookupName */
-// const char* lookupName
 USER_FUNC(evt_npc_clear_paper) {
     EvtWord* args = event->args;
     const char* name;
@@ -1351,7 +1329,6 @@ USER_FUNC(evt_npc_clear_paper) {
 }
 
 /** const char* lookupName, const char* animName */
-// const char* lookupName, const char* animName
 USER_FUNC(evt_npc_set_force_regl_anim) {
     EvtWord* args = event->args;
     const char* name;
@@ -1367,7 +1344,6 @@ USER_FUNC(evt_npc_set_force_regl_anim) {
 }
 
 /** const char* lookupName */
-// const char* lookupName
 USER_FUNC(evt_npc_wait_pera) {
     EvtWord* args = event->args;
     const char* name;
@@ -1382,7 +1358,6 @@ USER_FUNC(evt_npc_wait_pera) {
 }
 
 /** const char* lookupName, f32 loopCount */
-// const char* lookupName, f32 loopCount
 USER_FUNC(evt_npc_wait_anim) {
     EvtWord* args = event->args;
     const char* name;
@@ -1397,7 +1372,6 @@ USER_FUNC(evt_npc_wait_anim) {
 }
 
 /** s32 type (off/on), const char* npcName, s32 mask */
-// s32 type (off/on), const char* npcName, s32 mask
 USER_FUNC(evt_npc_flag_onoff) {
     EvtWord* args = event->args;
     s32 type;
@@ -1420,7 +1394,6 @@ USER_FUNC(evt_npc_flag_onoff) {
 }
 
 /** const char* lookupName, s32 mask, s32 storeIndex */
-// const char* lookupName, s32 mask, s32 storeIndex
 USER_FUNC(evt_npc_flag_check) {
     EvtWord* args = event->args;
     const char* name;
@@ -1435,7 +1408,6 @@ USER_FUNC(evt_npc_flag_check) {
 }
 
 /** s32 type (off/on), const char* npcName, s32 mask */
-// s32 type (off/on), const char* npcName, s32 mask
 USER_FUNC(evt_npc_reaction_flag_onoff) {
     EvtWord* args = event->args;
     s32 type, mask;
@@ -1457,7 +1429,6 @@ USER_FUNC(evt_npc_reaction_flag_onoff) {
 }
 
 /** s32 type (off/on), const char* npcName, s32 mask */
-// s32 type (off/on), const char* npcName, s32 mask
 USER_FUNC(evt_npc_status_onoff) {
     EvtWord* args = event->args;
     s32 type;
@@ -1480,7 +1451,6 @@ USER_FUNC(evt_npc_status_onoff) {
 }
 
 /** const char* lookupName, s32 mask, s32 storeIndex */
-// const char* lookupName, s32 mask, s32 storeIndex
 USER_FUNC(evt_npc_status_check) {
     EvtWord* args = event->args;
     const char* name;
@@ -1495,7 +1465,6 @@ USER_FUNC(evt_npc_status_check) {
 }
 
 /** const char* lookupName, s32 type (off/on) */
-// const char* lookupName, s32 type (off/on)
 USER_FUNC(evt_npc_pera_onoff) {
     EvtWord* args = event->args;
     const char* name;
@@ -1516,7 +1485,6 @@ USER_FUNC(evt_npc_pera_onoff) {
 }
 
 /** const char* lookupName, CameraId cameraId */
-// const char* lookupName, CameraId cameraId
 USER_FUNC(evt_npc_set_camid) {
     EvtWord* args = event->args;
     const char* name;
@@ -1549,7 +1517,6 @@ static f32 _get_target_dir(EventEntry* event, NpcEntry* npc, const char* targetN
 }
 
 /** const char* lookupName, const char* targetName, s32 dirStoreIndex (f32 out) */
-// const char* lookupName, const char* targetName, s32 dirStoreIndex (f32 out)
 USER_FUNC(evt_get_target_dir) {
     EvtWord* args = event->args;
     const char* name;
@@ -1566,7 +1533,6 @@ USER_FUNC(evt_get_target_dir) {
 }
 
 /** const char* lookupName, const char* targetName */
-// const char* lookupName, const char* targetName
 USER_FUNC(evt_set_dir_to_target) {
     EvtWord* args = event->args;
     const char* name;
@@ -1581,7 +1547,6 @@ USER_FUNC(evt_set_dir_to_target) {
 }
 
 /** const char* lookupName, unused */
-// const char* lookupName, unused
 USER_FUNC(evt_set_dir_to_home) {
     EvtWord* args = event->args;
     const char* name;
@@ -1596,7 +1561,6 @@ USER_FUNC(evt_set_dir_to_home) {
 }
 
 /** f32 x (in/out), f32 z (in/out), f32 dir, f32 dist */
-// f32 x (in/out), f32 z (in/out), f32 dir, f32 dist
 USER_FUNC(evt_npc_add_dirdist) {
     EvtWord* args = event->args;
     s32 xIndex, zIndex;
@@ -1641,7 +1605,6 @@ USER_FUNC(evt_npc_get_loiter_dir) {
 }
 
 /** const char* lookupName, s32 type, void* evt */
-// const char* lookupName, s32 type, void* evt
 USER_FUNC(evt_npc_change_interrupt) {
     EvtWord* args = event->args;
     const char* name;
@@ -1680,7 +1643,6 @@ USER_FUNC(evt_npc_change_interrupt) {
 }
 
 /** const char* lookupName, s32 storeIndex */
-// const char* lookupName, s32 storeIndex
 USER_FUNC(evt_npc_get_reglid) {
     EvtWord* args = event->args;
     const char* name;
@@ -1693,7 +1655,6 @@ USER_FUNC(evt_npc_get_reglid) {
 }
 
 /** const char* lookupName */
-// const char* lookupName
 USER_FUNC(evt_npc_restart_regular_event) {
     EvtWord* args = event->args;
     const char* name;
@@ -1828,7 +1789,6 @@ USER_FUNC(evt_npc_start_for_event) {
 }
 
 /** const char* lookupName */
-// const char* lookupName
 USER_FUNC(evt_npc_stop_for_one_event) {
     EvtWord* args = event->args;
     const char* name;
@@ -1841,7 +1801,6 @@ USER_FUNC(evt_npc_stop_for_one_event) {
 }
 
 /** const char* lookupName */
-// const char* lookupName
 USER_FUNC(evt_npc_start_for_one_event) {
     EvtWord* args = event->args;
     const char* name;
@@ -1864,7 +1823,6 @@ USER_FUNC(evt_npc_change_fbat_mode) {
 }
 
 /** const char* lookupName, const char* offscreenName */
-// const char* lookupName, const char* offscreenName
 USER_FUNC(evt_npc_set_offscreen) {
     EvtWord* args = event->args;
     const char* name;
@@ -1883,7 +1841,6 @@ USER_FUNC(evt_npc_set_offscreen) {
 }
 
 /** const char* lookupName, u8 r, u8 g, u8 b, u8 a */
-// const char* lookupName, u8 r, u8 g, u8 b, u8 a
 USER_FUNC(evt_npc_set_color) {
     EvtWord* args = event->args;
     const char* name;
@@ -1900,7 +1857,6 @@ USER_FUNC(evt_npc_set_color) {
 }
 
 /** BOOL enable, const char* lookupName */
-// BOOL enable, const char* lookupName
 USER_FUNC(evt_npc_blur_onoff) {
     EvtWord* args = event->args;
     BOOL enable;
@@ -1918,7 +1874,6 @@ USER_FUNC(evt_npc_blur_onoff) {
 }
 
 /** const char* lookupName, BOOL storeIndex (out) */
-// const char* lookupName, BOOL storeIndex (out)
 USER_FUNC(evt_npc_check) {
     EvtWord* args = event->args;
 
@@ -1931,7 +1886,6 @@ USER_FUNC(evt_npc_check) {
 }
 
 /** const char* lookupName, s16 mode */
-// const char* lookupName, s16 mode
 USER_FUNC(evt_npc_set_attack_mode) {
     EvtWord* args = event->args;
     const char* name;
@@ -1944,7 +1898,6 @@ USER_FUNC(evt_npc_set_attack_mode) {
 }
 
 /** const char* lookupName, s32 battleInfoId */
-// const char* lookupName, s32 battleInfoId
 USER_FUNC(evt_npc_set_battle_info) {
     EvtWord* args = event->args;
     const char* name;
@@ -1959,7 +1912,6 @@ USER_FUNC(evt_npc_set_battle_info) {
 }
 
 /** const char* lookupName, u8 rule0, u8 rule1, u8 rule2 */
-// const char* lookupName, u8 rule0, u8 rule1, u8 rule2
 USER_FUNC(evt_npc_set_battle_rule) {
     EvtWord* args = event->args;
     const char* name;
@@ -1978,7 +1930,6 @@ USER_FUNC(evt_npc_set_battle_rule) {
 }
 
 /** const char* lookupName, unused */
-// const char* lookupName, unused
 USER_FUNC(evt_npc_battle_start) {
     EvtWord* args = event->args;
     const char* name;
@@ -2042,7 +1993,6 @@ USER_FUNC(evt_npc_wait_battle_end) {
 }
 
 /** s32 resultStoreIndex */
-// s32 resultStoreIndex
 USER_FUNC(evt_npc_get_battle_result) {
     EvtWord* args = event->args;
     s32 index = args[0];
@@ -2052,7 +2002,6 @@ USER_FUNC(evt_npc_get_battle_result) {
 }
 
 /** s32 result */
-// s32 result
 USER_FUNC(evt_npc_check_escape_battle) {
     EvtWord* args = event->args;
 
@@ -2063,7 +2012,6 @@ USER_FUNC(evt_npc_check_escape_battle) {
 }
 
 /** s32 storeIndex */
-// s32 storeIndex
 USER_FUNC(evt_npc_get_battle_rule_keep_result) {
     EvtWord* args = event->args;
     s32 index = args[0];
@@ -2075,7 +2023,6 @@ USER_FUNC(evt_npc_get_battle_rule_keep_result) {
 }
 
 /** const char* lookupName, s32 workIndex, s32 storeIndex */
-// const char* lookupName, s32 workIndex, s32 storeIndex
 USER_FUNC(evt_npc_get_btlsetup_work) {
     EvtWord* args = event->args;
     const char* name;
@@ -2091,7 +2038,6 @@ USER_FUNC(evt_npc_get_btlsetup_work) {
 }
 
 /** const char* lookupName, s32 workIndex, s32 value */
-// const char* lookupName, s32 workIndex, s32 value
 USER_FUNC(evt_npc_set_btlsetup_work) {
     EvtWord* args = event->args;
     const char* name;
@@ -2107,7 +2053,6 @@ USER_FUNC(evt_npc_set_btlsetup_work) {
 }
 
 /** const char* lookupName, const char* otherName */
-// const char* lookupName, const char* otherName
 USER_FUNC(evt_npc_set_link) {
     EvtWord* args = event->args;
     const char* name;
@@ -2124,7 +2069,6 @@ USER_FUNC(evt_npc_set_link) {
 }
 
 /** const char* lookupName, ItemType storeIndex (out) */
-// const char* lookupName, ItemType storeIndex (out)
 USER_FUNC(evt_npc_get_drop_fixitem) {
     EvtWord* args = event->args;
     const char* name;
@@ -2824,7 +2768,6 @@ USER_FUNC(evt_fbat_trans_floor_position) {
 
 #if VERSION >= VERSION_US
 /** US, PAL and September demos: like evt_fbat_trans_floor_position, but also probes at x +/- width/2 and keeps the highest floor */
-// US, PAL and September demos: like evt_fbat_trans_floor_position, but also probes at x +/- width/2 and keeps the highest floor
 USER_FUNC(evt_fbat_trans_floor_position_wide) {
     EvtWord* args = event->args;
 

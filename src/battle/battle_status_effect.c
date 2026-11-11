@@ -619,7 +619,7 @@ void BattleStatusChangeMsgAdjust(BattleWork* wp) {
         msg->flags = 0;
         for (j = 0; j < BATTLE_UNIT_MAX; j++) {
             unit = BattleGetUnitPtr(wp, j);
-            if (unit && !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
+            if (unit && !BtlUnit_CheckStatus(unit, STATUS_DEAD)) {
                 e = &unit->statusChangeInfo[0];
                 found = 0;
                 k = 0;

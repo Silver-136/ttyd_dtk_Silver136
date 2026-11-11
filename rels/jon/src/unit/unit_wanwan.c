@@ -334,8 +334,8 @@ EVT_END()
  * it plays pose 39 and is knocked back a short way (25 units against its facing) over 5 frames,
  * waits half a second and, in the early demos, also hops twice back toward its spot.
  * It then restores the camera and starts the wait event again,
- * except when the hit knocked it out (damage flag 0x200) without a Life Shroom to revive it (0x800):
- * then it just
+ * except when the hit knocked it out (DAMAGE_RESULT_ZERO_HP) without a Life Shroom to revive it
+ * (DAMAGE_RESULT_REVIVAL): then it just
  * returns.
  */
 static EVT_BEGIN(counter_damage_event)

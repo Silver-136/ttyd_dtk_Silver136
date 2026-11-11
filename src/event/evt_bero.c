@@ -274,14 +274,12 @@ USER_FUNC(evt_bero_mapchange) {
 }
 
 /** s32 retIndex */
-// s32 retIndex
 USER_FUNC(evt_bero_get_entername) {
     evtSetValue(event, *event->args, (EvtWord)&gp->beroEnterName);
     return EVT_RETURN_DONE;
 }
 
 /** BOOL* on/off, s32* mask */
-// BOOL* on/off, s32* mask
 USER_FUNC(evt_bero_exec_onoff) {
     EvtWord* args = event->args;
     BOOL onoff;
@@ -298,7 +296,6 @@ USER_FUNC(evt_bero_exec_onoff) {
 }
 
 /** s32 retIndex */
-// s32 retIndex
 USER_FUNC(evt_bero_exec_get) {
     evtSetValue(event, *event->args, BeroEXEC);
     return EVT_RETURN_DONE;
@@ -310,7 +307,6 @@ USER_FUNC(evt_bero_exec_wait) {
 }
 
 /** f32 retX, f32 retY, f32 retZ */
-// f32 retX, f32 retY, f32 retZ
 USER_FUNC(evt_bero_get_start_position) {
     EvtWord* args = event->args;
 
@@ -321,7 +317,6 @@ USER_FUNC(evt_bero_get_start_position) {
 }
 
 /** f32 retX, f32 retY, f32 retZ */
-// f32 retX, f32 retY, f32 retZ
 USER_FUNC(evt_bero_get_end_position) {
     EvtWord* args = event->args;
 
@@ -332,7 +327,6 @@ USER_FUNC(evt_bero_get_end_position) {
 }
 
 /** s32* id, s32 retIndex1, s32 retIndex2, s32 retIndex3, s32 retIndex4 */
-// s32* id, s32 retIndex1, s32 retIndex2, s32 retIndex3, s32 retIndex4
 USER_FUNC(evt_bero_get_info_anime) {
     BeroEntry* bero;
     EvtWord* args = event->args;
@@ -1637,7 +1631,7 @@ EVT_END()
 
 /**
  * Exit trigger for pipes (only in normal mode):
- * Mario slides in, the pipe-direction fade is set unless type bit 0x2000, then the map changes.
+ * Mario slides in, the pipe-direction fade is set unless BERO_TYPE_FLAG_NO_FADE, then the map changes.
  * Pipes with no destination map run bero_case_exec_pipe_sub.
  */
 EVT_BEGIN(bero_case_exec_pipe)
@@ -1846,6 +1840,7 @@ static EVT_BEGIN(evt_bero_info_run_none)
     RETURN
 EVT_END()
 #endif
+
 /**
  * Arrival by road: Mario walks from the map edge to the end point
  * while partners follow closely (homing distance 20, back to 50 after).
@@ -1939,6 +1934,7 @@ static EVT_BEGIN(evt_bero_info_run_gate)
     RETURN
 EVT_END()
 #endif
+
 /**
  * Map-entry script run after evt_bero_get_info: on a save load just registers exits;
  * otherwise sets up Mario (background mode, partners, pipe pose), places him,

@@ -478,7 +478,7 @@ static void winTabDisp(WindowWork* wp);
  * Draws the whole pause menu for winDisp (win_main.c):
  * the open pages back to front (menu slots 4..0, skipping ones covered by a fully slid-in page or sliding out),
  * then the tabs, mail window, help box, sort menu and the bobbing cursor hand with its shadow.
- * From JP on the hand is hidden while a book is open (flags 0x8000).
+ * From JP on the hand is hidden while a book is open (WINDOW_FLAG_BOOK_OPEN).
  */
 void winRootDisp(s32 camId, WindowWork* wp) {
     GXColor white = {0xFF, 0xFF, 0xFF, 0xFF};
@@ -2809,7 +2809,7 @@ void winZClear(void) {
  * As a list: one row per letter with a sender colour (MailData flags 1/2/4), an opened/unopened envelope,
  * its two-digit number and title.
  * While a letter is read (item.state 202): its header, the body scrolled by mailLine,
- * its picture (flags 0x1000) and scroll arrows.
+ * its picture (MAIL_FLAG_PICTURE) and scroll arrows.
  */
 static void winMailDisp(WindowWork* wp) {
     s32 i;

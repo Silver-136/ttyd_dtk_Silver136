@@ -676,7 +676,7 @@ static EVT_BEGIN(entry_event)
 EVT_END()
 
 /**
- * Damage event of the Doopliss forms: when the hit defeats him (damage flag 0x400) sets GW(13) = 1 (he is going
+ * Damage event of the Doopliss forms: when the hit defeats him (DAMAGE_RESULT_DEATH) sets GW(13) = 1 (he is going
  * down; the Sirens' scripts check it), then runs the default damage handling for every hit.
  */
 static EVT_BEGIN(damage_event)

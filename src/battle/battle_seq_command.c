@@ -1725,7 +1725,7 @@ BOOL BattleCommandCheckChangePositionEnable(BattleWork* wp) {
         return FALSE;
     }
     if (BtlUnit_CheckStatus(unit, STATUS_SLEEP) || BtlUnit_CheckStatus(unit, STATUS_STOP) ||
-        BtlUnit_CheckStatus(unit, STATUS_FREEZE) || BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
+        BtlUnit_CheckStatus(unit, STATUS_FREEZE) || BtlUnit_CheckStatus(unit, STATUS_DEAD)) {
         return FALSE;
     }
     if (unit->attributeFlags & kVeiled) {
@@ -1742,7 +1742,7 @@ BOOL BattleCommandCheckChangePositionEnable(BattleWork* wp) {
         return FALSE;
     }
     if (BtlUnit_CheckStatus(unit, STATUS_SLEEP) || BtlUnit_CheckStatus(unit, STATUS_STOP) ||
-        BtlUnit_CheckStatus(unit, STATUS_FREEZE) || BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
+        BtlUnit_CheckStatus(unit, STATUS_FREEZE) || BtlUnit_CheckStatus(unit, STATUS_DEAD)) {
         return FALSE;
     }
     return unit->flippedTurns <= 0;
@@ -2809,7 +2809,7 @@ void BattleDrawEnemyHP(CameraId camId, void* param) {
         if (!unit) {
             continue;
         }
-        if (BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
+        if (BtlUnit_CheckStatus(unit, STATUS_DEAD)) {
             continue;
         }
         if (!battleCheckUnitMonosiriFlag(wp->units[i])) {

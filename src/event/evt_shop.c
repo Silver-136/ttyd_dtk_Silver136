@@ -1348,6 +1348,7 @@ EVT_BEGIN(shopper_talk_evt)
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
+
 static EVT_BEGIN(first_shopping_evt)
     CALL(shopper_name, LW(9))
     CALL(evt_set_dir_to_target, LW(9), STRING("mario"))

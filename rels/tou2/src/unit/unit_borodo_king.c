@@ -379,7 +379,7 @@ static BattleUnitKindPart parts[] = {
  * Init event of the Big Bandit: registers its wait, attack,
  * damage and confusion events and its run and walk footstep sounds, and picks the pose table:
  * the one with the loot bag (pose_table_item_have)
- * when unit flag 0x40000000 (it already holds stolen goods) is set, the plain one otherwise.
+ * when BATTLE_UNIT_FLAG_STOLEN_ITEM (it already holds stolen goods) is set, the plain one otherwise.
  * Then starts the wait event.
  */
 static EVT_BEGIN(init_event)
@@ -812,7 +812,7 @@ static EVT_BEGIN(escape_event)
 EVT_END()
 
 /**
- * Wait event of the Big Bandit: picks the plain or loot-bag pose table by unit flag 0x40000000
+ * Wait event of the Big Bandit: picks the plain or loot-bag pose table by BATTLE_UNIT_FLAG_STOLEN_ITEM
  * and sets the idle pose from it.
  */
 static EVT_BEGIN(wait_event)
@@ -868,7 +868,7 @@ EVT_BEGIN(_borodo_king_emergency_revival_event)
     IF_INT_GREATER(LW(0), 0)
         GOTO(7)
     END_IF
-    CALL(btlevtcmd_OnOffStatus, LW(10), STATUS_INSTANT_KILL, 0, 0, 0)
+    CALL(btlevtcmd_OnOffStatus, LW(10), STATUS_DEAD, 0, 0, 0)
     CALL(btlevtcmd_SetHp, LW(10), 0)
     CALL(btlevtcmd_RecoverHp, LW(10), LW(11), 10)
     CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))

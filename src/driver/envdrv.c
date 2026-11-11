@@ -836,7 +836,7 @@ void envGlareFilterZ(f32 zscale) {
 #pragma opt_lifetimes off
 /**
  * Draws a ring of 1000 jittered lines from the screen centre outwards, textured with the captured frame,
- * which gives a radial streak over the picture; enabled by flag 0x10000000.
+ * which gives a radial streak over the picture; enabled by ENV_FLAG_FF_UNUSED.
  */
 static void envDisp_FF(void) {
     EnvironmentWork* wp = envGetWork();

@@ -110,7 +110,7 @@ static NpcSetupInfo npcEnt[] = {
 
 /**
  * Enter event of the pipe A_dokan: in the background it waits
- * until the entrance has finished (BeroEXEC bit 0x10000) and 10 more frames,
+ * until the entrance has finished (BERO_EXEC_ENTRY_DONE) and 10 more frames,
  * then makes the camera follow Mario's height again; returns LW(0) = 0.
  */
 static EVT_BEGIN(evt_haikei_in)

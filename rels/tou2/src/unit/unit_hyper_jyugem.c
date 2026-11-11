@@ -347,7 +347,7 @@ EVT_END()
 /**
  * Damage event of the Dark Lakitu.
  * When it is not holding a Spiny egg (UNIT_WORK_HOLD = 0) it just runs the default damage reaction.
- * When it is holding one, a hit that did damage or left it with instant KO (STATUS_INSTANT_KILL), sleep, dizzy, confusion,
+ * When it is holding one, a hit that did damage or left it with instant KO (STATUS_DEAD), sleep, dizzy, confusion,
  * electric, freeze or stop knocks the egg out of its hands:
  * part 2 is thrown 200 units behind it to the floor and hidden, the hold (UNIT_WORK_HOLD),
  * its spiky counter attribute, pose table and hit offset are reset, then the default damage reaction runs.
@@ -372,7 +372,7 @@ static EVT_BEGIN(damage_event)
         END_IF
 
         // A hit that did damage, or left instant KO, sleep, dizzy, confusion, electric, freeze or stop, knocks the egg out of its hands.
-        CALL(btlevtcmd_CheckStatus, LW(10), STATUS_INSTANT_KILL, LW(14))
+        CALL(btlevtcmd_CheckStatus, LW(10), STATUS_DEAD, LW(14))
         OR(LW(15), LW(14))
         CALL(btlevtcmd_CheckStatus, LW(10), STATUS_SLEEP, LW(14))
         OR(LW(15), LW(14))
@@ -474,7 +474,7 @@ static EVT_BEGIN(unison_phase_event)
     IF_INT_EQUAL(LW(0), 1)
         GOTO(99)
     END_IF
-    CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_INSTANT_KILL, LW(0))
+    CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_DEAD, LW(0))
     IF_INT_EQUAL(LW(0), 1)
         GOTO(99)
     END_IF

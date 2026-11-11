@@ -358,7 +358,7 @@ EVT_END()
  * and head spin in place for 48 frames with SFX_BTL_ENEMY_DIE1_1,
  * then the unit puffs out in smoke with SFX_BTL_ENEMY_DIE1_2 and a "star_point" effect,
  * its coins and experience are stored, the chain pieces shake for 30 frames,
- * it returns any item it held and uses kill mode 0 when the DEATH flag (0x400) is set,
+ * it returns any item it held and uses kill mode 0 when DAMAGE_RESULT_DEATH is set,
  * otherwise mode 2; the coins and experience were already stored.
  */
 static EVT_BEGIN(dead_event)

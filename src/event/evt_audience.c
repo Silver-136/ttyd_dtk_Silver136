@@ -7,7 +7,6 @@
 #include "libc_decls.h"
 
 /** s32* mask */
-// s32* mask
 USER_FUNC(evt_audience_base_flag_on) {
     BattleAudience* audience;
     s32 mask;
@@ -19,7 +18,6 @@ USER_FUNC(evt_audience_base_flag_on) {
 }
 
 /** s32* memberId, s32* flags, s32 retIndex */
-// s32* memberId, s32* flags, s32 retIndex
 USER_FUNC(evt_audience_flag_check) {
     EvtWord* args = event->args;
     s32 id, flags;
@@ -37,7 +35,6 @@ USER_FUNC(evt_audience_flag_check) {
 }
 
 /** s32* memberId, s32* flags */
-// s32* memberId, s32* flags
 USER_FUNC(evt_audience_flag_on) {
     EvtWord* args = event->args;
     s32 id, flags;
@@ -49,7 +46,6 @@ USER_FUNC(evt_audience_flag_on) {
 }
 
 /** s32* memberId, s32* flags */
-// s32* memberId, s32* flags
 USER_FUNC(evt_audience_flag_off) {
     EvtWord* args = event->args;
     s32 id, flags;
@@ -61,7 +57,6 @@ USER_FUNC(evt_audience_flag_off) {
 }
 
 /** s32* memberId, f32* x, f32* y, f32* z */
-// s32* memberId, f32* x, f32* y, f32* z
 USER_FUNC(evt_audience_set_position) {
     EvtWord* args = event->args;
     f32 x, y, z;
@@ -76,7 +71,6 @@ USER_FUNC(evt_audience_set_position) {
 }
 
 /** s32* memberId, s32 retX, s32 retY, s32 retZ */
-// s32* memberId, s32 retX, s32 retY, s32 retZ
 USER_FUNC(evt_audience_get_position) {
     BattleAudienceMember* member;
     EvtWord* args = event->args;
@@ -91,7 +85,6 @@ USER_FUNC(evt_audience_get_position) {
 }
 
 /** s32* memberId, f32* x, f32* y, f32* z */
-// s32* memberId, f32* x, f32* y, f32* z
 USER_FUNC(evt_audience_set_rotate) {
     EvtWord* args = event->args;
     f32 x, y, z;
@@ -106,7 +99,6 @@ USER_FUNC(evt_audience_set_rotate) {
 }
 
 /** s32* memberId, f32* x, f32* y, f32* z */
-// s32* memberId, f32* x, f32* y, f32* z
 USER_FUNC(evt_audience_set_rotate_offset) {
     EvtWord* args = event->args;
     f32 x, y, z;
@@ -121,7 +113,6 @@ USER_FUNC(evt_audience_set_rotate_offset) {
 }
 
 /** s32* memberId, f32* targetX, f32* targetY, f32* targetZ, s32* interpMode, s32* numFrames */
-// s32* memberId, f32* targetX, f32* targetY, f32* targetZ, s32* interpMode, s32* numFrames
 USER_FUNC(evt_audience_move_position_frame) {
     EvtWord* args = event->args;
     f32 targetX, targetY, targetZ;
@@ -166,7 +157,6 @@ USER_FUNC(evt_audience_move_position_frame) {
 }
 
 /** s32* memberId, f32* targetX, f32* targetY, f32* targetZ, f32* interpSpeed */
-// s32* memberId, f32* targetX, f32* targetY, f32* targetZ, f32* interpSpeed
 USER_FUNC(evt_audience_move_position_speed) {
     EvtWord* args = event->args;
     BattleAudienceMember* member;
@@ -240,7 +230,6 @@ USER_FUNC(evt_audience_move_position_speed) {
 }
 
 /** s32* memberId, f32* targetX, f32* targetY, f32* targetZ, s32* numFrames, f32* deltaY */
-// s32* memberId, f32* targetX, f32* targetY, f32* targetZ, s32* numFrames, f32* deltaY
 USER_FUNC(evt_audience_jump_position_firstsp) {
     EvtWord* args = event->args;
     BattleAudienceMember* member;
@@ -287,7 +276,6 @@ USER_FUNC(evt_audience_jump_position_firstsp) {
 }
 
 /** s32* memberId, f32* targetX, f32* targetY, f32* targetZ, s32* numFrames, f32* gravity */
-// s32* memberId, f32* targetX, f32* targetY, f32* targetZ, s32* numFrames, f32* gravity
 USER_FUNC(evt_audience_jump_position_gravity) {
     EvtWord* args = event->args;
     BattleAudienceMember* member;
@@ -335,7 +323,6 @@ USER_FUNC(evt_audience_jump_position_gravity) {
 }
 
 /** s32* memberId, s32* animId, BOOL* force */
-// s32* memberId, s32* animId, BOOL* force
 USER_FUNC(evt_audience_set_animpose) {
     EvtWord* args = event->args;
     s32 id, animId;

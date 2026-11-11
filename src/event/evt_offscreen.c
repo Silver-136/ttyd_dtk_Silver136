@@ -5,21 +5,18 @@
 #include "manager/evtmgr_cmd.h"
 
 /** const char* name */
-// const char* name
 USER_FUNC(evt_offscreen_entry) {
     offscreenEntry((const char*)evtGetValue(event, *event->args));
     return EVT_RETURN_DONE;
 }
 
 /** const char* name */
-// const char* name
 USER_FUNC(evt_offscreen_delete) {
     offscreenDelete((const char*)evtGetValue(event, *event->args));
     return EVT_RETURN_DONE;
 }
 
 /** const char* name, s32 x (out), s32 y (out), s32 width (out), s32 height (out) */
-// const char* name, s32 x (out), s32 y (out), s32 width (out), s32 height (out)
 USER_FUNC(evt_offscreen_get_boundingbox) {
     EvtWord* args = event->args;
     const char* name;
@@ -42,7 +39,6 @@ USER_FUNC(evt_offscreen_get_boundingbox) {
 }
 
 /** same as above, but gives up waiting for a valid box after 5 frames */
-// same as above, but gives up waiting for a valid box after 5 frames
 USER_FUNC(evt_offscreen_get_boundingbox2) {
     EvtWord* args = event->args;
     const char* name;
@@ -73,7 +69,6 @@ USER_FUNC(evt_offscreen_get_boundingbox2) {
 }
 
 /** const char* name, s32 format, s32 param */
-// const char* name, s32 format, s32 param
 USER_FUNC(evt_offscreen_set_texture_fmt) {
     EvtWord* args = event->args;
     const char* name;

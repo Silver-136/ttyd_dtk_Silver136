@@ -684,21 +684,21 @@ static void kpa_status_disp(CameraId camera, void* param) {
 #if VERSION >= VERSION_US
     iconDispGx(1.0f, &pos, KPA_ICON_2D, kpa_status_icon_tbl[gp->language][0]);
 #else
-    iconDispGx(1.0f, &pos, KPA_ICON_2D, gp->language ? 0x210 : 0x206);
+    iconDispGx(1.0f, &pos, KPA_ICON_2D, gp->language ? ICON_TEXT_BOWSER : ICON_TEXT_KOOPA);
 #endif
     pos.x = 50.0f;
     pos.y = 160.0f;
 #if VERSION >= VERSION_US
     iconDispGx(1.0f, &pos, KPA_ICON_2D, kpa_status_icon_tbl[gp->language][1]);
 #else
-    iconDispGx(1.0f, &pos, KPA_ICON_2D, 0x208);
+    iconDispGx(1.0f, &pos, KPA_ICON_2D, ICON_TEXT_WORLD);
 #endif
     pos.x = 220.0f;
     pos.y = 160.0f;
 #if VERSION >= VERSION_US
     iconDispGx(1.0f, &pos, KPA_ICON_2D, kpa_status_icon_tbl[gp->language][2]);
 #else
-    iconDispGx(1.0f, &pos, KPA_ICON_2D, 0x207);
+    iconDispGx(1.0f, &pos, KPA_ICON_2D, ICON_TEXT_TIME);
 #endif
 
     n = pouchGetKpaScore();

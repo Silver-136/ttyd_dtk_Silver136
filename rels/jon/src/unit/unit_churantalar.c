@@ -289,7 +289,7 @@ static USER_FUNC(piders_get_num) {
 
     for (i = 0; i < 64; i++) {
         unit = wp->units[i];
-        if (unit != NULL && (unit->currentKind == UNIT_PIDER || unit->currentKind == UNIT_ARANTULA) && !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
+        if (unit != NULL && (unit->currentKind == UNIT_PIDER || unit->currentKind == UNIT_ARANTULA) && !BtlUnit_CheckStatus(unit, STATUS_DEAD)) {
             num++;
         }
     }
@@ -315,7 +315,7 @@ static USER_FUNC(piders_get_zyun) {
     for (i = 0; i < 64; i++) {
         unit = wp->units[i];
         if (unit != NULL && (unit->currentKind == UNIT_PIDER || unit->currentKind == UNIT_ARANTULA)) {
-            if (!BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
+            if (!BtlUnit_CheckStatus(unit, STATUS_DEAD)) {
                 order++;
             }
             if (unit->unitId == id) {
@@ -341,7 +341,7 @@ static USER_FUNC(piders_get_first_pos_attr) {
     // find the first living pider
     for (i = 0; i < 64; i++) {
         unit = wp->units[i];
-        if (unit != NULL && (unit->currentKind == UNIT_PIDER || unit->currentKind == UNIT_ARANTULA) && !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
+        if (unit != NULL && (unit->currentKind == UNIT_PIDER || unit->currentKind == UNIT_ARANTULA) && !BtlUnit_CheckStatus(unit, STATUS_DEAD)) {
             break;
         }
     }
@@ -765,7 +765,7 @@ static EVT_BEGIN(move_kuuchu_event)
 EVT_END()
 
 /**
- * Before the player's phase, if the Arantula can act and is not in STATUS_INSTANT_KILL (KO),
+ * Before the player's phase, if the Arantula can act and is not in STATUS_DEAD (KO),
  * it moves up (move_kuuchu_event) or down (move_kuutei_event),
  * counting the living Piders and Arantulas together.
  * The first of them (piders_get_zyun gives 1) switches between the floor and the air every turn.
@@ -779,7 +779,7 @@ static EVT_BEGIN(unison_phase_event)
     IF_INT_EQUAL(LW(0), 0)
         GOTO(99)
     END_IF
-    CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_INSTANT_KILL, LW(0))
+    CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_DEAD, LW(0))
     IF_INT_EQUAL(LW(0), 1)
         GOTO(99)
     END_IF

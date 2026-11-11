@@ -450,7 +450,7 @@ f32 yoshiAnimeOfsy(PartyEntry* party) {
  * Runs Yoshi's ride: mounting, ground movement, flutter and jump-stand motion, dismounting and water handling.
  * The early demos omit the head search and add the fly bob speed directly to the height;
  * JP and later accumulate a bob offset around a ground/base height. The early demos also scale ordinary ride movement
- * to 3/4 while party bit 0x80 (shallow water) is set.
+ * to 3/4 while PARTY_FLAG_IN_SHALLOW_WATER is set.
  */
 void yoshi_use(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;

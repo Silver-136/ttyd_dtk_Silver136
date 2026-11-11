@@ -1992,6 +1992,7 @@ static EVT_BEGIN(erase_house)
     END_IF
     RETURN
 EVT_END()
+
 static EVT_BEGIN(appear_house)
     IF_INT_EQUAL(GF(11), 1)
         RETURN

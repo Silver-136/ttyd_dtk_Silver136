@@ -1920,7 +1920,7 @@ USER_FUNC(evt_koopa_chk_dead) {
 }
 
 /**
- * Sets (arg 0 non-zero, taken literally) or clears KpaWork flag 0x1000000, which makes Bowser's stay and walk
+ * Sets (arg 0 non-zero, taken literally) or clears KPA_WORK_FLAG_WEARY, which makes Bowser's stay and walk
  * motions (koopa_motion) use KPA_S_2 and KPA_W_2 instead of KPA_S_1 and KPA_W_1;
  * set for gor_01's chapter 6 interlude in the Rogueport plaza.
  * Guess: those are tired poses, from the name.

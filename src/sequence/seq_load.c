@@ -1196,7 +1196,7 @@ static void loadDraw(CameraId camera, void* param) {
             y = FontGetMessageWidth(buf);
             FontDrawString(60.0f + win1->x + (w - y), win1->y, buf);
             PSMTXTrans(m, 58.0f + win1->x, win1->y - 20.0f, 0.0f);
-            iconDispGxCol(m, 4, ICON_COUNTER_COLON, (GXColor){0, 0, 0, 255});
+            iconDispGxCol(m, ICON_FLAG_2D, ICON_COUNTER_COLON, (GXColor){0, 0, 0, 255});
 
             // FAKE: y read through a byte offset so the loop-invariant &win1->y becomes a hoisted @ temp (target pop order)
             for (k = 0; k < 7; k++) {
@@ -1204,7 +1204,7 @@ static void loadDraw(CameraId camera, void* param) {
                     PSMTXTrans(m, (win1->x - 106.0f) + k * 32, *(f32*)((u8*)win1 + offsetof(WinDt, y)) - 52.0f, 0.0f);
                     PSMTXScale(s, 0.7f, 0.7f, 0.7f);
                     PSMTXConcat(m, s, m);
-                    iconDispGxCol(m, 4, (u16)stone_id[k], i == wp->slot ? white : gray);
+                    iconDispGxCol(m, ICON_FLAG_2D, (u16)stone_id[k], i == wp->slot ? white : gray);
 #else
 #if VERSION >= VERSION_US
             if (gp->language == LANGUAGE_JP) {

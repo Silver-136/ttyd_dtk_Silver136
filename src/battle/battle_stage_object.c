@@ -2536,6 +2536,7 @@ static EVT_BEGIN(_nozzle_turn_event)
     CALL(_nozzle_turn)
     RETURN
 EVT_END()
+
 static EVT_BEGIN(_close_wall_event)
     CALL(btlevtcmd_WaitAttackEnd)
     CALL(_announce_wall_message)
@@ -3322,7 +3323,7 @@ static USER_FUNC(_fall_frame_wait) {
 
 /**
  * Runs each living unit's ceiling-fall script (btlevtcmd_SetEventCeilFall) and waits for all of them to end.
- * JP and later skip units with the instant-kill status.
+ * JP and later skip defeated units (STATUS_DEAD).
  */
 static USER_FUNC(_fall_frame_wait_unit_ready) {
     BattleWork* wp = _battleWorkPointer;
@@ -3336,7 +3337,7 @@ static USER_FUNC(_fall_frame_wait_unit_ready) {
 #if VERSION <= VERSION_DEMO_JP
             if (unit && !(unit->flags & BATTLE_UNIT_FLAG_BROKEN) && unit->ceilFallEventCode) {
 #else
-            if (unit && !(unit->flags & BATTLE_UNIT_FLAG_BROKEN) && !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL) && unit->ceilFallEventCode) {
+            if (unit && !(unit->flags & BATTLE_UNIT_FLAG_BROKEN) && !BtlUnit_CheckStatus(unit, STATUS_DEAD) && unit->ceilFallEventCode) {
 #endif
                 evt = evtEntry(unit->ceilFallEventCode, 10, 0);
                 if (evt) {

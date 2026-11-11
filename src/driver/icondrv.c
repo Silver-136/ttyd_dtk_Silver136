@@ -51,14 +51,20 @@ static TEXPalette* icon_tpl;
     }
 
 #if VERSION >= VERSION_US
-    // US and later: language-specific variants of icons 0x49 and 0x67 (indexed by gp->language)
-    u16 icon_049_lang_tbl[6] = {0x49, 0x4A, 0x4B, 0x4C, 0x49, 0x4D};
-    u16 icon_067_lang_tbl[6] = {0x67, 0x68, 0x69, 0x6A, 0x67, 0x6B};
+    // US and later: the Power Rush and Power Rush P icons for each language (indexed by gp->language: JP, US, GE,
+    // FR, SP, IT)
+    u16 icon_049_lang_tbl[6] = {
+        ICON_POWER_RUSH, ICON_POWER_RUSH_D, ICON_POWER_RUSH_K, ICON_POWER_RUSH_A, ICON_POWER_RUSH, ICON_POWER_RUSH_C,
+    };
+    u16 icon_067_lang_tbl[6] = {
+        ICON_POWER_RUSH_P,   ICON_POWER_RUSH_P_D, ICON_POWER_RUSH_P_K,
+        ICON_POWER_RUSH_P_A, ICON_POWER_RUSH_P,   ICON_POWER_RUSH_P_C,
+    };
 #endif
 
 /**
  * Returns icon iconId's frame data in icon.bin, or NULL until both icon.tpl and icon.bin have loaded.
- * The US and later builds swap icons 0x49 and 0x67 for their variant in the current language.
+ * The US and later builds swap the Power Rush and Power Rush P icons for their variant in the current language.
  */
 #if VERSION >= VERSION_US
 static inline IconBinaryEntry* iconGetBinData(s32 iconId) {
@@ -72,10 +78,10 @@ static inline IconBinaryEntry* iconGetBinData(u16 iconId) {
     }
 #if VERSION >= VERSION_US
     switch ((u16)iconId) {
-        case 0x49:
+        case ICON_POWER_RUSH:
             iconId = icon_049_lang_tbl[gp->language];
             break;
-        case 0x67:
+        case ICON_POWER_RUSH_P:
             iconId = icon_067_lang_tbl[gp->language];
             break;
     }

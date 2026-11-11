@@ -115,7 +115,7 @@ typedef enum BattleUnitAttribute_Flags { // 32-bit size
     kNoGravityBob = (1 << 12),           // 0x1000, no zero-gravity bob (like kFloating)
     kActsInZeroGravity = (1 << 13),      // 0x2000, not stopped by the zero-gravity cannot-act event
     kUnitNoHammerKnockback = (1 << 14),  // 0x4000, Super/Ultra Hammer knock-away damage patterns are dropped
-    kUndead = (1 << 16),                 // 0x10000, keeps taking turns while KO'd (STATUS_INSTANT_KILL)
+    kUndead = (1 << 16),                 // 0x10000, keeps taking turns while KO'd (STATUS_DEAD)
     kInactive = (1 << 17),               // 0x20000
     kUnitLeader = (1 << 18),             // 0x40000, the side whose leaders are all down is defeated
     kNoTurn = (1 << 19),                 // 0x80000, never put in the turn order

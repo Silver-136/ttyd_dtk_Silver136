@@ -2741,7 +2741,6 @@ USER_FUNC(evt_mobj_save_blk) {
 
 #if VERSION >= VERSION_US
 /** Plain block (MOBJ_Block / MOBJ_PinkBlock) that runs an event when hit; not in JP. */
-// US and later: plain block (MOBJ_Block / MOBJ_PinkBlock) that runs an event when hit.
 static s32 mobj_blk(MapObjectEntry* mobj) {
     switch (mobj->state) {
         case 0:
@@ -3642,7 +3641,7 @@ BOOL mobj_kf_ride_check(f32 x, f32 z, f32 px, f32 pz, f32 r) {
  * a Super Boots spin jump next to it (within 60) with nothing standing on it flips it over
  * and pops out the Star Piece; a hammer hit, a farther spin jump
  * or anything on it gives the half flip that carries Mario, partners, NPCs and items with it.
- * US and later skip a partner with flag 0x100 set.
+ * US and later skip a partner that is in use (PARTY_FLAG_IS_BEING_USED).
  */
 static s32 mobj_kururing_floor(MapObjectEntry* mobj) {
     PartyEntry* party;
@@ -5247,11 +5246,13 @@ static EVT_BEGIN(kpa_powerup_evt)
     CALL(kpa_powerup, LW(0), LW(1), LW(2))
     RETURN
 EVT_END()
+
 static EVT_BEGIN(evt_fire)
     CALL(fire_func, LW(0), LW(1), LW(2), LW(3))
     RETURN
 EVT_END()
 #endif
+
 /**
  * Goal pole sequence for small Bowser (levels 0-1):
  * shows the score, slides him and the flag down to the ground, then moves the camera on and hands control back.

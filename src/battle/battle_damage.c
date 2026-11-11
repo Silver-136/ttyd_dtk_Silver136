@@ -727,7 +727,7 @@ static s32 _getSickStatusRate(BattleWeapon* weapon, s32 type) {
         case STATUS_SLOW: return weapon->slowChance;
         case STATUS_FRIGHT: return weapon->frightChance;
         case STATUS_GALE_FORCE: return weapon->galeForceChance;
-        case STATUS_INSTANT_KILL: return (u8)weapon->ohkoChance;
+        case STATUS_DEAD: return (u8)weapon->ohkoChance;
         case STATUS_INVISIBLE: return weapon->invisibleChance;
         case STATUS_HP_REGEN: return weapon->hpRegenTime > 0 ? 100 : 0;
         case STATUS_FP_REGEN: return weapon->fpRegenTime > 0 ? 100 : 0;
@@ -847,7 +847,7 @@ static void _getSickStatusParam(BattleUnit* unit, BattleWeapon* weapon, u32 type
         case STATUS_SLOW:
             time = strength = weapon->slowTime;
             break;
-        case STATUS_INSTANT_KILL:
+        case STATUS_DEAD:
             time = strength = weapon->ohkoChance;
             break;
         case STATUS_INVISIBLE:
@@ -966,7 +966,7 @@ static u8 _getRegistStatus(BattleUnit* unit, s32 type) {
         case STATUS_DEFENSE_UP: return v->defenseUpRate;
         case STATUS_DEFENSE_DOWN: return v->defenseDownRate;
         case STATUS_ALLERGIC: return v->allergicRate;
-        case STATUS_INSTANT_KILL: return v->instaKillRate;
+        case STATUS_DEAD: return v->instaKillRate;
         case STATUS_FAST: return v->fastRate;
         case STATUS_SLOW: return v->slowRate;
         case STATUS_FRIGHT: return v->frightRate;
@@ -1075,7 +1075,7 @@ static s32 BattleSetStatusDamage(u32* result, BattleUnit* unit, BattleUnitPart* 
             case STATUS_SLOW:
             case STATUS_FRIGHT:
             case STATUS_GALE_FORCE:
-            case STATUS_INSTANT_KILL:
+            case STATUS_DEAD:
 #if VERSION <= VERSION_DEMO_JP
                 return 0;
 #else
@@ -1097,7 +1097,7 @@ static s32 BattleSetStatusDamage(u32* result, BattleUnit* unit, BattleUnitPart* 
             case STATUS_TINY:
             case STATUS_ATTACK_DOWN:
             case STATUS_DEFENSE_DOWN:
-            case STATUS_INSTANT_KILL:
+            case STATUS_DEAD:
                 return 0;
         }
     }
@@ -1128,8 +1128,8 @@ static s32 BattleSetStatusDamage(u32* result, BattleUnit* unit, BattleUnitPart* 
         if ((u32)type == STATUS_SLEEP) {
             *result |= STATUS_RESULT_SLEEP;
         }
-        if ((u32)type == STATUS_INSTANT_KILL) {
-            *result |= STATUS_RESULT_INSTANT_KILL;
+        if ((u32)type == STATUS_DEAD) {
+            *result |= STATUS_RESULT_DEAD;
         }
         ok = BtlUnit_SetStatus(unit, type, time, strength);
     }
@@ -1286,7 +1286,7 @@ static s32 BattleSetStatusDamage(u32* result, BattleUnit* unit, BattleUnitPart* 
                 eff = effStampN64Entry(2, x, y, 10.0f + z);
                 STAMP_COL(eff, 220, 220, 220, 0, 220, 0);
                 break;
-            case STATUS_INSTANT_KILL:
+            case STATUS_DEAD:
                 eff = effStampN64Entry(2, x, y, 10.0f + z);
                 STAMP_COL(eff, 220, 220, 220, 10, 10, 10);
 #endif
@@ -1759,7 +1759,7 @@ s32 BattleCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* 
         if (status & STATUS_RESULT_GALE_FORCE) {
             result = flags | DAMAGE_CODE_GALE_FORCE;
         }
-        if ((flags & DAMAGE_RESULT_FINAL_HIT) && (status & STATUS_RESULT_INSTANT_KILL)) {
+        if ((flags & DAMAGE_RESULT_FINAL_HIT) && (status & STATUS_RESULT_DEAD)) {
             code = DAMAGE_RESULT_DEATH | DAMAGE_RESULT_ZERO_HP | DAMAGE_RESULT_FINAL_HIT | DAMAGE_CODE_NORMAL;
             target->damagePattern = ATTACKPATTERN_NULL;
             _checkDamageCode_EmergencyRevival(target, &code);

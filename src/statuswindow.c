@@ -289,11 +289,7 @@ static void gaugeDisp(s32 sp, f32 x, f32 y) {
         pos.x = x + (f32)(full * 32);
         pos.y = y;
         pos.z = 0.0f;
-#if VERSION <= VERSION_DEMO_JP
-        iconDispGxScaleFirst(1.0f, &pos, 0x4, gauge_wakka[part]);
-#else
-        iconDispGxScaleFirst(1.0f, &pos, 0x10, gauge_wakka[part]);
-#endif
+        iconDispGxScaleFirst(1.0f, &pos, ICON_FLAG_2D, gauge_wakka[part]);
     }
     for (i = 0; i < sizeof(gauge_back) / sizeof(gauge_back[0]); i++) {
         Vec pos2;
@@ -303,11 +299,7 @@ static void gaugeDisp(s32 sp, f32 x, f32 y) {
         pos2.x = x + (f32)(i * 32);
         pos2.y = 12.0f + y;
         pos2.z = 0.0f;
-#if VERSION <= VERSION_DEMO_JP
-        iconDispGxScaleFirst(1.0f, &pos2, 0x4, i < full ? gauge_back[i] : ICON_SP_ORB_EMPTY);
-#else
-        iconDispGxScaleFirst(1.0f, &pos2, 0x10, i < full ? gauge_back[i] : ICON_SP_ORB_EMPTY);
-#endif
+        iconDispGxScaleFirst(1.0f, &pos2, ICON_FLAG_2D, i < full ? gauge_back[i] : ICON_SP_ORB_EMPTY);
     }
 }
 

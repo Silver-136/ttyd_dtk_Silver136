@@ -316,7 +316,7 @@ EVT_END()
  * Damage script of the Bob-omb.
  * A final-hit result (flag 256) of kind 24, 25 or 27 (a fire, explosion or electric hit) sets it off at once
  * (bomb_event).
- * Otherwise it takes the default damage and, if it is still able to act and not in STATUS_INSTANT_KILL (KO),
+ * Otherwise it takes the default damage and, if it is still able to act and not in STATUS_DEAD (KO),
  * lights its fuse (change_spark_event) only for a final hit that dealt at least 1 HP.
  */
 static EVT_BEGIN(damage_event)
@@ -336,7 +336,7 @@ static EVT_BEGIN(damage_event)
         END_SWITCH
     END_IF
     CALL_CHILD(btldefaultevt_Damage)
-    CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_INSTANT_KILL, LW(0))
+    CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_DEAD, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_CheckActStatus, UNIT_ID_SELF, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)

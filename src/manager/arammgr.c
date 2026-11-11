@@ -48,7 +48,7 @@ static void aramCallbackGarbage(u32 request) {
 
 /**
  * Compacts ARAM when the bump allocator runs off the end:
- * waits for transfers in flight, unlinks entries already copied back to main RAM (flag 0x20),
+ * waits for transfers in flight, unlinks entries already copied back to main RAM (ARAM_FLAG_FREE),
  * then slides the live ones down through a 32 KB main-RAM bounce buffer.
  */
 static void aramMgrGarbage(void) {

@@ -33,6 +33,7 @@
 #include "pmario_sound.h"
 #include <dolphin/pad.h>
 #include <demo/DEMOPad.h>
+#include "icon_ids.h"
 
 typedef struct IraiWork {
     s32 state;
@@ -700,14 +701,14 @@ static USER_FUNC(irai_main_func) {
 
     switch (wp->state) {
         case 0:
-            iconEntry2D("iraiYubi", VERSION_PICK(0x1F0, 0x1F8));
+            iconEntry2D("iraiYubi", ICON_YUBI_CURSOR);
             iconFlagOn("iraiYubi", ICON_FLAG_FLIP_X);
-            iconEntry2D("iraiArrowUp", VERSION_PICK(0x205, 0x20C));
+            iconEntry2D("iraiArrowUp", ICON_PAGE_ARROW);
             iconFlagOn("iraiArrowUp", ICON_FLAG_FLIP_Y);
-            iconEntry2D("iraiArrowDown", VERSION_PICK(0x205, 0x20C));
-            iconEntry2D("iraiLButton", VERSION_PICK(0x7E, 0x86));
+            iconEntry2D("iraiArrowDown", ICON_PAGE_ARROW);
+            iconEntry2D("iraiLButton", ICON_TRIGGER_L);
             iconSetScale("iraiLButton", 0.8f);
-            iconEntry2D("iraiRButton", VERSION_PICK(0x80, 0x88));
+            iconEntry2D("iraiRButton", ICON_TRIGGER_R);
             iconSetScale("iraiRButton", 0.8f);
             iconFlagOn("iraiYubi", ICON_FLAG_HIDDEN);
             iconFlagOn("iraiArrowUp", ICON_FLAG_HIDDEN);

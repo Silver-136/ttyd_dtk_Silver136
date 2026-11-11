@@ -337,7 +337,7 @@ static EVT_BEGIN(damage_event)
     ELSE
         SET_VALUE(LW(15), 0)
     END_IF
-    CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_INSTANT_KILL, LW(14))
+    CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_DEAD, LW(14))
     OR(LW(15), LW(14))
     CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_SLEEP, LW(14))
     OR(LW(15), LW(14))

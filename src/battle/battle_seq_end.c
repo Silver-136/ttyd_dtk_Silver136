@@ -318,7 +318,7 @@ void btlseqEnd(BattleWork* wp) {
                 switch (i) {
                     case STATUS_FRIGHT:
                     case STATUS_GALE_FORCE:
-                    case STATUS_INSTANT_KILL:
+                    case STATUS_DEAD:
                         break;
                     default:
                         if (party) BtlUnit_SetStatus(party, i, 0, 0);
@@ -394,7 +394,7 @@ void btlseqEnd(BattleWork* wp) {
             BattleAudienceSoundWhistle();
             partnerKo = 0;
             party = BattleGetPartyPtr(wp);
-            if (party && BtlUnit_CheckStatus(party, STATUS_INSTANT_KILL)) {
+            if (party && BtlUnit_CheckStatus(party, STATUS_DEAD)) {
                 partnerKo = 1;
             }
             if (!partnerKo) {
@@ -675,7 +675,7 @@ void btlseqEnd(BattleWork* wp) {
             } else if (party2) {
                 // The repeated Mario check below does not test the partner's DANGER/PERIL flags.
                 if (((u32)mario->statusFlags & UNIT_STATUS_FLAG_DANGER) || ((u32)mario->statusFlags & UNIT_STATUS_FLAG_PERIL) ||
-                    BtlUnit_CheckStatus(party2, STATUS_INSTANT_KILL)) {
+                    BtlUnit_CheckStatus(party2, STATUS_DEAD)) {
                     ok = 0;
                 }
             }
@@ -737,7 +737,7 @@ void btlseqEnd(BattleWork* wp) {
         } else if (party) {
             // The repeated Mario check below does not test the partner's DANGER/PERIL flags.
             if (((u32)mario->statusFlags & UNIT_STATUS_FLAG_DANGER) || ((u32)mario->statusFlags & UNIT_STATUS_FLAG_PERIL) ||
-                BtlUnit_CheckStatus(party, STATUS_INSTANT_KILL)) {
+                BtlUnit_CheckStatus(party, STATUS_DEAD)) {
                 ok = 0;
             }
         }

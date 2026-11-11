@@ -576,7 +576,7 @@ static EVT_BEGIN(dead_event)
     WAIT_FRAMES(5)
     CALL(btlevtcmd_GetMaxHp, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SetHp, UNIT_ID_SELF, LW(0))
-    CALL(btlevtcmd_OnOffStatus, UNIT_ID_SELF, STATUS_INSTANT_KILL, 0, 0, 0)
+    CALL(btlevtcmd_OnOffStatus, UNIT_ID_SELF, STATUS_DEAD, 0, 0, 0)
     WAIT_FRAMES(95)
 #if VERSION >= VERSION_JP
     CALL(evt_batstage_return_aud_dark_base, 1, 0)
@@ -623,7 +623,7 @@ static EVT_BEGIN(dead_event)
 EVT_END()
 
 /**
- * Phase event of Lord Crump: before the player's turn (from turn 2), if he is not KO'd (STATUS_INSTANT_KILL) and can act,
+ * Phase event of Lord Crump: before the player's turn (from turn 2), if he is not KO'd (STATUS_DEAD) and can act,
  * with group 3 in play (UNIT_WORK_GROUP = 2) he calls it back when it is gone (call_event).
  */
 static EVT_BEGIN(phase_event)
@@ -635,7 +635,7 @@ static EVT_BEGIN(phase_event)
     IF_INT_EQUAL(LW(0), 1)
         GOTO(99)
     END_IF
-    CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_INSTANT_KILL, LW(0))
+    CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_DEAD, LW(0))
     IF_INT_EQUAL(LW(0), 1)
         GOTO(99)
     END_IF

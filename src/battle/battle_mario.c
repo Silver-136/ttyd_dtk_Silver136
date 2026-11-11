@@ -3564,6 +3564,7 @@ static EVT_BEGIN(marioAttackEvent_GatsunJump)
     CALL_CHILD(marioAttackEvent_GatsuDokaJump)
     RETURN
 EVT_END()
+
 static EVT_BEGIN(marioAttackEvent_DokanJump)
     SET_VALUE(LW(12), PTR(&badgeWeapon_DokanJump))
     CALL_CHILD(marioAttackEvent_GatsuDokaJump)
@@ -4693,6 +4694,7 @@ static EVT_BEGIN(marioAttackEvent_NormalHammer)
     CALL_CHILD(marioAttackEvent_NormalHammer_Core)
     RETURN
 EVT_END()
+
 static EVT_BEGIN(marioAttackEvent_GatsunHammer)
     SET_VALUE(LW(14), 1)
     CALL_CHILD(marioAttackEvent_NormalHammer_Core)
@@ -4707,6 +4709,7 @@ static EVT_BEGIN(marioAttackEvent_IceNaguri)
     CALL_CHILD(marioAttackEvent_NormalHammer_Core)
     RETURN
 EVT_END()
+
 static EVT_BEGIN(marioAttackEvent_TsuranukiHammer)
     SET_VALUE(LW(14), 1)
     CALL_CHILD(marioAttackEvent_NormalHammer_Core)

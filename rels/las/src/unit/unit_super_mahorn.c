@@ -2297,7 +2297,7 @@ static USER_FUNC(hand_init) {
 }
 
 /**
- * Counts the enemy-side (alliance 1) units in battle that are not knocked out (no STATUS_INSTANT_KILL, the KO status)
+ * Counts the enemy-side (alliance 1) units in battle that are not knocked out (no STATUS_DEAD, the KO status)
  * and returns the count in args[0].
  */
 static USER_FUNC(mahorn_get_live_num) {
@@ -2309,7 +2309,7 @@ static USER_FUNC(mahorn_get_live_num) {
 
     for (i = 0; i < 64; i++) {
         unit = wp->units[i];
-        if (unit != NULL && unit->alliance == ALLIANCE_ENEMY && !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
+        if (unit != NULL && unit->alliance == ALLIANCE_ENEMY && !BtlUnit_CheckStatus(unit, STATUS_DEAD)) {
             num++;
         }
     }

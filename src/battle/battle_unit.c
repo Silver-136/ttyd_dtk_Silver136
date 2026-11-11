@@ -1110,7 +1110,7 @@ void BtlUnit_GetStatus(BattleUnit* unit, s8 type, s8* turns, s8* strength) {
             status_turns = unit->fpRegenTurns;
             status_strength = unit->fpRegenStrength;
             break;
-        case STATUS_INSTANT_KILL:
+        case STATUS_DEAD:
             status_strength = unit->instantKillStrength;
             status_turns = status_strength;
             break;
@@ -1338,7 +1338,7 @@ BOOL BtlUnit_SetStatus(BattleUnit* unit, s8 type, s8 turns, s8 strength) {
             unit->fpRegenTurns = turns;
             unit->fpRegenStrength = strength;
             break;
-        case STATUS_INSTANT_KILL:
+        case STATUS_DEAD:
             unit->instantKillStrength = turns;
             break;
         default:
@@ -1372,7 +1372,7 @@ BOOL BtlUnit_CheckRecoveryStatus(BattleUnit* unit, s8 type) {
     if (!unit) {
         return FALSE;
     }
-    if (BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
+    if (BtlUnit_CheckStatus(unit, STATUS_DEAD)) {
         return FALSE;
     }
     if (unit->currentHp <= 0) {
@@ -1677,7 +1677,7 @@ BOOL BtlUnit_GetACPossibility(BattleUnit* unit) {
         return FALSE;
     }
     if (BtlUnit_CheckStatus(unit, STATUS_SLEEP) || BtlUnit_CheckStatus(unit, STATUS_STOP) ||
-        BtlUnit_CheckStatus(unit, STATUS_FREEZE) || BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
+        BtlUnit_CheckStatus(unit, STATUS_FREEZE) || BtlUnit_CheckStatus(unit, STATUS_DEAD)) {
         return FALSE;
     }
     return !BtlUnit_CheckStatusFlag(unit, UNIT_STATUS_FLAG_FLIPPED);
@@ -1721,7 +1721,7 @@ BOOL BtlUnit_CanGuardStatus(BattleUnit* unit) {
 /** Whether the unit's statuses let it act: not asleep, stopped, frozen, KO'd or flipped. */
 BOOL BtlUnit_CanActStatus(BattleUnit* unit) {
     if (BtlUnit_CheckStatus(unit, STATUS_SLEEP) || BtlUnit_CheckStatus(unit, STATUS_STOP) ||
-        BtlUnit_CheckStatus(unit, STATUS_FREEZE) || BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
+        BtlUnit_CheckStatus(unit, STATUS_FREEZE) || BtlUnit_CheckStatus(unit, STATUS_DEAD)) {
         return FALSE;
     }
     return !BtlUnit_CheckStatusFlag(unit, UNIT_STATUS_FLAG_FLIPPED);
@@ -1757,7 +1757,7 @@ void BtlUnit_SetParamFromPouch(BattleUnit* unit) {
         unit->usCommandDisabled[1] = info->usCommandDisabled[1];
 #endif
         if (unit->currentHp <= 0) {
-            BtlUnit_SetStatus(unit, STATUS_INSTANT_KILL, 1, 1);
+            BtlUnit_SetStatus(unit, STATUS_DEAD, 1, 1);
         }
     }
 }

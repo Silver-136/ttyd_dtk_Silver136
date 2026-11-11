@@ -824,7 +824,7 @@ state_end:
                     }
                     for (i = 0; i < BATTLE_UNIT_MAX; i++) {
                         u = BattleGetUnitPtr(bw, i);
-                        if (u != NULL && !(u->attributeFlags & kInactive) && !BtlUnit_CheckStatus(u, STATUS_INSTANT_KILL) &&
+                        if (u != NULL && !(u->attributeFlags & kInactive) && !BtlUnit_CheckStatus(u, STATUS_DEAD) &&
                             u->alliance == ALLIANCE_ENEMY && BtlUnit_CanActStatus(u)) {
                             if (w->frame == 0) {
                                 BtlUnit_SetBodyAnimType(u, POSE_TYPE_TALK);
@@ -1039,7 +1039,7 @@ state_end:
                     for (i = 0; i < BATTLE_UNIT_MAX; i++) {
                         u = BattleGetUnitPtr(bw, i);
                         if (u != NULL && u->alliance == ALLIANCE_ENEMY && BtlUnit_CanActStatus(u) &&
-                            !(u->attributeFlags & kInactive) && !BtlUnit_CheckStatus(u, STATUS_INSTANT_KILL) &&
+                            !(u->attributeFlags & kInactive) && !BtlUnit_CheckStatus(u, STATUS_DEAD) &&
                             !(u->attributeFlags & kFloating) && !(u->attributeFlags & kCeiling)) {
                             BtlUnit_GetHomePos(u, &hx, &hy, &hz);
                             BtlUnit_SetPos(u, hx, hy + w->hpos.y, hz);
@@ -1216,12 +1216,12 @@ static void bakuGameDecideButton(s32 first) {
     }
 }
 
-/** TRUE when the partner exists, is not KO'd (STATUS_INSTANT_KILL) and can act. */
+/** TRUE when the partner exists, is not KO'd (STATUS_DEAD) and can act. */
 static BOOL bakuGamePartyExist(BattleUnit* unit) {
     if (unit == NULL) {
         return FALSE;
     }
-    if (BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
+    if (BtlUnit_CheckStatus(unit, STATUS_DEAD)) {
         return FALSE;
     }
     return BtlUnit_CanActStatus(unit) != 0;
@@ -1257,7 +1257,7 @@ static void bakuGameEnemySurpriseReset(void) {
 
     for (i = 0; i < BATTLE_UNIT_MAX; i++) {
         u = BattleGetUnitPtr(wp, i);
-        if (u != NULL && u->alliance == ALLIANCE_ENEMY && !(u->attributeFlags & kInactive) && !BtlUnit_CheckStatus(u, STATUS_INSTANT_KILL)) {
+        if (u != NULL && u->alliance == ALLIANCE_ENEMY && !(u->attributeFlags & kInactive) && !BtlUnit_CheckStatus(u, STATUS_DEAD)) {
             btlDispPoseAnime(BtlUnit_GetPartsPtr(u, BtlUnit_GetBodyPartsId(u)));
         }
     }
@@ -1323,7 +1323,7 @@ static void bakuGameEnemySurprise(void) {
 
     for (i = 0; i < BATTLE_UNIT_MAX; i++) {
         u = BattleGetUnitPtr(wp, i);
-        if (u != NULL && u->alliance == ALLIANCE_ENEMY && !(u->attributeFlags & kInactive) && !BtlUnit_CheckStatus(u, STATUS_INSTANT_KILL)) {
+        if (u != NULL && u->alliance == ALLIANCE_ENEMY && !(u->attributeFlags & kInactive) && !BtlUnit_CheckStatus(u, STATUS_DEAD)) {
             BtlUnit_SetBodyAnimType(u, POSE_TYPE_DAMAGE);
         }
     }
@@ -1539,7 +1539,7 @@ static EVT_BEGIN(hitCheck_MarioTeam)
     IF_INT_EQUAL(LW(3), -1)
         GOTO(50)
     END_IF
-    CALL(btlevtcmd_CheckStatus, LW(3), STATUS_INSTANT_KILL, LW(0))
+    CALL(btlevtcmd_CheckStatus, LW(3), STATUS_DEAD, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         GOTO(50)
     END_IF
@@ -1552,7 +1552,7 @@ static EVT_BEGIN(hitCheck_MarioTeam)
     IF_INT_EQUAL(LW(3), -1)
         GOTO(99)
     END_IF
-    CALL(btlevtcmd_CheckStatus, LW(3), STATUS_INSTANT_KILL, LW(0))
+    CALL(btlevtcmd_CheckStatus, LW(3), STATUS_DEAD, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         GOTO(99)
     END_IF

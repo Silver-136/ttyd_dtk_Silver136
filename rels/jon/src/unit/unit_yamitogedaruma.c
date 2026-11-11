@@ -307,7 +307,7 @@ static EVT_BEGIN(damage_event)
 EVT_END()
 
 /**
- * Run when a hit flips the Dark Bristle (data table entry 13, damage flag 0x200000):
+ * Run when a hit flips the Dark Bristle (data table entry 13, DAMAGE_RESULT_FLIPPED):
  * swaps in the turned defence and pose tables, sets the flipped status flag with an over-turn count of 2
  * (INSIDE1 sound, TGD_S_1), and, unless it was already flipped, turns it over (18 degrees a frame for 10 frames)
  * while it hops, landing at height 10 in the TGD_S_5 pose, which becomes its home.

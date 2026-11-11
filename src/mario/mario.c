@@ -478,7 +478,7 @@ static inline BOOL marioChkYoshiKey(void) {
  * or a partner action holding the keys.
  * In the Pianta Parlor game rooms (yuu_) only the control and key locks count.
  * Called by win_main and a dou_04 script call; with Vivian in use,
- * US and later also block it while her party entry has flag 0x80000000.
+ * US and later also block it while her party entry has PARTY_FLAG_IS_EVT_USE.
  */
 BOOL marioCheckMenuDisable(void) {
     MarioWork* wp = mp;

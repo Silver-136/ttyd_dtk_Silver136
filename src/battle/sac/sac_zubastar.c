@@ -396,6 +396,7 @@ static EVT_BEGIN(nice_event)
     CALL(btlevtcmd_ACSuccessEffect, LW(0), -120, 140, 0)
     RETURN
 EVT_END()
+
 static void zubastar_disp2D(CameraId cam, void* param);
 
 /**

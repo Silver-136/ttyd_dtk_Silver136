@@ -2355,7 +2355,6 @@ static inline void sfwVecSet(Vec* d, Vec v) {
 }
 
 /** wall-slide offset: half of the move vector minus its component along the wall normal */
-// wall-slide offset: half of the move vector minus its component along the wall normal
 static inline void sfwSlide(Vec* n, f32 vx, f32 vz, f32* mx, f32* mz) {
     f32 dot = vx * n->x + vz * n->z;
     *mx = 0.5f * (vx - dot * n->x);

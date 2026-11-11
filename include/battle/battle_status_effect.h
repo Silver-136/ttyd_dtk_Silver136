@@ -37,7 +37,10 @@ typedef enum StatusEffectType {
     STATUS_FP_REGEN, // 0x18
     STATUS_FRIGHT, // 0x19
     STATUS_GALE_FORCE, // 0x1A
-    STATUS_INSTANT_KILL, // 0x1B
+    // 0x1B: defeated (the Switch remake's name is STATUS_DEAD). Every defeated unit gets it (HP 0, a script
+    // kill, a partner that enters battle at 0 HP); one-hit-KO attacks inflict it like any other status
+    // (their chance is the weapon's ohkoChance).
+    STATUS_DEAD, // 0x1B
     STATUS_INVALID // 0x1C
 } StatusEffectType;
 

@@ -5,7 +5,6 @@
 #include "driver/extdrv.h"
 
 /** pose count, texture list, init function, main function, second main function */
-// pose count, texture list, init function, main function, second main function
 USER_FUNC(evt_ext_entry) {
     EvtWord* args = event->args;
     s32 count;

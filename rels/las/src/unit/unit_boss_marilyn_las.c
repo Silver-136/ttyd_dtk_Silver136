@@ -344,7 +344,7 @@ EVT_END()
 
 /**
  * Damage handler for Marilyn: sets GW(12) (her state for the sisters' scripts) to 1
- * when the hit carries the death flag (0x400), then runs the default damage script.
+ * when the hit carries DAMAGE_RESULT_DEATH, then runs the default damage script.
  */
 static EVT_BEGIN(damage_event)
     CALL(btlevtcmd_CheckDamageCode, UNIT_ID_SELF, DAMAGE_RESULT_DEATH, LW(0))

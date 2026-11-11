@@ -1239,7 +1239,7 @@ static void disp_3D_alpha(CameraId cam, void* param) {
 static EVT_BEGIN(genki_evt_common)
     CALL(btlevtcmd_GetUnitId, UNIT_ID_PARTNER, LW(13))
     CALL(btlevtcmd_GetBodyId, LW(13), LW(14))
-    CALL(btlevtcmd_CheckStatus, LW(13), STATUS_INSTANT_KILL, LW(0))
+    CALL(btlevtcmd_CheckStatus, LW(13), STATUS_DEAD, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         SET_VALUE(LW(13), -1)
     END_IF

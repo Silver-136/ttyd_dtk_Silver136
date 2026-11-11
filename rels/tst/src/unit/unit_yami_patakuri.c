@@ -284,10 +284,10 @@ static EVT_BEGIN(init_event_patakuri)
 EVT_END()
 
 /**
- * Run when a hit grounds the flying Paragloomba (data table entry 14, damage flag 0x400000):
+ * Run when a hit grounds the flying Paragloomba (data table entry 14, DAMAGE_RESULT_GROUNDED):
  * it loses its floating
  * and winged attributes, and after a second its parts, pose table and data table become the Gloomba's
- * (unit flag 4, kind changed); it falls to the ground with the fall sound, takes that spot as home,
+ * (BATTLE_UNIT_FLAG_KIND_CHANGED); it falls to the ground with the fall sound, takes that spot as home,
  * becomes kind 0x99 (Gloomba) and reruns init_event to install the ground attack.
  */
 static EVT_BEGIN(dmg_fall_event)

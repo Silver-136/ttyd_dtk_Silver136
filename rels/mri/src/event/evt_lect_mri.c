@@ -317,7 +317,7 @@ static USER_FUNC(lecture_button_set_alpha) {
     return EVT_RETURN_DONE;
 }
 
-/** Sets or clears the flag bits args[1] on button args[0] (args[2] nonzero sets them); bit 0x1 is the hidden flag. */
+/** Sets (args[2] nonzero) or clears the flag bits args[1] on button args[0]; LECT_BUTTON_FLAG_HIDDEN hides it. */
 static USER_FUNC(lecture_button_flag_on_off) {
     EvtWord* args = event->args;
     s32 index = evtGetValue(event, args[0]);

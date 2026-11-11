@@ -112,7 +112,7 @@ void kpaBubble(void) {
 
 /**
  * TRUE when Bowser may ground pound: not already doing one
- * and KpaWork flag 0x10 (set when he starts swimming) is clear.
+ * and KPA_WORK_FLAG_NO_HIP_ATTACK (set when he starts swimming) is clear.
  */
 BOOL kpaHipAttackOk(void) {
     MarioWork* mario = marioGetPtr();
@@ -611,7 +611,7 @@ BOOL kpaPowUp(void) {
 
 /**
  * Damage: shrinks Bowser one level with the power-down motion and 3 seconds without hits, returning TRUE;
- * at the smallest level sets KpaWork flag 0x10000000 instead and returns FALSE.
+ * at the smallest level sets KPA_WORK_FLAG_DEAD instead and returns FALSE.
  * Called from the NPC contact code.
  * That flag is Bowser's death: the Super Koopa Bros. stage scripts poll it with evt_koopa_chk_dead
  * and run kpa_dead, which plays his defeat and restarts the stage.

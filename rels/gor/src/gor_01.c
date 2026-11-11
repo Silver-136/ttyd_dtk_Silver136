@@ -798,6 +798,7 @@ static EVT_BEGIN(first_shopping_evt)
     RETURN
 EVT_END()
 #endif
+
 EVT_BEGIN(badgeshopper_talk_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(unitwin_get_work_ptr, LW(10))

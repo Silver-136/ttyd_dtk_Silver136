@@ -11,7 +11,7 @@ static HitDamageReturn* hitDmgretPtr;
 
 /**
  * Enables (args[2] nonzero) or disables the collision of hit object args[0],
- * or of its whole group when args[1] is nonzero, by clearing or setting hit flag 0x1.
+ * or of its whole group when args[1] is nonzero, by clearing or setting HIT_FLAG_OFF.
  * Doors use it on their inside groups.
  */
 USER_FUNC(evt_hitobj_onoff) {

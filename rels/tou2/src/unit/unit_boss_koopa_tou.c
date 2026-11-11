@@ -475,7 +475,7 @@ EVT_END()
  * it declares the phase event and runs harf_hp_event, then restarts the wait event.
  */
 static EVT_BEGIN(phase_event)
-    CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_INSTANT_KILL, LW(0))
+    CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_DEAD, LW(0))
     IF_INT_EQUAL(LW(0), 1)
         GOTO(99)
     END_IF

@@ -380,8 +380,8 @@ EVT_END()
 
 /**
  * Damage handler of the Gold Fuzzy.
- * If its Fuzzy horde has been summoned and this hit would knock it out (damage flag 0x200 without the Life
- * Shroom flag 0x800), it hands out the horde's rewards in JP and later (chorogun_dead_reward),
+ * If its Fuzzy horde has been summoned and this hit would knock it out (DAMAGE_RESULT_ZERO_HP without
+ * the Life Shroom DAMAGE_RESULT_REVIVAL), it hands out the horde's rewards in JP and later (chorogun_dead_reward),
  * makes all the Fuzzies escape and removes the horde unit.
  * It then runs the default damage script, and the first time its HP drops to 7
  * or less (but not 0) it spawns the Fuzzy horde (entry_chorogun) with call_chorogun_event.

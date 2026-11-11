@@ -2705,6 +2705,7 @@ EVT_BEGIN(piders_init_event)
     RETURN
 EVT_END()
 #endif
+
 EVT_BEGIN(piders_move_event)
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_npc_set_anim, STRING("me"), STRING("PAI_S_1"))
@@ -3083,12 +3084,14 @@ EVT_BEGIN(basabasa_dead_event)
     CALL_CHILD(enemy_common_dead_event)
     RETURN
 EVT_END()
+
 EVT_BEGIN(basabasa2_init_event)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_UPDATE_BY_EVENT | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_ENEMY)
     CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
     RETURN
 EVT_END()
 #endif
+
 EVT_BEGIN(basabasa2_move_event)
 #if VERSION >= VERSION_JP
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_AUTO_MOVE_ANIM)
@@ -3174,12 +3177,14 @@ EVT_BEGIN(basabasa2_dead_event)
     CALL_CHILD(enemy_common_dead_event)
     RETURN
 EVT_END()
+
 EVT_BEGIN(teresa_init_event)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_UPDATE_BY_EVENT | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_ENEMY)
     CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
     RETURN
 EVT_END()
 #endif
+
 EVT_BEGIN(teresa_move_event)
 #if VERSION >= VERSION_JP
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_AUTO_MOVE_ANIM)
@@ -3279,12 +3284,14 @@ EVT_BEGIN(teresa_dead_event)
     CALL_CHILD(enemy_common_dead_event)
     RETURN
 EVT_END()
+
 EVT_BEGIN(bubble_init_event)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_UPDATE_BY_EVENT | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_ENEMY)
     CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
     RETURN
 EVT_END()
 #endif
+
 EVT_BEGIN(bubble_move_event)
 #if VERSION >= VERSION_JP
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_AUTO_MOVE_ANIM)
@@ -3377,6 +3384,7 @@ EVT_BEGIN(hbom_init_event)
     RETURN
 EVT_END()
 #endif
+
 EVT_BEGIN(hbom_move_event)
     CALL_CHILD(enemy_common_flag_init_event)
     CALL(evt_sub_random, 360, LW(3))
@@ -3468,6 +3476,7 @@ EVT_BEGIN(zakowiz_dead_event)
     RETURN
 EVT_END()
 #endif
+
 EVT_BEGIN(zakowiz_find_event)
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_NPC, 0, STRING("me"), 0, 0, 0, 0, 0, 0, 0, 30)
     CALL(evt_get_target_dir, STRING("me"), STRING("mario"), LW(0))
@@ -3542,6 +3551,7 @@ EVT_BEGIN(hannya_init_event)
     RETURN
 EVT_END()
 #endif
+
 EVT_BEGIN(hannya_move_event)
     CALL(evt_sub_random, 360, LW(3))
     LABEL(0)
@@ -3949,6 +3959,7 @@ EVT_BEGIN(kamec_dead_event)
     RETURN
 EVT_END()
 #endif
+
 EVT_BEGIN(kamec_blow_event)
     CALL(evt_npc_set_attack_mode, STRING("slave_0"), 0)
     CALL(evt_npc_flag_onoff, 1, STRING("slave_0"), NPC_FLAG_NO_HIT)
@@ -4059,6 +4070,7 @@ EVT_BEGIN(kamec2_dead_event)
     RETURN
 EVT_END()
 #endif
+
 EVT_BEGIN(kamec2_blow_event)
     CALL(evt_npc_set_attack_mode, STRING("slave_0"), 0)
     CALL(evt_npc_flag_onoff, 1, STRING("slave_0"), NPC_FLAG_NO_HIT)
@@ -4103,6 +4115,7 @@ EVT_BEGIN(hbross_dead_event)
     RETURN
 EVT_END()
 #endif
+
 EVT_BEGIN(hbross_find_event)
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_NPC, 0, STRING("me"), 0, 0, 0, 0, 0, 0, 0, 30)
     CALL(evt_get_target_dir, STRING("me"), STRING("mario"), LW(0))
@@ -5255,6 +5268,7 @@ EVT_BEGIN(zakoM2D_dead_event)
     RETURN
 EVT_END()
 #endif
+
 /** Init event of Bloopers in Bowser's side-scrolling stages: enemy flags, side-scrolling mode, no gravity. */
 EVT_BEGIN(gesso2D_init_event)
     CALL_CHILD(enemy_common_flag_init_event)

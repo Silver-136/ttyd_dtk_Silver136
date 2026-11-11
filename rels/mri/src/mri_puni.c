@@ -39,6 +39,7 @@
 #include "eff/eff_n64.h"
 #include "driver/seqdrv.h"
 #include "evt/evt_save_flags.h"
+#include "icon_ids.h"
 extern int abs(int);
 void envSetYami(MapTevCallbackInfo* info);
 
@@ -155,10 +156,10 @@ void evt_icon_disp_func(CameraId camId, void* param) {
                     b = a;
                     puniSinCosRet(p->index + gp->retraceCount * 10, &a.z, &a.x, 9.0f, 9.0f);
                     a.y += 13.0f;
-                    iconDispGx(&a, 0, VERSION_PICK(0x14d, 0x155), 0.6f);
+                    iconDispGx(&a, 0, ICON_BTL_CMD_SUPER_ACTION, 0.6f);
                     puniSinCosRet(p->index + gp->retraceCount * 10 + 180, &b.z, &b.x, 9.0f, 9.0f);
                     b.y += 15.0f;
-                    iconDispGx(&b, 0, VERSION_PICK(0x14d, 0x155), 0.5f);
+                    iconDispGx(&b, 0, ICON_BTL_CMD_SUPER_ACTION, 0.5f);
                 }
             }
         }
@@ -7622,9 +7623,9 @@ void puniCountDisp(CameraId unused, void* param) {
     c2.a = c2.a * Punigp->puniCounterAlpha / 255;
     c3.a = c3.a * Punigp->puniCounterAlpha / 255;
     PSMTXTrans(m, -160.0f, -180.0f, 0.0f);
-    iconDispGxCol(m, ICON_FLAG_2D, VERSION_PICK(0x203, 0x20A), c1);
+    iconDispGxCol(m, ICON_FLAG_2D, ICON_PUNI_BAR_WHITE, c1);
     PSMTXTrans(m, -232.0f, -178.0f, 0.0f);
-    iconDispGxCol(m, ICON_FLAG_2D, VERSION_PICK(0x204, 0x20B), c2);
+    iconDispGxCol(m, ICON_FLAG_2D, ICON_PUNI_WHITE, c2);
     PSMTXTrans(m, -160.0f, -178.0f, 0.0f);
     if (Punigp->showRemaining) {
         if (gp->retraceCount & 0x10) {
@@ -7634,7 +7635,7 @@ void puniCountDisp(CameraId unused, void* param) {
         iconNumberDispGx(m, num2, FALSE, c3);
     }
     PSMTXTrans(m, -140.0f, -178.0f, 0.0f);
-    iconDispGxCol(m, ICON_FLAG_2D, VERSION_PICK(0x1D8, 0x1E0), c3);
+    iconDispGxCol(m, ICON_FLAG_2D, ICON_SLASH, c3);
     PSMTXTrans(m, -90.0f, -178.0f, 0.0f);
     iconNumberDispGx(m, num1, TRUE, c3);
 }

@@ -310,7 +310,7 @@ EVT_END()
  * Dead event of the Dark Bones: it spins for 48 frames with the death sound, a smoke puff appears and the coins,
  * experience and star points are awarded once (UNIT_WORK_REWARD_GIVEN guards it);
  * then it tips over and the unit is killed: KO'd and deleted
- * when the hit defeated it for good (damage flag 0x400,
+ * when the hit defeated it for good (DAMAGE_RESULT_DEATH,
  * also set by certain counter and instant-kill results, not just fire or explosions), otherwise only marked inactive (KILL_UNIT_INACTIVE).
  */
 static EVT_BEGIN(dead_event)

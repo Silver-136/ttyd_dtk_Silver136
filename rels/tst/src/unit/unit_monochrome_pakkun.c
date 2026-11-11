@@ -333,7 +333,7 @@ EVT_END()
  * Data-table events 25 to 36: the Pale Piranha is hurt by a counter (spikes, fire, ice, electricity, explosions,
  * poison, Payback, Hold Fast) while biting.
  * It shows its damage pose (PKF_D_1) for a second and,
- * unless the counter knocked it out (KO flag 0x200 without the Life Shroom flag 0x800),
+ * unless the counter knocked it out (DAMAGE_RESULT_ZERO_HP without the Life Shroom DAMAGE_RESULT_REVIVAL),
  * runs return_event so it burrows back to its spot.
  */
 static EVT_BEGIN(counter_damage_event)

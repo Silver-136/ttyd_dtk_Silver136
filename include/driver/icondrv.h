@@ -109,6 +109,8 @@ void iconDelete(const char* name);
 void iconChange(const char* name, u16 iconId);
 void iconDispGxAlpha(Vec* position, s16 flags, u16 iconId, u8 alpha, f32 scale);
 void iconDispGx(Vec* position, s16 flags, u16 iconId, f32 scale);
+// Callers that pass a u16 id call it through a (Mtx, s16, u16) cast: their code needs a u16 parameter, but the
+// JP-era definition needs a wider one (a u16 or s32 prototype breaks the other side), so no single prototype fits.
 void iconDispGx2(Mtx mtx, s16 flags, s16 iconId);
 void iconDispGxCol(Mtx pos, u16 flags, s32 iconId, GXColor color);
 void iconGetTexObj(GXTexObj* texObj, s32 iconId);

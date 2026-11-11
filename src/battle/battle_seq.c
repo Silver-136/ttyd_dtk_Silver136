@@ -143,7 +143,7 @@ static void BattleCheckAllPinchStatus(BattleWork* wp, BOOL noAudience) {
         unit = BattleGetUnitPtr(wp, i);
         if (unit) {
             if ((unit->statusFlags & UNIT_STATUS_FLAG_PERIL) &&
-                !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL) &&
+                !BtlUnit_CheckStatus(unit, STATUS_DEAD) &&
                 !BtlUnit_GetBelong(unit)) {
                 if (unit->currentKind == UNIT_MARIO ||
                     unit->currentKind >= TYPE_PARTNER_MIN &&
@@ -172,7 +172,7 @@ static void BattleCheckAllPinchStatus(BattleWork* wp, BOOL noAudience) {
             unit = BattleGetUnitPtr(wp, i);
             if (unit) {
                 if ((unit->statusFlags & UNIT_STATUS_FLAG_DANGER) &&
-                    !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL) &&
+                    !BtlUnit_CheckStatus(unit, STATUS_DEAD) &&
                     !BtlUnit_GetBelong(unit)) {
                     if (unit->currentKind == UNIT_MARIO ||
                         unit->currentKind >= TYPE_PARTNER_MIN &&
@@ -509,7 +509,7 @@ static void btlseqFirstAct(BattleWork* wp) {
             k = 0;
             do {
                 unit = BattleGetUnitPtr(wp, k);
-                if (unit && unit->badgesEquipped.LuckyStart && !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
+                if (unit && unit->badgesEquipped.LuckyStart && !BtlUnit_CheckStatus(unit, STATUS_DEAD)) {
                     flag = 1;
                 }
             } while (++k < BATTLE_UNIT_MAX);
@@ -629,7 +629,7 @@ static USER_FUNC(_set_effect_luck) {
 
     for (i = 0; i < BATTLE_UNIT_MAX; i++) {
         unit = BattleGetUnitPtr(wp, i);
-        if (unit && unit->badgesEquipped.LuckyStart && !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
+        if (unit && unit->badgesEquipped.LuckyStart && !BtlUnit_CheckStatus(unit, STATUS_DEAD)) {
             switch (irand(4)) {
                 case 0:
                     weapon.dodgyChance = 0;
@@ -1480,7 +1480,7 @@ static void btlseqTurn(BattleWork* wp) {
         case 0x3000006:
             for (i = 0; i < BATTLE_UNIT_MAX; i++) {
                 unit = BattleGetUnitPtr(wp, i);
-                if ((unit && (!BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL))) && (unit->currentHp > 0)) {
+                if ((unit && (!BtlUnit_CheckStatus(unit, STATUS_DEAD))) && (unit->currentHp > 0)) {
                     BtlUnit_GetStatus(unit, STATUS_POISON, &turns, &strength);
                     if ((strength > 0) && (!BtlUnit_CheckShadowGuard(unit))) {
                         found = 1;
@@ -1502,7 +1502,7 @@ static void btlseqTurn(BattleWork* wp) {
         case 0x3000008:
             for (i = 0; i < BATTLE_UNIT_MAX; i++) {
                 unit = BattleGetUnitPtr(wp, i);
-                if ((unit && (!BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL))) && (unit->currentHp > 0)) {
+                if ((unit && (!BtlUnit_CheckStatus(unit, STATUS_DEAD))) && (unit->currentHp > 0)) {
                     BtlUnit_GetStatus(unit, STATUS_BURN, &turns, &strength);
                     if (strength > 0) {
                         found = 1;
@@ -1528,7 +1528,7 @@ static void btlseqTurn(BattleWork* wp) {
                     wp->turnSubSeq++;
                     for (i = 0; i < BATTLE_UNIT_MAX; i++) {
                         unit = BattleGetUnitPtr(wp, i);
-                        if ((unit && (!BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL))) && (unit->currentHp > 0)) {
+                        if ((unit && (!BtlUnit_CheckStatus(unit, STATUS_DEAD))) && (unit->currentHp > 0)) {
                             BtlUnit_GetStatus(unit, STATUS_BURN, &turns, &strength);
                             if (strength > 0) {
                                 BSE_TurnFirstProcessEffectEntry(unit, 1);
@@ -1571,7 +1571,7 @@ static void btlseqTurn(BattleWork* wp) {
         case 0x300000A:
             for (i = 0; i < BATTLE_UNIT_MAX; i++) {
                 unit = BattleGetUnitPtr(wp, i);
-                if ((unit && (!BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL))) && (unit->currentHp > 0)) {
+                if ((unit && (!BtlUnit_CheckStatus(unit, STATUS_DEAD))) && (unit->currentHp > 0)) {
                     BtlUnit_GetStatus(unit, STATUS_HP_REGEN, &turns, &strength);
                     if (strength > 0) {
                         if (!(unit->attributeFlags & kUnitHpFixed)) {
@@ -1610,7 +1610,7 @@ static void btlseqTurn(BattleWork* wp) {
         case 0x300000C:
             for (i = 0; i < BATTLE_UNIT_MAX; i++) {
                 unit = BattleGetUnitPtr(wp, i);
-                if ((unit && (!BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL))) && (unit->currentHp > 0)) {
+                if ((unit && (!BtlUnit_CheckStatus(unit, STATUS_DEAD))) && (unit->currentHp > 0)) {
                     BtlUnit_GetStatus(unit, STATUS_FP_REGEN, &turns, &strength);
                     if (strength > 0) {
                         BtlUnit_RecoverFp(unit, strength);
@@ -1646,7 +1646,7 @@ static void btlseqTurn(BattleWork* wp) {
             }
             for (i = 0; i < BATTLE_UNIT_MAX; i++) {
                 unit = BattleGetUnitPtr(wp, i);
-                if ((unit && (!BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL))) && (unit->currentHp > 0)) {
+                if ((unit && (!BtlUnit_CheckStatus(unit, STATUS_DEAD))) && (unit->currentHp > 0)) {
                     n = 0;
                     for (count = unit->badgesEquipped.HappyHeart; count > 0; count--) {
                         // integer division: currentHp / maxHp is 0 below full HP, so the chance is 33 %, at full HP 30 %
@@ -1696,7 +1696,7 @@ static void btlseqTurn(BattleWork* wp) {
             }
             for (i = 0; i < BATTLE_UNIT_MAX; i++) {
                 unit = BattleGetUnitPtr(wp, i);
-                if ((unit && (!BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL))) && (unit->currentHp > 0)) {
+                if ((unit && (!BtlUnit_CheckStatus(unit, STATUS_DEAD))) && (unit->currentHp > 0)) {
                     n = 0;
 
                     // rate and count swap roles here compared with the Happy Heart case above (retail local reuse): rate is the badge counter, count the chance
@@ -1768,7 +1768,7 @@ static void btlseqTurn(BattleWork* wp) {
 #if VERSION >= VERSION_US
             for (i = 0; i < BATTLE_UNIT_MAX; i++) {
                 unit = BattleGetUnitPtr(wp, i);
-                if (unit && !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL) && unit->currentHp > 0 && unit->usCommandDisabled[0]) {
+                if (unit && !BtlUnit_CheckStatus(unit, STATUS_DEAD) && unit->currentHp > 0 && unit->usCommandDisabled[0]) {
                     unit->usCommandDisabled[0]--;
                 }
             }
@@ -1786,7 +1786,7 @@ static void btlseqTurn(BattleWork* wp) {
 #if VERSION >= VERSION_US
             for (i = 0; i < BATTLE_UNIT_MAX; i++) {
                 unit = BattleGetUnitPtr(wp, i);
-                if (unit && !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL) && unit->currentHp > 0 && unit->usCommandDisabled[1]) {
+                if (unit && !BtlUnit_CheckStatus(unit, STATUS_DEAD) && unit->currentHp > 0 && unit->usCommandDisabled[1]) {
                     unit->usCommandDisabled[1]--;
                 }
             }
@@ -2052,7 +2052,7 @@ static void btlseqMove(BattleWork* wp) {
                         if (unit && unit->movesRemaining > 0) {
 #endif
                             state = unit->moveState;
-                            if (state != MOVE_STATE_DONE && (!BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL) || (unit->attributeFlags & kUndead))) {
+                            if (state != MOVE_STATE_DONE && (!BtlUnit_CheckStatus(unit, STATUS_DEAD) || (unit->attributeFlags & kUndead))) {
                                 if (state != MOVE_STATE_POSITION_CHANGE) {
                                     break;
                                 }
@@ -2168,10 +2168,10 @@ static BOOL BattlePhaseEndCheck(void) {
         if (wp->movePriorityQueue[i] != -1) {
             unit = BattleGetUnitPtr(wp, wp->movePriorityQueue[i]);
 #if VERSION <= VERSION_DEMO_JP
-            if (unit && unit->moveState != MOVE_STATE_DONE && !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
+            if (unit && unit->moveState != MOVE_STATE_DONE && !BtlUnit_CheckStatus(unit, STATUS_DEAD)) {
 #else
             if (unit && unit->moveState != MOVE_STATE_DONE && unit->movesRemaining > 0 &&
-                !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
+                !BtlUnit_CheckStatus(unit, STATUS_DEAD)) {
 #endif
                 break;
             }
@@ -2212,7 +2212,7 @@ static void btlseqAct(BattleWork* wp) {
                         if (!BtlUnit_CheckStatus(unit, STATUS_SLEEP) &&
                             !BtlUnit_CheckStatus(unit, STATUS_STOP) &&
                             !BtlUnit_CheckStatus(unit, STATUS_FREEZE) &&
-                            !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
+                            !BtlUnit_CheckStatus(unit, STATUS_DEAD)) {
                             cantMove = FALSE;
                         }
                         break;
@@ -2221,7 +2221,7 @@ static void btlseqAct(BattleWork* wp) {
                             if (!BtlUnit_CheckStatus(unit, STATUS_SLEEP) &&
                                 !BtlUnit_CheckStatus(unit, STATUS_STOP) &&
                                 !BtlUnit_CheckStatus(unit, STATUS_FREEZE) &&
-                                !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
+                                !BtlUnit_CheckStatus(unit, STATUS_DEAD)) {
                                 cantMove = FALSE;
                             }
                         }
@@ -2290,7 +2290,7 @@ static void btlseqAct(BattleWork* wp) {
             } else if (!BtlUnit_CheckStatus(unit, STATUS_SLEEP) &&
                 !BtlUnit_CheckStatus(unit, STATUS_STOP) &&
                 !BtlUnit_CheckStatus(unit, STATUS_FREEZE) &&
-                (!BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL) || (unit->attributeFlags & kUndead))) {
+                (!BtlUnit_CheckStatus(unit, STATUS_DEAD) || (unit->attributeFlags & kUndead))) {
                 // BUG: irand(100) < 0 never holds, so an electrified unit never runs btldefaultevt_BiribiriMove.
                 // With a real chance, the shock would replace the unit's action for the turn, like the status tests
                 // above. Feeling Fine blocks Electric along with the harmful statuses (BattleSetStatusDamage).
@@ -2765,7 +2765,7 @@ BOOL BattleCheckConcluded(BattleWork* wp) {
             for (j = 0; j < BATTLE_UNIT_MAX; j++) {
                 unit = BattleGetUnitPtr(wp, j);
                 if (unit && unit->alliance == i &&
-                    !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL) &&
+                    !BtlUnit_CheckStatus(unit, STATUS_DEAD) &&
                     !(unit->attributeFlags & kInactive) &&
                     !(unit->attributeFlags & kUnitNoncombatant)) {
                     break;
@@ -2782,7 +2782,7 @@ BOOL BattleCheckConcluded(BattleWork* wp) {
                 unit = BattleGetUnitPtr(wp, j);
                 if (unit && unit->alliance == i &&
                     (unit->attributeFlags & kUnitLeader) &&
-                    !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL) &&
+                    !BtlUnit_CheckStatus(unit, STATUS_DEAD) &&
                     !(unit->attributeFlags & kUnitNoncombatant)) {
                     break;
                 }

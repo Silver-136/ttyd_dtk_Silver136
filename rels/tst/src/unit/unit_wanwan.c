@@ -344,8 +344,8 @@ EVT_END()
  * ice, electricity, explosions, poison, Payback, Hold Fast) hurts the Chomp while attacking:
  * the Chomp's head recoils 25 units back and up in the damage pose and hangs for 30 frames,
  * then the camera resets. The early-demo branch also bounces it twice down to the floor first.
- * It restarts its wait event unless the counter knocked it out (KO flag 0x200 without the Life Shroom flag
- * 0x800).
+ * It restarts its wait event unless the counter knocked it out (DAMAGE_RESULT_ZERO_HP without the Life Shroom
+ * DAMAGE_RESULT_REVIVAL).
  */
 static EVT_BEGIN(counter_damage_event)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_DAMAGE)

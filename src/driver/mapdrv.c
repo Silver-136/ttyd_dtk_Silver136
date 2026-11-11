@@ -1524,7 +1524,7 @@ void mapCalcAnimMatrix(Mtx out, Mtx in, MapAnim* anim, MapAnimJoint* joint) {
 }
 
 /**
- * Recomputes the world matrix of obj (dirty flag 0x200 or force) from the parent matrix mtx and its local
+ * Recomputes the world matrix of obj (MAP_OBJ_FLAG_MTX_DIRTY or force) from the parent matrix mtx and its local
  * or animated matrix plus the script transform,
  * and walks the children (forced when the parent changed) and siblings.
  */
@@ -2123,7 +2123,7 @@ static void _mapDispMapObj(CameraId cam, MapObject* obj) {
     }
 }
 
-/** Draws a group: the object, its children, and for group members (flag 0x20) the later siblings. */
+/** Draws a group: the object, its children, and for group members (MAP_OBJ_FLAG_GROUP_MEMBER) the later siblings. */
 static void _mapDispMapGrp(CameraId cam, MapObject* obj) {
     _mapDispMapObj(cam, obj);
     if (obj->child) {
@@ -2176,7 +2176,7 @@ static void mapDispMapGrp_off(CameraId cam, void* payload) {
 }
 
 /**
- * Draws every map object with flag 0x400000 straight away, without bounding-box culling.
+ * Draws every map object with MAP_OBJ_FLAG_KURURING straight away, without bounding-box culling.
  * Named after the flipping floor panels (evt_mobj_kururing_floor flags the map group under a panel),
  * whose kururing_capture renders that floor from above into the panel's texture;
  * the sac_deka action command uses it the same way to photograph the stage floor.
@@ -2241,7 +2241,7 @@ static void _mapDispMapGrp_NoMaterial(CameraId cam, MapObject* obj) {
 }
 
 /**
- * dispdrv callback for objects with flag 0x20000000:
+ * dispdrv callback for objects with MAP_OBJ_FLAG_SCREEN_RECT:
  * draws the object untextured and stores the screen rectangle the GPU reports in obj->screenRect.
  */
 static void mapDispMapObj_bbox(CameraId cam, void* payload) {
@@ -3189,7 +3189,7 @@ void mapSetMaterialTev(s32 texCount, s32 drawMode, s32 flags, Mtx mtx) {
 
 /**
  * Sets TEV kcolor 0, the colour the last stage multiplies by:
- * white scaled by the object colour (flag 0x40),
+ * white scaled by the object colour (MAP_OBJ_FLAG_COLOR),
  * the material alpha (color2.r) and the map-wide blend colours and colour unless the object opts out.
  * Shared with animdrv.
  */
@@ -3910,7 +3910,7 @@ void mapGrpFlagOff(const char* name, u32 flags) {
 
 /**
  * Assigns offscreen buffer id to obj and its subtree (and later siblings when doNext),
- * setting the offscreen flag 0x80, or clearing it for id -1.
+ * setting MAP_OBJ_FLAG_OFFSCREEN, or clearing it for id -1.
  */
 static void _setOffScrnId(MapObject* obj, s32 id, BOOL doNext) {
     // Requires a non-NULL object; group offscreen operations pass their lookup result without a check.
@@ -4129,8 +4129,8 @@ void mapSetBlend(GXColor* color) {
 }
 
 /**
- * Sets and enables the second map-wide blend colour, applied like mapSetBlend to objects without flag 0x1000;
- * evt_map.
+ * Sets and enables the second map-wide blend colour, applied like mapSetBlend to objects without
+ * MAP_OBJ_FLAG_NO_MAP_BLEND2; evt_map.
  */
 void mapSetBlend2(GXColor* color) {
     MapWork* wp = &mapWork[activeGroup];
@@ -4172,7 +4172,7 @@ void mapBlendOff2(void) {
 }
 
 /**
- * Tints the map object name by color, alpha included (flag 0x40);
+ * Tints the map object name by color, alpha included (MAP_OBJ_FLAG_COLOR);
  * objects with alpha below 255 draw translucent and at 0 not at all.
  */
 void mapObjSetColor(const char* name, GXColor* color) {
@@ -4184,7 +4184,7 @@ void mapObjSetColor(const char* name, GXColor* color) {
     }
 }
 
-/** Sets the tint colour and flag 0x40 on obj, its subtree and, when doNext, its later siblings. */
+/** Sets the tint colour and MAP_OBJ_FLAG_COLOR on obj, its subtree and, when doNext, its later siblings. */
 static void setColor(MapObject* obj, GXColor color, BOOL doNext) {
     if (obj) {
         obj->color = color;
@@ -4203,13 +4203,13 @@ void mapGrpSetColor(const char* name, GXColor color) {
     setColor(mapGetMapObj(name), color, FALSE);
 }
 
-/** Stores the texture for the projected texture stage of objects with flag 0x400; called by hei_00 and tou_01. */
+/** Stores the texture for the projected texture stage (MAP_OBJ_FLAG_PROJ_TEX objects); called by hei_00 and tou_01. */
 void mapSetProjTexObj(GXTexObj* obj, void* imgRef) {
     projTexObj = *obj;
     projTexImgRef = imgRef;
 }
 
-/** Stores the projection matrix for the projected texture stage of objects with flag 0x400; called by hei_00 and tou_01. */
+/** Stores the projection matrix of the MAP_OBJ_FLAG_PROJ_TEX texture stage; called by hei_00 and tou_01. */
 void mapSetProjMtx(Mtx mtx) {
     MTXCopy(mtx, projMtx);
 }
@@ -4339,7 +4339,7 @@ void* HSD_ArchiveGetPublicAddress(MapHeader* header, const char* name) {
 
 /**
  * Same translucency test as mapObjIsTranslucent, for animdrv models:
- * TRUE when the model colour (flag 0x40), material colour or a map-wide blend colour is not fully opaque.
+ * TRUE when the model colour (MAP_OBJ_FLAG_COLOR), material colour or a map-wide blend colour is not fully opaque.
  */
 BOOL mapTestXLU(u32 flags, GXColor* color, GXColor* matColor) {
     if ((flags & MAP_OBJ_FLAG_COLOR) && color->a != 0xFF) {
@@ -4366,7 +4366,7 @@ void mapSetTevCallback(s32 index, MapTevCallback callback) {
     mapGetWork()->entries[0].tevCallbacks[index] = callback;
 }
 
-/** Turns on the flash colour of the map object name: its tint colour is added on top of its texture (flag 0x100000). */
+/** Turns on the flash colour (MAP_OBJ_FLAG_FLUSH) of the map object name: its tint colour is added to its texture. */
 void mapObjFlushOn(const char* name) {
     mapObjFlagOn(name, MAP_OBJ_FLAG_FLUSH);
 }

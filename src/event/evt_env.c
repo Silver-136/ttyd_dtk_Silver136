@@ -6,7 +6,6 @@
 #include <dolphin/os.h>
 
 /** s32 type, s32 msec (0 = forever) */
-// s32 type, s32 msec (0 = forever)
 USER_FUNC(evt_env_blur_on) {
     EvtWord* args = event->args;
     s32 type, msec;

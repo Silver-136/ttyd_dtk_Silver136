@@ -1255,9 +1255,9 @@ static inline const char* unitwin_party_name(s32 i) {
 
 /**
  * Draws the unit window each frame: the item name and description for the highlighted counter slot with prices,
- * the counter window that counts toward Mario's coins (or Star Pieces, or pouchGetSuperCoin with flag 0x4000),
- * the optional Shine Sprite counter, the lottery number (not in the early demos), and the list windows by mode:
- * item lists (2-3), badge/shop lists (11-16), the informant's rumour lists (17-18),
+ * the counter window that counts toward Mario's coins (or Star Pieces, or pouchGetSuperCoin with
+ * UNITWIN_FLAG_SHINE_UNUSED), the optional Shine Sprite counter, the lottery number (not in the early demos),
+ * and the list windows by mode: item lists (2-3), badge/shop lists (11-16), the informant's rumour lists (17-18),
  * the partner lists (5-7) and the HP/FP/BP lists (8-10),
  * with the finger cursor and the help text of the highlighted row.
  */
