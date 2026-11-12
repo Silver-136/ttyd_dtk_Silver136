@@ -3476,6 +3476,7 @@ static s32 mobj_breaking_floor(MapObjectEntry* mobj) {
     GXColor c3;
     GXColor c2;
     GXColor c1 = {0xff, 0xff, 0xff, 0xff};
+    u8* alpha = &c3.a;
     c2 = c1;
     c3 = c1;
     switch (mobj->state) {
@@ -3504,11 +3505,10 @@ static s32 mobj_breaking_floor(MapObjectEntry* mobj) {
         case 1:
             c3 = animPoseGetMaterialEvtColor(mobj->poseId);
 
-            // FAKE: comma expression `(0, X)`: X becomes a separate compiler temp; the plain X changes the object
-            if (((0, c3)).a >= 4) {
-                c3.a -= 4;
+            if (*alpha >= 4) {
+                *alpha -= 4;
             } else {
-                c3.a = 0;
+                *alpha = 0;
                 mobj->state = 99;
             }
             animPoseSetMaterialEvtColor(mobj->poseId, c3);
@@ -3668,7 +3668,7 @@ static s32 mobj_kururing_floor(MapObjectEntry* mobj) {
     s32 i;
     NpcWork* wp;
     NpcEntry* npc;
-    f32* joint;
+    Vec* joint;
     party = partyGetPtr(marioGetPartyId());
     switch (mobj->state) {
         case 0:
@@ -3757,11 +3757,10 @@ static s32 mobj_kururing_floor(MapObjectEntry* mobj) {
             mobj->flags |= MOBJ_FLAG_PAPER_TEX;
             dispEntry(CAMERA_SHADOW, 0.0f, DISP_MODE_OPAQUE, (DispCallback)kururing_capture, mobj);
 
-            // FAKE: joint points at worldPositions[0][1].y (the y read below) so its web is the unnamed add temp, not a named load (colours before mario's call temp)
-            joint = &((Vec*)animPoseGetAnimPosePtr(mobj->poseId)->worldPositions->address)[1].y;
+            joint = &((Vec*)animPoseGetAnimPosePtr(mobj->poseId)->worldPositions->address)[1];
             mp = marioGetPtr();
             if (mobj_kf_ride_check(mobj->position.x, mobj->position.z, mp->position.x, mp->position.z, 30.0f)) {
-                mp->position.y = *joint;
+                mp->position.y = joint->y;
             }
             member = partyGetPtr(marioGetPartyId());
 #if VERSION >= VERSION_US
@@ -3770,7 +3769,7 @@ static s32 mobj_kururing_floor(MapObjectEntry* mobj) {
             if (member) {
 #endif
                 if (mobj_kf_ride_check(mobj->position.x, mobj->position.z, member->position.x, member->position.z, 30.0f)) {
-                    member->position.y = *joint;
+                    member->position.y = joint->y;
                 }
             }
             member = partyGetPtr(marioGetExtraPartyId());
@@ -3780,7 +3779,7 @@ static s32 mobj_kururing_floor(MapObjectEntry* mobj) {
             if (member) {
 #endif
                 if (mobj_kf_ride_check(mobj->position.x, mobj->position.z, member->position.x, member->position.z, 30.0f)) {
-                    member->position.y = *joint;
+                    member->position.y = joint->y;
                 }
             }
             wp = npcGetWorkPtr();
@@ -3788,13 +3787,13 @@ static s32 mobj_kururing_floor(MapObjectEntry* mobj) {
             for (i = 0; i < wp->total; i++, npc++) {
                 if (npc->flags & NPC_FLAG_IN_USE) {
                     if (mobj_kf_ride_check(mobj->position.x, mobj->position.z, npc->position.x, npc->position.z, 42.420002f)) {
-                        npc->position.y = *joint;
+                        npc->position.y = joint->y;
                     }
                 }
             }
             item = itemNearDistCheck(mobj->position.x, mobj->position.y, mobj->position.z, 42.420002f);
             if (item) {
-                item->position.y = *joint;
+                item->position.y = joint->y;
             }
             if (animPoseGetLoopTimes(mobj->poseId) < 2.0f) {
                 break;

@@ -508,6 +508,23 @@ static BOOL texture_dl(EffectEntry* effect, s32 idx, u32 type) {
     return FALSE;
 }
 
+/** Draws walk-cycle frame `anim` (0-2) of the Boo model with back-face culling. */
+// Original name and size (0x68) from the JP demo map (UNUSED there: every call is inlined).
+static void model_dl(s32 anim) {
+    GXSetCullMode(GX_CULL_BACK);
+    switch (anim) {
+        case 0:
+            boo_polygon_0();
+            break;
+        case 1:
+            boo_polygon_1();
+            break;
+        case 2:
+            boo_polygon_2();
+            break;
+    }
+}
+
 /**
  * Draws every enabled slot as the current walk-cycle Boo model, scaled by 10, facing its rotation;
  * skins 8 and 9 pulse by changing the TEV colour.
@@ -517,13 +534,13 @@ static void effBoobooDisp(CameraId cameraId, EffectEntry* effect) {
     Mtx scl;
     Mtx rot;
     CameraEntry* camera;
-    s32 animPhase[2]; // FAKE: register-promoted array (anim id + time*30); separate scalars differ
+    s32 phase;
     EffBoobooN64Work* work;
     s32 i;
 
     camera = camGetPtr(cameraId);
     work = effect->userdata;
-    animPhase[1] = work->time * 30;
+    phase = work->time * 30;
     for (i = 0; i < 11; i++) {
         if (!(work->flags[i] & 1)) {
             continue;
@@ -540,22 +557,10 @@ static void effBoobooDisp(CameraId cameraId, EffectEntry* effect) {
             continue;
         }
         if (work->type[i] == 8 || work->type[i] == 9) {
-            f32 s = (f32)sin(6.2831855f * (f32)(animPhase[1] + i * 20) / 360.0f);
+            f32 s = (f32)sin(6.2831855f * (f32)(phase + i * 20) / 360.0f);
             s32 v = (s32)(63.0f * s + 63.0f);
             GXSetTevColor(GX_TEVREG0, (GXColor){v, v, v});
         }
-        animPhase[0] = work->anim[i];
-        GXSetCullMode(GX_CULL_BACK);
-        switch (animPhase[0]) {
-            case 0:
-                boo_polygon_0();
-                break;
-            case 1:
-                boo_polygon_1();
-                break;
-            case 2:
-                boo_polygon_2();
-                break;
-        }
+        model_dl(work->anim[i]);
     }
 }

@@ -175,6 +175,98 @@ GXColor effFunemizuGetMapColor(void) {
 }
 #endif
 
+/** Sets up the vertex arrays of the wake mesh's first layer and calls its 3 display lists. */
+// Original name and size (0x140) from the JP demo map (UNUSED there: every call is inlined).
+static void funemizu_polygon_0(void) {
+    u32 i;
+
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 9);
+    GXSetArray(GX_VA_POS, funemizu_vertex_tbl, 6);
+    GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);
+    GXSetArray(GX_VA_NRM, funemizu_normal_tbl, 3);
+    GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
+    GXSetArray(GX_VA_CLR0, funemizu_color0_tbl, 4);
+    GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 12);
+    GXSetArray(GX_VA_TEX0, funemizu_texcoord0_tbl, 4);
+    for (i = 0; i < 3; i++) {
+        GXCallDisplayList(funemizu_dl_0_tbl[i], funemizu_dl_0_size_tbl[i] * 32);
+    }
+}
+
+/** Sets up the vertex arrays of the wake mesh's second layer and calls its 4 display lists. */
+// Original name and size (0x140) from the JP demo map (UNUSED there: every call is inlined).
+static void funemizu_polygon_1(void) {
+    u32 i;
+
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 9);
+    GXSetArray(GX_VA_POS, funemizu_vertex_tbl, 6);
+    GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);
+    GXSetArray(GX_VA_NRM, funemizu_normal_tbl, 3);
+    GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
+    GXSetArray(GX_VA_CLR0, funemizu_color0_tbl, 4);
+    GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 12);
+    GXSetArray(GX_VA_TEX0, funemizu_texcoord0_tbl, 4);
+    for (i = 0; i < 4; i++) {
+        GXCallDisplayList(funemizu_dl_1_tbl[i], funemizu_dl_1_size_tbl[i] * 32);
+    }
+}
+
+/** Sets up the vertex arrays of the ship wake mesh's first layer and calls its 2 display lists. */
+// Original name and size (0x140) from the JP demo map (UNUSED there: every call is inlined).
+static void gor_fune_polygon_0(void) {
+    u32 i;
+
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 8);
+    GXSetArray(GX_VA_POS, gor_fune_vertex_tbl, 6);
+    GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);
+    GXSetArray(GX_VA_NRM, gor_fune_normal_tbl, 3);
+    GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
+    GXSetArray(GX_VA_CLR0, gor_fune_color0_tbl, 4);
+    GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 14);
+    GXSetArray(GX_VA_TEX0, gor_fune_texcoord0_tbl, 4);
+    for (i = 0; i < 2; i++) {
+        GXCallDisplayList(gor_fune_dl_0_tbl[i], gor_fune_dl_0_size_tbl[i] * 32);
+    }
+}
+
+/** Sets up the vertex arrays of the ship wake mesh's second layer and calls its 2 display lists. */
+// Original name and size (0x140) from the JP demo map (UNUSED there: every call is inlined).
+static void gor_fune_polygon_1(void) {
+    u32 i;
+
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 8);
+    GXSetArray(GX_VA_POS, gor_fune_vertex_tbl, 6);
+    GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);
+    GXSetArray(GX_VA_NRM, gor_fune_normal_tbl, 3);
+    GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
+    GXSetArray(GX_VA_CLR0, gor_fune_color0_tbl, 4);
+    GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 14);
+    GXSetArray(GX_VA_TEX0, gor_fune_texcoord0_tbl, 4);
+    for (i = 0; i < 2; i++) {
+        GXCallDisplayList(gor_fune_dl_1_tbl[i], gor_fune_dl_1_size_tbl[i] * 32);
+    }
+}
+
 /**
  * Spawns boat water: types 0 and 2 are the ripple wake,
  * type 1 a spray burst (size picks how many pieces, at most 9).
@@ -325,15 +417,6 @@ static void effFunemizuMain(EffectEntry* effect) {
     }
 }
 
-/** Calls the three display lists of the wake mesh. */
-static inline void funemizuCallDL(u32 *p_u) {
-    u32 u = *p_u;
-    for (u = 0; u < 3; u++) {
-        GXCallDisplayList(funemizu_dl_0_tbl[u], funemizu_dl_0_size_tbl[u] * 32);
-    }
-    *p_u = u;
-}
-
 /**
  * Draws the wake ripple mesh (both layers, front and back faces) tinted with the map's water colour; the early
  * demos instead ease the tint toward the framebuffer pixel under the wake.
@@ -365,7 +448,6 @@ static void effFunemizuDisp(CameraId cameraId, EffectEntry* effect) {
     f32 z;
     s32 type;
     s32 i;
-    u32 u;
 
     cam = camGetPtr(cameraId);
     type = work->type;
@@ -458,39 +540,9 @@ static void effFunemizuDisp(CameraId cameraId, EffectEntry* effect) {
         PSMTXTrans(scale, work->wave0Scroll, 0.0f, 0.0f);
         GXLoadTexMtxImm(scale, GX_TEXMTX0, GX_MTX2x4);
         if (type == 0) {
-            GXClearVtxDesc();
-            GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
-            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 9);
-            GXSetArray(GX_VA_POS, funemizu_vertex_tbl, 6);
-            GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
-            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);
-            GXSetArray(GX_VA_NRM, funemizu_normal_tbl, 3);
-            GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
-            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
-            GXSetArray(GX_VA_CLR0, funemizu_color0_tbl, 4);
-            GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
-            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 12);
-            GXSetArray(GX_VA_TEX0, funemizu_texcoord0_tbl, 4);
-
-            // FAKE: funemizuCallDL wraps this display-list loop with a dead read and write-back of u; the plain loop changes the object
-            funemizuCallDL(&u);
+            funemizu_polygon_0();
         } else {
-            GXClearVtxDesc();
-            GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
-            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 8);
-            GXSetArray(GX_VA_POS, gor_fune_vertex_tbl, 6);
-            GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
-            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);
-            GXSetArray(GX_VA_NRM, gor_fune_normal_tbl, 3);
-            GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
-            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
-            GXSetArray(GX_VA_CLR0, gor_fune_color0_tbl, 4);
-            GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
-            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 14);
-            GXSetArray(GX_VA_TEX0, gor_fune_texcoord0_tbl, 4);
-            for (u = 0; u < 2; u++) {
-                GXCallDisplayList(gor_fune_dl_0_tbl[u], gor_fune_dl_0_size_tbl[u] * 32);
-            }
+            gor_fune_polygon_0();
         }
         PSMTXScale(scale, work->wave1Width, work->wave1Height, work->wave1Width);
         PSMTXConcat(trans, scale, scale);
@@ -499,39 +551,9 @@ static void effFunemizuDisp(CameraId cameraId, EffectEntry* effect) {
         PSMTXTrans(scale, work->wave1Scroll, 0.0f, 0.0f);
         GXLoadTexMtxImm(scale, GX_TEXMTX0, GX_MTX2x4);
         if (type == 0) {
-            GXClearVtxDesc();
-            GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
-            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 9);
-            GXSetArray(GX_VA_POS, funemizu_vertex_tbl, 6);
-            GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
-            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);
-            GXSetArray(GX_VA_NRM, funemizu_normal_tbl, 3);
-            GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
-            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
-            GXSetArray(GX_VA_CLR0, funemizu_color0_tbl, 4);
-            GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
-            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 12);
-            GXSetArray(GX_VA_TEX0, funemizu_texcoord0_tbl, 4);
-            for (u = 0; u < 4; u++) {
-                GXCallDisplayList(funemizu_dl_1_tbl[u], funemizu_dl_1_size_tbl[u] * 32);
-            }
+            funemizu_polygon_1();
         } else {
-            GXClearVtxDesc();
-            GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
-            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 8);
-            GXSetArray(GX_VA_POS, gor_fune_vertex_tbl, 6);
-            GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
-            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);
-            GXSetArray(GX_VA_NRM, gor_fune_normal_tbl, 3);
-            GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
-            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
-            GXSetArray(GX_VA_CLR0, gor_fune_color0_tbl, 4);
-            GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
-            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 14);
-            GXSetArray(GX_VA_TEX0, gor_fune_texcoord0_tbl, 4);
-            for (u = 0; u < 2; u++) {
-                GXCallDisplayList(gor_fune_dl_1_tbl[u], gor_fune_dl_1_size_tbl[u] * 32);
-            }
+            gor_fune_polygon_1();
         }
     }
 }

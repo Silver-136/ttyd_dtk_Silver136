@@ -521,6 +521,29 @@ static f32 scroll_tbl[] = {
 };
 #endif
 
+/** Sets up the ring model's vertex formats and arrays and calls its 20 display lists. */
+// Original name and size (0x140) from the JP demo map (UNUSED there: every call is inlined).
+static void wakka_polygon_0(void) {
+    u32 i;
+
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 10);
+    GXSetArray(GX_VA_POS, &wakka_vertex_tbl, 6);
+    GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);
+    GXSetArray(GX_VA_NRM, &wakka_normal_tbl, 3);
+    GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
+    GXSetArray(GX_VA_CLR0, &wakka_color0_tbl, 4);
+    GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 13);
+    GXSetArray(GX_VA_TEX0, &wakka_texcoord0_tbl, 4);
+    for (i = 0; i < 20; i++) {
+        GXCallDisplayList(wakka_dl_0_tbl[i], wakka_dl_0_size_tbl[i] << 5);
+    }
+}
+
 static void effUltraHammerMain(EffectEntry* effect);
 static void effUltraHammerDisp(CameraId camId, void* param);
 
@@ -621,7 +644,6 @@ inline Vec initializeVec(Vec* input) {
 
 /** Draws each ring whose start delay has run out with the scrolling texture, mirrored in x if `mode` is non-zero. */
 static void effUltraHammerDisp(CameraId camId, void* param) {
-    u32 fmtLoop[2]; // FAKE: register-promoted array (vtx fmt + loop counter); separate scalars differ
     CameraEntry* cam;
     EffUltraHammerData* data;
     s32 i;
@@ -677,23 +699,7 @@ static void effUltraHammerDisp(CameraId camId, void* param) {
             GXSetCurrentMtx(GX_PNMTX0);
             PSMTXTrans(mtx, data->offsetX, data->offsetY, 0.0f);
             GXLoadTexMtxImm(mtx, GX_TEXMTX0, GX_MTX2x4);
-            GXClearVtxDesc();
-            GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
-            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 10);
-            GXSetArray(GX_VA_POS, &wakka_vertex_tbl, 6);
-            GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
-            fmtLoop[0] = GX_VTXFMT0;
-            GXSetVtxAttrFmt(fmtLoop[0], GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);
-            GXSetArray(GX_VA_NRM, &wakka_normal_tbl, 3);
-            GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
-            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
-            GXSetArray(GX_VA_CLR0, &wakka_color0_tbl, 4);
-            GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
-            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 13);
-            GXSetArray(GX_VA_TEX0, &wakka_texcoord0_tbl, 4);
-            for (fmtLoop[1] = 0; fmtLoop[1] < 20; fmtLoop[1]++) {
-                GXCallDisplayList(wakka_dl_0_tbl[fmtLoop[1]], wakka_dl_0_size_tbl[fmtLoop[1]] << 5);
-            }
+            wakka_polygon_0();
         }
     }
 }

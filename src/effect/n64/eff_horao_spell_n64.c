@@ -151,6 +151,22 @@ static void effHoraoSpellMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effHoraoSpellDisp, effect);
 }
 
+static void vtx_copy(effN64Vtx* dst, effN64Vtx* src, Mtx mtx) {
+    Vec v;
+
+    memcpy(dst, src, sizeof(effN64Vtx));
+    OSInitFastCast();
+    OSs16tof32(&dst->x, &v.x);
+    OSs16tof32(&dst->y, &v.y);
+    OSs16tof32(&dst->z, &v.z);
+    PSMTXMultVec(mtx, &v, &v);
+    OSInitFastCast();
+    // FAKE: x stored through an s16* view of dst; &dst->x lets the loop fold the address into its own register
+    OSf32tos16(&v.x, (s16*)dst);
+    OSf32tos16(&v.y, &dst->y);
+    OSf32tos16(&v.z, &dst->z);
+}
+
 /**
  * Draws two 15-segment (16-point) ribbons 36 degrees apart that sway with a sine and scroll texture 0x73.
  * The vertices are rebuilt every frame in smartAlloc memory.
@@ -241,32 +257,8 @@ static void effHoraoSpellDisp(CameraId cameraId, void* payload) {
             PSMTXScale(scale, s, s, s);
             PSMTXConcat(mtx, scale, mtx);
             PSMTXConcat(mtx2, mtx, mtx2);
-            p = &vtx[k];
-            memcpy(p, &horao_spell_vtx[k], sizeof(effN64Vtx));
-
-            OSInitFastCast();
-            OSs16tof32(&p->x, &v1.x);
-            OSs16tof32(&p->y, &v1.y);
-            OSs16tof32(&p->z, &v1.z);
-            PSMTXMultVec(mtx2, &v1, &v1);
-            OSInitFastCast();
-            OSf32tos16(&v1.x, &p->x);
-            OSf32tos16(&v1.y, &p->y);
-            OSf32tos16(&v1.z, &p->z);
-            q = &vtx[k + 1];
-            memcpy(q, &horao_spell_vtx[k + 1], sizeof(effN64Vtx));
-
-            OSInitFastCast();
-            OSs16tof32(&q->x, &v2.x);
-            OSs16tof32(&q->y, &v2.y);
-            OSs16tof32(&q->z, &v2.z);
-            PSMTXMultVec(mtx2, &v2, &v2);
-            OSInitFastCast();
-            OSf32tos16(&v2.x, &q->x);
-
-            // FAKE: p[1] is q; writing y and z through q changes the object
-            OSf32tos16(&v2.y, &p[1].y);
-            OSf32tos16(&v2.z, &p[1].z);
+            vtx_copy(&vtx[k], &horao_spell_vtx[k], mtx2);
+            vtx_copy(&vtx[k + 1], &horao_spell_vtx[k + 1], mtx2);
         }
         DCFlushRange(vtx, sizeof(effN64Vtx) * 32);
         GXInvalidateVtxCache();

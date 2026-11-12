@@ -146,6 +146,22 @@ static void effBalloonMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effBalloonDisp, effect);
 }
 
+static void vtx_copy(effN64Vtx* dst, effN64Vtx* src, Mtx mtx) {
+    Vec v;
+
+    memcpy(dst, src, sizeof(effN64Vtx));
+    OSInitFastCast();
+    OSs16tof32(&dst->x, &v.x);
+    OSs16tof32(&dst->y, &v.y);
+    OSs16tof32(&dst->z, &v.z);
+    PSMTXMultVec(mtx, &v, &v);
+    OSInitFastCast();
+    // FAKE: x stored through an s16* view of dst; &dst->x lets the loop fold the address into its own register
+    OSf32tos16(&v.x, (s16*)dst);
+    OSf32tos16(&v.y, &dst->y);
+    OSf32tos16(&v.z, &dst->z);
+}
+
 /**
  * Builds the vertices in a temporary buffer (from the template, via fast-cast conversions),
  * then draws the outline as a fan of triangles around one vertex; vertex 0 (placed at the effect position,
@@ -158,9 +174,6 @@ static void effBalloonDisp(CameraId cameraId, void* payload) {
     EffBalloonN64Work* work = effect->userdata;
     s32 lifetime;
     effN64Vtx* vtx = (effN64Vtx*)smartAlloc(sizeof(effN64Vtx) * 32, SMART_GROUP_TEMP)->address;
-    Vec v0;
-    Vec v1;
-    Vec v2;
     GXTexObj texObj;
     Mtx mtx;
     Mtx tex;
@@ -193,47 +206,18 @@ static void effBalloonDisp(CameraId cameraId, void* payload) {
     GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ONE);
     GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_TEXA);
     PSMTXTrans(mtx, work->position.x, work->position.y, work->position.z);
-    memcpy(vtx, &balloon_vtx[1], sizeof(effN64Vtx));
-    OSInitFastCast();
-    OSs16tof32(&vtx->x, &v0.x);
-    OSs16tof32(&vtx->y, &v0.y);
-    OSs16tof32(&vtx->z, &v0.z);
-    PSMTXMultVec(mtx, &v0, &v0);
-    OSInitFastCast();
-    OSf32tos16(&v0.x, &vtx->x);
-    OSf32tos16(&v0.y, &vtx->y);
-    OSf32tos16(&v0.z, &vtx->z);
+    vtx_copy(vtx, &balloon_vtx[1], mtx);
     PSMTXRotRad(rot, 'z', 0.017453292f * work->rotation);
     PSMTXConcat(mtx, rot, a);
     PSMTXRotRad(rot, 'y', 0.017453292f * -camGetPtr(CAMERA_3D)->viewYaw);
     PSMTXTrans(mtx, work->offsetX, work->offsetY, 0.0f);
     PSMTXConcat(rot, mtx, b);
     PSMTXConcat(a, b, b);
-    memcpy(vtx + 1, &balloon_vtx[0], sizeof(effN64Vtx));
-    OSInitFastCast();
-    OSs16tof32(&vtx[1].x, &v1.x);
-    OSs16tof32(&vtx[1].y, &v1.y);
-    OSs16tof32(&vtx[1].z, &v1.z);
-    PSMTXMultVec(b, &v1, &v1);
-    OSInitFastCast();
-    OSf32tos16(&v1.x, &vtx[1].x);
-    OSf32tos16(&v1.y, &vtx[1].y);
-    OSf32tos16(&v1.z, &vtx[1].z);
+    vtx_copy(vtx + 1, &balloon_vtx[0], b);
     for (i = 0; i < 20; i++) {
         PSMTXTrans(mtx, work->points[i].x, work->points[i].y, 0.0f);
         PSMTXConcat(b, mtx, mtx);
-        memcpy(&vtx[i + 2], &balloon_vtx[i + 2], sizeof(effN64Vtx));
-        OSInitFastCast();
-        OSs16tof32(&vtx[i + 2].x, &v2.x);
-        OSs16tof32(&vtx[i + 2].y, &v2.y);
-        OSs16tof32(&vtx[i + 2].z, &v2.z);
-        PSMTXMultVec(mtx, &v2, &v2);
-        OSInitFastCast();
-
-        // FAKE: element pointer cast instead of &vtx[i + 2].x; the plain form changes the object
-        OSf32tos16(&v2.x, (s16*)&vtx[i + 2]);
-        OSf32tos16(&v2.y, &vtx[i + 2].y);
-        OSf32tos16(&v2.z, &vtx[i + 2].z);
+        vtx_copy(&vtx[i + 2], &balloon_vtx[i + 2], mtx);
     }
     DCFlushRange(vtx, sizeof(effN64Vtx) * 32);
     GXInvalidateVtxCache();

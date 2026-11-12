@@ -308,8 +308,9 @@ static void effStardust2Main(EffectEntry* effect) {
         }
     }
 
-    // FAKE: (u32)type > 1 tests type other than 0 and 1; type != 0 && type != 1 changes the object
-    if ((u32)type > 1 && type != 3 && type < 10 && done >= effect->count - 1) {
+    if (type == 0 || type == 1) {
+        // these end on the life timer above
+    } else if (type != 3 && type < 10 && done >= effect->count - 1) {
         effDelete(effect);
         return;
     }

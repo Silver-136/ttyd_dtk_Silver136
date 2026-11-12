@@ -223,6 +223,22 @@ static void effSstarMain(EffectEntry* effect) {
     }
 }
 
+static void vtx_copy(effN64Vtx* dst, effN64Vtx* src, Mtx mtx) {
+    Vec v;
+
+    memcpy(dst, src, sizeof(effN64Vtx));
+    OSInitFastCast();
+    OSs16tof32(&dst->x, &v.x);
+    OSs16tof32(&dst->y, &v.y);
+    OSs16tof32(&dst->z, &v.z);
+    PSMTXMultVec(mtx, &v, &v);
+    OSInitFastCast();
+    // FAKE: x stored through an s16* view of dst; &dst->x lets the loop fold the address into its own register
+    OSf32tos16(&v.x, (s16*)dst);
+    OSf32tos16(&v.y, &dst->y);
+    OSf32tos16(&v.z, &dst->z);
+}
+
 /**
  * Draws the star camera-facing: a 60x60 star from texture 9 in its colour plus the glow diamond, then,
  * while it has bounced at most once (always), a four-segment dust trail placed by five of the eight stored frame
@@ -332,30 +348,8 @@ static void effSstarDisp(CameraId cameraId, void* param) {
         PSMTXRotRad(rot, 'z', 0.017453292f * w->rotZ);
         PSMTXConcat(mtx, rot, w->mtx[w->idx]);
         for (i = 0; i < 5; i++) {
-            memcpy(&w->vtx[i * 2], &shooting_dust_vtx[i * 2], sizeof(effN64Vtx));
-            OSInitFastCast();
-            OSs16tof32(&w->vtx[i * 2].x, &v0.x);
-            OSs16tof32(&w->vtx[i * 2].y, &v0.y);
-            OSs16tof32(&w->vtx[i * 2].z, &v0.z);
-            PSMTXMultVec(w->mtx[(k - i + 8) % 8], &v0, &v0);
-            OSInitFastCast();
-            OSf32tos16(&v0.x, &w->vtx[i * 2].x);
-            OSf32tos16(&v0.y, &w->vtx[i * 2].y);
-            OSf32tos16(&v0.z, &w->vtx[i * 2].z);
-            memcpy(&w->vtx[i * 2 + 1], &shooting_dust_vtx[i * 2 + 1], sizeof(effN64Vtx));
-            OSInitFastCast();
-
-            // FAKE: vertex fields addressed through s16* casts; &w->vtx[i * 2 + 1].x/.y/.z change the object
-            OSs16tof32((s16*)&w->vtx[i * 2 + 1], &v1.x);
-            OSs16tof32((s16*)&w->vtx[i * 2 + 1] + 1, &v1.y);
-            OSs16tof32((s16*)&w->vtx[i * 2 + 1] + 2, &v1.z);
-            PSMTXMultVec(w->mtx[(k - i + 8) % 8], &v1, &v1);
-            OSInitFastCast();
-
-            // FAKE: x stored through an s16* cast of the vertex; &w->vtx[i * 2 + 1].x changes the object
-            OSf32tos16(&v1.x, (s16*)&w->vtx[i * 2 + 1]);
-            OSf32tos16(&v1.y, &w->vtx[i * 2 + 1].y);
-            OSf32tos16(&v1.z, &w->vtx[i * 2 + 1].z);
+            vtx_copy(&w->vtx[i * 2], &shooting_dust_vtx[i * 2], w->mtx[(k - i + 8) % 8]);
+            vtx_copy(&w->vtx[i * 2 + 1], &shooting_dust_vtx[i * 2 + 1], w->mtx[(k - i + 8) % 8]);
         }
         GXInvalidateVtxCache();
         DCFlushRange(w->vtx, sizeof(w->vtx));
