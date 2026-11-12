@@ -74,11 +74,11 @@ static inline NanNPC* nanNPCSearch(char* name) {
 }
 
 /**
- * Moves crowd NPC npc by its move vector, sliding off map collision:
- * a hit reflects the motion off the wall and pushes the NPC clear; without a hit the move vector is scaled by 0.6.
- * NPCs with NANNPC_FLAG_NO_HIT move without collision.
+ * Moves crowd NPC npc by its move vector with map collision, casting a ray from origin along dir (length mag):
+ * a hit reflects the motion off the wall and pushes the NPC clear. Returns 1 if nothing was hit.
  */
-static inline void nanNPCHitMove(NanNPC* npc, f32 mag) {
+// Original name and size (0x238) from the JP demo map (UNUSED there: every call is inlined).
+inline s32 nanNPCMoveAtari(NanNPC* npc, Vec origin, Vec dir, f32 mag) {
     s32 clear;
     f32 hitX;
     f32 hitY;
@@ -92,62 +92,77 @@ static inline void nanNPCHitMove(NanNPC* npc, f32 mag) {
     Vec step;
     Vec prevPos;
     Vec reflected;
-    Vec origin;
-    Vec dir;
-    Vec rayOrigin;
-    Vec rayDir;
     f32 dot;
-    origin = npc->pos;
-    origin.y += 1.0f;
-    PSVECNormalize(&npc->move, &dir);
-    if (npc->flags & NANNPC_FLAG_NO_HIT) {
-        PSVECAdd(&npc->pos, &npc->move, &npc->pos);
-        PSVECScale(&npc->move, &npc->move, 0.6f);
-    } else {
-        clear = 1;
-        rayDir = dir;
-        rayOrigin = origin;
-        npc->hit1 = NULL;
-        npc->hit0 = NULL;
-        dist = mag;
-        npc->hit0 = hitCheckFilter(NULL, &hitPos.x, &hitPos.y, &hitPos.z, &dist, &normal.x, &normal.y, &normal.z,
-                                   rayOrigin.x, rayOrigin.y, rayOrigin.z, rayDir.x, rayDir.y, rayDir.z);
-        if (!npc->hit0) {
-            PSVECAdd(&npc->pos, &npc->move, &npc->pos);
-        } else {
-            prevPos = npc->pos;
-            PSVECAdd(&npc->pos, &npc->move, &npc->pos);
-            if (npc->move.y == 0.0f) {
-                normal.y = 0.0f;
-            }
-            PSVECNormalize(&normal, &normal);
-            C_VECReflect(&rayDir, &normal, &reflected);
-            PSVECScale(&reflected, &npc->move, mag);
-            clear = 0;
 
-            dot = PSVECDotProduct(&rayDir, &normal);
-            PSVECScale(&normal, &normal, dot * -(mag - dist) + 0.1f);
-            PSVECAdd(&npc->pos, &normal, &npc->pos);
-            PSVECSubtract(&npc->pos, &prevPos, &step);
-            dist = PSVECMag(&step);
-            if (dist > 0.0f) {
-                PSVECNormalize(&step, &step);
-                rayOrigin = prevPos;
-                npc->hit1 = hitCheckFilter(
-                    NULL, &hitX, &hitY, &hitZ, &dist, &normX, &normY, &normZ, prevPos.x, 1.0f + prevPos.y, prevPos.z,
-                    step.x, step.y, step.z);
-                if (npc->hit1) {
-                    npc->pos = prevPos; // rayOrigin was set to prevPos above and is not read again
-                }
+    clear = 1;
+    npc->hit1 = NULL;
+    npc->hit0 = NULL;
+    dist = mag;
+    npc->hit0 = hitCheckFilter(NULL, &hitPos.x, &hitPos.y, &hitPos.z, &dist, &normal.x, &normal.y, &normal.z,
+                               origin.x, origin.y, origin.z, dir.x, dir.y, dir.z);
+    if (!npc->hit0) {
+        PSVECAdd(&npc->pos, &npc->move, &npc->pos);
+    } else {
+        prevPos = npc->pos;
+        PSVECAdd(&npc->pos, &npc->move, &npc->pos);
+        if (npc->move.y == 0.0f) {
+            normal.y = 0.0f;
+        }
+        PSVECNormalize(&normal, &normal);
+        C_VECReflect(&dir, &normal, &reflected);
+        PSVECScale(&reflected, &npc->move, mag);
+        clear = 0;
+
+        dot = PSVECDotProduct(&dir, &normal);
+        PSVECScale(&normal, &normal, dot * -(mag - dist) + 0.1f);
+        PSVECAdd(&npc->pos, &normal, &npc->pos);
+        PSVECSubtract(&npc->pos, &prevPos, &step);
+        dist = PSVECMag(&step);
+        if (dist > 0.0f) {
+            PSVECNormalize(&step, &step);
+            origin = prevPos;
+            npc->hit1 = hitCheckFilter(
+                NULL, &hitX, &hitY, &hitZ, &dist, &normX, &normY, &normZ, prevPos.x, 1.0f + prevPos.y, prevPos.z,
+                step.x, step.y, step.z);
+            if (npc->hit1) {
+                npc->pos = prevPos;
             }
         }
-        if (clear) {
+    }
+    return clear;
+}
+
+/**
+ * Moves crowd NPC npc with its move vector capped at 5 when longer than 10, sliding off map collision
+ * (nanNPCMoveAtari); without a hit the move vector is scaled by 0.6. NPCs with NANNPC_FLAG_NO_HIT move
+ * without collision.
+ */
+// Original name and size (0x2f0) from the JP demo map (UNUSED there: every call is inlined).
+inline void nanNPCMoveDecel(NanNPC* npc) {
+    f32 mag;
+    Vec origin;
+    Vec dir;
+
+    mag = PSVECMag(&npc->move);
+    if (mag) {
+        if (mag > 10.0f) {
+            PSVECScale(&npc->move, &npc->move, 5.0f / mag);
+            mag = 5.0f;
+        }
+        origin = npc->pos;
+        origin.y += 1.0f;
+        PSVECNormalize(&npc->move, &dir);
+        if (npc->flags & NANNPC_FLAG_NO_HIT) {
+            PSVECAdd(&npc->pos, &npc->move, &npc->pos);
+            PSVECScale(&npc->move, &npc->move, 0.6f);
+        } else if (nanNPCMoveAtari(npc, origin, dir, mag)) {
             PSVECScale(&npc->move, &npc->move, 0.6f);
         }
     }
 }
 
-// FAKE: opt_dead_assignments off keeps the dead rayOrigin = prevPos struct copy in the inlined nanNPCHitMove (the retail code stores it, never reads it)
+
+// FAKE: opt_dead_assignments off keeps the dead origin = prevPos struct copy in the inlined nanNPCMoveAtari (the retail code stores it, never reads it)
 #pragma push
 #pragma opt_dead_assignments off
 /**
@@ -159,7 +174,6 @@ void nanNPCOption(void) {
     NanNPC* q;
     NanNPCWork* w;
     NanNPC* p;
-    NanNPC* r;
     Vec diff;
     f32 mag;
     f32 dist;
@@ -187,8 +201,7 @@ void nanNPCOption(void) {
         }
     }
 
-    // FAKE: r (loop 3 start) assigned in loop 2's exit test, as the target loads it there (no mr copy); w->npc is not changed by loop 2
-    for (p = w->npc; p < (r = w->npc) + w->num; p++) {
+    for (p = w->npc; p < w->npc + w->num; p++) {
         if (p->flags & NANNPC_FLAG_WALK) {
             PSVECSubtract(&p->target, &p->pos, &diff);
             mag = PSVECMag(&diff);
@@ -200,16 +213,9 @@ void nanNPCOption(void) {
             }
         }
     }
-    for (; r < w->npc + w->num; r++) {
-        if (r->flags & NANNPC_FLAG_WALK) {
-            mag = PSVECMag(&r->move);
-            if (mag) {
-                if (mag > 10.0f) {
-                    PSVECScale(&r->move, &r->move, 5.0f / mag);
-                    mag = 5.0f;
-                }
-                nanNPCHitMove(r, mag);
-            }
+    for (p = w->npc; p < w->npc + w->num; p++) {
+        if (p->flags & NANNPC_FLAG_WALK) {
+            nanNPCMoveDecel(p);
         }
     }
 }

@@ -25,6 +25,22 @@ typedef struct EffOpukuWcurtainN64Work {
     f32 speed[12];  // 0x5C
 } EffOpukuWcurtainN64Work;
 
+/** Transforms vertex `src`'s position by `mtx` into `dst` (fast-cast s16 <-> f32 conversions). */
+// Original name and size (0x110) from the JP demo map (UNUSED there: every call is inlined).
+static void vtx_copy(effN64Vtx* dst, effN64Vtx* src, Mtx mtx) {
+    Vec v;
+
+    OSInitFastCast();
+    OSs16tof32(&src->x, &v.x);
+    OSs16tof32(&src->y, &v.y);
+    OSs16tof32(&src->z, &v.z);
+    PSMTXMultVec(mtx, &v, &v);
+    OSInitFastCast();
+    OSf32tos16(&v.x, &dst->x);
+    OSf32tos16(&v.y, &dst->y);
+    OSf32tos16(&v.z, &dst->z);
+}
+
 static void effOpukuWcurtainMain(EffectEntry* effect);
 static void effOpukuWcurtainDisp(CameraId cameraId, void* param);
 
@@ -122,7 +138,6 @@ static void effOpukuWcurtainDisp(CameraId cameraId, void* param) {
     Mtx mtx;
     Mtx scale;
     GXTexObj texObj;
-    Vec v;
     f32 s;
     s32 i;
     effN64Vtx* vtx;
@@ -180,15 +195,7 @@ static void effOpukuWcurtainDisp(CameraId cameraId, void* param) {
     PSMTXScale(scale, s, s, s);
     PSMTXConcat(mtx, scale, mtx);
     for (j = 0; j < i * 2; j++) {
-        OSInitFastCast();
-        OSs16tof32(&vtx[j].x, &v.x);
-        OSs16tof32(&vtx[j].y, &v.y);
-        OSs16tof32(&vtx[j].z, &v.z);
-        PSMTXMultVec(mtx, &v, &v);
-        OSInitFastCast();
-        OSf32tos16(&v.x, &vtx[j].x);
-        OSf32tos16(&v.y, &vtx[j].y);
-        OSf32tos16(&v.z, &vtx[j].z);
+        vtx_copy(&vtx[j], &vtx[j], mtx);
     }
     DCFlushRange(vtx, sizeof(effN64Vtx) * 48);
     GXInvalidateVtxCache();

@@ -402,6 +402,136 @@ static void* nozle_4_dl_0_tbl[] = {nozle_4_dl_0_0, nozle_4_dl_0_1, nozle_4_dl_0_
 /** Display-list sizes for nozzle model 4, drawn once for each spray piece of type 3. */
 static u8 nozle_4_dl_0_size_tbl[] = {0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02};
 
+/** Sets up nozzle model 1's vertex formats and arrays and calls its first set of ten display lists. */
+// Original name and size (0x174) from the JP demo map (UNUSED there: every call is inlined).
+static void nozle_1_polygon_0(void) {
+    u32 i;
+
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 7);
+    GXSetArray(GX_VA_POS, nozle_1_vertex_tbl, 6);
+    GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);
+    GXSetArray(GX_VA_NRM, nozle_1_normal_tbl, 3);
+    GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
+    GXSetArray(GX_VA_CLR0, nozle_1_color0_tbl, 4);
+    GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 14);
+    GXSetArray(GX_VA_TEX0, nozle_1_texcoord0_tbl, 4);
+    GXSetVtxDesc(GX_VA_TEX1, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX1, GX_TEX_ST, GX_S16, 14);
+    GXSetArray(GX_VA_TEX1, nozle_1_texcoord1_tbl, 4);
+    for (i = 0; i < 10; i++) {
+        GXCallDisplayList(nozle_1_dl_0_tbl[i], nozle_1_dl_0_size_tbl[i] << 5);
+    }
+}
+
+/** Sets up nozzle model 1's vertex formats and arrays and calls its second set of ten display lists. */
+// Original name and size (0x174) from the JP demo map (UNUSED there: every call is inlined).
+static void nozle_1_polygon_1(void) {
+    u32 i;
+
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 7);
+    GXSetArray(GX_VA_POS, nozle_1_vertex_tbl, 6);
+    GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);
+    GXSetArray(GX_VA_NRM, nozle_1_normal_tbl, 3);
+    GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
+    GXSetArray(GX_VA_CLR0, nozle_1_color0_tbl, 4);
+    GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 14);
+    GXSetArray(GX_VA_TEX0, nozle_1_texcoord0_tbl, 4);
+    GXSetVtxDesc(GX_VA_TEX1, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX1, GX_TEX_ST, GX_S16, 14);
+    GXSetArray(GX_VA_TEX1, nozle_1_texcoord1_tbl, 4);
+    for (i = 0; i < 10; i++) {
+        GXCallDisplayList(nozle_1_dl_1_tbl[i], nozle_1_dl_1_size_tbl[i] << 5);
+    }
+}
+
+/** Sets up nozzle model 3's vertex formats and arrays and calls display-list set 0 (17 lists). */
+// Original name and size (0x174) from the JP demo map (UNUSED there: every call is inlined).
+static void nozle_3_polygon_0(void) {
+    u32 i;
+
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_INDEX16);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 7);
+    GXSetArray(GX_VA_POS, nozle_3_vertex_tbl, 6);
+    GXSetVtxDesc(GX_VA_NRM, GX_INDEX16);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);
+    GXSetArray(GX_VA_NRM, nozle_3_normal_tbl, 3);
+    GXSetVtxDesc(GX_VA_CLR0, GX_INDEX16);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
+    GXSetArray(GX_VA_CLR0, nozle_3_color0_tbl, 4);
+    GXSetVtxDesc(GX_VA_TEX0, GX_INDEX16);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 14);
+    GXSetArray(GX_VA_TEX0, nozle_3_texcoord0_tbl, 4);
+    GXSetVtxDesc(GX_VA_TEX1, GX_INDEX16);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX1, GX_TEX_ST, GX_S16, 14);
+    GXSetArray(GX_VA_TEX1, nozle_3_texcoord1_tbl, 4);
+    for (i = 0; i < 17; i++) {
+        GXCallDisplayList(nozle_3_dl_0_tbl[i], nozle_3_dl_0_size_tbl[i] << 5);
+    }
+}
+
+/** Sets up nozzle model 3's vertex formats and arrays and calls display-list set 1 (17 lists). */
+// Original name and size (0x174) from the JP demo map (UNUSED there: every call is inlined).
+static void nozle_3_polygon_1(void) {
+    u32 i;
+
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_INDEX16);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 7);
+    GXSetArray(GX_VA_POS, nozle_3_vertex_tbl, 6);
+    GXSetVtxDesc(GX_VA_NRM, GX_INDEX16);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);
+    GXSetArray(GX_VA_NRM, nozle_3_normal_tbl, 3);
+    GXSetVtxDesc(GX_VA_CLR0, GX_INDEX16);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
+    GXSetArray(GX_VA_CLR0, nozle_3_color0_tbl, 4);
+    GXSetVtxDesc(GX_VA_TEX0, GX_INDEX16);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 14);
+    GXSetArray(GX_VA_TEX0, nozle_3_texcoord0_tbl, 4);
+    GXSetVtxDesc(GX_VA_TEX1, GX_INDEX16);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX1, GX_TEX_ST, GX_S16, 14);
+    GXSetArray(GX_VA_TEX1, nozle_3_texcoord1_tbl, 4);
+    for (i = 0; i < 17; i++) {
+        GXCallDisplayList(nozle_3_dl_1_tbl[i], nozle_3_dl_1_size_tbl[i] << 5);
+    }
+}
+
+/** Sets up nozzle model 4's vertex formats and arrays and calls its eight display lists. */
+// Original name and size (0x174) from the JP demo map (UNUSED there: every call is inlined).
+static void nozle_4_polygon_0(void) {
+    u32 i;
+
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 6);
+    GXSetArray(GX_VA_POS, nozle_4_vertex_tbl, 6);
+    GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);
+    GXSetArray(GX_VA_NRM, nozle_4_normal_tbl, 3);
+    GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
+    GXSetArray(GX_VA_CLR0, nozle_4_color0_tbl, 4);
+    GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 13);
+    GXSetArray(GX_VA_TEX0, nozle_4_texcoord0_tbl, 4);
+    GXSetVtxDesc(GX_VA_TEX1, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX1, GX_TEX_ST, GX_S16, 13);
+    GXSetArray(GX_VA_TEX1, nozle_4_texcoord1_tbl, 4);
+    for (i = 0; i < 8; i++) {
+        GXCallDisplayList(nozle_4_dl_0_tbl[i], nozle_4_dl_0_size_tbl[i] << 5);
+    }
+}
+
 /**
  * Width and height percentages per frame as a type 0 or 2 nozzle grows in; read backwards from its
  * remaining life as it shrinks away at the end.
@@ -553,40 +683,8 @@ static void effNozleMain(EffectEntry* effect) {
     }
 }
 
-// Indexed vertex arrays of one nozzle model: type = index size, posFrac/texFrac = fixed-point fraction bits.
-static inline void nozleVtxSetup(GXAttrType type, u8 posFrac, u8 texFrac, void* vtx, void* nrm, void* clr, void* tex0, void* tex1) {
-    GXClearVtxDesc();
-    GXSetVtxDesc(GX_VA_POS, type);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, posFrac);
-    GXSetArray(GX_VA_POS, vtx, 6);
-    GXSetVtxDesc(GX_VA_NRM, type);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);
-    GXSetArray(GX_VA_NRM, nrm, 3);
-    GXSetVtxDesc(GX_VA_CLR0, type);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
-    GXSetArray(GX_VA_CLR0, clr, 4);
-    GXSetVtxDesc(GX_VA_TEX0, type);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, texFrac);
-    GXSetArray(GX_VA_TEX0, tex0, 4);
-    GXSetVtxDesc(GX_VA_TEX1, type);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX1, GX_TEX_ST, GX_S16, texFrac);
-    GXSetArray(GX_VA_TEX1, tex1, 4);
-}
-
 /** Draws the nozzle from its display lists with indexed vertex arrays (effect textures 60-62). */
 static void effNozleDisp(CameraId cameraId, EffectEntry* effect) {
-    // a separate size/list pointer pair per display-list loop (sz/dl .. sz5/dl5)
-    void** dl5;
-    u8* sz5;
-    u8* sz3;
-    void** dl3;
-    u8* sz4;
-    void** dl4;
-    u8* sz2;
-    void** dl2;
-    void** dl;
-    u8* sz;
-    u32 k;
     EffNozleWork* w;
     s32 i;
     s32 alpha;
@@ -656,24 +754,12 @@ static void effNozleDisp(CameraId cameraId, EffectEntry* effect) {
     GXSetCullMode(GX_CULL_NONE);
     switch (work->type) {
         case 0:
-            nozleVtxSetup(GX_INDEX8, 7, 14, nozle_1_vertex_tbl, nozle_1_normal_tbl, nozle_1_color0_tbl, nozle_1_texcoord0_tbl, nozle_1_texcoord1_tbl);
-            for (k = 0, sz = nozle_1_dl_0_size_tbl, dl = nozle_1_dl_0_tbl; k < 10; k++, sz++, dl++) {
-                GXCallDisplayList(*dl, *sz * 32);
-            }
-            nozleVtxSetup(GX_INDEX8, 7, 14, nozle_1_vertex_tbl, nozle_1_normal_tbl, nozle_1_color0_tbl, nozle_1_texcoord0_tbl, nozle_1_texcoord1_tbl);
-            for (k = 0, sz2 = nozle_1_dl_1_size_tbl, dl2 = nozle_1_dl_1_tbl; k < 10; k++, sz2++, dl2++) {
-                GXCallDisplayList(*dl2, *sz2 * 32);
-            }
+            nozle_1_polygon_0();
+            nozle_1_polygon_1();
             break;
         case 2:
-            nozleVtxSetup(GX_INDEX16, 7, 14, nozle_3_vertex_tbl, nozle_3_normal_tbl, nozle_3_color0_tbl, nozle_3_texcoord0_tbl, nozle_3_texcoord1_tbl);
-            for (k = 0, sz5 = nozle_3_dl_1_size_tbl, dl5 = nozle_3_dl_1_tbl; k < 17; k++, sz5++, dl5++) {
-                GXCallDisplayList(*dl5, *sz5 * 32);
-            }
-            nozleVtxSetup(GX_INDEX16, 7, 14, nozle_3_vertex_tbl, nozle_3_normal_tbl, nozle_3_color0_tbl, nozle_3_texcoord0_tbl, nozle_3_texcoord1_tbl);
-            for (k = 0, sz3 = nozle_3_dl_0_size_tbl, dl3 = nozle_3_dl_0_tbl; k < 17; k++, sz3++, dl3++) {
-                GXCallDisplayList(*dl3, *sz3 * 32);
-            }
+            nozle_3_polygon_1();
+            nozle_3_polygon_0();
             break;
         case 3:
             GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_A0, GX_CA_TEXA, GX_CA_ZERO);
@@ -689,10 +775,7 @@ static void effNozleDisp(CameraId cameraId, EffectEntry* effect) {
                 PSMTXConcat(a, c, c);
                 PSMTXConcat(d, c, c);
                 GXLoadPosMtxImm(c, GX_PNMTX0);
-                nozleVtxSetup(GX_INDEX8, 6, 13, nozle_4_vertex_tbl, nozle_4_normal_tbl, nozle_4_color0_tbl, nozle_4_texcoord0_tbl, nozle_4_texcoord1_tbl);
-                for (k = 0, sz4 = nozle_4_dl_0_size_tbl, dl4 = nozle_4_dl_0_tbl; k < 8; k++, sz4++, dl4++) {
-                    GXCallDisplayList(*dl4, *sz4 * 32);
-                }
+                nozle_4_polygon_0();
             }
             break;
     }

@@ -32,6 +32,26 @@ typedef struct EffKemuri3N64Work {
     f32 cosAngle;     // 0x84
 } EffKemuri3N64Work;
 
+/** Builds the puff's model matrix from its rotation (x, then y, around a z spin), position and scale. */
+// Original name and size (0xd8) from the JP demo map (UNUSED there: every call is inlined).
+static void kemuri_matrix(EffKemuri3N64Work* work) {
+    Mtx scale;
+    Mtx trans;
+    Mtx rotX;
+    Mtx rotY;
+    Mtx rotZ;
+
+    PSMTXRotRad(rotX, 'x', 0.017453292f * work->rotation.x);
+    PSMTXRotRad(rotY, 'y', 0.017453292f * work->rotation.y);
+    PSMTXRotRad(rotZ, 'z', 0.017453292f * work->rotation.z);
+    PSMTXTrans(trans, work->position.x, work->position.y, work->position.z);
+    PSMTXScale(scale, work->scale.x, work->scale.y, work->scale.z);
+    PSMTXConcat(rotX, rotZ, rotZ);
+    PSMTXConcat(rotY, rotZ, rotZ);
+    PSMTXConcat(rotZ, scale, scale);
+    PSMTXConcat(trans, scale, work->mtx);
+}
+
 static void effKemuri3Main(EffectEntry* effect);
 static void effKemuri3Disp(CameraId cameraId, void* param);
 
@@ -91,11 +111,6 @@ static void effKemuri3Main(EffectEntry* effect) {
     EffKemuri3N64Work* work = effect->userdata;
     s32 i;
     BOOL alive;
-    Mtx rotZ;
-    Mtx rotY;
-    Mtx rotX;
-    Mtx trans;
-    Mtx scale;
     Vec position;
     Vec tmp = {0.0f, 0.0f, 0.0f};
 
@@ -127,15 +142,7 @@ static void effKemuri3Main(EffectEntry* effect) {
         if (work->rotation.x < -100.0f) {
             work->rotation.x = -100.0f;
         }
-        PSMTXRotRad(rotX, 'x', 0.017453292f * work->rotation.x);
-        PSMTXRotRad(rotY, 'y', 0.017453292f * work->rotation.y);
-        PSMTXRotRad(rotZ, 'z', 0.017453292f * work->rotation.z);
-        PSMTXTrans(trans, work->position.x, work->position.y, work->position.z);
-        PSMTXScale(scale, work->scale.x, work->scale.y, work->scale.z);
-        PSMTXConcat(rotX, rotZ, rotZ);
-        PSMTXConcat(rotY, rotZ, rotZ);
-        PSMTXConcat(rotZ, scale, scale);
-        PSMTXConcat(trans, scale, work->mtx);
+        kemuri_matrix(work);
     }
     if (!alive) {
         effDelete(effect);

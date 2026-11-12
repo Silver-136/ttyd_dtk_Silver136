@@ -105,6 +105,50 @@ static EVT_BEGIN(evt_shake)
     RETURN
 EVT_END()
 
+/** Sets up the splash mesh's vertex formats and arrays and calls the four display lists of its first layer. */
+// Original name and size (0x130) from the JP demo map (UNUSED there: every call is inlined).
+static void shibuki_polygon_0(void) {
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 8);
+    GXSetArray(GX_VA_POS, shibuki_vertex_tbl, 6);
+    GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);
+    GXSetArray(GX_VA_NRM, shibuki_normal_tbl, 3);
+    GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
+    GXSetArray(GX_VA_CLR0, shibuki_color0_tbl, 4);
+    GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 14);
+    GXSetArray(GX_VA_TEX0, shibuki_texcoord0_tbl, 4);
+    GXCallDisplayList(shibuki_dl_0_0, 0x40);
+    GXCallDisplayList(shibuki_dl_0_1, 0x40);
+    GXCallDisplayList(shibuki_dl_0_2, 0x40);
+    GXCallDisplayList(shibuki_dl_0_3, 0x40);
+}
+
+/** Sets up the splash mesh's vertex formats and arrays and calls the four display lists of its second layer. */
+// Original name and size (0x130) from the JP demo map (UNUSED there: every call is inlined).
+static void shibuki_polygon_1(void) {
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 8);
+    GXSetArray(GX_VA_POS, shibuki_vertex_tbl, 6);
+    GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);
+    GXSetArray(GX_VA_NRM, shibuki_normal_tbl, 3);
+    GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
+    GXSetArray(GX_VA_CLR0, shibuki_color0_tbl, 4);
+    GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 14);
+    GXSetArray(GX_VA_TEX0, shibuki_texcoord0_tbl, 4);
+    GXCallDisplayList(shibuki_dl_1_0, 0x20);
+    GXCallDisplayList(shibuki_dl_1_1, 0x20);
+    GXCallDisplayList(shibuki_dl_1_2, 0x20);
+    GXCallDisplayList(shibuki_dl_1_3, 0x20);
+}
+
 static void effFallMain(EffectEntry* effect);
 static void effFallDisp(CameraId cameraId, void* payload);
 static void effFallDispInseki(CameraId cameraId, void* payload);
@@ -1143,23 +1187,7 @@ static void effFallDispWater(CameraId cameraId, void* payload) {
         GXSetTevColor(GX_TEVREG0, (GXColor){ 255, 255, 255, w->alpha });
         effGetTexObj(0x37, &tex);
         GXLoadTexObj(&tex, GX_TEXMAP0);
-        GXClearVtxDesc();
-        GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
-        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 8);
-        GXSetArray(GX_VA_POS, shibuki_vertex_tbl, 6);
-        GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
-        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);
-        GXSetArray(GX_VA_NRM, shibuki_normal_tbl, 3);
-        GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
-        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
-        GXSetArray(GX_VA_CLR0, shibuki_color0_tbl, 4);
-        GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
-        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 14);
-        GXSetArray(GX_VA_TEX0, shibuki_texcoord0_tbl, 4);
-        GXCallDisplayList(shibuki_dl_1_0, 0x20);
-        GXCallDisplayList(shibuki_dl_1_1, 0x20);
-        GXCallDisplayList(shibuki_dl_1_2, 0x20);
-        GXCallDisplayList(shibuki_dl_1_3, 0x20);
+        shibuki_polygon_1();
         PSMTXTrans(trans, w->pos2.x, w->pos2.y, w->pos2.z);
 
         // FAKE: constant parked in s first; target loads scale before 0.8f (natural `s = w->scale * 0.8f` swaps the loads)
@@ -1177,23 +1205,7 @@ static void effFallDispWater(CameraId cameraId, void* payload) {
         }
         effGetTexObj(0x36, &tex);
         GXLoadTexObj(&tex, GX_TEXMAP0);
-        GXClearVtxDesc();
-        GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
-        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 8);
-        GXSetArray(GX_VA_POS, shibuki_vertex_tbl, 6);
-        GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
-        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);
-        GXSetArray(GX_VA_NRM, shibuki_normal_tbl, 3);
-        GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
-        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
-        GXSetArray(GX_VA_CLR0, shibuki_color0_tbl, 4);
-        GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
-        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 14);
-        GXSetArray(GX_VA_TEX0, shibuki_texcoord0_tbl, 4);
-        GXCallDisplayList(shibuki_dl_0_0, 0x40);
-        GXCallDisplayList(shibuki_dl_0_1, 0x40);
-        GXCallDisplayList(shibuki_dl_0_2, 0x40);
-        GXCallDisplayList(shibuki_dl_0_3, 0x40);
+        shibuki_polygon_0();
     }
 }
 

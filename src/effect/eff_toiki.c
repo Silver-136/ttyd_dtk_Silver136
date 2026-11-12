@@ -230,6 +230,29 @@ static void effToikiMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effToikiDisp, effect);
 }
 
+/** Sets up the breath cloud model's vertex formats and arrays and calls its 14 display lists. */
+// Original name and size (0x140) from the JP demo map (UNUSED there: every call is inlined).
+static void queen_toiki_polygon_0(void) {
+    u32 i;
+
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 6);
+    GXSetArray(GX_VA_POS, queen_toiki_vertex_tbl, 6);
+    GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);
+    GXSetArray(GX_VA_NRM, queen_toiki_normal_tbl, 3);
+    GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
+    GXSetArray(GX_VA_CLR0, queen_toiki_color0_tbl, 4);
+    GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 14);
+    GXSetArray(GX_VA_TEX0, queen_toiki_texcoord0_tbl, 4);
+    for (i = 0; i < 14; i++) {
+        GXCallDisplayList(queen_toiki_dl_0_tbl[i], queen_toiki_dl_0_size_tbl[i] << 5);
+    }
+}
+
 /**
  * Draws the breath model (an indexed display-list cloud) tinted by a per-type colour,
  * with the texture scrolled across it.
@@ -242,9 +265,6 @@ static void effToikiDisp(CameraId cameraId, EffectEntry* effect) {
     Mtx rot;
     Mtx scale;
     CameraEntry* camera;
-    u8** dl;
-    u32 i;
-    u8* sz;
     s32 type;
 
     camera = camGetPtr(cameraId);
@@ -276,20 +296,5 @@ static void effToikiDisp(CameraId cameraId, EffectEntry* effect) {
     GXLoadPosMtxImm(mtx, GX_PNMTX0);
     GXSetCurrentMtx(GX_PNMTX0);
     GXSetCullMode(GX_CULL_NONE);
-    GXClearVtxDesc();
-    GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 6);
-    GXSetArray(GX_VA_POS, queen_toiki_vertex_tbl, 6);
-    GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);
-    GXSetArray(GX_VA_NRM, queen_toiki_normal_tbl, 3);
-    GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
-    GXSetArray(GX_VA_CLR0, queen_toiki_color0_tbl, 4);
-    GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 14);
-    GXSetArray(GX_VA_TEX0, queen_toiki_texcoord0_tbl, 4);
-    for (i = 0, sz = queen_toiki_dl_0_size_tbl, dl = queen_toiki_dl_0_tbl; i < 14; i++, sz++, dl++) {
-        GXCallDisplayList(*dl, *sz << 5);
-    }
+    queen_toiki_polygon_0();
 }

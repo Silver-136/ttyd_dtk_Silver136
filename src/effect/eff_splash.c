@@ -74,6 +74,29 @@ static s8 geso_trans_dt[] = { -40, -12, -40, -12, -39, -9, -39, -6, -39, -3, -39
 /** Display-list sizes (32-byte units) of the Blooper spray (shibuki) model's five lists. */
 static u8 geso_shibuki_dl_0_size_tbl[] = { 1, 1, 1, 1, 1};
 
+/** Sets up the Blooper spray model's vertex formats and arrays and calls its five display lists. */
+// Original name and size (0x140) from the JP demo map (UNUSED there: every call is inlined).
+static void geso_shibuki_polygon_0(void) {
+    u32 i;
+
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 8);
+    GXSetArray(GX_VA_POS, geso_shibuki_vertex_tbl, 6);
+    GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);
+    GXSetArray(GX_VA_NRM, geso_shibuki_normal_tbl, 3);
+    GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
+    GXSetArray(GX_VA_CLR0, geso_shibuki_color0_tbl, 4);
+    GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 14);
+    GXSetArray(GX_VA_TEX0, geso_shibuki_texcoord0_tbl, 4);
+    for (i = 0; i < 5; i++) {
+        GXCallDisplayList(geso_shibuki_dl_0_tbl[i], geso_shibuki_dl_0_size_tbl[i] << 5);
+    }
+}
+
 /**
  * Spawns the splash at (x, y, z) with `size`.
  * Types: 0 falls in water, 1 jumps out of water, 2 falls into lava/fire (also starts a smoke effect),
@@ -402,9 +425,6 @@ static void effSplashDisp(CameraId cameraId, EffectEntry* effect) {
     f32 r0, g0, b0, r1, g1, b1;
     f32 ang, sn, cs;
     f32 w;
-    u32 k2;
-    u8* sz;
-    u8** dl;
     s32 kb;
     cam = camGetPtr(cameraId);
     type = work->type;
@@ -557,22 +577,7 @@ static void effSplashDisp(CameraId cameraId, EffectEntry* effect) {
                 break;
             case 3:
                 *(GXColor*)geso_shibuki_color0_tbl = color;
-                GXClearVtxDesc();
-                GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
-                GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 8);
-                GXSetArray(GX_VA_POS, geso_shibuki_vertex_tbl, 6);
-                GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
-                GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);
-                GXSetArray(GX_VA_NRM, geso_shibuki_normal_tbl, 3);
-                GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
-                GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
-                GXSetArray(GX_VA_CLR0, geso_shibuki_color0_tbl, 4);
-                GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
-                GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 14);
-                GXSetArray(GX_VA_TEX0, geso_shibuki_texcoord0_tbl, 4);
-                for (k2 = 0, sz = geso_shibuki_dl_0_size_tbl, dl = geso_shibuki_dl_0_tbl; k2 < 5; k2++, sz++, dl++) {
-                    GXCallDisplayList(*dl, *sz << 5);
-                }
+                geso_shibuki_polygon_0();
                 break;
         }
     }

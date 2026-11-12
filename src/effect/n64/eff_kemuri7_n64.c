@@ -40,6 +40,17 @@ static effN64Vtx foot_vtx[] = {
     {-5, 0, 5, 0, 0, 0, 0, 0, 255},
 };
 
+/** Builds the footprint's model matrix from its position and y rotation. */
+// Original name and size (0x64) from the JP demo map (UNUSED there: every call is inlined).
+static void kemuri_yuki_matrix(EffKemuri7N64Work* work) {
+    Mtx trans;
+    Mtx rot;
+
+    PSMTXTrans(trans, work->position.x, work->position.y, work->position.z);
+    PSMTXRotRad(rot, 'y', 0.017453292f * work->rotation.y);
+    PSMTXConcat(trans, rot, work->mtx);
+}
+
 static void effKemuri7Main(EffectEntry* effect);
 static void effKemuri7Disp(CameraId cameraId, void* param);
 
@@ -97,8 +108,6 @@ static void effKemuri7Main(EffectEntry* effect) {
     EffKemuri7N64Work* work = effect->userdata;
     s32 i;
     BOOL alive;
-    Mtx rot;
-    Mtx trans;
     Vec position;
     Vec tmp = {0.0f, 0.0f, 0.0f};
 
@@ -116,9 +125,7 @@ static void effKemuri7Main(EffectEntry* effect) {
             continue;
         }
         alive = TRUE;
-        PSMTXTrans(trans, work->position.x, work->position.y, work->position.z);
-        PSMTXRotRad(rot, 'y', 0.017453292f * work->rotation.y);
-        PSMTXConcat(trans, rot, work->mtx);
+        kemuri_yuki_matrix(work);
         work->alpha--;
     }
     if (!alive) {

@@ -302,26 +302,6 @@ static f32 edge_color[] = { 0.331f, 0.314999998f, 0.231999993f, 0.158999994f, 0.
 static u8* color_tbl[] = { diamond_1_color0_tbl, diamond_2_color0_tbl, diamond_3_color0_tbl, diamond_4_color0_tbl, diamond_5_color0_tbl, diamond_6_color0_tbl, diamond_7_color0_tbl };
 #endif
 
-#define CLR_ARRAY(c) GXSetArray(GX_VA_CLR0, c, 4);
-#define CLR_NONE(c)
-
-// Vertex format and arrays of a star stone mesh; clrMac is CLR_ARRAY (set the colour array) or CLR_NONE.
-// A macro, not an inline function: as a function (colour array NULL = skip) the object changes.
-#define VTX_SETUP(posT, nrmT, clrMac, clrT, texT, texFrac)               \
-    GXClearVtxDesc();                                                    \
-    GXSetVtxDesc(GX_VA_POS, GX_INDEX8);                                  \
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 11);      \
-    GXSetArray(GX_VA_POS, posT, 6);                                      \
-    GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);                                  \
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);        \
-    GXSetArray(GX_VA_NRM, nrmT, 3);                                      \
-    GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);                                 \
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);   \
-    clrMac(clrT)                                                         \
-    GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);                                 \
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, texFrac); \
-    GXSetArray(GX_VA_TEX0, texT, 4);
-
 // A macro, not an inline function: as a function the GXColor temporaries move on the stack.
 #define DISP_START(w)                                                                    \
     mapSetMaterialFog();                                                                 \
@@ -365,12 +345,6 @@ static inline void starStoneBlendState(void) {
     GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
     GXSetZMode(GX_TRUE, GX_LEQUAL, GX_FALSE);
 }
-
-#define CALL_DL_TABLE(tbl, sz, n)         \
-    i = 0; dp = tbl; sp = sz;             \
-    for (; i < n##U; i++, sp++, dp++) {   \
-        GXCallDisplayList(*dp, *sp << 5); \
-    }
 
 /**
  * Spawns Crystal Star type % 7 (0 Diamond, 1 Emerald, 2 Gold, 3 Ruby, 4 Sapphire, 5 Garnet,
@@ -599,48 +573,147 @@ static void effStarStoneMain(EffectEntry* effect) {
     }
 }
 
-// Call a table of n display lists (sizes in 32-byte units). Macros, not inline functions: written as functions,
-// the loops change the object.
-#define LOOPK2(tbl, sz, n)                    \
-    {                                         \
-        u8* s2;                               \
-        u8** d2;                              \
-        s32 kk;                               \
-        kk = 0;                               \
-        d2 = tbl;                             \
-        s2 = sz;                              \
-        for (; kk < n##U; kk++, s2++, d2++) { \
-            GXCallDisplayList(*d2, *s2 << 5); \
-        }                                     \
-    }
-
-// The same loop with the caller's k, dq and sq
-#define LOOPK(tbl, sz, n)                 \
-    k = 0;                                \
-    dq = tbl;                             \
-    sq = sz;                              \
-    for (; k < n##U; k++, sq++, dq++) {   \
-        GXCallDisplayList(*dq, *sq << 5); \
-    }
-
-/**
- * Draws the round stone (types 0 and 6): a 10% larger untextured shell, then the textured stone.
- * Each loop walks a display-list table and its size table (32-byte units).
- * The loops are written the way the compiler saw them:
- * some share the function's loop variables, others have their own block,
- * and the early demos order the loop variables differently; each form gives the original register allocation.
- */
-#if VERSION <= VERSION_DEMO_JP
-static void effStarStoneDisp_1(CameraId cameraId, EffectEntry* effect) {
+/** Sets up the round stone's vertex formats and arrays (with its colour array) and calls display-list set 0 (34 lists). */
+// Original name and size (0x140) from the JP demo map (UNUSED there: every call is inlined).
+static void diamond_1_polygon_0(void) {
     u32 i;
-    u8* size;
-    u8** list;
-    u8* sz;
-    u8** dl;
-    u32 n;
-#else
+
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 11);
+    GXSetArray(GX_VA_POS, diamond_1_vertex_tbl, 6);
+    GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);
+    GXSetArray(GX_VA_NRM, diamond_1_normal_tbl, 3);
+    GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
+    GXSetArray(GX_VA_CLR0, diamond_1_color0_tbl, 4);
+    GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 13);
+    GXSetArray(GX_VA_TEX0, diamond_1_texcoord0_tbl, 4);
+    for (i = 0; i < 34; i++) {
+        GXCallDisplayList(diamond_1_dl_0_tbl[i], diamond_1_dl_0_size_tbl[i] << 5);
+    }
+}
+
+/** Sets up the round stone's vertex formats and arrays (keeping the current colour array) and calls display-list set 1 (34 lists). */
+// Original name and size (0x130) from the JP demo map (UNUSED there: every call is inlined).
+static void diamond_1_polygon_1(void) {
+    u32 i;
+
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 11);
+    GXSetArray(GX_VA_POS, diamond_1_vertex_tbl, 6);
+    GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);
+    GXSetArray(GX_VA_NRM, diamond_1_normal_tbl, 3);
+    GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
+    GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 13);
+    GXSetArray(GX_VA_TEX0, diamond_1_texcoord0_tbl, 4);
+    for (i = 0; i < 34; i++) {
+        GXCallDisplayList(diamond_1_dl_1_tbl[i], diamond_1_dl_1_size_tbl[i] << 5);
+    }
+}
+
+/** Sets up the split stone's vertex formats and arrays and calls the first half's 19 display lists (list 0 only while the stone is falling). */
+// Original name and size (0x150) from the JP demo map (UNUSED there: every call is inlined).
+static void diamond_2_2_polygon_0(EffStarStoneWork* w) {
+    s32 i;
+
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 11);
+    GXSetArray(GX_VA_POS, diamond_2_2_vertex_tbl, 6);
+    GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);
+    GXSetArray(GX_VA_NRM, diamond_2_2_normal_tbl, 3);
+    GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
+    GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 14);
+    GXSetArray(GX_VA_TEX0, diamond_2_2_texcoord0_tbl, 4);
+    for (i = 0; i < sizeof(diamond_2_2_dl_0_tbl) / sizeof(diamond_2_2_dl_0_tbl[0]); i++) {
+        if ((w->flags & STAR_STONE_FLAG_FALLING) || i != 0) {
+            GXCallDisplayList(diamond_2_2_dl_0_tbl[i], diamond_2_2_dl_0_size_tbl[i] << 5);
+        }
+    }
+}
+
+/** Sets up the split stone's vertex formats and arrays and calls the second half's 19 display lists (list 0 only while the stone is falling). */
+// Original name and size (0x150) from the JP demo map (UNUSED there: every call is inlined).
+static void diamond_2_2_polygon_1(EffStarStoneWork* w) {
+    s32 i;
+
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 11);
+    GXSetArray(GX_VA_POS, diamond_2_2_vertex_tbl, 6);
+    GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);
+    GXSetArray(GX_VA_NRM, diamond_2_2_normal_tbl, 3);
+    GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
+    GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 14);
+    GXSetArray(GX_VA_TEX0, diamond_2_2_texcoord0_tbl, 4);
+    for (i = 0; i < sizeof(diamond_2_2_dl_1_tbl) / sizeof(diamond_2_2_dl_1_tbl[0]); i++) {
+        if ((w->flags & STAR_STONE_FLAG_FALLING) || i != 0) {
+            GXCallDisplayList(diamond_2_2_dl_1_tbl[i], diamond_2_2_dl_1_size_tbl[i] << 5);
+        }
+    }
+}
+
+/** Sets up the Crystal Star's vertex formats and arrays and calls display-list set 0 (34 lists). */
+// Original name and size (0x140) from the JP demo map (UNUSED there: every call is inlined).
+static void diamond_7_polygon_0(void) {
+    u32 i;
+
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 11);
+    GXSetArray(GX_VA_POS, diamond_7_vertex_tbl, 6);
+    GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);
+    GXSetArray(GX_VA_NRM, diamond_7_normal_tbl, 3);
+    GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
+    GXSetArray(GX_VA_CLR0, diamond_7_color0_tbl, 4);
+    GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 13);
+    GXSetArray(GX_VA_TEX0, diamond_7_texcoord0_tbl, 4);
+    for (i = 0; i < 34; i++) {
+        GXCallDisplayList(diamond_7_dl_0_tbl[i], diamond_7_dl_0_size_tbl[i] << 5);
+    }
+}
+
+/** Sets up the Crystal Star's vertex formats and arrays and calls display-list set 1 (33 lists). */
+// Original name and size (0x140) from the JP demo map (UNUSED there: every call is inlined).
+static void diamond_7_polygon_1(void) {
+    u32 i;
+
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 11);
+    GXSetArray(GX_VA_POS, diamond_7_vertex_tbl, 6);
+    GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);
+    GXSetArray(GX_VA_NRM, diamond_7_normal_tbl, 3);
+    GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
+    GXSetArray(GX_VA_CLR0, diamond_7_color0_tbl, 4);
+    GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 13);
+    GXSetArray(GX_VA_TEX0, diamond_7_texcoord0_tbl, 4);
+    for (i = 0; i < 33; i++) {
+        GXCallDisplayList(diamond_7_dl_1_tbl[i], diamond_7_dl_1_size_tbl[i] << 5);
+    }
+}
+
+/** Draws the round stone (types 0 and 6): a 10% larger untextured shell, then the textured stone. */
 static void effStarStoneDisp_1(CameraId cameraId, EffectEntry* effect) {
-#endif
     Mtx m;
     Mtx s;
     Mtx r;
@@ -648,14 +721,6 @@ static void effStarStoneDisp_1(CameraId cameraId, EffectEntry* effect) {
     EffStarStoneWork* w = effect->userdata;
     CameraEntry* cam = camGetPtr(cameraId);
     s32 type = w->type;
-#if VERSION >= VERSION_JP
-    u8** dp;
-    u8* sp;
-    u32 i;
-    u8* sq;
-    u8** dq;
-    s32 k;
-#endif
 
     DISP_START(w)
     PSMTXTrans(m, w->position.x, w->position.y, w->position.z);
@@ -669,73 +734,13 @@ static void effStarStoneDisp_1(CameraId cameraId, EffectEntry* effect) {
     starStoneBlendState();
     GXSetCullMode(GX_CULL_BACK);
     if (type == 0) {
-#if VERSION <= VERSION_DEMO_JP
-        VTX_SETUP(diamond_1_vertex_tbl, diamond_1_normal_tbl, CLR_ARRAY, diamond_1_color0_tbl, diamond_1_texcoord0_tbl, 13);
-        for (i = 0, size = diamond_1_dl_0_size_tbl, list = diamond_1_dl_0_tbl; i < sizeof(diamond_1_dl_0_tbl) / sizeof(diamond_1_dl_0_tbl[0]); i++, size++, list++) {
-            GXCallDisplayList(*list, *size << 5);
-        }
-        VTX_SETUP(diamond_1_vertex_tbl, diamond_1_normal_tbl, CLR_NONE, diamond_1_color0_tbl, diamond_1_texcoord0_tbl, 13);
-        {
-            u8* sz;
-            u8** dl;
-            u32 n;
-
-            for (n = 0, sz = diamond_1_dl_1_size_tbl, dl = diamond_1_dl_1_tbl; n < sizeof(diamond_1_dl_1_tbl) / sizeof(diamond_1_dl_1_tbl[0]); n++, sz++, dl++) {
-                GXCallDisplayList(*dl, *sz << 5);
-            }
-        }
+        diamond_1_polygon_0();
+        diamond_1_polygon_1();
     } else {
-        VTX_SETUP(diamond_7_vertex_tbl, diamond_7_normal_tbl, CLR_ARRAY, diamond_7_color0_tbl, diamond_7_texcoord0_tbl, 13);
-        {
-            u8* sz;
-            u8** dl;
-            u32 n;
-
-            for (n = 0, sz = diamond_7_dl_0_size_tbl, dl = diamond_7_dl_0_tbl; n < sizeof(diamond_7_dl_0_tbl) / sizeof(diamond_7_dl_0_tbl[0]); n++, sz++, dl++) {
-                GXCallDisplayList(*dl, *sz << 5);
-            }
-        }
-        VTX_SETUP(diamond_7_vertex_tbl, diamond_7_normal_tbl, CLR_ARRAY, diamond_7_color0_tbl, diamond_7_texcoord0_tbl, 13);
-        {
-            u8* sz;
-            u8** dl;
-            u32 n;
-
-            for (n = 0, sz = diamond_7_dl_1_size_tbl, dl = diamond_7_dl_1_tbl; n < sizeof(diamond_7_dl_1_tbl) / sizeof(diamond_7_dl_1_tbl[0]); n++, sz++, dl++) {
-                GXCallDisplayList(*dl, *sz << 5);
-            }
-        }
+        diamond_7_polygon_0();
+        diamond_7_polygon_1();
     }
-    GXSetNumChans(1);
-    GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_VTX, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
-    GXSetNumTexGens(1);
-    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0, GX_FALSE, GX_PTIDENTITY);
-    PSMTXTrans(m, w->texScrollX, w->texScrollY, 0.0f);
-    GXLoadTexMtxImm(m, GX_TEXMTX0, GX_MTX2x4);
-    GXSetNumTevStages(2);
-    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
-    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-    GXSetTevOp(GX_TEVSTAGE0, GX_MODULATE);
-    GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR_NULL);
-    GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-    GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-    GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_ZERO, GX_CC_C0, GX_CC_CPREV, GX_CC_ZERO);
-    GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_A0, GX_CA_APREV, GX_CA_ZERO);
-    GXSetTevColor(GX_TEVREG0, (GXColor){w->r, w->g, w->b, w->a});
-#else
-        VTX_SETUP(diamond_1_vertex_tbl, diamond_1_normal_tbl, CLR_ARRAY, diamond_1_color0_tbl, diamond_1_texcoord0_tbl, 13)
-        CALL_DL_TABLE(diamond_1_dl_0_tbl, diamond_1_dl_0_size_tbl, 34)
-        VTX_SETUP(diamond_1_vertex_tbl, diamond_1_normal_tbl, CLR_NONE, diamond_1_color0_tbl, diamond_1_texcoord0_tbl, 13)
-        CALL_DL_TABLE(diamond_1_dl_1_tbl, diamond_1_dl_1_size_tbl, 34)
-    } else {
-        VTX_SETUP(diamond_7_vertex_tbl, diamond_7_normal_tbl, CLR_ARRAY, diamond_7_color0_tbl, diamond_7_texcoord0_tbl, 13)
-        CALL_DL_TABLE(diamond_7_dl_0_tbl, diamond_7_dl_0_size_tbl, 34)
-        VTX_SETUP(diamond_7_vertex_tbl, diamond_7_normal_tbl, CLR_ARRAY, diamond_7_color0_tbl, diamond_7_texcoord0_tbl, 13)
-        CALL_DL_TABLE(diamond_7_dl_1_tbl, diamond_7_dl_1_size_tbl, 33)
-    }
-        DISP_MID(w)
-#endif
+    DISP_MID(w)
     PSMTXTrans(m, w->position.x, w->position.y, w->position.z);
     PSMTXScale(s, w->scale, w->scale, w->scale);
     PSMTXConcat(m, s, m);
@@ -753,78 +758,17 @@ static void effStarStoneDisp_1(CameraId cameraId, EffectEntry* effect) {
     }
     starStoneBlendState();
     if (type == 0) {
-#if VERSION <= VERSION_DEMO_JP
-        VTX_SETUP(diamond_1_vertex_tbl, diamond_1_normal_tbl, CLR_ARRAY, diamond_1_color0_tbl, diamond_1_texcoord0_tbl, 13);
-        {
-            u8* sz;
-            u8** dl;
-            u32 n;
-
-            for (n = 0, sz = diamond_1_dl_0_size_tbl, dl = diamond_1_dl_0_tbl; n < sizeof(diamond_1_dl_0_tbl) / sizeof(diamond_1_dl_0_tbl[0]); n++, sz++, dl++) {
-                GXCallDisplayList(*dl, *sz << 5);
-            }
-        }
-#else
-        VTX_SETUP(diamond_1_vertex_tbl, diamond_1_normal_tbl, CLR_ARRAY, diamond_1_color0_tbl, diamond_1_texcoord0_tbl, 13)
-        LOOPK(diamond_1_dl_0_tbl, diamond_1_dl_0_size_tbl, 34)
-#endif
+        diamond_1_polygon_0();
     } else {
-#if VERSION <= VERSION_DEMO_JP
-        VTX_SETUP(diamond_7_vertex_tbl, diamond_7_normal_tbl, CLR_ARRAY, diamond_7_color0_tbl, diamond_7_texcoord0_tbl, 13);
-        {
-            u8* sz;
-            u8** dl;
-            u32 n;
-
-            for (n = 0, sz = diamond_7_dl_0_size_tbl, dl = diamond_7_dl_0_tbl; n < sizeof(diamond_7_dl_0_tbl) / sizeof(diamond_7_dl_0_tbl[0]); n++, sz++, dl++) {
-                GXCallDisplayList(*dl, *sz << 5);
-            }
-        }
-#else
-        VTX_SETUP(diamond_7_vertex_tbl, diamond_7_normal_tbl, CLR_ARRAY, diamond_7_color0_tbl, diamond_7_texcoord0_tbl, 13)
-        LOOPK2(diamond_7_dl_0_tbl, diamond_7_dl_0_size_tbl, 34)
-#endif
+        diamond_7_polygon_0();
     }
     effGetTexObj(0x2d, &tex);
     GXLoadTexObj(&tex, GX_TEXMAP0);
     starStoneBlendState();
     if (type == 0) {
-#if VERSION <= VERSION_DEMO_JP
-        VTX_SETUP(diamond_1_vertex_tbl, diamond_1_normal_tbl, CLR_NONE, diamond_1_color0_tbl, diamond_1_texcoord0_tbl, 13);
-        {
-            u8* sz;
-            u8** dl;
-            u32 n;
-
-            for (n = 0, sz = diamond_1_dl_1_size_tbl, dl = diamond_1_dl_1_tbl; n < sizeof(diamond_1_dl_1_tbl) / sizeof(diamond_1_dl_1_tbl[0]); n++, sz++, dl++) {
-                GXCallDisplayList(*dl, *sz << 5);
-            }
-        }
+        diamond_1_polygon_1();
     } else {
-        VTX_SETUP(diamond_7_vertex_tbl, diamond_7_normal_tbl, CLR_ARRAY, diamond_7_color0_tbl, diamond_7_texcoord0_tbl, 13);
-
-        for (n = 0, sz = diamond_7_dl_1_size_tbl, dl = diamond_7_dl_1_tbl; n < sizeof(diamond_7_dl_1_tbl) / sizeof(diamond_7_dl_1_tbl[0]); n++, sz++, dl++) {
-            GXCallDisplayList(*dl, *sz << 5);
-        }
-    }
-}
-#else
-        VTX_SETUP(diamond_1_vertex_tbl, diamond_1_normal_tbl, CLR_NONE, diamond_1_color0_tbl, diamond_1_texcoord0_tbl, 13)
-        LOOPK2(diamond_1_dl_1_tbl, diamond_1_dl_1_size_tbl, 34)
-    } else {
-        VTX_SETUP(diamond_7_vertex_tbl, diamond_7_normal_tbl, CLR_ARRAY, diamond_7_color0_tbl, diamond_7_texcoord0_tbl, 13)
-        LOOPK2(diamond_7_dl_1_tbl, diamond_7_dl_1_size_tbl, 33)
-    }
-    }
-#endif
-
-static inline void drawSplitStoneLists(EffStarStoneWork* w, u8** lists, const u8* sizes) {
-    s32 i;
-
-    for (i = 0; i < 19U; i++) {
-        if ((w->flags & STAR_STONE_FLAG_FALLING) || i != 0) {
-            GXCallDisplayList(lists[i], sizes[i] << 5);
-        }
+        diamond_7_polygon_1();
     }
 }
 
@@ -870,19 +814,7 @@ static void effStarStoneDisp_2(CameraId cameraId, void* param) {
     PSMTXConcat(cam->view, m, m);
     GXLoadPosMtxImm(m, GX_PNMTX0);
     GXSetCurrentMtx(GX_PNMTX0);
-    GXClearVtxDesc();
-    GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 11);
-    GXSetArray(GX_VA_POS, diamond_2_2_vertex_tbl, 6);
-    GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);
-    GXSetArray(GX_VA_NRM, diamond_2_2_normal_tbl, 3);
-    GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
-    GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 14);
-    GXSetArray(GX_VA_TEX0, diamond_2_2_texcoord0_tbl, 4);
-    drawSplitStoneLists(w, diamond_2_2_dl_0_tbl, diamond_2_2_dl_0_size_tbl);
+    diamond_2_2_polygon_0(w);
 
     PSMTXTrans(m, w->position.x + w->half1OffsetX, w->position.y, w->position.z + w->half1OffsetZ);
     PSMTXScale(s, 1.1f * w->scale, 1.1f * w->scale, 1.1f * w->scale);
@@ -896,19 +828,7 @@ static void effStarStoneDisp_2(CameraId cameraId, void* param) {
     PSMTXConcat(cam->view, m, m);
     GXLoadPosMtxImm(m, GX_PNMTX0);
     GXSetCurrentMtx(GX_PNMTX0);
-    GXClearVtxDesc();
-    GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 11);
-    GXSetArray(GX_VA_POS, diamond_2_2_vertex_tbl, 6);
-    GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);
-    GXSetArray(GX_VA_NRM, diamond_2_2_normal_tbl, 3);
-    GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
-    GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 14);
-    GXSetArray(GX_VA_TEX0, diamond_2_2_texcoord0_tbl, 4);
-    drawSplitStoneLists(w, diamond_2_2_dl_1_tbl, diamond_2_2_dl_1_size_tbl);
+    diamond_2_2_polygon_1(w);
 
     GXSetNumChans(1);
     GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_VTX, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
@@ -950,19 +870,7 @@ static void effStarStoneDisp_2(CameraId cameraId, void* param) {
     PSMTXConcat(cam->view, m, m);
     GXLoadPosMtxImm(m, GX_PNMTX0);
     GXSetCurrentMtx(GX_PNMTX0);
-    GXClearVtxDesc();
-    GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 11);
-    GXSetArray(GX_VA_POS, diamond_2_2_vertex_tbl, 6);
-    GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);
-    GXSetArray(GX_VA_NRM, diamond_2_2_normal_tbl, 3);
-    GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
-    GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 14);
-    GXSetArray(GX_VA_TEX0, diamond_2_2_texcoord0_tbl, 4);
-    drawSplitStoneLists(w, diamond_2_2_dl_0_tbl, diamond_2_2_dl_0_size_tbl);
+    diamond_2_2_polygon_0(w);
 
     PSMTXTrans(m, w->position.x + w->half1OffsetX, w->position.y, w->position.z + w->half1OffsetZ);
     PSMTXScale(s, w->scale, w->scale, w->scale);
@@ -976,19 +884,7 @@ static void effStarStoneDisp_2(CameraId cameraId, void* param) {
     PSMTXConcat(cam->view, m, m);
     GXLoadPosMtxImm(m, GX_PNMTX0);
     GXSetCurrentMtx(GX_PNMTX0);
-    GXClearVtxDesc();
-    GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 11);
-    GXSetArray(GX_VA_POS, diamond_2_2_vertex_tbl, 6);
-    GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);
-    GXSetArray(GX_VA_NRM, diamond_2_2_normal_tbl, 3);
-    GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
-    GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 14);
-    GXSetArray(GX_VA_TEX0, diamond_2_2_texcoord0_tbl, 4);
-    drawSplitStoneLists(w, diamond_2_2_dl_1_tbl, diamond_2_2_dl_1_size_tbl);
+    diamond_2_2_polygon_1(w);
 }
 
 /** Draws the star with the right model: the round stone for types 0 and 6, the two-half stone otherwise. */

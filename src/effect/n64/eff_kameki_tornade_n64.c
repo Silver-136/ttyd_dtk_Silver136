@@ -16,10 +16,21 @@
 #include "eff/eff_n64.h"
 #include "dolphin/os.h"
 
-static inline void Vec2Vtx(Vec* v, s16* o) {
-    OSf32tos16(&v->x, &o[0]);
-    OSf32tos16(&v->y, &o[1]);
-    OSf32tos16(&v->z, &o[2]);
+/** Copies vertex `src` to `dst` and transforms its position by `mtx` (fast-cast s16 <-> f32 conversions). */
+// Original name and size (0x124) from the JP demo map (UNUSED there: every call is inlined).
+static void vtx_copy(effN64Vtx* dst, effN64Vtx* src, Mtx mtx) {
+    Vec v;
+
+    memcpy(dst, src, sizeof(effN64Vtx));
+    OSInitFastCast();
+    OSs16tof32(&dst->x, &v.x);
+    OSs16tof32(&dst->y, &v.y);
+    OSs16tof32(&dst->z, &v.z);
+    PSMTXMultVec(mtx, &v, &v);
+    OSInitFastCast();
+    OSf32tos16(&v.x, &dst->x);
+    OSf32tos16(&v.y, &dst->y);
+    OSf32tos16(&v.z, &dst->z);
 }
 
 static void effKamekiTornadeMain(EffectEntry* effect);
@@ -169,8 +180,6 @@ static void effKamekiTornadeDisp(CameraId cameraId, void* payload) {
     Mtx base;
     GXTexObj texObj;
     Vec axis;
-    Vec v1;
-    Vec v2;
     f32 cosVal;
 
     camera = camGetPtr(cameraId);
@@ -250,14 +259,7 @@ static void effKamekiTornadeDisp(CameraId cameraId, void* payload) {
         PSMTXConcat(mtx, tex, mtx);
         PSMTXConcat(base, mtx, mtx);
         for (j = 0; j < 16; j++) {
-            memcpy(&vtx[j], &tmpl[j], sizeof(effN64Vtx));
-            OSInitFastCast();
-            OSs16tof32(&vtx[j].x, &v1.x);
-            OSs16tof32(&vtx[j].y, &v1.y);
-            OSs16tof32(&vtx[j].z, &v1.z);
-            PSMTXMultVec(mtx, &v1, &v1);
-            OSInitFastCast();
-            Vec2Vtx(&v1, &vtx[j].x);
+            vtx_copy(&vtx[j], &tmpl[j], mtx);
         }
         PSMTXTrans(mtx, 10.0f * work->px[i + 1], 10.0f * work->py[i + 1], 10.0f * work->pz[i + 1]);
         PSMTXRotRad(rot, 'z', 0.017453292f * work->rot[i + 1]);
@@ -276,14 +278,7 @@ static void effKamekiTornadeDisp(CameraId cameraId, void* payload) {
         PSMTXConcat(mtx, tex, mtx);
         PSMTXConcat(base, mtx, mtx);
         for (j = 16; j < 32; j++) {
-            memcpy(&vtx[j], &tmpl[j], sizeof(effN64Vtx));
-            OSInitFastCast();
-            OSs16tof32(&vtx[j].x, &v2.x);
-            OSs16tof32(&vtx[j].y, &v2.y);
-            OSs16tof32(&vtx[j].z, &v2.z);
-            PSMTXMultVec(mtx, &v2, &v2);
-            OSInitFastCast();
-            Vec2Vtx(&v2, &vtx[j].x);
+            vtx_copy(&vtx[j], &tmpl[j], mtx);
         }
         GXInvalidateVtxCache();
         DCFlushRange(vtx, sizeof(effN64Vtx) * 32);

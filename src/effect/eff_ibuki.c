@@ -55,12 +55,65 @@ static u8* ibuki_dl_0_tbl[] = { ibuki_dl_0_0, ibuki_dl_0_1, ibuki_dl_0_2, ibuki_
 /** Sizes in 32-byte units of the four display lists of the breath stream's strip mesh; used by effIbukiDisp. */
 static u8 ibuki_dl_0_size_tbl[4] = { 2, 2, 2, 2 };
 
+/** Sets up the breath stream's strip mesh vertex formats and arrays and calls its four display lists. */
+// Original name and size (0x174) from the JP demo map (UNUSED there: every call is inlined).
+static void ibuki_polygon_0(void) {
+    u32 i;
+
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 6);
+    GXSetArray(GX_VA_POS, ibuki_vertex_tbl, 6);
+    GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);
+    GXSetArray(GX_VA_NRM, ibuki_normal_tbl, 3);
+    GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
+    GXSetArray(GX_VA_CLR0, ibuki_color0_tbl, 4);
+    GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 14);
+    GXSetArray(GX_VA_TEX0, ibuki_texcoord0_tbl, 4);
+    GXSetVtxDesc(GX_VA_TEX1, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX1, GX_TEX_ST, GX_S16, 14);
+    GXSetArray(GX_VA_TEX1, ibuki_texcoord1_tbl, 4);
+    for (i = 0; i < 4; i++) {
+        GXCallDisplayList(ibuki_dl_0_tbl[i], ibuki_dl_0_size_tbl[i] << 5);
+    }
+}
+
+/** Restarts one puff at the mouth with a random upward angle, height and spin, released after 10 frames per puff index `i`. */
+// Original name and size (0x188) from the JP demo map (UNUSED there: every call is inlined).
+static void _init(EffIbukiWork* p, s32 i) {
+    f32 a;
+
+    a = 30 - irand(40);
+    p->position.x = 0.0f;
+    p->position.y = irand(30);
+    a = 6.2831855f * a / 360.0f;
+    p->position.z = 0.0f;
+    p->velocity.x = cos(a);
+    p->velocity.y = sin(a);
+    p->velocity.z = 0.0f;
+    p->scale = 1.0f;
+    p->alpha = 0;
+    p->delay = i * 10;
+    p->x2 = 0.0f;
+    p->y2 = 0.0f;
+    if (irand(1000) < 500) {
+        a = irand(10) + 10;
+        p->vx2 = a;
+        p->vy2 = 0.0f;
+    } else {
+        p->vx2 = 0.0f;
+        p->vy2 = irand(10) + 10;
+    }
+}
+
 /**
  * Spawns a breath puff stream of 32 puffs from (x, y, z); life <= 0 keeps it endless.
  * Spawned by boss units (las, win), battle items and event scripts.
  */
 EffectEntry* effIbukiEntry(s32 type, s32 life, f32 x, f32 y, f32 z) {
-    s32 delay;
     EffectEntry* effect;
     EffIbukiWork* work;
     EffIbukiWork* p;
@@ -92,35 +145,14 @@ EffectEntry* effIbukiEntry(s32 type, s32 life, f32 x, f32 y, f32 z) {
     work->tex[2] = 0.0f;
     work->tex[3] = 0.0f;
     p = work + 1;
-    for (i = 1, delay = 10; i < effect->count; delay += 10, i++, p++) {
-        a = 30 - irand(40);
-        p->position.x = 0.0f;
-        p->position.y = irand(30);
-        a = 6.2831855f * a / 360.0f;
-        p->position.z = 0.0f;
-        p->velocity.x = cos(a);
-        p->velocity.y = sin(a);
-        p->velocity.z = 0.0f;
-        p->scale = 1.0f;
-        p->alpha = 0;
-        p->delay = delay;
-        p->x2 = 0.0f;
-        p->y2 = 0.0f;
-        if (irand(1000) < 500) {
-            a = irand(10) + 10;
-            p->vx2 = a;
-            p->vy2 = 0.0f;
-        } else {
-            p->vx2 = 0.0f;
-            p->vy2 = irand(10) + 10;
-        }
+    for (i = 1; i < effect->count; i++, p++) {
+        _init(p, i);
     }
     return effect;
 }
 
 /** Releases each puff after its delay and drifts it outward, spawns vapor puffs, fades out on soft delete. */
 static void effIbukiMain(EffectEntry* effect) {
-    s32 delay;
     EffIbukiWork* work = effect->userdata;
     s32 i;
     f32 a;
@@ -167,7 +199,7 @@ static void effIbukiMain(EffectEntry* effect) {
         effVaporN64Entry(2, 30, spawn.x, spawn.y, spawn.z, 1.0f + irand(10) / 10.0f);
     }
     work++;
-    for (i = 1, delay = 10; i < effect->count; delay += 10, i++, work++) {
+    for (i = 1; i < effect->count; i++, work++) {
         if (work->delay != 0) {
             work->delay--;
             continue;
@@ -187,26 +219,7 @@ static void effIbukiMain(EffectEntry* effect) {
             work->alpha = 255;
         }
         if (work->position.x > 300.0f) {
-            a = 30 - irand(40);
-            work->position.x = 0.0f;
-            work->position.y = irand(30);
-            a = 6.2831855f * a / 360.0f;
-            work->position.z = 0.0f;
-            work->velocity.x = cos(a);
-            work->velocity.y = sin(a);
-            work->velocity.z = 0.0f;
-            work->scale = 1.0f;
-            work->alpha = 0;
-            work->delay = delay;
-            work->x2 = 0.0f;
-            work->y2 = 0.0f;
-            if (irand(1000) < 500) {
-                work->vx2 = irand(10) + 10;
-                work->vy2 = 0.0f;
-            } else {
-                work->vx2 = 0.0f;
-                work->vy2 = irand(10) + 10;
-            }
+            _init(work, i);
         }
     }
     dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effIbukiDisp, effect);
@@ -219,8 +232,6 @@ static void effIbukiMain(EffectEntry* effect) {
 static void effIbukiDisp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
     s32 i;
-    u8* sz;
-    u8** dl;
     EffIbukiWork* work = effect->userdata;
     Mtx trans;
     Mtx rot;
@@ -285,26 +296,7 @@ static void effIbukiDisp(CameraId cameraId, void* param) {
     GXLoadTexObj(&texObj, GX_TEXMAP0);
     effGetTexObj(0x62, &texObj);
     GXLoadTexObj(&texObj, GX_TEXMAP1);
-    GXClearVtxDesc();
-    GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 6);
-    GXSetArray(GX_VA_POS, ibuki_vertex_tbl, 6);
-    GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);
-    GXSetArray(GX_VA_NRM, ibuki_normal_tbl, 3);
-    GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
-    GXSetArray(GX_VA_CLR0, ibuki_color0_tbl, 4);
-    GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 14);
-    GXSetArray(GX_VA_TEX0, ibuki_texcoord0_tbl, 4);
-    GXSetVtxDesc(GX_VA_TEX1, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX1, GX_TEX_ST, GX_S16, 14);
-    GXSetArray(GX_VA_TEX1, ibuki_texcoord1_tbl, 4);
-
-    for (i = 0, sz = ibuki_dl_0_size_tbl, dl = ibuki_dl_0_tbl; i < sizeof(ibuki_dl_0_tbl) / sizeof(ibuki_dl_0_tbl[0]); i++, sz++, dl++) {
-        GXCallDisplayList(*dl, *sz * 32);
-    }
+    ibuki_polygon_0();
     GXSetNumChans(1);
     GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
     GXSetNumTexGens(1);

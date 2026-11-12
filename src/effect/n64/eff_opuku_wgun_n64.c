@@ -46,6 +46,22 @@ typedef struct EffOpukuWgunN64Work {
     u8 alphas[12];   // 0x1D8
 } EffOpukuWgunN64Work;
 
+/** Transforms vertex `src`'s position by `mtx` into `dst` (fast-cast s16 <-> f32 conversions). */
+// Original name and size (0x110) from the JP demo map (UNUSED there: every call is inlined).
+static void vtx_copy(effN64Vtx* dst, effN64Vtx* src, Mtx mtx) {
+    Vec v;
+
+    OSInitFastCast();
+    OSs16tof32(&src->x, &v.x);
+    OSs16tof32(&src->y, &v.y);
+    OSs16tof32(&src->z, &v.z);
+    PSMTXMultVec(mtx, &v, &v);
+    OSInitFastCast();
+    OSf32tos16(&v.x, &dst->x);
+    OSf32tos16(&v.y, &dst->y);
+    OSf32tos16(&v.z, &dst->z);
+}
+
 static void effOpukuWgunMain(EffectEntry* effect);
 static void effOpukuWgunDisp(CameraId cameraId, void* param);
 
@@ -196,7 +212,6 @@ static void effOpukuWgunDisp(CameraId cameraId, void* param) {
     EffOpukuWgunN64Work* work;
     Mtx scale;
     GXTexObj texObj;
-    Vec v;
     f32 scl;
     f32 dz;
     f32 rad;
@@ -208,7 +223,6 @@ static void effOpukuWgunDisp(CameraId cameraId, void* param) {
     s32 type;
     effN64Vtx* vtx;
     effN64Vtx* p;
-    effN64Vtx* q;
     s32 n;
     s32 j;
     s32 a;
@@ -272,19 +286,9 @@ static void effOpukuWgunDisp(CameraId cameraId, void* param) {
         p++;
     }
     PSMTXScale(scale, 0.05f, 0.05f, 0.05f);
-    q = vtx;
     n = i * 2;
     for (j = 0; j < n; j++) {
-        OSInitFastCast();
-        OSs16tof32(&q->x, &v.x);
-        OSs16tof32(&q->y, &v.y);
-        OSs16tof32(&q->z, &v.z);
-        PSMTXMultVec(scale, &v, &v);
-        OSInitFastCast();
-        OSf32tos16(&v.x, &q->x);
-        OSf32tos16(&v.y, &q->y);
-        OSf32tos16(&v.z, &q->z);
-        q++;
+        vtx_copy(&vtx[j], &vtx[j], scale);
     }
     DCFlushRange(vtx, sizeof(effN64Vtx) * 48);
     GXInvalidateVtxCache();

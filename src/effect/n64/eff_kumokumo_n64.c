@@ -458,30 +458,55 @@ static void effKumokumoMain(EffectEntry* effect) {
     dispEntry(camera, dispCalcZ(&position), DISP_MODE_XLU, effKumokumoDisp, effect);
 }
 
-/**
- * Points GX at the given vertex, normal, color and texcoord arrays
- * and calls the four display lists of one cloud model.
- */
-static inline void drawModel(void* vtx, void* tex0, void* tex1, void* norm, void* clr, void** dl, u8* sz) {
+/** Sets up the round cloud model's vertex formats and arrays and calls its four display lists. */
+// Original name and size (0x174) from the JP demo map (UNUSED there: every call is inlined).
+static void cloud_polygon_0(void) {
     u32 i;
+
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 6);
-    GXSetArray(GX_VA_POS, vtx, 6);
+    GXSetArray(GX_VA_POS, cloud_vertex_tbl, 6);
     GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);
-    GXSetArray(GX_VA_NRM, norm, 3);
+    GXSetArray(GX_VA_NRM, cloud_normal_tbl, 3);
     GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
-    GXSetArray(GX_VA_CLR0, clr, 4);
+    GXSetArray(GX_VA_CLR0, cloud_color0_tbl, 4);
     GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 14);
-    GXSetArray(GX_VA_TEX0, tex0, 4);
+    GXSetArray(GX_VA_TEX0, cloud_texcoord0_tbl, 4);
     GXSetVtxDesc(GX_VA_TEX1, GX_INDEX8);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX1, GX_TEX_ST, GX_S16, 14);
-    GXSetArray(GX_VA_TEX1, tex1, 4);
+    GXSetArray(GX_VA_TEX1, cloud_texcoord1_tbl, 4);
     for (i = 0; i < 4; i++) {
-        GXCallDisplayList(dl[i], sz[i] << 5);
+        GXCallDisplayList(cloud_dl_0_tbl[i], cloud_dl_0_size_tbl[i] << 5);
+    }
+}
+
+/** Sets up the X-shaped (batten) cloud model's vertex formats and arrays and calls its four display lists. */
+// Original name and size (0x174) from the JP demo map (UNUSED there: every call is inlined).
+static void batten_polygon_0(void) {
+    u32 i;
+
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 6);
+    GXSetArray(GX_VA_POS, batten_vertex_tbl, 6);
+    GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);
+    GXSetArray(GX_VA_NRM, batten_normal_tbl, 3);
+    GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
+    GXSetArray(GX_VA_CLR0, batten_color0_tbl, 4);
+    GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 14);
+    GXSetArray(GX_VA_TEX0, batten_texcoord0_tbl, 4);
+    GXSetVtxDesc(GX_VA_TEX1, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX1, GX_TEX_ST, GX_S16, 14);
+    GXSetArray(GX_VA_TEX1, batten_texcoord1_tbl, 4);
+    for (i = 0; i < 4; i++) {
+        GXCallDisplayList(batten_dl_0_tbl[i], batten_dl_0_size_tbl[i] << 5);
     }
 }
 
@@ -568,10 +593,10 @@ static void effKumokumoDisp(CameraId cameraId, void* param) {
     switch (type) {
         case 0:
         case 1:
-            drawModel(cloud_vertex_tbl, cloud_texcoord0_tbl, cloud_texcoord1_tbl, cloud_normal_tbl, cloud_color0_tbl, cloud_dl_0_tbl, cloud_dl_0_size_tbl);
+            cloud_polygon_0();
             break;
         case 2:
-            drawModel(batten_vertex_tbl, batten_texcoord0_tbl, batten_texcoord1_tbl, batten_normal_tbl, batten_color0_tbl, batten_dl_0_tbl, batten_dl_0_size_tbl);
+            batten_polygon_0();
             break;
         case 3:
             for (j = 0; j < 5; j++) {
@@ -579,12 +604,12 @@ static void effKumokumoDisp(CameraId cameraId, void* param) {
                 PSMTXConcat(mtx2, rot, rot);
                 GXLoadPosMtxImm(rot, GX_PNMTX0);
                 GXSetCurrentMtx(GX_PNMTX0);
-                drawModel(cloud_vertex_tbl, cloud_texcoord0_tbl, cloud_texcoord1_tbl, cloud_normal_tbl, cloud_color0_tbl, cloud_dl_0_tbl, cloud_dl_0_size_tbl);
+                cloud_polygon_0();
             }
             break;
         case 4:
         default:
-            drawModel(cloud_vertex_tbl, cloud_texcoord0_tbl, cloud_texcoord1_tbl, cloud_normal_tbl, cloud_color0_tbl, cloud_dl_0_tbl, cloud_dl_0_size_tbl);
+            cloud_polygon_0();
             break;
     }
     GXSetNumChans(1);

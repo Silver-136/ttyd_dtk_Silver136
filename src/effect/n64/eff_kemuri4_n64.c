@@ -81,6 +81,26 @@ effN64Vtx flowers_v[41] = {
     {-11, -5, 0, 0, 0, 100, 160, 60, 255},
 };
 
+/** Builds the puff's model matrix from its rotation (x, then y, around a z spin), position and scale. */
+// Original name and size (0xd8) from the JP demo map (UNUSED there: every call is inlined).
+static void kemuri_matrix(EffKemuri4N64Work* work) {
+    Mtx scale;
+    Mtx trans;
+    Mtx rotX;
+    Mtx rotY;
+    Mtx rotZ;
+
+    PSMTXRotRad(rotX, 'x', 0.017453292f * work->rotation.x);
+    PSMTXRotRad(rotY, 'y', 0.017453292f * work->rotation.y);
+    PSMTXRotRad(rotZ, 'z', 0.017453292f * work->rotation.z);
+    PSMTXTrans(trans, work->position.x, work->position.y, work->position.z);
+    PSMTXScale(scale, work->scale.x, work->scale.y, work->scale.z);
+    PSMTXConcat(rotX, rotZ, rotZ);
+    PSMTXConcat(rotY, rotZ, rotZ);
+    PSMTXConcat(rotZ, scale, scale);
+    PSMTXConcat(trans, scale, work->mtx);
+}
+
 static void effKemuri4Main(EffectEntry* effect);
 static void effKemuri4Disp(CameraId cameraId, void* param);
 
@@ -140,11 +160,6 @@ static void effKemuri4Main(EffectEntry* effect) {
     EffKemuri4N64Work* work = effect->userdata;
     Vec position;
     Vec tmp = {0.0f, 0.0f, 0.0f};
-    Mtx rotZ;
-    Mtx rotY;
-    Mtx rotX;
-    Mtx trans;
-    Mtx scale;
     s32 i;
     s32 anyActive = 0;
 
@@ -175,15 +190,7 @@ static void effKemuri4Main(EffectEntry* effect) {
                 work->holdOnStay = 0.0f;
             }
         }
-        PSMTXRotRad(rotX, 'x', 0.017453292f * work->rotation.x);
-        PSMTXRotRad(rotY, 'y', 0.017453292f * work->rotation.y);
-        PSMTXRotRad(rotZ, 'z', 0.017453292f * work->rotation.z);
-        PSMTXTrans(trans, work->position.x, work->position.y, work->position.z);
-        PSMTXScale(scale, work->scale.x, work->scale.y, work->scale.z);
-        PSMTXConcat(rotX, rotZ, rotZ);
-        PSMTXConcat(rotY, rotZ, rotZ);
-        PSMTXConcat(rotZ, scale, scale);
-        PSMTXConcat(trans, scale, work->mtx);
+        kemuri_matrix(work);
     }
     if (anyActive == 0) {
         effDelete(effect);
