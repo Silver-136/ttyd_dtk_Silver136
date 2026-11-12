@@ -541,9 +541,11 @@ static USER_FUNC(powan_rider_follow) {
         y = -1000.0f;
         z = 0.0f;
     } else {
-        x = (*(Vec**)pose->worldPositions)[idx].x; // FAKE: smartEntry viewed as its address word; ->address with a cast loads differently
-        y = (*(Vec**)pose->worldPositions)[idx].y;
-        z = (*(Vec**)pose->worldPositions)[idx].z;
+        Vec* positions = pose->worldPositions->address;
+
+        x = positions[idx].x;
+        y = positions[idx].y;
+        z = positions[idx].z;
     }
     BtlUnit_SetPartsPos(part, x, y, z);
 #if VERSION >= VERSION_JP // the demos do not print the position

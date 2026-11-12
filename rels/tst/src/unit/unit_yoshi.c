@@ -34,10 +34,6 @@
 #include "unit/party/unit_party_yoshi.h"
 #include "battle/unit/unit_party_yoshi.h"
 
-// FAKE: _btlYoshiDisp calls btlDispTexPlane through this float-first prototype so the float arguments are evaluated
-// first; same registers as (id, color, 0, x, y, z, sX, sY), behaviour-identical.
-typedef void (*BtlDispTexPlaneArgOrderFn)(f32, f32, f32, f32, f32, u32, GXColor, s32);
-
 #if VERSION <= VERSION_DEMO_JP
 static void _btlYoshiDisp(CameraId camera, YoshiGundanWork* w);
 #else
@@ -2659,14 +2655,14 @@ static void _btlYoshiDisp(CameraId camera, YoshiGundanWork* w) {
     for (i = 0; i < 256; i++) {
         p = &w->parts[i];
         s = (p->vx < 0.0f) ? 0.4f : -0.4f;
-        ((BtlDispTexPlaneArgOrderFn)btlDispTexPlane)(p->x, p->y + 20.0f, p->z, s, 0.4f, _yoshig_tpl_no_tbl[p->frame], (GXColor){255, 255, 255, 255}, 0);
+        btlDispTexPlane(p->x, p->y + 20.0f, p->z, s, 0.4f, _yoshig_tpl_no_tbl[p->frame], (GXColor){255, 255, 255, 255}, 0);
     }
 }
 #else
 static void _btlYoshiDisp(CameraId camera, YoshiGundanPart* p) {
     f32 s;
     s = (p->vx < 0.0f) ? 0.4f : -0.4f;
-    ((BtlDispTexPlaneArgOrderFn)btlDispTexPlane)(p->x, p->y + 20.0f, p->z, s, 0.4f, _yoshig_tpl_no_tbl[p->frame], (GXColor){255, 255, 255, 255}, 0);
+    btlDispTexPlane(p->x, p->y + 20.0f, p->z, s, 0.4f, _yoshig_tpl_no_tbl[p->frame], (GXColor){255, 255, 255, 255}, 0);
 }
 #endif
 

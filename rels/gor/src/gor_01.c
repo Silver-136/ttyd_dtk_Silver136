@@ -3565,9 +3565,9 @@ static USER_FUNC(house03_f2_fade_func) {
 static USER_FUNC(chk_marco_fuki) {
     EvtWord* args = event->args;
 
-    // FAKE: passes marioGetPtr() to fbatNpcTalkCheck, which takes no arguments, through a cast; the plain
-    // fbatNpcTalkCheck() call drops the marioGetPtr call and changes the object.
-    NpcEntry* npc = ((NpcEntry* (*)(MarioWork*))fbatNpcTalkCheck)(marioGetPtr());
+    // the result of this marioGetPtr() call is never used (the call is in the retail code)
+    MarioWork* mario = marioGetPtr();
+    NpcEntry* npc = fbatNpcTalkCheck();
 
     if (npc != NULL && strcmp(npc->description, "\203}\203\213\203R") == 0) {
         evtSetValue(event, args[0], 1);

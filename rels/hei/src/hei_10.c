@@ -51,8 +51,10 @@ typedef struct ChorobonWork {
 static ChorobonWork* wp;
 static f32 randf(f32 min, f32 max);
 
-// FAKE: the `a = a;` lines in chb_sin/chb_cos keep each quadrant's polynomial in the target float registers
-// (polySinf/polyCosf from poly_trig.h and removing them change the register choice)
+/**
+ * Sine of x (radians, 0..2pi) by a polynomial approximation, folded by quadrant.
+ * The positive quadrants return at once; polySinf from poly_trig.h (one return at the end) colours differently.
+ */
 static inline f32 chb_sin(f32 x) {
     f32 a = 0.00761f;
     f32 b = 0.16605f;
@@ -64,15 +66,13 @@ static inline f32 chb_sin(f32 x) {
             x2 = x * x;
             a = a * x2 - b;
             a = a * x2 + c;
-            a = a;
-            a = a * x;
+            return a * x;
         } else {
             y = 1.5707964f - (x - 1.5707964f);
             x2 = y * y;
             a = a * x2 - b;
             a = a * x2 + c;
-            a = a;
-            a = a * y;
+            return a * y;
         }
     } else if (x < 4.712389f) {
         y = x - 3.1415927f;
@@ -107,28 +107,27 @@ static inline f32 chb_cos(f32 x) {
             x2 = x * x;
             a = a * x2 - b;
             a = a * x2 + c;
-            a = a;
+            return a;
         } else {
             y = 1.5707964f - (x - 1.5707964f);
             x2 = y * y;
             a = a * x2 - b;
             a = a * x2 + c;
-            a = -a;
+            return -a;
         }
     } else if (x < 4.712389f) {
         y = x - 3.1415927f;
         x2 = y * y;
         a = a * x2 - b;
         a = a * x2 + c;
-        a = -a;
+        return -a;
     } else {
         y = 1.5707964f - (x - 4.712389f);
         x2 = y * y;
         a = a * x2 - b;
         a = a * x2 + c;
-        a = a;
+        return a;
     }
-    return a;
 }
 
 static void ext_disp(CameraId camera, void* param);

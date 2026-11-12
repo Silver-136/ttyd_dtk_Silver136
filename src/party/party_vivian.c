@@ -129,12 +129,11 @@ void mot_vivian_post(void) {
 #if VERSION <= VERSION_DEMO_JP
         camFollowYOn();
 #endif
-    } else if (party && party->currentMemberId == PARTY_VIVIAN && (party->flags & PARTY_FLAG_IS_BEING_USED)) {
-        // FAKE: the store is reached by a goto past the return; writing it here changes the object
-        goto cancel;
+        return;
     }
-    return;
-cancel:
+    if (!party || party->currentMemberId != PARTY_VIVIAN || !(party->flags & PARTY_FLAG_IS_BEING_USED)) {
+        return;
+    }
     vivian_cancel_req = 1;
 }
 

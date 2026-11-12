@@ -68,7 +68,6 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | libs/dolsdk2004/src/perf/perfdraw.c | PERFDumpScreen | dead expression statement `!samples[s].cpuTimeStampStart;` (the unit is not built: no probe possible) | see comment |
 | Both | rels/bom/src/bom_01.c | disp_sight | pointer-typed ?: = id = on ? 6 : 7 without the branchless int select (same value) | int/unsigned/char/short/long long arms, enum-like and propagated arms, if/else, inline helpers, a named k (spill worker, tiny TUs re_work/spill/bom/tern) |
 | Both | rels/bom/src/bom_01.c | ext_main | SFX_NAME_WORD (integer round trip) on the literal, see jump() | plain literals, a named `se` local, `(const char*)(u32)` (spill worker) |
-| Both | rels/hei/src/hei_10.c | chb_sin, chb_cos | `a = a;` self-assignments in the quadrant branches (register choice) | the shared polySinf/polyCosf (only float registers differ); removing them |
 | Both | rels/bom/src/bom_01.c | jump | SFX_NAME_WORD (integer round trip) makes the front end hoist the literal address (same pointer value) | see comment |
 | Both | rels/dou/src/dou_10.c | dou_namiatari_check | (decomp-permuter): the addf inline fixes the fadds operand order | see comment |
 | Both | rels/eki/src/eki_00.c | ext_moamoa_main | integer cast (SFX_NAME_WORD) hoists the literal as an @ temp; block-local copies of the float args (behaviour-identical) put the f1..f5 arg moves ahead of the ?: as in the target | see comment |
@@ -188,7 +187,6 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | src/window/win_main.c | winMainStrippedPool | stand-in that nothing calls; it only places the int-to-float conversion constant in the pool | see comment |
 | Both | rels/gor/src/gor_01.c | cook_chk | `(volatile u32)args[n]` casts on the evtSetValue index | plain `args[n]` (both versions change) |
 | Both | rels/gor/src/gor_01.c | cook_chk2 | `(volatile u32)args[2]` casts on the evtSetValue index | plain `args[2]` (both versions change) |
-| Both | rels/gor/src/gor_01.c | chk_marco_fuki (fbatNpcTalkCheck) | call through a cast to a `(MarioWork*)` function type, passing marioGetPtr() to the no-argument function | plain `fbatNpcTalkCheck()`: the marioGetPtr call goes, changes the object (gor.rel versions) |
 | Both | libs/dolsdk2004/src/os/OSAudioSystem.c | __OSInitAudioSystem | dead comparison `reg16 != 0x81800;` | without it (both versions change) |
 | Both | rels/tou2/src/tou2.c | tou_champion_belt | the star stone work is read through `EffStarStoneWork** work = (EffStarStoneWork**)&eff->userdata`, so userdata is reloaded at every store as in the target | an `EffStarStoneWork*` local from `eff->userdata` (86.67%); `((EffStarStoneWork*)eff->userdata)->field` per access (99.26%) |
 | Both | include/battle/battle_ac.h | battleAcDisp_AirGauge, battleAcDisp_PowerGaugeLv, battleAcDisp_TimingA (ac_air_gauge, ac_power_gauge_lv, ac_timing_a) | `AC_SLIDE_TIMER_AT(disp, i)` reads slideTimer through a byte offset from a register-held index (i = 4), `*(s32*)((u8*)&disp->slideTimer + i - 4)` | `disp->slideTimer` (98.86% in power_gauge_lv); `(&disp->slideTimer)[i - 4]` (78.95%) |
@@ -225,7 +223,6 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | src/cam_road.c | calcHokanCamRoad | spare temporary a2; a0 = (f32)atan2(...) directly changes the object | see comment |
 | Both | src/koopa.c | kpaStrippedFallPool | stand-in, never called (the linker strips it); it only puts kpaSetFallPara's eight literals into the .sdata2 pool; removing it changes the object | see comment |
 | Both | src/koopa.c | kpaStrippedPool | stand-in, never called (the linker strips it); its int-to-float conversion only puts the conversion constant into the pool; removing it changes the object | see comment |
-| Both | src/koopa.c | kpaCamFollow | comma expression `(v = (...stageFlags & SIDE_SCROLLING) ^ 1, v == 1)` | `!(stageFlags & KPA_STAGE_FLAG_SIDE_SCROLLING)`: changes the object |
 | Both | src/koopa.c | kpaSetJumpPara (marioJumpData) | unsized `extern f32 marioJumpData[]` view of mario_motion.c's MarioJumpData struct | MarioJumpData in mario_motion.h and `marioJumpData.jump`: changes the object |
 | Both | src/koopa_hit.c | kpaGetHitobjHead | address temporary; the plain return of headHit[i] changes the object | see comment |
 | Both | src/koopa_hit.c | kpaGetHitobjRide | address temporary; the plain return of rideHit[i] changes the object | see comment |
@@ -276,7 +273,6 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Demos | src/sound.c | SoundSongStrippedName | stand-in for a dead-stripped song loader, probably SoundSongLoadPlayCh (JP demo map, UNUSED 0x258): it only keeps ".song" (@3563); body unknown | see comment |
 | Both | src/statuswindow.c | gaugeDisp | iconDispGx called through a scale-first function pointer cast (the scale is in f1 either way), which evaluates the arguments in the retail order; the plain call changes the object. | see comment |
 | Both | src/statuswindow.c | statusWinEase | unreferenced (dead-stripped at link); it only sets the order of the float constants in the pool, and the object changes without it. | see comment |
-| Both | src/system.c | reviseAngle | spare temporary temp; result = (f32)fmod(angle, 360.0) changes the object | see comment |
 | Both | src/system.c | systemStrippedPool1 | stand-in for the stripped intplStringData/intplStringToEnum and mtxGetScaleElement: the interpolation mode names, 1.0f and the sqrtf constants in pool order (table entry @491 unknown; JP and later lack three names) | see comment |
 | Both | src/system.c | systemStrippedPool1b | stand-in for the stripped movePos2/movePos3: their doubles 1.5, 2.5, 1.7 (bodies unknown) | see comment |
 | Both | src/battle/ac/ac_lst_rc_keep.c | battleAcMain_LstRcKeep | byte-offset index (off >> 2) and the n >= 0 guard; the plain loop over ac_lstrckeep_iconname[i] changes the object | see comment |
@@ -427,7 +423,6 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | src/party/party_nokonoko.c | nokoStrippedPool | stand-in that nothing calls (in no symbol map); it only places 10.0f, 30.0f, 100.0f, 11.0f and 6.0f in this object's constant pool; removing it changes the object | see comment |
 | Both | src/party/party_nokonoko.c | ccwall | spare copy k of 30.0f; dist = w + 30.0f changes the object | see comment |
 | Both | src/party/party_vivian.c | marioForceVivianAnime | padding constant kept in .sdata2 by explicit_zero_data and the (void)& use; removing it changes the section layout | see comment |
-| Both | src/party/party_vivian.c | mot_vivian_post | the store is reached by a goto past the return; writing it here changes the object | see comment |
 | Both | src/sequence/seq_battle.c | seq_battleMain | wait flag and goto check; a plain break while still waiting changes the object | see comment |
 | Both | src/sequence/seq_e3.c | e3Disp | the (u32) cast on the 8; plain i + 8 changes the object in the JP demo only (retail versions stay the same without it) | see comment |
 | Both | src/sequence/seq_e3.c | forceSdata | stand-in that nothing calls (the linker strips it); it only places 30.0f in the constant pool (JP and US); removing it changes the object | see comment |
@@ -438,7 +433,6 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | JP | src/window/win_root.c | winKirinukiGX | JP-side constant locals `w74 = 74.0f`, `w66 = 66.0f` | literals: changes the object |
 | Both | src/window/win_root.c | winRootDisp (winLogDisp) | private (s32, WindowWork*, s32) prototype; win_log.c defines winLogDisp(CameraId, void*, s32) | the definition's prototype in win_log.h: register allocation changes (also with winRootDisp's camId as CameraId) |
 | Both | rels/muj/src/muj_10.c | suifu_option_func | double-negation addition; either plain addition order changes the object. | see comment |
-| PAL | rels/tst/src/unit/unit_powan.c | powan_rider_follow | worldPositions read as `*(Vec**)` instead of `(Vec*)...->address` (register choice) | natural form with the typed smartEntry address |
 | Demos | rels/mri/src/mri_puni.c | puni_puni_main | `(const char*)(u32)` round trip on one sound name, so its address is hoisted into a saved register before the loop | plain literal: one register less, stack frame 16 bytes smaller |
 | Demos | src/battle/battle_unit.c | BtlUnit_GetStatus, BtlUnit_SetStatus, BtlUnit_CheckRecoveryStatus, BtlUnit_CheckStatus | BATTLE_UNIT_STATUS_ENUM: the file sees the enum prototypes while its callers see s8 (same bytes retail reads through s8) | one prototype for all units: the callers then lose their sign extension |
 | Both | src/event/evt_mario.c | evt_mario_mov_pos | marioSetForceMove called through a (s32, f32, f32) cast (frames first); mario_sbr.h declares the definition's (dir, time, speed), which the other three calls use | plain call in the definition's order: the frame count and direction load the other way round |
@@ -464,10 +458,8 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | PAL | src/event/evt_msg.c | (file scope) | msgArticlePad: unused zero object, read by nothing | removing it changes the object |
 | Both | src/event/evt_msg.c | (file scope) msgWindow_Add | private `const char*` prototype; the definition takes `char*` (msgAnalize takes char* after the early demos) | header prototype: build errors at the const char* calls without casts |
 | Both | src/effect/eff_recovery.c | effRecoveryEntry | pp walks the records and `work = pp` each pass | stepping work itself: changes the object |
-| Both | src/sdk/arc.c | entryToPath | `#pragma inline_depth(3)` before entryToPath | removing it: changes the object (JP demo map not checked) |
 | Both | src/sequence/seq_mapchange.c | seq_mapChangeMain | LangTbl struct wrapper (lang_tbl) copied into a local `lang` | local `const char* lang[]` initialiser: changes the object |
 | Demos | libs/msl/include/dtrigf.h | (file: `DTRIGF_PLAIN_DATA` block) | the early demos' main.dol units take the paired dtrigf constants as plain data in source order (LLCOOLT's form) instead of the inline-assembly form | see comment |
 | Both | rels/las/src/las_04.c | firebar_entry | `*(s32*)&wp = event->userdata[0]` stores through &wp, so wp keeps a stack slot for the whole function | `wp = event->userdatap[0]`: see comment |
-| PAL | rels/tst/src/unit/unit_yoshi.c | _btlYoshiDisp | btlDispTexPlane called through a float-first prototype so the float arguments are evaluated first (tst.rel: PAL and the JP demo) | see comment |
 | Both | src/battle/battle_damage.c | BattleCalculateDamage | negation written as `(u32)damage * -1` | `-damage`: changes the object |
 | Both | src/window/win_log.c | mapGX | the texture id goes through a spare temporary `tex` in a comma expression | `((gp->retraceCount >> 4) & 1) ? 0xB9 : 0xBA`: changes the object |

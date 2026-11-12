@@ -914,7 +914,7 @@ config.libs = [
         "cflags": cflags_static,
         "progress_category": "game",
         "objects": [
-            Object(MatchingFor("G8MJ01", "G8ME01"), "sdk/arc.c"),
+            Object(MatchingFor("G8MJ01", "G8ME01"), "sdk/arc.c", extra_cflags=["-inline auto,deferred,level=3"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "sdk/DEMOInit.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "sdk/DEMOPad.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "sdk/texPalette.c"),

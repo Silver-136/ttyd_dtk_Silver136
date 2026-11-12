@@ -84,11 +84,9 @@ s32 roundi(f32 x) {
 
 /** Wraps an angle in degrees into [0, 360); NaN becomes 0. */
 f32 reviseAngle(f32 angle) {
-    f32 result, temp;
+    f32 result;
 
-    // FAKE: spare temporary temp; result = (f32)fmod(angle, 360.0) changes the object
-    temp = (f32)fmod(angle, 360.0);
-    result = temp;
+    result = fmodf(angle, 360.0f);
 
     if (result != result) { // check for NaN
         result = 0.0f;
