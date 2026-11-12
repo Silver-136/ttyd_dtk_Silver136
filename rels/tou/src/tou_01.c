@@ -809,6 +809,7 @@ static void make_shadow_disp(CameraId camera, void* param) {
     GXSetScissor(1, 1, 254, 254);
     C_MTXPerspective(proj, 25.0f, 1.2666667f, 1.0f, 1000.0f);
     GXSetProjection(proj, GX_PERSPECTIVE);
+    // FAKE: comma expression for the tan temporary; t = tan(...) as a statement changes the register choice
     C_MTXLookAt(view, &(Vec){0.0f, (t = tan(0.21816615760326385), 128.0f / t), 0.0f}, &(Vec){0.0f, 0.0f, -1.0f},
                 &(Vec){0.0f, 0.0f, 0.0f});
     PSMTXScale(mtx, 128.0f, 64.0f, 64.0f);

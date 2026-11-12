@@ -2674,6 +2674,7 @@ static void BattleAudienceDispAudience(CameraId camId, void* param) {
         t0 = m->angle;
         if (t0 > 0.0f && t0 <= 180.0f) flip = 1;
         if (t0 == 0.0f || (t0 > 180.0f && t0 < 360.0f)) flip = 0;
+        // FAKE: (u8) cast on the BOOL front for the byte compare; plain front changes the object
         if ((u8)front == 1 && (cur = m->animStart) != m->animTable[AUD_ANIM_DAMAGE_FRONT] && cur != m->animTable[8] && cur != m->animTable[7]) {
             flip ^= 1;
         }

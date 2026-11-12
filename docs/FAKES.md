@@ -403,3 +403,19 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Demos | libs/msl/include/dtrigf.h | (file: `DTRIGF_PLAIN_DATA` block) | the early demos' main.dol units take the paired dtrigf constants as plain data in source order (LLCOOLT's form) instead of the inline-assembly form | see comment |
 | Both | rels/las/src/las_04.c | firebar_entry | `*(s32*)&wp = event->userdata[0]` stores through &wp, so wp keeps a stack slot for the whole function | `wp = event->userdatap[0]`: see comment |
 | Both | src/battle/battle_damage.c | BattleCalculateDamage | negation written as `(u32)damage * -1` | `-damage`: changes the object |
+| Both | src/driver/mapdrv.c | mapSetMaterialTev | no-op `(s32)texCount > 0` cast on the s32 parameter | `texCount > 0`: changes the object |
+| Both | src/event/evt_twoddisp.c | twoddisp_main, evt_twoddisp_init | `u32 i` compared as `(s32)i < 100` | `i < 100`; `s32 i`: changes the object |
+| Both | src/battle/battle_audience_kinopio.c | BattleAudienceCtrlProcessKinopio* (11 functions) | `(u8)front == 0/1` on the BOOL parameter front (12 sites) | plain front; u8 front parameters, local or BattleAudience_GetFront return: changes the object |
+| Both | src/battle/battle_audience_kinopio.c | BattleAudienceCtrlProcessKinopioWait | `threshold + (f32)(10.0f * a)` product cast | plain sum, `+=`, a named local: changes the object |
+| Both | src/battle/battle_audience.c | BattleAudienceDispAudience | `(u8)front == 1` on the BOOL from BattleAudience_GetFront | plain front or a u8 local: changes the object |
+| Both | src/driver/npcdrv.c | npcMain | comma expressions `(dist = angleABf(...), __fabsf(compAngle(dir, dist)))` (2 sites) | `compAngle(dir, dist = angleABf(...))`: changes the object |
+| Both | rels/gon/src/gon_11.c | _mapsetofs_all, _mapclsofs_all, evt_iri_16_cloud_ent | `(s8)name[0] == 0` sign-extending test on a char | plain char test: changes the object |
+| Both | rels/las/src/las_14.c | _mapsetofs_all, _mapclsofs_all, evt_las_cloud_ent | `(s8)name[0] == 0` sign-extending test on a char | plain char test: changes the object |
+| Both | rels/mri/src/mri_00.c | _mapsetofs_all, _mapclsofs_all, evt_mri_cloud_ent | `(s8)name[0] == 0` sign-extending test on a char | plain char test: changes the object |
+| Both | rels/las/src/las_14.c | evt_cloud_main | `(s32)cloud_once_flag == 1` on a static u8 | plain compare: changes the object |
+| Both | rels/mri/src/mri_00.c | evt_cloud_main | `(s32)cloud_once_flag == 1` on a static u8 | plain compare: changes the object |
+| Both | rels/hei/src/hei_10.c | npc_jump | `event->userdata[n] = *(s32*)&t` word view of the floats | `event->userdataf[n] = t`: 351 vs 342 instructions |
+| Both | rels/pik/src/pik_02.c | hoshi_jump | `event->userdata[n] = *(s32*)&t` word view of the floats | `event->userdataf[n] = t`: 262 vs 255 instructions |
+| Both | rels/rsh/src/rsh_05.c | npc_jump | `event->userdata[n] = *(s32*)&t` word view of the floats | `event->userdataf[n] = t`: 351 vs 342 instructions |
+| Both | rels/tou2/src/tou_03.c | item_jump | `event->userdata[n] = *(s32*)&t` word view of the floats | `event->userdataf[n] = t`: 192 vs 174 instructions |
+| Both | rels/tou/src/tou_01.c | make_shadow_disp | comma `(t = tan(...), 128.0f / t)` in the eye-position literal | `t = tan(...);` before the call: changes the object |

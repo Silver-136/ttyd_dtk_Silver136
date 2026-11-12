@@ -781,6 +781,7 @@ static void _mapsetofs_all(CloudRoomWork* wp) {
     s32 i;
 
     for (i = 0; i < 8; i++) {
+        // FAKE: (s8) cast on the first character (extsb); the plain char test compiles cmplwi
         if ((s8)wp->groupNames[i][0] == 0) {
             break;
         }
@@ -793,6 +794,7 @@ static void _mapclsofs_all(CloudRoomWork* wp) {
     s32 i;
 
     for (i = 0; i < 8; i++) {
+        // FAKE: (s8) cast on the first character (extsb); the plain char test compiles cmplwi
         if ((s8)wp->groupNames[i][0] == 0) {
             break;
         }
@@ -1029,6 +1031,7 @@ static USER_FUNC(evt_iri_16_cloud_ent) {
     wp->used = 1;
     strcpy(wp->animName, "P_oof_cloud_1");
     for (j = 0; j < 8; j++) {
+        // FAKE: (s8) cast on the first character (extsb); the plain char test compiles cmplwi
         if ((s8)groups[j][0] == 0) {
             break;
         }

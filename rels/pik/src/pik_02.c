@@ -540,6 +540,7 @@ static USER_FUNC(hoshi_jump) {
         dy = y - pos[1];
         g = 0.1f * t;
         vy = dy / t + g / 2.0f;
+        // FAKE: float bits stored through an s32 view; event->userdataf[n] = t changes the object
         event->userdata[0] = *(s32*)&t;
         event->userdata[1] = *(s32*)&vy;
         event->userdata[2] = *(s32*)&speed;
@@ -560,6 +561,7 @@ static USER_FUNC(hoshi_jump) {
         pos[2] = z;
         return EVT_RETURN_DONE;
     }
+    // FAKE: float bits stored through an s32 view; event->userdataf[n] = t changes the object
     event->userdata[0] = *(s32*)&t;
     event->userdata[1] = *(s32*)&vy;
     return EVT_RETURN_BLOCK;

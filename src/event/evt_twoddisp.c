@@ -74,6 +74,7 @@ static void twoddisp_disp(CameraId camera, void* param) {
 /** Registers twoddisp_disp on the 2D camera for this frame; run every frame by twoddisp_main_event. */
 static USER_FUNC(twoddisp_main) {
     u32 i;
+    // FAKE: u32 counter compared as (s32)i; `i < 100` gives cmplwi, an s32 i adds an entry test
     for (i = 0; (s32)i < 100; i++) {
     }
     dispEntry(CAMERA_2D, 1000.0f, DISP_MODE_OPAQUE, twoddisp_disp, NULL);
@@ -102,6 +103,7 @@ USER_FUNC(evt_twoddisp_init) {
     e->ufBase = event->ufBase;
     twodID = e->eventId;
     twodPtr = (TwodEntry*)_mapAlloc(100 * sizeof(TwodEntry));
+    // FAKE: u32 counter compared as (s32)i; `i < 100` gives cmplwi, an s32 i adds an entry test
     for (i = 0; (s32)i < 100; i++) {
         p = &twodPtr[i];
         p->name[0] = 0;

@@ -545,7 +545,7 @@ static s32 npc_jump(EventEntry* event, BOOL isFirstCall) {
         }
         vy = dy / t + gravity * t / 2.0f;
 
-        // The floats are stored as their bit patterns through the word view (a float store gives different code).
+        // FAKE: float bits stored through an s32 view; event->userdataf[n] = t changes the object
         event->userdata[0] = *(s32*)&t;
         event->userdata[1] = *(s32*)&vy;
         event->userdata[2] = *(s32*)&speed;
@@ -563,6 +563,7 @@ static s32 npc_jump(EventEntry* event, BOOL isFirstCall) {
         npc->position = (Vec){x, y, z};
         return EVT_RETURN_YIELD;
     }
+    // FAKE: float bits stored through an s32 view; event->userdataf[n] = t changes the object
     event->userdata[0] = *(s32*)&t;
     event->userdata[1] = *(s32*)&vy;
     return EVT_RETURN_BLOCK;

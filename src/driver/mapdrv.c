@@ -2499,6 +2499,7 @@ void mapSetMaterialTev(s32 texCount, s32 drawMode, s32 flags, Mtx mtx) {
     coord = (GXTexCoordID)texCount;
     indStages = 0;
 
+    // FAKE: no-op (s32) cast on the s32 texCount; `texCount > 0` schedules the static's address load earlier
     if ((s32)texCount > 0) {
         switch (drawMode) {
             case 0:

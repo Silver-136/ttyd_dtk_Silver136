@@ -201,6 +201,7 @@ static void BattleAudienceCtrlProcessKinopioWait(s32 index, s32 front) {
     base = BattleAudienceBaseGetPtr();
     m = BattleAudienceGetPtr(index);
     pouchGetPtr();
+    // FAKE: (u8) cast on the BOOL front for the byte compare; plain front compiles cmpwi
     if ((u8)front == 1) {
         BattleAudience_SetAnim(index, AUD_ANIM_WAIT_FRONT, FALSE);
     } else {
@@ -328,6 +329,7 @@ static void BattleAudienceCtrlProcessKinopioWait(s32 index, s32 front) {
                     if (rnd < threshold) {
                         BattleAudience_ChangeStatus(index, AUDIENCE_STATUS_WAIT_KUBI_KATAMUKE);
                     } else {
+                        // FAKE: (f32) cast on the product keeps the multiply apart from the add (no fmadd)
                         threshold = (s32)(threshold + (f32)(10.0f * a));
                         if (rnd < threshold) {
                             BattleAudience_ChangeStatus(index, AUDIENCE_STATUS_JOY_RAISE_ARM);
@@ -363,6 +365,7 @@ static void BattleAudienceCtrlProcessKinopioWait(s32 index, s32 front) {
 /** Status 1, "furimuki" (looking back): turns 180 degrees over 15 frames, holds, turns back, then idles again. */
 static void BattleAudienceCtrlProcessKinopioWaitHurimuki(s32 index, s32 front) {
     BattleAudienceMember* m = BattleAudienceGetPtr(index);
+    // FAKE: (u8) cast on the BOOL front for the byte compare; plain front compiles cmpwi
     if ((u8)front == 1) {
         BattleAudience_SetAnim(index, AUD_ANIM_WAIT_FRONT, FALSE);
     } else {
@@ -384,6 +387,7 @@ static void BattleAudienceCtrlProcessKinopioWaitHurimuki(s32 index, s32 front) {
 /** Status 2, "kubi katamuke" (head tilt): sways the sprite sideways and back over 60 frames, then idles again. */
 static void BattleAudienceCtrlProcessKinopioWaitKubiKatamuke(s32 index, s32 front) {
     BattleAudienceMember* m = BattleAudienceGetPtr(index);
+    // FAKE: (u8) cast on the BOOL front for the byte compare; plain front compiles cmpwi
     if ((u8)front == 1) {
         BattleAudience_SetAnim(index, AUD_ANIM_WAIT_FRONT, FALSE);
     } else {
@@ -408,6 +412,7 @@ static void BattleAudienceCtrlProcessKinopioWaitKubiKatamuke(s32 index, s32 fron
 /** Status 3, idle hop: one small hop (three higher ones for Punies), then back to idle. */
 static void BattleAudienceCtrlProcessKinopioWaitJump(s32 index, s32 front) {
     BattleAudienceMember* m = BattleAudienceGetPtr(index);
+    // FAKE: (u8) cast on the BOOL front for the byte compare; plain front compiles cmpwi
     if ((u8)front == 1) {
         BattleAudience_SetAnim(index, AUD_ANIM_JUMP_FRONT, FALSE);
     } else {
@@ -445,6 +450,7 @@ static void BattleAudienceCtrlProcessKinopioWaitJump(s32 index, s32 front) {
 /** Status 4, cheering with raised arms: bobs up and down for counterF cycles of 30 frames. */
 static void BattleAudienceCtrlProcessKinopioJoyRaiseArm(s32 index, s32 front) {
     BattleAudienceMember* m = BattleAudienceGetPtr(index);
+    // FAKE: (u8) cast on the BOOL front for the byte compare; plain front compiles cmpwi
     if ((u8)front == 0) {
         BattleAudience_SetAnim(index, AUD_ANIM_RAISE_BACK, FALSE);
     }
@@ -473,6 +479,7 @@ static void BattleAudienceCtrlProcessKinopioJoyRaiseArm(s32 index, s32 front) {
 /** Status 5, cheering: one excited hop of slightly random height. */
 static void BattleAudienceCtrlProcessKinopioJoyJump(s32 index, s32 front) {
     BattleAudienceMember* m = BattleAudienceGetPtr(index);
+    // FAKE: (u8) cast on the BOOL front for the byte compare; plain front compiles cmpwi
     if ((u8)front == 1) {
         BattleAudience_SetAnim(index, AUD_ANIM_JUMP_FRONT, FALSE);
     } else {
@@ -501,6 +508,7 @@ static void BattleAudienceCtrlProcessKinopioJoyJump(s32 index, s32 front) {
 /** Status 6, big cheer: two higher hops while spinning. */
 static void BattleAudienceCtrlProcessKinopioJoyJump2(s32 index, s32 front) {
     BattleAudienceMember* m = BattleAudienceGetPtr(index);
+    // FAKE: (u8) cast on the BOOL front for the byte compare; plain front compiles cmpwi
     if ((u8)front == 1) {
         BattleAudience_SetAnim(index, AUD_ANIM_JUMP_FRONT, FALSE);
     } else {
@@ -538,6 +546,7 @@ static void BattleAudienceCtrlProcessKinopioItemOn(s32 index, s32 front) {
     BattleAudience* base = BattleAudienceBaseGetPtr();
     BattleAudienceMember* m = BattleAudienceGetPtr(index);
     BattleAudienceItem* item;
+    // FAKE: (u8) cast on the BOOL front for the byte compare; plain front compiles cmpwi
     if ((u8)front == 1) {
         BattleAudience_SetAnim(index, AUD_ANIM_WAIT_FRONT, FALSE);
     } else {
@@ -798,6 +807,7 @@ static void BattleAudienceCtrlProcessKinopioSleep(s32 index, s32 front) {
     base = BattleAudienceBaseGetPtr();
     m = BattleAudienceGetPtr(index);
     if (m->step <= 1) {
+        // FAKE: (u8) cast on the BOOL front for the byte compare; plain front compiles cmpwi
         if ((u8)front == 1) {
             BattleAudience_SetAnim(index, AUD_ANIM_SLEEP_FRONT, FALSE);
         } else {
@@ -833,6 +843,7 @@ static void BattleAudienceCtrlProcessKinopioSleep(s32 index, s32 front) {
         case 2:
             m->hopSpeed = 6.0f + (f32)rand() / 32767.0f;
             m->hopAccel = -0.5f;
+            // FAKE: (u8) cast on the BOOL front for the byte compare; plain front compiles cmpwi
             if ((u8)front == 1) {
                 BattleAudience_SetAnim(index, AUD_ANIM_WAIT_FRONT, FALSE);
             } else {
@@ -1293,6 +1304,7 @@ static void BattleAudienceCtrlProcessKinopioShell(s32 index, s32 front) {
 /** Status 18, Bulky Bob-omb phase event: lights its fuse (sound for 180 frames) and counts down to the blast. */
 static void BattleAudienceCtrlProcessKinopioIgnite(s32 index, s32 front) {
     BattleAudienceMember* m = BattleAudienceGetPtr(index);
+    // FAKE: (u8) cast on the BOOL front for the byte compare; plain front compiles cmpwi
     if ((u8)front == 1) {
         BattleAudience_SetAnim(index, AUD_ANIM_IGNITE_FRONT, FALSE);
     } else {
@@ -1331,6 +1343,7 @@ static void BattleAudienceCtrlProcessKinopioFire(s32 index, s32 front) {
     s32 i;
     base = BattleAudienceBaseGetPtr();
     m = BattleAudienceGetPtr(index);
+    // FAKE: (u8) cast on the BOOL front for the byte compare; plain front compiles cmpwi
     if ((u8)front == 1) {
         BattleAudience_SetAnim(index, AUD_ANIM_IGNITE_FRONT, FALSE);
     } else {
