@@ -5263,20 +5263,19 @@ USER_FUNC(btlevtcmd_AudienceDeclareACResult) {
     EvtWord* args = event->args;
     BattleWeapon* weapon;
     s32 result;
-    u8* ac;
+    BattleMarioAcCount* ac;
     weapon = (BattleWeapon*)evtGetValue(event, args[0]);
     result = evtGetValue(event, args[1]);
 
-    // FAKE: ac[0] / ac[1] are marioAcSuccess / marioAcFailed through one pointer; the field names change the object
-    ac = &wp->marioAcSuccess;
+    ac = &wp->marioAc;
     if (result != -1) {
-        if (ac[0] < 200) {
-            ac[0]++;
+        if (ac->success < 200) {
+            ac->success++;
         }
         wp->lastAcSuccess = 1;
     } else {
-        if (ac[1] < 200) {
-            ac[1]++;
+        if (ac->failed < 200) {
+            ac->failed++;
         }
         wp->lastAcSuccess = 0;
     }

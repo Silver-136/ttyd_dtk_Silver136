@@ -6,6 +6,7 @@
 #include "evt/evt_word.h"
 #include <dolphin/gx/GXStruct.h>
 #include <dolphin/mtx.h>
+#include "battle/battle_seq_command.h"
 
 struct BattleWork;
 struct EffectEntry;
@@ -42,9 +43,7 @@ typedef struct BattleSeqEndWork {
     s32 reserved_14;               // 0x14, only cleared
     s32 objCount;                  // 0x18
     u8 reserved_1C[0x24 - 0x1C];   // 0x1C, never accessed
-    s32 cursor;                    // 0x24
-    s32 reserved_28;               // 0x28, only cleared
-    s32 cursorCount;               // 0x2C, number of level-up choices
+    BattleCursor cursor;           // 0x24, Yes/No cursor of the level-up confirmation (2 choices)
     u32 flags;                     // 0x30
     struct IconEntry* icons[19];   // 0x34
     s32 alpha[19];                 // 0x80

@@ -36,7 +36,7 @@
 #include "mario/mario_hit.h"
 
 typedef struct MotShipWork {
-    u32 flags;                    // 0x00: bit0 = facing (SHIP_DIR), bit1 = marioShipGetDir; set to 0/1/2 by shipDecideDir
+    u32 flags;                    // 0x00: bit0 = facing (SHIP_DIR), bit1 = marioShipGetDir; set to 0/1/2 from getHarborDir
     f32 baseY;                    // 0x04: y the hull floats at; copied from harborPos.y when docking
     f32 bobAngle;                 // 0x08: bob phase in degrees, dispOfs.y = 3 sin(bobAngle) - 13
     f32 bobSpeed;                 // 0x0C: 4.25 degrees per frame
@@ -97,6 +97,8 @@ static f32 shipData[6] = {-0.05f, -0.7f, 0.02f, 0.02f, 2.0f, 0.01f};
 static const char* paper_ship[4] = {"p_hune", "p_hune_g", "p_hune_y", "p_hune_v"};
 
 s32 getHarborType(HitEntry* hit);
+s32 getHarborDir(HitEntry* hit);
+s32 getSeaPos(HitEntry* hit, Vec* out);
 
 // Macro, not inline: as static inline harborProbe(m, ang, &pos, out) the object changes.
 #define HARBOR_PROBE(ANG, POS)                                                                      \
@@ -359,34 +361,6 @@ static inline void shipEff(f32 s) {
     ((EffFunemizuWork*)marioGetPtr()->motShip->wakeEff->userdata)->yaw = mario->displayDirection;
 }
 
-// FAKE: case-0 block as an inline helper so hit/attr/r are inline temps numbered
-// above getHarborType's k (register pick only; same behaviour as the inline block).
-static inline void shipDecideDir(MarioWork* m, Vec* pp1, Vec* pp2) {
-    MarioWork* m2;
-    s32 r;
-    f32 ff;
-    HitEntry* hit;
-    s32 attr;
-    hit = m->hitobjJumpFrom;
-    m2 = marioGetPtr();
-    attr = hitGetAttr(hit);
-    r = 0;
-    if (attr & HIT_ATTR_SHIP_PANEL1) {
-        hitObjGetPos(hitGetName(m2->hitobjJumpFrom), pp1);
-        ff = revise360(angleABf(m2->position.x, m2->position.z, pp1->x, pp1->z) - m2->targetYaw);
-        r = (ff >= 180.0f) ? 2 : 1;
-    } else if (attr & HIT_ATTR_SHIP_PANEL2) {
-        hitObjGetPos(hitGetName(m2->hitobjJumpFrom), pp2);
-        ff = revise360(angleABf(m2->position.x, m2->position.z, pp2->x, pp2->z) - m2->targetYaw);
-        r = (ff >= 180.0f) ? 2 : 1;
-    } else if (attr & HIT_ATTR_SHIP_PANEL3) {
-        r = 2;
-    } else if (attr & HIT_ATTR_SHIP_PANEL4) {
-        r = 1;
-    }
-    marioGetPtr()->motShip->flags = r;
-}
-
 /**
  * Boat Mode motion (from a boat panel): Mario jumps, spins and folds into a paper boat,
  * drops onto the water and settles at the dock position;
@@ -396,12 +370,8 @@ static inline void shipDecideDir(MarioWork* m, Vec* pp1, Vec* pp2) {
 void mot_ship(void) {
     MarioWork* m = marioGetPtr();
     MotShipWork* newWork;
-    MotShipWork* ms;
     s32 r29, r27;
     f32 f30, f31;
-    Vec p2;
-    Vec p1;
-    Vec pos;
     f32 c;
     f32 d;
     EventEntry* e;
@@ -444,7 +414,7 @@ void mot_ship(void) {
 #if VERSION >= VERSION_JP
             marioSetBottomlessRespawnPosOnBeroEntry(m->position.x, m->position.y, m->position.z);
 #endif
-            shipDecideDir(m, &p1, &p2);
+            marioGetPtr()->motShip->flags = getHarborDir(m->hitobjJumpFrom);
 
             /* fallthrough */
         case 1:
@@ -556,39 +526,11 @@ void mot_ship(void) {
             }
             break;
         case 10: {
-            MarioWork* mm;
-            f32 fz, fx;
-            HitEntry* hit;
             m->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
             m->displayDirection = revise360(m->displayDirection);
             m->wPlayerCollisionBox.x = 40.0f;
             m->wPlayerCollisionBox.y = 40.0f;
-
-            // FAKE: motStruct derived back from &field (same pointer) so ms is a later-numbered codegen value (target r28)
-            ms = (MotShipWork*)((u8*)&marioGetPtr()->motShip->harborPos - offsetof(MotShipWork, harborPos));
-            hit = m->hitobjJumpFrom;
-            mm = marioGetPtr();
-            hitObjGetPos(hitGetName(hit), &pos);
-            fx = (s32)((100.0f * pos.x + 0.5f) / 100.0f);
-            fz = (s32)((100.0f * pos.z + 0.5f) / 100.0f);
-            ms->harborPos.y = mm->position.y - 15.0f;
-            r27 = getHarborType(mm->hitobjJumpFrom);
-            if (r27 == 1) {
-                ms->harborPos.x = fx;
-                ms->harborPos.z = fz - 50.0f - 30.30303f;
-            } else if (r27 == 2) {
-                ms->harborPos.x = fx;
-                ms->harborPos.z = 30.30303f + (50.0f + fz);
-            } else if (r27 == 3) {
-                ms->harborPos.x = fx - 50.0f - 30.30303f;
-                ms->harborPos.z = fz;
-            } else if (r27 == 4) {
-                ms->harborPos.x = 30.30303f + (50.0f + fx);
-                ms->harborPos.z = fz;
-            } else {
-                ms->harborPos.x = fx;
-                ms->harborPos.z = fz;
-            }
+            r27 = getSeaPos(m->hitobjJumpFrom, &marioGetPtr()->motShip->harborPos);
             f30 = 0.1f * distABf(marioGetPtr()->motShip->harborPos.x, marioGetPtr()->motShip->harborPos.z, m->position.x, m->position.z);
             switch (r27) {
             case 1:
@@ -1181,13 +1123,69 @@ s32 getHarborType(HitEntry* hit) {
     return k;
 }
 
-// FAKE: stand-in that nothing calls; it only places these literals in this object's constant pool
-void shipStrippedPool(f32* p) {
-    p[0] = 15.0f;
-    p[1] = 50.0f;
-    p[2] = 30.30303f;
-    p[3] = 180.0f;
-    p[4] = 3.1415927f;
+/**
+ * Which way the boat turns when Mario jumps from boat panel hit: for panels 1 and 2 by the side of the panel he
+ * faces (2 when the angle from Mario to the panel, less his target yaw, is 180 or more, else 1), 2 for panel 3,
+ * 1 for panel 4, 0 otherwise.
+ */
+// Original name and size (0x114) from the JP demo map (UNUSED there: every call is inlined).
+s32 getHarborDir(HitEntry* hit) {
+    MarioWork* m = marioGetPtr();
+    s32 attr = hitGetAttr(hit);
+    s32 dir = 0;
+    if (attr & HIT_ATTR_SHIP_PANEL1) {
+        Vec pos;
+        f32 ang;
+        hitObjGetPos(hitGetName(m->hitobjJumpFrom), &pos);
+        ang = revise360(angleABf(m->position.x, m->position.z, pos.x, pos.z) - m->targetYaw);
+        dir = (ang >= 180.0f) ? 2 : 1;
+    } else if (attr & HIT_ATTR_SHIP_PANEL2) {
+        Vec pos;
+        f32 ang;
+        hitObjGetPos(hitGetName(m->hitobjJumpFrom), &pos);
+        ang = revise360(angleABf(m->position.x, m->position.z, pos.x, pos.z) - m->targetYaw);
+        dir = (ang >= 180.0f) ? 2 : 1;
+    } else if (attr & HIT_ATTR_SHIP_PANEL3) {
+        dir = 2;
+    } else if (attr & HIT_ATTR_SHIP_PANEL4) {
+        dir = 1;
+    }
+    return dir;
+}
+
+/**
+ * Where the boat settles on the water off the boat panel hit: the panel's rounded position, 50 + 30.30303 out from
+ * it along the panel's facing (getHarborType), 15 below Mario. Returns the panel type.
+ */
+// Original name and size (0x1d4) from the JP demo map (UNUSED there: every call is inlined).
+s32 getSeaPos(HitEntry* hit, Vec* out) {
+    MarioWork* m = marioGetPtr();
+    Vec pos;
+    f32 x, z;
+    s32 type;
+
+    hitObjGetPos(hitGetName(hit), &pos);
+    x = (s32)((100.0f * pos.x + 0.5f) / 100.0f);
+    z = (s32)((100.0f * pos.z + 0.5f) / 100.0f);
+    out->y = m->position.y - 15.0f;
+    type = getHarborType(m->hitobjJumpFrom);
+    if (type == 1) {
+        out->x = x;
+        out->z = z - 50.0f - 30.30303f;
+    } else if (type == 2) {
+        out->x = x;
+        out->z = 30.30303f + (50.0f + z);
+    } else if (type == 3) {
+        out->x = x - 50.0f - 30.30303f;
+        out->z = z;
+    } else if (type == 4) {
+        out->x = 30.30303f + (50.0f + x);
+        out->z = z;
+    } else {
+        out->x = x;
+        out->z = z;
+    }
+    return type;
 }
 
 /**

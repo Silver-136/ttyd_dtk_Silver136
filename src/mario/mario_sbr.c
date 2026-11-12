@@ -572,6 +572,17 @@ void marioGetRubInit(void) {
     rubwork.revDir = -1;
 }
 
+/** Index of the rub history entry ofs steps from the current one (wrapped into the 20-entry ring). */
+// Original name and size (0x34) from the JP demo map (UNUSED there: every call is inlined).
+s32 _getBufId(s32 ofs) {
+    s32 id = rubwork.idx;
+    id += ofs;
+    while (id < 0) {
+        id += 20;
+    }
+    return id;
+}
+
 /**
  * Looks at the last ten stick angles in the rub history and decides which way the stick is turning:
  * 0 one way, 1 the other (no steps against it and at least four with it), or -1 when it is not turning steadily.
@@ -654,11 +665,7 @@ static s32 checkOneRevolution(s32 dir) {
     start = rw->start;
     cur = rw->hist[rw->idx];
     for (i = 1; i <= 20; i++) {
-        // FAKE: rubwork read directly instead of through rw; the plain form changes the object
-        j = rubwork.idx - i;
-        while (j < 0) {
-            j += 20;
-        }
+        j = _getBufId(-i);
         v = rw->hist[j];
         if (cur != v) {
             break;
@@ -742,12 +749,7 @@ s32 marioGetRub(u32 btn, s32* dirOut, s32* countOut, f32* magOut) {
     rw->idleTimer = 0;
     rw->hist[rw->idx] = a;
 
-    // FAKE: rubwork read directly instead of through rw; the plain form changes the object
-    j = rubwork.idx;
-    j++;
-    while (j < 0) {
-        j += 20;
-    }
+    j = _getBufId(1);
     rw->hist[j] = -1;
     r = chkRevolveDir(&cw, &ccw);
     if (r == 0) {

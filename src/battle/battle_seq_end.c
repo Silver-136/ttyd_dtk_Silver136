@@ -588,9 +588,9 @@ void btlseqEnd(BattleWork* wp) {
                     break;
                 }
                 if (ok) {
-                    work->cursor = 0;
-                    work->reserved_28 = 0;
-                    work->cursorCount = 2;
+                    work->cursor.absPos = 0;
+                    work->cursor.relPos = 0;
+                    work->cursor.count = 2;
                     work->flags &= ~SEQEND_DISP_LVUP_HELP;
                     BattleSetSeq(wp, SEQ_END, SEQ_END_LEVEL_UP_JUMP_WAIT);
                     e = evtEntry(_jump_event, 10, 0);
@@ -602,15 +602,15 @@ void btlseqEnd(BattleWork* wp) {
             // Yes/No confirmation of the level-up choice (_LvupParamConfirmDisp); no step moves here
         case SEQ_END_LEVEL_UP_CONFIRM_UNUSED:
             if (BattlePadCheckTrigger(BATTLE_PAD_STICK_DOWN)) {
-                work->cursor = work->cursor + 1;
-                if (work->cursor >= work->cursorCount) {
-                    work->cursor = 0;
+                work->cursor.absPos = work->cursor.absPos + 1;
+                if (work->cursor.absPos >= work->cursor.count) {
+                    work->cursor.absPos = 0;
                 }
             }
             if (BattlePadCheckTrigger(BATTLE_PAD_STICK_UP)) {
-                work->cursor = work->cursor - 1;
-                if (work->cursor < 0) {
-                    work->cursor = work->cursorCount - 1;
+                work->cursor.absPos = work->cursor.absPos - 1;
+                if (work->cursor.absPos < 0) {
+                    work->cursor.absPos = work->cursor.count - 1;
                 }
             }
             if (BattlePadCheckTrigger(PAD_BUTTON_B)) {
@@ -618,7 +618,7 @@ void btlseqEnd(BattleWork* wp) {
                 BattleSetSeq(wp, SEQ_END, SEQ_END_LEVEL_UP_SELECT);
             }
             if (BattlePadCheckTrigger(PAD_BUTTON_A)) {
-                if (work->cursor == 0) {
+                if (work->cursor.absPos == 0) {
                     work->flags &= ~(SEQEND_DISP_LVUP_SELECT | SEQEND_DISP_LVUP_CONFIRM_UNUSED);
                     BattleSetSeq(wp, SEQ_END, SEQ_END_LEVEL_UP_APPLY);
                     break;
@@ -911,11 +911,11 @@ static void _LvupParamConfirmDisp(CameraId camId, void* param) {
     // FAKE: 0.0f held in zero so the expression is 0.0f - w, not a negation
     f32 zero = 0.0f;
     u32 len;
-    s32 *cursorPtr;
+    BattleCursor *cursor;
     f32 w;
     char buf[0x14];
     BattleSeqEndWork* work = ((BattleWork*)param)->seqEndWork;
-    cursorPtr = &work->cursor; // FAKE: pointer to the field; direct work->cursor differs
+    cursor = &work->cursor;
     pouchGetPtr();
     sprintf(buf, msgSearch("btl_msg_lvup_ok"));
     len = strlen(buf);
@@ -928,7 +928,7 @@ static void _LvupParamConfirmDisp(CameraId camId, void* param) {
     FontDrawString(-20.0f, -13.0f, msgSearch("btl_msg_lvup_yes"));
     FontDrawString(-20.0f, -38.0f, msgSearch("btl_msg_lvup_no"));
     pos.x = -40.0f;
-    pos.y = -50 - (*cursorPtr) * 25;
+    pos.y = -50 - cursor->absPos * 25;
     pos.z = 0.0f;
     iconDispGx(&pos, ICON_FLAG_2D, ICON_STAR_POINT, 1.0f);
 }

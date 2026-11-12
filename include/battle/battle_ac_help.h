@@ -7,7 +7,7 @@
 void BattleAcHelpInit(void);
 void BattleAcHelpMain(void);
 
-// BattleWork.acHelpDispType: the action command help text. Off also lets the audience window show.
+// BattleWork.acHelp.dispType: the action command help text. Off also lets the audience window show.
 enum {
     AC_HELP_DISP_OFF = 0,
     AC_HELP_DISP_XLU = 1,  // half transparent

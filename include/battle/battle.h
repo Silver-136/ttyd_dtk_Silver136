@@ -190,6 +190,15 @@ typedef struct BattleActRecord {   // u8 counters for the battle-condition rules
     u8 turnCount;              // 0x1F, cond 58/59
 } BattleActRecord;
 
+/**
+ * Mario's action command results in this battle, each counted up to 200 by btlevtcmd_AudienceDeclareACResult,
+ * which updates both through one pointer to this pair.
+ */
+typedef struct BattleMarioAcCount {
+    u8 success; // 0x0
+    u8 failed;  // 0x1
+} BattleMarioAcCount;
+
 // StChgMsg.flags: whose status changed.
 enum {
     ST_CHG_MSG_MARIO = 1,
@@ -231,6 +240,15 @@ typedef struct BattleAnnounce {
 #endif
     StChgWork stChg;                 // 0x118, status-change message queue (battle_status_effect)
 } BattleAnnounce;
+
+/**
+ * The action-command hint box (battle_ac_help.c). BattleAcHelpMain and _ac_help_disp read both fields
+ * through one pointer to this pair.
+ */
+typedef struct BattleAcHelpWork {
+    const char* msg; // 0x0, message id of the hint (the weapon's acHelpMsg)
+    s32 dispType;    // 0x4, AC_HELP_DISP_OFF/XLU/ON
+} BattleAcHelpWork;
 
 struct BattleAlliance {
     u16 clearFlags;     // 0x0
@@ -353,8 +371,7 @@ struct BattleWork {
     FileEntry* menuTex;                 // 0x163DC
     BattleStage stage;                  // 0x163E0
     BattleActRecord actRecord;          // 0x16F1C, battle condition counters (battle_actrecord)
-    u8 marioAcSuccess;                  // 0x16F3C
-    u8 marioAcFailed;                   // 0x16F3D
+    BattleMarioAcCount marioAc;         // 0x16F3C
     u8 pad_16F3E[0x16F40 - 0x16F3E];    // 0x16F3E (US 0x16F5A), never accessed
     BattleAfterReaction afterReactions[64]; // 0x16F40 (US 0x16F5C), BattleAfterReactionEntry/Release/Main queue
     BattleStageObject stageObjects[32]; // 0x17140
@@ -365,8 +382,7 @@ struct BattleWork {
     u8 majinaiState;                    // 0x18FE1
     u16 luckTimer;                      // 0x18FE2
     StarPowerInfo impendingBonuses;     // 0x18FE4
-    const char* acHelpMsg;              // 0x18FF0
-    s32 acHelpDispType;                 // 0x18FF4
+    BattleAcHelpWork acHelp;            // 0x18FF0, battle_ac_help.c
     u8 pad_18FF8[0x19038 - 0x18FF8];    // 0x18FF8, never accessed
 #if VERSION >= VERSION_US
     s32 commandDisabled[3]; // US and later

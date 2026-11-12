@@ -10,7 +10,7 @@
 
 /** Sets the message id of the action-command hint box shown above the stage (the weapon's acHelpMsg). */
 void BattleAcHelpSetHelp(const char* msg) {
-    _battleWorkPointer->acHelpMsg = msg;
+    _battleWorkPointer->acHelp.msg = msg;
 }
 
 /**
@@ -18,7 +18,7 @@ void BattleAcHelpSetHelp(const char* msg) {
  * The audience window is only allowed while the hint is hidden.
  */
 void BattleAcHelpSetDispType(s32 type) {
-    _battleWorkPointer->acHelpDispType = type;
+    _battleWorkPointer->acHelp.dispType = type;
     switch (type) {
         case 0:
             BattleAudience_WinSetActive(TRUE);
@@ -39,10 +39,9 @@ static void _ac_help_disp(CameraId cameraId, void* param);
 /** Per-frame battle hook: queues the hint box draw when a hint is set and shown, except during a First Strike. */
 void BattleAcHelpMain(void) {
     BattleWork* wp = _battleWorkPointer;
+    BattleAcHelpWork* help = &wp->acHelp;
 
-    // FAKE: spare pointer to acHelpDispType; testing wp->acHelpDispType directly changes the object
-    s32* type = &wp->acHelpDispType;
-    if (wp->acHelpMsg && *type && !(wp->flags & BATTLE_FLAG_FIRST_ATTACK)) {
+    if (help->msg && help->dispType && !(wp->flags & BATTLE_FLAG_FIRST_ATTACK)) {
         dispEntry(CAMERA_2D, 498.0f, DISP_MODE_ALPHA_TEST, _ac_help_disp, NULL);
     }
 }
@@ -59,14 +58,13 @@ static void _ac_help_disp(CameraId cameraId, void* param) {
     u8 alpha;
     f32 x;
     f32 y;
+    BattleAcHelpWork* help = &wp->acHelp;
 
-    // FAKE: spare pointer to acHelpMsg; msgSearch(wp->acHelpMsg) changes the object
-    const char **help = &wp->acHelpMsg;
     alpha = 0xFF;
-    if (wp->acHelpDispType == AC_HELP_DISP_XLU) {
+    if (help->dispType == AC_HELP_DISP_XLU) {
         alpha = 0x80;
     }
-    msgs[0] = msgSearch(*help);
+    msgs[0] = msgSearch(help->msg);
     if (!msgs[0]) {
         msgs[0] = "めっせーじがみつかりません";
     }

@@ -616,12 +616,12 @@ static EVT_BEGIN(normal_attack_event)
 EVT_END()
 
 static USER_FUNC(_mario_ac_success_check) {
-    evtSetValue(event, event->args[0], _battleWorkPointer->marioAcSuccess);
+    evtSetValue(event, event->args[0], _battleWorkPointer->marioAc.success);
     return EVT_RETURN_DONE;
 }
 
-/** Script helper: stores in args[0] Mario's cumulative failed-action-command count (the battle work's marioAcFailed). */
+/** Script helper: stores in args[0] Mario's cumulative failed-action-command count (the battle work's marioAc.failed). */
 static USER_FUNC(_mario_ac_failed_check) {
-    evtSetValue(event, event->args[0], _battleWorkPointer->marioAcFailed);
+    evtSetValue(event, event->args[0], _battleWorkPointer->marioAc.failed);
     return EVT_RETURN_DONE;
 }

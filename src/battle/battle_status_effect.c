@@ -22,9 +22,6 @@
 #include "eff/eff_ice.h"
 #include "eff/eff_spark.h"
 
-// FAKE: no-op cast of the msg array to StChgMsg*; &_battleWorkPointer->announce.stChg.msg[i] changes the object
-#define ST_CHG_MSG(i) ((StChgMsg*)_battleWorkPointer->announce.stChg.msg + (i))
-
 BOOL BattleStatusChangeAnnouceMain_Unit(BattleUnit* unit);
 static void _st_chg_msg_disp(void);
 
@@ -579,7 +576,8 @@ void BattleStatusChangeMsgWorkInit(void) {
 }
 
 void BattleStatusChangeMsgSetAnnouce(BattleUnit* unit, s32 index, s32 changed) {
-    StChgMsg* msg = ST_CHG_MSG(index);
+    StChgWork* st = &_battleWorkPointer->announce.stChg;
+    StChgMsg* msg = &st->msg[index];
     s32 id;
 
     msg->unitId = unit->unitId;
