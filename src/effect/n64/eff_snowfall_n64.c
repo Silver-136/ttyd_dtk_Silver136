@@ -83,6 +83,23 @@ static effN64Vtx eff_snowfall_v[] = {
     {27, -44, -57, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF},
 };
 
+/** Places a particle at random within 1000 units of the camera with a random downward drift (halved). */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+static void _init_proc(EffSnowfallParticle* p) {
+    CameraEntry* cam = camGetPtr(CAMERA_3D);
+
+    p->position.x = cam->cameraPos.x + (rand() % 2000) - 1000.0f;
+    p->position.y = cam->cameraPos.y + (rand() % 2000) - 1000.0f;
+    p->position.z = cam->cameraPos.z + (rand() % 2000) - 1000.0f;
+    p->velocity.x = 0.05f * ((rand() % 20) - 10.0f);
+    p->velocity.y = -1.2f - 0.01f * (rand() % 80);
+    p->velocity.z = 0.05f * ((rand() % 20) - 10.0f);
+    p->alpha = 255;
+    p->velocity.x *= 0.5f;
+    p->velocity.y *= 0.5f;
+    p->velocity.z *= 0.5f;
+}
+
 /**
  * Wraps a particle back into the box of half-width w and half-height h around a centre taken from the camera
  * (target x, the mean of target and eye y, and (target z + viewDistance) / 2 for z);
@@ -143,7 +160,6 @@ EffectEntry* effSnowfallN64Entry(s32 arg, s32 count) {
     EffectEntry* effect;
     EffSnowfallWork* work;
     EffSnowfallParticle* p;
-    CameraEntry* cam;
     s32 i, n;
 
     effect = effEntry();
@@ -161,17 +177,7 @@ EffectEntry* effSnowfallN64Entry(s32 arg, s32 count) {
     work->active = 1;
     p = work->p;
     for (i = 0; i < count; i++, p++) {
-        cam = camGetPtr(CAMERA_3D);
-        p->position.x = cam->cameraPos.x + (rand() % 2000) - 1000.0f;
-        p->position.y = cam->cameraPos.y + (rand() % 2000) - 1000.0f;
-        p->position.z = cam->cameraPos.z + (rand() % 2000) - 1000.0f;
-        p->velocity.x = 0.05f * ((rand() % 20) - 10.0f);
-        p->velocity.y = -1.2f - 0.01f * (rand() % 80);
-        p->velocity.z = 0.05f * ((rand() % 20) - 10.0f);
-        p->alpha = 255;
-        p->velocity.x *= 0.5f;
-        p->velocity.y *= 0.5f;
-        p->velocity.z *= 0.5f;
+        _init_proc(p);
         p->timer = 0;
     }
     return effect;

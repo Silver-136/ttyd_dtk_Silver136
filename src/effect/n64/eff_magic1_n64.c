@@ -114,6 +114,18 @@ static void effMagic1Main(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effMagic1Disp, effect);
 }
 
+/** One colour channel pulsing between `from` and `to` as the sine of `deg` degrees. */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+static u8 color(s32 from, s32 to, s32 deg) {
+    return (s32)(0.5f * ((f32)(to - from) * (1.0f + effMagic1SinDeg((f32)deg))) + (f32)from);
+}
+
+/** As color, with the angle given as a time part and a phase part. */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+static u8 color2(s32 from, s32 to, s32 t, s32 phase) {
+    return (s32)(0.5f * ((f32)(to - from) * (1.0f + effMagic1SinDeg((f32)(t + phase)))) + (f32)from);
+}
+
 /** Draws three trailing rings of three spinning glow sprites (texture 0x10) with colors that pulse over time. */
 static void main_dl(EffectEntry* effect, Mtx base) {
     u8* a;
@@ -205,12 +217,12 @@ static void main_dl(EffectEntry* effect, Mtx base) {
             PSMTXConcat(m68, m38, m38);
             PSMTXConcat(base, m38, m38);
             GXLoadPosMtxImm(m38, GX_PNMTX0);
-            GXSetTevColor(GX_TEVREG0, (GXColor){(u8)(s32)effMagic1Blend(a[1], 0, (f32)(s32)(180 + (gp->retraceCount << 5) + a[0])),
-                                                (u8)(s32)effMagic1Blend(a[2], 0, (f32)(s32)(180 + (gp->retraceCount << 5) + a[0])),
-                                                (u8)(s32)effMagic1Blend(a[3], 0, (f32)(s32)(180 + (gp->retraceCount << 5) + a[0])), alpha});
-            GXSetTevColor(GX_TEVREG1, (GXColor){(u8)(s32)effMagic1Blend(a[1], 255, (f32)(s32)((gp->retraceCount << 5) + a[0])),
-                                                (u8)(s32)effMagic1Blend(a[2], 255, (f32)(s32)((gp->retraceCount << 5) + a[0])),
-                                                (u8)(s32)effMagic1Blend(a[3], 255, (f32)(s32)((gp->retraceCount << 5) + a[0])), 255});
+            GXSetTevColor(GX_TEVREG0, (GXColor){color2(a[1], 0, 180 + (gp->retraceCount << 5), a[0]),
+                                                color2(a[2], 0, 180 + (gp->retraceCount << 5), a[0]),
+                                                color2(a[3], 0, 180 + (gp->retraceCount << 5), a[0]), alpha});
+            GXSetTevColor(GX_TEVREG1, (GXColor){color(a[1], 255, (gp->retraceCount << 5) + a[0]),
+                                                color(a[2], 255, (gp->retraceCount << 5) + a[0]),
+                                                color(a[3], 255, (gp->retraceCount << 5) + a[0]), 255});
             if (type == 0) {
                 sz = 15;
             } else {

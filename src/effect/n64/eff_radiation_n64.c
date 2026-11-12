@@ -52,6 +52,22 @@ static s32 r_data[] = {
     -10, 20, 337, 1, 1,
 };
 
+/** Respawns a type 0-1 ray at a random tilt (table seeds n * 3 .. n * 3 + 2) and resets it to its start values. */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+static void type1_init(EffRadiationN64Work* p, s32 n) {
+    p->initRotX = (f32)(s32)effTblRandN64(180, n * 3);
+    p->initRotY = (f32)(s32)effTblRandN64(180, n * 3 + 1);
+    p->initRotZ = (f32)(s32)effTblRandN64(180, n * 3 + 2);
+    p->y = p->initY;
+    p->life = p->initLife;
+    p->yVel = p->initYVel;
+    p->rotX = p->initRotX;
+    p->rotY = p->initRotY;
+    p->rotZ = p->initRotZ;
+    p->alpha = 0;
+    p->frame = 0;
+}
+
 /**
  * Spawns the radiation rays at (x, y, z): types 0-1 use 8 rising rays, other types 16 spinning rays;
  * type + 10 draws on another display layer.
@@ -104,17 +120,7 @@ EffectEntry* effRadiationN64Entry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
                 p->initY = (f32)((i - 1) * 30 / (count - 1) - 10);
                 p->initLife = 50 - (i - 1) * 20 / (count - 1);
                 p->initYVel = 2.5f + 25.0f / (f32)p->initLife;
-                p->initRotX = (f32)(s32)effTblRandN64(180, i * 3);
-                p->initRotY = (f32)(s32)effTblRandN64(180, i * 3 + 1);
-                p->initRotZ = (f32)(s32)effTblRandN64(180, i * 3 + 2);
-                p->y = p->initY;
-                p->life = p->initLife;
-                p->yVel = p->initYVel;
-                p->rotX = p->initRotX;
-                p->rotY = p->initRotY;
-                p->rotZ = p->initRotZ;
-                p->alpha = 0;
-                p->frame = 0;
+                type1_init(p, i);
                 p++;
             }
             break;
@@ -148,6 +154,39 @@ EffectEntry* effRadiationN64Entry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
     return effect;
 }
 
+/** Advances the four texture scroll offsets of a ray, wrapping them into 0-256. */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+static void tx_scroll(EffRadiationN64Work* p) {
+    p->scroll0 += p->scrollVel0;
+    if (p->scroll0 > 256.0f) {
+        p->scroll0 -= 256.0f;
+    }
+    if (p->scroll0 < 0.0f) {
+        p->scroll0 += 256.0f;
+    }
+    p->scroll1 += p->scrollVel1;
+    if (p->scroll1 > 256.0f) {
+        p->scroll1 -= 256.0f;
+    }
+    if (p->scroll1 < 0.0f) {
+        p->scroll1 += 256.0f;
+    }
+    p->scroll2 += p->scrollVel2;
+    if (p->scroll2 > 256.0f) {
+        p->scroll2 -= 256.0f;
+    }
+    if (p->scroll2 < 0.0f) {
+        p->scroll2 += 256.0f;
+    }
+    p->scroll3 += p->scrollVel3;
+    if (p->scroll3 > 256.0f) {
+        p->scroll3 -= 256.0f;
+    }
+    if (p->scroll3 < 0.0f) {
+        p->scroll3 += 256.0f;
+    }
+}
+
 /**
  * Types 0-1: each ray moves out along its own direction by yVel, fades in over 10 frames and out over its last 5,
  * then respawns at a random tilt (0-179 degrees per axis).
@@ -158,9 +197,7 @@ EffectEntry* effRadiationN64Entry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
  * Drawn on layer 2, or 8 when `flag` is set.
  */
 static void effRadiationMain(EffectEntry* effect) {
-    s32 base1;
-    s32 base2;
-    s32 base;
+    s32 frame;
     EffRadiationN64Work* p = effect->userdata;
     EffRadiationN64Work* w2;
     Vec position;
@@ -192,13 +229,10 @@ static void effRadiationMain(EffectEntry* effect) {
         effDelete(effect);
         return;
     }
-    base1 = p->frame;
+    frame = p->frame;
     switch (type) {
         case 0:
         case 1:
-            base = (base1 * 10 + 1) * 3;
-            base1 = base + 1;
-            base2 = base + 2;
             p++;
             for (i = 1; i < effect->count; i++, p++) {
                 p->life--;
@@ -211,51 +245,14 @@ static void effRadiationMain(EffectEntry* effect) {
                 }
                 p->y += p->yVel;
                 if (p->life <= 0) {
-                    p->initRotX = (f32)(s32)effTblRandN64(180, base);
-                    p->initRotY = (f32)(s32)effTblRandN64(180, base1);
-                    p->initRotZ = (f32)(s32)effTblRandN64(180, base2);
-                    p->y = p->initY;
-                    p->life = p->initLife;
-                    p->yVel = p->initYVel;
-                    p->rotX = p->initRotX;
-                    p->rotY = p->initRotY;
-                    p->rotZ = p->initRotZ;
-                    p->alpha = 0;
-                    p->frame = 0;
+                    type1_init(p, frame * 10 + 1);
                 }
             }
             break;
         default:
             p++;
             for (j = 1, lf = 0x20; j < effect->count; lf += 2, j++, p++) {
-                p->scroll0 += p->scrollVel0;
-                if (p->scroll0 > 256.0f) {
-                    p->scroll0 -= 256.0f;
-                }
-                if (p->scroll0 < 0.0f) {
-                    p->scroll0 += 256.0f;
-                }
-                p->scroll1 += p->scrollVel1;
-                if (p->scroll1 > 256.0f) {
-                    p->scroll1 -= 256.0f;
-                }
-                if (p->scroll1 < 0.0f) {
-                    p->scroll1 += 256.0f;
-                }
-                p->scroll2 += p->scrollVel2;
-                if (p->scroll2 > 256.0f) {
-                    p->scroll2 -= 256.0f;
-                }
-                if (p->scroll2 < 0.0f) {
-                    p->scroll2 += 256.0f;
-                }
-                p->scroll3 += p->scrollVel3;
-                if (p->scroll3 > 256.0f) {
-                    p->scroll3 -= 256.0f;
-                }
-                if (p->scroll3 < 0.0f) {
-                    p->scroll3 += 256.0f;
-                }
+                tx_scroll(p);
                 p->life--;
                 p->frame++;
                 if (p->frame < 5) {

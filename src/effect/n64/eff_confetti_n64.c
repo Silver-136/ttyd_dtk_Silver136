@@ -72,6 +72,18 @@ void effConfettiN64SetCamId(EffectEntry* effect, s32 camId) {
     w->camId = camId;
 }
 
+/** Respawns a type 3 shower piece at random near the top with a random drift; it lives 120 frames. */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+static void _init_proc(EffConfettiN64Work* w) {
+    w->position.x = 0.1f * (f32)(rand() % 701) - 35.0f;
+    w->position.y = 0.0f;
+    w->position.z = 0.1f * (f32)(rand() % 301) - 15.0f;
+    w->velocity.x = 0.03f * (w->position.x + 0.1f * (f32)(rand() % 101) - 5.0f);
+    w->velocity.y = -1.7f - 0.01f * (0.1f * (f32)(rand() % 801));
+    w->velocity.z = 0.05f * (0.1f * (f32)(rand() % 201) - 10.0f);
+    w->life = 120;
+}
+
 /**
  * Spawns a confetti burst of 12, 18, 24 or 48 pieces.
  * type % 10 picks the piece count and motion (3 = a falling shower, 4-6 = bursts that slow down and sag);
@@ -158,13 +170,7 @@ EffectEntry* effConfettiN64Entry(s32 type, s32 life, f32 x, f32 y, f32 z, f32 sc
         s2 = sin(ang);
         c2 = cos(ang);
         if (mod == 3) {
-            w->position.x = 0.1f * (f32)(rand() % 701) - 35.0f;
-            w->position.y = 0.0f;
-            w->position.z = 0.1f * (f32)(rand() % 301) - 15.0f;
-            w->velocity.x = 0.03f * (w->position.x + 0.1f * (f32)(rand() % 101) - 5.0f);
-            w->velocity.y = -1.7f - 0.01f * (0.1f * (f32)(rand() % 801));
-            w->velocity.z = 0.05f * (0.1f * (f32)(rand() % 201) - 10.0f);
-            w->life = 120;
+            _init_proc(w);
             w->delay = k * 3;
         } else {
             w->position.x = c2 * (r * s1);
@@ -236,13 +242,7 @@ static void effConfettiMain(EffectEntry* effect) {
                 }
                 w->life--;
                 if (w->life < 0) {
-                    w->position.x = 0.1f * (f32)(rand() % 701) - 35.0f;
-                    w->position.y = 0.0f;
-                    w->position.z = 0.1f * (f32)(rand() % 301) - 15.0f;
-                    w->velocity.x = 0.03f * (w->position.x + 0.1f * (f32)(rand() % 101) - 5.0f);
-                    w->velocity.y = -1.7f - 0.01f * (0.1f * (f32)(rand() % 801));
-                    w->velocity.z = 0.05f * (0.1f * (f32)(rand() % 201) - 10.0f);
-                    w->life = 120;
+                    _init_proc(w);
                     w->life--;
                 }
                 break;

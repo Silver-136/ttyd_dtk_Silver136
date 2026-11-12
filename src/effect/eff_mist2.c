@@ -16,6 +16,29 @@
 static void effMist2Main(EffectEntry* effect);
 static void effMist2Disp(CameraId cameraId, void* param);
 
+/** Respawns a puff at a random spot within spawnRadius with a random target size, spin, life and delay. */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+static void _init_mist(EffMist2Work* p) {
+    f32 amp;
+    f32 ang;
+
+    amp = irand((s32)p->spawnRadius);
+    ang = 6.2831855f * irand(360) / 360.0f;
+    p->position.x = amp * (f32)sin(ang);
+    p->position.y = 0.0f;
+    p->position.z = amp * (f32)cos(ang);
+    p->scale = 0.0f;
+    p->scaleTarget = 0.5f + irand(100) / 100.0f;
+    p->alpha = 255.0f;
+    p->life = irand(60) + 60;
+    p->timer = 0;
+    p->rotSpeed = 5 - irand(10);
+    p->rot = 0.0f;
+    p->delay = irand(30);
+    p->gravity = 0.2f;
+    p->vy = 0.0f;
+}
+
 /** Spawns the second mist effect at (x, y, z) for `life` frames; called through evt_eff ("mist2", the black mist). */
 EffectEntry* effMist2Entry(s32 type, s32 life, f32 x, f32 y, f32 z, f32 a, f32 b) {
     EffectEntry* effect;
@@ -52,21 +75,7 @@ EffectEntry* effMist2Entry(s32 type, s32 life, f32 x, f32 y, f32 z, f32 a, f32 b
     for (i = 1, p = work + 1; i < effect->count; i++, p++) {
         p->spawnRadius = a;
         p->spawnHeight = b;
-        amp = irand((s32)p->spawnRadius);
-        ang = 6.2831855f * irand(360) / 360.0f;
-        p->position.x = amp * (f32)sin(ang);
-        p->position.y = 0.0f;
-        p->position.z = amp * (f32)cos(ang);
-        p->scale = 0.0f;
-        p->scaleTarget = 0.5f + irand(100) / 100.0f;
-        p->alpha = 255.0f;
-        p->life = irand(60) + 60;
-        p->timer = 0;
-        p->rotSpeed = 5 - irand(10);
-        p->rot = 0.0f;
-        p->delay = irand(30);
-        p->gravity = 0.2f;
-        p->vy = 0.0f;
+        _init_mist(p);
         if (type == 1) {
             f32 t = 6.2831855f * irand(360) / 360.0f;
             p->position.x = p->spawnRadius * (f32)sin(t);
@@ -118,21 +127,7 @@ static void effMist2Main(EffectEntry* effect) {
             work->alpha = work->life * 8;
         }
         if (work->alpha <= 0.0f) {
-            amp = irand((s32)work->spawnRadius);
-            ang = 6.2831855f * irand(360) / 360.0f;
-            work->position.x = amp * (f32)sin(ang);
-            work->position.y = 0.0f;
-            work->position.z = amp * (f32)cos(ang);
-            work->scale = 0.0f;
-            work->scaleTarget = 0.5f + irand(100) / 100.0f;
-            work->alpha = 255.0f;
-            work->life = irand(60) + 60;
-            work->timer = 0;
-            work->rotSpeed = 5 - irand(10);
-            work->rot = 0.0f;
-            work->delay = irand(30);
-            work->gravity = 0.2f;
-            work->vy = 0.0f;
+            _init_mist(work);
         } else {
             work->rot += work->rotSpeed;
             work->scale += (work->scaleTarget - work->scale) / 10.0f;
