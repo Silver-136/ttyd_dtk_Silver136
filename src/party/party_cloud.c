@@ -182,7 +182,7 @@ f32 cloudGetBreathDir(void) {
  * npcdrv.c uses it to tell whether an NPC is caught by the gust.
  */
 #if VERSION >= VERSION_JP
-f32 cloudGetBreathPower(f32 size, Vec* pos) {
+f32 cloudGetBreathPower(Vec pos, f32 size) {
     PartyEntry* party = partyGetPtr(PARTY_SLOT_PARTY);
     f32 breathPower;
     f32 dist;
@@ -195,12 +195,12 @@ f32 cloudGetBreathPower(f32 size, Vec* pos) {
     }
 
     if (party->currentMemberId == PARTY_FLURRIE && (party->flags & PARTY_FLAG_IS_BEING_USED) != 0 &&
-        party->useMotionId >= CLOUD_USE_BREATH_INIT && __fabsf(party->position.y - pos->y - 18.0f) <= 10.0f) {
+        party->useMotionId >= CLOUD_USE_BREATH_INIT && __fabsf(party->position.y - pos.y - 18.0f) <= 10.0f) {
         PartyCloud* cloud = (PartyCloud*)party->useStruct;
         reach = cloud->breathDist;
-        if (-((0.5f * size) - distABf(party->position.x, party->position.z, pos->x, pos->z)) <= reach) {
+        if (-((0.5f * size) - distABf(party->position.x, party->position.z, pos.x, pos.z)) <= reach) {
             dist = toMovedir(CLOUD_WORK(party)->breathDir);
-            angle = angleABf(party->position.x, party->position.z, pos->x, pos->z);
+            angle = angleABf(party->position.x, party->position.z, pos.x, pos.z);
             dist = revise360(angle - dist);
 
             if (dist <= 30.0f || dist >= 330.0f) {

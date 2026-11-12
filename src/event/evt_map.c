@@ -20,10 +20,6 @@
 #include "evt/evt_map.h"
 #include "eff/eff_torch.h"
 
-void mapObjSetColor(const char* name, GXColor color);
-void mapSetBlend(GXColor color);
-void mapSetBlend2(GXColor color);
-
 /**
  * Sets the translation of the map object named in args[1] to args[2..4];
  * args[0] (single or group) is ignored, both choices call mapObjTranslate.

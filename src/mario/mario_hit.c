@@ -1694,7 +1694,7 @@ f32 marioChkOverhead(void) {
                 if (mario->baseSpeed == 0.0f) {
                     marioChgStayMotion();
                 } else {
-                    ((BOOL (*)(s32))marioChgMot)(mario->baseSpeed > mario->baseWalkSpeed ? 2 : 1);
+                    marioChgMot(mario->baseSpeed > mario->baseWalkSpeed ? 2 : 1);
 #else
             if (!(mario->flags & MARIO_FLAG_TUBE_MODE) && mario->currMotionId != MARIO_MOTION_SHIP && mario->currMotionId != MARIO_MOTION_PLANE &&
                 mario->currMotionId != MARIO_MOTION_VIVIAN && mario->characterId != CHARACTER_BOWSER && !marioChkSlitEnd()) {

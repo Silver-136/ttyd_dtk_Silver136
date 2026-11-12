@@ -822,7 +822,7 @@ static void winMsgDisp(WindowWork* wp, f32 x, f32 y) {
 
     bx = (10.0f + (x - 250.0f)) - 10.0f;
     by = 40.0f + y;
-    windowDispGX_Waku_col(0, waku, bx, by, 500.0f, 80.0f, 20.0f);
+    windowDispGX_Waku_col(bx, by, 500.0f, 80.0f, 20.0f, 0, waku);
 
     // The != 0 test is redundant; both compares are in the retail code
     if (wp->msgItem != 0 && wp->msgItem > 0) {

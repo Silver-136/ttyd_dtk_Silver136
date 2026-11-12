@@ -351,7 +351,7 @@ void monteCountDisp(void) {
     }
 #endif
     c1 = (GXColor){255, 255, 255, 153};
-    windowDispGX_Waku_col(0, c1, -288.0f, (f32)(y + 0x2C), 200.0f, 44.0f, 16.0f);
+    windowDispGX_Waku_col(-288.0f, (f32)(y + 0x2C), 200.0f, 44.0f, 16.0f, 0, c1);
     PSMTXTrans(mtx, -260.0f, (f32)(y + 2), 0.0f);
     c2 = (GXColor){255, 255, 255, 255};
     iconDispGxCol(mtx, ICON_FLAG_2D, ICON_ITEM_PIANTA_TOKEN, c2);

@@ -6,4 +6,4 @@
 #include "driver/effdrv.h"
 #include <dolphin/types.h>
 
-EffectEntry* effCoinFukidashiEntry(s32 type, s32 number, s32 duration, f32 x, f32 y, f32 z);
+EffectEntry* effCoinFukidashiEntry(f32 x, f32 y, f32 z, s32 type, s32 number, s32 duration);

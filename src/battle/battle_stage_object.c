@@ -3284,7 +3284,7 @@ static void _disp_escape_wall_message(CameraId camera, void* param) {
     f32 zero = 0.0f;
 
     x = zero - width / 2;
-    windowDispGX_Waku_col(0, (GXColor){255, 255, 255, 255}, x - 20.0f, -117.0f, width + 40, 30.0f, 10.0f);
+    windowDispGX_Waku_col(x - 20.0f, -117.0f, width + 40, 30.0f, 10.0f, 0, (GXColor){255, 255, 255, 255});
     FontDrawStart();
     FontDrawString(zero - (width / 2), -120.0f, msg);
 }

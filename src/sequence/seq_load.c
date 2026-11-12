@@ -1077,7 +1077,7 @@ static void loadDraw(CameraId camera, void* param) {
         }
     }
 
-    windowDispGX_Waku_col(0, (GXColor){255, 255, 255, 255}, -250.0f, 200.0f, 500.0f, 40.0f, 20.0f);
+    windowDispGX_Waku_col(-250.0f, 200.0f, 500.0f, 40.0f, 20.0f, 0, (GXColor){255, 255, 255, 255});
     FontDrawStart();
     {
         const char* msg = wp->msg;

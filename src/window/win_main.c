@@ -1298,11 +1298,7 @@ void winFontSetPitch(f32 pitch, Vec pos, Vec scale, GXColor color, const char* f
     vsprintf(buf, fmt, args);
     FontDrawColor(color);
     FontDrawScaleVec(scale);
-#if VERSION == VERSION_DEMO_US_1
-    ((void (*)(Vec*, const char*, f32))FontDrawStringVecPitch)(&pos, buf, pitch);
-#else
     FontDrawStringVecPitch(&pos, buf, pitch);
-#endif
 }
 #endif
 

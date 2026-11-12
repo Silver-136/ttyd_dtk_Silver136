@@ -32,7 +32,6 @@
 static EvtWord btlataudevtPresentItem_Damage[14];
 static EvtWord btlataudevtPresentItem_Get[49];
 
-ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, EvtWord* evtCode, f32 x, f32 y, f32 z);
 
 /**
  * Script helper: finds the audience member currently holding an item to throw and returns its index (args[0])
@@ -194,7 +193,7 @@ static void _get_item_announce_disp(CameraId cameraId, void* param) {
     lines++;
     x = 0.0f;
     y = 60.0f;
-    windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, (x - width / 2) - 10.0f, 34.0f, width + 20, lines * 29 + 3, 10.0f);
+    windowDispGX_Waku_col((x - width / 2) - 10.0f, 34.0f, width + 20, lines * 29 + 3, 10.0f, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
     FontDrawStart();
     FontDrawMessage(x - width / 2, (s32)y - 29, buf);
 }
@@ -220,7 +219,7 @@ static s32 _get_item_announce(EventEntry* event, BOOL isFirstCall) {
 #else
         y = y + (unit->sizeMultiplier * (f32)BtlUnit_GetHeight(unit) + 8.0f);
 #endif
-        event->userdatap[1] = itemEntry(NULL, item, ITEM_TYPE_STILL_NO_TOUCH, -1, NULL, x, y, z);
+        event->userdatap[1] = itemEntry(x, y, z, NULL, item, ITEM_TYPE_STILL_NO_TOUCH, -1, NULL);
         event->userdata[2] = 90;
     } else {
         if (event->userdata[2] > 0) {

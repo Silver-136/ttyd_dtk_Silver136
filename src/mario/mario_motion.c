@@ -71,9 +71,6 @@ static void mot_shadow(void);
 static void mot_partyUse(void);
 static void mot_dummy(void);
 
-// Private by-value Vec prototype; mot_slit.c defines marioCreviceWallChk(const Vec* p). The call copies the Vec to
-// the stack and passes a pointer to the copy (the copy is in the retail code), so the original called it this way.
-BOOL marioCreviceWallChk(Vec pos);
 
 /**
  * Mario's motions by motion id (standing, walking, dashing, jumping, ... and Bowser's): the function that runs

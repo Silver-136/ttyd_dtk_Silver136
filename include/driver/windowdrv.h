@@ -64,7 +64,7 @@ void windowMain(void);
 void windowDispGX_Kanban(s32 type, u8 alpha, f32 x, f32 y, f32 width, f32 height);
 void windowDispGX_System(s32 type, u8 alpha, f32 x, f32 y, f32 width, f32 height);
 void windowDispGX_Message(s32 type, s32 tailFlags, u8 alpha, f32 x, f32 y, f32 width, f32 height, f32 tailX, f32 tailY);
-void windowDispGX_Waku_col(u16 gxTexMapID, GXColor color, f32 x, f32 y, f32 width, f32 height, f32 curve);
+void windowDispGX_Waku_col(f32 x, f32 y, f32 width, f32 height, f32 curve, u16 gxTexMapID, GXColor color);
 void windowDispGX2_Waku_col(Mtx mtx, u16 gxTexMapID, GXColor color, f32 x, f32 y, f32 width, f32 height, f32 curve);
 s32 windowCheckID(s32 id);
 WindowEntry* windowGetPointer(s32 id);

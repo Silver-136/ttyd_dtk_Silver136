@@ -39,20 +39,13 @@
 #include "stdlib.h"
 #include "mri_puni.h"
 #include "driver/seqdrv.h"
+#include "manager/fontmgr.h"
 
 static USER_FUNC(evt_mri_door_naname_func);
 
 typedef void (*voidfunctionptr)(void);
 extern voidfunctionptr _ctors[];
 extern voidfunctionptr _dtors[];
-typedef struct HSV {
-    u8 h;
-    u8 s;
-    u8 v;
-    u8 a;
-} HSV;
-GXColor HSV2RGB(HSV hsv);
-PuniWork* puniGetPunigp(void);
 
 void _prolog(void);
 void _epilog(void);
@@ -473,7 +466,7 @@ static USER_FUNC(hakari_color) {
     s32 max = evtGetValue(event, args[2]);
 
     if (now <= max) {
-        mapGrpSetColor(name, HSV2RGB((HSV){gp->retraceCount, 0xFF, 0xFF, 0xFF}));
+        mapGrpSetColor(name, HSV2RGB((GXColor){gp->retraceCount, 0xFF, 0xFF, 0xFF}));
     } else {
         GXColor white = {0xFF, 0xFF, 0xFF, 0xFF};
         mapGrpSetColor(name, white);

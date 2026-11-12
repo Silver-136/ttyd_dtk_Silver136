@@ -4113,10 +4113,10 @@ void mapFogOff(void) {
  * Sets and enables the map-wide blend colour, which tints
  * and fades every map object that does not opt out (MAP_OBJ_FLAG_NO_MAP_BLEND); evt_map.
  */
-void mapSetBlend(GXColor* color) {
+void mapSetBlend(GXColor color) {
     MapWork* wp = &mapWork[activeGroup];
 
-    wp->entries[0].blend = *color;
+    wp->entries[0].blend = color;
     wp->entries[0].flags |= MAP_ENTRY_BLEND;
 }
 
@@ -4124,10 +4124,10 @@ void mapSetBlend(GXColor* color) {
  * Sets and enables the second map-wide blend colour, applied like mapSetBlend to objects without
  * MAP_OBJ_FLAG_NO_MAP_BLEND2; evt_map.
  */
-void mapSetBlend2(GXColor* color) {
+void mapSetBlend2(GXColor color) {
     MapWork* wp = &mapWork[activeGroup];
 
-    wp->entries[0].blend2 = *color;
+    wp->entries[0].blend2 = color;
     wp->entries[0].flags |= MAP_ENTRY_BLEND2;
 }
 
@@ -4167,11 +4167,11 @@ void mapBlendOff2(void) {
  * Tints the map object name by color, alpha included (MAP_OBJ_FLAG_COLOR);
  * objects with alpha below 255 draw translucent and at 0 not at all.
  */
-void mapObjSetColor(const char* name, GXColor* color) {
+void mapObjSetColor(const char* name, GXColor color) {
     MapObject* obj = mapGetMapObj(name);
 
     if (obj) {
-        obj->color = *color;
+        obj->color = color;
         obj->flags |= MAP_OBJ_FLAG_COLOR;
     }
 }
@@ -4390,7 +4390,7 @@ void mapObjSetFlushColor(const char* name, u8 r, u8 g, u8 b, u8 a) {
     color.b = b;
     color.a = a;
 
-    mapObjSetColor(name, &color);
+    mapObjSetColor(name, color);
     mapObjFlagOff(name, MAP_OBJ_FLAG_COLOR);
 }
 

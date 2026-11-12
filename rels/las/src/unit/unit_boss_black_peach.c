@@ -32,6 +32,7 @@
 #include "driver/dispdrv.h"
 #include "driver/effdrv.h"
 #include "driver/npcdrv.h"
+#include "driver/lightdrv.h"
 #include "mario/mariost.h"
 #include "memory.h"
 #include "string.h"
@@ -86,7 +87,6 @@ typedef struct QueenConnect {
 } QueenConnect;
 static ExtTexInfo hand_data[32];
 static HandWork* hand_wp;
-u8* lightGetPaperCraft(void);
 
 static USER_FUNC(eff_queen_set_alpha_evt);
 static USER_FUNC(make_pattern);
@@ -1172,11 +1172,11 @@ static f32 hair_offset[] = {
 /** Initializes the hand lighting vector used by pose_init. */
 inline void hand_light_init(void) {
     Mtx mtx;
-    u8* light = lightGetPaperCraft();
+    LightEntry* light = lightGetPaperCraft();
 
-    *(Vec*)(light + 0x24) = (Vec){-200.0f, 100.0f, 500.0f};
+    light->position = (Vec){-200.0f, 100.0f, 500.0f};
     PSMTXScale(mtx, 3.0f, 3.0f, 3.0f);
-    PSMTXMultVec(mtx, (Vec*)(light + 0x24), (Vec*)(light + 0x24));
+    PSMTXMultVec(mtx, &light->position, &light->position);
 }
 
 /**

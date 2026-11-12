@@ -52,7 +52,6 @@
 #define BATTLE_COMMAND_WEAPON_CAPACITY ((s32)(sizeof(((BattleCommand*)0)->weapon) / sizeof(((BattleCommand*)0)->weapon[0])))
 #define BATTLE_COMMAND_VISIBLE_WEAPON_ROWS (6)
 
-void BattleMenuDisp_ChangePartySelect_Init(BattleWork* wp);
 void BattleCommandDisplay_ActMenuEnd(BattleWork* wp);
 unsigned long strlen(const char* s);
 static BOOL BattleCommandAttackAudienceCheck(void);
@@ -1174,7 +1173,7 @@ void BattleCommandDisplay_MultiItemMenuSetup(BattleWork* wp, s32 a);
 s32 BattleCommandDisplay_MultiItemMenuMain(BattleWork* wp);
 void BattleCommandDisplay_OperationMenuSetup(BattleWork* wp, s32 a);
 s32 BattleCommandDisplay_OperationMenuMain(BattleWork* wp);
-void BattleCommandDisplay_ChangePartySelectMenuSetup();
+void BattleCommandDisplay_ChangePartySelectMenuSetup(BattleWork* wp, s32 a);
 s32 BattleCommandDisplay_ChangePartySelectMenuMain(BattleWork* wp);
 void BattleCommandDisplay_ProtectPartnerSelectMenuSetup(BattleWork* wp);
 void BattleCommandDisplay_ProtectPartnerSelectMenuEnd(BattleWork* wp);
@@ -1976,15 +1975,13 @@ void BattleCommandDisplay_WeaponMultiItemCancelCheckDisp(CameraId camId, void* p
 #if VERSION >= VERSION_DEMO_EU
     len = (f32)FontGetMessageWidth(buf);
 
-    // FAKE: called through a cast that puts the float arguments first; the plain call changes the object
-    ((void (*)(f32, f32, f32, f32, f32, u16, GXColor))windowDispGX_Waku_col)(-30.0f - (w = 0.5f * (f32)len), 30.0f, 65.0f + (f32)len, 32.0f, 10.0f, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+    windowDispGX_Waku_col(-30.0f - (w = 0.5f * (f32)len), 30.0f, 65.0f + (f32)len, 32.0f, 10.0f, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
 #else
     len = strlen(buf);
 
-    // FAKE: called through a cast that puts the float arguments first; the plain call changes the object
-    ((void (*)(f32, f32, f32, f32, f32, u16, GXColor))windowDispGX_Waku_col)(-30.0f - (w = 6.25f * (f32)len), 30.0f, 12.5f * (f32)len + 65.0f, 32.0f, 10.0f, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+    windowDispGX_Waku_col(-30.0f - (w = 6.25f * (f32)len), 30.0f, 12.5f * (f32)len + 65.0f, 32.0f, 10.0f, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
 #endif
-    windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, -70.0f, -10.0f, 130.0f, 60.0f, 10.0f);
+    windowDispGX_Waku_col(-70.0f, -10.0f, 130.0f, 60.0f, 10.0f, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
     FontDrawStart();
 
     // x is a variable: the retail code computes 0.0f - w at run time (lfs 0.0f, fsubs); a literal 0.0f folds to fneg
@@ -2211,8 +2208,8 @@ void BattleCommandDisplay_MultiItemMenuEnd(BattleWork* wp) {
 }
 
 /** Opens the Change Partner list display and shows all enemy HP. */
-void BattleCommandDisplay_ChangePartySelectMenuSetup(BattleWork* wp) {
-    BattleMenuDisp_ChangePartySelect_Init(wp);
+void BattleCommandDisplay_ChangePartySelectMenuSetup(BattleWork* wp, s32 a) {
+    BattleMenuDisp_ChangePartySelect_Init(wp, a);
     wp->commandMenu.flags |= (CMD_MENU_CHANGE_PARTY | CMD_MENU_ENEMY_HP);
 }
 
@@ -2349,7 +2346,7 @@ void BattleCommandDisplay_TargetSelectMenuDisp(CameraId camId, void* param) {
                 name = msgSearch(part->partName);
             }
             nameWidth = FontGetMessageWidth(name);
-            windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xCF}, -240.0f, 86.0f, 16.0f + nameWidth, 32.0f, 10.0f);
+            windowDispGX_Waku_col(-240.0f, 86.0f, 16.0f + nameWidth, 32.0f, 10.0f, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xCF});
             FontDrawStart();
             FontDrawString(-232.0f, 83.0f, name);
         } else {
@@ -2364,7 +2361,7 @@ void BattleCommandDisplay_TargetSelectMenuDisp(CameraId camId, void* param) {
                 name = msgSearch(part->partName);
             }
             nameWidth = FontGetMessageWidth(name);
-            windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xCF}, -240.0f, 86.0f, 16.0f + nameWidth, 32.0f, 10.0f);
+            windowDispGX_Waku_col(-240.0f, 86.0f, 16.0f + nameWidth, 32.0f, 10.0f, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xCF});
             FontDrawStart();
             FontDrawString(-232.0f, 83.0f, name);
         }
@@ -2389,8 +2386,7 @@ void BattleCommandDisplay_TargetSelectMenuDisp(CameraId camId, void* param) {
                     name = msgSearch(part2->partName);
                 }
                 nameWidth = FontGetMessageWidth(name);
-                windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xCF}, -240.0f, 118.0f - (f32)(i * 32), 16.0f + nameWidth,
-                                      32.0f, 10.0f);
+                windowDispGX_Waku_col(-240.0f, 118.0f - (f32)(i * 32), 16.0f + nameWidth, 32.0f, 10.0f, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xCF});
                 FontDrawStart();
                 FontDrawString(-232.0f, 115.0f - (f32)(i * 32), name);
             } else {
@@ -2405,8 +2401,7 @@ void BattleCommandDisplay_TargetSelectMenuDisp(CameraId camId, void* param) {
                     name = msgSearch(part2->partName);
                 }
                 nameWidth = FontGetMessageWidth(name);
-                windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xCF}, -240.0f, 118.0f - (f32)(i * 32), 16.0f + nameWidth,
-                                      32.0f, 10.0f);
+                windowDispGX_Waku_col(-240.0f, 118.0f - (f32)(i * 32), 16.0f + nameWidth, 32.0f, 10.0f, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xCF});
                 FontDrawStart();
                 FontDrawString(-232.0f, 115.0f - (f32)(i * 32), name);
             }
@@ -2453,7 +2448,7 @@ void BattleCommandDisplay_ProtectPartnerSelectMenuDisp(CameraId camId, void* par
     iconDispGx(&icon, ICON_FLAG_2D, ICON_TARGET_CURSOR, 1.0f);
     len = strlen(msgSearch(unit->kindParams->name));
     w = 6.25f * len;
-    windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xCF}, icon.x - w, 80.0f + icon.y, 12.5f * len, 32.0f, 10.0f);
+    windowDispGX_Waku_col(icon.x - w, 80.0f + icon.y, 12.5f * len, 32.0f, 10.0f, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xCF});
     FontDrawStart();
     FontDrawString(3.0f + icon.x - w, 77.0f + icon.y, msgSearch(unit->kindParams->name));
 }

@@ -3517,7 +3517,6 @@ USER_FUNC(btlevtcmd_PartsFaceDirectionSub) {
 
 static void _MoveSoundControlEndCore(BattleUnit* unit, BecSndWork* work);
 static void _MoveSoundControlCore(BattleUnit* unit, BecSndWork* work, BattleUnitPart* part, f32 x, f32 y, f32 z);
-ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, EvtWord* evtCode, f32 x, f32 y, f32 z);
 
 /**
  * Refund badge payout when the unit uses an item:
@@ -3670,7 +3669,7 @@ USER_FUNC(btlevtcmd_DispItemIcon) {
     time = evtGetValue(event, args[4]);
     if (isFirstCall) {
         event->userdata[0] = time;
-        event->userdatap[1] = itemEntry(NULL, item, ITEM_TYPE_STILL_NO_TOUCH, -1, NULL, x, y, z);
+        event->userdatap[1] = itemEntry(x, y, z, NULL, item, ITEM_TYPE_STILL_NO_TOUCH, -1, NULL);
 #if VERSION <= VERSION_DEMO_JP
         itemFlagOn(event->userdatap[1], ITEM_FLAG_LOST_BADGE_TO_SHOP);
 #endif
@@ -3721,7 +3720,7 @@ USER_FUNC(btlevtcmd_CommandFlyItem) {
                 pos.y += unit->sizeMultiplier * BtlUnit_GetHeight(unit);
             }
         }
-        event->userdatap[1] = itemEntry(NULL, item, ITEM_TYPE_STILL_NO_TOUCH, -1, NULL, pos.x, pos.y, pos.z);
+        event->userdatap[1] = itemEntry(pos.x, pos.y, pos.z, NULL, item, ITEM_TYPE_STILL_NO_TOUCH, -1, NULL);
         effItemGetEntry(10, pos.x, 12.0f + pos.y, pos.z - 5.0f);
 #if VERSION <= VERSION_DEMO_JP
         itemFlagOn(event->userdatap[1], ITEM_FLAG_LOST_BADGE_TO_SHOP);

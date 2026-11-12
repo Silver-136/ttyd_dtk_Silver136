@@ -51,6 +51,7 @@
 #include "driver/npcdrv.h"
 #include "koopa_motion.h"
 #include "eff/eff_mobj_broken.h"
+#include "eff/eff_batfukidashi.h"
 
 static USER_FUNC(fire_func);
 static USER_FUNC(kpa_powerup);
@@ -109,11 +110,6 @@ BOOL _mobj_check_lightup(const s8* a) {
     }
     return FALSE;
 }
-
-// FAKE: itemEntry declared with the position first: the original calls load x/y/z before the other arguments
-// (same registers by the EABI); calls in the definition's order and an inline wrapper both load them last
-extern ItemEntry* itemEntry(f32 x, f32 y, f32 z, const char* name, s32 itemId, u16 type, s32 collectFlag,
-                            EvtWord* evtCode);
 
 /** Event that runs kpa_powerup with LW(0)-LW(2); started when Bowser grabs a power-up in his side-scrolling stages. */
 #if VERSION >= VERSION_JP
@@ -2428,10 +2424,6 @@ void mobj_sign(void) {
     mobjNameToPtr("MOBJ_Arrow");
 }
 #endif
-
-// FAKE: private float-first prototype; eff_batfukidashi.h (and the definition) order the arguments (type, number,
-// duration, x, y, z), and calls through it change the object.
-extern EffectEntry* effCoinFukidashiEntry(f32 x, f32 y, f32 z, s32 type, s32 number, s32 duration);
 
 // Restores Mario's HP and FP and the HP of every active partner that is not PARTY_FLAG_IS_GROUNDED (case 3).
 // FAKE: case 4 repeats these steps inline instead of calling this helper; calling it there changes the object

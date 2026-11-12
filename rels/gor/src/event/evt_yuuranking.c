@@ -238,7 +238,7 @@ static void evt_yuuranking_disp_func(CameraId camera, void* param) {
     s32 iy;
     Mtx mtx;
     f32 scale;
-    windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, -196.0f + wp->x, 112.0f + wp->y, 392.0f, 224.0f, 20.0f);
+    windowDispGX_Waku_col(-196.0f + wp->x, 112.0f + wp->y, 392.0f, 224.0f, 20.0f, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
     switch (wp->mode) {
         case 0:
             title = msgSearch(scoreTitles[wp->type]);
@@ -249,7 +249,7 @@ static void evt_yuuranking_disp_func(CameraId camera, void* param) {
             break;
     }
     scale = 1.0f;
-    windowDispGX_Waku_col(0, (GXColor){0x2B, 0xA3, 0xFF, 0xFF}, wp->x + -(scale * FontGetMessageWidth(title) + 50.0f) / 2.0f, scale + (128.0f + wp->y), scale * FontGetMessageWidth(title) + 50.0f, 28.0f, 8.0f);
+    windowDispGX_Waku_col(wp->x + -(scale * FontGetMessageWidth(title) + 50.0f) / 2.0f, scale + (128.0f + wp->y), scale * FontGetMessageWidth(title) + 50.0f, 28.0f, 8.0f, 0, (GXColor){0x2B, 0xA3, 0xFF, 0xFF});
     FontDrawStart();
     FontDrawScale(1.0f);
     FontDrawColor((GXColor){0xFF, 0xFF, 0xFF, 0xFF});

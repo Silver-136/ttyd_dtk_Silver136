@@ -72,8 +72,6 @@ typedef struct FirebarWork {
     FirebarBall* balls;
     FirebarSetup* setup;
 } FirebarWork;
-ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, EvtWord* evtCode, f32 x, f32 y, f32 z);
-void shadowSetVolumeDecay(f32 a, f32 b, f32 c);
 static void firebar_disp(CameraId camera, void* param);
 
 static USER_FUNC(coin_entry);
@@ -749,8 +747,7 @@ static USER_FUNC(firebar_disp_evt) {
         a = 0.375f * a + 0.625f;
         ball = wp->balls;
         for (i = 0; i < wp->count; i++, ball++) {
-            shadowEntryMode(SHADOW_MODE_CYLINDER, ball->pos.x, ball->pos.y, ball->pos.z, 17.0f * wp->scale);
-            shadowSetVolumeDecay(a, 0.2f * a, 0.4f * a);
+            shadowSetVolumeDecay(shadowEntryMode(SHADOW_MODE_CYLINDER, ball->pos.x, ball->pos.y, ball->pos.z, 17.0f * wp->scale), a, 0.2f * a, 0.4f * a);
         }
         dispEntry(CAMERA_3D, dispCalcZ(&wp->pos), DISP_MODE_ALPHA_TEST, firebar_disp, wp);
         return EVT_RETURN_BLOCK;
@@ -786,7 +783,7 @@ static USER_FUNC(coin_entry) {
     s32 y = evtGetValue(event, args[1]);
     s32 z = evtGetValue(event, args[2]);
     s32 w = evtGetValue(event, args[3]);
-    ItemEntry* item = itemEntry(NULL, ITEM_COIN, ITEM_TYPE_SCATTER_TIMED, -1, NULL, x, y, z);
+    ItemEntry* item = itemEntry(x, y, z, NULL, ITEM_COIN, ITEM_TYPE_SCATTER_TIMED, -1, NULL);
 
     itemStatusOn(item, ITEM_FLAG2_SKIP_BOUND_INIT);
     item->bounceFactor = 0.8f;

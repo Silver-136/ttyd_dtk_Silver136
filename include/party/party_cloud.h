@@ -48,6 +48,7 @@ void cloud_use(PartyEntry* party);
 void cloudLockAnimationsOff(PartyEntry* party);
 void cloudLockAnimationsOn(PartyEntry* party);
 f32 cloudGetBreathDist(void);
+f32 cloudGetBreathPower(Vec pos, f32 width);
 #if VERSION >= VERSION_JP
 void mot_cloud(void);
 #endif

@@ -249,7 +249,7 @@ void caseMain(void) {
                     }
                     break;
                 case CASE_FUNC:
-                    if (entry->activeFunc != NULL && ((s32 (*)(CaseEntry*))entry->activeFunc)(entry)) {
+                    if (entry->activeFunc != NULL && entry->activeFunc(entry)) {
                         entry->flags |= CASE_FLAG_TRIGGERED;
                     }
                     break;

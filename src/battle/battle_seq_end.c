@@ -896,8 +896,7 @@ static void _MarioExpDisp(CameraId camId, void* param) {
         len = strlen(buf);
         width = 12.5f * len + 65.0f;
 
-        // FAKE: windowDispGX_Waku_col called through a float-first cast; the plain call changes the object
-        ((void (*)(f32, f32, f32, f32, f32, u16, GXColor))windowDispGX_Waku_col)(180.0f, -160.0f, width, 32.0f, 10.0f, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+        windowDispGX_Waku_col(180.0f, -160.0f, width, 32.0f, 10.0f, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
 
         iconDispGx(&pos, ICON_FLAG_2D, ICON_STAR_POINT, 1.0f);
         FontDrawStart();
@@ -920,9 +919,8 @@ static void _LvupParamConfirmDisp(CameraId camId, void* param) {
     sprintf(buf, msgSearch("btl_msg_lvup_ok"));
     len = strlen(buf);
 
-    // FAKE: windowDispGX_Waku_col called through a float-first cast; the plain call changes the object
-    ((void (*)(f32, f32, f32, f32, f32, u16, GXColor))windowDispGX_Waku_col)(-30.0f - (w = 6.25f * len), 30.0f, 12.5f * len + 65.0f, 32.0f, 10.0f, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
-    windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, -70.0f, -10.0f, 130.0f, 60.0f, 10.0f);
+    windowDispGX_Waku_col(-30.0f - (w = 6.25f * len), 30.0f, 12.5f * len + 65.0f, 32.0f, 10.0f, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+    windowDispGX_Waku_col(-70.0f, -10.0f, 130.0f, 60.0f, 10.0f, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
     FontDrawStart();
     FontDrawString(zero - w, 27.0f, buf);
     FontDrawString(-20.0f, -13.0f, msgSearch("btl_msg_lvup_yes"));
@@ -976,7 +974,7 @@ void _LvupParamHelpMsgDisp(CameraId camId, void* param) {
 #if VERSION == VERSION_JP || VERSION == VERSION_US || VERSION == VERSION_EU
     width = FontGetMessageWidthLine(msg, &lines);
     lines++;
-    windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, (zero - width / 2) - 20.0f, -145.0f + (lines - 1) * 29, width + 40, lines * 29 + 1, 10.0f);
+    windowDispGX_Waku_col((zero - width / 2) - 20.0f, -145.0f + (lines - 1) * 29, width + 40, lines * 29 + 1, 10.0f, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
     FontDrawStart_alpha(0xFF);
     y = -148.0f;
     FontDrawMessage(zero - width / 2, (s32)y + (lines - 1) * 29, msg);
@@ -1076,7 +1074,7 @@ static void _GetExpIcon_Main(BattleWork* wp) {
 
 /** Draws the translucent white window behind the Star Point icons. */
 static void _GetExpIcon_Disp(CameraId camId, void* param) {
-    windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0x80}, -76.899994f, 21.0f, 165.79999f, 24.199999f, 10.0f);
+    windowDispGX_Waku_col(-76.899994f, 21.0f, 165.79999f, 24.199999f, 10.0f, 0, (GXColor){0xFF, 0xFF, 0xFF, 0x80});
 }
 
 /** Turns the Star Point icon display off and deletes the 19 icons. */
@@ -1484,7 +1482,7 @@ void _draw_select_one_to_upgrade_text(CameraId camId, void* param) {
     msg = msgSearch("select_HPFPBP");
     width = FontGetMessageWidthLine(msg, &lines);
     lines++;
-    windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, (zero - width / 2) - 20.0f, -145.0f + (lines - 1) * 29, width + 40, lines * 29 + 1, 10.0f);
+    windowDispGX_Waku_col((zero - width / 2) - 20.0f, -145.0f + (lines - 1) * 29, width + 40, lines * 29 + 1, 10.0f, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
     FontDrawStart_alpha(0xFF);
     y = -148.0f;
     FontDrawMessage(zero - width / 2, (s32)y + (lines - 1) * 29, msg);

@@ -32,7 +32,6 @@
 #include "mario/mario_pouch.h"
 #include "driver/mapdrv.h"
 
-ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, EvtWord* evtCode, f32 x, f32 y, f32 z);
 
 // These values describe this shared inn event, not generic story progress.
 enum { INN_COMMEMORATIVE_STAY = 50, INN_STAY_COUNT_CAP = 100 };
@@ -249,8 +248,7 @@ static USER_FUNC(breakfast) {
     if (item == NULL || !(item->flags & ITEM_FLAG_ACTIVE)) {
         KinopioWork* w = *wp;
         if (w->breakfastItem != 0) {
-            itemEntry("breakfast", w->breakfastItem, ITEM_TYPE_STILL, -1, NULL, w->breakfastPos.x, w->breakfastPos.y,
-                      w->breakfastPos.z);
+            itemEntry(w->breakfastPos.x, w->breakfastPos.y, w->breakfastPos.z, "breakfast", w->breakfastItem, ITEM_TYPE_STILL, -1, NULL);
         }
     }
     return EVT_RETURN_DONE;

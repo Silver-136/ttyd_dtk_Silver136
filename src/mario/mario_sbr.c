@@ -408,7 +408,7 @@ void marioForceMoveMain(void) {
  * scripts use it (evt_mario.c) to move him to a point.
  * The boat, slit, tube and Yoshi motions keep their own motion.
  */
-void marioSetForceMove(f32 dir, s32 time, f32 speed) {
+void marioSetForceMove(s32 time, f32 dir, f32 speed) {
     MarioWork* mario = marioGetPtr();
 
     mario->flags |= MARIO_FLAG_FORCED_MOVEMENT;

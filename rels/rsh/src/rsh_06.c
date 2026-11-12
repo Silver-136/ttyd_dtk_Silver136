@@ -2740,4 +2740,3 @@ static s32 npc_anim_wait(EventEntry* event, BOOL isFirstCall) {
     return EVT_RETURN_BLOCK;
 }
 
-void __cvt_ull_flt();

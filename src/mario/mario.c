@@ -47,8 +47,8 @@ static void marioDispBlur(CameraId camId, void* param);
 static void marioMoveMain(void);
 static void marioCtrlOff2Main(void);
 
-// defined in mario_hit.c with no parameter, but called here with one
-void dou10_yoko_yari3(void* p);
+// Declared without a prototype: mario_hit.c defines it with no parameter, but the call passes one
+struct HitEntry* dou10_yoko_yari3();
 
 //.data
 #if VERSION >= VERSION_JP

@@ -142,6 +142,7 @@ typedef struct ItemWork {
 void itemInit(void);
 void itemReInit(void);
 void itemMain(void);
+ItemEntry* itemEntry(f32 x, f32 y, f32 z, const char* name, s32 itemId, u16 type, s32 collectFlag, EvtWord* evtCode);
 ItemEntry* itemNameToPtr(char* name);
 
 void itemNokoForceGet(ItemEntry* entry);

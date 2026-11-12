@@ -49,8 +49,6 @@ typedef enum SlitState {
 #define SLIT_FLAG_RESUME 0x10 // mot.slit.flags: resumeState holds the state motSlitContinue2 returns to
 #endif
 
-BOOL marioCreviceWallChk(const Vec* p);
-
 int __abs(int);
 
 // Descriptive name (not in the symbol maps); placeholder unk_800a4e40, JP 0x800A4E40. See docs/NAME_PROVENANCE.md.
@@ -201,15 +199,13 @@ static f32 _getWalkSpd(void) {
  */
 BOOL marioSlitContinueChk(void) {
     MarioWork* mario = marioGetPtr();
-    Vec pos;
     if (marioSlitButton()) {
         return TRUE;
     }
     if (marioSlitChkWallAround()) {
         return TRUE;
     }
-    pos = mario->position;
-    return marioCreviceWallChk(&pos) != 0;
+    return marioCreviceWallChk(mario->position) != 0;
 }
 #endif
 
@@ -218,7 +214,7 @@ BOOL marioSlitContinueChk(void) {
  * rays 20 units to both sides (each tried from the centre and from points 10 units ahead and behind) hit walls
  * whose two normal angles average to within 10 degrees of 180.
  */
-BOOL marioCreviceWallChk(const Vec* p) {
+BOOL marioCreviceWallChk(Vec p) {
     f32 offX;
     f32 offZ;
     f32 angA;
@@ -242,7 +238,7 @@ BOOL marioCreviceWallChk(const Vec* p) {
     angB = angA;
     sincosf(&s, &c, toMovedirSimple(180.0f));
     dist = 20.0f;
-    pos = *p;
+    pos = p;
     pos.y += 10.0f;
     {
         Vec t1 = {0, 0, 0};
@@ -257,9 +253,9 @@ BOOL marioCreviceWallChk(const Vec* p) {
     if (!hitA) {
         Vec t2 = {0, 0, 0};
         dist = 20.0f;
-        t2.x = p->x + offX;
-        t2.y = p->y + h;
-        t2.z = p->z + offZ;
+        t2.x = p.x + offX;
+        t2.y = p.y + h;
+        t2.z = p.z + offZ;
         pos = t2;
         hitA = marioHitCheckVec(&pos, &dir, &outPos, &outNrm, &dist);
         if (hitA) {
@@ -269,9 +265,9 @@ BOOL marioCreviceWallChk(const Vec* p) {
     if (!hitA) {
         Vec t3 = {0, 0, 0};
         dist = 20.0f;
-        t3.x = p->x - offX;
-        t3.y = p->y + h;
-        t3.z = p->z - offZ;
+        t3.x = p.x - offX;
+        t3.y = p.y + h;
+        t3.z = p.z - offZ;
         pos = t3;
         hitA = marioHitCheckVec(&pos, &dir, &outPos, &outNrm, &dist);
         if (hitA) {
@@ -280,7 +276,7 @@ BOOL marioCreviceWallChk(const Vec* p) {
     }
     sincosf(&s, &c, toMovedirSimple(0.0f));
     dist = 20.0f;
-    pos = *p;
+    pos = p;
     pos.y += 10.0f;
     {
         Vec u1 = {0, 0, 0};
@@ -295,9 +291,9 @@ BOOL marioCreviceWallChk(const Vec* p) {
     if (!hitB) {
         Vec u2 = {0, 0, 0};
         dist = 20.0f;
-        u2.x = p->x + offX;
-        u2.y = p->y + h;
-        u2.z = p->z + offZ;
+        u2.x = p.x + offX;
+        u2.y = p.y + h;
+        u2.z = p.z + offZ;
         pos = u2;
         hitB = marioHitCheckVec(&pos, &dir, &outPos, &outNrm, &dist);
         if (hitB) {
@@ -307,9 +303,9 @@ BOOL marioCreviceWallChk(const Vec* p) {
     if (!hitB) {
         Vec u3 = {0, 0, 0};
         dist = 20.0f;
-        u3.x = p->x - offX;
-        u3.y = p->y + h;
-        u3.z = p->z - offZ;
+        u3.x = p.x - offX;
+        u3.y = p.y + h;
+        u3.z = p.z - offZ;
         pos = u3;
         hitB = marioHitCheckVec(&pos, &dir, &outPos, &outNrm, &dist);
         if (hitB) {
@@ -681,7 +677,6 @@ void marioReInit_slit(void) {
  */
 static inline BOOL slitContinueChk(void) {
     MarioWork* mario = marioGetPtr();
-    Vec pos;
 #if VERSION <= VERSION_DEMO_JP
     if (marioSlitButton() == 2) {
 #else
@@ -692,8 +687,7 @@ static inline BOOL slitContinueChk(void) {
     if (marioSlitChkWallAround()) {
         return TRUE;
     }
-    pos = mario->position;
-    if (marioCreviceWallChk(&pos)) {
+    if (marioCreviceWallChk(mario->position)) {
         return TRUE;
     }
     return FALSE;

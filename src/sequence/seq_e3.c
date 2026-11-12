@@ -817,8 +817,7 @@ static void e3Disp(CameraId cameraId, void* param) {
 #endif
                 step = (i == wp->scenario) ? 0 : 10;
 
-                windowDispGX_Waku_col(0, (GXColor){ 0x4A, 0x56, 0xB5, 0xFF }, (((f32)step + e3_tbl[i].x) - 100.0f),
-                                      ((e3_tbl[i].y - (f32)step) - 60.0f), 200.0f, 40.0f, 20.0f);
+                windowDispGX_Waku_col((((f32)step + e3_tbl[i].x) - 100.0f), ((e3_tbl[i].y - (f32)step) - 60.0f), 200.0f, 40.0f, 20.0f, 0, (GXColor){ 0x4A, 0x56, 0xB5, 0xFF });
 
                 // Centered Label
                 FontDrawStart();

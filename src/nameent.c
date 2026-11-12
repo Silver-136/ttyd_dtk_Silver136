@@ -911,7 +911,7 @@ static void nameEntDisp(CameraId cameraId, void* param) {
     }
     str = msg_tbl[wp->type];
     w = FontGetMessageWidth(msgSearch(str));
-    windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, -250.0f, -160.0f, 500.0f, 40.0f, 20.0f);
+    windowDispGX_Waku_col(-250.0f, -160.0f, 500.0f, 40.0f, 20.0f, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
     FontDrawStart();
     FontDrawString((240.0f - w) / 2.0f + -120.0f, -168.0f, msgSearch(str));
     nameMaskGX(wp->maskAlpha);

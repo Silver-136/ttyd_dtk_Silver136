@@ -462,6 +462,8 @@ void mapSetMaterialTev(s32 texCount, s32 drawMode, s32 flags, Mtx mtx);
 
 MapObject* mapGetMapObj(const char* name);
 
+void mapSetBlend(GXColor color);
+void mapSetBlend2(GXColor color);
 void mapGetBlend(GXColor* color);
 void mapGetBlend2(GXColor* color);
 BOOL mapTestXLU(u32 flags, GXColor* color, GXColor* matColor);
@@ -512,6 +514,7 @@ void mapResetPaperAmbColor(void);
 void mapSetPlayRate(const char* name, f32 rate);
 void bmapLoad(const char *map, const char *map2);
 void mapObjGetPos(const char* name, Vec* pos);
+void mapObjSetColor(const char* name, GXColor color);
 void mapGrpSetColor(const char* name, GXColor color);
 void mapSetFog(s32 type, f32 start, f32 end, GXColor color);
 void mapGetFog(s32* type, f32* start, f32* end, GXColor* color);

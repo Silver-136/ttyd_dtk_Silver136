@@ -27,8 +27,8 @@
 #include "battle/battle_database_common.h"
 #include "battle/battle_damage.h"
 #include "battle/unit/unit_boss_gonbaba.h"
+#include "driver/lightdrv.h"
 
-u8* lightGetPaperCraft(void);
 
 static USER_FUNC(_leg_smoke_effect);
 static USER_FUNC(_btlgon_get_escape_param);
@@ -1129,12 +1129,12 @@ static EVT_BEGIN(negotiation_event)
 EVT_END()
 
 static USER_FUNC(_set_gonbaba_light) {
-    u8* light = lightGetPaperCraft();
+    LightEntry* light = lightGetPaperCraft();
     Mtx mtx;
 
-    *(Vec*)(light + 0x24) = (Vec){-200.0f, 50.0f, 500.0f};
+    light->position = (Vec){-200.0f, 50.0f, 500.0f};
     PSMTXScale(mtx, 3.0f, 3.0f, 3.0f);
-    PSMTXMultVec(mtx, (Vec*)(light + 0x24), (Vec*)(light + 0x24));
+    PSMTXMultVec(mtx, &light->position, &light->position);
     return EVT_RETURN_DONE;
 }
 

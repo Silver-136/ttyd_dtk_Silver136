@@ -1393,9 +1393,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
 #endif
                     {
                         entry->value = iconId;
-
-                        // FAKE: called through a u16-parameter cast (target passes clrlwi r5 with no extsh to the s16 parameter)
-                        ((void (*)(u16*, u16*, u16))iconGetWidthHight)(&iw, &ih, iconId);
+                        iconGetWidthHight(&iw, &ih, (u16)iconId);
                         entry->glyph = MSG_GLYPH_ICON;
                         entry->x = (x + ((0.5f * iw) * iconScale)) + iconOffX;
                         x += 0x28;
@@ -2520,7 +2518,7 @@ static void selectWindow_Disp(CameraId camId, void* param) {
     Vec pos;
 
     GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, (GXColor){0, 0, 0, 0});
-    windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, window->alpha}, window->x, window->y, window->width, window->height, 30.0f);
+    windowDispGX_Waku_col(window->x, window->y, window->width, window->height, 30.0f, 0, (GXColor){0xFF, 0xFF, 0xFF, window->alpha});
     msgDisp(window->userdata, window->alpha, 40.0f + window->x, window->y - 25.0f);
     pos.x = 2.0f + window->x;
     data->cursorY += 0.3f * (window->y - (f32)(data->sel * 31 + 58) - data->cursorY);

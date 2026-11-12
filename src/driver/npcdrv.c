@@ -10,6 +10,7 @@
 #include "mot/mot_jabara.h"
 #include "party/party_nokonoko.h"
 #include "party/party_vivian.h"
+#include "party/party_cloud.h"
 #include "evt/evt_mario.h"
 #include "data/npc_data.h"
 #include "libc_decls.h"
@@ -65,12 +66,6 @@ typedef struct NpcWork2 {
     NpcWork field;  // 0x0
     NpcWork battle; // 0x14
 } NpcWork2;
-
-// External APIs retained locally until their shared contracts are settled.
-f32 cloudGetBreathPower(Vec pos, f32 width);
-
-
-ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, EvtWord* evtCode, f32 x, f32 y, f32 z);
 
 //.data
 static char* luigi_pose[14][2] = { { "Z_1", "Z_1R" }, { "S_1", "S_1R" },   { "W_1", "W_1R" },   { "R_1", "R_1R" },
@@ -1796,14 +1791,12 @@ static void _fbatFirstAttackAnnouceDisp(CameraId camId, void* param) {
         }
     }
 
-    windowDispGX_Waku_col(0, firstStrike->color, scale * (shakeX - 10.0f - width / 2),
-                          shakeY * scale, (20 + width) * scale, height * scale, 1.0f);
+    windowDispGX_Waku_col(scale * (shakeX - 10.0f - width / 2), shakeY * scale, (20 + width) * scale, height * scale, 1.0f, 0, firstStrike->color);
 #else
     width = FontGetMessageWidth(message);
     shakeX = x + (f32)(irand(10000) % 5);
     shakeY = y + (f32)(irand(10000) % 5);
-    windowDispGX_Waku_col(0, firstStrike->color, scale * (shakeX - 10.0f - width / 2.0f),
-                          shakeY * scale, (20.0f + width) * scale, 3.2f, 1.0f);
+    windowDispGX_Waku_col(scale * (shakeX - 10.0f - width / 2.0f), shakeY * scale, (20.0f + width) * scale, 3.2f, 1.0f, 0, firstStrike->color);
 #endif
     FontDrawStart();
     FontDrawEdge();
@@ -2223,17 +2216,15 @@ static inline void fbatRecoverItems(NpcEntry* npc) {
     do {
         if (b->recoveredItems[i]) {
 #if VERSION <= VERSION_DEMO_JP
-            itemEntry(NULL, b->recoveredItems[i], ITEM_TYPE_SCATTER_NO_PICKUP_TIMED, -1, NULL, npc->position.x, npc->position.y, npc->position.z);
+            itemEntry(npc->position.x, npc->position.y, npc->position.z, NULL, b->recoveredItems[i], ITEM_TYPE_SCATTER_NO_PICKUP_TIMED, -1, NULL);
 #elif VERSION >= VERSION_US
-            ItemEntry* item = itemEntry(NULL, b->recoveredItems[i], ITEM_TYPE_DROP_LONG, -1, NULL, npc->position.x, npc->position.y,
-                                          npc->position.z);
+            ItemEntry* item = itemEntry(npc->position.x, npc->position.y, npc->position.z, NULL, b->recoveredItems[i], ITEM_TYPE_DROP_LONG, -1, NULL);
             if (item) {
                 itemFlagOn(item, ITEM_FLAG_LOST_BADGE_TO_SHOP);
             }
 #else
             // BUG: itemEntry returns NULL when no item slot is free, and itemFlagOn dereferences it; US and later check.
-            itemFlagOn(itemEntry(NULL, b->recoveredItems[i], ITEM_TYPE_DROP_LONG, -1, NULL, npc->position.x, npc->position.y,
-                                 npc->position.z),
+            itemFlagOn(itemEntry(npc->position.x, npc->position.y, npc->position.z, NULL, b->recoveredItems[i], ITEM_TYPE_DROP_LONG, -1, NULL),
                        ITEM_FLAG_LOST_BADGE_TO_SHOP);
 #endif
             b->recoveredItems[i] = z;
@@ -3651,17 +3642,15 @@ void npcGetBackItemEntry(NpcEntry* npc) {
     for (i = 0; i < 8; i++) {
         if (info->recoveredItems[i]) {
 #if VERSION <= VERSION_DEMO_JP
-            itemEntry(NULL, info->recoveredItems[i], ITEM_TYPE_SCATTER_NO_PICKUP_TIMED, -1, NULL, npc->position.x, npc->position.y, npc->position.z);
+            itemEntry(npc->position.x, npc->position.y, npc->position.z, NULL, info->recoveredItems[i], ITEM_TYPE_SCATTER_NO_PICKUP_TIMED, -1, NULL);
 #elif VERSION >= VERSION_US
-            ItemEntry* item = itemEntry(NULL, info->recoveredItems[i], ITEM_TYPE_DROP_LONG, -1, NULL, npc->position.x,
-                                          npc->position.y, npc->position.z);
+            ItemEntry* item = itemEntry(npc->position.x, npc->position.y, npc->position.z, NULL, info->recoveredItems[i], ITEM_TYPE_DROP_LONG, -1, NULL);
             if (item) {
                 itemFlagOn(item, ITEM_FLAG_LOST_BADGE_TO_SHOP);
             }
 #else
             // BUG: itemEntry returns NULL when no item slot is free, and itemFlagOn dereferences it; US and later check.
-            itemFlagOn(itemEntry(NULL, info->recoveredItems[i], ITEM_TYPE_DROP_LONG, -1, NULL, npc->position.x,
-                                 npc->position.y, npc->position.z),
+            itemFlagOn(itemEntry(npc->position.x, npc->position.y, npc->position.z, NULL, info->recoveredItems[i], ITEM_TYPE_DROP_LONG, -1, NULL),
                        ITEM_FLAG_LOST_BADGE_TO_SHOP);
 #endif
             info->recoveredItems[i] = 0;

@@ -24,5 +24,6 @@ void motSlitCancel3(void);
 void mot_slit(void);
 void mot_slit_post(void);
 BOOL marioSlitContinueChk(void);
+BOOL marioCreviceWallChk(Vec p);
 
 BOOL marioGetSlitFloorPos(Vec* pos);

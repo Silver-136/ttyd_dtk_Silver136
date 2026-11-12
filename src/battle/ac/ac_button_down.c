@@ -337,8 +337,8 @@ static void actionCommandDisp(s32 unused, f32 x, f32 y) {
         count = work->actionCommands.params[2];
     }
     for (i = 0, off = 0, j = 0; i < count; i++, off += 0x30, j += 4) {
-        s32 a;
-        s32 b;
+        u16 a;
+        u16 b;
         if (p->button[j >> 2] == 0U) {
             continue;
         }
@@ -391,12 +391,12 @@ static void actionCommandDisp(s32 unused, f32 x, f32 y) {
             Vec pos4 = {0.0f, 0.0f, 0.0f};
             pos4.x = bx + ((f32) off);
             pos4.y = by;
-            ((void (*)(Vec *, s32, s32, f32)) iconDispGx)(&pos4, size, a, 1.0f);
+            iconDispGx(&pos4, size, a, 1.0f);
         } else {
             Vec pos5 = {0.0f, 0.0f, 0.0f};
             pos5.x = bx + ((f32) off);
             pos5.y = by;
-            ((void (*)(Vec *, s32, s32, f32)) iconDispGx)(&pos5, size, b, 1.0f);
+            iconDispGx(&pos5, size, b, 1.0f);
         }
     }
 }

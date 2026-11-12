@@ -78,7 +78,6 @@ static void winFullDisp(WinMgrEntry* win);
 
 static HitEntry* itemHitCheckSide(ItemEntry* entry, f32* outX, f32 dx, f32* outZ, f32 dz, s32* angle);
 static void itemseq_GetItem(ItemEntry* entry);
-ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, EvtWord* evtCode, f32 x, f32 y, f32 z);
 
 //.bss
 static ItemWork work[2];
@@ -218,7 +217,7 @@ void itemCoinDrop(Vec* position) {
 
     if (pouchGetCoin() > 0) {
         pouchAddCoin(-1);
-        entry = itemEntry(NULL, ITEM_COIN, ITEM_TYPE_DROP, -1, NULL, position->x, position->y, position->z);
+        entry = itemEntry(position->x, position->y, position->z, NULL, ITEM_COIN, ITEM_TYPE_DROP, -1, NULL);
         if (entry) {
             entry->flags2 |= ITEM_FLAG2_SPREAD;
         }
@@ -683,11 +682,11 @@ static inline ItemEntry* itemFindDeletable(ItemWork* wp, s32 itemId) {
  * the first slot for a replaceable coin, flower or heart. Returns the entry or NULL.
  */
 #if VERSION <= VERSION_DEMO_JP
-ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, EvtWord* pickupEvt, f32 x, f32 y, f32 z) {
+ItemEntry* itemEntry(f32 x, f32 y, f32 z, const char* name, s32 itemId, u16 type, s32 collectFlag, EvtWord* pickupEvt) {
     char* nm;
 
 #else
-ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, EvtWord* evtCode, f32 x, f32 y, f32 z) {
+ItemEntry* itemEntry(f32 x, f32 y, f32 z, const char* name, s32 itemId, u16 type, s32 collectFlag, EvtWord* evtCode) {
 #endif
     ItemWork* wp = itemGetWork();
     int i;

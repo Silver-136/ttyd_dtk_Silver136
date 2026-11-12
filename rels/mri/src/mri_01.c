@@ -52,8 +52,6 @@
 #include "driver/seqdrv.h"
 #include "evt/evt_save_flags.h"
 
-void* puniGetPunigp(void);
-void puniswGetindex(s32 flag, s32 index, s32* a, s32* b);
 static u8* bp;
 
 static USER_FUNC(akari_charge_entry);
@@ -200,23 +198,19 @@ USER_FUNC(elder_talk_sub_punicheck) {
 #endif
 
     EvtWord* args = event->args;
-    s32* punigp = puniGetPunigp();
+    PuniWork* punigp = puniGetPunigp();
     s32 i;
     s32 traps = 0;
     s32 others = 0;
     s32 result;
-#if VERSION <= VERSION_DEMO_JP
     Vec pos;
-#else
-    s32 c[5];
-#endif
     s32 trap;
     s32 puni;
     for (i = 1; i < 103; i++) {
         puniGetPunidat();
 #if VERSION <= VERSION_DEMO_JP
-        puniswGetindex(LSW_MRI_PUNI_RECORDS, i - 1, &puni, (s32*)&pos);
-        if (puni != 0 && puni != punigp[0x328 / 4]) {
+        puniswGetindex(LSW_MRI_PUNI_RECORDS, i - 1, &puni, &pos);
+        if (puni != 0 && puni != punigp->floor) {
             others++;
         } else {
             puniswTrapGetindex(i, &trap);
@@ -228,11 +222,11 @@ USER_FUNC(elder_talk_sub_punicheck) {
         if (i == 1 && swGet(GSWF_ID(GSWF_MRI_PUNIO_WAITING_AT_JAIL))) {
             continue;
         }
-        puniswGetindex(LSW_MRI_PUNI_RECORDS, i - 1, &puni, c);
+        puniswGetindex(LSW_MRI_PUNI_RECORDS, i - 1, &puni, &pos);
         puniswTrapGetindex(i, &trap);
         if (trap != 0) {
             traps++;
-        } else if (puni != 0 && puni != punigp[0x328 / 4]) {
+        } else if (puni != 0 && puni != punigp->floor) {
             others++;
         }
 #endif

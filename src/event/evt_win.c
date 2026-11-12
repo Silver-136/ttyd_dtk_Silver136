@@ -1277,13 +1277,13 @@ static void evt_unitwin_disp_func(CameraId cameraId, void* param) {
         const char* name = itemDataTable[wp->goods[wp->goodsIdx]].id;
         const char* desc = itemDataTable[wp->goods[wp->goodsIdx]].description;
 
-        windowDispGX_Waku_col(0, (GXColor){0x2B, 0xA4, 0xFF, 0xFF}, -150.0f, 120.0f, 300.0f, 50.0f, 20.0f);
+        windowDispGX_Waku_col(-150.0f, 120.0f, 300.0f, 50.0f, 20.0f, 0, (GXColor){0x2B, 0xA4, 0xFF, 0xFF});
         FontDrawStart();
         FontDrawEdge();
         FontDrawColor((GXColor){0xFF, 0xFF, 0xFF, 0xFF});
         FontDrawString((s32)(strlen(name) * 24 / 4) * -1, 108.0f, name);
         FontDrawEdgeOff();
-        windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, -240.0f, -130.0f, 480.0f, 70.0f, 20.0f);
+        windowDispGX_Waku_col(-240.0f, -130.0f, 480.0f, 70.0f, 20.0f, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
         FontDrawStart();
         FontDrawMessage(-220, -138, msgSearch(desc));
 
@@ -1324,7 +1324,7 @@ static void evt_unitwin_disp_func(CameraId cameraId, void* param) {
         s32 coin;
         s32 delta;
 
-        windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, -250.0f, -75.0f, 150.0f, 45.0f, 20.0f);
+        windowDispGX_Waku_col(-250.0f, -75.0f, 150.0f, 45.0f, 20.0f, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
         PSMTXTrans(mtx, -220.0f, -113.0f, 0.0f);
         PSMTXScale(scale, 0.7f, 0.7f, 0.7f);
         PSMTXConcat(mtx, scale, mtx);
@@ -1376,7 +1376,7 @@ static void evt_unitwin_disp_func(CameraId cameraId, void* param) {
         Mtx scale;
         s32 delta;
 
-        windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, -250.0f, -130.0f, 150.0f, 45.0f, 20.0f);
+        windowDispGX_Waku_col(-250.0f, -130.0f, 150.0f, 45.0f, 20.0f, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
         PSMTXTrans(mtx, -210.0f, -166.0f, 0.0f);
         PSMTXScale(scale, 1.1f, 1.1f, 1.1f);
         PSMTXConcat(mtx, scale, mtx);
@@ -1398,7 +1398,7 @@ static void evt_unitwin_disp_func(CameraId cameraId, void* param) {
         Mtx mtx;
         char buf[32];
 
-        windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, -250.0f, -130.0f, 150.0f, 45.0f, 20.0f);
+        windowDispGX_Waku_col(-250.0f, -130.0f, 150.0f, 45.0f, 20.0f, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
         PSMTXTrans(mtx, -220.0f, -172.0f, 0.0f);
         iconDispGx2(mtx, ICON_FLAG_2D, ICON_ITEM_LOTTERY_PICK);
         sprintf(buf, "%04d", lotteryGetPtr()->number);
@@ -1421,8 +1421,8 @@ static void evt_unitwin_disp_func(CameraId cameraId, void* param) {
             desc = NULL;
 
             h = (8 - pouchGetKeepItemCnt() > 0 ? 8 - pouchGetKeepItemCnt() : 0) * 24;
-            windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, -24.0f, 100.0f, 300.0f, 220 - h, 20.0f);
-            windowDispGX_Waku_col(0, (GXColor){0x2B, 0xA4, 0xFF, 0xFF}, 51.0f, 114.0f, 150.0f, 28.0f, 8.0f);
+            windowDispGX_Waku_col(-24.0f, 100.0f, 300.0f, 220 - h, 20.0f, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+            windowDispGX_Waku_col(51.0f, 114.0f, 150.0f, 28.0f, 8.0f, 0, (GXColor){0x2B, 0xA4, 0xFF, 0xFF});
             FontDrawStart();
             FontDrawEdge();
             FontDrawColor((GXColor){0xFF, 0xFF, 0xFF, 0xFF});
@@ -1445,7 +1445,7 @@ static void evt_unitwin_disp_func(CameraId cameraId, void* param) {
             }
             GXSetScissor(sl, st, sw, sh);
             if (desc) {
-                windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, -240.0f, -130.0f, 480.0f, 70.0f, 20.0f);
+                windowDispGX_Waku_col(-240.0f, -130.0f, 480.0f, 70.0f, 20.0f, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
                 FontDrawStart();
                 FontDrawMessage(-220, -138, msgSearch(desc));
             }
@@ -1504,8 +1504,8 @@ static void evt_unitwin_disp_func(CameraId cameraId, void* param) {
                     title = msgSearch("msg_window_title_2");
                     titleX = 40;
                 }
-                windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, -24.0f, 100.0f, 300.0f, 220 - h, 20.0f);
-                windowDispGX_Waku_col(0, (GXColor){0x2B, 0xA4, 0xFF, 0xFF}, 51.0f, 114.0f, 150.0f, 28.0f, 8.0f);
+                windowDispGX_Waku_col(-24.0f, 100.0f, 300.0f, 220 - h, 20.0f, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+                windowDispGX_Waku_col(51.0f, 114.0f, 150.0f, 28.0f, 8.0f, 0, (GXColor){0x2B, 0xA4, 0xFF, 0xFF});
                 FontDrawStart();
                 FontDrawEdge();
                 FontDrawColor((GXColor){0xFF, 0xFF, 0xFF, 0xFF});
@@ -1637,7 +1637,7 @@ static void evt_unitwin_disp_func(CameraId cameraId, void* param) {
                 }
                 GXSetScissor(sl, st, sw, sh);
                 if (desc) {
-                    windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, -240.0f, -130.0f, 480.0f, 70.0f, 20.0f);
+                    windowDispGX_Waku_col(-240.0f, -130.0f, 480.0f, 70.0f, 20.0f, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
                     FontDrawStart();
                     FontDrawMessage(-220, -138, msgSearch(desc));
                 }
@@ -1662,8 +1662,8 @@ static void evt_unitwin_disp_func(CameraId cameraId, void* param) {
                     title = msgSearch("msg_window_title_6");
                     tbl = jdt->readFlags.luigiRead;
                 }
-                windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, -24.0f, 100.0f, 300.0f, 220 - h, 20.0f);
-                windowDispGX_Waku_col(0, (GXColor){0x2B, 0xA4, 0xFF, 0xFF}, 51.0f, 114.0f, 150.0f, 28.0f, 8.0f);
+                windowDispGX_Waku_col(-24.0f, 100.0f, 300.0f, 220 - h, 20.0f, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+                windowDispGX_Waku_col(51.0f, 114.0f, 150.0f, 28.0f, 8.0f, 0, (GXColor){0x2B, 0xA4, 0xFF, 0xFF});
                 FontDrawStart();
                 FontDrawEdge();
                 FontDrawColor((GXColor){0xFF, 0xFF, 0xFF, 0xFF});
@@ -1719,14 +1719,14 @@ static void evt_unitwin_disp_func(CameraId cameraId, void* param) {
 
                 h = 8 - wp->count;
                 h = (h > 0 ? h : 0) * 24;
-                windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, -24.0f, 100.0f, 300.0f, 220 - h, 20.0f);
-                windowDispGX_Waku_col(0, (GXColor){0x2B, 0xA4, 0xFF, 0xFF}, 16.0f, 114.0f, 120.0f, 28.0f, 8.0f);
+                windowDispGX_Waku_col(-24.0f, 100.0f, 300.0f, 220 - h, 20.0f, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+                windowDispGX_Waku_col(16.0f, 114.0f, 120.0f, 28.0f, 8.0f, 0, (GXColor){0x2B, 0xA4, 0xFF, 0xFF});
                 FontDrawStart();
                 FontDrawEdge();
                 FontDrawColor((GXColor){0xFF, 0xFF, 0xFF, 0xFF});
                 FontDrawString(41.0f, 111.0f, msgSearch("msg_window_title_7"));
                 FontDrawEdgeOff();
-                windowDispGX_Waku_col(0, (GXColor){0x2B, 0xA4, 0xFF, 0xFF}, 167.0f, 114.0f, 85.0f, 28.0f, 8.0f);
+                windowDispGX_Waku_col(167.0f, 114.0f, 85.0f, 28.0f, 8.0f, 0, (GXColor){0x2B, 0xA4, 0xFF, 0xFF});
                 FontDrawStart();
                 FontDrawEdge();
                 FontDrawColor((GXColor){0xFF, 0xFF, 0xFF, 0xFF});
@@ -1810,7 +1810,7 @@ static void evt_unitwin_disp_func(CameraId cameraId, void* param) {
 
                 // FAKE: first character read through an s8 cast; msgName[0] changes the object
                 if (*(s8*)msgName) {
-                    windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, -240.0f, -130.0f, 480.0f, 70.0f, 20.0f);
+                    windowDispGX_Waku_col(-240.0f, -130.0f, 480.0f, 70.0f, 20.0f, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
                     FontDrawStart();
                     FontDrawMessage(-220, -138, msgSearch(msgName));
                 }
@@ -1832,14 +1832,14 @@ static void evt_unitwin_disp_func(CameraId cameraId, void* param) {
 
                 h = 8 - wp->count;
                 h = (h > 0 ? h : 0) * 24;
-                windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, -24.0f, 100.0f, 300.0f, 220 - h, 20.0f);
-                windowDispGX_Waku_col(0, (GXColor){0x2B, 0xA4, 0xFF, 0xFF}, 16.0f, 114.0f, 120.0f, 28.0f, 8.0f);
+                windowDispGX_Waku_col(-24.0f, 100.0f, 300.0f, 220 - h, 20.0f, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+                windowDispGX_Waku_col(16.0f, 114.0f, 120.0f, 28.0f, 8.0f, 0, (GXColor){0x2B, 0xA4, 0xFF, 0xFF});
                 FontDrawStart();
                 FontDrawEdge();
                 FontDrawColor((GXColor){0xFF, 0xFF, 0xFF, 0xFF});
                 FontDrawString(21.0f, 111.0f, msgSearch("msg_window_title_9"));
                 FontDrawEdgeOff();
-                windowDispGX_Waku_col(0, (GXColor){0x2B, 0xA4, 0xFF, 0xFF}, 167.0f, 114.0f, 85.0f, 28.0f, 8.0f);
+                windowDispGX_Waku_col(167.0f, 114.0f, 85.0f, 28.0f, 8.0f, 0, (GXColor){0x2B, 0xA4, 0xFF, 0xFF});
                 FontDrawStart();
                 FontDrawEdge();
                 FontDrawColor((GXColor){0xFF, 0xFF, 0xFF, 0xFF});
@@ -1910,7 +1910,7 @@ static void evt_unitwin_disp_func(CameraId cameraId, void* param) {
 
                 // FAKE: first character read through an s8 cast; msgName[0] changes the object
                 if (*(s8*)msgName) {
-                    windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, -240.0f, -130.0f, 480.0f, 70.0f, 20.0f);
+                    windowDispGX_Waku_col(-240.0f, -130.0f, 480.0f, 70.0f, 20.0f, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
                     FontDrawStart();
                     FontDrawMessage(-220, -138, msgSearch(msgName));
                 }
@@ -1929,14 +1929,14 @@ static void evt_unitwin_disp_func(CameraId cameraId, void* param) {
 
                 h = 8 - wp->count;
                 h = (h > 0 ? h : 0) * 24;
-                windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, -24.0f, 100.0f, 300.0f, 220 - h, 20.0f);
-                windowDispGX_Waku_col(0, (GXColor){0x2B, 0xA4, 0xFF, 0xFF}, 16.0f, 114.0f, 120.0f, 28.0f, 8.0f);
+                windowDispGX_Waku_col(-24.0f, 100.0f, 300.0f, 220 - h, 20.0f, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+                windowDispGX_Waku_col(16.0f, 114.0f, 120.0f, 28.0f, 8.0f, 0, (GXColor){0x2B, 0xA4, 0xFF, 0xFF});
                 FontDrawStart();
                 FontDrawEdge();
                 FontDrawColor((GXColor){0xFF, 0xFF, 0xFF, 0xFF});
                 FontDrawString(21.0f, 111.0f, msgSearch("msg_window_title_9"));
                 FontDrawEdgeOff();
-                windowDispGX_Waku_col(0, (GXColor){0x2B, 0xA4, 0xFF, 0xFF}, 167.0f, 114.0f, 85.0f, 28.0f, 8.0f);
+                windowDispGX_Waku_col(167.0f, 114.0f, 85.0f, 28.0f, 8.0f, 0, (GXColor){0x2B, 0xA4, 0xFF, 0xFF});
                 FontDrawStart();
                 FontDrawEdge();
                 FontDrawColor((GXColor){0xFF, 0xFF, 0xFF, 0xFF});
@@ -1989,7 +1989,7 @@ static void evt_unitwin_disp_func(CameraId cameraId, void* param) {
 
                 // FAKE: first character read through an s8 cast; msgName[0] changes the object
                 if (*(s8*)msgName) {
-                    windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, -240.0f, -130.0f, 480.0f, 70.0f, 20.0f);
+                    windowDispGX_Waku_col(-240.0f, -130.0f, 480.0f, 70.0f, 20.0f, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
                     FontDrawStart();
                     FontDrawMessage(-220, -138, msgSearch(msgName));
                 }
@@ -2008,14 +2008,14 @@ static void evt_unitwin_disp_func(CameraId cameraId, void* param) {
 
                 h = 8 - wp->count;
                 h = (h > 0 ? h : 0) * 24;
-                windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, -24.0f, 100.0f, 300.0f, 220 - h, 20.0f);
-                windowDispGX_Waku_col(0, (GXColor){0x2B, 0xA4, 0xFF, 0xFF}, 16.0f, 114.0f, 120.0f, 28.0f, 8.0f);
+                windowDispGX_Waku_col(-24.0f, 100.0f, 300.0f, 220 - h, 20.0f, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+                windowDispGX_Waku_col(16.0f, 114.0f, 120.0f, 28.0f, 8.0f, 0, (GXColor){0x2B, 0xA4, 0xFF, 0xFF});
                 FontDrawStart();
                 FontDrawEdge();
                 FontDrawColor((GXColor){0xFF, 0xFF, 0xFF, 0xFF});
                 FontDrawString(21.0f, 111.0f, msgSearch("msg_window_title_9"));
                 FontDrawEdgeOff();
-                windowDispGX_Waku_col(0, (GXColor){0x2B, 0xA4, 0xFF, 0xFF}, 167.0f, 114.0f, 85.0f, 28.0f, 8.0f);
+                windowDispGX_Waku_col(167.0f, 114.0f, 85.0f, 28.0f, 8.0f, 0, (GXColor){0x2B, 0xA4, 0xFF, 0xFF});
                 FontDrawStart();
                 FontDrawEdge();
                 FontDrawColor((GXColor){0xFF, 0xFF, 0xFF, 0xFF});
@@ -2065,7 +2065,7 @@ static void evt_unitwin_disp_func(CameraId cameraId, void* param) {
 
                 // FAKE: first character read through an s8 cast; msgName[0] changes the object
                 if (*(s8*)msgName) {
-                    windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, -240.0f, -130.0f, 480.0f, 70.0f, 20.0f);
+                    windowDispGX_Waku_col(-240.0f, -130.0f, 480.0f, 70.0f, 20.0f, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
                     FontDrawStart();
                     FontDrawMessage(-220, -138, msgSearch(msgName));
                 }
@@ -2139,7 +2139,7 @@ static void evt_unitwin_disp_func(CameraId cameraId, void* param) {
                 break;
             }
         }
-        windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, -280.0f, 100.0f, 240.0f, (lines - 1) * 24 + 45, 20.0f);
+        windowDispGX_Waku_col(-280.0f, 100.0f, 240.0f, (lines - 1) * 24 + 45, 20.0f, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
         FontDrawStart();
         k = line1 ? FontGetMessageWidth(line1) : 0;
         if (line2) {

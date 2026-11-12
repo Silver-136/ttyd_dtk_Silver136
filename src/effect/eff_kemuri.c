@@ -119,9 +119,10 @@ EffectEntry* effKemuriEntry(s32 type, f32 x, f32 y, f32 z, f32 dir) {
 #pragma opt_propagation off
 /**
  * Spawns one smoke puff at (x, y, z) that drifts along (dx, dz) while rising and spinning.
- * Spawned by Mario and partner movement code (mario_kemuri.c).
+ * Spawned by Mario and partner movement code (mario_kemuri.c), which pass 0 for type; type is not read here
+ * (the parameter list of effKemuriEntry).
  */
-EffectEntry* effKemuri2Entry(f32 x, f32 y, f32 z, f32 dx, f32 dz) {
+EffectEntry* effKemuri2Entry(s32 type, f32 x, f32 y, f32 z, f32 dx, f32 dz) {
     EffectEntry* entry;
     effKemuri2Data* data;
     f32 rv, vy, speed, rot, zz;

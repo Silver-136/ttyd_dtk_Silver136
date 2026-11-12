@@ -890,7 +890,7 @@ void windowDispGX_Message(s32 type, s32 tailFlags, u8 alpha, f32 x, f32 y, f32 w
  * colour and corner radius (curve) at screen position (x, y), from nine pieces of the frame texture;
  * used by selection lists, menus and item windows.
  */
-void windowDispGX_Waku_col(u16 gxTexMapID, GXColor color, f32 x, f32 y, f32 width, f32 height, f32 curve) {
+void windowDispGX_Waku_col(f32 x, f32 y, f32 width, f32 height, f32 curve, u16 gxTexMapID, GXColor color) {
     CameraEntry* camera = camGetCurPtr();
     Mtx mtx;
     f32 twothirds, third;

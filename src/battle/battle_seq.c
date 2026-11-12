@@ -1848,7 +1848,7 @@ static void _rule_disp(CameraId cameraId, void* param) {
     {
         // white: the rule banner's window
         GXColor color = {0xFF, 0xFF, 0xFF, 0xFF};
-        windowDispGX_Waku_col(0, color, (x - (u16)width / 2) - 10.0f, 94.0f, width + 20, lines * 29 + 3, 10.0f);
+        windowDispGX_Waku_col((x - (u16)width / 2) - 10.0f, 94.0f, width + 20, lines * 29 + 3, 10.0f, 0, color);
     }
     FontDrawStart();
     FontDrawMessage(x - (u16)width / 2, (s32)y - 29, buf);

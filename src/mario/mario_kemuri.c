@@ -18,9 +18,7 @@
 #include "libc_decls.h"
 #include "mario/mario_kemuri.h"
 
-// Private prototype with a leading s32 type the definition (eff_kemuri.c, x, y, z, dx, dz) does not take: the calls
-// pass 0 for it (the li r3,0 is in the retail code), so the original called it this way.
-extern EffectEntry* effKemuri2Entry(s32 type, f32 x, f32 y, f32 z, f32 s, f32 c);
+extern EffectEntry* effKemuri2Entry(s32 type, f32 x, f32 y, f32 z, f32 dx, f32 dz);
 
 static void kemuri(void);
 static void kemuri_mugi(void);

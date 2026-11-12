@@ -22,9 +22,9 @@
 #include "party/party_hit.h"
 #include "eff/eff_kemutest.h"
 
-// Private prototype with a second mode argument: the calls pass 1 (the li r4,1 is in the retail code), so the
-// original called it this way; party_move.c defines partyWalkInit(party) alone.
-extern void partyWalkInit(PartyEntry* party, s32 mode);
+// Declared without a prototype: the call passes a second argument 1 (the li r4,1 is in the retail code) that
+// party_move.c's partyWalkInit(party) does not take.
+void partyWalkInit();
 
 static u32 nokoSe;
 #include "driver/hitdrv.h"

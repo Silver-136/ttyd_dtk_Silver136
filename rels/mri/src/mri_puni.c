@@ -8,6 +8,7 @@
 #include "eff/eff_puniballoon.h"
 #include "mri_puni.h"
 #include "party.h"
+#include "party/party_cloud.h"
 #include "mario/mario_party.h"
 #include "driver/camdrv.h"
 #include "memory.h"
@@ -5466,7 +5467,6 @@ static void puniSound(void) {
     Punigp->fightSfxCount2 = 0;
 }
 
-f32 cloudGetBreathPower(Vec pos, f32 r);
 extern double fabs(double);
 
 #if VERSION <= VERSION_DEMO_JP

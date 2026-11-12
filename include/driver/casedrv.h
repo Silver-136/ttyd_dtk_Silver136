@@ -40,11 +40,13 @@ typedef enum CaseEntryFlags {
     CASE_FLAG_SHOW_HINT = (1 << 2), // 0x4, enables the interaction-balloon checks
 } CaseEntryFlags;
 
+struct CaseEntry;
+
 typedef struct CaseSetup {
     u16 conditionId; // 0x0, trigger condition (CaseEntry.conditionId list); | CASE_SETUP_SHOW_HINT enables the interaction hint
     const char* hitObjName; // 0x4
     u32 swFlag; // 0x8
-    void* activeFunc; // 0xC
+    s32 (*activeFunc)(struct CaseEntry* entry); // 0xC, nonzero = the CASE_FUNC condition holds
     s32 lwData[16]; // 0x10
     u8 pad_50[0x54 - 0x50]; // 0x50, never accessed
     EvtWord* evtCode; // 0x54
@@ -57,7 +59,7 @@ typedef struct CaseEntry {
     char hitObjName[0x40]; // 0x8
     s32 caseId; // 0x48
     u32 swFlag; // 0x4C
-    void* activeFunc; // 0x50
+    s32 (*activeFunc)(struct CaseEntry* entry); // 0x50
     s32 lwData[16]; // 0x54
     s32 evtId; // 0x94
     EvtWord* evtCode; // 0x98

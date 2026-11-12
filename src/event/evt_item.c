@@ -9,7 +9,6 @@
 #include <dolphin/os.h>
 #include "poly_trig.h"
 
-ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, EvtWord* evtCode, f32 x, f32 y, f32 z);
 
 /**
  * Spawns a field item: args are name, item id, x, y, z (integers), ItemEntryType,
@@ -25,7 +24,7 @@ USER_FUNC(evt_item_entry) {
     s32 type = evtGetValue(event, args[5]);
     s32 collectFlag = args[6];
     EvtWord* evtCode = (EvtWord*)evtGetValue(event, args[7]);
-    itemEntry(name, itemId, type, collectFlag, evtCode, x, y, z);
+    itemEntry(x, y, z, name, itemId, type, collectFlag, evtCode);
     return EVT_RETURN_DONE;
 }
 
