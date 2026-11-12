@@ -818,6 +818,16 @@ static void effStarStoneDisp_1(CameraId cameraId, EffectEntry* effect) {
     }
 #endif
 
+static inline void drawSplitStoneLists(EffStarStoneWork* w, u8** lists, const u8* sizes) {
+    s32 i;
+
+    for (i = 0; i < 19U; i++) {
+        if ((w->flags & STAR_STONE_FLAG_FALLING) || i != 0) {
+            GXCallDisplayList(lists[i], sizes[i] << 5);
+        }
+    }
+}
+
 /** Draws the stones that split in two (types 1-5): an untextured shell for each half, then each half textured. */
 static void effStarStoneDisp_2(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
@@ -828,7 +838,6 @@ static void effStarStoneDisp_2(CameraId cameraId, void* param) {
     EffStarStoneWork* w = effect->userdata;
     CameraEntry* cam = camGetPtr(cameraId);
     s32 type = w->type;
-    int dlIdx[4]; // FAKE: four loop counters as one register-promoted array; one counter / four scalars differ
     mapSetMaterialFog();
     GXSetArray(GX_VA_CLR0, color_tbl[w->type], 4);
     GXSetNumChans(1);
@@ -873,11 +882,7 @@ static void effStarStoneDisp_2(CameraId cameraId, void* param) {
     GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 14);
     GXSetArray(GX_VA_TEX0, diamond_2_2_texcoord0_tbl, 4);
-    for (dlIdx[0] = 0; dlIdx[0] < 19U; dlIdx[0]++) {
-        if ((w->flags & STAR_STONE_FLAG_FALLING) || (dlIdx[0] != 0)) {
-            GXCallDisplayList(diamond_2_2_dl_0_tbl[dlIdx[0]], diamond_2_2_dl_0_size_tbl[dlIdx[0]] << 5);
-        }
-    }
+    drawSplitStoneLists(w, diamond_2_2_dl_0_tbl, diamond_2_2_dl_0_size_tbl);
 
     PSMTXTrans(m, w->position.x + w->half1OffsetX, w->position.y, w->position.z + w->half1OffsetZ);
     PSMTXScale(s, 1.1f * w->scale, 1.1f * w->scale, 1.1f * w->scale);
@@ -903,11 +908,7 @@ static void effStarStoneDisp_2(CameraId cameraId, void* param) {
     GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 14);
     GXSetArray(GX_VA_TEX0, diamond_2_2_texcoord0_tbl, 4);
-    for (dlIdx[1] = 0; dlIdx[1] < 19U; dlIdx[1]++) {
-        if ((w->flags & STAR_STONE_FLAG_FALLING) || (dlIdx[1] != 0)) {
-            GXCallDisplayList(diamond_2_2_dl_1_tbl[dlIdx[1]], diamond_2_2_dl_1_size_tbl[dlIdx[1]] << 5);
-        }
-    }
+    drawSplitStoneLists(w, diamond_2_2_dl_1_tbl, diamond_2_2_dl_1_size_tbl);
 
     GXSetNumChans(1);
     GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_VTX, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
@@ -961,11 +962,7 @@ static void effStarStoneDisp_2(CameraId cameraId, void* param) {
     GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 14);
     GXSetArray(GX_VA_TEX0, diamond_2_2_texcoord0_tbl, 4);
-    for (dlIdx[2] = 0; dlIdx[2] < 19U; dlIdx[2]++) {
-        if ((w->flags & STAR_STONE_FLAG_FALLING) || (dlIdx[2] != 0)) {
-            GXCallDisplayList(diamond_2_2_dl_0_tbl[dlIdx[2]], diamond_2_2_dl_0_size_tbl[dlIdx[2]] << 5);
-        }
-    }
+    drawSplitStoneLists(w, diamond_2_2_dl_0_tbl, diamond_2_2_dl_0_size_tbl);
 
     PSMTXTrans(m, w->position.x + w->half1OffsetX, w->position.y, w->position.z + w->half1OffsetZ);
     PSMTXScale(s, w->scale, w->scale, w->scale);
@@ -991,11 +988,7 @@ static void effStarStoneDisp_2(CameraId cameraId, void* param) {
     GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 14);
     GXSetArray(GX_VA_TEX0, diamond_2_2_texcoord0_tbl, 4);
-    for (dlIdx[3] = 0; dlIdx[3] < 19U; dlIdx[3]++) {
-        if ((w->flags & STAR_STONE_FLAG_FALLING) || (dlIdx[3] != 0)) {
-            GXCallDisplayList(diamond_2_2_dl_1_tbl[dlIdx[3]], diamond_2_2_dl_1_size_tbl[dlIdx[3]] << 5);
-        }
-    }
+    drawSplitStoneLists(w, diamond_2_2_dl_1_tbl, diamond_2_2_dl_1_size_tbl);
 }
 
 /** Draws the star with the right model: the round stone for types 0 and 6, the two-half stone otherwise. */

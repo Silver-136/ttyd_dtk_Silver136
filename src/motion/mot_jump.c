@@ -252,7 +252,6 @@ void mot_jumpSw(void) {
  */
 void mot_jumpNpc(void) {
     MarioWork* mario = marioGetPtr();
-    f32 s, c;
     MapObjectEntry* mobj;
     f32 dir;
     f32 x, z;
@@ -288,25 +287,25 @@ void mot_jumpNpc(void) {
                 {
                     Vec v;
                     Vec t = {0.0f, 0.0f, 0.0f};
-
-                    // FAKE: one Vec holds the front distance (x) and the sin/cos pair (z, y); an f32 out with the s, c locals (as in mot_jumpSw) changes the object
-                    Vec out;
+                    f32 directionX, directionZ;
+                    f32 frontDistance;
                     t.x = mobj->position.x;
                     t.y = 0.5f * mario->wPlayerCollisionBox.y + mobj->position.y;
                     t.z = mobj->position.z;
                     v = t;
-                    if (marioChkFront(&out.x, &v, mario->directionView, 5.0f * mario->wPlayerCollisionBox.x) != NULL && out.x >= 0.0f &&
-                        out.x <= 0.5f * mario->wPlayerCollisionBox.x + 30.0f) {
+                    if (marioChkFront(&frontDistance, &v, mario->directionView, 5.0f * mario->wPlayerCollisionBox.x) != NULL && frontDistance >= 0.0f &&
+                        frontDistance <= 0.5f * mario->wPlayerCollisionBox.x + 30.0f) {
                         mario->moveDirection = mario->directionView = revise360(180.0f + mario->directionView);
                     }
-                    sincosf(&out.z, &out.y, mario->directionView);
-                    x = 30.0f * out.z + mobj->position.x;
-                    z = 30.0f * out.y + mobj->position.z;
+                    sincosf(&directionX, &directionZ, mario->directionView);
+                    x = 30.0f * directionX + mobj->position.x;
+                    z = 30.0f * directionZ + mobj->position.z;
                     mario->multiTimer = 20;
                     mario->baseSpeed = distABf(mario->position.x, mario->position.z, x, z) / (f32)(s32)mario->multiTimer;
                 }
             }
         } else {
+            f32 s, c;
             // The revise360 result is discarded: unlike mot_jumpSw, the direction is not turned around.
             revise360(180.0f + mario->directionView);
             dir = mario->directionView;

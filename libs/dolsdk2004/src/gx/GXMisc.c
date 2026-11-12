@@ -372,25 +372,22 @@ u32 GXCompressZ16(u32 z24, GXZFmt16 zfmt) {
     u32 z24n;
     s32 exp;
     s32 shift;
-#if DEBUG
-#define temp exp
-#else
-    // FAKE: the release build keeps temp apart from exp (DEBUG aliases them)
-    s32 temp;
+    s32 leadingZeros;
+#if !DEBUG
     u8 unused[4]; // unused; the original had it too (its stack space is in the retail code)
 #endif
 
     z24n = ~(z24 << 8);
-    temp = __cntlzw(z24n);
+    leadingZeros = __cntlzw(z24n);
     switch (zfmt) {
     case GX_ZC_LINEAR:
         z16 = (z24 >> 8) & 0xFFFF;
         break;
     case GX_ZC_NEAR:
-        if (temp > 3) {
+        if (leadingZeros > 3) {
             exp = 3;
         } else {
-            exp = temp;
+            exp = leadingZeros;
         }
         if (exp == 3) {
             shift = 7;
@@ -400,10 +397,10 @@ u32 GXCompressZ16(u32 z24, GXZFmt16 zfmt) {
         z16 = ((z24 >> shift) & 0x3FFF & ~0xFFFFC000) | (exp << 14);
         break;
     case GX_ZC_MID:
-        if (temp > 7) {
+        if (leadingZeros > 7) {
             exp = 7;
         } else {
-            exp = temp;
+            exp = leadingZeros;
         }
         if (exp == 7) {
             shift = 4;
@@ -413,10 +410,10 @@ u32 GXCompressZ16(u32 z24, GXZFmt16 zfmt) {
         z16 = ((z24 >> shift) & 0x1FFF & ~0xFFFFE000) | (exp << 13);
         break;
     case GX_ZC_FAR:
-        if (temp > 12) {
+        if (leadingZeros > 12) {
             exp = 12;
         } else {
-            exp = temp;
+            exp = leadingZeros;
         }
         if (exp == 12) {
             shift = 0;

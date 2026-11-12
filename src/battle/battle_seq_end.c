@@ -1024,14 +1024,14 @@ static void _GetExpIcon_Init(BattleSeqEndWork* work) {
  * hides the rest and re-centres the large row as the count drops.
  */
 static void _GetExpIcon_Main(BattleWork* wp) {
-    s32 digits[2]; // FAKE: register-promoted array (tens, ones); two scalars differ
+    s32 visibleCount;
     BattleSeqEndWork* work = wp->seqEndWork;
     s32 exp = work->expDisp;
     s32 i;
     f32 ofs;
 
-    digits[1] = exp / 10;
-    for (i = 0; i < digits[1]; i++) {
+    visibleCount = exp / 10;
+    for (i = 0; i < visibleCount; i++) {
         iconFlagOff(work->icons[i]->name, ICON_FLAG_HIDDEN);
         if (work->alpha[i] <= 0) {
             work->alpha[i] = 0x40;
@@ -1051,8 +1051,8 @@ static void _GetExpIcon_Main(BattleWork* wp) {
         work->alpha[i] = 0;
         work->counter[i] = 0;
     }
-    digits[0] = exp % 10;
-    for (i = 10; i - 10 < digits[0]; i++) {
+    visibleCount = exp % 10;
+    for (i = 10; i - 10 < visibleCount; i++) {
         iconFlagOff(work->icons[i]->name, ICON_FLAG_HIDDEN);
         if (work->alpha[i] <= 0) {
             work->alpha[i] = 0x40;
