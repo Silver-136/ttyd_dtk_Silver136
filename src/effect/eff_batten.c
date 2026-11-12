@@ -233,7 +233,7 @@ static void effBattenDisp(CameraId cameraId, void* payload) {
     PSMTXConcat(scale, rot, view);
     PSMTXConcat(camera->view, view, view);
 
-    // FAKE: constant temporaries for the quad corners (w, half, neg, pos); literal corners change the object
+    // The quad corners come from variables: the retail code computes neg = -w * half at run time (fneg, fmuls)
     w = 32.0f;
     half = 0.5f;
     neg = -w * half;

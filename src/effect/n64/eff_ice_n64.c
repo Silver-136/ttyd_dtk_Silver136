@@ -129,7 +129,10 @@ static void effIceMain(EffectEntry* effect) {
         p = (EffIceN64Piece*)work;
         t = sin(6.2831855f * (2.0f * p->rotZ) / 360.0f);
         p->velY += -0.05f;
-        p->velX += (f32)(0.2f * t);
+        {
+            f32 drift = 0.2f * t;
+            p->velX += drift;
+        }
         p->velY += -0.05f;
         p->velX *= 0.92f;
         p->rotVel += (s32)effTblRandN64(50, idx) - 25;

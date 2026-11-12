@@ -1406,7 +1406,7 @@ static s32 mobj_lv_blk_evt(MapObjectEntry* mobj) {
             if (mobj->flags & MOBJ_FLAG_HIT) {
                 if (!strcmp(mobj->animName, "MOBJ_Lv1Block") || !strcmp(mobj->animName, "MOBJ_Lv1BigBlock")) {
                 } else if (!strcmp(mobj->animName, "MOBJ_Lv1BigBigBlock")) {
-                    if (pouchGetHammerLv() < 2 || (u16)mario->currMotionId != MARIO_MOTION_HAMMER_2) {
+                    if (pouchGetHammerLv() < 2 || mario->currMotionId != MARIO_MOTION_HAMMER_2) {
                         mobj->flags &= ~MOBJ_FLAG_HIT;
                         break;
                     }
@@ -1416,7 +1416,7 @@ static s32 mobj_lv_blk_evt(MapObjectEntry* mobj) {
                         break;
                     }
                 } else if (!strcmp(mobj->animName, "MOBJ_Lv2BigBigBlock")) {
-                    if (pouchGetHammerLv() < 3 || (u16)mario->currMotionId != MARIO_MOTION_HAMMER_2) {
+                    if (pouchGetHammerLv() < 3 || mario->currMotionId != MARIO_MOTION_HAMMER_2) {
                         mobj->flags &= ~MOBJ_FLAG_HIT;
                         break;
                     }
@@ -2959,7 +2959,7 @@ static s32 mobj_badgeblk(MapObjectEntry* mobj) {
                     mobj->flags &= ~MOBJ_FLAG_HIDDEN;
                 }
                 animPoseSetAnim(mobj->poseId, "A_1", 1);
-                if ((u32)mobj->event != 0) {
+                if ((s32*)mobj->event != NULL) {
                     mobjRunEvent(mobj, (s32*)mobj->event);
                 } else if (mobj->typeData[0] != ITEM_COIN) {
                     itemEntry(mobj->position.x, 40.0f + mobj->position.y, mobj->position.z, mobj->name, mobj->typeData[0], ITEM_TYPE_SCATTER_NO_PICKUP, mobj->flagVar, NULL);
@@ -3284,7 +3284,7 @@ static s32 mobj_10countblk(MapObjectEntry* mobj) {
                 animPoseSetAnim(mobj->poseId, "A_1", 1);
                 psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_TEN_COUNT_HIT1), &mobj->position);
                 evtSetValue(NULL, mobj->flagVar, 1);
-                if ((u32)mobj->event != 0) {
+                if ((s32*)mobj->event != NULL) {
                     mobjRunEvent(mobj, (s32*)mobj->event);
                 } else {
                     pouchAddCoin(1);
@@ -3487,7 +3487,7 @@ static s32 mobj_breaking_floor(MapObjectEntry* mobj) {
                 psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_BREAK_FLOOR1 | PSND_SFX_KEEP), &mobj->position);
 #endif
                 animPoseSetAnim(mobj->poseId, "A_1", 1);
-                if ((u32)mobj->event != 0U) {
+                if ((s32*)mobj->event != NULL) {
                     mobjRunEvent(mobj, (s32*)mobj->event);
                 }
                 if (mobj->hitObj[0].hitObject) {

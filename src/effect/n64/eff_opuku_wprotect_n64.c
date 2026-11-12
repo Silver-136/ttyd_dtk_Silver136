@@ -146,7 +146,7 @@ static void effOpukuWprotectMain(EffectEntry* effect) {
         }
     }
     u = (f32)sin(6.2831855f * (f32)(frame + frame * 6) / 360.0f);
-    work->colorG = (u8)(s32)(127.0f + 32.0f * u);
+    work->colorG = (u8)(127.0f + 32.0f * u);
     t = 0.01f * (f32)frame;
     a1 = 6.2831855f * t / 360.0f;
     s1 = (f32)sin(a1);

@@ -3797,7 +3797,7 @@ USER_FUNC(btlevtcmd_ConsumeItemReserve) {
                 if ((s32)wp->reserveItems[i] == item) {
                     break;
                 }
-                if ((s32)wp->reserveItems[i] == 0) {
+                if (wp->reserveItems[i] == 0) {
                     wp->reserveItems[i] = item;
                     break;
                 }

@@ -868,7 +868,7 @@ static void item_disp(WindowWork* w, f32 xo, f32 yo) {
         winIconInit();
         winIconSet(ICON_TRIGGER_R, (Vec){rightArrowX, 20.0f + (yo - 90.0f), 0.0f}, (Vec){0.6f, 0.6f, 0.6f}, white2);
     }
-    sortWidth = 0.7f * (f32)(u32)FontGetMessageWidth(msgSearch("msg_menu_sort_narabikae"));
+    sortWidth = 0.7f * (f32)FontGetMessageWidth(msgSearch("msg_menu_sort_narabikae"));
     winFontInit();
     sortX = xo + (220.0f - sortWidth);
     winFontSet((Vec){sortX, 20.0f + ((yo - 92.0f) - 10.0f), 0.0f}, (Vec){0.7f, 0.7f, 0.7f}, black, msgSearch("msg_menu_sort_narabikae"));

@@ -75,7 +75,7 @@ static s32 _GetInputDir(void) {
  * Which way the stick turned since last frame: +1 clockwise, -1 anticlockwise, 0 when centred, jumping or new;
  * an unchanged direction keeps the current roll.
  */
-static s32 _CalcRollDir(void) {
+static s8 _CalcRollDir(void) {
     StickRotateWork* w = (StickRotateWork*)_battleWorkPointer->actionCommands.work;
     s8 cur = w->dir;
     s8 prev = w->prevDir;
@@ -87,7 +87,7 @@ static s32 _CalcRollDir(void) {
         return 0;
     }
     if (cur == prev) {
-        return (u8)w->roll;
+        return w->roll;
     }
     if (cur == 1 && prev == 8) {
         return 1;
@@ -122,7 +122,7 @@ s32 battleAcMain_StickRotate(BattleWork* work) {
     BattleACDispParams* disp;
     BattleActions* ac = &work->actionCommands;
     BOOL restart;
-    s32 r;
+    s8 r;
     sw = (StickRotateWork*)ac->work;
     disp = &work->actionCommands.disp;
 
@@ -235,7 +235,7 @@ s32 battleAcMain_StickRotate(BattleWork* work) {
                     }
                 } else if (sw->prevDir != 0) {
                     r = _CalcRollDir();
-                    if ((s8)r != 0) {
+                    if (r != 0) {
                         if (sw->roll == 0) {
                             s8 t;
                             sw->roll = r;

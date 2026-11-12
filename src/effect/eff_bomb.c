@@ -189,7 +189,7 @@ static void effBombDisp(CameraId cameraId, void* payload) {
     PSMTXConcat(camera->view, base, base);
     GXSetCurrentMtx(GX_PNMTX0);
 
-    // FAKE: constant temporaries deg, half, one (and left = -one / 2.0f); literals change the object
+    // deg, half and one are variables: the retail code negates and divides them at run time
     deg = 0.017453292f;
     scale = 30.0f * scale;
     half = 0.5f;

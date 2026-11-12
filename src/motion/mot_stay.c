@@ -264,7 +264,7 @@ void mot_stay(void) {
             }
             mario->dispFlags |= MARIO_DISP_FLAG_NO_REAR_POSE;
             marioChgPose("M_S_3");
-        } else if ((s32)mario->currSubMotionId == 0 && mario->idleKeyTimer != 0) {
+        } else if (mario->currSubMotionId == 0 && mario->idleKeyTimer != 0) {
             mario->idleKeyTimer = 0;
             if (strcmp(mario->animName, "M_I_Y") != 0) {
                 marioChgPose("M_S_1");
@@ -337,7 +337,7 @@ void mot_stay(void) {
         }
     }
     if ((mario->flags & MARIO_FLAG_KEY_OFF) || (mario->dispFlags & MARIO_DISP_FLAG_PAPER)) {
-        if ((s32)mario->currSubMotionId > 0 && strcmp(mario->animName, "M_S_1") != 0 &&
+        if (mario->currSubMotionId > 0 && strcmp(mario->animName, "M_S_1") != 0 &&
             strcmp(mario->animName, "M_S_1R") != 0) {
             marioChgPose("M_S_1");
             mario->currSubMotionId = 0;
@@ -347,7 +347,7 @@ void mot_stay(void) {
     if (chkWeak()) {
         return;
     }
-    switch ((s32)mario->currSubMotionId) {
+    switch (mario->currSubMotionId) {
         case 0:
             if ((s32)++mario->multiTimer >= sysMsec2Frame(50000)) {
                 mario->currSubMotionId = 1;

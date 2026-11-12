@@ -209,7 +209,7 @@ static void effKemuri9Disp(CameraId cameraId, EffectEntry* effect) {
 #endif
     GXLoadTexObj(&texObj, GX_TEXMAP0);
 #if VERSION <= VERSION_DEMO_JP
-    if ((s32)type < 2) {
+    if (type < 2) {
         GXSetTevColor(GX_TEVREG0, (GXColor){0xE6, 0xDE, 0xDE, 0x82});
     } else {
         GXSetTevColor(GX_TEVREG0, (GXColor){0xFF, 0x28, 0x0A, 0xA0});
@@ -302,7 +302,7 @@ static void effKemuri9Disp(CameraId cameraId, EffectEntry* effect) {
         GXLoadPosMtxImm(mtx, GX_PNMTX0);
         GXSetCurrentMtx(GX_PNMTX0);
 #if VERSION <= VERSION_DEMO_JP
-        effSetVtxDescN64((s32)type == 1 ? size16x16_tex32x32_vtx : size32x32_tex32x32_vtx);
+        effSetVtxDescN64(type == 1 ? size16x16_tex32x32_vtx : size32x32_tex32x32_vtx);
         GXBegin(GX_TRIANGLES, GX_VTXFMT0, 6);
         tri2(0, 1, 2, 0, 0, 2, 3, 0);
 #else

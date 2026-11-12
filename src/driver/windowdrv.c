@@ -469,21 +469,51 @@ void windowDispGX_Kanban(s32 type, u8 alpha, f32 x, f32 y, f32 width, f32 height
 }
 
 /**
+ * One piece of the system window frame: the quad from (x, y) to (x + w, y - h) with texture 5 scrolled by scroll
+ * on GX_TEXMAP0 and the textures map1Tex / map2Tex on GX_TEXMAP1 / GX_TEXMAP2.
+ */
+// Original name and size (0x364) from the JP demo map (UNUSED there: every call is inlined).
+void parts2(f32 x, f32 y, f32 w, f32 h, f32 scroll, s32 map1Tex, s32 map2Tex) {
+    Mtx scale, trans;
+
+    GXLoadTexObj(&wakuTexObj[5], GX_TEXMAP0);
+    GXLoadTexObj(&wakuTexObj[map1Tex], GX_TEXMAP1);
+    GXLoadTexObj(&wakuTexObj[map2Tex], GX_TEXMAP2);
+
+    GXSetNumTexGens(2);
+    GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0);
+    MTXTrans(trans, scroll + (x / (f32)GXGetTexObjWidth(&wakuTexObj[5])),
+        (-y / (f32)GXGetTexObjHeight(&wakuTexObj[5])) - scroll, 0.0f);
+    MTXScale(scale, __fabsf(w) / (f32)GXGetTexObjWidth(&wakuTexObj[5]),
+        __fabsf(h) / (f32)GXGetTexObjHeight(&wakuTexObj[5]), 1.0f);
+    MTXConcat(trans, scale, trans);
+    GXLoadTexMtxImm(trans, GX_TEXMTX0, GX_MTX2x4);
+    GXSetTexCoordGen(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX1);
+    MTXScale(scale, __fabsf(w) / (f32)GXGetTexObjWidth(&wakuTexObj[map1Tex]),
+        __fabsf(h) / (f32)GXGetTexObjHeight(&wakuTexObj[map1Tex]), 1.0f);
+    GXLoadTexMtxImm(scale, GX_TEXMTX1, GX_MTX2x4);
+    GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+
+    GXPosition3f32(x, y, 0.0f);
+    GXTexCoord2f32(0.0f, 0.0f);
+
+    GXPosition3f32(x + w, y, 0.0f);
+    GXTexCoord2f32(1.0f, 0.0f);
+
+    GXPosition3f32(x + w, y - h, 0.0f);
+    GXTexCoord2f32(1.0f, 1.0f);
+
+    GXPosition3f32(x, y - h, 0.0f);
+    GXTexCoord2f32(0.0f, 1.0f);
+}
+
+/**
  * Draws the frame of a system window at (x, y) with the given size and alpha,
  * with its slowly scrolling background pattern (type is not used; the Glitz Pit rooms pass 0).
  */
 void windowDispGX_System(s32 type, u8 alpha, f32 x, f32 y, f32 width, f32 height) {
     CameraEntry* camera;
-    f32 x5, scroll;
-
     Mtx mtx;
-    Mtx trans, scale;
-    f32 x2, y2;
-    Mtx trans2, scale2;
-    f32 y3, y4;
-    Mtx trans3, scale3;
-    f32 x3, x4;
-    Mtx trans4, scale4;
     static f32 scrl;
 
     camera = camGetCurPtr();
@@ -550,148 +580,10 @@ void windowDispGX_System(s32 type, u8 alpha, f32 x, f32 y, f32 width, f32 height
     GXLoadPosMtxImm(mtx, GX_PNMTX0);
     GXSetCurrentMtx(GX_PNMTX0);
 
-    // top left of the frame
-    scroll = scrl;
-    GXLoadTexObj(&wakuTexObj[5], GX_TEXMAP0);
-    GXLoadTexObj(&wakuTexObj[42], GX_TEXMAP1);
-    GXLoadTexObj(&wakuTexObj[46], GX_TEXMAP2);
-
-    GXSetNumTexGens(2);
-    GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0);
-    MTXTrans(trans, scroll + (0.0f / (f32)GXGetTexObjWidth(&wakuTexObj[5])),
-        (-0.0f / (f32)GXGetTexObjHeight(&wakuTexObj[5])) - scroll, 0.0f);
-    MTXScale(scale, __fabsf(width - 32.0f) / (f32)GXGetTexObjWidth(&wakuTexObj[5]),
-        __fabsf(height - 32.0f) / (f32)GXGetTexObjHeight(&wakuTexObj[5]), 1.0f);
-    MTXConcat(trans, scale, trans);
-    GXLoadTexMtxImm(trans, GX_TEXMTX0, GX_MTX2x4);
-    GXSetTexCoordGen(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX1);
-    MTXScale(scale, __fabsf(width - 32.0f) / (f32)GXGetTexObjWidth(&wakuTexObj[42]),
-        __fabsf(height - 32.0f) / (f32)GXGetTexObjHeight(&wakuTexObj[42]), 1.0f);
-    GXLoadTexMtxImm(scale, GX_TEXMTX1, GX_MTX2x4);
-    GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-
-    GXPosition3f32(0.0f, 0.0f, 0.0f);
-    x5 = 0.0f;
-    x2 = x5 + (width - 32.0f);
-    y2 = x5 - (height - 32.0f);
-    GXTexCoord2f32(0.0f, 0.0f);
-
-    GXPosition3f32(x2, 0.0f, 0.0f);
-    GXTexCoord2f32(1.0f, 0.0f);
-
-    GXPosition3f32(x2, y2, 0.0f);
-    GXTexCoord2f32(1.0f, 1.0f);
-
-    GXPosition3f32(0.0f, y2, 0.0f);
-    GXTexCoord2f32(0.0f, 1.0f);
-
-    // bottom left of the frame
-    scroll = scrl;
-    GXLoadTexObj(&wakuTexObj[5], GX_TEXMAP0);
-    GXLoadTexObj(&wakuTexObj[43], GX_TEXMAP1);
-    GXLoadTexObj(&wakuTexObj[47], GX_TEXMAP2);
-
-    GXSetNumTexGens(2);
-    GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0);
-    MTXTrans(trans2, scroll + (0.0f / (f32)GXGetTexObjWidth(&wakuTexObj[5])),
-        ((height - 32.0f) / (f32)GXGetTexObjHeight(&wakuTexObj[5])) - scroll, 0.0f);
-    MTXScale(scale2, __fabsf(width - 32.0f) / (f32)GXGetTexObjWidth(&wakuTexObj[5]),
-        __fabsf(32.0f) / (f32)GXGetTexObjHeight(&wakuTexObj[5]), 1.0f);
-    MTXConcat(trans2, scale2, trans2);
-    GXLoadTexMtxImm(trans2, GX_TEXMTX0, GX_MTX2x4);
-    GXSetTexCoordGen(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX1);
-    MTXScale(scale2, __fabsf(width - 32.0f) / (f32)GXGetTexObjWidth(&wakuTexObj[43]),
-        __fabsf(32.0f) / (f32)GXGetTexObjHeight(&wakuTexObj[43]), 1.0f);
-    GXLoadTexMtxImm(scale2, GX_TEXMTX1, GX_MTX2x4);
-    GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-
-    // FAKE: GXPosition3f32(0.0f, y3, 0.0f) written out as FIFO stores with y3/y4 computed between them; the plain call changes the object
-    GXWGFifo.f32 = 0.0f;
-    y3 = -(height - 32.0f);
-    y4 = y3 - 32.0f;
-    GXWGFifo.f32 = y3;
-    GXWGFifo.f32 = 0.0f;
-    GXTexCoord2f32(0.0f, 0.0f);
-
-    GXPosition3f32(x2, y3, 0.0f);
-    GXTexCoord2f32(1.0f, 0.0f);
-
-    GXPosition3f32(x2, y4, 0.0f);
-    GXTexCoord2f32(1.0f, 1.0f);
-
-    GXPosition3f32(0.0f, y4, 0.0f);
-    GXTexCoord2f32(0.0f, 1.0f);
-
-    // top right of the frame
-    scroll = scrl;
-    GXLoadTexObj(&wakuTexObj[5], GX_TEXMAP0);
-    GXLoadTexObj(&wakuTexObj[44], GX_TEXMAP1);
-    GXLoadTexObj(&wakuTexObj[48], GX_TEXMAP2);
-
-    GXSetNumTexGens(2);
-    GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0);
-    MTXTrans(trans3, scroll + ((width - 32.0f) / (f32)GXGetTexObjWidth(&wakuTexObj[5])),
-        (-0.0f / (f32)GXGetTexObjHeight(&wakuTexObj[5])) - scroll, 0.0f);
-    MTXScale(scale3, __fabsf(32.0f) / (f32)GXGetTexObjWidth(&wakuTexObj[5]),
-        __fabsf(height - 32.0f) / (f32)GXGetTexObjHeight(&wakuTexObj[5]), 1.0f);
-    MTXConcat(trans3, scale3, trans3);
-    GXLoadTexMtxImm(trans3, GX_TEXMTX0, GX_MTX2x4);
-    GXSetTexCoordGen(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX1);
-    MTXScale(scale3, __fabsf(32.0f) / (f32)GXGetTexObjWidth(&wakuTexObj[44]),
-        __fabsf(height - 32.0f) / (f32)GXGetTexObjHeight(&wakuTexObj[44]), 1.0f);
-    GXLoadTexMtxImm(scale3, GX_TEXMTX1, GX_MTX2x4);
-    GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-
-    // FAKE: x4 first holds the constant 32.0f; `x3 = width - 32.0f; x4 = x3 + 32.0f;` changes the object
-    x4 = 32.0f;
-    x3 = width - x4;
-    x4 = x3 + x4;
-
-    GXPosition3f32(x3, 0.0f, 0.0f);
-    GXTexCoord2f32(0.0f, 0.0f);
-
-    GXPosition3f32(x4, 0.0f, 0.0f);
-    GXTexCoord2f32(1.0f, 0.0f);
-
-    GXPosition3f32(x4, y2, 0.0f);
-    GXTexCoord2f32(1.0f, 1.0f);
-
-    GXPosition3f32(x3, y2, 0.0f);
-    GXTexCoord2f32(0.0f, 1.0f);
-
-    // bottom right of the frame
-    scroll = scrl;
-    GXLoadTexObj(&wakuTexObj[5], GX_TEXMAP0);
-    GXLoadTexObj(&wakuTexObj[45], GX_TEXMAP1);
-    GXLoadTexObj(&wakuTexObj[49], GX_TEXMAP2);
-
-    GXSetNumTexGens(2);
-    GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0);
-    MTXTrans(trans4, scroll + ((width - 32.0f) / (f32)GXGetTexObjWidth(&wakuTexObj[5])),
-        ((height - 32.0f) / (f32)GXGetTexObjHeight(&wakuTexObj[5])) - scroll, 0.0f);
-    MTXScale(scale4, __fabsf(32.0f) / (f32)GXGetTexObjWidth(&wakuTexObj[5]),
-        __fabsf(32.0f) / (f32)GXGetTexObjHeight(&wakuTexObj[5]), 1.0f);
-    MTXConcat(trans4, scale4, trans4);
-    GXLoadTexMtxImm(trans4, GX_TEXMTX0, GX_MTX2x4);
-    GXSetTexCoordGen(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX1);
-    MTXScale(scale4, __fabsf(32.0f) / (f32)GXGetTexObjWidth(&wakuTexObj[45]),
-        __fabsf(32.0f) / (f32)GXGetTexObjHeight(&wakuTexObj[45]), 1.0f);
-    GXLoadTexMtxImm(scale4, GX_TEXMTX1, GX_MTX2x4);
-    GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-
-    x5 = width - 32.0f;
-
-    GXPosition3f32(x5, y3, 0.0f);
-    GXTexCoord2f32(0.0f, 0.0f);
-
-    GXPosition3f32(x4, y3, 0.0f);
-    GXTexCoord2f32(1.0f, 0.0f);
-
-    GXPosition3f32(x4, y4, 0.0f);
-    GXTexCoord2f32(1.0f, 1.0f);
-
-    GXPosition3f32(x5, y4, 0.0f);
-    GXTexCoord2f32(0.0f, 1.0f);
+    parts2(0.0f, 0.0f, width - 32.0f, height - 32.0f, scrl, 42, 46);  // top left of the frame
+    parts2(0.0f, -(height - 32.0f), width - 32.0f, 32.0f, scrl, 43, 47);  // bottom left
+    parts2(width - 32.0f, 0.0f, 32.0f, height - 32.0f, scrl, 44, 48);  // top right
+    parts2(width - 32.0f, -(height - 32.0f), 32.0f, 32.0f, scrl, 45, 49);  // bottom right
 }
 
 /**

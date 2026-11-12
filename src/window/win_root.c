@@ -32,9 +32,13 @@ typedef struct WinSortData {
     void (*func)(WindowWork* wp);
 } WinSortData;
 
-// FAKE: private s32/WindowWork* view of winLogDisp (win_log.c: CameraId, void*); the definition's prototype changes
-// the object (register allocation in winRootDisp), with or without winRootDisp's camId as CameraId.
-void winLogDisp(s32 camId, WindowWork* wp, s32 n);
+void winLogDisp();
+/** The envelope textures of the mail list (winMailDisp), by pouchCheckMail state. */
+typedef enum WinMailTex {
+    WIN_TEX_MAIL_UNREAD = 0x5D,
+    WIN_TEX_MAIL_READ = 0x5E,
+} WinMailTex;
+
 static void winMailDisp(WindowWork* wp);
 static void winMsgDisp(WindowWork* wp, f32 x, f32 y);
 static void winSortGX(WindowWork* wp);
@@ -1892,14 +1896,12 @@ static void sort_4_3_func(WindowWork* wp) {
         for (i = 0; i < wp->badge.count - 1; i++) {
             for (j = i + 1; j < wp->badge.count; j++) {
                 da = &itemDataTable[(s16)wp->badge.list[i].id];
-                db = &itemDataTable[(s16)wp->badge.list[j].id];
                 swap = FALSE;
 
-                // FAKE: re-indexes itemDataTable instead of using db (same pointer); db->... changes the object
-                if (da->bp_cost < (&itemDataTable[(s16)wp->badge.list[j].id])->bp_cost) {
+                if (da->bp_cost < itemDataTable[(s16)wp->badge.list[j].id].bp_cost) {
                     swap = TRUE;
-                } else if (da->bp_cost == (&itemDataTable[(s16)wp->badge.list[j].id])->bp_cost) {
-                    if (da->type_sort_order < (&itemDataTable[(s16)wp->badge.list[j].id])->type_sort_order) {
+                } else if (da->bp_cost == itemDataTable[(s16)wp->badge.list[j].id].bp_cost) {
+                    if (da->type_sort_order < itemDataTable[(s16)wp->badge.list[j].id].type_sort_order) {
                         swap = TRUE;
                     }
                 }
@@ -2830,9 +2832,7 @@ static void winMailDisp(WindowWork* wp) {
                     winTexInit((TEXPalette*)*wp->res->data);
                     winTexSet(0x77, (Vec){ 4.0f + (208.0f + wp->item.mailX), wp->item.mailScroll + ((wp->item.mailY - 56.0f) - (f32)(i * 40)), 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f }, col);
                     white = (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF };
-
-                    // FAKE: the texture id goes through void* casts; pouchCheckMail(id) == 2 ? 0x5E : 0x5D changes the object
-                    winTexSet((u32)(pouchCheckMail(id) == 2 ? (void*)0x5E : (void*)0x5D), (Vec){ 72.0f + wp->item.mailX, wp->item.mailScroll + (((wp->item.mailY - 56.0f) - (f32)(i * 40)) - 3.0f), 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f }, white);
+                    winTexSet(pouchCheckMail(id) == 2 ? WIN_TEX_MAIL_READ : WIN_TEX_MAIL_UNREAD, (Vec){ 72.0f + wp->item.mailX, wp->item.mailScroll + (((wp->item.mailY - 56.0f) - (f32)(i * 40)) - 3.0f), 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f }, white);
                     winTexSet(0x65 + (kind + 1) / 10, (Vec){ 2.0f + (88.0f + wp->item.mailX), wp->item.mailScroll + (((wp->item.mailY - 56.0f) - (f32)(i * 40)) - 3.0f), 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f }, white);
                     winTexSet(0x65 + (kind + 1) % 10, (Vec){ 2.0f + (104.0f + wp->item.mailX), wp->item.mailScroll + (((wp->item.mailY - 56.0f) - (f32)(i * 40)) - 3.0f), 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f }, white);
                     winFontInit();

@@ -178,7 +178,7 @@ s32 marioGetPlaneStatus(void) {
 #if VERSION <= VERSION_DEMO_JP
 void mario_plane_cancel(void) {
     MarioWork* mario = marioGetPtr();
-    if ((u16)mario->currMotionId == MARIO_MOTION_PLANE && (s32)mario->currSubMotionId >= 12 && (s32)mario->currSubMotionId < 20) {
+    if (mario->currMotionId == MARIO_MOTION_PLANE && mario->currSubMotionId >= 12 && mario->currSubMotionId < 20) {
         mario->currSubMotionId = 50;
         mario->mot.plane.groundY = mario->position.y;
     }
@@ -379,13 +379,13 @@ void mot_plane(void) {
     if (marioKeyOffChk() && !(mp->trigFlags & MARIO_TRIG_FLAG_SHIP_PLANE_EVT_ON)) {
 #if VERSION <= VERSION_DEMO_JP
         MarioWork* m = marioGetPtr();
-        if ((u16)m->currMotionId == MARIO_MOTION_PLANE && (s32)m->currSubMotionId >= 12 && (s32)m->currSubMotionId < 20) {
+        if (m->currMotionId == MARIO_MOTION_PLANE && m->currSubMotionId >= 12 && m->currSubMotionId < 20) {
             m->currSubMotionId = 50;
             m->mot.plane.groundY = m->position.y;
         }
         return;
     }
-    if ((s32)mp->currSubMotionId == 20 || (s32)mp->currSubMotionId == 30) {
+    if (mp->currSubMotionId == 20 || mp->currSubMotionId == 30) {
 #else
         if (planeCancel()) {
             return;

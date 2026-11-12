@@ -1307,6 +1307,13 @@ const char* winGetMapTplName(void) {
     return "map7.tpl";
 }
 
+/** Textures of the route dots in the window texture set (mapGX). */
+typedef enum WinMapDotTex {
+    WIN_TEX_MAP_DOT = 0xB8,       // a place passed so far
+    WIN_TEX_MAP_DOT_BLINK = 0xB9, // the hovered place, every other 16 frames
+    WIN_TEX_MAP_DOT_BIG = 0xBA,   // a big place, and the hovered place
+} WinMapDotTex;
+
 /** Local fabs on the __fabs intrinsic, used for the map arrows' bobbing offset. */
 static inline double fabs(double x) { return __fabs(x); }
 
@@ -1322,7 +1329,6 @@ static void mapGX(WindowWork* w, f32 x, f32 y) {
     };
 
     GXColor white = (GXColor){0xFF, 0xFF, 0xFF, 0xFF};
-    s32 tex;
     Mtx m;
     f32 top;
     f32 mx;
@@ -1356,10 +1362,9 @@ static void mapGX(WindowWork* w, f32 x, f32 y) {
             if (swByteGet(GSW_ID(GSW_STORY_PROGRESS)) >= t->progress || tubuCheck(t->type)) {
 #endif
                 if (w->log.mapSel == i) {
-                    // FAKE: the texture id goes through a spare temporary tex in a comma expression; ((gp->retraceCount >> 4) & 1) ? 0xB9 : 0xBA changes the object
-                    winTexSet((tex = 0xBA, ((gp->retraceCount >> 4) & 1) ? tex = 0xB9 : 0, tex), (Vec){mx + t->x, my + t->y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);
+                    winTexSet(((gp->retraceCount >> 4) & 1) ? WIN_TEX_MAP_DOT_BLINK : WIN_TEX_MAP_DOT_BIG, (Vec){mx + t->x, my + t->y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);
                 } else {
-                    winTexSet(t->big ? 0xBA : 0xB8, (Vec){mx + t->x, my + t->y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);
+                    winTexSet(t->big ? WIN_TEX_MAP_DOT_BIG : WIN_TEX_MAP_DOT, (Vec){mx + t->x, my + t->y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);
                 }
             }
         }

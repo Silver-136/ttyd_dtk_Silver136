@@ -145,7 +145,7 @@ USER_FUNC(search_result) {
     PartyEntry* party = partyGetPtr(marioGetPartyId());
 
     if (isFirstCall) {
-        if ((u32)event->lwData[0] == 0 || event->lwData[1] == 0) {
+        if ((const char*)event->lwData[0] == NULL || event->lwData[1] == 0) {
             return EVT_RETURN_DONE;
         }
 #if VERSION <= VERSION_DEMO_JP

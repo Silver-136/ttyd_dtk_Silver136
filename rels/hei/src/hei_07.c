@@ -909,10 +909,10 @@ static USER_FUNC(mario_set_dir) {
             event->userdataf[2] -= 360.0f;
         }
     }
-    if ((s32)event->userdata3 > 0) {
+    if (event->userdata3 > 0) {
         mario->multiTimer++;
-        mario->moveDirection = reviseAngle(event->userdataf[1] + event->userdataf[2] * (s32)mario->multiTimer / (s32)event->userdata3);
-        return (s32)mario->multiTimer >= (s32)event->userdata3;
+        mario->moveDirection = reviseAngle(event->userdataf[1] + event->userdataf[2] * mario->multiTimer / event->userdata3);
+        return mario->multiTimer >= event->userdata3;
     }
     mario->moveDirection = reviseAngle(mario->moveDirection + event->userdataf[2]);
     return EVT_RETURN_DONE;

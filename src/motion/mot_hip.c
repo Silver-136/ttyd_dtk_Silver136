@@ -96,10 +96,10 @@ static inline void hip_snd_reset(MarioWork* mario) {
 static inline void hip_snd_on(MarioWork* mario) {
 #if VERSION >= VERSION_US
     mario = marioGetPtr();
-    if ((u32)HIP_SFX_DROP == 0xFFFFFFFFU) {
+    if (HIP_SFX_DROP == 0xFFFFFFFF) {
         HIP_SFX_DROP = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_HIP_DROP1), &mario->position);
     }
-    if ((u32)HIP_SFX_VOICE == 0xFFFFFFFFU) {
+    if (HIP_SFX_VOICE == 0xFFFFFFFF) {
         HIP_SFX_VOICE = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_VOICE_MARIO_POWER1), &mario->position);
     }
 #else
@@ -112,11 +112,11 @@ static inline void hip_snd_off(MarioWork* mario) {
 #if VERSION >= VERSION_US
     mario = marioGetPtr();
 #endif
-    if ((u32)HIP_SFX_DROP != 0xFFFFFFFFU) {
+    if (HIP_SFX_DROP != 0xFFFFFFFF) {
         psndSFXOff(HIP_SFX_DROP);
         HIP_SFX_DROP = -1;
     }
-    if ((u32)HIP_SFX_VOICE != 0xFFFFFFFFU) {
+    if (HIP_SFX_VOICE != 0xFFFFFFFF) {
         psndSFXOff(HIP_SFX_VOICE);
         HIP_SFX_VOICE = -1;
     }

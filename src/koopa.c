@@ -574,7 +574,7 @@ void kpa_jumpNpc(void) {
         mario->flags |= MARIO_FLAG_IS_JUMPING;
         mario->currSubMotionId = 0;
     }
-    switch ((s32)mario->currSubMotionId) {
+    switch (mario->currSubMotionId) {
         case 0:
             marioMakeJumpPara();
             if (mario->jumpVelocityY <= 0.0f) {
@@ -872,7 +872,7 @@ static void kpaFireAttack(void) {
                 break;
             }
             mario->kpaWork->attackState = KPA_ATTACK_NONE;
-            switch ((u16)mario->currMotionId) {
+            switch (mario->currMotionId) {
             case MARIO_MOTION_STAY:
                 kpaChgPose("KPA_S_1", "KPA2_S_1");
                 break;

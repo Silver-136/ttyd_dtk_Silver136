@@ -203,7 +203,7 @@ USER_FUNC(evt_party_outofscreen) {
     if (p == NULL) {
         return EVT_RETURN_DONE;
     }
-    evtSetFloat(event, args[1], (f32)(s32)((p->flags2 & PARTY_DISP_FLAG_OUT_OF_SCREEN) == 0));
+    evtSetFloat(event, args[1], (f32)((p->flags2 & PARTY_DISP_FLAG_OUT_OF_SCREEN) == 0));
     return EVT_RETURN_DONE;
 }
 

@@ -307,25 +307,19 @@ static MapObject* _mapEnt(MapFileJoint* joint, MapObject* parent, Mtx mtx, s32 i
                         else if (t == 1) n1++;
                     }
                 }
-                if (n2) obj->blendMode = 2;
-                else if (n1) obj->blendMode = 1;
-                else obj->blendMode = 0;
+                if (n2) obj->blendMode = DISP_MODE_XLU;
+                else if (n1) obj->blendMode = DISP_MODE_ALPHA_TEST;
+                else obj->blendMode = DISP_MODE_OPAQUE;
                 break;
             }
-            case 1: {
-                // FAKE: spare temporary m; the conditional expression of cases 2 and 3 changes the object
-                u8 m = 0;
-                if (obj->flags & MAP_OBJ_FLAG_BACKGROUND) {
-                    m = 3;
-                }
-                obj->blendMode = m;
+            case 1:
+                obj->blendMode = (obj->flags & MAP_OBJ_FLAG_BACKGROUND) ? DISP_MODE_OPAQUE_NO_Z : DISP_MODE_OPAQUE;
                 break;
-            }
             case 2:
-                obj->blendMode = (obj->flags & MAP_OBJ_FLAG_BACKGROUND) ? 4 : 1;
+                obj->blendMode = (obj->flags & MAP_OBJ_FLAG_BACKGROUND) ? DISP_MODE_ALPHA_TEST_NO_Z : DISP_MODE_ALPHA_TEST;
                 break;
             case 3:
-                obj->blendMode = (obj->flags & MAP_OBJ_FLAG_BACKGROUND) ? 5 : 2;
+                obj->blendMode = (obj->flags & MAP_OBJ_FLAG_BACKGROUND) ? DISP_MODE_XLU_BEFORE_OPAQUE : DISP_MODE_XLU;
                 break;
         }
         if (joint->drawMode->modeFlags & DRAW_MODE_GROUP) {
@@ -1064,13 +1058,9 @@ BOOL mapPreLoad(const char* map) {
 void mapLoad(const char* map) {
     MapWork* wp;
 
-    // FAKE: wp2 is a second copy of mapWork used only by the memset; memset(wp, ...) without it changes the object
-    MapWork* wp2;
-
     sysWaitDrawSync();
-    wp2 = wp = mapWork;
     activeGroup = 0;
-    memset(wp2, 0, sizeof(MapWork));
+    memset(wp = mapWork, 0, sizeof(MapWork));
     _mapLoad(wp, 0, map);
     wp->entries[0].count = 1;
 }
@@ -2835,7 +2825,7 @@ void mapSetMaterialTev(s32 texCount, s32 drawMode, s32 flags, Mtx mtx) {
         GXColor depthColor = shadowGetDepthShadowColor();
         Mtx dsMtx;
 
-        switch ((s32)shadowGetDepthShadowConfig()->format) {
+        switch (shadowGetDepthShadowConfig()->format) {
             case 0:
                 GXSetTevColorOp((GXTevStageID)(tevStage - 1), GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVREG0);
                 GXSetTevAlphaOp((GXTevStageID)tevStage - 1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVREG0);
@@ -3016,7 +3006,7 @@ void mapSetMaterialTev(s32 texCount, s32 drawMode, s32 flags, Mtx mtx) {
         GXColor depthColor = shadowGetDepthShadowColor();
         Mtx dsMtx;
 
-        switch ((s32)shadowGetDepthShadowConfig()->format) {
+        switch (shadowGetDepthShadowConfig()->format) {
             case 0:
                 GXSetTevColorOp((GXTevStageID)(tevStage - 1), GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVREG0);
                 GXSetTevAlphaOp((GXTevStageID)tevStage - 1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVREG0);

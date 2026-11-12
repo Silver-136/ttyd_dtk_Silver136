@@ -358,12 +358,12 @@ BOOL marioCamZoomUp(void) {
     PSVECScale(&cameraDir, &cameraDir, zoomDistance);
     PSVECAdd(&targetPos, &cameraDir, &targetPos);
 
-    args[0] = (s16)(s32)targetPos.x;
-    args[1] = (s16)(s32)targetPos.y;
-    args[2] = (s16)(s32)targetPos.z;
-    args[3] = (s16)(s32)cloudPos.x;
-    args[4] = (s16)(s32)cloudPos.y;
-    args[5] = (s16)(s32)cloudPos.z;
+    args[0] = (s16)targetPos.x;
+    args[1] = (s16)targetPos.y;
+    args[2] = (s16)targetPos.z;
+    args[3] = (s16)cloudPos.x;
+    args[4] = (s16)cloudPos.y;
+    args[5] = (s16)cloudPos.z;
     args[6] = 1500;
     args[7] = EASING_QUARTIC_IN;
 
@@ -429,12 +429,12 @@ BOOL marioCamZoomUpLevelMain(void) {
     PSVECScale(&cameraDir, &cameraDir, zoomDistance);
     PSVECAdd(&targetPos, &cameraDir, &targetPos);
 
-    args[0] = (s16)(s32)targetPos.x;
-    args[1] = (s16)(s32)targetPos.y;
-    args[2] = (s16)(s32)targetPos.z;
-    args[3] = (s16)(s32)cloudPos.x;
-    args[4] = (s16)(s32)cloudPos.y;
-    args[5] = (s16)(s32)cloudPos.z;
+    args[0] = (s16)targetPos.x;
+    args[1] = (s16)targetPos.y;
+    args[2] = (s16)targetPos.z;
+    args[3] = (s16)cloudPos.x;
+    args[4] = (s16)cloudPos.y;
+    args[5] = (s16)cloudPos.z;
     args[6] = 1500;
     args[7] = EASING_QUARTIC_IN;
 

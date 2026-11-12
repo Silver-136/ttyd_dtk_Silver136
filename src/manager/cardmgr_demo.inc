@@ -1162,7 +1162,7 @@ static inline void memcard_unmount(void) {
 
     wp->flags |= CARD_FLAG_CALL_BUSY;
     i = 0;
-    while (result = CARDUnmount(wp->chan), result == CARD_RESULT_BUSY) {
+    while ((result = CARDUnmount(wp->chan)) == CARD_RESULT_BUSY) {
         if (++i > 1000000) {
             result = CARD_RESULT_FATAL_ERROR;
             break;
@@ -1204,7 +1204,7 @@ static inline void memcard_delete(void) {
     wp->flags |= CARD_FLAG_CALL_BUSY;
 
     i = 0;
-    while (result = CARDDelete(wp->chan, cardFileName), result == CARD_RESULT_BUSY) {
+    while ((result = CARDDelete(wp->chan, cardFileName)) == CARD_RESULT_BUSY) {
         if (++i > 1000000) {
             result = CARD_RESULT_FATAL_ERROR;
             break;
@@ -1274,7 +1274,7 @@ static inline void memcard_get_stat(void) {
     wp->flags |= CARD_FLAG_CALL_BUSY;
 
     i = 0;
-    while (result = CARDGetStatus(wp->chan, wp->info.fileNo, &wp->status), result == CARD_RESULT_BUSY) {
+    while ((result = CARDGetStatus(wp->chan, wp->info.fileNo, &wp->status)) == CARD_RESULT_BUSY) {
         if (++i > 1000000) {
             result = CARD_RESULT_FATAL_ERROR;
             break;
@@ -1292,7 +1292,7 @@ static inline void memcard_get_serial(void) {
     wp->flags |= CARD_FLAG_CALL_BUSY;
 
     i = 0;
-    while (result = CARDGetSerialNo(wp->chan, &wp->serialNo), result == CARD_RESULT_BUSY) {
+    while ((result = CARDGetSerialNo(wp->chan, &wp->serialNo)) == CARD_RESULT_BUSY) {
         if (++i > 1000000) {
             result = CARD_RESULT_FATAL_ERROR;
             break;
@@ -1322,7 +1322,7 @@ static void memcard_open(void) {
     wp->flags |= CARD_FLAG_CALL_BUSY;
     if (wp->flags & CARD_FLAG_SERIAL) {
         i = 0;
-        while (result = CARDGetSerialNo(wp->chan, &serialNo), result == -1) {
+        while ((result = CARDGetSerialNo(wp->chan, &serialNo)) == -1) {
             if (++i > 1000000) {
                 result = CARD_RESULT_FATAL_ERROR;
                 break;
@@ -1341,7 +1341,7 @@ static void memcard_open(void) {
     }
     for (fileNo = 0; fileNo < 127; fileNo++) {
         i = 0;
-        while (result = CARDGetStatus(wp->chan, fileNo, &stat), result == CARD_RESULT_BUSY) {
+        while ((result = CARDGetStatus(wp->chan, fileNo, &stat)) == CARD_RESULT_BUSY) {
             if (++i > 1000000) {
                 result = CARD_RESULT_FATAL_ERROR;
                 break;
@@ -1371,7 +1371,7 @@ static void memcard_open(void) {
     }
     if (fileNo >= 127) {
         i = 0;
-        while (result = CARDFreeBlocks(wp->chan, &byteNotUsed, &filesNotUsed), result == CARD_RESULT_BUSY) {
+        while ((result = CARDFreeBlocks(wp->chan, &byteNotUsed, &filesNotUsed)) == CARD_RESULT_BUSY) {
             if (++i > 1000000) {
                 result = CARD_RESULT_FATAL_ERROR;
                 break;
@@ -1397,7 +1397,7 @@ static void memcard_open(void) {
         return;
     }
     i = 0;
-    while (result = CARDOpen(wp->chan, cardFileName, &wp->info), result == CARD_RESULT_BUSY) {
+    while ((result = CARDOpen(wp->chan, cardFileName, &wp->info)) == CARD_RESULT_BUSY) {
         if (++i > 1000000) {
             result = CARD_RESULT_FATAL_ERROR;
             break;
@@ -1415,7 +1415,7 @@ static inline void memcard_close(void) {
     wp->flags |= CARD_FLAG_CALL_BUSY;
 
     i = 0;
-    while (result = CARDClose(&wp->info), result == CARD_RESULT_BUSY) {
+    while ((result = CARDClose(&wp->info)) == CARD_RESULT_BUSY) {
         if (++i > 1000000) {
             result = CARD_RESULT_FATAL_ERROR;
             break;

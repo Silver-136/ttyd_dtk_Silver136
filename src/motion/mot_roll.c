@@ -105,7 +105,7 @@ static inline s32 stickAngOut(f32 half) {
     s32 r = w;
     MarioWork* mario = marioGetPtr();
     f32 c = (f32)(s32)(10.0f * mario->moveDirection) / 10.0f;
-    f32 x = angleABf(0.0f, 0.0f, (f32)(s32)mario->wStickDir1, (f32)(s32)mario->wStickDir2);
+    f32 x = angleABf(0.0f, 0.0f, (f32)mario->wStickDir1, (f32)mario->wStickDir2);
     f32 lo;
     f32 hi;
     lo = c - half;
@@ -1288,7 +1288,7 @@ void roll_upstairs_on(void) {
     mario->flags |= MARIO_FLAG_STOP_AIR_MOVEMENT;
     marioClearJumpPara();
     mario->multiTimer = 3;
-    mario->jumpVelocityY = (mario->stepUpY - mario->position.y) / (f32)(s32)mario->multiTimer;
+    mario->jumpVelocityY = (mario->stepUpY - mario->position.y) / (f32)mario->multiTimer;
 
     // BUG: overwrites the step-height velocity just computed, so roll_upstairs always climbs 3 x 4 = 12 units.
     mario->jumpVelocityY = 4.0f;

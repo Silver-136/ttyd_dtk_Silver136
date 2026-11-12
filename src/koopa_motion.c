@@ -460,7 +460,7 @@ void kpa_fall(void) {
         mario->currSubMotionId = 0;
         if (mario->currMotionId != MARIO_MOTION_FALL_2) {
 #if VERSION <= VERSION_DEMO_JP
-            if ((s32)(u8)mario->characterId == CHARACTER_BOWSER) {
+            if (mario->characterId == CHARACTER_BOWSER) {
                 kpaChgPose("KPA_J_1B", "KPA2_J_1B");
 #else
             if (mario->characterId == CHARACTER_BOWSER) {
@@ -1030,8 +1030,8 @@ void kpa_swim(void) {
             if (mario->buttonTrg & PAD_BUTTON_A) {
                 mario->currSubMotionId = 20;
             } else {
-                mario->multiTimer = (s32)mario->multiTimer - 1;
-                if ((s32)mario->multiTimer <= 0) {
+                mario->multiTimer = mario->multiTimer - 1;
+                if (mario->multiTimer <= 0) {
 #else
             if ((mario->buttonTrg & PAD_BUTTON_A) && !kpaFireAttackCheck()) {
                 mario->currSubMotionId = 20;

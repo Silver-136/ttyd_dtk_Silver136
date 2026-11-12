@@ -910,7 +910,7 @@ static s32 moamoa_hit_check(ExtdrvPose* pose, Moamoa* moa) {
             return 2;
         }
     }
-    if (mario->currMotionId == MARIO_MOTION_HAMMER_2 && (s32)mario->currSubMotionId == 0x14) {
+    if (mario->currMotionId == MARIO_MOTION_HAMMER_2 && mario->currSubMotionId == 0x14) {
         {
             f32 (*m)[4] = *pose->mtx;
             a = (Vec){m[0][3], m[1][3], m[2][3]};

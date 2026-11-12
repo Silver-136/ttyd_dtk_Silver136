@@ -69,9 +69,7 @@ typedef struct NpcWork2 {
 // External APIs retained locally until their shared contracts are settled.
 f32 cloudGetBreathPower(Vec pos, f32 width);
 
-// FAKE: private const char* prototype; fontmgr.c defines FontDrawStringShake with const s8* (game code builds with
-// -char unsigned), so the definition's prototype rejects the const char* arguments without casts.
-void FontDrawStringShake(f32 x, f32 y, const char* message);
+
 ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, EvtWord* evtCode, f32 x, f32 y, f32 z);
 
 //.data
@@ -1371,11 +1369,9 @@ static BOOL npcCheckHitMarioSide(NpcEntry* npc) {
 #if VERSION <= VERSION_DEMO_JP
     len = sqrtf((dx * dx) + (dz * dz));
     if (len > ((mario->wPlayerCollisionBox.z > 4.0f) ? (3.0f) : (1.5f))) {
-        if (1) {
-            scale = 1.0f / len;
-            dx *= scale;
-            dz *= scale;
-        }
+        scale = 1.0f / len;
+        dx *= scale;
+        dz *= scale;
     }
 #else
     len = sqrtf(dx * dx + dz * dz);
@@ -1687,9 +1683,6 @@ void fbatSetAttackAnnounceEnable(void) {
     gp->fbatData->firstStrike.enabled = TRUE;
 }
 
-/** Plain multiply, so the banner's coordinates are scaled by 0.1 in the order the original code did it. */
-static inline f32 mulf(f32 a, f32 b) { return a * b; }
-
 /** Runs the first-strike banner (slide in, hold, slide out) and queues its draw. */
 // Original name and size (0x138) from the JP demo map (UNUSED there: npcMain's call is inlined).
 void _fbatFitstAttackAnnounceMain(FirstStrikeInfo* firstStrike) {
@@ -1758,6 +1751,7 @@ static void _fbatFirstAttackAnnouceDisp(CameraId camId, void* param) {
     const char* message;
     f32 x;
     f32 y;
+    f32 scale = 0.1f;
 #if VERSION >= VERSION_US
     u16 lines;
     u16 width;
@@ -1765,7 +1759,7 @@ static void _fbatFirstAttackAnnouceDisp(CameraId camId, void* param) {
     f32 shakeY;
     s32 i;
     s32 j;
-    char buf[4][128];
+    s8 buf[4][128];
     s8* p;
 #else
     f32 width;
@@ -1798,15 +1792,14 @@ static void _fbatFirstAttackAnnouceDisp(CameraId camId, void* param) {
         }
     }
 
-    // FAKE: the products go through the mulf() inline; plain multiplications change the object
-    windowDispGX_Waku_col(0, firstStrike->color, mulf(0.1f, shakeX - 10.0f - width / 2),
-                          mulf(shakeY, 0.1f), mulf(20 + width, 0.1f), mulf(height, 0.1f), 1.0f);
+    windowDispGX_Waku_col(0, firstStrike->color, scale * (shakeX - 10.0f - width / 2),
+                          shakeY * scale, (20 + width) * scale, height * scale, 1.0f);
 #else
     width = FontGetMessageWidth(message);
     shakeX = x + (f32)(irand(10000) % 5);
     shakeY = y + (f32)(irand(10000) % 5);
-    windowDispGX_Waku_col(0, firstStrike->color, mulf(0.1f, shakeX - 10.0f - width / 2.0f),
-                          mulf(shakeY, 0.1f), mulf(20.0f + width, 0.1f), 3.2f, 1.0f);
+    windowDispGX_Waku_col(0, firstStrike->color, scale * (shakeX - 10.0f - width / 2.0f),
+                          shakeY * scale, (20.0f + width) * scale, 3.2f, 1.0f);
 #endif
     FontDrawStart();
     FontDrawEdge();
@@ -1814,10 +1807,10 @@ static void _fbatFirstAttackAnnouceDisp(CameraId camId, void* param) {
     FontDrawScale(0.1f);
 #if VERSION >= VERSION_US
     for (i = 0; i < lines; i++) {
-        FontDrawStringShake(mulf(0.1f, x - width / 2), mulf(0.1f, y + -29 * i - 3.0f), buf[i]);
+        FontDrawStringShake(scale * (x - width / 2), scale * (y + -29 * i - 3.0f), buf[i]);
     }
 #else
-    FontDrawStringShake(mulf(0.1f, x - width / 2.0f), mulf(y - 3.0f, 0.1f), message);
+    FontDrawStringShake(scale * (x - width / 2.0f), (y - 3.0f) * scale, (const s8*)message);
 #endif
 }
 
@@ -3034,7 +3027,7 @@ s32 _getHammerMotionParam(void) {
     s32 frame;
 
     animPoseGetAnimPosePtr(mario->paperAnimGroupId[marioAnimeId()]);
-    frame = (s32)mario->multiTimer;
+    frame = mario->multiTimer;
     if (frame > 20) {
         frame = 10;
     }

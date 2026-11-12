@@ -204,7 +204,7 @@ void mot_jumpSw(void) {
             x = 30.0f * s + ((MapObjectEntry*)mobj)->position.x;
             z = 30.0f * c + ((MapObjectEntry*)mobj)->position.z;
             mario->multiTimer = 20;
-            mario->baseSpeed = distABf(mario->position.x, mario->position.z, x, z) / (f32)(s32)mario->multiTimer;
+            mario->baseSpeed = distABf(mario->position.x, mario->position.z, x, z) / (f32)mario->multiTimer;
             }
         } else {
             dir = revise360(180.0f + mario->directionView);
@@ -301,7 +301,7 @@ void mot_jumpNpc(void) {
                     x = 30.0f * directionX + mobj->position.x;
                     z = 30.0f * directionZ + mobj->position.z;
                     mario->multiTimer = 20;
-                    mario->baseSpeed = distABf(mario->position.x, mario->position.z, x, z) / (f32)(s32)mario->multiTimer;
+                    mario->baseSpeed = distABf(mario->position.x, mario->position.z, x, z) / (f32)mario->multiTimer;
                 }
             }
         } else {

@@ -142,15 +142,12 @@ static const LangTbl lang_tbl = {{
 void seq_mapChangeMain(SequenceWork* work) {
 #if VERSION <= VERSION_DEMO_JP
     BOOL newarea = strcmp(_next_area, gp->currentAreaName) ? TRUE : FALSE;
+#else
+    BOOL newarea = strcmp(_next_area, gp->currentAreaName) != 0;
+#endif
     const char* area_name;
     EvtWord* evtCode;
     FileEntry* fres;
-#else
-    BOOL newarea = strcmp(_next_area, gp->currentAreaName) != 0;
-    const char* area_name;
-    EvtWord* evtCode;
-    u32 fres;
-#endif
     BOOL fok;
     LangTbl lang;
     MarioWork* mario;
@@ -231,12 +228,8 @@ void seq_mapChangeMain(SequenceWork* work) {
                 seqSetSeq(SEQ_TITLE, NULL, NULL);
             } else {
                 area_name = getAreaName();
-#if VERSION <= VERSION_DEMO_JP
                 fres = (FileEntry*)fileAsyncf(FILE_TYPE_RAW, 0, mc_rel_fmt, getMarioStDvdRoot(), area_name);
-#else
-                fres = fileAsyncf(FILE_TYPE_RAW, 0, mc_rel_fmt, getMarioStDvdRoot(), area_name);
-#endif
-                if (fres == 0) {
+                if (fres == NULL) {
                     fok = FALSE;
                 } else if ((s32)fres == -1) {
                     fok = TRUE;

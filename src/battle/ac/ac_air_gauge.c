@@ -231,7 +231,7 @@ static f32 _GetGaugeDecValue(void) {
     GaugeKey* t;
     f32 base;
 
-    switch ((u32)ac->params[7]) {
+    switch (ac->params[7]) {
 #if VERSION <= VERSION_DEMO_JP
         case 0:
             base = 0.0f;

@@ -1034,7 +1034,7 @@ static USER_FUNC(cam_r) {
 
     cam = camGetPtr(CAMERA_3D);
     cam->rollAngle += 3.0f;
-    s = (f32)sin((f32)(u32)gp->retraceCount / 10.0f);
+    s = (f32)sin((f32)gp->retraceCount / 10.0f);
     PSVECSubtract(&cam->cameraAt, &cam->cameraPos, &v);
     PSVECScale(&v, &v, 0.2f * s);
     cam->viewOffset.x = v.x;
@@ -1129,14 +1129,7 @@ void winFontSetR(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
     va_list args;
 #if VERSION <= VERSION_DEMO_JP
     va_start(args, fmt);
-#if VERSION == VERSION_DEMO_JP
     vsprintf(buf, fmt, args);
-#else
-    do {
-        vsprintf(buf, fmt, args);
-    }
-    while (0);
-#endif
     {
         s32 w = FontGetMessageWidth("９９９") - FontGetMessageWidth(buf);
 #elif VERSION >= VERSION_US

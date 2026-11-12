@@ -288,18 +288,13 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | src/driver/fadedrv.c | fadeStrippedPool | stand-in that nothing calls; it only adds its 3.141592f literal to this object's constant pool | see comment |
 | Both | src/driver/itemdrv.c | makeVecByValue2 (itemNearDistCheck) | second identical copy of the makeVecByValue inline | one inline for both uses: changes the object |
 | Both | src/driver/itemdrv_pad.c | (file scope) | 24 zero bytes of JP .rodata at 0x802CAE68 with no known owner, kept alive with force_active | see comment |
-| Both | src/driver/mapdrv.c | mapLoad | wp2 is a second copy of mapWork used only by the memset; memset(wp, ...) without it changes the object | mapGetWork() at the declaration / after sysWaitDrawSync / in the memset |
 | Both | src/driver/mapdrv.c | mapStrippedPool | stand-in for dead-stripped code, likely mapGetConvertDate, mapGetAnmDt and mapGetCurve (JP demo map, UNUSED; the floats' owner is not identified); it only keeps the constants in .rodata/.sdata2, in their original order. Bodies unknown. | see comment |
 | Both | src/driver/mapdrv.c | mapSetMaterialTev | `#pragma opt_lifetimes off` (push/pop) for this function only | removing it changes the object; the file-wide `-opt nolifetimes` changes other functions (2026-11-07) |
-| Both | src/driver/mapdrv.c | _mapEnt | spare temporary `m` | the conditional expression of cases 2 and 3: changes the object |
 | Both | src/driver/shadowdrv.c | _filter | opt_dead_assignments off keeps the unused `f32 t = 20.0f;`; without the pragma and t the object changes | see comment |
-| Both | src/driver/windowdrv.c | windowDispGX_System | GXPosition3f32(0.0f, y3, 0.0f) written out as FIFO stores with y3/y4 computed between them; the plain call changes the object | see comment |
 | Both | src/driver/windowdrv.c | windowDispGX2_Waku_col | negated and halved in two steps with a no-op (f32) cast; `left = -width / 2.0f;` changes the object | see comment |
 | Both | src/effect/eff_funemizu.c | effFunemizuDisp | funemizuCallDL wraps this display-list loop with a dead read and write-back of u; the plain loop changes the object | see comment |
 | Both | src/driver/mobjdrv.c | mobjStrippedFallPool | stand-in, never called (in neither symbol map; the linker strips it); it only places its literals in the .sdata2 pool | see comment |
-| Both | src/driver/msgdrv.c | (file scope) hankakuSearch | private prototypes taking s32 (US and later) or char (JP, early demos); the definition in fontmgr.c takes s8 | `u16 hankakuSearch(s8 c);` in fontmgr.h: changes the object |
 | Both | src/driver/npcdrv.c | npcCheckHitMarioSide | the height goes through the spare dz; passing mario->wPlayerCollisionBox.y directly changes the object | see comment |
-| US | src/driver/npcdrv.c | _fbatFirstAttackAnnouceDisp | the products go through the mulf() inline; plain multiplications change the object | see comment |
 | Both | src/effect/eff_kemutest.c | effKemuTestEntry | count (already equal to effect->count) is re-assigned in the loop test; `i < effect->count` changes the object | see comment |
 | Both | src/effect/eff_kemutest.c | effKemuTestEntry, effKemuTestMain | named file-scope static const aggregates (kemu_a..kemu_h, kemu_pos, kemu_tmp) copied into locals | see comment |
 | JP | src/effect/eff_kemutest.c | __declspec | zero filler objects with no known owner (4 bytes of .rodata, 28 bytes of .data; the other versions need neither); without them the object changes | see comment |
@@ -386,9 +381,6 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | src/sequence/seq_e3.c | forceSdata | stand-in that nothing calls (the linker strips it); it only places 30.0f in the constant pool (JP and US); removing it changes the object | see comment |
 | Both | src/unit/party/unit_party_yoshi.c | yoshiStrippedPool | stand-in that nothing calls; its s32-to-f32 conversion likely shapes the constant pool (as kpaStrippedPool does in koopa.c); removing it changes the object | see comment |
 | Both | src/window/win_root.c | winRootStrippedPool | stand-in that nothing calls; it only places 185.0f and 1000.0f in this object's constant pool. Removing it changes the object. | see comment |
-| Both | src/window/win_root.c | sort_4_3_func | re-indexes itemDataTable instead of using db (same pointer); db->... changes the object | see comment |
-| Both | src/window/win_root.c | winMailDisp | the texture id goes through void* casts; pouchCheckMail(id) == 2 ? 0x5E : 0x5D changes the object | see comment |
-| Both | src/window/win_root.c | winRootDisp (winLogDisp) | private (s32, WindowWork*, s32) prototype; win_log.c defines winLogDisp(CameraId, void*, s32) | the definition's prototype in win_log.h: register allocation changes (also with winRootDisp's camId as CameraId) |
 | Both | rels/muj/src/muj_10.c | suifu_option_func | double-negation addition; either plain addition order changes the object. | see comment |
 | Demos | rels/mri/src/mri_puni.c | puni_puni_main | `(const char*)(u32)` round trip on one sound name, so its address is hoisted into a saved register before the loop | plain literal: one register less, stack frame 16 bytes smaller |
 | Demos | src/battle/battle_unit.c | BtlUnit_GetStatus, BtlUnit_SetStatus, BtlUnit_CheckRecoveryStatus, BtlUnit_CheckStatus | BATTLE_UNIT_STATUS_ENUM: the file sees the enum prototypes while its callers see s8 (same bytes retail reads through s8) | one prototype for all units: the callers then lose their sign extension |
@@ -398,15 +390,11 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Demos | src/manager/cardmgr_demo.inc | (demo copy of cardmgr.c) | no-op self-assignment the target compiles to a register copy; | see comment |
 | Demos | src/driver/npcdrv.c | fbatHitCheck (demo copy) | `(*(T*)&...)` field reads as in the retail copy's row | plain field reads |
 | Both | src/driver/npcdrv.c | npcStrippedKoopaPool | stand-in that nothing calls; it only places 60.0f and the water splash sound name in the constant pools (npcCheckInWater, restored 2026-11-09, takes the name from npcMain) | see comment |
-| Both | src/driver/npcdrv.c | (file scope) FontDrawStringShake | private `const char*` prototype; the definition takes `const s8*` (-char unsigned) | the definition's prototype: build errors at the const char* calls without casts (not built) |
 | Both | src/driver/npcdrv.c | npcDisp_blur | `#pragma optimization_level 2` (push/pop) for this function only | removing it changes the object |
 | Both | src/driver/npcdrv.c | npcSetTalkPose .. npcCheckHitMarioSide | `opt_propagation` and `opt_lifetimes` off over these functions | removing either changes npcCheckHitMarioSide; the file-wide `-opt noprop,nolifetimes` changes other functions (2026-11-07) |
 | Both | src/battle/battle_enemy_item.c | _check_hp_recover_item, _check_fp_recover_item, _check_attack_item, _check_status_attack_item, _check_status_support_item, _check_status_recover_item | `(s32)(s8)` no-op casts on the s8 attackDirection passed to BattleSamplingEnemy | the plain field at all six: changes the object |
-| Both | src/effect/eff_batten.c | effBattenDisp | constant temporaries w/half/neg/pos for the quad corners | literal corners (-16.0f/16.0f): changes the object |
-| Both | src/effect/eff_bomb.c | effBombDisp | constant temporaries deg/half/one and left = -one / 2.0f | literals: changes the object |
 | Both | src/effect/eff_kemuri.c | effKemuri2Entry | `opt_propagation` off for the function (its spare temporaries only make sense under it) | removing it changes the object; the file-wide `-opt noprop` changes other functions (2026-11-07) |
 | Both | src/effect/eff_kemuri.c | effKemuri2Main | `opt_propagation` off for the function, with the `data = p` / `p = data` re-assignment | removing it changes the object; the file-wide `-opt noprop` changes other functions (2026-11-07) |
-| Both | src/effect/eff_mist2.c | effMist2Disp | constant locals w = 16.0f, k = 255.0f, h = 8.0f | literals: changes the object |
 | Both | src/effect/n64/eff_kemuri5_n64.c | effKemuri5N64Entry, effKemuri5Main | `opt_propagation` off over both functions | removing it changes the object; the file-wide `-opt noprop` changes other functions (2026-11-07) |
 | Both | src/event/evt_msg.c | _evt_msg_print (msgWindow_Entry) | call through a cast to an `(const char*, s32, s32)` function type, passing `(s16)event->msgPriority` | plain call with msgdrv.h's u16 priority prototype: changes the object |
 | PAL | src/event/evt_msg.c | (file scope) | msgArticlePad: unused zero object, read by nothing | removing it changes the object |
@@ -415,4 +403,3 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Demos | libs/msl/include/dtrigf.h | (file: `DTRIGF_PLAIN_DATA` block) | the early demos' main.dol units take the paired dtrigf constants as plain data in source order (LLCOOLT's form) instead of the inline-assembly form | see comment |
 | Both | rels/las/src/las_04.c | firebar_entry | `*(s32*)&wp = event->userdata[0]` stores through &wp, so wp keeps a stack slot for the whole function | `wp = event->userdatap[0]`: see comment |
 | Both | src/battle/battle_damage.c | BattleCalculateDamage | negation written as `(u32)damage * -1` | `-damage`: changes the object |
-| Both | src/window/win_log.c | mapGX | the texture id goes through a spare temporary `tex` in a comma expression | `((gp->retraceCount >> 4) & 1) ? 0xB9 : 0xBA`: changes the object |

@@ -391,14 +391,10 @@ void marioItemGetDisable(void) {
  */
 void marioItemGetChk(void) {
     MarioWork* work;
-    s32 timer;
 
     work = mp;
-    timer = mp->itemGetDisableTimer;
-    if (timer > 0) {
-        timer--;
-        work->itemGetDisableTimer = (s16)timer;
-        if ((s16)timer <= 0) {
+    if (mp->itemGetDisableTimer > 0) {
+        if (--work->itemGetDisableTimer <= 0) {
             work->itemGetDisableTimer = 0;
             mp->flags &= ~MARIO_FLAG_ITEM_GET_DISABLED;
         }

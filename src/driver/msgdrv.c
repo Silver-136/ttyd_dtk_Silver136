@@ -793,13 +793,7 @@ static void msgDispKeyWait_render(s32 wXluStage) {
     wp->currDispMode = wXluStage;
 }
 
-// FAKE: private hankakuSearch prototypes (s32 from the US release, char before) while fontmgr.c defines it with
-// s8; a shared s8 prototype in fontmgr.h changes the object.
-#if VERSION >= VERSION_US
-u16 hankakuSearch(s32 c);
-#else
-u16 hankakuSearch(char c);
-#endif
+u16 hankakuSearch();
 
 /* FAKE: opt_lifetimes off keeps total as one web, so the rubyW conversion int shares the loop-1 accumulator register
    as in the target. The webs the target does split are split by hand: glyphD, wwD, wwR and kR (declared first so they take
