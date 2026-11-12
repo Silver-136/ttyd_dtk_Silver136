@@ -140,7 +140,7 @@ static void effItemGetMain(EffectEntry* effect) {
         return;
     }
     work->timer++;
-    if ((u32)work->timer < 12) {
+    if (work->timer < sizeof(scale_data) / sizeof(scale_data[0])) {
         work->scale = (f32)scale_data[work->timer] / 100.0f;
     }
     if (work->timer > 1000) {

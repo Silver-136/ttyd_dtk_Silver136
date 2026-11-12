@@ -252,7 +252,7 @@ static void effStageClearMain(EffectEntry* effect) {
                 psndSFXOn(SFX_NAME_WORD(type == 0 ? PSND_SFX_EVT_STAGE_CLEAR1 : PSND_SFX_KUPPA_GOALIN1));
             }
         } else {
-            if ((u32)work->frame < 11) {
+            if (work->frame < sizeof(scale_dt) / sizeof(scale_dt[0])) {
                 work->scale = (f32)scale_dt[work->frame] / 100.0f;
             }
             work->frame++;

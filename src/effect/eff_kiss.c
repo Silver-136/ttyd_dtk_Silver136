@@ -198,7 +198,7 @@ static void effKissMain(EffectEntry* effect) {
         case 1:
             ang = 6.2831855f * ang;
             for (i = 1; i < effect->count; i++, work++) {
-                if ((u32)work->frame < 24) {
+                if (work->frame < sizeof(kuri_kiss) / 3) {
                     f32 aa;
                     f32 r;
                     aa = kuri_kiss[work->frame * 3] / 32.0f;
@@ -216,7 +216,7 @@ static void effKissMain(EffectEntry* effect) {
         case 2:
             ang = 6.2831855f * ang;
             for (i = 1; i < effect->count; i++, work++) {
-                if ((u32)work->frame < 39) {
+                if (work->frame < sizeof(kura_kiss) / 3) {
                     rad = ang / 360.0f;
                     a = kura_kiss[work->frame * 3] / 32.0f;
                     a *= 1.2f;

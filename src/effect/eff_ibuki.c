@@ -302,8 +302,7 @@ static void effIbukiDisp(CameraId cameraId, void* param) {
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX1, GX_TEX_ST, GX_S16, 14);
     GXSetArray(GX_VA_TEX1, ibuki_texcoord1_tbl, 4);
 
-    // FAKE: (u32) cast for an unsigned compare; `i < 4` changes the object
-    for (i = 0, sz = ibuki_dl_0_size_tbl, dl = ibuki_dl_0_tbl; (u32)i < 4; i++, sz++, dl++) {
+    for (i = 0, sz = ibuki_dl_0_size_tbl, dl = ibuki_dl_0_tbl; i < sizeof(ibuki_dl_0_tbl) / sizeof(ibuki_dl_0_tbl[0]); i++, sz++, dl++) {
         GXCallDisplayList(*dl, *sz * 32);
     }
     GXSetNumChans(1);

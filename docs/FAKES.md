@@ -232,7 +232,7 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | src/koopa.c | kpaSetJumpPara (marioJumpData) | unsized `extern f32 marioJumpData[]` view of mario_motion.c's MarioJumpData struct | MarioJumpData in mario_motion.h and `marioJumpData.jump`: changes the object |
 | Both | src/koopa_hit.c | kpaGetHitobjHead | address temporary; the plain return of headHit[i] changes the object | see comment |
 | Both | src/koopa_hit.c | kpaGetHitobjRide | address temporary; the plain return of rideHit[i] changes the object | see comment |
-| Both | src/memory.c | smartAutoFree | no-op (s32) cast; the plain compare changes the object; `u16 type` copy of allocType for the first compare | plain compare |
+| Both | src/memory.c | smartAutoFree | `u16 type` copy of allocType for the first compare | comparing allocType directly |
 | US | src/nameent.c | nameMain | no-op (s32) cast; the plain ?: changes the object | see comment |
 | Both | src/npc_event.c | _2d_get_dead_jump_offset | spare temporary k for 20.0f * d; the plain (s32)(20.0f * d) changes the object | see comment |
 | Both | src/pmario_sound.c | calc3D | v.z read through a (Vec*) cast of &v; plain v.z changes the object | see comment |
@@ -311,7 +311,6 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | src/driver/itemdrv.c | makeVecByValue2 (itemNearDistCheck) | second identical copy of the makeVecByValue inline | one inline for both uses: changes the object |
 | Both | src/driver/itemdrv_pad.c | (file scope) | 24 zero bytes of JP .rodata at 0x802CAE68 with no known owner, kept alive with force_active | see comment |
 | Both | src/driver/mapdrv.c | mapLoad | wp2 is a second copy of mapWork used only by the memset; memset(wp, ...) without it changes the object | mapGetWork() at the declaration / after sysWaitDrawSync / in the memset |
-| Both | src/driver/mapdrv.c | mapSearchDmdJoint | no-op (s32) cast; name[0] != '/' changes the object | see comment |
 | Both | src/driver/mapdrv.c | mapStrippedPool | stand-in for dead-stripped code, likely mapGetConvertDate, mapGetAnmDt and mapGetCurve (JP demo map, UNUSED; the floats' owner is not identified); it only keeps the constants in .rodata/.sdata2, in their original order. Bodies unknown. | see comment |
 | Both | src/driver/mapdrv.c | mapSetMaterialTev | `#pragma opt_lifetimes off` (push/pop) for this function only | removing it changes the object; the file-wide `-opt nolifetimes` changes other functions (2026-11-07) |
 | Both | src/driver/mapdrv.c | _mapEnt | spare temporary `m` | the conditional expression of cases 2 and 3: changes the object |
@@ -321,7 +320,6 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | src/driver/windowdrv.c | windowDispGX2_Waku_col | negated and halved in two steps with a no-op (f32) cast; `left = -width / 2.0f;` changes the object | see comment |
 | Both | src/effect/eff_funemizu.c | effFunemizuDisp | funemizuCallDL wraps this display-list loop with a dead read and write-back of u; the plain loop changes the object | see comment |
 | Both | src/effect/eff_funemizu.c | effFunemizuShibukiDisp | `nw = -w` with mixed `nw / 2` and `w * 0.5f` quad corners | `-w * 0.5f` corners: changes the object |
-| Both | src/effect/eff_ibuki.c | effIbukiDisp | (u32) cast for an unsigned compare; `i < 4` changes the object | u32 i with the plain compare |
 | Both | src/driver/mobjdrv.c | mobjHitEntry | (0, x) comma expressions around the x and z __fabs calls; the plain __fabs changes the object | see comment |
 | Both | src/driver/mobjdrv.c | mobjStrippedFallPool | stand-in, never called (in neither symbol map; the linker strips it); it only places its literals in the .sdata2 pool | see comment |
 | Both | src/driver/msgdrv.c | (file scope) hankakuSearch | private prototypes taking s32 (US and later) or char (JP, early demos); the definition in fontmgr.c takes s8 | `u16 hankakuSearch(s8 c);` in fontmgr.h: changes the object |
@@ -352,7 +350,6 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | src/effect/n64/eff_magic_horao_n64.c | effMagicHoraoDisp | ang is assigned in a comma expression inside the initializer; assigning it in its own statement changes the object | see comment |
 | Both | src/effect/n64/eff_opuku_jetwrain_n64.c | effOpukuJetwrainN64Entry | inline_fn(j) is j < 13; the plain loop condition changes the object | see comment |
 | Both | src/effect/n64/eff_opuku_jetwrain_n64.c | effOpukuJetwrainMain | inline_fn2(j) is j < 12; the plain loop condition changes the object | see comment |
-| Both | src/effect/n64/eff_peach_dust_n64.c | effPeachDustN64Entry | (s32) cast on the char; without it the object changes | see comment |
 | Both | src/effect/n64/eff_peach_dust_n64.c | effPeachDustDisp | k and h hold the 1.4f/0.7f factors in a block of their own; the literal factors change the object | see comment |
 | Both | src/effect/n64/eff_pokopi_thunder_n64.c | effPokopiThunderN64Entry | spare local holding 0.0f for the length test; comparing with 0.0f directly changes the object | see comment |
 | Both | src/effect/n64/eff_pokopi_thunder_n64.c | effPokopiThunderDisp | pt_dy(work, work) is end.y - start.y through an inline helper; the plain expression changes the object | see comment |
@@ -462,7 +459,6 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | src/effect/eff_bomb.c | effBombDisp | constant temporaries deg/half/one and left = -one / 2.0f | literals: changes the object |
 | Both | src/effect/eff_kemuri.c | effKemuri2Entry | `opt_propagation` off for the function (its spare temporaries only make sense under it) | removing it changes the object; the file-wide `-opt noprop` changes other functions (2026-11-07) |
 | Both | src/effect/eff_kemuri.c | effKemuri2Main | `opt_propagation` off for the function, with the `data = p` / `p = data` re-assignment | removing it changes the object; the file-wide `-opt noprop` changes other functions (2026-11-07) |
-| Both | src/effect/eff_minigame.c | effMiniGameMain | `(u32)work->delay < 20` unsigned compare on the s32 delay (three sites) | plain signed compare: changes the object |
 | Both | src/effect/eff_mist2.c | effMist2Disp | constant locals w = 16.0f, k = 255.0f, h = 8.0f | literals: changes the object |
 | Both | src/effect/eff_nozle.c | effNozleMain | `< 21U` unsigned compare on the s32 life (also tested signed: < 1000, < 16, < 0) | `< 21`: changes the object |
 | Both | src/effect/n64/eff_kemuri4_n64.c | effKemuri4N64Entry | zero held in a local for the two flip tests | `flip != 0.0f`: changes the object |

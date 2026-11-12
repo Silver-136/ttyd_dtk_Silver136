@@ -188,7 +188,7 @@ static void effKemuriMain(EffectEntry* effect) {
         }
         switch (type) {
             case 0:
-                if ((u32)data->frame < 30) {
+                if (data->frame < sizeof(touchdown_scale) / sizeof(touchdown_scale[0])) {
                     data->scaleX = touchdown_scale[data->frame][0] / 128.0f;
                     data->scaleY = touchdown_scale[data->frame][1] / 128.0f;
                 } else {
@@ -203,7 +203,7 @@ static void effKemuriMain(EffectEntry* effect) {
                 data->frame++;
                 break;
             case 2:
-                if ((u32)data->frame < 30) {
+                if (data->frame < sizeof(heavy_scale) / sizeof(heavy_scale[0])) {
                     data->scaleX = heavy_scale[data->frame][0] / 128.0f;
                     data->scaleY = heavy_scale[data->frame][1] / 128.0f;
                 } else {

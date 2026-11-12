@@ -135,8 +135,9 @@ EffectEntry* effPeachDustN64Entry(s32 type, f32 x, f32 y, f32 z, f32 unused, f32
 
     for (i = 0; i < 16; i++) {
         for (j = 0; j < 16; j++) {
-            // FAKE: (s32) cast on the char; without it the object changes
-            if ((s32)base[(15 - i) * 16 + j] == '.') {
+            s32 c = base[(15 - i) * 16 + j];
+
+            if (c == '.') {
                 continue;
             }
             r = 0.1f * (rand() % 20 - 10) + (f32)((j - 8) * 2);

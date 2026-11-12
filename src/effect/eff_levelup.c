@@ -171,7 +171,7 @@ static void effLevelupMain(EffectEntry* effect) {
         switch (work->state) {
             case 0:
                 work->timer++;
-                if ((u32)work->timer < 0x2e) {
+                if (work->timer < sizeof(y_trans) / sizeof(y_trans[0])) {
                     work->y = y_trans[work->timer];
                     if (i == 1 && work->y == 0.0f) {
                         evtEntry(evt_shake, 0, 0);
@@ -184,7 +184,7 @@ static void effLevelupMain(EffectEntry* effect) {
                 break;
             case 1:
                 work->timer++;
-                if ((u32)work->timer < 0x13) {
+                if (work->timer < sizeof(y_scale) / sizeof(y_scale[0])) {
                     if (i > 2) {
                         work->scaleY = y_scale[work->timer] / 100.0f;
                     }

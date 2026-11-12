@@ -486,10 +486,10 @@ void smartAutoFree(s32 allocType) {
     }
     if (allocType == 3) {
         for (entry = wp->allocHead; entry; entry = next) {
-            next = entry->next;
+            s32 entryType = entry->type;
 
-            // FAKE: no-op (s32) cast; the plain compare changes the object
-            if ((s32)entry->type == SMART_GROUP_TEMP_KEEP) {
+            next = entry->next;
+            if (entryType == SMART_GROUP_TEMP_KEEP) {
                 smartFree(entry);
             }
         }

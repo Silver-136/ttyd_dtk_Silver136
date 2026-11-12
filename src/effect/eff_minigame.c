@@ -284,8 +284,7 @@ static void effMiniGameMain(EffectEntry* effect) {
                 }
                 break;
             case 12:
-                // FAKE: (u32) cast makes the compare unsigned (cmplwi); delay is s32
-                if ((u32)work->delay < 20) {
+                if (work->delay < sizeof(poyon_scale) / 2) {
                     work->scaleX = (f32)poyon_scale[work->delay * 2 + 1] / 100.0f;
                     work->scaleY = (f32)poyon_scale[work->delay * 2] / 100.0f;
                     work->delay++;
@@ -370,8 +369,7 @@ static void effMiniGameMain(EffectEntry* effect) {
                 }
                 break;
             case 32:
-                // FAKE: (u32) cast makes the compare unsigned (cmplwi); delay is s32
-                if ((u32)work->delay < 20) {
+                if (work->delay < sizeof(poyon_scale) / 2) {
                     work->scaleX = (f32)poyon_scale[work->delay * 2] / 100.0f;
                     work->scaleY = (f32)poyon_scale[work->delay * 2 + 1] / 100.0f;
                     work->delay++;
@@ -417,8 +415,7 @@ static void effMiniGameMain(EffectEntry* effect) {
                 }
                 break;
             case 52:
-                // FAKE: (u32) cast makes the compare unsigned (cmplwi); delay is s32
-                if ((u32)work->delay < 20) {
+                if (work->delay < sizeof(poyon_scale) / 2) {
                     work->scaleX = (f32)poyon_scale[work->delay * 2] / 100.0f;
                     work->scaleY = (f32)poyon_scale[work->delay * 2 + 1] / 100.0f;
                     work->delay++;

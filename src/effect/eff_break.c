@@ -164,7 +164,7 @@ static void effBreakMain(EffectEntry* effect) {
                 }
                 break;
             case 1:
-                if ((u32)work->timer < 21) {
+                if (work->timer < sizeof(ty_data) / sizeof(ty_data[0])) {
                     work->offsetY = ty_data[work->timer];
                     work->timer++;
                     if (work->offsetY == 0.0f) {
@@ -193,7 +193,7 @@ static void effBreakMain(EffectEntry* effect) {
                 }
                 break;
             case 4:
-                if ((u32)work->timer < 21) {
+                if (work->timer < sizeof(ty_data2) / sizeof(ty_data2[0])) {
                     work->offsetY = ty_data2[work->timer];
                     if ((i & 1) == 0) {
                         work->offsetY = -work->offsetY;

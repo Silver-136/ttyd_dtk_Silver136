@@ -150,7 +150,7 @@ static void effSandarsMain(EffectEntry* effect) {
                 if (work->delay != 0) {
                     work->delay--;
                 } else {
-                    if ((u32)work->frame < 15) {
+                    if (work->frame < sizeof(scale_data) / sizeof(scale_data[0])) {
                         work->scale = scale_data[work->frame] / 100.0f;
                     }
                     work->frame++;

@@ -3777,8 +3777,9 @@ static MapFileJoint* mapSearchDmdJointSub2(MapFileJoint* joint, const char* name
  * Used to find the map and hit roots named in the information chunk.
  */
 MapFileJoint* mapSearchDmdJoint(MapFileJoint* joint, const char* name) {
-    // FAKE: no-op (s32) cast; name[0] != '|' changes the object
-    if ((s32)name[0] != '|') {
+    s32 first = name[0];
+
+    if (first != '|') {
         return mapSearchDmdJointSub(joint, name);
     }
     return mapSearchDmdJointSub2(joint, name, "|");
