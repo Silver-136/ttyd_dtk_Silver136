@@ -218,6 +218,46 @@ static void quakeOn(s32 lv) {
 }
 
 /**
+ * Mario's facing for a swing that will hit something: straight left (180) or right (0),
+ * turned 30 degrees when he shows his back.
+ */
+// Original name and size (0x80) from the JP demo's link map (UNUSED there): every call is inlined.
+static f32 adjustdir(MarioWork* mario) {
+    f32 a = mario->displayDirection;
+    f32 off = marioGetPtr()->dispFlags & MARIO_DISP_FLAG_REAR_POSE ? -30.0f : 0.0f;
+    f32 r;
+    if (a >= 90.0f && a <= 270.0f) {
+        r = toMovedir2(180.0f, off);
+    } else {
+        r = toMovedir2(0.0f, off);
+    }
+    return r;
+}
+
+/** hitEstimate's probe direction: straight left (180) or right (0), turned 20 degrees when Mario shows his back. */
+// Original name and size (0x80) from the JP demo's link map (UNUSED there): every call is inlined.
+static f32 adjustdir2(MarioWork* mario) {
+    f32 a = mario->displayDirection;
+    f32 off = (marioGetPtr()->dispFlags & MARIO_DISP_FLAG_REAR_POSE) ? -20.0f : 0.0f;
+    if (a >= 90.0f && a <= 270.0f) {
+        a = toMovedir2(180.0f, off);
+    } else {
+        a = toMovedir2(0.0f, off);
+    }
+    return a;
+}
+
+/** The display direction for swing direction a: 180 (left) when a points left (90-270), else 0 (right). */
+// Original name and size (0x40) from the JP demo's link map (UNUSED there): every call is inlined.
+static f32 hammerSwingDir2(f32 a) {
+    BOOL r = FALSE;
+    if (a >= 90.0f && a <= 270.0f) {
+        r = TRUE;
+    }
+    return r ? 180.0f : 0.0f;
+}
+
+/**
  * Normal hammer swing (B button): picks the swing pose for the hammer level,
  * checks what the hammer will hit (hitEstimate) and plays a clang or a breakable-block swing,
  * shakes the camera per level on impact, spawns the hit effect (JP and later),
@@ -247,15 +287,7 @@ void mot_hammer(void) {
         hit = hitEstimate(&kind);
         mario->hitobjHammerNew = hit;
         if (hit) {
-            f32 a = mario->displayDirection;
-            f32 off = marioGetPtr()->dispFlags & MARIO_DISP_FLAG_REAR_POSE ? -30.0f : 0.0f;
-            f32 r;
-            if (a >= 90.0f && a <= 270.0f) {
-                r = toMovedir2(180.0f, off);
-            } else {
-                r = toMovedir2(0.0f, off);
-            }
-            mario->directionView = r;
+            mario->directionView = adjustdir(mario);
             mario->mot.hammer.dir = hamDir(mario);
         }
         if (hitGetAttr(hit) & HIT_ATTR_MOBJ) {
@@ -290,14 +322,7 @@ void mot_hammer(void) {
         mario->mot.hammer.hitKind = kind;
 #endif
     }
-    {
-        f32 a = mario->mot.hammer.dir;
-        BOOL r = FALSE;
-        if (a >= 90.0f && a <= 270.0f) {
-            r = TRUE;
-        }
-        mario->displayDirection = r ? 180.0f : 0.0f;
-    }
+    mario->displayDirection = hammerSwingDir2(mario->mot.hammer.dir);
     mario->displayDirectionTarget = mario->displayDirection;
     mario->moveDirection = toMovedir(mario->mot.hammer.dir);
     done = 0;
@@ -781,15 +806,7 @@ static HitEntry* hitEstimate(s32* out) {
 
     mario = marioGetPtr();
     *out = HAMMER_HIT_NONE;
-    a = mario->displayDirection;
-    {
-        f32 off = (marioGetPtr()->dispFlags & MARIO_DISP_FLAG_REAR_POSE) ? -20.0f : 0.0f;
-        if (a >= 90.0f && a <= 270.0f) {
-            a = toMovedir2(180.0f, off);
-        } else {
-            a = toMovedir2(0.0f, off);
-        }
-    }
+    a = adjustdir2(mario);
     sincosf(&s, &c, a);
     h = mario->wPlayerCollisionBox.y;
     ang = 3.14159265f;

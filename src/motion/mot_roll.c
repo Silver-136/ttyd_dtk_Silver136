@@ -287,6 +287,15 @@ void marioRollFixOn(void) {
     }
 }
 
+/** Releases the Tube Mode lock (ROLL_FLAG_FIX); only while in the roll motion. */
+// Original name and size (0x38) from the JP demo map (UNUSED there: nothing calls it).
+void marioRollFixOff(void) {
+    MarioWork* mario = marioGetPtr();
+    if (mario->currMotionId == MARIO_MOTION_ROLL) {
+        mario->mot.roll.flags &= ~ROLL_FLAG_FIX;
+    }
+}
+
 /**
  * 1 when Mario could not unroll right now (locked, under a ceiling, not on the ground,
  * or walls too close around him); the item menu refuses items then.

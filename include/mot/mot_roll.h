@@ -13,6 +13,7 @@ void marioReInit_roll(void);
 void marioResetRollSpd(void);
 s32 marioRollCancelDisable(void);
 void marioRollFixOn(void);
+void marioRollFixOff(void);
 void marioRollForceCancel(void);
 void marioSetRollDispDir(void);
 void mot_fall_roll(void);
