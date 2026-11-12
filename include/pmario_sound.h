@@ -167,7 +167,8 @@ void psndMain(void);
 void psndMainInt(void);
 void psndExit(void);
 
-BOOL psndPushGroup(void);
+// u32 (TRUE/FALSE): seq_logoMain tests the result with an unsigned compare
+u32 psndPushGroup(void);
 
 BOOL psndBGMOn(u32 flags, char* bgm_name);
 void psndStopAllFadeOut(void);

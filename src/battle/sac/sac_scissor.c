@@ -36,8 +36,7 @@
 #include "manager/fontmgr.h"
 
 /** Absolute value through the __fabs intrinsic; scissor_intersection uses it to pick each segment's major axis. */
-// FAKE: my_fabsf() wraps __fabs for scissor_intersection; direct __fabs calls change the object
-static inline double my_fabsf(float x) { return __fabs(x); }
+static inline double fabs(double x) { return __fabs(x); }
 static void scissor_disp_control(CameraId camera, void* param);
 
 typedef struct ScissorTri {
@@ -244,9 +243,9 @@ static s32 scissor_intersection(f32 x1, f32 y1, f32 x2, f32 y2, f32 x3, f32 y3, 
     }
 
     if (f1 == 0 && f2 == 0) {
-        if (my_fabsf(dx1) > my_fabsf(dy1)) {
+        if (fabs(dx1) > fabs(dy1)) {
             a1 = dy1 / dx1;
-            if (my_fabsf(dx2) > my_fabsf(dy2)) {
+            if (fabs(dx2) > fabs(dy2)) {
                 a2 = dy2 / dx2;
                 if (a1 - a2 != 0.0f) {
                     d = a1 - a2;
@@ -267,7 +266,7 @@ static s32 scissor_intersection(f32 x1, f32 y1, f32 x2, f32 y2, f32 x3, f32 y3, 
             }
         } else {
             a1 = dx1 / dy1;
-            if (my_fabsf(dx2) > my_fabsf(dy2)) {
+            if (fabs(dx2) > fabs(dy2)) {
                 a2 = dy2 / dx2;
                 if (a1 * a2 != 1.0f) {
                     d = 1.0f - a1 * a2;

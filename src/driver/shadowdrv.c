@@ -491,7 +491,7 @@ static void shadowCharShadowDisp_Projection(CameraId cameraId, void* param) {
     s32 i;
     Mtx m;
     f32 w, h, fw, fh;
-    f32 cx, cz;
+    f32 cx, cy, cz;
 
     cfg = &shadowConfig[(wp = cswp)->base.configIdx];
     entry = wp->entries;
@@ -555,40 +555,40 @@ static void shadowCharShadowDisp_Projection(CameraId cameraId, void* param) {
         fw = 0.2f * w;
         GXBegin(GX_QUADS, GX_VTXFMT0, 16);
 
-        // FAKE: cx (0.0f) doubles as the y coordinate of every vertex; 0.0f for y changes the object
         cx = 0.0f;
+        cy = 0.0f;
         cz = 0.0f;
-        GXPosition3f32((cx - w), cx, (cz - h));
+        GXPosition3f32((cx - w), cy, (cz - h));
         GXColor4u8(0, 0, 0, 0xFF);
-        GXPosition3f32((cx + w), cx, (cz - h));
+        GXPosition3f32((cx + w), cy, (cz - h));
         GXColor4u8(0, 0, 0, 0xFF);
-        GXPosition3f32((cx + w), cx, fh + (cz - h));
+        GXPosition3f32((cx + w), cy, fh + (cz - h));
         GXColor4u8(0, 0, 0, 0);
-        GXPosition3f32((cx - w), cx, fh + (cz - h));
+        GXPosition3f32((cx - w), cy, fh + (cz - h));
         GXColor4u8(0, 0, 0, 0);
-        GXPosition3f32((cx - w), cx, (cz + h));
+        GXPosition3f32((cx - w), cy, (cz + h));
         GXColor4u8(0, 0, 0, 0xFF);
-        GXPosition3f32((cx + w), cx, (cz + h));
+        GXPosition3f32((cx + w), cy, (cz + h));
         GXColor4u8(0, 0, 0, 0xFF);
-        GXPosition3f32((cx + w), cx, (cz + h) - fh);
+        GXPosition3f32((cx + w), cy, (cz + h) - fh);
         GXColor4u8(0, 0, 0, 0);
-        GXPosition3f32((cx - w), cx, (cz + h) - fh);
+        GXPosition3f32((cx - w), cy, (cz + h) - fh);
         GXColor4u8(0, 0, 0, 0);
-        GXPosition3f32((cx - w), cx, (cz - h));
+        GXPosition3f32((cx - w), cy, (cz - h));
         GXColor4u8(0, 0, 0, 0xFF);
-        GXPosition3f32((cx - w), cx, (cz + h));
+        GXPosition3f32((cx - w), cy, (cz + h));
         GXColor4u8(0, 0, 0, 0xFF);
-        GXPosition3f32(fw + (cx - w), cx, (cz + h));
+        GXPosition3f32(fw + (cx - w), cy, (cz + h));
         GXColor4u8(0, 0, 0, 0);
-        GXPosition3f32(fw + (cx - w), cx, (cz - h));
+        GXPosition3f32(fw + (cx - w), cy, (cz - h));
         GXColor4u8(0, 0, 0, 0);
-        GXPosition3f32((cx + w), cx, (cz - h));
+        GXPosition3f32((cx + w), cy, (cz - h));
         GXColor4u8(0, 0, 0, 0xFF);
-        GXPosition3f32((cx + w), cx, (cz + h));
+        GXPosition3f32((cx + w), cy, (cz + h));
         GXColor4u8(0, 0, 0, 0xFF);
-        GXPosition3f32((cx + w) - fw, cx, (cz + h));
+        GXPosition3f32((cx + w) - fw, cy, (cz + h));
         GXColor4u8(0, 0, 0, 0);
-        GXPosition3f32((cx + w) - fw, cx, (cz - h));
+        GXPosition3f32((cx + w) - fw, cy, (cz - h));
         GXColor4u8(0, 0, 0, 0);
     }
 }

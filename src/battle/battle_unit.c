@@ -2309,12 +2309,11 @@ void BtlUnit_ControlPoseSoundMain(BattleUnitPart* part) {
 }
 
 /** Plays a sound effect at the unit's position (BtlUnit_snd_se_pos). */
-s32 BtlUnit_snd_se(BattleUnit* unit, const char* sfxName, s32 volume, s32 pitch) {
+s32 BtlUnit_snd_se(BattleUnit* unit, const char* sfxName, s32 volume, s16 pitch) {
     Vec pos;
     BtlUnit_GetPos(unit, &pos.x, &pos.y, &pos.z);
 
-    // FAKE: called through a prototype with s32 pitch (the definition takes s16); the plain call changes the object
-    return ((s32 (*)(BattleUnit*, const char*, s32, s32, Vec*))BtlUnit_snd_se_pos)(unit, sfxName, volume, pitch, &pos);
+    return BtlUnit_snd_se_pos(unit, sfxName, volume, pitch, &pos);
 }
 
 /**

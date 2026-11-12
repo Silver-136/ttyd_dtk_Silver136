@@ -408,8 +408,7 @@ void seq_logoMain(SequenceWork* work) {
                 wp->skipStory = TRUE;
             }
 
-            // FAKE: unsigned compare of the BOOL result with 0U; `!psndPushGroup()` compiles cmpwi and changes the object
-            if ((u32)psndPushGroup() == 0U) {
+            if (!psndPushGroup()) {
                 DVDMgrSetupCallback(NULL);
                 if (fadeIsFinish()) {
                     if (!(gp->flags & GW_FLAG_PROGRESSIVE)) {
@@ -835,7 +834,6 @@ static void dummy_draw(CameraId camId, void* param) {
  */
 // Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
 BOOL arcPreLoad(void) {
-#if VERSION <= VERSION_DEMO_JP
     FileEntry* ret = (FileEntry*)fileAsyncf(FILE_TYPE_RAW, 0, "%s/b/first", getMarioStDvdRoot());
     if (ret == NULL) {
         return FALSE;
@@ -844,18 +842,6 @@ BOOL arcPreLoad(void) {
     } else {
         return TRUE;
     }
-#else
-    s32 ret = fileAsyncf(FILE_TYPE_RAW, 0, "%s/b/first", getMarioStDvdRoot());
-
-    // FAKE: unsigned compare with 0U; `ret == 0` changes the object (JP)
-    if (ret == 0U) {
-        return FALSE;
-    } else if (ret == -1) {
-        return TRUE;
-    } else {
-        return TRUE;
-    }
-#endif
 }
 #endif
 

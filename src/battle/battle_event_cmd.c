@@ -1869,6 +1869,7 @@ USER_FUNC(btlevtcmd_SetPartsWork) {
     EvtWord* args = event->args;
     s32 btlId, id, partId, slot;
     EvtWord value;
+    BattleUnitPart* part;
     BattleUnit* unit;
 
     btlId = evtGetValue(event, args[0]);
@@ -1877,7 +1878,8 @@ USER_FUNC(btlevtcmd_SetPartsWork) {
     slot = evtGetValue(event, args[2]);
     value = evtGetValue(event, args[3]);
     unit = BattleGetUnitPtr(_battleWorkPointer, id);
-    *(EvtWord*)((u8*)BtlUnit_GetPartsPtr(unit, partId)->work + slot * sizeof(EvtWord)) = value; // FAKE: byte-stride form of ->work[slot] (slot scaled before the field offset is added, as in the target)
+    part = BtlUnit_GetPartsPtr(unit, partId);
+    part->work[slot] = value;
     return EVT_RETURN_DONE;
 }
 

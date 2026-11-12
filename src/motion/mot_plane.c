@@ -218,14 +218,6 @@ static inline void planeRoll1(MarioWork* mp, f32 rate, f32 max) {
     *p += rate * (target - *p);
 }
 
-/** Eases the plane's turn speed toward max (degrees per frame) in the flying direction by rate. */
-// Same easing as planeRoll1.
-// FAKE: a second copy of planeRoll1's easing; calling planeRoll1 at both sites changes the object
-static inline void planeRoll2(MarioWork* mario, f32 rate, f32 max) {
-    f32* p = &mario->mot.plane.turnSpeed;
-    *p += rate * (max * ((mario->motPlane->flags & MOT_PLANE_FLAG_RIGHT) ? 1.0f : -1.0f) - *p);
-}
-
 #if VERSION >= VERSION_US
 /**
  * Height below which the camera stops following the plane down, per map:
@@ -481,7 +473,7 @@ void mot_plane(void) {
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_AIRPLANE3), &mp->position);
             allPartyRideOff2();
         case 80:
-            planeRoll2(mp, 0.3f, 28.0f);
+            mp->mot.plane.turnSpeed += 0.3f * (28.0f * ((mp->motPlane->flags & MOT_PLANE_FLAG_RIGHT) ? 1.0f : -1.0f) - mp->mot.plane.turnSpeed);
             mp->displayDirection = revise360(mp->displayDirection + mp->mot.plane.turnSpeed);
             marioMakeJumpPara();
             mp->position.y += mp->jumpVelocityY;
@@ -499,7 +491,7 @@ void mot_plane(void) {
             break;
         case 90:
             if (mp->multiTimer > 0) {
-                planeRoll2(mp, 0.3f, 28.0f);
+                mp->mot.plane.turnSpeed += 0.3f * (28.0f * ((mp->motPlane->flags & MOT_PLANE_FLAG_RIGHT) ? 1.0f : -1.0f) - mp->mot.plane.turnSpeed);
                 mp->displayDirection = revise360(mp->displayDirection + mp->mot.plane.turnSpeed);
                 if (--mp->multiTimer <= 0) {
                     mp->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;

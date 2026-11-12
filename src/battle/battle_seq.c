@@ -2358,7 +2358,7 @@ static void btlseqAct(BattleWork* wp) {
                         break;
                 }
                 if (unit->moveState == MOVE_STATE_NORMAL) {
-                    // FAKE: decrement is always TRUE; the plain form without the flag and its test changes the object
+                    // decrement is always TRUE; the flag, its second store and its test are all in the retail code
                     decrement = TRUE;
                     if (wp->flags & BATTLE_FLAG_RESET_TURN) {
                         decrement = TRUE;

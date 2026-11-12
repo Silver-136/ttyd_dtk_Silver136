@@ -27,6 +27,7 @@
 #include <dolphin/pad.h>
 #include "koopa_hit.h"
 #include "mot/mot_hip.h"
+#include <math.h>
 
 /* static map-file joint data for the mobj cube models (MapFileJoint / MapJointDrawMode, as in a loaded map file) */
 typedef struct CubeMesh {
@@ -475,10 +476,9 @@ void mobjHitEntry(MapObjectEntry* entry, s32 type) {
     PSVECScale(&entry->translation, &entry->translation, 10.0f);
     entry->translation.y = 0.0f;
 
-    // FAKE: (0, x) comma expressions around the x and z __fabs calls; the plain __fabs changes the object
-    entry->scale2.x = 10.0f * (entry->scale.x * (f32)(0, __fabs(max.x - min.x)));
-    entry->scale2.y = 10.0f * (entry->scale.y * (f32)__fabs(max.y));
-    entry->scale2.z = 10.0f * (entry->scale.z * (f32)(0, __fabs(max.z - min.z)));
+    entry->scale2.x = 10.0f * (entry->scale.x * (f32)fabs(max.x - min.x));
+    entry->scale2.y = 10.0f * (entry->scale.y * (f32)fabs(max.y));
+    entry->scale2.z = 10.0f * (entry->scale.z * (f32)fabs(max.z - min.z));
     if (strncmp(pose->fileName, "HOBJ_", strlen("HOBJ_")) == 0) {
         entry->translation.z = 0.0f;
         entry->scale2.z = 10.0f * (2.5f * entry->scale.z);

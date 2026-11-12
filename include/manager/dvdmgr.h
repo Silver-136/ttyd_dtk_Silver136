@@ -8,7 +8,7 @@
 
 #define DVDEntryCount 0x100
 
-typedef BOOL (*DVDMgrCallback)(void);
+typedef u32 (*DVDMgrCallback)(void); // psndPushGroup's type; the result is not used
 
 typedef enum DVDFlags {
     DVDMGR_READING = (1 << 0),

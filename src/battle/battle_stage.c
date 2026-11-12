@@ -17,8 +17,6 @@
 #include "libc_decls.h"
 #include "eff/eff_magic1_n64.h"
 
-#define STG ((BattleStage*)BattleStageGetPtr()) // FAKE: no-op cast; without it US BattleStageEnd swaps the registers of s and i (r28/r29) around the batSpotEnd call
-
 typedef struct ScreenWork {
     void* tex;         // 0x0
     s32 captured;      // 0x4
@@ -96,7 +94,7 @@ BattleStage* BattleStageGetPtr(void) {
  * then sets up the stage objects and the spotlight cones.
  */
 void BattleStageInit(void) {
-    BattleStage* s = STG;
+    BattleStage* s = BattleStageGetPtr();
     s32 i;
 
     memset(s, 0, sizeof(BattleStage));
@@ -146,7 +144,7 @@ void BattleStageMain(void) {
     StageLight* l;
     s32 i;
     LightSpline* sp;
-    BattleStage* s = STG;
+    BattleStage* s = BattleStageGetPtr();
 
     batSpotMain();
     for (i = 0; i < 12; i++) {
@@ -235,7 +233,7 @@ void BattleStageMain(void) {
  */
 void BattleStageEnd(void) {
     s32 i;
-    BattleStage* s = STG;
+    BattleStage* s = &_battleWorkPointer->stage;
 
 #if VERSION >= VERSION_US
     batSpotEnd();
@@ -288,7 +286,7 @@ static void DarkBySquare(f32 x0, f32 y0, f32 x1, f32 y1, f32 z, u8 alpha) {
  * then one at the stage darkness (stgDark.cur).
  */
 static void BattleStageDispDark(CameraId camId, void* param) {
-    BattleStage* s = STG;
+    BattleStage* s = BattleStageGetPtr();
     CameraEntry* cam = camGetPtr(CAMERA_3D);
     StageDark* aud;
 
@@ -434,7 +432,7 @@ void BattleStageOffLightEnemyInCommand(void) {
  * evt_batstage.c finds its sys_activeUnit_1..3 beams this way.
  */
 s32 BattleStageGetLightNumberByName(const char* name) {
-    BattleStage* s = STG;
+    BattleStage* s = BattleStageGetPtr();
     s32 i;
 
     for (i = 0; i < 12; i++) {
@@ -452,7 +450,7 @@ s32 BattleStageGetLightNumberByName(const char* name) {
  * The first loop searches for the name but does nothing with a match.
  */
 s32 BattleStageSysLightEntry(const char* name) {
-    BattleStage* s = STG;
+    BattleStage* s = BattleStageGetPtr();
     s32 i;
 
     // looks for a system light (0..6) with this name, but the result is not used
@@ -479,8 +477,8 @@ s32 BattleStageSysLightEntry(const char* name) {
  */
 void BattleStageLightRelease(s32 idx, s32 time, u8 mode) {
     // FAKE: l first holds the stage pointer (two definitions), which keeps the stage base and idx * 232 + 4 as
-    // separate adds; `StageLight* l = &STG->lights[idx];` changes the object
-    StageLight* l = (StageLight*)STG;
+    // separate adds; `StageLight* l = &BattleStageGetPtr()->lights[idx];` changes the object
+    StageLight* l = (StageLight*)BattleStageGetPtr();
 
     l = ((BattleStage*)l)->lights + idx;
 
@@ -505,7 +503,7 @@ void BattleStageLightRelease(s32 idx, s32 time, u8 mode) {
  * time 0 sets it at once.
  */
 void BattleStageLightSetLightColor(s32 idx, u8 r, u8 g, u8 b, s32 time, u8 mode) {
-    StageLight* l = &STG->lights[idx];
+    StageLight* l = &BattleStageGetPtr()->lights[idx];
 
     l->colorStart = (GXColor){l->color.r, l->color.g, l->color.b};
     l->colorTarget = (GXColor){r, g, b};
@@ -525,7 +523,7 @@ void BattleStageLightSetLightColor(s32 idx, u8 r, u8 g, u8 b, s32 time, u8 mode)
  * time 0 sets it at once.
  */
 void BattleStageLightSetWidth(s32 idx, s32 width, s32 time, u8 mode) {
-    StageLight* l = &STG->lights[idx];
+    StageLight* l = &BattleStageGetPtr()->lights[idx];
 
     l->widthStart = l->width;
     l->widthTarget = width;
@@ -545,7 +543,7 @@ void BattleStageLightSetWidth(s32 idx, s32 width, s32 time, u8 mode) {
  * time 0 moves it at once.
  */
 void BattleStageLightSetPosition(s32 idx, f32 x, f32 y, f32 z, s32 time, u8 mode) {
-    StageLight* l = &STG->lights[idx];
+    StageLight* l = &BattleStageGetPtr()->lights[idx];
 
     l->posStart.x = l->pos.x;
     l->posStart.y = l->pos.y;
@@ -572,7 +570,7 @@ void BattleStageLightSetPosition(s32 idx, f32 x, f32 y, f32 z, s32 time, u8 mode
  * dropping any spline target (flag 4); time 0 moves it at once.
  */
 void BattleStageLightSetTarget(s32 idx, f32 x, f32 y, f32 z, s32 time, u8 mode) {
-    StageLight* l = &STG->lights[idx];
+    StageLight* l = &BattleStageGetPtr()->lights[idx];
 
     l->targetStart.x = l->target.x;
     l->targetStart.y = l->target.y;
@@ -613,7 +611,7 @@ void BattleStageLightSetTargetByUnit(s32 idx, s32 unitId, f32 x, f32 y, f32 z, s
  * interpolation curve mode; time 0 sets it at once.
  */
 void BattleStageLightSetUpVec(s32 idx, f32 x, f32 y, f32 z, s32 time, u8 mode) {
-    StageLight* l = &STG->lights[idx];
+    StageLight* l = &BattleStageGetPtr()->lights[idx];
 
     l->upStart.x = l->up.x;
     l->upStart.y = l->up.y;
@@ -674,17 +672,17 @@ static void BattleStageSetDarkBase(StageDark* d, u8 v, s32 time, u8 mode) {
  * helpers).
  */
 void BattleStageSetStgDark(u8 v, s32 time, u8 mode) {
-    BattleStageSetDark(&STG->stgDark, v, time, mode);
+    BattleStageSetDark(&BattleStageGetPtr()->stgDark, v, time, mode);
 }
 
 /** Fades the stage darkness's base alpha to v over time frames (evt_batstage_set_stg_dark_base). */
 void BattleStageSetStgDarkBase(u8 v, s32 time, u8 mode) {
-    BattleStageSetDarkBase(&STG->stgDark, v, time, mode);
+    BattleStageSetDarkBase(&BattleStageGetPtr()->stgDark, v, time, mode);
 }
 
 /** Fades the stage darkness back to its base alpha over time frames. */
 void BattleStageReturnStgDarkBase(s32 time, u8 mode) {
-    StageDark* d = &STG->stgDark;
+    StageDark* d = &BattleStageGetPtr()->stgDark;
     BattleStageSetDark(d, d->base, time, mode);
 }
 
@@ -693,17 +691,17 @@ void BattleStageReturnStgDarkBase(s32 time, u8 mode) {
  * light helpers).
  */
 void BattleStageSetAudDark(u8 v, s32 time, u8 mode) {
-    BattleStageSetDark(&STG->audDark, v, time, mode);
+    BattleStageSetDark(&BattleStageGetPtr()->audDark, v, time, mode);
 }
 
 /** Fades the audience darkness's base alpha to v over time frames. */
 void BattleStageSetAudDarkBase(u8 v, s32 time, u8 mode) {
-    BattleStageSetDarkBase(&STG->audDark, v, time, mode);
+    BattleStageSetDarkBase(&BattleStageGetPtr()->audDark, v, time, mode);
 }
 
 /** Fades the audience darkness back to its base alpha over time frames. */
 void BattleStageReturnAudDarkBase(s32 time, u8 mode) {
-    StageDark* d = &STG->audDark;
+    StageDark* d = &BattleStageGetPtr()->audDark;
     BattleStageSetDark(d, d->base, time, mode);
 }
 

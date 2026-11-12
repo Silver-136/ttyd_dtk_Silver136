@@ -1636,9 +1636,8 @@ void DrawMainMenu(BattleWork* wp_) {
             case 1:
                 menu->iconFlags[i] |= SUBMENU_ICON_VISIBLE;
 
-                // FAKE: c is zeroed and added to the step (a = c + ...); a = FRAMES_STEP(...) alone changes the object
                 c = 0.0f;
-                a = c + FRAMES_STEP(0.2f, 12.0f, menu->iconTimer[i]);
+                a = 3.1415927f * c / 180.0f + FRAMES_STEP(0.2f, 12.0f, menu->iconTimer[i]);
                 b = 3.1415927f * kakutable[cursor->count - 3][menu->iconSlot[i]] / 180.0f;
                 if (a >= b) {
                     a = b;

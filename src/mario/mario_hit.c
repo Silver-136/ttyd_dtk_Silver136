@@ -687,9 +687,8 @@ void marioChkGnd2(void) {
                 mario->jumpPeakAirTime = 0;
                 if (mario->characterId == CHARACTER_BOWSER) {
                     if (mario->controlStickSensitivity || !kpaFireAttackCheck()) {
-                        // FAKE: no-op (s8) casts of the s8 stick fields; the plain fields change the object
-                        s32 sx = (s8)mario->wStickDir1;
-                        s32 sy = (s8)mario->wStickDir2;
+                        s8 sx = mario->wStickDir1;
+                        s8 sy = mario->wStickDir2;
                         if (sx * sx + sy * sy > (55 * 55)) {
                             marioChgMot(MARIO_MOTION_DASH);
                         } else {

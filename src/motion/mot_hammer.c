@@ -23,11 +23,8 @@
 #include "evt/evt_cam.h"
 #include "mot/mot_stay.h"
 #include "mot/mot_hammer.h"
+#include "libc_decls.h"
 
-#if VERSION >= VERSION_JP
-// FAKE: cos declared with a float parameter; the library's double prototype (libc_decls.h) changes the object
-double cos(float);
-#endif
 
 static HitEntry* hitEstimate(s32* out);
 
@@ -781,9 +778,8 @@ static HitEntry* hitEstimate(s32* out) {
 
     // FAKE: 5.0f held in k5 for four products; the literal changes the object
     f32 k5 = 5.0f;
-#if VERSION <= VERSION_DEMO_JP
     f32 ang;
-#endif
+
     mario = marioGetPtr();
     *out = HAMMER_HIT_NONE;
     a = mario->displayDirection;
@@ -797,12 +793,8 @@ static HitEntry* hitEstimate(s32* out) {
     }
     sincosf(&s, &c, a);
     h = mario->wPlayerCollisionBox.y;
-#if VERSION <= VERSION_DEMO_JP
     ang = 3.14159265f;
     cy = (f32)cos(ang);
-#else
-    cy = (f32)cos(3.14159265f);
-#endif
     pos = mario->position;
     {
         Vec dir1 = {0.0f, 0.0f, 0.0f};
@@ -819,12 +811,8 @@ static HitEntry* hitEstimate(s32* out) {
             return hit;
         }
     }
-#if VERSION <= VERSION_DEMO_JP
     ang = 1.2217306f;
     cy = (f32)cos(ang);
-#else
-    cy = (f32)cos(1.2217306f);
-#endif
     {
         Vec dir2 = {0.0f, 0.0f, 0.0f};
         pos.x = (s * k5) + mario->position.x;
@@ -842,12 +830,8 @@ static HitEntry* hitEstimate(s32* out) {
             return hit;
         }
     }
-#if VERSION <= VERSION_DEMO_JP
     ang = 0.78539816f;
     cy = (f32)cos(ang);
-#else
-    cy = (f32)cos(0.78539816f);
-#endif
     {
         Vec dir3 = {0.0f, 0.0f, 0.0f};
         pos.x = (s * k5) + mario->position.x;
@@ -865,12 +849,8 @@ static HitEntry* hitEstimate(s32* out) {
             return hit;
         }
     }
-#if VERSION <= VERSION_DEMO_JP
     ang = 0.0f;
     cy = (f32)cos(ang);
-#else
-    cy = (f32)cos(0.0f);
-#endif
     {
         Vec dir4 = {0.0f, 0.0f, 0.0f};
         dir4.y = -cy;

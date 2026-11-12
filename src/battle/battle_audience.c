@@ -4474,7 +4474,7 @@ void BattleAudienceSoundHandBeat(void) {
     BattleAudienceSound* sound;
     s32 left;
     s32 sum;
-    s32 vol;
+    u8 vol;
 
     BattleAudienceBaseGetPtr();
     sound = BattleAudienceSoundGetPtr(AUD_SOUND_HAND_BEAT);
@@ -4495,9 +4495,7 @@ void BattleAudienceSoundHandBeat(void) {
             vol = 75.0f + sum * (26.0f + irand(26)) / 200.0f;
         }
 
-        // FAKE: vol goes in untruncated through an s32 view of psndSFX_vol; the plain call through the u8
-        // prototype masks it to a byte first and changes the object.
-        ((void (*)(s32, s32))psndSFX_vol)(sound->sfxId, vol);
+        psndSFX_vol(sound->sfxId, vol);
         sound->currentBaseSfxVolume = vol;
         sound->baseSfxVolume = vol;
         sound->volumeMultiplier = 100;

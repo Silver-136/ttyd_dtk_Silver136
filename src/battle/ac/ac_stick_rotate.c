@@ -360,16 +360,12 @@ void battleAcDisp_StickRotate(CameraId cameraId, void* param) {
     BattleACDispParams* disp = &ac->disp;
     void (*fn)(f32, f32);
 
-// FAKE: `work` is a macro for the cast parameter, not a local: a `BattleWork* work = param;` local (before or after
-// disp) changes the object in both versions. #undef at the end of the function.
-#define work ((BattleWork*)param)
-
     if (ac->acFlags & AC_STICK_ROTATE_FLAG_GUIDED_UNUSED) {
         fn = actionCommandDisp;
     } else {
         fn = actionCommandDisp2;
     }
-    switch (work->actionCommands.acState) {
+    switch (ac->acState) {
         case AC_STATE_WAIT_START:
             disp->iconX = intplGetValue(EASING_QUADRATIC_OUT, -300.0f, 30.0f, 20 - disp->slideTimer, 20);
             fn(disp->iconX, disp->iconY);
@@ -399,7 +395,6 @@ void battleAcDisp_StickRotate(CameraId cameraId, void* param) {
             fn(disp->iconX, disp->iconY);
             break;
     }
-#undef work
 }
 
 // no automatic inlining for _get_icon_id, actionCommandDisp, actionCommandDisp2, as in the original (the object differs without it)

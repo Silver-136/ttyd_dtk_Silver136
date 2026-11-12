@@ -9347,7 +9347,7 @@ void psndExit(void) {
  * returns TRUE while groups remain and, after the last, frees the staging buffer,
  * marks sound as ready and returns FALSE.
  */
-BOOL psndPushGroup(void) {
+u32 psndPushGroup(void) {
     static u8 tbl[2];
     static s32 group;
 

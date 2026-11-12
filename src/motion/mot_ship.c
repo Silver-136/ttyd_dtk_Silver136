@@ -223,6 +223,15 @@ BOOL marioChkShipPlace(HitEntry* hit) {
     return (hitGetAttr(hit) & (HIT_ATTR_SHIP_PANEL1 | HIT_ATTR_SHIP_PANEL2 | HIT_ATTR_SHIP_PANEL3 | HIT_ATTR_SHIP_PANEL4)) != 0;
 }
 
+/** 0 while the boat's bob angle is past 180 degrees, else 1; shipEff picks the wake pulse size by it. */
+// Original name and place from the JP demo map (UNUSED there, 0x44 bytes: inlined into shipEff, the emitted copy is
+// stripped); this definition's out-of-line copy is 0x44 bytes too.
+static s32 shipYureguai(void) {
+    MarioWork* mario = marioGetPtr();
+
+    return (marioGetPtr()->motShip->bobAngle > 180.0f) ? 0 : 1;
+}
+
 /**
  * Re-applies the paper boat animation in Mario's current colour (paper_ship[marioGetColor()])
  * when mario.c rebuilds his look while sailing.
@@ -339,11 +348,7 @@ static inline void shipEff(f32 s) {
     // zz (0.0f) is added to position.y below (the add is in the retail code)
     f32 zz = 0.0f;
     if (!s) {
-        // FAKE: the c temporary choosing 0.3f/0.6f; s = (... > 180.0f) ? 0.6f : 0.3f changes the object
-        s32 c;
-        marioGetPtr();
-        c = (marioGetPtr()->motShip->bobAngle > 180.0f) ? 0 : 1;
-        s = c ? 0.3f : 0.6f;
+        s = shipYureguai() ? 0.3f : 0.6f;
         shipLerpWake(s, 0.1f);
         s = marioGetPtr()->motShip->wakeScale;
     }
