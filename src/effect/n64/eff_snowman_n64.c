@@ -128,7 +128,6 @@ static void effSnowmanMain(EffectEntry* effect) {
     Vec position;
     Vec tmp = {0.0f, 0.0f, 0.0f};
     f32 spd;
-    f32 zero;
     f32 sx;
     s32 frame;
 
@@ -137,8 +136,6 @@ static void effSnowmanMain(EffectEntry* effect) {
     tmp.z = work->position.z;
     position = tmp;
 
-    // FAKE: zero held in a local for the compares and stores; 0.0f literals change the object
-    zero = 0.0f;
     if (effect->flags & EFFECT_FLAG_SOFT_DELETE) {
         effect->flags &= ~EFFECT_FLAG_SOFT_DELETE;
         work->lifetime = 16;
@@ -159,12 +156,12 @@ static void effSnowmanMain(EffectEntry* effect) {
         work->alpha = frame * 16 + 15;
     }
     sx = work->speed.x;
-    if (sx != zero) {
+    if (sx) {
         spd = work->speed.y;
-        if (spd < zero) {
+        if (spd < 0.0f) {
             spd = -spd;
         }
-        if (sx < zero) {
+        if (sx < 0.0f) {
             work->rotY -= spd;
         } else {
             work->rotY += spd;
@@ -212,7 +209,7 @@ static void effSnowmanMain(EffectEntry* effect) {
             work->offset.y += work->speed.y;
             work->offset.z += work->speed.z;
             work->speed.y += work->gravity;
-            if (work->offset.y < zero) {
+            if (work->offset.y < 0.0f) {
                 switch (work->phase) {
                     case 0:
                         work->state = 0;
@@ -237,20 +234,20 @@ static void effSnowmanMain(EffectEntry* effect) {
                         break;
                     case 4:
                         work->speed.x = 10.0f;
-                        work->speed.z = zero;
+                        work->speed.z = 0.0f;
                         work->state = 1;
                         work->speed.y = 14.0f;
                         work->gravity = -1.0f;
                         break;
                     default:
-                        work->speed.x = zero;
-                        work->speed.y = zero;
-                        work->speed.z = zero;
-                        work->offset.y = zero;
+                        work->speed.x = 0.0f;
+                        work->speed.y = 0.0f;
+                        work->speed.z = 0.0f;
+                        work->offset.y = 0.0f;
                         work->state = 2;
                         break;
                 }
-                work->offset.y = zero;
+                work->offset.y = 0.0f;
                 work->counter = 0;
                 work->phase++;
             }

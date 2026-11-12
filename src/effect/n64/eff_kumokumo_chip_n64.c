@@ -49,7 +49,6 @@ EffectEntry* effKumokumoChipN64Entry(s32 type, f32 x, f32 y, f32 z, f32 tx, f32 
     f32 dx, dy, dz, dist;
     s32 lifetime;
     f32 inv;
-    f32 zero;
 
     effect = effEntry();
     effect->type = "KumokumoChipN64";
@@ -65,24 +64,8 @@ EffectEntry* effKumokumoChipN64Entry(s32 type, f32 x, f32 y, f32 z, f32 tx, f32 
     dz = tz - z;
     dist = dx * dx + dy * dy + dz * dz;
 
-    // FAKE: square root written out by hand (frsqrte plus three Newton steps) instead of sqrtf
-    zero = 0.0f;
-    if (dist != zero) {
-        f32 r;
-        if (dist > zero) {
-            f64 guess = __frsqrte(dist);
-            guess = 0.5 * guess * (3.0 - guess * guess * dist);
-            guess = 0.5 * guess * (3.0 - guess * guess * dist);
-            guess = 0.5 * guess * (3.0 - guess * guess * dist);
-            r = dist * guess;
-        } else if (dist < 0.0) {
-            r = NAN;
-        } else if (isnan(dist)) {
-            r = NAN;
-        } else {
-            r = dist;
-        }
-        dist = r;
+    if (dist) {
+        dist = sqrtf(dist);
     }
     if (speed > 0.0f) {
         lifetime = dist / speed;

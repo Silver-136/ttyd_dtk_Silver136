@@ -58,7 +58,6 @@ static void effWhirlwindDisp(CameraId cameraId, void* param);
  * (target NULL, type 1 when the unit faces left) and event scripts.
  */
 EffectEntry* effWhirlwindN64Entry(s32 type, MarioWork* target, f32 scale, s32 life) {
-    f32 quarter;
     EffectEntry* effect;
     EffWhirlwindN64Work* work;
     s32 i;
@@ -122,9 +121,7 @@ EffectEntry* effWhirlwindN64Entry(s32 type, MarioWork* target, f32 scale, s32 li
                 work->vel.y = 0.0f;
                 work->vel.z = (rand() % 2 * 2 - 1) * 4;
 
-                // FAKE: spare temporary for 0.25f; the plain literal changes the object
-                quarter = 0.25f;
-                work->scale = 0.5f + 0.5f * ((f32)(i - 1) * quarter);
+                work->scale = 0.5f + 0.5f * ((f32)(i - 1) / 4.0f);
                 work->rot.x = 25 * i;
                 work->rot.y = (i - 1) * 360 / 4;
                 work->rot.z = 360 - 38 * i;

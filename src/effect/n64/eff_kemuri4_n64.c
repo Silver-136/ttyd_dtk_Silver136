@@ -92,8 +92,6 @@ EffectEntry* effKemuri4N64Entry(s32 type, f32 x, f32 y, f32 z, f32 angle, f32 fl
     EffectEntry* effect;
     EffKemuri4N64Work* work;
 
-    // FAKE: zero holds 0.0f for the two flip tests; flip != 0.0f changes the object
-    f32 zero = 0.0f;
     f32 rad;
     s32 i;
 
@@ -117,7 +115,7 @@ EffectEntry* effKemuri4N64Entry(s32 type, f32 x, f32 y, f32 z, f32 angle, f32 fl
         work->alpha = 255;
         work->holdOnStay = 1.0f;
         work->moveScale = 5.4f;
-        work->rotSpeed = (f32)(flip != zero ? -10 : 10);
+        work->rotSpeed = (f32)(flip ? -10 : 10);
         work->velocity = 0.5f;
         work->accel = -0.07f;
         work->accel2 = 0.003f;
@@ -127,7 +125,7 @@ EffectEntry* effKemuri4N64Entry(s32 type, f32 x, f32 y, f32 z, f32 angle, f32 fl
         work->rotation.x = 0.0f;
         work->rotation.z = 0.0f;
         work->texFlag = (rand() % 100 >> 4) & 1;
-        rad = 6.2831855f * reviseAngle(angle + (f32)(flip != zero ? -90 : 90)) / 360.0f;
+        rad = 6.2831855f * reviseAngle(angle + (f32)(flip ? -90 : 90)) / 360.0f;
         work->dirX = (f32)sin(rad);
         work->dirZ = (f32)cos(rad);
     }

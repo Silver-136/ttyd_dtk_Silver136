@@ -1576,6 +1576,7 @@ void door_position_sub(s32 type, const char* map, const char* hitIn, const char*
     f32 w = 10.0f;
     f32 a, b;
     f32 t;
+    f32 half;
 
     if (!mario) {
         a = 40.0f;
@@ -1592,14 +1593,11 @@ void door_position_sub(s32 type, const char* map, const char* hitIn, const char*
         PSVECSubtract(&max, &min, &d);
         if (d.x) {
             t = d.x / (f32)cos((f32)atan(d.z / d.x));
-            w = t / 2.0f;
+            half = t / 2.0f;
         } else {
-            w = d.z / 2.0f;
+            half = d.z / 2.0f;
         }
-
-        // FAKE: self-assignment through t; removing it changes the object
-        t = w;
-        w = t;
+        w = half;
     }
     switch (type) {
         case 0:

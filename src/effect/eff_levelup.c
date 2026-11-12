@@ -240,8 +240,6 @@ static void effLevelupDisp(CameraId cameraId, EffectEntry* effect) {
     f32 dx;
     f32 dy;
 
-    // FAKE: 0.5f held in a local for the quad half-widths; width * 0.5f changes the object
-    f32 halfScale = 0.5f;
 #if VERSION >= VERSION_US
     GXTexObj texObj2;
     f32 width;
@@ -324,8 +322,8 @@ static void effLevelupDisp(CameraId cameraId, EffectEntry* effect) {
                 s32 arr[2][4] = { { 0, 128, 120, 24 }, { 0, 176, 68, 24 } };
                 f32 width = *(s32*)((u8*)arr[gp->language != LANGUAGE_JP] + tofs);
 #endif
-                f32 half = width * halfScale;
-                f32 negHalf = -width * halfScale;
+                f32 half = width / 2.0f;
+                f32 negHalf = -width / 2.0f;
                 GXPosition3f32(negHalf, height, 0.0f);
                 GXTexCoord2f32(0.0f, 0.0f);
                 GXPosition3f32(half, height, 0.0f);

@@ -40,7 +40,6 @@ EffectEntry* effSmallStarN64Entry(s32 type, s32 count, f32 x, f32 y, f32 z, f32 
     EffSmallStarN64Work* w;
     f32 px, py, pz;
     f32 inv;
-    f32 zr;
     f32 len;
     f32 ang;
     s32 i;
@@ -53,20 +52,18 @@ EffectEntry* effSmallStarN64Entry(s32 type, s32 count, f32 x, f32 y, f32 z, f32 
     }
     len = dx * dx + dy * dy + dz * dz;
 
-    // FAKE: zero kept in a local for the comparisons; comparing with 0.0f literals changes the object
-    zr = 0.0f;
-    if (len == zr) {
+    if (!len) {
         return NULL;
     }
     inv = -1.0f / sqrtf(len);
     dx *= inv;
     dy *= inv;
     dz *= inv;
-    if (dx != zr) {
+    if (dx) {
         px = -dy / dx;
         py = 1.0f;
         pz = 0.0f;
-    } else if (dy != zr) {
+    } else if (dy) {
         px = 1.0f;
         py = -dx / dy;
         pz = 0.0f;
@@ -76,7 +73,7 @@ EffectEntry* effSmallStarN64Entry(s32 type, s32 count, f32 x, f32 y, f32 z, f32 
         pz = -dx / dz;
     }
     len = px * px + py * py + pz * pz;
-    if (len == zr) {
+    if (!len) {
         return NULL;
     }
     inv = 1.0f / sqrtf(len);

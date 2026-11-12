@@ -546,7 +546,6 @@ static void effFunemizuShibukiDisp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* cam;
     s32 i;
     f32 w = 3.0f;
-    f32 nw;
 
     cam = camGetPtr(cameraId);
     GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
@@ -577,8 +576,6 @@ static void effFunemizuShibukiDisp(CameraId cameraId, EffectEntry* effect) {
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
 
-    // FAKE: nw = -w with mixed nw / 2 and w * 0.5f corners; -w * 0.5f throughout changes the object
-    nw = -w;
     work++;
     for (i = 1; i < effect->count; i++, work++) {
         if (work->delay == 0 && !(work->position.y < 0.0f)) {
@@ -588,13 +585,13 @@ static void effFunemizuShibukiDisp(CameraId cameraId, EffectEntry* effect) {
             GXLoadPosMtxImm(trans, GX_PNMTX0);
             GXSetCurrentMtx(GX_PNMTX0);
             GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-            GXPosition3f32(nw / 2, w * 0.5f, 0.0f);
+            GXPosition3f32(-w / 2, w / 2, 0.0f);
             GXTexCoord2f32(0.0f, 0.0f);
-            GXPosition3f32(w * 0.5f, w * 0.5f, 0.0f);
+            GXPosition3f32(w / 2, w / 2, 0.0f);
             GXTexCoord2f32(1.0f, 0.0f);
-            GXPosition3f32(w * 0.5f, nw / 2, 0.0f);
+            GXPosition3f32(w / 2, -w / 2, 0.0f);
             GXTexCoord2f32(1.0f, 1.0f);
-            GXPosition3f32(nw / 2, nw / 2, 0.0f);
+            GXPosition3f32(-w / 2, -w / 2, 0.0f);
             GXTexCoord2f32(0.0f, 1.0f);
         }
     }

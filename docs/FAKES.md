@@ -201,8 +201,6 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | rels/end/src/end_00.c | (data: `fd_end_00_*` dtrigf constants) | the unit's dtrigf constants are hand-made globals: in the original they follow the unit's own data instead of leading it, so the unit is built without msl_rel.pch (PCH_EXCLUDE in configure.py) | msl_rel.pch: constants placed first, end.rel 4 bytes short (R) |
 | Both | src/battle/battle_seq_command.c | _get_msg | empty `if (!event->args && !event->args) {}` in case 1; `#pragma auto_inline on` around the function in this `-inline noauto` unit (as an auto-inline candidate it gets the front end's simple optimizer pass: target string base register) | removing either changes the object in both versions (dead_probe.py; five declaration/argument orders under noauto) |
 | Both | src/event/evt_sub.c | coin_fmt | `#pragma force_active` keeps evt_npc's orphan "%f%f%f" (from the dead-stripped evt_npc_set_position_xls) at the start of evt_sub's .rodata; JP and later only | see comment |
-| Both | src/event/evt_sub.c | evt_sub_spline_get_value_manual | `t = t;` self-assignment | removing it changes the object in both versions (dead_probe.py) |
-| Both | src/event/evt_telop.c | telop | `scale = scale;` as the then-branch | removing it changes the object in both versions (dead_probe.py) |
 | Both | src/manager/fontmgr.c | FontDrawMessageMtx | `scale = scale;` before iconDispGxAlpha | removing it changes the object in both versions (dead_probe.py) |
 | Both | src/mario/mario_kemuri.c | mario_kemuri | `s = s;` as the then-branch of the dokan check | removing it changes the object in both versions (dead_probe.py) |
 | Both | rels/gon/src/gon_03.c | senkaron_ext_main | `SFX_NAME_WORD` on a name literal at the use: the integer word keeps the address in a saved register (include/sfx_name_word.h) | a plain literal differs; settled with the other SFX_NAME_WORD literal sites if the sound functions prove to take a word |
@@ -312,7 +310,6 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | src/driver/windowdrv.c | windowDispGX_System | GXPosition3f32(0.0f, y3, 0.0f) written out as FIFO stores with y3/y4 computed between them; the plain call changes the object | see comment |
 | Both | src/driver/windowdrv.c | windowDispGX2_Waku_col | negated and halved in two steps with a no-op (f32) cast; `left = -width / 2.0f;` changes the object | see comment |
 | Both | src/effect/eff_funemizu.c | effFunemizuDisp | funemizuCallDL wraps this display-list loop with a dead read and write-back of u; the plain loop changes the object | see comment |
-| Both | src/effect/eff_funemizu.c | effFunemizuShibukiDisp | `nw = -w` with mixed `nw / 2` and `w * 0.5f` quad corners | `-w * 0.5f` corners: changes the object |
 | Both | src/driver/mobjdrv.c | mobjHitEntry | (0, x) comma expressions around the x and z __fabs calls; the plain __fabs changes the object | see comment |
 | Both | src/driver/mobjdrv.c | mobjStrippedFallPool | stand-in, never called (in neither symbol map; the linker strips it); it only places its literals in the .sdata2 pool | see comment |
 | Both | src/driver/msgdrv.c | (file scope) hankakuSearch | private prototypes taking s32 (US and later) or char (JP, early demos); the definition in fontmgr.c takes s8 | `u16 hankakuSearch(s8 c);` in fontmgr.h: changes the object |
@@ -322,58 +319,48 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | src/effect/eff_kemutest.c | effKemuTestEntry, effKemuTestMain | named file-scope static const aggregates (kemu_a..kemu_h, kemu_pos, kemu_tmp) copied into locals | see comment |
 | JP | src/effect/eff_kemutest.c | __declspec | zero filler objects with no known owner (4 bytes of .rodata, 28 bytes of .data; the other versions need neither); without them the object changes | see comment |
 | JP | src/effect/eff_levelup.c | getX | (gp->language ? 0 : 1) == 0 stands for gp->language != LANGUAGE_JP; the plain test changes the object | see comment |
-| Both | src/effect/eff_levelup.c | effLevelupDisp | 0.5f held in `halfScale`; work array and texid_tbl walked by byte offsets (ofs/tofs) | `width * 0.5f`: changes the object |
+| Both | src/effect/eff_levelup.c | effLevelupDisp | work array and texid_tbl walked by byte offsets (ofs/tofs) | indexing by i: changes the object |
 | Both | src/effect/eff_mizutama.c | effMizutamaEntry | parameter z reused as the half-width; the local dist (as in the circle branch) changes the object | see comment |
 | Both | src/effect/eff_mobj_broken.c | effMObjBrokenMain | the counter done is reused as the loop index; a loop over i changes the object | see comment |
 | Both | src/effect/eff_mugi.c | effMugiKemuri2Entry | discarded `__fabs(x * 0.005)` (it only creates the 0.005 constant); deleting it changes the object | see comment |
-| Both | src/effect/eff_nice.c | effNiceEntry | size reused for the in-battle flag; passing gp->inBattle != 0 directly changes the object | see comment |
 | Both | src/effect/eff_particle.c | particleStrippedPool | stand-in that nothing calls; its int-to-float constant (JP demo map @715) is the last item in .rodata; owner one of the UNUSED ParticleInit, EmitterInit, EmitterUpdate, ParticleUpdate (unknown which) | see comment |
 | Both | src/effect/eff_starpoint.c | _cosf | dead guard (gz is always 0, emits no code); without it the caller's 2.0f constant is loaded at a different point and the object changes | see comment |
 | Both | src/effect/n64/eff_balloon_n64.c | effBalloonDisp | element pointer cast instead of &vtx[i + 2].x; the plain form changes the object | see comment |
-| Both | src/effect/n64/eff_blow_n64.c | effBlowN64Entry | zr holds 0.0f for the comparisons below; comparing with 0.0f directly changes the object | see comment |
 | Both | src/effect/n64/eff_cloud_n64.c | effCloudDisp | zero is added to z when the vertices are written; (s16)z changes the object | see comment |
 | Both | src/effect/n64/eff_horao_spell_n64.c | effHoraoSpellDisp | p[1] is q; writing y and z through q changes the object | see comment |
-| Both | src/effect/n64/eff_kemuri10_n64.c | effKemuri10N64Entry | zr holds 0.0f for the zero tests and stores | 0.0f literals: changes the object |
 | Both | src/effect/n64/eff_kemuri1_n64.c | effKemuri1Disp | colour filled in through a pointer to a zeroed compound literal; (GXColor){work->r, work->g, work->b, 0xFF} changes the object | see comment |
 | Both | src/effect/n64/eff_kemuri3_n64.c | effKemuri3N64Entry | `opt_propagation` off for the function | removing it changes the object; the file-wide `-opt noprop` changes other functions (2026-11-07) |
 | Both | src/effect/n64/eff_kemuri8_n64.c | effKemuri8N64Entry | one-use inline inline_fn computes radius * -sin; writing it out changes the object; `opt_propagation` off for the function | see comment |
-| Both | src/effect/n64/eff_kumokumo_chip_n64.c | effKumokumoChipN64Entry | square root expanded by hand (__frsqrte plus three Newton steps) instead of sqrtf | sqrtf (changes the object) |
 | Both | src/effect/n64/eff_magic3_n64.c | effMagic3N64Entry | nx * nx + ny * ny + nz * nz with ny * ny written as 1.0f and nz * nz as nz (exact for ny = -1, nz = 0); the plain sum changes the object; `opt_propagation` off for the function | see comment |
 | Both | src/effect/n64/eff_magic3_n64.c | effMagic3Main | magic3_scale(a, b) is 3.0f * a + b; the written-out sum changes the object | see comment |
 | Both | src/effect/n64/eff_magic_horao_n64.c | effMagicHoraoDisp | ang is assigned in a comma expression inside the initializer; assigning it in its own statement changes the object | see comment |
 | Both | src/effect/n64/eff_opuku_jetwrain_n64.c | effOpukuJetwrainN64Entry | inline_fn(j) is j < 13; the plain loop condition changes the object | see comment |
 | Both | src/effect/n64/eff_opuku_jetwrain_n64.c | effOpukuJetwrainMain | inline_fn2(j) is j < 12; the plain loop condition changes the object | see comment |
 | Both | src/effect/n64/eff_peach_dust_n64.c | effPeachDustDisp | k and h hold the 1.4f/0.7f factors in a block of their own; the literal factors change the object | see comment |
-| Both | src/effect/n64/eff_pokopi_thunder_n64.c | effPokopiThunderN64Entry | spare local holding 0.0f for the length test; comparing with 0.0f directly changes the object | see comment |
 | Both | src/effect/n64/eff_pokopi_thunder_n64.c | effPokopiThunderDisp | pt_dy(work, work) is end.y - start.y through an inline helper; the plain expression changes the object | see comment |
 | Both | src/effect/n64/eff_pturn_n64.c | effPturnMain | spare flag local for the condition; testing it directly changes the object | see comment |
 | Both | src/effect/n64/eff_recover_heart_n64.c | effRecoverHeartDisp | tex first holds the type test, then the texture id; testing the condition directly changes the object | see comment |
 | Both | src/effect/n64/eff_ripple_n64.c | effRippleDisp | type is read through a cast of userdata before work is set; reading work->type changes the object | see comment |
 | Both | src/effect/n64/eff_rothammer_fail_n64.c | effRotHammerFailN64Entry | child = work + 1 through a pointer step and back; the plain assignment changes the object; zero held in a local for the 0.0f stores and sin(zero)/cos(zero) | see comment |
-| Both | src/effect/n64/eff_small_star_n64.c | effSmallStarN64Entry | zero kept in a local for the comparisons; comparing with 0.0f literals changes the object | see comment |
 | Both | src/effect/n64/eff_small_star_n64.c | alphaf, effSmallStarMain | `opt_propagation` and `opt_lifetimes` off over both functions | removing it changes the object; the file-wide `-opt noprop,nolifetimes` changes other functions (2026-11-07) |
 | Both | src/effect/n64/eff_snowfall_n64.c | effSnowfallDisp | discarded compound literal with no effect; removing it changes the object | see comment |
 | Both | src/effect/n64/eff_sstar_n64.c | effSstarDisp | vertex fields addressed through s16* casts; &w->vtx[i * 2 + 1].x/.y/.z change the object | see comment |
 | Both | src/effect/n64/eff_stardust2_n64.c | effStardust2Main | (u32)type > 1 tests type other than 0 and 1; type != 0 && type != 1 changes the object | see comment |
 | Both | src/effect/n64/eff_sweat_n64.c | sin | sin/cos declared with float parameters; the library's double prototypes change the object | see comment |
 | Both | src/effect/n64/eff_vapor_n64.c | effVaporDisp | rows indexed as (table + type * 30)[n]; table[type * 30 + n] changes the object | see comment |
-| Both | src/effect/n64/eff_whirlwind_n64.c | effWhirlwindN64Entry | spare temporary for 0.25f; the plain literal changes the object | see comment |
 | Both | src/event/evt_mario.c | evt_mario_set_motion | function-pointer cast passes the s32 without narrowing to MarioMotion; marioChgMot(evtGetValue(...)) changes the object | marioChgMot(s32) (mario_motion, mario_sbr change) |
 | Both | src/event/evt_mario.c | evt_mario_paper_pose_dokan | unreferenced static const char names[] holding the six DOKAN_* pose names with hand padding | see comment |
 | Both | src/event/evt_batstage.c | (file scope) BattleStage*Dark* | private prototypes of the six stage/audience darkness setters with an s32 mode; battle_stage.c defines them with u8 mode | the definitions' prototypes in battle_stage.h: changes the object |
 | Both | src/event/evt_bero.c | bero_get_kind | walk flag picks a pointer-walk loop (evt_bero_get_info_num) or the index loop (evt_bero_get_into_info); constant-folded per call site | see comment |
 | Both | src/event/evt_bero.c | evt_bero_move_mario_speed | spare temporary for BeroSX; using BeroSX directly changes the object | see comment |
 | Both | src/event/evt_cam.c | evt_cam_debug_print | stand-in for the dead-stripped evt_cam3d_evt_set_xls / evt_cam3d_evt_set_rel_xls (JP demo map, UNUSED); it only keeps their format string and 100.0f. Bodies unknown (sscanf forms tried miss the map sizes). | see comment |
-| Both | src/event/evt_door.c | door_position_sub | self-assignment through t; removing it changes the object | see comment |
 | Both | src/event/evt_item.c | evt_item_get_important_item | float bits stored through an s32 view; event->userdataf[n] = value changes the object | see comment |
 | Both | src/event/evt_lottery.c | evt_lottery | bt is a spare temporary (two different shapes for the same sum); passing lot->buyTime + ... directly changes the object | see comment |
 | Both | src/event/evt_mobj.c | mobj_recovery_blk_recover | case 4 repeats these steps inline instead of calling this helper; calling it there changes the object | see comment |
-| Both | src/event/evt_mobj.c | mobj_koopa_ojama_blk_evt | unused Vec local; removing the block changes the object | see comment |
 | Both | src/event/evt_mobj.c | mobj_recovery_blk (effCoinFukidashiEntry) | private float-first prototype (x, y, z, type, number, duration) | eff_batfukidashi.h's (type, number, duration, x, y, z) with reordered calls: changes the object |
 | Both | src/event/evt_nannpc.c | evt_nannpc_entry | the value goes through a long long cast; plain name = evtGetValue(...) changes the object | see comment |
 | Demos | src/event/evt_npc.c | npc_report_pos | stand-in for the dead-stripped evt_npc_set_position_xls (JP demo map, UNUSED 0xb4); it only keeps its "%f%f%f" at the end of .rodata. Body unknown. | see comment |
 | Both | src/event/evt_party.c | evtPartyStrippedPool | stand-in that nothing calls (in neither symbol map); it only fixes the order of these literals in the constant pool; removing it changes the object | see comment |
-| Both | src/event/evt_party.c | (file scope) bomheiGetStatus | private prototype returning s32; party_bomhei.c returns u8 | `u8 bomheiGetStatus(void)` in party_bomhei.h: changes the object |
 | Both | src/event/evt_shop.c | evt_shop_main_func | the masks and BOOL casts do nothing (!x is 0 or 1); !marioChkCtrl() // !marioChkKey() changes the object | see comment |
 | Both | src/manager/cardmgr.c | memcard_probe | self-assignment with no effect; without it the object changes | see comment |
 | Both | src/manager/evtmgr_cmd.c | evtGetValue | result stored back into index; return (mask & data) != 0 changes the object | see comment |
@@ -450,10 +437,7 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | src/effect/eff_kemuri.c | effKemuri2Entry | `opt_propagation` off for the function (its spare temporaries only make sense under it) | removing it changes the object; the file-wide `-opt noprop` changes other functions (2026-11-07) |
 | Both | src/effect/eff_kemuri.c | effKemuri2Main | `opt_propagation` off for the function, with the `data = p` / `p = data` re-assignment | removing it changes the object; the file-wide `-opt noprop` changes other functions (2026-11-07) |
 | Both | src/effect/eff_mist2.c | effMist2Disp | constant locals w = 16.0f, k = 255.0f, h = 8.0f | literals: changes the object |
-| Both | src/effect/eff_nozle.c | effNozleMain | `< 21U` unsigned compare on the s32 life (also tested signed: < 1000, < 16, < 0) | `< 21`: changes the object |
-| Both | src/effect/n64/eff_kemuri4_n64.c | effKemuri4N64Entry | zero held in a local for the two flip tests | `flip != 0.0f`: changes the object |
 | Both | src/effect/n64/eff_kemuri5_n64.c | effKemuri5N64Entry, effKemuri5Main | `opt_propagation` off over both functions | removing it changes the object; the file-wide `-opt noprop` changes other functions (2026-11-07) |
-| Both | src/effect/n64/eff_snowman_n64.c | effSnowmanMain | zero held in a local for about 11 compares and stores | 0.0f literals: changes the object |
 | Both | src/event/evt_msg.c | _evt_msg_print (msgWindow_Entry) | call through a cast to an `(const char*, s32, s32)` function type, passing `(s16)event->msgPriority` | plain call with msgdrv.h's u16 priority prototype: changes the object |
 | PAL | src/event/evt_msg.c | (file scope) | msgArticlePad: unused zero object, read by nothing | removing it changes the object |
 | Both | src/event/evt_msg.c | (file scope) msgWindow_Add | private `const char*` prototype; the definition takes `char*` (msgAnalize takes char* after the early demos) | header prototype: build errors at the const char* calls without casts |

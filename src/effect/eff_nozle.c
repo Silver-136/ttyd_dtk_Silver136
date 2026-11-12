@@ -508,8 +508,7 @@ static void effNozleMain(EffectEntry* effect) {
                 work->sy = scale_dt[work->timer][1] / 100.0f;
             }
 
-            // FAKE: unsigned compare on a signed counter (guards scale_dt[21]); < 21 changes the object
-            if (work->life < 21U) {
+            if (work->life < sizeof(scale_dt) / sizeof(scale_dt[0])) {
                 work->sx = scale_dt[work->life][0] / 100.0f;
                 work->sy = scale_dt[work->life][1] / 100.0f;
             }

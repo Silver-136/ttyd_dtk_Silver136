@@ -153,10 +153,10 @@ void bomhei_init_800BFBB0(PartyEntry* party) {
  * but not using his ability. Otherwise returns 1 for use motion 60 (Bobbery's blast), 2 for other motions;
  * the motion-60 test itself does not require the selected partner to be Bobbery.
  */
-u8 bomheiGetStatus(void) {
+s32 bomheiGetStatus(void) {
     u32 partyId = marioGetPartyId();
     PartyEntry* party = partyGetPtr(partyId);
-    u8 status = 2;
+    s32 status = 2;
 
     if (party == NULL || (party->currentMemberId == PARTY_BOBBERY && (party->flags & PARTY_FLAG_IS_BEING_USED) == 0)) {
         status = 0;

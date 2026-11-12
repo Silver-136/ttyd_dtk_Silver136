@@ -1642,12 +1642,11 @@ USER_FUNC(evt_sub_spline_get_value) {
 USER_FUNC(evt_sub_spline_get_value_manual) {
     EvtWord* args = event->args;
     SplineWork* w = (SplineWork*)event->lwData[15];
-    f32 t = evtGetValue(event, args[0]);
+    f32 pos = evtGetValue(event, args[0]);
+    f32 t;
     Vec v;
 
-    // FAKE: no-op self-assignment; without it t's conversion is scheduled differently
-    t = t;
-    t = t / (w->manual ? (f32)w->msec : (f32)w->steps);
+    t = pos / (w->manual ? (f32)w->msec : (f32)w->steps);
     spline_getvalue(&v, t, w->n, w->pts, w->ts, w->tbl);
     evtSetValue(event, args[1], FLOAT(v.x));
     evtSetValue(event, args[2], FLOAT(v.y));

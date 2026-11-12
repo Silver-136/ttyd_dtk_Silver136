@@ -195,9 +195,7 @@ EffectEntry* effNiceEntry(s32 type, f32 x, f32 y, f32 z) {
             }
             break;
         default:
-            // FAKE: size reused for the in-battle flag; passing gp->inBattle != 0 directly changes the object
-            size = gp->inBattle != 0;
-            userdata->poseId = animPoseEntry(anim_tbl[gp->language][type], size);
+            userdata->poseId = animPoseEntry(anim_tbl[gp->language][type], gp->inBattle ? 1 : 0);
             animPoseSetAnim(userdata->poseId, "A_1", TRUE);
             animPoseSetMaterialFlagOn(userdata->poseId, (MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2));
             animPoseSetGXFunc(userdata->poseId, rendermodeFunc, FALSE);

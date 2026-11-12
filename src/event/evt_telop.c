@@ -210,9 +210,8 @@ static void telop(CameraId cameraId, void* param) {
     width = FontGetMessageWidth(msg);
     scale = 1.0f;
     if (gp->language != LANGUAGE_JP) {
-        if ((f32)width / (texW - 100.0f) < scale) {
-            // FAKE: no-op self-assignment (the branch keeps scale); without it the comparison is laid out differently
-            scale = scale;
+        if ((f32)width / (texW - 100.0f) < 1.0f) {
+            scale = 1.0f;
         } else {
             scale = (texW - 100.0f) / (f32)width;
         }

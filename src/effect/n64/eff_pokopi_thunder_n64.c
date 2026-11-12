@@ -67,7 +67,6 @@ EffectEntry* effPokopiThunderN64Entry(s32 type, s32 duration, f32 x, f32 y, f32 
     s32 cam;
     f32 len;
     f32 dx;
-    f32 nv;
     f32 dy;
     f32 dz;
 
@@ -105,11 +104,9 @@ EffectEntry* effPokopiThunderN64Entry(s32 type, s32 duration, f32 x, f32 y, f32 
     work->position.y = y;
     work->position.z = z;
 
-    // FAKE: spare local holding 0.0f for the length test; comparing with 0.0f directly changes the object
-    nv = 0.0f;
     work->scale = scale;
     work->cameraId = cam;
-    if (len != nv) {
+    if (len) {
         work->length = sqrtf(len);
     } else {
 

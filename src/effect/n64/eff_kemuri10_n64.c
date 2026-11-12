@@ -65,36 +65,33 @@ EffectEntry* effKemuri10N64Entry(s32 type, f32 x, f32 y, f32 z, f32 dx, f32 dy, 
     EffectEntry* effect;
     EffKemuri10N64Work* work;
     f32 inv;
-    f32 zr;
     f32 az, ay, ax;
     f32 bx, by, bz;
 
     effect = effEntry();
 
-    // FAKE: zr holds 0.0f for the comparisons and stores; 0.0f literals change the object
-    zr = 0.0f;
-    if (dx == zr && dy == zr && dz == zr) {
+    if (!dx && !dy && !dz) {
         return NULL;
     }
     inv = dx * dx + dy * dy + dz * dz;
-    if (inv == zr) {
+    if (!inv) {
         return NULL;
     }
     inv = 1.0f / sqrtf(inv);
     dx *= inv;
     dy *= inv;
     dz *= inv;
-    if (dx != zr || dz != zr) {
+    if (dx || dz) {
         az = dz;
-        ay = zr;
+        ay = 0.0f;
         ax = -dx;
     } else {
         az = 1.0f;
-        ax = zr;
-        ay = zr;
+        ax = 0.0f;
+        ay = 0.0f;
     }
     inv = az * az + ay * ay + ax * ax;
-    if (inv == zr) {
+    if (!inv) {
         return NULL;
     }
     inv = 1.0f / sqrtf(inv);
@@ -105,7 +102,7 @@ EffectEntry* effKemuri10N64Entry(s32 type, f32 x, f32 y, f32 z, f32 dx, f32 dy, 
     by = ax * dx - az * dz;
     bz = az * dy - ay * dx;
     inv = bx * bx + by * by + bz * bz;
-    if (inv == zr) {
+    if (!inv) {
         return NULL;
     }
     inv = 1.0f / sqrtf(inv);
@@ -144,9 +141,9 @@ EffectEntry* effKemuri10N64Entry(s32 type, f32 x, f32 y, f32 z, f32 dx, f32 dy, 
     work->rot[0][2] = dx;
     work->rot[1][2] = dy;
     work->rot[2][2] = dz;
-    work->rot[0][3] = zr;
-    work->rot[1][3] = zr;
-    work->rot[2][3] = zr;
+    work->rot[0][3] = 0.0f;
+    work->rot[1][3] = 0.0f;
+    work->rot[2][3] = 0.0f;
     work->scale = 0.1f * scale;
 #if VERSION >= VERSION_JP
     work->camera = CAMERA_3D;

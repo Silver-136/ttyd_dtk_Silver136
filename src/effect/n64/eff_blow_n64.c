@@ -53,7 +53,6 @@ EffectEntry* effBlowN64Entry(s32 type, s32 count, f32 x, f32 y, f32 z, f32 dx, f
     EffBlowN64Work* w;
     f32 px, py, pz;
     f32 inv;
-    f32 zr;
     s32 i;
     Mtx mtx;
     Vec axis;
@@ -61,24 +60,22 @@ EffectEntry* effBlowN64Entry(s32 type, s32 count, f32 x, f32 y, f32 z, f32 dx, f
     // BUG: the slot is taken before the count and direction checks below; their early returns leave this entry without userdata or callback, and nothing releases it.
     effect = effEntry();
 
-    // FAKE: zr holds 0.0f for the comparisons below; comparing with 0.0f directly changes the object
-    zr = 0.0f;
     if (count == 0) {
         return NULL;
     }
     inv = dx * dx + dy * dy + dz * dz;
-    if (inv == zr) {
+    if (!inv) {
         return NULL;
     }
     inv = -1.0f / sqrtf(inv);
     dx *= inv;
     dy *= inv;
     dz *= inv;
-    if (dx != zr) {
+    if (dx) {
         px = -dy / dx;
         py = 1.0f;
         pz = 0.0f;
-    } else if (dy != zr) {
+    } else if (dy) {
         px = 1.0f;
         py = -dx / dy;
         pz = 0.0f;
@@ -88,7 +85,7 @@ EffectEntry* effBlowN64Entry(s32 type, s32 count, f32 x, f32 y, f32 z, f32 dx, f
         pz = -dx / dz;
     }
     inv = px * px + py * py + pz * pz;
-    if (inv == zr) {
+    if (!inv) {
         return NULL;
     }
     inv = 1.0f / sqrtf(inv);
