@@ -1065,17 +1065,22 @@ void SoundEfxStop(s32 chan) {
     }
 }
 
+/** Returns the MusyX voice of the effect on chan (through its emitter for emitter effects). */
+// Original name and size (0x54) from the JP demo map (UNUSED there: every call is inlined).
+SND_VOICEID SoundEfxGetVoiceID(s32 chan) {
+    SoundEffect* sfx = &sound.effects[chan];
+
+    if (sfx->flags & SOUND_EFX_FLAG_EMITTER_UNUSED) {
+        return sndFXCheck(sndEmitterVoiceID(&sfx->emitter));
+    }
+    return sndFXCheck(sfx->voiceId);
+}
+
 /** Bends the pitch of the effect on chan (0 = unchanged; 0x2000 is MusyX's centre). */
 void SoundEfxSetPitch(s32 chan, s16 pitch) {
-    SoundEffect* sfx;
     SND_VOICEID vid;
 
-    sfx = &sound.effects[chan];
-    if (sfx->flags & SOUND_EFX_FLAG_EMITTER_UNUSED) {
-        vid = sndFXCheck(sndEmitterVoiceID(&sfx->emitter));
-    } else {
-        vid = sndFXCheck(sfx->voiceId);
-    }
+    vid = SoundEfxGetVoiceID(chan);
     if (vid != -1) {
         sndFXPitchBend(vid, (u16)(pitch + 0x2000));
     }
@@ -1087,11 +1092,7 @@ void SoundEfxSetVolume(s32 chan, u8 vol) {
     SND_VOICEID vid;
 
     sfx = &sound.effects[chan];
-    if (sfx->flags & SOUND_EFX_FLAG_EMITTER_UNUSED) {
-        vid = sndFXCheck(sndEmitterVoiceID(&sfx->emitter));
-    } else {
-        vid = sndFXCheck(sfx->voiceId);
-    }
+    vid = SoundEfxGetVoiceID(chan);
     if (vid != -1) {
         sfx->vol = vol;
         sndFXVolume(vid, vol);
@@ -1110,15 +1111,9 @@ u8 SoundEfxGetVolume(s32 chan) {
 
 /** Sets the reverb send of the effect on chan. */
 void SoundEfxSetAux1(s32 chan, u8 reverb) {
-    SoundEffect* sfx;
     SND_VOICEID vid;
 
-    sfx = &sound.effects[chan];
-    if (sfx->flags & SOUND_EFX_FLAG_EMITTER_UNUSED) {
-        vid = sndFXCheck(sndEmitterVoiceID(&sfx->emitter));
-    } else {
-        vid = sndFXCheck(sfx->voiceId);
-    }
+    vid = SoundEfxGetVoiceID(chan);
     if (vid != -1) {
         sndFXReverb(vid, reverb);
     }
@@ -1128,17 +1123,10 @@ void SoundEfxSetAux1(s32 chan, u8 reverb) {
 void SoundEfxSetPan(s32 chan, u8 pan) {
     SoundEffect* sfx;
     SND_VOICEID vid;
-    SoundEffect* e;
 
-    // FAKE: the store goes through its own pointer e to the entry, then sfx is formed again; one pointer (sfx = &sound.effects[chan]; sfx->pan = pan) changes the object
-    e = &sound.effects[chan];
-    e->pan = pan;
     sfx = &sound.effects[chan];
-    if (sfx->flags & SOUND_EFX_FLAG_EMITTER_UNUSED) {
-        vid = sndFXCheck(sndEmitterVoiceID(&sfx->emitter));
-    } else {
-        vid = sndFXCheck(sfx->voiceId);
-    }
+    sfx->pan = pan;
+    vid = SoundEfxGetVoiceID(chan);
     if (vid != -1) {
         sndFXPanning(vid, pan);
     }
@@ -1152,14 +1140,10 @@ void SoundEfxSetSrndPan(s32 chan, u8 span) {
     SoundEffect* sfx;
     SND_VOICEID vid;
     s32 doppler;
-    SoundEffect* e;
 
-    // FAKE: the store goes through its own pointer e to the entry, then sfx is formed again; one pointer (sfx = &sound.effects[chan]; sfx->span = span) changes the object
-    e = &sound.effects[chan];
-    e->span = span;
     sfx = &sound.effects[chan];
-    vid = (sfx->flags & SOUND_EFX_FLAG_EMITTER_UNUSED) ? sndFXCheck(sndEmitterVoiceID(&sfx->emitter))
-                              : sndFXCheck(sfx->voiceId);
+    sfx->span = span;
+    vid = SoundEfxGetVoiceID(chan);
     if (vid != -1) {
         sndFXSurroundPanning(vid, span);
         if (span == 0) {
@@ -1175,15 +1159,9 @@ void SoundEfxSetSrndPan(s32 chan, u8 span) {
 
 /** Applies a low-pass filter at freq to the effect on chan; 0 removes it. */
 void SoundEfxSetLPF(s32 chan, s16 freq) {
-    SoundEffect* sfx;
     u32 voiceId;
 
-    sfx = &sound.effects[chan];
-    if (sfx->flags & SOUND_EFX_FLAG_EMITTER_UNUSED) {
-        voiceId = sndFXCheck(sndEmitterVoiceID(&sfx->emitter));
-    } else {
-        voiceId = sndFXCheck(sfx->voiceId);
-    }
+    voiceId = SoundEfxGetVoiceID(chan);
     if (voiceId != -1) {
         if (!freq) {
             sndFXSetFilter(voiceId, SND_FILTER_NONE, 0);
@@ -1207,12 +1185,8 @@ u32 SoundEfxCheck(s32 chan) {
         return FALSE;
     }
     if (!(sfx->flags & SOUND_EFX_FLAG_EMITTER_UNUSED)) {
-        SND_VOICEID vid;
-        if (sfx->flags & SOUND_EFX_FLAG_EMITTER_UNUSED) {
-            vid = sndFXCheck(sndEmitterVoiceID(&sfx->emitter));
-        } else {
-            vid = sndFXCheck(sfx->voiceId);
-        }
+        SND_VOICEID vid = SoundEfxGetVoiceID(chan);
+
         if (sndFXCheck(vid) == -1) {
             return FALSE;
         }
@@ -1226,15 +1200,9 @@ u32 SoundEfxCheck(s32 chan) {
 
 /** Frees the effect channel chan if its voice has ended. */
 inline void SoundEfxCheckCh(s32 chan) {
-    SoundEffect* effect;
     SND_VOICEID vid;
 
-    effect = &sound.effects[chan];
-    if (effect->flags & SOUND_EFX_FLAG_EMITTER_UNUSED) {
-        vid = sndFXCheck(sndEmitterVoiceID(&effect->emitter));
-    } else {
-        vid = sndFXCheck(effect->voiceId);
-    }
+    vid = SoundEfxGetVoiceID(chan);
     if (sndFXCheck(vid) == -1) {
         SoundEfxMuteCh(chan);
     }

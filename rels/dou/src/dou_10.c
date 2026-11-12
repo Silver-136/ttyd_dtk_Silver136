@@ -29,7 +29,6 @@
 #include "evt/evt_damage.h"
 #include "driver/hitdrv.h"
 
-static inline f32 addf(f32 a, f32 b) { return a + b; }
 typedef struct EntryMgrEntry {
     s32 used;
     s32 id;
@@ -686,8 +685,9 @@ static USER_FUNC(dou_namiatari_check) {
     f32 d = w;
     f32 mx = mario->position.x;
     f32 mz = mario->position.z;
+    f32 marginX = 20.0f;
+    f32 marginZ = 10.0f;
     BOOL hit;
-
     if (y <= -45.0f) {
         evtSetValue(event, args[3], 0);
         return EVT_RETURN_DONE;
@@ -700,11 +700,10 @@ static USER_FUNC(dou_namiatari_check) {
     }
     hit = TRUE;
 
-    // FAKE: the addf inline fixes the fadds operand order
-    if (__fabsf(x - mx) > __fabsf(addf(w, 20.0f))) {
+    if (__fabsf(x - mx) > __fabsf(w + marginX)) {
         hit = FALSE;
     }
-    if (__fabsf(z - mz) > __fabsf(addf(d, 10.0f))) {
+    if (__fabsf(z - mz) > __fabsf(d + marginZ)) {
         hit = FALSE;
     }
     evtSetValue(event, args[3], hit);

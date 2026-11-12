@@ -475,12 +475,10 @@ void smartAutoFree(s32 allocType) {
     smartEntry* entry;
     smartEntry* next;
 
-    // FAKE: u16 copy of allocType for the compare; comparing allocType directly changes the object
-    u16 type = allocType;
 
     for (entry = wp->allocHead; entry; entry = next) {
         next = entry->next;
-        if (entry->type == type) {
+        if (entry->type == (u16)allocType) {
             smartFree(entry);
         }
     }

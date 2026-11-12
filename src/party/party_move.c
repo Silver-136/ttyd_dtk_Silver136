@@ -747,84 +747,6 @@ static inline f32 partySpdRate(PartyEntry* party) {
 }
 
 /**
- * Eases moveSpeed toward the target speed (targetSpeed scaled by Mario's playerGravity, 0.75 in shallow water;
- * Mario's own speed while he pushes) and returns it; with no target it slows to a stop.
- */
-#if VERSION >= VERSION_JP
-static inline f32 partyUpdSpd(PartyEntry* party) {
-    MarioWork* mario = party->playerPtr;
-    f32 f;
-    f32 target;
-    f32 cur;
-
-    cur = party->moveSpeed;
-    if (mario->flags & MARIO_FLAG_IS_PUSHING) {
-        target = mario->baseSpeed;
-    } else {
-        target = party->targetSpeed * mario->playerGravity * partySpdRate(party);
-    }
-    if (target > 0.0f) {
-        f = cur + 0.05f * ((0.5f + target) - cur);
-        if (f >= target) {
-            f = target;
-        }
-        party->moveSpeed = f;
-        return f;
-    }
-    f = cur + 0.1f * (-1.0f - cur);
-    if (f <= 0.0f) {
-        f = 0.0f;
-    }
-    party->moveSpeed = f;
-    return f;
-}
-#endif
-
-/** partyUpdSpd again with its locals declared in another order (as found; the order can change register allocation). */
-// FAKE: copy of partyUpdSpd with its locals declared in another order; using partyUpdSpd in partyChkUpdSpd changes the object
-#if VERSION >= VERSION_JP
-
-static inline f32 partyUpdSpd2(PartyEntry* party) {
-    MarioWork* mario = party->playerPtr;
-    f32 f;
-    f32 cur;
-    f32 target;
-
-    cur = party->moveSpeed;
-    if (mario->flags & MARIO_FLAG_IS_PUSHING) {
-        target = mario->baseSpeed;
-    } else {
-        target = party->targetSpeed * mario->playerGravity * partySpdRate(party);
-    }
-    if (target > 0.0f) {
-        f = cur + 0.05f * ((0.5f + target) - cur);
-        if (f >= target) {
-            f = target;
-        }
-        party->moveSpeed = f;
-        return f;
-    }
-    f = cur + 0.1f * (-1.0f - cur);
-    if (f <= 0.0f) {
-        f = 0.0f;
-    }
-    party->moveSpeed = f;
-    return f;
-}
-#endif
-
-/**
- * partyUpdSpd, except while forced to move (forceMoveFrames) or jumping,
- * falling or climbing a step (motions 2, 3, 6), when moveSpeed is left as it is.
- */
-static inline f32 partyChkUpdSpd(PartyEntry* party) {
-    if (party->forceMoveFrames != 0 || party->motionId == PARTY_MOTION_JUMP || party->motionId == PARTY_MOTION_FALL || party->motionId == PARTY_MOTION_UPSTAIRS) {
-        return party->moveSpeed;
-    }
-    return partyUpdSpd2(party);
-}
-
-/**
  * Sets targetSpeed (0 = stop); when nonzero requests an easing step unless forced to move, jumping, falling or climbing a step. Returns spd.
  * Descriptive name (not in the symbol maps); placeholder unk_800c93d0, JP 0x800C93D0. See docs/NAME_PROVENANCE.md.
  */
@@ -833,7 +755,7 @@ static inline f32 partyChkUpdSpd(PartyEntry* party) {
 f32 partySetTargetSpd(PartyEntry* party, f32 spd) {
     if (spd) {
         party->targetSpeed = spd;
-        partyChkUpdSpd(party);
+        partyUpdMoveSpd(party);
         return spd;
     }
     party->targetSpeed = 0.0f;
@@ -857,17 +779,44 @@ f32 partyForceSetSpd(PartyEntry* party, f32 spd) {
 #endif
 
 /**
- * One speed-easing step for this frame (partyUpdSpd) unless the partner is forced to move or is jumping,
- * falling or climbing a step; returns moveSpeed. Koops and Ms. Mowz call it from their walks.
+ * One speed-easing step for this frame unless the partner is forced to move or is jumping, falling or climbing a
+ * step: eases moveSpeed toward the target speed (targetSpeed scaled by Mario's playerGravity, 0.75 in shallow water;
+ * Mario's own speed while he pushes) and returns it; with no target it slows to a stop. Otherwise returns moveSpeed
+ * unchanged. Koops and Ms. Mowz call it from their walks.
  * Descriptive name (not in the symbol maps); placeholder unk_800c92c4, JP 0x800C92C4. See docs/NAME_PROVENANCE.md.
  */
 #if VERSION >= VERSION_JP
 
 f32 partyUpdMoveSpd(PartyEntry* party) {
+    MarioWork* mario;
+    f32 f;
+    f32 cur;
+    f32 target;
+
     if (party->forceMoveFrames != 0 || party->motionId == PARTY_MOTION_JUMP || party->motionId == PARTY_MOTION_FALL || party->motionId == PARTY_MOTION_UPSTAIRS) {
         return party->moveSpeed;
     }
-    return partyUpdSpd(party);
+    mario = party->playerPtr;
+    cur = party->moveSpeed;
+    if (mario->flags & MARIO_FLAG_IS_PUSHING) {
+        target = mario->baseSpeed;
+    } else {
+        target = party->targetSpeed * mario->playerGravity * partySpdRate(party);
+    }
+    if (target > 0.0f) {
+        f = cur + 0.05f * ((0.5f + target) - cur);
+        if (f >= target) {
+            f = target;
+        }
+        party->moveSpeed = f;
+        return f;
+    }
+    f = cur + 0.1f * (-1.0f - cur);
+    if (f <= 0.0f) {
+        f = 0.0f;
+    }
+    party->moveSpeed = f;
+    return f;
 }
 #endif
 
@@ -1570,7 +1519,7 @@ void partyMoveWalk(PartyEntry* party) {
         partyWalkInit(party);
     }
 #if VERSION >= VERSION_JP
-    partyChkUpdSpd(party);
+    partyUpdMoveSpd(party);
 #endif
     partyWalkMain(party);
 }

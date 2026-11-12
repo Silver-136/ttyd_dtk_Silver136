@@ -188,17 +188,14 @@ f32 cloudGetBreathPower(f32 size, Vec* pos) {
     f32 dist;
     f32 angle;
     f32 reach;
-    f32 val;
 
     breathPower = 0.0f;
     if (party == NULL) {
         return breathPower;
     }
 
-    // FAKE: val holds 10.0f and then 100.0f; the literals change the object
-    val = 10.0f;
     if (party->currentMemberId == PARTY_FLURRIE && (party->flags & PARTY_FLAG_IS_BEING_USED) != 0 &&
-        party->useMotionId >= CLOUD_USE_BREATH_INIT && __fabs(party->position.y - pos->y - 18.0f) <= val) {
+        party->useMotionId >= CLOUD_USE_BREATH_INIT && __fabsf(party->position.y - pos->y - 18.0f) <= 10.0f) {
         PartyCloud* cloud = (PartyCloud*)party->useStruct;
         reach = cloud->breathDist;
         if (-((0.5f * size) - distABf(party->position.x, party->position.z, pos->x, pos->z)) <= reach) {
@@ -208,8 +205,7 @@ f32 cloudGetBreathPower(f32 size, Vec* pos) {
 
             if (dist <= 30.0f || dist >= 330.0f) {
                 breathPower = cos((3.1415927f * dist) / 180.0f);
-                val = 100.0f;
-                breathPower = val * __fabsf(breathPower);
+                breathPower = 100.0f * __fabsf(breathPower);
             }
         }
     }
@@ -728,17 +724,14 @@ f32 cloudGetBreathPower(Vec pos, f32 width) {
     f32 dist;
     f32 angle;
     f32 breathDist;
-    f32 val;
 
     breathPower = 0.0f;
     if (party == NULL) {
         return breathPower;
     }
 
-    // FAKE: val holds 10.0f and then 100.0f; the literals change the object
-    val = 10.0f;
     if (
-        party->currentMemberId == PARTY_FLURRIE && (party->flags & PARTY_FLAG_IS_BEING_USED) != 0 && party->useMotionId >= MARIO_MOTION_FALL && ((__fabs(party->position.y - pos.y - 18.0f)) <= val)) {
+        party->currentMemberId == PARTY_FLURRIE && (party->flags & PARTY_FLAG_IS_BEING_USED) != 0 && party->useMotionId >= MARIO_MOTION_FALL && ((__fabsf(party->position.y - pos.y - 18.0f)) <= 10.0f)) {
         PartyCloud* cloud = (PartyCloud*)party->useStruct;
         breathDist = cloud->breathDist;
         if (-((0.5f * width) - distABf(party->position.x, party->position.z, pos.x, pos.z)) <= breathDist) {
@@ -749,8 +742,7 @@ f32 cloudGetBreathPower(Vec pos, f32 width) {
 
             if (dist <= 30.0f || dist >= 330.0f) {
                 breathPower = cos((3.1415927f * dist) / 180.0f);
-                val = 100.0f;
-                breathPower = val * __fabsf(breathPower);
+                breathPower = 100.0f * __fabsf(breathPower);
             }
         }
     }

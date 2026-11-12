@@ -354,6 +354,9 @@ static s32 nameMain(void) {
     s32 j;
     s32 off;
     s32 idx;
+#if VERSION >= VERSION_US
+    s32 cmdRow; // first row of the command column
+#endif
     f32 dist;
 
     dist = distABf(wp->x2, wp->y2, wp->x1, wp->y1);
@@ -364,8 +367,7 @@ static s32 nameMain(void) {
                 if (keyGetButtonTrg(0) & PAD_BUTTON_A) {
                     off = wp->cursorX;
 #if VERSION >= VERSION_US
-                    // FAKE: no-op (s32) cast; the plain ?: changes the object
-                    if (off >= 10 && wp->cursorY >= (s32)(gp->language == LANGUAGE_JP ? 4 : 6)) {
+                    if (off >= 10 && wp->cursorY >= (cmdRow = gp->language == LANGUAGE_JP ? 4 : 6)) {
 #else
                     if (off >= 10 && wp->cursorY >= 4) {
 #endif

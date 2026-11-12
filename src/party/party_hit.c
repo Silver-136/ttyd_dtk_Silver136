@@ -1080,8 +1080,6 @@ void partyHitStrippedPool(f32* f, s32 i) {
 }
 
 #if VERSION >= VERSION_US
-/* FAKE: inline add keeps the original fadds operand order (pos.y, 10.0f) */
-static inline f32 party_addf(f32 a, f32 b) { return a + b; }
 
 /** 20-unit partner-filtered ray from *pos along *dir; returns the hit object and its normal in *nrm. */
 static inline HitEntry* partyHitNrm(PartyEntry* party, Vec* pos, Vec* dir, Vec* nrm) {
@@ -1128,6 +1126,7 @@ BOOL partyChkBetweenWalls(PartyEntry* party, Vec pos) {
     f32 sn, cs;
     f32 ox, oz;
     f32 ang1, ang2;
+    f32 rayHeight = 10.0f;
     Vec p;
     Vec n;
     HitEntry* hit1;
@@ -1141,40 +1140,40 @@ BOOL partyChkBetweenWalls(PartyEntry* party, Vec pos) {
     ang2 = ang1;
     sincosf(&sn, &cs, toMovedirSimple(180.0f));
     p = pos;
-    p.y += 10.0f;
+    p.y += rayHeight;
     d = (Vec){sn, 0.0f, cs};
     hit1 = partyHitNrm(party, &p, &d, &n);
     if (hit1) {
         ang1 = angleABf(0.0f, 0.0f, n.x, n.z);
     }
     if (!hit1) {
-        hit1 = partyHitNrm(party, &(Vec){pos.x + ox, party_addf(pos.y, 10.0f), pos.z + oz}, &d, &n);
+        hit1 = partyHitNrm(party, &(Vec){pos.x + ox, pos.y + rayHeight, pos.z + oz}, &d, &n);
         if (hit1) {
             ang1 = angleABf(0.0f, 0.0f, n.x, n.z);
         }
     }
     if (!hit1) {
-        hit1 = partyHitNrm(party, &(Vec){pos.x - ox, party_addf(pos.y, 10.0f), pos.z - oz}, &d, &n);
+        hit1 = partyHitNrm(party, &(Vec){pos.x - ox, pos.y + rayHeight, pos.z - oz}, &d, &n);
         if (hit1) {
             ang1 = angleABf(0.0f, 0.0f, n.x, n.z);
         }
     }
     sincosf(&sn, &cs, toMovedirSimple(0.0f));
     p = pos;
-    p.y += 10.0f;
+    p.y += rayHeight;
     d = (Vec){sn, 0.0f, cs};
     hit2 = partyHitNrm(party, &p, &d, &n);
     if (hit2) {
         ang2 = angleABf(0.0f, 0.0f, n.x, n.z);
     }
     if (!hit2) {
-        hit2 = partyHitNrm(party, &(Vec){pos.x + ox, party_addf(pos.y, 10.0f), pos.z + oz}, &d, &n);
+        hit2 = partyHitNrm(party, &(Vec){pos.x + ox, pos.y + rayHeight, pos.z + oz}, &d, &n);
         if (hit2) {
             ang2 = angleABf(0.0f, 0.0f, n.x, n.z);
         }
     }
     if (!hit2) {
-        hit2 = partyHitNrm(party, &(Vec){pos.x - ox, party_addf(pos.y, 10.0f), pos.z - oz}, &d, &n);
+        hit2 = partyHitNrm(party, &(Vec){pos.x - ox, pos.y + rayHeight, pos.z - oz}, &d, &n);
         if (hit2) {
             ang2 = angleABf(0.0f, 0.0f, n.x, n.z);
         }

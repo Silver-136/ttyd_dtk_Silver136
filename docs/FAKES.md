@@ -53,7 +53,6 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | US | src/manager/fontmgr.c | FontDrawStringShake | US: dead guard `s32 gz = 0; if (gz != 0) x = -1.0f;` (folded after register allocation, emits no code) only creates the -1.0f .sdata2 literal early, before the 28.0f of FontDrawStringMtx | see comment |
 | US | src/manager/fontmgr.c | FontDrawStringVecPitch | US: `#pragma auto_inline off` around it keeps the FontDrawString/FontDrawStringPitch wrappers calling it, as in the target | see comment |
 | JP | src/manager/fontmgr.c | fontDrawStringVecPitch | msg = str spare copy; using str directly changes the object | see comment |
-| US | src/party/party_hit.c | partyChkBetweenWalls | US: `party_addf` inline add keeps the original fadds operand order (pos.y, 10.0f) | see comment |
 | Both | libs/dolsdk2004/src/mcc/mcc.c | 17 functions (MCCInit .. MCCWrite, MailboxCheck, ...) | `int unused[N];` dead local in each function (comment "fake but blah"): pads the stack frame to the original size (the unit is not built: no configure entry; the original debug records show no such locals) | see comment |
 | Both | libs/musyx/src/musyx/runtime/snd3d.c | startListNum (data) | `extern` declaration of the file-local array ahead of its static definition, for its .bss place (local copy plus an unused external reference) | static declaration (moves it), `= {0}` at the definition (moves it to .data) |
 | Both | src/driver/animdrv.c | g_modeling_mtx_stack, tanfTbl (data) | `extern` declarations of the file-local objects ahead of their static definitions at the end of the file, for their .bss order | static declarations (place them first) |
@@ -67,7 +66,6 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | rels/bom/src/bom_01.c | disp_sight | pointer-typed ?: = id = on ? 6 : 7 without the branchless int select (same value) | int/unsigned/char/short/long long arms, enum-like and propagated arms, if/else, inline helpers, a named k (spill worker, tiny TUs re_work/spill/bom/tern) |
 | Both | rels/bom/src/bom_01.c | ext_main | SFX_NAME_WORD (integer round trip) on the literal, see jump() | plain literals, a named `se` local, `(const char*)(u32)` (spill worker) |
 | Both | rels/bom/src/bom_01.c | jump | SFX_NAME_WORD (integer round trip) makes the front end hoist the literal address (same pointer value) | see comment |
-| Both | rels/dou/src/dou_10.c | dou_namiatari_check | (decomp-permuter): the addf inline fixes the fadds operand order | see comment |
 | Both | rels/eki/src/eki_00.c | ext_moamoa_main | integer cast (SFX_NAME_WORD) hoists the literal as an @ temp; block-local copies of the float args (behaviour-identical) put the f1..f5 arg moves ahead of the ?: as in the target | see comment |
 | Both | rels/mri/src/mri_16.c | (USER_FUNC near line 93) | (decomp-permuter): the dead condition moves the ssf load ahead of event->args; casts, temps and u32 index variants do not reproduce it | see comment |
 | Both | rels/mri/src/mri_puni.c | evt_puni_all_save | opt_propagation off for evt_puni_all_save (keeps the branch-2 zero argument in its own temp, register colouring) | see comment |
@@ -186,8 +184,6 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | src/battle/sac/sac_scissor.c | scissor_damage_sub2 | `q = &t->x[j]; y0 = q[(offsetof(ScissorTri, y) - offsetof(ScissorTri, x)) / sizeof(f32)]` reads ScissorTri y[j] through the x pointer, keeping the target r9/r10 order | `t->y[j]` / `t->x[j]` (99.65%); `q = &t->x[j]; y0 = t->y[j]; x0 = *q` (99.65%) |
 | US | src/effect/eff_pointget.c | effPointGetDisp | US: the digit table pointer is read as `texid_tbl[0].tbl[gp->language * 3 + slot]`, one flat index over the three-word PointGetTexSet rows, so the address is (language * 3 + slot) * 4 as in the target | `texid_tbl[gp->language].tbl[slot]` (row address shared with .count, 1455 disasm lines differ), the same with .count read first, `(&texid_tbl[lang].tbl[0])[slot]`, a `PointGetTex* [6][3]` table (2D index folds the row too), a flat union slot array (needs designated initialisers, which MWCC C mode rejects) |
 | Both | src/manager/filemgr.c | fileGarbageDataAdrClear | descriptor relocation stores still use byte-offset addressing; four descriptor pointer loads now use typed TEXDescriptor indexing | ADDR_WORD(tpl->descriptorArray[i].textureHeader / .CLUTHeader) stores: all 7 versions differ |
-| Both | src/sound.c | SoundEfxSetPan | pan stored through its own entry pointer e, then sfx formed again from the index (was a byte-offset store) | `sfx = &sound.effects[chan]; sfx->pan = pan` (75.4%) |
-| Both | src/sound.c | SoundEfxSetSrndPan | surround pan stored through its own entry pointer e, then sfx formed again from the index (was a byte-offset store) | `sfx = &sound.effects[chan]; sfx->span = span` (88.3%) |
 | Both | src/battle/battle_camera.c | evt_btl_camera_set_homing_unitparts | u holds the priority word first and is compared as `(EvtWord)u` (one register in the target) | separate `s32 pri` local, declared first, last, or set in a comma expression (all mismatch, longer code) |
 | Both | src/battle/battle_seq_command.c | BattleCommandInput | `wp = (BattleWork*)(void*)work` keeps wp its own copy (r24 as in the target); `(EvtWord)weapon == (EvtWord)&ItemWeaponData_Naniga_Okorukana` gives the target's signed cmpw | `wp = work`, `&work[0]`, `work + 0` (r22, 51 lines differ); plain pointer compare (cmplw) |
 | Both | rels/end/src/end_00.c | (data: `fd_end_00_*` dtrigf constants) | the unit's dtrigf constants are hand-made globals: in the original they follow the unit's own data instead of leading it, so the unit is built without msl_rel.pch (PCH_EXCLUDE in configure.py) | msl_rel.pch: constants placed first, end.rel 4 bytes short (R) |
@@ -216,8 +212,6 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | src/koopa.c | kpaSetJumpPara (marioJumpData) | unsized `extern f32 marioJumpData[]` view of mario_motion.c's MarioJumpData struct | MarioJumpData in mario_motion.h and `marioJumpData.jump`: changes the object |
 | Both | src/koopa_hit.c | kpaGetHitobjHead | address temporary; the plain return of headHit[i] changes the object | see comment |
 | Both | src/koopa_hit.c | kpaGetHitobjRide | address temporary; the plain return of rideHit[i] changes the object | see comment |
-| Both | src/memory.c | smartAutoFree | `u16 type` copy of allocType for the first compare | comparing allocType directly |
-| US | src/nameent.c | nameMain | no-op (s32) cast; the plain ?: changes the object | see comment |
 | Both | src/npc_event.c | _2d_get_dead_jump_offset | spare temporary k for 20.0f * d; the plain (s32)(20.0f * d) changes the object | see comment |
 | Both | src/pmario_sound.c | calc3D | v.z read through a (Vec*) cast of &v; plain v.z changes the object | see comment |
 | Both | src/pmario_sound.c | psndBGMMain | f0 is a second name for fade (&bgm->fade) in its own block; using fade changes the object | see comment |
@@ -356,7 +350,6 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | src/motion/mot_ship.c | shipMove | 64-bit index variable that always holds 3 for shipData[3]; indexing with the constant changes the object | see comment |
 | Both | src/party/party_cloud.c | partyCloudStrippedPool | stand-in that nothing calls; it only puts 0.0f, 70.0f, 180.0f and the int-to-float conversion constant in this object's constant pool | see comment |
 | Both | src/party/party_cloud.c | (file) | `#define _MATH_H_` keeps math.h out | removing it: changes the object |
-| Both | src/party/party_cloud.c | cloudGetBreathPower | val local holding 10.0f then 100.0f (both version copies) | literals: changes the object |
 | Both | src/party/party_hit.c | partyHitStrippedPool | stand-in that nothing calls; it only places these literals and the int-to-float conversion constant in this object's constant pool | see comment |
 | Both | src/party/party_motion.c | party_motion_stay | hand-inlined copy of partyStayDist; the call changes the object | see comment |
 | Both | src/party/party_motion.c | party_motion_homing_walk | no-op function-pointer cast; the plain call changes the object | see comment |
@@ -364,11 +357,9 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | src/party/party_motion.c | party_motion_behind_mario | hand-inlined copy of partyGetGndY(x, ty, z); the call changes the object | see comment |
 | Both | src/party/party_motion.c | party_motion_behind_mario_continue | hand-inlined copy of partyGetGndY(x, y, z); the call changes the object | see comment |
 | Both | src/party/party_move.c | partyRecordFootmark | call through a no-op function-pointer cast; the plain call changes the object | see comment |
-| Both | src/party/party_move.c | partyUpdSpd2 | copy of partyUpdSpd with its locals declared in another order; using partyUpdSpd in partyChkUpdSpd changes the object | see comment |
 | Both | src/party/party_move.c | partyChgMoveMode | the copy p and its self-assignment in case 4/5 keep the empty case 4/5 arm; the plain switch changes the object | see comment |
 | Both | src/party/party_move.c | partyMoveStrippedPool | stand-in that nothing calls; it places 90.0f and 20.0f in the .sdata2 pool | see comment |
 | Both | src/party/party_nokonoko.c | nokoStrippedPool | stand-in that nothing calls (in no symbol map); it only places 10.0f, 30.0f, 100.0f, 11.0f and 6.0f in this object's constant pool; removing it changes the object | see comment |
-| Both | src/party/party_nokonoko.c | ccwall | spare copy k of 30.0f; dist = w + 30.0f changes the object | see comment |
 | Both | src/party/party_vivian.c | marioForceVivianAnime | padding constant kept in .sdata2 by explicit_zero_data and the (void)& use; removing it changes the section layout | see comment |
 | Both | src/sequence/seq_battle.c | seq_battleMain | wait flag and goto check; a plain break while still waiting changes the object | see comment |
 | Both | src/sequence/seq_e3.c | e3Disp | the (u32) cast on the 8; plain i + 8 changes the object in the JP demo only (retail versions stay the same without it) | see comment |

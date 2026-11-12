@@ -995,17 +995,15 @@ static HitEntry* ccwall(PartyEntry* party, s32 mode) {
     f32 z;
     f32 x;
     f32 yofs;
-    f32 k;
     f32 w;
 
     yofs = 10.0f;
     x = party->position.x;
     z = party->position.z;
 
-    // FAKE: spare copy k of 30.0f; dist = w + 30.0f changes the object
+    // the floor probe starts yofs above the head and reaches 20 below the feet
     y0 = party->position.y + (w = party->height);
-    k = 30.0f;
-    dist = w + k;
+    dist = w + (yofs + 20.0f);
     y0 = yofs + y0;
     hit = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, x,
                          y0, z, 0.0f, -1.0f, 0.0f);
