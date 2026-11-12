@@ -445,13 +445,11 @@ static void main_base(void) {
                 if (i == 8) {
                     found = 0;
                     for (j = 0; j < 8; j++) {
-                        // FAKE: spare temporary t2; assigning t directly changes the object
-                        DekaTiming* t2 = &w->timing[idx[j]];
-                        t = t2;
-                        if (t->state == 2 && t->type == 1) {
+                        DekaTiming* timing = &w->timing[idx[j]];
+                        if (timing->state == 2 && timing->type == 1) {
                             w->state = 5;
                             w->gaugeState = 4;
-                            t->hit = 2;
+                            timing->hit = 2;
                             psndSFXOn("SFX_BTL_SAC_DOKKAN3");
                             BattleAudienceSoundBooing();
                             psndSFXOff(w->sfx);

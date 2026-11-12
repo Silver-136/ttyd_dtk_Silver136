@@ -433,11 +433,8 @@ void iconDispGxAlpha(Vec* position, s16 flags, u16 iconId, u8 alpha, f32 scale) 
     entry.color = (GXColor){0xFF, 0xFF, 0xFF, alpha};
     entry.uflags = flags;
 
-    // FAKE: iconId++ then iconId-- (no net change); without them the object changes
-    iconId++;
-    iconId--;
     entry.iconId = iconId;
-    data = iconGetBinData(iconId);
+    data = iconGetBinData(entry.iconId);
     entry.width = data->width;
     entry.height = data->height;
     entry.tplId = data->frames[0].tplId;

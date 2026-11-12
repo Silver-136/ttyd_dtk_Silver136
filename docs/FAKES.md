@@ -54,7 +54,6 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | US | src/manager/fontmgr.c | FontDrawStringShake | US: dead guard `s32 gz = 0; if (gz != 0) x = -1.0f;` (folded after register allocation, emits no code) only creates the -1.0f .sdata2 literal early, before the 28.0f of FontDrawStringMtx | see comment |
 | US | src/manager/fontmgr.c | FontDrawStringVecPitch | US: `#pragma auto_inline off` around it keeps the FontDrawString/FontDrawStringPitch wrappers calling it, as in the target | see comment |
 | JP | src/manager/fontmgr.c | fontDrawStringVecPitch | msg = str spare copy; using str directly changes the object | see comment |
-| US | src/mario/mario_pouch.c | pouchHiraToKata | US: s and d are re-assigned inside the language branch (they already hold these values) | see comment |
 | US | src/party/party_hit.c | partyChkBetweenWalls | US: `party_addf` inline add keeps the original fadds operand order (pos.y, 10.0f) | see comment |
 | Both | libs/dolsdk2004/src/gx/GXGeometry.c | GXGetCullMode | `// fake match?` in the non-default branch: decodes genMode with `((hwMode >> 0xD) & 0x2) | (((int)hwMode >> 0xE) & 0x2) >> 1` instead of the readable switch | see comment |
 | Both | libs/dolsdk2004/src/mcc/mcc.c | 17 functions (MCCInit .. MCCWrite, MailboxCheck, ...) | `int unused[N];` dead local in each function (comment "fake but blah"): pads the stack frame to the original size (the unit is not built: no configure entry; the original debug records show no such locals) | see comment |
@@ -92,7 +91,6 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | src/battle/battle_event_cmd.c | btlevtcmd_SetPartsWork | byte-stride `*(EvtWord*)((u8*)part->work + index * sizeof(EvtWord)) = value`: the index is scaled and added before the field offset, as in the target (replaces the old raw `p + 0x130` form) | `part->work[index] = value` (91.7%) |
 | Both | src/battle/ac/ac_button_down.c | battleAcMain_ButtonDown | the button[]/pressed[] indexes are cast (u32) (i, j >= 0 there, same value); the cast stops IR strength reduction so the backend emits the target addi/lwzx and the shared offset IV. allDone is declared first for the register ... | plain `i` index 81.69 (lab), byte-offset off/off2 forms 97.38 |
 | Both | src/battle/ac/ac_gauge_timing2.c | battleAcMain_GaugeTiming2 | register-promoted array of the two SFX names; separate scalars swap regs | two scalars |
-| Both | src/battle/ac/ac_signal_timing.c | actionCommandDisp | work recovered from ac (container-of: `(u8*)ac - offsetof(BattleWork, actionCommands)`) so its web is a codegen temp numbered above the rodata base; then work takes r31 and the base r30, as in the target | work/ac as statements, (0, ptr), *&ptr, (&ptr)[0], +0, u32 cast, inline getter, ac after camGetPtr (work named v39 -> r29), 41 decl orders: 85-136 |
 | Both | src/battle/ac/ac_signal_timing.c | battleAcMain_SignalTiming | second name for the NG sound; the chained assignment puts its address first in the pre-loop block | see comment |
 | Both | src/battle/ac/ac_timing_a.c | battleAcDisp_TimingA | register-held index; also read uninitialized on the else path below. Literal 4 / slot = 4 at decl both differ | literal 4; `int slot = 4` at declaration |
 | Both | src/battle/battle_ac_help.c | _ac_help_disp | register-promoted array; one msg pointer differs | see comment |
@@ -187,7 +185,6 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | US | src/window/win_mario.c | winMarioDisp | every float live range in its own named variable; one-element copies q1/q2 of row0/row1 are kept live across rowC by two dead int guards (gz is 0, no code) | see comment |
 | Both | src/party.c | partyHelloMain, partyRideMain | no-op `(PartyEntry*)party` cast on the moveFrames shrink-timer accesses (was raw `*(s32*)((u8*)party + 0x24)`); the plain field reschedules the int->float conversion | `party->moveFrames`, `*&party->moveFrames`, `(&party->moveFrames)[0]`, `*(s32*)&party->moveFrames`, `*(&party->moveFrames + 0)`, stores-only as field: all reschedule |
 | Both | src/motion/mot_roll.c | mot_roll | no-op `(MarioWork*)mario` cast on the directionView/groundRot.x/.z accesses (10 sites, were raw `MF(0x1a0/0x218/0x220)`); the plain field reorders a const load (lis/lfs) | `mario->field` per line, `*&field`, `(&field)[0]`, `(*mario).field`, inlining into angOut: all reorder |
-| Both | src/battle/ac/ac_stick_rotate.c | battleAcDisp_StickRotate | no-op `(BattleActions*)&...->actionCommands` casts before `->disp` / `->acFlags` remain; actionCommandDisp/actionCommandDisp2 now use the existing typed ac->work alias and the unused AC_WORK macro is removed | casts-only natural fields with work macro retained, and real-work-local forms: different in both versions |
 | Both | src/event/evt_win.c | unitwin_setpartylank | a signed copy `ofs2` of the byte offset `ofs` (= index * sizeof(PouchPartyData)) is used for the level stores, so `pouch->partyData + ofs` is added again after pouchRevisePartyParam as in the target | struct indexing `partyData[i]` (s32 and u32 index), `&partyData[i]` pointer locals, a `u8 (*)[14]` row pointer, `partyData + i`, one byte-offset local without the copy (CSEs the add): all differ (tiny-TU lab in scratch/cleanup/sections/lab_pp) |
 | Both | src/window/win_badge.c | badge_disp | `p0` is a WindowWork* stepped one WinBadgeEnt at a time (`(WindowWork*)((WinBadgeEnt*)p0 + 1)`), so `p0->badge.list[0]` reads w->badge.list[i] with 0x404 kept in the load displacement | `w->badge.list[i]` (99.96%, induction increments swapped, in both loop orders 99.95/99.96%); a `WinBadgeEnt* e = w->badge.list` walk (99.90%, base precomputed) |
 | Both | src/window/win_badge.c | winBadgeMain | equip toggle reads the selection as `wt->badge.sel[0]` with `wt = (WindowWork*)((s32*)w + tab)` (base w + 4*tab, 0x3E4 in the displacement); both sort entries pass an untyped copy `void* p = w`, so r3 is loaded before m is chosen | `w->badge.sel[tab]` (r27/r28 swap); `s32* sel = &w->badge.sel[tab]` (addi + lwzx); `WindowWork* p = w` or `w` itself (copy propagated, mr moves after the branch) |
@@ -229,7 +226,6 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | src/effect/eff_itemget.c | effItemGetDisp | comma expression(s) `(0, (f32)cos(6.2831855f * camGetPtr(cameraId)->...` keep the value as a separate temp | the plain expression; `cs` declared first; `cs` and `s` in a block (register allocation differs) |
 | Both | src/event/evt_mobj.c | mobj_breaking_floor | comma expression(s) `(0, c3)` keep the value as a separate temp | the plain expression; inverted test; block-scoped `c3` (stack frame 16 bytes smaller) |
 | Both | src/sound.c | SoundDropData | comma expression(s) `(0, &sound.dvds[i])`; `(0, &sound.effects[i])` keep the value as a separate temp | the plain expression; `sound.effects + i`; pointers declared first or last in the function (register allocation differs) |
-| Both | src/cam_road.c | collisionTri_simple | nz is a spare copy of n; testing n directly (crVecIsZero(n)) changes the object | see comment |
 | Both | src/cam_road.c | hokanRate | cos called through a double (*)(f32) cast; (f32)cos(a) changes the object | see comment |
 | Both | src/cam_road.c | calcHokanCamRoad | spare temporary a2; a0 = (f32)atan2(...) directly changes the object | see comment |
 | Both | src/error_handler.c | systemErrorHandler | no-op (s32) cast on the char; removing it changes the object | see comment |
@@ -247,7 +243,6 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | src/pmario_sound.c | psndSFXChk | no-op mask of the u16 serial; key != sfx->serial changes the object | see comment |
 | Both | src/pmario_sound.c | psndStrippedPool | stand-in that nothing calls; deleting it changes the object (its s32-to-f32 conversion likely shapes the constant pool, as hitStrippedPool does in hitdrv.c) | see comment |
 | Both | src/battle/battle_ac_help.c | BattleAcHelpMain | spare pointer to acHelpDispType; testing wp->acHelpDispType directly changes the object | see comment |
-| Both | src/battle/battle_audience.c | BattleAudience_CheckReactionPerPhase | comma expression; `--member->statusTimer <= 0` changes the object | see comment |
 | Both | src/battle/battle_audience.c | BattleAudienceItemCtrlProcess | s32 view of the BattleAudienceItemKind table (tbl[2j] = type, tbl[2j+1] = chance); field access changes the object | see comment |
 | Both | src/battle/battle_audience.c | BattleAudienceDispApSrc | star holds the BattleAudience pointer until the loop; a separate BattleAudience* variable changes the object | see comment |
 | Both | src/battle/battle_audience.c | BattleAudience_GetPPAudienceNum_Sub | one-value range test; `member->status == AUDIENCE_STATUS_SLEEP` changes the object | see comment; tried 2026-11-01: switch with one case: cmpwi + beq, target is cmplwi + blt + bgt |
@@ -300,7 +295,6 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | src/battle/battle_status_effect.c | _st_chg_msg_disp | y doubles as a 0.0f temporary; x = 0.0f - (width / 2) changes the object; also called through a cast prototype taking the color's address (WakuColByRefFunc), passing the color by value changes the object | see comment |
 | Both | src/battle/battle_sub.c | btlsubResetMoveColorLvAll | spare copies w and w2 of work and c of 0xFF; the plain loop changes the object | see comment |
 | Both | src/battle/battle_unit.c | BtlUnit_snd_se | called through a prototype with s32 pitch (BtlUnit_snd_se_pos takes s16) | the plain call changes the object |
-| Both | src/battle/sac/sac_deka.c | main_base | spare temporary t2; assigning t directly changes the object | see comment |
 | Both | src/battle/sac/sac_deka.c | yuka_disp | YUKA_POSITION macro and an explicit `fifo = &GXWGFifo` before the loop stand in for the SDK GXPosition3f32 (the volatile is the SDK's own) | GXPosition3f32(v->x, v->y, v->z) matches the z, y, x reads but puts the FIFO address load (lis) after the loop counter setup; a for loop or an earlier `i = 0` do not help |
 | Both | src/battle/sac/sac_deka.c | get_ride_pos | 64.0f held in local k for three products | literal 64.0f: changes the object |
 | Both | src/battle/sac/sac_muki.c | addf | addf() for x + 32.0f in disp_2D; the plain sum changes the object | see comment |
@@ -316,8 +310,6 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | src/driver/envdrv.c | envGlare | texW/texH are reused to hold the two konst colour selections; reading glare->kcolorSel0/1 at each call changes the object; glareIter/glareCur EnvironmentGlare pointers stepped by `(EnvironmentGlareTexCoord*)p + 1` (glareCur re-copied from glareIter) | see comment |
 | Both | src/driver/envdrv.c | envCapture, envCapture2 | `& 0xFFFF` masks on the u16 frame sizes before halving | `(u16)((u32)width / 2)`: changes the object |
 | Both | src/driver/fadedrv.c | fadeStrippedPool | stand-in that nothing calls; it only adds its 3.141592f literal to this object's constant pool | see comment |
-| Both | src/driver/hitdrv.c | hitCheckVecFilter | 0.5f through the spare local temp; `reach = query->targetDistance * 0.5f` changes the object | see comment |
-| Both | src/driver/icondrv.c | iconDispGxAlpha | iconId++ then iconId-- (no net change); without them the object changes | see comment |
 | Both | src/driver/itemdrv.c | itemMain | f64 local keeps 20.0 on the left of the fadd (as in itemHitCheckY); `hitDist = 20.0 + __fabs(-1.0)` changes the object | see comment |
 | Both | src/driver/itemdrv.c | makeVecByValue2 (itemNearDistCheck) | second identical copy of the makeVecByValue inline | one inline for both uses: changes the object |
 | Both | src/driver/itemdrv_pad.c | (file scope) | 24 zero bytes of JP .rodata at 0x802CAE68 with no known owner, kept alive with force_active | see comment |
@@ -330,7 +322,6 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | src/driver/shadowdrv.c | shadowCharShadowDisp_Projection | cx (0.0f) doubles as the y coordinate of all 16 vertices | see comment |
 | Both | src/driver/windowdrv.c | windowDispGX_System | GXPosition3f32(0.0f, y3, 0.0f) written out as FIFO stores with y3/y4 computed between them; the plain call changes the object | see comment |
 | Both | src/driver/windowdrv.c | windowDispGX2_Waku_col | negated and halved in two steps with a no-op (f32) cast; `left = -width / 2.0f;` changes the object | see comment |
-| Both | src/effect/eff_funemizu.c | effFunemizuMain | spare temporary f; `a = work->size; b = a - 1.0f;` changes the object | see comment |
 | Both | src/effect/eff_funemizu.c | effFunemizuDisp | funemizuCallDL wraps this display-list loop with a dead read and write-back of u; the plain loop changes the object | see comment |
 | Both | src/effect/eff_funemizu.c | effFunemizuShibukiDisp | `nw = -w` with mixed `nw / 2` and `w * 0.5f` quad corners | `-w * 0.5f` corners: changes the object |
 | Both | src/effect/eff_ibuki.c | effIbukiDisp | (u32) cast for an unsigned compare; `i < 4` changes the object | u32 i with the plain compare |
@@ -354,7 +345,6 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | src/effect/n64/eff_balloon_n64.c | effBalloonDisp | element pointer cast instead of &vtx[i + 2].x; the plain form changes the object | see comment |
 | Both | src/effect/n64/eff_blow_n64.c | effBlowN64Entry | zr holds 0.0f for the comparisons below; comparing with 0.0f directly changes the object | see comment |
 | Both | src/effect/n64/eff_cloud_n64.c | effCloudDisp | zero is added to z when the vertices are written; (s16)z changes the object | see comment |
-| Both | src/effect/n64/eff_flame_n64.c | effFlameDisp | one-element pointer array; a plain EffFlameN64Work* work changes the object | see comment |
 | Both | src/effect/n64/eff_horao_spell_n64.c | effHoraoSpellDisp | p[1] is q; writing y and z through q changes the object | see comment |
 | Both | src/effect/n64/eff_kemuri10_n64.c | effKemuri10N64Entry | zr holds 0.0f for the zero tests and stores | 0.0f literals: changes the object |
 | Both | src/effect/n64/eff_kemuri1_n64.c | effKemuri1Disp | colour filled in through a pointer to a zeroed compound literal; (GXColor){work->r, work->g, work->b, 0xFF} changes the object | see comment |
@@ -372,7 +362,6 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | src/effect/n64/eff_pokopi_thunder_n64.c | effPokopiThunderN64Entry | spare local holding 0.0f for the length test; comparing with 0.0f directly changes the object | see comment |
 | Both | src/effect/n64/eff_pokopi_thunder_n64.c | effPokopiThunderDisp | pt_dy(work, work) is end.y - start.y through an inline helper; the plain expression changes the object | see comment |
 | Both | src/effect/n64/eff_pturn_n64.c | effPturnMain | spare flag local for the condition; testing it directly changes the object | see comment |
-| Both | src/effect/n64/eff_radiation_n64.c | effRadiationMain | comma expression for the decrement test; --p->delay <= 0 changes the object | see comment |
 | Both | src/effect/n64/eff_recover_heart_n64.c | effRecoverHeartDisp | tex first holds the type test, then the texture id; testing the condition directly changes the object | see comment |
 | Both | src/effect/n64/eff_ripple_n64.c | effRippleDisp | type is read through a cast of userdata before work is set; reading work->type changes the object | see comment |
 | Both | src/effect/n64/eff_rothammer_fail_n64.c | effRotHammerFailN64Entry | child = work + 1 through a pointer step and back; the plain assignment changes the object; zero held in a local for the 0.0f stores and sin(zero)/cos(zero) | see comment |
@@ -382,7 +371,6 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | src/effect/n64/eff_sstar_n64.c | effSstarDisp | vertex fields addressed through s16* casts; &w->vtx[i * 2 + 1].x/.y/.z change the object | see comment |
 | Both | src/effect/n64/eff_stardust2_n64.c | effStardust2Main | (u32)type > 1 tests type other than 0 and 1; type != 0 && type != 1 changes the object | see comment |
 | Both | src/effect/n64/eff_sweat_n64.c | sin | sin/cos declared with float parameters; the library's double prototypes change the object | see comment |
-| Both | src/effect/n64/eff_timestamp_n64.c | effTimestampMain | comma expression; --work->delay[i] == 0 changes the object | see comment |
 | Both | src/effect/n64/eff_vapor_n64.c | effVaporDisp | rows indexed as (table + type * 30)[n]; table[type * 30 + n] changes the object | see comment |
 | Both | src/effect/n64/eff_whirlwind_n64.c | effWhirlwindN64Entry | spare temporary for 0.25f; the plain literal changes the object | see comment |
 | Both | src/event/evt_mario.c | evt_mario_set_motion | function-pointer cast passes the s32 without narrowing to MarioMotion; marioChgMot(evtGetValue(...)) changes the object | marioChgMot(s32) (mario_motion, mario_sbr change) |
@@ -395,7 +383,6 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | src/event/evt_door.c | door_position_sub | self-assignment through t; removing it changes the object | see comment |
 | Both | src/event/evt_item.c | evt_item_get_important_item | float bits stored through an s32 view; event->userdataf[n] = value changes the object | see comment |
 | Both | src/event/evt_lottery.c | evt_lottery | bt is a spare temporary (two different shapes for the same sum); passing lot->buyTime + ... directly changes the object | see comment |
-| Both | src/event/evt_lottery.c | evt_lottery_error_check | g is a spare copy of gp; &gp->mLotteryInfo changes the object | see comment |
 | Both | src/event/evt_mobj.c | evt_mobj_floatswitch_blue | gp->inBattle is loaded into inBattle before the test; `inBattle = gp->inBattle != 0` changes the object | see comment |
 | Both | src/event/evt_mobj.c | evt_mobj_tornadoswitch_blue | gp->inBattle is loaded into inBattle before the test; `inBattle = gp->inBattle != 0` changes the object | see comment |
 | Both | src/event/evt_mobj.c | evt_mobj_floatswitch_red | gp->inBattle is loaded into inBattle before the test; `inBattle = gp->inBattle != 0` changes the object | see comment |
@@ -418,7 +405,6 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | src/manager/fontmgr.c | fontDrawPairY | no-op (s16) casts on ix; the plain argument changes the object | see comment |
 | Both | src/manager/fontmgr.c | FontGetMessageWidthLine | empty dead test of code; removing it changes the object | see comment; tried 2026-11-01: demos checked: same empty test, no code in any version; __assert/__assert2 are UNUSED in the JP demo map; no evidence of a macro |
 | Both | src/manager/winmgr.c | winMgrSelectDelete | spare copies of sel, sel->items and a heap-id local (redundant inner heap assignment removed); the plain __memFree(HEAP_DEFAULT, sel->items); __memFree(HEAP_DEFAULT, sel); changes the object | see comment |
-| Both | src/manager/winmgr.c | select_disp_luigi | `ent` is a second name for entry | entry directly, no zero (tried together): changes the object |
 | Both | src/event/evt_win.c | select_func | `x ? FALSE : TRUE` in place of `!x`; !marioChkCtrl() // !marioChkKey() changes the object | see comment; tried 2026-11-01: shared inline marioNoCtrl/NoKey (return !x, local, ternary): the materialized cntlzw is lost |
 | Both | src/event/evt_win.c | ICONGX2 (evt_win list displays) | iconDispGx called through a (Vec*, u16, f32, u16) function-pointer cast macro (9 uses) | plain iconDispGx(pos, flags, id, scale): changes the object |
 | Both | src/mario/mario.c | marioReInit | spare copy t of paperPoseId; testing poseId directly changes the object | see comment |
@@ -432,7 +418,6 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Demos | src/mario/mario_hit.c | marioSearchGroundRoll | dead guard keeps rx/rz their own webs; the 24-byte zero ray copied from a volatile template | see comment |
 | Demos | src/mario/mario_hit.c | marioChkLandon2 | the 24-byte zero ray copied from a volatile template; a dead re-definition of gz at the loop end | `(LandonRay){0}` adds a .rodata object; see comment |
 | Both | src/mario/mario_kemuri.c | mario_kemuri | no-op self-assignment as the then-branch; without it the branch is laid out differently | see comment |
-| US | src/mario/mario_kemuri.c | party_kemuri | empty then-branch `if (party->moveSpeed < 2.0f) { } else if (...)` (twice, US-and-later branch) | `moveSpeed >= 2.0f && kemuriTimer++ > 6`: changes the object |
 | Both | src/mario/mario_sbr.c | checkOneRevolution | rubwork read directly instead of through rw; the plain form changes the object | see comment |
 | Both | src/mario/mario_sbr.c | marioGetRub | rubwork read directly instead of through rw; the plain form changes the object | see comment |
 | Both | src/motion/mot_hammer.c | mot_hammer | spare copy of kind in its own block; using kind directly changes the object | see comment |

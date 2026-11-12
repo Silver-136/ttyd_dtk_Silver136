@@ -241,7 +241,7 @@ static void effFunemizuMain(EffectEntry* effect) {
     s32 type;
     CameraId cam;
     s32 dead = 0;
-    f32 a, b, s, c, t, f;
+    f32 s, c, t;
 
     v.x = work->position.x;
     v.y = work->position.y;
@@ -254,10 +254,8 @@ static void effFunemizuMain(EffectEntry* effect) {
         work->timer -= 1000;
     }
     if (work->type == 0 || work->type == 2) {
-        // FAKE: spare temporary f; `a = work->size; b = a - 1.0f;` changes the object
-        f = work->size;
-        a = f;
-        b = f - 1.0f;
+        f32 a = work->size;
+        f32 b = work->size - 1.0f;
         if (a < 0.0f) {
             a = 0.0f;
         }

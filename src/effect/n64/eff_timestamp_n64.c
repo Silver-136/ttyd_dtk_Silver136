@@ -162,12 +162,15 @@ static void effTimestampMain(EffectEntry* effect) {
         work->bright = (frame << 4) + 15;
     }
     for (i = 0; i < 10; i++) {
-        // FAKE: comma expression; --work->delay[i] == 0 changes the object
-        if (work->delay[i] == 0 || (work->delay[i] -= 1, work->delay[i] == 0)) {
-            work->digitAlpha[i] += 8;
-            if (work->digitAlpha[i] > 255) {
-                work->digitAlpha[i] = 255;
+        if (work->delay[i] != 0) {
+            work->delay[i] -= 1;
+            if (work->delay[i] != 0) {
+                continue;
             }
+        }
+        work->digitAlpha[i] += 8;
+        if (work->digitAlpha[i] > 255) {
+            work->digitAlpha[i] = 255;
         }
     }
     dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effTimestampDisp, effect);

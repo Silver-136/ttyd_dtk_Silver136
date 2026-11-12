@@ -414,9 +414,6 @@ void battleAcDelete_SignalTiming(BattleWork* work) {
 static void actionCommandDisp(f32 x, f32 y) {
     BattleActions* ac = &_battleWorkPointer->actionCommands;
 
-    // FAKE: work recovered from ac (container-of through offsetof) so its web is a codegen temp numbered above the
-    // rodata base; then work takes r31 and the base r30, as in the target
-    BattleWork* work = (BattleWork*)((u8*)ac - offsetof(BattleWork, actionCommands));
     SignalTimingWork* w;
     s32 i;
     s32 count;
@@ -433,9 +430,9 @@ static void actionCommandDisp(f32 x, f32 y) {
 
     camGetPtr(CAMERA_2D);
     w = (SignalTimingWork*)ac->work;
-    count = work->actionCommands.params[SIGNAL_PARAM_COUNT];
+    count = ac->params[SIGNAL_PARAM_COUNT];
     next = w->next;
-    if (!(work->actionCommands.acFlags & AC_SIGNAL_TIMING_FLAG_SHOW_BUTTONS)) {
+    if (!(ac->acFlags & AC_SIGNAL_TIMING_FLAG_SHOW_BUTTONS)) {
         if (w->okFlag) {
             Vec pos = {0.0f, 0.0f, 0.0f};
             pos.x = -200.0f + x;
@@ -451,19 +448,19 @@ static void actionCommandDisp(f32 x, f32 y) {
 
     switch (count) {
         case 1:
-            n = work->actionCommands.params[SIGNAL_PARAM_LEAD] * 2 + 5;
+            n = ac->params[SIGNAL_PARAM_LEAD] * 2 + 5;
             break;
         case 3:
-            n = work->actionCommands.params[SIGNAL_PARAM_LEAD] * 2 + 11;
+            n = ac->params[SIGNAL_PARAM_LEAD] * 2 + 11;
             break;
         case 4:
-            n = work->actionCommands.params[SIGNAL_PARAM_LEAD] * 2 + 13;
+            n = ac->params[SIGNAL_PARAM_LEAD] * 2 + 13;
             break;
         case 5:
-            n = work->actionCommands.params[SIGNAL_PARAM_LEAD] * 2 + 15;
+            n = ac->params[SIGNAL_PARAM_LEAD] * 2 + 15;
             break;
         default:
-            n = work->actionCommands.params[SIGNAL_PARAM_LEAD] * 2 + 11;
+            n = ac->params[SIGNAL_PARAM_LEAD] * 2 + 11;
             break;
     }
 
@@ -486,13 +483,13 @@ static void actionCommandDisp(f32 x, f32 y) {
         iconDispGx(&pos, ICON_FLAG_2D, ICON_AC_BAR_RIGHT, 1.0f);
     }
 
-    if (!(work->actionCommands.acFlags & AC_SIGNAL_TIMING_FLAG_HIDE_HIT_COUNT)) {
+    if (!(ac->acFlags & AC_SIGNAL_TIMING_FLAG_HIDE_HIT_COUNT)) {
         fx = -200.0f + x;
-        num = w->hits + work->actionCommands.params[SIGNAL_PARAM_EXTRA];
+        num = w->hits + ac->params[SIGNAL_PARAM_EXTRA];
 
         // Both arms of the SHOW_BUTTONS test are the same (retail code): the counter's position does not depend on it.
-        PSMTXTrans(mTrans, fx + (f32)((work->actionCommands.acFlags & AC_SIGNAL_TIMING_FLAG_SHOW_BUTTONS) ? count * 0x30 - 26 + work->actionCommands.params[SIGNAL_PARAM_LEAD] * 32 : count * 0x30 - 26 + work->actionCommands.params[SIGNAL_PARAM_LEAD] * 32), yb, 0.0f);
-        if (work->actionCommands.acFlags & AC_SIGNAL_TIMING_FLAG_LARGE_HIT_COUNT) {
+        PSMTXTrans(mTrans, fx + (f32)((ac->acFlags & AC_SIGNAL_TIMING_FLAG_SHOW_BUTTONS) ? count * 0x30 - 26 + ac->params[SIGNAL_PARAM_LEAD] * 32 : count * 0x30 - 26 + ac->params[SIGNAL_PARAM_LEAD] * 32), yb, 0.0f);
+        if (ac->acFlags & AC_SIGNAL_TIMING_FLAG_LARGE_HIT_COUNT) {
             PSMTXScale(mScale, 1.5f, 1.5f, 1.5f);
         } else {
             PSMTXScale(mScale, 1.0f, 1.0f, 1.0f);
@@ -501,9 +498,9 @@ static void actionCommandDisp(f32 x, f32 y) {
         iconNumberDispGx(mOut, num, FALSE, (GXColor){255, 255, 255, 255});
     }
 
-    for (i = 0; i < work->actionCommands.params[SIGNAL_PARAM_LEAD]; i++) {
+    for (i = 0; i < ac->params[SIGNAL_PARAM_LEAD]; i++) {
         if (i < w->next) {
-            if (i < work->actionCommands.params[SIGNAL_PARAM_LEAD]) {
+            if (i < ac->params[SIGNAL_PARAM_LEAD]) {
                 Vec pos = {0.0f, 0.0f, 0.0f};
                 pos.x = x + (f32)(i * 33 - 258);
                 pos.y = yb;
@@ -522,32 +519,32 @@ static void actionCommandDisp(f32 x, f32 y) {
         }
     }
 
-    if (!(work->actionCommands.acFlags & AC_SIGNAL_TIMING_FLAG_SHOW_BUTTONS)) {
+    if (!(ac->acFlags & AC_SIGNAL_TIMING_FLAG_SHOW_BUTTONS)) {
         for (i = 0; i < count; i++) {
-            if (i + work->actionCommands.params[SIGNAL_PARAM_LEAD] < next) {
+            if (i + ac->params[SIGNAL_PARAM_LEAD] < next) {
                 Vec pos = {0.0f, 0.0f, 0.0f};
-                pos.x = x + (f32)(i * 48 + (work->actionCommands.params[SIGNAL_PARAM_LEAD] * 33 - 250));
+                pos.x = x + (f32)(i * 48 + (ac->params[SIGNAL_PARAM_LEAD] * 33 - 250));
                 pos.y = yb;
                 iconDispGx(&pos, ICON_FLAG_2D, ICON_AC_ON, 1.0f);
             } else {
                 Vec pos = {0.0f, 0.0f, 0.0f};
-                pos.x = x + (f32)(i * 48 + (work->actionCommands.params[SIGNAL_PARAM_LEAD] * 33 - 250));
+                pos.x = x + (f32)(i * 48 + (ac->params[SIGNAL_PARAM_LEAD] * 33 - 250));
                 pos.y = yb;
                 iconDispGx(&pos, ICON_FLAG_2D, ICON_AC_OFF, 1.0f);
             }
         }
-    } else if (!(work->actionCommands.acFlags & AC_SIGNAL_TIMING_FLAG_HIDE_UPCOMING_BUTTONS)) {
+    } else if (!(ac->acFlags & AC_SIGNAL_TIMING_FLAG_HIDE_UPCOMING_BUTTONS)) {
         yc = 15.0f + y;
         for (i = 0; i < count; i++) {
             f32 scale = 0.8f;
-            if (w->next == (i + work->actionCommands.params[SIGNAL_PARAM_LEAD]) && w->frame >= work->actionCommands.params[SIGNAL_PARAM_STEP] * (i + work->actionCommands.params[SIGNAL_PARAM_LEAD]) - 5 && w->frame < work->actionCommands.params[SIGNAL_PARAM_STEP] * (i + work->actionCommands.params[SIGNAL_PARAM_LEAD])) {
+            if (w->next == (i + ac->params[SIGNAL_PARAM_LEAD]) && w->frame >= ac->params[SIGNAL_PARAM_STEP] * (i + ac->params[SIGNAL_PARAM_LEAD]) - 5 && w->frame < ac->params[SIGNAL_PARAM_STEP] * (i + ac->params[SIGNAL_PARAM_LEAD])) {
                 Vec pos = {0.0f, 0.0f, 0.0f};
-                pos.x = x + (f32)(i * 48 + (work->actionCommands.params[SIGNAL_PARAM_LEAD] * 33 - 250));
+                pos.x = x + (f32)(i * 48 + (ac->params[SIGNAL_PARAM_LEAD] * 33 - 250));
                 pos.y = yc;
                 iconDispGx(&pos, ICON_FLAG_2D, BattleACGetButtonIcon(w->buttons[i], 0), 0.8f);
             } else {
                 s32 dy;
-                if (w->next <= (i + work->actionCommands.params[SIGNAL_PARAM_LEAD])) {
+                if (w->next <= (i + ac->params[SIGNAL_PARAM_LEAD])) {
                     scale = 0.6f;
                     dy = -2;
                 } else {
@@ -555,7 +552,7 @@ static void actionCommandDisp(f32 x, f32 y) {
                 }
                 {
                     Vec pos = {0.0f, 0.0f, 0.0f};
-                    pos.x = x + (f32)(i * 48 + (work->actionCommands.params[SIGNAL_PARAM_LEAD] * 33 - 250));
+                    pos.x = x + (f32)(i * 48 + (ac->params[SIGNAL_PARAM_LEAD] * 33 - 250));
                     pos.y = (f32)(dy + 25) + y;
                     iconDispGx(&pos, ICON_FLAG_2D, BattleACGetButtonIcon(w->buttons[i], 1), scale);
                 }
@@ -564,18 +561,18 @@ static void actionCommandDisp(f32 x, f32 y) {
     } else {
         yc = 20.800001f + yb;
         for (i = 0; i < count; i++) {
-            if (w->next == (i + work->actionCommands.params[SIGNAL_PARAM_LEAD]) && w->frame >= work->actionCommands.params[SIGNAL_PARAM_STEP] * (i + work->actionCommands.params[SIGNAL_PARAM_LEAD]) - 20 && w->frame <= work->actionCommands.params[SIGNAL_PARAM_STEP] * (i + work->actionCommands.params[SIGNAL_PARAM_LEAD])) {
+            if (w->next == (i + ac->params[SIGNAL_PARAM_LEAD]) && w->frame >= ac->params[SIGNAL_PARAM_STEP] * (i + ac->params[SIGNAL_PARAM_LEAD]) - 20 && w->frame <= ac->params[SIGNAL_PARAM_STEP] * (i + ac->params[SIGNAL_PARAM_LEAD])) {
                 Vec pos = {0.0f, 0.0f, 0.0f};
-                pos.x = x + (f32)(i * 48 + (work->actionCommands.params[SIGNAL_PARAM_LEAD] * 33 - 250));
+                pos.x = x + (f32)(i * 48 + (ac->params[SIGNAL_PARAM_LEAD] * 33 - 250));
                 pos.y = yb;
                 iconDispGx(&pos, ICON_FLAG_2D, BattleACGetButtonIcon(w->buttons[i], 0), 0.8f);
-            } else if (w->next <= (i + work->actionCommands.params[SIGNAL_PARAM_LEAD])) {
+            } else if (w->next <= (i + ac->params[SIGNAL_PARAM_LEAD])) {
                 if (i >= count - 1) {
-                    btlDispTexPlane(x + (f32)(i * 48 + (work->actionCommands.params[SIGNAL_PARAM_LEAD] * 33 - 250)), yc, 0.0f, 0.8f, 0.8f, BTL_TEX(0x40), (GXColor){255, 255, 255, 255}, 0);
+                    btlDispTexPlane(x + (f32)(i * 48 + (ac->params[SIGNAL_PARAM_LEAD] * 33 - 250)), yc, 0.0f, 0.8f, 0.8f, BTL_TEX(0x40), (GXColor){255, 255, 255, 255}, 0);
                 }
             } else {
                 Vec pos = {0.0f, 0.0f, 0.0f};
-                pos.x = x + (f32)(i * 48 + (work->actionCommands.params[SIGNAL_PARAM_LEAD] * 33 - 250));
+                pos.x = x + (f32)(i * 48 + (ac->params[SIGNAL_PARAM_LEAD] * 33 - 250));
                 pos.y = yb;
                 iconDispGx(&pos, ICON_FLAG_2D, BattleACGetButtonIcon(w->buttons[i], 1), 0.8f);
             }
@@ -585,9 +582,9 @@ static void actionCommandDisp(f32 x, f32 y) {
     yd = yb - 25.0f;
     for (i = 0; i < count; i++) {
         if (w->results[i] == 1) {
-            btlDispTexPlane(x + (f32)(i * 48 + (work->actionCommands.params[SIGNAL_PARAM_LEAD] * 33 - 250)), yd, 0.0f, 1.0f, 1.0f, BTL_TEX(0x3E), (GXColor){255, 255, 255, 255}, 0);
+            btlDispTexPlane(x + (f32)(i * 48 + (ac->params[SIGNAL_PARAM_LEAD] * 33 - 250)), yd, 0.0f, 1.0f, 1.0f, BTL_TEX(0x3E), (GXColor){255, 255, 255, 255}, 0);
         } else if (w->results[i] == -1) {
-            btlDispTexPlane(x + (f32)(i * 48 + (work->actionCommands.params[SIGNAL_PARAM_LEAD] * 33 - 250)), yd, 0.0f, 1.0f, 1.0f, BTL_TEX(0x3F), (GXColor){255, 255, 255, 255}, 0);
+            btlDispTexPlane(x + (f32)(i * 48 + (ac->params[SIGNAL_PARAM_LEAD] * 33 - 250)), yd, 0.0f, 1.0f, 1.0f, BTL_TEX(0x3F), (GXColor){255, 255, 255, 255}, 0);
         }
     }
 }

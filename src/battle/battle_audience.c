@@ -694,11 +694,13 @@ u8 BattleAudience_CheckReactionPerPhase(void) {
             for (counter = 0, i = 0; i < AUDIENCE_MEMBER_MAX; i++) {
                 member = BattleAudienceGetPtr(i);
 
-                // FAKE: comma expression; `--member->statusTimer <= 0` changes the object
                 if ((u8)BattleAudience_GetSysCtrl(i) == 1 && member->type == AUDIENCE_BULKY_BOBOMB &&
-                        member->status == AUDIENCE_STATUS_IGNITE && (member->statusTimer--, member->statusTimer <= 0)) {
-                    BattleAudience_ChangeStatus(i, AUDIENCE_STATUS_FIRE);
-                    counter++;
+                        member->status == AUDIENCE_STATUS_IGNITE) {
+                    member->statusTimer--;
+                    if (member->statusTimer <= 0) {
+                        BattleAudience_ChangeStatus(i, AUDIENCE_STATUS_FIRE);
+                        counter++;
+                    }
                 }
             }
             if (counter >= 1) {
@@ -1256,9 +1258,11 @@ u8 BattleAudience_CheckReactionPerPhase(void) {
             }
             for (i = 0; i < AUDIENCE_MEMBER_MAX; i++) {
                 member = BattleAudienceGetPtr(i);
-                if ((u8)BattleAudience_GetSysCtrl(i) == 1 && member->type == AUDIENCE_KOOPA && member->status == AUDIENCE_STATUS_SHELL &&
-                        (member->statusTimer--, member->statusTimer <= 0)) { // FAKE: comma expression; `--member->statusTimer <= 0` changes the object
-                    member->step = 4;
+                if ((u8)BattleAudience_GetSysCtrl(i) == 1 && member->type == AUDIENCE_KOOPA && member->status == AUDIENCE_STATUS_SHELL) {
+                    member->statusTimer--;
+                    if (member->statusTimer <= 0) {
+                        member->step = 4;
+                    }
                 }
             }
             BattleBreakSlot_DecBreakTurn();

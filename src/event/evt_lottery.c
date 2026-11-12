@@ -294,11 +294,9 @@ USER_FUNC(evt_lottery_todaynum) {
 USER_FUNC(evt_lottery_error_check) {
     OSCalendarTime a, b;
 
-    // FAKE: g is a spare copy of gp; &gp->lotteryInfo changes the object
-    GlobalWork* g = gp;
+    lottery_info* lot = &gp->lotteryInfo;
     EvtWord* args = event->args;
     OSTime now = OSGetTime();
-    lottery_info* lot = &g->lotteryInfo;
     u16 flags = lot->flags;
     BOOL err = FALSE;
 

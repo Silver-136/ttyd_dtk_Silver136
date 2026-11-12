@@ -1860,9 +1860,7 @@ static void select_disp_luigi(WinMgrEntry* entry) {
     f32 tw;
 #endif
     // zero (0.0f) is added to each row y (the adds are in the retail code).
-    // FAKE: ent is a second name for entry; using entry changes the object
-    WinMgrEntry* ent = entry;
-    WinMgrSelect* sel = ent->param;
+    WinMgrSelect* sel = entry->param;
     u32 left, top, wd, ht;
     GXColor black = {0x00, 0x00, 0x00, 0xFF};
     InformantWork* jdt = &_jdt;
@@ -1883,11 +1881,11 @@ static void select_disp_luigi(WinMgrEntry* entry) {
     if (!(wp->entries[sel->descriptorId[0]].flags & WINMGR_FLAG_ANIMATING)) {
         GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
         GXGetScissor(&left, &top, &wd, &ht);
-        GXSetScissor(ent->x + 304, 274 - ent->y, ent->width, ent->height - 50);
+        GXSetScissor(entry->x + 304, 274 - entry->y, entry->width, entry->height - 50);
         info = jdt->info;
         for (i = 0; i < sel->numItems; i++, info++) {
-            py = sel->scrollY + (zero + (ent->y - 44 - i * 24));
-            if ((f32)ent->y < py - 32.0f || (f32)(ent->y - ent->height) > py + 32.0f) {
+            py = sel->scrollY + (zero + (entry->y - 44 - i * 24));
+            if ((f32)entry->y < py - 32.0f || (f32)(entry->y - entry->height) > py + 32.0f) {
                 continue;
             }
             winFontInit();
@@ -1899,9 +1897,9 @@ static void select_disp_luigi(WinMgrEntry* entry) {
                 col = &black;
             }
 #if VERSION >= VERSION_US
-            winFontSetWidth((Vec){ent->x + 25, sel->scrollY + (zero + (ent->y - 32 - i * 24)), 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, *col, 200.0f, info->initEndPos);
+            winFontSetWidth((Vec){entry->x + 25, sel->scrollY + (zero + (entry->y - 32 - i * 24)), 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, *col, 200.0f, info->initEndPos);
 #else
-            winFontSet((Vec){ent->x + 25, sel->scrollY + (zero + (ent->y - 32 - i * 24)), 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, *col, info->initEndPos);
+            winFontSet((Vec){entry->x + 25, sel->scrollY + (zero + (entry->y - 32 - i * 24)), 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, *col, info->initEndPos);
 #endif
             info->initEndPos[info->tagEndPos] = save;
             if (sel->type == SELECT_TYPE_INFORMANT_PERFECT && !(sel->items[i].flags & SELECT_ITEM_GRAY)) {
@@ -1911,15 +1909,15 @@ static void select_disp_luigi(WinMgrEntry* entry) {
                 if (sel->items[i].flags & SELECT_ITEM_GRAY) {
                     col = &gray;
                 }
-                winFontSet((Vec){ent->x + 245, sel->scrollY + (zero + (ent->y - 32 - i * 24)), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, *col, buf);
+                winFontSet((Vec){entry->x + 245, sel->scrollY + (zero + (entry->y - 32 - i * 24)), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, *col, buf);
             }
         }
         GXSetScissor(left, top, wd, ht);
 #if VERSION <= VERSION_DEMO_JP
         msg = msgSearch("msg_window_title_6");
-        w = (ent->width - FontGetMessageWidth(msg)) / 2;
+        w = (entry->width - FontGetMessageWidth(msg)) / 2;
         winFontInit();
-        winFontSetEdge((Vec){ent->x + w, ent->y + 14, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white, msg);
+        winFontSetEdge((Vec){entry->x + w, entry->y + 14, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white, msg);
         iconDispGx(&(Vec){sel->cursorX, sel->cursorY, 1.0f}, (ICON_FLAG_2D | ICON_FLAG_FLIP_X), ICON_YUBI_CURSOR, 1.0f);
 #else
         switch (sel->type) {
@@ -1936,31 +1934,31 @@ static void select_disp_luigi(WinMgrEntry* entry) {
         if (tw > 120.0f) {
             tw = 120.0f;
         }
-        w = (ent->width - tw) / 2.0f;
+        w = (entry->width - tw) / 2.0f;
         winFontInit();
-        winFontSetEdgeWidth((Vec){ent->x + w, ent->y + 14, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white, 120.0f, msg);
+        winFontSetEdgeWidth((Vec){entry->x + w, entry->y + 14, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white, 120.0f, msg);
 #else
-        w = (ent->width - FontGetMessageWidth(msg)) / 2;
+        w = (entry->width - FontGetMessageWidth(msg)) / 2;
         winFontInit();
-        winFontSetEdge((Vec){ent->x + w, ent->y + 14, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white, msg);
+        winFontSetEdge((Vec){entry->x + w, entry->y + 14, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white, msg);
 #endif
         switch (sel->type) {
             case SELECT_TYPE_INFORMANT_PERFECT:
-                PSMTXTrans(mtx, ent->x + 268, ent->y - 18, 0.0f);
+                PSMTXTrans(mtx, entry->x + 268, entry->y - 18, 0.0f);
                 PSMTXScale(scale, 0.6f, 0.6f, 0.6f);
                 PSMTXConcat(mtx, scale, mtx);
                 iconDispGxCol(mtx, ICON_FLAG_2D, ICON_CURRENCY_PLATE, (GXColor){0xF0, 0xF0, 0xF0, 0xFF});
-                iconDispGx(&(Vec){ent->x + 268, ent->y - 12, 0.0f}, ICON_FLAG_2D, ICON_ITEM_COIN, 0.6f);
+                iconDispGx(&(Vec){entry->x + 268, entry->y - 12, 0.0f}, ICON_FLAG_2D, ICON_ITEM_COIN, 0.6f);
                 break;
         }
         iconDispGx(&(Vec){sel->cursorX, sel->cursorY, 1.0f}, ICON_FLAG_2D | ICON_FLAG_FLIP_X, ICON_YUBI_CURSOR, 1.0f);
 #endif
         if (sel->numItems > 8 && (gp->retraceCount & 31) < 20) {
             if (sel->scrollTop != 0) {
-                iconDispGx(&(Vec){ent->x + ent->width / 2.0f, ent->y - 36, 1.0f}, ICON_FLAG_2D, ICON_ARROW_UP, 0.6f);
+                iconDispGx(&(Vec){entry->x + entry->width / 2.0f, entry->y - 36, 1.0f}, ICON_FLAG_2D, ICON_ARROW_UP, 0.6f);
             }
             if (sel->scrollTop != sel->numItems - 8) {
-                iconDispGx(&(Vec){ent->x + ent->width / 2.0f, ent->y - ent->height - 12, 1.0f}, ICON_FLAG_2D, ICON_ARROW_DOWN, 0.6f);
+                iconDispGx(&(Vec){entry->x + entry->width / 2.0f, entry->y - entry->height - 12, 1.0f}, ICON_FLAG_2D, ICON_ARROW_DOWN, 0.6f);
             }
         }
     }

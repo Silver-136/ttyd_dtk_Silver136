@@ -293,18 +293,16 @@ static inline BOOL crVecIsZero(Vec a) {
  */
 static s32 collisionTri_simple(Vec P, Vec A, Vec B, Vec C, f32* dist) {
     Vec dir = {0.0f, -1.0f, 0.0f};
-    Vec nz;
+    Vec n;
     Vec hit;
-    Vec e2, e1, e3, n;
+    Vec e2, e1, e3;
     f32 nd, t;
     e2 = subV(C, A);
     e1 = subV(A, B);
     e3 = subV(B, C);
     n = outV(e2, e1);
 
-    // FAKE: nz is a spare copy of n; testing n directly (crVecIsZero(n)) changes the object
-    nz = n;
-    if (nz.x == 0.0f && nz.y == 0.0f && nz.z == 0.0f) {
+    if (n.x == 0.0f && n.y == 0.0f && n.z == 0.0f) {
         return 0;
     }
     nd = inV(n, subV(P, A));

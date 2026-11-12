@@ -304,9 +304,10 @@ void party_kemuri(PartyEntry* party) {
                 if (party->runMode == PARTY_RUN_USE && party->currentMemberId == PARTY_YOSHI) {
                     if (party->hitobjStandOn != NULL) {
                         if (!(hitGetAttr(party->hitobjStandOn) & HIT_ATTR_SHALLOW_WATER)) {
-                            // FAKE: empty then-branch; the plain >= test with && changes the object
                             if (party->moveSpeed < 2.0f) {
-                            } else if (party->kemuriTimer++ > 6) {
+                                return;
+                            }
+                            if (party->kemuriTimer++ > 6) {
                                 {
                                     f32 c, s;
                                     party->kemuriTimer = 0;
@@ -321,9 +322,10 @@ void party_kemuri(PartyEntry* party) {
                 } else if (party->motionId == 1) {
                     if (party->hitobjStandOn != NULL) {
                         if (!(hitGetAttr(party->hitobjStandOn) & HIT_ATTR_SHALLOW_WATER)) {
-                            // FAKE: empty then-branch; the plain >= test with && changes the object
                             if (party->moveSpeed < 2.0f) {
-                            } else if (party->kemuriTimer++ > 6) {
+                                return;
+                            }
+                            if (party->kemuriTimer++ > 6) {
                                 {
                                     f32 c, s;
                                     party->kemuriTimer = 0;

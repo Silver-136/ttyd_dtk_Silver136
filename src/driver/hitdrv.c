@@ -843,13 +843,11 @@ HitEntry* hitCheckVecFilter(HitCheckQuery* query, HitFilterCallback callback) {
     MapEntry* mapEntry;
     s32 mapIdx;
     f32 reach;
-    f32 temp;
     Vec position;
     Vec hitNormalTmp;
     Vec normal;
     Vec endPos;
 #else
-    f32 temp;
     HitVector* vector;
     Vec position;
     Vec hitNormalTmp;
@@ -871,12 +869,10 @@ HitEntry* hitCheckVecFilter(HitCheckQuery* query, HitFilterCallback callback) {
     }
     minDist = -1.0f;
 
-    // FAKE: 0.5f through the spare local temp; `reach = query->targetDistance * 0.5f` changes the object
 #if VERSION <= VERSION_DEMO_JP
     hitIdx = -1;
 #endif
-    temp = 0.5f;
-    reach = query->targetDistance * temp;
+    reach = query->targetDistance / 2.0f;
     PSVECScale(&query->targetDir, &endPos, reach);
     PSVECAdd(&query->targetPos, &endPos, &endPos);
 #if VERSION <= VERSION_DEMO_JP

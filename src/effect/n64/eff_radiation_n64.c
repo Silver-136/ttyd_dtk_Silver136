@@ -291,12 +291,15 @@ static void effRadiationMain(EffectEntry* effect) {
                     p->delay = 0;
                 }
 
-                // FAKE: comma expression for the decrement test; --p->delay <= 0 changes the object
-                if (p->delay <= 0 || (--p->delay, p->delay <= 0)) {
-                    p->rotX += p->rotVelX;
-                    p->rotY += p->rotVelY;
-                    p->rotZ += p->rotVelZ;
+                if (p->delay > 0) {
+                    --p->delay;
+                    if (p->delay > 0) {
+                        continue;
+                    }
                 }
+                p->rotX += p->rotVelX;
+                p->rotY += p->rotVelY;
+                p->rotZ += p->rotVelZ;
             }
             break;
     }
