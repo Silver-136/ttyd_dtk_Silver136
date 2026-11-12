@@ -703,6 +703,7 @@ static void _st_chg_msg_disp(void) {
     StChgWork* st = &_battleWorkPointer->announce.stChg;
     f32 y;
     f32 x;
+    f32 center = 0.0f;
     u16 width;
     u16 lines;
     GXColor col0;
@@ -710,9 +711,9 @@ static void _st_chg_msg_disp(void) {
     lines++;
     col0 = (GXColor){0xFF, 0xFF, 0xFF, 0xFF};
 
-    // FAKE: y doubles as a 0.0f temporary; x = 0.0f - (width / 2) changes the object
-    y = 0.0f;
-    x = y - (width / 2);
+    // center is a variable: the retail code computes 0.0f - width / 2 at run time (lfs 0.0f, fsubs); a literal
+    // 0.0f folds to fneg
+    x = center - (width / 2);
     y = -120.0f;
 
     // FAKE: called through a cast prototype with the color's address (no caller copy); passing col0 by value changes the object

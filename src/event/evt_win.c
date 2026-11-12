@@ -623,7 +623,7 @@ USER_FUNC(select_func) {
     wp->flags &= ~UNITWIN_FLAG_SELECTED;
     btn = keyGetButtonTrg(0);
 
-    // FAKE: `x ? FALSE : TRUE` in place of `!x`; !marioChkCtrl() || !marioChkKey() changes the object
+    // each negation is a value: the retail code materialises it (cntlzw, srwi.) before the test; a plain !x branches on cmpwi
     if ((marioChkCtrl() ? FALSE : TRUE) || (marioChkKey() ? FALSE : TRUE)) {
         btn = 0;
     }

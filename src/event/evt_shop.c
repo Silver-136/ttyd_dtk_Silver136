@@ -871,8 +871,8 @@ USER_FUNC(evt_shop_main_func) {
     wp->flags &= ~1;
     trg = keyGetButtonTrg(0);
 
-    // FAKE: the masks do nothing (!x is 0 or 1); !marioChkCtrl() || !marioChkKey() changes the object
-    if ((!marioChkCtrl() & 0x7ffffff) || (!marioChkKey() & 0x7ffffff)) {
+    // each negation is a value: the retail code materialises it (cntlzw, srwi.) before the test (as in select_func)
+    if ((marioChkCtrl() ? FALSE : TRUE) || (marioChkKey() ? FALSE : TRUE)) {
         trg = 0;
     }
     if (!strncmp(gp->currentMapName, "rsh_03", strlen("rsh_03")) &&

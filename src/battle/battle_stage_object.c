@@ -3280,7 +3280,7 @@ static void _disp_escape_wall_message(CameraId camera, void* param) {
     s32 width = FontGetMessageWidth(msg);
     f32 x;
 
-    // FAKE: spare temporary for 0.0f; writing 0.0f in place changes the object
+    // zero is a variable: the retail code computes 0.0f - width / 2 at run time (lfs 0.0f, fsubs); a literal folds to fneg
     f32 zero = 0.0f;
 
     x = zero - width / 2;

@@ -3565,7 +3565,7 @@ static BOOL BattleAudience_GetPPAudienceNum_Sub(s32 id) {
         return FALSE;
     }
 
-    // FAKE: one-value range test; `member->status == AUDIENCE_STATUS_SLEEP` changes the object
+    // a two-sided range test with equal bounds: the retail code has cmplwi 13 with both blt and bgt (== gives one bne)
     if (member->status >= AUDIENCE_STATUS_SLEEP && member->status <= AUDIENCE_STATUS_SLEEP) {
         return FALSE;
     }

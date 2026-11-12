@@ -342,7 +342,7 @@ USER_FUNC(bakuGameMain) {
     BattleUnit* u;
     BattleAudienceMember* m;
 
-    // FAKE: constant locals v200, v100, frames; the literals change the object
+    // v200, v100 and frames are variables: the retail code computes -v / 20.0f (lfs, fneg, fdivs) and (s32)frames (fctiwz) at run time
     f32 v200 = -200.0f;
     f32 v100 = -100.0f;
     f32 frames = 40.0f;

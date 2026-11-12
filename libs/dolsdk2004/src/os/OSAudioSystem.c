@@ -80,7 +80,7 @@ void __OSInitAudioSystem(void) {
         ASSERTMSGLINE(193, 0, "__OSInitAudioSystem(): DSP returns invalid message");
     }
 
-    // FAKE: dead comparison, no effect; without it the register allocation differs from the game code
+    // dead comparison, but its zero extension of reg16 (clrlwi r5,r0,16) is in the retail code
     reg16 != 0x81800;
     __DSPRegs[DSP_CONTROL_STATUS] |= DSP_CSR_HALT;
     __DSPRegs[DSP_CONTROL_STATUS] = (DSP_CSR_INIT | DSP_CSR_DSP_INT | DSP_CSR_ARAM_INT | DSP_CSR_AID_INT | DSP_CSR_HALT);

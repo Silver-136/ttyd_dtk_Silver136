@@ -908,7 +908,7 @@ static void _MarioExpDisp(CameraId camId, void* param) {
 static void _LvupParamConfirmDisp(CameraId camId, void* param) {
     Vec pos;
 
-    // FAKE: 0.0f held in zero so the expression is 0.0f - w, not a negation
+    // zero is a variable: the retail code computes 0.0f - w at run time (lfs 0.0f, fsubs); a literal 0.0f folds to fneg
     f32 zero = 0.0f;
     u32 len;
     BattleCursor *cursor;
@@ -944,7 +944,7 @@ void _LvupParamHelpMsgDisp(CameraId camId, void* param) {
     u16 lines;
     s32 width;
 
-    // FAKE: 0.0f and -148.0f held in locals (zero, y); writing the literals changes the object
+    // zero and y are variables: the retail code computes 0.0f - width / 2 (lfs 0.0f, fsubs) and (s32)-148.0f (fctiwz) at run time
     f32 y;
     f32 zero = 0.0f;
 
@@ -1477,7 +1477,7 @@ void _draw_select_one_to_upgrade_text(CameraId camId, void* param) {
     u16 lines;
     s32 width;
 
-    // FAKE: 0.0f and -148.0f held in locals (zero, y); writing the literals changes the object
+    // zero and y are variables: the retail code computes 0.0f - width / 2 (lfs 0.0f, fsubs) and (s32)-148.0f (fctiwz) at run time
     f32 y;
     f32 zero = 0.0f;
 
