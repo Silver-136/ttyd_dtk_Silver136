@@ -18,6 +18,12 @@
 #include "win/win_mario.h"
 #include "driver/mapdrv.h"
 
+/** Window texture ids of the BP pips: lit for available (or, in the list, equipped) points, dark for used ones. */
+typedef enum WinBpTex {
+    WIN_TEX_BP_LIT = 0x1C,
+    WIN_TEX_BP_DARK = 0x1D
+} WinBpTex;
+
 /** Builds the "Equipped" tab's list from the pouch: one entry (slot index, badge id, equipped) per equipped badge. */
 void winMakeEquipList(WindowWork* w) {
     s32 n = 0;
@@ -372,10 +378,10 @@ void winBadgeDisp(s32 camId, void* param, s32 n) {
     winTexInit(*w->res->data);
     d = 28.0f + y;
     for (i = 0; i < pouch->availableBP; i++) {
-        winTexSet(0x1C, (Vec){(x - 242.0f) + (i % 10) * 13, (20.0f + (d - (i / 10) * 13)) - 18.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);
+        winTexSet(WIN_TEX_BP_LIT, (Vec){(x - 242.0f) + (i % 10) * 13, (20.0f + (d - (i / 10) * 13)) - 18.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);
     }
     for (i = pouch->availableBP; i < pouch->maximumBP; i++) {
-        winTexSet(0x1D, (Vec){(x - 242.0f) + (i % 10) * 13, (20.0f + (d - (i / 10) * 13)) - 18.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);
+        winTexSet(WIN_TEX_BP_DARK, (Vec){(x - 242.0f) + (i % 10) * 13, (20.0f + (d - (i / 10) * 13)) - 18.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);
     }
     badge_disp(w, x, y);
 }
@@ -504,17 +510,13 @@ static void badge_disp(WindowWork* w, f32 xo, f32 yo) {
 #endif
         winTexInit(*w->res->data);
         for (j = 0; j < *cost; j++) {
-            // FAKE: the texture id goes through a spare temporary t in a comma expression; equipped ? 0x1C : 0x1D changes the object
-            {
-                s32 t;
 #if VERSION <= VERSION_DEMO_JP
-                winTexSet((t = 0x1D, equipped ? t = 0x1C : 0, t), (Vec){(160.0f + xo) + j * 13, (scroll + ((yo + 110.0f) - (f32)(i * 23))), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, colA);
+            winTexSet(equipped ? WIN_TEX_BP_LIT : WIN_TEX_BP_DARK, (Vec){(160.0f + xo) + j * 13, (scroll + ((yo + 110.0f) - (f32)(i * 23))), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, colA);
 #else
-                winTexSet((t = 0x1D, equipped ? t = 0x1C : 0, t),
-                          (Vec){(160.0f + xo) + j * 13, (scroll + ((yo + 110.0f) - (f32)rowOff)), 0.0f},
-                          (Vec){1.0f, 1.0f, 1.0f}, colA);
+            winTexSet(equipped ? WIN_TEX_BP_LIT : WIN_TEX_BP_DARK,
+                      (Vec){(160.0f + xo) + j * 13, (scroll + ((yo + 110.0f) - (f32)rowOff)), 0.0f},
+                      (Vec){1.0f, 1.0f, 1.0f}, colA);
 #endif
-            }
         }
     }
     GXSetScissor(0, 0, 0x260, 0x1E0);

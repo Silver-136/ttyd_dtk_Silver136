@@ -451,24 +451,6 @@ void FontDrawStringVecPitch(Vec pos, f32 pitch, const s8* msg) {
 #pragma auto_inline reset
 #endif
 
-/** The left/right pair of a glyph's four outline copies, 2 px either side of an integer x, y. */
-static inline void fontDrawPairXI(u16 code, s16 x, s16 y) {
-    // FAKE: spare s16 copies of the s16 parameters (and a no-op cast); using x and y directly changes the object
-    s16 iy = y;
-    s16 ix = x;
-    _JUTFont_DrawPos(code, ix - 2, (s16)iy);
-    _JUTFont_DrawPos(code, ix + 2, (s16)iy);
-}
-
-/** The down/up pair of outline copies for an integer position; see fontDrawPairXI. */
-static inline void fontDrawPairYI(u16 code, s16 x, s16 y) {
-    // FAKE: spare s16 copies of the s16 parameters; using x and y directly changes the object
-    s16 iy = y;
-    s16 ix = x;
-    _JUTFont_DrawPos(code, ix, iy - 2);
-    _JUTFont_DrawPos(code, ix, iy + 2);
-}
-
 /** The left/right pair of outline copies for a float position (truncated to pixels). */
 static inline void fontDrawPairX(u16 code, f32 x, f32 y) {
     s16 ix = x;
@@ -625,13 +607,27 @@ void FontDrawStringShake(f32 x, f32 y, const s8* msg) {
     }
 }
 
-/** Draws one glyph at integer x, y in the loaded matrix, outline first when FontDrawEdge is on. */
-static inline void fontDrawCodeEdgeI(u16 code, s16 x, s16 y) {
+/**
+ * Draws one glyph at x, y (pixels) in the loaded matrix; with FontDrawEdge on, first draws it four times in the
+ * outline colour (fontColTbl[0]) 2 px left, right, down and up of it, then restores the colour.
+ */
+// Original name and size (0x154) from the JP demo map (UNUSED there: every call is inlined).
+void JUTFont_DrawPos(u16 code, s32 x, s32 y) {
     if (fontEdge) {
         GXColor save = fontColor;
         FontDrawColorIDX(0);
-        fontDrawPairXI(code, x, y);
-        fontDrawPairYI(code, x, y);
+        {
+            s16 ix = x;
+            s16 iy = y;
+            _JUTFont_DrawPos(code, ix - 2, iy);
+            _JUTFont_DrawPos(code, ix + 2, iy);
+        }
+        {
+            s16 ix = x;
+            s16 iy = y;
+            _JUTFont_DrawPos(code, ix, iy - 2);
+            _JUTFont_DrawPos(code, ix, iy + 2);
+        }
         FontDrawColor(save);
     }
     _JUTFont_DrawPos(code, x, y);
@@ -714,7 +710,7 @@ void FontDrawMessage(s32 x, s32 y, const char* msg) {
             }
         }
         if (code != 0xFFFF) {
-            fontDrawCodeEdgeI(code, cx, cy);
+            JUTFont_DrawPos(code, cx, cy);
             cx += JUTFont_GetWidthEntry(code)->width + charspace[gp->language];
         }
     }

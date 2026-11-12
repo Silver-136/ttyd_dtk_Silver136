@@ -592,8 +592,8 @@ static s32 hitCalcVtxPosition(HitEntry* hit) {
                     m += j * stride;
                     i0 = *(u16*)(m + 3);
                     o0 = i0 * 3;
-                    o1 = (u16)(even ? i2 : i1) * 3;
-                    o2 = (u16)(even ? i1 : i2) * 3;
+                    o1 = (even ? i2 : i1) * 3;
+                    o2 = (even ? i1 : i2) * 3;
                     gqr = (wp->entries[hit->mapIndex].vcdTable->posFrac << 8) | 7;
                     gqr |= gqr << 16;
                     HW_SET_GQR5(gqr);
