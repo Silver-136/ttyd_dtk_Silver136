@@ -22,19 +22,6 @@
 
 u32 strlen(const char* s);
 
-// One textured rectangle (left, right, top, bottom) with horizontal texture repeat u.
-static inline void recoveryQuad(f32 l, f32 r, f32 t, f32 b, f32 u) {
-    GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-    GXPosition3f32(l, t, 0.0f);
-    GXTexCoord2f32(0.0f, 0.0f);
-    GXPosition3f32(r, t, 0.0f);
-    GXTexCoord2f32(u, 0.0f);
-    GXPosition3f32(r, b, 0.0f);
-    GXTexCoord2f32(u, 1.0f);
-    GXPosition3f32(l, b, 0.0f);
-    GXTexCoord2f32(0.0f, 1.0f);
-}
-
 #if VERSION <= VERSION_DEMO_JP
 static u8 color_rotation_data[] = {
     0xFE, 0xAC, 0xAC, 0xFE, 0xAC, 0xD5, 0xFE, 0xB4, 0x9A, 0xD5, 0xB4, 0xFE,
@@ -586,6 +573,20 @@ static void effRecoveryMain2(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&calc), DISP_MODE_XLU, effRecoveryDisp4, effect);
 }
 
+/** One textured quad: top-left corner (x, y), width w, height h, texture repeat (s, t). */
+// Original name and size (0x120) from the JP demo map (UNUSED there: every call is inlined).
+static void polygon(f32 x, f32 y, f32 w, f32 h, f32 s, f32 t) {
+    GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+    GXPosition3f32(x, y, 0.0f);
+    GXTexCoord2f32(0.0f, 0.0f);
+    GXPosition3f32(x + w, y, 0.0f);
+    GXTexCoord2f32(s, 0.0f);
+    GXPosition3f32(x + w, y - h, 0.0f);
+    GXTexCoord2f32(s, t);
+    GXPosition3f32(x, y - h, 0.0f);
+    GXTexCoord2f32(0.0f, t);
+}
+
 /** Draws the central icon (moved by the animation) and the small icons in cycling colours as camera-facing quads. */
 static void effRecoveryDisp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
@@ -660,7 +661,7 @@ static void effRecoveryDisp(CameraId cameraId, void* param) {
     GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
     GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_TEXC);
     GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_TEXA);
-    recoveryQuad(-16.0f, 16.0f, 16.0f, -16.0f, 1.0f);
+    polygon(-16.0f, 16.0f, 32.0f, 32.0f, 1.0f, 1.0f);
     if (type == 2 || type == 3) {
         return;
     }
@@ -691,7 +692,7 @@ static void effRecoveryDisp(CameraId cameraId, void* param) {
         PSMTXConcat(camGetPtr(cameraId)->view, transMtx, transMtx);
         GXLoadPosMtxImm(transMtx, GX_PNMTX0);
         GXSetCurrentMtx(GX_PNMTX0);
-        recoveryQuad(-6.0f, 6.0f, 6.0f, -6.0f, 2.0f);
+        polygon(-6.0f, 6.0f, 12.0f, 12.0f, 2.0f, 1.0f);
     }
 }
 
@@ -840,7 +841,15 @@ static void effRecoveryDisp3(CameraId cameraId, void* param) {
         left = -w;
         left *= 0.5f;
         right = left + w;
-        recoveryQuad(left, right, top, bot, 1.0f);
+        GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+        GXPosition3f32(left, top, 0.0f);
+        GXTexCoord2f32(0.0f, 0.0f);
+        GXPosition3f32(right, top, 0.0f);
+        GXTexCoord2f32(1.0f, 0.0f);
+        GXPosition3f32(right, bot, 0.0f);
+        GXTexCoord2f32(1.0f, 1.0f);
+        GXPosition3f32(left, bot, 0.0f);
+        GXTexCoord2f32(0.0f, 1.0f);
     }
 }
 

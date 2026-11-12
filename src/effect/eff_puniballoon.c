@@ -113,6 +113,20 @@ static void effPuniBalloonMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&pos), DISP_MODE_XLU, effPuniBalloonDisp, effect);
 }
 
+/** The balloon's textured quad: 24 x 24 around the origin, texture repeated twice across. */
+// Original name and size (0x94) from the JP demo map (UNUSED there: every call is inlined).
+static void polygon(void) {
+    GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+    GXPosition3s16(-12, 12, 0);
+    GXTexCoord2s16(0, 0);
+    GXPosition3s16(-12, -12, 0);
+    GXTexCoord2s16(0, 1);
+    GXPosition3s16(12, -12, 0);
+    GXTexCoord2s16(2, 1);
+    GXPosition3s16(12, 12, 0);
+    GXTexCoord2s16(2, 0);
+}
+
 /** Draw callback: dispatches to balloon_0 (the balloon) or balloon_1 (the burst) by type. */
 static void effPuniBalloonDisp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
@@ -165,15 +179,7 @@ static void balloon_0(CameraId cameraId, EffectEntry* effect) {
     GXSetTevKAlphaSel(GX_TEVSTAGE0, GX_TEV_KASEL_1_2);
     effGetTexObj(0x26, &texObj);
     GXLoadTexObj(&texObj, GX_TEXMAP0);
-    GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-    GXPosition3s16(-12, 12, 0);
-    GXTexCoord2s16(0, 0);
-    GXPosition3s16(-12, -12, 0);
-    GXTexCoord2s16(0, 1);
-    GXPosition3s16(12, -12, 0);
-    GXTexCoord2s16(2, 1);
-    GXPosition3s16(12, 12, 0);
-    GXTexCoord2s16(2, 0);
+    polygon();
     GXSetNumIndStages(0);
     GXSetTevDirect(GX_TEVSTAGE0);
 }
@@ -215,14 +221,6 @@ static void balloon_1(CameraId cameraId, EffectEntry* effect) {
         PSMTXConcat(mC, mA, mA);
         GXLoadPosMtxImm(mA, GX_PNMTX0);
         GXSetCurrentMtx(GX_PNMTX0);
-        GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-        GXPosition3s16(-12, 12, 0);
-        GXTexCoord2s16(0, 0);
-        GXPosition3s16(-12, -12, 0);
-        GXTexCoord2s16(0, 1);
-        GXPosition3s16(12, -12, 0);
-        GXTexCoord2s16(2, 1);
-        GXPosition3s16(12, 12, 0);
-        GXTexCoord2s16(2, 0);
+        polygon();
     }
 }

@@ -155,6 +155,20 @@ static void effMissStarMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position2), DISP_MODE_ALPHA_TEST, (DispCallback)effMissStarDisp, effect);
 }
 
+/** One textured quad: top-left corner (x, y), width w, height h, texture repeat (s, t). */
+// Original name and size (0x120) from the JP demo map (UNUSED there: every call is inlined).
+static void polygon(f32 x, f32 y, f32 w, f32 h, f32 s, f32 t) {
+    GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+    GXPosition3f32(x, y, 0.0f);
+    GXTexCoord2f32(0.0f, 0.0f);
+    GXPosition3f32(x + w, y, 0.0f);
+    GXTexCoord2f32(s, 0.0f);
+    GXPosition3f32(x + w, y - h, 0.0f);
+    GXTexCoord2f32(s, t);
+    GXPosition3f32(x, y - h, 0.0f);
+    GXTexCoord2f32(0.0f, t);
+}
+
 /** Draws each star as a camera-facing textured quad (effect texture 24). */
 static void effMissStarDisp(CameraId cameraId, EffectEntry* effect) {
     EffMissStarWork* work = effect->userdata;
@@ -197,14 +211,6 @@ static void effMissStarDisp(CameraId cameraId, EffectEntry* effect) {
         PSMTXConcat(camGetPtr(CAMERA_3D)->view, mtx, mtx);
         GXLoadPosMtxImm(mtx, GX_PNMTX0);
         GXSetCurrentMtx(GX_PNMTX0);
-        GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-        GXPosition3f32(-16.0f, 16.0f, 0.0f);
-        GXTexCoord2f32(0.0f, 0.0f);
-        GXPosition3f32(16.0f, 16.0f, 0.0f);
-        GXTexCoord2f32(1.0f, 0.0f);
-        GXPosition3f32(16.0f, -16.0f, 0.0f);
-        GXTexCoord2f32(1.0f, 1.0f);
-        GXPosition3f32(-16.0f, -16.0f, 0.0f);
-        GXTexCoord2f32(0.0f, 1.0f);
+        polygon(-16.0f, 16.0f, 32.0f, 32.0f, 1.0f, 1.0f);
     }
 }

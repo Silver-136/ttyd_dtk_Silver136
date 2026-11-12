@@ -119,19 +119,6 @@ static u8 moja_model_dl_0_size_tbl[] = { 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
 static f32 chuchu_dt[] = { 0.0f, 1.0f, 1.0f, -0.169270828f, 0.847395837f, 0.785937548f, -0.368055552f, 0.676388919f, 0.545833349f, -0.5078125f, 0.542187512f, 0.357812494f, -0.5f, 0.5f, 0.300000012f, -0.280888885f, 0.579022229f, 0.41413334f, 0.0839999989f, 0.738399982f, 0.642400026f, 0.489333332f, 0.928266644f, 0.913600028f, 0.829777777f, 1.0987556f, 1.15653336f, 1.0f, 1.20000005f, 1.29999995f, 0.954666674f, 1.2236445f, 1.33137774f, 0.763999999f, 1.20293331f, 1.29813337f, 0.495999992f, 1.15040004f, 1.21920002f, 0.218666673f, 1.07857776f, 1.11351109f, 0.0f, 1.0f, 1.0f };
 #endif
 
-// One textured rectangle (left, top, right, bottom) with texture repeats u, v.
-static inline void fukidashiQuad(f32 l, f32 t, f32 r, f32 b, f32 u, f32 v) {
-    GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-    GXPosition3f32(l, t, 0.0f);
-    GXTexCoord2f32(0.0f, 0.0f);
-    GXPosition3f32(r, t, 0.0f);
-    GXTexCoord2f32(u, 0.0f);
-    GXPosition3f32(r, b, 0.0f);
-    GXTexCoord2f32(u, v);
-    GXPosition3f32(l, b, 0.0f);
-    GXTexCoord2f32(0.0f, v);
-}
-
 // work->npc holds an NpcEntry* or a negative FUKIDASHI_* speaker id, so it is compared as a signed EvtWord.
 
 // Sets work->position to origin + base, moved (16 + size) along the rotated y axis.
@@ -139,6 +126,26 @@ static inline void fukidashiSetPos(EffFukidashiWork* work, Mtx rot, Vec* origin)
     work->position.x = rot[0][1] * (16.0f + work->size) + (origin->x + work->base.x);
     work->position.y = rot[1][1] * (16.0f + work->size) + (origin->y + work->base.y);
     work->position.z = rot[2][1] * (16.0f + work->size) + (origin->z + work->base.z);
+}
+
+/** Sets up the swirl model's vertex formats and arrays and calls its 21 display lists. */
+// Original name and size (0x10c) from the JP demo map (UNUSED there: every call is inlined).
+static void moja_model_polygon_0(void) {
+    u32 i;
+
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 8);
+    GXSetArray(GX_VA_POS, moja_model_vertex_tbl, 6);
+    GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);
+    GXSetArray(GX_VA_NRM, moja_model_normal_tbl, 3);
+    GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
+    GXSetArray(GX_VA_CLR0, moja_model_color0_tbl, 4);
+    for (i = 0; i < 21; i++) {
+        GXCallDisplayList(moja_model_dl_0_tbl[i], moja_model_dl_0_size_tbl[i] << 5);
+    }
 }
 
 /**
@@ -354,6 +361,20 @@ static void effFukidashiMain(EffectEntry* effect) {
     }
 }
 
+/** One textured quad: top-left corner (x, y), width w, height h, texture repeat (s, t). */
+// Original name and size (0x120) from the JP demo map (UNUSED there: every call is inlined).
+static void polygon(f32 x, f32 y, f32 w, f32 h, f32 s, f32 t) {
+    GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+    GXPosition3f32(x, y, 0.0f);
+    GXTexCoord2f32(0.0f, 0.0f);
+    GXPosition3f32(x + w, y, 0.0f);
+    GXTexCoord2f32(s, 0.0f);
+    GXPosition3f32(x + w, y - h, 0.0f);
+    GXTexCoord2f32(s, t);
+    GXPosition3f32(x, y - h, 0.0f);
+    GXTexCoord2f32(0.0f, t);
+}
+
 /**
  * Draws the bubble (textured quad with a shadow) and its content: the "!"/"?" mark, the swirl (type 2, the moja
  * model display lists lit by a GX light), the coin and number, the dots, the scribble or the bouncing icon.
@@ -367,9 +388,6 @@ static void effFukidashiDisp(CameraId cameraId, EffectEntry* effect) {
     s32 pass;
     s32 passes;
     s32 i;
-    u8** dp;
-    u32 j;
-    u8* sp;
     f32 degToRad;
     Mtx mF;
     Mtx mD;
@@ -461,15 +479,7 @@ static void effFukidashiDisp(CameraId cameraId, EffectEntry* effect) {
                 GXLoadPosMtxImm(mA, GX_PNMTX0);
                 GXSetCurrentMtx(GX_PNMTX0);
             }
-            GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-            GXPosition3f32(-16.0f, 13.0f, 0.0f);
-            GXTexCoord2f32(0.0f, 0.0f);
-            GXPosition3f32(16.0f, 13.0f, 0.0f);
-            GXTexCoord2f32(2.0f, 0.0f);
-            GXPosition3f32(16.0f, -19.0f, 0.0f);
-            GXTexCoord2f32(2.0f, 1.0f);
-            GXPosition3f32(-16.0f, -19.0f, 0.0f);
-            GXTexCoord2f32(0.0f, 1.0f);
+            polygon(-16.0f, 13.0f, 32.0f, 32.0f, 2.0f, 1.0f);
         }
         PSMTXScale(mH, 1.3f, 1.3f, 1.3f);
         PSMTXConcat(mF, mH, mF);
@@ -504,9 +514,9 @@ static void effFukidashiDisp(CameraId cameraId, EffectEntry* effect) {
                 PSMTXTransApply(mF, mH, 1.0f, -1.0f, 0.0f);
                 GXLoadPosMtxImm(mH, GX_PNMTX0);
                 if (work->type == 0) {
-                    fukidashiQuad(-4.0f, 8.0f, 4.0f, -8.0f, 1.0f, 1.0f);
+                    polygon(-4.0f, 8.0f, 8.0f, 16.0f, 1.0f, 1.0f);
                 } else {
-                    fukidashiQuad(-8.0f, 16.0f, 8.0f, -8.0f, 1.0f, 1.0f);
+                    polygon(-8.0f, 16.0f, 16.0f, 24.0f, 1.0f, 1.0f);
                 }
                 if (pass == 0) {
                     GXSetTevColor(GX_TEVREG0, (GXColor){ 0xFF, 0, 0, alphaB });
@@ -515,9 +525,9 @@ static void effFukidashiDisp(CameraId cameraId, EffectEntry* effect) {
                 }
                 GXLoadPosMtxImm(mF, GX_PNMTX0);
                 if (work->type == 0) {
-                    fukidashiQuad(-4.0f, 8.0f, 4.0f, -8.0f, 1.0f, 1.0f);
+                    polygon(-4.0f, 8.0f, 8.0f, 16.0f, 1.0f, 1.0f);
                 } else {
-                    fukidashiQuad(-8.0f, 16.0f, 8.0f, -8.0f, 1.0f, 1.0f);
+                    polygon(-8.0f, 16.0f, 16.0f, 24.0f, 1.0f, 1.0f);
                 }
                 break;
             case 2:
@@ -552,24 +562,7 @@ static void effFukidashiDisp(CameraId cameraId, EffectEntry* effect) {
                 PSMTXInvXpose(mH, mJ);
                 GXLoadNrmMtxImm(mJ, GX_PNMTX0);
                 GXSetZMode(GX_FALSE, GX_LEQUAL, GX_FALSE);
-                GXClearVtxDesc();
-                GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
-                GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 8);
-                GXSetArray(GX_VA_POS, moja_model_vertex_tbl, 6);
-                GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
-                GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);
-                GXSetArray(GX_VA_NRM, moja_model_normal_tbl, 3);
-                GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
-                GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
-                GXSetArray(GX_VA_CLR0, moja_model_color0_tbl, 4);
-#if VERSION <= VERSION_DEMO_JP
-                for (j = 0, sp = moja_model_dl_0_size_tbl, dp = moja_model_dl_0_tbl; j < 21; j++, sp++, dp++) {
-#else
-                dp = moja_model_dl_0_tbl;
-                for (j = 0, sp = moja_model_dl_0_size_tbl; j < 21; j++, sp++, dp++) {
-#endif
-                    GXCallDisplayList(*dp, *sp << 5);
-                }
+                moja_model_polygon_0();
                 break;
             case 3:
                 if (work->number >= 0 && work->number <= 99) {
@@ -614,7 +607,7 @@ static void effFukidashiDisp(CameraId cameraId, EffectEntry* effect) {
                 for (i = 0; i < work->animVal; i++) {
                     PSMTXTransApply(mF, mH, 5.0f * i + -5.0f, 0.0f, 0.0f);
                     GXLoadPosMtxImm(mH, GX_PNMTX0);
-                    fukidashiQuad(-3.0f, 3.0f, 3.0f, -3.0f, 1.0f, 1.0f);
+                    polygon(-3.0f, 3.0f, 6.0f, 6.0f, 1.0f, 1.0f);
                 }
                 break;
             case 5:
@@ -632,7 +625,7 @@ static void effFukidashiDisp(CameraId cameraId, EffectEntry* effect) {
                 GXLoadTexMtxImm(mD, GX_TEXMTX0, GX_MTX2x4);
                 GXSetTevColor(GX_TEVREG0, (GXColor){ 0, 0, 0, alphaB });
                 GXLoadPosMtxImm(mF, GX_PNMTX0);
-                fukidashiQuad(-7.0f, 7.0f, 7.0f, -7.0f, 1.0f, 1.0f);
+                polygon(-7.0f, 7.0f, 14.0f, 14.0f, 1.0f, 1.0f);
                 break;
             case 6: {
                 f32* p;
@@ -661,7 +654,7 @@ static void effFukidashiDisp(CameraId cameraId, EffectEntry* effect) {
                     PSMTXTransApply(mF, mH, 1.0f, -1.0f, 0.0f);
                     PSMTXConcat(mH, mA, mH);
                     GXLoadPosMtxImm(mH, GX_PNMTX0);
-                    fukidashiQuad(-8.0f, 16.0f, 8.0f, -8.0f, 2.0f, 2.0f);
+                    polygon(-8.0f, 16.0f, 16.0f, 24.0f, 2.0f, 2.0f);
                     if (pass == 0) {
                         GXSetTevColor(GX_TEVREG0, (GXColor){ 0xFF, 0xCD, 0x28, alphaB });
                     } else {
@@ -669,7 +662,7 @@ static void effFukidashiDisp(CameraId cameraId, EffectEntry* effect) {
                     }
                     PSMTXConcat(mF, mA, mH);
                     GXLoadPosMtxImm(mH, GX_PNMTX0);
-                    fukidashiQuad(-8.0f, 16.0f, 8.0f, -8.0f, 2.0f, 2.0f);
+                    polygon(-8.0f, 16.0f, 16.0f, 24.0f, 2.0f, 2.0f);
                 }
                 break;
             }

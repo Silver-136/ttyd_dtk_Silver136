@@ -107,6 +107,20 @@ static void effTogeFlushMain(EffectEntry* effect) {
     }
 }
 
+/** One textured quad: top-left corner (x, y), width w, height h, texture repeat (s, t). */
+// Original name and size (0x120) from the JP demo map (UNUSED there: every call is inlined).
+static void polygon(f32 x, f32 y, f32 w, f32 h, f32 s, f32 t) {
+    GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+    GXPosition3f32(x, y, 0.0f);
+    GXTexCoord2f32(0.0f, 0.0f);
+    GXPosition3f32(x + w, y, 0.0f);
+    GXTexCoord2f32(s, 0.0f);
+    GXPosition3f32(x + w, y - h, 0.0f);
+    GXTexCoord2f32(s, t);
+    GXPosition3f32(x, y - h, 0.0f);
+    GXTexCoord2f32(0.0f, t);
+}
+
 /**
  * Draws a pulsing coloured glow quad, then the (non-pulsing) flash quad on top,
  * using one of three flash textures depending on the remaining life.
@@ -175,15 +189,7 @@ static void effTogeFlushDisp(CameraId cameraId, EffectEntry* effect) {
             GXSetTevColor(GX_TEVREG0, (GXColor){ 0xFF, 0xFF, 0xFF, alpha });
             break;
     }
-    GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-    GXPosition3f32(-8.0f, 8.0f, 0.0f);
-    GXTexCoord2f32(0.0f, 0.0f);
-    GXPosition3f32(8.0f, 8.0f, 0.0f);
-    GXTexCoord2f32(2.0f, 0.0f);
-    GXPosition3f32(8.0f, -8.0f, 0.0f);
-    GXTexCoord2f32(2.0f, 2.0f);
-    GXPosition3f32(-8.0f, -8.0f, 0.0f);
-    GXTexCoord2f32(0.0f, 2.0f);
+    polygon(-8.0f, 8.0f, 16.0f, 16.0f, 2.0f, 2.0f);
     alpha = work->alpha;
     if (alpha > 255) {
         alpha = 255;
@@ -207,14 +213,6 @@ static void effTogeFlushDisp(CameraId cameraId, EffectEntry* effect) {
                 GXSetTevColor(GX_TEVREG0, (GXColor){ 0xFF, 0xFF, 0xFF, alpha });
                 break;
         }
-        GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-        GXPosition3f32(-4.0f, 4.0f, 0.0f);
-        GXTexCoord2f32(0.0f, 0.0f);
-        GXPosition3f32(4.0f, 4.0f, 0.0f);
-        GXTexCoord2f32(2.0f, 0.0f);
-        GXPosition3f32(4.0f, -4.0f, 0.0f);
-        GXTexCoord2f32(2.0f, 2.0f);
-        GXPosition3f32(-4.0f, -4.0f, 0.0f);
-        GXTexCoord2f32(0.0f, 2.0f);
+        polygon(-4.0f, 4.0f, 8.0f, 8.0f, 2.0f, 2.0f);
     }
 }

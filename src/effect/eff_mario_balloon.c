@@ -69,6 +69,24 @@ static void effMarioBalloonMain(EffectEntry* effect) {
     dispEntry(work->camera, dispCalcZ(&pos), DISP_MODE_CUSTOM_MID, effMarioBalloonDisp, effect);
 }
 
+/** One textured quad facing +z: top-left corner (x, y), width w, height h, texture repeat (s, t). */
+// Original name and size (0x180) from the JP demo map (UNUSED there: every call is inlined).
+static void polygon(f32 x, f32 y, f32 w, f32 h, f32 s, f32 t) {
+    GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+    GXPosition3f32(x, y, 0.0f);
+    GXNormal3f32(0.0f, 0.0f, 1.0f);
+    GXTexCoord2f32(0.0f, 0.0f);
+    GXPosition3f32(x + w, y, 0.0f);
+    GXNormal3f32(0.0f, 0.0f, 1.0f);
+    GXTexCoord2f32(s, 0.0f);
+    GXPosition3f32(x + w, y - h, 0.0f);
+    GXNormal3f32(0.0f, 0.0f, 1.0f);
+    GXTexCoord2f32(s, t);
+    GXPosition3f32(x, y - h, 0.0f);
+    GXNormal3f32(0.0f, 0.0f, 1.0f);
+    GXTexCoord2f32(0.0f, t);
+}
+
 /**
  * Draws the balloon icon as textured quads (effect textures 15/14 for type 0, 17/16 for type 1): a blended
  * shadow, then the front face and a grey back face with alpha test.
@@ -120,19 +138,7 @@ static void effMarioBalloonDisp(CameraId cameraId, void* payload) {
             GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
             GXSetZMode(GX_FALSE, GX_LEQUAL, GX_FALSE);
             GXSetCullMode(GX_CULL_NONE);
-            GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-            GXPosition3f32(-16.0f, 64.0f, 0.0f);
-            GXNormal3f32(0.0f, 0.0f, 1.0f);
-            GXTexCoord2f32(0.0f, 0.0f);
-            GXPosition3f32(16.0f, 64.0f, 0.0f);
-            GXNormal3f32(0.0f, 0.0f, 1.0f);
-            GXTexCoord2f32(2.0f, 0.0f);
-            GXPosition3f32(16.0f, 0.0f, 0.0f);
-            GXNormal3f32(0.0f, 0.0f, 1.0f);
-            GXTexCoord2f32(2.0f, 1.0f);
-            GXPosition3f32(-16.0f, 0.0f, 0.0f);
-            GXNormal3f32(0.0f, 0.0f, 1.0f);
-            GXTexCoord2f32(0.0f, 1.0f);
+            polygon(-16.0f, 64.0f, 32.0f, 64.0f, 2.0f, 1.0f);
             effGetTexObj(14, &texObj);
             GXLoadTexObj(&texObj, GX_TEXMAP0);
             GXSetTevColor(GX_TEVREG0, (GXColor){255, 255, 255, 255});
@@ -147,34 +153,10 @@ static void effMarioBalloonDisp(CameraId cameraId, void* payload) {
             GXSetAlphaCompare(GX_GEQUAL, 128, GX_AOP_OR, GX_NEVER, 0);
             GXSetZMode(GX_FALSE, GX_LEQUAL, GX_FALSE);
             GXSetCullMode(GX_CULL_BACK);
-            GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-            GXPosition3f32(-16.0f, 64.0f, 0.0f);
-            GXNormal3f32(0.0f, 0.0f, 1.0f);
-            GXTexCoord2f32(0.0f, 0.0f);
-            GXPosition3f32(16.0f, 64.0f, 0.0f);
-            GXNormal3f32(0.0f, 0.0f, 1.0f);
-            GXTexCoord2f32(2.0f, 0.0f);
-            GXPosition3f32(16.0f, 0.0f, 0.0f);
-            GXNormal3f32(0.0f, 0.0f, 1.0f);
-            GXTexCoord2f32(2.0f, 1.0f);
-            GXPosition3f32(-16.0f, 0.0f, 0.0f);
-            GXNormal3f32(0.0f, 0.0f, 1.0f);
-            GXTexCoord2f32(0.0f, 1.0f);
+            polygon(-16.0f, 64.0f, 32.0f, 64.0f, 2.0f, 1.0f);
             GXSetTevColor(GX_TEVREG0, (GXColor){160, 160, 160, 255});
             GXSetCullMode(GX_CULL_FRONT);
-            GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-            GXPosition3f32(-16.0f, 64.0f, 0.0f);
-            GXNormal3f32(0.0f, 0.0f, 1.0f);
-            GXTexCoord2f32(0.0f, 0.0f);
-            GXPosition3f32(16.0f, 64.0f, 0.0f);
-            GXNormal3f32(0.0f, 0.0f, 1.0f);
-            GXTexCoord2f32(2.0f, 0.0f);
-            GXPosition3f32(16.0f, 0.0f, 0.0f);
-            GXNormal3f32(0.0f, 0.0f, 1.0f);
-            GXTexCoord2f32(2.0f, 1.0f);
-            GXPosition3f32(-16.0f, 0.0f, 0.0f);
-            GXNormal3f32(0.0f, 0.0f, 1.0f);
-            GXTexCoord2f32(0.0f, 1.0f);
+            polygon(-16.0f, 64.0f, 32.0f, 64.0f, 2.0f, 1.0f);
             break;
         case 1:
             effGetTexObj(17, &texObj);
@@ -188,19 +170,7 @@ static void effMarioBalloonDisp(CameraId cameraId, void* payload) {
             GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
             GXSetZMode(GX_FALSE, GX_LEQUAL, GX_FALSE);
             GXSetCullMode(GX_CULL_NONE);
-            GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-            GXPosition3f32(-20.0f, 32.0f, 0.0f);
-            GXNormal3f32(0.0f, 0.0f, 1.0f);
-            GXTexCoord2f32(0.0f, 0.0f);
-            GXPosition3f32(20.0f, 32.0f, 0.0f);
-            GXNormal3f32(0.0f, 0.0f, 1.0f);
-            GXTexCoord2f32(1.0f, 0.0f);
-            GXPosition3f32(20.0f, 0.0f, 0.0f);
-            GXNormal3f32(0.0f, 0.0f, 1.0f);
-            GXTexCoord2f32(1.0f, 1.0f);
-            GXPosition3f32(-20.0f, 0.0f, 0.0f);
-            GXNormal3f32(0.0f, 0.0f, 1.0f);
-            GXTexCoord2f32(0.0f, 1.0f);
+            polygon(-20.0f, 32.0f, 40.0f, 32.0f, 1.0f, 1.0f);
             effGetTexObj(16, &texObj);
             GXLoadTexObj(&texObj, GX_TEXMAP0);
             GXSetTevColor(GX_TEVREG0, (GXColor){255, 255, 255, 255});
@@ -211,34 +181,10 @@ static void effMarioBalloonDisp(CameraId cameraId, void* payload) {
             GXLoadNrmMtxImm(mN, GX_PNMTX0);
             GXSetCurrentMtx(GX_PNMTX0);
             GXSetCullMode(GX_CULL_BACK);
-            GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-            GXPosition3f32(-20.0f, 32.0f, 0.0f);
-            GXNormal3f32(0.0f, 0.0f, 1.0f);
-            GXTexCoord2f32(0.0f, 0.0f);
-            GXPosition3f32(20.0f, 32.0f, 0.0f);
-            GXNormal3f32(0.0f, 0.0f, 1.0f);
-            GXTexCoord2f32(1.0f, 0.0f);
-            GXPosition3f32(20.0f, 0.0f, 0.0f);
-            GXNormal3f32(0.0f, 0.0f, 1.0f);
-            GXTexCoord2f32(1.0f, 1.0f);
-            GXPosition3f32(-20.0f, 0.0f, 0.0f);
-            GXNormal3f32(0.0f, 0.0f, 1.0f);
-            GXTexCoord2f32(0.0f, 1.0f);
+            polygon(-20.0f, 32.0f, 40.0f, 32.0f, 1.0f, 1.0f);
             GXSetTevColor(GX_TEVREG0, (GXColor){160, 160, 160, 255});
             GXSetCullMode(GX_CULL_FRONT);
-            GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-            GXPosition3f32(-20.0f, 32.0f, 0.0f);
-            GXNormal3f32(0.0f, 0.0f, 1.0f);
-            GXTexCoord2f32(0.0f, 0.0f);
-            GXPosition3f32(20.0f, 32.0f, 0.0f);
-            GXNormal3f32(0.0f, 0.0f, 1.0f);
-            GXTexCoord2f32(1.0f, 0.0f);
-            GXPosition3f32(20.0f, 0.0f, 0.0f);
-            GXNormal3f32(0.0f, 0.0f, 1.0f);
-            GXTexCoord2f32(1.0f, 1.0f);
-            GXPosition3f32(-20.0f, 0.0f, 0.0f);
-            GXNormal3f32(0.0f, 0.0f, 1.0f);
-            GXTexCoord2f32(0.0f, 1.0f);
+            polygon(-20.0f, 32.0f, 40.0f, 32.0f, 1.0f, 1.0f);
             break;
     }
 }

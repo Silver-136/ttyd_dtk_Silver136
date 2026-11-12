@@ -109,6 +109,20 @@ static void effChargeDisp(CameraId cameraId, void* param) {
     }
 }
 
+/** One textured quad: top-left corner (x, y), width w, height h, texture repeat (s, t). */
+// Original name and size (0x120) from the JP demo map (UNUSED there: nothing in this unit calls it).
+static void polygon(f32 x, f32 y, f32 w, f32 h, f32 s, f32 t) {
+    GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+    GXPosition3f32(x, y, 0.0f);
+    GXTexCoord2f32(0.0f, 0.0f);
+    GXPosition3f32(x + w, y, 0.0f);
+    GXTexCoord2f32(s, 0.0f);
+    GXPosition3f32(x + w, y - h, 0.0f);
+    GXTexCoord2f32(s, t);
+    GXPosition3f32(x, y - h, 0.0f);
+    GXTexCoord2f32(0.0f, t);
+}
+
 /**
  * Ramps the header's alpha up over the first 20 frames (effChargeDisp reads only the sparkles' own alpha),
  * moves every sparkle inward along its spiral each frame (the yaw and pitch steps swap on odd frames),
