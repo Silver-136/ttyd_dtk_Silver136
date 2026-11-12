@@ -117,9 +117,9 @@ EffectEntry* effMugiKemuri2Entry(s32 type, f32 x, f32 y, f32 z, f32 angle, f32 d
 
     // Never read; unused in the original too: its stack slot and initializer template are in the retail code
     Vec unused = {0.0f, 0.0f, 0.0f};
+    // Never read; unused in the original too: only its 0.005 constant is in the retail code
+    f64 scaledX = __fabs(x * 0.005);
 
-    // FAKE: discarded __fabs(x * 0.005); deleting it changes the object
-    __fabs(x * 0.005);
     effect = effEntry();
 
     effect->type = "MugiKemuri2";

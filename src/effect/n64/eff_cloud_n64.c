@@ -236,7 +236,7 @@ static void effCloudDisp(CameraId cameraId, void* param) {
     effN64Vtx* v;
     s32 c;
     s32 idx;
-    f32 zero, ang, a1, a2, x, y, z, w, sn, cs;
+    f32 dz, ang, a1, a2, x, y, z, w, sn, cs;
 
     camera = camGetPtr(cameraId);
     work = effect->userdata;
@@ -288,8 +288,6 @@ static void effCloudDisp(CameraId cameraId, void* param) {
     uo = (frame & 0x3F) << 5;
     first = -1;
 
-    // FAKE: zero is added to z when the vertices are written; (s16)z changes the object
-    zero = 0.0f;
     count = 0;
     for (i = 0; i < 30; i++) {
         if (work->active[(1 + work->head + i) % 30] != 0) {
@@ -364,9 +362,10 @@ static void effCloudDisp(CameraId cameraId, void* param) {
                 a1 = 6.2831855f * ang / 360.0f;
                 sn = w * (f32)sin(a1);
                 cs = w * (f32)cos(a1);
+                dz = 0.0f;
                 v[0].x = (s16)(x + sn);
                 v[0].y = (s16)(y + cs);
-                v[0].z = (s16)(z + zero);
+                v[0].z = (s16)(z + dz);
                 v[0].s = u;
                 v[0].t = 0x400;
                 v[0].r = g;
@@ -375,7 +374,7 @@ static void effCloudDisp(CameraId cameraId, void* param) {
                 v[0].a = alpha;
                 v[1].x = (s16)(x - sn);
                 v[1].y = (s16)(y - cs);
-                v[1].z = (s16)(z + zero);
+                v[1].z = (s16)(z + dz);
                 v[1].s = u;
                 v[1].t = 0;
                 v[1].r = g;

@@ -202,15 +202,14 @@ static void effPturnMain(EffectEntry* effect) {
     b = 0.05f * (f32)life;
     work++;
     for (i = 1; i < effect->count; i++, work++) {
-        s32 f2;
+        BOOL bobbing;
         s32 age = work->age;
         f32 y;
         work->scale = (age >= 9 || type == 10) ? 1.0f : scale_dat[age];
         work->scale = work->scale * scl;
 
-        // FAKE: spare flag local for the condition; testing it directly changes the object
-        f2 = (type == 0 || type == 1);
-        if (f2) {
+        bobbing = (type == 0 || type == 1);
+        if (bobbing) {
             c = (f32)cos(a / 360.0f);
             y = 4.0f * c;
         } else {

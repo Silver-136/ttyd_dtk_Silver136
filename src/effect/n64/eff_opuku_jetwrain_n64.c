@@ -53,12 +53,6 @@ static void effOpukuJetwrainMain(EffectEntry* effect);
 /** Returns the sine of an angle given in degrees. */
 static inline f32 sind(f32 deg) { return sin(6.2831855f * deg / 360.0f); }
 
-/** Returns whether a < 12 (the loop bound over the wave grid columns). */
-inline int inline_fn2(s32 a) { return a < 12; }
-
-/** Returns whether n < 13 (the loop bound over the wave grid width). */
-inline int inline_fn(s32 n) { return n < 13; }
-
 /**
  * Spawns a water-ripple screen distortion for lifetime frames (<= 0 means until deleted), scaled by scale;
  * the position is stored but the draw covers the whole screen. Via evt_eff64 "opuku_jetwrain_n64".
@@ -96,8 +90,7 @@ EffectEntry* effOpukuJetwrainN64Entry(s32 type, f32 x, f32 y, f32 z, f32 scale, 
     work->col2[1] = 220;
     work->col2[2] = 255;
     for (i = 0; i < 19; i++) {
-        // FAKE: inline_fn(j) is j < 13; the plain loop condition changes the object
-        for (j = 0; inline_fn(j); j++) {
+        for (j = 0; j < (s32)(sizeof(work->h[0]) / sizeof(work->h[0][0])); j++) {
             work->h[i][j] = 0;
             work->v[i][j] = 0;
         }
@@ -165,8 +158,7 @@ static void effOpukuJetwrainMain(EffectEntry* effect) {
         }
     }
     for (i = 1; i < 18; i++) {
-        // FAKE: inline_fn2(j) is j < 12; the plain loop condition changes the object
-        for (j = 1; inline_fn2(j); j++) {
+        for (j = 1; j < (s32)(sizeof(work->h[0]) / sizeof(work->h[0][0])) - 1; j++) {
             work->h[i][j] += 0.02f * work->v[i][j];
         }
     }

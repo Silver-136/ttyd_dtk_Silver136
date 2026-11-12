@@ -211,19 +211,20 @@ USER_FUNC(evt_lottery) {
     // The calendar dates computed below (today, the purchase day and the four match days) are never used.
     OSTicksToCalendarTime(now, &e);
     if (lot->flags & LOTTERY_FLAG_TICKET) {
-        // FAKE: bt is a spare temporary (two different shapes for the same sum); passing lot->buyTime + ... directly changes the object
-        OSTime bt;
+        OSTime matchTime;
         OSTicksToCalendarTime(lot->buyTime, &e);
-        bt = lot->buyTime;
-        OSTicksToCalendarTime(bt + (OSTime)OS_TIMER_CLOCK * 86400 * lot->days[0], &e);
-        bt = lot->buyTime;
-        OSTicksToCalendarTime(bt + (OSTime)OS_TIMER_CLOCK * 86400 * lot->days[1], &e);
-        bt = lot->buyTime;
-        bt += (OSTime)OS_TIMER_CLOCK * 86400 * lot->days[2];
-        OSTicksToCalendarTime(bt, &e);
-        bt = lot->buyTime;
-        bt += (OSTime)OS_TIMER_CLOCK * 86400 * lot->days[3];
-        OSTicksToCalendarTime(bt, &e);
+        matchTime = lot->buyTime;
+        matchTime += (OSTime)OS_TIMER_CLOCK * 86400 * lot->days[0];
+        OSTicksToCalendarTime(matchTime, &e);
+        matchTime = lot->buyTime;
+        matchTime += (OSTime)OS_TIMER_CLOCK * 86400 * lot->days[1];
+        OSTicksToCalendarTime(matchTime, &e);
+        matchTime = lot->buyTime;
+        matchTime += (OSTime)OS_TIMER_CLOCK * 86400 * lot->days[2];
+        OSTicksToCalendarTime(matchTime, &e);
+        matchTime = lot->buyTime;
+        matchTime += (OSTime)OS_TIMER_CLOCK * 86400 * lot->days[3];
+        OSTicksToCalendarTime(matchTime, &e);
     }
     return EVT_RETURN_DONE;
 }

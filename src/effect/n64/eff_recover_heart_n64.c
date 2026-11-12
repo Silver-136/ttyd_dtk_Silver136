@@ -248,6 +248,7 @@ static void effRecoverHeartDisp(CameraId cameraId, void* payload) {
     s32 flag;
     s32 k;
     s32 tex;
+    BOOL isHeart;
     Mtx mtx;
     Mtx scale;
     Mtx rot;
@@ -291,9 +292,8 @@ static void effRecoverHeartDisp(CameraId cameraId, void* payload) {
             GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_TEXA, GX_CA_A0, GX_CA_ZERO);
         }
 
-        // FAKE: tex first holds the type test, then the texture id; testing the condition directly changes the object
-        tex = (type == 0 || type == 2);
-        if (tex) {
+        isHeart = (type == 0 || type == 2);
+        if (isHeart) {
             tex = 0x51;
             if (flag == 0) {
                 tex = 0x50;

@@ -83,10 +83,10 @@ EffectEntry* effMizutamaEntry(s32 type, f32 x, f32 y, f32 z, f32 angle) {
             work->delay = i * 2;
         } else {
             // scattered along a line, splashing outwards
-            // FAKE: parameter z reused as the half-width; the local dist (as in the circle branch) changes the object
-            z = radius;
+            f32 halfWidth = radius;
+
             irand(360);
-            work->position.x = irand((s32)z * 2) - z;
+            work->position.x = irand((s32)halfWidth * 2) - halfWidth;
             work->position.y = 0.0f;
             work->position.z = 0.0f;
             angle = work->position.x < 0.0f ? 225.0f : 135.0f;

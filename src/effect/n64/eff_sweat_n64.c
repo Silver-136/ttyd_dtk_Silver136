@@ -8,10 +8,7 @@
 #include "memory.h"
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
-
-// FAKE: sin/cos declared with float parameters; the library's double prototypes change the object
-double sin(float);
-double cos(float);
+#include "libc_decls.h"
 
 static void effSweatMain(EffectEntry* effect);
 static void effSweatDisp(CameraId cameraId, void* payload);
@@ -55,8 +52,10 @@ EffectEntry* effSweatN64Entry(s32 type, f32 x, f32 y, f32 z, f32 base, f32 angle
     for (i = 1; i < effect->count; i++, w++) {
         Vec axis;
         Vec dir = {0.0f, 0.0f, 0.0f};
-        dir.x = (f32)sin(0.0f);
-        dir.z = -(f32)cos(0.0f);
+        f32 yaw = 0.0f;
+
+        dir.x = (f32)sin(yaw);
+        dir.z = -(f32)cos(yaw);
         axis = dir;
         switch (type) {
             case 0:
