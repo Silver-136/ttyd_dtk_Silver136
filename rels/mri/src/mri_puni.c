@@ -3884,8 +3884,9 @@ void puniModeWonder(PuniData* p) {
 #if VERSION >= VERSION_US
             effPuniBalloonEntry(1, pos.x, pos.y, pos.z, 1.5f);
 #else
-            // BUG: keeps the pop burst in p->effect, but that effect deletes itself after 30 frames, leaving the
-            // pointer stale for the effDelete(p->effect) checks; US and later do not keep it.
+            // BUG: keeps the pop burst in p->effect, but that effect deletes itself after 30 frames and effEntry
+            // reuses its slot, so a later effDelete(p->effect) deletes whichever effect took the slot (often another
+            // Puni's balloon, whose work puniModeUpdraft keeps writing after it is freed); US and later do not keep it.
             p->effect = effPuniBalloonEntry(1, pos.x, pos.y, pos.z, 1.5f);
 #endif
             p->timer = 20;
