@@ -3634,14 +3634,13 @@ static USER_FUNC(_nozzle_work_effect) {
     if (event->userWork[0] > 0) {
         event->userWork[0]--;
         if (event->userWork[0] <= 0) {
-            // FAKE: (u32) casts compared with 0xFFFFFFFF; the plain != -1 changes the object
-            if ((u32)event->userWork[5] != 0xFFFFFFFF) {
+            if (event->userWork[5] != 0xFFFFFFFF) {
                 psndSFXOff(event->userWork[5]);
             }
-            if ((u32)event->userWork[6] != 0xFFFFFFFF) {
+            if (event->userWork[6] != 0xFFFFFFFF) {
                 psndSFXOff(event->userWork[6]);
             }
-            if ((u32)event->userWork[7] != 0xFFFFFFFF) {
+            if (event->userWork[7] != 0xFFFFFFFF) {
                 psndSFXOff(event->userWork[7]);
             }
         }
