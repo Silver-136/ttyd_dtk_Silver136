@@ -168,10 +168,7 @@ static inline f32 partyNrmTo(Vec* n) {
     return angleABf(0.0f, 0.0f, sqrtf(n->x * n->x + n->z * n->z), -n->y);
 }
 
-/**
- * Slope in degrees of a surface normal, by value (party_move.c calls it through a pointer prototype,
- * the same thing at the ABI level).
- */
+/** Slope in degrees of a surface normal, by value (party.c and party_move.c use it for appear spots). */
 f32 partyNrmToAngle(Vec n) {
     return angleABf(0.0f, 0.0f, sqrtf(n.x * n.x + n.z * n.z), -n.y);
 }

@@ -130,50 +130,6 @@ BOOL partyChkHerohero(PartyEntry* party) {
     return pinch;
 }
 
-// FAKE: same behaviour as partyChgPoseId (inlined), but with the pinch check written out in place instead of
-// partyChkHerohero(). Only partyReInit's first call uses it: that call needs this form while its other
-// two calls need the partyChkHerohero() form (see docs/FAKES.md).
-static inline const char* partyChgPoseIdNoPinch_inl(PartyEntry* party, s32 index) {
-    BOOL pinch;
-    s32 poseIdx = index;
-    const char* pose;
-    const char* curPose;
-
-    if ((party->flags2 & PARTY_DISP_FLAG_POSE_LOCK) != 0) {
-        return party->animName;
-    }
-    pinch = FALSE;
-    if (party->currentMemberId < PARTNER_COUNT) {
-        if (partyGetHp(party->currentMemberId) <= PARTY_PINCH_HP) {
-            pinch = TRUE;
-        }
-    }
-    if (pinch == TRUE) {
-        if (index == PARTY_POSE_STAND) {
-            poseIdx = PARTY_POSE_PINCH_STAND;
-        } else if (index == PARTY_POSE_WALK) {
-            poseIdx = PARTY_POSE_PINCH_WALK;
-        } else if (index == PARTY_POSE_RUN) {
-            poseIdx = PARTY_POSE_PINCH_RUN;
-        }
-    }
-    if (!(party->flags2 & PARTY_DISP_FLAG_FAMICOM)) {
-        pose = partyPoseTbl[party->currentMemberId][poseIdx];
-    } else if (party->currentMemberId != PARTY_YOSHI) {
-        pose = partyDotPoseTbl[party->currentMemberId][poseIdx];
-    } else {
-        pose = yoshiDotPoseTbl[pouchGetPartyColor(PARTY_YOSHI)][poseIdx];
-    }
-    curPose = party->animName;
-    if (curPose && !strcmp(curPose, pose)) {
-        return pose;
-    }
-    party->animName = pose;
-    party->poseTime = 0;
-    party->trigFlags |= PARTY_TRIG_CHG_ANIM;
-    return pose;
-}
-
 /**
  * Starts the partner's pose number index from partyPoseTbl (or the 8-bit table in the Famicom pipe,
  * or Yoshi's colour table) and returns the pose name.
@@ -766,7 +722,8 @@ void partyReInit(void) {
         party->hitobjPush = NULL;
         party->hitobjHead = NULL;
         party->hitobjUnder = NULL;
-        partyChgPose(party, partyChgPoseIdNoPinch_inl(party, 1)); // FAKE: see partyChgPoseIdNoPinch_inl
+        pose = partyChgPoseId(party, PARTY_POSE_STAND);
+        partyChgPose(party, pose);
         partyChgRunMode(party, PARTY_RUN_MOVE);
         partyChgMot(party, PARTY_MOTION_STAY);
         party->yoshiPsndSFXId = -1;
@@ -2364,16 +2321,10 @@ static inline void partyChgRunMo(PartyEntry* party) {
 #include "driver/hitdrv.h"
 #include "driver/npcdrv.h"
 #include "mot/mot_plane.h"
-extern f32 partyNrmToAngle(Vec* n);
 
 /** TRUE when hit is a floor the partner may stand on (not flagged with hit attributes 0x200 or 0x800). */
 static inline BOOL partyAppearChkFloor(HitEntry* hit) {
     return hit == NULL ? FALSE : (hitGetAttr(hit) & (HIT_ATTR_WATER_HAZARD | HIT_ATTR_SPIKES)) == 0;
-}
-
-/** Slope angle in degrees of the floor normal n (partyNrmToAngle on a copy). */
-static inline f32 partyAppearNrmAngle(Vec n) {
-    return partyNrmToAngle(&n);
 }
 
 /** Moves out by d units against direction ang (behind it). */
@@ -2702,7 +2653,7 @@ BOOL partyGetAppearPos3(PartyEntry* party, Vec* out) {
         if (!hit) {
             continue;
         }
-        if (partyAppearNrmAngle(query.hitNormal) > 60.0f) {
+        if (partyNrmToAngle(query.hitNormal) > 60.0f) {
             continue;
         }
         if (!partyAppearChkFloor(hit)) {

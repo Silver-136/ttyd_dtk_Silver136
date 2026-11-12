@@ -2054,7 +2054,7 @@ void SoundSSPlayChEx(s32 chan, const char* name, s32 aram) {
     const char* path;
     const char* paths[1];
 #else
-    const char* paths[2]; // FAKE: alias array for the root and path strings; the plain _ssGetStr()/getMarioStDvdRoot() form changes the object
+    const char* path;
 #endif
     stream = &sound.streams[chan];
     if (stream->flags) {
@@ -2088,14 +2088,14 @@ void SoundSSPlayChEx(s32 chan, const char* name, s32 aram) {
     path = paths[0];
     if (!(stream->entries[0].dvd = DVDMgrOpen(path, 0, 0))) {
 #else
-    paths[1] = getMarioStDvdRoot();
-    sprintf(_ssGetStr(), "%s/%s%s", paths[1], name, ".stm");
-    if (!(stream->entries[0].dvd = DVDMgrOpen(paths[0] = _ssGetStr(), 0, 0))) {
+    path = getMarioStDvdRoot();
+    sprintf(_ssGetStr(), "%s/%s%s", path, name, ".stm");
+    if (!(stream->entries[0].dvd = DVDMgrOpen(path = _ssGetStr(), 0, 0))) {
 #endif
         stream->flags = 0;
         return;
     }
-    if (!(stream->entries[1].dvd = DVDMgrOpen(paths[0], 0, 0))) {
+    if (!(stream->entries[1].dvd = DVDMgrOpen(path, 0, 0))) {
         stream->flags = 0;
         return;
     }

@@ -1940,8 +1940,6 @@ static void flyMain(PartyEntry* party) {
     }
 }
 
-extern f32 partyNrmToAngle(Vec* n);
-
 /**
  * TRUE when hit is floor a partner may appear on:
  * not deep water or spikes (attr 0x200 / 0x800) and not a map object from objNames.
@@ -1957,12 +1955,6 @@ static inline BOOL partyAppearChkFloor(HitEntry* hit) {
         return FALSE;
     }
     return TRUE;
-}
-
-// FAKE: one-use inline helper; writing the call out changes the object in both versions
-/** Slope of a floor normal in degrees (partyNrmToAngle), taking the normal by value. */
-static inline f32 partyAppearNrmAngle(Vec n) {
-    return partyNrmToAngle(&n);
 }
 
 /** Moves point out d units back from direction ang, in the horizontal plane. */
@@ -2301,7 +2293,7 @@ BOOL partyGetAppearPos3(PartyEntry* party, Vec* out) {
         if (partyChkNoStandMobj(hit)) {
             continue;
         }
-        if (partyAppearNrmAngle(query.hitNormal) > 60.0f) {
+        if (partyNrmToAngle(query.hitNormal) > 60.0f) {
             continue;
         }
         if (!partyAppearChkFloor(hit)) {
