@@ -33,6 +33,8 @@ static void kpa3DMain(void);
 static void kpaFireAttack(void);
 static void kpaFireMain(void);
 static void kpaFall(void);
+static void kpaFire(Vec pos);
+static void kpaFireEntry(Vec pos);
 void fire_se_init(void);
 const f32 vec3_802fc920[3] = {0.0f, 0.0f, 0.0f};
 
@@ -53,73 +55,6 @@ static EffectEntry* fireefp;
 
 // Unused 4-byte object, read by nothing; the original had it too (its storage is in the retail .sbss). Name invented.
 static u8* fireefp_pad;
-
-/**
- * Spawns Bowser's fire breath (the Hooktail breath effect) in front of his mouth if none is active:
- * offset by his size and facing, flame size by level (level 3 uses the big flame type),
- * both flame layers turned to his facing.
- */
-static inline void kpaFireEntry2(Vec pos) {
-    MarioWork* mario = marioGetPtr();
-    if (fireefp == NULL) {
-        s32 flag = 0;
-        s32 ang;
-        f32 dir;
-        f32 scale;
-        f32 x;
-        f32 y;
-        f32 z;
-        f32 sz;
-        s32 type;
-        EffectEntry* child;
-        s32 t;
-        dir = (mario->displayDirection >= 90.0f && mario->displayDirection <= 270.0f) ? 1.0f : -1.0f;
-        scale = kpaGetBaseScale(kpaGetLevel());
-        x = 40.0f * dir * scale + pos.x;
-        t = (marioGetPtr()->stageFlags & KPA_STAGE_FLAG_SIDE_SCROLLING) ^ 1;
-        y = pos.y + (20.0f * scale + (t == 1 ? 6.0f : 0.0f));
-        z = pos.z;
-        type = 7;
-        sz = 0.4f;
-        switch (mario->kpaWork->level) {
-            case 0:
-                sz = 0.3f;
-                break;
-            case 1:
-                sz = 1.0f;
-                break;
-            case 2:
-                sz = 1.4f;
-                break;
-            case 3:
-                sz = 1.5f;
-                type = 0;
-                break;
-        }
-        fireefp = effGonbabaBreathEntry(type, 0, x, y, z, sz);
-        flag = 0;
-        if (mario->displayDirectionTarget >= 90.0f && mario->displayDirectionTarget <= 270.0f) {
-            flag = 1;
-        }
-        ((EffGonbabaBreathWork*)fireefp->userdata)->yaw = (f32)(flag ? 180 : 0);
-        child = ((EffGonbabaBreathWork*)fireefp->userdata)->child;
-        if (child) {
-            flag = 0;
-            if (mario->displayDirectionTarget >= 90.0f && mario->displayDirectionTarget <= 270.0f) {
-                flag = 1;
-            }
-            ang = flag ? 180 : 0;
-            ((EffGonbabaBreathWork*)child->userdata)->yaw = (f32)ang;
-        }
-    }
-}
-
-/** Spawns the fire breath at pos (see kpaFireEntry2). */
-static void kpaFireEntry(Vec pos) {
-    // the result of this marioGetPtr() call is never used (the call is in the retail code)
-    MarioWork* mp = marioGetPtr();
-    kpaFireEntry2(pos);
-}
 
 /** Returns the active fire breath effect, or NULL. koopa_hit reads it to test the flame against objects. */
 EffectEntry* getKoopaFireEfp(void) {
@@ -786,7 +721,7 @@ static void kpaFireAttack(void) {
             fire_se_on();
             break;
         case KPA_ATTACK_FIRE_START:
-            kpaFireEntry(mario->position);
+            kpaFire(mario->position);
             if (--mario->kpaWork->attackTimer > 0) {
                 break;
             }
@@ -795,7 +730,7 @@ static void kpaFireAttack(void) {
             mario->kpaWork->attackState = KPA_ATTACK_FIRE_HOLD;
             break;
         case KPA_ATTACK_FIRE_HOLD:
-            kpaFireEntry(mario->position);
+            kpaFire(mario->position);
             if (--mario->kpaWork->attackTimer > 0) {
                 break;
             }
@@ -843,7 +778,7 @@ static void kpaFireAttack(void) {
             fire_se_on();
             break;
         case KPA_ATTACK_SCRIPTED_FIRE_START:
-            kpaFireEntry(mario->position);
+            kpaFire(mario->position);
             if (--mario->kpaWork->attackTimer > 0) {
                 break;
             }
@@ -852,7 +787,7 @@ static void kpaFireAttack(void) {
             mario->kpaWork->attackState = KPA_ATTACK_SCRIPTED_FIRE_HOLD;
             break;
         case KPA_ATTACK_SCRIPTED_FIRE_HOLD:
-            kpaFireEntry(mario->position);
+            kpaFire(mario->position);
             if (--mario->kpaWork->attackTimer > 0) {
                 break;
             }
@@ -914,10 +849,73 @@ void kpaFireDelete(void) {
     }
 }
 
-// FAKE: stand-in, never called (the linker strips it); its int-to-float conversion only puts the conversion
-// constant into the pool; removing it changes the object
-void kpaStrippedPool(f32* f, s32 i) {
-    *f = (f32)i;
+/** Spawns the fire breath at pos (see kpaFireEntry). */
+// Original names from the JP demo's link map (UNUSED there, after kpaGetFireNum): kpaFire 0x28c and
+// kpaFireEntry 0x278, the sizes of these two bodies out of line; every call is inlined.
+static void kpaFire(Vec pos) {
+    // the result of this marioGetPtr() call is never used (the call is in the retail code)
+    MarioWork* mp = marioGetPtr();
+    kpaFireEntry(pos);
+}
+
+/**
+ * Spawns Bowser's fire breath (the Hooktail breath effect) in front of his mouth if none is active:
+ * offset by his size and facing, flame size by level (level 3 uses the big flame type),
+ * both flame layers turned to his facing.
+ */
+static inline void kpaFireEntry(Vec pos) {
+    MarioWork* mario = marioGetPtr();
+    if (fireefp == NULL) {
+        s32 flag = 0;
+        s32 ang;
+        f32 dir;
+        f32 scale;
+        f32 x;
+        f32 y;
+        f32 z;
+        f32 sz;
+        s32 type;
+        EffectEntry* child;
+        s32 t;
+        dir = (mario->displayDirection >= 90.0f && mario->displayDirection <= 270.0f) ? 1.0f : -1.0f;
+        scale = kpaGetBaseScale(kpaGetLevel());
+        x = 40.0f * dir * scale + pos.x;
+        t = (marioGetPtr()->stageFlags & KPA_STAGE_FLAG_SIDE_SCROLLING) ^ 1;
+        y = pos.y + (20.0f * scale + (t == 1 ? 6.0f : 0.0f));
+        z = pos.z;
+        type = 7;
+        sz = 0.4f;
+        switch (mario->kpaWork->level) {
+            case 0:
+                sz = 0.3f;
+                break;
+            case 1:
+                sz = 1.0f;
+                break;
+            case 2:
+                sz = 1.4f;
+                break;
+            case 3:
+                sz = 1.5f;
+                type = 0;
+                break;
+        }
+        fireefp = effGonbabaBreathEntry(type, 0, x, y, z, sz);
+        flag = 0;
+        if (mario->displayDirectionTarget >= 90.0f && mario->displayDirectionTarget <= 270.0f) {
+            flag = 1;
+        }
+        ((EffGonbabaBreathWork*)fireefp->userdata)->yaw = (f32)(flag ? 180 : 0);
+        child = ((EffGonbabaBreathWork*)fireefp->userdata)->child;
+        if (child) {
+            flag = 0;
+            if (mario->displayDirectionTarget >= 90.0f && mario->displayDirectionTarget <= 270.0f) {
+                flag = 1;
+            }
+            ang = flag ? 180 : 0;
+            ((EffGonbabaBreathWork*)child->userdata)->yaw = (f32)ang;
+        }
+    }
 }
 
 /**

@@ -2613,8 +2613,8 @@ static void _btlYoshiDisp(CameraId camera, YoshiGundanPart* p) {
 }
 #endif
 
-// FAKE: stand-in that nothing calls; its s32-to-f32 conversion likely shapes the constant pool (as
-// kpaStrippedPool does in koopa.c); removing it changes the object
+// FAKE: stand-in that nothing calls; its s32-to-f32 conversion likely shapes the constant pool;
+// removing it changes the object
 void yoshiStrippedPool(f32* f, s32 i) {
     *f = (f32)i;
 }
