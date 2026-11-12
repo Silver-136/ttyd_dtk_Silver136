@@ -1295,17 +1295,22 @@ static void _pose_two_pattern(BattleUnitPart* part) {
     }
 }
 
-// FAKE: unused constant local kept by a per-function opt_dead_assignments off; without them the object changes
-#pragma push
-// dead assignments optimisation off for btlDispAnimeSpeed only (until the pop): the original register allocation and scheduling need it
-#pragma opt_dead_assignments off
 /** Sets a part's status animation speed (2 for Fast, 0.5 for Slow) and applies it times its scripted speed. */
 void btlDispAnimeSpeed(BattleUnitPart* part, f32 speed) {
-    f32 unusedOne = 1.0f;
     part->animSpeed = speed;
     animPoseSetLocalTimeRate(part->poseId, part->animSpeed * part->animSpeed2);
 }
-#pragma pop
+
+/** Sets every part of unit unitId back to the normal animation speed (1). */
+// Original name and size (0x50) from the JP demo's link map (UNUSED there): nothing calls it, so the linker strips it;
+// its emitted copy places the 1.0f in this object's constant pool.
+void btlDispAnimeSpeedUnit(s32 unitId) {
+    BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, unitId);
+    BattleUnitPart* part;
+    for (part = unit->parts; part != NULL; part = part->nextPart) {
+        btlDispAnimeSpeed(part, 1.0f);
+    }
+}
 
 /** Projects a 3D battle position to 2D screen coordinates (the 608x480 2D camera space centred on the screen). */
 void btlGetScreenPoint(Vec* in, Vec* out) {

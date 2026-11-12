@@ -632,16 +632,13 @@ void mot_ship(void) {
     case 40: {
         f32 tt, qq;
         s32 n;
-        MotShipWork* ms2;
         move_se_off();
         camFollowYOff();
         m->dispFlags &= ~MARIO_DISP_FLAG_SHADOW_OFF;
         marioGetPtr()->motShip->baseY = marioGetPtr()->motShip->harborPos.y;
         m->baseSpeed = 2.8f;
-        ms2 = (MotShipWork*)((u8*)&marioGetPtr()->motShip->harborPos.z - offsetof(MotShipWork, harborPos.z)); // FAKE: same derive trick as case 10
-        n = (s32)((10.0f * (2.0f * distABf(m->position.x, m->position.z, marioGetPtr()->motShip->harborPos.x, ms2->harborPos.z) / m->baseSpeed) + 0.5f) / 10.0f);
-        ms2 = (MotShipWork*)((u8*)&marioGetPtr()->motShip->harborPos.z - offsetof(MotShipWork, harborPos.z)); // FAKE: same derive trick as case 10
-        m->directionView = angleABf(m->position.x, m->position.z, marioGetPtr()->motShip->harborPos.x, ms2->harborPos.z);
+        n = (s32)((10.0f * (2.0f * distABf(m->position.x, m->position.z, marioGetPtr()->motShip->harborPos.x, marioGetPtr()->motShip->harborPos.z) / m->baseSpeed) + 0.5f) / 10.0f);
+        m->directionView = angleABf(m->position.x, m->position.z, marioGetPtr()->motShip->harborPos.x, marioGetPtr()->motShip->harborPos.z);
         m->moveDirection = m->directionView;
 
         // 1, or 2 when MARIO_TRIG_FLAG_DISP_DIR_LEFT (bit 9) is set

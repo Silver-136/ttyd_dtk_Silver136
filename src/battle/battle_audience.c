@@ -1905,8 +1905,7 @@ static void BattleAudienceItemCtrlProcess(void) {
             case 0:
                 it->flags |= AUDIENCE_ITEM_FLAG_VISIBLE;
                 if (it->itemType == ITEM_NULL) {
-                    // FAKE: s32 view of the BattleAudienceItemKind table (tbl[2j] = type, tbl[2j+1] = chance); field access changes the object
-                    s32* tbl = (s32*)kd->itemTable;
+                    BattleAudienceItemKind* tbl = kd->itemTable;
                     s32 cnt = 0;
                     s32 sum;
                     s32 acc;
@@ -1914,10 +1913,10 @@ static void BattleAudienceItemCtrlProcess(void) {
                     j = 0;
                     sum = 0;
                     for (;;) {
-                        if (tbl[j * 2] == 0) {
+                        if (tbl[j].type == ITEM_NULL) {
                             break;
                         }
-                        sum += tbl[j * 2 + 1];
+                        sum += tbl[j].chance;
                         cnt++;
                         j++;
                     }
@@ -1928,12 +1927,12 @@ static void BattleAudienceItemCtrlProcess(void) {
                     j = 0;
                     acc = 0;
                     for (;; j++) {
-                        if (r >= acc && r < acc + tbl[j * 2 + 1]) {
+                        if (r >= acc && r < acc + tbl[j].chance) {
                             break;
                         }
-                        acc += tbl[j * 2 + 1];
+                        acc += tbl[j].chance;
                     }
-                    it->itemType = tbl[j * 2];
+                    it->itemType = tbl[j].type;
                 }
                 it->timer = i + 180;
                 it->scale = 1.0f;
