@@ -339,6 +339,10 @@ void seq_mapChangeMain(SequenceWork* work) {
 #else
                 fileAsyncf(FILE_TYPE_TPL, 0, "%s/window/%s/win.tpl", getMarioStDvdRoot(), lang.s[gp->language]);
 #endif
+                // BUG (JP and the early demos, fixed in US by these two loads): p_roll and p_slit are not loaded
+                // ahead, so the first Tube or Paper Mode on a map loads its animation file through marioPaperOn ->
+                // animPaperPoseEntry -> animPoseEntry -> fileAllocf, a synchronous disc read (DVDMgrRead), and that
+                // frame stalls until the file is in.
 #if VERSION >= VERSION_US
                 animGroupBaseAsync("p_roll", 0, 0);
                 animGroupBaseAsync("p_slit", 0, 0);
