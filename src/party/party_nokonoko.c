@@ -772,16 +772,16 @@ void nokonoko_use(PartyEntry* party) {
                 party->useMotionId = 100;
             }
             break;
-        case 100:
+        case 100: {
+            f32 deltaY, deltaX, deltaZ;
             ccwall(party, 1);
 
-            // FAKE: dy holds the x difference and dx the y difference here; swapping them changes the object
-            dy = party->position.x - mario->position.x;
-            dx = party->position.y - mario->position.y;
-            dz = party->position.z - mario->position.z;
-            qx = dy * dy;
-            qy = dx * dx;
-            qz = dz * dz;
+            deltaX = party->position.x - mario->position.x;
+            deltaY = party->position.y - mario->position.y;
+            deltaZ = party->position.z - mario->position.z;
+            qx = deltaX * deltaX;
+            qy = deltaY * deltaY;
+            qz = deltaZ * deltaZ;
             if ((f32)sqrt(qz + (qx + qy)) < 5.0f) {
                 f32 a;
                 a = mario->directionView + (mario->directionView >= 180.0 ? 90.0f : (-90.0f));
@@ -804,6 +804,7 @@ void nokonoko_use(PartyEntry* party) {
             }
             nokonoko_finish(party);
             return;
+        }
         case 88:
             party->moveSpeed = 0.0f;
             flags = lookupSafetyPos(party->moveTarget, party->height, &out2);
@@ -1288,6 +1289,7 @@ static void lookupSafetyPos2(Vec pos, f32 height, Vec* out) {
     f32 rad;
     f32 dx;
     f32 dz;
+    f32 offsetX, offsetZ;
     f32 d;
     f32 dist;
     f32 w;
@@ -1304,13 +1306,14 @@ static void lookupSafetyPos2(Vec pos, f32 height, Vec* out) {
 
     w = player->wPlayerCollisionBox.x;
 
-    // FAKE: the (f32) casts on the w * dx and w * -dz products keep them separate multiplies (no fused multiply-add); without them the object changes
     rad = (3.1415927f * 90.0f) / 180.0f;
     dx = nokoSin(rad);
     dz = (f32)cos(rad);
-    x = pos.x + (f32)(w * dx);
+    offsetX = w * dx;
+    offsetZ = w * -dz;
+    x = pos.x + offsetX;
     y = pos.y;
-    z = pos.z + (f32)(w * -dz);
+    z = pos.z + offsetZ;
     d = 0.1f + height;
     dist = d;
     if (hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, x, y + height, z, 0.0f, (-1.0f), 0.0f) != NULL) {
@@ -1322,9 +1325,11 @@ static void lookupSafetyPos2(Vec pos, f32 height, Vec* out) {
     rad = (3.1415927f * 270.0f) / 180.0f;
     dx = nokoSin(rad);
     dz = (f32)cos(rad);
-    x = pos.x + (f32)(w * dx);
+    offsetX = w * dx;
+    offsetZ = w * -dz;
+    x = pos.x + offsetX;
     y = pos.y;
-    z = pos.z + (f32)(w * -dz);
+    z = pos.z + offsetZ;
     dist = d;
     if (hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, x, y + height, z, 0.0f, (-1.0f), 0.0f) != NULL) {
         out->x = x;
@@ -1348,9 +1353,11 @@ static void lookupSafetyPos2(Vec pos, f32 height, Vec* out) {
     rad = (3.1415927f * 0.0f) / 180.0f;
     dx = nokoSin(rad);
     dz = (f32)cos(rad);
-    x = pos.x + (f32)(w * dx);
+    offsetX = w * dx;
+    offsetZ = w * -dz;
+    x = pos.x + offsetX;
     y = pos.y;
-    z = pos.z + (f32)(w * -dz);
+    z = pos.z + offsetZ;
     dist = d;
     if (hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, x, y + height, z, 0.0f, (-1.0f), 0.0f) != NULL) {
         out->x = x;
@@ -1370,6 +1377,7 @@ static void lookupSafetyPos3(Vec pos, f32 height, Vec* out) {
     f32 rad;
     f32 dx;
     f32 dz;
+    f32 offsetX, offsetZ;
     f32 d;
     f32 dist;
     f32 w;
@@ -1386,13 +1394,14 @@ static void lookupSafetyPos3(Vec pos, f32 height, Vec* out) {
 
     w = player->wPlayerCollisionBox.x;
 
-    // FAKE: the (f32) casts on the w * dx and w * -dz products keep them separate multiplies (no fused multiply-add); without them the object changes
     rad = (3.1415927f * 90.0f) / 180.0f;
     dx = (f32)sin(rad);
     dz = (f32)cos(rad);
-    x = pos.x + (f32)(w * dx);
+    offsetX = w * dx;
+    offsetZ = w * -dz;
+    x = pos.x + offsetX;
     y = pos.y;
-    z = pos.z + (f32)(w * -dz);
+    z = pos.z + offsetZ;
     d = 0.1f + height;
     dist = d;
     if (hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, x, y + height, z, 0.0f, -1.0f, 0.0f) != NULL) {
@@ -1404,9 +1413,11 @@ static void lookupSafetyPos3(Vec pos, f32 height, Vec* out) {
     rad = (3.1415927f * 270.0f) / 180.0f;
     dx = (f32)sin(rad);
     dz = (f32)cos(rad);
-    x = pos.x + (f32)(w * dx);
+    offsetX = w * dx;
+    offsetZ = w * -dz;
+    x = pos.x + offsetX;
     y = pos.y;
-    z2 = pos.z + (f32)(w * -dz);
+    z2 = pos.z + offsetZ;
     dist = d;
     if (hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, x, y + height, z2, 0.0f, -1.0f, 0.0f) != NULL) {
         out->x = x;

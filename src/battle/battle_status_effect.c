@@ -493,7 +493,8 @@ void BattleStatusChangeInfoSetAnnouce(BattleUnit* unit, s32 type, s32 strength, 
     u8 u, t;
 
     for (i = 0; i < 6; i++) {
-        n = _get_pri((s8)e[i].type); // FAKE: no-op (s8) cast on the s8 type (lbz, extsb at the call), as in the target
+        s32 queuedType = e[i].type;
+        n = _get_pri(queuedType);
         if (pri >= (s8)n) {
             break;
         }

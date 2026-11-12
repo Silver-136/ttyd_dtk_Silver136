@@ -719,11 +719,11 @@ static BOOL msgDisp(smartEntry* smart, u8 alpha, f32 x, f32 y) {
                     MSG_DRAW_SCALE(c);
                     FontDrawCode(sx, sy, c->glyph);
 #else
-                    // FAKE: hy holds the x position and hx the y position; swapping the names changes the object
-                    hy = sx + irand(10000) % 3;
-                    hx = sy + irand(10000) % 3;
+                    f32 shakeX, shakeY;
+                    shakeX = sx + irand(10000) % 3;
+                    shakeY = sy + irand(10000) % 3;
                     FontDrawScale(c->scale);
-                    FontDrawCode(hy, hx, c->glyph);
+                    FontDrawCode(shakeX, shakeY, c->glyph);
 #endif
                 } else if (c->value & MSG_CHAR_WAVE) {
                     t = 0.01f * OSTicksToMilliseconds(gp->renderTime - data->openTime) - 0.02f * sx;

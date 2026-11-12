@@ -650,14 +650,14 @@ USER_FUNC(bero_get_position_normal) {
         f32 hz;
         f32 hy;
         f32 hx;
+        f32 fullTurnDegrees;
         f32 deg;
         f32 rad;
         hz = hy = hx = 0.0f;
         dist = 1000000.0f;
 
-        // FAKE: two-step product; `deg = (angle * 360.0f) * 0.125f` changes the object
-        deg = 0.125f;
-        deg = (angle * 360.0f) * deg;
+        fullTurnDegrees = angle * 360.0f;
+        deg = fullTurnDegrees / 8.0f;
         if (dir == 1) {
             deg += 180.0f;
         }

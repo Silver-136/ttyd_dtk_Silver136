@@ -515,12 +515,13 @@ void evtMsgFmtStr(char* buf, const char* name) {
     char* marker;
     const char* article;
     s32 form;
+    signed char initial;
 
     switch (gp->language) {
         case LANGUAGE_US:
         case 6:
-            // FAKE: (signed char) cast on the first character; switch (*name) changes the object in US, PAL and the September demos
-            switch ((signed char)*name) {
+            initial = *name;
+            switch (initial) {
                 case 'A':
                 case 'E':
                 case 'I':

@@ -178,8 +178,8 @@ void systemErrorHandler(OSError error, OSContext* context, u32 dsisr, u32 dar) {
 #endif
         i = 0;
         while (textBase[i] != 0) {
-            // FAKE: no-op (s32) cast on the char; removing it changes the object
-            if ((s32)print_buffer[i] == '\n') {
+            s32 character = print_buffer[i];
+            if (character == '\n') {
 #if VERSION >= VERSION_US
                 px = 40;
 #else

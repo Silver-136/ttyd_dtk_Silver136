@@ -106,7 +106,6 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | src/battle/battle_stage.c | BattleStageDispLight | copy propagation off and the 2.0f held in a named local `two`, so the constant numbers below `width` (a propagated constant load is an unnamed temp numbered above every named local); `s` is taken directly rather than through STG ... | 9 shapes with propagation on (named/const/static const two, width in block/shadowed/moved): all propagate back to the same temp; prop off alone 36 rows; prop off + two through STG 26 rows (GPR) |
 | Both | src/battle/battle_stage.c | BattleStageLightRelease | l first holds the stage pointer (two defs), so with propagation on the stage base and idx * 232 + 4 stay separate adds as in the target; this replaces the old opt_propagation off pragma, under which the {0,0,0} template also left ... | see comment |
 | Both | src/battle/battle_stage_object.c | _object_fall_attack | comma expr makes the literal an early @ temp (same pointer); integer cast (SFX_NAME_WORD) makes the literal a hoisted @ temp (same pointer); no-op self-assign (no code) raises w spill cost | zero-instruction forms; declsearch over decl orders |
-| Both | src/battle/battle_status_effect.c | BattleStatusChangeInfoSetAnnouce | no-op `(s8)e[i].type` cast on the s8 field before `_get_pri` (load/extend order as in the target) | `_get_pri(e[i].type)` |
 | Both | src/battle/sac/sac_bakugame.c | bakuGameMain | constant locals v200/v100/frames | the literals change the object |
 | Both | src/cam_road.c | calcCamRoad | cos through an inline so the first-block cs is an inline @ temp (numbered above the hoisted +-1 constants, f15 as in the target); sgn1/sgn2 as if/else locals of an inline: inline locals get their @ labels at definition time, so the sgn webs are numbered above l2 (crMul) and below cs; with ax/az numbered low this gives the target l2 f14 / sgn1 f15 / sgn2 f28 (+4 more FAKE comment(s)) | see comment |
 | Both | src/cam_road.c | camRoadStrippedReport | stand-in for the dead-stripped camRoadDraw (JP demo map, UNUSED 0x8b8): it only keeps that function's two debug strings (@2397/@2398) at the end of .rodata; body unknown (too large to reconstruct) | strings via crCheck casts: not emitted; file-end const char arrays: placed before the function pools (V) |
@@ -146,7 +145,6 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | src/event/evt_badgeshop.c | badgeShop_bottakuruGeneration | dead int-guarded re-definition (COLOURING M): count keeps a second def, so it stays a named web and takes the target r21 | s32 count + guard (extsh + mr), guard bodies count = 0/i/j/k/count++ with s16 (extra extsh), lifetime-split roles for count/j/m (72 combos), inline helpers (spill worker) |
 | Both | src/event/evt_bero.c | evt_bero_get_info_num | walk flag picks a pointer-walk loop (evt_bero_get_info_num) or the index loop (evt_bero_get_into_info); constant-folded per call site | single pointer-walk inline: get_info_num 100% but get_into_info 99.18 (P); index loop: get_info_num 99.42 (U) |
 | Both | src/event/evt_cam.c | evt_cam_shake | dead int guard (COLOURING W): its division temps survive to RA and add interference, then the post-RA peephole folds the branch and deletes the arm (no code). Colours the first u64 compare's dummy r24.; `camId` is a spare copy of id (used by two camGetPtr calls) | see comment |
-| Both | src/event/evt_mobj.c | evt_mobj_koopa_badgeblk | separate inBattle temp needed for the target register allocation | `inBattle = gp->inBattle != 0` local and the inline `gp->inBattle != 0` argument: both 97.78 (G5) |
 | Both | src/event/evt_mobj.c | mobj_kururing_floor | joint points at worldPositions[0][1].y (the y read below; typed address since 10-23) so its web is the unnamed add temp, not a named load (colours before mario's call temp) | `?:` result (fixed the registers but kept a compare, +4 instrs), self-assign degree extension, no-op casts/transforms (all stay named) |
 | Both | src/event/evt_mobj.c | _mobj_check_ground (inlined; mobj_float_blk, evt_mobj_float_blk, mobj_switch_float_blk, evt_mobj_switch_float_blk) | returns the hitCheckFilter pointer as an EvtWord so the callers' tests stay signed (cmpwi) | HitEntry* return and BOOL `!= NULL` return: both cmplwi at all five tests (G3) |
 | Both | src/event/evt_mobj.c | itemEntry callers (10 calls) | private itemEntry declaration with x/y/z first: the retail calls load the floats before the other arguments (same registers by the EABI), so itemEntry has no header prototype | calls in the definition's order; a static inline wrapper taking the floats first (both load them last) |
@@ -228,7 +226,6 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | src/sound.c | SoundDropData | comma expression(s) `(0, &sound.dvds[i])`; `(0, &sound.effects[i])` keep the value as a separate temp | the plain expression; `sound.effects + i`; pointers declared first or last in the function (register allocation differs) |
 | Both | src/cam_road.c | hokanRate | cos called through a double (*)(f32) cast; (f32)cos(a) changes the object | see comment |
 | Both | src/cam_road.c | calcHokanCamRoad | spare temporary a2; a0 = (f32)atan2(...) directly changes the object | see comment |
-| Both | src/error_handler.c | systemErrorHandler | no-op (s32) cast on the char; removing it changes the object | see comment |
 | Both | src/koopa.c | kpaStrippedFallPool | stand-in, never called (the linker strips it); it only puts kpaSetFallPara's eight literals into the .sdata2 pool; removing it changes the object | see comment |
 | Both | src/koopa.c | kpaStrippedPool | stand-in, never called (the linker strips it); its int-to-float conversion only puts the conversion constant into the pool; removing it changes the object | see comment |
 | Both | src/koopa.c | kpaCamFollow | comma expression `(v = (...stageFlags & SIDE_SCROLLING) ^ 1, v == 1)` | `!(stageFlags & KPA_STAGE_FLAG_SIDE_SCROLLING)`: changes the object |
@@ -327,7 +324,6 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | src/effect/eff_ibuki.c | effIbukiDisp | (u32) cast for an unsigned compare; `i < 4` changes the object | u32 i with the plain compare |
 | Both | src/driver/mobjdrv.c | mobjHitEntry | (0, x) comma expressions around the x and z __fabs calls; the plain __fabs changes the object | see comment |
 | Both | src/driver/mobjdrv.c | mobjStrippedFallPool | stand-in, never called (in neither symbol map; the linker strips it); it only places its literals in the .sdata2 pool | see comment |
-| JP | src/driver/msgdrv.c | msgDisp | hy holds the x position and hx the y position; swapping the names changes the object | see comment |
 | Both | src/driver/msgdrv.c | (file scope) hankakuSearch | private prototypes taking s32 (US and later) or char (JP, early demos); the definition in fontmgr.c takes s8 | `u16 hankakuSearch(s8 c);` in fontmgr.h: changes the object |
 | Both | src/driver/npcdrv.c | npcCheckHitMarioSide | the height goes through the spare dz; passing mario->wPlayerCollisionBox.y directly changes the object | see comment |
 | US | src/driver/npcdrv.c | _fbatFirstAttackAnnouceDisp | the products go through the mulf() inline; plain multiplications change the object | see comment |
@@ -356,7 +352,6 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | src/effect/n64/eff_magic_horao_n64.c | effMagicHoraoDisp | ang is assigned in a comma expression inside the initializer; assigning it in its own statement changes the object | see comment |
 | Both | src/effect/n64/eff_opuku_jetwrain_n64.c | effOpukuJetwrainN64Entry | inline_fn(j) is j < 13; the plain loop condition changes the object | see comment |
 | Both | src/effect/n64/eff_opuku_jetwrain_n64.c | effOpukuJetwrainMain | inline_fn2(j) is j < 12; the plain loop condition changes the object | see comment |
-| Both | src/effect/n64/eff_opuku_wprotect_n64.c | effOpukuWprotectDisp | (f32) casts on f32 products; without them the object changes | see comment |
 | Both | src/effect/n64/eff_peach_dust_n64.c | effPeachDustN64Entry | (s32) cast on the char; without it the object changes | see comment |
 | Both | src/effect/n64/eff_peach_dust_n64.c | effPeachDustDisp | k and h hold the 1.4f/0.7f factors in a block of their own; the literal factors change the object | see comment |
 | Both | src/effect/n64/eff_pokopi_thunder_n64.c | effPokopiThunderN64Entry | spare local holding 0.0f for the length test; comparing with 0.0f directly changes the object | see comment |
@@ -377,19 +372,13 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | src/event/evt_mario.c | evt_mario_paper_pose_dokan | unreferenced static const char names[] holding the six DOKAN_* pose names with hand padding | see comment |
 | Both | src/event/evt_batstage.c | (file scope) BattleStage*Dark* | private prototypes of the six stage/audience darkness setters with an s32 mode; battle_stage.c defines them with u8 mode | the definitions' prototypes in battle_stage.h: changes the object |
 | Both | src/event/evt_bero.c | bero_get_kind | walk flag picks a pointer-walk loop (evt_bero_get_info_num) or the index loop (evt_bero_get_into_info); constant-folded per call site | see comment |
-| Both | src/event/evt_bero.c | bero_get_position_normal | two-step product; `deg = (angle * 360.0f) * 0.125f` changes the object | see comment |
 | Both | src/event/evt_bero.c | evt_bero_move_mario_speed | spare temporary for BeroSX; using BeroSX directly changes the object | see comment |
 | Both | src/event/evt_cam.c | evt_cam_debug_print | stand-in for the dead-stripped evt_cam3d_evt_set_xls / evt_cam3d_evt_set_rel_xls (JP demo map, UNUSED); it only keeps their format string and 100.0f. Bodies unknown (sscanf forms tried miss the map sizes). | see comment |
 | Both | src/event/evt_door.c | door_position_sub | self-assignment through t; removing it changes the object | see comment |
 | Both | src/event/evt_item.c | evt_item_get_important_item | float bits stored through an s32 view; event->userdataf[n] = value changes the object | see comment |
 | Both | src/event/evt_lottery.c | evt_lottery | bt is a spare temporary (two different shapes for the same sum); passing lot->buyTime + ... directly changes the object | see comment |
-| Both | src/event/evt_mobj.c | evt_mobj_floatswitch_blue | gp->inBattle is loaded into inBattle before the test; `inBattle = gp->inBattle != 0` changes the object | see comment |
-| Both | src/event/evt_mobj.c | evt_mobj_tornadoswitch_blue | gp->inBattle is loaded into inBattle before the test; `inBattle = gp->inBattle != 0` changes the object | see comment |
-| Both | src/event/evt_mobj.c | evt_mobj_floatswitch_red | gp->inBattle is loaded into inBattle before the test; `inBattle = gp->inBattle != 0` changes the object | see comment |
-| Both | src/event/evt_mobj.c | evt_mobj_signboard | gp->inBattle is loaded into inBattle before the test; `inBattle = gp->inBattle != 0` changes the object | see comment |
 | Both | src/event/evt_mobj.c | mobj_recovery_blk_recover | case 4 repeats these steps inline instead of calling this helper; calling it there changes the object | see comment |
 | Both | src/event/evt_mobj.c | mobj_koopa_ojama_blk_evt | unused Vec local; removing the block changes the object | see comment |
-| Both | src/event/evt_mobj.c | evt_mobj_koopa_hidden_blk | gp->inBattle is loaded into inBattle before the test; `inBattle = gp->inBattle != 0` changes the object | see comment |
 | Both | src/event/evt_mobj.c | mobj_recovery_blk (effCoinFukidashiEntry) | private float-first prototype (x, y, z, type, number, duration) | eff_batfukidashi.h's (type, number, duration, x, y, z) with reordered calls: changes the object |
 | Both | src/event/evt_nannpc.c | evt_nannpc_entry | the value goes through a long long cast; plain name = evtGetValue(...) changes the object | see comment |
 | Demos | src/event/evt_npc.c | npc_report_pos | stand-in for the dead-stripped evt_npc_set_position_xls (JP demo map, UNUSED 0xb4); it only keeps its "%f%f%f" at the end of .rodata. Body unknown. | see comment |
@@ -444,13 +433,9 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | src/party/party_move.c | partyMoveStrippedPool | stand-in that nothing calls; it places 90.0f and 20.0f in the .sdata2 pool | see comment |
 | Both | src/party/party_nokonoko.c | nokoStrippedPool | stand-in that nothing calls (in no symbol map); it only places 10.0f, 30.0f, 100.0f, 11.0f and 6.0f in this object's constant pool; removing it changes the object | see comment |
 | Both | src/party/party_nokonoko.c | ccwall | spare copy k of 30.0f; dist = w + 30.0f changes the object | see comment |
-| Both | src/party/party_nokonoko.c | lookupSafetyPos2 | the (f32) casts on the w * dx and w * -dz products keep them separate multiplies (no fused multiply-add); without them the object changes | see comment |
-| Both | src/party/party_nokonoko.c | lookupSafetyPos3 | the (f32) casts on the w * dx and w * -dz products keep them separate multiplies (no fused multiply-add); without them the object changes | see comment |
-| Both | src/party/party_nokonoko.c | nokonoko_use | `dy` holds the x difference and `dx` the y difference | swapping them: changes the object |
 | Both | src/party/party_vivian.c | marioForceVivianAnime | padding constant kept in .sdata2 by explicit_zero_data and the (void)& use; removing it changes the section layout | see comment |
 | Both | src/party/party_vivian.c | mot_vivian_post | the store is reached by a goto past the return; writing it here changes the object | see comment |
 | Both | src/sequence/seq_battle.c | seq_battleMain | wait flag and goto check; a plain break while still waiting changes the object | see comment |
-| Both | src/sequence/seq_battle.c | loadTpl | `(u32)` cast on fileAsyncf's result before `!= 0` | comparing the s32 result: changes the object |
 | Both | src/sequence/seq_e3.c | e3Disp | the (u32) cast on the 8; plain i + 8 changes the object in the JP demo only (retail versions stay the same without it) | see comment |
 | Both | src/sequence/seq_e3.c | forceSdata | stand-in that nothing calls (the linker strips it); it only places 30.0f in the constant pool (JP and US); removing it changes the object | see comment |
 | Both | src/unit/party/unit_party_yoshi.c | yoshiStrippedPool | stand-in that nothing calls; its s32-to-f32 conversion likely shapes the constant pool (as kpaStrippedPool does in koopa.c); removing it changes the object | see comment |
@@ -483,7 +468,6 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | src/effect/n64/eff_kemuri4_n64.c | effKemuri4N64Entry | zero held in a local for the two flip tests | `flip != 0.0f`: changes the object |
 | Both | src/effect/n64/eff_kemuri5_n64.c | effKemuri5N64Entry, effKemuri5Main | `opt_propagation` off over both functions | removing it changes the object; the file-wide `-opt noprop` changes other functions (2026-11-07) |
 | Both | src/effect/n64/eff_snowman_n64.c | effSnowmanMain | zero held in a local for about 11 compares and stores | 0.0f literals: changes the object |
-| US | src/event/evt_msg.c | evtMsgFmtStr | `(signed char)` cast on the first character of name | `switch (*name)`: changes the object in those versions (JP and early demos the same) |
 | Both | src/event/evt_msg.c | _evt_msg_print (msgWindow_Entry) | call through a cast to an `(const char*, s32, s32)` function type, passing `(s16)event->msgPriority` | plain call with msgdrv.h's u16 priority prototype: changes the object |
 | PAL | src/event/evt_msg.c | (file scope) | msgArticlePad: unused zero object, read by nothing | removing it changes the object |
 | Both | src/event/evt_msg.c | (file scope) msgWindow_Add | private `const char*` prototype; the definition takes `char*` (msgAnalize takes char* after the early demos) | header prototype: build errors at the const char* calls without casts |
@@ -494,5 +478,4 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | rels/las/src/las_04.c | firebar_entry | `*(s32*)&wp = event->userdata[0]` stores through &wp, so wp keeps a stack slot for the whole function | `wp = event->userdatap[0]`: see comment |
 | PAL | rels/tst/src/unit/unit_yoshi.c | _btlYoshiDisp | btlDispTexPlane called through a float-first prototype so the float arguments are evaluated first (tst.rel: PAL and the JP demo) | see comment |
 | Both | src/battle/battle_damage.c | BattleCalculateDamage | negation written as `(u32)damage * -1` | `-damage`: changes the object |
-| Both | src/event/evt_cloud.c | evt_cloud_main | `(u32)`/`(s32)` casts on the half sizes | `(f32)(uw >> 1)`: changes the object |
 | Both | src/window/win_log.c | mapGX | the texture id goes through a spare temporary `tex` in a comma expression | `((gp->retraceCount >> 4) & 1) ? 0xB9 : 0xBA`: changes the object |

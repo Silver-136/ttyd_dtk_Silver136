@@ -126,6 +126,7 @@ static USER_FUNC(evt_cloud_main) {
             s32 x, y;
             s32 w, h;
             u16 uw, uh;
+            s32 halfWidth, halfHeight;
             Vec pos;
             EventEntry evt;
             EvtWord args[10];
@@ -141,9 +142,10 @@ static USER_FUNC(evt_cloud_main) {
                 w = uw;
                 h = uh;
 
-                // FAKE: (u32)/(s32) casts on the half sizes; (f32)(uw >> 1) changes the object
-                x = (s32)(pos.x - (f32)(s32)((u32)uw >> 1));
-                y = (s32)(pos.y - (f32)(s32)(uh >> 1));
+                halfWidth = uw / 2U;
+                halfHeight = uh / 2U;
+                x = (s32)(pos.x - halfWidth);
+                y = (s32)(pos.y - halfHeight);
                 if (x < 0) {
                     x = 0;
                 }

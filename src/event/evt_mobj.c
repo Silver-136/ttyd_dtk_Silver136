@@ -493,7 +493,7 @@ USER_FUNC(evt_mobj_floatswitch_blue) {
     MapObjectEntry* mobj;
     s32 val;
     const char* anim;
-    s32 inBattle;
+    s32 animGroup;
     evtGetValue(event, args[0]);
     name = (const char*)evtGetValue(event, args[1]);
     x = evtGetFloat(event, args[2]);
@@ -502,11 +502,13 @@ USER_FUNC(evt_mobj_floatswitch_blue) {
     val = evtGetValue(event, args[5]);
     flagVar = args[6];
 
-    // FAKE: gp->inBattle is loaded into inBattle before the test; `inBattle = gp->inBattle != 0` changes the object
-    inBattle = gp->inBattle;
-    inBattle = inBattle != 0;
+    if (gp->inBattle) {
+        animGroup = 1;
+    } else {
+        animGroup = 0;
+    }
     anim = "MOBJ_BlueSwitchBlock";
-    if (animGroupBaseAsync(anim, inBattle, NULL) == 0) {
+    if (animGroupBaseAsync(anim, animGroup, NULL) == 0) {
         return EVT_RETURN_BLOCK;
     }
     mobjEntry(name, anim);
@@ -537,7 +539,7 @@ USER_FUNC(evt_mobj_tornadoswitch_blue) {
     MapObjectEntry* mobj;
     s32 val;
     const char* anim;
-    s32 inBattle;
+    s32 animGroup;
     evtGetValue(event, args[0]);
     name = (const char*)evtGetValue(event, args[1]);
     x = evtGetFloat(event, args[2]);
@@ -546,11 +548,13 @@ USER_FUNC(evt_mobj_tornadoswitch_blue) {
     val = evtGetValue(event, args[5]);
     flagVar = args[6];
 
-    // FAKE: gp->inBattle is loaded into inBattle before the test; `inBattle = gp->inBattle != 0` changes the object
-    inBattle = gp->inBattle;
-    inBattle = inBattle != 0;
+    if (gp->inBattle) {
+        animGroup = 1;
+    } else {
+        animGroup = 0;
+    }
     anim = "MOBJ_BlueTornadoSwitch";
-    if (animGroupBaseAsync(anim, inBattle, NULL) == 0) {
+    if (animGroupBaseAsync(anim, animGroup, NULL) == 0) {
         return EVT_RETURN_BLOCK;
     }
     mobjEntry(name, anim);
@@ -661,7 +665,7 @@ USER_FUNC(evt_mobj_floatswitch_red) {
     MapObjectEntry* mobj;
     s32 val;
     const char* anim;
-    s32 inBattle;
+    s32 animGroup;
     evtGetValue(event, args[0]);
     name = (const char*)evtGetValue(event, args[1]);
     x = evtGetFloat(event, args[2]);
@@ -670,11 +674,13 @@ USER_FUNC(evt_mobj_floatswitch_red) {
     val = evtGetValue(event, args[5]);
     flagVar = args[6];
 
-    // FAKE: gp->inBattle is loaded into inBattle before the test; `inBattle = gp->inBattle != 0` changes the object
-    inBattle = gp->inBattle;
-    inBattle = inBattle != 0;
+    if (gp->inBattle) {
+        animGroup = 1;
+    } else {
+        animGroup = 0;
+    }
     anim = "MOBJ_RedSwitchBlock";
-    if (animGroupBaseAsync(anim, inBattle, NULL) == 0) {
+    if (animGroupBaseAsync(anim, animGroup, NULL) == 0) {
         return EVT_RETURN_BLOCK;
     }
     mobjEntry(name, anim);
@@ -703,7 +709,7 @@ USER_FUNC(evt_mobj_tornadoswitch_red) {
     MapObjectEntry* mobj;
     s32 val;
     const char* anim;
-    s32 inBattle;
+    s32 animGroup;
     evtGetValue(event, args[0]);
     name = (const char*)evtGetValue(event, args[1]);
     x = evtGetFloat(event, args[2]);
@@ -711,10 +717,13 @@ USER_FUNC(evt_mobj_tornadoswitch_red) {
     z = evtGetFloat(event, args[4]);
     val = evtGetValue(event, args[5]);
     flagVar = args[6];
-    inBattle = gp->inBattle;
-    inBattle = inBattle != 0;
+    if (gp->inBattle) {
+        animGroup = 1;
+    } else {
+        animGroup = 0;
+    }
     anim = "MOBJ_RedTornadoSwitch";
-    if (animGroupBaseAsync(anim, inBattle, NULL) == 0) {
+    if (animGroupBaseAsync(anim, animGroup, NULL) == 0) {
         return EVT_RETURN_BLOCK;
     }
     mobjEntry(name, anim);
@@ -2344,7 +2353,7 @@ USER_FUNC(evt_mobj_signboard) {
     s32 flagVar;
     MapObjectEntry* mobj;
     const char* anim;
-    s32 inBattle;
+    s32 animGroup;
     f32 x, y, z;
     name = (const char*)evtGetValue(event, args[0]);
     x = evtGetFloat(event, args[1]);
@@ -2352,12 +2361,14 @@ USER_FUNC(evt_mobj_signboard) {
     z = evtGetFloat(event, args[3]);
     val = evtGetValue(event, args[4]);
 
-    // FAKE: gp->inBattle is loaded into inBattle before the test; `inBattle = gp->inBattle != 0` changes the object
-    inBattle = gp->inBattle;
-    inBattle = inBattle != 0;
+    if (gp->inBattle) {
+        animGroup = 1;
+    } else {
+        animGroup = 0;
+    }
     flagVar = args[5];
     anim = "MOBJ_Signboard";
-    if (animGroupBaseAsync(anim, inBattle, NULL) == 0) {
+    if (animGroupBaseAsync(anim, animGroup, NULL) == 0) {
         return EVT_RETURN_BLOCK;
     }
     mobjEntry(name, anim);
@@ -2381,7 +2392,7 @@ static s32 mobj_arrow(MapObjectEntry* mobj) {
 /** Places a decorative arrow sign (MOBJ_Arrow); only built in the early demos, the PAL demo and PAL. args: name, x, y, z, flag variable. */
 USER_FUNC(evt_mobj_arrow) {
     EvtWord* args = event->args;
-    s32 inBattle;
+    s32 animGroup;
     const char* name;
     f32 x, y, z;
     s32 flagVar;
@@ -2392,10 +2403,13 @@ USER_FUNC(evt_mobj_arrow) {
     y = evtGetFloat(event, args[2]);
     z = evtGetFloat(event, args[3]);
     flagVar = args[4];
-    inBattle = gp->inBattle;
-    inBattle = inBattle != 0;
+    if (gp->inBattle) {
+        animGroup = 1;
+    } else {
+        animGroup = 0;
+    }
     anim = "MOBJ_Arrow";
-    if (animGroupBaseAsync(anim, inBattle, NULL) == 0) {
+    if (animGroupBaseAsync(anim, animGroup, NULL) == 0) {
         return EVT_RETURN_BLOCK;
     }
     mobjEntry(name, anim);
@@ -4485,7 +4499,7 @@ USER_FUNC(evt_mobj_koopa_badgeblk) {
     s32 item;
     EvtWord* args = event->args;
     s32 flagVar;
-    int battleFlag; // FAKE: separate inBattle temp needed for the target register allocation
+    s32 animGroup;
     const char* name;
     MapObjectEntry* mobj;
     const char* anim;
@@ -4497,10 +4511,13 @@ USER_FUNC(evt_mobj_koopa_badgeblk) {
     item = evtGetValue(event, args[4]);
     val = evtGetValue(event, args[5]);
     flagVar = args[6];
-    battleFlag = gp->inBattle;
-    battleFlag = battleFlag != 0;
+    if (gp->inBattle) {
+        animGroup = 1;
+    } else {
+        animGroup = 0;
+    }
     anim = "MOBJ_HatenaBlock";
-    if (animGroupBaseAsync(anim, battleFlag, NULL) == 0) {
+    if (animGroupBaseAsync(anim, animGroup, NULL) == 0) {
         return EVT_RETURN_BLOCK;
     }
     mobjEntry(name, anim);
@@ -4531,7 +4548,7 @@ USER_FUNC(evt_mobj_koopa_hidden_blk) {
     const char* anim;
     s32 item;
     EvtWord* args = event->args;
-    s32 inBattle;
+    s32 animGroup;
     s32 flagVar;
     f32 x, y, z;
     s32 val;
@@ -4544,11 +4561,13 @@ USER_FUNC(evt_mobj_koopa_hidden_blk) {
     val = evtGetValue(event, args[6]);
     flagVar = args[7];
 
-    // FAKE: gp->inBattle is loaded into inBattle before the test; `inBattle = gp->inBattle != 0` changes the object
-    inBattle = gp->inBattle;
-    inBattle = inBattle != 0;
+    if (gp->inBattle) {
+        animGroup = 1;
+    } else {
+        animGroup = 0;
+    }
     anim = "MOBJ_HiddenHatenaBlock";
-    if (animGroupBaseAsync(anim, inBattle, NULL) == 0) {
+    if (animGroupBaseAsync(anim, animGroup, NULL) == 0) {
         return EVT_RETURN_BLOCK;
     }
     mobjEntry(name, anim);
