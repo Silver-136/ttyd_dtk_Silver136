@@ -944,10 +944,11 @@ void npcMain(void) {
                                         trig = 1;
                                     } else if (dist > entry->homingRange) {
                                         trig = 1;
-                                    // FAKE: comma expression around the angleABf assignment; the assignment as the argument changes the object
-                                    } else if ((dist = angleABf(0.0f, 0.0f, dx, dz), __fabsf(compAngle(dir, dist))) >
-                                               0.5f * entry->homingAngle) {
-                                        trig = 1;
+                                    } else {
+                                        dist = angleABf(0.0f, 0.0f, dx, dz);
+                                        if (__fabsf(compAngle(dir, dist)) > 0.5f * entry->homingAngle) {
+                                            trig = 1;
+                                        }
                                     }
                                 }
                             }
@@ -1029,11 +1030,12 @@ void npcMain(void) {
 #endif
                                         trig = 0;
                                         goto search_done;
-                                        // FAKE: comma expression around the angleABf assignment (as at the homing test)
-                                    } else if ((angleToMario = angleABf(0.0f, 0.0f, dx, dz), __fabsf(compAngle(dir, angleToMario))) >
-                                               0.5f * entry->searchAngle) {
-                                        trig = 0;
-                                        goto search_done;
+                                    } else {
+                                        angleToMario = angleABf(0.0f, 0.0f, dx, dz);
+                                        if (__fabsf(compAngle(dir, angleToMario)) > 0.5f * entry->searchAngle) {
+                                            trig = 0;
+                                            goto search_done;
+                                        }
                                     }
                                 }
                                 if (dy > entry->territoryLoiter.y) {

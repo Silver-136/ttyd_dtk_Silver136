@@ -390,6 +390,12 @@ static void drawNum(s32 num, s32 digits, f32 x, f32 y, f32 scale) {
     }
 }
 
+// taihou.tpl textures of the direction arrows (drawBG ids).
+typedef enum SightArrowTex {
+    SIGHT_TEX_ARROW_LIT = 6,
+    SIGHT_TEX_ARROW = 7
+} SightArrowTex;
+
 /**
  * Draws the cannon's targeting display (taihou.tpl) over the aiming part of evt_taihou ("Sighting! Target is the
  * moon!"): corner frames that spin with the sight direction, blinking inner frames, the four direction arrows
@@ -483,11 +489,10 @@ static void disp_sight(CameraId camera, void* param) {
     for (i = 0; i < 4; i++) {
         on = (gp->retraceCount % 20 > 6 && i == sight_wp->dir) ? 1 : 0;
 
-        // FAKE: pointer-typed ?: = id = on ? 6 : 7 without the branchless int select (same value)
-        id = (s32)(on ? (char*)6 : (char*)7);
+        id = on ? SIGHT_TEX_ARROW_LIT : SIGHT_TEX_ARROW;
         if (sight_wp->dir == 4) {
             on = 0;
-            id = 7;
+            id = SIGHT_TEX_ARROW;
         }
         switch (i) {
             case 0:

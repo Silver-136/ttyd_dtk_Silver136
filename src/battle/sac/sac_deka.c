@@ -1442,14 +1442,13 @@ static USER_FUNC(get_ride_pos) {
     DekaWork* w = get_ptr();
     EvtWord* args = event->args;
 
-    // FAKE: 64.0f held in k for the three scale products; the literal changes the object
-    f32 k = 64.0f;
+    f32 baseSize = 64.0f; // the star's size at scale 1
     if (evtGetValue(event, *args++) == 0) {
-        evtSetFloat(event, *args++, 0.5f * (0.25f * (w->scale.x * k)) + w->starPos.x);
+        evtSetFloat(event, *args++, 0.5f * (0.25f * (w->scale.x * baseSize)) + w->starPos.x);
     } else {
-        evtSetFloat(event, *args++, w->starPos.x - 0.5f * (0.25f * (w->scale.x * k)));
+        evtSetFloat(event, *args++, w->starPos.x - 0.5f * (0.25f * (w->scale.x * baseSize)));
     }
-    evtSetFloat(event, *args++, 0.25f * (0.25f * (w->scale.y * k)) + w->starPos.y);
+    evtSetFloat(event, *args++, 0.25f * (0.25f * (w->scale.y * baseSize)) + w->starPos.y);
     evtSetFloat(event, *args++, 5.0f + w->starPos.z + 4.0f * w->scale.z);
     return EVT_RETURN_DONE;
 }

@@ -776,8 +776,7 @@ static HitEntry* hitEstimate(s32* out) {
     f32 h;
     s32 i;
 
-    // FAKE: 5.0f held in k5 for four products; the literal changes the object
-    f32 k5 = 5.0f;
+    f32 probeAhead = 5.0f; // how far ahead of Mario the angled probes start
     f32 ang;
 
     mario = marioGetPtr();
@@ -815,8 +814,8 @@ static HitEntry* hitEstimate(s32* out) {
     cy = (f32)cos(ang);
     {
         Vec dir2 = {0.0f, 0.0f, 0.0f};
-        pos.x = (s * k5) + mario->position.x;
-        pos.z = (c * k5) + mario->position.z;
+        pos.x = (s * probeAhead) + mario->position.x;
+        pos.z = (c * probeAhead) + mario->position.z;
         pos.y = mario->position.y + h;
         dir2.x = s;
         dir2.y = -cy;
@@ -834,8 +833,8 @@ static HitEntry* hitEstimate(s32* out) {
     cy = (f32)cos(ang);
     {
         Vec dir3 = {0.0f, 0.0f, 0.0f};
-        pos.x = (s * k5) + mario->position.x;
-        pos.z = (c * k5) + mario->position.z;
+        pos.x = (s * probeAhead) + mario->position.x;
+        pos.z = (c * probeAhead) + mario->position.z;
         pos.y = mario->position.y + h;
         dir3.x = s;
         dir3.y = -cy;

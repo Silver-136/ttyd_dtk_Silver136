@@ -40,7 +40,7 @@
 #include "evt/evt_cloud_room.h"
 
 static CloudRoomWork* cloud;
-static u8 cloud_once_flag;
+static s8 cloud_once_flag;
 static void _mapsetofs_all(CloudRoomWork* wp);
 static void _mapclsofs_all(CloudRoomWork* wp);
 static BOOL _get_boundingbox(const char* name, s32* x, s32* y, s32* w, s32* h);
@@ -371,8 +371,7 @@ static USER_FUNC(evt_cloud_main) {
     hit3 = cloudGetHitBreathout(3);
     switch (wp->state) {
         case 0:
-            // FAKE: (s32) cast on the u8 flag gives cmpwi; the plain compare gives cmplwi
-            if ((s32)cloud_once_flag == 1) {
+            if (cloud_once_flag == 1) {
                 break;
             }
             hit = hitNameToPtr(wp->hitName);

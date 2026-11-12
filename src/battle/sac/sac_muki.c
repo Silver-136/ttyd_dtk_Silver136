@@ -736,14 +736,6 @@ static USER_FUNC(end_muki) {
     return 2;
 }
 
-/** Float add, kept as a function so disp_2D matches the original's operation order. */
-// FAKE: addf() for x + 32.0f in disp_2D; the plain sum changes the object
-static inline f32 addf(f32 a, f32 b) { return a + b; }
-
-/** Float multiply, kept as a function so disp_3D_alpha matches the original's operation order. */
-// FAKE: mulf() for c * 3.141592f in disp_3D_alpha; the plain product changes the object
-static inline f32 mulf(f32 x, f32 y) { return x * y; }
-
 /**
  * Draws the two gauges on the left: attack (red) and defense (blue),
  * each a bar filled by the fractional part of the level with the level number beside it,
@@ -759,6 +751,7 @@ static void disp_2D(CameraId cam, void* param) {
     f32 x;
     f32 y;
     u8 r, g, b, a;
+    f32 halfWidth = 32.0f;
 
     if (w->state >= 2 && w->state <= 7) {
         Vec p = {0.0f, 0.0f, 0.0f};
@@ -776,15 +769,15 @@ static void disp_2D(CameraId cam, void* param) {
         y = s.y;
         c = (GXColor){0xFF, 0xFF, 0xFF, 0xFF};
         x = s.x;
-        PSMTXTrans(m, x - 32.0f - 8.0f, y, 0.0f);
+        PSMTXTrans(m, x - halfWidth - 8.0f, y, 0.0f);
         btlDispTexPlane2(m, BTL_TEX(0x43), c, 0);
         PSMTXScale(m, 16.0f, 1.0f, 1.0f);
         PSMTXTransApply(m, m, x, y, 0.0f);
         btlDispTexPlane2(m, BTL_TEX(0x44), c, 0);
         PSMTXScale(m, -1.0f, 1.0f, 1.0f);
-        PSMTXTransApply(m, m, 8.0f + addf(x, 32.0f), y, 0.0f);
+        PSMTXTransApply(m, m, x + halfWidth + 8.0f, y, 0.0f);
         btlDispTexPlane2(m, BTL_TEX(0x43), c, 0);
-        x = x - 32.0f - 8.0f;
+        x = x - halfWidth - 8.0f;
         frac = w->atkDisp - (f32)(s32)w->atkDisp;
         btlDispGXInit2DRasta();
         GXLoadPosMtxImm(camGetPtr(CAMERA_2D)->view, GX_PNMTX0);
@@ -833,15 +826,15 @@ static void disp_2D(CameraId cam, void* param) {
         x = s.x;
         y = s.y;
         c = (GXColor){0xFF, 0xFF, 0xFF, 0xFF};
-        PSMTXTrans(m, x - 32.0f - 8.0f, y, 0.0f);
+        PSMTXTrans(m, x - halfWidth - 8.0f, y, 0.0f);
         btlDispTexPlane2(m, BTL_TEX(0x43), c, 0);
         PSMTXScale(m, 16.0f, 1.0f, 1.0f);
         PSMTXTransApply(m, m, x, y, 0.0f);
         btlDispTexPlane2(m, BTL_TEX(0x44), c, 0);
         PSMTXScale(m, -1.0f, 1.0f, 1.0f);
-        PSMTXTransApply(m, m, 8.0f + addf(x, 32.0f), y, 0.0f);
+        PSMTXTransApply(m, m, x + halfWidth + 8.0f, y, 0.0f);
         btlDispTexPlane2(m, BTL_TEX(0x43), c, 0);
-        x = x - 32.0f - 8.0f;
+        x = x - halfWidth - 8.0f;
         frac = w->defDisp - (f32)(s32)w->defDisp;
         btlDispGXInit2DRasta();
         GXLoadPosMtxImm(camGetPtr(CAMERA_2D)->view, GX_PNMTX0);
@@ -919,13 +912,14 @@ static void disp_3D_alpha(CameraId cam, void* param) {
         if (o->state >= 1 && o->state <= 9) {
             f32 a;
             f32 c;
+            f32 pi = 3.141592f;
             switch (o->type) {
                 case 0:
                     PSMTXRotRad(m, 'y', 0.017453292f * o->rot.y);
                     PSMTXScaleApply(m, m, 2.0f * o->scale.x, 2.0f * o->scale.y, o->scale.z);
                     PSMTXTransApply(m, m, o->pos.x, o->pos.y, o->pos.z);
                     c = 2.0f * o->rot.y;
-                    a = mulf(c, 3.141592f) / 360.0f;
+                    a = c * pi / 360.0f;
                     c = (f32)cos(a);
                     PSMTXTransApply(m, m, 15.0f * (f32)sin(a), 0.0f, 15.0f * c);
                     col[0] = col[1] = (GXColor){0xE9, 0x4A, 0x3F, o->alpha};
@@ -937,7 +931,7 @@ static void disp_3D_alpha(CameraId cam, void* param) {
                     PSMTXScaleApply(m, m, 2.0f * o->scale.x, 2.0f * o->scale.y, o->scale.z);
                     PSMTXTransApply(m, m, o->pos.x, o->pos.y, o->pos.z);
                     c = 2.0f * o->rot.y;
-                    a = mulf(c, 3.141592f) / 360.0f;
+                    a = c * pi / 360.0f;
                     c = (f32)cos(a);
                     PSMTXTransApply(m, m, 15.0f * (f32)sin(a), 0.0f, 15.0f * c);
                     col[0] = col[1] = (GXColor){0x3F, 0x3F, 0xE9, o->alpha};
@@ -949,7 +943,7 @@ static void disp_3D_alpha(CameraId cam, void* param) {
                     PSMTXScaleApply(m, m, o->scale.x, o->scale.y, o->scale.z);
                     PSMTXTransApply(m, m, o->pos.x, o->pos.y, o->pos.z);
                     c = 2.0f * o->rot.y;
-                    a = mulf(c, 3.141592f) / 360.0f;
+                    a = c * pi / 360.0f;
                     c = (f32)cos(a);
                     PSMTXTransApply(m, m, 15.0f * (f32)sin(a), 0.0f, 15.0f * c);
                     col[0] = (GXColor){0xFF, 0xFF, 0xFF, o->alpha};

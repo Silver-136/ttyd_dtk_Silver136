@@ -5,14 +5,14 @@
 #include <dolphin/mtx.h>
 #include "battle/battle_stage.h"
 
-// FAKE: private prototypes with an s32 mode; battle_stage.c defines the six with u8 mode, and those prototypes
-// (in battle_stage.h) change the object.
-void BattleStageReturnAudDarkBase(s32 time, s32 mode);
-void BattleStageSetAudDarkBase(u8 dark, s32 time, s32 mode);
-void BattleStageSetAudDark(u8 dark, s32 time, s32 mode);
-void BattleStageReturnStgDarkBase(s32 time, s32 mode);
-void BattleStageSetStgDarkBase(u8 dark, s32 time, s32 mode);
-void BattleStageSetStgDark(u8 dark, s32 time, s32 mode);
+// Old-style (non-prototype) declarations of battle_stage.c's darkness setters: the calls pass the s32 mode
+// unconverted (battle_stage.c defines the parameter as u8 and converts it there).
+void BattleStageReturnAudDarkBase();
+void BattleStageSetAudDarkBase();
+void BattleStageSetAudDark();
+void BattleStageReturnStgDarkBase();
+void BattleStageSetStgDarkBase();
+void BattleStageSetStgDark();
 
 /**
  * Fades the battle stage's darkness: args are the darkness level (0-255), the fade time in frames and a mode.

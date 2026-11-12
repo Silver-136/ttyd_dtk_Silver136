@@ -24,9 +24,9 @@ void evt_msg_init(void) {
     // empty in every version
 }
 
-// FAKE: private const char* prototype; the definition takes char* (it passes msg to msgAnalize, which takes char*
-// in every version after the early demos), so a header prototype rejects the const char* arguments here without casts.
-void msgWindow_Add(const char* msg, s32 id);
+// Old-style (non-prototype) declaration: msgdrv.c defines msgWindow_Add(char* msg, s32 id), and the calls here pass
+// const char* message names.
+void msgWindow_Add();
 
 extern float __fabsf(float);
 

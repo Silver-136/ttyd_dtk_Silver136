@@ -50,9 +50,9 @@ static void DrawMenuPartyChangeButton_Sub(u32 id, f32 x, f32 y, f32 angle);
 #define FRAMES_STEP(jp, n, x) ((jp) * (x))
 #endif
 
-// FAKE: private const char* prototype; the definition (fontmgr.c) takes const s8* (game code builds with
-// -char unsigned), so the header prototype rejects this const char* argument without a cast.
-void FontDrawStringCenterMtx(Mtx mtx, const char* msg);
+// Old-style (non-prototype) declaration: fontmgr.c defines FontDrawStringCenterMtx(Mtx mtx, const s8* msg), and the
+// call here passes a const char* message.
+void FontDrawStringCenterMtx();
 
 /**
  * Angles in degrees of the command icons around the battle menu's ring, one row each for 3, 4 and 5 commands
@@ -1289,8 +1289,11 @@ static void DrawSubMenuCommonProcess(f32* x, f32* y, Mtx* iconMtx, Vec* iconPos,
         mainCursor = &wp->commandMenu.cursor[1];
     }
 
-    // FAKE: no-op (s32) cast on the min; `n = (6 <= cursor->count) ? 6 : cursor->count;` changes the object
-    n = (s32)((6 <= cursor->count) ? 6 : cursor->count);
+    if (6 <= cursor->count) {
+        n = 6;
+    } else {
+        n = cursor->count;
+    }
     prev = cursor->relPos;
     if (cursor->absPos <= cursor->relPos) {
         cursor->relPos = cursor->absPos - 1;

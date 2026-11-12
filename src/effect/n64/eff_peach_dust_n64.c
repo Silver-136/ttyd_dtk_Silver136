@@ -241,8 +241,8 @@ static void effPeachDustDisp(CameraId cameraId, void* param) {
     s32 tex;
     CameraEntry* camera;
     s32 off;
-    f32 k;
-    f32 h;
+    f32 redScale;
+    f32 greenBlueScale;
     effN64Vtx* vtx;
     GXTexObj texObj;
     Mtx tr;
@@ -291,13 +291,12 @@ static void effPeachDustDisp(CameraId cameraId, void* param) {
             off = 0;
         }
 
-        // FAKE: k and h hold the 1.4f/0.7f factors in a block of their own; the literal factors change the object
-        k = 1.4f;
-        h = 0.7f;
+        redScale = 1.4f;
+        greenBlueScale = 0.7f;
 
-        r = color_rotation_data[off++] * k;
-        g = color_rotation_data[off++] * h;
-        b = color_rotation_data[off++] * h;
+        r = color_rotation_data[off++] * redScale;
+        g = color_rotation_data[off++] * greenBlueScale;
+        b = color_rotation_data[off++] * greenBlueScale;
         if (r > 255) {
             r = 255;
         }

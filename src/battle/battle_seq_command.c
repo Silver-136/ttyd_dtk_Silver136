@@ -1174,7 +1174,7 @@ void BattleCommandDisplay_MultiItemMenuSetup(BattleWork* wp, s32 a);
 s32 BattleCommandDisplay_MultiItemMenuMain(BattleWork* wp);
 void BattleCommandDisplay_OperationMenuSetup(BattleWork* wp, s32 a);
 s32 BattleCommandDisplay_OperationMenuMain(BattleWork* wp);
-void BattleCommandDisplay_ChangePartySelectMenuSetup(BattleWork* wp);
+void BattleCommandDisplay_ChangePartySelectMenuSetup();
 s32 BattleCommandDisplay_ChangePartySelectMenuMain(BattleWork* wp);
 void BattleCommandDisplay_ProtectPartnerSelectMenuSetup(BattleWork* wp);
 void BattleCommandDisplay_ProtectPartnerSelectMenuEnd(BattleWork* wp);
@@ -1453,12 +1453,11 @@ s32 BattleCommandInput(BattleWork* work) {
                 break;
             case CMD_STATE_PARTY_SETUP:
             case CMD_STATE_PARTY_REOPEN:
-                // FAKE: calls through a cast to pass TRUE/FALSE to the one-parameter setup (it ignores them); an unused
-                // second parameter on the definition and plain calls change the object.
+                // the retail code passes TRUE/FALSE as a second argument, which the one-parameter setup ignores
                 if (state == 24) {
-                    ((void (*)(BattleWork*, s32))BattleCommandDisplay_ChangePartySelectMenuSetup)(wp, TRUE);
+                    BattleCommandDisplay_ChangePartySelectMenuSetup(wp, TRUE);
                 } else {
-                    ((void (*)(BattleWork*, s32))BattleCommandDisplay_ChangePartySelectMenuSetup)(wp, FALSE);
+                    BattleCommandDisplay_ChangePartySelectMenuSetup(wp, FALSE);
                 }
                 cmd->state = CMD_STATE_PARTY_MENU;
                 _commandRestoreRec();
