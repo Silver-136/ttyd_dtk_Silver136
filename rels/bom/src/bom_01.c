@@ -984,7 +984,7 @@ static void jump(s32 i, s32 next, f32 x, f32 y, f32 z, f32 speed, f32 gravity) {
     if (i % 20 == 0 && !(wp->flags & 1)) {
         Vec pos = (Vec){(*pose->mtx)[0][3], (*pose->mtx)[1][3], (*pose->mtx)[2][3]};
 
-        // FAKE: SFX_NAME_WORD (integer round trip) makes the front end hoist the literal address (same pointer value)
+        // sound name passed as an integer word, as in the original (only loops show it; see sfx_name_word.h)
         psndSFXOn_3D(SFX_NAME_WORD("SFX_STG7_BOMB_TOGETHER2"), &pos);
     }
 }
@@ -1099,7 +1099,7 @@ static void ext_main(void) {
                     if (irand(100) == 0) {
                         Vec p = (Vec){(*pose->mtx)[0][3], (*pose->mtx)[1][3], (*pose->mtx)[2][3]};
 
-                        // FAKE: SFX_NAME_WORD (integer round trip), see jump()
+                        // sound name passed as an integer word, as in the original (only loops show it; see sfx_name_word.h)
                         psndSFXOn_3D(SFX_NAME_WORD("SFX_STG7_BOMB_FALL1"), &p);
                     }
                 }

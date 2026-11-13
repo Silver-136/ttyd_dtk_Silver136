@@ -5616,8 +5616,8 @@ void puni_puni_main(void) {
                     case PUNI_MODE_DEAD:
                         p->flags &= ~PUNI_FLAG_STRAY;
 
-                        // FAKE: the (u32) round trip keeps the name out of constant propagation, so its address is hoisted into a saved
-                        // register before the loop as in the demo.
+                        // the name goes through the integer word, as in the original (the demo's loop hoists it; see
+                        // sfx_name_word.h)
                         puniModeDeadSfx(p, (const char*)(u32)"SFX_STG2_FIGHT_TOGE3");
                         break;
                     case PUNI_MODE_WIND:
@@ -5645,7 +5645,7 @@ void puni_puni_main(void) {
                     case PUNI_MODE_WONDER:
                         p->flags |= PUNI_FLAG_STRAY;
 
-                        // FAKE: same (u32) round trip as PUNI_MODE_DEAD.
+                        // the integer word, as for PUNI_MODE_DEAD
                         puniModeWonderSfx(p, (const char*)(u32) "SFX_STG2_SOAPBALL_BREAK1");
                         break;
                     case PUNI_MODE_FUNBARI:

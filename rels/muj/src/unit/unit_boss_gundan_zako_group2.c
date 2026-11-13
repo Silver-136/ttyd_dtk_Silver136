@@ -671,7 +671,7 @@ void zakogun_ext_main2(void) {
                 zako->state = 35;
                 zakogun_set_pose(zako, 0x2C, 1, 1);
 
-                // FAKE: SFX_NAME_WORD keeps the name's address in a saved register (sfx_name_word.h)
+                // sound name passed as an integer word, as in the original (only loops show it; see sfx_name_word.h)
                 psndSFXOn(SFX_NAME_WORD("SFX_BOSS_TEAM_3RD_ATTACK2"));
             case 35:
                 zako->pos.x += zako->vel.x;

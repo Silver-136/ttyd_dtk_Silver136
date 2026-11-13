@@ -320,8 +320,8 @@ static inline void effFallRelease(EffectEntry* effect) {
     }
 }
 
-// FAKE: the seven sfx names are spelled SFX_NAME_WORD("lit") at each call (no locals) so each becomes a hoisted
-// loop-invariant temporary; plain literals in calls are not hoisted. Same string addresses.
+// The seven sound names go through the integer word at each call, as in the original: in this loop the
+// conversion is hoisted, which is what the retail code shows (see sfx_name_word.h).
 static void effFallMain(EffectEntry* effect) {
     Vec origin;
     EffFallElem* e;

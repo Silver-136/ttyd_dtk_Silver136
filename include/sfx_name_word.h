@@ -9,9 +9,13 @@
  * and is used as the index directly. SfxNameWord is that name-or-id word.
  *
  * SFX_NAME_WORD(x) passes an id, or a name literal through the word: for a
- * literal it is the same pointer, but the compiler then treats the address as
- * a loop-invariant word and loads it once (an @ temp), which is the shape
- * some callers were compiled with. */
+ * literal it is the same pointer. The original source converted sound-name
+ * literals to this integer word at its sound calls; in compiled code the
+ * conversion only shows inside loops, where the compiler hoists the integer
+ * (a loop-invariant @ temp) instead of reloading the address at each call.
+ * Outside loops both spellings compile the same, so the source spells the
+ * conversion only where the bytes prove it (the loop sites) and leaves plain
+ * literals elsewhere. */
 typedef u32 SfxNameWord;
 #define SFX_NAME_WORD(lit) ((const char*)(SfxNameWord)(lit))
 /* the id a name parameter holds, when SFX_NAME_IS_ID (a direct s32 cast: the

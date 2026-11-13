@@ -914,7 +914,7 @@ static void senkaron_ext_main(void) {
                         pos.y = (*pose->mtx)[1][3];
                         pos.z = (*pose->mtx)[2][3];
 
-                        // FAKE: SFX_NAME_WORD keeps the name's address in a saved register (sfx_name_word.h)
+                        // sound name passed as an integer word, as in the original (only loops show it; see sfx_name_word.h)
                         psndSFXOn_3D(SFX_NAME_WORD("SFX_STG1_HONE_LANDING1"), &pos);
                     }
                 }
