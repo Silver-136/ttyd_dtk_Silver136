@@ -44,7 +44,7 @@ in `docs/FAKES.md` and in the mweppc review record.
   114 are tou_03, which cannot include the evt headers because it defines its own out-of-line GXSetTexCoordGen).
   Most of the rest are retail mismatches the bytes prove: different argument counts (partyWalkInit, winBadgeExit,
   effStageClearEndChk, effThunderflareN64Entry), narrowed parameters or returns (BattleStageSet*Dark*,
-  psndSFX_pit/vol, msgWindow_Entry, hankakuSearch per version), Vec/GXColor by value vs pointer
+  psndSFX_pit/vol, hankakuSearch per version), Vec/GXColor by value vs pointer
   (cloudGetBreathPower, mapObjSetColor, mapSetBlend, partyNrmToAngle, marioCreviceWallChk), argument order that
   changes code (intpl_sub, marioSetForceMove, gor_irai's FontDrawString).
 - From the certification pilot (2026-10-27): qqsort has no live prototype (system.h's is commented out with a

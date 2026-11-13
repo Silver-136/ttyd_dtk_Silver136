@@ -9,7 +9,6 @@
 #include <math.h>
 #include "sfx_name_word.h"
 
-#define _MATH_H_
 #include "pmario_sound.h"
 #include "sound.h"
 #include <string.h>

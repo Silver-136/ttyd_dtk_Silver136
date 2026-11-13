@@ -32136,7 +32136,6 @@ float_0p5_8041dc98 = .sdata2:0x80424000; // type:object size:0x4 scope:global al
 @656 = .sdata2:0x804242D0; // type:object size:0x4 scope:local align:4 data:float
 @666 = .sdata2:0x804242D4; // type:object size:0x4 scope:local align:4 data:float
 @683 = .sdata2:0x804242D8; // type:object size:0x4 scope:local align:4 data:float
-gap_09_8041DF6C_sdata2$157 = .sdata2:0x804242DC; // type:object size:0x4 scope:local
 @423 = .sdata2:0x804242E0; // type:object size:0x4 scope:local align:4 data:float
 @424 = .sdata2:0x804242E4; // type:object size:0x4 scope:local align:4 data:float
 @425 = .sdata2:0x804242E8; // type:object size:0x4 scope:local align:4 data:float

@@ -4,7 +4,6 @@
 #include "musyx/platform.h"
 #include "musyx/version.h"
 
-#include <math.h>
 #include <stddef.h>
 
 #ifdef __cplusplus

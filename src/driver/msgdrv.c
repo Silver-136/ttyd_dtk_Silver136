@@ -1857,7 +1857,7 @@ static void msgPageInc(smartEntry* smart) {
  * parses the text and sizes the window for its type; returns the window id.
  * callback is a function (s32 event, smartEntry*) the window notifies, 0 for none.
  */
-s32 msgWindow_Entry(const char* msg, s32 callback, u16 priority) {
+s32 msgWindow_Entry(const char* msg, s32 callback, s16 priority) {
     WindowEntry* window;
     char* copy;
     MsgWinData* data;

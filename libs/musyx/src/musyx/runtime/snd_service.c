@@ -1,4 +1,5 @@
 #include "musyx/musyx.h"
+#include <math.h>
 #include "musyx/platform.h"
 #include "musyx/snd.h"
 #include "musyx/synth.h"

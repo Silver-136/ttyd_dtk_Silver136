@@ -166,7 +166,7 @@ void windowReInit(void) {
 }
 
 /** Claims a free window slot with the given draw priority and returns its id, or -1 if all 7 are in use. */
-s32 windowEntry(u16 priority) {
+s32 windowEntry(s16 priority) {
     WindowEntry* entry;
     int i;
 

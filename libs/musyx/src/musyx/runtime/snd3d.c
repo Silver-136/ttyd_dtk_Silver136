@@ -1,6 +1,7 @@
 #define SND3D_LISTENER_NO_ROOM 1
 #define SND3D_EMITTER_NO_ROOM 1
 #include "musyx/musyx.h"
+#include <math.h>
 
 #include "musyx/hardware.h"
 #include "musyx/sal.h"

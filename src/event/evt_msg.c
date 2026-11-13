@@ -53,9 +53,7 @@ static s32 _evt_msg_print(EventEntry* event, BOOL isFirstCall, s32 flags, const 
             msg = "DIRECT";
         }
 
-        // FAKE: the priority goes in sign-extended from s16 through an s32 parameter; a call through msgdrv.h's
-        // u16 prototype changes the object.
-        event->printWindowId = ((s32 (*)(const char*, s32, s32))msgWindow_Entry)(m, callback, (s16)event->msgPriority);
+        event->printWindowId = msgWindow_Entry(m, callback, event->msgPriority);
         event->msgPriority = 0;
         win = windowGetPointer(event->printWindowId);
         MSG_WIN_DATA(win)->tag = msg;

@@ -57,7 +57,7 @@ struct WindowEntry {
 void windowInit(void);
 void windowTexSetup(void);
 void windowReInit(void);
-s32 windowEntry(u16 priority);
+s32 windowEntry(s16 priority);
 BOOL windowDelete(WindowEntry* entry);
 BOOL windowDeleteID(s32 id);
 void windowMain(void);

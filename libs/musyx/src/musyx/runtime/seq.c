@@ -1,3 +1,5 @@
+#include <math.h>
+
 #include "musyx/seq.h"
 
 #include "musyx/assert.h"

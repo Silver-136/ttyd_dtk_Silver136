@@ -1,5 +1,3 @@
-// skip <math.h> (pulled in by musyx.h): its inline sqrt/sqrtf emit unused localstatics into .sdata2
-#define _MATH_H_
 #include <string.h>
 
 #include "musyx/musyx.h"

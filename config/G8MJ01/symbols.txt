@@ -31324,7 +31324,6 @@ float_0p1_8041df5c = .sdata2:0x8041DF5C; // type:object size:0x4 align:4 data:fl
 float_22_8041df60 = .sdata2:0x8041DF60; // type:object size:0x4 align:4 data:float
 float_neg1000_8041df64 = .sdata2:0x8041DF64; // type:object size:0x4 align:4 data:float
 float_35_8041df68 = .sdata2:0x8041DF68; // type:object size:0x4 align:4 data:float
-float_0_8041df6c = .sdata2:0x8041DF6C; // type:object size:0x4 data:float
 float_0_8041df70 = .sdata2:0x8041DF70; // type:object size:0x4 align:4 data:float
 float_70_8041df74 = .sdata2:0x8041DF74; // type:object size:0x4 align:4 data:float
 float_180_8041df78 = .sdata2:0x8041DF78; // type:object size:0x4 align:4 data:float

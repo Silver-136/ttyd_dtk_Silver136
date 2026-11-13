@@ -3,6 +3,7 @@
 #include "musyx/synth_dbtab.h"
 
 #include <float.h>
+#include <math.h>
 
 extern float powf(float, float);
 

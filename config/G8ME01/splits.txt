@@ -1144,7 +1144,7 @@ party/party_vivian.c:
 	.rodata     start:0x802F8948 end:0x802F89C0
 	.data       start:0x8038E868 end:0x8038E8B8
 	.sbss       start:0x8041EC50 end:0x8041EC58
-	.sdata2     start:0x80424270 end:0x804242E0
+	.sdata2     start:0x80424270 end:0x804242DC
 
 party/party_cloud.c:
 	.text       start:0x801868F0 end:0x80188260

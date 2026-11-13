@@ -2,7 +2,6 @@
 // DVD, reverb, output mode, and loading the sound project data into ARAM.
 
 #include "version.h"
-#define _MATH_H_ // skip math.h (its sqrtf statics are not in this TU)
 #include "sound.h"
 #include <dolphin/os.h>
 #include "manager/dvdmgr.h"
