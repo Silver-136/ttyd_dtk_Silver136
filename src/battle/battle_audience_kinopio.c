@@ -345,7 +345,7 @@ static void BattleAudienceCtrlProcessKinopioWait(s32 index, u8 front) {
                                 if (n != -1) {
                                     BattleAudienceGetPtr(n);
                                     if (m->type != AUDIENCE_PIRANHA_PLANT) {
-                                        if ((u8)BattleAudience_GetExist(n) == 1) {
+                                        if (BattleAudience_GetExist(n) == 1) {
                                             BattleAudience_ChangeStatus(index, AUDIENCE_STATUS_WAIT_JUMP);
                                         }
                                     }
@@ -648,7 +648,7 @@ static void BattleAudienceCtrlProcessKinopioDamage(s32 index, u8 front) {
             if (BattleAudience_GetAnimEnd(index) == 1) {
                 m->baseScale.y = 1.0f;
                 m->timer = 0;
-                if ((u8)BattleAudience_GetEscapeChangeOK(index) == 1) {
+                if (BattleAudience_GetEscapeChangeOK(index) == 1) {
                     BattleAudience_ChangeStatus(index, AUDIENCE_STATUS_ESCAPE);
                     psndSFXOn_3D("SFX_AUDIENCE_PANIC_SCREAM2", &m->position);
                 } else {
@@ -1388,7 +1388,7 @@ static void BattleAudienceCtrlProcessKinopioFireSub(s32 index) {
     BattleAudienceMember* m = BattleAudienceGetPtr(index);
     if (m->flags & AUDIENCE_MEMBER_FLAG_WIDE_SUB) {
         BattleAudienceCtrlProcessKinopioFireSub(index - 1);
-    } else if ((u8)BattleAudience_GetSysCtrl(index)) {
+    } else if (BattleAudience_GetSysCtrl(index)) {
         if (m->type == AUDIENCE_BULKY_BOBOMB) {
             if (m->status != AUDIENCE_STATUS_FIRE) {
                 BattleAudience_ChangeStatus(index, AUDIENCE_STATUS_FIRE);
@@ -1487,7 +1487,7 @@ static void BattleAudienceCtrlProcessKinopioEat(s32 index, u8 front) {
             } else {
                 cnt = 0;
                 for (i = 0; i <= 59; i++) {
-                    if (!(u8)BattleAudience_GetExist(i) && !(BattleAudienceGetPtr(i)->flags & AUDIENCE_MEMBER_FLAG_WIDE_SUB) &&
+                    if (!BattleAudience_GetExist(i) && !(BattleAudienceGetPtr(i)->flags & AUDIENCE_MEMBER_FLAG_WIDE_SUB) &&
                         BattleAudienceDetectPakkunEatTarget(i) != -1) {
                         list[cnt] = i;
                         cnt++;

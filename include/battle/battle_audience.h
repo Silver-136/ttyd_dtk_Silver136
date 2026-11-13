@@ -414,8 +414,8 @@ void BattleAudience_ChangeStatus(s32 index, s32 status);
 
 // Every caller reads the results of GetExist, GetSysCtrl and GetEscapeChangeOK as u8 (`(u8)` casts), but the
 // definitions return int: declared u8, they would mask their result to a byte, which the game code does not do.
-BOOL BattleAudience_GetExist(s32 id);
-BOOL BattleAudience_GetSysCtrl(s32 index);
+u8 BattleAudience_GetExist(s32 id);
+u8 BattleAudience_GetSysCtrl(s32 index);
 u8 BattleAudience_GetWaiting(s32 index);
 s32 BattleAudience_HaitiRandForFallObject(void);
 s32 BattleAudience_GetAudienceNum(void);
@@ -498,7 +498,7 @@ void BattleAudienceSoundSetVol(s32 index, u8 vol, s32 length);
 BOOL BattleAudience_GetAnimEnd(s32 index);
 s32 BattleAudienceSoundCheck(s32 index);
 
-BOOL BattleAudience_GetEscapeChangeOK(s32 index);
+u8 BattleAudience_GetEscapeChangeOK(s32 index);
 
 // Names from LLCOOLT's tree.
 #define AUDIENCE_ITEM_MAX 100

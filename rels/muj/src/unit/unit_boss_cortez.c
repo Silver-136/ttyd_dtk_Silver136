@@ -2970,7 +2970,7 @@ static USER_FUNC(_cortez_check_drain_audience) {
 
         // Select the ten right-hand seats from each of ten twenty-seat rows.
         seat = 10 + (i / 10) * 20 + i % 10;
-        if ((u8)BattleAudience_GetExist(seat)) {
+        if (BattleAudience_GetExist(seat)) {
             work->audienceId[i] = seat;
             work->count++;
         }

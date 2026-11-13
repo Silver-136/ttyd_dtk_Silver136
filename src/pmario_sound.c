@@ -10495,21 +10495,21 @@ sgfound:
         if (sfx[0]->flags & PSFX_FLAG_FADE_OUT) {
             f = e->fxId;
             if (f & SFX_FLAG_STREAM) {
-                r = (u8)SoundSSGetVolCh(sfx[0]->channel);
+                r = SoundSSGetVolCh(sfx[0]->channel);
                 r = (r * fade) / 127;
                 SoundSSSetVolCh(sfx[0]->channel, r);
                 if (r == 0) {
                     psndSFXOff(i);
                 }
             } else if (f & SFX_FLAG_SONG) {
-                r = (u8)SoundSongGetVolCh(sfx[0]->channel);
+                r = SoundSongGetVolCh(sfx[0]->channel);
                 r = (r * fade) / 127;
                 SoundSongSetVolCh(sfx[0]->channel, r);
                 if (r == 0) {
                     psndSFXOff(i);
                 }
             } else {
-                r = (u8)SoundEfxGetVolume(sfx[0]->channel);
+                r = SoundEfxGetVolume(sfx[0]->channel);
                 r = (r * fade) / 127;
                 SoundEfxSetVolume(sfx[0]->channel, r);
                 if (r == 0) {

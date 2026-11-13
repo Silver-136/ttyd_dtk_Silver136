@@ -5411,13 +5411,13 @@ static USER_FUNC(queen_hp_drain_4_evt) {
             event->userdata[1] = 0;
             event->userdata[0]++;
             for (i = 0; i < AUDIENCE_MEMBER_MAX; i++) {
-                if ((u8)BattleAudience_GetSysCtrl(i)) {
+                if (BattleAudience_GetSysCtrl(i)) {
                     BattleAudience_SetAnim(i, AUD_ANIM_DAMAGE_FRONT, TRUE);
                 }
             }
         case 1:
             for (i = 0; i < AUDIENCE_MEMBER_MAX; i++) {
-                if ((u8)BattleAudience_GetSysCtrl(i)) {
+                if (BattleAudience_GetSysCtrl(i)) {
                     BattleAudience_GetPosition(i, &x, &y, &z);
                     BattleAudience_SetPosition(i, x, y - 1.0f, z);
                 }
@@ -5429,7 +5429,7 @@ static USER_FUNC(queen_hp_drain_4_evt) {
             break;
         case 2:
             for (i = 0; i < AUDIENCE_MEMBER_MAX; i++) {
-                if ((u8)BattleAudience_GetSysCtrl(i)) {
+                if (BattleAudience_GetSysCtrl(i)) {
                     BattleAudience_Delete(i);
                     BattleAudienceAddTargetNum(0.0f, -1.0f);
                 }
@@ -5592,7 +5592,7 @@ static USER_FUNC(queen_kankyaku_delete_evt) {
     s32 i;
 
     for (i = 0; i < AUDIENCE_MEMBER_MAX; i++) {
-        if ((u8)BattleAudience_GetSysCtrl(i)) {
+        if (BattleAudience_GetSysCtrl(i)) {
             BattleAudience_Delete(i);
             BattleAudienceAddTargetNum(0.0f, -1.0f);
         }

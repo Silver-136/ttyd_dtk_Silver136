@@ -2358,12 +2358,12 @@ void SoundSSSetVolCh(s32 chan, u8 vol) {
 }
 
 /** Returns the volume of stream chan, 0 when none plays. */
-s32 SoundSSGetVolCh(s32 chan) {
+u8 SoundSSGetVolCh(s32 chan) {
     SoundStream* stream;
 
     stream = &sound.streams[chan];
     if (stream->flags) {
-        return (s32)stream->vol;
+        return stream->vol;
     } else {
         return 0;
     }

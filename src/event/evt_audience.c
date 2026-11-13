@@ -407,7 +407,7 @@ USER_FUNC(evt_audience_abnormal_natural_all) {
     i = 0;
     member = BattleAudienceGetPtr(0);
     for (; i < AUDIENCE_MEMBER_MAX; i++, member++) {
-        if ((u8)BattleAudience_GetSysCtrl(i)) {
+        if (BattleAudience_GetSysCtrl(i)) {
             status = member->status;
             if ((status <= AUDIENCE_STATUS_WAIT_JUMP || (u8)(status - AUDIENCE_STATUS_JOY_RAISE_ARM) <= 2 || status == AUDIENCE_STATUS_ITEM_ON) && irand(100) < chance) {
                 BattleAudience_ChangeStatus(i, AUDIENCE_STATUS_SLEEP);

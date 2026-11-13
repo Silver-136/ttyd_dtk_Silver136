@@ -720,7 +720,7 @@ USER_FUNC(aud_suikomi) {
         }
         list = BattleAlloc(sizeof(s32) * 20);
         for (i = 0; i < AUDIENCE_MEMBER_MAX; i++) {
-            if ((u8)BattleAudience_GetExist(i) == TRUE) {
+            if (BattleAudience_GetExist(i) == TRUE) {
                 ids[n] = i;
                 n++;
             }

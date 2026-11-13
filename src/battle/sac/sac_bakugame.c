@@ -884,7 +884,7 @@ state_end:
                 }
                 for (i = 0; i < AUDIENCE_MEMBER_MAX; i++) {
                     m = BattleAudienceGetPtr(i);
-                    if (bakuGameAudienceCanThrowPos(i) == 1 && (u8)BattleAudience_GetExist(i) && (m->flags & AUDIENCE_MEMBER_FLAG_NO_SYS_CTRL)) {
+                    if (bakuGameAudienceCanThrowPos(i) == 1 && BattleAudience_GetExist(i) && (m->flags & AUDIENCE_MEMBER_FLAG_NO_SYS_CTRL)) {
                         BattleAudience_GetHomePosition(i, &x, &y, &z);
                         BattleAudience_SetPosition(i, x, y + w->audY, z);
                         w->pos.y = 20.0f + (y + w->audY);
@@ -1067,7 +1067,7 @@ state_end:
                 }
                 for (i = 0; i < AUDIENCE_MEMBER_MAX; i++) {
                     m = BattleAudienceGetPtr(i);
-                    if (bakuGameAudienceCanThrowPos(i) == 1 && (u8)BattleAudience_GetExist(i) && (m->flags & AUDIENCE_MEMBER_FLAG_NO_SYS_CTRL)) {
+                    if (bakuGameAudienceCanThrowPos(i) == 1 && BattleAudience_GetExist(i) && (m->flags & AUDIENCE_MEMBER_FLAG_NO_SYS_CTRL)) {
                         BattleAudience_GetHomePosition(i, &x, &y, &z);
                         BattleAudience_SetPosition(i, x, y + w->audY, z);
                     }
@@ -1271,7 +1271,7 @@ static void bakuGameAudienceSurpriseReset(void) {
     BattleAudienceMember* m;
 
     for (i = 0; i < AUDIENCE_MEMBER_MAX; i++) {
-        if ((u8)BattleAudience_GetExist(i)) {
+        if (BattleAudience_GetExist(i)) {
             m = BattleAudienceGetPtr(i);
             m->angle = 90.0f;
             if (!bakuGameAudienceCanThrowPos(i)) {

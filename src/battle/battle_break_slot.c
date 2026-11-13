@@ -560,7 +560,7 @@ void BattleBreakSlot_Main(void) {
                     btl_camera_shake_h(BTL_CAM_PRI_NORMAL, 2.0f, 2.0f, 1000, 0);
                 }
                 for (k = 0; k < AUDIENCE_MEMBER_MAX; k++) {
-                    if ((u8)BattleAudience_GetExist(k) == 1) {
+                    if (BattleAudience_GetExist(k) == 1) {
                         if (BattleAudienceGetPtr(k)->status == AUDIENCE_STATUS_ENTER || BattleAudienceGetPtr(k)->status == AUDIENCE_STATUS_ESCAPE) {
                             slot->phaseTimer--;
                             break;
