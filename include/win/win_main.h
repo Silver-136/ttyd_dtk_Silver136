@@ -325,6 +325,18 @@ void winWazaGX(WindowWork* wp, s32 type, f32 x, f32 y, f32 w, f32 h);
 void winKageGX(WindowWork* wp, f32 x, f32 y, f32 z, f32 scale, GXColor color);
 void winBookGX(WindowWork* wp, s32 type, f32 x, f32 y);
 void winHakoGX(WindowWork* wp, s32 type, f32 x, f32 y);
+// winSortEntry's type: the index of the list's sort options in win_root.c's sort_data (sort_1 .. sort_8).
+typedef enum WinSortType {
+    WIN_SORT_ITEMS = 0,
+    WIN_SORT_IMPORTANT_ITEMS = 1,
+    WIN_SORT_BADGES = 2,
+    WIN_SORT_EQUIPPED_BADGES = 3,
+    WIN_SORT_BADGE_LOG = 4,
+    WIN_SORT_RECIPE_LOG = 5,
+    WIN_SORT_TATTLE_LOG = 6,
+    WIN_SORT_MAIL = 7,
+} WinSortType;
+
 void winSortEntry(WindowWork* wp, s32 type, f32 x, f32 y);
 BOOL winSortWait(WindowWork* wp);
 

@@ -468,7 +468,11 @@ void iconDispGx(Vec* position, s16 flags, u16 iconId, f32 scale) {
  * Immediately draws icon iconId with a caller-built matrix (in the current camera's space), opaque white;
  * the battle menus, audience, windows, shops and some effects use it.
  */
+#if VERSION >= VERSION_US
+void iconDispGx2(Mtx mtx, s16 flags, u16 iconId) {
+#else
 void iconDispGx2(Mtx mtx, s16 flags, s16 iconId) {
+#endif
     IconEntry entry;
     Mtx m;
     CameraEntry* camera;
@@ -488,9 +492,8 @@ void iconDispGx2(Mtx mtx, s16 flags, s16 iconId) {
     entry.color = (GXColor){0xFF, 0xFF, 0xFF, 0xFF};
 
 #if VERSION >= VERSION_US
-    /* FAKE: (u16)(s16) round-trip is a no-op on the u16 field (the s32 id goes through s16 first); it steers MWCC's register choice */
-    ep->iconId = (u16)(s16)iconId;
-    data = iconGetBinData((u16)iconId);
+    ep->iconId = iconId;
+    data = iconGetBinData(iconId);
 #else
     ep->iconId = (id = iconId);
     data = iconGetBinData(id);

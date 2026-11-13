@@ -311,7 +311,11 @@ USER_FUNC(evt_win_one_message) {
 static void coin_disp(WinMgrEntry* entry) {
     CoinWin* w;
     s32 target;
+#if VERSION >= VERSION_US
+    u16 icon;
+#else
     s16 icon;
+#endif
     Mtx pos;
     Mtx scale;
     s32 diff;

@@ -917,7 +917,7 @@ s32 winLogMain(WindowWork* w) {
                 w->log.badge.idx = w->log.badge.cursor / 28;
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_TABI_MOVE1 | PSND_SFX_BYPASS_MUTE));
             } else if (w->buttonTrg & PAD_TRIGGER_Z) {
-                winSortEntry(w, 4, -310.0f, 150.0f);
+                winSortEntry(w, WIN_SORT_BADGE_LOG, -310.0f, 150.0f);
                 w->savedState = w->log.state;
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
                 w->log.state = 1000;
@@ -976,7 +976,7 @@ s32 winLogMain(WindowWork* w) {
                 w->log.recipe.idx = w->log.recipe.cursor / 28;
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_TABI_MOVE1 | PSND_SFX_BYPASS_MUTE));
             } else if (w->buttonTrg & PAD_TRIGGER_Z) {
-                winSortEntry(w, 5, -310.0f, 150.0f);
+                winSortEntry(w, WIN_SORT_RECIPE_LOG, -310.0f, 150.0f);
                 w->savedState = w->log.state;
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
                 w->log.state = 1000;
@@ -1046,7 +1046,7 @@ s32 winLogMain(WindowWork* w) {
                     w->log.mono = monosiriInit(w->log.enemy[w->log.enemySel].id, -60.0f, 150.0f);
                 }
             } else if (w->buttonTrg & PAD_TRIGGER_Z) {
-                winSortEntry(w, 6, -310.0f, 150.0f);
+                winSortEntry(w, WIN_SORT_TATTLE_LOG, -310.0f, 150.0f);
                 w->savedState = w->log.state;
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
                 w->log.state = 1001;

@@ -145,7 +145,6 @@ s32 winBadgeMain(WindowWork* w) {
     s32 cnt;
     s32 pages;
     s32 itemId;
-    s32 m;
 
     switch (w->badge.state) {
         case 0:
@@ -173,13 +172,7 @@ s32 winBadgeMain(WindowWork* w) {
                 w->badge.state = 10;
                 break;
             } else if (w->buttonTrg & PAD_TRIGGER_Z) {
-                // FAKE: an untyped copy of w is loaded into r3 before m is chosen (a WindowWork* copy or w itself is propagated into the call)
-                void* p = w;
-                m = 3;
-                if (w->badge.tab == 0) {
-                    m = 2;
-                }
-                winSortEntry(p, m, -310.0f, 150.0f);
+                winSortEntry(w, w->badge.tab == 0 ? WIN_SORT_BADGES : WIN_SORT_EQUIPPED_BADGES, -310.0f, 150.0f);
                 w->savedState = w->badge.state;
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
                 w->badge.state = 1000;
@@ -254,13 +247,7 @@ s32 winBadgeMain(WindowWork* w) {
                 w->badge.sel[tab]++;
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_TABI_MOVE1 | PSND_SFX_BYPASS_MUTE));
             } else if (w->buttonTrg & PAD_TRIGGER_Z) {
-                // FAKE: an untyped copy of w is loaded into r3 before m is chosen (a WindowWork* copy or w itself is propagated into the call)
-                void* p = w;
-                m = 3;
-                if (tab == 0) {
-                    m = 2;
-                }
-                winSortEntry(p, m, -310.0f, 150.0f);
+                winSortEntry(w, tab == 0 ? WIN_SORT_BADGES : WIN_SORT_EQUIPPED_BADGES, -310.0f, 150.0f);
                 w->savedState = w->badge.state;
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
                 w->badge.state = 1000;

@@ -530,7 +530,7 @@ s32 winItemMain(WindowWork* w) {
                     psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_MAIL_MOVE1 | PSND_SFX_BYPASS_MUTE));
                 }
             } else if (w->buttonTrg & PAD_TRIGGER_Z) {
-                winSortEntry(w, 7, w->item.mailTgtX, w->item.mailTgtY - 60.0f);
+                winSortEntry(w, WIN_SORT_MAIL, w->item.mailTgtX, w->item.mailTgtY - 60.0f);
                 w->savedState = w->item.state;
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
                 w->item.state = 1000;

@@ -1857,7 +1857,7 @@ void fbatEncountCheck(void) {
     s32 total = wp->total;
     MarioWork* mario = marioGetPtr();
     FieldBattleData* data;
-    NpcEntry* npc;
+    NpcEntry* npc = NULL;
     u32* kind;
     s32 i;
     NpcEntry* talk;
@@ -1867,9 +1867,6 @@ void fbatEncountCheck(void) {
         return;
     }
     if (!(wp->flags & NPC_WORK_ALWAYS_ENCOUNT)) {
-        // FAKE: dead test that reads the uninitialised npc; removing it changes the object
-        if ((!npc->width) && (!npc->width)) {
-        }
         if (marioKeyOffChk() || marioCtrlOffChk()) {
             return;
         }

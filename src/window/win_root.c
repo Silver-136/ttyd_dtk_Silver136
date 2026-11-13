@@ -2620,7 +2620,7 @@ static void winSortGX(WindowWork* wp) {
     GXLoadPosMtxImm(camGetPtr(CAMERA_2D)->view, GX_PNMTX0);
     GXSetCurrentMtx(GX_PNMTX0);
 
-    if (wp->sortType == 7) {
+    if (wp->sortType == WIN_SORT_MAIL) {
         GXSetScissor((u32)(16.0f + (16.0f + (304.0f + wp->item.mailX))),
                      (u32)(40.0f + (240.0f - wp->item.mailY)), 0x200, 0xC0);
     }
@@ -2665,7 +2665,7 @@ static void winSortGX(WindowWork* wp) {
         }
     }
 
-    if (wp->sortType == 7) {
+    if (wp->sortType == WIN_SORT_MAIL) {
         GXSetScissor(0, 0, 0x260, 0x1E0);
     }
 }
