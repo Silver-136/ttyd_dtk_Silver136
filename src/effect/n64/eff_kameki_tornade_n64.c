@@ -16,23 +16,6 @@
 #include "eff/eff_n64.h"
 #include "dolphin/os.h"
 
-/** Copies vertex `src` to `dst` and transforms its position by `mtx` (fast-cast s16 <-> f32 conversions). */
-// Original name and size (0x124) from the JP demo map (UNUSED there: every call is inlined).
-static void vtx_copy(effN64Vtx* dst, effN64Vtx* src, Mtx mtx) {
-    Vec v;
-
-    memcpy(dst, src, sizeof(effN64Vtx));
-    OSInitFastCast();
-    OSs16tof32(&dst->x, &v.x);
-    OSs16tof32(&dst->y, &v.y);
-    OSs16tof32(&dst->z, &v.z);
-    PSMTXMultVec(mtx, &v, &v);
-    OSInitFastCast();
-    OSf32tos16(&v.x, &dst->x);
-    OSf32tos16(&v.y, &dst->y);
-    OSf32tos16(&v.z, &dst->z);
-}
-
 static void effKamekiTornadeMain(EffectEntry* effect);
 static void effKamekiTornadeDisp(CameraId cameraId, void* payload);
 
@@ -150,6 +133,23 @@ static void effKamekiTornadeMain(EffectEntry* effect) {
         work->ang[i] += work->angVel[i];
     }
     dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effKamekiTornadeDisp, effect);
+}
+
+/** Copies vertex `src` to `dst` and transforms its position by `mtx` (fast-cast s16 <-> f32 conversions). */
+// Original name and size (0x124) from the JP demo map (UNUSED there: every call is inlined).
+static void vtx_copy(effN64Vtx* dst, effN64Vtx* src, Mtx mtx) {
+    Vec v;
+
+    memcpy(dst, src, sizeof(effN64Vtx));
+    OSInitFastCast();
+    OSs16tof32(&dst->x, &v.x);
+    OSs16tof32(&dst->y, &v.y);
+    OSs16tof32(&dst->z, &v.z);
+    PSMTXMultVec(mtx, &v, &v);
+    OSInitFastCast();
+    OSf32tos16(&v.x, &dst->x);
+    OSf32tos16(&v.y, &dst->y);
+    OSf32tos16(&v.z, &dst->z);
 }
 
 /**

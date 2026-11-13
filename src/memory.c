@@ -138,6 +138,40 @@ void memInit(void) {
     }
 }
 
+void _mapAllocInit(void);
+
+/**
+ * Throws away everything in a heap by destroying and recreating it;
+ * for HEAP_MALLOC also resets the map heap allocator.
+ */
+void memClear(HEAP_TYPE heap) {
+    OSDestroyHeap(heapHandle[heap]);
+    OSCreateHeap(heapStart[heap], heapEnd[heap]);
+    if (heap == HEAP_MALLOC) {
+        _mapAllocInit();
+    }
+}
+
+/**
+ * Allocates size bytes from one of the game heaps, zeroed and flushed from the data cache;
+ * NULL when the heap is full.
+ */
+void* __memAlloc(HEAP_TYPE heap, u32 size) {
+    void* ptr;
+
+    ptr = OSAllocFromHeap(heapHandle[heap], size);
+    if (ptr) {
+        memset(ptr, 0, size);
+        DCFlushRange(ptr, size);
+    }
+    return ptr;
+}
+
+/** Returns a block from __memAlloc to its heap. */
+void __memFree(HEAP_TYPE heap, void* ptr) {
+    OSFreeToHeap(heapHandle[heap], ptr);
+}
+
 /**
  * Turns the whole HEAP_MALLOC heap into one free map heap block for _mapAlloc.
  * JP and the early demos also reset the allocation id counter.
@@ -177,38 +211,6 @@ void _mapAllocInit(void) {
     mapalloc_size = size;
     COUNT = 0;
 #endif
-}
-
-/**
- * Throws away everything in a heap by destroying and recreating it;
- * for HEAP_MALLOC also resets the map heap allocator.
- */
-void memClear(HEAP_TYPE heap) {
-    OSDestroyHeap(heapHandle[heap]);
-    OSCreateHeap(heapStart[heap], heapEnd[heap]);
-    if (heap == HEAP_MALLOC) {
-        _mapAllocInit();
-    }
-}
-
-/**
- * Allocates size bytes from one of the game heaps, zeroed and flushed from the data cache;
- * NULL when the heap is full.
- */
-void* __memAlloc(HEAP_TYPE heap, u32 size) {
-    void* ptr;
-
-    ptr = OSAllocFromHeap(heapHandle[heap], size);
-    if (ptr) {
-        memset(ptr, 0, size);
-        DCFlushRange(ptr, size);
-    }
-    return ptr;
-}
-
-/** Returns a block from __memAlloc to its heap. */
-void __memFree(HEAP_TYPE heap, void* ptr) {
-    OSFreeToHeap(heapHandle[heap], ptr);
 }
 
 #if VERSION >= VERSION_US

@@ -30,6 +30,21 @@ typedef struct TwodEntry {
 static TwodEntry* twodPtr;
 static s32 twodID;
 
+/** Finds the overlay entry with the given name, or NULL. */
+// Original name and size (0x80) from the JP demo map (UNUSED there: every call is inlined).
+TwodEntry* twodNameToPtr(const char* name) {
+    s32 i;
+    TwodEntry* p;
+
+    for (i = 0; i < 100; i++) {
+        p = &twodPtr[i];
+        if (strcmp(p->name, name) == 0) {
+            return p;
+        }
+    }
+    return NULL;
+}
+
 /**
  * Draws every visible 2D overlay entry: an icon, or (id top bit set) a text string with a black shadow,
  * at its base position plus offset.
@@ -151,21 +166,6 @@ USER_FUNC(evt_twoddisp_entry) {
         }
     }
     return EVT_RETURN_DONE;
-}
-
-/** Finds the overlay entry with the given name, or NULL. */
-// Original name and size (0x80) from the JP demo map (UNUSED there: every call is inlined).
-TwodEntry* twodNameToPtr(const char* name) {
-    s32 i;
-    TwodEntry* p;
-
-    for (i = 0; i < 100; i++) {
-        p = &twodPtr[i];
-        if (strcmp(p->name, name) == 0) {
-            return p;
-        }
-    }
-    return NULL;
 }
 
 /** Sets the offset of overlay args[0] to (args[1], args[2]), added to its base position. */

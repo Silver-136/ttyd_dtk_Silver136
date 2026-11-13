@@ -51,37 +51,6 @@ static inline BOOL marioChkBeroInl(HitEntry* hit) {
     return mario->currMotionId == MARIO_MOTION_SHIP;
 }
 
-/**
- * Turns a surface normal (nx, ny, nz) into Mario's groundRot tilt (x and z, degrees rounded to 0.01)
- * and returns the surface's slope in degrees from horizontal (0 = flat floor, 90 = wall, 180 = flat ceiling).
- */
-// Original names and sizes (_ABCtoAngleY 0x234, ABCtoAngleY 0x210) from the JP demo map (UNUSED there: every
-// call is inlined).
-static f32 _ABCtoAngleY(f32 nx, f32 ny, f32 nz) {
-    MarioWork* mario = marioGetPtr();
-    mario->groundRot.x = (s32)(100.0f * (angleABf(0.0f, 0.0f, 100.0f * nz, 100.0f * ny) - 180.0f) + 0.5f) / 100.0f;
-    mario->groundRot.y = 0.0f;
-    mario->groundRot.z = (s32)(100.0f * (angleABf(0.0f, 0.0f, 100.0f * nx, 100.0f * ny) - 180.0f) + 0.5f) / 100.0f;
-    return angleABf(0.0f, 0.0f, sqrtf(nx * nx + nz * nz), -ny);
-}
-
-/** Slides a move (vx, vz) along a wall with normal (nx, nz): the move minus its part into the wall, at half speed. */
-// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
-static void _reflect(f32 vx, f32 nx, f32 vz, f32 nz, f32* mx, f32* mz) {
-    f32 dot = vx * nx + vz * nz;
-    *mx = 0.5f * (vx - dot * nx);
-    *mz = 0.5f * (vz - dot * nz);
-}
-
-/** _ABCtoAngleY for a normal vector. */
-static f32 ABCtoAngleY(Vec* nrm) {
-    MarioWork* mario = marioGetPtr();
-    mario->groundRot.x = (s32)(100.0f * (angleABf(0.0f, 0.0f, 100.0f * nrm->z, 100.0f * nrm->y) - 180.0f) + 0.5f) / 100.0f;
-    mario->groundRot.y = 0.0f;
-    mario->groundRot.z = (s32)(100.0f * (angleABf(0.0f, 0.0f, 100.0f * nrm->x, 100.0f * nrm->y) - 180.0f) + 0.5f) / 100.0f;
-    return angleABf(0.0f, 0.0f, sqrtf(nrm->x * nrm->x + nrm->z * nrm->z), -nrm->y);
-}
-
 /** Mario's collision height, or the riding partner's height (partyGetHeight) while he is on Yoshi. */
 // Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
 f32 marioGetHeight(void) {
@@ -278,35 +247,6 @@ HitEntry* marioHitCheckVec(Vec* pos, Vec* dir, Vec* outPos, Vec* outNrm, f32* di
     return marioHitCheckVecInl(pos, dir, outPos, outNrm, dist);
 }
 
-/**
- * Scalar wrapper of marioHitCheckVecInl: casts Mario's ray from (x, y, z) along (dx, dy, dz) for up to *dist
- * and returns the hit position, normal and distance through the pointers. Used by the plane and roll motions.
- */
-HitEntry* marioHitCheck(f32* ox, f32* oy, f32* oz, f32* dist, f32* nx, f32* ny, f32* nz, f32 x, f32 y, f32 z, f32 dx,
-                        f32 dy, f32 dz) {
-    Vec outPos, outNrm;
-    Vec pos = zv0;
-    Vec dir = zv1;
-    f32 d;
-    HitEntry* hit;
-    d = *dist;
-    pos.x = x;
-    pos.y = y;
-    pos.z = z;
-    dir.x = dx;
-    dir.y = dy;
-    dir.z = dz;
-    hit = marioHitCheckVecInl(&pos, &dir, &outPos, &outNrm, &d);
-    *dist = d;
-    *ox = outPos.x;
-    *oy = outPos.y;
-    *oz = outPos.z;
-    *nx = outNrm.x;
-    *ny = outNrm.y;
-    *nz = outNrm.z;
-    return hit;
-}
-
 /** marioHitCheckVecInl with chkFilterAttr2: skips 0x4 surfaces that lack 0x800000. */
 // Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
 // It keeps `inline`: as a plain function -inline auto leaves it out of line here (the link changes).
@@ -354,6 +294,35 @@ inline HitEntry* marioHitCheckVec2(Vec* pos, Vec* dir, Vec* outPos, Vec* outNrm,
     if (outNrm) {
         *outNrm = query.hitNormal;
     }
+    return hit;
+}
+
+/**
+ * Scalar wrapper of marioHitCheckVecInl: casts Mario's ray from (x, y, z) along (dx, dy, dz) for up to *dist
+ * and returns the hit position, normal and distance through the pointers. Used by the plane and roll motions.
+ */
+HitEntry* marioHitCheck(f32* ox, f32* oy, f32* oz, f32* dist, f32* nx, f32* ny, f32* nz, f32 x, f32 y, f32 z, f32 dx,
+                        f32 dy, f32 dz) {
+    Vec outPos, outNrm;
+    Vec pos = zv0;
+    Vec dir = zv1;
+    f32 d;
+    HitEntry* hit;
+    d = *dist;
+    pos.x = x;
+    pos.y = y;
+    pos.z = z;
+    dir.x = dx;
+    dir.y = dy;
+    dir.z = dz;
+    hit = marioHitCheckVecInl(&pos, &dir, &outPos, &outNrm, &d);
+    *dist = d;
+    *ox = outPos.x;
+    *oy = outPos.y;
+    *oz = outPos.z;
+    *nx = outNrm.x;
+    *ny = outNrm.y;
+    *nz = outNrm.z;
     return hit;
 }
 
@@ -413,6 +382,37 @@ BOOL marioChkBero(HitEntry* hit) {
         return (attr & HIT_ATTR_BERO) ? 1 : 0;
     }
     return mario->currMotionId == MARIO_MOTION_SHIP;
+}
+
+/** Slides a move (vx, vz) along a wall with normal (nx, nz): the move minus its part into the wall, at half speed. */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+static void _reflect(f32 vx, f32 nx, f32 vz, f32 nz, f32* mx, f32* mz) {
+    f32 dot = vx * nx + vz * nz;
+    *mx = 0.5f * (vx - dot * nx);
+    *mz = 0.5f * (vz - dot * nz);
+}
+
+/** _ABCtoAngleY for a normal vector. */
+static f32 ABCtoAngleY(Vec* nrm) {
+    MarioWork* mario = marioGetPtr();
+    mario->groundRot.x = (s32)(100.0f * (angleABf(0.0f, 0.0f, 100.0f * nrm->z, 100.0f * nrm->y) - 180.0f) + 0.5f) / 100.0f;
+    mario->groundRot.y = 0.0f;
+    mario->groundRot.z = (s32)(100.0f * (angleABf(0.0f, 0.0f, 100.0f * nrm->x, 100.0f * nrm->y) - 180.0f) + 0.5f) / 100.0f;
+    return angleABf(0.0f, 0.0f, sqrtf(nrm->x * nrm->x + nrm->z * nrm->z), -nrm->y);
+}
+
+/**
+ * Turns a surface normal (nx, ny, nz) into Mario's groundRot tilt (x and z, degrees rounded to 0.01)
+ * and returns the surface's slope in degrees from horizontal (0 = flat floor, 90 = wall, 180 = flat ceiling).
+ */
+// Original names and sizes (_ABCtoAngleY 0x234, ABCtoAngleY 0x210) from the JP demo map (UNUSED there: every
+// call is inlined).
+static f32 _ABCtoAngleY(f32 nx, f32 ny, f32 nz) {
+    MarioWork* mario = marioGetPtr();
+    mario->groundRot.x = (s32)(100.0f * (angleABf(0.0f, 0.0f, 100.0f * nz, 100.0f * ny) - 180.0f) + 0.5f) / 100.0f;
+    mario->groundRot.y = 0.0f;
+    mario->groundRot.z = (s32)(100.0f * (angleABf(0.0f, 0.0f, 100.0f * nx, 100.0f * ny) - 180.0f) + 0.5f) / 100.0f;
+    return angleABf(0.0f, 0.0f, sqrtf(nx * nx + nz * nz), -ny);
 }
 
 // FAKE: inline size limit raised for the rest of the file; without it the object changes

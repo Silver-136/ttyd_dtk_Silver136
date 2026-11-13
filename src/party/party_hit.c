@@ -173,6 +173,15 @@ f32 partyNrmToAngle(Vec n) {
     return angleABf(0.0f, 0.0f, sqrtf(n.x * n.x + n.z * n.z), -n.y);
 }
 
+/** Stores the floor tilt from normal n in the partner's groundRot (x and z, in degrees) and returns the slope. */
+// Original name and size (0x1f0) from the JP demo map (UNUSED there: every call is inlined).
+static f32 ABCtoAngleY(PartyEntry* party, Vec n) {
+    party->groundRot.x = (s32)(angleABf(0.0f, 0.0f, 100.0f * n.z, 100.0f * n.y) - 180.0f);
+    party->groundRotY = 0.0f;
+    party->groundRotZ = (s32)(angleABf(0.0f, 0.0f, 100.0f * n.x, 100.0f * n.y) - 180.0f);
+    return partyNrmTo(&n);
+}
+
 /**
  * Per-frame ground check for a walking partner (the Goombella, Bobbery, Ms. Mowz and Yoshi ability code,
  * party.c and party_motion.c call it):
@@ -219,15 +228,6 @@ void partyChkGnd(PartyEntry* party) {
             }
         }
     }
-}
-
-/** Stores the floor tilt from normal n in the partner's groundRot (x and z, in degrees) and returns the slope. */
-// Original name and size (0x1f0) from the JP demo map (UNUSED there: every call is inlined).
-static f32 ABCtoAngleY(PartyEntry* party, Vec n) {
-    party->groundRot.x = (s32)(angleABf(0.0f, 0.0f, 100.0f * n.z, 100.0f * n.y) - 180.0f);
-    party->groundRotY = 0.0f;
-    party->groundRotZ = (s32)(angleABf(0.0f, 0.0f, 100.0f * n.x, 100.0f * n.y) - 180.0f);
-    return partyNrmTo(&n);
 }
 
 #if VERSION <= VERSION_DEMO_JP

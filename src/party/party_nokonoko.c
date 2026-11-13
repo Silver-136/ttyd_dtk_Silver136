@@ -179,6 +179,33 @@ void nokonoko_move(PartyEntry* party) {
 }
 
 /**
+ * Spawns n small N64-style star sparks at the top of the shell,
+ * aimed along its direction of travel (the bump effect when the shell hits a wall or grabs an item;
+ * 3 when it launches).
+ */
+// Original name and size (0xa4) from the JP demo map (UNUSED there: every call is inlined).
+void hitstar(PartyEntry* party, s32 n) {
+    f32 c = (f32)cos(6.2831855f * party->targetDir / 360.0f);
+    f32 s = (f32)sin(6.2831855f * party->targetDir / 360.0f);
+    effSmallStarN64Entry(3, n, party->position.x, party->position.y + party->height, party->position.z, s, (-1.0f), -c);
+}
+
+/**
+ * Spins the shell's sprite 50 degrees a frame, clockwise or counter-clockwise depending on
+ * which way it travels on screen.
+ */
+// Original name and size (0x64) from the JP demo map (UNUSED there: every call is inlined).
+void nokoFastSpin(PartyEntry* party) {
+    f32 dir;
+    if (revise360(party->targetDir - party->camDir) > 180.0f) {
+        dir = 1.0f;
+    } else {
+        dir = -1.0f;
+    }
+    party->displayDirection = revise360(50.0f * dir + party->displayDirection);
+}
+
+/**
  * Aborts Koops's Shell Toss when Mario gets hurt (called from the damage motion in JP and later):
  * stops the shell-spin sound, restores his flags and standing height and puts him back into follow mode
  * unless he is in run mode 8 or 13.
@@ -230,33 +257,6 @@ void nokonoko_use_post(PartyEntry* party) {
     party->work.nokonoko.shellSpinBits = 0;
     party->work.nokonoko.word17C = 0;
     party->work.nokonoko.word180 = 0;
-}
-
-/**
- * Spins the shell's sprite 50 degrees a frame, clockwise or counter-clockwise depending on
- * which way it travels on screen.
- */
-// Original name and size (0x64) from the JP demo map (UNUSED there: every call is inlined).
-void nokoFastSpin(PartyEntry* party) {
-    f32 dir;
-    if (revise360(party->targetDir - party->camDir) > 180.0f) {
-        dir = 1.0f;
-    } else {
-        dir = -1.0f;
-    }
-    party->displayDirection = revise360(50.0f * dir + party->displayDirection);
-}
-
-/**
- * Spawns n small N64-style star sparks at the top of the shell,
- * aimed along its direction of travel (the bump effect when the shell hits a wall or grabs an item;
- * 3 when it launches).
- */
-// Original name and size (0xa4) from the JP demo map (UNUSED there: every call is inlined).
-void hitstar(PartyEntry* party, s32 n) {
-    f32 c = (f32)cos(6.2831855f * party->targetDir / 360.0f);
-    f32 s = (f32)sin(6.2831855f * party->targetDir / 360.0f);
-    effSmallStarN64Entry(3, n, party->position.x, party->position.y + party->height, party->position.z, s, (-1.0f), -c);
 }
 
 #define NOKO_PICK_UP_NEAR_ITEM(party, body)                                                                        \

@@ -71,6 +71,17 @@ void flying_se_on(void) {
     }
 }
 
+/** Stops the plane's looping flight sound if it is playing. */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+void flying_se_off(void) {
+    MarioWork* mario = marioGetPtr();
+
+    if (mario->motStruct != NULL && mario->motPlane->sfxId != -1) {
+        psndSFXOff(mario->motPlane->sfxId);
+        mario->motPlane->sfxId = -1;
+    }
+}
+
 // Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
 static void zoomUp(void) {
     MarioWork* mario = marioGetPtr();
@@ -90,37 +101,6 @@ static void zoomOff(void) {
 
 /** Paper airplane animation for each of Mario's colours (marioGetColor). */
 static const char* paper_plane[4] = {"p_hikohki", "p_hikohki_g", "p_hikohki_y", "p_hikohki_v"};
-
-/** Stops the plane's looping flight sound if it is playing. */
-// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
-void flying_se_off(void) {
-    MarioWork* mario = marioGetPtr();
-
-    if (mario->motStruct != NULL && mario->motPlane->sfxId != -1) {
-        psndSFXOff(mario->motPlane->sfxId);
-        mario->motPlane->sfxId = -1;
-    }
-}
-
-/**
- * Turns Mario back from the plane: normal 20x37 collision box, rotation and offsets cleared,
- * paper animation off, mirror and facing locks released.
- */
-// Original name and size (0xc8) from the JP demo map (UNUSED there: every call is inlined).
-void paper_plane_off(void) {
-    MarioWork* mario = marioGetPtr();
-    mario->wPlayerCollisionBox.x = 20.0f;
-    mario->wPlayerCollisionBox.y = 37.0f;
-    mario->rot = (Vec){0.0f, 0.0f, 0.0f};
-    mario->rotOfs = (Vec){0.0f, 0.0f, 0.0f};
-    mario->dispOfs = (Vec){0.0f, 0.0f, 0.0f};
-    marioPaperOff();
-    marioChgPaper(NULL);
-    mario->dispFlags &= ~MARIO_DISP_FLAG_NO_DIR_FLIP;
-    mario->flags |= MARIO_FLAG_STOP_AIR_MOVEMENT;
-    marioAdjustMoveDir();
-    mario->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
-}
 
 /**
  * Inline form of mario_plane_cancel (JP and later):
@@ -255,6 +235,8 @@ static inline f32 planeCamFloor(void) {
     return 90.0f;
 }
 #endif
+
+void paper_plane_off(void);
 
 /**
  * Plane Mode motion (from a plane panel): Mario jumps, spins and folds into a paper airplane,
@@ -586,26 +568,14 @@ void mot_plane(void) {
 #define PI 3.1415927f
 
 /**
- * TRUE when the floor under the plane has one of the attributes 0x38 (0x8, HIT_ATTR_PLANE_PANEL_R and
- * HIT_ATTR_PLANE_PANEL_L); over such a floor flyMain speeds the plane up (to 2) and keeps its dive limit at -22.
- */
-// Original name and size (0x4c) from the JP demo map (UNUSED there: every call is inlined).
-BOOL checkAirPort(void) {
-    BOOL ret = FALSE;
-    MarioWork* mario = marioGetPtr();
-    if (mario->hitobjUnder != NULL && (hitGetAttr(mario->hitobjUnder) & 0x38)) {
-        ret = TRUE;
-    }
-    return ret;
-}
-
-/**
  * Per-frame flight: the climb into the glide, then pitch from the stick,
  * speed gain when diving and loss when climbing (planeData constants),
  * the yaw clamped to stay in the flying direction, and the collision checks that end the flight on the ground,
  * a wall or water.
  */
 static f32 movedir2dispdir(f32 dir);
+
+BOOL checkAirPort(void);
 
 static void flyMain(void) {
     f32 s2, c2, s, c;
@@ -891,6 +861,26 @@ void mot_plane_post(void) {
     allPartyRideOff2();
 }
 
+/**
+ * Turns Mario back from the plane: normal 20x37 collision box, rotation and offsets cleared,
+ * paper animation off, mirror and facing locks released.
+ */
+// Original name and size (0xc8) from the JP demo map (UNUSED there: every call is inlined).
+void paper_plane_off(void) {
+    MarioWork* mario = marioGetPtr();
+    mario->wPlayerCollisionBox.x = 20.0f;
+    mario->wPlayerCollisionBox.y = 37.0f;
+    mario->rot = (Vec){0.0f, 0.0f, 0.0f};
+    mario->rotOfs = (Vec){0.0f, 0.0f, 0.0f};
+    mario->dispOfs = (Vec){0.0f, 0.0f, 0.0f};
+    marioPaperOff();
+    marioChgPaper(NULL);
+    mario->dispFlags &= ~MARIO_DISP_FLAG_NO_DIR_FLIP;
+    mario->flags |= MARIO_FLAG_STOP_AIR_MOVEMENT;
+    marioAdjustMoveDir();
+    mario->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
+}
+
 /** The display direction for a plane flying toward dir (the sprite faces left between 90 and 270). */
 // Original name and size (0x68) from the JP demo map (UNUSED there: flyMain's call is inlined).
 static f32 movedir2dispdir(f32 dir) {
@@ -900,6 +890,20 @@ static f32 movedir2dispdir(f32 dir) {
         left = TRUE;
     }
     return revise360(left ? -dir - 90.0f : 270.0f - dir);
+}
+
+/**
+ * TRUE when the floor under the plane has one of the attributes 0x38 (0x8, HIT_ATTR_PLANE_PANEL_R and
+ * HIT_ATTR_PLANE_PANEL_L); over such a floor flyMain speeds the plane up (to 2) and keeps its dive limit at -22.
+ */
+// Original name and size (0x4c) from the JP demo map (UNUSED there: every call is inlined).
+BOOL checkAirPort(void) {
+    BOOL ret = FALSE;
+    MarioWork* mario = marioGetPtr();
+    if (mario->hitobjUnder != NULL && (hitGetAttr(mario->hitobjUnder) & 0x38)) {
+        ret = TRUE;
+    }
+    return ret;
 }
 
 /**

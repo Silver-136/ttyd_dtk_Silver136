@@ -55,42 +55,6 @@ static inline void kpa_hip_launch(MarioWork* mario) {
 }
 
 /**
- * Spawns the water droplet effect around swimming Bowser:
- * on every frame of sub-states 0x1E/0x1F (a stroke has ended and his downward speed is braked),
- * otherwise every 10 frames while rising and every 30 while sinking.
- */
-// Original name and size (0x198) from the JP demo map (UNUSED there: every call is inlined).
-void kpaBubble(void) {
-    MarioWork* mario = marioGetPtr();
-    s32 st;
-    s32 lim;
-    mario->kpaWork->swimSplashTimer++;
-    st = mario->currSubMotionId;
-    if (st == 0x1E || st == 0x1F) {
-        if (mario->kpaWork->swimSplashTimer > 0) {
-            f32 rx;
-            f32 rz;
-            mario->kpaWork->swimSplashTimer = 0;
-            rx = (f32)(irand(40) - 20);
-            rz = (f32)(irand(40) - 20);
-            effMizutamaEntry(0, mario->position.x + rx, 0.6f * mario->wPlayerCollisionBox.y + (mario->position.y + rz), mario->position.z,
-                             mario->directionView < 180.0f ? 225.0f : 135.0f);
-        }
-    } else {
-        s32 in = FALSE;
-        if (st >= 0 && st < 20) {
-            in = TRUE;
-        }
-        lim = in ? 10 : 30;
-        if (mario->kpaWork->swimSplashTimer > lim) {
-            mario->kpaWork->swimSplashTimer = 0;
-            effMizutamaEntry(0, mario->position.x, mario->position.y + mario->wPlayerCollisionBox.y / 3.0f, mario->position.z,
-                             mario->directionView < 180.0f ? 225.0f : 135.0f);
-        }
-    }
-}
-
-/**
  * TRUE when Bowser may ground pound: not already doing one
  * and KPA_WORK_FLAG_NO_HIP_ATTACK (set when he starts swimming) is clear.
  */
@@ -127,6 +91,30 @@ static s32 kpaChkJump(void) {
     }
     marioChgMot(MARIO_MOTION_JUMP);
     return 1;
+}
+
+/** 3D stages: Bowser's walk speed for his power-up level; also sets his walk animation rate. */
+// Original name and size (0x54) from the JP demo map (UNUSED there: every call is inlined).
+static f32 kpaGetWalkSpd(void) {
+    MarioWork* mario = marioGetPtr();
+    s32 lv = kpaGetLevel();
+    f32 spd = _walkSpdTbl[lv];
+    s32 rate = _rateTbl[lv];
+
+    mario->kpaWork->walkRate = rate;
+    return spd;
+}
+
+/** 3D stages: Bowser's dash speed for his power-up level; also sets his walk animation rate. */
+// Original name and size (0x54) from the JP demo map (UNUSED there: every call is inlined).
+static f32 kpaGetDashSpd(void) {
+    MarioWork* mario = marioGetPtr();
+    s32 lv = kpaGetLevel();
+    f32 spd = _dashSpdTbl[lv];
+    s32 rate = _rateTbl2[lv];
+
+    mario->kpaWork->walkRate = rate;
+    return spd;
 }
 
 /**
@@ -190,30 +178,6 @@ static f32 kpaStickSpd(s32 dash) {
         mario->directionView = a;
     }
     return mario->baseSpeed;
-}
-
-/** 3D stages: Bowser's walk speed for his power-up level; also sets his walk animation rate. */
-// Original name and size (0x54) from the JP demo map (UNUSED there: every call is inlined).
-static f32 kpaGetWalkSpd(void) {
-    MarioWork* mario = marioGetPtr();
-    s32 lv = kpaGetLevel();
-    f32 spd = _walkSpdTbl[lv];
-    s32 rate = _rateTbl[lv];
-
-    mario->kpaWork->walkRate = rate;
-    return spd;
-}
-
-/** 3D stages: Bowser's dash speed for his power-up level; also sets his walk animation rate. */
-// Original name and size (0x54) from the JP demo map (UNUSED there: every call is inlined).
-static f32 kpaGetDashSpd(void) {
-    MarioWork* mario = marioGetPtr();
-    s32 lv = kpaGetLevel();
-    f32 spd = _dashSpdTbl[lv];
-    s32 rate = _rateTbl2[lv];
-
-    mario->kpaWork->walkRate = rate;
-    return spd;
 }
 
 /**
@@ -784,6 +748,42 @@ void kpa_powdown(void) {
                 m->flags &= ~MARIO_FLAG_CHG_MOT_DISABLED;
                 marioChgMot(MARIO_MOTION_STAY);
             }
+    }
+}
+
+/**
+ * Spawns the water droplet effect around swimming Bowser:
+ * on every frame of sub-states 0x1E/0x1F (a stroke has ended and his downward speed is braked),
+ * otherwise every 10 frames while rising and every 30 while sinking.
+ */
+// Original name and size (0x198) from the JP demo map (UNUSED there: every call is inlined).
+void kpaBubble(void) {
+    MarioWork* mario = marioGetPtr();
+    s32 st;
+    s32 lim;
+    mario->kpaWork->swimSplashTimer++;
+    st = mario->currSubMotionId;
+    if (st == 0x1E || st == 0x1F) {
+        if (mario->kpaWork->swimSplashTimer > 0) {
+            f32 rx;
+            f32 rz;
+            mario->kpaWork->swimSplashTimer = 0;
+            rx = (f32)(irand(40) - 20);
+            rz = (f32)(irand(40) - 20);
+            effMizutamaEntry(0, mario->position.x + rx, 0.6f * mario->wPlayerCollisionBox.y + (mario->position.y + rz), mario->position.z,
+                             mario->directionView < 180.0f ? 225.0f : 135.0f);
+        }
+    } else {
+        s32 in = FALSE;
+        if (st >= 0 && st < 20) {
+            in = TRUE;
+        }
+        lim = in ? 10 : 30;
+        if (mario->kpaWork->swimSplashTimer > lim) {
+            mario->kpaWork->swimSplashTimer = 0;
+            effMizutamaEntry(0, mario->position.x, mario->position.y + mario->wPlayerCollisionBox.y / 3.0f, mario->position.z,
+                             mario->directionView < 180.0f ? 225.0f : 135.0f);
+        }
     }
 }
 

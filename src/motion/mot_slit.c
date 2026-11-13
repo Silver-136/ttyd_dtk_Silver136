@@ -621,6 +621,30 @@ void marioForceSlitAnime(void) {
     mario->dispFlags |= MARIO_DISP_FLAG_NO_REAR_POSE;
 }
 
+void init_slit(void);
+
+/**
+ * Restores Paper Mode when Mario is re-entered on a new map while paper (marioEntry):
+ * sideways standing state, 6-unit collision width, partners turned paper too.
+ */
+void marioReInit_slit(void) {
+    MarioWork* mario = marioGetPtr();
+    init_slit();
+    mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
+    mario->currMotionId = MARIO_MOTION_SLIT;
+    mario->slitState = SLIT_STATE_READY;
+    mario->displayDirection = 270.0f;
+    mario->displayDirectionTarget = mario->displayDirection;
+    marioChgPose("M_S_1");
+    marioChgPaper("PM_S_1B");
+    mario->slitState = SLIT_STATE_READY;
+    mario->mot.slit.count = 0;
+    mario->wPlayerCollisionBox.x = 6.0f;
+    mario->flags |= MARIO_FLAG_PAPER_MODE;
+    mario->dispFlags |= MARIO_DISP_FLAG_SLIT;
+    allPartySlitOn();
+}
+
 // Original name and size (0xe4) from the JP demo map (UNUSED there: every call is inlined).
 void init_slit(void) {
     MarioWork* mario = marioGetPtr();
@@ -647,28 +671,6 @@ void init_slit(void) {
         marioChgPose("M_S_1");
     }
     marioChgPaper("PM_S_1A");
-}
-
-/**
- * Restores Paper Mode when Mario is re-entered on a new map while paper (marioEntry):
- * sideways standing state, 6-unit collision width, partners turned paper too.
- */
-void marioReInit_slit(void) {
-    MarioWork* mario = marioGetPtr();
-    init_slit();
-    mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
-    mario->currMotionId = MARIO_MOTION_SLIT;
-    mario->slitState = SLIT_STATE_READY;
-    mario->displayDirection = 270.0f;
-    mario->displayDirectionTarget = mario->displayDirection;
-    marioChgPose("M_S_1");
-    marioChgPaper("PM_S_1B");
-    mario->slitState = SLIT_STATE_READY;
-    mario->mot.slit.count = 0;
-    mario->wPlayerCollisionBox.x = 6.0f;
-    mario->flags |= MARIO_FLAG_PAPER_MODE;
-    mario->dispFlags |= MARIO_DISP_FLAG_SLIT;
-    allPartySlitOn();
 }
 
 /**

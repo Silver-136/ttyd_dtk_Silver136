@@ -56,135 +56,13 @@ void marioBalloonOff(void) {
     }
 }
 
-/**
- * TRUE when the surface in front of Mario (hitobjFrontA) is something A can act on:
- * a map object whose hint is 1 or a case-event hit flagged for the balloon with the "front + A" condition.
- * Hits with attribute 0x800000 never count.
- */
-// Original name and size (0xa0) from the JP demo map (UNUSED there: every call is inlined).
-BOOL chkBalloonTypeTouch(HitEntry* hit) {
-    BOOL ret = FALSE;
-    CaseEntry* entry;
-    s32 attr;
+BOOL chkBalloonTypeTouch(HitEntry* hit);
 
-    if (hit != NULL) {
-        attr = hitGetAttr(hit);
-        if (attr & HIT_ATTR_BERO) {
-            ret = FALSE;
-        } else if (attr & HIT_ATTR_MOBJ) {
-            if (mobjGetHint(mobjHitObjPtrToPtr(hit)) == 1) {
-                ret = TRUE;
-            }
-        } else {
-            entry = caseCheckHitObj(hit);
-            if (entry != NULL && (entry->flags & CASE_FLAG_SHOW_HINT) && entry->conditionId == CASE_FRONT_A) {
-                ret = TRUE;
-            }
-        }
-    }
-    return ret;
-}
+BOOL chkBalloonTypeRide(HitEntry* hit);
 
-/**
- * TRUE when the hit directly in front of Mario is a hinted map object or a balloon case event triggered by A
- * while facing or pushing it. Hits Mario passes through (marioChkBero) never count.
- */
-// Original name and size (0xb4) from the JP demo map (UNUSED there: every call is inlined).
-BOOL chkBalloonTypeFront(HitEntry* hit) {
-    BOOL ret = FALSE;
-    CaseEntry* entry;
+BOOL chkBalloonTypeFront(HitEntry* hit);
 
-    if (hit != NULL) {
-        if (hitGetAttr(hit) & HIT_ATTR_MOBJ) {
-            if (mobjGetHint(mobjHitObjPtrToPtr(hit)) == 1) {
-                ret = TRUE;
-            }
-        } else {
-            entry = caseCheckHitObj(hit);
-            if (entry != NULL) {
-                if (entry->flags & CASE_FLAG_SHOW_HINT) {
-                    if (entry->conditionId == CASE_FRONT_A || entry->conditionId == CASE_PUSH_A) {
-                        ret = TRUE;
-                    }
-                }
-            } else {
-                // Redundant (ret is already FALSE); the store and its branch are in the retail code
-                ret = FALSE;
-            }
-        }
-        if (marioChkBero(hit)) {
-            ret = FALSE;
-        }
-    }
-    return ret;
-}
-
-/**
- * TRUE when the floor Mario stands on is a hinted map object or a balloon case event triggered by A
- * while pushing or standing on it. Attribute 0x800000 hits and pass-through hits (marioChkBero) never count.
- */
-// Original name and size (0xc4) from the JP demo map (UNUSED there: every call is inlined).
-BOOL chkBalloonTypeRide(HitEntry* hit) {
-    BOOL ret = FALSE;
-    CaseEntry* entry;
-    s32 attr;
-
-    if (hit != NULL) {
-        attr = hitGetAttr(hit);
-        if (attr & HIT_ATTR_BERO) {
-            ret = FALSE;
-        } else {
-            if (attr & HIT_ATTR_MOBJ) {
-                if (mobjGetHint(mobjHitObjPtrToPtr(hit)) == 1) {
-                    ret = TRUE;
-                }
-            } else {
-                entry = caseCheckHitObj(hit);
-                if (entry != NULL) {
-                    if (entry->flags & CASE_FLAG_SHOW_HINT) {
-                        if (entry->conditionId == CASE_PUSH_A || entry->conditionId == CASE_STAND_ON_A) {
-                            ret = TRUE;
-                        }
-                    }
-                } else {
-                    // Redundant (ret is already FALSE); the store and its branch are in the retail code
-                    ret = FALSE;
-                }
-            }
-            if (marioChkBero(hit)) {
-                ret = FALSE;
-            }
-        }
-    }
-    return ret;
-}
-
-/**
- * Checks whether the hit is a treasure chest (MOBJ_TreasureBox or MOBJ_BigTreasureBox):
- * -1 if it is not one, 1 if it is still closed, 0 once opened.
- * marioBalloonMain uses it so the "!" shows only over unopened chests.
- */
-// Original name and size (0xa8) from the JP demo map (UNUSED there: every call is inlined).
-s32 treasureBox(HitEntry* hit) {
-    MapObjectEntry* mobj;
-    s32 ret = -1;
-
-    marioGetPtr();
-    if (!(hitGetAttr(hit) & HIT_ATTR_MOBJ)) {
-        // Redundant (ret is already -1); the store and its branch are in the retail code
-        ret = -1;
-    } else {
-        mobj = mobjHitObjPtrToPtr(hit);
-        if (strcmp(mobj->animName, "MOBJ_TreasureBox") == 0 ||
-            strcmp(mobj->animName, "MOBJ_BigTreasureBox") == 0) {
-            ret = 1;
-            if (mobjCheckItemboxOpen(mobj) != 1) {
-                ret = 0;
-            }
-        }
-    }
-    return ret;
-}
+s32 treasureBox(HitEntry* hit);
 
 void marioBalloonMain(void) {
     MarioWork* mario;
@@ -288,6 +166,136 @@ BOOL chkBalloon(HitEntry* hit) {
         }
         if (marioChkBero(hit)) {
             ret = FALSE;
+        }
+    }
+    return ret;
+}
+
+/**
+ * TRUE when the surface in front of Mario (hitobjFrontA) is something A can act on:
+ * a map object whose hint is 1 or a case-event hit flagged for the balloon with the "front + A" condition.
+ * Hits with attribute 0x800000 never count.
+ */
+// Original name and size (0xa0) from the JP demo map (UNUSED there: every call is inlined).
+BOOL chkBalloonTypeTouch(HitEntry* hit) {
+    BOOL ret = FALSE;
+    CaseEntry* entry;
+    s32 attr;
+
+    if (hit != NULL) {
+        attr = hitGetAttr(hit);
+        if (attr & HIT_ATTR_BERO) {
+            ret = FALSE;
+        } else if (attr & HIT_ATTR_MOBJ) {
+            if (mobjGetHint(mobjHitObjPtrToPtr(hit)) == 1) {
+                ret = TRUE;
+            }
+        } else {
+            entry = caseCheckHitObj(hit);
+            if (entry != NULL && (entry->flags & CASE_FLAG_SHOW_HINT) && entry->conditionId == CASE_FRONT_A) {
+                ret = TRUE;
+            }
+        }
+    }
+    return ret;
+}
+
+/**
+ * TRUE when the floor Mario stands on is a hinted map object or a balloon case event triggered by A
+ * while pushing or standing on it. Attribute 0x800000 hits and pass-through hits (marioChkBero) never count.
+ */
+// Original name and size (0xc4) from the JP demo map (UNUSED there: every call is inlined).
+BOOL chkBalloonTypeRide(HitEntry* hit) {
+    BOOL ret = FALSE;
+    CaseEntry* entry;
+    s32 attr;
+
+    if (hit != NULL) {
+        attr = hitGetAttr(hit);
+        if (attr & HIT_ATTR_BERO) {
+            ret = FALSE;
+        } else {
+            if (attr & HIT_ATTR_MOBJ) {
+                if (mobjGetHint(mobjHitObjPtrToPtr(hit)) == 1) {
+                    ret = TRUE;
+                }
+            } else {
+                entry = caseCheckHitObj(hit);
+                if (entry != NULL) {
+                    if (entry->flags & CASE_FLAG_SHOW_HINT) {
+                        if (entry->conditionId == CASE_PUSH_A || entry->conditionId == CASE_STAND_ON_A) {
+                            ret = TRUE;
+                        }
+                    }
+                } else {
+                    // Redundant (ret is already FALSE); the store and its branch are in the retail code
+                    ret = FALSE;
+                }
+            }
+            if (marioChkBero(hit)) {
+                ret = FALSE;
+            }
+        }
+    }
+    return ret;
+}
+
+/**
+ * TRUE when the hit directly in front of Mario is a hinted map object or a balloon case event triggered by A
+ * while facing or pushing it. Hits Mario passes through (marioChkBero) never count.
+ */
+// Original name and size (0xb4) from the JP demo map (UNUSED there: every call is inlined).
+BOOL chkBalloonTypeFront(HitEntry* hit) {
+    BOOL ret = FALSE;
+    CaseEntry* entry;
+
+    if (hit != NULL) {
+        if (hitGetAttr(hit) & HIT_ATTR_MOBJ) {
+            if (mobjGetHint(mobjHitObjPtrToPtr(hit)) == 1) {
+                ret = TRUE;
+            }
+        } else {
+            entry = caseCheckHitObj(hit);
+            if (entry != NULL) {
+                if (entry->flags & CASE_FLAG_SHOW_HINT) {
+                    if (entry->conditionId == CASE_FRONT_A || entry->conditionId == CASE_PUSH_A) {
+                        ret = TRUE;
+                    }
+                }
+            } else {
+                // Redundant (ret is already FALSE); the store and its branch are in the retail code
+                ret = FALSE;
+            }
+        }
+        if (marioChkBero(hit)) {
+            ret = FALSE;
+        }
+    }
+    return ret;
+}
+
+/**
+ * Checks whether the hit is a treasure chest (MOBJ_TreasureBox or MOBJ_BigTreasureBox):
+ * -1 if it is not one, 1 if it is still closed, 0 once opened.
+ * marioBalloonMain uses it so the "!" shows only over unopened chests.
+ */
+// Original name and size (0xa8) from the JP demo map (UNUSED there: every call is inlined).
+s32 treasureBox(HitEntry* hit) {
+    MapObjectEntry* mobj;
+    s32 ret = -1;
+
+    marioGetPtr();
+    if (!(hitGetAttr(hit) & HIT_ATTR_MOBJ)) {
+        // Redundant (ret is already -1); the store and its branch are in the retail code
+        ret = -1;
+    } else {
+        mobj = mobjHitObjPtrToPtr(hit);
+        if (strcmp(mobj->animName, "MOBJ_TreasureBox") == 0 ||
+            strcmp(mobj->animName, "MOBJ_BigTreasureBox") == 0) {
+            ret = 1;
+            if (mobjCheckItemboxOpen(mobj) != 1) {
+                ret = 0;
+            }
         }
     }
     return ret;

@@ -171,56 +171,6 @@ void npcRecoveryFiledNpc(void) {
     }
 }
 
-static void mtx_setup(NpcEntry* entry, Mtx mtx, s32 history) {
-    f32 rotationAngle;
-    f32 scaleSign;
-    CameraEntry* camera;
-    f32 viewAngles[2];
-    f32 rotY;
-    Mtx mtxX, mtxY, mtxZ;
-
-    rotationAngle = 0.0f;
-    scaleSign = 1.0f;
-    if (!(entry->flags & NPC_FLAG_NO_VIEW_CORRECTION) && !(entry->flags & NPC_FLAG_2D)) {
-        camera = camGetCurPtr();
-        viewAngles[1] = angleABf(camera->cameraPos.x, camera->cameraPos.z, camera->cameraAt.x, camera->cameraAt.z);
-        viewAngles[0] = angleABf(camera->cameraPos.x, camera->cameraPos.z, entry->position.x, entry->position.z);
-        rotationAngle = reviseAngle(viewAngles[1] - viewAngles[0]);
-    }
-    rotY = reviseAngle(reviseAngle(entry->rotation.y));
-    if (rotY >= 90.0f && rotY <= 270.0f) {
-        scaleSign *= -1.0f;
-    }
-    MTXIdentity(mtx);
-    if (entry->scale.x != 1.0f || entry->scale.y != 1.0f || entry->scale.z != 1.0f || scaleSign != 1.0f) {
-        MTXScaleApply(mtx, mtx, entry->scale.x, entry->scale.y, entry->scale.z * scaleSign);
-    }
-    if (entry->rotationOffset.x || entry->rotationOffset.y || entry->rotationOffset.z) {
-        MTXTransApply(mtx, mtx, -entry->rotationOffset.x, -entry->rotationOffset.y, -entry->rotationOffset.z);
-    }
-    if (entry->rotation.z) {
-        MTXRotRad(mtxZ, 'z', entry->rotation.z * 0.017453292f);
-        MTXConcat(mtxZ, mtx, mtx);
-    }
-    if (entry->rotation.x) {
-        MTXRotRad(mtxX, 'x', entry->rotation.x * 0.017453292f);
-        MTXConcat(mtxX, mtx, mtx);
-    }
-    if (entry->rotation.y || rotationAngle) {
-        MTXRotRad(mtxY, 'y', (entry->rotation.y + rotationAngle) * 0.017453292f);
-        MTXConcat(mtxY, mtx, mtx);
-    }
-    if (entry->rotationOffset.x || entry->rotationOffset.y || entry->rotationOffset.z) {
-        MTXTransApply(mtx, mtx, entry->rotationOffset.x, entry->rotationOffset.y, entry->rotationOffset.z);
-    }
-    if (history == -1) {
-        MTXTransApply(mtx, mtx, entry->position.x, entry->position.y, entry->position.z);
-    } else {
-        MTXTransApply(mtx, mtx, entry->positionHistory[history].x, entry->positionHistory[history].y,
-                      entry->positionHistory[history].z);
-    }
-}
-
 /**
  * For the Luigi model only: swaps each animation in luigi_pose for its "R" twin
  * when the camera sees him from behind, and back again when it sees him from the front.
@@ -269,6 +219,56 @@ inline void luigiMain(NpcEntry* entry) {
                 animPoseSetAnim(entry->poseId, luigi_pose[i][0], FALSE);
             }
         }
+    }
+}
+
+static void mtx_setup(NpcEntry* entry, Mtx mtx, s32 history) {
+    f32 rotationAngle;
+    f32 scaleSign;
+    CameraEntry* camera;
+    f32 viewAngles[2];
+    f32 rotY;
+    Mtx mtxX, mtxY, mtxZ;
+
+    rotationAngle = 0.0f;
+    scaleSign = 1.0f;
+    if (!(entry->flags & NPC_FLAG_NO_VIEW_CORRECTION) && !(entry->flags & NPC_FLAG_2D)) {
+        camera = camGetCurPtr();
+        viewAngles[1] = angleABf(camera->cameraPos.x, camera->cameraPos.z, camera->cameraAt.x, camera->cameraAt.z);
+        viewAngles[0] = angleABf(camera->cameraPos.x, camera->cameraPos.z, entry->position.x, entry->position.z);
+        rotationAngle = reviseAngle(viewAngles[1] - viewAngles[0]);
+    }
+    rotY = reviseAngle(reviseAngle(entry->rotation.y));
+    if (rotY >= 90.0f && rotY <= 270.0f) {
+        scaleSign *= -1.0f;
+    }
+    MTXIdentity(mtx);
+    if (entry->scale.x != 1.0f || entry->scale.y != 1.0f || entry->scale.z != 1.0f || scaleSign != 1.0f) {
+        MTXScaleApply(mtx, mtx, entry->scale.x, entry->scale.y, entry->scale.z * scaleSign);
+    }
+    if (entry->rotationOffset.x || entry->rotationOffset.y || entry->rotationOffset.z) {
+        MTXTransApply(mtx, mtx, -entry->rotationOffset.x, -entry->rotationOffset.y, -entry->rotationOffset.z);
+    }
+    if (entry->rotation.z) {
+        MTXRotRad(mtxZ, 'z', entry->rotation.z * 0.017453292f);
+        MTXConcat(mtxZ, mtx, mtx);
+    }
+    if (entry->rotation.x) {
+        MTXRotRad(mtxX, 'x', entry->rotation.x * 0.017453292f);
+        MTXConcat(mtxX, mtx, mtx);
+    }
+    if (entry->rotation.y || rotationAngle) {
+        MTXRotRad(mtxY, 'y', (entry->rotation.y + rotationAngle) * 0.017453292f);
+        MTXConcat(mtxY, mtx, mtx);
+    }
+    if (entry->rotationOffset.x || entry->rotationOffset.y || entry->rotationOffset.z) {
+        MTXTransApply(mtx, mtx, entry->rotationOffset.x, entry->rotationOffset.y, entry->rotationOffset.z);
+    }
+    if (history == -1) {
+        MTXTransApply(mtx, mtx, entry->position.x, entry->position.y, entry->position.z);
+    } else {
+        MTXTransApply(mtx, mtx, entry->positionHistory[history].x, entry->positionHistory[history].y,
+                      entry->positionHistory[history].z);
     }
 }
 
@@ -2567,25 +2567,6 @@ s32 _getHammerMotionParam(void);
 void _getHammerPoint(f32 f, f32 r, f32 angle, f32* x, f32* y, f32* z);
 void _getKaitenHammerPoint(f32 angle, f32 r, f32* x, f32* y, f32* z);
 
-/**
- * Whether Mario can hit or touch NPCs now: not during map events, outside SEQ_GAME, on the boat,
- * while Vivian hides him, while he is hurt, or while the given NPC is in its post-battle hit cooldown.
- */
-// Original name and size (0xfc) from the JP demo map (UNUSED there: every call is inlined).
-inline BOOL npcCheckEnableTouchMario(NpcEntry* npc) {
-    MarioWork* m = marioGetPtr();
-    NpcWork* wp = npcGetWorkPtrInline();
-    if (m->flags & (MARIO_FLAG_BG_MODE | MARIO_FLAG_IS_8_BIT)) return FALSE;
-    if (!(wp->flags & NPC_WORK_ALWAYS_ENCOUNT) && (m->flags & (MARIO_FLAG_CTRL_OFF | MARIO_FLAG_KEY_OFF))) return FALSE;
-    if ((*(s32*)&((GlobalWork*)gp)->mapEventId)) return FALSE;
-    if (seqGetSeq() != SEQ_GAME) return FALSE;
-    if ((*(u16*)&((MarioWork*)m)->currMotionId) == MARIO_MOTION_SHIP) return FALSE;
-    if (vivianGetStatus()) return FALSE;
-    if ((*(u16*)&((MarioWork*)m)->currMotionId) == MARIO_MOTION_DAMAGE || (*(u16*)&((MarioWork*)m)->currMotionId) == MARIO_MOTION_DAMAGE_TOGE) return FALSE;
-    if ((*(u16*)&((NpcEntry*)npc)->hitCooldown)) return FALSE;
-    return TRUE;
-}
-
 #define CONTINUE_IF_NPC_NOT_HITTABLE(f1000, bit)                                                                     \
     if (npc == NULL) continue;                                                                                       \
     if (!(npc->flags & NPC_FLAG_READY)) continue;                                                                    \
@@ -2599,6 +2580,8 @@ inline BOOL npcCheckEnableTouchMario(NpcEntry* npc) {
     if (npc->flags & NPC_FLAG_NO_HIT) continue;                                                                      \
     if ((*(u32*)&((NpcEntry*)npc)->statusFlags) & NPC_STATUS_DEAD) continue;                                         \
     if (npc->flags & NPC_FLAG_2D) continue;
+
+inline BOOL npcCheckEnableTouchMario(NpcEntry* npc);
 
 /**
  * Finds the NPC Mario or the partner hits this frame.
@@ -3840,6 +3823,25 @@ s32 npcCalcScore(NpcEntry* npc) {
         kpaAddScorePos(score, &pos);
     }
     return score;
+}
+
+/**
+ * Whether Mario can hit or touch NPCs now: not during map events, outside SEQ_GAME, on the boat,
+ * while Vivian hides him, while he is hurt, or while the given NPC is in its post-battle hit cooldown.
+ */
+// Original name and size (0xfc) from the JP demo map (UNUSED there: every call is inlined).
+inline BOOL npcCheckEnableTouchMario(NpcEntry* npc) {
+    MarioWork* m = marioGetPtr();
+    NpcWork* wp = npcGetWorkPtrInline();
+    if (m->flags & (MARIO_FLAG_BG_MODE | MARIO_FLAG_IS_8_BIT)) return FALSE;
+    if (!(wp->flags & NPC_WORK_ALWAYS_ENCOUNT) && (m->flags & (MARIO_FLAG_CTRL_OFF | MARIO_FLAG_KEY_OFF))) return FALSE;
+    if ((*(s32*)&((GlobalWork*)gp)->mapEventId)) return FALSE;
+    if (seqGetSeq() != SEQ_GAME) return FALSE;
+    if ((*(u16*)&((MarioWork*)m)->currMotionId) == MARIO_MOTION_SHIP) return FALSE;
+    if (vivianGetStatus()) return FALSE;
+    if ((*(u16*)&((MarioWork*)m)->currMotionId) == MARIO_MOTION_DAMAGE || (*(u16*)&((MarioWork*)m)->currMotionId) == MARIO_MOTION_DAMAGE_TOGE) return FALSE;
+    if ((*(u16*)&((NpcEntry*)npc)->hitCooldown)) return FALSE;
+    return TRUE;
 }
 
 /**

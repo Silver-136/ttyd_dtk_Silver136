@@ -1150,24 +1150,6 @@ static inline void marioMainBlur(MarioWork* wp) {
     }
 }
 
-/**
- * End-of-frame bookkeeping for marioMain: remembers the air timer and floor,
- * starts the game over sequence when HP is 0, clears the moving-floor push and counts the frame.
- */
-// Original name and size (0x88) from the JP demo map (UNUSED there: every call is inlined).
-void marioPostMain(MarioWork* wp) {
-    wp->prevAirTimer = wp->airTimer;
-    wp->prevHitobjStandOn = wp->hitobjStandOn;
-    if (pouchGetHP() <= 0) {
-        seqSetSeq(SEQ_GAME_OVER, NULL, NULL);
-    }
-    wp->basePos = wp->position;
-    wp->floorMove.x = 0.0f;
-    wp->floorMove.y = 0.0f;
-    wp->floorMove.z = 0.0f;
-    wp->frameCounter++;
-}
-
 /** TRUE while Mario rolls as a paper tube; a copy of marioChkRollMot defined before marioMain. */
 static inline BOOL marioChkRollMot2(void) {
     BOOL ret = FALSE;
@@ -1176,6 +1158,8 @@ static inline BOOL marioChkRollMot2(void) {
     }
     return ret;
 }
+
+void marioPostMain(MarioWork* wp);
 
 /**
  * Mario's per-frame update, run from mariost while he is active:
@@ -1407,6 +1391,24 @@ void marioMain(void) {
     marioPostMain(mp);
 }
 
+/**
+ * End-of-frame bookkeeping for marioMain: remembers the air timer and floor,
+ * starts the game over sequence when HP is 0, clears the moving-floor push and counts the frame.
+ */
+// Original name and size (0x88) from the JP demo map (UNUSED there: every call is inlined).
+void marioPostMain(MarioWork* wp) {
+    wp->prevAirTimer = wp->airTimer;
+    wp->prevHitobjStandOn = wp->hitobjStandOn;
+    if (pouchGetHP() <= 0) {
+        seqSetSeq(SEQ_GAME_OVER, NULL, NULL);
+    }
+    wp->basePos = wp->position;
+    wp->floorMove.x = 0.0f;
+    wp->floorMove.y = 0.0f;
+    wp->floorMove.z = 0.0f;
+    wp->frameCounter++;
+}
+
 /** TRUE while Mario rolls as a paper tube. */
 static inline BOOL marioChkRollMot(void) {
     BOOL ret = FALSE;
@@ -1495,16 +1497,7 @@ static void marioCtrlOff2Main(void) {
     }
 }
 
-/** Stores Mario's current screen position in MarioWork. */
-// Original name and size (0xd4) from the JP demo map (UNUSED there: every call is inlined).
-void marioUpdateScreenPos(void) {
-    MarioWork* p = mp;
-    f32 x1, y1, z1;
-    marioGetScreenPos(p->position, &x1, &y1, &z1);
-    p->screenX = x1;
-    p->screenY = y1;
-    p->screenZ = z1;
-}
+void marioUpdateScreenPos(void);
 
 /**
  * Moves Mario for the frame (marioMoveMain) and updates his screen position.
@@ -1899,17 +1892,6 @@ void marioSetPaperAnimeLocalTime(s32 frames) {
     animPoseSetLocalTime(wp->paperAnimGroupId[marioAnimeId()], frames);
 }
 
-/** Frees Mario's paper pose if one is loaded. */
-static void marioPaperRelease(void) {
-    MarioWork* wp = mp;
-    s32 poseId = wp->paperPoseId;
-
-    if (poseId >= 0) {
-        animPaperPoseRelease(poseId);
-        wp->paperPoseId = -1;
-    }
-}
-
 /**
  * Loads a paper form animation and attaches it to Mario's model;
  * for the tube, plane, boat, accordion and pipe forms (p_roll, p_plane, p_hune, p_jyabara, p_dokan_x/y) the
@@ -1935,6 +1917,8 @@ BOOL marioPaperOn(const char* name) {
     return TRUE;
 }
 
+static void marioPaperRelease(void);
+
 /** Detaches and frees Mario's paper form animation, returning him to his normal model. */
 void marioPaperOff(void) {
     MarioWork* wp = mp;
@@ -1946,6 +1930,17 @@ void marioPaperOff(void) {
             wp->dispFlags &= ~MARIO_DISP_FLAG_PAPER;
             marioPaperRelease();
         }
+    }
+}
+
+/** Frees Mario's paper pose if one is loaded. */
+static void marioPaperRelease(void) {
+    MarioWork* wp = mp;
+    s32 poseId = wp->paperPoseId;
+
+    if (poseId >= 0) {
+        animPaperPoseRelease(poseId);
+        wp->paperPoseId = -1;
     }
 }
 
@@ -1981,6 +1976,17 @@ BOOL marioChkInScreen(s32 x, s32 y) {
 
     // The compare with FALSE is in the retail code (the result is normalised to 0 or 1)
     return valid != FALSE;
+}
+
+/** Stores Mario's current screen position in MarioWork. */
+// Original name and size (0xd4) from the JP demo map (UNUSED there: every call is inlined).
+void marioUpdateScreenPos(void) {
+    MarioWork* p = mp;
+    f32 x1, y1, z1;
+    marioGetScreenPos(p->position, &x1, &y1, &z1);
+    p->screenX = x1;
+    p->screenY = y1;
+    p->screenZ = z1;
 }
 
 /** Mario's draw scale: 1.2 in background mode, 2.0 otherwise. */

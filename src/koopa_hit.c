@@ -142,16 +142,6 @@ s32 kpaEnemyHitChk(f32 x, f32 y, f32 z, f32 h, f32 w) {
     return KPA_ENEMY_HIT_NONE;
 }
 
-/** Clears the ten ceiling-hit slots (headHit/headDist). */
-// Original name and size (0x84) from the JP demo map (UNUSED there: every call is inlined).
-void kpaClearHitobjHead(void) {
-    s32 i;
-    for (i = 0; i < KPA_HIT_SLOTS; i++) {
-        marioGetPtr()->kpaWork->headHit[i] = NULL;
-        marioGetPtr()->kpaWork->headDist[i] = 1000.0f;
-    }
-}
-
 HitEntry* kpaSearchGround(f32 range, f32* outY, f32* outDepth, f32* outAng) {
     s32 n, i;
     MarioWork* m;
@@ -278,6 +268,8 @@ HitEntry* kpaSearchGround(f32 range, f32* outY, f32* outDepth, f32* outAng) {
     }
     return best;
 }
+
+void kpaClearHitobjHead(void);
 
 /**
  * Bowser's ceiling probe for mario_hit: casts rays up from a per-level set of points over his head (some only
@@ -406,6 +398,16 @@ HitEntry* kpaGetHitobjHead2(void) {
 #else
     return marioGetPtr()->kpaWork->headHit[0];
 #endif
+}
+
+/** Clears the ten ceiling-hit slots (headHit/headDist). */
+// Original name and size (0x84) from the JP demo map (UNUSED there: every call is inlined).
+void kpaClearHitobjHead(void) {
+    s32 i;
+    for (i = 0; i < KPA_HIT_SLOTS; i++) {
+        marioGetPtr()->kpaWork->headHit[i] = NULL;
+        marioGetPtr()->kpaWork->headDist[i] = 1000.0f;
+    }
 }
 
 /** The floor object floor probe i is standing on (mobjdrv uses it for blocks stood on). */

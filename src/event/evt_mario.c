@@ -91,33 +91,6 @@
     return EVT_RETURN_DONE;
 
 /**
- * True when Mario's motion counts as standing on the ground:
- * stay, walk or dash, slit/roll/ship with no air time, or riding Yoshi.
- * The landon and rideon waits pair it with a non-null hitobjStandOn.
- */
-// Original name and size (0xa4) from the JP demo map (UNUSED there: every call is inlined).
-BOOL _check_motion(void) {
-    MarioWork* mp = marioGetPtr();
-    s32 m = mp->currMotionId;
-    if (m == MARIO_MOTION_STAY || m == MARIO_MOTION_WALK || m == MARIO_MOTION_DASH) {
-        return TRUE;
-    }
-    if (m == MARIO_MOTION_ROLL && mp->airTimer == 0) {
-        return TRUE;
-    }
-    if (m == MARIO_MOTION_SLIT && mp->airTimer == 0) {
-        return TRUE;
-    }
-    if (m == MARIO_MOTION_SHIP && mp->airTimer == 0) {
-        return TRUE;
-    }
-    if (m == MARIO_MOTION_YOSHI) {
-        return TRUE;
-    }
-    return FALSE;
-}
-
-/**
  * Snaps Mario onto the ground if the next vy step reaches it (the roll search in Tube Mode):
  * clears the jump state and air timers, records the jump distance, re-enables camera Y follow.
  * True when he landed.
@@ -144,6 +117,33 @@ static BOOL chkgnd(f32 vy) {
         mp->jumpPeakAirTime = 0;
         mp->flags &= ~MARIO_FLAG_STOP_AIR_MOVEMENT;
         camFollowYOn();
+        return TRUE;
+    }
+    return FALSE;
+}
+
+/**
+ * True when Mario's motion counts as standing on the ground:
+ * stay, walk or dash, slit/roll/ship with no air time, or riding Yoshi.
+ * The landon and rideon waits pair it with a non-null hitobjStandOn.
+ */
+// Original name and size (0xa4) from the JP demo map (UNUSED there: every call is inlined).
+BOOL _check_motion(void) {
+    MarioWork* mp = marioGetPtr();
+    s32 m = mp->currMotionId;
+    if (m == MARIO_MOTION_STAY || m == MARIO_MOTION_WALK || m == MARIO_MOTION_DASH) {
+        return TRUE;
+    }
+    if (m == MARIO_MOTION_ROLL && mp->airTimer == 0) {
+        return TRUE;
+    }
+    if (m == MARIO_MOTION_SLIT && mp->airTimer == 0) {
+        return TRUE;
+    }
+    if (m == MARIO_MOTION_SHIP && mp->airTimer == 0) {
+        return TRUE;
+    }
+    if (m == MARIO_MOTION_YOSHI) {
         return TRUE;
     }
     return FALSE;

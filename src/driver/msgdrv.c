@@ -138,6 +138,16 @@ static s32 msgWindowOpen_SE_Data[] = {
 static int msg_compare(const void* a, const void* b);
 static void msgDispKeyWait_render(s32 wXluStage);
 
+/** Plays the talking blip once per frame at the window's talk volume, except in small (type 1) windows. */
+// Original name and size (0x54) from the JP demo map (UNUSED there: every call is inlined).
+void msgSEOn(smartEntry* smart) {
+    MsgWinData* d = smart->address;
+    if (d->window->type != WINDOW_TYPE_SMALL && !msgSEflag) {
+        psndSFXOnVol(SFX_NAME_WORD(PSND_SFX_MESSAGE1_1 | PSND_SFX_BYPASS_MUTE), d->talkVolume);
+        msgSEflag = 1;
+    }
+}
+
 /**
  * Sets up the message system at boot: the blinking star (hoshi_2) pose drawn at key waits
  * and the always-loaded global message file (slot 1).
@@ -331,17 +341,6 @@ void msgLoad(const char* filename, s32 index) {
     }
 }
 
-/** Records y as the top of a new page for paging back with Z, up to 110 pages, unless the window keeps no page list. */
-// Original name and size (0x54) from the JP demo map (UNUSED there: every call is inlined).
-void msgPageAdd(smartEntry* smart, s32 y) {
-    MsgWinData* d = smart->address;
-    if (!(d->flags & MSG_WIN_FLAG_NO_PAGE_LOG) && d->pageCount < 110) {
-        if (d->pageCount == 0 || d->pageY[d->pageCount - 1] != y) {
-            d->pageY[d->pageCount++] = y;
-        }
-    }
-}
-
 /** Lets A or B (and X after <keyxon>) speed up the printing, unless <dkey> turned that off. */
 static inline void msgCheckSkip(smartEntry* smart, MsgWinData* data) {
     s32 btn, trgv;
@@ -357,15 +356,7 @@ static inline void msgCheckSkip(smartEntry* smart, MsgWinData* data) {
     }
 }
 
-/** Plays the talking blip once per frame at the window's talk volume, except in small (type 1) windows. */
-// Original name and size (0x54) from the JP demo map (UNUSED there: every call is inlined).
-void msgSEOn(smartEntry* smart) {
-    MsgWinData* d = smart->address;
-    if (d->window->type != WINDOW_TYPE_SMALL && !msgSEflag) {
-        psndSFXOnVol(SFX_NAME_WORD(PSND_SFX_MESSAGE1_1 | PSND_SFX_BYPASS_MUTE), d->talkVolume);
-        msgSEflag = 1;
-    }
-}
+void msgPageAdd(smartEntry* smart, s32 y);
 
 /**
  * Per-frame text update for a message: runs the window callback on the first frame,
@@ -1836,6 +1827,17 @@ s32 msgIconStr2ID(const char* str) {
         }
     }
     return -1;
+}
+
+/** Records y as the top of a new page for paging back with Z, up to 110 pages, unless the window keeps no page list. */
+// Original name and size (0x54) from the JP demo map (UNUSED there: every call is inlined).
+void msgPageAdd(smartEntry* smart, s32 y) {
+    MsgWinData* d = smart->address;
+    if (!(d->flags & MSG_WIN_FLAG_NO_PAGE_LOG) && d->pageCount < 110) {
+        if (d->pageCount == 0 || d->pageY[d->pageCount - 1] != y) {
+            d->pageY[d->pageCount++] = y;
+        }
+    }
 }
 
 /** Steps a message window back one page (Z at a key wait); FALSE if already on the first page. */

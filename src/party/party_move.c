@@ -447,6 +447,27 @@ f32 partyGetTargetMovespd2(PartyEntry* party) {
     return mario->baseDashSpeed;
 }
 
+/** TRUE while Mario is in a jump (MARIO_FLAG_IS_JUMPING); footmarks laid then get the jump bit. */
+// Original name and size (0x34) from the JP demo map (UNUSED there: every call is inlined).
+BOOL footmarkGetJumpTrig(void) {
+    MarioWork* mario = marioGetPtr();
+    BOOL ret = FALSE;
+    if (mario->flags & MARIO_FLAG_IS_JUMPING) {
+        ret = TRUE;
+    }
+    return ret;
+}
+
+/** TRUE while the other party member is jumping (PARTY_FLAG_IS_JUMPING); its footmarks then get the jump bit. */
+// Original name and size (0x18) from the JP demo map (UNUSED there: every call is inlined).
+BOOL footmarkGetJumpTrig2(PartyEntry* other) {
+    BOOL ret = FALSE;
+    if (other->flags & PARTY_FLAG_IS_JUMPING) {
+        ret = TRUE;
+    }
+    return ret;
+}
+
 /**
  * Advances trail id's read position by one, wrapping at 80.
  * JP and later stop at the write position; the early demos can advance past it.
@@ -569,67 +590,7 @@ void partyClearFootmark2(void) {
     readId[1] = 0;
 }
 
-/** TRUE while Mario is in a jump (MARIO_FLAG_IS_JUMPING); footmarks laid then get the jump bit. */
-// Original name and size (0x34) from the JP demo map (UNUSED there: every call is inlined).
-BOOL footmarkGetJumpTrig(void) {
-    MarioWork* mario = marioGetPtr();
-    BOOL ret = FALSE;
-    if (mario->flags & MARIO_FLAG_IS_JUMPING) {
-        ret = TRUE;
-    }
-    return ret;
-}
-
-/**
- * Appends pos to trail id, unless successive marks are both jump marks, pos is unchanged,
- * or readId is exactly writeId + 1 (this full check does not account for wrapping).
- * Argument mask 1 marks a jump; the slit argument is 2 in the early demos and 4 in JP and later, stored as FOOTMARK_FLAG_SLIT (4).
- */
-// Original name and size (0x14c) from the JP demo map (UNUSED there: every call is inlined).
-void partyRecordFootmarkSub(s32 id, Vec pos, u32 flags) {
-    MarioWork* mario = marioGetPtr();
-    Footmark* fm = &footmarkBuf[id][writeId[id]];
-
-    if ((fm->flag & FOOTMARK_FLAG_JUMP) && (flags & FOOTMARK_FLAG_JUMP)) {
-        return;
-    }
-    if (fm->pos.x == pos.x && fm->pos.y == pos.y && fm->pos.z == pos.z) {
-        return;
-    }
-    if (readId[id] == writeId[id] + 1) {
-        return;
-    }
-    writeId[id]++;
-    if (writeId[id] >= 80) {
-        writeId[id] = 0;
-    }
-    fm = &footmarkBuf[id][writeId[id]];
-    fm->pos = pos;
-    if (flags & FOOTMARK_FLAG_JUMP) {
-        fm->flag |= FOOTMARK_FLAG_JUMP;
-    } else {
-        fm->flag &= ~FOOTMARK_FLAG_JUMP;
-    }
-#if VERSION <= VERSION_DEMO_JP
-    if (flags & PARTY_FOOTMARK_DEMO_ARG_SLIT) {
-#else
-    if (flags & FOOTMARK_FLAG_SLIT) {
-#endif
-        fm->flag |= FOOTMARK_FLAG_SLIT;
-    } else {
-        fm->flag &= ~FOOTMARK_FLAG_SLIT;
-    }
-}
-
-/** TRUE while the other party member is jumping (PARTY_FLAG_IS_JUMPING); its footmarks then get the jump bit. */
-// Original name and size (0x18) from the JP demo map (UNUSED there: every call is inlined).
-BOOL footmarkGetJumpTrig2(PartyEntry* other) {
-    BOOL ret = FALSE;
-    if (other->flags & PARTY_FLAG_IS_JUMPING) {
-        ret = TRUE;
-    }
-    return ret;
-}
+void partyRecordFootmarkSub(s32 id, Vec pos, u32 flags);
 
 /**
  * Lays this frame's footmark for Koops's walk (party_nokonoko.c).
@@ -705,6 +666,47 @@ void partyRecordFootmark(PartyEntry* party) {
             partyRecordFootmarkSub(partyGetFootmarkId(party), mario->position, flags);
 #endif
         }
+    }
+}
+
+/**
+ * Appends pos to trail id, unless successive marks are both jump marks, pos is unchanged,
+ * or readId is exactly writeId + 1 (this full check does not account for wrapping).
+ * Argument mask 1 marks a jump; the slit argument is 2 in the early demos and 4 in JP and later, stored as FOOTMARK_FLAG_SLIT (4).
+ */
+// Original name and size (0x14c) from the JP demo map (UNUSED there: every call is inlined).
+void partyRecordFootmarkSub(s32 id, Vec pos, u32 flags) {
+    MarioWork* mario = marioGetPtr();
+    Footmark* fm = &footmarkBuf[id][writeId[id]];
+
+    if ((fm->flag & FOOTMARK_FLAG_JUMP) && (flags & FOOTMARK_FLAG_JUMP)) {
+        return;
+    }
+    if (fm->pos.x == pos.x && fm->pos.y == pos.y && fm->pos.z == pos.z) {
+        return;
+    }
+    if (readId[id] == writeId[id] + 1) {
+        return;
+    }
+    writeId[id]++;
+    if (writeId[id] >= 80) {
+        writeId[id] = 0;
+    }
+    fm = &footmarkBuf[id][writeId[id]];
+    fm->pos = pos;
+    if (flags & FOOTMARK_FLAG_JUMP) {
+        fm->flag |= FOOTMARK_FLAG_JUMP;
+    } else {
+        fm->flag &= ~FOOTMARK_FLAG_JUMP;
+    }
+#if VERSION <= VERSION_DEMO_JP
+    if (flags & PARTY_FOOTMARK_DEMO_ARG_SLIT) {
+#else
+    if (flags & FOOTMARK_FLAG_SLIT) {
+#endif
+        fm->flag |= FOOTMARK_FLAG_SLIT;
+    } else {
+        fm->flag &= ~FOOTMARK_FLAG_SLIT;
     }
 }
 

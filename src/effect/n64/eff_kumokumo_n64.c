@@ -175,6 +175,58 @@ static u8 rz_tbl[] = {0x00, 0x09, 0x12, 0x1C, 0x25, 0x2F, 0x39, 0x43, 0x4D, 0x57
 static void effKumokumoMain(EffectEntry* effect);
 static void effKumokumoDisp(CameraId cameraId, void* param);
 
+/** Sets up the round cloud model's vertex formats and arrays and calls its four display lists. */
+// Original name and size (0x174) from the JP demo map (UNUSED there: every call is inlined).
+static void cloud_polygon_0(void) {
+    u32 i;
+
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 6);
+    GXSetArray(GX_VA_POS, cloud_vertex_tbl, 6);
+    GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);
+    GXSetArray(GX_VA_NRM, cloud_normal_tbl, 3);
+    GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
+    GXSetArray(GX_VA_CLR0, cloud_color0_tbl, 4);
+    GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 14);
+    GXSetArray(GX_VA_TEX0, cloud_texcoord0_tbl, 4);
+    GXSetVtxDesc(GX_VA_TEX1, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX1, GX_TEX_ST, GX_S16, 14);
+    GXSetArray(GX_VA_TEX1, cloud_texcoord1_tbl, 4);
+    for (i = 0; i < 4; i++) {
+        GXCallDisplayList(cloud_dl_0_tbl[i], cloud_dl_0_size_tbl[i] << 5);
+    }
+}
+
+/** Sets up the X-shaped (batten) cloud model's vertex formats and arrays and calls its four display lists. */
+// Original name and size (0x174) from the JP demo map (UNUSED there: every call is inlined).
+static void batten_polygon_0(void) {
+    u32 i;
+
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 6);
+    GXSetArray(GX_VA_POS, batten_vertex_tbl, 6);
+    GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);
+    GXSetArray(GX_VA_NRM, batten_normal_tbl, 3);
+    GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
+    GXSetArray(GX_VA_CLR0, batten_color0_tbl, 4);
+    GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 14);
+    GXSetArray(GX_VA_TEX0, batten_texcoord0_tbl, 4);
+    GXSetVtxDesc(GX_VA_TEX1, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX1, GX_TEX_ST, GX_S16, 14);
+    GXSetArray(GX_VA_TEX1, batten_texcoord1_tbl, 4);
+    for (i = 0; i < 4; i++) {
+        GXCallDisplayList(batten_dl_0_tbl[i], batten_dl_0_size_tbl[i] << 5);
+    }
+}
+
 /**
  * Spawns a cloud effect at (x, y, z) scaled by scale, lasting time frames (time <= 0 means until deleted).
  * Record 0 is the main cloud model (colors, alpha, texture scroll); records 1+ are textured puff sprites.
@@ -456,58 +508,6 @@ static void effKumokumoMain(EffectEntry* effect) {
         work->frame++;
     }
     dispEntry(camera, dispCalcZ(&position), DISP_MODE_XLU, effKumokumoDisp, effect);
-}
-
-/** Sets up the round cloud model's vertex formats and arrays and calls its four display lists. */
-// Original name and size (0x174) from the JP demo map (UNUSED there: every call is inlined).
-static void cloud_polygon_0(void) {
-    u32 i;
-
-    GXClearVtxDesc();
-    GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 6);
-    GXSetArray(GX_VA_POS, cloud_vertex_tbl, 6);
-    GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);
-    GXSetArray(GX_VA_NRM, cloud_normal_tbl, 3);
-    GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
-    GXSetArray(GX_VA_CLR0, cloud_color0_tbl, 4);
-    GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 14);
-    GXSetArray(GX_VA_TEX0, cloud_texcoord0_tbl, 4);
-    GXSetVtxDesc(GX_VA_TEX1, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX1, GX_TEX_ST, GX_S16, 14);
-    GXSetArray(GX_VA_TEX1, cloud_texcoord1_tbl, 4);
-    for (i = 0; i < 4; i++) {
-        GXCallDisplayList(cloud_dl_0_tbl[i], cloud_dl_0_size_tbl[i] << 5);
-    }
-}
-
-/** Sets up the X-shaped (batten) cloud model's vertex formats and arrays and calls its four display lists. */
-// Original name and size (0x174) from the JP demo map (UNUSED there: every call is inlined).
-static void batten_polygon_0(void) {
-    u32 i;
-
-    GXClearVtxDesc();
-    GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 6);
-    GXSetArray(GX_VA_POS, batten_vertex_tbl, 6);
-    GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);
-    GXSetArray(GX_VA_NRM, batten_normal_tbl, 3);
-    GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
-    GXSetArray(GX_VA_CLR0, batten_color0_tbl, 4);
-    GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 14);
-    GXSetArray(GX_VA_TEX0, batten_texcoord0_tbl, 4);
-    GXSetVtxDesc(GX_VA_TEX1, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX1, GX_TEX_ST, GX_S16, 14);
-    GXSetArray(GX_VA_TEX1, batten_texcoord1_tbl, 4);
-    for (i = 0; i < 4; i++) {
-        GXCallDisplayList(batten_dl_0_tbl[i], batten_dl_0_size_tbl[i] << 5);
-    }
 }
 
 /**

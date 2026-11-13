@@ -43,26 +43,6 @@ typedef struct EffFlameN64Work {
 static void effFlameMain(EffectEntry* effect);
 static void effFlameDisp(CameraId cameraId, void* param);
 
-/**
- * Copies one s16 vertex from src to dst and transforms its position by `mtx`,
- * going through float with the fast-cast routines.
- */
-// Original name and size (0x124) from the JP demo map (UNUSED there: every call is inlined).
-static void vtx_copy(effN64Vtx* dst, effN64Vtx* src, Mtx mtx) {
-    Vec v;
-
-    memcpy(dst, src, sizeof(effN64Vtx));
-    OSInitFastCast();
-    OSs16tof32(&dst->x, &v.x);
-    OSs16tof32(&dst->y, &v.y);
-    OSs16tof32(&dst->z, &v.z);
-    PSMTXMultVec(mtx, &v, &v);
-    OSInitFastCast();
-    OSf32tos16(&v.x, &dst->x);
-    OSf32tos16(&v.y, &dst->y);
-    OSf32tos16(&v.z, &dst->z);
-}
-
 /** Flame mesh for type 0: eight vertices in two layers for the scrolling textures. */
 static effN64Vtx stg_flame_v[] = {
     {-50, -20, 2, 0, 0, 255, 255, 255, 255},
@@ -305,6 +285,26 @@ static void effFlameMain(EffectEntry* effect) {
         work->smoothed.z += 0.1f * (work->position.z - work->smoothed.z);
         dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effFlameDisp, effect);
     }
+}
+
+/**
+ * Copies one s16 vertex from src to dst and transforms its position by `mtx`,
+ * going through float with the fast-cast routines.
+ */
+// Original name and size (0x124) from the JP demo map (UNUSED there: every call is inlined).
+static void vtx_copy(effN64Vtx* dst, effN64Vtx* src, Mtx mtx) {
+    Vec v;
+
+    memcpy(dst, src, sizeof(effN64Vtx));
+    OSInitFastCast();
+    OSs16tof32(&dst->x, &v.x);
+    OSs16tof32(&dst->y, &v.y);
+    OSs16tof32(&dst->z, &v.z);
+    PSMTXMultVec(mtx, &v, &v);
+    OSInitFastCast();
+    OSf32tos16(&v.x, &dst->x);
+    OSf32tos16(&v.y, &dst->y);
+    OSf32tos16(&v.z, &dst->z);
 }
 
 static void effFlameDisp(CameraId cameraId, void* param) {

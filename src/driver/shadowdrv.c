@@ -249,11 +249,6 @@ static GXColor color_tbl_cube[3] ATTRIBUTE_ALIGN(32) = {
     {0x00, 0x00, 0x00, 0x8E}, {0x00, 0x00, 0x00, 0x00}, {0x00, 0x00, 0x00, 0x16},
 };
 
-/** The shadow config at index idx. */
-inline ShadowConfig* shadowGetConfig(s32 idx) {
-    return &shadowConfig[idx];
-}
-
 /** The character shadow work. */
 inline CharShadowWork* shadowGetCharShadowWork(void) {
     return cswp;
@@ -382,6 +377,11 @@ static void shadowDisp(CameraId cameraId, void* param) {
                 break;
         }
     }
+}
+
+/** The shadow config at index idx. */
+inline ShadowConfig* shadowGetConfig(s32 idx) {
+    return &shadowConfig[idx];
 }
 
 /** Sets up the character shadows: the 64-entry list (default mode 2, the cylinder shadow) and the texture buffer. */
@@ -1050,6 +1050,14 @@ ShadowConfig* shadowGetDepthShadowConfig(void) {
     return &shadowConfig[dswp->configIdx];
 }
 
+/** Resets the projected shadow work: config 0, colour black at alpha 0x40. */
+inline void shadowProjShadowInit(void) {
+    pswp->flags = SHADOW_WORK_ALLOC;
+    pswp->drawCount = 0;
+    pswp->configIdx = 0;
+    pswp->color = (GXColor){0, 0, 0, 0x40};
+}
+
 /** Counts one object drawn into the projected shadow this frame; with none, projShadowEnd skips the texture copy. */
 void shadowProjShadowDrawCountUp(void) {
     pswp->drawCount++;
@@ -1065,14 +1073,6 @@ GXTexObj* shadowGetProjShadowTexObj(void) {
 
 f32 (*shadowGetProjShadowProjTexMtx(void))[4] {
     return pswp->texMtx;
-}
-
-/** Resets the projected shadow work: config 0, colour black at alpha 0x40. */
-inline void shadowProjShadowInit(void) {
-    pswp->flags = SHADOW_WORK_ALLOC;
-    pswp->drawCount = 0;
-    pswp->configIdx = 0;
-    pswp->color = (GXColor){0, 0, 0, 0x40};
 }
 
 /** Returns the projected shadow colour. */

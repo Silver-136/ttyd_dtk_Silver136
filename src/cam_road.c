@@ -231,14 +231,13 @@ static void calcCurrentCamState(CameraParams* out) {
     out->at.z = out->pos.z + res.z;
 }
 
-/** Vector a - b by value. */
-// subV..inV keep `inline`: as plain functions with by-value Vec arguments -inline auto leaves them out of line.
+/** Vector a scaled by s, by value. */
 // Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
-inline Vec subV(Vec a, Vec b) {
+inline Vec mulV(Vec a, f32 s) {
     Vec r;
-    r.x = a.x - b.x;
-    r.y = a.y - b.y;
-    r.z = a.z - b.z;
+    r.x = a.x * s;
+    r.y = a.y * s;
+    r.z = a.z * s;
     return r;
 }
 
@@ -252,13 +251,14 @@ inline Vec addV(Vec a, Vec b) {
     return r;
 }
 
-/** Vector a scaled by s, by value. */
+/** Vector a - b by value. */
+// subV..inV keep `inline`: as plain functions with by-value Vec arguments -inline auto leaves them out of line.
 // Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
-inline Vec mulV(Vec a, f32 s) {
+inline Vec subV(Vec a, Vec b) {
     Vec r;
-    r.x = a.x * s;
-    r.y = a.y * s;
-    r.z = a.z * s;
+    r.x = a.x - b.x;
+    r.y = a.y - b.y;
+    r.z = a.z - b.z;
     return r;
 }
 

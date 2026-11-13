@@ -193,14 +193,16 @@ f32 marioGetMoveRate(f32 dir) {
     return 1.0f + (1.19f - 1.0f) * __fabsf(c);
 }
 
-/** Sets Mario's gravity multiplier (playerGravity; 1.0 is normal). */
-static void marioSetGravity(f32 g) {
-    marioGetPtr()->playerGravity = g;
-}
+static void marioSetGravity(f32 g);
 
 /** Puts Mario's gravity back to normal (1.0); run from mario.c. */
 void marioResetGravity(void) {
     marioSetGravity(1.0f);
+}
+
+/** Sets Mario's gravity multiplier (playerGravity; 1.0 is normal). */
+static void marioSetGravity(f32 g) {
+    marioGetPtr()->playerGravity = g;
 }
 
 void* marioGetTouchNpcPtr(void) {
@@ -572,6 +574,16 @@ void marioGetRubInit(void) {
     rubwork.revDir = -1;
 }
 
+/** Fills the rub history with the angle v. */
+// Original name and size (0x60) from the JP demo map (UNUSED there: every call is inlined).
+void clearChkbuf(s32 v) {
+    u32 i;
+    s16* p = rubwork.hist;
+    for (i = 0; i < 21; i++) {
+        p[i] = v;
+    }
+}
+
 /** Index of the rub history entry ofs steps from the current one (wrapped into the 20-entry ring). */
 // Original name and size (0x34) from the JP demo map (UNUSED there: every call is inlined).
 s32 _getBufId(s32 ofs) {
@@ -699,16 +711,6 @@ static s32 checkOneRevolution(s32 dir) {
         }
     }
     return ret;
-}
-
-/** Fills the rub history with the angle v. */
-// Original name and size (0x60) from the JP demo map (UNUSED there: every call is inlined).
-void clearChkbuf(s32 v) {
-    u32 i;
-    s16* p = rubwork.hist;
-    for (i = 0; i < 21; i++) {
-        p[i] = v;
-    }
 }
 
 /**

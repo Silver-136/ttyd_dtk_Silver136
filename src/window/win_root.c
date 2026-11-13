@@ -122,51 +122,7 @@ static void winSortMain(WindowWork* wp);
 #define WR_FSTEP(n) (n)
 #endif
 
-/**
- * Animates the five tab labels at the top of the menu each frame:
- * on open they drop in one by one (4 frames apart) from y 300 to 185 over 10 frames;
- * states 10-13 (set when the menu closes) slide them back up, rightmost first.
- */
-// Original name and size (0x188) from the JP demo map (UNUSED there: every call is inlined).
-inline void winTabMain(WindowWork* w) {
-    s32 i;
-
-    for (i = 0; i < 5; i++) {
-        switch (w->tab[i].state) {
-            case 0:
-                w->tab[i].x = i * 105 - 205;
-                w->tab[i].y = 300.0f;
-                w->tab[i].timer = i << 2;
-                w->tab[i].state++;
-                break;
-            case 1:
-            case 11:
-                if (--w->tab[i].timer < 0) {
-                    w->tab[i].timer = 0;
-                    w->tab[i].state++;
-                }
-                break;
-            case 2:
-                w->tab[i].y = intplGetValue(EASING_SINE_IN_OUT, 300.0f, 185.0f, w->tab[i].timer++, WR_FRAMES(10));
-                if (w->tab[i].timer > WR_FRAMES(10)) {
-                    w->tab[i].state++;
-                }
-                break;
-            case 10:
-                w->tab[i].timer = (4 - i) * 4;
-                w->tab[i].state++;
-                break;
-            case 12:
-                w->tab[i].y = intplGetValue(EASING_SINE_IN_OUT, 180.0f, 300.0f, w->tab[i].timer++, WR_FRAMES(10));
-                if (w->tab[i].timer > WR_FRAMES(10)) {
-                    w->tab[i].state++;
-                }
-                break;
-            case 13:
-                break;
-        }
-    }
-}
+inline void winTabMain(WindowWork* w);
 
 /**
  * Pause menu state machine, run each frame by winMain (win_main.c).
@@ -532,6 +488,52 @@ void winRootDisp(s32 camId, WindowWork* wp) {
             winTexInit((TEXPalette*)*wp->res->data);
             winTexSet(0, (Vec){2.0f + wp->helpX, wp->helpY - 2.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0x00, 0x00, 0x00, 0x80});
             winTexSet(0, (Vec){wp->helpX, wp->helpY, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);
+        }
+    }
+}
+
+/**
+ * Animates the five tab labels at the top of the menu each frame:
+ * on open they drop in one by one (4 frames apart) from y 300 to 185 over 10 frames;
+ * states 10-13 (set when the menu closes) slide them back up, rightmost first.
+ */
+// Original name and size (0x188) from the JP demo map (UNUSED there: every call is inlined).
+inline void winTabMain(WindowWork* w) {
+    s32 i;
+
+    for (i = 0; i < 5; i++) {
+        switch (w->tab[i].state) {
+            case 0:
+                w->tab[i].x = i * 105 - 205;
+                w->tab[i].y = 300.0f;
+                w->tab[i].timer = i << 2;
+                w->tab[i].state++;
+                break;
+            case 1:
+            case 11:
+                if (--w->tab[i].timer < 0) {
+                    w->tab[i].timer = 0;
+                    w->tab[i].state++;
+                }
+                break;
+            case 2:
+                w->tab[i].y = intplGetValue(EASING_SINE_IN_OUT, 300.0f, 185.0f, w->tab[i].timer++, WR_FRAMES(10));
+                if (w->tab[i].timer > WR_FRAMES(10)) {
+                    w->tab[i].state++;
+                }
+                break;
+            case 10:
+                w->tab[i].timer = (4 - i) * 4;
+                w->tab[i].state++;
+                break;
+            case 12:
+                w->tab[i].y = intplGetValue(EASING_SINE_IN_OUT, 180.0f, 300.0f, w->tab[i].timer++, WR_FRAMES(10));
+                if (w->tab[i].timer > WR_FRAMES(10)) {
+                    w->tab[i].state++;
+                }
+                break;
+            case 13:
+                break;
         }
     }
 }

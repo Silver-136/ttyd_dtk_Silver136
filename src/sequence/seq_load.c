@@ -184,24 +184,7 @@ void seq_loadExit(SequenceWork* seq) {
     dvdClose();
 }
 
-#if VERSION >= VERSION_US
 BOOL dvdOpen(void);
-#else
-/** Starts loading the file menu's texture file (name.tpl, from the jp folder before US); TRUE once it is loaded. */
-// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
-BOOL dvdOpen(void) {
-#if VERSION <= VERSION_DEMO_JP
-    if (fileAsyncf(FILE_TYPE_TPL, NULL, "%s/window/jp/name.tpl", getMarioStDvdRoot()) != 0U) {
-        wp->file = fileAllocf(FILE_TYPE_TPL, "%s/window/jp/name.tpl", getMarioStDvdRoot());
-#else
-    if (fileAsyncf(FILE_TYPE_TPL, NULL, "%s/w/jp/name.tpl", getMarioStDvdRoot()) != 0U) {
-        wp->file = fileAllocf(FILE_TYPE_TPL, "%s/w/jp/name.tpl", getMarioStDvdRoot());
-#endif
-        return TRUE;
-    }
-    return FALSE;
-}
-#endif
 
 /**
  * File select sequence: loads name.tpl, runs the memory card check script (back to the title if the card is
@@ -281,18 +264,27 @@ void seq_loadMain(SequenceWork* seq) {
     }
 }
 
-#if VERSION >= VERSION_US
-/** Starts loading the file menu's texture file (name.tpl, per language in US and later); TRUE once it is loaded. */
+/**
+ * Starts loading the file menu's texture file (name.tpl: from the jp folder before US, per language in US and
+ * later); TRUE once it is loaded.
+ */
 // Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
 BOOL dvdOpen(void) {
+#if VERSION >= VERSION_US
     const char* lang[] = {"jp", "us", "ge", "fr", "sp", "it"};
     if (fileAsyncf(FILE_TYPE_TPL, NULL, "%s/w/%s/name.tpl", getMarioStDvdRoot(), lang[gp->language]) != 0U) {
         wp->file = fileAllocf(FILE_TYPE_TPL, "%s/w/%s/name.tpl", getMarioStDvdRoot(), lang[gp->language]);
+#elif VERSION <= VERSION_DEMO_JP
+    if (fileAsyncf(FILE_TYPE_TPL, NULL, "%s/window/jp/name.tpl", getMarioStDvdRoot()) != 0U) {
+        wp->file = fileAllocf(FILE_TYPE_TPL, "%s/window/jp/name.tpl", getMarioStDvdRoot());
+#else
+    if (fileAsyncf(FILE_TYPE_TPL, NULL, "%s/w/jp/name.tpl", getMarioStDvdRoot()) != 0U) {
+        wp->file = fileAllocf(FILE_TYPE_TPL, "%s/w/jp/name.tpl", getMarioStDvdRoot());
+#endif
         return TRUE;
     }
     return FALSE;
 }
-#endif
 
 /** Frees the file menu's texture file (name.tpl), if loaded. */
 // Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.

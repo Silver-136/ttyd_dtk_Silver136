@@ -91,26 +91,6 @@ EVT_END()
 /** Animation names of the coloured switch blocks, in the order mobj_switch_float_blk steps through them. */
 static const char* _switch_anim[] = {"A_1", "A_2", "A_3", "A_4", "A_5", "S_1"};
 
-// FAKE: the hit pointer is tested as a signed word (cmpwi); a pointer or BOOL test compiles to cmplwi
-// Original name and size (0x7c) from the JP demo map (UNUSED there: every call is inlined).
-EvtWord _mobj_check_ground(MapObjectEntry* m) {
-    f32 hx, hy, hz, dist, nx, ny, nz;
-    dist = 1.0f + (f32)__fabs(m->velocity.y);
-    return (EvtWord)hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, m->position.x, m->position.y + 0.5f, m->position.z, 0.0f, -1.0f, 0.0f);
-}
-
-/**
- * True when the animation name is "A_1" to "A_3" (an 'A' and a digit 1-3 in the third character);
- * used by the switch-block code to tell its hit animations from the others.
- */
-// Original name and size (0x34) from the JP demo map (UNUSED there: every call is inlined).
-BOOL _mobj_check_lightup(const s8* a) {
-    if (a[0] == 'A' && a[2] >= '1' && a[2] <= '3') {
-        return TRUE;
-    }
-    return FALSE;
-}
-
 /** Event that runs kpa_powerup with LW(0)-LW(2); started when Bowser grabs a power-up in his side-scrolling stages. */
 #if VERSION >= VERSION_JP
                             EVT_BEGIN(kpa_powerup_evt)
@@ -1495,6 +1475,14 @@ static s32 mobj_lv_blk_evt(MapObjectEntry* mobj) {
     return 0;
 }
 
+// FAKE: the hit pointer is tested as a signed word (cmpwi); a pointer or BOOL test compiles to cmplwi
+// Original name and size (0x7c) from the JP demo map (UNUSED there: every call is inlined).
+EvtWord _mobj_check_ground(MapObjectEntry* m) {
+    f32 hx, hy, hz, dist, nx, ny, nz;
+    dist = 1.0f + (f32)__fabs(m->velocity.y);
+    return (EvtWord)hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, m->position.x, m->position.y + 0.5f, m->position.z, 0.0f, -1.0f, 0.0f);
+}
+
 /**
  * Places a block that only a strong enough hammer breaks (MOBJ_Lv1Block etc.).
  * args: name, x, y, z, event, flag variable (already set: not placed), animation group.
@@ -1675,6 +1663,18 @@ s32 _mobj_get_switch_anim_index(s32 poseId) {
         }
     }
     return idx;
+}
+
+/**
+ * True when the animation name is "A_1" to "A_3" (an 'A' and a digit 1-3 in the third character);
+ * used by the switch-block code to tell its hit animations from the others.
+ */
+// Original name and size (0x34) from the JP demo map (UNUSED there: every call is inlined).
+BOOL _mobj_check_lightup(const s8* a) {
+    if (a[0] == 'A' && a[2] >= '1' && a[2] <= '3') {
+        return TRUE;
+    }
+    return FALSE;
 }
 
 /**

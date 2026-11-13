@@ -78,47 +78,6 @@ void FontDrawStringVecPitch(Vec pos, f32 pitch, const s8* msg);
 #endif
 
 /**
- * The width entry (kerning and advance width in pixels) of a glyph, from the font's WID1 block that covers it;
- * NULL if no block does (callers do not check).
- */
-// Original name and size (0x74) from the JP demo map (UNUSED there: every call is inlined).
-FontWidthEntry* JUTFont_GetWidthEntry(u16 code) {
-    FontWidthBlock* block = (FontWidthBlock*)&pfh[1];
-    u32 i;
-
-    for (i = 0; i < pfh->blockcount; i++) {
-        switch (block->magic) {
-            case 'WID1':
-                if (code >= block->firstcode && code <= block->lastcode) {
-                    return &block->entries[code - block->firstcode];
-                }
-                break;
-        }
-        block = (FontWidthBlock*)((u8*)block + block->size);
-    }
-    return NULL;
-}
-
-/**
- * Draws one glyph at the current position matrix origin;
- * with FontDrawEdge on, first draws it four times in the outline colour (fontColTbl[0]) offset 2 px left, right,
- * down and up, then restores the colour.
- */
-// Original name and size (0x12c) from the JP demo map (UNUSED there: every call is inlined).
-void JUTFont_Draw(u16 code) {
-    if (fontEdge) {
-        GXColor save = fontColor;
-        FontDrawColorIDX(0);
-        _JUTFont_DrawPos(code, -2, 0);
-        _JUTFont_DrawPos(code, 2, 0);
-        _JUTFont_DrawPos(code, 0, -2);
-        _JUTFont_DrawPos(code, 0, 2);
-        FontDrawColor(save);
-    }
-    _JUTFont_DrawPos(code, 0, 0);
-}
-
-/**
  * Font manager start-up, called once from the boot code in mariost.c.
  * Empty: the font is loaded later by fontmgrTexSetup.
  */
@@ -250,6 +209,8 @@ void FontDrawScaleVec(Vec scale) {
     fontScale = scale;
 }
 
+void JUTFont_Draw(u16 code);
+
 /**
  * Draws one glyph (an index from JUTFont_CodeToGlyph) at x, y with the current scale and outline;
  * msgdrv draws message windows glyph by glyph through this.
@@ -275,6 +236,24 @@ void FontDrawCodeMtx(Mtx mtx, u16 code) {
     GXSetCurrentMtx(GX_PNMTX0);
     JUTFont_Draw(code);
 }
+
+static void FontDrawStringVec(Vec pos, const s8* str);
+
+/**
+ * Draws a single-line string at x, y with proportional spacing;
+ * message tags are drawn as text in JP and the early demos and skipped in US and later.
+ */
+// US and later: FontDrawString and FontDrawStringPitch are wrappers over FontDrawStringVecPitch
+void FontDrawString(f32 x, f32 y, const char* msg) {
+#if VERSION >= VERSION_US
+    // US and later: FontDrawString and FontDrawStringPitch are wrappers over FontDrawStringVecPitch
+    FontDrawStringVecPitch((Vec){x, y, 0.0f}, -1.0f, (const s8*)msg);
+#else
+    FontDrawStringVec((Vec){x, y, 0.0f}, (const s8*)msg);
+#endif
+}
+
+FontWidthEntry* JUTFont_GetWidthEntry(u16 code);
 
 /**
  * JP and early-demo body of FontDrawString: draws a plain string (no tags, no line breaks) left to right from pos with
@@ -306,20 +285,6 @@ static void FontDrawStringVec(Vec pos, const s8* str) {
         JUTFont_Draw(code);
         x += fontScale.x * (width + charspace[gp->language]);
     }
-}
-
-/**
- * Draws a single-line string at x, y with proportional spacing;
- * message tags are drawn as text in JP and the early demos and skipped in US and later.
- */
-// US and later: FontDrawString and FontDrawStringPitch are wrappers over FontDrawStringVecPitch
-void FontDrawString(f32 x, f32 y, const char* msg) {
-#if VERSION >= VERSION_US
-    // US and later: FontDrawString and FontDrawStringPitch are wrappers over FontDrawStringVecPitch
-    FontDrawStringVecPitch((Vec){x, y, 0.0f}, -1.0f, (const s8*)msg);
-#else
-    FontDrawStringVec((Vec){x, y, 0.0f}, (const s8*)msg);
-#endif
 }
 
 /**
@@ -561,11 +526,7 @@ void FontDrawStringCenterMtx(Mtx mtx, const s8* msg) {
     }
 }
 
-/** A glyph's advance width in pixels from the WID1 block. */
-// Original name and size (0x78) from the JP demo map (UNUSED there: every call is inlined).
-u8 JUTFont_GetWidth(u16 code) {
-    return JUTFont_GetWidthEntry(code)->width;
-}
+u8 JUTFont_GetWidth(u16 code);
 
 /**
  * Draws a single-line string with every glyph jittered 0-2 px at random each frame (shaking text);
@@ -607,31 +568,7 @@ void FontDrawStringShake(f32 x, f32 y, const s8* msg) {
     }
 }
 
-/**
- * Draws one glyph at x, y (pixels) in the loaded matrix; with FontDrawEdge on, first draws it four times in the
- * outline colour (fontColTbl[0]) 2 px left, right, down and up of it, then restores the colour.
- */
-// Original name and size (0x154) from the JP demo map (UNUSED there: every call is inlined).
-void JUTFont_DrawPos(u16 code, s32 x, s32 y) {
-    if (fontEdge) {
-        GXColor save = fontColor;
-        FontDrawColorIDX(0);
-        {
-            s16 ix = x;
-            s16 iy = y;
-            _JUTFont_DrawPos(code, ix - 2, iy);
-            _JUTFont_DrawPos(code, ix + 2, iy);
-        }
-        {
-            s16 ix = x;
-            s16 iy = y;
-            _JUTFont_DrawPos(code, ix, iy - 2);
-            _JUTFont_DrawPos(code, ix, iy + 2);
-        }
-        FontDrawColor(save);
-    }
-    _JUTFont_DrawPos(code, x, y);
-}
+void JUTFont_DrawPos(u16 code, s32 x, s32 y);
 
 /**
  * Draws a message at screen position x, y (line height 28), handling the <red>, <col xxxxxxxx> and <icon> tags;
@@ -1128,6 +1065,34 @@ u16 JUTFont_CodeToGlyph(u32 code) {
 }
 
 /**
+ * The width entry (kerning and advance width in pixels) of a glyph, from the font's WID1 block that covers it;
+ * NULL if no block does (callers do not check).
+ */
+// Original name and size (0x74) from the JP demo map (UNUSED there: every call is inlined).
+FontWidthEntry* JUTFont_GetWidthEntry(u16 code) {
+    FontWidthBlock* block = (FontWidthBlock*)&pfh[1];
+    u32 i;
+
+    for (i = 0; i < pfh->blockcount; i++) {
+        switch (block->magic) {
+            case 'WID1':
+                if (code >= block->firstcode && code <= block->lastcode) {
+                    return &block->entries[code - block->firstcode];
+                }
+                break;
+        }
+        block = (FontWidthBlock*)((u8*)block + block->size);
+    }
+    return NULL;
+}
+
+/** A glyph's advance width in pixels from the WID1 block. */
+// Original name and size (0x78) from the JP demo map (UNUSED there: every call is inlined).
+u8 JUTFont_GetWidth(u16 code) {
+    return JUTFont_GetWidthEntry(code)->width;
+}
+
+/**
  * Sets up GX for textured glyph quads: alpha blending, no depth test or fog,
  * direct s16 positions with colour and two texture coordinates, the glyph sheet texture and its texel scale,
  * colour in TEV register 0.
@@ -1299,4 +1264,49 @@ static void _JUTFont_DrawPos(u16 code, s16 x, s16 y) {
     GXColor4u8(c.r, c.g, c.b, c.a);
     GXTexCoord2u16(u0, v1);
     GXTexCoord2u8(n0, t1);
+}
+
+/**
+ * Draws one glyph at x, y (pixels) in the loaded matrix; with FontDrawEdge on, first draws it four times in the
+ * outline colour (fontColTbl[0]) 2 px left, right, down and up of it, then restores the colour.
+ */
+// Original name and size (0x154) from the JP demo map (UNUSED there: every call is inlined).
+void JUTFont_DrawPos(u16 code, s32 x, s32 y) {
+    if (fontEdge) {
+        GXColor save = fontColor;
+        FontDrawColorIDX(0);
+        {
+            s16 ix = x;
+            s16 iy = y;
+            _JUTFont_DrawPos(code, ix - 2, iy);
+            _JUTFont_DrawPos(code, ix + 2, iy);
+        }
+        {
+            s16 ix = x;
+            s16 iy = y;
+            _JUTFont_DrawPos(code, ix, iy - 2);
+            _JUTFont_DrawPos(code, ix, iy + 2);
+        }
+        FontDrawColor(save);
+    }
+    _JUTFont_DrawPos(code, x, y);
+}
+
+/**
+ * Draws one glyph at the current position matrix origin;
+ * with FontDrawEdge on, first draws it four times in the outline colour (fontColTbl[0]) offset 2 px left, right,
+ * down and up, then restores the colour.
+ */
+// Original name and size (0x12c) from the JP demo map (UNUSED there: every call is inlined).
+void JUTFont_Draw(u16 code) {
+    if (fontEdge) {
+        GXColor save = fontColor;
+        FontDrawColorIDX(0);
+        _JUTFont_DrawPos(code, -2, 0);
+        _JUTFont_DrawPos(code, 2, 0);
+        _JUTFont_DrawPos(code, 0, -2);
+        _JUTFont_DrawPos(code, 0, 2);
+        FontDrawColor(save);
+    }
+    _JUTFont_DrawPos(code, 0, 0);
 }

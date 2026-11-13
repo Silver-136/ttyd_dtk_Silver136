@@ -69,19 +69,6 @@ static inline void cloudSweep(PartyEntry* party, s32 i) {
     }
 }
 
-// Flurrie's move target: beside Mario (3.3 units to his left or right of the facing direction), 10 units up
-// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
-void set_cloud_hold_pos(PartyEntry* party) {
-    MarioWork* mario = party->playerPtr;
-    f32 dir;
-
-    party->moveTarget = mario->position;
-    dir = mario->displayDirectionTarget;
-    dir = toMovedir(dir + ((dir < 90.0f || dir >= 270.0f) ? -90.0f : 90.0f));
-    movePos(&party->moveTarget.x, &party->moveTarget.z, 3.3f, dir);
-    party->moveTarget.y += 10.0f;
-}
-
 #if VERSION >= VERSION_JP
 
 /**
@@ -356,6 +343,19 @@ void cloud_move(PartyEntry* party) {
         party->trigFlags &= ~PARTY_TRIG_HALF_PUSH;
 #endif
     }
+}
+
+// Flurrie's move target: beside Mario (3.3 units to his left or right of the facing direction), 10 units up
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+void set_cloud_hold_pos(PartyEntry* party) {
+    MarioWork* mario = party->playerPtr;
+    f32 dir;
+
+    party->moveTarget = mario->position;
+    dir = mario->displayDirectionTarget;
+    dir = toMovedir(dir + ((dir < 90.0f || dir >= 270.0f) ? -90.0f : 90.0f));
+    movePos(&party->moveTarget.x, &party->moveTarget.z, 3.3f, dir);
+    party->moveTarget.y += 10.0f;
 }
 
 /**

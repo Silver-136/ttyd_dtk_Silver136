@@ -141,6 +141,29 @@ static u8* queen_toiki_dl_0_tbl[] = { queen_toiki_dl_0_0, queen_toiki_dl_0_1, qu
 /** Display-list sizes (32-byte units) of the Shadow Queen's breath cloud model. */
 static u8 queen_toiki_dl_0_size_tbl[] = { 3, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
 
+/** Sets up the breath cloud model's vertex formats and arrays and calls its 14 display lists. */
+// Original name and size (0x140) from the JP demo map (UNUSED there: every call is inlined).
+static void queen_toiki_polygon_0(void) {
+    u32 i;
+
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 6);
+    GXSetArray(GX_VA_POS, queen_toiki_vertex_tbl, 6);
+    GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);
+    GXSetArray(GX_VA_NRM, queen_toiki_normal_tbl, 3);
+    GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
+    GXSetArray(GX_VA_CLR0, queen_toiki_color0_tbl, 4);
+    GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 14);
+    GXSetArray(GX_VA_TEX0, queen_toiki_texcoord0_tbl, 4);
+    for (i = 0; i < 14; i++) {
+        GXCallDisplayList(queen_toiki_dl_0_tbl[i], queen_toiki_dl_0_size_tbl[i] << 5);
+    }
+}
+
 /**
  * Spawns the breath cloud at (x, y, z) lasting `duration` frames (1000 or more: until removed).
  * Type 0 sigh, 1 temptation, 2 poison; it drifts left and slightly down (200 degrees) at an initial speed of 2.5.
@@ -228,29 +251,6 @@ static void effToikiMain(EffectEntry* effect) {
         work->texOffset = 4.0f;
     }
     dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effToikiDisp, effect);
-}
-
-/** Sets up the breath cloud model's vertex formats and arrays and calls its 14 display lists. */
-// Original name and size (0x140) from the JP demo map (UNUSED there: every call is inlined).
-static void queen_toiki_polygon_0(void) {
-    u32 i;
-
-    GXClearVtxDesc();
-    GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 6);
-    GXSetArray(GX_VA_POS, queen_toiki_vertex_tbl, 6);
-    GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);
-    GXSetArray(GX_VA_NRM, queen_toiki_normal_tbl, 3);
-    GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
-    GXSetArray(GX_VA_CLR0, queen_toiki_color0_tbl, 4);
-    GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 14);
-    GXSetArray(GX_VA_TEX0, queen_toiki_texcoord0_tbl, 4);
-    for (i = 0; i < 14; i++) {
-        GXCallDisplayList(queen_toiki_dl_0_tbl[i], queen_toiki_dl_0_size_tbl[i] << 5);
-    }
 }
 
 /**

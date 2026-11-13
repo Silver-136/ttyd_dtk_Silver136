@@ -25,22 +25,6 @@ typedef struct EffOpukuWcurtainN64Work {
     f32 speed[12];  // 0x5C
 } EffOpukuWcurtainN64Work;
 
-/** Transforms vertex `src`'s position by `mtx` into `dst` (fast-cast s16 <-> f32 conversions). */
-// Original name and size (0x110) from the JP demo map (UNUSED there: every call is inlined).
-static void vtx_copy(effN64Vtx* dst, effN64Vtx* src, Mtx mtx) {
-    Vec v;
-
-    OSInitFastCast();
-    OSs16tof32(&src->x, &v.x);
-    OSs16tof32(&src->y, &v.y);
-    OSs16tof32(&src->z, &v.z);
-    PSMTXMultVec(mtx, &v, &v);
-    OSInitFastCast();
-    OSf32tos16(&v.x, &dst->x);
-    OSf32tos16(&v.y, &dst->y);
-    OSf32tos16(&v.z, &dst->z);
-}
-
 static void effOpukuWcurtainMain(EffectEntry* effect);
 static void effOpukuWcurtainDisp(CameraId cameraId, void* param);
 
@@ -125,6 +109,22 @@ static void effOpukuWcurtainMain(EffectEntry* effect) {
         }
     }
     dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effOpukuWcurtainDisp, effect);
+}
+
+/** Transforms vertex `src`'s position by `mtx` into `dst` (fast-cast s16 <-> f32 conversions). */
+// Original name and size (0x110) from the JP demo map (UNUSED there: every call is inlined).
+static void vtx_copy(effN64Vtx* dst, effN64Vtx* src, Mtx mtx) {
+    Vec v;
+
+    OSInitFastCast();
+    OSs16tof32(&src->x, &v.x);
+    OSs16tof32(&src->y, &v.y);
+    OSs16tof32(&src->z, &v.z);
+    PSMTXMultVec(mtx, &v, &v);
+    OSInitFastCast();
+    OSf32tos16(&v.x, &dst->x);
+    OSf32tos16(&v.y, &dst->y);
+    OSf32tos16(&v.z, &dst->z);
 }
 
 /**

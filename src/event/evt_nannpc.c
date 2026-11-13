@@ -219,23 +219,6 @@ void nanNPCOption(void) {
         }
     }
 }
-#pragma pop
-
-/**
- * qsort comparator ordering crowd NPCs by Z, larger first; nannpc_ext_disp draws the sorted list from its end,
- * so the smaller Z draw first.
- */
-static s32 nannpc_zcompare(const void* paramA, const void* paramB) {
-    const NanNPCSort* a = paramA;
-    const NanNPCSort* b = paramB;
-    if (a->z < b->z) {
-        return 1;
-    }
-    if (a->z > b->z) {
-        return -1;
-    }
-    return 0;
-}
 
 /**
  * Sets the TEV, channel and fog state for drawing crowd sprites tinted by each NPC's colour (TEV colour register
@@ -253,6 +236,23 @@ void nannpc_ext_AlphaLoadTev(void) {
     GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, (GXColor){255, 255, 255, 255});
     GXSetNumTexGens(1);
     GXSetNumTevStages(1);
+}
+#pragma pop
+
+/**
+ * qsort comparator ordering crowd NPCs by Z, larger first; nannpc_ext_disp draws the sorted list from its end,
+ * so the smaller Z draw first.
+ */
+static s32 nannpc_zcompare(const void* paramA, const void* paramB) {
+    const NanNPCSort* a = paramA;
+    const NanNPCSort* b = paramB;
+    if (a->z < b->z) {
+        return 1;
+    }
+    if (a->z > b->z) {
+        return -1;
+    }
+    return 0;
 }
 
 /**

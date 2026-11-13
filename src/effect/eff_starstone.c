@@ -346,6 +346,145 @@ static inline void starStoneBlendState(void) {
     GXSetZMode(GX_TRUE, GX_LEQUAL, GX_FALSE);
 }
 
+/** Sets up the round stone's vertex formats and arrays (with its colour array) and calls display-list set 0 (34 lists). */
+// Original name and size (0x140) from the JP demo map (UNUSED there: every call is inlined).
+static void diamond_1_polygon_0(void) {
+    u32 i;
+
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 11);
+    GXSetArray(GX_VA_POS, diamond_1_vertex_tbl, 6);
+    GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);
+    GXSetArray(GX_VA_NRM, diamond_1_normal_tbl, 3);
+    GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
+    GXSetArray(GX_VA_CLR0, diamond_1_color0_tbl, 4);
+    GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 13);
+    GXSetArray(GX_VA_TEX0, diamond_1_texcoord0_tbl, 4);
+    for (i = 0; i < 34; i++) {
+        GXCallDisplayList(diamond_1_dl_0_tbl[i], diamond_1_dl_0_size_tbl[i] << 5);
+    }
+}
+
+/** Sets up the round stone's vertex formats and arrays (keeping the current colour array) and calls display-list set 1 (34 lists). */
+// Original name and size (0x130) from the JP demo map (UNUSED there: every call is inlined).
+static void diamond_1_polygon_1(void) {
+    u32 i;
+
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 11);
+    GXSetArray(GX_VA_POS, diamond_1_vertex_tbl, 6);
+    GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);
+    GXSetArray(GX_VA_NRM, diamond_1_normal_tbl, 3);
+    GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
+    GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 13);
+    GXSetArray(GX_VA_TEX0, diamond_1_texcoord0_tbl, 4);
+    for (i = 0; i < 34; i++) {
+        GXCallDisplayList(diamond_1_dl_1_tbl[i], diamond_1_dl_1_size_tbl[i] << 5);
+    }
+}
+
+/** Sets up the split stone's vertex formats and arrays and calls the first half's 19 display lists (list 0 only while the stone is falling). */
+// Original name and size (0x150) from the JP demo map (UNUSED there: every call is inlined).
+static void diamond_2_2_polygon_0(EffStarStoneWork* w) {
+    s32 i;
+
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 11);
+    GXSetArray(GX_VA_POS, diamond_2_2_vertex_tbl, 6);
+    GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);
+    GXSetArray(GX_VA_NRM, diamond_2_2_normal_tbl, 3);
+    GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
+    GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 14);
+    GXSetArray(GX_VA_TEX0, diamond_2_2_texcoord0_tbl, 4);
+    for (i = 0; i < sizeof(diamond_2_2_dl_0_tbl) / sizeof(diamond_2_2_dl_0_tbl[0]); i++) {
+        if ((w->flags & STAR_STONE_FLAG_FALLING) || i != 0) {
+            GXCallDisplayList(diamond_2_2_dl_0_tbl[i], diamond_2_2_dl_0_size_tbl[i] << 5);
+        }
+    }
+}
+
+/** Sets up the split stone's vertex formats and arrays and calls the second half's 19 display lists (list 0 only while the stone is falling). */
+// Original name and size (0x150) from the JP demo map (UNUSED there: every call is inlined).
+static void diamond_2_2_polygon_1(EffStarStoneWork* w) {
+    s32 i;
+
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 11);
+    GXSetArray(GX_VA_POS, diamond_2_2_vertex_tbl, 6);
+    GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);
+    GXSetArray(GX_VA_NRM, diamond_2_2_normal_tbl, 3);
+    GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
+    GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 14);
+    GXSetArray(GX_VA_TEX0, diamond_2_2_texcoord0_tbl, 4);
+    for (i = 0; i < sizeof(diamond_2_2_dl_1_tbl) / sizeof(diamond_2_2_dl_1_tbl[0]); i++) {
+        if ((w->flags & STAR_STONE_FLAG_FALLING) || i != 0) {
+            GXCallDisplayList(diamond_2_2_dl_1_tbl[i], diamond_2_2_dl_1_size_tbl[i] << 5);
+        }
+    }
+}
+
+/** Sets up the Crystal Star's vertex formats and arrays and calls display-list set 0 (34 lists). */
+// Original name and size (0x140) from the JP demo map (UNUSED there: every call is inlined).
+static void diamond_7_polygon_0(void) {
+    u32 i;
+
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 11);
+    GXSetArray(GX_VA_POS, diamond_7_vertex_tbl, 6);
+    GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);
+    GXSetArray(GX_VA_NRM, diamond_7_normal_tbl, 3);
+    GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
+    GXSetArray(GX_VA_CLR0, diamond_7_color0_tbl, 4);
+    GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 13);
+    GXSetArray(GX_VA_TEX0, diamond_7_texcoord0_tbl, 4);
+    for (i = 0; i < 34; i++) {
+        GXCallDisplayList(diamond_7_dl_0_tbl[i], diamond_7_dl_0_size_tbl[i] << 5);
+    }
+}
+
+/** Sets up the Crystal Star's vertex formats and arrays and calls display-list set 1 (33 lists). */
+// Original name and size (0x140) from the JP demo map (UNUSED there: every call is inlined).
+static void diamond_7_polygon_1(void) {
+    u32 i;
+
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 11);
+    GXSetArray(GX_VA_POS, diamond_7_vertex_tbl, 6);
+    GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);
+    GXSetArray(GX_VA_NRM, diamond_7_normal_tbl, 3);
+    GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
+    GXSetArray(GX_VA_CLR0, diamond_7_color0_tbl, 4);
+    GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 13);
+    GXSetArray(GX_VA_TEX0, diamond_7_texcoord0_tbl, 4);
+    for (i = 0; i < 33; i++) {
+        GXCallDisplayList(diamond_7_dl_1_tbl[i], diamond_7_dl_1_size_tbl[i] << 5);
+    }
+}
+
 /**
  * Spawns Crystal Star type % 7 (0 Diamond, 1 Emerald, 2 Gold, 3 Ruby, 4 Sapphire, 5 Garnet,
  * 6 Crystal) at (x, y, z). Types 7 and up are the same stars without the dust trail or shine sound.
@@ -570,145 +709,6 @@ static void effStarStoneMain(EffectEntry* effect) {
                 dispEntry(cam, dispCalcZ(&pos), DISP_MODE_XLU, effStarStoneDisp_2, effect);
                 break;
         }
-    }
-}
-
-/** Sets up the round stone's vertex formats and arrays (with its colour array) and calls display-list set 0 (34 lists). */
-// Original name and size (0x140) from the JP demo map (UNUSED there: every call is inlined).
-static void diamond_1_polygon_0(void) {
-    u32 i;
-
-    GXClearVtxDesc();
-    GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 11);
-    GXSetArray(GX_VA_POS, diamond_1_vertex_tbl, 6);
-    GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);
-    GXSetArray(GX_VA_NRM, diamond_1_normal_tbl, 3);
-    GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
-    GXSetArray(GX_VA_CLR0, diamond_1_color0_tbl, 4);
-    GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 13);
-    GXSetArray(GX_VA_TEX0, diamond_1_texcoord0_tbl, 4);
-    for (i = 0; i < 34; i++) {
-        GXCallDisplayList(diamond_1_dl_0_tbl[i], diamond_1_dl_0_size_tbl[i] << 5);
-    }
-}
-
-/** Sets up the round stone's vertex formats and arrays (keeping the current colour array) and calls display-list set 1 (34 lists). */
-// Original name and size (0x130) from the JP demo map (UNUSED there: every call is inlined).
-static void diamond_1_polygon_1(void) {
-    u32 i;
-
-    GXClearVtxDesc();
-    GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 11);
-    GXSetArray(GX_VA_POS, diamond_1_vertex_tbl, 6);
-    GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);
-    GXSetArray(GX_VA_NRM, diamond_1_normal_tbl, 3);
-    GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
-    GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 13);
-    GXSetArray(GX_VA_TEX0, diamond_1_texcoord0_tbl, 4);
-    for (i = 0; i < 34; i++) {
-        GXCallDisplayList(diamond_1_dl_1_tbl[i], diamond_1_dl_1_size_tbl[i] << 5);
-    }
-}
-
-/** Sets up the split stone's vertex formats and arrays and calls the first half's 19 display lists (list 0 only while the stone is falling). */
-// Original name and size (0x150) from the JP demo map (UNUSED there: every call is inlined).
-static void diamond_2_2_polygon_0(EffStarStoneWork* w) {
-    s32 i;
-
-    GXClearVtxDesc();
-    GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 11);
-    GXSetArray(GX_VA_POS, diamond_2_2_vertex_tbl, 6);
-    GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);
-    GXSetArray(GX_VA_NRM, diamond_2_2_normal_tbl, 3);
-    GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
-    GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 14);
-    GXSetArray(GX_VA_TEX0, diamond_2_2_texcoord0_tbl, 4);
-    for (i = 0; i < sizeof(diamond_2_2_dl_0_tbl) / sizeof(diamond_2_2_dl_0_tbl[0]); i++) {
-        if ((w->flags & STAR_STONE_FLAG_FALLING) || i != 0) {
-            GXCallDisplayList(diamond_2_2_dl_0_tbl[i], diamond_2_2_dl_0_size_tbl[i] << 5);
-        }
-    }
-}
-
-/** Sets up the split stone's vertex formats and arrays and calls the second half's 19 display lists (list 0 only while the stone is falling). */
-// Original name and size (0x150) from the JP demo map (UNUSED there: every call is inlined).
-static void diamond_2_2_polygon_1(EffStarStoneWork* w) {
-    s32 i;
-
-    GXClearVtxDesc();
-    GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 11);
-    GXSetArray(GX_VA_POS, diamond_2_2_vertex_tbl, 6);
-    GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);
-    GXSetArray(GX_VA_NRM, diamond_2_2_normal_tbl, 3);
-    GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
-    GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 14);
-    GXSetArray(GX_VA_TEX0, diamond_2_2_texcoord0_tbl, 4);
-    for (i = 0; i < sizeof(diamond_2_2_dl_1_tbl) / sizeof(diamond_2_2_dl_1_tbl[0]); i++) {
-        if ((w->flags & STAR_STONE_FLAG_FALLING) || i != 0) {
-            GXCallDisplayList(diamond_2_2_dl_1_tbl[i], diamond_2_2_dl_1_size_tbl[i] << 5);
-        }
-    }
-}
-
-/** Sets up the Crystal Star's vertex formats and arrays and calls display-list set 0 (34 lists). */
-// Original name and size (0x140) from the JP demo map (UNUSED there: every call is inlined).
-static void diamond_7_polygon_0(void) {
-    u32 i;
-
-    GXClearVtxDesc();
-    GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 11);
-    GXSetArray(GX_VA_POS, diamond_7_vertex_tbl, 6);
-    GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);
-    GXSetArray(GX_VA_NRM, diamond_7_normal_tbl, 3);
-    GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
-    GXSetArray(GX_VA_CLR0, diamond_7_color0_tbl, 4);
-    GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 13);
-    GXSetArray(GX_VA_TEX0, diamond_7_texcoord0_tbl, 4);
-    for (i = 0; i < 34; i++) {
-        GXCallDisplayList(diamond_7_dl_0_tbl[i], diamond_7_dl_0_size_tbl[i] << 5);
-    }
-}
-
-/** Sets up the Crystal Star's vertex formats and arrays and calls display-list set 1 (33 lists). */
-// Original name and size (0x140) from the JP demo map (UNUSED there: every call is inlined).
-static void diamond_7_polygon_1(void) {
-    u32 i;
-
-    GXClearVtxDesc();
-    GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 11);
-    GXSetArray(GX_VA_POS, diamond_7_vertex_tbl, 6);
-    GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);
-    GXSetArray(GX_VA_NRM, diamond_7_normal_tbl, 3);
-    GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
-    GXSetArray(GX_VA_CLR0, diamond_7_color0_tbl, 4);
-    GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 13);
-    GXSetArray(GX_VA_TEX0, diamond_7_texcoord0_tbl, 4);
-    for (i = 0; i < 33; i++) {
-        GXCallDisplayList(diamond_7_dl_1_tbl[i], diamond_7_dl_1_size_tbl[i] << 5);
     }
 }
 

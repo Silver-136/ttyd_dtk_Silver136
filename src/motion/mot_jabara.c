@@ -65,26 +65,6 @@ static void zoomOff(void) {
 }
 
 /**
- * Puts Mario back to normal after the Spring Jump:
- * restores the facing saved at take-off, clears the offsets and rotation,
- * resets the 20x37 collision box and releases the front-pose and facing locks.
- */
-// Original name and size (0xc0) from the JP demo map (UNUSED there: every call is inlined).
-void _marioRefresh(void) {
-    MarioWork* mario = marioGetPtr();
-    mario->displayDirection = mario->mot.jabara.dir;
-    mario->displayDirectionTarget = mario->mot.jabara.dir;
-    mario->rotOfs = (Vec){0.0f, 0.0f, 0.0f};
-    mario->dispOfs = (Vec){0.0f, 0.0f, 0.0f};
-    mario->rot = (Vec){0.0f, 0.0f, 0.0f};
-    mario->wPlayerCollisionBox.x = 20.0f;
-    mario->wPlayerCollisionBox.y = 37.0f;
-    marioAdjustMoveDir();
-    mario->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
-    mario->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
-}
-
-/**
  * Casts a short ray (half Mario's width) from just above his head along angle ang (degrees);
  * returns the hit, used while walking hanging under a ceiling to stop at walls.
  */
@@ -217,6 +197,26 @@ BOOL marioChkJabara(void) {
     } else {
         return rubCount >= 1;
     }
+}
+
+/**
+ * Puts Mario back to normal after the Spring Jump:
+ * restores the facing saved at take-off, clears the offsets and rotation,
+ * resets the 20x37 collision box and releases the front-pose and facing locks.
+ */
+// Original name and size (0xc0) from the JP demo map (UNUSED there: every call is inlined).
+void _marioRefresh(void) {
+    MarioWork* mario = marioGetPtr();
+    mario->displayDirection = mario->mot.jabara.dir;
+    mario->displayDirectionTarget = mario->mot.jabara.dir;
+    mario->rotOfs = (Vec){0.0f, 0.0f, 0.0f};
+    mario->dispOfs = (Vec){0.0f, 0.0f, 0.0f};
+    mario->rot = (Vec){0.0f, 0.0f, 0.0f};
+    mario->wPlayerCollisionBox.x = 20.0f;
+    mario->wPlayerCollisionBox.y = 37.0f;
+    marioAdjustMoveDir();
+    mario->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
+    mario->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
 }
 
 /** z position of the ceiling hit object Mario grabbed, so he can be snapped to its plane. */

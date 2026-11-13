@@ -48,6 +48,25 @@ static void SoundSSMain(void);
 
 static void SoundAIDMACallback(void);
 
+/** Undoes one sndDisableIRQ, restoring interrupts at the outermost level. */
+// Original name and size (0x48) from the JP demo map (UNUSED there: every call is inlined).
+void sndEnableIRQ(void) {
+    if (sound.interruptDepth) {
+        if (!--sound.interruptDepth) {
+            OSRestoreInterrupts(sound.interrupts);
+        }
+    }
+}
+
+/** Disables interrupts for stream bookkeeping; nests. */
+// Original name and size (0x54) from the JP demo map (UNUSED there: every call is inlined).
+void sndDisableIRQ(void) {
+    if (!sound.interruptDepth) {
+        sound.interrupts = OSDisableInterrupts();
+    }
+    sound.interruptDepth++;
+}
+
 /** MusyX allocation hook: allocates from the default heap. */
 void* sndMalloc(size_t size) {
     return __memAlloc(HEAP_DEFAULT, size);
@@ -56,6 +75,23 @@ void* sndMalloc(size_t size) {
 /** MusyX free hook: frees to the default heap. */
 void sndFree(void* ptr) {
     __memFree(HEAP_DEFAULT, ptr);
+}
+
+/** Returns the song library group with index, or NULL. */
+// Original name and size (0x38) from the JP demo map (UNUSED there: every call is inlined).
+SoundGroup* searchSongPtr(u8 groupIndex) {
+    u16 index = groupIndex;
+    SoundGroup* group;
+
+    for (group = sound.groups;; group = group->next) {
+        if (group == NULL) {
+            return NULL;
+        }
+        if (group->index == index) {
+            break;
+        }
+    }
+    return group;
 }
 
 /**
@@ -603,83 +639,7 @@ BOOL SoundSLibLoadDVD(const char* path) {
     return TRUE;
 }
 
-/**
- * Stops every song, effect, DVD-audio track and stream. Only SoundDropData calls it (inlined); the JP demo map
- * lists its out-of-line copy as stripped (SoundStopAll, 0x208 bytes, which this body compiles to there).
- */
-inline void SoundStopAll(void) {
-    u32 i;
-
-    for (i = 0; i < SOUND_SONG_MAX; i++) {
-        SoundSong* song = &sound.songs[i];
-        if (sndSeqGetValid(song->seqId)) {
-            sndSeqStop(song->seqId);
-            song->seqId = (SND_SEQID)-1;
-        }
-    }
-    for (i = 0; i < SOUND_EFFECT_MAX; i++) {
-        SoundEffect* effect = &sound.effects[i];
-        if (effect->flags) {
-            sndFXKeyOff(effect->voiceId);
-            if (effect->flags & SOUND_EFX_FLAG_EMITTER_UNUSED) {
-                sndRemoveEmitter(&effect->emitter);
-            }
-            effect->flags = 0;
-        }
-    }
-
-    for (i = 0; i < SOUND_DVD_MAX; i++) {
-        SoundDVD* dvd = &sound.dvds[i];
-        if (dvd->flags & (SOUND_DVD_FLAG_PLAY | SOUND_DVD_FLAG_MUTE)) {
-            AISetStreamPlayState(0);
-            dvd->flags = 0;
-            sound.dvdChannel = -1;
-            DVDCancelStream(&dvd->info.cb);
-            DVDClose(&dvd->info);
-        }
-    }
-
-    for (i = 0; i < SOUND_STREAM_MAX; i++) {
-        SoundStream* stream;
-        if (sound.streams[i].flags) {
-            stream = &sound.streams[i];
-#if VERSION <= VERSION_DEMO_JP
-            if (!(stream->flags & SOUND_STREAM_FLAG_STARTED)) {
-                stream->flags |= SOUND_STREAM_FLAG_END;
-                continue;
-#else
-            if (!sound.interruptDepth) {
-                sound.interrupts = OSDisableInterrupts();
-#endif
-            }
-#if VERSION >= VERSION_JP
-            sound.interruptDepth++;
-#endif
-            if (stream->flags & SOUND_STREAM_FLAG_ARAM) {
-                sound.slotUsed[stream->slot] = 0;
-            }
-            stream->flags = 0;
-#if VERSION <= VERSION_DEMO_JP
-            if (!sound.interruptDepth) {
-                sound.interrupts = OSDisableInterrupts();
-            }
-            sound.interruptDepth++;
-#endif
-            DVDMgrClose(stream->entries[0].dvd);
-            DVDMgrClose(stream->entries[1].dvd);
-            sndStreamFree(stream->entries[0].streamId);
-            if (stream->count == 2) {
-                sndStreamFree(stream->entries[1].streamId);
-            }
-            if (sound.interruptDepth) {
-                if (!--sound.interruptDepth) {
-                    OSRestoreInterrupts(sound.interrupts);
-                }
-            }
-            sound.streamChannel = -1;
-        }
-    }
-}
+inline void SoundStopAll(void);
 
 /**
  * Unloads all sound data: stops everything, frees the song library and group memory. The loops that pop the
@@ -779,6 +739,84 @@ BOOL SoundDropData(void) {
     return TRUE;
 }
 
+/**
+ * Stops every song, effect, DVD-audio track and stream. Only SoundDropData calls it (inlined); the JP demo map
+ * lists its out-of-line copy as stripped (SoundStopAll, 0x208 bytes, which this body compiles to there).
+ */
+inline void SoundStopAll(void) {
+    u32 i;
+
+    for (i = 0; i < SOUND_SONG_MAX; i++) {
+        SoundSong* song = &sound.songs[i];
+        if (sndSeqGetValid(song->seqId)) {
+            sndSeqStop(song->seqId);
+            song->seqId = (SND_SEQID)-1;
+        }
+    }
+    for (i = 0; i < SOUND_EFFECT_MAX; i++) {
+        SoundEffect* effect = &sound.effects[i];
+        if (effect->flags) {
+            sndFXKeyOff(effect->voiceId);
+            if (effect->flags & SOUND_EFX_FLAG_EMITTER_UNUSED) {
+                sndRemoveEmitter(&effect->emitter);
+            }
+            effect->flags = 0;
+        }
+    }
+
+    for (i = 0; i < SOUND_DVD_MAX; i++) {
+        SoundDVD* dvd = &sound.dvds[i];
+        if (dvd->flags & (SOUND_DVD_FLAG_PLAY | SOUND_DVD_FLAG_MUTE)) {
+            AISetStreamPlayState(0);
+            dvd->flags = 0;
+            sound.dvdChannel = -1;
+            DVDCancelStream(&dvd->info.cb);
+            DVDClose(&dvd->info);
+        }
+    }
+
+    for (i = 0; i < SOUND_STREAM_MAX; i++) {
+        SoundStream* stream;
+        if (sound.streams[i].flags) {
+            stream = &sound.streams[i];
+#if VERSION <= VERSION_DEMO_JP
+            if (!(stream->flags & SOUND_STREAM_FLAG_STARTED)) {
+                stream->flags |= SOUND_STREAM_FLAG_END;
+                continue;
+#else
+            if (!sound.interruptDepth) {
+                sound.interrupts = OSDisableInterrupts();
+#endif
+            }
+#if VERSION >= VERSION_JP
+            sound.interruptDepth++;
+#endif
+            if (stream->flags & SOUND_STREAM_FLAG_ARAM) {
+                sound.slotUsed[stream->slot] = 0;
+            }
+            stream->flags = 0;
+#if VERSION <= VERSION_DEMO_JP
+            if (!sound.interruptDepth) {
+                sound.interrupts = OSDisableInterrupts();
+            }
+            sound.interruptDepth++;
+#endif
+            DVDMgrClose(stream->entries[0].dvd);
+            DVDMgrClose(stream->entries[1].dvd);
+            sndStreamFree(stream->entries[0].streamId);
+            if (stream->count == 2) {
+                sndStreamFree(stream->entries[1].streamId);
+            }
+            if (sound.interruptDepth) {
+                if (!--sound.interruptDepth) {
+                    OSRestoreInterrupts(sound.interrupts);
+                }
+            }
+            sound.streamChannel = -1;
+        }
+    }
+}
+
 /** Switches MusyX between mono, stereo and surround output (JP and later only when it changes). */
 void SoundSetOutputMode(SND_OUTPUTMODE mode) {
 #if VERSION >= VERSION_JP
@@ -828,23 +866,6 @@ void SoundCloseCover(void) {
             sound.coverState = SOUND_COVER_CLOSED;
         }
     }
-}
-
-/** Returns the song library group with index, or NULL. */
-// Original name and size (0x38) from the JP demo map (UNUSED there: every call is inlined).
-SoundGroup* searchSongPtr(u8 groupIndex) {
-    u16 index = groupIndex;
-    SoundGroup* group;
-
-    for (group = sound.groups;; group = group->next) {
-        if (group == NULL) {
-            return NULL;
-        }
-        if (group->index == index) {
-            break;
-        }
-    }
-    return group;
 }
 
 /**
@@ -963,18 +984,6 @@ inline void SoundEfxMuteCh(s32 chan) {
     }
 }
 
-/**
- * Stops the effects on all effect channels and frees the channels (unused; the JP demo map lists it stripped,
- * 0x7c bytes, which this loop compiles to).
- */
-static void SoundEfxStopAll(void) {
-    s32 chan;
-
-    for (chan = 0; chan < SOUND_EFFECT_MAX; chan++) {
-        SoundEfxMuteCh(chan);
-    }
-}
-
 /** Returns whether the effect on chan is still sounding (it does not free the channel). */
 inline u32 SoundEfxCheckPlay(s32 chan) {
     SoundEffect* sfx = &sound.effects[chan];
@@ -1062,6 +1071,18 @@ void SoundEfxStop(s32 chan) {
             sndRemoveEmitter(&sfx->emitter);
         }
         sfx->flags = 0;
+    }
+}
+
+/**
+ * Stops the effects on all effect channels and frees the channels (unused; the JP demo map lists it stripped,
+ * 0x7c bytes, which this loop compiles to).
+ */
+static void SoundEfxStopAll(void) {
+    s32 chan;
+
+    for (chan = 0; chan < SOUND_EFFECT_MAX; chan++) {
+        SoundEfxMuteCh(chan);
     }
 }
 
@@ -1379,25 +1400,6 @@ static void _ssDVDReadAsync_activeChk(s32 result, DVDFileInfo* fileInfo);
 static void cache_flush(u32 pointerToARQRequest);
 static void _ssDVDReadAsync_cache_next(s32 result, DVDFileInfo* fileInfo);
 static void SoundSSPlayChEx_main(s32 result, DVDFileInfo* fileInfo);
-
-/** Disables interrupts for stream bookkeeping; nests. */
-// Original name and size (0x54) from the JP demo map (UNUSED there: every call is inlined).
-void sndDisableIRQ(void) {
-    if (!sound.interruptDepth) {
-        sound.interrupts = OSDisableInterrupts();
-    }
-    sound.interruptDepth++;
-}
-
-/** Undoes one sndDisableIRQ, restoring interrupts at the outermost level. */
-// Original name and size (0x48) from the JP demo map (UNUSED there: every call is inlined).
-void sndEnableIRQ(void) {
-    if (sound.interruptDepth) {
-        if (!--sound.interruptDepth) {
-            OSRestoreInterrupts(sound.interrupts);
-        }
-    }
-}
 
 /** Rounds x up to a multiple of 32 bytes (DVD and DMA alignment). */
 static inline u32 _ssAlign32(u32 x) {

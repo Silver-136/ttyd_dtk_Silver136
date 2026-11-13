@@ -341,6 +341,24 @@ static MapObjectWork* mobjGetWork(void) {
     }
 }
 
+/** Builds a scale, x/y/z rotation (degrees) and translation matrix. */
+static void calcMtx(Mtx mtx, Vec* pos, Vec* sc, Vec* rot) {
+    Mtx trans;
+    Mtx scale;
+    Mtx xrot;
+    Mtx yrot;
+    Mtx zrot;
+    MTXTrans(trans, pos->x, pos->y, pos->z);
+    MTXScale(scale, sc->x, sc->y, sc->z);
+    MTXRotRad(xrot, 'x', MTXDegToRad(rot->x));
+    MTXRotRad(yrot, 'y', MTXDegToRad(rot->y));
+    MTXRotRad(zrot, 'z', MTXDegToRad(rot->z));
+    MTXConcat(trans, zrot, trans);
+    MTXConcat(trans, yrot, trans);
+    MTXConcat(trans, xrot, trans);
+    MTXConcat(trans, scale, mtx);
+}
+
 /**
  * Draw callback for a translucent map object: draws its pose's opaque and translucent parts in one go,
  * with its paper texture if it has one.
@@ -1040,24 +1058,6 @@ EventEntry* mobjRunEvent(MapObjectEntry* entry, EvtWord* eventCode) {
     entry->eventId = event->eventId;
 
     return event;
-}
-
-/** Builds a scale, x/y/z rotation (degrees) and translation matrix. */
-static void calcMtx(Mtx mtx, Vec* pos, Vec* sc, Vec* rot) {
-    Mtx trans;
-    Mtx scale;
-    Mtx xrot;
-    Mtx yrot;
-    Mtx zrot;
-    MTXTrans(trans, pos->x, pos->y, pos->z);
-    MTXScale(scale, sc->x, sc->y, sc->z);
-    MTXRotRad(xrot, 'x', MTXDegToRad(rot->x));
-    MTXRotRad(yrot, 'y', MTXDegToRad(rot->y));
-    MTXRotRad(zrot, 'z', MTXDegToRad(rot->z));
-    MTXConcat(trans, zrot, trans);
-    MTXConcat(trans, yrot, trans);
-    MTXConcat(trans, xrot, trans);
-    MTXConcat(trans, scale, mtx);
 }
 
 /**

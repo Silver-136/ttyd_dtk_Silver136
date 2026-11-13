@@ -225,19 +225,7 @@ void extReset(void) {
     memset(wp, 0, sizeof(ExtdrvWork));
 }
 
-/** The 3D camera's yaw in degrees (0..360), from the direction it looks along. */
-static f32 camGetRy(void) {
-    CameraEntry* cam = camGetPtr(CAMERA_3D);
-    f32 ry = 57.29579f * (f32)atan2(-(cam->cameraAt.x - cam->cameraPos.x), -(cam->cameraAt.z - cam->cameraPos.z));
-
-    while (ry >= 360.0f) {
-        ry -= 360.0f;
-    }
-    if (ry < 0.0f) {
-        ry += 360.0f;
-    }
-    return ry;
-}
+static f32 camGetRy(void);
 
 /**
  * Once per frame: runs the crowd's callbacks (the first only when the game is not paused),
@@ -467,6 +455,20 @@ void extLoadTev(void) {
     GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, fogColor);
     GXSetNumTexGens(1);
     GXSetNumTevStages(1);
+}
+
+/** The 3D camera's yaw in degrees (0..360), from the direction it looks along. */
+static f32 camGetRy(void) {
+    CameraEntry* cam = camGetPtr(CAMERA_3D);
+    f32 ry = 57.29579f * (f32)atan2(-(cam->cameraAt.x - cam->cameraPos.x), -(cam->cameraAt.z - cam->cameraPos.z));
+
+    while (ry >= 360.0f) {
+        ry -= 360.0f;
+    }
+    if (ry < 0.0f) {
+        ry += 360.0f;
+    }
+    return ry;
 }
 
 static u8 shadow_dl[32] ATTRIBUTE_ALIGN(32) = {
