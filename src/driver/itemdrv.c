@@ -51,25 +51,6 @@ inline Vec unknownVec0(void) {
     return (Vec){ 0.0f, 0.0f, 0.0f };
 }
 
-// FAKE: makeVecByValue2 is a second copy of makeVecByValue; calling makeVecByValue at both sites changes the object
-/** Builds a Vec from x, y, z (a twin of makeVecByValue that compiles the same). */
-inline Vec makeVecByValue2(f32 x, f32 y, f32 z) {
-    Vec v = (Vec){ 0.0f, 0.0f, 0.0f };
-    v.x = x;
-    v.y = y;
-    v.z = z;
-    return v;
-}
-
-/** Builds a Vec from x, y, z. */
-inline Vec makeVecByValue(f32 x, f32 y, f32 z) {
-    Vec v = (Vec){ 0.0f, 0.0f, 0.0f };
-    v.x = x;
-    v.y = y;
-    v.z = z;
-    return v;
-}
-
 static void winNameDisp(WinMgrEntry* win);
 static void winNameDisp2(WinMgrEntry* win);
 static void winHelpMain(WinMgrEntry* win);
@@ -1041,7 +1022,7 @@ ItemEntry* itemNearDistCheck(f32 x, f32 y, f32 z, f32 range) {
     entry = wp->entries;
     found = NULL;
     i = 0;
-    pos = makeVecByValue2(x, y, z);
+    pos = (Vec){ x, y, z };
     for (; i < wp->count; i++, entry++) {
 #if VERSION <= VERSION_DEMO_JP
         if (!(entry->flags & ITEM_FLAG_ACTIVE)) {
@@ -1072,13 +1053,7 @@ ItemEntry* itemNearDistCheck(f32 x, f32 y, f32 z, f32 range) {
             continue;
         }
 #endif
-        {
-            f32 iz, iy, ix;
-            ix = entry->position.x;
-            iy = entry->position.y;
-            iz = entry->position.z;
-            itemPos = makeVecByValue(ix, iy, iz);
-        }
+        itemPos = (Vec){ entry->position.x, entry->position.y, entry->position.z };
         PSVECSubtract(&itemPos, &pos, &diff);
         dist = PSVECMag(&diff);
         if (dist < range) {

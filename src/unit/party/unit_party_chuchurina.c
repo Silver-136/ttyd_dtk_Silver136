@@ -2474,6 +2474,21 @@ static USER_FUNC(_get_itemsteal_param) {
  * clears the item from the field battle setup and unequips it if it was a badge.
  * Returns the item in args[1], or 0 when nothing is stolen.
  */
+/**
+ * Unequips everything from the unit when the stolen item is a badge.
+ */
+static void _chuchu_item_check(BattleUnit* unit, u32 item) {
+    if (item >= BADGE_MIN && item < BADGE_MAX) {
+        if (unit->currentKind == UNIT_MARIO) {
+            BtlUnit_EquipItem(unit, EQUIP_RESET | EQUIP_MARIO, ITEM_NULL);
+        } else if (unit->currentKind >= TYPE_PARTNER_MIN && unit->currentKind < TYPE_PARTNER_MAX) {
+            BtlUnit_EquipItem(unit, EQUIP_RESET | EQUIP_PARTNER, ITEM_NULL);
+        } else {
+            BtlUnit_EquipItem(unit, EQUIP_RESET, ITEM_NULL);
+        }
+    }
+}
+
 static USER_FUNC(_chuchu_item_steal) {
     ItemDropData* table;
     BattleWork* wp;
@@ -2551,15 +2566,7 @@ static USER_FUNC(_chuchu_item_steal) {
         NpcBattleInfo* setup = wp->fbatInfo->setup;
         setup->heldItems[unit->groupSetupId] = ITEM_NULL;
     }
-    if (item >= BADGE_MIN && item < BADGE_MAX) {
-        if (unit->currentKind == UNIT_MARIO) {
-            BtlUnit_EquipItem(unit, EQUIP_RESET | EQUIP_MARIO, ITEM_NULL);
-        } else if (unit->currentKind >= TYPE_PARTNER_MIN && unit->currentKind < TYPE_PARTNER_MAX) {
-            BtlUnit_EquipItem(unit, EQUIP_RESET | EQUIP_PARTNER, ITEM_NULL);
-        } else {
-            BtlUnit_EquipItem(unit, EQUIP_RESET, ITEM_NULL);
-        }
-    }
+    _chuchu_item_check(unit, item);
 
     // FAKE: no-op (u16) cast (item is u16); the plain call changes the object
     evtSetValue(event, out, (u16)item);
