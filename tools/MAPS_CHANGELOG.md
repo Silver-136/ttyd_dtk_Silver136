@@ -8,13 +8,14 @@ generated from (maps made before 2026-11-13 have no such line).
 One entry per push, newest first: date, the pushed commit, whether maps from the previous push are now obsolete,
 and what changed in plain words.
 
-## 2026-11-13 - pushed commit: PUSH_COMMIT
+## 2026-11-13 - pushed commit: the one that adds this entry (maps stamped 7799968b7)
 
 Old maps obsolete: **yes**. Regenerate them.
 
 - Many functions the linker stripped from the original (listed as UNUSED in the JP demo maps) are back as
   ordinary functions under their original names; in the built maps they now appear as UNUSED entries of their
-  own instead of being missing. Several replace names this project had made up, for example `partyWallSlide` is
+  own instead of being missing. Compared with maps made on 2026-11-09, the JP demo's MarioSt.MAP has 125 more
+  UNUSED entries (US: 118), most of them from this push. Several replace names this project had made up, for example `partyWallSlide` is
   now `reflect2`, `partyGetFrontAttrFar` is `getFrontFloorAttr2`, `psndSongFindCh` is `searchEmptySONGCh`,
   `psndEnvVolume` is `psndENV_calcvol`, `statusWinEase` is `winPositionCalc`.
 - About 90 functions in over 40 files moved to the order the JP demo maps give, so their addresses inside those
