@@ -27,9 +27,7 @@
 #include "sfx_name_word.h"
 #include "evt/evt_cam.h"
 
-#if VERSION <= VERSION_DEMO_JP
 #include "party/party_bomhei.h"
-#endif
 
 #if VERSION != VERSION_JP
 // Only JP has a local duplicate; elsewhere this is the global bomhei_init
@@ -56,25 +54,6 @@ EVT_END()
 #if VERSION <= VERSION_DEMO_JP
 static s32 m_w_7_sync[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 9, 9, 8, 7, 5, 3, 1, 0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 9, 8, 6, 4, 3, 2, 1, 0, 0, 0, 0, 0};
 #endif
-
-// Original name and size (0x90) from the JP demo map (UNUSED there: every call is inlined).
-inline BOOL chkBreakable(HitEntry* hit) {
-    CaseEntry* c;
-    if (hit == NULL) {
-        return FALSE;
-    }
-    if (hitGetAttr(hit) & HIT_ATTR_MOBJ) {
-        if (strcmp(mobjHitObjPtrToPtr(hit)->animName, "MOBJ_BombRock") == 0) {
-            return TRUE;
-        }
-    } else {
-        c = caseCheckHitObj2(hit);
-        if (c != NULL && c->conditionId == CASE_BOBBERY) {
-            return TRUE;
-        }
-    }
-    return FALSE;
-}
 
 static inline void bomheiCleanFlags(PartyEntry* p) {
     p->flags2 &= ~PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
@@ -204,8 +183,12 @@ s32 bomheiGetStatus(void) {
     return status;
 }
 
-#if VERSION >= VERSION_JP
+/**
+ * Party table exit handler: drops Mario's carry flag, stops the bomb sounds and frees the use work. The early demos
+ * do this on the given partner; JP and later on the current partner when it is Bobbery in use (as bomhei_use_cancel).
+ */
 void bomhei_exit(PartyEntry* party) {
+#if VERSION >= VERSION_JP
     PartyEntry* p;
     party->playerPtr->flags &= ~MARIO_FLAG_IS_CARRYING_BOBBERY;
     p = partyGetPtr(marioGetPartyId());
@@ -220,18 +203,12 @@ void bomhei_exit(PartyEntry* party) {
         se2_off(p);
         bomheiFree(p);
     }
-}
-#endif
-
-#if VERSION <= VERSION_DEMO_JP
-
-/** Party table exit handler (early demos): drops Mario's carry flag, stops the bomb sounds and frees the use work. */
-void bomhei_exit(PartyEntry* party) {
+#else
     party->playerPtr->flags &= ~(MARIO_FLAG_ACTIVE << 13);
     se_all_off(party);
     bomheiFree(party);
-}
 #endif
+}
 
 /**
  * Cancels a bomb in progress: back to run mode 2 unless in run mode 9,
@@ -283,8 +260,8 @@ void bomhei_use_cancel2(void) {
  * The early demos restore a standing pose when carried; JP and later choose walk, dash, jump or standing from Mario's state
  * and repositions Bobbery near Mario during use motions 70-99.
  */
-#if VERSION >= VERSION_JP
 void bomhei_use_post(PartyEntry* party) {
+#if VERSION >= VERSION_JP
     MarioWork* player = party->playerPtr;
     const char* name;
     if (party->useMotionId >= 70 && party->useMotionId < 100) {
@@ -312,9 +289,7 @@ void bomhei_use_post(PartyEntry* party) {
     se1_off(party);
     se2_off(party);
     bomheiFree(party);
-}
 #else
-void bomhei_use_post(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;
     if (mario->flags & (MARIO_FLAG_ACTIVE << 13)) {
         mario->flags &= ~(MARIO_FLAG_ACTIVE << 13);
@@ -322,8 +297,90 @@ void bomhei_use_post(PartyEntry* party) {
     }
     se_all_off(party);
     bomheiFree(party);
+#endif
+}
+
+/**
+ * Ends the fuse early on attribute 0xC00 (use motion 60, explode), or floor attribute 0x200
+ * without 0xC00 (use motion 40, the splash). JP and later check front, then head, then floor until one applies;
+ * the early demos inspect only the first hit object present. JP and later return TRUE when one applied (use motion 22
+ * reads it); the early demos return nothing (no caller reads a result there).
+ * 0x200 is the hazard water that sinks Mario (mario_hit.c, MARIO_MOTION_DAMAGE), 0x400 HIT_ATTR_DAMAGE_LIQUID
+ * and 0x800 the spikes (MARIO_MOTION_DAMAGE_TOGE).
+ */
+// Original name and size (0xa4) from the JP demo map (UNUSED there: every call is inlined).
+#if VERSION <= VERSION_DEMO_JP
+static void checkMapAttr(PartyEntry* party) {
+    u32 attr;
+
+    if (party->hitobjFront != NULL) {
+        if (hitGetAttr(party->hitobjFront) & (HIT_ATTR_DAMAGE_LIQUID | HIT_ATTR_SPIKES)) {
+            party->useMotionId = 60;
+        }
+    } else if (party->hitobjHead != NULL) {
+        if (hitGetAttr(party->hitobjHead) & (HIT_ATTR_DAMAGE_LIQUID | HIT_ATTR_SPIKES)) {
+            party->useMotionId = 60;
+        }
+    } else if (party->hitobjStandOn != NULL) {
+        attr = hitGetAttr(party->hitobjStandOn);
+        if (attr & (HIT_ATTR_DAMAGE_LIQUID | HIT_ATTR_SPIKES)) {
+            party->useMotionId = 60;
+        } else if (attr & HIT_ATTR_WATER_HAZARD) {
+            party->useMotionId = 40;
+        }
+    }
+}
+#else
+static BOOL checkMapAttr(PartyEntry* party) {
+    HitEntry* hit;
+    u32 attr;
+
+    hit = party->hitobjFront;
+    if (hit != NULL && (hitGetAttr(hit) & (HIT_ATTR_DAMAGE_LIQUID | HIT_ATTR_SPIKES))) {
+        party->useMotionId = 60;
+        return TRUE;
+    }
+    hit = party->hitobjHead;
+    if (hit != NULL && (hitGetAttr(hit) & (HIT_ATTR_DAMAGE_LIQUID | HIT_ATTR_SPIKES))) {
+        party->useMotionId = 60;
+        return TRUE;
+    }
+    hit = party->hitobjStandOn;
+    if (hit != NULL) {
+        attr = hitGetAttr(hit);
+        if (attr & (HIT_ATTR_DAMAGE_LIQUID | HIT_ATTR_SPIKES)) {
+            party->useMotionId = 60;
+            return TRUE;
+        }
+        if (attr & HIT_ATTR_WATER_HAZARD) {
+            party->useMotionId = 40;
+            return TRUE;
+        }
+    }
+    return FALSE;
 }
 #endif
+
+/**
+ * Holds Bobbery above Mario's head: 36 units up (plus a bob from m_w_7_sync while Mario plays the carry walk
+ * M_W_7), 6 behind along his facing, facing the same way as Mario.
+ */
+// Original name and size (0xf4) from the JP demo map (UNUSED there: every call is inlined).
+void bomhei_hold(PartyEntry* party) {
+    MarioWork* mario = party->playerPtr;
+    f32 height = 36.0f;
+
+    if (strcmp(mario->animName, "M_W_7") == 0) {
+        height += m_w_7_sync[party->work.bomhei.syncFrame] / 4.0f;
+    }
+    party->position.x = mario->position.x;
+    party->position.y = mario->position.y + height;
+    party->position.z = mario->position.z;
+    movePos(&party->position.x, &party->position.z, -6.0f, toMovedirSimple(mario->displayDirectionTarget));
+    party->position.z += 2.0f;
+    party->displayDirectionTarget = mario->displayDirectionTarget;
+    party->displayDirection = mario->displayDirection;
+}
 
 static void bomhei_use_main(PartyEntry* party);
 static void mario_controll(PartyEntry* party);
@@ -416,88 +473,6 @@ typedef struct BomheiWork {
 
 // Bobbery's work (PartyEntry.useStruct). A macro, not an inline function: as a function the object changes.
 #define BOMHEI_WORK(p) ((BomheiWork*)(p)->useStruct)
-
-/**
- * Ends the fuse early on attribute 0xC00 (use motion 60, explode), or floor attribute 0x200
- * without 0xC00 (use motion 40, the splash). JP and later check front, then head, then floor until one applies;
- * the early demos inspect only the first hit object present. JP and later return TRUE when one applied (use motion 22
- * reads it); the early demos return nothing (no caller reads a result there).
- * 0x200 is the hazard water that sinks Mario (mario_hit.c, MARIO_MOTION_DAMAGE), 0x400 HIT_ATTR_DAMAGE_LIQUID
- * and 0x800 the spikes (MARIO_MOTION_DAMAGE_TOGE).
- */
-// Original name and size (0xa4) from the JP demo map (UNUSED there: every call is inlined).
-#if VERSION <= VERSION_DEMO_JP
-static void checkMapAttr(PartyEntry* party) {
-    u32 attr;
-
-    if (party->hitobjFront != NULL) {
-        if (hitGetAttr(party->hitobjFront) & (HIT_ATTR_DAMAGE_LIQUID | HIT_ATTR_SPIKES)) {
-            party->useMotionId = 60;
-        }
-    } else if (party->hitobjHead != NULL) {
-        if (hitGetAttr(party->hitobjHead) & (HIT_ATTR_DAMAGE_LIQUID | HIT_ATTR_SPIKES)) {
-            party->useMotionId = 60;
-        }
-    } else if (party->hitobjStandOn != NULL) {
-        attr = hitGetAttr(party->hitobjStandOn);
-        if (attr & (HIT_ATTR_DAMAGE_LIQUID | HIT_ATTR_SPIKES)) {
-            party->useMotionId = 60;
-        } else if (attr & HIT_ATTR_WATER_HAZARD) {
-            party->useMotionId = 40;
-        }
-    }
-}
-#else
-static BOOL checkMapAttr(PartyEntry* party) {
-    HitEntry* hit;
-    u32 attr;
-
-    hit = party->hitobjFront;
-    if (hit != NULL && (hitGetAttr(hit) & (HIT_ATTR_DAMAGE_LIQUID | HIT_ATTR_SPIKES))) {
-        party->useMotionId = 60;
-        return TRUE;
-    }
-    hit = party->hitobjHead;
-    if (hit != NULL && (hitGetAttr(hit) & (HIT_ATTR_DAMAGE_LIQUID | HIT_ATTR_SPIKES))) {
-        party->useMotionId = 60;
-        return TRUE;
-    }
-    hit = party->hitobjStandOn;
-    if (hit != NULL) {
-        attr = hitGetAttr(hit);
-        if (attr & (HIT_ATTR_DAMAGE_LIQUID | HIT_ATTR_SPIKES)) {
-            party->useMotionId = 60;
-            return TRUE;
-        }
-        if (attr & HIT_ATTR_WATER_HAZARD) {
-            party->useMotionId = 40;
-            return TRUE;
-        }
-    }
-    return FALSE;
-}
-#endif
-
-/**
- * Holds Bobbery above Mario's head: 36 units up (plus a bob from m_w_7_sync while Mario plays the carry walk
- * M_W_7), 6 behind along his facing, facing the same way as Mario.
- */
-// Original name and size (0xf4) from the JP demo map (UNUSED there: every call is inlined).
-inline void bomhei_hold(PartyEntry* party) {
-    MarioWork* mario = party->playerPtr;
-    f32 height = 36.0f;
-
-    if (strcmp(mario->animName, "M_W_7") == 0) {
-        height += m_w_7_sync[party->work.bomhei.syncFrame] / 4.0f;
-    }
-    party->position.x = mario->position.x;
-    party->position.y = mario->position.y + height;
-    party->position.z = mario->position.z;
-    movePos(&party->position.x, &party->position.z, -6.0f, toMovedirSimple(mario->displayDirectionTarget));
-    party->position.z += 2.0f;
-    party->displayDirectionTarget = mario->displayDirectionTarget;
-    party->displayDirection = mario->displayDirection;
-}
 
 /**
  * The bomb ability's motion steps (party->useMotionId).
@@ -1219,4 +1194,23 @@ static HitEntry* check_front(PartyEntry* party) {
         return last;
     }
     return hit;
+}
+
+// Original name and size (0x90) from the JP demo map (UNUSED there: every call is inlined).
+BOOL chkBreakable(HitEntry* hit) {
+    CaseEntry* c;
+    if (hit == NULL) {
+        return FALSE;
+    }
+    if (hitGetAttr(hit) & HIT_ATTR_MOBJ) {
+        if (strcmp(mobjHitObjPtrToPtr(hit)->animName, "MOBJ_BombRock") == 0) {
+            return TRUE;
+        }
+    } else {
+        c = caseCheckHitObj2(hit);
+        if (c != NULL && c->conditionId == CASE_BOBBERY) {
+            return TRUE;
+        }
+    }
+    return FALSE;
 }

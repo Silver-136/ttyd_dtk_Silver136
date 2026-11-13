@@ -68,6 +68,35 @@ static void type1_init(EffRadiationN64Work* p, s32 n) {
     p->frame = 0;
 }
 
+/** Respawns a ray of type 2 or later on its fixed r_data pose j (life lf) with its scroll and spin reset; returns the next ray. */
+// Original name and size (0x114) from the JP demo's link map (UNUSED there): every call is inlined.
+static EffRadiationN64Work* type2_init(EffRadiationN64Work* p, s32 j, s32 lf) {
+    s32 k;
+
+    p->y = 0.0f;
+    k = (j - 1) * 5;
+    p->life = lf;
+    p->rotX = (f32)r_data[k++];
+    p->rotY = (f32)r_data[k++];
+    p->rotZ = (f32)r_data[k++];
+    p->alpha = 0;
+    p->frame = 0;
+    p->scroll2 = 0.0f;
+    p->scroll0 = 0.0f;
+    p->scrollVel0 = 0.0f;
+    p->scrollVel2 = -0.6f;
+    p->scroll1 = 10.0f;
+    p->scroll3 = 0.0f;
+    p->scrollVel1 = 0.0f;
+    p->scrollVel3 = 0.6f;
+    p->rotVelX = 0.0f;
+    p->rotVelY = 0.0f;
+    k++;
+    p->rotVelZ = 0.1f * (f32)r_data[k++];
+    p->delay = 0;
+    return p + 1;
+}
+
 /**
  * Spawns the radiation rays at (x, y, z): types 0-1 use 8 rising rays, other types 16 spinning rays;
  * type + 10 draws on another display layer.
@@ -79,7 +108,6 @@ EffectEntry* effRadiationN64Entry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
     EffRadiationN64Work* p;
     s32 count;
     s32 camera;
-    s32 k;
     s32 lf;
     s32 i;
     s32 flag;
@@ -126,28 +154,8 @@ EffectEntry* effRadiationN64Entry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
             break;
         default:
             p++;
-            for (j = 1, lf = 0x20; j < effect->count; lf += 2, j++, p++) {
-                p->y = 0.0f;
-                k = (j - 1) * 5;
-                p->life = lf;
-                p->rotX = (f32)r_data[k++];
-                p->rotY = (f32)r_data[k++];
-                p->rotZ = (f32)r_data[k++];
-                p->alpha = 0;
-                p->frame = 0;
-                p->scroll2 = 0.0f;
-                p->scroll0 = 0.0f;
-                p->scrollVel0 = 0.0f;
-                p->scrollVel2 = -0.6f;
-                p->scroll1 = 10.0f;
-                p->scroll3 = 0.0f;
-                p->scrollVel1 = 0.0f;
-                p->scrollVel3 = 0.6f;
-                p->rotVelX = 0.0f;
-                p->rotVelY = 0.0f;
-                k++;
-                p->rotVelZ = 0.1f * (f32)r_data[k++];
-                p->delay = 0;
+            for (j = 1, lf = 0x20; j < effect->count; lf += 2, j++) {
+                p = type2_init(p, j, lf);
             }
             break;
     }
@@ -204,7 +212,6 @@ static void effRadiationMain(EffectEntry* effect) {
     Vec tmp = {0.0f, 0.0f, 0.0f};
     s32 type;
     s32 life;
-    u32 k;
     s32 i;
     s32 lf;
     s32 j;
@@ -265,27 +272,7 @@ static void effRadiationMain(EffectEntry* effect) {
                     p->alpha = p->alpha * life / 10;
                 }
                 if (p->life <= 0) {
-                    p->y = 0.0f;
-                    k = (j - 1) * 5;
-                    p->life = lf;
-                    p->rotX = (f32)r_data[k++];
-                    p->rotY = (f32)r_data[k++];
-                    p->rotZ = (f32)r_data[k++];
-                    p->alpha = 0;
-                    p->frame = 0;
-                    p->scroll2 = 0.0f;
-                    p->scroll0 = 0.0f;
-                    p->scrollVel0 = 0.0f;
-                    p->scrollVel2 = -0.6f;
-                    p->scroll1 = 10.0f;
-                    p->scroll3 = 0.0f;
-                    p->scrollVel1 = 0.0f;
-                    p->scrollVel3 = 0.6f;
-                    p->rotVelX = 0.0f;
-                    p->rotVelY = 0.0f;
-                    k++;
-                    p->rotVelZ = 0.1f * (f32)r_data[k++];
-                    p->delay = 0;
+                    type2_init(p, j, lf);
                 }
 
                 if (p->delay > 0) {

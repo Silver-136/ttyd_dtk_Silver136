@@ -415,9 +415,9 @@ s32 partyKill2(s32 id) {
 
 /**
  * Loads the partner's model: her member's animation group, Yoshi's group for his colour,
- * or the 8-bit d_mario group in the Famicom pipe.
+ * or the 8-bit d_mario group in the Famicom pipe. Returns the new pose id (paperAnimGroup).
  */
-static void partyPoseEntry(PartyEntry* party) {
+static s32 partyPoseEntry(PartyEntry* party) {
     char* animName;
 
     if (party->currentMemberId != PARTY_YOSHI) {
@@ -436,6 +436,7 @@ static void partyPoseEntry(PartyEntry* party) {
         animPoseRelease(party->paperAnimGroup);
     }
     party->paperAnimGroup = animPoseEntry(animName, 2);
+    return party->paperAnimGroup;
 }
 
 /**
@@ -538,8 +539,7 @@ s32 partyEntryMain(s32 memberId) {
     if (player->flags & MARIO_FLAG_IS_8_BIT) {
         party->flags2 |= PARTY_DISP_FLAG_FAMICOM;
     }
-    partyPoseEntry(party);
-    animPosePeraOff(party->paperAnimGroup);
+    animPosePeraOff(partyPoseEntry(party));
     setAnimPoseMaterialFlag(party);
     partyChgPose(party, partyChgPoseId(party, PARTY_POSE_STAND));
     party->paperAnimName = NULL;
@@ -575,8 +575,7 @@ s32 partyEntry2(s32 memberId) {
         party->flags |= PARTY_FLAG_IS_FOLLOWER;
     }
     party_dp = &partyDataTbl[memberId];
-    partyPoseEntry(party);
-    animPosePeraOff(party->paperAnimGroup);
+    animPosePeraOff(partyPoseEntry(party));
     setAnimPoseMaterialFlag(party);
     partyChgPose(party, partyChgPoseId(party, PARTY_POSE_STAND));
     party->paperAnimName = NULL;
@@ -613,8 +612,7 @@ s32 partyEntry2Hello(s32 memberId) {
         party->flags |= PARTY_FLAG_IS_FOLLOWER;
     }
     party_dp = &partyDataTbl[memberId];
-    partyPoseEntry(party);
-    animPosePeraOff(party->paperAnimGroup);
+    animPosePeraOff(partyPoseEntry(party));
     setAnimPoseMaterialFlag(party);
     partyChgPose(party, partyChgPoseId(party, PARTY_POSE_STAND));
     party->paperAnimName = NULL;
@@ -648,8 +646,7 @@ s32 partyEntry2Pos(s32 memberId, f32 x, f32 y, f32 z) {
         party->flags |= PARTY_FLAG_IS_FOLLOWER;
     }
     party_dp = &partyDataTbl[memberId];
-    partyPoseEntry(party);
-    animPosePeraOff(party->paperAnimGroup);
+    animPosePeraOff(partyPoseEntry(party));
     setAnimPoseMaterialFlag(party);
     partyChgPose(party, partyChgPoseId(party, PARTY_POSE_STAND));
     party->paperAnimName = NULL;
@@ -3335,28 +3332,6 @@ BOOL partyChkHerohero(PartyEntry* party) {
     return pinch;
 }
 
-/** Reloads the partner's model for her normal or 8-bit form (see partyPoseEntry). */
-static inline void partyPoseEntryF(PartyEntry* party) {
-    char* animName;
-
-    if (party->currentMemberId != PARTY_YOSHI) {
-        if (!(party->flags2 & PARTY_DISP_FLAG_FAMICOM)) {
-            animName = party_dp->name;
-        } else {
-            animName = "d_mario";
-        }
-    } else {
-        animName = yoshigroup[pouchGetPartyColor(PARTY_YOSHI)];
-        if (party->flags2 & PARTY_DISP_FLAG_FAMICOM) {
-            animName = "d_mario";
-        }
-    }
-    if (party->paperAnimGroup >= 0) {
-        animPoseRelease(party->paperAnimGroup);
-    }
-    party->paperAnimGroup = animPoseEntry(animName, 2);
-}
-
 /**
  * Switches the partner into (mode 1) or out of the 8-bit Famicom form, reloading her model and standing pose.
  * Called by the aji rooms (aji.c, aji_09.c).
@@ -3370,14 +3345,14 @@ void partySetFamicomMode(PartyEntry* party, s32 mode) {
         partyForceSlitOff(party);
 #endif
         party->flags2 |= PARTY_DISP_FLAG_FAMICOM;
-        partyPoseEntryF(party);
+        partyPoseEntry(party);
         partyChgPose(party, partyChgPoseId(party, PARTY_POSE_STAND));
     } else {
         if (!(party->flags2 & PARTY_DISP_FLAG_FAMICOM)) {
             return;
         }
         party->flags2 &= ~PARTY_DISP_FLAG_FAMICOM;
-        partyPoseEntryF(party);
+        partyPoseEntry(party);
         partyChgPose(party, partyChgPoseId(party, PARTY_POSE_STAND));
     }
 }

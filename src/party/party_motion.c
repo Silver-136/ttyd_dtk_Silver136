@@ -3632,32 +3632,22 @@ static void partyGorFix(PartyEntry* party) {
         party->position = fix;
     }
 }
+
+/**
+ * Ms. Mowz's sniffing pose (PCH_A2_1) for 30 frames,
+ * when chuchu_searchObject finds an item or hidden treasure within 150 units of Mario.
+ */
+static void partyPoseA2(PartyEntry* party) {
+    partyChgPose(party, "PCH_A2_1");
+    party->useMotionId = 1;
+    party->moveFrames = 30;
+}
 #endif
 
 // The early demos define the jump, follow, stay, damage, slit and roll motions here, after the helpers above; JP and later define
 // them earlier in the file. The object's function order follows the definitions, so each order keeps its own copies.
 #if VERSION <= VERSION_DEMO_JP
-
-// Original name and size (0xa4) from the JP demo map (UNUSED there: every call is inlined).
-static void _moveCheckWall(PartyEntry* party) {
-    Vec v;
-    HitEntry* hit;
-    if (party->flags & PARTY_FLAG_DISABLE_FRONT_WALL_CHK) {
-        // v is uninitialized here and the result is dropped: the partner does not move this frame.
-        movePos(&v.x, &v.z, party->moveSpeed, party->targetDir);
-        return;
-    }
-    v = party->position;
-    hit = partySearchFrontWall(party, &v, party->moveSpeed, party->targetDir);
-    if (hit) {
-        party->hitobjFront = hit;
-        if (party->moveSpeed) {
-            party->hitobjPush = hit;
-        }
-    }
-    party->position.x = v.x;
-    party->position.z = v.z;
-}
+static void _moveCheckWall(PartyEntry* party);
 
 /**
  * Demos: the follow jump (motion 2): aims at the next footmark or moveTarget,
@@ -3787,6 +3777,27 @@ void party_motion_jump(PartyEntry* party) {
             _moveCheckWall(party);
             break;
     }
+}
+
+// Original name and size (0xa4) from the JP demo map (UNUSED there: every call is inlined).
+static void _moveCheckWall(PartyEntry* party) {
+    Vec v;
+    HitEntry* hit;
+    if (party->flags & PARTY_FLAG_DISABLE_FRONT_WALL_CHK) {
+        // v is uninitialized here and the result is dropped: the partner does not move this frame.
+        movePos(&v.x, &v.z, party->moveSpeed, party->targetDir);
+        return;
+    }
+    v = party->position;
+    hit = partySearchFrontWall(party, &v, party->moveSpeed, party->targetDir);
+    if (hit) {
+        party->hitobjFront = hit;
+        if (party->moveSpeed) {
+            party->hitobjPush = hit;
+        }
+    }
+    party->position.x = v.x;
+    party->position.z = v.z;
 }
 
 /**
@@ -4908,34 +4919,10 @@ void party_motion_stay(PartyEntry* party) {
                 break;
             case 0:
             default:
-#else
-static void partyPoseA2(PartyEntry* party) {
-#endif
-
-/**
- * Ms. Mowz's sniffing pose (PCH_A2_1) for 30 frames,
- * when chuchu_searchObject finds an item or hidden treasure within 150 units of Mario.
- */
-    partyChgPose(party, "PCH_A2_1");
-    party->useMotionId = 1;
-    party->moveFrames = 30;
-}
-#if VERSION <= VERSION_DEMO_JP
-    }
-}
-
-// Original name and size (0x90) from the JP demo map (UNUSED there: every call is inlined).
-void hitcheck_party_motion_stay_fly(PartyEntry* party) {
-    MarioWork* mario = party->playerPtr;
-    f32 depth, gy;
-
-    if (party->flags & PARTY_FLAG_DISABLE_FLOORS) {
-        return;
-    }
-    if (_partySearchGround(party, &gy, &depth, 10.0f, 0.0f)) {
-        party->position.y = 1.0f + gy;
-    } else {
-        party->position.y += 0.1f * ((10.0f + mario->position.y) - party->position.y);
+                partyChgPose(party, "PCH_A2_1");
+                party->useMotionId = 1;
+                party->moveFrames = 30;
+        }
     }
 }
 
@@ -4985,6 +4972,21 @@ void hitcheck_party_motion_stay(PartyEntry* party) {
             }
         }
         party->position.y = g2.y;
+    }
+}
+
+// Original name and size (0x90) from the JP demo map (UNUSED there: every call is inlined).
+void hitcheck_party_motion_stay_fly(PartyEntry* party) {
+    MarioWork* mario = party->playerPtr;
+    f32 depth, gy;
+
+    if (party->flags & PARTY_FLAG_DISABLE_FLOORS) {
+        return;
+    }
+    if (_partySearchGround(party, &gy, &depth, 10.0f, 0.0f)) {
+        party->position.y = 1.0f + gy;
+    } else {
+        party->position.y += 0.1f * ((10.0f + mario->position.y) - party->position.y);
     }
 }
 
@@ -5095,21 +5097,6 @@ void allPartySlitOff(void) {
     }
 }
 
-/**
- * Demos: ends Paper Mode on this partner at once, facing left or right from its direction, and resets its pose.
- */
-static inline void partyForceSlitOff(PartyEntry* party) {
-    party->displayDirection = revise360(party->targetDir - party->camDir) >= 180.0f ? 0.0f : 180.0f;
-    party->displayDirectionTarget = party->displayDirection;
-    party->moveDir = revise360(270.0f - party->displayDirection);
-    party->targetDir = party->moveDir;
-    party->flags2 &= ~(PARTY_DISP_FLAG_TURN_LEFT_UNUSED | PARTY_DISP_FLAG_TURN_RIGHT_UNUSED | PARTY_DISP_FLAG_SLIT | PARTY_DISP_FLAG_SLIT_DIR_280);
-    partyPaperOff(party);
-    party->flags &= ~(PARTY_FLAG_PAPER_MODE | PARTY_FLAG_MOT_SLIT_FLOOR);
-    party->slitOn = 0;
-    partyChgPoseId(party, PARTY_POSE_STAND);
-}
-
 void allPartyForceSlitOff(void) {
     PartyEntry* party = partyGetPtr(marioGetPartyId());
     if (party) {
@@ -5119,6 +5106,22 @@ void allPartyForceSlitOff(void) {
     if (party) {
         partyForceSlitOff(party);
     }
+}
+
+/**
+ * Demos: ends Paper Mode on this partner at once, facing left or right from its direction, and resets its pose.
+ */
+// Original size (0xa8) from the JP demo map (UNUSED there: every call is inlined).
+void partyForceSlitOff(PartyEntry* party) {
+    party->displayDirection = revise360(party->targetDir - party->camDir) >= 180.0f ? 0.0f : 180.0f;
+    party->displayDirectionTarget = party->displayDirection;
+    party->moveDir = revise360(270.0f - party->displayDirection);
+    party->targetDir = party->moveDir;
+    party->flags2 &= ~(PARTY_DISP_FLAG_TURN_LEFT_UNUSED | PARTY_DISP_FLAG_TURN_RIGHT_UNUSED | PARTY_DISP_FLAG_SLIT | PARTY_DISP_FLAG_SLIT_DIR_280);
+    partyPaperOff(party);
+    party->flags &= ~(PARTY_FLAG_PAPER_MODE | PARTY_FLAG_MOT_SLIT_FLOOR);
+    party->slitOn = 0;
+    partyChgPoseId(party, PARTY_POSE_STAND);
 }
 
 /**

@@ -9228,6 +9228,45 @@ static u32 calc3D(s32 id, Vec* pos, u8 vol, u16 dist) {
     return *(u32*)PAN;
 }
 
+/** Looks BGM name up in psbgmlist (or decodes a numeric id): the early demos return it, JP and later write it to *pi. */
+#if VERSION <= VERSION_DEMO_JP
+// Original name and size (0x84) from the JP demo map (UNUSED there: every call is inlined).
+s32 searchPSBGMList(char* name) {
+    SoundBGMEntry* entry;
+    s32 i;
+    entry = psbgmlist;
+    if (SFX_NAME_IS_ID(name)) {
+        return SFX_NAME_ID(name);
+    }
+    for (i = 0; i < 0x106; i++, entry++) {
+        if (!strcmp(entry->name, name)) {
+            break;
+        }
+    }
+    if (i >= 0x106) {
+        i = 0;
+    }
+    return i;
+}
+#else
+void searchPSBGMList(const char* name, s32* pi) {
+    SoundBGMEntry* entry;
+    entry = psbgmlist;
+    if (SFX_NAME_IS_ID(name)) {
+        *pi = SFX_NAME_ID(name);
+        return;
+    }
+    for (*pi = 0; *pi < (s32)(sizeof(psbgmlist) / sizeof(psbgmlist[0])); (*pi)++, entry++) {
+        if (!strcmp(entry->name, name)) {
+            break;
+        }
+    }
+    if (*pi >= 0x106) {
+        *pi = 0;
+    }
+}
+#endif
+
 s32 searchPSSFXList(const char* name) {
     SoundEffectEntry* entry = pssfxlist;
     int i;
@@ -9712,38 +9751,7 @@ static inline s32 psndSongFindCh(void) {
     return -1;
 }
 
-/** Looks BGM name up in psbgmlist (or decodes a numeric id) into *pi (the early demos return it). */
 #if VERSION <= VERSION_DEMO_JP
-// Original name and size (0x84) from the JP demo map (UNUSED there: every call is inlined).
-s32 searchPSBGMList(char* name) {
-    SoundBGMEntry* entry;
-    s32 i;
-    entry = psbgmlist;
-    if (SFX_NAME_IS_ID(name)) {
-        return SFX_NAME_ID(name);
-    }
-    for (i = 0; i < 0x106; i++, entry++) {
-#else
-void searchPSBGMList(const char* name, s32* pi) {
-    SoundBGMEntry* entry;
-    entry = psbgmlist;
-    if (SFX_NAME_IS_ID(name)) {
-        *pi = SFX_NAME_ID(name);
-        return;
-    }
-    for (*pi = 0; *pi < (s32)(sizeof(psbgmlist) / sizeof(psbgmlist[0])); (*pi)++, entry++) {
-#endif
-        if (!strcmp(entry->name, name)) {
-            break;
-        }
-    }
-#if VERSION <= VERSION_DEMO_JP
-    if (i >= 0x106) {
-        i = 0;
-    }
-    return i;
-}
-
 /** Early-demo form: no fadeout parameter; replacement fades use 750 ms (100 ms when restarting a stream). */
 BOOL psndBGMOn_f_d(u32 flags, char* bgm_name, u32 fadetime, s32 unused) {
     PaperSoundBGM* bgm;
@@ -9761,11 +9769,6 @@ BOOL psndBGMOn_f_d(u32 flags, char* bgm_name, u32 fadetime, s32 unused) {
         psnd.reverb = 0;
     }
 #else
-    if (*pi >= 0x106) {
-        *pi = 0;
-    }
-}
-
 /** JP and later form of psndBGMOn_f_d above; fadeout is the fade-out time for the BGM being replaced. */
 BOOL psndBGMOn_f_d(u32 flags, const char* bgm_name, u32 fadetime, u32 fadeout, s32 unused) {
     PaperSoundBGM* bgm;
@@ -10840,6 +10843,25 @@ PaperSoundEnv* searchEmptyPSENV(void) {
     return NULL;
 }
 
+/** Resets an environment sound entry to wait for its first or next play (types 0 and 2: a random interval). */
+// Original name and size (0xa0) from the JP demo map (UNUSED there: every call is inlined).
+static void psndENV_initPara(PaperSoundEnv* e) {
+    e->state = 0;
+    e->timer = 0;
+    switch (e->type) {
+        case 0:
+            e->timer = e->interval * PSND_FPS;
+            e->timer += irand(e->intervalRand) * PSND_FPS;
+            break;
+        case 2:
+            e->timer = e->interval * PSND_FPS;
+            e->timer += irand(e->intervalRand) * PSND_FPS;
+            break;
+        case 3:
+            break;
+    }
+}
+
 /** Stops every environment sound entry belonging to environment id, switching off their effects. */
 static void psndENV_stop(u32 id) {
     s32 i;
@@ -10903,25 +10925,6 @@ static inline u8 psndEnvVolume(PaperSoundEnv* e, PaperSoundWork* p) {
     }
     w = f->timeMax * (e->volume * v / 127) / f->time;
     return w * p->envVolume / 100;
-}
-
-/** Resets an environment sound entry to wait for its first or next play (types 0 and 2: a random interval). */
-// Original name and size (0xa0) from the JP demo map (UNUSED there: every call is inlined).
-static void psndENV_initPara(PaperSoundEnv* e) {
-    e->state = 0;
-    e->timer = 0;
-    switch (e->type) {
-        case 0:
-            e->timer = e->interval * PSND_FPS;
-            e->timer += irand(e->intervalRand) * PSND_FPS;
-            break;
-        case 2:
-            e->timer = e->interval * PSND_FPS;
-            e->timer += irand(e->intervalRand) * PSND_FPS;
-            break;
-        case 3:
-            break;
-    }
 }
 
 #if VERSION <= VERSION_DEMO_JP

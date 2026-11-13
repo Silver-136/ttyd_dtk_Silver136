@@ -113,7 +113,7 @@ static FireScaleKey scale2[] = {
 static void effFireSmokeDisp(CameraId cameraId, void* payload);
 static void effFireSmokeMain(EffectEntry* effect);
 
-static void effFireSmokeEntry(f32 x, f32 y, f32 z, f32 scale);
+static EffectEntry* effFireSmokeEntry(s32 type, s32 life, f32 x, f32 y, f32 z, f32 scale);
 
 /**
  * Spawns a flame of the given type at (x, y, z); duration <= 0 keeps it burning until soft-deleted.
@@ -297,7 +297,7 @@ static void effFireMain(EffectEntry* effect) {
             work->sparkTimer++;
             if (work->sparkTimer > work->range) {
                 u8 offs[4] = { 5, 10, 10, 10 };
-                effFireSmokeEntry(work->position.x, work->position.y + (f32)offs[type], work->position.z - 5.0f,
+                effFireSmokeEntry(0, 60, work->position.x, work->position.y + (f32)offs[type], work->position.z - 5.0f,
                                   work->scale);
                 work->sparkTimer = 0;
                 work->range = rand() % 30 + 30;
@@ -821,8 +821,9 @@ static void effFireDisp3(CameraId cameraId, EffectEntry* effect) {
     work->bboxValid = 1;
 }
 
-/** Spawns a single smoke puff at (x, y, z) that lives 60 frames, with the given scale. */
-static void effFireSmokeEntry(f32 x, f32 y, f32 z, f32 scale) {
+/** Spawns a single smoke puff of the given type at (x, y, z) that lives life frames, with the given scale. */
+// Original name and size (0x168) from the JP demo map (UNUSED there: every call is inlined).
+static EffectEntry* effFireSmokeEntry(s32 type, s32 life, f32 x, f32 y, f32 z, f32 scale) {
     EffectEntry* smoke = effEntry();
     EffFireSmokeWork* sw;
     smoke->type = "FireSmoke";
@@ -831,11 +832,11 @@ static void effFireSmokeEntry(f32 x, f32 y, f32 z, f32 scale) {
     smoke->userdata = sw;
     smoke->callback = effFireSmokeMain;
     smoke->flags |= EFFECT_FLAG_SOFT_DELETABLE;
-    sw->type = 0;
+    sw->type = type;
     sw->color[3] = 0x80;
     sw->position = (Vec){ x, y, z };
     sw->scale = scale;
-    sw->life = 60;
+    sw->life = life;
     sw->age = 0;
     sw->velocity.x = 0.0f;
     sw->velocity.y = 1.0f;
@@ -844,6 +845,7 @@ static void effFireSmokeEntry(f32 x, f32 y, f32 z, f32 scale) {
     sw->color[0] = 0xCF;
     sw->color[1] = 0x67;
     sw->color[2] = 0x38;
+    return smoke;
 }
 
 /** Moves the puff by its velocity, ages it, and fades it out over its last 16 frames. */

@@ -461,9 +461,11 @@ void mapSetTevCallback(s32 index, MapTevCallback callback);
 void mapSetMaterialTev(s32 texCount, s32 drawMode, s32 flags, Mtx mtx);
 
 MapObject* mapGetMapObj(const char* name);
+MapFileJoint* mapSearchDmdJoint(MapFileJoint* joint, const char* name);
 MapMaterial* mapSearchDmdMaterial(const char* name);
 void mapSetPolygonGeometry(MapFileMesh* mesh);
 void Locate(MapEntry* entry);
+void* HSD_ArchiveGetPublicAddress(MapHeader* header, const char* name);
 
 void mapSetBlend(GXColor color);
 void mapSetBlend2(GXColor color);

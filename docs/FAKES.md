@@ -243,7 +243,7 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | src/event/evt_bero.c | bero_get_kind | walk flag picks a pointer-walk loop (evt_bero_get_info_num) or the index loop (evt_bero_get_into_info); constant-folded per call site | see comment |
 | Both | src/event/evt_cam.c | evt_cam_debug_print | stand-in for the dead-stripped evt_cam3d_evt_set_xls / evt_cam3d_evt_set_rel_xls (JP demo map, UNUSED); it only keeps their format string and 100.0f. Bodies unknown (sscanf forms tried miss the map sizes). | see comment |
 | Both | src/event/evt_item.c | evt_item_get_important_item | float bits stored through an s32 view; event->userdataf[n] = value changes the object | see comment |
-| Both | src/event/evt_mobj.c | mobj_recovery_blk_recover | case 4 repeats these steps inline instead of calling this helper; calling it there changes the object | see comment |
+| Both | src/event/evt_mobj.c | mobj_recovery_blk_recover | case 4 repeats these steps inline instead of calling this helper; `recover(mobj->typeData[1])` there gives the same instructions with the price and pouch registers swapped (24 declaration orders, parameter types tried) | see comment |
 | Both | src/event/evt_nannpc.c | evt_nannpc_entry | the value goes through a long long cast; plain name = evtGetValue(...) changes the object | see comment |
 | Demos | src/event/evt_npc.c | npc_report_pos | stand-in for the dead-stripped evt_npc_set_position_xls (JP demo map, UNUSED 0xb4); it only keeps its "%f%f%f" at the end of .rodata. Body unknown. | see comment |
 | Both | src/event/evt_party.c | evtPartyStrippedPool | stand-in that nothing calls (in neither symbol map); it only fixes the order of these literals in the constant pool; removing it changes the object | see comment |

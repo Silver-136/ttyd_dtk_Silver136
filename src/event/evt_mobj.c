@@ -2425,12 +2425,14 @@ void mobj_sign(void) {
 }
 #endif
 
-// Restores Mario's HP and FP and the HP of every active partner that is not PARTY_FLAG_IS_GROUNDED (case 3).
-// FAKE: case 4 repeats these steps inline instead of calling this helper; calling it there changes the object
-// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
-void mobj_recovery_blk_recover(void) {
-    PouchData* pouch;
+// Restores Mario's HP and FP and the HP of every active partner that is not PARTY_FLAG_IS_GROUNDED, then
+// takes the block's price in coins (case 3 passes 0).
+// FAKE: case 4 repeats these steps inline instead of calling this helper; calling it there with the price
+// swaps the registers of the price and the pouch pointer
+// Original name and size (0x11c) from the JP demo map (UNUSED there): every call is inlined.
+void mobj_recovery_blk_recover(s32 coins) {
     PouchPartyData* party;
+    PouchData* pouch;
     MarioWork* mario;
     s32 i;
     mario = marioGetPtr();
@@ -2445,6 +2447,7 @@ void mobj_recovery_blk_recover(void) {
             party->currentHP = party->maximumHP;
         }
     }
+    pouchAddCoin(-coins);
 }
 
 /**
@@ -2507,8 +2510,7 @@ static s32 mobj_recovery_blk(MapObjectEntry* mobj) {
                 psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_HP_RECOVER_SHINE1), &mobj->position);
             }
             if (mobj->timer == 100) {
-                mobj_recovery_blk_recover();
-                pouchAddCoin(0);
+                mobj_recovery_blk_recover(0);
             }
             mobj->timer--;
             if (mobj->timer <= 0) {

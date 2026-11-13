@@ -52,7 +52,6 @@ static s32 activeGroup;
 static MapWork* mapWork; // allocates two entries
 
 // Implementation forward declarations; definitions retain target order.
-MapFileJoint* mapSearchDmdJoint(MapFileJoint* joint, const char* name);
 static void mapSetMaterial(MapObject* obj, void* material);
 static void mapSetPolygon(MapObject* obj, MapFileMesh* mesh);
 static void mapSetPolygonVtxDesc(MapObject* obj, MapFileMesh* mesh);
@@ -677,8 +676,6 @@ void mapSetPlayRate(const char* name, f32 rate) {
         anim->rate = rate;
     }
 }
-
-void* HSD_ArchiveGetPublicAddress(MapHeader* header, const char* name);
 
 /**
  * Whether the map header's stored file size equals the loaded size.
