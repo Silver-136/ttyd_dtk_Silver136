@@ -334,78 +334,77 @@ static void btlseqFirstAct(BattleWork* wp) {
                         }
                     }
                     BattleSetSeq(wp, SEQ_FIRST_ACT, 0x2000001);
-
-                    // FAKE: inner switch with one case and a goto past the outer switch; if (type == 0) { ... break; } changes the object
-                    goto done_fa;
-            }
-            switch (type) {
-                case FIRST_ATTACK_JUMP:
-                case FIRST_ATTACK_SPIN_JUMP:
-                case FIRST_ATTACK_JUMP_UNUSED:
-                    wp->ruleDispTimer = 10;
-                    break;
-                case FIRST_ATTACK_HAMMER:
-                case FIRST_ATTACK_SPIN_HAMMER:
-                case FIRST_ATTACK_ULTRA_HAMMER:
-                case FIRST_ATTACK_SHELL:
-                case FIRST_ATTACK_BOMB:
-                    wp->ruleDispTimer = 0;
                     break;
                 default:
-                    wp->ruleDispTimer = 0;
+                    switch (type) {
+                        case FIRST_ATTACK_JUMP:
+                        case FIRST_ATTACK_SPIN_JUMP:
+                        case FIRST_ATTACK_JUMP_UNUSED:
+                            wp->ruleDispTimer = 10;
+                            break;
+                        case FIRST_ATTACK_HAMMER:
+                        case FIRST_ATTACK_SPIN_HAMMER:
+                        case FIRST_ATTACK_ULTRA_HAMMER:
+                        case FIRST_ATTACK_SHELL:
+                        case FIRST_ATTACK_BOMB:
+                            wp->ruleDispTimer = 0;
+                            break;
+                        default:
+                            wp->ruleDispTimer = 0;
+                            break;
+                    }
+                    wp->flags |= BATTLE_FLAG_FIRST_ATTACK;
+                    BattleGetFirstAttackUnit(wp, &a, &b);
+                    wp->activeUnitId = a->unitId;
+                    a->tokenFlags |= kCurrentlyActing;
+                    evt = evtEntry(b->damageEventCode, 10, EVENT_START_IMMEDIATE);
+                    if (evt) {
+                        evt->unitId = b->unitId;
+                        b->damageCode = DAMAGE_CODE_FIRST_ATTACK_POS;
+                        b->damageEventId = evt->eventId;
+                    }
+                    a->flags |= BATTLE_UNIT_FLAG_ACTING;
+                    if (type < FIRST_ATTACK_ENEMY) {
+                        a->attackEventCode = _GetFirstAttackWeapon(type)->attackEvtScript;
+                        a->attackEventFlags = 0;
+                        BattleStatusWindowEventOff();
+                    }
+                    if (BtlUnit_GetBelong(a) == 0) {
+                        BattleAudience_Case_FirstAttack_Good();
+                    } else {
+                        BattleAudience_Case_FirstAttack_Bad();
+                    }
+                    evt = evtEntry(a->attackEventCode, 10, 0);
+                    if (evt) {
+                        evt->unitId = a->unitId;
+                        a->attackEventId = evt->eventId;
+                    }
+                    switch (type) {
+                        case FIRST_ATTACK_JUMP:
+                        case FIRST_ATTACK_SPIN_JUMP:
+                        case FIRST_ATTACK_JUMP_UNUSED:
+                        case FIRST_ATTACK_HAMMER:
+                        case FIRST_ATTACK_SPIN_HAMMER:
+                        case FIRST_ATTACK_ULTRA_HAMMER:
+                            unit = BattleGetPartyPtr(wp);
+                            if (unit) {
+                                evt = evtEntry(unit->entryEventCode, 10, 0);
+                                unit->entryEventId = evt->eventId;
+                                evt->unitId = unit->unitId;
+                            }
+                            break;
+                        case FIRST_ATTACK_SHELL:
+                        case FIRST_ATTACK_BOMB:
+                            unit = BattleGetMarioPtr(wp);
+                            if (unit) {
+                                evt = evtEntry(unit->entryEventCode, 10, 0);
+                                unit->entryEventId = evt->eventId;
+                                evt->unitId = unit->unitId;
+                            }
+                    }
+                    BattleSetSeq(wp, SEQ_FIRST_ACT, 0x2000001);
                     break;
             }
-            wp->flags |= BATTLE_FLAG_FIRST_ATTACK;
-            BattleGetFirstAttackUnit(wp, &a, &b);
-            wp->activeUnitId = a->unitId;
-            a->tokenFlags |= kCurrentlyActing;
-            evt = evtEntry(b->damageEventCode, 10, EVENT_START_IMMEDIATE);
-            if (evt) {
-                evt->unitId = b->unitId;
-                b->damageCode = DAMAGE_CODE_FIRST_ATTACK_POS;
-                b->damageEventId = evt->eventId;
-            }
-            a->flags |= BATTLE_UNIT_FLAG_ACTING;
-            if (type < FIRST_ATTACK_ENEMY) {
-                a->attackEventCode = _GetFirstAttackWeapon(type)->attackEvtScript;
-                a->attackEventFlags = 0;
-                BattleStatusWindowEventOff();
-            }
-            if (BtlUnit_GetBelong(a) == 0) {
-                BattleAudience_Case_FirstAttack_Good();
-            } else {
-                BattleAudience_Case_FirstAttack_Bad();
-            }
-            evt = evtEntry(a->attackEventCode, 10, 0);
-            if (evt) {
-                evt->unitId = a->unitId;
-                a->attackEventId = evt->eventId;
-            }
-            switch (type) {
-                case FIRST_ATTACK_JUMP:
-                case FIRST_ATTACK_SPIN_JUMP:
-                case FIRST_ATTACK_JUMP_UNUSED:
-                case FIRST_ATTACK_HAMMER:
-                case FIRST_ATTACK_SPIN_HAMMER:
-                case FIRST_ATTACK_ULTRA_HAMMER:
-                    unit = BattleGetPartyPtr(wp);
-                    if (unit) {
-                        evt = evtEntry(unit->entryEventCode, 10, 0);
-                        unit->entryEventId = evt->eventId;
-                        evt->unitId = unit->unitId;
-                    }
-                    break;
-                case FIRST_ATTACK_SHELL:
-                case FIRST_ATTACK_BOMB:
-                    unit = BattleGetMarioPtr(wp);
-                    if (unit) {
-                        evt = evtEntry(unit->entryEventCode, 10, 0);
-                        unit->entryEventId = evt->eventId;
-                        evt->unitId = unit->unitId;
-                    }
-            }
-            BattleSetSeq(wp, SEQ_FIRST_ACT, 0x2000001);
-            done_fa:
             break;
 
         case 0x2000001:

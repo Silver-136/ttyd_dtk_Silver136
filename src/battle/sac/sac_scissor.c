@@ -1096,20 +1096,15 @@ static void scissor_damage_sub(BattleUnit* unit, s32* out) {
 /** Whether screen point pt is inside any triangle of the drawn loop. */
 static s32 scissor_damage_sub2(Vec pt) {
     ScissorWork* w = GetScissorPtr();
-    s32 n = w->triCount;
     f32 y0, x0;
-    f32* q;
     f32 c[3];
     s32 i, j;
-    for (i = 0; i < n; i++) {
+    for (i = 0; i < w->triCount; i++) {
         ScissorTri* t = &w->tris[i];
         for (j = 0; j < 3; j++) {
             s32 k = (j + 1) % 3;
-
-            // FAKE: y[j] is read through q = &x[j] (index = the x-to-y distance in floats); plain t->y[j] / t->x[j] changes the object
-            q = &t->x[j];
-            y0 = q[(offsetof(ScissorTri, y) - offsetof(ScissorTri, x)) / sizeof(f32)];
-            x0 = q[0];
+            y0 = t->y[j];
+            x0 = t->x[j];
             c[j] = (pt.x - x0) * (t->y[k] - y0) - (pt.y - y0) * (t->x[k] - x0);
         }
         if ((c[0] > 0.0f && c[1] > 0.0f && c[2] > 0.0f) || (c[0] < 0.0f && c[1] < 0.0f && c[2] < 0.0f)) {
