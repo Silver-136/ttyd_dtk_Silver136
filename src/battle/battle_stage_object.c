@@ -4302,7 +4302,6 @@ static USER_FUNC(_object_fall_attack) {
             }
             e3->index = -1;
         }
-        w->entries[0].weapon.weapon.reserved_14 = w->entries[0].weapon.weapon.reserved_14; // FAKE: no-op self-assign (no code) raises w spill cost
     }
 
     if (!done) {

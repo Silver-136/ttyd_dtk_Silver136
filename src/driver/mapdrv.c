@@ -797,10 +797,8 @@ static void _mapLoad(MapWork* wp, BOOL group, const char* map) {
     char str2[128];
     char str3[128];
     DVDEntry* dvd;
-    MapWork* wo; // FAKE: alias of wp; the chunk-table stores go through it to keep the original address reloads
     MapHeader* header;
 
-    wo = wp;
     error_flag = FALSE;
     error_count = 0;
     strncpy(wp->entries[group].name, map, sizeof(wp->entries[group].name));
@@ -837,11 +835,11 @@ static void _mapLoad(MapWork* wp, BOOL group, const char* map) {
     mapLoadHeader_(wp, group);
     header = &wp->entries[group].header;
     info = (MapFileInfo*)HSD_ArchiveGetPublicAddress(header, "information");
-    wo->entries[group].textureTable = HSD_ArchiveGetPublicAddress(header, "texture_table");
-    wo->entries[group].lightTable = HSD_ArchiveGetPublicAddress(header, "light_table");
-    wo->entries[group].fogTable = HSD_ArchiveGetPublicAddress(header, "fog_table");
-    wo->entries[group].materialNameTable = HSD_ArchiveGetPublicAddress(header, "material_name_table");
-    wo->entries[group].vcdTable = HSD_ArchiveGetPublicAddress(header, "vcd_table");
+    wp->entries[group].textureTable = HSD_ArchiveGetPublicAddress(header, "texture_table");
+    wp->entries[group].lightTable = HSD_ArchiveGetPublicAddress(header, "light_table");
+    wp->entries[group].fogTable = HSD_ArchiveGetPublicAddress(header, "fog_table");
+    wp->entries[group].materialNameTable = HSD_ArchiveGetPublicAddress(header, "material_name_table");
+    wp->entries[group].vcdTable = HSD_ArchiveGetPublicAddress(header, "vcd_table");
     {
         MapFileJoint* mapJoint = mapSearchDmdJoint(info->joint, info->mapName);
         MapFileJoint* hitJoint = mapSearchDmdJoint(info->joint, info->hitName);
@@ -878,17 +876,17 @@ static void _mapLoad(MapWork* wp, BOOL group, const char* map) {
         }
         mapResetPaperAmbColor();
         mapResetPaperCraftAmbColor();
-        if ((&wo->entries[group])->fogTable != NULL) {
-            wo->entries[group].fogEnable = (&wo->entries[group])->fogTable->enable;
-            wp->entries[group].fogType = (&wo->entries[group])->fogTable->type;
-            wp->entries[group].fogStart = (&wo->entries[group])->fogTable->start;
-            wp->entries[group].fogEnd = (&wo->entries[group])->fogTable->end;
-            wp->entries[group].fogColor = (&wo->entries[group])->fogTable->color;
-            if (wo->entries[group].fogEnable != 0) {
+        if (wp->entries[group].fogTable != NULL) {
+            wp->entries[group].fogEnable = wp->entries[group].fogTable->enable;
+            wp->entries[group].fogType = wp->entries[group].fogTable->type;
+            wp->entries[group].fogStart = wp->entries[group].fogTable->start;
+            wp->entries[group].fogEnd = wp->entries[group].fogTable->end;
+            wp->entries[group].fogColor = wp->entries[group].fogTable->color;
+            if (wp->entries[group].fogEnable != 0) {
                 wp->entries[group].flags |= MAP_ENTRY_FOG;
             }
         } else {
-            wo->entries[group].fogEnable = 0;
+            wp->entries[group].fogEnable = 0;
             wp->entries[group].fogType = 0;
             wp->entries[group].fogStart = 0.0f;
             wp->entries[group].fogEnd = 0.0f;
@@ -903,7 +901,7 @@ static void _mapLoad(MapWork* wp, BOOL group, const char* map) {
 #if VERSION <= VERSION_DEMO_JP
         mapBuildTexture(wp->entries[group].rootMapObj, wp->entries[group].tpl, wp->entries[group].textureTable);
 #else
-        mapBuildTexture(wp->entries[group].rootMapObj, wp->entries[group].tpl, (&wo->entries[group])->textureTable);
+        mapBuildTexture(wp->entries[group].rootMapObj, wp->entries[group].tpl, wp->entries[group].textureTable);
 #endif
         {
             Vec mn;
