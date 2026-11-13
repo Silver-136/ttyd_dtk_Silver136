@@ -661,36 +661,6 @@ void mobjSetPosition(const char* name, f32 x, f32 y, f32 z) {
  * and reports it to the object; runs each object's main function, drops falling ones,
  * keeps their shadows and colours, and queues their drawing (offscreen if they have a region).
  */
-/** A falling map object: rises and slows, then drops, landing on the ground with a damped bounce. */
-// Original name and size (0x120) from the JP demo map (UNUSED there: mobjMain's call is inlined).
-void mobjHitCheckGround(MapObjectEntry* entry) {
-    f32 hx, hy, hz, dist, nx, ny, nz;
-
-    if (entry->velocity.y >= 0.0f) {
-        entry->position.y += entry->velocity.y;
-        entry->velocity.y -= entry->gravity;
-    } else {
-#if VERSION <= VERSION_DEMO_JP
-        dist = 1.0f + (f32)__fabs(entry->velocity.y);
-        if (hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, entry->position.x,
-                           10.0f + entry->position.y, entry->position.z, 0.0f, -10.0f, 0.0f) != NULL) {
-#else
-        dist = 10.0f + (1.0f + (f32)__fabs(entry->velocity.y));
-        if (hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, entry->position.x,
-                           10.0f + entry->position.y, entry->position.z, 0.0f, -1.0f, 0.0f) != NULL) {
-#endif
-            entry->position.y = hy;
-            entry->velocity.y = (-0.5f * entry->bounce) * entry->velocity.y;
-            if (__fabs(entry->velocity.y) <= 2.0) {
-                entry->velocity.y = 0.0f;
-            }
-        } else {
-            entry->position.y += entry->velocity.y;
-            entry->velocity.y -= entry->gravity;
-        }
-    }
-}
-
 void mobjMain(void) {
     MapObjectWork* wp;
     MapObjectEntry* entry;
@@ -1141,6 +1111,36 @@ void mobjCalcMtx2(MapObjectEntry* entry) {
     }
 }
 
+/** A falling map object: rises and slows, then drops, landing on the ground with a damped bounce. */
+// Original name and size (0x120) from the JP demo map (UNUSED there: mobjMain's call is inlined).
+void mobjHitCheckGround(MapObjectEntry* entry) {
+    f32 hx, hy, hz, dist, nx, ny, nz;
+
+    if (entry->velocity.y >= 0.0f) {
+        entry->position.y += entry->velocity.y;
+        entry->velocity.y -= entry->gravity;
+    } else {
+#if VERSION <= VERSION_DEMO_JP
+        dist = 1.0f + (f32)__fabs(entry->velocity.y);
+        if (hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, entry->position.x,
+                           10.0f + entry->position.y, entry->position.z, 0.0f, -10.0f, 0.0f) != NULL) {
+#else
+        dist = 10.0f + (1.0f + (f32)__fabs(entry->velocity.y));
+        if (hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, entry->position.x,
+                           10.0f + entry->position.y, entry->position.z, 0.0f, -1.0f, 0.0f) != NULL) {
+#endif
+            entry->position.y = hy;
+            entry->velocity.y = (-0.5f * entry->bounce) * entry->velocity.y;
+            if (__fabs(entry->velocity.y) <= 2.0) {
+                entry->velocity.y = 0.0f;
+            }
+        } else {
+            entry->position.y += entry->velocity.y;
+            entry->velocity.y -= entry->gravity;
+        }
+    }
+}
+
 /**
  * Returns whether a map object shows the "!" hint balloon over Mario when he is near (MOBJ_FLAG_SHOW_HINT).
  * JP and later accept NULL.
@@ -1211,18 +1211,6 @@ s32 mobjCheckItemboxOpen(MapObjectEntry* entry) {
 }
 
 #if VERSION <= VERSION_DEMO_JP
-// FAKE: stand-in; nothing calls it (the linker strips it); it only places its literals in this object's constant pool. Removing it changes the object.
-void mobjStrippedFallPool(MapObjectEntry* entry) {
-    entry->velocity.y = 0.0f;
-    entry->position.y = 1.0f;
-    entry->position.x = 10.0f;
-    entry->position.z = -10.0f;
-    entry->velocity.x = -0.5f;
-    if (__fabs(entry->velocity.y) <= 2.0) {
-        entry->velocity.z = 0.0f;
-    }
-}
-
 /** early demos only: the nearest active mobj within minMagnitude of (x, y, z) */
 MapObjectEntry* mobjNearDistCheck(f32 x, f32 y, f32 z, f32 minMagnitude) {
     int entryCount;
@@ -1352,13 +1340,3 @@ int mobjCheckKururingFloorItem(MapObjectEntry* entry) {
 /** Name of the flipping floor panels that hide Star Pieces, checked to treat their hidden item specially. */
 const char kururinName[] = "MOBJ_KururinFloor";
 
-// FAKE: stand-in, never called (in neither symbol map; the linker strips it); it only places its literals in the .sdata2 pool
-#if VERSION >= VERSION_JP
-void mobjStrippedFallPool(MapObjectEntry* entry) {
-    entry->velocity.y = 0.0f;
-    entry->position.y = 10.0f;
-    entry->position.x = 1.0f;
-    entry->position.z = -1.0f;
-    entry->velocity.x = -0.5f;
-}
-#endif

@@ -232,7 +232,7 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | src/driver/animdrv.c | animPose_AllocBuffer | macro twin of the animPoseGetBaseData inline above, used by every caller below; calling the inline instead changes the object | see comment |
 | Both | src/driver/animdrv.c | animEffectAsync | (u32) casts on the zero tests (unsigned compares); plain model == 0 / anim == 0 change the object | u32 model, anim locals; fileAsyncf returning u32 |
 | Both | src/driver/animdrv.c | animGroupBaseAsync | (u32) cast (unsigned compare); plain model == 0 changes the object | u32 model local; fileAsyncf returning u32 |
-| Both | src/driver/animdrv.c | animStrippedPool | stand-in that nothing calls; it only places its literals in this object's constant pool | see comment |
+| Both | src/driver/animdrv.c | animStrippedPool | stand-in that nothing calls; it only places the u32-to-f32 conversion constant (owned by a stripped function after animGetTexName, probably animdrvtest_loadTPL; body unknown) | see comment |
 | Both | src/driver/animdrv.c | animPoseDisp_MakeExtTexture | `#pragma opt_lifetimes off` (push/pop) for this function only | removing it changes the object; the file-wide `-opt nolifetimes` changes other functions (2026-11-07) |
 | Both | src/driver/envdrv.c | envGlare | texW/texH are reused to hold the two konst colour selections; reading glare->kcolorSel0/1 at each call changes the object; glareIter/glareCur EnvironmentGlare pointers stepped by `(EnvironmentGlareTexCoord*)p + 1` (glareCur re-copied from glareIter) | see comment |
 | Both | src/driver/envdrv.c | envCapture, envCapture2 | `& 0xFFFF` masks on the u16 frame sizes before halving | `(u16)((u32)width / 2)`: changes the object |
@@ -243,7 +243,6 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | src/driver/mapdrv.c | mapSetMaterialTev | `#pragma opt_lifetimes off` (push/pop) for this function only | removing it changes the object; the file-wide `-opt nolifetimes` changes other functions (2026-11-07) |
 | Both | src/driver/shadowdrv.c | _filter | opt_dead_assignments off keeps the unused `f32 t = 20.0f;`; without the pragma and t the object changes | see comment |
 | Both | src/driver/windowdrv.c | windowDispGX2_Waku_col | negated and halved in two steps with a no-op (f32) cast; `left = -width / 2.0f;` changes the object | see comment |
-| Both | src/driver/mobjdrv.c | mobjStrippedFallPool | stand-in, never called (in neither symbol map; the linker strips it); it only places its literals in the .sdata2 pool | see comment |
 | Both | src/effect/eff_kemutest.c | effKemuTestEntry | count (already equal to effect->count) is re-assigned in the loop test; `i < effect->count` changes the object | see comment |
 | Both | src/effect/eff_kemutest.c | effKemuTestEntry, effKemuTestMain | named file-scope static const aggregates (kemu_a..kemu_h, kemu_pos, kemu_tmp) copied into locals | see comment |
 | JP | src/effect/eff_kemutest.c | __declspec | zero filler objects with no known owner (4 bytes of .rodata, 28 bytes of .data; the other versions need neither); without them the object changes | see comment |

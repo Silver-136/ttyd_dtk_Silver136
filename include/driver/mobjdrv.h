@@ -101,6 +101,7 @@ MapObjectEntry* mobjNameToPtrNoAssert(const char* name);
 MapObjectEntry* mobjNameToPtr(const char* name);
 void mobjCalcMtx(MapObjectEntry* mobj);
 void mobjCalcMtx2(MapObjectEntry* mobj);
+void mobjHitCheckGround(MapObjectEntry* entry);
 
 void mobjDelete(const char* name);
 s32 mobjEntry(const char* name, const char* animPoseName);

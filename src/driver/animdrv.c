@@ -338,6 +338,7 @@ void animPoseRefresh(void);
 static void animPaperPoseDisp(CameraId camId, void* param);
 static void animPaperPoseDispSub(s32 unused, AnimationPose* pose);
 static void evalProc(s32 parentId, s32 groupId);
+void _animPoseEvalMtx(AnimationPose* pose, Mtx matrix, f32 rotY, f32 scale);
 
 /** Returns the animation driver's work (files, textures, pose pool, scratch buffers). */
 AnimationWork* animGetPtr(void) {
@@ -3152,32 +3153,6 @@ static inline void apdScratchN(s32 posNum, s32 nrmNum) {
     }
 }
 
-// Original name and size (0x120) from the JP demo map (UNUSED there: every call is inlined).
-void _animPoseEvalMtx(AnimationPose* pose, Mtx matrix, f32 rotY, f32 scale) {
-    Mtx tmp;
-    Mtx *m;
-    Mtx rot;
-    Mtx scl;
-    AnimationPoseData *data;
-    data = *((AnimationPoseData**)wp->files[pose->fileId].handle->data);
-    m = (Mtx*)matrix;
-    if ((!(pose->flags & ANIM_POSE_FLAG_PERA)) && rotY) {
-        PSMTXRotRad(rot, 'y', 0.017453292f * rotY);
-        PSMTXConcat(matrix, rot, tmp);
-        m = &tmp;
-    }
-    if (1.0f != scale) {
-        PSMTXScale(scl, scale, scale, scale);
-        PSMTXConcat(*m, scl, tmp);
-        m = &tmp;
-    }
-    g_modeling_mtx_lv = 0;
-    g_modeling_mtx = &g_modeling_mtx_stack[0];
-    PSMTXCopy(*m, *g_modeling_mtx);
-    wp->curPose = pose;
-    wp->curPoseData = data;
-    evalProc(-1, data->groupCount - 1);
-}
 #pragma push
 // FAKE: lifetimes optimisation off for animPoseDrawMtx only; with it on the object changes
 #pragma opt_lifetimes off
@@ -3725,13 +3700,12 @@ const char* animGetTexName(const char* name) {
     return "";
 }
 
-// FAKE: stand-in; nothing calls it (the linker strips it); it only places its literals in this object's constant pool. Removing it changes the object.
+// FAKE: stand-in; nothing calls it (the linker strips it); it only places the u32-to-f32 conversion constant in
+// this object's .rodata, ahead of animGetTexName's strings. Its owner is a stripped function after this point
+// (JP demo map, UNUSED; animdrvtest_loadTPL 0x250 is the only one large enough to be likely). Removing it changes the object.
 void animStrippedPool(f32* p, u32 n) {
-    p[0] = 0.0f;
-    p[1] = 0.017453292f * p[1];
-    p[2] = n;
+    *p = n;
 }
-
 /** Returns pose poseId's entry. */
 AnimationPose* animPoseGetAnimPosePtr(s32 poseId) {
     return &wp->poses[poseId];
@@ -3760,6 +3734,32 @@ BOOL animPoseTestXLU(s32 poseId) {
     return (animPoseGetAnimBaseDataPtr(poseId)->flags >> 3) & 1;
 }
 
+// Original name and size (0x120) from the JP demo map (UNUSED there: every call is inlined).
+void _animPoseEvalMtx(AnimationPose* pose, Mtx matrix, f32 rotY, f32 scale) {
+    Mtx tmp;
+    Mtx *m;
+    Mtx rot;
+    Mtx scl;
+    AnimationPoseData *data;
+    data = *((AnimationPoseData**)wp->files[pose->fileId].handle->data);
+    m = (Mtx*)matrix;
+    if ((!(pose->flags & ANIM_POSE_FLAG_PERA)) && rotY) {
+        PSMTXRotRad(rot, 'y', 0.017453292f * rotY);
+        PSMTXConcat(matrix, rot, tmp);
+        m = &tmp;
+    }
+    if (1.0f != scale) {
+        PSMTXScale(scl, scale, scale, scale);
+        PSMTXConcat(*m, scl, tmp);
+        m = &tmp;
+    }
+    g_modeling_mtx_lv = 0;
+    g_modeling_mtx = &g_modeling_mtx_stack[0];
+    PSMTXCopy(*m, *g_modeling_mtx);
+    wp->curPose = pose;
+    wp->curPoseData = data;
+    evalProc(-1, data->groupCount - 1);
+}
 /**
  * Walks the pose's group tree from groupId and pushes each visible group's node matrix,
  * storing the groups' world positions or matrices when the pose asked for them; it does not draw.
