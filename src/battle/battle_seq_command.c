@@ -1195,7 +1195,7 @@ s32 BattleCommandInput(BattleWork* work) {
     s32 type;
     s32 wtype;
     BattleWorkWeaponTargets* targets;
-    BattleWork* wp;
+    BattleWork* const wp = work;
     s16 unitIdx;
     s16 partIdx;
     s32 state;
@@ -1203,8 +1203,6 @@ s32 BattleCommandInput(BattleWork* work) {
     s32 i;
     BattleWorkTarget* t;
 
-    // FAKE: the cast through void* keeps wp a separate variable from work; plain `wp = work` changes the object
-    wp = (BattleWork*)(void*)work;
     unit = BattleGetUnitPtr(work, work->activeUnitId);
     cmd = &wp->commandMenu;
 

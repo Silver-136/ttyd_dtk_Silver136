@@ -3392,7 +3392,7 @@ static void animPaperPoseDisp(CameraId camId, void* param) {
  * with rectangle caching on, the rectangle is only remeasured after an animation change.
  */
 static void animPaperPoseDispSub(s32 unused, AnimationPose* arg) {
-    AnimationPose* pose;
+    AnimationPose* const pose = arg;
     AnimData* d;
     Mtx m, save;
     GXColor col1;
@@ -3406,19 +3406,11 @@ static void animPaperPoseDispSub(s32 unused, AnimationPose* arg) {
     s32 t, b, e, a, x1, y0, y1;
     u16 w;
 
-    pose = arg;
     scale = 8.0f;
     if (!(arg->flags & ANIM_POSE_FLAG_ACTIVE)) {
         return;
     }
 
-    // FAKE: dead int-guarded re-definition (COLOURING M). The second reaching def stops IRO pass-0 copy
-    // propagation, so 'pose' stays a named local (numbered above d) instead of the low parameter vreg;
-    // the arm is folded away (t is reassigned before its next use). Behaviour-identical.
-    t = 0;
-    if (t != 0) {
-        pose = arg;
-    }
     d = animPoseGetBaseData(pose)->anims[pose->animId].data;
     scale *= 25.74f / (d->bboxMax.y - d->bboxMin.y);
     hh = 0.75f * DEMOGetRenderModeObj()->efbHeight;

@@ -2541,14 +2541,12 @@ void battleSortPhaseMoveTable(BattleWork* wp, s32 count) {
     f32 x2, y2, z2;
     s32 tmp;
 
-    // FAKE: wp copied into a void* and cast back at every use; using wp directly changes the object
-    void* w;
+    BattleWork* const w = wp;
 
-    w = (void*)wp;
     if (count <= 0) {
         count = 0;
         for (i = 0; i < BATTLE_UNIT_MAX; i++) {
-            if (((BattleWork*)w)->movePriorityQueue[i] == -1) {
+            if (w->movePriorityQueue[i] == -1) {
                 break;
             }
             count++;
@@ -2556,25 +2554,25 @@ void battleSortPhaseMoveTable(BattleWork* wp, s32 count) {
     }
     for (i = 0; i < count - 1; i++) {
         for (j = 0; j < count - i - 1; j++) {
-            unit1 = BattleGetUnitPtr(((BattleWork*)w), ((BattleWork*)w)->movePriorityQueue[j]);
-            unit2 = BattleGetUnitPtr(((BattleWork*)w), ((BattleWork*)w)->movePriorityQueue[j + 1]);
+            unit1 = BattleGetUnitPtr(w, w->movePriorityQueue[j]);
+            unit2 = BattleGetUnitPtr(w, w->movePriorityQueue[j + 1]);
             BtlUnit_GetHomePos(unit1, &x1, &y1, &z1);
             BtlUnit_GetHomePos(unit2, &x2, &y2, &z2);
             if (__fabs(x1) > __fabs(x2)) {
-                tmp = ((BattleWork*)w)->movePriorityQueue[j];
-                ((BattleWork*)w)->movePriorityQueue[j] = ((BattleWork*)w)->movePriorityQueue[j + 1];
-                ((BattleWork*)w)->movePriorityQueue[j + 1] = tmp;
+                tmp = w->movePriorityQueue[j];
+                w->movePriorityQueue[j] = w->movePriorityQueue[j + 1];
+                w->movePriorityQueue[j + 1] = tmp;
             }
         }
     }
     for (i = 0; i < count - 1; i++) {
         for (j = 0; j < count - i - 1; j++) {
-            unit1 = BattleGetUnitPtr(((BattleWork*)w), ((BattleWork*)w)->movePriorityQueue[j]);
-            unit2 = BattleGetUnitPtr(((BattleWork*)w), ((BattleWork*)w)->movePriorityQueue[j + 1]);
+            unit1 = BattleGetUnitPtr(w, w->movePriorityQueue[j]);
+            unit2 = BattleGetUnitPtr(w, w->movePriorityQueue[j + 1]);
             if (unit1->movePriority < unit2->movePriority) {
-                tmp = ((BattleWork*)w)->movePriorityQueue[j];
-                ((BattleWork*)w)->movePriorityQueue[j] = ((BattleWork*)w)->movePriorityQueue[j + 1];
-                ((BattleWork*)w)->movePriorityQueue[j + 1] = tmp;
+                tmp = w->movePriorityQueue[j];
+                w->movePriorityQueue[j] = w->movePriorityQueue[j + 1];
+                w->movePriorityQueue[j + 1] = tmp;
             }
         }
     }
@@ -2676,15 +2674,13 @@ BOOL BattleWaitAllActiveEvtEnd(BattleWork* wp) {
  * so battle_stage_object.c can use it while those run.
  */
 BOOL BattleWaitAllActiveEvtEnd_NoBgSetEndWait(BattleWork* wp) {
-    // FAKE: wp copied into a void* and cast back at its use; using wp directly changes the object
-    void* w;
+    BattleWork* const w = wp;
     BattleUnit* unit;
     BOOL done;
     int i;
     done = TRUE;
-    w = (void*)wp;
     for (i = 0; i < BATTLE_UNIT_MAX; i++) {
-        unit = BattleGetUnitPtr((BattleWork*)w, i);
+        unit = BattleGetUnitPtr(w, i);
         if (unit) {
             // FAKE: while loops that always break on the first pass, used as ifs; plain if/else changes the object
             while (unit->phaseEventId) {
