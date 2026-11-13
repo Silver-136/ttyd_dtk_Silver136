@@ -1452,7 +1452,6 @@ s32 BattleCommandInput(BattleWork* work) {
                 break;
             case CMD_STATE_PARTY_SETUP:
             case CMD_STATE_PARTY_REOPEN:
-                // the retail code passes TRUE/FALSE as a second argument, which the one-parameter setup ignores
                 if (state == 24) {
                     BattleCommandDisplay_ChangePartySelectMenuSetup(wp, TRUE);
                 } else {

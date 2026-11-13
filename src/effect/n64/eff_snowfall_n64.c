@@ -305,8 +305,6 @@ static void effSnowfallDisp(CameraId cameraId, void* param) {
     }
     GXSetCullMode(GX_CULL_NONE);
 
-    // FAKE: discarded compound literal with no effect; removing it changes the object
-    (void)(GXColor){0, 0, 0, alpha};
     effSetVtxDescN64(eff_snowfall_v);
     PSMTXRotRad(rot, 'y', 0.017453292f * -camGetPtr(CAMERA_3D)->viewYaw);
     PSMTXConcat(cam->view, rot, rot);

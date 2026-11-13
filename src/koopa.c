@@ -440,40 +440,32 @@ static void kpa3DMain(void) {
     mp->floorMove.z = 0.0f;
 }
 
-#define SETPV(m, v, a, b, c, d) \
-    do {                        \
-        JUMP_PARAM(m, v) = (a); \
-        JUMP_PARAM(m, 1) = (b); \
-        JUMP_PARAM(m, 2) = (c); \
-        JUMP_PARAM(m, 3) = (d); \
-    } while (v)
 /**
  * Loads Bowser's jump physics (initial speed, acceleration, jerk, snap) for his level:
  * 7.0, 8.1, 8.4 or 10.5 units per frame upward. Returns the initial speed.
  */
 f32 kpaSetJumpPara(void) {
-    int slot;
+    int i;
     f32* jd = marioJumpData;
     MarioWork* mario = marioGetPtr();
-    slot = 0; // FAKE: register-held 0 for SETPV/JUMP_PARAM index and the dead empty if below; literal 0 differs
-    SETPV(mario, slot, jd[slot], jd[1], jd[2], jd[3]);
+    for (i = 0; i < 4; i++) {
+        JUMP_PARAM(mario, i) = jd[i];
+    }
     switch (mario->kpaWork->level) {
         case 0:
-            SETPV(mario, slot, 7.0f, -0.4f, 0.08f, -0.02f);
+            kpaSetJumpParams(mario, 7.0f, -0.4f, 0.08f, -0.02f);
             break;
         case 1:
-            SETPV(mario, slot, 8.1f, -0.3f, 0.08f, -0.02f);
+            kpaSetJumpParams(mario, 8.1f, -0.3f, 0.08f, -0.02f);
             break;
         case 2:
-            SETPV(mario, slot, 8.4f, -0.1f, 0.08f, -0.018f);
+            kpaSetJumpParams(mario, 8.4f, -0.1f, 0.08f, -0.018f);
             break;
-            if (!slot) {
-            }
         case 3:
-            SETPV(mario, slot, 10.5f, -0.12f, 0.08f, -0.018f);
+            kpaSetJumpParams(mario, 10.5f, -0.12f, 0.08f, -0.018f);
             break;
     }
-    return JUMP_PARAM(mario, slot);
+    return mario->jumpVelocityY;
 }
 
 /**
