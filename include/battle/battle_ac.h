@@ -33,10 +33,6 @@ typedef struct BattleACDispParams {
     f32 gaugeRatio;                 // 0x28, power gauge fill, 0..1
 } BattleACDispParams;
 
-// FAKE: slideTimer read through a byte offset from a register-held index (i = 4 maps to slideTimer); the plain field schedules the
-// address differently (the plain disp->slideTimer or (&disp->slideTimer)[i - 4] changes the object). Used by ac_air_gauge, ac_power_gauge_lv, ac_timing_a.
-#define AC_SLIDE_TIMER_AT(disp, i) (*(s32*)((u8*)&(disp)->slideTimer + (i) - 4))
-
 // BattleActions.acFlags (btlevtcmd_AcSetFlag): each action command reads its own bits, so each has its own set.
 // The setup call does not clear the word; every script that sets up a command reading it sets the flags first.
 // Commands without a set read no flags (timing_a, lst_rc_keep, shot_target, crane_timing, air_gauge,

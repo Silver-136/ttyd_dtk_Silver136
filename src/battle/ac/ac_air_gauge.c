@@ -302,17 +302,16 @@ s32 battleAcResult_AirGauge(BattleWork* work) {
  */
 void battleAcDisp_AirGauge(CameraId cameraId, void* param) {
     BattleWork* work = (BattleWork*)param;
-    BattleACDispParams* disp = &work->actionCommands.disp;
-    s32 i;
-    switch (work->actionCommands.acState) {
+    BattleActions* ac = &work->actionCommands;
+    BattleACDispParams* disp = &ac->disp;
+    switch (ac->acState) {
         case AC_STATE_WAIT_START:
             disp->iconX = intplGetValue(EASING_QUADRATIC_OUT, -300.0f, 30.0f, 20 - disp->slideTimer, 20);
         case AC_STATE_START:
-            i = 4;
         case AC_STATE_RUN:
             actionCommandDisp(disp->iconX, disp->iconY);
-            if (AC_SLIDE_TIMER_AT(disp, i) > 0) {
-                (AC_SLIDE_TIMER_AT(disp, i))--;
+            if (disp->slideTimer > 0) {
+                disp->slideTimer--;
             }
             break;
         case AC_STATE_RUN + 2:

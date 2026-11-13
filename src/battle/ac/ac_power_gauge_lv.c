@@ -138,43 +138,40 @@ s32 battleAcResult_PowerGaugeLv(BattleWork* work) {
 
 static void actionCommandDisp(f32 x, f32 y);
 
-// kept: without it battleAcDisp_PowerGaugeLv changes; -opt noprop for the whole file changes other functions
-#pragma opt_propagation off
 /**
  * Display callback: slides the gauge in from the left over 20 frames,
  * and once the command ends keeps it up for 40 frames before sliding it back out.
  */
 void battleAcDisp_PowerGaugeLv(CameraId cameraId, void* param) {
     BattleWork* work = (BattleWork*)param;
-    BattleACDispParams* disp = &work->actionCommands.disp;
-    s32 i = 4;
-    switch (work->actionCommands.acState) {
+    BattleActions* ac = &work->actionCommands;
+    BattleACDispParams* disp = &ac->disp;
+    switch (ac->acState) {
         case AC_STATE_WAIT_START:
-            disp->iconX = intplGetValue(EASING_QUADRATIC_OUT, -300.0f, 30.0f, 20 - AC_SLIDE_TIMER_AT(disp, i), 20);
+            disp->iconX = intplGetValue(EASING_QUADRATIC_OUT, -300.0f, 30.0f, 20 - disp->slideTimer, 20);
         case AC_STATE_START:
         case AC_STATE_RUN:
         case AC_STATE_RUN + 2:
             actionCommandDisp(disp->iconX, disp->iconY);
-            if (AC_SLIDE_TIMER_AT(disp, i) > 0) {
-                (AC_SLIDE_TIMER_AT(disp, i))--;
+            if (disp->slideTimer > 0) {
+                disp->slideTimer--;
             }
             break;
         case AC_STATE_RUN + 3:
         case AC_STATE_RUN + 4:
-            if (AC_SLIDE_TIMER_AT(disp, i) >= 40) {
-                disp->iconX = intplGetValue(EASING_QUADRATIC_OUT, 30.0f, -300.0f, AC_SLIDE_TIMER_AT(disp, i) - 40, 20);
+            if (disp->slideTimer >= 40) {
+                disp->iconX = intplGetValue(EASING_QUADRATIC_OUT, 30.0f, -300.0f, disp->slideTimer - 40, 20);
             } else {
                 disp->iconX = 30.0f;
             }
             actionCommandDisp(disp->iconX, disp->iconY);
-            if (AC_SLIDE_TIMER_AT(disp, i) < 60) {
-                (AC_SLIDE_TIMER_AT(disp, i))++;
+            if (disp->slideTimer < 60) {
+                disp->slideTimer++;
             }
             break;
     }
 }
 
-#pragma opt_propagation reset
 /** Called by btlevtcmd_StopAC: unless the command already finished, starts the 60-frame end wait. */
 void battleAcDelete_PowerGaugeLv(BattleWork* work) {
     if (work->actionCommands.doneFlags & AC_DONE_FLAG_FINISHED) {
