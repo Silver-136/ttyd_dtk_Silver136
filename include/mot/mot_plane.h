@@ -30,6 +30,8 @@ typedef struct MotPlaneWork {
 } MotPlaneWork;                   // size 0x48
 
 void marioForcePlaneAnime(void);
+void getPlaneFrPos(Vec* pos);
+void getPlaneBoPos(Vec* pos);
 
 // marioGetPlaneStatus
 enum {

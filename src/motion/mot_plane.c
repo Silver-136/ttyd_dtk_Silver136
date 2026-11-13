@@ -197,6 +197,24 @@ BOOL mario_plane_cancel(void) {
 #endif
 }
 
+/** Copies the plane's front collision probe point (motPlane->frontPos, set by chkCollision) to pos. */
+// Original name and size (0x50) from the JP demo map (UNUSED there: nothing calls it).
+void getPlaneFrPos(Vec* pos) {
+    MarioWork* mario = marioGetPtr();
+    pos->x = mario->motPlane->frontPos.x;
+    pos->y = mario->motPlane->frontPos.y;
+    pos->z = mario->motPlane->frontPos.z;
+}
+
+/** Copies the plane's other probe point (motPlane->tipPos, set by chkCollision) to pos. */
+// Original name and size (0x50) from the JP demo map (UNUSED there: nothing calls it).
+void getPlaneBoPos(Vec* pos) {
+    MarioWork* mario = marioGetPtr();
+    pos->x = mario->motPlane->tipPos.x;
+    pos->y = mario->motPlane->tipPos.y;
+    pos->z = mario->motPlane->tipPos.z;
+}
+
 /**
  * Re-applies the paper airplane animation in Mario's current colour (paper_plane[marioGetColor()])
  * when mario.c rebuilds his look while flying.

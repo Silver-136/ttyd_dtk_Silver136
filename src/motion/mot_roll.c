@@ -204,6 +204,12 @@ static inline void marioRollCan(void);
 
 #pragma inline_max_total_size(200000)
 
+/** Tuning value i of rollData. */
+// Original name and size (0x14) from the JP demo map (UNUSED there: nothing calls it).
+static f32 getRollVal(s32 i) {
+    return rollData[i];
+}
+
 /** Marks the rolling sound as not playing (sfxId -1) when the roll work is set up. */
 // Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
 void roll_se_init(void) {
