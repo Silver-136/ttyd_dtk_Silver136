@@ -2709,8 +2709,7 @@ void* fbatHitCheck(u32 flags, void* result) {
                 }
                 reach = 1.5f * mario->wPlayerCollisionBox.x;
 
-                // FAKE: `(*(T*)&...)` reads, as above (FAKES.md, fbatHitCheck)
-                swingAngle = reviseAngle(mario->displayDirection - 90.0f + (*(f32*)&((CameraEntry*)camGetPtr(CAMERA_3D))->viewYaw));
+                swingAngle = reviseAngle(mario->displayDirection - 90.0f + camGetPtr(CAMERA_3D)->viewYaw);
 #else
                 f32 x, y, z;
                 f32 r, angle;
@@ -2724,7 +2723,6 @@ void* fbatHitCheck(u32 flags, void* result) {
                 _getHammerPoint(f, reach, swingAngle, &x, &y, &z);
                 npc = wp->entries;
                 for (i = 0; i < total; i++, npc++) {
-                    // FAKE: `(*(T*)&...)` reads, as in the retail form (FAKES.md, fbatHitCheck)
                     if (npc == NULL) {
                         continue;
                     }
@@ -2752,7 +2750,7 @@ void* fbatHitCheck(u32 flags, void* result) {
                     if (npc->flags & NPC_FLAG_2D) {
                         continue;
                     }
-                    if ((*(u32*)&((NpcEntry*)npc)->statusFlags) & NPC_STATUS_DEAD) {
+                    if (npc->statusFlags & NPC_STATUS_DEAD) {
                         continue;
                     }
                     if (!_npcHitCheckSphere(npc, &dist, x, y, z, 10.0f)) {
@@ -2828,7 +2826,6 @@ void* fbatHitCheck(u32 flags, void* result) {
                 _getKaitenHammerPoint(swingAngle, reach, &x, &y, &z);
                 npc = wp->entries;
                 for (i = 0; i < total; i++, npc++) {
-                    // FAKE: `(*(T*)&...)` reads, as in the retail form (FAKES.md, fbatHitCheck)
                     if (npc == NULL) {
                         continue;
                     }
@@ -2844,7 +2841,7 @@ void* fbatHitCheck(u32 flags, void* result) {
                             continue;
                         }
                     }
-                    if (soft && !((*(u32*)&((NpcEntry*)npc)->reactionFlags) & NPC_REACTION_HAMMER)) {
+                    if (soft && !(npc->reactionFlags & NPC_REACTION_HAMMER)) {
                         continue;
                     }
                     if (npc->flags & NPC_FLAG_NO_PLAYER_ATTACK) {
@@ -2853,7 +2850,7 @@ void* fbatHitCheck(u32 flags, void* result) {
                     if (npc->flags & NPC_FLAG_NO_HIT) {
                         continue;
                     }
-                    if ((*(u32*)&((NpcEntry*)npc)->statusFlags) & NPC_STATUS_DEAD) {
+                    if (npc->statusFlags & NPC_STATUS_DEAD) {
                         continue;
                     }
                     if (npc->flags & NPC_FLAG_2D) {
