@@ -16,6 +16,9 @@ Names: most are the original names; compiler-generated objects (string literals,
 compiler's labels (@N), whose numbers depend on header contents and need not match Nintendo's. Some names were
 made up by this project; docs/NAME_PROVENANCE.md lists them.
 
+Each map starts with one stamp line naming the ttyd commit it was generated from (and "with local changes" when
+the working tree differed from it); tools/MAPS_CHANGELOG.md says which pushes made older maps obsolete.
+
 The build outputs are unchanged by --map (the map is a side file). Afterwards the tree is configured again for the
 last version without --map.
 
@@ -91,7 +94,25 @@ def rewrite_memory_map(text, file_offset_of):
     return nl.join(head + [b"", b""] + block + [b"", b""] + tail)
 
 
-def export_version(version, out_dir):
+def source_stamp():
+    """The stamp line: commit hash and date of the checkout the maps were built from."""
+    def git(*a):
+        return subprocess.run(["git", *a], cwd=ROOT, capture_output=True, text=True).stdout.strip()
+    rev = git("rev-parse", "--short=9", "HEAD") or "unknown"
+    date = git("log", "-1", "--format=%cs", "HEAD") or "unknown date"
+    dirty = " with local changes" if git("status", "--porcelain", "--untracked-files=no") else ""
+    return f"generated from ttyd commit {rev} ({date}){dirty}"
+
+
+def stamped(text, stamp):
+    nl = b"
+" if b"
+" in text else b"
+"
+    return stamp.encode("ascii") + nl + text
+
+
+def export_version(version, out_dir, stamp):
     build = ROOT / "build" / version
     dst = out_dir / version
     dst.mkdir(parents=True, exist_ok=True)
@@ -107,7 +128,7 @@ def export_version(version, out_dir):
                 return off, s
         return None
 
-    (dst / "MarioSt.MAP").write_bytes(rewrite_memory_map(dol_map.read_bytes(), dol_offset))
+    (dst / "MarioSt.MAP").write_bytes(stamped(rewrite_memory_map(dol_map.read_bytes(), dol_offset), stamp))
     count = 1
     for rel in sorted(build.glob("*/*.rel")):
         name = rel.stem
@@ -126,7 +147,7 @@ def export_version(version, out_dir):
                     return off, s
             return None
 
-        (dst / f"{name}.plf.MAP").write_bytes(rewrite_memory_map(plf_map.read_bytes(), rel_offset))
+        (dst / f"{name}.plf.MAP").write_bytes(stamped(rewrite_memory_map(plf_map.read_bytes(), rel_offset), stamp))
         count += 1
     print(f"{version}: {count} maps -> {dst}")
 
@@ -139,11 +160,12 @@ def main():
     p.add_argument("--ninja", default=shutil.which("ninja") or str(Path(sys.executable).parent / "Scripts" / "ninja"))
     args = p.parse_args()
     versions = args.version or VERSIONS
+    stamp = source_stamp()
     for v in versions:
         if not args.no_build:
             subprocess.run([sys.executable, "configure.py", "--version", v, "--map"], cwd=ROOT, check=True)
             subprocess.run([args.ninja], cwd=ROOT, check=True)
-        export_version(v, args.out)
+        export_version(v, args.out, stamp)
     if not args.no_build:
         subprocess.run([sys.executable, "configure.py", "--version", versions[-1]], cwd=ROOT, check=True)
 

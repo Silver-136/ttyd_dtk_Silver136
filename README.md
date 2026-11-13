@@ -169,6 +169,10 @@ Each version builds into its own folder, `build/<version>/`, so all seven can si
 ninja build/G8MJ01/ok
 ```
 
+Symbol maps in the format of the JP demo's linker maps (one for `main.dol`, one per REL) come from
+`python tools/export_maps.py` (into `build/maps/<version>/`). Each map names the commit it was made from;
+[tools/MAPS_CHANGELOG.md](tools/MAPS_CHANGELOG.md) lists which pushes made older maps obsolete.
+
 Running
 =======
 
