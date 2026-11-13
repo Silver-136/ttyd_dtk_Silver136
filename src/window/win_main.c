@@ -507,12 +507,12 @@ BOOL winDvdOpenAsync(void) {
 #endif
     };
 #if VERSION <= VERSION_DEMO_JP
-    if (fileAsyncf(FILE_TYPE_TPL, NULL, WIN_DIR "%s/win.tpl", getMarioStDvdRoot(), lang[gp->language]) == 0U) {
+    if (fileAsyncf(FILE_TYPE_TPL, NULL, WIN_DIR "%s/win.tpl", getMarioStDvdRoot(), lang[gp->language]) == NULL) {
         return FALSE;
     }
     wp->res = fileAllocf(FILE_TYPE_TPL, WIN_DIR "%s/win.tpl", getMarioStDvdRoot(), lang[gp->language]);
 #else
-    if (fileAsyncf(FILE_TYPE_TPL, NULL, "%s/w/%s/win.tpl", getMarioStDvdRoot(), lang[gp->language]) == 0U) {
+    if (fileAsyncf(FILE_TYPE_TPL, NULL, "%s/w/%s/win.tpl", getMarioStDvdRoot(), lang[gp->language]) == NULL) {
         return FALSE;
     }
     wp->res = fileAllocf(FILE_TYPE_TPL, "%s/w/%s/win.tpl", getMarioStDvdRoot(), lang[gp->language]);

@@ -975,7 +975,7 @@ void shadowFlagOn(s32 id, u16 flags) {
 /** Returns the character shadow texture rendered this frame, or NULL if none was. */
 GXTexObj* shadowGetCharShadowTexObj(void) {
     if (cswp->base.flags & SHADOW_WORK_READY) {
-        return smartTexObj(&cswp->base.texObj, (void**)cswp->base.texBuffer);
+        return smartTexObj(&cswp->base.texObj, &cswp->base.texBuffer->address);
     }
     return NULL;
 }
@@ -1022,7 +1022,7 @@ void shadowDepthShadowDrawCountUp(void) {
 /** Returns the depth shadow texture rendered this frame, or NULL if none was. */
 GXTexObj* shadowGetDepthShadowTexObj(void) {
     if (dswp->flags & SHADOW_WORK_READY) {
-        return smartTexObj(&dswp->texObj, (void**)dswp->texBuffer);
+        return smartTexObj(&dswp->texObj, &dswp->texBuffer->address);
     }
     return NULL;
 }
@@ -1066,7 +1066,7 @@ void shadowProjShadowDrawCountUp(void) {
 /** Returns the projected shadow texture rendered this frame, or NULL if none was. */
 GXTexObj* shadowGetProjShadowTexObj(void) {
     if (pswp->flags & SHADOW_WORK_READY) {
-        return smartTexObj(&pswp->texObj, (void**)pswp->texBuffer);
+        return smartTexObj(&pswp->texObj, &pswp->texBuffer->address);
     }
     return NULL;
 }

@@ -38,8 +38,10 @@ static void kpaFireEntry(Vec pos);
 void fire_se_init(void);
 const f32 vec3_802fc920[3] = {0.0f, 0.0f, 0.0f};
 
-// FAKE: unsized f32 array view of mario_motion.c's MarioJumpData marioJumpData; reading marioJumpData.jump through
-// the struct type changes the object.
+// mario_motion.c's marioJumpData (MarioJumpData; its jump[] curve comes first), declared without a size as this
+// file saw it in the original: the retail code here addresses the 0x28-byte .sdata object with lis/addi, which
+// MWCC gives only for an incomplete type (any sized declaration gets r13-relative SDA21 under -sdata 48, as
+// mario_motion.c's own references do).
 extern f32 marioJumpData[];
 
 /**

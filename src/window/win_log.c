@@ -688,16 +688,16 @@ s32 winLogMain(WindowWork* w) {
             break;
         case 10:
 #if VERSION <= VERSION_DEMO_JP
-            if (fileAsyncf(FILE_TYPE_TPL, NULL, WIN_DIR "jp/%s", getMarioStDvdRoot(), winGetMapTplName()) == 0U) {
+            if (fileAsyncf(FILE_TYPE_TPL, NULL, WIN_DIR "jp/%s", getMarioStDvdRoot(), winGetMapTplName()) == NULL) {
                     break;
             }
             if (!w->mapRes) {
                 w->mapRes = fileAllocf(FILE_TYPE_TPL, WIN_DIR "jp/%s", getMarioStDvdRoot(), winGetMapTplName());
 #else
 #if VERSION >= VERSION_US
-            if (fileAsyncf(FILE_TYPE_TPL, NULL, "%s/w/%s/%s", getMarioStDvdRoot(), gp->language == LANGUAGE_JP ? "jp" : "us", winGetMapTplName()) == 0U) break;
+            if (fileAsyncf(FILE_TYPE_TPL, NULL, "%s/w/%s/%s", getMarioStDvdRoot(), gp->language == LANGUAGE_JP ? "jp" : "us", winGetMapTplName()) == NULL) break;
 #else
-            if (fileAsyncf(FILE_TYPE_TPL, NULL, "%s/w/jp/%s", getMarioStDvdRoot(), winGetMapTplName()) == 0U) break;
+            if (fileAsyncf(FILE_TYPE_TPL, NULL, "%s/w/jp/%s", getMarioStDvdRoot(), winGetMapTplName()) == NULL) break;
 #endif
             if (!w->mapRes) {
 #if VERSION >= VERSION_US
@@ -1601,10 +1601,10 @@ void monosiriMain(MonosiriWork* m) {
     }
     switch (m->state) {
         case 0:
-            if (fileAsyncf(FILE_TYPE_TPL, NULL, WIN_DIR "%s/win.tpl", getMarioStDvdRoot(), lang[gp->language]) == 0U) {
+            if (fileAsyncf(FILE_TYPE_TPL, NULL, WIN_DIR "%s/win.tpl", getMarioStDvdRoot(), lang[gp->language]) == NULL) {
                 break;
             }
-            if (fileAsyncf(FILE_TYPE_RAW, NULL, WIN_DIR "jp/mono.dat", getMarioStDvdRoot()) == 0U)
+            if (fileAsyncf(FILE_TYPE_RAW, NULL, WIN_DIR "jp/mono.dat", getMarioStDvdRoot()) == NULL)
             break;
             m->winTpl = fileAllocf(FILE_TYPE_TPL, WIN_DIR "%s/win.tpl", getMarioStDvdRoot(), lang[gp->language]);
             m->monoDat = fileAllocf(FILE_TYPE_RAW, WIN_DIR "jp/mono.dat", getMarioStDvdRoot());
@@ -1625,11 +1625,11 @@ void monosiriMain(MonosiriWork* m) {
     if (!m) return;
     switch (m->state) {
         case 0:
-            if (fileAsyncf(FILE_TYPE_TPL, NULL, "%s/w/%s/win.tpl", getMarioStDvdRoot(), lang[gp->language]) == 0U) break;
+            if (fileAsyncf(FILE_TYPE_TPL, NULL, "%s/w/%s/win.tpl", getMarioStDvdRoot(), lang[gp->language]) == NULL) break;
 #if VERSION >= VERSION_US
-            if (fileAsyncf(FILE_TYPE_RAW, NULL, "%s/w/%s/mono.dat", getMarioStDvdRoot(), gp->language == LANGUAGE_JP ? "jp" : "us") == 0U) break;
+            if (fileAsyncf(FILE_TYPE_RAW, NULL, "%s/w/%s/mono.dat", getMarioStDvdRoot(), gp->language == LANGUAGE_JP ? "jp" : "us") == NULL) break;
 #else
-            if (fileAsyncf(FILE_TYPE_RAW, NULL, "%s/w/jp/mono.dat", getMarioStDvdRoot()) == 0U) break;
+            if (fileAsyncf(FILE_TYPE_RAW, NULL, "%s/w/jp/mono.dat", getMarioStDvdRoot()) == NULL) break;
 #endif
             m->winTpl = fileAllocf(FILE_TYPE_TPL, "%s/w/%s/win.tpl", getMarioStDvdRoot(), lang[gp->language]);
 #if VERSION >= VERSION_US

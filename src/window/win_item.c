@@ -546,14 +546,14 @@ s32 winItemMain(WindowWork* w) {
             mail = mailGetPtr(w->item.mail[w->item.mailSel].id);
             if (mail->flags & MAIL_FLAG_PICTURE) {
 #if VERSION <= VERSION_DEMO_JP
-                w->mailRes = (FileEntry*)fileAsyncf(FILE_TYPE_TPL, 0, "%s/window/jp/mail.tpl", getMarioStDvdRoot());
+                w->mailRes = fileAsyncf(FILE_TYPE_TPL, 0, "%s/window/jp/mail.tpl", getMarioStDvdRoot());
                 if (w->mailRes) {
                     w->mailRes = fileAllocf(FILE_TYPE_TPL, "%s/window/jp/mail.tpl", getMarioStDvdRoot());
 #else
 #if VERSION >= VERSION_US
-                w->mailRes = (FileEntry*)fileAsyncf(FILE_TYPE_TPL, 0, "%s/w/%s/mail.tpl", getMarioStDvdRoot(), gp->language == LANGUAGE_JP ? "jp" : "us");
+                w->mailRes = fileAsyncf(FILE_TYPE_TPL, 0, "%s/w/%s/mail.tpl", getMarioStDvdRoot(), gp->language == LANGUAGE_JP ? "jp" : "us");
 #else
-                w->mailRes = (FileEntry*)fileAsyncf(FILE_TYPE_TPL, 0, "%s/w/jp/mail.tpl", getMarioStDvdRoot());
+                w->mailRes = fileAsyncf(FILE_TYPE_TPL, 0, "%s/w/jp/mail.tpl", getMarioStDvdRoot());
 #endif
                 if (w->mailRes) {
 #if VERSION >= VERSION_US
