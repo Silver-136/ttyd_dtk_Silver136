@@ -22,9 +22,7 @@
 #include "battle/battle_database_common.h"
 #include "battle/battle_damage.h"
 #include "battle/unit/unit_mahorn.h"
-
-/** Absolute value of a double. */
-static inline double mahorn_fabs(double x) { return __fabs(x); }
+#include <math.h>
 
 static USER_FUNC(hand_ctrl);
 static USER_FUNC(hand_init);
@@ -1609,7 +1607,7 @@ static USER_FUNC(eff_magic) {
     x += unit->sizeMultiplier * unit->faceDirection;
     y += 18.0f * unit->sizeMultiplier;
     z += 5.0f;
-    unit->work[UNIT_WORK_MAGIC_EFFECT] = (EvtWord)effMahorn2Entry(0, x, y, z, a, y, z, unit->sizeMultiplier, mahorn_fabs((a - x) / time));
+    unit->work[UNIT_WORK_MAGIC_EFFECT] = (EvtWord)effMahorn2Entry(0, x, y, z, a, y, z, unit->sizeMultiplier, fabs((a - x) / time));
     return EVT_RETURN_DONE;
 }
 

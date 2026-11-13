@@ -160,7 +160,6 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | src/mario/mario_kemuri.c | mario_kemuri | `s = s;` as the then-branch of the dokan check | removing it changes the object in both versions (dead_probe.py) |
 | Both | src/battle/ac/ac_button_down.c | actionCommandDisp | `int size` holds ICON_FLAG_2D for the bar and button icons | ICON_FLAG_2D at the four uses: changes the object |
 | Both | src/sound.c | SoundDropData | comma expression(s) `(0, &sound.dvds[i])`; `(0, &sound.effects[i])` keep the value as a separate temp | the plain expression; `sound.effects + i`; pointers declared first or last in the function (register allocation differs) |
-| Both | src/cam_road.c | hokanRate | cos called through a double (*)(f32) cast; (f32)cos(a) changes the object | see comment |
 | Both | src/koopa.c | kpaStrippedFallPool | stand-in, never called (the linker strips it); it only puts kpaSetFallPara's eight literals into the .sdata2 pool; removing it changes the object | see comment |
 | Both | src/koopa.c | kpaSetJumpPara (marioJumpData) | unsized `extern f32 marioJumpData[]` view of mario_motion.c's MarioJumpData struct | MarioJumpData in mario_motion.h and `marioJumpData.jump`: changes the object |
 | Both | src/koopa_hit.c | kpaGetHitobjHead | address temporary; the plain return of headHit[i] changes the object | see comment |
@@ -293,4 +292,3 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | rels/pik/src/pik_02.c | hoshi_jump | `event->userdata[n] = *(s32*)&t` word view of the floats | `event->userdataf[n] = t`: 262 vs 255 instructions |
 | Both | rels/rsh/src/rsh_05.c | npc_jump | `event->userdata[n] = *(s32*)&t` word view of the floats | `event->userdataf[n] = t`: 351 vs 342 instructions |
 | Both | rels/tou2/src/tou_03.c | item_jump | `event->userdata[n] = *(s32*)&t` word view of the floats | `event->userdataf[n] = t`: 192 vs 174 instructions |
-| Both | rels/tou/src/tou_01.c | make_shadow_disp | comma `(t = tan(...), 128.0f / t)` in the eye-position literal | `t = tan(...);` before the call: changes the object |

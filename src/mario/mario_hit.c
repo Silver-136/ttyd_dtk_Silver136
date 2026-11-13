@@ -31,6 +31,11 @@
 #include "sfx_name_word.h"
 #include "koopa.h"
 #include "pmario_sound.h"
+
+/** sin and cos of an angle in degrees. */
+static inline f32 sind(f32 deg) { return sin(3.1415927f * deg / 180.0f); }
+static inline f32 cosd(f32 deg) { return cos(3.1415927f * deg / 180.0f); }
+
 static HitEntry* searchFrontWall(Vec* pos, f32* h, f32 dx, f32 dz, f32 w);
 static HitEntry* marioChkFrontStep(f32* y, f32* h, f32* ang);
 
@@ -770,10 +775,9 @@ HitEntry* marioSearchGround(f32* y, f32* b, f32* c, f32 spd, f32 h) {
     } else {
         a = toMovedir(mario->displayDirection);
     }
-    a = (3.1415927f * a) / 180.0f;
-    sn = (f32)sin(a);
+    sn = sind(a);
     sx = 0.375f * (mario->wPlayerCollisionBox.x * sn);
-    sn = (f32)cos(a);
+    sn = cosd(a);
     sz = 0.375f * (mario->wPlayerCollisionBox.x * -sn);
     y0 = mario->position.y;
     {
@@ -797,16 +801,14 @@ HitEntry* marioSearchGround(f32* y, f32* b, f32* c, f32 spd, f32 h) {
     }
 #endif
     if (mario->flags & MARIO_FLAG_PAPER_MODE) {
-        a = (3.1415927f * a) / 180.0f;
-        sn = (f32)sin(a);
+        sn = sind(a);
         sx = 0.425f * (mario->wPlayerCollisionBox.x * sn);
-        sn = (f32)cos(a);
+        sn = cosd(a);
         sz = 0.425f * (mario->wPlayerCollisionBox.x * -sn);
     } else {
-        a = (3.1415927f * a) / 180.0f;
-        sn = (f32)sin(a);
+        sn = sind(a);
         sx = 0.375f * (mario->wPlayerCollisionBox.x * sn);
-        sn = (f32)cos(a);
+        sn = cosd(a);
         sz = 0.375f * (mario->wPlayerCollisionBox.x * -sn);
     }
     y0 = mario->position.y;
@@ -1044,45 +1046,45 @@ HitEntry* marioSearchGroundRoll(f32* y, f32* b, f32* c, f32 spd, f32 h) {
                 z = x = 0.0f;
                 break;
             case 1:
-                a = (3.1415927f * (90.0f + mario->directionView)) / 180.0f;
-                x = 9.0f * (f32)sin(a);
-                sn = (f32)cos(a);
+                a = 90.0f + mario->directionView;
+                x = 9.0f * sind(a);
+                sn = cosd(a);
                 z = 9.0f * -sn;
                 break;
             case 2:
-                a = (3.1415927f * (mario->directionView - 90.0f)) / 180.0f;
-                x = 9.0f * (f32)sin(a);
-                sn = (f32)cos(a);
+                a = mario->directionView - 90.0f;
+                x = 9.0f * sind(a);
+                sn = cosd(a);
                 z = 9.0f * -sn;
                 break;
             case 3:
                 z = x = 0.0f;
                 break;
             case 4:
-                a = (3.1415927f * (90.0f + mario->directionView)) / 180.0f;
-                x = 9.0f * (f32)sin(a);
-                sn = (f32)cos(a);
+                a = 90.0f + mario->directionView;
+                x = 9.0f * sind(a);
+                sn = cosd(a);
                 z = 9.0f * -sn;
                 movePos(&x, &z, 3.0f, mario->directionView);
                 break;
             case 5:
-                a = (3.1415927f * (mario->directionView - 90.0f)) / 180.0f;
-                x = 9.0f * (f32)sin(a);
-                sn = (f32)cos(a);
+                a = mario->directionView - 90.0f;
+                x = 9.0f * sind(a);
+                sn = cosd(a);
                 z = 9.0f * -sn;
                 movePos(&x, &z, 3.0f, mario->directionView);
                 break;
             case 6:
-                a = (3.1415927f * (90.0f + mario->directionView)) / 180.0f;
-                x = 9.0f * (f32)sin(a);
-                sn = (f32)cos(a);
+                a = 90.0f + mario->directionView;
+                x = 9.0f * sind(a);
+                sn = cosd(a);
                 z = 9.0f * -sn;
                 movePos(&x, &z, 3.0f, 180.0f + mario->directionView);
                 break;
             case 7:
-                a = (3.1415927f * (mario->directionView - 90.0f)) / 180.0f;
-                x = 9.0f * (f32)sin(a);
-                sn = (f32)cos(a);
+                a = mario->directionView - 90.0f;
+                x = 9.0f * sind(a);
+                sn = cosd(a);
                 z = 9.0f * -sn;
                 movePos(&x, &z, 3.0f, 180.0f + mario->directionView);
                 break;
@@ -1162,15 +1164,15 @@ HitEntry* marioSearchGroundRoll(f32* y, f32* b, f32* c, f32 spd, f32 h) {
                     z = x = 0.0f;
                     break;
                 case 1:
-                    a = (3.1415927f * (90.0f + mario->directionView)) / 180.0f;
-                    x = 8.6399994f * (f32)sin(a);
-                    sn = (f32)cos(a);
+                    a = 90.0f + mario->directionView;
+                    x = 8.6399994f * sind(a);
+                    sn = cosd(a);
                     z = 8.6399994f * -sn;
                     break;
                 case 2:
-                    a = (3.1415927f * (mario->directionView - 90.0f)) / 180.0f;
-                    x = 8.6399994f * (f32)sin(a);
-                    sn = (f32)cos(a);
+                    a = mario->directionView - 90.0f;
+                    x = 8.6399994f * sind(a);
+                    sn = cosd(a);
                     z = 8.6399994f * -sn;
                     break;
                 case 3:
@@ -1181,16 +1183,16 @@ HitEntry* marioSearchGroundRoll(f32* y, f32* b, f32* c, f32 spd, f32 h) {
                     z = x = 0.0f;
                     break;
                 case 5:
-                    a = (3.1415927f * (90.0f + mario->directionView)) / 180.0f;
-                    x = 8.6399994f * (f32)sin(a);
-                    sn = (f32)cos(a);
+                    a = 90.0f + mario->directionView;
+                    x = 8.6399994f * sind(a);
+                    sn = cosd(a);
                     z = 8.6399994f * -sn;
                     movePos(&x, &z, 3.0f, mario->directionView);
                     break;
                 case 6:
-                    a = (3.1415927f * (mario->directionView - 90.0f)) / 180.0f;
-                    x = 8.6399994f * (f32)sin(a);
-                    sn = (f32)cos(a);
+                    a = mario->directionView - 90.0f;
+                    x = 8.6399994f * sind(a);
+                    sn = cosd(a);
                     z = 8.6399994f * -sn;
                     movePos(&x, &z, 3.0f, mario->directionView);
                     break;
@@ -1347,10 +1349,9 @@ HitEntry* marioLandonChk_old(f32* outY, f32 spd) {
     } else {
         a = toMovedir(mario->displayDirection);
     }
-    a = (3.1415927f * a) / 180.0f;
-    sn = (f32)sin(a);
+    sn = sind(a);
     ox = 0.25f * (mario->wPlayerCollisionBox.x * sn);
-    sn = (f32)cos(a);
+    sn = cosd(a);
     oz = 0.25f * (mario->wPlayerCollisionBox.x * -sn);
     px = mario->position.x;
     py = mario->position.y;
@@ -1796,11 +1797,10 @@ f32 marioChkOverheadJabara(s32* sideOut, f32* distOut) {
 
 /** Offset of half of Mario's width (less 0.5) in the direction deg (degrees), for marioSearchHead's side rays. */
 static inline void marioSearchHeadOfs(MarioWork* mario, f32 deg, f32* px, f32* pz) {
-    f32 r = (3.1415927f * deg) / 180.0f;
     f32 t;
-    t = sin(r);
+    t = sind(deg);
     *px = 0.5f * ((mario->wPlayerCollisionBox.x - 0.5f) * t);
-    t = cos(r);
+    t = cosd(deg);
     *pz = 0.5f * ((mario->wPlayerCollisionBox.x - 0.5f) * -t);
 }
 
@@ -1910,22 +1910,13 @@ HitEntry* marioSearchHead(Vec* pos, f32* h, f32 dd) {
     return NULL;
 }
 
-/** Side offset of marioSearchHead_roll's corner rays: 9 units along deg (degrees) into *x and *z. */
-static inline void rollSideOffset(f32* x, f32* z, f32 deg) {
-    f32 a = (3.1415927f * deg) / 180.0f;
-    f32 c;
-
-    *x = 9.0f * (f32)sin(a);
-    c = cos(a);
-    *z = 9.0f * -c;
-}
-
 /**
  * Ceiling check for the tube: five rays up from 1 above pos (centre and the tube's front and back corners).
  * On contact Mario is pushed down under the ceiling, *h is 0 and the hit is returned;
  * otherwise *h gets the smallest gap.
  */
 HitEntry* marioSearchHead_roll(Vec* pos, f32* h, f32 d) {
+    f32 a;
     Vec outPos, outNrm;
     f32 x, z;
     f32 dist;
@@ -1945,19 +1936,27 @@ HitEntry* marioSearchHead_roll(Vec* pos, f32* h, f32 d) {
                 z = x = 0.0f;
                 break;
             case 1:
-                rollSideOffset(&x, &z, 90.0f + mario->directionView);
+                a = 90.0f + mario->directionView;
+                x = 9.0f * sind(a);
+                z = 9.0f * -cosd(a);
                 movePos(&x, &z, 3.0f, mario->directionView);
                 break;
             case 2:
-                rollSideOffset(&x, &z, mario->directionView - 90.0f);
+                a = mario->directionView - 90.0f;
+                x = 9.0f * sind(a);
+                z = 9.0f * -cosd(a);
                 movePos(&x, &z, 3.0f, mario->directionView);
                 break;
             case 3:
-                rollSideOffset(&x, &z, 90.0f + mario->directionView);
+                a = 90.0f + mario->directionView;
+                x = 9.0f * sind(a);
+                z = 9.0f * -cosd(a);
                 movePos(&x, &z, 3.0f, 180.0f + mario->directionView);
                 break;
             case 4:
-                rollSideOffset(&x, &z, mario->directionView - 90.0f);
+                a = mario->directionView - 90.0f;
+                x = 9.0f * sind(a);
+                z = 9.0f * -cosd(a);
                 movePos(&x, &z, 3.0f, 180.0f + mario->directionView);
                 break;
         }
@@ -2012,8 +2011,8 @@ HitEntry* marioSearchHead_jabara(Vec* pos, f32* h, s32* side, f32 d) {
     dir = (Vec){0.0f, 1.0f, 0.0f};
     for (; i < 8; i++, off += 5.8f) {
         dist = top;
-        v.x = pos->x + off * (f32)sin((3.1415927f * mario->targetYaw) / 180.0f);
-        v.z = pos->z - off * (f32)cos((3.1415927f * mario->targetYaw) / 180.0f);
+        v.x = pos->x + off * sind(mario->targetYaw);
+        v.z = pos->z - off * cosd(mario->targetYaw);
         v.y = 0.5f + pos->y;
         hit = marioHitCheck2(&v, &dir, &outPos, &outNrm, &dist);
         if (hit) {
@@ -2725,7 +2724,6 @@ static HitEntry* marioChkFrontStep(f32* y, f32* h, f32* ang) {
     BOOL ok;
     MarioWork* mario = marioGetPtr();
     f32 c;
-    f32 rad;
     mario->groundRot.x = 0.0f;
     mario->groundRot.y = 0.0f;
     mario->groundRot.z = 0.0f;
@@ -2744,9 +2742,8 @@ static HitEntry* marioChkFrontStep(f32* y, f32* h, f32* ang) {
     } else {
         r = 0.265f * mario->wPlayerCollisionBox.x;
     }
-    rad = (3.1415927f * a) / 180.0f;
-    s = (f32)sin(rad);
-    c = (f32)cos(rad);
+    s = sind(a);
+    c = cosd(a);
     s = r * s;
     a = r * -c;
     y0 = mario->position.y;

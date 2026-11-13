@@ -1293,13 +1293,14 @@ static u32 compareCamRoad(CamRoadState* a, CamRoadState* b, f32* outSpeed) {
 /** Blend curve for interpolation (hokan): eases t from 0 to 1 along a cosine shape, clamped to 1. */
 static inline f32 hokanRate(f32 t, f32 a, f32 b, f32 k, f32 o) {
     f32 c1, c0, c2, r;
+    f32 ang;
 
-    // FAKE: cos called through a double (*)(f32) cast; (f32)cos(a) changes the object
-    c0 = (f32)((double (*)(f32))cos)(a);
-
-    // FAKE: cos called through a double (*)(f32) cast; (f32)cos(b) changes the object
-    c1 = (f32)((double (*)(f32))cos)(b);
-    c2 = (f32)cos(3.141592f * t * k + o);
+    ang = a;
+    c0 = (f32)cos(ang);
+    ang = b;
+    c1 = (f32)cos(ang);
+    ang = 3.141592f * t * k + o;
+    c2 = (f32)cos(ang);
     r = (2.0f / (1.0f + c0)) * (0.5f * (1.0f - c1) + c2);
     r = 0.500001f * (2.0f - (1.0f + r));
     if (r > 1.0f) {

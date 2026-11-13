@@ -784,6 +784,9 @@ static USER_FUNC(proj_on) {
     return EVT_RETURN_DONE;
 }
 
+/** tan as f32 (as end_00 and tik_00 define it). */
+static inline f32 tanf(f32 x) { return tan(x); }
+
 /**
  * Display callback: renders a scaled sphere from above into a 128x128 texture,
  * the source for the blimp shadow projected on the plaza.
@@ -800,7 +803,6 @@ static void make_shadow_disp(CameraId camera, void* param) {
     u32 top;
     u32 width;
     u32 height;
-    f32 t;
 
     GXGetViewportv(viewport);
     GXGetProjectionv(projv);
@@ -809,8 +811,7 @@ static void make_shadow_disp(CameraId camera, void* param) {
     GXSetScissor(1, 1, 254, 254);
     C_MTXPerspective(proj, 25.0f, 1.2666667f, 1.0f, 1000.0f);
     GXSetProjection(proj, GX_PERSPECTIVE);
-    // FAKE: comma expression for the tan temporary; t = tan(...) as a statement changes the register choice
-    C_MTXLookAt(view, &(Vec){0.0f, (t = tan(0.21816615760326385), 128.0f / t), 0.0f}, &(Vec){0.0f, 0.0f, -1.0f},
+    C_MTXLookAt(view, &(Vec){0.0f, 128.0f / tanf(0.21816616f), 0.0f}, &(Vec){0.0f, 0.0f, -1.0f},
                 &(Vec){0.0f, 0.0f, 0.0f});
     PSMTXScale(mtx, 128.0f, 64.0f, 64.0f);
     PSMTXConcat(view, mtx, mtx);

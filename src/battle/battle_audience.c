@@ -1249,11 +1249,12 @@ u8 BattleAudience_CheckReactionPerPhase(void) {
             for (i = 0; i < AUDIENCE_MEMBER_MAX; i++) {
                 member = BattleAudienceGetPtr(i);
 
-                // FAKE: comma expression; `--member->statusDelay <= 0` changes the object
-                if (BattleAudience_GetSysCtrl(i) == 1 && member->status == AUDIENCE_STATUS_SLEEP &&
-                        (member->statusDelay--, member->statusDelay <= 0)) {
-                    BattleAudience_ChangeStatus(i, AUDIENCE_STATUS_WAIT_JUMP);
-                    member->statusDelay = 0;
+                if (BattleAudience_GetSysCtrl(i) == 1 && member->status == AUDIENCE_STATUS_SLEEP) {
+                    member->statusDelay--;
+                    if (member->statusDelay <= 0) {
+                        BattleAudience_ChangeStatus(i, AUDIENCE_STATUS_WAIT_JUMP);
+                        member->statusDelay = 0;
+                    }
                 }
             }
             for (i = 0; i < AUDIENCE_MEMBER_MAX; i++) {

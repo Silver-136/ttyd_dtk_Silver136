@@ -1009,11 +1009,8 @@ void winKirinukiGX(WindowWork* wp, s32 type, f32 x, f32 y, f32 w, f32 h) {
     }
 }
 
-/** Absolute value in double precision, for nameTex below. */
-static inline double fabs_d(double x) { return __fabs(x); }
-
-/** Float absolute value that goes through fabs_d (double), for nameTex below. */
-static inline float fabsf_(float x) { return (float)fabs_d((double)x); }
+/** Local fabs on the __fabs intrinsic (math.h's inline), for nameTex and winSortTex below. */
+static inline double fabs(double x) { return __fabs(x); }
 
 static inline void nameTex(WindowWork* wp, GXTexObj* obj, s32 id, Mtx mtx, f32 tw, f32 th) {
     TEXGetGXTexObjFromPalette((TEXPalette*)*wp->res->data, obj, id);
@@ -1021,7 +1018,7 @@ static inline void nameTex(WindowWork* wp, GXTexObj* obj, s32 id, Mtx mtx, f32 t
     GXLoadTexObj(obj, GX_TEXMAP0);
     GXSetNumTexGens(1);
     GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0, GX_FALSE, GX_PTIDENTITY);
-    MTXScale(mtx, fabsf_(tw) / (f32)GXGetTexObjWidth(obj), fabsf_(th) / (f32)GXGetTexObjHeight(obj), 1.0f);
+    MTXScale(mtx, (f32)fabs(tw) / (f32)GXGetTexObjWidth(obj), (f32)fabs(th) / (f32)GXGetTexObjHeight(obj), 1.0f);
     GXLoadTexMtxImm(mtx, GX_TEXMTX0, GX_MTX2x4);
 }
 
@@ -2572,7 +2569,7 @@ static inline void winSortTex(WindowWork* wp, s32 id, f32 x, f32 y, f32 w, f32 h
     GXLoadTexObj(&obj, GX_TEXMAP0);
     GXSetNumTexGens(1);
     GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0, GX_FALSE, GX_PTIDENTITY);
-    PSMTXScale(m, (f32)fabs_d(w) / (f32)GXGetTexObjWidth(&obj), (f32)fabs_d(h) / (f32)GXGetTexObjHeight(&obj),
+    PSMTXScale(m, (f32)fabs(w) / (f32)GXGetTexObjWidth(&obj), (f32)fabs(h) / (f32)GXGetTexObjHeight(&obj),
                1.0f);
     GXLoadTexMtxImm(m, GX_TEXMTX0, GX_MTX2x4);
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
