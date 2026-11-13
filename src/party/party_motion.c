@@ -1888,20 +1888,7 @@ void party_motion_behind_mario(PartyEntry* party) {
     ty = target.y;
     ang = angleABf(party->position.x, party->position.z, x, z);
 
-    // FAKE: hand-inlined copy of partyGetGndY(x, ty, z); the call changes the object
-    {
-        f32 py = ty;
-        f32 nz, ny, nx, dd, hz, hy, hx;
-        py += touch_wall_ct;
-        dd = 1000.0f;
-        hit = hitCheckFilter(NULL, &hx, &hy, &hz, &dd, &nx, &ny, &nz, x, py, z, 0.0f, -1.0f, 0.0f);
-        if (!hit) {
-            gy = -2000.0f;
-        } else {
-            gy = (s32)(100.0f * hy + 0.5f) / 100.0f;
-            hitGetAttr(hit);
-        }
-    }
+    partyGetGndYTo(&gy, x, ty, z);
     if (gy <= -2000.0f) {
         gy = 1.5f * mario->wPlayerCollisionBox.x;
         movePos(&x, &z, gy, toMovedir(mario->displayDirection));
@@ -1924,28 +1911,16 @@ void party_motion_behind_mario(PartyEntry* party) {
             movePos(&x, &z, dist, ang);
             angleABf(party->position.x, party->position.z, x, z);
 
-            // FAKE: hand-inlined copy of partyGetGndY(x, ty, z); the call changes the object
             {
-                f32 py = ty;
-                f32 GG;
-                f32 nz, ny, nx, dd, hz, hy, hx;
-                py += touch_wall_ct;
-                dd = 1000.0f;
-                hit = hitCheckFilter(NULL, &hx, &hy, &hz, &dd, &nx, &ny, &nz, x, py, z, 0.0f, -1.0f, 0.0f);
-                if (!hit) {
-                    GG = -2000.0f;
-                } else {
-                    GG = (s32)(100.0f * hy + 0.5f) / 100.0f;
-                    hitGetAttr(hit);
+                f32 gndY;
+                partyGetGndYTo(&gndY, x, ty, z);
+                if (__fabsf(party->position.y - gndY) > 1.0f) {
+                    party->moveTarget.x = x;
+                    party->moveTarget.y = gndY;
+                    party->moveTarget.z = z;
+                    partyChgMot(party, PARTY_MOTION_JUMP);
+                    return;
                 }
-                thr = GG;
-            }
-            if (__fabsf(party->position.y - thr) > 1.0f) {
-                party->moveTarget.x = x;
-                party->moveTarget.y = thr;
-                party->moveTarget.z = z;
-                partyChgMot(party, PARTY_MOTION_JUMP);
-                return;
             }
         } else if (ty > party->position.y) {
             x = party->position.x;
@@ -1953,28 +1928,16 @@ void party_motion_behind_mario(PartyEntry* party) {
             movePos(&x, &z, dist, ang);
             angleABf(party->position.x, party->position.z, x, z);
 
-            // FAKE: hand-inlined copy of partyGetGndY(x, ty, z); the call changes the object
             {
-                f32 py = ty;
-                f32 GG;
-                f32 nz, ny, nx, dd, hz, hy, hx;
-                py += touch_wall_ct;
-                dd = 1000.0f;
-                hit = hitCheckFilter(NULL, &hx, &hy, &hz, &dd, &nx, &ny, &nz, x, py, z, 0.0f, -1.0f, 0.0f);
-                if (!hit) {
-                    GG = -2000.0f;
-                } else {
-                    GG = (s32)(100.0f * hy + 0.5f) / 100.0f;
-                    hitGetAttr(hit);
+                f32 gndY;
+                partyGetGndYTo(&gndY, x, ty, z);
+                if (__fabsf(party->position.y - gndY) > 1.0f) {
+                    party->moveTarget.x = x;
+                    party->moveTarget.y = gndY;
+                    party->moveTarget.z = z;
+                    partyChgMot(party, PARTY_MOTION_JUMP);
+                    return;
                 }
-                thr = GG;
-            }
-            if (__fabsf(party->position.y - thr) > 1.0f) {
-                party->moveTarget.x = x;
-                party->moveTarget.y = thr;
-                party->moveTarget.z = z;
-                partyChgMot(party, PARTY_MOTION_JUMP);
-                return;
             }
         }
         hit = partyBehindGround(party);

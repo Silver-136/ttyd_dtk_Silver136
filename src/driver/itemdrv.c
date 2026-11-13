@@ -1829,14 +1829,13 @@ static void itemseq_Bound(ItemEntry* entry) {
             if (!(entry->flags2 & ITEM_FLAG2_POP_VANISH) && !(entry->flags & ITEM_FLAG_NO_CEILING_HIT)) {
                 {
                     // FAKE: itemHitCheckUp written out here (inlining it leaves the Y block below in the wrong stack order);
-                    // h/r are the inline's result copies and keep the same register pressure. hit* declared in reverse for ascending slots.
+                    // h is the inline's result copy and keeps the same register pressure. hit* declared in reverse for ascending slots.
                     HitEntry* h;
-                    HitEntry* r;
                     f32 hitNZ, hitNY, hitNX, hitDist, hitZ, hitY, hitX;
                     f32 x, y, z;
 
                     if (dy <= 0.0f) {
-                        r = NULL;
+                        hit = NULL;
                     } else {
                         x = entry->position.x;
                         y = 20.0f + entry->position.y;
@@ -1844,7 +1843,7 @@ static void itemseq_Bound(ItemEntry* entry) {
                         hitDist = 20.0 + fabs(dy);
                         if ((h = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ, x, y, z, 0.0f, 1.0f, 0.0f)) != NULL) {
                             entry->position.y = hitY - 20.0f - 4.0f;
-                            r = h;
+                            hit = h;
                         } else {
                             x = entry->position.x;
                             y = entry->position.y;
@@ -1852,13 +1851,12 @@ static void itemseq_Bound(ItemEntry* entry) {
                             hitDist = 20.0 + fabs(dy);
                             if ((h = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ, x, y, z, 0.0f, 1.0f, 0.0f)) != NULL) {
                                 entry->position.y = hitY - 20.0f;
-                                r = h;
+                                hit = h;
                             } else {
-                                r = NULL;
+                                hit = NULL;
                             }
                         }
                     }
-                    hit = r;
                 }
                 if (hit) {
                     entry->velocityY = -entry->velocityY / 4.0f; // FAKE: /4.0f (exact) gives the target register order

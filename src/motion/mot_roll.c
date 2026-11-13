@@ -640,7 +640,6 @@ void mot_roll(void) {
     f32 mv;
     f32 pre;
     f32 l;
-    f32 k;
     MarioWork* m;
     s32 z0;
     s32 z1;
@@ -868,8 +867,7 @@ void mot_roll(void) {
     switch (marioGetPtr()->motRoll->squashState) {
         case 1:
             if (v26 < 1.4f) {
-                // FAKE: the 1.0f factor goes through the temporary k; the plain expression changes the object
-                k = 1.0f;
+                f32 k = 1.0f;
                 v26 = k * (1.4499999f - v26) + v26;
                 if (v26 >= 1.4f) {
                     v26 = 1.4f;
