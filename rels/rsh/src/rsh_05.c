@@ -40,7 +40,6 @@
 #include "driver/camdrv.h"
 #include "driver/offscreendrv.h"
 #include "system.h"
-#define _MATH_H_
 #include "mario/mario.h"
 #include "mario/mario_motion.h"
 #include "party.h"

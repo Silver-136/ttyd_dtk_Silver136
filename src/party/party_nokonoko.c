@@ -1274,9 +1274,9 @@ static u32 lookupSafetyPos(Vec pos, f32 height, Vec* out) {
     return flags;
 }
 
-// FAKE: sin via an inline helper makes each sin result an inline @ temp (numbered after the other temps), which gives the
-// target colouring in lookupSafetyPos2; same value as (f32)sin(rad)
+/** Single-precision sine and cosine of a radian angle, used by the landing-spot probes below. */
 static inline f32 nokoSin(f32 rad) { return (f32)sin(rad); }
+static inline f32 nokoCos(f32 rad) { return (f32)cos(rad); }
 
 /**
  * Fallback landing spot for the returning shell:
@@ -1306,7 +1306,7 @@ static void lookupSafetyPos2(Vec pos, f32 height, Vec* out) {
 
     rad = (3.1415927f * 90.0f) / 180.0f;
     dx = nokoSin(rad);
-    dz = (f32)cos(rad);
+    dz = nokoCos(rad);
     offsetX = w * dx;
     offsetZ = w * -dz;
     x = pos.x + offsetX;
@@ -1322,7 +1322,7 @@ static void lookupSafetyPos2(Vec pos, f32 height, Vec* out) {
     }
     rad = (3.1415927f * 270.0f) / 180.0f;
     dx = nokoSin(rad);
-    dz = (f32)cos(rad);
+    dz = nokoCos(rad);
     offsetX = w * dx;
     offsetZ = w * -dz;
     x = pos.x + offsetX;
@@ -1337,7 +1337,7 @@ static void lookupSafetyPos2(Vec pos, f32 height, Vec* out) {
     }
     rad = (3.1415927f * 180.0f) / 180.0f;
     dx = nokoSin(rad);
-    dz = (f32)cos(rad);
+    dz = nokoCos(rad);
     x = pos.x;
     z = pos.z;
     y = pos.y;
@@ -1350,7 +1350,7 @@ static void lookupSafetyPos2(Vec pos, f32 height, Vec* out) {
     }
     rad = (3.1415927f * 0.0f) / 180.0f;
     dx = nokoSin(rad);
-    dz = (f32)cos(rad);
+    dz = nokoCos(rad);
     offsetX = w * dx;
     offsetZ = w * -dz;
     x = pos.x + offsetX;
@@ -1393,8 +1393,8 @@ static void lookupSafetyPos3(Vec pos, f32 height, Vec* out) {
     w = player->wPlayerCollisionBox.x;
 
     rad = (3.1415927f * 90.0f) / 180.0f;
-    dx = (f32)sin(rad);
-    dz = (f32)cos(rad);
+    dx = nokoSin(rad);
+    dz = nokoCos(rad);
     offsetX = w * dx;
     offsetZ = w * -dz;
     x = pos.x + offsetX;
@@ -1409,8 +1409,8 @@ static void lookupSafetyPos3(Vec pos, f32 height, Vec* out) {
         return;
     }
     rad = (3.1415927f * 270.0f) / 180.0f;
-    dx = (f32)sin(rad);
-    dz = (f32)cos(rad);
+    dx = nokoSin(rad);
+    dz = nokoCos(rad);
     offsetX = w * dx;
     offsetZ = w * -dz;
     x = pos.x + offsetX;
@@ -1447,8 +1447,8 @@ static void lookupSafetyPosSub(Vec pos, f32 height, f32 angle, Vec* out) {
     MarioWork* player = marioGetPtr();
     rad = (3.1415927f * angle) / 180.0f;
     w = player->wPlayerCollisionBox.x;
-    x = w * (f32)sin(rad) + pos.x;
-    z = w * -(f32)cos(rad) + pos.z;
+    x = w * nokoSin(rad) + pos.x;
+    z = w * -nokoCos(rad) + pos.z;
     y = pos.y + height;
     dist = 0.1f + height;
     if (hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, x, y, z, 0.0f, (-1.0f), 0.0f) != NULL) {
