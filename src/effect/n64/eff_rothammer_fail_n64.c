@@ -41,39 +41,35 @@ static void effRotHammerFailDisp(CameraId cameraId, void* payload);
  */
 EffectEntry* effRotHammerFailN64Entry(s32 type, s32 time, f32 x, f32 y, f32 z, f32 unused) {
     EffectEntry* effect;
-    EffRotHammerFailN64Work* child;
-    f32 zero;
     EffRotHammerFailN64Work* work;
+    s32 i;
 
     effect = effEntry();
     effect->type = "RotHammerFailN64";
     effect->count = 2;
     effect->userdata = work = __memAlloc(HEAP_EFFECT, sizeof(EffRotHammerFailN64Work) * 2);
-
-    // FAKE: zero held in a local for the stores and sin/cos(zero); 0.0f literals change the object
-    zero = 0.0f;
     effect->callback = effRotHammerFailMain;
     work->lifetime = time;
-
-    // FAKE: child = work + 1 through a pointer step and back; the plain assignment changes the object
-    child = work++;
-    child = work;
-    work--;
     work->frame = 0;
     work->total = time;
-    work->progress = zero;
+    work->progress = 0.0f;
     work->type = type;
     work->position.x = x;
     work->position.y = y;
     work->position.z = z;
     work->scaleY = 10.0f;
     work->scaleX = 30.0f;
-    work[1].position.x = zero;
-    work[1].position.y = zero;
-    work[1].position.z = zero;
-    child->velocity.x = (f32)sin(zero);
-    child->velocity.y = zero;
-    child->velocity.z = (f32)cos(zero);
+    work++;
+    for (i = 1; i < 2; i++, work++) {
+        f32 angle = 0.0f;
+
+        work->position.x = 0.0f;
+        work->position.y = 0.0f;
+        work->position.z = 0.0f;
+        work->velocity.x = sin(angle);
+        work->velocity.y = 0.0f;
+        work->velocity.z = cos(angle);
+    }
     return effect;
 }
 

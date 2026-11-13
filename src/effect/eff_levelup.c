@@ -82,11 +82,14 @@ static EVT_BEGIN(evt_shake)
 EVT_END()
 
 #if VERSION < VERSION_US
+static inline BOOL isJapanese(void) {
+    return !gp->language;
+}
+
 static inline s32 getX(s32 i) {
     s32 arr[2][5] = { { 0, 64, 188, 260, 136 }, { 0, 88, 210, 256, 134 } };
 
-    // FAKE: (gp->language ? 0 : 1) == 0 stands for gp->language != LANGUAGE_JP; the plain test changes the object
-    return arr[(gp->language ? 0 : 1) == 0][i] - arr[(gp->language ? 0 : 1) == 0][4];
+    return arr[isJapanese() ? 0 : 1][i] - arr[isJapanese() ? 0 : 1][4];
 }
 #endif
 
@@ -225,8 +228,10 @@ static void effLevelupMain(EffectEntry* effect) {
 
 /** Draws the banner letters in 2D at their offsets and scales. */
 static void effLevelupDisp(CameraId cameraId, EffectEntry* effect) {
+#if VERSION < VERSION_US
     s32 ofs;
     s32 tofs;
+#endif
     s32 xofs;
     EffLevelupWork* w;
     EffLevelupWork* work = effect->userdata;
@@ -272,30 +277,32 @@ static void effLevelupDisp(CameraId cameraId, EffectEntry* effect) {
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
     for (j = 1, xofs = 4; j >= 0; j--, xofs -= 4) {
 #if VERSION >= VERSION_US
-        // FAKE: work array and texid_tbl walked by byte offsets (ofs/tofs); indexing by i changes the object
-        for (i = effect->count - 1, ofs = i * sizeof(EffLevelupWork), tofs = i * sizeof(s32); i >= 1; ofs -= sizeof(EffLevelupWork), tofs -= sizeof(s32), i--) {
+        for (i = effect->count - 1; i >= 1; i--) {
+            w = effect->userdata;
+            w += i;
 #else
-        // FAKE: work array and texid_tbl walked by byte offsets (ofs/tofs); indexing by i changes the object
+        // FAKE: JP and the early demos: work array and texid_tbl walked by byte offsets (ofs/tofs); indexing by i
+        // (as US) gives the same instructions with the i and work-offset decrements in the other order
         for (i = effect->count - 1, ofs = i * sizeof(EffLevelupWork), tofs = i * sizeof(s32); i >= 1; i--, ofs -= sizeof(EffLevelupWork), tofs -= sizeof(s32)) {
-#endif
             w = effect->userdata;
             (u8*)w += ofs;
+#endif
             dx = xofs;
             dy = -j * 4;
             if (j != 0) {
 #if VERSION >= VERSION_US
-                effGetTexObj(*(s32*)((u8*)texid_tbl[gp->language] + tofs + 2 * sizeof(s32)), &texObj);
+                effGetTexObj(texid_tbl[gp->language][i + 2], &texObj);
 #else
-                effGetTexObj(*(s32*)((u8*)texid_tbl[gp->language != LANGUAGE_JP] + tofs + 2 * sizeof(s32)), &texObj);
+                effGetTexObj(*(s32*)((u8*)texid_tbl[isJapanese() ? 0 : 1] + tofs + 2 * sizeof(s32)), &texObj);
 #endif
                 GXLoadTexObj(&texObj, GX_TEXMAP0);
                 color = (GXColor){ 0, 0, 0, 0x80 };
                 GXSetChanMatColor(GX_COLOR0A0, color);
             } else {
 #if VERSION >= VERSION_US
-                effGetTexObj(*(s32*)((u8*)texid_tbl[gp->language] + tofs - sizeof(s32)), &texObj);
+                effGetTexObj(texid_tbl[gp->language][i - 1], &texObj);
 #else
-                effGetTexObj(*(s32*)((u8*)texid_tbl[gp->language != LANGUAGE_JP] + tofs - sizeof(s32)), &texObj);
+                effGetTexObj(*(s32*)((u8*)texid_tbl[isJapanese() ? 0 : 1] + tofs - sizeof(s32)), &texObj);
 #endif
                 GXLoadTexObj(&texObj, GX_TEXMAP0);
                 color = (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF };
@@ -308,7 +315,7 @@ static void effLevelupDisp(CameraId cameraId, EffectEntry* effect) {
             GXLoadPosMtxImm(m0, GX_PNMTX0);
             GXSetCurrentMtx(GX_PNMTX0);
 #if VERSION >= VERSION_US
-            effGetTexObj(*(s32*)((u8*)texid_tbl[gp->language] + tofs - sizeof(s32)), &texObj2);
+            effGetTexObj(texid_tbl[gp->language][i - 1], &texObj2);
             width = GXGetTexObjWidth(&texObj2);
             height = GXGetTexObjHeight(&texObj2);
             if (gp->language == LANGUAGE_FR) {
@@ -320,7 +327,7 @@ static void effLevelupDisp(CameraId cameraId, EffectEntry* effect) {
             {
 #if VERSION < VERSION_US
                 s32 arr[2][4] = { { 0, 128, 120, 24 }, { 0, 176, 68, 24 } };
-                f32 width = *(s32*)((u8*)arr[gp->language != LANGUAGE_JP] + tofs);
+                f32 width = *(s32*)((u8*)arr[isJapanese() ? 0 : 1] + tofs);
 #endif
                 f32 half = width / 2.0f;
                 f32 negHalf = -width / 2.0f;
