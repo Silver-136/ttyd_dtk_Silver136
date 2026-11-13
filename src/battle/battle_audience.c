@@ -2532,7 +2532,7 @@ static void BattleAudienceDispAudience(CameraId camId, void* param) {
     Mtx rot;
     Mtx scl;
     Mtx fin;
-    BOOL front;
+    u8 front;
     s32* cur;
     f32 hw;
 
@@ -2673,8 +2673,7 @@ static void BattleAudienceDispAudience(CameraId camId, void* param) {
         t0 = m->angle;
         if (t0 > 0.0f && t0 <= 180.0f) flip = 1;
         if (t0 == 0.0f || (t0 > 180.0f && t0 < 360.0f)) flip = 0;
-        // FAKE: (u8) cast on the BOOL front for the byte compare; plain front changes the object
-        if ((u8)front == 1 && (cur = m->animStart) != m->animTable[AUD_ANIM_DAMAGE_FRONT] && cur != m->animTable[8] && cur != m->animTable[7]) {
+        if (front == 1 && (cur = m->animStart) != m->animTable[AUD_ANIM_DAMAGE_FRONT] && cur != m->animTable[8] && cur != m->animTable[7]) {
             flip ^= 1;
         }
 #if VERSION <= VERSION_DEMO_JP
@@ -3151,7 +3150,7 @@ void BattleAudience_Attack(s32 index) {
  * TRUE when member index faces the camera: its facing direction points against
  * the 3D camera's view direction.
  */
-BOOL BattleAudience_GetFront(s32 index) {
+u8 BattleAudience_GetFront(s32 index) {
     BattleAudienceMember* member;
     CameraEntry* camera;
     Vec dir;
@@ -3162,7 +3161,10 @@ BOOL BattleAudience_GetFront(s32 index) {
     dir.x = camera->cameraAt.x - camera->cameraPos.x;
     dir.y = camera->cameraAt.y - camera->cameraPos.y;
     dir.z = camera->cameraAt.z - camera->cameraPos.z;
-    return !(dir.x * member->facingDir.x + dir.y * member->facingDir.y + dir.z * member->facingDir.z >= 0.0f);
+    if (dir.x * member->facingDir.x + dir.y * member->facingDir.y + dir.z * member->facingDir.z >= 0.0f) {
+        return FALSE;
+    }
+    return TRUE;
 }
 
 /**

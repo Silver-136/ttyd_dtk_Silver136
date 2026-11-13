@@ -184,7 +184,6 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | src/effect/eff_itemget.c | effItemGetDisp | comma expression(s) `(0, (f32)cos(6.2831855f * camGetPtr(cameraId)->...` keep the value as a separate temp | the plain expression; `cs` declared first; `cs` and `s` in a block (register allocation differs) |
 | Both | src/sound.c | SoundDropData | comma expression(s) `(0, &sound.dvds[i])`; `(0, &sound.effects[i])` keep the value as a separate temp | the plain expression; `sound.effects + i`; pointers declared first or last in the function (register allocation differs) |
 | Both | src/cam_road.c | hokanRate | cos called through a double (*)(f32) cast; (f32)cos(a) changes the object | see comment |
-| Both | src/cam_road.c | calcHokanCamRoad | spare temporary a2; a0 = (f32)atan2(...) directly changes the object | see comment |
 | Both | src/koopa.c | kpaStrippedFallPool | stand-in, never called (the linker strips it); it only puts kpaSetFallPara's eight literals into the .sdata2 pool; removing it changes the object | see comment |
 | Both | src/koopa.c | kpaSetJumpPara (marioJumpData) | unsized `extern f32 marioJumpData[]` view of mario_motion.c's MarioJumpData struct | MarioJumpData in mario_motion.h and `marioJumpData.jump`: changes the object |
 | Both | src/koopa_hit.c | kpaGetHitobjHead | address temporary; the plain return of headHit[i] changes the object | see comment |
@@ -334,9 +333,7 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | rels/las/src/las_04.c | firebar_entry | `*(s32*)&wp = event->userdata[0]` stores through &wp, so wp keeps a stack slot for the whole function | `wp = event->userdatap[0]`: see comment |
 | Both | src/battle/battle_damage.c | BattleCalculateDamage | negation written as `(u32)damage * -1` | `-damage`: changes the object |
 | Both | src/driver/mapdrv.c | mapSetMaterialTev | no-op `(s32)texCount > 0` cast on the s32 parameter | `texCount > 0`: changes the object |
-| Both | src/battle/battle_audience_kinopio.c | BattleAudienceCtrlProcessKinopio* (11 functions) | `(u8)front == 0/1` on the BOOL parameter front (12 sites) | plain front; u8 front parameters, local or BattleAudience_GetFront return: changes the object |
 | Both | src/battle/battle_audience_kinopio.c | BattleAudienceCtrlProcessKinopioWait | `threshold + (f32)(10.0f * a)` product cast | plain sum, `+=`, a named local: changes the object |
-| Both | src/battle/battle_audience.c | BattleAudienceDispAudience | `(u8)front == 1` on the BOOL from BattleAudience_GetFront | plain front or a u8 local: changes the object |
 | Both | rels/gon/src/gon_11.c | _mapsetofs_all, _mapclsofs_all, evt_iri_16_cloud_ent | `(s8)name[0] == 0` sign-extending test on a char | plain char test: changes the object |
 | Both | rels/las/src/las_14.c | _mapsetofs_all, _mapclsofs_all, evt_las_cloud_ent | `(s8)name[0] == 0` sign-extending test on a char | plain char test: changes the object |
 | Both | rels/mri/src/mri_00.c | _mapsetofs_all, _mapclsofs_all, evt_mri_cloud_ent | `(s8)name[0] == 0` sign-extending test on a char | plain char test: changes the object |

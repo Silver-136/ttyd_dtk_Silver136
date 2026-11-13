@@ -492,7 +492,7 @@ void BattleAudience_Case_MarioPinch(void);
 void BattleAudience_Case_PartyDown(void);
 void BattleAudience_Case_TurnEnd(void);
 s32 BattleAudience_GetAudienceNoFromOffset(s32 index, s32 column, s32 row);
-BOOL BattleAudience_GetFront(s32 index);
+u8 BattleAudience_GetFront(s32 index);
 s32 BattleAudienceAddAudienceNum(s32 num);
 void BattleAudienceSoundSetVol(s32 index, u8 vol, s32 length);
 BOOL BattleAudience_GetAnimEnd(s32 index);

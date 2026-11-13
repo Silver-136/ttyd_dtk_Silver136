@@ -1324,7 +1324,7 @@ static inline f32 angleLerp(f32 from, f32 to, f32 r) {
  * rotation and shift rate. The third state (unused) is not read.
  */
 static void calcHokanCamRoad(s32 type, CamRoadState* from, CamRoadState* to, CamRoadState* unused, CamRoadState* out, f32 t) {
-    f32 r, a0, a1, a2;
+    f32 r, angle, toAngle, fromAngle;
     r = hokanRate(t, 0.0f, 0.0f, 1.0f, 0.0f);
     if (type) {
         out->pos.x = r * (to->pos.x - from->pos.x) + from->pos.x;
@@ -1336,19 +1336,19 @@ static void calcHokanCamRoad(s32 type, CamRoadState* from, CamRoadState* to, Cam
         out->pos.z = to->pos.z;
     }
 
-    // FAKE: spare temporary a2; a0 = (f32)atan2(...) directly changes the object
-    a2 = (f32)atan2(from->dir.x, from->dir.z);
-    a0 = a2;
-    a1 = (f32)atan2(to->dir.x, to->dir.z);
-    while (a0 - a1 > 3.1415927f) {
-        a0 -= 6.2831855f;
+    // The heading starts at from's and is unwrapped to within half a turn of to's before the blend.
+    fromAngle = (f32)atan2(from->dir.x, from->dir.z);
+    angle = fromAngle;
+    toAngle = (f32)atan2(to->dir.x, to->dir.z);
+    while (angle - toAngle > 3.1415927f) {
+        angle -= 6.2831855f;
     }
-    while (a0 - a1 < -3.1415927f) {
-        a0 += 6.2831855f;
+    while (angle - toAngle < -3.1415927f) {
+        angle += 6.2831855f;
     }
-    a0 = r * (a1 - a0) + a0;
-    out->dir.x = (f32)sin(a0);
-    out->dir.z = (f32)cos(a0);
+    angle = r * (toAngle - angle) + angle;
+    out->dir.x = (f32)sin(angle);
+    out->dir.z = (f32)cos(angle);
     out->dir.y = r * (to->dir.y - from->dir.y) + from->dir.y;
     out->dist = r * (to->dist - from->dist) + from->dist;
     out->angle = r * (to->angle - from->angle) + from->angle;
