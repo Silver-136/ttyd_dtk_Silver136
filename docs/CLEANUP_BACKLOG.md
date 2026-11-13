@@ -3,21 +3,21 @@
 Everything left to clean up, in one place. All seven builds (US, JP, PAL, the two early demos, the two September 2004 demos) must stay byte-identical
 to the original games through every step; US retail is the priority for readability; nothing here changes behaviour. Per-function detail for the fakes lives in
 [FAKES.md](FAKES.md); invented names are listed in [NAME_PROVENANCE.md](NAME_PROVENANCE.md). Counts are from
-<!--n:counted_date-->2026-11-12<!--/n--> (game code unless marked; the "at adoption" column is the LLCOOLT tree at `85ac972b`).
+<!--n:counted_date-->2026-11-13<!--/n--> (game code unless marked; the "at adoption" column is the LLCOOLT tree at `85ac972b`).
 
 ## 1. Matching tricks (debt by policy)
 
 | Item | Now | At adoption | Notes |
 | --- | --- | --- | --- |
-| FAKES.md rows | <!--n:fakes_rows-->434<!--/n--> (<!--n:fakes_rows_both-->393<!--/n--> both, <!--n:fakes_rows_us-->17<!--/n--> US, <!--n:fakes_rows_jp-->8<!--/n--> JP, <!--n:fakes_rows_demos-->13<!--/n--> demos, <!--n:fakes_rows_pal-->3<!--/n--> PAL) | 214 | the count rises when hidden tricks are found and documented (2026-10-27: certification review marks every device it finds that the bytes need; 2026-10-26 readability sweep: 15 unmarked one-use inline/macro devices) |
-| FAKE comment sites | <!--n:all_fake_comment_sites-->667<!--/n--> in <!--n:all_fake_comment_sites_files-->202<!--/n--> files (libs <!--n:libs_fake_comment_sites-->27<!--/n-->; up from 306 because the certification review marked existing tricks, 2026-10-27) | 320 (libs 94) | |
-| `#pragma opt_*` / `optimize` / `dont_inline` / `auto_inline` lines | <!--n:game_pragma_opt_star-->129<!--/n--> / <!--n:game_pragma_optimize-->4<!--/n--> / <!--n:game_pragma_dont_inline-->66<!--/n--> / <!--n:game_pragma_auto_inline-->4<!--/n--> (libs: `dont_inline` <!--n:libs_pragma_dont_inline-->4<!--/n-->, VI's two pairs) | 259 / 71 / 358 / 9 | whole-file settings moved to per-unit flags (Codex round 14: five more units; round 16: OSLink); the rest are per-function pairs with no whole-unit equivalent |
+| FAKES.md rows | <!--n:fakes_rows-->216<!--/n--> (<!--n:fakes_rows_both-->188<!--/n--> both, <!--n:fakes_rows_us-->11<!--/n--> US, <!--n:fakes_rows_jp-->5<!--/n--> JP, <!--n:fakes_rows_demos-->11<!--/n--> demos, <!--n:fakes_rows_pal-->1<!--/n--> PAL) | 214 | the count rises when hidden tricks are found and documented (2026-10-27: certification review marks every device it finds that the bytes need; 2026-10-26 readability sweep: 15 unmarked one-use inline/macro devices) |
+| FAKE comment sites | <!--n:all_fake_comment_sites-->374<!--/n--> in <!--n:all_fake_comment_sites_files-->133<!--/n--> files (libs <!--n:libs_fake_comment_sites-->25<!--/n-->; up from 306 because the certification review marked existing tricks, 2026-10-27) | 320 (libs 94) | |
+| `#pragma opt_*` / `optimize` / `dont_inline` / `auto_inline` lines | <!--n:game_pragma_opt_star-->117<!--/n--> / <!--n:game_pragma_optimize-->2<!--/n--> / <!--n:game_pragma_dont_inline-->66<!--/n--> / <!--n:game_pragma_auto_inline-->4<!--/n--> (libs: `dont_inline` <!--n:libs_pragma_dont_inline-->4<!--/n-->, VI's two pairs) | 259 / 71 / 358 / 9 | whole-file settings moved to per-unit flags (Codex round 14: five more units; round 16: OSLink); the rest are per-function pairs with no whole-unit equivalent |
 | `__declspec(section)` placements | <!--n:game_section_placement-->15<!--/n--> (libs <!--n:libs_section_placement-->30<!--/n-->) | 434 | template Vecs in .rodata, .sdata2 constants, a few real-storage objects; the library sites are mostly genuine (see section 7) |
 | `#pragma force_active` | <!--n:game_force_active-->11<!--/n--> lines in <!--n:game_force_active_files-->5<!--/n--> files (libs <!--n:libs_force_active-->0<!--/n-->) | 776 | the game pairs keep the game `gap_*` objects; no library pairs are left |
-| `gap_*` padding objects | <!--n:game_gap_padding-->8<!--/n--> (libs <!--n:libs_gap_padding-->0<!--/n-->) | 142 | game only: dispdrv and eff_gonbaba_breath (real space), eff_kemutest (JP), itemdrv_pad, party_vivian (section 7) |
+| `gap_*` padding objects | <!--n:game_gap_padding-->6<!--/n--> (libs <!--n:libs_gap_padding-->0<!--/n-->) | 142 | game only: dispdrv and eff_gonbaba_breath (real space), eff_kemutest (JP), itemdrv_pad, party_vivian (section 7) |
 | `fd_*` math-static data | <!--n:game_fake_data_fd-->28<!--/n--> lines, end_00 only | 16,730 lines in 607 files | end_00 is built without the REL precompiled header |
 | inline asm | <!--n:game_inline_asm-->9<!--/n--> (libs <!--n:libs_inline_asm-->276<!--/n-->) | 19 | library sites sorted in section 7: mostly genuine assembly (the five TRK functions with C in other decompilations are C now) |
-| raw pointer arithmetic | <!--n:game_raw_pointer_math-->20<!--/n--> (libs <!--n:libs_raw_pointer_math-->15<!--/n-->) | 28 | all documented fakes |
+| raw pointer arithmetic | <!--n:game_raw_pointer_math-->12<!--/n--> (libs <!--n:libs_raw_pointer_math-->15<!--/n-->) | 28 | all documented fakes |
 
 FAKES.md rows by kind: no current breakdown (the old one counted about 195 rows); the classes that remain are listed
 in `docs/FAKES.md` and in the mweppc review record.
