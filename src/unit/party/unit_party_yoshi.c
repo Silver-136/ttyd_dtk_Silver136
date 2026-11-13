@@ -2115,9 +2115,7 @@ USER_FUNC(yoshi_original_color_anim_set) {
     EvtWord* args = event->args;
     s32 id;
 
-    if (part && part) { // FAKE: empty test of the uninitialised part pointer; removing it changes codegen
-    }
-    id = evtGetValue(event, args[0]);
+    id = evtGetValue(event, *args++);
     id = BattleTransID(event, id);
     BattleGetUnitPtr(wp, id);
     switch (pouchGetPartyColor(PARTY_YOSHI)) {

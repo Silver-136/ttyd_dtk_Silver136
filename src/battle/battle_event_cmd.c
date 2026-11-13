@@ -179,7 +179,7 @@ USER_FUNC(btlevtcmd_GetRandomValue) {
 /** s32 retIndex, s32 countIndex, s32 sizeIndex[] */
 USER_FUNC(btlevtcmd_DrawLots) {
     EvtWord* args = event->args;
-    s32 index = args[0];
+    s32 index = *args++;
     s32 *alloc;
     s32 i, count, max;
     s32 ceiling;
@@ -187,8 +187,7 @@ USER_FUNC(btlevtcmd_DrawLots) {
     // FAKE: nv[0]/nv[1] are the pick index and the running sum in a two-element array; two scalars change the object
     s32 nv[2];
 
-    args += 2;
-    count = evtGetValue(event, args[-1]);
+    count = evtGetValue(event, *args++);
     alloc = BattleAlloc(sizeof(s32) * count);
     max = 0;
     for (i = 0; i < count; i++) {

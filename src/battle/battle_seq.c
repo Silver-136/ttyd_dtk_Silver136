@@ -1827,9 +1827,7 @@ static void _rule_disp(CameraId cameraId, void* param) {
     f32 x;
     f32 y;
     u16 lines;
-
-    // FAKE: s32 width holding the u16 result, halved as (u16)width / 2 (twin _get_item_announce_disp shape)
-    s32 width;
+    u16 width;
 
     if (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG3_34_RETURN_TO_ROGUEPORT) {
         if (evtGetValue(NULL, GSW_GLITZ_PIT_RANK) < 11) {
@@ -1847,10 +1845,10 @@ static void _rule_disp(CameraId cameraId, void* param) {
     {
         // white: the rule banner's window
         GXColor color = {0xFF, 0xFF, 0xFF, 0xFF};
-        windowDispGX_Waku_col((x - (u16)width / 2) - 10.0f, 94.0f, width + 20, lines * 29 + 3, 10.0f, 0, color);
+        windowDispGX_Waku_col((x - width / 2) - 10.0f, 94.0f, width + 20, lines * 29 + 3, 10.0f, 0, color);
     }
     FontDrawStart();
-    FontDrawMessage(x - (u16)width / 2, (s32)y - 29, buf);
+    FontDrawMessage(x - width / 2, (s32)y - 29, buf);
 }
 
 /**

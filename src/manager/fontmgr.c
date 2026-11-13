@@ -280,8 +280,10 @@ static void FontDrawStringVec(Vec pos, const s8* str) {
 
 /**
  * JP and the early demos: FontDrawStringPitch's copy of FontDrawStringVecPitch.
- * It walks the string through a local copy (msg = str);
- * calling FontDrawStringVecPitch itself, or giving it the same copy, changes the registers.
+ * FAKE: an invented inline copy (no map entry). FontDrawStringVecPitch itself cannot be inlined
+ * here: the declaration order of its msg copy that matches the inlined FontDrawStringPitch breaks
+ * the out-of-line function (all 8 positions tried). The msg = str copy itself is natural (as in
+ * FontDrawStringVec).
  */
 static inline void fontDrawStringVecPitch(Vec pos, f32 pitch, const s8* str) {
     CameraEntry* camera;
@@ -291,7 +293,6 @@ static inline void fontDrawStringVecPitch(Vec pos, f32 pitch, const s8* str) {
     u16 code;
     f32 x;
 
-    // FAKE: walks the string through a local copy (msg = str); using str directly or calling FontDrawStringVecPitch changes the registers
     msg = str;
     camera = camGetCurPtr();
     x = pos.x;
