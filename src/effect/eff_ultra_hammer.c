@@ -14,7 +14,6 @@
 #include <string.h>
 
 // Defined below (inline) and used only in this file.
-inline Vec initializeVec(Vec* input);
 
 static u8 wakka_dl_0_0[32];
 static u8 wakka_dl_0_1[32];
@@ -600,7 +599,7 @@ static void effUltraHammerMain(EffectEntry* effect) {
     int i;
 
     data = effect->userdata;
-    position = initializeVec(&data->position);
+    position = (Vec){ data->position.x, data->position.y, data->position.z };
     if (data->counter < 1000) {
         data->counter--;
     }
@@ -631,15 +630,6 @@ static void effUltraHammerMain(EffectEntry* effect) {
         }
     }
     dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effUltraHammerDisp, effect);
-}
-
-// Returns a copy of *input, built in a zero-initialized temporary
-inline Vec initializeVec(Vec* input) {
-    Vec temp = (Vec){ 0.0f, 0.0f, 0.0f };
-    temp.x = input->x;
-    temp.y = input->y;
-    temp.z = input->z;
-    return temp;
 }
 
 /** Draws each ring whose start delay has run out with the scrolling texture, mirrored in x if `mode` is non-zero. */

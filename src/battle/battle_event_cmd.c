@@ -2914,54 +2914,6 @@ static void _UnitMoveSoundControl(BattleUnit* unit);
 static void _UnitMoveSoundControlEnd(BattleUnit* unit);
 
 /**
- * Builds a Vec for a 3D sound position; becMvVecA to becMvVecE are identical copies, one per call site,
- * as the original code had them.
- */
-static inline Vec becMvVecA(f32 x, f32 y, f32 z) {
-    Vec v = {0.0f, 0.0f, 0.0f};
-    v.x = x;
-    v.y = y;
-    v.z = z;
-    return v;
-}
-
-/** Identical to becMvVecA (sound position for another mover). */
-static inline Vec becMvVecB(f32 x, f32 y, f32 z) {
-    Vec v = {0.0f, 0.0f, 0.0f};
-    v.x = x;
-    v.y = y;
-    v.z = z;
-    return v;
-}
-
-/** Identical to becMvVecA (sound position for another mover). */
-static inline Vec becMvVecC(f32 x, f32 y, f32 z) {
-    Vec v = {0.0f, 0.0f, 0.0f};
-    v.x = x;
-    v.y = y;
-    v.z = z;
-    return v;
-}
-
-/** Identical to becMvVecA (sound position for another mover). */
-static inline Vec becMvVecD(f32 x, f32 y, f32 z) {
-    Vec v = {0.0f, 0.0f, 0.0f};
-    v.x = x;
-    v.y = y;
-    v.z = z;
-    return v;
-}
-
-/** Identical to becMvVecA (sound position for another mover). */
-static inline Vec becMvVecE(f32 x, f32 y, f32 z) {
-    Vec v = {0.0f, 0.0f, 0.0f};
-    v.x = x;
-    v.y = y;
-    v.z = z;
-    return v;
-}
-
-/**
  * Script: jumps the unit args[0] in an arc to (args[1..3]) over args[4] frames (0 = the unit's preset frame
  * count, or from the jump speed when that is 0 too),
  * using its gravity, with the jump sounds of sound set args[5]. Blocks until it lands.
@@ -3012,7 +2964,7 @@ USER_FUNC(btlevtcmd_JumpPosition) {
         unit->moveSpeedXZ = unit->moveSpeedXZ + unit->moveDistance / unit->moveFrames;
         BtlUnit_LoadSeMode(2, kind, &unit->moveSndTable, &unit->moveSnd);
         if ((EvtWord)unit->moveSnd.name0) {
-            Vec pos = becMvVecA(unit->moveCurrentPos.x, unit->moveCurrentPos.y, unit->moveCurrentPos.z);
+            Vec pos = (Vec){ unit->moveCurrentPos.x, unit->moveCurrentPos.y, unit->moveCurrentPos.z };
             psndSFXOn_3D(unit->moveSnd.name0, &pos);
         }
     }
@@ -3027,7 +2979,7 @@ USER_FUNC(btlevtcmd_JumpPosition) {
     if (unit->moveFrames <= 0) {
         BtlUnit_SetPos(unit, unit->moveTargetPos.x, unit->moveTargetPos.y, unit->moveTargetPos.z);
         if ((EvtWord)unit->moveSnd.name1) {
-            Vec pos = becMvVecB(unit->moveTargetPos.x, unit->moveTargetPos.y, unit->moveTargetPos.z);
+            Vec pos = (Vec){ unit->moveTargetPos.x, unit->moveTargetPos.y, unit->moveTargetPos.z };
             psndSFXOn_3D(unit->moveSnd.name1, &pos);
         }
         return EVT_RETURN_YIELD;
@@ -4524,7 +4476,7 @@ USER_FUNC(btlevtcmd_MarioJumpPosition) {
             }
             BtlUnit_LoadSeMode(2, kind, &unit->moveSndTable, &unit->moveSnd);
             if ((EvtWord)unit->moveSnd.name0) {
-                Vec pos = becMvVecC(unit->moveCurrentPos.x, unit->moveCurrentPos.y, unit->moveCurrentPos.z);
+                Vec pos = (Vec){ unit->moveCurrentPos.x, unit->moveCurrentPos.y, unit->moveCurrentPos.z };
                 psndSFXOn_3D(unit->moveSnd.name0, &pos);
             }
         }
@@ -4756,7 +4708,7 @@ USER_FUNC(btlevtcmd_JumpPartsPosition) {
         part->moveSpeedXZ = part->moveSpeedXZ + part->moveDistance / part->moveTotalFrames;
         BtlUnit_LoadSeMode(2, kind, &part->moveSndTable, &part->moveSnd);
         if ((EvtWord)part->moveSnd.name0) {
-            Vec pos = becMvVecD(part->moveCurrentPos.x, part->moveCurrentPos.y, part->moveCurrentPos.z);
+            Vec pos = (Vec){ part->moveCurrentPos.x, part->moveCurrentPos.y, part->moveCurrentPos.z };
             psndSFXOn_3D(part->moveSnd.name0, &pos);
         }
     }
@@ -4771,7 +4723,7 @@ USER_FUNC(btlevtcmd_JumpPartsPosition) {
     if (part->moveTotalFrames <= 0) {
         BtlUnit_SetPartsPos(part, part->moveTargetPos.x, part->moveTargetPos.y, part->moveTargetPos.z);
         if ((EvtWord)part->moveSnd.name1) {
-            Vec pos = becMvVecE(part->moveTargetPos.x, part->moveTargetPos.y, part->moveTargetPos.z);
+            Vec pos = (Vec){ part->moveTargetPos.x, part->moveTargetPos.y, part->moveTargetPos.z };
             psndSFXOn_3D(part->moveSnd.name1, &pos);
         }
         return EVT_RETURN_YIELD;

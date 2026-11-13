@@ -101,15 +101,6 @@ EffectEntry* effSandarsEntry(s32 type, f32 x, f32 y, f32 z, f32 radius) {
     return effect;
 }
 
-/** Builds a Vec from three floats (inline helper so Main's position copy compiles the same way). */
-static inline Vec effSandarsMakeVec(f32 x, f32 y, f32 z) {
-    Vec pos = { 0.0f, 0.0f, 0.0f };
-    pos.x = x;
-    pos.y = y;
-    pos.z = z;
-    return pos;
-}
-
 /**
  * Types 0-4 spawn a bomb effect, then (types 3/4) play the EFF_bakuhatu animation and fade it out;
  * type 5 runs the scale/spin timers of the steam sprites for 100 frames.
@@ -126,7 +117,7 @@ static void effSandarsMain(EffectEntry* effect) {
     bx = work->position.x;
     by = work->position.y;
     bz = work->position.z;
-    pos2 = effSandarsMakeVec(bx, by, bz);
+    pos2 = (Vec){ bx, by, bz };
     type = work->type;
     camId = work->camId;
     inBattle = gp->inBattle != 0;

@@ -1550,7 +1550,7 @@ static s32 mobj_float_blk(MapObjectEntry* mobj) {
             } else {
                 other = mobjNameToPtr(mobj->linkedName);
                 cur = (const char*)animPoseGetCurrentAnim(other->poseId);
-                if ((s8)cur[0] == 'A' && (s8)cur[2] >= '1' && (s8)cur[2] <= '3') {
+                if (cur[0] == 'A' && cur[2] >= '1' && cur[2] <= '3') {
                     animPoseSetAnim(mobj->poseId, "A_1", 0);
                 } else {
                     animPoseSetAnim(mobj->poseId, "S_1", 1);
