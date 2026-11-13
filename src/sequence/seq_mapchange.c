@@ -81,6 +81,50 @@ static inline const char* getAreaName(void) {
 }
 
 /**
+ * Starts the asynchronous loads of the files every field map needs (not on the dmo, dig, sys and, from JP on, end and
+ * gor_10 maps): the window textures (win.tpl) of the current language, Mario's animations, the Nice effect and the
+ * battle textures.
+ */
+static void asyncFiles(void) {
+#if VERSION <= VERSION_DEMO_JP
+    if (strncmp(_next_map, "dmo", 3) && strncmp(_next_map, "dig", 3) && strncmp(_next_map, "sys", 3)) {
+#else
+    if (strncmp(_next_map, "dmo", 3) && strncmp(_next_map, "dig", 3) && strncmp(_next_map, "end", 3) &&
+        strncmp(_next_map, "sys", 3) && strncmp(_next_map, "gor_10", 6)) {
+#endif
+        /* Folder name of each language. */
+        const char* lang[] = {
+            "jp", "us",
+#if VERSION >= VERSION_US
+            "ge", "fr", "sp", "it", "du"
+#endif
+        };
+
+#if VERSION >= VERSION_US
+        fileAsyncf(FILE_TYPE_TPL, 0, "%s/w/%s/win.tpl", getMarioStDvdRoot(), lang[gp->language]);
+#else
+        fileAsyncf(FILE_TYPE_TPL, 0, "%s/window/%s/win.tpl", getMarioStDvdRoot(), lang[gp->language]);
+#endif
+        // BUG (JP and the early demos, fixed in US by these two loads): p_roll and p_slit are not loaded
+        // ahead, so the first Tube or Paper Mode on a map loads its animation file through marioPaperOn ->
+        // animPaperPoseEntry -> animPoseEntry -> fileAllocf, a synchronous disc read (DVDMgrRead), and that
+        // frame stalls until the file is in.
+#if VERSION >= VERSION_US
+        animGroupBaseAsync("p_roll", 0, 0);
+        animGroupBaseAsync("p_slit", 0, 0);
+#endif
+        animGroupBaseAsync("p_jyabara", 0, 0);
+        animGroupBaseAsync("p_kaiten_h", 0, 0);
+        animGroupBaseAsync("p_b_st", 0, 0);
+        animGroupBaseAsync("OFF_d_maku_up_down", 0, 0);
+        effNiceAsync(0);
+        fileAsyncf(FILE_TYPE_TPL, 0, "%s/battle/common/battle_common.tpl", getMarioStDvdRoot());
+        fileAsyncf(FILE_TYPE_TPL, 0, "%s/battle/audience/audience_normal.tpl", getMarioStDvdRoot());
+        fileAsyncf(FILE_TYPE_TPL, 0, "%s/battle/audience/audience_luigi.tpl", getMarioStDvdRoot());
+    }
+}
+
+/**
  * Enters the map change sequence: stores the target area, map and entrance (bero) names and fades out the ambience.
  * Entering gor_01 rerolls the Rogueport badge shop's bargain and Charlieton stock when BADGESHOP_RESTOCK_PENDING is set;
  * a change from a nonempty map other than gor_01 to another map other than gor_01 sets that flag.
@@ -120,19 +164,6 @@ void seq_mapChangeExit(SequenceWork* work) {
     dbg_lotteryinfo = FALSE;
 }
 
-typedef struct {
-    const char* s[VERSION_PICK(2, 7)];
-} LangTbl;
-
-/** Folder name of each language, used to load that language's window textures (win.tpl) on a map change. */
-// FAKE: struct wrapper around the language folder names, copied into a local; a plain local array changes the object
-static const LangTbl lang_tbl = {{
-    "jp", "us",
-#if VERSION >= VERSION_US
-    "ge", "fr", "sp", "it", "du"
-#endif
-}};
-
 /**
  * Map-change state machine: fades out, unloads the old map and area REL, loads the next REL and map,
  * starts the map and NPC initialization scripts, then enters SEQ_GAME (or SEQ_TITLE for a title target).
@@ -149,7 +180,6 @@ void seq_mapChangeMain(SequenceWork* work) {
     EvtWord* evtCode;
     FileEntry* fres;
     BOOL fok;
-    LangTbl lang;
     MarioWork* mario;
     PartyEntry* party;
     PartyEntry* extraParty;
@@ -319,37 +349,7 @@ void seq_mapChangeMain(SequenceWork* work) {
             }
             break;
         case 7:
-#if VERSION <= VERSION_DEMO_JP
-            if (strncmp(_next_map, "dmo", 3) && strncmp(_next_map, "dig", 3) && strncmp(_next_map, "sys", 3)) {
-                lang = lang_tbl;
-                fileAsyncf(FILE_TYPE_TPL, 0, "%s/window/%s/win.tpl", getMarioStDvdRoot(), lang.s[gp->language]);
-#else
-            if (strncmp(_next_map, "dmo", 3) && strncmp(_next_map, "dig", 3) && strncmp(_next_map, "end", 3) &&
-                strncmp(_next_map, "sys", 3) && strncmp(_next_map, "gor_10", 6)) {
-                lang = lang_tbl;
-#if VERSION >= VERSION_US
-                fileAsyncf(FILE_TYPE_TPL, 0, "%s/w/%s/win.tpl", getMarioStDvdRoot(), lang.s[gp->language]);
-#else
-                fileAsyncf(FILE_TYPE_TPL, 0, "%s/window/%s/win.tpl", getMarioStDvdRoot(), lang.s[gp->language]);
-#endif
-                // BUG (JP and the early demos, fixed in US by these two loads): p_roll and p_slit are not loaded
-                // ahead, so the first Tube or Paper Mode on a map loads its animation file through marioPaperOn ->
-                // animPaperPoseEntry -> animPoseEntry -> fileAllocf, a synchronous disc read (DVDMgrRead), and that
-                // frame stalls until the file is in.
-#if VERSION >= VERSION_US
-                animGroupBaseAsync("p_roll", 0, 0);
-                animGroupBaseAsync("p_slit", 0, 0);
-#endif
-#endif
-                animGroupBaseAsync("p_jyabara", 0, 0);
-                animGroupBaseAsync("p_kaiten_h", 0, 0);
-                animGroupBaseAsync("p_b_st", 0, 0);
-                animGroupBaseAsync("OFF_d_maku_up_down", 0, 0);
-                effNiceAsync(0);
-                fileAsyncf(FILE_TYPE_TPL, 0, "%s/battle/common/battle_common.tpl", getMarioStDvdRoot());
-                fileAsyncf(FILE_TYPE_TPL, 0, "%s/battle/audience/audience_normal.tpl", getMarioStDvdRoot());
-                fileAsyncf(FILE_TYPE_TPL, 0, "%s/battle/audience/audience_luigi.tpl", getMarioStDvdRoot());
-            }
+            asyncFiles();
             if (gp->flags & GW_FLAG_SAVE_LOADED) {
                 mario = marioGetPtr();
                 party = partyGetPtr(marioGetPartyId());

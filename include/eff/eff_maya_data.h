@@ -10,7 +10,7 @@ typedef struct MayaHermitChannel {
     s16 inTangent;  // 0x2
     s16 outTangent; // 0x4
     u8 pad_06;   // 0x6, never accessed
-    u8 step;        // 0x7, nonzero: hold value, no interpolation
+    s8 step;        // 0x7, nonzero: hold value, no interpolation (read as a signed byte: lbz + extsb)
 } MayaHermitChannel;
 
 /* 22 channels: translate xyz, rotate xyz, scale xyz, pivot xyz, translate2 xyz, pivot2 xyz, translate3 xyz, alpha */

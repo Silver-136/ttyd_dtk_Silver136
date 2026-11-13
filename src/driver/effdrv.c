@@ -489,17 +489,10 @@ EffectSet* effGetSet(const char* name) {
  * inline locals take the low registers, last declared lowest (qv0 f9 .. qm1 f12 above dt f8 / s f7 / s3 f6 / s2
  * f5; gqr r9 under the key-offset temp r10)
  */
-// Hermite interpolation of the 22 channels of two keys into buf (MayaHermitKey: value at +2, in/out tangents at
-// +4/+6, step flag at +9 of each 8-byte channel; the s16 values are read through GQR5, see effMayaSetGQR)
-// FAKE: channel fields are read through byte offsets; typed channel indexing changes the object
+// Hermite interpolation of the 22 channels of two keys into buf (the s16 values are read through GQR5, see
+// effMayaSetGQR)
 static inline void effMayaKeyInterp(MayaHermitKey* prev, MayaHermitKey* curr, f32 t, f32* buf) {
     s32 i;
-    f32* out;
-    s8* pb;
-    s8* pa;
-    pa = (s8*)prev;
-    pb = (s8*)curr;
-    out = buf;
     for (i = 0; i < 22; i++) {
         f32 qd0;
         f32 qm1;
@@ -512,14 +505,14 @@ static inline void effMayaKeyInterp(MayaHermitKey* prev, MayaHermitKey* curr, f3
         f32 s3;
         f32 s2;
         f32 div;
-        qv0 = __OSs16tof32((s16*)(pa + 2));
-        qd0 = __OSs16tof32((s16*)(pa + 4));
-        qm0 = __OSs16tof32((s16*)(pa + 6));
-        qv1 = __OSs16tof32((s16*)(pb + 2));
-        qm1 = __OSs16tof32((s16*)(pb + 4));
-        qd0 = __OSs16tof32((s16*)(pb + 6));
-        if (pa[9] != 0) {
-            *out = qv0;
+        qv0 = __OSs16tof32(&prev->ch[i].value);
+        qd0 = __OSs16tof32(&prev->ch[i].inTangent);
+        qm0 = __OSs16tof32(&prev->ch[i].outTangent);
+        qv1 = __OSs16tof32(&curr->ch[i].value);
+        qm1 = __OSs16tof32(&curr->ch[i].inTangent);
+        qd0 = __OSs16tof32(&curr->ch[i].outTangent);
+        if (prev->ch[i].step != 0) {
+            buf[i] = qv0;
         } else {
             u = t - prev->time;
             dt = curr->time - prev->time;
@@ -527,14 +520,11 @@ static inline void effMayaKeyInterp(MayaHermitKey* prev, MayaHermitKey* curr, f3
             s = u / div;
             s2 = s * s;
             s3 = s2 * s;
-            *out = qv0 * (1.0f + ((2.0f * s3) - (3.0f * s2))) +
-                   qm0 * (dt * (s + (s3 - (2.0f * s2)))) +
-                   qv1 * ((-2.0f * s3) + (3.0f * s2)) +
-                   qm1 * (dt * (s3 - s2));
+            buf[i] = qv0 * (1.0f + ((2.0f * s3) - (3.0f * s2))) +
+                     qm0 * (dt * (s + (s3 - (2.0f * s2)))) +
+                     qv1 * ((-2.0f * s3) + (3.0f * s2)) +
+                     qm1 * (dt * (s3 - s2));
         }
-        pa += 8;
-        pb += 8;
-        out++;
     }
 }
 

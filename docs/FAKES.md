@@ -54,7 +54,6 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | src/driver/animdrv.c | g_modeling_mtx_stack, tanfTbl (data) | `extern` declarations of the file-local objects ahead of their static definitions at the end of the file, for their .bss order | static declarations (place them first) |
 | Demos | src/memory.c | smartWork (data) | early demos: `extern` declaration of the file-local smartWork so `wp = &smartWork` comes first while the object keeps its .bss place | static declaration (moves it), `= {0}` (.data) |
 | Both | libs/musyx/src/musyx/runtime/HARDWARE.C | itdOffTab (data) | `static volatile const` table, read by SetupITD | plain `static const` (both versions change) |
-| Both | src/driver/effdrv.c | effMayaKeyInterp (inline, used by effCalcMayaAnimMatrix) | channel fields still read through byte offsets; unnecessary register qualifiers removed, typed MayaHermitChannel indexing changes both objects | fresh US/JP ordinary-local and typed-channel probes |
 | Both | libs/dolsdk2004/src/pad/Padclamp.c | ClampRegion (data) | wrapper struct `{ PADClampRegion r; u8 pad[2]; }` pads the object to the original 12-byte symbol size (uses go through `.r`); the plain 10-byte SDK type matches US but not JP (Codex round 16) | see comment |
 | Both | libs/dolsdk2004/src/support/List.c | DSAttachList | dead expression statement `linkPrev;` (the unit is not built: no probe possible) | see comment |
 | Both | libs/dolsdk2004/src/mcc/mcc.c | callbackEventStream | dead expression statement `value;` (the unit is not built: no probe possible) | see comment |
@@ -247,7 +246,6 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | src/effect/eff_kemuri.c | effKemuri2Entry | `opt_propagation` off for the function (its spare temporaries only make sense under it) | removing it changes the object; the file-wide `-opt noprop` changes other functions (2026-11-07) |
 | Both | src/effect/eff_kemuri.c | effKemuri2Main | `opt_propagation` off for the function, with the `data = p` / `p = data` re-assignment | removing it changes the object; the file-wide `-opt noprop` changes other functions (2026-11-07) |
 | PAL | src/event/evt_msg.c | (file scope) | msgArticlePad: unused zero object, read by nothing | removing it changes the object |
-| Both | src/sequence/seq_mapchange.c | seq_mapChangeMain | LangTbl struct wrapper (lang_tbl) copied into a local `lang` | local `const char* lang[]` initialiser: changes the object |
 | Demos | libs/msl/include/dtrigf.h | (file: `DTRIGF_PLAIN_DATA` block) | the early demos' main.dol units take the paired dtrigf constants as plain data in source order (LLCOOLT's form) instead of the inline-assembly form | see comment |
 | Both | rels/las/src/las_04.c | firebar_entry | `*(s32*)&wp = event->userdata[0]` stores through &wp, so wp keeps a stack slot for the whole function | `wp = event->userdatap[0]`: see comment |
 | Both | src/battle/battle_damage.c | BattleCalculateDamage | negation written as `(u32)damage * -1` | `-damage`: changes the object |
