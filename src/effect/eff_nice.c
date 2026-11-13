@@ -381,14 +381,12 @@ static void acrobatMain(EffectEntry* effect) {
     tmp.z = wp->position.z;
     pos = tmp;
     for (i = 1, wp++; i < effect->count; i++, wp++) {
-        // FAKE: the sound name is read into a loop-local through SFX_NAME_WORD; psndSFXOn("SFX_SYSTEM_ACROBAT1") in case 0 changes the object
-        const char* sfxName = SFX_NAME_WORD("SFX_SYSTEM_ACROBAT1");
         switch (wp->state) {
             case 0:
                 wp->timer = i * 4;
                 wp->state++;
                 if (i == 1) {
-                    psndSFXOn(sfxName);
+                    psndSFXOn(SFX_NAME_WORD("SFX_SYSTEM_ACROBAT1"));
                 }
                 break;
             case 1:

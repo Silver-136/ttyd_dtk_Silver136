@@ -87,11 +87,6 @@ static s32 _get_ok_frame_range(s32 difficulty) {
  * JP and later also stop taking presses once every signal is answered.
  */
 s32 battleAcMain_SignalTiming(BattleWork *work) {
-    const char *sfxPi;
-    const char *sfxPone;
-    const char *sfxOk;
-    const char *sfxNg;
-    const char *sfxNg2; // FAKE: second name for the NG sound; the chained assignment puts its address first in the pre-loop block
     s32 j;
     s32 i;
     s32 k;
@@ -108,10 +103,6 @@ s32 battleAcMain_SignalTiming(BattleWork *work) {
     if (ac->acUnit->badgesEquipped.AutoCommand) {
         autoCommand = 1;
     }
-    sfxPi = "SFX_AC_PI1";
-    sfxPone = "SFX_AC_PONE1";
-    sfxOk = "SFX_AC_COMMAND_OK1";
-    sfxNg2 = sfxNg = "SFX_AC_COMMAND_NG1";
     do {
         loop = 0;
         got = 0;
@@ -200,10 +191,10 @@ s32 battleAcMain_SignalTiming(BattleWork *work) {
                 w->next++;
                 if (w->next < (work->actionCommands.params[SIGNAL_PARAM_LEAD] + 1)) {
                     if (!((work->actionCommands.setupFlags & AC_SETUP_FLAG_CONFUSED_AUTO) && (work->actionCommands.acUnit->tokenFlags & kConfusedAction))) {
-                        psndSFXOn(sfxPi);
+                        psndSFXOn(SFX_NAME_WORD("SFX_AC_PI1"));
                     }
                 } else if (!((work->actionCommands.setupFlags & AC_SETUP_FLAG_CONFUSED_AUTO) && (work->actionCommands.acUnit->tokenFlags & kConfusedAction))) {
-                    psndSFXOn(sfxPone);
+                    psndSFXOn(SFX_NAME_WORD("SFX_AC_PONE1"));
                 }
                 w->pressed = 0;
                 ac->acState = AC_STATE_RUN + 1;
@@ -256,7 +247,7 @@ s32 battleAcMain_SignalTiming(BattleWork *work) {
                         if ((w->index >= work->actionCommands.params[SIGNAL_PARAM_LEAD]) && (w->index < (work->actionCommands.params[SIGNAL_PARAM_COUNT] + work->actionCommands.params[SIGNAL_PARAM_LEAD]))) {
                             w->results[w->index - work->actionCommands.params[SIGNAL_PARAM_LEAD]] = 1;
                             if (!((work->actionCommands.setupFlags & AC_SETUP_FLAG_CONFUSED_AUTO) && (work->actionCommands.acUnit->tokenFlags & kConfusedAction))) {
-                                psndSFXOn(sfxOk);
+                                psndSFXOn(SFX_NAME_WORD("SFX_AC_COMMAND_OK1"));
                             }
                         }
                         if (work->actionCommands.acFlags & AC_SIGNAL_TIMING_FLAG_END_ON_HIT) {
@@ -275,7 +266,7 @@ s32 battleAcMain_SignalTiming(BattleWork *work) {
                         if (w->frame >= w->rangeStart) {
                             w->results[w->index - work->actionCommands.params[SIGNAL_PARAM_LEAD]] = -1;
                             if (!((work->actionCommands.setupFlags & AC_SETUP_FLAG_CONFUSED_AUTO) && (work->actionCommands.acUnit->tokenFlags & kConfusedAction))) {
-                                psndSFXOn(sfxNg2);
+                                psndSFXOn(SFX_NAME_WORD("SFX_AC_COMMAND_NG1"));
                             }
                             work->actionCommands.outputParams[SIGNAL_OUT_RESULT] = -1;
                         } else {
@@ -292,7 +283,7 @@ s32 battleAcMain_SignalTiming(BattleWork *work) {
 #endif
                         w->results[w->index - work->actionCommands.params[SIGNAL_PARAM_LEAD]] = -1;
                         if (!((work->actionCommands.setupFlags & AC_SETUP_FLAG_CONFUSED_AUTO) && (work->actionCommands.acUnit->tokenFlags & kConfusedAction))) {
-                            psndSFXOn(sfxNg);
+                            psndSFXOn(SFX_NAME_WORD("SFX_AC_COMMAND_NG1"));
                         }
                     }
                 }

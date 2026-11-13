@@ -1975,7 +1975,6 @@ void ext_fan_main(void) {
                         fan->timer = dist / fan->param.y;
                         fan->param.x = dy / fan->timer + fan->param.z * fan->timer / 2.0f;
 
-                        // FAKE: integer cast makes the literal a CSE/loop-invariant temp (target addi r30 + mr r29 copy)
                         psndSFXOn_3D(SFX_NAME_WORD("SFX_STG3_AUDIENCE_FAN_FLY1"), &fan->pos);
                         break;
                     case 2:
@@ -2000,7 +1999,6 @@ void ext_fan_main(void) {
                         fan->param.z = spd * -polyCosf(angle);
                         fan->timer = 120;
 
-                        // FAKE: integer cast makes the literal a CSE/loop-invariant temp (target addi r30 + mr r29 copy)
                         psndSFXOn_3D(SFX_NAME_WORD("SFX_STG3_AUDIENCE_FAN_FLY1"), &fan->pos);
                         break;
                 }

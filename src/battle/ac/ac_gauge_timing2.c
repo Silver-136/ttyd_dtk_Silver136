@@ -43,9 +43,7 @@ static void actionCommandDisp(f32 x, f32 y);
  */
 s32 battleAcMain_GaugeTiming2(BattleWork *work) {
     BOOL pressed;
-    const char *sfxNg;
     BOOL allDone;
-    const char *sfxNames[2]; // FAKE: register-promoted array of the two SFX names; separate scalars swap regs
     BOOL found;
     s32 i3;
     s32 i4;
@@ -54,7 +52,6 @@ s32 battleAcMain_GaugeTiming2(BattleWork *work) {
     BattleACDispParams* disp = &work->actionCommands.disp;
     s32 i;
     BOOL doAuto;
-    const char *sfxOk;
     if (work->actionCommands.acUnit->badgesEquipped.AutoCommand) {
         autoCommand = 1;
     }
@@ -137,20 +134,18 @@ s32 battleAcMain_GaugeTiming2(BattleWork *work) {
             }
             gw->frame2++;
             gw->cursor = (100.0f * ((f32) gw->frame2)) / ((f32) gw->totalFrames);
-            sfxNames[0] = "SFX_AC_COMMAND_NG1";
             for (i3 = 0; i3 < work->actionCommands.params[2]; i3++) {
                 if ((!gw->state[i3]) && (gw->cursor > (6.0f + gw->targets[i3]))) {
                     gw->state[i3] = -1;
-                    psndSFXOn(sfxNames[0]);
+                    psndSFXOn(SFX_NAME_WORD("SFX_AC_COMMAND_NG1"));
                 }
             }
             gw->hit = 0;
-            sfxNames[1] = "SFX_AC_PONE1";
             for (i = 0; i < work->actionCommands.params[2]; i++) {
                 if ((!gw->state[i]) && (__fabs(gw->cursor - gw->targets[i]) <= 6.0)) {
                     gw->hit = 1;
                     if (gw->sfx[i] == (-1)) {
-                        gw->sfx[i] = psndSFXOn(sfxNames[1]);
+                        gw->sfx[i] = psndSFXOn(SFX_NAME_WORD("SFX_AC_PONE1"));
                     }
                 }
             }
@@ -170,8 +165,6 @@ s32 battleAcMain_GaugeTiming2(BattleWork *work) {
                 }
             }
             if (pressed || doAuto) {
-                sfxNg = "SFX_AC_COMMAND_NG1";
-                sfxOk = "SFX_AC_COMMAND_OK1";
                 found = 0;
                 for (i4 = 0; i4 < work->actionCommands.params[2]; i4++) {
                     if ((!gw->state[i4]) && (!found)) {
@@ -179,14 +172,14 @@ s32 battleAcMain_GaugeTiming2(BattleWork *work) {
                         if (d <= 6.0) {
                             if ((!doAuto) && gw->earlyPress[i4]) {
                                 gw->state[i4] = -1;
-                                psndSFXOn(sfxNg);
+                                psndSFXOn(SFX_NAME_WORD("SFX_AC_COMMAND_NG1"));
 #if VERSION >= VERSION_JP
                                 found = 1;
 #endif
                             } else {
                                 gw->state[i4] = 1;
                                 work->actionCommands.outputParams[0]++;
-                                psndSFXOn(sfxOk);
+                                psndSFXOn(SFX_NAME_WORD("SFX_AC_COMMAND_OK1"));
 #if VERSION >= VERSION_JP
                                 found = 1;
 #endif
@@ -195,7 +188,7 @@ s32 battleAcMain_GaugeTiming2(BattleWork *work) {
                             gw->earlyPress[i4] = 1;
                             if (i4 == (work->actionCommands.params[2] - 1)) {
                                 gw->state[i4] = -1;
-                                psndSFXOn(sfxNg);
+                                psndSFXOn(SFX_NAME_WORD("SFX_AC_COMMAND_NG1"));
 #if VERSION >= VERSION_JP
                                 found = 1;
 #endif

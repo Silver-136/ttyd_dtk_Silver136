@@ -716,7 +716,6 @@ void npcCheckInWater(NpcEntry* entry, const char* sfx);
 void _fbatFitstAttackAnnounceMain(FirstStrikeInfo* firstStrike);
 
 void npcMain(void) {
-    const char* kpaSfx;
     NpcWork* npcwork;
     FieldBattleData* fbat;
     NpcEntry* entry;
@@ -734,7 +733,6 @@ void npcMain(void) {
 #if VERSION >= VERSION_JP
     marioGetPtr()->targetNpc = NULL;
 #endif
-    kpaSfx = "SFX_KUPPA_3RD_WATER_FALL1";
 
     npcMainCount++;
 
@@ -779,7 +777,7 @@ void npcMain(void) {
             }
 
             if (entry->flags & NPC_FLAG_READY) {
-                npcCheckInWater(entry, kpaSfx);
+                npcCheckInWater(entry, SFX_NAME_WORD("SFX_KUPPA_3RD_WATER_FALL1"));
                 if (entry->statusFlags & NPC_STATUS_IN_WATER && !(entry->statusFlags & NPC_STATUS_NO_WATER_DRAG)) {
                     entry->maxFallSpeed = 100.0f;
                     speedScale = 0.5f;

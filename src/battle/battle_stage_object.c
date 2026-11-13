@@ -2765,13 +2765,10 @@ EVT_END()
 #endif
 
 static USER_FUNC(_set_mobj_rotate_x) {
-    const char* fall1;
-    const char* fall3;
     BattleWork* wp;
     int j;
     int i;
     BOOL busy;
-    const char* fall2;
     s32 layer;
     BattleStageObjectWork* sw;
     BattleStageObject* obj;
@@ -2803,8 +2800,6 @@ static USER_FUNC(_set_mobj_rotate_x) {
     switch (layer) {
         case STAGE_LAYER_A1:
         case STAGE_LAYER_A2:
-            fall1 = "SFX_BTL_STAGE_SET_FALL1";
-            fall3 = "SFX_BTL_STAGE_SET_FALL3";
             for (i = 0; i < BATTLE_STAGE_OBJECT_MAX; i++) {
                 obj = &wp->stageObjects[i];
                 if (obj->id > 0 && obj->data->layer == layer) {
@@ -2815,9 +2810,9 @@ static USER_FUNC(_set_mobj_rotate_x) {
                     } else {
                         if (obj->numFramesFalling == 0) {
                             if (layer == 0) {
-                                psndSFXOn_3D(fall1, &obj->position);
+                                psndSFXOn_3D(SFX_NAME_WORD("SFX_BTL_STAGE_SET_FALL1"), &obj->position);
                             } else {
-                                psndSFXOn_3D(fall3, &obj->position);
+                                psndSFXOn_3D(SFX_NAME_WORD("SFX_BTL_STAGE_SET_FALL3"), &obj->position);
                             }
                         }
                         obj->numFramesFalling++;
@@ -2835,8 +2830,7 @@ static USER_FUNC(_set_mobj_rotate_x) {
                 busy = TRUE;
             } else {
                 if (event->userWork[3] == 0) {
-                    fall2 = "SFX_BTL_STAGE_SET_FALL2";
-                    psndSFXOn_3D(fall2, &(Vec){0.0f, 0.0f, -100.0f});
+                    psndSFXOn_3D("SFX_BTL_STAGE_SET_FALL2", &(Vec){0.0f, 0.0f, -100.0f});
                 }
                 event->userWork[3]++;
                 sw->bgRotation.x = (s32)intpl_sub(EASING_CUBIC_IN, 0.0f, 90.0f, event->userWork[3], event->userWork[2]);
@@ -2974,9 +2968,6 @@ static USER_FUNC(_get_bgset_attack_data) {
 /** Puffs dust (kemuri) in front of each piece of the fallen layer args[0] and plays its landing sound. */
 static USER_FUNC(_bgset_kemuri_effect) {
     s32 layer;
-    const char* sfxA1;
-    const char* sfxA2;
-    const char* sfxB;
     BattleWork* wp;
     EvtWord* args = event->args;
     int i;
@@ -2985,9 +2976,6 @@ static USER_FUNC(_bgset_kemuri_effect) {
 
     wp = _battleWorkPointer;
     layer = evtGetValue(event, args[0]);
-    sfxA1 = "SFX_BTL_STAGE_SET_DOWN1";
-    sfxA2 = "SFX_BTL_STAGE_SET_DOWN3";
-    sfxB = "SFX_BTL_STAGE_SET_DOWN2";
     for (i = 0; i < 32; i++) {
         // FAKE: args++/args-- cancel out; removing them changes the object
         args++;
@@ -3001,18 +2989,18 @@ static USER_FUNC(_bgset_kemuri_effect) {
                 case STAGE_LAYER_A1:
                     z += 30.0f;
                     effKemuri1N64Entry(3, x, y, z, 0.0f);
-                    psndSFXOn_3D(sfxA1, &obj->position);
+                    psndSFXOn_3D(SFX_NAME_WORD("SFX_BTL_STAGE_SET_DOWN1"), &obj->position);
                     break;
                 case STAGE_LAYER_A2:
                     z += 15.0f;
                     effKemuri1N64Entry(0, x, y, z, 0.0f);
-                    psndSFXOn_3D(sfxA2, &obj->position);
+                    psndSFXOn_3D(SFX_NAME_WORD("SFX_BTL_STAGE_SET_DOWN3"), &obj->position);
                     break;
                 case STAGE_LAYER_B:
                     z += 30.0f;
                     effKemuri1N64Entry(3, x, y, z, 0.0f);
                     effKemuri1N64Entry(4, x, y, z, 0.0f);
-                    psndSFXOn_3D(sfxB, &obj->position);
+                    psndSFXOn_3D(SFX_NAME_WORD("SFX_BTL_STAGE_SET_DOWN2"), &obj->position);
                     break;
             }
         }
@@ -3932,7 +3920,6 @@ typedef struct FallObjectWork {
 static USER_FUNC(_object_fall_attack) {
     BattleWork* wp = _battleWorkPointer;
     BattleStageFallObjectData* fd = wp->stageObjectWork.fallObjectData;
-    const char* sfxNormal;
     BOOL done;
     s32 acCount;
     EvtWord* args = event->args;
@@ -3950,9 +3937,7 @@ static USER_FUNC(_object_fall_attack) {
     FallObjectEntry* e;
     FallObjectEntry* o;
     s32 k;
-    const char* sfxTub2;
     FallObjectEntry* o2;
-    const char* sfxRest;
     s32 i;
     s32 sum;
     s32 r;
@@ -4085,9 +4070,6 @@ static USER_FUNC(_object_fall_attack) {
             }
         }
     }
-    sfxTub2 = (0, "SFX_BTL_STAGE_DAMAGE_TUB1"); // FAKE: comma expr makes the literal an early @ temp (same pointer)
-    sfxNormal = "SFX_BTL_STAGE_DAMAGE_NORMAL1";
-    sfxRest = "SFX_REST_CONDITION1";
     w = event->userdatap[0];
     done = TRUE;
     for (i = 0; i < w->count; i++) {
@@ -4218,11 +4200,11 @@ static USER_FUNC(_object_fall_attack) {
 
                     case STAGE_FALL_BASIN:
                     case STAGE_FALL_BUCKET:
-                        psndSFXOn_3D(SFX_NAME_WORD("SFX_BTL_STAGE_DAMAGE_TUB1"), &sfxPos); // FAKE: integer cast makes the literal a hoisted @ temp (same pointer)
+                        psndSFXOn_3D(SFX_NAME_WORD("SFX_BTL_STAGE_DAMAGE_TUB1"), &sfxPos);
                         break;
 
                     default:
-                        psndSFXOn_3D(sfxNormal, &sfxPos);
+                        psndSFXOn_3D(SFX_NAME_WORD("SFX_BTL_STAGE_DAMAGE_NORMAL1"), &sfxPos);
                         break;
                 }
 
@@ -4245,7 +4227,7 @@ static USER_FUNC(_object_fall_attack) {
                                     break;
                                 case STAGE_FALL_BASIN:
                                 case STAGE_FALL_BUCKET:
-                                    psndSFXOn_3D(sfxTub2, &sfxPos);
+                                    psndSFXOn_3D(SFX_NAME_WORD("SFX_BTL_STAGE_DAMAGE_TUB1"), &sfxPos);
                                     break;
                             }
                             break;
@@ -4253,15 +4235,15 @@ static USER_FUNC(_object_fall_attack) {
                             switch (e3->type) {
                                 case STAGE_FALL_BASIN:
                                 case STAGE_FALL_BUCKET:
-                                    psndSFXOn_3D(SFX_NAME_WORD("SFX_BTL_STAGE_DAMAGE_TUB1"), &sfxPos); // FAKE: integer cast makes the literal a hoisted @ temp (same pointer)
+                                    psndSFXOn_3D(SFX_NAME_WORD("SFX_BTL_STAGE_DAMAGE_TUB1"), &sfxPos);
                                     break;
                                 case STAGE_FALL_WATER:
 #if VERSION >= VERSION_JP
-                                    psndSFXOn_3D(sfxRest, &sfxPos);
+                                    psndSFXOn_3D(SFX_NAME_WORD("SFX_REST_CONDITION1"), &sfxPos);
 #endif
                                     break;
                                 default:
-                                    psndSFXOn_3D(sfxNormal, &sfxPos);
+                                    psndSFXOn_3D(SFX_NAME_WORD("SFX_BTL_STAGE_DAMAGE_NORMAL1"), &sfxPos);
                                     break;
                             }
                             if (BtlUnit_GetACPossibility(unit)) {

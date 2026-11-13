@@ -1133,7 +1133,7 @@ static void ext_moamoa_main(void) {
                 tmp.z = (*pose->mtx)[2][3];
                 sp = tmp;
             }
-            psndSFXOn_3D(SFX_NAME_WORD("SFX_STG6_MOAMOA_VOICE1"), &sp); /* FAKE: integer cast hoists the literal as an @ temp (sfx local removed) */
+            psndSFXOn_3D(SFX_NAME_WORD("SFX_STG6_MOAMOA_VOICE1"), &sp);
         }
         switch (m->state) {
             case MOAMOA_STATE_WANDER:

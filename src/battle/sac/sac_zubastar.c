@@ -836,7 +836,6 @@ static void zubastar_capture(CameraId cam, void* param);
  */
 static USER_FUNC(zubastar_bomb) {
     ZubaStarWork* w = GetZubaStarPtr();
-    const char* sfx;
     s32 i;
     s32 k;
     s32 c;
@@ -858,7 +857,6 @@ static USER_FUNC(zubastar_bomb) {
                 return 2;
             }
     }
-    sfx = "SFX_BTL_SAC_ZUBA_STAR3";
     for (k = 0; k < w->count; k++) {
         ZSObj* t = w->ptrs[k];
         switch (t->state) {
@@ -886,7 +884,7 @@ static USER_FUNC(zubastar_bomb) {
                 t->vy = (2.0f * (t->end.y - t->start.y) - steps * (-1.25f * steps)) / (2.0f * steps);
                 t->fallFrame = 0;
                 t->state = 5;
-                psndSFXOn(sfx);
+                psndSFXOn(SFX_NAME_WORD("SFX_BTL_SAC_ZUBA_STAR3"));
                 break;
         }
         case 5:
