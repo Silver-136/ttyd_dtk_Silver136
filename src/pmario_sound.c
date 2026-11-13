@@ -10905,9 +10905,9 @@ static inline u8 psndEnvVolume(PaperSoundEnv* e, PaperSoundWork* p) {
     return w * p->envVolume / 100;
 }
 
-// An environment sound has finished: schedule its next play.
-static inline void psndEnvDone(PaperSoundEnv* e) {
-    e->sfx = -1;
+/** Resets an environment sound entry to wait for its first or next play (types 0 and 2: a random interval). */
+// Original name and size (0xa0) from the JP demo map (UNUSED there: every call is inlined).
+static void psndENV_initPara(PaperSoundEnv* e) {
     e->state = 0;
     e->timer = 0;
     switch (e->type) {
@@ -10951,25 +10951,6 @@ static inline void psndENVVolume(PaperSoundEnv* e, PaperSoundWork* p, u8* vol) {
             s16 faded = f->timeMax * (e->volume * dip / 127) / f->time;
             *vol = faded * p->envVolume / 100;
         }
-    }
-}
-
-/** the ENV sound has finished: wait for its next play */
-static inline void psndENVRestart(PaperSoundEnv* e) {
-    e->sfx = -1;
-    e->state = 0;
-    e->timer = 0;
-    switch (e->type) {
-        case 0:
-            e->timer = e->interval * PSND_FPS;
-            e->timer += irand(e->intervalRand) * PSND_FPS;
-            break;
-        case 2:
-            e->timer = e->interval * PSND_FPS;
-            e->timer += irand(e->intervalRand) * PSND_FPS;
-            break;
-        case 3:
-            break;
     }
 }
 
@@ -11077,7 +11058,8 @@ static void psndENVMain(void) {
                             break;
                         }
                     }
-                    psndEnvDone(e);
+                    e->sfx = -1;
+                    psndENV_initPara(e);
                     break;
                 }
                 break;
@@ -11110,7 +11092,8 @@ static void psndENVMain(void) {
                             break;
                         }
                     }
-                    psndEnvDone(e);
+                    e->sfx = -1;
+                    psndENV_initPara(e);
 #endif
                     break;
                 }
@@ -11138,7 +11121,8 @@ static void psndENVMain(void) {
                             break;
                         }
                     }
-                    psndEnvDone(e);
+                    e->sfx = -1;
+                    psndENV_initPara(e);
                     break;
                 }
                 break;
@@ -11166,7 +11150,8 @@ static void psndENVMain(void) {
                             break;
                         }
                     }
-                    psndEnvDone(e);
+                    e->sfx = -1;
+                    psndENV_initPara(e);
 #endif
                     break;
                 }
@@ -11440,20 +11425,7 @@ BOOL psndENVOn_f_d(u32 flags, const char* name, u32 fadetime, s32 unused) {
         e->radiusMin = list->radiusMin;
         e->radiusRange = list->radiusRange;
         e->dist = list->dist;
-        e->state = 0;
-        e->timer = 0;
-        switch (e->type) {
-            case 0:
-                e->timer = e->interval * PSND_FPS;
-                e->timer += irand(e->intervalRand) * PSND_FPS;
-                break;
-            case 2:
-                e->timer = e->interval * PSND_FPS;
-                e->timer += irand(e->intervalRand) * PSND_FPS;
-                break;
-            case 3:
-                break;
-        }
+        psndENV_initPara(e);
     }
     *env = id;
 #if VERSION <= VERSION_DEMO_JP

@@ -1227,42 +1227,38 @@ static void driveParty(PartyEntry* party) {
 }
 
 /**
- * Starts and runs the partner's appear (run modes 4-7):
+ * Starts the partner's appear (run modes 4-7):
  * modes 4 and 5 pop her out of Mario from scale 0, mode 7 starts later in the sequence, and if Mario is rolling,
  * flying or sailing she joins at the end.
  */
-static inline void partyHello_inl(PartyEntry* party) {
+// Original name and size (0x158) from the JP demo map (UNUSED there: every call is inlined).
+static void partyHelloInit(PartyEntry* party) {
     MarioWork* mario;
 
-    if (party->trigFlags & PARTY_TRIG_CHG_RUN_MODE) {
-        party->trigFlags &= ~PARTY_TRIG_CHG_RUN_MODE;
-        mario = party->playerPtr;
-        if (mario->currMotionId == MARIO_MOTION_ROLL || mario->currMotionId == MARIO_MOTION_PLANE || mario->currMotionId == MARIO_MOTION_SHIP) {
-            party->motionStep = 30;
-        } else if (party->runMode == 4 || party->runMode == 5) {
-            party->flags2 |= PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
-            party->scale = (Vec){0.0f, 0.0f, 0.0f};
-            party->motionStep = 0;
-            party->displayDirectionTarget = mario->displayDirection;
-            party->displayDirection = mario->displayDirection;
-            party->position = mario->position;
-            party->trailPos = party->position;
-        } else if (party->runMode == 7) {
-            party->scale = (Vec){1.0f, 1.0f, 1.0f};
-            party->motionStep = 20;
-            party->displayDirectionTarget = mario->displayDirection;
-            party->displayDirection = mario->displayDirection;
-        } else {
-            party->scale = (Vec){1.0f, 1.0f, 1.0f};
-            party->motionStep = 10;
-            party->displayDirectionTarget = mario->displayDirection;
-            party->displayDirection = mario->displayDirection;
-            party->position = mario->position;
-            party->trailPos = party->position;
-        }
-        party->flags &= ~PARTY_FLAG_IS_BEING_USED;
+    mario = party->playerPtr;
+    if (mario->currMotionId == MARIO_MOTION_ROLL || mario->currMotionId == MARIO_MOTION_PLANE || mario->currMotionId == MARIO_MOTION_SHIP) {
+        party->motionStep = 30;
+    } else if (party->runMode == 4 || party->runMode == 5) {
+        party->flags2 |= PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
+        party->scale = (Vec){0.0f, 0.0f, 0.0f};
+        party->motionStep = 0;
+        party->displayDirectionTarget = mario->displayDirection;
+        party->displayDirection = mario->displayDirection;
+        party->position = mario->position;
+        party->trailPos = party->position;
+    } else if (party->runMode == 7) {
+        party->scale = (Vec){1.0f, 1.0f, 1.0f};
+        party->motionStep = 20;
+        party->displayDirectionTarget = mario->displayDirection;
+        party->displayDirection = mario->displayDirection;
+    } else {
+        party->scale = (Vec){1.0f, 1.0f, 1.0f};
+        party->motionStep = 10;
+        party->displayDirectionTarget = mario->displayDirection;
+        party->displayDirection = mario->displayDirection;
+        party->position = mario->position;
+        party->trailPos = party->position;
     }
-    partyHelloMain(party);
 }
 
 /**
@@ -1284,9 +1280,14 @@ BOOL partyDoWork(void) {
     return TRUE;
 }
 
-/** Runs the partner appear handler (partyHello_inl) for mario_party. */
+/** Starts (partyHelloInit) and runs (partyHelloMain) the partner's appear, run modes 4-7. */
 void partyHello(PartyEntry* party) {
-    partyHello_inl(party);
+    if (party->trigFlags & PARTY_TRIG_CHG_RUN_MODE) {
+        party->trigFlags &= ~PARTY_TRIG_CHG_RUN_MODE;
+        partyHelloInit(party);
+        party->flags &= ~PARTY_FLAG_IS_BEING_USED;
+    }
+    partyHelloMain(party);
 }
 
 /**
@@ -2323,7 +2324,8 @@ static inline void partyChgRunMo(PartyEntry* party) {
 #include "mot/mot_plane.h"
 
 /** TRUE when hit is a floor the partner may stand on (not flagged with hit attributes 0x200 or 0x800). */
-static inline BOOL partyAppearChkFloor(HitEntry* hit) {
+// Original name and size (0x3c) from the JP demo map (UNUSED there: every call is inlined).
+static BOOL chkMapAttr(HitEntry* hit) {
     return hit == NULL ? FALSE : (hitGetAttr(hit) & (HIT_ATTR_WATER_HAZARD | HIT_ATTR_SPIKES)) == 0;
 }
 
@@ -2383,7 +2385,7 @@ BOOL partyGetAppearPos(PartyEntry* party, Vec* out) {
                 query.targetPos = (Vec){out->x, 37.0f + out->y, out->z};
                 query.targetDir = (Vec){0.0f, -1.0f, 0.0f};
                 hit = hitCheckVecFilter(&query, NULL);
-                if (partyAppearChkFloor(hit) && query.targetDistance <= 100.0f) {
+                if (chkMapAttr(hit) && query.targetDistance <= 100.0f) {
                     out->y = query.hitPos.y;
                     return TRUE;
                 }
@@ -2403,7 +2405,7 @@ BOOL partyGetAppearPos(PartyEntry* party, Vec* out) {
                 query.targetPos = (Vec){out->x, 37.0f + out->y, out->z};
                 query.targetDir = (Vec){0.0f, -1.0f, 0.0f};
                 hit = hitCheckVecFilter(&query, NULL);
-                if (partyAppearChkFloor(hit) && query.targetDistance <= 100.0f) {
+                if (chkMapAttr(hit) && query.targetDistance <= 100.0f) {
                     out->y = query.hitPos.y;
                     return TRUE;
                 }
@@ -2425,7 +2427,7 @@ BOOL partyGetAppearPos(PartyEntry* party, Vec* out) {
                 query.targetPos = (Vec){out->x, 37.0f + out->y, out->z};
                 query.targetDir = (Vec){0.0f, -1.0f, 0.0f};
                 hit = hitCheckVecFilter(&query, NULL);
-                if (partyAppearChkFloor(hit) && query.targetDistance <= 100.0f) {
+                if (chkMapAttr(hit) && query.targetDistance <= 100.0f) {
                     out->y = query.hitPos.y;
                     return TRUE;
                 }
@@ -2443,7 +2445,7 @@ BOOL partyGetAppearPos(PartyEntry* party, Vec* out) {
                 query.targetPos = (Vec){out->x, 37.0f + out->y, out->z};
                 query.targetDir = (Vec){0.0f, -1.0f, 0.0f};
                 hit = hitCheckVecFilter(&query, NULL);
-                if (partyAppearChkFloor(hit) && query.targetDistance <= 100.0f) {
+                if (chkMapAttr(hit) && query.targetDistance <= 100.0f) {
                     out->y = query.hitPos.y;
                     return TRUE;
                 }
@@ -2461,7 +2463,7 @@ BOOL partyGetAppearPos(PartyEntry* party, Vec* out) {
                 query.targetPos = (Vec){out->x, 37.0f + out->y, out->z};
                 query.targetDir = (Vec){0.0f, -1.0f, 0.0f};
                 hit = hitCheckVecFilter(&query, NULL);
-                if (partyAppearChkFloor(hit) && query.targetDistance <= 100.0f) {
+                if (chkMapAttr(hit) && query.targetDistance <= 100.0f) {
                     out->y = query.hitPos.y;
                     return TRUE;
                 }
@@ -2483,7 +2485,7 @@ BOOL partyGetAppearPos(PartyEntry* party, Vec* out) {
                 query.targetPos = (Vec){out->x, 37.0f + out->y, out->z};
                 query.targetDir = (Vec){0.0f, -1.0f, 0.0f};
                 hit = hitCheckVecFilter(&query, NULL);
-                if (partyAppearChkFloor(hit) && query.targetDistance <= 100.0f) {
+                if (chkMapAttr(hit) && query.targetDistance <= 100.0f) {
                     out->y = query.hitPos.y;
                     return TRUE;
                 }
@@ -2501,7 +2503,7 @@ BOOL partyGetAppearPos(PartyEntry* party, Vec* out) {
                 query.targetPos = (Vec){out->x, 37.0f + out->y, out->z};
                 query.targetDir = (Vec){0.0f, -1.0f, 0.0f};
                 hit = hitCheckVecFilter(&query, NULL);
-                if (partyAppearChkFloor(hit) && query.targetDistance <= 100.0f) {
+                if (chkMapAttr(hit) && query.targetDistance <= 100.0f) {
                     out->y = query.hitPos.y;
                     return TRUE;
                 }
@@ -2519,7 +2521,7 @@ BOOL partyGetAppearPos(PartyEntry* party, Vec* out) {
                 query.targetPos = (Vec){out->x, 37.0f + out->y, out->z};
                 query.targetDir = (Vec){0.0f, -1.0f, 0.0f};
                 hit = hitCheckVecFilter(&query, NULL);
-                if (partyAppearChkFloor(hit) && query.targetDistance <= 100.0f) {
+                if (chkMapAttr(hit) && query.targetDistance <= 100.0f) {
                     out->y = query.hitPos.y;
                     return TRUE;
                 }
@@ -2656,7 +2658,7 @@ BOOL partyGetAppearPos3(PartyEntry* party, Vec* out) {
         if (partyNrmToAngle(query.hitNormal) > 60.0f) {
             continue;
         }
-        if (!partyAppearChkFloor(hit)) {
+        if (!chkMapAttr(hit)) {
             continue;
         }
         if (npcNearDistCheck(out->x, out->y, out->z, party->width)) {
@@ -2736,7 +2738,7 @@ BOOL partyGetAppearPos4(PartyEntry* party, Vec* out) {
         if (!hit) {
             continue;
         }
-        if (!partyAppearChkFloor(hit)) {
+        if (!chkMapAttr(hit)) {
             continue;
         }
         if (npcNearDistCheck(out->x, out->y, out->z, party->width)) {

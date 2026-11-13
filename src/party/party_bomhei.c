@@ -420,28 +420,38 @@ typedef struct BomheiWork {
 /**
  * Ends the fuse early on attribute 0xC00 (use motion 60, explode), or floor attribute 0x200
  * without 0xC00 (use motion 40, the splash). JP and later check front, then head, then floor until one applies;
- * the early demos inspect only the first hit object present.
+ * the early demos inspect only the first hit object present. JP and later return TRUE when one applied (use motion 22
+ * reads it); the early demos return nothing (no caller reads a result there).
  * 0x200 is the hazard water that sinks Mario (mario_hit.c, MARIO_MOTION_DAMAGE), 0x400 HIT_ATTR_DAMAGE_LIQUID
  * and 0x800 the spikes (MARIO_MOTION_DAMAGE_TOGE).
  */
-static inline BOOL bomheiChkHitAttr(PartyEntry* party) {
-    HitEntry* hit;
+// Original name and size (0xa4) from the JP demo map (UNUSED there: every call is inlined).
+#if VERSION <= VERSION_DEMO_JP
+static void checkMapAttr(PartyEntry* party) {
     u32 attr;
 
-#if VERSION <= VERSION_DEMO_JP
     if (party->hitobjFront != NULL) {
         if (hitGetAttr(party->hitobjFront) & (HIT_ATTR_DAMAGE_LIQUID | HIT_ATTR_SPIKES)) {
             party->useMotionId = 60;
-            return TRUE;
         }
     } else if (party->hitobjHead != NULL) {
         if (hitGetAttr(party->hitobjHead) & (HIT_ATTR_DAMAGE_LIQUID | HIT_ATTR_SPIKES)) {
             party->useMotionId = 60;
-            return TRUE;
         }
     } else if (party->hitobjStandOn != NULL) {
         attr = hitGetAttr(party->hitobjStandOn);
+        if (attr & (HIT_ATTR_DAMAGE_LIQUID | HIT_ATTR_SPIKES)) {
+            party->useMotionId = 60;
+        } else if (attr & HIT_ATTR_WATER_HAZARD) {
+            party->useMotionId = 40;
+        }
+    }
+}
 #else
+static BOOL checkMapAttr(PartyEntry* party) {
+    HitEntry* hit;
+    u32 attr;
+
     hit = party->hitobjFront;
     if (hit != NULL && (hitGetAttr(hit) & (HIT_ATTR_DAMAGE_LIQUID | HIT_ATTR_SPIKES))) {
         party->useMotionId = 60;
@@ -455,22 +465,18 @@ static inline BOOL bomheiChkHitAttr(PartyEntry* party) {
     hit = party->hitobjStandOn;
     if (hit != NULL) {
         attr = hitGetAttr(hit);
-#endif
         if (attr & (HIT_ATTR_DAMAGE_LIQUID | HIT_ATTR_SPIKES)) {
             party->useMotionId = 60;
-#if VERSION <= VERSION_DEMO_JP
-        } else if (attr & HIT_ATTR_WATER_HAZARD) {
-#else
             return TRUE;
         }
         if (attr & HIT_ATTR_WATER_HAZARD) {
-#endif
             party->useMotionId = 40;
             return TRUE;
         }
     }
     return FALSE;
 }
+#endif
 
 /**
  * Holds Bobbery above Mario's head: 36 units up (plus a bob from m_w_7_sync while Mario plays the carry walk
@@ -569,7 +575,7 @@ static void bomhei_use_main(PartyEntry* party) {
                 partyChgPose(party, "L_2");
             }
             bomhei_hold(party);
-            bomheiChkHitAttr(party);
+            checkMapAttr(party);
 #if VERSION <= VERSION_DEMO_JP
             if ((party->flags & PARTY_FLAG_IS_EVT_USE) || !(mario->buttonHold & PAD_BUTTON_X)) {
 #else
@@ -607,12 +613,12 @@ static void bomhei_use_main(PartyEntry* party) {
             party->moveFrames = (s16)tmp;
             party->flags2 &= ~PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
             party->flags |= PARTY_FLAG_IS_JUMPING;
-            bomheiChkHitAttr(party);
+            checkMapAttr(party);
             break;
         case 21:
             partyMoveNoHosei(party);
             if (--party->moveFrames > 0) {
-                bomheiChkHitAttr(party);
+                checkMapAttr(party);
                 break;
             }
             party->velY = 0.0f;
@@ -627,19 +633,19 @@ static void bomhei_use_main(PartyEntry* party) {
             } else {
                 party->useMotionId = 22;
             }
-            bomheiChkHitAttr(party);
+            checkMapAttr(party);
             break;
         case 22:
             partyMoveNoHosei(party);
 #if VERSION <= VERSION_DEMO_JP
             if (party->hitobjStandOn != NULL) {
 #else
-            if (party->hitobjStandOn != NULL && !bomheiChkHitAttr(party)) {
+            if (party->hitobjStandOn != NULL && !checkMapAttr(party)) {
 #endif
                 party->useMotionId = !(BOMHEI_WORK(party)->flags & 4) ? 30 : 50;
             }
 #if VERSION <= VERSION_DEMO_JP
-            bomheiChkHitAttr(party);
+            checkMapAttr(party);
 #endif
             break;
         case 30:
@@ -652,7 +658,7 @@ static void bomhei_use_main(PartyEntry* party) {
             }
             partyChgPose(party, "S_1");
             if (--party->moveFrames > 0) {
-                bomheiChkHitAttr(party);
+                checkMapAttr(party);
                 break;
             }
             party->useMotionId = 32;
@@ -666,7 +672,7 @@ static void bomhei_use_main(PartyEntry* party) {
             if (BOMHEI_WORK(party)->timer <= 0) {
                 party->useMotionId = 50;
             }
-            bomheiChkHitAttr(party);
+            checkMapAttr(party);
             break;
     }
 #if VERSION <= VERSION_DEMO_JP
@@ -750,7 +756,7 @@ static void bomhei_use_main(PartyEntry* party) {
                 bomhei_hold(party);
             }
             if (--party->moveFrames > 0) {
-                bomheiChkHitAttr(party);
+                checkMapAttr(party);
                 break;
             }
             se2_off(party);

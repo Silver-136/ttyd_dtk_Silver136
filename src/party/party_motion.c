@@ -2346,7 +2346,7 @@ void party_motion_beside_mario(PartyEntry* party) {
  * so the partner does not move sideways at all.
  */
 #if VERSION >= VERSION_JP
-static inline void partyJumpFrontMove(PartyEntry* party) {
+static inline void _moveCheckWall(PartyEntry* party) {
     // With front-wall checks disabled, only the local Vec is moved; the party position is not updated.
     Vec v;
     HitEntry* hit;
@@ -2563,7 +2563,7 @@ void party_motion_jump(PartyEntry* party) {
                     break;
                 }
             }
-            partyJumpFrontMove(party);
+            _moveCheckWall(party);
             break;
     }
 }
@@ -3638,7 +3638,8 @@ static void partyGorFix(PartyEntry* party) {
 // them earlier in the file. The object's function order follows the definitions, so each order keeps its own copies.
 #if VERSION <= VERSION_DEMO_JP
 
-static inline void partyJumpFrontMove(PartyEntry* party) {
+// Original name and size (0xa4) from the JP demo map (UNUSED there: every call is inlined).
+static void _moveCheckWall(PartyEntry* party) {
     Vec v;
     HitEntry* hit;
     if (party->flags & PARTY_FLAG_DISABLE_FRONT_WALL_CHK) {
@@ -3783,7 +3784,7 @@ void party_motion_jump(PartyEntry* party) {
                     break;
                 }
             }
-            partyJumpFrontMove(party);
+            _moveCheckWall(party);
             break;
     }
 }

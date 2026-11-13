@@ -102,6 +102,12 @@ BOOL kpaHipAttackOk(void) {
     return ((mario->kpaWork->flags >> 4) & 1) ^ 1;
 }
 
+/** Turns Bowser's ground pound off (KPA_WORK_FLAG_NO_HIP_ATTACK, read by kpaHipAttackOk). */
+// Original name and size (0x30) from the JP demo map (UNUSED there: every call is inlined).
+static void kpaHipAttackOff(void) {
+    marioGetPtr()->kpaWork->flags |= KPA_WORK_FLAG_NO_HIP_ATTACK;
+}
+
 /**
  * In the side-scrolling stages, A jumps (or swims when fully underwater); returns 1 if it changed motion.
  * Always 0 in 3D maps.
@@ -184,6 +190,30 @@ static f32 kpaStickSpd(s32 dash) {
         mario->directionView = a;
     }
     return mario->baseSpeed;
+}
+
+/** 3D stages: Bowser's walk speed for his power-up level; also sets his walk animation rate. */
+// Original name and size (0x54) from the JP demo map (UNUSED there: every call is inlined).
+static f32 kpaGetWalkSpd(void) {
+    MarioWork* mario = marioGetPtr();
+    s32 lv = kpaGetLevel();
+    f32 spd = _walkSpdTbl[lv];
+    s32 rate = _rateTbl[lv];
+
+    mario->kpaWork->walkRate = rate;
+    return spd;
+}
+
+/** 3D stages: Bowser's dash speed for his power-up level; also sets his walk animation rate. */
+// Original name and size (0x54) from the JP demo map (UNUSED there: every call is inlined).
+static f32 kpaGetDashSpd(void) {
+    MarioWork* mario = marioGetPtr();
+    s32 lv = kpaGetLevel();
+    f32 spd = _dashSpdTbl[lv];
+    s32 rate = _rateTbl2[lv];
+
+    mario->kpaWork->walkRate = rate;
+    return spd;
 }
 
 /**
@@ -302,12 +332,7 @@ void kpa_walk(void) {
             if (kpaGetStageViewType() == KPA_VIEW_SIDE) {
                 m->baseSpeed = kpaStickSpd(0);
             } else {
-                MarioWork* mm = marioGetPtr();
-                s32 lv = kpaGetLevel();
-                f32 sp = _walkSpdTbl[lv];
-                s32 rt = _rateTbl[lv];
-                mm->kpaWork->walkRate = rt;
-                m->baseSpeed = sp;
+                m->baseSpeed = kpaGetWalkSpd();
             }
         }
         if (kpaGetStageViewType() == KPA_VIEW_SIDE) {
@@ -373,12 +398,7 @@ void kpa_dash(void) {
             if (kpaGetStageViewType() == KPA_VIEW_SIDE) {
                 m->baseSpeed = kpaStickSpd(1);
             } else {
-                MarioWork* mm = marioGetPtr();
-                s32 lv = kpaGetLevel();
-                f32 sp = _dashSpdTbl[lv];
-                s32 rt = _rateTbl2[lv];
-                mm->kpaWork->walkRate = rt;
-                m->baseSpeed = sp;
+                m->baseSpeed = kpaGetDashSpd();
             }
         }
         if (kpaGetStageViewType() == KPA_VIEW_SIDE) {
@@ -843,7 +863,7 @@ void kpa_swim(void) {
         mario->currSubMotionId = 0;
         mario->baseSpeed = 0.0f;
         mario->kpaSpeed = 0.0f;
-        marioGetPtr()->kpaWork->flags |= KPA_WORK_FLAG_NO_HIP_ATTACK;
+        kpaHipAttackOff();
     }
     if (mario->buttonTrg & PAD_BUTTON_B) {
         kpaAttackStart2();

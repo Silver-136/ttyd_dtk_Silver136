@@ -74,30 +74,7 @@ static const char* objNames[] = {
 };
 #endif
 
-// Movement helper; definitions below retain their original order.
-static inline void partyModeTail(PartyEntry* party) {
-    Vec pos;
-
-    party->moveDir = party->targetDir;
-    if (party->trigFlags & PARTY_TRIG_SPLASH) {
-        party->trigFlags &= ~PARTY_TRIG_SPLASH;
-        pos = party->position;
-        marioSetSplash(0, &pos);
-        party->splashTimer = 20;
-    }
-    if (--party->splashTimer < 0) {
-        party->splashTimer = 0;
-    }
-    if (party->runMode != PARTY_RUN_DAMAGE_RETURN) {
-        if (party->hitobjStandOn && (hitGetAttr(party->hitobjStandOn) & HIT_ATTR_SPIKES)) {
-            partyChgRunMode(party, PARTY_RUN_DAMAGE_RETURN);
-        } else if (party->hitobjFront && (hitGetAttr(party->hitobjFront) & HIT_ATTR_SPIKES)) {
-            partyChgRunMode(party, PARTY_RUN_DAMAGE_RETURN);
-        } else if (party->hitobjHead && (hitGetAttr(party->hitobjHead) & HIT_ATTR_SPIKES)) {
-            partyChgRunMode(party, PARTY_RUN_DAMAGE_RETURN);
-        }
-    }
-}
+static void checkMapAttr(PartyEntry* party);
 
 /**
  * The footmark at the read position of trail id (0 = the trail the partner follows, 1 = the follower's trail);
@@ -1465,7 +1442,8 @@ void party_move_mode_wait(PartyEntry* party) {
             party_motion_fall(party);
             break;
     }
-    partyModeTail(party);
+    party->moveDir = party->targetDir;
+    checkMapAttr(party);
     vivianShadow(party);
 }
 #endif
@@ -1606,7 +1584,8 @@ void party_move_mode_stay(PartyEntry* party) {
             party_motion_fall(party);
             break;
     }
-    partyModeTail(party);
+    party->moveDir = party->targetDir;
+    checkMapAttr(party);
 }
 
 /**
@@ -1641,7 +1620,8 @@ void party_move_mode_walk(PartyEntry* party) {
             party_motion_damage(party);
             break;
     }
-    partyModeTail(party);
+    party->moveDir = party->targetDir;
+    checkMapAttr(party);
 }
 
 /**
@@ -1944,7 +1924,8 @@ static void flyMain(PartyEntry* party) {
  * TRUE when hit is floor a partner may appear on:
  * not deep water or spikes (attr 0x200 / 0x800) and not a map object from objNames.
  */
-static inline BOOL partyAppearChkFloor(HitEntry* hit) {
+// Original name from the early demos' copy in party.c (JP demo map, UNUSED there).
+static inline BOOL chkMapAttr(HitEntry* hit) {
     if (!hit) {
         return FALSE;
     }
@@ -2012,7 +1993,7 @@ BOOL partyGetAppearPos(PartyEntry* party, Vec* out) {
                 query.targetPos = (Vec){out->x, 37.0f + out->y, out->z};
                 query.targetDir = (Vec){0.0f, -1.0f, 0.0f};
                 hit = hitCheckVecFilter(&query, NULL);
-                if (partyAppearChkFloor(hit) && query.targetDistance <= 100.0f) {
+                if (chkMapAttr(hit) && query.targetDistance <= 100.0f) {
                     out->y = query.hitPos.y;
                     return TRUE;
                 }
@@ -2032,7 +2013,7 @@ BOOL partyGetAppearPos(PartyEntry* party, Vec* out) {
                 query.targetPos = (Vec){out->x, 37.0f + out->y, out->z};
                 query.targetDir = (Vec){0.0f, -1.0f, 0.0f};
                 hit = hitCheckVecFilter(&query, NULL);
-                if (partyAppearChkFloor(hit) && query.targetDistance <= 100.0f) {
+                if (chkMapAttr(hit) && query.targetDistance <= 100.0f) {
                     out->y = query.hitPos.y;
                     return TRUE;
                 }
@@ -2054,7 +2035,7 @@ BOOL partyGetAppearPos(PartyEntry* party, Vec* out) {
                 query.targetPos = (Vec){out->x, 37.0f + out->y, out->z};
                 query.targetDir = (Vec){0.0f, -1.0f, 0.0f};
                 hit = hitCheckVecFilter(&query, NULL);
-                if (partyAppearChkFloor(hit) && query.targetDistance <= 100.0f) {
+                if (chkMapAttr(hit) && query.targetDistance <= 100.0f) {
                     out->y = query.hitPos.y;
                     return TRUE;
                 }
@@ -2072,7 +2053,7 @@ BOOL partyGetAppearPos(PartyEntry* party, Vec* out) {
                 query.targetPos = (Vec){out->x, 37.0f + out->y, out->z};
                 query.targetDir = (Vec){0.0f, -1.0f, 0.0f};
                 hit = hitCheckVecFilter(&query, NULL);
-                if (partyAppearChkFloor(hit) && query.targetDistance <= 100.0f) {
+                if (chkMapAttr(hit) && query.targetDistance <= 100.0f) {
                     out->y = query.hitPos.y;
                     return TRUE;
                 }
@@ -2090,7 +2071,7 @@ BOOL partyGetAppearPos(PartyEntry* party, Vec* out) {
                 query.targetPos = (Vec){out->x, 37.0f + out->y, out->z};
                 query.targetDir = (Vec){0.0f, -1.0f, 0.0f};
                 hit = hitCheckVecFilter(&query, NULL);
-                if (partyAppearChkFloor(hit) && query.targetDistance <= 100.0f) {
+                if (chkMapAttr(hit) && query.targetDistance <= 100.0f) {
                     out->y = query.hitPos.y;
                     return TRUE;
                 }
@@ -2112,7 +2093,7 @@ BOOL partyGetAppearPos(PartyEntry* party, Vec* out) {
                 query.targetPos = (Vec){out->x, 37.0f + out->y, out->z};
                 query.targetDir = (Vec){0.0f, -1.0f, 0.0f};
                 hit = hitCheckVecFilter(&query, NULL);
-                if (partyAppearChkFloor(hit) && query.targetDistance <= 100.0f) {
+                if (chkMapAttr(hit) && query.targetDistance <= 100.0f) {
                     out->y = query.hitPos.y;
                     return TRUE;
                 }
@@ -2130,7 +2111,7 @@ BOOL partyGetAppearPos(PartyEntry* party, Vec* out) {
                 query.targetPos = (Vec){out->x, 37.0f + out->y, out->z};
                 query.targetDir = (Vec){0.0f, -1.0f, 0.0f};
                 hit = hitCheckVecFilter(&query, NULL);
-                if (partyAppearChkFloor(hit) && query.targetDistance <= 100.0f) {
+                if (chkMapAttr(hit) && query.targetDistance <= 100.0f) {
                     out->y = query.hitPos.y;
                     return TRUE;
                 }
@@ -2148,7 +2129,7 @@ BOOL partyGetAppearPos(PartyEntry* party, Vec* out) {
                 query.targetPos = (Vec){out->x, 37.0f + out->y, out->z};
                 query.targetDir = (Vec){0.0f, -1.0f, 0.0f};
                 hit = hitCheckVecFilter(&query, NULL);
-                if (partyAppearChkFloor(hit) && query.targetDistance <= 100.0f) {
+                if (chkMapAttr(hit) && query.targetDistance <= 100.0f) {
                     out->y = query.hitPos.y;
                     return TRUE;
                 }
@@ -2296,7 +2277,7 @@ BOOL partyGetAppearPos3(PartyEntry* party, Vec* out) {
         if (partyNrmToAngle(query.hitNormal) > 60.0f) {
             continue;
         }
-        if (!partyAppearChkFloor(hit)) {
+        if (!chkMapAttr(hit)) {
             continue;
         }
         npc = npcNearDistCheck(out->x, out->y, out->z, party->width);
@@ -2424,7 +2405,7 @@ BOOL partyGetAppearPos4(PartyEntry* party, Vec* out) {
         if (!hit) {
             continue;
         }
-        if (!partyAppearChkFloor(hit)) {
+        if (!chkMapAttr(hit)) {
             continue;
         }
         if (npcNearDistCheck(out->x, out->y, out->z, party->width)) {
@@ -2518,3 +2499,31 @@ BOOL partyGetFrontPos(PartyEntry* party, HitEntry* hit, Vec* out) {
     return TRUE;
 }
 #endif
+
+/**
+ * End-of-frame map attribute checks of the stay and walk move modes: a splash trigger sets off the splash
+ * effect (20-frame cooldown), and spikes under, in front of or above the partner start the damage return.
+ */
+// Original name and size (0x104) from the JP demo map (UNUSED there: every call is inlined).
+static void checkMapAttr(PartyEntry* party) {
+    Vec pos;
+
+    if (party->trigFlags & PARTY_TRIG_SPLASH) {
+        party->trigFlags &= ~PARTY_TRIG_SPLASH;
+        pos = party->position;
+        marioSetSplash(0, &pos);
+        party->splashTimer = 20;
+    }
+    if (--party->splashTimer < 0) {
+        party->splashTimer = 0;
+    }
+    if (party->runMode != PARTY_RUN_DAMAGE_RETURN) {
+        if (party->hitobjStandOn && (hitGetAttr(party->hitobjStandOn) & HIT_ATTR_SPIKES)) {
+            partyChgRunMode(party, PARTY_RUN_DAMAGE_RETURN);
+        } else if (party->hitobjFront && (hitGetAttr(party->hitobjFront) & HIT_ATTR_SPIKES)) {
+            partyChgRunMode(party, PARTY_RUN_DAMAGE_RETURN);
+        } else if (party->hitobjHead && (hitGetAttr(party->hitobjHead) & HIT_ATTR_SPIKES)) {
+            partyChgRunMode(party, PARTY_RUN_DAMAGE_RETURN);
+        }
+    }
+}
