@@ -40,7 +40,9 @@ static inline char* _ssGetStr(void) {
 
 // local prototypes
 static void SoundEfxMain(void);
+inline void SoundEfxMuteCh(u32 chan);
 static void SoundDVDMain(void);
+static void SoundDVDStopCh(u32 chan);
 
 static void SoundSSMainInt(void);
 static void SoundSSMain(void);
@@ -652,8 +654,8 @@ BOOL SoundDropData(void) {
     SoundStopAll();
     sndSilence();
 
-    // a second stop pass: song, effect and DVD loops written out, streams through SoundSSStopCh; a second
-    // SoundStopAll() call, or channel calls for the other loops, change the loops' register order
+    // a second stop pass: the song loop written out, effects, DVD audio and streams through their channel stops; a
+    // second SoundStopAll() call, or SoundSongStopCh for the song loop, changes the loops' register order
     for (i = 0; i < SOUND_SONG_MAX; i++) {
         SoundSong* song = &sound.songs[i];
         if (sndSeqGetValid(song->seqId)) {
@@ -662,27 +664,11 @@ BOOL SoundDropData(void) {
         }
     }
     for (i = 0; i < SOUND_EFFECT_MAX; i++) {
-        // FAKE: comma expression `(0, X)`: X becomes a separate compiler temp; the plain X changes the object
-        SoundEffect* effect = (0, &sound.effects[i]);
-        if (effect->flags) {
-            sndFXKeyOff(effect->voiceId);
-            if (effect->flags & SOUND_EFX_FLAG_EMITTER_UNUSED) {
-                sndRemoveEmitter(&effect->emitter);
-            }
-            effect->flags = 0;
-        }
+        SoundEfxMuteCh(i);
     }
 
     for (i = 0; i < SOUND_DVD_MAX; i++) {
-        // FAKE: comma expression `(0, X)`: X becomes a separate compiler temp; the plain X changes the object
-        SoundDVD* dvd = (0, &sound.dvds[i]);
-        if (dvd->flags & (SOUND_DVD_FLAG_PLAY | SOUND_DVD_FLAG_MUTE)) {
-            AISetStreamPlayState(0);
-            dvd->flags = 0;
-            sound.dvdChannel = -1;
-            DVDCancelStream(&dvd->info.cb);
-            DVDClose(&dvd->info);
-        }
+        SoundDVDStopCh(i);
     }
 
     for (i = 0; i < SOUND_STREAM_MAX; i++) {
@@ -970,7 +956,7 @@ u32 SoundSongCheck(s32 chan) {
 }
 
 /** Stops the sound effect on effect channel chan and frees the channel (and its 3D emitter). */
-inline void SoundEfxMuteCh(s32 chan) {
+inline void SoundEfxMuteCh(u32 chan) {
     SoundEffect* sfx = &sound.effects[chan];
     if (sfx->flags) {
         sndFXKeyOff(sfx->voiceId);
@@ -1217,7 +1203,7 @@ u32 SoundEfxCheck(s32 chan) {
 }
 
 /** Frees the effect channel chan if its voice has ended. */
-inline void SoundEfxCheckCh(s32 chan) {
+inline void SoundEfxCheckCh(u32 chan) {
     SND_VOICEID vid;
 
     vid = SoundEfxGetVoiceID(chan);
@@ -1226,10 +1212,6 @@ inline void SoundEfxCheckCh(s32 chan) {
     }
 }
 
-// FAKE: opt_strength_reduction off for this function only. With it on, the second loop's chan*sizeof offset becomes an
-// induction temp created before the loop's split temps and gets the highest register; the retail code has the effect
-// pointer (second web of the reused `effect`) r30, i r29, the offset r28.
-#pragma opt_strength_reduction off
 /**
  * Per-frame effect update: moves the MusyX listener to sound.pos
  * and heading (velocity from the last frame's move), updates every 3D emitter's position and volume,
@@ -1299,7 +1281,6 @@ static void SoundEfxMain(void) {
         }
     }
 }
-#pragma opt_strength_reduction reset
 
 #if VERSION <= VERSION_DEMO_JP
 // FAKE: stand-in for the dead-stripped DVD stream starters; nothing calls it. It only places their ".adp" (JP demo
@@ -1311,7 +1292,7 @@ const char* SoundDVDStrippedName(void) {
 #endif
 
 /** Stops the DVD audio stream (the disc's streamed music) on chan and closes its file. */
-static void SoundDVDStopCh(s32 chan) {
+static void SoundDVDStopCh(u32 chan) {
     SoundDVD* dvd = &sound.dvds[chan];
     if (dvd->flags & (SOUND_DVD_FLAG_PLAY | SOUND_DVD_FLAG_MUTE)) {
         AISetStreamPlayState(0);
@@ -1323,7 +1304,7 @@ static void SoundDVDStopCh(s32 chan) {
 }
 
 /** Applies pan and the current volume of DVD audio channel chan to the hardware stream volume. */
-static void SoundDVDSetPanCh(s32 chan, u8 pan) {
+static void SoundDVDSetPanCh(u32 chan, u8 pan) {
     f32 left, right;
     SoundDVD* dvd;
 
@@ -1348,10 +1329,9 @@ static void SoundDVDSetPanCh(s32 chan, u8 pan) {
  * and fade-ins.
  */
 static void SoundDVDMain(void) {
-    u32 i;
+    s32 i;
 
-    // FAKE: u32 counter with a signed compare; a plain int counter changes the object
-    for (i = 0; (int)i < SOUND_DVD_MAX; i++) {
+    for (i = 0; i < SOUND_DVD_MAX; i++) {
         SoundDVD* dvd = &sound.dvds[i];
         if (!(dvd->flags & SOUND_DVD_FLAG_MUTE)) {
             if (dvd->flags & SOUND_DVD_FLAG_FADEMUTE) {
@@ -2253,7 +2233,7 @@ static void SoundSSPlayChEx_main(s32 result, DVDFileInfo* fileInfo) {
  * Stops stream chan and frees its MusyX streams and files;
  * the early demos defer the stop when the stream has not started.
  */
-void SoundSSStopCh(s32 chan) {
+void SoundSSStopCh(u32 chan) {
     SoundStream* stream;
 
     if (sound.streams[chan].flags) {
@@ -2318,7 +2298,7 @@ void SoundSSContinueCh(s32 chan) {
  * Sets the pan of stream chan; a stereo stream keeps its two channels panned left
  * and right with the balance applied.
  */
-void SoundSSSetPanCh(s32 chan, u8 pan) {
+void SoundSSSetPanCh(u32 chan, u8 pan) {
     SoundStream* stream;
     f32 left, right;
 
@@ -2344,7 +2324,7 @@ void SoundSSSetPanCh(s32 chan, u8 pan) {
 }
 
 /** Sets the volume of stream chan. */
-void SoundSSSetVolCh(s32 chan, u8 vol) {
+void SoundSSSetVolCh(u32 chan, u8 vol) {
     SoundStream* stream;
 
     if (sound.streams[chan].flags) {
@@ -2369,7 +2349,7 @@ u8 SoundSSGetVolCh(s32 chan) {
 }
 
 /** Sets the surround (front-back) pan of stream chan. */
-void SoundSSSetSrndPanCh(s32 chan, u8 span) {
+void SoundSSSetSrndPanCh(u32 chan, u8 span) {
     SoundStream* stream = &sound.streams[chan];
 
     if (stream->flags) {
@@ -2421,11 +2401,10 @@ void SoundSSMuteOff(s32 chan) {
  * fade-to-pause, fade-out (stopping at silence) and fade-in.
  */
 static void SoundSSMain(void) {
-    u32 i;
+    s32 i;
     SoundStream* stream;
 
-    // FAKE: u32 counter with a signed compare; a plain int counter changes the object
-    for (i = 0; (int)i < SOUND_STREAM_MAX; i++) {
+    for (i = 0; i < SOUND_STREAM_MAX; i++) {
         stream = &sound.streams[i];
         if ((stream->flags & SOUND_STREAM_FLAG_STARTED) && !(stream->flags & SOUND_STREAM_FLAG_MUTE)) {
             if (stream->flags & SOUND_STREAM_FLAG_END) {
