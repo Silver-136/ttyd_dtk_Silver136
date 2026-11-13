@@ -719,7 +719,7 @@ const char* animGetTexName(const char* name);
  * TRUE once both are loaded (or missing), FALSE while still loading.
  */
 BOOL animEffectAsync(const char* animName, u32 group) {
-    s32 model, anim;
+    FileEntry *model, *anim;
     BOOL ret;
 
     switch (group) {
@@ -736,14 +736,13 @@ BOOL animEffectAsync(const char* animName, u32 group) {
     model = fileAsyncf(FILE_TYPE_ANIM, NULL, "%s/%s", "a", animName);
     anim = fileAsyncf(FILE_TYPE_TPL, NULL, "%s/%s-", "a", animGetTexName(animName));
 
-    // FAKE: (u32) casts on the zero tests (unsigned compares); plain model == 0 / anim == 0 change the object
-    if (model == -1) {
+    if ((s32)model == -1) {
         ret = TRUE;
-    } else if ((u32)model == 0) {
+    } else if (model == NULL) {
         ret = FALSE;
-    } else if (anim == -1) {
+    } else if ((s32)anim == -1) {
         ret = TRUE;
-    } else if ((u32)anim == 0) {
+    } else if (anim == NULL) {
         ret = FALSE;
     } else {
         ret = TRUE;
@@ -3652,7 +3651,7 @@ void animSetPaperTexMtx(Mtx mtx1, Mtx mtx2, Mtx mtx3) {
  * with callback for the model; TRUE once both are loaded (or missing), FALSE while still loading.
  */
 BOOL animGroupBaseAsync(const char* name, s32 group, void* callback) {
-    s32 model, anim;
+    FileEntry *model, *anim;
 
     switch (group) {
         case 0:
@@ -3667,18 +3666,16 @@ BOOL animGroupBaseAsync(const char* name, s32 group, void* callback) {
     }
     model = fileAsyncf(FILE_TYPE_ANIM, callback, "%s/%s", "a", name);
     anim = fileAsyncf(FILE_TYPE_TPL, NULL, "%s/%s-", "a", animGetTexName(name));
-    if (model == -1) {
+    if ((s32)model == -1) {
         return TRUE;
     }
-
-    // FAKE: (u32) cast (unsigned compare); plain model == 0 changes the object
-    if ((u32)model == 0) {
+    if (model == NULL) {
         return FALSE;
     }
-    if (anim == -1) {
+    if ((s32)anim == -1) {
         return TRUE;
     }
-    return anim != 0;
+    return anim != NULL;
 }
 
 /** Returns the texture file name the animation file name uses, from a/ag2tg.bin; "" if it is not listed. */

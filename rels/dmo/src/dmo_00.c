@@ -124,7 +124,7 @@ USER_FUNC(demo_init) {
         statusWinDispOff();
         psndSetFlag(PSND_FLAG_NO_SFX);
     }
-    if (fileAsyncf(FILE_TYPE_TPL, NULL, "%s/demo.tpl", getMarioStDvdRoot()) != 0U) {
+    if (fileAsyncf(FILE_TYPE_TPL, NULL, "%s/demo.tpl", getMarioStDvdRoot()) != NULL) {
         wp->tpl = fileAllocf(FILE_TYPE_TPL, "%s/demo.tpl", getMarioStDvdRoot());
 #if VERSION <= VERSION_DEMO_JP
         if (seqGetPrevSeq() == SEQ_LOGO) {

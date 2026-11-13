@@ -2442,7 +2442,7 @@ USER_FUNC(logo) {
     }
     wp = event->userdatap[0];
 #if VERSION >= VERSION_JP
-    if ((u32)fileAsyncf(FILE_TYPE_TPL, NULL, "%s/mariost.tpl", getMarioStDvdRoot()) == 0) {
+    if (fileAsyncf(FILE_TYPE_TPL, NULL, "%s/mariost.tpl", getMarioStDvdRoot()) == NULL) {
         return EVT_RETURN_BLOCK;
     }
 #endif

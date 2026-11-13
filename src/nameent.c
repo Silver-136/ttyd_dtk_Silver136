@@ -153,9 +153,9 @@ const char* latin_tbl[] = {
 BOOL nameEntPrepare(void) {
 #if VERSION >= VERSION_US
     const char* lang[6] = {"jp", "us", "ge", "fr", "sp", "it"};
-    return fileAsyncf(FILE_TYPE_TPL, NULL, "%s/w/%s/name.tpl", getMarioStDvdRoot(), lang[gp->language]) != 0;
+    return fileAsyncf(FILE_TYPE_TPL, NULL, "%s/w/%s/name.tpl", getMarioStDvdRoot(), lang[gp->language]) != NULL;
 #else
-    return fileAsyncf(FILE_TYPE_TPL, NULL, NAME_TPL_JP, getMarioStDvdRoot()) != 0;
+    return fileAsyncf(FILE_TYPE_TPL, NULL, NAME_TPL_JP, getMarioStDvdRoot()) != NULL;
 #endif
 }
 
@@ -298,10 +298,10 @@ const char* nameEntGetName(void) {
 BOOL fileOpen(void) {
 #if VERSION >= VERSION_US
     const char* lang[6] = {"jp", "us", "ge", "fr", "sp", "it"};
-    if (fileAsyncf(FILE_TYPE_TPL, NULL, "%s/w/%s/name.tpl", getMarioStDvdRoot(), lang[gp->language]) != 0U) {
+    if (fileAsyncf(FILE_TYPE_TPL, NULL, "%s/w/%s/name.tpl", getMarioStDvdRoot(), lang[gp->language]) != NULL) {
         wp->tplFile = fileAllocf(FILE_TYPE_TPL, "%s/w/%s/name.tpl", getMarioStDvdRoot(), lang[gp->language]);
 #else
-    if (fileAsyncf(FILE_TYPE_TPL, NULL, NAME_TPL_JP, getMarioStDvdRoot()) != 0U) {
+    if (fileAsyncf(FILE_TYPE_TPL, NULL, NAME_TPL_JP, getMarioStDvdRoot()) != NULL) {
         wp->tplFile = fileAllocf(FILE_TYPE_TPL, NAME_TPL_JP, getMarioStDvdRoot());
 #endif
         return TRUE;

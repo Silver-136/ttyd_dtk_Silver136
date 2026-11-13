@@ -421,7 +421,7 @@ void effMain(void) {
         }
         prefix = prefix_tbl[gp->language];
         dvdroot = getMarioStDvdRoot();
-        if (fileAsyncf(FILE_TYPE_TPL, 0, EFF_TPL_PATH, dvdroot, prefix, prefix) != 0U) {
+        if (fileAsyncf(FILE_TYPE_TPL, 0, EFF_TPL_PATH, dvdroot, prefix, prefix) != NULL) {
             prefix = prefix_tbl[gp->language];
             wp->handle = fileAllocf(FILE_TYPE_TPL, EFF_TPL_PATH, getMarioStDvdRoot(), prefix, prefix);
             wp->language = gp->language;

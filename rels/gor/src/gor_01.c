@@ -6975,7 +6975,7 @@ static USER_FUNC(cook_chk) {
         evtSetValue(event, *args++, item);
         return EVT_RETURN_DONE;
     }
-    file = (FileEntry*)fileAsyncf(0, NULL, "%s/cooking.xml", getMarioStDvdRoot());
+    file = fileAsyncf(0, NULL, "%s/cooking.xml", getMarioStDvdRoot());
     if (file == NULL) {
         return EVT_RETURN_BLOCK;
     }
@@ -7033,7 +7033,7 @@ static USER_FUNC(cook_chk2) {
         evtSetValue(event, *args++, item2);
         return EVT_RETURN_DONE;
     }
-    file = (FileEntry*)fileAsyncf(0, NULL, "%s/cooking.xml", getMarioStDvdRoot());
+    file = fileAsyncf(0, NULL, "%s/cooking.xml", getMarioStDvdRoot());
     if (file == NULL) {
         return EVT_RETURN_BLOCK;
     }

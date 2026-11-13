@@ -272,13 +272,13 @@ void seq_loadMain(SequenceWork* seq) {
 BOOL dvdOpen(void) {
 #if VERSION >= VERSION_US
     const char* lang[] = {"jp", "us", "ge", "fr", "sp", "it"};
-    if (fileAsyncf(FILE_TYPE_TPL, NULL, "%s/w/%s/name.tpl", getMarioStDvdRoot(), lang[gp->language]) != 0U) {
+    if (fileAsyncf(FILE_TYPE_TPL, NULL, "%s/w/%s/name.tpl", getMarioStDvdRoot(), lang[gp->language]) != NULL) {
         wp->file = fileAllocf(FILE_TYPE_TPL, "%s/w/%s/name.tpl", getMarioStDvdRoot(), lang[gp->language]);
 #elif VERSION <= VERSION_DEMO_JP
-    if (fileAsyncf(FILE_TYPE_TPL, NULL, "%s/window/jp/name.tpl", getMarioStDvdRoot()) != 0U) {
+    if (fileAsyncf(FILE_TYPE_TPL, NULL, "%s/window/jp/name.tpl", getMarioStDvdRoot()) != NULL) {
         wp->file = fileAllocf(FILE_TYPE_TPL, "%s/window/jp/name.tpl", getMarioStDvdRoot());
 #else
-    if (fileAsyncf(FILE_TYPE_TPL, NULL, "%s/w/jp/name.tpl", getMarioStDvdRoot()) != 0U) {
+    if (fileAsyncf(FILE_TYPE_TPL, NULL, "%s/w/jp/name.tpl", getMarioStDvdRoot()) != NULL) {
         wp->file = fileAllocf(FILE_TYPE_TPL, "%s/w/jp/name.tpl", getMarioStDvdRoot());
 #endif
         return TRUE;

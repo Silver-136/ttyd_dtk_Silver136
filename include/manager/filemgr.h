@@ -55,5 +55,5 @@ void _fileGarbage(BOOL agePreloadedEntries);
 FileEntry* fileAllocf(s32 type, const char* format, ...);
 FileEntry* fileAlloc(const char* filename, s32 type);
 void fileFree(FileEntry* handle);
-s32 fileAsyncf(s32 type, FileCallback callback, const char* format, ...);
+FileEntry* fileAsyncf(s32 type, FileCallback callback, const char* format, ...);
 void fileSetCurrentArchiveType(s32 type);

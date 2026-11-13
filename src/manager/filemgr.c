@@ -32,7 +32,7 @@ static FileManagerWork* afp = &fileWork;
 
 // local prototypes
 static FileEntry* _fileAlloc(const char* filename, s32 type, void (*callback)(FileEntry*));
-s32 fileAsync(const char* filename, s32 type, FileCallback callback);
+FileEntry* fileAsync(const char* filename, s32 type, FileCallback callback);
 
 /** Boot-time setup: allocates the 1024 file entries and chains them all into the free list. */
 void fileInit(void) {
@@ -768,7 +768,7 @@ static void dvdReadDoneCallBack(s32 error, DVDFileInfo* info) {
 }
 
 /** fileAsync with a printf-style file name. */
-s32 fileAsyncf(s32 type, FileCallback callback, const char* format, ...) {
+FileEntry* fileAsyncf(s32 type, FileCallback callback, const char* format, ...) {
     va_list va;
 
     va_start(va, format);
@@ -776,7 +776,7 @@ s32 fileAsyncf(s32 type, FileCallback callback, const char* format, ...) {
     return fileAsync(_filename, type, callback);
 }
 
-s32 fileAsync(const char* filename, s32 type, FileCallback callback) {
+FileEntry* fileAsync(const char* filename, s32 type, FileCallback callback) {
     FileEntry *search, *newentry, *temp;
     smartEntry* smart;
     DVDEntry* entry;
@@ -789,12 +789,12 @@ s32 fileAsync(const char* filename, s32 type, FileCallback callback) {
                 return 0;
             }
             if (search->state == FILE_STATE_PRELOADED) {
-                return (s32)search;
+                return search;
             }
             if (search->state == FILE_STATE_RELEASED) {
                 search->state = FILE_STATE_PRELOADED;
             }
-            return (s32)search;
+            return search;
         }
     }
 
@@ -859,11 +859,11 @@ s32 fileAsync(const char* filename, s32 type, FileCallback callback) {
             afp->lastused->next = newentry;
             afp->lastused = newentry;
         }
-        return (s32)newentry;
+        return newentry;
     } else {
         entry = DVDMgrOpen(filename, 2, 0);
         if (!entry) {
-            return -1;
+            return (FileEntry*)-1;
         }
         size = DVDMgrGetLength(entry);
         alignedSize = size + ((size & 31) ? 32 - (size & 31) : 0);

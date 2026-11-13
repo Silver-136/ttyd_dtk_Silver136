@@ -53,8 +53,8 @@ static s32 debug_battle_flag;
 
 /** Requests an async load of a TPL under the disc root; true once the file is resident (seq_battleMain polls it). */
 static inline BOOL loadTpl(const char* path) {
-    u32 handle = fileAsyncf(FILE_TYPE_TPL, NULL, "%s/%s", getMarioStDvdRoot(), path);
-    return handle != 0;
+    FileEntry* handle = fileAsyncf(FILE_TYPE_TPL, NULL, "%s/%s", getMarioStDvdRoot(), path);
+    return handle != NULL;
 }
 
 /**

@@ -2001,7 +2001,7 @@ USER_FUNC(evt_end_staff_roll_init) {
 #endif
 #endif
     }
-    if ((u32)fileAsyncf(FILE_TYPE_TPL, NULL, "%s/ending.tpl", getMarioStDvdRoot()) == 0) {
+    if (fileAsyncf(FILE_TYPE_TPL, NULL, "%s/ending.tpl", getMarioStDvdRoot()) == NULL) {
         return 0;
     }
     if (end_wp->tpl == NULL) {

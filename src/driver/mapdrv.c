@@ -1058,7 +1058,7 @@ void mapLoad(const char* map) {
  * mapPreLoad starts the read, mapLoad unpacks it into the arc slot before loading the map.
  */
 BOOL mapPreLoad(const char* map) {
-    FileEntry* file = (FileEntry*)fileAsyncf(0, NULL, "%s/b/%s", getMarioStDvdRoot(), map);
+    FileEntry* file = fileAsyncf(0, NULL, "%s/b/%s", getMarioStDvdRoot(), map);
 
     if (file == NULL) {
         return FALSE;
@@ -1243,10 +1243,10 @@ BOOL bmapPreLoad(const char* map, const char* map2) {
     FileEntry* file2 = NULL;
 
     if (map != NULL) {
-        file = (FileEntry*)fileAsyncf(0, NULL, "%s/arc_d/%s.arc", getMarioStDvdRoot(), map);
+        file = fileAsyncf(0, NULL, "%s/arc_d/%s.arc", getMarioStDvdRoot(), map);
     }
     if (map2 != NULL) {
-        file2 = (FileEntry*)fileAsyncf(0, NULL, "%s/arc_d/%s.arc", getMarioStDvdRoot(), map2);
+        file2 = fileAsyncf(0, NULL, "%s/arc_d/%s.arc", getMarioStDvdRoot(), map2);
     }
     if (file == NULL) {
         return FALSE;

@@ -1422,10 +1422,10 @@ USER_FUNC(display) {
     switch (wp->state) {
         case 0:
 #if VERSION <= VERSION_DEMO_JP
-            if (fileAsyncf(FILE_TYPE_TPL, NULL, "%s/eff/%s/effect_sys.tpl", getMarioStDvdRoot(), lang_prefix[gp->language]) != 0U) {
+            if (fileAsyncf(FILE_TYPE_TPL, NULL, "%s/eff/%s/effect_sys.tpl", getMarioStDvdRoot(), lang_prefix[gp->language]) != NULL) {
                 wp->file = fileAllocf(FILE_TYPE_TPL, "%s/eff/%s/effect_sys.tpl", getMarioStDvdRoot(), lang_prefix[gp->language]);
 #else
-            if (fileAsyncf(FILE_TYPE_TPL, NULL, "%s/e/%s/effect_sys.tpl", getMarioStDvdRoot(), lang_prefix[gp->language]) != 0U) {
+            if (fileAsyncf(FILE_TYPE_TPL, NULL, "%s/e/%s/effect_sys.tpl", getMarioStDvdRoot(), lang_prefix[gp->language]) != NULL) {
                 wp->file = fileAllocf(FILE_TYPE_TPL, "%s/e/%s/effect_sys.tpl", getMarioStDvdRoot(), lang_prefix[gp->language]);
 #endif
                 wp->state++;

@@ -834,7 +834,7 @@ static void dummy_draw(CameraId camId, void* param) {
  */
 // Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
 BOOL arcPreLoad(void) {
-    FileEntry* ret = (FileEntry*)fileAsyncf(FILE_TYPE_RAW, 0, "%s/b/first", getMarioStDvdRoot());
+    FileEntry* ret = fileAsyncf(FILE_TYPE_RAW, 0, "%s/b/first", getMarioStDvdRoot());
     if (ret == NULL) {
         return FALSE;
     } else if ((s32)ret == -1) {
