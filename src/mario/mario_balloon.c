@@ -9,6 +9,7 @@
 #include "eff/eff_mario_balloon.h"
 #include <string.h>
 #include "mario/mario_hit.h"
+#include "mario/mario_balloon.h"
 
 /** Clears the balloon effect pointer; run from marioInit and marioReInit (the "Baloon" spelling is the original's). */
 void marioBaloonInit(void) {
@@ -55,14 +56,6 @@ void marioBalloonOff(void) {
         mario->balloonNpc = NULL;
     }
 }
-
-BOOL chkBalloonTypeTouch(HitEntry* hit);
-
-BOOL chkBalloonTypeRide(HitEntry* hit);
-
-BOOL chkBalloonTypeFront(HitEntry* hit);
-
-s32 treasureBox(HitEntry* hit);
 
 void marioBalloonMain(void) {
     MarioWork* mario;

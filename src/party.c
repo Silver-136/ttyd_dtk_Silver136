@@ -114,20 +114,13 @@ void partyPaperLightOff(PartyEntry* party) {
     animPoseSetMaterialLightFlagOff(party->paperAnimGroup, MATERIAL_LIGHT_PAPER);
 }
 
-/**
- * TRUE when one of the seven partners is in a pinch:
- * HP at or below PARTY_PINCH_HP (1 in the early demos, 5 in JP and later), which switches her to the tired pose set.
- */
-// Original name and size (0x4c) from the JP demo map (UNUSED there: every call is inlined).
-BOOL partyChkHerohero(PartyEntry* party) {
-    BOOL pinch = FALSE;
+/** Copies Mario's current material and light flags to the partner's model, so she is lit and tinted like him. */
+static void setAnimPoseMaterialFlag(PartyEntry* party) {
+    MarioWork* player = party->playerPtr;
 
-    if (party->currentMemberId < PARTNER_COUNT) {
-        if (partyGetHp(party->currentMemberId) <= PARTY_PINCH_HP) {
-            pinch = TRUE;
-        }
-    }
-    return pinch;
+    animPoseSetMaterialFlagOn(party->paperAnimGroup, animPoseGetMaterialFlag(player->paperAnimGroupId[marioAnimeId()]));
+    animPoseSetMaterialLightFlagOn(party->paperAnimGroup,
+                                   animPoseGetMaterialLightFlag(player->paperAnimGroupId[marioAnimeId()]));
 }
 
 /**
@@ -246,6 +239,29 @@ void partySetForceMove(PartyEntry* party, s32 frames, f32 dir, f32 speed) {
     party->moveSpeed = speed;
     partyChgRunMode(party, PARTY_RUN_FORCE_WALK);
     partyChgMot(party, PARTY_MOTION_WALK);
+}
+
+/** Counts the active partner slots. */
+// Original name and size (0x6c) from the JP demo map (UNUSED there: every call is inlined).
+s32 partyGetNum(void) {
+    s32 count = 0;
+    s32 i;
+    for (i = 0; i < 2; i++) {
+        if (partyPtrTbl[i] && (partyGetPtr(i)->flags & PARTY_FLAG_IS_ACTIVE)) {
+            count++;
+        }
+    }
+    return count;
+}
+
+/** Allocates and zeroes the follower slot (1) if it is empty; returns 1, or -1 if taken. */
+// Original name and size (0x5c) from the JP demo map (UNUSED there: every call is inlined).
+s32 getExtraPartyEntryId(void) {
+    if (partyPtrTbl[1] == NULL) {
+        memset(partyPtrTbl[1] = __memAlloc(HEAP_DEFAULT, sizeof(PartyEntry)), 0, sizeof(PartyEntry));
+        return 1;
+    }
+    return -1;
 }
 
 /** Creates the partner memberId in a free slot and has her pop out of Mario (run mode 4). Returns the slot or -1. */
@@ -398,6 +414,31 @@ s32 partyKill2(s32 id) {
 }
 
 /**
+ * Loads the partner's model: her member's animation group, Yoshi's group for his colour,
+ * or the 8-bit d_mario group in the Famicom pipe.
+ */
+static void partyPoseEntry(PartyEntry* party) {
+    char* animName;
+
+    if (party->currentMemberId != PARTY_YOSHI) {
+        if (!(party->flags2 & PARTY_DISP_FLAG_FAMICOM)) {
+            animName = party_dp->name;
+        } else {
+            animName = "d_mario";
+        }
+    } else {
+        animName = yoshigroup[pouchGetPartyColor(PARTY_YOSHI)];
+        if (party->flags2 & PARTY_DISP_FLAG_FAMICOM) {
+            animName = "d_mario";
+        }
+    }
+    if (party->paperAnimGroup >= 0) {
+        animPoseRelease(party->paperAnimGroup);
+    }
+    party->paperAnimGroup = animPoseEntry(animName, 2);
+}
+
+/**
  * Picks Yoshi's colour at random when he hatches in Glitzville (stg3_12_2_init):
  * the first six colours 15% each, the seventh 10%. Stores it in the pouch and returns it.
  */
@@ -444,50 +485,6 @@ static inline s32 partyGetFreeSlot(s32 start) {
             memset(partyPtrTbl[i] = __memAlloc(HEAP_DEFAULT, sizeof(PartyEntry)), 0, sizeof(PartyEntry));
             return i;
         }
-    }
-    return -1;
-}
-
-/**
- * Loads the partner's model: her member's animation group, Yoshi's group for his colour,
- * or the 8-bit d_mario group in the Famicom pipe.
- */
-static void partyPoseEntry(PartyEntry* party) {
-    char* animName;
-
-    if (party->currentMemberId != PARTY_YOSHI) {
-        if (!(party->flags2 & PARTY_DISP_FLAG_FAMICOM)) {
-            animName = party_dp->name;
-        } else {
-            animName = "d_mario";
-        }
-    } else {
-        animName = yoshigroup[pouchGetPartyColor(PARTY_YOSHI)];
-        if (party->flags2 & PARTY_DISP_FLAG_FAMICOM) {
-            animName = "d_mario";
-        }
-    }
-    if (party->paperAnimGroup >= 0) {
-        animPoseRelease(party->paperAnimGroup);
-    }
-    party->paperAnimGroup = animPoseEntry(animName, 2);
-}
-
-/** Copies Mario's current material and light flags to the partner's model, so she is lit and tinted like him. */
-static void setAnimPoseMaterialFlag(PartyEntry* party) {
-    MarioWork* player = party->playerPtr;
-
-    animPoseSetMaterialFlagOn(party->paperAnimGroup, animPoseGetMaterialFlag(player->paperAnimGroupId[marioAnimeId()]));
-    animPoseSetMaterialLightFlagOn(party->paperAnimGroup,
-                                   animPoseGetMaterialLightFlag(player->paperAnimGroupId[marioAnimeId()]));
-}
-
-/** Allocates and zeroes the follower slot (1) if it is empty; returns 1, or -1 if taken. */
-// Original name and size (0x5c) from the JP demo map (UNUSED there: every call is inlined).
-s32 getExtraPartyEntryId(void) {
-    if (partyPtrTbl[1] == NULL) {
-        memset(partyPtrTbl[1] = __memAlloc(HEAP_DEFAULT, sizeof(PartyEntry)), 0, sizeof(PartyEntry));
-        return 1;
     }
     return -1;
 }
@@ -667,14 +664,9 @@ s32 partyEntry2Pos(s32 memberId, f32 x, f32 y, f32 z) {
 }
 
 static void driveParty(PartyEntry* party);
+static void partyShadowOn(PartyEntry* party);
+static void partyHelloInit(PartyEntry* party);
 s32 partyHelloMain(PartyEntry* party);
-
-/** Lets partyPreDisp draw the partner's shadow again. */
-static void partyShadowOn(PartyEntry* party) {
-    if (party) {
-        party->flags2 &= ~PARTY_DISP_FLAG_SHADOW_OFF;
-    }
-}
 
 /** Clears both partner slots at game start. */
 void partyInit(void) {
@@ -1003,19 +995,6 @@ void partyPrevRunMode(PartyEntry* party) {
 }
 #endif
 
-/** Counts the active partner slots. */
-// Original name and size (0x6c) from the JP demo map (UNUSED there: every call is inlined).
-s32 partyGetNum(void) {
-    s32 count = 0;
-    s32 i;
-    for (i = 0; i < 2; i++) {
-        if (partyPtrTbl[i] && (partyGetPtr(i)->flags & PARTY_FLAG_IS_ACTIVE)) {
-            count++;
-        }
-    }
-    return count;
-}
-
 /**
  * Per-frame partner update from Mario's main loop:
  * when any partner is active (JP and later also run marioUsePartyMain first),
@@ -1227,6 +1206,35 @@ static void driveParty(PartyEntry* party) {
 }
 
 /**
+ * Starts the main partner's field ability (run mode 3) when Mario presses the partner button:
+ * only from standing, waiting or following. Stops Mario and returns TRUE if it started.
+ */
+BOOL partyDoWork(void) {
+    PartyEntry* party = partyGetPtr(marioGetPtr()->currPartySlotId[0]);
+#if VERSION >= VERSION_JP
+    if (!party) {
+        return FALSE;
+    }
+#endif
+    if (party->runMode != PARTY_RUN_MOVE_RESET && party->runMode != PARTY_RUN_WAIT && party->runMode != PARTY_RUN_MOVE) {
+        return FALSE;
+    }
+    marioGetPtr()->baseSpeed = 0.0f;
+    partyChgRunMode(party, PARTY_RUN_USE);
+    return TRUE;
+}
+
+/** Starts (partyHelloInit) and runs (partyHelloMain) the partner's appear, run modes 4-7. */
+void partyHello(PartyEntry* party) {
+    if (party->trigFlags & PARTY_TRIG_CHG_RUN_MODE) {
+        party->trigFlags &= ~PARTY_TRIG_CHG_RUN_MODE;
+        partyHelloInit(party);
+        party->flags &= ~PARTY_FLAG_IS_BEING_USED;
+    }
+    partyHelloMain(party);
+}
+
+/**
  * Starts the partner's appear (run modes 4-7):
  * modes 4 and 5 pop her out of Mario from scale 0, mode 7 starts later in the sequence, and if Mario is rolling,
  * flying or sailing she joins at the end.
@@ -1259,35 +1267,6 @@ static void partyHelloInit(PartyEntry* party) {
         party->position = mario->position;
         party->trailPos = party->position;
     }
-}
-
-/**
- * Starts the main partner's field ability (run mode 3) when Mario presses the partner button:
- * only from standing, waiting or following. Stops Mario and returns TRUE if it started.
- */
-BOOL partyDoWork(void) {
-    PartyEntry* party = partyGetPtr(marioGetPtr()->currPartySlotId[0]);
-#if VERSION >= VERSION_JP
-    if (!party) {
-        return FALSE;
-    }
-#endif
-    if (party->runMode != PARTY_RUN_MOVE_RESET && party->runMode != PARTY_RUN_WAIT && party->runMode != PARTY_RUN_MOVE) {
-        return FALSE;
-    }
-    marioGetPtr()->baseSpeed = 0.0f;
-    partyChgRunMode(party, PARTY_RUN_USE);
-    return TRUE;
-}
-
-/** Starts (partyHelloInit) and runs (partyHelloMain) the partner's appear, run modes 4-7. */
-void partyHello(PartyEntry* party) {
-    if (party->trigFlags & PARTY_TRIG_CHG_RUN_MODE) {
-        party->trigFlags &= ~PARTY_TRIG_CHG_RUN_MODE;
-        partyHelloInit(party);
-        party->flags &= ~PARTY_FLAG_IS_BEING_USED;
-    }
-    partyHelloMain(party);
 }
 
 /**
@@ -3326,11 +3305,34 @@ void partyUpdateKeyData(PartyEntry* party) {
     party->buttonUp = gp->buttonUp[port];
 }
 
+/** Lets partyPreDisp draw the partner's shadow again. */
+static void partyShadowOn(PartyEntry* party) {
+    if (party) {
+        party->flags2 &= ~PARTY_DISP_FLAG_SHADOW_OFF;
+    }
+}
+
 /** Hides the partner's shadow (pipes, riding, events); NULL is ignored. */
 void partyShadowOff(PartyEntry* party) {
     if (party) {
         party->flags2 |= PARTY_DISP_FLAG_SHADOW_OFF;
     }
+}
+
+/**
+ * TRUE when one of the seven partners is in a pinch:
+ * HP at or below PARTY_PINCH_HP (1 in the early demos, 5 in JP and later), which switches her to the tired pose set.
+ */
+// Original name and size (0x4c) from the JP demo map (UNUSED there: every call is inlined).
+BOOL partyChkHerohero(PartyEntry* party) {
+    BOOL pinch = FALSE;
+
+    if (party->currentMemberId < PARTNER_COUNT) {
+        if (partyGetHp(party->currentMemberId) <= PARTY_PINCH_HP) {
+            pinch = TRUE;
+        }
+    }
+    return pinch;
 }
 
 /** Reloads the partner's model for her normal or 8-bit form (see partyPoseEntry). */

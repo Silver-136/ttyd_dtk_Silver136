@@ -149,6 +149,7 @@ s32 msgWindow_Entry(const char* msg, s32 callback, u16 priority);
 void msgWindow_Continue(s32 id);
 void msgWindow_Repeat(s32 id);
 void msgWindow_ForceClose(const char* name);
+void msgPageAdd(smartEntry* smart, s32 y);
 
 // Names from LLCOOLT's tree.
 enum {

@@ -621,8 +621,6 @@ void marioForceSlitAnime(void) {
     mario->dispFlags |= MARIO_DISP_FLAG_NO_REAR_POSE;
 }
 
-void init_slit(void);
-
 /**
  * Restores Paper Mode when Mario is re-entered on a new map while paper (marioEntry):
  * sideways standing state, 6-unit collision width, partners turned paper too.

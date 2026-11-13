@@ -10,3 +10,7 @@ void marioBalloonMain(void);
 void marioBalloonOff(void);
 void marioBalloonOn(s32 type);
 void marioBaloonInit(void);
+BOOL chkBalloonTypeTouch(HitEntry* hit);
+BOOL chkBalloonTypeRide(HitEntry* hit);
+BOOL chkBalloonTypeFront(HitEntry* hit);
+s32 treasureBox(HitEntry* hit);

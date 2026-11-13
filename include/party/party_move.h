@@ -75,3 +75,4 @@ void partyMoveBehindMario3(PartyEntry* party, s32 arg, f32 dir);
 void party_set_behind_dir(PartyEntry* party, f32 dir);
 
 s32 partyGetFootmarkId(PartyEntry* party);
+void partyRecordFootmarkSub(s32 id, Vec pos, u32 flags);

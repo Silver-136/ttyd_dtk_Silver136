@@ -356,8 +356,6 @@ static inline void msgCheckSkip(smartEntry* smart, MsgWinData* data) {
     }
 }
 
-void msgPageAdd(smartEntry* smart, s32 y);
-
 /**
  * Per-frame text update for a message: runs the window callback on the first frame,
  * reveals characters at the print speed (faster when skipping), plays talk blips,

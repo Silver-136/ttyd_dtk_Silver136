@@ -11,3 +11,4 @@ void winRootDisp(s32 camId, WindowWork* wp);
 s32 winRootMain(WindowWork* w);
 s32 compare_func5_2(const void* a, const void* b);
 s32 compare_func6_2(const void* a, const void* b);
+void winTabMain(WindowWork* w);

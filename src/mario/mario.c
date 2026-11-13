@@ -1159,8 +1159,6 @@ static inline BOOL marioChkRollMot2(void) {
     return ret;
 }
 
-void marioPostMain(MarioWork* wp);
-
 /**
  * Mario's per-frame update, run from mariost while he is active:
  * outfit and Slow Go checks, the Moon's low gravity (moo maps), invincibility and coin-drop timers, input,
@@ -1496,8 +1494,6 @@ static void marioCtrlOff2Main(void) {
 #endif
     }
 }
-
-void marioUpdateScreenPos(void);
 
 /**
  * Moves Mario for the frame (marioMoveMain) and updates his screen position.

@@ -2578,8 +2578,6 @@ void _getKaitenHammerPoint(f32 angle, f32 r, f32* x, f32* y, f32* z);
     if ((*(u32*)&((NpcEntry*)npc)->statusFlags) & NPC_STATUS_DEAD) continue;                                         \
     if (npc->flags & NPC_FLAG_2D) continue;
 
-inline BOOL npcCheckEnableTouchMario(NpcEntry* npc);
-
 /**
  * Finds the NPC Mario or the partner hits this frame.
  * flags pick the checks: 0x20 jump, 0x40 hammer, 0x80 spin hammer, 0x100 Koops' shell,

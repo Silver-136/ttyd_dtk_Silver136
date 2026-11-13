@@ -7,6 +7,14 @@
 
 s32 uranaisi_ryokin_rtn(s32 mode);
 
+// One fortune-table row: a flag name as written in the fortune messages and its flag id.
+typedef struct {
+    const char* name;
+    s32 id;
+} UranaiEntry;
+
+s32 search_moji_no(UranaiEntry* table, const char* name);
+
 USER_FUNC(uranaisi_data_alloc);
 USER_FUNC(uranaisi_data_free);
 USER_FUNC(uranaisi_next_check);

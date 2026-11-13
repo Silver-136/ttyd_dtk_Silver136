@@ -113,3 +113,13 @@ void FontDrawCodeMtx(Mtx mtx, u16 code);
 void FontDrawScaleVec(Vec scale);
 GXColor FontGetDrawColor(void);
 GXColor HSV2RGB(GXColor hsv);
+
+typedef struct FontWidthEntry {
+    u8 kerning; // 0x0
+    u8 width; // 0x1
+} FontWidthEntry;
+
+void JUTFont_Draw(u16 code);
+FontWidthEntry* JUTFont_GetWidthEntry(u16 code);
+u8 JUTFont_GetWidth(u16 code);
+void JUTFont_DrawPos(u16 code, s32 x, s32 y);

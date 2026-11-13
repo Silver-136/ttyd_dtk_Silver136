@@ -138,8 +138,6 @@ void memInit(void) {
     }
 }
 
-void _mapAllocInit(void);
-
 /**
  * Throws away everything in a heap by destroying and recreating it;
  * for HEAP_MALLOC also resets the map heap allocator.

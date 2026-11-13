@@ -34,11 +34,6 @@ typedef struct {
     s32 next;           // 0x34
 } UranaiWork;
 
-typedef struct {
-    const char* name;
-    s32 id;
-} UranaiEntry;
-
 /**
  * The fortune teller's session state: the fortune list being built from the message labels,
  * its kind and prefix, and which Star Piece and Shine Sprite fortunes were already told.
@@ -514,8 +509,6 @@ inc:
     }
     return infoId;
 }
-
-s32 search_moji_no(UranaiEntry* table, const char* name);
 
 s32 uranaisi_data_make_starpiece(const char* prefix, s32 type) {
     UranaiWork* wp = &_udt;

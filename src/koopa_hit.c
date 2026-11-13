@@ -269,8 +269,6 @@ HitEntry* kpaSearchGround(f32 range, f32* outY, f32* outDepth, f32* outAng) {
     return best;
 }
 
-void kpaClearHitobjHead(void);
-
 /**
  * Bowser's ceiling probe for mario_hit: casts rays up from a per-level set of points over his head (some only
  * while jumping), at a reach set by level and motion.

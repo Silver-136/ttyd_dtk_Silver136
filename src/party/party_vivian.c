@@ -66,22 +66,7 @@ void mot_vivian(void) {
         mario->airTimer = 0;
         mario->currSubMotionId = 0;
         mario->baseSpeed = 0.0f;
-#if VERSION <= VERSION_DEMO_JP
-    }
-}
-
-/** Early-demo copy: hides Vivian's shadow tail (bit 0 of her tail flags), when she sinks into the floor with Mario. */
-static inline void partyVivianTailStop(PartyEntry* party) {
-    if (party->currentMemberId == PARTY_VIVIAN) {
-        party->work.vivian.tailFlags |= 1; // the early demos keep the tail flags in the Vivian work
-    }
-}
-
-/** Early-demo copy: shows Vivian's shadow tail again. */
-static inline void partyVivianTailStart(PartyEntry* party) {
-    if (party->currentMemberId == PARTY_VIVIAN) {
-        party->work.vivian.tailFlags &= ~1;
-#else
+#if VERSION >= VERSION_JP
         mario->hitobjFront = NULL;
         mario->hitobjFrontA = NULL;
         mario->hitobjPush = NULL;
@@ -195,21 +180,29 @@ void vivianUnhold(PartyEntry* party) {
     }
 }
 
-#if VERSION >= VERSION_JP
-
-/** hides Vivian's shadow tail (bit 0 of her tail flags), when she sinks into the floor with Mario. */
+/** Hides Vivian's shadow tail (bit 0 of her tail flags), when she sinks into the floor with Mario. */
 void partyVivianTailStop(PartyEntry* party) {
     if (party->currentMemberId == PARTY_VIVIAN) {
+#if VERSION <= VERSION_DEMO_JP
+        party->work.vivian.tailFlags |= 1; // the early demos keep the tail flags in the Vivian work
+#else
         party->tailFlags |= 1;
+#endif
     }
 }
 
-/** shows Vivian's shadow tail again. */
+/** Shows Vivian's shadow tail again. */
 void partyVivianTailStart(PartyEntry* party) {
     if (party->currentMemberId == PARTY_VIVIAN) {
+#if VERSION <= VERSION_DEMO_JP
+        party->work.vivian.tailFlags &= ~1;
+#else
         party->tailFlags &= ~1;
+#endif
     }
 }
+
+#if VERSION >= VERSION_JP
 
 /**
  * Whether party.c draws Vivian's shadow tail this frame:

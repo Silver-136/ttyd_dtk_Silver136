@@ -528,3 +528,4 @@ void npcSetStayPose(char* name);
 void npcSetTalkPose(char* name);
 NpcEntry* fbatHitCheckAll(void);
 s32 npcKoopaModeMobjBoundDeadCheck(struct HitEntry* hit);
+BOOL npcCheckEnableTouchMario(NpcEntry* npc);

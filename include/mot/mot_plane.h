@@ -45,6 +45,8 @@ s32 marioPlaneGetFlyingDir(void);
 void mot_plane(void);
 void mot_plane_post(void);
 
+void paper_plane_off(void);
+BOOL checkAirPort(void);
 #if VERSION <= VERSION_DEMO_JP
 void mario_plane_cancel(void);
 #else

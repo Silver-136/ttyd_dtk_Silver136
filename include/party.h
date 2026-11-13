@@ -432,6 +432,7 @@ void partyPaperOff(PartyEntry* party);
 void partyReInit(void);
 void partySetFamicomMode(PartyEntry* party, s32 mode);
 void partyShadowOff(PartyEntry* party);
+BOOL partyChkHerohero(PartyEntry* party);
 void partyUpdateKeyData(PartyEntry* party);
 s32 yoshiSetColor(void);
 void partyChgPaper(PartyEntry* party, char* paper);

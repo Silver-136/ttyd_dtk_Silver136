@@ -236,8 +236,6 @@ static inline f32 planeCamFloor(void) {
 }
 #endif
 
-void paper_plane_off(void);
-
 /**
  * Plane Mode motion (from a plane panel): Mario jumps, spins and folds into a paper airplane,
  * then glides with the stick pitching it up and down (flyMain); A or B or a key-off lands him.
@@ -574,8 +572,6 @@ void mot_plane(void) {
  * a wall or water.
  */
 static f32 movedir2dispdir(f32 dir);
-
-BOOL checkAirPort(void);
 
 static void flyMain(void) {
     f32 s2, c2, s, c;

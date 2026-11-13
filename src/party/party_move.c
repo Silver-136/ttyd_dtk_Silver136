@@ -590,8 +590,6 @@ void partyClearFootmark2(void) {
     readId[1] = 0;
 }
 
-void partyRecordFootmarkSub(s32 id, Vec pos, u32 flags);
-
 /**
  * Lays this frame's footmark for Koops's walk (party_nokonoko.c).
  * The slot 0 entry tracks Mario; the other tracks the active partner,

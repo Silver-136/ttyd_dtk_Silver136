@@ -99,3 +99,4 @@ extern void* R_battlemapalloc_base_ptr;
 
 void battleMapAlloc(void);
 void battleMapFree(void);
+void _mapAllocInit(void);

@@ -13,11 +13,6 @@
 #include "driver/windowdrv.h"
 #include "libc_decls.h"
 
-typedef struct FontWidthEntry {
-    u8 kerning; // 0x0
-    u8 width; // 0x1
-} FontWidthEntry;
-
 typedef struct FontWidthBlock {
     u32 magic; // 0x0, "WID1"
     u32 size; // 0x4
@@ -209,8 +204,6 @@ void FontDrawScaleVec(Vec scale) {
     fontScale = scale;
 }
 
-void JUTFont_Draw(u16 code);
-
 /**
  * Draws one glyph (an index from JUTFont_CodeToGlyph) at x, y with the current scale and outline;
  * msgdrv draws message windows glyph by glyph through this.
@@ -252,8 +245,6 @@ void FontDrawString(f32 x, f32 y, const char* msg) {
     FontDrawStringVec((Vec){x, y, 0.0f}, (const s8*)msg);
 #endif
 }
-
-FontWidthEntry* JUTFont_GetWidthEntry(u16 code);
 
 /**
  * JP and early-demo body of FontDrawString: draws a plain string (no tags, no line breaks) left to right from pos with
@@ -526,8 +517,6 @@ void FontDrawStringCenterMtx(Mtx mtx, const s8* msg) {
     }
 }
 
-u8 JUTFont_GetWidth(u16 code);
-
 /**
  * Draws a single-line string with every glyph jittered 0-2 px at random each frame (shaking text);
  * npcdrv uses it for the first-strike bubble text.
@@ -567,8 +556,6 @@ void FontDrawStringShake(f32 x, f32 y, const s8* msg) {
         x += fontScale.x * (width + charspace[gp->language]);
     }
 }
-
-void JUTFont_DrawPos(u16 code, s32 x, s32 y);
 
 /**
  * Draws a message at screen position x, y (line height 28), handling the <red>, <col xxxxxxxx> and <icon> tags;

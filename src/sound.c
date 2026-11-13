@@ -639,8 +639,6 @@ BOOL SoundSLibLoadDVD(const char* path) {
     return TRUE;
 }
 
-inline void SoundStopAll(void);
-
 /**
  * Unloads all sound data: stops everything, frees the song library and group memory. The loops that pop the
  * pushed groups and free the project files run up to dataId, which is never incremented (0), so they do nothing.

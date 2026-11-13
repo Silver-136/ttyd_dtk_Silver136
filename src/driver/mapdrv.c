@@ -681,21 +681,6 @@ void mapSetPlayRate(const char* name, f32 rate) {
 void* HSD_ArchiveGetPublicAddress(MapHeader* header, const char* name);
 
 /**
- * Turns the file-relative pointers listed in the map.dat relocation table into real addresses by adding the data
- * base.
- */
-// Original name and size (0x48) from the JP demo map (UNUSED there: every call is inlined).
-void Locate(MapEntry* entry) {
-    u32 k;
-    for (k = 0; k < entry->header.file.relCount; k++) {
-        u32* rel = (u32*)((u8*)entry->header.data + entry->header.rel[k]);
-        if (*rel <= 0x80000000) {
-            *rel += (u32)entry->header.data;
-        }
-    }
-}
-
-/**
  * Whether the map header's stored file size equals the loaded size.
  * MWCC swaps == operands when the left side is a computed address (wp->entries[group]...);
  * through a pointer parameter the load stays on the left, as in the original (cmplw r0,r17).
@@ -1513,46 +1498,6 @@ void mapCalcAnimMatrix(Mtx out, Mtx in, MapAnim* anim, MapAnimJoint* joint) {
     }
 }
 
-/**
- * Recomputes the world matrix of obj (MAP_OBJ_FLAG_MTX_DIRTY or force) from the parent matrix mtx and its local
- * or animated matrix plus the script transform,
- * and walks the children (forced when the parent changed) and siblings.
- */
-static void mapReCalcMatrix(MapObject* obj, Mtx mtx, BOOL force) {
-    BOOL dirty = FALSE;
-
-    if (obj->flags & MAP_OBJ_FLAG_MTX_DIRTY) {
-        dirty = TRUE;
-    }
-    if (force) {
-        dirty = TRUE;
-    }
-    if (dirty) {
-        if (obj->flags & MAP_OBJ_FLAG_ANIM_MTX) {
-            PSMTXConcat(mtx, obj->animMtx, obj->modelWorldMtx);
-        } else {
-            PSMTXConcat(mtx, obj->localMtx, obj->modelWorldMtx);
-        }
-        if (obj->flags & MAP_OBJ_FLAG_TRANSFORM) {
-            PSMTXConcat(obj->modelWorldMtx, obj->transformMtx, obj->modelWorldMtx);
-        }
-        obj->flags &= ~MAP_OBJ_FLAG_MTX_DIRTY;
-        if (obj->child) {
-            mapReCalcMatrix(obj->child, obj->modelWorldMtx, TRUE);
-        }
-        if (obj->next) {
-            mapReCalcMatrix(obj->next, mtx, force);
-        }
-    } else {
-        if (obj->child) {
-            mapReCalcMatrix(obj->child, obj->modelWorldMtx, force);
-        }
-        if (obj->next) {
-            mapReCalcMatrix(obj->next, mtx, force);
-        }
-    }
-}
-
 typedef struct MapAnimKey4 {
     f32 time;
     MapAnimKeyCh ch[4];
@@ -1728,38 +1673,44 @@ void mapCalcAnimLightCol(MapAnim* anim, LightEntry* lp, MapAnimLightData2* d, f3
     }
 }
 
-// Original name and size (0xb8) from the JP demo map (UNUSED there: every call is inlined).
-MapMaterial* mapSearchDmdMaterial(const char* name) {
-#if VERSION <= VERSION_DEMO_JP
-    int j;
-    int i;
+/**
+ * Recomputes the world matrix of obj (MAP_OBJ_FLAG_MTX_DIRTY or force) from the parent matrix mtx and its local
+ * or animated matrix plus the script transform,
+ * and walks the children (forced when the parent changed) and siblings.
+ */
+static void mapReCalcMatrix(MapObject* obj, Mtx mtx, BOOL force) {
+    BOOL dirty = FALSE;
 
-    MapEntry* entry;
-    MapWork* wp;
-    MapMaterialName* mat;
-    wp = mapGetWork();
-#else
-    MapEntry* entry;
-    MapWork* wp;
-    int j;
-    MapMaterialName* mat;
-    int i;
-
-    wp = &mapWork[activeGroup];
-#endif
-    for (i = 0; i < wp->entries[0].count; i++) {
-        entry = &wp->entries[i];
-        if (!entry->materialNameTable) {
-            return NULL;
+    if (obj->flags & MAP_OBJ_FLAG_MTX_DIRTY) {
+        dirty = TRUE;
+    }
+    if (force) {
+        dirty = TRUE;
+    }
+    if (dirty) {
+        if (obj->flags & MAP_OBJ_FLAG_ANIM_MTX) {
+            PSMTXConcat(mtx, obj->animMtx, obj->modelWorldMtx);
+        } else {
+            PSMTXConcat(mtx, obj->localMtx, obj->modelWorldMtx);
         }
-        for (j = 0; j < entry->materialNameTable->count; j++) {
-            mat = &entry->materialNameTable->entries[j];
-            if (!strcmp(mat->name, name)) {
-                return mat->data;
-            }
+        if (obj->flags & MAP_OBJ_FLAG_TRANSFORM) {
+            PSMTXConcat(obj->modelWorldMtx, obj->transformMtx, obj->modelWorldMtx);
+        }
+        obj->flags &= ~MAP_OBJ_FLAG_MTX_DIRTY;
+        if (obj->child) {
+            mapReCalcMatrix(obj->child, obj->modelWorldMtx, TRUE);
+        }
+        if (obj->next) {
+            mapReCalcMatrix(obj->next, mtx, force);
+        }
+    } else {
+        if (obj->child) {
+            mapReCalcMatrix(obj->child, obj->modelWorldMtx, force);
+        }
+        if (obj->next) {
+            mapReCalcMatrix(obj->next, mtx, force);
         }
     }
-    return NULL;
 }
 
 // A macro, not an inline function: as a function mapMain changes (together with mapMainAlpha).
@@ -1948,15 +1899,6 @@ static inline BOOL mapObjIsTranslucent(u32 flags, GXColor objColor, GXColor matC
         return TRUE;
     }
     return FALSE;
-}
-
-/** Draws every packed display list of the mesh straight from the map file. */
-// Original name and size (0x64) from the JP demo map (UNUSED there: every call is inlined).
-void mapSetPolygonGeometry(MapFileMesh* mesh) {
-    int j;
-    for (j = 0; j < mesh->displayListCount; j++) {
-        GXCallDisplayList((void*)mesh->displayLists.packedLists[j].offset, mesh->displayLists.packedLists[j].size);
-    }
 }
 
 /**
@@ -3711,6 +3653,15 @@ static void mapSetPolygonVtxDesc(MapObject* obj, MapFileMesh* mesh) {
     }
 }
 
+/** Draws every packed display list of the mesh straight from the map file. */
+// Original name and size (0x64) from the JP demo map (UNUSED there: every call is inlined).
+void mapSetPolygonGeometry(MapFileMesh* mesh) {
+    int j;
+    for (j = 0; j < mesh->displayListCount; j++) {
+        GXCallDisplayList((void*)mesh->displayLists.packedLists[j].offset, mesh->displayLists.packedLists[j].size);
+    }
+}
+
 /** Depth-first search of the joint tree (children, then later siblings) for the joint called name. */
 static MapFileJoint* mapSearchDmdJointSub(MapFileJoint* joint, const char* name) {
     MapFileJoint* found;
@@ -3774,6 +3725,40 @@ MapFileJoint* mapSearchDmdJoint(MapFileJoint* joint, const char* name) {
         return mapSearchDmdJointSub(joint, name);
     }
     return mapSearchDmdJointSub2(joint, name, "|");
+}
+
+// Original name and size (0xb8) from the JP demo map (UNUSED there: every call is inlined).
+MapMaterial* mapSearchDmdMaterial(const char* name) {
+#if VERSION <= VERSION_DEMO_JP
+    int j;
+    int i;
+
+    MapEntry* entry;
+    MapWork* wp;
+    MapMaterialName* mat;
+    wp = mapGetWork();
+#else
+    MapEntry* entry;
+    MapWork* wp;
+    int j;
+    MapMaterialName* mat;
+    int i;
+
+    wp = &mapWork[activeGroup];
+#endif
+    for (i = 0; i < wp->entries[0].count; i++) {
+        entry = &wp->entries[i];
+        if (!entry->materialNameTable) {
+            return NULL;
+        }
+        for (j = 0; j < entry->materialNameTable->count; j++) {
+            mat = &entry->materialNameTable->entries[j];
+            if (!strcmp(mat->name, name)) {
+                return mat->data;
+            }
+        }
+    }
+    return NULL;
 }
 
 /**
@@ -4311,6 +4296,21 @@ void spline_getvalue(Vec* out, f32 t, s32 n, Vec* pts, f32* ts, Vec* tbl) {
     out->x = pts[lo].x + u * ((pts[lo + 1].x - pts[lo].x) / h - h * (2.0f * tbl[lo].x + tbl[lo + 1].x) + u * (3.0f * tbl[lo].x + u * (tbl[lo + 1].x - tbl[lo].x) / h));
     out->y = pts[lo].y + u * ((pts[lo + 1].y - pts[lo].y) / h - h * (2.0f * tbl[lo].y + tbl[lo + 1].y) + u * (3.0f * tbl[lo].y + u * (tbl[lo + 1].y - tbl[lo].y) / h));
     out->z = pts[lo].z + u * ((pts[lo + 1].z - pts[lo].z) / h - h * (2.0f * tbl[lo].z + tbl[lo + 1].z) + u * (3.0f * tbl[lo].z + u * (tbl[lo + 1].z - tbl[lo].z) / h));
+}
+
+/**
+ * Turns the file-relative pointers listed in the map.dat relocation table into real addresses by adding the data
+ * base.
+ */
+// Original name and size (0x48) from the JP demo map (UNUSED there: every call is inlined).
+void Locate(MapEntry* entry) {
+    u32 k;
+    for (k = 0; k < entry->header.file.relCount; k++) {
+        u32* rel = (u32*)((u8*)entry->header.data + entry->header.rel[k]);
+        if (*rel <= 0x80000000) {
+            *rel += (u32)entry->header.data;
+        }
+    }
 }
 
 /**

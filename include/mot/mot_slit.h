@@ -27,3 +27,4 @@ BOOL marioSlitContinueChk(void);
 BOOL marioCreviceWallChk(Vec p);
 
 BOOL marioGetSlitFloorPos(Vec* pos);
+void init_slit(void);

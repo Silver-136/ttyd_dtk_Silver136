@@ -284,3 +284,4 @@ void SoundSSSetSrndPanCh(s32 chan, u8 span);
 void SoundSSSetVolCh(s32 chan, u8 vol);
 void SoundSSStopCh(s32 chan);
 u8 SoundSSGetVolCh(s32 chan);
+void SoundStopAll(void);

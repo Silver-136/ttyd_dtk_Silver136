@@ -16,6 +16,7 @@
 static BOOL checkTriVec_xz(HitCheckQuery* query, HitVector* vector);
 static s32 hitCalcVtxPosition(HitEntry* hit);
 static void hitReCalcMatrix2(HitEntry* hit, Mtx mtx, BOOL recursion);
+static void hitPreCheck(void);
 
 // Unused 4-byte object, read by nothing; the original had it too (its storage is in the retail .sbss). Name invented.
 s32 unk_8041840C;
@@ -187,52 +188,6 @@ typedef struct HitAnimJointList {
     s32 count;
     void* joints[1];
 } HitAnimJointList;
-
-/**
- * Builds the list of hit objects the checks walk (hitActiveListTop; JP and later).
- * The early demos have no active list: hit objects without parts are flagged 0x8000 and skipped by the checks.
- */
-static void hitPreCheck(void) {
-    MapEntry* entry;
-    s32 i;
-    s32 j;
-    MapWork* wp = mapGetWork();
-    HitEntry* hit;
-#if VERSION >= VERSION_JP
-    HitEntry* prev;
-
-    prev = hitActiveListTop = NULL;
-#endif
-    i = 0;
-    entry = wp->entries;
-    for (; i < wp->entries->count; entry++, i++) {
-        hit = entry->hitEntries;
-        for (j = 0; j < entry->hitNumJoints; j++, hit++) {
-#if VERSION <= VERSION_DEMO_JP
-            hit->flags |= HIT_FLAG_NO_GEOMETRY;
-            if (hit->joint->partCount != 0) {
-                hit->flags &= ~HIT_FLAG_NO_GEOMETRY;
-            }
-        }
-    }
-}
-#else
-            if (hit->joint->partCount != 0 && !(hit->flags & (HIT_FLAG_OFF | HIT_FLAG_DELETED))) {
-                if (prev == NULL) {
-                    hitActiveListTop = hit;
-                    prev = hit;
-                } else {
-                    prev->siblingActive = hit;
-                    prev = hit;
-                }
-            }
-        }
-    }
-    if (prev != NULL) {
-        prev->siblingActive = NULL;
-    }
-}
-#endif
 
 /**
  * Removes the collision object named name: it is flagged deleted (0x80) and the checks skip it from then on;
@@ -1334,6 +1289,52 @@ HitEntry* hitCheckSphereFilter(HitFilterCallback callback, f32 x, f32 y, f32 z,
     }
     return &map->hitEntries[objectId];
 }
+
+/**
+ * Builds the list of hit objects the checks walk (hitActiveListTop; JP and later).
+ * The early demos have no active list: hit objects without parts are flagged 0x8000 and skipped by the checks.
+ */
+static void hitPreCheck(void) {
+    MapEntry* entry;
+    s32 i;
+    s32 j;
+    MapWork* wp = mapGetWork();
+    HitEntry* hit;
+#if VERSION >= VERSION_JP
+    HitEntry* prev;
+
+    prev = hitActiveListTop = NULL;
+#endif
+    i = 0;
+    entry = wp->entries;
+    for (; i < wp->entries->count; entry++, i++) {
+        hit = entry->hitEntries;
+        for (j = 0; j < entry->hitNumJoints; j++, hit++) {
+#if VERSION <= VERSION_DEMO_JP
+            hit->flags |= HIT_FLAG_NO_GEOMETRY;
+            if (hit->joint->partCount != 0) {
+                hit->flags &= ~HIT_FLAG_NO_GEOMETRY;
+            }
+        }
+    }
+}
+#else
+            if (hit->joint->partCount != 0 && !(hit->flags & (HIT_FLAG_OFF | HIT_FLAG_DELETED))) {
+                if (prev == NULL) {
+                    hitActiveListTop = hit;
+                    prev = hit;
+                } else {
+                    prev->siblingActive = hit;
+                    prev = hit;
+                }
+            }
+        }
+    }
+    if (prev != NULL) {
+        prev->siblingActive = NULL;
+    }
+}
+#endif
 
 /** Returns the live (not deleted) collision object named name in any loaded map, or NULL (also for a NULL name). */
 HitEntry* hitNameToPtr(const char* name) {

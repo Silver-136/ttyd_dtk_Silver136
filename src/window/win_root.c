@@ -122,8 +122,6 @@ static void winSortMain(WindowWork* wp);
 #define WR_FSTEP(n) (n)
 #endif
 
-inline void winTabMain(WindowWork* w);
-
 /**
  * Pause menu state machine, run each frame by winMain (win_main.c).
  * On open it builds the tabs (Mario, Party once Goombella joined, Items,
