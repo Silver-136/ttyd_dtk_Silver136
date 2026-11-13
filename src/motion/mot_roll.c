@@ -83,7 +83,7 @@ static inline s32 angOut(f32 center, f32 half, f32 x) {
 
 // FAKE: k025/rabs/rollRad/rollCos/rSin are invented one-line inline helpers. Their result temps get
 // later inline numbering, which gives the target FPR colouring in mot_roll (fmadds operand order, stickAngOut c
-// in f31) and marioRollCan (v26 in f26, fabs/sin/cos volatiles). Behaviour-identical to the expressions they wrap.
+// in f31) and makeOfs (v26 in f26, fabs/sin/cos volatiles). Behaviour-identical to the expressions they wrap.
 static inline f32 k025(void) { return 0.025f; }
 
 /** sin of a (radians) as a float. */
@@ -200,7 +200,7 @@ static inline s32 stickAngOut(f32 half) {
     }
 
 void roll_upstairs(void);
-static inline void marioRollCan(void);
+static void makeOfs(void);
 
 #pragma inline_max_total_size(200000)
 
@@ -1289,7 +1289,7 @@ void mot_roll(void) {
     if (mario->baseSpeed) {
         zoomOff();
     }
-    marioRollCan();
+    makeOfs();
 }
 
 /**
@@ -1355,7 +1355,8 @@ void mot_fall_roll(void) {
  * Offsets the tube's display position by the slope of the ground under Mario when the slope is under
  * 45 degrees (the side ray cast for steeper slopes has no effect).
  */
-static inline void marioRollCan(void) {
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+static void makeOfs(void) {
     MarioWork* mario = marioGetPtr();
     f32 v26;
     f32 t1;

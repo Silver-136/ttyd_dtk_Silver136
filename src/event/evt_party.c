@@ -494,6 +494,32 @@ USER_FUNC(evt_party_wait_landon) {
 }
 
 /**
+ * Landing check of a partner's scripted jump: snaps it onto the floor the next vy step reaches and clears its jump
+ * flags. TRUE when it landed.
+ */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+static BOOL chkgnd(PartyEntry* p, f32 vy) {
+    BOOL ret = FALSE;
+#if VERSION <= VERSION_DEMO_JP
+    f32 dropDepth, groundY;
+    HitEntry* hit = _partySearchGround(p, &groundY, &dropDepth, __fabsf(vy), __fabsf(vy));
+    if (hit != NULL && p->position.y + vy <= groundY) {
+        p->hitobjStandOn = hit;
+        ret = TRUE;
+        p->position.y = groundY;
+#else
+    HitEntry* hit = partySearchGround(p, __fabsf(vy), __fabsf(vy));
+    if (hit != NULL && p->position.y + vy <= p->groundY) {
+        p->hitobjStandOn = hit;
+        ret = TRUE;
+        p->position.y = p->groundY;
+#endif
+        p->flags &= ~(PARTY_FLAG_IS_JUMPING | PARTY_FLAG_IS_FALLING | PARTY_FLAG_IS_STEPPING);
+    }
+    return ret;
+}
+
+/**
  * Makes the partner jump to (args[1], args[2], args[3]) in args[4] milliseconds, blocking until it lands.
  * args[5] = 0 also turns it toward the target; args[6] is the arc height for a level jump (-1000 or below = 20).
  * Rising jumps add headroom (half the partner's height in the early demos, 37 units in JP and later).
@@ -580,28 +606,7 @@ USER_FUNC(evt_party_jump_pos) {
         case 2:
             movePos(&p->position.x, &p->position.z, p->moveSpeed, p->targetDir);
             p->velY += p->work.common.accelY;
-            mode = 0;
-            ff = p->velY;
-            {
-#if VERSION <= VERSION_DEMO_JP
-                f32 groundY, dropDepth;
-                HitEntry* hit = _partySearchGround(
-                    p, &groundY, &dropDepth, __fabsf(ff), __fabsf(ff));
-                if (hit != NULL && p->position.y + ff <= groundY) {
-#else
-                HitEntry* hit = partySearchGround(p, __fabsf(ff), __fabsf(ff));
-                if (hit != NULL && p->position.y + ff <= p->groundY) {
-#endif
-                    p->hitobjStandOn = hit;
-                    mode = 1;
-#if VERSION <= VERSION_DEMO_JP
-                    p->position.y = groundY;
-#else
-                    p->position.y = p->groundY;
-#endif
-                    p->flags &= ~(PARTY_FLAG_IS_JUMPING | PARTY_FLAG_IS_FALLING | PARTY_FLAG_IS_STEPPING);
-                }
-            }
+            mode = chkgnd(p, p->velY);
             if (mode) {
                 event->userdata[2] = 0;
             } else {

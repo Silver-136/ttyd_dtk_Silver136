@@ -76,18 +76,6 @@ inline BOOL chkBreakable(HitEntry* hit) {
     return FALSE;
 }
 
-// Stops Bobbery's two looping sounds.
-static inline void bomheiCleanSfx(PartyEntry* p) {
-    if (p->work.bomhei.sfxId != -1) {
-        psndSFXOff(p->work.bomhei.sfxId);
-        p->work.bomhei.sfxId = -1;
-    }
-    if (p->work.bomhei.sfxId2 != -1) {
-        psndSFXOff(p->work.bomhei.sfxId2);
-        p->work.bomhei.sfxId2 = -1;
-    }
-}
-
 static inline void bomheiCleanFlags(PartyEntry* p) {
     p->flags2 &= ~PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
     p->flags &= ~PARTY_FLAG_FORCE_FALL;
@@ -99,6 +87,51 @@ static inline void bomheiFree(PartyEntry* p) {
     if (p->useStruct != NULL) {
         __memFree(HEAP_DEFAULT, p->useStruct);
         p->useStruct = NULL;
+    }
+}
+
+/** Starts sound name in Bobbery's slot 0 (throwSfxId) at his position. */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+static void se0_on(PartyEntry* party, const char* name) {
+    party->work.bomhei.throwSfxId = psndSFXOn_3D(name, &party->playerPtr->position);
+}
+
+/** Starts sound name in Bobbery's slot 1 (sfxId) at his position. */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+static void se1_on(PartyEntry* party, const char* name) {
+    party->work.bomhei.sfxId = psndSFXOn_3D(name, &party->playerPtr->position);
+}
+
+/** Starts sound name in Bobbery's slot 2 (sfxId2) at his position. */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+static void se2_on(PartyEntry* party, const char* name) {
+    party->work.bomhei.sfxId2 = psndSFXOn_3D(name, &party->playerPtr->position);
+}
+
+/** Stops Bobbery's sound in slot 0 (throwSfxId) if it is playing. */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+static void se0_off(PartyEntry* party) {
+    if (party->work.bomhei.throwSfxId != -1) {
+        psndSFXOff(party->work.bomhei.throwSfxId);
+        party->work.bomhei.throwSfxId = -1;
+    }
+}
+
+/** Stops Bobbery's sound in slot 1 (sfxId) if it is playing. */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+static void se1_off(PartyEntry* party) {
+    if (party->work.bomhei.sfxId != -1) {
+        psndSFXOff(party->work.bomhei.sfxId);
+        party->work.bomhei.sfxId = -1;
+    }
+}
+
+/** Stops Bobbery's sound in slot 2 (sfxId2) if it is playing. */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+static void se2_off(PartyEntry* party) {
+    if (party->work.bomhei.sfxId2 != -1) {
+        psndSFXOff(party->work.bomhei.sfxId2);
+        party->work.bomhei.sfxId2 = -1;
     }
 }
 
@@ -114,12 +147,10 @@ void init_se_work(PartyEntry* party) {
 // Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
 void se_all_off(PartyEntry* p) {
 #if VERSION <= VERSION_DEMO_JP
-    if (p->work.bomhei.throwSfxId != -1) {
-        psndSFXOff(p->work.bomhei.throwSfxId);
-        p->work.bomhei.throwSfxId = -1;
-    }
+    se0_off(p);
 #endif
-    bomheiCleanSfx(p);
+    se1_off(p);
+    se2_off(p);
 }
 
 /**
@@ -185,7 +216,8 @@ void bomhei_exit(PartyEntry* party) {
             p->moveMode = PARTY_MOVE_MODE_STAY;
         }
         bomheiCleanFlags(p);
-        bomheiCleanSfx(p);
+        se1_off(p);
+        se2_off(p);
         bomheiFree(p);
     }
 }
@@ -219,7 +251,8 @@ void bomhei_use_cancel(void) {
         }
         bomheiCleanFlags(p);
 #if VERSION >= VERSION_JP
-        bomheiCleanSfx(p);
+        se1_off(p);
+        se2_off(p);
 #endif
         bomheiFree(p);
     }
@@ -276,7 +309,8 @@ void bomhei_use_post(PartyEntry* party) {
         party->trigFlags |= PARTY_TRIG_CHG_RUN_MODE;
     }
     party->playerPtr->flags &= ~MARIO_FLAG_IS_CARRYING_BOBBERY;
-    bomheiCleanSfx(party);
+    se1_off(party);
+    se2_off(party);
     bomheiFree(party);
 }
 #else
@@ -550,7 +584,7 @@ static void bomhei_use_main(PartyEntry* party) {
     switch (party->useMotionId) {
         case 20:
 #if VERSION <= VERSION_DEMO_JP
-            party->work.bomhei.throwSfxId = psndSFXOn_3D((const char*)PSND_SFX_PARTY_PBM_THROW1, &party->playerPtr->position);
+            se0_on(party, (const char*)PSND_SFX_PARTY_PBM_THROW1);
 #else
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_PBM_THROW1), &party->playerPtr->position);
 #endif
@@ -644,11 +678,11 @@ static void bomhei_use_main(PartyEntry* party) {
         if (BOMHEI_WORK(party)->timer == (s16)sysMsec2Frame(2500)) {
             BOMHEI_WORK(party)->flags |= 2;
 #if VERSION <= VERSION_DEMO_JP
-            party->work.bomhei.sfxId = psndSFXOn_3D((const char*)PSND_SFX_PARTY_PBM_FUSE1, &party->playerPtr->position);
+            se1_on(party, (const char*)PSND_SFX_PARTY_PBM_FUSE1);
 #else
             // the first fuse sound only starts while the second one (FUSE2) is not playing
             if (party->work.bomhei.sfxId2 == -1) {
-                party->work.bomhei.sfxId = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_PBM_FUSE1), &party->playerPtr->position);
+                se1_on(party, SFX_NAME_WORD(PSND_SFX_PARTY_PBM_FUSE1));
             }
 #endif
         } else if (BOMHEI_WORK(party)->timer == (s16)sysMsec2Frame(500)) {
@@ -664,10 +698,7 @@ static void bomhei_use_main(PartyEntry* party) {
 
     switch (party->useMotionId) {
         case 40:
-            if (party->work.bomhei.sfxId != -1) {
-                psndSFXOff(party->work.bomhei.sfxId);
-                party->work.bomhei.sfxId = -1;
-            }
+            se1_off(party);
 
             // Called with no prototype in scope, passing the Vec by value (the callee's Vec* then points at the caller's
             // copy, same values); the copy is in the retail code, so the original called it this way.
@@ -698,15 +729,12 @@ static void bomhei_use_main(PartyEntry* party) {
 
     switch (party->useMotionId) {
         case 50:
-            if (party->work.bomhei.sfxId != -1) {
-                psndSFXOff(party->work.bomhei.sfxId);
-                party->work.bomhei.sfxId = -1;
-            }
+            se1_off(party);
 #if VERSION <= VERSION_DEMO_JP
-            party->work.bomhei.sfxId2 = psndSFXOn_3D((const char*)PSND_SFX_PARTY_PBM_FUSE2, &party->playerPtr->position);
+            se2_on(party, (const char*)PSND_SFX_PARTY_PBM_FUSE2);
 #else
             if (party->work.bomhei.sfxId2 == -1) {
-                party->work.bomhei.sfxId2 = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_PBM_FUSE2), &party->playerPtr->position);
+                se2_on(party, SFX_NAME_WORD(PSND_SFX_PARTY_PBM_FUSE2));
             }
 #endif
             partyChgPose(party, "A_3");
@@ -725,10 +753,7 @@ static void bomhei_use_main(PartyEntry* party) {
                 bomheiChkHitAttr(party);
                 break;
             }
-            if (party->work.bomhei.sfxId2 != -1) {
-                psndSFXOff(party->work.bomhei.sfxId2);
-                party->work.bomhei.sfxId2 = -1;
-            }
+            se2_off(party);
             BOMHEI_WORK(party)->flags &= ~2;
             party->hitobjAction = check_front(party);
             if (mario->flags & MARIO_FLAG_IS_CARRYING_BOBBERY) {
@@ -743,7 +768,8 @@ static void bomhei_use_main(PartyEntry* party) {
     switch (party->useMotionId) {
         case 60: {
             EffectEntry* eff;
-            bomheiCleanSfx(party);
+            se1_off(party);
+    se2_off(party);
 #if VERSION >= VERSION_JP
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_PBM_BOMB1), &party->position);
 #endif

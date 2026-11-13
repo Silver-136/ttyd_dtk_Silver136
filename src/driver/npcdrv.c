@@ -1501,16 +1501,12 @@ f32 npcTransRytoFaceDir(NpcEntry* npc) {
     return 270.0f;
 }
 
-/**
- * Adds half of the move (dx, dz), with the part into the wall normal (nx, nz) removed, to *outX / *outZ,
- * so the NPC slides along the wall.
- */
-static inline void npcSideSlide(f32* outX, f32* outZ, f32 dx, f32 dz, f32 nx, f32 nz) {
-    f32 d = dx * nx + dz * nz;
-    f32 ax = 0.5f * (dx - d * nx);
-    f32 az = 0.5f * (dz - d * nz);
-    *outX += ax;
-    *outZ += az;
+/** Slides a move (vx, vz) along a wall with normal (nx, nz): the move minus its part into the wall, at half speed. */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+static void _reflect(f32 vx, f32 nx, f32 vz, f32 nz, f32* mx, f32* mz) {
+    f32 dot = vx * nx + vz * nz;
+    *mx = 0.5f * (vx - dot * nx);
+    *mz = 0.5f * (vz - dot * nz);
 }
 
 /**
@@ -1523,6 +1519,7 @@ HitEntry* npcHitCheckSide(NpcEntry* npc, f32* outX, f32* outZ, f32* angle, f32 d
     f32 height;
     HitEntry* hit;
     f32 s, c;
+    f32 mx, mz;
 
     *outX = npc->position.x;
     *outZ = npc->position.z;
@@ -1542,7 +1539,9 @@ HitEntry* npcHitCheckSide(NpcEntry* npc, f32* outX, f32* outZ, f32* angle, f32 d
         hit = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, npc->position.x, npc->position.y + height, npc->position.z, s, 0.0f, c);
     }
     if (hit) {
-        npcSideSlide(outX, outZ, dx, dz, nx, nz);
+        _reflect(dx, nx, dz, nz, &mx, &mz);
+        *outX += mx;
+        *outZ += mz;
         if (npc->flags & NPC_FLAG_WALL_BOUNCE) {
             f32 a = reviseAngle(180.0f + *angle);
             f32 b = reviseAngle(angleABf(0.0f, 0.0f, 100.0f * nx, 100.0f * nz));
@@ -1559,7 +1558,9 @@ HitEntry* npcHitCheckSide(NpcEntry* npc, f32* outX, f32* outZ, f32* angle, f32 d
         hit = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, npc->position.x, npc->position.y + height, npc->position.z, s, 0.0f, c);
     }
     if (hit && angleABf(0.0f, 0.0f, sqrtf(nx * nx + nz * nz), -ny) >= 45.0f) {
-        npcSideSlide(outX, outZ, dx, dz, nx, nz);
+        _reflect(dx, nx, dz, nz, &mx, &mz);
+        *outX += mx;
+        *outZ += mz;
         if (npc->flags & NPC_FLAG_WALL_BOUNCE) {
             f32 a = reviseAngle(180.0f + *angle);
             f32 b = reviseAngle(angleABf(0.0f, 0.0f, 100.0f * nx, 100.0f * nz));
@@ -1576,7 +1577,9 @@ HitEntry* npcHitCheckSide(NpcEntry* npc, f32* outX, f32* outZ, f32* angle, f32 d
         hit = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, npc->position.x, npc->position.y + height, npc->position.z, s, 0.0f, c);
     }
     if (hit) {
-        npcSideSlide(outX, outZ, dx, dz, nx, nz);
+        _reflect(dx, nx, dz, nz, &mx, &mz);
+        *outX += mx;
+        *outZ += mz;
         if (npc->flags & NPC_FLAG_WALL_BOUNCE) {
             f32 a = reviseAngle(180.0f + *angle);
             f32 b = reviseAngle(angleABf(0.0f, 0.0f, 100.0f * nx, 100.0f * nz));

@@ -124,6 +124,7 @@ static BOOL checkHarbor(Vec* out);
 #define SHIP_DIR (marioGetPtr()->motShip->flags & 1)
 
 static void shipMove(void);
+static BOOL chkgnd(f32 vy);
 
 /**
  * Facing bit of the boat (motShip flag 2) for the partner follow code in party.c,
@@ -373,12 +374,7 @@ void mot_ship(void) {
     s32 r29, r27;
     f32 f30, f31;
     f32 c;
-    f32 d;
     EventEntry* e;
-    s32 ok;
-    HitEntry* land;
-    f32 ly;
-    MarioWork* mm;
     f32 dd;
 
     if (m->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
@@ -563,25 +559,7 @@ void mot_ship(void) {
         movePos(&m->position.x, &m->position.z, m->baseSpeed, m->directionView);
         m->position.y += m->jumpVelocityY;
         marioMakeJumpPara();
-        f30 = m->jumpVelocityY;
-        mm = marioGetPtr();
-        mm->wPlayerCollisionBox.x = 20.0f;
-        land = marioChkLandon(&ly, f30);
-        mm->wPlayerCollisionBox.x = 40.0f;
-        if (land && ((d = mm->position.y - ly) <= 0.0f || d + f30 <= 0.0f)) {
-            mm->hitobjStandOn = land;
-            mm->position.y = ly;
-            mm->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
-            mm->jumpDistance = __fabsf(distABf(mm->position.x, mm->position.z, mm->lastGroundPos.x, mm->lastGroundPos.z));
-            mm->flags &= ~MARIO_FLAG_STOP_AIR_MOVEMENT;
-            mm->airTimer = 0;
-            mm->jumpPeakAirTime = 0;
-            camFollowYOn();
-            ok = 1;
-        } else {
-            ok = 0;
-        }
-        if (ok) {
+        if (chkgnd(m->jumpVelocityY)) {
             f30 = 0.0f;
             m->jumpVelocityY = f30;
             m->jumpAccelerationY = f30;
@@ -850,33 +828,12 @@ void mot_ship(void) {
         }
         shipMove();
         if ((s32)m->flags & MARIO_FLAG_IS_FALLING) {
-            MarioWork* mm;
-            s32 ok;
-            HitEntry* land;
-            f32 ly;
             marioMakeJumpPara();
             if (m->jumpVelocityY <= -7.0f) {
                 m->jumpVelocityY = -7.0f;
             }
             f30 = m->jumpVelocityY;
-            mm = marioGetPtr();
-            mm->wPlayerCollisionBox.x = 20.0f;
-            land = marioChkLandon(&ly, f30);
-            mm->wPlayerCollisionBox.x = 40.0f;
-            if (land && ((d = mm->position.y - ly) <= 0.0f || d + f30 <= 0.0f)) {
-                mm->hitobjStandOn = land;
-                mm->position.y = ly;
-                mm->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
-                mm->jumpDistance = __fabsf(distABf(mm->position.x, mm->position.z, mm->lastGroundPos.x, mm->lastGroundPos.z));
-                mm->flags &= ~MARIO_FLAG_STOP_AIR_MOVEMENT;
-                mm->airTimer = 0;
-                mm->jumpPeakAirTime = 0;
-                camFollowYOn();
-                ok = 1;
-            } else {
-                ok = 0;
-            }
-            if (!ok) {
+            if (!chkgnd(f30)) {
                 m->position.y += m->jumpVelocityY;
             }
         } else {
@@ -1098,6 +1055,35 @@ static void shipMove(void) {
 #endif
     }
     m->moveDist = len;
+}
+
+/**
+ * Landing check of the boat's jump and fall: with a 20-wide collision box, snaps Mario onto the floor the next vy
+ * step reaches, clears the jump state and air timers, records the jump distance and re-enables camera Y follow.
+ * TRUE when he landed.
+ */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+static BOOL chkgnd(f32 vy) {
+    MarioWork* mario = marioGetPtr();
+    HitEntry* hit;
+    f32 y;
+    f32 d;
+
+    mario->wPlayerCollisionBox.x = 20.0f;
+    hit = marioChkLandon(&y, vy);
+    mario->wPlayerCollisionBox.x = 40.0f;
+    if (hit && ((d = mario->position.y - y) <= 0.0f || d + vy <= 0.0f)) {
+        mario->hitobjStandOn = hit;
+        mario->position.y = y;
+        mario->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
+        mario->jumpDistance = __fabsf(distABf(mario->position.x, mario->position.z, mario->lastGroundPos.x, mario->lastGroundPos.z));
+        mario->flags &= ~MARIO_FLAG_STOP_AIR_MOVEMENT;
+        mario->airTimer = 0;
+        mario->jumpPeakAirTime = 0;
+        camFollowYOn();
+        return TRUE;
+    }
+    return FALSE;
 }
 
 /**

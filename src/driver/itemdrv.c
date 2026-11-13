@@ -2049,6 +2049,14 @@ void itemSetPosition(ItemEntry* entry, f32 x, f32 y, f32 z) {
     entry->position.z = z;
 }
 
+/** Slides a move (vx, vz) along a wall with normal (nx, nz): the move minus its part into the wall, at half speed. */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+static void _reflect(f32 vx, f32 nx, f32 vz, f32 nz, f32* mx, f32* mz) {
+    f32 dot = vx * nx + vz * nz;
+    *mx = 0.5f * (vx - dot * nx);
+    *mz = 0.5f * (vz - dot * nz);
+}
+
 /**
  * Wall check for a moving item: casts a ray along its motion (dx, dz) and, on a wall,
  * returns the hit and the corrected position and reflected direction (degrees) in outX, outZ and angle.
@@ -2058,7 +2066,7 @@ static HitEntry* itemHitCheckSide(ItemEntry* entry, f32* outX, f32 dx, f32* outZ
     f32 a, b;
     f32 hitX, hitY, hitZ, hitDist, hitNX, hitNY, hitNZ;
     f32 dirSin, dirCos;
-    f32 dot, ox, oz;
+    f32 ox, oz;
     f32 h;
 
     *outX = entry->position.x;
@@ -2072,9 +2080,7 @@ static HitEntry* itemHitCheckSide(ItemEntry* entry, f32* outX, f32 dx, f32* outZ
     hit = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ,
         entry->position.x, entry->position.y + h, entry->position.z, dirSin, 0.0f, dirCos);
     if (hit) {
-        dot = dx * hitNX + dz * hitNZ;
-        ox = 0.5f * (dx - dot * hitNX);
-        oz = 0.5f * (dz - dot * hitNZ);
+        _reflect(dx, hitNX, dz, hitNZ, &ox, &oz);
         *outX += ox;
         *outZ += oz;
         a = reviseAngle(180.0f + *angle);
@@ -2087,9 +2093,7 @@ static HitEntry* itemHitCheckSide(ItemEntry* entry, f32* outX, f32 dx, f32* outZ
     hit = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ,
         entry->position.x, entry->position.y + h, entry->position.z, dirSin, 0.0f, dirCos);
     if (hit) {
-        dot = dx * hitNX + dz * hitNZ;
-        ox = 0.5f * (dx - dot * hitNX);
-        oz = 0.5f * (dz - dot * hitNZ);
+        _reflect(dx, hitNX, dz, hitNZ, &ox, &oz);
         *outX += ox;
         *outZ += oz;
         a = reviseAngle(180.0f + *angle);

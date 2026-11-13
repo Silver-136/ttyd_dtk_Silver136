@@ -973,6 +973,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
 
             // Shift-JIS 0x8145 is the middle dot, 0x8140 the full-width space, 0x8151 the full-width low line
 #if VERSION <= VERSION_DEMO_JP
+        // FAKE: dead guard (never runs) at the loop top; without it the US demo object changes
         gz = 0;
         if (gz != 0) {
             y = 0;

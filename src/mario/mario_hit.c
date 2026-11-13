@@ -65,6 +65,14 @@ static f32 _ABCtoAngleY(f32 nx, f32 ny, f32 nz) {
     return angleABf(0.0f, 0.0f, sqrtf(nx * nx + nz * nz), -ny);
 }
 
+/** Slides a move (vx, vz) along a wall with normal (nx, nz): the move minus its part into the wall, at half speed. */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+static void _reflect(f32 vx, f32 nx, f32 vz, f32 nz, f32* mx, f32* mz) {
+    f32 dot = vx * nx + vz * nz;
+    *mx = 0.5f * (vx - dot * nx);
+    *mz = 0.5f * (vz - dot * nz);
+}
+
 /** _ABCtoAngleY for a normal vector. */
 static f32 ABCtoAngleY(Vec* nrm) {
     MarioWork* mario = marioGetPtr();
@@ -2353,13 +2361,6 @@ static inline void sfwVecSet(Vec* d, Vec v) {
     *d = v;
 }
 
-/** wall-slide offset: half of the move vector minus its component along the wall normal */
-static inline void sfwSlide(Vec* n, f32 vx, f32 vz, f32* mx, f32* mz) {
-    f32 dot = vx * n->x + vz * n->z;
-    *mx = 0.5f * (vx - dot * n->x);
-    *mz = 0.5f * (vz - dot * n->z);
-}
-
 // FAKE: two-level wrapper so dir2 is allocated as a nested-inline local (lowest stack slot, COLOURING C2)
 static inline void sfwVecSetNested(Vec* d, Vec v) {
     sfwVecSet(d, v);
@@ -2480,7 +2481,7 @@ static HitEntry* searchFrontWall(Vec* pos, f32* h, f32 dx, f32 dz, f32 w) {
         }
     }
     if (best) {
-        sfwSlide(&bestNrm, s * dx, c * dx, &mx, &mz);
+        _reflect(s * dx, bestNrm.x, c * dx, bestNrm.z, &mx, &mz);
     }
     hit2 = NULL;
     sincosf(&s2, &c2, dz + 45.0f);
