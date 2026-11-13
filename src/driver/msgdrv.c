@@ -970,7 +970,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
         check = *((const u8*)msg);
         if (_ismbblead((u8)check)) {
             glyph = kanjiSearch(*((const u16*)msg));
-            ww = scale * ((f32)(kanjiGetWidth((u16)(glyph + 0)) + 4));
+            ww = scale * ((f32)(kanjiGetWidth(glyph) + 4));
             entry->glyph = glyph;
             entry->x = x;
             entry->y = y - (s16)(10.0f * scale);
@@ -996,15 +996,13 @@ void msgAnalize(smartEntry* smart, char* msg) {
 #endif
             glyph = kanjiSearch(*(u16*)msg);
 #if VERSION >= VERSION_US
-            // FAKE: (u16)(glyph + 0) re-truncates the argument; kanjiGetWidth(glyph) changes the object
-            ww = scale.x * (f32)(kanjiGetWidth((u16)(glyph + 0)) + 4);
+            ww = scale.x * (f32)(kanjiGetWidth(glyph) + 4);
             entry->glyph = glyph;
             entry->x = x;
             entry->y = y - (s16)(10.0f * scale.y);
             entry->scale = scale.x;
 #else
-            // FAKE: (u16)(glyph + 0) re-truncates the argument; kanjiGetWidth(glyph) changes the object
-            ww = scale * (f32)(kanjiGetWidth((u16)(glyph + 0)) + 4);
+            ww = scale * (f32)(kanjiGetWidth(glyph) + 4);
             entry->glyph = glyph;
             entry->x = x;
             entry->y = y - (s16)(10.0f * scale);
@@ -1402,7 +1400,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
                     }
                     else {
                         glyph = kanjiSearch(0x94B5);
-                        iw = scale * ((f32)(kanjiGetWidth((u16)(glyph + 0)) + 4));
+                        iw = scale * ((f32)(kanjiGetWidth(glyph) + 4));
                         entry->glyph = glyph;
                         entry->x = x;
                         entry->y = y - (s16)(10.0f * scale);
@@ -1434,8 +1432,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
                             glyph = hankakuSearch(-48);
                         }
 
-                        // FAKE: (u16)(glyph + 0) re-truncates the argument; kanjiGetWidth(glyph) changes the object
-                        iw = scale.x * (f32)(kanjiGetWidth((u16)(glyph + 0)) + 4);
+                        iw = scale.x * (f32)(kanjiGetWidth(glyph) + 4);
                         entry->glyph = glyph;
                         entry->x = x;
                         entry->y = y - (s16)(10.0f * scale.y);
@@ -1443,8 +1440,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
 #else
                         glyph = kanjiSearch(0x94B5);
 
-                        // FAKE: (u16)(glyph + 0) re-truncates the argument; kanjiGetWidth(glyph) changes the object
-                        iw = scale * (f32)(kanjiGetWidth((u16)(glyph + 0)) + 4);
+                        iw = scale * (f32)(kanjiGetWidth(glyph) + 4);
                         entry->glyph = glyph;
                         entry->x = x;
                         entry->y = y - (s16)(10.0f * scale);
@@ -1542,18 +1538,16 @@ void msgAnalize(smartEntry* smart, char* msg) {
                     for (k = 0; k < half; k++) {
                         glyph = kanjiSearch(*(u16*)&tag[(u32)j]);
 #if VERSION <= VERSION_DEMO_JP
-                        total += (s32)(0.55f * (scale * ((f32)(kanjiGetWidth((u16)(glyph + 0)) + 4))));
+                        total += (s32)(0.55f * (scale * ((f32)(kanjiGetWidth(glyph) + 4))));
                         j += 2;
                     }
                     total = (u16)total - (0.55f * (4.0f * scale));
                     rubyX = ((rubyX + x) - 4.0f * scale - (u16)total) / 2;
 #else
 #if VERSION >= VERSION_US
-                        // FAKE: (u16)(glyph + 0) re-truncates the argument; kanjiGetWidth(glyph) changes the object
-                        total += (s32)(0.55f * (scale.y * (f32)(kanjiGetWidth((u16)(glyph + 0)) + 4)));
+                        total += (s32)(0.55f * (scale.y * (f32)(kanjiGetWidth(glyph) + 4)));
 #else
-                        // FAKE: (u16)(glyph + 0) re-truncates the argument; kanjiGetWidth(glyph) changes the object
-                        total += (s32)(0.55f * (scale * (f32)(kanjiGetWidth((u16)(glyph + 0)) + 4)));
+                        total += (s32)(0.55f * (scale * (f32)(kanjiGetWidth(glyph) + 4)));
 #endif
                         j += 2;
                     }
@@ -1586,13 +1580,11 @@ void msgAnalize(smartEntry* smart, char* msg) {
                         }
                         glyph = kanjiSearch(*(u16*)&tag[(u32)nn[0]]);
 #if VERSION <= VERSION_DEMO_JP
-                        wwR = 0.55f * (scale * ((f32)(kanjiGetWidth((u16)(glyph + 0)) + 4)));
+                        wwR = 0.55f * (scale * ((f32)(kanjiGetWidth(glyph) + 4)));
 #elif VERSION >= VERSION_US
-                        // FAKE: (u16)(glyph + 0) re-truncates the argument; kanjiGetWidth(glyph) changes the object
-                        wwR = 0.55f * (scale.x * (f32)(kanjiGetWidth((u16)(glyph + 0)) + 4));
+                        wwR = 0.55f * (scale.x * (f32)(kanjiGetWidth(glyph) + 4));
 #else
-                        // FAKE: (u16)(glyph + 0) re-truncates the argument; kanjiGetWidth(glyph) changes the object
-                        wwR = 0.55f * (scale * (f32)(kanjiGetWidth((u16)(glyph + 0)) + 4));
+                        wwR = 0.55f * (scale * (f32)(kanjiGetWidth(glyph) + 4));
 #endif
                         entry->glyph = glyph;
                         entry->x = rubyX;
@@ -1639,7 +1631,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
                     glyphD = hankakuSearch(check);
                 }
 #if VERSION <= VERSION_DEMO_JP
-                wwD = scale * ((f32)(kanjiGetWidth((u16)(glyphD + 0)) + 2));
+                wwD = scale * ((f32)(kanjiGetWidth(glyphD) + 2));
                 entry->glyph = glyphD;
                 entry->x = x;
                 entry->y = y - (s16)(10.0f * scale);
@@ -1648,15 +1640,13 @@ void msgAnalize(smartEntry* smart, char* msg) {
                 if ((*((const s8*)msg)) != ' ') {
 #else
 #if VERSION >= VERSION_US
-                // FAKE: (u16)(glyphD + 0) re-truncates the argument; kanjiGetWidth(glyphD) changes the object
-                wwD = scale.x * (f32)(kanjiGetWidth((u16)(glyphD + 0)) + 2);
+                wwD = scale.x * (f32)(kanjiGetWidth(glyphD) + 2);
                 entry->glyph = glyphD;
                 entry->x = x;
                 entry->y = y - (s16)(10.0f * scale.y);
                 entry->scale = scale.x;
 #else
-                // FAKE: (u16)(glyphD + 0) re-truncates the argument; kanjiGetWidth(glyphD) changes the object
-                wwD = scale * (f32)(kanjiGetWidth((u16)(glyphD + 0)) + 2);
+                wwD = scale * (f32)(kanjiGetWidth(glyphD) + 2);
                 entry->glyph = glyphD;
                 entry->x = x;
                 entry->y = y - (s16)(10.0f * scale);

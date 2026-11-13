@@ -3123,7 +3123,8 @@ static BOOL BattleCommandAttackAudienceCheck(void) {
 // front end's simple optimizer pass, which gives the target's string base register; without it r5/r6 swap
 #pragma auto_inline on
 static USER_FUNC(_get_msg) {
-    s32 index = event->args[0];
+    EvtWord* args = event->args;
+    s32 index = *args++;
     BattleWork* wp = _battleWorkPointer;
     const char* msg;
 
@@ -3131,8 +3132,6 @@ static USER_FUNC(_get_msg) {
         case CMD_DISABLE_NO_FP:
             msg = "btl_msg_cmderror_no_fp";
 
-            // FAKE: empty if that only reads event->args (twice); without it case 1 is scheduled differently
-            if (!event->args && !event->args) {}
             break;
         case CMD_DISABLE_NO_SP:
             msg = "btl_msg_cmderror_no_ap";

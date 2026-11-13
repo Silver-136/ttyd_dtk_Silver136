@@ -75,7 +75,6 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | rels/tik/src/tik_05.c | tiz_broken_draw | copy temp; plain nx = dx / len changes regalloc (+4 B) | see comment |
 | Both | rels/tou/src/tou.c | tou_champion_belt | the work is read through a pointer to the userdata slot (EffStarStoneWork**, as in tou2), so userdata is reloaded at every store | typed `EffStarStoneWork*` local, direct `eff->userdata` cast: object differs (A2) |
 | Both | rels/tou/src/tou_02.c | ext_fan_main | hand-inlined randf(135.0f, 225.0f) (same rand() call, r*90+135), 6.28 first so its pool address is created before 90/135 as in the target | see comment |
-| Both | rels/win/src/window/win_04.c | ss_ch_check | (decomp-permuter): reorders the args[1] load | see comment |
 | Both | src/battle/ac/ac_button_down.c | battleAcMain_ButtonDown | the button[]/pressed[] indexes are cast (u32) (i, j >= 0 there, same value); the cast stops IR strength reduction so the backend emits the target addi/lwzx and the shared offset IV. allDone is declared first for the register ... | plain `i` index 81.69 (lab), byte-offset off/off2 forms 97.38 |
 | Both | src/battle/ac/ac_timing_a.c | battleAcDisp_TimingA | register-held index; also read uninitialized on the else path below. Literal 4 / slot = 4 at decl both differ | literal 4; `int slot = 4` at declaration |
 | Both | src/battle/battle_ac_help.c | _ac_help_disp | register-promoted array; one msg pointer differs | see comment |
@@ -140,7 +139,6 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | src/sound.c | _sscallback | len2/buffer1/buffer2 are copied from the params into locals of a different type (unsigned int, s16*) so IRO cannot propagate the copies; the params then coalesce into r3/r5/r6 and these statement copies give the target order len1 ...; dst (not a u8* dst8) for the byte copies, so dst's split webs number above i/n; loop 2 reads through its own copy of src8; the copy takes the pre-RA scheduler's cycle-1 slot so `mr dst,buffer2` issues after mulhwu (magic constant and dst then share r3, as in the target); the copy itself colours to a ... US: len1 is also a local copy of its parameter, copied first, so it leaves r4 before the sound base is formed. | see comment |
 | Both | src/unit/party/unit_party_chuchurina.c | _chuchu_item_steal | no-op (u16) casts (item is u16); the plain call changes the object | see comment |
 | Both | src/unit/party/unit_party_yoshi.c | yoshi_original_color_anim_set | empty test of the uninitialised part pointer; removing it changes codegen | see comment |
-| JP | src/window/win_mario.c | winMarioDisp | dead store; makes y the first float referenced, so its later web (the mode label x) is split before x's (register order) | without the dead store 4 rows (f19/f20 swap); `y = y;` also works; statement swaps of x/y loads change load order |
 | US | src/window/win_mario.c | winMarioDisp | every float live range in its own named variable; one-element copies q1/q2 of row0/row1 are kept live across rowC by two dead int guards (gz is 0, no code) | see comment |
 | Both | src/party.c | partyHelloMain, partyRideMain | no-op `(PartyEntry*)party` cast on the moveFrames shrink-timer accesses (was raw `*(s32*)((u8*)party + 0x24)`); the plain field reschedules the int->float conversion | `party->moveFrames`, `*&party->moveFrames`, `(&party->moveFrames)[0]`, `*(s32*)&party->moveFrames`, `*(&party->moveFrames + 0)`, stores-only as field: all reschedule |
 | Both | src/motion/mot_roll.c | mot_roll | no-op `(MarioWork*)mario` cast on the directionView/groundRot.x/.z accesses (10 sites, were raw `MF(0x1a0/0x218/0x220)`); the plain field reorders a const load (lis/lfs) | `mario->field` per line, `*&field`, `(&field)[0]`, `(*mario).field`, inlining into angOut: all reorder |
@@ -160,7 +158,7 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | src/battle/battle_camera.c | evt_btl_camera_set_homing_unitparts | u holds the priority word first and is compared as `(EvtWord)u` (one register in the target) | separate `s32 pri` local, declared first, last, or set in a comma expression (all mismatch, longer code) |
 | Both | src/battle/battle_seq_command.c | BattleCommandInput | `(EvtWord)weapon == (EvtWord)&ItemWeaponData_Naniga_Okorukana` gives the target's signed cmpw | `wp = work`, `&work[0]`, `work + 0` (r22, 51 lines differ); plain pointer compare (cmplw) |
 | Both | rels/end/src/end_00.c | (data: `fd_end_00_*` dtrigf constants) | the unit's dtrigf constants are hand-made globals: in the original they follow the unit's own data instead of leading it, so the unit is built without msl_rel.pch (PCH_EXCLUDE in configure.py) | msl_rel.pch: constants placed first, end.rel 4 bytes short (R) |
-| Both | src/battle/battle_seq_command.c | _get_msg | empty `if (!event->args && !event->args) {}` in case 1; `#pragma auto_inline on` around the function in this `-inline noauto` unit (as an auto-inline candidate it gets the front end's simple optimizer pass: target string base register) | removing either changes the object in both versions (dead_probe.py; five declaration/argument orders under noauto) |
+| Both | src/battle/battle_seq_command.c | _get_msg | `#pragma auto_inline on` around the function in this `-inline noauto` unit (as an auto-inline candidate it gets the front end's simple optimizer pass: target string base register) | removing either changes the object in both versions (dead_probe.py; five declaration/argument orders under noauto) |
 | Both | src/event/evt_sub.c | coin_fmt | `#pragma force_active` keeps evt_npc's orphan "%f%f%f" (from the dead-stripped evt_npc_set_position_xls) at the start of evt_sub's .rodata; JP and later only | see comment |
 | Both | src/manager/fontmgr.c | FontDrawMessageMtx | `scale = scale;` before iconDispGxAlpha | removing it changes the object in both versions (dead_probe.py) |
 | Both | src/mario/mario_kemuri.c | mario_kemuri | `s = s;` as the then-branch of the dokan check | removing it changes the object in both versions (dead_probe.py) |
@@ -181,11 +179,6 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | src/battle/battle_audience.c | BattleAudienceJoy_Sub | no-op (s32) cast; `a + b` changes the object | see comment |
 | Both | src/battle/battle_disp.c | btlUnitItemDisp | per-function opt_dead_assignments off keeps the unused height store; without it the object changes; float-first cast of iconDispGx (the plain call changes the object) | see comment |
 | Both | src/battle/battle_disp.c | btlUnitStolenItemDisp | float-first cast of iconDispGx; the plain call changes the object | see comment |
-| Both | src/battle/battle_event_cmd.c | btlevtcmd_GetRGB | args is reused to hold the blue index; indexB = args[4] changes the object | see comment |
-| Both | src/battle/battle_event_cmd.c | btlevtcmd_PreCheckDamage | args is reused to hold the result index; out = args[5] changes the object | see comment |
-| Both | src/battle/battle_event_cmd.c | btlevtcmd_CheckDamage | args is reused to hold the result index; a separate out local changes the object | see comment |
-| Both | src/battle/battle_event_cmd.c | btlevtcmd_PadCheckTrigger | args is reused to hold the result index; a separate index local changes the object | see comment |
-| Both | src/battle/battle_event_cmd.c | btlevtcmd_PadCheckNow | args is reused to hold the result index; a separate index local changes the object | see comment |
 | Both | src/battle/battle_event_cmd.c | btlevtcmd_DrawLots | pick index and running sum kept in `s32 nv[2]` | two scalar locals: changes the object |
 | Both | src/battle/battle_icon.c | btlIconStrippedPool | not called anywhere; it only places the literals 0.0f, 1.0f and 0.5f in this object's constant pool. | see comment |
 | Both | src/battle/battle_mario.c | (file scope) | no-op (char*) cast; PTR(battle_mario_nullstr) changes the object; battle_mario_nullstr itself is a 4-byte static array (STRING("") at both uses changes the object) | see comment |
@@ -194,7 +187,6 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | src/battle/battle_seq_command.c | _btlcmd_MakeSelectWeaponTable | top is a spare copy of cursor->relPos; testing cursor->relPos directly changes the object | see comment |
 | Both | src/battle/battle_seq_command.c | _btlcmd_SelectWeaponDecide | (s32) cast on the s8 attackDirection passed as s8; dropping it changes the object | BattleSamplingEnemy with s32 belong (7 units change) |
 | Both | src/battle/battle_seq_command.c | _btlcmd_SetAttackEvent | compares the pointers as signed integers (cmpw); the plain pointer compare changes the object | see comment |
-| Both | src/battle/battle_seq_end.c | _set_confetti_control_evtid | empty triple NULL test of seqEndWork; removing it changes the object | see comment; tried 2026-11-01: removal or swapped declarations: args and work loads swap; demos have the same empty test, no evidence of an assert macro |
 | Both | src/sound.c | SoundLoadDVD2 | dead store; removing it changes the object | see comment |
 | Both | src/sound.c | SoundDVDMain | u32 counter with a signed compare; a plain int counter changes the object | see comment |
 | Both | src/sound.c | SoundSSMain | u32 counter with a signed compare; a plain int counter changes the object | see comment |
@@ -208,7 +200,6 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | src/battle/ac/ac_lst_rc_keep.c | battleAcMain_LstRcKeep | byte-offset index (off >> 2) and the n >= 0 guard; the plain loop over ac_lstrckeep_iconname[i] changes the object | see comment |
 | Both | src/battle/ac/ac_repeatedly_lv.c | actionCommandDisp | spare temporary w for the 108.0f offset; the plain constant changes the object | see comment |
 | Both | src/battle/ac/ac_timing_a.c | battleAcMain_TimingA | flags reached through a second cast of the work buffer instead of tw; tw->flags changes the object | see comment |
-| Both | src/battle/battle_stage_object.c | _bgset_kemuri_effect | args++/args-- cancel out; removing them changes the object | see comment |
 | Both | src/battle/battle_stage_object.c | _nozzle_work_effect | the sum goes through rot first; rot = reviseAngle(90.0f + angle1) changes the object | see comment |
 | Both | src/battle/battle_status_effect.c | _st_chg_msg_disp | called through a cast prototype taking the color's address (WakuColByRefFunc), passing the color by value changes the object | see comment |
 | Both | src/battle/sac/sac_deka.c | yuka_disp | YUKA_POSITION macro and an explicit `fifo = &GXWGFifo` before the loop stand in for the SDK GXPosition3f32 (the volatile is the SDK's own) | GXPosition3f32(v->x, v->y, v->z) matches the z, y, x reads but puts the FIFO address load (lis) after the loop counter setup; a for loop or an earlier `i = 0` do not help |
@@ -259,8 +250,6 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | src/manager/cardmgr.c | memcard_probe | self-assignment with no effect; without it the object changes | see comment |
 | Both | src/manager/evtmgr_cmd.c | evtGetValue | result stored back into index; return (mask & data) != 0 changes the object | see comment |
 | Both | src/manager/filemgr.c | fileGarbageDataAdrSet | no-op (u16) cast on the u16 counter; the plain comparison changes the object; descriptor reads/stores through byte offsets (off/off2) | int i without the cast |
-| Both | src/manager/fontmgr.c | fontDrawPairX | no-op (s16) casts on iy; the plain argument changes the object | see comment |
-| Both | src/manager/fontmgr.c | fontDrawPairY | no-op (s16) casts on ix; the plain argument changes the object | see comment |
 | Both | src/manager/fontmgr.c | FontGetMessageWidthLine | empty dead test of code; removing it changes the object | see comment; tried 2026-11-01: demos checked: same empty test, no code in any version; __assert/__assert2 are UNUSED in the JP demo map; no evidence of a macro |
 | Both | src/event/evt_win.c | ICONGX2 (evt_win list displays) | iconDispGx called through a (Vec*, u16, f32, u16) function-pointer cast macro (9 uses) | plain iconDispGx(pos, flags, id, scale): changes the object |
 | Both | src/mario/mario.c | marioReInit | spare copy t of paperPoseId; testing poseId directly changes the object | see comment |

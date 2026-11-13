@@ -517,7 +517,7 @@ void winMarioDisp(s32 camId, void* param, s32 idx) {
 #if VERSION <= VERSION_DEMO_JP
     f32 left;
     f32 x;
-    f32 y;
+    f32 y = 0.0f;
     f32 rowA;
     f32 rowB;
     f32 cx;
@@ -531,7 +531,7 @@ void winMarioDisp(s32 camId, void* param, s32 idx) {
     f32 rubyW;
 #elif VERSION < VERSION_US
     f32 x;
-    f32 y;
+    f32 y = 0.0f;
     f32 rowA;
     f32 rowB;
     f32 cx;
@@ -556,10 +556,6 @@ void winMarioDisp(s32 camId, void* param, s32 idx) {
     s32 gz;
 
     w = param;
-#if VERSION < VERSION_US
-    // FAKE: dead store; makes y the first float referenced, so its later web (the mode label x) is split before x's (register order)
-    y = 0.0f;
-#endif
     pouch = pouchGetPtr();
     white = (GXColor){0xFF, 0xFF, 0xFF, 0xFF};
     black = (GXColor){0x00, 0x00, 0x00, 0xFF};

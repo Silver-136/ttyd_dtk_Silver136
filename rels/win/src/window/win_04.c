@@ -613,11 +613,10 @@ static EVT_BEGIN(dummy2_jump)
 EVT_END()
 
 static USER_FUNC(ss_ch_check) {
-    u64 out; // FAKE: reorders the args[1] load
     EvtWord* args = event->args;
-    s32 index = evtGetValue(event, args[0]);
+    s32 index = evtGetValue(event, *args++);
+    s32 out = *args++;
 
-    out = args[1];
     evtSetFloat(event, out, ssf[index]);
     return EVT_RETURN_DONE;
 }

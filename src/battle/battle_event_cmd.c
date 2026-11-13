@@ -837,18 +837,16 @@ USER_FUNC(btlevtcmd_GetRGB) {
     BattleUnitPart* part;
     s32 indexR, indexG, indexB;
 
-    id = evtGetValue(event, args[0]);
-    partId = evtGetValue(event, args[1]);
+    id = evtGetValue(event, *args++);
+    partId = evtGetValue(event, *args++);
     id = BattleTransID(event, id);
     part = BattleGetUnitPartsPtr(id, partId);
-    indexR = args[2];
-    indexG = args[3];
-
-    // FAKE: args is reused to hold the blue index; indexB = args[4] changes the object
-    args = (EvtWord*)args[4];
+    indexR = *args++;
+    indexG = *args++;
+    indexB = *args++;
     evtSetValue(event, indexR, part->color.r);
     evtSetValue(event, indexG, part->color.g);
-    evtSetValue(event, (EvtWord)args, part->color.b);
+    evtSetValue(event, indexB, part->color.b);
     return EVT_RETURN_DONE;
 }
 
@@ -3865,24 +3863,22 @@ USER_FUNC(btlevtcmd_PreCheckDamage) {
     s32 out;
     s32 flags;
 
-    id = evtGetValue(event, args[0]);
+    id = evtGetValue(event, *args++);
     id = BattleTransID(event, id);
     attacker = BattleGetUnitPtr(wp, id);
-    id2 = evtGetValue(event, args[1]);
+    id2 = evtGetValue(event, *args++);
     id2 = BattleTransID(event, id2);
     target = BattleGetUnitPtr(wp, id2);
-    pno = evtGetValue(event, args[2]);
+    pno = evtGetValue(event, *args++);
     part = BtlUnit_GetPartsPtr(target, pno);
-    weapon = (BattleWeapon*)evtGetValue(event, args[3]);
-    flags = args[4];
-
-    // FAKE: args is reused to hold the result index; out = args[5] changes the object
-    args = (EvtWord*)args[5];
+    weapon = (BattleWeapon*)evtGetValue(event, *args++);
+    flags = *args++;
+    out = *args++;
     res = BattlePreCheckDamage(attacker, target, part, weapon, flags);
     if (res < 0) {
         return EVT_RETURN_FINISH;
     }
-    evtSetValue(event, (EvtWord)args, res);
+    evtSetValue(event, out, res);
     if (!evtCheckID(event->eventId)) {
         return EVT_RETURN_FINISH;
     }
@@ -4016,25 +4012,24 @@ USER_FUNC(btlevtcmd_CheckDamage) {
     s32 pno;
     s32 flags;
     s32 res;
+    s32 out;
 
-    id = evtGetValue(event, args[0]);
+    id = evtGetValue(event, *args++);
     id = BattleTransID(event, id);
     attacker = BattleGetUnitPtr(wp, id);
-    id2 = evtGetValue(event, args[1]);
+    id2 = evtGetValue(event, *args++);
     id2 = BattleTransID(event, id2);
     target = BattleGetUnitPtr(wp, id2);
-    pno = evtGetValue(event, args[2]);
+    pno = evtGetValue(event, *args++);
     part = BtlUnit_GetPartsPtr(target, pno);
-    weapon = (BattleWeapon*)evtGetValue(event, args[3]);
-    flags = args[4];
-
-    // FAKE: args is reused to hold the result index; a separate out local changes the object
-    args = (EvtWord*)args[5];
+    weapon = (BattleWeapon*)evtGetValue(event, *args++);
+    flags = *args++;
+    out = *args++;
     res = BattleCheckDamage(attacker, target, part, weapon, flags);
     if (res < 0) {
         return EVT_RETURN_FINISH;
     }
-    evtSetValue(event, (EvtWord)args, res);
+    evtSetValue(event, out, res);
     if (!evtCheckID(event->eventId)) {
         return EVT_RETURN_FINISH;
     }
@@ -7003,15 +6998,14 @@ USER_FUNC(btlevtcmd_EnemyItemUseCheck) {
 /** Script: returns TRUE in args[2] when a button in the mask args[1] was just pressed on controller args[0]. */
 USER_FUNC(btlevtcmd_PadCheckTrigger) {
     EvtWord* args = event->args;
-    s32 chan = evtGetValue(event, args[0]);
-    s32 mask = args[1];
+    s32 chan = evtGetValue(event, *args++);
+    s32 mask = *args++;
+    EvtWord out = *args++;
 
-    // FAKE: args is reused to hold the result index; a separate index local changes the object
-    args = (EvtWord*)args[2];
     if (BattlePadMultiCheckTrigger(chan, mask)) {
-        evtSetValue(event, (EvtWord)args, TRUE);
+        evtSetValue(event, out, TRUE);
     } else {
-        evtSetValue(event, (EvtWord)args, FALSE);
+        evtSetValue(event, out, FALSE);
     }
     return EVT_RETURN_DONE;
 }
@@ -7019,15 +7013,14 @@ USER_FUNC(btlevtcmd_PadCheckTrigger) {
 /** Script: returns TRUE in args[2] when a button in the mask args[1] is held on controller args[0]. */
 USER_FUNC(btlevtcmd_PadCheckNow) {
     EvtWord* args = event->args;
-    s32 chan = evtGetValue(event, args[0]);
-    s32 mask = args[1];
+    s32 chan = evtGetValue(event, *args++);
+    s32 mask = *args++;
+    EvtWord out = *args++;
 
-    // FAKE: args is reused to hold the result index; a separate index local changes the object
-    args = (EvtWord*)args[2];
     if (BattlePadMultiCheckNow(chan, mask)) {
-        evtSetValue(event, (EvtWord)args, TRUE);
+        evtSetValue(event, out, TRUE);
     } else {
-        evtSetValue(event, (EvtWord)args, FALSE);
+        evtSetValue(event, out, FALSE);
     }
     return EVT_RETURN_DONE;
 }

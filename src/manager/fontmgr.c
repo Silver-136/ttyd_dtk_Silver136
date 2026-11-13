@@ -409,22 +409,20 @@ void FontDrawStringVecPitch(Vec pos, f32 pitch, const s8* msg) {
 
 /** The left/right pair of outline copies for a float position (truncated to pixels). */
 static inline void fontDrawPairX(u16 code, f32 x, f32 y) {
-    s16 ix = x;
-    s16 iy = y;
+    const s16 ix = x;
+    const s16 iy = y;
 
-    // FAKE: no-op (s16) casts on iy; the plain argument changes the object
-    _JUTFont_DrawPos(code, ix - 2, (s16)iy);
-    _JUTFont_DrawPos(code, ix + 2, (s16)iy);
+    _JUTFont_DrawPos(code, ix - 2, iy);
+    _JUTFont_DrawPos(code, ix + 2, iy);
 }
 
 /** The down/up pair of outline copies for a float position (truncated to pixels). */
 static inline void fontDrawPairY(u16 code, f32 x, f32 y) {
-    s16 ix = x;
-    s16 iy = y;
+    const s16 ix = x;
+    const s16 iy = y;
 
-    // FAKE: no-op (s16) casts on ix; the plain argument changes the object
-    _JUTFont_DrawPos(code, (s16)ix, iy - 2);
-    _JUTFont_DrawPos(code, (s16)ix, iy + 2);
+    _JUTFont_DrawPos(code, ix, iy - 2);
+    _JUTFont_DrawPos(code, ix, iy + 2);
 }
 
 /** Draws one glyph at x, y in the already-loaded matrix, with the outline first when FontDrawEdge is on. */
@@ -742,7 +740,7 @@ u16 kanjiSearch(u32 code) {
 }
 
 /** A glyph's advance width in pixels (code is a glyph index, not a character code). */
-u16 kanjiGetWidth(u16 code) {
+u16 kanjiGetWidth(u32 code) {
     return JUTFont_GetWidthEntry(code)->width;
 }
 

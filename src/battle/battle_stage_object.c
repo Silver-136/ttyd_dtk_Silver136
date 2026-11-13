@@ -2975,11 +2975,8 @@ static USER_FUNC(_bgset_kemuri_effect) {
     f32 x, y, z;
 
     wp = _battleWorkPointer;
-    layer = evtGetValue(event, args[0]);
+    layer = evtGetValue(event, *args++);
     for (i = 0; i < 32; i++) {
-        // FAKE: args++/args-- cancel out; removing them changes the object
-        args++;
-        args--;
         obj = &wp->stageObjects[i];
         if (obj->id > 0 && obj->data->layer == layer) {
             x = obj->position.x;

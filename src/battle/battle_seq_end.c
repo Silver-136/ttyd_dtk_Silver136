@@ -1584,10 +1584,7 @@ static USER_FUNC(_set_confetti_control_evtid) {
     EvtWord* args = event->args;
     BattleSeqEndWork* work = _battleWorkPointer->seqEndWork;
 
-    // FAKE: empty triple NULL test of seqEndWork; removing it changes the object
-    if (!_battleWorkPointer->seqEndWork && !_battleWorkPointer->seqEndWork && !_battleWorkPointer->seqEndWork) {
-    }
-    work->confettiEvtId = evtGetValue(event, args[0]);
+    work->confettiEvtId = evtGetValue(event, *args++);
 
     return 2;
 }
