@@ -780,8 +780,9 @@ static s32 collisionCurve(s32 mode, void* curve, Vec pos, CamRoadHit* hit) {
     return ret;
 }
 
-// FAKE: cos through an inline so the first-block cs is an inline @ temp (numbered above the hoisted +-1 constants, f15 as in the target)
+/** cos and sin of an angle in radians, as floats. */
 static inline f32 camRoadCos(f32 x) { return (f32)cos(x); }
+static inline f32 camRoadSin(f32 x) { return (f32)sin(x); }
 
 // FAKE: l2 through an inline so it is an inline @ temp (numbered with the sgn ?: temps) -> 2nd-web lim1/lim2 colour f27/f25 as in the target
 static inline f32 crMul(f32 a, f32 b) { return a * b; }
@@ -1009,7 +1010,7 @@ static void calcCamRoad(CamRoadState* out, CamRoadState* prev, f32 xA, f32 yA, f
         zoom = 1.0f;
         if (shiftWeight && hitCurve != NULL && prev->on) {
             cs = camRoadCos(fov);
-            sn = (f32)sin(fov);
+            sn = camRoadSin(fov);
             mnz = -nz;
             w = 0.01f * (prev->f_58 * (zoom * (640.0f * (dist * sn / cs) / 480.0f)));
             found = 0;
@@ -1047,8 +1048,8 @@ static void calcCamRoad(CamRoadState* out, CamRoadState* prev, f32 xA, f32 yA, f
                 qz = z;
             }
 
-            cs2 = (f32)cos(fov);
-            sn = (f32)sin(fov);
+            cs2 = camRoadCos(fov);
+            sn = camRoadSin(fov);
             w = 0.01f * (shiftWeight * (zoom * (640.0f * (dist * sn / cs2) / 480.0f)));
             found2 = 0;
             flags = 0;

@@ -1687,6 +1687,10 @@ static void itemseq_GetItem(ItemEntry* entry) {
 // Unused 4-byte object, read by nothing; the original had it too (its storage is in the retail .sbss). Name invented.
 static s32 _move_dir_1090;
 
+/** sin and cos of an angle in degrees. */
+static inline f32 sind(f32 deg) { return sin(6.2831855f * deg / 360.0f); }
+static inline f32 cosd(f32 deg) { return cos(6.2831855f * deg / 360.0f); }
+
 /**
  * Moves a bouncing or falling item: gravity, bouncing off floors (with fewer, lower bounces each time),
  * walls and ceilings, landing on map objects, water and lava, and despawning where needed;
@@ -1794,13 +1798,8 @@ static void itemseq_Bound(ItemEntry* entry) {
             dt = OSTicksToMicroseconds(delta) / 1000000.0f;
             t1 = OSTicksToMicroseconds(entry->airTime) / 1000000.0f;
             t2 = OSTicksToMicroseconds(entry->airTime + delta) / 1000000.0f;
-            dx = dt * (entry->speed * (f32)sin(6.2831855f * entry->direction / 360.0f));
-
-            // FAKE: cos result in a local
-            {
-                f32 c = cos(6.2831855f * entry->direction / 360.0f);
-                dz = dt * (entry->speed * -c);
-            }
+            dx = dt * (entry->speed * sind(entry->direction));
+            dz = dt * (entry->speed * -cosd(entry->direction));
             if (entry->flags2 & ITEM_FLAG2_NO_Z_MOVE) {
                 dz = 0.0f;
             }

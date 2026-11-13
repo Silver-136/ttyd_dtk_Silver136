@@ -81,22 +81,13 @@ static inline s32 angOut(f32 center, f32 half, f32 x) {
     return r;
 }
 
-// FAKE: k025/rabs/rollRad/rollCos/rSin are invented one-line inline helpers. Their result temps get
-// later inline numbering, which gives the target FPR colouring in mot_roll (fmadds operand order, stickAngOut c
-// in f31) and makeOfs (v26 in f26, fabs/sin/cos volatiles). Behaviour-identical to the expressions they wrap.
+/** sin and cos of an angle in degrees. */
+static inline f32 sind(f32 deg) { return sin(3.1415927f * deg / 180.0f); }
+static inline f32 cosd(f32 deg) { return cos(3.1415927f * deg / 180.0f); }
+
+// FAKE: k025 is an invented one-line inline helper. Its result temp gets later inline numbering, which gives the
+// target FPR colouring in mot_roll (fmadds operand order). Behaviour-identical to the 0.025f it wraps.
 static inline f32 k025(void) { return 0.025f; }
-
-/** sin of a (radians) as a float. */
-static inline f32 rSin(f32 a) { return (f32)sin(a); }
-
-/** Absolute value of x. */
-static inline f32 rabs(f32 x) { return __fabsf(x); }
-
-/** Degrees to radians. */
-static inline f32 rollRad(f32 d) { return 3.1415927f * d / 180.0f; }
-
-/** cos of a (radians) as a float. */
-static inline f32 rollCos(f32 a) { return (f32)cos(a); }
 
 /** 1 if the control stick points outside +/-half degrees of Mario's move direction (angOut with the stick angle). */
 // Returns 1 when the stick direction lies outside moveDirection +/- half degrees (angOut with both angles read here).
@@ -1010,17 +1001,16 @@ void mot_roll(void) {
         nz = distABf(nx, nx, stickX, stickY);
         v31 = angleABf(0.0f, 0.0f, stickX, stickY);
         v31 = revise360(mario->targetYaw + v31);
-        v26 = 3.1415927f * v31 / 180.0f;
-        nx = nz * (f32)sin(v26);
-        nz = nz * -(f32)cos(v26);
+        nx = nz * sind(v31);
+        nz = nz * -cosd(v31);
         v31 = angleABf(0.0f, 0.0f, nx, nz);
 
         // FAKE: no-op (MarioWork*) cast on the directionView/groundRot reads below (were raw MWOFF offsets); the plain field reorders a const load
         tcA = ((MarioWork*)mario)->directionView;
         if (angOut(tcA, 135.0f, v31) == 1) {
             nz = distABf(0.0f, 0.0f, nx, nz);
-            nx = -nz * (f32)sin(3.1415927f * mario->directionView / 180.0f);
-            nz = nz * (f32)cos(3.1415927f * ((MarioWork*)mario)->directionView / 180.0f);
+            nx = -nz * sind(mario->directionView);
+            nz = nz * cosd(((MarioWork*)mario)->directionView);
         }
     }
     if (!(mario->flags & (MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING)) && !(mario->mot.roll.flags & ROLL_FLAG_NO_SLOPE_UNUSED)) {
@@ -1032,7 +1022,7 @@ void mot_roll(void) {
 #endif
             v26 = (v31 > 180.0f) ? rollData[5] : rollData[6];
             {
-                f32 t = (f32)sin(3.1415927f * ((MarioWork*)mario)->groundRot.z / 180.0f);
+                f32 t = sind(((MarioWork*)mario)->groundRot.z);
                 t = t * v26;
                 nx = nx - t;
             }
@@ -1046,7 +1036,7 @@ void mot_roll(void) {
 #endif
             v26 = (v31 < 180.0f) ? rollData[5] : rollData[6];
             {
-                f32 t = (f32)sin(3.1415927f * mario->groundRot.z / 180.0f);
+                f32 t = sind(mario->groundRot.z);
                 t = t * v26;
                 nx = nx - t;
             }
@@ -1061,7 +1051,7 @@ void mot_roll(void) {
 #endif
             v26 = (v31 > 180.0f) ? rollData[5] : rollData[6];
             {
-                f32 t = (f32)sin(3.1415927f * ((MarioWork*)mario)->groundRot.x / 180.0f);
+                f32 t = sind(((MarioWork*)mario)->groundRot.x);
                 t = t * v26;
                 nz = nz - t;
             }
@@ -1075,7 +1065,7 @@ void mot_roll(void) {
 #endif
             v26 = (v31 < 180.0f) ? rollData[5] : rollData[6];
             {
-                f32 t = (f32)sin(3.1415927f * mario->groundRot.x / 180.0f);
+                f32 t = sind(mario->groundRot.x);
                 t = t * v26;
                 nz = nz - t;
             }
@@ -1089,8 +1079,8 @@ void mot_roll(void) {
         tcA = ((MarioWork*)mario)->directionView;
         if (angOut(tcA, 135.0f, v31) == 1) {
             nz = distABf(0.0f, 0.0f, nx, -nz);
-            nx = -nz * (f32)sin(3.1415927f * mario->directionView / 180.0f);
-            nz = nz * (f32)cos(3.1415927f * ((MarioWork*)mario)->directionView / 180.0f);
+            nx = -nz * sind(mario->directionView);
+            nz = nz * cosd(((MarioWork*)mario)->directionView);
 #if VERSION >= VERSION_JP
         }
     }
@@ -1234,9 +1224,8 @@ void mot_roll(void) {
     marioGetPtr()->motRoll->spdZ = v28;
     v31 = -v28;
     v30 = angleABf(0.0f, 0.0f, v29, v31);
-    v27 = 3.1415927f * v30 / 180.0f;
-    v26 = rollCos(v27);
-    v27 = distABf(0.0f, 0.0f, v29 * (f32)sin(v27), v28 * v26);
+    v26 = cosd(v30);
+    v27 = distABf(0.0f, 0.0f, v29 * sind(v30), v28 * v26);
     s = 0.05f * v27;
     if (!getRollEvtFlag() && mario->forceMoveTimer == 0) {
         v30 = angleABf(0.0f, 0.0f, v29, v31);
@@ -1273,7 +1262,7 @@ void mot_roll(void) {
         mario->moveDirection = v31;
     }
     if (mario->groundRot.z != 0.0f) {
-        mario->rot.x = revise360(-mario->groundRot.z * (f32)sin(3.1415927f * mario->displayDirection / 180.0f));
+        mario->rot.x = revise360(-mario->groundRot.z * sind(mario->displayDirection));
     } else {
         mario->rot.x = 0.0f;
     }
@@ -1391,10 +1380,9 @@ static void makeOfs(void) {
             f32 ang = angleABf(0.0f, 0.0f, sq, -nrm.y);
 #endif
             f32 r = (f32)(s32)(0.5f + ang);
-            if (rabs(ang) < 45.0) {
-                v26 = rollRad(r);
-                s = rSin(v26);
-                c = rollCos(v26);
+            if (fabs(ang) < 45.0) {
+                s = sind(r);
+                c = cosd(r);
                 t1 = s * 5.0f;
                 t2 = 5.0f * c;
                 mario->dispOfs.x = 6.0f + t1;
