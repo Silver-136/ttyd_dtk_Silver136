@@ -73,21 +73,83 @@ typedef struct FileReloc9 {
 } FileReloc9;
 
 /**
+ * Turns the offsets of a loaded TPL back into pointers: the descriptor array, then each texture and palette
+ * header and its data (only once per header).
+ */
+static void UnpackTexPalette(TEXPalette* pal) {
+    u16 i;
+
+    if (pal->versionNumber != PALETTE_VERSION) {
+#if VERSION >= VERSION_DEMO_EU
+        OSPanic("filemgr.c", 109, "invalid version number for texture palette");
+#else
+        OSPanic("filemgr.c", VERSION_PICK(106, 112), "invalid version number for texture palette");
+#endif
+    }
+    if ((void*)pal->descriptorArray < pal) {
+        ADDR_WORD(pal->descriptorArray) += (AddrWord)pal;
+        for (i = 0; i < pal->numDescriptors; i++) {
+            if (pal->descriptorArray[i].textureHeader) {
+                pal->descriptorArray[i].textureHeader = (TEXHeader*)((u8*)pal + (AddrWord)pal->descriptorArray[i].textureHeader);
+                if (!pal->descriptorArray[i].textureHeader->unpacked) {
+                    pal->descriptorArray[i].textureHeader->data = (char*)pal + (AddrWord)pal->descriptorArray[i].textureHeader->data;
+                    pal->descriptorArray[i].textureHeader->unpacked = TRUE;
+                }
+            }
+            if (pal->descriptorArray[i].CLUTHeader) {
+                pal->descriptorArray[i].CLUTHeader = (CLUTHeader*)((u8*)pal + (AddrWord)pal->descriptorArray[i].CLUTHeader);
+                if (!pal->descriptorArray[i].CLUTHeader->unpacked) {
+                    pal->descriptorArray[i].CLUTHeader->data = (char*)pal + (AddrWord)pal->descriptorArray[i].CLUTHeader->data;
+                    pal->descriptorArray[i].CLUTHeader->unpacked = TRUE;
+                }
+            }
+        }
+    }
+}
+
+/** The inverse of UnpackTexPalette: turns the pointers of a TPL back into offsets from its start. */
+static void PackTexPalette(TEXPalette* pal) {
+    u16 i;
+
+    if (pal->versionNumber != PALETTE_VERSION) {
+#if VERSION >= VERSION_DEMO_EU
+        OSPanic("filemgr.c", 150, "invalid version number for texture palette");
+#else
+        OSPanic("filemgr.c", VERSION_PICK(147, 153), "invalid version number for texture palette");
+#endif
+    }
+    if ((void*)pal->descriptorArray >= pal) {
+        for (i = 0; i < pal->numDescriptors; i++) {
+            if (pal->descriptorArray[i].textureHeader) {
+                if (pal->descriptorArray[i].textureHeader->unpacked) {
+                    pal->descriptorArray[i].textureHeader->unpacked = FALSE;
+                    pal->descriptorArray[i].textureHeader->data -= (AddrWord)pal;
+                }
+                ADDR_WORD(pal->descriptorArray[i].textureHeader) -= (AddrWord)pal;
+            }
+            if (pal->descriptorArray[i].CLUTHeader) {
+                if (pal->descriptorArray[i].CLUTHeader->unpacked) {
+                    pal->descriptorArray[i].CLUTHeader->unpacked = FALSE;
+                    pal->descriptorArray[i].CLUTHeader->data -= (AddrWord)pal;
+                }
+                ADDR_WORD(pal->descriptorArray[i].CLUTHeader) -= (AddrWord)pal;
+            }
+        }
+        ADDR_WORD(pal->descriptorArray) -= (AddrWord)pal;
+    }
+}
+
+/**
  * Turns the absolute pointers inside a loaded file back into offsets from its start (per file type: animation
  * poses, animation data, TPL textures and the other relocated formats), so the data can be moved;
  * undone by fileGarbageDataAdrSet.
  */
 static void fileGarbageDataAdrClear(FileEntry* entry) {
-    u16 i;
-    u32 off;
-    TEXPalette* tpl;
     AnimationPoseData* pose;
     AnimData* anim;
     s32 j, n;
     AnimTableEntry* e;
     u8* q;
-    TEXHeader* img;
-    CLUTHeader* pal;
     void* data = *entry->data;
     switch (entry->type) {
         case FILE_TYPE_POSE_UNUSED:
@@ -139,39 +201,7 @@ static void fileGarbageDataAdrClear(FileEntry* entry) {
             }
             break;
         case FILE_TYPE_TPL:
-            tpl = data;
-            if (tpl->versionNumber != PALETTE_VERSION) {
-#if VERSION >= VERSION_DEMO_EU
-                OSPanic("filemgr.c", 150, "invalid version number for texture palette");
-#else
-                OSPanic("filemgr.c", VERSION_PICK(147, 153), "invalid version number for texture palette");
-#endif
-            }
-            if ((void*)tpl->descriptorArray >= tpl) {
-                // FAKE: no-op (u16) cast on the u16 counter; the plain comparison changes the object
-                for (i = 0; (u16)i < tpl->numDescriptors; i++) {
-                    off = i * sizeof(TEXDescriptor); // FAKE: descriptor relocation stores retain byte-offset addressing; descriptor field loads use typed indexing
-                    img = tpl->descriptorArray[i].textureHeader;
-                    if (img) {
-                        if (img->unpacked) {
-                            img->unpacked = FALSE;
-                            img = tpl->descriptorArray[i].textureHeader;
-                            img->data -= (AddrWord)tpl;
-                        }
-                        *(AddrWord*)((u8*)tpl->descriptorArray + off) -= (AddrWord)tpl; // FAKE: byte-offset store (ADDR_WORD(tpl->descriptorArray[i].textureHeader) changes the object)
-                    }
-                    pal = tpl->descriptorArray[i].CLUTHeader;
-                    if (pal) {
-                        if (pal->unpacked) {
-                            pal->unpacked = FALSE;
-                            pal = tpl->descriptorArray[i].CLUTHeader;
-                            pal->data -= (AddrWord)tpl;
-                        }
-                        *(AddrWord*)((u8*)tpl->descriptorArray + off + offsetof(TEXDescriptor, CLUTHeader)) -= (AddrWord)tpl; // FAKE: byte-offset store (ADDR_WORD(tpl->descriptorArray[i].CLUTHeader) changes the object)
-                    }
-                }
-                ADDR_WORD(tpl->descriptorArray) -= (AddrWord)tpl;
-            }
+            PackTexPalette(data);
             break;
         case FILE_TYPE_ANIM:
             pose = data;
@@ -283,18 +313,10 @@ static void fileGarbageDataAdrClear(FileEntry* entry) {
  * unless the fields are already absolute. The textures' image and palette headers are fixed up here too.
  */
 static void fileGarbageDataAdrSet(void* data, s32 type) {
-    u16 i;
-    u32 off;
-    u32 off2;
-    TEXPalette* tpl;
     AnimationPoseData* pose;
     AnimData* anim;
     u8* q;
     s32 j, n;
-    TEXHeader* img;
-    CLUTHeader* pal;
-    TEXHeader* img2;
-    CLUTHeader* pal2;
     switch (type) {
         case FILE_TYPE_POSE_UNUSED:
             pose = data;
@@ -345,42 +367,7 @@ static void fileGarbageDataAdrSet(void* data, s32 type) {
             }
             break;
         case FILE_TYPE_TPL:
-            tpl = data;
-            if (tpl->versionNumber != PALETTE_VERSION) {
-#if VERSION >= VERSION_DEMO_EU
-                OSPanic("filemgr.c", 109, "invalid version number for texture palette");
-#else
-                OSPanic("filemgr.c", VERSION_PICK(106, 112), "invalid version number for texture palette");
-#endif
-            }
-            if ((void*)tpl->descriptorArray < tpl) {
-                ADDR_WORD(tpl->descriptorArray) += (AddrWord)tpl;
-
-                // FAKE: no-op (u16) cast on the u16 counter; the plain comparison changes the object
-                for (i = 0; (u16)i < tpl->numDescriptors; i++) {
-                    // FAKE: byte-offset descriptor access as in fileGarbageDataAdrClear; typed indexing changes the object
-                    off = i * sizeof(TEXDescriptor);
-                    img = *(TEXHeader**)((u8*)tpl->descriptorArray + off);
-                    if (img) {
-                        *(TEXHeader**)((u8*)tpl->descriptorArray + off) = (TEXHeader*)((u8*)tpl + (AddrWord)img);
-                        img2 = *(TEXHeader**)((u8*)tpl->descriptorArray + off);
-                        if (!img2->unpacked) {
-                            img2->data = (char*)tpl + (AddrWord)img2->data;
-                            (*(TEXHeader**)((u8*)tpl->descriptorArray + off))->unpacked = TRUE;
-                        }
-                    }
-                    off2 = off + offsetof(TEXDescriptor, CLUTHeader);
-                    pal = *(CLUTHeader**)((u8*)tpl->descriptorArray + off2);
-                    if (pal) {
-                        *(CLUTHeader**)((u8*)tpl->descriptorArray + off2) = (CLUTHeader*)((u8*)tpl + (AddrWord)pal);
-                        pal2 = *(CLUTHeader**)((u8*)tpl->descriptorArray + off2);
-                        if (!pal2->unpacked) {
-                            pal2->data = (char*)tpl + (AddrWord)pal2->data;
-                            (*(CLUTHeader**)((u8*)tpl->descriptorArray + off2))->unpacked = TRUE;
-                        }
-                    }
-                }
-            }
+            UnpackTexPalette(data);
             break;
         case FILE_TYPE_ANIM:
             pose = data;
