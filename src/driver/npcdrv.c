@@ -1326,11 +1326,11 @@ static BOOL npcCheckHitMarioSide(NpcEntry* npc) {
     f32 dist;
     f32 range;
     f32 angle;
+    f32 scale;
     f32 dx;
     f32 dz;
     f32 rad;
     f32 len;
-    f32 scale;
 
     mario = marioGetPtr();
     if (npc->position.y > mario->position.y + mario->wPlayerCollisionBox.y) {
@@ -1382,13 +1382,10 @@ static BOOL npcCheckHitMarioSide(NpcEntry* npc) {
 #endif
     mario->position.x += dx;
     mario->position.z += dz;
-
-    // FAKE: the height goes through the spare dz; passing mario->wPlayerCollisionBox.y directly changes the object
-    dz = mario->wPlayerCollisionBox.y;
 #if VERSION <= VERSION_DEMO_JP
-    marioChkWallAround(&mario->position, 0.0f, 160.0f + angle, 20.0f, dz);
+    marioChkWallAround(&mario->position, 0.0f, 160.0f + angle, 20.0f, mario->wPlayerCollisionBox.y);
 #else
-    marioChkWallAround(&mario->position, 0, 0.0f, 160.0f + angle, 20.0f, dz);
+    marioChkWallAround(&mario->position, 0, 0.0f, 160.0f + angle, 20.0f, mario->wPlayerCollisionBox.y);
 #endif
     return TRUE;
 }

@@ -4987,6 +4987,12 @@ void hitcheck_party_motion_stay(PartyEntry* party) {
     }
 }
 
+/** TRUE when hit is deep water (HIT_ATTR_WATER_HAZARD, attribute bit 9). */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+static BOOL chkWater(HitEntry* hit) {
+    return (hitGetAttr(hit) >> 9) & 1;
+}
+
 /**
  * Demos: motion 7, the partner knocked away: it flies up off the top of the screen,
  * waits until Mario's damage motion is over, drops in from 200 above partyGetReturnPos and,
@@ -5048,7 +5054,7 @@ void party_motion_damage(PartyEntry* party) {
                 party->position.y += 200.0f;
                 party->flags &= ~(PARTY_FLAG_IS_JUMPING | PARTY_FLAG_IS_FALLING | PARTY_FLAG_IS_STEPPING);
             }
-            if (party->hitobjStandOn && !((hitGetAttr(party->hitobjStandOn) >> 9) & 1)) {
+            if (party->hitobjStandOn && !chkWater(party->hitobjStandOn)) {
                 party->motionStep = 12;
                 party->moveFrames = 30;
             }

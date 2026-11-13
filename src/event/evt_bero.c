@@ -1176,7 +1176,6 @@ static USER_FUNC(evt_bero_move_mario_speed) {
     f32 ox, oy;
     BOOL xdone, ydone;
     s32 frames;
-    f32 sx;
 
     if (isFirstCall) {
         event->savedTime = now;
@@ -1191,9 +1190,10 @@ static USER_FUNC(evt_bero_move_mario_speed) {
     dist = speed * frames;
     ox = s * dist;
 
-    // FAKE: spare temporary for BeroSX; using BeroSX directly changes the object
-    sx = BeroSX;
-    marioGetPtr()->position.x = sx + ox;
+    {
+        const f32 sx = BeroSX;
+        marioGetPtr()->position.x = sx + ox;
+    }
     oy = -(c * dist);
     marioGetPtr()->position.y = BeroSY + oy;
     marioGetPtr()->position.z = BeroSZ;

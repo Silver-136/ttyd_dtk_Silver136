@@ -1216,20 +1216,9 @@ s32 winMgrSelectOther(WinMgrSelect* sel, EventEntry* evt) {
 }
 
 void winMgrSelectDelete(WinMgrSelect* sel) {
-    // FAKE: chain of spare copies of sel, sel->items and the heap id; the plain
-    // __memFree(HEAP_DEFAULT, sel->items); __memFree(HEAP_DEFAULT, sel); changes the object
-    WinMgrSelectItem* items;
-    int heap;
-    WinMgrSelect* sel3;
-    WinMgrSelectItem* items2;
-    WinMgrSelectItem* items3;
-    WinMgrSelect* sel2;
-    items3 = (sel2 = (sel3 = sel))->items;
-    items2 = items3;
-    heap = HEAP_DEFAULT;
-    items = items2;
-    __memFree(HEAP_DEFAULT, items);
-    __memFree(heap, sel3);
+    WinMgrSelect* const s = sel;
+    __memFree(HEAP_DEFAULT, s->items);
+    __memFree(HEAP_DEFAULT, s);
 }
 
 // Descriptive name (not in the symbol maps); placeholder unk_80237448, JP 0x80237448. See docs/NAME_PROVENANCE.md.

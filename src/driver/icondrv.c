@@ -62,35 +62,6 @@ static TEXPalette* icon_tpl;
     };
 #endif
 
-/**
- * Returns icon iconId's frame data in icon.bin, or NULL until both icon.tpl and icon.bin have loaded.
- * The US and later builds swap the Power Rush and Power Rush P icons for their variant in the current language.
- */
-#if VERSION >= VERSION_US
-static inline IconBinaryEntry* iconGetBinData(s32 iconId) {
-#else
-static inline IconBinaryEntry* iconGetBinData(u16 iconId) {
-#endif
-
-    IconBinary* bin = icon_bin;
-    if (!icon_tpl_ok || !icon_bin_ok) {
-        return NULL;
-    }
-#if VERSION >= VERSION_US
-    switch ((u16)iconId) {
-        case ICON_POWER_RUSH:
-            iconId = icon_049_lang_tbl[gp->language];
-            break;
-        case ICON_POWER_RUSH_P:
-            iconId = icon_067_lang_tbl[gp->language];
-            break;
-    }
-    return (IconBinaryEntry*)((u8*)bin + bin->offset[(u16)iconId]);
-#else
-    return (IconBinaryEntry*)((u8*)bin + bin->offset[iconId]);
-#endif
-}
-
 // local prototypes
 static void iconDisp(CameraId camId, void* param);
 static void iconGX(Mtx mtx, IconEntry* entry);
@@ -194,6 +165,36 @@ void iconReInit(void) {
 }
 
 /**
+ * Returns icon iconId's frame data in icon.bin, or NULL until both icon.tpl and icon.bin have loaded.
+ * The US and later builds swap the Power Rush and Power Rush P icons for their variant in the current language.
+ */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+#if VERSION >= VERSION_US
+static IconBinaryEntry* iconBinPtr(s32 iconId) {
+#else
+static IconBinaryEntry* iconBinPtr(u16 iconId) {
+#endif
+
+    IconBinary* bin = icon_bin;
+    if (!icon_tpl_ok || !icon_bin_ok) {
+        return NULL;
+    }
+#if VERSION >= VERSION_US
+    switch ((u16)iconId) {
+        case ICON_POWER_RUSH:
+            iconId = icon_049_lang_tbl[gp->language];
+            break;
+        case ICON_POWER_RUSH_P:
+            iconId = icon_067_lang_tbl[gp->language];
+            break;
+    }
+    return (IconBinaryEntry*)((u8*)bin + bin->offset[(u16)iconId]);
+#else
+    return (IconBinaryEntry*)((u8*)bin + bin->offset[iconId]);
+#endif
+}
+
+/**
  * Per-frame update: finishes the set-up of icons made before icon.bin loaded,
  * steps animated icons through their frames (delays in frames),
  * and queues each visible icon for drawing on the 2D, effect or 3D camera,
@@ -214,7 +215,7 @@ void iconMain(void) {
             if (entry->uflags & ICON_FLAG_DATA_PENDING) {
                 entry->uflags &= ~ICON_FLAG_DATA_PENDING;
 #if VERSION >= VERSION_US
-                data = iconGetBinData(entry->iconId);
+                data = iconBinPtr(entry->iconId);
 #endif
                 // BUG: JP and the early demos read data here without loading it for this entry (uninitialized, or
                 // left over from an earlier entry's animation step); US and later load it first.
@@ -237,7 +238,7 @@ void iconMain(void) {
                     if (entry->currIcon >= entry->numIcons) {
                         entry->currIcon = 0;
                     }
-                    data = iconGetBinData(entry->iconId);
+                    data = iconBinPtr(entry->iconId);
                     entry->tplId = data->frames[entry->currIcon].tplId;
                     entry->frameDelay = data->frames[entry->currIcon].delay;
                 }
@@ -287,7 +288,7 @@ void iconEntry(const char* name, u16 iconId) {
     entry->color = (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF };
     strcpy(entry->name, name);
     entry->iconId = iconId;
-    data = iconGetBinData(entry->iconId);
+    data = iconBinPtr(entry->iconId);
     if (data) {
         entry->width = data->width;
         entry->height = data->height;
@@ -336,7 +337,7 @@ void iconEntry2D(const char* name, s16 iconId) {
     entry->color = (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF };
     strcpy(entry->name, name);
     entry->iconId = iconId;
-    data = iconGetBinData(entry->iconId);
+    data = iconBinPtr(entry->iconId);
     if (data) {
         entry->width = data->width;
         entry->height = data->height;
@@ -373,7 +374,7 @@ void iconChange(const char* name, u16 iconId) {
     IconBinaryEntry* data;
 
     entry->iconId = iconId;
-    data = iconGetBinData(entry->iconId);
+    data = iconBinPtr(entry->iconId);
     entry->width = data->width;
     entry->height = data->height;
     entry->numIcons = data->numIcons;
@@ -434,7 +435,7 @@ void iconDispGxAlpha(Vec* position, s16 flags, u16 iconId, u8 alpha, f32 scale) 
     entry.uflags = flags;
 
     entry.iconId = iconId;
-    data = iconGetBinData(entry.iconId);
+    data = iconBinPtr(entry.iconId);
     entry.width = data->width;
     entry.height = data->height;
     entry.tplId = data->frames[0].tplId;
@@ -493,10 +494,10 @@ void iconDispGx2(Mtx mtx, s16 flags, s16 iconId) {
 
 #if VERSION >= VERSION_US
     ep->iconId = iconId;
-    data = iconGetBinData(iconId);
+    data = iconBinPtr(iconId);
 #else
     ep->iconId = (id = iconId);
-    data = iconGetBinData(id);
+    data = iconBinPtr(id);
 #endif
 
     entry.width = data->width;
@@ -550,10 +551,10 @@ void iconDispGxCol(Mtx pos, u16 flags, s32 iconId, GXColor color) {
 #if VERSION >= VERSION_US
     /* FAKE: (u16)(s16) round-trip is a no-op on the u16 field (the s32 id goes through s16 first); it steers MWCC's register choice */
     ep->iconId = (u16)(s16)iconId;
-    data = iconGetBinData((u16)iconId);
+    data = iconBinPtr((u16)iconId);
 #else
     ep->iconId = (id = iconId);
-    data = iconGetBinData(id);
+    data = iconBinPtr(id);
 #endif
 
     entry.width = data->width;
@@ -577,9 +578,9 @@ void iconGetTexObj(GXTexObj* texObj, s32 iconId) {
     }
 
 #if VERSION >= VERSION_US
-    data = iconGetBinData(iconId);
+    data = iconBinPtr(iconId);
 #else
-    data = iconGetBinData((u16)iconId);
+    data = iconBinPtr((u16)iconId);
 #endif
 
     tplId = data->frames[0].tplId;
@@ -593,7 +594,7 @@ void iconGetWidthHight(u16* width, u16* height, s32 iconId) {
     IconBinaryEntry* data;
     TEXDescriptor* descriptor;
 
-    data = iconGetBinData(iconId);
+    data = iconBinPtr(iconId);
     *width = data->width;
     *height = data->height;
     if (!*width && !*height) { // no size in icon.bin: use the texture's size

@@ -663,7 +663,6 @@ void btlUnitPartsDisp(CameraId camId, void* param) {
     BattleWork* wp;
     BattleUnitPart* part;
     BattleUnit* unit;
-    s32 gz;
     CameraEntry* cam;
     f32 rotY;
     f32 ex;
@@ -681,11 +680,6 @@ void btlUnitPartsDisp(CameraId camId, void* param) {
     zscale = 1.0f;
     unit = part->owner;
     if (part->poseId < 0) return;
-
-    // FAKE: dead int guard (COLOURING W). part becomes a multi-def named local (not folded back into the param), so it
-    // numbers above unit, and gz adds wp's missing neighbour; the arm is deleted after colouring and leaves no code.
-    gz = 0;
-    if (gz != 0) part = (BattleUnitPart*)unit;
 
     PSMTXTrans(uTN, -unit->rotationOffset.x, -unit->rotationOffset.y, -unit->rotationOffset.z);
     PSMTXTrans(uT, unit->rotationOffset.x, unit->rotationOffset.y, unit->rotationOffset.z);

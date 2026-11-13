@@ -120,31 +120,6 @@ inline void itemCheckBadge(ItemEntry* entry) {
 static void itemseq_Bound(ItemEntry* entry);
 
 /**
- * Puts the item into the pouch; FALSE if the pouch is full.
- * On success sets its collect flag (GSWF or LSWF) and starts its pickup script.
- */
-static inline BOOL itemGetPouch(ItemEntry* entry) {
-    EventEntry* evt;
-
-    if (!pouchGetItem(entry->itemId)) {
-        return FALSE;
-    }
-    if (entry->flags & ITEM_FLAG_COLLECT_GSWF) {
-        swSet(entry->collectFlag);
-    } else if (entry->flags & ITEM_FLAG_COLLECT_LSWF) {
-        _swSet(entry->collectFlag);
-    }
-    if (entry->evtCode != NULL) {
-        evt = evtEntry(entry->evtCode, 0, EVENT_START_IMMEDIATE);
-        evt->lwData[0] = FLOAT(entry->position.x);
-        evt->lwData[1] = FLOAT(entry->position.y);
-        evt->lwData[2] = FLOAT(entry->position.z);
-    }
-    entry->flags2 |= ITEM_FLAG2_IN_POUCH;
-    return TRUE;
-}
-
-/**
  * Ends an item get sequence: gives Mario back his controls and keys and unmutes the sound effects.
  * Later versions also undo the control lock if the get set it.
  */
@@ -1115,6 +1090,32 @@ ItemEntry* itemNearDistCheck(f32 x, f32 y, f32 z, f32 range) {
 }
 
 /**
+ * Puts the item into the pouch; FALSE if the pouch is full.
+ * On success sets its collect flag (GSWF or LSWF) and starts its pickup script.
+ */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+static BOOL itemGetItem(ItemEntry* entry) {
+    EventEntry* evt;
+
+    if (!pouchGetItem(entry->itemId)) {
+        return FALSE;
+    }
+    if (entry->flags & ITEM_FLAG_COLLECT_GSWF) {
+        swSet(entry->collectFlag);
+    } else if (entry->flags & ITEM_FLAG_COLLECT_LSWF) {
+        _swSet(entry->collectFlag);
+    }
+    if (entry->evtCode != NULL) {
+        evt = evtEntry(entry->evtCode, 0, EVENT_START_IMMEDIATE);
+        evt->lwData[0] = FLOAT(entry->position.x);
+        evt->lwData[1] = FLOAT(entry->position.y);
+        evt->lwData[2] = FLOAT(entry->position.z);
+    }
+    entry->flags2 |= ITEM_FLAG2_IN_POUCH;
+    return TRUE;
+}
+
+/**
  * Draws the "You got X!" box during an item get, with "badge" wording for badges;
  * US, PAL and the September demos format the message per language and size the box by its line count; JP and the early demos use sprintf and fixed height.
  */
@@ -1281,7 +1282,7 @@ static void itemseq_GetItem(ItemEntry* entry) {
             entry->flags &= ~ITEM_FLAG_LOST_BADGE_TO_SHOP;
 #endif
             if (entry->flags & ITEM_FLAG_QUICK_GET) {
-                if (itemGetPouch(entry)) {
+                if (itemGetItem(entry)) {
                     entry->timer = 0;
                     itemPlaySound(entry);
                     itemDelete(entry->name);
@@ -1424,7 +1425,7 @@ static void itemseq_GetItem(ItemEntry* entry) {
                 winMgrOpen(entry->winId[1]);
                 winMgrSetParam(entry->winId[1], entry);
             }
-            if (!itemGetPouch(entry)) {
+            if (!itemGetItem(entry)) {
                 entry->winId[2] = winMgrEntry(&itemdrv_window_desc[2]);
                 winMgrOpen(entry->winId[2]);
                 winMgrSetParam(entry->winId[2], entry);
@@ -1563,7 +1564,7 @@ static void itemseq_GetItem(ItemEntry* entry) {
             } else {
 #endif
                 pouchRemoveItem(select);
-                itemGetPouch(entry);
+                itemGetItem(entry);
                 entry->flags2 &= ~ITEM_FLAG2_IN_POUCH;
                 entry->itemId = select;
                 entry->evtCode = NULL;

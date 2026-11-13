@@ -148,6 +148,12 @@ void bomhei_init_800BFBB0(PartyEntry* party) {
     init_se_work(party);
 }
 
+/** TRUE when hit is deep water (HIT_ATTR_WATER_HAZARD, attribute bit 9). */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+static BOOL chkWater(HitEntry* hit) {
+    return (hitGetAttr(hit) >> 9) & 1;
+}
+
 /**
  * Bobbery's state for scripts (evt_party.c): 0 when there is no partner, or Bobbery is out
  * but not using his ability. Otherwise returns 1 for use motion 60 (Bobbery's blast), 2 for other motions;
@@ -832,7 +838,7 @@ static void bomhei_use_main(PartyEntry* party) {
                 party->position.y += 200.0f;
                 party->flags &= ~(PARTY_FLAG_IS_JUMPING | PARTY_FLAG_IS_FALLING | PARTY_FLAG_IS_STEPPING);
             }
-            if (party->hitobjStandOn != NULL && !((hitGetAttr(party->hitobjStandOn) >> 9) & 1)) {
+            if (party->hitobjStandOn != NULL && !chkWater(party->hitobjStandOn)) {
                 partyChgPose(party, "F_1");
                 party->useMotionId = 82;
                 party->moveFrames = 30;

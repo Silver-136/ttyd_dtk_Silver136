@@ -35,6 +35,7 @@ static u32 nokoSe;
 #include "mario/mariost.h"
 static HitEntry* ccwall(PartyEntry* party, s32 mode);
 static void lookupSafetyPosSub(Vec pos, f32 height, f32 angle, Vec* out);
+static BOOL chkWater(HitEntry* hit);
 static void lookupSafetyPos3(Vec pos, f32 height, Vec* out);
 static void lookupSafetyPos2(Vec pos, f32 height, Vec* out);
 static u32 lookupSafetyPos(Vec pos, f32 height, Vec* out);
@@ -918,7 +919,7 @@ void nokonoko_use(PartyEntry* party) {
             if (party->hitobjStandOn != NULL) {
                 party->displayDirectionTarget = mario->displayDirectionTarget;
                 party->displayDirection = party->displayDirectionTarget;
-                if (!((hitGetAttr(party->hitobjStandOn) >> 9) & 1)) {
+                if (!chkWater(party->hitobjStandOn)) {
                     party->useMotionId = 114;
                     party->moveFrames = 30;
                 }
@@ -1007,7 +1008,7 @@ static HitEntry* ccwall(PartyEntry* party, s32 mode) {
     y0 = yofs + y0;
     hit = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, x,
                          y0, z, 0.0f, -1.0f, 0.0f);
-    if (((hitGetAttr(hit) >> 9) & 1) == 1) {
+    if (chkWater(hit) == 1) {
         hit = NULL;
     }
     party->hitobjStandOn = hit;
@@ -1461,4 +1462,10 @@ static void lookupSafetyPosSub(Vec pos, f32 height, f32 angle, Vec* out) {
         p = &pos;
     }
     *out = *p;
+}
+
+/** TRUE when hit is deep water (HIT_ATTR_WATER_HAZARD, attribute bit 9). */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+static BOOL chkWater(HitEntry* hit) {
+    return (hitGetAttr(hit) >> 9) & 1;
 }

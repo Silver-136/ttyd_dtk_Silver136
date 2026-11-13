@@ -3,7 +3,7 @@
 #pragma once
 
 /*
-icon.bin structure (as icondrv.c reads it, iconGetBinData / IconBinaryEntry):
+icon.bin structure (as icondrv.c reads it, iconBinPtr / IconBinaryEntry):
 u16 numEntries
 u16 entryOffset[numEntries], byte offsets from the file start
 per icon at its offset: u16 type (bit 0: animated), u16 width, u16 height, u16 numIcons,

@@ -55,26 +55,6 @@ static inline void kpa_hip_launch(MarioWork* mario) {
 }
 
 /**
- * In the side-scrolling stages, A jumps (or swims when fully underwater); returns 1 if it changed motion.
- * Always 0 in 3D maps.
- */
-static inline s32 kpa_stay_chk(void) {
-    MarioWork* mario = marioGetPtr();
-    if (kpaGetStageViewType() == KPA_VIEW_3D) {
-        return 0;
-    }
-    if (!(mario->buttonTrg & PAD_BUTTON_A)) {
-        return 0;
-    }
-    if (kpaGetBodyStatus() == KPA_BODY_SUBMERGED) {
-        marioChgMot(MARIO_MOTION_KPA_SWIM);
-        return 1;
-    }
-    marioChgMot(MARIO_MOTION_JUMP);
-    return 1;
-}
-
-/**
  * Spawns the water droplet effect around swimming Bowser:
  * on every frame of sub-states 0x1E/0x1F (a stroke has ended and his downward speed is braked),
  * otherwise every 10 frames while rising and every 30 while sinking.
@@ -120,6 +100,27 @@ BOOL kpaHipAttackOk(void) {
         return FALSE;
     }
     return ((mario->kpaWork->flags >> 4) & 1) ^ 1;
+}
+
+/**
+ * In the side-scrolling stages, A jumps (or swims when fully underwater); returns 1 if it changed motion.
+ * Always 0 in 3D maps.
+ */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+static s32 kpaChkJump(void) {
+    MarioWork* mario = marioGetPtr();
+    if (kpaGetStageViewType() == KPA_VIEW_3D) {
+        return 0;
+    }
+    if (!(mario->buttonTrg & PAD_BUTTON_A)) {
+        return 0;
+    }
+    if (kpaGetBodyStatus() == KPA_BODY_SUBMERGED) {
+        marioChgMot(MARIO_MOTION_KPA_SWIM);
+        return 1;
+    }
+    marioChgMot(MARIO_MOTION_JUMP);
+    return 1;
 }
 
 /**
@@ -210,7 +211,7 @@ void kpa_stay(void) {
         }
     }
     if (kpaGetAttackMode() == 0) {
-        if (!kpa_stay_chk()) {
+        if (!kpaChkJump()) {
             if (mario->buttonTrg & PAD_BUTTON_B) {
                 kpaAttackStart();
             } else {
@@ -268,7 +269,7 @@ void kpa_walk(void) {
         m->kpaWork->standParamA = 0.02f;
         m->kpaWork->standParamB = -0.02f;
     }
-    if (!kpa_stay_chk()) {
+    if (!kpaChkJump()) {
         if (m->buttonTrg & PAD_BUTTON_B) {
             kpaAttackStart();
             marioChgMot(MARIO_MOTION_STAY);
@@ -346,7 +347,7 @@ void kpa_dash(void) {
         m->multiTimer = 0;
         m->mot.kpa.animFrame = 0;
     }
-    if (!kpa_stay_chk()) {
+    if (!kpaChkJump()) {
         if (m->buttonTrg & PAD_BUTTON_B) {
             kpaAttackStart();
             marioChgMot(MARIO_MOTION_STAY);

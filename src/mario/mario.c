@@ -85,10 +85,48 @@ static s32 blurPosId;
 // local prototypes
 static const char* toRearPose(const char* name);
 static const char* toFrontPose(const char* name);
+static BOOL marioChkKey2(void);
+static void marioChgColor(s32 color);
 
 /** Returns Mario's work (MarioWork), allocated once by marioInit; the main way the rest of the game reaches Mario. */
 MarioWork* marioGetPtr(void) {
     return mp;
+}
+
+/**
+ * Switches Mario's outfit when the colour from the equipped badges changed:
+ * 1 with only the L Emblem (Luigi's colours), 2 with only the W Emblem (Wario's colours), 3 with both,
+ * 0 otherwise.
+ */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+static void marioSuperEmblemChk(void) {
+    s32 lEmblem;
+    s32 wEmblem;
+    s32 color;
+
+    if (!mp->characterId) {
+        lEmblem = pouchEquipCheckBadge(ITEM_L_EMBLEM);
+        wEmblem = pouchEquipCheckBadge(ITEM_W_EMBLEM);
+        if (lEmblem && !wEmblem) {
+            color = 1;
+        } else if (!lEmblem && wEmblem) {
+            color = 2;
+        } else if (lEmblem && wEmblem) {
+            color = 3;
+        } else {
+            color = 0;
+        }
+        marioChgColor(color);
+    }
+}
+
+/** Switches Mario's outfit to colour (see marioGetColor) when it changed; only while the player is Mario. */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+static void marioChgColor(s32 color) {
+    if (!mp->characterId && mp->colorId != color) {
+        mp->colorId = color;
+        marioSetCharMode(CHARACTER_MARIO);
+    }
 }
 
 /**
@@ -116,25 +154,6 @@ static inline void marioCharPoseRelease(MarioWork* wp) {
         animPoseRelease(wp->paperAnimGroupId[2]);
         wp->paperAnimGroupId[2] = -1;
     }
-}
-
-/**
- * Works out the outfit colour from the equipped badges:
- * 1 with only the L Emblem (Luigi's colours), 2 with only the W Emblem (Wario's colours), 3 with both,
- * 0 otherwise.
- */
-static inline s32 marioBadgeColor(void) {
-    s32 lEmblem = pouchEquipCheckBadge(ITEM_L_EMBLEM);
-    s32 wEmblem = pouchEquipCheckBadge(ITEM_W_EMBLEM);
-
-    if (lEmblem && !wEmblem) {
-        return 1;
-    } else if (!lEmblem && wEmblem) {
-        return 2;
-    } else if (lEmblem && wEmblem) {
-        return 3;
-    }
-    return 0;
 }
 
 #if VERSION >= VERSION_DEMO_EU
@@ -190,13 +209,7 @@ void marioSetCharMode(s32 mode) {
         lightFlag = animPoseGetMaterialLightFlag(wp->paperAnimGroupId[marioAnimeId()]);
         wp->characterId = CHARACTER_MARIO;
 #if VERSION >= VERSION_JP
-        if (!mp->characterId) {
-            color = marioBadgeColor();
-            if (!mp->characterId && mp->colorId != color) {
-                mp->colorId = color;
-                marioSetCharMode(CHARACTER_MARIO);
-            }
-        }
+        marioSuperEmblemChk();
 #endif
         marioCharPoseRelease(wp);
         wp->paperAnimGroupId[0] = animPoseEntry(marioAnimeGroupData[mp->colorId][0], 2);
@@ -450,25 +463,6 @@ static inline BOOL marioKeyDisable(void) {
 }
 
 /**
- * TRUE while Mario rides Yoshi on the ground (yoshiGetStatus 1), in the normal game sequence with keys on;
- * marioCheckMenuDisable then lets the pause menu open even though Yoshi's ride holds the keys.
- */
-static inline BOOL marioChkYoshiKey(void) {
-    PartyEntry* party = partyGetPtr(marioGetPartyId());
-
-    if (seqGetSeq() != SEQ_GAME) {
-        return FALSE;
-    }
-    if (mp->keyOffCount) {
-        return FALSE;
-    }
-    if (yoshiGetStatus() == YOSHI_STATUS_RIDING) {
-        return TRUE;
-    }
-    return FALSE;
-}
-
-/**
  * TRUE when the pause menu may not open now: control off, playing Peach or Bowser in the side view, mid-hammer,
  * accordion, plane or boat changing form, taking damage, in the air, Bobbery busy,
  * or a partner action holding the keys.
@@ -533,7 +527,7 @@ BOOL marioCheckMenuDisable(void) {
         return FALSE;
     }
 #endif
-    if (marioChkYoshiKey()) {
+    if (marioChkKey2()) {
         return FALSE;
     }
     if (marioKeyDisable()) {
@@ -587,6 +581,26 @@ BOOL marioChkKey(void) {
         return FALSE;
     }
     return TRUE;
+}
+
+/**
+ * TRUE while Mario rides Yoshi on the ground (yoshiGetStatus 1), in the normal game sequence with keys on;
+ * marioCheckMenuDisable then lets the pause menu open even though Yoshi's ride holds the keys.
+ */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+static BOOL marioChkKey2(void) {
+    PartyEntry* party = partyGetPtr(marioGetPartyId());
+
+    if (seqGetSeq() != SEQ_GAME) {
+        return FALSE;
+    }
+    if (mp->keyOffCount) {
+        return FALSE;
+    }
+    if (yoshiGetStatus() == YOSHI_STATUS_RIDING) {
+        return TRUE;
+    }
+    return FALSE;
 }
 
 /** TRUE when Mario's control is on, i.e. no marioCtrlOff is outstanding. */
@@ -1154,19 +1168,6 @@ void marioPostMain(MarioWork* wp) {
     wp->frameCounter++;
 }
 
-/** Switches Mario's outfit when the colour from the equipped L Emblem/W Emblem changed. */
-static inline void marioColorChk(void) {
-    s32 color;
-
-    if (!mp->characterId) {
-        color = marioBadgeColor();
-        if (!mp->characterId && mp->colorId != color) {
-            mp->colorId = color;
-            marioSetCharMode(CHARACTER_MARIO);
-        }
-    }
-}
-
 /** TRUE while Mario rolls as a paper tube; a copy of marioChkRollMot defined before marioMain. */
 static inline BOOL marioChkRollMot2(void) {
     BOOL ret = FALSE;
@@ -1195,7 +1196,7 @@ void marioMain(void) {
     }
 #if VERSION >= VERSION_JP
     if (marioChkUseParty()) {
-        marioColorChk();
+        marioSuperEmblemChk();
         p = mp;
         if (pouchEquipCheckBadge(ITEM_SLOW_GO)) {
             if (p->currMotionId == MARIO_MOTION_STAY) {
@@ -1209,7 +1210,7 @@ void marioMain(void) {
         }
     }
 #else
-    marioColorChk();
+    marioSuperEmblemChk();
 #endif
     marioSetDirEventMain();
 #if VERSION >= VERSION_JP

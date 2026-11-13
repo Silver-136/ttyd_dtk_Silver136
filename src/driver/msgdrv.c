@@ -1126,14 +1126,6 @@ void msgAnalize(smartEntry* smart, char* msg) {
 #endif
                 msg = next;
 #if VERSION <= VERSION_DEMO_JP
-                /* FAKE: dead int guard (COLOURING W): msg is redefined in the arm while next is still live
-                   (the later newline test on next), so msg/next interfere and the target copy mr r21,r15 survives */
-                gz = 0;
-                if (gz != 0) {
-                    msg++;
-                }
-#endif
-#if VERSION <= VERSION_DEMO_JP
                 if ((strcmp(tag, "k") == 0) || (strcmp(tag, "key") == 0)) {
 #else
                 if (strcmp(tag, "k") == 0 || strcmp(tag, "key") == 0) {
@@ -1845,6 +1837,30 @@ s32 msgIconStr2ID(const char* str) {
     return -1;
 }
 
+/** Steps a message window back one page (Z at a key wait); FALSE if already on the first page. */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+static u32 msgPageDec(smartEntry* smart) {
+    MsgWinData* d = smart->address;
+    d->page--;
+    if (d->page < 0) {
+        d->page = 0;
+        return FALSE;
+    }
+    return TRUE;
+}
+
+/** Steps a message window forward one page, stopping at the last. */
+// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+static void msgPageInc(smartEntry* smart) {
+    MsgWinData* d = smart->address;
+    s32 max;
+    d->page++;
+    max = d->pageCount - 1;
+    if (d->page > max) {
+        d->page = max;
+    }
+}
+
 /**
  * Opens a speech window for message text msg at the given priority (type and options come from the markup),
  * parses the text and sizes the window for its type; returns the window id.
@@ -2022,28 +2038,6 @@ void msgWindow_ForceClose(const char* name) {
     }
 }
 
-/** Steps a message window back one page (Z at a key wait); FALSE if already on the first page. */
-static inline u32 msgWinPrevPage(WindowEntry* window) {
-    MsgWinData* d = WIN_DATA(window);
-    d->page--;
-    if (d->page < 0) {
-        d->page = 0;
-        return FALSE;
-    }
-    return TRUE;
-}
-
-/** Steps a message window forward one page, stopping at the last. */
-static inline void msgWinNextPage(WindowEntry* window) {
-    MsgWinData* d = WIN_DATA(window);
-    s32 max;
-    d->page++;
-    max = d->pageCount - 1;
-    if (d->page > max) {
-        d->page = max;
-    }
-}
-
 // kept: without it msgWindow_Main changes; -opt nocse for the whole file changes other functions
 #pragma opt_common_subs off
 /**
@@ -2170,7 +2164,7 @@ static void msgWindow_Main(WindowEntry* window) {
             if (keyGetButtonTrg(0) & PAD_TRIGGER_Z) {
                 data->page = data->pageCount - 1;
 
-                if (msgWinPrevPage(window)) {
+                if (msgPageDec(window->userdata)) {
                     window->state = MSG_WIN_STATE_REVIEW_UP;
                     window->timestamp = gp->renderTime;
                     psndSFXOn(SFX_NAME_WORD(PSND_SFX_MESSAGE_Z1 | PSND_SFX_BYPASS_MUTE));
@@ -2214,7 +2208,7 @@ static void msgWindow_Main(WindowEntry* window) {
             if (trg & target) {
                 window->state = MSG_WIN_STATE_REVIEW_DOWN;
                 window->timestamp = gp->renderTime;
-                msgWinNextPage(window);
+                msgPageInc(window->userdata);
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_MESSAGE_Z1 | PSND_SFX_BYPASS_MUTE));
             }
             // BUG (JP and the early demos, fixed in US by the one-key-per-frame else): B and Z pressed in the same
@@ -2238,7 +2232,7 @@ static void msgWindow_Main(WindowEntry* window) {
                 window->state = MSG_WIN_STATE_REVIEW_UP;
                 window->timestamp = gp->renderTime;
 
-                if (msgWinPrevPage(window)) {
+                if (msgPageDec(window->userdata)) {
                     psndSFXOn(SFX_NAME_WORD(PSND_SFX_MESSAGE_Z1 | PSND_SFX_BYPASS_MUTE));
                 }
             }
