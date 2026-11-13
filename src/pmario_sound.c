@@ -9569,6 +9569,46 @@ void psndBGM_rate(s32 id, u16 rate) {
 }
 
 /**
+ * Sets the volume of BGM channel id (ignored when the channel is free) on its stream or song channel.
+ * Original name and size (0x70) from the JP demo map (UNUSED there: every call is inlined).
+ */
+static void psndBGM_vol(s32 id, u8 vol) {
+    PaperSoundBGM* bgm = &psbgm[id & 0xF];
+
+    if (bgm->listId == 0xFFFFFFFF) {
+        return;
+    }
+    if (psbgmlist[bgm->listId].flags & PSND_BGM_STREAM) {
+        SoundSSSetVolCh(bgm->streamId, vol);
+    } else {
+        SoundSongSetVolCh(bgm->streamId, vol);
+    }
+}
+
+/**
+ * Volume of a BGM channel after its fade and dip: volume scaled by the fade progress (timeMax / time)
+ * while a fade runs, then by dipTime / dipTimeMax (0x7F = no dip) while a dip runs.
+ * Original name and size (0x84) from the JP demo map (UNUSED there: every call is inlined).
+ */
+static u8 psndBGM_calcvol(PaperSoundBGM* bgm) {
+    PaperSoundFade* fade = &bgm->fade;
+    u8 a;
+    u8 b;
+
+    if (fade->state == PSND_FADE_STATE_IDLE) {
+        a = bgm->volume;
+    } else {
+        a = (u8)((bgm->volume * fade->timeMax) / fade->time);
+    }
+    if (fade->dipState == PSND_DIP_STATE_IDLE) {
+        b = 0x7F;
+    } else {
+        b = (u8)((fade->dipTime * 0x7F) / fade->dipTimeMax);
+    }
+    return (u8)(a * b / 127);
+}
+
+/**
  * Per-frame BGM update: frees channels whose song or stream ended,
  * applies the master BGM volume (65% while the letterbox is shown and not disabled, unless the BGM is exempt via psndBGMScope),
  * and runs fade-in, fade-out, hold and dip/undip volume ramps for both channels.
@@ -9580,12 +9620,8 @@ static void psndBGMMain(void) {
     s32 maxv = 100;
     PaperSoundFade* fade2;
     s32 vol;
-    u8 b;
     u8 a;
     s32 c;
-
-    PaperSoundBGM* tmpp2;
-    PaperSoundFade* f0;
     u32 alive;
     if ((psnd.flags & PSND_FLAG_LETTER_BOX) && !(psnd.flags & PSND_FLAG_LETTER_BOX_OFF)) {
         maxv = 65;
@@ -9638,30 +9674,9 @@ static void psndBGMMain(void) {
             vol = psnd.bgmVolume;
         }
 
-        // FAKE: f0 is a second name for fade (&bgm->fade) in its own block; using fade changes the object
-        f0 = &bgm->fade;
-        if (f0->state == PSND_FADE_STATE_IDLE) {
-            a = bgm->volume;
-        } else {
-            a = (u8)((bgm->volume * f0->timeMax) / f0->time);
-        }
-        if (f0->dipState == PSND_DIP_STATE_IDLE) {
-            b = 0x7F;
-        } else {
-            b = (u8)((f0->dipTime * 0x7F) / f0->dipTimeMax);
-        }
-        a = (u8)(a * b / 127);
+        a = psndBGM_calcvol(bgm);
 
-        // FAKE: tmpp2 and psbgm[i & 0xF] are the same entry, read both ways; reading every field through tmpp2
-        // changes the object
-        tmpp2 = &psbgm[i & 0xF];
-        if (tmpp2->listId != -1) {
-            if (psbgmlist[psbgm[i & 0xF].listId].flags & PSND_BGM_STREAM) {
-                SoundSSSetVolCh(tmpp2->streamId, (u8)(a * vol / 100));
-            } else {
-                SoundSongSetVolCh(psbgm[i & 0xF].streamId, (u8)(a * vol / 100));
-            }
-        }
+        psndBGM_vol(i, (u8)(a * vol / 100));
         if (fade->state == PSND_FADE_STATE_IN) {
             fade->timeMax++;
             if (fade->timeMax >= fade->time) {

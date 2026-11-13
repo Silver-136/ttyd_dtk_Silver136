@@ -95,7 +95,7 @@ u32 getFrontFloorAttr(PartyEntry* party, f32 dir);
 static f32 partyHomingOff(PartyEntry* party);
 static f32 partyGetGndY(f32 x, f32 y, f32 z);
 static f32 partyGetDirGndY(Vec u, f32 md);
-static u32 partyGetFrontAttrFar(PartyEntry* party);
+static u32 getFrontFloorAttr2(PartyEntry* party, f32 dir, f32 dist);
 static void partyGorFix(PartyEntry* party);
 static void partyPoseA2(PartyEntry* party);
 static s32 getFrontFloor(PartyEntry* party, Vec* out, f32 dir);
@@ -1047,7 +1047,7 @@ found:
             }
         }
         if (party->moveSpeed) {
-            attr = partyGetFrontAttrFar(party);
+            attr = getFrontFloorAttr2(party, party->targetDir, 40.0f);
             if (!(attr & HIT_ATTR_WATER_HAZARD)) {
                 v.x = party->position.x;
                 v.z = party->position.z;
@@ -1623,7 +1623,7 @@ void party_motion_homing_fly(PartyEntry* party) {
             }
         }
         if (party->moveSpeed) {
-            attr = partyGetFrontAttrFar(party);
+            attr = getFrontFloorAttr2(party, party->targetDir, 40.0f);
             if (!(attr & HIT_ATTR_WATER_HAZARD)) {
                 v.x = party->position.x;
                 v.z = party->position.z;
@@ -3462,19 +3462,19 @@ u32 getFrontFloorAttr(PartyEntry* party, f32 dir) {
 }
 
 /**
- * hit attributes of the floor 40 units ahead along targetDir (probed from 40 up, 100 down), 0 if none.
- * Homing walk does not step forward when it is 0x200 (water).
+ * hit attributes of the floor dist units ahead in direction dir (probed from dist up, 100 down), 0 if none.
+ * Homing walk does not step forward when it is 0x200 (water) 40 units ahead along targetDir.
+ * Original name and size (0xbc) from the JP demo map (UNUSED there: every call is inlined).
  */
-static inline u32 partyGetFrontAttrFar(PartyEntry* party) {
+static u32 getFrontFloorAttr2(PartyEntry* party, f32 dir, f32 dist) {
     HitCheckQuery q;
     HitEntry* hit;
     f32 s, c;
-    f32 k = 40.0f;
-    sincosf(&s, &c, party->targetDir);
+    sincosf(&s, &c, dir);
     q.targetDistance = 100.0f;
-    q.targetPos.x = s * k + party->position.x;
-    q.targetPos.z = c * k + party->position.z;
-    q.targetPos.y = party->position.y + k;
+    q.targetPos.x = s * dist + party->position.x;
+    q.targetPos.z = c * dist + party->position.z;
+    q.targetPos.y = party->position.y + dist;
     q.targetDir = (Vec){0.0f, -1.0f, 0.0f};
     hit = hitCheckVecFilter(&q, NULL);
     return hit ? hitGetAttr(hit) : 0;

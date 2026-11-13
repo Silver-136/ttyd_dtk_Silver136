@@ -571,19 +571,18 @@ HitEntry* partyChkFrontStep(PartyEntry* party, f32 range, f32* outY, f32* outDis
 }
 
 /**
- * Moves *out by half of the movement (sn, cs) * d with its component into the wall normal n removed,
+ * Moves *out by half of the movement (vx, vz) with its component into the wall normal n removed,
  * so a partner pushing into a wall slides along it.
+ * Original name and size (0x38) from the JP demo map (UNUSED there: every call is inlined).
  */
-static inline void partyWallSlide(Vec* out, Vec n, f32 d, f32 sn, f32 cs) {
+static void reflect2(Vec* out, Vec n, f32 vx, f32 vz) {
 #if VERSION >= VERSION_JP
     // Never read; unused in the original too: its stack slot and initializer template are in the retail code
     Vec unused = {0.0f, 0.0f, 0.0f};
 #endif
-    f32 mx = sn * d;
-    f32 mz = cs * d;
-    f32 dot = mx * n.x + mz * n.z;
-    out->x += 0.5f * (mx - dot * n.x);
-    out->z += 0.5f * (mz - dot * n.z);
+    f32 dot = vx * n.x + vz * n.z;
+    out->x += 0.5f * (vx - dot * n.x);
+    out->z += 0.5f * (vz - dot * n.z);
 }
 
 /**
@@ -821,7 +820,7 @@ HitEntry* partySearchWallFront(PartyEntry* party, Vec* pos, f32 dist, f32 ang) {
         p.y = pos->y + dy;
         hit = partyHitCheckDistNrm(party, &p, &dir, &nrm, &d);
         if (hit) {
-            partyWallSlide(pos, nrm, dist, sn, cs);
+            reflect2(pos, nrm, sn * dist, cs * dist);
             return hit;
         }
         if (party->currentMemberId == PARTY_YOSHI && (party->flags & PARTY_FLAG_IS_BEING_USED)) {
@@ -829,7 +828,7 @@ HitEntry* partySearchWallFront(PartyEntry* party, Vec* pos, f32 dist, f32 ang) {
             p.y = pos->y + dy;
             hit = partyHitCheckNrm(party, &p, &dir, &nrm, d);
             if (hit) {
-                partyWallSlide(pos, nrm, dist, sn, cs);
+                reflect2(pos, nrm, sn * dist, cs * dist);
                 return hit;
             }
         }
@@ -843,7 +842,7 @@ HitEntry* partySearchWallFront(PartyEntry* party, Vec* pos, f32 dist, f32 ang) {
         hit = partyHitCheckNrm(party, &p, &dir, &nrm, d);
         if (hit) {
             if (partyNrmTo(&nrm) >= 45.0f) {
-                partyWallSlide(pos, nrm, dist, sn, cs);
+                reflect2(pos, nrm, sn * dist, cs * dist);
                 return hit;
             }
         }
@@ -893,7 +892,7 @@ HitEntry* partySearchFrontWall(PartyEntry* party, Vec* pos, f32 dist, f32 ang) {
 #if VERSION >= VERSION_JP
             party->frontWallDist = d;
 #endif
-            partyWallSlide(pos, nrm, dist, sn, cs);
+            reflect2(pos, nrm, sn * dist, cs * dist);
             return hit;
         }
         dy = 11.0f;
@@ -913,7 +912,7 @@ HitEntry* partySearchFrontWall(PartyEntry* party, Vec* pos, f32 dist, f32 ang) {
 #if VERSION >= VERSION_JP
                 party->frontWallDist = d;
 #endif
-                partyWallSlide(pos, nrm, dist, sn, cs);
+                reflect2(pos, nrm, sn * dist, cs * dist);
                 return hit;
             }
         }
