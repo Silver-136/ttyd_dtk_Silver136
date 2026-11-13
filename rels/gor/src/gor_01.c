@@ -6890,28 +6890,26 @@ static s32 itemNameToID(const char* name) {
  * in args[1] and args[2], or 0 when no recipe matches. Mystery gives the same random dish in both outputs.
  */
 USER_FUNC(cook_chk) {
-    // FAKE: `(volatile u32)args[n]` index casts on the evtSetValue calls below (plain args[n] changes
-    // the object in both versions)
     EvtWord* args = event->args;
-    s32 item = evtGetValue(event, args[0]);
+    s32 item = evtGetValue(event, *args++);
     ItemData* data = &itemDataTable[item];
     u32 i;
 
     if (item == ITEM_MYSTERY) {
         item = naniga_okorukana_cook();
-        evtSetValue(event, args[1], item);
-        evtSetValue(event, args[2], item);
+        evtSetValue(event, *args++, item);
+        evtSetValue(event, *args++, item);
         return EVT_RETURN_DONE;
     }
     for (i = 0; i < 26; i++) {
         if (strcmp(data->id, R_simple_recipe_table[i].ingredient) == 0) {
-            evtSetValue(event, (volatile u32)args[1], itemNameToID(R_simple_recipe_table[i].result));
-            evtSetValue(event, (volatile u32)args[2], itemNameToID(R_simple_recipe_table[i].result2));
+            evtSetValue(event, *args++, itemNameToID(R_simple_recipe_table[i].result));
+            evtSetValue(event, *args++, itemNameToID(R_simple_recipe_table[i].result2));
             return EVT_RETURN_DONE;
         }
     }
-    evtSetValue(event, args[1], 0);
-    evtSetValue(event, args[2], 0);
+    evtSetValue(event, *args++, 0);
+    evtSetValue(event, *args++, 0);
     return EVT_RETURN_DONE;
 }
 #endif
@@ -6924,18 +6922,16 @@ USER_FUNC(cook_chk) {
  */
 #if VERSION >= VERSION_JP
 USER_FUNC(cook_chk2) {
-    // FAKE: `(volatile u32)args[n]` index casts on the evtSetValue calls below (plain args[n] changes
-    // the object in both versions)
     EvtWord* args = event->args;
-    s32 item1 = evtGetValue(event, args[0]);
-    s32 item2 = evtGetValue(event, args[1]);
+    s32 item1 = evtGetValue(event, *args++);
+    s32 item2 = evtGetValue(event, *args++);
     ItemData* data1 = &itemDataTable[item1];
     ItemData* data2 = &itemDataTable[item2];
     u32 i;
 
     if (item1 == ITEM_MYSTERY || item2 == ITEM_MYSTERY) {
         item2 = naniga_okorukana_cook();
-        evtSetValue(event, (volatile u32)args[2], item2);
+        evtSetValue(event, *args++, item2);
         return EVT_RETURN_DONE;
     }
 #if VERSION >= VERSION_US
@@ -6945,11 +6941,11 @@ USER_FUNC(cook_chk2) {
 #endif
         if ((strcmp(data1->id, R_cookbook_recipe_table[i].a) == 0 && strcmp(data2->id, R_cookbook_recipe_table[i].b) == 0) ||
             (strcmp(data2->id, R_cookbook_recipe_table[i].a) == 0 && strcmp(data1->id, R_cookbook_recipe_table[i].b) == 0)) {
-            evtSetValue(event, (volatile u32)args[2], itemNameToID(R_cookbook_recipe_table[i].out));
+            evtSetValue(event, *args++, itemNameToID(R_cookbook_recipe_table[i].out));
             return EVT_RETURN_DONE;
         }
     }
-    evtSetValue(event, args[2], 0);
+    evtSetValue(event, *args++, 0);
     return EVT_RETURN_DONE;
 }
 #endif
@@ -6966,7 +6962,7 @@ static inline BOOL fileAsyncMissing(FileEntry* file) {
  */
 static USER_FUNC(cook_chk) {
     EvtWord* args = event->args;
-    s32 item = evtGetValue(event, args[0]);
+    s32 item = evtGetValue(event, *args++);
     ItemData* data = &itemDataTable[item];
     FileEntry* file;
     char ingredient[128];
@@ -6975,8 +6971,8 @@ static USER_FUNC(cook_chk) {
 
     if (item == 163) {
         item = naniga_okorukana_cook();
-        evtSetValue(event, args[1], item);
-        evtSetValue(event, args[2], item);
+        evtSetValue(event, *args++, item);
+        evtSetValue(event, *args++, item);
         return EVT_RETURN_DONE;
     }
     file = (FileEntry*)fileAsyncf(0, NULL, "%s/cooking.xml", getMarioStDvdRoot());
@@ -6984,8 +6980,8 @@ static USER_FUNC(cook_chk) {
         return EVT_RETURN_BLOCK;
     }
     if (fileAsyncMissing(file)) {
-        evtSetValue(event, args[1], 0);
-        evtSetValue(event, args[2], 0);
+        evtSetValue(event, *args++, 0);
+        evtSetValue(event, *args++, 0);
         return EVT_RETURN_DONE;
     }
     strcpy(ingredient, "");
@@ -7008,9 +7004,8 @@ static USER_FUNC(cook_chk) {
     parsePop();
     fileFree(file);
 
-    // FAKE: volatile casts, see the retail cook_chk.
-    evtSetValue(event, (volatile u32)args[1], itemNameToID(result));
-    evtSetValue(event, (volatile u32)args[2], itemNameToID(result2));
+    evtSetValue(event, *args++, itemNameToID(result));
+    evtSetValue(event, *args++, itemNameToID(result2));
     return EVT_RETURN_DONE;
 }
 #endif
@@ -7024,8 +7019,8 @@ static USER_FUNC(cook_chk) {
 #if VERSION <= VERSION_DEMO_JP
 static USER_FUNC(cook_chk2) {
     EvtWord* args = event->args;
-    s32 item1 = evtGetValue(event, args[0]);
-    s32 item2 = evtGetValue(event, args[1]);
+    s32 item1 = evtGetValue(event, *args++);
+    s32 item2 = evtGetValue(event, *args++);
     ItemData* data1 = &itemDataTable[item1];
     ItemData* data2 = &itemDataTable[item2];
     FileEntry* file;
@@ -7035,9 +7030,7 @@ static USER_FUNC(cook_chk2) {
 
     if (item1 == 163 || item2 == 163) {
         item2 = naniga_okorukana_cook();
-
-        // FAKE: volatile cast, see the retail cook_chk.
-        evtSetValue(event, (volatile u32)args[2], item2);
+        evtSetValue(event, *args++, item2);
         return EVT_RETURN_DONE;
     }
     file = (FileEntry*)fileAsyncf(0, NULL, "%s/cooking.xml", getMarioStDvdRoot());
@@ -7045,7 +7038,7 @@ static USER_FUNC(cook_chk2) {
         return EVT_RETURN_BLOCK;
     }
     if (fileAsyncMissing(file)) {
-        evtSetValue(event, args[2], 0);
+        evtSetValue(event, *args++, 0);
         return EVT_RETURN_DONE;
     }
     strcpy(a, "");
@@ -7069,8 +7062,7 @@ static USER_FUNC(cook_chk2) {
     parsePop();
     fileFree(file);
 
-    // FAKE: volatile cast, see the retail cook_chk.
-    evtSetValue(event, (volatile u32)args[2], itemNameToID(out));
+    evtSetValue(event, *args++, itemNameToID(out));
     return EVT_RETURN_DONE;
 }
 #endif

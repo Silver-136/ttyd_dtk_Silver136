@@ -98,7 +98,7 @@ in `docs/FAKES.md` and in the mweppc review record.
 - Prototypes of restored stripped functions (rule, user 2026-11-08): a global function the JP demo map lists as
   stripped gets its prototype in its unit's header, like every other global (the header is the interface); no
   private declarations. Done for the 15 that had none (pouch addHead/addHeadCheck/addTail/pouchGetItemCheck,
-  itemHitCheckY/Up, statusWinEase, breakableMobj, effMugiEntry, evt_mobj_rideswitch, mobj_sign,
+  itemHitCheckY/Up, breakableMobj, effMugiEntry, evt_mobj_rideswitch, mobj_sign,
   mobj_koopa_stone_blk, THPSimpleGetFrameRate/Volume, rndi; itemdrv.h now includes hitdrv.h for HitEntry).
   Not covered: FAKE stand-ins (`*Stripped*`, forceSdata), non-static inline helpers, partyNrmToAngle (its
   pointer prototype in party.c is a FAKES row); cleanup_tools/uncalled_protos.py lists the rest.

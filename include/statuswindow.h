@@ -95,4 +95,4 @@ void statusWinForceCloseClear(void);
 void statusWinForceUpdateCoin(void);
 Vec statusGetApPos(void);
 void statusWinOpen(void);
-void statusWinEase(f32* f);
+void winPositionCalc(void);

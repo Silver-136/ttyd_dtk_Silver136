@@ -123,9 +123,7 @@ void statusWinReInit(void) {
  */
 void statusWinMain(void) {
     MarioWork* mario;
-    f32 inv;
     f32 one;
-    f32 t;
 
     one = 1.0f;
     mario = marioGetPtr();
@@ -219,25 +217,7 @@ void statusWinMain(void) {
         wp->flags &= ~STATUS_WINDOW_FLAG_FORCE_OPEN_REQ;
         wp->flags &= ~STATUS_WINDOW_FLAG_FORCE_CLOSE_REQ;
     }
-#if VERSION >= VERSION_US
-    wp->timer += 60.0f / gp->framerate;
-#else
-    wp->timer += one;
-#endif
-    if (wp->timer >= wp->duration) {
-        wp->timer = wp->duration;
-        wp->t = wp->tEnd;
-        if (wp->t == 0.0f) {
-            wp->flags &= ~STATUS_WINDOW_FLAG_MENU_ICONS;
-        }
-    } else {
-        inv = (f32)cos(3.1415927f * wp->timer / wp->duration);
-        wp->t = wp->tStart + (wp->tEnd - wp->tStart) * (one - inv) / 2.0f;
-    }
-    t = wp->t;
-    inv = 1.0f - t;
-    wp->x = wp->openX * t + wp->closeX * inv;
-    wp->y = wp->openY * t + wp->closeY * inv;
+    winPositionCalc();
     valueUpdate();
     if (!(wp->flags & STATUS_WINDOW_FLAG_DISP_OFF)) {
         dispEntry(CAMERA_2D, 500.0f, DISP_MODE_OPAQUE, statusWinDisp, NULL);
@@ -581,6 +561,39 @@ static BOOL valueCheck(void) {
 }
 
 /**
+ * Advances the HUD slide timer and eases the HUD position between its closed (t = 0) and open (t = 1) spots
+ * with a half cosine; clears the menu icons once fully closed.
+ * Original name and size (0xf4) from the JP demo map (UNUSED there: every call is inlined).
+ */
+void winPositionCalc(void) {
+    f32 t;
+    f32 inv;
+    f32 c;
+    f32 one;
+
+    one = 1.0f;
+#if VERSION >= VERSION_US
+    wp->timer += 60.0f / gp->framerate;
+#else
+    wp->timer += one;
+#endif
+    if (wp->timer >= wp->duration) {
+        wp->timer = wp->duration;
+        wp->t = wp->tEnd;
+        if (wp->t == 0.0f) {
+            wp->flags &= ~STATUS_WINDOW_FLAG_MENU_ICONS;
+        }
+    } else {
+        c = (f32)cos(3.1415927f * wp->timer / wp->duration);
+        wp->t = wp->tStart + (wp->tEnd - wp->tStart) * (one - c) / 2.0f;
+    }
+    t = wp->t;
+    inv = 1.0f - t;
+    wp->x = wp->openX * t + wp->closeX * inv;
+    wp->y = wp->openY * t + wp->closeY * inv;
+}
+
+/**
  * Step for the counting-number animation: a tenth of the remaining difference, at least 1 toward the target,
  * 0 when equal.
  */
@@ -777,20 +790,4 @@ void statusMarioHPBlink(s32 frames) {
 void statusPartyHPBlink(s32 frames) {
     wp->blink |= STATUS_BLINK_PARTY_HP;
     wp->blinkTimer = frames;
-}
-
-// FAKE: unreferenced (dead-stripped at link); it only sets the order of the float constants in the pool, and the
-// object changes without it.
-void statusWinEase(f32* f) {
-    f[0] = 0.0f;
-#if VERSION >= VERSION_US
-    // US and later pool order: 0, 60 (framerate step), pi, 1, 0.5
-    f[4] = 60.0f;
-    f[2] = 3.1415927f;
-    f[1] = 1.0f;
-#else
-    f[1] = 1.0f;
-    f[2] = 3.1415927f;
-#endif
-    f[3] = 0.5f;
 }
