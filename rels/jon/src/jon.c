@@ -2069,6 +2069,10 @@ static EVT_BEGIN(dokan_open)
 #if VERSION >= VERSION_US
     WAIT_MS(1000)
 #else
+    // BUG: evt_cam_letter_box_wait has no time limit, and camLetterBox only brings the bars in while no partner
+    // ability is in use and the letterbox is not disabled. If the bars cannot come in here, this script waits
+    // forever with Mario's controls off and the pipe never rises (the early-demo branch above has the same wait;
+    // US waits a fixed second instead).
     CALL(evt_cam_letter_box_wait)
 #endif
 #endif

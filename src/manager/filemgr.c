@@ -617,7 +617,9 @@ static FileEntry* _fileAlloc(const char* filename, s32 type, void (*callback)(Fi
                 OSYieldThread();
             }
 #else
-            // busy-waits until the loader thread clears the entry (US and later yield instead)
+            // BUG: busy-waits until the loader thread clears the entry. dvdmgr's thread has the main thread's
+            // priority (16) and is never switched to while this loop runs, so if the file's read is still in
+            // flight the game hangs here. US and later call OSYieldThread in the loop.
             while (search->entry) {
             }
 #endif
