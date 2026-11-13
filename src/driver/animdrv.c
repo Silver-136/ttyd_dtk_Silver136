@@ -2746,10 +2746,9 @@ static void renderProc(s32 shapeId, s32 unused) {
                 if (pose2->flags & ANIM_POSE_FLAG_CHANGE_TEXTURE) {
                     texObj = wp->texObjs[0];
                     if (texObj) {
-                        buffer = (f32*)wp->paperMtxPtr[0]; // FAKE: the paper matrix pointer held in buffer (an earlier web) so it is a split @ web, not a named mtx local
-                        if (buffer) {
+                        if (wp->paperMtxPtr[0]) {
                             cd = wp->curPoseData;
-                            animSetMaterial_ChangeTexture(cd, draw, pose2, texObj, wp->texDatas[0], *(Mtx*)buffer, 1);
+                            animSetMaterial_ChangeTexture(cd, draw, pose2, texObj, wp->texDatas[0], *wp->paperMtxPtr[0], 1);
                         }
                     }
                 }

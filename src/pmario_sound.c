@@ -9810,15 +9810,16 @@ BOOL psndBGMOn_f_d(u32 flags, const char* bgm_name, u32 fadetime, u32 fadeout, s
     s32 i;
     u8 pan;
     u32 old;
+    u32 restart;
     unsigned int fo;
     PaperSoundFade* fade;
     s32 id;
     u32 ft;
     u32 fl;
 
-    // FAKE: fo/ft/fl are copies of the parameters; flags is reused to hold the volume and fadetime to hold the
-    // PSND_RESTART test; the never-true gz block after the early return gives ft and fo a second definition; fade2
-    // repeats fade, and the name is looked up through searchPSBGMList. Using the parameters directly changes the object.
+    // FAKE: fo/ft/fl are copies of the parameters; flags is reused to hold the volume; the never-true gz block after the
+    // early return gives ft and fo a second definition; fade2 repeats fade, and the name is looked up through
+    // searchPSBGMList. Using the parameters directly changes the object.
     fo = fadeout;
     ft = fadetime;
     fl = flags;
@@ -9989,8 +9990,8 @@ BOOL psndBGMOn_f_d(u32 flags, const char* bgm_name, u32 fadetime, u32 fadeout, s
     SoundSetFadeTime(ft, ft);
     old = bgm->listId;
     if (old != 0xFFFFFFFF) {
-        fadetime = fl & PSND_RESTART;
-        if (!fadetime) {
+        restart = fl & PSND_RESTART;
+        if (!restart) {
             if (fl & PSND_CONTINUE) {
 #endif
                 if (psbgmlist[old].flags & PSND_BGM_STREAM) {
@@ -10056,11 +10057,7 @@ BOOL psndBGMOn_f_d(u32 flags, const char* bgm_name, u32 fadetime, u32 fadeout, s
             }
         }
         if (entry->flags & PSND_BGM_STREAM) {
-#if VERSION <= VERSION_DEMO_JP
             if (restart) {
-#else
-            if (fadetime) {
-#endif
                 SoundSetFadeTime(0, 100);
                 SoundSSFadeoutCh(bgm->streamId);
             } else {

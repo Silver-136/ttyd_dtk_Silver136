@@ -443,10 +443,10 @@ void battleCameraMain(void) {
     case BTL_CAM_MODE_VICTORY:
     case BTL_CAM_MODE_VICTORY_AUDIENCE:
         mario = BattleGetMarioPtr(wp);
-        part = (BattleUnitPart*)BattleGetPartyPtr(wp); // FAKE: party held in part (role swap)
-        if ((BattleUnit*)part != NULL) {
+        party = BattleGetPartyPtr(wp);
+        if (party != NULL) {
             BtlUnit_GetHomePos(mario, &mx, &my, &mz);
-            BtlUnit_GetHomePos((BattleUnit*)part, &px, &py, &pz);
+            BtlUnit_GetHomePos(party, &px, &py, &pz);
             atX = 0.5f * (mx + px);
             atY = 0.5f * (my + py);
             atZ = 0.5f * (mz + pz);

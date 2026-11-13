@@ -1154,6 +1154,7 @@ static u32 lookupSafetyPos(Vec pos, f32 height, Vec* out) {
     f32 x;
     f32 y;
     f32 z;
+    f32 top;
     f32 c;
     f32 w;
     HitEntry* h0;
@@ -1173,10 +1174,9 @@ static u32 lookupSafetyPos(Vec pos, f32 height, Vec* out) {
     z = w * -c + pos.z;
     p[3].z = z;
 
-    // FAKE: y + height held in the otherwise dead c; removing it changes the object
-    c = y + height;
+    top = y + height;
     dist = 0.1f + height;
-    h0 = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, x, c, z, 0.0f, (-1.0f), 0.0f);
+    h0 = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, x, top, z, 0.0f, (-1.0f), 0.0f);
     deg = revise360(toMovedir(player->displayDirectionTarget) - 90.0f);
     x = w * (f32)sin((3.1415927f * deg) / 180.0f) + pos.x;
     p[2].x = x;
@@ -1185,8 +1185,9 @@ static u32 lookupSafetyPos(Vec pos, f32 height, Vec* out) {
     p[2].y = y;
     z = w * -c + pos.z;
     p[2].z = z;
+    top = y + height;
     dist = 0.1f + height;
-    h1 = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, x, y + height, z, 0.0f, (-1.0f), 0.0f);
+    h1 = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, x, top, z, 0.0f, (-1.0f), 0.0f);
     deg = revise360(90.0f + toMovedir(player->displayDirectionTarget));
     x = w * (f32)sin((3.1415927f * deg) / 180.0f) + pos.x;
     p[1].x = x;
@@ -1195,8 +1196,9 @@ static u32 lookupSafetyPos(Vec pos, f32 height, Vec* out) {
     p[1].y = y;
     z = w * -c + pos.z;
     p[1].z = z;
+    top = y + height;
     dist = 0.1f + height;
-    h2 = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, x, y + height, z, 0.0f, (-1.0f), 0.0f);
+    h2 = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, x, top, z, 0.0f, (-1.0f), 0.0f);
     deg = revise360(toMovedir(player->displayDirectionTarget));
     x = w * (f32)sin((3.1415927f * deg) / 180.0f) + pos.x;
     p[0].x = x;
@@ -1205,8 +1207,9 @@ static u32 lookupSafetyPos(Vec pos, f32 height, Vec* out) {
     p[0].y = y;
     z = w * -c + pos.z;
     p[0].z = z;
+    top = y + height;
     dist = 0.1f + height;
-    h3 = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, x, y + height, z, 0.0f, (-1.0f), 0.0f);
+    h3 = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, x, top, z, 0.0f, (-1.0f), 0.0f);
     flags = 0;
     if (h2) {
         flags |= 4;
