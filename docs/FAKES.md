@@ -301,7 +301,6 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | src/battle/battle_seq_end.c | btlseqEnd | `(u32)` casts on the s32 `BattleUnit.statusFlags` in the Danger/Peril tests (8) | without the casts: changes the object; field typed u32: battle_unit.c changes |
 | Demos | src/manager/cardmgr_demo.inc | (demo copy of cardmgr.c) | no-op self-assignment the target compiles to a register copy; | see comment |
 | Demos | src/driver/npcdrv.c | fbatHitCheck (demo copy) | `(*(T*)&...)` field reads as in the retail copy's row | plain field reads |
-| Both | src/driver/npcdrv.c | npcStrippedKoopaPool | stand-in that nothing calls; it only places 60.0f and the water splash sound name in the constant pools (npcCheckInWater, restored 2026-11-09, takes the name from npcMain) | see comment |
 | Both | src/driver/npcdrv.c | npcDisp_blur | `#pragma optimization_level 2` (push/pop) for this function only | removing it changes the object |
 | Both | src/driver/npcdrv.c | npcSetTalkPose .. npcCheckHitMarioSide | `opt_propagation` and `opt_lifetimes` off over these functions | removing either changes npcCheckHitMarioSide; the file-wide `-opt noprop,nolifetimes` changes other functions (2026-11-07) |
 | Both | src/battle/battle_enemy_item.c | _check_hp_recover_item, _check_fp_recover_item, _check_attack_item, _check_status_attack_item, _check_status_support_item, _check_status_recover_item | `(s32)(s8)` no-op casts on the s8 attackDirection passed to BattleSamplingEnemy | the plain field at all six: changes the object |

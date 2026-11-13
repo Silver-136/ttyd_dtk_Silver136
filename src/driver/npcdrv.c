@@ -712,7 +712,7 @@ static inline void npcMoveSide(NpcEntry* entry, f32 mx, f32 mz) {
  * Then on-screen culling, draw, shadow, blur and offscreen registration.
  * Last it runs the first-strike banner and the field battle mode (encounter, talk or battle).
  */
-void npcCheckInWater(NpcEntry* entry, const char* sfx);
+BOOL npcCheckInWater(NpcEntry* entry);
 void _fbatFitstAttackAnnounceMain(FirstStrikeInfo* firstStrike);
 
 void npcMain(void) {
@@ -777,8 +777,7 @@ void npcMain(void) {
             }
 
             if (entry->flags & NPC_FLAG_READY) {
-                npcCheckInWater(entry, SFX_NAME_WORD("SFX_KUPPA_3RD_WATER_FALL1"));
-                if (entry->statusFlags & NPC_STATUS_IN_WATER && !(entry->statusFlags & NPC_STATUS_NO_WATER_DRAG)) {
+                if (npcCheckInWater(entry) && !(entry->statusFlags & NPC_STATUS_NO_WATER_DRAG)) {
                     entry->maxFallSpeed = 100.0f;
                     speedScale = 0.5f;
                 } else {
@@ -3641,16 +3640,12 @@ void npcClearDeadInfo(void) {
     memset(gp->fbatData->deadInfo, 0, sizeof(gp->fbatData->deadInfo));
 }
 
-// FAKE: stand-in; nothing calls it (the linker strips it); it only places 60.0f and the water splash's sound name
-// in this object's constant pools (npcCheckInWater takes the name from npcMain). Removing it changes the object.
-void npcStrippedKoopaPool(f32* f, const char** p) {
-    f[0] = 60.0f;
-    p[0] = "SFX_KUPPA_3RD_WATER_FALL1";
-}
-
-/** On kpa_03, marks an NPC at or below the water line (y 365) as in water, with a splash when it enters. */
+/**
+ * On kpa_03, marks an NPC at or below the water line (y 365) as in water, with a splash when it enters;
+ * returns whether it is in water.
+ */
 // Original name and size (0xb8) from the JP demo map (UNUSED there: npcMain's call is inlined).
-void npcCheckInWater(NpcEntry* entry, const char* sfx) {
+BOOL npcCheckInWater(NpcEntry* entry) {
     if (entry->statusFlags & NPC_STATUS_IN_WATER) {
         entry->statusFlags |= NPC_STATUS_WAS_IN_WATER;
     } else {
@@ -3660,9 +3655,10 @@ void npcCheckInWater(NpcEntry* entry, const char* sfx) {
     if (!strcmp(gp->currentMapName, "kpa_03") && !(entry->position.y > 365.0f)) {
         entry->statusFlags |= NPC_STATUS_IN_WATER;
         if (!(entry->statusFlags & NPC_STATUS_WAS_IN_WATER) && (entry->statusFlags & NPC_STATUS_IN_WATER)) {
-            psndSFXOn_3D(sfx, &entry->position);
+            psndSFXOn_3D(SFX_NAME_WORD("SFX_KUPPA_3RD_WATER_FALL1"), &entry->position);
         }
     }
+    return (entry->statusFlags & NPC_STATUS_IN_WATER) != 0;
 }
 
 /**
