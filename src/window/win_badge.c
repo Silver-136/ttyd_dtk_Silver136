@@ -378,13 +378,7 @@ void winBadgeDisp(s32 camId, void* param, s32 n) {
  * equipped highlight, icon, name, BP cost and cost pips, plus the page arrows and the Z sort hint.
  * JP and later gray out badges Mario cannot afford.
  */
-#if VERSION <= VERSION_DEMO_JP
 static void badge_disp(WindowWork* w, f32 xo, f32 yo) {
-#else
-static void badge_disp(WindowWork* w, f32 xo, f32 yo) {
-    WindowWork* p0;
-#endif
-
     ItemData* item;
     s8* cost;
     s32 j;
@@ -398,7 +392,6 @@ static void badge_disp(WindowWork* w, f32 xo, f32 yo) {
     GXColor colD;
     char buf[64];
     s32 cnt;
-    s32 rowOff;
     s32 i;
     s32 badge;
     s32 equipped;
@@ -418,42 +411,22 @@ static void badge_disp(WindowWork* w, f32 xo, f32 yo) {
         cnt = w->badge.count;
     }
     GXSetScissor(0, 0x77, 0x260, 0xB8);
-#if VERSION <= VERSION_DEMO_JP
     for (i = 0; i < cnt; i++) {
-#else
-    p0 = w;
-
-    // FAKE: p0 is a WindowWork* stepped one WinBadgeEnt at a time, so list[0] reads w->badge.list[i] with the 0x404 kept in the load displacement (w->badge.list[i] or a WinBadgeEnt* walk changes the induction order and the base register)
-    for (i = 0, rowOff = 0; i < cnt; p0 = (WindowWork*)((WinBadgeEnt*)p0 + 1), rowOff += 23, i++) {
-#endif
         if (w->badge.tab == 0) {
             badge = pouchHaveBadge(i);
         } else {
-#if VERSION <= VERSION_DEMO_JP
             badge = w->badge.list[i].id;
-#else
-            badge = p0->badge.list[0].id;
-#endif
         }
         scroll = w->badge.scroll[w->badge.tab];
         if (w->badge.tab == 0) {
             equipped = pouchEquipCheckBadgeIndex(i);
         } else {
-#if VERSION <= VERSION_DEMO_JP
             equipped = w->badge.list[i].equipped;
         }
         if ((scroll + ((yo + 110.0f) - (f32)(i * 23))) > 240.0f) {
             continue;
         }
         if ((scroll + ((yo + 110.0f) - (f32)(i * 23))) < -240.0f) {
-#else
-            equipped = p0->badge.list[0].equipped;
-        }
-        if ((scroll + ((yo + 110.0f) - (f32)rowOff)) > 240.0f) {
-            continue;
-        }
-        if ((scroll + ((yo + 110.0f) - (f32)rowOff)) < -240.0f) {
-#endif
             break;
         }
         if (equipped) {
@@ -469,7 +442,7 @@ static void badge_disp(WindowWork* w, f32 xo, f32 yo) {
         cost = &item->bp_cost;
         winFontSet((Vec){130.0f + xo, scroll + (12.0f + ((yo + 110.0f) - (f32)(i * 23))), 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, colB, "%d", *cost);
 #else
-            winTexSet(0x1E, (Vec){82.0f + xo, (scroll + ((yo + 110.0f) - (f32)rowOff)), 0.0f}, (Vec){44.0f, 1.0f, 1.0f}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+            winTexSet(0x1E, (Vec){82.0f + xo, (scroll + ((yo + 110.0f) - (f32)(i * 23))), 0.0f}, (Vec){44.0f, 1.0f, 1.0f}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
         }
         if (!equipped && itemDataTable[badge].bp_cost > pouchGetPtr()->availableBP) {
             colB = (GXColor){0x7F, 0x7F, 0x7F, 0xFF};
@@ -483,17 +456,17 @@ static void badge_disp(WindowWork* w, f32 xo, f32 yo) {
         } else {
             winIconGrayInit();
         }
-        winIconSet(itemDataTable[badge].icon_id, (Vec){xo - 75.0f, (scroll + ((yo + 110.0f) - (f32)rowOff)), 0.0f}, (Vec){0.54f, 0.54f, 0.54f}, colA);
+        winIconSet(itemDataTable[badge].icon_id, (Vec){xo - 75.0f, (scroll + ((yo + 110.0f) - (f32)(i * 23))), 0.0f}, (Vec){0.54f, 0.54f, 0.54f}, colA);
         item = &itemDataTable[badge];
         winFontInit();
 #if VERSION >= VERSION_US
-        winFontSetWidth((Vec){xo - 55.0f, scroll + (12.0f + ((yo + 110.0f) - (f32)rowOff)), 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, colB, 170.0f, msgSearch(item->name));
+        winFontSetWidth((Vec){xo - 55.0f, scroll + (12.0f + ((yo + 110.0f) - (f32)(i * 23))), 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, colB, 170.0f, msgSearch(item->name));
 #else
-        winFontSet((Vec){xo - 55.0f, scroll + (12.0f + ((yo + 110.0f) - (f32)rowOff)), 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, colB, item->id);
+        winFontSet((Vec){xo - 55.0f, scroll + (12.0f + ((yo + 110.0f) - (f32)(i * 23))), 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, colB, item->id);
 #endif
         cost = &item->bp_cost;
         sprintf(buf, "%s", winZenkakuStr(*cost));
-        winFontSet((Vec){(142.0f + xo) - (f32)(FontGetMessageWidth(buf) / 2), scroll + (12.0f + ((yo + 110.0f) - (f32)rowOff)), 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, colB, buf);
+        winFontSet((Vec){(142.0f + xo) - (f32)(FontGetMessageWidth(buf) / 2), scroll + (12.0f + ((yo + 110.0f) - (f32)(i * 23))), 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, colB, buf);
 #endif
         winTexInit(*w->res->data);
         for (j = 0; j < *cost; j++) {
@@ -501,7 +474,7 @@ static void badge_disp(WindowWork* w, f32 xo, f32 yo) {
             winTexSet(equipped ? WIN_TEX_BP_LIT : WIN_TEX_BP_DARK, (Vec){(160.0f + xo) + j * 13, (scroll + ((yo + 110.0f) - (f32)(i * 23))), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, colA);
 #else
             winTexSet(equipped ? WIN_TEX_BP_LIT : WIN_TEX_BP_DARK,
-                      (Vec){(160.0f + xo) + j * 13, (scroll + ((yo + 110.0f) - (f32)rowOff)), 0.0f},
+                      (Vec){(160.0f + xo) + j * 13, (scroll + ((yo + 110.0f) - (f32)(i * 23))), 0.0f},
                       (Vec){1.0f, 1.0f, 1.0f}, colA);
 #endif
         }

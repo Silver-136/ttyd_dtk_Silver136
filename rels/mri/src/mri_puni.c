@@ -6650,6 +6650,7 @@ static USER_FUNC(evt_puni_exit) {
     Vec pos;
     s32 o1;
     s32 o2;
+    s32 off;
     s32 j;
 
     evtGetValue(event, args[1]);
@@ -6747,9 +6748,8 @@ static USER_FUNC(evt_puni_exit) {
         for (j = 1; j <= PUNI_ALLY_LAST; j++) {
             Vec zero = {0.0f, 0.0f, 0.0f};
 
-            // FAKE: the dead mode variable reused for this loop's slot offset (register colouring)
-            mode = (j - 1) * 7;
-            puni_exit_swset(mode, 0, &zero);
+            off = (j - 1) * 7;
+            puni_exit_swset(off, 0, &zero);
         }
     }
     return EVT_RETURN_DONE;

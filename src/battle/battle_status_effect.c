@@ -524,13 +524,14 @@ void BattleStatusChangeInfoSetAnnouce(BattleUnit* unit, s32 type, s32 strength, 
         n++;
     }
 
-    // FAKE: goto chain for a plain if/else; if (t != 0) { u = 0x50; } else { u = 0x3C; } changes the object
-    if (t == 0) goto L3;
-    u = 0x50;
-    goto Ld;
-L3:
-    u = 0x3C;
-Ld:;
+    switch (t) {
+        default:
+            u = 0x50;
+            break;
+        case 0:
+            u = 0x3C;
+            break;
+    }
     for (j = n; j >= 0; j--) {
         if (e[j].type != -1) {
             e[j].stackOffset = u;

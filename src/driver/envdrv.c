@@ -638,20 +638,18 @@ void envBlurOff(void) {
 static void envGlare(EnvironmentGlare* glare) {
     static f32 frame_cnt = 0.0f;
     EnvironmentWork* envWork = envGetWork();
+    GXTevKColorSel kcolorSel1;
+    GXTevKColorSel kcolorSel0;
     s16 sx;
     EnvironmentGlareFilter* glareFilter;
     u32 texH;
     u32 texW;
 
-    // FAKE: glareIter/glareCur walk the coords as EnvironmentGlare pointers stepped by one EnvironmentGlareTexCoord; one coord pointer over glare->coords changes the object
-    EnvironmentGlare* glareIter;
-    EnvironmentGlare* glareCur;
     s32 width;
     s32 y1v;
 
     s32 x1v;
     s32 glareCount;
-    u32 texMtxId;
     s16 sy;
     s32 doneCount;
     s32 batchCount;
@@ -689,31 +687,29 @@ static void envGlare(EnvironmentGlare* glare) {
     glareCount = glare->count;
     doneCount = 0;
 
-    // FAKE: texW/texH are reused to hold the two konst colour selections; reading glare->kcolorSel0/1 at each call
-    // changes the object
-    texW = glare->kcolorSel0;
-    texH = glare->kcolorSel1;
+    kcolorSel0 = glare->kcolorSel0;
+    kcolorSel1 = glare->kcolorSel1;
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
     GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_SUB, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVREG1);
     GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_KONST, GX_CC_ZERO, GX_CC_ZERO, GX_CC_TEXC);
-    GXSetTevKColorSel(GX_TEVSTAGE0, texW);
+    GXSetTevKColorSel(GX_TEVSTAGE0, kcolorSel0);
     GXSetTevSwapMode(GX_TEVSTAGE0, GX_TEV_SWAP0, GX_TEV_SWAP0);
     GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR_NULL);
     GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
     GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_ZERO, GX_CC_C1, GX_CC_KONST, GX_CC_ZERO);
-    GXSetTevKColorSel(GX_TEVSTAGE1, texH);
+    GXSetTevKColorSel(GX_TEVSTAGE1, kcolorSel1);
     GXSetTevSwapMode(GX_TEVSTAGE1, GX_TEV_SWAP0, GX_TEV_SWAP0);
 
     for (i = 0; i < 7; i++) {
         GXSetTevOrder(i * 2 + 2, i + 1, GX_TEXMAP0, GX_COLOR_NULL);
         GXSetTevColorOp(i * 2 + 2, GX_TEV_SUB, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVREG1);
         GXSetTevColorIn(i * 2 + 2, GX_CC_KONST, GX_CC_ZERO, GX_CC_ZERO, GX_CC_TEXC);
-        GXSetTevKColorSel(i * 2 + 2, texW);
+        GXSetTevKColorSel(i * 2 + 2, kcolorSel0);
         GXSetTevSwapMode(i * 2 + 2, GX_TEV_SWAP0, GX_TEV_SWAP0);
         GXSetTevOrder(i * 2 + 3, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR_NULL);
         GXSetTevColorOp(i * 2 + 3, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
         GXSetTevColorIn(i * 2 + 3, GX_CC_ZERO, GX_CC_C1, GX_CC_KONST, GX_CC_CPREV);
-        GXSetTevKColorSel(i * 2 + 3, texH);
+        GXSetTevKColorSel(i * 2 + 3, kcolorSel1);
         GXSetTevSwapMode(i * 2 + 3, GX_TEV_SWAP0, GX_TEV_SWAP0);
     }
 
@@ -747,19 +743,13 @@ static void envGlare(EnvironmentGlare* glare) {
     x1v = x0 + width;
     sx = x0;
     sy = y0;
-    glareIter = glare;
     while (doneCount < glareCount) {
-        glareCur = glareIter;
         batchCount = 0;
-        texMtxId = GX_TEXMTX0;
         while ((batchCount < 8) && (doneCount < glareCount)) {
-            MTXTrans(texMtx, (glare->coordScale * glareCur->coords[0].x) / (f32)gp->fbWidth,
-                     (glare->coordScale * glareCur->coords[0].y) / (f32)gp->efbHeight, 0.0f);
-            GXLoadTexMtxImm(texMtx, texMtxId, GX_MTX2x4);
-            texMtxId += 3;
+            MTXTrans(texMtx, (glare->coordScale * glare->coords[doneCount].x) / (f32)gp->fbWidth,
+                     (glare->coordScale * glare->coords[doneCount].y) / (f32)gp->efbHeight, 0.0f);
+            GXLoadTexMtxImm(texMtx, GX_TEXMTX0 + batchCount * 3, GX_MTX2x4);
             batchCount += 1;
-            glareCur = (EnvironmentGlare*)((EnvironmentGlareTexCoord*)glareCur + 1);
-            glareIter = (EnvironmentGlare*)((EnvironmentGlareTexCoord*)glareIter + 1);
             doneCount += 1;
         }
         GXSetNumTevStages((u8)(batchCount * 2));
