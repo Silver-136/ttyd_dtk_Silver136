@@ -493,11 +493,20 @@ void partyMoveAnime(PartyEntry* party, f32 spd) {
     }
 }
 
-/** Height of the floor below (x, y + 40, z), rounded to 0.01, or -2000 when there is none. */
+#endif
+
+/**
+ * Height of the floor below (x, y + 40, z) in the early demos, (x, y + touch_wall_ct, z) in JP and later,
+ * rounded to 0.01, or -2000 when there is none.
+ */
 static inline void partyGetGndYTo(f32* out, f32 x, f32 y, f32 z) {
     f32 hx, hy, hz, dist, nx, ny, nz;
     HitEntry* hit;
+#if VERSION <= VERSION_DEMO_JP
     y += 40.0f;
+#else
+    y += touch_wall_ct;
+#endif
     dist = 1000.0f;
     hit = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, x, y, z, 0.0f, -1.0f, 0.0f);
     if (!hit) {
@@ -508,6 +517,7 @@ static inline void partyGetGndYTo(f32* out, f32 x, f32 y, f32 z) {
     }
 }
 
+#if VERSION <= VERSION_DEMO_JP
 /**
  * Demos: FALSE while the partner should not chase Mario's height:
  * he is in the air without moving, or in his damage or Spin Jump motion.
@@ -951,7 +961,8 @@ found:
         if (!(party->flags & PARTY_FLAG_DISABLE_FLOORS)) {
             party->flags &= ~PARTY_FLAG_IN_SHALLOW_WATER;
 
-            // FAKE: hand-expanded copy of partyBehindGround; the call changes the object
+            // Written out as in the early demos' homing walk (same floor and splash check as partyBehindGround;
+            // calling it here adds an instruction)
             hit = partySearchGround(party, 10.0f, 0.0f);
             if (hit && (hitGetAttr(hit) & HIT_ATTR_WATER_HAZARD)) {
                 hit = NULL;
@@ -2065,20 +2076,7 @@ void party_motion_behind_mario_continue(PartyEntry* party) {
     movePos(&x, &z, sp, party->homeDir);
     angleABf(party->position.x, party->position.z, x, z);
 
-    // FAKE: hand-inlined copy of partyGetGndY(x, y, z); the call changes the object
-    {
-        f32 py = y;
-        f32 nz, ny, nx, dist, hz, hy, hx;
-        py += touch_wall_ct;
-        dist = 1000.0f;
-        hit = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, x, py, z, 0.0f, -1.0f, 0.0f);
-        if (!hit) {
-            gy = -2000.0f;
-        } else {
-            gy = (s32)(100.0f * hy + 0.5f) / 100.0f;
-            hitGetAttr(hit);
-        }
-    }
+    partyGetGndYTo(&gy, x, y, z);
     if (gy <= -2000.0f) {
         sp = 1.5f * mario->wPlayerCollisionBox.x;
         movePos(&x, &z, sp, toMovedir(mario->displayDirection));

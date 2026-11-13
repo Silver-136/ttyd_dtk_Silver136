@@ -535,9 +535,11 @@ void iconDispGxCol(Mtx pos, u16 flags, s32 iconId, GXColor color) {
     CameraEntry* camera;
     IconBinaryEntry* data;
     IconEntry* ep;
-
+    // JP and earlier: a u16 copy, as in iconDispGx2; US: the same store through an s16 copy
 #if VERSION < VERSION_US
     u16 id;
+#else
+    s16 id;
 #endif
 
     camera = camGetCurPtr();
@@ -549,8 +551,7 @@ void iconDispGxCol(Mtx pos, u16 flags, s32 iconId, GXColor color) {
     entry.color = color;
 
 #if VERSION >= VERSION_US
-    /* FAKE: (u16)(s16) round-trip is a no-op on the u16 field (the s32 id goes through s16 first); it steers MWCC's register choice */
-    ep->iconId = (u16)(s16)iconId;
+    ep->iconId = (id = iconId);
     data = iconBinPtr((u16)iconId);
 #else
     ep->iconId = (id = iconId);

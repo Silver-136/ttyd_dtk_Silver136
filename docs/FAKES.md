@@ -45,7 +45,6 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | src/mario/mario_hit.c | sfwVecSetNested (sfwVecSet) | a Vec store `*d = v` through an inline | written out at the call (both versions change) |
 | Both | rels/tik/src/tik_05.c | tiz_broken | US: `tb_sqrtf(dx * dx + dy * dy)` expanded by hand into function-scope locals `sq`/`guess` (same instructions; with the inline its @ temp colours f0 instead of f6). JP: `inv` copy temp before `nx = inv` (plain `nx = dx / len` changes regalloc, +4 B) | US: tb_sqrtf body variants, a guess-as-parameter inline helper, block-scoped sum locals, other holder variables, pragma changes |
 | US | rels/yuu/src/event/evt_yuuranking.c | yuuDrawRight (US inline, used by evt_yuuranking_disp_func) | US: same as the gor twin: x offset plus work pointer, `wp->x` added inside so it is read after the width test (same value) | see comment |
-| US | src/driver/icondrv.c | iconDispGxCol | US: `ep->iconId = (u16)(s16)iconId`, a no-op round trip (the field is u16), steers register choice | see comment |
 | US | src/driver/itemdrv.c | itemEntry | US: a named search pointer `e` and entries base `base`; the 0x79/0x7C searches are written as explicit loops, while 0x7B uses the itemFindDeletable inline (register numbering only) | see comment |
 | US | src/manager/fontmgr.c | FontDrawStringShake | US: dead guard `s32 gz = 0; if (gz != 0) x = -1.0f;` (folded after register allocation, emits no code) only creates the -1.0f .sdata2 literal early, before the 28.0f of FontDrawStringMtx | see comment |
 | US | src/manager/fontmgr.c | FontDrawStringVecPitch | US: `#pragma auto_inline off` around it keeps the FontDrawString/FontDrawStringPitch wrappers calling it, as in the target | see comment |
@@ -237,7 +236,6 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | src/party/party_motion.c | party_motion_homing_walk | no-op function-pointer cast; the plain call changes the object | see comment |
 | Both | src/party/party_motion.c | party_motion_homing_fly | no-op function-pointer cast; the plain call changes the object | see comment |
 | Both | src/party/party_motion.c | party_motion_behind_mario | hand-inlined copy of partyGetGndY(x, ty, z); the call changes the object | see comment |
-| Both | src/party/party_motion.c | party_motion_behind_mario_continue | hand-inlined copy of partyGetGndY(x, y, z); the call changes the object | see comment |
 | Both | src/party/party_move.c | partyRecordFootmark | call through a no-op function-pointer cast; the plain call changes the object | see comment |
 | Both | src/party/party_move.c | partyChgMoveMode | the copy p and its self-assignment in case 4/5 keep the empty case 4/5 arm; the plain switch changes the object | see comment |
 | Both | src/party/party_move.c | partyMoveStrippedPool | stand-in that nothing calls; it places 90.0f and 20.0f in the .sdata2 pool | see comment |
