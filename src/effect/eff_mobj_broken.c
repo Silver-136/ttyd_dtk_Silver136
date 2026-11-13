@@ -148,6 +148,7 @@ static void effMObjBrokenMain(EffectEntry* effect) {
     s32 type;
     EffMObjBrokenWork* w2;
     s32 done = 0;
+    s32 j;
     s32 i;
     Vec pos2;
     Vec pos = {0.0f, 0.0f, 0.0f};
@@ -163,8 +164,7 @@ static void effMObjBrokenMain(EffectEntry* effect) {
     if (effect->flags & EFFECT_FLAG_SOFT_DELETE) {
         w = work;
 
-        // FAKE: the counter done is reused as the loop index; a loop over i changes the object
-        for (done = 0; done < effect->count; done++, w++) {
+        for (j = 0; j < effect->count; j++, w++) {
             if (w->poseId != -1) {
                 animPoseRelease(w->poseId);
             }

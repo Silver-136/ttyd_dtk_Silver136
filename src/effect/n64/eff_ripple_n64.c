@@ -37,6 +37,7 @@ static void effRippleDisp(CameraId cameraId, void* payload) {
     EffectEntry* effect = payload;
     CameraEntry* camera;
     s32 type;
+    s32 offset;
     EffRippleN64Work* work;
     Mtx mtx;
     Mtx scale;
@@ -75,10 +76,9 @@ static void effRippleDisp(CameraId cameraId, void* payload) {
         GXSetTevColor(GX_TEVREG0, (GXColor){0xFF, 0xFF, 0xFF, work->alpha});
     }
 
-    // FAKE: the type local is reused for the scroll offset; passing work->offset directly changes the object
-    type = work->offset;
+    offset = work->offset;
     PSMTXScale(scale, 0.03125f, 0.03125f, 0.0f);
-    PSMTXTrans(mtx, 0.0f, type, 0.0f);
+    PSMTXTrans(mtx, 0.0f, offset, 0.0f);
     PSMTXConcat(scale, mtx, mtx);
     GXLoadTexMtxImm(mtx, GX_TEXMTX1, GX_MTX2x4);
     PSMTXTrans(mtx, work->position.x, work->position.y, work->position.z);

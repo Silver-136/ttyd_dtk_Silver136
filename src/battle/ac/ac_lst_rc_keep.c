@@ -40,7 +40,6 @@ s32 battleAcMain_LstRcKeep(BattleWork* work) {
     LstRcWork* lw = (LstRcWork*)ac->work;
     BattleACDispParams* disp = &ac->disp;
     s32 loop;
-    s32 off;
     s32 autoCmd = 0;
     s32 ok;
     s32 d;
@@ -190,12 +189,10 @@ s32 battleAcMain_LstRcKeep(BattleWork* work) {
                 ac->acState = AC_STATE_RUN + 3;
                 break;
             case AC_STATE_RUN + 3:
-                // FAKE: byte-offset index (off >> 2) and the n >= 0 guard; the plain loop over
-                // ac_lstrckeep_iconname[i] changes the object
                 n = lw->count - 1;
                 if (n >= 0) {
-                    for (i = 0, off = 0; i <= n; i++, off += 4) {
-                        iconDelete(ac_lstrckeep_iconname[off >> 2]);
+                    for (i = 0; i <= n; i++) {
+                        iconDelete(ac_lstrckeep_iconname[i]);
                     }
                 }
                 ac->acState = AC_STATE_RUN + 4;
@@ -279,14 +276,11 @@ void battleAcDelete_LstRcKeep(BattleWork* work) {
     work->actionCommands.acState = AC_STATE_RUN + 5;
 }
 
-// actionCommandDisp size-optimised, as in the original (the object differs without it)
-#pragma optimize_for_size on
 /**
  * Draws the two stick icons (shown tilted until the last step),
  * the bar and its three numbered stars lit up to step n, and the final star, lit on the last step.
  */
 static void actionCommandDisp(f32 x, f32 y, s32 n) {
-    s32 off;
     s32 i;
     camGetPtr(CAMERA_2D);
     if (n < 3) {
@@ -318,17 +312,15 @@ static void actionCommandDisp(f32 x, f32 y, s32 n) {
         pos.y = y;
         iconDispGx(&pos, ICON_FLAG_2D, ICON_AC_BAR_MIDDLE, 1.0f);
     }
-    i = 0;
-    off = 0;
-    for (; i < 3; i++, off += 0x21) {
+    for (i = 0; i < 3; i++) {
         if (i <= n) {
             Vec pos = {0.0f, 0.0f, 0.0f};
-            pos.x = x + (f32)(off - 0x102);
+            pos.x = x + (f32)(i * 0x21 - 0x102);
             pos.y = y;
             iconDispGx(&pos, ICON_FLAG_2D, ICON_AC_LAMP_1 + i, 1.0f);
         } else {
             Vec pos = {0.0f, 0.0f, 0.0f};
-            pos.x = x + (f32)(off - 0x102);
+            pos.x = x + (f32)(i * 0x21 - 0x102);
             pos.y = y;
             iconDispGx(&pos, ICON_FLAG_2D, ICON_AC_OFF, 0.5f);
         }
@@ -345,4 +337,3 @@ static void actionCommandDisp(f32 x, f32 y, s32 n) {
         iconDispGx(&pos, ICON_FLAG_2D, ICON_AC_ON, 1.0f);
     }
 }
-#pragma optimize_for_size reset
