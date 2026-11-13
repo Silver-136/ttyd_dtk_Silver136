@@ -295,6 +295,7 @@ static BattleWeapon* _GetFirstAttackWeapon(s32 type) {
  */
 static void btlseqFirstAct(BattleWork* wp) {
     s32 type;
+    NpcBattleInfo* info;
     int i;
     BattleUnit* unit;
     BattleUnit* a;
@@ -305,8 +306,6 @@ static void btlseqFirstAct(BattleWork* wp) {
     int k;
     FieldBattleInfo* fb = wp->fbatInfo;
 
-    // FAKE: u8* view of fbatInfo->setup, cast back to NpcBattleInfo* at its use; NpcBattleInfo* info changes the object
-    u8* info;
     s32* id;
     type = (s32)fb->firstAttack;
 
@@ -316,11 +315,11 @@ static void btlseqFirstAct(BattleWork* wp) {
                 case 0:
                     wp->ruleDispTimer = 0;
                     evtEntry(_default_haikei_set_entry_event, 10, 0);
-                    info = (u8*)wp->fbatInfo->setup;
+                    info = wp->fbatInfo->setup;
                     for (i = 0; i < BATTLE_UNIT_MAX; i++) {
                         unit = BattleGetUnitPtr(wp, i);
                         if (unit && unit->entryEventCode) {
-                            if ((((NpcBattleInfo*)info)->battleFlags & NPC_BATTLE_NO_PARTY_ENTRY) && (unit->currentKind == UNIT_MARIO || (unit->currentKind >= TYPE_PARTNER_MIN && unit->currentKind < TYPE_PARTNER_MAX))) {
+                            if ((info->battleFlags & NPC_BATTLE_NO_PARTY_ENTRY) && (unit->currentKind == UNIT_MARIO || (unit->currentKind >= TYPE_PARTNER_MIN && unit->currentKind < TYPE_PARTNER_MAX))) {
                                 continue;
                             }
                             if (marioGetPtr()->currMotionId == MARIO_MOTION_YOSHI && unit->currentKind == UNIT_MARIO) {

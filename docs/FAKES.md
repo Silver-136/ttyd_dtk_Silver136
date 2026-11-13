@@ -211,7 +211,7 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | src/battle/battle_icon.c | btlIconStrippedPool | not called anywhere; it only places the literals 0.0f, 1.0f and 0.5f in this object's constant pool. | see comment |
 | Both | src/battle/battle_mario.c | (file scope) | no-op (char*) cast; PTR(battle_mario_nullstr) changes the object; battle_mario_nullstr itself is a 4-byte static array (STRING("") at both uses changes the object) | see comment |
 | Both | src/battle/battle_mario.c | _mario_fire_ball_controll | `battle_mario_one`: a named global 1.0f constant for one effFireEntry scale | literal 1.0f at the call: changes the object |
-| Both | src/battle/battle_seq.c | btlseqFirstAct | u8* view of fbatInfo->setup, cast back to NpcBattleInfo* at its use; NpcBattleInfo* info changes the object; one-case inner `switch (type)` left by `goto done_fa` | see comment |
+| Both | src/battle/battle_seq.c | btlseqFirstAct | one-case inner `switch (type)` left by `goto done_fa` | see comment |
 | Both | src/battle/battle_seq.c | battleSortPhaseMoveTable | wp copied into a void* and cast back at every use; using wp directly changes the object | see comment |
 | Both | src/battle/battle_seq.c | BattleWaitAllActiveEvtEnd_NoBgSetEndWait | wp copied into a void* and cast back at its use; using wp directly changes the object | see comment |
 | Both | src/battle/battle_seq_command.c | _btlcmd_MakeSelectWeaponTable | top is a spare copy of cursor->relPos; testing cursor->relPos directly changes the object | see comment |
