@@ -372,7 +372,6 @@ static void actionCommandDisp(f32 x, f32 y) {
     s32 arr[4];
     s32 i, count, flags, phase;
     f32 target;
-    f32 w;
     camGetPtr(CAMERA_2D);
     {
         s32 numIcons;
@@ -507,10 +506,9 @@ static void actionCommandDisp(f32 x, f32 y) {
     if (ac->acFlags & AC_REPEATEDLY_LV_FLAG_SHOW_LEVEL_NUMBER_UNUSED) {
         Mtx m3, m1, m2;
         s32 number = (s32)ac->outputParams[2] + ac->params[7];
+        f32 numberOfsX = 108.0f; // the level number's x offset from the gauge's left end
 
-        // FAKE: spare temporary w for the 108.0f offset; the plain constant changes the object
-        w = 108.0f;
-        PSMTXTrans(m1, -200.0f + x + w, 25.0f + y, 0.0f);
+        PSMTXTrans(m1, -200.0f + x + numberOfsX, 25.0f + y, 0.0f);
         PSMTXScale(m2, 1.0f, 1.0f, 1.0f);
         PSMTXConcat(m1, m2, m3);
         iconNumberDispGx(m3, number, FALSE, (GXColor){255, 255, 255, 255});

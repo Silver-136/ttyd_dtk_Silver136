@@ -2750,22 +2750,21 @@ static void BattleAudienceDispItem(CameraId camId, void* param) {
 }
 
 static void BattleAudienceDispApSrc(CameraId camId, void* param) {
-    s32 i;
+    BattleAudience* base = BattleAudienceBaseGetPtr();
     BattleAudienceStar* star;
+    s32 i;
     Mtx rot;
     Mtx scale;
     Mtx trans;
     Mtx mtx;
 
-    // FAKE: star holds the BattleAudience pointer until the loop; a separate BattleAudience* variable changes the object
-    star = (BattleAudienceStar*)BattleAudienceBaseGetPtr();
     camGetPtr(CAMERA_2D);
     BattleAudienceGXInit();
     GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
     GXSetZCompLoc(GX_TRUE);
     GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
     GXSetZMode(GX_TRUE, GX_LEQUAL, GX_FALSE);
-    star = ((BattleAudience*)star)->starpower;
+    star = base->starpower;
     for (i = 0; i < 100; i++, star++) {
         if (star->flags & AUDIENCE_STAR_FLAG_ACTIVE) {
             PSMTXScale(scale, star->scale.x, star->scale.y, star->scale.z);
@@ -4045,10 +4044,6 @@ void BattleAudienceJoyEnding(void) {
     BattleAudienceJoy(3);
 }
 
-#pragma push
-// kept: loop-invariant code motion off for BattleAudienceJoy_Sub (until the pop); without it the function changes,
-// and -opt noloop for the whole file changes other functions
-#pragma opt_loop_invariants off
 /**
  * Makes every waiting member react (BattleAudienceJoy):
  * status 4 (counterF 3 for type 3, else 2) with weight a, status 5 with weight b, status 6 with weight c.
@@ -4058,10 +4053,10 @@ static void BattleAudienceJoy_Sub(s32 a, s32 b, s32 c, s32 type) {
     BattleAudienceMember* member;
     s32 i;
     s32 total;
-    s32 r, ab;
+    s32 r, limit;
 
     BattleAudienceBaseGetPtr();
-    total = c + (a + b);
+    total = a + b + c;
     for (i = 0, member = BattleAudienceGetPtr(0); i < AUDIENCE_MEMBER_MAX; i++, member++) {
         if (!BattleAudience_GetWaiting(i)) {
             continue;
@@ -4075,23 +4070,23 @@ static void BattleAudienceJoy_Sub(s32 a, s32 b, s32 c, s32 type) {
             }
         } else {
             r = irand(total);
-            if (r < a) {
+            limit = a;
+            if (r < limit) {
                 BattleAudience_ChangeStatus(i, AUDIENCE_STATUS_JOY_RAISE_ARM);
                 if (type == 3) {
                     member->counterF = 3.0f;
                 } else {
                     member->counterF = 2.0f;
                 }
-            } else if (r < (ab = a + (s32)b)) { // FAKE: no-op (s32) cast; `a + b` changes the object
+            } else if (r < (limit += b)) {
                 BattleAudience_ChangeStatus(i, AUDIENCE_STATUS_JOY_JUMP);
-            } else if (r < ab + c) {
+            } else if (r < limit + c) {
                 BattleAudience_ChangeStatus(i, AUDIENCE_STATUS_JOY_JUMP2);
             }
         }
     }
 }
 
-#pragma pop
 
 /**
  * Returns the seat dir columns beside Piranha Plant index

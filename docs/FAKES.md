@@ -169,16 +169,12 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | src/pmario_sound.c | calc3D | v.z read through a (Vec*) cast of &v; plain v.z changes the object | see comment |
 | Both | src/pmario_sound.c | psndSFXChk | no-op mask of the u16 serial; key != sfx->serial changes the object | see comment |
 | Both | src/pmario_sound.c | psndStrippedPool | stand-in that nothing calls; deleting it changes the object (its s32-to-f32 conversion likely shapes the constant pool, as hitStrippedPool does in hitdrv.c) | see comment |
-| Both | src/battle/battle_audience.c | BattleAudienceDispApSrc | star holds the BattleAudience pointer until the loop; a separate BattleAudience* variable changes the object | see comment |
-| Both | src/battle/battle_audience.c | BattleAudienceJoy_Sub | no-op (s32) cast; `a + b` changes the object | see comment |
 | Both | src/battle/battle_disp.c | btlUnitItemDisp | per-function opt_dead_assignments off keeps the unused height store; without it the object changes; float-first cast of iconDispGx (the plain call changes the object) | see comment |
 | Both | src/battle/battle_disp.c | btlUnitStolenItemDisp | float-first cast of iconDispGx; the plain call changes the object | see comment |
 | Both | src/battle/battle_event_cmd.c | btlevtcmd_DrawLots | pick index and running sum kept in `s32 nv[2]` | two scalar locals: changes the object |
 | Both | src/battle/battle_icon.c | btlIconStrippedPool | not called anywhere; it only places the literals 0.0f, 1.0f and 0.5f in this object's constant pool. | see comment |
-| Both | src/battle/battle_mario.c | (file scope) | no-op (char*) cast; PTR(battle_mario_nullstr) changes the object; battle_mario_nullstr itself is a 4-byte static array (STRING("") at both uses changes the object) | see comment |
 | Both | src/battle/battle_mario.c | _mario_fire_ball_controll | `battle_mario_one`: a named global 1.0f constant for one effFireEntry scale | literal 1.0f at the call: changes the object |
 | Both | src/battle/battle_seq.c | btlseqFirstAct | one-case inner `switch (type)` left by `goto done_fa` | see comment |
-| Both | src/battle/battle_seq_command.c | _btlcmd_MakeSelectWeaponTable | top is a spare copy of cursor->relPos; testing cursor->relPos directly changes the object | see comment |
 | Both | src/battle/battle_seq_command.c | _btlcmd_SelectWeaponDecide | (s32) cast on the s8 attackDirection passed as s8; dropping it changes the object | BattleSamplingEnemy with s32 belong (7 units change) |
 | Both | src/battle/battle_seq_command.c | _btlcmd_SetAttackEvent | compares the pointers as signed integers (cmpw); the plain pointer compare changes the object | see comment |
 | Both | src/sound.c | SoundLoadDVD2 | dead store; removing it changes the object | see comment |
@@ -192,7 +188,6 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | src/system.c | systemStrippedPool1 | stand-in for the stripped intplStringData/intplStringToEnum and mtxGetScaleElement: the interpolation mode names, 1.0f and the sqrtf constants in pool order (table entry @491 unknown; JP and later lack three names) | see comment |
 | Both | src/system.c | systemStrippedPool1b | stand-in for the stripped movePos2/movePos3: their doubles 1.5, 2.5, 1.7 (bodies unknown) | see comment |
 | Both | src/battle/ac/ac_lst_rc_keep.c | battleAcMain_LstRcKeep | byte-offset index (off >> 2) and the n >= 0 guard; the plain loop over ac_lstrckeep_iconname[i] changes the object | see comment |
-| Both | src/battle/ac/ac_repeatedly_lv.c | actionCommandDisp | spare temporary w for the 108.0f offset; the plain constant changes the object | see comment |
 | Both | src/battle/ac/ac_timing_a.c | battleAcMain_TimingA | flags reached through a second cast of the work buffer instead of tw; tw->flags changes the object | see comment |
 | Both | src/battle/battle_stage_object.c | _nozzle_work_effect | the sum goes through rot first; rot = reviseAngle(90.0f + angle1) changes the object | see comment |
 | Both | src/battle/battle_status_effect.c | _st_chg_msg_disp | called through a cast prototype taking the color's address (WakuColByRefFunc), passing the color by value changes the object | see comment |
@@ -244,9 +239,8 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | src/mario/mario.c | marioReInit | spare copy t of paperPoseId; testing poseId directly changes the object | see comment |
 | Both | src/mario/mario.c | marioDispBlur | `opt_dead_assignments` off keeps the never-used sin/cos quadrant computation | removing the pragma or the code changes the object; the file-wide `-opt nodeadstore` changes other functions (2026-11-07) |
 | Both | src/mario/mario_hit.c | marioHitStrippedPool2 | stand-in that nothing calls (the linker strips it); it only places 18.0f in this object's constant pool | see comment |
-| Both | src/mario/mario_hit.c | marioSearchHead_roll | spare pointer to dir; passing &dir directly changes the object; one-purpose `marioSearchHead_roll_cos` helper (4 uses) | see comment |
+| Both | src/mario/mario_hit.c | marioSearchHead_roll | spare pointer to dir; passing &dir directly changes the object | see comment |
 | Both | src/mario/mario_hit.c | marioHitStrippedPool | stand-in that nothing calls (the linker strips it); it only places its five literals in this object's constant pool | see comment |
-| Both | src/mario/mario_hit.c | marioSlitChkWallAround | spare temporary k; the plain `pos.y = w->position.y + 5.0f;` changes the object | see comment |
 | Both | src/mario/mario_hit.c | (file) | `#pragma inline_max_size(1000)` for the rest of the file | removing it: changes the object |
 | Demos | src/mario/mario_hit.c | marioSearchGroundRoll | dead guard keeps rx/rz their own webs; the 24-byte zero ray copied from a volatile template | see comment |
 | Demos | src/mario/mario_hit.c | marioChkLandon2 | the 24-byte zero ray copied from a volatile template; a dead re-definition of gz at the loop end | `(LandonRay){0}` adds a .rodata object; see comment |
@@ -254,7 +248,7 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | src/motion/mot_hammer.c | mot_hammer | spare copy of kind in its own block; using kind directly changes the object | see comment |
 | Both | src/motion/mot_plane.c | planeDead4 | stand-in that nothing calls; it only places its 4.0f literal in this object's constant pool | see comment |
 | Both | src/motion/mot_roll.c | marioRollStrippedPool | stand-in that nothing calls; it only places these literals in this object's constant pool | see comment |
-| Both | src/motion/mot_ship.c | shipMove | 64-bit index variable that always holds 3 for shipData[3]; indexing with the constant changes the object | see comment |
+| Both | src/motion/mot_ship.c | shipMove | index variable that always holds 3 for shipData[3]; indexing with the constant changes the object | see comment |
 | Both | src/party/party_cloud.c | partyCloudStrippedPool | stand-in that nothing calls; it only puts 0.0f, 70.0f, 180.0f and the int-to-float conversion constant in this object's constant pool | see comment |
 | Both | src/party/party_cloud.c | (file) | `#define _MATH_H_` keeps math.h out | removing it: changes the object |
 | Both | src/party/party_hit.c | partyHitStrippedPool | stand-in that nothing calls; it only places these literals and the int-to-float conversion constant in this object's constant pool | see comment |

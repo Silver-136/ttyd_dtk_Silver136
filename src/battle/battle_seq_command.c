@@ -399,7 +399,6 @@ static s32 _getHammerIconId(void) {
  * Then marks which entries are usable.
  */
 static s32 _btlcmd_MakeSelectWeaponTable(BattleWork* wp, s32 type) {
-    s32 top;
     BattleUnit* unit;
     BattleCommand* cmd;
     PouchData* pouch;
@@ -667,8 +666,9 @@ static s32 _btlcmd_MakeSelectWeaponTable(BattleWork* wp, s32 type) {
         cursor->absPos = cursor->count - 1;
     }
     while (cursor->count < cursor->relPos + BATTLE_COMMAND_VISIBLE_WEAPON_ROWS) {
-        // FAKE: top is a spare copy of cursor->relPos; testing cursor->relPos directly changes the object
-        if ((top = cursor->relPos) <= 0) {
+        const s32 top = cursor->relPos;
+
+        if (top <= 0) {
             break;
         }
         cursor->relPos--;

@@ -1910,10 +1910,14 @@ HitEntry* marioSearchHead(Vec* pos, f32* h, f32 dd) {
     return NULL;
 }
 
-/** cos(a) as f32, for marioSearchHead_roll's side offsets. */
-// FAKE: one-purpose cos helper; (f32)cos(a) at the four sites changes the object
-inline f32 marioSearchHead_roll_cos(f32 a) {
-    return (f32)cos(a);
+/** Side offset of marioSearchHead_roll's corner rays: 9 units along deg (degrees) into *x and *z. */
+static inline void rollSideOffset(f32* x, f32* z, f32 deg) {
+    f32 a = (3.1415927f * deg) / 180.0f;
+    f32 c;
+
+    *x = 9.0f * (f32)sin(a);
+    c = cos(a);
+    *z = 9.0f * -c;
 }
 
 /**
@@ -1922,7 +1926,6 @@ inline f32 marioSearchHead_roll_cos(f32 a) {
  * otherwise *h gets the smallest gap.
  */
 HitEntry* marioSearchHead_roll(Vec* pos, f32* h, f32 d) {
-    f32 a;
     Vec outPos, outNrm;
     f32 x, z;
     f32 dist;
@@ -1942,27 +1945,19 @@ HitEntry* marioSearchHead_roll(Vec* pos, f32* h, f32 d) {
                 z = x = 0.0f;
                 break;
             case 1:
-                a = (3.1415927f * (90.0f + mario->directionView)) / 180.0f;
-                x = 9.0f * (f32)sin(a);
-                z = 9.0f * -marioSearchHead_roll_cos(a);
+                rollSideOffset(&x, &z, 90.0f + mario->directionView);
                 movePos(&x, &z, 3.0f, mario->directionView);
                 break;
             case 2:
-                a = (3.1415927f * (mario->directionView - 90.0f)) / 180.0f;
-                x = 9.0f * (f32)sin(a);
-                z = 9.0f * -marioSearchHead_roll_cos(a);
+                rollSideOffset(&x, &z, mario->directionView - 90.0f);
                 movePos(&x, &z, 3.0f, mario->directionView);
                 break;
             case 3:
-                a = (3.1415927f * (90.0f + mario->directionView)) / 180.0f;
-                x = 9.0f * (f32)sin(a);
-                z = 9.0f * -marioSearchHead_roll_cos(a);
+                rollSideOffset(&x, &z, 90.0f + mario->directionView);
                 movePos(&x, &z, 3.0f, 180.0f + mario->directionView);
                 break;
             case 4:
-                a = (3.1415927f * (mario->directionView - 90.0f)) / 180.0f;
-                x = 9.0f * (f32)sin(a);
-                z = 9.0f * -marioSearchHead_roll_cos(a);
+                rollSideOffset(&x, &z, mario->directionView - 90.0f);
                 movePos(&x, &z, 3.0f, 180.0f + mario->directionView);
                 break;
         }
@@ -2953,7 +2948,7 @@ BOOL marioSlitChkWallAround(void) {
     f32 s, c;
     HitEntry* hit;
     MarioWork* mario = marioGetPtr();
-    f32 k;
+    f32 lowRayHeight = 5.0f;
     pos = mario->position;
     pos.y += 11.0f;
     for (i = 0, a = 0.0f; i < 8; i++, a += 45.0f) {
@@ -2969,9 +2964,7 @@ BOOL marioSlitChkWallAround(void) {
         }
     }
 
-    // FAKE: spare temporary k; the plain `pos.y = mario->position.y + 5.0f;` changes the object
-    k = 5.0f;
-    pos.y = mario->position.y + k;
+    pos.y = mario->position.y + lowRayHeight;
     for (i = 0, a = 0.0f; i < 8; i++, a += 45.0f) {
         if (flags[i] != 1) {
             Vec dir;

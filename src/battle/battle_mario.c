@@ -6351,9 +6351,6 @@ EVT_BEGIN(marioAttackEvent_HammerNageru_object)
     RETURN
 EVT_END()
 
-/** Empty effect name passed to evt_eff and evt_eff64 for Fire Drive's sparks and smoke. */
-// FAKE: a 4-byte static array for the empty effect name; STRING("") at the two uses changes the object
-static const char battle_mario_nullstr[4] = "";
 extern const f32 battle_mario_one;
 
 static EVT_BEGIN(marioAttackEvent_FireNaguri)
@@ -6472,12 +6469,10 @@ static EVT_BEGIN(marioAttackEvent_FireNaguri)
         CALL(btlevtcmd_InviteApInfoReport)
         CALL(btlevtcmd_GetPartsPos, UNIT_ID_SELF, 3, LW(0), LW(1), LW(2))
 
-        // FAKE: no-op (char*) cast; PTR(battle_mario_nullstr) changes the object
-        CALL(evt_eff64, PTR((char*)battle_mario_nullstr), STRING("fire_spark_n64"), 0, LW(0), LW(1), LW(2), 30, 40, FLOAT(1.0f), 12, 100, FLOAT(1.0f), FLOAT(1.0f), 0)
+        CALL(evt_eff64, STRING(""), STRING("fire_spark_n64"), 0, LW(0), LW(1), LW(2), 30, 40, FLOAT(1.0f), 12, 100, FLOAT(1.0f), FLOAT(1.0f), 0)
         ADD(LW(1), 5)
 
-        // FAKE: no-op (char*) cast; PTR(battle_mario_nullstr) changes the object
-        CALL(evt_eff, PTR((char*)battle_mario_nullstr), STRING("kemuri_test"), 11, LW(0), LW(1), LW(2), FLOAT(1.0f), 0, 0, 0, 0, 0, 0, 0)
+        CALL(evt_eff, STRING(""), STRING("kemuri_test"), 11, LW(0), LW(1), LW(2), FLOAT(1.0f), 0, 0, 0, 0, 0, 0, 0)
         CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT_ZOOM)
         CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
         CALL(evt_btl_camera_set_zoom, 0, 0)

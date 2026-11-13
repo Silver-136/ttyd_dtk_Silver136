@@ -904,8 +904,8 @@ static void shipMove(void) {
 #if VERSION >= VERSION_JP
     f32 len;
 
-    // FAKE: 64-bit index variable that always holds 3 for shipData[3]; indexing with the constant changes the object
-    unsigned long long rateIdx;
+    // FAKE: index variable that always holds 3 for shipData[3]; indexing with the constant changes the object
+    s32 rateIdx;
 #endif
     f32 spd;
 #if VERSION <= VERSION_DEMO_JP
@@ -927,7 +927,7 @@ static void shipMove(void) {
     f32 dx;
     f32 dz;
 #if VERSION <= VERSION_DEMO_JP
-    unsigned long long rateIdx;
+    s32 rateIdx;
 #else
     f32 fr;
 #endif
