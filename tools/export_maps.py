@@ -105,10 +105,7 @@ def source_stamp():
 
 
 def stamped(text, stamp):
-    nl = b"
-" if b"
-" in text else b"
-"
+    nl = b"\r\n" if b"\r\n" in text else b"\n"
     return stamp.encode("ascii") + nl + text
 
 
