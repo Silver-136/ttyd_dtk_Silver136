@@ -9039,13 +9039,38 @@ s32 searchEmptySSCh(void) {
     return -1;
 }
 
+/**
+ * Returns a free song channel for a new BGM, or -1.
+ * Original name and size (0x50) from the JP demo map (UNUSED there: every call is inlined).
+ */
+static s32 searchEmptySONGCh(void) {
+    u32 ch;
+    for (ch = 0; ch < 4; ch++) {
+        if (!SoundSongCheck(ch)) {
+            return ch;
+        }
+    }
+    return -1;
+}
+
+/**
+ * Rounds to the nearest integer, halves away from zero (this file's copy of system.c's roundi).
+ * Original name and size (0x54) from the JP demo map (UNUSED there: every call is inlined).
+ */
+static s32 roundi(f32 x) {
+    if (x >= 0.0f) {
+        return (s32)(0.5 + x);
+    } else {
+        return -(s32)(0.5 - x);
+    }
+}
+
 // Angle of the vector (x2 - x1, y2 - y1) in degrees: 0 toward -y, 90 toward +x, 180 toward +y, 270 toward -x. The
 // ratio of the smaller to the larger component, times 45, is corrected by angleABTBL.
 static f32 angleABf(f32 x1, f32 y1, f32 x2, f32 y2) {
     f32 xdiff, ydiff;
     f32 xabs, yabs;
     f32 approxX;
-    f32 scaled;
     int index;
     f32 angle;
     f32 approxY;
@@ -9057,12 +9082,7 @@ static f32 angleABf(f32 x1, f32 y1, f32 x2, f32 y2) {
     yabs = __fabsf(ydiff);
     if (xabs > yabs) {
         approxX = 45.0f * (yabs / xabs);
-        scaled = 2.0f * approxX;
-        if (scaled >= 0.0f) {
-            index = (int)(0.5 + scaled);
-        } else {
-            index = -(int)(0.5 - scaled);
-        }
+        index = roundi(2.0f * approxX);
         delta = approxX * angleABTBL[index];
         if (xdiff >= 0.0f) {
             if (ydiff >= 0.0f) {
@@ -9082,12 +9102,7 @@ static f32 angleABf(f32 x1, f32 y1, f32 x2, f32 y2) {
             return 0.0f;
         } else {
             approxY = 45.0f * (xabs / yabs);
-            scaled = 2.0f * approxY;
-            if (scaled >= 0.0f) {
-                index = (int)(0.5 + scaled);
-            } else {
-                index = -(int)(0.5 - scaled);
-            }
+            index = roundi(2.0f * approxY);
             delta = approxY * angleABTBL[index];
             if (ydiff >= 0.0f) {
                 if (xdiff >= 0.0f) {
@@ -9105,6 +9120,21 @@ static f32 angleABf(f32 x1, f32 y1, f32 x2, f32 y2) {
         }
     }
     return angle;
+}
+
+/**
+ * Returns the signed shortest turn in degrees from angle from to angle to (this file's copy of system.c's compAngle).
+ * Original name and size (0x3c) from the JP demo map (UNUSED there: every call is inlined).
+ */
+static f32 compAngle(f32 from, f32 to) {
+    if (__fabsf(to - from) >= 180.0f) {
+        if (to < from) {
+            to += 360.0f;
+        } else {
+            to -= 360.0f;
+        }
+    }
+    return to - from;
 }
 
 /** calc3D, returns the packed 3D sound info word (vol, pan, span, unused) */
@@ -9136,14 +9166,7 @@ static u32 calc3D(s32 id, Vec* pos, u8 vol, u16 dist) {
 
     // FAKE: v.z read through a (Vec*) cast of &v; plain v.z changes the object
     ang = angleABf(wp->position.x, wp->position.z, v.x, ((Vec*)&v)->z);
-    if (__fabsf(ang - pd) >= 180.0f) {
-        if (ang < pd) {
-            ang += 360.0f;
-        } else {
-            ang -= 360.0f;
-        }
-    }
-    ang = (ang - pd) / 180.0f;
+    ang = compAngle(pd, ang) / 180.0f;
     t = 127.0f * ang + 127.0f;
     if (t < 64) {
         t = 127 - t;
@@ -9569,6 +9592,26 @@ void psndBGM_rate(s32 id, u16 rate) {
 }
 
 /**
+ * Returns whether BGM channel bgm is still playing: FALSE when it is free or its stream or song has ended.
+ * Original name and size (0x7c) from the JP demo map (UNUSED there: every call is inlined).
+ */
+static u32 psndBGM_check(PaperSoundBGM* bgm) {
+    if (bgm->listId == 0xFFFFFFFF) {
+        return FALSE;
+    }
+    if (psbgmlist[bgm->listId].flags & PSND_BGM_STREAM) {
+        if (SoundSSCheck(bgm->streamId)) {
+            return TRUE;
+        }
+        return FALSE;
+    }
+    if (SoundSongCheck(bgm->streamId) == 0) {
+        return FALSE;
+    }
+    return TRUE;
+}
+
+/**
  * Sets the volume of BGM channel id (ignored when the channel is free) on its stream or song channel.
  * Original name and size (0x70) from the JP demo map (UNUSED there: every call is inlined).
  */
@@ -9622,7 +9665,7 @@ static void psndBGMMain(void) {
     s32 vol;
     u8 a;
     s32 c;
-    u32 alive;
+
     if ((psnd.flags & PSND_FLAG_LETTER_BOX) && !(psnd.flags & PSND_FLAG_LETTER_BOX_OFF)) {
         maxv = 65;
     }
@@ -9647,22 +9690,7 @@ static void psndBGMMain(void) {
             SoundSSMuteOff(bgm->streamId);
         }
 
-        // Repeated listId test (listId != -1 is known here); the test is in the retail code
-        if (bgm->listId == -1) {
-            alive = 0;
-        } else if (psbgmlist[bgm->listId].flags & PSND_BGM_STREAM) {
-            if (SoundSSCheck(bgm->streamId)) {
-                alive = 1;
-            } else {
-                alive = 0;
-            }
-        } else if (SoundSongCheck(bgm->streamId) == 0) {
-            alive = 0;
-        } else {
-            alive = 1;
-        }
-
-        if (!alive) {
+        if (!psndBGM_check(bgm)) {
             bgm->listId = -1;
             continue;
         }
@@ -9753,17 +9781,6 @@ BOOL psndBGMOn_f(u32 flags, char* bgm_name, u32 fadetime, s32 unused) {
 BOOL psndBGMOn_f(u32 flags, const char* bgm_name, u32 fadetime, s32 unused) {
     return psndBGMOn_f_d(flags, bgm_name, fadetime, 750, unused);
 #endif
-}
-
-/** Returns a free song channel, or -1. */
-static inline s32 psndSongFindCh(void) {
-    u32 ch;
-    for (ch = 0; ch < 4; ch++) {
-        if (!SoundSongCheck(ch)) {
-            return ch;
-        }
-    }
-    return -1;
 }
 
 #if VERSION <= VERSION_DEMO_JP
@@ -10109,7 +10126,7 @@ BOOL psndBGMOn_f_d(u32 flags, const char* bgm_name, u32 fadetime, u32 fadeout, s
             SoundSSSetSrndPanCh(bgm->streamId, 0);
         }
     } else {
-        bgm->streamId = psndSongFindCh();
+        bgm->streamId = searchEmptySONGCh();
         if (bgm->streamId == -1) {
             goto fail;
         }
@@ -10916,19 +10933,23 @@ static void psndENV_stop(u32 id) {
     }
 }
 
-// Volume of an environment sound: its base volume scaled by the environment volume and any dip or fade on it.
-static inline u8 psndEnvVolume(PaperSoundEnv* e, PaperSoundWork* p) {
+/**
+ * Volume of an environment sound: its base volume scaled by the environment volume and any dip or fade on its
+ * channel. Original name and size (0x178) from the JP demo map (UNUSED there: every call is inlined).
+ */
+static u8 psndENV_calcvol(PaperSoundEnv* e) {
     PaperSoundFade* f = NULL;
     s16 v;
     s16 w;
-    if (p->envId[0] == e->id) {
-        f = &p->fade[0];
+
+    if (psnd.envId[0] == e->id) {
+        f = &psnd.fade[0];
     }
-    if (p->envId[1] == e->id) {
-        f = &p->fade[1];
+    if (psnd.envId[1] == e->id) {
+        f = &psnd.fade[1];
     }
     if (f == NULL) {
-        return e->volume * p->envVolume / 100;
+        return e->volume * psnd.envVolume / 100;
     }
     if (f->dipState == PSND_DIP_STATE_IDLE) {
         v = 0x7f;
@@ -10936,10 +10957,26 @@ static inline u8 psndEnvVolume(PaperSoundEnv* e, PaperSoundWork* p) {
         v = f->dipTime * 0x7f / f->dipTimeMax;
     }
     if (f->state == PSND_FADE_STATE_IDLE) {
-        return p->envVolume * (e->volume * v / 127) / 100;
+        return psnd.envVolume * (e->volume * v / 127) / 100;
     }
     w = f->timeMax * (e->volume * v / 127) / f->time;
-    return w * p->envVolume / 100;
+    return w * psnd.envVolume / 100;
+}
+
+/**
+ * Low-pass value of environment sound e: its channel's current value, 0 when it is on neither channel.
+ * Original name and size (0x3c) from the JP demo map (UNUSED there: every call is inlined).
+ */
+static u16 psndENV_calclpf(PaperSoundEnv* e) {
+    u16 lpf = 0;
+
+    if (psnd.envId[0] == e->id) {
+        lpf = psnd.envLpf[0];
+    }
+    if (psnd.envId[1] == e->id) {
+        lpf = psnd.envLpf[1];
+    }
+    return lpf;
 }
 
 #if VERSION <= VERSION_DEMO_JP
@@ -10988,13 +11025,7 @@ static inline void psndENVApply(PaperSoundEnv* e) {
             sfx->volume = vol;
         }
     }
-    lpf = 0;
-    if (psnd.envId[0] == e->id) {
-        lpf = psnd.envLpf[0];
-    }
-    if (psnd.envId[1] == e->id) {
-        lpf = psnd.envLpf[1];
-    }
+    lpf = psndENV_calclpf(e);
     id = e->sfx;
     if (id != -1) {
         sfx = &pssfx[id & 0xFF];
@@ -11063,7 +11094,7 @@ static void psndENVMain(void) {
                     e->position.x += r * (f32)sin(a2);
                     e->position.z -= r * (f32)cos(a2);
                     {
-                        u8 vv = psndEnvVolume(e, &psnd);
+                        u8 vv = psndENV_calcvol(e);
                         e->sfx = __psndSFXOn(SFX_NAME_WORD(e->sfxId | PSND_SFX_ENV | PSND_SFX_LISTENER_OFFSET), vv, 0xff,
                                              0, &e->position, 0, e->dist, 0);
                     }
@@ -11085,7 +11116,7 @@ static void psndENVMain(void) {
                 switch (e->state) {
                 case 0:
                     {
-                        u8 vv = psndEnvVolume(e, &psnd);
+                        u8 vv = psndENV_calcvol(e);
                         e->sfx = __psndSFXOn(SFX_NAME_WORD(e->sfxId | PSND_SFX_ENV), vv, 0xff,
                                              0, &e->position, 0, e->dist, 0);
                     }
@@ -11126,7 +11157,7 @@ static void psndENVMain(void) {
                     break;
                 case 1:
                     {
-                        u8 vv = psndEnvVolume(e, &psnd);
+                        u8 vv = psndENV_calcvol(e);
                         e->sfx = __psndSFXOn(SFX_NAME_WORD(e->sfxId | PSND_SFX_ENV), vv, 0xff,
                                              0, &e->position, 0, e->dist, 0);
                     }
@@ -11148,7 +11179,7 @@ static void psndENVMain(void) {
                 switch (e->state) {
                 case 0:
                     {
-                        u8 vv = psndEnvVolume(e, &psnd);
+                        u8 vv = psndENV_calcvol(e);
                         e->sfx = __psndSFXOn(SFX_NAME_WORD(e->sfxId | PSND_SFX_ENV | PSND_SFX_AT_LISTENER), vv, 0xff,
                                              0, &e->position, 0, e->dist, 0);
                     }
@@ -11241,7 +11272,7 @@ static void psndENVMain(void) {
     {                                                                                        \
         u8 vol;                                                                              \
         u16 lpf;                                                                             \
-        vol = psndEnvVolume(ent, &psnd);                                                     \
+        vol = psndENV_calcvol(ent);                                                          \
         {                                                                                    \
             s32 id = *(s32*)&ent->sfx;                                                       \
             PaperSoundEffect* sfx;                                                           \
@@ -11252,9 +11283,7 @@ static void psndENVMain(void) {
                 }                                                                            \
             }                                                                                \
         }                                                                                    \
-        lpf = 0;                                                                             \
-        if (psnd.envId[0] == ent->id) lpf = psnd.envLpf[0];                                  \
-        if (psnd.envId[1] == ent->id) lpf = psnd.envLpf[1];                                  \
+        lpf = psndENV_calclpf(ent);                                                          \
         {                                                                                    \
             s32 id = ent->sfx;                                                               \
             PaperSoundEffect* sfx;                                                           \

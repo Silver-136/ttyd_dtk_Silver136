@@ -70,9 +70,9 @@ BOOL __assert2(const char* filename, int line, const char* assertion, const char
 }
 
 /**
- * Rounds to the nearest integer, halves away from zero; no version calls it (JP demo map: UNUSED, 0x54). The body
- * is angleABf's rounding: it compiles to the map size (the float-constant and plain x - 0.5 forms do not) and adds
- * no pool constants, as the map's numbering shows.
+ * Rounds to the nearest integer, halves away from zero. Only angleABf calls it, and those calls are inlined (JP demo
+ * map: UNUSED, 0x54). This body compiles to the map size (the float-constant and plain x - 0.5 forms do not) and
+ * adds no pool constants, as the map's numbering shows.
  */
 s32 roundi(f32 x) {
     if (x >= 0.0f) {
@@ -131,7 +131,6 @@ f32 angleABf(f32 x1, f32 y1, f32 x2, f32 y2) {
     f32 xdiff, ydiff;
     f32 xabs, yabs;
     f32 approxX;
-    f32 tablePos;
     int tableIndex;
     f32 angle;
     f32 approxY;
@@ -143,12 +142,7 @@ f32 angleABf(f32 x1, f32 y1, f32 x2, f32 y2) {
     yabs = fabsf(ydiff);
     if (xabs > yabs) {
         approxX = 45.0f * (yabs / xabs);
-        tablePos = 2.0f * approxX;
-        if (tablePos >= 0.0f) {
-            tableIndex = (int)(0.5 + tablePos);
-        } else {
-            tableIndex = -(int)(0.5 - tablePos);
-        }
+        tableIndex = roundi(2.0f * approxX);
         corrected = approxX * angleABTBL[tableIndex];
         if (xdiff >= 0.0f) {
             if (ydiff >= 0.0f) {
@@ -168,12 +162,7 @@ f32 angleABf(f32 x1, f32 y1, f32 x2, f32 y2) {
             return 0.0f;
         } else {
             approxY = 45.0f * (xabs / yabs);
-            tablePos = 2.0f * approxY;
-            if (tablePos >= 0.0f) {
-                tableIndex = (int)(0.5 + tablePos);
-            } else {
-                tableIndex = -(int)(0.5 - tablePos);
-            }
+            tableIndex = roundi(2.0f * approxY);
             corrected = approxY * angleABTBL[tableIndex];
             if (ydiff >= 0.0f) {
                 if (xdiff >= 0.0f) {
