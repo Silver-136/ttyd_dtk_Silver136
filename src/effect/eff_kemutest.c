@@ -392,6 +392,10 @@ static void effKemuTestMain(EffectEntry* effect) {
     }
 }
 
+/** sin and cos of an angle in degrees. */
+static inline f32 sind(f32 deg) { return sin(6.2831855f * deg / 360.0f); }
+static inline f32 cosd(f32 deg) { return cos(6.2831855f * deg / 360.0f); }
+
 /**
  * Spawns the smoke burst at (x, y, z): the type (0-22) picks the piece count and motion.
  * Spawned by the hammer motion (mot_hammer.c), partner code, other effects and event scripts.
@@ -593,17 +597,12 @@ EffectEntry* effKemuTestEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
                 work->b = 0xff;
                 work->delay = 0;
                 if (type == 4 || type == 13) {
-                    f32 ang;
                     f32 spd;
                     f32 d;
                     d = bom_dir[i - 1];
                     spd = 2.0f * bom_spd[i - 1];
-
-                    // FAKE: d copied through ang; `ang = 6.2831855f * (90.0f + d) / 360.0f` changes the object
-                    ang = d;
-                    ang = 6.2831855f * (90.0f + ang) / 360.0f;
-                    work->vel.x = spd * (f32)sin(ang);
-                    work->vel.y = -spd * (f32)cos(ang);
+                    work->vel.x = spd * sind(90.0f + d);
+                    work->vel.y = -spd * cosd(90.0f + d);
                     work->scale = 1.0f;
                     work->delay = irand(0x1e);
                     if (type == 13) {
@@ -620,16 +619,16 @@ EffectEntry* effKemuTestEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
                 } else if (type == 5) {
                     KemuF4 d = kemu_d;
                     f32 spd = 3.0f;
-                    f32 s = (f32)sin(6.2831855f * d.v[i] / 360.0f);
+                    f32 s = sind(d.v[i]);
                     work->vel.x = spd * s;
-                    work->vel.y = -spd * (f32)cos(6.2831855f * d.v[i] / 360.0f);
+                    work->vel.y = -spd * cosd(d.v[i]);
                     work->scale = 0.5f;
                 } else if (type == 21) {
                     KemuF3 e = kemu_e;
                     f32 spd = 3.0f;
-                    f32 s = (f32)sin(6.2831855f * e.v[i] / 360.0f);
+                    f32 s = sind(e.v[i]);
                     work->vel.x = spd * s;
-                    work->vel.y = -spd * (f32)cos(6.2831855f * e.v[i] / 360.0f);
+                    work->vel.y = -spd * cosd(e.v[i]);
                     work->scale = 0.5f;
                 } else if (type == 9 || type == 17 || type == 20) {
                     f32 ang = (f32)irand(0x168);

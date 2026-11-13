@@ -616,6 +616,10 @@ USER_FUNC(evt_bero_get_info_num) {
     return EVT_RETURN_DONE;
 }
 
+/** sin and cos of an angle in degrees. */
+static inline f32 sind(f32 deg) { return sin(6.2831855f * deg / 360.0f); }
+static inline f32 cosd(f32 deg) { return cos(6.2831855f * deg / 360.0f); }
+
 USER_FUNC(bero_get_position_normal) {
     EvtWord* args = event->args;
 #if VERSION >= VERSION_JP
@@ -652,7 +656,6 @@ USER_FUNC(bero_get_position_normal) {
         f32 hx;
         f32 fullTurnDegrees;
         f32 deg;
-        f32 rad;
         hz = hy = hx = 0.0f;
         dist = 1000000.0f;
 
@@ -661,11 +664,10 @@ USER_FUNC(bero_get_position_normal) {
         if (dir == 1) {
             deg += 180.0f;
         }
-        rad = (6.2831855f * deg) / 360.0f;
-        tmp.x = start.x - (30.0f * (f32)sin(rad));
+        tmp.x = start.x - (30.0f * sind(deg));
         tmp.y = start.y;
 
-        c0 = (f32) cos(rad);
+        c0 = cosd(deg);
         tmp.z = start.z - (30.0f * (-c0));
 
         // dist is stored again before the second probe; the store is in the retail code
@@ -674,10 +676,9 @@ USER_FUNC(bero_get_position_normal) {
             tmp.y = hy;
         }
         tmp2 = tmp;
-        tmp2.x += (30.0f + len) * (f32)sin(rad);
+        tmp2.x += (30.0f + len) * sind(deg);
 
-        // FAKE: recomputes rad; `cos(rad)` changes the object
-        tmp2.z += (30.0f + len) * (-((f32) cos((6.2831855f * deg) / 360.0f)));
+        tmp2.z += (30.0f + len) * -cosd(deg);
         start = tmp;
         end = tmp2;
     }

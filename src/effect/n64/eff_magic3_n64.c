@@ -115,7 +115,7 @@ EffectEntry* effMagic3N64Entry(s32 type, f32 x, f32 y, f32 z, s32 life) {
 }
 
 #pragma opt_propagation reset
-/** Returns 3 * a + b (a size term used while the sparks fade out). */
+/** Returns 3 * a + b: the spark size from its two sine waves (alpha wave a, time wave b). */
 inline f32 magic3_scale(f32 a, f32 b) { return 3.0f * a + b; }
 
 /** Slows each spark (80% per frame, 70% near the end), fades alpha in then out, and pulses its size with sine waves. */
@@ -145,7 +145,7 @@ static void effMagic3Main(EffectEntry* effect) {
             work->velocity.y *= 0.8f;
             work->velocity.z *= 0.8f;
             work->alpha = (s32)(0.4f * (f32)(255 - work->alpha) + (f32)work->alpha);
-            work->scale = (f32)sin(t / 360.0f) + 3.0f * (f32)sin(6.2831855f * (f32)(work->alpha / 2) / 360.0f);
+            work->scale = magic3_scale((f32)sin(6.2831855f * (f32)(work->alpha / 2) / 360.0f), (f32)sin(t / 360.0f));
         }
         if (life < 5) {
             work->alpha *= 0.6f;
@@ -153,7 +153,6 @@ static void effMagic3Main(EffectEntry* effect) {
             work->velocity.y *= 0.7f;
             work->velocity.z *= 0.7f;
 
-            // FAKE: magic3_scale(a, b) is 3.0f * a + b; the written-out sum changes the object
             work->scale = (f32)(255 - work->alpha) / 30.0f +
                           magic3_scale((f32)sin(6.2831855f * (f32)(work->alpha / 2) / 360.0f), (f32)sin(t / 360.0f));
         }

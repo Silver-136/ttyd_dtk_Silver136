@@ -47,11 +47,9 @@ void effKemuri8N64SetCamId(EffectEntry* effect, s32 camId) {
     ((EffKemuri8N64Work*)effect->userdata)->camId = camId;
 }
 
-/** Returns a * -b (used for the x position of each puff in the ring). */
-static inline f32 inline_fn(f32 a, f32 b) { return a * (-b); }
+/** Returns radius * -trig: one coordinate of a puff's start offset on the ring. */
+static inline f32 ringOffset(f32 radius, f32 trig) { return radius * (-trig); }
 
-// FAKE: opt_propagation off for effKemuri8N64Entry only
-#pragma opt_propagation off
 /**
  * Spawns a ring of smoke puffs (6/8/10 for type 0/1/other after the header element, radius 14/28/42) around
  * (x, y, z) that fly outward in the screen plane. Types 3 and up use the same sizes with a hot variant.
@@ -113,9 +111,8 @@ EffectEntry* effKemuri8N64Entry(s32 type, f32 x, f32 y, f32 z) {
         work->vAccelStep2 = 0.0f;
         rad = 6.2831855f * (f32)(((i - 1) * 360) / (count - 1)) / 360.0f;
 
-        // FAKE: one-use inline inline_fn computes radius * -sin; writing it out changes the object
-        work->position.x = inline_fn(radius, (f32)sin(rad));
-        work->position.y = radius * -(f32)cos(rad);
+        work->position.x = ringOffset(radius, (f32)sin(rad));
+        work->position.y = ringOffset(radius, (f32)cos(rad));
         work->position.z = 0.0f;
         work->sinAngle = sin(rad);
         work->cosAngle = cos(rad);
@@ -136,7 +133,6 @@ EffectEntry* effKemuri8N64Entry(s32 type, f32 x, f32 y, f32 z) {
     return effect;
 }
 
-#pragma opt_propagation reset
 /** Steps the shared 16-frame texture animation over 17 frames and flies each puff outward; deletes at the end. */
 static void effKemuri8Main(EffectEntry* effect) {
     EffKemuri8N64Work* work = effect->userdata;

@@ -100,12 +100,11 @@ static void effSleepMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effSleepDisp, effect);
 }
 
-// FAKE: same values as the plain form, written so the code generator sees the target's shapes:
-// - sin argument via `(t = tau * x, t *= 0.015625f)`: a compound assignment skips the front end's
-//   commutative swap (CExpr optimizecomm), so the constant stays the right operand;
-// - 0.5f / 0.015625f / 1.0f are literals (LICM-hoisted temps in first-use order), xh = x0 * 0.5f is
-//   computed in the inner loop body, and the y products go through sleepPos so `1.0f * y` is not
-//   folded away by the front end (CExpr_IsOne).
+/** sin(t / 64) for t = 2 pi times a frame count: a wave with a 64-frame period. */
+static inline f32 sleepSin(f32 t) { return sin(t / 64.0f); }
+
+// FAKE: the y products go through sleepPos so `1.0f * y` is not folded away by the front end (CExpr_IsOne);
+// GXPosition3f32(x, y, 0.0f) and a 1.0f height local change the object
 static inline void sleepPos(f32 x, f32 one, f32 y) { GXPosition3f32(x, one * y, 0.0f); }
 
 /**
@@ -131,7 +130,6 @@ static void effSleepDisp(CameraId camId, void* param) {
     s32 alpha;
     f32 xh;
     f32 s0, s1;
-    f32 t;
 
     data = effect->userdata;
     cam = camGetPtr(camId);
@@ -176,10 +174,9 @@ static void effSleepDisp(CameraId camId, void* param) {
             j = 0;
             off = 0;
             while (j < 8) {
-                s0 = 0.5f * (f32)sin((t = (tau * (f32)(u32)(gp->retraceCount + base + off)), t *= 0.015625f));
-                s1 = 0.5f * (f32)sin((t = (tau * (f32)(u32)(gp->retraceCount + base + (j + 1) * 10)), t *= 0.015625f));
-                xh = x0;
-                xh *= 0.5f;
+                s0 = 0.5f * sleepSin(tau * (f32)(u32)(gp->retraceCount + base + off));
+                s1 = 0.5f * sleepSin(tau * (f32)(u32)(gp->retraceCount + base + (j + 1) * 10));
+                xh = x0 / 2.0f;
                 GXBegin(GX_QUADS, GX_VTXFMT0, 4);
                 sleepPos(xh + s1, 1.0f, j + 1);
                 GXTexCoord2f32(0.0f, 0.125f * (f32)(7 - j));

@@ -199,6 +199,10 @@ static void effItemGetMain(EffectEntry* effect) {
     }
 }
 
+/** cos and sin of an angle in degrees. */
+static inline f32 cosd(f32 deg) { return cos(6.2831855f * deg / 360.0f); }
+static inline f32 sind(f32 deg) { return sin(6.2831855f * deg / 360.0f); }
+
 /** Draws the sparkle sprites for the item get types in two passes (shadow, then main). */
 static void effItemGetDisp(CameraId cameraId, void* payload) {
     EffectEntry* effect = payload;
@@ -239,9 +243,8 @@ static void effItemGetDisp(CameraId cameraId, void* payload) {
     PSMTXConcat(m19c, m13c, m19c);
     PSMTXConcat(m19c, m16c, m7c);
 
-    // FAKE: comma expression `(0, X)`: X becomes a separate compiler temp; the plain X changes the object
-    cs = (0, (f32)cos(6.2831855f * camGetPtr(cameraId)->viewYaw / 360.0f));
-    s = (f32)sin(6.2831855f * camGetPtr(cameraId)->viewYaw / 360.0f);
+    cs = cosd(camGetPtr(cameraId)->viewYaw);
+    s = sind(camGetPtr(cameraId)->viewYaw);
     PSMTXTrans(m19c, 2.0f * s, 0.0f, -cs * 2.0f);
     PSMTXConcat(m19c, m7c, m7c);
     GXSetTevColor(GX_TEVREG0, white);

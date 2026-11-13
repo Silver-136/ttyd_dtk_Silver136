@@ -147,6 +147,9 @@ static void effMagicHoraoMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effMagicHoraoDisp, effect);
 }
 
+/** The red/green shade (200-250) pulsing with the angle. */
+static inline f32 shade(f32 ang) { return 225.0f + 25.0f * (f32)sin(ang); }
+
 /**
  * In the hold state (1) draws two flat quads (texture 0x56, then 0x57 fading in); in every other state draws a
  * wobbling ribbon of 15 strips (texture 0x56 while easing in, 0x57 from state 2 on).
@@ -185,8 +188,7 @@ static void effMagicHoraoDisp(CameraId cameraId, void* payload) {
     GXLoadPosMtxImm(mtx, GX_PNMTX0);
     GXSetCurrentMtx(GX_PNMTX0);
 
-    // FAKE: ang is assigned in a comma expression inside the initializer; assigning it in its own statement changes the object
-    GXSetTevColor(GX_TEVREG0, (GXColor){(ang = 6.2831855f * (f32)(frame * 30) / 360.0f, 225.0f + 25.0f * (f32)sin(ang)), 225.0f + 25.0f * (f32)sin(ang), 0xFF, alpha});
+    GXSetTevColor(GX_TEVREG0, (GXColor){shade(ang = 6.2831855f * (f32)(frame * 30) / 360.0f), shade(ang), 0xFF, alpha});
     GXSetNumChans(0);
     GXSetNumTexGens(1);
     GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0, GX_FALSE, GX_PTIDENTITY);

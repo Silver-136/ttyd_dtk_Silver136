@@ -44,8 +44,10 @@ static void effKemuri5Main(EffectEntry* effect);
 
 static void effKemuri5Disp(CameraId cameraId, void* param);
 
-// FAKE: opt_propagation off for effKemuri5N64Entry and effKemuri5Main
-#pragma opt_propagation off
+/** sin and cos of an angle in degrees. */
+static inline f32 sind(f32 deg) { return sin(6.2831855f * deg / 360.0f); }
+static inline f32 cosd(f32 deg) { return cos(6.2831855f * deg / 360.0f); }
+
 /**
  * Spawns eight cloud-smoke puffs ("landing" in the effect table) at (x, y, z), 45 degrees apart from the angle,
  * with randomized sizes; 30 frames. Called via evt_eff64 "kemuri5_n64".
@@ -56,7 +58,7 @@ EffectEntry* effKemuri5N64Entry(f32 x, f32 y, f32 z, f32 angle) {
     EffKemuri5N64Work* work;
     f32 angF;
     s32 i;
-    f32 rad;
+    f32 deg;
 
     effect = effEntry();
     effect->type = "Kemuri5N64";
@@ -84,9 +86,9 @@ EffectEntry* effKemuri5N64Entry(f32 x, f32 y, f32 z, f32 angle) {
         work->accelY = -0.02f;
         work->accelY2 = 0.00005f;
         work->speed = -3.9f;
-        rad = 6.2831855f * reviseAngle(angle + angF) / 360.0f;
-        work->dirX = (f32)sin(rad);
-        work->dirZ = (f32)cos(rad);
+        deg = reviseAngle(angle + angF);
+        work->dirX = sind(deg);
+        work->dirZ = cosd(deg);
         ang += 45;
     }
     return effect;
@@ -116,9 +118,9 @@ static void effKemuri5Main(EffectEntry* effect) {
         anyActive = 1;
         work->angle = reviseAngle(12.0f + work->angle);
 
-        sv = (f32)sin(6.2831855f * work->angle / 360.0f);
+        sv = sind(work->angle);
         work->scale.x = 0.1f * sv + work->baseScaleX;
-        work->scale.y = 0.1f * (f32)cos(6.2831855f * work->angle / 360.0f) + work->baseScaleY;
+        work->scale.y = 0.1f * cosd(work->angle) + work->baseScaleY;
         work->speed *= 0.83f;
         work->position.x = work->speed * work->dirX + work->position.x;
         work->position.z = work->speed * work->dirZ + work->position.z;
@@ -141,7 +143,6 @@ static void effKemuri5Main(EffectEntry* effect) {
     }
 }
 
-#pragma opt_propagation reset
 
 /** Draws each puff as a camera-facing (Y-billboarded) textured quad using effect texture 0x4E. */
 static void effKemuri5Disp(CameraId cameraId, void* param) {

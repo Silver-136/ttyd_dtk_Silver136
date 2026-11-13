@@ -162,8 +162,10 @@ static void effPokopiThunderMain(EffectEntry* effect) {
     dispEntry(work->cameraId, dispCalcZ(&position), DISP_MODE_XLU, effPokopiThunderDisp, effect);
 }
 
-/** Returns a->end.y - b->start.y, the vertical span of the bolt. */
-inline float pt_dy(EffPokopiThunderN64Work* a, EffPokopiThunderN64Work* b) { return a->end.y - b->start.y; }
+/** The bolt's span from start to end along x, y and z. */
+static inline f32 pt_dx(EffPokopiThunderN64Work* w) { return w->end.x - w->start.x; }
+static inline f32 pt_dy(EffPokopiThunderN64Work* w) { return w->end.y - w->start.y; }
+static inline f32 pt_dz(EffPokopiThunderN64Work* w) { return w->end.z - w->start.z; }
 
 /**
  * Rebuilds a 12-point jagged ribbon along the bolt each frame, wobbling the points from the frame table,
@@ -260,19 +262,18 @@ static void effPokopiThunderDisp(CameraId cameraId, void* param) {
     for (i = 0; i < 12; i++) {
         f32 w, dx, dy, a, s, c, off;
         w = (f32)data[i];
-        dx = 0.09090909f * (work->end.x - work->start.x);
+        dx = 0.09090909f * pt_dx(work);
 
-        // FAKE: pt_dy(work, work) is end.y - start.y through an inline helper; the plain expression changes the object
-        dy = 0.09090909f * pt_dy(work, work);
+        dy = 0.09090909f * pt_dy(work);
         a = 6.2831855f * (f32)((work->seed + (i - frame) * 10) % 120 - 60) / 360.0f;
         s = (f32)sin(a);
         off = 0.04f * (w * s);
         s = dy * off;
         c = (f32)cos(a);
         c = 0.04f * (w * c);
-        work->x[i] = (dx * c - s) + (0.09090909f * ((f32)i * (work->end.x - work->start.x)) + work->start.x);
-        work->y[i] = (dx * off + dy * c) + (0.09090909f * ((f32)i * pt_dy(work, work)) + work->start.y);
-        work->z[i] = zero + (0.09090909f * ((f32)i * (work->end.z - work->start.z)) + work->start.z);
+        work->x[i] = (dx * c - s) + (0.09090909f * ((f32)i * pt_dx(work)) + work->start.x);
+        work->y[i] = (dx * off + dy * c) + (0.09090909f * ((f32)i * pt_dy(work)) + work->start.y);
+        work->z[i] = zero + (0.09090909f * ((f32)i * pt_dz(work)) + work->start.z);
         work->w[i] = 0.1f * (f32)data[i + 12];
     }
     vtx = (effN64Vtx*)smartAlloc(sizeof(effN64Vtx) * 48, SMART_GROUP_TEMP)->address;

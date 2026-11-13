@@ -55,8 +55,10 @@ static void kemuri_matrix(EffKemuri3N64Work* work) {
 static void effKemuri3Main(EffectEntry* effect);
 static void effKemuri3Disp(CameraId cameraId, void* param);
 
-// FAKE: opt_propagation off for effKemuri3N64Entry only
-#pragma opt_propagation off
+/** sin and cos of an angle in degrees. */
+static inline f32 sind(f32 deg) { return sin(6.2831855f * deg / 360.0f); }
+static inline f32 cosd(f32 deg) { return cos(6.2831855f * deg / 360.0f); }
+
 /**
  * Spawns five flower-smoke puffs ("jump" in the effect table) at (x, y, z), 72 degrees apart around the angle;
  * 60 frames. Called via evt_eff64 "kemuri3_n64".
@@ -66,8 +68,7 @@ EffectEntry* effKemuri3N64Entry(f32 x, f32 y, f32 z, f32 angle) {
     EffectEntry* effect;
     EffKemuri3N64Work* work;
     s32 i;
-    f32 rad;
-    f32 t;
+    f32 deg;
 
     effect = effEntry();
     effect->type = "Kemuri3N64";
@@ -96,16 +97,13 @@ EffectEntry* effKemuri3N64Entry(f32 x, f32 y, f32 z, f32 angle) {
         work->vJerk = 0.0f;
         work->vSnap = 0.0f;
         work->speed = -3.9f;
-        rad = reviseAngle(work->rotation.y);
-        t = 6.2831855f * rad;
-        rad = t / 360.0f;
-        work->sinAngle = sin(rad);
-        work->cosAngle = cos(rad);
+        deg = reviseAngle(work->rotation.y);
+        work->sinAngle = sind(deg);
+        work->cosAngle = cosd(deg);
     }
     return effect;
 }
 
-#pragma opt_propagation reset
 /** Moves each puff outward (slowing 15% per frame) in a rise-then-fall arc and tilts it; deletes when all expire. */
 static void effKemuri3Main(EffectEntry* effect) {
     EffKemuri3N64Work* work = effect->userdata;
