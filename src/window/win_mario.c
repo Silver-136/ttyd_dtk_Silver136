@@ -731,7 +731,6 @@ void winMarioDisp(s32 camId, void* param, s32 idx) {
             }
         }
     }
-#if VERSION >= VERSION_JP
 #if VERSION >= VERSION_US
     // FAKE: two dead int guards (gz is 0; folded after register allocation, no code): the first redefines q1/q2 so
     // they are not propagated, the second consumes them into y
@@ -746,7 +745,6 @@ void winMarioDisp(s32 camId, void* param, s32 idx) {
     if (gz != 0) {
         y = q1[0] + q2[0];
     }
-#endif
 #endif
     left = 10.0f + x;
     winKirinukiGX(w, 0, left, 10.0f + (20.0f + y), 260.0f, 150.0f);

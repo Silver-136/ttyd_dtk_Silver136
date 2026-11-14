@@ -2545,6 +2545,10 @@ static void winSortMain(WindowWork* wp) {
         sort_data[wp->sortType][wp->sortSel].func(wp);
     }
 #if VERSION < VERSION_US
+    // BUG: Start is only seen when B, the stick and A are not pressed in the same frame. With A (or the stick) and
+    // Start together, the pause menu closes on Start while this branch never runs, so sortActive stays set and the
+    // hidden sort menu still takes input when the pause menu is opened again (until winReInit on a map change).
+    // US checks Start first.
     else if (trg & PAD_BUTTON_START) {
         wp->sortActive = 0;
         wp->sortTgtX = -600.0f;

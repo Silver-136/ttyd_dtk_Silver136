@@ -1039,7 +1039,6 @@ void msgAnalize(smartEntry* smart, char* msg) {
             case 0:
                 entry->glyph = MSG_GLYPH_END;
                 entry->time = time;
-#if VERSION >= VERSION_JP
 #if VERSION >= VERSION_US
                 if (data->selWidth == 0) {
                     if (maxW < x) {
@@ -1047,7 +1046,6 @@ void msgAnalize(smartEntry* smart, char* msg) {
                     }
                     data->selWidth = maxW + 80;
                 }
-#endif
 #endif
                 data->parseTime = time;
                 data->parseX = x;
