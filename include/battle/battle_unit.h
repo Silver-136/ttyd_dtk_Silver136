@@ -79,9 +79,10 @@ typedef enum BattleUnitStatusFlags {
     UNIT_STATUS_FLAG_FLIPPED = (1 << 0),   // 0x1, set by the flip damage scripts: cannot act, guard or get an AC
     UNIT_STATUS_FLAG_DEFEND = (1 << 24),   // 0x1000000, Defend command: +1 defense until the next turn
     UNIT_STATUS_FLAG_HUSTLE = (1 << 25),   // 0x2000000, _set_hustle: the next action costs no move
-    UNIT_STATUS_FLAG_DANGER = (1 << 28),   // 0x10000000, HP <= dangerHP (BtlUnit_CheckPinchStatus)
-    UNIT_STATUS_FLAG_PERIL = (1 << 29),    // 0x20000000, HP <= perilHP
 } BattleUnitStatusFlags;
+// Unsigned constants: btlseqEnd's repeated Danger/Peril test compares the and results unsigned (cmplwi).
+#define UNIT_STATUS_FLAG_DANGER 0x10000000U // HP <= dangerHP (BtlUnit_CheckPinchStatus)
+#define UNIT_STATUS_FLAG_PERIL 0x20000000U  // HP <= perilHP
 
 typedef enum BattleUnit_Flags {
     BATTLE_UNIT_FLAG_SHOW_HP = (1 << 0),                  // 0x1, enemy HP shown until the gauge timer runs out

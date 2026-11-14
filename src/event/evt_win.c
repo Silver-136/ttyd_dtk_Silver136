@@ -1418,7 +1418,7 @@ static void evt_unitwin_disp_func(CameraId cameraId, void* param) {
         sprintf(buf, "%04d", lotteryGetPtr()->number);
         for (i = 0; i < 4; i++) {
             PSMTXTrans(mtx, 20.0f * i + -126.0f - 60.0f, -168.0f, 0.0f);
-            iconNumberDispGx(mtx, (s8)buf[i] - '0', 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+            iconNumberDispGx(mtx, buf[i] - '0', 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
         }
     }
 #endif
@@ -1822,8 +1822,7 @@ static void evt_unitwin_disp_func(CameraId cameraId, void* param) {
                 }
                 GXSetScissor(sl, st, sw, sh);
 
-                // FAKE: first character read through an s8 cast; msgName[0] changes the object
-                if (*(s8*)msgName) {
+                if (msgName[0]) {
                     windowDispGX_Waku_col(-240.0f, -130.0f, 480.0f, 70.0f, 20.0f, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
                     FontDrawStart();
                     FontDrawMessage(-220, -138, msgSearch(msgName));
@@ -1922,8 +1921,7 @@ static void evt_unitwin_disp_func(CameraId cameraId, void* param) {
                 }
                 GXSetScissor(sl, st, sw, sh);
 
-                // FAKE: first character read through an s8 cast; msgName[0] changes the object
-                if (*(s8*)msgName) {
+                if (msgName[0]) {
                     windowDispGX_Waku_col(-240.0f, -130.0f, 480.0f, 70.0f, 20.0f, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
                     FontDrawStart();
                     FontDrawMessage(-220, -138, msgSearch(msgName));
@@ -2001,8 +1999,7 @@ static void evt_unitwin_disp_func(CameraId cameraId, void* param) {
                 }
                 GXSetScissor(sl, st, sw, sh);
 
-                // FAKE: first character read through an s8 cast; msgName[0] changes the object
-                if (*(s8*)msgName) {
+                if (msgName[0]) {
                     windowDispGX_Waku_col(-240.0f, -130.0f, 480.0f, 70.0f, 20.0f, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
                     FontDrawStart();
                     FontDrawMessage(-220, -138, msgSearch(msgName));
@@ -2077,8 +2074,7 @@ static void evt_unitwin_disp_func(CameraId cameraId, void* param) {
                 }
                 GXSetScissor(sl, st, sw, sh);
 
-                // FAKE: first character read through an s8 cast; msgName[0] changes the object
-                if (*(s8*)msgName) {
+                if (msgName[0]) {
                     windowDispGX_Waku_col(-240.0f, -130.0f, 480.0f, 70.0f, 20.0f, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
                     FontDrawStart();
                     FontDrawMessage(-220, -138, msgSearch(msgName));
@@ -2144,9 +2140,8 @@ static void evt_unitwin_disp_func(CameraId cameraId, void* param) {
         line1 = text;
         lines = 1;
 
-        // FAKE: characters read through an s8 cast; line1[k] changes the object
-        for (k = 0; ((s8*)line1)[k]; k++) {
-            if (((s8*)line1)[k] == '\n') {
+        for (k = 0; text[k]; k++) {
+            if (text[k] == '\n') {
                 text[k] = 0;
                 lines = 2;
                 line2 = &text[k] + 1;

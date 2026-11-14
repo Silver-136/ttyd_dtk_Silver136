@@ -756,7 +756,7 @@ config.libs = [
             Object(MatchingFor("G8MJ01", "G8ME01"), "event/evt_seq.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "event/evt_twoddisp.c", extra_cflags=["-char signed"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "event/evt_snd.c"),
-            Object(MatchingFor("G8MJ01", "G8ME01"), "event/evt_win.c"),
+            Object(MatchingFor("G8MJ01", "G8ME01"), "event/evt_win.c", extra_cflags=["-char signed"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "event/evt_cloud.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "event/evt_env.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "event/evt_telop.c"),

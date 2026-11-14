@@ -668,13 +668,11 @@ void btlseqEnd(BattleWork* wp) {
             mario = BattleGetMarioPtr(wp);
             party2 = BattleGetPartyPtr(wp);
 
-            // FAKE: (u32) casts on the s32 BattleUnit.statusFlags in these Danger/Peril tests (here and in the later
-            // branch); without them, or with the field typed u32 (battle_unit.c changes then), the object changes.
-            if (((u32)mario->statusFlags & UNIT_STATUS_FLAG_DANGER) || ((u32)mario->statusFlags & UNIT_STATUS_FLAG_PERIL)) {
+            if ((mario->statusFlags & UNIT_STATUS_FLAG_DANGER) || (mario->statusFlags & UNIT_STATUS_FLAG_PERIL)) {
                 ok = 0;
             } else if (party2) {
                 // The repeated Mario check below does not test the partner's DANGER/PERIL flags.
-                if (((u32)mario->statusFlags & UNIT_STATUS_FLAG_DANGER) || ((u32)mario->statusFlags & UNIT_STATUS_FLAG_PERIL) ||
+                if ((mario->statusFlags & UNIT_STATUS_FLAG_DANGER) || (mario->statusFlags & UNIT_STATUS_FLAG_PERIL) ||
                     BtlUnit_CheckStatus(party2, STATUS_DEAD)) {
                     ok = 0;
                 }
@@ -732,11 +730,11 @@ void btlseqEnd(BattleWork* wp) {
         NpcBattleInfo* fd = wp->fbatInfo->setup;
         BattleUnit* mario = BattleGetMarioPtr(wp);
         BattleUnit* party = BattleGetPartyPtr(wp);
-        if (((u32)mario->statusFlags & UNIT_STATUS_FLAG_DANGER) || ((u32)mario->statusFlags & UNIT_STATUS_FLAG_PERIL)) {
+        if ((mario->statusFlags & UNIT_STATUS_FLAG_DANGER) || (mario->statusFlags & UNIT_STATUS_FLAG_PERIL)) {
             ok = 0;
         } else if (party) {
             // The repeated Mario check below does not test the partner's DANGER/PERIL flags.
-            if (((u32)mario->statusFlags & UNIT_STATUS_FLAG_DANGER) || ((u32)mario->statusFlags & UNIT_STATUS_FLAG_PERIL) ||
+            if ((mario->statusFlags & UNIT_STATUS_FLAG_DANGER) || (mario->statusFlags & UNIT_STATUS_FLAG_PERIL) ||
                 BtlUnit_CheckStatus(party, STATUS_DEAD)) {
                 ok = 0;
             }
