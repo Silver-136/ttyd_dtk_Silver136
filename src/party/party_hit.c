@@ -185,7 +185,7 @@ static f32 ABCtoAngleY(PartyEntry* party, Vec n) {
 /**
  * Per-frame ground check for a walking partner (the Goombella, Bobbery, Ms. Mowz and Yoshi ability code,
  * party.c and party_motion.c call it):
- * snaps her to the floor, sets the grounded and shallow-water flags (attribute 0x100),
+ * snaps it to the floor, sets the grounded and shallow-water flags (attribute 0x100),
  * starts a fall when there is no floor (attribute 0x200 counts as none),
  * and starts the step-up motion when the floor just ahead is 5 or more units higher on a gentle slope.
  */
@@ -499,9 +499,9 @@ HitEntry* _partySearchGround(PartyEntry* party, f32* outY, f32* outDepth, f32 ra
 }
 
 /**
- * Probes the floor 0.265 of the partner's width ahead, from her height above (half her height in the early demos).
+ * Probes the floor 0.265 of the partner's width ahead, from its height above (half its height in the early demos).
  * On a floor less than 2 units lower, or a higher floor, returns it with *outY = floor height and *outDist = 0;
- * on a lower floor returns NULL with *outDist = the drop. Also sets her floor tilt and slope.
+ * on a lower floor returns NULL with *outDist = the drop. Also sets its floor tilt and slope.
  */
 HitEntry* partyChkFrontStep(PartyEntry* party, f32 range, f32* outY, f32* outDist, f32* outAng) {
     HitEntry* hit;

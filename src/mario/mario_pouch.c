@@ -1477,7 +1477,7 @@ s32 pouchArriveBadge(s32 id) {
 
 /**
  * Script command evt_pouch_majinai_set: when fewer than curseCount charm uses remain,
- * sets that many uses and restarts her countdown (majinai: charm).
+ * sets that many uses and restarts the charm's countdown (majinai: charm).
  */
 void pouchMajinaiInit(s32 curseCount) {
     if (mpp->merleeCurseUsesRemaining < curseCount) {
