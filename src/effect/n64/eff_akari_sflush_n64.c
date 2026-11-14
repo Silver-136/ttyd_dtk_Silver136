@@ -33,9 +33,6 @@ static effN64Vtx size16x16_tex32x32_vtx[] = {
     {-16, 0, 0, 0, 0, 255, 255, 255, 255},
 };
 
-/** White, used as the flash's second colour when drawing the flares. */
-static const GXColor kWhite = {255, 255, 255, 0};
-
 static void effAkariSflushMain(EffectEntry* effect);
 static void effAkariSflushDisp(CameraId cameraId, void* payload);
 
@@ -127,7 +124,6 @@ static void effAkariSflushDisp(CameraId cameraId, void* payload) {
     Mtx viewMtx;
     Mtx m44;
     Mtx m14;
-    GXColor color2;
 
     camera = camGetPtr(cameraId);
     work = effect->userdata;
@@ -154,8 +150,7 @@ static void effAkariSflushDisp(CameraId cameraId, void* payload) {
     GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_APREV);
     GXSetNumTexGens(0);
     GXSetTevColor(GX_TEVREG0, (GXColor){work->r, work->g, work->b, alpha});
-    color2 = kWhite;
-    GXSetTevColor(GX_TEVREG1, color2);
+    GXSetTevColor(GX_TEVREG1, (GXColor){255, 255, 255, 0});
     GXSetCullMode(GX_CULL_NONE);
     effSetVtxDescN64(size16x16_tex32x32_vtx);
     for (i = 0; i < work->count + 1; i++) {

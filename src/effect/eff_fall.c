@@ -1198,8 +1198,8 @@ static void effFallDispWater(CameraId cameraId, void* payload) {
         PSMTXTrans(trans, 0.0f, (-w->pos3.y) / 4.0f, 0.0f);
         GXLoadTexMtxImm(trans, GX_TEXMTX0, GX_MTX2x4);
         {
-            static const GXColor white255b = {255, 255, 255, 255};
-            GXSetTevColor(GX_TEVREG0, white255b);
+            GXColor white = {255, 255, 255, 255};
+            GXSetTevColor(GX_TEVREG0, white);
         }
         effGetTexObj(0x36, &tex);
         GXLoadTexObj(&tex, GX_TEXMAP0);

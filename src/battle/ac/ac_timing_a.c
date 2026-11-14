@@ -51,69 +51,75 @@ static TimingAEntry* _ac_timing_a_timing_tbl[] = {
     _ac_timing_a_timing_lv_6,
 };
 
-/**
- * Draws the A icon, shown pressed while the jump script sets timing flag bit 0 (btlevtcmd_ac_timing_flag_onoff)
- * as the cue.
- */
-static void actionCommandDisp(f32 x, f32 y) {
-    BattleWork* work = _battleWorkPointer;
-    BattleActions* ac = &work->actionCommands;
-    s32* blinkTimer = &ac->disp.blinkTimer;
-    camGetPtr(CAMERA_2D);
-    if (((TimingAWork*)ac->work)->flags & AC_TIMING_A_ICON_PRESSED) {
-        Vec pos = {0.0f, 0.0f, 0.0f};
-        pos.x = -200.0f + x;
-        pos.y = 50.0f + y;
-        iconDispGx(&pos, ICON_FLAG_2D, ICON_BUTTON_A_PRESSED, 1.0f);
-    } else {
-        Vec pos = {0.0f, 0.0f, 0.0f};
-        pos.x = -200.0f + x;
-        pos.y = 50.0f + y;
-        iconDispGx(&pos, ICON_FLAG_2D, ICON_BUTTON_A, 1.0f);
-    }
-    (*blinkTimer)++;
-}
+static void actionCommandDisp(f32 x, f32 y);
 
-/** Called by btlevtcmd_StopAC: starts the 60-frame end wait. */
-void battleAcDelete_TimingA(BattleWork* work) {
-    work->actionCommands.acState = AC_STATE_RUN;
-}
 
 /**
- * Display callback: slides the A icon in from the left over 20 frames (JP and later snap it in place),
- * and once the command is stopped keeps it up for 40 frames before sliding it back out.
+ * Per-frame driver of action command 1, used by Mario's jumps,
+ * Goombella's Headbonk and Multibonk and Frankly's lesson.
+ * Does no judging itself (see battleAcResult_TimingA); it only sets up the display and runs the end wait.
  */
-void battleAcDisp_TimingA(CameraId cameraId, void* param) {
-    BattleWork* work = (BattleWork*)param;
+s32 battleAcMain_TimingA(BattleWork* work) {
     BattleActions* ac = &work->actionCommands;
+    TimingAWork* tw = (TimingAWork*)ac->work;
     BattleACDispParams* disp = &ac->disp;
-    switch (ac->acState) {
-        case AC_STATE_WAIT_START:
-            disp->iconX = intplGetValue(EASING_QUADRATIC_OUT, -300.0f, 30.0f, 20 - disp->slideTimer, 20);
 
-            // no break: in JP and later case 100 sets iconX to 30.0f, so the icon does not slide in
+    switch (work->actionCommands.acState) {
+        case AC_STATE_INIT:
+            memset(disp, 0, sizeof(BattleACDispParams));
+            disp->iconX = -300.0f;
+            disp->iconY = 0.0f;
+            disp->slideTimer = 20;
+            work->actionCommands.acState = AC_STATE_WAIT_START;
+
+            // FAKE: flags reached through a second cast of the work buffer instead of tw; tw->flags changes the object
+            ((TimingAWork*)work->actionCommands.work)->flags &= ~AC_TIMING_A_ICON_PRESSED;
+            work->actionCommands.outputParams[0] = 0;
+            break;
         case AC_STATE_START:
-#if VERSION >= VERSION_JP
-            disp->iconX = 30.0f;
-#endif
-            actionCommandDisp(disp->iconX, disp->iconY);
-            if (disp->slideTimer > 0) {
-                disp->slideTimer--;
-            }
             break;
         case AC_STATE_RUN:
+            tw->endTimer = 60;
+            work->actionCommands.acState = AC_STATE_RUN + 1;
         case AC_STATE_RUN + 1:
-            if (disp->slideTimer >= 40) {
-                disp->iconX = intplGetValue(EASING_QUADRATIC_OUT, 30.0f, -300.0f, disp->slideTimer - 40, 20);
-            } else {
-                disp->iconX = 30.0f;
-            }
-            actionCommandDisp(disp->iconX, disp->iconY);
-            if (disp->slideTimer < 60) {
-                disp->slideTimer++;
+            tw->endTimer--;
+            if (tw->endTimer <= 0) {
+                work->actionCommands.acState = AC_STATE_RUN + 2;
             }
             break;
+        case AC_STATE_RUN + 2:
+            work->actionCommands.maincb = NULL;
+            work->actionCommands.dispcb = NULL;
+            work->actionCommands.resultcb = NULL;
+            work->actionCommands.deletecb = NULL;
+            return 0;
     }
+    return 1;
+}
+
+/**
+ * Width in frames of the A window by difficulty (10 at the easiest down to 5);
+ * with timing flag bit 1 it narrows as resultCount grows, as in Power Bounce and Multibonk,
+ * until 100000 bounces make it 0.
+ */
+s32 battleAcTimingA_GetSuccessFrame(BattleWork* work) {
+    s32 diff = BattleActionCommandGetDifficulty(work);
+    TimingAEntry* e = _ac_timing_a_timing_tbl[diff];
+    s32 ret = e->value;
+    s32 count = work->actionCommands.resultCount;
+    if (((TimingAWork*)work->actionCommands.work)->flags & AC_TIMING_A_WINDOW_BY_COUNT) {
+        if (count >= 100000) {
+            return 0;
+        }
+        while (TRUE) {
+            if (count <= e->frame) {
+                break;
+            }
+            e++;
+        }
+        ret = e->value;
+    }
+    return ret;
 }
 
 /**
@@ -177,69 +183,66 @@ s32 battleAcResult_TimingA(BattleWork* work) {
 }
 
 /**
- * Width in frames of the A window by difficulty (10 at the easiest down to 5);
- * with timing flag bit 1 it narrows as resultCount grows, as in Power Bounce and Multibonk,
- * until 100000 bounces make it 0.
+ * Display callback: slides the A icon in from the left over 20 frames (JP and later snap it in place),
+ * and once the command is stopped keeps it up for 40 frames before sliding it back out.
  */
-s32 battleAcTimingA_GetSuccessFrame(BattleWork* work) {
-    s32 diff = BattleActionCommandGetDifficulty(work);
-    TimingAEntry* e = _ac_timing_a_timing_tbl[diff];
-    s32 ret = e->value;
-    s32 count = work->actionCommands.resultCount;
-    if (((TimingAWork*)work->actionCommands.work)->flags & AC_TIMING_A_WINDOW_BY_COUNT) {
-        if (count >= 100000) {
-            return 0;
-        }
-        while (TRUE) {
-            if (count <= e->frame) {
-                break;
+void battleAcDisp_TimingA(CameraId cameraId, void* param) {
+    BattleWork* work = (BattleWork*)param;
+    BattleActions* ac = &work->actionCommands;
+    BattleACDispParams* disp = &ac->disp;
+    switch (ac->acState) {
+        case AC_STATE_WAIT_START:
+            disp->iconX = intplGetValue(EASING_QUADRATIC_OUT, -300.0f, 30.0f, 20 - disp->slideTimer, 20);
+
+            // no break: in JP and later case 100 sets iconX to 30.0f, so the icon does not slide in
+        case AC_STATE_START:
+#if VERSION >= VERSION_JP
+            disp->iconX = 30.0f;
+#endif
+            actionCommandDisp(disp->iconX, disp->iconY);
+            if (disp->slideTimer > 0) {
+                disp->slideTimer--;
             }
-            e++;
-        }
-        ret = e->value;
+            break;
+        case AC_STATE_RUN:
+        case AC_STATE_RUN + 1:
+            if (disp->slideTimer >= 40) {
+                disp->iconX = intplGetValue(EASING_QUADRATIC_OUT, 30.0f, -300.0f, disp->slideTimer - 40, 20);
+            } else {
+                disp->iconX = 30.0f;
+            }
+            actionCommandDisp(disp->iconX, disp->iconY);
+            if (disp->slideTimer < 60) {
+                disp->slideTimer++;
+            }
+            break;
     }
-    return ret;
+}
+
+/** Called by btlevtcmd_StopAC: starts the 60-frame end wait. */
+void battleAcDelete_TimingA(BattleWork* work) {
+    work->actionCommands.acState = AC_STATE_RUN;
 }
 
 /**
- * Per-frame driver of action command 1, used by Mario's jumps,
- * Goombella's Headbonk and Multibonk and Frankly's lesson.
- * Does no judging itself (see battleAcResult_TimingA); it only sets up the display and runs the end wait.
+ * Draws the A icon, shown pressed while the jump script sets timing flag bit 0 (btlevtcmd_ac_timing_flag_onoff)
+ * as the cue.
  */
-s32 battleAcMain_TimingA(BattleWork* work) {
+static void actionCommandDisp(f32 x, f32 y) {
+    BattleWork* work = _battleWorkPointer;
     BattleActions* ac = &work->actionCommands;
-    TimingAWork* tw = (TimingAWork*)ac->work;
-    BattleACDispParams* disp = &ac->disp;
-
-    switch (work->actionCommands.acState) {
-        case AC_STATE_INIT:
-            memset(disp, 0, sizeof(BattleACDispParams));
-            disp->iconX = -300.0f;
-            disp->iconY = 0.0f;
-            disp->slideTimer = 20;
-            work->actionCommands.acState = AC_STATE_WAIT_START;
-
-            // FAKE: flags reached through a second cast of the work buffer instead of tw; tw->flags changes the object
-            ((TimingAWork*)work->actionCommands.work)->flags &= ~AC_TIMING_A_ICON_PRESSED;
-            work->actionCommands.outputParams[0] = 0;
-            break;
-        case AC_STATE_START:
-            break;
-        case AC_STATE_RUN:
-            tw->endTimer = 60;
-            work->actionCommands.acState = AC_STATE_RUN + 1;
-        case AC_STATE_RUN + 1:
-            tw->endTimer--;
-            if (tw->endTimer <= 0) {
-                work->actionCommands.acState = AC_STATE_RUN + 2;
-            }
-            break;
-        case AC_STATE_RUN + 2:
-            work->actionCommands.maincb = NULL;
-            work->actionCommands.dispcb = NULL;
-            work->actionCommands.resultcb = NULL;
-            work->actionCommands.deletecb = NULL;
-            return 0;
+    s32* blinkTimer = &ac->disp.blinkTimer;
+    camGetPtr(CAMERA_2D);
+    if (((TimingAWork*)ac->work)->flags & AC_TIMING_A_ICON_PRESSED) {
+        Vec pos = {0.0f, 0.0f, 0.0f};
+        pos.x = -200.0f + x;
+        pos.y = 50.0f + y;
+        iconDispGx(&pos, ICON_FLAG_2D, ICON_BUTTON_A_PRESSED, 1.0f);
+    } else {
+        Vec pos = {0.0f, 0.0f, 0.0f};
+        pos.x = -200.0f + x;
+        pos.y = 50.0f + y;
+        iconDispGx(&pos, ICON_FLAG_2D, ICON_BUTTON_A, 1.0f);
     }
-    return 1;
+    (*blinkTimer)++;
 }

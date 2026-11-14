@@ -31,6 +31,151 @@ typedef struct EffChargeWork {
     s32 b1;       // 0x44
 } EffChargeWork;
 
+static void effChargeDisp(CameraId cameraId, void* param);
+static void effChargeMain(EffectEntry* effect);
+
+/**
+ * Spawns a charge glow with 30 sparkles at (x, y, z); type 0-2 select the colour pair.
+ * Spawned via evt_eff by Palace of Shadow boss units (las) and an item script in battle_item_data.c.
+ */
+EffectEntry* effChargeEntry(s32 type, s32 duration, f32 x, f32 y, f32 z, f32 scale) {
+    EffectEntry* effect;
+    EffChargeWork* work;
+    EffChargeWork* p;
+    s32 i;
+
+    effect = effEntry();
+    effect->type = "Charge";
+    effect->count = 31;
+    work = __memAlloc(HEAP_EFFECT, 31 * sizeof(EffChargeWork));
+    effect->userdata = work;
+    effect->callback = effChargeMain;
+    work->type = type;
+    work->frame = 0;
+    work->duration = duration;
+    work->alpha = 0;
+    work->position.x = x;
+    work->position.y = y;
+    work->position.z = z;
+    work->scale = scale;
+    switch (type) {
+        case 0:
+            work->r0 = 255;
+            work->g0 = 0;
+            work->b0 = 255;
+            work->r1 = 255;
+            work->g1 = 255;
+            work->b1 = 255;
+            break;
+        case 1:
+            work->r0 = 255;
+            work->g0 = 20;
+            work->b0 = 33;
+            work->r1 = 50;
+            work->g1 = 20;
+            work->b1 = 10;
+            break;
+        case 2:
+        default:
+            work->r0 = 0;
+            work->g0 = 0;
+            work->b0 = 0;
+            work->r1 = 255;
+            work->g1 = 255;
+            work->b1 = 255;
+            break;
+    }
+    for (i = 1, p = work + 1; i <= 30; i++, p++) {
+        p->yaw = 9.0f * (360.0f * (i - 1)) / 30.0f;
+        p->pitch = 0.0f;
+        p->dist = (i - 1) * 100 / 30;
+        p->state = 0;
+    }
+    return effect;
+}
+
+/**
+ * Ramps the header's alpha up over the first 20 frames (effChargeDisp reads only the sparkles' own alpha),
+ * moves every sparkle inward along its spiral each frame (the yaw and pitch steps swap on odd frames),
+ * and deletes the effect once the duration (1000 or more means endless) expires.
+ */
+static void effChargeMain(EffectEntry* effect) {
+    s32 frame;
+    s32 odd;
+    EffChargeWork* work = effect->userdata;
+    s32 i;
+    Vec position;
+    Vec tmp = { 0.0f, 0.0f, 0.0f };
+
+    tmp.x = work->position.x;
+    tmp.y = work->position.y;
+    tmp.z = work->position.z;
+    position = tmp;
+
+    if (work->duration < 1000) {
+        work->duration--;
+    }
+    work->frame++;
+    if (work->duration < 0) {
+        effDelete(effect);
+        return;
+    }
+    frame = work->frame;
+    if (frame <= 20) {
+        work->alpha = frame * 12;
+    } else {
+        work->alpha = 255;
+    }
+    if (frame & 1) {
+        work->alpha /= 2;
+    }
+    odd = work->frame & 1;
+    work++;
+    for (i = 1; i < effect->count; i++, work++) {
+        f32 sa, ca, sb, cb, b;
+        f32 pt;
+        f32 a = 6.2831855f * work->yaw / 360.0f;
+        f32 d = work->dist;
+        pt = work->pitch;
+        sa = sin(a);
+        ca = cos(a);
+        b = 6.2831855f * pt / 360.0f;
+        sb = sin(b);
+        cb = cos(b);
+
+        work->position.x = cb * (d * sa);
+        work->position.y = cb * (d * ca);
+        work->position.z = d * sb;
+        work->alpha = (s32)(100.0f - work->dist) * 510 / 100;
+        if (work->alpha > 255) {
+            work->alpha = 255;
+        }
+        work->scale = 0.2f + work->dist / 80.0f;
+        work->dist -= (f32)((i & 3) * 2 + 2);
+        if (work->dist < 0.0f) {
+            work->dist = 0.0f;
+            work->scale = 0.0f;
+        }
+        work->yaw += (f32)(odd ? 5 : 2);
+        work->pitch += (f32)(odd ? 2 : 5);
+    }
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effChargeDisp, effect);
+}
+
+/** One textured quad: top-left corner (x, y), width w, height h, texture repeat (s, t). */
+// Original name and size (0x120) from the JP demo map (UNUSED there: nothing in this unit calls it).
+static void polygon(f32 x, f32 y, f32 w, f32 h, f32 s, f32 t) {
+    GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+    GXPosition3f32(x, y, 0.0f);
+    GXTexCoord2f32(0.0f, 0.0f);
+    GXPosition3f32(x + w, y, 0.0f);
+    GXTexCoord2f32(s, 0.0f);
+    GXPosition3f32(x + w, y - h, 0.0f);
+    GXTexCoord2f32(s, t);
+    GXPosition3f32(x, y - h, 0.0f);
+    GXTexCoord2f32(0.0f, t);
+}
+
 /** Draws the sparkles as additive billboards from texture 30, tinted between the two colours chosen by type. */
 static void effChargeDisp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
@@ -107,146 +252,4 @@ static void effChargeDisp(CameraId cameraId, void* param) {
             }
         }
     }
-}
-
-/** One textured quad: top-left corner (x, y), width w, height h, texture repeat (s, t). */
-// Original name and size (0x120) from the JP demo map (UNUSED there: nothing in this unit calls it).
-static void polygon(f32 x, f32 y, f32 w, f32 h, f32 s, f32 t) {
-    GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-    GXPosition3f32(x, y, 0.0f);
-    GXTexCoord2f32(0.0f, 0.0f);
-    GXPosition3f32(x + w, y, 0.0f);
-    GXTexCoord2f32(s, 0.0f);
-    GXPosition3f32(x + w, y - h, 0.0f);
-    GXTexCoord2f32(s, t);
-    GXPosition3f32(x, y - h, 0.0f);
-    GXTexCoord2f32(0.0f, t);
-}
-
-/**
- * Ramps the header's alpha up over the first 20 frames (effChargeDisp reads only the sparkles' own alpha),
- * moves every sparkle inward along its spiral each frame (the yaw and pitch steps swap on odd frames),
- * and deletes the effect once the duration (1000 or more means endless) expires.
- */
-static void effChargeMain(EffectEntry* effect) {
-    s32 frame;
-    s32 odd;
-    EffChargeWork* work = effect->userdata;
-    s32 i;
-    Vec position;
-    Vec tmp = { 0.0f, 0.0f, 0.0f };
-
-    tmp.x = work->position.x;
-    tmp.y = work->position.y;
-    tmp.z = work->position.z;
-    position = tmp;
-
-    if (work->duration < 1000) {
-        work->duration--;
-    }
-    work->frame++;
-    if (work->duration < 0) {
-        effDelete(effect);
-        return;
-    }
-    frame = work->frame;
-    if (frame <= 20) {
-        work->alpha = frame * 12;
-    } else {
-        work->alpha = 255;
-    }
-    if (frame & 1) {
-        work->alpha /= 2;
-    }
-    odd = work->frame & 1;
-    work++;
-    for (i = 1; i < effect->count; i++, work++) {
-        f32 sa, ca, sb, cb, b;
-        f32 pt;
-        f32 a = 6.2831855f * work->yaw / 360.0f;
-        f32 d = work->dist;
-        pt = work->pitch;
-        sa = sin(a);
-        ca = cos(a);
-        b = 6.2831855f * pt / 360.0f;
-        sb = sin(b);
-        cb = cos(b);
-
-        work->position.x = cb * (d * sa);
-        work->position.y = cb * (d * ca);
-        work->position.z = d * sb;
-        work->alpha = (s32)(100.0f - work->dist) * 510 / 100;
-        if (work->alpha > 255) {
-            work->alpha = 255;
-        }
-        work->scale = 0.2f + work->dist / 80.0f;
-        work->dist -= (f32)((i & 3) * 2 + 2);
-        if (work->dist < 0.0f) {
-            work->dist = 0.0f;
-            work->scale = 0.0f;
-        }
-        work->yaw += (f32)(odd ? 5 : 2);
-        work->pitch += (f32)(odd ? 2 : 5);
-    }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effChargeDisp, effect);
-}
-
-/**
- * Spawns a charge glow with 30 sparkles at (x, y, z); type 0-2 select the colour pair.
- * Spawned via evt_eff by Palace of Shadow boss units (las) and an item script in battle_item_data.c.
- */
-EffectEntry* effChargeEntry(s32 type, s32 duration, f32 x, f32 y, f32 z, f32 scale) {
-    EffectEntry* effect;
-    EffChargeWork* work;
-    EffChargeWork* p;
-    s32 i;
-
-    effect = effEntry();
-    effect->type = "Charge";
-    effect->count = 31;
-    work = __memAlloc(HEAP_EFFECT, 31 * sizeof(EffChargeWork));
-    effect->userdata = work;
-    effect->callback = effChargeMain;
-    work->type = type;
-    work->frame = 0;
-    work->duration = duration;
-    work->alpha = 0;
-    work->position.x = x;
-    work->position.y = y;
-    work->position.z = z;
-    work->scale = scale;
-    switch (type) {
-        case 0:
-            work->r0 = 255;
-            work->g0 = 0;
-            work->b0 = 255;
-            work->r1 = 255;
-            work->g1 = 255;
-            work->b1 = 255;
-            break;
-        case 1:
-            work->r0 = 255;
-            work->g0 = 20;
-            work->b0 = 33;
-            work->r1 = 50;
-            work->g1 = 20;
-            work->b1 = 10;
-            break;
-        case 2:
-        default:
-            work->r0 = 0;
-            work->g0 = 0;
-            work->b0 = 0;
-            work->r1 = 255;
-            work->g1 = 255;
-            work->b1 = 255;
-            break;
-    }
-    for (i = 1, p = work + 1; i <= 30; i++, p++) {
-        p->yaw = 9.0f * (360.0f * (i - 1)) / 30.0f;
-        p->pitch = 0.0f;
-        p->dist = (i - 1) * 100 / 30;
-        p->state = 0;
-    }
-    return effect;
 }

@@ -235,8 +235,6 @@ static void imgDisp(CameraId camId, void* param) {
 static void imgDisp_ProjPlane(CameraId camId, void* param) {
     ImageEntry* entry = param;
     static const Vec lightPos = {0.0f, 0.0f, 0.0f};
-    static const GXColor color1 = {0xFF, 0xFF, 0xFF, 0xFF};
-    static const GXColor color2 = {0xFF, 0xFF, 0xFF, 0xFF};
     Mtx mtx;
     Mtx mtx2;
     Vec pos;
@@ -260,7 +258,7 @@ static void imgDisp_ProjPlane(CameraId camId, void* param) {
     pos = lightPos;
     PSMTXMultVec(mtx, &pos, &pos);
     mapSetMaterialLight(0, pos);
-    mapSetMaterialLastStageBlend(flags, color1, color2);
+    mapSetMaterialLastStageBlend(flags, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
     mapSetMaterialTev(0, 0, flags, mtx);
     PSMTXConcat(camGetCurPtr()->view, mtx, mtx2);
     GXLoadPosMtxImm(mtx2, GX_PNMTX0);

@@ -52,8 +52,6 @@ TwodEntry* twodNameToPtr(const char* name) {
 static void twoddisp_disp(CameraId camera, void* param) {
     char buf[0x100];
     Vec pos;
-    GXColor fogi;
-    GXColor fogt;
     GXColor col;
     GXColor col2;
     s32 i;
@@ -63,17 +61,15 @@ static void twoddisp_disp(CameraId camera, void* param) {
         p = &twodPtr[i];
         if (p->name[0] != 0 && (p->flags & 1)) {
             if (!(p->id & 0x80000000)) {
-                fogi = twod_icon_fog_color;
                 pos.x = p->baseX + p->x;
                 pos.y = p->baseY + p->y;
                 pos.z = 0.0f;
-                GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, fogi);
+                GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, (GXColor){0, 0, 0, 0});
                 iconDispGx(&pos, ICON_FLAG_2D, (u16)p->id, p->scale);
             } else {
                 FontDrawStart();
                 FontDrawScale(p->scale);
-                fogt = twod_text_fog_color;
-                GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, fogt);
+                GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, (GXColor){0, 0, 0, 0});
                 sprintf(buf, (const char*)p->id);
                 col = (GXColor){0, 0, 0, 255};
                 FontDrawColor(col);
@@ -224,6 +220,3 @@ static EVT_BEGIN(twoddisp_main_event)
     RETURN
 EVT_END()
 
-// FAKE: placed in .sdata2 (both colors); without it the object changes
-__declspec(section ".sdata2") const GXColor twod_text_fog_color;
-__declspec(section ".sdata2") const GXColor twod_icon_fog_color;

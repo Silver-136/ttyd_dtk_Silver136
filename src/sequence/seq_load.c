@@ -1440,9 +1440,6 @@ static EVT_BEGIN(evt_continue)
     CALL(evt_sub_animgroup_async, STRING("OFF_f_in_out_peach"))
     RETURN
 EVT_END()
-#if VERSION < VERSION_US
-#pragma defer_codegen off
-#endif
 static void continueGame(void) {
     cardCopy2Main(wp->slot);
     gp->saveSlot = wp->slot;
@@ -1617,6 +1614,3 @@ static void continueGame(void) {
             break;
     }
 }
-#if VERSION < VERSION_US
-#pragma defer_codegen reset
-#endif

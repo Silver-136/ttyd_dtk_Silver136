@@ -442,7 +442,7 @@ config.libs = [
         "objects": [
             Object(MatchingFor("G8MJ01", "G8ME01"), "battle/ac/ac_table.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "battle/ac/ac_stick_keep_left.c", extra_cflags=["-O4,s", "-inline off"]),
-            Object(MatchingFor("G8MJ01", "G8ME01"), "battle/ac/ac_timing_a.c", cflags=cflags_static_nodefer, extra_cflags=["-O4,s", "-inline noauto"]),
+            Object(MatchingFor("G8MJ01", "G8ME01"), "battle/ac/ac_timing_a.c", extra_cflags=["-O4,s", "-inline noauto"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "battle/ac/ac_repeatedly.c", extra_cflags=["-O4,s", "-inline noauto"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "battle/ac/ac_shot.c", extra_cflags=["-O4,s", "-inline noauto"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "battle/ac/ac_lst_rc_keep.c", extra_cflags=["-O4,s"]),
@@ -546,7 +546,7 @@ config.libs = [
             Object(MatchingFor("G8MJ01", "G8ME01"), "effect/eff_fire.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "effect/eff_spark.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "effect/eff_updown.c"),
-            Object(MatchingFor("G8MJ01", "G8ME01"), "effect/eff_charge.c", cflags=cflags_static_nodefer),
+            Object(MatchingFor("G8MJ01", "G8ME01"), "effect/eff_charge.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "effect/eff_toge_flush.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "effect/eff_ice.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "effect/eff_torch.c"),
