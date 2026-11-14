@@ -89,8 +89,8 @@ static BeroEntry bero_entry_data[] = {
         1, // exitAnimeType
         0, 0, // enterAnimeArg..exitAnimeArg
     },
-    {
 #if VERSION <= VERSION_DEMO_JP
+    {
         "s_bero_2", // hitName
         0, 0, // type..sfxId
         BERO_DIR_AUTO, // directionId
@@ -107,39 +107,39 @@ static BeroEntry bero_entry_data[] = {
         0, 0, // enterAnimeArg..exitAnimeArg
     },
     {
-            "s_bero_3", // hitName
-            0, 0, // type..sfxId
-            BERO_DIR_AUTO, // directionId
-            BERO_POS_AUTO, // centerPosition
-            0, 0, // centerPositionY..centerPositionZ
-            -1, // length
-            NULL, // enterEvent
-            -1, // caseType
-            NULL, // exitEvent
-            "tik_04", // nextMapName
-            "n_bero_3", // nextBeroName
-            1, // enterAnimeType
-            1, // exitAnimeType
-            0, 0, // enterAnimeArg..exitAnimeArg
-        },
-        {
-                "s_bero_4", // hitName
-                0, 0, // type..sfxId
-                BERO_DIR_AUTO, // directionId
-                BERO_POS_AUTO, // centerPosition
-                0, 0, // centerPositionY..centerPositionZ
-                -1, // length
-                NULL, // enterEvent
-                -1, // caseType
-                NULL, // exitEvent
-                "tik_04", // nextMapName
-                "n_bero_4", // nextBeroName
-                1, // enterAnimeType
-                1, // exitAnimeType
-                0, 0, // enterAnimeArg..exitAnimeArg
-            },
-        {
+        "s_bero_3", // hitName
+        0, 0, // type..sfxId
+        BERO_DIR_AUTO, // directionId
+        BERO_POS_AUTO, // centerPosition
+        0, 0, // centerPositionY..centerPositionZ
+        -1, // length
+        NULL, // enterEvent
+        -1, // caseType
+        NULL, // exitEvent
+        "tik_04", // nextMapName
+        "n_bero_3", // nextBeroName
+        1, // enterAnimeType
+        1, // exitAnimeType
+        0, 0, // enterAnimeArg..exitAnimeArg
+    },
+    {
+        "s_bero_4", // hitName
+        0, 0, // type..sfxId
+        BERO_DIR_AUTO, // directionId
+        BERO_POS_AUTO, // centerPosition
+        0, 0, // centerPositionY..centerPositionZ
+        -1, // length
+        NULL, // enterEvent
+        -1, // caseType
+        NULL, // exitEvent
+        "tik_04", // nextMapName
+        "n_bero_4", // nextBeroName
+        1, // enterAnimeType
+        1, // exitAnimeType
+        0, 0, // enterAnimeArg..exitAnimeArg
+    },
 #endif
+    {
         "dokan", // hitName
         2, // type
         0, // sfxId

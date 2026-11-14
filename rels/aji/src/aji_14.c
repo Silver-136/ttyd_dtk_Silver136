@@ -506,15 +506,16 @@ EVT_BEGIN(aji_14_init_evt)
 #if VERSION >= VERSION_JP
     CALL(evt_bero_get_entername, LW(0))
     IF_STR_NOT_EQUAL(LW(0), STRING("tuzuki"))
-#endif
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI2"))
-#if VERSION >= VERSION_JP
-        ELSE
+    ELSE
         CALL(evt_snd_bgmoff, PSND_FADEOUT)
         CALL(evt_snd_envoff, PSND_FADEOUT)
     END_IF
     CALL(evt_snd_set_rev_mode, 1)
+#else
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI2"))
 #endif
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)

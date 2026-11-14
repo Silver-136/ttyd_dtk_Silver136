@@ -374,10 +374,10 @@ EVT_BEGIN(evt_rsh_konarikin_irai_party_talk)
     CALL(evt_party_run, 0)
 #if VERSION >= VERSION_US
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_10_THE_CONDUCTOR_ZIP_TOAD)
-#endif
-    SET_VALUE(GSW_STORY_PROGRESS, STG6_10_THE_CONDUCTOR_ZIP_TOAD)
-#if VERSION >= VERSION_US
+        SET_VALUE(GSW_STORY_PROGRESS, STG6_10_THE_CONDUCTOR_ZIP_TOAD)
     END_IF
+#else
+    SET_VALUE(GSW_STORY_PROGRESS, STG6_10_THE_CONDUCTOR_ZIP_TOAD)
 #endif
     RETURN
 EVT_END()
@@ -1381,18 +1381,19 @@ static NpcSetupInfo npc_data[] = {
 EVT_BEGIN(evt_tana_5)
 #if VERSION <= VERSION_DEMO_JP
     IF_INT_EQUAL(GSWF_STARPIECE_85, 1)
+        CALL(evt_msg_print, 0, LW(1), 0, 0)
+        RETURN
+    END_IF
 #else
     IF_INT_EQUAL(GSWF_STARPIECE_85, 1)
         IF_INT_LESS(GSW_STORY_PROGRESS, STG6_56_ROGUEPORT_STATION)
-#endif
             CALL(evt_msg_print, 0, LW(1), 0, 0)
-#if VERSION >= VERSION_JP
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, LW(3), 0, 0)
         END_IF
-#endif
         RETURN
     END_IF
+#endif
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_item_entry, STRING("_item00"), ITEM_STAR_PIECE, -260, 0, -240, ITEM_TYPE_STILL, -1, 0)
     CALL(evt_item_flag_on, STRING("_item00"), ITEM_FLAG_NO_TOUCH_GET)
@@ -1424,12 +1425,12 @@ static EVT_BEGIN(evt_access)
     IF_INT_EQUAL(LW(2), 0)
 #if VERSION >= VERSION_JP
         IF_INT_LESS(GSW_STORY_PROGRESS, STG6_56_ROGUEPORT_STATION)
-#endif
             CALL(evt_msg_print, 0, LW(1), 0, 0)
-#if VERSION >= VERSION_JP
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, LW(3), 0, 0)
         END_IF
+#else
+        CALL(evt_msg_print, 0, LW(1), 0, 0)
 #endif
         ELSE
         CALL_CHILD(LW(2))
@@ -1612,15 +1613,15 @@ static EVT_BEGIN(rsh_04_init_evt)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG6_45_DAY_3_STARTS)
         SET_VALUE(LW(0), 0)
         CALL_CHILD(bero_case_switch_on)
-#if VERSION >= VERSION_US
     END_IF
+#if VERSION >= VERSION_US
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG6_49_POSHLEY_HEIGHTS)
         IF_INT_LESS(GSW_STORY_PROGRESS, STG6_55_PEACH_GRODUS_X_NAUT)
             SET_VALUE(LW(0), 0)
             CALL_CHILD(bero_case_switch_off)
         END_IF
-#endif
     END_IF
+#endif
     CALL_CHILD(evt_access_entry)
     SPAWN_EVENT(evt_narikin_room)
     SPAWN_EVENT(evt_powan_room)

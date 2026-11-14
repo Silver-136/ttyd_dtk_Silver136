@@ -1447,13 +1447,13 @@ static s32 mobj_lv_blk_evt(MapObjectEntry* mobj) {
         case 11:
             img = imgNameToPtr(iname, type);
             if (img->loopTimes >= 1.0f) {
+                mobj->state = 12;
+            }
 #if VERSION >= VERSION_JP
-                mobj->state = 12;
-            }
             if (img->flags & IMAGE_FLAG_NO_CAPTURE) {
-#endif
                 mobj->state = 12;
             }
+#endif
             mobj->position = (Vec){0.0f, -2000.0f, 0.0f};
             mobj->flags |= MOBJ_FLAG_UPDATE_MTX;
             mobj->flags |= MOBJ_FLAG_HIT;
@@ -3232,13 +3232,13 @@ static s32 mobj_brickblk(MapObjectEntry* mobj) {
         case 11:
             img = imgNameToPtr(iname, type);
             if (img->loopTimes >= 1.0f) {
+                mobj->state = 12;
+            }
 #if VERSION >= VERSION_JP
-                mobj->state = 12;
-            }
             if (img->flags & IMAGE_FLAG_NO_CAPTURE) {
-#endif
                 mobj->state = 12;
             }
+#endif
             mobj->position = (Vec){0.0f, -2000.0f, 0.0f};
             mobj->flags |= MOBJ_FLAG_UPDATE_MTX;
             mobj->flags |= MOBJ_FLAG_HIT;

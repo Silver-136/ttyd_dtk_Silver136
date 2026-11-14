@@ -120,12 +120,12 @@ EVT_END()
 static EVT_BEGIN(talk_unten)
 #if VERSION >= VERSION_JP
     IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_ROGUEPORT, 0)
-#endif
         CALL(evt_msg_print, 0, STRING("stg6_rsh_c_08"), 0, 0)
-#if VERSION >= VERSION_JP
-        ELSE
+    ELSE
         CALL(evt_msg_print, 0, STRING("stg6_rsh_c_08_1"), 0, 0)
     END_IF
+#else
+    CALL(evt_msg_print, 0, STRING("stg6_rsh_c_08"), 0, 0)
 #endif
     RETURN
 EVT_END()

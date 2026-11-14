@@ -2364,14 +2364,31 @@ static EVT_BEGIN(bottakuru_talk)
     END_IF
 
     // Charlieton quotes the price of the chosen item; for a badge (id 240 and up) he also gives its BP cost.
-    IF_INT_GREATER_OR_EQUAL(LW(1), BADGE_MIN)
 #if VERSION <= VERSION_DEMO_JP
+    IF_INT_GREATER_OR_EQUAL(LW(1), BADGE_MIN)
         CALL(evt_msg_print_insert, 0, STRING("bottakuru_07"), 0, STRING("me"), LW(2), LW(3), LW(4))
     ELSE
         CALL(evt_msg_print_insert, 0, STRING("bottakuru_06"), 0, STRING("me"), LW(2), LW(3))
-#else
+    END_IF
+#elif VERSION <= VERSION_JP
+    IF_INT_GREATER_OR_EQUAL(LW(1), BADGE_MIN)
         CALL(evt_sub_get_language, LW(0))
-#if VERSION >= VERSION_US
+        IF_INT_NOT_EQUAL(LW(0), 0)
+            CALL(evt_msg_print_insert, 0, STRING("bottakuru_07"), 0, STRING("me"), LW(3), LW(2), LW(4))
+        ELSE
+            CALL(evt_msg_print_insert, 0, STRING("bottakuru_07"), 0, STRING("me"), LW(2), LW(3), LW(4))
+        END_IF
+    ELSE
+        CALL(evt_sub_get_language, LW(0))
+        IF_INT_NOT_EQUAL(LW(0), 0)
+            CALL(evt_msg_print_insert, 0, STRING("bottakuru_06"), 0, STRING("me"), LW(3), LW(2))
+        ELSE
+            CALL(evt_msg_print_insert, 0, STRING("bottakuru_06"), 0, STRING("me"), LW(2), LW(3))
+        END_IF
+    END_IF
+#else
+    IF_INT_GREATER_OR_EQUAL(LW(1), BADGE_MIN)
+        CALL(evt_sub_get_language, LW(0))
         SWITCH(LW(0))
             CASE_EQUAL(0)
                 CALL(evt_msg_print_insert, 0, STRING("bottakuru_07"), 0, STRING("me"), LW(2), LW(3), LW(4))
@@ -2380,7 +2397,7 @@ static EVT_BEGIN(bottakuru_talk)
                 CALL(evt_msg_fmt_str, 1, LW(14), LW(14), LW(2))
                 CALL(evt_msg_print_insert, MSG_PRINT_DIRECT_TEXT, LW(14), 0, STRING("me"), LW(4))
         END_SWITCH
-        ELSE
+    ELSE
         CALL(evt_sub_get_language, LW(0))
         SWITCH(LW(0))
             CASE_EQUAL(0)
@@ -2390,22 +2407,8 @@ static EVT_BEGIN(bottakuru_talk)
                 CALL(evt_msg_fmt_str, 1, LW(14), LW(14), LW(2))
                 CALL(evt_msg_print, MSG_PRINT_DIRECT_TEXT, LW(14), 0, STRING("me"))
         END_SWITCH
-#else
-        IF_INT_NOT_EQUAL(LW(0), 0)
-            CALL(evt_msg_print_insert, 0, STRING("bottakuru_07"), 0, STRING("me"), LW(3), LW(2), LW(4))
-        ELSE
-            CALL(evt_msg_print_insert, 0, STRING("bottakuru_07"), 0, STRING("me"), LW(2), LW(3), LW(4))
-        END_IF
-        ELSE
-        CALL(evt_sub_get_language, LW(0))
-        IF_INT_NOT_EQUAL(LW(0), 0)
-            CALL(evt_msg_print_insert, 0, STRING("bottakuru_06"), 0, STRING("me"), LW(3), LW(2))
-        ELSE
-            CALL(evt_msg_print_insert, 0, STRING("bottakuru_06"), 0, STRING("me"), LW(2), LW(3))
-        END_IF
-#endif
-#endif
     END_IF
+#endif
 
     // Mario confirms or declines the purchase.
     CALL(evt_msg_select, 0, STRING("bottakuru_yesno"))

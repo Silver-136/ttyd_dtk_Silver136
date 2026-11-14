@@ -710,12 +710,11 @@ EVT_BEGIN(plane_majin_lecture)
 #if VERSION >= VERSION_JP
                 CALL(x_flag_get, 1, LW(0))
                 IF_INT_NOT_EQUAL(LW(0), 3)
-#endif
                     CALL(evt_cam3d_evt_set_rel, FLOAT(0.0f), FLOAT(98.0f), FLOAT(558.0f), FLOAT(0.0f), FLOAT(42.0f), FLOAT(-101.799805f), 0, EASING_SINE_IN_OUT)
-#if VERSION <= VERSION_DEMO_JP
-                CALL(x_flag_get, 1, LW(0))
-#else
                 END_IF
+#else
+                CALL(evt_cam3d_evt_set_rel, FLOAT(0.0f), FLOAT(98.0f), FLOAT(558.0f), FLOAT(0.0f), FLOAT(42.0f), FLOAT(-101.799805f), 0, EASING_SINE_IN_OUT)
+                CALL(x_flag_get, 1, LW(0))
 #endif
                 IF_INT_EQUAL(LW(0), 2)
                     BREAK_LOOP

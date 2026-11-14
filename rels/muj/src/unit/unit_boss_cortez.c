@@ -1178,15 +1178,12 @@ static EVT_BEGIN(phase_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, CORTEZ_UNIT_WORK_MODE, LW(0))
 #if VERSION >= VERSION_JP
     BEGIN_SIBLING_EVENT_GET_ID(LW(15))
-#endif
         SET_VALUE(LW(15), -1)
         SWITCH(LW(0))
             CASE_EQUAL(2)
                 CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KRT_2B_1"))
-#if VERSION >= VERSION_JP
                 CALL(btlevtcmd_ftomsec, 80, LW(0))
                 WAIT_MS(LW(0))
-#endif
                 CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_KOR_MOVE2"), EVT_NULLPTR, 0, LW(15))
             CASE_EQUAL(3)
                 CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KRT_3B_1"))
@@ -1196,9 +1193,22 @@ static EVT_BEGIN(phase_event)
         IF_INT_NOT_EQUAL(LW(15), -1)
             CALL(evt_snd_sfxoff, LW(15))
         END_IF
-#if VERSION >= VERSION_JP
     END_SIBLING_EVENT
     CALL(btlevtcmd_WaitEventEnd, LW(15))
+#else
+    SET_VALUE(LW(15), -1)
+    SWITCH(LW(0))
+        CASE_EQUAL(2)
+            CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KRT_2B_1"))
+            CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_KOR_MOVE2"), EVT_NULLPTR, 0, LW(15))
+        CASE_EQUAL(3)
+            CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KRT_3B_1"))
+            CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_KOR_MOVE2"), EVT_NULLPTR, 0, LW(15))
+    END_SWITCH
+    CALL(btlevtcmd_AnimeWaitPlayComplete, UNIT_ID_SELF, 1)
+    IF_INT_NOT_EQUAL(LW(15), -1)
+        CALL(evt_snd_sfxoff, LW(15))
+    END_IF
 #endif
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, CORTEZ_UNIT_WORK_MODE, 1)
 
@@ -1707,9 +1717,7 @@ static EVT_BEGIN(attack_audience_event)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_KOR_INHALE2"), EVT_NULLPTR, 0, EVT_NULLPTR)
 #if VERSION >= VERSION_JP
     BEGIN_SIBLING_EVENT
-#endif
         CALL(evt_snd_sfxon, STRING("SFX_AUDIENCE_PANIC_SCREAM1"), LW(15))
-#if VERSION >= VERSION_JP
         WAIT_FRAMES(120)
         CALL(_cortez_get_sfx_vol, LW(15), LW(14))
         SET_VALUE(LW(13), 120)
@@ -1727,6 +1735,8 @@ static EVT_BEGIN(attack_audience_event)
         END_LOOP
         CALL(evt_snd_sfxoff, LW(15))
     END_SIBLING_EVENT
+#else
+    CALL(evt_snd_sfxon, STRING("SFX_AUDIENCE_PANIC_SCREAM1"), LW(15))
 #endif
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KRT_A2_2"))
     CALL(_cortez_collect_energy, UNIT_ID_SELF)
@@ -2721,15 +2731,15 @@ EVT_BEGIN(mode_change_event)
             END_IF
 #if VERSION <= VERSION_DEMO_JP
             CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_KOR_MOVE1"), EVT_NULLPTR, 0, LW(15))
+            CALL(btlevtcmd_AnimeWaitPlayComplete, UNIT_ID_SELF, 1)
+            CALL(evt_snd_sfxoff, LW(15))
 #else
             BEGIN_SIBLING_EVENT_GET_ID(LW(15))
                 CALL(btlevtcmd_ftomsec, 80, LW(0))
                 WAIT_MS(LW(0))
                 CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_KOR_MOVE2"), EVT_NULLPTR, 0, LW(15))
-#endif
                 CALL(btlevtcmd_AnimeWaitPlayComplete, UNIT_ID_SELF, 1)
                 CALL(evt_snd_sfxoff, LW(15))
-#if VERSION >= VERSION_JP
             END_SIBLING_EVENT
             CALL(btlevtcmd_WaitEventEnd, LW(15))
 #endif

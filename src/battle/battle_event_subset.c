@@ -925,12 +925,14 @@ EVT_BEGIN(btldefaultevt_ChangePosition)
 #if VERSION >= VERSION_JP
         CALL(btlevtcmd_GetHp, LW(10), LW(0))
         IF_INT_GREATER(LW(0), 0)
-#endif
             CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_KOURA_OPEN_EVENT)
             CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
             CALL(btlevtcmd_SetHomePos, LW(10), LW(0), LW(1), LW(2))
-#if VERSION >= VERSION_JP
         END_IF
+#else
+        CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_KOURA_OPEN_EVENT)
+        CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
+        CALL(btlevtcmd_SetHomePos, LW(10), LW(0), LW(1), LW(2))
 #endif
     END_IF
     CALL(btlevtcmd_SortPhaseMoveTable)
@@ -946,11 +948,13 @@ EVT_END()
 EVT_BEGIN(subsetevt_happy_heart)
     CALL(btlevtcmd_GetBodyId, UNIT_ID_SELF, LW(5))
     CALL(btlevtcmd_CheckDefinePosetype, UNIT_ID_SELF, LW(5), POSE_TYPE_HAPPY_HEART, LW(0))
-    IF_INT_NOT_EQUAL(LW(0), 0)
 #if VERSION <= VERSION_DEMO_JP
+    IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, LW(5), 60)
+    END_IF
+    WAIT_FRAMES(120)
 #else
-
+    IF_INT_NOT_EQUAL(LW(0), 0)
         // BUG (JP and later): the status tests use LW(3), which nothing sets (0 from evtEntry), not UNIT_ID_SELF,
         // so they check unit 0 instead of the healed unit.
         CALL(btlevtcmd_CheckStatus, LW(3), STATUS_FREEZE, LW(0))
@@ -960,11 +964,7 @@ EVT_BEGIN(subsetevt_happy_heart)
                 CALL(btlevtcmd_CheckStatus, LW(3), STATUS_STOP, LW(0))
                 IF_INT_EQUAL(LW(0), 0)
                     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, LW(5), POSE_TYPE_HAPPY_HEART)
-#endif
                 END_IF
-#if VERSION <= VERSION_DEMO_JP
-            WAIT_FRAMES(120)
-#else
             END_IF
         END_IF
     END_IF
@@ -978,11 +978,13 @@ EVT_END()
 EVT_BEGIN(subsetevt_happy_flower)
     CALL(btlevtcmd_GetBodyId, UNIT_ID_SELF, LW(5))
     CALL(btlevtcmd_CheckDefinePosetype, UNIT_ID_SELF, LW(5), POSE_TYPE_HAPPY_FLOWER, LW(0))
-    IF_INT_NOT_EQUAL(LW(0), 0)
 #if VERSION <= VERSION_DEMO_JP
+    IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, LW(5), 61)
+    END_IF
+    WAIT_FRAMES(120)
 #else
-
+    IF_INT_NOT_EQUAL(LW(0), 0)
         // BUG (JP and later): the status tests use LW(3), which nothing sets (0 from evtEntry), not UNIT_ID_SELF,
         // so they check unit 0 instead of the healed unit.
         CALL(btlevtcmd_CheckStatus, LW(3), STATUS_FREEZE, LW(0))
@@ -992,11 +994,7 @@ EVT_BEGIN(subsetevt_happy_flower)
                 CALL(btlevtcmd_CheckStatus, LW(3), STATUS_STOP, LW(0))
                 IF_INT_EQUAL(LW(0), 0)
                     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, LW(5), POSE_TYPE_HAPPY_FLOWER)
-#endif
                 END_IF
-#if VERSION <= VERSION_DEMO_JP
-            WAIT_FRAMES(120)
-#else
             END_IF
         END_IF
     END_IF
@@ -1270,12 +1268,14 @@ EVT_BEGIN(subsetevt_shot_damage_ultra)
 #if VERSION >= VERSION_JP
         IS_EVENT_RUNNING(LW(5), LW(6))
         IF_INT_EQUAL(LW(6), 1)
-#endif
             SET_VALUE(LW(1), LW(0))
             WAIT_FRAMES(1)
             GOTO(32)
-#if VERSION >= VERSION_JP
         END_IF
+#else
+        SET_VALUE(LW(1), LW(0))
+        WAIT_FRAMES(1)
+        GOTO(32)
 #endif
     END_IF
     CALL(btlevtcmd_PreCheckDamage, LW(10), LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(0))

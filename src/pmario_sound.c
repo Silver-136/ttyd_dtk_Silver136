@@ -10669,12 +10669,12 @@ static s32 __psndSFXOn(const char* name, u8 vol, u8 pan, u16 pitch, Vec* pos, u3
     }
     if (id & PSND_SFX_BYPASS_MUTE) {
         sfx->flags |= PSFX_FLAG_BYPASS_MUTE;
-#if VERSION >= VERSION_JP
     }
+#if VERSION >= VERSION_JP
     if (id & PSND_SFX_KEEP) {
         sfx->flags |= PSFX_FLAG_KEEP;
-#endif
     }
+#endif
     sfx->listId = id;
     sfx->volume = vol;
     sfx->entryVolume = entry->volume;
@@ -11262,6 +11262,19 @@ static void psndENVMain(void) {
                     if (psnd.fade[i].dipTime < psnd.fade[i].dipTimeMax)
                         (psnd.fade[i].dipTime)++;
                     else
+                        psnd.fade[i].dipState = PSND_DIP_STATE_IDLE;
+                }
+            }
+            if (psnd.envLpf[i] < psnd.envFreq[i]) {
+                psnd.envLpf[i] += 100;
+            }
+            if (psnd.envLpf[i] > psnd.envFreq[i]) {
+                psnd.envLpf[i] -= 1000;
+                if (psnd.envLpf[i] < psnd.envFreq[i])
+                    psnd.envLpf[i] = psnd.envFreq[i];
+            }
+        }
+    }
 #else
 // Macro, not inline: as a static inline over ent (US and later) the object changes.
 #define ENVAPPLY                                                                             \
@@ -11339,18 +11352,9 @@ static void psndENVMain(void) {
                 if (psnd.fade[i].dipTime < psnd.fade[i].dipTimeMax) {
                     psnd.fade[i].dipTime++;
                 } else {
-#endif
                     psnd.fade[i].dipState = PSND_DIP_STATE_IDLE;
                 }
             }
-#if VERSION <= VERSION_DEMO_JP
-            if (psnd.envLpf[i] < psnd.envFreq[i]) {
-                psnd.envLpf[i] += 100;
-            }
-            if (psnd.envLpf[i] > psnd.envFreq[i]) {
-                psnd.envLpf[i] -= 1000;
-                if (psnd.envLpf[i] < psnd.envFreq[i])
-#else
         }
         if (psnd.envLpf[i] < psnd.envFreq[i]) {
             psnd.envLpf[i] += 100;
@@ -11358,11 +11362,11 @@ static void psndENVMain(void) {
         if (psnd.envLpf[i] > psnd.envFreq[i]) {
             psnd.envLpf[i] -= 1000;
             if (psnd.envLpf[i] < psnd.envFreq[i]) {
-#endif
                 psnd.envLpf[i] = psnd.envFreq[i];
             }
         }
     }
+#endif
 }
 
 /** Starts environment sound name on channel flags & 0xF with a 1 second fade (psndENVOn_f_d). */

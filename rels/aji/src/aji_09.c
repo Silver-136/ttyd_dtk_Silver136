@@ -881,12 +881,12 @@ EVT_BEGIN(aji_09_init_evt)
             CALL(evt_mario_key_onoff, 1)
             CALL(evt_cam_letter_box_disable, 0)
         END_INLINE_EVENT
-#if VERSION <= VERSION_DEMO_JP
     END_IF
+#if VERSION <= VERSION_DEMO_JP
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG6_53_THE_REAL_GARNET_STAR)
         CALL(evt_item_entry, STRING("item_00"), ITEM_REPEL_CAPE, -180, 12, -135, ITEM_TYPE_STILL, GSWF(4213), 0)
-#endif
     END_IF
+#endif
     SPAWN_EVENT(evt_emergency)
     CALL(evt_mario_get_mode, LW(0))
     IF_INT_EQUAL(LW(0), 0)

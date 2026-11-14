@@ -2035,13 +2035,12 @@ EVT_BEGIN(maffia2_talk)
             CALL(evt_msg_print, 0, STRING("mac_2_044_03"), 0, STRING("me"))
 #if VERSION <= VERSION_DEMO_JP
         CASE_EQUAL(STG2_44_FINDING_DON_PIANTA)
+            CALL(evt_msg_print, 0, STRING("mac_2_071"), 0, STRING("me"))
 #else
         CASE_BETWEEN(STG2_44_FINDING_DON_PIANTA, STG2_45_DAUGHTER_LOCATED)
             IF_INT_EQUAL(GSWF_GOR_DON_PIANTA_TICKET_SCENE_DONE, 0)
-#endif
                 CALL(evt_msg_print, 0, STRING("mac_2_071"), 0, STRING("me"))
-#if VERSION >= VERSION_JP
-                ELSE
+            ELSE
                 CALL(evt_msg_print, 0, STRING("mac_2_116_buka2"), 0, STRING("me"))
             END_IF
 #endif
@@ -2714,17 +2713,19 @@ static EVT_BEGIN(bteresa_talk_sub_keihin)
     END_IF
 
     // On the first visit she explains that piantas can be traded in for prizes.
-    IF_INT_EQUAL(GSWF_GOR_PARLOR_PRIZE_INTRO_DONE, 0)
 #if VERSION <= VERSION_DEMO_JP
+    IF_INT_EQUAL(GSWF_GOR_PARLOR_PRIZE_INTRO_DONE, 0)
         CALL(evt_msg_print, 0, STRING("bunny_teresa_60"), 0, STRING("me"))
         SET_VALUE(GSWF_GOR_PARLOR_PRIZE_INTRO_DONE, 1)
+    END_IF
 #else
+    IF_INT_EQUAL(GSWF_GOR_PARLOR_PRIZE_INTRO_DONE, 0)
         CALL(evt_msg_print_add, 0, STRING("bunny_teresa_60"))
         SET_VALUE(GSWF_GOR_PARLOR_PRIZE_INTRO_DONE, 1)
-        ELSE
+    ELSE
         CALL(evt_msg_continue)
-#endif
     END_IF
+#endif
     LABEL(1)
 
     // Mario picks a prize from the list.
@@ -2744,14 +2745,31 @@ static EVT_BEGIN(bteresa_talk_sub_keihin)
     END_IF
 
     // Teresa quotes the price (and the BP a badge needs) and asks Mario to confirm.
-    IF_INT_GREATER_OR_EQUAL(LW(1), BADGE_MIN)
 #if VERSION <= VERSION_DEMO_JP
+    IF_INT_GREATER_OR_EQUAL(LW(1), BADGE_MIN)
         CALL(evt_msg_print_insert, 0, STRING("bunny_teresa_67"), 0, STRING("me"), LW(2), LW(3), LW(4))
     ELSE
         CALL(evt_msg_print_insert, 0, STRING("bunny_teresa_66"), 0, STRING("me"), LW(2), LW(3))
-#else
+    END_IF
+#elif VERSION <= VERSION_JP
+    IF_INT_GREATER_OR_EQUAL(LW(1), BADGE_MIN)
         CALL(evt_sub_get_language, LW(0))
-#if VERSION >= VERSION_US
+        IF_INT_NOT_EQUAL(LW(0), 0)
+            CALL(evt_msg_print_insert, 0, STRING("bunny_teresa_67"), 0, STRING("me"), LW(3), LW(2), LW(4))
+        ELSE
+            CALL(evt_msg_print_insert, 0, STRING("bunny_teresa_67"), 0, STRING("me"), LW(2), LW(3), LW(4))
+        END_IF
+    ELSE
+        CALL(evt_sub_get_language, LW(0))
+        IF_INT_NOT_EQUAL(LW(0), 0)
+            CALL(evt_msg_print_insert, 0, STRING("bunny_teresa_66"), 0, STRING("me"), LW(3), LW(2))
+        ELSE
+        END_IF
+        CALL(evt_msg_print_insert, 0, STRING("bunny_teresa_66"), 0, STRING("me"), LW(2), LW(3))
+    END_IF
+#else
+    IF_INT_GREATER_OR_EQUAL(LW(1), BADGE_MIN)
+        CALL(evt_sub_get_language, LW(0))
         SWITCH(LW(0))
             CASE_EQUAL(0)
                 CALL(evt_msg_print_insert, 0, STRING("bunny_teresa_67"), 0, STRING("me"), LW(2), LW(3), LW(4))
@@ -2760,7 +2778,7 @@ static EVT_BEGIN(bteresa_talk_sub_keihin)
                 CALL(evt_msg_fmt_str, 1, LW(14), LW(14), LW(2))
                 CALL(evt_msg_print_insert, MSG_PRINT_DIRECT_TEXT, LW(14), 0, STRING("me"), LW(4))
         END_SWITCH
-        ELSE
+    ELSE
         CALL(evt_sub_get_language, LW(0))
         SWITCH(LW(0))
             CASE_EQUAL(0)
@@ -2770,22 +2788,8 @@ static EVT_BEGIN(bteresa_talk_sub_keihin)
                 CALL(evt_msg_fmt_str, 1, LW(14), LW(14), LW(2))
                 CALL(evt_msg_print, MSG_PRINT_DIRECT_TEXT, LW(14), 0, STRING("me"))
         END_SWITCH
-#else
-        IF_INT_NOT_EQUAL(LW(0), 0)
-            CALL(evt_msg_print_insert, 0, STRING("bunny_teresa_67"), 0, STRING("me"), LW(3), LW(2), LW(4))
-        ELSE
-            CALL(evt_msg_print_insert, 0, STRING("bunny_teresa_67"), 0, STRING("me"), LW(2), LW(3), LW(4))
-        END_IF
-        ELSE
-        CALL(evt_sub_get_language, LW(0))
-        IF_INT_NOT_EQUAL(LW(0), 0)
-            CALL(evt_msg_print_insert, 0, STRING("bunny_teresa_66"), 0, STRING("me"), LW(3), LW(2))
-        ELSE
-        END_IF
-        CALL(evt_msg_print_insert, 0, STRING("bunny_teresa_66"), 0, STRING("me"), LW(2), LW(3))
-#endif
-#endif
     END_IF
+#endif
     CALL(evt_msg_select, 0, STRING("bunny_teresa_yesno"))
     IF_INT_EQUAL(LW(0), 1)
         CALL(evt_msg_print_add, 0, STRING("bunny_teresa_68"))
@@ -3615,10 +3619,10 @@ static EVT_BEGIN(kinopiko_b_talk)
             IF_INT_EQUAL(LW(0), PARTY_FLURRIE)
                 CALL(evt_msg_print, 0, STRING("gor_03_072_01"), 0, STRING("me"))
             ELSE
-#endif
                 CALL(evt_msg_print, 0, STRING("gor_03_072"), 0, STRING("me"))
-#if VERSION >= VERSION_JP
             END_IF
+#else
+            CALL(evt_msg_print, 0, STRING("gor_03_072"), 0, STRING("me"))
 #endif
         CASE_LESS(STG3_32_BOSS_BATTLE)
             IF_INT_EQUAL(LW(0), PARTY_FLURRIE)
@@ -4667,26 +4671,33 @@ EVT_END()
 EVT_BEGIN(evt_door_02_1_close)
 #if VERSION <= VERSION_DEMO_JP
     IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG5_64_03_F_F_ARRIVE)
-#else
-    IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG5_64_03_F_F_ARRIVE)
-        IF_INT_EQUAL(GF(5), 0)
-#endif
-            CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
-            CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
-            CALL(evt_snd_envoff, PSND_FADEOUT | PSND_SLOT(1))
-            CALL(evt_snd_envon, PSND_CONTINUE | PSND_FADEIN, 0)
-#if VERSION >= VERSION_JP
-            ELSE
-            CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
-            CALL(evt_snd_envoff, PSND_FADEOUT | PSND_SLOT(1))
-            CALL(evt_snd_envon, PSND_CONTINUE | PSND_FADEIN, 0)
-        END_IF
-#endif
-        ELSE
+        CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
+        CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
+        CALL(evt_snd_envoff, PSND_FADEOUT | PSND_SLOT(1))
+        CALL(evt_snd_envon, PSND_CONTINUE | PSND_FADEIN, 0)
+    ELSE
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
         CALL(evt_snd_envoff, PSND_FADEOUT | PSND_SLOT(1))
         CALL(evt_snd_envon, PSND_CONTINUE | PSND_FADEIN, 0)
     END_IF
+#else
+    IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG5_64_03_F_F_ARRIVE)
+        IF_INT_EQUAL(GF(5), 0)
+            CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
+            CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
+            CALL(evt_snd_envoff, PSND_FADEOUT | PSND_SLOT(1))
+            CALL(evt_snd_envon, PSND_CONTINUE | PSND_FADEIN, 0)
+        ELSE
+            CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
+            CALL(evt_snd_envoff, PSND_FADEOUT | PSND_SLOT(1))
+            CALL(evt_snd_envon, PSND_CONTINUE | PSND_FADEIN, 0)
+        END_IF
+    ELSE
+        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
+        CALL(evt_snd_envoff, PSND_FADEOUT | PSND_SLOT(1))
+        CALL(evt_snd_envon, PSND_CONTINUE | PSND_FADEIN, 0)
+    END_IF
+#endif
     RETURN
 EVT_END()
 
@@ -6047,12 +6058,14 @@ EVT_BEGIN(kuzi_keiziban_normal)
                 ADD(LW(2), 1)
                 CALL(evt_msg_print, 0, STRING("kuji_bomb_028"), 0, STRING("グルメボム兵"))
             ELSE
-#endif
+                SET_VALUE(LW(2), LW(0))
+                ADD(LW(2), 1)
+                CALL(evt_msg_print_insert, 0, STRING("kuji_bomb_028"), 0, STRING("グルメボム兵"), LW(2))
+            END_IF
+#else
             SET_VALUE(LW(2), LW(0))
             ADD(LW(2), 1)
             CALL(evt_msg_print_insert, 0, STRING("kuji_bomb_028"), 0, STRING("グルメボム兵"), LW(2))
-#if VERSION >= VERSION_DEMO_EU
-            END_IF
 #endif
 #endif
             CALL(evt_mario_mov_pos2, -120, 480, 60)

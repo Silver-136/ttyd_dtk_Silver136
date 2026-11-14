@@ -31,16 +31,16 @@ static void _partyEntry(s32 keepScale) {
     mario = marioGetPtr();
     if (mario->flags & MARIO_FLAG_BG_MODE) {
         return;
-#if VERSION >= VERSION_JP
     }
+#if VERSION >= VERSION_JP
     count = 0;
     if (partyGetPtr(mario->currPartySlotId[0]) != NULL) {
         count = 1;
     }
     if (partyGetPtr(mario->currPartySlotId[1]) != NULL) {
         count++;
-#endif
     }
+#endif
     for (i = 0; i < 2; i++) {
         if (mario->currPartySlotId[i] < 0) {
             prev = mario->prevPartyMemberId[i];

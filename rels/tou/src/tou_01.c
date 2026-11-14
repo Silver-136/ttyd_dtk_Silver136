@@ -1667,10 +1667,10 @@ EVT_BEGIN(init_bijyo)
         CASE_DEFAULT
 #if VERSION >= VERSION_JP
             IF_INT_EQUAL(GSWF_TOU_LEFT_AFTER_CHAPTER, 1)
-#endif
                 CALL(evt_npc_set_position, STRING("me"), 610, 10, -120)
-#if VERSION >= VERSION_JP
             END_IF
+#else
+            CALL(evt_npc_set_position, STRING("me"), 610, 10, -120)
 #endif
     END_SWITCH
     RETURN
@@ -3975,17 +3975,20 @@ EVT_BEGIN(tou_01_init_evt)
     // JP and both demos heal only when restoring a missing partner; US and PAL heal either way.
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_33_06_BOWSER_TREASURE)
         CALL(evt_mario_get_party, LW(15))
+#if VERSION >= VERSION_US
         IF_INT_EQUAL(LW(15), 0)
             CALL(evt_mario_set_party, 0, PARTY_GOOMBELLA)
             CALL(evt_party_run, 0)
-#if VERSION >= VERSION_US
         END_IF
-#endif
-            CALL(evt_pouch_mario_recovery)
-            CALL(evt_pouch_all_party_recovery)
-#if VERSION >= VERSION_US
+        CALL(evt_pouch_mario_recovery)
+        CALL(evt_pouch_all_party_recovery)
         CALL(evt_sub_status_gauge_force_update)
 #else
+        IF_INT_EQUAL(LW(15), 0)
+            CALL(evt_mario_set_party, 0, PARTY_GOOMBELLA)
+            CALL(evt_party_run, 0)
+            CALL(evt_pouch_mario_recovery)
+            CALL(evt_pouch_all_party_recovery)
         END_IF
 #endif
         SPAWN_EVENT(evt_peach_after)

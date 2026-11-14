@@ -701,14 +701,12 @@ EVT_BEGIN(btldefaultevt_Appeal)
 #if VERSION >= VERSION_JP
     CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_HUGE, LW(0))
     IF_INT_EQUAL(LW(0), 0)
-#endif
         CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
         SET_VALUE(LW(3), LW(1))
         ADD(LW(1), 53)
         ADD(LW(3), 35)
         SET_VALUE(LW(4), LW(2))
         ADD(LW(2), 250)
-#if VERSION >= VERSION_JP
     ELSE
         CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
         SET_VALUE(LW(3), LW(1))
@@ -717,6 +715,13 @@ EVT_BEGIN(btldefaultevt_Appeal)
         SET_VALUE(LW(4), LW(2))
         ADD(LW(2), 400)
     END_IF
+#else
+    CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
+    SET_VALUE(LW(3), LW(1))
+    ADD(LW(1), 53)
+    ADD(LW(3), 35)
+    SET_VALUE(LW(4), LW(2))
+    ADD(LW(2), 250)
 #endif
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
     CALL(evt_btl_camera_set_moveto, 0, LW(0), LW(1), LW(2), LW(0), LW(3), LW(4), 30, 11)

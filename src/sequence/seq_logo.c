@@ -792,7 +792,13 @@ static void dummy_draw(CameraId camId, void* param) {
     f32 scale;
     u16 height;
 
-#if VERSION == VERSION_DEMO_US_2
+#if VERSION <= VERSION_US
+    if (OSGetProgressiveMode() != 1) {
+        rmode = &GXNtsc480IntDfMarioSt;
+    } else {
+        rmode = &GXNtsc480ProgMarioSt;
+    }
+#elif VERSION <= VERSION_DEMO_US_2
     // as in logoDisp: on a PAL TV the NTSC modes hold the PAL and EURGB60 ones
     if (VIGetTvFormat() != VI_NTSC) {
         if (OSGetEuRgb60Mode() != 1) {
@@ -808,11 +814,7 @@ static void dummy_draw(CameraId camId, void* param) {
         }
     }
 #else
-#if VERSION >= VERSION_DEMO_EU
     if (OSGetEuRgb60Mode() != 1) {
-#else
-    if (OSGetProgressiveMode() != 1) {
-#endif
         rmode = &GXNtsc480IntDfMarioSt;
     } else {
         rmode = &GXNtsc480ProgMarioSt;
@@ -985,7 +987,7 @@ static void progDisp(CameraId camId, void* param) {
                 break;
 
             case 2:
-#if VERSION < VERSION_US
+#if VERSION <= VERSION_JP
                 if (OSTicksToMilliseconds(gp->renderTime - time) > 2000) {
                     wp->promptStep++;
                 }
@@ -1029,10 +1031,7 @@ static void progDisp(CameraId camId, void* param) {
                     VISetBlack(FALSE);
                     wp->progressive = FALSE;
                 }
-#else
-#if VERSION >= VERSION_DEMO_EU
-                if (OSTicksToMilliseconds(gp->renderTime - time) > 2000) {
-#else
+#elif VERSION <= VERSION_DEMO_US_2
                 if (!wp->toggle) {
                     VISetBlack(TRUE);
                     OSSetProgressiveMode(1);
@@ -1064,20 +1063,11 @@ static void progDisp(CameraId camId, void* param) {
             case 4:
                 if (OSTicksToMilliseconds(gp->renderTime - time) > 2000) {
                     wp->progressive = FALSE;
-#endif
                     wp->progState++;
                 }
-#if VERSION >= VERSION_DEMO_EU
-                type = 8;
-#else
                 type = 3;
-#endif
                 if (wp->toggle) {
-#if VERSION >= VERSION_DEMO_EU
-                    type = 9;
-#else
                     type = 4;
-#endif
                 }
                 msg = romFontGetMessage(type);
                 width = (f32)romFontGetWidth(msg);
@@ -1087,7 +1077,22 @@ static void progDisp(CameraId camId, void* param) {
                     1.0f,
                     &(GXColor){0xFF, 0xFF, 0xFF, 0xFF},
                     msg);
-#if VERSION >= VERSION_DEMO_EU
+#else
+                if (OSTicksToMilliseconds(gp->renderTime - time) > 2000) {
+                    wp->progState++;
+                }
+                type = 8;
+                if (wp->toggle) {
+                    type = 9;
+                }
+                msg = romFontGetMessage(type);
+                width = (f32)romFontGetWidth(msg);
+                romFontPrintGX(
+                    -width / 2.0f,
+                    -100.0f,
+                    1.0f,
+                    &(GXColor){0xFF, 0xFF, 0xFF, 0xFF},
+                    msg);
                 break;
 
             case 3:
@@ -1116,7 +1121,6 @@ static void progDisp(CameraId camId, void* param) {
                     VISetBlack(FALSE);
                     wp->progressive = FALSE;
                 }
-#endif
 #endif
                 break;
         }

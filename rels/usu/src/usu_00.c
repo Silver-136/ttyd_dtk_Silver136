@@ -4269,17 +4269,20 @@ EVT_BEGIN(usu_00_init_evt)
     // while earlier versions heal it only if no partner is active on entry.
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG4_15_08_BOWSER_ROGUEPORT_DOCK)
         CALL(evt_mario_get_party, LW(15))
+#if VERSION >= VERSION_US
         IF_INT_EQUAL(LW(15), 0)
             CALL(evt_mario_set_party, 0, 1)
             CALL(evt_party_run, 0)
-#if VERSION >= VERSION_US
         END_IF
-#endif
-            CALL(evt_pouch_mario_recovery)
-            CALL(evt_pouch_all_party_recovery)
-#if VERSION >= VERSION_US
+        CALL(evt_pouch_mario_recovery)
+        CALL(evt_pouch_all_party_recovery)
         CALL(evt_sub_status_gauge_force_update)
 #else
+        IF_INT_EQUAL(LW(15), 0)
+            CALL(evt_mario_set_party, 0, 1)
+            CALL(evt_party_run, 0)
+            CALL(evt_pouch_mario_recovery)
+            CALL(evt_pouch_all_party_recovery)
         END_IF
 #endif
         CALL(evt_party_stop, 0)

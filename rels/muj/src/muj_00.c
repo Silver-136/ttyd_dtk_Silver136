@@ -3059,14 +3059,12 @@ EVT_BEGIN(kaizoku_vs_dai3)
 #if VERSION >= VERSION_DEMO_EU
         CALL(evt_sub_get_framerate, LW(0))
         IF_INT_EQUAL(LW(0), 60)
-#endif
-        WAIT_MS(9500)
-        DELETE_EVENT(LW(10))
-        CALL(evt_cam3d_evt_set, -205, 528, 672, -205, 108, -278, 0, EASING_SINE_IN_OUT)
-        WAIT_MS(1400)
-        CALL(evt_cam3d_evt_set, -700, 290, 74, -374, 80, -316, 0, EASING_SINE_IN_OUT)
-        WAIT_MS(200)
-#if VERSION >= VERSION_DEMO_EU
+            WAIT_MS(9500)
+            DELETE_EVENT(LW(10))
+            CALL(evt_cam3d_evt_set, -205, 528, 672, -205, 108, -278, 0, EASING_SINE_IN_OUT)
+            WAIT_MS(1400)
+            CALL(evt_cam3d_evt_set, -700, 290, 74, -374, 80, -316, 0, EASING_SINE_IN_OUT)
+            WAIT_MS(200)
         ELSE
             WAIT_MS(11400)
             DELETE_EVENT(LW(10))
@@ -3075,6 +3073,13 @@ EVT_BEGIN(kaizoku_vs_dai3)
             CALL(evt_cam3d_evt_set, -700, 290, 74, -374, 80, -316, 0, 11)
             WAIT_MS(240)
         END_IF
+#else
+        WAIT_MS(9500)
+        DELETE_EVENT(LW(10))
+        CALL(evt_cam3d_evt_set, -205, 528, 672, -205, 108, -278, 0, EASING_SINE_IN_OUT)
+        WAIT_MS(1400)
+        CALL(evt_cam3d_evt_set, -700, 290, 74, -374, 80, -316, 0, EASING_SINE_IN_OUT)
+        WAIT_MS(200)
 #endif
         SET_VALUE(GF(0), 0)
     END_INLINE_EVENT

@@ -518,13 +518,17 @@ void itemMain(void) {
                     }
 #endif
                 }
+#if VERSION >= VERSION_JP
                 if (!hit) {
                     itemModeChange(entry, ITEM_MODE_FALL);
-#if VERSION >= VERSION_JP
                 } else {
                     entry->position.y = newY;
-#endif
                 }
+#else
+                if (!hit) {
+                    itemModeChange(entry, ITEM_MODE_FALL);
+                }
+#endif
                 break;
             case ITEM_MODE_GET:
                 itemseq_GetItem(entry);
@@ -695,7 +699,9 @@ ItemEntry* itemEntry(f32 x, f32 y, f32 z, const char* name, s32 itemId, u16 type
     }
 
     if (i >= wp->count) {
-#if VERSION <= VERSION_DEMO_JP
+#if VERSION <= VERSION_JP
+        // BUG: with every slot in use, only the first slot is checked for a replaceable coin (and below, flower and
+        // heart), so a replaceable item in any other slot is never freed; US and later search every slot.
         entry = wp->entries;
         if (entry->flags & ITEM_FLAG_ACTIVE && entry->itemId == ITEM_COIN && entry->flags & ITEM_FLAG_REPLACEABLE) {
             itemDelete(entry->name);
@@ -710,8 +716,9 @@ ItemEntry* itemEntry(f32 x, f32 y, f32 z, const char* name, s32 itemId, u16 type
                 } else {
                     entry = NULL;
                 }
+            }
+        }
 #else
-#if VERSION >= VERSION_US
         entry = NULL;
         for (e = base, i = 0; i < wp->count; i++, e++) {
             if (e->flags & ITEM_FLAG_ACTIVE && e->itemId == ITEM_COIN && e->flags & ITEM_FLAG_REPLACEABLE) {
@@ -720,15 +727,8 @@ ItemEntry* itemEntry(f32 x, f32 y, f32 z, const char* name, s32 itemId, u16 type
             }
         }
         if (entry) {
-#else
-        // BUG: with every slot in use, only the first slot is checked for a replaceable coin (and below, flower and
-        // heart), so a replaceable item in any other slot is never freed; US and later search every slot.
-        entry = wp->entries;
-        if (entry->flags & ITEM_FLAG_ACTIVE && entry->itemId == ITEM_COIN && entry->flags & ITEM_FLAG_REPLACEABLE) {
-#endif
             itemDelete(entry->name);
         } else {
-#if VERSION >= VERSION_US
             entry = NULL;
             for (e = base, i = 0; i < wp->count; i++, e++) {
                 if (e->flags & ITEM_FLAG_ACTIVE && e->itemId == ITEM_FLOWER && e->flags & ITEM_FLAG_REPLACEABLE) {
@@ -737,27 +737,14 @@ ItemEntry* itemEntry(f32 x, f32 y, f32 z, const char* name, s32 itemId, u16 type
                 }
             }
             if (entry) {
-#else
-            entry = wp->entries;
-            if (entry->flags & ITEM_FLAG_ACTIVE && entry->itemId == ITEM_FLOWER && entry->flags & ITEM_FLAG_REPLACEABLE) {
-#endif
                 itemDelete(entry->name);
             } else {
-#if VERSION >= VERSION_US
                 // the heart found here is discarded: US and later never replace a heart
                 entry = itemFindDeletable(wp, ITEM_HEART);
                 entry = NULL;
-#else
-                entry = wp->entries;
-                if (entry->flags & ITEM_FLAG_ACTIVE && entry->itemId == ITEM_HEART && entry->flags & ITEM_FLAG_REPLACEABLE) {
-                    itemDelete(entry->name);
-                } else {
-                    entry = NULL;
-                }
-#endif
-#endif
             }
         }
+#endif
         if (entry == NULL) {
             return NULL;
         }
@@ -1399,16 +1386,18 @@ static void itemseq_GetItem(ItemEntry* entry) {
                 winMgrOpen(entry->winId[2]);
                 winMgrSetParam(entry->winId[2], entry);
             }
-            if (entry->itemId == ITEM_WEDDING_RING) {
 #if VERSION <= VERSION_DEMO_JP
+            if (entry->itemId == ITEM_WEDDING_RING) {
                 iconChange(entry->name, ICON_WEDDING_RING_LARGE);
+            }
 #else
+            if (entry->itemId == ITEM_WEDDING_RING) {
                 iconChange(entry->name, ICON_WEDDING_RING_LARGE);
             }
             if (!entry->effect) {
                 iconNameToPtr(entry->name)->uflags |= ICON_FLAG_ITEM_NO_MAP_BLEND;
-#endif
             }
+#endif
             break;
         case 2:
 #if VERSION >= VERSION_JP

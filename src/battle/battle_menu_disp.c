@@ -518,14 +518,15 @@ static void DrawSubIconSub(BattleSubMenu* menu, s32 i, Mtx m, s32 enabled, s32 i
     PSMTXTrans(trn, -104.0f, 22.0f, 0.0f);
 #if VERSION <= VERSION_DEMO_JP
     PSMTXScale(scl, 0.8f, 0.8f, 0.8f);
-#else
-#if VERSION >= VERSION_DEMO_EU
-    if (squeezeName != 0) {
-        PSMTXScale(scl, FontGetMessageWidth(name) > squeezeName ? 0.8f * squeezeName / FontGetMessageWidth(name) : 0.8f, 0.8f, 0.8f);
-#else
+#elif VERSION <= VERSION_DEMO_US_2
     if (squeezeName == 1) {
         PSMTXScale(scl, FontGetMessageWidth(name) > 150 ? 120.0f / FontGetMessageWidth(name) : 0.8f, 0.8f, 0.8f);
-#endif
+    } else {
+        PSMTXScale(scl, 0.8f, 0.8f, 0.8f);
+    }
+#else
+    if (squeezeName != 0) {
+        PSMTXScale(scl, FontGetMessageWidth(name) > squeezeName ? 0.8f * squeezeName / FontGetMessageWidth(name) : 0.8f, 0.8f, 0.8f);
     } else {
         PSMTXScale(scl, 0.8f, 0.8f, 0.8f);
     }

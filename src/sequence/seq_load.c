@@ -834,8 +834,8 @@ static void loadMain(SequenceWork* seq) {
             }
             if (wp->soundModeSel < 0) {
                 wp->soundModeSel = 2;
-#if VERSION >= VERSION_JP
             }
+#if VERSION >= VERSION_JP
             if (wp->soundModeSel != sound) {
                 switch (wp->soundModeSel) {
                     case 0:
@@ -849,8 +849,8 @@ static void loadMain(SequenceWork* seq) {
                         break;
                 }
                 psndENVOn(PSND_RESTART | PSND_FADEIN, (const char*)PSND_ENV_SYS_FL1);
-#endif
             }
+#endif
             wp->tx = -74.0f;
             wp->ty = 4.0f + (50.0f - 50.0f * wp->soundModeSel);
             break;

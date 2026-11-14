@@ -972,7 +972,6 @@ EVT_BEGIN(jin_04_jumpstand)
 #if VERSION >= VERSION_JP
         CALL(evt_party_dokan, 0, LW(0))
         IF_INT_EQUAL(LW(0), 1)
-#endif
             BEGIN_INLINE_EVENT_GET_ID(LW(10))
                 CALL(evt_party_stop, 0)
                 WAIT_MS(300)
@@ -982,8 +981,17 @@ EVT_BEGIN(jin_04_jumpstand)
                 CALL(evt_party_jump_pos, 0, -100, 670, 50, 1000, 0, -1000)
                 CALL(evt_party_run, 0)
             END_INLINE_EVENT
-#if VERSION >= VERSION_JP
         END_IF
+#else
+        BEGIN_INLINE_EVENT_GET_ID(LW(10))
+            CALL(evt_party_stop, 0)
+            WAIT_MS(300)
+            CALL(evt_mobj_get_position, STRING("mobj_jump"), LW(0), LW(1), LW(2))
+            ADD(LW(1), 30)
+            CALL(evt_party_set_pos, 0, LW(0), LW(1), LW(2))
+            CALL(evt_party_jump_pos, 0, -100, 670, 50, 1000, 0, -1000)
+            CALL(evt_party_run, 0)
+        END_INLINE_EVENT
 #endif
         CALL(evt_mario_jump_pos, -75, 670, 50, 1000, 0, -1000)
         LOOP(0)
@@ -1001,7 +1009,6 @@ EVT_BEGIN(jin_04_jumpstand)
 #if VERSION >= VERSION_JP
         CALL(evt_party_dokan, 0, LW(0))
         IF_INT_EQUAL(LW(0), 1)
-#endif
             BEGIN_INLINE_EVENT_GET_ID(LW(10))
                 CALL(evt_party_stop, 0)
                 WAIT_MS(300)
@@ -1011,8 +1018,17 @@ EVT_BEGIN(jin_04_jumpstand)
                 CALL(evt_party_jump_pos, 0, -60, 450, 130, 500, 0, -1000)
                 CALL(evt_party_run, 0)
             END_INLINE_EVENT
-#if VERSION >= VERSION_JP
         END_IF
+#else
+        BEGIN_INLINE_EVENT_GET_ID(LW(10))
+            CALL(evt_party_stop, 0)
+            WAIT_MS(300)
+            CALL(evt_mobj_get_position, STRING("mobj_jump"), LW(0), LW(1), LW(2))
+            ADD(LW(1), 30)
+            CALL(evt_party_set_pos, 0, LW(0), LW(1), LW(2))
+            CALL(evt_party_jump_pos, 0, -60, 450, 130, 500, 0, -1000)
+            CALL(evt_party_run, 0)
+        END_INLINE_EVENT
 #endif
         CALL(evt_hitobj_onoff, STRING("MOBJ_mobj_jump"), 0, 0)
         CALL(evt_mario_jump_pos, -30, 450, 110, 500, 0, -1000)
@@ -1029,23 +1045,26 @@ EVT_END()
  * and fake-Mario scenes depending on the story progress.
  */
 EVT_BEGIN(jin_04_init_evt)
+#if VERSION >= VERSION_JP
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG4_10_DOOPLISS_BATTLE)
             CALL(evt_snd_bgmoff, PSND_FADEOUT)
-#if VERSION <= VERSION_DEMO_JP
-            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG4_JIN1"))
-            CALL(evt_snd_set_rev_mode, 2)
-#else
             CALL(evt_snd_envoff, PSND_FADEOUT)
-#endif
         CASE_DEFAULT
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG4_JIN1"))
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG4_JIN1"))
-#if VERSION >= VERSION_JP
     END_SWITCH
-#endif
     CALL(evt_snd_set_rev_mode, 2)
-#if VERSION <= VERSION_DEMO_JP
+#else
+    SWITCH(GSW_STORY_PROGRESS)
+        CASE_EQUAL(STG4_10_DOOPLISS_BATTLE)
+            CALL(evt_snd_bgmoff, PSND_FADEOUT)
+            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG4_JIN1"))
+            CALL(evt_snd_set_rev_mode, 2)
+        CASE_DEFAULT
+            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG4_JIN1"))
+            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG4_JIN1"))
+            CALL(evt_snd_set_rev_mode, 2)
     END_SWITCH
 #endif
     CALL(evt_kagemario_init)

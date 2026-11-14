@@ -158,15 +158,15 @@ USER_FUNC(main_deka) {
         memset(w, 0, sizeof(DekaWork));
         w->unitId = evtGetValue(event, args[0]);
         yuka_init();
-#if VERSION >= VERSION_JP
     }
+#if VERSION >= VERSION_JP
     if (w->tex->address == NULL) {
         return EVT_RETURN_DONE;
     }
     if (w->mesh->address == NULL) {
         return EVT_RETURN_DONE;
-#endif
     }
+#endif
     main_base();
     main_gauge();
     for (i = 0; i < 8; i++) {

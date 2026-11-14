@@ -238,8 +238,8 @@ void mot_stay(void) {
             mario->baseSpeed = 0.0f;
         }
         mario->flags &= ~MARIO_FLAG_IS_PUSHING;
-#if VERSION >= VERSION_JP
     }
+#if VERSION >= VERSION_JP
     if (mario->flags & MARIO_FLAG_IS_8_BIT) {
         marioChkJump();
         if (mario->controlStickSensitivity > 0.0f) {
@@ -254,8 +254,8 @@ void mot_stay(void) {
             }
         }
         return;
-#endif
     }
+#endif
     frames = sysMsec2Frame(1000);
     if (++mario->idleKeyTimer > frames && !(mario->flags & MARIO_FLAG_IS_CARRYING_BOBBERY) && marioChkKey()) {
         if (chkWeak()) {

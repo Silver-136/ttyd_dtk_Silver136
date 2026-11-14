@@ -175,21 +175,27 @@ s32 yoshiGetStatus(void) {
         return YOSHI_STATUS_INACTIVE;
     }
     motion = party->useMotionId;
+#if VERSION >= VERSION_JP
     if (motion >= 10 && motion <= 13) {
         status = YOSHI_STATUS_RIDING;
     } else if (motion >= 20 && motion <= 22) {
         status = YOSHI_STATUS_FLUTTER;
     } else if (motion >= 100 && motion <= 101) {
-#if VERSION >= VERSION_JP
         status = YOSHI_STATUS_OTHER;
     } else if (motion >= 60 && motion <= 65) {
-#endif
         status = YOSHI_STATUS_STAND_JUMP;
-#if VERSION >= VERSION_JP
     } else if (motion >= 50 && motion <= 52) {
         status = YOSHI_STATUS_FALL;
-#endif
     }
+#else
+    if (motion >= 10 && motion <= 13) {
+        status = YOSHI_STATUS_RIDING;
+    } else if (motion >= 20 && motion <= 22) {
+        status = YOSHI_STATUS_FLUTTER;
+    } else if (motion >= 100 && motion <= 101) {
+        status = YOSHI_STATUS_STAND_JUMP;
+    }
+#endif
     return status;
 }
 
@@ -472,13 +478,17 @@ void yoshi_use(PartyEntry* party) {
     f32 z;
     f32 s;
 
+#if VERSION >= VERSION_JP
     if (!mario->keyOffCount) {
         partyUpdateKeyData(party);
-#if VERSION >= VERSION_JP
     } else {
         partyClearCont(party);
-#endif
     }
+#else
+    if (!mario->keyOffCount) {
+        partyUpdateKeyData(party);
+    }
+#endif
     if (party->trigFlags & PARTY_TRIG_CHG_RUN_MODE) {
         party->trigFlags &= ~PARTY_TRIG_CHG_RUN_MODE;
 #if VERSION >= VERSION_JP
@@ -664,14 +674,14 @@ void yoshi_use(PartyEntry* party) {
             }
             if (party->runMode == PARTY_RUN_GOODBYE) {
                 break;
-#if VERSION >= VERSION_JP
             }
+#if VERSION >= VERSION_JP
             if (yoshiGetStatus() == YOSHI_STATUS_RIDING) {
                 party->floorMoveX = mario->floorMove.x;
                 party->floorMoveY = mario->floorMove.y;
                 party->floorMoveZ = mario->floorMove.z;
-#endif
             }
+#endif
             if (party->flags & PARTY_FLAG_IS_GROUNDED) {
                 if (!(party->flags & PARTY_FLAG_IS_EVT_USE)) {
                     if (party->buttonTrg & PAD_BUTTON_A) {

@@ -601,13 +601,13 @@ void cloud_use(PartyEntry* party) {
             party->useMotionId = CLOUD_USE_BREATH_FINISH;
             if (party->flags & PARTY_FLAG_IS_EVT_USE) {
                 party->useMotionId = CLOUD_USE_CLEANUP;
-#if VERSION >= VERSION_JP
             }
+#if VERSION >= VERSION_JP
             if (CLOUD_WORK(party) != NULL && CLOUD_WORK(party)->sfxId != -1) {
                 psndSFXOff(CLOUD_WORK(party)->sfxId);
                 CLOUD_WORK(party)->sfxId = -1;
-#endif
             }
+#endif
             break;
         case CLOUD_USE_BREATH_FINISH:
             set_cloud_hold_pos(party);

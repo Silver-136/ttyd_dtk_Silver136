@@ -874,12 +874,13 @@ EVT_BEGIN(aunt_talk)
 #if VERSION >= VERSION_JP
             BEGIN_INLINE_EVENT
                 WAIT_MS(2000)
-#endif
                 CALL(evt_snd_bgmoff, PSND_PAUSE)
                 CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_EVT_ORGEL1"))
-#if VERSION >= VERSION_JP
             END_INLINE_EVENT
 
+#else
+            CALL(evt_snd_bgmoff, PSND_PAUSE)
+            CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_EVT_ORGEL1"))
 #endif
 
             // She explains she wants to meet her former love Podley (irai_20_002);

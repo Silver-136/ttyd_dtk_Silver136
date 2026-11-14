@@ -148,10 +148,12 @@ void BattleDamageDirect(s32 unitId, BattleUnit* target, BattleUnitPart* part, s3
     if (!(result & DAMAGE_RESULT_ABSORBED) && damage > 0) {
         s32 n = 0;
         s32 i = target->badgesEquipped.PityFlower;
-        for (; i > 0; i--) {
 #if VERSION <= VERSION_DEMO_JP
+        for (; i > 0; i--) {
             irand(100);
+        }
 #else
+        for (; i > 0; i--) {
             if (irand(100) < 30) {
                 n++;
             }
@@ -162,8 +164,8 @@ void BattleDamageDirect(s32 unitId, BattleUnit* target, BattleUnitPart* part, s3
             BtlUnit_GetPos(target, &x, &y, &z);
             y += target->sizeMultiplier * BtlUnit_GetHeight(target) + 5.0f;
             effRecoveryEntry(1, n, x, y, z);
-#endif
         }
+#endif
     }
 
     if (pattern != ATTACKPATTERN_ULTRA_HAMMER_FINISH && pattern != ATTACKPATTERN_NO_DAMAGE_FINISH) {
@@ -181,11 +183,13 @@ void BattleDamageDirect(s32 unitId, BattleUnit* target, BattleUnitPart* part, s3
         } else if (result & DAMAGE_RESULT_ATTACK_FX_G) {
 #endif
             psndSFXOn_3D("SFX_MARIO_HAMMER_PIKKYO_G1", &pos);
+        }
 #if VERSION <= VERSION_DEMO_JP
-        } else if (result & DAMAGE_RESULT_ATTACK_FX_G) {
+        else if (result & DAMAGE_RESULT_ATTACK_FX_G) {
             psndSFXOn_3D("SFX_MARIO_HAMMER_PIKKYO_Y1", &pos);
+        }
 #endif
-        } else if (result & DAMAGE_RESULT_ATTACK_FX_P) {
+        else if (result & DAMAGE_RESULT_ATTACK_FX_P) {
             psndSFXOn_3D("SFX_MARIO_HAMMER_PIKKYO_P1", &pos);
         } else if (BtlUnit_GetBelong(target) == ALLIANCE_PLAYER && (result & DAMAGE_RESULT_GUARD)) {
             psndSFXOn_3D("SFX_MARIO_GUARD1", &pos);

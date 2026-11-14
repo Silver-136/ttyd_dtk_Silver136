@@ -1114,13 +1114,13 @@ EVT_BEGIN(evt_toron_catch)
             CALL(evt_mario_key_onoff, 0)
             BEGIN_INLINE_EVENT
                 CALL(mario_normalize_wait)
-#endif
                 CALL(evt_mario_normalize)
                 CALL(evt_party_yoshi_ride, 0, 0)
-#if VERSION <= VERSION_DEMO_JP
-            CALL(evt_mario_key_onoff, 0)
-#else
             END_INLINE_EVENT
+#else
+            CALL(evt_mario_normalize)
+            CALL(evt_party_yoshi_ride, 0, 0)
+            CALL(evt_mario_key_onoff, 0)
 #endif
             BREAK_LOOP
         END_IF
@@ -1306,13 +1306,13 @@ static EVT_BEGIN(evt_toron_appear)
     END_IF
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     IF_INT_GREATER(LW(0), -110)
+        GOTO(100)
+    END_IF
 #if VERSION >= VERSION_JP
-        GOTO(100)
-    END_IF
     IF_INT_LESS(LW(0), -330)
-#endif
         GOTO(100)
     END_IF
+#endif
     IF_INT_GREATER(LW(2), -70)
         GOTO(100)
     END_IF
@@ -1544,12 +1544,10 @@ EVT_END()
 static EVT_BEGIN(evt_access_entry)
 #if VERSION >= VERSION_JP
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_56_ROGUEPORT_STATION)
-#endif
         SET_VALUE(LW(1), STRING("stg6_rsh_267"))
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("tana_4"), 0, PTR(evt_access), 0)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("tana_5"), 0, PTR(evt_access2), 0)
-#if VERSION >= VERSION_JP
-        ELSE
+    ELSE
         SET_VALUE(LW(1), STRING("stg6_rsh_267"))
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("tana_3"), 0, PTR(evt_access), 0)
         SET_VALUE(LW(1), STRING("stg6_rsh_267"))
@@ -1558,6 +1556,10 @@ static EVT_BEGIN(evt_access_entry)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("tana_5"), 0, PTR(evt_access), 0)
         SET_VALUE(GSWF_RSH_02_DRIED_SHROOM_DRAWER, 1)
     END_IF
+#else
+    SET_VALUE(LW(1), STRING("stg6_rsh_267"))
+    CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("tana_4"), 0, PTR(evt_access), 0)
+    CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("tana_5"), 0, PTR(evt_access2), 0)
 #endif
     RETURN
 EVT_END()

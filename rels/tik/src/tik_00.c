@@ -2530,15 +2530,11 @@ EVT_END()
  * JP and later add a third state from the return to Rogueport onwards, which shows ie_4_1 again.
  */
 EVT_BEGIN(evt_open_04_open)
-#if VERSION <= VERSION_DEMO_JP
-    IF_INT_LESS(GSW_STORY_PROGRESS, STG7_26_THE_HIDEOUT_EXPLODES)
-#else
+#if VERSION >= VERSION_JP
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG7_26_THE_HIDEOUT_EXPLODES)
-#endif
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("ie_4_1"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("ie_4_2"), MAP_OBJ_FLAG_HIDDEN)
-#if VERSION >= VERSION_JP
             IF_INT_EQUAL(GW(10), 0)
                 CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("sui__1"), MAP_OBJ_FLAG_HIDDEN)
                 CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("sui__2"), MAP_OBJ_FLAG_HIDDEN)
@@ -2551,7 +2547,6 @@ EVT_BEGIN(evt_open_04_open)
         CASE_LESS(STG9_02_RETURN_TO_ROGUEPORT)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("ie_4_1"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("ie_4_2"), MAP_OBJ_FLAG_HIDDEN)
-#endif
             IF_INT_EQUAL(GW(10), 0)
                 CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("sui__1"), MAP_OBJ_FLAG_HIDDEN)
                 CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("sui__2"), MAP_OBJ_FLAG_HIDDEN)
@@ -2561,7 +2556,6 @@ EVT_BEGIN(evt_open_04_open)
                 CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("sui__1"), MAP_OBJ_FLAG_HIDDEN)
                 CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("wa_pu"), MAP_OBJ_FLAG_HIDDEN)
             END_IF
-#if VERSION >= VERSION_JP
         CASE_DEFAULT
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("ie_4_1"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("ie_4_2"), MAP_OBJ_FLAG_HIDDEN)
@@ -2569,31 +2563,40 @@ EVT_BEGIN(evt_open_04_open)
                 CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("sui__1"), MAP_OBJ_FLAG_HIDDEN)
                 CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("sui__2"), MAP_OBJ_FLAG_HIDDEN)
                 CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("wa_pu"), MAP_OBJ_FLAG_HIDDEN)
-#endif
-                ELSE
-#if VERSION <= VERSION_DEMO_JP
-                CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("ie_4_1"), MAP_OBJ_FLAG_HIDDEN)
-                CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("ie_4_2"), MAP_OBJ_FLAG_HIDDEN)
-                IF_INT_EQUAL(GW(10), 0)
-                    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("sui__1"), MAP_OBJ_FLAG_HIDDEN)
-                    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("sui__2"), MAP_OBJ_FLAG_HIDDEN)
-                    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("wa_pu"), MAP_OBJ_FLAG_HIDDEN)
-                ELSE
-                    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("sui__2"), MAP_OBJ_FLAG_HIDDEN)
-                    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("sui__1"), MAP_OBJ_FLAG_HIDDEN)
-                    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("wa_pu"), MAP_OBJ_FLAG_HIDDEN)
-#else
+            ELSE
                 CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("sui__2"), MAP_OBJ_FLAG_HIDDEN)
                 CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("sui__1"), MAP_OBJ_FLAG_HIDDEN)
                 CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("wa_pu"), MAP_OBJ_FLAG_HIDDEN)
-#endif
             END_IF
-#if VERSION <= VERSION_DEMO_JP
-        END_IF
-        CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
-        CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
-#else
     END_SWITCH
+    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
+    CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
+#else
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG7_26_THE_HIDEOUT_EXPLODES)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("ie_4_1"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("ie_4_2"), MAP_OBJ_FLAG_HIDDEN)
+        IF_INT_EQUAL(GW(10), 0)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("sui__1"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("sui__2"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("wa_pu"), MAP_OBJ_FLAG_HIDDEN)
+        ELSE
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("sui__2"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("sui__1"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("wa_pu"), MAP_OBJ_FLAG_HIDDEN)
+        END_IF
+    ELSE
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("ie_4_1"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("ie_4_2"), MAP_OBJ_FLAG_HIDDEN)
+        IF_INT_EQUAL(GW(10), 0)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("sui__1"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("sui__2"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("wa_pu"), MAP_OBJ_FLAG_HIDDEN)
+        ELSE
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("sui__2"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("sui__1"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("wa_pu"), MAP_OBJ_FLAG_HIDDEN)
+        END_IF
+    END_IF
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
 #endif

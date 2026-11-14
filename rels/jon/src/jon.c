@@ -302,7 +302,23 @@ static EVT_BEGIN(jon_init_evt)
                     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("after"), MAP_OBJ_FLAG_HIDDEN)
                     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("s_rakugaki"), MAP_OBJ_FLAG_HIDDEN)
                 ELSE
-#endif
+                    SET_VALUE(LF(0), 0)
+                    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_ERASE_THAT_GRAFFITI)
+                        IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 1)
+                            SET_VALUE(LF(0), 1)
+                        END_IF
+                    END_IF
+                    IF_INT_EQUAL(LF(0), 0)
+                        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("after"), MAP_OBJ_FLAG_HIDDEN)
+                        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_rakugaki"), 0, PTR(evt_iri_30_touch_rakugaki), LW(0))
+                        CALL(evt_run_case_evt, CASE_BOBBERY, 1, STRING("a_rakugaki"), 0, PTR(evt_iri_30_bomb_rakugaki), LW(1))
+                        CALL(evt_set_case_wrk, LW(1), 15, LW(0))
+                    ELSE
+                        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("before"), MAP_OBJ_FLAG_HIDDEN)
+                        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("s_rakugaki"), MAP_OBJ_FLAG_HIDDEN)
+                    END_IF
+                END_IF
+#else
                 SET_VALUE(LF(0), 0)
                 IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_ERASE_THAT_GRAFFITI)
                     IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 1)
@@ -312,23 +328,17 @@ static EVT_BEGIN(jon_init_evt)
                 IF_INT_EQUAL(LF(0), 0)
                     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("after"), MAP_OBJ_FLAG_HIDDEN)
                     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_rakugaki"), 0, PTR(evt_iri_30_touch_rakugaki), LW(0))
-#if VERSION < VERSION_US
                     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_ERASE_THAT_GRAFFITI)
                         IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 1)
-#endif
                             CALL(evt_run_case_evt, CASE_BOBBERY, 1, STRING("a_rakugaki"), 0, PTR(evt_iri_30_bomb_rakugaki), LW(1))
                             CALL(evt_set_case_wrk, LW(1), 15, LW(0))
-#if VERSION < VERSION_US
                         END_IF
                     END_IF
-#endif
-                    ELSE
+                ELSE
                     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("before"), MAP_OBJ_FLAG_HIDDEN)
                     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("s_rakugaki"), MAP_OBJ_FLAG_HIDDEN)
-#if VERSION >= VERSION_US
-                    END_IF
-#endif
                 END_IF
+#endif
                 ELSE
                 CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("before"), MAP_OBJ_FLAG_HIDDEN)
                 CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("s_rakugaki"), MAP_OBJ_FLAG_HIDDEN)
@@ -1753,20 +1763,23 @@ EVT_BEGIN(talk_idouya)
             SET_VALUE(LW(1), STRING("dokan_3"))
     END_SWITCH
 #endif
-    IF_STR_EQUAL(LW(0), STRING("tik_06"))
 #if VERSION >= VERSION_JP
+    IF_STR_EQUAL(LW(0), STRING("tik_06"))
         IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_HELP_MY_DADDY)
-#endif
             IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 1)
                 SET_VALUE(GSWF_TROUBLE_WORK(2), 1)
             END_IF
         END_IF
-#if VERSION <= VERSION_DEMO_JP
-    CALL(evt_msg_print, 0, STRING("msg_jon_mover_2"), 0, 0)
-#else
     END_IF
     CALL(evt_msg_print_add, MSG_PRINT_DIRECT_TEXT, STRING("<scrl_auto><once_stop>"))
     CALL(evt_msg_print_add, 0, STRING("msg_jon_mover_2"))
+#else
+    IF_STR_EQUAL(LW(0), STRING("tik_06"))
+        IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 1)
+            SET_VALUE(GSWF_TROUBLE_WORK(2), 1)
+        END_IF
+    END_IF
+    CALL(evt_msg_print, 0, STRING("msg_jon_mover_2"), 0, 0)
 #endif
     BEGIN_INLINE_EVENT
         CALL(evt_raster)
@@ -1864,21 +1877,38 @@ static EVT_BEGIN(talk_gyousyou)
 
     // The trader names the item and its price and asks Mario to confirm (outside Japanese the name and price
     // arguments are swapped, except for the early demos).
-    IF_INT_GREATER_OR_EQUAL(LW(1), 240)
 #if VERSION <= VERSION_DEMO_JP
+    IF_INT_GREATER_OR_EQUAL(LW(1), 240)
         CALL(evt_msg_print_insert, 0, STRING("100kai_item_04"), 0, STRING("me"), LW(2), LW(3), LW(4))
     ELSE
-            CALL(evt_msg_print_insert, 0, STRING("100kai_item_04"), 0, STRING("me"), LW(2), LW(3))
-#else
+        CALL(evt_msg_print_insert, 0, STRING("100kai_item_04"), 0, STRING("me"), LW(2), LW(3))
+    END_IF
+#elif VERSION <= VERSION_JP
+    IF_INT_GREATER_OR_EQUAL(LW(1), 240)
         CALL(evt_sub_get_language, LW(0))
-#if VERSION >= VERSION_US
+        IF_INT_NOT_EQUAL(LW(0), 0)
+            CALL(evt_msg_print_insert, 0, STRING("100kai_item_04"), 0, STRING("me"), LW(3), LW(2), LW(4))
+        ELSE
+            CALL(evt_msg_print_insert, 0, STRING("100kai_item_04"), 0, STRING("me"), LW(2), LW(3), LW(4))
+        END_IF
+    ELSE
+        CALL(evt_sub_get_language, LW(0))
+        IF_INT_NOT_EQUAL(LW(0), 0)
+            CALL(evt_msg_print_insert, 0, STRING("100kai_item_04"), 0, STRING("me"), LW(3), LW(2))
+        ELSE
+            CALL(evt_msg_print_insert, 0, STRING("100kai_item_04"), 0, STRING("me"), LW(2), LW(3))
+        END_IF
+    END_IF
+#else
+    IF_INT_GREATER_OR_EQUAL(LW(1), 240)
+        CALL(evt_sub_get_language, LW(0))
         SWITCH(LW(0))
             CASE_EQUAL(0)
                 CALL(evt_msg_print_insert, 0, STRING("100kai_item_04"), 0, STRING("me"), LW(2), LW(3), LW(4))
             CASE_DEFAULT
                 CALL(evt_msg_print_insert, 0, STRING("100kai_item_04"), 0, STRING("me"), LW(3), LW(2), LW(4))
         END_SWITCH
-        ELSE
+    ELSE
         CALL(evt_sub_get_language, LW(0))
         SWITCH(LW(0))
             CASE_EQUAL(0)
@@ -1888,22 +1918,8 @@ static EVT_BEGIN(talk_gyousyou)
                 CALL(evt_msg_fmt_str, 1, LW(14), LW(14), LW(2))
                 CALL(evt_msg_print, MSG_PRINT_DIRECT_TEXT, LW(14), 0, STRING("me"))
         END_SWITCH
-#else
-        IF_INT_NOT_EQUAL(LW(0), 0)
-            CALL(evt_msg_print_insert, 0, STRING("100kai_item_04"), 0, STRING("me"), LW(3), LW(2), LW(4))
-        ELSE
-            CALL(evt_msg_print_insert, 0, STRING("100kai_item_04"), 0, STRING("me"), LW(2), LW(3), LW(4))
-        END_IF
-        ELSE
-        CALL(evt_sub_get_language, LW(0))
-        IF_INT_NOT_EQUAL(LW(0), 0)
-            CALL(evt_msg_print_insert, 0, STRING("100kai_item_04"), 0, STRING("me"), LW(3), LW(2))
-        ELSE
-            CALL(evt_msg_print_insert, 0, STRING("100kai_item_04"), 0, STRING("me"), LW(2), LW(3))
-        END_IF
-#endif
-#endif
     END_IF
+#endif
     CALL(evt_msg_select, 0, STRING("100kai_item_00"))
     IF_INT_EQUAL(LW(0), 1)
         CALL(evt_win_coin_off, LW(12))

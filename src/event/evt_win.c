@@ -431,24 +431,29 @@ USER_FUNC(evt_unitwin_free) {
     if (!(wp->flags2 & UNITWIN_FREE_OK)) {
         return EVT_RETURN_BLOCK;
     }
+#if VERSION <= VERSION_DEMO_JP
     for (i = 0; i < wp->goodsMax; i++) {
         mapObjFlagOff(wp->entries[i].mapObj, MAP_OBJ_FLAG_DISABLED);
         sprintf(name, "uwn%d", i);
         iconDelete(name);
-#if VERSION <= VERSION_DEMO_JP
         entry = caseIdToPtr(wp->caseId[i]);
         if (evtCheckID(entry->evtId)) {
             evtDeleteID(entry->evtId);
         }
         caseDelete(wp->caseId[i]);
+    }
 #else
+    for (i = 0; i < wp->goodsMax; i++) {
+        mapObjFlagOff(wp->entries[i].mapObj, MAP_OBJ_FLAG_DISABLED);
+        sprintf(name, "uwn%d", i);
+        iconDelete(name);
     }
     if (wp->flags & UNITWIN_FLAG_WINMGR) {
         for (i = 0; i < 3; i++) {
             winMgrDelete(wp->winId[i]);
         }
-#endif
     }
+#endif
     iconDelete("yubicursor_2");
     _mapFree(_wp);
     _wp = NULL;
@@ -479,16 +484,23 @@ USER_FUNC(evt_unitwin_selltable_setup) {
         wp->goodsMax++;
         mapObjGetPos(wp->entries[i].mapObj, &pos);
         mapObjFlagOn(wp->entries[i].mapObj, MAP_OBJ_FLAG_DISABLED);
+#if VERSION >= VERSION_JP
         if (wp->goods[i] != 0) {
             sprintf(name, "uwn%d", i);
             iconEntry(name, itemDataTable[wp->goods[i]].icon_id);
             iconSetPos(name, pos.x, pos.y + 6.0f, pos.z);
             iconFlagOn(name, ICON_FLAG_NO_MAP_BLEND);
-#if VERSION >= VERSION_JP
         } else {
             wp->itemFlags[i] |= UNITWIN_ITEM_UNAVAILABLE;
-#endif
         }
+#else
+        if (wp->goods[i] != 0) {
+            sprintf(name, "uwn%d", i);
+            iconEntry(name, itemDataTable[wp->goods[i]].icon_id);
+            iconSetPos(name, pos.x, pos.y + 6.0f, pos.z);
+            iconFlagOn(name, ICON_FLAG_NO_MAP_BLEND);
+        }
+#endif
 #if VERSION <= VERSION_DEMO_JP
         caseWork[0] = (EvtWord)wp;
         caseWork[1] = i;
@@ -1365,12 +1377,12 @@ static void evt_unitwin_disp_func(CameraId cameraId, void* param) {
                 unitwin_coin_se_wait = 7;
 #endif
             }
-#if VERSION >= VERSION_JP
         }
+#if VERSION >= VERSION_JP
         if (unitwin_coin_se_wait > 0) {
             unitwin_coin_se_wait--;
-#endif
         }
+#endif
     }
 
     if (wp->flags & UNITWIN_FLAG_SHINE_WINDOW_UNUSED) {

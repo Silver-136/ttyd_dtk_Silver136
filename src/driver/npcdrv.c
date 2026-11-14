@@ -1447,20 +1447,13 @@ static void npcMoveG(NpcEntry* npc) {
             dist = probeHeight + (f32)fallDistance;
 
             // US and later: also probe the floor at both side edges of the NPC
+#if VERSION >= VERSION_US
             if ((npc->groundHit = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &dist, &hitNX, &hitNY, &hitNZ,
                                               npc->position.x, npc->position.y + probeHeight, npc->position.z, 0.0f,
-#if VERSION >= VERSION_US
                                               -1.0f, 0.0f)) != NULL) {
-#else
-                                              -1.0f, 0.0f)) == NULL) {
-                npc->statusFlags |= NPC_STATUS_AIRBORNE;
-                npc->position.y += dy;
-            } else {
-#endif
                 npc->statusFlags &= ~NPC_STATUS_AIRBORNE;
                 npc->position.y = hitY;
                 npc->jumpTicks = 0;
-#if VERSION >= VERSION_US
             } else if ((npc->groundHit = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &dist, &hitNX, &hitNY, &hitNZ,
                                               npc->position.x + 0.5f * npc->width, npc->position.y + probeHeight,
                                               npc->position.z, 0.0f, -1.0f, 0.0f)) != NULL) {
@@ -1476,8 +1469,19 @@ static void npcMoveG(NpcEntry* npc) {
             } else {
                 npc->statusFlags |= NPC_STATUS_AIRBORNE;
                 npc->position.y += dy;
-#endif
             }
+#else
+            if ((npc->groundHit = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &dist, &hitNX, &hitNY, &hitNZ,
+                                              npc->position.x, npc->position.y + probeHeight, npc->position.z, 0.0f,
+                                              -1.0f, 0.0f)) == NULL) {
+                npc->statusFlags |= NPC_STATUS_AIRBORNE;
+                npc->position.y += dy;
+            } else {
+                npc->statusFlags &= ~NPC_STATUS_AIRBORNE;
+                npc->position.y = hitY;
+                npc->jumpTicks = 0;
+            }
+#endif
         }
     }
 }
@@ -1867,12 +1871,12 @@ void fbatEncountCheck(void) {
         if (marioKeyOffChk() || marioCtrlOffChk()) {
             return;
         }
-#if VERSION >= VERSION_JP
     }
+#if VERSION >= VERSION_JP
     if (itemPickUpFromFieldCheck()) {
         return;
-#endif
     }
+#endif
     data = gp->fbatData;
     kind = (u32*)&data->hitKind;
     npc = fbatHitCheck(FBAT_CHECK_ENEMY | FBAT_CHECK_BOMB | FBAT_CHECK_SHELL | FBAT_CHECK_SPIN_HAMMER | FBAT_CHECK_HAMMER | FBAT_CHECK_JUMP | FBAT_CHECK_TOUCH | FBAT_CHECK_CURRENT, kind);
@@ -2414,9 +2418,9 @@ void fbatBattleMode(void) {
                             stolen = TRUE;
                             break;
                         }
-#if VERSION >= VERSION_JP
                     }
                 }
+#if VERSION >= VERSION_JP
 
                 // FAKE: dead int guard (COLOURING W; folded after RA, no code). The arm redefines stolen (dead in
                 // the arm), so its 6 division temps raise only res/info4 (simplify pass 2), and `res = 0` keeps
@@ -2427,9 +2431,9 @@ void fbatBattleMode(void) {
                         stolen = (res / (s32)(AddrWord)info4) + ((s32)(AddrWord)info4 / res) + ((res + 1) / (s32)(AddrWord)info4) +
                                  (((s32)(AddrWord)info4 + 1) / res) + ((res + 2) / (s32)(AddrWord)info4) + (((s32)(AddrWord)info4 + 2) / res);
                         res = 0;
-#endif
                     }
                 }
+#endif
                 data->mode = FBAT_MODE_FIELD;
                 if (res == BATTLE_RESULT_WIN || res == BATTLE_RESULT_WIN_FIELD) {
                     mult = 1;

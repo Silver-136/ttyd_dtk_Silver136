@@ -1118,15 +1118,19 @@ EVT_BEGIN(marioAttackEvent_Muki)
 #if VERSION >= VERSION_DEMO_EU
     IF_INT_EQUAL(LW(13), 0)
         DELETE_EVENT(LW(12))
-#endif
+        CALL(sac_enemy_slide_return)
+        WAIT_MS(1000)
+        CALL(end_muki)
+        WAIT_MS(1000)
+        CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
+    ELSE
+    END_IF
+#else
     CALL(sac_enemy_slide_return)
     WAIT_MS(1000)
     CALL(end_muki)
     WAIT_MS(1000)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
-#if VERSION >= VERSION_DEMO_EU
-    ELSE
-    END_IF
 #endif
     RETURN
 EVT_END()

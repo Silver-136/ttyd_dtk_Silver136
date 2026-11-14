@@ -2340,13 +2340,13 @@ s32 check_hammer(Fan* fan) {
     Vec pos;
 
     if (mario->position.y > 0.0f) {
+        return 0;
+    }
 #if VERSION >= VERSION_JP
-        return 0;
-    }
     if (fan->flags & 1) {
-#endif
         return 0;
     }
+#endif
     if (mario->currMotionId == MARIO_MOTION_HAMMER && fan_wp->hammerTimer > 10) {
         rot = 6.2831855f * reviseAngle(mario->displayDirection - 90.0f + camGetPtr(CAMERA_3D)->viewYaw) / 360.0f;
 

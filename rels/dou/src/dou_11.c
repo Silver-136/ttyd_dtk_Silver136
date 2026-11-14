@@ -1714,14 +1714,14 @@ static EVT_BEGIN(bombwall_bomb)
         WAIT_MS(200)
         CALL(evt_mapobj_get_position, STRING("S_ana_before"), LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_OFF_WALL_BREAK1"), LW(0), LW(1), LW(2), 0)
-#if VERSION >= VERSION_JP
     END_INLINE_EVENT
+#if VERSION >= VERSION_JP
     BEGIN_INLINE_EVENT
         CALL(evt_mario_wait_landon)
         CALL(evt_mario_normalize)
         SPAWN_EVENT(bombwall_escape_move)
-#endif
     END_INLINE_EVENT
+#endif
     CALL(evt_img_entry, STRING("capture_img"))
     CALL(evt_img_set_paper, STRING("capture_img"), STRING("OFF_d_bom_ver2"))
     CALL(evt_offscreen_entry, STRING("offscreen"))

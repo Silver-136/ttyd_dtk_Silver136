@@ -353,13 +353,13 @@ void marioBoots(void) {
         return;
     }
     if (!(flags & MARIO_FLAG_HAS_INPUT_JUMP)) {
+        return;
+    }
 #if VERSION >= VERSION_DEMO_EU
-        return;
-    }
     if (mario->currMotionId == MARIO_MOTION_PLANE) {
-#endif
         return;
     }
+#endif
     if (!marioChkHipAttack()) {
         return;
     }
@@ -423,17 +423,23 @@ void marioChgMotSub(MarioMotion id, s32 callPost) {
     }
     mario->prevMotionId = mario->currMotionId;
     mario->currMotionId = id;
+#if VERSION >= VERSION_JP
     if (callPost) {
         if (marioMotTbl[mario->prevMotionId].post) {
             marioMotTbl[mario->prevMotionId].post();
         }
-#if VERSION >= VERSION_JP
     } else if (mario->prevMotionId == MARIO_MOTION_JABARA) {
         if (marioMotTbl[mario->prevMotionId].post) {
             marioMotTbl[mario->prevMotionId].post();
         }
-#endif
     }
+#else
+    if (callPost) {
+        if (marioMotTbl[mario->prevMotionId].post) {
+            marioMotTbl[mario->prevMotionId].post();
+        }
+    }
+#endif
     mario->trigFlags |= MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
 }
 
@@ -722,17 +728,22 @@ void marioFall(void) {
             mario->position.y = y;
 #if VERSION <= VERSION_DEMO_JP
             if (marioPriCheckJabara() && a != -1 && rub >= 0) {
-#else
-#if VERSION >= VERSION_US
-            if (!(mario->trigFlags & MARIO_TRIG_FLAG_JABARA_MOVE_CHK) && (mario->trigFlags & MARIO_TRIG_FLAG_JABARA_CHK) && marioPriCheckJabara() && a != -1 && rub >= 0) {
-#else
-            if (marioPriCheckJabara() && a != -1 && rub >= 0) {
-#endif
-                camFollowYOn();
-#endif
                 marioChgMot(MARIO_MOTION_JABARA);
                 return;
             }
+#elif VERSION <= VERSION_JP
+            if (marioPriCheckJabara() && a != -1 && rub >= 0) {
+                camFollowYOn();
+                marioChgMot(MARIO_MOTION_JABARA);
+                return;
+            }
+#else
+            if (!(mario->trigFlags & MARIO_TRIG_FLAG_JABARA_MOVE_CHK) && (mario->trigFlags & MARIO_TRIG_FLAG_JABARA_CHK) && marioPriCheckJabara() && a != -1 && rub >= 0) {
+                camFollowYOn();
+                marioChgMot(MARIO_MOTION_JABARA);
+                return;
+            }
+#endif
         }
     } else {
         mario->position.y += spd;
@@ -1047,13 +1058,13 @@ BOOL marioChkJump(void) {
         }
     }
     if (fbatNpcTalkCheck()) {
+        return FALSE;
+    }
 #if VERSION >= VERSION_DEMO_EU
-        return FALSE;
-    }
     if (mario->hitobjStandOn && (hitGetAttr(mario->hitobjStandOn) & HIT_ATTR_WATER_HAZARD)) {
-#endif
         return FALSE;
     }
+#endif
     marioChgMot(MARIO_MOTION_JUMP);
     return TRUE;
 }
@@ -1067,13 +1078,13 @@ BOOL marioChkJump(void) {
 BOOL marioChkTransform(void) {
     MarioWork* mario = marioGetPtr();
     if (!(mario->buttonTrg & PAD_BUTTON_Y)) {
+        return FALSE;
+    }
 #if VERSION >= VERSION_JP
-        return FALSE;
-    }
     if (!(mario->trigFlags & MARIO_TRIG_FLAG_SHIP_PLANE_EVT_ON) && mario->partyUseDelay) {
-#endif
         return FALSE;
     }
+#endif
     if (mario->currMotionId == MARIO_MOTION_YOSHI) {
         return FALSE;
     }

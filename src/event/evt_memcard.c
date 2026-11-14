@@ -405,10 +405,10 @@ EVT_BEGIN(evt_memcard_check)
             SET_VALUE(LF(10), 0)
             SET_VALUE(LW(10), 1)
         ELSE
-#endif
             BREAK_LOOP
-#if VERSION >= VERSION_JP
         END_IF
+#else
+        BREAK_LOOP
 #endif
     END_LOOP
     RETURN
@@ -562,10 +562,10 @@ EVT_BEGIN(evt_memcard_save)
     IF_INT_EQUAL(LW(10), 21)
         CALL(evt_msg_select, 0, STRING("msg_mcard_yesno_ending"))
     ELSE
-#endif
         CALL(evt_msg_select, 0, STRING("msg_mcard_yesno"))
-#if VERSION >= VERSION_JP
     END_IF
+#else
+    CALL(evt_msg_select, 0, STRING("msg_mcard_yesno"))
 #endif
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(evt_msg_continue)
@@ -745,7 +745,6 @@ EVT_BEGIN(evt_memcard_save)
             CALL(evt_msg_print_add, 0, STRING("msg_mcard_nospace"))
 #if VERSION >= VERSION_JP
             IF_INT_EQUAL(LW(10), 23)
-#endif
                 CALL(evt_msg_print_add, 0, STRING("msg_gc_mcard_open"))
                 CALL(evt_msg_select, 0, STRING("msg_mcard_yesno2"))
                 IF_INT_NOT_EQUAL(LW(0), 0)
@@ -761,8 +760,23 @@ EVT_BEGIN(evt_memcard_save)
                 ELSE
                     CALL(evt_msg_print_add, 0, STRING("msg_mcard_save_miss"))
                 END_IF
-#if VERSION >= VERSION_JP
+            ELSE
+                CALL(evt_msg_print_add, 0, STRING("msg_mcard_save_miss"))
+            END_IF
+#else
+            CALL(evt_msg_print_add, 0, STRING("msg_gc_mcard_open"))
+            CALL(evt_msg_select, 0, STRING("msg_mcard_yesno2"))
+            IF_INT_NOT_EQUAL(LW(0), 0)
+                CALL(evt_msg_print_add, 0, STRING("msg_mcard_save_miss"))
+            ELSE
+                CALL(evt_msg_print_add, 0, STRING("msg_gc_mcard_nosave"))
+                CALL(evt_msg_select, 0, STRING("msg_mcard_yesno2"))
+                IF_INT_NOT_EQUAL(LW(0), 0)
+                    CALL(evt_msg_print_add, 0, STRING("msg_mcard_save_miss"))
                 ELSE
+                    CALL(memcard_ipl)
+                END_IF
+            ELSE
                 CALL(evt_msg_print_add, 0, STRING("msg_mcard_save_miss"))
             END_IF
 #endif
@@ -793,24 +807,23 @@ EVT_BEGIN(evt_memcard_save)
         CALL(evt_msg_select, 0, STRING("msg_mcard_yesno3"))
     END_IF
     IF_INT_EQUAL(LW(0), 0)
-#endif
         IF_INT_EQUAL(LW(10), 23)
-#if VERSION <= VERSION_DEMO_JP
-            CALL(evt_msg_continue)
-            RETURN
-#else
             GOTO(2)
-            ELSE
+        ELSE
             GOTO(1)
-#endif
         END_IF
-#if VERSION <= VERSION_DEMO_JP
+    END_IF
+#else
+    IF_INT_EQUAL(LW(10), 23)
+        CALL(evt_msg_continue)
+        RETURN
+    END_IF
     CALL(evt_msg_print_add, 0, STRING("msg_savefile_nosave_warnning"))
     CALL(evt_msg_select, 0, STRING("msg_mcard_yesno3"))
     IF_INT_EQUAL(LW(0), 0)
         GOTO(1)
-#endif
     END_IF
+#endif
     CALL(evt_msg_continue)
     RETURN
 EVT_END()

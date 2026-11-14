@@ -1851,24 +1851,20 @@ EVT_BEGIN(evt_elv_down)
     CALL(evt_hitobj_onoff, STRING("a_eki_00"), 1, 0)
 #if VERSION <= VERSION_DEMO_JP
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_41_ORIGAMI_STAIRS)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_lever"), 0, PTR(evt_origami), GW(10))
+    ELSE
+        CALL(evt_mapobj_rotate, 1, STRING("s_lever"), 0, 0, -80)
+    END_IF
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG6_40_SWATTING_SMORGS)
+        CALL(evt_del_case_evt, 0, GW(10))
+    END_IF
 #else
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_40_SWATTING_SMORGS)
         CASE_EQUAL(STG6_40_SWATTING_SMORGS)
-#endif
             CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_lever"), 0, PTR(evt_origami), GW(10))
-#if VERSION <= VERSION_DEMO_JP
-            ELSE
-#else
         CASE_DEFAULT
-#endif
             CALL(evt_mapobj_rotate, 1, STRING("s_lever"), 0, 0, -80)
-#if VERSION <= VERSION_DEMO_JP
-        END_IF
-        IF_INT_LESS(GSW_STORY_PROGRESS, STG6_40_SWATTING_SMORGS)
-            CALL(evt_del_case_evt, 0, GW(10))
-        END_IF
-#else
     END_SWITCH
 #endif
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG6_41_ORIGAMI_STAIRS)

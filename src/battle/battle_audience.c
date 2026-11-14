@@ -493,19 +493,15 @@ void BattleAudience_PerAct(void) {
         if (delta <= -20.0f) BattleAudienceAddPhaseEvtList(11);
         if (delta <= -10.0f) BattleAudienceAddPhaseEvtList(13);
     }
+#if VERSION <= VERSION_DEMO_JP
     if (audience->impendingBonuses && ((audience->flags & AUDIENCE_FLAG_ACROBAT_GOOD) || (audience->flags & AUDIENCE_FLAG_ACROBAT_BAD))) {
         if (audience->flags & AUDIENCE_FLAG_ACROBAT_GOOD) {
-#if VERSION <= VERSION_DEMO_JP
             audience->acStreak++;
             if (audience->acStreak > 2) {
                 audience->acStreak = 2;
             }
             delta = audience->impendingBonuses->stylishCommandMultiplier * (audience->acStreak * 2);
-#else
-            delta = audience->impendingBonuses->stylishCommandMultiplier * (audience->numStylishCommandsThisAttack * 2);
-#endif
             total += delta;
-#if VERSION <= VERSION_DEMO_JP
             if (delta >= 30.0f) {
                 BattleAudienceAddPhaseEvtList(0);
             }
@@ -526,18 +522,23 @@ void BattleAudience_PerAct(void) {
     }
     if (audience->impendingBonuses && ((audience->flags & AUDIENCE_FLAG_ACROBAT_GOOD) || (audience->flags & AUDIENCE_FLAG_ACROBAT_BAD))) {
         if (audience->flags & AUDIENCE_FLAG_ACROBAT_GOOD) {
+            BattleAudienceAddPuni(10);
+        }
+    }
 #else
+    if (audience->impendingBonuses && ((audience->flags & AUDIENCE_FLAG_ACROBAT_GOOD) || (audience->flags & AUDIENCE_FLAG_ACROBAT_BAD))) {
+        if (audience->flags & AUDIENCE_FLAG_ACROBAT_GOOD) {
+            delta = audience->impendingBonuses->stylishCommandMultiplier * (audience->numStylishCommandsThisAttack * 2);
+            total += delta;
             if (delta >= 30.0f) BattleAudienceAddPhaseEvtList(0);
             if (delta >= 40.0f) BattleAudienceAddPhaseEvtList(3);
             if (delta >= 25.0f) BattleAudienceAddPhaseEvtList(8);
             if (delta >= 20.0f) BattleAudienceAddPhaseEvtList(13);
-#endif
             BattleAudienceAddPuni(10);
         }
-#if VERSION >= VERSION_JP
         if (audience->flags & AUDIENCE_FLAG_ACROBAT_BAD) total -= 5.0f;
-#endif
     }
+#endif
     if (audience->flags & AUDIENCE_FLAG_PUNI_ESCAPE) {
         audience->event = evtEntry(&msg_puni_all_escape, 0, EVENT_START_IMMEDIATE);
         audience->flags &= ~AUDIENCE_FLAG_PUNI_ESCAPE;
@@ -5086,14 +5087,19 @@ void BattleAudience_Case_TurnEnd(void) {
         if (turns < 5) {
             turns = 5;
         }
+#if VERSION >= VERSION_JP
         if (wp->turnCount >= turns) {
             BattleAudienceAddTargetNum(-0.049999997f * BattleAudienceBaseGetPtr()->audienceDeltaMultiplier, 0.0f);
-#if VERSION >= VERSION_JP
         }
         if (wp->turnCount == turns) {
-#endif
             BattleAudienceAddPhaseEvtList(6);
         }
+#else
+        if (wp->turnCount >= turns) {
+            BattleAudienceAddTargetNum(-0.049999997f * BattleAudienceBaseGetPtr()->audienceDeltaMultiplier, 0.0f);
+            BattleAudienceAddPhaseEvtList(6);
+        }
+#endif
         if (irand(100) < audience->turnEndPhaseEventChance) {
             if (wp->turnCount >= turns) {
                 BattleAudienceAddPhaseEvtList(1);
@@ -5125,15 +5131,17 @@ void BattleAudience_Case_Appeal(BattleUnit* unit) {
     if (BattleAudience_GetPPAudienceNum() > 0.0f) {
         audience->starPowerGain += (s32)(BattleAudience_GetPPAudienceNum() / 4.0f) + 25;
 #endif
-        if (unit->badgesEquipped.SuperAppeal) {
 #if VERSION <= VERSION_DEMO_JP
+        if (unit->badgesEquipped.SuperAppeal) {
             audience->starPowerGain += BattleAudience_GetPPAudienceNum() / 4 + 25 + unit->badgesEquipped.SuperAppeal * 25;
         } else {
             audience->starPowerGain += BattleAudience_GetPPAudienceNum() / 4 + 25;
-#else
-            audience->starPowerGain += unit->badgesEquipped.SuperAppeal * 25;
-#endif
         }
+#else
+        if (unit->badgesEquipped.SuperAppeal) {
+            audience->starPowerGain += unit->badgesEquipped.SuperAppeal * 25;
+        }
+#endif
 #if VERSION <= VERSION_DEMO_JP
         audience->numStylishCommandsThisAttack = 1;
 #endif

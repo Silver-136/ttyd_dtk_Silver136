@@ -798,17 +798,22 @@ void mot_slit(void) {
                 break;
             }
 #endif
+#if VERSION >= VERSION_US
             if (!m->controlStickSensitivity) {
                 m->baseSpeed = 0.0f;
                 marioChgPose("M_S_1");
-#if VERSION >= VERSION_US
             } else {
                 if (SPEEDCHK_COND(m)) {
                     slitSpeedDown(m);
                 }
                 m->directionView = m->controlStickAngle;
-#endif
             }
+#else
+            if (!m->controlStickSensitivity) {
+                m->baseSpeed = 0.0f;
+                marioChgPose("M_S_1");
+            }
+#endif
             if (--m->slitTimer <= 0) {
                 m->flags |= MARIO_FLAG_PAPER_MODE;
                 m->slitState = SLIT_STATE_SIDEWAYS;
@@ -1247,15 +1252,20 @@ void mot_slit(void) {
             }
 #endif
 #endif
+#if VERSION >= VERSION_US
             if (!m->controlStickSensitivity) {
                 m->baseSpeed = 0.0f;
                 marioChgPose("M_S_1");
-#if VERSION >= VERSION_US
             } else {
                 slitSpeedDown(m);
                 m->directionView = m->controlStickAngle;
-#endif
             }
+#else
+            if (!m->controlStickSensitivity) {
+                m->baseSpeed = 0.0f;
+                marioChgPose("M_S_1");
+            }
+#endif
             if (--m->slitTimer2 > 0) {
                 break;
             }
@@ -1267,7 +1277,20 @@ void mot_slit(void) {
             if (!m->controlStickSensitivity) {
                 m->baseSpeed = 0.0f;
                 marioChgPose("M_S_1");
-#elif VERSION == VERSION_EU
+            }
+#elif VERSION <= VERSION_JP
+            if (!m->controlStickSensitivity) {
+                m->baseSpeed = 0.0f;
+                marioChgPose("M_S_1");
+            }
+#elif VERSION <= VERSION_DEMO_EU
+            if (!m->controlStickSensitivity) {
+                m->baseSpeed = 0.0f;
+                marioChgPose("M_S_1");
+            } else {
+                slitSpeedDown(m);
+            }
+#else
             if (!(m->flags & MARIO_FLAG_FORCED_MOVEMENT)) {
                 if (!m->controlStickSensitivity) {
                     m->baseSpeed = 0.0f;
@@ -1275,16 +1298,8 @@ void mot_slit(void) {
                 } else {
                     slitSpeedDown(m);
                 }
-#else
-            if (!m->controlStickSensitivity) {
-                m->baseSpeed = 0.0f;
-                marioChgPose("M_S_1");
-#if VERSION >= VERSION_US
-            } else {
-                slitSpeedDown(m);
-#endif
-#endif
             }
+#endif
             m->flags &= ~MARIO_FLAG_PARTY_WALK_DISABLED;
             m->flags &= ~MARIO_FLAG_GONE_THROUGH_BARS;
             m->dispFlags &= ~(MARIO_DISP_FLAG_LEFT_ONLY | MARIO_DISP_FLAG_RIGHT_ONLY | MARIO_DISP_FLAG_SLIT);

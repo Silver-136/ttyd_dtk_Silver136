@@ -995,9 +995,9 @@ static BOOL chkCollision(f32* outY) {
             mario->hitobjStandOn = hit;
             ret = TRUE;
             *outY = oy;
-#if VERSION >= VERSION_JP
         }
     }
+#if VERSION >= VERSION_JP
     if (!ret) {
         PSVECSubtract(&mario->motPlane->tipPos, &mario->motPlane->frontPos, &dir);
         dist = PSVECMag(&dir);
@@ -1007,9 +1007,9 @@ static BOOL chkCollision(f32* outY) {
             mario->hitobjStandOn = hit;
             ret = TRUE;
             *outY = hpos.y;
-#endif
         }
     }
+#endif
     mario->hitobjHead = NULL;
     if (mario->hitobjStandOn == NULL) {
         x = mario->motPlane->frontPos.x;

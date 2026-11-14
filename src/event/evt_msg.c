@@ -567,6 +567,7 @@ void evtMsgFmtStr(char* buf, const char* name) {
             break;
         case LANGUAGE_GE:
             form = 0;
+#if VERSION >= VERSION_DEMO_EU
             if (strstr(name, "<M>") != NULL) {
                 form = 0;
             } else if (strstr(name, "<F>") != NULL) {
@@ -579,11 +580,24 @@ void evtMsgFmtStr(char* buf, const char* name) {
                 form = 4;
             } else if (strstr(name, "<NPLdie>") != NULL) {
                 form = 5;
-#if VERSION >= VERSION_DEMO_EU
             } else if (strstr(name, "<PL") != NULL) {
                 form = 6;
-#endif
             }
+#else
+            if (strstr(name, "<M>") != NULL) {
+                form = 0;
+            } else if (strstr(name, "<F>") != NULL) {
+                form = 1;
+            } else if (strstr(name, "<N>") != NULL) {
+                form = 2;
+            } else if (strstr(name, "<MPLdie>") != NULL) {
+                form = 3;
+            } else if (strstr(name, "<FPLdie>") != NULL) {
+                form = 4;
+            } else if (strstr(name, "<NPLdie>") != NULL) {
+                form = 5;
+            }
+#endif
             if ((marker = strstr(buf, "<Einen>")) != NULL) {
                 len = strlen(buf) - strlen(marker);
                 strncpy(tmp, buf, len);
@@ -626,16 +640,18 @@ void evtMsgFmtStr(char* buf, const char* name) {
                 strcat(tmp, msg_de_article_acc_tbl[form]);
                 strcat(tmp, name);
                 strcat(tmp, marker + 12);
+            }
 #if VERSION >= VERSION_DEMO_EU
-            } else if ((marker = strstr(buf, "<einem_ITEM>")) != NULL) {
+            else if ((marker = strstr(buf, "<einem_ITEM>")) != NULL) {
                 len = strlen(buf) - strlen(marker);
                 strncpy(tmp, buf, len);
                 tmp[len] = 0;
                 strcat(tmp, msg_de_article_dat_tbl[form]);
                 strcat(tmp, name);
                 strcat(tmp, marker + 12);
+            }
 #endif
-            } else if ((marker = strstr(buf, "<ITEM>")) != NULL) {
+            else if ((marker = strstr(buf, "<ITEM>")) != NULL) {
                 len = strlen(buf) - strlen(marker);
                 strncpy(tmp, buf, len);
                 tmp[len] = 0;
@@ -645,17 +661,25 @@ void evtMsgFmtStr(char* buf, const char* name) {
             break;
         case LANGUAGE_FR:
             form = 0;
+#if VERSION >= VERSION_DEMO_EU
             if (strstr(name, "<M>") != NULL) {
                 form = 0;
             } else if (strstr(name, "<F>") != NULL) {
                 form = 1;
             } else if (strstr(name, "<PLles>") != NULL) {
                 form = 2;
-#if VERSION >= VERSION_DEMO_EU
             } else if (strstr(name, "<PLdes>") != NULL) {
                 form = 3;
-#endif
             }
+#else
+            if (strstr(name, "<M>") != NULL) {
+                form = 0;
+            } else if (strstr(name, "<F>") != NULL) {
+                form = 1;
+            } else if (strstr(name, "<PLles>") != NULL) {
+                form = 2;
+            }
+#endif
             if ((marker = strstr(buf, "<un>")) != NULL) {
                 len = strlen(buf) - strlen(marker);
                 strncpy(tmp, buf, len);

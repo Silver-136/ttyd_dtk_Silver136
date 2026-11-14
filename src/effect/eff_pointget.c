@@ -328,8 +328,69 @@ static void effPointGetDisp(CameraId cameraId, EffectEntry* effect) {
             shown = TRUE;
         }
     }
+#elif VERSION <= VERSION_JP
+    base = -(362.0f + width);
+    width = 48.0f;
+    wide = 352.0f;
+    y1 = 24.0f;
+    for (pass = 1; pass >= 0; pass--) {
+        x0 = -width / 2.0f;
+        ox = (f32)(pass * 4);
+        oy = (f32)(-pass * 4);
+        if (pass != 0) {
+            effGetTexObj(texid_tbl[gp->language != LANGUAGE_JP][3], &texObj);
+            GXLoadTexObj(&texObj, GX_TEXMAP0);
+            GXSetChanMatColor(GX_COLOR0A0, (GXColor){ 0, 0, 0, 0x80 });
+        } else {
+            effGetTexObj(texid_tbl[gp->language != LANGUAGE_JP][2], &texObj);
+            GXLoadTexObj(&texObj, GX_TEXMAP0);
+            GXSetChanMatColor(GX_COLOR0A0, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
+        }
+        for (i = 0; i < strlen(buf); i++) {
+            PSMTXTrans(mtx, ox + (32.0f * (f32)i + base / 2.0f), oy, 0.0f);
+            PSMTXConcat(baseMtx, mtx, mtx);
+            GXLoadPosMtxImm(mtx, GX_PNMTX0);
+            GXSetCurrentMtx(GX_PNMTX0);
+            PSMTXScale(scaleMtx, 0.1f, 1.0f, 1.0f);
+            PSMTXTrans(mtx, (f32)((s8)buf[i] - '0'), 0.0f, 0.0f);
+            PSMTXConcat(scaleMtx, mtx, mtx);
+            GXLoadTexMtxImm(mtx, GX_TEXMTX0, GX_MTX2x4);
+            GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+            GXPosition3f32(0.0f, y1, 0.0f);
+            GXTexCoord2f32(0.0f, 0.0f);
+            GXPosition3f32(width, y1, 0.0f);
+            GXTexCoord2f32(1.0f, 0.0f);
+            GXPosition3f32(width, x0, 0.0f);
+            GXTexCoord2f32(1.0f, 1.0f);
+            GXPosition3f32(0.0f, x0, 0.0f);
+            GXTexCoord2f32(0.0f, 1.0f);
+        }
+        if (pass != 0) {
+            effGetTexObj(texid_tbl[gp->language != LANGUAGE_JP][1], &texObj);
+            GXLoadTexObj(&texObj, GX_TEXMAP0);
+            GXSetChanMatColor(GX_COLOR0A0, (GXColor){ 0, 0, 0, 0x80 });
+        } else {
+            effGetTexObj(texid_tbl[gp->language != LANGUAGE_JP][0], &texObj);
+            GXLoadTexObj(&texObj, GX_TEXMAP0);
+            GXSetChanMatColor(GX_COLOR0A0, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
+        }
+        PSMTXTrans(mtx, 10.0f + (ox + (32.0f * (f32)strlen(buf) + base / 2.0f)), oy, 0.0f);
+        PSMTXConcat(baseMtx, mtx, mtx);
+        GXLoadPosMtxImm(mtx, GX_PNMTX0);
+        GXSetCurrentMtx(GX_PNMTX0);
+        PSMTXIdentity(mtx);
+        GXLoadTexMtxImm(mtx, GX_TEXMTX0, GX_MTX2x4);
+        GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+        GXPosition3f32(0.0f, y1, 0.0f);
+        GXTexCoord2f32(0.0f, 0.0f);
+        GXPosition3f32(wide, y1, 0.0f);
+        GXTexCoord2f32(1.0f, 0.0f);
+        GXPosition3f32(wide, x0, 0.0f);
+        GXTexCoord2f32(1.0f, 1.0f);
+        GXPosition3f32(0.0f, x0, 0.0f);
+        GXTexCoord2f32(0.0f, 1.0f);
+    }
 #else
-#if VERSION >= VERSION_US
     for (pass = 1; pass >= 0; pass--) {
         ox = (f32)(pass * 4);
         oy = (f32)(-pass * 4);
@@ -401,68 +462,6 @@ static void effPointGetDisp(CameraId cameraId, EffectEntry* effect) {
                     break;
             }
         }
-#else
-    base = -(362.0f + width);
-    width = 48.0f;
-    wide = 352.0f;
-    y1 = 24.0f;
-    for (pass = 1; pass >= 0; pass--) {
-        x0 = -width / 2.0f;
-        ox = (f32)(pass * 4);
-        oy = (f32)(-pass * 4);
-        if (pass != 0) {
-            effGetTexObj(texid_tbl[gp->language != LANGUAGE_JP][3], &texObj);
-            GXLoadTexObj(&texObj, GX_TEXMAP0);
-            GXSetChanMatColor(GX_COLOR0A0, (GXColor){ 0, 0, 0, 0x80 });
-        } else {
-            effGetTexObj(texid_tbl[gp->language != LANGUAGE_JP][2], &texObj);
-            GXLoadTexObj(&texObj, GX_TEXMAP0);
-            GXSetChanMatColor(GX_COLOR0A0, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
-        }
-        for (i = 0; i < strlen(buf); i++) {
-            PSMTXTrans(mtx, ox + (32.0f * (f32)i + base / 2.0f), oy, 0.0f);
-            PSMTXConcat(baseMtx, mtx, mtx);
-            GXLoadPosMtxImm(mtx, GX_PNMTX0);
-            GXSetCurrentMtx(GX_PNMTX0);
-            PSMTXScale(scaleMtx, 0.1f, 1.0f, 1.0f);
-            PSMTXTrans(mtx, (f32)((s8)buf[i] - '0'), 0.0f, 0.0f);
-            PSMTXConcat(scaleMtx, mtx, mtx);
-            GXLoadTexMtxImm(mtx, GX_TEXMTX0, GX_MTX2x4);
-            GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-            GXPosition3f32(0.0f, y1, 0.0f);
-            GXTexCoord2f32(0.0f, 0.0f);
-            GXPosition3f32(width, y1, 0.0f);
-            GXTexCoord2f32(1.0f, 0.0f);
-            GXPosition3f32(width, x0, 0.0f);
-            GXTexCoord2f32(1.0f, 1.0f);
-            GXPosition3f32(0.0f, x0, 0.0f);
-            GXTexCoord2f32(0.0f, 1.0f);
-        }
-        if (pass != 0) {
-            effGetTexObj(texid_tbl[gp->language != LANGUAGE_JP][1], &texObj);
-            GXLoadTexObj(&texObj, GX_TEXMAP0);
-            GXSetChanMatColor(GX_COLOR0A0, (GXColor){ 0, 0, 0, 0x80 });
-        } else {
-            effGetTexObj(texid_tbl[gp->language != LANGUAGE_JP][0], &texObj);
-            GXLoadTexObj(&texObj, GX_TEXMAP0);
-            GXSetChanMatColor(GX_COLOR0A0, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
-        }
-        PSMTXTrans(mtx, 10.0f + (ox + (32.0f * (f32)strlen(buf) + base / 2.0f)), oy, 0.0f);
-        PSMTXConcat(baseMtx, mtx, mtx);
-        GXLoadPosMtxImm(mtx, GX_PNMTX0);
-        GXSetCurrentMtx(GX_PNMTX0);
-        PSMTXIdentity(mtx);
-        GXLoadTexMtxImm(mtx, GX_TEXMTX0, GX_MTX2x4);
-        GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-        GXPosition3f32(0.0f, y1, 0.0f);
-        GXTexCoord2f32(0.0f, 0.0f);
-        GXPosition3f32(wide, y1, 0.0f);
-        GXTexCoord2f32(1.0f, 0.0f);
-        GXPosition3f32(wide, x0, 0.0f);
-        GXTexCoord2f32(1.0f, 1.0f);
-        GXPosition3f32(0.0f, x0, 0.0f);
-        GXTexCoord2f32(0.0f, 1.0f);
-#endif
     }
 #endif
 }

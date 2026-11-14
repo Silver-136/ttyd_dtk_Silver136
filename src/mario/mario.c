@@ -299,13 +299,15 @@ void marioSetFamicomMode(s32 mode) {
             npcSetMarioAutoTalkPose("M_S_1", MARIO_TALK_POSE);
             wp->animName = NULL;
             marioChgPose("M_S_1");
+        }
 #if VERSION >= VERSION_JP
-        } else {
+        else {
             wp->animName = NULL;
             marioChgPose("M_S_1");
-#endif
         }
+#endif
     } else {
+#if VERSION >= VERSION_JP
         if (wp->flags & MARIO_FLAG_IS_8_BIT) {
             wp->flags &= ~MARIO_FLAG_IS_8_BIT;
             if (wp->paperAnimGroupId[0] >= 0) {
@@ -320,12 +322,27 @@ void marioSetFamicomMode(s32 mode) {
             npcSetMarioAutoTalkPose("M_S_1", MARIO_TALK_POSE);
             wp->animName = NULL;
             marioChgPose("M_S_1");
-#if VERSION >= VERSION_JP
         } else {
             wp->animName = NULL;
             marioChgPose("M_S_1");
-#endif
         }
+#else
+        if (wp->flags & MARIO_FLAG_IS_8_BIT) {
+            wp->flags &= ~MARIO_FLAG_IS_8_BIT;
+            if (wp->paperAnimGroupId[0] >= 0) {
+                animPoseRelease(wp->paperAnimGroupId[0]);
+            }
+            if (wp->paperAnimGroupId[1] >= 0) {
+                animPoseRelease(wp->paperAnimGroupId[1]);
+            }
+            wp->paperAnimGroupId[0] = animPoseEntry(marioAnimeGroupData[mp->colorId][0], 2);
+            wp->paperAnimGroupId[1] = animPoseEntry(marioAnimeGroupData[mp->colorId][1], 2);
+            wp->characterId = CHARACTER_MARIO;
+            npcSetMarioAutoTalkPose("M_S_1", MARIO_TALK_POSE);
+            wp->animName = NULL;
+            marioChgPose("M_S_1");
+        }
+#endif
     }
 }
 
@@ -1198,15 +1215,21 @@ void marioMain(void) {
 #if VERSION >= VERSION_JP
     wp->playerGravity = 1.0f;
 #endif
+#if VERSION <= VERSION_DEMO_JP
     if (!strcmp(gp->currentMapName, "moo_00") || !strcmp(gp->currentMapName, "moo_01") ||
         !strcmp(gp->currentMapName, "moo_02") || !strcmp(gp->currentMapName, "moo_05") ||
         !strcmp(gp->currentMapName, "moo_06") || !strcmp(gp->currentMapName, "moo_07")) {
         wp->playerGravity = 0.5f;
-#if VERSION <= VERSION_DEMO_JP
     } else {
         wp->playerGravity = 1.0f;
-#endif
     }
+#else
+    if (!strcmp(gp->currentMapName, "moo_00") || !strcmp(gp->currentMapName, "moo_01") ||
+        !strcmp(gp->currentMapName, "moo_02") || !strcmp(gp->currentMapName, "moo_05") ||
+        !strcmp(gp->currentMapName, "moo_06") || !strcmp(gp->currentMapName, "moo_07")) {
+        wp->playerGravity = 0.5f;
+    }
+#endif
     marioPreCamera();
     marioHitCheckWidth();
     if (wp->mutekiTimer > 0) {
@@ -1489,10 +1512,13 @@ static void marioCtrlOff2Main(void) {
         }
 #if VERSION >= VERSION_JP
         marioChkWallAround(&wp->position, 0, 0.0f, 0.0f, wp->wPlayerCollisionBox.z, wp->wPlayerCollisionBox.y);
-    } else {
-        marioChkGnd();
 #endif
     }
+#if VERSION >= VERSION_JP
+    else {
+        marioChkGnd();
+    }
+#endif
 }
 
 /**

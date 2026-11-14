@@ -674,12 +674,12 @@ static EVT_BEGIN(evt_access)
     CALL(evt_mario_key_onoff, 0)
 #if VERSION >= VERSION_JP
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_56_ROGUEPORT_STATION)
-#endif
         CALL(evt_msg_print, 0, LW(1), 0, 0)
-#if VERSION >= VERSION_JP
-        ELSE
+    ELSE
         CALL(evt_msg_print, 0, LW(2), 0, 0)
     END_IF
+#else
+    CALL(evt_msg_print, 0, LW(1), 0, 0)
 #endif
     CALL(evt_mario_key_onoff, 1)
     RETURN
@@ -868,12 +868,12 @@ EVT_END()
 EVT_BEGIN(talk_syasyou)
 #if VERSION >= VERSION_JP
     IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_ROGUEPORT, 0)
-#endif
         CALL(evt_msg_print, 0, STRING("stg6_rsh_c_14"), 0, 0)
-#if VERSION >= VERSION_JP
-        ELSE
+    ELSE
         CALL(evt_msg_print, 0, STRING("stg6_rsh_c_09_1"), 0, 0)
     END_IF
+#else
+    CALL(evt_msg_print, 0, STRING("stg6_rsh_c_14"), 0, 0)
 #endif
     RETURN
 EVT_END()

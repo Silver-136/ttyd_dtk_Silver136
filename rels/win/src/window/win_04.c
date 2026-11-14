@@ -290,13 +290,13 @@ EVT_BEGIN(meet_clouda2)
                             CALL(evt_party_get_pos, 1, LW(0), LW(1), LW(2))
                             IF_INT_GREATER_OR_EQUAL(LW(1), 50)
                                 IF_INT_LESS(LW(1), 51)
-#endif
+                                    BREAK_LOOP
+                                END_IF
+                            END_IF
+                        END_IF
+                    END_IF
+#else
                     BREAK_LOOP
-#if VERSION <= VERSION_DEMO_JP
-                END_IF
-            END_IF
-        END_IF
-    END_IF
 #endif
                 END_IF
             END_IF
@@ -370,18 +370,14 @@ EVT_BEGIN(clouda_irai)
 #if VERSION >= VERSION_JP
     BEGIN_INLINE_EVENT_GET_ID(LW(10))
         CALL(evt_party_force_reset_outofscreen, 0)
-#endif
         CALL(evt_party_stop, 0)
-#if VERSION >= VERSION_JP
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_party_move_pos2, 0, 255, LW(2), FLOAT(120.0f))
         CALL(evt_party_set_dir, 0, 90, 200)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT_GET_ID(LW(11))
         CALL(evt_party_force_reset_outofscreen, 1)
-#endif
         CALL(evt_party_stop, 1)
-#if VERSION >= VERSION_JP
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_party_move_pos2, 1, 225, LW(2), FLOAT(120.0f))
         CALL(evt_party_set_dir, 1, 90, 200)
@@ -396,6 +392,9 @@ EVT_BEGIN(clouda_irai)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
+#else
+    CALL(evt_party_stop, 0)
+    CALL(evt_party_stop, 1)
 #endif
     CALL(evt_msg_toge, MSG_TOGE_AT_POS, 350, 100, 0)
     CALL(evt_msg_print, 0, STRING("stg2_win_e05_00_03"), 0, 0)

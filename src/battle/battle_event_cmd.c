@@ -5507,12 +5507,12 @@ USER_FUNC(btlevtcmd_ACSuccessEffect) {
     h = w / 2.0f;
     if (pos.x + h > 160.0f) {
         pos.x = 160.0f - h;
-#if VERSION >= VERSION_US
     }
+#if VERSION >= VERSION_US
     if (pos.x - h < -180.0f) {
         pos.x = -180.0f + h;
-#endif
     }
+#endif
 #endif
     if (pos.y < 80.0f) {
         entry = effNiceEntry(eff, pos.x - h, 50.0f + pos.y, pos.z);

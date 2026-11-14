@@ -1048,12 +1048,12 @@ static void shipMove(void) {
         move_se_on();
     } else if (len <= 0.2f) {
         move_se_off();
-#if VERSION >= VERSION_JP
     }
+#if VERSION >= VERSION_JP
     if (marioGetPtr()->motShip->sfxId != -1) {
         psndSFX_pos(marioGetPtr()->motShip->sfxId, &m->position);
-#endif
     }
+#endif
     m->moveDist = len;
 }
 

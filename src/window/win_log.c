@@ -1191,15 +1191,13 @@ void winLogDisp(CameraId cam, void* param, s32 idx) {
     if (y + w->log.stoneWinY > -480.0f) {
         winTexInit(*w->res->data);
         winTexSet(0x24, (Vec){x + w->log.stoneWinX, y + w->log.stoneWinY, 0.0f}, (Vec){60.0f, 1.0f, 1.0f}, (GXColor){0xFF, 0xFF, 0xFF, w->log.stoneAlpha});
+#if VERSION <= VERSION_DEMO_JP
         for (i = 0; i < 7; i++) {
             Vec v = {0.0f, 0.0f, 170.0f};
             PSMTXRotRad(m1, 'x', 0.43633232f);
             PSMTXRotRad(m2, 'y', 0.017453292f * (51.42857f * i - w->log.stoneAngle));
             PSMTXMultVec(m2, &v, &v);
             PSMTXMultVec(m1, &v, &v);
-#if VERSION >= VERSION_JP
-            winKageGX(w, v.x + (x + w->log.stoneWinX), (v.y + (y + w->log.stoneWinY)) - 30.0f, v.z, 1.0f, (GXColor){0x00, 0x00, 0x00, 0x80});
-#endif
             // wk is reloaded before each position store; the three loads are in the retail code
             wk = w->log.eff[i]->userdata;
             wk->position.x = v.x + (x + w->log.stoneWinX);
@@ -1207,14 +1205,28 @@ void winLogDisp(CameraId cam, void* param, s32 idx) {
             wk->position.y = 20.0f + (v.y + (y + w->log.stoneWinY));
             wk = w->log.eff[i]->userdata;
             wk->position.z = v.z;
-#if VERSION <= VERSION_DEMO_JP
             winKageGX(w, v.x + (x + w->log.stoneWinX), (v.y + (y + w->log.stoneWinY)) - 30.0f, v.z, 1.0f, (GXColor){0x00, 0x00, 0x00, 0x80});
+        }
 #else
+        for (i = 0; i < 7; i++) {
+            Vec v = {0.0f, 0.0f, 170.0f};
+            PSMTXRotRad(m1, 'x', 0.43633232f);
+            PSMTXRotRad(m2, 'y', 0.017453292f * (51.42857f * i - w->log.stoneAngle));
+            PSMTXMultVec(m2, &v, &v);
+            PSMTXMultVec(m1, &v, &v);
+            winKageGX(w, v.x + (x + w->log.stoneWinX), (v.y + (y + w->log.stoneWinY)) - 30.0f, v.z, 1.0f, (GXColor){0x00, 0x00, 0x00, 0x80});
+            // wk is reloaded before each position store; the three loads are in the retail code
+            wk = w->log.eff[i]->userdata;
+            wk->position.x = v.x + (x + w->log.stoneWinX);
+            wk = w->log.eff[i]->userdata;
+            wk->position.y = 20.0f + (v.y + (y + w->log.stoneWinY));
+            wk = w->log.eff[i]->userdata;
+            wk->position.z = v.z;
         }
         for (i = 0; i < 7; i++) {
             effStarStoneDraw(CAMERA_2D, w->log.eff[i]);
-#endif
         }
+#endif
     }
     if (w->log.badge.x < 320.0f && w->log.badge.y > -240.0f) {
         winHakoGX(w, 0, x + w->log.badge.x, y + w->log.badge.y);
@@ -1973,24 +1985,25 @@ static void monosiri_disp(CameraId camera, void* param) {
         te = battleGetUnitMonosiriPtr(id);
 #if VERSION <= VERSION_DEMO_JP
         sprintf(buf, "%d\201D%s", enemy_monoshiri_sort_table[id], msgSearch(te->enemyTag));
-#else
+#elif VERSION <= VERSION_JP
         if (id == UNIT_DOOPLISS_CHAPTER4_FIGHT1 || id == UNIT_DOOPLISS_CHAPTER8) {
             if (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG4_14_NAME_GUESSING) {
-#if VERSION >= VERSION_US
-                sprintf(buf, gp->language != LANGUAGE_JP ? "%d. %s" : "%d\201D%s", enemy_monoshiri_sort_table[id], msgSearch("btl_un_hatena"));
-            } else {
-                sprintf(buf, gp->language != LANGUAGE_JP ? "%d. %s" : "%d\201D%s", enemy_monoshiri_sort_table[id], msgSearch("btl_un_rampell"));
-            }
-        } else {
-            sprintf(buf, gp->language != LANGUAGE_JP ? "%d. %s" : "%d\201D%s", enemy_monoshiri_sort_table[id], msgSearch(te->enemyTag));
-#else
                 sprintf(buf, "%d\201D%s", enemy_monoshiri_sort_table[id], msgSearch("btl_un_hatena"));
             } else {
                 sprintf(buf, "%d\201D%s", enemy_monoshiri_sort_table[id], msgSearch("btl_un_rampell"));
             }
         } else {
             sprintf(buf, "%d\201D%s", enemy_monoshiri_sort_table[id], msgSearch(te->enemyTag));
-#endif
+        }
+#else
+        if (id == UNIT_DOOPLISS_CHAPTER4_FIGHT1 || id == UNIT_DOOPLISS_CHAPTER8) {
+            if (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG4_14_NAME_GUESSING) {
+                sprintf(buf, gp->language != LANGUAGE_JP ? "%d. %s" : "%d\201D%s", enemy_monoshiri_sort_table[id], msgSearch("btl_un_hatena"));
+            } else {
+                sprintf(buf, gp->language != LANGUAGE_JP ? "%d. %s" : "%d\201D%s", enemy_monoshiri_sort_table[id], msgSearch("btl_un_rampell"));
+            }
+        } else {
+            sprintf(buf, gp->language != LANGUAGE_JP ? "%d. %s" : "%d\201D%s", enemy_monoshiri_sort_table[id], msgSearch(te->enemyTag));
         }
 #endif
         w = 0.75f * FontGetMessageWidth(buf);

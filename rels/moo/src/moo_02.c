@@ -175,29 +175,34 @@ static EVT_BEGIN(dokan_evt)
     CALL(evt_offscreen_get_boundingbox2, STRING("offscreen"), LW(0), LW(1), LW(2), LW(3))
     IF_INT_GREATER(LW(2), 0)
         IF_INT_GREATER(LW(3), 0)
-#endif
+            CALL(evt_img_entry, STRING("img"))
+            CALL(evt_img_set_paper, STRING("img"), STRING("OFF_d_bom_ver2"))
+            CALL(evt_img_alloc_capture, STRING("img"), 0, STRING("offscreen"), 1, 0, 0, 0, 0)
+            CALL(evt_img_clear_virtual_point, STRING("img"))
+            CALL(evt_img_set_shadow, STRING("img"), 2)
+            CALL(evt_img_set_paper_anim, STRING("img"), STRING("A_1"))
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("S_iwa_04"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_hitobj_onoff, STRING("A_iwa_04"), 1, 0)
+            CALL(evt_img_wait_animend, STRING("img"))
+            CALL(evt_img_free_capture, STRING("img"), 0)
+            CALL(evt_img_set_shadow, STRING("img"), 0)
+            CALL(evt_img_onoff, STRING("img"), 0)
+            CALL(evt_img_release, STRING("img"))
+        END_IF
+    END_IF
+#else
     CALL(evt_img_entry, STRING("img"))
     CALL(evt_img_set_paper, STRING("img"), STRING("OFF_d_bom_ver2"))
-#if VERSION >= VERSION_US
-            CALL(evt_img_alloc_capture, STRING("img"), 0, STRING("offscreen"), 1, 0, 0, 0, 0)
-#else
     CALL(evt_img_alloc_capture, STRING("img"), 0, STRING("offscreen"), 0, 0, 0, 0, 0)
-#endif
     CALL(evt_img_clear_virtual_point, STRING("img"))
     CALL(evt_img_set_shadow, STRING("img"), 2)
     CALL(evt_img_set_paper_anim, STRING("img"), STRING("A_1"))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("S_iwa_04"), MAP_OBJ_FLAG_HIDDEN)
-#if VERSION >= VERSION_US
-            CALL(evt_hitobj_onoff, STRING("A_iwa_04"), 1, 0)
-#endif
     CALL(evt_img_wait_animend, STRING("img"))
     CALL(evt_img_free_capture, STRING("img"), 0)
     CALL(evt_img_set_shadow, STRING("img"), 0)
     CALL(evt_img_onoff, STRING("img"), 0)
     CALL(evt_img_release, STRING("img"))
-#if VERSION >= VERSION_US
-        END_IF
-    END_IF
 #endif
     CALL(evt_offscreen_delete, STRING("offscreen"))
     CALL(evt_mapobj_clear_offscreen, 0, STRING("S_iwa_04"))

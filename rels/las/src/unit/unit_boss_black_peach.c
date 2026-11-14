@@ -2714,14 +2714,21 @@ EVT_BEGIN(queen_hand_big_life_check_evt)
     IF_INT_NOT_EQUAL(GW(9), -1)
         RETURN
     END_IF
+    SET_VALUE(GF(0), 0)
+    CALL(btlevtcmd_SpawnUnit, LW(0), PTR(&entry_shadow_hand_1), 0)
+    SET_VALUE(GW(8), LW(0))
+    CALL(btlevtcmd_SpawnUnit, LW(0), PTR(&entry_shadow_hand_2), 0)
+    SET_VALUE(GW(9), LW(0))
+    CALL(btlevtcmd_OffPartsAttribute, GW(8), 1, kNotTargetable)
+    CALL(btlevtcmd_OffPartsAttribute, GW(9), 1, kNotTargetable)
+    CALL(btlevtcmd_OffAttribute, GW(8), kUnitNoHpGauge)
+    CALL(btlevtcmd_OffAttribute, GW(9), kUnitNoHpGauge)
 #else
     SET_VALUE(GF(0), 1)
     IF_INT_EQUAL(GW(8), -1)
-#endif
         SET_VALUE(GF(0), 0)
         CALL(btlevtcmd_SpawnUnit, LW(0), PTR(&entry_shadow_hand_1), 0)
         SET_VALUE(GW(8), LW(0))
-#if VERSION >= VERSION_JP
         CALL(btlevtcmd_OffPartsAttribute, GW(8), 1, kNotTargetable)
         CALL(btlevtcmd_OffAttribute, GW(8), kUnitNoHpGauge)
     END_IF
@@ -2732,13 +2739,6 @@ EVT_BEGIN(queen_hand_big_life_check_evt)
         CALL(btlevtcmd_OffPartsAttribute, GW(9), 1, kNotTargetable)
         CALL(btlevtcmd_OffAttribute, GW(9), kUnitNoHpGauge)
     END_IF
-#else
-        CALL(btlevtcmd_SpawnUnit, LW(0), PTR(&entry_shadow_hand_2), 0)
-        SET_VALUE(GW(9), LW(0))
-        CALL(btlevtcmd_OffPartsAttribute, GW(8), 1, kNotTargetable)
-        CALL(btlevtcmd_OffPartsAttribute, GW(9), 1, kNotTargetable)
-        CALL(btlevtcmd_OffAttribute, GW(8), kUnitNoHpGauge)
-        CALL(btlevtcmd_OffAttribute, GW(9), kUnitNoHpGauge)
 #endif
     LOOP(0)
         IF_INT_EQUAL(GF(0), 1)
@@ -3373,13 +3373,13 @@ EVT_BEGIN(queen_attack_black_wave)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
 #if VERSION >= VERSION_JP
     IF_INT_EQUAL(LF(0), 0)
-#endif
-
         // Deal the damage, reduced by the action command defence.
         CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_peach_black_wave_attack))
-#if VERSION >= VERSION_JP
         SET_VALUE(LF(0), 1)
     END_IF
+#else
+    // Deal the damage, reduced by the action command defence.
+    CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_peach_black_wave_attack))
 #endif
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_peach_black_wave_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     LABEL(95)
@@ -3537,13 +3537,13 @@ EVT_BEGIN(queen_attack_bress1)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
 #if VERSION >= VERSION_JP
     IF_INT_EQUAL(LF(0), 0)
-#endif
-
         // Deal the damage, reduced by the action command defence.
         CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_peach_black_sigh_attack))
-#if VERSION >= VERSION_JP
         SET_VALUE(LF(0), 1)
     END_IF
+#else
+    // Deal the damage, reduced by the action command defence.
+    CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_peach_black_sigh_attack))
 #endif
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_peach_black_sigh_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     LABEL(95)
@@ -3647,13 +3647,13 @@ EVT_BEGIN(queen_attack_bress2)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
 #if VERSION >= VERSION_JP
     IF_INT_EQUAL(LF(0), 0)
-#endif
-
         // Deal the damage, reduced by the action command defence.
         CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_peach_black_temptation_attack))
-#if VERSION >= VERSION_JP
         SET_VALUE(LF(0), 1)
     END_IF
+#else
+    // Deal the damage, reduced by the action command defence.
+    CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_peach_black_temptation_attack))
 #endif
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_peach_black_temptation_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     LABEL(95)
@@ -3758,13 +3758,13 @@ EVT_BEGIN(queen_attack_bress3)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
 #if VERSION >= VERSION_JP
     IF_INT_EQUAL(LF(0), 0)
-#endif
-
         // Deal the damage, reduced by the action command defence.
         CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_peach_black_poison_attack))
-#if VERSION >= VERSION_JP
         SET_VALUE(LF(0), 1)
     END_IF
+#else
+    // Deal the damage, reduced by the action command defence.
+    CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_peach_black_poison_attack))
 #endif
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_peach_black_poison_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     LABEL(95)
@@ -3940,8 +3940,8 @@ EVT_BEGIN(queen_dead_event)
         CALL(btlevtcmd_SetAlpha, UNIT_ID_SELF, 5, 0)
         SET_VALUE(GF(0), 1)
     END_INLINE_EVENT
-    BEGIN_INLINE_EVENT
 #if VERSION >= VERSION_JP
+    BEGIN_INLINE_EVENT
         CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_BOSS_BPCH_DIE1"), LW(0), LW(1), LW(2), LW(10))
         CALL(evt_eff, STRING(""), STRING("mist"), 6, 80, 50, 20, 0, 1500, 0, 0, 0, 0, 0, 0)
@@ -3960,8 +3960,8 @@ EVT_BEGIN(queen_dead_event)
         END_LOOP
         CALL(evt_snd_sfxoff, LW(10))
     END_INLINE_EVENT
-    BEGIN_INLINE_EVENT
 #endif
+    BEGIN_INLINE_EVENT
         IF_INT_NOT_EQUAL(GW(8), -1)
 
             // The big hand is removed.

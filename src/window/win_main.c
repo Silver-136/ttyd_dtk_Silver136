@@ -233,16 +233,17 @@ void winMain(void) {
                     if (keyGetButton(0) & PAD_TRIGGER_L) {
                         break;
                     }
-#if VERSION >= VERSION_JP
 #if VERSION >= VERSION_US
                     if ((gp->flags & GW_FLAG_E3) && evtGetValue(NULL, GSW_STORY_PROGRESS) < STG0_07_GOOMBELLA_JOINS) {
                         break;
                     }
 #endif
-                } else {
-                    wp->menuSel = 0;
-#endif
                 }
+#if VERSION >= VERSION_JP
+                else {
+                    wp->menuSel = 0;
+                }
+#endif
                 camGetPtr(CAMERA_2D)->flags |= CAMERA_FLAG_LETTER_BOX_OFF;
                 if (gp->flags & GW_FLAG_E3) {
                     wp->menuSel = 1;

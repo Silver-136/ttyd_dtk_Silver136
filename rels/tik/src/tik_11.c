@@ -332,13 +332,13 @@ static EVT_BEGIN(powerdownya_mario_level_rtn)
         CALL(evt_sub_get_language, LW(15))
         SWITCH(LW(15))
             CASE_EQUAL(0)
-#endif
-            CALL(evt_msg_print_insert, 0, STRING("powerdown_06"), 0, STRING("me"), LW(2), LW(3), 39)
-#if VERSION >= VERSION_US
+                CALL(evt_msg_print_insert, 0, STRING("powerdown_06"), 0, STRING("me"), LW(2), LW(3), 39)
             CASE_DEFAULT
                 CALL(evt_msg_fmt_int, 0, LW(14), STRING("powerdown_06"), 39)
                 CALL(evt_msg_print_insert, MSG_PRINT_DIRECT_TEXT, LW(14), 0, STRING("me"), LW(2), LW(3))
         END_SWITCH
+#else
+        CALL(evt_msg_print_insert, 0, STRING("powerdown_06"), 0, STRING("me"), LW(2), LW(3), 39)
 #endif
         CALL(evt_msg_select, 0, STRING("powerdown_09"))
         IF_INT_EQUAL(LW(0), 0)
@@ -535,15 +535,15 @@ static EVT_BEGIN(powerdownya_party_lank_rtn)
     CALL(evt_pouch_get_coin, LW(0))
     IF_INT_LESS(LW(0), 39)
         CALL(evt_msg_print_add, 0, STRING("powerdown_04"))
-#if VERSION >= VERSION_JP
         RETURN
     END_IF
+#if VERSION >= VERSION_JP
     CALL(evt_win_party_lankdown_chk, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_msg_print_add, 0, STRING("powerdown_07"))
-#endif
         RETURN
     END_IF
+#endif
 
     // Mario picks the partner to rank up and the partner to rank down, and confirms the trade.
     CALL(evt_msg_continue)
@@ -566,13 +566,13 @@ static EVT_BEGIN(powerdownya_party_lank_rtn)
         CALL(evt_sub_get_language, LW(15))
         SWITCH(LW(15))
             CASE_EQUAL(0)
-#endif
-            CALL(evt_msg_print_insert, 0, STRING("powerdown_08"), 0, STRING("me"), LW(3), LW(4), 39)
-#if VERSION >= VERSION_US
+                CALL(evt_msg_print_insert, 0, STRING("powerdown_08"), 0, STRING("me"), LW(3), LW(4), 39)
             CASE_DEFAULT
                 CALL(evt_msg_fmt_int, 0, LW(14), STRING("powerdown_08"), 39)
                 CALL(evt_msg_print_insert, MSG_PRINT_DIRECT_TEXT, LW(14), 0, STRING("me"), LW(3), LW(4))
         END_SWITCH
+#else
+        CALL(evt_msg_print_insert, 0, STRING("powerdown_08"), 0, STRING("me"), LW(3), LW(4), 39)
 #endif
         CALL(evt_msg_select, 0, STRING("powerdown_09"))
         IF_INT_EQUAL(LW(0), 0)
@@ -869,13 +869,13 @@ static EVT_BEGIN(powerdownya_table_talk)
         CALL(evt_sub_get_language, LW(15))
         SWITCH(LW(15))
             CASE_EQUAL(0)
-#endif
-            CALL(evt_msg_print_insert, 0, STRING("powerdown_00"), 0, STRING("me"), 39)
-#if VERSION >= VERSION_US
+                CALL(evt_msg_print_insert, 0, STRING("powerdown_00"), 0, STRING("me"), 39)
             CASE_DEFAULT
                 CALL(evt_msg_fmt_int, 0, LW(14), STRING("powerdown_00"), 39)
                 CALL(evt_msg_print, MSG_PRINT_DIRECT_TEXT, LW(14), 0, STRING("me"))
         END_SWITCH
+#else
+        CALL(evt_msg_print_insert, 0, STRING("powerdown_00"), 0, STRING("me"), 39)
 #endif
         SET_VALUE(GSWF_TIK_11_CHET_RIPPO_FIRST_TALK_DONE, 1)
         SET_VALUE(GSWF_TIK_11_CHET_RIPPO_GREETED_VISIT, 1)

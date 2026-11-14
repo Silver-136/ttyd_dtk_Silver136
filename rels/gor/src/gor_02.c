@@ -1724,13 +1724,13 @@ static EVT_BEGIN(johoyaperfect_talk)
             CALL(evt_sub_get_language, LW(0))
             SWITCH(LW(0))
                 CASE_EQUAL(0)
-#endif
-                CALL(evt_msg_print_insert, 0, STRING("johoyaperfect_01"), 0, STRING("me"), LW(3), LW(2), LW(4))
-#if VERSION >= VERSION_US
+                    CALL(evt_msg_print_insert, 0, STRING("johoyaperfect_01"), 0, STRING("me"), LW(3), LW(2), LW(4))
                 CASE_DEFAULT
                     CALL(evt_msg_fmt_int, 0, LW(14), STRING("johoyaperfect_01"), LW(4))
                     CALL(evt_msg_print_insert, MSG_PRINT_DIRECT_TEXT, LW(14), 0, STRING("me"), LW(3), LW(2))
             END_SWITCH
+#else
+            CALL(evt_msg_print_insert, 0, STRING("johoyaperfect_01"), 0, STRING("me"), LW(3), LW(2), LW(4))
 #endif
             CALL(evt_msg_select, 0, STRING("johoyaperfect_02"))
             IF_INT_EQUAL(LW(0), 0)
@@ -1919,23 +1919,25 @@ static EVT_BEGIN(kurihakase_talk)
             END_IF
 #if VERSION <= VERSION_DEMO_JP
         CASE_LESS(STG7_03_GOLDBOB)
+            CALL(evt_pouch_check_item, ITEM_ULTRA_HAMMER, LW(0))
+            IF_INT_EQUAL(LW(0), 0)
+                CALL(evt_msg_print, 0, STRING("gor_02_026_01"), 0, STRING("me"))
+            ELSE
+                CALL(evt_msg_print, 0, STRING("gor_02_026"), 0, STRING("me"))
+            END_IF
+        CASE_LESS(STG7_04_BACK_ONLINE)
+            CALL(evt_msg_print, 0, STRING("gor_02_027"), 0, STRING("me"))
 #else
         CASE_LESS(STG7_02_MAYOR_BOB)
             IF_INT_EQUAL(GSWF_BOM_FIRST_ARRIVAL_DONE, 0)
-#endif
                 CALL(evt_pouch_check_item, ITEM_ULTRA_HAMMER, LW(0))
                 IF_INT_EQUAL(LW(0), 0)
                     CALL(evt_msg_print, 0, STRING("gor_02_026_01"), 0, STRING("me"))
                 ELSE
                     CALL(evt_msg_print, 0, STRING("gor_02_026"), 0, STRING("me"))
                 END_IF
-#if VERSION <= VERSION_DEMO_JP
-            CASE_LESS(STG7_04_BACK_ONLINE)
-#else
-                ELSE
-#endif
+            ELSE
                 CALL(evt_msg_print, 0, STRING("gor_02_027"), 0, STRING("me"))
-#if VERSION >= VERSION_JP
             END_IF
 #endif
         CASE_LESS(STG7_25_00_BOWSER_POSHLEY_HEIGHTS)
@@ -4043,31 +4045,36 @@ EVT_BEGIN(evt_door_03_roll_open)
     CALL(evt_mario_mov_pos2, 65, -55, FLOAT(120.0f))
 #if VERSION >= VERSION_JP
     IF_INT_EQUAL(GSWF_GOR_BOBBERY_DOOR_UNLOCKED, 0)
-#endif
         WAIT_MS(500)
         CALL(evt_mario_set_dir, 270, 0, 0)
         CALL(evt_mario_cancel_roll_motion)
-#if VERSION <= VERSION_DEMO_JP
-    IF_INT_EQUAL(GSWF_GOR_BOBBERY_DOOR_UNLOCKED, 0)
-#else
     END_IF
     IF_INT_EQUAL(GSWF_GOR_BOBBERY_DOOR_UNLOCKED, 0)
-#endif
         CALL(evt_npc_set_ry, STRING("サンダース"), 90)
     END_IF
+#else
+    WAIT_MS(500)
+    CALL(evt_mario_set_dir, 270, 0, 0)
+    CALL(evt_mario_cancel_roll_motion)
+    IF_INT_EQUAL(GSWF_GOR_BOBBERY_DOOR_UNLOCKED, 0)
+        CALL(evt_npc_set_ry, STRING("サンダース"), 90)
+    END_IF
+#endif
 #if VERSION >= VERSION_JP
     IF_INT_EQUAL(GSWF_GOR_BOBBERY_DOOR_UNLOCKED, 0)
-#endif
         CALL(evt_party_set_dir, 0, 270, 0)
         CALL(evt_party_set_dispdir, 0, 0)
-#if VERSION <= VERSION_DEMO_JP
-    IF_INT_EQUAL(GSWF_GOR_BOBBERY_DOOR_UNLOCKED, 0)
-#else
     END_IF
     IF_INT_EQUAL(GSWF_GOR_BOBBERY_DOOR_UNLOCKED, 0)
-#endif
         CALL(evt_msg_print, 0, STRING("mac_4_049"), 0, STRING("サンダース"))
     END_IF
+#else
+    CALL(evt_party_set_dir, 0, 270, 0)
+    CALL(evt_party_set_dispdir, 0, 0)
+    IF_INT_EQUAL(GSWF_GOR_BOBBERY_DOOR_UNLOCKED, 0)
+        CALL(evt_msg_print, 0, STRING("mac_4_049"), 0, STRING("サンダース"))
+    END_IF
+#endif
     CALL(evt_cam_ctrl_onoff, CAMERA_3D, 1)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_cam_letter_box_disable, 0)

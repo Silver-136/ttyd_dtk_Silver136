@@ -1048,19 +1048,19 @@ void yuuminigame_main_2fune(EventEntry* event, BOOL isFirstCall) {
         case 4:
             wp->subEvent = evtEntry(minigame02_end, 0, 0);
             wp->subEvent->lwData[0] = data->coins;
-#if VERSION <= VERSION_DEMO_JP
+#if VERSION >= VERSION_JP
+            if (data->result + 5 <= 0) {
+                data->result = 1;
+            } else {
+                data->result += 0x105;
+            }
+#else
             if (data->result == 0) {
                 data->result += 2;
             } else if (data->result < 0) {
-#else
-            if (data->result + 5 <= 0) {
-#endif
                 data->result = 1;
-#if VERSION >= VERSION_JP
-            } else {
-                data->result += 0x105;
-#endif
             }
+#endif
             wp->subEvent->lwData[1] = data->result;
             wp->subEvent->lwData[2] = data->monteCount;
             data->phase++;

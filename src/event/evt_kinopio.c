@@ -194,11 +194,11 @@ static USER_FUNC(paper_on) {
     EvtWord* args = event->args;
     f32 dir = evtGetFloat(event, *args++);
     MarioWork* mario = marioGetPtr();
+#if VERSION >= VERSION_JP
     if (isFirstCall) {
         marioPaperOn("p_slit");
         marioChgPose("M_S_1");
         marioChgPaper("PM_S_3A");
-#if VERSION >= VERSION_JP
         event->userdata[0] = 0;
     }
     if (event->userdata[0] < 30) {
@@ -213,8 +213,14 @@ static USER_FUNC(paper_on) {
             mario->position.z += 0.2f * (f32)sin(ang);
         }
         event->userdata[0]++;
-#endif
     }
+#else
+    if (isFirstCall) {
+        marioPaperOn("p_slit");
+        marioChgPose("M_S_1");
+        marioChgPaper("PM_S_3A");
+    }
+#endif
     mario->displayDirectionTarget = dir;
     mario->displayDirection = dir;
     return EVT_RETURN_BLOCK;

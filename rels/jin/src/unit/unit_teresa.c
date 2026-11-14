@@ -725,14 +725,14 @@ static EVT_BEGIN(move_event)
     CALL(btlevtcmd_GetSelectNextEnemy, LW(3), LW(4))
     IF_INT_NOT_EQUAL(LW(3), -1)
         GOTO(0)
-#if VERSION >= VERSION_DEMO_EU
     END_IF
+#if VERSION >= VERSION_DEMO_EU
     IF_INT_GREATER_OR_EQUAL(LW(15), 2)
         IF_INT_LESS(LW(12), 145)
             SET_VALUE(LW(12), 145)
         END_IF
-#endif
     END_IF
+#endif
     WAIT_FRAMES(LW(12))
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("S_1"))
     RETURN

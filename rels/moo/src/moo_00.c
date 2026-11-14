@@ -346,30 +346,30 @@ static EVT_BEGIN(rock_main)
     CALL(evt_offscreen_get_boundingbox2, STRING("offscreen"), LW(0), LW(1), LW(2), LW(3))
     IF_INT_GREATER(LW(2), 0)
         IF_INT_GREATER(LW(3), 0)
-#else
-    CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, LW(10), MAP_OBJ_FLAG_HIDDEN)
-#endif
-    CALL(evt_img_entry, STRING("img"))
-    CALL(evt_img_set_paper, STRING("img"), STRING("OFF_d_bom_ver2"))
-#if VERSION >= VERSION_US
+            CALL(evt_img_entry, STRING("img"))
+            CALL(evt_img_set_paper, STRING("img"), STRING("OFF_d_bom_ver2"))
             CALL(evt_img_alloc_capture, STRING("img"), 0, STRING("offscreen"), 1, 0, 0, 0, 0)
-#else
-    CALL(evt_img_alloc_capture, STRING("img"), 0, STRING("offscreen"), 0, 0, 0, 0, 0)
-#endif
-    CALL(evt_img_clear_virtual_point, STRING("img"))
-    CALL(evt_img_set_shadow, STRING("img"), 2)
-    CALL(evt_img_set_paper_anim, STRING("img"), STRING("A_1"))
-#if VERSION >= VERSION_US
+            CALL(evt_img_clear_virtual_point, STRING("img"))
+            CALL(evt_img_set_shadow, STRING("img"), 2)
+            CALL(evt_img_set_paper_anim, STRING("img"), STRING("A_1"))
             CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, LW(10), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_hitobj_onoff, LW(11), 1, 0)
-#endif
-    CALL(evt_img_wait_animend, STRING("img"))
-    CALL(evt_img_release, STRING("img"))
-#if VERSION >= VERSION_US
+            CALL(evt_img_wait_animend, STRING("img"))
+            CALL(evt_img_release, STRING("img"))
         END_IF
     END_IF
     CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, LW(10), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, LW(11), 1, 0)
+#else
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, LW(10), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_img_entry, STRING("img"))
+    CALL(evt_img_set_paper, STRING("img"), STRING("OFF_d_bom_ver2"))
+    CALL(evt_img_alloc_capture, STRING("img"), 0, STRING("offscreen"), 0, 0, 0, 0, 0)
+    CALL(evt_img_clear_virtual_point, STRING("img"))
+    CALL(evt_img_set_shadow, STRING("img"), 2)
+    CALL(evt_img_set_paper_anim, STRING("img"), STRING("A_1"))
+    CALL(evt_img_wait_animend, STRING("img"))
+    CALL(evt_img_release, STRING("img"))
 #endif
     CALL(evt_offscreen_delete, STRING("offscreen"))
     CALL(evt_mapobj_clear_offscreen, 0, LW(10))

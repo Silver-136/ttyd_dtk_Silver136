@@ -675,8 +675,8 @@ static USER_FUNC(firebar_entry) {
         if (psndSFXChk(wp->sfxId) == 0) {
             psndSFXOff(wp->sfxId);
             wp->sfxId = -1;
-#if VERSION >= VERSION_JP
         }
+#if VERSION >= VERSION_JP
         balls = wp->balls;
         for (j = 0; j < 3; j++) {
             n = (wp->count + 1) * j / 3;
@@ -684,8 +684,8 @@ static USER_FUNC(firebar_entry) {
             y = 10.0f + balls[n].pos.y;
             z = balls[n].pos.z + (rand() % 5 + 3);
             effKemuTestEntry(0, x, y, z, 1.0f);
-#endif
         }
+#endif
         ball = wp->balls;
         for (i = 0; i < wp->count; i++, ball++) {
             animPoseRelease(ball->pose);

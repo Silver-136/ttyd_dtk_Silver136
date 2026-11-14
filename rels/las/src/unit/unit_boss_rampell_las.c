@@ -855,7 +855,6 @@ static EVT_BEGIN(phase_event)
 #if VERSION >= VERSION_JP
                 CALL(mario_shadow_guard_check, LW(0))
                 IF_INT_EQUAL(LW(0), 0)
-#endif
                     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_FORM, LW(0))
                     IF_INT_EQUAL(LW(0), 0)
                         CALL(btlevtcmd_PhaseEventStartDeclare, UNIT_ID_SELF)
@@ -867,11 +866,24 @@ static EVT_BEGIN(phase_event)
                             CALL(btlevtcmd_PhaseEventStartDeclare, UNIT_ID_SELF)
                             CALL_CHILD(mutate_event)
                             CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
-#if VERSION >= VERSION_JP
                         END_IF
-#endif
                     END_IF
                 END_IF
+#else
+                CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_FORM, LW(0))
+                IF_INT_EQUAL(LW(0), 0)
+                    CALL(btlevtcmd_PhaseEventStartDeclare, UNIT_ID_SELF)
+                    CALL_CHILD(mutate_event)
+                    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
+                ELSE
+                    CALL(evt_sub_random, 10, LW(0))
+                    IF_INT_LESS(LW(0), 3)
+                        CALL(btlevtcmd_PhaseEventStartDeclare, UNIT_ID_SELF)
+                        CALL_CHILD(mutate_event)
+                        CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
+                    END_IF
+                END_IF
+#endif
             END_IF
         END_IF
     END_IF

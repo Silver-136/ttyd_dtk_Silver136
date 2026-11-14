@@ -813,19 +813,19 @@ EVT_BEGIN(evt_toile_door)
         RETURN
     END_IF
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
+        CALL(evt_mario_key_onoff, 0)
+        CALL(evt_msg_print, 0, STRING("stg3_tou_t_00"), 0, 0)
+        CALL(evt_mario_key_onoff, 1)
+        RETURN
+    END_IF
 #if VERSION >= VERSION_JP
-        CALL(evt_mario_key_onoff, 0)
-        CALL(evt_msg_print, 0, STRING("stg3_tou_t_00"), 0, 0)
-        CALL(evt_mario_key_onoff, 1)
-        RETURN
-    END_IF
     IF_INT_EQUAL(GSWF_TOU_RAWK_HAWK_OPENING_SEEN, 1)
-#endif
         CALL(evt_mario_key_onoff, 0)
         CALL(evt_msg_print, 0, STRING("stg3_tou_t_00"), 0, 0)
         CALL(evt_mario_key_onoff, 1)
         RETURN
     END_IF
+#endif
     CALL(evt_cam_letter_box_disable, 1)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)

@@ -283,15 +283,21 @@ USER_FUNC(evt_end_credit_npc_get_wait_type) {
         evtSetValue(event, args[1], 0);
         return 2;
     }
+#if VERSION >= VERSION_JP
     if (R_credits_npc_info[id].evt != NULL) {
         evtSetValue(event, args[1], 0);
-#if VERSION >= VERSION_JP
     } else if (strcmp(R_credits_npc_info[id].agb, "c_gazigazi") == 0) {
         evtSetValue(event, args[1], 2);
-#endif
     } else {
         evtSetValue(event, args[1], 1);
     }
+#else
+    if (R_credits_npc_info[id].evt != NULL) {
+        evtSetValue(event, args[1], 0);
+    } else {
+        evtSetValue(event, args[1], 1);
+    }
+#endif
     return 2;
 }
 
@@ -740,12 +746,12 @@ USER_FUNC(evt_end_credit_npc_main) {
                 actor->angle = 70.0f;
                 actor->limit = 90.0f + actor->angle + 30.0f;
                 break;
-#if VERSION >= VERSION_JP
-            }
-            if (id + 5 < ARRAY_SIZE(R_credits_npc_info)) {
-                animGroupBaseAsync(R_credits_npc_info[id + 5].agb, inBattle, NULL);
-#endif
         }
+#if VERSION >= VERSION_JP
+        if (id + 5 < ARRAY_SIZE(R_credits_npc_info)) {
+            animGroupBaseAsync(R_credits_npc_info[id + 5].agb, inBattle, NULL);
+        }
+#endif
         event->userdatap[0] = actor;
     }
     actor = event->userdatap[0];
@@ -850,16 +856,18 @@ EVT_BEGIN(end_credit_npc_parade)
         BEGIN_INLINE_EVENT
             CALL(evt_end_credit_npc_main, LW(0))
         END_INLINE_EVENT
-        IF_INT_EQUAL(LW(1), 1)
 #if VERSION <= VERSION_DEMO_JP
+        IF_INT_EQUAL(LW(1), 1)
             WAIT_MS(2000)
+        END_IF
 #else
+        IF_INT_EQUAL(LW(1), 1)
             WAIT_MS(1920)
         END_IF
         IF_INT_EQUAL(LW(1), 2)
             WAIT_MS(6000)
-#endif
         END_IF
+#endif
         ADD(LW(0), 1)
 #if VERSION <= VERSION_DEMO_JP
         IF_INT_GREATER_OR_EQUAL(LW(0), ARRAY_SIZE(R_credits_npc_info))
@@ -1832,12 +1840,12 @@ USER_FUNC(evt_end_staff_roll_msg_main) {
                     }
                     sprintf(buf1, "<clear><wait %d><dkey><wpos %d %d 400 200><col f0f0f0ff><speed 0><scale 0.8>%s</scale></speed></col><wait 500></dkey><once_stop>", 0, wx - 62, wy, msg);
 #else
-#if VERSION >= VERSION_DEMO_EU
                     }
+#if VERSION >= VERSION_DEMO_EU
                     if (strcmp(end_staff_roll_msg_tbl[idx].msg1[i], "c00") == 0) {
                         wx += 10;
-#endif
                     }
+#endif
                     sprintf(buf1, "<clear><dkey><wpos %d %d 400 200><col f0f0f0ff><speed 0><scale 0.8>%s</scale></speed></col><wait 500></dkey><once_stop>", wx - 62, wy, msg);
 #endif
                     end_wp->win1[i] = msgWindow_Entry(buf1, 0, 0);

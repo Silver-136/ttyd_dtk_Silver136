@@ -1102,10 +1102,10 @@ static EVT_BEGIN(mail_evt_gor_02_2)
 #if VERSION >= VERSION_DEMO_EU
                 CALL(evt_mario_get_motion, LW(5))
                 IF_INT_NOT_EQUAL(LW(5), 25)
-#endif
-                BREAK_LOOP
-#if VERSION >= VERSION_DEMO_EU
+                    BREAK_LOOP
                 END_IF
+#else
+                BREAK_LOOP
 #endif
             END_IF
         END_IF
@@ -1381,18 +1381,21 @@ EVT_BEGIN(evt_sub_mail_event)
         CALL_CHILD(mail_evt_gor_01)
         RETURN
     END_IF
-    IF_STR_EQUAL(LW(0), STRING("gor_04"))
 #if VERSION >= VERSION_US
+    IF_STR_EQUAL(LW(0), STRING("gor_04"))
         CALL_CHILD(mail_evt_gor_04)
         RETURN
     END_IF
     IF_STR_EQUAL(LW(0), STRING("rsh_02_a"))
         CALL_CHILD(mail_evt_rsh_03_a)
-#else
-        CALL_CHILD(mail_evt_gor_04)
-#endif
         RETURN
     END_IF
+#else
+    IF_STR_EQUAL(LW(0), STRING("gor_04"))
+        CALL_CHILD(mail_evt_gor_04)
+        RETURN
+    END_IF
+#endif
     IF_STR_EQUAL(LW(0), STRING("rsh_03_a"))
 #if VERSION >= VERSION_US
         CALL_CHILD(mail_evt_rsh_03_a_2)

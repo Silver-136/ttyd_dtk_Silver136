@@ -690,8 +690,8 @@ void partyReInit(void) {
         if (poseId >= 0) {
             animPoseSetMaterialFlagOff(poseId, -1);
             animPoseSetMaterialLightFlagOn(poseId, MATERIAL_LIGHT_CHARA);
-#if VERSION >= VERSION_JP
         }
+#if VERSION >= VERSION_JP
         party->slitOn = 0;
         if (party->paperAnimName) {
             animPoseSetPaperAnimGroup(party->paperAnimGroup, NULL, FALSE);
@@ -701,8 +701,8 @@ void partyReInit(void) {
                 animPaperPoseRelease(party->paperPoseId);
                 party->paperPoseId = -1;
             }
-#endif
         }
+#endif
         party->hitobjAction = NULL;
         party->hitobjFront = NULL;
         party->reserved_148 = 0;
@@ -732,8 +732,8 @@ void partyReInit(void) {
             if (poseId >= 0) {
                 animPoseSetMaterialFlagOff(poseId, -1);
                 animPoseSetMaterialLightFlagOn(poseId, MATERIAL_LIGHT_CHARA);
-#if VERSION >= VERSION_JP
             }
+#if VERSION >= VERSION_JP
             if (party->paperAnimName) {
                 animPoseSetPaperAnimGroup(party->paperAnimGroup, NULL, FALSE);
                 party->paperAnimName = NULL;
@@ -742,8 +742,8 @@ void partyReInit(void) {
                     animPaperPoseRelease(party->paperPoseId);
                     party->paperPoseId = -1;
                 }
-#endif
             }
+#endif
             party->hitobjAction = NULL;
             party->hitobjFront = NULL;
             party->reserved_148 = 0;
@@ -1921,14 +1921,16 @@ static void getRidePos(PartyEntry* party, Vec* pos) {
         pos->x = mario->position.x;
         pos->z = mario->position.z;
         pos->y = 40.0f + mario->position.y;
+    }
 #if VERSION >= VERSION_JP
-    } else if (mario->currMotionId == MARIO_MOTION_SHIP) {
+    else if (mario->currMotionId == MARIO_MOTION_SHIP) {
         sincosf(&s, &c, toMovedirSimple(marioShipGetDir() ? 0.0f : 180.0f));
         pos->x = mario->position.x + 22.0f * s;
         pos->z = mario->position.z + 22.0f * c;
         pos->y = mario->position.y;
+    }
 #endif
-    } else {
+    else {
         pos->x = mario->position.x;
         pos->z = mario->position.z;
         pos->y = 20.0f + mario->position.y;

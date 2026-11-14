@@ -752,15 +752,15 @@ static EVT_BEGIN(talk_murabito_e)
                 WAIT_MS(1000)
                 CALL(evt_mario_set_pose, STRING("M_S_1"))
 #if VERSION >= VERSION_US
-            IF_INT_EQUAL(LF(0), 0)
-#endif
-
+                IF_INT_EQUAL(LF(0), 0)
+                    // Mario has erased it: the villager thanks him.
+                    CALL(evt_msg_print, 0, STRING("irai_30_004"), 0, 0)
+                ELSE
+                    CALL(evt_msg_print, 0, STRING("irai_30_003_1"), 0, 0)
+                END_IF
+#else
                 // Mario has erased it: the villager thanks him.
                 CALL(evt_msg_print, 0, STRING("irai_30_004"), 0, 0)
-#if VERSION >= VERSION_US
-                ELSE
-                CALL(evt_msg_print, 0, STRING("irai_30_003_1"), 0, 0)
-            END_IF
 #endif
                 CALL(evt_pouch_get_haveitemcnt, LW(0))
                 CALL(evt_pouch_check_item, ITEM_STRANGE_SACK, LW(1))

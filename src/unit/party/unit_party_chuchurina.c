@@ -1967,11 +1967,13 @@ static EVT_BEGIN(partyChuchurinaAttack_Kiss)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     CALL(evt_btl_camera_set_zoom, 0, 250)
     CALL(btlevtcmd_GetUnitId, UNIT_ID_SELF, LW(0))
-    IF_INT_NOT_EQUAL(LW(0), LW(3))
 #if VERSION <= VERSION_DEMO_JP
+    IF_INT_NOT_EQUAL(LW(0), LW(3))
         CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
         CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
+    END_IF
 #else
+    IF_INT_NOT_EQUAL(LW(0), LW(3))
         CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
         CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
     END_IF
@@ -1979,8 +1981,8 @@ static EVT_BEGIN(partyChuchurinaAttack_Kiss)
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_CalculateFaceDirection, LW(3), LW(4), UNIT_ID_SELF, -1, FACE_DIR_TOWARD_UNIT, LW(15))
         CALL(btlevtcmd_ChangeFaceDirection, LW(3), LW(15))
-#endif
     END_IF
+#endif
 
     // Set up the alternate-A-and-B gauge command from the difficulty.
     CALL(btlevtcmd_CommandGetWeaponActionLv, LW(0))

@@ -2125,12 +2125,12 @@ EVT_BEGIN(evt_tou_match_make_default_sub)
             ELSE
 #if VERSION >= VERSION_DEMO_EU
                 IF_INT_EQUAL(LF(3), 0)
-#endif
-                CALL(evt_msg_print_insert, 0, STRING("stg3_tou_107_00"), 0, STRING("ガンス"), LW(3), LW(1))
-#if VERSION >= VERSION_DEMO_EU
+                    CALL(evt_msg_print_insert, 0, STRING("stg3_tou_107_00"), 0, STRING("ガンス"), LW(3), LW(1))
                 ELSE
                     CALL(evt_msg_print_insert, 0, STRING("stg3_tou_107_00"), 0, STRING("ガンス"), LW(1), LW(3))
                 END_IF
+#else
+                CALL(evt_msg_print_insert, 0, STRING("stg3_tou_107_00"), 0, STRING("ガンス"), LW(3), LW(1))
 #endif
             END_IF
             ELSE
@@ -2139,12 +2139,12 @@ EVT_BEGIN(evt_tou_match_make_default_sub)
             ELSE
 #if VERSION >= VERSION_DEMO_EU
                 IF_INT_EQUAL(LF(3), 0)
-#endif
-                CALL(evt_msg_print_insert, 0, STRING("stg3_tou_re_361"), 0, STRING("キノシコワ"), LW(3), LW(1))
-#if VERSION >= VERSION_DEMO_EU
+                    CALL(evt_msg_print_insert, 0, STRING("stg3_tou_re_361"), 0, STRING("キノシコワ"), LW(3), LW(1))
                 ELSE
                     CALL(evt_msg_print_insert, 0, STRING("stg3_tou_re_361"), 0, STRING("キノシコワ"), LW(1), LW(3))
                 END_IF
+#else
+                CALL(evt_msg_print_insert, 0, STRING("stg3_tou_re_361"), 0, STRING("キノシコワ"), LW(3), LW(1))
 #endif
             END_IF
         END_IF
@@ -2163,25 +2163,27 @@ EVT_BEGIN(evt_tou_match_make_default_sub)
         SET_VALUE(GSW_GLITZ_PIT_OPPONENT, LW(0))
         CALL(evt_tou_get_fighter_info, LW(0), LW(1), LW(2))
         CALL(evt_tou_get_fighter_rank, LW(0), LW(3))
+#if VERSION >= VERSION_DEMO_EU
         IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
-#if VERSION >= VERSION_DEMO_EU
             IF_INT_EQUAL(LF(3), 0)
-#endif
-            CALL(evt_msg_print_insert, 0, STRING("stg3_tou_107_00"), 0, STRING("ガンス"), LW(3), LW(1))
+                CALL(evt_msg_print_insert, 0, STRING("stg3_tou_107_00"), 0, STRING("ガンス"), LW(3), LW(1))
             ELSE
-#if VERSION >= VERSION_DEMO_EU
                 CALL(evt_msg_print_insert, 0, STRING("stg3_tou_107_00"), 0, STRING("ガンス"), LW(1), LW(3))
             END_IF
         ELSE
             IF_INT_EQUAL(LF(3), 0)
-#endif
-            CALL(evt_msg_print_insert, 0, STRING("stg3_tou_re_361"), 0, STRING("キノシコワ"), LW(3), LW(1))
-#if VERSION >= VERSION_DEMO_EU
+                CALL(evt_msg_print_insert, 0, STRING("stg3_tou_re_361"), 0, STRING("キノシコワ"), LW(3), LW(1))
             ELSE
                 CALL(evt_msg_print_insert, 0, STRING("stg3_tou_re_361"), 0, STRING("キノシコワ"), LW(1), LW(3))
             END_IF
-#endif
         END_IF
+#else
+        IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
+            CALL(evt_msg_print_insert, 0, STRING("stg3_tou_107_00"), 0, STRING("ガンス"), LW(3), LW(1))
+        ELSE
+            CALL(evt_msg_print_insert, 0, STRING("stg3_tou_re_361"), 0, STRING("キノシコワ"), LW(3), LW(1))
+        END_IF
+#endif
     END_IF
 
     // The special condition for this match is read out and stored for the battle.

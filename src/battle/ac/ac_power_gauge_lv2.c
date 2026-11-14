@@ -150,14 +150,14 @@ s32 battleAcMain_PowerGaugeLv2(BattleWork* work) {
             ac->outputParams[0] = (s32)(g->gauge * (f32)ac->params[3] / 100.0f);
             if (ac->outputParams[0] >= ac->params[3]) {
                 ac->outputParams[0] = ac->params[3] - 1;
-#if VERSION >= VERSION_JP
             }
+#if VERSION >= VERSION_JP
             if (!(ac->acFlags & AC_POWER_GAUGE_LV2_FLAG_NO_FULL_BONUS_UNUSED)) {
                 if (g->gauge >= 100.0f) {
                     ac->outputParams[0]++;
                 }
-#endif
             }
+#endif
             break;
         case AC_STATE_RUN + 1:
             ac->setupParam--;

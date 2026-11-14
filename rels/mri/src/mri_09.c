@@ -287,17 +287,17 @@ static EVT_BEGIN(wall_roll)
 EVT_END()
 
 static EVT_BEGIN(breakyuka_init)
-#if VERSION <= VERSION_DEMO_JP
-    IF_INT_EQUAL(GSWF_MRI_09_BREAKING_FLOOR_BROKEN, 1)
-#else
-    IF_INT_EQUAL(GSWF_MRI_09_BREAKING_FLOOR_BROKEN, 0)
-#endif
-        CALL(evt_hitobj_onoff, STRING("A_f2_rak_02"), 1, 0)
 #if VERSION >= VERSION_JP
-        ELSE
+    IF_INT_EQUAL(GSWF_MRI_09_BREAKING_FLOOR_BROKEN, 0)
+        CALL(evt_hitobj_onoff, STRING("A_f2_rak_02"), 1, 0)
+    ELSE
         CALL(evt_hitobj_onoff, STRING("A_f2_rak_02"), 1, 1)
-#endif
     END_IF
+#else
+    IF_INT_EQUAL(GSWF_MRI_09_BREAKING_FLOOR_BROKEN, 1)
+        CALL(evt_hitobj_onoff, STRING("A_f2_rak_02"), 1, 0)
+    END_IF
+#endif
     RETURN
 EVT_END()
 

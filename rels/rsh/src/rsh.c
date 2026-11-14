@@ -481,15 +481,15 @@ EVT_BEGIN(evt_rsh_door_open)
             END_IF
             IF_INT_EQUAL(GSWF_RSH_GHOST_APPEARED, 1)
                 CALL(evt_snd_bgmoff, PSND_SILENT)
-#if VERSION >= VERSION_DEMO_EU
             END_IF
+#if VERSION >= VERSION_DEMO_EU
             IF_INT_EQUAL(GSW_STORY_PROGRESS, STG6_25_ZIP_TOAD_APPEARS)
                 CALL(evt_npc_check, STRING("トロン"), LW(10))
                 IF_INT_EQUAL(LW(10), 1)
                     CALL(evt_npc_flag_onoff, 1, STRING("トロン"), NPC_FLAG_NO_HIT)
                 END_IF
-#endif
             END_IF
+#endif
             SET_VALUE(GSWF_RSH_02_IN_ROOM_4, 1)
         END_IF
     END_IF
@@ -592,18 +592,26 @@ EVT_BEGIN(evt_rsh_door_close)
             SET_VALUE(LF(0), 1)
         END_IF
 #endif
-        IF_STR_EQUAL(LW(10), STRING("rsh_02_c"))
 #if VERSION >= VERSION_JP
+        IF_STR_EQUAL(LW(10), STRING("rsh_02_c"))
             SET_VALUE(LF(0), 1)
         END_IF
         IF_INT_EQUAL(LF(0), 1)
-#endif
             IF_STR_EQUAL(LW(1), STRING("heya_4"))
                 IF_INT_EQUAL(GSWF_RSH_GHOST_APPEARED, 1)
                     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
                 END_IF
             END_IF
         END_IF
+#else
+        IF_STR_EQUAL(LW(10), STRING("rsh_02_c"))
+            IF_STR_EQUAL(LW(1), STRING("heya_4"))
+                IF_INT_EQUAL(GSWF_RSH_GHOST_APPEARED, 1)
+                    CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
+                END_IF
+            END_IF
+        END_IF
+#endif
     END_INLINE_EVENT
 
     // Remember that Mario is no longer inside a cabin.
@@ -648,15 +656,23 @@ EVT_BEGIN(evt_rsh_door_close)
 #if VERSION <= VERSION_DEMO_JP
     CALL(evt_img_wait_animend, STRING("capture_img"))
     CALL(evt_img_onoff, STRING("capture_img"), 0)
+    CALL(evt_mapobj_clear_offscreen, 1, STRING("rouka"))
+    CALL(evt_mapobj_clear_offscreen, 1, LW(1))
+    CALL(evt_mapobj_clear_offscreen, 1, LW(2))
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("rouka"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_npc_check, STRING("車掌"), LW(0))
+    IF_INT_EQUAL(LW(0), 1)
+        CALL(evt_npc_flag_onoff, 0, STRING("車掌"), NPC_FLAG_NO_DRAW)
+    END_IF
+    IF_INT_EQUAL(LW(0), 1)
+        CALL(evt_npc_set_offscreen, STRING("車掌"), 0)
+    END_IF
+    CALL_CHILD(simi_check)
 #else
     BEGIN_INLINE_EVENT
-#endif
         CALL(evt_mapobj_clear_offscreen, 1, STRING("rouka"))
         CALL(evt_mapobj_clear_offscreen, 1, LW(1))
         CALL(evt_mapobj_clear_offscreen, 1, LW(2))
-#if VERSION <= VERSION_DEMO_JP
-        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("rouka"), MAP_OBJ_FLAG_HIDDEN)
-#endif
         CALL(evt_npc_check, STRING("車掌"), LW(0))
         IF_INT_EQUAL(LW(0), 1)
             CALL(evt_npc_flag_onoff, 0, STRING("車掌"), NPC_FLAG_NO_DRAW)
@@ -664,9 +680,6 @@ EVT_BEGIN(evt_rsh_door_close)
         IF_INT_EQUAL(LW(0), 1)
             CALL(evt_npc_set_offscreen, STRING("車掌"), 0)
         END_IF
-#if VERSION <= VERSION_DEMO_JP
-    CALL_CHILD(simi_check)
-#else
     END_INLINE_EVENT
     CALL(evt_img_wait_animend, STRING("capture_img"))
     CALL(evt_img_onoff, STRING("capture_img"), 0)

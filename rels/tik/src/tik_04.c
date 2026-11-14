@@ -73,11 +73,11 @@ static BeroEntry bero_entry_data[] = {
         NULL, // exitEvent
         "tik_03", // nextMapName
         "s_bero_1", // nextBeroName
-#if VERSION <= VERSION_DEMO_JP
         1, // enterAnimeType
         1, // exitAnimeType
         0, 0, // enterAnimeArg..exitAnimeArg
     },
+#if VERSION <= VERSION_DEMO_JP
     {
         "n_bero_2", // hitName
         0, 0, // type..sfxId
@@ -122,11 +122,11 @@ static BeroEntry bero_entry_data[] = {
         NULL, // exitEvent
         "tik_03", // nextMapName
         "s_bero_4", // nextBeroName
-#endif
         1, // enterAnimeType
         1, // exitAnimeType
         0, 0, // enterAnimeArg..exitAnimeArg
     },
+#endif
     {
         "n_bero_5", // hitName
         0, 0, // type..sfxId

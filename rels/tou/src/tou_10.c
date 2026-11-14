@@ -833,13 +833,13 @@ static EVT_BEGIN(evt_saisyo_after)
         CALL(evt_sub_get_language, LW(15))
         SWITCH(LW(15))
             CASE_EQUAL(0)
-#endif
-            CALL(evt_msg_print_insert, 0, STRING("stg3_tou_91"), 0, 0, 3)
-#if VERSION >= VERSION_US
+                CALL(evt_msg_print_insert, 0, STRING("stg3_tou_91"), 0, 0, 3)
             CASE_DEFAULT
                 CALL(evt_msg_fmt_int, 0, LW(14), STRING("stg3_tou_91"), 3)
                 CALL(evt_msg_print, MSG_PRINT_DIRECT_TEXT, LW(14), 0, 0)
         END_SWITCH
+#else
+        CALL(evt_msg_print_insert, 0, STRING("stg3_tou_91"), 0, 0, 3)
 #endif
         CALL_CHILD(evt_tou_ranking_msg)
         CALL(evt_pouch_add_coin, 3)
@@ -873,13 +873,13 @@ static EVT_BEGIN(evt_saisyo_after)
         CALL(evt_sub_get_language, LW(15))
         SWITCH(LW(15))
             CASE_EQUAL(0)
-#endif
-            CALL(evt_msg_print_insert, 0, STRING("stg3_tou_93_3"), 0, 0, 1)
-#if VERSION >= VERSION_US
+                CALL(evt_msg_print_insert, 0, STRING("stg3_tou_93_3"), 0, 0, 1)
             CASE_DEFAULT
                 CALL(evt_msg_fmt_int, 0, LW(14), STRING("stg3_tou_93_3"), 1)
                 CALL(evt_msg_print, MSG_PRINT_DIRECT_TEXT, LW(14), 0, 0)
         END_SWITCH
+#else
+        CALL(evt_msg_print_insert, 0, STRING("stg3_tou_93_3"), 0, 0, 1)
 #endif
         CALL_CHILD(evt_tou_ranking_msg)
         CALL(evt_pouch_add_coin, 1)
@@ -1029,13 +1029,13 @@ static EVT_BEGIN(evt_saisyo_after_re)
         CALL(evt_sub_get_language, LW(15))
         SWITCH(LW(15))
             CASE_EQUAL(0)
-#endif
-            CALL(evt_msg_print_insert, 0, STRING("stg3_tou_re_030"), 0, 0, 3)
-#if VERSION >= VERSION_US
+                CALL(evt_msg_print_insert, 0, STRING("stg3_tou_re_030"), 0, 0, 3)
             CASE_DEFAULT
                 CALL(evt_msg_fmt_int, 0, LW(14), STRING("stg3_tou_re_030"), 3)
                 CALL(evt_msg_print, MSG_PRINT_DIRECT_TEXT, LW(14), 0, 0)
         END_SWITCH
+#else
+        CALL(evt_msg_print_insert, 0, STRING("stg3_tou_re_030"), 0, 0, 3)
 #endif
         CALL_CHILD(evt_tou_ranking_msg)
         CALL(evt_pouch_add_coin, 3)
@@ -1065,13 +1065,13 @@ static EVT_BEGIN(evt_saisyo_after_re)
         CALL(evt_sub_get_language, LW(15))
         SWITCH(LW(15))
             CASE_EQUAL(0)
-#endif
-            CALL(evt_msg_print_insert, 0, STRING("stg3_tou_re_034"), 0, 0, 1)
-#if VERSION >= VERSION_US
+                CALL(evt_msg_print_insert, 0, STRING("stg3_tou_re_034"), 0, 0, 1)
             CASE_DEFAULT
                 CALL(evt_msg_fmt_int, 0, LW(14), STRING("stg3_tou_re_034"), 1)
                 CALL(evt_msg_print, MSG_PRINT_DIRECT_TEXT, LW(14), 0, 0)
         END_SWITCH
+#else
+        CALL(evt_msg_print_insert, 0, STRING("stg3_tou_re_034"), 0, 0, 1)
 #endif
         CALL_CHILD(evt_tou_ranking_msg)
         CALL(evt_pouch_add_coin, 1)
@@ -1291,13 +1291,13 @@ static EVT_BEGIN(evt_1st_leagu)
     CALL(evt_sub_get_language, LW(15))
     SWITCH(LW(15))
         CASE_EQUAL(0)
-#endif
-        CALL(evt_msg_print_insert, 0, STRING("stg3_tou_179_01"), 0, STRING("キノシコワ"), LW(10))
-#if VERSION >= VERSION_US
+            CALL(evt_msg_print_insert, 0, STRING("stg3_tou_179_01"), 0, STRING("キノシコワ"), LW(10))
         CASE_DEFAULT
             CALL(evt_msg_fmt_int, 0, LW(14), STRING("stg3_tou_179_01"), LW(10))
             CALL(evt_msg_print, MSG_PRINT_DIRECT_TEXT, LW(14), 0, STRING("キノシコワ"))
     END_SWITCH
+#else
+    CALL(evt_msg_print_insert, 0, STRING("stg3_tou_179_01"), 0, STRING("キノシコワ"), LW(10))
 #endif
     CALL_CHILD(evt_tou_ranking_msg)
     CALL(evt_pouch_add_coin, LW(10))
@@ -1365,13 +1365,13 @@ static EVT_BEGIN(evt_1st_leagu_re)
     CALL(evt_sub_get_language, LW(15))
     SWITCH(LW(15))
         CASE_EQUAL(0)
-#endif
-        CALL(evt_msg_print_insert, 0, STRING("stg3_tou_179_01"), 0, 0, LW(10))
-#if VERSION >= VERSION_US
+            CALL(evt_msg_print_insert, 0, STRING("stg3_tou_179_01"), 0, 0, LW(10))
         CASE_DEFAULT
             CALL(evt_msg_fmt_int, 0, LW(14), STRING("stg3_tou_179_01"), LW(10))
             CALL(evt_msg_print, MSG_PRINT_DIRECT_TEXT, LW(14), 0, 0)
     END_SWITCH
+#else
+    CALL(evt_msg_print_insert, 0, STRING("stg3_tou_179_01"), 0, 0, LW(10))
 #endif
     CALL_CHILD(evt_tou_ranking_msg)
     CALL(evt_pouch_add_coin, LW(10))

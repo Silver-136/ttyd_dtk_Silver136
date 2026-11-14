@@ -680,11 +680,11 @@ EVT_BEGIN(muj_02_init_evt)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG5_43_X_NAUTS_RETREAT)
         SET_VALUE(LW(0), PTR(tree_tbl_treeb_evt))
     ELSE
-#endif
-    SET_VALUE(LW(0), PTR(tree_tbl))
-#if VERSION >= VERSION_US
+        SET_VALUE(LW(0), PTR(tree_tbl))
         SET_VALUE(GSWF_MUJ_02_KEEL_MANGO_TREE, 1)
     END_IF
+#else
+    SET_VALUE(LW(0), PTR(tree_tbl))
 #endif
     CALL_CHILD(evt_sub_tree_access_entry)
     SET_VALUE(LW(0), PTR(kusa_tbl))

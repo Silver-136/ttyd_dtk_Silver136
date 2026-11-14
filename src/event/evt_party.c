@@ -173,15 +173,15 @@ USER_FUNC(evt_party_force_reset_outofscreen) {
         pos2 = p->position;
         marioGetScreenPos(pos2, &sx, &sy, &sz);
         if (marioChkInScreen((s32)sx, (s32)sy)) {
-#if VERSION >= VERSION_DEMO_EU
             break;
         }
+#if VERSION >= VERSION_DEMO_EU
         marioPos = ((MarioWork*)mario)->position;
         marioGetScreenPos(marioPos, &sx, &sy, &sz);
         if (!marioChkInScreen((s32)sx, (s32)sy)) {
-#endif
             break;
         }
+#endif
         ang = angleABf(p->position.x, p->position.z, mario->position.x, mario->position.z);
         movePos(&p->position.x, &p->position.z, 1.0f, ang);
         h = 100.0f;

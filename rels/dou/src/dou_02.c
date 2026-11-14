@@ -142,10 +142,10 @@ static EVT_BEGIN(yari_trap_sub)
         IF_INT_EQUAL(LW(0), 50)
             WAIT_MS(2800)
         ELSE
-#endif
-        WAIT_MS(2500)
-#if VERSION >= VERSION_DEMO_EU
+            WAIT_MS(2500)
         END_IF
+#else
+        WAIT_MS(2500)
 #endif
         IF_INT_EQUAL(GW(15), 2)
             BREAK_LOOP

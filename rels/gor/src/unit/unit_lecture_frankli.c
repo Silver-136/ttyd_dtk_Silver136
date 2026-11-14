@@ -848,7 +848,6 @@ EVT_BEGIN(lecAttackEvent_Hammer)
                     IS_EVENT_RUNNING(LW(15), LW(0))
                     IF_INT_EQUAL(LW(0), 0)
                     ELSE
-#endif
                         SUSPEND_EVENT(LW(15))
                         CALL(btlevtcmd_AcSetParam, 2, 1)
                         CALL(btlevtcmd_SetTalkPose, UNIT_ID_LECTURE, STRING("T_1"))
@@ -862,14 +861,28 @@ EVT_BEGIN(lecAttackEvent_Hammer)
                             WAIT_FRAMES(1)
                             GOTO(6)
                         END_IF
-#if VERSION >= VERSION_JP
                         WAIT_MS(200)
-#endif
                         CALL(evt_msg_continue)
                         CALL(btlevtcmd_AcSetParam, 2, 0)
                         RESUME_EVENT(LW(15))
-#if VERSION >= VERSION_JP
                     END_IF
+#else
+                    SUSPEND_EVENT(LW(15))
+                    CALL(btlevtcmd_AcSetParam, 2, 1)
+                    CALL(btlevtcmd_SetTalkPose, UNIT_ID_LECTURE, STRING("T_1"))
+                    CALL(btlevtcmd_SetStayPose, UNIT_ID_LECTURE, STRING("S_1"))
+
+                    // Frankly tells him to keep holding the stick.
+                    CALL(evt_msg_print, MSG_PRINT_BATTLE_UNIT, STRING("mac_0_b_t2_009"), 0, -6)
+                    LABEL(6)
+                    CALL(btlevtcmd_PadCheckNow, 0, 262144, LW(0))
+                    IF_INT_EQUAL(LW(0), 0)
+                        WAIT_FRAMES(1)
+                        GOTO(6)
+                    END_IF
+                    CALL(evt_msg_continue)
+                    CALL(btlevtcmd_AcSetParam, 2, 0)
+                    RESUME_EVENT(LW(15))
 #endif
                 END_IF
                 WAIT_FRAMES(1)

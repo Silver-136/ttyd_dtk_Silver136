@@ -541,20 +541,26 @@ void vivian_use(PartyEntry* party) {
     s = party->trailPos;
 #endif
     // stores NULL into an already NULL rippleEffect (the store is in the retail code)
+#if VERSION <= VERSION_DEMO_JP
     if (party->work.vivian.rippleEffect == NULL) {
         party->work.vivian.rippleEffect = NULL;
     } else if (party->work.vivian.rippleEffect->flags == 0) {
         party->work.vivian.rippleEffect = NULL;
     } else {
-#if VERSION <= VERSION_DEMO_JP
         effRippleSetPosition(party->work.vivian.rippleEffect, p->position.x, 1.5f + p->position.y, p->position.z);
     }
     if (party->useMotionId >= 4) {
         party->trailPos = m->position;
-#else
-        effRippleSetPosition(party->work.vivian.rippleEffect, s.x, 1.5f + s.y, s.z);
-#endif
     }
+#else
+    if (party->work.vivian.rippleEffect == NULL) {
+        party->work.vivian.rippleEffect = NULL;
+    } else if (party->work.vivian.rippleEffect->flags == 0) {
+        party->work.vivian.rippleEffect = NULL;
+    } else {
+        effRippleSetPosition(party->work.vivian.rippleEffect, s.x, 1.5f + s.y, s.z);
+    }
+#endif
 
     switch (party->useMotionId) {
         case 20:

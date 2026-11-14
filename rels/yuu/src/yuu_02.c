@@ -603,19 +603,19 @@ void yuuminigame_main_3roll(EventEntry* event, BOOL isFirstCall) {
         case 4:
             wp->subEvent = evtEntry(minigame03_end, 0, 0);
             wp->subEvent->lwData[0] = data->coins;
-#if VERSION <= VERSION_DEMO_JP
+#if VERSION >= VERSION_JP
+            if (data->result + 5 <= 0) {
+                data->result = 1;
+            } else {
+                data->result += 261;
+            }
+#else
             if (data->result == 0) {
                 data->result += 2;
             } else if (data->result < 0) {
-#else
-            if (data->result + 5 <= 0) {
-#endif
                 data->result = 1;
-#if VERSION >= VERSION_JP
-            } else {
-                data->result += 261;
-#endif
             }
+#endif
             wp->subEvent->lwData[1] = data->result;
             wp->subEvent->lwData[2] = data->monteCount;
             data->phase++;
@@ -661,12 +661,15 @@ BOOL yuuminigame3_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp
         data->result--;
     }
     if (!(data->flags & 2)) {
-        if (mario->position.z * fukkipoint[data->index + 1].z >= 0.0f && mario->position.y >= fukkipoint[data->index + 1].y - 1.0f) {
 #if VERSION <= VERSION_DEMO_JP
+        if (mario->position.z * fukkipoint[data->index + 1].z >= 0.0f && mario->position.y >= fukkipoint[data->index + 1].y - 1.0f) {
             if ((data->pos.x < fukkipoint[data->index + 1].x && mario->position.x >= fukkipoint[data->index + 1].x) ||
                 (data->pos.x > fukkipoint[data->index + 1].x && mario->position.x <= fukkipoint[data->index + 1].x)) {
                 data->index++;
+            }
+        }
 #else
+        if (mario->position.z * fukkipoint[data->index + 1].z >= 0.0f && mario->position.y >= fukkipoint[data->index + 1].y - 1.0f) {
             if ((mario->position.z >= 0.0f && data->pos.x < fukkipoint[data->index + 1].x && mario->position.x >= fukkipoint[data->index + 1].x) ||
                 (mario->position.z < 0.0f && data->pos.x > fukkipoint[data->index + 1].x && mario->position.x <= fukkipoint[data->index + 1].x)) {
                 if (data->index < 14) {
@@ -682,9 +685,9 @@ BOOL yuuminigame3_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp
                     data->index--;
                 }
                 icon_monte_p->hidden = 0;
-#endif
             }
         }
+#endif
         data->pos = mario->position;
         if (yuucounter_get_data() < 0 || data->index >= 13) {
             data->coins = yuucounter_get_data();

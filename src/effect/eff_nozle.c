@@ -672,15 +672,21 @@ static void effNozleMain(EffectEntry* effect) {
         work->alpha = work->life * 16;
     }
     work->timer++;
+#if VERSION >= VERSION_JP
     if (work->life < 0) {
         effDelete(effect);
-#if VERSION >= VERSION_JP
     } else if (type == 3) {
         dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_CUSTOM_MID, (DispCallback)effNozleDisp, effect);
-#endif
     } else {
         dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effNozleDisp, effect);
     }
+#else
+    if (work->life < 0) {
+        effDelete(effect);
+    } else {
+        dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effNozleDisp, effect);
+    }
+#endif
 }
 
 /** Draws the nozzle from its display lists with indexed vertex arrays (effect textures 60-62). */

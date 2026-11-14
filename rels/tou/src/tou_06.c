@@ -703,14 +703,12 @@ EVT_BEGIN(tou_06_init_evt)
         CALL(evt_party_set_pos, 0, 125, 100, -30)
         CALL(evt_mario_cont_onoff, 0)
         CALL(evt_party_cont_onoff, 0, 0)
+#if VERSION >= VERSION_DEMO_EU
         BEGIN_INLINE_EVENT
             CALL(evt_seq_wait, SEQ_GAME)
             CALL(evt_mario_cont_onoff, 1)
-#if VERSION >= VERSION_DEMO_EU
             CALL(evt_party_cont_onoff, 0, 1)
-#endif
             CALL(evt_mario_wait_landon)
-#if VERSION >= VERSION_DEMO_EU
             LOOP(30)
                 CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
                 CALL(evt_party_get_pos, 0, LW(3), LW(4), LW(5))
@@ -723,18 +721,23 @@ EVT_BEGIN(tou_06_init_evt)
                 END_IF
                 WAIT_FRAMES(1)
             END_LOOP
-#endif
             CALL(evt_mario_key_onoff, 1)
             CALL(evt_mario_cam_on)
-#if VERSION >= VERSION_DEMO_EU
             CALL(evt_cam_letter_box_disable, 0)
+        END_INLINE_EVENT
 #else
+        BEGIN_INLINE_EVENT
+            CALL(evt_seq_wait, SEQ_GAME)
+            CALL(evt_mario_cont_onoff, 1)
+            CALL(evt_mario_wait_landon)
+            CALL(evt_mario_key_onoff, 1)
+            CALL(evt_mario_cam_on)
         END_INLINE_EVENT
         BEGIN_INLINE_EVENT
             CALL(evt_seq_wait, SEQ_GAME)
             CALL(evt_party_cont_onoff, 0, 1)
-#endif
         END_INLINE_EVENT
+#endif
     END_IF
 
     // Animate the flies over the garbage; retail sets up Trouble Center job 13 here, demos do so below.

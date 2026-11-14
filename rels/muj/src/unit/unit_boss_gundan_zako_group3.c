@@ -380,7 +380,6 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_CheckActStatus, LW(5), LW(12))
     IF_INT_NOT_EQUAL(LW(12), 0)
         CALL(zakogun_get_kanbu_id_evtcmd, LW(5))
-#endif
         BEGIN_SIBLING_EVENT_GET_ID(LW(15))
             WAIT_FRAMES(10)
             CALL(btlevtcmd_AnimeChangePose, LW(5), 1, STRING("W_1"))
@@ -389,8 +388,16 @@ static EVT_BEGIN(attack_event)
             CALL(btlevtcmd_MovePosition, LW(5), LW(0), LW(1), LW(2), 60, MOVE_SOUND_FROM_TABLE, 0)
             CALL(btlevtcmd_AnimeChangePose, LW(5), 1, STRING("S_1"))
         END_SIBLING_EVENT
-#if VERSION >= VERSION_JP
     END_IF
+#else
+    BEGIN_SIBLING_EVENT_GET_ID(LW(15))
+        WAIT_FRAMES(10)
+        CALL(btlevtcmd_AnimeChangePose, LW(5), 1, STRING("W_1"))
+        CALL(btlevtcmd_GetPos, LW(5), LW(0), LW(1), LW(2))
+        CALL(btlevtcmd_FaceDirectionSub, LW(5), LW(0), 50)
+        CALL(btlevtcmd_MovePosition, LW(5), LW(0), LW(1), LW(2), 60, MOVE_SOUND_FROM_TABLE, 0)
+        CALL(btlevtcmd_AnimeChangePose, LW(5), 1, STRING("S_1"))
+    END_SIBLING_EVENT
 #endif
     BEGIN_SIBLING_EVENT
         WAIT_FRAMES(32)
@@ -399,7 +406,6 @@ static EVT_BEGIN(attack_event)
     CALL(zakogun_attack3_1)
 #if VERSION >= VERSION_JP
     IF_INT_NOT_EQUAL(LW(12), 0)
-#endif
         DELETE_EVENT(LW(15))
         CALL(btlevtcmd_AnimeChangePose, LW(5), 1, STRING("A_1A"))
         CALL(btlevtcmd_snd_se, LW(5), STRING("SFX_BOSS_KANBU_JUMP1"), EVT_NULLPTR, 0, LW(13))
@@ -407,14 +413,20 @@ static EVT_BEGIN(attack_event)
         CALL(btlevtcmd_JumpPosition, LW(5), 0, 100, 0, 0, MOVE_SOUND_FROM_TABLE)
         CALL(btlevtcmd_AnimeChangePose, LW(5), 1, STRING("S_1"))
         CALL(evt_snd_sfxoff, LW(13))
-#if VERSION >= VERSION_JP
     END_IF
+#else
+    DELETE_EVENT(LW(15))
+    CALL(btlevtcmd_AnimeChangePose, LW(5), 1, STRING("A_1A"))
+    CALL(btlevtcmd_snd_se, LW(5), STRING("SFX_BOSS_KANBU_JUMP1"), EVT_NULLPTR, 0, LW(13))
+    CALL(btlevtcmd_JumpSetting, LW(5), 0, FLOAT(6.0f), FLOAT(0.2998047f))
+    CALL(btlevtcmd_JumpPosition, LW(5), 0, 100, 0, 0, MOVE_SOUND_FROM_TABLE)
+    CALL(btlevtcmd_AnimeChangePose, LW(5), 1, STRING("S_1"))
+    CALL(evt_snd_sfxoff, LW(13))
 #endif
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
     CALL(zakogun_set_target_id, LW(3))
 #if VERSION >= VERSION_JP
     IF_INT_NOT_EQUAL(LW(12), 0)
-#endif
         BEGIN_SIBLING_EVENT_GET_ID(LW(14))
             CALL(zakogun_get_kanbu_id_evtcmd, LW(5))
             CALL(btlevtcmd_AnimeChangePose, LW(5), 1, STRING("R_2"))
@@ -423,8 +435,16 @@ static EVT_BEGIN(attack_event)
                 WAIT_FRAMES(1)
             END_LOOP
         END_SIBLING_EVENT
-#if VERSION >= VERSION_JP
     END_IF
+#else
+    BEGIN_SIBLING_EVENT_GET_ID(LW(14))
+        CALL(zakogun_get_kanbu_id_evtcmd, LW(5))
+        CALL(btlevtcmd_AnimeChangePose, LW(5), 1, STRING("R_2"))
+        LOOP(0)
+            CALL(zakogun_kanbu_on_ball)
+            WAIT_FRAMES(1)
+        END_LOOP
+    END_SIBLING_EVENT
 #endif
     BEGIN_SIBLING_EVENT
         CALL_CHILD(hit_check_event)

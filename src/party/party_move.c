@@ -1290,20 +1290,24 @@ void partyGetMoveDirSpd(PartyEntry* party, f32* dir, f32* spd) {
                 far = TRUE;
 #endif
             }
+#if VERSION <= VERSION_DEMO_JP
             if (far) {
                 partyClearFootmark2();
-#if VERSION <= VERSION_DEMO_JP
             } else {
                 partyClearFootmark();
-#endif
             }
+#else
+            if (far) {
+                partyClearFootmark2();
+            }
+#endif
         }
-#if VERSION >= VERSION_JP
     }
+#if VERSION >= VERSION_JP
     if (party->trigFlags & PARTY_TRIG_DOOR_MOVE) {
         hosei = 0;
-#endif
     }
+#endif
     if (hosei >= 30) {
         party->pushCount = 0;
         partyMoveBehindMario(party, 0);
@@ -1328,28 +1332,32 @@ s32 partyMarioHosei(PartyEntry* party) {
     f32 scale;
     f32 d;
 
+#if VERSION <= VERSION_DEMO_JP
     if (!(party->trigFlags & PARTY_TRIG_HALF_PUSH)) {
         kx = 0.4f;
         kz = 0.3f;
         ky = kx;
     } else {
-#if VERSION <= VERSION_DEMO_JP
         kx = 0.1f;
+        ky = kx;
+        kz = kx;
+    }
 #else
+    if (!(party->trigFlags & PARTY_TRIG_HALF_PUSH)) {
+        kx = 0.4f;
+        kz = 0.3f;
+        ky = kx;
+    } else {
         kx = 0.2f;
         kz = 0.15f;
-#endif
         ky = kx;
-#if VERSION <= VERSION_DEMO_JP
-        kz = kx;
-#else
     }
     if (mario->flags & MARIO_FLAG_IS_PUSHING) {
         kx = 0.2f;
         kz = 0.15f;
         ky = kx;
-#endif
     }
+#endif
     w = party->width + mario->wPlayerCollisionBox.x;
     h = mario->wPlayerCollisionBox.y + party->height;
     party->pushVelX = 0.0f;

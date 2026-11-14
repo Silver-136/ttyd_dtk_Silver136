@@ -1506,15 +1506,15 @@ EVT_BEGIN(npc_entry)
             CALL(evt_npc_set_position, LW(2), 0, -1000, 0)
             CALL(evt_npc_flag_onoff, 1, LW(2), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION)
             CALL(evt_npc_set_ry, LW(2), 270)
-            BEGIN_INLINE_EVENT
 #if VERSION >= VERSION_JP
+            BEGIN_INLINE_EVENT
                 CALL(evt_npc_get_height, LW(2), LW(0))
                 IF_INT_GREATER(LW(0), 50)
                     CALL(evt_npc_set_height, LW(2), 50)
                 END_IF
             END_INLINE_EVENT
-            BEGIN_INLINE_EVENT
 #endif
+            BEGIN_INLINE_EVENT
                 IF_INT_EQUAL(GSW_GLITZ_PIT_OPPONENT, 2)
                     SWITCH(LW(1))
                         CASE_EQUAL(0)
@@ -3337,22 +3337,21 @@ EVT_BEGIN(evt_champ_lose)
     CALL(evt_eff, STRING(""), STRING("confetti"), 3, LW(0), LW(1), LW(2), 300, 0, 0, 0, 0, 0, 0, 0)
     CALL(evt_snd_sfxon, STRING("SFX_STG3_WIN_AUDIENCE1"), 0)
     CALL(evt_tou_get_fighter_info, GSW_GLITZ_PIT_OPPONENT, LW(0), LW(1))
+#if VERSION >= VERSION_DEMO_EU
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
         SET_VALUE(LW(2), STRING("\203K\203\223\203X"))
-#if VERSION >= VERSION_DEMO_EU
         CALL(evt_msg_print_insert, 0, PTR("stg3_tou_118_61"), 0, PTR("ガンス"), LW(0))
-#endif
-        ELSE
-#if VERSION >= VERSION_DEMO_EU
+    ELSE
         SET_VALUE(LW(2), PTR("キノシコワ"))
         CALL(evt_msg_print_insert, 0, PTR("stg3_tou_re_118_61"), 0, PTR("キノシコワ"), LW(0))
+    END_IF
 #else
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
+        SET_VALUE(LW(2), STRING("\203K\203\223\203X"))
+    ELSE
         SET_VALUE(LW(2), STRING("\203L\203m\203V\203R\203\217"))
     END_IF
     CALL(evt_msg_print_insert, 0, STRING("stg3_tou_118_61"), 0, LW(2), LW(0))
-#endif
-#if VERSION >= VERSION_DEMO_EU
-    END_IF
 #endif
     WAIT_MS(300)
     CALL(evt_cam3d_evt_set, 40, 142, 250, 40, 96, -8, 0, EASING_LINEAR)
@@ -5344,20 +5343,21 @@ EVT_END()
  */
 EVT_BEGIN(evt_watch_match)
     // Grubba (or later the announcer, conditionally in demos) stands at the edge of the ring to watch.
+#if VERSION <= VERSION_DEMO_JP
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
         CALL(evt_npc_set_position, STRING("\203K\203\223\203X"), 0, 60, -130)
     ELSE
-#if VERSION <= VERSION_DEMO_JP
         IF_INT_EQUAL(GSWF_TOU_LEFT_AFTER_CHAPTER, 1)
             CALL(evt_npc_set_position, STRING("キノシコワ"), 0, 60, -130)
-#else
-        CALL(evt_npc_set_position, STRING("\203L\203m\203V\203R\203\217"), 0, 60, -130)
-#endif
-    END_IF
-#if VERSION <= VERSION_DEMO_JP
+        END_IF
     END_IF
     CALL(evt_npc_flag_onoff, 1, STRING("選手1"), NPC_FLAG_NO_HIT)
 #else
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
+        CALL(evt_npc_set_position, STRING("\203K\203\223\203X"), 0, 60, -130)
+    ELSE
+        CALL(evt_npc_set_position, STRING("\203L\203m\203V\203R\203\217"), 0, 60, -130)
+    END_IF
     CALL(evt_npc_flag_onoff, 1, STRING("\221I\216\3501"), NPC_FLAG_NO_HIT)
 #endif
 

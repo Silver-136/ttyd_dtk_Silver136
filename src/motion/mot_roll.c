@@ -924,14 +924,10 @@ void mot_roll(void) {
         marioGetPtr()->motRoll->spdX = v26;
         marioGetPtr()->motRoll->spdZ = v27;
     }
-    if (mario->hitobjStandOn) {
 #if VERSION <= VERSION_DEMO_JP
+    if (mario->hitobjStandOn) {
         if (mario->airTimer == 0 && (mario->buttonTrg & PAD_BUTTON_A)) {
             {
-#else
-        if (!(hitGetAttr(mario->hitobjStandOn) & (HIT_ATTR_WATER_HAZARD | HIT_ATTR_SPIKES)) && mario->airTimer == 0 && (mario->buttonTrg & PAD_BUTTON_A)) {
-            if (!(strcmp(gp->currentMapName, "eki_04") == 0 && __fabsf(mario->groundSlope) >= 40.0f)) {
-#endif
                 MarioWork* m = marioGetPtr();
                 camFollowYOff();
                 m->jumpVelocityY = 2.85f;
@@ -941,24 +937,37 @@ void mot_roll(void) {
                 m->flags |= MARIO_FLAG_IS_JUMPING;
                 m->airTimer = 1;
                 roll_jump_se();
-#if VERSION >= VERSION_JP
+            }
+        }
+        marioUpdateCamCollision(mario->position);
+    } else {
+        mario->airTimer++;
+        mario->airTimer--;
+    }
+#else
+    if (mario->hitobjStandOn) {
+        if (!(hitGetAttr(mario->hitobjStandOn) & (HIT_ATTR_WATER_HAZARD | HIT_ATTR_SPIKES)) && mario->airTimer == 0 && (mario->buttonTrg & PAD_BUTTON_A)) {
+            if (!(strcmp(gp->currentMapName, "eki_04") == 0 && __fabsf(mario->groundSlope) >= 40.0f)) {
+                MarioWork* m = marioGetPtr();
+                camFollowYOff();
+                m->jumpVelocityY = 2.85f;
+                m->jumpAccelerationY = -0.14f;
+                m->jumpJerkY = 0.08f;
+                m->jumpSnapY = -0.02f;
+                m->flags |= MARIO_FLAG_IS_JUMPING;
+                m->airTimer = 1;
+                roll_jump_se();
                 mario->hitobjJumpFrom = mario->hitobjStandOn;
                 mario->hitobjStandOn = NULL;
                 mario->fallStartPos = mario->position;
                 mario->lastGroundPos = mario->position;
                 camFollowYOff();
-#endif
             }
         }
         marioUpdateCamCollision(mario->position);
-#if VERSION <= VERSION_DEMO_JP
-    } else {
-        mario->airTimer++;
-        mario->airTimer--;
-#else
         mario->airTimer = 0;
-#endif
     }
+#endif
     if (mario->flags & (MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING)) {
         if (mario->hitobjHead) {
 #if VERSION <= VERSION_DEMO_JP
@@ -1078,9 +1087,9 @@ void mot_roll(void) {
             nz = distABf(0.0f, 0.0f, nx, -nz);
             nx = -nz * sind(mario->directionView);
             nz = nz * cosd(((MarioWork*)mario)->directionView);
-#if VERSION >= VERSION_JP
         }
     }
+#if VERSION >= VERSION_JP
     if (mario->targetNpc) {
         if (!marioChkBero(mario->hitobjFront)) {
             v29 = 0.05f * -v29 + v29;
@@ -1091,9 +1100,9 @@ void mot_roll(void) {
             if (__fabsf(v28) < 0.1f) {
                 v28 = 0.0f;
             }
-#endif
         }
     }
+#endif
     if (mario->hitobjFront && !mario->wStickDir1 && !mario->wStickDir2 && !marioChkBero(mario->hitobjFront)) {
         v29 = 0.6f * -v29 + v29;
         v28 = 0.6f * -v28 + v28;

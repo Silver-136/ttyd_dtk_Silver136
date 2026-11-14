@@ -237,13 +237,17 @@ USER_FUNC(elder_talk_sub_punicheck) {
         result = 2;
     }
 #endif
+#if VERSION >= VERSION_JP
     if (others != 0) {
         result = 0;
-#if VERSION >= VERSION_JP
     } else if (traps != 0) {
         result = 2;
-#endif
     }
+#else
+    if (others != 0) {
+        result = 0;
+    }
+#endif
     evtSetValue(event, args[0], result);
     return EVT_RETURN_DONE;
 }

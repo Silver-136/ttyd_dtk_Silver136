@@ -433,19 +433,24 @@ EVT_BEGIN(aji_18_init_evt)
             CALL(evt_bero_get_entername, LW(0))
             IF_STR_EQUAL(LW(0), STRING("e_bero"))
                 CALL(evt_mario_get_party, LW(15))
+#if VERSION >= VERSION_US
                 IF_INT_EQUAL(LW(15), 0)
                     CALL(evt_mario_set_party, 0, 1)
                     CALL(evt_party_run, 0)
-#if VERSION >= VERSION_US
                 END_IF
-#endif
 
                 // US and PAL recovery is outside the missing-partner branch; JP and the early demos keep it inside.
                 CALL(evt_pouch_mario_recovery)
-                    CALL(evt_pouch_all_party_recovery)
-#if VERSION >= VERSION_US
+                CALL(evt_pouch_all_party_recovery)
                 CALL(evt_sub_status_gauge_force_update)
 #else
+                IF_INT_EQUAL(LW(15), 0)
+                    CALL(evt_mario_set_party, 0, 1)
+                    CALL(evt_party_run, 0)
+
+                    // US and PAL recovery is outside the missing-partner branch; JP and the early demos keep it inside.
+                    CALL(evt_pouch_mario_recovery)
+                    CALL(evt_pouch_all_party_recovery)
                 END_IF
 #endif
                 SPAWN_EVENT(evt_koopa_after)

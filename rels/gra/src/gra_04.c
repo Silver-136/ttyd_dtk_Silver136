@@ -119,12 +119,12 @@ static EVT_BEGIN(out_evt2)
 #if VERSION >= VERSION_JP
     CALL(roll_release_check, LW(0))
     IF_INT_EQUAL(LW(0), 1)
-#endif
         CALL(evt_mario_normalize)
-#if VERSION >= VERSION_JP
-        ELSE
+    ELSE
         DEBUG_PUT_MSG(STRING("ロール解除できません"))
     END_IF
+#else
+    CALL(evt_mario_normalize)
 #endif
     CALL(evt_mario_mov_pos2, -242, -450, FLOAT(150.0f))
     WAIT_MS(800)

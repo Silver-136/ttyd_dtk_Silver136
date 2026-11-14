@@ -1091,13 +1091,13 @@ s32 select_comp_bteresa(const void* a, const void* b) {
 s32 winMgrSelect(WinMgrSelect* sel) {
     if (sel->flags & SELECT_DONE) {
         if (sel->flags & SELECT_CANCELLED) {
+            return -1;
+        }
 #if VERSION >= VERSION_JP
-            return -1;
-        }
         if (sel->newItem && sel->cursor == 0 && (sel->flags & SELECT_CANCEL_OK)) {
-#endif
             return -1;
         }
+#endif
         return sel->items[sel->cursor].id;
     }
     return 0;

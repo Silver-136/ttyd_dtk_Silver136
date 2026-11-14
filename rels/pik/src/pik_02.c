@@ -1255,18 +1255,24 @@ EVT_BEGIN(pik_02_init_evt)
         CALL(evt_bero_get_info)
         CALL_CHILD(evt_bero_info_run)
     END_IF
+#if VERSION <= VERSION_DEMO_JP
     IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG7_25_00_BOWSER_POSHLEY_HEIGHTS)
         CALL(evt_snd_bgmoff, PSND_FADEOUT)
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_PIK2"))
-#if VERSION <= VERSION_DEMO_JP
         CALL(evt_snd_set_rev_mode, 2)
     ELSE
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_KUPPA1"))
         CALL(evt_snd_bgm_scope, 0, 1)
         CALL(evt_snd_envoff, PSND_FADEOUT)
-#endif
         CALL(evt_snd_set_rev_mode, 2)
     END_IF
+#else
+    IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG7_25_00_BOWSER_POSHLEY_HEIGHTS)
+        CALL(evt_snd_bgmoff, PSND_FADEOUT)
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_PIK2"))
+        CALL(evt_snd_set_rev_mode, 2)
+    END_IF
+#endif
     CALL(evt_npc_setup, PTR(npc_data))
     CALL(evt_hit_bind_mapobj, STRING("a_ka_ten"), STRING("ka_ten"))
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_52_THE_HIDDEN_PIPE)

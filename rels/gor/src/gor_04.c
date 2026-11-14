@@ -2332,28 +2332,27 @@ EVT_BEGIN(gor_04_init_evt)
 
     // US always restores HP here; JP restores it only when a partner must be supplied.
     // At this story stage Mario and his partners are fully healed.
+#if VERSION <= VERSION_JP
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG6_55_04_BOWSER_RAWK_HAWK)
         CALL(evt_mario_get_party, LW(15))
         IF_INT_EQUAL(LW(15), 0)
             CALL(evt_mario_set_party, 0, 1)
             CALL(evt_party_run, 0)
-#if VERSION <= VERSION_DEMO_JP
-        CALL(evt_pouch_mario_recovery)
-        CALL(evt_pouch_all_party_recovery)
-    END_IF
+            CALL(evt_pouch_mario_recovery)
+            CALL(evt_pouch_all_party_recovery)
+        END_IF
     END_IF
 
 #else
-#if VERSION >= VERSION_US
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG6_55_04_BOWSER_RAWK_HAWK)
+        CALL(evt_mario_get_party, LW(15))
+        IF_INT_EQUAL(LW(15), 0)
+            CALL(evt_mario_set_party, 0, 1)
+            CALL(evt_party_run, 0)
         END_IF
-#endif
-            CALL(evt_pouch_mario_recovery)
-            CALL(evt_pouch_all_party_recovery)
-#if VERSION >= VERSION_US
+        CALL(evt_pouch_mario_recovery)
+        CALL(evt_pouch_all_party_recovery)
         CALL(evt_sub_status_gauge_force_update)
-#else
-        END_IF
-#endif
     END_IF
 #endif
 

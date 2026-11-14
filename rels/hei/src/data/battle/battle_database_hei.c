@@ -2268,10 +2268,10 @@ NpcSetupBattleInfo btlsetup_hei_tbl[] = {
         btlgrpsel_hei_btlno_hei_08_01_off, // select
         (NPC_BATTLE_NO_ESCAPE | NPC_BATTLE_STORY), // battleFlags
         0, // randomMode
-#if VERSION >= VERSION_JP
         {{5, 5}, {0}, {0}, {0}, {0}, {5, 5}, {0}, {0}, {5, 5}, {0}, {5, 5}, {0}, {1, 1}, {0}, {0}, {0}}, // randomRanges
         "BGM_ZAKO_BATTLE1", // bgmName
     },
+#if VERSION >= VERSION_JP
     {
         "hei08チョロボン２", // name
         NULL, 0, // mapName..fixedItem
@@ -2279,10 +2279,10 @@ NpcSetupBattleInfo btlsetup_hei_tbl[] = {
         NULL, // altSelect
         R_btlgrpsel_hei_btlno_hei_08_02_off, // select
         0, 0, // battleFlags..randomMode
-#endif
         {{5, 5}, {0}, {0}, {0}, {0}, {5, 5}, {0}, {0}, {5, 5}, {0}, {5, 5}, {0}, {1, 1}, {0}, {0}, {0}}, // randomRanges
         "BGM_ZAKO_BATTLE1", // bgmName
     },
+#endif
     {
         "hei09チョロボン1", // name
         NULL, 0, // mapName..fixedItem
@@ -2343,10 +2343,10 @@ NpcSetupBattleInfo btlsetup_hei_tbl[] = {
         btlgrpsel_hei_btlno_hei_12_01_off, // select
         (NPC_BATTLE_NO_ESCAPE | NPC_BATTLE_STORY), // battleFlags
         0, // randomMode
-#if VERSION >= VERSION_JP
         {{5, 5}, {0}, {0}, {0}, {0}, {5, 5}, {0}, {0}, {5, 5}, {0}, {5, 5}, {0}, {1, 1}, {0}, {0}, {0}}, // randomRanges
         "BGM_ZAKO_BATTLE1", // bgmName
     },
+#if VERSION >= VERSION_JP
     {
         "hei12チョロボン２", // name
         NULL, 0, // mapName..fixedItem
@@ -2354,10 +2354,10 @@ NpcSetupBattleInfo btlsetup_hei_tbl[] = {
         NULL, // altSelect
         R_btlgrpsel_hei_btlno_hei_12_02_off, // select
         0, 0, // battleFlags..randomMode
-#endif
         {{5, 5}, {0}, {0}, {0}, {0}, {5, 5}, {0}, {0}, {5, 5}, {0}, {5, 5}, {0}, {1, 1}, {0}, {0}, {0}}, // randomRanges
         "BGM_ZAKO_BATTLE1", // bgmName
     },
+#endif
     {
         "hei13クリボー2", // name
         NULL, 0, // mapName..fixedItem

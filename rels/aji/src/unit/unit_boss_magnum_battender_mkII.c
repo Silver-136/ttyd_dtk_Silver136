@@ -1113,11 +1113,10 @@ static EVT_BEGIN(dead_event)
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
     WAIT_MS(500)
     CALL(arm_check, 0, LW(0))
-    IF_INT_NOT_EQUAL(LW(0), -1)
 #if VERSION >= VERSION_JP
+    IF_INT_NOT_EQUAL(LW(0), -1)
         CALL(btlevtcmd_CheckDamageCode, LW(0), DAMAGE_RESULT_ZERO_HP, LW(1))
         IF_INT_EQUAL(LW(1), 0)
-#endif
             SET_VALUE(LW(10), LW(0))
             BEGIN_INLINE_EVENT
                 CALL_CHILD(subsetevt_dead_core)
@@ -1126,7 +1125,16 @@ static EVT_BEGIN(dead_event)
                 CALL(btlevtcmd_OnPartsAttribute, LW(10), 1, kNoShadow)
             END_INLINE_EVENT
         END_IF
-#if VERSION >= VERSION_JP
+    END_IF
+#else
+    IF_INT_NOT_EQUAL(LW(0), -1)
+        SET_VALUE(LW(10), LW(0))
+        BEGIN_INLINE_EVENT
+            CALL_CHILD(subsetevt_dead_core)
+            CALL(arm_end, 0)
+            CALL(btlevtcmd_OnPartsAttribute, LW(10), 1, kHidden)
+            CALL(btlevtcmd_OnPartsAttribute, LW(10), 1, kNoShadow)
+        END_INLINE_EVENT
     END_IF
 #endif
     CALL(arm_check, 1, LW(0))
@@ -1134,7 +1142,6 @@ static EVT_BEGIN(dead_event)
 #if VERSION >= VERSION_JP
         CALL(btlevtcmd_CheckDamageCode, LW(0), DAMAGE_RESULT_ZERO_HP, LW(1))
         IF_INT_EQUAL(LW(1), 0)
-#endif
             SET_VALUE(LW(10), LW(0))
             BEGIN_INLINE_EVENT
                 CALL_CHILD(subsetevt_dead_core)
@@ -1142,8 +1149,15 @@ static EVT_BEGIN(dead_event)
                 CALL(btlevtcmd_OnPartsAttribute, LW(10), 1, kHidden)
                 CALL(btlevtcmd_OnPartsAttribute, LW(10), 1, kNoShadow)
             END_INLINE_EVENT
-#if VERSION >= VERSION_JP
         END_IF
+#else
+        SET_VALUE(LW(10), LW(0))
+        BEGIN_INLINE_EVENT
+            CALL_CHILD(subsetevt_dead_core)
+            CALL(arm_end, 1)
+            CALL(btlevtcmd_OnPartsAttribute, LW(10), 1, kHidden)
+            CALL(btlevtcmd_OnPartsAttribute, LW(10), 1, kNoShadow)
+        END_INLINE_EVENT
 #endif
     END_IF
     SET_VALUE(LW(10), UNIT_ID_SELF)

@@ -273,10 +273,10 @@ static EVT_BEGIN(evt_gameover)
     IF_INT_EQUAL(LW(0), LANGUAGE_SP)
         CALL_CHILD(fall_gameover_es)
     ELSE
-#endif
-    CALL_CHILD(fall_gameover)
-#if VERSION >= VERSION_US
+        CALL_CHILD(fall_gameover)
     END_IF
+#else
+    CALL_CHILD(fall_gameover)
 #endif
     RETURN
 EVT_END()

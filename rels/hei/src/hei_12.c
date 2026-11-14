@@ -122,6 +122,7 @@ EVT_BEGIN(hei_12_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG1_TORIDE1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG1_HEI3"))
     CALL(evt_snd_set_rev_mode, 1)
+#if VERSION >= VERSION_JP
     IF_INT_EQUAL(GSWF_HEI_SUN_STONE_TAKEN, 0)
         CALL(evt_npc_change_interrupt, STRING("チョロボン"), 1, 0)
         CALL(evt_npc_restart_regular_event, STRING("チョロボン"))
@@ -130,20 +131,28 @@ EVT_BEGIN(hei_12_init_evt)
         CALL(evt_npc_change_fbat_mode, FBAT_MODE_EVENT)
     ELSE
         CALL(evt_npc_change_fbat_mode, FBAT_MODE_FIELD)
-#if VERSION >= VERSION_JP
         CALL(evt_npc_check, STRING("チョロボン"), LW(0))
         IF_INT_EQUAL(LW(0), 1)
             CALL(evt_npc_set_battle_info, STRING("チョロボン"), 23)
-#endif
         END_IF
-#if VERSION <= VERSION_DEMO_JP
-    IF_INT_EQUAL(GSWF_HEI_SUN_STONE_TAKEN, 0)
-#else
     END_IF
     IF_INT_EQUAL(GSWF_HEI_SUN_STONE_TAKEN, 0)
-#endif
         CALL(evt_item_entry, STRING("sun_st"), ITEM_SUN_STONE, 0, 0, 0, ITEM_TYPE_GROUND, -1, PTR(evt_chorobon))
     END_IF
+#else
+    IF_INT_EQUAL(GSWF_HEI_SUN_STONE_TAKEN, 0)
+        CALL(evt_npc_change_interrupt, STRING("チョロボン"), 1, 0)
+        CALL(evt_npc_restart_regular_event, STRING("チョロボン"))
+        CALL(evt_npc_set_position, STRING("チョロボン"), 0, 400, 0)
+        CALL(evt_npc_flag_onoff, 0, STRING("チョロボン"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)
+        CALL(evt_npc_change_fbat_mode, FBAT_MODE_EVENT)
+    ELSE
+        CALL(evt_npc_change_fbat_mode, FBAT_MODE_FIELD)
+    END_IF
+    IF_INT_EQUAL(GSWF_HEI_SUN_STONE_TAKEN, 0)
+        CALL(evt_item_entry, STRING("sun_st"), ITEM_SUN_STONE, 0, 0, 0, ITEM_TYPE_GROUND, -1, PTR(evt_chorobon))
+    END_IF
+#endif
     CALL(evt_map_playanim, STRING("mizu"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_set_tevcallback, 1, PTR(hei_test_water_tev))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("mizu"), MAP_OBJ_TEV_CALLBACK(1))
