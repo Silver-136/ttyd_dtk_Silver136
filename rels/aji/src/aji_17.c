@@ -3182,7 +3182,7 @@ EVT_END()
 /** NPC setup records for 手下１, 手下２ and シュリョー in TEC's room. */
 static NpcSetupInfo npcEnt[] = {
     {
-        /*"手下１"*/"手下１", // name (an X-Naut grunt in TEC's room)
+        "手下１", // name (an X-Naut grunt in TEC's room)
         0, 0, // flags..reactionFlags
         teshita1_init, // initEvent
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, // regularEvent..territoryType
@@ -3191,7 +3191,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"手下２"*/"手下２", // name (an X-Naut grunt in TEC's room)
+        "手下２", // name (an X-Naut grunt in TEC's room)
         0, 0, // flags..reactionFlags
         teshita2_init, // initEvent
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, // regularEvent..territoryType
@@ -3200,7 +3200,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"シュリョー"*/"シュリョー", // name (Sir Grodus)
+        "シュリョー", // name (Sir Grodus)
         0, 0, // flags..reactionFlags
         syuryo_init, // initEvent
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, // regularEvent..territoryType

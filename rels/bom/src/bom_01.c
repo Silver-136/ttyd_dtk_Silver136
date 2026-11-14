@@ -721,9 +721,9 @@ EVT_END()
 
 /** Actors that pass through the village house door during its scenes: General White and his crew. */
 static const char* door_npc[] = {
-    /*"ホワイト"*/"ホワイト",
-    /*"ペントリット"*/"ペントリット",
-    /*"スラリー"*/"スラリー",
+    "ホワイト",
+    "ペントリット",
+    "スラリー",
     NULL,
 };
 
@@ -1401,10 +1401,10 @@ static f32 spline_dt[] = {
 
 /** The cannon crew: each name with the message key of his drill call (stg7_bom_65_a to d). */
 static const char* oh_data[] = {
-    /*"\203j\203g\203\215"*/"ニトロ", "stg7_bom_65_a",
-    /*"\203y\203\223\203g\203\212\203b\203g"*/"ペントリット", "stg7_bom_65_b",
-    /*"\203X\203\211\203\212\201["*/"スラリー", "stg7_bom_65_c",
-    /*"\203{\203\200\203w\203CD"*/"ボムヘイD", "stg7_bom_65_d",
+    "ニトロ", "stg7_bom_65_a",
+    "ペントリット", "stg7_bom_65_b",
+    "スラリー", "stg7_bom_65_c",
+    "ボムヘイD", "stg7_bom_65_d",
 };
 
 /**
@@ -2425,7 +2425,7 @@ EVT_END()
 /** The cast of the village square: the mayor, Nitro, Pentrit, Surary, the Bob-omb soldier D and General White. */
 static NpcSetupInfo npcEnt[] = {
     {
-        /*"村長"*/"村長", // name (the mayor of Fahr Outpost)
+        "村長", // name (the mayor of Fahr Outpost)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_soncho, // initEvent
@@ -2437,7 +2437,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"ニトロ"*/"ニトロ", // name (Nob, a Fahr Outpost Bob-omb)
+        "ニトロ", // name (Nob, a Fahr Outpost Bob-omb)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_nitoro, // initEvent
@@ -2449,7 +2449,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"ペントリット"*/("ペントリット"), // name (Rob, a Fahr Outpost Bob-omb)
+        "ペントリット", // name (Rob, a Fahr Outpost Bob-omb)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_pentrit, // initEvent
@@ -2461,7 +2461,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"スラリー"*/("スラリー"), // name (Fred, a Fahr Outpost Bob-omb)
+        "スラリー", // name (Fred, a Fahr Outpost Bob-omb)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_surary, // initEvent
@@ -2473,7 +2473,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"ボムヘイD"*/"ボムヘイD", // name (a Fahr Outpost Bob-omb)
+        "ボムヘイD", // name (a Fahr Outpost Bob-omb)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_murabito_d, // initEvent
@@ -2485,7 +2485,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"ホワイト"*/("ホワイト"), // name (General White)
+        "ホワイト", // name (General White)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_white, // initEvent
