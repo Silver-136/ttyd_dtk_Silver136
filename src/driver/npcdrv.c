@@ -1632,6 +1632,52 @@ FieldBattleData* fbatGetPointer(void) {
     return gp->fbatData;
 }
 
+/** Starts talking to npc: switches the field battle mode from 1 (normal) to 2 (talk); nothing in another mode. */
+// Original name and size (0x30) from the JP demo map (UNUSED there: every call is inlined).
+static void fbatChangeMode_Talk(NpcEntry* npc) {
+    FieldBattleData* d = fbatGetPointer();
+    if (d->mode != FBAT_MODE_FIELD) {
+        return;
+    }
+    d->mode = FBAT_MODE_TALK;
+    d->subState = 0;
+    d->npc = npc;
+    npc->fbatHitKind = 0;
+}
+
+/**
+ * Runs a friendly NPC's reaction to a hit of the given FbatHitKind: switches the field battle mode from 1 (normal)
+ * to 3 (reaction); nothing in another mode.
+ */
+// Original name and size (0x30) from the JP demo map (UNUSED there: every call is inlined).
+static void fbatChangeMode_Attack_Reaction(NpcEntry* npc, u32 hitKind) {
+    FieldBattleData* d = fbatGetPointer();
+    if (d->mode != FBAT_MODE_FIELD) {
+        return;
+    }
+    d->mode = FBAT_MODE_REACTION_TALK;
+    d->subState = 0;
+    d->npc = npc;
+    npc->fbatHitKind = hitKind;
+}
+
+/**
+ * Starts the battle for an enemy Mario hit or touched:
+ * switches the field battle mode from 1 (normal) to 5 (battle). Returns FALSE when the mode was not 1.
+ */
+// Original name and size (0x3c) from the JP demo map (UNUSED there: every call is inlined).
+static BOOL fbatChangeMode_Battle(NpcEntry* npc) {
+    FieldBattleData* d = fbatGetPointer();
+    if (d->mode != FBAT_MODE_FIELD) {
+        return FALSE;
+    }
+    d->mode = FBAT_MODE_BATTLE;
+    d->subState = 0;
+    d->npc = npc;
+    d->target = npc;
+    return TRUE;
+}
+
 /**
  * Sets the field battle mode (0 off, 1 normal, 2 talking, 3 hit a friendly NPC, 5 battle, 7 events and menus, ...);
  * called from scripts and the pause menu.
@@ -1830,22 +1876,6 @@ static f32 camGetRy(void) {
 }
 
 /**
- * Starts the battle for an enemy Mario hit or touched:
- * switches the field battle mode from 1 (normal) to 5 (battle). Returns FALSE when the mode was not 1.
- */
-static inline BOOL fbat_setHit(NpcEntry* npc) {
-    FieldBattleData* d = gp->fbatData;
-    if (d->mode != FBAT_MODE_FIELD) {
-        return FALSE;
-    }
-    d->mode = FBAT_MODE_BATTLE;
-    d->subState = 0;
-    d->npc = npc;
-    d->target = npc;
-    return TRUE;
-}
-
-/**
  * Each frame in normal field mode: 1) a hit or touch with an enemy starts a battle (mode 5) with the hit
  * animation, star sparks, damage sound and the enemy turned to face the camera;
  * 2) finds the friendly NPC Mario faces close enough to talk to (wp->talkTarget, turning it toward him)
@@ -1884,7 +1914,7 @@ void fbatEncountCheck(void) {
         AnimationPose *pose;
         f32 rel;
         f32 ang;
-        if (!fbat_setHit(npc)) {
+        if (!fbatChangeMode_Battle(npc)) {
             return;
         }
         switch (*kind) {
@@ -2087,15 +2117,7 @@ void fbatEncountCheck(void) {
 
         mario->touchNpc = talk;
         if (wp->talkTarget && (keyGetButtonTrg(0) & PAD_BUTTON_A)) {
-            npc = wp->talkTarget;
-            data = gp->fbatData;
-            if (data->mode != FBAT_MODE_FIELD) {
-                return;
-            }
-            data->mode = FBAT_MODE_TALK;
-            data->subState = 0;
-            data->npc = npc;
-            npc->fbatHitKind = 0;
+            fbatChangeMode_Talk(wp->talkTarget);
             return;
         }
     }
@@ -2108,14 +2130,7 @@ void fbatEncountCheck(void) {
         npc = fbatHitCheck(FBAT_CHECK_REACTION | FBAT_CHECK_BOMB | FBAT_CHECK_SHELL | FBAT_CHECK_HAMMER | FBAT_CHECK_JUMP | FBAT_CHECK_CURRENT, kind);
 #endif
         if (npc && (data->mode == FBAT_MODE_FIELD)) {
-            u32 k = *kind;
-            FieldBattleData *d = gp->fbatData;
-            if (d->mode == FBAT_MODE_FIELD) {
-                d->mode = FBAT_MODE_REACTION_TALK;
-                d->subState = 0;
-                d->npc = npc;
-                npc->fbatHitKind = k;
-            }
+            fbatChangeMode_Attack_Reaction(npc, *kind);
             switch (*kind) {
                 case FBAT_HIT_JUMP:
                 case FBAT_HIT_HIP:

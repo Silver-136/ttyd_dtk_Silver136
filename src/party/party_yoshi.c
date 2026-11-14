@@ -59,14 +59,6 @@ static f32 ofs_PYS_F_1[10] = {0.0f, 0.0f, 0.433f, 0.557f, 0.512f, 0.0f, 0.0f, 0.
 // Yoshi's work (PartyEntry.useStruct). A macro, not an inline function: as a function the object changes.
 #define YOSHI_WORK(party) ((YoshiWork*)(party)->useStruct)
 
-static inline void yoshiAddFloorMove(PartyEntry* party) {
-    if (party->hitobjStandOn) {
-        party->position.x += party->floorMove.x;
-        party->position.y += party->floorMove.y;
-        party->position.z += party->floorMove.z;
-    }
-}
-
 // Mario rides Yoshi: he follows Yoshi's position and direction.
 static inline void yoshiSyncMario(MarioWork* mario, PartyEntry* party) {
     mario->camTarget.x = party->position.x;
@@ -371,6 +363,16 @@ void yoshi_jumpStand(void) {
     }
 }
 
+/** Moves Yoshi with the floor he stands on (a moving platform): adds its movement to his position. */
+// Original name and size (0x40) from the JP demo map (UNUSED there: every call is inlined).
+static void moveHosei(PartyEntry* party) {
+    if (party->hitobjStandOn) {
+        party->position.x += party->floorMove.x;
+        party->position.y += party->floorMove.y;
+        party->position.z += party->floorMove.z;
+    }
+}
+
 /**
  * Spike hit while riding: stops Mario's ride velocity,
  * plays the hurt motion (MARIO_MOTION_DAMAGE_TOGE) with the hurt poses and puts Yoshi
@@ -561,7 +563,7 @@ void yoshi_use(PartyEntry* party) {
             party->position.z += (party->moveTarget.z - party->position.z) / party->moveFrames;
             if (--party->moveFrames != 0) {
                 searchGround(party);
-                yoshiAddFloorMove(party);
+                moveHosei(party);
                 return;
             }
             mario->trigFlags |= MARIO_TRIG_FLAG_DISABLE_JUMP_KEMURI;
@@ -573,7 +575,7 @@ void yoshi_use(PartyEntry* party) {
             party->displayDirection = mario->displayDirection;
             party->moveSpeed = 0.0f;
             party->useMotionId = 7;
-            yoshiAddFloorMove(party);
+            moveHosei(party);
             partyChkGnd(party);
             return;
         case 7:
@@ -592,7 +594,7 @@ void yoshi_use(PartyEntry* party) {
                 }
             }
             if (mario->hitobjStandOn == NULL) {
-                yoshiAddFloorMove(party);
+                moveHosei(party);
                 partyChkGnd(party);
                 return;
             }
@@ -750,12 +752,12 @@ void yoshi_use(PartyEntry* party) {
             partyChgPose(party, "PYS_H_2");
             party->moveSpeed = 0.0f;
             party->useMotionId = 101;
-            yoshiAddFloorMove(party);
+            moveHosei(party);
             partyChkGnd(party);
             return;
         case 101:
             if (mario->hitobjStandOn == NULL) {
-                yoshiAddFloorMove(party);
+                moveHosei(party);
                 partyChkGnd(party);
                 return;
             }
@@ -764,7 +766,7 @@ void yoshi_use(PartyEntry* party) {
                 partyChgRunMode(party, PARTY_RUN_MOVE);
                 party->moveMode = PARTY_MOVE_MODE_STAY;
             }
-            yoshiAddFloorMove(party);
+            moveHosei(party);
             partyChkGnd(party);
 #if VERSION >= VERSION_US
             movePos(&party->position.x, &party->position.z, mario->hitobjFront ? -0.1f : 0.1f, toMovedir(mario->displayDirection));
@@ -1146,7 +1148,7 @@ void yoshi_use(PartyEntry* party) {
         return;
     }
 #if VERSION <= VERSION_DEMO_JP
-    yoshiAddFloorMove(party);
+    moveHosei(party);
 #endif
     if (party->useMotionId >= 10 && party->useMotionId <= 13 && mario->currMotionId != MARIO_MOTION_YOSHI) {
         party->flags &= ~PARTY_FLAG_IS_BEING_USED;
@@ -1160,7 +1162,7 @@ void yoshi_use(PartyEntry* party) {
         return;
     }
 #if VERSION >= VERSION_JP
-    yoshiAddFloorMove(party);
+    moveHosei(party);
 #endif
     mario->camTarget.x = party->position.x;
     mario->camTarget.z = party->position.z;

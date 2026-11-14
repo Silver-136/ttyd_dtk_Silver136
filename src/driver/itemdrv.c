@@ -1638,8 +1638,8 @@ static void itemseq_GetItem(ItemEntry* entry) {
             }
             // BUG: case 0 set CAMERA_FLAG_LETTER_BOX_OFF, and this cancelled pickup undoes everything else case 0
             // did but not that (itemGetEnd clears it). The 2D camera then shows no cutscene bars until something
-            // else clears the flag (closing the pause menu, a finished item get, a Tube Mode change, ...), and JP's
-            // Pit exit pipe (jon.c dokan_open), which waits for the bars, never rises.
+            // else clears the flag (closing the pause menu, a finished item get, a Tube Mode change, ...); meanwhile
+            // JP's Pit exit pipe (jon.c dokan_open), which waits for the bars, would never rise.
             marioKeyOn();
             break;
 #endif
