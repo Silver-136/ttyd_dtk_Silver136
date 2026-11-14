@@ -332,7 +332,8 @@ USER_FUNC(evt_item_get_important_item) {
         framesLeft = dist / spd;
         speedY = dy / framesLeft + (framesLeft * 0.1f) / 2.0f;
 
-        // FAKE: float bits stored through an s32 view; event->userdataf[n] = value changes the object
+        // The float bits go into the script words as integers: the target copies them with lwz/stw
+        // (a float store would be stfs).
         event->userdata[0] = *(s32*)&framesLeft;
         event->userdata[1] = *(s32*)&speedY;
         event->userdata[2] = *(s32*)&spd;
@@ -356,7 +357,7 @@ USER_FUNC(evt_item_get_important_item) {
         return EVT_RETURN_DONE;
     }
 
-    // FAKE: float bits stored through an s32 view; event->userdataf[n] = value changes the object
+    // float bits copied as integers again (lwz/stw in the target)
     event->userdata[0] = *(s32*)&framesLeft;
     event->userdata[1] = *(s32*)&speedY;
     return EVT_RETURN_BLOCK;

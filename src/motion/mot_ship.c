@@ -904,7 +904,8 @@ static void shipMove(void) {
 #if VERSION >= VERSION_JP
     f32 len;
 
-    // FAKE: index variable that always holds 3 for shipData[3]; indexing with the constant changes the object
+    // rateIdx always holds 3 (shipData[3] is the steering rate); the target's load schedule fits a variable
+    // index (a constant index schedules the four loads differently)
     s32 rateIdx;
 #endif
     f32 spd;

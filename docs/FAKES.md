@@ -172,7 +172,6 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | src/driver/mapdrv.c | mapSetMaterialTev | `#pragma opt_lifetimes off` (push/pop) for this function only | removing it changes the object; the file-wide `-opt nolifetimes` changes other functions (2026-11-07) |
 | Both | src/driver/shadowdrv.c | _filter | opt_dead_assignments off keeps the unused `f32 t = 20.0f;`; without the pragma and t the object changes | see comment |
 | Both | src/driver/windowdrv.c | windowDispGX2_Waku_col | negated and halved in two steps with a no-op (f32) cast; `left = -width / 2.0f;` changes the object | see comment |
-| Both | src/effect/eff_kemutest.c | effKemuTestEntry | count (already equal to effect->count) is re-assigned in the loop test; `i < effect->count` changes the object | see comment |
 | Both | src/effect/eff_kemutest.c | effKemuTestEntry, effKemuTestMain | named file-scope static const aggregates (kemu_a..kemu_h, kemu_pos, kemu_tmp) copied into locals | see comment |
 | JP | src/effect/eff_kemutest.c | __declspec | zero filler objects with no known owner (4 bytes of .rodata, 28 bytes of .data; the other versions need neither); without them the object changes | see comment |
 | JP | src/effect/eff_levelup.c | effLevelupDisp | JP and early demos: work array and texid_tbl walked by byte offsets (ofs/tofs); US and later index by i | indexing by i in JP: same instructions, but the i and offset decrements come out in the other order |
@@ -189,7 +188,6 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | src/event/evt_mario.c | evt_mario_paper_pose_dokan | unreferenced static const char names[] holding the six DOKAN_* pose names with hand padding | see comment |
 | Both | src/event/evt_bero.c | bero_get_kind | walk flag picks a pointer-walk loop (evt_bero_get_info_num) or the index loop (evt_bero_get_into_info); constant-folded per call site | see comment |
 | Both | src/event/evt_cam.c | evt_cam_debug_print | stand-in for the dead-stripped evt_cam3d_evt_set_xls / evt_cam3d_evt_set_rel_xls (JP demo map, UNUSED); it only keeps their format string and 100.0f. Bodies unknown (sscanf forms tried miss the map sizes). | see comment |
-| Both | src/event/evt_item.c | evt_item_get_important_item | float bits stored through an s32 view; event->userdataf[n] = value changes the object | see comment |
 | Both | src/event/evt_mobj.c | mobj_recovery_blk_recover | case 4 repeats these steps inline instead of calling this helper; `recover(mobj->typeData[1])` there gives the same instructions with the price and pouch registers swapped (24 declaration orders, parameter types tried) | see comment |
 | Both | src/event/evt_nannpc.c | evt_nannpc_entry | the value goes through a long long cast; plain name = evtGetValue(...) changes the object | see comment |
 | Demos | src/event/evt_npc.c | npc_report_pos | stand-in for the dead-stripped evt_npc_set_position_xls (JP demo map, UNUSED 0xb4); it only keeps its "%f%f%f" at the end of .rodata. Body unknown. | see comment |
@@ -209,7 +207,6 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | src/motion/mot_hammer.c | mot_hammer | spare copy of kind in its own block; using kind directly changes the object | see comment |
 | Both | src/motion/mot_plane.c | planeDead4 | stand-in that nothing calls; it only places its 4.0f literal in this object's constant pool | see comment |
 | Both | src/motion/mot_roll.c | marioRollStrippedPool | stand-in that nothing calls; it only places these literals in this object's constant pool | see comment |
-| Both | src/motion/mot_ship.c | shipMove | index variable that always holds 3 for shipData[3]; indexing with the constant changes the object | see comment |
 | Both | src/party/party_cloud.c | partyCloudStrippedPool | stand-in that nothing calls; it only puts 0.0f, 70.0f, 180.0f and the int-to-float conversion constant in this object's constant pool | see comment |
 | Both | src/party/party_hit.c | partyHitStrippedPool | stand-in that nothing calls; it only places these literals and the int-to-float conversion constant in this object's constant pool | see comment |
 | Both | src/party/party_motion.c | party_motion_stay | hand-inlined copy of partyStayDist; the call changes the object | see comment |
@@ -220,7 +217,7 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | src/party/party_move.c | partyMoveStrippedPool | stand-in that nothing calls; it places 90.0f and 20.0f in the .sdata2 pool | see comment |
 | Both | src/party/party_nokonoko.c | nokoStrippedPool | stand-in that nothing calls (in no symbol map); it only places 10.0f, 30.0f, 100.0f, 11.0f and 6.0f in this object's constant pool; removing it changes the object | see comment |
 | Both | src/sequence/seq_battle.c | seq_battleMain | wait flag and goto check; a plain break while still waiting changes the object | see comment |
-| Both | src/sequence/seq_e3.c | e3Disp | the (u32) cast on the 8; plain i + 8 changes the object in the JP demo only (retail versions stay the same without it) | see comment |
+| Both | src/sequence/seq_e3.c | e3Disp | the (u32) cast on the 8 of the shadow box call (JP demo copy and the shared later copy); plain i + 8 lets CSE merge the two i + 8 sums (US: .text 4 bytes shorter, 2026-11-14) | see comment |
 | Both | src/sequence/seq_e3.c | forceSdata | stand-in that nothing calls (the linker strips it); it only places 30.0f in the constant pool (JP and US); removing it changes the object | see comment |
 | Both | src/unit/party/unit_party_yoshi.c | yoshiStrippedPool | stand-in that nothing calls; its s32-to-f32 conversion likely shapes the constant pool; removing it changes the object | see comment |
 | Both | src/window/win_root.c | winRootStrippedPool | stand-in that nothing calls; it only places 185.0f and 1000.0f in this object's constant pool. Removing it changes the object. | see comment |
@@ -236,7 +233,3 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | src/battle/battle_damage.c | BattleCalculateDamage | negation written as `(u32)damage * -1` | `-damage`: changes the object |
 | Both | src/driver/mapdrv.c | mapSetMaterialTev | no-op `(s32)texCount > 0` cast on the s32 parameter | `texCount > 0`: changes the object |
 | Both | src/battle/battle_audience_kinopio.c | BattleAudienceCtrlProcessKinopioWait | `threshold + (f32)(10.0f * a)` product cast | plain sum, `+=`, a named local: changes the object |
-| Both | rels/hei/src/hei_10.c | npc_jump | `event->userdata[n] = *(s32*)&t` word view of the floats | `event->userdataf[n] = t`: 351 vs 342 instructions |
-| Both | rels/pik/src/pik_02.c | hoshi_jump | `event->userdata[n] = *(s32*)&t` word view of the floats | `event->userdataf[n] = t`: 262 vs 255 instructions |
-| Both | rels/rsh/src/rsh_05.c | npc_jump | `event->userdata[n] = *(s32*)&t` word view of the floats | `event->userdataf[n] = t`: 351 vs 342 instructions |
-| Both | rels/tou2/src/tou_03.c | item_jump | `event->userdata[n] = *(s32*)&t` word view of the floats | `event->userdataf[n] = t`: 192 vs 174 instructions |

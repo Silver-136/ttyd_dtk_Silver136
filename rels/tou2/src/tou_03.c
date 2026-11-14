@@ -4183,7 +4183,8 @@ static inline s32 item_jump_sub(EventEntry* event, BOOL isFirstCall, f32 speed, 
         t = distABf(x, z, item->position.x, item->position.z) / speed;
         vy = dy / t + 0.5f * t * g;
         angle = angleABf(item->position.x, item->position.z, x, z);
-        // FAKE: float bits stored through an s32 view; event->userdataf[n] = t changes the object
+        // The float bits go into the script words as integers: the target copies them with lwz/stw
+        // (a float store would be stfs).
         event->userdata[0] = *(s32*)&t;
         event->userdata[1] = *(s32*)&vy;
         event->userdata[2] = *(s32*)&angle;
@@ -4212,7 +4213,7 @@ static inline s32 item_jump_sub(EventEntry* event, BOOL isFirstCall, f32 speed, 
         }
         return 1;
     }
-    // FAKE: float bits stored through an s32 view; event->userdataf[n] = t changes the object
+    // float bits copied as integers again (lwz/stw in the target)
     event->userdata[0] = *(s32*)&t;
     event->userdata[1] = *(s32*)&vy;
     return EVT_RETURN_BLOCK;

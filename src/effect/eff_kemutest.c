@@ -496,7 +496,7 @@ EffectEntry* effKemuTestEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
     work->rz = 0.0f;
     work++;
 
-    // FAKE: count (already equal to effect->count) is re-assigned in the loop test; `i < effect->count` changes the object
+    // count is re-read from effect->count at every loop test: the target's count - 2 below uses that load
     for (i = 1; i < (count = effect->count); i++, work++) {
         switch (type) {
             case 0:
