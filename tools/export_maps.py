@@ -7,7 +7,8 @@ linker strips as UNUSED) and copies the maps next to each other:
     build/maps/<version>/MarioSt.MAP        main program (main.dol), absolute addresses
     build/maps/<version>/<rel>.plf.MAP      one per REL; every section starts at address 0
 
-The maps come straight from mwldeppc. One change: in the "Memory map" block the File Offset column gives the
+The maps come straight from mwldeppc, with library members named "archive.a source" as in the original maps
+(e.g. "os.a OSInit.c"; the build links the objects directly). One more change: in the "Memory map" block the File Offset column gives the
 section's offset in the shipped file (main.dol or <rel>.rel, from that file's own section table) rather than in the
 linker's intermediate ELF, the empty debug-section lines are left out, and the block has two empty lines above
 and below it. Sections without file data (.bss, .sbss, .sbss2) get the offset where the file data before them ends.
@@ -25,6 +26,7 @@ last version without --map.
 usage: python tools/export_maps.py [--version G8ME01 ...] [--out DIR] [--no-build] [--ninja PATH]
 """
 import argparse
+import re
 import shutil
 import struct
 import subprocess
@@ -109,6 +111,34 @@ def stamped(text, stamp):
     return stamp.encode("ascii") + nl + text
 
 
+def library_names():
+    """{b"file.o": b"Archive.a file.c"} for library objects, named the way the original linker maps name library
+    members ("os.a OSInit.c"): the archive is the libs/ folder named *.a, else the SDK library folder
+    (libs/dolsdk2004/src/<lib>/ -> <lib>.a), else musyx.a. Only object names unique in the whole tree are renamed
+    (this matches the JP demo map's archive for every library file whose name is unique)."""
+    seen = {}
+    for p in ROOT.glob("libs/*/src/**/*"):
+        if p.suffix not in (".c", ".s", ".cpp"):
+            continue
+        rel = p.relative_to(ROOT / "libs").parts
+        arch = next((part for part in rel if part.endswith(".a")), None)
+        if arch is None and rel[0] == "dolsdk2004" and len(rel) > 3:
+            arch = rel[2] + ".a"
+        if arch is None and rel[0] == "musyx":
+            arch = "musyx.a"
+        seen.setdefault(p.stem + ".o", []).append(f"{arch} {p.name}" if arch else None)
+    for p in list(ROOT.glob("src/**/*.c")) + list(ROOT.glob("rels/**/*.c")):
+        seen.setdefault(p.stem + ".o", []).append(None)
+    return {k.encode(): v[0].encode() for k, v in seen.items() if len(v) == 1 and v[0]}
+
+
+def name_libraries(text, names):
+    """Replace a library member's object name at the end of a map line ("... found in x.o", "... \tx.o")."""
+    def sub(m):
+        return m.group(1) + names.get(m.group(2), m.group(2))
+    return re.sub(rb"([ \t])([A-Za-z0-9_.]+\.o)(?= ?\r?$)", sub, text, flags=re.M)
+
+
 def export_version(version, out_dir, stamp):
     build = ROOT / "build" / version
     dst = out_dir / version
@@ -125,7 +155,9 @@ def export_version(version, out_dir, stamp):
                 return off, s
         return None
 
-    (dst / "MarioSt.MAP").write_bytes(stamped(rewrite_memory_map(dol_map.read_bytes(), dol_offset), stamp))
+    libs = library_names()
+    (dst / "MarioSt.MAP").write_bytes(
+        stamped(name_libraries(rewrite_memory_map(dol_map.read_bytes(), dol_offset), libs), stamp))
     count = 1
     for rel in sorted(build.glob("*/*.rel")):
         name = rel.stem
@@ -144,7 +176,8 @@ def export_version(version, out_dir, stamp):
                     return off, s
             return None
 
-        (dst / f"{name}.plf.MAP").write_bytes(stamped(rewrite_memory_map(plf_map.read_bytes(), rel_offset), stamp))
+        (dst / f"{name}.plf.MAP").write_bytes(
+            stamped(name_libraries(rewrite_memory_map(plf_map.read_bytes(), rel_offset), libs), stamp))
         count += 1
     print(f"{version}: {count} maps -> {dst}")
 

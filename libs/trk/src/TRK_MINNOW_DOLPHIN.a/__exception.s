@@ -8,10 +8,10 @@
 gTRKInterruptVectorTable:
 	.asciz "Metrowerks Target Resident Kernel for PowerPC"
 	.skip 0xD2
-rfi_0:
+.L_rfi_0:
 	b __TRK_reset
 	.skip 0xFC
-rfi_1:
+.L_rfi_1:
 	mtsprg 1, r2
 	mfsrr0 r2
 	icbi r0, r2
@@ -32,7 +32,7 @@ rfi_1:
 	li r3, 0x200
 	rfi
 	.skip 0xB4
-rfi_2:
+.L_rfi_2:
 	mtsprg 1, r2
 	mtsprg 2, r3
 	mtsprg 3, r4
@@ -47,10 +47,9 @@ rfi_2:
 	li r3, 0x300
 	rfi
 	.skip 0x78
-.global gTRKInterruptVectorTable_500
-gTRKInterruptVectorTable_500:
+.L_gTRKInterruptVectorTable_500:
 	.skip 0x54
-rfi_3:
+.L_rfi_3:
 	mtsprg 1, r2
 	mtsprg 2, r3
 	mtsprg 3, r4
@@ -65,7 +64,7 @@ rfi_3:
 	li r3, 0x400
 	rfi
 	.skip 0xCC
-rfi_4:
+.L_rfi_4:
 	mtsprg 1, r2
 	mtsprg 2, r3
 	mtsprg 3, r4
@@ -80,7 +79,7 @@ rfi_4:
 	li r3, 0x500
 	rfi
 	.skip 0xCC
-rfi_5:
+.L_rfi_5:
 	mtsprg 1, r2
 	mtsprg 2, r3
 	mtsprg 3, r4
@@ -95,7 +94,7 @@ rfi_5:
 	li r3, 0x600
 	rfi
 	.skip 0xCC
-rfi_6:
+.L_rfi_6:
 	mtsprg 1, r2
 	mtsprg 2, r3
 	mtsprg 3, r4
@@ -110,7 +109,7 @@ rfi_6:
 	li r3, 0x700
 	rfi
 	.skip 0xCC
-rfi_7:
+.L_rfi_7:
 	mtsprg 1, r2
 	mtsprg 2, r3
 	mtsprg 3, r4
@@ -125,7 +124,7 @@ rfi_7:
 	li r3, 0x800
 	rfi
 	.skip 0xCC
-rfi_8:
+.L_rfi_8:
 	mtsprg 1, r2
 	mtsprg 2, r3
 	mtsprg 3, r4
@@ -140,7 +139,7 @@ rfi_8:
 	li r3, 0x900
 	rfi
 	.skip 0x2CC
-rfi_9:
+.L_rfi_9:
 	mtsprg 1, r2
 	mtsprg 2, r3
 	mtsprg 3, r4
@@ -155,7 +154,7 @@ rfi_9:
 	li r3, 0xc00
 	rfi
 	.skip 0xCC
-rfi_10:
+.L_rfi_10:
 	mtsprg 1, r2
 	mtsprg 2, r3
 	mtsprg 3, r4
@@ -170,7 +169,7 @@ rfi_10:
 	li r3, 0xd00
 	rfi
 	.skip 0xCC
-rfi_11:
+.L_rfi_11:
 	mtsprg 1, r2
 	mtsprg 2, r3
 	mtsprg 3, r4
@@ -185,8 +184,8 @@ rfi_11:
 	li r3, 0xe00
 	rfi
 	.skip 0xCC
-rfi_12:
-	b rfi_13
+.L_rfi_12:
+	b .L_rfi_13
 	.skip 0x1C
 	mtsprg 1, r2
 	mtsprg 2, r3
@@ -201,7 +200,7 @@ rfi_12:
 	mtsrr0 r3
 	li r3, 0xf20
 	rfi
-rfi_13:
+.L_rfi_13:
 	mtsprg 1, r2
 	mtsprg 2, r3
 	mtsprg 3, r4
@@ -216,20 +215,20 @@ rfi_13:
 	li r3, 0xf00
 	rfi
 	.skip 0x78
-rfi_14:
+.L_rfi_14:
 	mtsprg 1, r2
 	mfcr r2
 	mtsprg 2, r2
 	mfmsr r2
 	andis. r2, r2, 0x2
-	beq L_80004184
+	beq .L_80004184
 	mfmsr r2
 	xoris r2, r2, 0x2
 	sync
 	mtmsr r2
 	sync
 	mtsprg 1, r2
-L_80004184:
+.L_80004184:
 	mfsprg r2, 2
 	mtcrf 255, r2
 	mfsprg r2, 1
@@ -247,20 +246,20 @@ L_80004184:
 	li r3, 0x1000
 	rfi
 	.skip 0x90
-rfi_15:
+.L_rfi_15:
 	mtsprg 1, r2
 	mfcr r2
 	mtsprg 2, r2
 	mfmsr r2
 	andis. r2, r2, 0x2
-	beq L_80004284
+	beq .L_80004284
 	mfmsr r2
 	xoris r2, r2, 0x2
 	sync
 	mtmsr r2
 	sync
 	mtsprg 1, r2
-L_80004284:
+.L_80004284:
 	mfsprg r2, 2
 	mtcrf 255, r2
 	mfsprg r2, 1
@@ -278,20 +277,20 @@ L_80004284:
 	li r3, 0x1100
 	rfi
 	.skip 0x90
-rfi_16:
+.L_rfi_16:
 	mtsprg 1, r2
 	mfcr r2
 	mtsprg 2, r2
 	mfmsr r2
 	andis. r2, r2, 0x2
-	beq L_80004384
+	beq .L_80004384
 	mfmsr r2
 	xoris r2, r2, 0x2
 	sync
 	mtmsr r2
 	sync
 	mtsprg 1, r2
-L_80004384:
+.L_80004384:
 	mfsprg r2, 2
 	mtcrf 255, r2
 	mfsprg r2, 1
@@ -309,7 +308,7 @@ L_80004384:
 	li r3, 0x1200
 	rfi
 	.skip 0x90
-rfi_17:
+.L_rfi_17:
 	mtsprg 1, r2
 	mtsprg 2, r3
 	mtsprg 3, r4
@@ -324,7 +323,7 @@ rfi_17:
 	li r3, 0x1300
 	rfi
 	.skip 0xCC
-rfi_18:
+.L_rfi_18:
 	mtsprg 1, r2
 	mtsprg 2, r3
 	mtsprg 3, r4
@@ -339,7 +338,7 @@ rfi_18:
 	li r3, 0x1400
 	rfi
 	.skip 0x1CC
-rfi_19:
+.L_rfi_19:
 	mtsprg 1, r2
 	mtsprg 2, r3
 	mtsprg 3, r4
@@ -354,7 +353,7 @@ rfi_19:
 	li r3, 0x1600
 	rfi
 	.skip 0xCC
-rfi_20:
+.L_rfi_20:
 	mtsprg 1, r2
 	mtsprg 2, r3
 	mtsprg 3, r4
@@ -369,7 +368,7 @@ rfi_20:
 	li r3, 0x1700
 	rfi
 	.skip 0x4CC
-rfi_21:
+.L_rfi_21:
 	mtsprg 1, r2
 	mtsprg 2, r3
 	mtsprg 3, r4
@@ -384,7 +383,7 @@ rfi_21:
 	li r3, 0x1c00
 	rfi
 	.skip 0xCC
-rfi_22:
+.L_rfi_22:
 	mtsprg 1, r2
 	mtsprg 2, r3
 	mtsprg 3, r4
@@ -399,7 +398,7 @@ rfi_22:
 	li r3, 0x1d00
 	rfi
 	.skip 0xCC
-rfi_23:
+.L_rfi_23:
 	mtsprg 1, r2
 	mtsprg 2, r3
 	mtsprg 3, r4
@@ -414,7 +413,7 @@ rfi_23:
 	li r3, 0x1e00
 	rfi
 	.skip 0xCC
-rfi_24:
+.L_rfi_24:
 	mtsprg 1, r2
 	mtsprg 2, r3
 	mtsprg 3, r4
@@ -428,3 +427,6 @@ rfi_24:
 	mtsrr0 r3
 	li r3, 0x1f00
 	rfi
+
+.global gTRKInterruptVectorTableEnd
+gTRKInterruptVectorTableEnd:
