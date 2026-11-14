@@ -78,6 +78,48 @@ void sndFree(void* ptr) {
     __memFree(HEAP_DEFAULT, ptr);
 }
 
+/** Builds "<DVD root>/<path><ext>" in the shared string buffer and returns it. */
+// Original name and size (0x64) from the JP demo map (UNUSED there: every call is inlined).
+char* makeFilename(const char* path, const char* ext) {
+    sprintf(_ssGetStr(), "%s/%s%s", getMarioStDvdRoot(), path, ext);
+    return _ssGetStr();
+}
+
+/**
+ * Reads the whole file name into a new default-heap buffer (size rounded up to 32 bytes) and returns it, or NULL
+ * when the file is missing or empty, the allocation fails or the read fails.
+ */
+// Original name and size (0xc4) from the JP demo map (UNUSED there: every call is inlined).
+void* ReadMusyXData(const char* name) {
+    DVDEntry* entry;
+    u32 size;
+    u32 length;
+    void* pointer;
+
+    entry = DVDMgrOpen(name, 2, 0);
+    if (entry == NULL) {
+        return NULL;
+    }
+    size = DVDMgrGetLength(entry);
+    if (size == 0) {
+        return NULL;
+    }
+    length = OSRoundUp32B(size);
+    pointer = __memAlloc(HEAP_DEFAULT, length);
+
+    // BUG: DVDMgrClose runs only after a good read: an empty file, a failed allocation or a failed read leaves the
+    // entry open.
+    if (pointer == NULL) {
+        return NULL;
+    }
+    if (DVDMgrRead(entry, pointer, length, 0) <= 0) {
+        __memFree(HEAP_DEFAULT, pointer);
+        return NULL;
+    }
+    DVDMgrClose(entry);
+    return pointer;
+}
+
 /** Returns the song library group with index, or NULL. */
 // Original name and size (0x38) from the JP demo map (UNUSED there: every call is inlined).
 SoundGroup* searchSongPtr(u8 groupIndex) {
@@ -355,11 +397,9 @@ static void* loadDVD_callback(u32 offset, u32 bytes) {
  * returns FALSE when a file fails.
  */
 BOOL SoundLoadDVD2(const char* path) {
-    DVDEntry* entry;
 #if VERSION <= VERSION_DEMO_JP
     const char* root;
 #endif
-    u32 length;
     void* pointer;
 
     if (sound.dataId >= 8) {
@@ -368,94 +408,28 @@ BOOL SoundLoadDVD2(const char* path) {
 #if VERSION <= VERSION_DEMO_JP
     root = getMarioStDvdRoot();
     sprintf(_ssGetStr(), "%s/%s%s", root, path, ".pool");
-    entry = DVDMgrOpen(_ssGetStr(), 2, 0);
+    pointer = ReadMusyXData(_ssGetStr());
 #else
-    sprintf(_ssGetStr(), "%s/%s%s", getMarioStDvdRoot(), path, ".pool");
-    entry = DVDMgrOpen(_ssGetStr(), 2, 0);
+    pointer = ReadMusyXData(makeFilename(path, ".pool"));
 #endif
-    // FAKE: dead store; removing it changes the object
-    length = entry == NULL;
-    if (entry == NULL) {
-        pointer = NULL;
-    } else {
-        length = DVDMgrGetLength(entry);
-        if (length == 0) {
-            pointer = NULL;
-        } else {
-            length = OSRoundUp32B(length);
-            pointer = __memAlloc(HEAP_DEFAULT, length);
-
-            // BUG: here and for the .proj and .sdir files, DVDMgrClose runs only after a good read: an empty file,
-            // a failed allocation or a failed read leaves the entry open.
-            if (pointer == NULL) {
-                pointer = NULL;
-            } else if (DVDMgrRead(entry, pointer, length, 0) <= 0) {
-                __memFree(HEAP_DEFAULT, pointer);
-                pointer = NULL;
-            } else {
-                DVDMgrClose(entry);
-            }
-        }
-    }
     if (pointer == NULL) {
         return FALSE;
     }
     sound.poolData[sound.dataId] = pointer;
 
-    sprintf(_ssGetStr(), "%s/%s%s", getMarioStDvdRoot(), path, ".proj");
-    entry = DVDMgrOpen(_ssGetStr(), 2, 0);
-    if (entry == NULL) {
-        pointer = NULL;
-    } else {
-        length = DVDMgrGetLength(entry);
-        if (length == 0) {
-            pointer = NULL;
-        } else {
-            length = OSRoundUp32B(length);
-            pointer = __memAlloc(HEAP_DEFAULT, length);
-            if (pointer == NULL) {
-                pointer = NULL;
-            } else if (DVDMgrRead(entry, pointer, length, 0) <= 0) {
-                __memFree(HEAP_DEFAULT, pointer);
-                pointer = NULL;
-            } else {
-                DVDMgrClose(entry);
-            }
-        }
-    }
+    pointer = ReadMusyXData(makeFilename(path, ".proj"));
     if (pointer == NULL) {
         return FALSE;
     }
     sound.projData[sound.dataId] = pointer;
 
-    sprintf(_ssGetStr(), "%s/%s%s", getMarioStDvdRoot(), path, ".sdir");
-    entry = DVDMgrOpen(_ssGetStr(), 2, 0);
-    if (entry == NULL) {
-        pointer = NULL;
-    } else {
-        length = DVDMgrGetLength(entry);
-        if (length == 0) {
-            pointer = NULL;
-        } else {
-            length = OSRoundUp32B(length);
-            pointer = __memAlloc(HEAP_DEFAULT, length);
-            if (pointer == NULL) {
-                pointer = NULL;
-            } else if (DVDMgrRead(entry, pointer, length, 0) <= 0) {
-                __memFree(HEAP_DEFAULT, pointer);
-                pointer = NULL;
-            } else {
-                DVDMgrClose(entry);
-            }
-        }
-    }
+    pointer = ReadMusyXData(makeFilename(path, ".sdir"));
     if (pointer == NULL) {
         return FALSE;
     }
     sound.sdirData[sound.dataId] = pointer;
 
-    sprintf(_ssGetStr(), "%s/%s%s", getMarioStDvdRoot(), path, ".samp");
-    strcpy(sound.filepath, _ssGetStr());
+    strcpy(sound.filepath, makeFilename(path, ".samp"));
     sndSetSampleDataUploadCallback(loadDVD_callback, 0x20000);
     return TRUE;
 }
@@ -510,15 +484,11 @@ void SoundLoadDVD2Free(void) {
  */
 BOOL SoundSLibLoadDVD(const char* path) {
     SoundGroup* groupsHead;
-    u32 length2;
-    u32 length3;
     SoundGroup* iter;
     SoundGroup* group;
-    u32 blockSize;
     u32* cursor;
+    u32 blockSize;
     u16 id;
-    DVDEntry* entry;
-    u32 length;
     void* pointer;
     void* pointer2;
     void* pointer3;
@@ -527,27 +497,7 @@ BOOL SoundSLibLoadDVD(const char* path) {
         return FALSE;
     }
 
-    sprintf(_ssGetStr(), "%s/%s%s", getMarioStDvdRoot(), path, ".slib");
-    entry = DVDMgrOpen(_ssGetStr(), 2, 0);
-    if (entry == NULL) {
-        pointer = NULL;
-    } else {
-        length = DVDMgrGetLength(entry);
-        if (length == 0) {
-            pointer = NULL;
-        } else {
-            length = OSRoundUp32B(length);
-            pointer = __memAlloc(HEAP_DEFAULT, length);
-            if (pointer == NULL) {
-                pointer = NULL;
-            } else if (DVDMgrRead(entry, pointer, length, 0) <= 0) {
-                __memFree(HEAP_DEFAULT, pointer);
-                pointer = NULL;
-            } else {
-                DVDMgrClose(entry);
-            }
-        }
-    }
+    pointer = ReadMusyXData(makeFilename(path, ".slib"));
     if ((cursor = pointer) == NULL) {
         return FALSE;
     }
@@ -585,53 +535,13 @@ BOOL SoundSLibLoadDVD(const char* path) {
         cursor = (u32*)((u8*)cursor + blockSize);
     }
 
-    sprintf(_ssGetStr(), "%s/%s%s", getMarioStDvdRoot(), path, ".stbl");
-    entry = DVDMgrOpen(_ssGetStr(), 2, 0);
-    if (entry == NULL) {
-        pointer2 = NULL;
-    } else {
-        length2 = DVDMgrGetLength(entry);
-        if (length2 == 0) {
-            pointer2 = NULL;
-        } else {
-            length2 = OSRoundUp32B(length2);
-            pointer2 = __memAlloc(HEAP_DEFAULT, length2);
-            if (pointer2 == NULL) {
-                pointer2 = NULL;
-            } else if (DVDMgrRead(entry, pointer2, length2, 0) <= 0) {
-                __memFree(HEAP_DEFAULT, pointer2);
-                pointer2 = NULL;
-            } else {
-                DVDMgrClose(entry);
-            }
-        }
-    }
+    pointer2 = ReadMusyXData(makeFilename(path, ".stbl"));
     if (pointer2 == NULL) {
         return FALSE;
     }
     sound.stblData[sound.slibId] = pointer2;
 
-    sprintf(_ssGetStr(), "%s/%s%s", getMarioStDvdRoot(), path, ".etbl");
-    entry = DVDMgrOpen(_ssGetStr(), 2, 0);
-    if (entry == NULL) {
-        pointer3 = NULL;
-    } else {
-        length3 = DVDMgrGetLength(entry);
-        if (length3 == 0) {
-            pointer3 = NULL;
-        } else {
-            length3 = OSRoundUp32B(length3);
-            pointer3 = __memAlloc(HEAP_DEFAULT, length3);
-            if (pointer3 == NULL) {
-                pointer3 = NULL;
-            } else if (DVDMgrRead(entry, pointer3, length3, 0) <= 0) {
-                __memFree(HEAP_DEFAULT, pointer3);
-                pointer3 = NULL;
-            } else {
-                DVDMgrClose(entry);
-            }
-        }
-    }
+    pointer3 = ReadMusyXData(makeFilename(path, ".etbl"));
     if (pointer3 == NULL) {
         return FALSE;
     }
@@ -2021,12 +1931,7 @@ void SoundSSPlayCh(s32 chan, const char* name) {
 void SoundSSPlayChEx(s32 chan, const char* name, s32 aram) {
     SoundStream* stream;
     int i;
-#if VERSION <= VERSION_DEMO_JP
     const char* path;
-    const char* paths[1];
-#else
-    const char* path;
-#endif
     stream = &sound.streams[chan];
     if (stream->flags) {
         SoundSSStopCh(chan);
@@ -2054,9 +1959,7 @@ void SoundSSPlayChEx(s32 chan, const char* name, s32 aram) {
         stream->flags |= SOUND_STREAM_FLAG_ARAM;
     }
 #if VERSION <= VERSION_DEMO_JP
-    sprintf(_ssGetStr(), "%s/%s%s", getMarioStDvdRoot(), name, ".stm");
-    paths[0] = _ssGetStr();
-    path = paths[0];
+    path = makeFilename(name, ".stm");
     if (!(stream->entries[0].dvd = DVDMgrOpen(path, 0, 0))) {
 #else
     path = getMarioStDvdRoot();

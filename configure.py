@@ -692,7 +692,7 @@ config.libs = [
             Object(MatchingFor("G8MJ01", "G8ME01"), "effect/n64/eff_rappa_n64.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "effect/n64/eff_recover_heart_n64.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "effect/n64/eff_release_n64.c"),
-            Object(MatchingFor("G8MJ01", "G8ME01"), "effect/n64/eff_ripple_n64.c", cflags=cflags_static_nodefer),
+            Object(MatchingFor("G8MJ01", "G8ME01"), "effect/n64/eff_ripple_n64.c", extra_cflags=["-inline noauto"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "effect/n64/eff_rothammer_fail_n64.c", extra_cflags=["-opt noprop"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "effect/n64/eff_rothammer_success_n64.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "effect/n64/eff_rubble_n64.c"),

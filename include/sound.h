@@ -238,6 +238,8 @@ typedef struct SoundWork {
 
 extern SoundWork sound;
 
+char* makeFilename(const char* path, const char* ext);
+void* ReadMusyXData(const char* name);
 void SoundInit(void);
 void SoundMain(void);
 void SoundMainInt(void);

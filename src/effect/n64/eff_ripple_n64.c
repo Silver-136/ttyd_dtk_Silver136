@@ -17,14 +17,111 @@ static effN64Vtx size16x16_tex32x32_0_vtx[] = {
     {-8, 0, 8, 0, 1024, 0, 0, 0, 255},
 };
 
-// FAKE: section placement (.rodata) of the zero Vec; a plain static const Vec changes the object
-__declspec(section ".rodata") static Vec vec3_802fb520 = {0.0f, 0.0f, 0.0f};
+static void effRippleDisp(CameraId cameraId, void* payload);
+static void effRippleMain(EffectEntry* effect);
 
-/** Sets the x/z rotation of the ripple plane (degrees), so it can lie on a slanted surface. Used by bom_01 and eff_ripple.c. */
-void effRippleN64SetRxRz(EffectEntry* effect, f32 rx, f32 rz) {
-    EffRippleN64Work* work = effect->userdata;
-    work->rx = rx;
-    work->rz = rz;
+/**
+ * Spawns a ripple at (x, y, z); type 1/2/3 (or 10/20/30) select the start scale.
+ * Used by eff_ripple.c, las_29, mario_kemuri, party_vivian and event scripts.
+ */
+EffectEntry* effRippleN64Entry(s32 type, f32 x, f32 y, f32 z, f32 yOffset) {
+    EffectEntry* effect;
+    EffRippleN64Work* work;
+
+    effect = effEntry();
+    effect->type = "RippleN64";
+    effect->count = 1;
+    work = __memAlloc(HEAP_EFFECT, sizeof(EffRippleN64Work));
+    effect->userdata = work;
+    effect->callback = effRippleMain;
+    work->type = type;
+    work->position.x = x;
+    work->position.y = y;
+    work->position.z = z;
+    work->alpha = 0;
+    work->frame = 0;
+    work->rx = 0.0f;
+    work->rz = 0.0f;
+    work->scaleY = 1.0f;
+    work->cameraId = CAMERA_3D;
+    switch (type) {
+        case 1:
+        case 10:
+            work->scale = 0.6f;
+            break;
+        case 2:
+        case 20:
+            work->scale = 10.0f;
+            break;
+        case 3:
+        case 30:
+            work->scale = 10.0f;
+            break;
+        default:
+            work->scale = 1.0f;
+            break;
+    }
+    work->lifetime = 32;
+    work->offset = rand() % 32;
+    work->unk28 = y + yOffset;
+    return effect;
+}
+
+/**
+ * Grows the ring by 0.1 per frame (types 2/3 and 20/30 also by 5%),
+ * eases alpha toward 120 and fades it over the last 32 frames (the whole 32-frame life, so the fade sets the
+ * alpha from the second frame on), and scrolls the texture.
+ * Types 1-3 spawn a second ring (type x10) at the same spot and tilt 15 frames before they end.
+ * Deletes when the lifetime runs out; drawn on the work's camera, layer 2.
+ */
+static void effRippleMain(EffectEntry* effect) {
+    EffRippleN64Work* work;
+    EffectEntry* e;
+    EffRippleN64Work* w;
+    f32 rz;
+    s32 lifetime;
+    s32 type;
+    Vec position;
+    Vec tmp = {0.0f, 0.0f, 0.0f};
+
+    work = effect->userdata;
+    tmp.x = work->position.x;
+    tmp.y = work->position.y;
+    tmp.z = work->position.z;
+    position = tmp;
+    lifetime = work->lifetime;
+    type = work->type;
+    work->lifetime--;
+    work->frame++;
+    if (work->lifetime < 0) {
+        effDelete(effect);
+        return;
+    }
+    if (lifetime > 5) {
+        work->alpha += 0.3f * (120 - work->alpha);
+    }
+    if ((type == 1 || type == 2 || type == 3) && lifetime == 15) {
+        e = effRippleN64Entry(type * 10, work->position.x, work->position.y, work->position.z, 0.0f);
+        rz = work->rz;
+        w = e->userdata;
+        w->rx = work->rx;
+        w->rz = rz;
+    }
+    if (type == 2 || type == 20) {
+        work->scale *= 1.05f;
+    }
+    if (type == 3 || type == 30) {
+        work->scale *= 1.05f;
+    }
+    if (lifetime < 32) {
+        work->alpha = lifetime * 8;
+    }
+    work->offset++;
+    if (work->offset >= 32) {
+        work->offset -= 32;
+    }
+    work->scale += 0.1f;
+    dispEntry(work->cameraId, dispCalcZ(&position), DISP_MODE_XLU, effRippleDisp, effect);
 }
 
 /**
@@ -36,9 +133,9 @@ void effRippleN64SetRxRz(EffectEntry* effect, f32 rx, f32 rz) {
 static void effRippleDisp(CameraId cameraId, void* payload) {
     EffectEntry* effect = payload;
     CameraEntry* camera;
+    EffRippleN64Work* work;
     s32 type;
     s32 offset;
-    EffRippleN64Work* work;
     Mtx mtx;
     Mtx scale;
     Mtx rotX;
@@ -46,9 +143,8 @@ static void effRippleDisp(CameraId cameraId, void* payload) {
 
     camera = camGetPtr(cameraId);
 
-    // FAKE: type is read through a cast of userdata before work is set; reading work->type changes the object
-    type = ((EffRippleN64Work*)effect->userdata)->type;
     work = effect->userdata;
+    type = work->type;
     if (type == 10 || type == 20 || type == 1 || type == 2 || type == 3 || type == 30) {
         effGetTexObj(0x5B, &texObj);
     } else {
@@ -97,107 +193,9 @@ static void effRippleDisp(CameraId cameraId, void* payload) {
     tri2(0, 1, 2, 0, 0, 2, 3, 0);
 }
 
-/**
- * Grows the ring by 0.1 per frame (types 2/3 and 20/30 also by 5%),
- * eases alpha toward 120 and fades it over the last 32 frames (the whole 32-frame life, so the fade sets the
- * alpha from the second frame on), and scrolls the texture.
- * Types 1-3 spawn a second ring (type x10) at the same spot and tilt 15 frames before they end.
- * Deletes when the lifetime runs out; drawn on the work's camera, layer 2.
- */
-static void effRippleMain(EffectEntry* effect) {
-    EffRippleN64Work* work;
-    EffectEntry* e;
-    EffRippleN64Work* w;
-    f32 rz;
-    s32 lifetime;
-    s32 type;
-    Vec position;
-    Vec tmp;
-
-    work = effect->userdata;
-    tmp = vec3_802fb520;
-    tmp.x = work->position.x;
-    tmp.y = work->position.y;
-    tmp.z = work->position.z;
-    position = tmp;
-    lifetime = work->lifetime;
-    type = work->type;
-    work->lifetime--;
-    work->frame++;
-    if (work->lifetime < 0) {
-        effDelete(effect);
-        return;
-    }
-    if (lifetime > 5) {
-        work->alpha += 0.3f * (120 - work->alpha);
-    }
-    if ((type == 1 || type == 2 || type == 3) && lifetime == 15) {
-        e = effRippleN64Entry(type * 10, work->position.x, work->position.y, work->position.z, 0.0f);
-        rz = work->rz;
-        w = e->userdata;
-        w->rx = work->rx;
-        w->rz = rz;
-    }
-    if (type == 2 || type == 20) {
-        work->scale *= 1.05f;
-    }
-    if (type == 3 || type == 30) {
-        work->scale *= 1.05f;
-    }
-    if (lifetime < 32) {
-        work->alpha = lifetime * 8;
-    }
-    work->offset++;
-    if (work->offset >= 32) {
-        work->offset -= 32;
-    }
-    work->scale += 0.1f;
-    dispEntry(work->cameraId, dispCalcZ(&position), DISP_MODE_XLU, effRippleDisp, effect);
-}
-
-/**
- * Spawns a ripple at (x, y, z); type 1/2/3 (or 10/20/30) select the start scale.
- * Used by eff_ripple.c, las_29, mario_kemuri, party_vivian and event scripts.
- */
-EffectEntry* effRippleN64Entry(s32 type, f32 x, f32 y, f32 z, f32 yOffset) {
-    EffectEntry* effect;
-    EffRippleN64Work* work;
-
-    effect = effEntry();
-    effect->type = "RippleN64";
-    effect->count = 1;
-    work = __memAlloc(HEAP_EFFECT, sizeof(EffRippleN64Work));
-    effect->userdata = work;
-    effect->callback = effRippleMain;
-    work->type = type;
-    work->position.x = x;
-    work->position.y = y;
-    work->position.z = z;
-    work->alpha = 0;
-    work->frame = 0;
-    work->rx = 0.0f;
-    work->rz = 0.0f;
-    work->scaleY = 1.0f;
-    work->cameraId = CAMERA_3D;
-    switch (type) {
-        case 1:
-        case 10:
-            work->scale = 0.6f;
-            break;
-        case 2:
-        case 20:
-            work->scale = 10.0f;
-            break;
-        case 3:
-        case 30:
-            work->scale = 10.0f;
-            break;
-        default:
-            work->scale = 1.0f;
-            break;
-    }
-    work->lifetime = 32;
-    work->offset = rand() % 32;
-    work->unk28 = y + yOffset;
-    return effect;
+/** Sets the x/z rotation of the ripple plane (degrees), so it can lie on a slanted surface. Used by bom_01 and eff_ripple.c. */
+void effRippleN64SetRxRz(EffectEntry* effect, f32 rx, f32 rz) {
+    EffRippleN64Work* work = effect->userdata;
+    work->rx = rx;
+    work->rz = rz;
 }
