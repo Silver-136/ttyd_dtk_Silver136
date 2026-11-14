@@ -2085,10 +2085,11 @@ static EVT_BEGIN(dokan_open)
 #if VERSION >= VERSION_US
     WAIT_MS(1000)
 #else
-    // BUG: evt_cam_letter_box_wait has no time limit, and camLetterBox only brings the bars in while no partner
-    // ability is in use and the letterbox is not disabled. If the bars cannot come in here, this script waits
-    // forever with Mario's controls off and the pipe never rises (the early-demo branch above has the same wait;
-    // US waits a fixed second instead).
+    // BUG: evt_cam_letter_box_wait has no time limit, and camLetterBox only brings the bars in while
+    // CAMERA_FLAG_LETTER_BOX_OFF is clear (and no partner ability is in use). That flag survives map changes and is
+    // left set by an item pickup cancelled in mid-jump (itemdrv.c, item get subState 8), so after such a pickup
+    // anywhere earlier this script waits forever with Mario's controls off and the pipe never rises (the
+    // early-demo branch above has the same wait; US waits a fixed second instead).
     CALL(evt_cam_letter_box_wait)
 #endif
 #endif
