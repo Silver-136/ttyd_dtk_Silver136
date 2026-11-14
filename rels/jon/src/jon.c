@@ -2088,9 +2088,10 @@ static EVT_BEGIN(dokan_open)
     // BUG: evt_cam_letter_box_wait has no time limit, and camLetterBox only brings the bars in while
     // CAMERA_FLAG_LETTER_BOX_OFF is clear, no door or pipe transition is busy, the sequence is SEQ_GAME and no
     // partner ability is in use. If any of these still holds here, this script waits forever with Mario's controls
-    // off and the pipe never rises. One known way: the flag survives map changes and is left set by an item pickup
-    // cancelled in mid-jump (itemdrv.c, item get subState 8). Not every reported case is explained by it. The
-    // early-demo branch above has the same wait; US waits a fixed second instead.
+    // off and the pipe never rises. The flag survives map changes; known ways to leave it set: the Paper Mode fall
+    // through the gor_03 grate into tik_07 (tik_07.c tik_07_down_evt; PAL clears it there) and an item pickup
+    // cancelled in mid-jump (itemdrv.c, item get subState 8). The early-demo branch above has the same wait; US
+    // waits a fixed second instead.
     CALL(evt_cam_letter_box_wait)
 #endif
 #endif

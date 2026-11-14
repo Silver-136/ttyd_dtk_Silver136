@@ -237,6 +237,11 @@ EVT_BEGIN(tik_07_down_evt)
         CALL(evt_cam3d_evt_off, 0, EASING_SINE_IN_OUT)
         WAIT_MS(400)
         CALL(evt_mario_key_onoff, 1)
+        // BUG (before the September 2004 PAL demo): falling through the gor_03 grate in Paper Mode starts the slit
+        // crack fall (mot_slit.c SLIT_STATE_CRACK_1 sets CAMERA_FLAG_LETTER_BOX_OFF; only SLIT_STATE_CRACK_5, the
+        // landing in the same map, clears it), and the map changes to here mid-fall, so the flag stays set: no
+        // cutscene bars afterwards until something else clears it, and in JP the Pit exit pipe (jon.c dokan_open)
+        // never rises. The PAL builds clear it here.
 #if VERSION >= VERSION_DEMO_EU
         CALL(evt_cam_letter_box_disable, 0)
 #endif
