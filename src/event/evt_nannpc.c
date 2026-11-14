@@ -828,7 +828,3 @@ USER_FUNC(evt_nannpcwork_flag_onoff) {
     }
     return EVT_RETURN_DONE;
 }
-#pragma explicit_zero_data reset
-
-#pragma explicit_zero_data on
-#pragma explicit_zero_data reset

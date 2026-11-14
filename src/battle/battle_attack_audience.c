@@ -269,11 +269,6 @@ void* btlataudGetMoveEventPtr(s32 id) {
     }
 }
 
-#if VERSION < VERSION_US
-// FAKE: 4-byte placement object that keeps the JP .data layout; removing it changes the object.
-__declspec(section ".data") static s32 btlataudevtDummyPad[1] = {0};
-#endif
-
 /** Fallback audience attack for units without their own: hit the member holding the item and resume. */
 static EVT_BEGIN(btlataudevtDummy)
     CALL(_get_attack_aud_no, LW(3), LW(0), LW(1), LW(2))

@@ -1445,9 +1445,9 @@ static void ext_moamoa_main(void) {
     } else {
         v = (Vec){mario->floorMove.x, mario->floorMove.y, mario->floorMove.z};
 
-        // FAKE: unreferenced 12-byte .rodata pad object, defined after the compound literal's template so the template comes first (target order)
+        // unused zero Vec (its initializer template is in the retail .rodata, after the compound literal's: JP demo map @1020)
         {
-            static const Vec zv2 = {0.0f, 0.0f, 0.0f};
+            Vec zero = {0.0f, 0.0f, 0.0f};
         }
         if (PSVECMag(&v) > 2.0f) {
             PSVECNormalize(&v, &v);
@@ -1459,9 +1459,9 @@ static void ext_moamoa_main(void) {
 #else
     v = (Vec){mario->floorMove.x, mario->floorMove.y, mario->floorMove.z};
 
-    // FAKE: unreferenced 12-byte .rodata pad object, defined after the compound literal's template so the template comes first (target order)
+    // unused zero Vec (its initializer template is in the retail .rodata, after the compound literal's: JP demo map @1020)
     {
-        static const Vec zv2 = {0.0f, 0.0f, 0.0f};
+        Vec zero = {0.0f, 0.0f, 0.0f};
     }
     if (PSVECMag(&v) > 2.0f) {
         PSVECNormalize(&v, &v);

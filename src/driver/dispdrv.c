@@ -201,11 +201,3 @@ f32 dispCalcZ(Vec* input) {
 DispEntry* dispGetCurWork(void) {
     return currentWorkPtr;
 }
-
-// Padding object: 28 zero bytes the JP and later .sdata holds after offset_tbl; no source form for them is known
-// (layout debt, docs/CLEANUP_BACKLOG.md)
-#if VERSION >= VERSION_JP
-#pragma force_active on
-u32 gap_07_8040F344_sdata[7] = {0, 0, 0, 0, 0, 0, 0};
-#pragma force_active reset
-#endif

@@ -387,12 +387,10 @@ void effTexSetupN64(void) {
 
 /** Fills obj with effect texture id from the loaded palette, or a 1x1 placeholder until loading has finished. */
 void effGetTexObjN64(u32 id, GXTexObj* obj) {
-#pragma explicit_zero_data on
-    static u8 dummy ATTRIBUTE_ALIGN(32) = 0;
-#pragma explicit_zero_data reset
+    static char dummy[] ATTRIBUTE_ALIGN(32) = "";
 
     if (!wp->effTextureLoaded) {
-        GXInitTexObj(obj, &dummy, 1, 1, GX_TF_I4, GX_CLAMP, GX_CLAMP, GX_FALSE);
+        GXInitTexObj(obj, dummy, 1, 1, GX_TF_I4, GX_CLAMP, GX_CLAMP, GX_FALSE);
     } else {
         TEXGetGXTexObjFromPalette(wp->effTexture, obj, id);
     }

@@ -316,26 +316,23 @@ void effTexSetup(void) {
     effTexSetupN64();
 }
 
-// explicit_zero_data keeps the zero-initialised `dummy` textures in .sdata instead of .sbss
-#pragma explicit_zero_data on
 void effGetTexObj(u32 id, GXTexObj* obj) {
     if ((s32)id < EFF_NTEX) { // number of images in effect.tpl
         if (!wp->texLoaded) {
-            static char dummy ATTRIBUTE_ALIGN(32) = '\0';
-            GXInitTexObj(obj, &dummy, 1, 1, GX_TF_I4, GX_CLAMP, GX_CLAMP, GX_FALSE);
+            static char dummy[] ATTRIBUTE_ALIGN(32) = "";
+            GXInitTexObj(obj, dummy, 1, 1, GX_TF_I4, GX_CLAMP, GX_CLAMP, GX_FALSE);
         } else {
             TEXGetGXTexObjFromPalette(wp->texture, obj, id);
         }
     } else {
-        static char dummy ATTRIBUTE_ALIGN(32) = '\0';
+        static char dummy[] ATTRIBUTE_ALIGN(32) = "";
         if (!wp->handle) {
-            GXInitTexObj(obj, &dummy, 1, 1, GX_TF_I4, GX_CLAMP, GX_CLAMP, GX_FALSE);
+            GXInitTexObj(obj, dummy, 1, 1, GX_TF_I4, GX_CLAMP, GX_CLAMP, GX_FALSE);
         } else {
             TEXGetGXTexObjFromPalette(*wp->handle->data, obj, id - EFF_NTEX);
         }
     }
 }
-#pragma explicit_zero_data reset
 
 /**
  * Frees every in-use effect that belongs to the battle (inBattle TRUE) or to the field (FALSE);

@@ -519,7 +519,6 @@ config.libs = [
             Object(MatchingFor("G8MJ01", "G8ME01"), "driver/msgdrv.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "driver/swdrv.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "driver/itemdrv.c"),
-            Object(MatchingFor("G8MJ01"), "driver/itemdrv_pad.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "driver/extdrv.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "driver/envdrv.c"),
         ],

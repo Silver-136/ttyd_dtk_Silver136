@@ -1409,11 +1409,7 @@ void fadeMain(void) {
  * and nothing more once a fade-in has finished.
  */
 static void disp_texture(CameraId camId, void* param) {
-#if VERSION <= VERSION_DEMO_JP
     static u8 i4tex[1] ATTRIBUTE_ALIGN(32) = {0xFF};
-#else
-    static u8 i4tex[1] = {0xFF};
-#endif
     FadeWork* work;
     CameraEntry* camera;
     f32 scale;

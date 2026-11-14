@@ -1,21 +1,21 @@
-// Small GX helpers: queen_uv (texture offsets extdrv scrolls), and in the early demos the 2D textured-quad
-// helpers seq_demo draws with.
+// Small GX helpers: queen_uv (texture offsets extdrv scrolls) and the 2D textured-quad helpers the early demos'
+// seq_demo draws with. From JP on nothing calls the helpers, so the linker strips them and their data; the 32-byte
+// alignment of their white texel (filltex) still aligns this unit's .sdata, which is why queen_uv sits on a 32-byte
+// boundary in every later version.
 
 #include "version.h"
 #include "gxsub.h"
+#include "driver/camdrv.h"
 
 //.sdata
-#if VERSION <= VERSION_DEMO_JP
-#include "driver/camdrv.h"
-f32 queen_uv[4]
-= {0.0f, -0.0016000001f, 0.0f, -0.00080000004f};
+f32 queen_uv[4] = {0.0f, -0.0016000001f, 0.0f, -0.00080000004f};
 static s32 lastGX = 8;
 static BOOL fillTexEdgeOn;
 static BOOL fillTexAlphaOff;
 static GXTexObj* pFillTexObj;
 
 /**
- * Early demos only.
+ * Called only in the early demos (stripped from JP on).
  * Records mode as the last applied GX setup; returns TRUE when it differs from the previous one,
  * so the caller must set up GX again. -1 forces the next call to return TRUE.
  */
@@ -28,7 +28,7 @@ BOOL gxsubMiscSetGX(s32 mode) {
 }
 
 /**
- * Early demos only.
+ * Called only in the early demos (stripped from JP on).
  * Draws a w x h quad at (x, y) in the current camera,
  * textured with the texture set by gxsubFillSetTexObj (or a plain white texel) and tinted by color;
  * height flips for the 2D camera.
@@ -97,10 +97,7 @@ void gxsubFillGX(s32 x, s32 y, s32 w, s32 h, GXColor* color) {
     GXTexCoord2f32(0.0f, 1.0f);
 }
 
-/** Early demos only. Sets the texture gxsubFillGX draws with; NULL goes back to a plain fill. */
+/** Called only in the early demos (stripped from JP on). Sets the texture gxsubFillGX draws with; NULL goes back to a plain fill. */
 void gxsubFillSetTexObj(GXTexObj* obj) {
     pFillTexObj = obj;
 }
-#else
-f32 queen_uv[4] = {0.0f, -0.0016000001f, 0.0f, -0.00080000004f};
-#endif

@@ -79,7 +79,7 @@ driver/camdrv.c:
 driver/dispdrv.c:
 	.text       start:0x800106B8 end:0x80010B28
 	.data       start:0x80302EA0 end:0x80302EE0
-	.sdata      start:0x8040F318 end:0x8040F360
+	.sdata      start:0x8040F318 end:0x8040F344
 	.sbss       start:0x804183F0 end:0x80418400
 	.sdata2     start:0x80419680 end:0x80419698
 
@@ -87,7 +87,7 @@ driver/fadedrv.c:
 	.text       start:0x80010B28 end:0x80013A34
 	.rodata     start:0x802C13F8 end:0x802C1538
 	.data       start:0x80302EE0 end:0x803032E0
-	.sdata      start:0x8040F360 end:0x8040F380
+	.sdata      start:0x8040F360 end:0x8040F380 align:32
 	.sbss       start:0x80418400 end:0x80418408
 	.sdata2     start:0x80419698 end:0x80419758
 	.sbss2      start:0x80422F78 end:0x80422F80
@@ -492,12 +492,9 @@ driver/itemdrv.c:
 	.sbss       start:0x80418890 end:0x80418898
 	.sdata2     start:0x8041AF90 end:0x8041B018
 
-driver/itemdrv_pad.c:
-	.rodata     start:0x802CAE68 end:0x802CAE80
-
 manager/cardmgr.c:
 	.text       start:0x800ACF78 end:0x800B1694
-	.rodata     start:0x802CAE80 end:0x802CCCD0
+	.rodata     start:0x802CAE80 end:0x802CCCD0 align:32
 	.data       start:0x803124B8 end:0x803125F0
 	.sdata      start:0x80410580 end:0x80410588
 	.sbss       start:0x80418898 end:0x804188A0
@@ -1002,7 +999,7 @@ effect/eff_breath_fire.c:
 battle/battle_attack_audience.c:
 	.text       start:0x80140B9C end:0x801412AC
 	.rodata     start:0x802F3A90 end:0x802F3AC8
-	.data       start:0x80371354 end:0x80371490
+	.data       start:0x80371358 end:0x80371490
 	.sdata2     start:0x8041CCC0 end:0x8041CCE8
 
 battle/battle_stage_object.c:
@@ -2683,11 +2680,11 @@ effect/eff_queen2.c:
 effect/eff_gonbaba_breath.c:
 	.text       start:0x80254CF4 end:0x8025613C
 	.rodata     start:0x80301518 end:0x80301540
-	.sdata      start:0x80417DE0 end:0x80417EA0
+	.sdata      start:0x80417DE0 end:0x80417E8C
 	.sdata2     start:0x804224E8 end:0x80422568
 
 gxsub.c:
-	.sdata      start:0x80417EA0 end:0x80417EC0
+	.sdata      start:0x80417EA0 end:0x80417EC0 align:32
 
 event/evt_memcard.c:
 	.text       start:0x8025613C end:0x80256544
@@ -3443,7 +3440,7 @@ demo/DEMOStats.c:
 
 pad/Padclamp.c:
 	.text       start:0x802A08C4 end:0x802A0B08
-	.rodata     start:0x80302B68 end:0x80302B78
+	.rodata     start:0x80302B68 end:0x80302B72
 
 pad/Pad.c:
 	.text       start:0x802A0B08 end:0x802A2450

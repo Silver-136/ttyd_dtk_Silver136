@@ -79,7 +79,7 @@ driver/camdrv.c:
 driver/dispdrv.c:
 	.text       start:0x80010A28 end:0x80010E98
 	.data       start:0x803101A0 end:0x803101E0
-	.sdata      start:0x80421818 end:0x80421860
+	.sdata      start:0x80421818 end:0x80421844
 	.sbss       start:0x8042AF30 end:0x8042AF40
 	.sdata2     start:0x8042C1E0 end:0x8042C1F0
 
@@ -87,7 +87,7 @@ driver/fadedrv.c:
 	.text       start:0x80010E98 end:0x80013EB0
 	.rodata     start:0x802CB1E8 end:0x802CB338
 	.data       start:0x803101E0 end:0x803105E0
-	.sdata      start:0x80421860 end:0x80421880
+	.sdata      start:0x80421860 end:0x80421880 align:32
 	.sbss       start:0x8042AF40 end:0x8042AF48
 	.sdata2     start:0x8042C1F0 end:0x8042C2B8
 	.sbss2      start:0x80436038 end:0x80436040
@@ -2693,11 +2693,11 @@ effect/eff_queen2.c:
 effect/eff_gonbaba_breath.c:
 	.text       start:0x8025E838 end:0x8025FC80
 	.rodata     start:0x8030E818 end:0x8030E840
-	.sdata      start:0x8042A918 end:0x8042A9E0
+	.sdata      start:0x8042A918 end:0x8042A9C4
 	.sdata2     start:0x80435598 end:0x80435618
 
 gxsub.c:
-	.sdata      start:0x8042A9E0 end:0x8042AA00
+	.sdata      start:0x8042A9E0 end:0x8042AA00 align:32
 
 event/evt_memcard.c:
 	.text       start:0x8025FC80 end:0x80260088
@@ -3459,7 +3459,7 @@ demo/DEMOStats.c:
 
 pad/Padclamp.c:
 	.text       start:0x802AA744 end:0x802AA988
-	.rodata     start:0x8030FE68 end:0x8030FE78
+	.rodata     start:0x8030FE68 end:0x8030FE72
 
 pad/Pad.c:
 	.text       start:0x802AA988 end:0x802AC2D0

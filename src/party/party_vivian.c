@@ -352,7 +352,6 @@ inline void set_vivian_pos(PartyEntry* party) {
 }
 
 #pragma defer_codegen off
-#pragma explicit_zero_data on
 #endif
 
 /**
@@ -708,4 +707,3 @@ void vivian_use(PartyEntry* party) {
     }
 }
 
-#pragma explicit_zero_data reset
