@@ -1143,7 +1143,7 @@ static void loadDraw(CameraId camera, void* param) {
         sprintf(buf, "%s%s", str, winZenkakuStr(i + 1));
         FontDrawString(win1[0]->x - 100.0f, 84.0f + win1[0]->y, buf);
 #else
-        sprintf(buf, "\203f\201[\203^%s", winZenkakuStr(i + 1));
+        sprintf(buf, "データ%s", winZenkakuStr(i + 1));
         FontDrawString(win1->x - 100.0f, 84.0f + win1->y, buf);
 #endif
         FontDrawEdgeOff();
@@ -1154,13 +1154,13 @@ static void loadDraw(CameraId camera, void* param) {
         }
         if (flags & CARD_SAVE_FLAG_NO_VALID_COPY) {
 #if VERSION <= VERSION_DEMO_JP
-            str = "\202\261\202\355\202\352\202\304\202\242\202\334\202\267";
+            str = "こわれています";
             FontDrawString(win1->x - FontGetMessageWidth(str) / 2.0f, 12.0f + win1->y, str);
         } else if (flags & CARD_SAVE_FLAG_ERASED) {
-            str = "\203j\203\205\201[\203Q\201[\203\200";
+            str = "ニューゲーム";
             FontDrawString(win1->x - FontGetMessageWidth(str) / 2.0f, 12.0f + win1->y, str);
         } else if (gsw0 == 0) {
-            str = "\202\315\202\266\202\337\202\251\202\347";
+            str = "はじめから";
             FontDrawString(win1->x - FontGetMessageWidth(str) / 2.0f, 12.0f + win1->y, str);
             if (strlen(name) != 0) {
                 FontDrawString(win1->x - FontGetMessageWidth(name) / 2, 70.0f + win1->y, name);
@@ -1229,13 +1229,13 @@ static void loadDraw(CameraId camera, void* param) {
         } else {
             FontGetMessageWidth(gp->language != LANGUAGE_JP ? "88" : "８８");
 #else
-            str = "\202\261\202\355\202\352\202\304\202\242\202\334\202\267";
+            str = "こわれています";
             FontDrawString(win1->x - FontGetMessageWidth(str) / 2.0f, 12.0f + win1->y, str);
         } else if (flags & CARD_SAVE_FLAG_ERASED) {
-            str = "\203j\203\205\201[\203Q\201[\203\200";
+            str = "ニューゲーム";
             FontDrawString(win1->x - FontGetMessageWidth(str) / 2.0f, 12.0f + win1->y, str);
         } else if (gsw0 == 0) {
-            str = "\202\315\202\266\202\337\202\251\202\347";
+            str = "はじめから";
             FontDrawString(win1->x - FontGetMessageWidth(str) / 2.0f, 12.0f + win1->y, str);
             if (strlen(name) != 0) {
                 FontDrawString(win1->x - FontGetMessageWidth(name) / 2, 70.0f + win1->y, name);
@@ -1261,9 +1261,9 @@ static void loadDraw(CameraId camera, void* param) {
 #else
                 FontDrawString(win1->x - FontGetMessageWidth(name) / 2, 70.0f + win1->y, name);
             }
-            sprintf(buf2, "\203\214\203x\203\213\201@%s", winZenkakuStr(level));
+            sprintf(buf2, "レベル　%s", winZenkakuStr(level));
             FontDrawString(win1->x - FontGetMessageWidth(buf2) / 2.0f, 30.0f + win1->y, buf2);
-            strcpy(buf2, "\203v\203\214\203C\202\266\202\251\202\361\201@");
+            strcpy(buf2, "プレイじかん　");
 #endif
             strcat(buf2, winZenkakuStrPad(hours, 2));
             strcat(buf2, " ");
@@ -1290,7 +1290,7 @@ static void loadDraw(CameraId camera, void* param) {
             PSMTXTrans(m, x + (win1[0]->x - w / 2.0f), 1.0f + (win1[0]->y - 22.0f), 0.0f);
 #else
             FontDrawString(win1->x - w / 2.0f, win1->y, buf2);
-            strcpy(buf2, "\203v\203\214\203C\202\266\202\251\202\361\201@");
+            strcpy(buf2, "プレイじかん　");
             strcat(buf2, winZenkakuStrPad(hours, 2));
             x = FontGetMessageWidth(buf2);
             PSMTXTrans(m, 8.0f + (x + (win1->x - w / 2.0f)), 1.0f + (win1->y - 22.0f), 0.0f);

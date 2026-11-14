@@ -398,7 +398,7 @@ static USER_FUNC(nancy_block_init_func) {
 USER_FUNC(nancy_block_init_func) {
 #endif
 
-    NpcEntry* npc = evtNpcNameToPtr(event, "\203i\203\223\203V\201[");
+    NpcEntry* npc = evtNpcNameToPtr(event, "ナンシー");
     f32 z;
 
     z = npc->position.z;
@@ -417,7 +417,7 @@ USER_FUNC(nancy_block_init_func) {
  */
 static USER_FUNC(nancy_block_func) {
     MarioWork* mario = marioGetPtr();
-    NpcEntry* npc = evtNpcNameToPtr(event, "\203i\203\223\203V\201[");
+    NpcEntry* npc = evtNpcNameToPtr(event, "ナンシー");
     f32 z;
     f32 base;
     f32 limit;
@@ -3572,7 +3572,7 @@ static USER_FUNC(chk_marco_fuki) {
     MarioWork* mario = marioGetPtr();
     NpcEntry* npc = fbatNpcTalkCheck();
 
-    if (npc != NULL && strcmp(npc->description, "\203}\203\213\203R") == 0) {
+    if (npc != NULL && strcmp(npc->description, "マルコ") == 0) {
         evtSetValue(event, args[0], 1);
         return EVT_RETURN_DONE;
     }

@@ -454,7 +454,7 @@ static USER_FUNC(senteresa_okure_move_init) {
  */
 static USER_FUNC(senteresa_okure_move) {
     EvtWord* args = event->args;
-    NpcEntry* npc = npcNameToPtr("\203e\203\214\203T");
+    NpcEntry* npc = npcNameToPtr("テレサ");
     f32 t = evtGetFloat(event, args[0]);
     Vec pos;
     Vec m0 = {0.0f, 250.0f, 0.0f};

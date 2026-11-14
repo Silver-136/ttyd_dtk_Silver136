@@ -336,7 +336,7 @@ void winBadgeDisp(s32 camId, void* param, s32 n) {
 #if VERSION <= VERSION_DEMO_JP
     winKirinukiGX(w, 1, x - 260.0f, yy = 20.0f + (40.0f + y), 150.0f, 158 - (10 - ((pouch->maximumBP + 9) / 10)) * 13);
     winFontInit();
-    winFontSet((Vec){x - 220.0f, yy = yy - 4.0f, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, "\202a\202o");
+    winFontSet((Vec){x - 220.0f, yy = yy - 4.0f, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, "ＢＰ");
     winFontSet((Vec){x - 175.0f, yy, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, "%d", pouch->maximumBP);
     winFontSet((Vec){x - 180.0f, ((20.0f + (y - 108.0f)) - 18.0f) + (10 - ((pouch->maximumBP + 9) / 10)) * 13, 0.0f}, (Vec){0.5f, 0.5f, 0.5f}, black, msgSearch("msg_menu_badge_nokori"));
     winFontSet((Vec){x - 145.0f, ((20.0f + (y - 102.0f)) - 18.0f) + (10 - ((pouch->maximumBP + 9) / 10)) * 13, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, "%d", pouch->availableBP);
@@ -347,11 +347,11 @@ void winBadgeDisp(s32 camId, void* param, s32 n) {
     {
 
         // US and later: BP label per language (indexed by gp->language)
-        const char* bpLabel[7] = {"\202a\202o", "BP", "OP", "PB", "PM", "PT", "BP"};
+        const char* bpLabel[7] = {"ＢＰ", "BP", "OP", "PB", "PM", "PT", "BP"};
         winFontSet((Vec){x - 220.0f, yy = yy - 4.0f, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, bpLabel[gp->language]);
     }
 #else
-    winFontSet((Vec){x - 220.0f, yy = yy - 4.0f, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, "\202a\202o");
+    winFontSet((Vec){x - 220.0f, yy = yy - 4.0f, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, "ＢＰ");
 #endif
     winFontSetR((Vec){(x - 175.0f) - 18.0f, yy, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, "%s", winZenkakuStr(pouch->maximumBP));
 #if VERSION >= VERSION_US

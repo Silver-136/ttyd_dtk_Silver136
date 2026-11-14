@@ -721,9 +721,9 @@ EVT_END()
 
 /** Actors that pass through the village house door during its scenes: General White and his crew. */
 static const char* door_npc[] = {
-    /*"ホワイト"*/"\203z\203\217\203C\203g",
-    /*"ペントリット"*/"\203y\203\223\203g\203\212\203b\203g",
-    /*"スラリー"*/"\203X\203\211\203\212\201[",
+    /*"ホワイト"*/"ホワイト",
+    /*"ペントリット"*/"ペントリット",
+    /*"スラリー"*/"スラリー",
     NULL,
 };
 
@@ -1401,10 +1401,10 @@ static f32 spline_dt[] = {
 
 /** The cannon crew: each name with the message key of his drill call (stg7_bom_65_a to d). */
 static const char* oh_data[] = {
-    /*"\203j\203g\203\215"*/"\203j\203g\203\215", "stg7_bom_65_a",
-    /*"\203y\203\223\203g\203\212\203b\203g"*/"\203y\203\223\203g\203\212\203b\203g", "stg7_bom_65_b",
-    /*"\203X\203\211\203\212\201["*/"\203X\203\211\203\212\201[", "stg7_bom_65_c",
-    /*"\203{\203\200\203w\203CD"*/"\203{\203\200\203w\203CD", "stg7_bom_65_d",
+    /*"\203j\203g\203\215"*/"ニトロ", "stg7_bom_65_a",
+    /*"\203y\203\223\203g\203\212\203b\203g"*/"ペントリット", "stg7_bom_65_b",
+    /*"\203X\203\211\203\212\201["*/"スラリー", "stg7_bom_65_c",
+    /*"\203{\203\200\203w\203CD"*/"ボムヘイD", "stg7_bom_65_d",
 };
 
 /**
@@ -1481,7 +1481,7 @@ static EVT_BEGIN(evt_taihou)
     WAIT_FRAMES(1)
     CALL(evt_mario_cont_onoff, 0)
 #if VERSION >= VERSION_JP
-    DEBUG_PUT_MSG(STRING("\203r\203r\203A\203\223\202\265\202\301\202\333\226\263\214\370"))
+    DEBUG_PUT_MSG(STRING("ビビアンしっぽ無効"))
     CALL(evt_party_vivian_tail, 0, 0)
 #endif
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
@@ -1509,7 +1509,7 @@ static EVT_BEGIN(evt_taihou)
 
     // The mayor asks General White whether the big bomb cannon is ready, and White calls his crew to the drill.
     CALL(evt_msg_print, 0, STRING("stg7_bom_64"), 0, STRING("me"))
-    CALL(evt_msg_print, 0, STRING("stg7_bom_64_01"), 0, STRING("\203z\203\217\203C\203g"))
+    CALL(evt_msg_print, 0, STRING("stg7_bom_64_01"), 0, STRING("ホワイト"))
     SET_INT_READ_ADDR(PTR(&oh_data))
 
     // The four crew members shout their drill calls in turn (Ho, Hup, Hut, Boom).
@@ -1530,29 +1530,29 @@ static EVT_BEGIN(evt_taihou)
     // The mayor orders positions, and the crew answer (stg7_bom_66 and 67).
     CALL(evt_msg_print, 0, STRING("stg7_bom_66"), 0, STRING("me"))
     SET_VALUE(GF(0), 0)
-    CALL(evt_npc_flag_onoff, 0, STRING("\203z\203\217\203C\203g"), NPC_FLAG_TALK_POSE)
-    CALL(evt_npc_flag_onoff, 0, STRING("\203y\203\223\203g\203\212\203b\203g"), NPC_FLAG_TALK_POSE)
-    CALL(evt_npc_flag_onoff, 0, STRING("\203X\203\211\203\212\201["), NPC_FLAG_TALK_POSE)
+    CALL(evt_npc_flag_onoff, 0, STRING("ホワイト"), NPC_FLAG_TALK_POSE)
+    CALL(evt_npc_flag_onoff, 0, STRING("ペントリット"), NPC_FLAG_TALK_POSE)
+    CALL(evt_npc_flag_onoff, 0, STRING("スラリー"), NPC_FLAG_TALK_POSE)
     BEGIN_INLINE_EVENT
-        CALL(evt_msg_print, 0, STRING("stg7_bom_67"), 0, STRING("\203z\203\217\203C\203g"))
+        CALL(evt_msg_print, 0, STRING("stg7_bom_67"), 0, STRING("ホワイト"))
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
-        CALL(evt_npc_get_position, STRING("\203z\203\217\203C\203g"), LW(0), LW(1), LW(2))
-        CALL(evt_npc_jump_position_nohit, STRING("\203z\203\217\203C\203g"), LW(0), LW(1), LW(2), 300, FLOAT(20.0f))
+        CALL(evt_npc_get_position, STRING("ホワイト"), LW(0), LW(1), LW(2))
+        CALL(evt_npc_jump_position_nohit, STRING("ホワイト"), LW(0), LW(1), LW(2), 300, FLOAT(20.0f))
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
-        CALL(evt_msg_print, 0, STRING("stg7_bom_67"), 0, STRING("\203y\203\223\203g\203\212\203b\203g"))
+        CALL(evt_msg_print, 0, STRING("stg7_bom_67"), 0, STRING("ペントリット"))
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
-        CALL(evt_npc_get_position, STRING("\203y\203\223\203g\203\212\203b\203g"), LW(0), LW(1), LW(2))
-        CALL(evt_npc_jump_position_nohit, STRING("\203y\203\223\203g\203\212\203b\203g"), LW(0), LW(1), LW(2), 300, FLOAT(20.0f))
+        CALL(evt_npc_get_position, STRING("ペントリット"), LW(0), LW(1), LW(2))
+        CALL(evt_npc_jump_position_nohit, STRING("ペントリット"), LW(0), LW(1), LW(2), 300, FLOAT(20.0f))
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
-        CALL(evt_npc_get_position, STRING("\203X\203\211\203\212\201["), LW(0), LW(1), LW(2))
-        CALL(evt_npc_jump_position_nohit, STRING("\203X\203\211\203\212\201["), LW(0), LW(1), LW(2), 300, FLOAT(20.0f))
+        CALL(evt_npc_get_position, STRING("スラリー"), LW(0), LW(1), LW(2))
+        CALL(evt_npc_jump_position_nohit, STRING("スラリー"), LW(0), LW(1), LW(2), 300, FLOAT(20.0f))
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
-        CALL(evt_msg_print, 0, STRING("stg7_bom_67"), 0, STRING("\203X\203\211\203\212\201["))
+        CALL(evt_msg_print, 0, STRING("stg7_bom_67"), 0, STRING("スラリー"))
         SET_VALUE(GF(0), 1)
     END_INLINE_EVENT
     WAIT_MS(1000)
@@ -1566,20 +1566,20 @@ static EVT_BEGIN(evt_taihou)
     SET_VALUE(GF(1), 0)
     SET_VALUE(GF(2), 0)
     BEGIN_INLINE_EVENT
-        CALL(evt_npc_status_onoff, 1, STRING("\203z\203\217\203C\203g"), NPC_STATUS_FACE_MOVE_DIR)
-        CALL(evt_npc_move_position, STRING("\203z\203\217\203C\203g"), -50, -80, 0, FLOAT(100.0f), 1)
+        CALL(evt_npc_status_onoff, 1, STRING("ホワイト"), NPC_STATUS_FACE_MOVE_DIR)
+        CALL(evt_npc_move_position, STRING("ホワイト"), -50, -80, 0, FLOAT(100.0f), 1)
         SET_VALUE(GF(0), 1)
     END_INLINE_EVENT
     WAIT_MS(500)
     BEGIN_INLINE_EVENT
-        CALL(evt_npc_status_onoff, 1, STRING("\203y\203\223\203g\203\212\203b\203g"), NPC_STATUS_FACE_MOVE_DIR)
-        CALL(evt_npc_move_position, STRING("\203y\203\223\203g\203\212\203b\203g"), 0, -80, 0, FLOAT(100.0f), 1)
+        CALL(evt_npc_status_onoff, 1, STRING("ペントリット"), NPC_STATUS_FACE_MOVE_DIR)
+        CALL(evt_npc_move_position, STRING("ペントリット"), 0, -80, 0, FLOAT(100.0f), 1)
         SET_VALUE(GF(1), 1)
     END_INLINE_EVENT
     WAIT_MS(500)
     BEGIN_INLINE_EVENT
-        CALL(evt_npc_status_onoff, 1, STRING("\203X\203\211\203\212\201["), NPC_STATUS_FACE_MOVE_DIR)
-        CALL(evt_npc_move_position, STRING("\203X\203\211\203\212\201["), 50, -80, 0, FLOAT(100.0f), 1)
+        CALL(evt_npc_status_onoff, 1, STRING("スラリー"), NPC_STATUS_FACE_MOVE_DIR)
+        CALL(evt_npc_move_position, STRING("スラリー"), 50, -80, 0, FLOAT(100.0f), 1)
         SET_VALUE(GF(2), 1)
     END_INLINE_EVENT
     LABEL(2)
@@ -1595,23 +1595,23 @@ static EVT_BEGIN(evt_taihou)
         WAIT_FRAMES(1)
         GOTO(2)
     END_IF
-    CALL(evt_npc_flag_onoff, 1, STRING("\203z\203\217\203C\203g"), NPC_FLAG_TALK_POSE)
-    CALL(evt_npc_flag_onoff, 1, STRING("\203y\203\223\203g\203\212\203b\203g"), NPC_FLAG_TALK_POSE)
-    CALL(evt_npc_flag_onoff, 1, STRING("\203X\203\211\203\212\201["), NPC_FLAG_TALK_POSE)
+    CALL(evt_npc_flag_onoff, 1, STRING("ホワイト"), NPC_FLAG_TALK_POSE)
+    CALL(evt_npc_flag_onoff, 1, STRING("ペントリット"), NPC_FLAG_TALK_POSE)
+    CALL(evt_npc_flag_onoff, 1, STRING("スラリー"), NPC_FLAG_TALK_POSE)
     BEGIN_INLINE_EVENT
-        CALL(evt_npc_move_position, STRING("\203z\203\217\203C\203g"), -50, -200, 0, FLOAT(80.0f), 1)
-        CALL(evt_npc_move_position, STRING("\203z\203\217\203C\203g"), -35, -260, 0, FLOAT(80.0f), 1)
+        CALL(evt_npc_move_position, STRING("ホワイト"), -50, -200, 0, FLOAT(80.0f), 1)
+        CALL(evt_npc_move_position, STRING("ホワイト"), -35, -260, 0, FLOAT(80.0f), 1)
     END_INLINE_EVENT
     WAIT_MS(400)
     BEGIN_INLINE_EVENT
-        CALL(evt_npc_move_position, STRING("\203y\203\223\203g\203\212\203b\203g"), -50, -80, 0, FLOAT(80.0f), 1)
-        CALL(evt_npc_move_position, STRING("\203y\203\223\203g\203\212\203b\203g"), -55, -225, 0, FLOAT(80.0f), 1)
+        CALL(evt_npc_move_position, STRING("ペントリット"), -50, -80, 0, FLOAT(80.0f), 1)
+        CALL(evt_npc_move_position, STRING("ペントリット"), -55, -225, 0, FLOAT(80.0f), 1)
     END_INLINE_EVENT
     WAIT_MS(400)
-    CALL(evt_npc_move_position, STRING("\203X\203\211\203\212\201["), -50, -80, 0, FLOAT(80.0f), 1)
+    CALL(evt_npc_move_position, STRING("スラリー"), -50, -80, 0, FLOAT(80.0f), 1)
     CALL(evt_cam3d_evt_set, 0, 152, 108, 0, 57, -432, 0, EASING_SINE_IN_OUT)
     BEGIN_INLINE_EVENT
-        CALL(evt_npc_move_position, STRING("\203X\203\211\203\212\201["), -70, -180, 0, FLOAT(80.0f), 1)
+        CALL(evt_npc_move_position, STRING("スラリー"), -70, -180, 0, FLOAT(80.0f), 1)
     END_INLINE_EVENT
     SET_VALUE(GF(0), 0)
     SET_VALUE(LW(0), PTR(&door))
@@ -1625,59 +1625,59 @@ static EVT_BEGIN(evt_taihou)
         WAIT_FRAMES(1)
     END_LOOP
     BEGIN_INLINE_EVENT
-        CALL(evt_npc_move_position, STRING("\203z\203\217\203C\203g"), 0, -320, 0, FLOAT(70.0f), 1)
-        CALL(evt_npc_move_position, STRING("\203z\203\217\203C\203g"), 35, -330, 0, FLOAT(70.0f), 1)
-        CALL(evt_npc_move_position, STRING("\203z\203\217\203C\203g"), 80, -380, 0, FLOAT(70.0f), 1)
-        CALL(evt_npc_jump_position_nohit, STRING("\203z\203\217\203C\203g"), 70, 30, -435, 300, FLOAT(20.0f))
-        CALL(evt_npc_move_position, STRING("\203z\203\217\203C\203g"), 40, -445, 0, FLOAT(70.0f), 1)
-        CALL(evt_npc_jump_position_nohit, STRING("\203z\203\217\203C\203g"), 0, 40, -430, 300, FLOAT(20.0f))
-        CALL(evt_npc_set_ry, STRING("\203z\203\217\203C\203g"), 90)
+        CALL(evt_npc_move_position, STRING("ホワイト"), 0, -320, 0, FLOAT(70.0f), 1)
+        CALL(evt_npc_move_position, STRING("ホワイト"), 35, -330, 0, FLOAT(70.0f), 1)
+        CALL(evt_npc_move_position, STRING("ホワイト"), 80, -380, 0, FLOAT(70.0f), 1)
+        CALL(evt_npc_jump_position_nohit, STRING("ホワイト"), 70, 30, -435, 300, FLOAT(20.0f))
+        CALL(evt_npc_move_position, STRING("ホワイト"), 40, -445, 0, FLOAT(70.0f), 1)
+        CALL(evt_npc_jump_position_nohit, STRING("ホワイト"), 0, 40, -430, 300, FLOAT(20.0f))
+        CALL(evt_npc_set_ry, STRING("ホワイト"), 90)
     END_INLINE_EVENT
     WAIT_MS(400)
     BEGIN_INLINE_EVENT
-        CALL(evt_npc_move_position, STRING("\203y\203\223\203g\203\212\203b\203g"), 0, -320, 0, FLOAT(70.0f), 1)
-        CALL(evt_npc_move_position, STRING("\203y\203\223\203g\203\212\203b\203g"), 35, -330, 0, FLOAT(70.0f), 1)
-        CALL(evt_npc_move_position, STRING("\203y\203\223\203g\203\212\203b\203g"), 80, -380, 0, FLOAT(70.0f), 1)
-        CALL(evt_npc_move_position, STRING("\203y\203\223\203g\203\212\203b\203g"), 80, -415, 0, FLOAT(70.0f), 1)
-        CALL(evt_npc_move_position, STRING("\203y\203\223\203g\203\212\203b\203g"), 45, -415, 0, FLOAT(70.0f), 1)
-        CALL(evt_npc_jump_position_nohit, STRING("\203y\203\223\203g\203\212\203b\203g"), -20, 15, -390, 300, FLOAT(20.0f))
-        CALL(evt_npc_set_ry, STRING("\203y\203\223\203g\203\212\203b\203g"), 315)
+        CALL(evt_npc_move_position, STRING("ペントリット"), 0, -320, 0, FLOAT(70.0f), 1)
+        CALL(evt_npc_move_position, STRING("ペントリット"), 35, -330, 0, FLOAT(70.0f), 1)
+        CALL(evt_npc_move_position, STRING("ペントリット"), 80, -380, 0, FLOAT(70.0f), 1)
+        CALL(evt_npc_move_position, STRING("ペントリット"), 80, -415, 0, FLOAT(70.0f), 1)
+        CALL(evt_npc_move_position, STRING("ペントリット"), 45, -415, 0, FLOAT(70.0f), 1)
+        CALL(evt_npc_jump_position_nohit, STRING("ペントリット"), -20, 15, -390, 300, FLOAT(20.0f))
+        CALL(evt_npc_set_ry, STRING("ペントリット"), 315)
     END_INLINE_EVENT
     WAIT_MS(400)
-    CALL(evt_npc_move_position, STRING("\203X\203\211\203\212\201["), 0, -320, 0, FLOAT(70.0f), 1)
+    CALL(evt_npc_move_position, STRING("スラリー"), 0, -320, 0, FLOAT(70.0f), 1)
     SET_VALUE(GF(0), 0)
-    CALL(evt_npc_move_position, STRING("\203X\203\211\203\212\201["), 35, -330, 0, FLOAT(70.0f), 1)
-    CALL(evt_npc_move_position, STRING("\203X\203\211\203\212\201["), 80, -380, 0, FLOAT(70.0f), 1)
-    CALL(evt_npc_move_position, STRING("\203X\203\211\203\212\201["), 80, -415, 0, FLOAT(70.0f), 1)
-    CALL(evt_npc_move_position, STRING("\203X\203\211\203\212\201["), 45, -415, 0, FLOAT(70.0f), 1)
-    CALL(evt_npc_jump_position_nohit, STRING("\203X\203\211\203\212\201["), 20, 15, -390, 300, FLOAT(20.0f))
-    CALL(evt_npc_set_ry, STRING("\203X\203\211\203\212\201["), 90)
+    CALL(evt_npc_move_position, STRING("スラリー"), 35, -330, 0, FLOAT(70.0f), 1)
+    CALL(evt_npc_move_position, STRING("スラリー"), 80, -380, 0, FLOAT(70.0f), 1)
+    CALL(evt_npc_move_position, STRING("スラリー"), 80, -415, 0, FLOAT(70.0f), 1)
+    CALL(evt_npc_move_position, STRING("スラリー"), 45, -415, 0, FLOAT(70.0f), 1)
+    CALL(evt_npc_jump_position_nohit, STRING("スラリー"), 20, 15, -390, 300, FLOAT(20.0f))
+    CALL(evt_npc_set_ry, STRING("スラリー"), 90)
     CALL(evt_cam3d_evt_set, -160, 125, -100, 10, 55, -427, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
-    CALL(evt_set_dir_to_target, STRING("\203z\203\217\203C\203g"), STRING("\203y\203\223\203g\203\212\203b\203g"))
+    CALL(evt_set_dir_to_target, STRING("ホワイト"), STRING("ペントリット"))
 
     // System check: the guidance system is brought online (stg7_bom_68 to 72).
-    CALL(evt_msg_print, 0, STRING("stg7_bom_68"), 0, STRING("\203z\203\217\203C\203g"))
+    CALL(evt_msg_print, 0, STRING("stg7_bom_68"), 0, STRING("ホワイト"))
     WAIT_MS(300)
-    CALL(evt_set_dir_to_target, STRING("\203y\203\223\203g\203\212\203b\203g"), STRING("\203z\203\217\203C\203g"))
-    CALL(evt_msg_print, 0, STRING("stg7_bom_69"), 0, STRING("\203y\203\223\203g\203\212\203b\203g"))
+    CALL(evt_set_dir_to_target, STRING("ペントリット"), STRING("ホワイト"))
+    CALL(evt_msg_print, 0, STRING("stg7_bom_69"), 0, STRING("ペントリット"))
     WAIT_MS(300)
-    CALL(evt_npc_reverse_ry, STRING("\203y\203\223\203g\203\212\203b\203g"))
+    CALL(evt_npc_reverse_ry, STRING("ペントリット"))
     CALL(evt_snd_sfxon, STRING("SFX_STG7_CANNON_SYS_ACTIVE1"), 0)
     CALL(evt_snd_sfxon, STRING("SFX_STG7_CANNON_SYS_ACTIVE2"), LW(10))
     CALL(evt_map_playanim, STRING("kikai"), 1, 0)
     WAIT_MS(1000)
-    CALL(evt_set_dir_to_target, STRING("\203y\203\223\203g\203\212\203b\203g"), STRING("\203z\203\217\203C\203g"))
-    CALL(evt_msg_print, 0, STRING("stg7_bom_70"), 0, STRING("\203y\203\223\203g\203\212\203b\203g"))
-    CALL(evt_npc_set_ry, STRING("\203y\203\223\203g\203\212\203b\203g"), 315)
+    CALL(evt_set_dir_to_target, STRING("ペントリット"), STRING("ホワイト"))
+    CALL(evt_msg_print, 0, STRING("stg7_bom_70"), 0, STRING("ペントリット"))
+    CALL(evt_npc_set_ry, STRING("ペントリット"), 315)
     WAIT_MS(300)
-    CALL(evt_set_dir_to_target, STRING("\203z\203\217\203C\203g"), STRING("\203X\203\211\203\212\201["))
-    CALL(evt_msg_print, 0, STRING("stg7_bom_71"), 0, STRING("\203z\203\217\203C\203g"))
+    CALL(evt_set_dir_to_target, STRING("ホワイト"), STRING("スラリー"))
+    CALL(evt_msg_print, 0, STRING("stg7_bom_71"), 0, STRING("ホワイト"))
     WAIT_MS(300)
-    CALL(evt_set_dir_to_target, STRING("\203X\203\211\203\212\201["), STRING("\203z\203\217\203C\203g"))
-    CALL(evt_msg_print, 0, STRING("stg7_bom_72"), 0, STRING("\203X\203\211\203\212\201["))
+    CALL(evt_set_dir_to_target, STRING("スラリー"), STRING("ホワイト"))
+    CALL(evt_msg_print, 0, STRING("stg7_bom_72"), 0, STRING("スラリー"))
     WAIT_MS(300)
-    CALL(evt_npc_reverse_ry, STRING("\203X\203\211\203\212\201["))
+    CALL(evt_npc_reverse_ry, STRING("スラリー"))
     CALL(evt_snd_sfxoff, LW(10))
     CALL(evt_cam3d_evt_set, 200, 350, 1224, 200, 125, 250, 0, EASING_SINE_IN_OUT)
     CALL_CHILD(cam_outside)
@@ -1688,7 +1688,7 @@ static EVT_BEGIN(evt_taihou)
 
         // The detonation sequence is announced and the outer hatch and inner shutter open, with the camera
         // cutting between inside and outside (stg7_bom_73 to 76).
-        CALL(evt_msg_print, 0, STRING("stg7_bom_73"), 0, STRING("\203z\203\217\203C\203g"))
+        CALL(evt_msg_print, 0, STRING("stg7_bom_73"), 0, STRING("ホワイト"))
         SET_VALUE(GF(0), 1)
     END_INLINE_EVENT
     CALL(evt_cam3d_evt_set, 0, 350, 1224, 0, 125, 250, 6000, EASING_SINE_IN_OUT)
@@ -1704,7 +1704,7 @@ static EVT_BEGIN(evt_taihou)
     CALL(evt_snd_sfxon, STRING("SFX_STG7_CANNON_SYS_ACTIVE2"), LW(10))
     CALL_CHILD(cam_inside)
     WAIT_MS(300)
-    CALL(evt_msg_print, 0, STRING("stg7_bom_74"), 0, STRING("\203z\203\217\203C\203g"))
+    CALL(evt_msg_print, 0, STRING("stg7_bom_74"), 0, STRING("ホワイト"))
     WAIT_MS(300)
     CALL(evt_snd_sfxoff, LW(10))
 
@@ -1765,7 +1765,7 @@ static EVT_BEGIN(evt_taihou)
     CALL(evt_snd_sfxon, STRING("SFX_STG7_CANNON_SYS_ACTIVE2"), LW(8))
     CALL_CHILD(cam_inside)
     WAIT_MS(300)
-    CALL(evt_msg_print, 0, STRING("stg7_bom_75"), 0, STRING("\203z\203\217\203C\203g"))
+    CALL(evt_msg_print, 0, STRING("stg7_bom_75"), 0, STRING("ホワイト"))
     WAIT_MS(300)
     CALL(evt_snd_sfxoff, LW(8))
     CALL(evt_cam3d_evt_set, 0, 283, 932, 0, 125, 250, 0, EASING_SINE_IN_OUT)
@@ -1798,7 +1798,7 @@ static EVT_BEGIN(evt_taihou)
     CALL_CHILD(cam_inside2)
     WAIT_MS(300)
     WAIT_MS(1000)
-    CALL(evt_msg_print, 0, STRING("stg7_bom_76"), 0, STRING("\203z\203\217\203C\203g"))
+    CALL(evt_msg_print, 0, STRING("stg7_bom_76"), 0, STRING("ホワイト"))
     WAIT_MS(300)
     CALL(evt_snd_sfxoff, LW(8))
     CALL(evt_cam3d_evt_set, -230, 734, 684, -10, 50, 63, 0, EASING_SINE_IN_OUT)
@@ -1843,7 +1843,7 @@ static EVT_BEGIN(evt_taihou)
     WAIT_MS(300)
 
     // White sights the moon and reads out the aim and wind figures (stg7_bom_77 to 80).
-    CALL(evt_msg_print, 0, STRING("stg7_bom_77"), 0, STRING("\203z\203\217\203C\203g"))
+    CALL(evt_msg_print, 0, STRING("stg7_bom_77"), 0, STRING("ホワイト"))
     WAIT_MS(300)
     SET_VALUE(GW(5), 70)
     SPAWN_EVENT_GET_ID(PTR(evt_depth), LW(9))
@@ -1909,7 +1909,7 @@ static EVT_BEGIN(evt_taihou)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_moon"), MAP_OBJ_FLAG_HIDDEN)
     CALL_CHILD(cam_inside)
     WAIT_MS(300)
-    CALL(evt_msg_print, 0, STRING("stg7_bom_79"), 0, STRING("\203z\203\217\203C\203g"))
+    CALL(evt_msg_print, 0, STRING("stg7_bom_79"), 0, STRING("ホワイト"))
     WAIT_MS(300)
     CALL(evt_snd_sfxoff, LW(8))
     CALL(evt_cam3d_evt_set, -1500, 100, 2539, 0, 650, 0, 0, EASING_SINE_IN_OUT)
@@ -1931,7 +1931,7 @@ static EVT_BEGIN(evt_taihou)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.0f), 500)
     CALL(evt_snd_sfxoff, LW(8))
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
-    CALL(evt_msg_print, 0, STRING("stg7_bom_80"), 0, STRING("\203z\203\217\203C\203g"))
+    CALL(evt_msg_print, 0, STRING("stg7_bom_80"), 0, STRING("ホワイト"))
     WAIT_MS(300)
     CALL(evt_snd_sfxon, STRING("SFX_STG7_HATCH_OPEN1"), LW(8))
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, -1200, 1000)
@@ -1948,7 +1948,7 @@ static EVT_BEGIN(evt_taihou)
     WAIT_FRAMES(1)
 
     // The mayor orders everyone in; the crowd squeezes into the chamber, grumbling (stg7_bom_81 to 85_6).
-    CALL(evt_msg_print, 0, STRING("stg7_bom_81"), 0, STRING("\221\272\222\267"))
+    CALL(evt_msg_print, 0, STRING("stg7_bom_81"), 0, STRING("村長"))
     WAIT_MS(300)
     CALL(evt_snd_sfxon, STRING("SFX_STG7_BOMB_TOGETHER1"), LW(8))
     CALL_CHILD(evt_bom1000)
@@ -1960,7 +1960,7 @@ static EVT_BEGIN(evt_taihou)
     CALL(bom_flag, 1, 1)
     CALL_CHILD(cam_inside2)
     WAIT_MS(300)
-    CALL(evt_msg_print, 0, STRING("stg7_bom_85"), 0, STRING("\203z\203\217\203C\203g"))
+    CALL(evt_msg_print, 0, STRING("stg7_bom_85"), 0, STRING("ホワイト"))
     WAIT_MS(300)
     CALL(bom_flag, 0, 1)
     CALL(evt_snd_sfxoff, LW(10))
@@ -1997,20 +1997,20 @@ static EVT_BEGIN(evt_taihou)
     CALL(evt_msg_toge, MSG_TOGE_AT_POS, 10, 475, 75)
     CALL(evt_msg_print, 0, STRING("stg7_bom_85_6"), 0, 0)
     WAIT_MS(300)
-    CALL(evt_npc_reverse_ry, STRING("\221\272\222\267"))
+    CALL(evt_npc_reverse_ry, STRING("村長"))
     CALL(bom_flag, 1, 1)
     CALL(evt_snd_sfxon, STRING("SFX_STG7_CANNON_SYS_ACTIVE2"), LW(10))
     CALL_CHILD(cam_inside)
     WAIT_MS(300)
 
     // White reports all green and the mayor gives the order to fire (stg7_bom_86 and 87).
-    CALL(evt_msg_print, 0, STRING("stg7_bom_86"), 0, STRING("\203z\203\217\203C\203g"))
+    CALL(evt_msg_print, 0, STRING("stg7_bom_86"), 0, STRING("ホワイト"))
     WAIT_MS(300)
     CALL(evt_snd_sfxoff, LW(10))
     CALL(evt_cam3d_evt_set, 21, 175, 781, 9, 42, 265, 0, EASING_SINE_IN_OUT)
     CALL_CHILD(cam_outside)
     WAIT_MS(300)
-    CALL(evt_msg_print, 0, STRING("stg7_bom_87"), 0, STRING("\221\272\222\267"))
+    CALL(evt_msg_print, 0, STRING("stg7_bom_87"), 0, STRING("村長"))
     WAIT_MS(300)
     CALL(evt_cam3d_evt_set, 200, 0, 2483, 200, 550, 0, 0, EASING_SINE_IN_OUT)
     SPAWN_EVENT(mario_shot)
@@ -2075,13 +2075,13 @@ static EVT_BEGIN(evt_taihou)
     CALL(bom_fall)
     WAIT_MS(6000)
     CALL(evt_ext_reset)
-    CALL(evt_npc_set_ry, STRING("\221\272\222\267"), 90)
-    CALL(evt_npc_flag_onoff, 1, STRING("\221\272\222\267"), NPC_FLAG_INSTANT_TURN)
+    CALL(evt_npc_set_ry, STRING("村長"), 90)
+    CALL(evt_npc_flag_onoff, 1, STRING("村長"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_cam3d_evt_set, -60, 26, 493, 22, 33, 257, 0, EASING_SINE_IN_OUT)
     WAIT_MS(2000)
 
     // The mayor wishes Mario luck, the Goldbob guide is taken from the pouch and the map changes to moo_03.
-    CALL(evt_msg_print, 0, STRING("stg7_bom_91"), 0, STRING("\221\272\222\267"))
+    CALL(evt_msg_print, 0, STRING("stg7_bom_91"), 0, STRING("村長"))
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
     WAIT_MS(300)
     WAIT_MS(2000)
@@ -2368,17 +2368,17 @@ EVT_END()
 static EVT_BEGIN(musume_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG7_02_MAYOR_BOB)
-            CALL(evt_msg_print, 0, STRING("stg7_bom_09_01_01"), 0, STRING("\202R\220l\226\272\202`"))
-            CALL(evt_msg_print, 0, STRING("stg7_bom_09_01_02"), 0, STRING("\202R\220l\226\272\202a"))
-            CALL(evt_msg_print, 0, STRING("stg7_bom_09_01_03"), 0, STRING("\202R\220l\226\272\202b"))
+            CALL(evt_msg_print, 0, STRING("stg7_bom_09_01_01"), 0, STRING("３人娘Ａ"))
+            CALL(evt_msg_print, 0, STRING("stg7_bom_09_01_02"), 0, STRING("３人娘Ｂ"))
+            CALL(evt_msg_print, 0, STRING("stg7_bom_09_01_03"), 0, STRING("３人娘Ｃ"))
         CASE_LESS(STG7_04_BACK_ONLINE)
-            CALL(evt_msg_print, 0, STRING("stg7_bom_09_01_04"), 0, STRING("\202R\220l\226\272\202`"))
-            CALL(evt_msg_print, 0, STRING("stg7_bom_09_01_05"), 0, STRING("\202R\220l\226\272\202a"))
-            CALL(evt_msg_print, 0, STRING("stg7_bom_09_01_06"), 0, STRING("\202R\220l\226\272\202b"))
+            CALL(evt_msg_print, 0, STRING("stg7_bom_09_01_04"), 0, STRING("３人娘Ａ"))
+            CALL(evt_msg_print, 0, STRING("stg7_bom_09_01_05"), 0, STRING("３人娘Ｂ"))
+            CALL(evt_msg_print, 0, STRING("stg7_bom_09_01_06"), 0, STRING("３人娘Ｃ"))
         CASE_DEFAULT
-            CALL(evt_msg_print, 0, STRING("stg7_bom_09_01_07"), 0, STRING("\202R\220l\226\272\202`"))
-            CALL(evt_msg_print, 0, STRING("stg7_bom_09_01_08"), 0, STRING("\202R\220l\226\272\202a"))
-            CALL(evt_msg_print, 0, STRING("stg7_bom_09_01_09"), 0, STRING("\202R\220l\226\272\202b"))
+            CALL(evt_msg_print, 0, STRING("stg7_bom_09_01_07"), 0, STRING("３人娘Ａ"))
+            CALL(evt_msg_print, 0, STRING("stg7_bom_09_01_08"), 0, STRING("３人娘Ｂ"))
+            CALL(evt_msg_print, 0, STRING("stg7_bom_09_01_09"), 0, STRING("３人娘Ｃ"))
     END_SWITCH
     RETURN
 EVT_END()
@@ -2388,11 +2388,11 @@ EVT_END()
  * and her talk script musume_talk.
  */
 static EVT_BEGIN(musume_a_entry)
-    CALL(evt_npc_entry, STRING("\202R\220l\226\272\202`"), STRING("c_dance_r")) // one of the Traveling Sisters 3 (red)
-    CALL(evt_npc_set_tribe, STRING("\202R\220l\226\272\202`"), STRING("\227x\202\350\216q"))
-    CALL(evt_npc_set_position, STRING("\202R\220l\226\272\202`"), 370, 5, -120)
-    CALL(evt_npc_flag_onoff, 1, STRING("\202R\220l\226\272\202`"), NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_TALK_POSE)
-    CALL(evt_npc_change_interrupt, STRING("\202R\220l\226\272\202`"), 6, PTR(musume_talk))
+    CALL(evt_npc_entry, STRING("３人娘Ａ"), STRING("c_dance_r")) // one of the Traveling Sisters 3 (red)
+    CALL(evt_npc_set_tribe, STRING("３人娘Ａ"), STRING("踊り子"))
+    CALL(evt_npc_set_position, STRING("３人娘Ａ"), 370, 5, -120)
+    CALL(evt_npc_flag_onoff, 1, STRING("３人娘Ａ"), NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_TALK_POSE)
+    CALL(evt_npc_change_interrupt, STRING("３人娘Ａ"), 6, PTR(musume_talk))
     RETURN
 EVT_END()
 
@@ -2401,11 +2401,11 @@ EVT_END()
  * and her talk script musume_talk.
  */
 static EVT_BEGIN(musume_b_entry)
-    CALL(evt_npc_entry, STRING("\202R\220l\226\272\202a"), STRING("c_dance_p")) // one of the Traveling Sisters 3 (pink)
-    CALL(evt_npc_set_tribe, STRING("\202R\220l\226\272\202a"), STRING("\227x\202\350\216q\203s\203\223\203N"))
-    CALL(evt_npc_set_position, STRING("\202R\220l\226\272\202a"), 400, 5, -150)
-    CALL(evt_npc_flag_onoff, 1, STRING("\202R\220l\226\272\202a"), NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_TALK_POSE)
-    CALL(evt_npc_change_interrupt, STRING("\202R\220l\226\272\202a"), 6, PTR(musume_talk))
+    CALL(evt_npc_entry, STRING("３人娘Ｂ"), STRING("c_dance_p")) // one of the Traveling Sisters 3 (pink)
+    CALL(evt_npc_set_tribe, STRING("３人娘Ｂ"), STRING("踊り子ピンク"))
+    CALL(evt_npc_set_position, STRING("３人娘Ｂ"), 400, 5, -150)
+    CALL(evt_npc_flag_onoff, 1, STRING("３人娘Ｂ"), NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_TALK_POSE)
+    CALL(evt_npc_change_interrupt, STRING("３人娘Ｂ"), 6, PTR(musume_talk))
     RETURN
 EVT_END()
 
@@ -2414,18 +2414,18 @@ EVT_END()
  * and her talk script musume_talk.
  */
 static EVT_BEGIN(musume_c_entry)
-    CALL(evt_npc_entry, STRING("\202R\220l\226\272\202b"), STRING("c_dance_k")) // one of the Traveling Sisters 3 (yellow-green)
-    CALL(evt_npc_set_tribe, STRING("\202R\220l\226\272\202b"), STRING("\227x\202\350\216q\211\251\227\316"))
-    CALL(evt_npc_set_position, STRING("\202R\220l\226\272\202b"), 430, 5, -100)
-    CALL(evt_npc_flag_onoff, 1, STRING("\202R\220l\226\272\202b"), NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_TALK_POSE)
-    CALL(evt_npc_change_interrupt, STRING("\202R\220l\226\272\202b"), 6, PTR(musume_talk))
+    CALL(evt_npc_entry, STRING("３人娘Ｃ"), STRING("c_dance_k")) // one of the Traveling Sisters 3 (yellow-green)
+    CALL(evt_npc_set_tribe, STRING("３人娘Ｃ"), STRING("踊り子黄緑"))
+    CALL(evt_npc_set_position, STRING("３人娘Ｃ"), 430, 5, -100)
+    CALL(evt_npc_flag_onoff, 1, STRING("３人娘Ｃ"), NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_TALK_POSE)
+    CALL(evt_npc_change_interrupt, STRING("３人娘Ｃ"), 6, PTR(musume_talk))
     RETURN
 EVT_END()
 
 /** The cast of the village square: the mayor, Nitro, Pentrit, Surary, the Bob-omb soldier D and General White. */
 static NpcSetupInfo npcEnt[] = {
     {
-        /*"村長"*/"\221\272\222\267", // name (the mayor of Fahr Outpost)
+        /*"村長"*/"村長", // name (the mayor of Fahr Outpost)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_soncho, // initEvent
@@ -2437,7 +2437,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"ニトロ"*/"\203j\203g\203\215", // name (Nob, a Fahr Outpost Bob-omb)
+        /*"ニトロ"*/"ニトロ", // name (Nob, a Fahr Outpost Bob-omb)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_nitoro, // initEvent
@@ -2449,7 +2449,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"ペントリット"*/("\203y\203\223\203g\203\212\203b\203g"), // name (Rob, a Fahr Outpost Bob-omb)
+        /*"ペントリット"*/("ペントリット"), // name (Rob, a Fahr Outpost Bob-omb)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_pentrit, // initEvent
@@ -2461,7 +2461,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"スラリー"*/("\203X\203\211\203\212\201["), // name (Fred, a Fahr Outpost Bob-omb)
+        /*"スラリー"*/("スラリー"), // name (Fred, a Fahr Outpost Bob-omb)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_surary, // initEvent
@@ -2473,7 +2473,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"ボムヘイD"*/"\203{\203\200\203w\203CD", // name (a Fahr Outpost Bob-omb)
+        /*"ボムヘイD"*/"ボムヘイD", // name (a Fahr Outpost Bob-omb)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_murabito_d, // initEvent
@@ -2485,7 +2485,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"ホワイト"*/("\203z\203\217\203C\203g"), // name (General White)
+        /*"ホワイト"*/("ホワイト"), // name (General White)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_white, // initEvent
@@ -2894,29 +2894,29 @@ static EVT_BEGIN(minnnanokoe_evt)
     CALL(anim_tevcallback, STRING("ボムヘイD"), 1)
     CALL(anim_tevcallback, STRING("ホワイト"), 1)
 #else
-    CALL(evt_npc_set_position, STRING("\221\272\222\267"), 520, 0, 0)
-    CALL(evt_npc_set_ry, STRING("\221\272\222\267"), 270)
-    CALL(evt_npc_status_onoff, 1, STRING("\221\272\222\267"), NPC_STATUS_FACE_MOVE_DIR)
-    CALL(evt_npc_set_position, STRING("\203j\203g\203\215"), -30, 0, -180)
-    CALL(evt_npc_set_ry, STRING("\203j\203g\203\215"), 270)
-    CALL(evt_npc_set_position, STRING("\203y\203\223\203g\203\212\203b\203g"), 0, 0, -180)
-    CALL(evt_npc_set_ry, STRING("\203y\203\223\203g\203\212\203b\203g"), 270)
-    CALL(evt_npc_set_position, STRING("\203X\203\211\203\212\201["), 30, 0, -180)
-    CALL(evt_npc_set_ry, STRING("\203X\203\211\203\212\201["), 90)
-    CALL(evt_npc_set_position, STRING("\203{\203\200\203w\203CD"), 570, 0, 25)
-    CALL(evt_npc_set_ry, STRING("\203{\203\200\203w\203CD"), 270)
-    CALL(evt_npc_status_onoff, 1, STRING("\203{\203\200\203w\203CD"), NPC_STATUS_FACE_MOVE_DIR)
-    CALL(evt_npc_set_position, STRING("\203z\203\217\203C\203g"), 0, 0, -230)
-    CALL(evt_npc_set_ry, STRING("\203z\203\217\203C\203g"), 270)
+    CALL(evt_npc_set_position, STRING("村長"), 520, 0, 0)
+    CALL(evt_npc_set_ry, STRING("村長"), 270)
+    CALL(evt_npc_status_onoff, 1, STRING("村長"), NPC_STATUS_FACE_MOVE_DIR)
+    CALL(evt_npc_set_position, STRING("ニトロ"), -30, 0, -180)
+    CALL(evt_npc_set_ry, STRING("ニトロ"), 270)
+    CALL(evt_npc_set_position, STRING("ペントリット"), 0, 0, -180)
+    CALL(evt_npc_set_ry, STRING("ペントリット"), 270)
+    CALL(evt_npc_set_position, STRING("スラリー"), 30, 0, -180)
+    CALL(evt_npc_set_ry, STRING("スラリー"), 90)
+    CALL(evt_npc_set_position, STRING("ボムヘイD"), 570, 0, 25)
+    CALL(evt_npc_set_ry, STRING("ボムヘイD"), 270)
+    CALL(evt_npc_status_onoff, 1, STRING("ボムヘイD"), NPC_STATUS_FACE_MOVE_DIR)
+    CALL(evt_npc_set_position, STRING("ホワイト"), 0, 0, -230)
+    CALL(evt_npc_set_ry, STRING("ホワイト"), 270)
     CALL(evt_map_set_tevcallback, 1, PTR(envSetYami))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_bom01"), 16777216)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_bom01"), MAP_OBJ_FLAG_DISPLAY_LIST)
-    CALL(anim_tevcallback, STRING("\221\272\222\267"), 1)
-    CALL(anim_tevcallback, STRING("\203j\203g\203\215"), 1)
-    CALL(anim_tevcallback, STRING("\203y\203\223\203g\203\212\203b\203g"), 1)
-    CALL(anim_tevcallback, STRING("\203X\203\211\203\212\201["), 1)
-    CALL(anim_tevcallback, STRING("\203{\203\200\203w\203CD"), 1)
-    CALL(anim_tevcallback, STRING("\203z\203\217\203C\203g"), 1)
+    CALL(anim_tevcallback, STRING("村長"), 1)
+    CALL(anim_tevcallback, STRING("ニトロ"), 1)
+    CALL(anim_tevcallback, STRING("ペントリット"), 1)
+    CALL(anim_tevcallback, STRING("スラリー"), 1)
+    CALL(anim_tevcallback, STRING("ボムヘイD"), 1)
+    CALL(anim_tevcallback, STRING("ホワイト"), 1)
 #endif
     CALL(yami_view, -1500)
     CALL(evt_bg_set_color, 64, 64, 64, 255)
@@ -2966,7 +2966,6 @@ static EVT_BEGIN(minnnanokoe_evt)
     WAIT_MS(500)
     WAIT_MS(1000)
     BEGIN_INLINE_EVENT
-#if VERSION >= VERSION_US
         CALL(evt_npc_move_position, STRING("ボムヘイD"), 450, 25, 0, 90, 0)
     END_INLINE_EVENT
     CALL(evt_npc_move_position, STRING("村長"), 400, 0, 0, 90, 0)
@@ -2974,15 +2973,6 @@ static EVT_BEGIN(minnnanokoe_evt)
     CALL(evt_msg_print, 0, STRING("stg8_las_148_65"), 0, STRING("村長"))
     WAIT_MS(500)
     CALL(evt_msg_print, 0, STRING("stg8_las_148_66"), 0, STRING("村長"))
-#else
-        CALL(evt_npc_move_position, STRING("\203{\203\200\203w\203CD"), 450, 25, 0, 90, 0)
-    END_INLINE_EVENT
-    CALL(evt_npc_move_position, STRING("\221\272\222\267"), 400, 0, 0, 90, 0)
-    WAIT_FRAMES(1)
-    CALL(evt_msg_print, 0, STRING("stg8_las_148_65"), 0, STRING("\221\272\222\267"))
-    WAIT_MS(500)
-    CALL(evt_msg_print, 0, STRING("stg8_las_148_66"), 0, STRING("\221\272\222\267"))
-#endif
     CALL(evt_cam3d_evt_set, 0, 283, 1182, 0, 75, 0, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
     CALL(evt_msg_print, 0, STRING("stg8_las_148_67"), 0, 0)
@@ -3036,21 +3026,12 @@ static EVT_BEGIN(minnnanokoe_evt)
     WAIT_MS(3000)
     CALL(evt_cam3d_evt_set, 400, 106, 331, 400, 45, -13, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
-#if VERSION >= VERSION_US
     CALL(evt_npc_set_ry, STRING("村長"), 90)
     WAIT_MS(300)
     CALL(evt_npc_set_ry, STRING("ボムヘイD"), 90)
     WAIT_FRAMES(1)
     CALL(evt_npc_wait_pera, STRING("ボムヘイD"))
     CALL(evt_msg_print, 0, STRING("stg8_las_148_71"), 0, STRING("村長"))
-#else
-    CALL(evt_npc_set_ry, STRING("\221\272\222\267"), 90)
-    WAIT_MS(300)
-    CALL(evt_npc_set_ry, STRING("\203{\203\200\203w\203CD"), 90)
-    WAIT_FRAMES(1)
-    CALL(evt_npc_wait_pera, STRING("\203{\203\200\203w\203CD"))
-    CALL(evt_msg_print, 0, STRING("stg8_las_148_71"), 0, STRING("\221\272\222\267"))
-#endif
     WAIT_MS(2000)
     CALL(evt_fade_set_mapchange_type, 1, FADE_OUT_BLACK, 300, FADE_IN_BLACK, 300)
     CALL(evt_bero_mapchange, STRING("las_29"), STRING("minnnanokoe"))

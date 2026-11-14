@@ -3421,7 +3421,7 @@ EVT_END()
 /** Script helper: blocks until Bonetail's NPC is standing on the ground (groundHit set). */
 static USER_FUNC(gonbaba_wait_landon) {
     // 敵
-    return npcNameToPtr("\223G")->groundHit ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
+    return npcNameToPtr("敵")->groundHit ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }
 
 /**
@@ -3440,7 +3440,7 @@ static void iri_12_msgcb(s32 type, void* param) {
 /** Script helper: blocks until the sailor NPC has landed on the floor (returns at once if he cannot land). */
 static USER_FUNC(wait_landon) {
     // マッキノ
-    NpcEntry* npc = npcNameToPtr("\203}\203b\203L\203m");
+    NpcEntry* npc = npcNameToPtr("マッキノ");
 
     if (!(npc->flags & NPC_FLAG_FLOOR_COLLISION) || npc->groundHit != NULL) {
         return EVT_RETURN_DONE;
@@ -3452,13 +3452,13 @@ static USER_FUNC(wait_landon) {
 static USER_FUNC(iri_12_makkino_set_y) {
     f32 y = evtGetFloat(event, event->args[0]);
 
-    npcNameToPtr("\203}\203b\203L\203m")->position.y = y;
+    npcNameToPtr("マッキノ")->position.y = y;
     return EVT_RETURN_DONE;
 }
 
 /** Script helper: turns off paper-peraform bending and paper lighting on the sailor's model, for the pipe jump. */
 static USER_FUNC(iri_12_paper_init) {
-    NpcEntry* npc = npcNameToPtr("\203}\203b\203L\203m");
+    NpcEntry* npc = npcNameToPtr("マッキノ");
 
     animPosePaperPeraOff(npc->poseId);
     animPoseSetMaterialLightFlagOff(npc->poseId, MATERIAL_LIGHT_PAPER);
@@ -3467,7 +3467,7 @@ static USER_FUNC(iri_12_paper_init) {
 
 static USER_FUNC(shikakeFlag) {
     s32 type = evtGetValue(event, event->args[0]);
-    NpcEntry* npc = npcNameToPtr("\223G");
+    NpcEntry* npc = npcNameToPtr("敵");
 
     switch (type) {
         case 0:
@@ -3514,7 +3514,7 @@ static USER_FUNC(setup_npc_ex_para) {
 
 /** Script helper: sets NPC_BATTLE_NO_BUMP_ATTACK on the floor enemy's battle info. */
 static USER_FUNC(yattukeFlag) {
-    npcNameToPtr("\223G")->battleInfo.battleFlags |= NPC_BATTLE_NO_BUMP_ATTACK;
+    npcNameToPtr("敵")->battleInfo.battleFlags |= NPC_BATTLE_NO_BUMP_ATTACK;
     return EVT_RETURN_DONE;
 }
 
@@ -3541,7 +3541,7 @@ static USER_FUNC(enemy_info) {
     }
     if (!found) {
         // クリボー
-        name = "\203N\203\212\203{\201[";
+        name = "クリボー";
         tribe = npcGetTribe(name);
     } else {
         name = tribe->nameJp;

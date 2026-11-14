@@ -1102,7 +1102,7 @@ static void DrawMenuHelpWin(const char* msg, f32 x, f32 y) {
         }
         FontDrawString(tx, y - 52.0f, (char*)lines[2]);
     } else {
-        FontDrawString(10.0f + x, y - 4.0f, "\202\271\202\302\202\337\202\242\202\315\201@\202\310\202\242\202\314\202\276\201I\201I");
+        FontDrawString(10.0f + x, y - 4.0f, "せつめいは　ないのだ！！");
     }
 }
 

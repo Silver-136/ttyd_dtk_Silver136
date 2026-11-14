@@ -816,7 +816,7 @@ static void uranai_cap(CameraId cameraId, void* param) {
         C_MTXLookAt(lookAt, &pos, &up, &target);
     }
     saved = *camGetPtr(cameraId);
-    npc = npcNameToPtr("\202\244\202\347\202\310\202\242\216t");
+    npc = npcNameToPtr("うらない師");
     data = animPoseGetAnimBaseDataPtr(npc->poseId);
     bmin = (Vec){data->bboxMin.x, data->bboxMin.y, data->bboxMin.z};
     bmax = (Vec){data->bboxMax.x, data->bboxMax.y, data->bboxMax.z};

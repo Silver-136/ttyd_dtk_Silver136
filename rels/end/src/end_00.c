@@ -2153,7 +2153,7 @@ void end_ext_moamoa_init(void) {
  * Then clears the model's joint positions for the next frame.
  */
 void end_ext_moamoa_main(void) {
-    NpcEntry* npc = npcNameToPtr("\203\202\203A\203\202\203A");
+    NpcEntry* npc = npcNameToPtr("モアモア");
     Vec* wpos = (Vec*)animPoseGetAnimPosePtr(npc->poseId)->worldPositions->address;
     s32 i;
     ExtdrvPose* pose;
@@ -2240,7 +2240,7 @@ void end_ext_moamoa_dispent(void) {
  * turns on world-position tracking for its pose and writes the animation table to LW(10) for evt_ext_entry.
  */
 USER_FUNC(evt_end_moamoa_init) {
-    NpcEntry* npc = npcNameToPtr("\203\202\203A\203\202\203A");
+    NpcEntry* npc = npcNameToPtr("モアモア");
     AnimationPose* ap;
     Vec* p;
     s32 n;
@@ -2279,7 +2279,7 @@ USER_FUNC(evt_end_moamoa_init) {
 #if VERSION >= VERSION_JP
 /** Script helper: turns off the joint tracking, frees the Smorg silhouette's tables and resets the ext-pose driver. */
 USER_FUNC(evt_end_moamoa_exit) {
-    NpcEntry* npc = npcNameToPtr("\203\202\203A\203\202\203A");
+    NpcEntry* npc = npcNameToPtr("モアモア");
 
     animPoseWorldPositionEvalOff(npc->poseId);
     _mapFree(end_moa_tbl);

@@ -1988,8 +1988,8 @@ void BattleCommandDisplay_WeaponMultiItemCancelCheckDisp(CameraId camId, void* p
     FontDrawString(-20.0f, -13.0f, msgSearch("btl_msg_lvup_yes"));
     FontDrawString(-20.0f, -38.0f, msgSearch("btl_msg_lvup_no"));
 #else
-    FontDrawString(-20.0f, -13.0f, "\202\315\202\242\201@");
-    FontDrawString(-20.0f, -38.0f, "\202\242\202\242\202\246");
+    FontDrawString(-20.0f, -13.0f, "はい　");
+    FontDrawString(-20.0f, -38.0f, "いいえ");
 #endif
     pos.x = -40.0f;
     pos.y = -42 - wp->commandMenu.cursor[13].absPos * 25;

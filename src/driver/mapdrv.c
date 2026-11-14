@@ -349,11 +349,11 @@ static MapObject* _mapEnt(MapFileJoint* joint, MapObject* parent, Mtx mtx, s32 i
         }
     } else {
 #if VERSION <= VERSION_DEMO_JP
-        OSPanic("mapdrv.c", 0x2c1, "\x83\x57\x83\x87\x83\x43\x83\x93\x83\x67\x82\xcc\x83\x66\x81\x5b\x83\x5e\x82\xcc\x8e\x77\x92\xe8\x82\xc9\x82\xa8\x82\xa9\x82\xb5\x82\xc8\x82\xe0\x82\xcc\x82\xaa\x82\xa0\x82\xe9\n");
+        OSPanic("mapdrv.c", 0x2c1, "ジョイントのデータの指定におかしなものがある\n");
 #elif VERSION >= VERSION_DEMO_EU
-        OSPanic("mapdrv.c", 0x2e8, "\x83\x57\x83\x87\x83\x43\x83\x93\x83\x67\x82\xcc\x83\x66\x81\x5b\x83\x5e\x82\xcc\x8e\x77\x92\xe8\x82\xc9\x82\xa8\x82\xa9\x82\xb5\x82\xc8\x82\xe0\x82\xcc\x82\xaa\x82\xa0\x82\xe9\n");
+        OSPanic("mapdrv.c", 0x2e8, "ジョイントのデータの指定におかしなものがある\n");
 #else
-        OSPanic("mapdrv.c", 0x2e5, "\x83\x57\x83\x87\x83\x43\x83\x93\x83\x67\x82\xcc\x83\x66\x81\x5b\x83\x5e\x82\xcc\x8e\x77\x92\xe8\x82\xc9\x82\xa8\x82\xa9\x82\xb5\x82\xc8\x82\xe0\x82\xcc\x82\xaa\x82\xa0\x82\xe9\n");
+        OSPanic("mapdrv.c", 0x2e5, "ジョイントのデータの指定におかしなものがある\n");
 #endif
     }
     if (joint->partCount) {
@@ -897,11 +897,7 @@ static void _mapLoad(MapWork* wp, BOOL group, const char* map) {
             camLoadRoad(CAMERA_3D, str1);
         }
         camSetTypePersp(CAMERA_3D);
-#if VERSION <= VERSION_DEMO_JP
         mapBuildTexture(wp->entries[group].rootMapObj, wp->entries[group].tpl, wp->entries[group].textureTable);
-#else
-        mapBuildTexture(wp->entries[group].rootMapObj, wp->entries[group].tpl, wp->entries[group].textureTable);
-#endif
         {
             Vec mn;
             Vec mx;

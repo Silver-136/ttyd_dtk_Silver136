@@ -4738,7 +4738,7 @@ static USER_FUNC(status_gauge_force_off) {
 
 /** Sets Sanders's remembered facing (the direction he turns back to after talking) to 270 degrees. */
 static USER_FUNC(set_talk_memory_ry) {
-    NpcEntry* npc = npcNameToPtr("\203T\203\223\203_\201[\203X");
+    NpcEntry* npc = npcNameToPtr("サンダース");
 
     npc->savedDirection = 270.0f;
     return EVT_RETURN_DONE;
@@ -4795,7 +4795,7 @@ static void kuragarisan_msgcb(s32 type, void* param) {
     switch (type) {
         case 3:
             if (*(u16*)(msg + 8) == 1) {
-                npc = npcNameToPtr("\203N\203\211\203K\203\212\202\263\202\361");
+                npc = npcNameToPtr("クラガリさん");
                 npc->direction = 90.0f;
             }
             break;

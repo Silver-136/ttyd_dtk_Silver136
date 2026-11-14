@@ -669,11 +669,11 @@ static void b_peach_msgcb(s32 type, void* param) {
     switch (type) {
         case 0:
         case 3:
-            npcSetTalkPose("\211e\202\314\217\227\211\244");
+            npcSetTalkPose("影の女王");
             break;
         case 1:
         case 2:
-            npcSetStayPose("\211e\202\314\217\227\211\244");
+            npcSetStayPose("影の女王");
             break;
     }
 }
@@ -693,7 +693,7 @@ static USER_FUNC(add_vy) {
 
     base = dir ? -0.3f : 0.3f;
     step = dir ? 0.01f : -0.01f;
-    npc = npcNameToPtr("\203u\203\211\203b\203N\203s\201[\203`");
+    npc = npcNameToPtr("ブラックピーチ");
     base += step * n;
     npc->moveOffset.y += base;
     return EVT_RETURN_DONE;
@@ -889,7 +889,7 @@ static USER_FUNC(slowturnoff_check) {
 
 /** Script helper: creates a ripple effect on the floor under the Shadow Queen (possessing Peach). */
 static USER_FUNC(eff_b_peach_ripple) {
-    NpcEntry* npc = npcNameToPtr("\203u\203\211\203b\203N\203s\201[\203`");
+    NpcEntry* npc = npcNameToPtr("ブラックピーチ");
 
     effRippleSetRxRz(effRippleEntry(3, npc->position.x, 30.0f + npc->position.y, npc->position.z), 0.0f, 176.0f);
     return EVT_RETURN_DONE;
@@ -897,7 +897,7 @@ static USER_FUNC(eff_b_peach_ripple) {
 
 /** Script helper: puffs a mist effect beside Peach's NPC, 20 units away on the side facing away from the camera. */
 static USER_FUNC(eff_b_peach_mist) {
-    NpcEntry* npc = npcNameToPtr("\203s\201[\203`\225P");
+    NpcEntry* npc = npcNameToPtr("ピーチ姫");
     f32 s;
     f32 angle;
     f32 c;

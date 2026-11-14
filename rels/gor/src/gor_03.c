@@ -3227,9 +3227,7 @@ static EVT_BEGIN(slot_set)
         RETURN
     END_IF
     CALL(evt_mario_key_onoff, 0)
-#if VERSION <= VERSION_DEMO_JP
-    CALL(evt_party_stop, 0)
-#elif VERSION >= VERSION_US
+#if VERSION != VERSION_JP
     CALL(evt_party_stop, 0)
 #endif
     CALL(yuugijou_get_takeoutflag, LW(0))
@@ -3284,9 +3282,7 @@ static EVT_BEGIN(slot_set)
     LABEL(0)
     CALL(evt_cam3d_evt_off, 600, EASING_SINE_IN_OUT)
     WAIT_MS(600)
-#if VERSION <= VERSION_DEMO_JP
-    CALL(evt_party_run, 0)
-#elif VERSION >= VERSION_US
+#if VERSION != VERSION_JP
     CALL(evt_party_run, 0)
 #endif
     CALL(evt_mario_key_onoff, 1)
@@ -7301,7 +7297,7 @@ static USER_FUNC(viewport) {
  */
 static void kuji_bomb_055_callback(s32 type, MsgWinData** work) {
     MsgWinData* wp = *work;
-    NpcEntry* npc = npcNameToPtr("\203O\203\213\203\201\203{\203\200\225\272");
+    NpcEntry* npc = npcNameToPtr("グルメボム兵");
 
     switch (type) {
         case 3:
@@ -7392,7 +7388,7 @@ static USER_FUNC(kuzi_bomb_bomb_eff) {
     s32 type = evtGetValue(event, args[0]);
     s32 phase = evtGetValue(event, args[1]);
     s32 next = phase;
-    NpcEntry* npc = npcNameToPtr("\203O\203\213\203\201\203{\203\200\225\272");
+    NpcEntry* npc = npcNameToPtr("グルメボム兵");
 
     if (type == 2 || type == 3) {
         return EVT_RETURN_DONE;

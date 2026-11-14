@@ -523,7 +523,7 @@ static USER_FUNC(hoshi_r) {
  */
 static USER_FUNC(hoshi_jump) {
     f32* pos = (f32*)((EffectEntry*)event->lwData[10])->userdata + 2;
-    NpcEntry* npc = npcNameToPtr("\203}\203W\203\207\203\212\203\223");
+    NpcEntry* npc = npcNameToPtr("マジョリン");
     f32 vy;
     f32 speed;
     f32 t;

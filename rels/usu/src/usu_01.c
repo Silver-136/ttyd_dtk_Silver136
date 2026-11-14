@@ -2735,9 +2735,9 @@ static USER_FUNC(shop_item_disp_on) {
  * so they darken with the shop, and makes the black chest's demon ("ペラ魔人") ignore it.
  */
 static USER_FUNC(ie2_npc_disp_off) {
-    const char* show[] = {"\202\250\223X\202\314\211\234\202\263\202\361", "\203L\203U\226\354\230Y",
-                          "\203u\203^\203L\203U\226\354\230Y", "\223X\202\314\216\345\220l", NULL};
-    const char* hide[] = {"\203y\203\211\226\202\220l", NULL};
+    const char* show[] = {"お店の奥さん", "キザ野郎",
+                          "ブタキザ野郎", "店の主人", NULL};
+    const char* hide[] = {"ペラ魔人", NULL};
     s32 i;
 
     for (i = 0; show[i] != NULL; i++) {
@@ -2754,9 +2754,9 @@ static USER_FUNC(ie2_npc_disp_off) {
  * (the shop's people ignore the map's blend colour again and the chest demon takes it).
  */
 static USER_FUNC(ie2_npc_disp_on) {
-    const char* hide[] = {"\202\250\223X\202\314\211\234\202\263\202\361", "\203L\203U\226\354\230Y",
-                          "\203u\203^\203L\203U\226\354\230Y", "\223X\202\314\216\345\220l", NULL};
-    const char* show[] = {"\203y\203\211\226\202\220l", NULL};
+    const char* hide[] = {"お店の奥さん", "キザ野郎",
+                          "ブタキザ野郎", "店の主人", NULL};
+    const char* show[] = {"ペラ魔人", NULL};
     s32 i;
 
     for (i = 0; hide[i] != NULL; i++) {

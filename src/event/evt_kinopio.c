@@ -275,7 +275,7 @@ static USER_FUNC(snd_on) {
 // Descriptive name (not in the symbol maps).
 #if VERSION >= VERSION_JP
 USER_FUNC(cameraman_on) {
-    NpcEntry* npc = npcNameToPtr("\217h\211\256\202\314\203J\203\201\203\211\203}\203\223");
+    NpcEntry* npc = npcNameToPtr("宿屋のカメラマン");
     animPoseSetMaterialFlagOn(npc->poseId, (MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2));
     return EVT_RETURN_DONE;
 }
@@ -551,34 +551,34 @@ EVT_BEGIN(evt_50)
     CALL(get_npcname, LW(10))
 #if VERSION >= VERSION_JP
     CALL(evt_npc_get_position, LW(10), LW(13), LW(14), LW(15))
-    CALL(evt_npc_entry, STRING("\217h\211\256\202\314\203J\203\201\203\211\203}\203\223"), STRING("c_jugem_c")) // Lakitu cameraman who takes the 50th-stay inn photo
-    CALL(evt_npc_set_tribe, STRING("\217h\211\256\202\314\203J\203\201\203\211\203}\203\223"), STRING("\203J\203\201\203\211\203}\203\223"))
+    CALL(evt_npc_entry, STRING("宿屋のカメラマン"), STRING("c_jugem_c")) // Lakitu cameraman who takes the 50th-stay inn photo
+    CALL(evt_npc_set_tribe, STRING("宿屋のカメラマン"), STRING("カメラマン"))
     CALL(cameraman_on)
-    CALL(evt_npc_flag_onoff, 1, STRING("\217h\211\256\202\314\203J\203\201\203\211\203}\203\223"), NPC_FLAG_INSTANT_TURN)
+    CALL(evt_npc_flag_onoff, 1, STRING("宿屋のカメラマン"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_sub_get_mapname, LW(0))
     IF_STR_EQUAL(LW(0), STRING("bom_02"))
-        CALL(evt_npc_set_position, STRING("\217h\211\256\202\314\203J\203\201\203\211\203}\203\223"), -365, 30, -170)
+        CALL(evt_npc_set_position, STRING("宿屋のカメラマン"), -365, 30, -170)
     END_IF
     IF_STR_EQUAL(LW(0), STRING("gor_01"))
-        CALL(evt_npc_set_position, STRING("\217h\211\256\202\314\203J\203\201\203\211\203}\203\223"), 168, 154, -229)
+        CALL(evt_npc_set_position, STRING("宿屋のカメラマン"), 168, 154, -229)
     END_IF
     IF_STR_EQUAL(LW(0), STRING("muj_01"))
-        CALL(evt_npc_set_position, STRING("\217h\211\256\202\314\203J\203\201\203\211\203}\203\223"), 270, 20, -145)
+        CALL(evt_npc_set_position, STRING("宿屋のカメラマン"), 270, 20, -145)
     END_IF
     IF_STR_EQUAL(LW(0), STRING("nok_00"))
-        CALL(evt_npc_set_position, STRING("\217h\211\256\202\314\203J\203\201\203\211\203}\203\223"), -385, 25, -145)
+        CALL(evt_npc_set_position, STRING("宿屋のカメラマン"), -385, 25, -145)
     END_IF
     IF_STR_EQUAL(LW(0), STRING("pik_04"))
-        CALL(evt_npc_set_position, STRING("\217h\211\256\202\314\203J\203\201\203\211\203}\203\223"), 310, 1329, -100)
+        CALL(evt_npc_set_position, STRING("宿屋のカメラマン"), 310, 1329, -100)
         CALL(evt_npc_set_position, LW(10), 310, 1329, -65)
     END_IF
     IF_STR_EQUAL(LW(0), STRING("usu_00"))
-        CALL(evt_npc_set_position, STRING("\217h\211\256\202\314\203J\203\201\203\211\203}\203\223"), 268, 0, -210)
+        CALL(evt_npc_set_position, STRING("宿屋のカメラマン"), 268, 0, -210)
     END_IF
-    CALL(evt_set_dir_to_target, STRING("\217h\211\256\202\314\203J\203\201\203\211\203}\203\223"), STRING("mario"))
+    CALL(evt_set_dir_to_target, STRING("宿屋のカメラマン"), STRING("mario"))
     CALL(evt_set_dir_to_target, LW(10), STRING("mario"))
-    CALL(evt_mario_set_dir_npc, STRING("\217h\211\256\202\314\203J\203\201\203\211\203}\203\223"))
-    CALL(evt_party_set_dir_npc, 0, STRING("\217h\211\256\202\314\203J\203\201\203\211\203}\203\223"))
+    CALL(evt_mario_set_dir_npc, STRING("宿屋のカメラマン"))
+    CALL(evt_party_set_dir_npc, 0, STRING("宿屋のカメラマン"))
 #endif
     CALL(msg_no, 9, LW(0))
     CALL(evt_msg_print, 0, LW(0), 0, LW(10))
@@ -624,8 +624,8 @@ EVT_BEGIN(evt_50)
     CALL(evt_mario_set_dir_npc, LW(10))
     CALL(msg_no, 11, LW(0))
     CALL(evt_msg_print, 0, LW(0), 0, LW(10))
-    CALL(evt_mario_set_dir_npc, STRING("\217h\211\256\202\314\203J\203\201\203\211\203}\203\223"))
-    CALL(evt_party_set_dir_npc, 0, STRING("\217h\211\256\202\314\203J\203\201\203\211\203}\203\223"))
+    CALL(evt_mario_set_dir_npc, STRING("宿屋のカメラマン"))
+    CALL(evt_party_set_dir_npc, 0, STRING("宿屋のカメラマン"))
     WAIT_MS(300)
     CALL(evt_snd_sfxon, STRING("SFX_EVT_50_HOTEL_SHUTTER1"), 0)
     CALL(evt_fade_entry, FADE_OUT_SPOT2, 150, 255, 255, 255)
@@ -649,7 +649,7 @@ EVT_BEGIN(evt_50)
 #if VERSION >= VERSION_JP
     CALL(evt_fade_entry, FADE_OUT_BLACK, 1000, 0, 0, 0)
     CALL(evt_fade_end_wait)
-    CALL(evt_npc_check_delete, STRING("\217h\211\256\202\314\203J\203\201\203\211\203}\203\223"))
+    CALL(evt_npc_check_delete, STRING("宿屋のカメラマン"))
     CALL(evt_npc_set_position, LW(10), LW(13), LW(14), LW(15))
     CALL(evt_set_dir_to_target, LW(10), STRING("mario"))
     CALL(evt_fade_entry, FADE_IN_BLACK, 1000, 0, 0, 0)

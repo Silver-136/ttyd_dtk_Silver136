@@ -186,7 +186,7 @@ static s32 party_icon_table[7] = {ICON_PARTY_GOOMBELLA, ICON_PARTY_KOOPS, ICON_P
 static const char* party_labelname_table[7] = {"_kur", "_nok", "_win", "_yos", "_viv", "_bom", "_chu"};
 static s32 mario_status_icon_table[3] = {ICON_HP, ICON_FP, ICON_BP};
 static const char* mario_status_labelname_table[3] = {"_hp", "_fp", "_bp"};
-static const char* mario_status_name_table[3] = {"\202g\202o", "\202e\202o", "\202a\202o"};
+static const char* mario_status_name_table[3] = {"ＨＰ", "ＦＰ", "ＢＰ"};
 static s32 mario_status_henka_table[3] = {5, 5, 3};
 
 /** Unit-window update event, started by evt_unitwin_alloc unless window-manager mode is selected (JP and later); runs evt_unitwin_main_func. */

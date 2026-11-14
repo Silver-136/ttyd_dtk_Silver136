@@ -831,7 +831,7 @@ static void kpa_stageclear_disp(CameraId camera, void* param) {
     FontDrawScale(2.0f);
     FontDrawEdge();
     FontDrawColor((GXColor){0xFF, 0xFF, 0xFF, 0xFF});
-    FontDrawString(-140.0f, 40.0f, "\203S\201[\203\213\203C\203\223\201I\201I");
+    FontDrawString(-140.0f, 40.0f, "ゴールイン！！");
     FontDrawEdgeOff();
 }
 

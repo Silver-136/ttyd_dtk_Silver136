@@ -279,7 +279,7 @@ static void monitor_cap_capture(CameraId cameraId, void* param) {
     C_MTXPerspective(projMtx, 60.0f, 1.2666667f, 1.0f, 1000.0f);
     GXSetProjection(projMtx, GX_PERSPECTIVE);
     if (monitor_wp->kanbu) {
-        npc = npcNameToPtr("\203J\203\223\203u\201[");
+        npc = npcNameToPtr("カンブー");
         {
             static const Vec monitor_kanbu_pos = {0.0f, 28.0f, 46.0f};
             static const Vec monitor_kanbu_up = {0.0f, 1.0f, 0.0f};
@@ -295,7 +295,7 @@ static void monitor_cap_capture(CameraId cameraId, void* param) {
             C_MTXLookAt(lookAt, &pos, &up, &target);
         }
     } else {
-        npc = npcNameToPtr("\216\350\211\272\202P");
+        npc = npcNameToPtr("手下１");
         {
             static const Vec monitor_teshita_pos = {0.0f, 25.0f, 30.0f};
             static const Vec monitor_teshita_up = {0.0f, 1.0f, 0.0f};

@@ -1019,7 +1019,7 @@ static void disp_proc(CameraId cameraId, void* param) {
     windowDispGX_System(0, 0xFF, x - 30.0f, 165.0f, 310.0f, 330.0f);
 #if VERSION >= VERSION_US
     if (gp->language == LANGUAGE_JP) {
-        title = "\203\211\203\223\203L\203\223\203O";
+        title = "ランキング";
     } else {
         title = msgSearch("stg3_ranking");
     }
@@ -1029,7 +1029,7 @@ static void disp_proc(CameraId cameraId, void* param) {
 #else
     FontDrawStart();
     FontDrawScale(1.0f);
-    w = (u16)FontGetMessageWidth("\203\211\203\223\203L\203\223\203O");
+    w = (u16)FontGetMessageWidth("ランキング");
 #endif
     {
         GXColor color = {0xDC, 0xC8, 0xDC, 0xFF};
@@ -1039,7 +1039,7 @@ static void disp_proc(CameraId cameraId, void* param) {
 #if VERSION >= VERSION_US
     FontDrawMessage(-w / 2, top, title);
 #else
-    FontDrawMessage(-w / 2, top, "\203\211\203\223\203L\203\223\203O");
+    FontDrawMessage(-w / 2, top, "ランキング");
 #endif
     sx = 304.0f + x;
     sw = winW;
@@ -1464,7 +1464,7 @@ static void gans_tex(CameraId cameraId, void* param) {
         C_MTXLookAt(lookAt, &pos, &up, &target);
     }
     saved = *camGetPtr(cameraId);
-    npc = npcNameToPtr(evtGetValue(NULL, GSW_STORY_PROGRESS) < STG3_34_RETURN_TO_ROGUEPORT ? "\203K\203\223\203X" : "\203L\203m\203V\203R\203\217");
+    npc = npcNameToPtr(evtGetValue(NULL, GSW_STORY_PROGRESS) < STG3_34_RETURN_TO_ROGUEPORT ? "ガンス" : "キノシコワ");
     PSMTXCopy(lookAt, camGetCurPtr()->view);
     animPosePeraOff(npc->poseId);
     PSMTXIdentity(ident);
@@ -2764,7 +2764,7 @@ EVT_END()
 
 // Wait for the story-selected NPC, then update the monitor texture and fade while remaining active.
 static USER_FUNC(make_monitor) {
-    NpcEntry* npc = npcNameToPtr_NoAssert(evtGetValue(NULL, GSW_STORY_PROGRESS) < STG3_34_RETURN_TO_ROGUEPORT ? "\203K\203\223\203X" : "\203L\203m\203V\203R\203\217");
+    NpcEntry* npc = npcNameToPtr_NoAssert(evtGetValue(NULL, GSW_STORY_PROGRESS) < STG3_34_RETURN_TO_ROGUEPORT ? "ガンス" : "キノシコワ");
     GansWork* wp;
 
     if (isFirstCall) {
@@ -2892,7 +2892,7 @@ USER_FUNC(tou_mario_keyoff_check) {
 
 /** Script helper: stops Octor's regular script and parks him at (80, 0, 85) facing 270 degrees. */
 static USER_FUNC(octo_stop) {
-    NpcEntry* npc = npcNameToPtr_NoAssert("\203I\203N\203g\201[\203\213");
+    NpcEntry* npc = npcNameToPtr_NoAssert("オクトール");
 
     if (npc != NULL) {
         evtStopID(npc->regularEvtId);
@@ -2905,7 +2905,7 @@ static USER_FUNC(octo_stop) {
 
 /** Script helper: restarts Octor's regular script. */
 static USER_FUNC(octo_start) {
-    NpcEntry* npc = npcNameToPtr_NoAssert("\203I\203N\203g\201[\203\213");
+    NpcEntry* npc = npcNameToPtr_NoAssert("オクトール");
 
     if (npc != NULL) {
         evtStartID(npc->regularEvtId);

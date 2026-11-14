@@ -139,9 +139,9 @@ static WinMgrDesc window_desc[2] = {
 };
 
 #if VERSION >= VERSION_US
-#define WI_SLASH (gp->language != LANGUAGE_JP ? "/" : "\201^")
+#define WI_SLASH (gp->language != LANGUAGE_JP ? "/" : "／")
 #else
-#define WI_SLASH "\201^"
+#define WI_SLASH "／"
 #endif
 
 /**
@@ -886,7 +886,7 @@ static void item_disp(WindowWork* w, f32 xo, f32 yo) {
  * and an unused seventh row.
  */
 static const char* hpfp_name_table[7][2] = {
-    {"\202g\202o", "\202e\202o"},
+    {"ＨＰ", "ＦＰ"},
     {"HP", "FP"},
     {"KP", "BP"},
     {"PC", "PF"},
@@ -900,8 +900,8 @@ static const char* hpfp_name_table[7][2] = {
 #define WI_HP_NAME hpfp_name_table[gp->language][0]
 #define WI_FP_NAME hpfp_name_table[gp->language][1]
 #else
-#define WI_HP_NAME "\202g\202o"
-#define WI_FP_NAME "\202e\202o"
+#define WI_HP_NAME "ＨＰ"
+#define WI_FP_NAME "ＦＰ"
 #endif
 
 /**

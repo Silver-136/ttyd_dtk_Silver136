@@ -18,172 +18,172 @@
 
 //.data
 #if VERSION <= VERSION_DEMO_JP
-static const char* kemuri_patname[] = {"\203}\203\212\203I:KAMECSMALL", "\203K\203\214\203L:KAMECBIG", "-----", "\203}\203\212\203I\202\307\202\301\202\265\202\361:KAMECBIG", "Block\202\307\202\301\202\265\202\361::KAMECBIG", "\203T\203\223\203{", "\203}\203~\201[", NULL};
+static const char* kemuri_patname[] = {"マリオ:KAMECSMALL", "ガレキ:KAMECBIG", "-----", "マリオどっしん:KAMECBIG", "Blockどっしん::KAMECBIG", "サンボ", "マミー", NULL};
 static const char* kemuri_dash_patname[] = {"Mairo:KAMECSMALL", "KAMECBIG", "PINKYBOM", NULL};
-static const char* stardust_patname[] = {"\202\317\202\237\201[\202\301\202\306\202\305\202\351", "\202\267\202\255\202\310\202\337", "\202\250\202\250\202\337", "\202\347\202\301\202\251\202\267\202\255\202\310\202\337", "\202\347\202\301\202\251\202\250\202\250\202\337"};
-static const char* magic2_patname[] = {"\203J\203\201\203b\203N\202\265\202\343\202\244\202\277\202\343\202\244", "\203J\203\201\203b\203N\202\355\202\301\202\251", NULL};
-static const char* hokori_patname[] = {"\203g\203\212\203f\202\331\202\261\202\350", "\202\331\202\261\202\350\202\273\202\314\202Q", "\202\331\202\261\202\350\202\320\202\306\202\302", NULL};
-static const char* kemu_pinky_patname[] = {"LV1", "LV2", "LV3", "LV1\211\212", "LV2\211\212", "LV3\211\212", NULL};
-static const char* small_star_patname[] = {"\202\265\202\345\202\253\202\251\202\242\202\304\202\361\202\310\202\265", "\202\265\202\345\202\253\202\251\202\242\202\304\202\361\202\240\202\350", "\202\347\202\301\202\251\202\240\202\350", "\203I\203E\203M", "\203p\201[\203e\203B", NULL};
-static const char* pinky_patname[] = {"LV1", "LV2", "LV3", "LV1\211\212", "LV2\211\212", "LV3\211\212", NULL};
-static const char* wangflush_patname[] = {"\203\217\203\223\203\217\203\223", "<\202\335\202\265\202\346\202\244>", NULL};
-static const char* hammerkemu_patname[] = {"\202\271\202\242\202\261\202\244", "\203m\201[\203}\203\213", NULL};
-static const char* stardust2_patname[] = {"<\202\335\202\265\202\346\202\244>", "HP\202\251\202\242\202\323\202\255", "HP\202\251\202\242\202\323\202\2552", "HP,FP\203u\203\215\203b\203N", "\203s\201[\203`\202\326\202\361\202\265\202\361", "\202\313\202\252\202\244", "HP,FP\203u\203\215\203b\203N(Z)", NULL};
+static const char* stardust_patname[] = {"ぱぁーっとでる", "すくなめ", "おおめ", "らっかすくなめ", "らっかおおめ"};
+static const char* magic2_patname[] = {"カメックしゅうちゅう", "カメックわっか", NULL};
+static const char* hokori_patname[] = {"トリデほこり", "ほこりその２", "ほこりひとつ", NULL};
+static const char* kemu_pinky_patname[] = {"LV1", "LV2", "LV3", "LV1炎", "LV2炎", "LV3炎", NULL};
+static const char* small_star_patname[] = {"しょきかいてんなし", "しょきかいてんあり", "らっかあり", "オウギ", "パーティ", NULL};
+static const char* pinky_patname[] = {"LV1", "LV2", "LV3", "LV1炎", "LV2炎", "LV3炎", NULL};
+static const char* wangflush_patname[] = {"ワンワン", "<みしよう>", NULL};
+static const char* hammerkemu_patname[] = {"せいこう", "ノーマル", NULL};
+static const char* stardust2_patname[] = {"<みしよう>", "HPかいふく", "HPかいふく2", "HP,FPブロック", "ピーチへんしん", "ねがう", "HP,FPブロック(Z)", NULL};
 static const char* ripple_patname[] = {"a", "b", NULL};
 static const char* eff_n64_users_unused[] = {"c", "d", "e", "f", "g", "h", "j", "k", NULL};
-static const char* dogabon_kemuri_patname[] = {"\202\240\202\351\202\253\201\225\202\315\202\265\202\350", "\203q\203b\203v\203A\203^\203b\203N", "\203T\203\223\203{", "\202\255\202\340\202\255\202\340\202\334\202\266\202\361", "\220V\203T\203\223\203{", "\220V\203T\203\223\203{\203}\203~\201[", "\203\211\203C\203g\227\216\211\272", NULL};
-static const char* onpu_patname[] = {"\202\266\202\345\202\244\202\265\202\345\202\244", "\203t\203\211\203\217\201[\202\263\202\361", "\203\213\203C\201[\203W\202\265\202\361\202\317\202\242\202\265\202\304\202\351", NULL};
-static const char* sweat_patname[] = {"\215U\214\202\203~\203X\216\236", "\203`\203r\203\210\203b\203V\201[", NULL};
-static const char* stamp_patname[] = {"\202\313\202\336\202\347\202\271", "\202\261\202\361\202\347\202\361", "\203o\203g\203\213\203r\203r\203A\203\223\202R", "\202\273\202\314\202\331\202\251", NULL};
-static const char* thruhammer_patname[] = {"\202\251\202\361\202\302\202\244\203n\203\223\203}\201[", "\202\251\202\361\202\302\202\244\203n\203\223\203}\201[\202\265\202\301\202\317\202\242", NULL};
-static const char* radiation_patname[] = {"-----", "\202\302\202\246\202\314\202\320\202\251\202\350", "\202\302\202\246\202\314\202\320\202\251\202\350\202Q", "\203m\203R\203u\203\215\203X\202\314\202\355\202\264", NULL};
-static const char* broken_barrier_patname[] = {"\202\302\202\246\203o\203\212\203A\202\261\202\355\202\352\202\351", "\203s\201[\203`\202\326\202\361\202\265\202\361\202\306\202\251\202\352\202\351", "\213t\215\304\220\266", NULL};
-static const char* flame_patname[] = {"\203^\203C\203g\203\213\203f\203\202", "\202\331\202\314\202\250\202\314\202\304\202\253", "\203N\203b\203p", "\202\265\202\265\202\345\202\244", NULL};
-static const char* sunlight_patname[] = {"\211E\202\251\202\347", "\215\266\202\251\202\347", NULL};
-static const char* release_patname[] = {"\203m\201[\203}\203\213", "\203e\203X\203g \202\355\202\301\202\251\202\310\202\265", "\203e\203X\203g \202\323\202\347\202\301\202\265\202\343\202\302\202\253", "\203e\203X\203g \202\340\202\307\202\301\202\304\202\261\202\310\202\242", NULL};
-static const char* peach_dust_patname[] = {"\202\304\202\253\202\311\202\240\202\275\202\351 \203g\203Q\203m\203R", "\202\304\202\253\202\311\202\240\202\275\202\351 \203n\203\223\203}\201[\203u\203\215\203X", "\202\304\202\253\202\311\202\240\202\275\202\351 \203K\203{\203\223", "----\202\335\202\304\202\242", NULL};
-static const char* star_power_patname[] = {"-----", "<\203f\203o\203b\203O\202\346\202\244>", NULL};
-static const char* hit_patname[] = {"\202\302\202\244\202\266\202\345\202\244", "\202\320", "\202\251\202\335\202\310\202\350", "\202\352\202\242\202\253", NULL};
+static const char* dogabon_kemuri_patname[] = {"あるき＆はしり", "ヒップアタック", "サンボ", "くもくもまじん", "新サンボ", "新サンボマミー", "ライト落下", NULL};
+static const char* onpu_patname[] = {"じょうしょう", "フラワーさん", "ルイージしんぱいしてる", NULL};
+static const char* sweat_patname[] = {"攻撃ミス時", "チビヨッシー", NULL};
+static const char* stamp_patname[] = {"ねむらせ", "こんらん", "バトルビビアン３", "そのほか", NULL};
+static const char* thruhammer_patname[] = {"かんつうハンマー", "かんつうハンマーしっぱい", NULL};
+static const char* radiation_patname[] = {"-----", "つえのひかり", "つえのひかり２", "ノコブロスのわざ", NULL};
+static const char* broken_barrier_patname[] = {"つえバリアこわれる", "ピーチへんしんとかれる", "逆再生", NULL};
+static const char* flame_patname[] = {"タイトルデモ", "ほのおのてき", "クッパ", "ししょう", NULL};
+static const char* sunlight_patname[] = {"右から", "左から", NULL};
+static const char* release_patname[] = {"ノーマル", "テスト わっかなし", "テスト ふらっしゅつき", "テスト もどってこない", NULL};
+static const char* peach_dust_patname[] = {"てきにあたる トゲノコ", "てきにあたる ハンマーブロス", "てきにあたる ガボン", "----みてい", NULL};
+static const char* star_power_patname[] = {"-----", "<デバッグよう>", NULL};
+static const char* hit_patname[] = {"つうじょう", "ひ", "かみなり", "れいき", NULL};
 static const char* confetti_patname[] = {"bom lv1", "bom lv2", "bom lv3", "level up!", "bom lv1", "bom lv2", "bom lv3", NULL};
 static const char* sstar_patname[] = {"none-z,BG_SURF", "none-z,LAST_DRAW", "z,Hit Check", "Small:z,Hit Check", NULL};
-static const char* recover_heart_patname[] = {"\203n\201[\203g", "\203t\203\211\203\217\201[", "\203w\203C\203z\201[\202\251\202\242\202\323\202\255", NULL};
+static const char* recover_heart_patname[] = {"ハート", "フラワー", "ヘイホーかいふく", NULL};
 static const char* thunder_patname[] = {"demo1", "demo2", "demo3", "battle", "battle", "battle", NULL};
-static const char* thunderflare_patname[] = {"\203J\203\201\203b\203N\202\302\202\246\202\334\202\331\202\244", "\203h\203K\203{\203\223\202\265\202\361\202\274\202\244\202\334\202\331\202\244", NULL};
-static const char* whirlwind_patname[] = {"\215\266\202\334\202\355\202\350", "\211E\202\334\202\355\202\350", "\202\240\202\251\215\266\202\334\202\355\202\350", "\202\240\202\251\211E\202\334\202\355\202\350", "\202\240\202\250\215\266\202\334\202\355\202\350", "\202\240\202\250\211E\202\334\202\355\202\350", "\202\240\202\251\202\240\202\250\215\266\202\334\202\355\202\350", "\202\240\202\251\202\240\202\250\211E\202\334\202\355\202\350", "test 0", NULL};
-static const char* glass_patname[] = {"\203m\201[\203}\203\213", "\203\211\203C\203g\202\302\202\253", "\227\316\201E\203m\201[\203}\203\213", "\227\316\201E\203\211\203C\203g\202\302\202\253", NULL};
-static const char* kemuri12_patname[] = {"\202\255\202\353\202\261\202\260", "\202\346\202\244\202\252\202\361\202\240\202\302\202\242", "\203h\203K\203{\203\223\202\337\202\264\202\337", NULL};
-static const char* balloon_heiho_patname[] = {"\220\324", "\220\302", "\211\251", NULL};
+static const char* thunderflare_patname[] = {"カメックつえまほう", "ドガボンしんぞうまほう", NULL};
+static const char* whirlwind_patname[] = {"左まわり", "右まわり", "あか左まわり", "あか右まわり", "あお左まわり", "あお右まわり", "あかあお左まわり", "あかあお右まわり", "test 0", NULL};
+static const char* glass_patname[] = {"ノーマル", "ライトつき", "緑・ノーマル", "緑・ライトつき", NULL};
+static const char* kemuri12_patname[] = {"くろこげ", "ようがんあつい", "ドガボンめざめ", NULL};
+static const char* balloon_heiho_patname[] = {"赤", "青", "黄", NULL};
 static const char* rubble_patname[] = {"rock", "wall", "block", NULL};
-static const char* snow_dust_patname[] = {"\203A\203C\203X\203X\203^\203\223\203v\202\344\202\253\202\275\202\334", "\203A\203C\203X\203X\203^\203\223\203v/\203p\203\211\203\214\203\211\201[\202\344\202\253\202\266\202\351\202\265", "\203}\203\212\203I\202\323\202\301\202\251\202\302/\203L\203\211\203L\203\211", "\203f\203\202:\202\331\202\265\202\267\202\242\202\261\202\335/\202\261\202\304\202\242\203L\203\211\203L\203\211", "\202\331\202\265\202\314\202\313\202\252\202\242\202\355\202\264/\202\331\202\265\202\331\202\265", "\203~\203j\202\331\202\265\202\331\202\265", "\202\334\202\307\202\355\202\271\202\314\225\262", NULL};
-static const char* fireworks_patname[] = {"\202\323\202\302\202\244\202\273\202\306\202\252\202\355", "\202\323\202\302\202\244\202\244\202\277\202\252\202\355", "\203X\203^\201[\202\252\202\275", NULL};
-static const char* vapor_patname[] = {"\203{\203X\203p\203b\203N\203\223 \202\344\202\260", "\202\307\202\255\201E\203A\203C\203X\203p\203b\203N\203\223 \202\242\202\253", "\202\344\202\253\202\261\202\361\202\261\202\361 \202\352\202\242\202\253", NULL};
-static const char* kumokumo_chip_patname[] = {"\202\255\202\340\202\255\202\340\202\334\202\266\202\361", "\202\333\202\261\202\322\201[\202\314\202\355\202\264", NULL};
-static const char* crystal_patname[] = {"\203f\203A\201[\203\213", "\203~\203X\203e\201[\203\213", "\202\331\202\265\202\314\202\271\202\242\202\314\202\262\202\261\202\244", "\203f\203A\201[\203\213 \203E\203G\201[\203u", "\203z\203V\203p\203\217\201[\203A\203b\203v \203f\203A\201[\203\213\203E\203G\201[\203u2", "\203~\203X\203e\201[\203\213 \203E\203G\201[\203u", "\203~\203X\203e\201[\203\213 \203E\203G\201[\203u2", "\203`\203\203\201[\203W", NULL};
-static const char* packn_bfire_patname[] = {"\202\242\202\277\202\316\202\361", "\202\311\202\316\202\361", NULL};
-static const char* kumokumo_patname[] = {"\203N\203\211\203E\203_\220\201\202\253\224\362\202\316\202\265", "\203R\203\213\203e\203X\213z\202\242\215\236\202\335", "\203o\203b\203e\203\223\203_\201[\213z\202\242\215\236\202\335", "\203u\203\212\203U\201[\203h\202P", "\203u\203\212\203U\201[\203h\202Q", NULL};
-static const char* akari_pose_patname[] = {"AKR_B_1 \202\302\202\244\202\266\202\345\202\244", "AKR_B_2 \202\346\202\353\202\261\202\321", NULL};
-static const char* breath_fire_patname[] = {"\203t\203@\203C\203A\203u\203\214\203X", "\203`\203\207\203\215\203`\203\207\203\215\203t\203@\203C\203A", "\202\315\202\361\202\346\202\244\203u\203\214\203X", NULL};
+static const char* snow_dust_patname[] = {"アイススタンプゆきたま", "アイススタンプ/パラレラーゆきじるし", "マリオふっかつ/キラキラ", "デモ:ほしすいこみ/こていキラキラ", "ほしのねがいわざ/ほしほし", "ミニほしほし", "まどわせの粉", NULL};
+static const char* fireworks_patname[] = {"ふつうそとがわ", "ふつううちがわ", "スターがた", NULL};
+static const char* vapor_patname[] = {"ボスパックン ゆげ", "どく・アイスパックン いき", "ゆきこんこん れいき", NULL};
+static const char* kumokumo_chip_patname[] = {"くもくもまじん", "ぽこぴーのわざ", NULL};
+static const char* crystal_patname[] = {"デアール", "ミステール", "ほしのせいのごこう", "デアール ウエーブ", "ホシパワーアップ デアールウエーブ2", "ミステール ウエーブ", "ミステール ウエーブ2", "チャージ", NULL};
+static const char* packn_bfire_patname[] = {"いちばん", "にばん", NULL};
+static const char* kumokumo_patname[] = {"クラウダ吹き飛ばし", "コルテス吸い込み", "バッテンダー吸い込み", "ブリザード１", "ブリザード２", NULL};
+static const char* akari_pose_patname[] = {"AKR_B_1 つうじょう", "AKR_B_2 よろこび", NULL};
+static const char* breath_fire_patname[] = {"ファイアブレス", "チョロチョロファイア", "はんようブレス", NULL};
 static const char* butterfly_patname[] = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", NULL};
-static const char* cloud_patname[] = {"\203p\203\214\203b\203^", "\203J\203\201\203L", "\203J\203\201\203L \203o\201[\203j\203\223\203O", "\202\320\202\345\202\244\202\266\203e\203X\203g", NULL};
-static const char* shock_patname[] = {"\203r\203\212\203r\203\212", "\203r\203\212\203r\203\212&Wave", "\202\240\202\251\202\350\203V\203r\203\214\202\315\202\307\202\244", "Wave", NULL};
-static const char* pokopi_pcharge_patname[] = {"\203|\203R\203s\201[/\203W\203\205\203Q\203\200", "\203J\203\201\203b\203N\202\324\202\361\202\265\202\361\202\267\202\351\202\306\202\253", "\203N\203b\203p\202\302\202\246\202\302\202\251\202\244/\203T\203\223\203f\201[\203\213", "\202\323\202\301\202\251\202\302\202\267\202\351\202\306\202\253", "\203N\203b\203p\203p\203\217\201[\203A\203b\203v\202\277\202\343\202\244", "<\202\335\202\265\202\346\202\244>", "\202\315\202\361\202\346\202\244\203`\203\203\201[\203W", "<\202\335\202\265\202\346\202\244>", "<\202\335\202\265\202\346\202\244>", "\202\251\202\242\202\323\202\255", "<\202\335\202\265\202\346\202\244>", "<\202\335\202\265\202\346\202\244>", "<\202\335\202\265\202\346\202\244>", NULL};
-static const char* opuku_jetw_patname[] = {"\203Q\203b\203\\\201[ \203X\203~\202\261\202\244\202\260\202\253", "\203I\203v\203N \203W\203F\203b\203g\202\323\202\361\202\265\202\341", NULL};
-static const char* pokopi_thunder_patname[] = {"\202\315\202\361\202\346\202\244\202\314\203J\203~\203i\203\212", "\203N\203b\203p\202\302\202\246", "<\202\302\202\251\202\355\202\310\202\242\202\261\202\306>", NULL};
-static const char* water_damage_patname[] = {"enemy", "mario", "\202\261\202\355\202\301\202\317\202\250\202\277\202\351", "\203W\203F\203b\203g\202\323\202\361\202\265\202\341", "\227\216\211\272\225\250\201i\220\205\201j", "mario jump", "mario stay", "mario dash", NULL};
+static const char* cloud_patname[] = {"パレッタ", "カメキ", "カメキ バーニング", "ひょうじテスト", NULL};
+static const char* shock_patname[] = {"ビリビリ", "ビリビリ&Wave", "あかりシビレはどう", "Wave", NULL};
+static const char* pokopi_pcharge_patname[] = {"ポコピー/ジュゲム", "カメックぶんしんするとき", "クッパつえつかう/サンデール", "ふっかつするとき", "クッパパワーアップちゅう", "<みしよう>", "はんようチャージ", "<みしよう>", "<みしよう>", "かいふく", "<みしよう>", "<みしよう>", "<みしよう>", NULL};
+static const char* opuku_jetw_patname[] = {"ゲッソー スミこうげき", "オプク ジェットふんしゃ", NULL};
+static const char* pokopi_thunder_patname[] = {"はんようのカミナリ", "クッパつえ", "<つかわないこと>", NULL};
+static const char* water_damage_patname[] = {"enemy", "mario", "こわっぱおちる", "ジェットふんしゃ", "落下物（水）", "mario jump", "mario stay", "mario dash", NULL};
 static const char* dogabon_attack_patname[] = {"a", "b", NULL};
 static const char* opuku_wgun_patname[] = {"a", "b", NULL};
 static const char* opuku_wprotect_patname[] = {"a", "b", NULL};
-static const char* pturn_patname[] = {"\202\322\202\346\202\350\203^\201[\203\223", "\202\250\202\255\202\277\202\311\203`\203\203\203b\203N", NULL};
+static const char* pturn_patname[] = {"ぴよりターン", "おくちにチャック", NULL};
 static const char* pokopi_pipo_patname[] = {"a", "b", NULL};
-static const char* str_fireflower[] = {"\217\207\225\373\214\374", "\213t\225\373\214\374", NULL};
-static const char* str_fall_leaf[] = {"\227\216\202\277\227t64-1", "\227\216\202\277\227t64-2", "\227\216\202\277\227t GC-1", "\227\216\202\277\227t GC-2", "\227\216\202\277\227t GC-3", NULL};
+static const char* str_fireflower[] = {"順方向", "逆方向", NULL};
+static const char* str_fall_leaf[] = {"落ち葉64-1", "落ち葉64-2", "落ち葉 GC-1", "落ち葉 GC-2", "落ち葉 GC-3", NULL};
 #endif
 
 eff_set eff_set_n64[] = {
 #if VERSION <= VERSION_DEMO_JP
-    {0, "expbom_n64", "\223G\202\252\202\265\202\361\202\266\202\341\202\244\202\306\202\253", NULL},
-    {1, "kemuri1_n64", "\223y\211\214\222\205\222n", kemuri_patname},
-    {2, "kemuri2_n64", "\223y\211\214\203_\203b\203V\203\205", kemuri_dash_patname},
-    {3, "kemuri3_n64", "\211\324\211\214\203W\203\203\203\223\203v", NULL},
-    {4, "kemuri4_n64", "\211\324\211\214\203_\203b\203V\203\205", NULL},
-    {5, "kemuri5_n64", "\211_\211\214\222\205\222n", NULL},
-    {6, "kemuri6_n64", "\211_\211\214\225\340\202\253", NULL},
-    {7, "kemuri7_n64", "\220\341\202\240\202\265\202\240\202\306", NULL},
-    {8, "flower_n64", "\202\250\211\324\202\252\202\314\202\332\202\301\202\304\202\242\202\255", NULL},
-    {9, "snow_n64", "\220\341\202\314\214\213\217\273\202\252\215~\202\351", NULL},
-    {10, "sstar_n64", "\227\254\202\352\220\257", sstar_patname},
-    {11, "stardust_n64", "\203X\203^\201[\203_\203X\203g", stardust_patname},
-    {12, "magic1_n64", "\203J\203\201\203b\203N\202\314\226\202\226@\202P", NULL},
-    {13, "@Pymagic2_n64@Pw", "\203J\203\201\203b\203N\202\314\226\202\226@\202Q", magic2_patname},
-    {14, "fall_leaf_n64", "\227\216\202\277\227t", str_fall_leaf},
-    {15, "hokori_n64", "\203z\203R\203\212", hokori_patname},
-    {16, "gareki_n64", "\202\252\202\352\202\253", NULL},
-    {17, "kemuri8_n64", "\202\257\202\336\202\350\203s\203\223\203L\201[\203{\203\200\227p", kemu_pinky_patname},
-    {18, "small_star_n64", "\215\327\202\251\202\242\220\257", small_star_patname},
+    {0, "expbom_n64", "敵がしんじゃうとき", NULL},
+    {1, "kemuri1_n64", "土煙着地", kemuri_patname},
+    {2, "kemuri2_n64", "土煙ダッシュ", kemuri_dash_patname},
+    {3, "kemuri3_n64", "花煙ジャンプ", NULL},
+    {4, "kemuri4_n64", "花煙ダッシュ", NULL},
+    {5, "kemuri5_n64", "雲煙着地", NULL},
+    {6, "kemuri6_n64", "雲煙歩き", NULL},
+    {7, "kemuri7_n64", "雪あしあと", NULL},
+    {8, "flower_n64", "お花がのぼっていく", NULL},
+    {9, "snow_n64", "雪の結晶が降る", NULL},
+    {10, "sstar_n64", "流れ星", sstar_patname},
+    {11, "stardust_n64", "スターダスト", stardust_patname},
+    {12, "magic1_n64", "カメックの魔法１", NULL},
+    {13, "@Pymagic2_n64@Pw", "カメックの魔法２", magic2_patname},
+    {14, "fall_leaf_n64", "落ち葉", str_fall_leaf},
+    {15, "hokori_n64", "ホコリ", hokori_patname},
+    {16, "gareki_n64", "がれき", NULL},
+    {17, "kemuri8_n64", "けむりピンキーボム用", kemu_pinky_patname},
+    {18, "small_star_n64", "細かい星", small_star_patname},
     {19, "bomb_n64", "bom", pinky_patname},
-    {20, "wangflush_n64", "\203\217\203\223\203\217\203\223\203t\203\211\203b\203V\203\205", wangflush_patname},
-    {21, "magic3_n64", "\203}\203W\203b\203N\202R", NULL},
-    {22, "kemuri9_n64", "\203n\203\223\203}\201[\211\214", hammerkemu_patname},
-    {23, "kemuri10_n64", "\203J\203\201\203b\203N\202\331\202\244\202\253\202\257\202\336\202\350", NULL},
-    {24, "@Pyfire_n64@Pw", "\202\331\202\314\202\250", NULL},
-    {25, "rappa_n64", "\203\211\203b\203p\221\220", NULL},
-    {26, "stardust2_n64", "\203X\203^\201[\203_\203X\203g\202Q", stardust2_patname},
-    {27, "ripple_n64", "\202\250\202\325\202\255\202\314\224g\226\344", ripple_patname},
-    {28, "@Pyexplosion_n64@Pw", "\224\232\224\255", NULL},
-    {29, "kemuri11_n64", "\203h\203K\203{\203\223\202\257\202\336\202\350", dogabon_kemuri_patname},
-    {30, "onpu_n64", "\211\271\225\204", onpu_patname},
-    {31, "kemuri12_n64", "\203R\203\215\203R\203Q\211\214", kemuri12_patname},
-    {32, "sweat_n64", "\212\276", sweat_patname},
-    {33, "balloon_n64", "\203h\203K\203{\203\223\225\227\221D", NULL},
-    {34, "cool_leaf_n64", "\202\263\202\324\202\301\201@\227\216\227t", NULL},
-    {35, "bush_n64", "\202\265\202\260\202\335", NULL},
-    {36, "rothammer_success_n64", "\211\361\223]\203n\203\223\203}\201[\220\254\214\367", NULL},
-    {37, "rothammer_fail_n64", "\211\361\223]\203n\203\223\203}\201[\216\270\224s", NULL},
-    {38, "guruguru_n64", "\202\256\202\351\202\256\202\351", NULL},
-    {39, "ice_n64", "\203A\203C\203X\203o\203b\203`", NULL},
-    {40, "stamp_n64", "\202\323\202\335\202\302\202\257", stamp_patname},
-    {41, "@Pythruhammer_n64@Pw", "\202\251\202\361\202\302\202\244\203n\203\223\203}\201[", thruhammer_patname},
-    {42, "radiation_n64", "\217W\222\206", radiation_patname},
-    {43, "thunder_n64", "\202\251\202\335\202\310\202\350", thunder_patname},
-    {44, "breath_fire_n64", "\211\316\202\360\223f\202\255", breath_fire_patname},
-    {45, "broken_barrier_n64", "\203o\203\212\203A\224j\211\363", broken_barrier_patname},
-    {46, "fire_ring_n64", "\203I\201[\203v\203j\203\223\203O", NULL},
-    {47, "fire_dust_n64", "fire_ring \202\252\216g\227p\202\267\202\351", NULL},
+    {20, "wangflush_n64", "ワンワンフラッシュ", wangflush_patname},
+    {21, "magic3_n64", "マジック３", NULL},
+    {22, "kemuri9_n64", "ハンマー煙", hammerkemu_patname},
+    {23, "kemuri10_n64", "カメックほうきけむり", NULL},
+    {24, "@Pyfire_n64@Pw", "ほのお", NULL},
+    {25, "rappa_n64", "ラッパ草", NULL},
+    {26, "stardust2_n64", "スターダスト２", stardust2_patname},
+    {27, "ripple_n64", "おぷくの波紋", ripple_patname},
+    {28, "@Pyexplosion_n64@Pw", "爆発", NULL},
+    {29, "kemuri11_n64", "ドガボンけむり", dogabon_kemuri_patname},
+    {30, "onpu_n64", "音符", onpu_patname},
+    {31, "kemuri12_n64", "コロコゲ煙", kemuri12_patname},
+    {32, "sweat_n64", "汗", sweat_patname},
+    {33, "balloon_n64", "ドガボン風船", NULL},
+    {34, "cool_leaf_n64", "さぶっ　落葉", NULL},
+    {35, "bush_n64", "しげみ", NULL},
+    {36, "rothammer_success_n64", "回転ハンマー成功", NULL},
+    {37, "rothammer_fail_n64", "回転ハンマー失敗", NULL},
+    {38, "guruguru_n64", "ぐるぐる", NULL},
+    {39, "ice_n64", "アイスバッチ", NULL},
+    {40, "stamp_n64", "ふみつけ", stamp_patname},
+    {41, "@Pythruhammer_n64@Pw", "かんつうハンマー", thruhammer_patname},
+    {42, "radiation_n64", "集中", radiation_patname},
+    {43, "thunder_n64", "かみなり", thunder_patname},
+    {44, "breath_fire_n64", "火を吐く", breath_fire_patname},
+    {45, "broken_barrier_n64", "バリア破壊", broken_barrier_patname},
+    {46, "fire_ring_n64", "オープニング", NULL},
+    {47, "fire_dust_n64", "fire_ring が使用する", NULL},
     {48, "@Pyflame_n64@Pw", "flame", flame_patname},
-    {49, "blow_n64", "\225\254\220\205", NULL},
-    {50, "bomhei_n64", "\203o\203g\203\213\202\314\223G\203{\203\200\203w\203C", NULL},
-    {51, "fireflower_n64", "\203t\203@\203C\203\204\201[\203t\203\211\203\217\201[", str_fireflower},
-    {52, "recover_heart_n64", "\211\361\225\234\203n\201[\203g", recover_heart_patname},
-    {53, "pturn_n64", "\215s\223\256\225s\224\\", pturn_patname},
-    {54, "hit_n64", "\203q\203b\203g", hit_patname},
-    {55, "confetti_n64", "\216\206\202\323\202\324\202\253", confetti_patname},
-    {56, "snowfall_n64", "\220\341\202\252\215~\202\351", NULL},
-    {57, "whirlwind_n64", "\203}\203\212\203I\201E\223G\202\314\227x\202\350\211\361\223]", whirlwind_patname},
-    {58, "thunderflare_n64", "\226\202\226@\203J\203\201\203b\203N\217\361", thunderflare_patname},
-    {59, "coin_n64", "\203R\203C\203\223\216\346\202\301\202\275\202\306\202\253", NULL},
-    {60, "shock_n64", "\203o\203g\203\213\227p", shock_patname},
-    {61, "balloon_heiho_n64", "\203o\203g\203\213\201E\203o\203\213\201[\203\223\203w\203C\203z\201[", balloon_heiho_patname},
-    {62, "rubble_n64", "\203o\203g\203\213\201E\203z\203\211\203I\203E", rubble_patname},
-    {63, "magic_horao_n64", "\203z\203\211\203I\203E\203o\203g\203\213", NULL},
-    {64, "lensflare_n64", "\203T\203\223\203f\201[\203\213\201E\203r\203b\203O\203J\203\223\203e\203\211", NULL},
-    {65, "crystal_n64", "\203N\203\212\203X\203^\203\213", crystal_patname},
-    {66, "butterfly_n64", "\203W\203\203\203\223\203O\203\213\224\362\202\361\202\305\202\351", butterfly_patname},
-    {67, "akari_charge_n64", "\203A\203J\203\212\201E\202\255\202\340\202\255\202\340\226\202\220l\201E\203s\203J\203\212\203\223", NULL},
-    {68, "akaro_sflush_n64", "\203A\203J\203\212\202\314\213Z", NULL},
-    {69, "opuku_wgun_n64", "\203I\203v\203N\202\314\213Z", opuku_wgun_patname},
-    {70, "opuku_wprotect_n64", "\203I\203v\203N\202\314\213Z", opuku_wprotect_patname},
-    {71, "opuku_wcurtain_n64", "\203I\203v\203N\202\314\213Z", NULL},
-    {72, "opuku_jetw_n64", "\203I\203v\203N\201E\203Q\203b\203\\\201[", opuku_jetw_patname},
-    {73, "opuku_jetwrain_n64", "\203I\203v\203N", NULL},
-    {74, "pokopi_thunder_n64", "\203|\203R\203s\201[", pokopi_thunder_patname},
-    {75, "water_damage_n64", "\220\205\203_\203\201\201[\203W", water_damage_patname},
-    {76, "snowman_n64", "\202\344\202\253\202\342\202\261\202\361\202\261\202\361", NULL},
-    {77, "holography_n64", "\203z\203\215\203O\203\211\203t", NULL},
-    {78, "timestamp_n64", "\203o\203g\203\213", NULL},
-    {79, "packn_bfire_n64", "\203p\203b\203N\203\223\203t\203\211\203\217\201[", packn_bfire_patname},
-    {80, "pokopi_pipo_n64", "\203|\203R\203s\201[\203p\203C\203|", pokopi_pipo_patname},
-    {81, "cloud_n64", "\202\255\202\340", cloud_patname},
-    {82, "dogabon_attack_n64", "\203h\203K\203{\203\223", dogabon_attack_patname},
-    {83, "kameki_tornade_n64", "\203o\203g\203\213\203J\203\201\203L", NULL},
-    {84, "stone_smoke_n64", "\203~\203j\203~\203j\201E\203X\203g\201[\203\223\202\332\202\244\202\265", NULL},
-    {85, "pokopi_pcharge_n64", "\203|\203R\203s\201[\203`\203\203\201[\203W", pokopi_pcharge_patname},
-    {86, "hagetaka_flush_n64", "\203o\203g\203\213\201E\203C\203\217\203n\203Q", NULL},
-    {87, "kumokumo_n64", "\202\255\202\340\202\255\202\340", kumokumo_patname},
-    {88, "vapor_n64", "\202\344\202\260", vapor_patname},
-    {89, "fire_spark_n64", "\203o\203g\203\213\201E\203t\203@\203C\203A\201[\203p\203b\203N\203\223", NULL},
-    {90, "horao_spell_n64", "\203o\203g\203\213\201E\203z\203\211\203I\203E", NULL},
-    {91, "snow_dust_n64", "\203\206\203L\202\314\211\214", snow_dust_patname},
-    {92, "akari_pose_n64", "\202\240\202\251\202\350\203|\201[\203Y", akari_pose_patname},
-    {93, "kumokumo_chip_n64", "\202\255\202\340\202\255\202\340\226\202\220l\201E\203|\203R\203s\201[\213Z", kumokumo_chip_patname},
-    {94, "fireworks_n64", "\211\324\211\316", fireworks_patname},
-    {95, "glass_n64", "\203K\203\211\203X", glass_patname},
-    {96, "booboo_n64", "\203u\201[\203u\201[\202\263\202\361", NULL},
-    {97, "pikkyolo_n64", "\202\322\202\301\202\253\202\345\202\353", NULL},
-    {98, "freeze_n64", "\203t\203\212\201[\203Y", NULL},
-    {99, "sunlight_n64", "\221\276\227z\214\365\220\374", sunlight_patname},
-    {100, "release_n64", "\211\360\225\372", release_patname},
-    {101, "peach_dust_n64", "\203s\201[\203`\203_\203X\203g", peach_dust_patname},
-    {102, "star_power_n64", "\203X\203^\201[\203p\203\217\201[", star_power_patname},
+    {49, "blow_n64", "噴水", NULL},
+    {50, "bomhei_n64", "バトルの敵ボムヘイ", NULL},
+    {51, "fireflower_n64", "ファイヤーフラワー", str_fireflower},
+    {52, "recover_heart_n64", "回復ハート", recover_heart_patname},
+    {53, "pturn_n64", "行動不能", pturn_patname},
+    {54, "hit_n64", "ヒット", hit_patname},
+    {55, "confetti_n64", "紙ふぶき", confetti_patname},
+    {56, "snowfall_n64", "雪が降る", NULL},
+    {57, "whirlwind_n64", "マリオ・敵の踊り回転", whirlwind_patname},
+    {58, "thunderflare_n64", "魔法カメック杖", thunderflare_patname},
+    {59, "coin_n64", "コイン取ったとき", NULL},
+    {60, "shock_n64", "バトル用", shock_patname},
+    {61, "balloon_heiho_n64", "バトル・バルーンヘイホー", balloon_heiho_patname},
+    {62, "rubble_n64", "バトル・ホラオウ", rubble_patname},
+    {63, "magic_horao_n64", "ホラオウバトル", NULL},
+    {64, "lensflare_n64", "サンデール・ビッグカンテラ", NULL},
+    {65, "crystal_n64", "クリスタル", crystal_patname},
+    {66, "butterfly_n64", "ジャングル飛んでる", butterfly_patname},
+    {67, "akari_charge_n64", "アカリ・くもくも魔人・ピカリン", NULL},
+    {68, "akaro_sflush_n64", "アカリの技", NULL},
+    {69, "opuku_wgun_n64", "オプクの技", opuku_wgun_patname},
+    {70, "opuku_wprotect_n64", "オプクの技", opuku_wprotect_patname},
+    {71, "opuku_wcurtain_n64", "オプクの技", NULL},
+    {72, "opuku_jetw_n64", "オプク・ゲッソー", opuku_jetw_patname},
+    {73, "opuku_jetwrain_n64", "オプク", NULL},
+    {74, "pokopi_thunder_n64", "ポコピー", pokopi_thunder_patname},
+    {75, "water_damage_n64", "水ダメージ", water_damage_patname},
+    {76, "snowman_n64", "ゆきやこんこん", NULL},
+    {77, "holography_n64", "ホログラフ", NULL},
+    {78, "timestamp_n64", "バトル", NULL},
+    {79, "packn_bfire_n64", "パックンフラワー", packn_bfire_patname},
+    {80, "pokopi_pipo_n64", "ポコピーパイポ", pokopi_pipo_patname},
+    {81, "cloud_n64", "くも", cloud_patname},
+    {82, "dogabon_attack_n64", "ドガボン", dogabon_attack_patname},
+    {83, "kameki_tornade_n64", "バトルカメキ", NULL},
+    {84, "stone_smoke_n64", "ミニミニ・ストーンぼうし", NULL},
+    {85, "pokopi_pcharge_n64", "ポコピーチャージ", pokopi_pcharge_patname},
+    {86, "hagetaka_flush_n64", "バトル・イワハゲ", NULL},
+    {87, "kumokumo_n64", "くもくも", kumokumo_patname},
+    {88, "vapor_n64", "ゆげ", vapor_patname},
+    {89, "fire_spark_n64", "バトル・ファイアーパックン", NULL},
+    {90, "horao_spell_n64", "バトル・ホラオウ", NULL},
+    {91, "snow_dust_n64", "ユキの煙", snow_dust_patname},
+    {92, "akari_pose_n64", "あかりポーズ", akari_pose_patname},
+    {93, "kumokumo_chip_n64", "くもくも魔人・ポコピー技", kumokumo_chip_patname},
+    {94, "fireworks_n64", "花火", fireworks_patname},
+    {95, "glass_n64", "ガラス", glass_patname},
+    {96, "booboo_n64", "ブーブーさん", NULL},
+    {97, "pikkyolo_n64", "ぴっきょろ", NULL},
+    {98, "freeze_n64", "フリーズ", NULL},
+    {99, "sunlight_n64", "太陽光線", sunlight_patname},
+    {100, "release_n64", "解放", release_patname},
+    {101, "peach_dust_n64", "ピーチダスト", peach_dust_patname},
+    {102, "star_power_n64", "スターパワー", star_power_patname},
     {-1, NULL, NULL, NULL},
 #else
     {0, "expbom_n64"},

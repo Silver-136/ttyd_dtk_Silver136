@@ -26,7 +26,7 @@
 #include "battle/battle_unit.h"
 #include "driver/mapdrv.h"
 /** Red "No messages" text shown in place of a message key that is not found, Japanese version (ErrMessage). */
-const char R_no_messages_JP[] = "<col ff0000ff>\203\201\203b\203Z\201[\203W\202\252\202\240\202\350\202\334\202\271\202\361</col>\n<key>";
+const char R_no_messages_JP[] = "<col ff0000ff>メッセージがありません</col>\n<key>";
 
 /** The same red "No messages" text for each other language (US and later tag it with the language name); ErrMessage picks one. */
 #if VERSION >= VERSION_US

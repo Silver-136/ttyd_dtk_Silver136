@@ -486,11 +486,11 @@ static EVT_BEGIN(evt_move_g)
     ADD(LW(2), 100)
     CALL(evt_mario_mov_pos, LW(0), LW(2), 500)
     BEGIN_INLINE_EVENT
-        CALL(evt_npc_move_position, STRING("\203K\201[\203h\203}\203\223\202P"), -530, -185, 0, FLOAT(80.0f), 1)
-        CALL(evt_set_dir_to_target, STRING("\203K\201[\203h\203}\203\223\202P"), STRING("mario"))
+        CALL(evt_npc_move_position, STRING("ガードマン１"), -530, -185, 0, FLOAT(80.0f), 1)
+        CALL(evt_set_dir_to_target, STRING("ガードマン１"), STRING("mario"))
     END_INLINE_EVENT
-    CALL(evt_npc_move_position, STRING("\203K\201[\203h\203}\203\223\202Q"), 530, -185, 0, FLOAT(80.0f), 1)
-    CALL(evt_set_dir_to_target, STRING("\203K\201[\203h\203}\203\223\202Q"), STRING("mario"))
+    CALL(evt_npc_move_position, STRING("ガードマン２"), 530, -185, 0, FLOAT(80.0f), 1)
+    CALL(evt_set_dir_to_target, STRING("ガードマン２"), STRING("mario"))
     SET_VALUE(LW(0), 3)
     CALL_CHILD(bero_case_switch_on)
     SET_VALUE(LW(0), 4)
@@ -1031,7 +1031,7 @@ EVT_END()
 
 /** NPC init for the female Toad: placed at (100, 0, 0). */
 static EVT_BEGIN(init_kinopio_f)
-    CALL(evt_npc_set_position, STRING("\203L\203m\203s\203I\217\227"), 100, 0, 0)
+    CALL(evt_npc_set_position, STRING("キノピオ女"), 100, 0, 0)
     RETURN
 EVT_END()
 
@@ -1371,7 +1371,7 @@ EVT_END()
  */
 static NpcSetupInfo npcEnt[] = {
     {
-        /*"ガードマン１"*/"\203K\201[\203h\203}\203\223\202P", // name (a Glitz Pit security guard)
+        /*"ガードマン１"*/"ガードマン１", // name (a Glitz Pit security guard)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_gard1, // initEvent
@@ -1383,7 +1383,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"ガードマン２"*/"\203K\201[\203h\203}\203\223\202Q", // name (a Glitz Pit security guard)
+        /*"ガードマン２"*/"ガードマン２", // name (a Glitz Pit security guard)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_gard2, // initEvent
@@ -1395,7 +1395,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"マダム"*/"\203}\203_\203\200", // name (Toodles)
+        /*"マダム"*/"マダム", // name (Toodles)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_madam, // initEvent
@@ -1407,7 +1407,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"レポーター"*/"\203\214\203|\201[\203^\201[", // name (a local reporter)
+        /*"レポーター"*/"レポーター", // name (a local reporter)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_repo, // initEvent
@@ -1419,7 +1419,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"カメラマン１"*/"\203J\203\201\203\211\203}\203\223\202P", // name (a rookie cameraman)
+        /*"カメラマン１"*/"カメラマン１", // name (a rookie cameraman)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_cam1, // initEvent
@@ -1431,7 +1431,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"カメラマン２"*/"\203J\203\201\203\211\203}\203\223\202Q", // name (a freelance cameraman)
+        /*"カメラマン２"*/"カメラマン２", // name (a freelance cameraman)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_cam2, // initEvent
@@ -1443,7 +1443,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"キノピオ４"*/"\203L\203m\203s\203I\202S", // name (a Toad who works at the Glitz Pit)
+        /*"キノピオ４"*/"キノピオ４", // name (a Toad who works at the Glitz Pit)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_kino4, // initEvent
@@ -1455,7 +1455,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"キノピオ５"*/"\203L\203m\203s\203I\202T", // name (a Toad father in the crowd)
+        /*"キノピオ５"*/"キノピオ５", // name (a Toad father in the crowd)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_kino5, // initEvent
@@ -1467,7 +1467,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"キノピコ"*/"\203L\203m\203s\203R", // name (a Toad child, a Prince Mush fan)
+        /*"キノピコ"*/"キノピコ", // name (a Toad child, a Prince Mush fan)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_kinopiko, // initEvent
@@ -1479,7 +1479,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"バッジ屋"*/"\203o\203b\203W\211\256", // name (Ms. Mowz)
+        /*"バッジ屋"*/"バッジ屋", // name (Ms. Mowz)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_chu, // initEvent
@@ -1491,7 +1491,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"チャンピョン"*/"\203`\203\203\203\223\203s\203\207\203\223", // name (Rawk Hawk)
+        /*"チャンピョン"*/"チャンピョン", // name (Rawk Hawk)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_champ, // initEvent
@@ -1503,7 +1503,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"キノシコワ"*/"\203L\203m\203V\203R\203\217", // name (Jolene)
+        /*"キノシコワ"*/"キノシコワ", // name (Jolene)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_shikowa, // initEvent
@@ -1515,7 +1515,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"ウラノコ"*/"\203E\203\211\203m\203R", // name (Shellshock, a fighter)
+        /*"ウラノコ"*/"ウラノコ", // name (Shellshock, a fighter)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_uranoko, // initEvent
@@ -1527,7 +1527,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"アイアンＡ"*/"\203A\203C\203A\203\223\202`", // name (the older Iron Adonis twin)
+        /*"アイアンＡ"*/"アイアンＡ", // name (the older Iron Adonis twin)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_ironA, // initEvent
@@ -1539,7 +1539,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"アイアンＢ"*/"\203A\203C\203A\203\223\202a", // name (the younger Iron Adonis twin)
+        /*"アイアンＢ"*/"アイアンＢ", // name (the younger Iron Adonis twin)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_ironB, // initEvent
@@ -1551,7 +1551,7 @@ static NpcSetupInfo npcEnt[] = {
         0.0f, 0.0f, 0.0f, 0.0f, 0, // searchRange..battleInfoId
     },
     {
-        /*"ボロドー"*/"\203{\203\215\203h\201[", // name (a Bandit)
+        /*"ボロドー"*/"ボロドー", // name (a Bandit)
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_borodo, // initEvent
@@ -1847,7 +1847,7 @@ void ext_fan_main(void) {
                     pose->flags &= ~EXT_POSE_FLAG_VISIBLE;
                     fan->flags |= 1;
                 } else {
-                    fan->pos = npcNameToPtr("\203`\203\203\203\223\203s\203\207\203\223")->position;
+                    fan->pos = npcNameToPtr("チャンピョン")->position;
                     target = fan->pos;
                     pose->flags &= ~EXT_POSE_FLAG_VISIBLE;
                     fan->flags |= 1;
@@ -1870,7 +1870,7 @@ void ext_fan_main(void) {
         if (evtGetValue(NULL, GF(10))) {
             target = fan->pos;
         } else {
-            target = npcNameToPtr("\203`\203\203\203\223\203s\203\207\203\223")->position;
+            target = npcNameToPtr("チャンピョン")->position;
         }
 #endif
 
@@ -2244,8 +2244,8 @@ static EVT_BEGIN(evt_momikucha)
     CALL(evt_ext_entry, 200, PTR(ext_fan_data), PTR(ext_fan_init), PTR(ext_fan_main), PTR(ext_fan_dispent))
 #endif
     IF_INT_EQUAL(GF(10), 0)
-        CALL(evt_npc_set_position, STRING("\203`\203\203\203\223\203s\203\207\203\223"), 0, 0, 0)
-        CALL(evt_npc_change_interrupt, STRING("\203`\203\203\203\223\203s\203\207\203\223"), 1, PTR(move_champ))
+        CALL(evt_npc_set_position, STRING("チャンピョン"), 0, 0, 0)
+        CALL(evt_npc_change_interrupt, STRING("チャンピョン"), 1, PTR(move_champ))
     ELSE
         SPAWN_EVENT(mario_momikucha_msg)
     END_IF
@@ -2463,7 +2463,7 @@ static EVT_BEGIN(evt_after_peach)
     CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
     CALL(evt_fade_end_wait)
     WAIT_MS(2000)
-    CALL(evt_msg_print, 0, STRING("stg3_tou_479_00_01"), 0, STRING("\203L\203m\203V\203R\203\217"))
+    CALL(evt_msg_print, 0, STRING("stg3_tou_479_00_01"), 0, STRING("キノシコワ"))
     WAIT_MS(300)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_NOD1_4"), LW(0), LW(1), LW(2), 0)
@@ -2472,17 +2472,17 @@ static EVT_BEGIN(evt_after_peach)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
     CALL(evt_cam3d_evt_set, 0, 100, 395, 0, 40, 0, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
-    CALL(evt_msg_print, 0, STRING("stg3_tou_479_00_02"), 0, STRING("\203L\203m\203V\203R\203\217"))
+    CALL(evt_msg_print, 0, STRING("stg3_tou_479_00_02"), 0, STRING("キノシコワ"))
     WAIT_MS(300)
     CALL(evt_cam3d_evt_set, -40, 100, 395, -40, 40, 0, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
-    CALL(evt_msg_print, 0, STRING("stg3_tou_479_00_03"), 0, STRING("\203`\203\203\203\223\203s\203\207\203\223"))
+    CALL(evt_msg_print, 0, STRING("stg3_tou_479_00_03"), 0, STRING("チャンピョン"))
     WAIT_MS(300)
-    CALL(evt_msg_print, 0, STRING("stg3_tou_479_00_04"), 0, STRING("\203E\203\211\203m\203R"))
+    CALL(evt_msg_print, 0, STRING("stg3_tou_479_00_04"), 0, STRING("ウラノコ"))
     WAIT_MS(300)
     CALL(evt_cam3d_evt_set, 0, 100, 395, 0, 40, 0, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
-    CALL(evt_msg_print, 0, STRING("stg3_tou_479_00_05"), 0, STRING("\203L\203m\203V\203R\203\217"))
+    CALL(evt_msg_print, 0, STRING("stg3_tou_479_00_05"), 0, STRING("キノシコワ"))
     WAIT_MS(300)
     CALL(evt_mario_set_pose, STRING("M_I_2"))
     WAIT_MS(800)
@@ -2529,11 +2529,7 @@ EVT_BEGIN(tou_02_init_evt)
     // NPCs and the Star Piece panel.
     CALL(evt_npc_setup, PTR(npcEnt))
     CALL_CHILD(init_kinopio_f)
-#if VERSION >= VERSION_US
     CALL(evt_npc_change_interrupt, STRING("キノピオ女"), 6, PTR(talk_kinopio_f))
-#else
-    CALL(evt_npc_change_interrupt, STRING("\203L\203m\203s\203I\217\227"), 6, PTR(talk_kinopio_f))
-#endif
     CALL(evt_mobj_kururing_floor, STRING("kururin1"), -260, 0, -120, STRING("sita"), 125, GSWF_STARPIECE_56)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_02_THE_GUARD_BACKS_OFF)
         SET_VALUE(LW(0), 3)
@@ -2551,13 +2547,8 @@ EVT_BEGIN(tou_02_init_evt)
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_33_06_BOWSER_TREASURE)
         IF_INT_EQUAL(GSWF_TOU_LEFT_AFTER_CHAPTER, 0)
-#if VERSION >= VERSION_US
             CALL(evt_npc_set_position, STRING("キノピオ女"), 0, -1000, 0)
             CALL(evt_npc_set_position, STRING("キノピオ４"), 0, -1000, 0)
-#else
-            CALL(evt_npc_set_position, STRING("\203L\203m\203s\203I\217\227"), 0, -1000, 0)
-            CALL(evt_npc_set_position, STRING("\203L\203m\203s\203I\202S"), 0, -1000, 0)
-#endif
         END_IF
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_33_06_BOWSER_TREASURE)

@@ -487,12 +487,12 @@ static USER_FUNC(mario_main_setup_func) {
     OrbitData* op = _op;
     MarioWork* mario = marioGetPtr();
     PartyEntry* party = partyGetPtr(0);
-    NpcEntry* npc1 = evtNpcNameToPtr(event, "\203}\203\213\203R");
-    NpcEntry* npc2 = evtNpcNameToPtr(event, "\203R\203\213\203e\203X");
-    NpcEntry* npc3 = evtNpcNameToPtr(event, "\203\202\203j\201[");
-    NpcEntry* npc4 = evtNpcNameToPtr(event, "\203K\203\211\202\314\210\253\202\242\220\205\225v");
-    NpcEntry* npc5 = evtNpcNameToPtr(event, "\203s\201[\203g\203\223");
-    NpcEntry* npc6 = evtNpcNameToPtr(event, "\203I\203h\203I\203h\220\205\225v");
+    NpcEntry* npc1 = evtNpcNameToPtr(event, "マルコ");
+    NpcEntry* npc2 = evtNpcNameToPtr(event, "コルテス");
+    NpcEntry* npc3 = evtNpcNameToPtr(event, "モニー");
+    NpcEntry* npc4 = evtNpcNameToPtr(event, "ガラの悪い水夫");
+    NpcEntry* npc5 = evtNpcNameToPtr(event, "ピートン");
+    NpcEntry* npc6 = evtNpcNameToPtr(event, "オドオド水夫");
 
     op[0].dist = distABf(cx, -cz, cx + mario->position.x, -(cz + mario->position.z));
     op[0].angle = angleABf(cx, -cz, cx + mario->position.x, -(cz + mario->position.z));
@@ -547,12 +547,12 @@ static USER_FUNC(mario_main_func) {
     op = _op;
     mario = marioGetPtr();
     party = partyGetPtr(0);
-    npc1 = evtNpcNameToPtr(event, "\203}\203\213\203R");
-    npc2 = evtNpcNameToPtr(event, "\203R\203\213\203e\203X");
-    npc3 = evtNpcNameToPtr(event, "\203\202\203j\201[");
-    npc4 = evtNpcNameToPtr(event, "\203K\203\211\202\314\210\253\202\242\220\205\225v");
-    npc5 = evtNpcNameToPtr(event, "\203s\201[\203g\203\223");
-    npc6 = evtNpcNameToPtr(event, "\203I\203h\203I\203h\220\205\225v");
+    npc1 = evtNpcNameToPtr(event, "マルコ");
+    npc2 = evtNpcNameToPtr(event, "コルテス");
+    npc3 = evtNpcNameToPtr(event, "モニー");
+    npc4 = evtNpcNameToPtr(event, "ガラの悪い水夫");
+    npc5 = evtNpcNameToPtr(event, "ピートン");
+    npc6 = evtNpcNameToPtr(event, "オドオド水夫");
     d = b - a;
     ORBIT(0, mario->position);
     ORBIT(1, party->position);

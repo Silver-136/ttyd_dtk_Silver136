@@ -947,7 +947,7 @@ static inline void gcResetCheck(void) {
 
     if (gp->resetType) {
 #if VERSION != VERSION_DEMO_JP
-        OSReport("\x83\x8A\x83\x5A\x83\x62\x83\x67\x8F\x88\x97\x9D\x8A\x4A\x8E\x6E\n");
+        OSReport("リセット処理開始\n");
 #endif
         VISetBlack(TRUE);
         VIFlush();

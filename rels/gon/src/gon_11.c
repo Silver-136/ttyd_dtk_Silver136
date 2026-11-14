@@ -151,7 +151,7 @@ static BeroEntry bero_entry_data[] = {
 /** Script helper: blocks until Hooktail (ゴンババ) has touched the ground. */
 static USER_FUNC(gonbaba_wait_landon) {
     // ゴンババ
-    return npcNameToPtr("\203S\203\223\203o\203o")->groundHit ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
+    return npcNameToPtr("ゴンババ")->groundHit ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }
 
 /**

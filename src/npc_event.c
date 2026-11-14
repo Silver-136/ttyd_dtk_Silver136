@@ -4646,16 +4646,16 @@ USER_FUNC(zakoEntryDokan) {
     NpcEntry* me = evtNpcNameToPtr(event, "me");
     NpcEntry* zako;
     s32 i;
-    if (!strcmp(me->description, "\214R\222c\203U\203R\202\252\202\305\202\351\223y\212\307\202P")) {
-        strcpy(names[0], "\214R\222c\203U\203R\223y\212\307\202P");
-        strcpy(names[1], "\214R\222c\203U\203R\223y\212\307\202Q");
-        strcpy(names[2], "\214R\222c\203U\203R\223y\212\307\202R");
+    if (!strcmp(me->description, "軍団ザコがでる土管１")) {
+        strcpy(names[0], "軍団ザコ土管１");
+        strcpy(names[1], "軍団ザコ土管２");
+        strcpy(names[2], "軍団ザコ土管３");
         strcpy(pipeHitName, "MOBJ_mobj9");
     }
-    if (!strcmp(me->description, "\214R\222c\203U\203R\202\252\202\305\202\351\223y\212\307\202Q")) {
-        strcpy(names[0], "\214R\222c\203U\203R\223y\212\307\202S");
-        strcpy(names[1], "\214R\222c\203U\203R\223y\212\307\202T");
-        strcpy(names[2], "\214R\222c\203U\203R\223y\212\307\202U");
+    if (!strcmp(me->description, "軍団ザコがでる土管２")) {
+        strcpy(names[0], "軍団ザコ土管４");
+        strcpy(names[1], "軍団ザコ土管５");
+        strcpy(names[2], "軍団ザコ土管６");
         strcpy(pipeHitName, "MOBJ_mobj14");
     }
     {
@@ -4715,10 +4715,10 @@ static USER_FUNC(dokanCheck) {
     EvtWord* args = event->args;
     char name[32];
     NpcEntry* me = evtNpcNameToPtr(event, "me");
-    if (!strcmp(me->description, "\214R\222c\203U\203R\202\252\202\305\202\351\223y\212\307\202P")) {
+    if (!strcmp(me->description, "軍団ザコがでる土管１")) {
         strcpy(name, "mobj9");
     }
-    if (!strcmp(me->description, "\214R\222c\203U\203R\202\252\202\305\202\351\223y\212\307\202Q")) {
+    if (!strcmp(me->description, "軍団ザコがでる土管２")) {
         strcpy(name, "mobj14");
     }
     if (mobjNameToPtrNoAssert(name)) {
@@ -4739,20 +4739,20 @@ static USER_FUNC(zakoEntryFall) {
     NpcEntry* me = evtNpcNameToPtr(event, "me");
     NpcEntry* zako;
     s32 i;
-    if (!strcmp(me->description, "\214R\222c\203U\203R\215~\211\272\222n\223_\202P")) {
-        strcpy(names[0], "\214R\222c\203U\203R\215~\211\272\202P");
-        strcpy(names[1], "\202\310\202\265");
-        strcpy(names[2], "\202\310\202\265");
+    if (!strcmp(me->description, "軍団ザコ降下地点１")) {
+        strcpy(names[0], "軍団ザコ降下１");
+        strcpy(names[1], "なし");
+        strcpy(names[2], "なし");
     }
-    if (!strcmp(me->description, "\214R\222c\203U\203R\215~\211\272\222n\223_\202Q\201Q\202P")) {
-        strcpy(names[0], "\214R\222c\203U\203R\215~\211\272\202P");
-        strcpy(names[1], "\214R\222c\203U\203R\215~\211\272\202Q");
-        strcpy(names[2], "\214R\222c\203U\203R\215~\211\272\202R");
+    if (!strcmp(me->description, "軍団ザコ降下地点２＿１")) {
+        strcpy(names[0], "軍団ザコ降下１");
+        strcpy(names[1], "軍団ザコ降下２");
+        strcpy(names[2], "軍団ザコ降下３");
     }
-    if (!strcmp(me->description, "\214R\222c\203U\203R\215~\211\272\222n\223_\202Q\201Q\202Q")) {
-        strcpy(names[0], "\214R\222c\203U\203R\215~\211\272\202S");
-        strcpy(names[1], "\214R\222c\203U\203R\215~\211\272\202T");
-        strcpy(names[2], "\214R\222c\203U\203R\215~\211\272\202U");
+    if (!strcmp(me->description, "軍団ザコ降下地点２＿２")) {
+        strcpy(names[0], "軍団ザコ降下４");
+        strcpy(names[1], "軍団ザコ降下５");
+        strcpy(names[2], "軍団ザコ降下６");
     }
     for (i = 0; i < 3; i++) {
         zako = npcNameToPtr_NoAssert(names[i]);

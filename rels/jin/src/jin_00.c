@@ -1892,7 +1892,7 @@ static USER_FUNC(senteresa_tikaduku_stop) {
  */
 static USER_FUNC(senteresa_syugo) {
     ExtdrvPose* pose = extGetPosePtr();
-    NpcEntry* npc = npcNameToPtr("\222\206\211\233\203e\203\214\203T");
+    NpcEntry* npc = npcNameToPtr("中央テレサ");
     s32 n = extGetPoseNum();
     s32 i;
     f32 a;
@@ -1939,7 +1939,7 @@ static USER_FUNC(senteresa_dispoff) {
  */
 static USER_FUNC(senteresa_huttobu) {
     ExtdrvPose* pose = extGetPosePtr();
-    NpcEntry* npc = npcNameToPtr("\203A\203g\203~\203b\203N\203e\203\214\203T");
+    NpcEntry* npc = npcNameToPtr("アトミックテレサ");
     s32 n = extGetPoseNum();
     s32 i;
     f32 scale;

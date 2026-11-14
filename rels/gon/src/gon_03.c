@@ -817,7 +817,7 @@ USER_FUNC(leader_touch_check) {
     if (marioStGetSystemLevel() != 0) {
         off = TRUE;
     }
-    if (npc != NULL && strcmp(npc->description, "\203\212\201[\203_\201[") == 0 && !off) {
+    if (npc != NULL && strcmp(npc->description, "リーダー") == 0 && !off) {
         evtSetValue(event, LW(0), 1);
     } else {
         evtSetValue(event, LW(0), 0);

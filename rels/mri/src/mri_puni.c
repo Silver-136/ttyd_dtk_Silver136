@@ -345,19 +345,19 @@ static void puniAnimation(PuniData* p, PunidrvPose* t) {
     if (!(p->flags & PUNI_FLAG_SCRIPT_CONTROL)) {
     if (p->flags & (PUNI_FLAG_NPC_GUIDE | PUNI_FLAG_NPC_GUIDE_SISTER | PUNI_FLAG_NPC_CHIBI_TOGE | PUNI_FLAG_NPC_RIVAL)) {
         if (p->flags & PUNI_FLAG_NPC_GUIDE) {
-            npc = npcNameToPtr("\203K\203C\203hsp");
+            npc = npcNameToPtr("ガイドsp");
             names = (char*)( &Punigp->animNames[0]) ;
         } else if (p->flags & PUNI_FLAG_NPC_GUIDE_SISTER) {
-            npc = npcNameToPtr("\203K\203C\203h\226\205sp");
+            npc = npcNameToPtr("ガイド妹sp");
             names = (char*)( &Punigp->animNames[160]) ;
         } else if (p->flags & PUNI_FLAG_NPC_CHIBI_TOGE) {
-            npc = npcNameToPtr("\202\277\202\321\203g\203Qsp");
+            npc = npcNameToPtr("ちびトゲsp");
             names = (char*)( &Punigp->animNames[320]) ;
         } else if (p->flags & PUNI_FLAG_NPC_RIVAL) {
-            npc = npcNameToPtr("\203\211\203C\203o\203\213sp");
+            npc = npcNameToPtr("ライバルsp");
             names = (char*)( &Punigp->animNames[480]) ;
         } else {
-            npc = npcNameToPtr("\203\211\203C\203o\203\213sp");
+            npc = npcNameToPtr("ライバルsp");
             names = (char*)( &Punigp->animNames[480]) ;
         }
         ofs = p->marioDist;
@@ -4276,7 +4276,7 @@ static void puniModeDodai(PuniData* p) {
 static void puniModeTrap_sub(PuniData* p) {
     NpcEntry* n;
     if (p->flags & PUNI_FLAG_NPC_GUIDE) {
-        n = npcNameToPtr("\203K\203C\203h");
+        n = npcNameToPtr("ガイド");
         p->flags &= ~PUNI_FLAG_HIDDEN;
         p->flags |= PUNI_FLAG_COLLIDE;
         n->flags &= ~NPC_FLAG_NO_HIT;
@@ -4285,7 +4285,7 @@ static void puniModeTrap_sub(PuniData* p) {
         n->position.z = 0.0f;
     }
     if (p->flags & PUNI_FLAG_NPC_GUIDE_SISTER) {
-        n = npcNameToPtr("\203K\203C\203h\226\205");
+        n = npcNameToPtr("ガイド妹");
         p->flags &= ~PUNI_FLAG_HIDDEN;
         p->flags |= PUNI_FLAG_COLLIDE;
         n->flags &= ~NPC_FLAG_NO_HIT;
@@ -4294,7 +4294,7 @@ static void puniModeTrap_sub(PuniData* p) {
         n->position.z = 0.0f;
     }
     if (p->flags & PUNI_FLAG_NPC_RIVAL) {
-        n = npcNameToPtr("\203\211\203C\203o\203\213");
+        n = npcNameToPtr("ライバル");
         p->flags &= ~PUNI_FLAG_HIDDEN;
         p->flags |= PUNI_FLAG_COLLIDE;
         n->flags &= ~NPC_FLAG_NO_HIT;
@@ -4333,27 +4333,27 @@ static void puniModeTrap(PuniData* p) {
     NpcEntry* n;
     if (p->modeStep == 0) {
         p->flags |= PUNI_FLAG_COLLIDE;
-        if (p->flags & PUNI_FLAG_NPC_GUIDE) TRAP_NPC("\203K\203C\203h", 0)
-        if (p->flags & PUNI_FLAG_NPC_GUIDE_SISTER) TRAP_NPC("\203K\203C\203h\226\205", 0)
-        if (p->flags & PUNI_FLAG_NPC_RIVAL) TRAP_NPC("\203\211\203C\203o\203\213", 0) {
+        if (p->flags & PUNI_FLAG_NPC_GUIDE) TRAP_NPC("ガイド", 0)
+        if (p->flags & PUNI_FLAG_NPC_GUIDE_SISTER) TRAP_NPC("ガイド妹", 0)
+        if (p->flags & PUNI_FLAG_NPC_RIVAL) TRAP_NPC("ライバル", 0) {
             Vec v_ = {0.0f, 0.0f, 0.0f};
             p->vel = v_;
         }
         p->prevMode = p->mode;
     }
     if (p->breathPower > 10.0f) {
-        if (p->flags & PUNI_FLAG_NPC_GUIDE) TRAP_HIDE("\203K\203C\203h")
-        if (p->flags & PUNI_FLAG_NPC_GUIDE_SISTER) TRAP_HIDE("\203K\203C\203h\226\205")
-        if (p->flags & PUNI_FLAG_NPC_RIVAL) TRAP_HIDE("\203\211\203C\203o\203\213")
+        if (p->flags & PUNI_FLAG_NPC_GUIDE) TRAP_HIDE("ガイド")
+        if (p->flags & PUNI_FLAG_NPC_GUIDE_SISTER) TRAP_HIDE("ガイド妹")
+        if (p->flags & PUNI_FLAG_NPC_RIVAL) TRAP_HIDE("ライバル")
         PuniDokuritsu(p);
         p->target = Punigp->marioPuni;
         p->prevMode = p->mode;
         p->mode = PUNI_MODE_WIND;
         p->modeStep = 0;
     } else if (p->massTarget != -1) {
-        if (p->flags & PUNI_FLAG_NPC_GUIDE) TRAP_HIDE("\203K\203C\203h")
-        if (p->flags & PUNI_FLAG_NPC_GUIDE_SISTER) TRAP_HIDE("\203K\203C\203h\226\205")
-        if (p->flags & PUNI_FLAG_NPC_RIVAL) TRAP_HIDE("\203\211\203C\203o\203\213")
+        if (p->flags & PUNI_FLAG_NPC_GUIDE) TRAP_HIDE("ガイド")
+        if (p->flags & PUNI_FLAG_NPC_GUIDE_SISTER) TRAP_HIDE("ガイド妹")
+        if (p->flags & PUNI_FLAG_NPC_RIVAL) TRAP_HIDE("ライバル")
         PuniDokuritsu(p);
         p->prevMode = p->mode;
         p->mode = PUNI_MODE_MASS;
@@ -7558,7 +7558,7 @@ static s32 puni_piders_check_func(EventEntry *event, BOOL isFirstCall) {
     }
     k = 2;
     for (i = 0; i < count; i++, npc++) {
-        if ((npc->flags & NPC_FLAG_IN_USE) && (npc->flags & NPC_FLAG_READY) && npc->tribe != NULL && strcmp(npc->tribe->nameJp, "\203p\203C\203_\201[\203X") == 0) {
+        if ((npc->flags & NPC_FLAG_IN_USE) && (npc->flags & NPC_FLAG_READY) && npc->tribe != NULL && strcmp(npc->tribe->nameJp, "パイダース") == 0) {
             Vec v;
             BOOL found = 0;
             v = npc->position;
@@ -7790,13 +7790,13 @@ static EVT_BEGIN(mri_puni_position_init)
             CALL(evt_puni_puninum_alpha, 255)
         END_IF
     END_INLINE_EVENT
-    DEBUG_PUT_MSG(STRING("\203v\203j\212\326\214W\201F\217\211\212\372\202\314\216\300\215s\222\206\221\322\202\277"))
+    DEBUG_PUT_MSG(STRING("プニ関係：初期の実行中待ち"))
     CALL(evt_bero_exec_wait, BERO_EXEC_BUSY)
     LOOP(0)
         CALL(evt_puni_set_systemmode, 1)
-        DEBUG_PUT_MSG(STRING("\203v\203j\212\326\214W\201F\215\300\225W\203Z\203b\203g\221\322\202\277"))
+        DEBUG_PUT_MSG(STRING("プニ関係：座標セット待ち"))
         CALL(evt_bero_exec_wait, BERO_EXEC_MARIO_MOVING)
-        DEBUG_PUT_MSG(STRING("\203v\203j\212\326\214W\201F\217\254\223\256\225\250\212\326\214W\217\211\212\372\211\273"))
+        DEBUG_PUT_MSG(STRING("プニ関係：小動物関係初期化"))
         DEBUG_PUT_REG(GSW_MRI_PUNI_ROOM)
         DEBUG_PUT_REG(GSW_MRI_PUNI_PREV_ROOM)
         CALL(evt_bero_get_now_number, LW(10))
@@ -7810,19 +7810,19 @@ static EVT_BEGIN(mri_puni_position_init)
         CALL(evt_puni_setup, LW(0), LW(1), LW(2))
         CALL(evt_toge_setup, LW(6), LW(7), LW(8), LW(9))
         CALL(evt_puni_set_systemmode, 2)
-        DEBUG_PUT_MSG(STRING("\203v\203j\212\326\214W\201F\217I\227\271\221\322\202\277"))
+        DEBUG_PUT_MSG(STRING("プニ関係：終了待ち"))
         CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
         CALL(evt_puni_set_systemmode, 3)
-        DEBUG_PUT_MSG(STRING("\203v\203j\212\326\214W\201F\216\237\202\314\216\300\215s\222\206\221\322\202\277"))
+        DEBUG_PUT_MSG(STRING("プニ関係：次の実行中待ち"))
         CALL(evt_bero_exec_wait, BERO_EXEC_BUSY)
         SET_VALUE(GSW_MRI_PUNI_PREV_ROOM, GSW_MRI_PUNI_ROOM)
         CALL(evt_bero_get_now_number, LW(10))
         CALL(evt_bero_get_info_kinddir, LW(10), LW(0), LW(1), LW(2))
         CALL(evt_bero_get_info_nextarea, LW(10), LW(3), LW(4))
         IF_INT_EQUAL(LW(0), 1)
-            DEBUG_PUT_MSG(STRING("\203v\203j\212\326\214W\201F\224\340\221\322\202\277"))
+            DEBUG_PUT_MSG(STRING("プニ関係：扉待ち"))
             CALL(evt_bero_exec_wait, BERO_EXEC_MRI_DOOR_GO)
-            DEBUG_PUT_MSG(STRING("\203v\203j\212\326\214W\201F\224\340\221\322\202\277\217I\202\355\202\350"))
+            DEBUG_PUT_MSG(STRING("プニ関係：扉待ち終わり"))
             CALL(evt_bero_exec_onoff, 1, BERO_EXEC_MRI_DOOR_GO)
         END_IF
         IF_INT_EQUAL(LW(0), 2)
@@ -7831,9 +7831,9 @@ static EVT_BEGIN(mri_puni_position_init)
             END_IF
         END_IF
         BEGIN_INLINE_EVENT
-            DEBUG_PUT_MSG(STRING("\203v\203j\212\326\214W\201F\203G\203\212\203A\203`\203F\203\223\203W\222\274\221O\221\322\202\277"))
+            DEBUG_PUT_MSG(STRING("プニ関係：エリアチェンジ直前待ち"))
             CALL(evt_bero_exec_wait, BERO_EXEC_EXIT_DONE)
-            DEBUG_PUT_MSG(STRING("\203v\203j\212\326\214W\201F\203v\203j\221\260\203g\203Q\221\260SE\213\255\220\247\203I\203t"))
+            DEBUG_PUT_MSG(STRING("プニ関係：プニ族トゲ族SE強制オフ"))
             CALL(evt_puni_force_se_off)
         END_INLINE_EVENT
         CALL(evt_puni_exit, LW(0), LW(1), LW(2), LW(3))
@@ -7854,30 +7854,30 @@ EVT_END()
  * without wall collision and with shadows not projected to the floor.
  */
 EVT_BEGIN(mri_puni_init_dvd)
-    CALL(evt_npc_entry, STRING("\203v\203jsp"), STRING("c_puni")) // hidden Puni model stand-in for the Puni system
-    CALL(evt_npc_set_tribe, STRING("\203v\203jsp"), STRING("\203v\203j\221\260"))
-    CALL(evt_npc_entry, STRING("\203g\203Qsp"), STRING("c_toge")) // hidden Jabbi model stand-in for the Puni system
-    CALL(evt_npc_set_tribe, STRING("\203g\203Qsp"), STRING("\203g\203Q\221\260"))
-    CALL(evt_npc_entry, STRING("\203K\203C\203hsp"), STRING("c_pguide")) // hidden Punio stand-in for the Puni system
-    CALL(evt_npc_set_tribe, STRING("\203K\203C\203hsp"), STRING("\203K\203C\203h"))
-    CALL(evt_npc_entry, STRING("\203K\203C\203h\226\205sp"), STRING("c_psister")) // hidden Petuni stand-in for the Puni system
-    CALL(evt_npc_set_tribe, STRING("\203K\203C\203h\226\205sp"), STRING("\203K\203C\203h\226\205"))
-    CALL(evt_npc_entry, STRING("\202\277\202\321\203g\203Qsp"), STRING("c_tchibi")) // hidden Jabble stand-in for the Puni system
-    CALL(evt_npc_set_tribe, STRING("\202\277\202\321\203g\203Qsp"), STRING("\202\277\202\321\203g\203Q"))
-    CALL(evt_npc_entry, STRING("\203\211\203C\203o\203\213sp"), STRING("c_prival")) // hidden Puniper stand-in for the Puni system
-    CALL(evt_npc_set_tribe, STRING("\203\211\203C\203o\203\213sp"), STRING("\203\211\203C\203o\203\213"))
-    CALL(evt_npc_set_position, STRING("\203v\203jsp"), 0, 4294966296, 0)
-    CALL(evt_npc_set_position, STRING("\203g\203Qsp"), 0, 4294966296, 0)
-    CALL(evt_npc_set_position, STRING("\203K\203C\203hsp"), 0, 4294966296, 0)
-    CALL(evt_npc_set_position, STRING("\203K\203C\203h\226\205sp"), 0, 4294966296, 0)
-    CALL(evt_npc_set_position, STRING("\202\277\202\321\203g\203Qsp"), 0, 4294966296, 0)
-    CALL(evt_npc_set_position, STRING("\203\211\203C\203o\203\213sp"), 0, 4294966296, 0)
-    CALL(evt_npc_flag_onoff, 1, STRING("\203v\203jsp"), NPC_FLAG_NO_HIT | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION)
-    CALL(evt_npc_flag_onoff, 1, STRING("\203g\203Qsp"), NPC_FLAG_NO_HIT | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION)
-    CALL(evt_npc_flag_onoff, 1, STRING("\203K\203C\203hsp"), NPC_FLAG_NO_HIT | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION)
-    CALL(evt_npc_flag_onoff, 1, STRING("\203K\203C\203h\226\205sp"), NPC_FLAG_NO_HIT | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION)
-    CALL(evt_npc_flag_onoff, 1, STRING("\202\277\202\321\203g\203Qsp"), NPC_FLAG_NO_HIT | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION)
-    CALL(evt_npc_flag_onoff, 1, STRING("\203\211\203C\203o\203\213sp"), NPC_FLAG_NO_HIT | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION)
+    CALL(evt_npc_entry, STRING("プニsp"), STRING("c_puni")) // hidden Puni model stand-in for the Puni system
+    CALL(evt_npc_set_tribe, STRING("プニsp"), STRING("プニ族"))
+    CALL(evt_npc_entry, STRING("トゲsp"), STRING("c_toge")) // hidden Jabbi model stand-in for the Puni system
+    CALL(evt_npc_set_tribe, STRING("トゲsp"), STRING("トゲ族"))
+    CALL(evt_npc_entry, STRING("ガイドsp"), STRING("c_pguide")) // hidden Punio stand-in for the Puni system
+    CALL(evt_npc_set_tribe, STRING("ガイドsp"), STRING("ガイド"))
+    CALL(evt_npc_entry, STRING("ガイド妹sp"), STRING("c_psister")) // hidden Petuni stand-in for the Puni system
+    CALL(evt_npc_set_tribe, STRING("ガイド妹sp"), STRING("ガイド妹"))
+    CALL(evt_npc_entry, STRING("ちびトゲsp"), STRING("c_tchibi")) // hidden Jabble stand-in for the Puni system
+    CALL(evt_npc_set_tribe, STRING("ちびトゲsp"), STRING("ちびトゲ"))
+    CALL(evt_npc_entry, STRING("ライバルsp"), STRING("c_prival")) // hidden Puniper stand-in for the Puni system
+    CALL(evt_npc_set_tribe, STRING("ライバルsp"), STRING("ライバル"))
+    CALL(evt_npc_set_position, STRING("プニsp"), 0, 4294966296, 0)
+    CALL(evt_npc_set_position, STRING("トゲsp"), 0, 4294966296, 0)
+    CALL(evt_npc_set_position, STRING("ガイドsp"), 0, 4294966296, 0)
+    CALL(evt_npc_set_position, STRING("ガイド妹sp"), 0, 4294966296, 0)
+    CALL(evt_npc_set_position, STRING("ちびトゲsp"), 0, 4294966296, 0)
+    CALL(evt_npc_set_position, STRING("ライバルsp"), 0, 4294966296, 0)
+    CALL(evt_npc_flag_onoff, 1, STRING("プニsp"), NPC_FLAG_NO_HIT | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION)
+    CALL(evt_npc_flag_onoff, 1, STRING("トゲsp"), NPC_FLAG_NO_HIT | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION)
+    CALL(evt_npc_flag_onoff, 1, STRING("ガイドsp"), NPC_FLAG_NO_HIT | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION)
+    CALL(evt_npc_flag_onoff, 1, STRING("ガイド妹sp"), NPC_FLAG_NO_HIT | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION)
+    CALL(evt_npc_flag_onoff, 1, STRING("ちびトゲsp"), NPC_FLAG_NO_HIT | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION)
+    CALL(evt_npc_flag_onoff, 1, STRING("ライバルsp"), NPC_FLAG_NO_HIT | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION)
     RETURN
 EVT_END()
 

@@ -2182,8 +2182,8 @@ EVT_END()
 
 static void bossrobot_batu(CameraId camera, void* param) {
     u8* alpha = param;
-    NpcEntry* robot = npcNameToPtr("\203{\203X\203\215\203{\203b\203g");
-    NpcEntry* batu = npcNameToPtr("\203{\203X\203\215\203{\203b\203g\203o\203c");
+    NpcEntry* robot = npcNameToPtr("ボスロボット");
+    NpcEntry* batu = npcNameToPtr("ボスロボットバツ");
     Mtx* mtxs = (Mtx*)animPoseGetAnimPosePtr(robot->poseId)->worldMatrices->address;
     s32 idx = animPoseGetGroupIdx(robot->poseId, "locator23");
     Mtx rot;
@@ -2219,9 +2219,9 @@ static void bossrobot_batu(CameraId camera, void* param) {
  */
 static USER_FUNC(bossrobot) {
     u8 alpha = evtGetValue(event, event->args[0]);
-    NpcEntry* robot = npcNameToPtr("\203{\203X\203\215\203{\203b\203g");
-    NpcEntry* batu = npcNameToPtr("\203{\203X\203\215\203{\203b\203g\203o\203c");
-    NpcEntry* maru = npcNameToPtr("\203{\203X\203\215\203{\203b\203g\203}\203\213");
+    NpcEntry* robot = npcNameToPtr("ボスロボット");
+    NpcEntry* batu = npcNameToPtr("ボスロボットバツ");
+    NpcEntry* maru = npcNameToPtr("ボスロボットマル");
     AnimationPose* pose;
     Mtx* mtxs;
     s32 idx;

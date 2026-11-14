@@ -780,7 +780,7 @@ static USER_FUNC(proj_on) {
     if (partyGetPtr(marioGetExtraPartyId()) != NULL) {
         animPoseSetMaterialFlagOn(partyGetPtr(marioGetExtraPartyId())->paperAnimGroup, ANIM_MATERIAL_FLAG_PROJ_TEXTURE);
     }
-    animPoseSetMaterialFlagOn(npcNameToPtr("\224\362\213\363\221D")->poseId, MAP_OBJ_FLAG_PROJ_TEX);
+    animPoseSetMaterialFlagOn(npcNameToPtr("飛空船")->poseId, MAP_OBJ_FLAG_PROJ_TEX);
     return EVT_RETURN_DONE;
 }
 
@@ -2276,7 +2276,7 @@ EVT_END()
 
 static USER_FUNC(eff_sleep_on) {
     EffectEntry* eff = effNameToPtr("eff_sleep");
-    NpcEntry* npc = npcNameToPtr_NoAssert("\202\275\202\334\202\262");
+    NpcEntry* npc = npcNameToPtr_NoAssert("たまご");
 
     if (eff == NULL) {
         effSetName(effSleepEntry(0, 0, npc->position.x, 16.0f + npc->position.y, npc->position.z, 1.0f, 65.0f),

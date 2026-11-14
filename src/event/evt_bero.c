@@ -826,7 +826,7 @@ static EVT_BEGIN(evt_bero_nonride_check)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
-    DEBUG_PUT_MSG(STRING("\223y\212\307\202\251\202\347\215~\202\350\202\275"))
+    DEBUG_PUT_MSG(STRING("土管から降りた"))
     SET_VALUE(LW(0), LW(3))
     CALL_CHILD(bero_case_switch_on)
     RETURN
@@ -1798,11 +1798,11 @@ EVT_BEGIN(bero_case_switch_on)
 #if VERSION <= VERSION_DEMO_JP
         CALL_CHILD(bero_case_entry_sub)
 #else
-        DEBUG_PUT_MSG(STRING("\203x\203\215\223o\230^"))
+        DEBUG_PUT_MSG(STRING("ベロ登録"))
         CALL_CHILD(bero_case_entry_sub)
 #endif
         ELSE
-        DEBUG_PUT_MSG(STRING("\203x\203\215\202\314\217o\202\304\215s\202\255\203f\201[\203^\202\314\223\361\217d\223o\230^\226h\216~\202\360\202\265\202\304\202\242\202\334\202\267"))
+        DEBUG_PUT_MSG(STRING("ベロの出て行くデータの二重登録防止をしています"))
     END_IF
     RETURN
 EVT_END()
@@ -1823,12 +1823,12 @@ EVT_BEGIN(bero_case_switch_off)
         DEBUG_PUT_MSG(STRING("ベロの出て行くデータの二重削除防止をしています"))
 #else
     IF_INT_EQUAL(LW(0), 0)
-        DEBUG_PUT_MSG(STRING("\203x\203\215\215\355\217\234\202\265\202\334\202\265\202\275"))
+        DEBUG_PUT_MSG(STRING("ベロ削除しました"))
         CALL(evt_bero_case_id_load, LW(1), LW(15))
         CALL(evt_del_case_evt, 0, LW(15))
         CALL(evt_hitobj_attr_onoff, 0, 0, LW(3), HIT_ATTR_BERO)
     ELSE
-        DEBUG_PUT_MSG(STRING("\203x\203\215\202\314\215\355\217\234\227\\\226\361\202\340\202\265\202\255\202\315\203x\203\215\202\314\217o\202\304\215s\202\255\203f\201[\203^\202\314\223\361\217d\215\355\217\234\226h\216~\202\305\202\267"))
+        DEBUG_PUT_MSG(STRING("ベロの削除予約もしくはベロの出て行くデータの二重削除防止です"))
 #endif
     END_IF
     RETURN
@@ -1951,7 +1951,7 @@ EVT_BEGIN(evt_bero_info_run)
     // Loading a save: no walk-in; only arm the exits and start the NPCs.
     IF_BITS_SET(LW(0), GW_FLAG_SAVE_LOADED)
 #if VERSION >= VERSION_JP
-        DEBUG_PUT_MSG(STRING("\203Z\201[\203u\203u\203\215\203b\203N\202\251\202\347\202\314\203\215\201[\203h\216\236\202\314\217\210\227\235"))
+        DEBUG_PUT_MSG(STRING("セーブブロックからのロード時の処理"))
 #endif
         CALL(evt_bero_exec_onoff, 0, BERO_EXEC_BUSY)
         WAIT_FRAMES(1)
@@ -1983,13 +1983,13 @@ EVT_BEGIN(evt_bero_info_run)
     SET_VALUE(LW(0), LW(4))
     AND_RAW(LW(0), BERO_TYPE_BG_MODE)
     IF_INT_NOT_EQUAL(LW(0), 0)
-        DEBUG_PUT_MSG(STRING("\224w\214i\202\311\223\374\202\351\202\306\202\253\202\314\203}\203\212\203I\202\314\217\211\212\372\217\210\227\235"))
+        DEBUG_PUT_MSG(STRING("背景に入るときのマリオの初期処理"))
         CALL(evt_mario_bgmode_on)
         CALL(evt_mario_kill_party, 0)
         CALL(evt_mario_kill_party, 1)
         CALL(evt_mario_cam_y_off)
     ELSE
-        DEBUG_PUT_MSG(STRING("\225\201\222\312\202\311\223\374\202\351\202\306\202\253\202\314\203}\203\212\203I\202\314\217\211\212\372\217\210\227\235"))
+        DEBUG_PUT_MSG(STRING("普通に入るときのマリオの初期処理"))
         CALL(evt_mario_bgmode_off)
         SET_VALUE(LW(0), LW(4))
         AND_RAW(LW(0), BERO_TYPE_KIND_MASK)
@@ -2041,7 +2041,7 @@ EVT_BEGIN(evt_bero_info_run)
             END_SWITCH
         END_IF
     END_IF
-    DEBUG_PUT_MSG(STRING("\202\331\202\251\202\314\217\211\212\372\220\335\222\350\212J\216n"))
+    DEBUG_PUT_MSG(STRING("ほかの初期設定開始"))
     SPAWN_EVENT(evt_bero_mario_enter)
     RETURN
 EVT_END()

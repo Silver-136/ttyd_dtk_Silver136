@@ -623,7 +623,7 @@ static EVT_BEGIN(moving_floor_bero_check)
         CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
 
         // debug text (Shift-JIS): waiting for the auto-delete check
-        DEBUG_PUT_MSG(STRING("\216\251\223\256\215\355\217\234\203`\203F\203b\203N\221\322\202\277"))
+        DEBUG_PUT_MSG(STRING("自動削除チェック待ち"))
         CALL(evt_bero_exec_wait, BERO_EXEC_BUSY)
         CALL(evt_bero_get_now_number, LW(10))
         CALL(evt_bero_get_info_nextarea, LW(10), LW(3), LW(4))
@@ -633,7 +633,7 @@ static EVT_BEGIN(moving_floor_bero_check)
     END_LOOP
 
     // debug text (Shift-JIS): auto-delete done
-    DEBUG_PUT_MSG(STRING("\216\251\223\256\215\355\217\234\212\256\227\271"))
+    DEBUG_PUT_MSG(STRING("自動削除完了"))
     CALL(moving_floor_stop_se, LW(9))
     CALL(moving_floor_halt_se, LW(9))
     RETURN

@@ -107,7 +107,7 @@ static void movie_draw(CameraId camera, void* param) {
 
     EXIGetType(0, 2, &type);
     if (type == EXI_IS_VIEWER) {
-        msg = "\202\261\202\261\202\311\203\200\201[\203r\201[\202\252\202\310\202\252\202\352\202\334\202\267";
+        msg = "ここにムービーがながれます";
         FontDrawStart();
         FontDrawColor((GXColor){0xFF, 0xFF, 0xFF, 0xFF});
         FontDrawString(-FontGetMessageWidth(msg) / 2, 0.0f, msg);
@@ -117,7 +117,7 @@ static void movie_draw(CameraId camera, void* param) {
         height = gp->efbHeight;
 #if VERSION >= VERSION_DEMO_EU
         if (THPSimpleDecode(0) == 1) {
-            sysOSReport("dig_00.c", 130, "THP Video Decode \x8E\xB8\x94\x73\n");
+            sysOSReport("dig_00.c", 130, "THP Video Decode 失敗\n");
         } else {
 #else
         if (THPSimpleDecode(0) != 1) {
@@ -210,7 +210,7 @@ static USER_FUNC(evt_action_sub) {
         evtSetValue(event, *args++, (EvtWord)name);
     } else {
         evtSetValue(event, *args++, (EvtWord)"a_mario");
-        evtSetValue(event, *args++, (EvtWord)"\202\311\202\271\203}\203\212\203I\202Q");
+        evtSetValue(event, *args++, (EvtWord)"にせマリオ２");
     }
     evtSetValue(event, *args++, bit);
     evtSetValue(event, *args++, anim_tbl[idx].anim);
