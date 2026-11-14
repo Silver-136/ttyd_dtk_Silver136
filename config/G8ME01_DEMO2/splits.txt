@@ -81,7 +81,7 @@ driver/dispdrv.c:
 	.data       start:0x80303FC0 end:0x80304000
 	.sdata      start:0x80414C78 end:0x80414CA4
 	.sbss       start:0x8041E290 end:0x8041E2A0
-	.sdata2     start:0x8041F3E0 end:0x8041F3F0
+	.sdata2     start:0x8041F3E0 end:0x8041F3F8
 
 driver/fadedrv.c:
 	.text       start:0x80010C20 end:0x80013C38
@@ -89,7 +89,7 @@ driver/fadedrv.c:
 	.data       start:0x80304000 end:0x80304400
 	.sdata      start:0x80414CC0 end:0x80414CE0 align:32
 	.sbss       start:0x8041E2A0 end:0x8041E2A8
-	.sdata2     start:0x8041F3F0 end:0x8041F4B8
+	.sdata2     start:0x8041F3F8 end:0x8041F4B8
 	.sbss2      start:0x80429158 end:0x80429160
 
 driver/hitdrv.c:
@@ -209,7 +209,7 @@ driver/npcdrv.c:
 
 event/evt_npc.c:
 	.text       start:0x8004CED4 end:0x800536B0
-	.rodata     start:0x802C0FF0 end:0x802C10C0
+	.rodata     start:0x802C0FF0 end:0x802C10C8
 	.data       start:0x80306560 end:0x803065C0
 	.sdata      start:0x80415AB8 end:0x80415AD8
 	.sbss       start:0x8041E560 end:0x8041E568
@@ -218,7 +218,7 @@ event/evt_npc.c:
 
 event/evt_sub.c:
 	.text       start:0x800536B0 end:0x80056104
-	.rodata     start:0x802C10C0 end:0x802C1420
+	.rodata     start:0x802C10C8 end:0x802C1420
 	.data       start:0x803065C0 end:0x803092A8
 	.sdata      start:0x80415AD8 end:0x80415B50
 	.sbss       start:0x8041E568 end:0x8041E570

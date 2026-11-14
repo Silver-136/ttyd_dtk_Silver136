@@ -9,16 +9,8 @@
 #include "system.h"
 #include <dolphin/mtx.h>
 #include <string.h>
-#include "driver/fadedrv.h"
 
 #define DISP_MAX_ENTRIES 1024
-
-#if VERSION >= VERSION_US
-// US and later read their 1.0f from a fadedrv global (the name float_1_8041f770 is a label, the original name is unknown)
-#define DISP_ONE float_1_8041f770
-#else
-#define DISP_ONE 1.0f
-#endif
 
 //.sdata
 static f32 offset_tbl[] = {
@@ -131,7 +123,7 @@ void dispDraw(CameraId camId) {
                     GXSetAlphaUpdate(GX_TRUE);
                     break;
             }
-            GXSetZScaleOffset(DISP_ONE, 0.0f);
+            GXSetZScaleOffset(1.0f, 0.0f);
             switch (entry->renderMode) {
                 case DISP_MODE_OPAQUE:
                     GXSetBlendMode(GX_BM_NONE, GX_BL_ONE, GX_BL_ZERO, GX_LO_OR);

@@ -81,18 +81,6 @@ typedef struct SplineWork {
     s32 manual;    // 0x28
 } SplineWork;
 
-// FAKE: the pragma below keeps an orphan string that is not evt_sub's. "%f%f%f" belongs to evt_npc's dead-stripped
-// evt_npc_set_position_xls (JP demo map: UNUSED, 0xb4), and in the early demos it ends evt_npc's .rodata (the
-// npc_report_pos stand-in there). From JP on, the split puts the evt_npc/evt_sub boundary in front of it, so it is
-// kept here. The function's body is not known (sscanf forms tried compile to 0xa0-0xb0).
-#pragma force_active on
-
-#if VERSION >= VERSION_JP
-static const char coin_fmt[] = "%f%f%f";
-#endif
-
-#pragma force_active reset
-
 /** Black text colour of the "You got N coins!" line in the coin reward window (coingetDisp). */
 static const GXColor coin_black = {0x00, 0x00, 0x00, 0xFF};
 

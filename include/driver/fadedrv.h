@@ -166,9 +166,4 @@ void fadeReset(s32 id);
 TEXPalette* fadeGetTpl(void);
 void fadeSetNarrowFast(void);
 
-#if VERSION >= VERSION_US
-extern const f32 float_1_8041f770;
-
-#endif
-
 void fadeSetAnimVirtualPos(f32 x, f32 y, f32 z);

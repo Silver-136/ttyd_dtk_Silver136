@@ -21,14 +21,6 @@
 #include "evt/evt_img.h"
 #include "driver/mapdrv.h"
 
-#if VERSION >= VERSION_US
-// US and later: named constant (dispdrv reads it by name), followed by a zero word
-#pragma force_active on
-const f32 float_1_8041f770 = 1.0f;
-const f32 float_0_8041f774 = 0.0f;
-#pragma force_active reset
-#endif
-
 static FadeWork* wp;
 
 // local prototypes
