@@ -8,6 +8,16 @@ generated from (maps made before 2026-11-13 have no such line).
 One entry per push, newest first: date, the pushed commit, whether maps from the previous push are now obsolete,
 and what changed in plain words.
 
+## 2026-11-14 (second push) - pushed commit: the one that adds this entry (maps stamped 917a33ddd)
+
+Old maps obsolete: **yes** (format). Regenerate them.
+
+- Library members are named as in the original maps, `archive.a source` (for example `os.a OSInit.c`,
+  `Runtime.PPCEABI.H.a runtime.c`) instead of the bare object name (`OSInit.o`).
+- The TRK exception table lists `gTRKInterruptVectorTable` and `gTRKInterruptVectorTableEnd` only, as in the
+  original; the internal `rfi_N` / `L_...` / `gTRKInterruptVectorTable_500` labels are gone.
+- The Danger/Peril status flags and evt_win.c's char setting changed no symbol names.
+
 ## 2026-11-14 - pushed commit: the one that adds this entry (maps stamped 4cb898184)
 
 Old maps obsolete: **yes, slightly**. Regenerate them.
