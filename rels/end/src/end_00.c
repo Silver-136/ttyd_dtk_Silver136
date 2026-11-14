@@ -1431,12 +1431,88 @@ EVT_BEGIN(end_credit_gonbaba_evt)
 EVT_END()
 
 #if VERSION <= VERSION_DEMO_JP
+
 EVT_BEGIN(end_credit_batten_evt)
     CALL(evt_npc_entry, STRING("batten"), STRING("c_mb_robo_1b")) // Magnus von Grapple in the credits parade
     CALL(evt_npc_set_anim, STRING("batten"), STRING("MGN_W_1"))
     CALL(evt_npc_flag_onoff, 1, STRING("batten"), NPC_FLAG_NO_CULL)
     CALL(evt_end_npc_silhouette_on, STRING("batten"))
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, -4000, 4000, 5000)
+    LOOP(0)
+        CALL(evt_sub_intpl_msec_get_value)
+        DIVIDE_FLOAT(LW(0), FLOAT(10.0f))
+        CALL(evt_npc_set_position, STRING("batten"), 0, LW(0), 0)
+        WAIT_FRAMES(1)
+        IF_INT_EQUAL(LW(1), 0)
+            BREAK_LOOP
+        END_IF
+    END_LOOP
+    CALL(evt_npc_delete, STRING("batten"))
+    RETURN
+EVT_END()
+
+/** Early-demo parade script for Cortez (korutesu): rises up through the middle of the screen. */
+EVT_BEGIN(end_credit_korutesu_evt)
+    CALL(evt_npc_entry, STRING("kortesu"), STRING("c_korutesu1")) // Cortez in the credits parade (early demos)
+    CALL(evt_npc_set_anim, STRING("kortesu"), STRING("KRT_S_1"))
+    CALL(evt_npc_flag_onoff, 1, STRING("kortesu"), NPC_FLAG_NO_CULL)
+    CALL(evt_end_npc_silhouette_on, STRING("kortesu"))
+    CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, -4000, 4000, 5000)
+    LOOP(0)
+        CALL(evt_sub_intpl_msec_get_value)
+        DIVIDE_FLOAT(LW(0), FLOAT(10.0f))
+        CALL(evt_npc_set_position, STRING("kortesu"), 0, LW(0), 0)
+        WAIT_FRAMES(1)
+        IF_INT_EQUAL(LW(1), 0)
+            BREAK_LOOP
+        END_IF
+    END_LOOP
+    CALL(evt_npc_delete, STRING("kortesu"))
+    RETURN
+EVT_END()
+
+/**
+ * Early-demo parade script for the second robot model (c_mb_robo_2b):
+ * rises up through the middle of the screen as a silhouette.
+ */
+EVT_BEGIN(end_credit_batten2_evt)
+    CALL(evt_npc_entry, STRING("batten2"), STRING("c_mb_robo_2b"))
+    CALL(evt_npc_set_anim, STRING("batten2"), STRING("MGN_W_1"))
+    CALL(evt_npc_flag_onoff, 1, STRING("batten2"), NPC_FLAG_NO_CULL)
+    CALL(evt_end_npc_silhouette_on, STRING("batten2"))
+    CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, -4000, 4000, 5000)
+    LOOP(0)
+        CALL(evt_sub_intpl_msec_get_value)
+        DIVIDE_FLOAT(LW(0), FLOAT(10.0f))
+        CALL(evt_npc_set_position, STRING("batten2"), 0, LW(0), 0)
+        WAIT_FRAMES(1)
+        IF_INT_EQUAL(LW(1), 0)
+            BREAK_LOOP
+        END_IF
+    END_LOOP
+    CALL(evt_npc_delete, STRING("batten2"))
+    RETURN
+EVT_END()
+
+/** Early-demo parade script for the Shadow Queen model (c_q_kage): rises up through the middle of the screen. */
+EVT_BEGIN(end_credit_queen_evt)
+    CALL(evt_npc_entry, STRING("queen"), STRING("c_q_kage")) // the Shadow Queen in the credits parade
+    CALL(evt_npc_set_anim, STRING("queen"), STRING("KRT_S_1"))
+    CALL(evt_npc_flag_onoff, 1, STRING("queen"), NPC_FLAG_NO_CULL)
+    CALL(evt_end_npc_silhouette_on, STRING("queen"))
+    CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, -4000, 4000, 5000)
+    LOOP(0)
+        CALL(evt_sub_intpl_msec_get_value)
+        DIVIDE_FLOAT(LW(0), FLOAT(10.0f))
+        CALL(evt_npc_set_position, STRING("queen"), 0, LW(0), 0)
+        WAIT_FRAMES(1)
+        IF_INT_EQUAL(LW(1), 0)
+            BREAK_LOOP
+        END_IF
+    END_LOOP
+    CALL(evt_npc_delete, STRING("queen"))
+    RETURN
+EVT_END()
 #else
 
 /**
@@ -1450,37 +1526,18 @@ EVT_BEGIN(end_credit_batten2_evt)
     CALL(evt_end_npc_silhouette_on, STRING("batten2"))
     CALL(evt_npc_set_rotate, STRING("batten2"), 180, 0, 0)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 4000, -4000, 4000)
-#endif
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         DIVIDE_FLOAT(LW(0), FLOAT(10.0f))
-#if VERSION <= VERSION_DEMO_JP
-        CALL(evt_npc_set_position, STRING("batten"), 0, LW(0), 0)
-#else
         CALL(evt_npc_set_position, STRING("batten2"), 100, LW(0), 0)
-#endif
         WAIT_FRAMES(1)
         IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
         END_IF
     END_LOOP
-#if VERSION <= VERSION_DEMO_JP
-    CALL(evt_npc_delete, STRING("batten"))
-#else
     CALL(evt_npc_delete, STRING("batten2"))
-#endif
     RETURN
 EVT_END()
-
-#if VERSION <= VERSION_DEMO_JP
-/** Early-demo parade script for Cortez (korutesu): rises up through the middle of the screen. */
-EVT_BEGIN(end_credit_korutesu_evt)
-    CALL(evt_npc_entry, STRING("kortesu"), STRING("c_korutesu1")) // Cortez in the credits parade (early demos)
-    CALL(evt_npc_set_anim, STRING("kortesu"), STRING("KRT_S_1"))
-    CALL(evt_npc_flag_onoff, 1, STRING("kortesu"), NPC_FLAG_NO_CULL)
-    CALL(evt_end_npc_silhouette_on, STRING("kortesu"))
-    CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, -4000, 4000, 5000)
-#else
 
 /** JP and later: parade script for Atomic Boo (c_atmic_trs): drifts across the screen at 0.8 scale. */
 EVT_BEGIN(end_credit_atomic_evt)
@@ -1491,40 +1548,18 @@ EVT_BEGIN(end_credit_atomic_evt)
     CALL(evt_npc_set_rotate, STRING("atomic"), 0, 180, 0)
     CALL(evt_npc_set_scale, STRING("atomic"), FLOAT(0.7998047f), FLOAT(0.7998047f), FLOAT(0.7998047f))
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, -5000, 5000, 6000)
-#endif
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         DIVIDE_FLOAT(LW(0), FLOAT(10.0f))
-#if VERSION <= VERSION_DEMO_JP
-        CALL(evt_npc_set_position, STRING("kortesu"), 0, LW(0), 0)
-#else
         CALL(evt_npc_set_position, STRING("atomic"), LW(0), 20, 0)
-#endif
         WAIT_FRAMES(1)
         IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
         END_IF
     END_LOOP
-#if VERSION <= VERSION_DEMO_JP
-    CALL(evt_npc_delete, STRING("kortesu"))
-#else
     CALL(evt_npc_delete, STRING("atomic"))
-#endif
     RETURN
 EVT_END()
-
-#if VERSION <= VERSION_DEMO_JP
-/**
- * Early-demo parade script for the second robot model (c_mb_robo_2b):
- * rises up through the middle of the screen as a silhouette.
- */
-EVT_BEGIN(end_credit_batten2_evt)
-    CALL(evt_npc_entry, STRING("batten2"), STRING("c_mb_robo_2b"))
-    CALL(evt_npc_set_anim, STRING("batten2"), STRING("MGN_W_1"))
-    CALL(evt_npc_flag_onoff, 1, STRING("batten2"), NPC_FLAG_NO_CULL)
-    CALL(evt_end_npc_silhouette_on, STRING("batten2"))
-    CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, -4000, 4000, 5000)
-#else
 
 /** JP and later: parade script for Cortez (korutesu): enters from the left, pauses, then returns left. */
 EVT_BEGIN(end_credit_korutesu_evt)
@@ -1534,23 +1569,15 @@ EVT_BEGIN(end_credit_korutesu_evt)
     CALL(evt_npc_set_ry, STRING("korutesu"), 90)
     CALL(evt_end_npc_silhouette_on, STRING("korutesu"))
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, -10000, -2000, 2000)
-#endif
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         DIVIDE_FLOAT(LW(0), FLOAT(10.0f))
-#if VERSION <= VERSION_DEMO_JP
-        CALL(evt_npc_set_position, STRING("batten2"), 0, LW(0), 0)
-#else
         CALL(evt_npc_set_position, STRING("korutesu"), LW(0), -150, 0)
-#endif
         WAIT_FRAMES(1)
         IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
         END_IF
     END_LOOP
-#if VERSION <= VERSION_DEMO_JP
-    CALL(evt_npc_delete, STRING("batten2"))
-#else
     WAIT_MS(3000)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, -2000, -10000, 2000)
     LOOP(0)
@@ -1563,19 +1590,8 @@ EVT_BEGIN(end_credit_korutesu_evt)
         END_IF
     END_LOOP
     CALL(evt_npc_delete, STRING("korutesu"))
-#endif
     RETURN
 EVT_END()
-
-#if VERSION <= VERSION_DEMO_JP
-/** Early-demo parade script for the Shadow Queen model (c_q_kage): rises up through the middle of the screen. */
-EVT_BEGIN(end_credit_queen_evt)
-    CALL(evt_npc_entry, STRING("queen"), STRING("c_q_kage")) // the Shadow Queen in the credits parade
-    CALL(evt_npc_set_anim, STRING("queen"), STRING("KRT_S_1"))
-    CALL(evt_npc_flag_onoff, 1, STRING("queen"), NPC_FLAG_NO_CULL)
-    CALL(evt_end_npc_silhouette_on, STRING("queen"))
-    CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, -4000, 4000, 5000)
-#else
 
 /**
  * JP and later: parade script for the c_bom_sen model, the Bob-omb crowd sprite of Fahr Outpost's cannon scene
@@ -1588,25 +1604,15 @@ EVT_BEGIN(end_credit_para_evt)
     CALL(evt_npc_flag_onoff, 1, STRING("para"), NPC_FLAG_NO_CULL | NPC_FLAG_INSTANT_TURN)
     CALL(evt_end_npc_silhouette_on, STRING("para"))
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 3000, -3000, 6000)
-#endif
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         DIVIDE_FLOAT(LW(0), FLOAT(10.0f))
-#if VERSION <= VERSION_DEMO_JP
-        CALL(evt_npc_set_position, STRING("queen"), 0, LW(0), 0)
-#else
         CALL(evt_npc_set_position, STRING("para"), 50, LW(0), 0)
-#endif
         WAIT_FRAMES(1)
         IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
         END_IF
     END_LOOP
-#if VERSION <= VERSION_DEMO_JP
-    CALL(evt_npc_delete, STRING("queen"))
-    RETURN
-EVT_END()
-#else
     CALL(evt_npc_delete, STRING("para"))
     RETURN
 EVT_END()

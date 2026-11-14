@@ -391,7 +391,6 @@ static void statusWinDisp(CameraId camId, void* param) {
     }
 #if VERSION <= VERSION_DEMO_JP || VERSION == VERSION_DEMO_US_2 || VERSION == VERSION_DEMO_EU
     // no demo draws the menu hints
-}
 #else
     if (wp->flags & STATUS_WINDOW_FLAG_MENU_ICONS && !gp->inBattle) {
         y2 = -180.0f + (wp->openY - wp->y);
@@ -438,8 +437,8 @@ static void statusWinDisp(CameraId camId, void* param) {
         iconDispGxCol(m2, ICON_FLAG_2D, ICON_MENU_JOURNAL, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
 #endif
     }
-}
 #endif
+}
 
 /**
  * Reads the values the HUD shows: from the pouch in the field (the partner from the party),

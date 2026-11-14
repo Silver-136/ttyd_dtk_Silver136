@@ -4946,31 +4946,21 @@ static EVT_BEGIN(mony_peton_event)
     CALL(evt_npc_set_ry, STRING("モニー"), 270)
     WAIT_MS(300)
     BEGIN_INLINE_EVENT
-#else
-
-/**
- * Francesca (Francesca) hops off the ship, runs along the pier, up the back stairs and out of the map,
- * then is hidden below it. JP and later releases.
- */
-EVT_BEGIN(mony_run_away)
-#endif
-
-    CALL(evt_npc_jump_position_nohit, STRING("モニー"), 145, 15, 225, 400, 20)
-    CALL(evt_npc_set_ry, STRING("モニー"), 270)
-    CALL(evt_npc_move_position, STRING("モニー"), -130, 200, 0, FLOAT(240.0f), 0)
-    CALL(evt_npc_move_position, STRING("モニー"), -230, -170, 0, FLOAT(240.0f), 0)
-    CALL(evt_npc_move_position, STRING("モニー"), -230, -400, 0, FLOAT(240.0f), 0)
-    CALL(evt_npc_set_ry, STRING("モニー"), 90)
-    CALL(evt_npc_move_position, STRING("モニー"), 250, -330, 0, FLOAT(240.0f), 0)
-    CALL(evt_npc_set_ry, STRING("モニー"), 270)
-    CALL(evt_npc_jump_position_nohit, STRING("モニー"), 270, 35, -400, 400, 20)
-    CALL(evt_npc_jump_position_nohit, STRING("モニー"), 260, 55, -450, 400, 20)
-    CALL(evt_npc_jump_position_nohit, STRING("モニー"), 230, 75, -480, 400, 20)
-    CALL(evt_npc_jump_position_nohit, STRING("モニー"), 210, 95, -520, 400, 20)
-    CALL(evt_npc_jump_position_nohit, STRING("モニー"), 150, 115, -530, 400, 20)
-    CALL(evt_npc_move_position, STRING("モニー"), 0, -570, 0, FLOAT(180.0f), 0)
-    CALL(evt_npc_set_position, STRING("モニー"), 0, -1000, 0)
-#if VERSION <= VERSION_DEMO_JP
+        CALL(evt_npc_jump_position_nohit, STRING("モニー"), 145, 15, 225, 400, 20)
+        CALL(evt_npc_set_ry, STRING("モニー"), 270)
+        CALL(evt_npc_move_position, STRING("モニー"), -130, 200, 0, FLOAT(240.0f), 0)
+        CALL(evt_npc_move_position, STRING("モニー"), -230, -170, 0, FLOAT(240.0f), 0)
+        CALL(evt_npc_move_position, STRING("モニー"), -230, -400, 0, FLOAT(240.0f), 0)
+        CALL(evt_npc_set_ry, STRING("モニー"), 90)
+        CALL(evt_npc_move_position, STRING("モニー"), 250, -330, 0, FLOAT(240.0f), 0)
+        CALL(evt_npc_set_ry, STRING("モニー"), 270)
+        CALL(evt_npc_jump_position_nohit, STRING("モニー"), 270, 35, -400, 400, 20)
+        CALL(evt_npc_jump_position_nohit, STRING("モニー"), 260, 55, -450, 400, 20)
+        CALL(evt_npc_jump_position_nohit, STRING("モニー"), 230, 75, -480, 400, 20)
+        CALL(evt_npc_jump_position_nohit, STRING("モニー"), 210, 95, -520, 400, 20)
+        CALL(evt_npc_jump_position_nohit, STRING("モニー"), 150, 115, -530, 400, 20)
+        CALL(evt_npc_move_position, STRING("モニー"), 0, -570, 0, FLOAT(180.0f), 0)
+        CALL(evt_npc_set_position, STRING("モニー"), 0, -1000, 0)
     END_INLINE_EVENT
     WAIT_MS(60)
     CALL(evt_npc_jump_position_nohit, STRING("ピートン"), 185, 15, 225, 400, 20)
@@ -4991,9 +4981,32 @@ EVT_BEGIN(mony_run_away)
         CALL(evt_npc_set_position, STRING("ピートン"), 0, -1000, 0)
     END_INLINE_EVENT
     SET_VALUE(GSW_STORY_PROGRESS, STG5_64_03_F_F_ARRIVE)
-#endif
     RETURN
 EVT_END()
+#else
+/**
+ * Francesca (Francesca) hops off the ship, runs along the pier, up the back stairs and out of the map,
+ * then is hidden below it. JP and later releases.
+ */
+EVT_BEGIN(mony_run_away)
+    CALL(evt_npc_jump_position_nohit, STRING("モニー"), 145, 15, 225, 400, 20)
+    CALL(evt_npc_set_ry, STRING("モニー"), 270)
+    CALL(evt_npc_move_position, STRING("モニー"), -130, 200, 0, FLOAT(240.0f), 0)
+    CALL(evt_npc_move_position, STRING("モニー"), -230, -170, 0, FLOAT(240.0f), 0)
+    CALL(evt_npc_move_position, STRING("モニー"), -230, -400, 0, FLOAT(240.0f), 0)
+    CALL(evt_npc_set_ry, STRING("モニー"), 90)
+    CALL(evt_npc_move_position, STRING("モニー"), 250, -330, 0, FLOAT(240.0f), 0)
+    CALL(evt_npc_set_ry, STRING("モニー"), 270)
+    CALL(evt_npc_jump_position_nohit, STRING("モニー"), 270, 35, -400, 400, 20)
+    CALL(evt_npc_jump_position_nohit, STRING("モニー"), 260, 55, -450, 400, 20)
+    CALL(evt_npc_jump_position_nohit, STRING("モニー"), 230, 75, -480, 400, 20)
+    CALL(evt_npc_jump_position_nohit, STRING("モニー"), 210, 95, -520, 400, 20)
+    CALL(evt_npc_jump_position_nohit, STRING("モニー"), 150, 115, -530, 400, 20)
+    CALL(evt_npc_move_position, STRING("モニー"), 0, -570, 0, FLOAT(180.0f), 0)
+    CALL(evt_npc_set_position, STRING("モニー"), 0, -1000, 0)
+    RETURN
+EVT_END()
+#endif
 
 #if VERSION >= VERSION_JP
 /**

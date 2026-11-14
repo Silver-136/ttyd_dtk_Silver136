@@ -582,15 +582,14 @@ USER_FUNC(point_wait) {
     PouchData* pouch = pouchGetPtr();
 #if VERSION <= VERSION_DEMO_JP
     return wp->points != pouch->shopPoints ? EVT_RETURN_BLOCK : EVT_RETURN_DONE;
-}
 #else
     if (wp->points != pouch->shopPoints) {
         psndSFXOn(SFX_NAME_WORD(PSND_SFX_EVT_GAME_MONTE_COUNT1));
         return EVT_RETURN_BLOCK;
     }
     return EVT_RETURN_DONE;
-}
 #endif
+}
 
 /** Sets or clears ShopWork flag bits; args: on/off, mask. The talk script sets SHOP_FLAG_TALKING while the counter menu is up. */
 static USER_FUNC(shop_flag_onoff) {
@@ -1611,17 +1610,19 @@ EVT_BEGIN(point_evt)
             CALL(evt_msg_fmt_int, 0, LW(14), LW(14), LW(1))
             CALL(evt_msg_print_add, MSG_PRINT_DIRECT_TEXT, LW(14))
     END_SWITCH
-    RETURN
-EVT_END()
-
-// US and later: point window icon per language (first object of evt_shop .sdata)
-u16 point_disp_icons[] = {ICON_JAPANESE_TEXT_POINTS, ICON_TEXT_POINTS, ICON_TEXT_PUNKTE, ICON_TEXT_POINTS, ICON_TEXT_PUNTOS, ICON_TEXT_PUNTI};
 #else
     CALL(get_shop_point, LW(0))
     CALL(get_msg, LW(10), 25, LW(14))
     CALL(evt_msg_print_add_insert, 0, LW(14), LW(0))
+#endif
     RETURN
 EVT_END()
+
+#if VERSION >= VERSION_US
+
+// US and later: point window icon per language (first object of evt_shop .sdata)
+u16 point_disp_icons[] = {ICON_JAPANESE_TEXT_POINTS, ICON_TEXT_POINTS, ICON_TEXT_PUNKTE, ICON_TEXT_POINTS, ICON_TEXT_PUNTOS, ICON_TEXT_PUNTI};
+
 #endif
 
 #if VERSION >= VERSION_JP

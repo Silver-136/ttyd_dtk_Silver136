@@ -1184,13 +1184,13 @@ s8 stage8_lang6_tbl[8] = {
 s8* texid_lang6_tbl[] = {
     prologue_lang6_tbl, stage1_lang6_tbl, stage2_lang6_tbl, stage3_lang6_tbl, stage4_lang6_tbl, stage5_lang6_tbl, stage6_lang6_tbl, stage7_lang6_tbl, stage8_lang6_tbl,
 };
+#endif
 
 /** The title tables of every language, indexed by the game language. */
 static s8** lang_tbl[] = {
+#if VERSION >= VERSION_US
     texid_jp_tbl, texid_us_tbl, texid_lang3_tbl, texid_lang4_tbl, texid_lang5_tbl, texid_lang6_tbl,
 #else
-/** The title tables of every language, indexed by the game language. */
-static s8** lang_tbl[] = {
     texid_jp_tbl, texid_us_tbl,
 #endif
 };

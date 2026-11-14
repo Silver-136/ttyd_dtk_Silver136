@@ -1594,11 +1594,10 @@ static inline s32 select_party_icon(u16 id) {
  * name, portrait (Yoshi in his colour) and one rank icon per rank already earned, with the two column titles,
  * cursor and scroll arrows.
  */
-#if VERSION <= VERSION_DEMO_JP
 static void select_disp_party(WinMgrEntry* entry) {
+#if VERSION <= VERSION_DEMO_JP
     s32 i;
 #else
-static void select_disp_party(WinMgrEntry* entry) {
 #if VERSION >= VERSION_US
     f32 tw;
 #endif

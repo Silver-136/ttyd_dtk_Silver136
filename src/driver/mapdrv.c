@@ -781,15 +781,14 @@ found:
  * the joint tree as map and hit objects (scaled x10), the map's lights and fog, the camera road (field only),
  * textures, bounding box corners, animation table and display lists.
  */
-#if VERSION <= VERSION_DEMO_JP
 static void _mapLoad(MapWork* wp, BOOL group, const char* map) {
+#if VERSION <= VERSION_DEMO_JP
     MapFileInfo* info;
     u32 datSize, k;
     int i;
     u32 r4, r7, r0;
     u32 sizeCheck;
 #else
-static void _mapLoad(MapWork* wp, BOOL group, const char* map) {
     MapFileInfo* info;
     int i;
 #endif
@@ -1109,8 +1108,8 @@ void mapLoad(const char* map) {
  * Frees the battle stage maps (MapWork slot 1) at the end of a battle,
  * then copies the field map's files back from ARAM and rebuilds its display lists so the field can resume.
  */
-#if VERSION <= VERSION_DEMO_JP
 void bmapUnLoad(void) {
+#if VERSION <= VERSION_DEMO_JP
     MapWork* wp2;
     MapEntry* entry3;
     int j;
@@ -1120,7 +1119,6 @@ void bmapUnLoad(void) {
     int i;
     s32 gz;
 #else
-void bmapUnLoad(void) {
     MapEntry* entry2;
     MapEntry* entry;
     int i;
@@ -1207,7 +1205,6 @@ void bmapUnLoad(void) {
     if (wp2->entries->arcData) {
         arcEntry(1, wp2->entries->arcData, wp2->entries->arcSize);
     }
-}
 #else
     wp = mapWork;
     activeGroup = 0;
@@ -1229,8 +1226,8 @@ void bmapUnLoad(void) {
     if (wp->entries->arcData) {
         arcEntry(1, wp->entries->arcData, wp->entries->arcSize);
     }
-}
 #endif
+}
 #pragma opt_common_subs reset
 
 #if VERSION <= VERSION_DEMO_JP
@@ -3798,11 +3795,10 @@ void mapObjFlagOn(const char* name, u32 flags) {
     if (!(flags & MAP_OBJ_FLAG_DISPLAY_LIST) || obj->displayListSize[0]) {
         obj->flags |= flags;
     }
-}
 #else
     obj->flags |= flags;
-}
 #endif
+}
 
 void mapObjFlagOff(const char* name, u32 flags) {
     MapObject* obj = mapGetMapObj(name);
@@ -3822,11 +3818,10 @@ void mapObjFlagOff(const char* name, u32 flags) {
  * Sets flags on obj and its whole subtree, and its later siblings when doNext;
  * JP and later skip the display-list flag on objects without a display list.
  */
-#if VERSION <= VERSION_DEMO_JP
 static void mapFlgOn(MapObject* obj, u32 flags, BOOL doNext) {
+#if VERSION <= VERSION_DEMO_JP
     obj->flags |= flags;
 #else
-static void mapFlgOn(MapObject* obj, u32 flags, BOOL doNext) {
     if (!(flags & MAP_OBJ_FLAG_DISPLAY_LIST) || obj->displayListSize[0]) {
         obj->flags |= flags;
     }

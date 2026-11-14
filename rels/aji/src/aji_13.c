@@ -1199,11 +1199,7 @@ USER_FUNC(hit_group_chk) {
  * when Mario is in background mode, the camera's Y-follow is off
  * and (in JP and later releases) Mario's airTimer is zero, it turns Y-follow back on. Blocks forever.
  */
-#if VERSION <= VERSION_DEMO_JP
 static USER_FUNC(bg_cam_chk) {
-#else
-USER_FUNC(bg_cam_chk) {
-#endif
 
     CameraEntry* camera = camGetPtr(CAMERA_3D);
 #if VERSION <= VERSION_DEMO_JP

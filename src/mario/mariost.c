@@ -753,15 +753,11 @@ exitcheck:
  * mutes sound and draws the ROM-font error message on its own, until the drive recovers.
  * US and later wait until the status has been steady for 10 frames before drawing.
  */
-#if VERSION <= VERSION_DEMO_JP
-static void* gcDvdCheckThread(void* param) {
-#else
 static void* gcDvdCheckThread(void* param) {
 #if VERSION >= VERSION_US
     s32 prevStatus = 0;
     s32 stableCount = 0;
     u32 prevRetrace = 0;
-#endif
 #endif
     const char* message;
     s32 msgId;

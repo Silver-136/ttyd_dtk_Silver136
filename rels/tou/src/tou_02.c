@@ -2310,10 +2310,9 @@ static EVT_BEGIN(evt_key)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_JP
 static void ext_fan_dispent(void) {
+#if VERSION <= VERSION_DEMO_JP
 #else
-void ext_fan_dispent(void) {
     pose_main();
 #endif
     dispEntry(CAMERA_3D, 0.0f, DISP_MODE_ALPHA_TEST, fan_disp, NULL);
@@ -2330,11 +2329,7 @@ void ext_fan_dispent(void) {
  * 2 when Flurrie's gust reaches within 30 of it; 0 otherwise. In JP and later, the fan standing in for Mario or
  * the champion (flags bit 1) is never hit.
  */
-#if VERSION <= VERSION_DEMO_JP
-static s32 check_hammer(Fan* fan) {
-#else
 s32 check_hammer(Fan* fan) {
-#endif
     MarioWork* mario = marioGetPtr();
     PartyEntry* party;
     f32 rot;

@@ -311,12 +311,11 @@ void iconEntry(const char* name, u16 iconId) {
             entry->uflags |= ICON_FLAG_NO_MAP_BLEND;
         }
     }
-}
 #else
         entry->uflags |= ICON_FLAG_NO_MAP_BLEND;
     }
-}
 #endif
+}
 
 /** Creates a named icon showing iconId drawn with the 2D (screen) camera. */
 void iconEntry2D(const char* name, s16 iconId) {

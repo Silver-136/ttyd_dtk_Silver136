@@ -2804,15 +2804,9 @@ static EVT_BEGIN(wait_event)
         CALL(check_satellite)
     END_LOOP
     RETURN
-#if VERSION <= VERSION_DEMO_JP
 EVT_END()
 
 static USER_FUNC(btlevtcmd_AnimeGetPose) {
-#else
-EVT_END()
-
-USER_FUNC(btlevtcmd_AnimeGetPose) {
-#endif
     s32 id;
     EvtWord* args = event->args;
     s32 partNo;

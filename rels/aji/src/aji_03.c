@@ -1183,11 +1183,7 @@ static USER_FUNC(evt_sousa_icon) {
     return EVT_RETURN_YIELD;
 }
 
-#if VERSION <= VERSION_DEMO_JP
 static void icon_disp(CameraId camera, void* param) {
-#else
-void icon_disp(CameraId camera, void* param) {
-#endif
 
     EventEntry* event = param;
     Mtx trans;

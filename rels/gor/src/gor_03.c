@@ -7326,11 +7326,7 @@ static void kuji_bomb_055_callback(s32 type, MsgWinData** work) {
  * Mushroom in the early demos) and then Zess Dynamite or Zess Special, rank 2 gives an Ultra Shroom,
  * rank 3 a Life Shroom, otherwise a Mushroom. The item goes to args[1].
  */
-#if VERSION <= VERSION_DEMO_JP
 static USER_FUNC(kuzi_get_keihin) {
-#else
-USER_FUNC(kuzi_get_keihin) {
-#endif
     EvtWord* args = event->args;
     s32 item;
 

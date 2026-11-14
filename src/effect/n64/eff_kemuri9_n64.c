@@ -156,12 +156,12 @@ static void effKemuri9Main(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effKemuri9Disp, effect);
 }
 
-#if VERSION <= VERSION_DEMO_JP
 /**
  * The early demos draw the smoke as N64 quads, blending two of the 8 frames of texture strip 0xE;
  * JP and later use the 16-cell GX texture 0x28 and draw the quads directly.
  */
 static void effKemuri9Disp(CameraId cameraId, EffectEntry* effect) {
+#if VERSION <= VERSION_DEMO_JP
     CameraEntry* camera = camGetPtr(cameraId);
     EffKemuri9N64Work* work = effect->userdata;
     BOOL last;
@@ -170,7 +170,6 @@ static void effKemuri9Disp(CameraId cameraId, EffectEntry* effect) {
     s32 u;
     s32 blend;
 #else
-static void effKemuri9Disp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* camera = camGetPtr(cameraId);
     EffKemuri9N64Work* work = effect->userdata;
     s32 i;

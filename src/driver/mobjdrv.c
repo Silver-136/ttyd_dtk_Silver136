@@ -1148,14 +1148,13 @@ void mobjHitCheckGround(MapObjectEntry* entry) {
 BOOL mobjGetHint(MapObjectEntry* entry) {
 #if VERSION <= VERSION_DEMO_JP
     return (entry->flags & MOBJ_FLAG_SHOW_HINT) != 0;
-}
 #else
     if (entry == NULL) {
         return FALSE;
     }
     return (entry->flags >> 5) & 1; // MOBJ_FLAG_SHOW_HINT, normalized to BOOL
-}
 #endif
+}
 
 /** Returns TRUE while any map object is busy (MOBJ_FLAG_BUSY); the pause menu does not open then. */
 BOOL mobjCheckExec(void) {

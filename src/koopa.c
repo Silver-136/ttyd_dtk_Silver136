@@ -1009,7 +1009,6 @@ static void kpaFireMain(void) {
             fireefp = NULL;
         }
     }
-}
 #else
                     ballScale = 7.0f * w->scale;
                     f30 = ballScale * headScale;
@@ -1036,8 +1035,8 @@ static void kpaFireMain(void) {
             fireefp = NULL;
         }
     }
-}
 #endif
+}
 
 /** Bowser's scale for power-up level lv (0.3, 1.0, 1.4, 3.1). */
 f32 kpaGetBaseScale(s32 lv) {

@@ -3342,13 +3342,14 @@ static void puniModeRecover(PuniData* p) {
 #if VERSION <= VERSION_DEMO_JP
 /** The early demos' puni main loop calls this directly with the sound name; their puniModeDead below calls it too. */
 static inline void puniModeDeadSfx(PuniData* p, const char* sfx) {
-    switch (p->modeStep) {
-        case 0:
-            psndSFXOn_3D(sfx, &p->pos);
 #else
 static void puniModeDead(PuniData* p) {
+#endif
     switch (p->modeStep) {
         case 0:
+#if VERSION <= VERSION_DEMO_JP
+            psndSFXOn_3D(sfx, &p->pos);
+#else
             psndSFXOn_3D("SFX_STG2_FIGHT_TOGE3", &p->pos);
 #endif
             {
@@ -5229,11 +5230,10 @@ static void puniOption(void) {
             PSVECScale(&p->vel, &p->vel, 8.0f);
         }
     }
-}
 #else
     }
-}
 #endif
+}
 
 // Descriptive name (not in the symbol maps); placeholder unk_mri_00014ad4, JP mri .text+0x14A10. See docs/NAME_PROVENANCE.md.
 #if VERSION >= VERSION_JP

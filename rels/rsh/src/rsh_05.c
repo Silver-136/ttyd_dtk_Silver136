@@ -1457,7 +1457,6 @@ static void ext_moamoa_main(void) {
             mario->floorMove.z = 2.0f * v.z;
         }
     }
-}
 #else
     v = (Vec){mario->floorMove.x, mario->floorMove.y, mario->floorMove.z};
 
@@ -1471,8 +1470,8 @@ static void ext_moamoa_main(void) {
         mario->floorMove.y = 2.0f * v.y;
         mario->floorMove.z = 2.0f * v.z;
     }
-}
 #endif
+}
 #pragma opt_propagation reset
 #pragma opt_lifetimes reset
 

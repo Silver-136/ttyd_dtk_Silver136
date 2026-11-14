@@ -1041,7 +1041,6 @@ EVT_BEGIN(yuu_02_init_evt)
     CALL_CHILD(evt_yuunpc_minigame3)
 #if VERSION < VERSION_US
     RETURN
-EVT_END()
 #else
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("J_mon"), MAP_OBJ_FLAG_DISABLED)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("E_mon"), MAP_OBJ_FLAG_DISABLED)
@@ -1089,5 +1088,5 @@ EVT_END()
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("I_kan"), MAP_OBJ_FLAG_DISABLED)
     END_SWITCH
     RETURN
-EVT_END()
 #endif
+EVT_END()

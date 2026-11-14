@@ -2502,11 +2502,7 @@ s32 _yoshig_main(YoshiGundanPart* p, s32 i) {
  * draws them, and frees the work and stops the sound when all are across.
  * US and later cap the herd's depth at 65 instead of 80.
  */
-#if VERSION <= VERSION_DEMO_JP
 static USER_FUNC(_gundan_yoshi_run_effect) {
-#else
-USER_FUNC(_gundan_yoshi_run_effect) {
-#endif
 
     BattleUnit* unit;
     YoshiGundanWork* w;
@@ -2604,12 +2600,11 @@ static void _btlYoshiDisp(CameraId camera, YoshiGundanPart* p) {
         s = (p->vx < 0.0f) ? 0.4f : -0.4f;
         btlDispTexPlane(p->x, p->y + 20.0f, p->z, s, 0.4f, _yoshig_tpl_no_tbl[p->frame], (GXColor){255,255,255,255}, 0);
     }
-}
 #else
     s = (p->vx < 0.0f) ? 0.4f : -0.4f;
     btlDispTexPlane(p->x, p->y + 20.0f, p->z, s, 0.4f, _yoshig_tpl_no_tbl[p->frame], (GXColor){255,255,255,255}, 0);
-}
 #endif
+}
 
 // FAKE: stand-in that nothing calls; its s32-to-f32 conversion likely shapes the constant pool;
 // removing it changes the object

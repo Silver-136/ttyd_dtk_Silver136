@@ -68,30 +68,54 @@ void windowLoadTpl(const char* name);
 
 /** the early demos load msgWindow.tpl synchronously */
 void windowTexSetup(void) {
-#else
+    s32 i;
 
+    windowLoadTpl("font/msgWindow.tpl");
+    wakuTexObj = __memAlloc(HEAP_DEFAULT, sizeof(GXTexObj) * winTpl->numDescriptors);
+
+    for (i = 0; i < winTpl->numDescriptors; i++) {
+        TEXGetGXTexObjFromPalette(winTpl, &wakuTexObj[i], i);
+    }
+}
+
+void windowLoadTpl(const char* name) {
+    DVDEntry* entry;
+    u32 size;
+    u32 len;
+    char path[128];
+    s32 i;
+
+    arcOpen(name, (void**)&winTpl, &size);
+    if (winTpl) {
+        UnpackTexPalette(winTpl);
+    } else {
+        sprintf(path, "%s/%s", getMarioStDvdRoot(), name);
+        entry = DVDMgrOpen(path, 2, 0);
+        if (entry) {
+            len = OSRoundUp32B(DVDMgrGetLength(entry));
+            winTpl = __memAlloc(HEAP_DEFAULT, len);
+            DVDMgrRead(entry, winTpl, len, 0);
+            DVDMgrClose(entry);
+            UnpackTexPalette(winTpl);
+        }
+    }
+}
+#else
 /**
  * Completion callback of the msgWindow.tpl DVD read in windowTexSetup.
  * Descriptive name (not in the symbol maps); placeholder unk_8007f204, JP 0x8007F204. See docs/NAME_PROVENANCE.md.
  */
 void windowTexSetup_callback(s32 error, DVDFileInfo* info) {
     DVDEntry* entry = info->cb.userData;
-#endif
-
     s32 i;
 
-#if VERSION <= VERSION_DEMO_JP
-    windowLoadTpl("font/msgWindow.tpl");
-#else
     UnpackTexPalette(winTpl);
     DVDMgrClose(entry);
-#endif
     wakuTexObj = __memAlloc(HEAP_DEFAULT, sizeof(GXTexObj) * winTpl->numDescriptors);
 
     for (i = 0; i < winTpl->numDescriptors; i++) {
         TEXGetGXTexObjFromPalette(winTpl, &wakuTexObj[i], i);
     }
-#if VERSION >= VERSION_JP
     tpl_loaded = TRUE;
 }
 
@@ -118,32 +142,10 @@ void windowTexSetup(void) {
 
         for (i = 0; i < winTpl->numDescriptors; i++) {
             TEXGetGXTexObjFromPalette(winTpl, &wakuTexObj[i], i);
-#else
-}
-
-void windowLoadTpl(const char* name) {
-    DVDEntry* entry;
-    u32 size;
-    u32 len;
-    char path[128];
-    s32 i;
-
-    arcOpen(name, (void**)&winTpl, &size);
-    if (winTpl) {
-        UnpackTexPalette(winTpl);
-    } else {
-        sprintf(path, "%s/%s", getMarioStDvdRoot(), name);
-        entry = DVDMgrOpen(path, 2, 0);
-        if (entry) {
-            len = OSRoundUp32B(DVDMgrGetLength(entry));
-            winTpl = __memAlloc(HEAP_DEFAULT, len);
-            DVDMgrRead(entry, winTpl, len, 0);
-            DVDMgrClose(entry);
-            UnpackTexPalette(winTpl);
-#endif
         }
     }
 }
+#endif
 
 /** Marks all 7 window slots free without calling their delete callbacks; run on every map change. */
 void windowReInit(void) {

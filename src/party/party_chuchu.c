@@ -136,11 +136,7 @@ static const Vec vecB = {0.0f, 0.0f, 0.0f};
  * if something was found, plays a 42-frame sniff (sound 0x945, pose PCH_Y_1) and
  * then a 1.5 s speech-bubble effect over her. In JP and later a far find skips the sniff.
  */
-#if VERSION <= VERSION_DEMO_JP
 static USER_FUNC(search_result) {
-#else
-USER_FUNC(search_result) {
-#endif
 
     PartyEntry* party = partyGetPtr(marioGetPartyId());
 
@@ -275,7 +271,6 @@ static USER_FUNC(set_msg) {
     event->lwData[0] = (EvtWord) "map_no_exist";
     event->lwData[1] = 0;
     return EVT_RETURN_DONE;
-}
 #else
         type = -1;
         item = itemNearDistCheck(player->position.x, player->position.y, player->position.z, range);
@@ -330,8 +325,8 @@ static USER_FUNC(set_msg) {
         event->lwData[1] = 0;
     }
     return EVT_RETURN_DONE;
-}
 #endif
+}
 
 /** Script helper: clears LW0 and advances Ms. Mowz's use step (22 to 23) so chuchu_use ends the search. */
 static USER_FUNC(post_msg) {

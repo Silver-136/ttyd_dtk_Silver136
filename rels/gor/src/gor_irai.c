@@ -897,7 +897,6 @@ static USER_FUNC(irai_end_func) {
  * the list of requests (client and contents columns) clipped to the window,
  * with texts centred or squeezed to fit; solved requests are grey and the active one is red.
  */
-static void irai_window_disp(CameraId camera, void* param) {
 #else
 /**
  * Adds an integer to a float; kept as a separate function
@@ -915,7 +914,10 @@ static inline f32 iraiAddI(f32 a, s32 b) {
  * the list of requests (client and contents columns) clipped to the window,
  * with texts drawn at fixed positions; solved requests are grey and the active one is red.
  */
+#endif
+
 static void irai_window_disp(CameraId camera, void* param) {
+#if VERSION < VERSION_US
     f32 negX;
 #endif
 

@@ -261,9 +261,11 @@ static inline HitEntry* partyHitCheckGnd(PartyEntry* party, Vec* pos, Vec* dir, 
     outNrm->z = query.hitNormal.z;
     return hit;
 }
+#endif
 
 /* partyChkGnd's ground search: writes the party's own groundY/dropDepth */
 HitEntry* partySearchGround(PartyEntry* party, f32 range, f32 depth) {
+#if VERSION <= VERSION_DEMO_JP
     HitEntry* hit;
     s32 i;
     f32 nsx, probeY, nsz, len, sx, sz, px, baseY, pz, ox, oz, gy, rad, d;
@@ -271,7 +273,6 @@ HitEntry* partySearchGround(PartyEntry* party, f32 range, f32 depth) {
     Vec dir;
     Vec outNrm;
 #else
-HitEntry* partySearchGround(PartyEntry* party, f32 range, f32 depth) {
     HitEntry* hit;
     HitEntry* best;
     s32 i;
@@ -387,8 +388,29 @@ HitEntry* partySearchGround(PartyEntry* party, f32 range, f32 depth) {
             }
         }
     }
+#else
+                } else if (gy > bestY) {
+                    bestY = gy;
+                    best = hit;
+                }
+            } else if (__fabsf(gy - baseY) <= 11.0f) {
+                if (gy > bestY) {
+                    bestY = gy;
+                    best = hit;
+                }
+            }
+        }
+    }
+    if (best) {
+        party->groundY = bestY;
+        party->dropDepth = 0.0f;
+        return best;
+    }
+#endif
     return NULL;
 }
+
+#if VERSION <= VERSION_DEMO_JP
 
 /* the early demos' second ground search reports the floor height and drop depth through out-pointers and takes the first
    acceptable probe instead of the highest one */
@@ -476,27 +498,11 @@ HitEntry* _partySearchGround(PartyEntry* party, f32* outY, f32* outDepth, f32 ra
                 return hit;
             }
         }
-#else
-                } else if (gy > bestY) {
-                    bestY = gy;
-                    best = hit;
-                }
-            } else if (__fabsf(gy - baseY) <= 11.0f) {
-                if (gy > bestY) {
-                    bestY = gy;
-                    best = hit;
-                }
-            }
-        }
-    }
-    if (best) {
-        party->groundY = bestY;
-        party->dropDepth = 0.0f;
-        return best;
-#endif
     }
     return NULL;
 }
+
+#endif
 
 /**
  * Probes the floor 0.265 of the partner's width ahead, from its height above (half its height in the early demos).

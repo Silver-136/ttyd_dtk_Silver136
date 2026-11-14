@@ -4730,11 +4730,7 @@ static USER_FUNC(_hpfp_change_declare_1) {
  * Blinks the HP and FP readouts for 120 frames when unit args[0] is Mario or a partner, after Point Swap.
  * JP and later clear any earlier blink first.
  */
-#if VERSION <= VERSION_DEMO_JP
 static USER_FUNC(_hpfp_change_declare_2) {
-#else
-USER_FUNC(_hpfp_change_declare_2) {
-#endif
 
     BattleWork* wp = _battleWorkPointer;
     s32 id = evtGetValue(event, event->args[0]);
@@ -4758,11 +4754,7 @@ USER_FUNC(_hpfp_change_declare_2) {
     return EVT_RETURN_DONE;
 }
 
-#if VERSION <= VERSION_DEMO_JP
 static USER_FUNC(_naniga_okorukana_check) {
-#else
-USER_FUNC(_naniga_okorukana_check) {
-#endif
     Vec pos;
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;

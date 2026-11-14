@@ -832,17 +832,6 @@ void DrawMenuMarioPinchMark(void) {
     Mtx s;
     GXTexObj texobj;
     Vec p;
-#else
-/**
- * Draws the DANGER/PERIL marks for Mario, then for his partner.
- */
-static void DrawMenuPinchMark(void) {
-    Mtx m;
-    Mtx out;
-    GXTexObj texobj;
-    Vec p;
-    Vec q;
-#endif
     BattleWork* wp = _battleWorkPointer;
     CameraEntry* cam;
     BattleUnit* unit;
@@ -853,47 +842,10 @@ static void DrawMenuPinchMark(void) {
     u32 id;
 
     cam = camGetPtr(CAMERA_2D);
-#if VERSION < VERSION_US
-    btlDispGXInit2D();
-#endif
     unit = BattleGetMarioPtr(wp);
     if (unit->currentHp > 0 && unit->currentHp < unit->maxHp && unit->currentHp <= 5) {
         if (unit->currentHp == 1) {
-#if VERSION >= VERSION_US
             id = peril_icon_tbl[gp->language];
-#else
-            id = (gp->language ? 0 : -1) + 9;
-            if (gp->retraceCount % 50 <= 24) {
-                r = 0xFF;
-                g = 0xE9;
-                b = 0x40;
-                a = 0xFF;
-            } else {
-                r = 0xE9;
-                g = 0x52;
-                b = 0x2F;
-                a = 0xFF;
-            }
-        } else {
-            id = gp->language == LANGUAGE_JP ? 6 : 7;
-            r = 0xFF;
-            g = 0xE9;
-            b = 0x40;
-            a = 0xFF;
-        }
-        TEXGetGXTexObjFromPalette(*wp->menuTex->data, &texobj, id);
-        GXLoadTexObj(&texobj, GX_TEXMAP0);
-        btlGetScreenPoint(&unit->position, &p);
-        PSMTXTrans(m, p.x - 20.0f, 60.0f + p.y, 0.0f);
-        PSMTXConcat(cam->view, m, out);
-        GXLoadPosMtxImm(out, GX_PNMTX0);
-        btlDispGXQuads2D(-28.0f, 12.0f, 28.0f, -12.0f, r, g, b, a);
-    }
-    unit = BattleGetPartyPtr(wp);
-    if (unit && unit->currentHp > 0 && unit->currentHp < unit->maxHp && unit->currentHp <= 5) {
-        if (unit->currentHp == 1) {
-            id = (gp->language ? 0 : -1) + 9;
-#endif
             if (gp->retraceCount % 50 <= 24) {
                 r = 0xFF;
                 g = 0xE9;
@@ -910,15 +862,10 @@ static void DrawMenuPinchMark(void) {
             g = 0xE9;
             b = 0x40;
             a = 0xFF;
-#if VERSION >= VERSION_US
             id = danger_icon_tbl[gp->language];
-#else
-            id = (gp->language ? 0 : -1) + 7;
-#endif
         }
         TEXGetGXTexObjFromPalette(*wp->menuTex->data, &texobj, id);
         GXLoadTexObj(&texobj, GX_TEXMAP0);
-#if VERSION >= VERSION_US
         btlGetScreenPoint(&unit->position, &p);
         if (unit->position.x > -120.0f) {
             PSMTXTrans(m, p.x - 20.0f, 60.0f + p.y, 20.0f);
@@ -1009,15 +956,91 @@ static void DrawMenuPinchMark(void) {
     } else {
         DrawMenuMarioPinchMark();
         DrawMenuPartyPinchMark();
+    }
+}
 #else
+/**
+ * Draws the DANGER/PERIL marks for Mario, then for his partner.
+ */
+static void DrawMenuPinchMark(void) {
+    Mtx m;
+    Mtx out;
+    GXTexObj texobj;
+    Vec p;
+    Vec q;
+    BattleWork* wp = _battleWorkPointer;
+    CameraEntry* cam;
+    BattleUnit* unit;
+    u8 r;
+    u8 g;
+    u8 b;
+    u8 a;
+    u32 id;
+
+    cam = camGetPtr(CAMERA_2D);
+    btlDispGXInit2D();
+    unit = BattleGetMarioPtr(wp);
+    if (unit->currentHp > 0 && unit->currentHp < unit->maxHp && unit->currentHp <= 5) {
+        if (unit->currentHp == 1) {
+            id = (gp->language ? 0 : -1) + 9;
+            if (gp->retraceCount % 50 <= 24) {
+                r = 0xFF;
+                g = 0xE9;
+                b = 0x40;
+                a = 0xFF;
+            } else {
+                r = 0xE9;
+                g = 0x52;
+                b = 0x2F;
+                a = 0xFF;
+            }
+        } else {
+            id = gp->language == LANGUAGE_JP ? 6 : 7;
+            r = 0xFF;
+            g = 0xE9;
+            b = 0x40;
+            a = 0xFF;
+        }
+        TEXGetGXTexObjFromPalette(*wp->menuTex->data, &texobj, id);
+        GXLoadTexObj(&texobj, GX_TEXMAP0);
+        btlGetScreenPoint(&unit->position, &p);
+        PSMTXTrans(m, p.x - 20.0f, 60.0f + p.y, 0.0f);
+        PSMTXConcat(cam->view, m, out);
+        GXLoadPosMtxImm(out, GX_PNMTX0);
+        btlDispGXQuads2D(-28.0f, 12.0f, 28.0f, -12.0f, r, g, b, a);
+    }
+    unit = BattleGetPartyPtr(wp);
+    if (unit && unit->currentHp > 0 && unit->currentHp < unit->maxHp && unit->currentHp <= 5) {
+        if (unit->currentHp == 1) {
+            id = (gp->language ? 0 : -1) + 9;
+            if (gp->retraceCount % 50 <= 24) {
+                r = 0xFF;
+                g = 0xE9;
+                b = 0x40;
+                a = 0xFF;
+            } else {
+                r = 0xE9;
+                g = 0x52;
+                b = 0x2F;
+                a = 0xFF;
+            }
+        } else {
+            r = 0xFF;
+            g = 0xE9;
+            b = 0x40;
+            a = 0xFF;
+            id = (gp->language ? 0 : -1) + 7;
+        }
+        TEXGetGXTexObjFromPalette(*wp->menuTex->data, &texobj, id);
+        GXLoadTexObj(&texobj, GX_TEXMAP0);
         btlGetScreenPoint(&unit->position, &q);
         PSMTXTrans(m, q.x - 20.0f, 60.0f + q.y, 0.0f);
         PSMTXConcat(cam->view, m, out);
         GXLoadPosMtxImm(out, GX_PNMTX0);
         btlDispGXQuads2D(-28.0f, 12.0f, 28.0f, -12.0f, r, g, b, a);
-#endif
     }
 }
+#endif
 
 /**
  * Draws a sub-menu help window at x, y: looks up the message,

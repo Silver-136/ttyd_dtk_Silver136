@@ -602,13 +602,12 @@ typedef enum E3Texture {
  * and the blinking corner cursor easing toward the selection.
  * On the offscreen page-flip camera it draws the other page.
  */
-#if VERSION <= VERSION_DEMO_JP
 static void e3Disp(CameraId cameraId, void* param) {
+#if VERSION <= VERSION_DEMO_JP
     CameraEntry* camera = camGetPtr(CAMERA_2D);
     Mtx poseMtx;
     Mtx poseScale;
 #else
-static void e3Disp(CameraId cameraId, void* param) {
     CameraEntry* camera = camGetPtr(CAMERA_2D);
 #endif
     Mtx mtx;
@@ -920,38 +919,7 @@ static void e3DispOffscreen(CameraId cameraId, void* param) {
     offscreenAddBoundingBox(offscreenNameToId("fOff_peron"), left, top, right, bottom);
 }
 
-// seq_title.c has its own copy (global there from US on)
-#if VERSION <= VERSION_DEMO_JP
-#if VERSION == VERSION_DEMO_JP
-static void pressStartGX(s32 alpha, f32 x, f32 y) {
-    CameraEntry* camera = camGetCurPtr();
-    GXTexObj startText, gradient;
-    Mtx mtx, scale;
-    TEXGetGXTexObjFromPalette(*wp->handle->data, &startText, 3);
-    GXLoadTexObj(&startText, GX_TEXMAP0);
-    TEXGetGXTexObjFromPalette(*wp->handle->data, &gradient, 4);
-    GXLoadTexObj(&gradient, GX_TEXMAP1);
-    GXSetNumTevStages(2);
-    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
-    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_TEXC);
-    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_TEXA);
-    GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD1, GX_TEXMAP1, GX_COLOR_NULL);
-    GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-    GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-    GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_ZERO, GX_CC_CPREV, GX_CC_TEXC, GX_CC_ZERO);
-    GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_APREV, GX_CA_A0, GX_CA_ZERO);
-    GXSetTevColor(GX_TEVREG0, (GXColor){ 0x00, 0x00, 0x00, alpha });
-    GXSetNumChans(0);
-    GXSetNumTexGens(2);
-    GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
-    GXSetTexCoordGen(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0);
-    MTXScale(scale, 1.0f, 1.0f, 1.0f);
-    MTXTrans(mtx, (f32)gp->retraceCount / -200.0f, 0.0f, 0.0f);
-    MTXConcat(scale, mtx, mtx);
-    GXLoadTexMtxImm(mtx, GX_TEXMTX0, GX_MTX2x4);
-#else
+#if VERSION == VERSION_DEMO_US_1
 /** Phase for the US demo title's blinking prompt: retrace count / 15 (radians for sin). */
 static f32 e3BlinkTime(void) {
     return (f32)gp->retraceCount / 15.0f;
@@ -966,8 +934,48 @@ static void e3DispShadow(f32 x, f32 y, f32 z) {
     GXTexObj tex;
 
     GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
-#endif
+    GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
+    GXSetZCompLoc(GX_TRUE);
+    GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
+    GXSetZMode(GX_DISABLE, GX_ALWAYS, GX_DISABLE);
+    GXSetNumChans(1);
+    GXSetChanCtrl(GX_COLOR0A0, GX_DISABLE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
+    GXSetChanMatColor(GX_COLOR0A0, (GXColor){0x00, 0x00, 0x00, 0x80});
+    GXSetNumTevStages(1);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
+    GXSetTevOp(GX_TEVSTAGE0, GX_MODULATE);
+    GXSetTevSwapMode(GX_TEVSTAGE0, GX_TEV_SWAP0, GX_TEV_SWAP0);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
+    TEXGetGXTexObjFromPalette(*wp->handle->data, &tex, 9);
+    GXInitTexObjLOD(&tex, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
+    GXLoadTexObj(&tex, GX_TEXMAP0);
+    MTXTrans(trans, x, y, z);
+    MTXScale(scale, 2.0f * GXGetTexObjWidth(&tex), 2.0f * GXGetTexObjHeight(&tex), 1.0f);
+    MTXRotRad(rot, 'x', -1.3962634f);
+    MTXConcat(trans, rot, mtx);
+    MTXConcat(mtx, scale, mtx);
+    MTXConcat(camGetCurPtr()->view, mtx, mtx);
+    GXLoadPosMtxImm(mtx, 0);
+    GXSetCurrentMtx(0);
+    GXSetCullMode(GX_CULL_NONE);
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+    GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
+    GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+    GXPosition3f32(-0.5f, 0.5f, 0.0f);
+    GXTexCoord2f32(0.0f, 0.0f);
+    GXPosition3f32(-0.5f, -0.5f, 0.0f);
+    GXTexCoord2f32(0.0f, 1.0f);
+    GXPosition3f32(0.5f, -0.5f, 0.0f);
+    GXTexCoord2f32(1.0f, 1.0f);
+    GXPosition3f32(0.5f, 0.5f, 0.0f);
+    GXTexCoord2f32(1.0f, 0.0f);
+}
 #else
+// seq_title.c has its own copy (global there from US on)
 static void pressStartGX(s32 alpha, f32 x, f32 y) {
     CameraEntry* camera = camGetCurPtr();
     GXTexObj startText, gradient;
@@ -1006,47 +1014,16 @@ static void pressStartGX(s32 alpha, f32 x, f32 y) {
     MTXTrans(mtx, (f32)gp->retraceCount / -200.0f, 0.0f, 0.0f);
     MTXConcat(scale, mtx, mtx);
     GXLoadTexMtxImm(mtx, GX_TEXMTX0, GX_MTX2x4);
-#endif
     GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
     GXSetZCompLoc(GX_TRUE);
     GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
-#if VERSION <= VERSION_DEMO_JP
-#if VERSION == VERSION_DEMO_JP
     GXSetZMode(GX_DISABLE, GX_LEQUAL, GX_DISABLE);
-#else
-    GXSetZMode(GX_DISABLE, GX_ALWAYS, GX_DISABLE);
-    GXSetNumChans(1);
-    GXSetChanCtrl(GX_COLOR0A0, GX_DISABLE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
-    GXSetChanMatColor(GX_COLOR0A0, (GXColor){0x00, 0x00, 0x00, 0x80});
-    GXSetNumTevStages(1);
-    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
-    GXSetTevOp(GX_TEVSTAGE0, GX_MODULATE);
-    GXSetTevSwapMode(GX_TEVSTAGE0, GX_TEV_SWAP0, GX_TEV_SWAP0);
-    GXSetNumTexGens(1);
-    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
-    TEXGetGXTexObjFromPalette(*wp->handle->data, &tex, 9);
-    GXInitTexObjLOD(&tex, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
-    GXLoadTexObj(&tex, GX_TEXMAP0);
-    MTXTrans(trans, x, y, z);
-    MTXScale(scale, 2.0f * GXGetTexObjWidth(&tex), 2.0f * GXGetTexObjHeight(&tex), 1.0f);
-    MTXRotRad(rot, 'x', -1.3962634f);
-    MTXConcat(trans, rot, mtx);
-    MTXConcat(mtx, scale, mtx);
-    MTXConcat(camGetCurPtr()->view, mtx, mtx);
-    GXLoadPosMtxImm(mtx, 0);
-    GXSetCurrentMtx(0);
-#endif
-#else
-    GXSetZMode(GX_DISABLE, GX_LEQUAL, GX_DISABLE);
-#endif
     GXSetCullMode(GX_CULL_NONE);
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
     GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
-#if VERSION <= VERSION_DEMO_JP
-#if VERSION == VERSION_DEMO_JP
     MTXTrans(mtx, x, y, 0.0f);
     MTXScale(scale, (f32)GXGetTexObjWidth(&startText), (f32)GXGetTexObjHeight(&startText), 1.0f);
     MTXConcat(mtx, scale, mtx);
@@ -1054,35 +1031,14 @@ static void pressStartGX(s32 alpha, f32 x, f32 y) {
     GXLoadPosMtxImm(mtx, GX_PNMTX0);
     GXSetCurrentMtx(GX_PNMTX0);
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-#else
-    GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-    GXPosition3f32(-0.5f, 0.5f, 0.0f);
-    GXTexCoord2f32(0.0f, 0.0f);
-#endif
-#else
-    MTXTrans(mtx, x, y, 0.0f);
-    MTXScale(scale, (f32)GXGetTexObjWidth(&startText), (f32)GXGetTexObjHeight(&startText), 1.0f);
-    MTXConcat(mtx, scale, mtx);
-    MTXConcat(camera->view, mtx, mtx);
-    GXLoadPosMtxImm(mtx, GX_PNMTX0);
-    GXSetCurrentMtx(GX_PNMTX0);
-    GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-#endif
     GXPosition3f32(-0.5f, -0.5f, 0.0f);
     GXTexCoord2f32(0.0f, 1.0f);
     GXPosition3f32(0.5f, -0.5f, 0.0f);
     GXTexCoord2f32(1.0f, 1.0f);
     GXPosition3f32(0.5f, 0.5f, 0.0f);
     GXTexCoord2f32(1.0f, 0.0f);
-#if VERSION <= VERSION_DEMO_JP
-#if VERSION == VERSION_DEMO_JP
     GXPosition3f32(-0.5f, 0.5f, 0.0f);
     GXTexCoord2f32(0.0f, 0.0f);
     GXSetTevSwapModeTable(GX_TEV_SWAP1, GX_CH_RED, GX_CH_GREEN, GX_CH_BLUE, GX_CH_ALPHA);
-#endif
-#else
-    GXPosition3f32(-0.5f, 0.5f, 0.0f);
-    GXTexCoord2f32(0.0f, 0.0f);
-    GXSetTevSwapModeTable(GX_TEV_SWAP1, GX_CH_RED, GX_CH_GREEN, GX_CH_BLUE, GX_CH_ALPHA);
-#endif
 }
+#endif

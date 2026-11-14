@@ -519,10 +519,10 @@ static EVT_BEGIN(_2d_dead_rotate_event)
         CALL(evt_npc_add_rotate, STRING("me"), 0, 0, LW(0))
         WAIT_FRAMES(1)
     END_LOOP
-#if VERSION >= VERSION_DEMO_EU
     RETURN
 EVT_END()
 
+#if VERSION >= VERSION_DEMO_EU
 /**
  * PAL and the September PAL demo only: kuriboo_move_event with the enemy flags set directly instead of
  * enemy_common_flag_init_event; only the NPC test map in tst.rel uses it (tst_npc_init_evt)
@@ -538,9 +538,9 @@ EVT_BEGIN(testnpc_move_event)
     CALL(evt_npc_add_dirdist, LW(0), LW(2), LW(3), FLOAT(100.0f))
     CALL(evt_npc_move_position, STRING("me"), LW(0), LW(2), 2000, FLOAT(40.0f), 4)
     GOTO(0)
-#endif
     RETURN
 EVT_END()
+#endif
 
 #if VERSION <= VERSION_DEMO_JP
 /**
@@ -2650,14 +2650,12 @@ static USER_FUNC(kamec_fire_magic_delete) {
     effSoftDelete((EffectEntry*)evtGetValue(event, event->args[0]));
     return EVT_RETURN_DONE;
 }
+#endif
 
 /** Lost event of Yux: hovers through its standing poses for 2 s and resumes. */
 EVT_BEGIN(barriern_lost_event)
-#else
-EVT_BEGIN(barriern_lost_event)
 #if VERSION >= VERSION_DEMO_EU
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_GRAVITY)
-#endif
 #endif
     CALL(evt_npc_set_anim, STRING("me"), STRING("S_3"))
     WAIT_FRAMES(60)

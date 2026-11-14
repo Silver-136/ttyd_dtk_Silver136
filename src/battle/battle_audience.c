@@ -565,9 +565,11 @@ u8 BattleAudience_CheckReaction(void) {
     if (audience->flags & AUDIENCE_FLAG_EVENT_CTRL) {
         return FALSE;
     }
+#endif
     return FALSE;
 }
 
+#if VERSION <= VERSION_DEMO_JP
 static u8 check_exe_phase_evt_status(BattleAudienceMember* member) {
     u8 status = member->status;
 
@@ -590,10 +592,8 @@ static u8 check_exe_phase_evt_status(BattleAudienceMember* member) {
         return TRUE;
     }
     return TRUE;
-#else
-    return FALSE;
 }
-
+#else
 static u8 check_exe_phase_evt_status(s32 index, s32 type) {
     BattleAudienceMember* member;
     u8 status;
@@ -612,8 +612,8 @@ static u8 check_exe_phase_evt_status(s32 index, s32 type) {
     if (status == 21) return FALSE;
     if (status == 22) return FALSE;
     return (member->flags & AUDIENCE_MEMBER_FLAG_FRONT_CENTER) != 0;
-#endif
 }
+#endif
 
 /**
  * Called by battle_seq.c when a phase starts. At the player's phase (unless the audience is frozen) members
@@ -3126,7 +3126,6 @@ void BattleAudience_SetTarget(s32 index) {
             }
         }
     }
-}
 #else
     BattleAudienceGetPtr(index)->flags |= AUDIENCE_MEMBER_FLAG_TARGETED;
     for (i = 0; i < AUDIENCE_MEMBER_MAX; i++) {
@@ -3139,8 +3138,8 @@ void BattleAudience_SetTarget(s32 index) {
             }
         }
     }
-}
 #endif
+}
 
 void BattleAudience_Attack(s32 index) {
     BattleAudienceGetPtr(index)->flags |= AUDIENCE_MEMBER_FLAG_ATTACKED;
@@ -3434,8 +3433,9 @@ s32 BattleAudience_NoUsedFCHaitiRand(void) {
         }
     }
     return -1;
-#if VERSION >= VERSION_US
 }
+
+#if VERSION >= VERSION_US
 
 /**
  * Same as BattleAudience_NoUsedFCHaitiRandFull but only over the narrower front block (haiti_data_front_narrow),
@@ -3498,8 +3498,9 @@ s32 BattleAudience_NoUsedFCHaitiRand(void) {
         }
     }
     return id;
-#endif
 }
+
+#endif
 
 /**
  * Returns the number of members in the stands as counted this frame (not those arriving or leaving);

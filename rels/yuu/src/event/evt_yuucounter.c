@@ -192,11 +192,7 @@ static USER_FUNC(evt_yuucounter_main_func) {
  * type 2 asks yuunpc_juni for Mario's current rank;
  * then draws the translucent backdrop, the digits and the unit icon with icon sprites.
  */
-#if VERSION <= VERSION_DEMO_JP
 static void evt_yuucounter_disp_func(CameraId camera, void* param) {
-#else
-void evt_yuucounter_disp_func(CameraId camera, void* param) {
-#endif
 
     YuuCounterWork* wp = param;
     GXColor color = white;

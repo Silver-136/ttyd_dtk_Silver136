@@ -741,12 +741,10 @@ static inline void pouchAiueoConv(const char* src, char* dst) {
 #endif
 }
 
-#if VERSION <= VERSION_DEMO_JP
-
 /** The early demos compare the item names as they are, without the kana conversion. */
 static s32 comp_aiueo(const void* a, const void* b) {
+#if VERSION <= VERSION_DEMO_JP
 #else
-static s32 comp_aiueo(const void* a, const void* b) {
     char bufA[0x80];
     char bufB[0x80];
 #endif
@@ -784,10 +782,9 @@ static s32 comp_kind(const void* paramA, const void* paramB) {
 }
 
 /** qqsort comparator: items by name, descending (pouchSortItem modes 7 and 9). */
+static s32 comp_aiueo_r(const void* a, const void* b) {
 #if VERSION <= VERSION_DEMO_JP
-static s32 comp_aiueo_r(const void* a, const void* b) {
 #else
-static s32 comp_aiueo_r(const void* a, const void* b) {
     char bufA[0x80];
     char bufB[0x80];
 #endif

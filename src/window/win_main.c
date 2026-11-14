@@ -870,16 +870,6 @@ EVT_BEGIN(evt_lecture_msg)
     CALL(evt_msg_print, 0, STRING("lecture_badge_07"), 0, 0)
     CALL(wait, 10)
     CALL(evt_msg_continue)
-#if VERSION <= VERSION_DEMO_JP
-    WAIT_MS(500)
-    RETURN
-EVT_END()
-
-static USER_FUNC(itemUseFunc) {
-    PartyEntry* party;
-    MarioWork* mario;
-    ItemData* item;
-#else
 #if VERSION >= VERSION_US
     LOOP(0)
         IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG0_17_BADGE_TUTORIAL)
@@ -889,7 +879,9 @@ static USER_FUNC(itemUseFunc) {
     END_LOOP
 #endif
     WAIT_MS(500)
+#if VERSION >= VERSION_JP
     CALL(lecture_key_mask_off)
+#endif
     RETURN
 EVT_END()
 
@@ -897,6 +889,7 @@ USER_FUNC(itemUseFunc) {
     PartyEntry* party;
     MarioWork* mario;
     ItemData* item;
+#if VERSION >= VERSION_JP
     EffectEntry* eff;
 #endif
 
@@ -1081,17 +1074,14 @@ void winFontSet(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
     PSMTXScale(scl, scale.x, scale.y, scale.z);
     PSMTXConcat(trans, scl, trans);
     FontDrawColor(color);
-#if VERSION <= VERSION_DEMO_JP
-    FontDrawMessageMtx(trans, buf);
-}
-
-/** Early-demo winFontSetR: always right-aligns to the full-width "９９９". */
-void winFontSetR(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
-    char buf[0x400];
-#else
 #if VERSION >= VERSION_US
     FontDrawMessageMtx(trans, msg);
+#else
+    FontDrawMessageMtx(trans, buf);
+#endif
 }
+
+#if VERSION >= VERSION_US
 
 /** Like winFontSet, but squeezes the text horizontally so it fits in width; used for long localized names. */
 void winFontSetWidth(Vec pos, Vec scale, GXColor color, f32 width, const char* fmt, ...) {
@@ -1110,10 +1100,9 @@ void winFontSetWidth(Vec pos, Vec scale, GXColor color, f32 width, const char* f
         scale.x *= width / w;
     }
     winFontSet(pos, scale, color, msg);
-#else
-    FontDrawMessageMtx(trans, buf);
-#endif
 }
+
+#endif
 
 /** Right-aligns the text to a reference width: "９９９" in JP, chosen by language in US and later. */
 void winFontSetR(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
@@ -1123,16 +1112,10 @@ void winFontSetR(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
 #else
     char buf[0x400];
 #endif
-#endif
     Mtx trans;
     Mtx scl;
     va_list args;
-#if VERSION < VERSION_US
-    va_start(args, fmt);
-    vsprintf(buf, fmt, args);
-    {
-        s32 w = FontGetMessageWidth("９９９") - FontGetMessageWidth(buf);
-#else
+#if VERSION >= VERSION_US
     s32 ref;
 
     if (strstr(fmt, "%")) {
@@ -1145,27 +1128,21 @@ void winFontSetR(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
     } else {
         ref = FontGetMessageWidth("９９９");
     }
+#else
+    va_start(args, fmt);
+    vsprintf(buf, fmt, args);
+#endif
     {
+#if VERSION >= VERSION_US
         s32 w = ref - FontGetMessageWidth(msg);
+#else
+        s32 w = FontGetMessageWidth("９９９") - FontGetMessageWidth(buf);
 #endif
         PSMTXTrans(trans, pos.x + scale.x * w, pos.y, pos.z);
     }
     PSMTXScale(scl, scale.x, scale.y, scale.z);
     PSMTXConcat(trans, scl, trans);
     FontDrawColor(color);
-#if VERSION <= VERSION_DEMO_JP
-    FontDrawStringMtx(trans, buf);
-}
-
-/** Early-demo winFontSetEdge: always formats into a 1 KB buffer. */
-void winFontSetEdge(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
-    char buf[0x400];
-    Mtx trans;
-    Mtx scl;
-    va_list args;
-    va_start(args, fmt);
-    vsprintf(buf, fmt, args);
-#else
 #if VERSION >= VERSION_US
     FontDrawStringMtx(trans, msg);
 #else
@@ -1236,7 +1213,6 @@ void winFontSetEdge(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
     va_start(args, fmt);
     vsprintf(buf, fmt, args);
 #endif
-#endif
     PSMTXTrans(trans, pos.x, pos.y, pos.z);
     PSMTXScale(scl, scale.x, scale.y, scale.z);
     PSMTXConcat(trans, scl, trans);
@@ -1244,8 +1220,13 @@ void winFontSetEdge(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
     FontDrawEdge();
 #if VERSION >= VERSION_US
     FontDrawStringMtx(trans, msg);
+#else
+    FontDrawStringMtx(trans, buf);
+#endif
     FontDrawEdgeOff();
 }
+
+#if VERSION >= VERSION_US
 
 /** Outlined text squeezed horizontally to fit in width (winFontSetEdge plus the winFontSetWidth fit). */
 void winFontSetEdgeWidth(Vec pos, Vec scale, GXColor color, f32 width, const char* fmt, ...) {
@@ -1264,11 +1245,9 @@ void winFontSetEdgeWidth(Vec pos, Vec scale, GXColor color, f32 width, const cha
         scale.x *= width / w;
     }
     winFontSetEdge(pos, scale, color, msg);
-#else
-    FontDrawStringMtx(trans, buf);
-    FontDrawEdgeOff();
-#endif
 }
+
+#endif
 
 /** Looks up message id msg (msgSearch) and draws it; does nothing for NULL. */
 void winFontSetLabel(Vec pos, Vec scale, GXColor color, const char* msg) {
@@ -1607,15 +1586,11 @@ void winIconSet(s32 iconId, Vec translate, Vec scale, GXColor color) {
  * In JP and later it clears WINDOW_FLAG_LECTURE_KEY_MASK on the first call and sets it once the step is reached;
  * the early demos do not change that flag here.
  */
-#if VERSION <= VERSION_DEMO_JP
+// Original name from the JP demo map (wait, local in win_main.o).
 static USER_FUNC(wait) {
     s32 n = evtGetValue(event, event->args[0]);
-#else
 
-// Original name from the JP demo map (wait, local in win_main.o).
-USER_FUNC(wait) {
-    s32 n = evtGetValue(event, event->args[0]);
-
+#if VERSION >= VERSION_JP
     if (isFirstCall) {
         wp->flags &= ~WINDOW_FLAG_LECTURE_KEY_MASK;
     }
@@ -1623,22 +1598,13 @@ USER_FUNC(wait) {
     if (wp->lectureStep < n) {
         return EVT_RETURN_BLOCK;
     }
-#if VERSION <= VERSION_DEMO_JP
+#if VERSION >= VERSION_JP
+    wp->flags |= WINDOW_FLAG_LECTURE_KEY_MASK;
+#endif
     return EVT_RETURN_DONE;
 }
 
-/**
- * Badge tutorial input filter, run by winMain each frame:
- * while the tutorial is on, only the input the current step asks for gets through and doing it advances lectureStep:
- * steps 0-1 take A (read from the pad and swallowed), 2-4 Right, 5-8 A, 9 Start. In JP and later nothing gets
- * through while WINDOW_FLAG_LECTURE_KEY_MASK is set (outside the script's wait steps).
- */
-static void winLectureKeyMask(void) {
-    if (wp->flags & WINDOW_FLAG_LECTURE) {
-#else
-    wp->flags |= WINDOW_FLAG_LECTURE_KEY_MASK;
-    return EVT_RETURN_DONE;
-}
+#if VERSION >= VERSION_JP
 
 // Descriptive name (not in the symbol maps); placeholder unk_80175e98, JP 0x80175E98. See docs/NAME_PROVENANCE.md.
 USER_FUNC(lecture_key_mask_off) {
@@ -1646,6 +1612,8 @@ USER_FUNC(lecture_key_mask_off) {
     return EVT_RETURN_DONE;
 }
 
+#endif
+
 /**
  * Badge tutorial input filter, run by winMain each frame:
  * while the tutorial is on, only the input the current step asks for gets through and doing it advances lectureStep:
@@ -1654,6 +1622,7 @@ USER_FUNC(lecture_key_mask_off) {
  */
 static void winLectureKeyMask(void) {
     if (wp->flags & WINDOW_FLAG_LECTURE) {
+#if VERSION >= VERSION_JP
         if (wp->flags & WINDOW_FLAG_LECTURE_KEY_MASK) {
             wp->buttonTrg = 0;
             wp->buttonRep = 0;

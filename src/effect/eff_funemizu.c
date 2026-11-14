@@ -421,14 +421,12 @@ static void effFunemizuMain(EffectEntry* effect) {
  * Draws the wake ripple mesh (both layers, front and back faces) tinted with the map's water colour; the early
  * demos instead ease the tint toward the framebuffer pixel under the wake.
  */
-#if VERSION <= VERSION_DEMO_JP
 static void effFunemizuDisp(CameraId cameraId, EffectEntry* effect) {
+#if VERSION <= VERSION_DEMO_JP
     s32 r;
     s32 g;
     s32 b;
 
-#else
-static void effFunemizuDisp(CameraId cameraId, EffectEntry* effect) {
 #endif
     EffFunemizuWork* work = effect->userdata;
     Mtx trans;

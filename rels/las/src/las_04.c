@@ -610,11 +610,7 @@ static void _firebar_trans(FirebarWork* wp) {
  * Mario's invulnerability motions or invincibility timer set the "no damage" bit;
  * the fire-bar sound plays while Mario is within 120 units in X.
  */
-#if VERSION <= VERSION_DEMO_JP
 static USER_FUNC(firebar_entry) {
-#else
-USER_FUNC(firebar_entry) {
-#endif
 
     FirebarSetup* setup = (FirebarSetup*)evtGetValue(event, event->args[0]);
     FirebarWork* wp;

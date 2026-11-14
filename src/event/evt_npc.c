@@ -2559,11 +2559,10 @@ static void _kamek_houki_kemuri(NpcEntry* npc, s32 animState) {
             ((EffKemuri10N64Work*)effect->userdata)->camera = CAMERA_3D_EFFECTB;
         }
     }
-}
 #else
     }
-}
 #endif
+}
 
 /**
  * Flies Kamek on his broom to x = args[1], z = args[2] like evt_npc_move_position,

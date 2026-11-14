@@ -217,7 +217,6 @@ static void imgDisp(CameraId camId, void* param) {
     animSetPaperTexMtx(NULL, NULL, NULL);
 #if VERSION <= VERSION_DEMO_JP
     sysWaitDrawSync();
-}
 #else
     e2 = wp->entries;
     for (i = 0; i < wp->count; i++, e2++) {
@@ -226,8 +225,8 @@ static void imgDisp(CameraId camId, void* param) {
             break;
     }
     if (i < wp->count) sysWaitDrawSync();
-}
 #endif
+}
 
 /**
  * Draw callback for an image's shadow: shadowId 1 blends

@@ -84,12 +84,11 @@ void marioBottomless(void) {
 #if VERSION <= VERSION_DEMO_JP
     }
     marioChgMot(MARIO_MOTION_FORCE_RESET);
-}
 #else
         marioChgMot(MARIO_MOTION_FORCE_RESET);
     }
-}
 #endif
+}
 
 /**
  * Saves where Mario respawns after falling out of the map:

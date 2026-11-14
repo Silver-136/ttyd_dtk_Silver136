@@ -1203,9 +1203,6 @@ EVT_BEGIN(kpa_01_init_evt)
             END_IF
     END_SWITCH
     RETURN
-#if VERSION <= VERSION_DEMO_JP
-EVT_END()
-#else
 EVT_END()
 
 static USER_FUNC(make_name) {
@@ -1216,18 +1213,6 @@ static USER_FUNC(make_name) {
     evtSetValue(event, args[1], (EvtWord)name);
     return EVT_RETURN_DONE;
 }
-#endif
-
-#if VERSION <= VERSION_DEMO_JP
-static USER_FUNC(make_name) {
-    EvtWord* args = event->args;
-    static char name[8];
-
-    sprintf(name, "hi_%d", evtGetValue(event, args[0]));
-    evtSetValue(event, args[1], (EvtWord)name);
-    return EVT_RETURN_DONE;
-}
-#endif
 
 /**
  * Message callback for kpa_stg1_008: when the text reaches page 1 it sets LSWF_KPA_01_MSG_CUE,

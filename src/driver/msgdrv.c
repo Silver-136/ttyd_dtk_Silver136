@@ -106,10 +106,12 @@ static MessageWork* msgw = &msgWork;
 
 #if VERSION <= VERSION_DEMO_JP
 static char NoMessage[] = "";
+#endif
+
 static const char* ErrMessage[VERSION_PICK(2, 7)] = {
+#if VERSION <= VERSION_DEMO_JP
     R_no_messages_JP, R_no_messages_US,
 #else
-static const char* ErrMessage[VERSION_PICK(2, 7)] = {
     R_no_messages_JP, R_no_messages_US,
 #if VERSION >= VERSION_US
     R_no_messages_DE, R_no_messages_FR, R_no_messages_ES, R_no_messages_IT, R_no_messages_DU

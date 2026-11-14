@@ -278,8 +278,8 @@ void vivian_move(PartyEntry* party) {
 // The early demos' set_vivian_pos/vivian_use are older (fixed hide offset, ground search in vivian_use): one copy each
 // Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
 // It keeps `inline`: as a plain function -inline auto leaves it out of line here (the link changes).
-inline void set_vivian_pos(PartyEntry* party) {
 #if VERSION <= VERSION_DEMO_JP
+inline void set_vivian_pos(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;
     f32 ofs;
 
@@ -292,8 +292,8 @@ inline void set_vivian_pos(PartyEntry* party) {
     }
     movePos(&party->moveTarget.x, &party->moveTarget.z, ofs, toMovedir(270.0f + mario->displayDirection));
 }
-
 #else
+inline void set_vivian_pos(PartyEntry* party) {
     HitEntry* hit;
     u8 id;
     MarioWork* mario = party->playerPtr;

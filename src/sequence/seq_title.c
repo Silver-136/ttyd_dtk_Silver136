@@ -179,13 +179,12 @@ void titleExit(SequenceWork* work) {
  * or about 19 s of idling (to the dmo_00 opening demo).
  * Queues the logo draws each frame; later versions also track the debug-mode button code.
  */
-#if VERSION <= VERSION_DEMO_JP
 static void titleMain(SequenceWork* work) {
+#if VERSION <= VERSION_DEMO_JP
     switch (wp2->state) {
         case 0:
             if (psndBGMStartCheck(0) != 0U) {
 #else
-static void titleMain(SequenceWork* work) {
     switch (wp2->state) {
         case 0:
             if (psndBGMStartCheck(0) != 0U
@@ -518,11 +517,7 @@ static void disp2(CameraId cameraId, void* param) {
     GXSetViewport(vp[0], vp[1], vp[2], vp[3], vp[4], vp[5]);
 }
 
-#if VERSION >= VERSION_US
 void pressStartGX(s32 alpha, f32 x, f32 y) {
-#else
-static void pressStartGX(s32 alpha, f32 x, f32 y) {
-#endif
     CameraEntry* camera = camGetCurPtr();
     GXTexObj startText, gradient;
     Mtx mtx, scaleMtx;

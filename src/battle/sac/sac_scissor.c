@@ -1258,10 +1258,8 @@ static void scissor_disp_control(CameraId camera, void* param) {
         GXPosition3f32(a.x, a.y, 0.0f);
         GXPosition3f32(b.x, b.y, 0.0f);
     }
-}
-#else
-}
 #endif
+}
 
 /** Registers scissor_disp_region on the off-screen camera to draw the closed loop. */
 static s32 scissor_offscreen(void) {

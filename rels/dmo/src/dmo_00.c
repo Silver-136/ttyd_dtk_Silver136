@@ -1245,8 +1245,7 @@ EVT_BEGIN(dmo_00_init_evt)
 #if VERSION >= VERSION_US
     CALL(evt_fade_set_mapchange_type, 1, -1, -1, -1, 900)
     RETURN
-EVT_END()
 #else
     RETURN
-EVT_END()
 #endif
+EVT_END()

@@ -441,13 +441,12 @@ s32 marioRollCancel(void) {
         camGetPtr(CAMERA_2D)->flags |= CAMERA_FLAG_LETTER_BOX_OFF;
     }
     return ret;
-}
 #else
     mario->currSubMotionId = 0x14;
     camGetPtr(CAMERA_2D)->flags |= CAMERA_FLAG_LETTER_BOX_OFF;
     return 1;
-}
 #endif
+}
 
 /**
  * Cleanup when the roll motion ends: stops the roll sound (JP and later), resets the camera shift,

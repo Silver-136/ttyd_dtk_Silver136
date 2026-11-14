@@ -1493,6 +1493,29 @@ EVT_BEGIN(powerupya_orb_use)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_i01_sui_ao"), MAP_OBJ_FLAG_HIDDEN)
     WAIT_MS(1500)
     CALL(evt_eff_softdelete, STRING("aaax"))
+
+    SET_VALUE(GSWF_GOR_UP_ARROW_USED, 1)
+
+    // The blue stone turns red and the ceremony music fades.
+    CALL(stonechangertn, STRING("S_i01_sui_aka"))
+    CALL(evt_snd_bgmoff_f, PSND_FADEOUT | PSND_SLOT(1), 2000)
+    WAIT_MS(2000)
+
+    // Merlon hops back to his table and speaks; the Up Arrow is removed from the inventory.
+    CALL(evt_npc_jump_position_nohit, STRING("me"), -320, 0, -205, 500, 50)
+    WAIT_MS(500)
+    CALL(evt_msg_print, 0, STRING("powerup_ev_07"), 0, STRING("me"))
+    CALL(evt_pouch_remove_item, ITEM_UP_ARROW, LW(0))
+    SET_VALUE(GSWF_GOR_MERLON_HINT_PENDING, 0)
+
+    // Control returns to the player and the shop music resumes.
+    CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
+    CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_POSE_LOCK)
+    CALL(evt_party_run, 0)
+    CALL(evt_snd_bgmoff_f, PSND_FADEOUT | PSND_SLOT(1), 2000)
+    CALL(evt_snd_bgmon_f, PSND_CONTINUE | PSND_FADEIN, 0, 2000)
+    RETURN
+EVT_END()
 #else
 
 /**
@@ -1504,53 +1527,33 @@ static EVT_BEGIN(powerupya_direct_talk)
         IF_INT_EQUAL(GSWF_GOR_MERLON_STAR_CHART_HINT_DONE, 0)
             CALL(evt_msg_print, 0, STRING("powerup_ev_01"), 0, STRING("me"))
             CALL(evt_cam3d_evt_set, -355, 114, 371, -355, 45, -23, 500, EASING_SINE_IN_OUT)
-    WAIT_MS(500)
-    CALL(evt_msg_print, 0, STRING("powerup_ev_02"), 0, STRING("me"))
-    CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
-    WAIT_MS(500)
-    SET_VALUE(GSWF_GOR_MERLON_STAR_CHART_HINT_DONE, 1)
+            WAIT_MS(500)
+            CALL(evt_msg_print, 0, STRING("powerup_ev_02"), 0, STRING("me"))
+            CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
+            WAIT_MS(500)
+            SET_VALUE(GSWF_GOR_MERLON_STAR_CHART_HINT_DONE, 1)
         ELSE
             CALL(evt_pouch_check_item, ITEM_UP_ARROW, LW(0))
             IF_INT_NOT_EQUAL(LW(0), 0)
                 CALL(evt_msg_print, FUKIDASHI_AT_MARIO, STRING("powerup_ev_04"), 0, STRING("me"))
                 CALL(evt_msg_print, 0, STRING("powerup_ev_05"), 0, STRING("me"))
-    CALL(evt_msg_print, 0, STRING("powerup_ev_06"), 0, STRING("me"))
-#endif
-
-    SET_VALUE(GSWF_GOR_UP_ARROW_USED, 1)
-
-    // The blue stone turns red; in JP and later, the ceremony music fades.
-    CALL(stonechangertn, STRING("S_i01_sui_aka"))
-#if VERSION >= VERSION_JP
-    CALL(evt_snd_bgmoff_f, PSND_FADEOUT | PSND_SLOT(1), 2000)
-    WAIT_MS(2000)
-
-    // Merlon hops back to his table and speaks; the Up Arrow is removed from the inventory.
-    CALL(evt_npc_jump_position_nohit, STRING("me"), -320, 0, -205, 500, 50)
-    WAIT_MS(500)
-#endif
-    CALL(evt_msg_print, 0, STRING("powerup_ev_07"), 0, STRING("me"))
-    CALL(evt_pouch_remove_item, ITEM_UP_ARROW, LW(0))
-    SET_VALUE(GSWF_GOR_MERLON_HINT_PENDING, 0)
-#if VERSION <= VERSION_DEMO_JP
-    ELSE
-    CALL(evt_msg_print, 0, STRING("powerup_ev_03"), 0, STRING("me"))
-    END_IF
+                CALL(evt_msg_print, 0, STRING("powerup_ev_06"), 0, STRING("me"))
+                SET_VALUE(GSWF_GOR_UP_ARROW_USED, 1)
+                // The blue stone turns red.
+                CALL(stonechangertn, STRING("S_i01_sui_aka"))
+                CALL(evt_msg_print, 0, STRING("powerup_ev_07"), 0, STRING("me"))
+                CALL(evt_pouch_remove_item, ITEM_UP_ARROW, LW(0))
+                SET_VALUE(GSWF_GOR_MERLON_HINT_PENDING, 0)
+            ELSE
+                CALL(evt_msg_print, 0, STRING("powerup_ev_03"), 0, STRING("me"))
+            END_IF
         END_IF
         RETURN
     END_IF
     CALL(evt_msg_print, 0, STRING("powerup_05"), 0, STRING("me"))
-#else
-
-    // Control returns to the player and the shop music resumes.
-    CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
-    CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_POSE_LOCK)
-    CALL(evt_party_run, 0)
-    CALL(evt_snd_bgmoff_f, PSND_FADEOUT | PSND_SLOT(1), 2000)
-    CALL(evt_snd_bgmon_f, PSND_CONTINUE | PSND_FADEIN, 0, 2000)
-#endif
     RETURN
 EVT_END()
+#endif
 
 /**
  * Talk event of Merlon in JP and later, run when the player talks to him at the portent point.
@@ -4648,11 +4651,7 @@ static USER_FUNC(enzan_lw_load) {
  * Switches the map background texture to the file named by args[0] (the current map's name if NULL),
  * from "./bg/" in the early demos and "./b/" in JP and later.
  */
-#if VERSION <= VERSION_DEMO_JP
 static USER_FUNC(evt_set_bgtpl) {
-#else
-USER_FUNC(evt_set_bgtpl) {
-#endif
 
     char path[64];
     const char* name = (const char*)evtGetValue(event, event->args[0]);
@@ -4865,11 +4864,7 @@ static USER_FUNC(lecture) {
  * returns in args[0] 1 if one exists, and its enemy id in args[1].
  * Gus and Bonetail are checked after the per-stage lists; JP and later also check the Atomic Boo.
  */
-#if VERSION <= VERSION_DEMO_JP
 static USER_FUNC(monosiri_check) {
-#else
-USER_FUNC(monosiri_check) {
-#endif
     EvtWord* args = event->args;
     s32 seq = evtGetValue(event, GSW_STORY_PROGRESS);
     u32 i;

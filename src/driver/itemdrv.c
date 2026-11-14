@@ -86,7 +86,6 @@ inline void itemCheckBadge(ItemEntry* entry) {
     if (BADGE_MIN <= entry->itemId && entry->itemId < BADGE_MAX && !(entry->flags & ITEM_FLAG_LOST_BADGE_TO_SHOP)) {
         pouchArriveBadge(entry->itemId);
     }
-}
 #else
     if (!gp->inBattle) {
         if (BADGE_MIN <= entry->itemId && entry->itemId < BADGE_MAX) {
@@ -95,8 +94,8 @@ inline void itemCheckBadge(ItemEntry* entry) {
             }
         }
     }
-}
 #endif
+}
 
 static void itemseq_Bound(ItemEntry* entry);
 
@@ -186,11 +185,9 @@ void itemCoinDrop(Vec* position) {
  * set), no map event or other sequence runs, Mario is not on the boat (or, JP and later, the plane panel), hiding with Vivian,
  * taking damage or holding Koops's item, no other get is in progress, and field battle state allows it.
  */
+static BOOL itemGetCheck(ItemEntry* entry) {
 #if VERSION <= VERSION_DEMO_JP
-static BOOL itemGetCheck(ItemEntry* entry) {
     s32 fbatMode = fbatGetPointer()->mode;
-#else
-static BOOL itemGetCheck(ItemEntry* entry) {
 #endif
     MarioWork* mario = marioGetPtr();
     ItemWork* wp;
@@ -308,11 +305,9 @@ static BOOL itemGetCheck(ItemEntry* entry) {
 }
 
 /** Like itemGetCheck for an item fetched by Koops's shell: whether the item may be collected for Mario now. */
+static BOOL itemGetNokoCheck(ItemEntry* entry) {
 #if VERSION <= VERSION_DEMO_JP
-static BOOL itemGetNokoCheck(ItemEntry* entry) {
     s32 fbatMode = fbatGetPointer()->mode;
-#else
-static BOOL itemGetNokoCheck(ItemEntry* entry) {
 #endif
 
     MarioWork* mario = marioGetPtr();
@@ -1195,11 +1190,10 @@ static void winHelpDisp(WinMgrEntry* win) {
 }
 
 /** Draws the full-pouch warning: JP and later choose item or badge wording; the early demos always use the item-full message. */
-#if VERSION <= VERSION_DEMO_JP
 static void winFullDisp(WinMgrEntry* win) {
+#if VERSION <= VERSION_DEMO_JP
     ItemEntry* entry;
 #else
-static void winFullDisp(WinMgrEntry* win) {
     ItemEntry* entry = win->param;
     BOOL isBadge = FALSE;
     u16 width;

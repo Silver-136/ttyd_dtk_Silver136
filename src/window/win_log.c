@@ -307,26 +307,15 @@ static TubuDt tubuDt[] = {
  * finds Mario's spot on the world map for the current area, and builds the sorted badge,
  * recipe and Tattle lists with their found counts.
  */
-#if VERSION <= VERSION_DEMO_JP
 void winLogInit(WindowWork* w) {
+#if VERSION <= VERSION_DEMO_JP
     s32 j;
     s32 i;
     u32 k;
     EffectEntry* e;
     const char* area;
     TattleEntry* t;
-#endif
-
-/**
- * Sets up the Journal when the pause menu opens:
- * adds the entries unlocked by story progress (map always; Tattle log once Goombella joins;
- * Crystal Stars at Frankly's; badge log after the badge tutorial;
- * recipe log once unlocked), spawns the seven Crystal Star effects (as many lit, in table order, as Mario owns; the rest dark),
- * finds Mario's spot on the world map for the current area, and builds the sorted badge,
- * recipe and Tattle lists with their found counts.
- */
-#if VERSION >= VERSION_JP
-void winLogInit(WindowWork* w) {
+#else
     u32 k;
     const char* area;
     s32 i;

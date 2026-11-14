@@ -162,9 +162,10 @@ static USER_FUNC(evt_moamoa_mainUnitIdClear) {
 /** Returns a random float between min and max using rand(). */
 static f32 randf(f32 min, f32 max) {
     f32 r = rand() / 32767.0f;
-#if VERSION >= VERSION_DEMO_EU
     return r * (max - min) + min;
 }
+
+#if VERSION >= VERSION_DEMO_EU
 
 /**
  * EU only: seeds the boss swarm's own random generator (two-word state),
@@ -184,10 +185,11 @@ f32 moamoa_randf(f32 min, f32 max) {
     moamoa_rand_prev = cur;
     moamoa_rand_cur = next;
     r = (next & 0x7FFF) / 32767.0f;
-#endif
 
     return r * (max - min) + min;
 }
+
+#endif
 
 /**
  * Clears the Smorg main body's unit id in the swarm work area (wp->unitId = -1).

@@ -394,14 +394,13 @@ static void effSplashGetCol(CameraId cameraId, EffectEntry* effect) {
         work->color.g = 0x04;
         work->color.b = 0x61;
     }
-}
 #else
     c = effFunemizuGetMapColor();
     work->color.r = c.r;
     work->color.g = c.g;
     work->color.b = c.b;
-}
 #endif
+}
 
 /**
  * Draws the splash columns (scrolling textured cones,

@@ -343,13 +343,12 @@ void nameEntMain(void) {
     }
 }
 
-#if VERSION <= VERSION_DEMO_JP
 /** The early demos have no cursor travel check, no all-blank name check and no default partner name. */
 static s32 nameMain(void) {
+#if VERSION <= VERSION_DEMO_JP
     s32 off;
     s32 idx;
 #else
-static s32 nameMain(void) {
     s32 len;
     s32 j;
     s32 off;

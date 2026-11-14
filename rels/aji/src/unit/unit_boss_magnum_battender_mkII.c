@@ -776,11 +776,10 @@ USER_FUNC(aud_suikomi) {
     }
     psndSFXOff(screamId);
     return EVT_RETURN_DONE;
-}
 #else
     return done < 20 ? EVT_RETURN_BLOCK : EVT_RETURN_DONE;
-}
 #endif
+}
 
 // Descriptive name (not in the symbol maps); placeholder unk_aji_00007668, JP aji .text+0x75A4. See docs/NAME_PROVENANCE.md.
 #if VERSION >= VERSION_JP

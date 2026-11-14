@@ -196,13 +196,15 @@ f32 cloudGetBreathPower(Vec pos, f32 size) {
 
     return breathPower;
 }
+#else
+static void getHitBreatheout2(PartyEntry* party, f32 tilt);
+#endif
 
 struct HitEntry* cloudGetHitBreathout(s32 which) {
+#if VERSION >= VERSION_JP
     u32 partyId = marioGetPartyId();
     PartyEntry* party = partyGetPtr(partyId);
 #else
-static void getHitBreatheout2(PartyEntry* party, f32 tilt);
-struct HitEntry* cloudGetHitBreathout(s32 which) {
     PartyEntry* party = partyGetPtr(PARTY_SLOT_PARTY);
 #endif
 
@@ -379,13 +381,13 @@ void cloud_init(PartyEntry* party) {
     party->work.cloud.breathEffect = NULL;
 }
 
+#if VERSION >= VERSION_JP
 /**
  * Gale Force (X): Flurrie moves beside Mario over 4 frames,
  * then blows a gust while X is held (or for actionTime ms when a script started it),
  * casting rays that map objects and NPCs read; ends by freeing the work and following.
  */
 void cloud_use(PartyEntry* party) {
-#if VERSION >= VERSION_JP
     MarioWork* mario = party->playerPtr;
 
     _cloud_use(party);
@@ -418,14 +420,19 @@ void cloud_use(PartyEntry* party) {
         partyChgMot(party, PARTY_MOTION_STAY);
     }
 }
+#endif
 
 /**
  * The gust itself: Flurrie moves beside Mario over 4 frames,
  * then blows while X is held (or for actionTime ms when a script started it),
  * casting the rays map objects and NPCs read; 200 ms after release she goes back to following.
- * Descriptive name (not in the symbol maps).
+ * The early demos have this as cloud_use itself.
+ * Descriptive name (not in the symbol maps) for the JP and later function.
  */
+#if VERSION >= VERSION_JP
 void _cloud_use(PartyEntry* party) {
+#else
+void cloud_use(PartyEntry* party) {
 #endif
     MarioWork* mario = party->playerPtr;
     f32 ofsX, ofsZ;
@@ -773,13 +780,12 @@ f32 cloudGetBreathDir() {
  * frame), places and scales the cloud effect in front of Flurrie, then casts the two swinging side rays.
  * Rays that hit collision with attribute 4 are ignored.
  */
-#if VERSION <= VERSION_DEMO_JP
 static void getHitBreatheout2(PartyEntry* party, f32 angle) {
+#if VERSION <= VERSION_DEMO_JP
     f32 dirSin, dirCos, ys, yc;
     f32 hx, hy, hz, dist, nx, ny, nz;
     f32 ofsX, ofsZ;
 #else
-static void getHitBreatheout2(PartyEntry* party, f32 angle) {
     f32 dirSin, dirCos, ys, yc;
     f32 hx, hy, hz, dist, nx, ny, nz;
     f32 ofsZ, ofsX;

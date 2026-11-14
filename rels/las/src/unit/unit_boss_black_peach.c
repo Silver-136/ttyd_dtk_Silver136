@@ -4876,11 +4876,7 @@ static USER_FUNC(queen_hand_small_1000hand_set_offset_evt) {
  * Script helper (runs until done): raises the swarm of small hands from below the floor (y from -80 to 0) in
  * randomised positions; called at the end of the thousand-hands attack.
  */
-#if VERSION <= VERSION_DEMO_JP
 static USER_FUNC(queen_hand_small_1000hand_2_evt) {
-#else
-USER_FUNC(queen_hand_small_1000hand_2_evt) {
-#endif
 
     s32 i;
     ExtdrvPose* pose;
@@ -4989,11 +4985,7 @@ static USER_FUNC(queen_hand_small_1000hand_1_evt) {
  * Script helper (runs until done) for the drag attack, run after drag_2: raises a fresh swarm out of the floor on
  * the party's side (x shifted by -200), waits 30 frames, plays SFX_BOSS_QWEN_HAND_IN1 and sinks it again.
  */
-#if VERSION <= VERSION_DEMO_JP
 static USER_FUNC(queen_hand_small_drag_1_evt) {
-#else
-USER_FUNC(queen_hand_small_drag_1_evt) {
-#endif
     s32 i;
     ExtdrvPose* pose;
     HandElem* elem;
@@ -5113,11 +5105,7 @@ static USER_FUNC(queen_hand_small_drag_2_evt) {
 }
 
 /** Script helper (runs until done) that ends the drag attack: raises a fresh randomised swarm out of the floor. */
-#if VERSION <= VERSION_DEMO_JP
 static USER_FUNC(queen_hand_small_drag_3_evt) {
-#else
-USER_FUNC(queen_hand_small_drag_3_evt) {
-#endif
     s32 i;
     ExtdrvPose* pose;
     HandElem* elem;
@@ -5249,11 +5237,7 @@ static USER_FUNC(queen_hand_small_dead_evt) {
  * Script helper (runs until done): raises the swarm of small hands out of the floor (y -80 to 0) at randomised
  * positions; used when the small hand unit enters.
  */
-#if VERSION <= VERSION_DEMO_JP
 static USER_FUNC(queen_hand_small_entry_evt) {
-#else
-USER_FUNC(queen_hand_small_entry_evt) {
-#endif
     s32 i;
     ExtdrvPose* pose;
     HandElem* elem;
@@ -5306,11 +5290,10 @@ USER_FUNC(queen_hand_small_entry_evt) {
     return EVT_RETURN_BLOCK;
 }
 
-#if VERSION <= VERSION_DEMO_JP
 static USER_FUNC(slot_init) {
+#if VERSION <= VERSION_DEMO_JP
     BattleBreakSlotGetPtr()->flags |= BREAK_SLOT_FLAG_QUEEN_FORCE_STAR;
 #else
-USER_FUNC(slot_init) {
     BattleBreakSlotGetPtr()->flags |= 4;
 #endif
     return EVT_RETURN_DONE;
@@ -5338,11 +5321,7 @@ static USER_FUNC(peach_shock_evt) {
  * Script helper (runs until done): the last stage of the HP drain:
  * raises the hand swarm back out of the floor (y -80 to 0) after the queen's heal.
  */
-#if VERSION <= VERSION_DEMO_JP
 static USER_FUNC(queen_hp_drain_5_evt) {
-#else
-USER_FUNC(queen_hp_drain_5_evt) {
-#endif
     s32 i;
     ExtdrvPose* pose;
     HandElem* elem;
@@ -5481,11 +5460,7 @@ static USER_FUNC(queen_hp_drain_3_evt) {
  * Script helper (runs until done): raises a hand swarm from y -110 to -30 closer to the audience (Z 270) during
  * the HP drain.
  */
-#if VERSION <= VERSION_DEMO_JP
 static USER_FUNC(queen_hp_drain_2_evt) {
-#else
-USER_FUNC(queen_hp_drain_2_evt) {
-#endif
     s32 i;
     ExtdrvPose* pose;
     HandElem* elem;
@@ -5604,11 +5579,7 @@ static USER_FUNC(queen_kankyaku_delete_evt) {
  * Script helper (runs until done): raises the hand swarm for the possessed Peach's dark drag attack, shifted
  * 200 units left.
  */
-#if VERSION <= VERSION_DEMO_JP
 static USER_FUNC(peach_hand1000_dark_drag_1_evt) {
-#else
-USER_FUNC(peach_hand1000_dark_drag_1_evt) {
-#endif
     s32 i;
     ExtdrvPose* pose;
     HandElem* elem;

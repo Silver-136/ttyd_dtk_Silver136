@@ -800,16 +800,34 @@ void partyUsePost(PartyEntry* party) {
 static inline void partyChgRunM(PartyEntry* party);
 static inline void partyChgRunMo(PartyEntry* party);
 
+#if VERSION <= VERSION_DEMO_JP
 /**
- * Cleanup when the partner leaves run mode prev for mode:
- * gets off a ride (11) unless it is leaving, ends the hello pop-out (4) back into following,
- * shows the shadow again after riding Yoshi (12), ends its ability (3),
- * and drops the paper slit from waiting/following.
+ * Cleanup when the partner leaves its run mode; the early demos only leave the hello state (4) and run the post
+ * function (3) on a run-mode change.
  * Descriptive name (not in the symbol maps).
  */
-#if VERSION <= VERSION_DEMO_JP
-/** the early demos only leave the hello state (4) and run the post function (3) on a run-mode change */
 static inline void partyLeaveRunMode(PartyEntry* party) {
+    MarioWork* mario;
+    PartyFunc func;
+
+    if (party->runMode != PARTY_RUN_FORCE_WALK && party->runMode != PARTY_RUN_USE) {
+        party->prevRunMode = party->runMode;
+    }
+    if (party->runMode == 4) {
+        mario = party->playerPtr;
+        partyChgRunM(party);
+        party->flags2 &= ~PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
+        party->moveDir = mario->moveDirection;
+        party->targetDir = mario->directionView;
+        party->displayDirectionTarget = mario->displayDirectionTarget;
+        party->displayDirection = mario->displayDirection;
+        partyClearJumpPara(party);
+        partyChgPoseId(party, PARTY_POSE_STAND);
+        party->flags2 &= ~PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
+        party->runMode = PARTY_RUN_WAIT;
+    }
+    partyUsePost(party);
+}
 #else
 /**
  * Cleanup when the partner leaves run mode prev for mode:
@@ -818,16 +836,9 @@ static inline void partyLeaveRunMode(PartyEntry* party) {
  * and drops the paper slit from waiting/following.
  */
 void _partyChgRunMode(PartyEntry* party, s32 prev, s32 mode) {
-#endif
     MarioWork* mario;
     PartyFunc func;
 
-#if VERSION <= VERSION_DEMO_JP
-    if (party->runMode != PARTY_RUN_FORCE_WALK && party->runMode != PARTY_RUN_USE) {
-        party->prevRunMode = party->runMode;
-    }
-    if (party->runMode == 4) {
-#else
     switch (prev) {
         case 11:
             if (mode != 8) {
@@ -845,7 +856,6 @@ void _partyChgRunMode(PartyEntry* party, s32 prev, s32 mode) {
             }
             break;
         case 4:
-#endif
             mario = party->playerPtr;
             partyChgRunM(party);
             party->flags2 &= ~PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
@@ -857,7 +867,6 @@ void _partyChgRunMode(PartyEntry* party, s32 prev, s32 mode) {
             partyChgPoseId(party, PARTY_POSE_STAND);
             party->flags2 &= ~PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
             party->runMode = PARTY_RUN_WAIT;
-#if VERSION >= VERSION_JP
             break;
         case 12:
             partyShadowOn(party);
@@ -878,10 +887,6 @@ void _partyChgRunMode(PartyEntry* party, s32 prev, s32 mode) {
 // kept: from JP on the target calls partyChgRunMode from its 17 callers in this file; a function this small is
 // auto-inlined otherwise, and -inline noauto for the file changes other functions
 #pragma dont_inline on
-#else
-        }
-        partyUsePost(party);
-    }
 #endif
 
 /**

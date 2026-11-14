@@ -1749,14 +1749,15 @@ static void sort_3_3_func(WindowWork* wp) {
 }
 
 #if VERSION <= VERSION_DEMO_JP
-
 /** The early demos sort the equipped list through the pouch, like the owned list. */
 static void sort_4_1_func(WindowWork* wp) {
     pouchSortItem(!wp->sortRev ? 4 : 11);
     wp->sortRev = 1 - wp->sortRev;
     winMakeEquipList(wp);
+    wp->badge.sel[1] = 0;
+    wp->badge.page[1] = wp->badge.sel[1] / 8;
+}
 #else
-
 /**
  * qqsort compare for the equipped badge list (WinBadgeEnt) by name;
  * names go through pouchHiraToKata so hiragana and katakana sort together.
@@ -1822,20 +1823,21 @@ static void sort_4_1_func(WindowWork* wp) {
         qqsort(wp->badge.list, wp->badge.count, sizeof(WinBadgeEnt), compare_func4_1_r);
     }
     wp->sortRev = 1 - wp->sortRev;
-#endif
     wp->badge.sel[1] = 0;
     wp->badge.page[1] = wp->badge.sel[1] / 8;
 }
+#endif
 
 #if VERSION <= VERSION_DEMO_JP
-
 /** Equipped badges by type, through the pouch (modes 5/12). */
 static void sort_4_2_func(WindowWork* wp) {
     pouchSortItem(!wp->sortRev ? 5 : 12);
     wp->sortRev = 1 - wp->sortRev;
     winMakeEquipList(wp);
+    wp->badge.sel[1] = 0;
+    wp->badge.page[1] = wp->badge.sel[1] / 8;
+}
 #else
-
 /** Sorts the equipped badge list by type through compare_func4_2 (or its reverse). */
 static void sort_4_2_func(WindowWork* wp) {
     if (!wp->sortRev) {
@@ -1844,21 +1846,22 @@ static void sort_4_2_func(WindowWork* wp) {
         qqsort(wp->badge.list, wp->badge.count, sizeof(WinBadgeEnt), compare_func4_2_r);
     }
     wp->sortRev = 1 - wp->sortRev;
-#endif
     wp->badge.sel[1] = 0;
     wp->badge.page[1] = wp->badge.sel[1] / 8;
 }
+#endif
 
 #if VERSION <= VERSION_DEMO_JP
-
 /** Equipped badges by name, then by BP cost, through the pouch. */
 static void sort_4_3_func(WindowWork* wp) {
     pouchSortItem(!wp->sortRev ? 4 : 11);
     pouchSortItem(!wp->sortRev ? 6 : 13);
     wp->sortRev = 1 - wp->sortRev;
     winMakeEquipList(wp);
+    wp->badge.sel[1] = 0;
+    wp->badge.page[1] = wp->badge.sel[1] / 8;
+}
 #else
-
 /** Sorts the equipped badge list by BP cost, breaking ties by type_sort_order (or reversing both). */
 static void sort_4_3_func(WindowWork* wp) {
     ItemData* db;
@@ -1911,10 +1914,10 @@ static void sort_4_3_func(WindowWork* wp) {
         }
     }
     wp->sortRev = 1 - wp->sortRev;
-#endif
     wp->badge.sel[1] = 0;
     wp->badge.page[1] = wp->badge.sel[1] / 8;
 }
+#endif
 
 /** Journal badge log by name, JP and later: names normalized through pouchHiraToKata first. */
 static s32 compare_func5_1(const void* a, const void* b) {

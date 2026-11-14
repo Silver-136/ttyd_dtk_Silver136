@@ -2327,7 +2327,6 @@ static void animSetMaterial_Texture(s32 texCount, s32* texIdRemap, AnimPoseTexEn
             GXLoadTexMtxImm(m, texMtx, GX_MTX2x4);
         }
     }
-}
 #else
     // FAKE: dead int guard (no code after RA) keeps the three copies from being propagated away
     gz = 0;
@@ -2404,8 +2403,8 @@ static void animSetMaterial_Texture(s32 texCount, s32* texIdRemap, AnimPoseTexEn
         GXSetTexCoordGen2((GXTexCoordID) i[0], GX_TG_MTX2x4, (GXTexGenSrc) (GX_TG_TEX0 + i[0]), texMtx, GX_FALSE, GX_PTIDENTITY);
         GXLoadTexMtxImm(m, texMtx, GX_MTX2x4);
     }
-}
 #endif
+}
 
 /**
  * Replaces the shape's texture of kind texType with texObj (and texture matrix mtx, if given),

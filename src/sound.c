@@ -807,12 +807,11 @@ void SoundSetOutputMode(SND_OUTPUTMODE mode) {
         sound.outputMode = mode;
         sndOutputMode(mode);
     }
-}
 #else
     sound.outputMode = mode;
     sndOutputMode(mode);
-}
 #endif
+}
 
 /** Called when the disc cover opens: mutes sound until it is closed. */
 void SoundOpenCover(void) {
@@ -1475,10 +1474,9 @@ inline void _ssResetEntries(SoundStream* stream) {
  * then starts the first stream whose entries are all ready.
  * The early demos mask interrupts only around the updates, JP and later around the whole search.
  */
+static void _ssDVDReadAsync_activeChk(s32 result, DVDFileInfo* fileInfo) {
 #if VERSION <= VERSION_DEMO_JP
-static void _ssDVDReadAsync_activeChk(s32 result, DVDFileInfo* fileInfo) {
 #else
-static void _ssDVDReadAsync_activeChk(s32 result, DVDFileInfo* fileInfo) {
     int i;
 #endif
     SoundStream* stream;

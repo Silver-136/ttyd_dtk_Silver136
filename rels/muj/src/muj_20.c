@@ -2427,11 +2427,7 @@ EVT_BEGIN(muj_20_init_evt)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_JP
 static USER_FUNC(logo) {
-#else
-USER_FUNC(logo) {
-#endif
 
     MujLogoWork* wp;
 

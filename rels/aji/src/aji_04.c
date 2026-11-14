@@ -986,10 +986,8 @@ static void callback(s32 type, void** work) {
     if (((EventEntry*)evt->lwData[8] == NULL || !evtCheckID(((EventEntry*)evt->lwData[8])->eventId)) && type == 5) {
         evt->lwData[8] = (EvtWord)evtEntry(UNK_0x00022c3c, 0, 0);
     }
-}
-#else
-}
 #endif
+}
 
 // Descriptive name (not in the symbol maps); placeholder unk_aji_00000ed0, JP aji .text+0xE0C. See docs/NAME_PROVENANCE.md.
 #if VERSION >= VERSION_JP

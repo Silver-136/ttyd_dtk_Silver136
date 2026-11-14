@@ -155,15 +155,11 @@ static void effPointGetMain(EffectEntry* effect) {
     dispEntry(CAMERA_2D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effPointGetDisp, effect);
 }
 
-#if VERSION <= VERSION_DEMO_JP
 /** The early demos draw the point count as three fixed digit cells (leading zeros skipped) left of the word texture. */
-static void effPointGetDisp(CameraId cameraId, EffectEntry* effect) {
-#else
 static void effPointGetDisp(CameraId cameraId, EffectEntry* effect) {
 #if VERSION >= VERSION_US
     f32 w;
     f32 w1;
-#endif
 #endif
     EffPointGetWork* work = effect->userdata;
     CameraEntry* camera = camGetPtr(cameraId);
@@ -332,7 +328,6 @@ static void effPointGetDisp(CameraId cameraId, EffectEntry* effect) {
             shown = TRUE;
         }
     }
-}
 #else
 #if VERSION >= VERSION_US
     for (pass = 1; pass >= 0; pass--) {
@@ -469,5 +464,5 @@ static void effPointGetDisp(CameraId cameraId, EffectEntry* effect) {
         GXTexCoord2f32(0.0f, 1.0f);
 #endif
     }
-}
 #endif
+}

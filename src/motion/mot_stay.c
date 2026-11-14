@@ -434,8 +434,7 @@ void mot_stay_post(void) {
             mario->soundId[0] = -1;
         }
     }
-}
 #else
     stopVoice();
-}
 #endif
+}

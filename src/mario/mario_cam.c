@@ -83,7 +83,6 @@ f32 marioGetCamFollowRate(void) {
 void marioPreCamera(void) {
 #if VERSION <= VERSION_DEMO_JP
     marioGetPtr()->targetYaw = revise360((100.0f * camGetPtr(CAMERA_3D)->viewYaw + 5.0f) / 100.0f);
-}
 #else
     f32 roundingFactor;
     if (camGetPtr(CAMERA_3D)->viewYaw >= 0.0f) {
@@ -92,8 +91,8 @@ void marioPreCamera(void) {
         roundingFactor = -0.5f;
     }
     marioGetPtr()->targetYaw = revise360((s32)((1000.0f * camGetPtr(CAMERA_3D)->viewYaw) + roundingFactor) / 1000.0f);
-}
 #endif
+}
 
 /**
  * While the stick is held, flags whether the camera did not move along x since the last frame

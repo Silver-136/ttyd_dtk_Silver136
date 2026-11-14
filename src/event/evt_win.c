@@ -691,6 +691,11 @@ USER_FUNC(select_func) {
                 iconFlagOn(name, ICON_FLAG_HIDDEN);
             } else {
                 iconFlagOff(name, ICON_FLAG_HIDDEN);
+            }
+        }
+    }
+    return EVT_RETURN_BLOCK;
+}
 #else
 // Original name from the JP demo map (early demos only).
 /** list window: arg = window kind; returns lwData[0] = 1 and the picked entry in lwData[1..] */
@@ -1088,12 +1093,9 @@ USER_FUNC(unitwin_window_select_func) {
                     if (j != wp->cursor) {
                         if (*mario_status_point_table[j] - mario_status_henka_table[j] <= 0) {
                             ng = 1;
-#endif
-
                         }
                     }
                 }
-#if VERSION <= VERSION_DEMO_JP
                 if (ng) {
                     break;
                 }
@@ -1172,9 +1174,9 @@ USER_FUNC(unitwin_window_select_func) {
         wp->mode = UNITWIN_MODE_IDLE;
         return EVT_RETURN_YIELD;
     }
-#endif
     return EVT_RETURN_BLOCK;
 }
+#endif
 
 /**
  * Unit-window update loop: counts the name/description timer down

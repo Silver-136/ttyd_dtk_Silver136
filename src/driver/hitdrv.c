@@ -1317,7 +1317,6 @@ static void hitPreCheck(void) {
             }
         }
     }
-}
 #else
             if (hit->joint->partCount != 0 && !(hit->flags & (HIT_FLAG_OFF | HIT_FLAG_DELETED))) {
                 if (prev == NULL) {
@@ -1333,8 +1332,8 @@ static void hitPreCheck(void) {
     if (prev != NULL) {
         prev->siblingActive = NULL;
     }
-}
 #endif
+}
 
 /** Returns the live (not deleted) collision object named name in any loaded map, or NULL (also for a NULL name). */
 HitEntry* hitNameToPtr(const char* name) {

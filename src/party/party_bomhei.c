@@ -439,7 +439,6 @@ void bomhei_use(PartyEntry* party) {
             }
         }
     }
-}
 #else
                 return;
             }
@@ -463,8 +462,8 @@ void bomhei_use(PartyEntry* party) {
             bomhei_use_cancel();
         }
     }
-}
 #endif
+}
 
 typedef struct BomheiWork {
     u32 flags;  // 0x0

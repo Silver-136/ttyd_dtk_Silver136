@@ -1710,11 +1710,7 @@ static USER_FUNC(_dictionary) {
  * otherwise it is flagged for an extra move.
  * JP and later also raise its max moves and mark Rally Wink when it is slowed.
  */
-#if VERSION <= VERSION_DEMO_JP
 static USER_FUNC(_set_hustle) {
-#else
-USER_FUNC(_set_hustle) {
-#endif
 
     BattleWork* wp = _battleWorkPointer;
     BattleUnit* unit;
