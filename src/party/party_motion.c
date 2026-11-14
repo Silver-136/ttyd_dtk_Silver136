@@ -2018,7 +2018,7 @@ void party_motion_behind_mario(PartyEntry* party) {
         // evt_mario_party_door_move sets PARTY_TRIG_DOOR_MOVE and never clears it (only evt_mario_party_bero_move
         // does), so after a door the partner keeps the door behaviour: Flurrie and Vivian stop 8 units from Mario
         // instead of 30, JP skips the wall-push correction in party_move.c, the appear spot is searched with the
-        // door angle tables, and a wall-stuck partner is moved with partyGetAppearPos4.
+        // door angle tables, and with no wall ahead the follow target comes from partyGetAppearPos4.
 #if VERSION >= VERSION_US
         party->trigFlags &= ~PARTY_TRIG_DOOR_MOVE;
 #endif
