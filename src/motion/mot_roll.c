@@ -193,8 +193,6 @@ static inline s32 stickAngOut(f32 half) {
 void roll_upstairs(void);
 static void makeOfs(void);
 
-#pragma inline_max_total_size(200000)
-
 /** Tuning value i of rollData. */
 // Original name and size (0x14) from the JP demo map (UNUSED there: nothing calls it).
 static f32 getRollVal(s32 i) {

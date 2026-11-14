@@ -58,7 +58,6 @@ static void moamoa_pose_init(void);
 static void moamoa_pose_main(void);
 static void moamoa_pose_change(Moamoa* moa, const char* model, const char* anim);
 static void ext_moamoa_main(void);
-#pragma inline_max_total_size(100000)
 
 /**
  * Polynomial approximation of sin(x) for an angle in radians in [0, 2*pi);

@@ -67,7 +67,6 @@ static void moamoa_pose_init(void);
 static void moamoa_pose_main(void);
 static void moamoa_pose_change(Moamoa* moa, const char* model, const char* anim);
 static void ext_moamoa_main(void);
-#pragma inline_max_total_size(100000)
 
 /**
  * Polynomial sine used by the Smorg swarm code (fast approximation, input in radians 0 to 2 pi),

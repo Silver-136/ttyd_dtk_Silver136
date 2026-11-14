@@ -817,7 +817,7 @@ config.libs = [
             Object(MatchingFor("G8MJ01", "G8ME01"), "motion/mot_jabara.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "motion/mot_jump.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "motion/mot_plane.c"),
-            Object(MatchingFor("G8MJ01", "G8ME01"), "motion/mot_roll.c"),
+            Object(MatchingFor("G8MJ01", "G8ME01"), "motion/mot_roll.c", extra_cflags=['-pragma "inline_max_total_size(200000)"']),
             Object(MatchingFor("G8MJ01", "G8ME01"), "motion/mot_ship.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "motion/mot_slit.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "motion/mot_stay.c"),
@@ -899,7 +899,7 @@ config.libs = [
         "cflags": cflags_static,
         "progress_category": "game",
         "objects": [
-            Object(MatchingFor("G8MJ01", "G8ME01"), "window/win_root.c"),
+            Object(MatchingFor("G8MJ01", "G8ME01"), "window/win_root.c", extra_cflags=['-pragma "inline_max_total_size(100000)"']),
             Object(MatchingFor("G8MJ01", "G8ME01"), "window/win_party.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "window/win_badge.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "window/win_item.c"),
@@ -1576,7 +1576,7 @@ config.libs = [
             Object(MatchingFor("G8MJ01", "G8ME01"), "event/evt_lect_eki.c", extra_cflags=["-inline auto,deferred"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "unit/unit_kuriboo.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "eki_06.c", extra_cflags=["-inline auto,deferred"]),
-            Object(MatchingFor("G8MJ01", "G8ME01"), "eki_00.c", extra_cflags=["-inline auto,deferred", "-opt noprop"]),
+            Object(MatchingFor("G8MJ01", "G8ME01"), "eki_00.c", extra_cflags=["-inline auto,deferred", "-opt noprop", '-pragma "inline_max_total_size(100000)"']),
         ]
     ),
     Rel(
@@ -1978,8 +1978,8 @@ config.libs = [
             Object(MatchingFor("G8MJ01", "G8ME01"), "rsh_07.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "rsh_02.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "rsh_03.c", extra_cflags=["-inline auto,deferred"]),
-            Object(MatchingFor("G8MJ01", "G8ME01"), "rsh_06.c", extra_cflags=["-inline auto,deferred"]),
-            Object(MatchingFor("G8MJ01", "G8ME01"), "rsh_05.c", extra_cflags=["-inline auto,deferred"]),
+            Object(MatchingFor("G8MJ01", "G8ME01"), "rsh_06.c", extra_cflags=["-inline auto,deferred", '-pragma "inline_max_total_size(100000)"']),
+            Object(MatchingFor("G8MJ01", "G8ME01"), "rsh_05.c", extra_cflags=["-inline auto,deferred", '-pragma "inline_max_total_size(11500)"']),
             Object(MatchingFor("G8MJ01", "G8ME01"), "unit/unit_boss_moamoa.c", extra_cflags=["-inline auto,deferred"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "rsh_00.c", extra_cflags=["-inline auto,deferred"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "rsh.c"),

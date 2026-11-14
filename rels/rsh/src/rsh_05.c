@@ -23,7 +23,6 @@
 #include "driver/casedrv.h"
 #include "driver/itemdrv.h"
 #include "evt/evt_item.h"
-#pragma inline_max_total_size(11500)
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 

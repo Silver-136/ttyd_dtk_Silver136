@@ -948,8 +948,6 @@ static void chip(WindowWork* wp, s32 id, f32 x, f32 y, f32 w, f32 h) {
     GXTexCoord2f32(1.0f, 0.0f);
 }
 
-#pragma inline_max_total_size(100000)
-
 /**
  * Draws a "kirinuki" (cut-out) inset panel of w x h at (x, y) from 8-pixel corner and edge pieces,
  * used for the boxes inside the pages.

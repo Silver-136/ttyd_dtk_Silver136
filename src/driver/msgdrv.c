@@ -2016,8 +2016,6 @@ void msgWindow_ForceClose(const char* name) {
     }
 }
 
-// kept: without it msgWindow_Main changes; -opt nocse for the whole file changes other functions
-#pragma opt_common_subs off
 /**
  * Per-frame window update for speech windows: times the speaker's talk animation,
  * then runs the window states (fade in, printing, key wait with A or B to continue and Z to page back;
@@ -2153,7 +2151,7 @@ static void msgWindow_Main(WindowEntry* window) {
         case MSG_WIN_STATE_REVIEW_UP:
             target = data->pageY[data->page];
             if (data->scrollPos >= target) {
-                data->scrollPos = data->scrollPos - 0.6f * OSTicksToMilliseconds(gp->renderTime - window->timestamp);
+                data->scrollPos -= 0.6f * OSTicksToMilliseconds(gp->renderTime - window->timestamp);
                 window->timestamp = gp->renderTime;
                 if (data->scrollPos <= target) {
                     data->scrollPos = target;
@@ -2164,7 +2162,7 @@ static void msgWindow_Main(WindowEntry* window) {
         case MSG_WIN_STATE_REVIEW_DOWN:
             target = data->pageY[data->page];
             if (data->scrollPos <= target) {
-                data->scrollPos = data->scrollPos + 0.6f * OSTicksToMilliseconds(gp->renderTime - window->timestamp);
+                data->scrollPos += 0.6f * OSTicksToMilliseconds(gp->renderTime - window->timestamp);
                 window->timestamp = gp->renderTime;
                 if (data->scrollPos >= target) {
                     data->scrollPos = target;
@@ -2219,7 +2217,6 @@ static void msgWindow_Main(WindowEntry* window) {
     dispEntry(CAMERA_2D, 400.0f - window->priority, DISP_MODE_OPAQUE, msgWindow_Disp, window);
 }
 
-#pragma opt_common_subs reset
 /**
  * Per-frame update for clear (type 11) windows, text with no frame:
  * fades in while printing, stops at key waits and <o> stops without reading any button (msgWindow_Continue resumes
