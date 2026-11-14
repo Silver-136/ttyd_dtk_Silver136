@@ -1178,7 +1178,8 @@ static void effFallDispWater(CameraId cameraId, void* payload) {
     w = effect->userdata;
     if (w->state > 0) {
         PSMTXTrans(trans, w->pos2.x, w->pos2.y, w->pos2.z);
-        PSMTXScale(scl, 0.56f, 0.4f, 0.8f);
+        s = 0.8f;
+        PSMTXScale(scl, 0.7f * s, 0.5f * s, s);
         PSMTXConcat(mtx, trans, trans);
         PSMTXConcat(trans, scl, trans);
         GXLoadPosMtxImm(trans, GX_PNMTX0);
@@ -1189,9 +1190,6 @@ static void effFallDispWater(CameraId cameraId, void* payload) {
         GXLoadTexObj(&tex, GX_TEXMAP0);
         shibuki_polygon_1();
         PSMTXTrans(trans, w->pos2.x, w->pos2.y, w->pos2.z);
-
-        // FAKE: constant parked in s first; target loads scale before 0.8f (natural `s = w->scale * 0.8f` swaps the loads)
-        s = 0.8f;
         s = w->scale * s;
         PSMTXScale(scl, 0.7f * s, 0.5f * s, s);
         PSMTXConcat(mtx, trans, trans);

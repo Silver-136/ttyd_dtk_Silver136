@@ -898,14 +898,9 @@ static USER_FUNC(irai_end_func) {
  * with texts centred or squeezed to fit; solved requests are grey and the active one is red.
  */
 #else
-/**
- * Adds an integer to a float; kept as a separate function
- * so the draw code's arithmetic compiles as in the original.
- */
-// FAKE: the float + int sum goes through an inline (same value); plain `wp->scroll + (140 - i * 30)` changes the JP
-// object
-static inline f32 iraiAddI(f32 a, s32 b) {
-    return a + b;
+/** Screen y of line i of the request list: 140 for the top line, 30 lower for each further line, plus the scroll. */
+static inline f32 iraiLineY(f32 scroll, s32 i) {
+    return scroll + (140 - i * 30);
 }
 
 /**
@@ -1004,8 +999,8 @@ static void irai_window_disp(CameraId camera, void* param) {
         iraiDrawFit(wp->client[no], -119.0f, wp->scroll + (140 - i * 30), 180.0f, w);
         iraiDrawFit(wp->contents[no], 51.0f, wp->scroll + (140 - i * 30), 260.0f, w);
 #else
-        FontDrawString(-119.0f, iraiAddI(wp->scroll, 140 - i * 30), wp->client[no]);
-        FontDrawString(51.0f, wp->scroll + (140 - i * 30), wp->contents[no]);
+        FontDrawString(-119.0f, iraiLineY(wp->scroll, i), wp->client[no]);
+        FontDrawString(51.0f, iraiLineY(wp->scroll, i), wp->contents[no]);
 #endif
     }
     GXSetScissor(left, top, width, height);

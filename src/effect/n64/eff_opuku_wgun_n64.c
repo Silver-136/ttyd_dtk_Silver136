@@ -265,9 +265,7 @@ static void effOpukuWgunDisp(CameraId cameraId, void* param) {
         p->x = 20.0f * (work->x[i] + dx);
         p->y = 20.0f * (work->y[i] + dy);
         p->z = 20.0f * (work->z[i] + dz);
-
-        // FAKE: (u32)(i * 64) * 5 == i * 320 (the old k IV) for i in 0..11; the unsigned multiply is strength-reduced by the back-end loop pass, so no li k = 0 competes with the work IV copy in the block after smartAlloc (target order li r28 / mr r30)
-        p->s = (u32)(i * 64) * 5;
+        p->s = (i * 10) << 5;
         p->t = 0;
         p->r = (i & 1) * 255;
         p->g = ((i >> 1) & 1) * 255;
@@ -277,7 +275,7 @@ static void effOpukuWgunDisp(CameraId cameraId, void* param) {
         p->x = 20.0f * (work->x[i] - dx);
         p->y = 20.0f * (work->y[i] - dy);
         p->z = 20.0f * (work->z[i] + dz);
-        p->s = (u32)(i * 64) * 5;
+        p->s = (i * 10) << 5;
         p->t = 1024;
         p->r = (i & 1) * 255;
         p->g = ((i >> 1) & 1) * 255;

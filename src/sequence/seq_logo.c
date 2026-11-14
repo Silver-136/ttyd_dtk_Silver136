@@ -27,10 +27,6 @@
 #include <dolphin/vi.h>
 #include <string.h>
 
-#if VERSION >= VERSION_US
-static inline s32* logoStoryTime(void);
-#endif
-
 //.sbss
 static LogoWork work;
 
@@ -596,12 +592,13 @@ static void logoDisp(CameraId camId, void* param) {
                 GXPosition3f32(0.0f, 448.0f, 0.0f);
                 GXTexCoord2f32(0.0f, 1.0f);
                 if (wp->page == 1) {
+                    static s32 time = 0;
                     s32 alpha;
                     f32 c;
 
-                    c = cos(1.5707964f * (f32)*logoStoryTime() / (f32)gp->framerate);
+                    c = cos(1.5707964f * (f32)time / (f32)gp->framerate);
                     alpha = (s32)(255.0 * (1.0 - c) / 2.0);
-                    *logoStoryTime() += 2;
+                    time += 2;
                     if (alpha > 255) {
                         alpha = 255;
                     }
@@ -1126,12 +1123,3 @@ static void progDisp(CameraId camId, void* param) {
         }
     }
 }
-
-#if VERSION >= VERSION_US
-/* FAKE: the US build places this static first in .sbss, ahead of progDisp's; a static inside a
-   deferred-inline helper defined last gives that order */
-static inline s32* logoStoryTime(void) {
-    static s32 time;
-    return &time;
-}
-#endif

@@ -226,9 +226,7 @@ static void effKamekiTornadeDisp(CameraId cameraId, void* payload) {
         q->x = 100.0f * (f32)cos(r);
         q->y = 0.0f;
         q->z = 100.0f * (f32)sin(r);
-
-        // FAKE: (u32)(i * 128) * 4 is i * 512 for i in 0..15; the plain i * 512 changes the object
-        q->s = (u32)(i * 128) * 4;
+        q->s = (i * 16) << 5;
         q->t = 1024;
     }
     PSMTXRotRad(rot, 'z', 0.017453292f * work->rotZ);
