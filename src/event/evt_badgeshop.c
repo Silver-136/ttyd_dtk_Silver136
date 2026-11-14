@@ -632,11 +632,9 @@ USER_FUNC(evt_badgeShop_starmaniac_dec) {
     return EVT_RETURN_DONE;
 }
 
-// kept: without it evt_badgeShop_bottakuru_dec changes; -opt nocse for the whole file changes other functions
-#pragma opt_common_subs off
 USER_FUNC(evt_badgeShop_bottakuru_dec) {
     s32 value;
-    int i;
+    s32 i;
 
     value = evtGetValue(event, *event->args);
     badgeShop_add(bdsw->bottakuru_table, (s16)value, -1);
@@ -647,8 +645,6 @@ USER_FUNC(evt_badgeShop_bottakuru_dec) {
     }
     return EVT_RETURN_DONE;
 }
-
-#pragma opt_common_subs reset
 
 #if VERSION <= VERSION_DEMO_JP
 /** the early demos count the thrown badges through an inline copy of badgeShop_ThrowCheck (with its bug: always 0) */

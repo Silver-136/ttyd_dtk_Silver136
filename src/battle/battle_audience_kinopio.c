@@ -178,8 +178,6 @@ void BattleAudienceCtrlProcessKinopio(s32 index) {
     }
 }
 
-// propagation optimisation off for BattleAudienceCtrlProcessKinopioWait: the original register allocation and scheduling need it
-#pragma opt_propagation off
 // lifetimes optimisation off for BattleAudienceCtrlProcessKinopioWait: the original register allocation and scheduling need it
 #pragma opt_lifetimes off
 /**
@@ -321,11 +319,11 @@ static void BattleAudienceCtrlProcessKinopioWait(s32 index, u8 front) {
         switch (m->itemId) {
             case -1:
                 rnd = irand(360000);
-                if (rnd < 10) {
+                threshold = 10;
+                if (rnd < threshold) {
                     BattleAudience_ChangeStatus(index, AUDIENCE_STATUS_WAIT_HURIMUKI);
                 } else {
-                    threshold = 20;
-                    if (rnd < threshold) {
+                    if (rnd < (threshold += 10)) {
                         BattleAudience_ChangeStatus(index, AUDIENCE_STATUS_WAIT_KUBI_KATAMUKE);
                     } else {
                         // FAKE: (f32) cast on the product keeps the multiply apart from the add (no fmadd)
@@ -359,7 +357,6 @@ static void BattleAudienceCtrlProcessKinopioWait(s32 index, u8 front) {
     }
 }
 
-#pragma opt_propagation reset
 #pragma opt_lifetimes reset
 /** Status 1, "furimuki" (looking back): turns 180 degrees over 15 frames, holds, turns back, then idles again. */
 static void BattleAudienceCtrlProcessKinopioWaitHurimuki(s32 index, u8 front) {

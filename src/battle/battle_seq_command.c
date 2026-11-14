@@ -932,9 +932,6 @@ static void _btlcmd_MakeOperationTable(BattleWork* wp) {
     }
 }
 
-// kept: without it _btlcmd_MakeMultiItemTable changes; -opt noprop for the whole file changes other functions
-#pragma opt_propagation off
-
 /**
  * Builds the menu shown before the item list when Double Dip or Triple Dip is equipped:
  * a single item, then Double Dip and Triple Dip with their FP cost (the P versions' names and icons for a
@@ -954,13 +951,14 @@ static void _btlcmd_MakeMultiItemTable(BattleWork* wp) {
         return;
     }
     _btlcmd_GetCursorPtr(cmd, 3, &cursor);
-    cmd->multiItem[0].dipMode = 1;
-    cmd->multiItem[0].enabled = 1;
-    cmd->multiItem[0].name = msgSearch("btl_cmd_act_item");
-    cmd->multiItem[0].icon = ICON_BTL_CMD_ITEM;
-    cmd->multiItem[0].help = NULL;
-    cmd->multiItem[0].cost = 0;
-    num = 1;
+    num = 0;
+    cmd->multiItem[num].dipMode = 1;
+    cmd->multiItem[num].enabled = 1;
+    cmd->multiItem[num].name = msgSearch("btl_cmd_act_item");
+    cmd->multiItem[num].icon = ICON_BTL_CMD_ITEM;
+    cmd->multiItem[num].help = NULL;
+    cmd->multiItem[num].cost = 0;
+    num++;
     if (unit->badgesEquipped.DoubleDip) {
         cmd->multiItem[num].dipMode = 2;
         if (unit->currentKind == UNIT_MARIO) {
@@ -1010,7 +1008,6 @@ static void _btlcmd_MakeMultiItemTable(BattleWork* wp) {
         cursor->absPos = cursor->count - 1;
     }
 }
-#pragma opt_propagation reset
 
 /**
  * Menu icon of a partner kind from _checkPartyTable; Yoshi's follows the colour he hatched with.
