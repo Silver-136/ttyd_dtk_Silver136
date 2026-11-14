@@ -970,7 +970,10 @@ void _LvupParamHelpMsgDisp(CameraId camId, void* param) {
             break;
     }
 
-// FAKE: the linker strips this function from every demo; their pool keeps its strings but not its numbers
+// FAKE (all four demos): the demos link this function out (the JP demo map lists it UNUSED at 0x1e4, so its full
+// body was compiled there), yet their constant pools hold its message strings but none of the drawing literals
+// below. Leaving the drawing out of the demo builds reproduces those pools; why the original pools look like this
+// is not known. Retail (JP, US, PAL) compiles the whole function.
 #if VERSION == VERSION_JP || VERSION == VERSION_US || VERSION == VERSION_EU
     width = FontGetMessageWidthLine(msg, &lines);
     lines++;
