@@ -8,6 +8,15 @@ generated from (maps made before 2026-11-13 have no such line).
 One entry per push, newest first: date, the pushed commit, whether maps from the previous push are now obsolete,
 and what changed in plain words.
 
+## 2026-11-14 - pushed commit: the one that adds this entry (maps stamped 4cb898184)
+
+Old maps obsolete: **yes, slightly**. Regenerate them.
+
+- Two data names changed (US and later): `icon_049_lang_tbl` / `icon_067_lang_tbl` are now `power_rush_lang_tbl` /
+  `power_rush_p_lang_tbl` (icondrv).
+- The rest of this push rearranges version `#if` blocks, string spellings and comments, which renames no
+  other symbol; the output files stay byte-identical to the original games.
+
 ## 2026-11-13 - pushed commit: the one that adds this entry (maps stamped 7799968b7)
 
 Old maps obsolete: **yes**. Regenerate them.
