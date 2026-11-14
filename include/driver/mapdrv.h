@@ -188,7 +188,7 @@ typedef struct MapHeader {
     void* unused;               // 0x2C, that table (MapFileHeader.unused); no retail map has one
     const char* strings;        // 0x30
     u8 pad_34[0x3C - 0x34]; // 0x34, never accessed
-    s32 loadFlags;             // 0x3C, bit 1 set by mapLoadHeader_ before the header copy
+    s32 loadFlags;             // 0x3C, bit 1 set by HSD_ArchiveParse before the header copy
     void* rawFile;          // 0x40, the map.dat buffer the header was read from (SPM MapFileContext.rawFile)
 } MapHeader;
 
@@ -466,6 +466,7 @@ MapMaterial* mapSearchDmdMaterial(const char* name);
 void mapSetPolygonGeometry(MapFileMesh* mesh);
 void Locate(MapEntry* entry);
 void* HSD_ArchiveGetPublicAddress(MapHeader* header, const char* name);
+s32 HSD_ArchiveParse(MapEntry* entry);
 
 void mapSetBlend(GXColor color);
 void mapSetBlend2(GXColor color);
@@ -502,6 +503,7 @@ void mapObjRotate(const char* name, f32 x, f32 y, f32 z);
 void mapObjScale(const char* name, f32 x, f32 y, f32 z);
 void mapObjSetFlushColor(const char* name, u8 r, u8 g, u8 b, u8 a);
 void mapObjTranslate(const char* name, f32 x, f32 y, f32 z);
+void mapEntryAnimation(BOOL group);
 void mapPauseAnimation(const char* name);
 void mapPauseAnimationAll(const char* name);
 

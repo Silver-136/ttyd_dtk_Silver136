@@ -621,6 +621,45 @@ void mapPlayAnimationLv(const char* name, s32 mode, s32 level) {
     }
 }
 
+/**
+ * Reads the animation_table chunk of map entry group and allocates its MapEntryAnimData list
+ * (flags cleared, anim pointing at each animation's header).
+ */
+// Original name and size (0x124) from the JP demo map (UNUSED there: its only call, in _mapLoad, is inlined).
+void mapEntryAnimation(BOOL group) {
+    MapWork* w;
+    u32* animTbl;
+    u32 n;
+    u32 k;
+    MapEntryAnimData* a;
+    int i;
+    MapEntry* e2;
+    w = &mapWork[activeGroup];
+    e2 = &w->entries[group];
+    for (k = 0; k < e2->header.file.chunkCount; k++) {
+        if (!strcmp(&e2->header.strings[e2->header.chunks[k].string], "animation_table")) {
+            animTbl = (u32*)((u8*)e2->header.data + e2->header.chunks[k].offset);
+            goto found;
+        }
+    }
+    animTbl = NULL;
+found:
+    if (animTbl != NULL) {
+        w->entries[group].numAnims = animTbl[0];
+        if (w->entries[group].numAnims != 0) {
+            n = OSRoundUp32B(w->entries[group].numAnims * 32);
+            w->entries[group].animData = _mapAlloc(n);
+            memset(w->entries[group].animData, 0, n);
+            a = w->entries[group].animData;
+            for (i = 0; i < w->entries[group].numAnims; i++) {
+                a->flags = 0;
+                a->anim = (MapAnimHeader*)*++animTbl;
+                a++;
+            }
+        }
+    }
+}
+
 /** Pauses the playing map animation name; mapMain stops advancing it. */
 void mapPauseAnimation(const char* name) {
     MapAnim* anim = mapSearchAnmObj_inl(name);
@@ -674,94 +713,6 @@ void mapSetPlayRate(const char* name, f32 rate) {
     MapAnim* anim = mapSearchAnmObj_inl(name);
     if (anim) {
         anim->rate = rate;
-    }
-}
-
-/**
- * Whether the map header's stored file size equals the loaded size.
- * MWCC swaps == operands when the left side is a computed address (wp->entries[group]...);
- * through a pointer parameter the load stays on the left, as in the original (cmplw r0,r17).
- */
-static inline BOOL mapHdrSizeOk_(MapHeader* h, u32 size) {
-    return h->file.fileSize == size;
-}
-
-/**
- * Parses the map.dat header of entry group: locates the data, relocation, chunk,
- * extern and string sections after it and relocates the pointers.
- * Does nothing if the stored file size does not match the loaded size.
- */
-static inline void mapLoadHeader_(MapWork* wp, BOOL group) {
-    u32 datSize = wp->entries[group].datSize;
-    u8* data = (u8*)wp->entries[group].dat;
-    u32 sizeCheck;
-    MapHeader* header = &wp->entries[group].header;
-
-    // header is the address of a member and never NULL; the test is in the retail code all the same
-    if (header != NULL) {
-        memset(header, 0, sizeof(MapHeader));
-        wp->entries[group].header.loadFlags |= 1;
-        memcpy(header, data, sizeof(MapFileHeader));
-        if (mapHdrSizeOk_(&wp->entries[group].header, datSize)) {
-            sizeCheck = sizeof(MapFileHeader);
-            if (wp->entries[group].header.file.dataSize != 0) {
-                wp->entries[group].header.data = &data[sizeCheck];
-                sizeCheck = wp->entries[group].header.file.dataSize;
-                sizeCheck += sizeof(MapFileHeader);
-            }
-            if (wp->entries[group].header.file.relCount != 0) {
-                wp->entries[group].header.rel = (u32*)&data[sizeCheck];
-                sizeCheck += 4 * wp->entries[group].header.file.relCount;
-            }
-            if (wp->entries[group].header.file.chunkCount != 0) {
-                wp->entries[group].header.chunks = (MapFileChunk*)&data[sizeCheck];
-                sizeCheck += sizeof(MapFileChunk) * wp->entries[group].header.file.chunkCount;
-            }
-            if (wp->entries[group].header.file.unused != 0) {
-                wp->entries[group].header.unused = &data[sizeCheck];
-                sizeCheck += 8 * wp->entries[group].header.file.unused;
-            }
-            if (sizeCheck < wp->entries[group].header.file.fileSize) {
-                wp->entries[group].header.strings = (const char*)&data[sizeCheck];
-            }
-            wp->entries[group].header.rawFile = data;
-            Locate(&wp->entries[group]);
-        }
-    }
-}
-
-// FAKE: chunk search written out here with k declared last, for the target k/w register order; same search
-static inline void mapLoadAnim_(BOOL group) {
-    MapWork* w;
-    u32* animTbl;
-    u32 n;
-    u32 k;
-    MapEntryAnimData* a;
-    int i;
-    MapEntry* e2;
-    w = &mapWork[activeGroup];
-    e2 = &w->entries[group];
-    for (k = 0; k < e2->header.file.chunkCount; k++) {
-        if (!strcmp(&e2->header.strings[e2->header.chunks[k].string], "animation_table")) {
-            animTbl = (u32*)((u8*)e2->header.data + e2->header.chunks[k].offset);
-            goto found;
-        }
-    }
-    animTbl = NULL;
-found:
-    if (animTbl != NULL) {
-        w->entries[group].numAnims = animTbl[0];
-        if (w->entries[group].numAnims != 0) {
-            n = OSRoundUp32B(w->entries[group].numAnims * 32);
-            w->entries[group].animData = _mapAlloc(n);
-            memset(w->entries[group].animData, 0, n);
-            a = w->entries[group].animData;
-            for (i = 0; i < w->entries[group].numAnims; i++) {
-                a->flags = 0;
-                a->anim = (MapAnimHeader*)*++animTbl;
-                a++;
-            }
-        }
     }
 }
 
@@ -831,7 +782,7 @@ static void _mapLoad(MapWork* wp, BOOL group, const char* map) {
     }
 
     GXInvalidateVtxCache();
-    mapLoadHeader_(wp, group);
+    HSD_ArchiveParse(&wp->entries[group]);
     header = &wp->entries[group].header;
     info = (MapFileInfo*)HSD_ArchiveGetPublicAddress(header, "information");
     wp->entries[group].textureTable = HSD_ArchiveGetPublicAddress(header, "texture_table");
@@ -922,7 +873,7 @@ static void _mapLoad(MapWork* wp, BOOL group, const char* map) {
             SET_BBOX_CORNER(7, mn.x, mn.y, mn.z)
 #undef SET_BBOX_CORNER
         }
-        mapLoadAnim_(group);
+        mapEntryAnimation(group);
     }
     makeDisplayList(group);
     {
@@ -4313,6 +4264,52 @@ void* HSD_ArchiveGetPublicAddress(MapHeader* header, const char* name) {
         }
     }
     return NULL;
+}
+
+/**
+ * Parses the map.dat header of entry: locates the data, relocation, chunk,
+ * extern and string sections after it and relocates the pointers.
+ * Does nothing if the stored file size does not match the loaded size.
+ */
+// Original name and size (0x168) from the JP demo map (UNUSED there: its only call, in _mapLoad, is inlined).
+s32 HSD_ArchiveParse(MapEntry* entry) {
+    u32 datSize = entry->datSize;
+    u8* data = (u8*)entry->dat;
+    u32 sizeCheck;
+    MapHeader* header = &entry->header;
+
+    // header is the address of a member and never NULL; the test is in the retail code all the same
+    if (header != NULL) {
+        memset(header, 0, sizeof(MapHeader));
+        entry->header.loadFlags |= 1;
+        memcpy(header, data, sizeof(MapFileHeader));
+        if (entry->header.file.fileSize == datSize) {
+            sizeCheck = sizeof(MapFileHeader);
+            if (entry->header.file.dataSize != 0) {
+                entry->header.data = &data[sizeCheck];
+                sizeCheck = entry->header.file.dataSize;
+                sizeCheck += sizeof(MapFileHeader);
+            }
+            if (entry->header.file.relCount != 0) {
+                entry->header.rel = (u32*)&data[sizeCheck];
+                sizeCheck += 4 * entry->header.file.relCount;
+            }
+            if (entry->header.file.chunkCount != 0) {
+                entry->header.chunks = (MapFileChunk*)&data[sizeCheck];
+                sizeCheck += sizeof(MapFileChunk) * entry->header.file.chunkCount;
+            }
+            if (entry->header.file.unused != 0) {
+                entry->header.unused = &data[sizeCheck];
+                sizeCheck += 8 * entry->header.file.unused;
+            }
+            if (sizeCheck < entry->header.file.fileSize) {
+                entry->header.strings = (const char*)&data[sizeCheck];
+            }
+            entry->header.rawFile = data;
+            Locate(entry);
+        }
+    }
+    return 0;
 }
 
 /**

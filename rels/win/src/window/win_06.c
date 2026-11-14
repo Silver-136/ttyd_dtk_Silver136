@@ -297,12 +297,6 @@ static USER_FUNC(cam_kaiten_set_direct) {
     return EVT_RETURN_DONE;
 }
 
-/** Identity function (returns x unchanged). */
-// FAKE: one-use inline helper; writing the call out changes the object in both versions
-static inline f32 fid(f32 x) {
-    return x;
-}
-
 /**
  * Script helper: allocates the three orbit parameter sets,
  * fills sets 0 and 1 from the two position/target vectors in args[0..11],
@@ -316,6 +310,7 @@ static USER_FUNC(cam_kaiten_init) {
     Vec target;
     Vec pos;
     f32 dist;
+    f32 dz;
 
     ckp0 = _mapAlloc(sizeof(KaitenParam));
     memset(ckp0, 0, sizeof(KaitenParam));
@@ -343,7 +338,8 @@ static USER_FUNC(cam_kaiten_init) {
     target.y = 0.0f;
     pos.y = 0.0f;
     dist = PSVECDistance(&pos, &target);
-    ckp0->angle = 57.29579f * (f32)atan2(-(target.x - pos.x), fid(target.z - pos.z));
+    dz = target.z - pos.z;
+    ckp0->angle = 57.29579f * (f32)atan2(-(target.x - pos.x), dz);
     ckp0->dist = dist;
 
     pos = ckp1->pos;
@@ -351,7 +347,8 @@ static USER_FUNC(cam_kaiten_init) {
     target.y = 0.0f;
     pos.y = 0.0f;
     dist = PSVECDistance(&pos, &target);
-    ckp1->angle = 57.29579f * (f32)atan2(-(target.x - pos.x), target.z - pos.z);
+    dz = target.z - pos.z;
+    ckp1->angle = 57.29579f * (f32)atan2(-(target.x - pos.x), dz);
     ckp1->dist = dist;
 
     ckpw->pos = ckp0->pos;
