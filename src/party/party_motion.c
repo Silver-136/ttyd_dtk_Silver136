@@ -2569,6 +2569,15 @@ void party_motion_jump(PartyEntry* party) {
                     party->flags |= PARTY_FLAG_IS_GROUNDED;
 #if VERSION >= VERSION_US
                     party->trigFlags &= ~PARTY_TRIG_JUMP_TARGET_SET;
+#else
+                    // BUG: nothing in JP clears PARTY_TRIG_JUMP_TARGET_SET (US clears it here and at every other
+                    // landing). After one hop off a switch or block (partyChkNoStandMobj) it stays set, so every
+                    // later follow jump skips the footmark target in case 0 and uses moveTarget as the caller left
+                    // it. The walk's jump-footmark path sets that target, for land ahead higher than the partner, to
+                    // y = that ground height and x/z = sin/cos * 40 with no world-position origin. The jump then
+                    // heads for a point near the map origin, so moveFrames is clamped to 40, and with a small rise
+                    // dy partyJumpCalc's g = 2 dy / (t * t - t) is tiny: velY is clamped up to 3 while the gravity
+                    // stays near 0, so the smaller the rise (above 1 unit), the higher and farther the partner flies.
 #endif
                     party->flags &= ~(PARTY_FLAG_IS_JUMPING | PARTY_FLAG_IS_FALLING | PARTY_FLAG_IS_STEPPING);
                     partyPlaySfxPartyLanding1(party);
