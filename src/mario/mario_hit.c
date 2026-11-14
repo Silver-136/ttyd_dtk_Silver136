@@ -420,9 +420,6 @@ static f32 _ABCtoAngleY(f32 nx, f32 ny, f32 nz) {
     return angleABf(0.0f, 0.0f, sqrtf(nx * nx + nz * nz), -ny);
 }
 
-// FAKE: inline size limit raised for the rest of the file; without it the object changes
-#pragma inline_max_size(1000)
-
 /**
  * Tube mode on the ground: casts down from 10 above Mario
  * and stores the floor's tilt in roll_grx / roll_grz for the rolling tube (mot_roll.c).

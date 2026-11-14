@@ -25916,7 +25916,6 @@ msg_fr_article_cap_tbl = .sdata:0x804226D4; // type:object size:0x10 scope:globa
 msg_fr_article_tbl = .sdata:0x804226E4; // type:object size:0x10 scope:global
 msg_es_article_cap_tbl = .sdata:0x804226F4; // type:object size:0x18 scope:global
 msg_es_article_tbl = .sdata:0x8042270C; // type:object size:0x18 scope:global
-msgArticlePad = .sdata:0x80422724; // type:object size:0x1C scope:local
 Normals$160 = .sdata:0x80422740; // type:object size:0x18 scope:local
 Colors$161 = .sdata:0x80422758; // type:object size:0x4 scope:local
 UVs$162 = .sdata:0x8042275C; // type:object size:0x20 scope:local

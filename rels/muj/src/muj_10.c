@@ -106,8 +106,9 @@ static USER_FUNC(suifu_option_func) {
     s32 i;
 
     for (i = 0; i < 95; i++) {
-        // FAKE: double-negation addition; either plain addition order changes the object.
-        wp->npc[i].pos.y = wp->npc[i].basePos.y - -y;
+        f32 baseY = wp->npc[i].basePos.y;
+
+        wp->npc[i].pos.y = baseY + y;
     }
     return EVT_RETURN_DONE;
 }

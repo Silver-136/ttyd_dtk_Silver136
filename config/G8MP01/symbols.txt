@@ -25925,7 +25925,6 @@ msg_fr_article_cap_tbl = .sdata:0x80422CB4; // type:object size:0x10 scope:globa
 msg_fr_article_tbl = .sdata:0x80422CC4; // type:object size:0x10 scope:global
 msg_es_article_cap_tbl = .sdata:0x80422CD4; // type:object size:0x18 scope:global
 msg_es_article_tbl = .sdata:0x80422CEC; // type:object size:0x18 scope:global
-msgArticlePad = .sdata:0x80422D04; // type:object size:0x1C scope:local
 Normals$160 = .sdata:0x80422D20; // type:object size:0x18 scope:local
 Colors$161 = .sdata:0x80422D38; // type:object size:0x4 scope:local
 UVs$162 = .sdata:0x80422D3C; // type:object size:0x20 scope:local

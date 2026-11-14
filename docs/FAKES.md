@@ -207,7 +207,6 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | src/mario/mario_hit.c | marioHitStrippedPool2 | stand-in that nothing calls (the linker strips it); it only places 18.0f in this object's constant pool | see comment |
 | Both | src/mario/mario_hit.c | marioSearchHead_roll | spare pointer to dir; passing &dir directly changes the object | see comment |
 | Both | src/mario/mario_hit.c | marioHitStrippedPool | stand-in that nothing calls (the linker strips it); it only places its five literals in this object's constant pool | see comment |
-| Both | src/mario/mario_hit.c | (file) | `#pragma inline_max_size(1000)` for the rest of the file | removing it: changes the object |
 | Demos | src/mario/mario_hit.c | marioSearchGroundRoll | dead guard keeps rx/rz their own webs; the 24-byte zero ray copied from a volatile template | see comment |
 | Demos | src/mario/mario_hit.c | marioChkLandon2 | the 24-byte zero ray copied from a volatile template; a dead re-definition of gz at the loop end | `(LandonRay){0}` adds a .rodata object; see comment |
 | Both | src/mario/mario_kemuri.c | mario_kemuri | no-op self-assignment as the then-branch; without it the branch is laid out differently | see comment |
@@ -229,7 +228,6 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | src/sequence/seq_e3.c | forceSdata | stand-in that nothing calls (the linker strips it); it only places 30.0f in the constant pool (JP and US); removing it changes the object | see comment |
 | Both | src/unit/party/unit_party_yoshi.c | yoshiStrippedPool | stand-in that nothing calls; its s32-to-f32 conversion likely shapes the constant pool; removing it changes the object | see comment |
 | Both | src/window/win_root.c | winRootStrippedPool | stand-in that nothing calls; it only places 185.0f and 1000.0f in this object's constant pool. Removing it changes the object. | see comment |
-| Both | rels/muj/src/muj_10.c | suifu_option_func | double-negation addition; either plain addition order changes the object. | see comment |
 | Demos | src/battle/battle_unit.c | BtlUnit_GetStatus, BtlUnit_SetStatus, BtlUnit_CheckRecoveryStatus, BtlUnit_CheckStatus | BATTLE_UNIT_STATUS_ENUM: the file sees the enum prototypes while its callers see s8 (same bytes retail reads through s8) | one prototype for all units: the callers then lose their sign extension |
 | All demos | src/battle/battle_seq_end.c | _LvupParamHelpMsgDisp | stripped in every demo: only the strings stay compiled there, so its numbers stay out of the pool | full body |
 | Demos | src/manager/cardmgr_demo.inc | (demo copy of cardmgr.c) | no-op self-assignment the target compiles to a register copy; | see comment |
@@ -237,16 +235,11 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | src/driver/npcdrv.c | npcSetTalkPose .. npcCheckHitMarioSide | `opt_propagation` and `opt_lifetimes` off over these functions | removing either changes npcCheckHitMarioSide; the file-wide `-opt noprop,nolifetimes` changes other functions (2026-11-07) |
 | Both | src/battle/battle_enemy_item.c | _check_hp_recover_item, _check_fp_recover_item, _check_attack_item, _check_status_attack_item, _check_status_support_item, _check_status_recover_item | `(s32)(s8)` no-op casts on the s8 attackDirection passed to BattleSamplingEnemy | the plain field at all six: changes the object |
 | Both | src/effect/eff_kemuri.c | effKemuri2Entry | `opt_propagation` off for the function (its spare temporaries only make sense under it) | removing it changes the object; the file-wide `-opt noprop` changes other functions (2026-11-07) |
-| Both | src/effect/eff_kemuri.c | effKemuri2Main | `opt_propagation` off for the function, with the `data = p` / `p = data` re-assignment | removing it changes the object; the file-wide `-opt noprop` changes other functions (2026-11-07) |
-| PAL | src/event/evt_msg.c | (file scope) | msgArticlePad: unused zero object, read by nothing | removing it changes the object |
 | Demos | libs/msl/include/dtrigf.h | (file: `DTRIGF_PLAIN_DATA` block) | the early demos' main.dol units take the paired dtrigf constants as plain data in source order (LLCOOLT's form) instead of the inline-assembly form | see comment |
 | Both | rels/las/src/las_04.c | firebar_entry | `*(s32*)&wp = event->userdata[0]` stores through &wp, so wp keeps a stack slot for the whole function | `wp = event->userdatap[0]`: see comment |
 | Both | src/battle/battle_damage.c | BattleCalculateDamage | negation written as `(u32)damage * -1` | `-damage`: changes the object |
 | Both | src/driver/mapdrv.c | mapSetMaterialTev | no-op `(s32)texCount > 0` cast on the s32 parameter | `texCount > 0`: changes the object |
 | Both | src/battle/battle_audience_kinopio.c | BattleAudienceCtrlProcessKinopioWait | `threshold + (f32)(10.0f * a)` product cast | plain sum, `+=`, a named local: changes the object |
-| Both | rels/gon/src/gon_11.c | _mapsetofs_all, _mapclsofs_all, evt_iri_16_cloud_ent | `(s8)name[0] == 0` sign-extending test on a char | plain char test: changes the object |
-| Both | rels/las/src/las_14.c | _mapsetofs_all, _mapclsofs_all, evt_las_cloud_ent | `(s8)name[0] == 0` sign-extending test on a char | plain char test: changes the object |
-| Both | rels/mri/src/mri_00.c | _mapsetofs_all, _mapclsofs_all, evt_mri_cloud_ent | `(s8)name[0] == 0` sign-extending test on a char | plain char test: changes the object |
 | Both | rels/hei/src/hei_10.c | npc_jump | `event->userdata[n] = *(s32*)&t` word view of the floats | `event->userdataf[n] = t`: 351 vs 342 instructions |
 | Both | rels/pik/src/pik_02.c | hoshi_jump | `event->userdata[n] = *(s32*)&t` word view of the floats | `event->userdataf[n] = t`: 262 vs 255 instructions |
 | Both | rels/rsh/src/rsh_05.c | npc_jump | `event->userdata[n] = *(s32*)&t` word view of the floats | `event->userdataf[n] = t`: 351 vs 342 instructions |

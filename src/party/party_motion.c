@@ -3707,6 +3707,9 @@ void party_motion_jump(PartyEntry* party) {
                         dir = partyGetTargetDir(id, party->position.x, party->position.z);
                         getFrontFloor(party, &fl, dir);
                         fl.y += 10.0f;
+                        // BUG (early demos): fl.y is already a world height, so adding the partner's own height
+                        // aims the jump far too high; and when Mario is close (the test above fails) x, y and z
+                        // are never set and the jump uses whatever they hold. JP rewrote this jump.
                         y = party->position.y + fl.y;
                         x = party->position.x;
                         z = party->position.z;

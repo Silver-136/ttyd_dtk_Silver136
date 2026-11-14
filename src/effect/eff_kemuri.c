@@ -222,23 +222,21 @@ static void effKemuriMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&pos2), DISP_MODE_XLU, effKemuriDisp, effect);
 }
 
-// FAKE: opt_propagation off for effKemuri2Main only; the pointer re-assignment data = p / p = data steers register choice
-#pragma opt_propagation off
 /**
  * Moves the puff along its direction at a constant speed while its rise and spin slow down, grows then shrinks it,
  * fades it after frame 15, and deletes it after 30 frames.
  */
 static void effKemuri2Main(EffectEntry* entry) {
+    effKemuri2Data* const first = entry->userdata;
     effKemuri2Data* data;
-    effKemuri2Data* p = entry->userdata;
     Vec pos2;
     Vec pos = {0.0f, 0.0f, 0.0f};
     f32 s;
     s32 i;
-    pos.x = p->x;
-    pos.y = p->y;
-    pos.z = p->z;
-    data = p;
+    pos.x = first->x;
+    pos.y = first->y;
+    pos.z = first->z;
+    data = first;
     pos2 = pos;
     s = sin(3.1415927f * data->timer / 30.0f);
     data->timer++;
@@ -247,21 +245,19 @@ static void effKemuri2Main(EffectEntry* entry) {
         return;
     }
     for (i = 0; i < entry->count; i++, data++) {
-        p = data;
-        p->x += p->speed * p->dirX;
-        p->z += p->speed * p->dirZ;
-        p->vy *= 0.9f;
-        p->y += p->vy;
-        p->rotVel *= 0.95f;
-        p->rot += p->rotVel;
-        p->scale = s;
+        data->x += data->speed * data->dirX;
+        data->z += data->speed * data->dirZ;
+        data->vy *= 0.9f;
+        data->y += data->vy;
+        data->rotVel *= 0.95f;
+        data->rot += data->rotVel;
+        data->scale = s;
         if (data->timer > 15) {
-            p->alpha *= 0.8f;
+            data->alpha *= 0.8f;
         }
     }
     dispEntry(CAMERA_3D, dispCalcZ(&pos2), DISP_MODE_XLU, effKemuri2Disp, entry);
 }
-#pragma opt_propagation reset
 
 /** Draws the smoke puffs as camera-facing quads with an animated texture. */
 static void effKemuriDisp(CameraId camId, void* param) {

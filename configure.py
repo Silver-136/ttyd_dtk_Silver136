@@ -796,7 +796,7 @@ config.libs = [
         "objects": [
             Object(MatchingFor("G8MJ01", "G8ME01"), "mario/mario.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "mario/mariost.c", extra_cflags=["-inline noauto"]),
-            Object(MatchingFor("G8MJ01", "G8ME01"), "mario/mario_hit.c"),
+            Object(MatchingFor("G8MJ01", "G8ME01"), "mario/mario_hit.c", extra_cflags=['-pragma "inline_max_size(1000)"']),
             Object(MatchingFor("G8MJ01", "G8ME01"), "mario/mario_motion.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "mario/mario_sbr.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "mario/mario_pouch.c"),

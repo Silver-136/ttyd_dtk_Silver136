@@ -561,7 +561,7 @@ event/evt_msg.c:
 	.rodata     start:0x802D7C80 end:0x802D7DC8
 	.data       start:0x80320A40 end:0x80320B50
 	.bss        start:0x803E8748 end:0x803EB008
-	.sdata      start:0x80422600 end:0x80422740
+	.sdata      start:0x80422600 end:0x80422724
 	.sdata2     start:0x8042DB70 end:0x8042DCF0
 
 mario/mario_pouch.c:
@@ -576,7 +576,7 @@ driver/extdrv.c:
 	.rodata     start:0x802D7DD8 end:0x802D7DE0
 	.data       start:0x80320B90 end:0x80321298
 	.bss        start:0x803EB008 end:0x803EB0E8
-	.sdata      start:0x80422740 end:0x80422800
+	.sdata      start:0x80422740 end:0x80422800 align:32
 	.sdata2     start:0x8042DD00 end:0x8042DD48
 
 event/evt_ext.c:
