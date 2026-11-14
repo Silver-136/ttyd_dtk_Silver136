@@ -248,15 +248,13 @@ void seq_e3Init(SequenceWork* seq) {
 
 /** Leaves the kiosk menu: frees its textures (and the US demo's characters and their script) and fades out sound. */
 void seq_e3Exit(SequenceWork* seq) {
-#if VERSION <= VERSION_DEMO_JP
-#if VERSION != VERSION_DEMO_JP
+#if VERSION == VERSION_DEMO_US
     s32 i;
 
     for (i = 0; i < 4; i++) {
         animPoseRelease(wp->poseIds[i]);
     }
     evtDelete(wp->animEvt);
-#endif
 #endif
     fileFree(wp->handle);
     psndStopAllFadeOut();

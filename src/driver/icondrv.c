@@ -53,10 +53,10 @@ static TEXPalette* icon_tpl;
 #if VERSION >= VERSION_US
     // US and later: the Power Rush and Power Rush P icons for each language (indexed by gp->language: JP, US, GE,
     // FR, SP, IT)
-    u16 icon_049_lang_tbl[6] = {
+    u16 power_rush_lang_tbl[6] = {
         ICON_POWER_RUSH, ICON_POWER_RUSH_D, ICON_POWER_RUSH_K, ICON_POWER_RUSH_A, ICON_POWER_RUSH, ICON_POWER_RUSH_C,
     };
-    u16 icon_067_lang_tbl[6] = {
+    u16 power_rush_p_lang_tbl[6] = {
         ICON_POWER_RUSH_P,   ICON_POWER_RUSH_P_D, ICON_POWER_RUSH_P_K,
         ICON_POWER_RUSH_P_A, ICON_POWER_RUSH_P,   ICON_POWER_RUSH_P_C,
     };
@@ -182,10 +182,10 @@ static IconBinaryEntry* iconBinPtr(u16 iconId) {
 #if VERSION >= VERSION_US
     switch ((u16)iconId) {
         case ICON_POWER_RUSH:
-            iconId = icon_049_lang_tbl[gp->language];
+            iconId = power_rush_lang_tbl[gp->language];
             break;
         case ICON_POWER_RUSH_P:
-            iconId = icon_067_lang_tbl[gp->language];
+            iconId = power_rush_p_lang_tbl[gp->language];
             break;
     }
     return (IconBinaryEntry*)((u8*)bin + bin->offset[(u16)iconId]);

@@ -1758,13 +1758,11 @@ static u8* ssDecodeDPCM(SoundStream* stream, SoundStreamEntry* entry, s16* out, 
 }
 
 /** Early-demo and JP signature of _sscallback: the first buffer's length arrives as len1. */
-#if VERSION <= VERSION_DEMO_JP
+#if VERSION < VERSION_US
 static u32 _sscallback(void* p_b1, u32 len1, void* p_b2, u32 p_l2, u32 user) {
-#elif VERSION >= VERSION_US
+#else
 static u32 _sscallback(void* p_b1, u32 p_l1, void* p_b2, u32 p_l2, u32 user) {
     u32 len1;
-#else
-static u32 _sscallback(void* p_b1, u32 len1, void* p_b2, u32 p_l2, u32 user) {
 #endif
     s16* dst;
     SoundStream* stream;
@@ -1875,9 +1873,7 @@ static u32 _sscallback(void* p_b1, u32 len1, void* p_b2, u32 p_l2, u32 user) {
                 entry->curBuf = 1 - entry->curBuf;
                 src8 = entry->loadBuffer[entry->curBuf];
             }
-#if VERSION <= VERSION_DEMO_JP
-            entry->pos++;
-#elif VERSION < VERSION_US
+#if VERSION < VERSION_US
             entry->pos++;
 #endif
             if (entry->pos >= stream->loopEnd) {
@@ -1926,9 +1922,7 @@ static u32 _sscallback(void* p_b1, u32 len1, void* p_b2, u32 p_l2, u32 user) {
                 entry->curBuf = 1 - entry->curBuf;
                 src8b = entry->loadBuffer[entry->curBuf];
             }
-#if VERSION <= VERSION_DEMO_JP
-            entry->pos++;
-#elif VERSION < VERSION_US
+#if VERSION < VERSION_US
             entry->pos++;
 #endif
             if (entry->pos >= stream->loopEnd) {

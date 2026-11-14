@@ -482,6 +482,7 @@ YoshiNomikomi_Spew, gonbaba_fumituke, gesso_ikasumi, KaitenHammer), so they are 
 | Kind | Unit | Name | Replaced placeholder | Date |
 | --- | --- | --- | --- | --- |
 | function | mario | `marioChkUseParty` (Zephiles' name; new in JP, no map names it) | `N_marioChkUseParty` | 2026-11-08 |
+| data | icondrv | `power_rush_lang_tbl`, `power_rush_p_lang_tbl` (US+ per-language Power Rush / Power Rush P icon ids; no map names them) | `icon_049_lang_tbl`, `icon_067_lang_tbl` | 2026-11-14 |
 | data | main | `zakoM2D_find_throw_event` (the bottle throw split out of the original zakoM2D_find_event from JP on) | `zakoM2D_find_event` (LLCOOLT) | 2026-11-09 |
 | data | cardmgr | `cardFileName` ("mariost_save_file") | `str_802CCC80` | 2026-10-25 |
 | data | cardmgr | `cardGameTitle` (memory card title, US/JP text) | `str_802CCC94` | 2026-10-25 |

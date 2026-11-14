@@ -63,10 +63,8 @@ static u16 y_trans[] = {
  * Effect texture ids of the banner's three pieces (entries 0-2) and their shadows (3-5); row 0 for Japanese,
  * row 1 for the other languages (both the same).
  */
-#if VERSION < VERSION_US
-#if VERSION >= VERSION_JP
+#if VERSION == VERSION_JP
 static s32 texid_tbl[2][6] = { { 146, 147, 148, 149, 150, 151 }, { 146, 147, 148, 149, 150, 151 } };
-#endif
 #endif
 
 /**

@@ -915,10 +915,8 @@ EVT_BEGIN(evt_door_open_bom_01)
     SPAWN_EVENT(door_open_se)
 
     // The door swings open with its sound.
-#if VERSION >= VERSION_JP
-#if VERSION < VERSION_US
+#if VERSION == VERSION_JP
     CALL(evt_mario_party_door_halve_hitbox)
-#endif
 #endif
     CALL(evt_door_param, LW(0), DOOR_PARAM_EVTS, LW(7), LW(8), LW(9))
     IF_INT_NOT_EQUAL(LW(7), 0)

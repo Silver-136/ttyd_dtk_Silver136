@@ -1127,12 +1127,12 @@ void winFontSetR(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
     Mtx trans;
     Mtx scl;
     va_list args;
-#if VERSION <= VERSION_DEMO_JP
+#if VERSION < VERSION_US
     va_start(args, fmt);
     vsprintf(buf, fmt, args);
     {
         s32 w = FontGetMessageWidth("９９９") - FontGetMessageWidth(buf);
-#elif VERSION >= VERSION_US
+#else
     s32 ref;
 
     if (strstr(fmt, "%")) {
@@ -1147,11 +1147,6 @@ void winFontSetR(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
     }
     {
         s32 w = ref - FontGetMessageWidth(msg);
-#else
-    va_start(args, fmt);
-    vsprintf(buf, fmt, args);
-    {
-        s32 w = FontGetMessageWidth("９９９") - FontGetMessageWidth(buf);
 #endif
         PSMTXTrans(trans, pos.x + scale.x * w, pos.y, pos.z);
     }
@@ -1539,11 +1534,9 @@ void winIconGrayInit(void) {
     GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_ZERO, GX_CC_C1, GX_CC_TEXC, GX_CC_CPREV);
     GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_TEXA);
     GXSetTevSwapMode(GX_TEVSTAGE1, GX_TEV_SWAP0, GX_TEV_SWAP2);
-#if VERSION <= VERSION_DEMO_JP
-#if VERSION != VERSION_DEMO_JP
+#if VERSION == VERSION_DEMO_US
     if (!GX_TEVSTAGE2 && !GX_TEVSTAGE2 && !GX_TEVSTAGE2) {
     }
-#endif
 #endif
     GXSetTevOrder(GX_TEVSTAGE2, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
     GXSetTevColorOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);

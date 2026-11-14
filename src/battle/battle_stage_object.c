@@ -2736,8 +2736,7 @@ static EVT_BEGIN(_nozzle_turn_event)
 EVT_END()
 #endif
 
-#if VERSION < VERSION_US
-#if VERSION >= VERSION_JP
+#if VERSION == VERSION_JP
 static EVT_BEGIN(_close_wall_event)
     CALL(btlevtcmd_WaitAttackEnd)
     CALL(_announce_wall_message)
@@ -2749,19 +2748,16 @@ static EVT_BEGIN(_nozzle_work_event_0)
     CALL_CHILD(_nozzle_work_event_core)
     RETURN
 EVT_END()
-#endif
 
 /**
  * Nozzle attack during battle (BattleStage_NozzleWorkCheck(1)):
  * _nozzle_work_event_core with LW(10) = 1, which also lets a type-0 nozzle set fill the stage with fog.
  */
-#if VERSION >= VERSION_JP
 static EVT_BEGIN(_nozzle_work_event_1)
     SET_VALUE(LW(10), 1)
     CALL_CHILD(_nozzle_work_event_core)
     RETURN
 EVT_END()
-#endif
 #endif
 
 static USER_FUNC(_set_mobj_rotate_x) {

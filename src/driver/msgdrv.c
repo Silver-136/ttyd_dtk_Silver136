@@ -902,9 +902,9 @@ void msgAnalize(smartEntry* smart, char* msg) {
     entry = &data->entries[data->charCount];
     flags = 0;
     maxScale = 0.0f;
-#if VERSION <= VERSION_DEMO_JP
+#if VERSION < VERSION_US
     scale = 1.0f;
-#elif VERSION >= VERSION_US
+#else
     {
         Vec one = {1.0f, 1.0f, 1.0f};
         scale = one;
@@ -913,8 +913,6 @@ void msgAnalize(smartEntry* smart, char* msg) {
 #if VERSION >= VERSION_DEMO_EU
     centerStart = 0;
 #endif
-#else
-    scale = 1.0f;
 #endif
     if (window->type < 0) {
         window->type = WINDOW_TYPE_NORMAL;
@@ -1056,18 +1054,16 @@ void msgAnalize(smartEntry* smart, char* msg) {
             case '\n':
                 entry->glyph = MSG_GLYPH_NEWLINE;
                 entry->time = time;
-#if VERSION <= VERSION_DEMO_JP
-                x = 0;
-#elif VERSION < VERSION_US
+#if VERSION < VERSION_US
                 x = 0;
 #endif
                 if (0.0f == maxScale) {
                     maxScale = 1.0f;
                 }
-#if VERSION <= VERSION_DEMO_JP
+#if VERSION < VERSION_US
                 y -= 32.0f * maxScale;
                 savedScroll -= 32.0f * maxScale;
-#elif VERSION >= VERSION_US
+#else
                 if (data->flags & MSG_WIN_FLAG_SMALL) {
                     // US and later: tighter line spacing
                     y -= 0.7f * (32.0f * maxScale);
@@ -1076,9 +1072,6 @@ void msgAnalize(smartEntry* smart, char* msg) {
                     y -= 32.0f * maxScale;
                     savedScroll -= 32.0f * maxScale;
                 }
-#else
-                y -= 32.0f * maxScale;
-                savedScroll -= 32.0f * maxScale;
 #endif
                 msg++;
                 entry++;
@@ -1587,12 +1580,10 @@ void msgAnalize(smartEntry* smart, char* msg) {
                         entry->glyph = glyph;
                         entry->x = rubyX;
                         entry->y = ys[0];
-#if VERSION <= VERSION_DEMO_JP
+#if VERSION < VERSION_US
                         entry->scale = 0.55f * scale;
-#elif VERSION >= VERSION_US
-                        entry->scale = 0.55f * scale.x;
 #else
-                        entry->scale = 0.55f * scale;
+                        entry->scale = 0.55f * scale.x;
 #endif
                         entry->value = flags;
                         if (fp[0]) {
@@ -1658,17 +1649,13 @@ void msgAnalize(smartEntry* smart, char* msg) {
                 if (flags & MSG_CHAR_DYNAMIC) {
                     entry->rot = fv;
                 }
-#if VERSION <= VERSION_DEMO_JP
+#if VERSION < VERSION_US
                 if (maxScale < scale) {
                     maxScale = scale;
-                }
-#elif VERSION >= VERSION_US
-                if (maxScale < scale.y) {
-                    maxScale = scale.y;
                 }
 #else
-                if (maxScale < scale) {
-                    maxScale = scale;
+                if (maxScale < scale.y) {
+                    maxScale = scale.y;
                 }
 #endif
                 entry->time = time;
