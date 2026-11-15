@@ -1295,6 +1295,12 @@ EVT_BEGIN(shopper_talk_evt)
             SET_VALUE(LF(10), 0)
             CALL(evt_msg_print_add, MSG_PRINT_DIRECT_TEXT, STRING("<scrl_auto><once_stop>"))
 #if VERSION >= VERSION_US
+            // BUG (US and the September demos, fixed in PAL): this branch should continue the talk hook's open
+            // window, as the JP form below does, but evt_msg_print / evt_msg_print_insert open a second window.
+            // The hook's window was left at <o> and has just been scrolled empty by <scrl_auto><once_stop>; nothing
+            // adds to, continues or closes it after this, so it stays on screen empty (no key-wait mark) after the
+            // prize window closes and the loop's evt_mario_key_onoff gives Mario control back. Reached with an
+            // unclaimed prize when the hook returns -100 (usu_01 shopper_talk1/2, gor_01 iri_09_tentyo_talk).
             CALL(evt_sub_get_language, LW(0))
             SWITCH(LW(0))
                 CASE_EQUAL(LANGUAGE_JP)
