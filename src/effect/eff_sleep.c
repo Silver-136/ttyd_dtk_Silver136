@@ -103,10 +103,6 @@ static void effSleepMain(EffectEntry* effect) {
 /** sin(t / 64) for t = 2 pi times a frame count: a wave with a 64-frame period. */
 static inline f32 sleepSin(f32 t) { return sin(t / 64.0f); }
 
-// FAKE: the y products go through sleepPos so `1.0f * y` is not folded away by the front end (CExpr_IsOne);
-// GXPosition3f32(x, y, 0.0f) and a 1.0f height local change the object
-static inline void sleepPos(f32 x, f32 one, f32 y) { GXPosition3f32(x, one * y, 0.0f); }
-
 /**
  * Draws each visible mark as a camera-facing strip of 8 quads whose x offset follows a sine wave,
  * giving a wavy ribbon texture.
@@ -130,6 +126,7 @@ static void effSleepDisp(CameraId camId, void* param) {
     s32 alpha;
     f32 xh;
     f32 s0, s1;
+    f32 height;
 
     data = effect->userdata;
     cam = camGetPtr(camId);
@@ -159,6 +156,7 @@ static void effSleepDisp(CameraId camId, void* param) {
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
 
     w = 8.0f;
+    height = 1.0f;
     x0 = -w;
 
     for (i = 1, data++, base = 50; i < effect->count; base += 50, i++, data++) {
@@ -178,13 +176,13 @@ static void effSleepDisp(CameraId camId, void* param) {
                 s1 = 0.5f * sleepSin(tau * (f32)(u32)(gp->retraceCount + base + (j + 1) * 10));
                 xh = x0 / 2.0f;
                 GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-                sleepPos(xh + s1, 1.0f, j + 1);
+                GXPosition3f32(xh + s1, height * (j + 1), 0.0f);
                 GXTexCoord2f32(0.0f, 0.125f * (f32)(7 - j));
-                sleepPos(4.0f + s1, 1.0f, j + 1);
+                GXPosition3f32(4.0f + s1, height * (j + 1), 0.0f);
                 GXTexCoord2f32(1.0f, 0.125f * (f32)(7 - j));
-                sleepPos(4.0f + s0, 1.0f, j);
+                GXPosition3f32(4.0f + s0, height * j, 0.0f);
                 GXTexCoord2f32(1.0f, 0.125f * (f32)(8 - j));
-                sleepPos(xh + s0, 1.0f, j);
+                GXPosition3f32(xh + s0, height * j, 0.0f);
                 GXTexCoord2f32(0.0f, 0.125f * (f32)(8 - j));
                 j++;
                 off += 10;

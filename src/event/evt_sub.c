@@ -2007,8 +2007,6 @@ static void coingetDisp(WinMgrEntry* entry) {
     }
 }
 
-// kept: without it evt_sub_get_coin changes; -opt nolifetimes for the whole file changes other functions
-#pragma opt_lifetimes off
 /**
  * The "got coins" scene: shows a coin icon in front of Mario with the item-get pose and jingle
  * and the coin window, waits for A, then adds args[0] coins to the pouch and restores the music.
@@ -2113,7 +2111,6 @@ USER_FUNC(evt_sub_get_coin) {
     }
     return EVT_RETURN_DONE;
 }
-#pragma opt_lifetimes reset
 
 /** Turns the star stone item args[0] to the yaw args[1] (degrees) while it spins up in evt_sub_starstone. */
 static USER_FUNC(stone_ry) {

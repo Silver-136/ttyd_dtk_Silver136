@@ -85,10 +85,6 @@ static inline s32 angOut(f32 center, f32 half, f32 x) {
 static inline f32 sind(f32 deg) { return sin(3.1415927f * deg / 180.0f); }
 static inline f32 cosd(f32 deg) { return cos(3.1415927f * deg / 180.0f); }
 
-// FAKE: k025 is an invented one-line inline helper. Its result temp gets later inline numbering, which gives the
-// target FPR colouring in mot_roll (fmadds operand order). Behaviour-identical to the 0.025f it wraps.
-static inline f32 k025(void) { return 0.025f; }
-
 /** 1 if the control stick points outside +/-half degrees of Mario's move direction (angOut with the stick angle). */
 // Returns 1 when the stick direction lies outside moveDirection +/- half degrees (angOut with both angles read here).
 static inline s32 stickAngOut(f32 half) {
@@ -1132,6 +1128,7 @@ void mot_roll(void) {
             v28 = 0.0f;
         }
     } else {  // the speed clamp runs only on this path
+        f32 accel = 0.025f;
         if ((mario->mot.roll.flags & ROLL_FLAG_SLOPE_DAMP_UNUSED) && mario->groundRot.z == 0.0f) {
             if (stickAngOut(135.0f) == 1) {
                 v29 = 0.2f * -v29 + v29;
@@ -1170,10 +1167,10 @@ void mot_roll(void) {
         a31 = a31 * v26;
         v26 = v28 * v28;
         if (v29 * v29 + v26 <= a31 * a31) {
-            v29 = nx * k025() + v29;
+            v29 = nx * accel + v29;
         } else {
             f32 n = -a31;
-            v29 = nx * k025() + v29;
+            v29 = nx * accel + v29;
             if (v29 < n) {
                 v29 = n;
             }
@@ -1202,10 +1199,10 @@ void mot_roll(void) {
         }
         b31 = b31 * v30;
         if (v29 * v29 + v26 <= b31 * b31) {
-            v28 = v28 - nz * k025();
+            v28 = v28 - nz * accel;
         } else {
             f32 n = -b31;
-            v28 = v28 - nz * k025();
+            v28 = v28 - nz * accel;
             if (v28 < n) {
                 v28 = n;
             }

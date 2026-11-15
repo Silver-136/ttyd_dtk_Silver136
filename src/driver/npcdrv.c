@@ -433,10 +433,6 @@ static void npcDisp_offscreen(CameraId camId, void* param) {
     offscreenAddBoundingBox(entry->offscreenId, left, top, right, bottom);
 }
 
-#pragma push
-// FAKE: optimization level 2 for npcDisp_blur only
-#pragma optimization_level 2
-
 /**
  * Draws the motion blur trail of an NPC with NPC_FLAG_BLUR:
  * four copies at positionHistory[4..1], offset 2 units along the camera yaw and more opaque toward the newest,
@@ -473,7 +469,6 @@ static void npcDisp_blur(CameraId camId, void* param) {
     animPoseSetMaterialFlagOff(entry->poseId, MAP_OBJ_FLAG_COLOR);
     animPoseSetMaterialFlagOn(entry->poseId, flag);
 }
-#pragma pop
 
 /**
  * Boot-time setup (from mariost.c): allocates the field and battle NPC tables,
