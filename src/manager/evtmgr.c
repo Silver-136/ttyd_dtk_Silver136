@@ -100,7 +100,7 @@ static void make_jump_table(EventEntry* entry) {
 
         switch (opcode) {
             case OPCODE_END_SCRIPT:
-                return;
+                goto end;
             case OPCODE_LBL:
                 entry->labelIdTable[n] = (s8)label;
                 entry->labelAddressTable[n] = cmd;
@@ -113,6 +113,7 @@ static void make_jump_table(EventEntry* entry) {
             "unused";
         }
     }
+end:;
 }
 #pragma warn_no_side_effect on
 

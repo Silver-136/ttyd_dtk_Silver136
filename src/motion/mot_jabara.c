@@ -241,26 +241,7 @@ static inline void animStep(MarioWork* mario) {
     animPoseSetLocalTime(mario->paperAnimGroupId[marioAnimeId()], (f32)mario->mot.jabara.animFrame);
 }
 
-// End of the spring jump: reset the pose, optionally return to standing, free the motion work
-static inline void jabTail(BOOL stay) {
-    _marioRefresh();
-    if (stay) {
-        marioChgMotSub(MARIO_MOTION_STAY, 0);
-    }
-    if (marioGetPtr()->motStruct) {
-        __memFree(HEAP_DEFAULT, marioGetPtr()->motStruct);
-        marioGetPtr()->motStruct = NULL;
-    }
-}
-
-// A macro, not an inline function: as a function the instruction order in mot_jabara changes.
-#define JAB_LAND(HIT, Y)    \
-    marioPaperOff();        \
-    jabaraLand((Y), (HIT)); \
-    camFollowYOn();         \
-    marioGetPtr();          \
-    allPartyRideOff();      \
-    jabTail(TRUE);
+void jabaraEnd(void);
 
 static void swingMain(void);
 void setCatchSwing(s32 s);
@@ -479,11 +460,7 @@ void mot_jabara(void) {
                     jabaraLand(mario->lastGroundPos.y, standOn);
                 }
                 camFollowYOn();
-                marioGetPtr();
-#if VERSION >= VERSION_JP
-                allPartyRideOff();
-#endif
-                jabTail(TRUE);
+                jabaraEnd();
                 return;
             }
             mario->position.y = hitY;
@@ -531,11 +508,7 @@ void mot_jabara(void) {
             marioPaperOff();
             jabaraLand(hitY, land);
             camFollowYOn();
-            marioGetPtr();
-#if VERSION >= VERSION_JP
-            allPartyRideOff();
-#endif
-            jabTail(TRUE);
+            jabaraEnd();
             return;
     }
     switch (mario->currSubMotionId) {
@@ -640,17 +613,14 @@ void mot_jabara(void) {
                         mario->flags |= MARIO_FLAG_STOP_AIR_MOVEMENT;
                         mario->flags &= ~MARIO_FLAG_WALLS_DISABLED;
                         marioPaperOff();
-                        marioGetPtr();
-#endif
+#else
                         allPartyRideOff();
-#if VERSION <= VERSION_DEMO_JP
                         if (mario->dispFlags & MARIO_DISP_FLAG_PAPER) {
                             marioPaperOff();
                         }
                         mario->flags |= MARIO_FLAG_STOP_AIR_MOVEMENT;
-                        marioGetPtr();
 #endif
-                        jabTail(TRUE);
+                        jabaraEnd();
                         return;
                     }
                 } else {
@@ -682,7 +652,11 @@ void mot_jabara(void) {
 #if VERSION >= VERSION_JP
             mario->flags &= ~MARIO_FLAG_WALLS_DISABLED;
 #endif
-            jabTail(FALSE);
+            _marioRefresh();
+            if (marioGetPtr()->motStruct) {
+                __memFree(HEAP_DEFAULT, marioGetPtr()->motStruct);
+                marioGetPtr()->motStruct = NULL;
+            }
 #if VERSION <= VERSION_DEMO_JP
             allPartyRideOff();
 #endif
@@ -735,11 +709,7 @@ void mot_jabara(void) {
                 allPartyRideOff();
 #endif
                 mario->flags |= MARIO_FLAG_STOP_AIR_MOVEMENT;
-                marioGetPtr();
-#if VERSION >= VERSION_JP
-                allPartyRideOff();
-#endif
-                jabTail(TRUE);
+                jabaraEnd();
                 return;
             } else {
                 animStep(mario);
@@ -841,6 +811,25 @@ BOOL jabaraNoHitChk(void) {
         return TRUE;
     }
     return FALSE;
+}
+
+/**
+ * Ends the Spring Jump back on foot: dismounts the partners (JP and later), puts Mario back to normal, switches to
+ * the stay motion and frees the motion work.
+ */
+// Original name and size (0x100) from the JP demo map (UNUSED there: every call is inlined).
+void jabaraEnd(void) {
+    MarioWork* mario = marioGetPtr();
+
+#if VERSION >= VERSION_JP
+    allPartyRideOff();
+#endif
+    _marioRefresh();
+    marioChgMotSub(MARIO_MOTION_STAY, 0);
+    if (marioGetPtr()->motStruct) {
+        __memFree(HEAP_DEFAULT, marioGetPtr()->motStruct);
+        marioGetPtr()->motStruct = NULL;
+    }
 }
 
 /**

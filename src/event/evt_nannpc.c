@@ -219,6 +219,7 @@ void nanNPCOption(void) {
         }
     }
 }
+#pragma pop
 
 /**
  * Sets the TEV, channel and fog state for drawing crowd sprites tinted by each NPC's colour (TEV colour register
@@ -237,7 +238,6 @@ void nannpc_ext_AlphaLoadTev(void) {
     GXSetNumTexGens(1);
     GXSetNumTevStages(1);
 }
-#pragma pop
 
 /**
  * qsort comparator ordering crowd NPCs by Z, larger first; nannpc_ext_disp draws the sorted list from its end,

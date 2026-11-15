@@ -163,6 +163,35 @@ static void move_se_off(void) {
     }
 }
 
+static s32 shipYureguai(void);
+
+/** Eases the wake effect scale toward t by rate k. */
+static inline void shipLerpWake(f32 t, f32 k) {
+    marioGetPtr()->motShip->wakeScale += k * (t - marioGetPtr()->motShip->wakeScale);
+}
+
+/**
+ * Moves the wake effect to the boat, dy above Mario's feet, and sets its size:
+ * s when moving, otherwise a gentle 0.3/0.6 pulse following the bob.
+ */
+// Original name and size (0x160) from the JP demo map (UNUSED there: every call is inlined). The dy parameter
+// (every caller passes 0.0f; the add is in the retail code) accounts for the size; the (s, dy) order is not fixed by
+// the bytes.
+static void eff_splash(f32 s, f32 dy) {
+    MarioWork* mario = marioGetPtr();
+
+    if (!s) {
+        s = shipYureguai() ? 0.3f : 0.6f;
+        shipLerpWake(s, 0.1f);
+        s = marioGetPtr()->motShip->wakeScale;
+    }
+    ((EffFunemizuWork*)marioGetPtr()->motShip->wakeEff->userdata)->position.x = mario->position.x;
+    ((EffFunemizuWork*)marioGetPtr()->motShip->wakeEff->userdata)->position.y = mario->position.y + dy;
+    ((EffFunemizuWork*)marioGetPtr()->motShip->wakeEff->userdata)->position.z = mario->position.z;
+    ((EffFunemizuWork*)marioGetPtr()->motShip->wakeEff->userdata)->size = s;
+    ((EffFunemizuWork*)marioGetPtr()->motShip->wakeEff->userdata)->yaw = mario->displayDirection;
+}
+
 /**
  * Boat transition phase: 2 while settling onto the water (sub-motion 10),
  * 1 while folding into or out of the boat (0-12, 30-48), 3 while sailing (50, 52),
@@ -226,8 +255,8 @@ BOOL marioChkShipPlace(HitEntry* hit) {
     return (hitGetAttr(hit) & (HIT_ATTR_SHIP_PANEL1 | HIT_ATTR_SHIP_PANEL2 | HIT_ATTR_SHIP_PANEL3 | HIT_ATTR_SHIP_PANEL4)) != 0;
 }
 
-/** 0 while the boat's bob angle is past 180 degrees, else 1; shipEff picks the wake pulse size by it. */
-// Original name and place from the JP demo map (UNUSED there, 0x44 bytes: inlined into shipEff, the emitted copy is
+/** 0 while the boat's bob angle is past 180 degrees, else 1; eff_splash picks the wake pulse size by it. */
+// Original name and place from the JP demo map (UNUSED there, 0x44 bytes: inlined into eff_splash, the emitted copy is
 // stripped); this definition's out-of-line copy is 0x44 bytes too.
 static s32 shipYureguai(void) {
     MarioWork* mario = marioGetPtr();
@@ -331,35 +360,9 @@ void mot_ship_post(void) {
     }
 }
 
-/** Eases the wake effect scale toward t by rate k. */
-static inline void shipLerpWake(f32 t, f32 k) {
-    marioGetPtr()->motShip->wakeScale += k * (t - marioGetPtr()->motShip->wakeScale);
-}
-
 /** Eases the boat's turn speed toward t by rate k. */
 static inline void shipLerpTurn(f32 t, f32 k) {
     marioGetPtr()->motShip->turnSpeed += k * (t - marioGetPtr()->motShip->turnSpeed);
-}
-
-/**
- * Moves the wake effect to the boat and sets its size:
- * s when moving, otherwise a gentle 0.3/0.6 pulse following the bob.
- */
-static inline void shipEff(f32 s) {
-    MarioWork* mario = marioGetPtr();
-
-    // zz (0.0f) is added to position.y below (the add is in the retail code)
-    f32 zz = 0.0f;
-    if (!s) {
-        s = shipYureguai() ? 0.3f : 0.6f;
-        shipLerpWake(s, 0.1f);
-        s = marioGetPtr()->motShip->wakeScale;
-    }
-    ((EffFunemizuWork*)marioGetPtr()->motShip->wakeEff->userdata)->position.x = mario->position.x;
-    ((EffFunemizuWork*)marioGetPtr()->motShip->wakeEff->userdata)->position.y = mario->position.y + zz;
-    ((EffFunemizuWork*)marioGetPtr()->motShip->wakeEff->userdata)->position.z = mario->position.z;
-    ((EffFunemizuWork*)marioGetPtr()->motShip->wakeEff->userdata)->size = s;
-    ((EffFunemizuWork*)marioGetPtr()->motShip->wakeEff->userdata)->yaw = mario->displayDirection;
 }
 
 /**
@@ -598,7 +601,7 @@ void mot_ship(void) {
             m->multiTimer = 4;
             m->currSubMotionId = 32;
         }
-        shipEff(1.6f);
+        eff_splash(1.6f, 0.0f);
         break;
     case 32:
         if (--m->multiTimer > 0) {
@@ -819,7 +822,7 @@ void mot_ship(void) {
             m->dispOfs.y = 3.0f * (f32)sin(3.1415927f * marioGetPtr()->motShip->bobAngle / 180.0f) + -13.0f;
         }
         if ((s32)m->flags & MARIO_FLAG_FORCED_MOVEMENT) {
-            shipEff(m->baseSpeed);
+            eff_splash(m->baseSpeed, 0.0f);
             break;
         }
         if (m->hitobjStandOn == NULL) {
@@ -857,7 +860,7 @@ void mot_ship(void) {
             m->baseSpeed = 0.0f;
             m->currSubMotionId = 0x32;
         }
-        shipEff(m->baseSpeed);
+        eff_splash(m->baseSpeed, 0.0f);
         if (m->buttonTrg & (PAD_BUTTON_B | PAD_BUTTON_Y)) {
             if (checkHarbor(&marioGetPtr()->motShip->harborPos)) {
                 m->currSubMotionId = 0x1e;
