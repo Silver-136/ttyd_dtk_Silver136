@@ -438,15 +438,15 @@ void badgeShop_bargainGeneration(void) {
     }
 }
 
-// kept: the target calls badgeShop_set from badgeShop_bargainGeneration; a function this small is auto-inlined
-// otherwise, and -inline noauto for the file changes other functions
-#pragma dont_inline on
 /**
  * Writes a 2-bit stock count (clamped to 0-3) for item id into a shop table and returns the stored count.
  * Tables hold four items per byte from BADGE_MIN, or from KEY_ITEM_MIN for Charlieton's and the Parlor's;
  * other ids give 0.
  */
+// badgeShop_bargainGeneration calls it: with the range check on a copy of id (as in badgeShop_add) the function
+// has more than the 30 statements MWCC auto-inlines.
 s16 badgeShop_set(u8* table, s16 id, s16 val) {
+    s32 temp;
     s32 bound;
     s16 index;
     u8 mask;
@@ -458,10 +458,11 @@ s16 badgeShop_set(u8* table, s16 id, s16 val) {
     } else {
         bound = BADGE_MIN;
     }
-    if (id < bound || id >= BADGE_MAX) {
+    temp = (s16)id;
+    if (temp < bound || temp >= BADGE_MAX) {
         return 0;
     }
-    index = (s16)(id - bound);
+    index = (s16)(temp - bound);
     switch (index & 3) {
         case 0:
             mask = (u8)~(3 << 0);
@@ -490,7 +491,6 @@ s16 badgeShop_set(u8* table, s16 id, s16 val) {
     return val;
 }
 
-#pragma dont_inline reset
 /**
  * Reads the 2-bit stock count (0-3) of item id from a shop table;
  * same layout as badgeShop_set, 0 when out of range.

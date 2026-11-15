@@ -441,7 +441,7 @@ config.libs = [
         "progress_category": "game",
         "objects": [
             Object(MatchingFor("G8MJ01", "G8ME01"), "battle/ac/ac_table.c"),
-            Object(MatchingFor("G8MJ01", "G8ME01"), "battle/ac/ac_stick_keep_left.c", extra_cflags=["-O4,s", "-inline off"]),
+            Object(MatchingFor("G8MJ01", "G8ME01"), "battle/ac/ac_stick_keep_left.c", extra_cflags=["-O4,s"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "battle/ac/ac_timing_a.c", extra_cflags=["-O4,s", "-inline noauto"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "battle/ac/ac_repeatedly.c", extra_cflags=["-O4,s", "-inline noauto"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "battle/ac/ac_shot.c", extra_cflags=["-O4,s", "-inline noauto"]),
@@ -1063,7 +1063,7 @@ config.libs = [
             Object(MatchingFor("G8MJ01", "G8ME01"), "TRK_MINNOW_DOLPHIN.a/mutex_TRK.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "TRK_MINNOW_DOLPHIN.a/notify.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "TRK_MINNOW_DOLPHIN.a/flush_cache.c"),
-            Object(MatchingFor("G8MJ01", "G8ME01"), "TRK_MINNOW_DOLPHIN.a/mem_TRK.c", extra_cflags=["-inline noauto,deferred"]),
+            Object(MatchingFor("G8MJ01", "G8ME01"), "TRK_MINNOW_DOLPHIN.a/mem_TRK.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "TRK_MINNOW_DOLPHIN.a/targimpl.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "TRK_MINNOW_DOLPHIN.a/targsupp.s"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "TRK_MINNOW_DOLPHIN.a/mpc_7xx_603e.c"),

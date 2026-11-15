@@ -4,9 +4,11 @@ typedef unsigned int u32;
 /* Fills n bytes at dst with the byte val: single bytes up to a word boundary, then eight words per step, the rest
    in words and bytes. dst itself walks the buffer with pre-increment stores (stbu/stwu), so it always points one
    unit before the next address to write. The casts on the left are CodeWarrior's cast-as-lvalue extension.
-   Form after the matched GC 2.6 decompilations of pikmin2 and ac-decomp (CC0). */
+   Form after the matched GC 2.6 decompilations of pikmin2 and ac-decomp (CC0). The eight word stores per step
+   are written out: with them the function has more than the 30 statements MWCC auto-inlines, so TRK_memset
+   calls it under the TRK library's default -inline auto,deferred. */
 static void TRK_fill_mem(void* dst, int val, unsigned int n) {
-    u32 v, i, j;
+    u32 v, i;
     v = (u8)val;
 
     ((u8*)dst) = ((u8*)dst) - 1;
@@ -34,8 +36,14 @@ static void TRK_fill_mem(void* dst, int val, unsigned int n) {
 
         if (i) {
             do {
-                for (j = 0; j < 8; j++)
-                    *++((u32*)dst) = v;
+                *++((u32*)dst) = v;
+                *++((u32*)dst) = v;
+                *++((u32*)dst) = v;
+                *++((u32*)dst) = v;
+                *++((u32*)dst) = v;
+                *++((u32*)dst) = v;
+                *++((u32*)dst) = v;
+                *++((u32*)dst) = v;
             } while (--i);
         }
 
