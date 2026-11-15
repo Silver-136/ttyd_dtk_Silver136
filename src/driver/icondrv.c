@@ -409,7 +409,7 @@ static void iconDisp(CameraId camId, void* param) {
  * Immediately draws icon iconId at a world position as a camera-facing billboard with the given alpha and scale,
  * picking the animation frame from the retrace count; for draw callbacks that show icons without a named entry.
  */
-void iconDispGxAlpha(Vec* position, s16 flags, u16 iconId, u8 alpha, f32 scale) {
+void iconDispGxAlpha(f32 scale, Vec* position, s16 flags, u16 iconId, u8 alpha) {
     IconEntry entry;
     Mtx transmtx;
     Mtx scalemtx;
@@ -461,7 +461,7 @@ void iconDispGxAlpha(Vec* position, s16 flags, u16 iconId, u8 alpha, f32 scale) 
 
 /** Immediately draws icon iconId at a world position, opaque; see iconDispGxAlpha. */
 void iconDispGx(Vec* position, s16 flags, u16 iconId, f32 scale) {
-    iconDispGxAlpha(position, flags, iconId, 0xFF, scale);
+    iconDispGxAlpha(scale, position, flags, iconId, 0xFF);
 }
 
 /**

@@ -614,7 +614,7 @@ void FontDrawMessage(s32 x, s32 y, const char* msg) {
                         pos.x = offsetX + (cx + 0.5f * w * scale);
                         pos.y = offsetY + (cy - h * scale);
                         pos.z = 0.0f;
-                        iconDispGxAlpha(&pos, ICON_FLAG_2D, id, fontAlpha, scale);
+                        iconDispGxAlpha(scale, &pos, ICON_FLAG_2D, id, fontAlpha);
                         FontDrawStart_alpha(fontAlpha);
                         FontDrawColor(fontColor);
                         cx += w * scale + spacing;
@@ -699,9 +699,7 @@ void FontDrawMessageMtx(Mtx mtx, const char* msg) {
                         pos.z = 0.0f;
                         PSMTXMultVec(mtx, &pos, &pos);
 
-                        // FAKE: no-op self-assignment before the icon draw; without it the scale load moves
-                        scale = scale;
-                        iconDispGxAlpha(&pos, ICON_FLAG_2D, id, fontAlpha, scale);
+                        iconDispGxAlpha(scale,&pos, ICON_FLAG_2D, id, fontAlpha);
                         FontDrawStart_alpha(fontAlpha);
                         FontDrawColor(fontColor);
                         cx += w * scale + spacing;
