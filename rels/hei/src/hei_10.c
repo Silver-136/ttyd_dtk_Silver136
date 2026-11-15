@@ -456,6 +456,7 @@ static void ext_main(void) {
 #pragma pop
 
 /* unused in the original build; only its Vec template survives in .rodata */
+// FAKE: pool stand-in with an invented name
 static inline void chb_zero(Vec* v) {
     *v = (Vec){0.0f, 0.0f, 0.0f};
 }

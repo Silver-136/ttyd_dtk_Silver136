@@ -1310,6 +1310,8 @@ static USER_FUNC(fall_rtn) {
     Vec v;
     Monte* m;
 
+    // FAKE: taking the inline's address keeps its uncalled out-of-line copy (the JP demo map lists get_monte_check
+    // in yuu_00 after monte_disp); -inline auto,deferred with a plain static changes JP (cleanup_notes/bf/E2)
     (void)&get_monte_check;
     if (isFirstCall) {
         if (monte_p != NULL) {

@@ -46,6 +46,7 @@
 #include "mario/mario_cam.h"
 #include "eff/n64/eff_hagetaka_flush_n64.h"
 
+// FAKE: pool stand-in with an invented name
 /* unused; its zero Vec template still lands in the constant pool / .rodata (removing it changes the object) */
 inline Vec unknownVec0(void) {
     return (Vec){ 0.0f, 0.0f, 0.0f };

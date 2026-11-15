@@ -2517,80 +2517,76 @@ USER_FUNC(_gundan_yoshi_run_effect) {
     s32 allDone;
     Vec pos;
     s32 id;
-    Vec tmp;
 
-    do {
-        id = evtGetValue(event, event->args[0]);
-        id = BattleTransID(event, id);
-        unit = BattleGetUnitPtr(_battleWorkPointer, id);
-        if (isFirstCall) {
-            w = BattleAlloc(sizeof(YoshiGundanWork));
-            TST_BATTLE_UNIT(unit)->countersetWeapon = (BattleWeapon*)w;
-            memset(w, 0, sizeof(YoshiGundanWork));
-            w->state = 0;
+    id = evtGetValue(event, event->args[0]);
+    id = BattleTransID(event, id);
+    unit = BattleGetUnitPtr(_battleWorkPointer, id);
+    if (isFirstCall) {
+        w = BattleAlloc(sizeof(YoshiGundanWork));
+        TST_BATTLE_UNIT(unit)->countersetWeapon = (BattleWeapon*)w;
+        memset(w, 0, sizeof(YoshiGundanWork));
+        w->state = 0;
+        w->meanX = 0.0f;
+        event->userdata[0] = 0;
+        event->userdata[1] = psndSFXOn("SFX_BTL_YOSHI_TAIGUN1");
+    } else {
+        w = (YoshiGundanWork*)TST_BATTLE_UNIT(unit)->countersetWeapon;
+    }
+    switch (w->state) {
+        case 0:
+            w->state++;
+        case 1:
             w->meanX = 0.0f;
-            event->userdata[0] = 0;
-            tmp.x = (f32)id;
-            event->userdata[1] = psndSFXOn("SFX_BTL_YOSHI_TAIGUN1");
-        } else {
-            w = (YoshiGundanWork*)TST_BATTLE_UNIT(unit)->countersetWeapon;
-        }
-        switch (w->state) {
-            case 0:
-                w->state++;
-            case 1:
-                w->meanX = 0.0f;
-                allDone = TRUE;
-                for (i = 0; i < 256; i++) {
-                    p = &w->parts[i];
-                    p->frameCount++;
-                    if (p->frameCount > 2) {
-                        p->frameCount = 0;
-                        p->frame++;
-                        if (p->frame >= 6) {
-                            p->frame = 0;
-                        }
+            allDone = TRUE;
+            for (i = 0; i < 256; i++) {
+                p = &w->parts[i];
+                p->frameCount++;
+                if (p->frameCount > 2) {
+                    p->frameCount = 0;
+                    p->frame++;
+                    if (p->frame >= 6) {
+                        p->frame = 0;
                     }
-                    if (_gundan_part_update(p, i)) {
-                        allDone = FALSE;
-                    }
-                    w->meanX += p->x;
                 }
-                if (event->userdata[0] > 0) {
-                    event->userdata[0]--;
-                } else {
-                    f32 sc;
-                    p = &w->parts[irand(256)];
-                    sc = 1.0f + 0.05f * (f32)irand(20);
+                if (_gundan_part_update(p, i)) {
+                    allDone = FALSE;
+                }
+                w->meanX += p->x;
+            }
+            if (event->userdata[0] > 0) {
+                event->userdata[0]--;
+            } else {
+                f32 sc;
+                p = &w->parts[irand(256)];
+                sc = 1.0f + 0.05f * (f32)irand(20);
 #if VERSION <= VERSION_DEMO_JP
-                    effKemuTestEntry(0, p->x, 5.0f + p->y + (f32)irand(10), p->z, sc);
+                effKemuTestEntry(0, p->x, 5.0f + p->y + (f32)irand(10), p->z, sc);
 #else
-                    effKemuTestEntry(0, p->x, 5.0f + p->y + (f32)irand(15), 65.0f, sc);
+                effKemuTestEntry(0, p->x, 5.0f + p->y + (f32)irand(15), 65.0f, sc);
 #endif
-                }
-                w->meanX *= 0.00390625f;
-                pos.x = w->meanX;
-                pos.y = 0.0f;
-                pos.z = 0.0f;
-                psndSFX_pos(event->userdata[1], &pos);
-                if (allDone) {
-                    w->state = 999;
-                }
-                break;
-            case 999:
-                psndSFXOff(event->userdata[1]);
-                BattleFree(TST_BATTLE_UNIT(unit)->countersetWeapon);
-                TST_BATTLE_UNIT(unit)->countersetWeapon = NULL;
-                return EVT_RETURN_DONE;
-        }
+            }
+            w->meanX *= 0.00390625f;
+            pos.x = w->meanX;
+            pos.y = 0.0f;
+            pos.z = 0.0f;
+            psndSFX_pos(event->userdata[1], &pos);
+            if (allDone) {
+                w->state = 999;
+            }
+            break;
+        case 999:
+            psndSFXOff(event->userdata[1]);
+            BattleFree(TST_BATTLE_UNIT(unit)->countersetWeapon);
+            TST_BATTLE_UNIT(unit)->countersetWeapon = NULL;
+            return EVT_RETURN_DONE;
+    }
 #if VERSION <= VERSION_DEMO_JP
-        dispEntry(CAMERA_3D, 0.0f, DISP_MODE_XLU, (DispCallback)_btlYoshiDisp, w);
+    dispEntry(CAMERA_3D, 0.0f, DISP_MODE_XLU, (DispCallback)_btlYoshiDisp, w);
 #else
-        for (i = 0; i < 256; i++) {
-            dispEntry(CAMERA_3D, dispCalcZ((Vec*)p), VERSION_PICK(DISP_MODE_XLU, DISP_MODE_ALPHA_TEST), (DispCallback)_btlYoshiDisp, &w->parts[i]);
-        }
+    for (i = 0; i < 256; i++) {
+        dispEntry(CAMERA_3D, dispCalcZ((Vec*)p), VERSION_PICK(DISP_MODE_XLU, DISP_MODE_ALPHA_TEST), (DispCallback)_btlYoshiDisp, &w->parts[i]);
+    }
 #endif
-    } while (0);
     return EVT_RETURN_BLOCK;
 }
 

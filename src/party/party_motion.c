@@ -3418,6 +3418,7 @@ found:
 }
 
 /* Unused, but the compiler still emits its {0, -1, 0} Vec constant. */
+// FAKE: pool stand-in with an invented name
 static inline void partyDownDirX(HitCheckQuery* q) {
     q->targetDir = (Vec){0.0f, -1.0f, 0.0f};
 }
@@ -3505,6 +3506,7 @@ static u32 getFrontFloorAttr2(PartyEntry* party, f32 dir, f32 dist) {
 }
 
 /* Unused (sets a hit query's direction to straight down), but the compiler still emits its {0, -1, 0} Vec constant. */
+// FAKE: pool stand-in with an invented name
 static inline void partyDownDirY(HitCheckQuery* q) {
     q->targetDir = (Vec){0.0f, -1.0f, 0.0f};
 }

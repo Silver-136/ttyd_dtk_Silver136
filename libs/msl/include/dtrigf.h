@@ -25,6 +25,8 @@ static DtrigfPairedConstants sincosf_constants[2] = {
 };
 #else
 
+/* FAKE: invented inline-assembly bodies (see above); they address each constant once so every REL TU emits the
+ * constants in the original storage order. */
 static inline void sincosf_f(void) {
     const long long one_negone = 0x3F800000BF800000;
     const long long negone_one = 0xBF8000003F800000;

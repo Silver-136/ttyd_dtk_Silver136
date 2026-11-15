@@ -2489,6 +2489,8 @@ static void BattleAudienceAnimProcess(void) {
 }
 
 // A macro, not an inline function: as a function GXPosition3f32 changes BattleAudienceDispAudience (AUD_POS / AUD_POSS differ only by temporaries).
+// FAKE: AUD_POS copies its arguments into spare temporaries (AUD_POSS does not); AUD_POSS sites through AUD_POS
+// change the object
 #define AUD_POS(x, y, z)   \
     do {                   \
         f32 _x = (x);      \

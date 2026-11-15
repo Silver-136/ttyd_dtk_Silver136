@@ -3574,17 +3574,6 @@ static USER_FUNC(evt_raster) {
 }
 
 /**
- * Offset of the pixel (x, y) in a 4x4-tiled IA8 texture 16 tiles (64 pixels) wide, with the roles of x and y
- * swapped: y runs along a row of tiles and x down the rows. raster_disp writes the same arithmetic out by hand.
- */
-inline s32 ia8_ofs(s32 x, s32 y) {
-    int off = (y / 4) << 5;
-    off += (x / 4) << 9;
-    off += ((y % 4) + ((x % 4) << 2)) * 2;
-    return off;
-}
-
-/**
  * Draw callback of the mover's warp: copies the screen to a texture
  * and draws it back through a 64x64 sine-wave indirect texture (amplitude capped at 127),
  * producing the wavy distortion.

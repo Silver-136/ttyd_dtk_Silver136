@@ -848,6 +848,7 @@ static void camLetterBox(void) {
 
 /** A zero vector; unused leftover helper. */
 // nothing calls it, but its zero Vec literal still emits a constant into this object's .rodata
+// FAKE: pool stand-in with an invented name
 inline Vec unknownVec0(void) {
     return (Vec){ 0.0f, 0.0f, 0.0f };
 }
@@ -862,6 +863,7 @@ inline Vec makeVecByValue(f32 x, f32 y, f32 z) {
 }
 
 /** A zero vector; unused leftover helper. */
+// FAKE: pool stand-in with an invented name
 inline Vec unknownVec2(void) {
     return (Vec){ 0.0f, 0.0f, 0.0f };
 }

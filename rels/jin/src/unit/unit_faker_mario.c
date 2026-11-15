@@ -192,6 +192,7 @@ static USER_FUNC(_save_param) {
     p->commandDisabled[0] = party->usCommandDisabled[0];
     p->commandDisabled[1] = party->usCommandDisabled[1];
 #endif
+    // FAKE: byte-offset view of the 30 bytes of status-turn fields from sleepTurns (memcpy changes the object)
     p->status = *(FakerStatus*)&party->sleepTurns;
     p->maxHp = party->maxHp;
     p->currentHp = party->currentHp;
@@ -235,6 +236,7 @@ static USER_FUNC(_load_param) {
     party->usCommandDisabled[0] = p->commandDisabled[0];
     party->usCommandDisabled[1] = p->commandDisabled[1];
 #endif
+    // FAKE: byte-offset view of the status-turn fields, as in _save_param
     *(FakerStatus*)&party->sleepTurns = p->status;
     party->maxHp = p->maxHp;
     party->currentHp = p->currentHp;

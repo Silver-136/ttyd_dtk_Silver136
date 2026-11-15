@@ -883,6 +883,7 @@ static USER_FUNC(irai_end_func) {
 
 // US: one row cell, x-squeezed to fit maxW. "y" is stored in the caller's float var v (the
 // original reuses one float local for these; this keeps the MWCC float register choice).
+// FAKE: the row y goes through the caller's width variable w (a new f32 local at any slot swaps f27/f28)
 #define iraiDrawFit(msg, x, y, maxW, v) {                                               \
     f32 w_;                                                                             \
     v = (y);                                                                            \

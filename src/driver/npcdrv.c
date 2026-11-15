@@ -713,6 +713,7 @@ static inline void npcMoveSide(NpcEntry* entry, f32 mx, f32 mz) {
  * Last it runs the first-strike banner and the field battle mode (encounter, talk or battle).
  */
 BOOL npcCheckInWater(NpcEntry* entry);
+BOOL npcCheckEnableLookMario(void);
 void _fbatFitstAttackAnnounceMain(FirstStrikeInfo* firstStrike);
 
 void npcMain(void) {
@@ -726,7 +727,6 @@ void npcMain(void) {
     f32 dist;
     Vec dv;
     Vec dv2;
-    s32 marioFindable;
     f32 speedScale;
 
     npcwork = gp->inBattle ? &work.battle : &work.field;
@@ -897,35 +897,7 @@ void npcMain(void) {
                                 }
                             }
                             trig = 0;
-                            do {
-                                m = marioGetPtr();
-                                if (m->flags & (MARIO_FLAG_BG_MODE | MARIO_FLAG_IS_8_BIT)) {
-                                    marioFindable = 0;
-                                    break;
-                                }
-                                if (m->flags & (MARIO_FLAG_CTRL_OFF | MARIO_FLAG_KEY_OFF)) {
-                                    marioFindable = 0;
-                                    break;
-                                }
-                                if (gp->mapEventId != 0) {
-                                    marioFindable = 0;
-                                    break;
-                                }
-                                if (seqGetSeq() != SEQ_GAME) {
-                                    marioFindable = 0;
-                                    break;
-                                }
-                                if (m->currMotionId == MARIO_MOTION_SHIP) {
-                                    marioFindable = 0;
-                                    break;
-                                }
-                                if (vivianGetStatus() != VIVIAN_STATUS_INACTIVE && vivianGetStatus() != VIVIAN_STATUS_SINKING) {
-                                    marioFindable = 0;
-                                } else {
-                                    marioFindable = 1;
-                                }
-                            } while (0);
-                            if (!marioFindable) {
+                            if (!npcCheckEnableLookMario()) {
                                 trig = 1;
                             } else {
                                 dist = sqrtf(dx * dx + dz * dz);
@@ -980,35 +952,7 @@ void npcMain(void) {
                             PSVECSubtract(&entry->prevPosition, &entry->position, &dv);
                             dir = reviseAngle(entry->direction) < 180.0f ? 90.0f : 270.0f;
                             trig = 1;
-                            do {
-                                m = marioGetPtr();
-                                if (m->flags & (MARIO_FLAG_BG_MODE | MARIO_FLAG_IS_8_BIT)) {
-                                    marioFindable = 0;
-                                    break;
-                                }
-                                if (m->flags & (MARIO_FLAG_CTRL_OFF | MARIO_FLAG_KEY_OFF)) {
-                                    marioFindable = 0;
-                                    break;
-                                }
-                                if (gp->mapEventId != 0) {
-                                    marioFindable = 0;
-                                    break;
-                                }
-                                if (seqGetSeq() != SEQ_GAME) {
-                                    marioFindable = 0;
-                                    break;
-                                }
-                                if (m->currMotionId == MARIO_MOTION_SHIP) {
-                                    marioFindable = 0;
-                                    break;
-                                }
-                                if (vivianGetStatus() != VIVIAN_STATUS_INACTIVE && vivianGetStatus() != VIVIAN_STATUS_SINKING) {
-                                    marioFindable = 0;
-                                } else {
-                                    marioFindable = 1;
-                                }
-                            } while (0);
-                            if (!marioFindable) {
+                            if (!npcCheckEnableLookMario()) {
                                 trig = 0;
                             } else {
                                 f32 angleToMario;
@@ -3831,6 +3775,34 @@ s32 npcCalcScore(NpcEntry* npc) {
         kpaAddScorePos(score, &pos);
     }
     return score;
+}
+
+/**
+ * Whether NPCs can notice Mario now: not in the background or 8-bit, not while his control or keys are off, not
+ * during map events, outside SEQ_GAME, on the boat, or while Vivian hides him.
+ */
+// Original name and size (0xb4) from the JP demo map (UNUSED there: npcMain's calls are inlined).
+BOOL npcCheckEnableLookMario(void) {
+    MarioWork* m = marioGetPtr();
+    if (m->flags & (MARIO_FLAG_BG_MODE | MARIO_FLAG_IS_8_BIT)) {
+        return FALSE;
+    }
+    if (m->flags & (MARIO_FLAG_CTRL_OFF | MARIO_FLAG_KEY_OFF)) {
+        return FALSE;
+    }
+    if (gp->mapEventId != 0) {
+        return FALSE;
+    }
+    if (seqGetSeq() != SEQ_GAME) {
+        return FALSE;
+    }
+    if (m->currMotionId == MARIO_MOTION_SHIP) {
+        return FALSE;
+    }
+    if (vivianGetStatus() != VIVIAN_STATUS_INACTIVE && vivianGetStatus() != VIVIAN_STATUS_SINKING) {
+        return FALSE;
+    }
+    return TRUE;
 }
 
 /**

@@ -83,20 +83,6 @@ inline IconEntry* iconFindIn(IconWork* wp, const char* name) {
     return NULL;
 }
 
-/** Returns the live icon with this name in the current (field or battle) set, or NULL; same search as iconNameToPtr. */
-inline IconEntry* iconGetEntry(const char* name) {
-    IconWork* wp = iconGetWork();
-    IconEntry* entry = wp->entries;
-    int i;
-
-    for (i = 0; i < wp->count; i++, entry++) {
-        if (entry->uflags & ICON_FLAG_ACTIVE && !strcmp(entry->name, name)) {
-            return entry;
-        }
-    }
-    return NULL;
-}
-
 /** DVD read callback for icon.tpl: unpacks the texture palette, closes the file and marks the textures ready. */
 static void _callback_tpl(s32 error, DVDFileInfo* info) {
     DVDEntry* entry = info->cb.userData;

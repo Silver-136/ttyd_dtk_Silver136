@@ -278,14 +278,6 @@ inline f32 inV(Vec a, Vec b) {
     return a.x * b.x + a.y * b.y + a.z * b.z;
 }
 
-/** Unused: TRUE when all three components of a are zero (kept: the 0.0f it contains may shape the constant pool). */
-static inline BOOL crVecIsZero(Vec a) {
-    if (a.x == 0.0f && a.y == 0.0f && a.z == 0.0f) {
-        return TRUE;
-    }
-    return FALSE;
-}
-
 /**
  * Casts a ray straight down from P onto triangle ABC;
  * returns 1 and sets *dist to the hit height when it hits at least as high as *dist.
@@ -342,15 +334,6 @@ static s32 collisionTri_simple(Vec P, Vec A, Vec B, Vec C, f32* dist) {
         *dist = hit.y;
     }
     return 1;
-}
-
-/** Unused: horizontal length of (x, z). */
-static inline f32 crLen2(f32 x, f32 z) {
-    f32 l = x * x + z * z;
-    if (l != 0.0) {
-        l = sqrtf(l);
-    }
-    return l;
 }
 
 /**
@@ -1304,17 +1287,6 @@ static inline f32 hokanRate(f32 t, f32 a, f32 b, f32 k, f32 o) {
         r = 1.0f;
     }
     return r;
-}
-
-/** Unused: interpolates between angles from and to (radians) the short way round. */
-static inline f32 angleLerp(f32 from, f32 to, f32 r) {
-    while (from - to > 3.1415927f) {
-        from -= 6.2831855f;
-    }
-    while (from - to < -3.1415927f) {
-        from += 6.2831855f;
-    }
-    return r * (to - from) + from;
 }
 
 /**

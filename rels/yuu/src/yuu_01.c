@@ -63,6 +63,8 @@ static void monte_disp(CameraId camera, void* param);
  * Returns TRUE when two points are within 20 units in 3D and within 20 in height,
  * i.e. the boat is touching a floating coin.
  */
+// FAKE: an invented inline copy of get_monte_check: fall_rtn inlines it, while the real get_monte_check (end of
+// the file, uncalled) only supplies the out-of-line copy the JP demo map lists
 static inline BOOL monte_check_inl(Vec* a, Vec* b) {
     if (PSVECDistance(a, b) < 20.0f && __fabs(a->y - b->y) < 20.0) {
         return TRUE;
