@@ -87,6 +87,3 @@ USER_FUNC(evt_mobj_switch_red);
 USER_FUNC(evt_mobj_timerswitch);
 USER_FUNC(evt_mobj_tornadoswitch_blue);
 USER_FUNC(evt_mobj_wait_animation_end);
-void evt_mobj_rideswitch(void);
-void mobj_sign(void);
-void mobj_koopa_stone_blk(void);

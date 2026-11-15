@@ -59,16 +59,6 @@ static s32 mobj_brickblk(MapObjectEntry* mobj);
 static s32 mobj_signboard(MapObjectEntry* mobj);
 static s32 mobj_lock(MapObjectEntry* mobj);
 
-// The objects JP, US and the US September demo strip (the A/B ride switches, red tornado switch, arrow,
-// trap floor and breaking rock) stay in the early demos, the PAL demo and PAL.
-#if VERSION >= VERSION_DEMO_EU
-#define MOBJ_EXTRA_OBJS 1
-#elif VERSION <= VERSION_DEMO_JP
-#define MOBJ_EXTRA_OBJS 1
-#else
-#define MOBJ_EXTRA_OBJS 0
-#endif
-
 /**
  * Resolves a map object name for the script commands below;
  * "me" means the object whose event is running (event->thisMapObj).
@@ -675,8 +665,11 @@ USER_FUNC(evt_mobj_floatswitch_red) {
     return EVT_RETURN_DONE;
 }
 
-#if MOBJ_EXTRA_OBJS
-/** Places a reusable red tornado switch pressed by a spin jump; only built in the early demos, the PAL demo and PAL. args[0] ignored. */
+/**
+ * Places a reusable red tornado switch pressed by a spin jump; used in the early demos, the PAL demo and PAL (every version compiles it; JP, US and the September US demo
+ * place none, so their link strips it, but its strings stay in .rodata).
+ * args[0] ignored.
+ */
 USER_FUNC(evt_mobj_tornadoswitch_red) {
     EvtWord* args = event->args;
     s32 flagVar;
@@ -717,8 +710,6 @@ USER_FUNC(evt_mobj_tornadoswitch_red) {
     mobjCalcMtx(mobj);
     return EVT_RETURN_DONE;
 }
-
-#endif
 
 /**
  * Main function of the paired timer switches: pressing one starts a countdown of typeWork frames;
@@ -864,7 +855,6 @@ USER_FUNC(evt_mobj_timerswitch) {
     return EVT_RETURN_DONE;
 }
 
-#if MOBJ_EXTRA_OBJS
 /**
  * Main function of the orange ride switch (early demos, PAL demo and PAL):
  * standing on it runs the event and squashes it flat, where it stays.
@@ -1026,8 +1016,6 @@ USER_FUNC(evt_mobj_rideswitch_green) {
     return EVT_RETURN_DONE;
 }
 
-#endif
-
 /**
  * Main function of the light blue ride switch: stepping on it runs the event and flattens it;
  * when Mario leaves it runs the second (release) event and springs back up.
@@ -1037,18 +1025,6 @@ static s32 mobj_rideswitch_lightblue(MapObjectEntry* mobj) {
     AnimationPoseData* data;
     f32 mag;
     Vec size;
-    Vec d1;
-    Vec d2;
-    Vec d3;
-    Vec d4;
-#if !MOBJ_EXTRA_OBJS
-    // Four Vec literals never read (they read the uninitialized x/y/z), in the original too: their stack slots
-    // and initializer templates are in the retail code
-    d1 = (Vec){x, y, z};
-    d2 = (Vec){x, y, z};
-    d3 = (Vec){x, y, z};
-    d4 = (Vec){x, y, z};
-#endif
     switch (mobj->state) {
         case 0:
             if (mobj->flags & MOBJ_FLAG_HIT) {
@@ -1103,15 +1079,6 @@ static s32 mobj_rideswitch_lightblue(MapObjectEntry* mobj) {
     }
     return 0;
 }
-
-#if !MOBJ_EXTRA_OBJS
-/** Not called: it only places the model-name strings that stripped code referenced. */
-void evt_mobj_rideswitch(void) {
-    mobjNameToPtr("MOBJ_RideSwitchB");
-    mobjNameToPtr("MOBJ_RideSwitchA");
-    mobjNameToPtr("MOBJ_RedTornadoSwitch");
-}
-#endif
 
 /**
  * Places a light blue ride switch (MOBJ_RideSwitchC).
@@ -2379,13 +2346,16 @@ USER_FUNC(evt_mobj_signboard) {
     return EVT_RETURN_DONE;
 }
 
-#if MOBJ_EXTRA_OBJS
 /** Main function of the arrow sign; it does nothing (the arrow is only decoration). */
 static s32 mobj_arrow(MapObjectEntry* mobj) {
     return 0;
 }
 
-/** Places a decorative arrow sign (MOBJ_Arrow); only built in the early demos, the PAL demo and PAL. args: name, x, y, z, flag variable. */
+/**
+ * Places a decorative arrow sign (MOBJ_Arrow); used in the early demos, the PAL demo and PAL (every version compiles it; JP, US and the September US demo
+ * place none, so their link strips it, but its strings stay in .rodata).
+ * args: name, x, y, z, flag variable.
+ */
 USER_FUNC(evt_mobj_arrow) {
     EvtWord* args = event->args;
     s32 animGroup;
@@ -2418,12 +2388,6 @@ USER_FUNC(evt_mobj_arrow) {
     mobj->state = 99;
     return EVT_RETURN_DONE;
 }
-#else
-/** Not called: it only places the model-name string that stripped code referenced. */
-void mobj_sign(void) {
-    mobjNameToPtr("MOBJ_Arrow");
-}
-#endif
 
 // Restores Mario's HP and FP and the HP of every active partner that is not PARTY_FLAG_IS_GROUNDED, then
 // takes the block's price in coins (case 3 passes 0).
@@ -3847,20 +3811,12 @@ USER_FUNC(evt_mobj_kururing_floor) {
     mobjCalcMtx(mobj);
     mobj->scale2 = (Vec){200.0f, mobj->scale2.y, 200.0f};
     mobjCalcMtx2(mobj);
-#if !MOBJ_EXTRA_OBJS
-    {
-        Vec dz = (Vec){x, y, z};
-        char oname[16] = "o_";
-        char iname[16] = "i_";
-    }
-#endif
     mapGrpFlagOn(grp, MAP_OBJ_FLAG_KURURING);
     animPoseSetAnim(mobj->poseId, "S_1", 1);
     animPoseWorldPositionEvalOn(mobj->poseId);
     return EVT_RETURN_DONE;
 }
 
-#if MOBJ_EXTRA_OBJS
 /**
  * Main function of the trap door panels (early demos, PAL demo and PAL):
  * standing or spin-jumping on one sets the flag variable and flips it open with the paper texture,
@@ -4060,8 +4016,6 @@ USER_FUNC(evt_mobj_breaking_rock) {
     return EVT_RETURN_DONE;
 }
 
-#endif
-
 /**
  * Bowser stage power-up pickup. args: x, y, z of the pickup.
  * Adds 500 points there (1000 more at level 3) and powers Bowser up.
@@ -4089,11 +4043,6 @@ static USER_FUNC(kpa_powerup) {
 static s32 mobj_koopa_ojama_blk_evt(MapObjectEntry* mobj) {
     BOOL ok = FALSE;
     ItemEntry* item;
-#if !MOBJ_EXTRA_OBJS
-    Vec dv = {0.0f, -2000.0f, 0.0f}; // unused
-#else
-    Vec dv; // unused
-#endif
     switch (mobj->state) {
         case 0:
             if (mobj->flags & MOBJ_FLAG_HIT) {
@@ -4192,15 +4141,6 @@ USER_FUNC(evt_mobj_koopa_ojama_blk) {
     }
     return EVT_RETURN_DONE;
 }
-
-#if !MOBJ_EXTRA_OBJS
-/** Not called: it only places the model-name strings that stripped code referenced. */
-void mobj_koopa_stone_blk(void) {
-    mobjNameToPtr("MOBJ_BombRock");
-    mobjNameToPtr("OFF_d_bom");
-    mobjNameToPtr("MOBJ_trap");
-}
-#endif
 
 /**
  * Main function of the Bowser-stage stone blocks:

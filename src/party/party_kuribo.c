@@ -18,11 +18,6 @@
 #include "system.h"
 #include "dolphin/mtx.h"
 
-#if VERSION != VERSION_JP
-// Only JP has a local duplicate; elsewhere this is the global kuribo_init
-#define kuribo_init_800C23B4 kuribo_init
-#endif
-
 //.sbss
 static u32 msg_ep; // cleared by kuribo_init; nothing reads it
 
@@ -223,7 +218,7 @@ USER_FUNC(post_kurio_use) {
     return EVT_RETURN_DONE;
 }
 
-void kuribo_init_800C23B4(PartyEntry* party) {
+void kuribo_init(PartyEntry* party) {
     party->memberKind = PARTY_GOOMBELLA;
     party->moveKind = 0;
     party->height = 24.0f;

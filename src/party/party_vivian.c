@@ -20,11 +20,6 @@
 #include "pmario_sound.h"
 #include "sfx_name_word.h"
 
-#if VERSION != VERSION_JP
-// Only JP has a local duplicate; elsewhere this is the global vivian_init
-#define vivian_init_801809C0 vivian_init
-#endif
-
 static s32 vivian_cancel_req;
 
 #if VERSION >= VERSION_JP
@@ -117,7 +112,7 @@ void mot_vivian_post(void) {
     vivian_cancel_req = 1;
 }
 
-void vivian_init_801809C0(PartyEntry* party) {
+void vivian_init(PartyEntry* party) {
     party->memberKind = 6;
     party->moveKind = 1;
     party->height = 35.0f;

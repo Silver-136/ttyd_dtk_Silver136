@@ -48,8 +48,8 @@ inline f32 mugiKemuriAngle(effMugiKemuriData *data) {
 
 #if VERSION <= VERSION_DEMO_JP
 /**
- * The early demos have one more entry function here.
- * Nothing calls it, so the linker drops it, but its type string stays at the end of the unit's .rodata.
+ * FAKE: stand-in that nothing calls (the linker strips it); it only keeps the "Mugi" type string at the end of the
+ * unit's .rodata. The JP demo map's stripped owners are effFlyMugi, effMugiMain and effMugiDisp (bodies unknown).
  */
 EffectEntry* effMugiEntry(void) {
     EffectEntry* effect = effEntry();

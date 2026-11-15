@@ -922,6 +922,8 @@ void marioLandOn(void) {
 }
 
 #if VERSION <= VERSION_DEMO_JP
+// FAKE: stand-in that nothing calls; it only places the doubles 0.0, 0.5 and 3.0 in the pool. The JP demo map's
+// UNUSED marioChkLandOn_roll (0x58c, body unknown) sits at this slot.
 static f32 marioDemoHalf(f32 x) {
     if (x < 0.0) {
         return x;

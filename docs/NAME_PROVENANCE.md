@@ -476,3 +476,14 @@ YoshiNomikomi_Spew, gonbaba_fumituke, gesso_ikasumi, KaitenHammer), so they are 
 | type | include/party/party_move.h | `FOOTMARK_FLAG_JUMP`, `FOOTMARK_FLAG_SLIT` | literal 1, 4 | 2026-10-25 |
 | type | include/battle/battle_damage.h | `CounterWork` fields (attackHits, payback, burnStatus, ..., hitEvent) | `field_0x0` .. `field_0x2C` | 2026-10-25 |
 | enum | include/battle/battle_database_common.h | `ATTACKPATTERN_*` (BattleDamagePattern, 0-27) | numbers 0-27 | 2026-10-25 |
+| function | main (party_motion) | `partyStayDist`, `partyHomingOff`, `partyGetDirGndY`, `partyGetGndY`, `partyGorFix`, `partyPoseA2` (static helpers new in JP, every call inlined and the copies stripped; JP and later only, so the JP demo map cannot name them) | none (LLCOOLT) | 2026-11-14 |
+| function | main (itemdrv) | `itemHitCheckY`, `itemHitCheckUp` (the JP demo map lists UNUSED `itemHitCheckGround` 0x104 and `itemHitCheckCeil` 0x158 at these slots; ours 0xb4 / 0x144, W0's held rename) | none (LLCOOLT) | 2026-11-14 |
+| function | main (mot_hammer) | `hammerHitWall` (no such function in the JP demo map; UNUSED `hitEstimate2` 0xd0 sits at its slot, ours 0xcc; a 0xd0 form changes mot_hammer2's inlined copy) | none (LLCOOLT) | 2026-11-14 |
+| function | main (windowdrv) | `windowLoadTpl` (early demos; probably the map's UNUSED `windowTEXGetPalette` 0xb4 after windowReInit, ours 0xc8: held candidate) | none (LLCOOLT) | 2026-11-14 |
+| function | main (seq_e3) | `e3BlinkTime` (June US demo only, stripped there; no map for that build; the JP demo map's UNUSED `e3GetTime` is 0x10 and first in the unit, not this 0x38 function) | none (LLCOOLT) | 2026-11-14 |
+| function | main (evt_cam) | `evt_cam_debug_print` (FAKE stand-in for UNUSED `evt_cam3d_evt_set_xls` / `evt_cam3d_evt_set_rel_xls`; FAKES row) | none (LLCOOLT) | 2026-11-14 |
+| function | main (evt_npc) | `npc_report_pos` (FAKE stand-in for UNUSED `evt_npc_set_position_xls`; FAKES row) | none (LLCOOLT) | 2026-11-14 |
+| function | main (mot_plane) | `planeDead4` (FAKE stand-in for UNUSED `marioGetPlaneRidePos`'s 4.0f; FAKES row) | none (LLCOOLT) | 2026-11-14 |
+| function | main (evt_win) | `unitwin_fmt` (JP and later: uncalled stand-in that keeps the "%s_%04d" string of a stripped function; no map; not FAKE-marked) | none (LLCOOLT) | 2026-11-14 |
+| function | main (eff_mugi) | `effMugiEntry` (early demos: uncalled stand-in that keeps the "Mugi" type string; the map's UNUSED effFlyMugi 0x158 / effMugiMain / effMugiDisp are the stripped owners; not FAKE-marked) | none (LLCOOLT) | 2026-11-14 |
+| function | main (mario_motion) | `marioDemoHalf` (early demos: uncalled stand-in that only places three doubles 0.0/0.5/3.0; the map's UNUSED `marioChkLandOn_roll` 0x58c sits at this slot; not FAKE-marked) | none (LLCOOLT) | 2026-11-14 |

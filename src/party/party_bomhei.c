@@ -29,11 +29,6 @@
 
 #include "party/party_bomhei.h"
 
-#if VERSION != VERSION_JP
-// Only JP has a local duplicate; elsewhere this is the global bomhei_init
-#define bomhei_init_800BFBB0 bomhei_init
-#endif
-
 /** Height bob of Bobbery over Mario's head per frame of Mario's carry walk (M_W_7), in quarter units. */
 #if VERSION >= VERSION_JP
 static s32 m_w_7_sync[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 9, 9, 8, 7, 5, 3, 1, 0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 9, 8, 6, 4, 3, 2, 1, 0, 0, 0, 0, 0};
@@ -149,7 +144,7 @@ void bomhei_bye(PartyEntry* party) {
     }
 }
 
-void bomhei_init_800BFBB0(PartyEntry* party) {
+void bomhei_init(PartyEntry* party) {
     party->memberKind = PARTY_BOBBERY;
     party->moveKind = 0;
     party->height = 28.0f;

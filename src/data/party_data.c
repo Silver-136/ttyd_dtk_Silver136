@@ -13,41 +13,30 @@
 #include "party/party_yoshi.h"
 #include "party/party_vivian.h"
 
-#if VERSION != VERSION_JP
-// only JP has local duplicates of these; every other version uses the global functions
-#define bomhei_init_800BFBB0 bomhei_init
-#define kuribo_init_800C23B4 kuribo_init
-#define vivian_init_801809C0 vivian_init
-#endif
-
-void bomhei_init_800BFBB0(PartyEntry* party);
-void kuribo_init_800C23B4(PartyEntry* party);
-void vivian_init_801809C0(PartyEntry* party);
-
 /**
  * One entry per partner id (empty for 0): the partner's field model and the functions that set it up, move it,
  * use its field ability and remove it; partyEntryMain and the other party calls read it by partner id.
  */
 PartyData partyDataTbl[] = {
     {0},
-    {"c_pkr", kuribo_init_800C23B4, partyMoveWalk, kuribo_use, kuribo_use_post, kuribo_bye, NULL, NULL, NULL, NULL},
+    {"c_pkr", kuribo_init, partyMoveWalk, kuribo_use, kuribo_use_post, kuribo_bye, NULL, NULL, NULL, NULL},
     {"c_pnk", nokonoko_init, nokonoko_move, nokonoko_use, nokonoko_use_post, nokonoko_bye, NULL, NULL, NULL, NULL},
-    {"c_bomt_n", bomhei_init_800BFBB0, partyMoveWalk, bomhei_use, bomhei_use_post, bomhei_bye, NULL, NULL, NULL, bomhei_exit},
+    {"c_bomt_n", bomhei_init, partyMoveWalk, bomhei_use, bomhei_use_post, bomhei_bye, NULL, NULL, NULL, bomhei_exit},
     {"c_babyyoshi", yoshi_init, partyMoveWalk, yoshi_use, NULL, yoshi_bye, NULL, NULL, NULL, yoshi_exit},
     {"c_windy", cloud_init, cloud_move, cloud_use, NULL, kuribo_bye, NULL, NULL, NULL, cloud_exit},
-    {"c_vivian", vivian_init_801809C0, vivian_move, vivian_use, NULL, kuribo_bye, NULL, NULL, NULL, NULL},
+    {"c_vivian", vivian_init, vivian_move, vivian_use, NULL, kuribo_bye, NULL, NULL, NULL, NULL},
     {"c_tyutyu", chuchu_init, chuchu_move, chuchu_use, NULL, kuribo_bye, NULL, NULL, NULL, chuchu_exit},
-    {"c_babyyoshi", kuribo_init_800C23B4, partyMoveWalk, kuribo_use, NULL, kuribo_bye, NULL, NULL, NULL, NULL},
-    {"c_marco", kuribo_init_800C23B4, partyMoveWalk, kuribo_use, NULL, kuribo_bye, NULL, NULL, NULL, NULL},
-    {"c_pguide", kuribo_init_800C23B4, partyMoveWalk, kuribo_use, NULL, kuribo_bye, NULL, NULL, NULL, NULL},
-    {"c_kuri_h", kuribo_init_800C23B4, partyMoveWalk, kuribo_use, NULL, kuribo_bye, NULL, NULL, NULL, NULL},
-    {"c_monban", kuribo_init_800C23B4, partyMoveWalk, kuribo_use, NULL, kuribo_bye, NULL, NULL, NULL, NULL},
-    {"c_pkr", kuribo_init_800C23B4, partyMoveWalk, kuribo_use, NULL, kuribo_bye, NULL, NULL, NULL, NULL},
+    {"c_babyyoshi", kuribo_init, partyMoveWalk, kuribo_use, NULL, kuribo_bye, NULL, NULL, NULL, NULL},
+    {"c_marco", kuribo_init, partyMoveWalk, kuribo_use, NULL, kuribo_bye, NULL, NULL, NULL, NULL},
+    {"c_pguide", kuribo_init, partyMoveWalk, kuribo_use, NULL, kuribo_bye, NULL, NULL, NULL, NULL},
+    {"c_kuri_h", kuribo_init, partyMoveWalk, kuribo_use, NULL, kuribo_bye, NULL, NULL, NULL, NULL},
+    {"c_monban", kuribo_init, partyMoveWalk, kuribo_use, NULL, kuribo_bye, NULL, NULL, NULL, NULL},
+    {"c_pkr", kuribo_init, partyMoveWalk, kuribo_use, NULL, kuribo_bye, NULL, NULL, NULL, NULL},
     {"c_pnk", nokonoko_init, nokonoko_move, nokonoko_use, NULL, nokonoko_bye, NULL, NULL, NULL, NULL},
-    {"c_bomt_n", bomhei_init_800BFBB0, partyMoveWalk, bomhei_use, bomhei_use_post, bomhei_bye, NULL, NULL, NULL, NULL},
+    {"c_bomt_n", bomhei_init, partyMoveWalk, bomhei_use, bomhei_use_post, bomhei_bye, NULL, NULL, NULL, NULL},
     {"c_babyyoshi", yoshi_init, partyMoveWalk, yoshi_use, NULL, yoshi_bye, NULL, NULL, NULL, NULL},
     {"c_windy", cloud_init, cloud_move, cloud_use, NULL, kuribo_bye, NULL, NULL, NULL, cloud_exit},
-    {"c_vivian", vivian_init_801809C0, vivian_move, vivian_use, NULL, kuribo_bye, NULL, NULL, NULL, NULL},
+    {"c_vivian", vivian_init, vivian_move, vivian_use, NULL, kuribo_bye, NULL, NULL, NULL, NULL},
     {"c_tyutyu", chuchu_init, partyMoveWalk, chuchu_use, NULL, kuribo_bye, NULL, NULL, NULL, NULL},
 };
 

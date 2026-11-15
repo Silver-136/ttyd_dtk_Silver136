@@ -685,7 +685,8 @@ void fbatBattleMode(void);
 static void npcMoveG(NpcEntry* npc);
 static BOOL npcCheckHitMarioSide(NpcEntry* npc);
 HitEntry* npcHitCheckSide(NpcEntry* npc, f32* outX, f32* outZ, f32* angle, f32 dx, f32 dz);
-void npcKoopaModeMain(void);
+void fbatKoopaMode(void);
+void fbatEncountCheck(void);
 #if VERSION >= VERSION_US
 
 /** US and later: probe the wall from a copy of the position first, then slide along it. */
@@ -1117,7 +1118,8 @@ void npcMain(void) {
     _fbatFitstAttackAnnounceMain(&fbatGetPointer()->firstStrike);
     switch (fbat->mode) {
         case FBAT_MODE_FIELD:
-            npcKoopaModeMain();
+            fbatEncountCheck();
+            fbatKoopaMode();
             break;
         case FBAT_MODE_TALK:
         case FBAT_MODE_REACTION_TALK:
@@ -3620,37 +3622,6 @@ BOOL npcCheckInWater(NpcEntry* entry) {
 }
 
 /**
- * Field battle mode 1, the normal field mode despite the name:
- * runs fbatEncountCheck, then on Bowser stages (characterId 2) pays the bonus for stomping two
- * or more enemies in one jump and resets the fire combo when he is not breathing fire.
- */
-void npcKoopaModeMain(void) {
-    s32 jump;
-    FieldBattleData* data;
-    s32 fire;
-    MarioWork* mario;
-    fbatEncountCheck();
-    data = gp->fbatData;
-    mario = marioGetPtr();
-    jump = 0;
-    fire = jump;
-    if (mario->characterId == CHARACTER_BOWSER) jump = kpaJumpChk();
-    if (mario->characterId == CHARACTER_BOWSER) fire = kpaFireAttackCheck();
-    if (jump) {
-        if (data->kpaJumpScore > 0 && data->kpaJumpKills >= 2) {
-            Vec pos = mario->position;
-            pos.y += 60.0f;
-            kpaAddScorePos(data->kpaJumpScore, &pos);
-        }
-        data->kpaJumpKills = 0;
-        data->kpaJumpScore = 0;
-    }
-    if (!fire) {
-        data->kpaComboCount = 0;
-    }
-}
-
-/**
  * Bowser stage enemies: kills each with the hazard kpaEnemyHitChk reports (reasons 1, 2, 4),
  * takes Bowser's power down on a hit, or kills it when it stands on lava ("a_magu").
  * Each reason only once (hazardFlags).
@@ -3775,6 +3746,41 @@ s32 npcCalcScore(NpcEntry* npc) {
         kpaAddScorePos(score, &pos);
     }
     return score;
+}
+
+/**
+ * Field battle mode 1, the normal field mode despite the name:
+ * after npcMain's fbatEncountCheck, on Bowser stages (characterId 2) pays the bonus for stomping two
+ * or more enemies in one jump and resets the fire combo when he is not breathing fire.
+ * Original name and size (0xe8) from the JP demo map (UNUSED there: npcMain's call is inlined).
+ */
+void fbatKoopaMode(void) {
+    s32 jump;
+    FieldBattleData* data;
+    s32 fire;
+    MarioWork* mario;
+    data = gp->fbatData;
+    mario = marioGetPtr();
+    jump = 0;
+    fire = jump;
+    if (mario->characterId == CHARACTER_BOWSER) {
+        jump = kpaJumpChk();
+    }
+    if (mario->characterId == CHARACTER_BOWSER) {
+        fire = kpaFireAttackCheck();
+    }
+    if (jump) {
+        if (data->kpaJumpScore > 0 && data->kpaJumpKills >= 2) {
+            Vec pos = mario->position;
+            pos.y += 60.0f;
+            kpaAddScorePos(data->kpaJumpScore, &pos);
+        }
+        data->kpaJumpKills = 0;
+        data->kpaJumpScore = 0;
+    }
+    if (!fire) {
+        data->kpaComboCount = 0;
+    }
 }
 
 /**

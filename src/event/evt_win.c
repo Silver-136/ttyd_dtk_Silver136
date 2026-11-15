@@ -232,7 +232,8 @@ void unitwin_name_disp(WinMgrEntry* entry) {
 }
 #endif
 
-// never called: the linker strips it, its "%s_%04d" string stays in this object's .rodata (name descriptive)
+// FAKE: stand-in that nothing calls (the linker strips it); it only keeps the "%s_%04d" string of a stripped
+// function in this object's .rodata (name invented; no map for these versions)
 #if VERSION >= VERSION_JP
 static void unitwin_fmt(char* buf, const char* name, s32 n) {
     sprintf(buf, "%s_%04d", name, n);
