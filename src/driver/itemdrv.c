@@ -76,26 +76,7 @@ static inline ItemWork* itemGetWork(void) {
     return gp->inBattle ? &work[1] : &work[0];
 }
 
-/**
- * Puts a removed badge item on sale at the badge shop through pouchArriveBadge:
- * the early demos do so when ITEM_FLAG_LOST_BADGE_TO_SHOP (0x100) is clear, in or out of battle;
- * JP and later (the September demos too) do so only outside battle and when the same bit is set.
- */
-inline void itemCheckBadge(ItemEntry* entry) {
-#if VERSION <= VERSION_DEMO_JP
-    if (BADGE_MIN <= entry->itemId && entry->itemId < BADGE_MAX && !(entry->flags & ITEM_FLAG_LOST_BADGE_TO_SHOP)) {
-        pouchArriveBadge(entry->itemId);
-    }
-#else
-    if (!gp->inBattle) {
-        if (BADGE_MIN <= entry->itemId && entry->itemId < BADGE_MAX) {
-            if (entry->flags & ITEM_FLAG_LOST_BADGE_TO_SHOP) {
-                pouchArriveBadge(entry->itemId);
-            }
-        }
-    }
-#endif
-}
+void itemRecycle(ItemEntry* entry);
 
 static void itemseq_Bound(ItemEntry* entry);
 
@@ -140,7 +121,7 @@ void itemInit(void) {
 
 /**
  * Clears the current item table on map change; on the field it first puts eligible dropped badges
- * on sale at the badge shop, using itemCheckBadge's per-version flag test.
+ * on sale at the badge shop, using itemRecycle's per-version flag test.
  */
 void itemReInit(void) {
     ItemWork* wp = itemGetWork();
@@ -149,8 +130,8 @@ void itemReInit(void) {
 
     if (!gp->inBattle) {
         for (entry = wp->entries, i = 0; i < wp->count; i++, entry++) {
-            if (entry->flags & ITEM_FLAG_ACTIVE) { // eligible badges go back to the shop (itemCheckBadge's per-version flag test)
-                itemCheckBadge(entry);
+            if (entry->flags & ITEM_FLAG_ACTIVE) { // eligible badges go back to the shop (itemRecycle's per-version flag test)
+                itemRecycle(entry);
             }
         }
     }
@@ -547,7 +528,7 @@ void itemMain(void) {
                 break;
             case ITEM_MODE_DELETE:
 #if VERSION <= VERSION_DEMO_JP
-                itemCheckBadge(entry);
+                itemRecycle(entry);
 #endif
                 itemDelete(entry->name);
                 break;
@@ -887,7 +868,7 @@ ItemEntry* itemEntry(f32 x, f32 y, f32 z, const char* name, s32 itemId, u16 type
 
 /**
  * Removes the named field item (and its name windows);
- * JP and later (the September demos too) first put a dropped badge on sale at the badge shop (itemCheckBadge).
+ * JP and later (the September demos too) first put a dropped badge on sale at the badge shop (itemRecycle).
  */
 void itemDelete(const char* name) {
     ItemWork* wp = itemGetWork();
@@ -897,7 +878,7 @@ void itemDelete(const char* name) {
     for (entry = wp->entries, i = 0; i < wp->count; i++, entry++) {
         if (!strcmp(entry->name, name)) {
 #if VERSION >= VERSION_JP
-            itemCheckBadge(entry);
+            itemRecycle(entry);
 #endif
             switch (entry->itemId) {
                 case ITEM_DIAMOND_STAR:
@@ -2106,6 +2087,28 @@ HitEntry* itemHitCheckUp(ItemEntry* entry, f32 vy) {
         return hit;
     }
     return NULL;
+}
+
+/**
+ * Puts a removed badge item on sale at the badge shop through pouchArriveBadge:
+ * the early demos do so when ITEM_FLAG_LOST_BADGE_TO_SHOP (0x100) is clear, in or out of battle;
+ * JP and later (the September demos too) do so only outside battle and when the same bit is set.
+ */
+// Original name, slot and size (0x44) from the JP demo's link map (UNUSED there): every call is inlined.
+void itemRecycle(ItemEntry* entry) {
+#if VERSION <= VERSION_DEMO_JP
+    if (BADGE_MIN <= entry->itemId && entry->itemId < BADGE_MAX && !(entry->flags & ITEM_FLAG_LOST_BADGE_TO_SHOP)) {
+        pouchArriveBadge(entry->itemId);
+    }
+#else
+    if (!gp->inBattle) {
+        if (BADGE_MIN <= entry->itemId && entry->itemId < BADGE_MAX) {
+            if (entry->flags & ITEM_FLAG_LOST_BADGE_TO_SHOP) {
+                pouchArriveBadge(entry->itemId);
+            }
+        }
+    }
+#endif
 }
 
 /**

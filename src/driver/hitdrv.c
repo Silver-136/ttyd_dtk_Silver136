@@ -1205,6 +1205,46 @@ HitEntry* hitCheckAttr(s32 user0, f32* hitX, f32* hitY, f32* hitZ, f32* distance
     return entry;
 }
 
+/**
+ * hitCheckAttrOnly's filter: accepts collision objects that lack the attribute bits in query->user0 or have any of
+ * those in query->user1 (the same filter as mario_hit.c's chkFilterAttr2).
+ */
+// Original name and size (0x2c) from the JP demo map (UNUSED there, as its only user hitCheckAttrOnly).
+static BOOL chkFilterAttr2(HitCheckQuery* query, HitEntry* entry) {
+    BOOL ret = FALSE;
+    s32 attr = entry->attributes;
+    if ((attr & query->user0) == 0 || (attr & query->user1) != 0) {
+        ret = TRUE;
+    }
+    return ret;
+}
+
+// Original name and size (0x138) from the JP demo map (UNUSED there).
+HitEntry* hitCheckAttrOnly(s32 user0, s32 user1, f32* hitX, f32* hitY, f32* hitZ, f32* distance, f32* hitNX,
+                           f32* hitNY, f32* hitNZ, f32 x, f32 y, f32 z, f32 nx, f32 ny, f32 nz) {
+    HitCheckQuery temp;
+    HitCheckQuery* query = &temp;
+    HitEntry* entry;
+
+    query->targetPos = (Vec){ x, y, z };
+    query->targetDir = (Vec){ nx, ny, nz };
+    query->targetDistance = *distance;
+    query->user0 = user0;
+    query->user1 = user1;
+    entry = hitCheckVecFilter(query, chkFilterAttr2);
+    if (entry == NULL) {
+        return NULL;
+    }
+    *distance = query->targetDistance;
+    *hitX = query->hitPos.x;
+    *hitY = query->hitPos.y;
+    *hitZ = query->hitPos.z;
+    *hitNX = query->hitNormal.x;
+    *hitNY = query->hitNormal.y;
+    *hitNZ = query->hitNormal.z;
+    return entry;
+}
+
 HitEntry* hitCheckSphereFilter(HitFilterCallback callback, f32 x, f32 y, f32 z,
                                f32 distance) {
     MapEntry* map = mapGetWork()->entries;

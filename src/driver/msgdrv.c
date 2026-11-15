@@ -770,6 +770,18 @@ static BOOL msgDisp(smartEntry* smart, u8 alpha, f32 x, f32 y) {
     return ret;
 }
 
+/** Draws the key-wait star at the window's top right corner. */
+// Original name and slot from the JP demo's link map (UNUSED there, 0x8c): its one call is inlined.
+static void msgDispKeyWait(WindowEntry* window) {
+    static u16 active;
+
+    if (active == 0) {
+        active = 1;
+    }
+    animPoseMain(msgw->poseId);
+    animPoseDraw(msgw->poseId, (window->x + window->width) - 52.0f, 31.0f + (window->y - window->height), 0.0f, 180.0f, 5.0f, 2);
+}
+
 /**
  * GX set-up hook for the key-wait star pose: draws it on top of everything (Z always passes, no blending, alpha
  * test).
@@ -2298,7 +2310,6 @@ static void msgWindow_Disp(CameraId camId, void* param) {
     f32 ex;
     f32 ey;
     s32 sy;
-    static u16 active;
 
     GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, (GXColor){0, 0, 0, 0});
 
@@ -2389,11 +2400,7 @@ static void msgWindow_Disp(CameraId camId, void* param) {
 
     GXSetScissor(camera->scissor[0], camera->scissor[1], camera->scissor[2], camera->scissor[3]);
     if (ret) {
-        if (active == 0) {
-            active = 1;
-        }
-        animPoseMain(msgw->poseId);
-        animPoseDraw(msgw->poseId, (window->x + window->width) - 52.0f, 31.0f + (window->y - window->height), 0.0f, 180.0f, 5.0f, 2);
+        msgDispKeyWait(window);
     }
 }
 

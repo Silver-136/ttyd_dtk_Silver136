@@ -188,6 +188,12 @@ USER_FUNC(evt_mario_dokan_prepare) {
     return EVT_RETURN_DONE;
 }
 
+// Debug names of the DokanType values. Original name from the JP demo's link map (UNUSED there): nothing reads
+// the table, so the linker strips it; its six strings stay in .rodata.
+static const char* dbg_dokan_name[] = {
+    "DOKAN_TATE_DOWNIN", "DOKAN_TATE_UPIN", "DOKAN_TATE_DOWNOUT", "DOKAN_TATE_UPOUT", "DOKAN_YOKO_IN", "DOKAN_YOKO_OUT",
+};
+
 /**
  * Plays Mario's paper pipe animation, then switches to the pipe motion;
  * arg 0 = DokanType (evt_bero passes the OUT types when Mario leaves through a pipe, the IN types when he comes out of one).
@@ -202,11 +208,6 @@ USER_FUNC(evt_mario_paper_pose_dokan) {
 #if VERSION >= VERSION_US
     f32 s, c;
 #endif
-    {
-        // FAKE: unreferenced table of the six DOKAN_* pose names with hand padding; kept for its string literals
-        static const char names[] = "DOKAN_TATE_DOWNIN\0\0\0DOKAN_TATE_UPIN\0DOKAN_TATE_DOWNOUT\0\0DOKAN_TATE_UPOUT\0\0\0\0DOKAN_YOKO_IN\0\0\0DOKAN_YOKO_OUT\0";
-    }
-
     if (isFirstCall) {
         event->userdata[1] = 0;
         if (mp->currMotionId == MARIO_MOTION_DOKAN) {

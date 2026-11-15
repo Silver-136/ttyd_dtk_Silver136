@@ -36,7 +36,6 @@ static void kpaFall(void);
 static void kpaFire(Vec pos);
 static void kpaFireEntry(Vec pos);
 void fire_se_init(void);
-const f32 vec3_802fc920[3] = {0.0f, 0.0f, 0.0f};
 
 // mario_motion.c's marioJumpData (MarioJumpData; its jump[] curve comes first), declared without a size as this
 // file saw it in the original: the retail code here addresses the 0x28-byte .sdata object with lis/addi, which
@@ -992,7 +991,7 @@ static void kpaFireMain(void) {
                     PSMTXScale(mb0, sc, sc, sc);
                     PSMTXConcat(m80, mb0, m80);
                     PSMTXConcat(m20, m80, m80);
-                    zero = *(Vec*)vec3_802fc920;
+                    zero = (Vec){0.0f, 0.0f, 0.0f};
                     PSMTXMultVec(m80, &zero, &out);
                     hit = kpaFlameHitCheck(out.x, out.y, out.z, sc * base);
                     if (hit) {
@@ -1017,7 +1016,7 @@ static void kpaFireMain(void) {
                         PSMTXScale(mb0, ballScale, ballScale, ballScale);
                         PSMTXConcat(m80, mb0, m80);
                         PSMTXConcat(m20, m80, m80);
-                        zero = *(Vec*)vec3_802fc920;
+                        zero = (Vec){0.0f, 0.0f, 0.0f};
                         PSMTXMultVec(m80, &zero, &out);
                         hit = kpaFlameHitCheck(out.x, out.y, out.z, f30);
                         if (hit) {
