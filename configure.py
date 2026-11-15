@@ -1427,7 +1427,7 @@ config.libs = [
             Object(MatchingFor("G8MJ01", "G8ME01"), "pik_04.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "battle_database_pik.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "pik_01.c", extra_cflags=["-inline auto,deferred"]),
-            Object(MatchingFor("G8MJ01", "G8ME01"), "pik_00.c"),
+            Object(MatchingFor("G8MJ01", "G8ME01"), "pik_00.c", extra_cflags=["-inline auto,deferred"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "pik_02.c", extra_cflags=["-inline auto,deferred", "-opt noprop,nolifetimes"]),
         ]
     ),

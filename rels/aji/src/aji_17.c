@@ -1115,14 +1115,175 @@ static EVT_BEGIN(peach_evt_stg1)
     RETURN
 EVT_END()
 
+static s32 noise(EventEntry* event, BOOL isFirstCall) {
+    EvtWord alpha = evtGetValue(event, event->args[0]);
+    dispEntry(CAMERA_2D, 1100.0f, DISP_MODE_OPAQUE, noiseDisp, (void*)alpha);
+    return EVT_RETURN_DONE;
+}
+
+/** Script function: sets Mario's (Peach's) pose to the animation named in args[0]. */
+static s32 peach_set_pose(EventEntry* event, BOOL isFirstCall) {
+    const char* pose = (const char*)evtGetValue(event, event->args[0]);
+    MarioWork* mario = marioGetPtr();
+    marioChgPose(pose);
+    return EVT_RETURN_DONE;
+}
+
 /**
- * Lighting and camera setup for drawing the hologram dancer: ambient colour, camera position, up direction
- * and look-at point.
+ * Draws one textured quad of width w and height h with its top-left corner at (x, y)
+ * and texture coordinates up to s and t.
  */
-static const GXColor horogram_amb = {0xFF, 0xFF, 0xFF, 0xFF};
-static const Vec horogram_pos = {0.0f, 0.0f, 20.0f};
-static const Vec horogram_up = {0.0f, 1.0f, 0.0f};
-static const Vec horogram_target = {0.0f, 0.0f, 0.0f};
+static void polygon(f32 x, f32 y, f32 w, f32 h, f32 s, f32 t) {
+    GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+    GXPosition3f32(x, y, 0.0f);
+    GXTexCoord2f32(0.0f, 0.0f);
+    GXPosition3f32(x + w, y, 0.0f);
+    GXTexCoord2f32(s, 0.0f);
+    GXPosition3f32(x + w, y - h, 0.0f);
+    GXTexCoord2f32(s, t);
+    GXPosition3f32(x, y - h, 0.0f);
+    GXTexCoord2f32(0.0f, t);
+}
+
+/**
+ * Draw callback that draws the dance hologram: the captured Peach picture (colour texture buf0, depth-like buf1)
+ * on a quad at the hologram NPC's position, with Y rotation derived from its direction and the camera yaw
+ * (plus 180 degrees when flag 4 is set), using the NPC's colour as the channel material.
+ */
+static void disp_horogram(CameraId cameraId, void* param) {
+    GXCullMode cull;
+    Mtx mtx;
+    Mtx trans;
+    Mtx rot;
+    GXColor mat;
+    f32 angle;
+    NpcEntry* npc = npcNameToPtr("ホログラム");
+
+    if (horogram_wp->ready) {
+        GXGetCullMode(&cull);
+        GXInitTexObj(&horogram_wp->tex0, horogram_wp->buf0, 0x130, 0xF0, GX_TF_RGBA8, GX_CLAMP, GX_CLAMP, GX_FALSE);
+        GXInitTexObjLOD(&horogram_wp->tex0, GX_NEAR, GX_NEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
+        GXInitTexObj(&horogram_wp->tex1, horogram_wp->buf1, 0x130, 0xF0, GX_TF_Z8, GX_CLAMP, GX_CLAMP, GX_FALSE);
+        GXInitTexObjLOD(&horogram_wp->tex1, GX_NEAR, GX_NEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
+        PSMTXTrans(trans, npc->position.x, npc->position.y, npc->position.z);
+        angle = reviseAngle(-npc->direction);
+        angle -= camGetPtr(cameraId)->viewYaw;
+        angle += (horogram_wp->flags & 4) ? 180.0f : 0.0f;
+        PSMTXRotRad(rot, 'y', 0.017453292f * angle);
+        PSMTXConcat(trans, rot, mtx);
+        PSMTXConcat(camGetPtr(cameraId)->view, mtx, mtx);
+        GXSetCurrentMtx(GX_PNMTX0);
+        GXLoadTexObj(&horogram_wp->tex0, GX_TEXMAP0);
+        GXLoadTexObj(&horogram_wp->tex1, GX_TEXMAP1);
+        GXClearVtxDesc();
+        GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+        GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
+        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
+        GXSetNumChans(1);
+        GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_CLAMP, GX_AF_NONE);
+        mat = npc->color;
+        GXSetChanMatColor(GX_COLOR0A0, mat);
+        GXSetChanAmbColor(GX_COLOR0A0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+        GXSetNumTexGens(1);
+        GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
+        GXSetNumTevStages(2);
+        GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
+        GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVREG0);
+        GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVREG0);
+        GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_TEXC, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO);
+        GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_RASA, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO);
+        GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD0, GX_TEXMAP1, GX_COLOR_NULL);
+        GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+        GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+        GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_C0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO);
+        GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_A0, GX_CA_ZERO, GX_CA_TEXA, GX_CA_ZERO);
+        GXSetCullMode(GX_CULL_NONE);
+        GXLoadPosMtxImm(mtx, GX_PNMTX0);
+        GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+        GXPosition3f32(-28.0f, 55.0f, 0.0f);
+        GXTexCoord2f32(0.0f, 0.0f);
+        GXPosition3f32(28.0f, 55.0f, 0.0f);
+        GXTexCoord2f32(1.0f, 0.0f);
+        GXPosition3f32(28.0f, 0.0f, 0.0f);
+        GXTexCoord2f32(1.0f, 1.0f);
+        GXPosition3f32(-28.0f, 0.0f, 0.0f);
+        GXTexCoord2f32(0.0f, 1.0f);
+        GXSetCullMode(cull);
+    }
+}
+
+/** Script function that queues disp_horogram for the 3D camera every frame; never finishes. */
+static s32 disp_horogram_evt(EventEntry* event, BOOL isFirstCall) {
+    dispEntry(CAMERA_3D, 0.0f, DISP_MODE_XLU, disp_horogram, NULL);
+    return EVT_RETURN_BLOCK;
+}
+
+/**
+ * Draw callback that renders the picture of the hologram:
+ * with flag 1 set, picks the normal or mirrored hologram NPC by facing direction; otherwise uses the normal NPC,
+ * sets up a 608 by 480 viewport and a close camera,
+ * draws the NPC's pose into the frame buffer and copies the colour and depth into horogram_wp->buf0 and buf1.
+ */
+static void peach_capture(CameraId cameraId, void* param) {
+    CameraEntry saved = *camGetCurPtr();
+    Mtx44 projMtx;
+    Mtx lookAt;
+    Mtx ident;
+    f32 viewport[6];
+    f32 proj[7];
+    u32 sx, sy, sw, sh;
+    NpcEntry* holo;
+    NpcEntry* holo2;
+    NpcEntry* npc;
+
+    holo = npcNameToPtr("ホログラム");
+    holo2 = npcNameToPtr("ホログラム2");
+    if (90.0f <= holo->direction && holo->direction < 270.0f) {
+        npc = holo2;
+        if (!(horogram_wp->flags & 2)) {
+            animPoseSetLocalTime(holo2->poseId, 0.0f);
+        }
+        horogram_wp->flags |= 2;
+    } else {
+        npc = holo;
+        if (horogram_wp->flags & 2) {
+            animPoseSetLocalTime(holo->poseId, 0.0f);
+        }
+        horogram_wp->flags &= ~2;
+    }
+    if (!(horogram_wp->flags & 1)) {
+        npc = holo;
+    }
+    GXGetViewportv(viewport);
+    GXGetProjectionv(proj);
+    GXGetScissor(&sx, &sy, &sw, &sh);
+    GXSetViewport(0.0f, 0.0f, 608.0f, 480.0f, 0.0f, 1.0f);
+    GXSetScissor(1, 1, 606, 478);
+    C_MTXOrtho(projMtx, 28.0f, 0.0f, -14.0f, 14.0f, 1.0f, 100.0f);
+    GXSetProjection(projMtx, GX_ORTHOGRAPHIC);
+
+    C_MTXLookAt(lookAt, &(Vec){0.0f, 0.0f, 20.0f}, &(Vec){0.0f, 1.0f, 0.0f}, &(Vec){0.0f, 0.0f, 0.0f});
+    PSMTXCopy(lookAt, camGetCurPtr()->view);
+    PSMTXIdentity(ident);
+    animPoseSetMaterialFlagOff(npc->poseId, MAP_OBJ_FLAG_COLOR);
+    animPoseMain(npc->poseId);
+    animPoseDrawMtx(npc->poseId, ident, 1, 0.0f, 1.0f);
+    animPoseDrawMtx(npc->poseId, ident, 2, 0.0f, 1.0f);
+    animPoseDrawMtx(npc->poseId, ident, 3, 0.0f, 1.0f);
+    GXSetTexCopySrc(0, 0, 0x260, 0x1E0);
+    GXSetTexCopyDst(0x130, 0xF0, GX_TF_RGBA8, GX_TRUE);
+    GXCopyTex(horogram_wp->buf0, GX_FALSE);
+    GXPixModeSync();
+    GXSetTexCopyDst(0x130, 0xF0, GX_TF_Z8, GX_TRUE);
+    GXCopyTex(horogram_wp->buf1, GX_TRUE);
+    GXPixModeSync();
+    PSMTXCopy(saved.view, camGetCurPtr()->view);
+    GXSetViewport(viewport[0], viewport[1], viewport[2], viewport[3], viewport[4], viewport[5]);
+    GXSetProjectionv(proj);
+    GXSetScissor(sx, sy, sw, sh);
+    horogram_wp->ready = 1;
+}
 
 /** The 15 positions of the dance path, advanced one per beat. */
 static f32 move_pos_list[15][2] = {
@@ -3350,183 +3511,6 @@ EVT_BEGIN(aji_17_init_evt)
 #endif
     RETURN
 EVT_END()
-
-static s32 noise(EventEntry* event, BOOL isFirstCall) {
-    EvtWord alpha = evtGetValue(event, event->args[0]);
-    dispEntry(CAMERA_2D, 1100.0f, DISP_MODE_OPAQUE, noiseDisp, (void*)alpha);
-    return EVT_RETURN_DONE;
-}
-
-/** Script function: sets Mario's (Peach's) pose to the animation named in args[0]. */
-static s32 peach_set_pose(EventEntry* event, BOOL isFirstCall) {
-    const char* pose = (const char*)evtGetValue(event, event->args[0]);
-    MarioWork* mario = marioGetPtr();
-    marioChgPose(pose);
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Draws one textured quad of width w and height h with its top-left corner at (x, y)
- * and texture coordinates up to s and t.
- */
-static void polygon(f32 x, f32 y, f32 w, f32 h, f32 s, f32 t) {
-    GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-    GXPosition3f32(x, y, 0.0f);
-    GXTexCoord2f32(0.0f, 0.0f);
-    GXPosition3f32(x + w, y, 0.0f);
-    GXTexCoord2f32(s, 0.0f);
-    GXPosition3f32(x + w, y - h, 0.0f);
-    GXTexCoord2f32(s, t);
-    GXPosition3f32(x, y - h, 0.0f);
-    GXTexCoord2f32(0.0f, t);
-}
-
-/**
- * Draw callback that draws the dance hologram: the captured Peach picture (colour texture buf0, depth-like buf1)
- * on a quad at the hologram NPC's position, with Y rotation derived from its direction and the camera yaw
- * (plus 180 degrees when flag 4 is set), using the NPC's colour as the channel material.
- */
-static void disp_horogram(CameraId cameraId, void* param) {
-    GXCullMode cull;
-    Mtx mtx;
-    Mtx trans;
-    Mtx rot;
-    GXColor mat;
-    f32 angle;
-    NpcEntry* npc = npcNameToPtr("ホログラム");
-
-    if (horogram_wp->ready) {
-        GXGetCullMode(&cull);
-        GXInitTexObj(&horogram_wp->tex0, horogram_wp->buf0, 0x130, 0xF0, GX_TF_RGBA8, GX_CLAMP, GX_CLAMP, GX_FALSE);
-        GXInitTexObjLOD(&horogram_wp->tex0, GX_NEAR, GX_NEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
-        GXInitTexObj(&horogram_wp->tex1, horogram_wp->buf1, 0x130, 0xF0, GX_TF_Z8, GX_CLAMP, GX_CLAMP, GX_FALSE);
-        GXInitTexObjLOD(&horogram_wp->tex1, GX_NEAR, GX_NEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
-        PSMTXTrans(trans, npc->position.x, npc->position.y, npc->position.z);
-        angle = reviseAngle(-npc->direction);
-        angle -= camGetPtr(cameraId)->viewYaw;
-        angle += (horogram_wp->flags & 4) ? 180.0f : 0.0f;
-        PSMTXRotRad(rot, 'y', 0.017453292f * angle);
-        PSMTXConcat(trans, rot, mtx);
-        PSMTXConcat(camGetPtr(cameraId)->view, mtx, mtx);
-        GXSetCurrentMtx(GX_PNMTX0);
-        GXLoadTexObj(&horogram_wp->tex0, GX_TEXMAP0);
-        GXLoadTexObj(&horogram_wp->tex1, GX_TEXMAP1);
-        GXClearVtxDesc();
-        GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
-        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
-        GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
-        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
-        GXSetNumChans(1);
-        GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_CLAMP, GX_AF_NONE);
-        mat = npc->color;
-        GXSetChanMatColor(GX_COLOR0A0, mat);
-        GXSetChanAmbColor(GX_COLOR0A0, horogram_amb);
-        GXSetNumTexGens(1);
-        GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
-        GXSetNumTevStages(2);
-        GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
-        GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVREG0);
-        GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVREG0);
-        GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_TEXC, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO);
-        GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_RASA, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO);
-        GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD0, GX_TEXMAP1, GX_COLOR_NULL);
-        GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-        GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-        GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_C0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO);
-        GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_A0, GX_CA_ZERO, GX_CA_TEXA, GX_CA_ZERO);
-        GXSetCullMode(GX_CULL_NONE);
-        GXLoadPosMtxImm(mtx, GX_PNMTX0);
-        GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-        GXPosition3f32(-28.0f, 55.0f, 0.0f);
-        GXTexCoord2f32(0.0f, 0.0f);
-        GXPosition3f32(28.0f, 55.0f, 0.0f);
-        GXTexCoord2f32(1.0f, 0.0f);
-        GXPosition3f32(28.0f, 0.0f, 0.0f);
-        GXTexCoord2f32(1.0f, 1.0f);
-        GXPosition3f32(-28.0f, 0.0f, 0.0f);
-        GXTexCoord2f32(0.0f, 1.0f);
-        GXSetCullMode(cull);
-    }
-}
-
-/** Script function that queues disp_horogram for the 3D camera every frame; never finishes. */
-static s32 disp_horogram_evt(EventEntry* event, BOOL isFirstCall) {
-    dispEntry(CAMERA_3D, 0.0f, DISP_MODE_XLU, disp_horogram, NULL);
-    return EVT_RETURN_BLOCK;
-}
-
-/**
- * Draw callback that renders the picture of the hologram:
- * with flag 1 set, picks the normal or mirrored hologram NPC by facing direction; otherwise uses the normal NPC,
- * sets up a 608 by 480 viewport and a close camera,
- * draws the NPC's pose into the frame buffer and copies the colour and depth into horogram_wp->buf0 and buf1.
- */
-static void peach_capture(CameraId cameraId, void* param) {
-    CameraEntry saved = *camGetCurPtr();
-    Mtx44 projMtx;
-    Mtx lookAt;
-    Mtx ident;
-    f32 viewport[6];
-    f32 proj[7];
-    u32 sx, sy, sw, sh;
-    NpcEntry* holo;
-    NpcEntry* holo2;
-    NpcEntry* npc;
-    Vec pos;
-    Vec up;
-    Vec target;
-
-    holo = npcNameToPtr("ホログラム");
-    holo2 = npcNameToPtr("ホログラム2");
-    if (90.0f <= holo->direction && holo->direction < 270.0f) {
-        npc = holo2;
-        if (!(horogram_wp->flags & 2)) {
-            animPoseSetLocalTime(holo2->poseId, 0.0f);
-        }
-        horogram_wp->flags |= 2;
-    } else {
-        npc = holo;
-        if (horogram_wp->flags & 2) {
-            animPoseSetLocalTime(holo->poseId, 0.0f);
-        }
-        horogram_wp->flags &= ~2;
-    }
-    if (!(horogram_wp->flags & 1)) {
-        npc = holo;
-    }
-    GXGetViewportv(viewport);
-    GXGetProjectionv(proj);
-    GXGetScissor(&sx, &sy, &sw, &sh);
-    GXSetViewport(0.0f, 0.0f, 608.0f, 480.0f, 0.0f, 1.0f);
-    GXSetScissor(1, 1, 606, 478);
-    C_MTXOrtho(projMtx, 28.0f, 0.0f, -14.0f, 14.0f, 1.0f, 100.0f);
-    GXSetProjection(projMtx, GX_ORTHOGRAPHIC);
-
-    target = horogram_target;
-    up = horogram_up;
-    pos = horogram_pos;
-
-    C_MTXLookAt(lookAt, &pos, &up, &target);
-    PSMTXCopy(lookAt, camGetCurPtr()->view);
-    PSMTXIdentity(ident);
-    animPoseSetMaterialFlagOff(npc->poseId, MAP_OBJ_FLAG_COLOR);
-    animPoseMain(npc->poseId);
-    animPoseDrawMtx(npc->poseId, ident, 1, 0.0f, 1.0f);
-    animPoseDrawMtx(npc->poseId, ident, 2, 0.0f, 1.0f);
-    animPoseDrawMtx(npc->poseId, ident, 3, 0.0f, 1.0f);
-    GXSetTexCopySrc(0, 0, 0x260, 0x1E0);
-    GXSetTexCopyDst(0x130, 0xF0, GX_TF_RGBA8, GX_TRUE);
-    GXCopyTex(horogram_wp->buf0, GX_FALSE);
-    GXPixModeSync();
-    GXSetTexCopyDst(0x130, 0xF0, GX_TF_Z8, GX_TRUE);
-    GXCopyTex(horogram_wp->buf1, GX_TRUE);
-    GXPixModeSync();
-    PSMTXCopy(saved.view, camGetCurPtr()->view);
-    GXSetViewport(viewport[0], viewport[1], viewport[2], viewport[3], viewport[4], viewport[5]);
-    GXSetProjectionv(proj);
-    GXSetScissor(sx, sy, sw, sh);
-    horogram_wp->ready = 1;
-}
 
 /** Script function that queues the capture of the hologram (peach_capture) every frame; blocks forever. */
 static s32 horogram_cap_evt(EventEntry* event, BOOL isFirstCall) {

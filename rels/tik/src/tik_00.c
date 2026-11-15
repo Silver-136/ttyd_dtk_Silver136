@@ -757,7 +757,6 @@ static USER_FUNC(uranai_exit_func) {
  */
 static void uranai_cap(CameraId cameraId, void* param) {
     CameraEntry* cam = camGetPtr(CAMERA_3D);
-    f32 half;
     u16 w = uranai_wp->w;
     u16 h = uranai_wp->h;
     f32 viewport[6];
@@ -772,7 +771,6 @@ static void uranai_cap(CameraId cameraId, void* param) {
     Vec bmin;
     Vec bmax;
     f32 scale;
-    f32 t;
 
     GXGetViewportv(viewport);
     GXGetProjectionv(proj);
@@ -783,25 +781,10 @@ static void uranai_cap(CameraId cameraId, void* param) {
     // The width/height quotient is computed with integer division before conversion to the aspect ratio.
     C_MTXPerspective(projMtx, 25.0f, w / h, 1.0f, 1000.0f);
     GXSetProjection(projMtx, GX_PERSPECTIVE);
-    {
-        static const Vec uranai_pos = {0.0f, 0.0f, 0.0f};
-        static const Vec uranai_up = {0.0f, 1.0f, 0.0f};
-        static const Vec uranai_target = {0.0f, 0.0f, 0.0f};
-        Vec pos;
-        Vec up;
-        Vec target;
-
-        target = uranai_target;
-        target.y = h / 3.0f;
-        up = uranai_up;
-        pos = uranai_pos;
-        half = 0.5f;
-        pos.y = h / 3.0f;
-        t = tan(0.21816616f);
-
-        pos.z = 0.7f * ((h * half) / t);
-        C_MTXLookAt(lookAt, &pos, &up, &target);
-    }
+    // Eye and target a third of the way up; the eye stands at 0.7 times the distance at which the capture height fills
+    // the 25 degree view (0.21816616 = half of it in radians).
+    C_MTXLookAt(lookAt, &(Vec){0.0f, h / 3.0f, 0.7f * (h / 2.0f / tanf(0.21816616f))}, &(Vec){0.0f, 1.0f, 0.0f},
+                &(Vec){0.0f, h / 3.0f, 0.0f});
     saved = *camGetPtr(cameraId);
     npc = npcNameToPtr("うらない師");
     data = animPoseGetAnimBaseDataPtr(npc->poseId);

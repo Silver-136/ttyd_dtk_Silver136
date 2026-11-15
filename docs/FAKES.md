@@ -38,7 +38,6 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Version | File | Function | Fake | Natural shape tried |
 | --- | --- | --- | --- | --- |
 | US | rels/gor/src/event/evt_yuuranking.c | yuuDrawRight (US inline, used by evt_yuuranking_disp_func) | US: the right-aligned text helper takes an x offset plus the work pointer and adds `wp->x` itself, so `wp->x` is read after the width test as in the target (same value) | see comment |
-| US | rels/pik/src/pik_00.c | zoom (data: zoom_zero_a/b) | US: the zero Vec initialisers of zoom are file-scope `static const` objects placed before talk_papa_taihou_kyoka, for their .rodata placement and load order (same values) | see comment |
 | US | rels/tik/src/tik_00.c | evt_uranaisi_msg_set | US: the local tag `char tag[4] = "pos"` is read through `char* t = tag` so tag[0] is not hoisted out of the loop | see comment |
 | Both | rels/jin/src/jin_07.c | computePosHermite (jin07HermiteMul3) | the product `(a * b) * c` through an inline | written out at the call (both versions change) |
 | Both | src/mario/mario_hit.c | sfwVecSetNested (sfwVecSet) | a Vec store `*d = v` through an inline | written out at the call (both versions change) |

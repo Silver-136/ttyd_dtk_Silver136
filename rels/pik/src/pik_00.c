@@ -1176,11 +1176,59 @@ static EVT_BEGIN(init_papa)
     RETURN
 EVT_END()
 
+/**
+ * Script helper: writes into LW(10) a sine wobble (1.8 times |GW(0)| times sin(frame count / 15));
+ * evt_ramp rotates the lamps (ranpu, ranpu_c) by it, so they sway with the train's speed and stay still when it stops.
+ */
+static USER_FUNC(ramp_r) {
+    f32 amp = __fabsf(evtGetFloat(event, GW(0)));
+    f32 wave = sin(gp->retraceCount / 15.0f);
+
+    evtSetFloat(event, LW(10), 1.8f * amp * wave);
+    return EVT_RETURN_DONE;
+}
+
+/** Map TEV callback for the train model: forwards the map object's TEV info to envAddTev with index 7. */
+static void resha_tev(MapTevCallbackInfo* info) {
+    envAddTev(7, info);
+}
+
+/**
+ * Script helper for the Goldbob scene's camera:
+ * computes a camera position 70 percent of the way from the current camera target to the camera,
+ * shifted in x to the middle between Mario and Goldbob, so the shot frames both.
+ * Writes the 3D camera position to args[0] to args[2] and the target to args[3] to args[5];
+ * used with evt_cam3d_evt_set.
+ */
+static USER_FUNC(zoom) {
+    EvtWord* args = event->args;
+
+    // ナリキンパパ
+    NpcEntry* npc = npcNameToPtr("ナリキンパパ");
+    MarioWork* mario = marioGetPtr();
+    CameraEntry* cam = camGetPtr(CAMERA_3D);
+    Vec v;
 #if VERSION >= VERSION_US
-// FAKE: the zero Vec initialisers of zoom sit here in .rodata
-static const Vec zoom_zero_a = {0.0f, 0.0f, 0.0f};
-static const Vec zoom_zero_b = {0.0f, 0.0f, 0.0f};
+    CameraParams out;
+    f32 bank = 0.0f;
+
+    camShiftMain(cam, mario, &bank);
+    camRoadMain(&out, cam->blendPos.x, cam->blendPos.y, cam->blendPos.z, cam->blendAt.x, cam->blendAt.y, cam->blendAt.z, bank);
+
+    PSVECSubtract(&(Vec){out.pos.x, out.pos.y, out.pos.z}, &(Vec){out.at.x, out.at.y, out.at.z}, &v);
+#else
+    PSVECSubtract(&cam->cameraPos, &cam->cameraAt, &v);
 #endif
+    PSVECScale(&v, &v, 0.7f);
+    PSVECAdd(&cam->cameraAt, &v, &v);
+    evtSetFloat(event, args[0], (npc->position.x + mario->position.x) / 2);
+    evtSetFloat(event, args[1], v.y);
+    evtSetFloat(event, args[2], v.z);
+    evtSetFloat(event, args[3], (npc->position.x + mario->position.x) / 2);
+    evtSetFloat(event, args[4], cam->cameraAt.y);
+    evtSetFloat(event, args[5], cam->cameraAt.z);
+    return EVT_RETURN_DONE;
+}
 
 /**
  * Talk script for Goldbob (ナリキンパパ) in chapter 7:
@@ -2259,9 +2307,25 @@ EVT_BEGIN(pik_00_init_evt)
     RETURN
 EVT_END()
 
-static USER_FUNC(img_flag) {
-    animPoseSetMaterialFlagOn(imgNameToPtr("img", gp->inBattle != 0)->poseId, (MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2));
+#if VERSION >= VERSION_US
+/** Script helper: releases the status window's forced-open or forced-close state (statusWinForceOff). */
+USER_FUNC(pik_00_statuswin_force_off) {
+    statusWinForceOff();
     return EVT_RETURN_DONE;
+}
+#endif
+
+/**
+ * Message callback for Trouble Center request 29 (irai_29_15):
+ * when the second page of the text appears (curPage 1) it starts the BGM_EVT_NOKO_SAIKAI1 (reunion) music.
+
+ */
+static void irai_29_15_cb(s32 type, smartEntry* smart) {
+    MsgWinData* info = smart->address;
+
+    if (type == 3 && info->curPage == 1) {
+        psndBGMOn(PSND_FADEOUT, "BGM_EVT_NOKO_SAIKAI1");
+    }
 }
 
 #if VERSION >= VERSION_JP
@@ -2311,87 +2375,7 @@ static USER_FUNC(under) {
 }
 #endif
 
-/**
- * Message callback for Trouble Center request 29 (irai_29_15):
- * when the second page of the text appears (curPage 1) it starts the BGM_EVT_NOKO_SAIKAI1 (reunion) music.
-
- */
-static void irai_29_15_cb(s32 type, smartEntry* smart) {
-    MsgWinData* info = smart->address;
-
-    if (type == 3 && info->curPage == 1) {
-        psndBGMOn(PSND_FADEOUT, "BGM_EVT_NOKO_SAIKAI1");
-    }
-}
-
-#if VERSION >= VERSION_US
-/** Script helper: releases the status window's forced-open or forced-close state (statusWinForceOff). */
-USER_FUNC(pik_00_statuswin_force_off) {
-    statusWinForceOff();
-    return EVT_RETURN_DONE;
-}
-#endif
-
-/**
- * Script helper for the Goldbob scene's camera:
- * computes a camera position 70 percent of the way from the current camera target to the camera,
- * shifted in x to the middle between Mario and Goldbob, so the shot frames both.
- * Writes the 3D camera position to args[0] to args[2] and the target to args[3] to args[5];
- * used with evt_cam3d_evt_set.
- */
-static USER_FUNC(zoom) {
-    EvtWord* args = event->args;
-
-    // ナリキンパパ
-    NpcEntry* npc = npcNameToPtr("ナリキンパパ");
-    MarioWork* mario = marioGetPtr();
-    CameraEntry* cam = camGetPtr(CAMERA_3D);
-    Vec v;
-#if VERSION >= VERSION_US
-    CameraParams out;
-    f32 bank = 0.0f;
-    Vec pos;
-    Vec at;
-
-    camShiftMain(cam, mario, &bank);
-    camRoadMain(&out, cam->blendPos.x, cam->blendPos.y, cam->blendPos.z, cam->blendAt.x, cam->blendAt.y, cam->blendAt.z, bank);
-
-    at = zoom_zero_b;
-    pos = zoom_zero_a;
-    at.x = out.at.x;
-    at.y = out.at.y;
-    at.z = out.at.z;
-    pos.x = out.pos.x;
-    pos.y = out.pos.y;
-    pos.z = out.pos.z;
-    PSVECSubtract(&pos, &at, &v);
-#else
-    PSVECSubtract(&cam->cameraPos, &cam->cameraAt, &v);
-#endif
-    PSVECScale(&v, &v, 0.7f);
-    PSVECAdd(&cam->cameraAt, &v, &v);
-    evtSetFloat(event, args[0], (npc->position.x + mario->position.x) / 2);
-    evtSetFloat(event, args[1], v.y);
-    evtSetFloat(event, args[2], v.z);
-    evtSetFloat(event, args[3], (npc->position.x + mario->position.x) / 2);
-    evtSetFloat(event, args[4], cam->cameraAt.y);
-    evtSetFloat(event, args[5], cam->cameraAt.z);
-    return EVT_RETURN_DONE;
-}
-
-/** Map TEV callback for the train model: forwards the map object's TEV info to envAddTev with index 7. */
-static void resha_tev(MapTevCallbackInfo* info) {
-    envAddTev(7, info);
-}
-
-/**
- * Script helper: writes into LW(10) a sine wobble (1.8 times |GW(0)| times sin(frame count / 15));
- * evt_ramp rotates the lamps (ranpu, ranpu_c) by it, so they sway with the train's speed and stay still when it stops.
- */
-static USER_FUNC(ramp_r) {
-    f32 amp = __fabsf(evtGetFloat(event, GW(0)));
-    f32 wave = sin(gp->retraceCount / 15.0f);
-
-    evtSetFloat(event, LW(10), 1.8f * amp * wave);
+static USER_FUNC(img_flag) {
+    animPoseSetMaterialFlagOn(imgNameToPtr("img", gp->inBattle != 0)->poseId, (MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2));
     return EVT_RETURN_DONE;
 }

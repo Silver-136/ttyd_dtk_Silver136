@@ -1449,20 +1449,7 @@ static void gans_tex(CameraId cameraId, void* param) {
     GXSetScissor(1, 1, 126, 126);
     C_MTXPerspective(projMtx, 25.0f, 1.0f, 1.0f, 1000.0f);
     GXSetProjection(projMtx, GX_PERSPECTIVE);
-    {
-        static const Vec gans_pos = {0.0f, 20.0f, 130.0f};
-        static const Vec gans_up = {0.0f, 1.0f, 0.0f};
-        static const Vec gans_target = {0.0f, 20.0f, 0.0f};
-        Vec pos;
-        Vec up;
-        Vec target;
-
-        target = gans_target;
-        up = gans_up;
-        pos = gans_pos;
-
-        C_MTXLookAt(lookAt, &pos, &up, &target);
-    }
+    C_MTXLookAt(lookAt, &(Vec){0.0f, 20.0f, 130.0f}, &(Vec){0.0f, 1.0f, 0.0f}, &(Vec){0.0f, 20.0f, 0.0f});
     saved = *camGetPtr(cameraId);
     npc = npcNameToPtr(evtGetValue(NULL, GSW_STORY_PROGRESS) < STG3_34_RETURN_TO_ROGUEPORT ? "ガンス" : "キノシコワ");
     PSMTXCopy(lookAt, camGetCurPtr()->view);

@@ -280,36 +280,10 @@ static void monitor_cap_capture(CameraId cameraId, void* param) {
     GXSetProjection(projMtx, GX_PERSPECTIVE);
     if (monitor_wp->kanbu) {
         npc = npcNameToPtr("カンブー");
-        {
-            static const Vec monitor_kanbu_pos = {0.0f, 28.0f, 46.0f};
-            static const Vec monitor_kanbu_up = {0.0f, 1.0f, 0.0f};
-            static const Vec monitor_kanbu_target = {0.0f, 3.0f, 0.0f};
-            Vec pos;
-            Vec up;
-            Vec target;
-
-            target = monitor_kanbu_target;
-            up = monitor_kanbu_up;
-            pos = monitor_kanbu_pos;
-
-            C_MTXLookAt(lookAt, &pos, &up, &target);
-        }
+        C_MTXLookAt(lookAt, &(Vec){0.0f, 28.0f, 46.0f}, &(Vec){0.0f, 1.0f, 0.0f}, &(Vec){0.0f, 3.0f, 0.0f});
     } else {
         npc = npcNameToPtr("手下１");
-        {
-            static const Vec monitor_teshita_pos = {0.0f, 25.0f, 30.0f};
-            static const Vec monitor_teshita_up = {0.0f, 1.0f, 0.0f};
-            static const Vec monitor_teshita_target = {0.0f, 0.0f, 0.0f};
-            Vec pos;
-            Vec up;
-            Vec target;
-
-            target = monitor_teshita_target;
-            up = monitor_teshita_up;
-            pos = monitor_teshita_pos;
-
-            C_MTXLookAt(lookAt, &pos, &up, &target);
-        }
+        C_MTXLookAt(lookAt, &(Vec){0.0f, 25.0f, 30.0f}, &(Vec){0.0f, 1.0f, 0.0f}, &(Vec){0.0f, 0.0f, 0.0f});
     }
     PSMTXCopy(lookAt, camGetCurPtr()->view);
     PSMTXIdentity(ident);
