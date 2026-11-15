@@ -736,6 +736,32 @@ BOOL animEffectAsync(const char* animName, u32 group) {
     return ret;
 }
 
+/* An anim name parameter holds a name (an address in main memory, negative as
+ * an s32) or an anim index (non-negative). */
+#define ANIM_NAME_INDEX(name) ((s32)(AddrWord)(name))
+#define ANIM_INDEX_NAME(idx) ((const char*)(AddrWord)(idx))
+
+/**
+ * Looks up an animation of pose's file: by name, or directly by index when name holds a non-negative index.
+ * Unknown names and indices give 0.
+ */
+s32 getAnimDataId(AnimationPose* pose, const char* name) {
+    AnimationPoseData* data = animPoseGetBaseData(pose);
+    s32 i = ANIM_NAME_INDEX(name);
+    s32 count = data->animCount;
+
+    if (i < 0) {
+        for (i = 0; i < count; i++) {
+            if (!strcmp(data->anims[i].name, name)) {
+                return i;
+            }
+        }
+    } else if (i < count) {
+        return i;
+    }
+    return 0;
+}
+
 /** Turns on pose poseId's paper turning (the flat character flips to face its new direction). */
 void animPosePeraOn(s32 poseId) {
     wp->poses[poseId].flags |= ANIM_POSE_FLAG_PERA;
@@ -792,31 +818,6 @@ void animPoseSetStartTime(s32 poseId, OSTime startTime) {
     pose->localTime = startTime;
 }
 
-/* An anim name parameter holds a name (an address in main memory, negative as
- * an s32) or an anim index (non-negative). */
-#define ANIM_NAME_INDEX(name) ((s32)(AddrWord)(name))
-#define ANIM_INDEX_NAME(idx) ((const char*)(AddrWord)(idx))
-
-/**
- * Looks up an animation in data: by name, or directly by index when name holds a non-negative index.
- * Unknown names and indices give 0.
- */
-inline s32 animPoseGetAnimIdx(AnimationPoseData* data, const char* name) {
-    s32 i = ANIM_NAME_INDEX(name);
-    s32 count = data->animCount;
-
-    if (i < 0) {
-        for (i = 0; i < count; i++) {
-            if (!strcmp(data->anims[i].name, name)) {
-                return i;
-            }
-        }
-    } else if (i < count) {
-        return i;
-    }
-    return 0;
-}
-
 /**
  * Switches pose poseId to animation animName (e.g. "S_1", "W_1"), restarting it from the beginning;
  * with reset FALSE nothing happens if it already plays that animation.
@@ -826,7 +827,7 @@ void animPoseSetAnim(s32 poseId, const char* animName, BOOL reset) {
     s32 animId;
 
     pose = &wp->poses[poseId];
-    animId = animPoseGetAnimIdx(animPoseGetBaseData(pose), animName);
+    animId = getAnimDataId(pose, animName);
     if (reset || animId != pose->animId) {
         pose->animId = animId;
         if (pose->paperId != -1 && pose->flags & ANIM_POSE_FLAG_PAPER_GROUP) {
@@ -892,12 +893,10 @@ void animPoseSetPaperAnimGroup(s32 poseId, const char* animName, BOOL paperGroup
  */
 void animPoseSetPaperAnim(s32 poseId, const char* animName, BOOL reset) {
     AnimationPose* pose = animPoseGetAnimPosePtr(poseId);
-    AnimationPoseData* data;
     s32 id;
     s32 idx;
 
-    data = animPoseGetAnimBaseDataPtr(pose->paperId);
-    idx = animPoseGetAnimIdx(data, animName);
+    idx = getAnimDataId(animPoseGetAnimPosePtr(pose->paperId), animName);
     pose->paperAnimIdx = idx;
     pose->localTimeInit = animTimeGetTime(pose->type);
     id = pose->paperId;

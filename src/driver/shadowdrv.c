@@ -385,7 +385,7 @@ inline ShadowConfig* shadowGetConfig(s32 idx) {
 }
 
 /** Sets up the character shadows: the 64-entry list (default mode 2, the cylinder shadow) and the texture buffer. */
-inline void shadowCharShadowInit(void) {
+void shadowCharShadowInit(void) {
     CharShadowWork* wp;
     u32 size;
 
@@ -405,22 +405,16 @@ inline void shadowCharShadowInit(void) {
     wp->base.texBuffer = smartAlloc(size, SMART_GROUP_PERMANENT);
 }
 
-#pragma push
-#pragma opt_dead_assignments off
 /**
  * Ground-hit filter for placing shadows: skips collision that belongs to map objects flagged 0x800 (so shadows
  * fall through them).
  */
-// FAKE: opt_dead_assignments off keeps the unused `f32 t = 20.0f;`; without the pragma and t the object changes
 static BOOL _filter(HitCheckQuery* query, HitEntry* hit) {
-    f32 t = 20.0f;
-
     if ((hitGetAttr(hit) & HIT_ATTR_MOBJ) && (*(u32*)mobjHitObjPtrToPtr(hit) & MOBJ_FLAG_HIDDEN)) {
         return FALSE;
     }
     return TRUE;
 }
-#pragma pop
 
 /**
  * Places each new shadow for this frame: casts a ray 150 units down from the owner
@@ -731,6 +725,7 @@ static void cylinder(ShadowEntry* entry) {
     f32 volumeAlpha;
     f32 decayAlpha;
     u8 alpha;
+    CharShadowWork* wp;
 
     if (entry->flags & SHADOW_ENTRY_NO_DECAY) {
         GXSetArray(GX_VA_CLR0, color_tbl_nodecay, 4);
@@ -739,8 +734,9 @@ static void cylinder(ShadowEntry* entry) {
         GXCallDisplayList(cylinder_dl_side, 0x40);
         return;
     }
+    wp = shadowGetCharShadowWork();
     inner = 1.0f - entry->decay2;
-    volumeAlpha = (cswp->base.color.a * entry->volume) / 255.0f;
+    volumeAlpha = (wp->base.color.a * entry->volume) / 255.0f;
     decayAlpha = volumeAlpha * entry->decay;
     if (inner < 0.0f) {
         inner = 0.0f;

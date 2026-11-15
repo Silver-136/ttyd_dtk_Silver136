@@ -291,7 +291,7 @@ typedef struct AnimationPose {
     f32 loopTime;                       // 0x84
     OSTime localTimeInit;              // 0x88
     s32 paperId;                        // 0x90
-    s32 paperAnimIdx;                  // 0x94, paper anim index from animPoseGetAnimIdx, -1 = none (not a string; passed to animPoseSetAnim as its name arg)
+    s32 paperAnimIdx;                  // 0x94, paper anim index from getAnimDataId, -1 = none (not a string; passed to animPoseSetAnim as its name arg)
     struct smartEntry* paperCapture0;   // 0x98, smartEntry of the paper capture texture
     struct smartEntry* paperCapture1;   // 0x9C, second paper capture (never allocated in C)
     GXTexObj paperTexObj[2];            // 0xA0, texture objects for paperCapture0 / paperCapture1
@@ -381,6 +381,7 @@ s32 animPoseEntry(const char* animName, s32 type);
 s32 animPaperPoseEntry(const char* animName, s32 type);
 
 BOOL animEffectAsync(const char* animName, u32 group);
+s32 getAnimDataId(AnimationPose* pose, const char* name);
 
 void animPosePeraOn(s32 poseId);
 void animPosePeraOff(s32 poseId);

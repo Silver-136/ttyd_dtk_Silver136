@@ -160,7 +160,6 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | src/driver/fadedrv.c | fadeStrippedPool | stand-in that nothing calls; it only adds its 3.141592f literal to this object's constant pool | see comment |
 | Both | src/driver/mapdrv.c | mapStrippedPool | stand-in for dead-stripped code, likely mapGetConvertDate, mapGetAnmDt and mapGetCurve (JP demo map, UNUSED; the floats' owner is not identified); it only keeps the constants in .rodata/.sdata2, in their original order. Bodies unknown. | see comment |
 | Both | src/driver/mapdrv.c | mapSetMaterialTev | `#pragma opt_lifetimes off` (push/pop) for this function only | removing it changes the object; the file-wide `-opt nolifetimes` changes other functions (2026-11-07) |
-| Both | src/driver/shadowdrv.c | _filter | opt_dead_assignments off keeps the unused `f32 t = 20.0f;`; without the pragma and t the object changes | see comment |
 | Both | src/driver/windowdrv.c | windowDispGX2_Waku_col | negated and halved in two steps with a no-op (f32) cast; `left = -width / 2.0f;` changes the object | see comment |
 | JP | src/effect/eff_levelup.c | effLevelupDisp | JP and early demos: work array and texid_tbl walked by byte offsets (ofs/tofs); US and later index by i | indexing by i in JP: same instructions, but the i and offset decrements come out in the other order |
 | Both | src/effect/eff_mobj_broken.c | effMObjBrokenMain | type is reused as the counter of the second release loop (opt_lifetimes off: a separate variable takes its own register) | see comment |

@@ -505,7 +505,7 @@ config.libs = [
             Object(MatchingFor("G8MJ01", "G8ME01"), "driver/icondrv.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "driver/lightdrv.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "driver/mapdrv.c"),
-            Object(MatchingFor("G8MJ01", "G8ME01"), "driver/shadowdrv.c", extra_cflags=["-inline noauto"]),
+            Object(MatchingFor("G8MJ01", "G8ME01"), "driver/shadowdrv.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "driver/seqdrv.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "driver/animdrv.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "driver/npcdrv.c"),
