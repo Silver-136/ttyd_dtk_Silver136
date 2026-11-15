@@ -126,6 +126,12 @@ static BOOL checkHarbor(Vec* out);
 static void shipMove(void);
 static BOOL chkgnd(f32 vy);
 
+/** Tuning value i of shipData. */
+// Original name and size (0x14) from the JP demo map (UNUSED there: every call is inlined).
+static f32 getShipVal(s32 i) {
+    return shipData[i];
+}
+
 /**
  * Facing bit of the boat (motShip flag 2) for the partner follow code in party.c,
  * which seats the partners on the matching side; 0 when no boat work is allocated.
@@ -906,18 +912,12 @@ static void shipMove(void) {
     MarioWork* m = marioGetPtr();
 #if VERSION >= VERSION_JP
     f32 len;
-
-    // rateIdx always holds 3 (shipData[3] is the steering rate); the target's load schedule fits a variable
-    // index (a constant index schedules the four loads differently)
-    s32 rateIdx;
 #endif
     f32 spd;
 #if VERSION <= VERSION_DEMO_JP
-    f32 swirlMax;
     f32 max;
     f32 len;
     f32 tx;
-    f32 nmax;
 #endif
     f32 tz;
     f32 vx;
@@ -930,9 +930,7 @@ static void shipMove(void) {
 #endif
     f32 dx;
     f32 dz;
-#if VERSION <= VERSION_DEMO_JP
-    s32 rateIdx;
-#else
+#if VERSION >= VERSION_JP
     f32 fr;
 #endif
     spd = m->controlStickSensitivity;
@@ -945,40 +943,21 @@ static void shipMove(void) {
         movePos(&dx, &dz, marioGetPtr()->motShip->swirlSpeed, marioGetPtr()->motShip->swirlAngle);
         marioGetPtr()->motShip->velX += dx;
         marioGetPtr()->motShip->velZ += dz;
-#if VERSION <= VERSION_DEMO_JP
-        swirlMax = shipData[4];
-        if (marioGetPtr()->motShip->velX > swirlMax) {
-            swirlMax = shipData[4];
-            marioGetPtr()->motShip->velX = swirlMax;
-#else
-        max = shipData[4];
-        if (marioGetPtr()->motShip->velX > max) {
-            max = shipData[4];
-            marioGetPtr()->motShip->velX = max;
-#endif
+        if (marioGetPtr()->motShip->velX > getShipVal(4)) {
+            marioGetPtr()->motShip->velX = getShipVal(4);
         }
-        if (marioGetPtr()->motShip->velX < (-shipData[4])) {
-            marioGetPtr()->motShip->velX = -shipData[4];
+        if (marioGetPtr()->motShip->velX < (-getShipVal(4))) {
+            marioGetPtr()->motShip->velX = -getShipVal(4);
         }
-#if VERSION <= VERSION_DEMO_JP
-        swirlMax = shipData[4];
-        if (marioGetPtr()->motShip->velZ > swirlMax) {
-            swirlMax = shipData[4];
-            marioGetPtr()->motShip->velZ = swirlMax;
-#else
-        max = shipData[4];
-        if (marioGetPtr()->motShip->velZ > max) {
-            max = shipData[4];
-            marioGetPtr()->motShip->velZ = max;
-#endif
+        if (marioGetPtr()->motShip->velZ > getShipVal(4)) {
+            marioGetPtr()->motShip->velZ = getShipVal(4);
         }
-        if (marioGetPtr()->motShip->velZ < (-shipData[4])) {
-            marioGetPtr()->motShip->velZ = -shipData[4];
+        if (marioGetPtr()->motShip->velZ < (-getShipVal(4))) {
+            marioGetPtr()->motShip->velZ = -getShipVal(4);
         }
     }
     vx = marioGetPtr()->motShip->velX;
     vz = marioGetPtr()->motShip->velZ;
-    rateIdx = 3;
     if (m->controlStickSensitivity) {
         tx = spd * (f32)sin(3.1415927f * m->controlStickAngle / 180.0f);
         tz = spd * -(f32)cos(3.1415927f * m->controlStickAngle / 180.0f);
@@ -986,41 +965,35 @@ static void shipMove(void) {
         tx = vx;
         tz = vz;
     }
-    max = shipData[4];
+    max = getShipVal(4);
     if (spd || (marioGetPtr()->motShip->swirlTime != 0)) {
         if (tx > vx) {
-            vx += ((1.0f + tx) - vx) * shipData[rateIdx];
+            vx += ((1.0f + tx) - vx) * getShipVal(3);
             if (vx >= max) {
                 vx = max;
             }
         } else {
-            vx += ((tx - 1.0f) - vx) * shipData[rateIdx];
-#if VERSION <= VERSION_DEMO_JP
-            nmax = -max;
-            if (vx <= nmax) {
-                vx = nmax;
-#else
+            vx += ((tx - 1.0f) - vx) * getShipVal(3);
             if (vx <= (-max)) {
                 vx = -max;
-#endif
             }
         }
         if (tz > vz) {
-            vz += ((1.0f + tz) - vz) * shipData[rateIdx];
+            vz += ((1.0f + tz) - vz) * getShipVal(3);
             if (vz >= max) {
                 vz = max;
             }
         } else {
-            vz += ((tz - 1.0f) - vz) * shipData[rateIdx];
+            vz += ((tz - 1.0f) - vz) * getShipVal(3);
             if (vz <= (-max)) {
                 vz = -max;
             }
         }
     }
     if (!spd) {
-        fr = shipData[0];
+        fr = getShipVal(0);
         if (m->hitobjWall != NULL) {
-            fr = shipData[1];
+            fr = getShipVal(1);
         }
         fr = __fabsf(fr);
         vx += (-vx) * fr;
@@ -1036,10 +1009,10 @@ static void shipMove(void) {
     marioGetPtr()->motShip->velZ = vz;
     len = distABf(0.0f, 0.0f, vx, vz);
     if (spd) {
-        if (len >= shipData[4]) {
-            len = shipData[4];
+        if (len >= getShipVal(4)) {
+            len = getShipVal(4);
         }
-    } else if (len < shipData[5]) {
+    } else if (len < getShipVal(5)) {
         len = 0.0f;
         marioGetPtr()->motShip->velX = 0.0f;
         marioGetPtr()->motShip->velZ = 0.0f;

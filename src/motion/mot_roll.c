@@ -190,7 +190,7 @@ void roll_upstairs(void);
 static void makeOfs(void);
 
 /** Tuning value i of rollData. */
-// Original name and size (0x14) from the JP demo map (UNUSED there: nothing calls it).
+// Original name and size (0x14) from the JP demo map (UNUSED there: every call is inlined).
 static f32 getRollVal(s32 i) {
     return rollData[i];
 }
@@ -569,7 +569,7 @@ static void roll_base_init(void) {
 
     mario->wPlayerCollisionBox.x = 14.8f;
     mario->wPlayerCollisionBox.y = 14.8f;
-    mario->baseDashSpeed = rollData[0];
+    mario->baseDashSpeed = getRollVal(0);
     marioGetPtr()->motRoll->spdX = 0.0f;
     marioGetPtr()->motRoll->spdZ = 0.0f;
     mario->rotOfs.x = -6.0f;
@@ -653,7 +653,6 @@ void mot_roll(void) {
     f32 sgn;
     f32 mv;
     f32 pre;
-    f32 l;
     MarioWork* m;
     s32 z0;
     s32 z1;
@@ -1010,7 +1009,7 @@ void mot_roll(void) {
 #else
         if (((MarioWork*)mario)->groundRot.z > 0.05f) {
 #endif
-            v26 = (v31 > 180.0f) ? rollData[5] : rollData[6];
+            v26 = (v31 > 180.0f) ? getRollVal(5) : getRollVal(6);
             {
                 f32 t = sind(((MarioWork*)mario)->groundRot.z);
                 t = t * v26;
@@ -1024,7 +1023,7 @@ void mot_roll(void) {
 #else
         } else if (mario->groundRot.z < -0.05f) {
 #endif
-            v26 = (v31 < 180.0f) ? rollData[5] : rollData[6];
+            v26 = (v31 < 180.0f) ? getRollVal(5) : getRollVal(6);
             {
                 f32 t = sind(mario->groundRot.z);
                 t = t * v26;
@@ -1039,7 +1038,7 @@ void mot_roll(void) {
 #else
         if (((MarioWork*)mario)->groundRot.x > 0.05f) {
 #endif
-            v26 = (v31 > 180.0f) ? rollData[5] : rollData[6];
+            v26 = (v31 > 180.0f) ? getRollVal(5) : getRollVal(6);
             {
                 f32 t = sind(((MarioWork*)mario)->groundRot.x);
                 t = t * v26;
@@ -1053,7 +1052,7 @@ void mot_roll(void) {
 #else
         } else if (mario->groundRot.x < -0.05f) {
 #endif
-            v26 = (v31 < 180.0f) ? rollData[5] : rollData[6];
+            v26 = (v31 < 180.0f) ? getRollVal(5) : getRollVal(6);
             {
                 f32 t = sind(mario->groundRot.x);
                 t = t * v26;
@@ -1100,31 +1099,26 @@ void mot_roll(void) {
     if (mario->forceMoveTimer == 0 && !nx && !nz) {
         if (mario->hitobjWall) {
             if (!marioChkBero(mario->hitobjWall)) {
-                f32 k = rollData[2];
-                v29 = v29 * k + v29;
-                v28 = v28 * k + v28;
+                v29 = v29 * getRollVal(2) + v29;
+                v28 = v28 * getRollVal(2) + v28;
             }
         } else if (mario->hitobjStandOn && mario->airTimer == 0) {
             // BUG: the parenthesis closes after the comparison, so this tests groundSlope <= 1 (true for any
             // negative slope) instead of |groundSlope| <= 1.
             if (__fabsf((f32)(mario->groundSlope <= 1.0f))) {
-                f32 k = rollData[1];
-                v29 = v29 * k + v29;
-                v28 = v28 * k + v28;
+                v29 = v29 * getRollVal(1) + v29;
+                v28 = v28 * getRollVal(1) + v28;
             } else {
-                f32 k = rollData[1];
-                f32 a = v29 * k;
-                f32 b = v28 * k;
+                f32 a = v29 * getRollVal(1);
+                f32 b = v28 * getRollVal(1);
                 v29 = 6.4f * a + v29;
                 v28 = 6.4f * b + v28;
             }
         }
-        l = rollData[3];
-        if (__fabsf(v29) < l) {
+        if (__fabsf(v29) < getRollVal(3)) {
             v29 = 0.0f;
         }
-        l = rollData[3];
-        if (__fabsf(v28) < l) {
+        if (__fabsf(v28) < getRollVal(3)) {
             v28 = 0.0f;
         }
     } else {  // the speed clamp runs only on this path
@@ -1145,20 +1139,20 @@ void mot_roll(void) {
                 }
             }
         }
-        a31 = rollData[0] / 0.05f;
+        a31 = getRollVal(0) / 0.05f;
         v26 = 1.0f;
         if (mario->forceMoveTimer == 0 && __fabsf(mario->groundSlope) >= v26) {
             f32 ang = angleABf(0.0f, 0.0f, v29, -v28);
             f32 sp = mario->groundRot.z;
             if (sp > 0.0f) {
                 if (ang > 180.0f) {
-                    v26 = rollData[9];
+                    v26 = getRollVal(9);
                 } else {
                     v26 = 1.0f;
                 }
             } else if (sp < 0.0f) {
                 if (ang < 180.0f) {
-                    v26 = rollData[9];
+                    v26 = getRollVal(9);
                 } else {
                     v26 = 1.0f;
                 }
@@ -1178,20 +1172,20 @@ void mot_roll(void) {
                 v29 = a31;
             }
         }
-        b31 = rollData[0] / 0.05f;
+        b31 = getRollVal(0) / 0.05f;
         v30 = 1.0f;
         if (mario->forceMoveTimer == 0 && __fabsf(mario->groundSlope) >= v30) {
             f32 ang = angleABf(0.0f, 0.0f, v29, -v28);
             f32 sp = mario->groundRot.x;
             if (sp > 0.0f) {
                 if (ang > 180.0f) {
-                    v30 = rollData[9];
+                    v30 = getRollVal(9);
                 } else {
                     v30 = 1.0f;
                 }
             } else if (sp < 0.0f) {
                 if (ang < 180.0f) {
-                    v30 = rollData[9];
+                    v30 = getRollVal(9);
                 } else {
                     v30 = 1.0f;
                 }
@@ -1236,6 +1230,8 @@ void mot_roll(void) {
     } else {
         move_se_off();
     }
+    // rollData[4] read directly here: as getRollVal(4) (every declaration slot tried) rd takes f26 instead of the
+    // retail f28; the other rollData reads are getRollVal calls
     rd = rollData[4];
     mv = toMovedir(mario->displayDirection);
 

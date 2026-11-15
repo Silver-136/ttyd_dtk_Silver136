@@ -293,6 +293,22 @@ static void effNanigaMain(EffectEntry* effect) {
     }
 }
 
+/** Draws one textured 40-unit quad centred on the origin of the current matrix. */
+// Original name and size (0xc4) from the JP demo map (UNUSED there: every call is inlined).
+static void quads(void) {
+    f32 w = 40.0f;
+
+    GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+    GXPosition3f32(-w / 2.0f, w * 0.5f, 0.0f);
+    GXTexCoord2f32(0.0f, 0.0f);
+    GXPosition3f32(w * 0.5f, w * 0.5f, 0.0f);
+    GXTexCoord2f32(1.0f, 0.0f);
+    GXPosition3f32(w * 0.5f, -w / 2.0f, 0.0f);
+    GXTexCoord2f32(1.0f, 1.0f);
+    GXPosition3f32(-w / 2.0f, -w / 2.0f, 0.0f);
+    GXTexCoord2f32(0.0f, 1.0f);
+}
+
 /**
  * Draws the item reel in screen space: the candidate items' icons in a vertical strip scrolled by `offset`,
  * clipped by a scissor to a 40x40 window (scaled 1.5x) around the effect's screen position.
@@ -305,11 +321,9 @@ static void effNanigaDisp(CameraId cameraId, void* param) {
     Mtx mT, mR, mS, mC;
     GXTexObj texObj;
     u32 left, top, width, height;
-    f32 w, lo, hi;
     f32 oldScale;
     s32 i;
 
-    w = 40.0f;
     oldScale = work->scale;
     work->scale *= 1.5f;
     PSMTXTrans(mT, work->screen.x, work->screen.y, work->screen.z);
@@ -339,17 +353,7 @@ static void effNanigaDisp(CameraId cameraId, void* param) {
     PSMTXConcat(camera->view, mC, mT);
     GXLoadPosMtxImm(mT, GX_PNMTX0);
     GXSetCurrentMtx(GX_PNMTX0);
-    GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-    lo = -w / 2.0f;
-    hi = 20.0f;
-    GXPosition3f32(lo, hi, 0.0f);
-    GXTexCoord2f32(0.0f, 0.0f);
-    GXPosition3f32(hi, hi, 0.0f);
-    GXTexCoord2f32(1.0f, 0.0f);
-    GXPosition3f32(hi, lo, 0.0f);
-    GXTexCoord2f32(1.0f, 1.0f);
-    GXPosition3f32(lo, lo, 0.0f);
-    GXTexCoord2f32(0.0f, 1.0f);
+    quads();
     for (i = 0; i < work->count + 5; i++) {
         iconGetTexObj(&texObj, itemDataTable[work->list[i % work->count]].icon_id);
         GXLoadTexObj(&texObj, GX_TEXMAP0);
@@ -360,15 +364,7 @@ static void effNanigaDisp(CameraId cameraId, void* param) {
         PSMTXConcat(camera->view, mT, mT);
         GXLoadPosMtxImm(mT, GX_PNMTX0);
         GXSetCurrentMtx(GX_PNMTX0);
-        GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-        GXPosition3f32(lo, hi, 0.0f);
-        GXTexCoord2f32(0.0f, 0.0f);
-        GXPosition3f32(hi, hi, 0.0f);
-        GXTexCoord2f32(1.0f, 0.0f);
-        GXPosition3f32(hi, lo, 0.0f);
-        GXTexCoord2f32(1.0f, 1.0f);
-        GXPosition3f32(lo, lo, 0.0f);
-        GXTexCoord2f32(0.0f, 1.0f);
+        quads();
     }
     GXSetScissor(left, top, width, height);
     work->scale = oldScale;
