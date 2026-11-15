@@ -1524,7 +1524,7 @@ config.libs = [
             Object(MatchingFor("G8MJ01", "G8ME01"), "unit/unit_kuriboo.c", extra_cflags=["-inline auto,deferred"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "unit/unit_ice_pakkun.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "bom_02.c", extra_cflags=["-inline auto,deferred"]),
-            Object(MatchingFor("G8MJ01", "G8ME01"), "bom.c"),
+            Object(MatchingFor("G8MJ01", "G8ME01"), "bom.c", extra_cflags=["-inline auto,deferred"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "unit/unit_bllizard.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "bom_01.c", extra_cflags=["-inline auto,deferred"]),
         ]

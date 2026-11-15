@@ -995,19 +995,8 @@ static void zubastar_disp_bomb(CameraId cam, void* param) {
     }
 }
 
-static inline void setG(u8 a) {
-    GXColor col = {0, 0, 0, 0xff};
-    col.r = a;
-    col.g = a;
-    col.b = a;
-    GXSetChanMatColor(GX_COLOR0A0, col);
-}
-
-static inline void dispA(Mtx m, s32 i) {
-    GXColor ca = {0xff, 0xff, 0xff, 0};
-    ca.a = 0xff - (i + 1) * 50;
-    iconDispGxCol(m, ICON_FLAG_2D, ICON_SAC_GENKI1, ca);
-}
+static inline void setG(u8 a);
+static inline void dispA(Mtx m, s32 i);
 
 /**
  * Draws the minigame's 2D layer: the A button and the gauge, the slash lines pulsing in brightness,
@@ -1066,6 +1055,20 @@ static void zubastar_disp2D(CameraId cam, void* param) {
             dispA(m, i);
         }
     }
+}
+
+static inline void setG(u8 a) {
+    GXColor col = {0, 0, 0, 0xff};
+    col.r = a;
+    col.g = a;
+    col.b = a;
+    GXSetChanMatColor(GX_COLOR0A0, col);
+}
+
+static inline void dispA(Mtx m, s32 i) {
+    GXColor ca = {0xff, 0xff, 0xff, 0};
+    ca.a = 0xff - (i + 1) * 50;
+    iconDispGxCol(m, ICON_FLAG_2D, ICON_SAC_GENKI1, ca);
 }
 
 /**

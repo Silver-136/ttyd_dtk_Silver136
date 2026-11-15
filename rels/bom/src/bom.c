@@ -24,44 +24,6 @@ void _unresolved(void);
 void _epilog(void);
 void _prolog(void);
 
-static EvtWord evt_bress[4];
-
-/**
- * Module unresolved-symbol stub: if a relocation could not be resolved the REL linker points it here;
- * it does nothing.
- */
-void _unresolved(void) {
-}
-
-/** REL module epilog: runs the static destructors (_dtors) when bom.rel is unloaded. */
-void _epilog(void) {
-    voidfunctionptr* dtor;
-
-    for (dtor = _dtors; *dtor != NULL; dtor++) {
-        (*dtor)();
-    }
-}
-
-/**
- * REL module prolog, run when bom.rel is loaded:
- * runs the static constructors, registers the five map init scripts (bom_00 to bom_04)
- * and the Fahr Outpost battle setup tables, and starts the breath-cloud script evt_bress.
- */
-void _prolog(void) {
-    voidfunctionptr* ctor;
-
-    for (ctor = _ctors; *ctor != NULL; ctor++) {
-        (*ctor)();
-    }
-    relSetEvtAddr("bom_00", bom_00_init_evt);
-    relSetEvtAddr("bom_01", bom_01_init_evt);
-    relSetEvtAddr("bom_02", bom_02_init_evt);
-    relSetEvtAddr("bom_03", bom_03_init_evt);
-    relSetEvtAddr("bom_04", bom_04_init_evt);
-    relSetBtlAddr("bom", btlsetup_bom_tbl, btl_bom_setup_no_tbl);
-    evtEntryType(evt_bress, 0, 0, 0);
-}
-
 /**
  * Breath-puff script helper, run every frame by evt_bress:
  * spawns a small mist effect in front of Mario and the first partner every 1 to 2 seconds (randomised, 60 to 119
@@ -147,3 +109,39 @@ static EVT_BEGIN(evt_bress)
     CALL(bress)
     RETURN
 EVT_END()
+
+/**
+ * REL module prolog, run when bom.rel is loaded:
+ * runs the static constructors, registers the five map init scripts (bom_00 to bom_04)
+ * and the Fahr Outpost battle setup tables, and starts the breath-cloud script evt_bress.
+ */
+void _prolog(void) {
+    voidfunctionptr* ctor;
+
+    for (ctor = _ctors; *ctor != NULL; ctor++) {
+        (*ctor)();
+    }
+    relSetEvtAddr("bom_00", bom_00_init_evt);
+    relSetEvtAddr("bom_01", bom_01_init_evt);
+    relSetEvtAddr("bom_02", bom_02_init_evt);
+    relSetEvtAddr("bom_03", bom_03_init_evt);
+    relSetEvtAddr("bom_04", bom_04_init_evt);
+    relSetBtlAddr("bom", btlsetup_bom_tbl, btl_bom_setup_no_tbl);
+    evtEntryType(evt_bress, 0, 0, 0);
+}
+
+/** REL module epilog: runs the static destructors (_dtors) when bom.rel is unloaded. */
+void _epilog(void) {
+    voidfunctionptr* dtor;
+
+    for (dtor = _dtors; *dtor != NULL; dtor++) {
+        (*dtor)();
+    }
+}
+
+/**
+ * Module unresolved-symbol stub: if a relocation could not be resolved the REL linker points it here;
+ * it does nothing.
+ */
+void _unresolved(void) {
+}
