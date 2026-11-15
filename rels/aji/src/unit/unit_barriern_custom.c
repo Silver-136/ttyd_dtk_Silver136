@@ -836,6 +836,7 @@ static USER_FUNC(barriern_satellite_zanzou2) {
  * type 1 expanding out over 8) with afterimage counts in zanzou_count[n + 1]; the body uses counter 0;
  * the same ghost-ring scaling and fading as barriern_zanzou_sub.
  */
+// FAKE: zanzou_count[(s32)(n + 1)] (no-op cast) keeps the +1 out of the load displacement (FAKES.md)
 static s32 barriern_satellite_zanzou_sub(BOOL isFirstCall, BattleUnit* unit, f32* scales, s32 n, s32 type) {
     f32 start[5];
     f32 end[5];

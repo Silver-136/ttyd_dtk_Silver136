@@ -481,7 +481,6 @@ static void npcDisp_blur(CameraId camId, void* param) {
  * Explicitly clears the NPC tables and FieldBattleData.
  */
 void npcInit(void) {
-    FieldBattleData* data;
     NpcWork* wp;
 
     wp = &work.field;
@@ -496,10 +495,7 @@ void npcInit(void) {
     wp->entries = __memAlloc(HEAP_DEFAULT, sizeof(NpcEntry) * wp->total);
     memset(wp->entries, 0, sizeof(NpcEntry) * wp->total);
 
-    data = __memAlloc(HEAP_DEFAULT, sizeof(FieldBattleData));
-    gp->fbatData = data;
-    memset(gp->fbatData, 0, sizeof(FieldBattleData));
-    data->mode = FBAT_MODE_OFF;
+    fbatInit();
     npcMainCount = 0;
 }
 
@@ -512,7 +508,7 @@ void npcReset(BOOL inBattle) {
     memset(wp->entries, 0, sizeof(NpcEntry) * wp->total);
     wp->count = 0;
     if (!inBattle) {
-        gp->fbatData->mode = FBAT_MODE_OFF;
+        fbatReInit();
     }
     npcMainCount = 0;
 }
@@ -1624,6 +1620,22 @@ static BOOL fbatChangeMode_Battle(NpcEntry* npc) {
  */
 void fbatChangeMode(s16 mode) {
     gp->fbatData->mode = mode;
+}
+
+/** Allocates and clears the field battle data, mode 0 (off). */
+// Original name and size (0x58) from the JP demo map (UNUSED there: every call is inlined).
+void fbatInit(void) {
+    FieldBattleData* data = __memAlloc(HEAP_DEFAULT, sizeof(FieldBattleData));
+
+    gp->fbatData = data;
+    memset(gp->fbatData, 0, sizeof(FieldBattleData));
+    data->mode = FBAT_MODE_OFF;
+}
+
+/** Resets the field battle mode to 0 (off). */
+// Original name and size (0x14) from the JP demo map (UNUSED there: every call is inlined).
+void fbatReInit(void) {
+    gp->fbatData->mode = FBAT_MODE_OFF;
 }
 
 /**
@@ -3122,11 +3134,25 @@ BOOL npcCheckInterrupt(NpcEntry* npc) {
     return FALSE;
 }
 
-/** Rolls the 16 random battle values of an NPC (battleInfo.random) inside the setup's per-value [min, max] ranges. */
-static inline void npcRandField(NpcBattleInfo* info, NpcSetupBattleInfo* setup) {
+/**
+ * Copies the setup's mode for the 16 battle values (battleInfo.random) and, in mode 0, rolls each value inside the
+ * setup's per-value [min, max] range.
+ */
+// Original name and size (0xa0) from the JP demo map (UNUSED there: every call is inlined).
+void npcSetupBattleAudienceRate(NpcBattleInfo* info, NpcSetupBattleInfo* setup) {
     s32 i;
-    for (i = 0; i < 16; i++) {
-        info->random.values[i] = (u8)setup->randomRanges[i][0] + irand(setup->randomRanges[i][1] - setup->randomRanges[i][0] + 1);
+
+    info->random.mode = setup->randomMode;
+    switch (info->random.mode) {
+        case 0:
+        default:
+            for (i = 0; i < 16; i++) {
+                info->random.values[i] = (u8)setup->randomRanges[i][0] + irand(setup->randomRanges[i][1] - setup->randomRanges[i][0] + 1);
+            }
+            break;
+        case 1:
+        case 2:
+            break;
     }
 }
 
@@ -3144,16 +3170,7 @@ void npcSetupBattleInfo(NpcEntry* npc, NpcSetupBattleInfo* setup) {
     memset(info, 0, sizeof(NpcBattleInfo));
     memset(info->recoveredItems, 0, sizeof(info->recoveredItems));
     if (setup && setup->name) {
-        info->random.mode = setup->randomMode;
-        switch (info->random.mode) {
-            case 0:
-            default:
-                npcRandField(info, setup);
-                break;
-            case 1:
-            case 2:
-                break;
-        }
+        npcSetupBattleAudienceRate(info, setup);
         info->battleFlags = setup->battleFlags;
         info->fixedItem = setup->fixedItem;
         info->itemDropped = ITEM_NULL;

@@ -476,6 +476,7 @@ void npcReleaseFiledNpc(void);
 void npcRecoveryFiledNpc(void);
 void npcInit(void);
 void npcReset(BOOL inBattle);
+void npcSetupBattleAudienceRate(NpcBattleInfo* info, NpcSetupBattleInfo* setup);
 s32 npcGetReactionOfLivingBody(BOOL inBattle);
 s32 npcEntry(const char* description, const char* animName);
 NpcTribeInfo* npcGetTribe(const char* tribeName);
@@ -504,6 +505,8 @@ FieldBattleData* fbatGetPointer(void);
 void npcSetSlave(NpcEntry* npc, NpcEntry* slave, s32 id);
 void npcSetBattleInfo(NpcEntry* npc, s32 battleInfoId);
 void fbatChangeMode(s16 mode);
+void fbatInit(void);
+void fbatReInit(void);
 
 NpcTerritoryType dbGetDefData(NpcTerritoryInfo* info, const char* description);
 

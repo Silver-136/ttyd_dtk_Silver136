@@ -397,6 +397,14 @@ void damageToge(PartyEntry* party) {
     }
 }
 
+/** Restarts the shared ride pose time (Mario's poseTime) that yoshiAnimeCtrl steps. */
+// Original name and size (0x10) from the JP demo map (UNUSED there: every call is inlined).
+static void yoshiAnimeInit(PartyEntry* party) {
+    MarioWork* mario = party->playerPtr;
+
+    mario->poseTime = 0;
+}
+
 void yoshiAnimeCtrl(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;
 
@@ -635,7 +643,7 @@ void yoshi_use(PartyEntry* party) {
             mario->lastGroundPos = party->position;
             break;
         case 12:
-            party->playerPtr->poseTime = 0;
+            yoshiAnimeInit(party);
             party->useMotionId = 13;
         case 13:
             if (mario->flags & MARIO_FLAG_FORCED_MOVEMENT) {

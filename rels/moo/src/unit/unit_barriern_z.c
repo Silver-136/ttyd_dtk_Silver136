@@ -761,6 +761,7 @@ static USER_FUNC(barriern_satellite_zanzou2) {
  * parts 2 to 6 are copies that scale and fade, counted by the satellite's own counter zanzou_count[n + 1].
  * n is the satellite number and type 0 draws in, type 1 flies out. Returns EVT_RETURN_BLOCK until done.
  */
+// FAKE: zanzou_count[(s32)(n + 1)] (no-op cast) keeps the +1 out of the load displacement (FAKES.md)
 static s32 barriern_satellite_zanzou_sub(BOOL isFirstCall, BattleUnit* unit, f32* scales, s32 n, s32 type) {
     f32 start[5];
     f32 end[5];

@@ -15,6 +15,7 @@ s32 kpaGetAttackMode(void);
 f32 kpaGetBaseScale(s32 lv);
 s32 kpaGetBodyStatus(void);
 s32 kpaGetStageType(void);
+void kpaGetStageTypeInit(void);
 
 // kpaGetStageViewType
 enum {
@@ -23,6 +24,7 @@ enum {
 };
 
 s32 kpaGetStageViewType(void);
+void kpaGetStageViewTypeInit(void);
 f32 kpaGetWidth(s32 lv);
 void kpaMSetMutekiTimer(void);
 s32 kpaMutekiCheck(void);

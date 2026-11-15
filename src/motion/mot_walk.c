@@ -83,6 +83,21 @@ void marioWalkDashSe(HitEntry* hitObj, u32 interval) {
     }
 }
 
+/** TRUE when the object Mario pushes against is a pushable case object (CASE_PUSH). */
+// Original name and size (0x50) from the JP demo map (UNUSED there: every call is inlined).
+BOOL pushEvtChk(HitEntry* hit) {
+    CaseEntry* caseEntry;
+
+    if (hit == NULL) {
+        return FALSE;
+    }
+    caseEntry = caseCheckHitObj(hit);
+    if (caseEntry != NULL && caseEntry->conditionId == CASE_PUSH) {
+        return TRUE;
+    }
+    return FALSE;
+}
+
 /**
  * Mario's walking speed: baseWalkSpeed, halved in Paper Mode when the stick is only tilted a little
  * and always in background mode, times playerGravity. Also used by Peach's walk and mario_sbr.c.
@@ -152,7 +167,6 @@ void mot_walk(void) {
     s8 stickDir2;
     s8 stickDir1;
     MarioWork* player;
-    CaseEntry* caseEntry;
 
     player = marioGetPtr();
     characterId = player->characterId;
@@ -165,16 +179,7 @@ void mot_walk(void) {
         return;
     }
     if (player->flags & MARIO_FLAG_IS_PUSHING) {
-        if (player->hitobjPush == NULL) {
-            pushCaseActive = FALSE;
-        } else {
-            caseEntry = caseCheckHitObj(player->hitobjPush);
-            if (caseEntry != NULL && caseEntry->conditionId == CASE_PUSH) {
-                pushCaseActive = TRUE;
-            } else {
-                pushCaseActive = FALSE;
-            }
-        }
+        pushCaseActive = pushEvtChk(player->hitobjPush);
         if (!pushCaseActive) {
             player->flags = player->flags & ~MARIO_FLAG_IS_PUSHING;
             if (marioChkPushAnime() && !marioBgmodeChk()) {
@@ -277,7 +282,6 @@ void mot_dash(void) {
     s8 stickDir2;
     s8 stickDir1;
     MarioWork* player;
-    CaseEntry* caseEntry;
 
     player = marioGetPtr();
     characterId = player->characterId;
@@ -289,16 +293,7 @@ void mot_dash(void) {
         peach_dash();
         return;
     }
-    if (player->hitobjPush == NULL) {
-        pushCaseActive = FALSE;
-    } else {
-        caseEntry = caseCheckHitObj(player->hitobjPush);
-        if (caseEntry != NULL && caseEntry->conditionId == CASE_PUSH) {
-            pushCaseActive = TRUE;
-        } else {
-            pushCaseActive = FALSE;
-        }
-    }
+    pushCaseActive = pushEvtChk(player->hitobjPush);
     if (!pushCaseActive && player->hitobjPush == NULL) {
         player->flags = player->flags & ~MARIO_FLAG_IS_PUSHING;
         if (marioChkPushAnime() && !marioBgmodeChk()) {

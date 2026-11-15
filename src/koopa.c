@@ -157,6 +157,18 @@ s32 kpaGetBodyStatus(void) {
     return st;
 }
 
+/** Sets KPA_STAGE_FLAG_KPA03 in kpa_03 and clears it elsewhere (kpaPreInit). */
+// Original name and size (0x64) from the JP demo map (UNUSED there: every call is inlined).
+void kpaGetStageTypeInit(void) {
+    MarioWork* mario = marioGetPtr();
+
+    if (strcmp(gp->currentMapName, "kpa_03") == 0) {
+        mario->stageFlags |= KPA_STAGE_FLAG_KPA03;
+    } else {
+        mario->stageFlags &= ~KPA_STAGE_FLAG_KPA03;
+    }
+}
+
 /** 1 in kpa_03, the seaside stage with water (KPA_STAGE_FLAG_KPA03, stageFlags 0x2), else 0. */
 s32 kpaGetStageType(void) {
     return (marioGetPtr()->stageFlags >> 1) & 1;
@@ -169,6 +181,20 @@ static inline void kpaSetJumpParams(MarioWork* mp, f32 velocityY, f32 accelerati
     mp->jumpAccelerationY = accelerationY;
     mp->jumpJerkY = jerkY;
     mp->jumpSnapY = snapY;
+}
+
+/** Sets KPA_STAGE_FLAG_SIDE_SCROLLING in the side-scrolling stages kpa_02 to kpa_06 and clears it elsewhere (kpaPreInit). */
+// Original name and size (0xd0) from the JP demo map (UNUSED there: every call is inlined).
+void kpaGetStageViewTypeInit(void) {
+    MarioWork* mario = marioGetPtr();
+
+    if (strcmp(gp->currentMapName, "kpa_02") == 0 || strcmp(gp->currentMapName, "kpa_03") == 0 ||
+        strcmp(gp->currentMapName, "kpa_04") == 0 || strcmp(gp->currentMapName, "kpa_05") == 0 ||
+        strcmp(gp->currentMapName, "kpa_06") == 0) {
+        mario->stageFlags |= KPA_STAGE_FLAG_SIDE_SCROLLING;
+    } else {
+        mario->stageFlags &= ~KPA_STAGE_FLAG_SIDE_SCROLLING;
+    }
 }
 
 /** 1 in the 3D maps, 0 in the side-scrolling stages kpa_02 to kpa_06 (KPA_STAGE_FLAG_SIDE_SCROLLING, stageFlags 0x1). */
@@ -209,20 +235,8 @@ void kpaPreInit(void) {
     mario->kpaWork->fireCount = 0;
     mario->kpaWork->fireRate = 1;
     fire_se_init();
-    mario = marioGetPtr();
-    if (strcmp(gp->currentMapName, "kpa_02") == 0 || strcmp(gp->currentMapName, "kpa_03") == 0 ||
-        strcmp(gp->currentMapName, "kpa_04") == 0 || strcmp(gp->currentMapName, "kpa_05") == 0 ||
-        strcmp(gp->currentMapName, "kpa_06") == 0) {
-        mario->stageFlags |= KPA_STAGE_FLAG_SIDE_SCROLLING;
-    } else {
-        mario->stageFlags &= ~KPA_STAGE_FLAG_SIDE_SCROLLING;
-    }
-    mario = marioGetPtr();
-    if (strcmp(gp->currentMapName, "kpa_03") == 0) {
-        mario->stageFlags |= KPA_STAGE_FLAG_KPA03;
-    } else {
-        mario->stageFlags &= ~KPA_STAGE_FLAG_KPA03;
-    }
+    kpaGetStageViewTypeInit();
+    kpaGetStageTypeInit();
     fireefp = NULL;
 }
 

@@ -724,8 +724,10 @@ static void e3Disp(CameraId cameraId, void* param) {
 
             if (i == wp->scenario) {
 #if VERSION == VERSION_DEMO_JP
+                int boxTex = i + TEX_BOX_FIRST;
+
                 // Shadow Box
-                winTexSet(i + (u32)TEX_BOX_FIRST, (Vec){10.0f + e3_tbl[i].x, e3_tbl[i].y - 10.0f, 0.0f},
+                winTexSet(boxTex, (Vec){10.0f + e3_tbl[i].x, e3_tbl[i].y - 10.0f, 0.0f},
                           (Vec){0.35f, 0.35f, 0.35f}, (GXColor){0x00, 0x00, 0x00, 0x40});
 
                 // Content Box
@@ -734,8 +736,10 @@ static void e3Disp(CameraId cameraId, void* param) {
             } else {
                 winTexSet(i + TEX_BOX_FIRST, (Vec){10.0f + e3_tbl[i].x, e3_tbl[i].y - 10.0f, 0.0f}, (Vec){0.35f, 0.35f, 0.35f},
 #else
+                int boxTex = i + E3_TEX_BOX;
+
                 // Shadow Box
-                winTexSet(i + (u32)E3_TEX_BOX, (Vec){10.0f + e3_tbl[i].x, e3_tbl[i].y - 10.0f, 0.0f},
+                winTexSet(boxTex, (Vec){10.0f + e3_tbl[i].x, e3_tbl[i].y - 10.0f, 0.0f},
                           (Vec){0.35f, 0.35f, 0.35f}, (GXColor){0x00, 0x00, 0x00, 0x40});
 
                 // Content Box
@@ -799,9 +803,10 @@ static void e3Disp(CameraId cameraId, void* param) {
             winTexInit(*wp->handle->data);
 
             if (i == wp->scenario) {
-                // FAKE: the (u32) cast on the 8; plain i + 8 changes the object
+                int boxTex = i + TEX_BOX_FIRST;
+
                 // Shadow Box
-                winTexSet(i + (u32)TEX_BOX_FIRST, (Vec){ 10.0f + e3_tbl[i].x, e3_tbl[i].y - 10.0f, 0.0f },
+                winTexSet(boxTex, (Vec){ 10.0f + e3_tbl[i].x, e3_tbl[i].y - 10.0f, 0.0f },
                           (Vec){ 0.35f, 0.35f, 0.35f }, (GXColor){ 0x00, 0x00, 0x00, 0x40 });
 
                 // Content Box

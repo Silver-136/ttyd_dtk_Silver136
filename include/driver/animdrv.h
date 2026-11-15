@@ -373,6 +373,8 @@ AnimationWork* animGetPtr(void);
 OSTime animTimeGetTime(BOOL globalTime);
 void animInit(void);
 void animMain(void);
+void animSetCommonBuf(AnimationPose* pose);
+void animClearCommonBuf(void);
 void animPoseBattleInit(void);
 
 s32 animPoseEntry(const char* animName, s32 type);

@@ -783,6 +783,7 @@ static USER_FUNC(barriern_satellite_zanzou2) {
  * with a counter per satellite for its afterimages (zanzou_count[n + 1]); the body uses zanzou_count[0].
  * Type 0 shrinks in over 36 frames, type 1 expands and fades over 8 frames.
  */
+// FAKE: zanzou_count[(s32)(n + 1)] (no-op cast) keeps the +1 out of the load displacement (FAKES.md)
 static s32 barriern_satellite_zanzou_sub(BOOL isFirstCall, BattleUnit* unit, f32* scales, s32 n, s32 type) {
     f32 start[5];
     f32 end[5];

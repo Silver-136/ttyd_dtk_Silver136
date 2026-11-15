@@ -3120,9 +3120,17 @@ inline void animSetPaperMtx(Mtx m0, Mtx* m1, Mtx* m2) {
     wp->paperMtxPtr[2] = m2;
 }
 
-// FAKE: the float-scratch block of animPoseDrawMtx as an inline helper (same code as animPoseMainSub); the sum becomes an inline local, numbered/coloured before posNum as in the target
-static inline void apdScratchN(s32 posNum, s32 nrmNum) {
+/**
+ * Points the pose's vertex buffers into the shared float scratch buffer (wrapping to its start) when the pose's
+ * position and normal counts fit.
+ */
+// Original name and size (0xb0) from the JP demo map (UNUSED there: every call is inlined).
+void animSetCommonBuf(AnimationPose* pose) {
+    AnimationPoseData* data = (animPoseGetBaseData)(pose);
+    s32 posNum = data->bufferPosNum;
+    s32 nrmNum = data->bufferNrmNum;
     s32 n = posNum + nrmNum;
+
     if (n <= wp->floatScratchRP) {
         if (wp->floatScratchWP + n > wp->floatScratchRP) {
             wp->floatScratchWP = 0;
@@ -3133,6 +3141,12 @@ static inline void apdScratchN(s32 posNum, s32 nrmNum) {
         wp->vtxArrayNrm = &wp->floatScratch[wp->floatScratchWP];
         wp->floatScratchWP += nrmNum;
     }
+}
+
+/** Stops drawing from the float scratch buffer. */
+// Original name and size (0x10) from the JP demo map (UNUSED there: every call is inlined).
+void animClearCommonBuf(void) {
+    wp->mbUseFloatScratch = 0;
 }
 
 #pragma push
@@ -3150,7 +3164,6 @@ void animPoseDrawMtx(s32 poseId, Mtx matrix, s32 xluMode, f32 rotY, f32 scale) {
     const char *name;
     AnimationPose *paper;
     AnimationPose *pose;
-    s32 scratchNum[2];
     AnimationPoseData *pd;
     pose = &wp->poses[poseId];
     if (pose->paperId != -1) {
@@ -3165,9 +3178,7 @@ void animPoseDrawMtx(s32 poseId, Mtx matrix, s32 xluMode, f32 rotY, f32 scale) {
             return;
         }
         if (paper->typeFlags & ANIM_POSE_TYPE_PAPER) {
-            scratchNum[1] = pd->bufferPosNum;
-            scratchNum[0] = pd->bufferNrmNum;
-            apdScratchN(scratchNum[1], scratchNum[0]);
+            animSetCommonBuf(paper);
             name = ANIM_INDEX_NAME(pose->paperAnimIdx);
             if (ANIM_NAME_INDEX(name) != -1) {
                 // FAKE: the inlined animPoseSetAnim (its animName param re-reads the paper anim id) adds the coalesced param copy the target has (p2 r29 / xluMode r28)
@@ -3235,7 +3246,7 @@ void animPoseDrawMtx(s32 poseId, Mtx matrix, s32 xluMode, f32 rotY, f32 scale) {
         wp->paperMtxPtr[1] = NULL;
         wp->paperMtxPtr[2] = NULL;
         if (paper->typeFlags & ANIM_POSE_TYPE_PAPER) {
-            wp->mbUseFloatScratch = 0;
+            animClearCommonBuf();
         }
     } else {
         _animPoseDrawMtx(pose, matrix, xluMode, rotY, scale);
@@ -3912,7 +3923,7 @@ inline void animPoseMainSub(AnimationPose* pose) {
             wp->floatScratchWP += nrmNum;
         }
         animPoseMain(id);
-        wp->mbUseFloatScratch = 0;
+        animClearCommonBuf();
     } else {
         animPoseMain(id);
     }

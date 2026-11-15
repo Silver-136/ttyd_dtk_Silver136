@@ -46,6 +46,7 @@ static void marioDisp(CameraId camId, void* param);
 static void marioDispBlur(CameraId camId, void* param);
 static void marioMoveMain(void);
 static void marioCtrlOff2Main(void);
+static void marioBlurInit(void);
 
 // Declared without a prototype: mario_hit.c defines it with no parameter, but the call passes one
 struct HitEntry* dou10_yoko_yari3();
@@ -987,15 +988,7 @@ void marioInit(void) {
     marioChgMot(MARIO_MOTION_STAY);
     marioBaloonInit();
     marioGetRubInit();
-    blurPosId = 0;
-    blurPos[0] = mp->position;
-    blurPos[1] = mp->position;
-    blurPos[2] = mp->position;
-    blurPos[3] = mp->position;
-    blurPos[4] = mp->position;
-    blurPos[5] = mp->position;
-    blurPos[6] = mp->position;
-    blurPos[7] = mp->position;
+    marioBlurInit();
     marioResetCamShift();
     marioResetCamShiftRate();
     marioResetCamFollowRate();
@@ -1133,15 +1126,7 @@ void marioReInit(void) {
     partyReInit();
     marioBaloonInit();
     marioGetRubInit();
-    blurPosId = 0;
-    blurPos[0] = mp->position;
-    blurPos[1] = mp->position;
-    blurPos[2] = mp->position;
-    blurPos[3] = mp->position;
-    blurPos[4] = mp->position;
-    blurPos[5] = mp->position;
-    blurPos[6] = mp->position;
-    blurPos[7] = mp->position;
+    marioBlurInit();
     if (!wp->characterId) {
         marioSetCharMode(CHARACTER_MARIO);
     }
@@ -2010,6 +1995,17 @@ void marioUpdateScreenPos(void) {
 /** Mario's draw scale: 1.2 in background mode, 2.0 otherwise. */
 f32 marioGetScale(void) {
     return mp->flags & MARIO_FLAG_BG_MODE ? 1.2f : 2.0f;
+}
+
+/** Resets the motion-blur trail: every slot to Mario's position, the write index to 0. */
+// Original name and size (0x84) from the JP demo map (UNUSED there: every call is inlined).
+static void marioBlurInit(void) {
+    s32 i;
+
+    blurPosId = 0;
+    for (i = 0; i < 8; i++) {
+        blurPos[i] = mp->position;
+    }
 }
 
 /**

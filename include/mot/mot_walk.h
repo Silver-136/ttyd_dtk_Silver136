@@ -4,6 +4,7 @@
 
 f32 marioGetDashSpd(void);
 
+BOOL pushEvtChk(struct HitEntry* hit);
 f32 marioGetWalkSpd(void);
 void mot_dash(void);
 void mot_walk(void);

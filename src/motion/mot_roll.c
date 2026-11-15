@@ -552,6 +552,26 @@ void rollEvtJumpSetup(void) {
     mario->airTimer = 1;
 }
 
+/** Tube Mode's base shape: the 14.8 collision box, roll speed, zero roll velocity, display offsets and scale. */
+// Original name and size (0xb4) from the JP demo map (UNUSED there: every call is inlined).
+static void roll_base_init(void) {
+    MarioWork* mario = marioGetPtr();
+
+    mario->wPlayerCollisionBox.x = 14.8f;
+    mario->wPlayerCollisionBox.y = 14.8f;
+    mario->baseDashSpeed = rollData[0];
+    marioGetPtr()->motRoll->spdX = 0.0f;
+    marioGetPtr()->motRoll->spdZ = 0.0f;
+    mario->rotOfs.x = -6.0f;
+    mario->rotOfs.y = 6.0f;
+    mario->dispOfs.x = 6.0f;
+    mario->dispOfs.y = 0.0f;
+    mario->scale.x = 1.0f;
+    mario->scale.y = 1.0f;
+    mario->scale.z = 1.0f;
+    mario->tubeScaleY = 1.0f;
+}
+
 /**
  * Restores Tube Mode when Mario is re-entered on a new map while rolled up (marioEntry):
  * allocates the roll work, sets the tube animation, the 14.8 collision box and roll speed,
@@ -576,20 +596,7 @@ void marioReInit_roll(void) {
     mario->dispFlags |= MARIO_DISP_FLAG_NO_DIR_FLIP;
     mario->dispFlags |= MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
     mario->currSubMotionId = 0x1e;
-    mario = marioGetPtr();
-    mario->wPlayerCollisionBox.x = 14.8f;
-    mario->wPlayerCollisionBox.y = 14.8f;
-    mario->baseDashSpeed = rollData[0];
-    marioGetPtr()->motRoll->spdX = 0.0f;
-    marioGetPtr()->motRoll->spdZ = 0.0f;
-    mario->rotOfs.x = -6.0f;
-    mario->rotOfs.y = 6.0f;
-    mario->dispOfs.x = 6.0f;
-    mario->dispOfs.y = 0.0f;
-    mario->scale.x = 1.0f;
-    mario->scale.y = 1.0f;
-    mario->scale.z = 1.0f;
-    mario->tubeScaleY = 1.0f;
+    roll_base_init();
     allPartyForceRideOn();
 }
 
@@ -683,20 +690,7 @@ void mot_roll(void) {
             marioChgPose("M_I_U");
             marioChgPaper("PM_R_1A");
             mario->multiTimer = 0x41;
-            m = marioGetPtr();
-            m->wPlayerCollisionBox.x = 14.8f;
-            m->wPlayerCollisionBox.y = 14.8f;
-            m->baseDashSpeed = rollData[0];
-            marioGetPtr()->motRoll->spdX = 0.0f;
-            marioGetPtr()->motRoll->spdZ = 0.0f;
-            m->rotOfs.x = -6.0f;
-            m->rotOfs.y = 6.0f;
-            m->dispOfs.x = 6.0f;
-            m->dispOfs.y = 0.0f;
-            m->scale.x = 1.0f;
-            m->scale.y = 1.0f;
-            m->scale.z = 1.0f;
-            m->tubeScaleY = 1.0f;
+            roll_base_init();
             mario->airTimer = 0;
             if (mario->forceMoveTimer == 0) {
                 mario->baseSpeed = 0.0f;

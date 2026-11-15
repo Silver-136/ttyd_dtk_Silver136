@@ -264,8 +264,8 @@ HitEntry* kpaSearchGround(f32 range, f32* outY, f32* outDepth, f32* outAng) {
                 best = hit;
             }
         }
-        marioGetPtr()->kpaWork->rideHit[i] = hit;
-        marioGetPtr()->kpaWork->rideProbeX[i] = ox;
+        kpaSetHitobjRide(i, hit);
+        kpaSetHitofsRide(i, ox);
     }
     return best;
 }
@@ -358,7 +358,7 @@ HitEntry* kpaSearchHead(f32 hgt, Vec* pos, f32* outB) {
                 pos->y = hy;
                 best = hit;
                 *outB = 0.0f;
-                marioGetPtr()->kpaWork->headHit[i] = hit;
+                kpaSetHitobjHead(i, hit);
             } else {
                 *outB = hy - pos->y - off;
             }
@@ -370,6 +370,12 @@ HitEntry* kpaSearchHead(f32 hgt, Vec* pos, f32* outB) {
 /** Always returns NULL; the 3D Bowser update still calls it each frame. */
 HitEntry* kpaSearchFrontUnder(void) {
     return NULL;
+}
+
+/** Records the object ceiling probe i hit (kpaGetHitobjHead reads it). */
+// Original name and size (0x48) from the JP demo map (UNUSED there: every call is inlined).
+void kpaSetHitobjHead(s32 i, HitEntry* hit) {
+    marioGetPtr()->kpaWork->headHit[i] = hit;
 }
 
 /** The object ceiling probe i hit this frame (mobjdrv uses it for blocks hit from below). */
@@ -407,6 +413,12 @@ void kpaClearHitobjHead(void) {
         marioGetPtr()->kpaWork->headHit[i] = NULL;
         marioGetPtr()->kpaWork->headDist[i] = 1000.0f;
     }
+}
+
+/** Records the floor object floor probe i hit (kpaGetHitobjRide reads it). */
+// Original name and size (0x48) from the JP demo map (UNUSED there: every call is inlined).
+void kpaSetHitobjRide(s32 i, HitEntry* hit) {
+    marioGetPtr()->kpaWork->rideHit[i] = hit;
 }
 
 /** The floor object floor probe i is standing on (mobjdrv uses it for blocks stood on). */
@@ -474,6 +486,12 @@ long kpaClearHitobjRide(void) {
     mario->kpaWork->rideHit[7] = NULL;
     mario->kpaWork->rideHit[8] = NULL;
     mario->kpaWork->rideHit[9] = NULL;
+}
+
+/** Records floor probe i's x offset. */
+// Original name and size (0x48) from the JP demo map (UNUSED there: every call is inlined).
+void kpaSetHitofsRide(s32 i, f32 ofs) {
+    marioGetPtr()->kpaWork->rideProbeX[i] = ofs;
 }
 
 /** The object Bowser's body spheres touched this frame (kpaHitCheck), or NULL when the player is not Bowser. */
@@ -611,7 +629,7 @@ HitEntry* kpaHitCheck(void) {
         }
         hit = hitCheckSphereFilter(NULL, x, y, z, r);
         if ((mario->flags & MARIO_FLAG_IS_JUMPING) && (hitGetAttr(hit) & HIT_ATTR_MOBJ) && mobjHitObjPtrToPtr(hit)->position.y > y) {
-            marioGetPtr()->kpaWork->headHit[j] = hit;
+            kpaSetHitobjHead(j, hit);
         }
         if (hit) {
             best = hit;

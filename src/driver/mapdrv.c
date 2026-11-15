@@ -1531,7 +1531,9 @@ void mapCalcAnimColor(MapAnim* a_, MapAnimAlphaData* d, MapMaterial* obj) {
  * Applies a light animation at the animation's current time to the light's position (x10 to world scale)
  * and rotation.
  */
-static inline void mapMainLight_ll(MapAnim* anim, LightEntry* lp, MapAnimLightData* d, f32* v) {
+// Original name and size (0x190) from the JP demo map (UNUSED there: every call is inlined).
+void mapCalcAnimLightMtx(MapAnim* anim, LightEntry* lp, MapAnimLightData* d) {
+    f32 v[9];
     int n, c;
     f32 cur;
 
@@ -1683,7 +1685,6 @@ void mapMain(void) {
     OSTime ms, t;
     char abuf[0x100];
     Mtx scale;
-    f32 v[9];
     f32 cv[5];
 #if VERSION <= VERSION_DEMO_JP
     for (i = 0; i < wp->entries[0].count; i++) {
@@ -1780,7 +1781,7 @@ void mapMain(void) {
                 for (k = 0; k < ll->count; k++) {
                     LightEntry* lp = lightNameToPtr((const char*)ll->items[k]->name);
                     if (lp) {
-                        mapMainLight_ll(anim, lp, ll->items[k], v);
+                        mapCalcAnimLightMtx(anim, lp, ll->items[k]);
                     }
                 }
             }
