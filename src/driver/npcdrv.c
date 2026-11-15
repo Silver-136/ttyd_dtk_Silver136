@@ -1142,9 +1142,6 @@ void npcSetMarioAutoTalkPose(const char* stayPose, const char* talkPose) {
     strcpy(MarioTalkPose, talkPose);
 }
 
-// FAKE: opt_propagation and opt_lifetimes off for npcSetTalkPose .. npcCheckHitMarioSide
-#pragma opt_propagation off
-#pragma opt_lifetimes off
 void npcSetTalkPose(char* name) {
     PartyEntry* party;
     NpcEntry* npc;
@@ -1213,6 +1210,10 @@ void npcSetStayPose(char* name) {
     }
 }
 
+// FAKE: opt_propagation and opt_lifetimes off for npcCheckHitMarioSide (the only function here that needs them; it
+// inlines polySinf/polyCosf, and every user of those inlines is built with propagation off)
+#pragma opt_propagation off
+#pragma opt_lifetimes off
 static BOOL npcCheckHitMarioSide(NpcEntry* npc) {
     MarioWork* mario;
     Vec marioPos;
