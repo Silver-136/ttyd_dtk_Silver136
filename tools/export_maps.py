@@ -8,8 +8,9 @@ linker strips as UNUSED) and copies the maps next to each other:
     build/maps/<version>/<rel>.plf.MAP      one per REL; every section starts at address 0
 
 The maps come straight from mwldeppc, with library members named "archive.a source" as in the original maps
-(e.g. "os.a OSInit.c", no trailing space; plain objects keep the linker's "x.o " with one trailing space, as in the
-original maps). The build links the objects directly, so the member names come from build.ninja (each object's
+(e.g. "os.a OSInit.c"). No line ends in a space (the original maps keep one after plain objects, "x.o "; map users
+prefer none). The register save/restore entry points (_savegpr_14.._savegpr_31 etc.), which the linker lists as
+"(entry of __save_gpr)" or UNUSED, are listed as ordinary symbols at their real addresses. The build links the objects directly, so the member names come from build.ninja (each object's
 source file); objects whose file name occurs twice in a link (main.o) are told apart by link order. In the
 "Memory map" block the File Offset column gives the section's offset in the shipped file (main.dol or <rel>.rel,
 from that file's own section table) rather than in the linker's intermediate ELF, the empty debug-section lines are
@@ -216,8 +217,7 @@ LAYOUT_SYM = re.compile(rb"^  (?:[0-9a-f]{8} [0-9a-f]{6} [0-9a-f]{8} (?:[ \d]\d 
 
 
 def name_libraries(text, objs):
-    """Name each library member the way the original maps do ("archive.a source", no trailing space; the linker
-    writes plain objects as "x.o " with one trailing space, which the original maps have too). Objects whose file
+    """Name each library member the way the original maps do ("archive.a source"). Objects whose file
     name occurs more than once in the link (main.o: the game's and TRK's) are told apart by link order: within a
     section layout, each new object group takes the next object of that name (in link order) that has the section;
     link-tree lines take the object that defines the symbol."""
@@ -278,6 +278,63 @@ def name_libraries(text, objs):
     return b"\n".join(out)
 
 
+# The register save/restore routines of the PPC EABI runtime (runtime.c): each is one run of 18 stores or loads
+# (r14..r31 / f14..f31, 4 bytes each) and a blr, with a global entry point _savegpr_N etc. at the store for
+# register N. The linker lists only the entries something calls ("(entry of __save_gpr)", size 0) and the rest as
+# UNUSED; the maps list all 18 as ordinary symbols at their real addresses, each running to the routine's end
+# (entering at register N executes the stores for N..31 and the blr), so every address of the routine belongs to the
+# nearest entry point at or below it.
+REGISTER_ROUTINES = {b"__save_gpr": b"_savegpr_", b"__restore_gpr": b"_restgpr_",
+                     b"__save_fpr": b"_savefpr_", b"__restore_fpr": b"_restfpr_"}
+FIRST_SAVED_REG = 14
+ROUTINE_HEAD = re.compile(rb"^  ([0-9a-f]{8}) ([0-9a-f]{6}) ([0-9a-f]{8})  4 (\S+) (\t.*)$")
+ROUTINE_ENTRY = re.compile(rb"^  (?:([0-9a-f]{8}) 000000 ([0-9a-f]{8}) (\S+) \(entry of (\S+)\) \t.*|"
+                           rb"UNUSED   000000 \.{8} (\S+) .*)$")
+
+
+def list_register_entries(text):
+    """Replace the "(entry of __save_gpr)" and UNUSED lines of the _savegpr_N/_restgpr_N/_savefpr_N/_restfpr_N
+    entry points with one ordinary symbol line each (address = routine start + 4 * (N - 14), size = to the routine's
+    end), in register order right after the routine's own line."""
+    nl = b"\r\n" if b"\r\n" in text else b"\n"
+    lines = text.split(nl)
+    out = []
+    i = 0
+    while i < len(lines):
+        line = lines[i]
+        out.append(line)
+        i += 1
+        h = ROUTINE_HEAD.match(line)
+        if not h or h.group(4) not in REGISTER_ROUTINES:
+            continue
+        prefix = REGISTER_ROUTINES[h.group(4)]
+        off, size, vaddr = (int(h.group(k), 16) for k in (1, 2, 3))
+        count = (size - 4) // 4  # stores/loads before the blr
+        listed = {}
+        while i < len(lines):
+            e = ROUTINE_ENTRY.match(lines[i])
+            name = e and (e.group(3) or e.group(5))
+            if not name or not name.startswith(prefix):
+                break
+            if e.group(3):  # check the linker's address of a used entry against the computed one
+                listed[name] = int(e.group(2), 16)
+            i += 1
+        for k in range(count):
+            name = prefix + b"%d" % (FIRST_SAVED_REG + k)
+            if listed.pop(name, vaddr + 4 * k) != vaddr + 4 * k:
+                sys.exit(f"{name.decode()}: linker address differs from {h.group(4).decode()} + {4 * k:#x}")
+            out.append(b"  %08x %06x %08x  4 %s %s" % (off + 4 * k, size - 4 * k, vaddr + 4 * k, name, h.group(5)))
+        if listed:
+            sys.exit(f"unexpected entries of {h.group(4).decode()}: {sorted(listed)}")
+    return nl.join(out)
+
+
+def strip_trailing_spaces(text):
+    """No line ends in spaces or tabs (the linker writes plain objects as "x.o " with one; map users prefer none)."""
+    nl = b"\r\n" if b"\r\n" in text else b"\n"
+    return nl.join(l.rstrip(b" \t") for l in text.split(nl))
+
+
 EMPTY_LAYOUT = b"%s section layout\r\n  Starting        Virtual\r\n  address  Size   address\r\n  -----------------------\r\n\r\n\r\n"
 
 
@@ -334,7 +391,9 @@ def export_version(version, out_dir, stamp):
     text = rewrite_memory_map(dol_map.read_bytes(), dol_offset)
     text = add_empty_layouts(text, [b"extab", b"extabindex"], b".text")
     text = add_empty_memory_rows(text, [b"extab", b"extabindex"], b".init")
-    (dst / "MarioSt.MAP").write_bytes(stamped(name_libraries(text, LinkObjects(statements, dol_map)), stamp))
+    text = list_register_entries(text)
+    (dst / "MarioSt.MAP").write_bytes(
+        strip_trailing_spaces(stamped(name_libraries(text, LinkObjects(statements, dol_map)), stamp)))
     count = 1
     for rel in sorted(build.glob("*/*.rel")):
         name = rel.stem
@@ -359,7 +418,7 @@ def export_version(version, out_dir, stamp):
         text = rewrite_memory_map(plf_map.read_bytes(), rel_offset, max(bss_align, 1))
         text = add_empty_layouts(text, [b".ctors", b".dtors"], b".rodata")
         (dst / f"{name}.plf.MAP").write_bytes(
-            stamped(name_libraries(text, LinkObjects(statements, plf_map)), stamp))
+            strip_trailing_spaces(stamped(name_libraries(text, LinkObjects(statements, plf_map)), stamp)))
         count += 1
     print(f"{version}: {count} maps -> {dst}")
 
