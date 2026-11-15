@@ -1028,6 +1028,10 @@ s32 partyRideYoshiMain(PartyEntry* party);
 static void party_damage_return(PartyEntry* party);
 s32 partyDokanInit(PartyEntry* party);
 s32 partyDokanMain(PartyEntry* party);
+static void party_dokan(PartyEntry* party);
+static void partyRideInit(PartyEntry* party);
+static void party_ride(PartyEntry* party);
+static void party_ride_yoshi(PartyEntry* party);
 
 /**
  * Runs one partner's frame by run mode (see partyChgRunMode):
@@ -1148,37 +1152,19 @@ static void driveParty(PartyEntry* party) {
             party_dp->bye_func(party);
             break;
         case 10:
-            if (party->trigFlags & PARTY_TRIG_CHG_RUN_MODE) {
-                party->trigFlags &= ~PARTY_TRIG_CHG_RUN_MODE;
-                partyDokanInit(party);
-                party->flags &= ~PARTY_FLAG_IS_BEING_USED;
-            }
-            partyDokanMain(party);
+            party_dokan(party);
             break;
         case 11:
             if ((party->flags & PARTY_FLAG_CTRL_OFF) && !(party->flags & PARTY_FLAG_RUN_OFF)) {
                 break;
             }
-            if (party->trigFlags & PARTY_TRIG_CHG_RUN_MODE) {
-                party->trigFlags &= ~PARTY_TRIG_CHG_RUN_MODE;
-                party->motionStep = 0;
-                party->flags &= ~PARTY_FLAG_IS_BEING_USED;
-#if VERSION >= VERSION_JP
-                partyForceSlitOff(party);
-#endif
-            }
-            partyRideMain(party);
+            party_ride(party);
             break;
         case 12:
             if ((party->flags & PARTY_FLAG_CTRL_OFF) && !(party->flags & PARTY_FLAG_RUN_OFF)) {
                 break;
             }
-            if (party->trigFlags & PARTY_TRIG_CHG_RUN_MODE) {
-                party->trigFlags &= ~PARTY_TRIG_CHG_RUN_MODE;
-                party->motionStep = 0;
-                party->flags &= ~PARTY_FLAG_IS_BEING_USED;
-            }
-            partyRideYoshiMain(party);
+            party_ride_yoshi(party);
             break;
         case 13:
             if ((party->flags & PARTY_FLAG_CTRL_OFF) && !(party->flags & PARTY_FLAG_RUN_OFF)) {
@@ -1509,6 +1495,17 @@ s32 partyGoodbyeMain(PartyEntry* party) {
 /** Resets the partner's scale to 1 (leaving the appear mode). */
 static inline void partyChgRunM(PartyEntry* party) {
     party->scale = (Vec){1.0f, 1.0f, 1.0f};
+}
+
+/** Pipe run mode (10): partyDokanInit on entering the mode, then partyDokanMain each frame. */
+// Original name and size (0x54) from the JP demo map (UNUSED there: every call is inlined).
+static void party_dokan(PartyEntry* party) {
+    if (party->trigFlags & PARTY_TRIG_CHG_RUN_MODE) {
+        party->trigFlags &= ~PARTY_TRIG_CHG_RUN_MODE;
+        partyDokanInit(party);
+        party->flags &= ~PARTY_FLAG_IS_BEING_USED;
+    }
+    partyDokanMain(party);
 }
 
 /**
@@ -2065,6 +2062,26 @@ s32 partyRideChk(PartyEntry* party) {
         }
     }
     return ret;
+}
+
+/** Starts the ride mode at its first step. */
+// Original name and size (0xc) from the JP demo map (UNUSED there: every call is inlined).
+static void partyRideInit(PartyEntry* party) {
+    party->motionStep = 0;
+}
+
+/** Ride run mode (11): partyRideInit on entering it (JP and later also force slit mode off), then partyRideMain. */
+// Original name and size (0x48) from the JP demo map (UNUSED there: every call is inlined).
+static void party_ride(PartyEntry* party) {
+    if (party->trigFlags & PARTY_TRIG_CHG_RUN_MODE) {
+        party->trigFlags &= ~PARTY_TRIG_CHG_RUN_MODE;
+        partyRideInit(party);
+        party->flags &= ~PARTY_FLAG_IS_BEING_USED;
+#if VERSION >= VERSION_JP
+        partyForceSlitOff(party);
+#endif
+    }
+    partyRideMain(party);
 }
 
 /**
@@ -2771,6 +2788,17 @@ void party_ride_yoshi_force_move(void) {
         party->displayDirectionTarget = party->playerPtr->displayDirectionTarget;
         party->moveDir = toMovedir(party->displayDirectionTarget);
     }
+}
+
+/** Ride-Yoshi run mode (12): restarts the ride steps on entering the mode, then partyRideYoshiMain. */
+// Original name and size (0x48) from the JP demo map (UNUSED there: every call is inlined).
+static void party_ride_yoshi(PartyEntry* party) {
+    if (party->trigFlags & PARTY_TRIG_CHG_RUN_MODE) {
+        party->trigFlags &= ~PARTY_TRIG_CHG_RUN_MODE;
+        party->motionStep = 0;
+        party->flags &= ~PARTY_FLAG_IS_BEING_USED;
+    }
+    partyRideYoshiMain(party);
 }
 
 /**

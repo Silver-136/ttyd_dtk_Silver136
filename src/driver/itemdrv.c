@@ -72,6 +72,7 @@ static inline ItemWork* itemGetWork(void) {
 }
 
 static void itemseq_Bound(ItemEntry* entry);
+static void itemSetVanishTimeFromType(ItemEntry* entry);
 
 /**
  * Ends an item get sequence: gives Mario back his controls and keys and unmutes the sound effects.
@@ -157,6 +158,29 @@ static BOOL itemRunCheck(ItemEntry* entry) {
             break;
     }
     return active;
+}
+
+/**
+ * Counts down an item's despawn timer by the time since its base time and deletes the item when it runs out;
+ * with blinkTime ms or less left it blinks. A zero timer or one waiting for the item to land keeps it visible.
+ */
+// Original name and size (0x188) from the JP demo map (UNUSED there: every call is inlined); the size needs the
+// blink threshold as a parameter (a constant in the code gives 0x178); the parameter is inferred from the size only.
+static void itemVanishCountDown(ItemEntry* entry, s32 blinkTime) {
+    if (entry->timer == 0) {
+        entry->flags2 &= ~ITEM_FLAG2_HIDDEN;
+    } else if (entry->flags2 & ITEM_FLAG2_TIMER_WAIT_LAND) {
+        entry->flags2 &= ~ITEM_FLAG2_HIDDEN;
+    } else {
+        entry->timer -= (f32)OSTicksToMicroseconds(gp->renderTime - entry->baseTime) / 1000.0f;
+        if (entry->timer <= 0) {
+            itemModeChange(entry, ITEM_MODE_DELETE);
+        } else if (entry->timer <= blinkTime) {
+            if ((entry->timer >> 4) & 1) {
+                entry->flags2 ^= ITEM_FLAG2_HIDDEN;
+            }
+        }
+    }
 }
 
 /**
@@ -426,7 +450,6 @@ void itemMain(void) {
     ItemEntry* entry;
     PartyEntry* party;
     HitEntry* hit;
-    u16 mode;
     int i;
     f32 newY;
     f32 y;
@@ -443,26 +466,12 @@ void itemMain(void) {
         if (!(entry->flags & ITEM_FLAG_ACTIVE)) {
             continue;
         }
-        mode = entry->mode;
         if (!itemRunCheck(entry)) {
             entry->baseTime = gp->renderTime;
             continue;
         }
-        if (mode != ITEM_MODE_GET) {
-            if (entry->timer == 0) {
-                entry->flags2 &= ~ITEM_FLAG2_HIDDEN;
-            } else if (entry->flags2 & ITEM_FLAG2_TIMER_WAIT_LAND) {
-                entry->flags2 &= ~ITEM_FLAG2_HIDDEN;
-            } else {
-                entry->timer -= (f32)OSTicksToMicroseconds(gp->renderTime - entry->baseTime) / 1000.0f;
-                if (entry->timer <= 0) {
-                    itemModeChange(entry, ITEM_MODE_DELETE);
-                } else if (entry->timer <= 3000) {
-                    if ((entry->timer >> 4) & 1) {
-                        entry->flags2 ^= ITEM_FLAG2_HIDDEN;
-                    }
-                }
-            }
+        if (entry->mode != ITEM_MODE_GET) {
+            itemVanishCountDown(entry, 3000);
         } else {
             entry->flags2 &= ~ITEM_FLAG2_HIDDEN;
         }
@@ -1579,13 +1588,7 @@ static void itemseq_GetItem(ItemEntry* entry) {
             entry->flags2 |= ITEM_FLAG2_NO_PICKUP_UNTIL_BOUND;
             itemModeChange(entry, ITEM_MODE_SCATTER_NO_PICKUP);
             entry->flags &= ~ITEM_FLAG_CUSTOM_BOUND;
-            if (entry->itemId >= KEY_ITEM_MIN && entry->itemId < KEY_ITEM_MAX) {
-                entry->timer = 0;
-            } else if (entry->itemId >= BADGE_MIN && entry->itemId < BADGE_MAX) {
-                entry->timer = 0;
-            } else {
-                entry->timer = 20000;
-            }
+            itemSetVanishTimeFromType(entry);
             entry->flags2 |= ITEM_FLAG2_RELEASED;
             entry->flags2 &= ~ITEM_FLAG2_CARRIED;
             entry->flags &= ~ITEM_FLAG_NO_TOUCH_GET;
@@ -1788,13 +1791,7 @@ static void itemseq_Bound(ItemEntry* entry) {
                 entry->flags2 &= ~ITEM_FLAG2_NO_PICKUP_RISING;
                 entry->flags2 &= ~ITEM_FLAG2_NO_PICKUP_UNTIL_BOUND;
                 entry->flags2 &= ~ITEM_FLAG2_TIMER_WAIT_LAND;
-                if (entry->itemId >= KEY_ITEM_MIN && entry->itemId < KEY_ITEM_MAX) {
-                    entry->timer = 0;
-                } else if (entry->itemId >= BADGE_MIN && entry->itemId < BADGE_MAX) {
-                    entry->timer = 0;
-                } else {
-                    entry->timer = 20000;
-                }
+                itemSetVanishTimeFromType(entry);
                 entry->flags2 |= ITEM_FLAG2_RELEASED;
                 entry->flags2 &= ~ITEM_FLAG2_CARRIED;
 #if VERSION >= VERSION_JP
@@ -2062,6 +2059,18 @@ HitEntry* itemHitCheckCeil(ItemEntry* entry, f32* outY, f32 vy) {
         return hit;
     }
     return NULL;
+}
+
+/** Despawn timer for a released item: none (0) for key items and badges, 20 seconds for anything else. */
+// Original name and size (0x58) from the JP demo map (UNUSED there: every call is inlined).
+static void itemSetVanishTimeFromType(ItemEntry* entry) {
+    if (entry->itemId >= KEY_ITEM_MIN && entry->itemId < KEY_ITEM_MAX) {
+        entry->timer = 0;
+    } else if (entry->itemId >= BADGE_MIN && entry->itemId < BADGE_MAX) {
+        entry->timer = 0;
+    } else {
+        entry->timer = 20000;
+    }
 }
 
 /**

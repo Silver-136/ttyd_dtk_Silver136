@@ -231,6 +231,33 @@ void vivianRippleOn(PartyEntry* party) {
 }
 
 /**
+ * Keeps the Veil ripple on the floor under Mario (early demos) or at Vivian's tail point (JP and later),
+ * and forgets it once the effect has ended.
+ * Stores NULL into an already NULL rippleEffect (the store is in the retail code).
+ */
+// Original name and size (0x6c) from the JP demo map (UNUSED there: every call is inlined). The JP+ parameter
+// list is not fixed by the bytes (no JP+ map; three argument forms build the same).
+#if VERSION <= VERSION_DEMO_JP
+static void vivianRippleMove(PartyEntry* party) {
+    MarioWork* p = party->playerPtr;
+#else
+static void vivianRippleMove(PartyEntry* party, Vec pos) {
+#endif
+
+    if (party->work.vivian.rippleEffect == NULL) {
+        party->work.vivian.rippleEffect = NULL;
+    } else if (party->work.vivian.rippleEffect->flags == 0) {
+        party->work.vivian.rippleEffect = NULL;
+    } else {
+#if VERSION <= VERSION_DEMO_JP
+        effRippleSetPosition(party->work.vivian.rippleEffect, p->position.x, 1.5f + p->position.y, p->position.z);
+#else
+        effRippleSetPosition(party->work.vivian.rippleEffect, pos.x, 1.5f + pos.y, pos.z);
+#endif
+    }
+}
+
+/**
  * Moves Vivian's tail point (trailPos) a tenth of the way toward her each frame,
  * keeping it within VIVIAN_FOLLOW_DIST (30 units in US and later, 22 in the early demos and JP);
  * party.c draws her shadow tail to it.
@@ -358,9 +385,7 @@ void vivian_use(PartyEntry* party) {
 #if VERSION <= VERSION_DEMO_JP
     f32 gx, gy, gz;
     void* hit;
-    MarioWork* p;
 #else
-    Vec s;
     f32 d;
 #endif
     MarioWork* m = party->playerPtr;
@@ -520,7 +545,10 @@ void vivian_use(PartyEntry* party) {
     party->position.z += m->floorMove.z;
     party->position.y += m->floorMove.y;
     party->trailPos = m->position;
-    p = party->playerPtr;
+    vivianRippleMove(party);
+    if (party->useMotionId >= 4) {
+        party->trailPos = m->position;
+    }
 #else
     if (party->useMotionId >= 2) {
         party->position = party->moveTarget;
@@ -532,28 +560,7 @@ void vivian_use(PartyEntry* party) {
     if (d > 0.0f) {
         party->trailPos.y += d;
     }
-    s = party->trailPos;
-#endif
-    // stores NULL into an already NULL rippleEffect (the store is in the retail code)
-#if VERSION <= VERSION_DEMO_JP
-    if (party->work.vivian.rippleEffect == NULL) {
-        party->work.vivian.rippleEffect = NULL;
-    } else if (party->work.vivian.rippleEffect->flags == 0) {
-        party->work.vivian.rippleEffect = NULL;
-    } else {
-        effRippleSetPosition(party->work.vivian.rippleEffect, p->position.x, 1.5f + p->position.y, p->position.z);
-    }
-    if (party->useMotionId >= 4) {
-        party->trailPos = m->position;
-    }
-#else
-    if (party->work.vivian.rippleEffect == NULL) {
-        party->work.vivian.rippleEffect = NULL;
-    } else if (party->work.vivian.rippleEffect->flags == 0) {
-        party->work.vivian.rippleEffect = NULL;
-    } else {
-        effRippleSetPosition(party->work.vivian.rippleEffect, s.x, 1.5f + s.y, s.z);
-    }
+    vivianRippleMove(party, party->trailPos);
 #endif
 
     switch (party->useMotionId) {

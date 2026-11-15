@@ -218,14 +218,6 @@ USER_FUNC(post_kurio_use) {
     return EVT_RETURN_DONE;
 }
 
-void kuribo_init(PartyEntry* party) {
-    party->memberKind = PARTY_GOOMBELLA;
-    party->moveKind = 0;
-    party->height = 24.0f;
-    party->width = 26.0f;
-    msg_ep = 0;
-}
-
 /**
  * Field Tattle event: runs pre_kurio_use, prints the chosen message in Goombella's party speech balloon,
  * then post_kurio_use. Started by kuribo_use with LW(0) set to the NPC Mario faces, if any.
@@ -240,6 +232,23 @@ static EVT_BEGIN(kurio_msg_evt)
     CALL(post_kurio_use)
     RETURN
 EVT_END()
+
+/** Starts the Field Tattle event (kurio_msg_evt) for the NPC Mario faces, if any, at system level 1. */
+// Original name and size (0x50) from the JP demo map (UNUSED there: every call is inlined).
+static void kurio_msg(void) {
+    EventEntry* evt = evtEntryType(kurio_msg_evt, 0, 0, 26);
+
+    marioStSystemLevel(1);
+    evt->lwData[0] = (EvtWord)fbatNpcTalkCheck();
+}
+
+void kuribo_init(PartyEntry* party) {
+    party->memberKind = PARTY_GOOMBELLA;
+    party->moveKind = 0;
+    party->height = 24.0f;
+    party->width = 26.0f;
+    msg_ep = 0;
+}
 
 /**
  * Party table post_func, run when Goombella leaves use mode (partyUsePost or a run-mode change out of mode 3):
@@ -261,7 +270,6 @@ void kuribo_use(PartyEntry* party) {
     MarioWork* player = party->playerPtr;
     HitEntry* wall;
     Vec pos;
-    EventEntry* evt;
 
     if (party->trigFlags & PARTY_TRIG_CHG_RUN_MODE) {
         party->trigFlags &= ~PARTY_TRIG_CHG_RUN_MODE;
@@ -319,9 +327,7 @@ void kuribo_use(PartyEntry* party) {
             party->useMotionId = 10;
             break;
         case 10:
-            evt = evtEntryType(kurio_msg_evt, 0, 0, 26);
-            marioStSystemLevel(1);
-            evt->lwData[0] = (EvtWord)fbatNpcTalkCheck();
+            kurio_msg();
             party->useMotionId = 15;
             break;
         case 20:
@@ -361,8 +367,6 @@ void kuribo_use_post(PartyEntry* party) {
  */
 #if VERSION <= VERSION_DEMO_JP
 void kuribo_use(PartyEntry* party) {
-    EventEntry* evt;
-
     if (party->trigFlags & PARTY_TRIG_CHG_RUN_MODE) {
         party->trigFlags &= ~PARTY_TRIG_CHG_RUN_MODE;
         partyChgMoveMode(party, 0);
@@ -374,9 +378,7 @@ void kuribo_use(PartyEntry* party) {
 
     switch (party->useMotionId) {
         case 0:
-            evt = evtEntryType(kurio_msg_evt, 0, 0, 26);
-            marioStSystemLevel(1);
-            evt->lwData[0] = (EvtWord)fbatNpcTalkCheck();
+            kurio_msg();
             party->useMotionId = 1;
             break;
         case 10:

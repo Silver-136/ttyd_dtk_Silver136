@@ -23,6 +23,7 @@ extern EffectEntry* effKemuri2Entry(s32 type, f32 x, f32 y, f32 z, f32 dx, f32 d
 static void kemuri(void);
 static void kemuri_mugi(void);
 void kemuri_water(void);
+static void partyKemuri(PartyEntry* party);
 
 /**
  * Per-frame footstep effects for the player character,
@@ -302,17 +303,7 @@ void party_kemuri(PartyEntry* party) {
                 if (party->runMode == PARTY_RUN_USE && party->currentMemberId == PARTY_YOSHI) {
                     if (party->hitobjStandOn != NULL) {
                         if (!(hitGetAttr(party->hitobjStandOn) & HIT_ATTR_SHALLOW_WATER)) {
-                            if (party->moveSpeed < 2.0f) {
-                                return;
-                            }
-                            if (party->kemuriTimer++ > 6) {
-                                {
-                                    f32 c, s;
-                                    party->kemuriTimer = 0;
-                                    sincosf(&s, &c, 6.2831855f * reviseAngle(-party->targetDir) / 360.0f);
-                                    effKemuri2Entry(0, party->position.x + 0.2f * (party->width * s), 1.5f + party->position.y, party->position.z + 0.2f * (party->width * c), s, c);
-                                }
-                            }
+                            partyKemuri(party);
                         }
                     } else {
                         party->kemuriTimer = 4;
@@ -320,17 +311,7 @@ void party_kemuri(PartyEntry* party) {
                 } else if (party->motionId == 1) {
                     if (party->hitobjStandOn != NULL) {
                         if (!(hitGetAttr(party->hitobjStandOn) & HIT_ATTR_SHALLOW_WATER)) {
-                            if (party->moveSpeed < 2.0f) {
-                                return;
-                            }
-                            if (party->kemuriTimer++ > 6) {
-                                {
-                                    f32 c, s;
-                                    party->kemuriTimer = 0;
-                                    sincosf(&s, &c, 6.2831855f * reviseAngle(-party->targetDir) / 360.0f);
-                                    effKemuri2Entry(0, party->position.x + 0.2f * (party->width * s), 1.5f + party->position.y, party->position.z + 0.2f * (party->width * c), s, c);
-                                }
-                            }
+                            partyKemuri(party);
                         }
                     } else {
                         party->kemuriTimer = 4;
@@ -340,31 +321,40 @@ void party_kemuri(PartyEntry* party) {
     if (party->moveKind != 1) {
         if (party->runMode == PARTY_RUN_USE && party->currentMemberId == PARTY_YOSHI) {
             if (party->hitobjStandOn != NULL) {
-                if (party->moveSpeed < 2.0f) {
-                    party->kemuriTimer = 7;
-                } else if (party->kemuriTimer++ > 6) {
-                    f32 c, s;
-                    party->kemuriTimer = 0;
-                    sincosf(&s, &c, 6.2831855f * reviseAngle(-party->targetDir) / 360.0f);
-                    effKemuri2Entry(0, party->position.x + 0.2f * (party->width * s), 1.5f + party->position.y, party->position.z + 0.2f * (party->width * c), s, c);
-                }
+                partyKemuri(party);
             } else {
                 party->kemuriTimer = 4;
             }
         } else if (party->motionId == 1) {
             if (party->hitobjStandOn != NULL) {
-                if (party->moveSpeed < 2.0f) {
-                    party->kemuriTimer = 7;
-                } else if (party->kemuriTimer++ > 6) {
-                    f32 c, s;
-                    party->kemuriTimer = 0;
-                    sincosf(&s, &c, 6.2831855f * reviseAngle(-party->targetDir) / 360.0f);
-                    effKemuri2Entry(0, party->position.x + 0.2f * (party->width * s), 1.5f + party->position.y, party->position.z + 0.2f * (party->width * c), s, c);
-                }
+                partyKemuri(party);
             } else {
                 party->kemuriTimer = 4;
 #endif
             }
         }
+    }
+}
+
+/**
+ * One step of the partner's dust trail (party_kemuri): a puff every eight calls at speed 2 or more, offset
+ * behind the partner by a fifth of its width. Below speed 2 there is no puff; JP and the early demos then set
+ * the timer so the next faster step puffs at once.
+ */
+// Original name and size (0xc8) from the JP demo map (UNUSED there: every call is inlined). Where the US water
+// test sits (here or in the callers) is not fixed by the bytes.
+static inline void partyKemuri(PartyEntry* party) {
+    f32 s, c;
+
+    if (party->moveSpeed < 2.0f) {
+#if VERSION >= VERSION_US
+        return;
+#else
+        party->kemuriTimer = 7;
+#endif
+    } else if (party->kemuriTimer++ > 6) {
+        party->kemuriTimer = 0;
+        sincosf(&s, &c, 6.2831855f * reviseAngle(-party->targetDir) / 360.0f);
+        effKemuri2Entry(0, party->position.x + 0.2f * (party->width * s), 1.5f + party->position.y, party->position.z + 0.2f * (party->width * c), s, c);
     }
 }

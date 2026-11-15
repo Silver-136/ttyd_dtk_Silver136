@@ -138,6 +138,7 @@ static s32 msgWindowOpen_SE_Data[] = {
 };
 #endif
 static int msg_compare(const void* a, const void* b);
+static void msgSort(MessageEntry* entry);
 static void msgDispKeyWait_render(s32 wXluStage);
 static void msgTalkPoseOn(smartEntry* smart);
 static void msgSetTalkPose(smartEntry* smart);
@@ -348,12 +349,7 @@ void msgLoad(const char* filename, s32 index) {
             ofs += strlen(str) + 1;
             str += strlen(str) + 1;
         }
-#if VERSION <= VERSION_DEMO_JP
-        msgSortDvdData = (void*)msgEntryText(entry);
-#else
-        msgSortDvdData = entry->address;
-#endif
-        qsort(entry->lookup->address, entry->count, sizeof(MsgLookupEntry), msg_compare);
+        msgSort(entry);
     }
 }
 
@@ -1765,6 +1761,13 @@ static inline const char* msgEntryText(MessageEntry* entry) {
     return (const char*)entry->address;
 }
 #endif
+
+/** Sorts a message file's lookup table by tag (msg_compare reads the tags through msgSortDvdData). */
+// Original name and size (0x44) from the JP demo map (UNUSED there: every call is inlined).
+static void msgSort(MessageEntry* entry) {
+    msgSortDvdData = (void*)msgEntryText(entry);
+    qsort(entry->lookup->address, entry->count, sizeof(MsgLookupEntry), msg_compare);
+}
 
 /**
  * Returns the text of the message with this tag, looking in the area file then the global file;
