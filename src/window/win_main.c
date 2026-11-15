@@ -59,9 +59,8 @@ EvtWord evt_item_use[];
 EvtWord evt_diary_read[];
 
 //.sbss
-static s32 cnt;
-static TEXPalette* winTexTpl;
-static WindowWork* wp;
+static WindowWork* wp = NULL;
+static TEXPalette* winTexTpl = NULL;
 
 // local prototypes
 #include "driver/fadedrv.h"
@@ -893,6 +892,7 @@ USER_FUNC(itemUseFunc) {
 #if VERSION >= VERSION_JP
     EffectEntry* eff;
 #endif
+    static s32 cnt;
 
     item = &itemDataTable[event->lwData[10]];
     mario = marioGetPtr();

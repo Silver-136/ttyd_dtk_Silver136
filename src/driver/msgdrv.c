@@ -139,6 +139,20 @@ static s32 msgWindowOpen_SE_Data[] = {
 #endif
 static int msg_compare(const void* a, const void* b);
 static void msgDispKeyWait_render(s32 wXluStage);
+static void msgTalkPoseOn(smartEntry* smart);
+static void msgSetTalkPose(smartEntry* smart);
+static void msgSetStayPose(smartEntry* smart);
+#if VERSION <= VERSION_DEMO_JP
+void msgAnalize(smartEntry* smart, const char* msg);
+#else
+void msgAnalize(smartEntry* smart, char* msg);
+#endif
+
+/** Lets the next talking blip play (msgSEOn plays one per frame). */
+// Original name and slot from the JP demo's link map (UNUSED there, 0xc): its one call is inlined.
+static void msgSEInit(void) {
+    msgSEflag = 0;
+}
 
 /** Plays the talking blip once per frame at the window's talk volume, except in small (type 1) windows. */
 // Original name and size (0x54) from the JP demo map (UNUSED there: every call is inlined).
@@ -343,14 +357,59 @@ void msgLoad(const char* filename, s32 index) {
     }
 }
 
+/** Appends message msg to a message's parsed text. */
+// Original name and slot from the JP demo's link map (UNUSED there, 0x38): its one call is inlined.
+static void msgAdd(smartEntry* smart, char* msg) {
+    ((MsgWinData*)smart->address)->lastUpdateTime = gp->renderTime;
+    msgAnalize(smart, msg);
+}
+
+/** Restarts a message's print timer so printing goes on. */
+// Original name and slot from the JP demo's link map (UNUSED there, 0x1c): its one call is inlined.
+static void msgContinue(smartEntry* smart) {
+    ((MsgWinData*)smart->address)->lastUpdateTime = gp->renderTime;
+}
+
+/** Restarts a message's text from the beginning. */
+// Original name and slot from the JP demo's link map (UNUSED there, 0x44): its one call is inlined.
+static void msgRepeat(smartEntry* smart) {
+    MsgWinData* data = smart->address;
+    data->lastUpdateTime = gp->renderTime;
+    data->openTime = gp->renderTime;
+    data->playTime = 0;
+    data->scrollTarget = 0;
+    data->scrollPos = 0;
+    data->nextEntry = 0;
+}
+
+/** Frees a message's parsed text. */
+// Original name and slot from the JP demo's link map (UNUSED there, 0x38): its one call is inlined.
+static void msgDelete(smartEntry* smart) {
+    MsgWinData* data = smart->address;
+    MsgChar* entry = data->entries;
+    s32 i;
+
+    // Empty loop over the characters; the loop is in the retail code
+    for (i = 0; i < data->charCount; i++, entry++) {
+    }
+    smartFree(smart);
+}
+
+/** Buttons that continue a message at a key wait: A, plus X after <keyxon>. */
+// Original name and slot from the JP demo's link map (UNUSED there, 0x1c): every call is inlined.
+static s32 getMsgButton(smartEntry* smart) {
+    s32 btn = PAD_BUTTON_A;
+    if (((MsgWinData*)smart->address)->flags & MSG_WIN_FLAG_KEY_X) {
+        btn = PAD_BUTTON_A | PAD_BUTTON_X;
+    }
+    return btn;
+}
+
 /** Lets A or B (and X after <keyxon>) speed up the printing, unless <dkey> turned that off. */
 static inline void msgCheckSkip(smartEntry* smart, MsgWinData* data) {
     s32 btn, trgv;
     if (!(data->flags & MSG_WIN_FLAG_NO_SKIP)) {
-        btn = PAD_BUTTON_A;
-        if (((MsgWinData*)smart->address)->flags & MSG_WIN_FLAG_KEY_X) {
-            btn = PAD_BUTTON_A | PAD_BUTTON_X;
-        }
+        btn = getMsgButton(smart);
         trgv = keyGetButtonTrg(0);
         if (trgv & (btn | PAD_BUTTON_B)) {
             data->flags |= MSG_WIN_FLAG_FAST;
@@ -371,7 +430,7 @@ static s32 msgMain(smartEntry* smart) {
     s32 ms;
     NpcEntry* npc;
 
-    msgSEflag = 0;
+    msgSEInit();
     if (data->flags & MSG_WIN_FLAG_START) {
         if (data->callback) {
             data->callback(0, smart);
@@ -496,9 +555,7 @@ static s32 msgMain(smartEntry* smart) {
                 if (entry->value & MSG_CHAR_VOICE) {
                     msgSEOn(smart);
                 } else if (entry->value & MSG_CHAR_TALK) {
-                    if (((MsgWinData*)smart->address)->window->type != WINDOW_TYPE_SYSTEM) {
-                        ((MsgWinData*)smart->address)->talkTimer = 15;
-                    }
+                    msgTalkPoseOn(smart);
                     msgSEOn(smart);
                 }
                 break;
@@ -1851,6 +1908,62 @@ static void msgPageInc(smartEntry* smart) {
     }
 }
 
+/** Clears a message window's talk-pose timer and state. */
+// Original name and slot from the JP demo's link map (UNUSED there, 0x14): its one call is inlined.
+static void msgTalkPoseInit(smartEntry* smart) {
+    MsgWinData* d = smart->address;
+    d->talkTimer = 0;
+    d->talkPoseSet = 0;
+}
+
+/** Counts down the speaker's talk pose: sets it when the timer starts and puts the speaker back in the standing pose when it runs out. */
+// Original name and slot from the JP demo's link map (UNUSED there, 0xb8): its one call is inlined.
+static void msgTalkPoseMain(smartEntry* smart) {
+    MsgWinData* d = smart->address;
+    if (d->talkTimer) {
+        if (!d->talkPoseSet) {
+            msgSetTalkPose(smart);
+            d->talkPoseSet = 1;
+        }
+        d->talkTimer--;
+        if (d->talkTimer == 0) {
+            msgSetStayPose(smart);
+            d->talkPoseSet = 0;
+        }
+    }
+}
+
+/** Starts the speaker's talk pose for 15 frames (not in system windows). */
+// Original name and slot from the JP demo's link map (UNUSED there, 0x20): its one call is inlined.
+static void msgTalkPoseOn(smartEntry* smart) {
+    MsgWinData* d = smart->address;
+    if (d->window->type != WINDOW_TYPE_SYSTEM) {
+        d->talkTimer = 15;
+    }
+}
+
+/** Puts the window's speaker (a battle unit or an NPC) in its talking pose. */
+// Original name and slot from the JP demo's link map (UNUSED there, 0x40): its call is inlined.
+static void msgSetTalkPose(smartEntry* smart) {
+    MsgWinData* d = smart->address;
+    if (d->flags & MSG_WIN_FLAG_BATTLE_UNIT) {
+        BtlUnit_ChangeTalkAnim(d->unitId);
+    } else {
+        npcSetTalkPose(d->speakerName);
+    }
+}
+
+/** Puts the window's speaker (a battle unit or an NPC) back in its standing pose. */
+// Original name and slot from the JP demo's link map (UNUSED there, 0x40): every call is inlined.
+static void msgSetStayPose(smartEntry* smart) {
+    MsgWinData* d = smart->address;
+    if (d->flags & MSG_WIN_FLAG_BATTLE_UNIT) {
+        BtlUnit_ChangeStayAnim(d->unitId);
+    } else {
+        npcSetStayPose(d->speakerName);
+    }
+}
+
 /**
  * Opens a speech window for message text msg at the given priority (type and options come from the markup),
  * parses the text and sizes the window for its type; returns the window id.
@@ -1900,8 +2013,7 @@ s32 msgWindow_Entry(const char* msg, s32 callback, s16 priority) {
     __memFree(HEAP_DEFAULT, copy);
     window->userdata = smart;
     data = window->userdata->address;
-    data->talkTimer = 0;
-    data->talkPoseSet = 0;
+    msgTalkPoseInit(window->userdata);
     switch (window->type) {
         case WINDOW_TYPE_CLEAR:
             window->main = msgWindow_Clear_Main;
@@ -1945,25 +2057,13 @@ s32 msgWindow_Entry(const char* msg, s32 callback, s16 priority) {
     return id;
 }
 
-// kept: without it msgWindow_Delete changes; -O4,s for the whole file changes other functions
-#pragma optimize_for_size on
 /** Window delete callback: frees the message window's parsed text. */
 static void msgWindow_Delete(WindowEntry* window) {
-    MsgWinData* data;
-    s32 i;
-
     if (window->userdata) {
-        data = window->userdata->address;
-
-        // Empty loop over charCount; the loop is in the retail code
-        for (i = 0; i < data->charCount; i++) {
-        }
-        smartFree(window->userdata);
+        msgDelete(window->userdata);
         window->userdata = NULL;
     }
 }
-
-#pragma optimize_for_size reset
 
 /**
  * Appends message msg to an open message window and resumes printing;
@@ -1971,10 +2071,8 @@ static void msgWindow_Delete(WindowEntry* window) {
  */
 void msgWindow_Add(char* msg, s32 id) {
     WindowEntry* window = windowGetPointer(id);
-    smartEntry* smart = window->userdata;
 
-    ((MsgWinData*)smart->address)->lastUpdateTime = gp->renderTime;
-    msgAnalize(smart, msg);
+    msgAdd(window->userdata, msg);
     window->state = MSG_WIN_STATE_PRINT;
     window->flags |= WINDOW_FLAG_BUSY;
 }
@@ -1982,34 +2080,24 @@ void msgWindow_Add(char* msg, s32 id) {
 /** Resumes printing in a message window that is waiting. */
 void msgWindow_Continue(s32 id) {
     WindowEntry* window = windowGetPointer(id);
-    MsgWinData* data;
 
     window->state = MSG_WIN_STATE_PRINT;
     window->flags |= WINDOW_FLAG_BUSY;
-    data = window->userdata->address;
-    data->lastUpdateTime = gp->renderTime;
+    msgContinue(window->userdata);
 }
 
 /** Restarts a message window's text from the beginning. */
 void msgWindow_Repeat(s32 id) {
     WindowEntry* window = windowGetPointer(id);
-    MsgWinData* data;
 
     window->state = MSG_WIN_STATE_PRINT;
     window->flags |= WINDOW_FLAG_BUSY;
-    data = window->userdata->address;
-    data->lastUpdateTime = gp->renderTime;
-    data->openTime = gp->renderTime;
-    data->playTime = 0;
-    data->scrollTarget = 0;
-    data->scrollPos = 0;
-    data->nextEntry = 0;
+    msgRepeat(window->userdata);
 }
 
 /** Closes every open message window whose speaker tag is name, putting its speaker back in the standing pose. */
 void msgWindow_ForceClose(const char* name) {
     WindowEntry* window;
-    MsgWinData* data;
     s32 i;
 
     for (i = 0; i < WINDOW_MAX; i++) {
@@ -2018,12 +2106,7 @@ void msgWindow_ForceClose(const char* name) {
             ((MsgWinData*)window->userdata->address)->tag &&
             !strcmp(((MsgWinData*)window->userdata->address)->tag, name)) {
             window->state = MSG_WIN_STATE_CLOSE;
-            data = window->userdata->address;
-            if (data->flags & MSG_WIN_FLAG_BATTLE_UNIT) {
-                BtlUnit_ChangeStayAnim(data->unitId);
-            } else {
-                npcSetStayPose(data->speakerName);
-            }
+            msgSetStayPose(window->userdata);
         }
     }
 }
@@ -2034,33 +2117,12 @@ void msgWindow_ForceClose(const char* name) {
  * while paging back A goes forward one page and B jumps to the last; fade out and close), playing the page sounds, and queues msgWindow_Disp.
  */
 static void msgWindow_Main(WindowEntry* window) {
-    smartEntry* smart = window->userdata;
-    MsgWinData* data = smart->address;
+    MsgWinData* data = window->userdata->address;
     s32 se;
     s32 target;
     u32 trg;
 
-    if (data->talkTimer) {
-        if (!data->talkPoseSet) {
-            if (data->flags & MSG_WIN_FLAG_BATTLE_UNIT) {
-                BtlUnit_ChangeTalkAnim(data->unitId);
-            } else {
-                npcSetTalkPose(data->speakerName);
-            }
-            data->talkPoseSet = 1;
-        }
-        data->talkTimer--;
-        if (data->talkTimer == 0) {
-            // d2 re-reads smart->address (data holds the same pointer; the reload is in the retail code)
-            MsgWinData* d2 = smart->address;
-            if (d2->flags & MSG_WIN_FLAG_BATTLE_UNIT) {
-                BtlUnit_ChangeStayAnim(d2->unitId);
-            } else {
-                npcSetStayPose(d2->speakerName);
-            }
-            data->talkPoseSet = 0;
-        }
-    }
+    msgTalkPoseMain(window->userdata);
 
     switch (window->state) {
         case MSG_WIN_STATE_OPEN:
@@ -2109,20 +2171,12 @@ static void msgWindow_Main(WindowEntry* window) {
             switch (msgMain(window->userdata)) {
             case 0:
                 window->state = MSG_WIN_STATE_CLOSE;
-                if (WIN_DATA(window)->flags & MSG_WIN_FLAG_BATTLE_UNIT) {
-                    BtlUnit_ChangeStayAnim(WIN_DATA(window)->unitId);
-                } else {
-                    npcSetStayPose(WIN_DATA(window)->speakerName);
-                }
+                msgSetStayPose(window->userdata);
                 break;
             case MSG_WIN_STATE_PRINT:
                 window->state = MSG_WIN_STATE_WAIT_TAG;
                 window->flags &= ~WINDOW_FLAG_BUSY;
-                if (WIN_DATA(window)->flags & MSG_WIN_FLAG_BATTLE_UNIT) {
-                    BtlUnit_ChangeStayAnim(WIN_DATA(window)->unitId);
-                } else {
-                    npcSetStayPose(WIN_DATA(window)->speakerName);
-                }
+                msgSetStayPose(window->userdata);
                 break;
             case MSG_WIN_STATE_WAIT_TAG:
                 window->state = MSG_WIN_STATE_KEY_WAIT;
@@ -2132,10 +2186,7 @@ static void msgWindow_Main(WindowEntry* window) {
             }
             break;
         case MSG_WIN_STATE_KEY_WAIT:
-            target = PAD_BUTTON_A;
-            if (WIN_DATA(window)->flags & MSG_WIN_FLAG_KEY_X) {
-                target = PAD_BUTTON_A | PAD_BUTTON_X;
-            }
+            target = getMsgButton(window->userdata);
             trg = keyGetButtonTrg(0);
             if (trg & (target | PAD_BUTTON_B)) {
                 window->state = MSG_WIN_STATE_PRINT;
@@ -2188,10 +2239,7 @@ static void msgWindow_Main(WindowEntry* window) {
             }
             break;
         case MSG_WIN_STATE_REVIEW_KEY_WAIT:
-            target = PAD_BUTTON_A;
-            if (WIN_DATA(window)->flags & MSG_WIN_FLAG_KEY_X) {
-                target = PAD_BUTTON_A | PAD_BUTTON_X;
-            }
+            target = getMsgButton(window->userdata);
             trg = keyGetButtonTrg(0);
             if (trg & target) {
                 window->state = MSG_WIN_STATE_REVIEW_DOWN;
@@ -2259,20 +2307,12 @@ static void msgWindow_Clear_Main(WindowEntry* window) {
                 case 0:
                     window->state = MSG_WIN_STATE_CLOSE;
                     window->timestamp = gp->renderTime;
-                    if (WIN_DATA(window)->flags & MSG_WIN_FLAG_BATTLE_UNIT) {
-                        BtlUnit_ChangeStayAnim(WIN_DATA(window)->unitId);
-                    } else {
-                        npcSetStayPose(WIN_DATA(window)->speakerName);
-                    }
+                    msgSetStayPose(window->userdata);
                     break;
                 case 1:
                     window->state = MSG_WIN_STATE_WAIT_TAG;
                     window->flags &= ~WINDOW_FLAG_BUSY;
-                    if (WIN_DATA(window)->flags & MSG_WIN_FLAG_BATTLE_UNIT) {
-                        BtlUnit_ChangeStayAnim(WIN_DATA(window)->unitId);
-                    } else {
-                        npcSetStayPose(WIN_DATA(window)->speakerName);
-                    }
+                    msgSetStayPose(window->userdata);
                     break;
                 case 2:
                     window->state = MSG_WIN_STATE_KEY_WAIT;

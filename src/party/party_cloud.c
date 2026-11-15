@@ -35,6 +35,7 @@ static Vec cloud_at;
 #include "mario/mario_motion.h"
 #include "eff/n64/eff_kumokumo_n64.h"
 void _cloud_use(PartyEntry* party);
+static HitEntry* getHitBreatheout(PartyEntry* party, f32 angle);
 static void getHitBreatheout2(PartyEntry* party, f32 angle);
 
 // Flurrie's work (PartyEntry.useStruct). A macro, not an inline function: as a function the object changes.
@@ -436,12 +437,8 @@ void cloud_use(PartyEntry* party) {
 #endif
     MarioWork* mario = party->playerPtr;
     f32 ofsX, ofsZ;
-    f32 nz, ny, nx, dist, hz, hy, hx;
-    f32 yc, ys, dirCos, dirSin;
-    HitEntry* hit;
     s32 flag;
     f32 dir;
-    PartyCloud* cl;
 
     if (party->trigFlags & PARTY_TRIG_CHG_RUN_MODE) {
         party->trigFlags &= ~PARTY_TRIG_CHG_RUN_MODE;
@@ -557,23 +554,7 @@ void cloud_use(PartyEntry* party) {
                 party->dispOfs = zero;
             }
             CLOUD_WORK(party)->breathDist += 2.0f;
-            cl = CLOUD_WORK(party);
-
-            // re-reads the player pointer mario already holds (the reload is in the retail code)
-            mario = party->playerPtr;
-            if (cl->breathDist >= cl->breathDistMax) {
-                cl->breathDist = cl->breathDistMax;
-            }
-            sincosf(&dirSin, &dirCos, toMovedir(CLOUD_WORK(party)->breathDir));
-            sincosf(&ys, &yc, -45.0f);
-            dist = CLOUD_WORK(party)->breathDist;
-            hit = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz,
-                                 party->position.x, 18.0f + mario->position.y, party->position.z,
-                                 dirSin, ys, dirCos);
-            if (hit != NULL && (hitGetAttr(hit) & HIT_ATTR_NPC_ONLY)) {
-                hit = NULL;
-            }
-            CLOUD_WORK(party)->hitDown = hit;
+            CLOUD_WORK(party)->hitDown = getHitBreatheout(party, -45.0f);
             getHitBreatheout2(party, 0.0f);
             if (++CLOUD_WORK(party)->breathLevel > 2) {
                 CLOUD_WORK(party)->breathLevel = 0;
@@ -774,6 +755,32 @@ f32 cloudGetBreathDir() {
     return breathDir;
 }
 #endif
+
+/**
+ * Casts a gust ray from 18 above Mario along the gust's direction, tilted by angle, as long as the gust (which it
+ * first clamps to its maximum); returns the hit collision, NULL if none or if it only blocks NPCs.
+ */
+// Original name and slot from the JP demo's link map (UNUSED there, 0xf8): its one call is inlined.
+static HitEntry* getHitBreatheout(PartyEntry* party, f32 angle) {
+    f32 dirSin, dirCos, ys, yc;
+    f32 hx, hy, hz, dist, nx, ny, nz;
+    HitEntry* hit;
+    PartyCloud* cl = CLOUD_WORK(party);
+    MarioWork* mario = party->playerPtr;
+    if (cl->breathDist >= cl->breathDistMax) {
+        cl->breathDist = cl->breathDistMax;
+    }
+    sincosf(&dirSin, &dirCos, toMovedir(CLOUD_WORK(party)->breathDir));
+    sincosf(&ys, &yc, angle);
+    dist = CLOUD_WORK(party)->breathDist;
+    hit = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz,
+                         party->position.x, 18.0f + mario->position.y, party->position.z,
+                         dirSin, ys, dirCos);
+    if (hit != NULL && (hitGetAttr(hit) & HIT_ATTR_NPC_ONLY)) {
+        hit = NULL;
+    }
+    return hit;
+}
 
 /**
  * Per-frame gust update: casts the straight ray at one of three heights (8, 20, 40 above Mario, cycling each

@@ -25,8 +25,6 @@ typedef struct EffSmallStarN64Work {
     u8 camera;    // 0x30
 } EffSmallStarN64Work;
 
-static f32 kaiten;
-
 static void effSmallStarMain(EffectEntry* effect);
 static void effSmallStarDisp(CameraId cameraId, void* param);
 
@@ -36,6 +34,7 @@ static void effSmallStarDisp(CameraId cameraId, void* param);
  * Used by the Koopa partner (party_nokonoko), eff_small_star.c and evt_eff64 (no script callers found).
  */
 EffectEntry* effSmallStarN64Entry(s32 type, s32 count, f32 x, f32 y, f32 z, f32 dx, f32 dy, f32 dz) {
+    static f32 kaiten;
     EffectEntry* effect;
     EffSmallStarN64Work* w;
     f32 px, py, pz;

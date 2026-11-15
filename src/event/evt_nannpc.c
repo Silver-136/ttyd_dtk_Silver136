@@ -391,6 +391,12 @@ static void nannpc_ext_dispent() {
     }
 }
 
+/** Makes nannpc_ext_main_sub the crowd's second per-frame sub function (slot 1). */
+// Original name and slot from the JP demo's link map (UNUSED there, 0x14): its one call is inlined.
+static void nannpc_set_default_main(void) {
+    nanNPCWork->subfunc1 = nannpc_ext_main_sub;
+}
+
 /**
  * Sets up the crowd NPC system for a map (Rogueport plaza, Keelhaul Key, dou_11):
  * args[0] the extdrv texture info, args[1] an optional table of up to five pairs ended by -1,
@@ -420,9 +426,7 @@ USER_FUNC(evt_nannpc_init) {
     w->tbl = _mapAlloc(0x14);
     memset(w->tbl, 0, 0x14);
     w->subfunc0 = NULL;
-
-    // stored through the global nanNPCWork instead of w (same pointer; the global's load is in the retail code)
-    nanNPCWork->subfunc1 = nannpc_ext_main_sub;
+    nannpc_set_default_main();
     w->subfunc2 = NULL;
     if (!initf) {
         initf = nannpc_ext_init;

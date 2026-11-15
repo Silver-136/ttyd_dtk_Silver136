@@ -884,7 +884,6 @@ double acos(double);
  * seen by the camera, scrolled or spun by the env work's angles).
  */
 static void envTevLoadTexMtxImm(s32 type, GXTexMtx id, GXTexMtx id2, GXTexMtxType mtxType) {
-    static f32 a = 0.0f;
     EnvironmentWork* wp = envGetWork();
     Mtx m0, m2, m1, m3, m4, m5, m6, m7;
     Mtx44 m9;
@@ -1002,6 +1001,7 @@ static void envTevLoadTexMtxImm(s32 type, GXTexMtx id, GXTexMtx id2, GXTexMtxTyp
             GXLoadTexMtxImm(m0, id2, mtxType);
             break;
         case 5: {
+                static f32 a = 0.0f;
                 Vec camPos;
                 Vec target;
                 Vec up;

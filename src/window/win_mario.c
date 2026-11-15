@@ -319,16 +319,16 @@ void winMarioMain2(void) {
 /** US and later use ASCII digits; JP and the early demos use full-width digits. */
 const char* winZenkakuStr(s32 n) {
 #if VERSION <= VERSION_DEMO_JP
+    static char tmp2[0x100];
     const char* tbl[10] = {"０", "１", "２", "３", "４",
                            "５", "６", "７", "８", "９"};
-        static char tmp2[0x100];
-        char buf[0x100];
-        u32 i;
-        sprintf(buf, "%d", n);
-        strcpy(tmp2, "");
-        for (i = 0; i < strlen(buf); i++) {
-            strcat(tmp2, tbl[(s8)buf[i] - '0']);
-        }
+    char buf[0x100];
+    u32 i;
+    sprintf(buf, "%d", n);
+    strcpy(tmp2, "");
+    for (i = 0; i < strlen(buf); i++) {
+        strcat(tmp2, tbl[(s8)buf[i] - '0']);
+    }
 #elif VERSION >= VERSION_US
     static char tmp2[0x100];
     sprintf(tmp2, "%d", n);
