@@ -15,6 +15,7 @@ BOOL partyChkJoin(s32 partnerId);
 void partyLeft(s32 partnerId);
 s32 marioGetParty(void);
 void marioPartyKill(void);
+BOOL marioPartyKillOne(s32 slot);
 BOOL marioPartyGoodbye(void);
 s32 marioPartyHello(s32 id);
 s32 marioPartyEntry(s32 id);

@@ -501,27 +501,7 @@ void partyMoveAnime(PartyEntry* party, f32 spd) {
 
 #endif
 
-/**
- * Height of the floor below (x, y + 40, z) in the early demos, (x, y + touch_wall_ct, z) in JP and later,
- * rounded to 0.01, or -2000 when there is none.
- */
-static inline void partyGetGndYTo(f32* out, f32 x, f32 y, f32 z) {
-    f32 hx, hy, hz, dist, nx, ny, nz;
-    HitEntry* hit;
-#if VERSION <= VERSION_DEMO_JP
-    y += 40.0f;
-#else
-    y += touch_wall_ct;
-#endif
-    dist = 1000.0f;
-    hit = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, x, y, z, 0.0f, -1.0f, 0.0f);
-    if (!hit) {
-        *out = -2000.0f;
-    } else {
-        *out = (s32)(100.0f * hy + 0.5f) / 100.0f;
-        hitGetAttr(hit);
-    }
-}
+static u32 _getFrontFloor2(f32* out, f32 x, f32 y, f32 z);
 
 /**
  * Direction the partner faces when it follows: Mario's move direction, or for a second partner
@@ -1945,7 +1925,7 @@ void party_motion_behind_mario(PartyEntry* party) {
     ty = target.y;
     ang = angleABf(party->position.x, party->position.z, x, z);
 
-    partyGetGndYTo(&gy, x, ty, z);
+    _getFrontFloor2(&gy, x, ty, z);
     if (gy <= -2000.0f) {
         gy = 1.5f * mario->wPlayerCollisionBox.x;
         movePos(&x, &z, gy, toMovedir(mario->displayDirection));
@@ -1970,7 +1950,7 @@ void party_motion_behind_mario(PartyEntry* party) {
 
             {
                 f32 gndY;
-                partyGetGndYTo(&gndY, x, ty, z);
+                _getFrontFloor2(&gndY, x, ty, z);
                 if (__fabsf(party->position.y - gndY) > 1.0f) {
                     party->moveTarget.x = x;
                     party->moveTarget.y = gndY;
@@ -1987,7 +1967,7 @@ void party_motion_behind_mario(PartyEntry* party) {
 
             {
                 f32 gndY;
-                partyGetGndYTo(&gndY, x, ty, z);
+                _getFrontFloor2(&gndY, x, ty, z);
                 if (__fabsf(party->position.y - gndY) > 1.0f) {
                     party->moveTarget.x = x;
                     party->moveTarget.y = gndY;
@@ -2091,7 +2071,7 @@ void party_motion_behind_mario_continue(PartyEntry* party) {
     movePos(&x, &z, sp, party->homeDir);
     angleABf(party->position.x, party->position.z, x, z);
 
-    partyGetGndYTo(&gy, x, y, z);
+    _getFrontFloor2(&gy, x, y, z);
     if (gy <= -2000.0f) {
         sp = 1.5f * mario->wPlayerCollisionBox.x;
         movePos(&x, &z, sp, toMovedir(mario->displayDirection));
@@ -3466,6 +3446,31 @@ static f32 partyGetGndY(f32 x, f32 y, f32 z) {
 #endif
 
 /**
+ * Height of the floor below (x, y + 40, z) in the early demos, (x, y + touch_wall_ct, z) in JP and later,
+ * rounded to 0.01, or -2000 when there is none; returns the floor's hit attributes (0 if none).
+ * Original name and size (0xc8) from the JP demo map (UNUSED there: every call is inlined; no caller reads the
+ * attributes): returning the attributes follows the siblings getFrontFloorAttr / getFrontFloorAttr2; the bytes
+ * allow returning *out too.
+ */
+static u32 _getFrontFloor2(f32* out, f32 x, f32 y, f32 z) {
+    f32 hx, hy, hz, dist, nx, ny, nz;
+    HitEntry* hit;
+#if VERSION <= VERSION_DEMO_JP
+    y += 40.0f;
+#else
+    y += touch_wall_ct;
+#endif
+    dist = 1000.0f;
+    hit = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, x, y, z, 0.0f, -1.0f, 0.0f);
+    if (!hit) {
+        *out = -2000.0f;
+        return 0;
+    }
+    *out = (s32)(100.0f * hy + 0.5f) / 100.0f;
+    return hitGetAttr(hit);
+}
+
+/**
  * hit attributes of the floor 20 units ahead in direction dir (probed from 20 up, 40 down), 0 if none.
  * Homing walk uses it to skip footmarks over 0x800 floors.
  * Original name and size (0xac) from the JP demo map (UNUSED there: every call is inlined).
@@ -4090,7 +4095,7 @@ void party_motion_homing_fly(PartyEntry* party) {
                 y = party->position.y;
                 z = party->position.z;
                 movePos(&x, &z, party->width, dir);
-                partyGetGndYTo(&py, x, y, z);
+                _getFrontFloor2(&py, x, y, z);
                 if (py > -2000.0f) {
                     party->position.y += 0.05f * ((py + party->height) - party->position.y);
                 } else {
@@ -4480,7 +4485,7 @@ void party_motion_behind_mario_continue(PartyEntry* party) {
     }
     movePos(&x, &z, sp, party->homeDir);
     angleABf(party->position.x, party->position.z, x, z);
-    partyGetGndYTo(&gy, x, y, z);
+    _getFrontFloor2(&gy, x, y, z);
     if (gy <= -2000.0f) {
         sp = 1.5f * mario->wPlayerCollisionBox.x;
         movePos(&x, &z, sp, toMovedir(mario->displayDirection));
@@ -4711,7 +4716,7 @@ void party_motion_beside_mario(PartyEntry* party) {
     my = mario->position.y;
     movePos(&x, &z, sp, party->homeDir);
     angleABf(party->position.x, party->position.z, x, z);
-    partyGetGndYTo(&y, x, my, z);
+    _getFrontFloor2(&y, x, my, z);
     if (y <= -2000.0f) {
         sp = 1.5f * mario->wPlayerCollisionBox.x;
         x = mario->position.x;

@@ -10,24 +10,6 @@
 #include "driver/npcdrv.h"
 #include "party/party_yoshi.h"
 
-/** Removes the partner in Mario's first party slot (currPartySlotId[0]) and marks the slot empty (-1). */
-static inline void marioPartyKillSlot0(void) {
-    MarioWork* mario = marioGetPtr();
-    if (mario->currPartySlotId[0] >= 0) {
-        partyKill(mario->currPartySlotId[0]);
-        mario->currPartySlotId[0] = -1;
-    }
-}
-
-/** Removes the follower in Mario's second party slot (currPartySlotId[1], the partyEntry2 members) and empties it. */
-static inline void marioPartyKillSlot1(void) {
-    MarioWork* mario = marioGetPtr();
-    if (mario->currPartySlotId[1] >= 0) {
-        partyKill(mario->currPartySlotId[1]);
-        mario->currPartySlotId[1] = -1;
-    }
-}
-
 #if VERSION >= VERSION_JP
 s32 marioUseParty(void) {
     MarioWork* mario = marioGetPtr();
@@ -138,7 +120,7 @@ s32 marioPartyEntry(s32 id) {
             return -1;
         }
         if (mario->currPartySlotId[0] >= 0) {
-            marioPartyKillSlot0();
+            marioPartyKillOne(0);
         }
         ret = partyEntry(id);
         if (ret >= 0) {
@@ -147,7 +129,7 @@ s32 marioPartyEntry(s32 id) {
         }
     } else {
         if (mario->currPartySlotId[1] >= 0) {
-            marioPartyKillSlot1();
+            marioPartyKillOne(1);
         }
         ret = partyEntry2(id);
         if (ret >= 0) {
@@ -202,8 +184,25 @@ BOOL marioPartyGoodbye(void) {
 
 /** Removes both the partner and the follower at once with no animation (save load, end of battle, E3 sequence). */
 void marioPartyKill(void) {
-    marioPartyKillSlot0();
-    marioPartyKillSlot1();
+    marioPartyKillOne(0);
+    marioPartyKillOne(1);
+}
+
+/**
+ * Removes the member in Mario's party slot (0 the partner, 1 the follower) with no animation and marks the
+ * slot empty (-1); TRUE if the slot held one. Original name from the JP demo's link map (UNUSED there, 0x60):
+ * every call is inlined, so the linker strips it. No caller reads the result: the BOOL return follows the sibling
+ * marioPartyGoodbye; the bytes allow returning the removed slot id or -1 too.
+ */
+BOOL marioPartyKillOne(s32 slot) {
+    BOOL ret = FALSE;
+    MarioWork* mario = marioGetPtr();
+    if (mario->currPartySlotId[slot] >= 0) {
+        partyKill(mario->currPartySlotId[slot]);
+        mario->currPartySlotId[slot] = -1;
+        ret = TRUE;
+    }
+    return ret;
 }
 
 #if VERSION <= VERSION_DEMO_JP
