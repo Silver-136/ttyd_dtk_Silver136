@@ -135,22 +135,21 @@ EffectEntry* effMObjBrokenEntry(s32 type, f32 x, f32 y, f32 z) {
     return effect;
 }
 
-// kept: without it effMObjBrokenMain changes; -opt nolifetimes for the whole file changes other functions
-#pragma opt_lifetimes off
 /**
  * Per frame: throws each fragment outward with gravity and spins it; once all have fallen 100 below the origin,
  * releases the poses and deletes the effect. Fragments do not fade (alpha is never changed).
  */
 static void effMObjBrokenMain(EffectEntry* effect) {
     EffMObjBrokenWork* work = effect->userdata;
-    s32 type;
     EffMObjBrokenWork* w2;
+    s32 k;
+    s32 i;
+    s32 type;
+    EffMObjBrokenWork* w;
     s32 done = 0;
     s32 j;
-    s32 i;
     Vec pos2;
     Vec pos = {0.0f, 0.0f, 0.0f};
-    EffMObjBrokenWork* w;
     s32 inBattle;
 
     pos.x = work->position.x;
@@ -203,8 +202,7 @@ static void effMObjBrokenMain(EffectEntry* effect) {
     if (done >= effect->count - 1) {
         w2 = effect->userdata;
 
-        // FAKE: type is reused as the loop index; a loop over i changes the object
-        for (type = 0; type < effect->count; type++, w2++) {
+        for (k = 0; k < effect->count; k++, w2++) {
             if (w2->poseId != -1) {
                 animPoseRelease(w2->poseId);
             }
@@ -218,8 +216,6 @@ static void effMObjBrokenMain(EffectEntry* effect) {
         dispEntry(CAMERA_3D, dispCalcZ(&pos2), DISP_MODE_CUSTOM_MID, effMObjBrokenDisp2, effect);
     }
 }
-
-#pragma opt_lifetimes reset
 
 /**
  * Draws the fragments as flattened textured cubes (effect texture 56-58 by type, 59 for type 6) with alpha

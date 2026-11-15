@@ -522,7 +522,7 @@ static USER_FUNC(hoshi_r) {
  * returns when it arrives. t, vy and speed are kept between frames in the event's userdata.
  */
 static USER_FUNC(hoshi_jump) {
-    f32* pos = (f32*)((EffectEntry*)event->lwData[10])->userdata + 2;
+    Vec* pos = &((EffStarStoneWork*)((EffectEntry*)event->lwData[10])->userdata)->position;
     NpcEntry* npc = npcNameToPtr("マジョリン");
     f32 vy;
     f32 speed;
@@ -536,13 +536,13 @@ static USER_FUNC(hoshi_jump) {
 
     speed = 0.5f;
     if (isFirstCall) {
-        t = distABf(x, z, pos[0], pos[2]) / speed;
-        dy = y - pos[1];
+        t = distABf(x, z, pos->x, pos->z) / speed;
+        dy = y - pos->y;
         g = 0.1f * t;
-        vy = dy / t + g / 2.0f;
         // The float bits go into the script words as integers: the target copies them with lwz/stw
         // (a float store would be stfs).
         event->userdata[0] = *(s32*)&t;
+        vy = dy / t + g / 2.0f;
         event->userdata[1] = *(s32*)&vy;
         event->userdata[2] = *(s32*)&speed;
         event->userdata3 = 0;
@@ -550,16 +550,16 @@ static USER_FUNC(hoshi_jump) {
     t = event->userdataf[0];
     vy = event->userdataf[1];
     speed = event->userdataf[2];
-    angle = 6.2831855f * angleABf(pos[0], pos[2], x, z) / 360.0f;
-    pos[0] = speed * polySinf(angle) + pos[0];
-    pos[2] = pos[2] - speed * polyCosf(angle);
-    pos[1] += vy;
+    angle = 6.2831855f * angleABf(pos->x, pos->z, x, z) / 360.0f;
+    pos->x = speed * polySinf(angle) + pos->x;
+    pos->z = pos->z - speed * polyCosf(angle);
+    pos->y += vy;
     vy -= 0.1f;
     t -= 1.0f;
     if (t < 0.0f) {
-        pos[0] = x;
-        pos[1] = y;
-        pos[2] = z;
+        pos->x = x;
+        pos->y = y;
+        pos->z = z;
         return EVT_RETURN_DONE;
     }
     // float bits copied as integers again (lwz/stw in the target)

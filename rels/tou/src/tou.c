@@ -127,8 +127,6 @@ static RuleData ruleDt_2bu[10];
 static RuleData ruleDt_1bu[14];
 static RuleData ruleDt_re[14];
 
-// Unused zero object, read by nothing; the original had it too (its storage is in the retail code). Name invented.
-static s32 tou_bss_1C;
 static RankWork rank_work;
 static DispWork disp_work;
 static const char* suuji[10];

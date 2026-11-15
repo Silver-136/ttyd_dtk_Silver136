@@ -364,11 +364,8 @@ static inline f32 env_cos(register f32 x) {
     return a;
 }
 
-// FAKE: the first vertex's y goes through an inline return temp, so in envDisp_DepthOfField (opt_propagation off)
-// it is numbered after the x product and x keeps f0 as in the target. Same value; envDisp_Blur is unaffected.
-static inline f32 dofDiv(f32 a, f32 b) { return a / b; }
 #define DOF_QUAD(g, half)                                                              \
-    GXPosition3f32(-(s32)(g)->fbWidth / (half), dofDiv((g)->efbHeight, (half)), 0.0f); \
+    GXPosition3f32(-(s32)(g)->fbWidth / (half), (g)->efbHeight / (half), 0.0f);        \
     GXTexCoord2f32(0.0f, 0.0f);                                                        \
     GXPosition3f32((g)->fbWidth / (half), (g)->efbHeight / (half), 0.0f);              \
     GXTexCoord2f32(1.0f, 0.0f);                                                        \
@@ -380,54 +377,25 @@ static inline f32 dofDiv(f32 a, f32 b) { return a / b; }
 /** Opaque white, the TEV colour of the depth-of-field pass (envDisp_DepthOfField). */
 static const GXColor white = {0xFF, 0xFF, 0xFF, 0xFF};
 
-// kept: without it envDisp_DepthOfField changes; -opt noprop for the whole file changes other functions
-#pragma opt_propagation off
-// FAKE: tbl, tbl2, coord2 and stage2 are one-element local arrays. The front end scalarizes them into @ temps,
-// which sit in the coalesce window: `tbl = texmtx_tbl` then loads straight into the pointer register (a named
-// pointer under opt_propagation off gives addi r0 + mr), and loop 2's zero inits become the target's li/mr copies.
-// i2 is an `int` array: an s32 (long) element is not scalarized (the int-typed loop compares count as a different
-// type), so it would stay in memory. The `(s32)` cast in `(s32)i2[0] == 3` stops CSE with the `3 == i2[0]` below.
 static void envDisp_DepthOfField(void) {
-    GXTevColorArg cin;
-    s32 first2[1];
-    s32 coord2[1];
     EnvironmentWork* wp = envGetWork();
-    const s32* tbl2[1];
-    s32 stage2[1];
+    EnvironmentDof* dof = &wp->dof;
     s32 coord;
-    s32 stage;
-    int i2[1];
-    s32 first;
-    const s32* tbl[1];
+    GXTevStageID stage;
     s32 tc;
-    s32 tc2;
-    EnvironmentDof* dof;
-    CameraEntry* cam[1];
+    s32 first;
+    s32 i;
+    GXTevColorArg cin;
     GXColor color;
     Mtx mtx;
-    s32 i;
     Mtx mtx2;
     f32 ang;
     f32 ang2;
-    s32 gz;
-    int k;
-    s32 gz2;
-    s32 hz;
-    s32 mg[1];
+    CameraEntry* cam;
 
-    /* FAKE: dead early stores (removed by the front end). They only set the first-reference order that numbers
-       the scalarized array temps: tbl, then mg, then cam, then the loop 2 arrays. */
-    tbl[0] = texmtx_tbl;
-    mg[0] = 0x43300000;
-    dof = &wp->dof;
     if (wp->flags & ENV_FLAG_DOF_UNUSED) {
-        /* FAKE: cam is a one-element array so it becomes an @ temp numbered between mg and tbl2 */
-        cam[0] = camGetPtr(CAMERA_2D);
-
-        // FAKE: dead guard (gz is 0) gives cam a second def, so it stays a named web instead of the call-result temp
-        gz = 0;
-        if (gz) cam[0] = (CameraEntry*)wp;
-        GXSetProjection(camGetPtr(CAMERA_2D)->projection, cam[0]->projType);
+        cam = camGetPtr(CAMERA_2D);
+        GXSetProjection(camGetPtr(CAMERA_2D)->projection, cam->projType);
         GXLoadPosMtxImm(camGetPtr(CAMERA_2D)->view, GX_PNMTX0);
         GXSetCurrentMtx(GX_PNMTX0);
         GXLoadTexObj(smartTexObj(&wp->captureObj, &wp->capture->address), GX_TEXMAP0);
@@ -444,46 +412,41 @@ static void envDisp_DepthOfField(void) {
         GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
         GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
 
-        /* FAKE: a one-trip loop. The back end unlinks it, which enables its array-to-register pass, so first2
-           (kept in memory by the front end, see below) is promoted late and numbered as a codegen temp. */
-        for (k = 0; k < 1; k++) {
-            GXSetCullMode(GX_CULL_NONE);
-        }
+        GXSetCullMode(GX_CULL_NONE);
         if ((dof->flags & ENV_DOF_PASS1) && dof->radius1) {
-            tbl[0] = texmtx_tbl;
             coord = 0;
             stage = 0;
-            for (i = 0; i < 4; i++, coord++, tbl[0]++, stage++) {
+            for (i = 0; i < 4; coord++, i++, stage++) {
                 ang = 6.2831855f * i / 4.0f;
                 PSMTXTrans(mtx, dof->radius1 * env_sin(ang) / 100.0f, dof->radius1 * env_cos(ang) / 100.0f, 0.0f);
-                GXLoadTexMtxImm(mtx, *tbl[0], GX_MTX2x4);
-                GXSetTexCoordGen2((GXTexCoordID)coord, GX_TG_MTX2x4, GX_TG_TEX0, *tbl[0], GX_FALSE, GX_PTIDENTITY);
-                GXSetTevKColorSel((GXTevStageID)stage, GX_TEV_KCSEL_1_4);
-                GXSetTevKAlphaSel((GXTevStageID)stage, GX_TEV_KASEL_1_4);
-                GXSetTevOrder((GXTevStageID)stage, (GXTexCoordID)coord, GX_TEXMAP0, GX_COLOR_NULL);
-                GXSetTevColorOp((GXTevStageID)stage, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, (GXTevRegID)(i == 3));
-                GXSetTevAlphaOp((GXTevStageID)stage, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, (GXTevRegID)(3 == i));
+                GXLoadTexMtxImm(mtx, texmtx_tbl[i], GX_MTX2x4);
+                GXSetTexCoordGen2((GXTexCoordID)coord, GX_TG_MTX2x4, GX_TG_TEX0, texmtx_tbl[i], GX_FALSE, GX_PTIDENTITY);
+                GXSetTevKColorSel(stage, GX_TEV_KCSEL_1_4);
+                GXSetTevKAlphaSel(stage, GX_TEV_KASEL_1_4);
+                GXSetTevOrder(stage, (GXTexCoordID)coord, GX_TEXMAP0, GX_COLOR_NULL);
+                GXSetTevColorOp(stage, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, (GXTevRegID)(i == 3));
+                GXSetTevAlphaOp(stage, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, (GXTevRegID)(3 == i));
                 cin = GX_CC_CPREV;
-                if (first = (i == 0)) {
+                if (first = !i) {
                     cin = GX_CC_ZERO;
                 }
-                GXSetTevColorIn((GXTevStageID)stage, GX_CC_ZERO, GX_CC_TEXC, GX_CC_KONST, cin);
-                GXSetTevAlphaIn((GXTevStageID)stage, GX_CA_ZERO, GX_CA_TEXA, GX_CA_KONST, first ? GX_CA_ZERO : GX_CA_APREV);
-                GXSetTevSwapMode((GXTevStageID)stage, GX_TEV_SWAP0, GX_TEV_SWAP0);
+                GXSetTevColorIn(stage, GX_CC_ZERO, GX_CC_TEXC, GX_CC_KONST, cin);
+                GXSetTevAlphaIn(stage, GX_CA_ZERO, GX_CA_TEXA, GX_CA_KONST, first ? GX_CA_ZERO : GX_CA_APREV);
+                GXSetTevSwapMode(stage, GX_TEV_SWAP0, GX_TEV_SWAP0);
             }
             color.r = dof->level1;
             color.a = 0xFF;
             GXSetTevKColor(GX_KCOLOR0, color);
             GXSetTexCoordGen2((GXTexCoordID)coord, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
             tc = coord++;
-            GXSetTevKColorSel((GXTevStageID)stage, GX_TEV_KCSEL_K0);
-            GXSetTevKAlphaSel((GXTevStageID)stage, GX_TEV_KASEL_K0_A);
-            GXSetTevOrder((GXTevStageID)stage, (GXTexCoordID)tc, GX_TEXMAP1, GX_COLOR_NULL);
-            GXSetTevColorOp((GXTevStageID)stage, GX_TEV_COMP_R8_GT, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-            GXSetTevAlphaOp((GXTevStageID)stage, GX_TEV_COMP_R8_GT, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-            GXSetTevColorIn((GXTevStageID)stage, GX_CC_TEXC, GX_CC_KONST, GX_CC_C0, GX_CC_ZERO);
-            GXSetTevAlphaIn((GXTevStageID)stage, GX_CA_TEXA, GX_CA_KONST, GX_CA_A0, GX_CA_ZERO);
-            GXSetTevSwapMode((GXTevStageID)stage, GX_TEV_SWAP0, GX_TEV_SWAP0);
+            GXSetTevKColorSel(stage, GX_TEV_KCSEL_K0);
+            GXSetTevKAlphaSel(stage, GX_TEV_KASEL_K0_A);
+            GXSetTevOrder(stage, (GXTexCoordID)tc, GX_TEXMAP1, GX_COLOR_NULL);
+            GXSetTevColorOp(stage, GX_TEV_COMP_R8_GT, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+            GXSetTevAlphaOp(stage, GX_TEV_COMP_R8_GT, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+            GXSetTevColorIn(stage, GX_CC_TEXC, GX_CC_KONST, GX_CC_C0, GX_CC_ZERO);
+            GXSetTevAlphaIn(stage, GX_CA_TEXA, GX_CA_KONST, GX_CA_A0, GX_CA_ZERO);
+            GXSetTevSwapMode(stage, GX_TEV_SWAP0, GX_TEV_SWAP0);
             stage++;
             GXSetNumTexGens((u8)coord);
             GXSetNumTevStages((u8)stage);
@@ -491,69 +454,54 @@ static void envDisp_DepthOfField(void) {
             DOF_QUAD(gp, 2.0f);
         }
         if ((dof->flags & ENV_DOF_PASS2) && dof->radius2) {
-            /* FAKE: dead read of i2 with a different type. It stops the first front end pass from scalarizing i2;
-               the read is then deleted and the second pass scalarizes it, so its @ temp is created after the
-               CSE temps and numbers below them. */
-            hz = *(s16*)i2;
-
-            /* FAKE: mg holds the int to float magic 0x43300000. The back end value-numbers the hoisted loop 2 lis
-               into mg, so the constant gets mg @ temp number. i2 is initialised last so it does not overlap the
-               tbl2 address temp. */
-            for (coord2[0] = 0, stage2[0] = 0, mg[0] = 0x43300000, tbl2[0] = texmtx_tbl, i2[0] = 0; i2[0] < 4; i2[0]++, coord2[0]++, tbl2[0]++, stage2[0]++) {
-                ang2 = 6.2831855f * i2[0] / 4.0f;
+            coord = 0;
+            stage = 0;
+            for (i = 0; i < 4; coord++, i++, stage++) {
+                ang2 = 6.2831855f * i / 4.0f;
                 PSMTXTrans(mtx2, dof->radius2 * env_sin(ang2) / 100.0f, dof->radius2 * env_cos(ang2) / 100.0f, 0.0f);
-                GXLoadTexMtxImm(mtx2, *tbl2[0], GX_MTX2x4);
-                GXSetTexCoordGen2((GXTexCoordID)coord2[0], GX_TG_MTX2x4, GX_TG_TEX0, *tbl2[0], GX_FALSE, GX_PTIDENTITY);
-                GXSetTevKColorSel((GXTevStageID)stage2[0], GX_TEV_KCSEL_1_4);
-                GXSetTevKAlphaSel((GXTevStageID)stage2[0], GX_TEV_KASEL_1_4);
-                GXSetTevOrder((GXTevStageID)stage2[0], (GXTexCoordID)coord2[0], GX_TEXMAP0, GX_COLOR_NULL);
-                GXSetTevColorOp((GXTevStageID)stage2[0], GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, (GXTevRegID)((s32)i2[0] == 3));
-                GXSetTevAlphaOp((GXTevStageID)stage2[0], GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, (GXTevRegID)(3 == i2[0]));
+                GXLoadTexMtxImm(mtx2, texmtx_tbl[i], GX_MTX2x4);
+                GXSetTexCoordGen2((GXTexCoordID)coord, GX_TG_MTX2x4, GX_TG_TEX0, texmtx_tbl[i], GX_FALSE, GX_PTIDENTITY);
+                GXSetTevKColorSel(stage, GX_TEV_KCSEL_1_4);
+                GXSetTevKAlphaSel(stage, GX_TEV_KASEL_1_4);
+                GXSetTevOrder(stage, (GXTexCoordID)coord, GX_TEXMAP0, GX_COLOR_NULL);
+                GXSetTevColorOp(stage, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, (GXTevRegID)(i == 3));
+                GXSetTevAlphaOp(stage, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, (GXTevRegID)(3 == i));
                 cin = GX_CC_CPREV;
-
-                /* FAKE: first2 is an s32 array stored through an int pointer: the type mismatch keeps it in memory
-                   through the front end (see the one-trip loop above) */
-                if (*(int*)first2 = (i2[0] == 0)) {
+                if (first = !i) {
                     cin = GX_CC_ZERO;
                 }
-                GXSetTevColorIn((GXTevStageID)stage2[0], GX_CC_ZERO, GX_CC_TEXC, GX_CC_KONST, cin);
-                GXSetTevAlphaIn((GXTevStageID)stage2[0], GX_CA_ZERO, GX_CA_TEXA, GX_CA_KONST, first2[0] ? GX_CA_ZERO : GX_CA_APREV);
-                GXSetTevSwapMode((GXTevStageID)stage2[0], GX_TEV_SWAP0, GX_TEV_SWAP0);
+                GXSetTevColorIn(stage, GX_CC_ZERO, GX_CC_TEXC, GX_CC_KONST, cin);
+                GXSetTevAlphaIn(stage, GX_CA_ZERO, GX_CA_TEXA, GX_CA_KONST, first ? GX_CA_ZERO : GX_CA_APREV);
+                GXSetTevSwapMode(stage, GX_TEV_SWAP0, GX_TEV_SWAP0);
             }
-
-            /* FAKE: dead guard (gz2 is 0) that keeps mg alive through the front end */
-            gz2 = 0;
-            if (gz2) coord2[0] = mg[0];
             color.r = dof->level2;
             color.a = 0xFF;
             GXSetTevKColor(GX_KCOLOR0, color);
-            GXSetTexCoordGen2((GXTexCoordID)coord2[0], GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
-            tc2 = coord2[0]++;
+            GXSetTexCoordGen2((GXTexCoordID)coord, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
+            tc = coord++;
             GXSetTevColor(GX_TEVREG1, white);
-            GXSetTevKColorSel((GXTevStageID)stage2[0], GX_TEV_KCSEL_K0);
-            GXSetTevKAlphaSel((GXTevStageID)stage2[0], GX_TEV_KASEL_K0_A);
-            GXSetTevOrder((GXTevStageID)stage2[0], (GXTexCoordID)tc2, GX_TEXMAP1, GX_COLOR_NULL);
-            GXSetTevColorOp((GXTevStageID)stage2[0], GX_TEV_COMP_R8_GT, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-            GXSetTevAlphaOp((GXTevStageID)stage2[0], GX_TEV_COMP_R8_GT, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-            GXSetTevColorIn((GXTevStageID)stage2[0], GX_CC_TEXC, GX_CC_KONST, GX_CC_ONE, GX_CC_ZERO);
-            GXSetTevAlphaIn((GXTevStageID)stage2[0], GX_CA_TEXA, GX_CA_KONST, GX_CA_A1, GX_CA_ZERO);
-            GXSetTevSwapMode((GXTevStageID)stage2[0], GX_TEV_SWAP0, GX_TEV_SWAP0);
-            GXSetTevOrder((GXTevStageID)(stage2[0] + 1), GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR_NULL);
-            GXSetTevColorOp((GXTevStageID)(stage2[0] + 1), GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-            GXSetTevAlphaOp((GXTevStageID)(stage2[0] + 1), GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-            GXSetTevColorIn((GXTevStageID)(stage2[0] + 1), GX_CC_C0, GX_CC_ZERO, GX_CC_APREV, GX_CC_ZERO);
-            GXSetTevAlphaIn((GXTevStageID)(stage2[0] + 1), GX_CA_A0, GX_CA_ZERO, GX_CA_APREV, GX_CA_ZERO);
-            GXSetTevSwapMode((GXTevStageID)(stage2[0] + 1), GX_TEV_SWAP0, GX_TEV_SWAP0);
-            stage2[0] += 2;
-            GXSetNumTexGens((u8)coord2[0]);
-            GXSetNumTevStages((u8)stage2[0]);
+            GXSetTevKColorSel(stage, GX_TEV_KCSEL_K0);
+            GXSetTevKAlphaSel(stage, GX_TEV_KASEL_K0_A);
+            GXSetTevOrder(stage, (GXTexCoordID)tc, GX_TEXMAP1, GX_COLOR_NULL);
+            GXSetTevColorOp(stage, GX_TEV_COMP_R8_GT, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+            GXSetTevAlphaOp(stage, GX_TEV_COMP_R8_GT, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+            GXSetTevColorIn(stage, GX_CC_TEXC, GX_CC_KONST, GX_CC_ONE, GX_CC_ZERO);
+            GXSetTevAlphaIn(stage, GX_CA_TEXA, GX_CA_KONST, GX_CA_A1, GX_CA_ZERO);
+            GXSetTevSwapMode(stage, GX_TEV_SWAP0, GX_TEV_SWAP0);
+            GXSetTevOrder((GXTevStageID)(stage + 1), GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR_NULL);
+            GXSetTevColorOp((GXTevStageID)(stage + 1), GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+            GXSetTevAlphaOp((GXTevStageID)(stage + 1), GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+            GXSetTevColorIn((GXTevStageID)(stage + 1), GX_CC_C0, GX_CC_ZERO, GX_CC_APREV, GX_CC_ZERO);
+            GXSetTevAlphaIn((GXTevStageID)(stage + 1), GX_CA_A0, GX_CA_ZERO, GX_CA_APREV, GX_CA_ZERO);
+            GXSetTevSwapMode((GXTevStageID)(stage + 1), GX_TEV_SWAP0, GX_TEV_SWAP0);
+            stage += 2;
+            GXSetNumTexGens((u8)coord);
+            GXSetNumTevStages((u8)stage);
             GXBegin(GX_QUADS, GX_VTXFMT0, 4);
             DOF_QUAD(gp, 2.0f);
         }
     }
 }
-
-#pragma opt_propagation reset
 
 /**
  * Draws the motion blur: the captured earlier frame over the screen at a constant alpha, or,

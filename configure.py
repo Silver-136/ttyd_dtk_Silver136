@@ -1433,7 +1433,7 @@ config.libs = [
             Object(MatchingFor("G8MJ01", "G8ME01"), "battle_database_pik.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "pik_01.c", extra_cflags=["-inline auto,deferred"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "pik_00.c", extra_cflags=["-inline auto,deferred"]),
-            Object(MatchingFor("G8MJ01", "G8ME01"), "pik_02.c", extra_cflags=["-inline auto,deferred", "-opt noprop"]),
+            Object(MatchingFor("G8MJ01", "G8ME01"), "pik_02.c", extra_cflags=["-inline auto,deferred"]),
         ]
     ),
     Rel(
@@ -1989,7 +1989,7 @@ config.libs = [
             Object(MatchingFor("G8MJ01", "G8ME01"), "rsh_05.c", extra_cflags=["-inline auto,deferred"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "unit/unit_boss_moamoa.c", extra_cflags=["-inline auto,deferred"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "rsh_00.c", extra_cflags=["-inline auto,deferred"]),
-            Object(MatchingFor("G8MJ01", "G8ME01"), "rsh.c"),
+            Object(MatchingFor("G8MJ01", "G8ME01"), "rsh.c", extra_cflags=["-inline noauto,deferred"]),
         ]
     ),
     Rel(

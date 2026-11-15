@@ -143,6 +143,79 @@ static NpcSetupInfo rsh_04_rnd_npc_3_ent[2];
 EvtWord evt_rsh_04_rnd_npc_entry[185];
 
 /**
+ * REL entry point: runs the global constructors,
+ * then registers each map's init script with relSetEvtAddr (the first-visit scripts until the story reaches
+ * STG6_54_WELCOME_BACK, the "nidome" second-visit scripts afterwards)
+ * and installs the battle setup table for the rsh module.
+ */
+void _prolog(void) {
+    voidfunctionptr* ctor;
+
+    for (ctor = _ctors; *ctor != NULL; ctor++) {
+        (*ctor)();
+    }
+    if (swByteGet(GSW_ID(GSW_STORY_PROGRESS)) < STG6_54_WELCOME_BACK) {
+        relSetEvtAddr("rsh_00_a", rsh_00_a_init_evt);
+        relSetEvtAddr("rsh_00_b", rsh_00_b_init_evt);
+        relSetEvtAddr("rsh_00_c", rsh_00_c_init_evt);
+        relSetEvtAddr("rsh_01_a", rsh_01_a_init_evt);
+        relSetEvtAddr("rsh_01_b", rsh_01_b_init_evt);
+        relSetEvtAddr("rsh_01_c", rsh_01_c_init_evt);
+        relSetEvtAddr("rsh_02_a", rsh_02_a_init_evt);
+        relSetEvtAddr("rsh_02_b", rsh_02_b_init_evt);
+        relSetEvtAddr("rsh_02_c", rsh_02_c_init_evt);
+        relSetEvtAddr("rsh_03_a", rsh_03_a_init_evt);
+        relSetEvtAddr("rsh_03_b", rsh_03_b_init_evt);
+        relSetEvtAddr("rsh_03_c", rsh_03_c_init_evt);
+        relSetEvtAddr("rsh_04_a", rsh_04_a_init_evt);
+        relSetEvtAddr("rsh_04_b", rsh_04_b_init_evt);
+        relSetEvtAddr("rsh_04_c", rsh_04_c_init_evt);
+        relSetEvtAddr("rsh_05_a", rsh_05_a_init_evt);
+        relSetEvtAddr("rsh_06_a", rsh_06_a_init_evt);
+        relSetEvtAddr("rsh_07_a", rsh_07_a_init_evt);
+        relSetEvtAddr("rsh_07_b", rsh_07_b_init_evt);
+        relSetEvtAddr("rsh_07_c", rsh_07_c_init_evt);
+        relSetEvtAddr("rsh_08_a", rsh_08_a_init_evt);
+    } else {
+        relSetEvtAddr("rsh_00_a", rsh_00_a_init_evt_nidome);
+        relSetEvtAddr("rsh_00_b", rsh_00_b_init_evt_nidome);
+        relSetEvtAddr("rsh_00_c", rsh_00_c_init_evt_nidome);
+        relSetEvtAddr("rsh_01_a", rsh_01_a_init_evt_nidome);
+        relSetEvtAddr("rsh_01_b", rsh_01_b_init_evt_nidome);
+        relSetEvtAddr("rsh_01_c", rsh_01_c_init_evt_nidome);
+        relSetEvtAddr("rsh_02_a", rsh_02_a_init_evt_nidome);
+        relSetEvtAddr("rsh_02_b", rsh_02_b_init_evt_nidome);
+        relSetEvtAddr("rsh_02_c", rsh_02_c_init_evt_nidome);
+        relSetEvtAddr("rsh_03_a", rsh_03_a_init_evt_nidome);
+        relSetEvtAddr("rsh_03_b", rsh_03_b_init_evt_nidome);
+        relSetEvtAddr("rsh_03_c", rsh_03_c_init_evt_nidome);
+        relSetEvtAddr("rsh_04_a", rsh_04_a_init_evt_nidome);
+        relSetEvtAddr("rsh_04_b", rsh_04_b_init_evt_nidome);
+        relSetEvtAddr("rsh_04_c", rsh_04_c_init_evt_nidome);
+        relSetEvtAddr("rsh_05_a", rsh_05_a_init_evt_nidome);
+        relSetEvtAddr("rsh_06_a", rsh_06_a_init_evt_nidome);
+        relSetEvtAddr("rsh_07_a", rsh_07_a_init_evt);
+        relSetEvtAddr("rsh_07_b", rsh_07_b_init_evt);
+        relSetEvtAddr("rsh_07_c", rsh_07_c_init_evt);
+        relSetEvtAddr("rsh_08_a", rsh_08_a_init_evt);
+    }
+    relSetBtlAddr("rsh", btlsetup_rsh_tbl, btl_rsh_setup_no_tbl);
+}
+
+/** REL epilog: runs the module's global destructors from the _dtors table when the module is unloaded. */
+void _epilog(void) {
+    voidfunctionptr* dtor;
+
+    for (dtor = _dtors; *dtor != NULL; dtor++) {
+        (*dtor)();
+    }
+}
+
+/** Linker stub for unresolved references in the relocatable module; does nothing. */
+void _unresolved(void) {
+}
+
+/**
  * Shows the stained floor object (s_yuka_simi, probably the spilled stew) in rsh_02_a
  * and rsh_03_a from the start of chapter 6 until the end of day 1,
  * and the clean floor (s_yuka) at every other story stage.
@@ -284,6 +357,21 @@ EVT_BEGIN(evt_rsh_door_entry)
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, LW(6), 0, PTR(evt_rsh_door_close), 0)
     RETURN
 EVT_END()
+
+/**
+ * Script helper polled by evt_rsh_door_open/close:
+ * returns TRUE once the capture_img door animation has ended (flag 2 set or one loop done),
+ * FALSE while it is still playing.
+ */
+// Ready when the capture is hidden or its first animation loop has completed.
+static BOOL img_wait(void) {
+    ImageEntry* img = imgNameToPtr("capture_img", gp->inBattle != 0);
+
+    if (!(img->flags & IMAGE_FLAG_HIDE) && img->loopTimes < 1.0f) {
+        return FALSE;
+    }
+    return TRUE;
+}
 
 /**
  * Runs when Mario presses A facing a cabin door from outside (LW(0) is the door table of evt_rsh_door_entry):
@@ -728,9 +816,120 @@ EVT_BEGIN(evt_rsh_window)
     RETURN
 EVT_END()
 
-static const s32 texmtx_tbl[] = {
-    GX_TEXMTX0, GX_TEXMTX1, GX_TEXMTX2, GX_TEXMTX3, GX_TEXMTX4, GX_TEXMTX5, GX_TEXMTX6, GX_TEXMTX7, GX_TEXMTX8, GX_TEXMTX9,
-};
+/**
+ * TEV callback for the train windows: copies the part of the frame buffer behind the window object into a
+ * half-size RGB5A3 texture and re-applies it as a projected texture with a frustum matched to the 3D camera,
+ * so the scenery seems to flow past the glass.
+ * Returns early on the first frame (it only marks the object to get a screen bounding box) and
+ * when the box is empty.
+ */
+static void rsh_window_tev(MapTevCallbackInfo* info) {
+    static const s32 texmtx_tbl[] = {
+        GX_TEXMTX0, GX_TEXMTX1, GX_TEXMTX2, GX_TEXMTX3, GX_TEXMTX4,
+        GX_TEXMTX5, GX_TEXMTX6, GX_TEXMTX7, GX_TEXMTX8, GX_TEXMTX9,
+    };
+    MapObject* p;
+    u32 flags;
+    GXTevStageID tevStage;
+    GXTexMapID texMap;
+    GXTexCoordID texCoord;
+    int indStage;
+    u16 x0, y0, x1, y1;
+    s32 height, width;
+    s32 halfHeight, halfWidth;
+    void* buf;
+    GXTexObj tex;
+    Mtx mtx;
+    f32 t;
+
+    p = info->mapObj;
+    tevStage = info->tevStage;
+    texMap = info->texMap;
+    texCoord = info->texCoord;
+    indStage = info->indStage;
+    flags = p->flags;
+    if (flags & MAP_OBJ_FLAG_GROUP_MEMBER) {
+        while ((p = p->parent) != NULL) {
+            u32 f = p->flags;
+            if (f & MAP_OBJ_FLAG_GROUP) {
+                if (!(f & MAP_OBJ_FLAG_SCREEN_RECT)) {
+                    p->flags = f | MAP_OBJ_FLAG_SCREEN_RECT;
+                    return;
+                }
+                x0 = p->screenRect[0];
+                y0 = p->screenRect[1];
+                x1 = p->screenRect[2];
+                y1 = p->screenRect[3];
+                break;
+            }
+        }
+    } else {
+        if (!(flags & MAP_OBJ_FLAG_SCREEN_RECT)) {
+            p->flags = flags | MAP_OBJ_FLAG_SCREEN_RECT;
+            return;
+        }
+        x0 = p->screenRect[0];
+        y0 = p->screenRect[1];
+        x1 = p->screenRect[2];
+        y1 = p->screenRect[3];
+    }
+
+    // BUG: when no parent is a group (MAP_OBJ_FLAG_GROUP) the loop above ends with x0..y1 never set,
+    // and they are read uninitialised here.
+    if (x0 == 0x3FF || y0 == 0x3FF || x1 == 0x3FF || y1 == 0x3FF) {
+        return;
+    }
+    if (x0 == 0 && y0 == 0 && x1 == 0 && y1 == 0) {
+        return;
+    }
+    x0 -= x0 & 1;
+    y0 -= y0 & 1;
+    x1 += x1 & 1;
+    y1 += y1 & 1;
+    if (x1 > gp->fbWidth) {
+        x1 = gp->fbWidth;
+    }
+    if (y1 > gp->efbHeight) {
+        y1 = gp->efbHeight;
+    }
+
+    // Copy the even-aligned screen rectangle into a half-resolution RGB5A3 reflection texture.
+    width = x1 - x0;
+    height = y1 - y0;
+    halfWidth = width / 2;
+    halfHeight = height / 2;
+    buf = smartAlloc(GXGetTexBufferSize(halfWidth, halfHeight, GX_TF_RGB5A3, GX_FALSE, 0), SMART_GROUP_TEMP)->address;
+    GXSetTexCopySrc(x0, y0, width, height);
+    GXSetTexCopyDst(halfWidth, halfHeight, GX_TF_RGB5A3, GX_TRUE);
+    GXCopyTex(buf, GX_FALSE);
+    GXInvalidateTexAll();
+    GXPixModeSync();
+    GXTexModeSync();
+    GXInitTexObj(&tex, buf, halfWidth, halfHeight, GX_TF_RGB5A3, GX_CLAMP, GX_CLAMP, GX_FALSE);
+    GXInitTexObjLOD(&tex, GX_NEAR, GX_NEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
+    t = tan(6.2831855f * (camGetPtr(CAMERA_3D)->fovY / 2.0f) / 360.0f);
+    C_MTXLightFrustum(mtx, gp->efbHeight / 2 - y1, gp->efbHeight / 2 - y0, x0 - gp->fbWidth / 2,
+                      x1 - gp->fbWidth / 2, gp->efbHeight / 2.0f / t, 0.5f, 0.5f, 0.4f, 0.6f);
+    PSMTXConcat(mtx, camGetCurPtr()->view, mtx);
+    PSMTXConcat(mtx, info->mtx, mtx);
+    GXSetTexCoordGen2(texCoord, GX_TG_MTX3x4, GX_TG_POS, texmtx_tbl[texMap], GX_FALSE, GX_PTIDENTITY);
+    GXLoadTexMtxImm(mtx, texmtx_tbl[texMap], GX_MTX3x4);
+    GXLoadTexObj(&tex, texMap);
+    GXSetTevOrder(tevStage, texCoord, texMap, GX_COLOR_NULL);
+    GXSetTevColorOp(tevStage, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevAlphaOp(tevStage, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevColorIn(tevStage, GX_CC_ZERO, GX_CC_TEXC, GX_CC_KONST, GX_CC_ZERO);
+    GXSetTevAlphaIn(tevStage, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_APREV);
+    GXSetTevSwapMode(tevStage, GX_TEV_SWAP0, GX_TEV_SWAP0);
+    GXSetTevKColorSel(tevStage, GX_TEV_KCSEL_3_4);
+    tevStage++;
+    texCoord++;
+    texMap++;
+    info->tevStage = tevStage;
+    info->texCoord = texCoord;
+    info->indStage = indStage;
+    info->texMap = texMap;
+}
 
 /**
  * Candidate passengers for random slot 1 of the car rsh_01: the model, NPC name and talk event of each, one
@@ -1530,219 +1729,6 @@ EVT_BEGIN(evt_rsh_04_rnd_npc_entry)
     RETURN
 EVT_END()
 
-static USER_FUNC(debug_print_func) {
-    EvtWord* args = event->args;
-    s32 room = evtGetValue(event, args[0]);
-    s32 group = evtGetValue(event, args[1]);
-    s32 index = evtGetValue(event, args[2]);
-    s32 value = evtGetValue(event, args[3]);
-    char header[256];
-    char buf[256];
-    const char** list;
-
-    *(RshDebugStr*)header = rsh_debug_str_init;
-
-    switch (room) {
-        case 0:
-            strcpy(header, "RSH_01:");
-            switch (group) {
-            case 0:
-                list = (const char**)rsh_01_rnd_npc_1_list;
-                break;
-            case 1:
-                list = (const char**)rsh_01_rnd_npc_2_list;
-                break;
-            case 2:
-                list = (const char**)rsh_01_rnd_npc_3_list;
-                break;
-            }
-            break;
-        case 1:
-            strcpy(header, "RSH_03:");
-            switch (group) {
-            case 0:
-                list = (const char**)rsh_03_rnd_npc_1_list;
-                break;
-            case 1:
-                list = (const char**)rsh_03_rnd_npc_2_list;
-                break;
-            }
-            break;
-        case 2:
-            strcpy(header, "RSH_04:");
-            switch (group) {
-            case 0:
-                list = (const char**)rsh_04_rnd_npc_1_list;
-                break;
-            case 1:
-                list = (const char**)rsh_04_rnd_npc_2_list;
-                break;
-            case 2:
-                list = (const char**)rsh_04_rnd_npc_3_list;
-                break;
-            case 3:
-                list = (const char**)rsh_04_rnd_npc_4_list;
-                break;
-            }
-            break;
-    }
-    sprintf(buf, "%s%d(%s, %s)\n", header, group, list[index], value);
-    return EVT_RETURN_DONE;
-}
-
-/** Sets the talkEvt of the named NPC. Args: [0] NPC name, [1] event script to run when Mario talks to it. */
-static USER_FUNC(evt_rsh_set_rnd_npc_talk_evt) {
-    EvtWord* args = event->args;
-    const char* name = (const char*)evtGetValue(event, args[0]);
-    EvtWord* evt = (EvtWord*)evtGetValue(event, args[1]); // event script for the npc talk
-
-    evtNpcNameToPtr(event, name)->talkEvt = evt;
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Looks up the talk script of a passenger candidate.
- * Args: [0] room (0 = rsh_01, 1 = rsh_03, 2 = rsh_04), [1] group, [2] index; [3] receives the script address.
- */
-static USER_FUNC(evt_rsh_get_rnd_npc_talk_evt) {
-    EvtWord* args = event->args;
-    s32 room = evtGetValue(event, args[0]);
-    s32 group = evtGetValue(event, args[1]);
-    s32 index = evtGetValue(event, args[2]);
-
-    evtSetValue(event, args[3], (EvtWord)_get_rnd_npc_data(room, group, index)->talkEvt);
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Looks up the model data of a passenger candidate.
- * Args: [0] room, [1] group, [2] index; [3] receives the model (animation) name, [4] the Japanese tribe name.
- */
-static USER_FUNC(evt_rsh_get_rnd_npc_data) {
-    EvtWord* args = event->args;
-    s32 room = evtGetValue(event, args[0]);
-    s32 group = evtGetValue(event, args[1]);
-    s32 index = evtGetValue(event, args[2]);
-    RshRndNpc* data = _get_rnd_npc_data(room, group, index);
-
-    evtSetValue(event, args[3], (EvtWord)data->name);
-    evtSetValue(event, args[4], (EvtWord)data->model);
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Returns the candidate table entry for a room (0 = rsh_01, 1 = rsh_03, 2 = rsh_04), passenger group and index;
- * unknown room/group falls back to the first rsh_01 candidate.
- */
-static RshRndNpc* _get_rnd_npc_data(s32 room, s32 group, s32 index) {
-    RshRndNpc* data = NULL;
-
-    switch (room) {
-        case 0:
-            switch (group) {
-            case 0:
-                data = rsh_01_rnd_npc_1;
-                break;
-            case 1:
-                data = rsh_01_rnd_npc_2;
-                break;
-            case 2:
-                data = rsh_01_rnd_npc_3;
-                break;
-            }
-            break;
-        case 1:
-            switch (group) {
-            case 0:
-                data = rsh_03_rnd_npc_1;
-                break;
-            case 1:
-                data = rsh_03_rnd_npc_2;
-                break;
-            }
-            break;
-        case 2:
-            switch (group) {
-            case 0:
-                data = rsh_04_rnd_npc_1;
-                break;
-            case 1:
-                data = rsh_04_rnd_npc_2;
-                break;
-            case 2:
-                data = rsh_04_rnd_npc_3;
-                break;
-            case 3:
-                data = rsh_04_rnd_npc_4;
-                break;
-            }
-            break;
-    }
-    if (data == NULL) {
-        data = rsh_01_rnd_npc_1;
-        index = 0;
-    }
-    return &data[index];
-}
-
-// OR a choice into its packed field; the initializer clears each saved word before setting choices.
-static USER_FUNC(evt_rsh_set_rnd_npc) {
-    EvtWord* args = event->args;
-    s32 room = evtGetValue(event, args[0]);
-    s32 group = evtGetValue(event, args[1]);
-    s32 index = evtGetValue(event, args[2]);
-    s32 value;
-
-    switch (room) {
-        case 0:
-            value = evtGetValue(NULL, GSW_RSH_01_RANDOM_NPCS);
-            switch (group) {
-            case 0:
-                value |= index & 7;
-                break;
-            case 1:
-                value |= (index & 3) << 3;
-                break;
-            case 2:
-                value |= (index & 1) << 5;
-                break;
-            }
-            evtSetValue(NULL, GSW_RSH_01_RANDOM_NPCS, value);
-            break;
-        case 1:
-            value = evtGetValue(NULL, GSW_RSH_03_RANDOM_NPCS);
-            switch (group) {
-            case 0:
-                value |= index & 0xF;
-                break;
-            case 1:
-                value |= (index & 7) << 4;
-                break;
-            }
-            evtSetValue(NULL, GSW_RSH_03_RANDOM_NPCS, value);
-            break;
-        case 2:
-            value = evtGetValue(NULL, GSW_RSH_04_RANDOM_NPCS);
-            switch (group) {
-            case 0:
-                value |= index & 1;
-                break;
-            case 1:
-                value |= (index & 1) << 1;
-                break;
-            case 2:
-                value |= (index & 1) << 2;
-                break;
-            case 3:
-                value |= (index & 3) << 3;
-                break;
-            }
-            evtSetValue(NULL, GSW_RSH_04_RANDOM_NPCS, value);
-            break;
-    }
-    return EVT_RETURN_DONE;
-}
-
 /**
  * Reads a random passenger pick back out of the packed state word.
  * Args: [0] room, [1] group; [2] receives the candidate index (0 for unknown groups).
@@ -1811,201 +1797,215 @@ static USER_FUNC(evt_rsh_get_rnd_npc) {
     return EVT_RETURN_DONE;
 }
 
-/**
- * TEV callback for the train windows: copies the part of the frame buffer behind the window object into a
- * half-size RGB5A3 texture and re-applies it as a projected texture with a frustum matched to the 3D camera,
- * so the scenery seems to flow past the glass.
- * Returns early on the first frame (it only marks the object to get a screen bounding box) and
- * when the box is empty.
- */
-static void rsh_window_tev(MapTevCallbackInfo* info) {
-    MapObject* p;
-    u32 flags;
-    GXTevStageID tevStage;
-    GXTexMapID texMap;
-    GXTexCoordID texCoord;
-    int indStage;
-    u16 x0, y0, x1, y1;
-    s32 height, width;
-    s32 halfHeight, halfWidth;
-    void* buf;
-    GXTexObj tex;
-    Mtx mtx;
-    f32 t;
+// OR a choice into its packed field; the initializer clears each saved word before setting choices.
+static USER_FUNC(evt_rsh_set_rnd_npc) {
+    EvtWord* args = event->args;
+    s32 room = evtGetValue(event, args[0]);
+    s32 group = evtGetValue(event, args[1]);
+    s32 index = evtGetValue(event, args[2]);
+    s32 value;
 
-    p = info->mapObj;
-    tevStage = info->tevStage;
-    texMap = info->texMap;
-    texCoord = info->texCoord;
-    indStage = info->indStage;
-    flags = p->flags;
-    if (flags & MAP_OBJ_FLAG_GROUP_MEMBER) {
-        while ((p = p->parent) != NULL) {
-            u32 f = p->flags;
-            if (f & MAP_OBJ_FLAG_GROUP) {
-                if (!(f & MAP_OBJ_FLAG_SCREEN_RECT)) {
-                    p->flags = f | MAP_OBJ_FLAG_SCREEN_RECT;
-                    return;
-                }
-                x0 = p->screenRect[0];
-                y0 = p->screenRect[1];
-                x1 = p->screenRect[2];
-                y1 = p->screenRect[3];
+    switch (room) {
+        case 0:
+            value = evtGetValue(NULL, GSW_RSH_01_RANDOM_NPCS);
+            switch (group) {
+            case 0:
+                value |= index & 7;
+                break;
+            case 1:
+                value |= (index & 3) << 3;
+                break;
+            case 2:
+                value |= (index & 1) << 5;
                 break;
             }
-        }
-    } else {
-        if (!(flags & MAP_OBJ_FLAG_SCREEN_RECT)) {
-            p->flags = flags | MAP_OBJ_FLAG_SCREEN_RECT;
-            return;
-        }
-        x0 = p->screenRect[0];
-        y0 = p->screenRect[1];
-        x1 = p->screenRect[2];
-        y1 = p->screenRect[3];
+            evtSetValue(NULL, GSW_RSH_01_RANDOM_NPCS, value);
+            break;
+        case 1:
+            value = evtGetValue(NULL, GSW_RSH_03_RANDOM_NPCS);
+            switch (group) {
+            case 0:
+                value |= index & 0xF;
+                break;
+            case 1:
+                value |= (index & 7) << 4;
+                break;
+            }
+            evtSetValue(NULL, GSW_RSH_03_RANDOM_NPCS, value);
+            break;
+        case 2:
+            value = evtGetValue(NULL, GSW_RSH_04_RANDOM_NPCS);
+            switch (group) {
+            case 0:
+                value |= index & 1;
+                break;
+            case 1:
+                value |= (index & 1) << 1;
+                break;
+            case 2:
+                value |= (index & 1) << 2;
+                break;
+            case 3:
+                value |= (index & 3) << 3;
+                break;
+            }
+            evtSetValue(NULL, GSW_RSH_04_RANDOM_NPCS, value);
+            break;
     }
-
-    // BUG: when no parent is a group (MAP_OBJ_FLAG_GROUP) the loop above ends with x0..y1 never set,
-    // and they are read uninitialised here.
-    if (x0 == 0x3FF || y0 == 0x3FF || x1 == 0x3FF || y1 == 0x3FF) {
-        return;
-    }
-    if (x0 == 0 && y0 == 0 && x1 == 0 && y1 == 0) {
-        return;
-    }
-    x0 -= x0 & 1;
-    y0 -= y0 & 1;
-    x1 += x1 & 1;
-    y1 += y1 & 1;
-    if (x1 > gp->fbWidth) {
-        x1 = gp->fbWidth;
-    }
-    if (y1 > gp->efbHeight) {
-        y1 = gp->efbHeight;
-    }
-
-    // Copy the even-aligned screen rectangle into a half-resolution RGB5A3 reflection texture.
-    width = x1 - x0;
-    height = y1 - y0;
-    halfWidth = width / 2;
-    halfHeight = height / 2;
-    buf = smartAlloc(GXGetTexBufferSize(halfWidth, halfHeight, GX_TF_RGB5A3, GX_FALSE, 0), SMART_GROUP_TEMP)->address;
-    GXSetTexCopySrc(x0, y0, width, height);
-    GXSetTexCopyDst(halfWidth, halfHeight, GX_TF_RGB5A3, GX_TRUE);
-    GXCopyTex(buf, GX_FALSE);
-    GXInvalidateTexAll();
-    GXPixModeSync();
-    GXTexModeSync();
-    GXInitTexObj(&tex, buf, halfWidth, halfHeight, GX_TF_RGB5A3, GX_CLAMP, GX_CLAMP, GX_FALSE);
-    GXInitTexObjLOD(&tex, GX_NEAR, GX_NEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
-    t = tan(6.2831855f * (camGetPtr(CAMERA_3D)->fovY / 2.0f) / 360.0f);
-    C_MTXLightFrustum(mtx, gp->efbHeight / 2 - y1, gp->efbHeight / 2 - y0, x0 - gp->fbWidth / 2,
-                      x1 - gp->fbWidth / 2, gp->efbHeight / 2.0f / t, 0.5f, 0.5f, 0.4f, 0.6f);
-    PSMTXConcat(mtx, camGetCurPtr()->view, mtx);
-    PSMTXConcat(mtx, info->mtx, mtx);
-    GXSetTexCoordGen2(texCoord, GX_TG_MTX3x4, GX_TG_POS, texmtx_tbl[texMap], GX_FALSE, GX_PTIDENTITY);
-    GXLoadTexMtxImm(mtx, texmtx_tbl[texMap], GX_MTX3x4);
-    GXLoadTexObj(&tex, texMap);
-    GXSetTevOrder(tevStage, texCoord, texMap, GX_COLOR_NULL);
-    GXSetTevColorOp(tevStage, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-    GXSetTevAlphaOp(tevStage, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-    GXSetTevColorIn(tevStage, GX_CC_ZERO, GX_CC_TEXC, GX_CC_KONST, GX_CC_ZERO);
-    GXSetTevAlphaIn(tevStage, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_APREV);
-    GXSetTevSwapMode(tevStage, GX_TEV_SWAP0, GX_TEV_SWAP0);
-    GXSetTevKColorSel(tevStage, GX_TEV_KCSEL_3_4);
-    tevStage++;
-    texCoord++;
-    texMap++;
-    info->tevStage = tevStage;
-    info->texCoord = texCoord;
-    info->indStage = indStage;
-    info->texMap = texMap;
+    return EVT_RETURN_DONE;
 }
 
 /**
- * Script helper polled by evt_rsh_door_open/close:
- * returns TRUE once the capture_img door animation has ended (flag 2 set or one loop done),
- * FALSE while it is still playing.
+ * Returns the candidate table entry for a room (0 = rsh_01, 1 = rsh_03, 2 = rsh_04), passenger group and index;
+ * unknown room/group falls back to the first rsh_01 candidate.
  */
-// Ready when the capture is hidden or its first animation loop has completed.
-static BOOL img_wait(void) {
-    ImageEntry* img = imgNameToPtr("capture_img", gp->inBattle != 0);
+static RshRndNpc* _get_rnd_npc_data(s32 room, s32 group, s32 index) {
+    RshRndNpc* data = NULL;
 
-    if (!(img->flags & IMAGE_FLAG_HIDE) && img->loopTimes < 1.0f) {
-        return FALSE;
+    switch (room) {
+        case 0:
+            switch (group) {
+            case 0:
+                data = rsh_01_rnd_npc_1;
+                break;
+            case 1:
+                data = rsh_01_rnd_npc_2;
+                break;
+            case 2:
+                data = rsh_01_rnd_npc_3;
+                break;
+            }
+            break;
+        case 1:
+            switch (group) {
+            case 0:
+                data = rsh_03_rnd_npc_1;
+                break;
+            case 1:
+                data = rsh_03_rnd_npc_2;
+                break;
+            }
+            break;
+        case 2:
+            switch (group) {
+            case 0:
+                data = rsh_04_rnd_npc_1;
+                break;
+            case 1:
+                data = rsh_04_rnd_npc_2;
+                break;
+            case 2:
+                data = rsh_04_rnd_npc_3;
+                break;
+            case 3:
+                data = rsh_04_rnd_npc_4;
+                break;
+            }
+            break;
     }
-    return TRUE;
-}
-
-/** Linker stub for unresolved references in the relocatable module; does nothing. */
-void _unresolved(void) {
-}
-
-/** REL epilog: runs the module's global destructors from the _dtors table when the module is unloaded. */
-void _epilog(void) {
-    voidfunctionptr* dtor;
-
-    for (dtor = _dtors; *dtor != NULL; dtor++) {
-        (*dtor)();
+    if (data == NULL) {
+        data = rsh_01_rnd_npc_1;
+        index = 0;
     }
+    return &data[index];
 }
 
 /**
- * REL entry point: runs the global constructors,
- * then registers each map's init script with relSetEvtAddr (the first-visit scripts until the story reaches
- * STG6_54_WELCOME_BACK, the "nidome" second-visit scripts afterwards)
- * and installs the battle setup table for the rsh module.
+ * Looks up the model data of a passenger candidate.
+ * Args: [0] room, [1] group, [2] index; [3] receives the model (animation) name, [4] the Japanese tribe name.
  */
-void _prolog(void) {
-    voidfunctionptr* ctor;
+static USER_FUNC(evt_rsh_get_rnd_npc_data) {
+    EvtWord* args = event->args;
+    s32 room = evtGetValue(event, args[0]);
+    s32 group = evtGetValue(event, args[1]);
+    s32 index = evtGetValue(event, args[2]);
+    RshRndNpc* data = _get_rnd_npc_data(room, group, index);
 
-    for (ctor = _ctors; *ctor != NULL; ctor++) {
-        (*ctor)();
+    evtSetValue(event, args[3], (EvtWord)data->name);
+    evtSetValue(event, args[4], (EvtWord)data->model);
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Looks up the talk script of a passenger candidate.
+ * Args: [0] room (0 = rsh_01, 1 = rsh_03, 2 = rsh_04), [1] group, [2] index; [3] receives the script address.
+ */
+static USER_FUNC(evt_rsh_get_rnd_npc_talk_evt) {
+    EvtWord* args = event->args;
+    s32 room = evtGetValue(event, args[0]);
+    s32 group = evtGetValue(event, args[1]);
+    s32 index = evtGetValue(event, args[2]);
+
+    evtSetValue(event, args[3], (EvtWord)_get_rnd_npc_data(room, group, index)->talkEvt);
+    return EVT_RETURN_DONE;
+}
+
+/** Sets the talkEvt of the named NPC. Args: [0] NPC name, [1] event script to run when Mario talks to it. */
+static USER_FUNC(evt_rsh_set_rnd_npc_talk_evt) {
+    EvtWord* args = event->args;
+    const char* name = (const char*)evtGetValue(event, args[0]);
+    EvtWord* evt = (EvtWord*)evtGetValue(event, args[1]); // event script for the npc talk
+
+    evtNpcNameToPtr(event, name)->talkEvt = evt;
+    return EVT_RETURN_DONE;
+}
+
+static USER_FUNC(debug_print_func) {
+    EvtWord* args = event->args;
+    s32 room = evtGetValue(event, args[0]);
+    s32 group = evtGetValue(event, args[1]);
+    s32 index = evtGetValue(event, args[2]);
+    s32 value = evtGetValue(event, args[3]);
+    char header[256];
+    char buf[256];
+    const char** list;
+
+    *(RshDebugStr*)header = rsh_debug_str_init;
+
+    switch (room) {
+        case 0:
+            strcpy(header, "RSH_01:");
+            switch (group) {
+            case 0:
+                list = (const char**)rsh_01_rnd_npc_1_list;
+                break;
+            case 1:
+                list = (const char**)rsh_01_rnd_npc_2_list;
+                break;
+            case 2:
+                list = (const char**)rsh_01_rnd_npc_3_list;
+                break;
+            }
+            break;
+        case 1:
+            strcpy(header, "RSH_03:");
+            switch (group) {
+            case 0:
+                list = (const char**)rsh_03_rnd_npc_1_list;
+                break;
+            case 1:
+                list = (const char**)rsh_03_rnd_npc_2_list;
+                break;
+            }
+            break;
+        case 2:
+            strcpy(header, "RSH_04:");
+            switch (group) {
+            case 0:
+                list = (const char**)rsh_04_rnd_npc_1_list;
+                break;
+            case 1:
+                list = (const char**)rsh_04_rnd_npc_2_list;
+                break;
+            case 2:
+                list = (const char**)rsh_04_rnd_npc_3_list;
+                break;
+            case 3:
+                list = (const char**)rsh_04_rnd_npc_4_list;
+                break;
+            }
+            break;
     }
-    if (swByteGet(GSW_ID(GSW_STORY_PROGRESS)) < STG6_54_WELCOME_BACK) {
-        relSetEvtAddr("rsh_00_a", rsh_00_a_init_evt);
-        relSetEvtAddr("rsh_00_b", rsh_00_b_init_evt);
-        relSetEvtAddr("rsh_00_c", rsh_00_c_init_evt);
-        relSetEvtAddr("rsh_01_a", rsh_01_a_init_evt);
-        relSetEvtAddr("rsh_01_b", rsh_01_b_init_evt);
-        relSetEvtAddr("rsh_01_c", rsh_01_c_init_evt);
-        relSetEvtAddr("rsh_02_a", rsh_02_a_init_evt);
-        relSetEvtAddr("rsh_02_b", rsh_02_b_init_evt);
-        relSetEvtAddr("rsh_02_c", rsh_02_c_init_evt);
-        relSetEvtAddr("rsh_03_a", rsh_03_a_init_evt);
-        relSetEvtAddr("rsh_03_b", rsh_03_b_init_evt);
-        relSetEvtAddr("rsh_03_c", rsh_03_c_init_evt);
-        relSetEvtAddr("rsh_04_a", rsh_04_a_init_evt);
-        relSetEvtAddr("rsh_04_b", rsh_04_b_init_evt);
-        relSetEvtAddr("rsh_04_c", rsh_04_c_init_evt);
-        relSetEvtAddr("rsh_05_a", rsh_05_a_init_evt);
-        relSetEvtAddr("rsh_06_a", rsh_06_a_init_evt);
-        relSetEvtAddr("rsh_07_a", rsh_07_a_init_evt);
-        relSetEvtAddr("rsh_07_b", rsh_07_b_init_evt);
-        relSetEvtAddr("rsh_07_c", rsh_07_c_init_evt);
-        relSetEvtAddr("rsh_08_a", rsh_08_a_init_evt);
-    } else {
-        relSetEvtAddr("rsh_00_a", rsh_00_a_init_evt_nidome);
-        relSetEvtAddr("rsh_00_b", rsh_00_b_init_evt_nidome);
-        relSetEvtAddr("rsh_00_c", rsh_00_c_init_evt_nidome);
-        relSetEvtAddr("rsh_01_a", rsh_01_a_init_evt_nidome);
-        relSetEvtAddr("rsh_01_b", rsh_01_b_init_evt_nidome);
-        relSetEvtAddr("rsh_01_c", rsh_01_c_init_evt_nidome);
-        relSetEvtAddr("rsh_02_a", rsh_02_a_init_evt_nidome);
-        relSetEvtAddr("rsh_02_b", rsh_02_b_init_evt_nidome);
-        relSetEvtAddr("rsh_02_c", rsh_02_c_init_evt_nidome);
-        relSetEvtAddr("rsh_03_a", rsh_03_a_init_evt_nidome);
-        relSetEvtAddr("rsh_03_b", rsh_03_b_init_evt_nidome);
-        relSetEvtAddr("rsh_03_c", rsh_03_c_init_evt_nidome);
-        relSetEvtAddr("rsh_04_a", rsh_04_a_init_evt_nidome);
-        relSetEvtAddr("rsh_04_b", rsh_04_b_init_evt_nidome);
-        relSetEvtAddr("rsh_04_c", rsh_04_c_init_evt_nidome);
-        relSetEvtAddr("rsh_05_a", rsh_05_a_init_evt_nidome);
-        relSetEvtAddr("rsh_06_a", rsh_06_a_init_evt_nidome);
-        relSetEvtAddr("rsh_07_a", rsh_07_a_init_evt);
-        relSetEvtAddr("rsh_07_b", rsh_07_b_init_evt);
-        relSetEvtAddr("rsh_07_c", rsh_07_c_init_evt);
-        relSetEvtAddr("rsh_08_a", rsh_08_a_init_evt);
-    }
-    relSetBtlAddr("rsh", btlsetup_rsh_tbl, btl_rsh_setup_no_tbl);
+    sprintf(buf, "%s%d(%s, %s)\n", header, group, list[index], value);
+    return EVT_RETURN_DONE;
 }
