@@ -144,7 +144,7 @@ static inline f32 moa_cos(f32 x) {
 }
 
 static s32 moamoa_hit_check(ExtdrvPose* pose, Moamoa* moa);
-static void moamoa_jump(ExtdrvPose* pose, Moamoa* moa, s32 next, s32 checkGround, f32 x, f32 y, f32 z, f32 speed, f32 gravity);
+static void moamoa_jump(ExtdrvPose* pose, Moamoa* moa, f32 x, f32 y, f32 z, f32 speed, f32 gravity, s32 next, s32 checkGround);
 static void ext_disp(CameraId camera, void* param);
 static void ext_shadow_disp(CameraId camera, void* param);
 
@@ -681,7 +681,7 @@ static void ext_shadow_disp(CameraId camera, void* param) {
  * computes the jump time from the distance and speed and the initial vertical speed from the height difference
  * and gravity, turns it toward the target and sets state 3 (in the air) with state next to follow.
  */
-static void moamoa_jump(ExtdrvPose* pose, Moamoa* moa, s32 next, s32 checkGround, f32 x, f32 y, f32 z, f32 speed, f32 gravity) {
+static void moamoa_jump(ExtdrvPose* pose, Moamoa* moa, f32 x, f32 y, f32 z, f32 speed, f32 gravity, s32 next, s32 checkGround) {
     f32 hitX, hitY, hitZ, dist, nx, ny, nz;
     f32 dy;
     f32 d;
@@ -868,12 +868,7 @@ static void ext_moamoa_main(void) {
     f32 r1;
     f32 r2;
     f32 a3;
-    f32 x2;
-    f32 y2;
-    f32 z2;
-    f32 s2;
     f32 g2;
-    f32 g3;
     f32 k1;
     f32 k2;
     hit = 0;
@@ -1005,7 +1000,7 @@ static void ext_moamoa_main(void) {
                         f32 k2;
                         f32 r1 = rand() / 32767.0f;
                         f32 r2 = rand() / 32767.0f;
-                        moamoa_jump(pose, moa, moa->state, 1, x, y, z, (r1 * (k1 = 3.0f - 1.5f)) + 1.5f, (r2 * (k2 = 2.0f - 0.8f)) + 0.8f);
+                        moamoa_jump(pose, moa, x, y, z, (r1 * (k1 = 3.0f - 1.5f)) + 1.5f, (r2 * (k2 = 2.0f - 0.8f)) + 0.8f, moa->state, 1);
                     }
                     moa->flags |= MOAMOA_FLAG_TO_TARGET;
                     break;
@@ -1028,7 +1023,7 @@ static void ext_moamoa_main(void) {
                     }
                     r1 = rand() / 32767.0f;
                     r2 = rand() / 32767.0f;
-                    moamoa_jump(pose, moa, moa->state, 1, rad, y, z, (r1 * (k1 = 0.5f - 0.3f)) + 0.3f, (r2 * (k2 = 0.8f - 0.5f)) + 0.5f);
+                    moamoa_jump(pose, moa, rad, y, z, (r1 * (k1 = 0.5f - 0.3f)) + 0.3f, (r2 * (k2 = 0.8f - 0.5f)) + 0.5f, moa->state, 1);
                 }
                 moa->flags &= ~MOAMOA_FLAG_TO_TARGET;
                 break;
@@ -1083,14 +1078,8 @@ static void ext_moamoa_main(void) {
                         f32 r1 = rand() / 32767.0f;
                         hopSpeed = r1 * (k = 1.0f - 1.0f) + 1.0f;
 
-                        // FAKE: block-local copies of the float args (behaviour-identical) put the f1..f5 arg moves ahead of the ?: as in the target
                         g2 = randf(0.4f, 0.4f);
-                        x2 = x;
-                        y2 = dist;
-                        z2 = z;
-                        s2 = hopSpeed;
-                        g3 = g2;
-                        moamoa_jump(pose, moa, (d < 100.0f) ? (moa->state) : (0), 1, x2, y2, z2, s2, g3);
+                        moamoa_jump(pose, moa, x, dist, z, hopSpeed, g2, (d < 100.0f) ? (moa->state) : (0), 1);
                     }
                 }
                 break;
@@ -1113,13 +1102,7 @@ static void ext_moamoa_main(void) {
                     r2 = rand() / 32767.0f;
                     b = 2.0f * ((r2 * (k = 0.4f - 0.4f)) + 0.4f);
 
-                    // FAKE: block-local copies of the float args (behaviour-identical) put the f1..f5 arg moves ahead of the ?: as in the target
-                    x2 = x;
-                    y2 = y;
-                    z2 = z;
-                    s2 = a2;
-                    g2 = b;
-                    moamoa_jump(pose, moa, (d < 100.0f) ? (moa->state) : (0), 1, x2, y2, z2, s2, g2);
+                    moamoa_jump(pose, moa, x, y, z, a2, b, (d < 100.0f) ? (moa->state) : (0), 1);
                 }
                 break;
 
@@ -1179,7 +1162,7 @@ static void ext_moamoa_main(void) {
                                 f32 r1 = rand() / 32767.0f;
                                 f32 r2 = rand() / 32767.0f;
                                 k = 1.0f - 1.0f;
-                                moamoa_jump(pose, moa, moa->state + 1, 1, ty, y, z, (r1 * k) + 1.0f, (r2 * k) + 1.0f);
+                                moamoa_jump(pose, moa, ty, y, z, (r1 * k) + 1.0f, (r2 * k) + 1.0f, moa->state + 1, 1);
                             }
                         }
                     }
@@ -1225,7 +1208,7 @@ static void ext_moamoa_main(void) {
                     sndFlag = 1;
                 }
                 dist = -100.0f;
-                moamoa_jump(pose, moa, MOAMOA_STATE_RESPAWN, 0, x, dist, y, spd, s);
+                moamoa_jump(pose, moa, x, dist, y, spd, s, MOAMOA_STATE_RESPAWN, 0);
                 break;
 
             case MOAMOA_STATE_BLOWN_DRIFT:
@@ -1292,7 +1275,7 @@ static void ext_moamoa_main(void) {
                         grav = (*pose->mtx)[2][3] - (15.0f * polyCosf(rad));
                         r1 = rand() / 32767.0f;
                         r2 = rand() / 32767.0f;
-                        moamoa_jump(pose, moa, moa->state, 1, x, 0.0f, grav, 3.0f * ((r1 * (k = 1.0f - 1.0f)) + 1.0f), (r2 * k) + 1.0f);
+                        moamoa_jump(pose, moa, x, 0.0f, grav, 3.0f * ((r1 * (k = 1.0f - 1.0f)) + 1.0f), (r2 * k) + 1.0f, moa->state, 1);
                     } else {
                         moa->state = MOAMOA_STATE_GONE;
                     }
