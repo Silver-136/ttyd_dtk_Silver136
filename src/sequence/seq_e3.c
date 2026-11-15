@@ -665,7 +665,10 @@ static void e3Disp(CameraId cameraId, void* param) {
     if (active == 0) {
 #if VERSION <= VERSION_DEMO_JP
 #if VERSION == VERSION_DEMO_JP
-        alpha = (s32)((f32)sin((f64)((f32)gp->retraceCount / 30.0f)) * 459.0f);
+        {
+            f32 pulse = (f32)sin((f64)((f32)gp->retraceCount / 30.0f));
+            alpha = (s32)(pulse * 459.0f);
+        }
         if (alpha < 0) {
             alpha = 0;
         }
@@ -756,7 +759,10 @@ static void e3Disp(CameraId cameraId, void* param) {
 #endif
 #else
         // 'Press Start' overlay with alpha pulsing
-        alpha = (s32)((f32)sin((f64)((f32)gp->retraceCount / 30.0f)) * 459.0f);
+        {
+            f32 pulse = (f32)sin((f64)((f32)gp->retraceCount / 30.0f));
+            alpha = (s32)(pulse * 459.0f);
+        }
 #if VERSION >= VERSION_DEMO_EU
         {
             // PAL: per-language title texture
@@ -914,13 +920,6 @@ static void e3Disp(CameraId cameraId, void* param) {
     GXSetViewport(viewportBackup[0], viewportBackup[1], viewportBackup[2], viewportBackup[3], viewportBackup[4],
                   viewportBackup[5]);
 }
-
-// FAKE: stand-in that nothing calls (the linker strips it); it only places 30.0f in the constant pool (every version but the June US demo); removing it changes the object
-#if VERSION != VERSION_DEMO_US_1
-f32 forceSdata(void) {
-    return 30.0f;
-}
-#endif
 
 /**
  * Page-flip offscreen callback: switches to the next page, draws it,

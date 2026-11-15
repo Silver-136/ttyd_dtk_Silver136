@@ -286,17 +286,10 @@ MoaChain g_moamoa_chain_tbl[47] = {
     { "joint_00", "joint_core" },
 };
 
-//.bss
-// FAKE: extern declarations of objects defined at the end of the file (g_modeling_mtx_stack and tanfTbl static
-// there): the .bss order comes from the definitions; static declarations here would place them first.
-extern Mtx g_modeling_mtx_stack[32];
-extern AnimationWork work;
-
-#if VERSION <= VERSION_DEMO_JP
+//.bss (uninitialised objects are emitted in reverse definition order: g_modeling_mtx_stack, work, tanfTbl)
 static f32 tanfTbl[0xB2];
-#else
-extern f32 tanfTbl[0xB2];
-#endif
+AnimationWork work;
+static Mtx g_modeling_mtx_stack[32];
 
 //.sdata
 #if VERSION >= VERSION_JP
@@ -318,11 +311,6 @@ void* vivihimoData[4] = {
 #endif
 
 /** Points at the animation driver's work (files, textures, pose pool, scratch buffers). */
-#if VERSION <= VERSION_DEMO_JP
-AnimationWork work;
-static Mtx g_modeling_mtx_stack[32];
-#endif
-
 static AnimationWork* wp = &work;
 
 //.sbss
@@ -712,7 +700,7 @@ s32 animPaperPoseEntry(const char* animName, s32 group) {
     return i;
 }
 
-const char* animGetTexName(const char* name);
+const char* ag2tg(const char* name);
 
 /**
  * Starts loading animation file animName and its textures in group's archive in the background;
@@ -734,7 +722,7 @@ BOOL animEffectAsync(const char* animName, u32 group) {
             break;
     }
     model = fileAsyncf(FILE_TYPE_ANIM, NULL, "%s/%s", "a", animName);
-    anim = fileAsyncf(FILE_TYPE_TPL, NULL, "%s/%s-", "a", animGetTexName(animName));
+    anim = fileAsyncf(FILE_TYPE_TPL, NULL, "%s/%s-", "a", ag2tg(animName));
 
     if ((s32)model == -1) {
         ret = TRUE;
@@ -3664,7 +3652,7 @@ BOOL animGroupBaseAsync(const char* name, s32 group, void* callback) {
             break;
     }
     model = fileAsyncf(FILE_TYPE_ANIM, callback, "%s/%s", "a", name);
-    anim = fileAsyncf(FILE_TYPE_TPL, NULL, "%s/%s-", "a", animGetTexName(name));
+    anim = fileAsyncf(FILE_TYPE_TPL, NULL, "%s/%s-", "a", ag2tg(name));
     if ((s32)model == -1) {
         return TRUE;
     }
@@ -3677,8 +3665,13 @@ BOOL animGroupBaseAsync(const char* name, s32 group, void* callback) {
     return anim != NULL;
 }
 
-/** Returns the texture file name the animation file name uses, from a/ag2tg.bin; "" if it is not listed. */
-const char* animGetTexName(const char* name) {
+/**
+ * Returns the texture file name the animation file name uses, from a/ag2tg.bin (animation group to texture group);
+ * "" if it is not listed.
+ */
+// Original name from the JP demo's link map (UNUSED there, 0x8c = this function's out-of-line size, at this slot):
+// every call is inlined, so the linker strips it.
+const char* ag2tg(const char* name) {
     void** data = wp->mp_ag2tg->data;
     s32 size;
     s32 i;
@@ -3696,7 +3689,7 @@ const char* animGetTexName(const char* name) {
 }
 
 // FAKE: stand-in; nothing calls it (the linker strips it); it only places the u32-to-f32 conversion constant in
-// this object's .rodata, ahead of animGetTexName's strings. Its owner is a stripped function after this point
+// this object's .rodata, ahead of ag2tg's strings. Its owner is a stripped function after this point
 // (JP demo map, UNUSED; animdrvtest_loadTPL 0x250 is the only one large enough to be likely). Removing it changes the object.
 void animStrippedPool(f32* p, u32 n) {
     *p = n;
@@ -4038,8 +4031,3 @@ const char* animPoseGetGroupName(s32 poseId, s32 group) {
     return animPoseGetAnimBaseDataPtr(poseId)->groups[group].name;
 }
 
-// Uninitialised objects are emitted in reverse definition order, so these end up as g_modeling_mtx_stack, work,
-// tanfTbl in .bss.
-static f32 tanfTbl[0xB2];
-AnimationWork work;
-static Mtx g_modeling_mtx_stack[32];
