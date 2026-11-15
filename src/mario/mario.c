@@ -1157,15 +1157,7 @@ void marioReInit(void) {
     wp->returnPos = (Vec){0.0f, -10000.0f, 0.0f};
 }
 
-/** Every other frame while motion blur is on, records Mario's position in the 8-entry blur trail. */
-static inline void marioMainBlur(MarioWork* wp) {
-    if ((wp->frameCounter & 1) && (mp->dispFlags & MARIO_DISP_FLAG_BLUR)) {
-        blurPos[blurPosId] = mp->position;
-        if (++blurPosId >= 8) {
-            blurPosId -= 8;
-        }
-    }
-}
+static void marioMakeBlur(void);
 
 /** TRUE while Mario rolls as a paper tube; a copy of marioChkRollMot defined before marioMain. */
 static inline BOOL marioChkRollMot2(void) {
@@ -1347,7 +1339,9 @@ void marioMain(void) {
             mario_kemuri();
             partyMain();
             marioCamMain();
-            marioMainBlur(wp);
+            if (wp->frameCounter & 1) {
+                marioMakeBlur();
+            }
             marioPostMain(mp);
             return;
         }
@@ -1408,7 +1402,9 @@ void marioMain(void) {
     mario_kemuri();
     partyMain();
     marioCamMain();
-    marioMainBlur(wp);
+    if (wp->frameCounter & 1) {
+        marioMakeBlur();
+    }
     marioPostMain(mp);
 }
 
@@ -2014,6 +2010,19 @@ void marioUpdateScreenPos(void) {
 /** Mario's draw scale: 1.2 in background mode, 2.0 otherwise. */
 f32 marioGetScale(void) {
     return mp->flags & MARIO_FLAG_BG_MODE ? 1.2f : 2.0f;
+}
+
+/**
+ * While motion blur is on, records Mario's position in the 8-entry blur trail (marioMain calls it every other frame).
+ * Original name and size (0x58) from the JP demo map (UNUSED there: every call is inlined).
+ */
+static void marioMakeBlur(void) {
+    if (mp->dispFlags & MARIO_DISP_FLAG_BLUR) {
+        blurPos[blurPosId] = mp->position;
+        if (++blurPosId >= 8) {
+            blurPosId -= 8;
+        }
+    }
 }
 
 /**
