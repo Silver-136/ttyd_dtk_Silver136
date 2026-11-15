@@ -487,6 +487,12 @@ EVT_BEGIN(gesso_arm_dead_event)
         IF_INT_NOT_EQUAL(LW(3), -1)
             CALL(btlevtcmd_SetUnitWork, LW(3), GESSO_UNIT_WORK_LEFT_ARM, -1)
         END_IF
+        // BUG: the body's id from GESSO_ARM_WORK_BODY is used without checking that the body still exists. When
+        // one hit defeats the body and this tentacle (an item that hits every enemy at once, such as Ice Storm),
+        // both death scripts start in the same frame; the body's dead_subevent finds this tentacle's slot already
+        // cleared and leaves it alone, and the body's defeat frees it 80 frames later, the frame this wait ends.
+        // btlevtcmd_SetUnitWork then writes through a NULL unit pointer and the game crashes. (The right
+        // tentacle's 50-frame wait ends while the body still exists.)
         WAIT_FRAMES(80)
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, GESSO_ARM_WORK_BODY, LW(3))
         IF_INT_NOT_EQUAL(LW(3), -1)
