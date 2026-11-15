@@ -1451,9 +1451,6 @@ static BOOL searchMario(PuniData* p) {
     return p->marioDist < 150.0f;
 }
 
-/** Straight-down direction used to find the floor under a falling Puni. */
-static const Vec puni_fall_dir = {0.0f, -1.0f, 0.0f};
-
 /**
  * Checks that a Puni has not been pushed out of the map:
  * returns 1 if its height is outside both height bands (it has left the floor heights),
@@ -1484,7 +1481,7 @@ static s32 puniPositionCheck(PuniData* p) {
     }
     pos = p->pos;
     pos.y += 1.0f;
-    dir = puni_fall_dir;
+    dir = (Vec){0.0f, -1.0f, 0.0f};
     dist = 3.0f;
     if (hitCheckFilter(NULL, &hit.x, &hit.y, &hit.z, &dist, &nrm.x, &nrm.y, &nrm.z, pos.x, pos.y, pos.z, dir.x, dir.y, dir.z) == NULL) {
         return 2;
@@ -1503,7 +1500,6 @@ static void puniPositionRecover(PuniData* p) {
     p->prevPos = p->pos;
 }
 
-static const Vec puni_fall_dir;
 
 /**
  * Moves a Puni by its velocity with wall collision:
@@ -1564,7 +1560,6 @@ int puniMoveAtari(PuniData* p, Vec start, Vec dir, int reflect, f32 dist) {
     return ret;
 }
 
-static const Vec puni_fall_dir;
 
 /* FAKE: hitCheckFilter called through a cast with the three start floats listed first. EABI assigns float and
    pointer args to f1-f6 and r3-r10 independently, so the registers and the call are identical; the reorder makes
@@ -1617,7 +1612,6 @@ void puniMoveHitLimited(PuniData* p, Vec start, Vec dir, f32 dist) {
 }
 #endif
 
-static const Vec puni_fall_dir;
 
 // Descriptive name (not in the symbol maps); placeholder unk_mri_0000980c, JP mri .text+0x9748. See docs/NAME_PROVENANCE.md.
 #if VERSION >= VERSION_JP
@@ -3438,7 +3432,6 @@ static void puniModeWind_kaiten(PuniData* p) {
     }
 }
 
-static const Vec puni_fall_dir;
 
 /**
  * Wind mode: Flurrie's breath blows the Puni away from Mario in a sliding, spinning arc:
@@ -3731,7 +3724,6 @@ static void puniModePreupdraft(PuniData* p) {
     }
 }
 
-static const Vec puni_fall_dir;
 
 /**
  * Updraft mode: the Puni floats upward inside a soap bubble (balloon effect following it,
@@ -4726,7 +4718,6 @@ static void puni_puni_init(void) {
     memset(Punimap, 0, sizeof(PuniMap));
 }
 
-static const Vec puni_fall_dir;
 
 /**
  * Checks that a stray Puni has not been pushed out of the map and puts it back at the recovery position
@@ -4901,7 +4892,6 @@ void puniModeMain(PuniData* p) {
 }
 #endif
 
-static const Vec puni_fall_dir;
 
 /**
  * Inline copy of the wall-collision move that reflects the velocity (puniMoveHit),
@@ -6500,7 +6490,6 @@ static BOOL _puniVAtari(PuniData* p, Vec* from, Vec* to) {
     return FALSE;
 }
 
-static const Vec puni_fall_dir;
 
 // Integer part of v, one lower for negative v (so not a true floor for negative whole numbers).
 static inline s32 puniFloor(f32 v) {
@@ -6591,7 +6580,6 @@ static inline void puni_exit_swset(s32 off, s32 val, Vec* pos) {
 // Kept: the target needs dead assignments kept in this block; no natural form found (cleanup_notes/mweppc_pilot.md).
 #pragma push
 #pragma opt_dead_assignments off
-static const Vec puni_fall_dir;
 
 /**
  * Called when Mario leaves the map (args[0] = 2 for a loading zone, args[2] its direction,
@@ -7153,7 +7141,6 @@ USER_FUNC(evt_puni_get_lsw_index) {
 // Kept: the target needs dead assignments kept in this block; no natural form found (cleanup_notes/mweppc_pilot.md).
 #pragma push
 #pragma opt_dead_assignments off
-static const Vec puni_fall_dir;
 
 /** Script helper: writes LSW slot args[1] from base args[0]: floor args[2] and position args[3] to args[5]. */
 USER_FUNC(evt_puni_set_lsw_index) {
@@ -7403,7 +7390,6 @@ USER_FUNC(evt_puni_force_se_off) {
 /** The zero vector, used as the default saved position. */
 static const Vec puni_save_zero = { 0.0f, 0.0f, 0.0f };
 #pragma push
-static const Vec puni_fall_dir;
 
 // FAKE: the zero-position branch of evt_puni_all_save inlines its own copy of puni_exit_swset with another local
 // declaration order (register colouring only)
@@ -7500,7 +7486,6 @@ static const char* npcGetTribeName(const char** name) {
     return *name;
 }
 
-static const Vec puni_fall_dir;
 
 /**
  * Per-frame callback of the spider check: turns each live spider-tribe NPC of the map (Piders)

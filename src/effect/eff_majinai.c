@@ -24,7 +24,7 @@ static void effMajinaiDisp(CameraId cameraId, EffectEntry* effect);
 EffectEntry* effMajinaiEntry(s32 type, f32 x, f32 y, f32 z) {
     EffectEntry* effect;
     EffMajinaiWork* work;
-    static const GXColor white = { 0xFF, 0xFF, 0xFF, 0xFF };
+    MapWork* map;
 
     effect = effEntry();
     effect->type = "Majinai";
@@ -41,7 +41,8 @@ EffectEntry* effMajinaiEntry(s32 type, f32 x, f32 y, f32 z) {
     work->alpha = 255;
     work->state = 0;
     work->poseId = -1;
-    mapGetWork()->entries[0].color = white;
+    map = mapGetWork();
+    map->entries[0].color = (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF };
     return effect;
 }
 
