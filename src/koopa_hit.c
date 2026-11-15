@@ -23,19 +23,6 @@
 #include "mario/mario_hit.h"
 #endif
 
-/** Slope of a floor normal: its angle from vertical in degrees. */
-static inline f32 kpa_nrmToAngle(f32 x, f32 y, f32 z) {
-    return angleABf(0.0f, 0.0f, sqrtf(x * x + z * z), -y);
-}
-
-/** Tilts Bowser's groundRot to match the floor normal (x, y, z) and returns the floor's slope in degrees. */
-static inline f32 kpa_nrmSet(MarioWork* mario, f32 x, f32 y, f32 z) {
-    mario->groundRot.x = (s32)(angleABf(0.0f, 0.0f, 100.0f * z, 100.0f * y) - 180.0f);
-    mario->groundRot.y = 0.0f;
-    mario->groundRot.z = (s32)(angleABf(0.0f, 0.0f, 100.0f * x, 100.0f * y) - 180.0f);
-    return kpa_nrmToAngle(x, y, z);
-}
-
 /**
  * TRUE when any active puff of Bowser's fire breath touches the box centre of an object at (x, y, z) with height
  * h and width w. Only kpaEnemyHitChk calls it.
@@ -142,6 +129,18 @@ s32 kpaEnemyHitChk(f32 x, f32 y, f32 z, f32 h, f32 w) {
     return KPA_ENEMY_HIT_NONE;
 }
 
+/**
+ * Tilts Bowser's groundRot to match the floor normal (nx, ny, nz) (whole degrees) and returns the floor's slope in
+ * degrees from horizontal (0 = flat floor).
+ */
+static f32 ABCtoAngleY(f32 nx, f32 ny, f32 nz) {
+    MarioWork* mario = marioGetPtr();
+    mario->groundRot.x = (s32)(angleABf(0.0f, 0.0f, 100.0f * nz, 100.0f * ny) - 180.0f);
+    mario->groundRot.y = 0.0f;
+    mario->groundRot.z = (s32)(angleABf(0.0f, 0.0f, 100.0f * nx, 100.0f * ny) - 180.0f);
+    return angleABf(0.0f, 0.0f, sqrtf(nx * nx + nz * nz), -ny);
+}
+
 HitEntry* kpaSearchGround(f32 range, f32* outY, f32* outDepth, f32* outAng) {
     s32 n, i;
     MarioWork* m;
@@ -242,13 +241,13 @@ HitEntry* kpaSearchGround(f32 range, f32* outY, f32* outDepth, f32* outAng) {
         dist = bd;
         hit = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, px + ox, yh, pz + oz, 0.0f, -1.0f, 0.0f);
         if (hit) {
-            if (kpa_nrmSet(marioGetPtr(), nx, ny, nz) >= 50.0f) {
+            if (ABCtoAngleY(nx, ny, nz) >= 50.0f) {
                 hit = NULL;
             }
         }
         hy = (s32)(100.0f * hy + 0.5f) / 100.0f;
         if (hit) {
-            m->groundSlope = kpa_nrmSet(marioGetPtr(), nx, ny, nz);
+            m->groundSlope = ABCtoAngleY(nx, ny, nz);
             if (hy < py && __fabsf(hy - py) >= 2.0f) {
                 *outDepth = py - hy;
                 *outAng = angleABf(px, pz, hx, hz);

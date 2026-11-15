@@ -145,6 +145,9 @@ void camDispOn(CameraId cameraId);
 void camDispOff(CameraId cameraId);
 void camCtrlOn(CameraId cameraId);
 void camCtrlOff(CameraId cameraId);
+void camSetAt(CameraId cameraId, f32 x, f32 y, f32 z);
+void camSetPos(CameraId cameraId, f32 x, f32 y, f32 z);
+void camSetUp(CameraId cameraId, f32 x, f32 y, f32 z);
 void camSetTypePersp(CameraId cameraId);
 void camSetTypeOrtho(CameraId cameraId);
 

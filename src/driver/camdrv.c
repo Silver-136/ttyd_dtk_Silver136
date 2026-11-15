@@ -44,7 +44,6 @@ CameraEntry* camEntryOrtho(CameraCallback callback, f32 fovY, f32 aspect, f32 to
 static void cam3dMain(CameraEntry* camera);
 static void cam3dImgMain(CameraEntry* camera);
 static void camEffMain(CameraEntry* camera);
-inline Vec makeVecByValue(f32 x, f32 y, f32 z);
 
 /**
  * Creates the 13 cameras at boot, in draw order:
@@ -72,21 +71,21 @@ void camInit(void) {
 
     camPtrTbl[6] = camEntryPersp(cam3dImgMain, 25.0f, 1.3333334f, 1.0f, 32768.0f, 0.0f, 1.0f, "3dimg");
     tanHalfFov = (f32)tan(HALF_FOVY_RAD);
-    camPtrTbl[6]->cameraPos = makeVecByValue(0.0f, 0.0f, 24.0f / tanHalfFov);
+    camSetPos(CAMERA_3D_IMAGE, 0.0f, 0.0f, 24.0f / tanHalfFov);
 
     camPtrTbl[7] = camEntryPersp(camEffMain, 25.0f, 1.2666666f, 100.0f, 10000.0f, 0.2f, 0.3f, "3deff_B");
 
     camPtrTbl[8] = camEntryPersp(NULL, 25.0f, 1.2666666f, 100.0f, 10000.0f, 0.1f, 0.2f, "2d");
     tanHalfFov = (f32)tan(HALF_FOVY_RAD);
-    camPtrTbl[8]->cameraPos = makeVecByValue(0.0f, 0.0f, 240.0f / tanHalfFov);
+    camSetPos(CAMERA_2D, 0.0f, 0.0f, 240.0f / tanHalfFov);
 
     camPtrTbl[9] = camEntryPersp(NULL, 25.0f, 1.3333334f, 1.0f, 32768.0f, 0.0f, 0.1f, "fade");
     tanHalfFov = (f32)tan(HALF_FOVY_RAD);
-    camPtrTbl[9]->cameraPos = makeVecByValue(0.0f, 0.0f, 24.0f / tanHalfFov);
+    camSetPos(CAMERA_FADE, 0.0f, 0.0f, 24.0f / tanHalfFov);
 
     camPtrTbl[10] = camEntryPersp(NULL, 25.0f, 1.3333334f, 1.0f, 32768.0f, 0.0f, 0.1f, "fade2");
     tanHalfFov = (f32)tan(HALF_FOVY_RAD);
-    camPtrTbl[10]->cameraPos = makeVecByValue(0.0f, 0.0f, 24.0f / tanHalfFov);
+    camSetPos(CAMERA_FADE2, 0.0f, 0.0f, 24.0f / tanHalfFov);
 
     camPtrTbl[11] =
         camEntryOrtho(NULL, 25.0f, 1.2666666f, 0.0f, 480.0f, 0.0f, 608.0f, 1.0f, 32768.0f, 0.0f, 1.0f, "dbg");
@@ -713,6 +712,21 @@ void camCtrlOff(CameraId cameraId) {
     camPtrTbl[cameraId]->flags |= CAMERA_FLAG_CTRL_OFF;
 }
 
+/** Points a camera at (x, y, z). */
+void camSetAt(CameraId cameraId, f32 x, f32 y, f32 z) {
+    camPtrTbl[cameraId]->cameraAt = (Vec){ x, y, z };
+}
+
+/** Moves a camera's eye to (x, y, z); camInit places the fixed image, 2D and fade cameras with it. */
+void camSetPos(CameraId cameraId, f32 x, f32 y, f32 z) {
+    camPtrTbl[cameraId]->cameraPos = (Vec){ x, y, z };
+}
+
+/** Sets a camera's up vector. */
+void camSetUp(CameraId cameraId, f32 x, f32 y, f32 z) {
+    camPtrTbl[cameraId]->cameraUp = (Vec){ x, y, z };
+}
+
 /** Switches a camera to a perspective projection. */
 void camSetTypePersp(CameraId cameraId) {
     camPtrTbl[cameraId]->projType = GX_PERSPECTIVE;
@@ -844,26 +858,4 @@ static void camLetterBox(void) {
         }
     }
     dispEntry(camera->letterBoxCamId, 0.0f, DISP_MODE_OPAQUE_NO_Z, &camLetterBoxDraw, NULL);
-}
-
-/** A zero vector; unused leftover helper. */
-// nothing calls it, but its zero Vec literal still emits a constant into this object's .rodata
-// FAKE: pool stand-in with an invented name
-inline Vec unknownVec0(void) {
-    return (Vec){ 0.0f, 0.0f, 0.0f };
-}
-
-/** Builds a Vec from three components; camInit uses it to place the fixed cameras. */
-inline Vec makeVecByValue(f32 x, f32 y, f32 z) {
-    Vec v = (Vec){ 0.0f, 0.0f, 0.0f };
-    v.x = x;
-    v.y = y;
-    v.z = z;
-    return v;
-}
-
-/** A zero vector; unused leftover helper. */
-// FAKE: pool stand-in with an invented name
-inline Vec unknownVec2(void) {
-    return (Vec){ 0.0f, 0.0f, 0.0f };
 }
