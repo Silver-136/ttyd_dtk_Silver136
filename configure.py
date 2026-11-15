@@ -1580,7 +1580,7 @@ config.libs = [
             Object(MatchingFor("G8MJ01", "G8ME01"), "event/evt_lect_eki.c", extra_cflags=["-inline auto,deferred"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "unit/unit_kuriboo.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "eki_06.c", extra_cflags=["-inline auto,deferred"]),
-            Object(MatchingFor("G8MJ01", "G8ME01"), "eki_00.c", extra_cflags=["-inline auto,deferred", "-opt noprop", '-pragma "inline_max_total_size(100000)"']),
+            Object(MatchingFor("G8MJ01", "G8ME01"), "eki_00.c", extra_cflags=["-inline auto,deferred", '-pragma "inline_max_total_size(100000)"']),
         ]
     ),
     Rel(
@@ -1646,7 +1646,7 @@ config.libs = [
             Object(MatchingFor("G8MJ01", "G8ME01"), "unit/unit_lecture_frankli_sac.c", extra_cflags=["-inline auto,deferred"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "gor_02.c", extra_cflags=["-inline auto,deferred"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "gor_01.c", extra_cflags=["-inline auto,deferred"]),
-            Object(MatchingFor("G8MJ01", "G8ME01"), "gor_10.c", extra_cflags=["-inline auto,deferred", "-opt nolifetimes"]),
+            Object(MatchingFor("G8MJ01", "G8ME01"), "gor_10.c", extra_cflags=["-inline auto,deferred"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "gor_irai.c", extra_cflags=["-inline auto,deferred"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "event/evt_yuuranking.c", extra_cflags=["-inline auto,deferred"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "gor_03.c", extra_cflags=["-inline auto,deferred"]),

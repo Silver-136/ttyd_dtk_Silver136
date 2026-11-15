@@ -1123,9 +1123,9 @@ void tiz_broken_draw(CameraId cameraId, void* param) {
     }
 }
 
-// Kept (pattern): propagation and lifetimes off for the extdrv and depthDisp functions of bom_01, eki_00, gor_10,
-// rsh_05, rsh_06, tik_05 and tou_02 (one half is a -opt file flag where configure.py sets it); the target needs it
-// and no natural form was found (cleanup_notes/mweppc_pilot.md, pragma review rels).
+// Kept (pattern): propagation and lifetimes off for tiz_broken (the same pattern as ext_moamoa_main in eki_00, rsh_05
+// and rsh_06 and bom_01's ext_main); the target needs it and no natural form was found
+// (cleanup_notes/mweppc_pilot.md, pragma review rels).
 #pragma opt_propagation off
 #pragma opt_lifetimes off
 

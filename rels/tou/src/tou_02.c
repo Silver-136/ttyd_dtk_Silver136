@@ -1780,12 +1780,8 @@ static void fan_disp(CameraId camera, void* param) {
     extLoadTextureExit();
 }
 
-// Kept (pattern): propagation and lifetimes off for the extdrv and depthDisp functions of bom_01, eki_00, gor_10,
-// rsh_05, rsh_06, tik_05 and tou_02 (one half is a -opt file flag where configure.py sets it); the target needs it
-// and no natural form was found (cleanup_notes/mweppc_pilot.md, pragma review rels).
-#pragma opt_propagation off
-static Vec fan_zero;
-
+// Kept (pattern): lifetimes off for this unit (the -opt nolifetimes flag in configure.py); with lifetimes on
+// ext_fan_main's retail-only GF(10) block takes other registers and no natural form was found.
 /**
  * Updates the crowd toward Mario when GF(10) is set, otherwise チャンピョン, with repulsion between walking fans.
  * check_hammer results 1 and 2 start the arc and drift states, then hide the sprite.
@@ -1950,12 +1946,7 @@ void ext_fan_main(void) {
                         break;
                     case 1:
                         fan->state = 10;
-                        { // FAKE: hand-inlined randf(135.0f, 225.0f) (same rand() call, r*90+135), 6.28 first so its pool address is created before 90/135 as in the target
-                            f32 k;
-                            f32 mn;
-                            f32 r = rand() / 32767.0f;
-                            angle = (6.2831855f * ((r * (k = 225.0f - 135.0f)) + (mn = 135.0f))) / 360.0f;
-                        }
+                        angle = 6.2831855f * randf(135.0f, 225.0f) / 360.0f;
                         dist = randf(400.0f, 500.0f);
                         x = fan->pos.x + dist * polySinf(angle);
                         z = fan->pos.z - dist * polyCosf(angle);
@@ -1963,8 +1954,8 @@ void ext_fan_main(void) {
                             Vec tgt = {0.0f, 0.0f, 0.0f};
 
                             tgt.x = x;
-                            tgt.y = -100.0f;
                             tgt.z = z;
+                            tgt.y = -100.0f;
                             fan->target = tgt;
                         }
                         fan->param.y = randf(4.0f, 6.0f);
@@ -1987,7 +1978,7 @@ void ext_fan_main(void) {
 #else
                         angle = (angle + dir2) / 2.0f;
 #endif
-                        fan->target = fan_zero;
+                        fan->target = (Vec){0.0f, 0.0f, 0.0f};
                         spd = randf(0.1f, 0.2f);
 #if VERSION <= VERSION_DEMO_JP
                         angle = 6.2831855f * dir2 / 360.0f;
@@ -2148,10 +2139,6 @@ void ext_fan_main(void) {
     psndSFX_pos(fan_wp->sfxId, &target);
     psndSFX_vol(fan_wp->sfxId, fan_wp->vol * fan_wp->count / fan_wp->num);
 }
-
-// FAKE: placed in .rodata; without it the object changes
-static __declspec(section ".rodata") Vec fan_zero = {0.0f, 0.0f, 0.0f};
-#pragma opt_propagation reset
 
 /**
  * Loop spawned while the fans mob Mario (GF(10) set): every 2 to 7 s a fan's cry for Gonzales (stg3_tou_236 to
@@ -2318,10 +2305,6 @@ static void ext_fan_dispent(void) {
     dispEntry(CAMERA_3D, 0.0f, DISP_MODE_ALPHA_TEST, fan_disp, NULL);
 }
 
-// Kept (pattern): propagation and lifetimes off for the extdrv and depthDisp functions of bom_01, eki_00, gor_10,
-// rsh_05, rsh_06, tik_05 and tou_02 (one half is a -opt file flag where configure.py sets it); the target needs it
-// and no natural form was found (cleanup_notes/mweppc_pilot.md, pragma review rels).
-#pragma opt_propagation off
 /**
  * Checks whether a fan is knocked away while Mario's Y is at most zero: returns 1 during hammer motion after
  * more than 10 callback updates, when the fan is within 35 of the point 35 units ahead,
@@ -2372,7 +2355,6 @@ s32 check_hammer(Fan* fan) {
     }
     return 0;
 }
-#pragma opt_propagation reset
 
 /** Script helper: args[0] receives the walking-fan count; retail excludes flagged anchors, demos include the hidden Mario anchor. */
 static s32 evt_end_count(EventEntry* event, BOOL isFirstCall) {

@@ -659,12 +659,6 @@ static void moamoa_jump(ExtdrvPose* pose, Moamoa* moa, f32 x, f32 y, f32 z, f32 
     pose->flags &= ~EXT_POSE_FLAG_NO_SHADOW;
 }
 
-// Kept (pattern): propagation and lifetimes off for the extdrv and depthDisp functions of bom_01, eki_00, gor_10,
-// rsh_05, rsh_06, tik_05 and tou_02 (one half is a -opt file flag where configure.py sets it); the target needs it
-// and no natural form was found (cleanup_notes/mweppc_pilot.md, pragma review rels).
-#pragma opt_propagation off
-#pragma opt_lifetimes off
-
 /**
  * Checks whether something hits one Moamoa.
  * Returns 0 for nothing, 1 for Mario jumping on it (Mario bounces), 2 for a hammer swing or Koops's shell,
@@ -710,29 +704,25 @@ static s32 moamoa_hit_check(ExtdrvPose* pose, Moamoa* moa) {
         }
     }
     if (mario->currMotionId == MARIO_MOTION_HAMMER_2 && mario->currSubMotionId == 0x14) {
-        f32 (*mtx)[4] = *pose->mtx;
-        a = (Vec){mtx[0][3], mtx[1][3], mtx[2][3]};
+        a = (Vec){(*pose->mtx)[0][3], (*pose->mtx)[1][3], (*pose->mtx)[2][3]};
         if (PSVECDistance(&mario->position, &a) < 65.0f) {
             return 2;
         }
     }
     if (wp->breathDir >= 0.0f) {
-        f32 (*mtx)[4] = *pose->mtx;
-        b = (Vec){mtx[0][3], mtx[1][3], mtx[2][3]};
+        b = (Vec){(*pose->mtx)[0][3], (*pose->mtx)[1][3], (*pose->mtx)[2][3]};
         if (PSVECDistance(&wp->breathPos, &b) < 30.0f) {
             return 3;
         }
     }
     if (nokonokoGetStatus(partyGetPtr(0)) == NOKONOKO_STATUS_SHELL_OUT) {
-        f32 (*mtx)[4] = *pose->mtx;
-        c = (Vec){mtx[0][3], mtx[1][3], mtx[2][3]};
+        c = (Vec){(*pose->mtx)[0][3], (*pose->mtx)[1][3], (*pose->mtx)[2][3]};
         if (PSVECDistance(&partyGetPtr(0)->position, &c) < 30.0f) {
             return 2;
         }
     }
     if (partyGetPtr(0)->currentMemberId == PARTY_BOBBERY && partyGetPtr(0)->useMotionId == 0x46) {
-        f32 (*mtx)[4] = *pose->mtx;
-        d = (Vec){mtx[0][3], mtx[1][3], mtx[2][3]};
+        d = (Vec){(*pose->mtx)[0][3], (*pose->mtx)[1][3], (*pose->mtx)[2][3]};
         if (PSVECDistance(&partyGetPtr(0)->position, &d) < 50.0f) {
             return 4;
         }
@@ -743,10 +733,7 @@ static s32 moamoa_hit_check(ExtdrvPose* pose, Moamoa* moa) {
     if (PSVECDistance(&e, &f) < range) {
         (*pose->mtx)[0][3] = moa->lastX;
         (*pose->mtx)[2][3] = moa->lastZ;
-        {
-            f32 (*mtx)[4] = *pose->mtx;
-            f = (Vec){mtx[0][3], mtx[1][3], mtx[2][3]};
-        }
+        f = (Vec){(*pose->mtx)[0][3], (*pose->mtx)[1][3], (*pose->mtx)[2][3]};
         dist = PSVECDistance(&e, &f);
         if (dist < range) {
             angle = angleABf(mario->position.x, mario->position.z, (*pose->mtx)[0][3], (*pose->mtx)[2][3]);
@@ -762,6 +749,10 @@ static s32 moamoa_hit_check(ExtdrvPose* pose, Moamoa* moa) {
     return 0;
 }
 
+// Kept (pattern): propagation and lifetimes off for ext_moamoa_main (eki_00, rsh_05, rsh_06) and bom_01's ext_main;
+// the target needs it and no natural form was found (cleanup_notes/bf/T1/log.md).
+#pragma opt_propagation off
+#pragma opt_lifetimes off
 // FAKE: placed in .rodata; without it the object changes
 __declspec(section ".rodata") static Vec moamoa_zero_vec = {0.0f, 0.0f, 0.0f};
 

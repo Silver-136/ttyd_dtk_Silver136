@@ -577,15 +577,6 @@ static f32 randf(f32 min, f32 max) {
     return r * (max - min) + min;
 }
 
-// Kept (pattern): propagation and lifetimes off for the extdrv and depthDisp functions of bom_01, eki_00, gor_10,
-// rsh_05, rsh_06, tik_05 and tou_02 (one half is a -opt file flag where configure.py sets it); the target needs it
-// and no natural form was found (cleanup_notes/mweppc_pilot.md, pragma review rels).
-#pragma opt_lifetimes off
-// FAKE: placed in .rodata (this and the next two Vecs); without it the object changes
-__declspec(section ".rodata") static Vec ext_moamoa_t0 = {0.0f, 0.0f, 10.0f};
-__declspec(section ".rodata") static Vec ext_moamoa_t1 = {0.0f, 0.0f, 10.0f};
-__declspec(section ".rodata") static Vec ext_moamoa_t2 = {0.0f, 0.0f, 10.0f};
-
 /**
  * Ext-pose init callback for the Smorg swarm (registered by evt_moamoa_init):
  * allocates the work area and one Moamoa per pose, scatters them randomly around the first swarm target,
@@ -601,9 +592,9 @@ static void ext_moamoa_init(void) {
 
     wp = _mapAlloc(sizeof(MoamoaWork));
     memset(wp, 0, sizeof(MoamoaWork));
-    wp->target[0] = ext_moamoa_t0;
-    wp->target[1] = ext_moamoa_t1;
-    wp->target[2] = ext_moamoa_t2;
+    wp->target[0] = (Vec){0.0f, 0.0f, 10.0f};
+    wp->target[1] = (Vec){0.0f, 0.0f, 10.0f};
+    wp->target[2] = (Vec){0.0f, 0.0f, 10.0f};
     wp->count = extGetPoseNum();
     wp->moa = _mapAlloc(wp->count * sizeof(Moamoa));
     memset(wp->moa, 0, wp->count * sizeof(Moamoa));
@@ -635,7 +626,6 @@ static void ext_moamoa_init(void) {
         ext_moamoa_main();
     }
 }
-#pragma opt_lifetimes reset
 
 /**
  * Draw callback for the swarm: loads the ext-pose render state, vertices, textures and TEV, draws all poses and,
@@ -732,11 +722,6 @@ static void moamoa_jump(ExtdrvPose* pose, Moamoa* moa, f32 x, f32 y, f32 z, f32 
 }
 #pragma dont_inline reset
 
-// Kept (pattern): propagation and lifetimes off for the extdrv and depthDisp functions of bom_01, eki_00, gor_10,
-// rsh_05, rsh_06, tik_05 and tou_02 (one half is a -opt file flag where configure.py sets it); the target needs it
-// and no natural form was found (cleanup_notes/mweppc_pilot.md, pragma review rels).
-#pragma opt_lifetimes off
-
 /**
  * Tests one Smorg against Mario and the partners:
  * returns 1 when Mario lands on it, 2 when a hammer swing or a Koops shell hits it,
@@ -745,7 +730,6 @@ static void moamoa_jump(ExtdrvPose* pose, Moamoa* moa, f32 x, f32 y, f32 z, f32 
  */
 static s32 moamoa_hit_check(ExtdrvPose* pose, Moamoa* moa) {
     MarioWork* mario = marioGetPtr();
-    CameraEntry* cam;
     f32 range;
     f32 dist;
     f32 angle;
@@ -777,10 +761,7 @@ static s32 moamoa_hit_check(ExtdrvPose* pose, Moamoa* moa) {
     }
     if (mario->currMotionId == MARIO_MOTION_HAMMER && wp->hammerFrames > 10) {
         f32 hammerRad;
-        f32 t;
-        cam = camGetPtr(CAMERA_3D);
-        t = cam->viewYaw;
-        hammerRad = 6.2831855f * reviseAngle((f32)(mario->displayDirection - 90.0f) + t) / 360.0f;
+        hammerRad = 6.2831855f * reviseAngle(mario->displayDirection - 90.0f + camGetPtr(CAMERA_3D)->viewYaw) / 360.0f;
         angle = 35.0f * moa_sin(hammerRad) + mario->position.x;
         dist = mario->position.z - 35.0f * moa_cos(hammerRad);
         if (distABf((*pose->mtx)[0][3], (*pose->mtx)[2][3], angle, dist) < 35.0f) {
@@ -788,29 +769,25 @@ static s32 moamoa_hit_check(ExtdrvPose* pose, Moamoa* moa) {
         }
     }
     if (mario->currMotionId == MARIO_MOTION_HAMMER_2 && mario->currSubMotionId == 0x14) {
-        f32 (*m)[4] = *pose->mtx;
-        a = (Vec){m[0][3], m[1][3], m[2][3]};
+        a = (Vec){(*pose->mtx)[0][3], (*pose->mtx)[1][3], (*pose->mtx)[2][3]};
         if (PSVECDistance(&mario->position, &a) < 65.0f) {
             return 2;
         }
     }
     if (wp->breathDir >= 0.0f) {
-        f32 (*m)[4] = *pose->mtx;
-        b = (Vec){m[0][3], m[1][3], m[2][3]};
+        b = (Vec){(*pose->mtx)[0][3], (*pose->mtx)[1][3], (*pose->mtx)[2][3]};
         if (PSVECDistance(&wp->breathPos, &b) < 30.0f) {
             return 3;
         }
     }
     if (nokonokoGetStatus(partyGetPtr(0)) == NOKONOKO_STATUS_SHELL_OUT) {
-        f32 (*m)[4] = *pose->mtx;
-        c = (Vec){m[0][3], m[1][3], m[2][3]};
+        c = (Vec){(*pose->mtx)[0][3], (*pose->mtx)[1][3], (*pose->mtx)[2][3]};
         if (PSVECDistance(&partyGetPtr(0)->position, &c) < 30.0f) {
             return 2;
         }
     }
     if (partyGetPtr(0)->currentMemberId == PARTY_BOBBERY && partyGetPtr(0)->useMotionId == 0x46) {
-        f32 (*m)[4] = *pose->mtx;
-        d = (Vec){m[0][3], m[1][3], m[2][3]};
+        d = (Vec){(*pose->mtx)[0][3], (*pose->mtx)[1][3], (*pose->mtx)[2][3]};
         if (PSVECDistance(&partyGetPtr(0)->position, &d) < 50.0f) {
             return 4;
         }
@@ -821,10 +798,7 @@ static s32 moamoa_hit_check(ExtdrvPose* pose, Moamoa* moa) {
     if (PSVECDistance(&e, &f) < range) {
         (*pose->mtx)[0][3] = moa->lastX;
         (*pose->mtx)[2][3] = moa->lastZ;
-        {
-            f32 (*m)[4] = *pose->mtx;
-            f = (Vec){m[0][3], m[1][3], m[2][3]};
-        }
+        f = (Vec){(*pose->mtx)[0][3], (*pose->mtx)[1][3], (*pose->mtx)[2][3]};
         dist = PSVECDistance(&e, &f);
         if (dist < range) {
             angle = angleABf(mario->position.x, mario->position.z, (*pose->mtx)[0][3], (*pose->mtx)[2][3]);
@@ -841,6 +815,10 @@ static s32 moamoa_hit_check(ExtdrvPose* pose, Moamoa* moa) {
     return 0;
 }
 
+// Kept (pattern): propagation and lifetimes off for ext_moamoa_main (eki_00, rsh_05, rsh_06) and bom_01's ext_main;
+// the target needs it and no natural form was found (cleanup_notes/bf/T1/log.md).
+#pragma opt_propagation off
+#pragma opt_lifetimes off
 // FAKE: placed in .rodata; without it the object changes
 __declspec(section ".rodata") static Vec moamoa_zero_vec = {0.0f, 0.0f, 0.0f};
 
@@ -1375,6 +1353,7 @@ static void ext_moamoa_main(void) {
         }
     }
 }
+#pragma opt_propagation reset
 #pragma opt_lifetimes reset
 static void ext_moamoa_dispent(void) {
     if (wp->flags & MOAMOA_WORK_FLAG_ACTIVE) {

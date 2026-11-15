@@ -87,10 +87,6 @@ void tegami_delete(void) {
     }
 }
 
-// Kept (pattern): propagation and lifetimes off for the extdrv and depthDisp functions of bom_01, eki_00, gor_10,
-// rsh_05, rsh_06, tik_05 and tou_02 (one half is a -opt file flag where configure.py sets it); the target needs it
-// and no natural form was found (cleanup_notes/mweppc_pilot.md, pragma review rels).
-#pragma opt_propagation off
 /**
  * Draw callback of the wake-up blur: copies the frame to a texture
  * and samples it eight times around a circle of radius GW(0)/10000 in texture coordinates, each at 1/8 weight,
@@ -106,8 +102,6 @@ static void depthDisp(CameraId camera, void* param) {
     f32 s;
     f32 c;
     s32 i;
-    BOOL first;
-    GXTevColorArg carg;
 
     GXSetTexCopySrc(0, 0, 608, 480);
     GXSetTexCopyDst(608, 480, GX_TF_RGB565, GX_FALSE);
@@ -136,10 +130,8 @@ static void depthDisp(CameraId camera, void* param) {
         GXSetTevOrder((GXTevStageID)i, (GXTexCoordID)i, GX_TEXMAP0, GX_COLOR_NULL);
         GXSetTevColorOp((GXTevStageID)i, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
         GXSetTevAlphaOp((GXTevStageID)i, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-        first = !i;
-        carg = first ? GX_CC_ZERO : GX_CC_CPREV;
-        GXSetTevColorIn((GXTevStageID)i, GX_CC_ZERO, GX_CC_TEXC, GX_CC_KONST, carg);
-        GXSetTevAlphaIn((GXTevStageID)i, GX_CA_ZERO, GX_CA_TEXA, GX_CA_KONST, first ? GX_CA_ZERO : GX_CA_APREV);
+        GXSetTevColorIn((GXTevStageID)i, GX_CC_ZERO, GX_CC_TEXC, GX_CC_KONST, !i ? GX_CC_ZERO : GX_CC_CPREV);
+        GXSetTevAlphaIn((GXTevStageID)i, GX_CA_ZERO, GX_CA_TEXA, GX_CA_KONST, !i ? GX_CA_ZERO : GX_CA_APREV);
         GXSetTevSwapMode((GXTevStageID)i, GX_TEV_SWAP0, GX_TEV_SWAP0);
     }
     GXLoadPosMtxImm(cam->view, GX_PNMTX0);
@@ -162,7 +154,6 @@ static void depthDisp(CameraId camera, void* param) {
     GXEnd();
     sysWaitDrawSync();
 }
-#pragma opt_propagation reset
 
 /** Script helper that queues depthDisp every frame (priority 1200). Never finishes. */
 static USER_FUNC(depth) {

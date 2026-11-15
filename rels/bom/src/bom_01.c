@@ -925,12 +925,6 @@ EVT_BEGIN(evt_bom_01_karakara)
     RETURN
 EVT_END()
 
-// Kept (pattern): propagation and lifetimes off for the extdrv and depthDisp functions of bom_01, eki_00, gor_10,
-// rsh_05, rsh_06, tik_05 and tou_02 (one half is a -opt file flag where configure.py sets it); the target needs it
-// and no natural form was found (cleanup_notes/mweppc_pilot.md, pragma review rels).
-#pragma opt_propagation off
-#pragma opt_lifetimes off
-
 /**
  * Extension-draw init for the 1000-Bob-omb crowd of the cannon scene:
  * allocates BomWork and scatters every sprite on a ring 500 to 900 units from the origin in the "R_1" pose.
@@ -963,8 +957,6 @@ static void ext_init(void) {
         pose_change(i, "R_1");
     }
 }
-#pragma opt_propagation reset
-#pragma opt_lifetimes reset
 
 /** Draw callback for the crowd sprites: loads render mode, vertices, texture and TEV, then draws all poses. */
 static void ext_disp(CameraId camera, void* param) {
@@ -1006,9 +998,8 @@ static void jump(s32 i, s32 next, f32 x, f32 y, f32 z, f32 speed, f32 gravity) {
     }
 }
 
-// Kept (pattern): propagation and lifetimes off for the extdrv and depthDisp functions of bom_01, eki_00, gor_10,
-// rsh_05, rsh_06, tik_05 and tou_02 (one half is a -opt file flag where configure.py sets it); the target needs it
-// and no natural form was found (cleanup_notes/mweppc_pilot.md, pragma review rels).
+// Kept (pattern): propagation and lifetimes off for ext_moamoa_main (eki_00, rsh_05, rsh_06) and bom_01's ext_main;
+// the target needs it and no natural form was found (cleanup_notes/bf/T1/log.md).
 #pragma opt_propagation off
 #pragma opt_lifetimes off
 
@@ -2537,12 +2528,6 @@ static s32 taihou_r(EventEntry* event, BOOL isFirstCall) {
     return EVT_RETURN_DONE;
 }
 
-// Kept (pattern): propagation and lifetimes off for the extdrv and depthDisp functions of bom_01, eki_00, gor_10,
-// rsh_05, rsh_06, tik_05 and tou_02 (one half is a -opt file flag where configure.py sets it); the target needs it
-// and no natural form was found (cleanup_notes/mweppc_pilot.md, pragma review rels).
-#pragma opt_propagation off
-#pragma opt_lifetimes off
-
 /**
  * Full-screen blur: copies the frame buffer into a texture and redraws it as eight overlapping copies,
  * each shifted by GW(5)/10000 of the screen in a ring (45 degrees apart) and blended at 1/8 strength.
@@ -2558,8 +2543,6 @@ static void depthDisp(CameraId camera, void* param) {
     f32 s;
     f32 c;
     s32 i;
-    BOOL first;
-    GXTevColorArg carg;
 
     GXSetTexCopySrc(0, 0, 608, 480);
     GXSetTexCopyDst(608, 480, GX_TF_RGB565, GX_FALSE);
@@ -2588,10 +2571,8 @@ static void depthDisp(CameraId camera, void* param) {
         GXSetTevOrder((GXTevStageID)i, (GXTexCoordID)i, GX_TEXMAP0, GX_COLOR_NULL);
         GXSetTevColorOp((GXTevStageID)i, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
         GXSetTevAlphaOp((GXTevStageID)i, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-        first = !i;
-        carg = first ? GX_CC_ZERO : GX_CC_CPREV;
-        GXSetTevColorIn((GXTevStageID)i, GX_CC_ZERO, GX_CC_TEXC, GX_CC_KONST, carg);
-        GXSetTevAlphaIn((GXTevStageID)i, GX_CA_ZERO, GX_CA_TEXA, GX_CA_KONST, first ? GX_CA_ZERO : GX_CA_APREV);
+        GXSetTevColorIn((GXTevStageID)i, GX_CC_ZERO, GX_CC_TEXC, GX_CC_KONST, !i ? GX_CC_ZERO : GX_CC_CPREV);
+        GXSetTevAlphaIn((GXTevStageID)i, GX_CA_ZERO, GX_CA_TEXA, GX_CA_KONST, !i ? GX_CA_ZERO : GX_CA_APREV);
         GXSetTevSwapMode((GXTevStageID)i, GX_TEV_SWAP0, GX_TEV_SWAP0);
     }
     GXLoadPosMtxImm(cam->view, GX_PNMTX0);
@@ -2614,8 +2595,6 @@ static void depthDisp(CameraId camera, void* param) {
     GXEnd();
     sysWaitDrawSync();
 }
-#pragma opt_propagation reset
-#pragma opt_lifetimes reset
 
 /** Script helper: queues depthDisp on the 2D camera and keeps blocking, so the blur runs every frame. */
 static s32 depth(EventEntry* event, BOOL isFirstCall) {
