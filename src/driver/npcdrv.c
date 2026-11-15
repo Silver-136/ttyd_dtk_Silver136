@@ -592,12 +592,6 @@ s32 npcEntry(const char* description, const char* animName) {
     return i;
 }
 
-#if VERSION < VERSION_US
-
-/** Zero vector left over in the NPC driver's constants; nothing reads it (its place differs by version). */
-static const Vec sZeroVec3 = {0.0f, 0.0f, 0.0f};
-#endif
-
 /** Looks up an enemy or NPC type in npcTribe by its Japanese name (nameJp); NULL if none matches. */
 NpcTribeInfo* npcGetTribe(const char* tribeName) {
     NpcTribeInfo* tribe;
@@ -1096,12 +1090,6 @@ void npcMain(void) {
     fbat->sandersBombTrigger = 0;
 }
 
-#if VERSION >= VERSION_US
-
-/** Zero vector left over in the NPC driver's constants; nothing reads it (its place differs by version). */
-static const Vec sZeroVec3 = {0.0f, 0.0f, 0.0f};
-#endif
-
 /**
  * Finds a live NPC by name in the current list.
  * If none matches it returns the slot past the end of the list, so callers must know the NPC exists.
@@ -1559,6 +1547,10 @@ NpcEntry* npcNearDistCheck(f32 x, f32 y, f32 z, f32 range) {
     total = wp->total;
     for (i = 0; i < total; i++, entry++) {
         if (entry->flags & NPC_FLAG_IN_USE) {
+            // unused: nothing reads it, but its zero template is in the retail .rodata (JP demo map @1204, 462
+            // numbers after npcEntry's @742: the numbering falls in this function; one zero for every version)
+            Vec zero = {0.0f, 0.0f, 0.0f};
+
             dx = x - entry->position.x;
             dz = z - entry->position.z;
             dy = y - entry->position.y;
