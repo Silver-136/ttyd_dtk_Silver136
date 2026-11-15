@@ -381,6 +381,7 @@ s32 animPoseEntry(const char* animName, s32 type);
 s32 animPaperPoseEntry(const char* animName, s32 type);
 
 BOOL animEffectAsync(const char* animName, u32 group);
+void animPose_ResetTime(AnimationPose* pose);
 s32 getAnimDataId(AnimationPose* pose, const char* name);
 
 void animPosePeraOn(s32 poseId);

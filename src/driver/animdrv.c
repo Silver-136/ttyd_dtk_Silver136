@@ -736,6 +736,16 @@ BOOL animEffectAsync(const char* animName, u32 group) {
     return ret;
 }
 
+/** Restarts pose's animation clock at the current time: frame 0, no keyframe passed, no loop time. */
+// Original name and size (0xbc) from the JP demo map (UNUSED there: every call is inlined).
+void animPose_ResetTime(AnimationPose* pose) {
+    pose->localTime = animTimeGetTime(pose->type);
+    pose->lastFrameZero = -1;
+    pose->lastFrameTime = 0.0f;
+    pose->curKeyValue = 0;
+    pose->loopTime = 0.0f;
+}
+
 /* An anim name parameter holds a name (an address in main memory, negative as
  * an s32) or an anim index (non-negative). */
 #define ANIM_NAME_INDEX(name) ((s32)(AddrWord)(name))
@@ -834,11 +844,7 @@ void animPoseSetAnim(s32 poseId, const char* animName, BOOL reset) {
         if (pose->paperId != -1 && pose->flags & ANIM_POSE_FLAG_PAPER_GROUP) {
             pose->flags |= ANIM_POSE_FLAG_PAPER_ANIM_CHANGED;
         }
-        pose->localTime = animTimeGetTime(pose->type);
-        pose->lastFrameZero = -1;
-        pose->lastFrameTime = 0.0f;
-        pose->curKeyValue = 0;
-        pose->loopTime = 0.0f;
+        animPose_ResetTime(pose);
     }
 }
 
@@ -3185,11 +3191,7 @@ void animPoseDrawMtx(s32 poseId, Mtx matrix, s32 xluMode, f32 rotY, f32 scale) {
                 // FAKE: the inlined animPoseSetAnim (its animName param re-reads the paper anim id) adds the coalesced param copy the target has (p2 r29 / xluMode r28)
                 animPoseSetAnim(pose->paperId, ANIM_INDEX_NAME(pose->paperAnimIdx), FALSE);
             }
-            paper->localTime = animTimeGetTime(paper->type);
-            paper->lastFrameZero = -1;
-            paper->lastFrameTime = 0.0f;
-            paper->curKeyValue = 0;
-            paper->loopTime = 0.0f;
+            animPose_ResetTime(paper);
             paper->localTime = pose->localTimeInit;
             animPoseMain(pose->paperId);
         }
@@ -3551,11 +3553,7 @@ void animPoseDisp_MakeExtTexture(const char* group, const char* anim, f32 frame,
     backup = *pose;
     pose->paperId = -1;
     animPoseSetAnim(i, anim, FALSE);
-    pose->localTime = animTimeGetTime(pose->type);
-    pose->lastFrameZero = -1;
-    pose->lastFrameTime = 0.0f;
-    pose->curKeyValue = 0;
-    pose->loopTime = 0.0f;
+    animPose_ResetTime(pose);
     animPoseSetLocalTime(i, frame);
     animPoseMain(i);
 
