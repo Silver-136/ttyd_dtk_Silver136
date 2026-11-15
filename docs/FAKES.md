@@ -192,7 +192,6 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Demos | src/mario/mario_hit.c | marioSearchGroundRoll | dead guard keeps rx/rz their own webs; the 24-byte zero ray copied from a volatile template | see comment |
 | Demos | src/mario/mario_hit.c | marioChkLandon2 | the 24-byte zero ray copied from a volatile template; a dead re-definition of gz at the loop end | `(LandonRay){0}` adds a .rodata object; see comment |
 | Both | src/mario/mario_kemuri.c | mario_kemuri | no-op self-assignment as the then-branch; without it the branch is laid out differently | see comment |
-| Both | src/motion/mot_hammer.c | mot_hammer | spare copy of kind in its own block; using kind directly changes the object | see comment |
 | Both | src/motion/mot_plane.c | planeDead4 | stand-in that nothing calls; it only places its 4.0f literal in this object's constant pool | see comment |
 | Both | src/motion/mot_roll.c | marioRollStrippedPool | stand-in that nothing calls; it only places these literals in this object's constant pool | see comment |
 | Both | src/party/party_cloud.c | partyCloudStrippedPool | stand-in that nothing calls; it only puts 0.0f, 70.0f, 180.0f and the int-to-float conversion constant in this object's constant pool | see comment |

@@ -26,7 +26,7 @@
 #include "libc_decls.h"
 
 
-static HitEntry* hitEstimate(s32* out);
+static HitEntry* hitEstimate(int* out);
 
 // hitEstimate's *out: what the swing will hit; it picks the pose, the effect and the swing length.
 enum {
@@ -259,7 +259,7 @@ static f32 hammerSwingDir2(f32 a) {
  */
 void mot_hammer(void) {
     MarioWork* mario = marioGetPtr();
-    s32 kind;
+    int kind;
     f32 px, pz;
     s32 n;
     f32 py, ez;
@@ -301,11 +301,7 @@ void mot_hammer(void) {
                 break;
         }
         if (kind != HAMMER_HIT_NONE) {
-            {
-                // FAKE: spare copy of kind in its own block; using kind directly changes the object
-                s32 k = kind;
-                mario->mot.hammer.hitFrames = k == HAMMER_HIT_OVERHEAD ? 3 : k;
-            }
+            mario->mot.hammer.hitFrames = kind == HAMMER_HIT_OVERHEAD ? 3 : kind;
             mario->flags |= MARIO_FLAG_HAMMER_HIT_WALL;
         } else {
             mario->flags &= ~MARIO_FLAG_HAMMER_HIT_WALL;
@@ -781,7 +777,7 @@ void mot_ham2_post(void) {
  * *out gets the hit kind (0 nothing, 4/5/6 a wall or object at high, middle or low height,
  * 7 something just above Mario's head height) that picks the swing pose, effect and length.
  */
-static HitEntry* hitEstimate(s32* out) {
+static HitEntry* hitEstimate(int* out) {
     MarioWork* mario;
     HitCheckQuery q;
     Vec pos;
