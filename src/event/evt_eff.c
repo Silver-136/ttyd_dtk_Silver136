@@ -932,16 +932,17 @@ USER_FUNC(evt_eff_fukidashi) {
     EffectEntry* entry = NULL;
     NpcEntry* npc;
     PartyEntry* party;
-    f32 h;
     f32 yy;
     f32 ww;
 
     switch (mode) {
         case FUKIDASHI_AT_MARIO:
-            h = marioGetPtr()->wPlayerCollisionBox.y;
-            yy = 2.0f * h / 3.0f;
-            ww = h / 3.0f;
-            entry = effFukidashiEntry(type, number, (NpcEntry*)FUKIDASHI_MARIO, 0.0f, yy, 0.0f, ww, angle, duration);
+            {
+                MarioWork* mario = marioGetPtr();
+                yy = 2.0f * mario->wPlayerCollisionBox.y / 3.0f;
+                ww = mario->wPlayerCollisionBox.y / 3.0f;
+                entry = effFukidashiEntry(type, number, (NpcEntry*)FUKIDASHI_MARIO, 0.0f, yy, 0.0f, ww, angle, duration);
+            }
             break;
         case FUKIDASHI_AT_NPC:
             npc = !strcmp(npcName, "me") ? event->ownerNPC : npcNameToPtr(npcName);
@@ -964,22 +965,20 @@ USER_FUNC(evt_eff_fukidashi) {
                         yy = 30.0f;
                     }
                     ww = party->height / 3.0f;
-#else
-                h = party->height;
-                {
-                    f32 yy = 2.0f * h / 3.0f;
-                    f32 ww = h / 3.0f;
-#endif
                     entry = effFukidashiEntry(type, number, (NpcEntry*)FUKIDASHI_PARTY, 0.0f, yy, 0.0f, ww, angle, duration);
                 }
+#else
+                yy = 2.0f * party->height / 3.0f;
+                ww = party->height / 3.0f;
+                entry = effFukidashiEntry(type, number, (NpcEntry*)FUKIDASHI_PARTY, 0.0f, yy, 0.0f, ww, angle, duration);
+#endif
             }
             break;
         case FUKIDASHI_AT_FOLLOWER:
             party = partyGetPtr(marioGetExtraPartyId());
             if (party) {
-                h = party->height;
-                yy = 2.0f * h / 3.0f;
-                ww = h / 3.0f;
+                yy = 2.0f * party->height / 3.0f;
+                ww = party->height / 3.0f;
                 entry = effFukidashiEntry(type, number, (NpcEntry*)FUKIDASHI_EXTRA_PARTY, 0.0f, yy, 0.0f, ww, angle, duration);
             }
             break;

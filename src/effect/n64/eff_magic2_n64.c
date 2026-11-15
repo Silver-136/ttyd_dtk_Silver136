@@ -183,11 +183,11 @@ static void effMagic2Main(EffectEntry* effect) {
     if (w->type == 1) {
         f32 sn = (f32)sin(6.2831855f * (f32)(life * 10) / 360.0f);
         f32 st = w->scaleTarget;
-        w->scale = 0.4f * ((st * (0.1f * sn) + st) - w->scale) + w->scale;
+        w->scale += 0.4f * ((st * (0.1f * sn) + st) - w->scale);
     } else {
         f32 sn = (f32)sin(6.2831855f * (f32)(life * 10) / 360.0f);
         f32 st = w->scaleTarget;
-        w->scale = 0.3f * ((st * (0.1f * sn) + st) - w->scale) + w->scale;
+        w->scale += 0.3f * ((st * (0.1f * sn) + st) - w->scale);
     }
     {
         Vec tmp2 = {0.0f, 0.0f, 0.0f};

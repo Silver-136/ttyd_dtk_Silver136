@@ -57,7 +57,11 @@ static void effSyuryouMain(EffectEntry* effect) {
 
     position = (Vec){ work->position.x, work->position.y, work->position.z };
     type = work->type;
-    inBattle = gp->inBattle != 0;
+    if (gp->inBattle) {
+        inBattle = 1;
+    } else {
+        inBattle = 0;
+    }
 
     switch (type) {
         case 0:
