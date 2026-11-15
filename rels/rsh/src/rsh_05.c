@@ -260,8 +260,8 @@ static void moamoa_pose_main(void) {
 }
 #pragma dont_inline reset
 
-// Inlined into the S_1 callers; the D_1 callers below sit in the opt_propagation off region and call it out of
-// line, as in the target (the JP demo REL map lists it as a function and names its table group_tbl$582).
+// Inlined into the S_1 callers and called out of line by the D_1 callers below, as in the target (the JP demo REL
+// map lists it as a function and names its table group_tbl$582).
 static void moamoa_pose_change(Moamoa* moa, const char* model, const char* anim) {
     static const char* group_tbl[][2] = {
         {"c_n_moa_a", "S_1"},

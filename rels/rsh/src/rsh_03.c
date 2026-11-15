@@ -43,7 +43,6 @@
 #include "evt/evt_shop.h"
 #include "data_tables.h"
 
-
 static USER_FUNC(fire);
 static USER_FUNC(iri_22_make_item_tbl);
 static USER_FUNC(mario_flag);

@@ -31,7 +31,6 @@
 #define RANKING_ROW(f) (f)
 #endif
 
-
 static USER_FUNC(evt_yuuranking_main_func);
 USER_FUNC(yuuranking_get_monte);
 s32 yuu_kesan(s32 type, s32 score, s32 bonus, s32 mul, s32 max);

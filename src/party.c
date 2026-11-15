@@ -2064,12 +2064,6 @@ s32 partyRideChk(PartyEntry* party) {
     return ret;
 }
 
-/** Starts the ride mode at its first step. */
-// Original name and size (0xc) from the JP demo map (UNUSED there: every call is inlined).
-static void partyRideInit(PartyEntry* party) {
-    party->motionStep = 0;
-}
-
 /** Ride run mode (11): partyRideInit on entering it (JP and later also force slit mode off), then partyRideMain. */
 // Original name and size (0x48) from the JP demo map (UNUSED there: every call is inlined).
 static void party_ride(PartyEntry* party) {
@@ -2082,6 +2076,12 @@ static void party_ride(PartyEntry* party) {
 #endif
     }
     partyRideMain(party);
+}
+
+/** Starts the ride mode at its first step. */
+// Original name and size (0xc) from the JP demo map (UNUSED there: every call is inlined).
+static void partyRideInit(PartyEntry* party) {
+    party->motionStep = 0;
 }
 
 /**

@@ -374,6 +374,8 @@ static inline void escape_r(ExtdrvPose* pose, Chorobon* chb, f32 x, f32 y, f32 z
     escape(pose, chb, chb->state, x, y, z, rs, 1.0f, 1.2f, rg, 0.8f, 0.8f);
 }
 
+// Kept (pattern): lifetimes off for this unit (the -opt nolifetimes flag in configure.py, as in tou_02); with
+// lifetimes on ext_main takes other registers and no natural form was found (cleanup_notes/bf/T7/table.txt).
 /**
  * Per-frame update of the Fuzzy swarm: idle Fuzzies hop around randomly inside the room,
  * fleeing ones hop away from Mario (with an occasional escape sound), hopping ones follow their arc,
