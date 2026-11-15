@@ -168,28 +168,21 @@ static inline f32 hamDir(MarioWork* mario) {
     return r;
 }
 
-static const char isS1_str[14];
-static const char isB1_str[17];
-static const char isS2_str[14];
-static const char isB2_str[17];
-static const char isS3_str[14];
-static const char isB3_str[17];
-
 /**
  * 1 if the hammer block mobj obj can be broken with Mario's current hammer level,
  * so the swing goes through instead of bouncing off.
  */
 static inline s32 chkBlock(MapObjectEntry* obj) {
     s32 ok = 0;
-    if (strcmp(obj->animName, isS1_str) == 0 || strcmp(obj->animName, isB1_str) == 0) {
+    if (strcmp(obj->animName, "MOBJ_Lv1Block") == 0 || strcmp(obj->animName, "MOBJ_Lv1BigBlock") == 0) {
         if (pouchGetPtr()->hammerLevel >= 1) {
             ok = 1;
         }
-    } else if (strcmp(obj->animName, isS2_str) == 0 || strcmp(obj->animName, isB2_str) == 0) {
+    } else if (strcmp(obj->animName, "MOBJ_Lv2Block") == 0 || strcmp(obj->animName, "MOBJ_Lv2BigBlock") == 0) {
         if (pouchGetPtr()->hammerLevel >= 2) {
             ok = 1;
         }
-    } else if (strcmp(obj->animName, isS3_str) == 0 || strcmp(obj->animName, isB3_str) == 0) {
+    } else if (strcmp(obj->animName, "MOBJ_Lv3Block") == 0 || strcmp(obj->animName, "MOBJ_Lv3BigBlock") == 0) {
         if (pouchGetPtr()->hammerLevel >= 3) {
             ok = 1;
         }
@@ -937,13 +930,6 @@ static const char* not_fullswing_mobj[] = {
     NULL,
 };
 #endif
-static const char isS1_str[] = "MOBJ_Lv1Block";
-static const char isB1_str[] = "MOBJ_Lv1BigBlock";
-static const char isS2_str[] = "MOBJ_Lv2Block";
-static const char isB2_str[] = "MOBJ_Lv2BigBlock";
-static const char isS3_str[] = "MOBJ_Lv3Block";
-static const char isB3_str[] = "MOBJ_Lv3BigBlock";
-
 /**
  * Casts a ray from Mario's mid height along angle ang (degrees) for twice his collision width,
  * returning the wall hit and its position and normal through the pointers.
@@ -962,15 +948,15 @@ static HitEntry* hammerHitWall(f32 ang, f32* s, f32* co, f32* len, f32* hx, f32*
  */
 s32 breakableMobj(const char* name) {
     s32 ok = 0;
-    if (strcmp(name, isS1_str) == 0 || strcmp(name, isB1_str) == 0) {
+    if (strcmp(name, "MOBJ_Lv1Block") == 0 || strcmp(name, "MOBJ_Lv1BigBlock") == 0) {
         if (pouchGetPtr()->hammerLevel >= 1) {
             ok = 1;
         }
-    } else if (strcmp(name, isS2_str) == 0 || strcmp(name, isB2_str) == 0) {
+    } else if (strcmp(name, "MOBJ_Lv2Block") == 0 || strcmp(name, "MOBJ_Lv2BigBlock") == 0) {
         if (pouchGetPtr()->hammerLevel >= 2) {
             ok = 1;
         }
-    } else if (strcmp(name, isS3_str) == 0 || strcmp(name, isB3_str) == 0) {
+    } else if (strcmp(name, "MOBJ_Lv3Block") == 0 || strcmp(name, "MOBJ_Lv3BigBlock") == 0) {
         if (pouchGetPtr()->hammerLevel >= 3) {
             ok = 1;
         }
