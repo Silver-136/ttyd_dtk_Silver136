@@ -199,26 +199,6 @@ static inline void planeRoll1(MarioWork* mp, f32 rate, f32 max) {
     *p += rate * (target - *p);
 }
 
-#if VERSION >= VERSION_US
-/**
- * Height below which the camera stops following the plane down, per map:
- * tik_01, tik_19 (Rogueport Underground), mri_19 (Great Tree), las_25 (Palace of Shadow), 90 elsewhere.
- * US and later only.
- */
-static inline f32 planeCamFloor(void) {
-    if (strcmp(gp->currentMapName, "tik_01") == 0) {
-        return 30.0f;
-    } else if (strcmp(gp->currentMapName, "tik_19") == 0) {
-        return -510.0f;
-    } else if (strcmp(gp->currentMapName, "mri_19") == 0) {
-        return -230.0f;
-    } else if (strcmp(gp->currentMapName, "las_25") == 0) {
-        return -510.0f;
-    }
-    return 90.0f;
-}
-#endif
-
 /**
  * Plane Mode motion (from a plane panel): Mario jumps, spins and folds into a paper airplane,
  * then glides with the stick pitching it up and down (flyMain); A or B or a key-off lands him.
@@ -232,6 +212,9 @@ void mot_plane(void) {
     f32 y, b, c;
     Vec p;
     HitEntry* hit;
+#if VERSION >= VERSION_US
+    f32 camFloor;
+#endif
 
     mp = marioGetPtr();
     if (mp->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
@@ -347,8 +330,20 @@ void mot_plane(void) {
             break;
     }
 #if VERSION >= VERSION_US
-    // US and later: per-map floor below which the camera stops following the plane
-    if (mp->position.y < planeCamFloor()) {
+    // US and later: per-map floor below which the camera stops following the plane down:
+    // tik_01, tik_19 (Rogueport Underground), mri_19 (Great Tree), las_25 (Palace of Shadow), 90 elsewhere
+    if (strcmp(gp->currentMapName, "tik_01") == 0) {
+        camFloor = 30.0f;
+    } else if (strcmp(gp->currentMapName, "tik_19") == 0) {
+        camFloor = -510.0f;
+    } else if (strcmp(gp->currentMapName, "mri_19") == 0) {
+        camFloor = -230.0f;
+    } else if (strcmp(gp->currentMapName, "las_25") == 0) {
+        camFloor = -510.0f;
+    } else {
+        camFloor = 90.0f;
+    }
+    if (mp->position.y < camFloor) {
         mp->camShiftTargetY = __fabsf(planeData[38]);
         camFollowYOff();
 #else

@@ -1323,23 +1323,9 @@ typedef struct MapAnimJoint {
 } MapAnimJoint;
 
 /**
- * Cubic Hermite interpolation at time cur between key (t0, p0, tangent m0) and key (t1, p1, tangent m1),
- * as used by the map animation keys.
+ * Cubic Hermite interpolation of the map animation keys at time cur between key times t0 and t1:
+ * from channel a's value and out tangent to channel b's value and in tangent.
  */
-static inline f32 mapHermite(f32 cur, f32 t0, f32 t1, f32 p0, f32 m0, f32 p1, f32 m1) {
-    f32 s = cur - t0;
-    f32 dt = t1 - t0;
-    f32 t = s / (!dt ? 1e-8f : dt);
-    f32 t2 = t * t;
-    f32 t3 = t2 * t;
-
-    return p0 * (2.0f * t3 - 3.0f * t2 + 1.0f)
-        + m0 * (dt * (t3 - 2.0f * t2 + t))
-        + p1 * (-2.0f * t3 + 3.0f * t2)
-        + m1 * (dt * (t3 - t2));
-}
-
-/** mapHermite between two animation key channels: a's value and out tangent to b's value and in tangent. */
 static inline f32 mapHermiteCh(f32 cur, f32 t0, f32 t1, MapAnimKeyCh* a, MapAnimKeyCh* b) {
     f32 s = cur - t0;
     f32 dt = t1 - t0;

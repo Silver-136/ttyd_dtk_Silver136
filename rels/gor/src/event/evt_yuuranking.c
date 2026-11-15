@@ -65,6 +65,7 @@ static s32 fontlenpitch(const char* str, s32 pitch) {
 
 #if VERSION >= VERSION_US
 /** US: centered in [x, x + width], squeezed to fit width. */
+// FAKE: invented one-use inline helper (no map name); writing it out changes the code (FAKES.md)
 static inline void yuuDrawCenter(f32 x, f32 y, f32 scale, const char* msg, s32 width) {
     Mtx trans;
     Mtx scl;

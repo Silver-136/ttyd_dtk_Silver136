@@ -1086,6 +1086,7 @@ static BOOL dataCheck(void) {
 
 #if VERSION >= VERSION_DEMO_EU
 /** Byte sum of the save file header (PAL: an inline; JP and US spell the loop out in make_header). */
+// FAKE: invented one-use inline helper (no map name); writing it out changes the code (FAKES.md)
 static inline u32 header_sum(u8* data, s32 size) {
     s32 i;
     u32 sum;

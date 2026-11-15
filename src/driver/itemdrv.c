@@ -587,6 +587,7 @@ void itemModeChange(ItemEntry* entry, u16 mode) {
  * Returns the first replaceable dropped item (coin, heart, flower) with this item id,
  * so itemEntry can reuse its slot when the table is full; NULL if none.
  */
+// FAKE: invented one-use inline helper (no map name); writing it out changes the code (FAKES.md)
 static inline ItemEntry* itemFindDeletable(ItemWork* wp, s32 itemId) {
     ItemEntry* entry;
     ItemEntry* found;

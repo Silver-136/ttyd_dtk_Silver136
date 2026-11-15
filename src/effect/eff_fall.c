@@ -305,21 +305,6 @@ EffectEntry* effFallEntry(s32 type, f32 x, f32 y, f32 z, f32 width, f32 drop, f3
 #pragma opt_propagation off
 #pragma opt_lifetimes off
 
-/** Releases every element's animation poses and stops its sound effect. */
-static inline void effFallRelease(EffectEntry* effect) {
-    s32 i;
-    EffFallElem* e;
-    for (i = 0, e = effect->userdata; i < effect->count; i++, e++) {
-        if (e->pose0 != -1) {
-            animPoseRelease(e->pose0);
-        }
-        if (e->pose1 != -1) {
-            animPoseRelease(e->pose1);
-        }
-        psndSFXOff(e->sfx);
-    }
-}
-
 // The seven sound names go through the integer word at each call, as in the original: in this loop the
 // conversion is hoisted, which is what the retail code shows (see sfx_name_word.h).
 static void effFallMain(EffectEntry* effect) {
@@ -358,7 +343,20 @@ static void effFallMain(EffectEntry* effect) {
     group = gp->inBattle != 0;
     if (effect->flags & EFFECT_FLAG_SOFT_DELETE) {
         effect->flags &= ~EFFECT_FLAG_SOFT_DELETE;
-        effFallRelease(effect);
+        {
+            // release every element's animation poses and stop its sound effect
+            EffFallElem* elem;
+            s32 idx;
+            for (idx = 0, elem = effect->userdata; idx < effect->count; idx++, elem++) {
+                if (elem->pose0 != -1) {
+                    animPoseRelease(elem->pose0);
+                }
+                if (elem->pose1 != -1) {
+                    animPoseRelease(elem->pose1);
+                }
+                psndSFXOff(elem->sfx);
+            }
+        }
         effDelete(effect);
         return;
     }

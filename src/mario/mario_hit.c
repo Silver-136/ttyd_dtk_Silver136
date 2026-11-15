@@ -421,16 +421,15 @@ static f32 _ABCtoAngleY(f32 nx, f32 ny, f32 nz) {
 }
 
 /**
- * Tube mode on the ground: casts down from 10 above Mario
- * and stores the floor's tilt in roll_grx / roll_grz for the rolling tube (mot_roll.c).
- * Inlined into marioChkGnd.
+ * Casts down from 10 above Mario (up to 47) and, on a hit, writes the floor's tilt (x and z, degrees rounded
+ * to 0.01, as _ABCtoAngleY) to *gx / *gz. Returns the floor hit. The slope angle it computes last is unused.
+ * Used for the rolling tube's floor tilt (roll_grx / roll_grz, mot_roll.c).
  */
-static inline void marioChkGndRoll(MarioWork* mario) {
+// Original name and size (0x420) from the JP demo map (UNUSED there: every call is inlined).
+HitEntry* marioGetSlope(MarioWork* mario, f32* gx, f32* gz) {
     HitEntry* hit;
-    f32 gz, gx;
     Vec pos, outPos, outNrm;
     f32 dist = 47.0f;
-    mario->baseHeight = mario->basePos.y - mario->position.y;
     pos = mario->position;
     pos.y += 10.0f;
     {
@@ -438,14 +437,11 @@ static inline void marioChkGndRoll(MarioWork* mario) {
         hit = marioHitCheckVecInl(&pos, &dir, &outPos, &outNrm, &dist);
     }
     if (hit) {
-        gx = (s32)(100.0f * (angleABf(0.0f, 0.0f, 100.0f * outNrm.z, 100.0f * outNrm.y) - 180.0f) + 0.5f) / 100.0f;
-        gz = (s32)(100.0f * (angleABf(0.0f, 0.0f, 100.0f * outNrm.x, 100.0f * outNrm.y) - 180.0f) + 0.5f) / 100.0f;
+        *gx = (s32)(100.0f * (angleABf(0.0f, 0.0f, 100.0f * outNrm.z, 100.0f * outNrm.y) - 180.0f) + 0.5f) / 100.0f;
+        *gz = (s32)(100.0f * (angleABf(0.0f, 0.0f, 100.0f * outNrm.x, 100.0f * outNrm.y) - 180.0f) + 0.5f) / 100.0f;
         angleABf(0.0f, 0.0f, sqrtf(outNrm.x * outNrm.x + outNrm.z * outNrm.z), -outNrm.y);
     }
-    if (hit) {
-        roll_grx = gx;
-        roll_grz = gz;
-    }
+    return hit;
 }
 
 /**
@@ -634,7 +630,13 @@ void marioChkGnd(void) {
     }
     if (hit) {
         if (mario->flags & MARIO_FLAG_TUBE_MODE) {
-            marioChkGndRoll(mario);
+            // tube mode: the floor's tilt for the rolling tube
+            f32 gx, gz;
+            mario->baseHeight = mario->basePos.y - mario->position.y;
+            if (marioGetSlope(mario, &gx, &gz)) {
+                roll_grx = gx;
+                roll_grz = gz;
+            }
         }
 #if VERSION <= VERSION_DEMO_JP
         mario->trigFlags |= MARIO_TRIG_FLAG_SHIP_PLANE_EVT_ON;

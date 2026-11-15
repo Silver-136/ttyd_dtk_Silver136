@@ -169,7 +169,11 @@ static USER_FUNC(search_result) {
 }
 
 #if VERSION >= VERSION_JP
-static inline int chuchu_findTreasure2(PartyEntry* cpp, f32 range, Vec* bestPos) {
+/**
+ * Finds the nearest unfound chuchu_treasure_tbl spot on the current map within range of Mario:
+ * returns 1 and writes its position to *bestPos, or returns 0 (bestPos untouched).
+ */
+static inline int chuchu_findTreasure(PartyEntry* cpp, f32 range, Vec* bestPos) {
     u32 i;
     int found;
     MarioWork* mario;
@@ -275,7 +279,7 @@ static USER_FUNC(set_msg) {
         type = -1;
         item = itemNearDistCheck(player->position.x, player->position.y, player->position.z, range);
         mobj = mobjNearDistCheck2(player->position.x, player->position.y, player->position.z, range, mobj_list);
-        found = chuchu_findTreasure2(cp, range, &bestPos);
+        found = chuchu_findTreasure(cp, range, &bestPos);
 
         minDist = 10000.0f;
         if (item) {
@@ -339,39 +343,6 @@ static USER_FUNC(post_msg) {
     return EVT_RETURN_DONE;
 }
 
-/** Whether any unfound chuchu_treasure_tbl entry on the current map is within range of Mario. */
-#if VERSION >= VERSION_JP
-static inline int chuchu_findTreasure(PartyEntry* cpp, f32 range) {
-    u32 i;
-    int found;
-    MarioWork* player2;
-    ChuchuTreasure* tbl;
-    f32 minDist;
-
-    found = 0;
-    player2 = cpp->playerPtr;
-    tbl = chuchu_treasure_tbl;
-    minDist = 10000.0f;
-    for (i = 0; i < sizeof(chuchu_treasure_tbl) / sizeof(chuchu_treasure_tbl[0]); i++, tbl++) {
-        if (strcmp(gp->currentMapName, tbl->map) == 0 && evtGetValue(NULL, tbl->flag) == 0) {
-            Vec pos;
-            Vec p = vecB;
-            f32 d;
-            p.x = tbl->x;
-            p.y = tbl->y;
-            p.z = tbl->z;
-            pos = p;
-            d = PSVECDistance(&player2->position, &pos);
-            if (!(range < d) && minDist > d) {
-                minDist = d;
-                found = 1;
-            }
-        }
-    }
-    return found;
-}
-#endif
-
 /**
  * Whether there is something to sniff within 150 units of Mario: an item or a map object from mobj_list,
  * plus in the early demos the nearest object if it is a closed item box or a Kururin floor with an item,
@@ -406,6 +377,7 @@ BOOL chuchu_searchObject(void) {
 #else
     PartyEntry* cp = partyGetPtr(marioGetPartyId());
     MarioWork* player = cp->playerPtr;
+    Vec treasurePos;
 
     if (itemNearDistCheck(player->position.x, player->position.y, player->position.z, 150.0f)) {
         return TRUE;
@@ -413,7 +385,7 @@ BOOL chuchu_searchObject(void) {
     if (mobjNearDistCheck2(player->position.x, player->position.y, player->position.z, 150.0f, mobj_list)) {
         return TRUE;
     }
-    return chuchu_findTreasure(cp, 150.0f) != 0;
+    return chuchu_findTreasure(cp, 150.0f, &treasurePos) != 0;
 #endif
 }
 

@@ -1017,6 +1017,7 @@ static inline BOOL dataCheck(void) {
 }
 
 /** Byte sum used as the header checksum. */
+// FAKE: invented one-use inline helper (no map name); writing it out changes the code (FAKES.md)
 static inline u32 header_sum(u8* data, s32 size) {
     s32 i;
     u32 sum;

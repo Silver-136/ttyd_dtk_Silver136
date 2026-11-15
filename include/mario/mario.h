@@ -478,7 +478,7 @@ typedef struct MarioWork {
     Vec camShiftRate;                   // 0x150
     f32 camFollowRate;                  // 0x15C
     f32 prevCamPosX;                    // 0x160
-    f32 baseHeight;                     // 0x164, basePos.y - position.y (marioChkGndRoll)
+    f32 baseHeight;                     // 0x164, basePos.y - position.y (marioChkGnd, tube mode)
     s32 screenX;                        // 0x168
     s32 screenY;                        // 0x16C
     s32 screenZ;                        // 0x170

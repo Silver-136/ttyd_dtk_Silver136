@@ -117,6 +117,18 @@ s32 marioGetJabaraState(void) {
 }
 
 /**
+ * z position of the ceiling hit object Mario grabbed (rounded to 0.01), so he can be snapped to its plane.
+ * The Mario pointer it fetches is unused.
+ */
+// Original name and size (0x7c) from the JP demo map (UNUSED there: every call is inlined).
+f32 getBarCenterPos(HitEntry* hit) {
+    Vec pos;
+    MarioWork* mario = marioGetPtr();
+    hitObjGetPos(hitGetName(hit), &pos);
+    return (s32)((100.0f * pos.z + 0.5f) / 100.0f);
+}
+
+/**
  * TRUE when Mario may start a Spring Jump: he owns the Ultra Boots
  * and no blocking flag (0x80000000, or 0x100000 / 0x2100000 by version) is set;
  * a blocking flag also clears the hold timer.
@@ -218,14 +230,6 @@ void _marioRefresh(void) {
     marioAdjustMoveDir();
     mario->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
     mario->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
-}
-
-/** z position of the ceiling hit object Mario grabbed, so he can be snapped to its plane. */
-static inline f32 jabaraHitPosZ(HitEntry* hit) {
-    Vec v;
-    marioGetPtr();
-    hitObjGetPos(hitGetName(hit), &v);
-    return v.z;
 }
 
 static inline void jabaraLand(f32 y, void* hit) {
@@ -475,7 +479,7 @@ void mot_jabara(void) {
                 mario->currSubMotionId = 0x46;
                 mario->multiTimer = 10;
                 mario->mot.jabara.floorY = (s32)(hitY + mario->wPlayerCollisionBox.y);
-                mario->position.z = (s32)((100.0f * jabaraHitPosZ(mario->hitobjHead) + 0.5f) / 100.0f);
+                mario->position.z = getBarCenterPos(mario->hitobjHead);
                 mario->position.y = (f32)mario->mot.jabara.floorY - mario->wPlayerCollisionBox.y - 3.5f;
                 mario->rotOfs.y = 9.0f + mario->wPlayerCollisionBox.y;
                 marioPaperOff();

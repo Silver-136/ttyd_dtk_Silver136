@@ -522,29 +522,6 @@ BOOL pouchRemoveItem(ItemType type) {
     return 0;
 }
 
-#if VERSION <= VERSION_DEMO_JP
-
-/**
- * The early demos' pouchRemoveItemIndex shifts the second table wrongly:
- * it clears the slot it has just filled instead of the one it moved from (the early demos' own bug;
- * the later versions call pouchShift).
- */
-static inline void pouchShiftDemo(s16* table1, s16* table2, int i, s32 maximum) {
-    table1[i] = ITEM_NULL;
-    if (table2 != 0) {
-        table2[i] = ITEM_NULL;
-    }
-    for (; i < maximum - 1; i++) {
-        table1[i] = table1[i + 1];
-        table1[i + 1] = ITEM_NULL;
-        if (table2 != 0) {
-            table2[i] = table2[i + 1];
-            table2[i] = ITEM_NULL;
-        }
-    }
-}
-#endif
-
 /**
  * Removes the item id from list slot index (the item used or thrown away, from the item menu,
  * battle and evt_pouch) and closes the gap; FALSE if the slot holds another item.
@@ -568,7 +545,20 @@ BOOL pouchRemoveItemIndex(ItemType type, s32 index) {
     for (i = index; i < maximum; p++, i++) {
         if (type == *p) {
 #if VERSION <= VERSION_DEMO_JP
-            pouchShiftDemo(table1, table2, i, maximum);
+            // early demos: the shift written out
+            table1[i] = ITEM_NULL;
+            if (table2 != NULL) {
+                table2[i] = ITEM_NULL;
+            }
+            for (; i < maximum - 1; i++) {
+                table1[i] = table1[i + 1];
+                table1[i + 1] = ITEM_NULL;
+                if (table2 != NULL) {
+                    // BUG: clears the slot just filled instead of the one moved from (later versions: pouchShift)
+                    table2[i] = table2[i + 1];
+                    table2[i] = ITEM_NULL;
+                }
+            }
 #else
             pouchShift(table1, table2, i, maximum);
 #endif

@@ -1463,22 +1463,6 @@ static void ext_yuunpc_minigame4_init(void) {
     ext_yuunpc_minigame4_init_sub();
 }
 
-/**
- * Returns the terrain code of the Paper Mode course at x (hitY, which tells racers what obstacle comes next),
- * or 0 outside the course.
- */
-static inline s32 yuunpc_hitY_get(f32 x) {
-    s32 out = 0;
-
-    if (x < -1800.0f || x >= 1800.0f) {
-        out = 1;
-    }
-    if (out) {
-        return 0;
-    }
-    return yuunpc_wp->hitY[(s32)((x - -1800.0f) / 50.0f)];
-}
-
 #define YUUNPC_HIT_AT(x, zp) (((x) < -1800.0f || (x) >= 1800.0f || *(zp) < -150.0f || *(zp) >= 150.0f) ? -500 : yuunpc_wp->hit[(s32)((*(zp) - -150.0f) / 50.0f) * 72 + (s32)(((x) - -1800.0f) / 50.0f)])
 #define yuunpc_hit_ofs(npc, ofs) ((((npc)->pos.x + (ofs)->x) < -1800.0f || ((npc)->pos.x + (ofs)->x) >= 1800.0f || ((npc)->pos.z + (ofs)->z) < -150.0f || ((npc)->pos.z + (ofs)->z) >= 150.0f) ? -500 : yuunpc_wp->hit[(s32)((((npc)->pos.z + (ofs)->z) - -150.0f) / 50.0f) * 72 + (s32)((((npc)->pos.x + (ofs)->x) - -1800.0f) / 50.0f)])
 
@@ -1678,7 +1662,8 @@ void yuunpc_pose_minigame4_main(void) {
             if (npc->motion != 3 && npc->motion != 4) {
                 px = npc->pos.x;
                 kind = 1;
-                h = yuunpc_hitY_get(px);
+                // terrain code of the course at px (tells racers what obstacle comes next), 0 outside it
+                h = (px < -1800.0f || px >= 1800.0f) ? 0 : yuunpc_wp->hitY[(s32)((px - -1800.0f) / 50.0f)];
 #if VERSION >= VERSION_JP
                 k = h;
 #endif

@@ -4159,6 +4159,7 @@ __declspec(weak) f32 cosf(f32 x) {
  * given horizontal speed and gravity, each frame, and plays the Star Stone jump sound on landing.
  * Returns EVT_RETURN_BLOCK until it arrives.
  */
+// FAKE: invented one-use inline helper (no map name); writing it out changes the code (FAKES.md)
 static inline s32 item_jump_sub(EventEntry* event, BOOL isFirstCall, f32 speed, f32 g) {
     // unused: nothing reads it, but its zero template is in the retail .rodata (JP demo map @1041, 4 numbers
     // before this function's own tmp template @1045)
