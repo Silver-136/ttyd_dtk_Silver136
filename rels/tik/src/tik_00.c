@@ -355,18 +355,151 @@ static ShopperData35 shopper_data = {
     {"tik_shop_00", "tik_shop_01", "tik_shop_02", "tik_shop_03", "tik_shop_04", "tik_shop_05", "tik_shop_06", "tik_shop_07", "tik_shop_08", "tik_shop_09", "tik_shop_10", "tik_shop_11", "tik_shop_12", "tik_shop_13", "tik_shop_14", "tik_shop_15", "tik_shop_16", "tik_shop_17", "tik_shop_18", "tik_shop_19", "tik_shop_20", "tik_shop_21", "tik_shop_22", "tik_shop_23", "tik_shop_24", "tik_shop_25", "tik_shop_26", "tik_shop_27", "tik_shop_28", "tik_shop_29", "shop_30", "shop_31", "shop_32", "shop_33", "shop_34"}, // msgs
 };
 
-#if VERSION >= VERSION_US
-// FAKE: "pos" lives here in .rodata (before the uranaisi scripts' strings); copied as a 4-byte struct
-typedef struct UranaiTag {
-    char s[4];
-} UranaiTag;
+/**
+ * Script helper.
+ * Sets the running event's owner NPC to the NPC named by args[0] (Merluvlee),
+ * so "me" in her scripts refers to her.
+ */
+static USER_FUNC(setmertn) {
+    event->ownerNPC = npcNameToPtr((const char*)evtGetValue(event, event->args[0]));
+    return EVT_RETURN_DONE;
+}
+
+/** Script helper. Stores the module-level flag ssf (set by ss_set) into the variable args[0]. */
+static USER_FUNC(ss_check) {
+    EvtWord* args = event->args;
+    s32 a = *args++;
+
+    evtSetFloat(event, a, ssf);
+    return EVT_RETURN_DONE;
+}
+
+/** Script helper. Sets the module-level flag ssf to the value of args[0]. */
+static USER_FUNC(ss_set) {
+    ssf = evtGetValue(event, event->args[0]);
+    return EVT_RETURN_DONE;
+}
+
+/** Script helper. Frees the 256-byte message buffer allocated by evt_uranaisi_msg_alloc, if there is one. */
+static USER_FUNC(evt_uranaisi_msg_free) {
+    if (uranaisi_msgp == NULL) {
+        return EVT_RETURN_DONE;
+    }
+    _mapFree(uranaisi_msgp);
+    uranaisi_msgp = NULL;
+    return EVT_RETURN_DONE;
+}
+
+/** Script helper. Allocates and clears a 256-byte buffer in map memory for building Merluvlee's price menu text. */
+static USER_FUNC(evt_uranaisi_msg_alloc) {
+    uranaisi_msgp = _mapAlloc(0x100);
+    memset(uranaisi_msgp, 0, 0x100);
+    return EVT_RETURN_DONE;
+}
 
 /**
- * Four-byte copy of the string "pos", placed here so the string sits
- * before the fortune-teller scripts' strings in read-only data.
+ * Script helper for her price menu.
+ * args[0] is the message id, args[1] receives the formatted string.
+ * In US and later, it scans the message for her position tags and pads the three reading prices to their column
+ * using the font's text width. Earlier versions format the three prices directly into the buffer from evt_uranaisi_msg_alloc.
  */
-static const UranaiTag uranaisi_pos_tag = { "pos" };
+static USER_FUNC(evt_uranaisi_msg_set) {
+    EvtWord* args = event->args;
+    const char* msg = msgSearch((const char*)evtGetValue(event, args[0]));
+#if VERSION >= VERSION_US
+    char tag[4] = "pos";
+    char* t = tag; // FAKE: reading the tag through a pointer keeps tag[0] from being hoisted out of the loop
+    char num[20];
+    s32 ofs[10];
+    char buf[256];
+    s32 i;
+    s32 j;
+    s32 state;
+    s32 count;
+    s32 k;
+    s32 sign;
+    s32 c;
+    s32 d;
+
+    state = 0;
+    count = 0;
+    i = 0;
+    j = 0;
+    while ((s8)(c = msg[i]) != 0) {
+        if ((s8)c == '<') {
+            state = 1;
+        } else if ((s8)c == '>') {
+            state = 0;
+        }
+        if (state != 0) {
+            if (state == 1 && (s8)c != ' ') {
+                state = 2;
+            }
+            if (state == 2 && (s8)t[0] == (s8)c) {
+                for (k = 1; (s8)(d = t[k]) != 0; k++) {
+                    if ((s8)d != (s8)msg[i + k]) {
+                        state = 3;
+                    }
+                }
+                if (state == 2) {
+                    if ((count & 1) == 0) {
+                        buf[j] = c;
+                        i++;
+                        j++;
+                        while ((s8)(c = msg[i]) != ' ') {
+                            buf[j] = c;
+                            i++;
+                            j++;
+                        }
+                        while ((s8)(c = msg[i]) == ' ') {
+                            buf[j] = c;
+                            i++;
+                            j++;
+                        }
+                        ofs[count / 2] = 0;
+                        sign = 1;
+                        while ((s8)(c = msg[i]) != ' ') {
+                            c = (s8)c;
+                            if (c == '-') {
+                                sign = -1;
+                            } else if (c >= '0' && c <= '9') {
+                                ofs[count / 2] = c + ofs[count / 2] * 10 - '0';
+                            }
+                            i++;
+                        }
+                        ofs[count / 2] = sign * ofs[count / 2];
+                        buf[j++] = '%';
+                        buf[j++] = 'd';
+                    }
+                    count++;
+                }
+            } else if (state == 2 && (s8)c == ' ') {
+                state = 3;
+            }
+        }
+        buf[j] = msg[i];
+        i++;
+        j++;
+    }
+    buf[j] = 0;
+    for (k = 0; k < count / 2; k++) {
+        switch (k) {
+            case 0:
+                sprintf(num, "%3d", uranaisi_ryokin_rtn(k));
+                break;
+            default:
+                sprintf(num, "%d", uranaisi_ryokin_rtn(k));
+                break;
+        }
+        ofs[k] -= FontGetMessageWidth(num);
+    }
+    sprintf(uranaisi_msgp, buf, ofs[0], uranaisi_ryokin_rtn(0), ofs[1], uranaisi_ryokin_rtn(1), ofs[2], uranaisi_ryokin_rtn(2));
+#else
+    sprintf(uranaisi_msgp, msg, uranaisi_ryokin_rtn(0), uranaisi_ryokin_rtn(1), uranaisi_ryokin_rtn(2));
 #endif
+    evtSetValue(event, args[1], (EvtWord)uranaisi_msgp);
+    return EVT_RETURN_DONE;
+}
 
 /**
  * Merluvlee's "next" reading, run after the card minigame. Prints the hint for the current story step.
@@ -559,152 +692,6 @@ static EVT_BEGIN(evt_uranai_cap)
     CALL(uranai_cap_evt)
     RETURN
 EVT_END()
-
-/**
- * Script helper.
- * Sets the running event's owner NPC to the NPC named by args[0] (Merluvlee),
- * so "me" in her scripts refers to her.
- */
-static USER_FUNC(setmertn) {
-    event->ownerNPC = npcNameToPtr((const char*)evtGetValue(event, event->args[0]));
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper. Stores the module-level flag ssf (set by ss_set) into the variable args[0]. */
-static USER_FUNC(ss_check) {
-    EvtWord* args = event->args;
-    s32 a = *args++;
-
-    evtSetFloat(event, a, ssf);
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper. Sets the module-level flag ssf to the value of args[0]. */
-static USER_FUNC(ss_set) {
-    ssf = evtGetValue(event, event->args[0]);
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper. Frees the 256-byte message buffer allocated by evt_uranaisi_msg_alloc, if there is one. */
-static USER_FUNC(evt_uranaisi_msg_free) {
-    if (uranaisi_msgp == NULL) {
-        return EVT_RETURN_DONE;
-    }
-    _mapFree(uranaisi_msgp);
-    uranaisi_msgp = NULL;
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper. Allocates and clears a 256-byte buffer in map memory for building Merluvlee's price menu text. */
-static USER_FUNC(evt_uranaisi_msg_alloc) {
-    uranaisi_msgp = _mapAlloc(0x100);
-    memset(uranaisi_msgp, 0, 0x100);
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper for her price menu.
- * args[0] is the message id, args[1] receives the formatted string.
- * In US and later, it scans the message for her position tags and pads the three reading prices to their column
- * using the font's text width. Earlier versions format the three prices directly into the buffer from evt_uranaisi_msg_alloc.
- */
-static USER_FUNC(evt_uranaisi_msg_set) {
-    EvtWord* args = event->args;
-    const char* msg = msgSearch((const char*)evtGetValue(event, args[0]));
-#if VERSION >= VERSION_US
-    UranaiTag tag = uranaisi_pos_tag;
-    char* t = tag.s; // FAKE: reading the tag through a pointer keeps tag[0] from being hoisted out of the loop
-    char num[20];
-    s32 ofs[10];
-    char buf[256];
-    s32 i;
-    s32 j;
-    s32 state;
-    s32 count;
-    s32 k;
-    s32 sign;
-    s32 c;
-    s32 d;
-
-    state = 0;
-    count = 0;
-    i = 0;
-    j = 0;
-    while ((s8)(c = msg[i]) != 0) {
-        if ((s8)c == '<') {
-            state = 1;
-        } else if ((s8)c == '>') {
-            state = 0;
-        }
-        if (state != 0) {
-            if (state == 1 && (s8)c != ' ') {
-                state = 2;
-            }
-            if (state == 2 && (s8)t[0] == (s8)c) {
-                for (k = 1; (s8)(d = t[k]) != 0; k++) {
-                    if ((s8)d != (s8)msg[i + k]) {
-                        state = 3;
-                    }
-                }
-                if (state == 2) {
-                    if ((count & 1) == 0) {
-                        buf[j] = c;
-                        i++;
-                        j++;
-                        while ((s8)(c = msg[i]) != ' ') {
-                            buf[j] = c;
-                            i++;
-                            j++;
-                        }
-                        while ((s8)(c = msg[i]) == ' ') {
-                            buf[j] = c;
-                            i++;
-                            j++;
-                        }
-                        ofs[count / 2] = 0;
-                        sign = 1;
-                        while ((s8)(c = msg[i]) != ' ') {
-                            c = (s8)c;
-                            if (c == '-') {
-                                sign = -1;
-                            } else if (c >= '0' && c <= '9') {
-                                ofs[count / 2] = c + ofs[count / 2] * 10 - '0';
-                            }
-                            i++;
-                        }
-                        ofs[count / 2] = sign * ofs[count / 2];
-                        buf[j++] = '%';
-                        buf[j++] = 'd';
-                    }
-                    count++;
-                }
-            } else if (state == 2 && (s8)c == ' ') {
-                state = 3;
-            }
-        }
-        buf[j] = msg[i];
-        i++;
-        j++;
-    }
-    buf[j] = 0;
-    for (k = 0; k < count / 2; k++) {
-        switch (k) {
-            case 0:
-                sprintf(num, "%3d", uranaisi_ryokin_rtn(k));
-                break;
-            default:
-                sprintf(num, "%d", uranaisi_ryokin_rtn(k));
-                break;
-        }
-        ofs[k] -= FontGetMessageWidth(num);
-    }
-    sprintf(uranaisi_msgp, buf, ofs[0], uranaisi_ryokin_rtn(0), ofs[1], uranaisi_ryokin_rtn(1), ofs[2], uranaisi_ryokin_rtn(2));
-#else
-    sprintf(uranaisi_msgp, msg, uranaisi_ryokin_rtn(0), uranaisi_ryokin_rtn(1), uranaisi_ryokin_rtn(2));
-#endif
-    evtSetValue(event, args[1], (EvtWord)uranaisi_msgp);
-    return EVT_RETURN_DONE;
-}
 
 /**
  * Script helper.
