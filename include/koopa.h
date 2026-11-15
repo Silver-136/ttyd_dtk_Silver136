@@ -27,6 +27,7 @@ s32 kpaGetStageViewType(void);
 void kpaGetStageViewTypeInit(void);
 f32 kpaGetWidth(s32 lv);
 void kpaMSetMutekiTimer(void);
+void kpaMutekiTimerMain(void);
 s32 kpaMutekiCheck(void);
 void kpaMutekiOff(void);
 void kpaMutekiOn(void);

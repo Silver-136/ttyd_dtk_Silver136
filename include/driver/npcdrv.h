@@ -507,6 +507,7 @@ void npcSetBattleInfo(NpcEntry* npc, s32 battleInfoId);
 void fbatChangeMode(s16 mode);
 void fbatInit(void);
 void fbatReInit(void);
+void fbatMain(void);
 
 NpcTerritoryType dbGetDefData(NpcTerritoryInfo* info, const char* description);
 

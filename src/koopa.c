@@ -88,12 +88,24 @@ void kpaMutekiOff(void) {
 
 /**
  * Starts the 12-second star invincibility timer and clears the post-damage timer;
- * the player update (kpa2DMain or kpa3DMain) calls kpaMutekiOff when it runs out.
+ * the player update (kpa2DMain or kpa3DMain) runs it down in kpaMutekiTimerMain.
  */
 void kpaMSetMutekiTimer(void) {
     MarioWork* mario = marioGetPtr();
     mario->kpaWork->mutekiTimer = sysMsec2Frame(12000);
     mario->kpaNoHitTimer = 0;
+}
+
+/** Per-frame star timer: counts mutekiTimer down and ends the invincibility (kpaMutekiOff) when it runs out. */
+// Original name and size (0x74) from the JP demo map (UNUSED there: every call is inlined).
+void kpaMutekiTimerMain(void) {
+    MarioWork* mario = marioGetPtr();
+    if (mario->kpaWork->mutekiTimer > 0) {
+        if (--mario->kpaWork->mutekiTimer <= 0) {
+            mario->kpaWork->mutekiTimer = 0;
+            kpaMutekiOff();
+        }
+    }
 }
 
 /** Sets Bowser's pose: a in the 3D maps, b in the side-scrolling stages (the KPA2_ poses). */
@@ -278,15 +290,7 @@ static void kpa2DMain(void) {
     marioItemGetChk();
     kpaFireAttack();
     kpaFireMain();
-    {
-        MarioWork* m2 = marioGetPtr();
-        if (m2->kpaWork->mutekiTimer > 0) {
-            if (--m2->kpaWork->mutekiTimer <= 0) {
-                m2->kpaWork->mutekiTimer = 0;
-                kpaMutekiOff();
-            }
-        }
-    }
+    kpaMutekiTimerMain();
     if (mp->currMotionId == MARIO_MOTION_JUMP_3) {
         mp->basePos = mp->position;
         mp->floorMove.x = 0.0f;
@@ -369,7 +373,6 @@ static void kpa2DMain(void) {
 static void kpa3DMain(void) {
     MarioWork* mp = marioGetPtr();
     struct HitEntry* h = kpaHitCheck();
-    MarioWork* m2;
     if (h) {
         mp->hitobjHead = h;
     }
@@ -392,13 +395,7 @@ static void kpa3DMain(void) {
     marioItemGetChk();
     kpaFireAttack();
     kpaFireMain();
-    m2 = marioGetPtr();
-    if (m2->kpaWork->mutekiTimer > 0) {
-        if (--m2->kpaWork->mutekiTimer <= 0) {
-            m2->kpaWork->mutekiTimer = 0;
-            kpaMutekiOff();
-        }
-    }
+    kpaMutekiTimerMain();
     if (mp->currMotionId == MARIO_MOTION_JUMP_3) {
         mp->basePos = mp->position;
         mp->floorMove.x = 0.0f;

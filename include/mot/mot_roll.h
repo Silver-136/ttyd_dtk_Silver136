@@ -19,6 +19,7 @@ void marioSetRollDispDir(void);
 void mot_fall_roll(void);
 void mot_roll(void);
 void mot_roll_post(void);
+void rollJumpSetup(void);
 void rollEvtJumpSetup(void);
 void setRollEvtFlag(void);
 s32 getRollEvtFlag(void);

@@ -36,6 +36,7 @@ static u32 nokoSe;
 static HitEntry* ccwall(PartyEntry* party, s32 mode);
 static void lookupSafetyPosSub(Vec pos, f32 height, f32 angle, Vec* out);
 static BOOL chkWater(HitEntry* hit);
+static f32 distABCf(f32 x1, f32 y1, f32 z1, f32 x2, f32 y2, f32 z2);
 static void lookupSafetyPos3(Vec pos, f32 height, Vec* out);
 static void lookupSafetyPos2(Vec pos, f32 height, Vec* out);
 static u32 lookupSafetyPos(Vec pos, f32 height, Vec* out);
@@ -298,12 +299,6 @@ void nokonoko_use(PartyEntry* party) {
     u32 flags;
     HitEntry* hit;
     BOOL b;
-    f32 dy;
-    f32 dx;
-    f32 qx;
-    f32 qy;
-    f32 qz;
-    f32 dz;
     MarioWork* mario = party->playerPtr;
     f32 lim;
 
@@ -664,13 +659,8 @@ void nokonoko_use(PartyEntry* party) {
             }
             break;
         case 70:
-            dx = party->position.x - mario->position.x;
-            dy = party->position.y - mario->position.y;
-            dz = party->position.z - mario->position.z;
-            qx = dx * dx;
-            qy = dy * dy;
-            qz = dz * dz;
-            if ((f32)sqrt(qz + (qx + qy)) < 5.0f) {
+            if (distABCf(party->position.x, party->position.y, party->position.z, mario->position.x, mario->position.y,
+                         mario->position.z) < 5.0f) {
                 f32 a;
                 a = mario->directionView + (mario->directionView >= 180.0 ? (-90.0f) : 90.0f);
                 movePos(&party->position.x, &party->position.z, 0.5f * mario->wPlayerCollisionBox.x, a);
@@ -774,16 +764,10 @@ void nokonoko_use(PartyEntry* party) {
             }
             break;
         case 100: {
-            f32 deltaY, deltaX, deltaZ;
             ccwall(party, 1);
 
-            deltaX = party->position.x - mario->position.x;
-            deltaY = party->position.y - mario->position.y;
-            deltaZ = party->position.z - mario->position.z;
-            qx = deltaX * deltaX;
-            qy = deltaY * deltaY;
-            qz = deltaZ * deltaZ;
-            if ((f32)sqrt(qz + (qx + qy)) < 5.0f) {
+            if (distABCf(party->position.x, party->position.y, party->position.z, mario->position.x, mario->position.y,
+                         mario->position.z) < 5.0f) {
                 f32 a;
                 a = mario->directionView + (mario->directionView >= 180.0 ? 90.0f : (-90.0f));
                 movePos(&party->position.x, &party->position.z, 0.5f * mario->wPlayerCollisionBox.x, a);
@@ -1470,4 +1454,16 @@ static void lookupSafetyPosSub(Vec pos, f32 height, f32 angle, Vec* out) {
 // Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
 static BOOL chkWater(HitEntry* hit) {
     return (hitGetAttr(hit) >> 9) & 1;
+}
+
+/** Distance in 3D between (x1, y1, z1) and (x2, y2, z2). */
+// Original name and size (0x44) from the JP demo map (UNUSED there: every call is inlined).
+static f32 distABCf(f32 x1, f32 y1, f32 z1, f32 x2, f32 y2, f32 z2) {
+    f32 dx = x1 - x2;
+    f32 dy = y1 - y2;
+    f32 dz = z1 - z2;
+    f32 qx = dx * dx;
+    f32 qy = dy * dy;
+    f32 qz = dz * dz;
+    return (f32)sqrt(qz + (qx + qy));
 }

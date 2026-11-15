@@ -406,6 +406,12 @@ void marioEntry(void) {
     }
 }
 
+/** Lets Mario collect field items again (clears the marioItemGetDisable lock). */
+// Original name and size (0x14) from the JP demo map (UNUSED there: every call is inlined).
+void marioItemGetEnable(void) {
+    mp->flags &= ~MARIO_FLAG_ITEM_GET_DISABLED;
+}
+
 /**
  * Stops Mario collecting field items for 20 frames; mario_hit calls it when Bowser bumps his head on a ceiling.
  * marioItemGetChk counts the timer down.
@@ -427,7 +433,7 @@ void marioItemGetChk(void) {
     if (mp->itemGetDisableTimer > 0) {
         if (--work->itemGetDisableTimer <= 0) {
             work->itemGetDisableTimer = 0;
-            mp->flags &= ~MARIO_FLAG_ITEM_GET_DISABLED;
+            marioItemGetEnable();
         }
     }
 }

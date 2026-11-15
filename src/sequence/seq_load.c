@@ -102,6 +102,7 @@ static void loadMain(SequenceWork* seq);
 #endif
 
 static void loadDraw(CameraId camera, void* param);
+static void newGame(void);
 static void continueGame(void);
 
 #if VERSION <= VERSION_DEMO_JP
@@ -528,18 +529,8 @@ static void loadMain(SequenceWork* seq) {
                         wp->state++;
                     } else {
                         // early demos: the new-game setup runs once the name is in, or after the first save
-                        stg0_00_init();
-                        gp->saveSlot = wp->slot;
-                        marioPartyKill();
-                        {
-                            MarioWork* m = marioGetPtr();
-                            m->prevPartyMemberId[0] = 0;
-                            m->prevPartyMemberId[1] = 0;
-                        }
-                        gp->areaFadeOutType = FADE_NONE;
-                        gp->areaFadeInType = FADE_CURTAIN_SIDES_A2_3D;
-                        swInit();
-                        swByteSet(GSW_ID(GSW_STORY_PROGRESS), STG0_00_PROLOGUE);
+                        newGame();
+                    }
 #else
                     stg0_00_init();
                     gp->saveSlot = wp->slot;
@@ -563,29 +554,19 @@ static void loadMain(SequenceWork* seq) {
                         wp->evt->lwData[0] = 0x17;
                         wp->state++;
                     } else {
-#endif
                         seqSetSeq(SEQ_MAP_CHANGE, "aaa_00", "prologue");
                     }
+#endif
                 }
             }
             break;
         case 0x23:
             if (!evtCheckID(wp->evt->eventId)) {
 #if VERSION <= VERSION_DEMO_JP
-                stg0_00_init();
-                gp->saveSlot = wp->slot;
-                marioPartyKill();
-                {
-                    MarioWork* m = marioGetPtr();
-                    m->prevPartyMemberId[0] = 0;
-                    m->prevPartyMemberId[1] = 0;
-                }
-                gp->areaFadeOutType = FADE_NONE;
-                gp->areaFadeInType = FADE_CURTAIN_SIDES_A2_3D;
-                swInit();
-                swByteSet(GSW_ID(GSW_STORY_PROGRESS), STG0_00_PROLOGUE);
-#endif
+                newGame();
+#else
                 seqSetSeq(SEQ_MAP_CHANGE, "aaa_00", "prologue");
+#endif
             }
             break;
         case 0x28:
@@ -1415,6 +1396,27 @@ static void loadDraw(CameraId camera, void* param) {
 #endif
 }
 
+/**
+ * Starts a new file: the prologue's initial state (stg0_00_init, empty party, reset switches, story progress at the
+ * prologue) and the map change to aaa_00.
+ */
+// Original name and size (0x80) from the JP demo map (UNUSED there: every call is inlined).
+static void newGame(void) {
+    MarioWork* m;
+
+    stg0_00_init();
+    gp->saveSlot = wp->slot;
+    marioPartyKill();
+    m = marioGetPtr();
+    m->prevPartyMemberId[0] = 0;
+    m->prevPartyMemberId[1] = 0;
+    gp->areaFadeOutType = FADE_NONE;
+    gp->areaFadeInType = FADE_CURTAIN_SIDES_A2_3D;
+    swInit();
+    swByteSet(GSW_ID(GSW_STORY_PROGRESS), STG0_00_PROLOGUE);
+    seqSetSeq(SEQ_MAP_CHANGE, "aaa_00", "prologue");
+}
+
 /** Icons of the seven Crystal Stars, drawn on a save file's panel for each star that file has collected. */
 #if VERSION >= VERSION_JP
 static s32 stone_id[7] = {
@@ -1593,19 +1595,7 @@ static void continueGame(void) {
             seqSetSeq(SEQ_MAP_CHANGE, "jin_04", 0);
             break;
         case 23:
-            stg0_00_init();
-            gp->saveSlot = wp->slot;
-            marioPartyKill();
-            {
-                MarioWork* m = marioGetPtr();
-                m->prevPartyMemberId[0] = 0;
-                m->prevPartyMemberId[1] = 0;
-            }
-            gp->areaFadeOutType = FADE_NONE;
-            gp->areaFadeInType = FADE_CURTAIN_SIDES_A2_3D;
-            swInit();
-            swByteSet(GSW_ID(GSW_STORY_PROGRESS), STG0_00_PROLOGUE);
-            seqSetSeq(SEQ_MAP_CHANGE, "aaa_00", "prologue");
+            newGame();
             break;
         case 24:
             gp->areaFadeOutType = FADE_STORY_PEACH_A2;

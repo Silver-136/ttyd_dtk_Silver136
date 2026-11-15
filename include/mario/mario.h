@@ -607,6 +607,7 @@ void marioSetCharMode(s32 mode);
 void marioSetFamicomMode(s32 mode);
 void marioSetSpec(void);
 void marioEntry(void);
+void marioItemGetEnable(void);
 void marioItemGetDisable(void);
 void marioItemGetChk(void);
 BOOL marioItemGetOk(void);

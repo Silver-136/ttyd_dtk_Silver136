@@ -544,6 +544,20 @@ void marioSetRollDispDir(void) {
     DISPDIR_BODY2(a, b, m2)
 }
 
+/** Starts a Tube Mode jump from the ground (A pressed): the jump speed curve, the jumping flag and the jump sound. */
+// Original name and size (0x78) from the JP demo map (UNUSED there: every call is inlined).
+void rollJumpSetup(void) {
+    MarioWork* mario = marioGetPtr();
+    camFollowYOff();
+    mario->jumpVelocityY = 2.85f;
+    mario->jumpAccelerationY = -0.14f;
+    mario->jumpJerkY = 0.08f;
+    mario->jumpSnapY = -0.02f;
+    mario->flags |= MARIO_FLAG_IS_JUMPING;
+    mario->airTimer = 1;
+    roll_jump_se();
+}
+
 /** Starts a scripted jump in Tube Mode: evt_mario's jump command calls this instead of switching to the jump motion. */
 void rollEvtJumpSetup(void) {
     MarioWork* mario = marioGetPtr();
@@ -919,17 +933,7 @@ void mot_roll(void) {
 #if VERSION <= VERSION_DEMO_JP
     if (mario->hitobjStandOn) {
         if (mario->airTimer == 0 && (mario->buttonTrg & PAD_BUTTON_A)) {
-            {
-                MarioWork* m = marioGetPtr();
-                camFollowYOff();
-                m->jumpVelocityY = 2.85f;
-                m->jumpAccelerationY = -0.14f;
-                m->jumpJerkY = 0.08f;
-                m->jumpSnapY = -0.02f;
-                m->flags |= MARIO_FLAG_IS_JUMPING;
-                m->airTimer = 1;
-                roll_jump_se();
-            }
+            rollJumpSetup();
         }
         marioUpdateCamCollision(mario->position);
     } else {
@@ -940,15 +944,7 @@ void mot_roll(void) {
     if (mario->hitobjStandOn) {
         if (!(hitGetAttr(mario->hitobjStandOn) & (HIT_ATTR_WATER_HAZARD | HIT_ATTR_SPIKES)) && mario->airTimer == 0 && (mario->buttonTrg & PAD_BUTTON_A)) {
             if (!(strcmp(gp->currentMapName, "eki_04") == 0 && __fabsf(mario->groundSlope) >= 40.0f)) {
-                MarioWork* m = marioGetPtr();
-                camFollowYOff();
-                m->jumpVelocityY = 2.85f;
-                m->jumpAccelerationY = -0.14f;
-                m->jumpJerkY = 0.08f;
-                m->jumpSnapY = -0.02f;
-                m->flags |= MARIO_FLAG_IS_JUMPING;
-                m->airTimer = 1;
-                roll_jump_se();
+                rollJumpSetup();
                 mario->hitobjJumpFrom = mario->hitobjStandOn;
                 mario->hitobjStandOn = NULL;
                 mario->fallStartPos = mario->position;

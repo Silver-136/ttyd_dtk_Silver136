@@ -412,6 +412,8 @@ void allPartyRideOn(void);
 void allPartyForceRideOn(void);
 void allPartyRideOff(void);
 void allPartyRideOff2(void);
+void partyRideOff(PartyEntry* party);
+void partyRideOff2(PartyEntry* party);
 void allPartyRidePlane(void);
 void allPartyRideShip(void);
 void partyChgRunMode(PartyEntry* party, s32 mode);

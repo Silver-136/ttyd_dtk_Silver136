@@ -1989,19 +1989,37 @@ void allPartyRideOn(void) {
  */
 void allPartyRideOff(void) {
     PartyEntry* party = partyGetPtr(marioGetPartyId());
-    if (party && party->runMode == PARTY_RUN_RIDE) {
-#if VERSION >= VERSION_US
-        if (!(party->trigFlags & PARTY_TRIG_CHG_RUN_MODE)) {
-            party->motionStep = 100;
-        } else {
-            party->runMode = PARTY_RUN_WAIT;
-        }
-#else
-        party->motionStep = 100;
-#endif
+    if (party) {
+        partyRideOff(party);
     }
     party = partyGetPtr(marioGetExtraPartyId());
-    if (party && party->runMode == PARTY_RUN_RIDE) {
+    if (party) {
+        partyRideOff(party);
+    }
+}
+
+/**
+ * Like allPartyRideOff but the partners land at the partyGetAppearPos2 spot (step 101);
+ * used when Mario lands from plane mode.
+ */
+void allPartyRideOff2(void) {
+    PartyEntry* party = partyGetPtr(marioGetPartyId());
+    if (party) {
+        partyRideOff2(party);
+    }
+    party = partyGetPtr(marioGetExtraPartyId());
+    if (party) {
+        partyRideOff2(party);
+    }
+}
+
+/**
+ * Makes a riding partner hop off Mario to its appear position (step 100);
+ * in US and later one that has not started riding yet just goes back to waiting.
+ */
+// Original name and size (0x18) from the JP demo map (UNUSED there: every call is inlined).
+void partyRideOff(PartyEntry* party) {
+    if (party->runMode == PARTY_RUN_RIDE) {
 #if VERSION >= VERSION_US
         if (!(party->trigFlags & PARTY_TRIG_CHG_RUN_MODE)) {
             party->motionStep = 100;
@@ -2014,25 +2032,10 @@ void allPartyRideOff(void) {
     }
 }
 
-/**
- * Like allPartyRideOff but the partners land at the partyGetAppearPos2 spot (step 101);
- * used when Mario lands from plane mode.
- */
-void allPartyRideOff2(void) {
-    PartyEntry* party = partyGetPtr(marioGetPartyId());
-    if (party && party->runMode == PARTY_RUN_RIDE) {
-#if VERSION >= VERSION_US
-        if (!(party->trigFlags & PARTY_TRIG_CHG_RUN_MODE)) {
-            party->motionStep = 101;
-        } else {
-            party->runMode = PARTY_RUN_WAIT;
-        }
-#else
-        party->motionStep = 101;
-#endif
-    }
-    party = partyGetPtr(marioGetExtraPartyId());
-    if (party && party->runMode == PARTY_RUN_RIDE) {
+/** Like partyRideOff but the partner lands at the partyGetAppearPos2 spot (step 101). */
+// Original name and size (0x18) from the JP demo map (UNUSED there: every call is inlined).
+void partyRideOff2(PartyEntry* party) {
+    if (party->runMode == PARTY_RUN_RIDE) {
 #if VERSION >= VERSION_US
         if (!(party->trigFlags & PARTY_TRIG_CHG_RUN_MODE)) {
             party->motionStep = 101;

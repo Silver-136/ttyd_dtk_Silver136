@@ -692,7 +692,6 @@ void _fbatFitstAttackAnnounceMain(FirstStrikeInfo* firstStrike);
 
 void npcMain(void) {
     NpcWork* npcwork;
-    FieldBattleData* fbat;
     NpcEntry* entry;
     int i;
     int total;
@@ -1066,24 +1065,7 @@ void npcMain(void) {
         }
     }
 
-    fbat = gp->fbatData;
-    _fbatFitstAttackAnnounceMain(&fbatGetPointer()->firstStrike);
-    switch (fbat->mode) {
-        case FBAT_MODE_FIELD:
-            fbatEncountCheck();
-            fbatKoopaMode();
-            break;
-        case FBAT_MODE_TALK:
-        case FBAT_MODE_REACTION_TALK:
-            fbatTalkMode();
-            break;
-        case FBAT_MODE_BATTLE:
-            fbatBattleMode();
-            break;
-        case 6:
-            break;
-    }
-    fbat->sandersBombTrigger = 0;
+    fbatMain();
 }
 
 /**
@@ -1639,6 +1621,33 @@ void fbatReInit(void) {
 }
 
 /**
+ * Per-frame field battle update after the NPCs: runs the first-strike banner and the current mode (encounter and
+ * Bowser checks in the field, talk, battle start), then clears the bomb trigger.
+ */
+// Original name and size (0x234) from the JP demo map (UNUSED there: npcMain's call is inlined).
+void fbatMain(void) {
+    FieldBattleData* fbat = gp->fbatData;
+
+    _fbatFitstAttackAnnounceMain(&fbat->firstStrike);
+    switch (fbat->mode) {
+        case FBAT_MODE_FIELD:
+            fbatEncountCheck();
+            fbatKoopaMode();
+            break;
+        case FBAT_MODE_TALK:
+        case FBAT_MODE_REACTION_TALK:
+            fbatTalkMode();
+            break;
+        case FBAT_MODE_BATTLE:
+            fbatBattleMode();
+            break;
+        case 6:
+            break;
+    }
+    fbat->sandersBombTrigger = 0;
+}
+
+/**
  * Prepares the first-strike banner for an FbatHitKind (shown once fbatSetAttackAnnounceEnable runs):
  * "You struck first!" sliding across in red for Mario's and the partner's first strikes,
  * "Your foe struck first!" in blue held in place for the enemy's, nothing for plain contact.
@@ -1825,6 +1834,36 @@ static f32 camGetRy(void) {
         angle += 360.0f;
     }
     return angle;
+}
+
+/**
+ * Mario can talk to this NPC: pauses its regular event, remembering its direction, and turns it to face
+ * Mario unless NPC_FLAG_NO_TALK_TURN. The caller tests that the NPC is not paused yet.
+ */
+// Original name and size (0x7c) from the JP demo map (UNUSED there: every call is inlined).
+static void _set_talk_ready(NpcEntry* npc) {
+    MarioWork* mario = marioGetPtr();
+    npc->statusFlags |= NPC_STATUS_TALK_PAUSE;
+    npc->savedDirection = npc->direction;
+    evtStopID(npc->regularEvtId);
+    if (!(npc->flags & NPC_FLAG_NO_TALK_TURN)) {
+        npc->direction = reviseAngle(angleABf(npc->position.x, npc->position.z, mario->position.x, mario->position.z));
+    }
+}
+
+/**
+ * The NPC left talk range: ends its talk pause and resumes its regular event facing its old direction
+ * (NPC_FLAG_RESUME_AFTER_TALK), or makes it restart its movement. The caller tests that it is paused.
+ */
+// Original name and size (0x54) from the JP demo map (UNUSED there: every call is inlined).
+static void _reset_talk_ready(NpcEntry* npc) {
+    npc->statusFlags &= ~NPC_STATUS_TALK_PAUSE;
+    if (npc->flags & NPC_FLAG_RESUME_AFTER_TALK) {
+        npc->direction = npc->savedDirection;
+        evtStartID(npc->regularEvtId);
+    } else {
+        npc->interruptFlags |= NPC_INTERRUPT_MOVE;
+    }
 }
 
 /**
@@ -2048,22 +2087,10 @@ void fbatEncountCheck(void) {
             }
             if (hit) {
                 if (!(npc->statusFlags & NPC_STATUS_TALK_PAUSE)) {
-                    MarioWork *m = marioGetPtr();
-                    npc->statusFlags |= NPC_STATUS_TALK_PAUSE;
-                    npc->savedDirection = npc->direction;
-                    evtStopID(npc->regularEvtId);
-                    if (!(npc->flags & NPC_FLAG_NO_TALK_TURN)) {
-                        npc->direction = reviseAngle(angleABf(npc->position.x, npc->position.z, m->position.x, m->position.z));
-                    }
+                    _set_talk_ready(npc);
                 }
             } else if (npc->statusFlags & NPC_STATUS_TALK_PAUSE) {
-                npc->statusFlags &= ~NPC_STATUS_TALK_PAUSE;
-                if (npc->flags & NPC_FLAG_RESUME_AFTER_TALK) {
-                    npc->direction = npc->savedDirection;
-                    evtStartID(npc->regularEvtId);
-                } else {
-                    npc->interruptFlags |= NPC_INTERRUPT_MOVE;
-                }
+                _reset_talk_ready(npc);
             }
         }
 

@@ -13,6 +13,7 @@ void kpa_powdown(void);
 void kpa_powup(void);
 void kpa_stay(void);
 void kpa_swim(void);
+void kpaChgModeSwimDown(void);
 void quake_kpaHipAttack(void);
 BOOL kpaHipAttackOk(void);
 BOOL kpaPowDown(void);

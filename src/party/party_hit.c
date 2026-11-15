@@ -25,15 +25,13 @@
 
 #include <math.h>
 
-static BOOL chkfilter(HitCheckQuery* query, HitEntry* entry) {
+/**
+ * Hidden blocks (MOBJ_HiddenHatenaBlock, MOBJ_HiddenBadgeBlock, MOBJ_Hidden10CountBlock) do not stop the partner:
+ * FALSE for them, TRUE for anything else. The tail of chkfilter, chkfilterYoshi and chkfilterNokotaro.
+ */
+// Original name and size (0xb0) from the JP demo map (UNUSED there: every call is inlined).
+static BOOL hiddenBlockFilter(HitCheckQuery* query, HitEntry* entry) {
     MapObjectEntry* mobj;
-    marioGetPtr();
-    if (entry->attributes & (HIT_ATTR_SHIP_ONLY | HIT_ATTR_ROLL_THROUGH)) {
-        return TRUE;
-    }
-    if (entry->attributes & (HIT_ATTR_NPC_ONLY | HIT_ATTR_BERO)) {
-        return FALSE;
-    }
     if (!(entry->attributes & HIT_ATTR_MOBJ)) {
         return TRUE;
     }
@@ -46,13 +44,23 @@ static BOOL chkfilter(HitCheckQuery* query, HitEntry* entry) {
     return TRUE;
 }
 
+static BOOL chkfilter(HitCheckQuery* query, HitEntry* entry) {
+    marioGetPtr();
+    if (entry->attributes & (HIT_ATTR_SHIP_ONLY | HIT_ATTR_ROLL_THROUGH)) {
+        return TRUE;
+    }
+    if (entry->attributes & (HIT_ATTR_NPC_ONLY | HIT_ATTR_BERO)) {
+        return FALSE;
+    }
+    return hiddenBlockFilter(query, entry);
+}
+
 /**
  * Partner ray filter used while yoshiGetStatus() is nonzero:
  * like chkfilter, but surfaces with 0x800000 still collide and only attribute 0x4 is skipped.
  * Hidden blocks are passed through.
  */
 static BOOL chkfilterYoshi(HitCheckQuery* query, HitEntry* entry) {
-    MapObjectEntry* mobj;
     marioGetPtr();
     if (entry->attributes & (HIT_ATTR_SHIP_ONLY | HIT_ATTR_ROLL_THROUGH)) {
         return TRUE;
@@ -63,16 +71,7 @@ static BOOL chkfilterYoshi(HitCheckQuery* query, HitEntry* entry) {
     if (entry->attributes & HIT_ATTR_NPC_ONLY) {
         return FALSE;
     }
-    if (!(entry->attributes & HIT_ATTR_MOBJ)) {
-        return TRUE;
-    }
-    mobj = mobjHitObjPtrToPtr(entry);
-    if (!strcmp(mobj->animName, "MOBJ_HiddenHatenaBlock") || !strcmp(mobj->animName, "MOBJ_HiddenBadgeBlock") ||
-        !strcmp(mobj->animName, "MOBJ_Hidden10CountBlock")) {
-        mobjHitObjPtrToPtr(entry);
-        return FALSE;
-    }
-    return TRUE;
+    return hiddenBlockFilter(query, entry);
 }
 
 /**
@@ -81,7 +80,6 @@ static BOOL chkfilterYoshi(HitCheckQuery* query, HitEntry* entry) {
  * and passes through hidden blocks.
  */
 static BOOL chkfilterNokotaro(HitCheckQuery* query, HitEntry* entry) {
-    MapObjectEntry* mobj;
     marioGetPtr();
     if (entry->attributes & (HIT_ATTR_SHELL_THROUGH | HIT_ATTR_NPC_ONLY | HIT_ATTR_BERO)) {
         return FALSE;
@@ -89,16 +87,7 @@ static BOOL chkfilterNokotaro(HitCheckQuery* query, HitEntry* entry) {
     if (entry->attributes & (HIT_ATTR_SHIP_ONLY | HIT_ATTR_ROLL_THROUGH)) {
         return TRUE;
     }
-    if (!(entry->attributes & HIT_ATTR_MOBJ)) {
-        return TRUE;
-    }
-    mobj = mobjHitObjPtrToPtr(entry);
-    if (!strcmp(mobj->animName, "MOBJ_HiddenHatenaBlock") || !strcmp(mobj->animName, "MOBJ_HiddenBadgeBlock") ||
-        !strcmp(mobj->animName, "MOBJ_Hidden10CountBlock")) {
-        mobjHitObjPtrToPtr(entry);
-        return FALSE;
-    }
-    return TRUE;
+    return hiddenBlockFilter(query, entry);
 }
 
 /**

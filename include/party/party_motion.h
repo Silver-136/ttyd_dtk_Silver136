@@ -31,6 +31,8 @@ void party_motion_stay(PartyEntry* party);
 void party_motion_upstairs(PartyEntry* party);
 void party_motion_wait(PartyEntry* party);
 void partyForceSlitOff(PartyEntry* party);
+void partySlitOn(PartyEntry* party);
+void partySlitOff(PartyEntry* party);
 void partyFollowCloseOff(PartyEntry* party);
 void partyFollowCloseOn(PartyEntry* party);
 void allPartySlitOffReq(void);

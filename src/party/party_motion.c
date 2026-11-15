@@ -2892,17 +2892,11 @@ void party_motion_damage(PartyEntry* party) {
 void allPartySlitOn(void) {
     PartyEntry* party = partyGetPtr(marioGetPartyId());
     if (party) {
-        if (!(party->playerPtr->trigFlags & MARIO_TRIG_FLAG_NORMALIZING)) {
-            party->trigFlags |= PARTY_TRIG_SLIT_INIT;
-            party->slitOn = 1;
-        }
+        partySlitOn(party);
     }
     party = partyGetPtr(marioGetExtraPartyId());
     if (party) {
-        if (!(party->playerPtr->trigFlags & MARIO_TRIG_FLAG_NORMALIZING)) {
-            party->trigFlags |= PARTY_TRIG_SLIT_INIT;
-            party->slitOn = 1;
-        }
+        partySlitOn(party);
     }
 }
 #endif
@@ -2914,12 +2908,12 @@ void allPartySlitOn(void) {
 #if VERSION >= VERSION_JP
 void allPartySlitOff(void) {
     PartyEntry* party = partyGetPtr(marioGetPartyId());
-    if (party && (party->flags & PARTY_FLAG_PAPER_MODE) && party->slitStep < 40) {
-        party->slitStep = 40;
+    if (party) {
+        partySlitOff(party);
     }
     party = partyGetPtr(marioGetExtraPartyId());
-    if (party && (party->flags & PARTY_FLAG_PAPER_MODE) && party->slitStep < 40) {
-        party->slitStep = 40;
+    if (party) {
+        partySlitOff(party);
     }
 }
 #endif
@@ -2969,6 +2963,24 @@ void allPartySlitOffReq(void) {
 
 #if VERSION >= VERSION_JP
 
+/** JP and later: the partner turns sideways with Mario (slitOn 1, set up by party_slit), unless Mario is normalizing. */
+// Original name from the JP demo map (UNUSED there: every call is inlined).
+void partySlitOn(PartyEntry* party) {
+    if (party->playerPtr->trigFlags & MARIO_TRIG_FLAG_NORMALIZING) {
+        return;
+    }
+    party->trigFlags |= PARTY_TRIG_SLIT_INIT;
+    party->slitOn = 1;
+}
+
+/** JP and later: a partner still in Paper Mode starts its turn-back animation (slitStep 40). */
+// Original name from the JP demo map (UNUSED there: every call is inlined).
+void partySlitOff(PartyEntry* party) {
+    if ((party->flags & PARTY_FLAG_PAPER_MODE) && party->slitStep < 40) {
+        party->slitStep = 40;
+    }
+}
+
 /**
  * JP and later: ends Paper Mode on this partner at once, facing left or right from its direction, and resets its pose.
  */
@@ -2994,10 +3006,7 @@ void partyChgMotSlitFloor(PartyEntry* party) {
     if (party->flags & PARTY_FLAG_MOT_SLIT_FLOOR) {
         return;
     }
-    if (!(party->playerPtr->trigFlags & MARIO_TRIG_FLAG_NORMALIZING)) {
-        party->trigFlags |= PARTY_TRIG_SLIT_INIT;
-        party->slitOn = 1;
-    }
+    partySlitOn(party);
     party->flags |= PARTY_FLAG_MOT_SLIT_FLOOR;
 }
 #endif
@@ -5056,24 +5065,22 @@ void party_motion_damage(PartyEntry* party) {
 void allPartySlitOn(void) {
     PartyEntry* party = partyGetPtr(marioGetPartyId());
     if (party) {
-        party->trigFlags |= PARTY_TRIG_SLIT_INIT;
-        party->slitOn = 1;
+        partySlitOn(party);
     }
     party = partyGetPtr(marioGetExtraPartyId());
     if (party) {
-        party->trigFlags |= PARTY_TRIG_SLIT_INIT;
-        party->slitOn = 1;
+        partySlitOn(party);
     }
 }
 
 void allPartySlitOff(void) {
     PartyEntry* party = partyGetPtr(marioGetPartyId());
-    if (party && (party->flags & PARTY_FLAG_PAPER_MODE) && party->slitStep < 0x28) {
-        party->slitStep = 0x28;
+    if (party) {
+        partySlitOff(party);
     }
     party = partyGetPtr(marioGetExtraPartyId());
-    if (party && (party->flags & PARTY_FLAG_PAPER_MODE) && party->slitStep < 0x28) {
-        party->slitStep = 0x28;
+    if (party) {
+        partySlitOff(party);
     }
 }
 
@@ -5085,6 +5092,21 @@ void allPartyForceSlitOff(void) {
     party = partyGetPtr(marioGetExtraPartyId());
     if (party) {
         partyForceSlitOff(party);
+    }
+}
+
+/** Demos: the partner turns sideways with Mario (slitOn 1, set up by party_slit). */
+// Original name and size (0x18) from the JP demo map (UNUSED there: every call is inlined).
+void partySlitOn(PartyEntry* party) {
+    party->trigFlags |= PARTY_TRIG_SLIT_INIT;
+    party->slitOn = 1;
+}
+
+/** Demos: a partner still in Paper Mode starts its turn-back animation (slitStep 40). */
+// Original name and size (0x24) from the JP demo map (UNUSED there: every call is inlined).
+void partySlitOff(PartyEntry* party) {
+    if ((party->flags & PARTY_FLAG_PAPER_MODE) && party->slitStep < 40) {
+        party->slitStep = 40;
     }
 }
 
@@ -5112,8 +5134,7 @@ void partyChgMotSlitFloor(PartyEntry* party) {
     if (party->flags & PARTY_FLAG_MOT_SLIT_FLOOR) {
         return;
     }
-    party->trigFlags |= PARTY_TRIG_SLIT_INIT;
-    party->slitOn = 1;
+    partySlitOn(party);
     party->flags |= PARTY_FLAG_MOT_SLIT_FLOOR;
 }
 

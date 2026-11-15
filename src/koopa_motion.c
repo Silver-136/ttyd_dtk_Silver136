@@ -483,18 +483,7 @@ void kpa_fall(void) {
         mario->kpaWork->flags |= KPA_WORK_FLAG_WATER_FALL_SFX;
     }
     if (kpaGetBodyStatus() == KPA_BODY_SUBMERGED) {
-        mario = marioGetPtr();
-        if (mario->currMotionId != MARIO_MOTION_KPA_SWIM) {
-            marioChgMot2(MARIO_MOTION_KPA_SWIM);
-        }
-        kpaClearHitobjRide();
-        mario->flags &= ~MARIO_FLAG_IS_JUMPING;
-        mario->flags |= MARIO_FLAG_IS_FALLING;
-        mario->currSubMotionId = 0x1E;
-        mario->airTimer = 0;
-        mario->multiTimer = 0;
-        mario->baseSpeed = 0.0f;
-        mario->kpaSpeed = 0.0f;
+        kpaChgModeSwimDown();
     }
 }
 
@@ -785,6 +774,26 @@ void kpaBubble(void) {
                              mario->directionView < 180.0f ? 225.0f : 135.0f);
         }
     }
+}
+
+/**
+ * Bowser fell fully into the water: switches to the swimming motion (if not in it already) and starts him sinking
+ * (sub-state 0x1E) with no air time and no horizontal speed.
+ */
+// Original name and size (0x7c) from the JP demo map (UNUSED there: every call is inlined).
+void kpaChgModeSwimDown(void) {
+    MarioWork* mario = marioGetPtr();
+    if (mario->currMotionId != MARIO_MOTION_KPA_SWIM) {
+        marioChgMot2(MARIO_MOTION_KPA_SWIM);
+    }
+    kpaClearHitobjRide();
+    mario->flags &= ~MARIO_FLAG_IS_JUMPING;
+    mario->flags |= MARIO_FLAG_IS_FALLING;
+    mario->currSubMotionId = 0x1E;
+    mario->airTimer = 0;
+    mario->multiTimer = 0;
+    mario->baseSpeed = 0.0f;
+    mario->kpaSpeed = 0.0f;
 }
 
 // kept: the target calls kpaSwimMove (a local function in the JP demo map) from kpa_swim; a function this small is
