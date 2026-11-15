@@ -713,9 +713,8 @@ static s32 moamoa_hit_check(ExtdrvPose* pose, Moamoa* moa) {
     return 0;
 }
 
-// Kept (pattern): propagation and lifetimes off for ext_moamoa_main (eki_00, rsh_05, rsh_06) and bom_01's ext_main;
-// the target needs it and no natural form was found (cleanup_notes/bf/T1/log.md).
-#pragma opt_propagation off
+// Kept (pattern): lifetimes off for ext_moamoa_main (eki_00, rsh_05, rsh_06; rsh_06 and bom_01's ext_main also
+// propagation off); the target needs it and no natural form was found (cleanup_notes/bf/T1/log.md).
 #pragma opt_lifetimes off
 // FAKE: placed in .rodata; without it the object changes
 __declspec(section ".rodata") static Vec moamoa_zero_vec = {0.0f, 0.0f, 0.0f};
@@ -1074,6 +1073,7 @@ static void ext_moamoa_main(void) {
             case MOAMOA_STATE_STOMPED_HOP2:
 
                 case MOAMOA_STATE_STOMPED_HOP3: {
+                        f32 tx;
                         f32 tz;
                         if (!(moa->flags & MOAMOA_FLAG_TO_TARGET)) {
                             tx = mario->position.x;
@@ -1330,7 +1330,6 @@ static void ext_moamoa_main(void) {
     }
 #endif
 }
-#pragma opt_propagation reset
 #pragma opt_lifetimes reset
 
 /**

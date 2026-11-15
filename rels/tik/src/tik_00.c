@@ -459,11 +459,10 @@ static USER_FUNC(evt_uranaisi_msg_set) {
                         ofs[count / 2] = 0;
                         sign = 1;
                         while ((s8)(c = msg[i]) != ' ') {
-                            c = (s8)c;
-                            if (c == '-') {
+                            if ((s8)c == '-') {
                                 sign = -1;
-                            } else if (c >= '0' && c <= '9') {
-                                ofs[count / 2] = c + ofs[count / 2] * 10 - '0';
+                            } else if ((s8)c >= '0' && (s8)c <= '9') {
+                                ofs[count / 2] = (s8)c + ofs[count / 2] * 10 - '0';
                             }
                             i++;
                         }
