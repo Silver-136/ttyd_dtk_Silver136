@@ -192,10 +192,10 @@ static f32 _getWalkSpd(void) {
     return spd;
 }
 
-#if VERSION >= VERSION_JP
 /**
  * TRUE when Mario must stay in Paper Mode: R is held, walls are too close around him,
- * or he stands in a narrow crack (marioCreviceWallChk). The item menu refuses items then. JP and later.
+ * or he stands in a narrow crack (marioCreviceWallChk). The item menu refuses items then (JP and later; nothing
+ * calls it in the early demos: JP demo map UNUSED, 0x100).
  */
 BOOL marioSlitContinueChk(void) {
     MarioWork* mario = marioGetPtr();
@@ -207,7 +207,6 @@ BOOL marioSlitContinueChk(void) {
     }
     return marioCreviceWallChk(mario->position) != 0;
 }
-#endif
 
 /**
  * TRUE when position p is inside a narrow crack:

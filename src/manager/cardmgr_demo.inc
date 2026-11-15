@@ -1,4 +1,8 @@
 // cardmgr.c as the early demos have it (from the LLCOOLT tree's demo view): a different file layout, most helpers inlined.
+// The static helpers the JP demo map lists as UNUSED (memcard_*, make_header, format_main, delete_main) are plain
+// functions whose calls are all inlined; their out-of-line copies have the map's sizes. check_sum, make_data,
+// headerCheck and dataCheck are UNUSED there too, but as plain functions their copies come out larger than the map's
+// (0xfc/0x160/0xfc/0x128 against 0xa8/0x130/0xf0/0x118), so they stay inline.
 /** Name of the game's save file on the memory card, used to find, create and delete it. */
 const char cardFileName[0x14] = "mariost_save_file";
 const char cardGameTitle[0x18] = "ペーパーマリオＲＰＧ";
@@ -24,23 +28,23 @@ static const char* version = VERSION_PICK("009", "010");
 
 // local prototypes
 static inline void check_sum(CardSaveSlot* save);
-static inline void make_header(void);
+static void make_header(void);
 static inline void make_data(void);
 
 static void memcard_probe(void); // the demo calls it, the later versions inline it
-static inline void memcard_mount(void);
-static inline void memcard_unmount(void);
-static inline void memcard_check(void);
-static inline void memcard_format(void);
-static inline void memcard_delete(void);
-static inline void memcard_create(void);
-static inline void memcard_write(void* addr, s32 length, s32 offset);
-static inline void memcard_read(void* addr, s32 length, s32 offset);
-static inline void memcard_set_stat(void);
-static inline void memcard_get_stat(void);
-static inline void memcard_get_serial(void);
+static void memcard_mount(void);
+static void memcard_unmount(void);
+static void memcard_check(void);
+static void memcard_format(void);
+static void memcard_delete(void);
+static void memcard_create(void);
+static void memcard_write(void* addr, s32 length, s32 offset);
+static void memcard_read(void* addr, s32 length, s32 offset);
+static void memcard_set_stat(void);
+static void memcard_get_stat(void);
+static void memcard_get_serial(void);
 static void memcard_open(void);
-static inline void memcard_close(void);
+static void memcard_close(void);
 
 static void mountDetachCallback(s32 chan, s32 result);
 static void mountAttachCallback(s32 chan, s32 result);
@@ -56,8 +60,8 @@ static void write_header_main(void);
 static void read_main(void);
 static void read_all_main(void);
 static void create_main(void);
-static inline void format_main(void);
-static inline void delete_main(void);
+static void format_main(void);
+static void delete_main(void);
 
 static inline BOOL headerCheck(void);
 static inline BOOL headerCheck2(void);
@@ -855,7 +859,7 @@ void cardFormat(void) {
 }
 
 /** Step machine for formatting: mount, format, unmount. Unused: cardMain carries its own copy for op 6. */
-static inline void format_main(void) {
+static void format_main(void) {
     if (wp->result != CARD_RESULT_READY) {
         wp->op = 8;
         wp->flags |= CARD_FLAG_OP_FAILED;
@@ -895,7 +899,7 @@ static inline void format_main(void) {
  * Step machine for deleting the save file: mount, check, delete, unmount.
  * Unused: cardMain carries its own copy (op 7).
  */
-static inline void delete_main(void) {
+static void delete_main(void) {
     if (wp->result != CARD_RESULT_READY) {
         wp->op = 8;
         wp->flags |= CARD_FLAG_OP_FAILED;
@@ -1049,7 +1053,7 @@ static inline u32 header_sum(u8* data, s32 size) {
  * and today's date comment shown in the GameCube memory card screen, the banner and icon images, and the sound,
  * rumble and last slot settings, then its checksums.
  */
-static inline void make_header(void) {
+static void make_header(void) {
     CardMetadata* metadata;
     OSCalendarTime td;
     metadata = &cardGetFilePtr()->metadata;
@@ -1149,14 +1153,14 @@ static void mountAttachCallback(s32 chan, s32 result) {
 }
 
 /** Mounts the card in the chosen slot asynchronously, in fast mode. */
-static inline void memcard_mount(void) {
+static void memcard_mount(void) {
     CARDSetFastMode(TRUE);
     wp->flags |= CARD_FLAG_CALL_BUSY;
     CARDMountAsync(wp->chan, wp->workArea, mountDetachCallback, mountAttachCallback);
 }
 
 /** Unmounts the card, retrying while busy. */
-static inline void memcard_unmount(void) {
+static void memcard_unmount(void) {
     s32 result;
     s32 i;
 
@@ -1179,7 +1183,7 @@ static void checkCallback(s32 chan, s32 result) {
 }
 
 /** Checks the card's file system asynchronously. */
-static inline void memcard_check(void) {
+static void memcard_check(void) {
     wp->flags |= CARD_FLAG_CALL_BUSY;
     CARDCheckAsync(wp->chan, checkCallback);
 }
@@ -1191,13 +1195,13 @@ static void formatCallback(s32 chan, s32 result) {
 }
 
 /** Formats the card asynchronously. */
-static inline void memcard_format(void) {
+static void memcard_format(void) {
     wp->flags |= CARD_FLAG_CALL_BUSY;
     CARDFormatAsync(wp->chan, formatCallback);
 }
 
 /** Deletes the save file, retrying while busy; a missing file counts as success. */
-static inline void memcard_delete(void) {
+static void memcard_delete(void) {
     s32 result;
     s32 i;
 
@@ -1225,7 +1229,7 @@ static void createCallback(s32 chan, s32 result) {
 }
 
 /** Creates mariost_save_file with room for the header and the eight slot copies (0x22000 bytes). */
-static inline void memcard_create(void) {
+static void memcard_create(void) {
     wp->flags |= CARD_FLAG_CALL_BUSY;
     CARDCreateAsync(wp->chan, cardFileName, sizeof(CardData) + (sizeof(CardSaveSlot) * 4), &wp->info, createCallback);
 }
@@ -1237,7 +1241,7 @@ static void writeCallback(s32 chan, s32 result) {
 }
 
 /** Writes length bytes at offset in the open save file asynchronously. */
-static inline void memcard_write(void* addr, s32 length, s32 offset) {
+static void memcard_write(void* addr, s32 length, s32 offset) {
     wp->flags |= CARD_FLAG_CALL_BUSY;
     CARDWriteAsync(&wp->info, addr, length, offset, writeCallback);
 }
@@ -1249,7 +1253,7 @@ static void readCallback(s32 chan, s32 result) {
 }
 
 /** Reads length bytes at offset from the open save file asynchronously. */
-static inline void memcard_read(void* addr, s32 length, s32 offset) {
+static void memcard_read(void* addr, s32 length, s32 offset) {
     wp->flags |= CARD_FLAG_CALL_BUSY;
     CARDReadAsync(&wp->info, addr, length, offset, readCallback);
 }
@@ -1261,13 +1265,13 @@ static void statusCallback(s32 chan, s32 result) {
 }
 
 /** Writes the directory entry (comment, banner and icon settings) of the save file asynchronously. */
-static inline void memcard_set_stat(void) {
+static void memcard_set_stat(void) {
     wp->flags |= CARD_FLAG_CALL_BUSY;
     CARDSetStatusAsync(wp->chan, wp->info.fileNo, &wp->status, statusCallback);
 }
 
 /** Reads the save file's directory entry into wp->status, retrying while busy. */
-static inline void memcard_get_stat(void) {
+static void memcard_get_stat(void) {
     s32 result;
     s32 i;
 
@@ -1285,7 +1289,7 @@ static inline void memcard_get_stat(void) {
 }
 
 /** Reads the card's serial number, which memcard_open later compares to spot a swapped card. */
-static inline void memcard_get_serial(void) {
+static void memcard_get_serial(void) {
     s32 result;
     s32 i;
 
@@ -1408,7 +1412,7 @@ static void memcard_open(void) {
 }
 
 /** Closes the save file, retrying while busy. */
-static inline void memcard_close(void) {
+static void memcard_close(void) {
     s32 result;
     s32 i;
 

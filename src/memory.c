@@ -436,10 +436,10 @@ void smartInit(void) {
     g_bFirstSmartAlloc = FALSE;
 }
 
-#if VERSION >= VERSION_JP
 /**
- * JP and later: empties the smart heap again without reallocating it.
- * Used by the crash screen to get memory for the ROM font.
+ * Empties the smart heap again without reallocating it.
+ * Used by the crash screen (JP and later) to get memory for the ROM font; nothing calls it in the early demos
+ * (JP demo map: UNUSED, 0x150).
  */
 void smartReInit(void) {
     smartEntry* e;
@@ -461,7 +461,6 @@ void smartReInit(void) {
     wp->tail->next = NULL;
     g_bFirstSmartAlloc = FALSE;
 }
-#endif
 
 // kept: the target calls smartAutoFree from smartAlloc; a function this small is auto-inlined otherwise, and
 // -inline noauto for the file changes other functions
