@@ -52,6 +52,25 @@ static void kemuri_matrix(EffKemuri3N64Work* work) {
     PSMTXConcat(trans, scale, work->mtx);
 }
 
+/** One frame of a puff: slows down, drifts along its direction, rises and tilts back (like eff_mugi's kemuri_mugi_jump). */
+// Original name and size (0xb8) from the JP demo map (UNUSED there: every call is inlined).
+static void kemuri_hana_jump(EffKemuri3N64Work* work) {
+    work->speed *= 0.85f;
+    work->position.x += work->speed * work->sinAngle;
+    work->position.z += work->speed * work->cosAngle;
+    work->vJerk += work->vSnap;
+    work->vAccel += work->vJerk;
+    work->vSpeed += work->vAccel;
+    work->position.y += work->vSpeed;
+    if (work->vSpeed < 0.0f) {
+        work->vJerk = 0.004f;
+    }
+    work->rotation.x -= 1.0f;
+    if (work->rotation.x < -100.0f) {
+        work->rotation.x = -100.0f;
+    }
+}
+
 static void effKemuri3Main(EffectEntry* effect);
 static void effKemuri3Disp(CameraId cameraId, void* param);
 
@@ -126,20 +145,7 @@ static void effKemuri3Main(EffectEntry* effect) {
             continue;
         }
         alive = TRUE;
-        work->speed *= 0.85f;
-        work->position.x += work->speed * work->sinAngle;
-        work->position.z += work->speed * work->cosAngle;
-        work->vJerk += work->vSnap;
-        work->vAccel += work->vJerk;
-        work->vSpeed += work->vAccel;
-        work->position.y += work->vSpeed;
-        if (work->vSpeed < 0.0f) {
-            work->vJerk = 0.004f;
-        }
-        work->rotation.x -= 1.0f;
-        if (work->rotation.x < -100.0f) {
-            work->rotation.x = -100.0f;
-        }
+        kemuri_hana_jump(work);
         kemuri_matrix(work);
     }
     if (!alive) {

@@ -2165,6 +2165,16 @@ static void pushGXModelMtx_JointNode__(AnimPoseNode* node, f32 sx, f32 sy, f32 s
 }
 
 /**
+ * Early demos: sets GX culling for a shape's cull mode (materialProc and renderProc).
+ * Original name and size (0x30) from the JP demo map (UNUSED there: every call is inlined); the map's tbl$1109
+ * is its static table.
+ */
+static void dispSetCullingMode(s32 mode) {
+    static s32 tbl[4] = { GX_CULL_BACK, GX_CULL_FRONT, GX_CULL_ALL, GX_CULL_NONE };
+    GXSetCullMode(tbl[mode]);
+}
+
+/**
  * the early demos set up each texture object, then build the full texture matrix
  * unless the animation is the identity.
  * The local declaration order is load-bearing: it decides the register colouring (wrapFlags r30, params
@@ -2455,12 +2465,6 @@ static BOOL animSetMaterial_ChangeTexture(AnimationPoseData* data, AnimPoseShape
 
 #if VERSION >= VERSION_JP
 static s32 tbl[4] = { GX_CULL_BACK, GX_CULL_FRONT, GX_CULL_ALL, GX_CULL_NONE }; // shape cullMode -> GXCullMode: GX_CULL_BACK, GX_CULL_FRONT, GX_CULL_ALL, GX_CULL_NONE
-#else
-/** Sets GX culling for a shape's cull mode; the demo map has one static local table both draw functions read. */
-static inline void animSetCullMode(s32 cullMode) {
-    static s32 tbl[4] = { GX_CULL_BACK, GX_CULL_FRONT, GX_CULL_ALL, GX_CULL_NONE };
-    GXSetCullMode(tbl[cullMode]);
-}
 #endif
 
 /**
@@ -2501,7 +2505,7 @@ static void materialProc(s32 shapeId, s32 xluStage) {
         draw = &wp->curPoseData->draws[shape->shapeDrawStart];
         if ((dispMode == 0 && wp->currDispMode == 2) || dispMode == wp->currDispMode || wp->curPose->materialColor.a != 0xFF || wp->curPose->materialColor2.a != 0xFF) {
 #if VERSION <= VERSION_DEMO_JP
-            animSetCullMode(shape->cullMode);
+            dispSetCullingMode(shape->cullMode);
 #else
             GXSetCullMode(tbl[shape->cullMode]);
 #endif
@@ -2639,7 +2643,7 @@ static void renderProc(s32 shapeId, s32 unused) {
             s32 firstDrawId;
             f32* texVtxIndices[8];
 #if VERSION <= VERSION_DEMO_JP
-            animSetCullMode(shape->cullMode);
+            dispSetCullingMode(shape->cullMode);
 #else
             GXSetCullMode(tbl[shape->cullMode]);
 #endif

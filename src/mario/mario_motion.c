@@ -591,23 +591,26 @@ void marioSetFallPara(void) {
     }
 }
 
+/** The fastest fall speed (marioJumpData.minFall, -18 units per frame). */
+// Original name and size (0x10) from the JP demo map (UNUSED there: every call is inlined).
+static f32 marioGetMaxFallSpd(void) {
+    return marioJumpData.minFall;
+}
+
 /**
  * Steps the fall curve one frame and returns the new vertical speed (units per frame),
  * capped at marioJumpData.minFall (-18); the jerk is not allowed to turn positive.
  */
 f32 marioGetFallSpd(void) {
     MarioWork* mario = marioGetPtr();
-    MarioJumpData* jd;
-    f32 min;
     mario->jumpJerkY = mario->jumpJerkY + mario->jumpSnapY;
     if (mario->jumpJerkY > 0.0f) {
         mario->jumpJerkY = 0.0f;
     }
-    jd = &marioJumpData;
     mario->jumpAccelerationY = mario->jumpAccelerationY + mario->jumpJerkY;
     mario->jumpVelocityY = mario->jumpVelocityY + mario->jumpAccelerationY;
-    if (mario->jumpVelocityY <= (min = jd->minFall)) {
-        mario->jumpVelocityY = min;
+    if (mario->jumpVelocityY <= marioGetMaxFallSpd()) {
+        mario->jumpVelocityY = marioGetMaxFallSpd();
         mario->jumpAccelerationY = 0.0f;
         mario->jumpJerkY = 0.0f;
         mario->jumpSnapY = 0.0f;

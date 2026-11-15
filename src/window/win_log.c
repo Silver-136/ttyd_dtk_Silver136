@@ -1745,6 +1745,31 @@ typedef struct MonoDatFile {
 } MonoDatFile;
 
 /**
+ * The portrait offset and scale for the card's enemy from its mono.dat entry (0, 0 and 1 without one).
+ * Original name and size (0x78) from the JP demo map (UNUSED there: every call is inlined). The parameter list is
+ * inferred from that size and the caller's locals.
+ */
+static void monosiriCamOffset(MonosiriWork* m, f32* x, f32* y, f32* scale) {
+    s32 n;
+    MonoDat* e;
+    s32 i;
+
+    n = ((MonoDatFile*)m->monoDat->data)->size / sizeof(MonoDat);
+    e = ((MonoDatFile*)m->monoDat->data)->entries;
+    for (i = 0; i < n; i++, e++) {
+        if (e->id == m->id) break;
+    }
+    if (i < n) {
+        *x = e->x;
+        *y = e->y;
+        *scale = e->scale;
+    } else {
+        *y = *x = 0.0f;
+        *scale = 1.0f;
+    }
+}
+
+/**
  * Renders the Tattle card's enemy portrait off screen:
  * frames the model's bounding box (adjusted by its mono.dat entry), draws it,
  * and copies the result into the card's RGB5A3 texture buffer.
@@ -1776,8 +1801,6 @@ static void capture(CameraId camera, void* param) {
     u16 tw;
     u16 th;
     s32 i;
-    MonoDat* e;
-    s32 n;
     Vec* gpos;
     s32* cnt;
     s32* idx;
@@ -1806,19 +1829,7 @@ static void capture(CameraId camera, void* param) {
         dist = ((608.0f * (max.y - cy)) / 480.0f) / (f32)tan(0.21816615760326385);
     }
     C_MTXLookAt(view, &(Vec){cx, cy, dist}, &(Vec){0.0f, 1.0f, 0.0f}, &(Vec){cx, cy, 0.0f});
-    n = ((MonoDatFile*)m->monoDat->data)->size / sizeof(MonoDat);
-    e = ((MonoDatFile*)m->monoDat->data)->entries;
-    for (i = 0; i < n; i++, e++) {
-        if (e->id == m->id) break;
-    }
-    if (i < n) {
-        tx = e->x;
-        ty = e->y;
-        s = e->scale;
-    } else {
-        ty = tx = 0.0f;
-        s = 1.0f;
-    }
+    monosiriCamOffset(m, &tx, &ty, &s);
     PSMTXTrans(t, tx, ty, 0.0f);
     PSMTXScale(sm, s, s, s);
     PSMTXConcat(t, sm, t);

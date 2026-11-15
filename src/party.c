@@ -261,6 +261,20 @@ s32 partyGetNum(void) {
     return count;
 }
 
+/** Finds the first empty partner slot, allocates and zeroes a new entry there and returns its index, or -1. */
+// Original name and size (0x7c) from the JP demo map (UNUSED there: every call is inlined).
+static s32 getPartyEntryId(void) {
+    s32 i;
+
+    for (i = 0; i < 2; i++) {
+        if (partyPtrTbl[i] == NULL) {
+            memset(partyPtrTbl[i] = __memAlloc(HEAP_DEFAULT, sizeof(PartyEntry)), 0, sizeof(PartyEntry));
+            return i;
+        }
+    }
+    return -1;
+}
+
 /** Allocates and zeroes the follower slot (1) if it is empty; returns 1, or -1 if taken. */
 // Original name and size (0x5c) from the JP demo map (UNUSED there: every call is inlined).
 s32 getExtraPartyEntryId(void) {
@@ -482,22 +496,6 @@ f32 partyGetHeight(PartyEntry* party) {
 }
 
 /**
- * Finds the first empty partner slot from start, allocates and zeroes a new entry there and returns its index,
- * or -1 if both are taken.
- */
-static inline s32 partyGetFreeSlot(s32 start) {
-    s32 i;
-
-    for (i = start; i < 2; i++) {
-        if (partyPtrTbl[i] == NULL) {
-            memset(partyPtrTbl[i] = __memAlloc(HEAP_DEFAULT, sizeof(PartyEntry)), 0, sizeof(PartyEntry));
-            return i;
-        }
-    }
-    return -1;
-}
-
-/**
  * Animation group names for Yoshi's seven colours,
  * indexed by the colour he hatched with (pouchGetPartyColor).
  */
@@ -522,7 +520,7 @@ s32 partyEntryMain(s32 memberId) {
     PartyEntry* party;
 
     player = marioGetPtr();
-    slot = partyGetFreeSlot(0);
+    slot = getPartyEntryId();
     if (slot < 0) {
         return -1;
     }

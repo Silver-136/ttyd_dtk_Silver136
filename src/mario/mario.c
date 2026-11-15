@@ -46,6 +46,7 @@ static void marioDisp(CameraId camId, void* param);
 static void marioDispBlur(CameraId camId, void* param);
 static void marioMoveMain(void);
 static void marioCtrlOff2Main(void);
+static void marioDokan(void);
 static void marioBlurInit(void);
 
 // Declared without a prototype: mario_hit.c defines it with no parameter, but the call passes one
@@ -1171,7 +1172,6 @@ void marioMain(void) {
     MarioWork* p;
     u32 flags;
     f32 y;
-    f32 c, b, a;
 
     if (!(wp->flags & MARIO_FLAG_ACTIVE)) {
         return;
@@ -1239,19 +1239,8 @@ void marioMain(void) {
         }
     }
     if (wp->currMotionId == MARIO_MOTION_DOKAN) {
-        marioMotion();
-        mp->hitobjStandOn = marioSearchGround(&a, &b, &c, 0.0f, 0.0f);
-        marioPreDisp();
-        partyMain();
-        marioCamMain();
-        wp = mp;
-        if ((wp->frameCounter & 1) && (wp->dispFlags & MARIO_DISP_FLAG_BLUR)) {
-            blurPos[blurPosId] = wp->position;
-            if (++blurPosId >= 8) {
-                blurPosId -= 8;
-            }
-        }
-        marioPostMain(wp);
+        marioDokan();
+        marioPostMain(mp);
         return;
     }
     if (wp->flags & MARIO_FLAG_CTRL_OFF) {
@@ -1506,6 +1495,24 @@ static void marioCtrlOff2Main(void) {
         marioChkGnd();
     }
 #endif
+}
+
+/**
+ * Mario's frame inside a pipe (marioMain's MARIO_MOTION_DOKAN arm): motion, floor search, display set-up,
+ * partner and camera, then the blur trail every other frame.
+ */
+// Original name and size (0xac) from the JP demo map (UNUSED there: every call is inlined).
+static void marioDokan(void) {
+    f32 a, b, c;
+
+    marioMotion();
+    mp->hitobjStandOn = marioSearchGround(&a, &b, &c, 0.0f, 0.0f);
+    marioPreDisp();
+    partyMain();
+    marioCamMain();
+    if (mp->frameCounter & 1) {
+        marioMakeBlur();
+    }
 }
 
 /**

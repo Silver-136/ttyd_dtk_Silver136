@@ -101,6 +101,28 @@ static void kemuri_matrix(EffKemuri4N64Work* work) {
     PSMTXConcat(trans, scale, work->mtx);
 }
 
+/**
+ * One frame of a puff: rises with growing speed, drifts back against its direction, spins and fades; a rising
+ * type 0 puff waits (its timer held) while Mario stands still (like eff_mugi's kemuri_mugi_dash).
+ */
+// Original name and size (0x100) from the JP demo map (UNUSED there: every call is inlined).
+static void kemuri_hana_dash(EffKemuri4N64Work* work) {
+    if (work->type == 0 && work->holdOnStay && marioGetPtr()->currMotionId == MARIO_MOTION_STAY) {
+        work->timer++;
+        return;
+    }
+    work->accel2 += work->accel3;
+    work->accel += work->accel2;
+    work->velocity += work->accel;
+    work->rotation.z += work->velocity * work->rotSpeed;
+    work->position.x -= work->dirX * (work->velocity * work->moveScale);
+    work->position.z -= work->dirZ * (work->velocity * work->moveScale);
+    work->alpha -= 12;
+    if (work->velocity < 0.0f) {
+        work->holdOnStay = 0.0f;
+    }
+}
+
 static void effKemuri4Main(EffectEntry* effect);
 static void effKemuri4Disp(CameraId cameraId, void* param);
 
@@ -176,20 +198,7 @@ static void effKemuri4Main(EffectEntry* effect) {
             continue;
         }
         anyActive = 1;
-        if (work->type == 0 && work->holdOnStay && marioGetPtr()->currMotionId == MARIO_MOTION_STAY) {
-            work->timer++;
-        } else {
-            work->accel2 += work->accel3;
-            work->accel += work->accel2;
-            work->velocity += work->accel;
-            work->rotation.z += work->velocity * work->rotSpeed;
-            work->position.x -= work->dirX * (work->velocity * work->moveScale);
-            work->position.z -= work->dirZ * (work->velocity * work->moveScale);
-            work->alpha -= 12;
-            if (work->velocity < 0.0f) {
-                work->holdOnStay = 0.0f;
-            }
-        }
+        kemuri_hana_dash(work);
         kemuri_matrix(work);
     }
     if (anyActive == 0) {

@@ -33,6 +33,40 @@ typedef struct EffKemuri1Work {
 
 static void effKemuri1Main(EffectEntry* effect);
 
+/** Moves one puff of types 0 and 1 (the landing puffs): speeds ramp by their factors, out along its direction and up. */
+// Original name and size from the JP demo map (UNUSED there: every call is inlined).
+static void kemuri_land(EffKemuri1Work* work) {
+    work->f18 += work->f1C;
+    work->f14 += work->f18;
+    work->hSpeed += work->f14;
+    work->position.x += work->hSpeed * work->dirX;
+    work->position.z += work->hSpeed * work->dirZ;
+    work->f28 += work->f2C;
+    work->f24 += work->f28;
+    work->vSpeed += work->f24;
+    work->position.y += work->vSpeed;
+}
+
+/** Moves one puff of type 3: up by its speed, which eases by f24 (itself scaled by f28 each frame). */
+// Original name and size from the JP demo map (UNUSED there: every call is inlined).
+static void kemuri_dosun(EffKemuri1Work* work) {
+    work->position.y += work->vSpeed;
+    work->vSpeed += work->f24;
+    work->f24 *= work->f28;
+}
+
+/** Moves one puff of types 4-7 (the ring): out along its direction and up, each speed scaled down every frame. */
+// Original name and size from the JP demo map (UNUSED there: every call is inlined).
+static void kemuri_dosun2(EffKemuri1Work* work) {
+    work->position.x += work->hSpeed * work->dirX;
+    work->position.z += work->hSpeed * work->dirZ;
+    work->hSpeed *= work->f14;
+    work->position.y += work->vSpeed;
+    work->vSpeed += work->f24;
+    work->f24 *= work->f28;
+    work->vSpeed *= work->f2C;
+}
+
 EffectEntry* effKemuri1N64Entry(s32 type, f32 x, f32 y, f32 z, f32 angleOfs) {
     EffectEntry* effect;
     EffKemuri1Work* data;
@@ -242,32 +276,16 @@ static void effKemuri1Main(EffectEntry* effect) {
         switch (type) {
             case 0:
             case 1:
-                work->f18 += work->f1C;
-                work->f14 += work->f18;
-                work->hSpeed += work->f14;
-                work->position.x += work->hSpeed * work->dirX;
-                work->position.z += work->hSpeed * work->dirZ;
-                work->f28 += work->f2C;
-                work->f24 += work->f28;
-                work->vSpeed += work->f24;
-                work->position.y += work->vSpeed;
+                kemuri_land(work);
                 break;
             case 3:
-                work->position.y += work->vSpeed;
-                work->vSpeed += work->f24;
-                work->f24 *= work->f28;
+                kemuri_dosun(work);
                 break;
             case 4:
             case 5:
             case 6:
             case 7:
-                work->position.x += work->hSpeed * work->dirX;
-                work->position.z += work->hSpeed * work->dirZ;
-                work->hSpeed *= work->f14;
-                work->position.y += work->vSpeed;
-                work->vSpeed += work->f24;
-                work->f24 *= work->f28;
-                work->vSpeed *= work->f2C;
+                kemuri_dosun2(work);
                 break;
         }
     }
