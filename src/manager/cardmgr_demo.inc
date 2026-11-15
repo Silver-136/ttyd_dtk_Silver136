@@ -2,7 +2,7 @@
 // The static helpers the JP demo map lists as UNUSED (memcard_*, make_header, format_main, delete_main) are plain
 // functions whose calls are all inlined; their out-of-line copies have the map's sizes. check_sum, make_data,
 // headerCheck and dataCheck are UNUSED there too, but as plain functions their copies come out larger than the map's
-// (0xfc/0x160/0xfc/0x128 against 0xa8/0x130/0xf0/0x118), so they stay inline.
+// (0xfc/0x160/0xf4/0x128 against 0xa8/0x130/0xf0/0x118), so they stay inline.
 /** Name of the game's save file on the memory card, used to find, create and delete it. */
 const char cardFileName[0x14] = "mariost_save_file";
 const char cardGameTitle[0x18] = "ペーパーマリオＲＰＧ";
@@ -63,8 +63,7 @@ static void create_main(void);
 static void format_main(void);
 static void delete_main(void);
 
-static inline BOOL headerCheck(void);
-static inline BOOL headerCheck2(void);
+static inline BOOL headerCheck(void* buf);
 static inline BOOL dataCheck(void);
 
 /**
@@ -430,7 +429,7 @@ static void write_main(void) {
                 memcard_read(wp->readBuf, sizeof(CardMetadata), 0);
                 break;
             case 5:
-                if (!headerCheck()) {
+                if (!headerCheck(wp->readBuf)) {
                     make_header();
                     memcard_write(wp->data, sizeof(CardMetadata), 0);
                 }
@@ -585,7 +584,7 @@ static void read_main(void) {
                 memcard_read(wp->readBuf, sizeof(CardMetadata), 0);
                 break;
             case 5:
-                if (!headerCheck()) {
+                if (!headerCheck(wp->readBuf)) {
                     wp->flags |= CARD_FLAG_BAD_HEADER;
                 }
                 break;
@@ -690,7 +689,7 @@ static void read_all_main(void) {
                 memcard_read(wp->data, 0x2000, 0);
                 break;
             case 5:
-                if (!headerCheck2()) {
+                if (!headerCheck(&wp->data->metadata)) {
                     make_header();
                     wp->flags |= CARD_FLAG_BAD_HEADER;
                 }
@@ -958,38 +957,18 @@ static inline void check_sum(CardSaveSlot* save) {
     save->checksum2 = ~save->checksum1;
 }
 
-/** TRUE if the header just read into the read buffer has matching checksums. */
-static inline BOOL headerCheck(void) {
+/**
+ * TRUE if the file header at buf has matching checksums: the read buffer after a header read, or the file image
+ * that cardReadAll reads straight into. (The map's headerCheck is 0xf0; with this parameter the plain copy is 0xf4,
+ * without it 0xfc, so it stays inline.)
+ */
+static inline BOOL headerCheck(void* buf) {
     s32 i;
     s32 checksum;
     u8* byte;
     CardMetadata* metadata;
 
-    metadata = wp->readBuf;
-    if (metadata->checksum2 != ~metadata->checksum1) {
-        return FALSE;
-    } else {
-        checksum = 0;
-        byte = (u8*)&metadata->data;
-        for (i = 0; i < (s32)sizeof(metadata->data); i++) {
-            checksum += byte[i];
-        }
-        if (metadata->checksum1 != checksum) {
-            return FALSE;
-        } else {
-            return TRUE;
-        }
-    }
-}
-
-/** TRUE if the header in the file image has matching checksums (cardReadAll reads it straight there). */
-static inline BOOL headerCheck2(void) {
-    s32 i;
-    s32 checksum;
-    u8* byte;
-    CardMetadata* metadata;
-
-    metadata = &wp->data->metadata;
+    metadata = buf;
     if (metadata->checksum2 != ~metadata->checksum1) {
         return FALSE;
     } else {

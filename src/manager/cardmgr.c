@@ -91,8 +91,7 @@ static void create_main(void);
 static void format_main(void);
 static void delete_main(void);
 
-static BOOL headerCheck(void);
-static inline BOOL headerCheck2(void);
+static BOOL headerCheck(void* buf);
 static BOOL dataCheck(void);
 
 /**
@@ -505,7 +504,7 @@ static void write_main(void) {
                 memcard_read(wp->readBuf, sizeof(CardMetadata), 0);
                 break;
             case 5:
-                if (!headerCheck()) {
+                if (!headerCheck(wp->readBuf)) {
                     make_header();
                     memcard_write(wp->data, sizeof(CardMetadata), 0);
                 }
@@ -660,7 +659,7 @@ static void read_main(void) {
                 memcard_read(wp->readBuf, sizeof(CardMetadata), 0);
                 break;
             case 5:
-                if (!headerCheck()) {
+                if (!headerCheck(wp->readBuf)) {
                     wp->flags |= CARD_FLAG_HEADER_INVALID;
                 }
                 break;
@@ -759,7 +758,7 @@ static void read_all_main(void) {
                 memcard_read(wp->data, sizeof(CardMetadata), 0);
                 break;
             case 5:
-                if (!headerCheck2()) {
+                if (!headerCheck(&wp->data->metadata)) {
                     make_header();
                     wp->flags |= CARD_FLAG_HEADER_INVALID;
                 }
@@ -1027,38 +1026,17 @@ static void check_sum(CardSaveSlot* save) {
     save->checksum2 = ~save->checksum1;
 }
 
-/** TRUE if the header just read into the read buffer has matching checksums. */
-static BOOL headerCheck(void) {
+/**
+ * TRUE if the file header at buf has matching checksums: the read buffer after a header read, or the file image
+ * that cardReadAll reads straight into.
+ */
+static BOOL headerCheck(void* buf) {
     s32 i;
     s32 checksum;
     u8* temp;
     CardMetadata* metadata;
 
-    metadata = wp->readBuf;
-    if (metadata->checksum2 != ~metadata->checksum1) {
-        return FALSE;
-    } else {
-        checksum = 0;
-        temp = (u8*)&metadata->data;
-        for (i = 0; i < (s32)sizeof(metadata->data); i++) {
-            checksum += temp[i];
-        }
-        if (metadata->checksum1 != checksum) {
-            return FALSE;
-        } else {
-            return TRUE;
-        }
-    }
-}
-
-/** TRUE if the header in the file image has matching checksums (cardReadAll reads it straight there). */
-static inline BOOL headerCheck2(void) {
-    s32 i;
-    s32 checksum;
-    u8* temp;
-    CardMetadata* metadata;
-
-    metadata = &wp->data->metadata;
+    metadata = buf;
     if (metadata->checksum2 != ~metadata->checksum1) {
         return FALSE;
     } else {
