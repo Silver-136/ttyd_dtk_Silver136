@@ -401,5 +401,12 @@ void mot_hip_post(void) {
     marioOfsRotReset();
     mario->airTimer = 0;
     mario->jumpPeakAirTime = 0;
+    // BUG: marioBoots starts the spin jump after marioMotion, so mot_hip's first-frame setup (hip_snd_reset,
+    // hip_snd_on) runs only in the next frame. A motion change in between (an enemy struck first in that frame:
+    // fbatEncountCheck -> marioChgMotJump2) runs this with sound ids the spin jump never set. Before US they are
+    // in the motion work all motions share, so psndSFXOff gets another motion's leftovers (0 after a map load):
+    // it stops an unrelated sound, or with a slot number of 40 or more reads and writes past the 40-entry sound
+    // table. In US and later they are MarioWork.hipSfxId, -1 when idle, so nothing is stopped; the late setup
+    // remains. Bowser's ground pound (kpa_hip) uses this post function without setting the ids.
     hip_snd_off(mario);
 }

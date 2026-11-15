@@ -226,12 +226,17 @@ typedef enum MarioMotHammer2Flags {
 typedef struct MarioMotRoll {      // mot_roll.c
     u8 pad00[4];                   // 0x00
     s32 flags;                     // 0x04, ROLL_FLAG_*
-    u32 sfxId;                     // 0x08, only JP uses it (US and later use MotRollWork.sfxId)
+    u32 sfxId;                     // 0x08, the early demos and JP (US and later use MotRollWork.sfxId)
+    // US moved the rolling sound id to the heap MotRollWork with motStruct checks, likely a precaution like
+    // MarioWork.hipSfxId (see mot_hip_post); no case was found where the roll's post runs before its setup.
 } MarioMotRoll;
 
 typedef struct MarioMotHip {       // mot_hip.c
     f32 angle;                     // 0x00
 #if VERSION < VERSION_US
+    // The ids are in the shared motion work and set only in mot_hip's first frame, one frame after marioBoots,
+    // so a motion change in between makes mot_hip_post stop leftover values (BUG in mot_hip_post). US moved them
+    // to MarioWork.hipSfxId, kept at -1 when idle, likely to make that harmless.
     s32 sfxId[2];                  // 0x04, before US (US and later use MarioWork.hipSfxId)
 #endif
 } MarioMotHip;
@@ -552,7 +557,9 @@ typedef struct MarioWork {
     Vec slitPos;                        // 0x26C, mot_slit saved position
     s32 soundId[3];                     // 0x278
 #if VERSION >= VERSION_US
-    s32 hipSfxId[2];                    // 0x284 US (+8 from here): mot_hip's drop sound and voice; JP keeps them in the hip motion work
+    // mot_hip's drop sound and voice; JP keeps them in the hip motion work. Outside the shared work they stay -1
+    // when idle, which likely was the point (see the BUG in mot_hip_post).
+    s32 hipSfxId[2];                    // 0x284 US (+8 from here)
 #endif
     u32 enableKeyMask;                  // 0x284 JP, 0x290 US: evt_mario_set_enable_key; 0 = all buttons
     union {                        // 0x288 JP, 0x294 US: per-motion work (motstruct design)
