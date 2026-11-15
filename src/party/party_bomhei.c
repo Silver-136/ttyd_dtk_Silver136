@@ -1132,7 +1132,6 @@ void partyGetReturnPos(Vec* out) {
  */
 static HitEntry* check_front(PartyEntry* party) {
     const s32 angles[8] = {0, 45, -45, 90, -90, 135, -135, 180};
-    static const Vec down = {0.0f, -1.0f, 0.0f};
     HitCheckQuery q;
     f32 height;
     HitEntry* hit;
@@ -1167,7 +1166,7 @@ static HitEntry* check_front(PartyEntry* party) {
     }
 
     q.targetPos = party->position;
-    q.targetDir = down;
+    q.targetDir = (Vec){0.0f, -1.0f, 0.0f};
     q.targetDistance = 2.0f + height;
     hit = hitCheckVecFilter(&q, NULL);
     if (hit != NULL) {

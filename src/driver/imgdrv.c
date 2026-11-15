@@ -234,7 +234,6 @@ static void imgDisp(CameraId camId, void* param) {
  */
 static void imgDisp_ProjPlane(CameraId camId, void* param) {
     ImageEntry* entry = param;
-    static const Vec lightPos = {0.0f, 0.0f, 0.0f};
     Mtx mtx;
     Mtx mtx2;
     Vec pos;
@@ -255,7 +254,7 @@ static void imgDisp_ProjPlane(CameraId camId, void* param) {
             GXSetBlendMode(GX_BM_SUBTRACT, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
             break;
     }
-    pos = lightPos;
+    pos = (Vec){0.0f, 0.0f, 0.0f};
     PSMTXMultVec(mtx, &pos, &pos);
     mapSetMaterialLight(0, pos);
     mapSetMaterialLastStageBlend(flags, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});

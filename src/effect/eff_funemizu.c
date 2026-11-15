@@ -24,11 +24,6 @@ typedef struct ColorEntry {
     GXColor color;
 } ColorEntry;
 
-/** Water tint used when the current map has no entry in funemizu_color_tbl: plain white. */
-#if VERSION >= VERSION_JP
-static const GXColor funemizu_default_color = {0xFF, 0xFF, 0xFF, 0xFF};
-#endif
-
 // Model data in the exporter's layout: indexed vertex arrays (positions, normals, colours, texture coordinates),
 // display lists of GX commands (each padded to 32 bytes with GX_NOP) and, per list table, the list sizes in
 // 32-byte units for GXCallDisplayList.
@@ -171,7 +166,7 @@ GXColor effFunemizuGetMapColor(void) {
             return e->color;
         }
     }
-    return funemizu_default_color;
+    return (GXColor){0xFF, 0xFF, 0xFF, 0xFF}; // no entry: plain white
 }
 #endif
 

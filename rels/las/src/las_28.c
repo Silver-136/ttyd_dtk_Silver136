@@ -311,8 +311,7 @@ EVT_END()
 static USER_FUNC(syuryo_baria_recalc_pos) {
     // ピーチ単
     NpcEntry* npc = npcNameToPtr("ピーチ姫");
-    static const Vec base = {0.0f, -8.0f, 10.0f};
-    Vec offset = base;
+    Vec offset = {0.0f, -8.0f, 10.0f};
     CameraEntry* cam = camGetPtr(CAMERA_3D);
     EffectEntry* eff = effNameToPtr("baria");
     Mtx mtx;

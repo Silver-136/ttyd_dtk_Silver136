@@ -2365,9 +2365,6 @@ static void puniModeChangeAway(void) {
     }
 }
 
-/** Direction straight down, used when checking whether a Puni has ground under it. */
-static const Vec puni_fallchk_dir = {0.0f, -1.0f, 0.0f};
-
 /**
  * Puni (slots 1 to 102) that have no floor within 2 units under them leave their chain,
  * lose their velocity and switch to PUNI_MODE_FALL.
@@ -2387,7 +2384,7 @@ static void puniModeChangeFallCheck(void) {
         }
         pos = p->pos;
         pos.y = 1.0f + pos.y;
-        dir = puni_fallchk_dir;
+        dir = (Vec){0.0f, -1.0f, 0.0f}; // straight down
         dist = 2.0f;
         if (hitCheckFilter(NULL, &hit.x, &hit.y, &hit.z, &dist, &nrm.x, &nrm.y, &nrm.z, pos.x, pos.y, pos.z, dir.x, dir.y, dir.z) ==
             NULL) {
@@ -2947,9 +2944,6 @@ static void puniModeAwayjump(PuniData* p) {
     }
 }
 
-/** The zero vector, used when an away target has no position. */
-static const Vec puni_away_zero0 = {0.0f, 0.0f, 0.0f};
-
 // Kept: the target calls puniModeAway_sub (REL map: called from puniModeAway); under -inline auto nothing else
 // keeps a short function out of line.
 #pragma dont_inline on
@@ -2967,7 +2961,7 @@ static int puniModeAway_sub(PuniData* p) {
     if (0.0f != mag) {
         PSVECNormalize(&p->vel, &dir);
     } else {
-        dir = puni_away_zero0;
+        dir = (Vec){0.0f, 0.0f, 0.0f};
     }
     puniMoveAtari(p, start, dir, 0, mag);
     if (p->hitMove != NULL || p->hitCheck != NULL) {
@@ -4632,18 +4626,15 @@ static f32 shadow_coord[8] ATTRIBUTE_ALIGN(32) = { 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
  */
 static void puni_puni_shadow_disp(CameraId camId, void* param) {
     static Mtx shadow_mt = { { 10.0f, 0.0f, 0.0f, 0.0f }, { 0.0f, 10.0f, 0.0f, 0.1f }, { 0.0f, 0.0f, 10.0f, 0.0f } };
-    GXColor color;
     GXTexObj obj;
     Mtx mtx;
     CameraEntry* cam = camGetPtr(camId);
     PunidrvPose* pose = param;
 
     if (!(pose->flags & 4)) {
-        static const GXColor c = { 0, 0, 0, 0xC0 };
         GXSetNumChans(1);
         GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_CLAMP, GX_AF_NONE);
-        color = c;
-        GXSetChanMatColor(GX_COLOR0A0, color);
+        GXSetChanMatColor(GX_COLOR0A0, (GXColor){0x00, 0x00, 0x00, 0xC0});
         GXSetNumTexGens(1);
         GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
         effGetTexObjN64(0x2C, &obj);
