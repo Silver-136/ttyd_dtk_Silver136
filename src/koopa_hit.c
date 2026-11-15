@@ -133,6 +133,8 @@ s32 kpaEnemyHitChk(f32 x, f32 y, f32 z, f32 h, f32 w) {
  * Tilts Bowser's groundRot to match the floor normal (nx, ny, nz) (whole degrees) and returns the floor's slope in
  * degrees from horizontal (0 = flat floor).
  */
+// Original name and size (0x218) from the JP demo map (UNUSED there: kpaSearchGround's calls are inlined). Like
+// mario_hit.c's _ABCtoAngleY, without its 0.01-degree rounding.
 static f32 ABCtoAngleY(f32 nx, f32 ny, f32 nz) {
     MarioWork* mario = marioGetPtr();
     mario->groundRot.x = (s32)(angleABf(0.0f, 0.0f, 100.0f * nz, 100.0f * ny) - 180.0f);

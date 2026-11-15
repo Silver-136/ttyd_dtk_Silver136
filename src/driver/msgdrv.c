@@ -389,7 +389,8 @@ static void msgDelete(smartEntry* smart) {
     MsgChar* entry = data->entries;
     s32 i;
 
-    // Empty loop over the characters; the loop is in the retail code
+    // FAKE: empty loop over the characters; the loop is in the retail code, but its body is gone, so the entry
+    // walk is a guess: with only the counter MWCC unrolls the loop (0x70, not the map's 0x38)
     for (i = 0; i < data->charCount; i++, entry++) {
     }
     smartFree(smart);

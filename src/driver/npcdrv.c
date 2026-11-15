@@ -686,7 +686,6 @@ static void npcMoveXZ(NpcEntry* npc);
 static void npcMoveG(NpcEntry* npc);
 static BOOL npcCheckHitMarioSide(NpcEntry* npc);
 HitEntry* npcHitCheckSide(NpcEntry* npc, f32* outX, f32* outZ, f32* angle, f32 dx, f32 dz);
-void fbatKoopaMode(void);
 void fbatEncountCheck(void);
 
 /**
@@ -3764,7 +3763,7 @@ void fbatKoopaMode(void) {
     data = gp->fbatData;
     mario = marioGetPtr();
     jump = 0;
-    fire = jump;
+    fire = 0;
     if (mario->characterId == CHARACTER_BOWSER) {
         jump = kpaJumpChk();
     }

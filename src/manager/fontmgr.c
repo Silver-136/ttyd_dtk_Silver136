@@ -699,7 +699,7 @@ void FontDrawMessageMtx(Mtx mtx, const char* msg) {
                         pos.z = 0.0f;
                         PSMTXMultVec(mtx, &pos, &pos);
 
-                        iconDispGxAlpha(scale,&pos, ICON_FLAG_2D, id, fontAlpha);
+                        iconDispGxAlpha(scale, &pos, ICON_FLAG_2D, id, fontAlpha);
                         FontDrawStart_alpha(fontAlpha);
                         FontDrawColor(fontColor);
                         cx += w * scale + spacing;

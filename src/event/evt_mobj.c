@@ -4144,7 +4144,7 @@ USER_FUNC(evt_mobj_koopa_ojama_blk) {
 
 /**
  * Main function of the Bowser-stage stone blocks:
- * they never react (the strings only keep stripped names in .rodata).
+ * they never react.
  */
 static s32 mobj_koopa_stone_blk_evt(MapObjectEntry* mobj) {
     return 0;

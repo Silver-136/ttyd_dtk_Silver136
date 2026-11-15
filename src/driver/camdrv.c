@@ -713,6 +713,9 @@ void camCtrlOff(CameraId cameraId) {
 }
 
 /** Points a camera at (x, y, z). */
+// Original names and sizes (0x60 each) of camSetAt, camSetPos and camSetUp from the JP demo map (UNUSED there:
+// camInit's camSetPos calls are inlined, the other two are uncalled). camSetPos's body is its inlined copies;
+// camSetAt and camSetUp are the same store to cameraAt / cameraUp (their sizes and .rodata templates fit).
 void camSetAt(CameraId cameraId, f32 x, f32 y, f32 z) {
     camPtrTbl[cameraId]->cameraAt = (Vec){ x, y, z };
 }
