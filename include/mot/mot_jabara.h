@@ -4,7 +4,11 @@
 
 #include "dolphin/types.h"
 
+struct HitEntry;
+
 BOOL jabaraNoHitChk(void);
+void jabaraEnd(void);
+f32 getBarCenterPos(struct HitEntry* hit);
 
 // marioGetJabaraState: Spring Jump phase, from the sub-motion.
 enum {

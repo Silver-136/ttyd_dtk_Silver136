@@ -387,8 +387,7 @@ void party_motion_wait(PartyEntry* party) {
     // units away): partyChkWall casts partySearchFrontWall's rays along Mario's push (partyMarioHosei, 4 units a frame
     // while he stands) and on a hit slides the partner along that wall with reflect2 without checking any other wall,
     // and no partyChkWallAround follows (unlike party_motion_stay). In a corner the slide carries the partner's centre
-    // past the other wall, whose back face no ray sees: in the Palace of Shadow hallways (las_19, las_21, las_23,
-    // las_25) pushing the partner into the corner of the west pillar and the back wall puts it behind the back wall.
+    // past the other wall, whose back face no ray sees (see KNOWN_GAME_BUGS.md).
     if (!(party->flags & PARTY_FLAG_DISABLE_FRONT_WALL_CHK)) {
         partyChkWall(party);
     }

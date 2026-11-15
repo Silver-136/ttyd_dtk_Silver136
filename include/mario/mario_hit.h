@@ -43,6 +43,7 @@ void marioHitCheckWidth(void);
 BOOL marioSlitChkWallAround(void);
 f32 marioChkOverhead(void);
 HitEntry* marioSearchUnder(void);
+HitEntry* marioGetSlope(struct MarioWork* mario, f32* gx, f32* gz);
 HitEntry* marioChkLandon(f32* a, f32 d);
 HitEntry* marioSearchHead(Vec* pos, f32* h, f32 dd);
 struct HitEntry* marioChkFront(f32* out, const Vec* pos, f32 angle, f32 dist);

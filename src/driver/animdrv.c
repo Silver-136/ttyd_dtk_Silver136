@@ -745,6 +745,7 @@ BOOL animEffectAsync(const char* animName, u32 group) {
  * Looks up an animation of pose's file: by name, or directly by index when name holds a non-negative index.
  * Unknown names and indices give 0.
  */
+// Original name and size (0xa4) from the JP demo map (UNUSED there: every call is inlined).
 s32 getAnimDataId(AnimationPose* pose, const char* name) {
     AnimationPoseData* data = animPoseGetBaseData(pose);
     s32 i = ANIM_NAME_INDEX(name);
@@ -2738,7 +2739,7 @@ static void renderProc(s32 shapeId, s32 unused) {
 
                 texIds = (s8*)draw->texArrayIds;
                 firstId = draw->firstIdTex;
-                                drawCall = &wp->curPoseData->drawCalls[draw->firstDrawCall];
+                drawCall = &wp->curPoseData->drawCalls[draw->firstDrawCall];
                 tc2 = draw->texCount;
                 drawCallCount = draw->drawCallCount;
                 clr0VtxPtr = (GXColor*)((u8*)wp->curPoseData->clr0VtxBuffer + clr0VtxSize);
@@ -3125,6 +3126,7 @@ inline void animSetPaperMtx(Mtx m0, Mtx* m1, Mtx* m2) {
  */
 // Original name and size (0xb0) from the JP demo map (UNUSED there: every call is inlined).
 void animSetCommonBuf(AnimationPose* pose) {
+    // FAKE: (animPoseGetBaseData) bypasses the macro so the real inline is used; the macro form changes the object
     AnimationPoseData* data = (animPoseGetBaseData)(pose);
     s32 posNum = data->bufferPosNum;
     s32 nrmNum = data->bufferNrmNum;

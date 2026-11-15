@@ -415,7 +415,7 @@ void kpaClearHitobjHead(void) {
     }
 }
 
-/** Records the floor object floor probe i hit (kpaGetHitobjRide reads it). */
+/** Records the object floor probe i stands on (kpaGetHitobjRide reads it). */
 // Original name and size (0x48) from the JP demo map (UNUSED there: every call is inlined).
 void kpaSetHitobjRide(s32 i, HitEntry* hit) {
     marioGetPtr()->kpaWork->rideHit[i] = hit;

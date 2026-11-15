@@ -35,6 +35,7 @@ typedef struct ChuchuTreasure {
 void partyWalkInit();
 
 /** Shows the 1.5 s speech bubble over Ms. Mowz (callers check that she is out first). */
+// Original name and size (0x4c) from the JP demo map (UNUSED there: every call is inlined).
 static void chuchuBalloonOn(void) {
     effFukidashiEntry(6, 0, (NpcEntry*)FUKIDASHI_PARTY, 0.0f, 18.0f, 0.0f, 0.0f, 0.0f, sysMsec2Frame(1500));
 }

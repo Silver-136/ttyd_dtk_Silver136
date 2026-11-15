@@ -1500,7 +1500,6 @@ static void puniPositionRecover(PuniData* p) {
     p->prevPos = p->pos;
 }
 
-
 /**
  * Moves a Puni by its velocity with wall collision:
  * casts a ray from start along dir for dist units,
@@ -1560,7 +1559,6 @@ int puniMoveAtari(PuniData* p, Vec start, Vec dir, int reflect, f32 dist) {
     return ret;
 }
 
-
 /* FAKE: hitCheckFilter called through a cast with the three start floats listed first. EABI assigns float and
    pointer args to f1-f6 and r3-r10 independently, so the registers and the call are identical; the reorder makes
    the start loads code-generate before the pointer args, so they read r4 directly (scheduling). */
@@ -1611,7 +1609,6 @@ void puniMoveHitLimited(PuniData* p, Vec start, Vec dir, f32 dist) {
     }
 }
 #endif
-
 
 // Descriptive name (not in the symbol maps); placeholder unk_mri_0000980c, JP mri .text+0x9748. See docs/NAME_PROVENANCE.md.
 #if VERSION >= VERSION_JP
@@ -3432,7 +3429,6 @@ static void puniModeWind_kaiten(PuniData* p) {
     }
 }
 
-
 /**
  * Wind mode: Flurrie's breath blows the Puni away from Mario in a sliding, spinning arc:
  * it accelerates up to a speed set by the breath power, then slows down;
@@ -3723,7 +3719,6 @@ static void puniModePreupdraft(PuniData* p) {
             break;
     }
 }
-
 
 /**
  * Updraft mode: the Puni floats upward inside a soap bubble (balloon effect following it,
@@ -4718,7 +4713,6 @@ static void puni_puni_init(void) {
     memset(Punimap, 0, sizeof(PuniMap));
 }
 
-
 /**
  * Checks that a stray Puni has not been pushed out of the map and puts it back at the recovery position
  * if needed, then makes it lost (hagure). Written as an inline helper for puniModeMain.
@@ -4891,7 +4885,6 @@ void puniModeMain(PuniData* p) {
     }
 }
 #endif
-
 
 /**
  * Inline copy of the wall-collision move that reflects the velocity (puniMoveHit),
@@ -6490,7 +6483,6 @@ static BOOL _puniVAtari(PuniData* p, Vec* from, Vec* to) {
     return FALSE;
 }
 
-
 // Integer part of v, one lower for negative v (so not a true floor for negative whole numbers).
 static inline s32 puniFloor(f32 v) {
     s32 i = v;
@@ -7485,7 +7477,6 @@ USER_FUNC(evt_target_set_soko) {
 static const char* npcGetTribeName(const char** name) {
     return *name;
 }
-
 
 /**
  * Per-frame callback of the spider check: turns each live spider-tribe NPC of the map (Piders)

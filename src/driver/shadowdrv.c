@@ -24,7 +24,6 @@
 // as stripped); declared here because earlier code calls them.
 CharShadowWork* shadowGetCharShadowWork(void);
 ShadowConfig* shadowGetConfig(s32 idx);
-void shadowCharShadowInit(void);
 void shadowDepthShadowInit(void);
 void shadowProjShadowInit(void);
 void CreateRampTex8(GXTexObj* obj);

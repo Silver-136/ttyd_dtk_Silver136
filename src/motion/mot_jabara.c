@@ -117,7 +117,8 @@ s32 marioGetJabaraState(void) {
 }
 
 /**
- * z position of the ceiling hit object Mario grabbed (rounded to 0.01), so he can be snapped to its plane.
+ * z position of the ceiling hit object Mario grabbed, so he can be snapped to its plane. The cast covers the
+ * division too, so the value is cut to a whole number (z + 0.005 truncated), not rounded to 0.01.
  * The Mario pointer it fetches is unused.
  */
 // Original name and size (0x7c) from the JP demo map (UNUSED there: every call is inlined).
@@ -229,8 +230,6 @@ static inline void jabaraLand(f32 y, void* hit) {
 static inline void animStep(MarioWork* mario) {
     animPoseSetLocalTime(mario->paperAnimGroupId[marioAnimeId()], (f32)mario->mot.jabara.animFrame);
 }
-
-void jabaraEnd(void);
 
 static void swingMain(void);
 void setCatchSwing(s32 s);

@@ -100,6 +100,7 @@ typedef struct ShadowConfig {
 } ShadowConfig;
 
 void shadowInit(void);
+void shadowCharShadowInit(void);
 void shadowMain(void);
 
 void shadowDepthShadowDrawCountUp(void);
