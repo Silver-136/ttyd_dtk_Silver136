@@ -975,8 +975,8 @@ static s32 moamoa_hit_check(ExtdrvPose* pose, Moamoa* moa) {
     return 0;
 }
 
-// Kept (pattern): lifetimes off for ext_moamoa_main (eki_00, rsh_05, rsh_06; rsh_06 and bom_01's ext_main also
-// propagation off); the target needs it and no natural form was found (cleanup_notes/bf/T1/log.md).
+// Kept (pattern): propagation and lifetimes off for rsh_06's ext_moamoa_main and bom_01's ext_main (the eki_00/rsh_05
+// copies need neither: block-local locals); the target needs them, no natural form found (cleanup_notes/bf/X1b/log.md).
 #pragma opt_propagation off
 #pragma opt_lifetimes off
 // FAKE: placed in .rodata; without it the object changes

@@ -713,9 +713,6 @@ static s32 moamoa_hit_check(ExtdrvPose* pose, Moamoa* moa) {
     return 0;
 }
 
-// Kept (pattern): lifetimes off for ext_moamoa_main (eki_00, rsh_05, rsh_06; rsh_06 and bom_01's ext_main also
-// propagation off); the target needs it and no natural form was found (cleanup_notes/bf/T1/log.md).
-#pragma opt_lifetimes off
 // FAKE: placed in .rodata; without it the object changes
 __declspec(section ".rodata") static Vec moamoa_zero_vec = {0.0f, 0.0f, 0.0f};
 
@@ -998,7 +995,9 @@ static void ext_moamoa_main(void) {
                 break;
 
             case MOAMOA_STATE_FLEE: {
+                    f32 d;
                     f32 rad;
+                    f32 z;
                     {
                         f32 k;
                         f32 r1 = rand() / 32767.0f;
@@ -1129,8 +1128,7 @@ static void ext_moamoa_main(void) {
                 }
                 r1 = rand() / 32767.0f;
                 spd = (r1 * (k = 6.0f - 5.0f)) + 5.0f;
-                r1 = rand() / 32767.0f;
-                s = (r1 * (k = 0.3f - 0.2f)) + 0.2f;
+                s = randf(0.2f, 0.3f);
                 if (!sfx) {
                     Vec pos = {0.0f, 0.0f, 0.0f};
                     pos.x = (*pose->mtx)[0][3];
@@ -1204,13 +1202,14 @@ static void ext_moamoa_main(void) {
                     a3 += ((tz * (k = 45.0f - -45.0f)) + -45.0f);
                     if (d > 6.0f && (x = (*pose->mtx)[1][3]) < 60.0f) {
                         f32 rad = (6.2831855f * a3) / 360.0f;
+                        f32 z;
                         dist = (15.0f * polySinf(rad)) + (*pose->mtx)[0][3];
-                        angle = (*pose->mtx)[2][3] - (15.0f * polyCosf(rad));
+                        z = (*pose->mtx)[2][3] - (15.0f * polyCosf(rad));
                         {
                             f32 k;
                             f32 r1 = rand() / 32767.0f;
                             f32 r2 = rand() / 32767.0f;
-                            moamoa_jump(pose, moa, dist, x, angle, 3.0f * ((r1 * (k = 1.0f - 1.0f)) + 1.0f), (r2 * k) + 1.0f, moa->state, 1);
+                            moamoa_jump(pose, moa, dist, x, z, 3.0f * ((r1 * (k = 1.0f - 1.0f)) + 1.0f), (r2 * k) + 1.0f, moa->state, 1);
                         }
                     } else {
                         moa->state++;
@@ -1330,7 +1329,6 @@ static void ext_moamoa_main(void) {
     }
 #endif
 }
-#pragma opt_lifetimes reset
 
 /**
  * Registers the swarm's draw callbacks each frame (sprites and shadows on the 3D camera and, if enabled,

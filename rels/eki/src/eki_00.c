@@ -810,9 +810,6 @@ static s32 moamoa_hit_check(ExtdrvPose* pose, Moamoa* moa) {
     return 0;
 }
 
-// Kept (pattern): lifetimes off for ext_moamoa_main (eki_00, rsh_05, rsh_06; rsh_06 and bom_01's ext_main also
-// propagation off); the target needs it and no natural form was found (cleanup_notes/bf/T1/log.md).
-#pragma opt_lifetimes off
 // FAKE: placed in .rodata; without it the object changes
 __declspec(section ".rodata") static Vec moamoa_zero_vec = {0.0f, 0.0f, 0.0f};
 
@@ -996,6 +993,7 @@ static void ext_moamoa_main(void) {
                 }
                 {
                     f32 z;
+                    f32 r1;
                     {
                         f32 d;
                         f32 a;
@@ -1050,7 +1048,9 @@ static void ext_moamoa_main(void) {
                 break;
 
             case MOAMOA_STATE_FLEE: {
+                    f32 d;
                     f32 rad;
+                    f32 z;
                     {
                         f32 k;
                         f32 r1 = rand() / 32767.0f;
@@ -1184,11 +1184,7 @@ static void ext_moamoa_main(void) {
                     f32 r1 = rand() / 32767.0f;
                     spd = (r1 * (k = 6.0f - 5.0f)) + 5.0f;
                 }
-                {
-                    f32 k;
-                    f32 r1 = rand() / 32767.0f;
-                    s = (r1 * (k = 0.3f - 0.2f)) + 0.2f;
-                }
+                s = randf(0.2f, 0.3f);
                 if (!sndFlag) {
                     Vec pos = {0.0f, 0.0f, 0.0f};
                     pos.x = (*pose->mtx)[0][3];
@@ -1348,7 +1344,6 @@ static void ext_moamoa_main(void) {
         }
     }
 }
-#pragma opt_lifetimes reset
 static void ext_moamoa_dispent(void) {
     if (wp->flags & MOAMOA_WORK_FLAG_ACTIVE) {
         dispEntry(CAMERA_3D, (0.0f), DISP_MODE_ALPHA_TEST, ext_disp, NULL);
