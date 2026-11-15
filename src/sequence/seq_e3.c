@@ -87,34 +87,19 @@ static seq_e3_entry e3_tbl[3] = {
 #endif
 
 };
-#if VERSION < VERSION_US
-#if VERSION <= VERSION_DEMO_JP
-char* anim_tbl[4 * 4] = {
+
+/**
+ * Model and three animations for each of the four characters of this sequence. Only the US demo links code that
+ * reads it (the JP demo map lists it UNUSED); in the later versions nothing reads it and the linker strips it.
+ * Its strings of eight bytes and more stay in .rodata; the five six-byte ones go to .sdata2 in the later
+ * compilers and are stripped with the table.
+ */
+static char* anim_tbl[4 * 4] = {
     "b_mario", "M_W_1", "M_S_1", "M_N_8",
     "c_pkr", "PKR_W_1", "PKR_S_1", "PKR_A_2A",
     "c_pnk", "PNK_W_1", "PNK_S_1", "PNK_O_1",
     "c_windy", "PWD_W_1", "PWD_S_1", "PWD_A_7",
 };
-#else
-char* anim_tbl[] = { "b_mario", "PKR_W_1", "PKR_S_1", "PKR_A_2A", "PNK_W_1", "PNK_S_1",
-                     "PNK_O_1", "c_windy", "PWD_W_1", "PWD_S_1",  "PWD_A_7" };
-#endif
-#endif
-
-#if VERSION >= VERSION_US
-// US and later: anim_tbl is gone (dead-stripped) but its strings stayed at the start of .rodata
-const char e3_anim_str0[] = "b_mario";
-const char e3_anim_str1[] = "PKR_W_1";
-const char e3_anim_str2[] = "PKR_S_1";
-const char e3_anim_str3[] = "PKR_A_2A";
-const char e3_anim_str4[] = "PNK_W_1";
-const char e3_anim_str5[] = "PNK_S_1";
-const char e3_anim_str6[] = "PNK_O_1";
-const char e3_anim_str7[] = "c_windy";
-const char e3_anim_str8[] = "PWD_W_1";
-const char e3_anim_str9[] = "PWD_S_1";
-const char e3_anim_str10[] = "PWD_A_7";
-#endif
 
 // Forward Declarations
 static void e3Disp(CameraId cameraId, void* param);

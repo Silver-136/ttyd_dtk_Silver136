@@ -74,8 +74,8 @@ EvtWord muj_12_init_evt[60];
 
 
 /**
- * Script helper that flashes the screen white: fades out in 20 ms with colour evtflash_col1 (white),
- * holds 50 ms, then fades back in over 80 ms with evtflash_col2. Blocks until finished.
+ * Script helper that flashes the screen white: fades out in 20 ms to white,
+ * holds 50 ms, then fades back in over 80 ms. Blocks until finished.
  */
 static USER_FUNC(evtflash) {
     if (isFirstCall) {

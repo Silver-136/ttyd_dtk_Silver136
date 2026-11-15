@@ -41,6 +41,10 @@ enum {
  */
 static s32 ac_stickkeepleft_ok_frame[7] = {80, 70, 60, 40, 20, 10, 5};
 
+// Icon names of this action command. Original name from the JP demo's link map (UNUSED there): nothing reads the
+// table, so the linker strips it; its five strings stay in .rodata.
+static const char* ac_stickkeepleft_iconname[] = {"_AcSkl1", "_AcSkl2", "_AcSkl3", "_AcSkl4", "_AcSkl5"};
+
 static void actionCommandDisp(f32 x, f32 y, s32 unused);
 
 /**
@@ -320,11 +324,6 @@ static void actionCommandDisp(f32 x, f32 y, s32 unused) {
     f32 spacing;
     f32 yy;
     f32 stepX;
-    char n1[8] = "_AcSkl1";
-    char n2[8] = "_AcSkl2";
-    char n3[8] = "_AcSkl3";
-    char n4[8] = "_AcSkl4";
-    char n5[8] = "_AcSkl5";
 
     ac = &_battleWorkPointer->actionCommands;
     camGetPtr(CAMERA_2D);
