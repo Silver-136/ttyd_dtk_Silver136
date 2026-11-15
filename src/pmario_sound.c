@@ -9577,19 +9577,6 @@ void L_psndBGM_stop(void) {
     }
 }
 
-void psndBGM_rate(s32 id, u16 rate) {
-    PaperSoundBGM* bgm = &psbgm[id & 0xF];
-    SoundBGMEntry* entry;
-
-    if (bgm->listId == 0xFFFFFFFF) {
-        return;
-    }
-    entry = &psbgmlist[bgm->listId];
-    if (entry->flags & PSND_BGM_STREAM) {
-        SoundSSSetPlayFreqCh(bgm->streamId, rate);
-    }
-}
-
 /**
  * Returns whether BGM channel bgm is still playing: FALSE when it is free or its stream or song has ended.
  * Original name and size (0x7c) from the JP demo map (UNUSED there: every call is inlined).
@@ -9624,6 +9611,19 @@ static void psndBGM_vol(s32 id, u8 vol) {
         SoundSSSetVolCh(bgm->streamId, vol);
     } else {
         SoundSongSetVolCh(bgm->streamId, vol);
+    }
+}
+
+void psndBGM_rate(s32 id, u16 rate) {
+    PaperSoundBGM* bgm = &psbgm[id & 0xF];
+    SoundBGMEntry* entry;
+
+    if (bgm->listId == 0xFFFFFFFF) {
+        return;
+    }
+    entry = &psbgmlist[bgm->listId];
+    if (entry->flags & PSND_BGM_STREAM) {
+        SoundSSSetPlayFreqCh(bgm->streamId, rate);
     }
 }
 

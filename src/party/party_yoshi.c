@@ -363,16 +363,6 @@ void yoshi_jumpStand(void) {
     }
 }
 
-/** Moves Yoshi with the floor he stands on (a moving platform): adds its movement to his position. */
-// Original name and size (0x40) from the JP demo map (UNUSED there: every call is inlined).
-static void moveHosei(PartyEntry* party) {
-    if (party->hitobjStandOn) {
-        party->position.x += party->floorMove.x;
-        party->position.y += party->floorMove.y;
-        party->position.z += party->floorMove.z;
-    }
-}
-
 /**
  * Spike hit while riding: stops Mario's ride velocity,
  * plays the hurt motion (MARIO_MOTION_DAMAGE_TOGE) with the hurt poses and puts Yoshi
@@ -429,22 +419,6 @@ void yoshiAnimeCtrl(PartyEntry* party) {
     }
 }
 
-/** Yoshi's init handler (party_data): sets his member kind and size (26 tall; 28 wide in the early demos, 20 in JP and later). */
-void yoshi_init(PartyEntry* party) {
-    party->memberKind = PARTY_YOSHI;
-    party->moveKind = 0;
-    party->height = 26.0f;
-#if VERSION <= VERSION_DEMO_JP
-    party->width = 28.0f;
-#else
-    party->width = 20.0f;
-#endif
-    party->yoshiPsndSFXId = -1;
-}
-
-// Descriptive name (inline helper; not in the symbol maps).
-static void searchHead(PartyEntry* party);
-
 /**
  * Mario's vertical ride bob this frame: twice the bob table entry for Yoshi's pose (PYS_S_2, PYS_R_2 or
  * PYS_F_1) at the shared pose time.
@@ -463,6 +437,32 @@ f32 yoshiAnimeOfsy(PartyEntry* party) {
     }
     return ofs;
 }
+
+/** Yoshi's init handler (party_data): sets his member kind and size (26 tall; 28 wide in the early demos, 20 in JP and later). */
+void yoshi_init(PartyEntry* party) {
+    party->memberKind = PARTY_YOSHI;
+    party->moveKind = 0;
+    party->height = 26.0f;
+#if VERSION <= VERSION_DEMO_JP
+    party->width = 28.0f;
+#else
+    party->width = 20.0f;
+#endif
+    party->yoshiPsndSFXId = -1;
+}
+
+/** Moves Yoshi with the floor he stands on (a moving platform): adds its movement to his position. */
+// Original name and size (0x40) from the JP demo map (UNUSED there: every call is inlined).
+static void moveHosei(PartyEntry* party) {
+    if (party->hitobjStandOn) {
+        party->position.x += party->floorMove.x;
+        party->position.y += party->floorMove.y;
+        party->position.z += party->floorMove.z;
+    }
+}
+
+// Descriptive name (inline helper; not in the symbol maps).
+static void searchHead(PartyEntry* party);
 
 /**
  * Runs Yoshi's ride: mounting, ground movement, flutter and jump-stand motion, dismounting and water handling.

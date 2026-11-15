@@ -301,11 +301,6 @@ ChuchuTreasure chuchu_treasure_tbl[] = {
 };
 #endif
 
-/** Zero vector that starts the position of a hidden scenery item during Ms. Mowz's treasure search. */
-#if VERSION >= VERSION_JP
-static const Vec vecB = {0.0f, 0.0f, 0.0f};
-#endif
-
 #if VERSION >= VERSION_JP
 /**
  * Finds the nearest unfound chuchu_treasure_tbl spot on the current map within range of Mario:
@@ -325,12 +320,8 @@ static inline int chuchu_findTreasure(PartyEntry* cpp, f32 range, Vec* bestPos) 
     for (i = 0; i < sizeof(chuchu_treasure_tbl) / sizeof(chuchu_treasure_tbl[0]); i++, tbl++) {
         if (strcmp(gp->currentMapName, tbl->map) == 0 && evtGetValue(NULL, tbl->flag) == 0) {
             Vec pos;
-            Vec p = vecB;
             f32 d;
-            p.x = tbl->x;
-            p.y = tbl->y;
-            p.z = tbl->z;
-            pos = p;
+            pos = (Vec){tbl->x, tbl->y, tbl->z};
             d = PSVECDistance(&mario->position, &pos);
             if (!(range < d) && minDist > d) {
                 minDist = d;

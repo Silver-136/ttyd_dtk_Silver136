@@ -64,22 +64,6 @@ static void zoomOff(void) {
     mario->camShiftRate.z = 0.01f;
 }
 
-/**
- * Casts a short ray (half Mario's width) from just above his head along angle ang (degrees);
- * returns the hit, used while walking hanging under a ceiling to stop at walls.
- */
-// Original name and size (0xcc) from the JP demo map (UNUSED there: every call is inlined).
-void* check_stopper(f32 ang) {
-    f32 sn, cs, hx, hy, hz, dist, nx, ny, nz;
-    MarioWork* mario = marioGetPtr();
-    f32 px = mario->position.x;
-    f32 py = 2.0f + (mario->position.y + mario->wPlayerCollisionBox.y);
-    f32 pz = mario->position.z;
-    dist = 0.5f * mario->wPlayerCollisionBox.x;
-    sincosf(&sn, &cs, ang);
-    return hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, px, py, pz, sn, 0.0f, cs);
-}
-
 /** Vertical camera shake (about 0.015 for 240 ms) when Mario bumps a ceiling during the Spring Jump. */
 static EVT_BEGIN(quake_evt)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.0146484375f), 240)
@@ -127,6 +111,22 @@ f32 getBarCenterPos(HitEntry* hit) {
     MarioWork* mario = marioGetPtr();
     hitObjGetPos(hitGetName(hit), &pos);
     return (s32)((100.0f * pos.z + 0.5f) / 100.0f);
+}
+
+/**
+ * Casts a short ray (half Mario's width) from just above his head along angle ang (degrees);
+ * returns the hit, used while walking hanging under a ceiling to stop at walls.
+ */
+// Original name and size (0xcc) from the JP demo map (UNUSED there: every call is inlined).
+void* check_stopper(f32 ang) {
+    f32 sn, cs, hx, hy, hz, dist, nx, ny, nz;
+    MarioWork* mario = marioGetPtr();
+    f32 px = mario->position.x;
+    f32 py = 2.0f + (mario->position.y + mario->wPlayerCollisionBox.y);
+    f32 pz = mario->position.z;
+    dist = 0.5f * mario->wPlayerCollisionBox.x;
+    sincosf(&sn, &cs, ang);
+    return hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, px, py, pz, sn, 0.0f, cs);
 }
 
 /**

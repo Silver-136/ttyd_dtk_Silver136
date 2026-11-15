@@ -2449,54 +2449,6 @@ static USER_FUNC(_wait_yoshig_complete) {
 }
 
 /**
- * Moves one Stampede Yoshi (index i) for a frame:
- * on the first call places it in a 16-wide grid off the left edge with a random speed and small depth drift,
- * then runs it right, bouncing between the depth limits, until it reaches X 300.
- * Returns FALSE once it has finished.
- */
-// Original name and size (0x240) from the JP demo map (UNUSED there: every call is inlined).
-s32 _yoshig_main(YoshiGundanPart* p, s32 i) {
-    switch (p->state) {
-        case 0:
-            p->state++;
-            p->delay = irand(3);
-            p->x = (f32)(-(i / 16 * 30 + 300) + irand(10));
-            p->y = 0.0f;
-            p->z = (f32)(i % 16 * 10 - 80);
-            p->frame = irand(6);
-            p->frameCount = irand(5);
-            p->vx = 0.1f * (f32)irand(10) + 3.0f;
-            p->vy = 0.0f;
-            p->vz = 0.001f * (f32)(irand(2000) - 1000);
-        case 1:
-            if (p->delay > 0) {
-                p->delay--;
-                break;
-            }
-        case 2:
-            p->z += p->vz;
-            if (p->z >= VERSION_PICK(80.0f, 65.0f)) {
-                p->z = VERSION_PICK(80.0f, 65.0f);
-                p->vz *= -1.0f;
-            }
-            if (p->z <= -80.0f) {
-                p->z = -80.0f;
-                p->vz *= -1.0f;
-            }
-            p->x += p->vx;
-            if (p->x >= 300.0f) {
-                p->x = 300.0f;
-                p->vx = 0.0f;
-                p->state = 999;
-            }
-            break;
-        default:
-            return FALSE;
-    }
-    return TRUE;
-}
-
-/**
  * Runs the Stampede herd for unit args[0]: allocates 256 running Yoshi sprites (work stored in
  * countersetWeapon), moves them each frame with dust puffs and a run sound that follows the herd's average X,
  * draws them, and frees the work and stops the sound when all are across.
@@ -2583,6 +2535,54 @@ static USER_FUNC(_gundan_yoshi_run_effect) {
     }
 #endif
     return EVT_RETURN_BLOCK;
+}
+
+/**
+ * Moves one Stampede Yoshi (index i) for a frame:
+ * on the first call places it in a 16-wide grid off the left edge with a random speed and small depth drift,
+ * then runs it right, bouncing between the depth limits, until it reaches X 300.
+ * Returns FALSE once it has finished.
+ */
+// Original name and size (0x240) from the JP demo map (UNUSED there: every call is inlined).
+s32 _yoshig_main(YoshiGundanPart* p, s32 i) {
+    switch (p->state) {
+        case 0:
+            p->state++;
+            p->delay = irand(3);
+            p->x = (f32)(-(i / 16 * 30 + 300) + irand(10));
+            p->y = 0.0f;
+            p->z = (f32)(i % 16 * 10 - 80);
+            p->frame = irand(6);
+            p->frameCount = irand(5);
+            p->vx = 0.1f * (f32)irand(10) + 3.0f;
+            p->vy = 0.0f;
+            p->vz = 0.001f * (f32)(irand(2000) - 1000);
+        case 1:
+            if (p->delay > 0) {
+                p->delay--;
+                break;
+            }
+        case 2:
+            p->z += p->vz;
+            if (p->z >= VERSION_PICK(80.0f, 65.0f)) {
+                p->z = VERSION_PICK(80.0f, 65.0f);
+                p->vz *= -1.0f;
+            }
+            if (p->z <= -80.0f) {
+                p->z = -80.0f;
+                p->vz *= -1.0f;
+            }
+            p->x += p->vx;
+            if (p->x >= 300.0f) {
+                p->x = 300.0f;
+                p->vx = 0.0f;
+                p->state = 999;
+            }
+            break;
+        default:
+            return FALSE;
+    }
+    return TRUE;
 }
 
 /** Draws one Stampede Yoshi (JP and later; the early demos draw all 256 in one call). */

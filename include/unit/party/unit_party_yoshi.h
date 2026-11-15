@@ -26,6 +26,7 @@ typedef struct YoshiGundanWork {
     f32 meanX;   // sum of the parts' x, then the mean (/ 256)
 } YoshiGundanWork;
 
+s32 _yoshig_main(YoshiGundanPart* p, s32 i);
 USER_FUNC(btl_yoshi_yoroyoro_jump_calc_param);
 USER_FUNC(btl_yoshi_yoroyoro_jump_move);
 USER_FUNC(yoshi_original_color_anim_set);

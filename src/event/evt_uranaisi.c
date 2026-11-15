@@ -646,18 +646,6 @@ s32 uranaisi_ryokin_rtn(s32 mode) {
     return pouchGetPtr()->level * 2;
 }
 
-/** The id of name in a fortune table (ends with a NULL name), or -1. The parameter order is not fixed by the code. */
-// Original name and size (0x88) from the JP demo map (UNUSED there: every call is inlined).
-s32 search_moji_no(UranaiEntry* table, const char* name) {
-    s32 i;
-    for (i = 0; table[i].name != NULL; i++) {
-        if (!strcmp(name, table[i].name)) {
-            return table[i].id;
-        }
-    }
-    return -1;
-}
-
 /** Script form of uranaisi_ryokin_rtn: writes the price in coins of fortune kind args[0] to args[1]. */
 USER_FUNC(uranaisi_ryokin) {
     EvtWord* args = event->args;
@@ -671,4 +659,16 @@ USER_FUNC(uranaisi_ryokin) {
     }
     evtSetValue(event, args[1], price);
     return EVT_RETURN_DONE;
+}
+
+/** The id of name in a fortune table (ends with a NULL name), or -1. The parameter order is not fixed by the code. */
+// Original name and size (0x88) from the JP demo map (UNUSED there: every call is inlined).
+s32 search_moji_no(UranaiEntry* table, const char* name) {
+    s32 i;
+    for (i = 0; table[i].name != NULL; i++) {
+        if (!strcmp(name, table[i].name)) {
+            return table[i].id;
+        }
+    }
+    return -1;
 }

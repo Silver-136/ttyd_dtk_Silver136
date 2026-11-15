@@ -1442,14 +1442,6 @@ static s32 mobj_lv_blk_evt(MapObjectEntry* mobj) {
     return 0;
 }
 
-// FAKE: the hit pointer is tested as a signed word (cmpwi); a pointer or BOOL test compiles to cmplwi
-// Original name and size (0x7c) from the JP demo map (UNUSED there: every call is inlined).
-EvtWord _mobj_check_ground(MapObjectEntry* m) {
-    f32 hx, hy, hz, dist, nx, ny, nz;
-    dist = 1.0f + (f32)__fabs(m->velocity.y);
-    return (EvtWord)hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, m->position.x, m->position.y + 0.5f, m->position.z, 0.0f, -1.0f, 0.0f);
-}
-
 /**
  * Places a block that only a strong enough hammer breaks (MOBJ_Lv1Block etc.).
  * args: name, x, y, z, event, flag variable (already set: not placed), animation group.
@@ -1492,6 +1484,14 @@ USER_FUNC(evt_mobj_lv_blk) {
     mobj->flagVar = flagVar;
     mobj->state = 0;
     return EVT_RETURN_DONE;
+}
+
+// FAKE: the hit pointer is tested as a signed word (cmpwi); a pointer or BOOL test compiles to cmplwi
+// Original name and size (0x7c) from the JP demo map (UNUSED there: every call is inlined).
+EvtWord _mobj_check_ground(MapObjectEntry* m) {
+    f32 hx, hy, hz, dist, nx, ny, nz;
+    dist = 1.0f + (f32)__fabs(m->velocity.y);
+    return (EvtWord)hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, m->position.x, m->position.y + 0.5f, m->position.z, 0.0f, -1.0f, 0.0f);
 }
 
 /**

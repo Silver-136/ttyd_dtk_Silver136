@@ -91,65 +91,6 @@
     return EVT_RETURN_DONE;
 
 /**
- * Snaps Mario onto the ground if the next vy step reaches it (the roll search in Tube Mode):
- * clears the jump state and air timers, records the jump distance, re-enables camera Y follow.
- * True when he landed.
- */
-// Original name and size (0x110) from the JP demo map (UNUSED there: every call is inlined).
-static BOOL chkgnd(f32 vy) {
-    MarioWork* mp = marioGetPtr();
-    f32 a;
-    f32 y;
-    f32 b;
-    HitEntry* hit;
-    if (mp->flags & MARIO_FLAG_TUBE_MODE) {
-        hit = marioSearchGroundRoll(&y, &a, &b, 11.0f, mp->jumpVelocityY);
-    } else {
-        hit = marioSearchGround(&y, &a, &b, vy, vy);
-    }
-    if (hit && mp->position.y + vy <= y) {
-        marioClearJumpPara();
-        mp->hitobjStandOn = hit;
-        mp->position.y = y;
-        mp->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
-        mp->jumpDistance = __fabsf(distABf(mp->position.x, mp->position.z, mp->lastGroundPos.x, mp->lastGroundPos.z));
-        mp->airTimer = 0;
-        mp->jumpPeakAirTime = 0;
-        mp->flags &= ~MARIO_FLAG_STOP_AIR_MOVEMENT;
-        camFollowYOn();
-        return TRUE;
-    }
-    return FALSE;
-}
-
-/**
- * True when Mario's motion counts as standing on the ground:
- * stay, walk or dash, slit/roll/ship with no air time, or riding Yoshi.
- * The landon and rideon waits pair it with a non-null hitobjStandOn.
- */
-// Original name and size (0xa4) from the JP demo map (UNUSED there: every call is inlined).
-BOOL _check_motion(void) {
-    MarioWork* mp = marioGetPtr();
-    s32 m = mp->currMotionId;
-    if (m == MARIO_MOTION_STAY || m == MARIO_MOTION_WALK || m == MARIO_MOTION_DASH) {
-        return TRUE;
-    }
-    if (m == MARIO_MOTION_ROLL && mp->airTimer == 0) {
-        return TRUE;
-    }
-    if (m == MARIO_MOTION_SLIT && mp->airTimer == 0) {
-        return TRUE;
-    }
-    if (m == MARIO_MOTION_SHIP && mp->airTimer == 0) {
-        return TRUE;
-    }
-    if (m == MARIO_MOTION_YOSHI) {
-        return TRUE;
-    }
-    return FALSE;
-}
-
-/**
  * Prepares a pipe arrival (evt_bero's pipe entry script): disables floors;
  * arg 4 (sideways pipe) also shrinks Mario and both partners to nothing and hides them,
  * arg 5 only turns their shadows off.
@@ -1455,6 +1396,38 @@ USER_FUNC(evt_mario_party_bero_move) {
 }
 
 /**
+ * Snaps Mario onto the ground if the next vy step reaches it (the roll search in Tube Mode):
+ * clears the jump state and air timers, records the jump distance, re-enables camera Y follow.
+ * True when he landed.
+ */
+// Original name and size (0x110) from the JP demo map (UNUSED there: every call is inlined).
+static BOOL chkgnd(f32 vy) {
+    MarioWork* mp = marioGetPtr();
+    f32 a;
+    f32 y;
+    f32 b;
+    HitEntry* hit;
+    if (mp->flags & MARIO_FLAG_TUBE_MODE) {
+        hit = marioSearchGroundRoll(&y, &a, &b, 11.0f, mp->jumpVelocityY);
+    } else {
+        hit = marioSearchGround(&y, &a, &b, vy, vy);
+    }
+    if (hit && mp->position.y + vy <= y) {
+        marioClearJumpPara();
+        mp->hitobjStandOn = hit;
+        mp->position.y = y;
+        mp->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
+        mp->jumpDistance = __fabsf(distABf(mp->position.x, mp->position.z, mp->lastGroundPos.x, mp->lastGroundPos.z));
+        mp->airTimer = 0;
+        mp->jumpPeakAirTime = 0;
+        mp->flags &= ~MARIO_FLAG_STOP_AIR_MOVEMENT;
+        camFollowYOn();
+        return TRUE;
+    }
+    return FALSE;
+}
+
+/**
  * Jumps Mario to (args 0-2) in arg 3 ms on a parabola;
  * arg 4 non-zero keeps his facing, arg 5 is the jump height (-1000 or less = 20).
  * Lands on the ground found on the way; works in Tube Mode too.
@@ -1775,6 +1748,33 @@ USER_FUNC(evt_mario_jump_jumpstand) {
         return EVT_RETURN_YIELD;
     }
     return EVT_RETURN_BLOCK;
+}
+
+/**
+ * True when Mario's motion counts as standing on the ground:
+ * stay, walk or dash, slit/roll/ship with no air time, or riding Yoshi.
+ * The landon and rideon waits pair it with a non-null hitobjStandOn.
+ */
+// Original name and size (0xa4) from the JP demo map (UNUSED there: every call is inlined).
+BOOL _check_motion(void) {
+    MarioWork* mp = marioGetPtr();
+    s32 m = mp->currMotionId;
+    if (m == MARIO_MOTION_STAY || m == MARIO_MOTION_WALK || m == MARIO_MOTION_DASH) {
+        return TRUE;
+    }
+    if (m == MARIO_MOTION_ROLL && mp->airTimer == 0) {
+        return TRUE;
+    }
+    if (m == MARIO_MOTION_SLIT && mp->airTimer == 0) {
+        return TRUE;
+    }
+    if (m == MARIO_MOTION_SHIP && mp->airTimer == 0) {
+        return TRUE;
+    }
+    if (m == MARIO_MOTION_YOSHI) {
+        return TRUE;
+    }
+    return FALSE;
 }
 
 /** Blocks until Mario stands on ground (a hit object under him and a grounded motion). */

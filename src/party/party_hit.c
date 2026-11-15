@@ -152,6 +152,20 @@ HitEntry* partyHitCheck(PartyEntry* party, Vec* pos, Vec* dir, Vec* outPos, Vec*
     return partyHitCheckInl(party, pos, dir, outPos, outNrm, dist);
 }
 
+/**
+ * Moves *out by half of the movement (vx, vz) with its component into the wall normal n removed,
+ * so a partner pushing into a wall slides along it.
+ * Original name and size (0x38) from the JP demo map (UNUSED there: every call is inlined), at its map slot; JP and
+ * later define it further down (see there).
+ */
+#if VERSION <= VERSION_DEMO_JP
+static void reflect2(Vec* out, Vec n, f32 vx, f32 vz) {
+    f32 dot = vx * n.x + vz * n.z;
+    out->x += 0.5f * (vx - dot * n.x);
+    out->z += 0.5f * (vz - dot * n.z);
+}
+#endif
+
 /** Slope in degrees of the surface with normal n (0 for a flat floor). */
 static inline f32 partyNrmTo(Vec* n) {
     return angleABf(0.0f, 0.0f, sqrtf(n->x * n->x + n->z * n->z), -n->y);
@@ -565,20 +579,19 @@ HitEntry* partyChkFrontStep(PartyEntry* party, f32 range, f32* outY, f32* outDis
     return NULL;
 }
 
+#if VERSION >= VERSION_JP
 /**
- * Moves *out by half of the movement (vx, vz) with its component into the wall normal n removed,
- * so a partner pushing into a wall slides along it.
- * Original name and size (0x38) from the JP demo map (UNUSED there: every call is inlined).
+ * reflect2 (see the early demos' copy above); nothing calls it from JP on, and its Vec template sits here in the
+ * .rodata order.
  */
 static void reflect2(Vec* out, Vec n, f32 vx, f32 vz) {
-#if VERSION >= VERSION_JP
-    // Never read; unused in the original too: its stack slot and initializer template are in the retail code
+    // Never read; unused in the original too: its initializer template is in the retail code
     Vec unused = {0.0f, 0.0f, 0.0f};
-#endif
     f32 dot = vx * n.x + vz * n.z;
     out->x += 0.5f * (vx - dot * n.x);
     out->z += 0.5f * (vz - dot * n.z);
 }
+#endif
 
 /**
  * Wall probe with Mario's filter (marioHitCheckVec) at 0.75 and 0.5 of the height and step height (11,

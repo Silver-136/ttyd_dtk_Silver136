@@ -441,6 +441,39 @@ static void statusWinDisp(CameraId camId, void* param) {
 }
 
 /**
+ * Advances the HUD slide timer and eases the HUD position between its closed (t = 0) and open (t = 1) spots
+ * with a half cosine; clears the menu icons once fully closed.
+ * Original name and size (0xf4) from the JP demo map (UNUSED there: every call is inlined).
+ */
+void winPositionCalc(void) {
+    f32 t;
+    f32 inv;
+    f32 c;
+    f32 one;
+
+    one = 1.0f;
+#if VERSION >= VERSION_US
+    wp->timer += 60.0f / gp->framerate;
+#else
+    wp->timer += one;
+#endif
+    if (wp->timer >= wp->duration) {
+        wp->timer = wp->duration;
+        wp->t = wp->tEnd;
+        if (wp->t == 0.0f) {
+            wp->flags &= ~STATUS_WINDOW_FLAG_MENU_ICONS;
+        }
+    } else {
+        c = (f32)cos(3.1415927f * wp->timer / wp->duration);
+        wp->t = wp->tStart + (wp->tEnd - wp->tStart) * (one - c) / 2.0f;
+    }
+    t = wp->t;
+    inv = 1.0f - t;
+    wp->x = wp->openX * t + wp->closeX * inv;
+    wp->y = wp->openY * t + wp->closeY * inv;
+}
+
+/**
  * Reads the values the HUD shows: from the pouch in the field (the partner from the party),
  * from Mario's and the partner's battle units in battle.
  */
@@ -557,39 +590,6 @@ static BOOL valueCheck(void) {
         wp->blink = 0;
     }
     return changed;
-}
-
-/**
- * Advances the HUD slide timer and eases the HUD position between its closed (t = 0) and open (t = 1) spots
- * with a half cosine; clears the menu icons once fully closed.
- * Original name and size (0xf4) from the JP demo map (UNUSED there: every call is inlined).
- */
-void winPositionCalc(void) {
-    f32 t;
-    f32 inv;
-    f32 c;
-    f32 one;
-
-    one = 1.0f;
-#if VERSION >= VERSION_US
-    wp->timer += 60.0f / gp->framerate;
-#else
-    wp->timer += one;
-#endif
-    if (wp->timer >= wp->duration) {
-        wp->timer = wp->duration;
-        wp->t = wp->tEnd;
-        if (wp->t == 0.0f) {
-            wp->flags &= ~STATUS_WINDOW_FLAG_MENU_ICONS;
-        }
-    } else {
-        c = (f32)cos(3.1415927f * wp->timer / wp->duration);
-        wp->t = wp->tStart + (wp->tEnd - wp->tStart) * (one - c) / 2.0f;
-    }
-    t = wp->t;
-    inv = 1.0f - t;
-    wp->x = wp->openX * t + wp->closeX * inv;
-    wp->y = wp->openY * t + wp->closeY * inv;
 }
 
 /**
