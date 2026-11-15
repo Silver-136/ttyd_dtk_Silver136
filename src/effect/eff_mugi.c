@@ -42,11 +42,6 @@ typedef struct effMugiKemuriData {
 static void effMugiKemuriMain(EffectEntry* effect);
 static void effMugiKemuriDisp(CameraId camId, void* param);
 
-// FAKE: invented one-use inline helper (no map name); writing it out changes the code (FAKES.md)
-inline f32 mugiKemuriAngle(effMugiKemuriData *data) {
-    return 6.2831855f * reviseAngle(data->rot.y);
-}
-
 #if VERSION <= VERSION_DEMO_JP
 /**
  * FAKE: stand-in that nothing calls (the linker strips it); it only keeps the "Mugi" type string at the end of the
@@ -98,7 +93,10 @@ EffectEntry* effMugiKemuriEntry(f32 x, f32 y, f32 z, f32 angle) {
         data->jy = 0.0f;
         data->ky = 0.0f;
         data->speed = -3.9f;
-        rad = mugiKemuriAngle(data) / 360.0f;
+        {
+            f32 scaledAngle = 6.2831855f * reviseAngle(data->rot.y);
+            rad = scaledAngle / 360.0f;
+        }
         data->dirX = (f32)sin(rad);
         data->dirZ = (f32)cos(rad);
         data->poseId = -1;

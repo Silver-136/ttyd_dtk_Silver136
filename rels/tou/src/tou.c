@@ -1471,12 +1471,65 @@ static void gans_tex(CameraId cameraId, void* param) {
     wp->ready = 1;
 }
 
-/** Returns a white color with the given alpha (used for the monitor's fade). */
-// FAKE: invented one-use inline helper (no map name); writing it out changes the code (FAKES.md)
-static inline GXColor tou_mkcolor(u8 a) {
-    GXColor c = {0xFF, 0xFF, 0xFF, 0x00};
-    c.a = a;
-    return c;
+// Wait for the story-selected NPC, then update the monitor texture and fade while remaining active.
+static USER_FUNC(make_monitor) {
+    NpcEntry* npc = npcNameToPtr_NoAssert(evtGetValue(NULL, GSW_STORY_PROGRESS) < STG3_34_RETURN_TO_ROGUEPORT ? "ガンス" : "キノシコワ");
+    GansWork* wp;
+
+    if (isFirstCall) {
+        wp = _mapAlloc(sizeof(GansWork));
+        event->userdatap[0] = wp;
+        wp->onoff = 0;
+        wp->ready = 0;
+    }
+    if (npc == NULL) {
+        return EVT_RETURN_BLOCK;
+    }
+    wp = event->userdatap[0];
+    gans_wp = wp;
+    wp->buf = smartAlloc(GXGetTexBufferSize(0x80, 0x80, GX_TF_RGB5A3, GX_FALSE, 0), SMART_GROUP_TEMP);
+    GXInitTexObj(&wp->tex, wp->buf->address, 0x80, 0x80, GX_TF_RGB5A3, GX_CLAMP, GX_CLAMP, GX_FALSE);
+    GXInitTexObjLOD(&wp->tex, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
+    if (gans_wp->onoff) {
+        gans_wp->alpha += 4;
+        if (gans_wp->alpha > 0x80) {
+            gans_wp->alpha = 0x80;
+        }
+    } else {
+        gans_wp->alpha -= 4;
+        if (gans_wp->alpha < 0) {
+            gans_wp->alpha = 0;
+        }
+    }
+    dispEntry(CAMERA_SHADOW, 0.0f, DISP_MODE_OPAQUE_NO_Z, gans_tex, wp);
+    return EVT_RETURN_BLOCK;
+}
+
+/**
+ * TEV callback for the monitor screen: replaces the screen's color stages with the live texture,
+ * blended by the work alpha, once the texture has been rendered at least once.
+ */
+static void monitor_tev(MapTevCallbackInfo* info) {
+    if (gans_wp->ready) {
+        GXSetTexCoordGen2(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
+        GXLoadTexObj(smartTexObj(&gans_wp->tex, &gans_wp->buf->address), GX_TEXMAP1);
+        GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD1, GX_TEXMAP1, GX_COLOR_NULL);
+        GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+        GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+        GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_TEXC);
+        GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_TEXA);
+        GXSetTevSwapMode(GX_TEVSTAGE0, GX_TEV_SWAP0, GX_TEV_SWAP0);
+        GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
+        GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+        GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+        GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_TEXC, GX_CC_CPREV, GX_CC_A0, GX_CC_ZERO);
+        GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_TEXA);
+        GXSetTevSwapMode(GX_TEVSTAGE1, GX_TEV_SWAP0, GX_TEV_SWAP0);
+        GXSetTevColor(GX_TEVREG0, (GXColor){0xFF, 0xFF, 0xFF, gans_wp->alpha});
+        info->tevStage = 2;
+        info->texCoord = 2;
+        info->texMap = 2;
+    }
 }
 
 /** Turns the registration monitor on, with the computer sound at the "M_make" console. */
@@ -2749,67 +2802,6 @@ static EVT_BEGIN(evt_michel_7)
     CALL(evt_npc_set_ry, STRING("マイケル"), 270)
     RETURN
 EVT_END()
-
-// Wait for the story-selected NPC, then update the monitor texture and fade while remaining active.
-static USER_FUNC(make_monitor) {
-    NpcEntry* npc = npcNameToPtr_NoAssert(evtGetValue(NULL, GSW_STORY_PROGRESS) < STG3_34_RETURN_TO_ROGUEPORT ? "ガンス" : "キノシコワ");
-    GansWork* wp;
-
-    if (isFirstCall) {
-        wp = _mapAlloc(sizeof(GansWork));
-        event->userdatap[0] = wp;
-        wp->onoff = 0;
-        wp->ready = 0;
-    }
-    if (npc == NULL) {
-        return EVT_RETURN_BLOCK;
-    }
-    wp = event->userdatap[0];
-    gans_wp = wp;
-    wp->buf = smartAlloc(GXGetTexBufferSize(0x80, 0x80, GX_TF_RGB5A3, GX_FALSE, 0), SMART_GROUP_TEMP);
-    GXInitTexObj(&wp->tex, wp->buf->address, 0x80, 0x80, GX_TF_RGB5A3, GX_CLAMP, GX_CLAMP, GX_FALSE);
-    GXInitTexObjLOD(&wp->tex, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
-    if (gans_wp->onoff) {
-        gans_wp->alpha += 4;
-        if (gans_wp->alpha > 0x80) {
-            gans_wp->alpha = 0x80;
-        }
-    } else {
-        gans_wp->alpha -= 4;
-        if (gans_wp->alpha < 0) {
-            gans_wp->alpha = 0;
-        }
-    }
-    dispEntry(CAMERA_SHADOW, 0.0f, DISP_MODE_OPAQUE_NO_Z, gans_tex, wp);
-    return EVT_RETURN_BLOCK;
-}
-
-/**
- * TEV callback for the monitor screen: replaces the screen's color stages with the live texture,
- * blended by the work alpha, once the texture has been rendered at least once.
- */
-static void monitor_tev(MapTevCallbackInfo* info) {
-    if (gans_wp->ready) {
-        GXSetTexCoordGen2(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
-        GXLoadTexObj(smartTexObj(&gans_wp->tex, &gans_wp->buf->address), GX_TEXMAP1);
-        GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD1, GX_TEXMAP1, GX_COLOR_NULL);
-        GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-        GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-        GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_TEXC);
-        GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_TEXA);
-        GXSetTevSwapMode(GX_TEVSTAGE0, GX_TEV_SWAP0, GX_TEV_SWAP0);
-        GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
-        GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-        GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-        GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_TEXC, GX_CC_CPREV, GX_CC_A0, GX_CC_ZERO);
-        GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_TEXA);
-        GXSetTevSwapMode(GX_TEVSTAGE1, GX_TEV_SWAP0, GX_TEV_SWAP0);
-        GXSetTevColor(GX_TEVREG0, tou_mkcolor(gans_wp->alpha));
-        info->tevStage = 2;
-        info->texCoord = 2;
-        info->texMap = 2;
-    }
-}
 
 /** Script helper: args[0] = 1/0 to fade the registration monitor in or out. */
 static USER_FUNC(onoff) {

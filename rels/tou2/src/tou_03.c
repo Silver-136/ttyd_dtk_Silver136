@@ -4339,15 +4339,6 @@ static s32 eff_pos(EventEntry* event, BOOL isFirstCall) {
     return EVT_RETURN_BLOCK;
 }
 
-/** Loads TEV register 0 with white at the given alpha, the fade amount of Grubba's white-out. */
-// FAKE: invented one-use inline helper (no map name); writing it out changes the code (FAKES.md)
-static inline void cb_set_color(u8 a) {
-    GXColor color = {255, 255, 255, 0};
-
-    color.a = a;
-    GXSetTevColor(GX_TEVREG0, color);
-}
-
 /**
  * TEV callback that adds the white-out colour (gans_alpha) on top of the model it is attached to;
  * used to flash Grubba white.
@@ -4358,7 +4349,7 @@ static void callback(MapTevCallbackInfo* info) {
     s32 texCoord = info->texCoord;
     s32 indStage = info->indStage;
 
-    cb_set_color(gans_alpha);
+    GXSetTevColor(GX_TEVREG0, (GXColor){255, 255, 255, gans_alpha});
     GXSetTevOrder(stage, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR_NULL);
     GXSetTevColorOp(stage, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
     GXSetTevAlphaOp(stage, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);

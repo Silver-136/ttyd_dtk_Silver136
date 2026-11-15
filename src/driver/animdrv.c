@@ -2563,12 +2563,6 @@ static void materialProc(s32 shapeId, s32 xluStage) {
     }
 }
 
-/** The pose data renderProc is drawing. */
-// FAKE: invented one-use inline helper (no map name); writing it out changes the code (FAKES.md)
-static inline AnimationPoseData* rpCurData(void) {
-    return wp->curPoseData;
-}
-
 /**
  * Draws shape shapeId of the current pose: points GX at the pose's evaluated vertex positions and normals
  * and the file's colours and texture coordinates, then sends its polygons.
@@ -2745,11 +2739,10 @@ static void renderProc(s32 shapeId, s32 unused) {
 
                 texIds = (s8*)draw->texArrayIds;
                 firstId = draw->firstIdTex;
-                data = rpCurData();
-                drawCall = &data->drawCalls[draw->firstDrawCall];
+                                drawCall = &wp->curPoseData->drawCalls[draw->firstDrawCall];
                 tc2 = draw->texCount;
                 drawCallCount = draw->drawCallCount;
-                clr0VtxPtr = (GXColor*)((u8*)data->clr0VtxBuffer + clr0VtxSize);
+                clr0VtxPtr = (GXColor*)((u8*)wp->curPoseData->clr0VtxBuffer + clr0VtxSize);
                 posFirstId = draw->firstIdPos;
                 nrmFirstId = draw->firstIdNrm;
                 clr0FirstId = draw->firstIdClr0;

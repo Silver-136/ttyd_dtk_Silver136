@@ -491,12 +491,6 @@ static s32 evt_chorobon_wait(EventEntry* event, BOOL isFirstCall) {
     return EVT_RETURN_DONE;
 }
 
-/** Returns the hop duration in milliseconds that the script passed as args[6] to npc_jump. */
-// FAKE: invented one-use inline helper (no map name); writing it out changes the code (FAKES.md)
-static inline s32 npc_jump_get_time(EventEntry* event, EvtWord* args) {
-    return evtGetValue(event, args[6]);
-}
-
 // Kept (pattern): propagation and lifetimes off for the extdrv, npc_jump and depthDisp functions of bom_01, eki_00,
 // gor_10, hei_10, rsh_05, rsh_06, tik_05 and tou_02 (one half is a -opt file flag where configure.py sets it); the
 // target needs it and no natural form was found (cleanup_notes/mweppc_pilot.md, pragma review rels).
@@ -515,7 +509,8 @@ static s32 npc_jump(EventEntry* event, BOOL isFirstCall) {
     f32 z = evtGetFloat(event, args[3]);
     f32 speed = evtGetFloat(event, args[4]);
     f32 gravity = evtGetFloat(event, args[5]);
-    f32 t = 60.0f * (f32)npc_jump_get_time(event, args) / 1000.0f;
+    s32 durationMs = evtGetValue(event, args[6]);
+    f32 t = 60.0f * durationMs / 1000.0f;
     NpcEntry* npc = npcNameToPtr(name);
     f32 vy;
     f32 dist;

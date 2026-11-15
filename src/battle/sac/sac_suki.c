@@ -871,15 +871,6 @@ static USER_FUNC(get_img_name) {
     return 2;
 }
 
-// FAKE: invented one-use inline helper (no map name); writing it out changes the code (FAKES.md)
-static inline GXColor grayColor(u8 v) {
-    GXColor c = {0, 0, 0, 255};
-    c.r = v;
-    c.g = v;
-    c.b = v;
-    return c;
-}
-
 /** Map TEV callback for the flash: draws the stage as a flat grey of the current flash brightness. */
 static void set_tev(MapTevCallbackInfo* info) {
     u8 v = get_ptr()->flash;
@@ -888,7 +879,7 @@ static void set_tev(MapTevCallbackInfo* info) {
     GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
     GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_C0);
     GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_A0);
-    GXSetTevColor(GX_TEVREG0, grayColor(v));
+    GXSetTevColor(GX_TEVREG0, (GXColor){v, v, v, 255});
     info->tevStage = 1;
     info->texCoord = 0;
     info->texMap = 0;

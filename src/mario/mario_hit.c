@@ -2269,65 +2269,6 @@ void marioCheckWall_roll(f32 dx, f32 dz) {
     mario->position.z = pos.z;
 }
 
-/** marioHitCheckVecInl with the direction built after the position copy (the target schedules the pos loads first) */
-// marioHitCheckVecInl for a horizontal ray: the direction is (s, 0, c)
-// FAKE: invented one-use inline helper (no map name); writing it out changes the code (FAKES.md)
-static inline HitEntry* marioChkFrontInl(const Vec* pos, f32 s, f32 c, Vec* outPos, Vec* outNrm, f32* dist) {
-    HitCheckQuery query;
-    HitEntry* hit;
-    f32 rf;
-
-    {
-        Vec dir = {0.0f, 0.0f, 0.0f};
-        dir.x = s;
-        dir.z = c;
-        query.targetPos = *pos;
-        query.targetDir = dir;
-    }
-    query.targetDistance = *dist;
-    if (marioGetPtr()->currMotionId == MARIO_MOTION_VIVIAN) {
-        hit = hitCheckVecFilter(&query, chkfilterVecVivian);
-    } else if (marioGetPtr()->flags & MARIO_FLAG_TUBE_MODE) {
-        hit = hitCheckVecFilter(&query, chkfilterVecRoll);
-    } else {
-        hit = hitCheckVecFilter(&query, chkfilterVec);
-    }
-    if (!hit) {
-        return NULL;
-    }
-    if (query.targetDistance >= 0.0f) {
-        rf = 0.5f;
-    } else {
-        rf = -0.5f;
-    }
-    *dist = (s32)((1000.0f * query.targetDistance) + rf) / 1000.0f;
-    if (outPos) {
-        *outPos = query.hitPos;
-        if (outPos->x >= 0.0f) {
-            rf = 0.5f;
-        } else {
-            rf = -0.5f;
-        }
-        outPos->x = (s32)((1000.0f * outPos->x) + rf) / 1000.0f;
-        if (outPos->y >= 0.0f) {
-            rf = 0.5f;
-        } else {
-            rf = -0.5f;
-        }
-        outPos->y = (s32)((1000.0f * outPos->y) + rf) / 1000.0f;
-        if (outPos->z >= 0.0f) {
-            rf = 0.5f;
-        } else {
-            rf = -0.5f;
-        }
-        outPos->z = (s32)((1000.0f * outPos->z) + rf) / 1000.0f;
-    }
-    if (outNrm) {
-        *outNrm = query.hitNormal;
-    }
-    return hit;
-}
-
 /**
  * Casts a horizontal ray from pos in direction angle (degrees) for up to dist.
  * Returns the hit and its flat distance in *out, or NULL with *out = -1.
@@ -2340,7 +2281,7 @@ HitEntry* marioChkFront(f32* out, const Vec* pos, f32 angle, f32 dist) {
     HitEntry* hit;
     sincosf(&s, &c, angle);
     d = dist;
-    hit = marioChkFrontInl(pos, s, c, &outPos, &outNrm, &d);
+    hit = marioHitCheckVecInl((Vec*)pos, &(Vec){s, 0.0f, c}, &outPos, &outNrm, &d);
     if (hit && d <= dist) {
         *out = distABf(pos->x, pos->z, outPos.x, outPos.z);
         return hit;

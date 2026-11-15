@@ -140,26 +140,10 @@ BOOL marioPriCheckJabara(void) {
         mario->wMotionTimer = 0;
         return FALSE;
     }
-    return pouchCheckItem(ITEM_ULTRA_BOOTS) != 0;
-}
-
-/** Inline copy of marioPriCheckJabara for marioChkJabara. */
-// FAKE: inline copy of a map function so its calls inline (the unit does not auto-inline; FAKES.md)
-static inline BOOL priChk(void) {
-    MarioWork* mario = marioGetPtr();
-    u32 flags = mario->flags;
-    BOOL ret;
-    if ((flags & MARIO_FLAG_IS_8_BIT) || (flags & VERSION_PICK(MARIO_FLAG_PAPER_MODE, MARIO_FLAG_PAPER_MODE | MARIO_FLAG_BG_MODE))) {
-        mario->wMotionTimer = 0;
-        ret = FALSE;
-    } else {
-        if (pouchCheckItem(ITEM_ULTRA_BOOTS) == 0) {
-            ret = FALSE;
-        } else {
-            ret = TRUE;
-        }
+    if (pouchCheckItem(ITEM_ULTRA_BOOTS) == 0) {
+        return FALSE;
     }
-    return ret;
+    return TRUE;
 }
 
 /**
@@ -172,7 +156,7 @@ BOOL marioChkJabara(void) {
     MarioWork* mario = marioGetPtr();
     s32 rubCount, rubDir;
     f32 rubMag;
-    if (!priChk()) {
+    if (!marioPriCheckJabara()) {
         return FALSE;
     }
     if (!(mario->buttonHold & PAD_BUTTON_A)) {
