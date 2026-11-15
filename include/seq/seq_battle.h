@@ -5,3 +5,6 @@
 void seq_battleInit(SequenceWork* work);
 void seq_battleMain(SequenceWork* work);
 void seq_battleExit(SequenceWork* work);
+#if VERSION >= VERSION_JP
+BOOL battleStageLoad(void);
+#endif

@@ -133,7 +133,11 @@ static void effRotHammerFailDisp(CameraId cameraId, void* payload) {
     work = effect->userdata;
     idx = work->progress;
     alpha = 256.0f * (work->progress - (f32)idx);
-    isSix = idx == 6;
+    if (idx == 6) {
+        isSix = 1;
+    } else {
+        isSix = 0;
+    }
     GXSetNumChans(0);
     GXSetNumTexGens(2);
     GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0, GX_FALSE, GX_PTIDENTITY);

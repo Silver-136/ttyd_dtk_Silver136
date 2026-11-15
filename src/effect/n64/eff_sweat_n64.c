@@ -161,13 +161,11 @@ static void effSweatDisp(CameraId cameraId, void* payload) {
     GXTexObj texObj;
     s32 i;
     f32 x2;
-    f32 nsize;
     f32 x1;
     f32 yt;
     f32 size;
     f32 yb;
     f32 h = 9.6f;
-    f32 neg;
 
     camera = camGetPtr(cameraId);
     work = effect->userdata;
@@ -193,7 +191,6 @@ static void effSweatDisp(CameraId cameraId, void* payload) {
     GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
-    neg = -h;
     work++;
     for (i = 1; i < effect->count; i++, work++) {
         if (work->delay != 0) {
@@ -211,11 +208,10 @@ static void effSweatDisp(CameraId cameraId, void* payload) {
         if (work->rot > 0.0f) {
             size *= -1.0f;
         }
-        yt = 4.8f;
-        nsize = 0.5f;
-        x1 = -size * nsize;
-        x2 = size * nsize;
-        yb = neg * nsize;
+        yt = h / 2.0f;
+        x1 = -size / 2.0f;
+        x2 = size / 2.0f;
+        yb = -h / 2.0f;
         GXPosition3f32(x1, yt, 0.0f);
         GXTexCoord2f32(0.0f, 0.0f);
         GXPosition3f32(x2, yt, 0.0f);

@@ -43,10 +43,6 @@ static BOOL battle_init(void);
 
 static void battle_init(void);
 BOOL bmapPreLoad(const char* map, const char* map2);
-static const char bti01[7];
-static const char bti02[7];
-static const char bti03[7];
-static const char bti04[7];
 #endif
 
 static s32 debug_battle_flag;
@@ -76,17 +72,17 @@ void seq_battleInit(SequenceWork* work) {
     fbatGetPointer();
     switch (pouchGetPtr()->rank) {
         case 0:
-            map = mapDataPtr(bti01);
+            map = mapDataPtr("bti_01");
             break;
         case 1:
-            map = mapDataPtr(bti02);
+            map = mapDataPtr("bti_02");
             break;
         case 2:
-            map = mapDataPtr(bti03);
+            map = mapDataPtr("bti_03");
             break;
         case 3:
         default:
-            map = mapDataPtr(bti04);
+            map = mapDataPtr("bti_04");
             break;
     }
     bmapPreLoad(map->mapName, NULL);
@@ -122,12 +118,6 @@ void seq_battleExit(SequenceWork* work) {
     battle_exit();
 }
 
-static const char gon11[7];
-static const char bti01[7];
-static const char bti02[7];
-static const char bti03[7];
-static const char bti04[7];
-
 /**
  * Per-frame battle sequence: curtain fade, audience texture loads,
  * waits out a pending first strike (up to 200 frames), loads the bti_01..04 audience stage for Mario's rank,
@@ -140,8 +130,6 @@ static const char bti04[7];
 #if VERSION >= VERSION_JP
 void seq_battleMain(SequenceWork* work) {
     FieldBattleData* fbat;
-    BattleStageData* stage;
-    PouchData* pouch;
     Vec pos;
 
     switch (work->state) {
@@ -185,52 +173,11 @@ void seq_battleMain(SequenceWork* work) {
             fbat = fbatGetPointer();
             fbat->battleWait = 0;
             work->state++;
-        case 3: {
-            // FAKE: wait flag and goto check; a plain break while still waiting changes the object
-            BOOL wait;
-            fbat = fbatGetPointer();
-            stage = fbat->target->battleInfo.stageData;
-            pouch = pouchGetPtr();
-            if (fbat->firstStrike.enabled != 0) {
-                BOOL ok = TRUE;
-                switch (fbat->firstStrike.type) {
-                    case FIRST_STRIKE_ENEMY:
-                    case FIRST_STRIKE_MARIO:
-                        if (fbat->firstStrike.hitKind != 0) {
-                            ok = FALSE;
-                        }
-                        break;
-                }
-                if (ok == FALSE) {
-                    fbat->battleWait++;
-                    if (fbat->battleWait < 200) {
-                        wait = TRUE;
-                        goto check;
-                    }
-                }
-            }
-            switch (pouch->rank) {
-                case 0:
-                    bmapLoad(bti01, stage->specificStageDataDir);
-                    break;
-                case 1:
-                    bmapLoad(bti02, stage->specificStageDataDir);
-                    break;
-                case 2:
-                    bmapLoad(bti03, stage->specificStageDataDir);
-                    break;
-                case 3:
-                default:
-                    bmapLoad(bti04, stage->specificStageDataDir);
-                    break;
-            }
-            wait = FALSE;
-        check:
-            if (wait != 0) {
+        case 3:
+            if (battleStageLoad()) {
                 break;
             }
             work->state++;
-        }
         case 4:
             if (battle_init()) {
                 break;
@@ -276,6 +223,55 @@ void seq_battleMain(SequenceWork* work) {
             }
             break;
     }
+}
+
+/**
+ * JP and later: waits out a pending first strike (up to 200 frames), then loads the audience stage for
+ * Mario's rank; TRUE while still waiting (seq_battleMain state 3 retries while TRUE). seq_battleMain inlines
+ * it and the linker strips the unused copy; that copy, codegenned between battle_init and seq_battleMain,
+ * places the bti_01..04 strings before seq_battleMain's own. The name is descriptive (no map lists it).
+ */
+BOOL battleStageLoad(void) {
+    FieldBattleData* fbat;
+    BattleStageData* stage;
+    PouchData* pouch;
+
+    fbat = fbatGetPointer();
+    stage = fbat->target->battleInfo.stageData;
+    pouch = pouchGetPtr();
+    if (fbat->firstStrike.enabled != 0) {
+        BOOL ok = TRUE;
+        switch (fbat->firstStrike.type) {
+            case FIRST_STRIKE_ENEMY:
+            case FIRST_STRIKE_MARIO:
+                if (fbat->firstStrike.hitKind != 0) {
+                    ok = FALSE;
+                }
+                break;
+        }
+        if (ok == FALSE) {
+            fbat->battleWait++;
+            if (fbat->battleWait < 200) {
+                return TRUE;
+            }
+        }
+    }
+    switch (pouch->rank) {
+        case 0:
+            bmapLoad("bti_01", stage->specificStageDataDir);
+            break;
+        case 1:
+            bmapLoad("bti_02", stage->specificStageDataDir);
+            break;
+        case 2:
+            bmapLoad("bti_03", stage->specificStageDataDir);
+            break;
+        case 3:
+        default:
+            bmapLoad("bti_04", stage->specificStageDataDir);
+            break;
+    }
+    return FALSE;
 }
 
 /** Later versions: same setup, returning FALSE once done (seq_battleMain state 4 retries while TRUE). */
@@ -377,17 +373,17 @@ static void battle_init(void) {
     }
     switch (pouch->rank) {
         case 0:
-            map = mapDataPtr(bti01);
+            map = mapDataPtr("bti_01");
             break;
         case 1:
-            map = mapDataPtr(bti02);
+            map = mapDataPtr("bti_02");
             break;
         case 2:
-            map = mapDataPtr(bti03);
+            map = mapDataPtr("bti_03");
             break;
         case 3:
         default:
-            map = mapDataPtr(bti04);
+            map = mapDataPtr("bti_04");
             break;
     }
     map2 = NULL;
@@ -404,7 +400,7 @@ static void battle_init(void) {
         if (msg) {
             msgLoad(msg, 0);
         } else {
-            msgLoad(gon11, 0);
+            msgLoad("gon_11", 0);
         }
     }
 #if VERSION >= VERSION_US
@@ -551,22 +547,3 @@ static void battle_exit(void) {
         psndENVOn(PSND_CONTINUE | PSND_FADEIN, NULL);
     }
 }
-
-/**
- * gon_11, whose message file a debug battle loads when its menu has none, and the battle stage maps for
- * Mario's rank (bti_01 to bti_04, the stage gets bigger as he rises).
- */
-#if VERSION >= VERSION_JP
-static const char gon11[] = "gon_11";
-#endif
-/**
- * Names of the battle stage maps for Mario's rank (bti_01 to bti_04, the stage gets bigger as he rises),
- * and gon_11, whose message file a debug battle loads when its menu has none.
- */
-static const char bti01[] = "bti_01";
-static const char bti02[] = "bti_02";
-static const char bti03[] = "bti_03";
-static const char bti04[] = "bti_04";
-#if VERSION <= VERSION_DEMO_JP
-static const char gon11[] = "gon_11";
-#endif
