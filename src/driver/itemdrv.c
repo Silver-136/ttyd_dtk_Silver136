@@ -46,12 +46,6 @@
 #include "mario/mario_cam.h"
 #include "eff/n64/eff_hagetaka_flush_n64.h"
 
-// FAKE: pool stand-in with an invented name
-/* unused; its zero Vec template still lands in the constant pool / .rodata (removing it changes the object) */
-inline Vec unknownVec0(void) {
-    return (Vec){ 0.0f, 0.0f, 0.0f };
-}
-
 static void winNameDisp(WinMgrEntry* win);
 static void winNameDisp2(WinMgrEntry* win);
 static void winHelpMain(WinMgrEntry* win);
@@ -926,6 +920,9 @@ ItemEntry* itemHitCheck(f32 x, f32 y, f32 z, f32 range) {
     f32 dx, dy, dz, xzdist, dist;
     f32 hitX, hitY, hitZ, hitDist, hitNX, hitNY, hitNZ;
     HitEntry* hit;
+    // unused: nothing reads it, but its zero template is in the retail .rodata (the file's first object,
+    // JP demo map @838, numbered with this function: 34 numbers before itemNearDistCheck's @872)
+    Vec zero = {0.0f, 0.0f, 0.0f};
 
     mario = marioGetPtr();
     found = NULL;

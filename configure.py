@@ -2050,7 +2050,7 @@ config.libs = [
             Object(MatchingFor("G8MJ01", "G8ME01"), "yuu_03.c", extra_cflags=["-inline auto,deferred"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "event/evt_yuunpc.c", extra_cflags=["-inline auto,deferred"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "event/evt_yuuranking.c", extra_cflags=["-inline auto,deferred"]),
-            Object(MatchingFor("G8MJ01", "G8ME01"), "yuu_01.c"),
+            Object(MatchingFor("G8MJ01", "G8ME01"), "yuu_01.c", extra_cflags=["-inline auto,deferred"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "event/evt_yuucounter.c", extra_cflags=["-inline auto,deferred"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "yuu_00.c", extra_cflags=["-inline noauto,deferred"]),
         ]

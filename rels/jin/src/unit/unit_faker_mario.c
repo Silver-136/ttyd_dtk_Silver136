@@ -28,12 +28,9 @@
 #define UNIT_WORK_HP_50 2        // 50% of max HP, threshold of the second HP line
 #define UNIT_WORK_HP_25 3        // 25% of max HP, threshold of the third HP line
 
-typedef struct FakerStatus {
-    s16 data[15];
-} FakerStatus;
 typedef struct FakerParam {
     f32 size;
-    FakerStatus status;
+    BtlStatusCopy status;
     s32 statusFlags;
 #if VERSION >= VERSION_US
     u16 commandDisabled[2];
@@ -192,8 +189,7 @@ static USER_FUNC(_save_param) {
     p->commandDisabled[0] = party->usCommandDisabled[0];
     p->commandDisabled[1] = party->usCommandDisabled[1];
 #endif
-    // FAKE: byte-offset view of the 30 bytes of status-turn fields from sleepTurns (memcpy changes the object)
-    p->status = *(FakerStatus*)&party->sleepTurns;
+    p->status = party->statusTurns;
     p->maxHp = party->maxHp;
     p->currentHp = party->currentHp;
     p->maxFp = party->maxFp;
@@ -236,8 +232,7 @@ static USER_FUNC(_load_param) {
     party->usCommandDisabled[0] = p->commandDisabled[0];
     party->usCommandDisabled[1] = p->commandDisabled[1];
 #endif
-    // FAKE: byte-offset view of the status-turn fields, as in _save_param
-    *(FakerStatus*)&party->sleepTurns = p->status;
+    party->statusTurns = p->status;
     party->maxHp = p->maxHp;
     party->currentHp = p->currentHp;
     party->maxFp = p->maxFp;
@@ -1551,7 +1546,7 @@ static USER_FUNC(_gullible_party_info_init) {
         p = &params[i];
         p->size = 1.0f;
         p->statusFlags = 0;
-        memset(&p->status, 0, sizeof(FakerStatus));
+        memset(&p->status, 0, sizeof(p->status));
         switch (i) {
             case 0:
                 p->maxHp = p->currentHp = pouch->partyData[1].baseMaxHP;

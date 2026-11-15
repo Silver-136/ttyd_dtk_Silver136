@@ -455,12 +455,6 @@ static void ext_main(void) {
 }
 #pragma pop
 
-/* unused in the original build; only its Vec template survives in .rodata */
-// FAKE: pool stand-in with an invented name
-static inline void chb_zero(Vec* v) {
-    *v = (Vec){0.0f, 0.0f, 0.0f};
-}
-
 /** Registers the swarm's draw callback with the 3D camera. */
 static void ext_dispent(void) {
     dispEntry(CAMERA_3D, 0.0f, DISP_MODE_ALPHA_TEST, ext_disp, NULL);
@@ -526,6 +520,9 @@ static s32 npc_jump(EventEntry* event, BOOL isFirstCall) {
     f32 angle;
 
     if (isFirstCall) {
+        // unused: nothing reads it, but its zero template is in the retail .rodata (JP demo map @629,
+        // numbered right before va and vb, @631 and @633)
+        Vec zero = {0.0f, 0.0f, 0.0f};
         static const Vec va = {0.0f, 0.0f, 0.0f};
         static const Vec vb = {0.0f, 0.0f, 0.0f};
         Vec a;
