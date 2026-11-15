@@ -372,8 +372,6 @@ inline void set_vivian_pos(PartyEntry* party) {
 #endif
     }
 }
-
-#pragma defer_codegen off
 #endif
 
 /**

@@ -3116,9 +3116,6 @@ static BOOL BattleCommandAttackAudienceCheck(void) {
  * is greyed out, by cmd->disableReason (no FP, no Star Power, no jump or hammer target, can't run,
  * or can't pick it now).
  */
-// FAKE: auto_inline on for _get_msg alone in this -inline noauto file: as an auto-inline candidate it gets the
-// front end's simple optimizer pass, which gives the target's string base register; without it r5/r6 swap
-#pragma auto_inline on
 static USER_FUNC(_get_msg) {
     EvtWord* args = event->args;
     s32 index = *args++;
@@ -3149,7 +3146,6 @@ static USER_FUNC(_get_msg) {
     evtSetValue(event, index, (EvtWord)msg);
     return EVT_RETURN_DONE;
 }
-#pragma auto_inline reset
 
 /**
  * TRUE if the weapon is offensive: it deals HP damage or inflicts a harmful status (sleep, stop, dizzy, poison,

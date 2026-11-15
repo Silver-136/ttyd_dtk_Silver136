@@ -935,6 +935,7 @@ void partyChgRunMode2(PartyEntry* party, s32 mode, s32 sub) {
 #endif
     party->motionStep = sub;
 }
+#pragma dont_inline reset
 
 /**
  * Returns the partner to the run mode it had before the current one,
@@ -951,7 +952,6 @@ void partyPrevRunMode(PartyEntry* party) {
     partyChgMot(party, PARTY_MOTION_STAY);
 }
 #endif
-#pragma dont_inline reset
 
 #if VERSION >= VERSION_JP
 void partyPrevRunMode(PartyEntry* party) {

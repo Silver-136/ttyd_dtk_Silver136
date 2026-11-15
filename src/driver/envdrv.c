@@ -380,10 +380,8 @@ static inline f32 dofDiv(f32 a, f32 b) { return a / b; }
 /** Opaque white, the TEV colour of the depth-of-field pass (envDisp_DepthOfField). */
 static const GXColor white = {0xFF, 0xFF, 0xFF, 0xFF};
 
-// kept: without it envDisp_DepthOfField changes; -opt noprop,nolifetimes for the whole file changes other functions
-// (propagation and lifetimes off together, as in the rels' extdrv functions)
+// kept: without it envDisp_DepthOfField changes; -opt noprop for the whole file changes other functions
 #pragma opt_propagation off
-#pragma opt_lifetimes off
 // FAKE: tbl, tbl2, coord2 and stage2 are one-element local arrays. The front end scalarizes them into @ temps,
 // which sit in the coalesce window: `tbl = texmtx_tbl` then loads straight into the pointer register (a named
 // pointer under opt_propagation off gives addi r0 + mr), and loop 2's zero inits become the target's li/mr copies.
@@ -556,7 +554,6 @@ static void envDisp_DepthOfField(void) {
 }
 
 #pragma opt_propagation reset
-#pragma opt_lifetimes reset
 
 /**
  * Draws the motion blur: the captured earlier frame over the screen at a constant alpha, or,
