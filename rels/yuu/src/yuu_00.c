@@ -1252,16 +1252,6 @@ USER_FUNC(yuu_00_cam_shift_reset) {
 #endif
 
 /**
- * Names of the floor areas below the course for yuuminigame1_gamerule;
- * landing on one sets the result to -5 (02, 05), -10 (03), -15 (06) or -20 (04).
- */
-static const char yuu00_gnd_02[] = "A_ground_02";
-static const char yuu00_gnd_05[] = "A_ground_05";
-static const char yuu00_gnd_03[] = "A_ground_03";
-static const char yuu00_gnd_06[] = "A_ground_06";
-static const char yuu00_gnd_04[] = "A_ground_04";
-
-/**
  * Returns TRUE when two points are within 20 units in 3D and within 20 in height,
  * i.e. Mario is touching a floating coin.
  */
@@ -1576,19 +1566,19 @@ BOOL yuuminigame1_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp
             data->result = 5;
 #endif
         }
-        if (!strcmp(yuu00_gnd_02, hitGetName(mario->hitobjStandOn))) {
+        if (!strcmp("A_ground_02", hitGetName(mario->hitobjStandOn))) {
             data->result = -5;
         }
-        if (!strcmp(yuu00_gnd_05, hitGetName(mario->hitobjStandOn))) {
+        if (!strcmp("A_ground_05", hitGetName(mario->hitobjStandOn))) {
             data->result = -5;
         }
-        if (!strcmp(yuu00_gnd_03, hitGetName(mario->hitobjStandOn))) {
+        if (!strcmp("A_ground_03", hitGetName(mario->hitobjStandOn))) {
             data->result = -10;
         }
-        if (!strcmp(yuu00_gnd_06, hitGetName(mario->hitobjStandOn))) {
+        if (!strcmp("A_ground_06", hitGetName(mario->hitobjStandOn))) {
             data->result = -15;
         }
-        if (!strcmp(yuu00_gnd_04, hitGetName(mario->hitobjStandOn))) {
+        if (!strcmp("A_ground_04", hitGetName(mario->hitobjStandOn))) {
             data->result = -20;
         }
         marioKeyOff();

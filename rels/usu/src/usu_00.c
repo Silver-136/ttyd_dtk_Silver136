@@ -3860,13 +3860,11 @@ static EVT_BEGIN(minnnanokoe_evt)
     RETURN
 EVT_END()
 
-/** Normal (1, 1, 1) scale the partner is reset to by party_scale before the after-Peach scene. */
-// FAKE: placed in .rodata; without it the object changes
-__declspec(section ".rodata") Vec party_scale_vec = {1.0f, 1.0f, 1.0f};
-
-/** Script helper: sets Mario's partner scale to party_scale_vec. */
+/** Script helper: resets Mario's partner to the normal (1, 1, 1) scale before the after-Peach scene. */
 static USER_FUNC(party_scale) {
-    partyGetPtr(0)->scale = party_scale_vec;
+    PartyEntry* party = partyGetPtr(0);
+
+    party->scale = (Vec){1.0f, 1.0f, 1.0f};
     return EVT_RETURN_DONE;
 }
 

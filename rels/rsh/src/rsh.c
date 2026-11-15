@@ -1555,180 +1555,6 @@ static EVT_BEGIN(debug_print_rnd_npc)
     RETURN
 EVT_END()
 
-typedef struct RshDebugStr {
-    char str[256];
-} RshDebugStr;
-
-/** Zeroed 256-byte template for the debug line buffer of the leftover debug print. */
-static const RshDebugStr rsh_debug_str_init = {0};
-
-// Nine passenger choices: three in rsh_01, two in rsh_03, four in rsh_04.
-EVT_BEGIN(evt_rsh_rnd_npc_init)
-    SET_VALUE(GSW_RSH_01_RANDOM_NPCS, 0)
-    SET_VALUE(GSW_RSH_03_RANDOM_NPCS, 0)
-    SET_VALUE(GSW_RSH_04_RANDOM_NPCS, 0)
-    CALL(evt_sub_random, 4, LW(0))
-    CALL(evt_rsh_set_rnd_npc, 0, 0, LW(0))
-    CALL(evt_sub_random, 2, LW(0))
-    CALL(evt_rsh_set_rnd_npc, 0, 1, LW(0))
-    CALL(evt_sub_random, 1, LW(0))
-    CALL(evt_rsh_set_rnd_npc, 0, 2, LW(0))
-    CALL(evt_sub_random, 12, LW(0))
-    CALL(evt_rsh_set_rnd_npc, 1, 0, LW(0))
-    CALL(evt_sub_random, 6, LW(0))
-    CALL(evt_rsh_set_rnd_npc, 1, 1, LW(0))
-    CALL(evt_sub_random, 1, LW(0))
-    CALL(evt_rsh_set_rnd_npc, 2, 0, LW(0))
-    CALL(evt_sub_random, 1, LW(0))
-    CALL(evt_rsh_set_rnd_npc, 2, 1, LW(0))
-    CALL(evt_sub_random, 1, LW(0))
-    CALL(evt_rsh_set_rnd_npc, 2, 2, LW(0))
-    CALL(evt_sub_random, 3, LW(0))
-    CALL(evt_rsh_set_rnd_npc, 2, 3, LW(0))
-    CALL_CHILD(debug_print_rnd_npc)
-    RETURN
-EVT_END()
-
-/**
- * Spawns the three random passengers of rsh_01 (Passenger 1..3):
- * looks up each stored pick, entries the NPC with its model, places and turns it at a fixed spot,
- * turns talk animation on and hooks its talk script.
- */
-EVT_BEGIN(evt_rsh_01_rnd_npc_entry)
-    CALL(evt_rsh_get_rnd_npc, 0, 0, LW(0))
-    CALL(evt_rsh_get_rnd_npc_data, 0, 0, LW(0), LW(1), LW(2))
-    CALL(evt_rsh_get_rnd_npc_talk_evt, 0, 0, LW(0), LW(3))
-    CALL(evt_npc_entry, STRING("乗客１"), LW(1))
-    CALL(evt_npc_set_tribe, STRING("乗客１"), LW(2))
-    CALL(evt_npc_set_position, STRING("乗客１"), -275, 0, -225)
-    CALL(evt_npc_set_ry, STRING("乗客１"), 90)
-    CALL(evt_npc_flag_onoff, 1, STRING("乗客１"), NPC_FLAG_TALK_POSE)
-    CALL(evt_rsh_set_rnd_npc_talk_evt, STRING("乗客１"), LW(3))
-    CALL(evt_rsh_get_rnd_npc, 0, 1, LW(0))
-    CALL(evt_rsh_get_rnd_npc_data, 0, 1, LW(0), LW(1), LW(2))
-    CALL(evt_rsh_get_rnd_npc_talk_evt, 0, 1, LW(0), LW(3))
-    CALL(evt_npc_entry, STRING("乗客２"), LW(1))
-    CALL(evt_npc_set_tribe, STRING("乗客２"), LW(2))
-    CALL(evt_npc_set_position, STRING("乗客２"), -45, 0, -175)
-    CALL(evt_npc_set_ry, STRING("乗客２"), 90)
-    CALL(evt_npc_flag_onoff, 1, STRING("乗客２"), NPC_FLAG_TALK_POSE)
-    CALL(evt_rsh_set_rnd_npc_talk_evt, STRING("乗客２"), LW(3))
-    CALL(evt_rsh_get_rnd_npc, 0, 2, LW(0))
-    CALL(evt_rsh_get_rnd_npc_data, 0, 2, LW(0), LW(1), LW(2))
-    CALL(evt_rsh_get_rnd_npc_talk_evt, 0, 2, LW(0), LW(3))
-    CALL(evt_npc_entry, STRING("乗客３"), LW(1))
-    CALL(evt_npc_set_tribe, STRING("乗客３"), LW(2))
-    CALL(evt_npc_set_position, STRING("乗客３"), 85, 16, -255)
-    CALL(evt_npc_set_ry, STRING("乗客３"), 270)
-    CALL(evt_npc_flag_onoff, 1, STRING("乗客３"), NPC_FLAG_TALK_POSE)
-    CALL(evt_rsh_set_rnd_npc_talk_evt, STRING("乗客３"), LW(3))
-    RETURN
-EVT_END()
-
-static NpcSetupInfo rsh_03_rnd_npc_2_ent[] = {
-    {
-        "乗客２", // name (a passenger on the Excess Express)
-        0, 0, // flags..reactionFlags
-        npc_urouro_init_event, // initEvent
-        npc_urouro_move_event, // regularEvent
-        NULL, NULL, NULL, NULL, // talkEvent..lostEvent
-        npc_urouro_return_event, // returnEvent
-        NULL, // blowEvent
-        1, // territoryType
-        {-360.0f, 0.0f, -10.0f}, // territoryBase
-        {50.0f, 0.0f, 0.0f}, // territoryLoiter
-        0.0f, 0.0f, 0.0f, 0.0f, // searchRange..homingAngle
-        -1, // battleInfoId
-    },
-    {0},
-};
-
-EVT_BEGIN(evt_rsh_03_rnd_npc_entry)
-    CALL(evt_rsh_get_rnd_npc, 1, 0, LW(0))
-    CALL(evt_rsh_get_rnd_npc_data, 1, 0, LW(0), LW(1), LW(2))
-    CALL(evt_rsh_get_rnd_npc_talk_evt, 1, 0, LW(0), LW(3))
-    CALL(evt_npc_entry, STRING("乗客１"), LW(1))
-    CALL(evt_npc_set_tribe, STRING("乗客１"), LW(2))
-    CALL(evt_npc_set_position, STRING("乗客１"), 460, 0, -60)
-    CALL(evt_npc_set_ry, STRING("乗客１"), 270)
-    CALL(evt_npc_flag_onoff, 1, STRING("乗客１"), NPC_FLAG_TALK_POSE)
-    CALL(evt_rsh_set_rnd_npc_talk_evt, STRING("乗客１"), LW(3))
-    CALL(evt_rsh_get_rnd_npc, 1, 1, LW(0))
-    CALL(evt_rsh_get_rnd_npc_data, 1, 1, LW(0), LW(1), LW(2))
-    CALL(evt_rsh_get_rnd_npc_talk_evt, 1, 1, LW(0), LW(3))
-    CALL(evt_npc_entry, STRING("乗客２"), LW(1))
-    CALL(evt_npc_set_tribe, STRING("乗客２"), LW(2))
-    CALL(evt_npc_setup, PTR(rsh_03_rnd_npc_2_ent))
-    CALL(evt_npc_set_position, STRING("乗客２"), -360, 0, -10)
-    CALL(evt_npc_set_ry, STRING("乗客２"), 90)
-    CALL(evt_npc_flag_onoff, 1, STRING("乗客２"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
-    CALL(evt_rsh_set_rnd_npc_talk_evt, STRING("乗客２"), LW(3))
-    RETURN
-EVT_END()
-
-static NpcSetupInfo rsh_04_rnd_npc_3_ent[] = {
-    {
-        "乗客３", // name (a passenger on the Excess Express)
-        0, 0, // flags..reactionFlags
-        npc_urouro_init_event, // initEvent
-        npc_urouro_move_event, // regularEvent
-        NULL, NULL, NULL, NULL, // talkEvent..lostEvent
-        npc_urouro_return_event, // returnEvent
-        NULL, // blowEvent
-        1, // territoryType
-        {-180.0f, 0.0f, -145.0f}, // territoryBase
-        {50.0f, 0.0f, 50.0f}, // territoryLoiter
-        0.0f, 0.0f, 0.0f, 0.0f, // searchRange..homingAngle
-        -1, // battleInfoId
-    },
-    {0},
-};
-
-EVT_BEGIN(evt_rsh_04_rnd_npc_entry)
-    CALL(evt_rsh_get_rnd_npc, 2, 0, LW(0))
-    CALL(evt_rsh_get_rnd_npc_data, 2, 0, LW(0), LW(1), LW(2))
-    CALL(evt_rsh_get_rnd_npc_talk_evt, 2, 0, LW(0), LW(3))
-    CALL(evt_npc_entry, STRING("乗客１"), LW(1))
-    CALL(evt_npc_set_tribe, STRING("乗客１"), LW(2))
-    CALL(evt_npc_set_position, STRING("乗客１"), 265, 0, -150)
-    CALL(evt_npc_set_ry, STRING("乗客１"), 270)
-    CALL(evt_npc_flag_onoff, 1, STRING("乗客１"), NPC_FLAG_TALK_POSE)
-    CALL(evt_rsh_set_rnd_npc_talk_evt, STRING("乗客１"), LW(3))
-    CALL(evt_rsh_get_rnd_npc, 2, 1, LW(0))
-    CALL(evt_rsh_get_rnd_npc_data, 2, 1, LW(0), LW(1), LW(2))
-    CALL(evt_rsh_get_rnd_npc_talk_evt, 2, 1, LW(0), LW(3))
-    CALL(evt_npc_entry, STRING("乗客２"), LW(1))
-    CALL(evt_npc_set_tribe, STRING("乗客２"), LW(2))
-    CALL(evt_npc_set_position, STRING("乗客２"), -230, 0, -215)
-    CALL(evt_npc_set_ry, STRING("乗客２"), 90)
-    CALL(evt_npc_flag_onoff, 1, STRING("乗客２"), NPC_FLAG_TALK_POSE)
-    CALL(evt_rsh_set_rnd_npc_talk_evt, STRING("乗客２"), LW(3))
-    CALL(evt_rsh_get_rnd_npc, 2, 2, LW(0))
-    CALL(evt_rsh_get_rnd_npc_data, 2, 2, LW(0), LW(1), LW(2))
-    CALL(evt_rsh_get_rnd_npc_talk_evt, 2, 2, LW(0), LW(3))
-    CALL(evt_npc_entry, STRING("乗客３"), LW(1))
-    CALL(evt_npc_set_tribe, STRING("乗客３"), LW(2))
-    CALL(evt_npc_setup, PTR(rsh_04_rnd_npc_3_ent))
-    CALL(evt_npc_set_position, STRING("乗客３"), -180, 0, -145)
-    CALL(evt_npc_set_ry, STRING("乗客３"), 270)
-    CALL(evt_npc_flag_onoff, 1, STRING("乗客３"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
-    CALL(evt_rsh_set_rnd_npc_talk_evt, STRING("乗客３"), LW(3))
-    CALL(evt_rsh_get_rnd_npc, 2, 3, LW(0))
-    CALL(evt_rsh_get_rnd_npc_data, 2, 3, LW(0), LW(1), LW(2))
-    CALL(evt_rsh_get_rnd_npc_talk_evt, 2, 3, LW(0), LW(3))
-    CALL(evt_npc_entry, STRING("乗客４"), LW(1))
-    CALL(evt_npc_set_tribe, STRING("乗客４"), LW(2))
-#if VERSION <= VERSION_DEMO_JP
-    CALL(evt_npc_set_position, STRING("乗客４"), -50, 30, -260)
-#else
-    CALL(evt_npc_set_position, STRING("乗客４"), -85, 16, -255)
-#endif
-    CALL(evt_npc_set_ry, STRING("乗客４"), 90)
-    CALL(evt_npc_flag_onoff, 1, STRING("乗客４"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
-    CALL(evt_rsh_set_rnd_npc_talk_evt, STRING("乗客４"), LW(3))
-    RETURN
-EVT_END()
-
 /**
  * Reads a random passenger pick back out of the packed state word.
  * Args: [0] room, [1] group; [2] receives the candidate index (0 for unknown groups).
@@ -1956,11 +1782,9 @@ static USER_FUNC(debug_print_func) {
     s32 group = evtGetValue(event, args[1]);
     s32 index = evtGetValue(event, args[2]);
     s32 value = evtGetValue(event, args[3]);
-    char header[256];
+    char header[256] = {0};
     char buf[256];
     const char** list;
-
-    *(RshDebugStr*)header = rsh_debug_str_init;
 
     switch (room) {
         case 0:
@@ -2009,3 +1833,170 @@ static USER_FUNC(debug_print_func) {
     sprintf(buf, "%s%d(%s, %s)\n", header, group, list[index], value);
     return EVT_RETURN_DONE;
 }
+
+// Nine passenger choices: three in rsh_01, two in rsh_03, four in rsh_04.
+EVT_BEGIN(evt_rsh_rnd_npc_init)
+    SET_VALUE(GSW_RSH_01_RANDOM_NPCS, 0)
+    SET_VALUE(GSW_RSH_03_RANDOM_NPCS, 0)
+    SET_VALUE(GSW_RSH_04_RANDOM_NPCS, 0)
+    CALL(evt_sub_random, 4, LW(0))
+    CALL(evt_rsh_set_rnd_npc, 0, 0, LW(0))
+    CALL(evt_sub_random, 2, LW(0))
+    CALL(evt_rsh_set_rnd_npc, 0, 1, LW(0))
+    CALL(evt_sub_random, 1, LW(0))
+    CALL(evt_rsh_set_rnd_npc, 0, 2, LW(0))
+    CALL(evt_sub_random, 12, LW(0))
+    CALL(evt_rsh_set_rnd_npc, 1, 0, LW(0))
+    CALL(evt_sub_random, 6, LW(0))
+    CALL(evt_rsh_set_rnd_npc, 1, 1, LW(0))
+    CALL(evt_sub_random, 1, LW(0))
+    CALL(evt_rsh_set_rnd_npc, 2, 0, LW(0))
+    CALL(evt_sub_random, 1, LW(0))
+    CALL(evt_rsh_set_rnd_npc, 2, 1, LW(0))
+    CALL(evt_sub_random, 1, LW(0))
+    CALL(evt_rsh_set_rnd_npc, 2, 2, LW(0))
+    CALL(evt_sub_random, 3, LW(0))
+    CALL(evt_rsh_set_rnd_npc, 2, 3, LW(0))
+    CALL_CHILD(debug_print_rnd_npc)
+    RETURN
+EVT_END()
+
+/**
+ * Spawns the three random passengers of rsh_01 (Passenger 1..3):
+ * looks up each stored pick, entries the NPC with its model, places and turns it at a fixed spot,
+ * turns talk animation on and hooks its talk script.
+ */
+EVT_BEGIN(evt_rsh_01_rnd_npc_entry)
+    CALL(evt_rsh_get_rnd_npc, 0, 0, LW(0))
+    CALL(evt_rsh_get_rnd_npc_data, 0, 0, LW(0), LW(1), LW(2))
+    CALL(evt_rsh_get_rnd_npc_talk_evt, 0, 0, LW(0), LW(3))
+    CALL(evt_npc_entry, STRING("乗客１"), LW(1))
+    CALL(evt_npc_set_tribe, STRING("乗客１"), LW(2))
+    CALL(evt_npc_set_position, STRING("乗客１"), -275, 0, -225)
+    CALL(evt_npc_set_ry, STRING("乗客１"), 90)
+    CALL(evt_npc_flag_onoff, 1, STRING("乗客１"), NPC_FLAG_TALK_POSE)
+    CALL(evt_rsh_set_rnd_npc_talk_evt, STRING("乗客１"), LW(3))
+    CALL(evt_rsh_get_rnd_npc, 0, 1, LW(0))
+    CALL(evt_rsh_get_rnd_npc_data, 0, 1, LW(0), LW(1), LW(2))
+    CALL(evt_rsh_get_rnd_npc_talk_evt, 0, 1, LW(0), LW(3))
+    CALL(evt_npc_entry, STRING("乗客２"), LW(1))
+    CALL(evt_npc_set_tribe, STRING("乗客２"), LW(2))
+    CALL(evt_npc_set_position, STRING("乗客２"), -45, 0, -175)
+    CALL(evt_npc_set_ry, STRING("乗客２"), 90)
+    CALL(evt_npc_flag_onoff, 1, STRING("乗客２"), NPC_FLAG_TALK_POSE)
+    CALL(evt_rsh_set_rnd_npc_talk_evt, STRING("乗客２"), LW(3))
+    CALL(evt_rsh_get_rnd_npc, 0, 2, LW(0))
+    CALL(evt_rsh_get_rnd_npc_data, 0, 2, LW(0), LW(1), LW(2))
+    CALL(evt_rsh_get_rnd_npc_talk_evt, 0, 2, LW(0), LW(3))
+    CALL(evt_npc_entry, STRING("乗客３"), LW(1))
+    CALL(evt_npc_set_tribe, STRING("乗客３"), LW(2))
+    CALL(evt_npc_set_position, STRING("乗客３"), 85, 16, -255)
+    CALL(evt_npc_set_ry, STRING("乗客３"), 270)
+    CALL(evt_npc_flag_onoff, 1, STRING("乗客３"), NPC_FLAG_TALK_POSE)
+    CALL(evt_rsh_set_rnd_npc_talk_evt, STRING("乗客３"), LW(3))
+    RETURN
+EVT_END()
+
+static NpcSetupInfo rsh_03_rnd_npc_2_ent[] = {
+    {
+        "乗客２", // name (a passenger on the Excess Express)
+        0, 0, // flags..reactionFlags
+        npc_urouro_init_event, // initEvent
+        npc_urouro_move_event, // regularEvent
+        NULL, NULL, NULL, NULL, // talkEvent..lostEvent
+        npc_urouro_return_event, // returnEvent
+        NULL, // blowEvent
+        1, // territoryType
+        {-360.0f, 0.0f, -10.0f}, // territoryBase
+        {50.0f, 0.0f, 0.0f}, // territoryLoiter
+        0.0f, 0.0f, 0.0f, 0.0f, // searchRange..homingAngle
+        -1, // battleInfoId
+    },
+    {0},
+};
+
+EVT_BEGIN(evt_rsh_03_rnd_npc_entry)
+    CALL(evt_rsh_get_rnd_npc, 1, 0, LW(0))
+    CALL(evt_rsh_get_rnd_npc_data, 1, 0, LW(0), LW(1), LW(2))
+    CALL(evt_rsh_get_rnd_npc_talk_evt, 1, 0, LW(0), LW(3))
+    CALL(evt_npc_entry, STRING("乗客１"), LW(1))
+    CALL(evt_npc_set_tribe, STRING("乗客１"), LW(2))
+    CALL(evt_npc_set_position, STRING("乗客１"), 460, 0, -60)
+    CALL(evt_npc_set_ry, STRING("乗客１"), 270)
+    CALL(evt_npc_flag_onoff, 1, STRING("乗客１"), NPC_FLAG_TALK_POSE)
+    CALL(evt_rsh_set_rnd_npc_talk_evt, STRING("乗客１"), LW(3))
+    CALL(evt_rsh_get_rnd_npc, 1, 1, LW(0))
+    CALL(evt_rsh_get_rnd_npc_data, 1, 1, LW(0), LW(1), LW(2))
+    CALL(evt_rsh_get_rnd_npc_talk_evt, 1, 1, LW(0), LW(3))
+    CALL(evt_npc_entry, STRING("乗客２"), LW(1))
+    CALL(evt_npc_set_tribe, STRING("乗客２"), LW(2))
+    CALL(evt_npc_setup, PTR(rsh_03_rnd_npc_2_ent))
+    CALL(evt_npc_set_position, STRING("乗客２"), -360, 0, -10)
+    CALL(evt_npc_set_ry, STRING("乗客２"), 90)
+    CALL(evt_npc_flag_onoff, 1, STRING("乗客２"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
+    CALL(evt_rsh_set_rnd_npc_talk_evt, STRING("乗客２"), LW(3))
+    RETURN
+EVT_END()
+
+static NpcSetupInfo rsh_04_rnd_npc_3_ent[] = {
+    {
+        "乗客３", // name (a passenger on the Excess Express)
+        0, 0, // flags..reactionFlags
+        npc_urouro_init_event, // initEvent
+        npc_urouro_move_event, // regularEvent
+        NULL, NULL, NULL, NULL, // talkEvent..lostEvent
+        npc_urouro_return_event, // returnEvent
+        NULL, // blowEvent
+        1, // territoryType
+        {-180.0f, 0.0f, -145.0f}, // territoryBase
+        {50.0f, 0.0f, 50.0f}, // territoryLoiter
+        0.0f, 0.0f, 0.0f, 0.0f, // searchRange..homingAngle
+        -1, // battleInfoId
+    },
+    {0},
+};
+
+EVT_BEGIN(evt_rsh_04_rnd_npc_entry)
+    CALL(evt_rsh_get_rnd_npc, 2, 0, LW(0))
+    CALL(evt_rsh_get_rnd_npc_data, 2, 0, LW(0), LW(1), LW(2))
+    CALL(evt_rsh_get_rnd_npc_talk_evt, 2, 0, LW(0), LW(3))
+    CALL(evt_npc_entry, STRING("乗客１"), LW(1))
+    CALL(evt_npc_set_tribe, STRING("乗客１"), LW(2))
+    CALL(evt_npc_set_position, STRING("乗客１"), 265, 0, -150)
+    CALL(evt_npc_set_ry, STRING("乗客１"), 270)
+    CALL(evt_npc_flag_onoff, 1, STRING("乗客１"), NPC_FLAG_TALK_POSE)
+    CALL(evt_rsh_set_rnd_npc_talk_evt, STRING("乗客１"), LW(3))
+    CALL(evt_rsh_get_rnd_npc, 2, 1, LW(0))
+    CALL(evt_rsh_get_rnd_npc_data, 2, 1, LW(0), LW(1), LW(2))
+    CALL(evt_rsh_get_rnd_npc_talk_evt, 2, 1, LW(0), LW(3))
+    CALL(evt_npc_entry, STRING("乗客２"), LW(1))
+    CALL(evt_npc_set_tribe, STRING("乗客２"), LW(2))
+    CALL(evt_npc_set_position, STRING("乗客２"), -230, 0, -215)
+    CALL(evt_npc_set_ry, STRING("乗客２"), 90)
+    CALL(evt_npc_flag_onoff, 1, STRING("乗客２"), NPC_FLAG_TALK_POSE)
+    CALL(evt_rsh_set_rnd_npc_talk_evt, STRING("乗客２"), LW(3))
+    CALL(evt_rsh_get_rnd_npc, 2, 2, LW(0))
+    CALL(evt_rsh_get_rnd_npc_data, 2, 2, LW(0), LW(1), LW(2))
+    CALL(evt_rsh_get_rnd_npc_talk_evt, 2, 2, LW(0), LW(3))
+    CALL(evt_npc_entry, STRING("乗客３"), LW(1))
+    CALL(evt_npc_set_tribe, STRING("乗客３"), LW(2))
+    CALL(evt_npc_setup, PTR(rsh_04_rnd_npc_3_ent))
+    CALL(evt_npc_set_position, STRING("乗客３"), -180, 0, -145)
+    CALL(evt_npc_set_ry, STRING("乗客３"), 270)
+    CALL(evt_npc_flag_onoff, 1, STRING("乗客３"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
+    CALL(evt_rsh_set_rnd_npc_talk_evt, STRING("乗客３"), LW(3))
+    CALL(evt_rsh_get_rnd_npc, 2, 3, LW(0))
+    CALL(evt_rsh_get_rnd_npc_data, 2, 3, LW(0), LW(1), LW(2))
+    CALL(evt_rsh_get_rnd_npc_talk_evt, 2, 3, LW(0), LW(3))
+    CALL(evt_npc_entry, STRING("乗客４"), LW(1))
+    CALL(evt_npc_set_tribe, STRING("乗客４"), LW(2))
+#if VERSION <= VERSION_DEMO_JP
+    CALL(evt_npc_set_position, STRING("乗客４"), -50, 30, -260)
+#else
+    CALL(evt_npc_set_position, STRING("乗客４"), -85, 16, -255)
+#endif
+    CALL(evt_npc_set_ry, STRING("乗客４"), 90)
+    CALL(evt_npc_flag_onoff, 1, STRING("乗客４"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
+    CALL(evt_rsh_set_rnd_npc_talk_evt, STRING("乗客４"), LW(3))
+    RETURN
+EVT_END()
