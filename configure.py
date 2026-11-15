@@ -418,7 +418,7 @@ config.libs = [
             Object(MatchingFor("G8MJ01", "G8ME01"), "data/battle/battle_item_data.c", cflags=cflags_static),
             Object(MatchingFor("G8MJ01", "G8ME01"), "battle/battle_monosiri.c"),
             Object(MatchingFor("G8MP01"), "battle/battle_ufo.c"),
-            Object(MatchingFor("G8MJ01", "G8ME01"), "battle/battle_stage.c", extra_cflags=["-inline auto"]),
+            Object(MatchingFor("G8MJ01", "G8ME01"), "battle/battle_stage.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "data/battle/battle_database_common.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "battle/battle_attack_audience.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "battle/battle_stage_object.c"),

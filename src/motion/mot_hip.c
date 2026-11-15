@@ -339,12 +339,6 @@ void mot_hip(void) {
     }
 }
 
-#if VERSION >= VERSION_JP
-// kept: from JP on the target calls chkground from mot_hip (the early demos inline it at every call: UNUSED in the
-// JP demo map); -inline noauto for the file changes mot_hip in other places
-#pragma dont_inline on
-#endif
-
 /**
  * Landing check for the spin jump: 0 while in the air,
  * 1 when the floor sent Mario into the water (0x200) or spike (0xC00) damage motion, 2 for a normal landing.
@@ -389,8 +383,7 @@ s32 chkground(void) {
 #endif
             marioChgMot(MARIO_MOTION_DAMAGE);
             return 1;
-        }
-        if (attr & (HIT_ATTR_SPIKES | HIT_ATTR_DAMAGE_LIQUID)) {
+        } else if (attr & (HIT_ATTR_SPIKES | HIT_ATTR_DAMAGE_LIQUID)) {
             set_damage_root_ypos(mario->position.y);
             marioChgMot(MARIO_MOTION_DAMAGE_TOGE);
             return 1;
@@ -399,8 +392,6 @@ s32 chkground(void) {
     }
     return 0;
 }
-
-#pragma dont_inline reset
 
 /** Cleanup when the spin jump motion ends: resets the spin offsets and air timers and stops the looping sounds. */
 void mot_hip_post(void) {

@@ -842,10 +842,6 @@ static void ext_shadow_disp(CameraId camera, void* param) {
     }
 }
 
-// Kept: the JP demo REL map lists this Smorg helper as its own function, and the target calls it, not inlined;
-// under -inline auto nothing else keeps a short static function out of line.
-#pragma dont_inline on
-
 /**
  * Starts a hop for one Moamoa toward (x, y, z) with the given horizontal speed and gravity:
  * optionally snaps y to the ground below the target, computes the flight time and initial vertical speed,
@@ -885,7 +881,6 @@ static void moamoa_jump(ExtdrvPose* pose, Moamoa* moa, s32 next, s32 checkGround
     pose->flags |= EXT_POSE_FLAG_SHADOW_POS;
     pose->flags &= ~EXT_POSE_FLAG_NO_SHADOW;
 }
-#pragma dont_inline reset
 
 /**
  * Checks whether something hits one Moamoa.

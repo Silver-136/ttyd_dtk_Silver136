@@ -2935,9 +2935,6 @@ static void puniModeAwayjump(PuniData* p) {
     }
 }
 
-// Kept: the target calls puniModeAway_sub (REL map: called from puniModeAway); under -inline auto nothing else
-// keeps a short function out of line.
-#pragma dont_inline on
 /**
  * Moves a fleeing Puni along its velocity with wall collision.
  * Returns 1 and sets the wall push direction when it hits a wall with attribute 0x4 (HIT_ATTR_NPC_ONLY),
@@ -2945,6 +2942,7 @@ static void puniModeAwayjump(PuniData* p) {
  */
 static int puniModeAway_sub(PuniData* p) {
     Vec dir;
+    int ret;
     Vec start;
     f32 mag = PSVECMag(&p->vel);
     start = p->pos;
@@ -2961,21 +2959,22 @@ static int puniModeAway_sub(PuniData* p) {
             p->pushDir.y = -p->wallNrm.y;
             p->pushDir.z = -p->wallNrm.z;
             p->modeStep = 1;
-            return 1;
+            ret = 1;
         } else if (p->hitCheck != NULL && (p->hitCheck->attributes & HIT_ATTR_NPC_ONLY)) {
             p->pushDir.x = -p->wallNrm.x;
             p->pushDir.y = -p->wallNrm.y;
             p->pushDir.z = -p->wallNrm.z;
             p->modeStep = 1;
-            return 1;
+            ret = 1;
         } else {
             p->modeStep = 10;
-            return 2;
+            ret = 2;
         }
+    } else {
+        ret = 0;
     }
-    return 0;
+    return ret;
 }
-#pragma dont_inline reset
 
 /**
  * Flee mode: runs from the nearest flee target (a Pider spider), steering away from it with wall avoidance,

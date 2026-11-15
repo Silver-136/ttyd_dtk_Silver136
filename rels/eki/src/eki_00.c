@@ -679,10 +679,6 @@ static void ext_shadow_disp(CameraId camera, void* param) {
     }
 }
 
-// Kept: the JP demo REL map lists this Smorg helper as its own function, and the target calls it, not inlined;
-// under -inline auto nothing else keeps a short static function out of line.
-#pragma dont_inline on
-
 /**
  * Starts one Smorg's hop to (x, y, z): optionally snaps the destination to the floor below it,
  * computes the jump time from the distance and speed and the initial vertical speed from the height difference
@@ -720,7 +716,6 @@ static void moamoa_jump(ExtdrvPose* pose, Moamoa* moa, f32 x, f32 y, f32 z, f32 
     pose->flags |= EXT_POSE_FLAG_SHADOW_POS;
     pose->flags &= ~EXT_POSE_FLAG_NO_SHADOW;
 }
-#pragma dont_inline reset
 
 /**
  * Tests one Smorg against Mario and the partners:

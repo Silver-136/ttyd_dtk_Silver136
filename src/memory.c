@@ -18,11 +18,7 @@ struct MapAllocEntry {
 };
 
 //.bss
-#if VERSION <= VERSION_DEMO_JP
-// FAKE: extern on the file-local smartWork (defined static below) so wp can point at it while it keeps its
-// .bss place; a static declaration here moves it, and `= {0}` would put it in .data.
-extern SmartWork smartWork;
-#else
+#if VERSION > VERSION_DEMO_JP
 static SmartWork smartWork;
 #endif
 
@@ -42,8 +38,6 @@ static s32 size_table[HEAP_COUNT][2] = {
 #endif
     {0, 0x64}    // the smart heap: 100 % of what is left
 };
-
-static SmartWork* wp = &smartWork;
 
 //.sbss
 OSHeapHandle heapHandle[HEAP_COUNT];
@@ -78,6 +72,9 @@ u32 count;
 #define MAPBASE_PARAM
 #define MAPBASE mapalloc_base_ptr
 #endif
+
+//.sdata
+static SmartWork* wp = &smartWork;
 
 #if VERSION <= VERSION_DEMO_JP
 // early demos: the smart heap is a fixed 7 MiB block taken from the default heap

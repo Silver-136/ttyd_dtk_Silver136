@@ -31,9 +31,6 @@ EventWork* evtGetWork(void) {
     return gp->inBattle ? &work[1] : &work[0];
 }
 
-// kept: the target calls make_pri_table (a local function in the JP demo map) from evtmgrMain; a function this small
-// is auto-inlined otherwise, and -inline noauto for the file changes other functions
-#pragma dont_inline on
 /**
  * Builds this frame's run order for evtmgrMain:
  * every active event's slot and id, sorted by priority, highest first.
@@ -47,12 +44,15 @@ static void make_pri_table(void) {
     s32 n, i, j;
 
     priEntryCount = 0;
-    for (n = 0; n < wp->count; n++, entry++) {
+    n = 0;
+    while (n < wp->count) {
         if (entry->flags & EVENT_ACTIVE) {
             priTbl[priEntryCount] = n;
             priIDTbl[priEntryCount] = entry->eventId;
             priEntryCount++;
         }
+        n++;
+        entry++;
     }
     priTblNum = priEntryCount;
 
@@ -72,7 +72,6 @@ static void make_pri_table(void) {
         }
     }
 }
-#pragma dont_inline reset
 
 #pragma warn_no_side_effect off
 /**
