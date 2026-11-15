@@ -28,10 +28,6 @@ static BOOL GPHangWorkaround = FALSE;
 /** True until the first frame is shown; DEMOSwapBuffers turns the video output on then (black until then). */
 static GXBool DemoFirstFrame = GX_TRUE;
 
-/** File name and message of the panic DEMOInit raises when the TV format is not one it knows. */
-static const char demo_file[] = "DEMOInit.c";
-static const char demo_msg[] = "DEMOInit: invalid TV format\n";
-
 static void __DEMOInitRenderMode(GXRenderModeObj* mode);
 static void __DEMOInitMem(void);
 static void __DEMOInitGX(void);
@@ -90,9 +86,9 @@ static void __DEMOInitRenderMode(GXRenderModeObj* mode) {
                 break;
             default:
 #if VERSION <= VERSION_DEMO_JP
-                OSPanic(demo_file, 0x203, demo_msg);
+                OSPanic("DEMOInit.c", 0x203, "DEMOInit: invalid TV format\n");
 #else
-                OSPanic(demo_file, 0x206, demo_msg);
+                OSPanic("DEMOInit.c", 0x206, "DEMOInit: invalid TV format\n");
 #endif
                 break;
         }

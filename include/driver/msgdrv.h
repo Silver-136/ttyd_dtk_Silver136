@@ -137,14 +137,6 @@ BOOL _ismbblead(u32 c);
 char* msgGetCommand(char* msg, char* cmd, char* arg);
 s32 msgIconStr2ID(const char* str);
 
-extern const char R_no_messages_JP[];
-extern const char R_no_messages_US[];
-
-extern const char R_no_messages_DE[];
-extern const char R_no_messages_DU[];
-extern const char R_no_messages_ES[];
-extern const char R_no_messages_FR[];
-extern const char R_no_messages_IT[];
 s32 msgWindow_Entry(const char* msg, s32 callback, s16 priority);
 void msgWindow_Continue(s32 id);
 void msgWindow_Repeat(s32 id);

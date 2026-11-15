@@ -25,21 +25,6 @@
 #include "eff/eff_magic1_n64.h"
 #include "battle/battle_unit.h"
 #include "driver/mapdrv.h"
-/** Red "No messages" text shown in place of a message key that is not found, Japanese version (ErrMessage). */
-const char R_no_messages_JP[] = "<col ff0000ff>メッセージがありません</col>\n<key>";
-
-/** The same red "No messages" text for each other language (US and later tag it with the language name); ErrMessage picks one. */
-#if VERSION >= VERSION_US
-const char R_no_messages_US[] = "<col ff0000ff>No messages.[English]<col>\012<key>";
-const char R_no_messages_DE[] = "<col ff0000ff>No messages.[German]<col>\012<key>";
-const char R_no_messages_FR[] = "<col ff0000ff>No messages.[French]<col>\012<key>";
-const char R_no_messages_ES[] = "<col ff0000ff>No messages.[Spanish]<col>\012<key>";
-const char R_no_messages_IT[] = "<col ff0000ff>No messages.[Italian]<col>\012<key>";
-const char R_no_messages_DU[] = "<col ff0000ff>No messages.[Dutch]<col>\012<key>";
-#else
-const char R_no_messages_US[] = "<col ff0000ff>No messages.<col>\n<key>";
-#endif
-
 // MsgWinData.callback holds a function pointer in an s32 (msgWindow_Entry takes the callback as s32)
 // A message window's MsgWinData lives in its userdata block. A macro, not an inline function: as a function the object changes.
 #define WIN_DATA(w) ((MsgWinData*)(w)->userdata->address)
@@ -59,6 +44,41 @@ typedef struct MsgIcon {
     const char* name; // 0x0
     s32 value; // 0x4
 } MsgIcon;
+
+//.sbss
+static MessageWork msgWork;
+
+#if VERSION <= VERSION_DEMO_JP
+static smartEntry dummySmartList;
+#endif
+
+static BOOL msgSEflag; // msgSEInit and related functions are unused
+static void* msgSortDvdData;
+
+//.sdata
+static MessageWork* msgw = &msgWork;
+
+#if VERSION <= VERSION_DEMO_JP
+static char NoMessage[] = "";
+#endif
+
+/**
+ * Red "No messages" text shown in place of a message key that is not found, per language: Japanese, English (US and
+ * later tag it with the language name), then German, French, Spanish, Italian and Dutch.
+ */
+static const char* ErrMessage[VERSION_PICK(2, 7)] = {
+    "<col ff0000ff>メッセージがありません</col>\n<key>",
+#if VERSION >= VERSION_US
+    "<col ff0000ff>No messages.[English]<col>\012<key>",
+    "<col ff0000ff>No messages.[German]<col>\012<key>",
+    "<col ff0000ff>No messages.[French]<col>\012<key>",
+    "<col ff0000ff>No messages.[Spanish]<col>\012<key>",
+    "<col ff0000ff>No messages.[Italian]<col>\012<key>",
+    "<col ff0000ff>No messages.[Dutch]<col>\012<key>",
+#else
+    "<col ff0000ff>No messages.<col>\n<key>",
+#endif
+};
 
 //.data
 static MsgIcon msgIcon[] = {
@@ -91,34 +111,6 @@ static s32 msgWindowOpen_SE_Data[] = {
 };
 #endif
 
-//.sbss
-static MessageWork msgWork;
-
-#if VERSION <= VERSION_DEMO_JP
-static smartEntry dummySmartList;
-#endif
-
-static BOOL msgSEflag; // msgSEInit and related functions are unused
-static void* msgSortDvdData;
-
-//.sdata
-static MessageWork* msgw = &msgWork;
-
-#if VERSION <= VERSION_DEMO_JP
-static char NoMessage[] = "";
-#endif
-
-static const char* ErrMessage[VERSION_PICK(2, 7)] = {
-#if VERSION <= VERSION_DEMO_JP
-    R_no_messages_JP, R_no_messages_US,
-#else
-    R_no_messages_JP, R_no_messages_US,
-#if VERSION >= VERSION_US
-    R_no_messages_DE, R_no_messages_FR, R_no_messages_ES, R_no_messages_IT, R_no_messages_DU
-#endif
-#endif
-
-};
 static const char* paperPoseTbl[6] = {
     "PM_Y_1B", "PM_Y_2B", "PM_F_1B",
     "PM_F_3B", "PM_C_1B", "PM_C_2B"

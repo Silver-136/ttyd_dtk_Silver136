@@ -787,13 +787,6 @@ static USER_FUNC(wait_star_stone_attack_end) {
     return get_ptr()->star.state == 8 ? 2 : 0;
 }
 
-typedef struct OhkoRateTbl {
-    u8 rate[6];
-} OhkoRateTbl;
-
-// Descriptive name (not in the symbol maps).
-const OhkoRateTbl ohko_rate_tbl = {{50, 60, 70, 80, 90, 100}};
-
 /**
  * Returns in args[1] a copy of Showstopper's weapon whose instant-KO chance depends on the stars earned in
  * args[0]: 50, 60, 70, 80, 90 or 100%.
@@ -802,9 +795,9 @@ static USER_FUNC(set_weapon) {
     EvtWord* args = event->args;
     s32 idx = evtGetValue(event, args[0]);
     SukiWork* w = get_ptr();
-    OhkoRateTbl tbl = ohko_rate_tbl;
+    u8 rate[6] = {50, 60, 70, 80, 90, 100};
     memcpy(&w->weapon, &weapon, sizeof(BattleWeapon));
-    w->weapon.ohkoChance = tbl.rate[idx - 1];
+    w->weapon.ohkoChance = rate[idx - 1];
     evtSetValue(event, args[1], (EvtWord)&w->weapon);
     return 2;
 }

@@ -325,7 +325,6 @@ this file.
 | `_draw_select_one_to_upgrade_text` | src/battle/battle_seq_end.c |
 | `_display_select_one_to_upgrade_text` | src/battle/battle_seq_end.c |
 | `_disp_2D` | src/battle/sac/sac_suki.c |
-| `ohko_rate_tbl` | src/battle/sac/sac_suki.c |
 | `itemPickUpFromFieldCheck` | src/driver/itemdrv.c |
 | `mapDispOff` | src/driver/mapdrv.c |
 | `mapDispOn` | src/driver/mapdrv.c |
