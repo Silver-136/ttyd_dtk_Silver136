@@ -34,6 +34,11 @@ typedef struct ChuchuTreasure {
 // party_move.c's partyWalkInit(party) does not take.
 void partyWalkInit();
 
+/** Shows the 1.5 s speech bubble over Ms. Mowz (callers check that she is out first). */
+static void chuchuBalloonOn(void) {
+    effFukidashiEntry(6, 0, (NpcEntry*)FUKIDASHI_PARTY, 0.0f, 18.0f, 0.0f, 0.0f, 0.0f, sysMsec2Frame(1500));
+}
+
 /** Map objects Ms. Mowz can sniff out: blocks, and from JP on the treasure chests and the Kururin floor. */
 static char* mobj_list[] = {
 #if VERSION >= VERSION_JP
@@ -55,12 +60,181 @@ static char* mobj_list[] = {
     NULL,
 };
 
-/** Zero vector that starts the position of a nearby item when Ms. Mowz searches for treasure. */
-static const Vec vecA = {0.0f, 0.0f, 0.0f};
+/**
+ * Script helper: reads set_msg's result (LW0 message, LW1 2 near / 1 far / 0 nothing) and,
+ * if something was found, plays a 42-frame sniff (sound 0x945, pose PCH_Y_1) and
+ * then a 1.5 s speech-bubble effect over her. In JP and later a far find skips the sniff.
+ */
+static USER_FUNC(search_result) {
 
-static USER_FUNC(set_msg);
-static USER_FUNC(search_result);
-static USER_FUNC(post_msg);
+    PartyEntry* party = partyGetPtr(marioGetPartyId());
+
+    if (isFirstCall) {
+        if ((const char*)event->lwData[0] == NULL || event->lwData[1] == 0) {
+            return EVT_RETURN_DONE;
+        }
+#if VERSION <= VERSION_DEMO_JP
+        psndSFXOn_3D((const char*)PSND_SFX_PARTY_CHURINA_SMELL_JUMP1, &party->position);
+#else
+        if (event->lwData[1] == 1) {
+            if (party) {
+                chuchuBalloonOn();
+            }
+            return EVT_RETURN_DONE;
+        }
+        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_CHURINA_SMELL_JUMP1), &party->position);
+#endif
+        event->userdata3 = 42;
+        partyChgPose(party, "PCH_Y_1");
+    }
+    partyChkGnd(party);
+    if ((s32)--event->userdata3 > 0) {
+        return EVT_RETURN_BLOCK;
+    }
+    if (party) {
+        chuchuBalloonOn();
+    }
+    return EVT_RETURN_DONE;
+}
+
+#if VERSION >= VERSION_JP
+static inline int chuchu_findTreasure(PartyEntry* cpp, f32 range, Vec* bestPos);
+
+static USER_FUNC(set_msg) {
+    MapObjectEntry* mobj;
+    ItemEntry* item;
+    int found;
+    MarioWork* player;
+    int pass;
+    int type;
+    PartyEntry* cp = partyGetPtr(marioGetPartyId());
+    f32 range;
+    f32 minDist;
+    f32 angle;
+    Vec bestPos;
+    Vec tmp;
+
+    player = cp->playerPtr;
+    event->lwData[0] = 0;
+    event->lwData[1] = 0;
+    if (!cp) {
+#else
+
+/**
+ * The early demos stop at the first item or block in range and have no hidden treasure table.
+ * Script helper: looks for an item and then a block from mobj_list within 150 units of Mario, then anywhere;
+ * sets LW0 to map_exist_near / map_exist_far / map_no_exist and LW1 to 2 / 1 / 0, and turns Ms. Mowz to face it.
+ */
+static USER_FUNC(set_msg) {
+    int pass;
+    PartyEntry* party = partyGetPtr(marioGetPartyId());
+    MarioWork* player = party->playerPtr;
+    ItemEntry* item;
+    MapObjectEntry* mobj;
+    f32 range;
+
+    event->lwData[0] = 0;
+    event->lwData[1] = 0;
+    if (!party) {
+#endif
+        return EVT_RETURN_DONE;
+    }
+    for (pass = 0; pass < 2; pass++) {
+        if (pass == 0) {
+            range = 150.0f;
+        } else {
+            range = 10000.0f;
+        }
+#if VERSION <= VERSION_DEMO_JP
+        item = itemNearDistCheck(player->position.x, player->position.y, player->position.z, range);
+        if (item) {
+            // Unused here; the later versions compare this position with the other finds. The JP demo
+            // map numbers its Vec template (@513) at this statement.
+            Vec tmp;
+            tmp = (Vec){item->position.x, item->position.y, item->position.z};
+            event->lwData[0] = (EvtWord)(pass == 0 ? "map_exist_near" : "map_exist_far");
+            event->lwData[1] = (pass == 0) + 1;
+            party->displayDirectionTarget = (revise360(angleABf(party->position.x, party->position.z, item->position.x, item->position.z) - party->camDir) <= 180.0f) ? 180.0f : 0.0f;
+            party->moveDir = partyToMovedir(party, party->displayDirectionTarget);
+            party->targetDir = party->moveDir;
+            return EVT_RETURN_DONE;
+        }
+        mobj = mobjNearDistCheck2(player->position.x, player->position.y, player->position.z, range, mobj_list);
+        if (mobj) {
+            event->lwData[0] = (EvtWord)(pass == 0 ? "map_exist_near" : "map_exist_far");
+            event->lwData[1] = (pass == 0) + 1;
+            party->displayDirectionTarget = (revise360(angleABf(party->position.x, party->position.z, mobj->position.x, mobj->position.z) - party->camDir) <= 180.0f) ? 180.0f : 0.0f;
+            party->moveDir = partyToMovedir(party, party->displayDirectionTarget);
+            party->targetDir = party->moveDir;
+            return EVT_RETURN_DONE;
+        }
+    }
+    event->lwData[0] = (EvtWord) "map_no_exist";
+    event->lwData[1] = 0;
+    return EVT_RETURN_DONE;
+#else
+        type = -1;
+        item = itemNearDistCheck(player->position.x, player->position.y, player->position.z, range);
+        mobj = mobjNearDistCheck2(player->position.x, player->position.y, player->position.z, range, mobj_list);
+        found = chuchu_findTreasure(cp, range, &bestPos);
+
+        minDist = 10000.0f;
+        if (item) {
+            tmp = (Vec){item->position.x, item->position.y, item->position.z};
+            if (minDist > PSVECDistance(&tmp, &player->position)) {
+                minDist = PSVECDistance(&tmp, &player->position);
+                angle = revise360(angleABf(cp->position.x, cp->position.z, item->position.x, item->position.z) - cp->camDir);
+                type = 0;
+            }
+        }
+        if (mobj) {
+            if (minDist > PSVECDistance(&mobj->position, &player->position)) {
+                minDist = PSVECDistance(&mobj->position, &player->position);
+                angle = revise360(angleABf(cp->position.x, cp->position.z, mobj->position.x, mobj->position.z) - cp->camDir);
+                type = 1;
+            }
+        }
+        if (found) {
+            if (minDist > PSVECDistance(&bestPos, &player->position)) {
+                minDist = PSVECDistance(&bestPos, &player->position);
+                angle = revise360(angleABf(cp->position.x, cp->position.z, bestPos.x, bestPos.z) - cp->camDir);
+                type = 2;
+            }
+        }
+        if (type >= 0) {
+            break;
+        }
+    }
+
+    if (type >= 0) {
+        if (range == 150.0f) {
+            event->lwData[0] = (EvtWord)"map_exist_near";
+            event->lwData[1] = 2;
+        } else {
+            event->lwData[0] = (EvtWord)"map_exist_far";
+            event->lwData[1] = 1;
+        }
+        cp->displayDirectionTarget = (angle <= 180.0f) ? 180.0f : 0.0f;
+        cp->moveDir = partyToMovedir(cp, cp->displayDirectionTarget);
+        cp->targetDir = cp->moveDir;
+    } else {
+        event->lwData[0] = (EvtWord)"map_no_exist";
+        event->lwData[1] = 0;
+    }
+    return EVT_RETURN_DONE;
+#endif
+}
+
+/** Script helper: clears LW0 and advances Ms. Mowz's use step (22 to 23) so chuchu_use ends the search. */
+static USER_FUNC(post_msg) {
+    PartyEntry* party = partyGetPtr(marioGetPartyId());
+
+    event->lwData[0] = 0;
+    if (party) {
+        party->useMotionId++;
+    }
+    return EVT_RETURN_DONE;
+}
 
 /**
  * Ms. Mowz's search report, run by chuchu_use after her sniff:
@@ -131,43 +305,6 @@ ChuchuTreasure chuchu_treasure_tbl[] = {
 static const Vec vecB = {0.0f, 0.0f, 0.0f};
 #endif
 
-/**
- * Script helper: reads set_msg's result (LW0 message, LW1 2 near / 1 far / 0 nothing) and,
- * if something was found, plays a 42-frame sniff (sound 0x945, pose PCH_Y_1) and
- * then a 1.5 s speech-bubble effect over her. In JP and later a far find skips the sniff.
- */
-static USER_FUNC(search_result) {
-
-    PartyEntry* party = partyGetPtr(marioGetPartyId());
-
-    if (isFirstCall) {
-        if ((const char*)event->lwData[0] == NULL || event->lwData[1] == 0) {
-            return EVT_RETURN_DONE;
-        }
-#if VERSION <= VERSION_DEMO_JP
-        psndSFXOn_3D((const char*)PSND_SFX_PARTY_CHURINA_SMELL_JUMP1, &party->position);
-#else
-        if (event->lwData[1] == 1) {
-            if (party) {
-                effFukidashiEntry(6, 0, (NpcEntry*)FUKIDASHI_PARTY, 0.0f, 18.0f, 0.0f, 0.0f, 0.0f, sysMsec2Frame(1500));
-            }
-            return EVT_RETURN_DONE;
-        }
-        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_CHURINA_SMELL_JUMP1), &party->position);
-#endif
-        event->userdata3 = 42;
-        partyChgPose(party, "PCH_Y_1");
-    }
-    partyChkGnd(party);
-    if ((s32)--event->userdata3 > 0) {
-        return EVT_RETURN_BLOCK;
-    }
-    if (party) {
-        effFukidashiEntry(6, 0, (NpcEntry*)FUKIDASHI_PARTY, 0.0f, 18.0f, 0.0f, 0.0f, 0.0f, sysMsec2Frame(1500));
-    }
-    return EVT_RETURN_DONE;
-}
-
 #if VERSION >= VERSION_JP
 /**
  * Finds the nearest unfound chuchu_treasure_tbl spot on the current map within range of Mario:
@@ -205,143 +342,7 @@ static inline int chuchu_findTreasure(PartyEntry* cpp, f32 range, Vec* bestPos) 
     }
     return found;
 }
-
-USER_FUNC(set_msg) {
-    MapObjectEntry* mobj;
-    ItemEntry* item;
-    int found;
-    MarioWork* player;
-    int pass;
-    int type;
-    PartyEntry* cp = partyGetPtr(marioGetPartyId());
-    f32 range;
-    f32 minDist;
-    f32 angle;
-    Vec bestPos;
-    Vec tmp;
-    Vec ip;
-
-    player = cp->playerPtr;
-    event->lwData[0] = 0;
-    event->lwData[1] = 0;
-    if (!cp) {
-#else
-
-/**
- * The early demos stop at the first item or block in range and have no hidden treasure table.
- * Script helper: looks for an item and then a block from mobj_list within 150 units of Mario, then anywhere;
- * sets LW0 to map_exist_near / map_exist_far / map_no_exist and LW1 to 2 / 1 / 0, and turns Ms. Mowz to face it.
- */
-static USER_FUNC(set_msg) {
-    int pass;
-    PartyEntry* party = partyGetPtr(marioGetPartyId());
-    MarioWork* player = party->playerPtr;
-    ItemEntry* item;
-    MapObjectEntry* mobj;
-    f32 range;
-
-    event->lwData[0] = 0;
-    event->lwData[1] = 0;
-    if (!party) {
 #endif
-        return EVT_RETURN_DONE;
-    }
-    for (pass = 0; pass < 2; pass++) {
-        if (pass == 0) {
-            range = 150.0f;
-        } else {
-            range = 10000.0f;
-        }
-#if VERSION <= VERSION_DEMO_JP
-        item = itemNearDistCheck(player->position.x, player->position.y, player->position.z, range);
-        if (item) {
-            event->lwData[0] = (EvtWord)(pass == 0 ? "map_exist_near" : "map_exist_far");
-            event->lwData[1] = (pass == 0) + 1;
-            party->displayDirectionTarget = (revise360(angleABf(party->position.x, party->position.z, item->position.x, item->position.z) - party->camDir) <= 180.0f) ? 180.0f : 0.0f;
-            party->moveDir = partyToMovedir(party, party->displayDirectionTarget);
-            party->targetDir = party->moveDir;
-            return EVT_RETURN_DONE;
-        }
-        mobj = mobjNearDistCheck2(player->position.x, player->position.y, player->position.z, range, mobj_list);
-        if (mobj) {
-            event->lwData[0] = (EvtWord)(pass == 0 ? "map_exist_near" : "map_exist_far");
-            event->lwData[1] = (pass == 0) + 1;
-            party->displayDirectionTarget = (revise360(angleABf(party->position.x, party->position.z, mobj->position.x, mobj->position.z) - party->camDir) <= 180.0f) ? 180.0f : 0.0f;
-            party->moveDir = partyToMovedir(party, party->displayDirectionTarget);
-            party->targetDir = party->moveDir;
-            return EVT_RETURN_DONE;
-        }
-    }
-    event->lwData[0] = (EvtWord) "map_no_exist";
-    event->lwData[1] = 0;
-    return EVT_RETURN_DONE;
-#else
-        type = -1;
-        item = itemNearDistCheck(player->position.x, player->position.y, player->position.z, range);
-        mobj = mobjNearDistCheck2(player->position.x, player->position.y, player->position.z, range, mobj_list);
-        found = chuchu_findTreasure(cp, range, &bestPos);
-
-        minDist = 10000.0f;
-        if (item) {
-            ip = vecA;
-            ip.x = item->position.x;
-            ip.y = item->position.y;
-            ip.z = item->position.z;
-            tmp = ip;
-            if (minDist > PSVECDistance(&tmp, &player->position)) {
-                minDist = PSVECDistance(&tmp, &player->position);
-                angle = revise360(angleABf(cp->position.x, cp->position.z, item->position.x, item->position.z) - cp->camDir);
-                type = 0;
-            }
-        }
-        if (mobj) {
-            if (minDist > PSVECDistance(&mobj->position, &player->position)) {
-                minDist = PSVECDistance(&mobj->position, &player->position);
-                angle = revise360(angleABf(cp->position.x, cp->position.z, mobj->position.x, mobj->position.z) - cp->camDir);
-                type = 1;
-            }
-        }
-        if (found) {
-            if (minDist > PSVECDistance(&bestPos, &player->position)) {
-                minDist = PSVECDistance(&bestPos, &player->position);
-                angle = revise360(angleABf(cp->position.x, cp->position.z, bestPos.x, bestPos.z) - cp->camDir);
-                type = 2;
-            }
-        }
-        if (type >= 0) {
-            break;
-        }
-    }
-
-    if (type >= 0) {
-        if (range == 150.0f) {
-            event->lwData[0] = (EvtWord)"map_exist_near";
-            event->lwData[1] = 2;
-        } else {
-            event->lwData[0] = (EvtWord)"map_exist_far";
-            event->lwData[1] = 1;
-        }
-        cp->displayDirectionTarget = (angle <= 180.0f) ? 180.0f : 0.0f;
-        cp->moveDir = partyToMovedir(cp, cp->displayDirectionTarget);
-        cp->targetDir = cp->moveDir;
-    } else {
-        event->lwData[0] = (EvtWord)"map_no_exist";
-        event->lwData[1] = 0;
-    }
-    return EVT_RETURN_DONE;
-#endif
-}
-
-/** Script helper: clears LW0 and advances Ms. Mowz's use step (22 to 23) so chuchu_use ends the search. */
-static USER_FUNC(post_msg) {
-    PartyEntry* party = partyGetPtr(marioGetPartyId());
-
-    event->lwData[0] = 0;
-    if (party) {
-        party->useMotionId++;
-    }
-    return EVT_RETURN_DONE;
-}
 
 /**
  * Whether there is something to sniff within 150 units of Mario: an item or a map object from mobj_list,
