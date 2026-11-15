@@ -424,8 +424,8 @@ static void envDisp_DepthOfField(void) {
                 GXSetTevKColorSel(stage, GX_TEV_KCSEL_1_4);
                 GXSetTevKAlphaSel(stage, GX_TEV_KASEL_1_4);
                 GXSetTevOrder(stage, (GXTexCoordID)coord, GX_TEXMAP0, GX_COLOR_NULL);
-                GXSetTevColorOp(stage, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, (GXTevRegID)(i == 3));
-                GXSetTevAlphaOp(stage, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, (GXTevRegID)(3 == i));
+                GXSetTevColorOp(stage, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, i == 3 ? GX_TEVREG0 : GX_TEVPREV);
+                GXSetTevAlphaOp(stage, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, i == 3 ? GX_TEVREG0 : GX_TEVPREV);
                 cin = GX_CC_CPREV;
                 if (first = !i) {
                     cin = GX_CC_ZERO;
@@ -464,8 +464,8 @@ static void envDisp_DepthOfField(void) {
                 GXSetTevKColorSel(stage, GX_TEV_KCSEL_1_4);
                 GXSetTevKAlphaSel(stage, GX_TEV_KASEL_1_4);
                 GXSetTevOrder(stage, (GXTexCoordID)coord, GX_TEXMAP0, GX_COLOR_NULL);
-                GXSetTevColorOp(stage, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, (GXTevRegID)(i == 3));
-                GXSetTevAlphaOp(stage, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, (GXTevRegID)(3 == i));
+                GXSetTevColorOp(stage, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, i == 3 ? GX_TEVREG0 : GX_TEVPREV);
+                GXSetTevAlphaOp(stage, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, i == 3 ? GX_TEVREG0 : GX_TEVPREV);
                 cin = GX_CC_CPREV;
                 if (first = !i) {
                     cin = GX_CC_ZERO;

@@ -723,6 +723,8 @@ __declspec(section ".rodata") static Vec moamoa_zero_vec = {0.0f, 0.0f, 0.0f};
  * escape, gathering and merging, being blown away).
  * When both targets have been freed it starts the swarm's escape.
  */
+// FAKE: the random values are hand-inlined copies of this file's randf (`r * (k = b - a) + a`, dead k
+// holders); calling randf matches at only one site (FAKES.md)
 static void ext_moamoa_main(void) {
     MarioWork* mario;
     PartyEntry* party;

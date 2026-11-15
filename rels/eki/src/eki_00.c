@@ -820,6 +820,8 @@ __declspec(section ".rodata") static Vec moamoa_zero_vec = {0.0f, 0.0f, 0.0f};
  * then runs every Smorg's state machine (idle hopping toward Mario or the swarm target, damage, knock-off,
  * escape, merge) and its animation.
  */
+// FAKE: the random values are hand-inlined copies of this file's randf (`r * (k = b - a) + a`, dead k
+// holders); calling randf matches at only one site (FAKES.md)
 static void ext_moamoa_main(void) {
     MarioWork *mario = marioGetPtr();
     PartyEntry *party = partyGetPtr(0);
