@@ -827,7 +827,7 @@ static BOOL msgDisp(smartEntry* smart, u8 alpha, f32 x, f32 y) {
     return ret;
 }
 
-/** Draws the key-wait star at the window's top right corner. */
+/** Draws the key-wait star at the window's bottom right corner. */
 // Original name and slot from the JP demo's link map (UNUSED there, 0x8c): its one call is inlined.
 static void msgDispKeyWait(WindowEntry* window) {
     static u16 active;

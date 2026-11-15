@@ -72,7 +72,6 @@ EvtWord kosho_event[517];
 static EvtWord coin_effect[151];
 EvtWord muj_12_init_evt[60];
 
-
 /**
  * Script helper that flashes the screen white: fades out in 20 ms to white,
  * holds 50 ms, then fades back in over 80 ms. Blocks until finished.

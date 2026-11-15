@@ -63,15 +63,6 @@ s32 BattleInformationGetResult(FieldBattleInfo* info) {
     return info->result;
 }
 
-typedef struct ItemHogTable {
-#if VERSION >= VERSION_US
-    ItemType items[25];
-#else
-    ItemType items[20];
-#endif
-} ItemHogTable;
-
-
 /**
  * Rolls the drops after a won battle into the NPC's battle setup:
  * hearts and flowers from the group's HP and FP drop tables according to Mario's remaining HP and FP percentage,

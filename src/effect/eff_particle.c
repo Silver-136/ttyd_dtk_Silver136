@@ -123,8 +123,8 @@ void EmitterInit(ParticleEmitter* emitter) {
 // FAKE: stand-in for EmitterUpdate, which the linker stripped (JP demo map: UNUSED, 0x10c, here between EmitterInit
 // and rndi); nothing calls it. Its signed int-to-float constant is the last item in .rodata (map @715, the highest
 // number in the object). The other stripped functions of the file (ParticleInit, EmitterInit, rndi, rndf, BoxMuller,
-// ParticleUpdate) are restored and convert no int, so the constant is EmitterUpdate's; its body is not known.
-// Removing the stand-in changes the object.
+// ParticleUpdate) are restored and convert no signed int (rndf's conversion is unsigned, a different constant), so
+// the constant is EmitterUpdate's; its body is not known. Removing the stand-in changes the object.
 void particleStrippedPool(f32* f, s32 i) {
     *f = (f32)i;
 }

@@ -77,8 +77,6 @@ static inline ItemWork* itemGetWork(void) {
     return gp->inBattle ? &work[1] : &work[0];
 }
 
-void itemRecycle(ItemEntry* entry);
-
 static void itemseq_Bound(ItemEntry* entry);
 
 /**

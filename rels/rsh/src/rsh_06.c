@@ -818,6 +818,7 @@ static void ext_shadow_disp(CameraId camera, void* param) {
  * optionally snaps y to the ground below the target, computes the flight time and initial vertical speed,
  * turns the sprite toward the target, and sets its state to the jump state (3) with `next` as the state to
  * return to.
+ * The int-first parameter order is part of ext_moamoa_main's FAKE (eki_00 and rsh_05 take the floats first).
  */
 static void moamoa_jump(ExtdrvPose* pose, Moamoa* moa, s32 next, s32 checkGround, f32 x, f32 y, f32 z, f32 speed, f32 gravity) {
     f32 hitX, hitY, hitZ, dist, nx, ny, nz;
@@ -1252,6 +1253,9 @@ static void ext_moamoa_main(void) {
                         hopSpeed = r1 * mmI(1.0f - 1.0f) + 1.0f;
 
                         // FAKE: block-local copies of the float args (behaviour-identical) put the f1..f5 arg moves ahead of the ?: as in the target
+                        // (part of the same fake: moamoa_jump keeps the int-first parameter order here; the copies of
+                        // this code in eki_00/rsh_05 show the original floats-first order, which needs no copies;
+                        // with it rsh_06 differs only by an FPR colour swap, cleanup_notes\bf\X0\log.md)
                         g2 = randf(0.4f, 0.4f);
                         {
                             f32 x2 = x;

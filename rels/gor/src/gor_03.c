@@ -479,7 +479,7 @@ static USER_FUNC(gor_npc_fuwafuwa) {
     NpcEntry* npc = evtNpcNameToPtr(event, name);
     f32 speed = evtGetFloat(event, args[1]);
     s32 duration = evtGetValue(event, args[2]);
-    /* Up-and-down offsets, in 40 steps, that make the NPC float in place. */
+    // Up-and-down offsets, in 40 steps, that make the NPC float in place
     f32 table[40] = {0.0f, 0.5f, 1.0f, 1.4f, 1.8f, 2.0f, 2.3f, 2.5f, 2.6f, 2.7f, 2.7f, 2.7f, 2.6f, 2.5f, 2.3f, 2.0f, 1.8f, 1.4f, 1.0f, 0.5f, -0.0f, -0.5f, -1.0f, -1.4f, -1.8f, -2.0f, -2.3f, -2.5f, -2.6f, -2.7f, -2.7f, -2.7f, -2.6f, -2.5f, -2.3f, -2.0f, -1.8f, -1.4f, -1.0f, -0.5f};
     Vec* base = (Vec*)&event->userdataf[1];
     s32 elapsed;
@@ -4074,6 +4074,7 @@ void goryuugijo_main_slot(EventEntry* event, BOOL isFirstCall) {
 
 void goryuugijo_disp_slot(CameraId camera, void* param) {
     SlotWork* data = ((MiniGameWork*)param)->data;
+    // Icon numbers of the three prompts drawn beside the spinning slot reel
     s32 icons[3] = {ICON_BUTTON_A_ALT, ICON_BUTTON_A_ALT, ICON_BUTTON_A_ALT};
     s32 i;
     Vec pos;
@@ -4109,7 +4110,6 @@ void goryuugijo_disp_slot(CameraId camera, void* param) {
         }
     }
 }
-
 
 /**
  * Talk event of the ranking board (ranking_mess_00, menu ranking_mess_01):

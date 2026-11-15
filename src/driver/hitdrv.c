@@ -1206,10 +1206,11 @@ HitEntry* hitCheckAttr(s32 user0, f32* hitX, f32* hitY, f32* hitZ, f32* distance
 }
 
 /**
- * hitCheckAttrOnly's filter: accepts collision objects that lack the attribute bits in query->user0 or have any of
- * those in query->user1 (the same filter as mario_hit.c's chkFilterAttr2).
+ * hitCheckAttrOnly's filter: accepts collision objects that have none of the bits in query->user0, or any of the
+ * bits in query->user1 (the same filter as mario_hit.c's chkFilterAttr2).
  */
-// Original name and size (0x2c) from the JP demo map (UNUSED there, as its only user hitCheckAttrOnly).
+// Original name and size (0x2c) from the JP demo map (UNUSED there, as its only user hitCheckAttrOnly). Body:
+// chkFilterAttr with the second mask, rebuilt to fit that size.
 static BOOL chkFilterAttr2(HitCheckQuery* query, HitEntry* entry) {
     BOOL ret = FALSE;
     s32 attr = entry->attributes;
@@ -1219,7 +1220,9 @@ static BOOL chkFilterAttr2(HitCheckQuery* query, HitEntry* entry) {
     return ret;
 }
 
-// Original name and size (0x138) from the JP demo map (UNUSED there).
+// Original name and size (0x138) from the JP demo map (UNUSED there). Body: hitCheckAttr with a second mask,
+// rebuilt from it; the size and its two Vec templates (map UNUSED .rodata @942/@944) fit, and user1 second is the
+// parameter order that fits the size.
 HitEntry* hitCheckAttrOnly(s32 user0, s32 user1, f32* hitX, f32* hitY, f32* hitZ, f32* distance, f32* hitNX,
                            f32* hitNY, f32* hitNZ, f32 x, f32 y, f32 z, f32 nx, f32 ny, f32 nz) {
     HitCheckQuery temp;

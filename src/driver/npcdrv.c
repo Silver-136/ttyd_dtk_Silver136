@@ -714,7 +714,6 @@ static inline void npcMoveSide(NpcEntry* entry, f32 mx, f32 mz) {
  * Last it runs the first-strike banner and the field battle mode (encounter, talk or battle).
  */
 BOOL npcCheckInWater(NpcEntry* entry);
-BOOL npcCheckEnableLookMario(void);
 void _fbatFitstAttackAnnounceMain(FirstStrikeInfo* firstStrike);
 
 void npcMain(void) {

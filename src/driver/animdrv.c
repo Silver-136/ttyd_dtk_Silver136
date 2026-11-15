@@ -700,8 +700,6 @@ s32 animPaperPoseEntry(const char* animName, s32 group) {
     return i;
 }
 
-const char* ag2tg(const char* name);
-
 /**
  * Starts loading animation file animName and its textures in group's archive in the background;
  * TRUE once both are loaded (or missing), FALSE while still loading.

@@ -93,6 +93,8 @@ static seq_e3_entry e3_tbl[3] = {
  * reads it (the JP demo map lists it UNUSED); in the later versions nothing reads it and the linker strips it.
  * Its strings of eight bytes and more stay in .rodata; the five six-byte ones go to .sdata2 in the later
  * compilers and are stripped with the table.
+ * Static: from US on eff_nice.c has a global anim_tbl, so a global here would not link (the JP demo map does not
+ * show this table's scope).
  */
 static char* anim_tbl[4 * 4] = {
     "b_mario", "M_W_1", "M_S_1", "M_N_8",

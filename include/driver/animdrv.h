@@ -428,6 +428,7 @@ void animPoseWorldMatrixEvalOn(s32 poseId);
 void animPoseMain(s32 poseId);
 
 BOOL animGroupBaseAsync(const char* name, s32 group, void* callback);
+const char* ag2tg(const char* name);
 
 void animPoseSetGXFunc(s32 poseId, void (*callback)(s32 wXluStage), BOOL disableDraw);
 

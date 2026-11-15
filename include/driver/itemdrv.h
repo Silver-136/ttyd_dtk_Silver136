@@ -156,6 +156,7 @@ u16 itemFlag(ItemEntry* entry, u16 flags);
 void itemFlagOff(ItemEntry* entry, u16 flags);
 void itemSetPosition(ItemEntry* entry, f32 x, f32 y, f32 z);
 u32 itemStatus(ItemEntry* entry, u32 flags);
+void itemRecycle(ItemEntry* entry);
 void itemForceGet(ItemEntry* entry);
 ItemEntry* itemHitCheck(f32 x, f32 y, f32 z, f32 range);
 ItemEntry* itemNearDistCheck(f32 x, f32 y, f32 z, f32 range);
