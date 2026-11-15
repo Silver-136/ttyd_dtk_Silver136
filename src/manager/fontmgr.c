@@ -329,11 +329,6 @@ void FontDrawStringPitch(f32 x, f32 y, f32 pitch, const char* msg) {
 #endif
 }
 
-#if VERSION >= VERSION_US
-// FAKE: auto_inline off keeps the wrappers from inlining FontDrawStringVecPitch (the US-and-later wrappers call it)
-#pragma auto_inline off
-#endif
-
 /**
  * Draws a single-line string from pos, fixed pitch or (pitch < 0) proportional;
  * the shared body of FontDrawString and FontDrawStringPitch in US and later,
@@ -350,6 +345,7 @@ void FontDrawStringVecPitch(Vec pos, f32 pitch, const s8* msg) {
     u16 code;
     f32 x;
 #if VERSION >= VERSION_US
+    f32 drawX;
     s8 c;
 #endif
 
@@ -378,7 +374,12 @@ void FontDrawStringVecPitch(Vec pos, f32 pitch, const s8* msg) {
         }
         if (code != 0xFFFF) {
             width = JUTFont_GetWidthEntry(code)->width;
-            PSMTXTransApply(scale, trans, pitch < 0.0f ? x : x + fontScale.x * ((pitch - width) * 0.5f), pos.y, pos.z);
+            if (pitch < 0.0f) {
+                drawX = x;
+            } else {
+                drawX = x + fontScale.x * ((pitch - width) * 0.5f);
+            }
+            PSMTXTransApply(scale, trans, drawX, pos.y, pos.z);
             PSMTXConcat(camera->view, trans, trans);
             GXLoadPosMtxImm(trans, GX_PNMTX0);
             JUTFont_Draw(code);
@@ -403,10 +404,6 @@ void FontDrawStringVecPitch(Vec pos, f32 pitch, const s8* msg) {
         }
     }
 }
-
-#if VERSION >= VERSION_US
-#pragma auto_inline reset
-#endif
 
 /** The left/right pair of outline copies for a float position (truncated to pixels). */
 static inline void fontDrawPairX(u16 code, f32 x, f32 y) {
