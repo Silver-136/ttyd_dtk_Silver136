@@ -31,8 +31,6 @@
 #define RANKING_ROW(f) (f)
 #endif
 
-static s32 snd_id; // was a function-local static; file scope (declared before _wp: .bss is emitted reversed) keeps order _wp, snd_id
-static YuuRankingWork* _wp;
 
 static USER_FUNC(evt_yuuranking_main_func);
 USER_FUNC(yuuranking_get_monte);
@@ -703,6 +701,7 @@ static void evt_yuuranking_disp_func(CameraId camera, void* param) {
  */
 static USER_FUNC(evt_yuuranking_main_func) {
     YuuRankingWork* wp = (YuuRankingWork*)event->lwData[0];
+    static s32 snd_id;
     s32 target;
 
     if (wp->flags & 1) {
@@ -866,6 +865,8 @@ static USER_FUNC(evt_yuuranking_main_func) {
     }
     return EVT_RETURN_BLOCK;
 }
+
+static YuuRankingWork* _wp;
 
 /**
  * Converts a result into monte (the medals paid out):

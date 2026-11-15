@@ -253,13 +253,18 @@ static void effToikiMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effToikiDisp, effect);
 }
 
+static GXColor color_tbl[3] = {
+    {0x03, 0x02, 0x21, 0xFF},
+    {0xD8, 0x0F, 0x51, 0xFF},
+    {0x0B, 0x1B, 0x00, 0xFF}
+};
+
 /**
  * Draws the breath model (an indexed display-list cloud) tinted by a per-type colour,
  * with the texture scrolled across it.
  */
 static void effToikiDisp(CameraId cameraId, EffectEntry* effect) {
     EffToikiWork* work = effect->userdata;
-    static u8 color_tbl[3][4] = { { 0x03, 0x02, 0x21, 0xFF }, { 0xD8, 0x0F, 0x51, 0xFF }, { 0x0B, 0x1B, 0x00, 0xFF } };
     GXTexObj texObj;
     Mtx mtx;
     Mtx rot;
@@ -273,7 +278,7 @@ static void effToikiDisp(CameraId cameraId, EffectEntry* effect) {
     GXLoadTexObj(&texObj, GX_TEXMAP0);
     GXSetNumChans(1);
     GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_VTX, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
-    GXSetTevColor(GX_TEVREG0, (GXColor){ color_tbl[type][0], color_tbl[type][1], color_tbl[type][2],
+    GXSetTevColor(GX_TEVREG0, (GXColor){ color_tbl[type].r, color_tbl[type].g, color_tbl[type].b,
                                          (u8)work->alpha });
     GXSetNumTexGens(1);
     GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0, GX_FALSE, GX_PTIDENTITY);

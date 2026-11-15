@@ -260,54 +260,22 @@ static void moamoa_pose_main(void) {
 }
 #pragma dont_inline reset
 
-static const char* group_tbl[][2] = {
-    {"c_n_moa_a", "S_1"},
-    {"c_n_moa_b", "S_1"},
-    {"c_kinodebu", "G_1"},
-    {"c_puku_c", "U_1"},
-    {"c_powan", "O_1"},
-    {"c_smoko", "T_2"},
-    {"c_rose", "G_1"},
-    {"c_papab", "G_1"},
-    {"c_mamab", "G_1"},
-    {"c_konari", "G_1"},
-    {"c_n_moa_a", "S_1"},
-};
-static inline void /**/ moamoa_pose_change_i(Moamoa* moa, const char* model, const char* anim) {
-    MoamoaPoseDef* def = wp->defs;
-    s32 i;
-
-    if (moa->flags & MOAMOA_FLAG_SHOW_KIND) {
-        model = group_tbl[moa->kind][0];
-        if (moa->kind >= MOAMOA_KIND_KINOPIO) {
-            anim = group_tbl[moa->kind][1];
-        }
-        if (moa->kind == MOAMOA_KIND_MOA_A_S2_UNUSED) {
-            anim = "S_2";
-        }
-    }
-    for (i = 0; i < wp->numDefs; i++, def++) {
-        if (!strcmp(def->model, model) && !strcmp(def->anim, anim)) {
-            break;
-        }
-    }
-    if (i < wp->numDefs && moa->pose != i) {
-        if (moa->flags & MOAMOA_FLAG_HIT) {
-            if (strncmp(anim, "D", 1)) {
-                return;
-            }
-        }
-        if (moa->flags & MOAMOA_FLAG_ESCAPING) {
-            if (strncmp(anim, "R", 1)) {
-                return;
-            }
-        }
-        moa->pose = i;
-        moa->startTime = gp->renderTime;
-    }
-}
-
+// Inlined into the S_1 callers; the D_1 callers below sit in the opt_propagation off region and call it out of
+// line, as in the target (the JP demo REL map lists it as a function and names its table group_tbl$582).
 static void moamoa_pose_change(Moamoa* moa, const char* model, const char* anim) {
+    static const char* group_tbl[][2] = {
+        {"c_n_moa_a", "S_1"},
+        {"c_n_moa_b", "S_1"},
+        {"c_kinodebu", "G_1"},
+        {"c_puku_c", "U_1"},
+        {"c_powan", "O_1"},
+        {"c_smoko", "T_2"},
+        {"c_rose", "G_1"},
+        {"c_papab", "G_1"},
+        {"c_mamab", "G_1"},
+        {"c_konari", "G_1"},
+        {"c_n_moa_a", "S_1"},
+    };
     MoamoaPoseDef* def = wp->defs;
     s32 i;
 
@@ -420,7 +388,7 @@ static s32 evt_moamoa_fusion(EventEntry* event, BOOL isFirstCall) {
         pose->flags |= EXT_POSE_FLAG_NO_SHADOW;
         moa->flags |= MOAMOA_FLAG_FUSED;
         moa->state = MOAMOA_STATE_FUSED;
-        moamoa_pose_change_i(moa, "c_n_moa_a", "S_1");
+        moamoa_pose_change(moa, "c_n_moa_a", "S_1");
     }
     return EVT_RETURN_DONE;
 }
@@ -452,7 +420,7 @@ static s32 evt_moamoa_kind_onoff(EventEntry* event, BOOL isFirstCall) {
                 moa->flags &= ~MOAMOA_FLAG_SHOW_KIND;
             }
         }
-        moamoa_pose_change_i(moa, "c_n_moa_a", "S_1");
+        moamoa_pose_change(moa, "c_n_moa_a", "S_1");
     }
     return EVT_RETURN_DONE;
 }
@@ -491,7 +459,7 @@ static s32 evt_moamoa_fusion_debug(EventEntry* event, BOOL isFirstCall) {
         moa->flags |= MOAMOA_FLAG_FUSION_ARRIVED;
         moa->state = MOAMOA_STATE_FUSED;
         moa->flags |= MOAMOA_FLAG_SHOW_KIND;
-        moamoa_pose_change_i(moa, "c_n_moa_a", "S_1");
+        moamoa_pose_change(moa, "c_n_moa_a", "S_1");
     }
     return EVT_RETURN_DONE;
 }
@@ -543,7 +511,7 @@ static void ext_moamoa_init(void) {
         moa->flags = 0;
         moa->state = MOAMOA_STATE_WANDER;
         moa->timer = 0;
-        moamoa_pose_change_i(moa, "c_n_moa_a", "S_1");
+        moamoa_pose_change(moa, "c_n_moa_a", "S_1");
         pose->flags |= (EXT_POSE_FLAG_VISIBLE | EXT_POSE_FLAG_BILLBOARD);
         PSMTXIdentity(*pose->mtx);
         (*pose->mtx)[0][3] = randf(-290.0f, 240.0f);

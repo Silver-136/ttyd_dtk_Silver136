@@ -41,9 +41,7 @@ typedef struct TegamiWork {
     s32 alpha;
     FileEntry* tpl;
 } TegamiWork;
-static f32 view_dy;
-static s32 view_trg;
-static TegamiWork* wp;
+static TegamiWork* wp = NULL;
 static void draw(CameraId camera, void* param);
 
 static USER_FUNC(cam_yure);
@@ -256,6 +254,8 @@ static USER_FUNC(mabuta) {
  * and plays a ship creak when it falls below its start height after rising above it. Never finishes.
  */
 static USER_FUNC(cam_yure) {
+    static f32 view_dy;
+    static s32 view_trg;
     CameraEntry* cam = camGetPtr(CAMERA_3D);
     f32 s;
 

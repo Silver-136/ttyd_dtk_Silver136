@@ -43,9 +43,6 @@
 #include "evt/evt_shop.h"
 #include "data_tables.h"
 
-static char tmp[32];
-static Vec camPt;
-static Vec camAt;
 
 static USER_FUNC(fire);
 static USER_FUNC(iri_22_make_item_tbl);
@@ -198,7 +195,8 @@ static USER_FUNC(iri_22_make_item_tbl) {
  */
 // Remember the latest non-NULL talk target; a later NULL result does not clear the cached name.
 static USER_FUNC(mario_flag) {
-    static BOOL flg;
+    static char tmp[32];
+    static BOOL flg = FALSE;
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
     NpcEntry* npc;
@@ -216,6 +214,9 @@ static USER_FUNC(mario_flag) {
     evtSetValue(event, args[1], 0);
     return EVT_RETURN_DONE;
 }
+
+static Vec camPt;
+static Vec camAt;
 
 /**
  * Script helper: saves the 3D camera's position and look-at point

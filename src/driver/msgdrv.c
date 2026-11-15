@@ -996,24 +996,12 @@ void msgAnalize(smartEntry* smart, char* msg) {
         case WINDOW_TYPE_SYSTEM:
         case WINDOW_TYPE_TEC:
             switch (window->type) {
-            case WINDOW_TYPE_SYSTEM: {
-                static const GXColor c = {0xDC, 0xC8, 0xDC, 0xFF};
-#if VERSION <= VERSION_DEMO_JP
-                entry->value = *((const u32*)(&c));
-#else
-                entry->value = *(u32*)&c;
-#endif
+            case WINDOW_TYPE_SYSTEM:
+                entry->color = (GXColor){0xDC, 0xC8, 0xDC, 0xFF};
                 break;
-            }
-            case WINDOW_TYPE_TEC: {
-                static const GXColor c = {0x00, 0xD9, 0x14, 0xFF};
-#if VERSION <= VERSION_DEMO_JP
-                entry->value = *((const u32*)(&c));
-#else
-                entry->value = *(u32*)&c;
-#endif
+            case WINDOW_TYPE_TEC:
+                entry->color = (GXColor){0x00, 0xD9, 0x14, 0xFF};
                 break;
-            }
             }
             entry->glyph = MSG_GLYPH_COLOR;
             entry->time = time;
@@ -1313,25 +1301,15 @@ void msgAnalize(smartEntry* smart, char* msg) {
                     step = 0;
                     data->parseSpeed = 0;
                 } else if (strcmp(tag, "system") == 0) {
-                    static const GXColor c = {0xDC, 0xC8, 0xDC, 0xFF};
                     window->type = WINDOW_TYPE_SYSTEM;
-#if VERSION <= VERSION_DEMO_JP
-                        entry->value = *((const u32*)(&c));
-#else
-                    entry->value = *(u32*)&c;
-#endif
+                    entry->color = (GXColor){0xDC, 0xC8, 0xDC, 0xFF};
                     entry->glyph = MSG_GLYPH_COLOR;
                     entry->time = time;
                     entry++;
                     data->charCount++;
                 } else if (strcmp(tag, "tec") == 0) {
-                    static const GXColor c = {0x00, 0xD9, 0x14, 0xFF};
                     window->type = WINDOW_TYPE_TEC;
-#if VERSION <= VERSION_DEMO_JP
-                        entry->value = *((const u32*)(&c));
-#else
-                    entry->value = *(u32*)&c;
-#endif
+                    entry->color = (GXColor){0x00, 0xD9, 0x14, 0xFF};
                     entry->glyph = MSG_GLYPH_COLOR;
                     entry->time = time;
                     entry++;

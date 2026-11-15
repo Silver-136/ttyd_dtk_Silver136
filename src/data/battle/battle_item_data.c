@@ -127,7 +127,6 @@ EvtWord ItemEvent_Attiike_Shisshi[167];
 BattleWeapon ItemWeaponData_Attiike_Shisshi;
 static EvtWord ItemEvent_Naniga_Okorukana[207];
 BattleWeapon ItemWeaponData_Naniga_Okorukana;
-static s32 _item_table[14];
 BattleWeapon ItemWeaponData_Shikaeshino_Kona;
 BattleWeapon ItemWeaponData_Kameno_Noroi;
 static EvtWord ItemEvent_RecoveryAndStatus[246];
@@ -3235,22 +3234,199 @@ BattleWeapon ItemWeaponData_Naniga_Okorukana = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
-static s32 _item_table[] = {
-    ITEM_MUSHROOM,
-    ITEM_HONEY_SYRUP,
-    ITEM_JAMMIN_JELLY,
-    ITEM_VOLT_SHROOM,
-    ITEM_REPEL_CAPE,
-    ITEM_SLOW_SHROOM,
-    ITEM_GRADUAL_SYRUP,
-    ITEM_ULTRA_SHROOM,
-    ITEM_DRIED_SHROOM,
-    ITEM_THUNDER_RAGE,
-    ITEM_FIRE_FLOWER,
-    ITEM_SHOOTING_STAR,
-    ITEM_STOPWATCH,
-    ITEM_NULL, // end of list (_naniga_okorukana_check counts up to it)
-};
+/**
+ * Picks a random target of weapon args[0] among the units of alliance args[3] (the user's opponents)
+ * and returns it in args[1] (unit) and args[2] (part), or -1 and -1 if there is none.
+ * Used by Shooting Star's falling stars.
+ */
+static USER_FUNC(_sampling_random_target) {
+    BattleWorkWeaponTargets targets;
+    BattleWork* wp;
+    BattleWeapon* weapon;
+    EvtWord* args;
+    s8 belong;
+    s32 outUnit;
+    s32 outPart;
+    BattleWorkWeaponTargets* t;
+    s32 idx;
+    s32 r;
+    wp = _battleWorkPointer;
+    args = event->args;
+    weapon = (BattleWeapon*)evtGetValue(event, args[0]);
+    outUnit = args[1];
+    outPart = args[2];
+    belong = evtGetValue(event, args[3]);
+
+    t = &targets;
+    BattleSamplingEnemy(t, weapon, BattleTransID(event, UNIT_ID_SELF), belong, weapon->targetClassFlags,
+                        weapon->targetPropertyFlags, -wp->alliances[belong].attackDirection);
+    if (t->numTargets <= 0) {
+        evtSetValue(event, outUnit, -1);
+        evtSetValue(event, outPart, -1);
+    } else {
+        r = irand(t->numTargets);
+        idx = t->targetIndices[r];
+        evtSetValue(event, outUnit, t->targets[idx].unitIdx);
+        evtSetValue(event, outPart, t->targets[idx].partIdx);
+    }
+    return EVT_RETURN_DONE;
+}
+
+/** Spins the 3D camera's roll from 720 degrees back to 0 over two seconds, for Dizzy Dial. */
+static USER_FUNC(_cam_rot) {
+    f32 rot;
+
+    if (isFirstCall) {
+        event->userdata[0] = sysMsec2Frame(2000);
+        event->userdata[1] = event->userdata[0];
+    }
+    rot = intplGetValue(EASING_QUADRATIC_OUT, 720.0f, 0.0f, event->userdata[0], event->userdata[1]);
+    camGetPtr(CAMERA_3D)->rollAngle = rot;
+    event->userdata[0]--;
+    if (event->userdata[0] <= 0) {
+        camGetPtr(CAMERA_3D)->rollAngle = 0.0f;
+        return EVT_RETURN_YIELD;
+    }
+    return EVT_RETURN_BLOCK;
+}
+
+/** Raises unit args[0]'s level by 5 (at most 99), for Trade Off. */
+static USER_FUNC(_rank_up) {
+    s32 id = evtGetValue(event, event->args[0]);
+    BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, BattleTransID(event, id));
+
+    if (unit) {
+        unit->level += 5;
+        if (unit->level > 99) {
+            unit->level = 99;
+        }
+    }
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Opens the battle status window when unit args[0] is Mario or a partner,
+ * before Point Swap changes their HP and FP.
+ */
+static USER_FUNC(_hpfp_change_declare_1) {
+    BattleWork* wp = _battleWorkPointer;
+    s32 id = evtGetValue(event, event->args[0]);
+    BattleUnit* unit = BattleGetUnitPtr(wp, BattleTransID(event, id));
+
+    if (unit) {
+        if (unit->currentKind == UNIT_MARIO) {
+            BattleStatusWindowSystemOn();
+        } else if (unit->currentKind >= TYPE_PARTNER_MIN && unit->currentKind < TYPE_PARTNER_MAX) {
+            BattleStatusWindowSystemOn();
+        }
+    }
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Blinks the HP and FP readouts for 120 frames when unit args[0] is Mario or a partner, after Point Swap.
+ * JP and later clear any earlier blink first.
+ */
+static USER_FUNC(_hpfp_change_declare_2) {
+
+    BattleWork* wp = _battleWorkPointer;
+    s32 id = evtGetValue(event, event->args[0]);
+    BattleUnit* unit = BattleGetUnitPtr(wp, BattleTransID(event, id));
+
+    if (unit) {
+        if (unit->currentKind == UNIT_MARIO) {
+#if VERSION >= VERSION_JP
+            statusClearBlink();
+#endif
+            statusMarioHPBlink(120);
+            statusFPBlink(120);
+        } else if (unit->currentKind >= TYPE_PARTNER_MIN && unit->currentKind < TYPE_PARTNER_MAX) {
+#if VERSION >= VERSION_JP
+            statusClearBlink();
+#endif
+            statusPartyHPBlink(120);
+            statusFPBlink(120);
+        }
+    }
+    return EVT_RETURN_DONE;
+}
+
+static USER_FUNC(_naniga_okorukana_check) {
+    static s32 _item_table[] = {
+        ITEM_MUSHROOM,
+        ITEM_HONEY_SYRUP,
+        ITEM_JAMMIN_JELLY,
+        ITEM_VOLT_SHROOM,
+        ITEM_REPEL_CAPE,
+        ITEM_SLOW_SHROOM,
+        ITEM_GRADUAL_SYRUP,
+        ITEM_ULTRA_SHROOM,
+        ITEM_DRIED_SHROOM,
+        ITEM_THUNDER_RAGE,
+        ITEM_FIRE_FLOWER,
+        ITEM_SHOOTING_STAR,
+        ITEM_STOPWATCH,
+        ITEM_NULL, // end of list
+    };
+    Vec pos;
+    BattleWork* wp = _battleWorkPointer;
+    EvtWord* args = event->args;
+    s32 id = evtGetValue(event, args[0]);
+    s32 out = args[1];
+    BattleUnit* unit;
+    s32 item;
+    s32 i;
+    u8* attackItemCount;
+    u8* supportItemCount;
+
+    unit = BattleGetUnitPtr(wp, BattleTransID(event, id));
+    BtlUnit_GetPos(unit, &pos.x, &pos.y, &pos.z);
+    if (!(unit->attributeFlags & kVeiled)) {
+        if (unit->attributeFlags & kCeiling) {
+            pos.y -= 5.0f;
+        } else {
+            pos.y += BtlUnit_GetHeight(unit) + 20;
+        }
+    }
+    if (isFirstCall) {
+        for (i = 0; _item_table[i] != 0; i++) {
+        }
+        item = _item_table[irand(i)];
+        event->userdata[0] = (EvtWord)effNanigaEntry(0, pos.x, pos.y, pos.z, _item_table, item);
+        effSetName((EffectEntry*)event->userdata[0], "effNaniga");
+        evtSetValue(event, out, item);
+#if VERSION >= VERSION_JP
+        if (unit->currentKind == UNIT_MARIO) {
+            attackItemCount = &wp->actRecord.marioAttackItems;
+            supportItemCount = &wp->actRecord.marioSupportItems;
+        } else if (unit->currentKind >= TYPE_PARTNER_MIN && unit->currentKind < TYPE_PARTNER_MAX) {
+            attackItemCount = &wp->actRecord.partnerAttackItems;
+            supportItemCount = &wp->actRecord.partnerSupportItems;
+        } else {
+            goto end;
+        }
+        switch (item) {
+            case ITEM_THUNDER_BOLT:
+            case ITEM_THUNDER_RAGE:
+            case ITEM_SHOOTING_STAR:
+            case ITEM_FIRE_FLOWER:
+            case ITEM_STOPWATCH:
+                (*attackItemCount)++;
+                break;
+            default:
+                (*supportItemCount)++;
+                break;
+        }
+    }
+    end:
+#else
+    }
+#endif
+    if (effNameToPtr("effNaniga")) {
+        return EVT_RETURN_BLOCK;
+    }
+    return EVT_RETURN_DONE;
+}
 
 /** Spite Pouch: gives the chosen ally payback for three turns. */
 #if VERSION <= VERSION_DEMO_JP
@@ -4636,184 +4812,6 @@ typedef struct ThrowWork {
     f32 vy;       // 0x30
     u8 pad[0x7C - 0x34]; // 0x34, never accessed (the work block is 0x7C bytes)
 } ThrowWork;
-
-/**
- * Picks a random target of weapon args[0] among the units of alliance args[3] (the user's opponents)
- * and returns it in args[1] (unit) and args[2] (part), or -1 and -1 if there is none.
- * Used by Shooting Star's falling stars.
- */
-static USER_FUNC(_sampling_random_target) {
-    BattleWorkWeaponTargets targets;
-    BattleWork* wp;
-    BattleWeapon* weapon;
-    EvtWord* args;
-    s8 belong;
-    s32 outUnit;
-    s32 outPart;
-    BattleWorkWeaponTargets* t;
-    s32 idx;
-    s32 r;
-    wp = _battleWorkPointer;
-    args = event->args;
-    weapon = (BattleWeapon*)evtGetValue(event, args[0]);
-    outUnit = args[1];
-    outPart = args[2];
-    belong = evtGetValue(event, args[3]);
-
-    t = &targets;
-    BattleSamplingEnemy(t, weapon, BattleTransID(event, UNIT_ID_SELF), belong, weapon->targetClassFlags,
-                        weapon->targetPropertyFlags, -wp->alliances[belong].attackDirection);
-    if (t->numTargets <= 0) {
-        evtSetValue(event, outUnit, -1);
-        evtSetValue(event, outPart, -1);
-    } else {
-        r = irand(t->numTargets);
-        idx = t->targetIndices[r];
-        evtSetValue(event, outUnit, t->targets[idx].unitIdx);
-        evtSetValue(event, outPart, t->targets[idx].partIdx);
-    }
-    return EVT_RETURN_DONE;
-}
-
-/** Spins the 3D camera's roll from 720 degrees back to 0 over two seconds, for Dizzy Dial. */
-static USER_FUNC(_cam_rot) {
-    f32 rot;
-
-    if (isFirstCall) {
-        event->userdata[0] = sysMsec2Frame(2000);
-        event->userdata[1] = event->userdata[0];
-    }
-    rot = intplGetValue(EASING_QUADRATIC_OUT, 720.0f, 0.0f, event->userdata[0], event->userdata[1]);
-    camGetPtr(CAMERA_3D)->rollAngle = rot;
-    event->userdata[0]--;
-    if (event->userdata[0] <= 0) {
-        camGetPtr(CAMERA_3D)->rollAngle = 0.0f;
-        return EVT_RETURN_YIELD;
-    }
-    return EVT_RETURN_BLOCK;
-}
-
-/** Raises unit args[0]'s level by 5 (at most 99), for Trade Off. */
-static USER_FUNC(_rank_up) {
-    s32 id = evtGetValue(event, event->args[0]);
-    BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, BattleTransID(event, id));
-
-    if (unit) {
-        unit->level += 5;
-        if (unit->level > 99) {
-            unit->level = 99;
-        }
-    }
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Opens the battle status window when unit args[0] is Mario or a partner,
- * before Point Swap changes their HP and FP.
- */
-static USER_FUNC(_hpfp_change_declare_1) {
-    BattleWork* wp = _battleWorkPointer;
-    s32 id = evtGetValue(event, event->args[0]);
-    BattleUnit* unit = BattleGetUnitPtr(wp, BattleTransID(event, id));
-
-    if (unit) {
-        if (unit->currentKind == UNIT_MARIO) {
-            BattleStatusWindowSystemOn();
-        } else if (unit->currentKind >= TYPE_PARTNER_MIN && unit->currentKind < TYPE_PARTNER_MAX) {
-            BattleStatusWindowSystemOn();
-        }
-    }
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Blinks the HP and FP readouts for 120 frames when unit args[0] is Mario or a partner, after Point Swap.
- * JP and later clear any earlier blink first.
- */
-static USER_FUNC(_hpfp_change_declare_2) {
-
-    BattleWork* wp = _battleWorkPointer;
-    s32 id = evtGetValue(event, event->args[0]);
-    BattleUnit* unit = BattleGetUnitPtr(wp, BattleTransID(event, id));
-
-    if (unit) {
-        if (unit->currentKind == UNIT_MARIO) {
-#if VERSION >= VERSION_JP
-            statusClearBlink();
-#endif
-            statusMarioHPBlink(120);
-            statusFPBlink(120);
-        } else if (unit->currentKind >= TYPE_PARTNER_MIN && unit->currentKind < TYPE_PARTNER_MAX) {
-#if VERSION >= VERSION_JP
-            statusClearBlink();
-#endif
-            statusPartyHPBlink(120);
-            statusFPBlink(120);
-        }
-    }
-    return EVT_RETURN_DONE;
-}
-
-static USER_FUNC(_naniga_okorukana_check) {
-    Vec pos;
-    BattleWork* wp = _battleWorkPointer;
-    EvtWord* args = event->args;
-    s32 id = evtGetValue(event, args[0]);
-    s32 out = args[1];
-    BattleUnit* unit;
-    s32 item;
-    s32 i;
-    u8* attackItemCount;
-    u8* supportItemCount;
-
-    unit = BattleGetUnitPtr(wp, BattleTransID(event, id));
-    BtlUnit_GetPos(unit, &pos.x, &pos.y, &pos.z);
-    if (!(unit->attributeFlags & kVeiled)) {
-        if (unit->attributeFlags & kCeiling) {
-            pos.y -= 5.0f;
-        } else {
-            pos.y += BtlUnit_GetHeight(unit) + 20;
-        }
-    }
-    if (isFirstCall) {
-        for (i = 0; _item_table[i] != 0; i++) {
-        }
-        item = _item_table[irand(i)];
-        event->userdata[0] = (EvtWord)effNanigaEntry(0, pos.x, pos.y, pos.z, _item_table, item);
-        effSetName((EffectEntry*)event->userdata[0], "effNaniga");
-        evtSetValue(event, out, item);
-#if VERSION >= VERSION_JP
-        if (unit->currentKind == UNIT_MARIO) {
-            attackItemCount = &wp->actRecord.marioAttackItems;
-            supportItemCount = &wp->actRecord.marioSupportItems;
-        } else if (unit->currentKind >= TYPE_PARTNER_MIN && unit->currentKind < TYPE_PARTNER_MAX) {
-            attackItemCount = &wp->actRecord.partnerAttackItems;
-            supportItemCount = &wp->actRecord.partnerSupportItems;
-        } else {
-            goto end;
-        }
-        switch (item) {
-            case ITEM_THUNDER_BOLT:
-            case ITEM_THUNDER_RAGE:
-            case ITEM_SHOOTING_STAR:
-            case ITEM_FIRE_FLOWER:
-            case ITEM_STOPWATCH:
-                (*attackItemCount)++;
-                break;
-            default:
-                (*supportItemCount)++;
-                break;
-        }
-    }
-    end:
-#else
-    }
-#endif
-    if (effNameToPtr("effNaniga")) {
-        return EVT_RETURN_BLOCK;
-    }
-    return EVT_RETURN_DONE;
-}
 
 /** Returns in args[1..3] where a thrown item starts: just above unit args[0]'s head (just below for ceiling units). */
 static USER_FUNC(_get_throw_first_pos) {

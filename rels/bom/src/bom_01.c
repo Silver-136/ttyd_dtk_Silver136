@@ -74,8 +74,6 @@ typedef struct SightWork {
 } SightWork;
 static SightWork* sight_wp;
 
-// make_name's sprintf buffer.
-static char name[64];
 typedef struct BomAnim {
     char name[8];
     f32 time;
@@ -102,7 +100,7 @@ typedef struct BomWork {
     u8 pad_ac[4];
     Bom bom[1000];
 } BomWork;
-static smartEntry* lp;
+static smartEntry* lp = NULL;
 static void pose_change(s32 i, const char* name);
 static ExtTexInfo ext_data[31];
 
@@ -2607,6 +2605,7 @@ static s32 depth(EventEntry* event, BOOL isFirstCall) {
  * to address the numbered light objects.
  */
 static s32 make_name(EventEntry* event, BOOL isFirstCall) {
+    static char name[64];
     EvtWord* args = event->args;
 
     sprintf(name, "S_hikari%d", evtGetValue(event, args[0]));
