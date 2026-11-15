@@ -100,11 +100,23 @@ s32 partyGetFootmarkId(PartyEntry* party) {
 }
 
 /**
- * Copies the supplied other member's position in the early demos unless it is absent or far, otherwise Mario's.
- * JP and later select the other slot and reject it when absent, in Koops status 3, or at least 150 units from Mario.
+ * Copies the position trail id chases into pos: the other slot's member (slot 1 for id 0, slot 0 otherwise),
+ * or Mario's when that member is absent or Koops's nokonokoGetStatus is NOKONOKO_STATUS_SHELL_HELD; JP and later
+ * also fall back to Mario when the member is at least 150 units from him.
+ * The early demos inline every call (JP demo map: UNUSED, 0xb4).
  */
 #if VERSION <= VERSION_DEMO_JP
-static inline void partyTargetPos(PartyEntry* other, BOOL far, Vec* pos) {
+static void getTargetPos(s32 id, Vec* pos) {
+    PartyEntry* other;
+    BOOL far;
+
+    far = FALSE;
+    other = anotherPartyGetPtr(id != 0);
+    if (other) {
+        if (nokonokoGetStatus(other) == NOKONOKO_STATUS_SHELL_HELD) {
+            far = TRUE;
+        }
+    }
     if (other && !far) {
         pos->x = other->position.x;
         pos->y = other->position.y;
@@ -185,22 +197,13 @@ void L_getTargetPos(s32 id, Vec* pos) {
  */
 f32 partyGetTargetDir(s32 id, f32 x, f32 z) {
     MarioWork* mario;
-    PartyEntry* other;
-    BOOL far;
     Vec pos;
 
     if (id == 0) {
         mario = marioGetPtr();
         return angleABf(x, z, mario->position.x, mario->position.z);
     }
-    far = FALSE;
-    other = anotherPartyGetPtr(id != 0);
-    if (other) {
-        if (nokonokoGetStatus(other) == NOKONOKO_STATUS_SHELL_HELD) {
-            far = TRUE;
-        }
-    }
-    partyTargetPos(other, far, &pos);
+    getTargetPos(id, &pos);
     return angleABf(x, z, pos.x, pos.z);
 }
 #else
@@ -235,22 +238,13 @@ f32 partyGetTargetDir(s32 id, f32 x, f32 z) {
 */
 f32 partyGetTargetDist(s32 id, f32 x, f32 z) {
     MarioWork* mario;
-    PartyEntry* other;
-    BOOL far;
     Vec pos;
 
     if (id == 0) {
         mario = marioGetPtr();
         return distABf(x, z, mario->position.x, mario->position.z);
     }
-    far = FALSE;
-    other = anotherPartyGetPtr(id != 0);
-    if (other) {
-        if (nokonokoGetStatus(other) == NOKONOKO_STATUS_SHELL_HELD) {
-            far = TRUE;
-        }
-    }
-    partyTargetPos(other, far, &pos);
+    getTargetPos(id, &pos);
     return distABf(x, z, pos.x, pos.z);
 }
 #else
@@ -284,21 +278,12 @@ f32 partyGetTargetDist(s32 id, f32 x, f32 z) {
 #if VERSION <= VERSION_DEMO_JP
 /** Demo: 3D distance from p to what trail id chases, picked as in partyGetTargetDir. */
 f32 partyGetTargetDist3D(s32 id, Vec* p) {
-    PartyEntry* other;
-    BOOL far;
     Vec pos;
 
     if (id == 0) {
         return PSVECDistance(&marioGetPtr()->position, p);
     }
-    far = FALSE;
-    other = anotherPartyGetPtr(id != 0);
-    if (other) {
-        if (nokonokoGetStatus(other) == NOKONOKO_STATUS_SHELL_HELD) {
-            far = TRUE;
-        }
-    }
-    partyTargetPos(other, far, &pos);
+    getTargetPos(id, &pos);
     return PSVECDistance(&pos, p);
 }
 #else
@@ -329,21 +314,12 @@ f32 partyGetTargetDist3D(s32 id, Vec* p) {
 #if VERSION <= VERSION_DEMO_JP
 /** Demo: vertical distance from height y to what trail id chases, picked as in partyGetTargetDir. */
 f32 partyGetTargetDistY(s32 id, f32 y) {
-    PartyEntry* other;
-    BOOL far;
     Vec pos;
 
     if (id == 0) {
         return __fabsf(marioGetPtr()->position.y - y);
     }
-    far = FALSE;
-    other = anotherPartyGetPtr(id != 0);
-    if (other) {
-        if (nokonokoGetStatus(other) == NOKONOKO_STATUS_SHELL_HELD) {
-            far = TRUE;
-        }
-    }
-    partyTargetPos(other, far, &pos);
+    getTargetPos(id, &pos);
     return __fabsf(pos.y - y);
 }
 #else

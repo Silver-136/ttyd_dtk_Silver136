@@ -285,19 +285,16 @@ static void imgDisp_ProjPlane(CameraId camId, void* param) {
 }
 
 /**
- * Copies capture slot sh's rectangle of the frame buffer into a texture,
+ * Copies capture slot sh's rectangle (sh->rect, set by the caller) of the frame buffer into a texture,
  * allocating the buffer from the smart heap (allocMode 1 or 2 pick the heap kind)
  * or as a type-3 block that smartAutoFree(SMART_GROUP_TEMP) reclaims.
+ * Original name from the JP demo's link map (UNUSED there, 0x128): every call is inlined, so the linker strips it.
  */
-static inline void imgCaptureCopy(ImageShadow* sh, ImageEntry* entry) {
+static void capture(ImageShadow* sh) {
     s32 fmt, dstFmt, alloc;
     u16 h, w;
     u32 size;
     smartEntry* data;
-    sh->rect.left = sh->x;
-    sh->rect.top = sh->y;
-    sh->rect.width = entry->width;
-    sh->rect.height = entry->height;
     h = sh->rect.height;
     w = sh->rect.width;
     fmt = sh->texFmt;
@@ -384,12 +381,20 @@ static void imgCapture_Prim(ImageEntry* entry, s32 id) {
         }
     } else if (sh->allocMode) {
         if (sh->flags & IMG_SHADOW_COPY_PENDING) {
-            imgCaptureCopy(sh, entry);
+            sh->rect.left = sh->x;
+            sh->rect.top = sh->y;
+            sh->rect.width = entry->width;
+            sh->rect.height = entry->height;
+            capture(sh);
             sh->flags &= ~IMG_SHADOW_COPY_PENDING;
         }
         if (!(sh->flags & IMG_SHADOW_COPY_PENDING)) sh->flags &= ~IMG_SHADOW_PENDING;
     } else {
-        imgCaptureCopy(sh, entry);
+        sh->rect.left = sh->x;
+        sh->rect.top = sh->y;
+        sh->rect.width = entry->width;
+        sh->rect.height = entry->height;
+        capture(sh);
         sh->flags &= ~IMG_SHADOW_PENDING;
     }
 }

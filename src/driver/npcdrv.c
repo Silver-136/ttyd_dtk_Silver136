@@ -682,27 +682,12 @@ static void _fbatFirstAttackAnnouceDisp(CameraId camId, void* param);
 void fbatTalkMode(void);
 void fbatBattleMode(void);
 
+static void npcMoveXZ(NpcEntry* npc);
 static void npcMoveG(NpcEntry* npc);
 static BOOL npcCheckHitMarioSide(NpcEntry* npc);
 HitEntry* npcHitCheckSide(NpcEntry* npc, f32* outX, f32* outZ, f32* angle, f32 dx, f32 dz);
 void fbatKoopaMode(void);
 void fbatEncountCheck(void);
-#if VERSION >= VERSION_US
-
-/** US and later: probe the wall from a copy of the position first, then slide along it. */
-static inline void npcMoveSide(NpcEntry* entry, f32 mx, f32 mz) {
-    f32 wx = entry->position.x;
-    f32 wz = entry->position.z;
-    entry->wallHit = npcHitCheckSide(entry, &wx, &wz, &entry->moveDir, mx, mz);
-    if (entry->wallHit) {
-        npcHitCheckSide(entry, &entry->position.x, &entry->position.z, &entry->moveDir, wx - entry->position.x,
-                        wz - entry->position.z);
-    } else {
-        entry->position.x = wx;
-        entry->position.z = wz;
-    }
-}
-#endif
 
 /**
  * Per-frame NPC update (from mariost.c).
@@ -788,28 +773,7 @@ void npcMain(void) {
                 }
                 if (entry->statusFlags & NPC_STATUS_UPDATE) {
                     if (entry->moveDt > 0.0f) {
-                        f32 mx = entry->moveOffset.x;
-                        f32 mz = entry->moveOffset.z;
-                        if (entry->statusFlags & NPC_STATUS_IN_WATER && !(entry->statusFlags & NPC_STATUS_NO_WATER_DRAG)) {
-                            mx *= 0.5f;
-                            mz *= 0.5f;
-                        }
-                        if (entry->flags & NPC_FLAG_2D) {
-                            mz = 0.0f;
-                        }
-                        if (entry->flags & NPC_FLAG_NO_WALL_COLLISION) {
-                            entry->position.x += mx;
-                            entry->position.z += mz;
-                        } else {
-#if VERSION >= VERSION_US
-                            npcMoveSide(entry, mx, mz);
-#else
-                            entry->wallHit = npcHitCheckSide(entry, &entry->position.x, &entry->position.z,
-                                                                    &entry->moveDir, mx, mz);
-#endif
-                        }
-                        entry->moveOffset.x = 0.0f;
-                        entry->moveOffset.z = 0.0f;
+                        npcMoveXZ(entry);
                         npcMoveG(entry);
                     }
                     if (!(entry->flags & NPC_FLAG_ENEMY) && !(entry->flags & NPC_FLAG_NO_HIT) && !(entry->flags & NPC_FLAG_NO_PUSH_MARIO_UNUSED)) {
@@ -1333,6 +1297,45 @@ static BOOL npcCheckHitMarioSide(NpcEntry* npc) {
 }
 #pragma opt_propagation reset
 #pragma opt_lifetimes reset
+
+/**
+ * Horizontal movement for one frame: the script's moveOffset x/z (halved in water, no z for 2D NPCs), with wall
+ * collision through npcHitCheckSide unless NPC_FLAG_NO_WALL_COLLISION; then clears the offset. US and later
+ * probe the wall from a copy of the position first, then slide along it.
+ * Original name from the JP demo's link map (UNUSED there, 0xa8): every call is inlined, so the linker strips it.
+ */
+static void npcMoveXZ(NpcEntry* npc) {
+    f32 mx = npc->moveOffset.x;
+    f32 mz = npc->moveOffset.z;
+    if (npc->statusFlags & NPC_STATUS_IN_WATER && !(npc->statusFlags & NPC_STATUS_NO_WATER_DRAG)) {
+        mx *= 0.5f;
+        mz *= 0.5f;
+    }
+    if (npc->flags & NPC_FLAG_2D) {
+        mz = 0.0f;
+    }
+    if (npc->flags & NPC_FLAG_NO_WALL_COLLISION) {
+        npc->position.x += mx;
+        npc->position.z += mz;
+    } else {
+#if VERSION >= VERSION_US
+        f32 wx = npc->position.x;
+        f32 wz = npc->position.z;
+        npc->wallHit = npcHitCheckSide(npc, &wx, &wz, &npc->moveDir, mx, mz);
+        if (npc->wallHit) {
+            npcHitCheckSide(npc, &npc->position.x, &npc->position.z, &npc->moveDir, wx - npc->position.x,
+                            wz - npc->position.z);
+        } else {
+            npc->position.x = wx;
+            npc->position.z = wz;
+        }
+#else
+        npc->wallHit = npcHitCheckSide(npc, &npc->position.x, &npc->position.z, &npc->moveDir, mx, mz);
+#endif
+    }
+    npc->moveOffset.x = 0.0f;
+    npc->moveOffset.z = 0.0f;
+}
 
 /**
  * Vertical movement for one frame: the script's moveOffset.y plus the jump arc (gravity 980 units/s^2 x
