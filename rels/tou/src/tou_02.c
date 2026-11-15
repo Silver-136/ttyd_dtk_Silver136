@@ -1780,8 +1780,6 @@ static void fan_disp(CameraId camera, void* param) {
     extLoadTextureExit();
 }
 
-// Kept (pattern): lifetimes off for this unit (the -opt nolifetimes flag in configure.py); with lifetimes on
-// ext_fan_main's retail-only GF(10) block takes other registers and no natural form was found.
 /**
  * Updates the crowd toward Mario when GF(10) is set, otherwise チャンピョン, with repulsion between walking fans.
  * check_hammer results 1 and 2 start the arc and drift states, then hide the sprite.
@@ -1816,6 +1814,7 @@ void ext_fan_main(void) {
     }
 #if VERSION >= VERSION_JP
     if (evtGetValue(NULL, GF(10))) {
+        s32 i;
         ExtdrvPose* pose = extGetPosePtr();
         Fan* fan = fan_wp->fans;
 
@@ -1891,46 +1890,50 @@ void ext_fan_main(void) {
         }
     }
 
+    {
+        s32 i;
+
 #if VERSION >= VERSION_JP
-    for (i = 0, fan = fan_wp->fans; i < fan_wp->num; i++, fan++) {
-        if (fan->state == 0) {
-            s32 j;
-            Fan* other;
+        for (i = 0, fan = fan_wp->fans; i < fan_wp->num; i++, fan++) {
+            if (fan->state == 0) {
+                s32 j;
+                Fan* other;
 
-            for (j = 0, other = fan_wp->fans; j < fan_wp->num; j++, other++) {
-                if (other->state == 0 && i != j && PSVECSquareDistance(&fan->pos, &other->pos) < 900.0f) {
-                    PSVECSubtract(&fan->pos, &other->pos, &dir);
-                    dir.y = 0.0f;
-                    PSVECNormalize(&dir, &dir);
-                    PSVECScale(&dir, &dir, 5.0f);
-                    PSVECAdd(&fan->vel, &dir, &fan->vel);
-                    PSVECSubtract(&other->vel, &dir, &other->vel);
-                }
-            }
-        }
-    }
-#else
-    for (i = 0, fan = fan_wp->fans; i < fan_wp->num; i++, fan++) {
-        if (fan->state == 0) {
-            s32 j;
-            Fan* other;
-            f32 d;
-
-            for (j = 0, other = fan_wp->fans; j < fan_wp->num; j++, other++) {
-                if (other->state == 0 && fan != other && (d = PSVECSquareDistance(&fan->pos, &other->pos)) < 900.0f) {
-                    PSVECSubtract(&fan->pos, &other->pos, &dir);
-                    if (d == 0.0f) {
-                        dir.x = d = 1.0f;
+                for (j = 0, other = fan_wp->fans; j < fan_wp->num; j++, other++) {
+                    if (other->state == 0 && i != j && PSVECSquareDistance(&fan->pos, &other->pos) < 900.0f) {
+                        PSVECSubtract(&fan->pos, &other->pos, &dir);
+                        dir.y = 0.0f;
+                        PSVECNormalize(&dir, &dir);
+                        PSVECScale(&dir, &dir, 5.0f);
+                        PSVECAdd(&fan->vel, &dir, &fan->vel);
+                        PSVECSubtract(&other->vel, &dir, &other->vel);
                     }
-                    dir.y = 0.0f;
-                    PSVECScale(&dir, &dir, 8.0f * (1.0f / d));
-                    PSVECAdd(&fan->vel, &dir, &fan->vel);
-                    PSVECSubtract(&other->vel, &dir, &other->vel);
                 }
             }
         }
-    }
+#else
+        for (i = 0, fan = fan_wp->fans; i < fan_wp->num; i++, fan++) {
+            if (fan->state == 0) {
+                s32 j;
+                Fan* other;
+                f32 d;
+
+                for (j = 0, other = fan_wp->fans; j < fan_wp->num; j++, other++) {
+                    if (other->state == 0 && fan != other && (d = PSVECSquareDistance(&fan->pos, &other->pos)) < 900.0f) {
+                        PSVECSubtract(&fan->pos, &other->pos, &dir);
+                        if (d == 0.0f) {
+                            dir.x = d = 1.0f;
+                        }
+                        dir.y = 0.0f;
+                        PSVECScale(&dir, &dir, 8.0f * (1.0f / d));
+                        PSVECAdd(&fan->vel, &dir, &fan->vel);
+                        PSVECSubtract(&other->vel, &dir, &other->vel);
+                    }
+                }
+            }
+        }
 #endif
+    }
     {
         f32 angle;
         f32 dist;

@@ -996,10 +996,9 @@ static void jump(s32 i, s32 next, f32 x, f32 y, f32 z, f32 speed, f32 gravity) {
     }
 }
 
-// Kept (pattern): propagation and lifetimes off for rsh_06's ext_moamoa_main and bom_01's ext_main (the eki_00/rsh_05
-// copies need neither: block-local locals); the target needs them, no natural form found (cleanup_notes/bf/X1b/log.md).
+// Kept (pattern): propagation off for ext_main (lifetimes needs no pragma: cases 1 and 3 declare their own locals);
+// the target needs it, no natural form found (cleanup_notes/bf/W2b/log.md, cleanup_notes/bf/X3b/log.md).
 #pragma opt_propagation off
-#pragma opt_lifetimes off
 
 /**
  * Per-frame logic of the crowd: state 0 walks each Bob-omb towards the middle,
@@ -1042,7 +1041,12 @@ static void ext_main(void) {
                     wp->bom[i].state++;
                 }
                 break;
-            case 1:
+            case 1: {
+                f32 angle;
+                f32 dist;
+                f32 gravity;
+                f32 speed;
+
                 angle = ( 6.2831855f * rand() ) / 32767.0f;
                 dist = 150.0f + (( 30.0f * rand() ) / 32767.0f) ;
                 gravity = 0.1f + (( 0.1f * rand() ) / 32767.0f) ;
@@ -1050,6 +1054,7 @@ static void ext_main(void) {
                 z = dist * ( -chb_cos(angle) );
                 jump(i, 2, dist * chb_sin(angle), 150.0f, z, speed, gravity);
                 break;
+            }
             case 2:
                 angle = ( 6.2831855f * rand() ) / 32767.0f;
                 dist = 50.0f + (( 30.0f * rand() ) / 32767.0f) ;
@@ -1059,7 +1064,12 @@ static void ext_main(void) {
                 dist = dist * chb_sin(angle);
                 jump(i, 3, dist, 400.0f, gravity, speed, z);
                 break;
-            case 3:
+            case 3: {
+                f32 angle;
+                f32 dist;
+                f32 gravity;
+                f32 speed;
+
                 angle = ( 6.2831855f * rand() ) / 32767.0f;
                 dist = ( 70.0f * rand() ) / 32767.0f;
 
@@ -1072,6 +1082,7 @@ static void ext_main(void) {
                 dist = ( dist * chb_sin(angle) ) + (100.0f + ( i % 100) );
                 jump(i, 4, dist, 350.0f + ( i % 150) , gravity, speed, z);
                 break;
+            }
             case 4:
                 wp->bom[i].state++;
                 break;
@@ -1115,7 +1126,6 @@ static void ext_main(void) {
     pose_main();
 }
 #pragma opt_propagation reset
-#pragma opt_lifetimes reset
 
 /** Queues ext_disp every frame for the crowd unless bit 0 of the BomWork flags is set (it also mutes the hops). */
 static void ext_dispent(void) {

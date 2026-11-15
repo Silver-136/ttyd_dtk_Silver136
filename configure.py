@@ -2010,7 +2010,7 @@ config.libs = [
             Object(MatchingFor("G8MJ01", "G8ME01"), "tou_01.c", extra_cflags=["-inline auto,deferred"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "event/evt_lect_tou.c", extra_cflags=["-inline auto,deferred"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "tou.c", extra_cflags=["-inline auto,deferred"]),
-            Object(MatchingFor("G8MJ01", "G8ME01"), "tou_02.c", extra_cflags=["-inline auto,deferred", "-opt nolifetimes"]),
+            Object(MatchingFor("G8MJ01", "G8ME01"), "tou_02.c", extra_cflags=["-inline auto,deferred"]),
         ]
     ),
     Rel(
