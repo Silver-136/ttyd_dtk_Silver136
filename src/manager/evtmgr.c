@@ -34,6 +34,8 @@ EventWork* evtGetWork(void) {
 /**
  * Builds this frame's run order for evtmgrMain:
  * every active event's slot and id, sorted by priority, highest first.
+ * The first loop is a while loop with separate increments; that form also keeps it over the 30-statement
+ * auto-inline limit, so evtmgrMain calls it as the target does.
  */
 static void make_pri_table(void) {
     EventWork* wp = evtGetWork();

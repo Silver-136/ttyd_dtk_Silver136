@@ -2939,6 +2939,8 @@ static void puniModeAwayjump(PuniData* p) {
  * Moves a fleeing Puni along its velocity with wall collision.
  * Returns 1 and sets the wall push direction when it hits a wall with attribute 0x4 (HIT_ATTR_NPC_ONLY),
  * 2 for any other wall (step 10), 0 when nothing was hit.
+ * Written single-exit like puniMoveAtari; that form also keeps it over the 30-statement auto-inline limit, so
+ * the caller calls it as the target does.
  */
 static int puniModeAway_sub(PuniData* p) {
     Vec dir;

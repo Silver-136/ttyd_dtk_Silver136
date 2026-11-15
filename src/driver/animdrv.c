@@ -460,6 +460,16 @@ static void animPose_AllocBuffer(AnimationPose* pose) {
     pose->lastFrameZero = -1;
 }
 
+/** Restarts pose's animation clock at the current time: frame 0, no keyframe passed, no loop time. */
+// Original name and size (0xbc) from the JP demo map (UNUSED there: every call is inlined).
+void animPose_ResetTime(AnimationPose* pose) {
+    pose->localTime = animTimeGetTime(pose->type);
+    pose->lastFrameZero = -1;
+    pose->lastFrameTime = 0.0f;
+    pose->curKeyValue = 0;
+    pose->loopTime = 0.0f;
+}
+
 /** heavily inlined */
 void animPoseRefresh(void) {
     int i;
@@ -734,16 +744,6 @@ BOOL animEffectAsync(const char* animName, u32 group) {
         ret = TRUE;
     }
     return ret;
-}
-
-/** Restarts pose's animation clock at the current time: frame 0, no keyframe passed, no loop time. */
-// Original name and size (0xbc) from the JP demo map (UNUSED there: every call is inlined).
-void animPose_ResetTime(AnimationPose* pose) {
-    pose->localTime = animTimeGetTime(pose->type);
-    pose->lastFrameZero = -1;
-    pose->lastFrameTime = 0.0f;
-    pose->curKeyValue = 0;
-    pose->loopTime = 0.0f;
 }
 
 /* An anim name parameter holds a name (an address in main memory, negative as

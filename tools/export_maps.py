@@ -10,8 +10,9 @@ linker strips as UNUSED) and copies the maps next to each other:
 The maps come straight from mwldeppc, with library members named "archive.a source" as in the original maps
 (e.g. "os.a OSInit.c"). No line ends in a space (the original maps keep one after plain objects, "x.o "; map users
 prefer none). The register save/restore entry points (_savegpr_14.._savegpr_31 etc.), which the linker lists as
-"(entry of __save_gpr)" or UNUSED, are listed as ordinary symbols at their real addresses. The build links the objects directly, so the member names come from build.ninja (each object's
-source file); objects whose file name occurs twice in a link (main.o) are told apart by link order. In the
+"(entry of __save_gpr)" or UNUSED, are listed as ordinary symbols at their real addresses. The build links the
+objects directly, so the member names come from build.ninja (each object's source file); objects whose file name
+occurs twice in a link (main.o) are told apart by link order. In the
 "Memory map" block the File Offset column gives the section's offset in the shipped file (main.dol or <rel>.rel,
 from that file's own section table) rather than in the linker's intermediate ELF, the empty debug-section lines are
 left out, and the block has two empty lines above and below it. Sections without file data (.bss, .sbss, .sbss2)
@@ -187,10 +188,12 @@ class LinkObjects:
         for outs, rule, ins in statements:
             if len(outs) == 1 and outs[0].endswith(".o") and ins:
                 src_of[outs[0]] = ins[0]
-        target = str(map_path.relative_to(ROOT)).replace("/", "\\")
-        objs = next((ins for outs, rule, ins in statements if target in outs), None)
+        target = map_path.relative_to(ROOT).as_posix()
+        objs = next((ins for outs, rule, ins in statements if any(o.replace("\\", "/") == target for o in outs)),
+                    None)
         if objs is None:
-            sys.exit(f"{map_path}: no link statement in build.ninja")
+            sys.exit(f"{map_path}: no link statement in build.ninja (it must be configured for this version with "
+                     "--map; with --no-build, export one version at a time)")
         self.paths = [o for o in objs if o.endswith(".o")]
         self.name = {}
         self.by_base = {}

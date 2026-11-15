@@ -299,11 +299,11 @@ static void quads(void) {
     f32 w = 40.0f;
 
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-    GXPosition3f32(-w / 2.0f, w * 0.5f, 0.0f);
+    GXPosition3f32(-w / 2.0f, w / 2.0f, 0.0f);
     GXTexCoord2f32(0.0f, 0.0f);
-    GXPosition3f32(w * 0.5f, w * 0.5f, 0.0f);
+    GXPosition3f32(w / 2.0f, w / 2.0f, 0.0f);
     GXTexCoord2f32(1.0f, 0.0f);
-    GXPosition3f32(w * 0.5f, -w / 2.0f, 0.0f);
+    GXPosition3f32(w / 2.0f, -w / 2.0f, 0.0f);
     GXTexCoord2f32(1.0f, 1.0f);
     GXPosition3f32(-w / 2.0f, -w / 2.0f, 0.0f);
     GXTexCoord2f32(0.0f, 1.0f);
