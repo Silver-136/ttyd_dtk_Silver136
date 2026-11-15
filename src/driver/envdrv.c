@@ -1231,12 +1231,6 @@ void envAddTev(s32 type, MapTevCallbackInfo* info) {
     info->texMap = map;
 }
 
-/** The map object being drawn, from a TEV callback's info. */
-// FAKE: invented one-use inline helper (no map name); writing it out changes the code (FAKES.md)
-static inline MapObject* envWaterObj(MapTevCallbackInfo* info) {
-    return info->mapObj;
-}
-
 /** A map object's parent object. */
 static inline MapObject* envWaterParent(MapObject* o) { return o->parent; }
 
@@ -1247,7 +1241,6 @@ static inline MapObject* envWaterParent(MapObject* o) { return o->parent; }
  * Called from map TEV callbacks installed with evt_map_set_tevcallback (dou_00, hei_09).
  */
 void envSetWater(MapTevCallbackInfo* info) {
-    MapObject* obj;
     GXTevStageID stage;
     GXTexMapID map;
     GXTexCoordID coord;
@@ -1272,12 +1265,13 @@ void envSetWater(MapTevCallbackInfo* info) {
     s32 x1;
     s32 y1;
 
-    obj = envWaterObj(info);
     stage = info->tevStage;
     map = info->texMap;
     coord = info->texCoord;
     ind = info->indStage;
-    if (obj->flags & MAP_OBJ_FLAG_GROUP_MEMBER) {
+    if (info->mapObj->flags & MAP_OBJ_FLAG_GROUP_MEMBER) {
+        MapObject* obj = info->mapObj;
+
         while ((obj = envWaterParent(obj)) != NULL) {
             if (obj->flags & MAP_OBJ_FLAG_GROUP) {
                 if (!(obj->flags & MAP_OBJ_FLAG_SCREEN_RECT)) {
@@ -1292,14 +1286,14 @@ void envSetWater(MapTevCallbackInfo* info) {
             }
         }
     } else {
-        if (!(obj->flags & MAP_OBJ_FLAG_SCREEN_RECT)) {
-            obj->flags |= MAP_OBJ_FLAG_SCREEN_RECT;
+        if (!(info->mapObj->flags & MAP_OBJ_FLAG_SCREEN_RECT)) {
+            info->mapObj->flags |= MAP_OBJ_FLAG_SCREEN_RECT;
             return;
         }
-        x0 = obj->screenRect[0];
-        y0 = obj->screenRect[1];
-        x1 = obj->screenRect[2];
-        y1 = obj->screenRect[3];
+        x0 = info->mapObj->screenRect[0];
+        y0 = info->mapObj->screenRect[1];
+        x1 = info->mapObj->screenRect[2];
+        y1 = info->mapObj->screenRect[3];
     }
     if (x0 == 0x3FF || y0 == 0x3FF || x1 == 0x3FF || y1 == 0x3FF) {
         return;
