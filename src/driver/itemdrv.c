@@ -138,6 +138,28 @@ void itemReInit(void) {
 }
 
 /**
+ * FALSE while the game is stopped (SYSTEM_LEVEL_STOP_ALL), except for items being collected, standing still,
+ * carried by a partner or popping out: itemMain then only keeps their timers' base time.
+ */
+// Original name and size (0x4c) from the JP demo map (UNUSED there: every call is inlined).
+static BOOL itemRunCheck(ItemEntry* entry) {
+    BOOL active = TRUE;
+    switch (entry->mode) {
+        case ITEM_MODE_GET:
+        case ITEM_MODE_STILL:
+        case ITEM_MODE_CARRIED:
+        case ITEM_MODE_POP:
+            break;
+        default:
+            if (gp->systemLevelFlags & SYSTEM_LEVEL_STOP_ALL) {
+                active = FALSE;
+            }
+            break;
+    }
+    return active;
+}
+
+/**
  * Takes one coin from Mario and drops it as a coin item that scatters and vanishes after 8 seconds;
  * mario.c calls it when Mario loses coins.
  */
@@ -404,7 +426,6 @@ void itemMain(void) {
     ItemEntry* entry;
     PartyEntry* party;
     HitEntry* hit;
-    BOOL active;
     u16 mode;
     int i;
     f32 newY;
@@ -423,20 +444,7 @@ void itemMain(void) {
             continue;
         }
         mode = entry->mode;
-        active = TRUE;
-        switch (mode) {
-            case ITEM_MODE_GET:
-            case ITEM_MODE_STILL:
-            case ITEM_MODE_CARRIED:
-            case ITEM_MODE_POP:
-                break;
-            default:
-                if (gp->systemLevelFlags & SYSTEM_LEVEL_STOP_ALL) {
-                    active = FALSE;
-                }
-                break;
-        }
-        if (!active) {
+        if (!itemRunCheck(entry)) {
             entry->baseTime = gp->renderTime;
             continue;
         }
@@ -1767,39 +1775,9 @@ static void itemseq_Bound(ItemEntry* entry) {
                 entry->speed *= 0.25f;
             }
             if (!(entry->flags2 & ITEM_FLAG2_POP_VANISH) && !(entry->flags & ITEM_FLAG_NO_CEILING_HIT)) {
-                {
-                    // FAKE: itemHitCheckUp written out here (inlining it leaves the Y block below in the wrong stack order);
-                    // h is the inline's result copy and keeps the same register pressure. hit* declared in reverse for ascending slots.
-                    HitEntry* h;
-                    f32 hitNZ, hitNY, hitNX, hitDist, hitZ, hitY, hitX;
-                    f32 x, y, z;
-
-                    if (dy <= 0.0f) {
-                        hit = NULL;
-                    } else {
-                        x = entry->position.x;
-                        y = 20.0f + entry->position.y;
-                        z = entry->position.z;
-                        hitDist = 20.0 + fabs(dy);
-                        if ((h = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ, x, y, z, 0.0f, 1.0f, 0.0f)) != NULL) {
-                            entry->position.y = hitY - 20.0f - 4.0f;
-                            hit = h;
-                        } else {
-                            x = entry->position.x;
-                            y = entry->position.y;
-                            z = entry->position.z;
-                            hitDist = 20.0 + fabs(dy);
-                            if ((h = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ, x, y, z, 0.0f, 1.0f, 0.0f)) != NULL) {
-                                entry->position.y = hitY - 20.0f;
-                                hit = h;
-                            } else {
-                                hit = NULL;
-                            }
-                        }
-                    }
-                }
+                hit = itemHitCheckCeil(entry, &entry->position.y, dy);
                 if (hit) {
-                    entry->velocityY = -entry->velocityY / 4.0f; // FAKE: /4.0f (exact) gives the target register order
+                    entry->velocityY = -entry->velocityY / 4.0f;
                     dy = 0.0f;
                     entry->airTime = 0;
                     entry->baseTime = entry->curTime;
@@ -1824,31 +1802,7 @@ static void itemseq_Bound(ItemEntry* entry) {
 #endif
                 break;
             }
-            if (dy >= 0.0f) {
-                hit = NULL;
-                entry->position.y += dy;
-            }
-
-            // FAKE: no-op u32 cast so the earlier masked flags2 value is not reused (target reloads flags2 here)
-            else if (*(u32*)&entry->flags2 & ITEM_FLAG2_SUNK) {
-                hit = NULL;
-                entry->position.y += dy;
-            } else {
-                // FAKE: itemHitCheckY written out here; the result goes through h so the caller's hit is set in each arm
-                // (coalesces into r26 like the target). hit* declared in reverse for ascending stack slots.
-                f32 hitNZ, hitNY, hitNX, hitDist, hitZ, hitY, hitX;
-                HitEntry* h;
-                f32 x = entry->position.x, y = 20.0f + entry->position.y, z = entry->position.z;
-                hitDist = 20.0 + fabs(dy);
-                h = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ, x, y, z, 0.0f, -1.0f, 0.0f);
-                if (h) {
-                    entry->position.y = hitY;
-                    hit = h;
-                } else {
-                    hit = NULL;
-                    entry->position.y += dy;
-                }
-            }
+            hit = itemHitCheckGround(entry, &entry->position.y, dy);
             if (hit) {
                 if (hitGetAttr(hit) & (HIT_ATTR_WATER_HAZARD | HIT_ATTR_DAMAGE_LIQUID)) {
                     entry->flags2 |= ITEM_FLAG2_SUNK;
@@ -2043,25 +1997,49 @@ static HitEntry* itemHitCheckSide(ItemEntry* entry, f32* outX, f32 dx, f32* outZ
     return NULL;
 }
 
-HitEntry* itemHitCheckY(ItemEntry* entry, f32 z, f32 y, f32 x, f32 vy) {
-    HitEntry* hit;
-    f32 hitX, hitY, hitZ, hitDist, hitNX, hitNY, hitNZ;
-
-    hitDist = 20.0 + fabs(vy);
-    if ((hit = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ, x, y, z, 0.0f, -1.0f, 0.0f)) != NULL) {
-        entry->position.y = hitY;
-    } else {
-        hit = NULL;
-        entry->position.y += vy;
-    }
-    return hit;
-}
-
-HitEntry* itemHitCheckUp(ItemEntry* entry, f32 vy) {
+/**
+ * Moves a falling item down by vy (vy < 0) onto the ground below it: rays down from 20 units above it; on a hit the new
+ * height *outY is the hit point and the hit is returned. Rising items and sunk items just move (NULL). Like
+ * itemHitCheckSide, the result height goes through an out pointer (itemseq_Bound passes &entry->position.y).
+ * Original name and size (0x104) from the JP demo's link map (UNUSED there): its only call, in itemseq_Bound, is inlined.
+ */
+HitEntry* itemHitCheckGround(ItemEntry* entry, f32* outY, f32 vy) {
     HitEntry* hit;
     f32 hitX, hitY, hitZ, hitDist, hitNX, hitNY, hitNZ;
     f32 x, y, z;
 
+    *outY = entry->position.y;
+    if (vy >= 0.0f) {
+        *outY += vy;
+        return NULL;
+    }
+    if (entry->flags2 & ITEM_FLAG2_SUNK) {
+        *outY += vy;
+        return NULL;
+    }
+    x = entry->position.x;
+    y = 20.0f + entry->position.y;
+    z = entry->position.z;
+    hitDist = 20.0 + fabs(vy);
+    if ((hit = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ, x, y, z, 0.0f, -1.0f, 0.0f)) != NULL) {
+        *outY = hitY;
+        return hit;
+    }
+    *outY += vy;
+    return NULL;
+}
+
+/**
+ * Checks the ceiling above a rising item (vy > 0): rays up from 20 units above it, then from its position; on a hit the
+ * new height *outY is just below the ceiling and the hit is returned, otherwise NULL (height unchanged).
+ * Original name and size (0x158) from the JP demo's link map (UNUSED there): its only call, in itemseq_Bound, is inlined.
+ */
+HitEntry* itemHitCheckCeil(ItemEntry* entry, f32* outY, f32 vy) {
+    HitEntry* hit;
+    f32 hitX, hitY, hitZ, hitDist, hitNX, hitNY, hitNZ;
+    f32 x, y, z;
+
+    *outY = entry->position.y;
     if (vy <= 0.0f) {
         return NULL;
     }
@@ -2071,7 +2049,7 @@ HitEntry* itemHitCheckUp(ItemEntry* entry, f32 vy) {
 
     hitDist = 20.0 + fabs(vy);
     if ((hit = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ, x, y, z, 0.0f, 1.0f, 0.0f)) != NULL) {
-        entry->position.y = hitY - 20.0f - 4.0f;
+        *outY = hitY - 20.0f - 4.0f;
         return hit;
     }
     x = entry->position.x;
@@ -2080,7 +2058,7 @@ HitEntry* itemHitCheckUp(ItemEntry* entry, f32 vy) {
 
     hitDist = 20.0 + fabs(vy);
     if ((hit = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ, x, y, z, 0.0f, 1.0f, 0.0f)) != NULL) {
-        entry->position.y = hitY - 20.0f;
+        *outY = hitY - 20.0f;
         return hit;
     }
     return NULL;

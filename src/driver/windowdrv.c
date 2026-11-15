@@ -1038,7 +1038,7 @@ void windowDispGX_Waku_col(f32 x, f32 y, f32 width, f32 height, f32 curve, u16 g
 void windowDispGX2_Waku_col(Mtx mtx, u16 gxTexMapID, GXColor color, f32 x, f32 y, f32 width, f32 height, f32 curve) {
     CameraEntry* camera = camGetCurPtr();
     Mtx mtx2;
-    f32 top, left;
+    f32 left, top;
     f32 twothirds, third;
     f32 right, bottom, innerLeft, innerRight, innerTop, innerBottom;
 
@@ -1050,11 +1050,8 @@ void windowDispGX2_Waku_col(Mtx mtx, u16 gxTexMapID, GXColor color, f32 x, f32 y
         windowDispGX_setup();
         GXSetTevColor(GX_TEVREG0, color);
 
+        left = -width / 2.0f;
         top = height / 2.0f;
-
-        // FAKE: negated and halved in two steps with a no-op (f32) cast; `left = -width / 2.0f;` changes the object
-        left = -width;
-        left = (f32)(left / 2.0f);
         MTXTrans(mtx2, x - left, y - top, 0.0f);
         MTXConcat(mtx2, mtx, mtx2);
         MTXConcat(camera->view, mtx2, mtx2);

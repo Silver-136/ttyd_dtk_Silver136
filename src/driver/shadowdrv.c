@@ -26,6 +26,9 @@ CharShadowWork* shadowGetCharShadowWork(void);
 ShadowConfig* shadowGetConfig(s32 idx);
 void shadowDepthShadowInit(void);
 void shadowProjShadowInit(void);
+void shadowCharShadowMain(void);
+void shadowDepthShadowMain(void);
+void shadowProjShadowMain(void);
 void CreateRampTex8(GXTexObj* obj);
 void CreateRampTex16(GXTexObj* obj);
 void SetCamera(ShadowConfig* cfg, Mtx view, Mtx44 proj);
@@ -279,13 +282,9 @@ void shadowMain(void) {
     dispEntry(CAMERA_SHADOW, 0.0f, DISP_MODE_OPAQUE, shadowDisp, NULL);
     dispEntry(CAMERA_SHADOW, 0.0f, DISP_MODE_XLU, shadowDisp, NULL);
     dispEntry(CAMERA_SHADOW, 0.0f, DISP_MODE_CUSTOM_LAST, shadowDisp, NULL);
-    cswp->numEntries = 0;
-    cswp->base.flags &= ~SHADOW_WORK_READY;
-    cswp->base.drawCount = 0;
-    pswp->flags &= ~SHADOW_WORK_READY;
-    pswp->drawCount = 0;
-    dswp->flags &= ~SHADOW_WORK_READY;
-    dswp->drawCount = 0;
+    shadowCharShadowMain();
+    shadowProjShadowMain();
+    shadowDepthShadowMain();
 }
 
 /** GX set-up for the flat shadow shapes: one colour channel from the character shadow colour, no textures. */
@@ -402,6 +401,14 @@ void shadowCharShadowInit(void) {
     wp = shadowGetCharShadowWork();
     size = GXGetTexBufferSize(ShadowSizeTbl[0], ShadowSizeTbl[0], GX_TF_IA4, GX_FALSE, 0);
     wp->base.texBuffer = smartAlloc(size, SMART_GROUP_PERMANENT);
+}
+
+/** Per-frame: empties the character shadow list and its draw count for the new frame. */
+// Original name and size (0x28) from the JP demo map (UNUSED there: every call is inlined).
+void shadowCharShadowMain(void) {
+    cswp->numEntries = 0;
+    cswp->base.flags &= ~SHADOW_WORK_READY;
+    cswp->base.drawCount = 0;
 }
 
 /**
@@ -999,6 +1006,13 @@ inline void shadowDepthShadowInit(void) {
     CreateRampTex16(&rampTex16);
 }
 
+/** Per-frame: clears the depth shadow's ready flag and draw count for the new frame. */
+// Original name and size (0x20) from the JP demo map (UNUSED there: every call is inlined).
+void shadowDepthShadowMain(void) {
+    dswp->flags &= ~SHADOW_WORK_READY;
+    dswp->drawCount = 0;
+}
+
 /** Returns the 16x16 8-bit ramp texture used to compare depths for depth shadows. */
 GXTexObj* shadowGetRamp8TexObj(void) {
     return &rampTex8;
@@ -1051,6 +1065,13 @@ inline void shadowProjShadowInit(void) {
     pswp->drawCount = 0;
     pswp->configIdx = 0;
     pswp->color = (GXColor){0, 0, 0, 0x40};
+}
+
+/** Per-frame: clears the projected shadow's ready flag and draw count for the new frame. */
+// Original name and size (0x20) from the JP demo map (UNUSED there: every call is inlined).
+void shadowProjShadowMain(void) {
+    pswp->flags &= ~SHADOW_WORK_READY;
+    pswp->drawCount = 0;
 }
 
 /** Counts one object drawn into the projected shadow this frame; with none, projShadowEnd skips the texture copy. */

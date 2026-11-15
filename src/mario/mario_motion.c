@@ -139,6 +139,30 @@ MarioJumpData marioJumpData = {
     -18.0f,
 };
 
+/** Plays Mario's landing sound at pos for the floor stand he lands on (water, wood, snow, grass, metal or the default). */
+// Original name and size (0x94) from the JP demo map (UNUSED there: every call is inlined).
+static void marioLandOnSe(Vec* pos, HitEntry* stand) {
+    s32 attr;
+    s32 sfx;
+    if (stand) {
+        attr = hitGetAttr(stand);
+        if (attr & HIT_ATTR_SHALLOW_WATER) {
+            sfx = PSND_SFX_MARIO_LANDING2;
+        } else if (attr & HIT_ATTR_WOOD) {
+            sfx = PSND_SFX_MARIO_LANDING3;
+        } else if (attr & HIT_ATTR_SNOW) {
+            sfx = PSND_SFX_MARIO_LANDING4;
+        } else if (attr & HIT_ATTR_GRASS) {
+            sfx = PSND_SFX_MARIO_LANDING5;
+        } else if (attr & HIT_ATTR_METAL) {
+            sfx = PSND_SFX_MARIO_LANDING6;
+        } else {
+            sfx = PSND_SFX_MARIO_LANDING1;
+        }
+        psndSFXOn_3D(SFX_NAME_WORD(sfx), pos);
+    }
+}
+
 /**
  * Puts Mario back into stay/walk/dash from the field battle code (fbatBattleMode state 4).
  * The plane is cancelled, the tube makes the partners ride on (not in the early demos),
@@ -769,7 +793,6 @@ void marioLandOn(void) {
     Vec pos;
     s32 attr;
     u32 flags;
-    s32 sfx;
     void* stand;
 
     if (!(hitGetAttr(mario->hitobjStandOn) & HIT_ATTR_WATER_HAZARD)) {
@@ -788,23 +811,7 @@ void marioLandOn(void) {
     }
     stand = mario->hitobjStandOn;
     pos = mario->position;
-    if (stand) {
-        attr = hitGetAttr(stand);
-        if (attr & HIT_ATTR_SHALLOW_WATER) {
-            sfx = PSND_SFX_MARIO_LANDING2;
-        } else if (attr & HIT_ATTR_WOOD) {
-            sfx = PSND_SFX_MARIO_LANDING3;
-        } else if (attr & HIT_ATTR_SNOW) {
-            sfx = PSND_SFX_MARIO_LANDING4;
-        } else if (attr & HIT_ATTR_GRASS) {
-            sfx = PSND_SFX_MARIO_LANDING5;
-        } else if (attr & HIT_ATTR_METAL) {
-            sfx = PSND_SFX_MARIO_LANDING6;
-        } else {
-            sfx = PSND_SFX_MARIO_LANDING1;
-        }
-        psndSFXOn_3D(SFX_NAME_WORD(sfx), &pos);
-    }
+    marioLandOnSe(&pos, stand);
     if (mario->flags & MARIO_FLAG_TUBE_MODE) {
         mario->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING);
         mario->hitobjJumpFrom = NULL;

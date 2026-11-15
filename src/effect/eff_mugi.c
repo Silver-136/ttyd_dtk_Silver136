@@ -159,6 +159,25 @@ EffectEntry* effMugiKemuri2Entry(s32 type, f32 x, f32 y, f32 z, f32 angle, f32 d
     return effect;
 }
 
+/** One frame of a puff of the first form: slows down, drifts along its direction, rises and tilts back. */
+// Original name and size (0xb8) from the JP demo map (UNUSED there: every call is inlined).
+static void kemuri_mugi_jump(effMugiKemuriData* data) {
+    data->speed *= 0.85f;
+    data->pos.x += data->speed * data->dirX;
+    data->pos.z += data->speed * data->dirZ;
+    data->jy += data->ky;
+    data->ay += data->jy;
+    data->vy += data->ay;
+    data->pos.y += data->vy;
+    if (data->vy < 0.0f) {
+        data->jy = 0.004f;
+    }
+    data->rot.x -= 1.0f;
+    if (data->rot.x < -100.0f) {
+        data->rot.x = -100.0f;
+    }
+}
+
 /**
  * Per frame: loads the EFF_Mugi (EFF_Hana on win) pose for each puff, moves them (no fade: alpha stays 255),
  * and deletes the effect when their 60-frame timers have run out.
@@ -209,20 +228,7 @@ static void effMugiKemuriMain(EffectEntry* effect) {
                 data->flag = 0;
             } else {
                 alive = 1;
-                data->speed *= 0.85f;
-                data->pos.x += data->speed * data->dirX;
-                data->pos.z += data->speed * data->dirZ;
-                data->jy += data->ky;
-                data->ay += data->jy;
-                data->vy += data->ay;
-                data->pos.y += data->vy;
-                if (data->vy < 0.0f) {
-                    data->jy = 0.004f;
-                }
-                data->rot.x -= 1.0f;
-                if (data->rot.x < -100.0f) {
-                    data->rot.x = -100.0f;
-                }
+                kemuri_mugi_jump(data);
             }
         }
     }
@@ -241,6 +247,29 @@ static void effMugiKemuriMain(EffectEntry* effect) {
 }
 
 /**
+ * One frame of a puff of the second form: rises with a spin, drifts against its direction by the vertical speed and
+ * fades; a rising type 0 puff waits (its timer held) while Mario stands still.
+ */
+// Original name and size (0x100) from the JP demo map (UNUSED there: every call is inlined).
+static void kemuri_mugi_dash(effMugiKemuriData* data) {
+    MarioWork* mario = marioGetPtr();
+    if (data->type == 0 && data->rising && mario->currMotionId == MARIO_MOTION_STAY) {
+        data->timer++;
+        return;
+    }
+    data->jy += data->ky;
+    data->ay += data->jy;
+    data->vy += data->ay;
+    data->rot.z += data->vy * data->speed;
+    data->pos.x -= data->dirX * (data->vy * data->hSpeedScale);
+    data->pos.z -= data->dirZ * (data->vy * data->hSpeedScale);
+    data->alpha -= 12;
+    if (data->vy < 0.0f) {
+        data->rising = 0.0f;
+    }
+}
+
+/**
  * Per frame: like effMugiKemuriMain for the second form, with sideways drift scaled by the vertical speed, a spin
  * and a fade; type 0 puffs wait while rising and Mario stands still. Deletes the effect once all have faded.
  */
@@ -252,7 +281,6 @@ static void effMugiKemuri2Main(EffectEntry* effect) {
     s32 group;
     s32 alive2;
     const char* name;
-    MarioWork* mario;
     Vec pos2;
     Vec pos = {0.0f, 0.0f, 0.0f};
 
@@ -292,21 +320,7 @@ static void effMugiKemuri2Main(EffectEntry* effect) {
                 data->flag = 0;
             } else {
                 alive = 1;
-                mario = marioGetPtr();
-                if (data->type == 0 && data->rising && mario->currMotionId == MARIO_MOTION_STAY) {
-                    data->timer++;
-                    continue;
-                }
-                data->jy += data->ky;
-                data->ay += data->jy;
-                data->vy += data->ay;
-                data->rot.z += data->vy * data->speed;
-                data->pos.x -= data->dirX * (data->vy * data->hSpeedScale);
-                data->pos.z -= data->dirZ * (data->vy * data->hSpeedScale);
-                data->alpha -= 12;
-                if (data->vy < 0.0f) {
-                    data->rising = 0.0f;
-                }
+                kemuri_mugi_dash(data);
             }
         }
     }

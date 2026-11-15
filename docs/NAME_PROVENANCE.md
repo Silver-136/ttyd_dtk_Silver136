@@ -474,7 +474,6 @@ YoshiNomikomi_Spew, gonbaba_fumituke, gesso_ikasumi, KaitenHammer), so they are 
 | type | include/battle/battle_damage.h | `CounterWork` fields (attackHits, payback, burnStatus, ..., hitEvent) | `field_0x0` .. `field_0x2C` | 2026-10-25 |
 | enum | include/battle/battle_database_common.h | `ATTACKPATTERN_*` (BattleDamagePattern, 0-27) | numbers 0-27 | 2026-10-25 |
 | function | main (party_motion) | `partyStayDist`, `partyHomingOff`, `partyGetDirGndY`, `partyGetGndY`, `partyGorFix`, `partyPoseA2` (static helpers new in JP, every call inlined and the copies stripped; JP and later only, so the JP demo map cannot name them) | none (LLCOOLT) | 2026-11-14 |
-| function | main (itemdrv) | `itemHitCheckY`, `itemHitCheckUp` (the JP demo map lists UNUSED `itemHitCheckGround` 0x104 and `itemHitCheckCeil` 0x158 at these slots; ours 0xb4 / 0x144, W0's held rename) | none (LLCOOLT) | 2026-11-14 |
 | function | main (mot_hammer) | `hammerHitWall` (no such function in the JP demo map; UNUSED `hitEstimate2` 0xd0 sits at its slot, ours 0xcc; a 0xd0 form changes mot_hammer2's inlined copy) | none (LLCOOLT) | 2026-11-14 |
 | function | main (windowdrv) | `windowLoadTpl` (early demos; probably the map's UNUSED `windowTEXGetPalette` 0xb4 after windowReInit, ours 0xc8: held candidate) | none (LLCOOLT) | 2026-11-14 |
 | function | main (seq_e3) | `e3BlinkTime` (June US demo only, stripped there; no map for that build; the JP demo map's UNUSED `e3GetTime` is 0x10 and first in the unit, not this 0x38 function) | none (LLCOOLT) | 2026-11-14 |

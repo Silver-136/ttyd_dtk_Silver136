@@ -5053,6 +5053,33 @@ USER_FUNC(evt_mobj_koopa_fireber_dodai) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Goal pole bonus for Bowser: 2000 points at level 3, 1000 at level 2, otherwise by the height he grabbed the pole
+ * (1000 from 170 up, 500 from 100, 200 from 50, else 100). Returns the height bonus (0 at levels 2-3).
+ */
+// Original name and size (0xc4) from the JP demo map (UNUSED there: every call is inlined).
+static s32 kpaAddBonus(void) {
+    MarioWork* mario = marioGetPtr();
+    s32 score = 0;
+    if (kpaGetLevel() == 3) {
+        kpaAddScore(2000);
+    } else if (kpaGetLevel() >= 2) {
+        kpaAddScore(1000);
+    } else {
+        if (mario->position.y >= 170.0f) {
+            score = 1000;
+        } else if (mario->position.y >= 100.0f) {
+            score = 500;
+        } else if (mario->position.y >= 50.0f) {
+            score = 200;
+        } else {
+            score = 100;
+        }
+        kpaAddScore(score);
+    }
+    return score;
+}
+
 #if VERSION <= VERSION_DEMO_JP
 /** Early demos only: turn Mario to face the given angle */
 static USER_FUNC(kpa_set_dir) {
@@ -5452,24 +5479,7 @@ static s32 mobj_koopa_pole_evt(MapObjectEntry* mobj) {
             mobj->state = next;
             break;
         case 10:
-            mario = marioGetPtr();
-            score = 0;
-            if (kpaGetLevel() == 3) {
-                kpaAddScore(2000);
-            } else if (kpaGetLevel() >= 2) {
-                kpaAddScore(1000);
-            } else {
-                if (mario->position.y >= 170.0f) {
-                    score = 1000;
-                } else if (mario->position.y >= 100.0f) {
-                    score = 500;
-                } else if (mario->position.y >= 50.0f) {
-                    score = 200;
-                } else {
-                    score = 100;
-                }
-                kpaAddScore(score);
-            }
+            score = kpaAddBonus();
             mobjRunEvent(mobj, kpa_pole)->lwData[0] = score;
             mobj->state++;
             break;
@@ -5479,23 +5489,7 @@ static s32 mobj_koopa_pole_evt(MapObjectEntry* mobj) {
             }
             break;
         case 50:
-            mario = marioGetPtr();
-            if (kpaGetLevel() == 3) {
-                kpaAddScore(2000);
-            } else if (kpaGetLevel() >= 2) {
-                kpaAddScore(1000);
-            } else {
-                if (mario->position.y >= 170.0f) {
-                    score = 1000;
-                } else if (mario->position.y >= 100.0f) {
-                    score = 500;
-                } else if (mario->position.y >= 50.0f) {
-                    score = 200;
-                } else {
-                    score = 100;
-                }
-                kpaAddScore(score);
-            }
+            kpaAddBonus();
             mobjRunEvent(mobj, kpa_pole_move);
             mobj->state++;
             break;

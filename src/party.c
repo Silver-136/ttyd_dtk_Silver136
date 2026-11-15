@@ -90,19 +90,15 @@ BOOL partyPaperOn(PartyEntry* party, const char* animGroup) {
     return TRUE;
 }
 
+static void partyPaperRelease(PartyEntry* party);
+
 /** Ends the partner's paper animation and releases its paper pose, if one is active. */
 void partyPaperOff(PartyEntry* party) {
-    s32 paperPoseId;
-
     if ((party->flags2 & PARTY_DISP_FLAG_PAPER) && party->paperAnimName) {
         animPoseSetPaperAnimGroup(party->paperAnimGroup, NULL, FALSE);
         party->paperAnimName = NULL;
         party->flags2 &= ~PARTY_DISP_FLAG_PAPER;
-        paperPoseId = party->paperPoseId;
-        if (paperPoseId >= 0) {
-            animPaperPoseRelease(paperPoseId);
-            party->paperPoseId = -1;
-        }
+        partyPaperRelease(party);
     }
 }
 
@@ -121,6 +117,17 @@ static void setAnimPoseMaterialFlag(PartyEntry* party) {
     animPoseSetMaterialFlagOn(party->paperAnimGroup, animPoseGetMaterialFlag(player->paperAnimGroupId[marioAnimeId()]));
     animPoseSetMaterialLightFlagOn(party->paperAnimGroup,
                                    animPoseGetMaterialLightFlag(player->paperAnimGroupId[marioAnimeId()]));
+}
+
+/** Frees the partner's paper pose if one is loaded. */
+// Original name and size (0x40) from the JP demo map (UNUSED there: every call is inlined).
+static void partyPaperRelease(PartyEntry* party) {
+    s32 paperPoseId = party->paperPoseId;
+
+    if (paperPoseId >= 0) {
+        animPaperPoseRelease(paperPoseId);
+        party->paperPoseId = -1;
+    }
 }
 
 /**
@@ -697,10 +704,7 @@ void partyReInit(void) {
             animPoseSetPaperAnimGroup(party->paperAnimGroup, NULL, FALSE);
             party->paperAnimName = NULL;
             party->flags2 &= ~PARTY_DISP_FLAG_PAPER;
-            if (party->paperPoseId >= 0) {
-                animPaperPoseRelease(party->paperPoseId);
-                party->paperPoseId = -1;
-            }
+            partyPaperRelease(party);
         }
 #endif
         party->hitobjAction = NULL;
@@ -738,10 +742,7 @@ void partyReInit(void) {
                 animPoseSetPaperAnimGroup(party->paperAnimGroup, NULL, FALSE);
                 party->paperAnimName = NULL;
                 party->flags2 &= ~PARTY_DISP_FLAG_PAPER;
-                if (party->paperPoseId >= 0) {
-                    animPaperPoseRelease(party->paperPoseId);
-                    party->paperPoseId = -1;
-                }
+                partyPaperRelease(party);
             }
 #endif
             party->hitobjAction = NULL;
