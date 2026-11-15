@@ -10,7 +10,8 @@ linker strips as UNUSED) and copies the maps next to each other:
 The maps come straight from mwldeppc, with library members named "archive.a source" as in the original maps
 (e.g. "os.a OSInit.c"). No line ends in a space (the original maps keep one after plain objects, "x.o "; map users
 prefer none). The register save/restore entry points (_savegpr_14.._savegpr_31 etc.), which the linker lists as
-"(entry of __save_gpr)" or UNUSED, are listed as ordinary symbols at their real addresses. The build links the
+"(entry of __save_gpr)" or UNUSED, are listed as ordinary symbols at their real addresses, and TRK's
+gTRKInterruptVectorTable (a plain label in __exception.s) gets its size up to gTRKInterruptVectorTableEnd. The build links the
 objects directly, so the member names come from build.ninja (each object's source file); objects whose file name
 occurs twice in a link (main.o) are told apart by link order. In the
 "Memory map" block the File Offset column gives the section's offset in the shipped file (main.dol or <rel>.rel,
@@ -332,6 +333,35 @@ def list_register_entries(text):
     return nl.join(out)
 
 
+# TRK's exception vector table (__exception.s) is a plain label, as in the original source, so the linker lists it
+# as a size-0 "(entry of .init)"; the map gives it its real size, up to the gTRKInterruptVectorTableEnd label.
+SIZED_LABELS = {b"gTRKInterruptVectorTable": b"gTRKInterruptVectorTableEnd"}
+LABEL_ENTRY = re.compile(rb"^  ([0-9a-f]{8}) 000000 ([0-9a-f]{8}) (\S+) \(entry of (\S+)\) (\t.*)$")
+
+
+def size_labels(text):
+    """Turn each SIZED_LABELS start label's "(entry of <section>)" line into an ordinary symbol line whose size runs
+    to its end label (address difference, both taken from this map); exits if either label is missing."""
+    nl = b"\r\n" if b"\r\n" in text else b"\n"
+    lines = text.split(nl)
+    entries = {}
+    for i, line in enumerate(lines):
+        e = LABEL_ENTRY.match(line)
+        if e:
+            entries[e.group(3)] = (i, e)
+    for start, end in SIZED_LABELS.items():
+        if start not in entries:
+            sys.exit(f"{start.decode()}: no \"(entry of ...)\" line in the map")
+        if end not in entries:
+            sys.exit(f"{end.decode()}: end label of {start.decode()} missing from the map")
+        i, e = entries[start]
+        size = int(entries[end][1].group(2), 16) - int(e.group(2), 16)
+        if not 0 < size <= 0xFFFFFF:
+            sys.exit(f"{start.decode()}: bad size {size:#x} to {end.decode()}")
+        lines[i] = b"  %s %06x %s  4 %s %s" % (e.group(1), size, e.group(2), start, e.group(5))
+    return nl.join(lines)
+
+
 def strip_trailing_spaces(text):
     """No line ends in spaces or tabs (the linker writes plain objects as "x.o " with one; map users prefer none)."""
     nl = b"\r\n" if b"\r\n" in text else b"\n"
@@ -395,6 +425,7 @@ def export_version(version, out_dir, stamp):
     text = add_empty_layouts(text, [b"extab", b"extabindex"], b".text")
     text = add_empty_memory_rows(text, [b"extab", b"extabindex"], b".init")
     text = list_register_entries(text)
+    text = size_labels(text)
     (dst / "MarioSt.MAP").write_bytes(
         strip_trailing_spaces(stamped(name_libraries(text, LinkObjects(statements, dol_map)), stamp)))
     count = 1

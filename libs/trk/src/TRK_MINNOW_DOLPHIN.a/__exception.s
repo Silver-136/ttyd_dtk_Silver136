@@ -4,8 +4,8 @@
 .section .init, "ax"
 .balign 4
 
-# Sized (no type, as the original map's link tree lists it) so symbol maps give the table its length.
-.sym gTRKInterruptVectorTable, global
+.global gTRKInterruptVectorTable
+gTRKInterruptVectorTable:
 	.asciz "Metrowerks Target Resident Kernel for PowerPC"
 	.skip 0xD2
 .L_rfi_0:
@@ -427,7 +427,6 @@
 	mtsrr0 r3
 	li r3, 0x1f00
 	rfi
-.endsym gTRKInterruptVectorTable
 
 .global gTRKInterruptVectorTableEnd
 gTRKInterruptVectorTableEnd:
