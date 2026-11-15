@@ -54,39 +54,50 @@ static f32 randf(f32 min, f32 max);
 /**
  * Sine of x (radians, 0..2pi) by a polynomial approximation, folded by quadrant.
  * The positive quadrants return at once; polySinf from poly_trig.h (one return at the end) colours differently.
+ * The polynomial is inline asm, as in poly_trig.h.
  */
-static inline f32 chb_sin(f32 x) {
-    f32 a = 0.00761f;
-    f32 b = 0.16605f;
-    f32 c = 1.0f;
-    f32 y;
-    f32 x2;
+static inline f32 chb_sin(register f32 x) {
+    register f32 a = 0.00761f;
+    register f32 b = 0.16605f;
+    register f32 c = 1.0f;
+    register f32 y;
+    register f32 x2;
     if (x <= 3.1415927f) {
         if (x <= 1.5707964f) {
-            x2 = x * x;
-            a = a * x2 - b;
-            a = a * x2 + c;
-            return a * x;
+            asm {
+                fmuls x2, x, x
+                fmsubs a, a, x2, b
+                fmadds a, a, x2, c
+                fmuls a, a, x
+            }
+            return a;
         } else {
             y = 1.5707964f - (x - 1.5707964f);
-            x2 = y * y;
-            a = a * x2 - b;
-            a = a * x2 + c;
-            return a * y;
+            asm {
+                fmuls x2, y, y
+                fmsubs a, a, x2, b
+                fmadds a, a, x2, c
+                fmuls a, a, y
+            }
+            return a;
         }
     } else if (x < 4.712389f) {
         y = x - 3.1415927f;
-        x2 = y * y;
-        a = a * x2 - b;
-        a = a * x2 + c;
-        a = a * y;
+        asm {
+            fmuls x2, y, y
+            fmsubs a, a, x2, b
+            fmadds a, a, x2, c
+            fmuls a, a, y
+        }
         a = -a;
     } else {
         y = 1.5707964f - (x - 4.712389f);
-        x2 = y * y;
-        a = a * x2 - b;
-        a = a * x2 + c;
-        a = a * y;
+        asm {
+            fmuls x2, y, y
+            fmsubs a, a, x2, b
+            fmadds a, a, x2, c
+            fmuls a, a, y
+        }
         a = -a;
     }
     return a;
@@ -96,36 +107,44 @@ static inline f32 chb_sin(f32 x) {
  * Cosine counterpart of chb_sin, with the same polynomial approximation
  * and quadrant folding (argument in radians, 0..2pi).
  */
-static inline f32 chb_cos(f32 x) {
-    f32 a = 0.03705f;
-    f32 b = 0.4967f;
-    f32 c = 1.0f;
-    f32 y;
-    f32 x2;
+static inline f32 chb_cos(register f32 x) {
+    register f32 a = 0.03705f;
+    register f32 b = 0.4967f;
+    register f32 c = 1.0f;
+    register f32 y;
+    register f32 x2;
     if (x <= 3.1415927f) {
         if (x <= 1.5707964f) {
-            x2 = x * x;
-            a = a * x2 - b;
-            a = a * x2 + c;
+            asm {
+                fmuls x2, x, x
+                fmsubs a, a, x2, b
+                fmadds a, a, x2, c
+            }
             return a;
         } else {
             y = 1.5707964f - (x - 1.5707964f);
-            x2 = y * y;
-            a = a * x2 - b;
-            a = a * x2 + c;
+            asm {
+                fmuls x2, y, y
+                fmsubs a, a, x2, b
+                fmadds a, a, x2, c
+            }
             return -a;
         }
     } else if (x < 4.712389f) {
         y = x - 3.1415927f;
-        x2 = y * y;
-        a = a * x2 - b;
-        a = a * x2 + c;
+        asm {
+            fmuls x2, y, y
+            fmsubs a, a, x2, b
+            fmadds a, a, x2, c
+        }
         return -a;
     } else {
         y = 1.5707964f - (x - 4.712389f);
-        x2 = y * y;
-        a = a * x2 - b;
-        a = a * x2 + c;
+        asm {
+            fmuls x2, y, y
+            fmsubs a, a, x2, b
+            fmadds a, a, x2, c
+        }
         return a;
     }
 }
@@ -336,9 +355,6 @@ static inline void escape(ExtdrvPose* pose, Chorobon* chb, s32 next, f32 x, f32 
     chb_jump(pose, chb, next, x, y, z, 2.0f * (rs * (smax - smin) + smin), rg * (gmax - gmin) + gmin);
 }
 
-// Kept: the target needs dead assignments kept in this block; no natural form found (cleanup_notes/mweppc_pilot.md).
-#pragma push
-#pragma opt_dead_assignments off
 /**
  * Random hop for a Fuzzy that is idling: speed 0.3..0.5, gravity 0.5..0.8,
  * returning to its current state afterwards.
@@ -455,7 +471,6 @@ static void ext_main(void) {
         }
     }
 }
-#pragma pop
 
 /** Registers the swarm's draw callback with the 3D camera. */
 static void ext_dispent(void) {
@@ -491,10 +506,6 @@ static s32 evt_chorobon_wait(EventEntry* event, BOOL isFirstCall) {
     return EVT_RETURN_DONE;
 }
 
-// Kept (pattern): propagation and lifetimes off for the extdrv, npc_jump and depthDisp functions of bom_01, eki_00,
-// gor_10, hei_10, rsh_05, rsh_06, tik_05 and tou_02 (one half is a -opt file flag where configure.py sets it); the
-// target needs it and no natural form was found (cleanup_notes/mweppc_pilot.md, pragma review rels).
-#pragma opt_propagation off
 /**
  * Script helper: makes an NPC hop to a point.
  * args: name, x, y, z, speed, gravity, duration in ms (0 to derive it from the distance).
@@ -519,20 +530,9 @@ static s32 npc_jump(EventEntry* event, BOOL isFirstCall) {
 
     if (isFirstCall) {
         // unused: nothing reads it, but its zero template is in the retail .rodata (JP demo map @629,
-        // numbered right before va and vb, @631 and @633)
+        // numbered right before the two distance templates, @631 and @633)
         Vec zero = {0.0f, 0.0f, 0.0f};
-        static const Vec va = {0.0f, 0.0f, 0.0f};
-        static const Vec vb = {0.0f, 0.0f, 0.0f};
-        Vec a;
-        Vec b;
-
-        b = vb;
-        b.x = npc->position.x;
-        b.z = npc->position.z;
-        a = va;
-        a.x = x;
-        a.z = z;
-        dist = PSVECDistance(&a, &b);
+        dist = PSVECDistance(&(Vec){x, 0.0f, z}, &(Vec){npc->position.x, 0.0f, npc->position.z});
         dy = y - npc->position.y;
         if (t == 0.0f) {
             t = dist / speed;
@@ -565,7 +565,6 @@ static s32 npc_jump(EventEntry* event, BOOL isFirstCall) {
     event->userdata[1] = *(s32*)&vy;
     return EVT_RETURN_BLOCK;
 }
-#pragma opt_propagation reset
 
 /** Script helper: blocks until the Gold Fuzzy's current animation has reached the frame given by args[0]. */
 static s32 wait_anim_frame(EventEntry* event, BOOL isFirstCall) {

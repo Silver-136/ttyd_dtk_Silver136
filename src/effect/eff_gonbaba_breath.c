@@ -49,8 +49,6 @@ static GXColor* col_tbl[] = {col_normal, col_poison, col_mega, col_cold, col_con
 static void effGonbabaBreathMain(EffectEntry* effect);
 static void effGonbabaBreathDisp(CameraId cameraId, void* param);
 
-// kept: without it init_breath changes; -opt noprop for the whole file changes other functions
-#pragma opt_propagation off
 /** Initialises one breath particle for the given type: delay by index, start offset, velocity and lifetime. */
 static void init_breath(EffGonbabaBreathWork* work, s32 idx, s32 type) {
     f32 ang;
@@ -139,8 +137,6 @@ static void init_breath(EffGonbabaBreathWork* work, s32 idx, s32 type) {
             break;
     }
 }
-
-#pragma opt_propagation reset
 
 /**
  * Spawns a breath of the given type (0-7, plus companion layers 10-17) at (x, y, z); the last argument (named

@@ -275,74 +275,91 @@ void envMain(void) {
 /** Texture matrix slots (GX_TEXMTX0 to 9) by index, for the environment textures and depth of field. */
 static const s32 texmtx_tbl[] = {GX_TEXMTX0, GX_TEXMTX1, GX_TEXMTX2, GX_TEXMTX3, GX_TEXMTX4, GX_TEXMTX5, GX_TEXMTX6, GX_TEXMTX7, GX_TEXMTX8, GX_TEXMTX9};
 
-static inline f32 env_sin(f32 x) {
-    f32 a = 0.00761f;
-    f32 b = 0.16605f;
-    f32 c = 1.0f;
-    f32 y;
-    f32 x2;
+// Private copies of polySinf/polyCosf. The polynomial is inline asm, as in poly_trig.h (see the note there).
+static inline f32 env_sin(register f32 x) {
+    register f32 a = 0.00761f;
+    register f32 b = 0.16605f;
+    register f32 c = 1.0f;
+    register f32 y;
+    register f32 x2;
 
     if (x <= 3.1415927f) {
         if (x <= 1.5707964f) {
-            x2 = x * x;
-            a = a * x2 - b;
-            a = a * x2 + c;
-            a = a * x;
+            asm {
+                fmuls x2, x, x
+                fmsubs a, a, x2, b
+                fmadds a, a, x2, c
+                fmuls a, a, x
+            }
         } else {
             y = 1.5707964f - (x - 1.5707964f);
-            x2 = y * y;
-            a = a * x2 - b;
-            a = a * x2 + c;
-            a = a * y;
+            asm {
+                fmuls x2, y, y
+                fmsubs a, a, x2, b
+                fmadds a, a, x2, c
+                fmuls a, a, y
+            }
         }
     } else if (x < 4.712389f) {
         y = x - 3.1415927f;
-        x2 = y * y;
-        a = a * x2 - b;
-        a = a * x2 + c;
-        a = a * y;
+        asm {
+            fmuls x2, y, y
+            fmsubs a, a, x2, b
+            fmadds a, a, x2, c
+            fmuls a, a, y
+        }
         a = -a;
     } else {
         y = 1.5707964f - (x - 4.712389f);
-        x2 = y * y;
-        a = a * x2 - b;
-        a = a * x2 + c;
-        a = a * y;
+        asm {
+            fmuls x2, y, y
+            fmsubs a, a, x2, b
+            fmadds a, a, x2, c
+            fmuls a, a, y
+        }
         a = -a;
     }
     return a;
 }
 
-static inline f32 env_cos(f32 x) {
-    f32 a = 0.03705f;
-    f32 b = 0.4967f;
-    f32 c = 1.0f;
-    f32 y;
-    f32 x2;
+static inline f32 env_cos(register f32 x) {
+    register f32 a = 0.03705f;
+    register f32 b = 0.4967f;
+    register f32 c = 1.0f;
+    register f32 y;
+    register f32 x2;
 
     if (x <= 3.1415927f) {
         if (x <= 1.5707964f) {
-            x2 = x * x;
-            a = a * x2 - b;
-            a = a * x2 + c;
+            asm {
+                fmuls x2, x, x
+                fmsubs a, a, x2, b
+                fmadds a, a, x2, c
+            }
         } else {
             y = 1.5707964f - (x - 1.5707964f);
-            x2 = y * y;
-            a = a * x2 - b;
-            a = a * x2 + c;
+            asm {
+                fmuls x2, y, y
+                fmsubs a, a, x2, b
+                fmadds a, a, x2, c
+            }
             a = -a;
         }
     } else if (x < 4.712389f) {
         y = x - 3.1415927f;
-        x2 = y * y;
-        a = a * x2 - b;
-        a = a * x2 + c;
+        asm {
+            fmuls x2, y, y
+            fmsubs a, a, x2, b
+            fmadds a, a, x2, c
+        }
         a = -a;
     } else {
         y = 1.5707964f - (x - 4.712389f);
-        x2 = y * y;
-        a = a * x2 - b;
-        a = a * x2 + c;
+        asm {
+            fmuls x2, y, y
+            fmsubs a, a, x2, b
+            fmadds a, a, x2, c
+        }
     }
     return a;
 }
@@ -820,10 +837,6 @@ void envGlareFilterZ(f32 zscale) {
     f->flags |= ENV_GLARE_FILTER_Z;
 }
 
-// kept: without it envDisp_FF changes; -opt noprop,nolifetimes for the whole file changes other functions
-// (propagation and lifetimes off together, as in the rels' extdrv functions)
-#pragma opt_propagation off
-#pragma opt_lifetimes off
 /**
  * Draws a ring of 1000 jittered lines from the screen centre outwards, textured with the captured frame,
  * which gives a radial streak over the picture; enabled by ENV_FLAG_FF_UNUSED.
@@ -873,9 +886,6 @@ static void envDisp_FF(void) {
         }
     }
 }
-
-#pragma opt_propagation reset
-#pragma opt_lifetimes reset
 
 double acos(double);
 

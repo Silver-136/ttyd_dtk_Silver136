@@ -135,9 +135,7 @@ EffectEntry* effMObjBrokenEntry(s32 type, f32 x, f32 y, f32 z) {
     return effect;
 }
 
-// kept: without it effMObjBrokenMain changes; -opt noprop,nolifetimes for the whole file changes other functions
-// (propagation and lifetimes off together, as in the rels' extdrv functions)
-#pragma opt_propagation off
+// kept: without it effMObjBrokenMain changes; -opt nolifetimes for the whole file changes other functions
 #pragma opt_lifetimes off
 /**
  * Per frame: throws each fragment outward with gravity and spins it; once all have fallen 100 below the origin,
@@ -221,7 +219,6 @@ static void effMObjBrokenMain(EffectEntry* effect) {
     }
 }
 
-#pragma opt_propagation reset
 #pragma opt_lifetimes reset
 
 /**

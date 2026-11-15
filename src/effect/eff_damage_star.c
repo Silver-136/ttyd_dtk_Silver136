@@ -278,10 +278,6 @@ static MayaAnimData damageStar_effAnimDt = { { 0 }, 65.0f, &damageStar_effAnimRS
 static void effDamageStarMain(EffectEntry* effect);
 static void effDamageStarDisp(CameraId cameraId, void* payload);
 
-// kept: without it effDamageStarEntry changes; -opt noprop,nolifetimes for the whole file changes other functions
-// (propagation and lifetimes off together, as in the rels' extdrv functions)
-#pragma opt_propagation off
-#pragma opt_lifetimes off
 /**
  * Spawns the damage star burst at (x, y, z): a central star plus up to 20 spark stars for the damage `number`.
  * type 0 is HP damage, 1 is FP damage; angle tilts the burst. Spawned by battle damage code.
@@ -339,8 +335,6 @@ EffectEntry* effDamageStarEntry(s32 type, s32 number, f32 x, f32 y, f32 z, f32 s
     }
     return effect;
 }
-#pragma opt_propagation reset
-#pragma opt_lifetimes reset
 
 /**
  * Advances the Maya animation and the star physics for each elapsed retrace (decay factor 0.75 per step)

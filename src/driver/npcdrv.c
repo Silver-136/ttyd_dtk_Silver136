@@ -1188,10 +1188,6 @@ void npcSetStayPose(char* name) {
     }
 }
 
-// FAKE: opt_propagation and opt_lifetimes off for npcCheckHitMarioSide (the only function here that needs them; it
-// inlines polySinf/polyCosf, and every user of those inlines is built with propagation off)
-#pragma opt_propagation off
-#pragma opt_lifetimes off
 static BOOL npcCheckHitMarioSide(NpcEntry* npc) {
     MarioWork* mario;
     Vec marioPos;
@@ -1261,8 +1257,6 @@ static BOOL npcCheckHitMarioSide(NpcEntry* npc) {
 #endif
     return TRUE;
 }
-#pragma opt_propagation reset
-#pragma opt_lifetimes reset
 
 /**
  * Horizontal movement for one frame: the script's moveOffset x/z (halved in water, no z for 2D NPCs), with wall

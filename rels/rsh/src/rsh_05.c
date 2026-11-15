@@ -659,9 +659,9 @@ static void moamoa_jump(ExtdrvPose* pose, Moamoa* moa, f32 x, f32 y, f32 z, f32 
     pose->flags &= ~EXT_POSE_FLAG_NO_SHADOW;
 }
 
-// Kept (pattern): propagation and lifetimes off for the extdrv, npc_jump and depthDisp functions of bom_01, eki_00,
-// gor_10, hei_10, rsh_05, rsh_06, tik_05 and tou_02 (one half is a -opt file flag where configure.py sets it); the
-// target needs it and no natural form was found (cleanup_notes/mweppc_pilot.md, pragma review rels).
+// Kept (pattern): propagation and lifetimes off for the extdrv and depthDisp functions of bom_01, eki_00, gor_10,
+// rsh_05, rsh_06, tik_05 and tou_02 (one half is a -opt file flag where configure.py sets it); the target needs it
+// and no natural form was found (cleanup_notes/mweppc_pilot.md, pragma review rels).
 #pragma opt_propagation off
 #pragma opt_lifetimes off
 
@@ -1393,12 +1393,6 @@ static void ext_moamoa_dispent(void) {
     }
 }
 
-// Kept (pattern): propagation and lifetimes off for the extdrv, npc_jump and depthDisp functions of bom_01, eki_00,
-// gor_10, hei_10, rsh_05, rsh_06, tik_05 and tou_02 (one half is a -opt file flag where configure.py sets it); the
-// target needs it and no natural form was found (cleanup_notes/mweppc_pilot.md, pragma review rels).
-#pragma opt_propagation off
-#pragma opt_lifetimes off
-
 /**
  * Script helper: moves the named NPC in a hop to (x, y, z).
  * Args: name, x, y, z, horizontal speed, gravity, duration in milliseconds. Blocks until the NPC lands.
@@ -1420,18 +1414,7 @@ static s32 npc_jump(EventEntry* event, BOOL isFirstCall) {
     f32 angle;
 
     if (isFirstCall) {
-        static const Vec va = {0.0f, 0.0f, 0.0f};
-        static const Vec vb = {0.0f, 0.0f, 0.0f};
-        Vec a;
-        Vec b;
-
-        b = vb;
-        b.x = npc->position.x;
-        b.z = npc->position.z;
-        a = va;
-        a.x = x;
-        a.z = z;
-        dist = PSVECDistance(&a, &b);
+        dist = PSVECDistance(&(Vec){x, 0.0f, z}, &(Vec){npc->position.x, 0.0f, npc->position.z});
         dy = y - npc->position.y;
         if (t == 0.0f) {
             t = dist / speed;
@@ -1464,8 +1447,6 @@ static s32 npc_jump(EventEntry* event, BOOL isFirstCall) {
     event->userdata[1] = *(s32*)&vy;
     return 0;
 }
-#pragma opt_propagation reset
-#pragma opt_lifetimes reset
 
 static EVT_BEGIN(evt_moamoa_init)
     CALL(evt_npc_entry, STRING("moa_a"), STRING("c_n_moa_a")) // hidden Smorg model A for the swarm sprites

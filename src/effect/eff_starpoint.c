@@ -28,12 +28,15 @@ typedef struct EffStarPointWork {
     s32 delay;               // 0x30
 } EffStarPointWork;
 
-/** Cosine approximation by a quartic polynomial, valid for x in [0, 2pi]. */
-static inline f32 _cosf(f32 x) {
-    f32 a = 0.03705f;
-    f32 b = 0.4967f;
-    f32 c = 1.0f;
-    f32 x2;
+/**
+ * Cosine approximation by a quartic polynomial, valid for x in [0, 2pi].
+ * The polynomial is inline asm, as in poly_trig.h (see the note there).
+ */
+static inline f32 _cosf(register f32 x) {
+    register f32 a = 0.03705f;
+    register f32 b = 0.4967f;
+    register f32 c = 1.0f;
+    register f32 x2;
 
     if (x <= PI) {
         {
@@ -43,27 +46,35 @@ static inline f32 _cosf(f32 x) {
             }
         } // FAKE: dead guard (gz is always 0, emits no code); without it the caller's 2.0f constant is loaded at a different point and the object changes
         if (x <= HALF_PI) {
-            x2 = x * x;
-            a = a * x2 - b;
-            a = a * x2 + c;
+            asm {
+                fmuls x2, x, x
+                fmsubs a, a, x2, b
+                fmadds a, a, x2, c
+            }
         } else {
             x = HALF_PI - (x - HALF_PI);
-            x2 = x * x;
-            a = a * x2 - b;
-            a = a * x2 + c;
+            asm {
+                fmuls x2, x, x
+                fmsubs a, a, x2, b
+                fmadds a, a, x2, c
+            }
             a = -a;
         }
     } else if (x < 4.712389f) {
         x = x - PI;
-        x2 = x * x;
-        a = a * x2 - b;
-        a = a * x2 + c;
+        asm {
+            fmuls x2, x, x
+            fmsubs a, a, x2, b
+            fmadds a, a, x2, c
+        }
         a = -a;
     } else {
         x = HALF_PI - (x - 4.712389f);
-        x2 = x * x;
-        a = a * x2 - b;
-        a = a * x2 + c;
+        asm {
+            fmuls x2, x, x
+            fmsubs a, a, x2, b
+            fmadds a, a, x2, c
+        }
     }
     return a;
 }

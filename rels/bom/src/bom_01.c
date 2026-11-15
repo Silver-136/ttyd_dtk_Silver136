@@ -110,43 +110,52 @@ static ExtTexInfo ext_data[31];
  * Approximates sin(x) with a short polynomial for x in [0, 2*pi) radians,
  * folding the argument into the first quadrant;
  * used for the crowd Bob-ombs' circle positions and hop directions.
+ * The polynomial is inline asm, as in poly_trig.h (see the note there).
  */
-static inline f32 chb_sin(f32 x) {
-    f32 y;
-    f32 x2;
+static inline f32 chb_sin(register f32 x) {
+    register f32 y;
+    register f32 x2;
     f32 r;
-    f32 a = 0.00761f;
-    f32 b = 0.16605f;
-    f32 c = 1.0f;
+    register f32 a = 0.00761f;
+    register f32 b = 0.16605f;
+    register f32 c = 1.0f;
     if (x <= 3.1415927f) {
         if (x <= 1.5707964f) {
-            x2 = x * x;
-            a = a * x2 - b;
-            a = a * x2 + c;
-            a = a * x;
+            asm {
+                fmuls x2, x, x
+                fmsubs a, a, x2, b
+                fmadds a, a, x2, c
+                fmuls a, a, x
+            }
             r = a;
         } else {
             y = 1.5707964f - (x - 1.5707964f);
-            x2 = y * y;
-            a = a * x2 - b;
-            a = a * x2 + c;
-            a = a * y;
+            asm {
+                fmuls x2, y, y
+                fmsubs a, a, x2, b
+                fmadds a, a, x2, c
+                fmuls a, a, y
+            }
             r = a;
         }
     } else if (x < 4.712389f) {
         y = x - 3.1415927f;
-        x2 = y * y;
-        a = a * x2 - b;
-        a = a * x2 + c;
-        a = a * y;
+        asm {
+            fmuls x2, y, y
+            fmsubs a, a, x2, b
+            fmadds a, a, x2, c
+            fmuls a, a, y
+        }
         a = -a;
         r = a;
     } else {
         y = 1.5707964f - (x - 4.712389f);
-        x2 = y * y;
-        a = a * x2 - b;
-        a = a * x2 + c;
-        a = a * y;
+        asm {
+            fmuls x2, y, y
+            fmsubs a, a, x2, b
+            fmadds a, a, x2, c
+            fmuls a, a, y
+        }
         a = -a;
         r = a;
     }
@@ -157,39 +166,47 @@ static inline f32 chb_sin(f32 x) {
  * Approximates cos(x) with a short polynomial for x in [0, 2*pi) radians,
  * folding the argument into the first quadrant; the cosine partner of chb_sin.
  */
-static inline f32 chb_cos(f32 x) {
-    f32 y;
-    f32 x2;
+static inline f32 chb_cos(register f32 x) {
+    register f32 y;
+    register f32 x2;
     f32 r;
-    f32 a = 0.03705f;
-    f32 b = 0.4967f;
-    f32 c = 1.0f;
+    register f32 a = 0.03705f;
+    register f32 b = 0.4967f;
+    register f32 c = 1.0f;
     if (x <= 3.1415927f) {
         if (x <= 1.5707964f) {
-            x2 = x * x;
-            a = a * x2 - b;
-            a = a * x2 + c;
+            asm {
+                fmuls x2, x, x
+                fmsubs a, a, x2, b
+                fmadds a, a, x2, c
+            }
             r = a;
         } else {
             y = 1.5707964f - (x - 1.5707964f);
-            x2 = y * y;
-            a = a * x2 - b;
-            a = a * x2 + c;
+            asm {
+                fmuls x2, y, y
+                fmsubs a, a, x2, b
+                fmadds a, a, x2, c
+            }
             a = -a;
             r = a;
         }
     } else if (x < 4.712389f) {
         y = x - 3.1415927f;
-        x2 = y * y;
-        a = a * x2 - b;
-        a = a * x2 + c;
+        asm {
+            fmuls x2, y, y
+            fmsubs a, a, x2, b
+            fmadds a, a, x2, c
+        }
         a = -a;
         r = a;
     } else {
         y = 1.5707964f - (x - 4.712389f);
-        x2 = y * y;
-        a = a * x2 - b;
-        a = a * x2 + c;
+        asm {
+            fmuls x2, y, y
+            fmsubs a, a, x2, b
+            fmadds a, a, x2, c
+        }
         r = a;
     }
     return r;
@@ -908,9 +925,9 @@ EVT_BEGIN(evt_bom_01_karakara)
     RETURN
 EVT_END()
 
-// Kept (pattern): propagation and lifetimes off for the extdrv, npc_jump and depthDisp functions of bom_01, eki_00,
-// gor_10, hei_10, rsh_05, rsh_06, tik_05 and tou_02 (one half is a -opt file flag where configure.py sets it); the
-// target needs it and no natural form was found (cleanup_notes/mweppc_pilot.md, pragma review rels).
+// Kept (pattern): propagation and lifetimes off for the extdrv and depthDisp functions of bom_01, eki_00, gor_10,
+// rsh_05, rsh_06, tik_05 and tou_02 (one half is a -opt file flag where configure.py sets it); the target needs it
+// and no natural form was found (cleanup_notes/mweppc_pilot.md, pragma review rels).
 #pragma opt_propagation off
 #pragma opt_lifetimes off
 
@@ -989,9 +1006,9 @@ static void jump(s32 i, s32 next, f32 x, f32 y, f32 z, f32 speed, f32 gravity) {
     }
 }
 
-// Kept (pattern): propagation and lifetimes off for the extdrv, npc_jump and depthDisp functions of bom_01, eki_00,
-// gor_10, hei_10, rsh_05, rsh_06, tik_05 and tou_02 (one half is a -opt file flag where configure.py sets it); the
-// target needs it and no natural form was found (cleanup_notes/mweppc_pilot.md, pragma review rels).
+// Kept (pattern): propagation and lifetimes off for the extdrv and depthDisp functions of bom_01, eki_00, gor_10,
+// rsh_05, rsh_06, tik_05 and tou_02 (one half is a -opt file flag where configure.py sets it); the target needs it
+// and no natural form was found (cleanup_notes/mweppc_pilot.md, pragma review rels).
 #pragma opt_propagation off
 #pragma opt_lifetimes off
 
@@ -2520,9 +2537,9 @@ static s32 taihou_r(EventEntry* event, BOOL isFirstCall) {
     return EVT_RETURN_DONE;
 }
 
-// Kept (pattern): propagation and lifetimes off for the extdrv, npc_jump and depthDisp functions of bom_01, eki_00,
-// gor_10, hei_10, rsh_05, rsh_06, tik_05 and tou_02 (one half is a -opt file flag where configure.py sets it); the
-// target needs it and no natural form was found (cleanup_notes/mweppc_pilot.md, pragma review rels).
+// Kept (pattern): propagation and lifetimes off for the extdrv and depthDisp functions of bom_01, eki_00, gor_10,
+// rsh_05, rsh_06, tik_05 and tou_02 (one half is a -opt file flag where configure.py sets it); the target needs it
+// and no natural form was found (cleanup_notes/mweppc_pilot.md, pragma review rels).
 #pragma opt_propagation off
 #pragma opt_lifetimes off
 

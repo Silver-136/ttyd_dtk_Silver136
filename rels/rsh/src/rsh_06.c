@@ -65,37 +65,46 @@ static void ext_moamoa_main(void);
  */
 
 // moa_sin/moa_cos and moa_sinx/moa_cosx: two copies of the polySinf/polyCosf bodies (poly_trig.h).
-static inline f32 moa_sin(f32 x) {
-    f32 a = 0.00761f;
-    f32 b = 0.16605f;
-    f32 c = 1.0f;
-    f32 x2;
+// The polynomial is inline asm, as in poly_trig.h (see the note there).
+static inline f32 moa_sin(register f32 x) {
+    register f32 a = 0.00761f;
+    register f32 b = 0.16605f;
+    register f32 c = 1.0f;
+    register f32 x2;
     if (x <= 3.1415927f) {
         if (x <= 1.5707964f) {
-            x2 = x * x;
-            a = a * x2 - b;
-            a = a * x2 + c;
-            a = a * x;
+            asm {
+                fmuls x2, x, x
+                fmsubs a, a, x2, b
+                fmadds a, a, x2, c
+                fmuls a, a, x
+            }
         } else {
             x = 1.5707964f - (x - 1.5707964f);
-            x2 = x * x;
-            a = a * x2 - b;
-            a = a * x2 + c;
-            a = a * x;
+            asm {
+                fmuls x2, x, x
+                fmsubs a, a, x2, b
+                fmadds a, a, x2, c
+                fmuls a, a, x
+            }
         }
     } else if (x < 4.712389f) {
         x = x - 3.1415927f;
-        x2 = x * x;
-        a = a * x2 - b;
-        a = a * x2 + c;
-        a = a * x;
+        asm {
+            fmuls x2, x, x
+            fmsubs a, a, x2, b
+            fmadds a, a, x2, c
+            fmuls a, a, x
+        }
         a = -a;
     } else {
         x = 1.5707964f - (x - 4.712389f);
-        x2 = x * x;
-        a = a * x2 - b;
-        a = a * x2 + c;
-        a = a * x;
+        asm {
+            fmuls x2, x, x
+            fmsubs a, a, x2, b
+            fmadds a, a, x2, c
+            fmuls a, a, x
+        }
         a = -a;
     }
     return a;
@@ -105,34 +114,42 @@ static inline f32 moa_sin(f32 x) {
  * Polynomial approximation of cos(x) for an angle in radians in [0, 2*pi), companion of moa_sin.
  * Inlined into the swarm code.
  */
-static inline f32 moa_cos(f32 x) {
-    f32 a = 0.03705f;
-    f32 b = 0.4967f;
-    f32 c = 1.0f;
-    f32 x2;
+static inline f32 moa_cos(register f32 x) {
+    register f32 a = 0.03705f;
+    register f32 b = 0.4967f;
+    register f32 c = 1.0f;
+    register f32 x2;
     if (x <= 3.1415927f) {
         if (x <= 1.5707964f) {
-            x2 = x * x;
-            a = a * x2 - b;
-            a = a * x2 + c;
+            asm {
+                fmuls x2, x, x
+                fmsubs a, a, x2, b
+                fmadds a, a, x2, c
+            }
         } else {
             x = 1.5707964f - (x - 1.5707964f);
-            x2 = x * x;
-            a = a * x2 - b;
-            a = a * x2 + c;
+            asm {
+                fmuls x2, x, x
+                fmsubs a, a, x2, b
+                fmadds a, a, x2, c
+            }
             a = -a;
         }
     } else if (x < 4.712389f) {
         x = x - 3.1415927f;
-        x2 = x * x;
-        a = a * x2 - b;
-        a = a * x2 + c;
+        asm {
+            fmuls x2, x, x
+            fmsubs a, a, x2, b
+            fmadds a, a, x2, c
+        }
         a = -a;
     } else {
         x = 1.5707964f - (x - 4.712389f);
-        x2 = x * x;
-        a = a * x2 - b;
-        a = a * x2 + c;
+        asm {
+            fmuls x2, x, x
+            fmsubs a, a, x2, b
+            fmadds a, a, x2, c
+        }
     }
     return a;
 }
@@ -141,37 +158,45 @@ static inline f32 moa_cos(f32 x) {
  * Variant of moa_sin using the same in-place argument reduction;
  * same polynomial sine for an angle in radians in [0, 2*pi).
  */
-static inline f32 moa_sinx(f32 x) {
-    f32 a = 0.00761f;
-    f32 b = 0.16605f;
-    f32 c = 1.0f;
-    f32 x2;
+static inline f32 moa_sinx(register f32 x) {
+    register f32 a = 0.00761f;
+    register f32 b = 0.16605f;
+    register f32 c = 1.0f;
+    register f32 x2;
     if (x <= 3.1415927f) {
         if (x <= 1.5707964f) {
-            x2 = x * x;
-            a = a * x2 - b;
-            a = a * x2 + c;
-            a = a * x;
+            asm {
+                fmuls x2, x, x
+                fmsubs a, a, x2, b
+                fmadds a, a, x2, c
+                fmuls a, a, x
+            }
         } else {
             x = 1.5707964f - (x - 1.5707964f);
-            x2 = x * x;
-            a = a * x2 - b;
-            a = a * x2 + c;
-            a = a * x;
+            asm {
+                fmuls x2, x, x
+                fmsubs a, a, x2, b
+                fmadds a, a, x2, c
+                fmuls a, a, x
+            }
         }
     } else if (x < 4.712389f) {
         x = x - 3.1415927f;
-        x2 = x * x;
-        a = a * x2 - b;
-        a = a * x2 + c;
-        a = a * x;
+        asm {
+            fmuls x2, x, x
+            fmsubs a, a, x2, b
+            fmadds a, a, x2, c
+            fmuls a, a, x
+        }
         a = -a;
     } else {
         x = 1.5707964f - (x - 4.712389f);
-        x2 = x * x;
-        a = a * x2 - b;
-        a = a * x2 + c;
-        a = a * x;
+        asm {
+            fmuls x2, x, x
+            fmsubs a, a, x2, b
+            fmadds a, a, x2, c
+            fmuls a, a, x
+        }
         a = -a;
     }
     return a;
@@ -181,34 +206,42 @@ static inline f32 moa_sinx(f32 x) {
  * Variant of moa_cos that reduces its argument in place;
  * same polynomial cosine for an angle in radians in [0, 2*pi).
  */
-static inline f32 moa_cosx(f32 x) {
-    f32 a = 0.03705f;
-    f32 b = 0.4967f;
-    f32 c = 1.0f;
-    f32 x2;
+static inline f32 moa_cosx(register f32 x) {
+    register f32 a = 0.03705f;
+    register f32 b = 0.4967f;
+    register f32 c = 1.0f;
+    register f32 x2;
     if (x <= 3.1415927f) {
         if (x <= 1.5707964f) {
-            x2 = x * x;
-            a = a * x2 - b;
-            a = a * x2 + c;
+            asm {
+                fmuls x2, x, x
+                fmsubs a, a, x2, b
+                fmadds a, a, x2, c
+            }
         } else {
             x = 1.5707964f - (x - 1.5707964f);
-            x2 = x * x;
-            a = a * x2 - b;
-            a = a * x2 + c;
+            asm {
+                fmuls x2, x, x
+                fmsubs a, a, x2, b
+                fmadds a, a, x2, c
+            }
             a = -a;
         }
     } else if (x < 4.712389f) {
         x = x - 3.1415927f;
-        x2 = x * x;
-        a = a * x2 - b;
-        a = a * x2 + c;
+        asm {
+            fmuls x2, x, x
+            fmsubs a, a, x2, b
+            fmadds a, a, x2, c
+        }
         a = -a;
     } else {
         x = 1.5707964f - (x - 4.712389f);
-        x2 = x * x;
-        a = a * x2 - b;
-        a = a * x2 + c;
+        asm {
+            fmuls x2, x, x
+            fmsubs a, a, x2, b
+            fmadds a, a, x2, c
+        }
     }
     return a;
 }
@@ -854,9 +887,9 @@ static void moamoa_jump(ExtdrvPose* pose, Moamoa* moa, s32 next, s32 checkGround
 }
 #pragma dont_inline reset
 
-// Kept (pattern): propagation and lifetimes off for the extdrv, npc_jump and depthDisp functions of bom_01, eki_00,
-// gor_10, hei_10, rsh_05, rsh_06, tik_05 and tou_02 (one half is a -opt file flag where configure.py sets it); the
-// target needs it and no natural form was found (cleanup_notes/mweppc_pilot.md, pragma review rels).
+// Kept (pattern): propagation and lifetimes off for the extdrv and depthDisp functions of bom_01, eki_00, gor_10,
+// rsh_05, rsh_06, tik_05 and tou_02 (one half is a -opt file flag where configure.py sets it); the target needs it
+// and no natural form was found (cleanup_notes/mweppc_pilot.md, pragma review rels).
 #pragma opt_propagation off
 #pragma opt_lifetimes off
 
