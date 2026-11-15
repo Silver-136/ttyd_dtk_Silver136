@@ -253,9 +253,6 @@ it, the map's size); `memcmp_as4` in `src/system.c` follows Super Paper Mario's 
 | data | end | `end_credit_batten_evt` | `unk_evt_end_00004d84` | .data:0x00001BCC | yes |
 | data | end | `end_credit_queen_evt` | `unk_evt_end_00004ed0` | .data:0x00001D18 | yes |
 | data | end | `end_credit_moamoa_evt` | `unk_evt_end_0000503c` | .data:0x00001E84 | yes |
-| data | gor | `fuwa_table` | `dat_gor_00019230` | .rodata:0x00006DE0 | yes |
-| data | gor | `disp_slot_icons` | `dat_gor_0001a46c` | .rodata:0x0000801C | yes |
-| data | gor | `yuuranking_unused_color` | `dat_gor_0001cc40` | .rodata:0x0000A7F0 | yes |
 | data | gor | `gor_00_mony_regl` | `unk_evt_gor_0001f4b4` | .data:0x00000C94 | yes |
 | data | gor | `gor_00_peton_regl` | `unk_evt_gor_0001fa08` | .data:0x000011E8 | yes |
 | data | gor | `marco_party_move` | `unk_evt_gor_0001fb1c` | .data:0x000012FC | yes |
@@ -277,8 +274,6 @@ it, the map's size); `memcmp_as4` in `src/system.c` follows Super Paper Mario's 
 | data | las | `hi_fire_end_flag` | `unk_las_bss00000098` | .bss:0x00000098 | yes |
 | data | las | `hi_fire_eff` | `unk_las_bss0000009c` | .bss:0x0000009C | yes |
 | data | mri | `trap_restore` | `unk_evt_mri_0005be38` | .data:0x00033D38 | yes |
-| data | muj | `evtflash_col1` | `dat_muj_000110b0` | .rodata:0x00003720 | yes |
-| data | muj | `evtflash_col2` | `dat_muj_000110b4` | .rodata:0x00003724 | yes |
 | data | main | `decay_tbl$207` | `dat_802c1680` | .rodata:0x802C1680 | yes |
 | data | main | `kemu_d` | `dat_802fdcac` | .rodata:0x802FDCAC | yes |
 | data | main | `coin_black` | `dat_80419d38` | .sdata2:0x80419D38 | yes |
@@ -286,9 +281,6 @@ it, the map's size); `memcmp_as4` in `src/system.c` follows Super Paper Mario's 
 | data | main | `c$412` | `dat_8041a504` | .sdata2:0x8041A504 | no |
 | data | main | `c$517` | `dat_8041a508` | .sdata2:0x8041A508 | no |
 | data | main | `c$521` | `dat_8041a50c` | .sdata2:0x8041A50C | no |
-| data | main | `winPartyWhiteC` | `dat_8041d21c` | .sdata2:0x8041D21C | yes |
-| data | main | `winPartyBlackC` | `dat_8041d220` | .sdata2:0x8041D220 | yes |
-| data | main | `kW$732` | `dat_8041d78c` | .sdata2:0x8041D78C | no |
 | data | main | `funemizu_default_color` | `dat_80421468` | .sdata2:0x80421468 | yes |
 | data | main | `build_date_ptr` | `dat_ptr_8040f260` | .sdata:0x8040F260 | yes |
 | data | main | `build_time_ptr` | `dat_ptr_8040f264` | .sdata:0x8040F264 | yes |
@@ -319,12 +311,7 @@ it, the map's size); `memcmp_as4` in `src/system.c` follows Super Paper Mario's 
 | data | tik | `gesso_left_arm_data_table` | `unk_tik_00029f1c` | .data:0x0001C4FC | yes |
 | data | tou | `evt_gardman_spawn` | `unk_evt_tou_00012b54` | .data:0x00002224 | yes |
 | data | tou | `n_bero_match_reset` | `unk_evt_tou_0002b6c8` | .data:0x0001AD98 | yes |
-| data | tou2 | `titleColor` | `dat_tou2_0000ca94` | .rodata:0x000034A4 | yes |
-| data | tou2 | `numberColor` | `dat_tou2_0000ca98` | .rodata:0x000034A8 | yes |
-| data | tou2 | `playerColor` | `dat_tou2_0000ca9c` | .rodata:0x000034AC | yes |
-| data | tou2 | `nameColor` | `dat_tou2_0000caa0` | .rodata:0x000034B0 | yes |
 | data | tou2 | `macho_gance_damage_event` | `unk_evt_tou2_000219a8` | .data:0x0000FDE8 | yes |
-| data | yuu | `yuuranking_unused_color` | `dat_yuu_00014990` | .rodata:0x00000988 | yes |
 | data | yuu | `icon_monte_p` | `monte_p` | .bss:0x00000000 | yes |
 | data | yuu | `yuu_02_icon_monte_entry_evt` | `unk_evt_yuu_000152bc` | .data:0x00000114 | yes |
 | data | yuu | `yuu_03_icon_monte_entry_evt` | `unk_evt_yuu_00015fe0` | .data:0x00000E38 | yes |
@@ -439,7 +426,6 @@ or local initializer does not build the same bytes (or has not been tried).
 | data | main | `white` | `dat_8041e510` | .sdata2:0x8041E510 | yes | JP demo map: compiler label (@N); ours: named object `white` |
 | data | main | `kWhite` | `dat_8041e900` | .sdata2:0x8041E900 | yes | JP demo map: compiler label (@N); ours: named object `kWhite` |
 | data | main | `c0$171` | `dat_8041fbc8` | .sdata2:0x8041FBC8 | yes | JP demo map: compiler label (@N); ours: function-local static `c0$180` |
-| data | main | `sWhite` | `dat_80420498` | .sdata2:0x80420498 | yes | JP demo map: compiler label (@N); ours: named object `sWhite` |
 | data | main | `white255b$548` | `dat_80420f6c` | .sdata2:0x80420F6C | yes | JP demo map: compiler label (@N); ours: function-local static `white255b$616` |
 | data | main | `white$157` | `dat_80422568` | .sdata2:0x80422568 | yes | JP demo map: compiler label (@N); ours: function-local static `white$188` |
 | data | main | `gTRKInterruptVectorTable_500` | `lbl_80003500` | .init:0x80003500 | yes | no object in our build: a config label inside a larger object |
@@ -450,7 +436,6 @@ or local initializer does not build the same bytes (or has not been tried).
 | data | main | `twod_icon_fog_color` | `unk_80423048` | .sbss2:0x80423048 | yes | JP demo map: compiler label (@N); ours: named object `twod_icon_fog_color` |
 | data | main | `twod_text_fog_color` | `unk_8042304c` | .sbss2:0x8042304C | yes | JP demo map: compiler label (@N); ours: named object `twod_text_fog_color` |
 | data | yuu | `white` | `dat_yuu_00014dd0` | .rodata:0x00000DC8 | yes | JP demo map: compiler label (@N); ours: named object `white` |
-| data | yuu | `bgColor` | `dat_yuu_00014dd4` | .rodata:0x00000DCC | yes | JP demo map: compiler label (@N); ours: named object `bgColor` |
 
 ## Compiler labels (not names)
 

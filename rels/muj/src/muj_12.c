@@ -72,11 +72,118 @@ EvtWord kosho_event[517];
 static EvtWord coin_effect[151];
 EvtWord muj_12_init_evt[60];
 
-/** White fade-out colour of the screen flash in the Cortez scenes. */
-static const GXColor evtflash_col1 = {0xFF, 0xFF, 0xFF, 0xFF};
 
-/** White fade-in colour of the screen flash in the Cortez scenes. */
-static const GXColor evtflash_col2 = {0xFF, 0xFF, 0xFF, 0xFF};
+/**
+ * Script helper that flashes the screen white: fades out in 20 ms with colour evtflash_col1 (white),
+ * holds 50 ms, then fades back in over 80 ms with evtflash_col2. Blocks until finished.
+ */
+static USER_FUNC(evtflash) {
+    if (isFirstCall) {
+        event->userdata[2] = 0;
+    }
+    switch (event->userdata[2]) {
+        case 0:
+            {
+                GXColor white = {0xFF, 0xFF, 0xFF, 0xFF};
+                fadeEntry(FADE_OUT_BLACK, 20, white);
+            }
+            event->userdata[2]++;
+        case 1:
+            if (fadeIsFinish() != TRUE) {
+                return EVT_RETURN_BLOCK;
+            }
+            event->userdata[0] = 50;
+            event->savedTime = (s32)gp->renderTime;
+            event->userdata[2]++;
+            if (event->userdata[0] == 0) {
+                event->userdata[2]++;
+            }
+            return EVT_RETURN_BLOCK;
+        case 2:
+            if (OSTicksToMilliseconds((u32)gp->renderTime - (u32)event->savedTime) < (u32)event->userdata[0]) {
+                return EVT_RETURN_BLOCK;
+            }
+            event->userdata[2]++;
+            return EVT_RETURN_BLOCK;
+        case 3:
+            {
+                GXColor white = {0xFF, 0xFF, 0xFF, 0xFF};
+                fadeEntry(FADE_IN_BLACK, 80, white);
+            }
+            event->userdata[2]++;
+        case 4:
+            if (fadeIsFinish() != TRUE) {
+                return EVT_RETURN_BLOCK;
+            }
+            return EVT_RETURN_DONE;
+    }
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script helper: moves the named item to the position (args[1], args[2], args[3]) over args[4] ms using
+ * interpolation mode args[5], adding args[6] to its height; blocks until it arrives.
+ */
+static USER_FUNC(muj_item_move_3d_position) {
+    EvtWord* args = event->args;
+    char* name = (char*)evtGetValue(event, args[0]);
+    f32 x = evtGetValue(event, args[1]);
+    f32 y = evtGetValue(event, args[2]);
+    f32 z = evtGetValue(event, args[3]);
+    s32 frames = evtGetValue(event, args[4]);
+    s32 mode = evtGetValue(event, args[5]);
+    f32 yOffset = evtGetFloat(event, args[6]);
+    ItemEntry* item = itemNameToPtr(name);
+    int elapsed;
+
+    if (isFirstCall) {
+        if (item == NULL) {
+            return EVT_RETURN_DONE;
+        }
+        event->savedTime = gp->renderTime;
+        event->userdataf[1] = item->position.x;
+        event->userdataf[2] = item->position.y;
+        event->userdata3f = item->position.z;
+    }
+    elapsed = OSTicksToMilliseconds((u32)gp->renderTime - (u32)event->savedTime);
+    if (elapsed < frames) {
+        item->position.x = intplGetValue(mode, event->userdataf[1], x, elapsed, frames);
+        item->position.y = intplGetValue(mode, event->userdataf[2], y, elapsed, frames);
+        item->position.z = intplGetValue(mode, event->userdata3f, z, elapsed, frames);
+        item->position.y += yOffset;
+        return EVT_RETURN_BLOCK;
+    }
+    item->position.x = x;
+    item->position.y = y;
+    item->position.z = z;
+    return EVT_RETURN_DONE;
+}
+
+// Requires 0 <= step < total and a nonzero accumulated speed.
+static f32 accdec_type(s32 step, s32 total, f32 start, f32 end) {
+    f32 cur;
+    f32 speed;
+    f32 sum;
+    s32 accel = total * 20 / 100;
+    s32 decel = total * 80 / 100;
+    s32 i;
+
+    speed = 0.0f;
+    sum = 0.0f;
+
+    for (i = 0; i < total; i++) {
+        if (i <= accel) {
+            speed += 1.0f;
+        } else if (i >= decel) {
+            speed -= 1.0f;
+        }
+        sum += speed;
+        if (i == step) {
+            cur = sum;
+        }
+    }
+    return start + cur * (end - start) / sum;
+}
 
 /**
  * Darkens the room: fades map blend colour 0 from white to black over LW(10) ms;
@@ -872,109 +979,3 @@ EVT_BEGIN(muj_12_init_evt)
     SPAWN_EVENT_GET_ID(PTR(coin_effect), GW(0))
     RETURN
 EVT_END()
-
-// Requires 0 <= step < total and a nonzero accumulated speed.
-static f32 accdec_type(s32 step, s32 total, f32 start, f32 end) {
-    f32 cur;
-    f32 speed;
-    f32 sum;
-    s32 accel = total * 20 / 100;
-    s32 decel = total * 80 / 100;
-    s32 i;
-
-    speed = 0.0f;
-    sum = 0.0f;
-
-    for (i = 0; i < total; i++) {
-        if (i <= accel) {
-            speed += 1.0f;
-        } else if (i >= decel) {
-            speed -= 1.0f;
-        }
-        sum += speed;
-        if (i == step) {
-            cur = sum;
-        }
-    }
-    return start + cur * (end - start) / sum;
-}
-
-/**
- * Script helper: moves the named item to the position (args[1], args[2], args[3]) over args[4] ms using
- * interpolation mode args[5], adding args[6] to its height; blocks until it arrives.
- */
-static USER_FUNC(muj_item_move_3d_position) {
-    EvtWord* args = event->args;
-    char* name = (char*)evtGetValue(event, args[0]);
-    f32 x = evtGetValue(event, args[1]);
-    f32 y = evtGetValue(event, args[2]);
-    f32 z = evtGetValue(event, args[3]);
-    s32 frames = evtGetValue(event, args[4]);
-    s32 mode = evtGetValue(event, args[5]);
-    f32 yOffset = evtGetFloat(event, args[6]);
-    ItemEntry* item = itemNameToPtr(name);
-    int elapsed;
-
-    if (isFirstCall) {
-        if (item == NULL) {
-            return EVT_RETURN_DONE;
-        }
-        event->savedTime = gp->renderTime;
-        event->userdataf[1] = item->position.x;
-        event->userdataf[2] = item->position.y;
-        event->userdata3f = item->position.z;
-    }
-    elapsed = OSTicksToMilliseconds((u32)gp->renderTime - (u32)event->savedTime);
-    if (elapsed < frames) {
-        item->position.x = intplGetValue(mode, event->userdataf[1], x, elapsed, frames);
-        item->position.y = intplGetValue(mode, event->userdataf[2], y, elapsed, frames);
-        item->position.z = intplGetValue(mode, event->userdata3f, z, elapsed, frames);
-        item->position.y += yOffset;
-        return EVT_RETURN_BLOCK;
-    }
-    item->position.x = x;
-    item->position.y = y;
-    item->position.z = z;
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper that flashes the screen white: fades out in 20 ms with colour evtflash_col1 (white),
- * holds 50 ms, then fades back in over 80 ms with evtflash_col2. Blocks until finished.
- */
-static USER_FUNC(evtflash) {
-    if (isFirstCall) {
-        event->userdata[2] = 0;
-    }
-    switch (event->userdata[2]) {
-        case 0:
-            fadeEntry(FADE_OUT_BLACK, 20, evtflash_col1);
-            event->userdata[2]++;
-        case 1:
-            if (fadeIsFinish() != TRUE) {
-                return EVT_RETURN_BLOCK;
-            }
-            event->userdata[0] = 50;
-            event->savedTime = (s32)gp->renderTime;
-            event->userdata[2]++;
-            if (event->userdata[0] == 0) {
-                event->userdata[2]++;
-            }
-            return EVT_RETURN_BLOCK;
-        case 2:
-            if (OSTicksToMilliseconds((u32)gp->renderTime - (u32)event->savedTime) < (u32)event->userdata[0]) {
-                return EVT_RETURN_BLOCK;
-            }
-            event->userdata[2]++;
-            return EVT_RETURN_BLOCK;
-        case 3:
-            fadeEntry(FADE_IN_BLACK, 80, evtflash_col2);
-            event->userdata[2]++;
-        case 4:
-            if (fadeIsFinish() != TRUE) {
-                return EVT_RETURN_BLOCK;
-            }
-            return EVT_RETURN_DONE;
-    }
-    return EVT_RETURN_DONE;
-}

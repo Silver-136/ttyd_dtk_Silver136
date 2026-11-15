@@ -68,12 +68,6 @@
 #include <dolphin/pad.h>
 #include <demo/DEMOPad.h>
 
-typedef struct FuwaTable {
-    f32 v[40];
-} FuwaTable;
-
-/** Up-and-down offsets, in 40 steps, that make an NPC float in place. */
-static const FuwaTable fuwa_table = {{0.0f, 0.5f, 1.0f, 1.4f, 1.8f, 2.0f, 2.3f, 2.5f, 2.6f, 2.7f, 2.7f, 2.7f, 2.6f, 2.5f, 2.3f, 2.0f, 1.8f, 1.4f, 1.0f, 0.5f, -0.0f, -0.5f, -1.0f, -1.4f, -1.8f, -2.0f, -2.3f, -2.5f, -2.6f, -2.7f, -2.7f, -2.7f, -2.6f, -2.5f, -2.3f, -2.0f, -1.8f, -1.4f, -1.0f, -0.5f}};
 typedef struct ExchangeRyokin {
     s32 ryokin;
     s32 medal;
@@ -485,7 +479,8 @@ static USER_FUNC(gor_npc_fuwafuwa) {
     NpcEntry* npc = evtNpcNameToPtr(event, name);
     f32 speed = evtGetFloat(event, args[1]);
     s32 duration = evtGetValue(event, args[2]);
-    FuwaTable table = fuwa_table;
+    /* Up-and-down offsets, in 40 steps, that make the NPC float in place. */
+    f32 table[40] = {0.0f, 0.5f, 1.0f, 1.4f, 1.8f, 2.0f, 2.3f, 2.5f, 2.6f, 2.7f, 2.7f, 2.7f, 2.6f, 2.5f, 2.3f, 2.0f, 1.8f, 1.4f, 1.0f, 0.5f, -0.0f, -0.5f, -1.0f, -1.4f, -1.8f, -2.0f, -2.3f, -2.5f, -2.6f, -2.7f, -2.7f, -2.7f, -2.6f, -2.5f, -2.3f, -2.0f, -1.8f, -1.4f, -1.0f, -0.5f};
     Vec* base = (Vec*)&event->userdataf[1];
     s32 elapsed;
     s32 frame;
@@ -502,7 +497,7 @@ static USER_FUNC(gor_npc_fuwafuwa) {
     t = 0.5f + sysMsec2FrameFloat(elapsed);
     frame = t * speed;
     y = base->y;
-    y += table.v[(u32)frame % 40];
+    y += table[(u32)frame % 40];
     npc->position.y = npc->prevPosition.y = y;
     if (duration == 0) {
         return EVT_RETURN_BLOCK;
@@ -3374,12 +3369,747 @@ static s32 upsidegara[2][3][8] = {
     },
 };
 
-typedef struct I3 {
-    s32 v[3];
-} I3;
+static USER_FUNC(fall_rtn) {
+    Vec pos;
+    SlotWork* data;
+    s32 i;
+    s32 done = 0;
+    f32 spd;
 
-/** Icon numbers of the three prompts drawn beside the spinning slot reel. */
-static const I3 disp_slot_icons = {{ICON_BUTTON_A_ALT, ICON_BUTTON_A_ALT, ICON_BUTTON_A_ALT}};
+    if (isFirstCall) {
+        SlotWork* data = ((MiniGameWork*)event->lwData[0])->data;
+        monte_p = _mapAlloc(data->monteCount * sizeof(GMonte));
+        memset(monte_p, 0, data->monteCount * sizeof(GMonte));
+        monte_p->owner = data;
+        for (i = 0; i < monte_p->owner->monteCount; i++) {
+            GMonteSub* sub = &monte_p[i].sub;
+            Vec pos = fall_pos0();
+            f32 s;
+            f32 c;
+            f32 ofs;
+
+            pos.z = montemedalzpos[monte_p->owner->nowSlot];
+            sub->pos = pos;
+            ofs = ((i & 1) * 2.0f - 1.0f) * ((rand() % 101) / 10.0f);
+            sub->pos.z += ofs;
+            sub->scale = 1.0f;
+            spd = 2.0f + (rand() % 300) / 100.0f;
+            c = 0.0f;
+            s = 0.0f;
+            movePos(&s, &c, spd, 270.0f - 3.0f * ofs);
+            {
+                Vec vel = fall_vel0();
+
+                vel.x = s;
+                vel.z = c;
+                monte_p[i].vel = vel;
+            }
+            monte_p[i].wait = ((rand() % 700 + 100) * 60) / 1000;
+        }
+    }
+    for (i = 0; i < monte_p->owner->monteCount; i++) {
+        GMonte* m = &monte_p[i];
+        switch (m->state) {
+            case 0:
+                if (m->wait != 0) {
+                    m->wait--;
+                } else {
+                    m->state++;
+                }
+                break;
+            case 1:
+                PSVECAdd(&m->sub.pos, &m->vel, &m->sub.pos);
+                m->vel.y -= 0.81666666f;
+                if (m->sub.pos.y <= 0.0f) {
+                    m->sub.pos.y = 0.0f;
+
+                    // sound name passed as an integer word, as in the original (only loops show it; see sfx_name_word.h)
+                    psndSFXOn_3D(SFX_NAME_WORD("SFX_EVT_GAME_MONTE_LEAPED1"), &m->sub.pos);
+                    if (__fabs(m->vel.y) <= 4.0) {
+                        m->state++;
+                        m->timer = 300;
+                    } else {
+                        f32 r = (rand() % 21) / 100.0f;
+                        m->vel.y *= -(0.5f + r);
+                        m->vel.x = 0.0f;
+                        m->vel.z = 0.0f;
+                    }
+                }
+                if (get_monte_check(&m->sub.pos, &marioGetPtr()->position) == TRUE) {
+                    psndSFXOn_3D(SFX_NAME_WORD("SFX_EVT_GAME_MONTE_COUNT1"), &m->sub.pos);
+#if VERSION <= VERSION_DEMO_JP
+                    if (yuwp->tokens < 0x7FFFFFFF) {
+#else
+                    if (yuwp->tokens < 99999) {
+#endif
+                        yuwp->tokens++;
+                    }
+                    m->hidden = 1;
+                    m->state = 3;
+                }
+                break;
+            case 2:
+                m->timer--;
+                if (m->timer == 0) {
+                    m->hidden = 1;
+                    m->state++;
+                }
+                if (m->timer < 60) {
+                    if (m->timer & 2) {
+                        m->sub.pos.y = 0.0f;
+                    } else {
+                        m->sub.pos.y = -1000.0f;
+                    }
+                }
+                pos = m->sub.pos;
+                pos.y = 0.0f;
+                if (get_monte_check(&pos, &marioGetPtr()->position) == TRUE) {
+                    psndSFXOn_3D(SFX_NAME_WORD("SFX_EVT_GAME_MONTE_COUNT1"), &m->sub.pos);
+#if VERSION <= VERSION_DEMO_JP
+                    if (yuwp->tokens < 0x7FFFFFFF) {
+#else
+                    if (yuwp->tokens < 99999) {
+#endif
+                        yuwp->tokens++;
+                    }
+                    m->hidden = 1;
+                    m->state = 3;
+                }
+                break;
+            case 3:
+                done++;
+                break;
+        }
+    }
+    if (done < monte_p->owner->monteCount) {
+        dispEntry(CAMERA_3D, 0.0f, DISP_MODE_ALPHA_TEST, monte_disp, monte_p);
+        return EVT_RETURN_BLOCK;
+    }
+    monte_p->owner->monteCount = 0;
+    monte_p->owner->monteEvt = NULL;
+    _mapFree(monte_p);
+    return EVT_RETURN_DONE;
+}
+
+/** Script helper that sets the phase of a slot machine (the minigame work block in args[0]) to args[1]. */
+static USER_FUNC(goryuugijo_set_slot_phase) {
+    EvtWord* args = event->args;
+    SlotWork* data = ((MiniGameWork*)evtGetValue(event, args[0]))->data;
+
+    data->phase = evtGetValue(event, args[1]);
+    return EVT_RETURN_DONE;
+}
+
+/** Script helper that reads the phase of a slot machine (the minigame work block in args[0]) into args[1]. */
+static USER_FUNC(goryuugijo_get_slot_phase) {
+    EvtWord* args = event->args;
+    SlotWork* data = ((MiniGameWork*)evtGetValue(event, args[0]))->data;
+
+    evtSetValue(event, args[1], data->phase);
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Sets MAP_OBJ_FLAG_HIDDEN on the three window map groups of reel number reel of a slot machine.
+ * Same operation as goryuugijo_upsidewindow_disp_sub.
+ */
+static void goryuugijo_upsidewindow_dispoff_sub(s32 slot, s32 reel) {
+    mapGrpFlagOn(drumname[slot].window[reel][0], MAP_OBJ_FLAG_HIDDEN);
+    mapGrpFlagOn(drumname[slot].window[reel][1], MAP_OBJ_FLAG_HIDDEN);
+    mapGrpFlagOn(drumname[slot].window[reel][2], MAP_OBJ_FLAG_HIDDEN);
+}
+
+/** Sets MAP_OBJ_FLAG_HIDDEN on the three window map groups of reel number reel of a slot machine. */
+static void goryuugijo_upsidewindow_disp_sub(s32 slot, s32 reel) {
+    mapGrpFlagOn(drumname[slot].window[reel][0], MAP_OBJ_FLAG_HIDDEN);
+    mapGrpFlagOn(drumname[slot].window[reel][1], MAP_OBJ_FLAG_HIDDEN);
+    mapGrpFlagOn(drumname[slot].window[reel][2], MAP_OBJ_FLAG_HIDDEN);
+}
+
+/**
+ * Script helper that gives each reel of both slot machines a random starting angle (a multiple of 45 degrees)
+ * and a random face.
+ */
+static USER_FUNC(goryuugijo_door_init_slot) {
+    MiniGameWork* wp = (MiniGameWork*)evtGetValue(event, event->args[0]);
+    SlotWork* data = wp->data;
+    s32 j;
+    s32 i;
+
+    for (i = 0; i < 2; i++) {
+        for (j = 0; j < 3; j++) {
+            data->angle[i][j] = 0.0f;
+            if (data->angle[i][j] >= 360.0f) {
+                data->angle[i][j] -= 360.0f;
+            }
+            data->angle[i][j] = 45.0f * irand(8);
+            mapObjRotate(drumname[i].drum[j], 0.0f, 0.0f, data->angle[i][j]);
+            data->face[i][j] = upsidegara[i][j][irand(8)];
+            goryuugijo_upsidewindow_disp_sub(i, j);
+        }
+    }
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Init callback of the slot machine game: clears the counter, the lever angle and the medal event,
+ * and clears the win flag.
+ */
+void goryuugijo_init_slot(EventEntry* event, BOOL isFirstCall) {
+    SlotWork* data = ((MiniGameWork*)event->lwData[0])->data;
+
+    data->counter = 0;
+    data->reberAngle = 0.0f;
+    data->monteEvt = NULL;
+    data->flags &= ~1;
+}
+
+/**
+ * Per-frame lights of a slot machine spin, run by goryuugijo_main_slot during the lever pull and spin for the first 79 frames
+ * (neonCount): for 27 frames it shuffles the three faces of the small window above the reels (UPSIDEGARA) every
+ * other frame, then assigns faces 0, 1 and 2 there and starts the reels at full speed;
+ * the neon animation plays once at
+ * frame 24.
+ * Flag 2 would pick a slow "lucky" spin with more neon flashes, but it is cleared right after its 1-in-10
+ * roll, and flag 4 (all three window faces equal) cannot be set with faces 0, 1 and 2.
+ */
+void slot_neon_sub(MiniGameWork* wp, SlotWork* data) {
+    s32 i;
+    s32 r;
+
+    if (data->neonCount > 78) {
+        return;
+    }
+    if (data->neonCount == 0) {
+        if (irand(10) == 0) {
+            data->flags |= 2;
+        }
+        data->flags &= ~2;
+    }
+    if (data->neonCount < 27) {
+        if (data->neonCount & 1) {
+            for (i = 0; i < 3; i++) {
+                r = irand(8);
+                while (data->face[data->nowSlot][i] == upsidegara[data->nowSlot][i][r]) {
+                    r = (r + 1) & 7;
+                }
+                data->face[data->nowSlot][i] = upsidegara[data->nowSlot][i][r];
+                if (data->flags & 2) {
+                    goryuugijo_upsidewindow_disp_sub(data->nowSlot, i);
+                } else {
+                    goryuugijo_upsidewindow_dispoff_sub(data->nowSlot, i);
+                }
+            }
+        }
+    } else if (data->neonCount == 27) {
+        for (i = 0; i < 3; i++) {
+            data->face[data->nowSlot][i] = i;
+            goryuugijo_upsidewindow_disp_sub(data->nowSlot, i);
+        }
+        if (data->face[data->nowSlot][0] == data->face[data->nowSlot][1] && data->face[data->nowSlot][1] == data->face[data->nowSlot][2]) {
+            data->flags |= 4;
+        }
+        if ((data->flags & 4) && (data->flags & 2)) {
+            data->speed[0] = data->speed[1] = data->speed[2] = 2.8125f;
+        } else {
+            data->speed[0] = data->speed[1] = data->speed[2] = VERSION_PICK(11.25f, 15.0f);
+        }
+        data->state[0] = data->state[1] = data->state[2] = 2;
+    } else if (data->flags & 4) {
+        if (data->neonCount == 33 || data->neonCount == 51 || data->neonCount == 69) {
+            for (i = 0; i < 3; i++) {
+                goryuugijo_upsidewindow_dispoff_sub(data->nowSlot, i);
+            }
+        }
+        if (data->neonCount == 42 || data->neonCount == 60 || data->neonCount == 78) {
+            for (i = 0; i < 3; i++) {
+                goryuugijo_upsidewindow_disp_sub(data->nowSlot, i);
+            }
+        }
+    }
+    if (data->flags & 2) {
+        if (data->neonCount == 0 || data->neonCount == 12 || data->neonCount == 24) {
+            mapPlayAnimationLv(drumname[data->nowSlot].neon[0], MAP_ANIM_PLAY_ONCE, 0);
+        }
+        if (data->neonCount == 6 || data->neonCount == 18) {
+            mapPlayAnimationLv(drumname[data->nowSlot].neon[1], MAP_ANIM_PLAY_ONCE, 0);
+        }
+    } else if (data->neonCount == 24) {
+        mapPlayAnimationLv(drumname[data->nowSlot].neon[0], MAP_ANIM_PLAY_ONCE, 0);
+    }
+    if (data->neonCount <= 78) {
+        data->neonCount++;
+    }
+}
+
+/**
+ * Spins one reel of the current slot machine by its speed:
+ * slows to a stop at the next face and snaps to it, keeping the angle in 0 to 360;
+ * returns 1 when the reel has stopped.
+ */
+s32 slot_rotate_sub(MiniGameWork* wp, SlotWork* data, s32 reel) {
+    s32 stopped = 0;
+    f32 angle = data->angle[data->nowSlot][reel];
+    f32 speed = data->speed[reel];
+    s32 face = (s32)angle / 45.0f;
+    s32 cross;
+    f32 d;
+
+    if (speed > 0.0f) {
+        face = (face + 1) & 7;
+        d = 45.0f * face - angle;
+        if (d < 0.0f) {
+            d += 360.0f;
+        }
+        if (d <= speed) {
+            cross = 1;
+        } else {
+            cross = 0;
+        }
+    } else {
+        d = 45.0f * face - angle;
+        if (d > 0.0f) {
+            d -= 360.0f;
+        }
+        if (d > speed) {
+            cross = -1;
+        } else {
+            cross = 0;
+        }
+    }
+    if ((data->state[reel] == 3 || data->state[reel] == 4) && cross != 0) {
+        if (data->stopCount[reel] != 0) {
+            if (data->state[reel] == 4) {
+                if (data->wait[reel] == 0) {
+                    if (data->extra[reel] != 0) {
+                        data->extra[reel]--;
+                        data->wait[reel] = 0;
+                    } else {
+                        data->wait[reel] = 18;
+                    }
+                } else {
+                    data->wait[reel]--;
+                }
+            }
+            if (data->wait[reel] != 0) {
+                goto rotate;
+            }
+            data->stopCount[reel]--;
+        } else {
+            stopped = 1;
+            data->state[reel] = 0;
+            data->angle[data->nowSlot][reel] = 45.0f * face;
+            goto rotate;
+        }
+    }
+    data->angle[data->nowSlot][reel] += data->speed[reel];
+    if (data->angle[data->nowSlot][reel] >= 360.0f) {
+        data->angle[data->nowSlot][reel] -= 360.0f;
+    }
+    if (data->angle[data->nowSlot][reel] < 0.0f) {
+        data->angle[data->nowSlot][reel] += 360.0f;
+    }
+rotate:
+    mapObjRotate(drumname[data->nowSlot].drum[reel], 0.0f, 0.0f, data->angle[data->nowSlot][reel]);
+    return stopped;
+}
+
+/**
+ * Per-frame state machine of the slot game (data->phase):
+ * 1 resets, 2 lights the neons, 3 handles the A presses that stop the reels one by one,
+ * 4 can adjust a near match to the small-window faces,
+ * 5 waits until all three reels stop, 6 checks the faces (three of a kind pays 3 Monte for the first symbol (5
+ * in the early demos), 15 for the second, 100 for the third), 7 to 10 play the payout and the falling medals,
+ * 11 shuts down.
+ */
+void goryuugijo_main_slot(EventEntry* event, BOOL isFirstCall) {
+    MiniGameWork* wp = (MiniGameWork*)event->lwData[0];
+    SlotWork* data = wp->data;
+    s32 r;
+    s32 dir;
+    s32 i;
+    s32 j;
+    s32 k;
+    s32 count;
+    s32 press;
+    CaseSetup setup;
+    s32 tbl[3][3];
+    s32 gara[3];
+    s32 gara2[3];
+    s32 n;
+    s32 m;
+
+    switch (data->phase) {
+        case 1:
+            data->cursor = 0;
+            data->counter = 0;
+            data->neonCount = 0;
+            data->wait[0] = data->wait[1] = data->wait[2] = 0;
+            data->extra[0] = data->extra[1] = data->extra[2] = 0;
+            data->state[0] = data->state[1] = data->state[2] = 1;
+            data->speed[0] = data->speed[1] = data->speed[2] = 0.0f;
+            data->flags &= ~2;
+            data->flags &= ~4;
+            data->phase++;
+            break;
+        case 2:
+            slot_neon_sub(wp, data);
+            if (data->counter >= 15) {
+                data->counter = 0;
+                data->phase++;
+                data->sfxId = psndSFXOn("SFX_EVT_GAME_SLOT_ROUND1");
+            } else {
+                data->counter++;
+                data->reberAngle += 4.0f;
+                mapObjRotate(drumname[data->nowSlot].reber, 0.0f, 0.0f, data->reberAngle);
+            }
+            break;
+        case 3:
+            slot_neon_sub(wp, data);
+            if (data->counter <= 6) {
+                if (data->counter >= 6) {
+                    data->reberAngle = 0.0f;
+                } else {
+                    data->reberAngle -= 10.0f;
+                }
+                mapObjRotate(drumname[data->nowSlot].reber, 0.0f, 0.0f, data->reberAngle);
+                data->counter++;
+            }
+            if (data->state[data->cursor] != 2 || (keyGetDirRep(0) & (DEMO_STICK_LEFT | DEMO_STICK_RIGHT))) {
+                if (data->state[data->cursor] != 2) {
+                    dir = 1;
+                } else {
+                    u32 key = keyGetDirRep(0);
+
+                    dir = 1;
+                    if (key & DEMO_STICK_LEFT) {
+                        dir = -1;
+                    }
+                }
+                for (i = 0; i < 3; i++) {
+                    data->cursor += dir;
+                    if (data->cursor < 0) {
+                        data->cursor = 2;
+                    } else if (data->cursor > 2) {
+                        data->cursor = 0;
+                    }
+                    if (data->state[data->cursor] == 2) {
+                        break;
+                    }
+                }
+            }
+            count = 0;
+            for (j = 0; j < 3; j++) {
+                if (data->state[j] == 0) {
+                    count++;
+                    continue;
+                }
+                if (j == data->cursor) {
+                    switch (j) {
+                        case 0:
+                            if (keyGetButtonTrg(0) & PAD_BUTTON_A) {
+                                press = 1;
+                            } else {
+                                press = 0;
+                            }
+                            break;
+                        case 1:
+                            if (keyGetButtonTrg(0) & PAD_BUTTON_A) {
+                                press = 1;
+                            } else {
+                                press = 0;
+                            }
+                            break;
+                        case 2:
+                            if (keyGetButtonTrg(0) & PAD_BUTTON_A) {
+                                press = 1;
+                            } else {
+                                press = 0;
+                            }
+                            break;
+                    }
+                } else {
+                    press = 0;
+                }
+                if (press && data->state[j] == 2) {
+                    data->state[j] = 3;
+                    if (data->flags & 2) {
+                        data->stopCount[j] = 0;
+                    } else {
+                        data->stopCount[j] = irand(2);
+                    }
+
+                    // sound name passed as an integer word, as in the original (only loops show it; see sfx_name_word.h)
+                    psndSFXOn(SFX_NAME_WORD("SFX_EVT_GAME_SLOT_STOP1"));
+                }
+                count += slot_rotate_sub(wp, data, j);
+            }
+            if (count == 3) {
+                for (i = 0; i < 3; i++) {
+                    goryuugijo_upsidewindow_disp_sub(data->nowSlot, i);
+                }
+                mapPlayAnimationLv(drumname[data->nowSlot].neon[1], MAP_ANIM_PLAY_ONCE, 0);
+                data->counter = 0;
+                data->phase++;
+            }
+            break;
+        case 4:
+            if (data->counter == 0) {
+                for (i = 0; i < 3; i++) {
+                    r = data->angle[data->nowSlot][i] / 45.0f;
+                    gara[i] = slotgara[data->nowSlot][i][r];
+                }
+                if (gara[0] == gara[1] && gara[1] == gara[2]) {
+                    data->phase = 6;
+                    break;
+                }
+                if (!(data->flags & 4)) {
+                    data->phase = 6;
+                    break;
+                }
+                count = 0;
+                for (i = 0; i < 3; i++) {
+                    if (data->face[data->nowSlot][i] == gara[i]) {
+                        count++;
+                    }
+                }
+                if (count < 2) {
+                    data->phase = 6;
+                    break;
+                }
+            }
+            if (data->counter == 0 || data->counter == 18 || data->counter == 36) {
+                for (i = 0; i < 3; i++) {
+                    goryuugijo_upsidewindow_disp_sub(data->nowSlot, i);
+                }
+            }
+            if (data->counter == 9 || data->counter == 27 || data->counter == 45) {
+                for (i = 0; i < 3; i++) {
+                    goryuugijo_upsidewindow_dispoff_sub(data->nowSlot, i);
+                }
+            }
+            if (data->counter == 45) {
+                for (j = 0; j < 3; j++) {
+                    s32 f = data->angle[data->nowSlot][j] / 45.0f;
+
+                    for (k = 0; k < 3; k++) {
+                        tbl[k][j] = slotgara[data->nowSlot][j][(f + k - 1) & 7];
+                    }
+                }
+                for (i = 0; i < 3; i++) {
+                    if (tbl[1][i] != data->face[data->nowSlot][i]) {
+                        r = irand(2);
+                        for (k = 0; k < 2; k++) {
+                            r = (r + 1) & 1;
+                            switch (r) {
+                                case 0:
+                                    if (data->face[data->nowSlot][i] == tbl[0][i] ||
+                                        !(data->face[data->nowSlot][i] == tbl[0][i] || tbl[2][i] == data->face[data->nowSlot][i])) {
+                                        if (data->face[data->nowSlot][i] == 0) {
+                                            data->stopCount[i] = 1;
+                                            data->extra[i] = 1;
+                                            data->speed[i] = -1.40625f;
+                                        } else {
+                                            data->stopCount[i] = 6;
+                                            if (data->face[data->nowSlot][i] == 2) {
+                                                data->stopCount[i] += 8;
+                                            }
+                                            data->extra[i] = 0;
+                                            data->speed[i] = 1.40625f;
+                                        }
+                                        data->state[i] = 4;
+                                        k = 1;
+                                    }
+                                    break;
+                                case 1:
+                                    if (tbl[2][i] == data->face[data->nowSlot][i] ||
+                                        !(data->face[data->nowSlot][i] == tbl[0][i] || tbl[2][i] == data->face[data->nowSlot][i])) {
+                                        if (data->face[data->nowSlot][i] == 0) {
+                                            data->stopCount[i] = 0;
+                                            data->extra[i] = 0;
+                                            data->speed[i] = 1.40625f;
+                                        } else {
+                                            data->stopCount[i] = 7;
+                                            if (data->face[data->nowSlot][i] == 2) {
+                                                data->stopCount[i] += 8;
+                                            }
+                                            data->extra[i] = 1;
+                                            data->speed[i] = -1.40625f;
+                                        }
+                                        data->state[i] = 4;
+                                        k = 1;
+                                    }
+                                    break;
+                            }
+                        }
+                    }
+                }
+                data->phase++;
+            }
+            data->counter++;
+            break;
+        case 5:
+            n = 0;
+            for (m = 0; m < 3; m++) {
+                if (data->state[m] == 0) {
+                    n++;
+                } else {
+                    n += slot_rotate_sub(wp, data, m);
+                }
+            }
+            if (n == 3) {
+                data->counter = 0;
+                data->phase++;
+            }
+            break;
+        case 6:
+            for (i = 0; i < 3; i++) {
+                gara2[i] = slotgara[data->nowSlot][i][(s32)(data->angle[data->nowSlot][i] / 45.0f)];
+            }
+            if (gara2[0] == gara2[1] && gara2[1] == gara2[2]) {
+                data->counter = 0;
+                data->phase++;
+                psndSFXOn("SFX_EVT_GAME_SLOT_SUCCESS1");
+                switch (gara2[0]) {
+                    case 0:
+#if VERSION <= VERSION_DEMO_JP
+                        data->monteCount = 5;
+#else
+                        data->monteCount = 3;
+#endif
+                        break;
+                    case 1:
+                        data->monteCount = 15;
+                        break;
+                    case 2:
+                        data->monteCount = 100;
+                        break;
+                }
+                caseDelete(data->caseId[0]);
+                caseDelete(data->caseId[1]);
+                data->flags |= 1;
+                mapPlayAnimationLv(drumname[data->nowSlot].neon[2], MAP_ANIM_PLAY_LOOP, 0);
+                data->flags |= 8;
+            } else {
+                data->phase = 11;
+            }
+            psndSFXOff(data->sfxId);
+            break;
+        case 7:
+            if (data->counter >= 48) {
+                data->counter = 0;
+                data->phase++;
+            }
+            data->counter++;
+            break;
+        case 8:
+            if (data->counter >= 36) {
+                data->counter = 19;
+                data->phase++;
+            }
+            data->counter++;
+            break;
+        case 9:
+            if (data->counter >= 19) {
+                data->counter = 0;
+                if (data->monteEvt == NULL) {
+                    data->monteEvt = evtEntry(slot_fall_monte, 0, 0);
+                    data->monteEvt->lwData[0] = event->lwData[0];
+                }
+                data->phase++;
+            } else {
+                data->counter++;
+            }
+            break;
+        case 10:
+            if (data->monteEvt == NULL || !evtCheckID(data->monteEvt->eventId)) {
+                mapPlayAnimationLv(drumname[data->nowSlot].neon[2], MAP_ANIM_PLAY_AT_END, 0);
+                data->flags &= ~8;
+                mapPlayAnimationLv(drumname[data->nowSlot].neon[1], MAP_ANIM_PLAY_ONCE, 0);
+                data->counter = 0;
+                data->monteEvt = NULL;
+                data->phase++;
+            } else {
+                data->counter++;
+            }
+            break;
+        case 11:
+            if (data->monteEvt != NULL) {
+                monte_p->owner->monteCount = 0;
+                _mapFree(monte_p);
+                evtDeleteID(data->monteEvt->eventId);
+                data->monteEvt = NULL;
+            }
+            data->counter = 0;
+            data->neonCount = 0;
+            data->phase = 0;
+            data->wait[0] = data->wait[1] = data->wait[2] = 0;
+            data->extra[0] = data->extra[1] = data->extra[2] = 0;
+            if (data->flags & 1) {
+                data->flags &= ~1;
+                {
+                    s32 n;
+                    CaseSetup* s = &setup;
+
+                    for (n = 0; n < 2; n++) {
+                        s->conditionId = 0x8009;
+                        s->hitObjName = drumname[n].anim;
+                        s->swFlag = 0;
+                        s->activeFunc = NULL;
+                        s->evtCode = slotevttbl[n];
+                        s->priority = 0;
+                        memcpy(s->lwData, event->lwData, sizeof(s->lwData));
+                        data->caseId[n] = caseEntry(s);
+                    }
+                }
+            }
+            if (data->flags & 8) {
+                mapPlayAnimationLv(drumname[data->nowSlot].neon[2], MAP_ANIM_PLAY_AT_END, 0);
+                data->flags &= ~8;
+                mapPlayAnimationLv(drumname[data->nowSlot].neon[1], MAP_ANIM_PLAY_ONCE, 0);
+            }
+            break;
+    }
+}
+
+void goryuugijo_disp_slot(CameraId camera, void* param) {
+    SlotWork* data = ((MiniGameWork*)param)->data;
+    s32 icons[3] = {ICON_BUTTON_A_ALT, ICON_BUTTON_A_ALT, ICON_BUTTON_A_ALT};
+    s32 i;
+    Vec pos;
+    f32 sx;
+    f32 sy;
+    f32 sz;
+    CameraEntry* cam;
+    f32 proj[7];
+    f32 vp[6];
+    Mtx trans;
+    Mtx scale;
+    Mtx mtx;
+
+    for (i = 0; i < 3; i++) {
+        if (data->state[i] == 2 && i == data->cursor) {
+            mapObjGetPos(drumname[data->nowSlot].drum[i], &pos);
+            pos.x -= 25.0f;
+            pos.y += 10.0f;
+            cam = camGetPtr(CAMERA_3D);
+            GXSetProjection(cam->projection, cam->projType);
+            GXGetProjectionv(proj);
+            GXGetViewportv(vp);
+            GXProject(pos.x, pos.y, pos.z, cam->view, proj, vp, &sx, &sy, &sz);
+            cam = camGetPtr(camera);
+            GXSetProjection(cam->projection, cam->projType);
+            PSMTXScale(scale, 1.1f, 1.1f, 1.1f);
+            PSMTXTrans(trans, -304.0f + sx, 240.0f - sy, 0.0f);
+            PSMTXConcat(trans, scale, mtx);
+            iconDispGx2(mtx, ICON_FLAG_2D, ICON_FUKIDASHI);
+            PSMTXTrans(trans, -304.0f + sx, 31.35f + (240.0f - sy), 0.0f);
+            PSMTXConcat(trans, scale, mtx);
+            ((void (*)(Mtx, s16, u16))iconDispGx2)(mtx, ICON_FLAG_2D, icons[i]);
+        }
+    }
+}
+
 
 /**
  * Talk event of the ranking board (ranking_mess_00, menu ranking_mess_01):
@@ -6438,747 +7168,6 @@ EVT_BEGIN(gor_03_init_evt)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kou_kabe"), MAP_OBJ_FLAG_CLIP)
     RETURN
 EVT_END()
-
-static USER_FUNC(fall_rtn) {
-    Vec pos;
-    SlotWork* data;
-    s32 i;
-    s32 done = 0;
-    f32 spd;
-
-    if (isFirstCall) {
-        SlotWork* data = ((MiniGameWork*)event->lwData[0])->data;
-        monte_p = _mapAlloc(data->monteCount * sizeof(GMonte));
-        memset(monte_p, 0, data->monteCount * sizeof(GMonte));
-        monte_p->owner = data;
-        for (i = 0; i < monte_p->owner->monteCount; i++) {
-            GMonteSub* sub = &monte_p[i].sub;
-            Vec pos = fall_pos0();
-            f32 s;
-            f32 c;
-            f32 ofs;
-
-            pos.z = montemedalzpos[monte_p->owner->nowSlot];
-            sub->pos = pos;
-            ofs = ((i & 1) * 2.0f - 1.0f) * ((rand() % 101) / 10.0f);
-            sub->pos.z += ofs;
-            sub->scale = 1.0f;
-            spd = 2.0f + (rand() % 300) / 100.0f;
-            c = 0.0f;
-            s = 0.0f;
-            movePos(&s, &c, spd, 270.0f - 3.0f * ofs);
-            {
-                Vec vel = fall_vel0();
-
-                vel.x = s;
-                vel.z = c;
-                monte_p[i].vel = vel;
-            }
-            monte_p[i].wait = ((rand() % 700 + 100) * 60) / 1000;
-        }
-    }
-    for (i = 0; i < monte_p->owner->monteCount; i++) {
-        GMonte* m = &monte_p[i];
-        switch (m->state) {
-            case 0:
-                if (m->wait != 0) {
-                    m->wait--;
-                } else {
-                    m->state++;
-                }
-                break;
-            case 1:
-                PSVECAdd(&m->sub.pos, &m->vel, &m->sub.pos);
-                m->vel.y -= 0.81666666f;
-                if (m->sub.pos.y <= 0.0f) {
-                    m->sub.pos.y = 0.0f;
-
-                    // sound name passed as an integer word, as in the original (only loops show it; see sfx_name_word.h)
-                    psndSFXOn_3D(SFX_NAME_WORD("SFX_EVT_GAME_MONTE_LEAPED1"), &m->sub.pos);
-                    if (__fabs(m->vel.y) <= 4.0) {
-                        m->state++;
-                        m->timer = 300;
-                    } else {
-                        f32 r = (rand() % 21) / 100.0f;
-                        m->vel.y *= -(0.5f + r);
-                        m->vel.x = 0.0f;
-                        m->vel.z = 0.0f;
-                    }
-                }
-                if (get_monte_check(&m->sub.pos, &marioGetPtr()->position) == TRUE) {
-                    psndSFXOn_3D(SFX_NAME_WORD("SFX_EVT_GAME_MONTE_COUNT1"), &m->sub.pos);
-#if VERSION <= VERSION_DEMO_JP
-                    if (yuwp->tokens < 0x7FFFFFFF) {
-#else
-                    if (yuwp->tokens < 99999) {
-#endif
-                        yuwp->tokens++;
-                    }
-                    m->hidden = 1;
-                    m->state = 3;
-                }
-                break;
-            case 2:
-                m->timer--;
-                if (m->timer == 0) {
-                    m->hidden = 1;
-                    m->state++;
-                }
-                if (m->timer < 60) {
-                    if (m->timer & 2) {
-                        m->sub.pos.y = 0.0f;
-                    } else {
-                        m->sub.pos.y = -1000.0f;
-                    }
-                }
-                pos = m->sub.pos;
-                pos.y = 0.0f;
-                if (get_monte_check(&pos, &marioGetPtr()->position) == TRUE) {
-                    psndSFXOn_3D(SFX_NAME_WORD("SFX_EVT_GAME_MONTE_COUNT1"), &m->sub.pos);
-#if VERSION <= VERSION_DEMO_JP
-                    if (yuwp->tokens < 0x7FFFFFFF) {
-#else
-                    if (yuwp->tokens < 99999) {
-#endif
-                        yuwp->tokens++;
-                    }
-                    m->hidden = 1;
-                    m->state = 3;
-                }
-                break;
-            case 3:
-                done++;
-                break;
-        }
-    }
-    if (done < monte_p->owner->monteCount) {
-        dispEntry(CAMERA_3D, 0.0f, DISP_MODE_ALPHA_TEST, monte_disp, monte_p);
-        return EVT_RETURN_BLOCK;
-    }
-    monte_p->owner->monteCount = 0;
-    monte_p->owner->monteEvt = NULL;
-    _mapFree(monte_p);
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper that sets the phase of a slot machine (the minigame work block in args[0]) to args[1]. */
-static USER_FUNC(goryuugijo_set_slot_phase) {
-    EvtWord* args = event->args;
-    SlotWork* data = ((MiniGameWork*)evtGetValue(event, args[0]))->data;
-
-    data->phase = evtGetValue(event, args[1]);
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper that reads the phase of a slot machine (the minigame work block in args[0]) into args[1]. */
-static USER_FUNC(goryuugijo_get_slot_phase) {
-    EvtWord* args = event->args;
-    SlotWork* data = ((MiniGameWork*)evtGetValue(event, args[0]))->data;
-
-    evtSetValue(event, args[1], data->phase);
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Sets MAP_OBJ_FLAG_HIDDEN on the three window map groups of reel number reel of a slot machine.
- * Same operation as goryuugijo_upsidewindow_disp_sub.
- */
-static void goryuugijo_upsidewindow_dispoff_sub(s32 slot, s32 reel) {
-    mapGrpFlagOn(drumname[slot].window[reel][0], MAP_OBJ_FLAG_HIDDEN);
-    mapGrpFlagOn(drumname[slot].window[reel][1], MAP_OBJ_FLAG_HIDDEN);
-    mapGrpFlagOn(drumname[slot].window[reel][2], MAP_OBJ_FLAG_HIDDEN);
-}
-
-/** Sets MAP_OBJ_FLAG_HIDDEN on the three window map groups of reel number reel of a slot machine. */
-static void goryuugijo_upsidewindow_disp_sub(s32 slot, s32 reel) {
-    mapGrpFlagOn(drumname[slot].window[reel][0], MAP_OBJ_FLAG_HIDDEN);
-    mapGrpFlagOn(drumname[slot].window[reel][1], MAP_OBJ_FLAG_HIDDEN);
-    mapGrpFlagOn(drumname[slot].window[reel][2], MAP_OBJ_FLAG_HIDDEN);
-}
-
-/**
- * Script helper that gives each reel of both slot machines a random starting angle (a multiple of 45 degrees)
- * and a random face.
- */
-static USER_FUNC(goryuugijo_door_init_slot) {
-    MiniGameWork* wp = (MiniGameWork*)evtGetValue(event, event->args[0]);
-    SlotWork* data = wp->data;
-    s32 j;
-    s32 i;
-
-    for (i = 0; i < 2; i++) {
-        for (j = 0; j < 3; j++) {
-            data->angle[i][j] = 0.0f;
-            if (data->angle[i][j] >= 360.0f) {
-                data->angle[i][j] -= 360.0f;
-            }
-            data->angle[i][j] = 45.0f * irand(8);
-            mapObjRotate(drumname[i].drum[j], 0.0f, 0.0f, data->angle[i][j]);
-            data->face[i][j] = upsidegara[i][j][irand(8)];
-            goryuugijo_upsidewindow_disp_sub(i, j);
-        }
-    }
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Init callback of the slot machine game: clears the counter, the lever angle and the medal event,
- * and clears the win flag.
- */
-void goryuugijo_init_slot(EventEntry* event, BOOL isFirstCall) {
-    SlotWork* data = ((MiniGameWork*)event->lwData[0])->data;
-
-    data->counter = 0;
-    data->reberAngle = 0.0f;
-    data->monteEvt = NULL;
-    data->flags &= ~1;
-}
-
-/**
- * Per-frame lights of a slot machine spin, run by goryuugijo_main_slot during the lever pull and spin for the first 79 frames
- * (neonCount): for 27 frames it shuffles the three faces of the small window above the reels (UPSIDEGARA) every
- * other frame, then assigns faces 0, 1 and 2 there and starts the reels at full speed;
- * the neon animation plays once at
- * frame 24.
- * Flag 2 would pick a slow "lucky" spin with more neon flashes, but it is cleared right after its 1-in-10
- * roll, and flag 4 (all three window faces equal) cannot be set with faces 0, 1 and 2.
- */
-void slot_neon_sub(MiniGameWork* wp, SlotWork* data) {
-    s32 i;
-    s32 r;
-
-    if (data->neonCount > 78) {
-        return;
-    }
-    if (data->neonCount == 0) {
-        if (irand(10) == 0) {
-            data->flags |= 2;
-        }
-        data->flags &= ~2;
-    }
-    if (data->neonCount < 27) {
-        if (data->neonCount & 1) {
-            for (i = 0; i < 3; i++) {
-                r = irand(8);
-                while (data->face[data->nowSlot][i] == upsidegara[data->nowSlot][i][r]) {
-                    r = (r + 1) & 7;
-                }
-                data->face[data->nowSlot][i] = upsidegara[data->nowSlot][i][r];
-                if (data->flags & 2) {
-                    goryuugijo_upsidewindow_disp_sub(data->nowSlot, i);
-                } else {
-                    goryuugijo_upsidewindow_dispoff_sub(data->nowSlot, i);
-                }
-            }
-        }
-    } else if (data->neonCount == 27) {
-        for (i = 0; i < 3; i++) {
-            data->face[data->nowSlot][i] = i;
-            goryuugijo_upsidewindow_disp_sub(data->nowSlot, i);
-        }
-        if (data->face[data->nowSlot][0] == data->face[data->nowSlot][1] && data->face[data->nowSlot][1] == data->face[data->nowSlot][2]) {
-            data->flags |= 4;
-        }
-        if ((data->flags & 4) && (data->flags & 2)) {
-            data->speed[0] = data->speed[1] = data->speed[2] = 2.8125f;
-        } else {
-            data->speed[0] = data->speed[1] = data->speed[2] = VERSION_PICK(11.25f, 15.0f);
-        }
-        data->state[0] = data->state[1] = data->state[2] = 2;
-    } else if (data->flags & 4) {
-        if (data->neonCount == 33 || data->neonCount == 51 || data->neonCount == 69) {
-            for (i = 0; i < 3; i++) {
-                goryuugijo_upsidewindow_dispoff_sub(data->nowSlot, i);
-            }
-        }
-        if (data->neonCount == 42 || data->neonCount == 60 || data->neonCount == 78) {
-            for (i = 0; i < 3; i++) {
-                goryuugijo_upsidewindow_disp_sub(data->nowSlot, i);
-            }
-        }
-    }
-    if (data->flags & 2) {
-        if (data->neonCount == 0 || data->neonCount == 12 || data->neonCount == 24) {
-            mapPlayAnimationLv(drumname[data->nowSlot].neon[0], MAP_ANIM_PLAY_ONCE, 0);
-        }
-        if (data->neonCount == 6 || data->neonCount == 18) {
-            mapPlayAnimationLv(drumname[data->nowSlot].neon[1], MAP_ANIM_PLAY_ONCE, 0);
-        }
-    } else if (data->neonCount == 24) {
-        mapPlayAnimationLv(drumname[data->nowSlot].neon[0], MAP_ANIM_PLAY_ONCE, 0);
-    }
-    if (data->neonCount <= 78) {
-        data->neonCount++;
-    }
-}
-
-/**
- * Spins one reel of the current slot machine by its speed:
- * slows to a stop at the next face and snaps to it, keeping the angle in 0 to 360;
- * returns 1 when the reel has stopped.
- */
-s32 slot_rotate_sub(MiniGameWork* wp, SlotWork* data, s32 reel) {
-    s32 stopped = 0;
-    f32 angle = data->angle[data->nowSlot][reel];
-    f32 speed = data->speed[reel];
-    s32 face = (s32)angle / 45.0f;
-    s32 cross;
-    f32 d;
-
-    if (speed > 0.0f) {
-        face = (face + 1) & 7;
-        d = 45.0f * face - angle;
-        if (d < 0.0f) {
-            d += 360.0f;
-        }
-        if (d <= speed) {
-            cross = 1;
-        } else {
-            cross = 0;
-        }
-    } else {
-        d = 45.0f * face - angle;
-        if (d > 0.0f) {
-            d -= 360.0f;
-        }
-        if (d > speed) {
-            cross = -1;
-        } else {
-            cross = 0;
-        }
-    }
-    if ((data->state[reel] == 3 || data->state[reel] == 4) && cross != 0) {
-        if (data->stopCount[reel] != 0) {
-            if (data->state[reel] == 4) {
-                if (data->wait[reel] == 0) {
-                    if (data->extra[reel] != 0) {
-                        data->extra[reel]--;
-                        data->wait[reel] = 0;
-                    } else {
-                        data->wait[reel] = 18;
-                    }
-                } else {
-                    data->wait[reel]--;
-                }
-            }
-            if (data->wait[reel] != 0) {
-                goto rotate;
-            }
-            data->stopCount[reel]--;
-        } else {
-            stopped = 1;
-            data->state[reel] = 0;
-            data->angle[data->nowSlot][reel] = 45.0f * face;
-            goto rotate;
-        }
-    }
-    data->angle[data->nowSlot][reel] += data->speed[reel];
-    if (data->angle[data->nowSlot][reel] >= 360.0f) {
-        data->angle[data->nowSlot][reel] -= 360.0f;
-    }
-    if (data->angle[data->nowSlot][reel] < 0.0f) {
-        data->angle[data->nowSlot][reel] += 360.0f;
-    }
-rotate:
-    mapObjRotate(drumname[data->nowSlot].drum[reel], 0.0f, 0.0f, data->angle[data->nowSlot][reel]);
-    return stopped;
-}
-
-/**
- * Per-frame state machine of the slot game (data->phase):
- * 1 resets, 2 lights the neons, 3 handles the A presses that stop the reels one by one,
- * 4 can adjust a near match to the small-window faces,
- * 5 waits until all three reels stop, 6 checks the faces (three of a kind pays 3 Monte for the first symbol (5
- * in the early demos), 15 for the second, 100 for the third), 7 to 10 play the payout and the falling medals,
- * 11 shuts down.
- */
-void goryuugijo_main_slot(EventEntry* event, BOOL isFirstCall) {
-    MiniGameWork* wp = (MiniGameWork*)event->lwData[0];
-    SlotWork* data = wp->data;
-    s32 r;
-    s32 dir;
-    s32 i;
-    s32 j;
-    s32 k;
-    s32 count;
-    s32 press;
-    CaseSetup setup;
-    s32 tbl[3][3];
-    s32 gara[3];
-    s32 gara2[3];
-    s32 n;
-    s32 m;
-
-    switch (data->phase) {
-        case 1:
-            data->cursor = 0;
-            data->counter = 0;
-            data->neonCount = 0;
-            data->wait[0] = data->wait[1] = data->wait[2] = 0;
-            data->extra[0] = data->extra[1] = data->extra[2] = 0;
-            data->state[0] = data->state[1] = data->state[2] = 1;
-            data->speed[0] = data->speed[1] = data->speed[2] = 0.0f;
-            data->flags &= ~2;
-            data->flags &= ~4;
-            data->phase++;
-            break;
-        case 2:
-            slot_neon_sub(wp, data);
-            if (data->counter >= 15) {
-                data->counter = 0;
-                data->phase++;
-                data->sfxId = psndSFXOn("SFX_EVT_GAME_SLOT_ROUND1");
-            } else {
-                data->counter++;
-                data->reberAngle += 4.0f;
-                mapObjRotate(drumname[data->nowSlot].reber, 0.0f, 0.0f, data->reberAngle);
-            }
-            break;
-        case 3:
-            slot_neon_sub(wp, data);
-            if (data->counter <= 6) {
-                if (data->counter >= 6) {
-                    data->reberAngle = 0.0f;
-                } else {
-                    data->reberAngle -= 10.0f;
-                }
-                mapObjRotate(drumname[data->nowSlot].reber, 0.0f, 0.0f, data->reberAngle);
-                data->counter++;
-            }
-            if (data->state[data->cursor] != 2 || (keyGetDirRep(0) & (DEMO_STICK_LEFT | DEMO_STICK_RIGHT))) {
-                if (data->state[data->cursor] != 2) {
-                    dir = 1;
-                } else {
-                    u32 key = keyGetDirRep(0);
-
-                    dir = 1;
-                    if (key & DEMO_STICK_LEFT) {
-                        dir = -1;
-                    }
-                }
-                for (i = 0; i < 3; i++) {
-                    data->cursor += dir;
-                    if (data->cursor < 0) {
-                        data->cursor = 2;
-                    } else if (data->cursor > 2) {
-                        data->cursor = 0;
-                    }
-                    if (data->state[data->cursor] == 2) {
-                        break;
-                    }
-                }
-            }
-            count = 0;
-            for (j = 0; j < 3; j++) {
-                if (data->state[j] == 0) {
-                    count++;
-                    continue;
-                }
-                if (j == data->cursor) {
-                    switch (j) {
-                        case 0:
-                            if (keyGetButtonTrg(0) & PAD_BUTTON_A) {
-                                press = 1;
-                            } else {
-                                press = 0;
-                            }
-                            break;
-                        case 1:
-                            if (keyGetButtonTrg(0) & PAD_BUTTON_A) {
-                                press = 1;
-                            } else {
-                                press = 0;
-                            }
-                            break;
-                        case 2:
-                            if (keyGetButtonTrg(0) & PAD_BUTTON_A) {
-                                press = 1;
-                            } else {
-                                press = 0;
-                            }
-                            break;
-                    }
-                } else {
-                    press = 0;
-                }
-                if (press && data->state[j] == 2) {
-                    data->state[j] = 3;
-                    if (data->flags & 2) {
-                        data->stopCount[j] = 0;
-                    } else {
-                        data->stopCount[j] = irand(2);
-                    }
-
-                    // sound name passed as an integer word, as in the original (only loops show it; see sfx_name_word.h)
-                    psndSFXOn(SFX_NAME_WORD("SFX_EVT_GAME_SLOT_STOP1"));
-                }
-                count += slot_rotate_sub(wp, data, j);
-            }
-            if (count == 3) {
-                for (i = 0; i < 3; i++) {
-                    goryuugijo_upsidewindow_disp_sub(data->nowSlot, i);
-                }
-                mapPlayAnimationLv(drumname[data->nowSlot].neon[1], MAP_ANIM_PLAY_ONCE, 0);
-                data->counter = 0;
-                data->phase++;
-            }
-            break;
-        case 4:
-            if (data->counter == 0) {
-                for (i = 0; i < 3; i++) {
-                    r = data->angle[data->nowSlot][i] / 45.0f;
-                    gara[i] = slotgara[data->nowSlot][i][r];
-                }
-                if (gara[0] == gara[1] && gara[1] == gara[2]) {
-                    data->phase = 6;
-                    break;
-                }
-                if (!(data->flags & 4)) {
-                    data->phase = 6;
-                    break;
-                }
-                count = 0;
-                for (i = 0; i < 3; i++) {
-                    if (data->face[data->nowSlot][i] == gara[i]) {
-                        count++;
-                    }
-                }
-                if (count < 2) {
-                    data->phase = 6;
-                    break;
-                }
-            }
-            if (data->counter == 0 || data->counter == 18 || data->counter == 36) {
-                for (i = 0; i < 3; i++) {
-                    goryuugijo_upsidewindow_disp_sub(data->nowSlot, i);
-                }
-            }
-            if (data->counter == 9 || data->counter == 27 || data->counter == 45) {
-                for (i = 0; i < 3; i++) {
-                    goryuugijo_upsidewindow_dispoff_sub(data->nowSlot, i);
-                }
-            }
-            if (data->counter == 45) {
-                for (j = 0; j < 3; j++) {
-                    s32 f = data->angle[data->nowSlot][j] / 45.0f;
-
-                    for (k = 0; k < 3; k++) {
-                        tbl[k][j] = slotgara[data->nowSlot][j][(f + k - 1) & 7];
-                    }
-                }
-                for (i = 0; i < 3; i++) {
-                    if (tbl[1][i] != data->face[data->nowSlot][i]) {
-                        r = irand(2);
-                        for (k = 0; k < 2; k++) {
-                            r = (r + 1) & 1;
-                            switch (r) {
-                                case 0:
-                                    if (data->face[data->nowSlot][i] == tbl[0][i] ||
-                                        !(data->face[data->nowSlot][i] == tbl[0][i] || tbl[2][i] == data->face[data->nowSlot][i])) {
-                                        if (data->face[data->nowSlot][i] == 0) {
-                                            data->stopCount[i] = 1;
-                                            data->extra[i] = 1;
-                                            data->speed[i] = -1.40625f;
-                                        } else {
-                                            data->stopCount[i] = 6;
-                                            if (data->face[data->nowSlot][i] == 2) {
-                                                data->stopCount[i] += 8;
-                                            }
-                                            data->extra[i] = 0;
-                                            data->speed[i] = 1.40625f;
-                                        }
-                                        data->state[i] = 4;
-                                        k = 1;
-                                    }
-                                    break;
-                                case 1:
-                                    if (tbl[2][i] == data->face[data->nowSlot][i] ||
-                                        !(data->face[data->nowSlot][i] == tbl[0][i] || tbl[2][i] == data->face[data->nowSlot][i])) {
-                                        if (data->face[data->nowSlot][i] == 0) {
-                                            data->stopCount[i] = 0;
-                                            data->extra[i] = 0;
-                                            data->speed[i] = 1.40625f;
-                                        } else {
-                                            data->stopCount[i] = 7;
-                                            if (data->face[data->nowSlot][i] == 2) {
-                                                data->stopCount[i] += 8;
-                                            }
-                                            data->extra[i] = 1;
-                                            data->speed[i] = -1.40625f;
-                                        }
-                                        data->state[i] = 4;
-                                        k = 1;
-                                    }
-                                    break;
-                            }
-                        }
-                    }
-                }
-                data->phase++;
-            }
-            data->counter++;
-            break;
-        case 5:
-            n = 0;
-            for (m = 0; m < 3; m++) {
-                if (data->state[m] == 0) {
-                    n++;
-                } else {
-                    n += slot_rotate_sub(wp, data, m);
-                }
-            }
-            if (n == 3) {
-                data->counter = 0;
-                data->phase++;
-            }
-            break;
-        case 6:
-            for (i = 0; i < 3; i++) {
-                gara2[i] = slotgara[data->nowSlot][i][(s32)(data->angle[data->nowSlot][i] / 45.0f)];
-            }
-            if (gara2[0] == gara2[1] && gara2[1] == gara2[2]) {
-                data->counter = 0;
-                data->phase++;
-                psndSFXOn("SFX_EVT_GAME_SLOT_SUCCESS1");
-                switch (gara2[0]) {
-                    case 0:
-#if VERSION <= VERSION_DEMO_JP
-                        data->monteCount = 5;
-#else
-                        data->monteCount = 3;
-#endif
-                        break;
-                    case 1:
-                        data->monteCount = 15;
-                        break;
-                    case 2:
-                        data->monteCount = 100;
-                        break;
-                }
-                caseDelete(data->caseId[0]);
-                caseDelete(data->caseId[1]);
-                data->flags |= 1;
-                mapPlayAnimationLv(drumname[data->nowSlot].neon[2], MAP_ANIM_PLAY_LOOP, 0);
-                data->flags |= 8;
-            } else {
-                data->phase = 11;
-            }
-            psndSFXOff(data->sfxId);
-            break;
-        case 7:
-            if (data->counter >= 48) {
-                data->counter = 0;
-                data->phase++;
-            }
-            data->counter++;
-            break;
-        case 8:
-            if (data->counter >= 36) {
-                data->counter = 19;
-                data->phase++;
-            }
-            data->counter++;
-            break;
-        case 9:
-            if (data->counter >= 19) {
-                data->counter = 0;
-                if (data->monteEvt == NULL) {
-                    data->monteEvt = evtEntry(slot_fall_monte, 0, 0);
-                    data->monteEvt->lwData[0] = event->lwData[0];
-                }
-                data->phase++;
-            } else {
-                data->counter++;
-            }
-            break;
-        case 10:
-            if (data->monteEvt == NULL || !evtCheckID(data->monteEvt->eventId)) {
-                mapPlayAnimationLv(drumname[data->nowSlot].neon[2], MAP_ANIM_PLAY_AT_END, 0);
-                data->flags &= ~8;
-                mapPlayAnimationLv(drumname[data->nowSlot].neon[1], MAP_ANIM_PLAY_ONCE, 0);
-                data->counter = 0;
-                data->monteEvt = NULL;
-                data->phase++;
-            } else {
-                data->counter++;
-            }
-            break;
-        case 11:
-            if (data->monteEvt != NULL) {
-                monte_p->owner->monteCount = 0;
-                _mapFree(monte_p);
-                evtDeleteID(data->monteEvt->eventId);
-                data->monteEvt = NULL;
-            }
-            data->counter = 0;
-            data->neonCount = 0;
-            data->phase = 0;
-            data->wait[0] = data->wait[1] = data->wait[2] = 0;
-            data->extra[0] = data->extra[1] = data->extra[2] = 0;
-            if (data->flags & 1) {
-                data->flags &= ~1;
-                {
-                    s32 n;
-                    CaseSetup* s = &setup;
-
-                    for (n = 0; n < 2; n++) {
-                        s->conditionId = 0x8009;
-                        s->hitObjName = drumname[n].anim;
-                        s->swFlag = 0;
-                        s->activeFunc = NULL;
-                        s->evtCode = slotevttbl[n];
-                        s->priority = 0;
-                        memcpy(s->lwData, event->lwData, sizeof(s->lwData));
-                        data->caseId[n] = caseEntry(s);
-                    }
-                }
-            }
-            if (data->flags & 8) {
-                mapPlayAnimationLv(drumname[data->nowSlot].neon[2], MAP_ANIM_PLAY_AT_END, 0);
-                data->flags &= ~8;
-                mapPlayAnimationLv(drumname[data->nowSlot].neon[1], MAP_ANIM_PLAY_ONCE, 0);
-            }
-            break;
-    }
-}
-
-void goryuugijo_disp_slot(CameraId camera, void* param) {
-    SlotWork* data = ((MiniGameWork*)param)->data;
-    I3 icons = disp_slot_icons;
-    s32 i;
-    Vec pos;
-    f32 sx;
-    f32 sy;
-    f32 sz;
-    CameraEntry* cam;
-    f32 proj[7];
-    f32 vp[6];
-    Mtx trans;
-    Mtx scale;
-    Mtx mtx;
-
-    for (i = 0; i < 3; i++) {
-        if (data->state[i] == 2 && i == data->cursor) {
-            mapObjGetPos(drumname[data->nowSlot].drum[i], &pos);
-            pos.x -= 25.0f;
-            pos.y += 10.0f;
-            cam = camGetPtr(CAMERA_3D);
-            GXSetProjection(cam->projection, cam->projType);
-            GXGetProjectionv(proj);
-            GXGetViewportv(vp);
-            GXProject(pos.x, pos.y, pos.z, cam->view, proj, vp, &sx, &sy, &sz);
-            cam = camGetPtr(camera);
-            GXSetProjection(cam->projection, cam->projType);
-            PSMTXScale(scale, 1.1f, 1.1f, 1.1f);
-            PSMTXTrans(trans, -304.0f + sx, 240.0f - sy, 0.0f);
-            PSMTXConcat(trans, scale, mtx);
-            iconDispGx2(mtx, ICON_FLAG_2D, ICON_FUKIDASHI);
-            PSMTXTrans(trans, -304.0f + sx, 31.35f + (240.0f - sy), 0.0f);
-            PSMTXConcat(trans, scale, mtx);
-            ((void (*)(Mtx, s16, u16))iconDispGx2)(mtx, ICON_FLAG_2D, icons.v[i]);
-        }
-    }
-}
 
 static USER_FUNC(mario_keyoff_wait) {
     switch (!marioChkKey()) {

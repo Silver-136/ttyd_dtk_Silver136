@@ -25,8 +25,6 @@
 #include <dolphin/pad.h>
 #include "icon_ids.h"
 
-/** White colour, kept from the original but never used. */
-const GXColor yuuranking_unused_color = {0xFF, 0xFF, 0xFF, 0xFF};
 
 #if VERSION >= VERSION_US
 // US keeps separate rankings for 60Hz (record rows 0-3) and 50Hz (rows 4-7) play.
@@ -206,6 +204,7 @@ static void evt_yuuranking_disp_func(CameraId camera, void* param) {
     const char* head;
 #endif
     YuuRankingWork* wp = param;
+    GXColor white = {0xFF, 0xFF, 0xFF, 0xFF};
     const char* titles[4] = {"menu_title_minigame1", "menu_title_minigame4", "menu_title_minigame3", "menu_title_minigame2"};
     const char* scoreTitles[4] = {"menu_title_score", "menu_title_score", "menu_title_score", "menu_title_score"};
 #if VERSION >= VERSION_US

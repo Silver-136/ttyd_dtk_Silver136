@@ -362,19 +362,15 @@ void winPartyMain2(WindowWork* wp) {
 }
 
 /**
- * White (icons, textures, edged text) and black (HP numbers and plain text) used
- * when drawing the Party screen.
- */
-static const GXColor winPartyWhiteC = {0xFF, 0xFF, 0xFF, 0xFF};
-static const GXColor winPartyBlackC = {0x00, 0x00, 0x00, 0xFF};
-
-/**
  * Draws the Party window (menu slot idx): the selected partner's HP
  * and rank (one Shine Sprite icon per rank-up), the partner carousel with shadows (others shrunk and grayed),
  * the partner's name, the switch and move-list hints, and the move list with FP costs.
  */
 void winPartyDisp(s32 camId, void* param, s32 idx) {
     WindowWork* wp = param;
+    // white: icons, textures, edged text; black: HP numbers and plain text
+    const GXColor whiteColor = {0xFF, 0xFF, 0xFF, 0xFF};
+    const GXColor blackColor = {0x00, 0x00, 0x00, 0xFF};
     GXColor white2;
     GXColor black2;
 
@@ -408,10 +404,10 @@ void winPartyDisp(s32 camId, void* param, s32 idx) {
     s32 id;
     const char* name;
     PouchPartyData* pd;
-    white = winPartyWhiteC;
-    white2 = winPartyWhiteC;
-    black = winPartyBlackC;
-    black2 = winPartyBlackC;
+    white = whiteColor;
+    white2 = whiteColor;
+    black = blackColor;
+    black2 = blackColor;
     x = wp->menu[idx].x;
     y = wp->menu[idx].y;
     winBgGX(wp, 1, x, y);

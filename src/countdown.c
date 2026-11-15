@@ -16,9 +16,6 @@
 #include "pmario_sound.h"
 #include "icon_ids.h"
 
-//.sdata2
-static const GXColor sWhite = {255, 255, 255, 255};
-
 //.sbss
 static CountdownWork* wp;
 
@@ -149,6 +146,7 @@ void countDownMain(void) {
  * Hidden while flag 4 is set.
  */
 static void countDownDisp(CameraId cameraId, void* param) {
+    const GXColor white = {255, 255, 255, 255};
     GXColor digitColor;
     GXColor colonColor;
     CountdownWork* work = wp;
@@ -158,8 +156,8 @@ static void countDownDisp(CameraId cameraId, void* param) {
     Mtx scale;
     Mtx base;
     GXColor shadow;
-    colonColor = sWhite;
-    digitColor = sWhite;
+    colonColor = white;
+    digitColor = white;
     flags = work->flags;
     remaining = work->limit - OSTicksToMilliseconds(work->elapsed);
     if ((flags & COUNTDOWN_FLAG_HIDDEN) == 0) {

@@ -1933,7 +1933,7 @@ config.libs = [
             Object(MatchingFor("G8MJ01", "G8ME01"), "unit/unit_flower_chorobon.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "muj.c", extra_cflags=["-inline auto,deferred"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "unit/unit_boss_cortez.c"),
-            Object(MatchingFor("G8MJ01", "G8ME01"), "muj_12.c"),
+            Object(MatchingFor("G8MJ01", "G8ME01"), "muj_12.c", extra_cflags=["-inline auto,deferred"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "unit/unit_boss_gundan_zako_group3.c", extra_cflags=["-inline auto,deferred"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "unit/unit_boss_gundan_zako_group1.c", extra_cflags=["-inline auto,deferred"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "unit/unit_boss_gundan_zako_group2.c", extra_cflags=["-inline auto,deferred"]),
@@ -2051,7 +2051,7 @@ config.libs = [
             Object(MatchingFor("G8MJ01", "G8ME01"), "event/evt_yuunpc.c", extra_cflags=["-inline auto,deferred"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "event/evt_yuuranking.c", extra_cflags=["-inline auto,deferred"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "yuu_01.c"),
-            Object(MatchingFor("G8MJ01", "G8ME01"), "event/evt_yuucounter.c"),
+            Object(MatchingFor("G8MJ01", "G8ME01"), "event/evt_yuucounter.c", extra_cflags=["-inline auto,deferred"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "yuu_00.c", extra_cflags=["-inline noauto,deferred"]),
         ]
     ),
@@ -2078,7 +2078,7 @@ config.libs = [
     Rel(
         "tou2",
         [
-            Object(MatchingFor("G8MJ01", "G8ME01"), "tou2.c", extra_cflags=["-inline noauto"]),
+            Object(MatchingFor("G8MJ01", "G8ME01"), "tou2.c", extra_cflags=["-inline noauto,deferred"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "data/battle/battle_database_tou.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "unit/unit_basabasa.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "unit/unit_bomhei.c"),

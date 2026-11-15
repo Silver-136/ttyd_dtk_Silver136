@@ -71,10 +71,6 @@ typedef struct ItemHogTable {
 #endif
 } ItemHogTable;
 
-// Descriptive name (not in the symbol maps).
-const ItemHogTable item_hog_table = {
-    {ITEM_DRIED_SHROOM, ITEM_DRIED_SHROOM, ITEM_DRIED_SHROOM, ITEM_FRIGHT_MASK, ITEM_MUSHROOM, ITEM_HONEY_SYRUP, ITEM_TASTY_TONIC, ITEM_FIRE_FLOWER, ITEM_VOLT_SHROOM, ITEM_POW_BLOCK}
-};
 
 /**
  * Rolls the drops after a won battle into the NPC's battle setup:
@@ -102,7 +98,6 @@ void BattleInformationSetDropMaterial(FieldBattleInfo* info) {
     ItemDropData* drop;
     ItemDropData* p;
     ItemType item;
-    ItemHogTable hog;
 
     pct = mario->currentHp * 100 / mario->maxHp;
     if (pct > 100) {
@@ -215,16 +210,16 @@ void BattleInformationSetDropMaterial(FieldBattleInfo* info) {
             }
 #if VERSION < VERSION_US
             else if (pouchEquipCheckBadge(ITEM_ITEM_HOG) >= 1) {
-                hog = item_hog_table;
-                setup->itemDropped = hog.items[irand(20)];
+                ItemType hog[20] = {ITEM_DRIED_SHROOM, ITEM_DRIED_SHROOM, ITEM_DRIED_SHROOM, ITEM_FRIGHT_MASK, ITEM_MUSHROOM, ITEM_HONEY_SYRUP, ITEM_TASTY_TONIC, ITEM_FIRE_FLOWER, ITEM_VOLT_SHROOM, ITEM_POW_BLOCK};
+                setup->itemDropped = hog[irand(20)];
             }
 #endif
             break;
     }
 #if VERSION >= VERSION_US
     if (setup->itemDropped == ITEM_NULL && pouchEquipCheckBadge(ITEM_ITEM_HOG) >= 1) {
-        hog = item_hog_table;
-        setup->itemDropped = hog.items[irand(25)];
+        ItemType hog[25] = {ITEM_DRIED_SHROOM, ITEM_DRIED_SHROOM, ITEM_DRIED_SHROOM, ITEM_FRIGHT_MASK, ITEM_MUSHROOM, ITEM_HONEY_SYRUP, ITEM_TASTY_TONIC, ITEM_FIRE_FLOWER, ITEM_VOLT_SHROOM, ITEM_POW_BLOCK};
+        setup->itemDropped = hog[irand(25)];
     }
 #endif
 }

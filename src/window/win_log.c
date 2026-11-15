@@ -1169,7 +1169,7 @@ static void monoshiriGX(WindowWork* w, f32 x, f32 y);
  * the Tattle log list, and the entry buttons.
  */
 void winLogDisp(CameraId cam, void* param, s32 idx) {
-    static const GXColor kW = {0xFF, 0xFF, 0xFF, 0xFF};
+    const GXColor white = {0xFF, 0xFF, 0xFF, 0xFF};
     WindowWork* w = param;
     GXColor c3;
     GXColor c2;
@@ -1179,8 +1179,8 @@ void winLogDisp(CameraId cam, void* param, s32 idx) {
     f32 y;
     s32 i;
     EffStarStoneWork* wk;
-    c2 = kW;
-    c3 = kW;
+    c2 = white;
+    c3 = white;
     x = w->menu[idx].x;
     y = w->menu[idx].y;
 

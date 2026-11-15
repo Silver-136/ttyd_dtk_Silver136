@@ -39,8 +39,6 @@ static void evt_yuucounter_disp_func(CameraId camera, void* param);
  * Colours of the minigame counter: plain white for the digits and unit icon,
  * and translucent white for the backdrop drawn behind them.
  */
-static const GXColor white = {0xFF, 0xFF, 0xFF, 0xFF};
-static const GXColor bgColor = {0xFF, 0xFF, 0xFF, 0x99};
 void iconDispGxCol(Mtx pos, s16 flags, u16 iconId, GXColor color);
 
 // IconFlags.ICON_FLAG_2D. icondrv.h cannot be included: its iconDispGxCol takes an s32 icon id, and the original
@@ -61,129 +59,23 @@ EvtWord yuucounter_window_disp_evt[6];
 EvtWord yuucounter_window_null_evt[2];
 #endif
 
-/**
- * Returns the bits of the counter's display flags selected by mask (1 hide, 2 freeze the value,
- * 4 restart the timer baseline in retail versions), or 0 if no counter exists.
- */
-u32 yuucounter_flag(u32 mask) {
-    if (_wp == NULL) {
-        return 0;
-    }
-    return _wp->dispFlags & mask;
-}
-
-/** Clears the masked display flag bits of the counter; does nothing if no counter exists. */
-void yuucounter_flag_off(u32 mask) {
-    if (_wp == NULL) {
-        return;
-    }
-    _wp->dispFlags &= ~mask;
-}
-
-/**
- * Sets the masked display flag bits of the counter (the minigames use 2 to freeze the value when a round ends);
- * does nothing if no counter exists.
- */
-void yuucounter_flag_on(u32 mask) {
-    if (_wp == NULL) {
-        return;
-    }
-    _wp->dispFlags |= mask;
-}
-
-/** Overwrites the counter's current value; does nothing if no counter exists. */
-void yuucounter_set_data(s32 data) {
-    if (_wp == NULL) {
-        return;
-    }
-    _wp->data = data;
-}
-
-/**
- * Returns the counter's current value (distance, remaining milliseconds or rank, depending on its type),
- * or 0 if no counter exists.
- */
-s32 yuucounter_get_data(void) {
-    if (_wp == NULL) {
-        return 0;
-    }
-    return _wp->data;
-}
-
-/** Script call that asks the counter's event to stop, blocks until it has, then frees the counter work area. */
-USER_FUNC(evt_yuucounter_free) {
+// Descriptive name (not in the symbol maps); placeholder unk_yuu_00009d5c, JP yuu .text+0x9C90. See docs/NAME_PROVENANCE.md.
+#if VERSION >= VERSION_JP
+/** args[0] = on/off, args[1] = flag mask. Sets or clears those display flag bits of the counter (JP and later). */
+USER_FUNC(yuucounter_disp_flag_onoff) {
+    EvtWord* args = event->args;
+    BOOL on = evtGetValue(event, args[0]);
+    u32 mask = evtGetValue(event, args[1]);
     YuuCounterWork* wp = _wp;
 
-    if (wp == NULL) {
-        return EVT_RETURN_DONE;
-    }
-    if (isFirstCall) {
-        wp->flags |= 1;
-    }
-    if (!(wp->flags & 2)) {
-        return EVT_RETURN_BLOCK;
-    }
-    _mapFree(_wp);
-    _wp = NULL;
-    return EVT_RETURN_DONE;
-}
-
-/**
- * args: [0] = x, [1] = y of the on-screen counter,
- * [2] = type (0 distance in Plane Mode, 1 countdown timer, 2 rank),
- * [3] = limit in seconds for type 1 or start count for type 2.
- * Allocates the counter and starts its draw event;
- * on JP and later also sets the script the Pianta Parlor pause window runs when it opens
- * (for timers, the one that restarts the time baseline).
- */
-USER_FUNC(evt_yuucounter_alloc) {
-    EvtWord* args = event->args;
-    YuuCounterWork* wp = _mapAlloc(sizeof(YuuCounterWork));
-    s32 value;
-
-    memset(wp, 0, sizeof(YuuCounterWork));
-    _wp = wp;
-    wp->x = evtGetFloat(event, args[0]);
-    wp->y = evtGetFloat(event, args[1]);
-    wp->type = evtGetValue(event, args[2]);
-    value = evtGetValue(event, args[3]);
-    switch (wp->type) {
-        case 1:
-            wp->limit = value * 1000;
-            wp->lastTime = gp->renderTime;
-            wp->elapsed = 0;
-            wp->data = wp->limit;
-            break;
-        case 2:
-            wp->startCount = value;
-            break;
-    }
-    wp->event = evtEntry(main_evt, 0, 0);
-    wp->event->lwData[0] = (EvtWord)wp;
-#if VERSION >= VERSION_JP
-    if (wp->type == 1) {
-        evtYuuSetWindowEvt(yuucounter_window_disp_evt);
+    if (on) {
+        wp->dispFlags |= mask;
     } else {
-        evtYuuSetWindowEvt(yuucounter_window_null_evt);
+        wp->dispFlags &= ~mask;
     }
-#endif
     return EVT_RETURN_DONE;
 }
-
-/**
- * Body of the counter event: queues the 2D draw callback each frame until the free request flag is set,
- * then marks itself stopped.
- */
-static USER_FUNC(evt_yuucounter_main_func) {
-    YuuCounterWork* wp = (YuuCounterWork*)event->lwData[0];
-
-    if (wp->flags & 1) {
-        wp->flags |= 2;
-        return EVT_RETURN_DONE;
-    }
-    dispEntry(CAMERA_2D, 1000.0f, DISP_MODE_OPAQUE, evt_yuucounter_disp_func, wp);
-    return EVT_RETURN_BLOCK;
-}
+#endif
 
 /**
  * Updates and draws the counter.
@@ -195,7 +87,7 @@ static USER_FUNC(evt_yuucounter_main_func) {
 static void evt_yuucounter_disp_func(CameraId camera, void* param) {
 
     YuuCounterWork* wp = param;
-    GXColor color = white;
+    const GXColor color = {0xFF, 0xFF, 0xFF, 0xFF};
     GXColor numColor;
     GXColor iconColor;
     f32 scale;
@@ -216,8 +108,8 @@ static void evt_yuucounter_disp_func(CameraId camera, void* param) {
     Vec pos;
     MarioWork* mario;
 
-    iconColor = white;
-    numColor = white;
+    iconColor = color;
+    numColor = color;
     switch (wp->type) {
         case 0:
             if (!(wp->dispFlags & 2)) {
@@ -275,7 +167,10 @@ static void evt_yuucounter_disp_func(CameraId camera, void* param) {
     PSMTXTrans(base, wp->x, wp->y, 0.0f);
     PSMTXScale(scaleMtx, scale, 1.0f, 1.0f);
     PSMTXConcat(base, scaleMtx, mtx);
-    iconDispGxCol(mtx, COUNTER_ICON_2D, ICON_COUNTER_BG, bgColor);
+    {
+        GXColor bgColor = {0xFF, 0xFF, 0xFF, 0x99};
+        iconDispGxCol(mtx, COUNTER_ICON_2D, ICON_COUNTER_BG, bgColor);
+    }
 
     switch (wp->type) {
         case 0: {
@@ -361,23 +256,129 @@ static void evt_yuucounter_disp_func(CameraId camera, void* param) {
     }
 }
 
-// Descriptive name (not in the symbol maps); placeholder unk_yuu_00009d5c, JP yuu .text+0x9C90. See docs/NAME_PROVENANCE.md.
-#if VERSION >= VERSION_JP
-/** args[0] = on/off, args[1] = flag mask. Sets or clears those display flag bits of the counter (JP and later). */
-USER_FUNC(yuucounter_disp_flag_onoff) {
-    EvtWord* args = event->args;
-    BOOL on = evtGetValue(event, args[0]);
-    u32 mask = evtGetValue(event, args[1]);
-    YuuCounterWork* wp = _wp;
+/**
+ * Body of the counter event: queues the 2D draw callback each frame until the free request flag is set,
+ * then marks itself stopped.
+ */
+static USER_FUNC(evt_yuucounter_main_func) {
+    YuuCounterWork* wp = (YuuCounterWork*)event->lwData[0];
 
-    if (on) {
-        wp->dispFlags |= mask;
-    } else {
-        wp->dispFlags &= ~mask;
+    if (wp->flags & 1) {
+        wp->flags |= 2;
+        return EVT_RETURN_DONE;
     }
+    dispEntry(CAMERA_2D, 1000.0f, DISP_MODE_OPAQUE, evt_yuucounter_disp_func, wp);
+    return EVT_RETURN_BLOCK;
+}
+
+/**
+ * args: [0] = x, [1] = y of the on-screen counter,
+ * [2] = type (0 distance in Plane Mode, 1 countdown timer, 2 rank),
+ * [3] = limit in seconds for type 1 or start count for type 2.
+ * Allocates the counter and starts its draw event;
+ * on JP and later also sets the script the Pianta Parlor pause window runs when it opens
+ * (for timers, the one that restarts the time baseline).
+ */
+USER_FUNC(evt_yuucounter_alloc) {
+    EvtWord* args = event->args;
+    YuuCounterWork* wp = _mapAlloc(sizeof(YuuCounterWork));
+    s32 value;
+
+    memset(wp, 0, sizeof(YuuCounterWork));
+    _wp = wp;
+    wp->x = evtGetFloat(event, args[0]);
+    wp->y = evtGetFloat(event, args[1]);
+    wp->type = evtGetValue(event, args[2]);
+    value = evtGetValue(event, args[3]);
+    switch (wp->type) {
+        case 1:
+            wp->limit = value * 1000;
+            wp->lastTime = gp->renderTime;
+            wp->elapsed = 0;
+            wp->data = wp->limit;
+            break;
+        case 2:
+            wp->startCount = value;
+            break;
+    }
+    wp->event = evtEntry(main_evt, 0, 0);
+    wp->event->lwData[0] = (EvtWord)wp;
+#if VERSION >= VERSION_JP
+    if (wp->type == 1) {
+        evtYuuSetWindowEvt(yuucounter_window_disp_evt);
+    } else {
+        evtYuuSetWindowEvt(yuucounter_window_null_evt);
+    }
+#endif
     return EVT_RETURN_DONE;
 }
-#endif
+
+/** Script call that asks the counter's event to stop, blocks until it has, then frees the counter work area. */
+USER_FUNC(evt_yuucounter_free) {
+    YuuCounterWork* wp = _wp;
+
+    if (wp == NULL) {
+        return EVT_RETURN_DONE;
+    }
+    if (isFirstCall) {
+        wp->flags |= 1;
+    }
+    if (!(wp->flags & 2)) {
+        return EVT_RETURN_BLOCK;
+    }
+    _mapFree(_wp);
+    _wp = NULL;
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Returns the counter's current value (distance, remaining milliseconds or rank, depending on its type),
+ * or 0 if no counter exists.
+ */
+s32 yuucounter_get_data(void) {
+    if (_wp == NULL) {
+        return 0;
+    }
+    return _wp->data;
+}
+
+/** Overwrites the counter's current value; does nothing if no counter exists. */
+void yuucounter_set_data(s32 data) {
+    if (_wp == NULL) {
+        return;
+    }
+    _wp->data = data;
+}
+
+/**
+ * Sets the masked display flag bits of the counter (the minigames use 2 to freeze the value when a round ends);
+ * does nothing if no counter exists.
+ */
+void yuucounter_flag_on(u32 mask) {
+    if (_wp == NULL) {
+        return;
+    }
+    _wp->dispFlags |= mask;
+}
+
+/** Clears the masked display flag bits of the counter; does nothing if no counter exists. */
+void yuucounter_flag_off(u32 mask) {
+    if (_wp == NULL) {
+        return;
+    }
+    _wp->dispFlags &= ~mask;
+}
+
+/**
+ * Returns the bits of the counter's display flags selected by mask (1 hide, 2 freeze the value,
+ * 4 restart the timer baseline in retail versions), or 0 if no counter exists.
+ */
+u32 yuucounter_flag(u32 mask) {
+    if (_wp == NULL) {
+        return 0;
+    }
+    return _wp->dispFlags & mask;
+}
 
 /** The counter's per-frame event, started by evt_yuucounter_alloc; runs evt_yuucounter_main_func. */
 static EVT_BEGIN(main_evt)

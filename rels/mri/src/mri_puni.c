@@ -4100,46 +4100,14 @@ static void puniModeWater(PuniData* p) {
  * if so, then goes to the hagure mode.
  */
 static void puniModePrehagure(PuniData* p) {
-    Vec nrm;
-    Vec hit;
-    Vec dir;
-    Vec start;
-    f32 dist;
     s32 res;
-    f32 b, a;
     switch (p->modeStep) {
         case 0:
-            res = 0;
-            a = Punigp->stuckTop0;
-            b = Punigp->stuckBottom0;
-            if (-1000.0f != a && p->pos.y < a && p->pos.y > b) {
-                res = 1;
-            }
-            a = Punigp->stuckTop1;
-            b = Punigp->stuckBottom1;
-            if (-1000.0f != a && p->pos.y < a && p->pos.y > b) {
-                res = 1;
-            }
-            if (res == 0) {
-                res = 1;
-            } else {
-                start = p->pos;
-                start.y += 1.0f;
-                dir = puni_fall_dir;
-                dist = 3.0f;
-                if (hitCheckFilter(NULL, &hit.x, &hit.y, &hit.z, &dist, &nrm.x, &nrm.y, &nrm.z, start.x, start.y, start.z, dir.x, dir.y, dir.z) == NULL) {
-                    res = 2;
-                } else {
-                    res = 0;
-                }
-            }
+            res = puniPositionCheck(p);
             if (res != 0) {
                 p->recoverReason = res;
                 p->recoverFromPos = p->pos;
-                p->pos = Punigp->recoverPos;
-                p->pos.x += randf(0.0f, 2.0f) - 1.0f;
-                p->pos.z += randf(0.0f, 2.0f) - 1.0f;
-                p->prevPos = p->pos;
+                puniPositionRecover(p);
                 p->recoverToPos = p->pos;
             }
             p->modeStep = 1;
