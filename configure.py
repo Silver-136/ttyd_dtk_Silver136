@@ -605,7 +605,7 @@ config.libs = [
             Object(MatchingFor("G8MJ01", "G8ME01"), "effect/eff_nokotarou.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "effect/eff_queen.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "effect/eff_queen2.c"),
-            Object(MatchingFor("G8MJ01", "G8ME01"), "effect/eff_gonbaba_breath.c", extra_cflags=["-opt nolifetimes"]),
+            Object(MatchingFor("G8MJ01", "G8ME01"), "effect/eff_gonbaba_breath.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "effect/eff_majinai.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "effect/eff_mahorn2.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "effect/eff_ultra_hammer.c"),
@@ -1433,7 +1433,7 @@ config.libs = [
             Object(MatchingFor("G8MJ01", "G8ME01"), "battle_database_pik.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "pik_01.c", extra_cflags=["-inline auto,deferred"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "pik_00.c", extra_cflags=["-inline auto,deferred"]),
-            Object(MatchingFor("G8MJ01", "G8ME01"), "pik_02.c", extra_cflags=["-inline auto,deferred", "-opt noprop,nolifetimes"]),
+            Object(MatchingFor("G8MJ01", "G8ME01"), "pik_02.c", extra_cflags=["-inline auto,deferred", "-opt noprop"]),
         ]
     ),
     Rel(

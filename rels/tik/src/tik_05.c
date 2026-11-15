@@ -1123,11 +1123,10 @@ void tiz_broken_draw(CameraId cameraId, void* param) {
     }
 }
 
-// Kept (pattern): propagation and lifetimes off for tiz_broken (the same pattern as ext_moamoa_main in eki_00, rsh_05
-// and rsh_06 and bom_01's ext_main); the target needs it and no natural form was found
-// (cleanup_notes/mweppc_pilot.md, pragma review rels).
-#pragma opt_propagation off
+// FAKE: US and later only: the hand-expanded sqrtf below (sq, guess) needs lifetimes off to colour as the target.
+#if VERSION >= VERSION_US
 #pragma opt_lifetimes off
+#endif
 
 /**
  * Blocking script helper for evt_mapwrite: shatters the screen into the item-get view. On the first call it sets
@@ -1146,7 +1145,9 @@ USER_FUNC(tiz_broken) {
 #endif
     s32 x;
     s32 y;
+#if VERSION >= VERSION_US
     f32 inv;
+#endif
     s32 done = 0;
     BrokenPiece* p;
     BrokenPiece* q;
@@ -1207,8 +1208,7 @@ USER_FUNC(tiz_broken) {
                     len = sq;
 #else
                     len = sqrtf(dx * dx + dy * dy);
-                    inv = dx / len; // FAKE: copy temp; plain nx = dx / len changes regalloc (+4 B)
-                    nx = inv;
+                    nx = dx / len;
                     ny = dy / len;
 #endif
                 } else {
@@ -1287,8 +1287,9 @@ USER_FUNC(tiz_broken) {
     dispEntry(CAMERA_2D, 0.0f, DISP_MODE_OPAQUE, tiz_broken_draw, NULL);
     return EVT_RETURN_BLOCK;
 }
-#pragma opt_propagation reset
+#if VERSION >= VERSION_US
 #pragma opt_lifetimes reset
+#endif
 
 /** The work area tiz_broken uses for the shattering screen. */
 static BrokenWork* broken_wp = &broken_work;

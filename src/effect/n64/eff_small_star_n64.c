@@ -174,9 +174,6 @@ EffectEntry* effSmallStarN64Entry(s32 type, s32 count, f32 x, f32 y, f32 z, f32 
     return effect;
 }
 
-// FAKE: opt_lifetimes off for alphaf and effSmallStarMain
-#pragma opt_lifetimes off
-
 /** Multiplies an integer alpha value by a float factor. */
 inline f32 alphaf(f32 m, s32 x) {
     return x * m;
@@ -245,8 +242,6 @@ static void effSmallStarMain(EffectEntry* effect) {
     }
     dispEntry(((EffSmallStarN64Work*)effect->userdata)->camera, dispCalcZ(&position), DISP_MODE_XLU, effSmallStarDisp, effect);
 }
-
-#pragma opt_lifetimes reset
 
 /** RGB colours the small stars cycle through (12 pastel steps around the colour wheel), three bytes per step. */
 static u8 color_rotation_data[] = {

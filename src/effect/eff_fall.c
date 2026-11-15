@@ -300,9 +300,6 @@ EffectEntry* effFallEntry(s32 type, f32 x, f32 y, f32 z, f32 width, f32 drop, f3
     return effect;
 }
 
-// kept: without it effFallMain changes; -opt nolifetimes for the whole file changes other functions
-#pragma opt_lifetimes off
-
 // The seven sound names go through the integer word at each call, as in the original: in this loop the
 // conversion is hoisted, which is what the retail code shows (see sfx_name_word.h).
 static void effFallMain(EffectEntry* effect) {
@@ -846,7 +843,6 @@ static void effFallMain(EffectEntry* effect) {
     }
 }
 
-#pragma opt_lifetimes reset
 /**
  * Draws the falling objects other than water and meteors: bugs and fork as textured quads, the tub, bucket,
  * Koopa and light as animation poses.
