@@ -343,6 +343,7 @@ static inline void escape(ExtdrvPose* pose, Chorobon* chb, s32 next, f32 x, f32 
  * Random hop for a Fuzzy that is idling: speed 0.3..0.5, gravity 0.5..0.8,
  * returning to its current state afterwards.
  */
+// FAKE: invented one-use inline helper (no map name); writing it out changes the code (FAKES.md)
 static inline void jump_r(ExtdrvPose* pose, Chorobon* chb, f32 x, f32 y, f32 z) {
     f32 rs = rand() / 32767.0f;
     f32 rg = rand01();
@@ -350,6 +351,7 @@ static inline void jump_r(ExtdrvPose* pose, Chorobon* chb, f32 x, f32 y, f32 z) 
 }
 
 /** Random flee hop: speed 1.0..1.2 doubled, gravity 0.8. */
+// FAKE: invented one-use inline helper (no map name); writing it out changes the code (FAKES.md)
 static inline void escape_r(ExtdrvPose* pose, Chorobon* chb, f32 x, f32 y, f32 z) {
     f32 rs = rand() / 32767.0f;
     f32 rg = rand01();
@@ -490,6 +492,7 @@ static s32 evt_chorobon_wait(EventEntry* event, BOOL isFirstCall) {
 }
 
 /** Returns the hop duration in milliseconds that the script passed as args[6] to npc_jump. */
+// FAKE: invented one-use inline helper (no map name); writing it out changes the code (FAKES.md)
 static inline s32 npc_jump_get_time(EventEntry* event, EvtWord* args) {
     return evtGetValue(event, args[6]);
 }

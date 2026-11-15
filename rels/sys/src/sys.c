@@ -271,6 +271,7 @@ static s32 getLightColor(f32 angle) {
 }
 
 /** Loads the color into TEV register 0 (inlined helper of display_func). */
+// FAKE: invented one-use inline helper (no map name); writing it out changes the code (FAKES.md)
 static inline void setTevColor(GXColor init) {
     GXColor color = init;
 

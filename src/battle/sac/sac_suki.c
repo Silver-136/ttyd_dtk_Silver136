@@ -871,6 +871,7 @@ static USER_FUNC(get_img_name) {
     return 2;
 }
 
+// FAKE: invented one-use inline helper (no map name); writing it out changes the code (FAKES.md)
 static inline GXColor grayColor(u8 v) {
     GXColor c = {0, 0, 0, 255};
     c.r = v;

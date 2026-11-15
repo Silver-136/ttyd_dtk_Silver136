@@ -495,15 +495,11 @@ static inline void h2Ramp(MarioWork* mario, f32 maxv, f32 midv, f32 minv, s32 lv
     }
 }
 
-static inline void h2LightOn(void) {
+static inline void h2ClrPaper(MarioWork* mario) {
+    marioPaperOff();
 #if VERSION < VERSION_US
     marioPaperLightOn();
 #endif
-}
-
-static inline void h2ClrPaper(MarioWork* mario) {
-    marioPaperOff();
-    h2LightOn();
     marioChgPose("M_S_1");
     mario->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
     mario->dispFlags &= ~MARIO_DISP_FLAG_NO_DIR_FLIP;

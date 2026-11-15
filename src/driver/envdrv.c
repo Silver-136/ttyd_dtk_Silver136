@@ -1232,6 +1232,7 @@ void envAddTev(s32 type, MapTevCallbackInfo* info) {
 }
 
 /** The map object being drawn, from a TEV callback's info. */
+// FAKE: invented one-use inline helper (no map name); writing it out changes the code (FAKES.md)
 static inline MapObject* envWaterObj(MapTevCallbackInfo* info) {
     return info->mapObj;
 }

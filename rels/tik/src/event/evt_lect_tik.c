@@ -49,21 +49,6 @@ static s32 x_flag_data[2];
 static void lecture_button_disp(CameraId camera, void* param);
 static LectButton lbtn[2];
 
-/**
- * Jumps the camera 3D by the offset ofs (position and look-at both) with an immediate transition;
- * used to move the view to the item-get stage and back.
- */
-static inline void effitemget_cam_move(CameraEntry* camera, Vec ofs) {
-    camera->presetPos = camera->cameraPos;
-    camera->presetAt = camera->cameraAt;
-    PSVECAdd(&camera->cameraPos, &ofs, &camera->storedPos);
-    PSVECAdd(&camera->cameraAt, &ofs, &camera->storedAt);
-    camera->startTimeA = gp->renderTime;
-    camera->durationA = 0;
-    camera->stateA = 3;
-    camera->curveA = 11;
-}
-
 static Vec daiv;
 
 static USER_FUNC(lect_map_cam_chg);
@@ -454,7 +439,14 @@ static USER_FUNC(effitemget_busaiku) {
     } else {
         ofs = (Vec){0.0f, -2016.0f, 0.0f};
     }
-    effitemget_cam_move(camera, ofs);
+    camera->presetPos = camera->cameraPos;
+    camera->presetAt = camera->cameraAt;
+    PSVECAdd(&camera->cameraPos, &ofs, &camera->storedPos);
+    PSVECAdd(&camera->cameraAt, &ofs, &camera->storedAt);
+    camera->startTimeA = gp->renderTime;
+    camera->durationA = 0;
+    camera->stateA = 3;
+    camera->curveA = EASING_SINE_IN_OUT;
     return EVT_RETURN_DONE;
 }
 

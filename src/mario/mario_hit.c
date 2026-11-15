@@ -2269,6 +2269,7 @@ void marioCheckWall_roll(f32 dx, f32 dz) {
 
 /** marioHitCheckVecInl with the direction built after the position copy (the target schedules the pos loads first) */
 // marioHitCheckVecInl for a horizontal ray: the direction is (s, 0, c)
+// FAKE: invented one-use inline helper (no map name); writing it out changes the code (FAKES.md)
 static inline HitEntry* marioChkFrontInl(const Vec* pos, f32 s, f32 c, Vec* outPos, Vec* outNrm, f32* dist) {
     HitCheckQuery query;
     HitEntry* hit;

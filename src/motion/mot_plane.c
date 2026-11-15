@@ -103,23 +103,6 @@ static void zoomOff(void) {
 static const char* paper_plane[4] = {"p_hikohki", "p_hikohki_g", "p_hikohki_y", "p_hikohki_v"};
 
 /**
- * Inline form of mario_plane_cancel (JP and later):
- * starts the landing (sub-motion 50) if Mario is in the gliding phase.
- */
-static inline BOOL planeCancel(void) {
-    MarioWork* mario = marioGetPtr();
-    if (mario->currMotionId != MARIO_MOTION_PLANE) {
-        return FALSE;
-    }
-    if (mario->currSubMotionId >= 12 && mario->currSubMotionId < 20) {
-        mario->currSubMotionId = 50;
-        mario->mot.plane.groundY = mario->position.y;
-        return TRUE;
-    }
-    return FALSE;
-}
-
-/**
  * Plane heading for the partner follow code: 0 when not flying,
  * 1 or -1 for the two directions (motPlane flag 1 set means 1).
  */
@@ -385,7 +368,7 @@ void mot_plane(void) {
     }
     if (mp->currSubMotionId == 20 || mp->currSubMotionId == 30) {
 #else
-        if (planeCancel()) {
+        if (mario_plane_cancel()) {
             return;
         }
     }

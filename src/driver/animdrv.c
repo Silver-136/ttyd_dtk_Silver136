@@ -2560,6 +2560,7 @@ static void materialProc(s32 shapeId, s32 xluStage) {
 }
 
 /** The pose data renderProc is drawing. */
+// FAKE: invented one-use inline helper (no map name); writing it out changes the code (FAKES.md)
 static inline AnimationPoseData* rpCurData(void) {
     return wp->curPoseData;
 }

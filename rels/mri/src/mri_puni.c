@@ -2201,6 +2201,7 @@ static PuniData* searchBattleMikata(PuniData* self) {
 }
 
 /** Inline version of "nearest living Jabbi within 1000 units", used by puniSearch. */
+// FAKE: inline copy of a map function so its calls inline (the unit does not auto-inline; FAKES.md)
 static inline PuniData* searchBattleTeki_inl(PuniData* self) {
     s32 i;
     PuniData* q;
@@ -2228,6 +2229,7 @@ static inline PuniData* searchBattleTeki_inl(PuniData* self) {
 }
 
 /** Inline version of "nearest living Puni within 1000 units", used by puniSearch. */
+// FAKE: inline copy of a map function so its calls inline (the unit does not auto-inline; FAKES.md)
 static inline PuniData* searchBattleMikata_inl(PuniData* self) {
     s32 i;
     PuniData* q;
@@ -3922,6 +3924,7 @@ static void puniModeWonder(PuniData* p) {
  * Inline copy of the speed-limited wall-collision move (see puniMoveLimitedNormal) taking the start
  * and direction by pointer; used by puniModeFunbari in the US and later releases.
  */
+// FAKE: inline copy of a map function so its calls inline (the unit does not auto-inline; FAKES.md)
 static inline void puniMoveHitLimitedInl(PuniData* p, Vec* s2, Vec* d2, f32 dist) {
     Vec pa;
     Vec hit;
@@ -4913,6 +4916,7 @@ static const Vec puni_fall_dir;
  * Inline copy of the wall-collision move that reflects the velocity (puniMoveHit),
  * taking start and direction by pointer; used by puniMoveMain.
  */
+// FAKE: inline copy of a map function so its calls inline (the unit does not auto-inline; FAKES.md)
 static inline void puniMoveHitInl(PuniData* p, Vec* s2, Vec* d2, f32 dist) {
     Vec pa;
     Vec hit;
@@ -7104,6 +7108,7 @@ USER_FUNC(evt_puni_dokan_onoff) {
  * Inline helper that reads a Puni's save slot: the floor byte and the x, y,
  * z shorts (sign-extended) stored 7 bytes per slot from LSW base.
  */
+// FAKE: inline copy of a map function so its calls inline (the unit does not auto-inline; FAKES.md)
 static inline void puniswGetindex_inl(s32 base, s32 idx, s32* val, Vec* pos) {
     u8 zHi, b5, b4, b3, b2, b1, b0;
     s32 off;

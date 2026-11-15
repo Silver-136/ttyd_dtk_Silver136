@@ -4339,6 +4339,7 @@ static s32 eff_pos(EventEntry* event, BOOL isFirstCall) {
 }
 
 /** Loads TEV register 0 with white at the given alpha, the fade amount of Grubba's white-out. */
+// FAKE: invented one-use inline helper (no map name); writing it out changes the code (FAKES.md)
 static inline void cb_set_color(u8 a) {
     GXColor color = {255, 255, 255, 0};
 

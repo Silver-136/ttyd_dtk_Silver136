@@ -50,23 +50,6 @@ static s32 x_flag_data[2];
 static void lecture_button_disp(CameraId camera, void* param);
 static LectButton lbtn[2];
 
-/**
- * Moves the camera's goal by the offset ofs: records the current camera position and target as the preset,
- * sets the stored (goal) position and target to those plus the offset,
- * and starts an immediate ease (curve EASING_SINE_IN_OUT) at the current time.
- * Used to shift the item-get view out of sight and back.
- */
-static inline void effitemget_cam_move(CameraEntry* camera, Vec ofs) {
-    camera->presetPos = camera->cameraPos;
-    camera->presetAt = camera->cameraAt;
-    PSVECAdd(&camera->cameraPos, &ofs, &camera->storedPos);
-    PSVECAdd(&camera->cameraAt, &ofs, &camera->storedAt);
-    camera->startTimeA = gp->renderTime;
-    camera->durationA = 0;
-    camera->stateA = 3;
-    camera->curveA = 11;
-}
-
 static USER_FUNC(lect_mario_ido_sum);
 USER_FUNC(lect_mobj_hit_nasi);
 static USER_FUNC(lect_status_off);
@@ -446,7 +429,7 @@ static USER_FUNC(effitemget_open_ptr) {
 
 /**
  * Script helper: shifts the 3D camera (CAMERA_3D) and its target 2016 units up (args[0] nonzero) or back down
- * at once (effitemget_cam_move). The lecture script moves Mario up by the same amount in between
+ * at once. The lecture script moves Mario up by the same amount in between
  * and captures the screen into a paper image ("img") there.
  */
 static USER_FUNC(effitemget_busaiku) {
@@ -459,7 +442,14 @@ static USER_FUNC(effitemget_busaiku) {
     } else {
         ofs = (Vec){0.0f, -2016.0f, 0.0f};
     }
-    effitemget_cam_move(camera, ofs);
+    camera->presetPos = camera->cameraPos;
+    camera->presetAt = camera->cameraAt;
+    PSVECAdd(&camera->cameraPos, &ofs, &camera->storedPos);
+    PSVECAdd(&camera->cameraAt, &ofs, &camera->storedAt);
+    camera->startTimeA = gp->renderTime;
+    camera->durationA = 0;
+    camera->stateA = 3;
+    camera->curveA = EASING_SINE_IN_OUT;
     return EVT_RETURN_DONE;
 }
 

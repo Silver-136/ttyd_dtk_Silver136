@@ -443,6 +443,7 @@ static s32 yuunpc_pose_check(const char* name, const char* anim) {
  * Inline copy of yuunpc_pose_change used by the init functions:
  * switches an NPC to pose id at the given animation speed and starting frame fraction.
  */
+// FAKE: inline copy of a map function so its calls inline (the unit does not auto-inline; FAKES.md)
 static inline void pose_change_inl(YuuNpc* npc, s16 id, f32 speed, f32 frame) {
     YuuNpcPose* cur = &yuunpc_wp->pose[npc->poseId];
     YuuNpcPose* pose = &yuunpc_wp->pose[id];

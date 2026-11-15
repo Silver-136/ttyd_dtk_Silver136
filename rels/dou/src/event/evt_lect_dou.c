@@ -45,22 +45,6 @@ static s32 x_flag_data[2];
 static void lecture_button_disp(CameraId camera, void* param);
 static LectButton lbtn[2];
 
-/**
- * Moves the camera by the offset ofs: the new target position and look-at are the current ones plus ofs,
- * applied instantly (zero-length move) with curve EASING_SINE_IN_OUT.
- * Used to jump the camera between the lecture stage and the lecture's item- get view.
- */
-static inline void effitemget_cam_move(CameraEntry* camera, Vec ofs) {
-    camera->presetPos = camera->cameraPos;
-    camera->presetAt = camera->cameraAt;
-    PSVECAdd(&camera->cameraPos, &ofs, &camera->storedPos);
-    PSVECAdd(&camera->cameraAt, &ofs, &camera->storedAt);
-    camera->startTimeA = gp->renderTime;
-    camera->durationA = 0;
-    camera->stateA = 3;
-    camera->curveA = EASING_SINE_IN_OUT;
-}
-
 static Vec daiv;
 
 static USER_FUNC(dai_moveti_get);
@@ -456,7 +440,14 @@ static USER_FUNC(effitemget_busaiku) {
     } else {
         ofs = (Vec){0.0f, -2016.0f, 0.0f};
     }
-    effitemget_cam_move(camera, ofs);
+    camera->presetPos = camera->cameraPos;
+    camera->presetAt = camera->cameraAt;
+    PSVECAdd(&camera->cameraPos, &ofs, &camera->storedPos);
+    PSVECAdd(&camera->cameraAt, &ofs, &camera->storedAt);
+    camera->startTimeA = gp->renderTime;
+    camera->durationA = 0;
+    camera->stateA = 3;
+    camera->curveA = EASING_SINE_IN_OUT;
     return EVT_RETURN_DONE;
 }
 

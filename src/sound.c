@@ -1288,6 +1288,7 @@ static void _ssDVDReadAsync_cache_next(s32 result, DVDFileInfo* fileInfo);
 static void SoundSSPlayChEx_main(s32 result, DVDFileInfo* fileInfo);
 
 /** Rounds x up to a multiple of 32 bytes (DVD and DMA alignment). */
+// FAKE: invented one-use inline helper (no map name); writing it out changes the code (FAKES.md)
 static inline u32 _ssAlign32(u32 x) {
     return (x + 0x1F) & ~0x1F;
 }

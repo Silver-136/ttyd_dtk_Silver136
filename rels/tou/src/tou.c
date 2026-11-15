@@ -1472,6 +1472,7 @@ static void gans_tex(CameraId cameraId, void* param) {
 }
 
 /** Returns a white color with the given alpha (used for the monitor's fade). */
+// FAKE: invented one-use inline helper (no map name); writing it out changes the code (FAKES.md)
 static inline GXColor tou_mkcolor(u8 a) {
     GXColor c = {0xFF, 0xFF, 0xFF, 0x00};
     c.a = a;

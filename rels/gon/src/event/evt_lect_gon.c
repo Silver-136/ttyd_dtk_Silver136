@@ -42,22 +42,6 @@ static s32 x_flag_data[2];
 static void lecture_button_disp(CameraId camera, void* param);
 static LectButton lbtn[2];
 
-/**
- * Shifts the 3D camera's current position and look-at target by ofs (the camera's preset values are saved,
- * the shifted ones become its new stored target, with an instant move).
- * Used to hop the camera 2016 units up and back while the item-get effect is repositioned.
- */
-static inline void effitemget_cam_move(CameraEntry* camera, Vec ofs) {
-    camera->presetPos = camera->cameraPos;
-    camera->presetAt = camera->cameraAt;
-    PSVECAdd(&camera->cameraPos, &ofs, &camera->storedPos);
-    PSVECAdd(&camera->cameraAt, &ofs, &camera->storedAt);
-    camera->startTimeA = gp->renderTime;
-    camera->durationA = 0;
-    camera->stateA = 3;
-    camera->curveA = EASING_SINE_IN_OUT;
-}
-
 static Vec daiv;
 
 static USER_FUNC(evtflash);
@@ -448,7 +432,7 @@ static USER_FUNC(effitemget_open_ptr) {
 
 /**
  * Script helper: args[0] nonzero moves the 3D camera 2016 units up,
- * zero moves it back down (effitemget_cam_move). Nothing in this file calls it; the lecture copies that call it (eki, gor,
+ * zero moves it back down. Nothing in this file calls it; the lecture copies that call it (eki, gor,
  * hei, mri, muj, tou, usu, win) lift the camera and Mario (or the partner) 2016 units, capture the screen into an image for the paper-seal
  * transition one frame later, and move both back.
  */
@@ -462,7 +446,14 @@ static USER_FUNC(effitemget_busaiku) {
     } else {
         ofs = (Vec){0.0f, -2016.0f, 0.0f};
     }
-    effitemget_cam_move(camera, ofs);
+    camera->presetPos = camera->cameraPos;
+    camera->presetAt = camera->cameraAt;
+    PSVECAdd(&camera->cameraPos, &ofs, &camera->storedPos);
+    PSVECAdd(&camera->cameraAt, &ofs, &camera->storedAt);
+    camera->startTimeA = gp->renderTime;
+    camera->durationA = 0;
+    camera->stateA = 3;
+    camera->curveA = EASING_SINE_IN_OUT;
     return EVT_RETURN_DONE;
 }
 

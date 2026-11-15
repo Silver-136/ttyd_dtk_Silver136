@@ -566,6 +566,7 @@ static USER_FUNC(irai_start_func) {
 }
 
 /** Returns the zero-based request index from the script argument, which holds the request number counted from 1. */
+// FAKE: invented one-use inline helper (no map name); writing it out changes the code (FAKES.md)
 static inline s32 irai_get_no(EventEntry* event) {
     return evtGetValue(event, event->args[0]) - 1;
 }

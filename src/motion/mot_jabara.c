@@ -132,6 +132,7 @@ BOOL marioPriCheckJabara(void) {
 }
 
 /** Inline copy of marioPriCheckJabara for marioChkJabara. */
+// FAKE: inline copy of a map function so its calls inline (the unit does not auto-inline; FAKES.md)
 static inline BOOL priChk(void) {
     MarioWork* mario = marioGetPtr();
     u32 flags = mario->flags;

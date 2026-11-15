@@ -473,13 +473,6 @@ BOOL marioGetMotSlitCancel3(void) {
     return r;
 }
 
-static inline void slitClearFlags(MarioWork* m) {
-    m->flags &= ~MARIO_FLAG_PARTY_WALK_DISABLED;
-    m->flags &= ~MARIO_FLAG_GONE_THROUGH_BARS;
-    m->dispFlags &= ~(MARIO_DISP_FLAG_LEFT_ONLY | MARIO_DISP_FLAG_RIGHT_ONLY | MARIO_DISP_FLAG_SLIT);
-    m->dispFlags &= ~(MARIO_DISP_FLAG_LEFT_ONLY | MARIO_DISP_FLAG_RIGHT_ONLY | MARIO_DISP_FLAG_SLIT); // the game clears these bits twice (both stores are in the retail code)
-}
-
 /**
  * Instantly turns Mario back from Paper Mode with no animation:
  * faces him left or right, clears the paper flags, sets his collision width (20 in the early demos, 10 in JP and later),
@@ -551,14 +544,11 @@ void mot_slit_post(void) {
                 mario->displayDirection = 180.0f;
                 mario->displayDirectionTarget = mario->displayDirection;
             }
-#if VERSION <= VERSION_DEMO_JP
             mario->flags &= ~MARIO_FLAG_PARTY_WALK_DISABLED;
             mario->flags &= ~MARIO_FLAG_GONE_THROUGH_BARS;
             mario->dispFlags &= ~(MARIO_DISP_FLAG_LEFT_ONLY | MARIO_DISP_FLAG_RIGHT_ONLY | MARIO_DISP_FLAG_SLIT);
+            // the game clears these bits twice (both stores are in the retail code)
             mario->dispFlags &= ~(MARIO_DISP_FLAG_LEFT_ONLY | MARIO_DISP_FLAG_RIGHT_ONLY | MARIO_DISP_FLAG_SLIT);
-#else
-            slitClearFlags(mario);
-#endif
             marioPaperOff();
             mapResetPaperAmbColor();
             mario->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
@@ -709,16 +699,6 @@ static inline void slitSpeedDown(MarioWork* m) {
 
 static inline void slitSetDisplayDir(MarioWork* m) {
     m->displayDirection = (revise360(m->directionView - m->targetYaw) <= 180.0f) ? 260.0f : 280.0f;
-}
-
-static inline void slitSetSide(MarioWork* m) {
-    if (revise360(m->directionView - m->targetYaw) <= 180.0f) {
-        m->mot.slit.side = 1;
-        m->displayDirection = 260.0f;
-    } else {
-        m->mot.slit.side = 2;
-        m->displayDirection = 280.0f;
-    }
 }
 
 #if VERSION >= VERSION_US
@@ -906,7 +886,6 @@ void mot_slit(void) {
                 marioChgPaper("PM_S_1E");
             } else {
                 marioChgPaper("PM_S_1D");
-#if VERSION <= VERSION_DEMO_JP
                 if (revise360(m->directionView - m->targetYaw) <= 180.0f) {
                     m->mot.slit.side = 1;
                     m->displayDirection = 260.0f;
@@ -914,9 +893,6 @@ void mot_slit(void) {
                     m->mot.slit.side = 2;
                     m->displayDirection = 280.0f;
                 }
-#else
-                slitSetSide(m);
-#endif
             }
             m->slitState = SLIT_STATE_MOVE;
             break;

@@ -1170,6 +1170,7 @@ static f32 hair_offset[] = {
 };
 
 /** Initializes the hand lighting vector used by pose_init. */
+// FAKE: invented one-use inline helper (no map name); writing it out changes the code (FAKES.md)
 inline void hand_light_init(void) {
     Mtx mtx;
     LightEntry* light = lightGetPaperCraft();
