@@ -495,9 +495,11 @@ static s32 hitCalcVtxPosition(HitEntry* hit) {
                 list = mesh->displayLists.normalLists[j];
                 for (k = 0; k < list->count - 2; k++) {
                     s16* idx;
+                    int next1 = k + 1;
+                    int next2 = k + 2;
                     idx = &list->vtx[k].pos;
-                    i1 = *(s16*)((u8*)list + (k + 1) * sizeof(MapVtxRec) + offsetof(MapRawDL, vtx)); // FAKE: the next two strip vertices by byte offset ((k + n) * size + 4), which keeps the target's mulli/strength reduction; list->vtx[k + n].pos schedules differently
-                    i2 = *(s16*)((u8*)list + (k + 2) * sizeof(MapVtxRec) + offsetof(MapRawDL, vtx));
+                    i1 = list->vtx[next1].pos;
+                    i2 = list->vtx[next2].pos;
                     vec = &hit->vectors[count++];
                     pos = (Vec*)mesh->vcdTable->positions->data;
                     MTXMultVec(hit->worldMtx, &pos[*idx], &vec->v0);

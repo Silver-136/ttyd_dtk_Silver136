@@ -2066,9 +2066,9 @@ static void animSetMaterial_Texture(s32 texCount_, s32 *texIdRemap_, AnimPoseTex
         s32 tex2;
         AnimPoseTexEntry *entry;
         s32 id;
+        int slot = texCount - i[0] - 1;
 
-        // FAKE: (u32) index cast; texIdRemap[texCount - i[0] - 1] changes the object
-        id = texIdRemap[(u32) ((texCount - i[0]) - 1)];
+        id = texIdRemap[slot];
 #else
 static void pushGXModelMtx_TransformNode__(AnimPoseNode* node) {
     Mtx trans, scale, rot, tmp;
@@ -2180,7 +2180,9 @@ static void animSetMaterial_Texture(s32 texCount, s32* texIdRemap, AnimPoseTexEn
         AnimPoseTexEntry* entry;
         s32 tex2;
         for (i = 0; i < texCount; i++) {
-            id = texIdRemap[(u32)((texCount - i) - 1)];
+            int slot = texCount - i - 1;
+
+            id = texIdRemap[slot];
 #endif
         entry = &pTexEntries[id];
         bindId = entry->bindId + animEntries[id].texBindIdx;
@@ -2287,7 +2289,9 @@ static void animSetMaterial_Texture(s32 texCount, s32* texIdRemap, AnimPoseTexEn
             k = 0;
         }
         for (j[0] = k; k < texCount; k++, j[0] += 3) {
-            anim = &animEntries[texIdRemap[(u32)((texCount - k) - 1)]];
+            int slot = texCount - k - 1;
+
+            anim = &animEntries[texIdRemap[slot]];
             scaleS = anim->scaleS;
             scaleT = anim->scaleT;
             transS = anim->transS;
@@ -2322,10 +2326,10 @@ static void animSetMaterial_Texture(s32 texCount, s32* texIdRemap, AnimPoseTexEn
         pTexEntries = NULL;
     }
     for (i[0] = 0; i[0] < texCount; i[0]++) {
-        flags = 0;
+        int slot = texCount - i[0] - 1;
 
-        // FAKE: (u32) index cast; texIdRemap[texCount - i[0] - 1] changes the object
-        anim = &animEntries[texIdRemap[(u32) ((texCount - i[0]) - 1)]];
+        flags = 0;
+        anim = &animEntries[texIdRemap[slot]];
         rotate = anim->rotate;
         scaleS = anim->scaleS;
         scaleT = anim->scaleT;
@@ -2815,8 +2819,9 @@ static void renderProc(s32 shapeId, s32 unused) {
                             GXNormal1x16(*nrmIndexPtr);
                             GXColor1x16(*clr0IndexPtr);
                             for (l = tc2, index = 0; l > 0; l--, index++) {
-                                // FAKE: (u32) index cast; texIds[tc2 - index - 1] changes the object
-                                texIndex = texIds[(u32)(tc2 - index - 1)];
+                                int slot = tc2 - index - 1;
+
+                                texIndex = texIds[slot];
                                 GXTexCoord1x16((&wp->curPoseData->texIndex[texIndex][fd2 + firstId[texIndex]])[k2]);
                             }
                         }
