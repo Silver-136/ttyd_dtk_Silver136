@@ -37,25 +37,6 @@
 #if VERSION <= VERSION_DEMO_JP
 #include "../src/manager/cardmgr_demo.inc"
 #else
-const char cardFileName[] = "mariost_save_file";
-#if VERSION >= VERSION_US
-#if VERSION >= VERSION_DEMO_EU
-const char card_title_jp[0x18] = "ペーパーマリオＲＰＧ";
-const char card_date_jp[0x20] = "%2d月%2d日のセーブデータです";
-const char cardGameTitle[0xC] = "Paper Mario";
-const char cardDateFormat[] = "%2d/%2d save data";
-const char card_date_de[0x18] = "Spielstand vom: %2d/%2d";
-const char card_date_fr[0x16] = "Sauvegarde du %2d/%2d";
-const char card_date_es[0x1B] = "Datos guardados el %2d/%2d";
-const char card_date_it[0x15] = "Salvataggio: %2d/%2d";
-#else
-const char cardGameTitle[] = "Paper Mario";
-const char cardDateFormat[] = "%2d/%2d save data";
-#endif
-#else
-const char cardGameTitle[] = "ペーパーマリオＲＰＧ";
-const char cardDateFormat[0x20] = "%2d月%2d日のセーブデータです";
-#endif
 
 //.sbss
 static CardWork* wp;
@@ -1115,35 +1096,39 @@ static void make_header(void) {
     OSTicksToCalendarTime(OSGetTime(), &td);
     switch (gp->language) {
         case 0:
-            strcpy(metadata->data.fileName, card_title_jp);
-            sprintf(metadata->data.dateString, card_date_jp, td.mon + 1, td.mday);
+            strcpy(metadata->data.fileName, "ペーパーマリオＲＰＧ");
+            sprintf(metadata->data.dateString, "%2d月%2d日のセーブデータです", td.mon + 1, td.mday);
             break;
         case 1:
         case 6:
-            strcpy(metadata->data.fileName, cardGameTitle);
-            sprintf(metadata->data.dateString, cardDateFormat, td.mon + 1, td.mday);
+            strcpy(metadata->data.fileName, "Paper Mario");
+            sprintf(metadata->data.dateString, "%2d/%2d save data", td.mon + 1, td.mday);
             break;
         case 2:
-            strcpy(metadata->data.fileName, cardGameTitle);
-            sprintf(metadata->data.dateString, card_date_de, td.mday, td.mon + 1);
+            strcpy(metadata->data.fileName, "Paper Mario");
+            sprintf(metadata->data.dateString, "Spielstand vom: %2d/%2d", td.mday, td.mon + 1);
             break;
         case 3:
-            strcpy(metadata->data.fileName, cardGameTitle);
-            sprintf(metadata->data.dateString, card_date_fr, td.mday, td.mon + 1);
+            strcpy(metadata->data.fileName, "Paper Mario");
+            sprintf(metadata->data.dateString, "Sauvegarde du %2d/%2d", td.mday, td.mon + 1);
             break;
         case 4:
-            strcpy(metadata->data.fileName, cardGameTitle);
-            sprintf(metadata->data.dateString, card_date_es, td.mday, td.mon + 1);
+            strcpy(metadata->data.fileName, "Paper Mario");
+            sprintf(metadata->data.dateString, "Datos guardados el %2d/%2d", td.mday, td.mon + 1);
             break;
         case 5:
-            strcpy(metadata->data.fileName, cardGameTitle);
-            sprintf(metadata->data.dateString, card_date_it, td.mday, td.mon + 1);
+            strcpy(metadata->data.fileName, "Paper Mario");
+            sprintf(metadata->data.dateString, "Salvataggio: %2d/%2d", td.mday, td.mon + 1);
             break;
     }
-#else
-    strcpy(metadata->data.fileName, cardGameTitle);
+#elif VERSION >= VERSION_US
+    strcpy(metadata->data.fileName, "Paper Mario");
     OSTicksToCalendarTime(OSGetTime(), &td);
-    sprintf(metadata->data.dateString, cardDateFormat, td.mon + 1, td.mday);
+    sprintf(metadata->data.dateString, "%2d/%2d save data", td.mon + 1, td.mday);
+#else
+    strcpy(metadata->data.fileName, "ペーパーマリオＲＰＧ");
+    OSTicksToCalendarTime(OSGetTime(), &td);
+    sprintf(metadata->data.dateString, "%2d月%2d日のセーブデータです", td.mon + 1, td.mday);
 #endif
     memcpy(metadata->data.bannerTex, _mariost_banner_tex, sizeof(metadata->data.bannerTex));
     memcpy(metadata->data.iconTex, _mariost_icon_tex, sizeof(metadata->data.iconTex));
@@ -1259,7 +1244,7 @@ static void memcard_delete(void) {
     wp->flags |= CARD_FLAG_BUSY;
 
     i = 0;
-    while ((result = CARDDelete(wp->chan, cardFileName)) == CARD_RESULT_BUSY) {
+    while ((result = CARDDelete(wp->chan, "mariost_save_file")) == CARD_RESULT_BUSY) {
         if (++i > 1000000) {
             result = CARD_RESULT_FATAL_ERROR;
             break;
@@ -1282,7 +1267,7 @@ static void createCallback(s32 chan, s32 result) {
 /** Creates mariost_save_file with room for the header and the eight slot copies (0x22000 bytes). */
 static void memcard_create(void) {
     wp->flags |= CARD_FLAG_BUSY;
-    CARDCreateAsync(wp->chan, cardFileName, CARD_FILE_BYTES, &wp->info, createCallback);
+    CARDCreateAsync(wp->chan, "mariost_save_file", CARD_FILE_BYTES, &wp->info, createCallback);
 }
 
 /** CARDWriteAsync completion: stores the result and clears the in-flight flag. */
@@ -1404,7 +1389,7 @@ static void memcard_open(void) {
         }
         if ((result != CARD_RESULT_NOFILE) && (result != CARD_RESULT_NOPERM)) {
             if (result == CARD_RESULT_READY) {
-                if (!strcmp(stat.fileName, cardFileName)) {
+                if (!strcmp(stat.fileName, "mariost_save_file")) {
                     if ((stat.commentAddr == 0) && (stat.iconAddr == offsetof(CardMetadata, data.bannerTex)) && (stat.length == CARD_FILE_BYTES)) {
                         wp->fileNo = fileNo;
                         break;
@@ -1452,7 +1437,7 @@ static void memcard_open(void) {
         return;
     }
     i = 0;
-    while ((result = CARDOpen(wp->chan, cardFileName, &wp->info)) == CARD_RESULT_BUSY) {
+    while ((result = CARDOpen(wp->chan, "mariost_save_file", &wp->info)) == CARD_RESULT_BUSY) {
         if (++i > 1000000) {
             result = CARD_RESULT_FATAL_ERROR;
             break;

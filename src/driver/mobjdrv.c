@@ -1170,28 +1170,6 @@ BOOL mobjCheckExec(void) {
     return FALSE;
 }
 
-#if VERSION >= VERSION_JP
-
-/**
- * For a MOBJ_KururinFloor object returns 2 while its item is still there to find,
- * 1 once its item is out or its flag is set, and 0 for any other object. The early demos keep it as a real function.
- */
-static int mobjCheckKururingFloorItem(MapObjectEntry* entry) { // always inlined in JP and later, a real function in the early demos
-    if (!strcmp(entry->animName, kururinName)) {
-        ItemEntry* item = itemNameToPtr(entry->name);
-        if (item != NULL && (item->flags & ITEM_FLAG_ACTIVE) && evtGetValue(0, entry->flagVar) == 0) {
-            return 1;
-        } else if (evtGetValue(0, entry->flagVar) != 0) {
-            return 1;
-        } else {
-            return 2;
-        }
-    } else {
-        return 0;
-    }
-}
-#endif
-
 /**
  * For treasure chests (normal, big, gray, black) returns 2 once opened (state 99) and 1 while closed;
  * 0 for any other object.
@@ -1291,7 +1269,7 @@ MapObjectEntry* mobjNearDistCheck2(f32 x, f32 y, f32 z, f32 minMagnitude, char**
                         animName++;
                         continue;
                     }
-                } else if (strcmp(entry->animName, kururinName) == 0) {
+                } else if (strcmp(entry->animName, "MOBJ_KururinFloor") == 0) {
                     if (mobjCheckKururingFloorItem(entry) != 2) {
                         animName++;
                         continue;
@@ -1313,15 +1291,14 @@ MapObjectEntry* mobjNearDistCheck2(f32 x, f32 y, f32 z, f32 minMagnitude, char**
     return ret;
 }
 
-#if VERSION <= VERSION_DEMO_JP
-
 /**
  * For a MOBJ_KururinFloor object returns 2 while its item is still there to find,
- * 1 once its item is out or its flag is set, and 0 for any other object. The early demos keep it as a real function.
+ * 1 once its item is out or its flag is set, and 0 for any other object. Defined after its callers. The early demos
+ * also call it from party_chuchu.c; in JP and later mobjNearDistCheck2 is its only caller, which inlines it, and the
+ * linker strips the copy (its emitted copy places the "MOBJ_KururinFloor" literal ahead of the treasure box names).
  */
-// A real function in the early demos, defined after its callers.
 int mobjCheckKururingFloorItem(MapObjectEntry* entry) {
-    if (!strcmp(entry->animName, kururinName)) {
+    if (!strcmp(entry->animName, "MOBJ_KururinFloor")) {
         ItemEntry* item = itemNameToPtr(entry->name);
         if (item != NULL && (item->flags & ITEM_FLAG_ACTIVE) && evtGetValue(0, entry->flagVar) == 0) {
             return 1;
@@ -1334,8 +1311,4 @@ int mobjCheckKururingFloorItem(MapObjectEntry* entry) {
         return 0;
     }
 }
-#endif
-
-/** Name of the flipping floor panels that hide Star Pieces, checked to treat their hidden item specially. */
-const char kururinName[] = "MOBJ_KururinFloor";
 

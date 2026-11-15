@@ -108,8 +108,6 @@ s32 mobjEntry(const char* name, const char* animPoseName);
 void mobjHitEntry(MapObjectEntry* entry, s32 type);
 MapObjectEntry* mobjHitObjPtrToPtr(HitEntry* hitObj);
 
-extern const char kururinName[];
-
 BOOL mobjCheckExec(void);
 void mobjReset(BOOL inBattle);
 void mobjSetPosition(const char* name, f32 x, f32 y, f32 z);
@@ -123,8 +121,6 @@ MapObjectEntry* mobjNearDistCheck(f32 x, f32 y, f32 z, f32 minMagnitude);
 
 MapObjectEntry* mobjNearDistCheck2(f32 x, f32 y, f32 z, f32 minMagnitude, char** names);
 
-#if VERSION <= VERSION_DEMO_JP
 int mobjCheckKururingFloorItem(MapObjectEntry* entry);
-#endif
 
 struct EventEntry* mobjRunEvent(MapObjectEntry* entry, EvtWord* eventCode);

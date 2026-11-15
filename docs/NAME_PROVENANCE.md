@@ -461,9 +461,6 @@ YoshiNomikomi_Spew, gonbaba_fumituke, gesso_ikasumi, KaitenHammer), so they are 
 | function | mario | `marioChkUseParty` (Zephiles' name; new in JP, no map names it) | `N_marioChkUseParty` | 2026-11-08 |
 | data | icondrv | `power_rush_lang_tbl`, `power_rush_p_lang_tbl` (US+ per-language Power Rush / Power Rush P icon ids; no map names them) | `icon_049_lang_tbl`, `icon_067_lang_tbl` | 2026-11-14 |
 | data | main | `zakoM2D_find_throw_event` (the bottle throw split out of the original zakoM2D_find_event from JP on) | `zakoM2D_find_event` (LLCOOLT) | 2026-11-09 |
-| data | cardmgr | `cardFileName` ("mariost_save_file") | `str_802CCC80` | 2026-10-25 |
-| data | cardmgr | `cardGameTitle` (memory card title, US/JP text) | `str_802CCC94` | 2026-10-25 |
-| data | cardmgr | `cardDateFormat` (memory card comment format) | `str_802CCCAC` | 2026-10-25 |
 | inline | include/poly_trig.h | `polySinf`, `polyCosf` (polynomial sine/cosine shared by many units) | private copies `npc_sin`, `moa_sin`, `item_sin`, `coin_sin`, `_sinf`, ... | 2026-10-25 |
 | type | include/party/party_move.h | `FOOTMARK_FLAG_JUMP`, `FOOTMARK_FLAG_SLIT` | literal 1, 4 | 2026-10-25 |
 | type | include/battle/battle_damage.h | `CounterWork` fields (attackHits, payback, burnStatus, ..., hitEvent) | `field_0x0` .. `field_0x2C` | 2026-10-25 |

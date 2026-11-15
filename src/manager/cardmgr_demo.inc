@@ -3,10 +3,6 @@
 // functions whose calls are all inlined; their out-of-line copies have the map's sizes. check_sum, make_data,
 // headerCheck and dataCheck are UNUSED there too, but as plain functions their copies come out larger than the map's
 // (0xfc/0x160/0xf4/0x128 against 0xa8/0x130/0xf0/0x118), so they stay inline.
-/** Name of the game's save file on the memory card, used to find, create and delete it. */
-const char cardFileName[0x14] = "mariost_save_file";
-const char cardGameTitle[0x18] = "ペーパーマリオＲＰＧ";
-const char cardDateFormat[0x20] = "%2d月%2d日のセーブデータです";
 
 //.sbss
 static CardWork* wp;
@@ -1029,7 +1025,7 @@ static inline u32 header_sum(u8* data, s32 size) {
 }
 
 /**
- * Builds the save file header: the game title (cardGameTitle, the Japanese one)
+ * Builds the save file header: the game title (the Japanese one)
  * and today's date comment shown in the GameCube memory card screen, the banner and icon images, and the sound,
  * rumble and last slot settings, then its checksums.
  */
@@ -1038,9 +1034,9 @@ static void make_header(void) {
     OSCalendarTime td;
     metadata = &cardGetFilePtr()->metadata;
     memset(metadata, 0, sizeof(metadata->data));
-    strcpy(metadata->data.fileName, cardGameTitle);
+    strcpy(metadata->data.fileName, "ペーパーマリオＲＰＧ");
     OSTicksToCalendarTime(OSGetTime(), &td);
-    sprintf(metadata->data.dateString, cardDateFormat, td.mon + 1, td.mday);
+    sprintf(metadata->data.dateString, "%2d月%2d日のセーブデータです", td.mon + 1, td.mday);
     memcpy(metadata->data.bannerTex, _mariost_banner_tex, sizeof(metadata->data.bannerTex));
     memcpy(metadata->data.iconTex, _mariost_icon_tex, sizeof(metadata->data.iconTex));
     memcpy(metadata->data.iconTlut, _mariost_icon_tlut, sizeof(metadata->data.iconTlut));
@@ -1188,7 +1184,7 @@ static void memcard_delete(void) {
     wp->flags |= CARD_FLAG_CALL_BUSY;
 
     i = 0;
-    while ((result = CARDDelete(wp->chan, cardFileName)) == CARD_RESULT_BUSY) {
+    while ((result = CARDDelete(wp->chan, "mariost_save_file")) == CARD_RESULT_BUSY) {
         if (++i > 1000000) {
             result = CARD_RESULT_FATAL_ERROR;
             break;
@@ -1211,7 +1207,7 @@ static void createCallback(s32 chan, s32 result) {
 /** Creates mariost_save_file with room for the header and the eight slot copies (0x22000 bytes). */
 static void memcard_create(void) {
     wp->flags |= CARD_FLAG_CALL_BUSY;
-    CARDCreateAsync(wp->chan, cardFileName, sizeof(CardData) + (sizeof(CardSaveSlot) * 4), &wp->info, createCallback);
+    CARDCreateAsync(wp->chan, "mariost_save_file", sizeof(CardData) + (sizeof(CardSaveSlot) * 4), &wp->info, createCallback);
 }
 
 /** CARDWriteAsync completion: stores the result and clears the in-flight flag. */
@@ -1333,7 +1329,7 @@ static void memcard_open(void) {
         }
         if ((result != CARD_RESULT_NOFILE) && (result != CARD_RESULT_NOPERM)) {
             if (result == CARD_RESULT_READY) {
-                if (!strcmp(stat.fileName, cardFileName)) {
+                if (!strcmp(stat.fileName, "mariost_save_file")) {
                     if ((stat.commentAddr == 0) && (stat.iconAddr == 0x40) && (stat.length == 0x22000)) {
                         wp->fileNo = fileNo;
                         break;
@@ -1381,7 +1377,7 @@ static void memcard_open(void) {
         return;
     }
     i = 0;
-    while ((result = CARDOpen(wp->chan, cardFileName, &wp->info)) == CARD_RESULT_BUSY) {
+    while ((result = CARDOpen(wp->chan, "mariost_save_file", &wp->info)) == CARD_RESULT_BUSY) {
         if (++i > 1000000) {
             result = CARD_RESULT_FATAL_ERROR;
             break;
