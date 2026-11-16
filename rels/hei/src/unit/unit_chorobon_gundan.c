@@ -599,6 +599,12 @@ static void chorogun_ext_main(void) {
                         BtlUnit_snd_se_pos(unit, "SFX_BOSS_TEAM_CHORO_WAIT1", 0x60, 0, &(Vec){(*pose->mtx)[0][3], (*pose->mtx)[1][3], (*pose->mtx)[2][3]});
                     }
                     c->speed = 3.0f + 0.5f * rand() / 32767.0f;
+
+                    // BUG: unlike states 10 and 31, nothing here guards d == 0: a Fuzzy that lands exactly on its
+                    // point gets 0 / 0 (NaN) velocities, and its x and z stay NaN for the rest of the battle (only
+                    // states 1 and 99 set them, and state 61 never reaches 99 with a NaN x). In state 31 its
+                    // d <= 30 test then never holds, so chorogun_approach_target waits for its 240-landing cap
+                    // (13-15 frames a landing) on every horde attack while that Fuzzy is still in the horde.
                     c->vel.x = c->speed * (dx2 / d);
                     c->vel.y = c->speed;
                     c->vel.z = c->speed * (dz2 / d);

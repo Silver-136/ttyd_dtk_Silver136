@@ -1281,6 +1281,9 @@ static void npcMoveXZ(NpcEntry* npc) {
             npc->position.z = wz;
         }
 #else
+        // BUG: npcHitCheckSide adds the slide along a hit wall (half the move's part along it) to the position
+        // without testing that slide, and its rays only look along the move, so the slide can carry the NPC
+        // through a wall in its own path; US and later test the slide once more from the real position.
         npc->wallHit = npcHitCheckSide(npc, &npc->position.x, &npc->position.z, &npc->moveDir, mx, mz);
 #endif
     }
@@ -1341,6 +1344,10 @@ static void npcMoveG(NpcEntry* npc) {
             npc->statusFlags |= NPC_STATUS_AIRBORNE;
             npc->position.y += dy;
         } else {
+            // The floor probe runs only on falling frames and starts 0.8 * height above the feet, and this branch
+            // has no lower bound (the one above stops at -1000): an NPC whose feet are more than 0.8 * height
+            // under a floor surface when it falls never finds it, falls for good and keeps NPC_STATUS_AIRBORNE, so
+            // an evt_npc_jump_position it is in never returns.
             f64 fallDistance = __fabs(dy);
             f32 probeHeight = 0.8f * npc->height;
             dist = probeHeight + (f32)fallDistance;
