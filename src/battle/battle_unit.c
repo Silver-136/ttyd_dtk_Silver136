@@ -500,11 +500,28 @@ void BtlUnit_AddHomePos(BattleUnit* unit, f32 x, f32 y, f32 z) {
     unit->homePosition.z += z;
 }
 
+/** Reads a part's home position. */
+// Original name and size (0x1c) from the JP demo map (UNUSED there: nothing calls it); the getter of
+// BtlUnit_SetPartsHomePos's field in the form of BtlUnit_GetHomePos.
+void BtlUnit_GetPartsHomePos(BattleUnitPart* part, f32* x, f32* y, f32* z) {
+    *x = part->homePosition.x;
+    *y = part->homePosition.y;
+    *z = part->homePosition.z;
+}
+
 /** Sets a part's home position. */
 void BtlUnit_SetPartsHomePos(BattleUnitPart* part, f32 x, f32 y, f32 z) {
     part->homePosition.x = x;
     part->homePosition.y = y;
     part->homePosition.z = z;
+}
+
+/** Moves a part's home position by an offset. */
+// Original name and size (0x28) from the JP demo map (UNUSED there: nothing calls it); BtlUnit_AddHomePos for a part.
+void BtlUnit_AddPartsHomePos(BattleUnitPart* part, f32 x, f32 y, f32 z) {
+    part->homePosition.x += x;
+    part->homePosition.y += y;
+    part->homePosition.z += z;
 }
 
 /** Sets the unit's rotation in degrees, each axis normalised to 0..360 with 360 folded to 0. */
@@ -636,6 +653,24 @@ void BtlUnit_SetRotateOffset(BattleUnit* unit, f32 x, f32 y, f32 z) {
     }
 }
 
+/** Reads the unit's rotation offset. */
+// Original name and size (0x1c) from the JP demo map (UNUSED there: nothing calls it); the getter of
+// BtlUnit_SetRotateOffset's field in the form of BtlUnit_GetRotate.
+void BtlUnit_GetRotateOffset(BattleUnit* unit, f32* x, f32* y, f32* z) {
+    *x = unit->rotationOffset.x;
+    *y = unit->rotationOffset.y;
+    *z = unit->rotationOffset.z;
+}
+
+/** Adds to the unit's rotation offset. */
+// Original name and size (0x28) from the JP demo map (UNUSED there: nothing calls it); BtlUnit_AddPartsRotateOffset
+// for the unit.
+void BtlUnit_AddRotateOffset(BattleUnit* unit, f32 x, f32 y, f32 z) {
+    unit->rotationOffset.x += x;
+    unit->rotationOffset.y += y;
+    unit->rotationOffset.z += z;
+}
+
 /** Sets the pivot offset a part rotates around; an axis passed as -250000000.0 is left unchanged. */
 void BtlUnit_SetPartsRotateOffset(BattleUnitPart* part, f32 x, f32 y, f32 z) {
     f32 noValue = -250000000.0f;
@@ -648,6 +683,15 @@ void BtlUnit_SetPartsRotateOffset(BattleUnitPart* part, f32 x, f32 y, f32 z) {
     if (noValue != z) {
         part->rotationOffset.z = z;
     }
+}
+
+/** Reads a part's rotation offset. */
+// Original name and size (0x1c) from the JP demo map (UNUSED there: nothing calls it); the getter of
+// BtlUnit_SetPartsRotateOffset's field in the form of BtlUnit_GetPartsRotate.
+void BtlUnit_GetPartsRotateOffset(BattleUnitPart* part, f32* x, f32* y, f32* z) {
+    *x = part->rotationOffset.x;
+    *y = part->rotationOffset.y;
+    *z = part->rotationOffset.z;
 }
 
 /** Moves a part's rotation pivot offset by the given amounts. */
@@ -720,6 +764,15 @@ void BtlUnit_SetPartsBaseScale(BattleUnitPart* part, f32 x, f32 y, f32 z) {
     }
 }
 
+/** Reads a part's scale. */
+// Original name and size (0x1c) from the JP demo map (UNUSED there: nothing calls it); BtlUnit_GetScale for a part
+// (the field BtlUnit_SetPartsScale sets).
+void BtlUnit_GetPartsScale(BattleUnitPart* part, f32* x, f32* y, f32* z) {
+    *x = part->mScale.x;
+    *y = part->mScale.y;
+    *z = part->mScale.z;
+}
+
 /** Sets a part's animated scale; an axis passed as -250000000.0 is left unchanged. */
 void BtlUnit_SetPartsScale(BattleUnitPart* part, f32 x, f32 y, f32 z) {
     f32 noValue = -250000000.0f;
@@ -758,9 +811,24 @@ s32 BtlUnit_GetHeight(BattleUnit* unit) {
     return unit->height;
 }
 
+/** Sets the unit's width. */
+// Original name and size (0x8) from the JP demo map (UNUSED there: nothing calls it); BtlUnit_SetHeight for the width.
+void BtlUnit_SetWidth(BattleUnit* unit, s16 width) {
+    unit->width = width;
+}
+
 /** Overrides the unit's height. */
 void BtlUnit_SetHeight(BattleUnit* unit, s16 height) {
     unit->height = height;
+}
+
+/** Reads the unit's position offset. */
+// Original name and size (0x1c) from the JP demo map (UNUSED there: nothing calls it); BtlUnit_GetPartsOffsetPos for
+// the unit (the field BtlUnit_SetOffsetPos sets).
+void BtlUnit_GetOffsetPos(BattleUnit* unit, f32* x, f32* y, f32* z) {
+    *x = unit->positionOffset.x;
+    *y = unit->positionOffset.y;
+    *z = unit->positionOffset.z;
 }
 
 /**
@@ -778,6 +846,15 @@ void BtlUnit_SetOffsetPos(BattleUnit* unit, f32 x, f32 y, f32 z) {
     if (noValue != z) {
         unit->positionOffset.z = z;
     }
+}
+
+/** Adds to the unit's position offset. */
+// Original name and size (0x28) from the JP demo map (UNUSED there: nothing calls it); BtlUnit_AddPartsOffsetPos for
+// the unit.
+void BtlUnit_AddOffsetPos(BattleUnit* unit, f32 x, f32 y, f32 z) {
+    unit->positionOffset.x += x;
+    unit->positionOffset.y += y;
+    unit->positionOffset.z += z;
 }
 
 /** Reads a part's offset from its unit's position. */
@@ -822,6 +899,22 @@ void BtlUnit_SetDispOffset(BattleUnit* unit, f32 x, f32 y, f32 z) {
     }
 }
 
+/** Adds to the unit's display offset; -250000000.0 keeps an axis. */
+// Original name and size (0x4c) from the JP demo map (UNUSED there: nothing calls it); BtlUnit_AddPartsDispOffset
+// for the unit.
+void BtlUnit_AddDispOffset(BattleUnit* unit, f32 x, f32 y, f32 z) {
+    f32 noValue = -250000000.0f;
+    if (noValue != x) {
+        unit->displayOffset.x += x;
+    }
+    if (noValue != y) {
+        unit->displayOffset.y += y;
+    }
+    if (noValue != z) {
+        unit->displayOffset.z += z;
+    }
+}
+
 /** Sets a part's draw offset (displayOffset); an axis passed as -250000000.0 is left unchanged. */
 void BtlUnit_SetPartsDispOffset(BattleUnitPart* part, f32 x, f32 y, f32 z) {
     f32 noValue = -250000000.0f;
@@ -850,6 +943,15 @@ void BtlUnit_AddPartsDispOffset(BattleUnitPart* part, f32 x, f32 y, f32 z) {
     }
 }
 
+/** Reads where the unit's current scripted move starts. */
+// Original name and size (0x1c) from the JP demo map (UNUSED there: nothing calls it), as the five getters below:
+// each reads the field its Set function sets, in the form of BtlUnit_GetPos.
+void BtlUnit_GetMoveStartPos(BattleUnit* unit, f32* x, f32* y, f32* z) {
+    *x = unit->moveStartPos.x;
+    *y = unit->moveStartPos.y;
+    *z = unit->moveStartPos.z;
+}
+
 /** Sets where the unit's current scripted move (walk, jump) starts; -250000000.0 keeps an axis. */
 void BtlUnit_SetMoveStartPos(BattleUnit* unit, f32 x, f32 y, f32 z) {
     f32 noValue = -250000000.0f;
@@ -862,6 +964,13 @@ void BtlUnit_SetMoveStartPos(BattleUnit* unit, f32 x, f32 y, f32 z) {
     if (noValue != z) {
         unit->moveStartPos.z = z;
     }
+}
+
+/** Reads where a part's current scripted move starts (JP demo map: UNUSED, 0x1c). */
+void BtlUnit_GetPartsMoveStartPos(BattleUnitPart* part, f32* x, f32* y, f32* z) {
+    *x = part->moveStartPos.x;
+    *y = part->moveStartPos.y;
+    *z = part->moveStartPos.z;
 }
 
 /** Sets where a part's current scripted move starts; -250000000.0 keeps an axis. */
@@ -878,6 +987,13 @@ void BtlUnit_SetPartsMoveStartPos(BattleUnitPart* part, f32 x, f32 y, f32 z) {
     }
 }
 
+/** Reads the position the unit's current scripted move has reached (JP demo map: UNUSED, 0x1c). */
+void BtlUnit_GetMoveCurrentPos(BattleUnit* unit, f32* x, f32* y, f32* z) {
+    *x = unit->moveCurrentPos.x;
+    *y = unit->moveCurrentPos.y;
+    *z = unit->moveCurrentPos.z;
+}
+
 /** Sets the position the unit's current scripted move has reached; -250000000.0 keeps an axis. */
 void BtlUnit_SetMoveCurrentPos(BattleUnit* unit, f32 x, f32 y, f32 z) {
     f32 noValue = -250000000.0f;
@@ -890,6 +1006,13 @@ void BtlUnit_SetMoveCurrentPos(BattleUnit* unit, f32 x, f32 y, f32 z) {
     if (noValue != z) {
         unit->moveCurrentPos.z = z;
     }
+}
+
+/** Reads the position a part's current scripted move has reached (JP demo map: UNUSED, 0x1c). */
+void BtlUnit_GetPartsMoveCurrentPos(BattleUnitPart* part, f32* x, f32* y, f32* z) {
+    *x = part->moveCurrentPos.x;
+    *y = part->moveCurrentPos.y;
+    *z = part->moveCurrentPos.z;
 }
 
 /** Sets the position a part's current scripted move has reached; -250000000.0 keeps an axis. */
@@ -906,6 +1029,13 @@ void BtlUnit_SetPartsMoveCurrentPos(BattleUnitPart* part, f32 x, f32 y, f32 z) {
     }
 }
 
+/** Reads where the unit's current scripted move ends (JP demo map: UNUSED, 0x1c). */
+void BtlUnit_GetMoveTargetPos(BattleUnit* unit, f32* x, f32* y, f32* z) {
+    *x = unit->moveTargetPos.x;
+    *y = unit->moveTargetPos.y;
+    *z = unit->moveTargetPos.z;
+}
+
 /** Sets where the unit's current scripted move ends; -250000000.0 keeps an axis. */
 void BtlUnit_SetMoveTargetPos(BattleUnit* unit, f32 x, f32 y, f32 z) {
     f32 noValue = -250000000.0f;
@@ -918,6 +1048,13 @@ void BtlUnit_SetMoveTargetPos(BattleUnit* unit, f32 x, f32 y, f32 z) {
     if (noValue != z) {
         unit->moveTargetPos.z = z;
     }
+}
+
+/** Reads where a part's current scripted move ends (JP demo map: UNUSED, 0x1c). */
+void BtlUnit_GetPartsMoveTargetPos(BattleUnitPart* part, f32* x, f32* y, f32* z) {
+    *x = part->moveTargetPos.x;
+    *y = part->moveTargetPos.y;
+    *z = part->moveTargetPos.z;
 }
 
 /** Sets where a part's current scripted move ends; -250000000.0 keeps an axis. */
@@ -957,6 +1094,19 @@ void BtlUnit_SetPartsMoveSpeed(BattleUnitPart* part, f32 moveSpeedXZ) {
 /** Sets the vertical speed of the unit's scripted jumps. */
 void BtlUnit_SetJumpSpeed(BattleUnit* unit, f32 moveSpeedY) {
     unit->moveSpeedY = moveSpeedY;
+}
+
+/** Sets the vertical speed of a part's scripted jumps. */
+// Original name and size (0x8) from the JP demo map (UNUSED there: nothing calls it); BtlUnit_SetJumpSpeed for a part.
+void BtlUnit_SetPartsJumpSpeed(BattleUnitPart* part, f32 moveSpeedY) {
+    part->moveSpeedY = moveSpeedY;
+}
+
+/** Sets the unit's alliance: which side it fights on. */
+// Original name and size (0x8) from the JP demo map (UNUSED there: nothing calls it); the setter of
+// BtlUnit_GetBelong's field.
+void BtlUnit_SetBelong(BattleUnit* unit, s8 alliance) {
+    unit->alliance = alliance;
 }
 
 /** Returns the unit's alliance: which side it fights on. */
@@ -1619,6 +1769,18 @@ void BtlUnit_ChangeStayAnim(s32 unitId) {
     btlDispChangeAnime(BtlUnit_GetPartsPtr(unit, unit->talkPartId), unit->stayPose, 0);
 }
 
+/** Sets the animation BtlUnit_ChangeTalkAnim plays. */
+// Original name and size (0x8) from the JP demo map (UNUSED there: nothing calls it), as BtlUnit_SetStayAnim below:
+// the setters of the names BtlUnit_ChangeTalkAnim and BtlUnit_ChangeStayAnim play.
+void BtlUnit_SetTalkAnim(BattleUnit* unit, const char* name) {
+    unit->talkPose = name;
+}
+
+/** Sets the animation BtlUnit_ChangeStayAnim plays. */
+void BtlUnit_SetStayAnim(BattleUnit* unit, const char* name) {
+    unit->stayPose = name;
+}
+
 /**
  * Where a speech bubble's tail (toge, "thorn") points for this unit:
  * its position plus the kind's talk offset and the unit's own tail offset, x mirrored by facing.
@@ -1653,6 +1815,13 @@ s32 BtlUnit_GetEnemyBelong(BattleUnit* unit) {
 /** Returns the HP damage the unit took from the last hit. */
 s32 BtlUnit_GetHitDamage(BattleUnit* unit) {
     return unit->hpDamageTaken;
+}
+
+/** Sets the HP damage the unit took from the last hit. */
+// Original name and size (0x8) from the JP demo map (UNUSED there: nothing calls it); the setter of
+// BtlUnit_GetHitDamage's field.
+void BtlUnit_SetHitDamage(BattleUnit* unit, s8 damage) {
+    unit->hpDamageTaken = damage;
 }
 
 /** Returns the HP damage the unit has taken so far in the current attack. */

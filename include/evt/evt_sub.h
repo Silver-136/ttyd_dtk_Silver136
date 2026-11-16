@@ -9,6 +9,15 @@
 #include "dolphin/types.h"
 
 USER_FUNC(evt_key_get_buttontrg);
+USER_FUNC(evt_key_get_dirrep);
+USER_FUNC(evt_key_get_buttonrep);
+USER_FUNC(evt_key_get_dirtrg);
+USER_FUNC(evt_key_get_stickx);
+USER_FUNC(evt_key_get_sticky);
+USER_FUNC(evt_key_get_substickx);
+USER_FUNC(evt_key_get_substicky);
+USER_FUNC(evt_key_get_triggerl);
+USER_FUNC(evt_key_get_triggerr);
 USER_FUNC(evt_sub_animgroup_async);
 USER_FUNC(evt_sub_countdown_end);
 USER_FUNC(evt_sub_countdown_flag_onoff);

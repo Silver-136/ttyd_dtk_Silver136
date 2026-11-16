@@ -1807,10 +1807,77 @@ USER_FUNC(evt_key_get_button) {
     return EVT_RETURN_DONE;
 }
 
+// evt_key_get_dirrep, _buttonrep, _dirtrg, _stickx, _sticky, _substickx, _substicky, _triggerl and _triggerr:
+// original names and sizes (0x54 each) from the JP demo map (UNUSED there: no script uses them). They sit in the
+// order of system.c's keyGet* functions, of which evt_key_get_dir, _button and _buttontrg call the first, second
+// and sixth: each returns its keyGet* value for controller args[0] in args[1].
+USER_FUNC(evt_key_get_dirrep) {
+    EvtWord* args = event->args;
+    s32 chan = evtGetValue(event, args[0]);
+    evtSetValue(event, args[1], keyGetDirRep(chan));
+    return EVT_RETURN_DONE;
+}
+
+USER_FUNC(evt_key_get_buttonrep) {
+    EvtWord* args = event->args;
+    s32 chan = evtGetValue(event, args[0]);
+    evtSetValue(event, args[1], keyGetButtonRep(chan));
+    return EVT_RETURN_DONE;
+}
+
+USER_FUNC(evt_key_get_dirtrg) {
+    EvtWord* args = event->args;
+    s32 chan = evtGetValue(event, args[0]);
+    evtSetValue(event, args[1], keyGetDirTrg(chan));
+    return EVT_RETURN_DONE;
+}
+
 USER_FUNC(evt_key_get_buttontrg) {
     EvtWord* args = event->args;
     s32 chan = evtGetValue(event, args[0]);
     evtSetValue(event, args[1], keyGetButtonTrg(chan));
+    return EVT_RETURN_DONE;
+}
+
+USER_FUNC(evt_key_get_stickx) {
+    EvtWord* args = event->args;
+    s32 chan = evtGetValue(event, args[0]);
+    evtSetValue(event, args[1], keyGetStickX(chan));
+    return EVT_RETURN_DONE;
+}
+
+USER_FUNC(evt_key_get_sticky) {
+    EvtWord* args = event->args;
+    s32 chan = evtGetValue(event, args[0]);
+    evtSetValue(event, args[1], keyGetStickY(chan));
+    return EVT_RETURN_DONE;
+}
+
+USER_FUNC(evt_key_get_substickx) {
+    EvtWord* args = event->args;
+    s32 chan = evtGetValue(event, args[0]);
+    evtSetValue(event, args[1], keyGetSubStickX(chan));
+    return EVT_RETURN_DONE;
+}
+
+USER_FUNC(evt_key_get_substicky) {
+    EvtWord* args = event->args;
+    s32 chan = evtGetValue(event, args[0]);
+    evtSetValue(event, args[1], keyGetSubStickY(chan));
+    return EVT_RETURN_DONE;
+}
+
+USER_FUNC(evt_key_get_triggerl) {
+    EvtWord* args = event->args;
+    s32 chan = evtGetValue(event, args[0]);
+    evtSetValue(event, args[1], keyGetTriggerL(chan));
+    return EVT_RETURN_DONE;
+}
+
+USER_FUNC(evt_key_get_triggerr) {
+    EvtWord* args = event->args;
+    s32 chan = evtGetValue(event, args[0]);
+    evtSetValue(event, args[1], keyGetTriggerR(chan));
     return EVT_RETURN_DONE;
 }
 

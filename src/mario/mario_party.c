@@ -182,6 +182,19 @@ BOOL marioPartyGoodbye(void) {
     return ret;
 }
 
+/** Sends the follower in slot 1 away with the leaving animation. TRUE if there was one. */
+// Original name and size (0x48) from the JP demo map (UNUSED there: nothing calls it); marioPartyGoodbye for the
+// second party slot.
+BOOL marioParty2Goodbye(void) {
+    BOOL ret = FALSE;
+    s8 slot = marioGetPtr()->currPartySlotId[1];
+    if (slot >= 0) {
+        partyGoodbye(slot);
+        ret = TRUE;
+    }
+    return ret;
+}
+
 /** Removes both the partner and the follower at once with no animation (save load, end of battle, E3 sequence). */
 void marioPartyKill(void) {
     marioPartyKillOne(0);
@@ -380,6 +393,95 @@ s32 partyGetHp(s32 partnerId) {
     return ret;
 }
 
+/** Sets the partner's current HP in the pouch (nothing for invalid ids). */
+// Original name and size (0x4c) from the JP demo map (UNUSED there: nothing calls it); the setter of partyGetHp's
+// field with the same id check.
+void partySetHp(s32 partnerId, s32 value) {
+    if (partnerId < PARTNER_COUNT) {
+        pouchGetPtr()->partyData[partnerId].currentHP = value;
+    }
+}
+
+/** The partner's HP level (rank) from the pouch (0 for invalid ids). */
+// Original name and size (0x44) from the JP demo map (UNUSED there: nothing calls it); partyGetHp for another
+// PouchPartyData field.
+s32 partyGetHpLv(s32 partnerId) {
+    s32 ret = 0;
+    if (partnerId < PARTNER_COUNT) {
+        ret = pouchGetPtr()->partyData[partnerId].HPLevel;
+    }
+    return ret;
+}
+
+/** Sets the partner's HP level (rank) in the pouch (nothing for invalid ids). */
+// Original name and size (0x4c) from the JP demo map (UNUSED there: nothing calls it); the setter of partyGetHpLv's
+// field with the same id check.
+void partySetHpLv(s32 partnerId, s32 value) {
+    if (partnerId < PARTNER_COUNT) {
+        pouchGetPtr()->partyData[partnerId].HPLevel = value;
+    }
+}
+
+/** The partner's max HP (with HP Plus P) from the pouch (0 for invalid ids). */
+// Original name and size (0x44) from the JP demo map (UNUSED there: nothing calls it); partyGetHp for another
+// PouchPartyData field.
+s32 partyGetMaxHp(s32 partnerId) {
+    s32 ret = 0;
+    if (partnerId < PARTNER_COUNT) {
+        ret = pouchGetPtr()->partyData[partnerId].maximumHP;
+    }
+    return ret;
+}
+
+/** Sets the partner's max HP (with HP Plus P) in the pouch (nothing for invalid ids). */
+// Original name and size (0x4c) from the JP demo map (UNUSED there: nothing calls it); the setter of partyGetMaxHp's
+// field with the same id check.
+void partySetMaxHp(s32 partnerId, s32 value) {
+    if (partnerId < PARTNER_COUNT) {
+        pouchGetPtr()->partyData[partnerId].maximumHP = value;
+    }
+}
+
+/** The partner's max HP without badges from the pouch (0 for invalid ids). */
+// Original name and size (0x44) from the JP demo map (UNUSED there: nothing calls it); partyGetHp for another
+// PouchPartyData field.
+s32 partyGetMaxHpBase(s32 partnerId) {
+    s32 ret = 0;
+    if (partnerId < PARTNER_COUNT) {
+        ret = pouchGetPtr()->partyData[partnerId].baseMaxHP;
+    }
+    return ret;
+}
+
+/** Sets the partner's max HP without badges in the pouch (nothing for invalid ids). */
+// Original name and size (0x4c) from the JP demo map (UNUSED there: nothing calls it); the setter of partyGetMaxHpBase's
+// field with the same id check.
+void partySetMaxHpBase(s32 partnerId, s32 value) {
+    if (partnerId < PARTNER_COUNT) {
+        pouchGetPtr()->partyData[partnerId].baseMaxHP = value;
+    }
+}
+
+/** The partner's attack level (rank) from the pouch (0 for invalid ids). */
+// Original name and size (0x44) from the JP demo map (UNUSED there: nothing calls it); partyGetHp for another
+// PouchPartyData field.
+s32 partyGetAttackLv(s32 partnerId) {
+    s32 ret = 0;
+    if (partnerId < PARTNER_COUNT) {
+        ret = pouchGetPtr()->partyData[partnerId].attackLevel;
+    }
+    return ret;
+}
+
+/** Sets the partner's attack level (rank) in the pouch (nothing for invalid ids). */
+// Original name and size (0x4c) from the JP demo map (UNUSED there: nothing calls it); the setter of partyGetAttackLv's
+// field with the same id check.
+void partySetAttackLv(s32 partnerId, s32 value) {
+    if (partnerId < PARTNER_COUNT) {
+        pouchGetPtr()->partyData[partnerId].attackLevel = value;
+    }
+}
+
 /**
  * The partner's rank (pouch techLevel: 0 unranked, 1 and 2 the rank-ups Merlon sells for Shine Sprites in
  * gor_02, which unitwin_setpartylank applies to HP, attack and tech levels together).
@@ -391,4 +493,13 @@ s32 partyGetTechLv(s32 partnerId) {
         ret = pouchGetPtr()->partyData[partnerId].techLevel;
     }
     return ret;
+}
+
+/** Sets the partner's rank in the pouch (nothing for invalid ids). */
+// Original name and size (0x4c) from the JP demo map (UNUSED there: nothing calls it); the setter of partyGetTechLv's
+// field with the same id check.
+void partySetTechLv(s32 partnerId, s32 value) {
+    if (partnerId < PARTNER_COUNT) {
+        pouchGetPtr()->partyData[partnerId].techLevel = value;
+    }
 }

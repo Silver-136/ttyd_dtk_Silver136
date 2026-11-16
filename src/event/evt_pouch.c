@@ -20,13 +20,18 @@
         return EVT_RETURN_DONE;            \
     }
 
+// Commands marked "unused" below: original names and sizes from the JP demo map (UNUSED there: no script uses
+// them, so the linker strips them). Each has the size of the getter (0x4c) or setter (0x30) form used here and
+// sits in the map between the same neighbours as here; the pouch function is the one its name gives.
 GETTER(evt_pouch_get_coin, pouchGetCoin)
 SETTER(evt_pouch_add_coin, pouchAddCoin)
 SETTER(evt_pouch_set_coin, pouchSetCoin)
 GETTER(evt_pouch_get_supercoin, pouchGetSuperCoin)
+SETTER(evt_pouch_add_supercoin, pouchAddSuperCoin) // unused
 SETTER(evt_pouch_set_supercoin, pouchSetSuperCoin)
 GETTER(evt_pouch_get_starpiece, pouchGetStarPiece)
 SETTER(evt_pouch_add_starpiece, pouchAddStarPiece)
+SETTER(evt_pouch_set_starpiece, pouchSetStarPiece) // unused
 SETTER(evt_pouch_get_starstone, pouchGetStarStone)
 
 /**
@@ -36,6 +41,22 @@ SETTER(evt_pouch_get_starstone, pouchGetStarStone)
 USER_FUNC(evt_pouch_add_item) {
     EvtWord* args = event->args;
     if (pouchGetItem(evtGetValue(event, args[0])) == 1) {
+        evtSetValue(event, args[1], 0);
+    } else {
+        evtSetValue(event, args[1], -1);
+    }
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Whether item, key item or badge args[0] would fit (pouchGetItemCheck adds nothing);
+ * args[1] gets 0 if there is room and -1 if not.
+ */
+// Original name and size (0x70) from the JP demo map (UNUSED there: no script uses it); evt_pouch_add_item's form
+// with the check function of the same name.
+USER_FUNC(evt_pouch_add_item_check) {
+    EvtWord* args = event->args;
+    if (pouchGetItemCheck(evtGetValue(event, args[0])) == 1) {
         evtSetValue(event, args[1], 0);
     } else {
         evtSetValue(event, args[1], -1);
@@ -127,14 +148,20 @@ USER_FUNC(evt_pouch_check_item) {
     return EVT_RETURN_DONE;
 }
 
-#if VERSION >= VERSION_JP
-GETTER(evt_pouch_get_hp, pouchGetHP)
-SETTER(evt_pouch_set_hp, pouchSetHP)
-#endif
+GETTER(evt_pouch_get_hp, pouchGetHP) // unused in the demos
+SETTER(evt_pouch_set_hp, pouchSetHP) // unused in the demos
+GETTER(evt_pouch_get_max_hp, pouchGetMaxHP) // unused
+SETTER(evt_pouch_set_max_hp, pouchSetMaxHP) // unused
+GETTER(evt_pouch_get_fp, pouchGetFP) // unused
+SETTER(evt_pouch_set_fp, pouchSetFP) // unused
+GETTER(evt_pouch_get_max_fp, pouchGetMaxFP) // unused
+SETTER(evt_pouch_set_max_fp, pouchSetMaxFP) // unused
+GETTER(evt_pouch_get_ap, pouchGetAP) // unused
 GETTER(evt_pouch_get_max_ap, pouchGetMaxAP)
 SETTER(evt_pouch_set_ap, pouchSetAP)
 SETTER(evt_pouch_party_join, partyJoin)
 SETTER(evt_pouch_party_left, partyLeft)
+GETTER(evt_pouch_get_hammer_lv, pouchGetHammerLv) // unused
 
 USER_FUNC(evt_pouch_mario_recovery) {
     pouchSetHP(pouchGetMaxHP());
@@ -153,7 +180,9 @@ USER_FUNC(evt_pouch_all_party_recovery) {
     return EVT_RETURN_DONE;
 }
 
+GETTER(evt_pouch_get_keyitemcnt, pouchGetKeyItemCnt) // unused
 GETTER(evt_pouch_get_haveitemcnt, pouchGetHaveItemCnt)
+GETTER(evt_pouch_get_keepitemcnt, pouchGetKeepItemCnt) // unused
 GETTER(evt_pouch_get_havebadgecnt, pouchGetHaveBadgeCnt)
 GETTER(evt_pouch_get_equipbadgecnt, pouchGetEquipBadgeCnt)
 SETTER(evt_pouch_majinai_set, pouchMajinaiInit)

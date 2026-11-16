@@ -149,6 +149,20 @@ ItemType pouchEquipBadge(s32 id) {
     return mpp->equippedBadges[id];
 }
 
+/** Number of key items Mario carries. */
+// Original name and size (0x2c) from the JP demo map (UNUSED there: nothing calls it); the count of the key item
+// list in the form of pouchGetHaveItemCnt below.
+s32 pouchGetKeyItemCnt(void) {
+    s32 i, count;
+
+    for (count = 0, i = 0; i < MAX_KEY_ITEMS; i++) {
+        if (mpp->keyItems[i] != ITEM_NULL) {
+            count++;
+        }
+    }
+    return count;
+}
+
 /** Number of items Mario carries (out of 20 slots). */
 s32 pouchGetHaveItemCnt(void) {
     s32 i, count;
@@ -1057,6 +1071,14 @@ s32 pouchGetSuperCoin(void) {
     return mpp->shineSpriteCount;
 }
 
+/** Adds Shine Sprites (negative to spend) without a clamp; returns the new count. */
+// Original name and size (0x1c) from the JP demo map (UNUSED there: nothing calls it); pouchAddStarPiece for the
+// Shine Sprite count.
+s32 pouchAddSuperCoin(s32 count) {
+    mpp->shineSpriteCount += count;
+    return mpp->shineSpriteCount;
+}
+
 /** Sets the Shine Sprite count (super coin: the Japanese name) and returns it. */
 s32 pouchSetSuperCoin(s32 count) {
     mpp->shineSpriteCount = count;
@@ -1071,6 +1093,14 @@ s32 pouchGetStarPiece(void) {
 /** Adds Star Pieces (negative to spend) without a clamp; returns the new count. */
 s32 pouchAddStarPiece(s32 count) {
     mpp->starPieceCount += count;
+    return mpp->starPieceCount;
+}
+
+/** Sets the Star Piece count and returns it. */
+// Original name and size (0x14) from the JP demo map (UNUSED there: nothing calls it); pouchSetSuperCoin for the
+// Star Piece count.
+s32 pouchSetStarPiece(s32 count) {
+    mpp->starPieceCount = count;
     return mpp->starPieceCount;
 }
 
@@ -1105,7 +1135,7 @@ void pouchSetHP(s32 points) {
 }
 
 /** Sets max HP and the badge-free base max HP. */
-void pouchSetMaxHP(s16 points) {
+void pouchSetMaxHP(s32 points) {
     mpp->maximumHP = points;
     mpp->baseMaxHP = mpp->maximumHP;
 }
@@ -1145,7 +1175,7 @@ void pouchSetFP(s32 points) {
 }
 
 /** Sets max FP and the badge-free base max FP. */
-void pouchSetMaxFP(s16 points) {
+void pouchSetMaxFP(s32 points) {
     mpp->maximumFP = points;
     mpp->baseMaxFP = mpp->maximumFP;
 }
@@ -1353,13 +1383,19 @@ void pouchRevisePartyParam(void) {
     for (i = 0; i < PARTNER_COUNT; i++) {
         if (i != PARTY_NONE) {
             party = &mpp->partyData[i];
-            party->baseMaxHP = _party_max_hp_table[i][party->HPLevel];
+            party->baseMaxHP = pouchGetPartyMaxHpBase(i, party->HPLevel);
             party->maximumHP = (s16)(party->baseMaxHP + (count * 5));
             if (party->currentHP > party->maximumHP) {
                 party->currentHP = party->maximumHP;
             }
         }
     }
+}
+
+/** A partner's max HP without badges at an HP level (rank). */
+// Original name and size (0x1c) from the JP demo map (UNUSED there: its call in pouchRevisePartyParam is inlined).
+s32 pouchGetPartyMaxHpBase(s32 partyId, s32 hpLevel) {
+    return _party_max_hp_table[partyId][hpLevel];
 }
 
 /** Mario's Star Points toward the next level, for the status window. */
@@ -1493,6 +1529,13 @@ BOOL pouchAddKpaCoin(s32 coins) {
     return ret;
 }
 
+/** Sets the coin counter of Bowser's side-scrolling stages. */
+// Original name and size (0xc) from the JP demo map (UNUSED there: nothing calls it); the setter of pouchGetKpaCoin's
+// field.
+void pouchSetKpaCoin(s32 coins) {
+    mpp->superBowserCoins = coins;
+}
+
 /** Score of Bowser's side-scrolling stages, shown by the kpa rel. */
 u32 pouchGetKpaScore(void) {
     return mpp->superBowserScore;
@@ -1504,6 +1547,13 @@ void pouchAddKpaScore(u32 score) {
     if (mpp->superBowserScore > 999999) {
         mpp->superBowserScore = 999999;
     }
+}
+
+/** Sets the score of Bowser's side-scrolling stages. */
+// Original name and size (0xc) from the JP demo map (UNUSED there: nothing calls it); the setter of
+// pouchGetKpaScore's field.
+void pouchSetKpaScore(u32 score) {
+    mpp->superBowserScore = score;
 }
 
 /**
