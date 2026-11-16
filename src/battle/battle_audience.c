@@ -66,7 +66,7 @@ EVT_END()
 
 // local prototypes
 static void BattleAudienceSettingAudience(void);
-static void BattleAudienceGuestTPLRead(s32 index, AudienceMemberType member, const char* tplName);
+static void BattleAudienceGuestTPLRead(s32 index, u8 member, const char* tplName);
 static void BattleAudienceCtrlProcess(void);
 static void BattleAudienceSetThrowItemMax(void);
 static void BattleAudienceItemCtrlProcess(void);
@@ -1593,7 +1593,7 @@ static void BattleAudienceSettingAudience(void) {
             for (i = 0; i < cnt; i++) {
                 s32 idx = BattleAudience_NoUsedFCHaitiRand();
                 if (idx == -1) break;
-                BattleAudience_Entry(idx, (u8)list[i], 0);
+                BattleAudience_Entry(idx, list[i], 0);
             }
             break;
     }
@@ -1604,7 +1604,7 @@ static void BattleAudienceSettingAudience(void) {
  * Loads guest texture slot id (0 or 1) from battle/audience/<path> for a special member kind;
  * BattleAudience_Init loads Luigi's into slot 0.
  */
-static void BattleAudienceGuestTPLRead(s32 id, AudienceMemberType member, const char* path) {
+static void BattleAudienceGuestTPLRead(s32 id, u8 member, const char* path) {
     char full_path[256];
 
     BattleAudience* audience = BattleAudienceBaseGetPtr();
@@ -2813,7 +2813,7 @@ static void BattleAudienceDispWin(CameraId camId, void* param) {
     }
 }
 
-BOOL BattleAudience_Entry(s32 index, AudienceMemberType type, u8 status) {
+BOOL BattleAudience_Entry(s32 index, u8 type, u8 status) {
     BattleAudienceMember* m;
     f32 x;
     s32 t;

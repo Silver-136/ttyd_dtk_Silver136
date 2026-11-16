@@ -10,7 +10,6 @@
 #include "mario/mario_pouch.h"
 #include "battle/battle_database_common.h"
 
-#pragma enumsalwaysint off
 typedef enum AudienceMemberType {
     AUDIENCE_TOAD,          // 0x0, 0
     AUDIENCE_XNAUT,         // 0x1, 1
@@ -27,7 +26,6 @@ typedef enum AudienceMemberType {
     AUDIENCE_LUIGI,         // 0xC, 12
     AUDIENCE_MAX            // 0xD, 13
 } AudienceMemberType;
-#pragma enumsalwaysint on
 
 typedef struct StarPowerInfo {
     struct BattleWeapon* weapon; // 0x0
@@ -320,8 +318,8 @@ typedef struct BattleAudience {
     s32 apStarSfxId;                   // 0x8, SFX_BTL_SYS_AP_STAR1 handle
     FileEntry* normalTex;              // 0xC
     FileEntry* guestTex[2];            // 0x10
-    AudienceMemberType guestType[2];   // 0x18
-    u8 pad_1A[0x1BC - 0x1A];           // 0x1A, never accessed (guestType is 2 bytes: AudienceMemberType is under enumsalwaysint off)
+    u8 guestType[2];                   // 0x18, AudienceMemberType
+    u8 pad_1A[0x1BC - 0x1A];           // 0x1A, never accessed
     BattleAudienceMember members[200]; // 0x1BC
     BattleAudienceItem items[100];     // 0xF25C
     BattleAudienceStar starpower[100]; // 0x10E7C
@@ -397,7 +395,7 @@ void BattleAudience_PerPhase(u32 value);
 u8 BattleAudience_CheckReactionPerPhase(void);
 void BattleAudience_Disp(void);
 void BattleAudience_End(void);
-BOOL BattleAudience_Entry(s32 index, AudienceMemberType type, u8 status);
+BOOL BattleAudience_Entry(s32 index, u8 type, u8 status);
 void BattleAudience_Delete(s32 index);
 void BattleAudience_SetAnim(s32 id, s32 animId, BOOL force);
 void BattleAudience_GetPosition(s32 index, f32* x, f32* y, f32* z);

@@ -384,11 +384,11 @@ USER_FUNC(evt_audience_set_animpose) {
  */
 USER_FUNC(evt_audience_entry) {
     EvtWord* args = event->args;
-    AudienceMemberType type;
+    u8 type;
     s32 id;
 
     id = evtGetValue(event, args[0]);
-    type = (AudienceMemberType)evtGetValue(event, args[1]);
+    type = evtGetValue(event, args[1]);
     if (BattleAudience_Entry(id, type, AUDIENCE_STATUS_WAIT) == TRUE) {
         BattleAudience_SetAnim(id, AUD_ANIM_WAIT_BACK, TRUE);
     }

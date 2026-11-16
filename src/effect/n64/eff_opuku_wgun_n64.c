@@ -226,6 +226,7 @@ static void effOpukuWgunDisp(CameraId cameraId, void* param) {
     s32 n;
     s32 j;
     s32 a;
+    s32 first = 0; // first segment drawn: always 0 here (the trail of eff_cloud_n64 computes its own)
 
     camera = camGetPtr(cameraId);
     work = effect->userdata;
@@ -238,8 +239,7 @@ static void effOpukuWgunDisp(CameraId cameraId, void* param) {
     p = (effN64Vtx*)smartAlloc(sizeof(effN64Vtx) * 48, SMART_GROUP_TEMP)->address;
     vtx = p;
     for (i = 0; i < 12; i++) {
-        // FAKE: the duplicated i == 0 test; the single test changes the object
-        if (i == 0 || i == 0) {
+        if (i == 0 || i == first) {
             ang = -angleABf(work->y[i + 1], -work->x[i + 1], work->y[i], -work->x[i]);
         } else if (i != 11 && work->delay[i] == 0) {
             ang = -angleABf(work->y[i + 1], -work->x[i + 1], work->y[i], -work->x[i]);
@@ -335,12 +335,12 @@ static void effOpukuWgunDisp(CameraId cameraId, void* param) {
         GXLoadTexObj(&texObj, GX_TEXMAP0);
     }
 
-    // FAKE: j >= 0 always holds here; the loop without the test changes the object
-    for (j = 0, n = 0; j < i - 1; j++) {
-        if (j >= 0) {
-            GXBegin(GX_TRIANGLES, GX_VTXFMT0, 6);
-            tri2(n, n + 2, n + 1, n, n + 1, n + 2, n + 3, n);
+    for (j = 0; j < i - 1; j++) {
+        n = j * 2;
+        if (j < first) {
+            continue;
         }
-        n += 2;
+        GXBegin(GX_TRIANGLES, GX_VTXFMT0, 6);
+        tri2(n, n + 2, n + 1, n, n + 1, n + 2, n + 3, n);
     }
 }

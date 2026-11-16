@@ -18,27 +18,17 @@
 #include <string.h>
 #include "driver/mapdrv.h"
 
-typedef struct EffSnowfallParticle {
-    u8 pad0[8];   // 0x0
-    Vec position; // 0x8
-    Vec velocity; // 0x14
-    u8 pad20[8];  // 0x20
-    s32 alpha;    // 0x28
-    s32 pad2c;    // 0x2C
-    s32 timer;    // 0x30
-} EffSnowfallParticle;
-
+// One record type for the whole userdata array, as in Paper Mario 64: entry 0 is the header, the particles follow.
 typedef struct EffSnowfallWork {
-    s32 active;                // 0x0
-    s32 arg;                   // 0x4
-    Vec position;              // 0x8
-    u8 pad14[0xC];             // 0x14
-    s32 life;                  // 0x20
-    s32 frame;                 // 0x24
-    s32 alpha;                 // 0x28
-    s32 count;                 // 0x2C
-    s32 pad30;                 // 0x30
-    EffSnowfallParticle p[1];  // 0x34
+    s32 active;   // 0x0, header: draw switch (set to 1 at entry)
+    s32 arg;      // 0x4, header: the entry's first argument, never read
+    Vec position; // 0x8, particle position (the header's is only read, for the draw order)
+    Vec velocity; // 0x14, particles
+    s32 life;     // 0x20, header
+    s32 frame;    // 0x24, header
+    s32 alpha;    // 0x28, header: overall alpha; particles: 0 once hidden
+    s32 count;    // 0x2C, header: number of particles
+    s32 timer;    // 0x30, particles: start delay
 } EffSnowfallWork;
 
 static void effSnowfallMain(EffectEntry* effect);
@@ -85,7 +75,7 @@ static effN64Vtx eff_snowfall_v[] = {
 
 /** Places a particle at random within 1000 units of the camera with a random downward drift (halved). */
 // Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
-static void _init_proc(EffSnowfallParticle* p) {
+static void _init_proc(EffSnowfallWork* p) {
     CameraEntry* cam = camGetPtr(CAMERA_3D);
 
     p->position.x = cam->cameraPos.x + (rand() % 2000) - 1000.0f;
@@ -105,7 +95,7 @@ static void _init_proc(EffSnowfallParticle* p) {
  * (target x, the mean of target and eye y, and (target z + viewDistance) / 2 for z);
  * below the box it either wraps to the top or, when life < 100, stops and hides the particle.
  */
-static void cam_clip_chk(EffSnowfallParticle* p, s32 w, s32 h, s32 life) {
+static void cam_clip_chk(EffSnowfallWork* p, s32 w, s32 h, s32 life) {
     CameraEntry* cam = camGetPtr(CAMERA_3D);
     f32 cx, cy, cz, py, pz;
     s32 d;
@@ -159,14 +149,13 @@ static void cam_clip_chk(EffSnowfallParticle* p, s32 w, s32 h, s32 life) {
 EffectEntry* effSnowfallN64Entry(s32 arg, s32 count) {
     EffectEntry* effect;
     EffSnowfallWork* work;
-    EffSnowfallParticle* p;
     s32 i, n;
 
     effect = effEntry();
     n = count + 1;
     effect->type = "SnowfallN64";
     effect->count = n;
-    work = __memAlloc(HEAP_EFFECT, n * sizeof(EffSnowfallParticle));
+    work = __memAlloc(HEAP_EFFECT, n * sizeof(EffSnowfallWork));
     effect->userdata = work;
     effect->callback = effSnowfallMain;
     work->frame = 0;
@@ -175,16 +164,14 @@ EffectEntry* effSnowfallN64Entry(s32 arg, s32 count) {
     work->count = count;
     work->alpha = 255;
     work->active = 1;
-    p = work->p;
-    for (i = 0; i < count; i++, p++) {
-        _init_proc(p);
-        p->timer = 0;
+    work++;
+    for (i = 0; i < count; i++, work++) {
+        _init_proc(work);
+        work->timer = 0;
     }
     return effect;
 }
 
-// The first userdata entry holds the EffSnowfallWork header; the particles follow it.
-#define SNOWFALL_WORK ((EffSnowfallWork*)p)
 /**
  * Moves the particles by their velocity (after each one's start delay)
  * and wraps them around the camera with cam_clip_chk;
@@ -192,48 +179,47 @@ EffectEntry* effSnowfallN64Entry(s32 arg, s32 count) {
  * US and later draw on layer 10 (on CAMERA_3D_EFFECTB in battle), JP on layer 10, the early demos on layer 2.
  */
 static void effSnowfallMain(EffectEntry* effect) {
-    s32 i, life, count, h;
-    f32 hf;
+    s32 i, life, count, w, h;
     Vec position;
     Vec tmp = {0.0f, 0.0f, 0.0f};
-    EffSnowfallParticle* p;
+    EffSnowfallWork* work;
 
-    p = effect->userdata;
+    work = effect->userdata;
 
-    tmp.x = SNOWFALL_WORK->position.x;
-    tmp.y = SNOWFALL_WORK->position.y;
-    tmp.z = SNOWFALL_WORK->position.z;
+    tmp.x = work->position.x;
+    tmp.y = work->position.y;
+    tmp.z = work->position.z;
     position = tmp;
     camGetPtr(CAMERA_3D);
-    if (SNOWFALL_WORK->life < 100) {
-        SNOWFALL_WORK->life--;
+    if (work->life < 100) {
+        work->life--;
     }
-    if (SNOWFALL_WORK->life < 0) {
+    if (work->life < 0) {
         effDelete(effect);
         return;
     }
-    SNOWFALL_WORK->frame++;
-    life = SNOWFALL_WORK->life;
-    count = SNOWFALL_WORK->count;
+    work->frame++;
+    life = work->life;
+    count = work->count;
     if (life < 10) {
-        SNOWFALL_WORK->alpha = life * 25;
+        work->alpha = life * 25;
     }
 
-    // the height goes through a float local (the run-time conversion is in the retail code)
-    hf = 166.0f;
-    h = hf;
-    p++;
-    for (i = 0; i < count; i++, p++) {
-        if (p->timer > 0) {
-            p->timer--;
-            if (p->timer > 0) {
+    // half-width of the wrap box and the half-height derived from it (166, converted at run time)
+    w = 550;
+    h = w * 0.3f + 1.0f;
+    work++;
+    for (i = 0; i < count; i++, work++) {
+        if (work->timer > 0) {
+            work->timer--;
+            if (work->timer > 0) {
                 continue;
             }
         }
-        p->position.x += p->velocity.x;
-        p->position.y += p->velocity.y;
-        p->position.z += p->velocity.z;
-        cam_clip_chk(p, 550, h, life);
+        work->position.x += work->velocity.x;
+        work->position.y += work->velocity.y;
+        work->position.z += work->velocity.z;
+        cam_clip_chk(work, w, h, life);
     }
 #if VERSION <= VERSION_DEMO_JP
     dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effSnowfallDisp, effect);
@@ -256,7 +242,7 @@ static void effSnowfallMain(EffectEntry* effect) {
 static void effSnowfallDisp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
     CameraEntry* cam;
-    EffSnowfallParticle* p;
+    EffSnowfallWork* work;
     Mtx trans;
     Mtx scale;
     Mtx rot;
@@ -271,12 +257,12 @@ static void effSnowfallDisp(CameraId cameraId, void* param) {
     int j;
 
     cam = camGetPtr(cameraId);
-    p = effect->userdata;
-    if (SNOWFALL_WORK->active == 0) {
+    work = effect->userdata;
+    if (work->active == 0) {
         return;
     }
-    count = SNOWFALL_WORK->count;
-    alpha = SNOWFALL_WORK->alpha;
+    count = work->count;
+    alpha = work->alpha;
     GXSetNumChans(0);
     GXSetNumTexGens(1);
     GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0, GX_FALSE, GX_PTIDENTITY);
@@ -308,12 +294,12 @@ static void effSnowfallDisp(CameraId cameraId, void* param) {
     effSetVtxDescN64(eff_snowfall_v);
     PSMTXRotRad(rot, 'y', 0.017453292f * -camGetPtr(CAMERA_3D)->viewYaw);
     PSMTXConcat(cam->view, rot, rot);
-    p++;
-    for (i = 0; i < count; i++, p++) {
-        if (p->timer > 0 || p->alpha == 0) {
+    work++;
+    for (i = 0; i < count; i++, work++) {
+        if (work->timer > 0 || work->alpha == 0) {
             continue;
         }
-        PSMTXTrans(trans, p->position.x, p->position.y, p->position.z);
+        PSMTXTrans(trans, work->position.x, work->position.y, work->position.z);
         PSMTXConcat(rot, trans, trans);
         GXLoadPosMtxImm(trans, GX_PNMTX0);
         GXSetCurrentMtx(GX_PNMTX0);
@@ -325,4 +311,3 @@ static void effSnowfallDisp(CameraId cameraId, void* param) {
         }
     }
 }
-#undef SNOWFALL_WORK

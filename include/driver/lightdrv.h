@@ -18,7 +18,6 @@ typedef enum LightType {
 // lightEntry flags (a map light's lflags): 0x2 = the light also lights characters (LIGHT_CHARA)
 #define LIGHT_LFLAG_CHARA 0x2
 
-#pragma enumsalwaysint off
 typedef enum LightEntryFlags {
     LIGHT_ENABLED = 1 << 0,
     LIGHT_NO_DIST_ATTEN = 1 << 6,
@@ -28,10 +27,9 @@ typedef enum LightEntryFlags {
     LIGHT_SPOT = 1 << 14,        // mapdrv's light setup gives it a GX spot cone (spotAngle)
     LIGHT_AMBIENT = 1 << 15
 } LightEntryFlags;
-#pragma enumsalwaysint on
 
 typedef struct LightEntry {
-    LightEntryFlags flags; // 0x0
+    u16 flags; // 0x0, LightEntryFlags
     char name[32]; // 0x2
     u8 align_22[2]; // 0x22
     Vec position; // 0x24
@@ -56,7 +54,7 @@ LightEntry* lightNameToPtr(const char* name);
 LightEntry* lightNumberToPtr(s32 index);
 LightEntry* lightGetPaperCraft(void);
 s32 lightGetEntryNum(void);
-s32 lightGetNearObj(const Vec* position, LightEntry** out, s32 count, LightEntryFlags flags);
+s32 lightGetNearObj(const Vec* position, LightEntry** out, s32 count, u16 flags);
 
 s32 lightCheckCharaLight(void);
 LightEntry* lightGetAmbient(void);

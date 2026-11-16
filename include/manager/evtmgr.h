@@ -7,7 +7,6 @@
 #include "driver/npcdrv.h"
 #include <dolphin/os.h>
 
-#pragma enumsalwaysint off
 // Script opcodes, named after their original mnemonics (the evtmgr_cmd.c handlers are evt_<mnemonic>; 1 has no
 // handler or name).
 typedef enum EventOpcode {
@@ -131,7 +130,6 @@ typedef enum EventOpcode {
     OPCODE_DEBUG_REM = 117,
     OPCODE_DEBUG_BP = 118
 } EventOpcode;
-#pragma enumsalwaysint on
 
 typedef struct EventEntry EventEntry;
 
@@ -182,7 +180,7 @@ struct EventEntry {
     OSTime lifetime;                   // 0x0
     u8 flags;                          // 0x8, validated
     u8 params;                         // 0x9, number of params
-    EventOpcode opcode;                // 0xA
+    u8 opcode;                         // 0xA, EventOpcode
     u8 priority;                       // 0xB, validated
     u8 type;                           // 0xC
     u8 blocked;                        // 0xD

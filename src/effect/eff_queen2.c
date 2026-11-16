@@ -92,12 +92,12 @@ static void effQueen2Main(EffectEntry* effect) {
                 work->state++;
                 work->charge = effAkariChargeN64Entry(0, 0, work->position.x, work->position.y,
                                                       work->position.z, 1.0f);
-                ((EffAkariChargeN64Work*)work->charge->userdata)->elem[0].r = 0;
-                ((EffAkariChargeN64Work*)work->charge->userdata)->elem[0].g = 0x9A;
-                ((EffAkariChargeN64Work*)work->charge->userdata)->elem[0].b = 0xFF;
-                ((EffAkariChargeN64Work*)work->charge->userdata)->elem[0].r2 = 0xFF;
-                ((EffAkariChargeN64Work*)work->charge->userdata)->elem[0].g2 = 0xFF;
-                ((EffAkariChargeN64Work*)work->charge->userdata)->elem[0].b2 = 0xFF;
+                ((EffAkariChargeN64Work*)work->charge->userdata)->r = 0;
+                ((EffAkariChargeN64Work*)work->charge->userdata)->g = 0x9A;
+                ((EffAkariChargeN64Work*)work->charge->userdata)->b = 0xFF;
+                ((EffAkariChargeN64Work*)work->charge->userdata)->r2 = 0xFF;
+                ((EffAkariChargeN64Work*)work->charge->userdata)->g2 = 0xFF;
+                ((EffAkariChargeN64Work*)work->charge->userdata)->b2 = 0xFF;
             }
             break;
         case 2:

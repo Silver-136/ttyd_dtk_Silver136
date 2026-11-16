@@ -65,7 +65,6 @@ typedef enum MarioMotion {
     MARIO_MOTION_DUMMY,        // 0x28
 } MarioMotion;
 
-#pragma enumsalwaysint off
 typedef enum MarioFlags {
     MARIO_FLAG_ACTIVE = (1 << 0),
     MARIO_FLAG_CTRL_OFF = (1 << 1),
@@ -98,9 +97,7 @@ typedef enum MarioFlags {
     MARIO_FLAG_IS_SHADOW_MARIO = (1 << 30),
     MARIO_FLAG_IS_8_BIT = (1 << 31)
 } MarioFlags;
-#pragma enumsalwaysint on
 
-#pragma enumsalwaysint off
 typedef enum MarioTrigFlags {
     MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION = (1 << 0),
     MARIO_TRIG_FLAG_USE_PARTNER = (1 << 1),
@@ -134,7 +131,6 @@ typedef enum MarioTrigFlags {
     MARIO_TRIG_FLAG_NORMALIZING = (1 << 31) // evt_mario_normalize running: the partner does not start slit mode
 #endif
 } MarioTrigFlags;
-#pragma enumsalwaysint on
 
 /* ---- (1) per-motion scratch views: MarioWork.mot, 0x2A0 JP / 0x2B8 US, 0x1C bytes ----
  * Each motion reuses the block with its own types. Offsets are relative to the block. */

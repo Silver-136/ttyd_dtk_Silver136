@@ -1952,7 +1952,7 @@ s32 evtmgrCmd(EventEntry* entry) {
             case OPCODE_NEXT:
                 entry->currCommand = entry->nextCommand;
                 args = entry->nextCommand;
-                entry->opcode = (EventOpcode)*args;
+                entry->opcode = *args;
                 argCount = *args++ >> 16;
                 entry->params = (u8)argCount;
                 entry->args = args;

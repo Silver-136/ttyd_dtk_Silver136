@@ -227,7 +227,7 @@ static s32 _sort(const void* a, const void* b) {
  * keeping only lights with any of flags (0 = all); NULL-pads the rest and returns how many were found.
  * mapdrv uses it to light map parts and characters.
  */
-s32 lightGetNearObj(const Vec* position, LightEntry** out, s32 count, LightEntryFlags flags) {
+s32 lightGetNearObj(const Vec* position, LightEntry** out, s32 count, u16 flags) {
     s32 found;
     LightWork* wp = lightGetWork();
     NearWork tmp[LIGHT_ENTRY_COUNT];

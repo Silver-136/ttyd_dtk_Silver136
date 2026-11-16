@@ -638,12 +638,12 @@ EffectEntry* effThunderN64Entry(s32 type, f32 x, f32 y, f32 z, f32 a, f32 b) {
         // a second test of type instead of an else (both compares are in the retail code)
         if (type != 1) {
             work->charge = effAkariChargeN64Entry(0, 0, -120.0f, 189.0f, 72.0f, 1.0f);
-            ((EffAkariChargeN64Elem*)work->charge->userdata)->r2 = 255;
-            ((EffAkariChargeN64Elem*)work->charge->userdata)->g2 = 255;
-            ((EffAkariChargeN64Elem*)work->charge->userdata)->b2 = 255;
-            ((EffAkariChargeN64Elem*)work->charge->userdata)->r = 255;
-            ((EffAkariChargeN64Elem*)work->charge->userdata)->g = 0;
-            ((EffAkariChargeN64Elem*)work->charge->userdata)->b = 255;
+            ((EffAkariChargeN64Work*)work->charge->userdata)->r2 = 255;
+            ((EffAkariChargeN64Work*)work->charge->userdata)->g2 = 255;
+            ((EffAkariChargeN64Work*)work->charge->userdata)->b2 = 255;
+            ((EffAkariChargeN64Work*)work->charge->userdata)->r = 255;
+            ((EffAkariChargeN64Work*)work->charge->userdata)->g = 0;
+            ((EffAkariChargeN64Work*)work->charge->userdata)->b = 255;
         }
     }
     if (type >= 3) {

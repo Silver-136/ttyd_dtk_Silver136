@@ -2269,9 +2269,9 @@ static USER_FUNC(akari_charge_entry) {
     f32 scale = evtGetFloat(event, args[6]);
     EffectEntry* eff = effAkariChargeN64Entry(0, evtGetValue(event, args[7]), x, y, z, scale);
 
-    ((EffAkariChargeN64Work*)eff->userdata)->elem[0].r = a;
-    ((EffAkariChargeN64Work*)eff->userdata)->elem[0].g = b;
-    ((EffAkariChargeN64Work*)eff->userdata)->elem[0].b = c;
+    ((EffAkariChargeN64Work*)eff->userdata)->r = a;
+    ((EffAkariChargeN64Work*)eff->userdata)->g = b;
+    ((EffAkariChargeN64Work*)eff->userdata)->b = c;
     return EVT_RETURN_DONE;
 }
 

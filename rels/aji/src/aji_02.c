@@ -400,12 +400,12 @@ static USER_FUNC(thunder_main) {
             event->userdata[0] = 1;
             psndSFXOn_3D("SFX_STG7_ELECTRIC_SHOCK1", &mario->position);
             eff = effAkariChargeN64Entry(0, 100, mario->position.x, 30.0f + mario->position.y, mario->position.z, 1.0f);
-            ((EffAkariChargeN64Work*)eff->userdata)->elem[0].r = 30;
-            ((EffAkariChargeN64Work*)eff->userdata)->elem[0].g = 231;
-            ((EffAkariChargeN64Work*)eff->userdata)->elem[0].b = 219;
-            ((EffAkariChargeN64Work*)eff->userdata)->elem[0].r2 = 0;
-            ((EffAkariChargeN64Work*)eff->userdata)->elem[0].g2 = 0;
-            ((EffAkariChargeN64Work*)eff->userdata)->elem[0].b2 = 0;
+            ((EffAkariChargeN64Work*)eff->userdata)->r = 30;
+            ((EffAkariChargeN64Work*)eff->userdata)->g = 231;
+            ((EffAkariChargeN64Work*)eff->userdata)->b = 219;
+            ((EffAkariChargeN64Work*)eff->userdata)->r2 = 0;
+            ((EffAkariChargeN64Work*)eff->userdata)->g2 = 0;
+            ((EffAkariChargeN64Work*)eff->userdata)->b2 = 0;
         }
     } else if (mario->currMotionId != MARIO_MOTION_DAMAGE_TOGE) {
         event->userdata[0] = 0;

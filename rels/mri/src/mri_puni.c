@@ -1013,21 +1013,21 @@ static void puniMapdata_MRI_16_getpos(s32 bx, s32 bz, f32* x, f32* z) {
  * Maze block of a world position.
  * Map kind 0 (no maze) leaves *bx and *bz unwritten;
  * every caller first checks that a maze is loaded (Punimap->enabled, which only maze maps set).
- * This function has no direct callers: the compiler inlines it into puniMapFindbuff,
- * puniModeParent and puniModeSearch.
+ * The compiler inlines it into its callers (puniMapFindbuff, puniModeParent and puniModeSearch) and also keeps
+ * this copy.
  */
-static void puniMapPos2Blk(Vec* pos, s32* blk) {
+static void puniMapPos2Blk(f32 x, f32 z, s32* bx, s32* bz) {
     switch (Punigp->mapKind) {
         case 0:
             break;
         case 1:
-            ((void (*)(Vec*, s32*))puniMapdata_MRI_06_getidx)(pos, blk);
+            puniMapdata_MRI_06_getidx(x, z, bx, bz);
             break;
         case 2:
-            ((void (*)(Vec*, s32*))puniMapdata_MRI_09_getidx)(pos, blk);
+            puniMapdata_MRI_09_getidx(x, z, bx, bz);
             break;
         case 3:
-            ((void (*)(Vec*, s32*))puniMapdata_MRI_16_getidx)(pos, blk);
+            puniMapdata_MRI_16_getidx(x, z, bx, bz);
             break;
     }
 }
@@ -1041,21 +1041,7 @@ static void puniMapBlk2Pos(s32 bx, s32 bz, f32* x, f32* z) {
             puniMapdata_MRI_06_getpos(bx, bz, x, z);
             break;
         case 2:
-            switch (bx) {
-                case 1: *x = -250.0f; break;
-                case 2: *x = -145.0f; break;
-                case 3: *x = 0.0f; break;
-                case 4: *x = 145.0f; break;
-                case 5: *x = 260.0f; break;
-                default: *x = -1000.0f; break;
-            }
-            switch (bz) {
-                case 1: *z = -120.0f; break;
-                case 2: *z = 0.0f; break;
-                case 3: *z = 105.0f; break;
-                case 4: *z = 160.0f; break;
-                default: *z = -1000.0f; break;
-            }
+            puniMapdata_MRI_09_getpos(bx, bz, x, z);
             break;
         case 3:
             puniMapdata_MRI_16_getpos(bx, bz, x, z);
@@ -1112,7 +1098,6 @@ static void puniMapDataSet(s32 w, s32 h, void* src, f32 x, f32 z) {
  * until nothing changes. Does nothing when no maze is loaded or pos is outside the maze's height range.
  */
 static void puniMapFindbuff(Vec pos) {
-    f32 px, pz;
     s32 bx, bz;
     u16* d;
     u16 lvl;
@@ -1126,21 +1111,7 @@ static void puniMapFindbuff(Vec pos) {
         } else {
             memcpy(Punimap->data, Punimap->src, Punimap->size);
             Punimap->inRange = 1;
-            pz = pos.z;
-            px = pos.x;
-            switch (Punigp->mapKind) {
-                case 0:
-                    break;
-                case 1:
-                    puniMapdata_MRI_06_getidx(px, pz, &bx, &bz);
-                    break;
-                case 2:
-                    puniMapdata_MRI_09_getidx(px, pz, &bx, &bz);
-                    break;
-                case 3:
-                    puniMapdata_MRI_16_getidx(px, pz, &bx, &bz);
-                    break;
-            }
+            puniMapPos2Blk(pos.x, pos.z, &bx, &bz);
             idx = bx + Punimap->width * bz;
             if (idx < 0) {
                 Punimap->inRange = 0;
@@ -2354,21 +2325,7 @@ static void puniModeParent(PuniData* p) {
         return;
     }
     if (Punimap->enabled != 0 && Punimap->inRange != 0) {
-        f32 z = p->pos.z;
-        f32 x = p->pos.x;
-        switch (Punigp->mapKind) {
-            case 0:
-                break;
-            case 1:
-                puniMapdata_MRI_06_getidx(x, z, &bx, &bz);
-                break;
-            case 2:
-                puniMapdata_MRI_09_getidx(x, z, &bx, &bz);
-                break;
-            case 3:
-                puniMapdata_MRI_16_getidx(x, z, &bx, &bz);
-                break;
-        }
+        puniMapPos2Blk(p->pos.x, p->pos.z, &bx, &bz);
         info = puniMapGetInfo(bx, bz);
         if (info != 0xFFFF && (info & 0xFFF) > 2) {
             PuniDokuritsu(p);
@@ -2385,13 +2342,6 @@ static void puniModeParent(PuniData* p) {
         p->maxSpeed = 3.0f;
     }
 }
-
-#define PUNI_MAPDATA_GETPOS(a, b)                                                          \
-    { s32 _pa = (b); s32 _pb = (a); switch (Punigp->mapKind) {                             \
-            case 0: break; case 1: puniMapdata_MRI_06_getpos(_pa, _pb, &tgx, &tgz); break; \
-            case 2: puniMapdata_MRI_09_getpos(_pa, _pb, &tgx, &tgz); break;                \
-            case 3: puniMapdata_MRI_16_getpos(_pa, _pb, &tgx, &tgz); break;                \
-        } }
 
 /**
  * Maze-search mode: a Puni that is too far from Mario on a maze map follows the downhill distance grid (the one
@@ -2411,7 +2361,6 @@ static void puniModeSearch(PuniData* p) {
     static u16 h1;
     static u16 h2;
     static u16 h3;
-    f32 px, pz;
     s32 bx;
     s32 bz;
     f32 tgx, tgz;
@@ -2438,21 +2387,7 @@ static void puniModeSearch(PuniData* p) {
     if (Punimap->inRange == 0) {
         return;
     }
-    pz = p->pos.z;
-    px = p->pos.x;
-    switch (Punigp->mapKind) {
-        case 0:
-            break;
-        case 1:
-            puniMapdata_MRI_06_getidx(px, pz, &bx, &bz);
-            break;
-        case 2:
-            puniMapdata_MRI_09_getidx(px, pz, &bx, &bz);
-            break;
-        case 3:
-            puniMapdata_MRI_16_getidx(px, pz, &bx, &bz);
-            break;
-    }
+    puniMapPos2Blk(p->pos.x, p->pos.z, &bx, &bz);
     c = Punimap->data[bz * Punimap->width + bx];
     if (!(c & 0xFF)) {
         c |= 0xFFFF;
@@ -2503,13 +2438,13 @@ static void puniModeSearch(PuniData* p) {
     switch (find) {
         case 0x000:
             if (m0 == move && __abs(h0 - takasa) <= 0x1000) {
-                PUNI_MAPDATA_GETPOS(bz, bx - 1);
+                puniMapBlk2Pos(bx - 1, bz, &tgx, &tgz);
             } else if (m1 == move && __abs(h1 - takasa) <= 0x1000) {
-                PUNI_MAPDATA_GETPOS(bz - 1, bx);
+                puniMapBlk2Pos(bx, bz - 1, &tgx, &tgz);
             } else if (m2 == move && __abs(h2 - takasa) <= 0x1000) {
-                PUNI_MAPDATA_GETPOS(bz, bx + 1);
+                puniMapBlk2Pos(bx + 1, bz, &tgx, &tgz);
             } else if (m3 == move && __abs(h3 - takasa) <= 0x1000) {
-                PUNI_MAPDATA_GETPOS(bz + 1, bx);
+                puniMapBlk2Pos(bx, bz + 1, &tgx, &tgz);
             } else {
                 tgx = 0.0f;
                 tgz = 0.0f;
@@ -2517,13 +2452,13 @@ static void puniModeSearch(PuniData* p) {
             break;
         case 0x100:
             if (m1 == move && __abs(h1 - takasa) <= 0x1000) {
-                PUNI_MAPDATA_GETPOS(bz - 1, bx);
+                puniMapBlk2Pos(bx, bz - 1, &tgx, &tgz);
             } else if (m2 == move && __abs(h2 - takasa) <= 0x1000) {
-                PUNI_MAPDATA_GETPOS(bz, bx + 1);
+                puniMapBlk2Pos(bx + 1, bz, &tgx, &tgz);
             } else if (m3 == move && __abs(h3 - takasa) <= 0x1000) {
-                PUNI_MAPDATA_GETPOS(bz + 1, bx);
+                puniMapBlk2Pos(bx, bz + 1, &tgx, &tgz);
             } else if (m0 == move && __abs(h0 - takasa) <= 0x1000) {
-                PUNI_MAPDATA_GETPOS(bz, bx - 1);
+                puniMapBlk2Pos(bx - 1, bz, &tgx, &tgz);
             } else {
                 tgx = 0.0f;
                 tgz = 0.0f;
@@ -2531,13 +2466,13 @@ static void puniModeSearch(PuniData* p) {
             break;
         case 0x200:
             if (m2 == move && __abs(h2 - takasa) <= 0x1000) {
-                PUNI_MAPDATA_GETPOS(bz, bx + 1);
+                puniMapBlk2Pos(bx + 1, bz, &tgx, &tgz);
             } else if (m3 == move && __abs(h3 - takasa) <= 0x1000) {
-                PUNI_MAPDATA_GETPOS(bz + 1, bx);
+                puniMapBlk2Pos(bx, bz + 1, &tgx, &tgz);
             } else if (m0 == move && __abs(h0 - takasa) <= 0x1000) {
-                PUNI_MAPDATA_GETPOS(bz, bx - 1);
+                puniMapBlk2Pos(bx - 1, bz, &tgx, &tgz);
             } else if (m1 == move && __abs(h1 - takasa) <= 0x1000) {
-                PUNI_MAPDATA_GETPOS(bz - 1, bx);
+                puniMapBlk2Pos(bx, bz - 1, &tgx, &tgz);
             } else {
                 tgx = 0.0f;
                 tgz = 0.0f;
@@ -2545,13 +2480,13 @@ static void puniModeSearch(PuniData* p) {
             break;
         case 0x300:
             if (m3 == move && __abs(h3 - takasa) <= 0x1000) {
-                PUNI_MAPDATA_GETPOS(bz + 1, bx);
+                puniMapBlk2Pos(bx, bz + 1, &tgx, &tgz);
             } else if (m0 == move && __abs(h0 - takasa) <= 0x1000) {
-                PUNI_MAPDATA_GETPOS(bz, bx - 1);
+                puniMapBlk2Pos(bx - 1, bz, &tgx, &tgz);
             } else if (m1 == move && __abs(h1 - takasa) <= 0x1000) {
-                PUNI_MAPDATA_GETPOS(bz - 1, bx);
+                puniMapBlk2Pos(bx, bz - 1, &tgx, &tgz);
             } else if (m2 == move && __abs(h2 - takasa) <= 0x1000) {
-                PUNI_MAPDATA_GETPOS(bz, bx + 1);
+                puniMapBlk2Pos(bx + 1, bz, &tgx, &tgz);
             } else {
                 tgx = 0.0f;
                 tgz = 0.0f;

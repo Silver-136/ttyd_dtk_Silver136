@@ -36,43 +36,42 @@ static void effAkariChargeDisp(CameraId cameraId, void* param);
 EffectEntry* effAkariChargeN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 size) {
     EffectEntry* effect;
     EffAkariChargeN64Work* work;
-    EffAkariChargeN64Elem* p;
     s32 i;
 
     effect = effEntry();
     effect->type = "AkariChargeN64";
     effect->count = 22;
-    work = __memAlloc(HEAP_EFFECT, sizeof(EffAkariChargeN64Work));
+    work = __memAlloc(HEAP_EFFECT, sizeof(EffAkariChargeN64Work) * 22);
     effect->userdata = work;
     effect->callback = effAkariChargeMain;
     effect->flags |= EFFECT_FLAG_SOFT_DELETABLE;
-    work->elem[0].type = type;
-    work->elem[0].frame = 0;
+    work->type = type;
+    work->frame = 0;
     if (lifetime <= 0) {
-        work->elem[0].lifetime = 1000;
+        work->lifetime = 1000;
     } else {
-        work->elem[0].lifetime = lifetime;
+        work->lifetime = lifetime;
     }
-    work->elem[0].alpha = 0;
-    work->elem[0].position.x = x;
-    work->elem[0].position.y = y;
-    work->elem[0].position.z = z;
-    work->elem[0].size = size;
-    work->elem[0].r = 255;
-    work->elem[0].g = 230;
-    work->elem[0].b = 0;
-    work->elem[0].r2 = 255;
-    work->elem[0].g2 = 255;
-    work->elem[0].b2 = 255;
-    p = &work->elem[1];
-    for (i = 1; i < 22; i++, p++) {
-        p->lifetime = 20;
-        p->frame = 0;
-        p->rotation = (f32)((i - 1) * 360 / 21);
-        p->position.x = 0.0f;
-        p->position.y = 0.0f;
-        p->scale = 1.0f;
-        p->index = i & 15;
+    work->alpha = 0;
+    work->position.x = x;
+    work->position.y = y;
+    work->position.z = z;
+    work->size = size;
+    work->r = 255;
+    work->g = 230;
+    work->b = 0;
+    work->r2 = 255;
+    work->g2 = 255;
+    work->b2 = 255;
+    work++;
+    for (i = 1; i < 22; i++, work++) {
+        work->lifetime = 20;
+        work->frame = 0;
+        work->rotation = (f32)((i - 1) * 360 / 21);
+        work->position.x = 0.0f;
+        work->position.y = 0.0f;
+        work->scale = 1.0f;
+        work->index = i & 15;
     }
     return effect;
 }
@@ -84,7 +83,7 @@ EffectEntry* effAkariChargeN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z,
  * each picks a random texture column.
  */
 static void effAkariChargeMain(EffectEntry* effect) {
-    EffAkariChargeN64Elem* p = effect->userdata;
+    EffAkariChargeN64Work* p = effect->userdata;
     s32 i;
     s32 type;
     f32 sv;
@@ -170,7 +169,7 @@ static void effAkariChargeMain(EffectEntry* effect) {
 static void effAkariChargeDisp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
     CameraEntry* camera;
-    EffAkariChargeN64Elem* p;
+    EffAkariChargeN64Work* p;
     s32 i;
     s32 alpha;
     s32 type;

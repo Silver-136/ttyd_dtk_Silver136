@@ -47,7 +47,6 @@ typedef enum PartyRunMode {
     PARTY_RUN_DELETE = 14,
 } PartyRunMode;
 
-#pragma enumsalwaysint off
 typedef enum PartyFlags {
     PARTY_FLAG_IS_ACTIVE = (1 << 0),
     PARTY_FLAG_IS_GROUNDED = (1 << 1),
@@ -76,15 +75,12 @@ typedef enum PartyFlags {
     PARTY_FLAG_CTRL_OFF_2 = (1 << 30),
     PARTY_FLAG_IS_EVT_USE = (1 << 31)
 } PartyFlags;
-#pragma enumsalwaysint on
 
-#pragma enumsalwaysint off
 typedef enum PartySlotId {
     PARTY_SLOT_PARTY = 0,    // 0x0
     PARTY_SLOT_FOLLOWER = 1, // 0x1
     PARTY_SLOT_NONE = -1
 } PartySlotId;
-#pragma enumsalwaysint on
 
 // PartyEntry.moveMode: names follow the exact walkMain/flyMain dispatch targets.
 // This is separate from runMode, motionId and the shared motionStep substate.

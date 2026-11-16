@@ -1,11 +1,10 @@
 // PartyMember: the party member ids (the seven partners, the other followers, and the partners' follower forms),
 // used by the party code (party.h) and the pouch (mario_pouch.h). No other includes, so either can use it.
-// The enum is byte-sized (enumsalwaysint off); the pouch and mario_party functions take and keep partner ids as
-// s32 (the int size the code was built with), so they are declared s32 there.
+// The pouch and mario_party functions take and keep partner ids as s32 (the int size the code was built with),
+// so they are declared s32 there.
 
 #pragma once
 
-#pragma enumsalwaysint off
 typedef enum PartyMember {
     PARTY_NONE,      // 0
     PARTY_GOOMBELLA, // 1
@@ -29,4 +28,3 @@ typedef enum PartyMember {
     PARTY_VIVIAN_FOLLOWER,    // 18
     PARTY_MS_MOWZ_FOLLOWER    // 19
 } PartyMember;
-#pragma enumsalwaysint on

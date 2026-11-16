@@ -13,27 +13,16 @@
 #include "eff/eff_magic1_n64.h"
 #include "eff/n64/eff_peach_dust_n64.h"
 
-typedef struct EffPeachDustParticle {
-    s32 pad0;     // 0x0
-    Vec position; // 0x4
-    Vec velocity; // 0x10
-    s32 lifetime; // 0x1C
-    s32 frame;    // 0x20
-    f32 scale;    // 0x24
-    s32 tex;      // 0x28
-} EffPeachDustParticle;
-
+// One record type for all 101 userdata entries, as the Paper Mario 64 effects have: entry 0 is the header
+// (type, position, lifetime, frame), the 100 particles follow.
 typedef struct EffPeachDustWork {
-    s32 type;     // 0x0
+    s32 type;     // 0x0, header
     Vec position; // 0x4
-    f32 velX;    // 0x10
-    f32 velY;    // 0x14
-    f32 velZ;    // 0x18
+    Vec velocity; // 0x10, particles
     s32 lifetime; // 0x1C
     s32 frame;    // 0x20
-    f32 scale;     // 0x24
-    s32 tex;      // 0x28
-    EffPeachDustParticle particles[100];
+    f32 scale;    // 0x24, particles
+    s32 tex;      // 0x28, particles
 } EffPeachDustWork;
 
 #if VERSION >= VERSION_JP
@@ -107,9 +96,8 @@ static void effPeachDustDisp(CameraId cameraId, void* param);
 EffectEntry* effPeachDustN64Entry(s32 type, f32 x, f32 y, f32 z, f32 unused, f32 rotY) {
     char* base;
     EffectEntry* effect;
-    EffPeachDustParticle* p;
-    s32 count;
     EffPeachDustWork* work;
+    s32 count;
     s32 j;
     s32 i;
     f32 ang;
@@ -119,7 +107,7 @@ EffectEntry* effPeachDustN64Entry(s32 type, f32 x, f32 y, f32 z, f32 unused, f32
     effect = effEntry();
     effect->type = "PeachDustN64";
     effect->count = 101;
-    work = __memAlloc(HEAP_EFFECT, sizeof(EffPeachDustWork));
+    work = __memAlloc(HEAP_EFFECT, sizeof(EffPeachDustWork) * 101);
     effect->userdata = work;
     effect->callback = effPeachDustMain;
     work->position.x = x;
@@ -130,7 +118,7 @@ EffectEntry* effPeachDustN64Entry(s32 type, f32 x, f32 y, f32 z, f32 unused, f32
     work->type = type;
     work->lifetime = 80;
     base = data + type * 256;
-    p = work->particles;
+    work++;
     count = 1;
 
     for (i = 0; i < 16; i++) {
@@ -142,15 +130,15 @@ EffectEntry* effPeachDustN64Entry(s32 type, f32 x, f32 y, f32 z, f32 unused, f32
             }
             r = 0.1f * (rand() % 20 - 10) + (f32)((j - 8) * 2);
             ang = rad / 360.0f;
-            p->position.x = r * (f32)cos(ang);
-            p->position.y = 0.1f * (rand() % 20 - 10) + (f32)(i * 2);
-            p->position.z = r * (f32)sin(ang);
-            p->velocity.x = 0.04f * p->position.x;
-            p->velocity.y = 0.04f * p->position.y;
-            p->velocity.z = 0.001f * (rand() % 10);
-            p->lifetime = rand() % 7 + 30;
-            p->frame = 0;
-            p++;
+            work->position.x = r * (f32)cos(ang);
+            work->position.y = 0.1f * (rand() % 20 - 10) + (f32)(i * 2);
+            work->position.z = r * (f32)sin(ang);
+            work->velocity.x = 0.04f * work->position.x;
+            work->velocity.y = 0.04f * work->position.y;
+            work->velocity.z = 0.001f * (rand() % 10);
+            work->lifetime = rand() % 7 + 30;
+            work->frame = 0;
+            work++;
             count++;
             if (count >= 101) {
                 break;
@@ -161,16 +149,16 @@ EffectEntry* effPeachDustN64Entry(s32 type, f32 x, f32 y, f32 z, f32 unused, f32
         }
     }
     for (; count < 101; count++) {
-        p->scale = 0.0f;
-        p->velocity.z = 0.0f;
-        p->velocity.y = 0.0f;
-        p->velocity.x = 0.0f;
-        p->position.z = 0.0f;
-        p->position.y = 0.0f;
-        p->position.x = 0.0f;
-        p->lifetime = -1;
-        p->frame = 0;
-        p++;
+        work->scale = 0.0f;
+        work->velocity.z = 0.0f;
+        work->velocity.y = 0.0f;
+        work->velocity.x = 0.0f;
+        work->position.z = 0.0f;
+        work->position.y = 0.0f;
+        work->position.x = 0.0f;
+        work->lifetime = -1;
+        work->frame = 0;
+        work++;
     }
     return effect;
 }
@@ -180,7 +168,7 @@ EffectEntry* effPeachDustN64Entry(s32 type, f32 x, f32 y, f32 z, f32 unused, f32
  * and cycles its texture frame; deletes the effect once all particles have expired.
  */
 static void effPeachDustMain(EffectEntry* effect) {
-    EffPeachDustParticle* p = effect->userdata;
+    EffPeachDustWork* work = effect->userdata;
     Vec position;
     Vec tmp = {0.0f, 0.0f, 0.0f};
     s32 i;
@@ -188,42 +176,42 @@ static void effPeachDustMain(EffectEntry* effect) {
     s32 f;
     s32 g;
 
-    tmp.x = p->position.x;
-    tmp.y = p->position.y;
-    tmp.z = p->position.z;
+    tmp.x = work->position.x;
+    tmp.y = work->position.y;
+    tmp.z = work->position.z;
     position = tmp;
-    p->lifetime--;
-    p->frame++;
-    f = p->frame;
-    p++;
-    for (i = 0; i < effect->count - 1; i++, p++) {
-        p->tex = (f + i + i) & 7;
-        if (p->lifetime < 0) {
+    work->lifetime--;
+    work->frame++;
+    f = work->frame;
+    work++;
+    for (i = 0; i < effect->count - 1; i++, work++) {
+        work->tex = (f + i + i) & 7;
+        if (work->lifetime < 0) {
             dead++;
         }
-        p->lifetime--;
-        if (p->lifetime > 30 || p->lifetime < 0) {
-            p->tex = -1;
+        work->lifetime--;
+        if (work->lifetime > 30 || work->lifetime < 0) {
+            work->tex = -1;
         } else {
-            p->frame++;
-            f = p->frame;
+            work->frame++;
+            f = work->frame;
 #if VERSION <= VERSION_DEMO_JP
             if (f - 1 < 25) {
-                p->scale = 0.4f * (0.01f * scale_data[f - 1]);
+                work->scale = 0.4f * (0.01f * scale_data[f - 1]);
 #else
             g = f - 1;
             if (g < 25) {
-                p->scale = 0.4f * (0.01f * scale_data[g]);
+                work->scale = 0.4f * (0.01f * scale_data[g]);
 #endif
             } else {
-                p->scale += 0.1f * (0.1f - p->scale);
+                work->scale += 0.1f * (0.1f - work->scale);
             }
-            p->position.x += p->velocity.x;
-            p->position.y += p->velocity.y;
-            p->velocity.y += p->velocity.z;
+            work->position.x += work->velocity.x;
+            work->position.y += work->velocity.y;
+            work->velocity.y += work->velocity.z;
 
             // z moves with the x step; the third stored velocity component accelerates y (above).
-            p->position.z += p->velocity.x;
+            work->position.z += work->velocity.x;
         }
     }
     if (dead >= effect->count - 1) {
@@ -236,7 +224,7 @@ static void effPeachDustMain(EffectEntry* effect) {
 /** Draws each live particle as a camera-facing quad (texture 0x20, one of eight 22x22 cells) with a rotating color. */
 static void effPeachDustDisp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
-    EffPeachDustParticle* p;
+    EffPeachDustWork* work;
     s32 i;
     s32 tex;
     CameraEntry* camera;
@@ -254,7 +242,7 @@ static void effPeachDustDisp(CameraId cameraId, void* param) {
     s32 b;
 
     camera = camGetPtr(cameraId);
-    p = effect->userdata;
+    work = effect->userdata;
     GXSetNumChans(0);
     GXSetNumTexGens(1);
     GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0, GX_FALSE, GX_PTIDENTITY);
@@ -269,21 +257,21 @@ static void effPeachDustDisp(CameraId cameraId, void* param) {
     GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_C0, GX_CC_ONE, GX_CC_TEXC, GX_CC_ZERO);
     GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_A0, GX_CA_TEXA, GX_CA_ZERO);
     GXSetCullMode(GX_CULL_NONE);
-    off = (p->frame - 1) * 3;
-    PSMTXTrans(tr, p->position.x, p->position.y, p->position.z);
+    off = (work->frame - 1) * 3;
+    PSMTXTrans(tr, work->position.x, work->position.y, work->position.z);
     PSMTXRotRad(rot, 'y', 0.017453292f * -camGetPtr(CAMERA_3D)->viewYaw);
     PSMTXConcat(tr, rot, mtx);
     PSMTXConcat(camera->view, mtx, mtx);
-    p++;
-    for (i = 0; i < effect->count - 1; i++, p++) {
-        tex = p->tex;
+    work++;
+    for (i = 0; i < effect->count - 1; i++, work++) {
+        tex = work->tex;
         if (tex < 0) {
             continue;
         }
-        PSMTXTrans(tr, p->position.x, p->position.y, p->position.z);
-        tr[0][0] = p->scale;
-        tr[1][1] = p->scale;
-        tr[2][2] = p->scale;
+        PSMTXTrans(tr, work->position.x, work->position.y, work->position.z);
+        tr[0][0] = work->scale;
+        tr[1][1] = work->scale;
+        tr[2][2] = work->scale;
         PSMTXConcat(mtx, tr, tr);
         GXLoadPosMtxImm(tr, GX_PNMTX0);
         GXSetCurrentMtx(GX_PNMTX0);

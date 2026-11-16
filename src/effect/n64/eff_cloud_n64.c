@@ -339,7 +339,7 @@ static void effCloudDisp(CameraId cameraId, void* param) {
                 w = (f32)k + (3.0f * sn + 16.0f);
                 w *= scale;
 
-                // FAKE: both branches assign the same value; a single assignment changes the object
+                // both branches assign the same value (so does the Paper Mario 64 original of this effect)
                 if (type == 0) {
                     u = (s32)(24.0f * work->len[idx]) + uo;
                 } else {
