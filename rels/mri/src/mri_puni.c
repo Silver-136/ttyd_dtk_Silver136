@@ -2165,24 +2165,7 @@ static PuniData* searchBattle(PuniData* self, s32 start, s32 count, f32 maxDist)
  * back or blown away, or NULL.
  */
 static PuniData* searchMikata(PuniData* self) {
-    f32 minDist = 1000000.0f;
-    PuniData* found = NULL;
-    PuniData* q = &Punidat[1];
-    s32 i;
-
-    for (i = 1; i < PUNI_SOLID_FIRST; i++, q++) {
-        if ((q->flags & PUNI_FLAG_ACTIVE) && !(q->flags & PUNI_FLAG_DEAD) && q->mode != PUNI_MODE_DAMAGE && q->mode != PUNI_MODE_WIND) {
-            f32 d = PSVECSquareDistance(&self->pos, &q->pos);
-            if (d < minDist) {
-                minDist = d;
-                found = q;
-            }
-        }
-    }
-    if (minDist < 2500.0f) {
-        return found;
-    }
-    return NULL;
+    return searchBattle(self, 1, PUNI_ALLY_LAST, 2500.0f);
 }
 
 /**
@@ -2190,124 +2173,17 @@ static PuniData* searchMikata(PuniData* self) {
  * or blown away, or NULL.
  */
 static PuniData* searchTeki(PuniData* self) {
-    f32 minDist = 1000000.0f;
-    PuniData* found = NULL;
-    PuniData* q = &Punidat[PUNI_ENEMY_FIRST];
-    s32 i;
-
-    for (i = PUNI_ENEMY_FIRST; i < PUNI_ENEMY_END; i++, q++) {
-        if ((q->flags & PUNI_FLAG_ACTIVE) && !(q->flags & PUNI_FLAG_DEAD) && q->mode != 9 && q->mode != 13) {
-            f32 d = PSVECSquareDistance(&self->pos, &q->pos);
-            if (d < minDist) {
-                minDist = d;
-                found = q;
-            }
-        }
-    }
-    if (minDist < 2500.0f) {
-        return found;
-    }
-    return NULL;
+    return searchBattle(self, PUNI_ENEMY_FIRST, 100, 2500.0f);
 }
 
-/** Nearest living Puni to self at any distance under 1000 units (squared 1000000), or NULL. */
+/** Nearest living Puni (slots 1 to 102) to self at any distance under 1000 units (squared 1000000), or NULL. */
 static PuniData* searchBattleMikata(PuniData* self) {
-    f32 minDist = 1000000.0f;
-    PuniData* found = NULL;
-    PuniData* q = &Punidat[1];
-    s32 i;
-
-    for (i = 1; i < PUNI_SOLID_FIRST; i++, q++) {
-        if ((q->flags & PUNI_FLAG_ACTIVE) && !(q->flags & PUNI_FLAG_DEAD) && q->mode != PUNI_MODE_DAMAGE && q->mode != PUNI_MODE_WIND) {
-            f32 d = PSVECSquareDistance(&self->pos, &q->pos);
-            if (d < minDist) {
-                minDist = d;
-                found = q;
-            }
-        }
-    }
-    if (minDist < 1000000.0f) {
-        return found;
-    }
-    return NULL;
+    return searchBattle(self, 1, PUNI_ALLY_LAST, 1000000.0f);
 }
 
-/** Inline version of "nearest living Jabbi within 1000 units", used by puniSearch. */
-// FAKE: inline copy of a map function so its calls inline (the unit does not auto-inline; FAKES.md)
-static inline PuniData* searchBattleTeki_inl(PuniData* self) {
-    s32 i;
-    PuniData* q;
-    f32 minDist = 1000000.0f;
-    PuniData* found = NULL;
-    PuniData* ret;
-
-    q = &Punidat[PUNI_ENEMY_FIRST];
-    for (i = PUNI_ENEMY_FIRST; i < PUNI_ENEMY_END; i++) {
-        if ((q->flags & PUNI_FLAG_ACTIVE) && !(q->flags & PUNI_FLAG_DEAD) && q->mode != PUNI_MODE_DAMAGE && q->mode != PUNI_MODE_WIND) {
-            f32 d = PSVECSquareDistance(&self->pos, &q->pos);
-            if (d < minDist) {
-                minDist = d;
-                found = q;
-            }
-        }
-        q++;
-    }
-    if (minDist < 1000000.0f) {
-        ret = found;
-    } else {
-        ret = NULL;
-    }
-    return ret;
-}
-
-/** Inline version of "nearest living Puni within 1000 units", used by puniSearch. */
-// FAKE: inline copy of a map function so its calls inline (the unit does not auto-inline; FAKES.md)
-static inline PuniData* searchBattleMikata_inl(PuniData* self) {
-    s32 i;
-    PuniData* q;
-    f32 minDist = 1000000.0f;
-    PuniData* found = NULL;
-    PuniData* ret;
-
-    q = &Punidat[1];
-    for (i = 1; i < PUNI_SOLID_FIRST; i++) {
-        if ((q->flags & PUNI_FLAG_ACTIVE) && !(q->flags & PUNI_FLAG_DEAD) && q->mode != PUNI_MODE_DAMAGE && q->mode != PUNI_MODE_WIND) {
-            f32 d = PSVECSquareDistance(&self->pos, &q->pos);
-            if (d < minDist) {
-                minDist = d;
-                found = q;
-            }
-        }
-        q++;
-    }
-    if (minDist < 1000000.0f) {
-        ret = found;
-    } else {
-        ret = NULL;
-    }
-    return ret;
-}
-
-/** Nearest living Jabbi to self at any distance under 1000 units, or NULL. */
+/** Nearest living Jabbi (slots 110 to 209) to self at any distance under 1000 units, or NULL. */
 static PuniData* searchBattleTeki(PuniData* self) {
-    f32 minDist = 1000000.0f;
-    PuniData* found = NULL;
-    PuniData* q = &Punidat[PUNI_ENEMY_FIRST];
-    s32 i;
-
-    for (i = PUNI_ENEMY_FIRST; i < PUNI_ENEMY_END; i++, q++) {
-        if ((q->flags & PUNI_FLAG_ACTIVE) && !(q->flags & PUNI_FLAG_DEAD) && q->mode != 9 && q->mode != 13) {
-            f32 d = PSVECSquareDistance(&self->pos, &q->pos);
-            if (d < minDist) {
-                minDist = d;
-                found = q;
-            }
-        }
-    }
-    if (minDist < 1000000.0f) {
-        return found;
-    }
-    return NULL;
+    return searchBattle(self, PUNI_ENEMY_FIRST, 100, 1000000.0f);
 }
 
 /**
@@ -2317,9 +2193,9 @@ static PuniData* searchBattleTeki(PuniData* self) {
 static void puniSearch(PuniData* p) {
     if ((s32)(gp->retraceCount & 3) == (p->index & 3)) {
         if (p->flags & PUNI_FLAG_PUNI) {
-            p->target = searchBattleTeki_inl(p);
+            p->target = searchBattleTeki(p);
         } else {
-            p->target = searchBattleMikata_inl(p);
+            p->target = searchBattleMikata(p);
         }
     }
 }
@@ -2341,9 +2217,9 @@ static void puniModeChangeAttack(void) {
                 case 2:
                 case 0x1d:
                     if (p->flags & PUNI_FLAG_PUNI) {
-                        f = searchBattleTeki_inl(p);
+                        f = searchBattleTeki(p);
                     } else {
-                        f = searchBattleMikata_inl(p);
+                        f = searchBattleMikata(p);
                     }
                     if (f) {
                         p->target = f;
@@ -3280,9 +3156,9 @@ static void puniModeEscape(PuniData* p) {
     }
     if ((s32)(gp->retraceCount & 3) == (p->index & 3)) {
         if (p->flags & PUNI_FLAG_PUNI) {
-            p->target = searchBattleTeki_inl(p);
+            p->target = searchBattleTeki(p);
         } else {
-            p->target = searchBattleMikata_inl(p);
+            p->target = searchBattleMikata(p);
         }
     }
     if (p->target == NULL) return;
@@ -3348,9 +3224,9 @@ static void puniModeRecover(PuniData* p) {
             } else {
                 if (((s32)gp->retraceCount & 3) == (p->index & 3)) {
                     if (p->flags & PUNI_FLAG_PUNI) {
-                        p->target = searchBattleTeki_inl(p);
+                        p->target = searchBattleTeki(p);
                     } else {
-                        p->target = searchBattleMikata_inl(p);
+                        p->target = searchBattleMikata(p);
                     }
                 }
                 if (p->target != NULL) {
