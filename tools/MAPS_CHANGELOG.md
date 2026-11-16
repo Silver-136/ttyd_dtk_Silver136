@@ -8,6 +8,17 @@ generated from (maps made before 2026-11-13 have no such line).
 One entry per push, newest first: date, the pushed commit, whether maps from the previous push are now obsolete,
 and what changed in plain words.
 
+## 2026-11-16 - pushed commit: the one that adds this entry (maps stamped 188651e23)
+
+Old maps obsolete: **slightly**. Regenerate them if you use mapdrv names or function-static `$N` numbers.
+
+- Six stripped mapdrv functions are back under their JP demo map names and appear as UNUSED entries:
+  `useDisplayList`, `freeDisplayList`, `mapGetTime`, `_mapUnLoad`, `mapReInit`, `mapSetActiveGroup`.
+- A few function-static `$N` numbers changed (for example `culling$N`, `owner_no$N`, `pow_10$N`, `scrl_uv$N`);
+  the objects are the same.
+- No addresses or sizes of linked symbols changed. MapWork's C layout changed (`{ s32 count; MapEntry entries[2]; }`,
+  each entry's tpl ARAM handle at +0x174), which renames no symbol.
+
 ## 2026-11-15 - pushed commit: the one that adds this entry (maps stamped 301027e38)
 
 Old maps obsolete: **yes**. Regenerate them.
