@@ -1108,31 +1108,31 @@ static void disp_proc(CameraId cameraId, void* param) {
         Vec pos = {0.0f, 0.0f, 0.0f};
         pos.x = 15.0f + x;
         pos.y = yy - 24.0f;
-        iconDispGx(&pos, ICON_FLAG_2D, ICON_ITEM_CHAMPS_BELT, 0.8f);
+        iconDispGx(&pos, ICON_FLAG_2D, 0.8f, ICON_ITEM_CHAMPS_BELT);
     }
     GXSetScissor(0, 0, 0x260, 0x1E0);
     if (dwp->page > 0) {
         {
             Vec pos = {0.0f, 125.0f, 0.0f};
             pos.x = x + winW;
-            iconDispGx(&pos, ICON_FLAG_2D, ICON_PAGE_ARROW, -1.0f);
+            iconDispGx(&pos, ICON_FLAG_2D, -1.0f, ICON_PAGE_ARROW);
         }
         {
             Vec pos = {0.0f, 75.0f, 0.0f};
             pos.x = x + winW;
-            iconDispGx(&pos, ICON_FLAG_2D, ICON_TRIGGER_L, 0.6f);
+            iconDispGx(&pos, ICON_FLAG_2D, 0.6f, ICON_TRIGGER_L);
         }
     }
     if (dwp->page < 1) {
         {
             Vec pos = {0.0f, -140.0f, 0.0f};
             pos.x = x + winW;
-            iconDispGx(&pos, ICON_FLAG_2D, ICON_PAGE_ARROW, 1.0f);
+            iconDispGx(&pos, ICON_FLAG_2D, 1.0f, ICON_PAGE_ARROW);
         }
         {
             Vec pos = {0.0f, -125.0f, 0.0f};
             pos.x = x + winW;
-            iconDispGx(&pos, ICON_FLAG_2D, ICON_TRIGGER_R, 0.6f);
+            iconDispGx(&pos, ICON_FLAG_2D, 0.6f, ICON_TRIGGER_R);
         }
     }
 }

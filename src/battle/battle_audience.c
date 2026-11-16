@@ -2801,9 +2801,9 @@ static void BattleAudienceDispWin(CameraId camId, void* param) {
         pos.x = 17.0f + win->x;
         pos.y = win->y - 40.0f;
 #if VERSION <= VERSION_DEMO_JP
-        iconDispGx(&pos, ICON_FLAG_2D, ICON_AUDIENCE, 0.85f);
+        iconDispGx(&pos, ICON_FLAG_2D, 0.85f, ICON_AUDIENCE);
 #else
-        iconDispGx(&pos, ICON_FLAG_2D, ICON_AUDIENCE, 0.8f);
+        iconDispGx(&pos, ICON_FLAG_2D, 0.8f, ICON_AUDIENCE);
 #endif
     }
     PSMTXTrans(mtx, 75.0f + win->x, win->y - 40.0f, 0.0f);

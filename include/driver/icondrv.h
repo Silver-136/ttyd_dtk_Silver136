@@ -107,8 +107,8 @@ void iconEntry(const char* name, u16 iconId);
 void iconEntry2D(const char* name, s16 iconId);
 void iconDelete(const char* name);
 void iconChange(const char* name, u16 iconId);
-void iconDispGxAlpha(f32 scale, Vec* position, s16 flags, u16 iconId, u8 alpha);
-void iconDispGx(Vec* position, s16 flags, u16 iconId, f32 scale);
+void iconDispGxAlpha(Vec* position, u16 flags, f32 scale, u16 iconId, u8 alpha);
+void iconDispGx(Vec* position, u16 flags, f32 scale, u16 iconId);
 // The id is u16 from US on (every US caller's code fits it). Before US the definition takes s16 while some
 // callers need a u16 parameter, so those call it through a (Mtx, s16, u16) cast (the US prototype's own type).
 #if VERSION >= VERSION_US

@@ -101,7 +101,7 @@ static void _accrobat_timing_icon_disp(CameraId camId, void* param) {
     BtlUnit_GetPos(unit, &pos.x, &pos.y, &pos.z);
     pos.y += BtlUnit_GetHeight(unit) + 5;
     pos.x += 15.0f;
-    iconDispGx(&pos, 0, ICON_STYLISH_TIMING, 0.67f);
+    iconDispGx(&pos, 0, 0.67f, ICON_STYLISH_TIMING);
 }
 
 /** Copies the last Stylish check result and the frame it was decided on to the script helper's outputs. */

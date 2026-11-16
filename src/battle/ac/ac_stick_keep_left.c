@@ -334,7 +334,7 @@ static void actionCommandDisp(f32 x, f32 y, s32 unused) {
                 Vec p = {0.0f, 0.0f, 0.0f};
                 p.x = -200.0f + x;
                 p.y = 70.0f + y;
-                iconDispGx(&p, ICON_FLAG_2D, ICON_STICK_NEUTRAL, 1.0f);
+                iconDispGx(&p, ICON_FLAG_2D, 1.0f, ICON_STICK_NEUTRAL);
                 break;
             }
         case AC_STATE_RUN:
@@ -342,12 +342,12 @@ static void actionCommandDisp(f32 x, f32 y, s32 unused) {
                 Vec p = {0.0f, 0.0f, 0.0f};
                 p.x = -200.0f + x;
                 p.y = 70.0f + y;
-                iconDispGx(&p, ICON_FLAG_2D, ICON_STICK_LEFT, 1.0f);
+                iconDispGx(&p, ICON_FLAG_2D, 1.0f, ICON_STICK_LEFT);
             } else {
                 Vec p = {0.0f, 0.0f, 0.0f};
                 p.x = -200.0f + x;
                 p.y = 70.0f + y;
-                iconDispGx(&p, ICON_FLAG_2D, ICON_STICK_NEUTRAL, 1.0f);
+                iconDispGx(&p, ICON_FLAG_2D, 1.0f, ICON_STICK_NEUTRAL);
             }
             break;
         default:
@@ -355,12 +355,12 @@ static void actionCommandDisp(f32 x, f32 y, s32 unused) {
                 Vec p = {0.0f, 0.0f, 0.0f};
                 p.x = -200.0f + x;
                 p.y = 70.0f + y;
-                iconDispGx(&p, ICON_FLAG_2D, ICON_STICK_LEFT, 1.0f);
+                iconDispGx(&p, ICON_FLAG_2D, 1.0f, ICON_STICK_LEFT);
             } else {
                 Vec p = {0.0f, 0.0f, 0.0f};
                 p.x = -200.0f + x;
                 p.y = 70.0f + y;
-                iconDispGx(&p, ICON_FLAG_2D, ICON_STICK_NEUTRAL, 1.0f);
+                iconDispGx(&p, ICON_FLAG_2D, 1.0f, ICON_STICK_NEUTRAL);
             }
             break;
     }
@@ -381,19 +381,19 @@ static void actionCommandDisp(f32 x, f32 y, s32 unused) {
         p.x = -288.0f + x;
         yy = 25.0f + y;
         p.y = yy;
-        iconDispGx(&p, ICON_FLAG_2D, ICON_AC_BAR_LEFT, 1.0f);
+        iconDispGx(&p, ICON_FLAG_2D, 1.0f, ICON_AC_BAR_LEFT);
     }
     for (i = 1; i < n; i++) {
         Vec p = {0.0f, 0.0f, 0.0f};
         p.x = x + (spacing * (f32)i + -288.0f);
         p.y = yy;
-        iconDispGx(&p, ICON_FLAG_2D, ICON_AC_BAR_MIDDLE, 1.0f);
+        iconDispGx(&p, ICON_FLAG_2D, 1.0f, ICON_AC_BAR_MIDDLE);
     }
     {
         Vec p = {0.0f, 0.0f, 0.0f};
         p.x = x + (spacing * (f32)i + -288.0f);
         p.y = yy;
-        iconDispGx(&p, ICON_FLAG_2D, ICON_AC_BAR_RIGHT, 1.0f);
+        iconDispGx(&p, ICON_FLAG_2D, 1.0f, ICON_AC_BAR_RIGHT);
     }
     stepX = 33.0f;
     if (ac->acFlags & AC_STICK_KEEP_LEFT_FLAG_COMPACT_GAUGE) {
@@ -406,29 +406,29 @@ static void actionCommandDisp(f32 x, f32 y, s32 unused) {
                 Vec p = {0.0f, 0.0f, 0.0f};
                 p.x = x + (stepX * (f32)j + -258.0f);
                 p.y = yy;
-                iconDispGx(&p, ICON_FLAG_2D, (u16)(ICON_AC_LAMP_1 + j), 1.0f);
+                iconDispGx(&p, ICON_FLAG_2D, 1.0f, (u16)(ICON_AC_LAMP_1 + j));
             } else {
                 Vec p = {0.0f, 0.0f, 0.0f};
                 p.x = x + (stepX * (f32)j + -258.0f);
                 p.y = yy;
-                iconDispGx(&p, ICON_FLAG_2D, ICON_AC_LAMP_3, 1.0f);
+                iconDispGx(&p, ICON_FLAG_2D, 1.0f, ICON_AC_LAMP_3);
             }
         } else {
             Vec p = {0.0f, 0.0f, 0.0f};
             p.x = x + (stepX * (f32)j + -258.0f);
             p.y = yy;
-            iconDispGx(&p, ICON_FLAG_2D, ICON_AC_OFF, 0.5f);
+            iconDispGx(&p, ICON_FLAG_2D, 0.5f, ICON_AC_OFF);
         }
     }
     if (idx < count) {
         Vec p = {0.0f, 0.0f, 0.0f};
         p.x = x + (stepX * (f32)m + -250.0f);
         p.y = yy;
-        iconDispGx(&p, ICON_FLAG_2D, ICON_AC_OFF, 1.0f);
+        iconDispGx(&p, ICON_FLAG_2D, 1.0f, ICON_AC_OFF);
     } else {
         Vec p = {0.0f, 0.0f, 0.0f};
         p.x = x + (stepX * (f32)m + -250.0f);
         p.y = yy;
-        iconDispGx(&p, ICON_FLAG_2D, ICON_AC_ON, 1.0f);
+        iconDispGx(&p, ICON_FLAG_2D, 1.0f, ICON_AC_ON);
     }
 }

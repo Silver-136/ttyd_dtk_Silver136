@@ -896,7 +896,7 @@ static void _MarioExpDisp(CameraId camId, void* param) {
 
         windowDispGX_Waku_col(180.0f, -160.0f, width, 32.0f, 10.0f, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
 
-        iconDispGx(&pos, ICON_FLAG_2D, ICON_STAR_POINT, 1.0f);
+        iconDispGx(&pos, ICON_FLAG_2D, 1.0f, ICON_STAR_POINT);
         FontDrawStart();
         FontDrawString(225.0f, -163.0f, buf);
     }
@@ -926,7 +926,7 @@ static void _LvupParamConfirmDisp(CameraId camId, void* param) {
     pos.x = -40.0f;
     pos.y = -50 - cursor->absPos * 25;
     pos.z = 0.0f;
-    iconDispGx(&pos, ICON_FLAG_2D, ICON_STAR_POINT, 1.0f);
+    iconDispGx(&pos, ICON_FLAG_2D, 1.0f, ICON_STAR_POINT);
 }
 
 /**

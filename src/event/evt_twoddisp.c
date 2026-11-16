@@ -65,7 +65,7 @@ static void twoddisp_disp(CameraId camera, void* param) {
                 pos.y = p->baseY + p->y;
                 pos.z = 0.0f;
                 GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, (GXColor){0, 0, 0, 0});
-                iconDispGx(&pos, ICON_FLAG_2D, (u16)p->id, p->scale);
+                iconDispGx(&pos, ICON_FLAG_2D, p->scale, (u16)p->id);
             } else {
                 FontDrawStart();
                 FontDrawScale(p->scale);

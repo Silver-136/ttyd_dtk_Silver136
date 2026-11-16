@@ -468,14 +468,14 @@ static void disp_2D(CameraId cam, void* param) {
         a.x = 215.0f + w->pos.x;
         a.y = 60.0f + w->pos.y;
         a.z = w->pos.z;
-        iconDispGx(&a, ICON_FLAG_2D, ICON_AC_BAR_RIGHT, 1.0f);
+        iconDispGx(&a, ICON_FLAG_2D, 1.0f, ICON_AC_BAR_RIGHT);
     }
     {
         Vec b = {0.0f, 0.0f, 0.0f};
         b.x = w->pos.x - 215.0f;
         b.y = 60.0f + w->pos.y;
         b.z = w->pos.z;
-        iconDispGx(&b, ICON_FLAG_2D, ICON_AC_BAR_LEFT, 1.0f);
+        iconDispGx(&b, ICON_FLAG_2D, 1.0f, ICON_AC_BAR_LEFT);
     }
     GXSetScissor(0, 0x91, gp->fbWidth, 0x50);
     for (i = 0; i < 7; i++) {
@@ -542,7 +542,7 @@ static void disp_2D(CameraId cam, void* param) {
                 pos.x = w->btn2[i].pos.x;
                 pos.y = 60.0f + ((80.0f + w->btn2[i].pos.y) + w->offsetY);
                 pos.z = w->btn2[i].pos.z;
-                iconDispGx(&pos, ICON_FLAG_2D, icon, 1.0f);
+                iconDispGx(&pos, ICON_FLAG_2D, 1.0f, icon);
             }
         }
         if (w->btn[i].state == 2) {
@@ -606,7 +606,7 @@ static void disp_2D(CameraId cam, void* param) {
                 pos.x = w->btn[i].pos.x;
                 pos.y = 60.0f + (w->btn[i].pos.y + w->offsetY);
                 pos.z = w->btn[i].pos.z;
-                iconDispGx(&pos, ICON_FLAG_2D, icon, 1.0f);
+                iconDispGx(&pos, ICON_FLAG_2D, 1.0f, icon);
             }
         }
 #else
@@ -703,7 +703,7 @@ void _disp_2D(s32 side, s32 idx) {
         pos.x = b->pos.x;
         pos.y = 60.0f + (w->offsetY + (b->pos.y + yoff));
         pos.z = b->pos.z;
-        iconDispGx(&pos, ICON_FLAG_2D, icon, 1.0f);
+        iconDispGx(&pos, ICON_FLAG_2D, 1.0f, icon);
     }
 }
 #endif

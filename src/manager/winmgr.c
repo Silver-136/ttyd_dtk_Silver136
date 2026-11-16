@@ -1550,35 +1550,35 @@ static void select_disp(WinMgrEntry* entry) {
                 PSMTXScale(scale, 0.6f, 0.6f, 0.6f);
                 PSMTXConcat(mtx, scale, mtx);
                 iconDispGxCol(mtx, ICON_FLAG_2D, ICON_CURRENCY_PLATE, (GXColor){0xF0, 0xF0, 0xF0, 0xFF});
-                iconDispGx(&(Vec){entry->x + 268, entry->y - 12, 0.0f}, ICON_FLAG_2D, ICON_ITEM_COIN, 0.6f);
+                iconDispGx(&(Vec){entry->x + 268, entry->y - 12, 0.0f}, ICON_FLAG_2D, 0.6f, ICON_ITEM_COIN);
                 break;
             case SELECT_TYPE_BADGE_STAR_PIECE:
                 PSMTXTrans(mtx, entry->x + 268, entry->y - 18, 0.0f);
                 PSMTXScale(scale, 0.6f, 0.6f, 0.6f);
                 PSMTXConcat(mtx, scale, mtx);
                 iconDispGxCol(mtx, ICON_FLAG_2D, ICON_CURRENCY_PLATE, (GXColor){0xF0, 0xF0, 0xF0, 0xFF});
-                iconDispGx(&(Vec){entry->x + 268, entry->y - 12, 0.0f}, ICON_FLAG_2D, ICON_ITEM_STAR_PIECE, 0.6f);
+                iconDispGx(&(Vec){entry->x + 268, entry->y - 12, 0.0f}, ICON_FLAG_2D, 0.6f, ICON_ITEM_STAR_PIECE);
                 break;
             case SELECT_TYPE_BADGE_PIANTA_TOKEN:
                 PSMTXTrans(mtx, entry->x + 268, entry->y - 18, 0.0f);
                 PSMTXScale(scale, 0.6f, 0.6f, 0.6f);
                 PSMTXConcat(mtx, scale, mtx);
                 iconDispGxCol(mtx, ICON_FLAG_2D, ICON_CURRENCY_PLATE, (GXColor){0xF0, 0xF0, 0xF0, 0xFF});
-                iconDispGx(&(Vec){entry->x + 268, entry->y - 12, 0.0f}, ICON_FLAG_2D, ICON_ITEM_PIANTA_TOKEN, 0.6f);
+                iconDispGx(&(Vec){entry->x + 268, entry->y - 12, 0.0f}, ICON_FLAG_2D, 0.6f, ICON_ITEM_PIANTA_TOKEN);
                 break;
         }
         // the hand cursor (mirrored) at the position select_main eases it to
-        iconDispGx(&(Vec){sel->cursorX, sel->cursorY, 1.0f}, ICON_FLAG_2D | ICON_FLAG_FLIP_X, ICON_YUBI_CURSOR, 1.0f);
+        iconDispGx(&(Vec){sel->cursorX, sel->cursorY, 1.0f}, ICON_FLAG_2D | ICON_FLAG_FLIP_X, 1.0f, ICON_YUBI_CURSOR);
         // Scroll arrows when the list is longer than the view, shown 20 frames in every 32: up at entry->y - 36
         // when rows are hidden above, down 12 below the bottom edge when rows are hidden below
         if (sel->numItems > SELECT_ROWS_SHOWN && (gp->retraceCount & 31) < 20) {
             if (sel->scrollTop != 0) {
-                iconDispGx(&(Vec){entry->x + entry->width / 2.0f, entry->y - 36, 1.0f}, ICON_FLAG_2D, ICON_ARROW_UP,
-                           0.6f);
+                iconDispGx(&(Vec){entry->x + entry->width / 2.0f, entry->y - 36, 1.0f}, ICON_FLAG_2D, 0.6f,
+                           ICON_ARROW_UP);
             }
             if (sel->scrollTop != sel->numItems - SELECT_ROWS_SHOWN) {
                 iconDispGx(&(Vec){entry->x + entry->width / 2.0f, entry->y - entry->height - 12, 1.0f}, ICON_FLAG_2D,
-                           ICON_ARROW_DOWN, 0.6f);
+                           0.6f, ICON_ARROW_DOWN);
             }
         }
     }
@@ -1725,15 +1725,15 @@ static void select_disp_party(WinMgrEntry* entry) {
                        (Vec){1.0f, 1.0f, 1.0f}, white, msg);
 #endif
         // hand cursor and scroll arrows as in select_disp
-        iconDispGx(&(Vec){sel->cursorX, sel->cursorY, 1.0f}, ICON_FLAG_2D | ICON_FLAG_FLIP_X, ICON_YUBI_CURSOR, 1.0f);
+        iconDispGx(&(Vec){sel->cursorX, sel->cursorY, 1.0f}, ICON_FLAG_2D | ICON_FLAG_FLIP_X, 1.0f, ICON_YUBI_CURSOR);
         if (sel->numItems > SELECT_ROWS_SHOWN && (gp->retraceCount & 31) < 20) {
             if (sel->scrollTop != 0) {
-                iconDispGx(&(Vec){entry->x + entry->width / 2.0f, entry->y - 36, 1.0f}, ICON_FLAG_2D, ICON_ARROW_UP,
-                           0.6f);
+                iconDispGx(&(Vec){entry->x + entry->width / 2.0f, entry->y - 36, 1.0f}, ICON_FLAG_2D, 0.6f,
+                           ICON_ARROW_UP);
             }
             if (sel->scrollTop != sel->numItems - SELECT_ROWS_SHOWN) {
                 iconDispGx(&(Vec){entry->x + entry->width / 2.0f, entry->y - entry->height - 12, 1.0f}, ICON_FLAG_2D,
-                           ICON_ARROW_DOWN, 0.6f);
+                           0.6f, ICON_ARROW_DOWN);
             }
         }
     }
@@ -1880,15 +1880,15 @@ static void select_disp_mario(WinMgrEntry* entry) {
                        (Vec){1.0f, 1.0f, 1.0f}, white, msg);
 #endif
         // hand cursor and scroll arrows as in select_disp
-        iconDispGx(&(Vec){sel->cursorX, sel->cursorY, 1.0f}, ICON_FLAG_2D | ICON_FLAG_FLIP_X, ICON_YUBI_CURSOR, 1.0f);
+        iconDispGx(&(Vec){sel->cursorX, sel->cursorY, 1.0f}, ICON_FLAG_2D | ICON_FLAG_FLIP_X, 1.0f, ICON_YUBI_CURSOR);
         if (sel->numItems > SELECT_ROWS_SHOWN && (gp->retraceCount & 31) < 20) {
             if (sel->scrollTop != 0) {
-                iconDispGx(&(Vec){entry->x + entry->width / 2.0f, entry->y - 36, 1.0f}, ICON_FLAG_2D, ICON_ARROW_UP,
-                           0.6f);
+                iconDispGx(&(Vec){entry->x + entry->width / 2.0f, entry->y - 36, 1.0f}, ICON_FLAG_2D, 0.6f,
+                           ICON_ARROW_UP);
             }
             if (sel->scrollTop != sel->numItems - SELECT_ROWS_SHOWN) {
                 iconDispGx(&(Vec){entry->x + entry->width / 2.0f, entry->y - entry->height - 12, 1.0f}, ICON_FLAG_2D,
-                           ICON_ARROW_DOWN, 0.6f);
+                           0.6f, ICON_ARROW_DOWN);
             }
         }
     }
@@ -1972,7 +1972,7 @@ static void select_disp_luigi(WinMgrEntry* entry) {
         w = (entry->width - FontGetMessageWidth(msg)) / 2;
         winFontInit();
         winFontSetEdge((Vec){entry->x + w, entry->y + 14, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white, msg);
-        iconDispGx(&(Vec){sel->cursorX, sel->cursorY, 1.0f}, (ICON_FLAG_2D | ICON_FLAG_FLIP_X), ICON_YUBI_CURSOR, 1.0f);
+        iconDispGx(&(Vec){sel->cursorX, sel->cursorY, 1.0f}, (ICON_FLAG_2D | ICON_FLAG_FLIP_X), 1.0f, ICON_YUBI_CURSOR);
 #else
         switch (sel->type) {
             case SELECT_TYPE_INFORMANT_PERFECT:
@@ -2002,19 +2002,19 @@ static void select_disp_luigi(WinMgrEntry* entry) {
                 PSMTXScale(scale, 0.6f, 0.6f, 0.6f);
                 PSMTXConcat(mtx, scale, mtx);
                 iconDispGxCol(mtx, ICON_FLAG_2D, ICON_CURRENCY_PLATE, (GXColor){0xF0, 0xF0, 0xF0, 0xFF});
-                iconDispGx(&(Vec){entry->x + 268, entry->y - 12, 0.0f}, ICON_FLAG_2D, ICON_ITEM_COIN, 0.6f);
+                iconDispGx(&(Vec){entry->x + 268, entry->y - 12, 0.0f}, ICON_FLAG_2D, 0.6f, ICON_ITEM_COIN);
                 break;
         }
-        iconDispGx(&(Vec){sel->cursorX, sel->cursorY, 1.0f}, ICON_FLAG_2D | ICON_FLAG_FLIP_X, ICON_YUBI_CURSOR, 1.0f);
+        iconDispGx(&(Vec){sel->cursorX, sel->cursorY, 1.0f}, ICON_FLAG_2D | ICON_FLAG_FLIP_X, 1.0f, ICON_YUBI_CURSOR);
 #endif
         if (sel->numItems > SELECT_ROWS_SHOWN && (gp->retraceCount & 31) < 20) {
             if (sel->scrollTop != 0) {
-                iconDispGx(&(Vec){entry->x + entry->width / 2.0f, entry->y - 36, 1.0f}, ICON_FLAG_2D, ICON_ARROW_UP,
-                           0.6f);
+                iconDispGx(&(Vec){entry->x + entry->width / 2.0f, entry->y - 36, 1.0f}, ICON_FLAG_2D, 0.6f,
+                           ICON_ARROW_UP);
             }
             if (sel->scrollTop != sel->numItems - SELECT_ROWS_SHOWN) {
                 iconDispGx(&(Vec){entry->x + entry->width / 2.0f, entry->y - entry->height - 12, 1.0f}, ICON_FLAG_2D,
-                           ICON_ARROW_DOWN, 0.6f);
+                           0.6f, ICON_ARROW_DOWN);
             }
         }
     }

@@ -407,34 +407,34 @@ static void actionCommandDisp(f32 x, f32 y) {
                 Vec pos = {0.0f, 0.0f, 0.0f};
                 pos.x = -200.0f + x;
                 pos.y = 70.0f + y;
-                iconDispGx(&pos, ICON_FLAG_2D, idleA, 1.0f);
+                iconDispGx(&pos, ICON_FLAG_2D, 1.0f, idleA);
             } else {
                 Vec pos = {0.0f, 0.0f, 0.0f};
                 pos.x = -200.0f + x;
                 pos.y = 70.0f + y;
-                iconDispGx(&pos, ICON_FLAG_2D, pressedA, 1.0f);
+                iconDispGx(&pos, ICON_FLAG_2D, 1.0f, pressedA);
             }
         } else if ((phase & 1) == 1) {
             Vec pos = {0.0f, 0.0f, 0.0f};
             pos.x = -225.0f + x + off0;
             pos.y = 70.0f + y;
-            iconDispGx(&pos, ICON_FLAG_2D, idleA, 1.0f);
+            iconDispGx(&pos, ICON_FLAG_2D, 1.0f, idleA);
             {
                 Vec pos2 = {0.0f, 0.0f, 0.0f};
                 pos2.x = -175.0f + x + off1;
                 pos2.y = 70.0f + y;
-                iconDispGx(&pos2, ICON_FLAG_2D, pressedB, 1.0f);
+                iconDispGx(&pos2, ICON_FLAG_2D, 1.0f, pressedB);
             }
         } else {
             Vec pos = {0.0f, 0.0f, 0.0f};
             pos.x = -225.0f + x + off0;
             pos.y = 70.0f + y;
-            iconDispGx(&pos, ICON_FLAG_2D, pressedA, 1.0f);
+            iconDispGx(&pos, ICON_FLAG_2D, 1.0f, pressedA);
             {
                 Vec pos2 = {0.0f, 0.0f, 0.0f};
                 pos2.x = -175.0f + x + off1;
                 pos2.y = 70.0f + y;
-                iconDispGx(&pos2, ICON_FLAG_2D, idleB, 1.0f);
+                iconDispGx(&pos2, ICON_FLAG_2D, 1.0f, idleB);
             }
         }
     }
@@ -494,7 +494,7 @@ static void actionCommandDisp(f32 x, f32 y) {
         Vec pos = {0.0f, 0.0f, 0.0f};
         pos.x = -288.0f + x + (f32)(ac->params[6] * 176) / 100.0f;
         pos.y = 45.0f + y;
-        iconDispGx(&pos, ICON_FLAG_2D, ICON_AC_GAUGE_MARKER, 1.0f);
+        iconDispGx(&pos, ICON_FLAG_2D, 1.0f, ICON_AC_GAUGE_MARKER);
     }
     if (ac->acFlags & AC_REPEATEDLY_LV_FLAG_SHOW_LEVEL_NUMBER_UNUSED) {
         Mtx m3, m1, m2;

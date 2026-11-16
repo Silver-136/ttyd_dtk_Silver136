@@ -1014,7 +1014,7 @@ static void zubastar_disp2D(CameraId cam, void* param) {
         pos.y = 60.0f + w->gaugePos.y;
 
         // FAKE: calls iconDispGx through a cast that passes the icon id as s32; the plain call changes the object
-        ((void (*)(Vec*, s16, s32, f32))iconDispGx)(&pos, ICON_FLAG_2D, icon, 1.0f);
+        ((void (*)(Vec*, u16, f32, s32))iconDispGx)(&pos, ICON_FLAG_2D, 1.0f, icon);
         BattleAcDrawGauge(w->gaugePos.x, w->gaugePos.y, 0.01f * w->gauge, 0xb1, 4, 0x1a, 0x34, 0x4e, 0);
     }
     GXSetCullMode(GX_CULL_NONE);
@@ -1047,7 +1047,7 @@ static void zubastar_disp2D(CameraId cam, void* param) {
             GXPosition3f32(l->x1, l->y1, 0.0f);
         }
     }
-    iconDispGx(&cur->pos, ICON_FLAG_2D, ICON_SAC_GENKI1, 1.0f);
+    iconDispGx(&cur->pos, ICON_FLAG_2D, 1.0f, ICON_SAC_GENKI1);
     if (cur->state >= 25 && cur->state < 30) {
         for (i = 0; i < 4; i++) {
             Mtx m;

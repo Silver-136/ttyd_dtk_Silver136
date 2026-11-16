@@ -283,7 +283,7 @@ void battleAcDelete_TimingWide(BattleWork* work) {
         Vec pos = {0.0f, 0.0f, 0.0f};               \
         pos.x = -200.0f + x;                        \
         pos.y = 50.0f + y;                          \
-        iconDispGx(&pos, ICON_FLAG_2D, (id), 1.0f); \
+        iconDispGx(&pos, ICON_FLAG_2D, 1.0f, (id)); \
     }
 
 /**

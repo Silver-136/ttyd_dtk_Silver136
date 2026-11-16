@@ -693,7 +693,7 @@ static BOOL msgDisp(smartEntry* smart, u8 alpha, f32 x, f32 y) {
                     pos.x = 20.0f + (x + c->x);
                     pos.y = c->iconY + (c->y + (y + data->scrollPos) - 40.0f);
                     pos.z = 0.0f;
-                    iconDispGxAlpha(c->scale, &pos, ICON_FLAG_2D, (u16)c->value, a * al / 255);
+                    iconDispGxAlpha(&pos, ICON_FLAG_2D, c->scale, (u16)c->value, a * al / 255);
                     FontDrawStart_alpha(alpha);
                     FontDrawColor(col4);
                     break;
@@ -2512,5 +2512,5 @@ static void selectWindow_Disp(CameraId camId, void* param) {
     data->cursorY += 0.3f * (window->y - (f32)(data->sel * 31 + 58) - data->cursorY);
     pos.y = data->cursorY;
     pos.z = 0.0f;
-    iconDispGxAlpha(1.0f, &pos, ICON_FLAG_2D | ICON_FLAG_FLIP_X, ICON_YUBI_CURSOR, window->alpha);
+    iconDispGxAlpha(&pos, ICON_FLAG_2D | ICON_FLAG_FLIP_X, 1.0f, ICON_YUBI_CURSOR, window->alpha);
 }

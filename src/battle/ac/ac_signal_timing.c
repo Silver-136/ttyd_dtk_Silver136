@@ -428,12 +428,12 @@ static void actionCommandDisp(f32 x, f32 y) {
             Vec pos = {0.0f, 0.0f, 0.0f};
             pos.x = -200.0f + x;
             pos.y = 70.0f + y;
-            iconDispGx(&pos, ICON_FLAG_2D, ICON_BUTTON_A_PRESSED, 1.0f);
+            iconDispGx(&pos, ICON_FLAG_2D, 1.0f, ICON_BUTTON_A_PRESSED);
         } else {
             Vec pos = {0.0f, 0.0f, 0.0f};
             pos.x = -200.0f + x;
             pos.y = 70.0f + y;
-            iconDispGx(&pos, ICON_FLAG_2D, ICON_BUTTON_A, 1.0f);
+            iconDispGx(&pos, ICON_FLAG_2D, 1.0f, ICON_BUTTON_A);
         }
     }
 
@@ -459,19 +459,19 @@ static void actionCommandDisp(f32 x, f32 y) {
         Vec pos = {0.0f, 0.0f, 0.0f};
         pos.x = -288.0f + x;
         pos.y = yb = 25.0f + y;
-        iconDispGx(&pos, ICON_FLAG_2D, ICON_AC_BAR_LEFT, 1.0f);
+        iconDispGx(&pos, ICON_FLAG_2D, 1.0f, ICON_AC_BAR_LEFT);
     }
     for (i = 1; i < n; i++) {
         Vec pos = {0.0f, 0.0f, 0.0f};
         pos.x = x + (f32)(i * 16 - 288);
         pos.y = yb;
-        iconDispGx(&pos, ICON_FLAG_2D, ICON_AC_BAR_MIDDLE, 1.0f);
+        iconDispGx(&pos, ICON_FLAG_2D, 1.0f, ICON_AC_BAR_MIDDLE);
     }
     {
         Vec pos = {0.0f, 0.0f, 0.0f};
         pos.x = x + (f32)(i * 16 - 288);
         pos.y = yb;
-        iconDispGx(&pos, ICON_FLAG_2D, ICON_AC_BAR_RIGHT, 1.0f);
+        iconDispGx(&pos, ICON_FLAG_2D, 1.0f, ICON_AC_BAR_RIGHT);
     }
 
     if (!(ac->acFlags & AC_SIGNAL_TIMING_FLAG_HIDE_HIT_COUNT)) {
@@ -495,18 +495,18 @@ static void actionCommandDisp(f32 x, f32 y) {
                 Vec pos = {0.0f, 0.0f, 0.0f};
                 pos.x = x + (f32)(i * 33 - 258);
                 pos.y = yb;
-                iconDispGx(&pos, ICON_FLAG_2D, (u16)(ICON_AC_LAMP_1 + i), 1.0f);
+                iconDispGx(&pos, ICON_FLAG_2D, 1.0f, (u16)(ICON_AC_LAMP_1 + i));
             } else {
                 Vec pos = {0.0f, 0.0f, 0.0f};
                 pos.x = x + (f32)(i * 33 - 258);
                 pos.y = yb;
-                iconDispGx(&pos, ICON_FLAG_2D, ICON_AC_LAMP_3, 1.0f);
+                iconDispGx(&pos, ICON_FLAG_2D, 1.0f, ICON_AC_LAMP_3);
             }
         } else {
             Vec pos = {0.0f, 0.0f, 0.0f};
             pos.x = x + (f32)(i * 33 - 258);
             pos.y = yb;
-            iconDispGx(&pos, ICON_FLAG_2D, ICON_AC_OFF, 0.5f);
+            iconDispGx(&pos, ICON_FLAG_2D, 0.5f, ICON_AC_OFF);
         }
     }
 
@@ -516,12 +516,12 @@ static void actionCommandDisp(f32 x, f32 y) {
                 Vec pos = {0.0f, 0.0f, 0.0f};
                 pos.x = x + (f32)(i * 48 + (ac->params[SIGNAL_PARAM_LEAD] * 33 - 250));
                 pos.y = yb;
-                iconDispGx(&pos, ICON_FLAG_2D, ICON_AC_ON, 1.0f);
+                iconDispGx(&pos, ICON_FLAG_2D, 1.0f, ICON_AC_ON);
             } else {
                 Vec pos = {0.0f, 0.0f, 0.0f};
                 pos.x = x + (f32)(i * 48 + (ac->params[SIGNAL_PARAM_LEAD] * 33 - 250));
                 pos.y = yb;
-                iconDispGx(&pos, ICON_FLAG_2D, ICON_AC_OFF, 1.0f);
+                iconDispGx(&pos, ICON_FLAG_2D, 1.0f, ICON_AC_OFF);
             }
         }
     } else if (!(ac->acFlags & AC_SIGNAL_TIMING_FLAG_HIDE_UPCOMING_BUTTONS)) {
@@ -532,7 +532,7 @@ static void actionCommandDisp(f32 x, f32 y) {
                 Vec pos = {0.0f, 0.0f, 0.0f};
                 pos.x = x + (f32)(i * 48 + (ac->params[SIGNAL_PARAM_LEAD] * 33 - 250));
                 pos.y = yc;
-                iconDispGx(&pos, ICON_FLAG_2D, BattleACGetButtonIcon(w->buttons[i], 0), 0.8f);
+                iconDispGx(&pos, ICON_FLAG_2D, 0.8f, BattleACGetButtonIcon(w->buttons[i], 0));
             } else {
                 s32 dy;
                 if (w->next <= (i + ac->params[SIGNAL_PARAM_LEAD])) {
@@ -545,7 +545,7 @@ static void actionCommandDisp(f32 x, f32 y) {
                     Vec pos = {0.0f, 0.0f, 0.0f};
                     pos.x = x + (f32)(i * 48 + (ac->params[SIGNAL_PARAM_LEAD] * 33 - 250));
                     pos.y = (f32)(dy + 25) + y;
-                    iconDispGx(&pos, ICON_FLAG_2D, BattleACGetButtonIcon(w->buttons[i], 1), scale);
+                    iconDispGx(&pos, ICON_FLAG_2D, scale, BattleACGetButtonIcon(w->buttons[i], 1));
                 }
             }
         }
@@ -556,7 +556,7 @@ static void actionCommandDisp(f32 x, f32 y) {
                 Vec pos = {0.0f, 0.0f, 0.0f};
                 pos.x = x + (f32)(i * 48 + (ac->params[SIGNAL_PARAM_LEAD] * 33 - 250));
                 pos.y = yb;
-                iconDispGx(&pos, ICON_FLAG_2D, BattleACGetButtonIcon(w->buttons[i], 0), 0.8f);
+                iconDispGx(&pos, ICON_FLAG_2D, 0.8f, BattleACGetButtonIcon(w->buttons[i], 0));
             } else if (w->next <= (i + ac->params[SIGNAL_PARAM_LEAD])) {
                 if (i >= count - 1) {
                     btlDispTexPlane(x + (f32)(i * 48 + (ac->params[SIGNAL_PARAM_LEAD] * 33 - 250)), yc, 0.0f, 0.8f, 0.8f, BTL_TEX(0x40), (GXColor){255, 255, 255, 255}, 0);
@@ -565,7 +565,7 @@ static void actionCommandDisp(f32 x, f32 y) {
                 Vec pos = {0.0f, 0.0f, 0.0f};
                 pos.x = x + (f32)(i * 48 + (ac->params[SIGNAL_PARAM_LEAD] * 33 - 250));
                 pos.y = yb;
-                iconDispGx(&pos, ICON_FLAG_2D, BattleACGetButtonIcon(w->buttons[i], 1), 0.8f);
+                iconDispGx(&pos, ICON_FLAG_2D, 0.8f, BattleACGetButtonIcon(w->buttons[i], 1));
             }
         }
     }

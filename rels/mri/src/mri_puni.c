@@ -157,10 +157,10 @@ void evt_icon_disp_func(CameraId camId, void* param) {
                     b = a;
                     puniSinCosRet(p->index + gp->retraceCount * 10, &a.z, &a.x, 9.0f, 9.0f);
                     a.y += 13.0f;
-                    iconDispGx(&a, 0, ICON_BTL_CMD_SUPER_ACTION, 0.6f);
+                    iconDispGx(&a, 0, 0.6f, ICON_BTL_CMD_SUPER_ACTION);
                     puniSinCosRet(p->index + gp->retraceCount * 10 + 180, &b.z, &b.x, 9.0f, 9.0f);
                     b.y += 15.0f;
-                    iconDispGx(&b, 0, ICON_BTL_CMD_SUPER_ACTION, 0.5f);
+                    iconDispGx(&b, 0, 0.5f, ICON_BTL_CMD_SUPER_ACTION);
                 }
             }
         }

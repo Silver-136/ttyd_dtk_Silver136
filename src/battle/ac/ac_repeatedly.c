@@ -385,12 +385,12 @@ static void actionCommandDisp(f32 x, f32 y) {
             Vec pos = {0.0f, 0.0f, 0.0f};
             pos.x = -200.0f + x;
             pos.y = 70.0f + y;
-            iconDispGx(&pos, ICON_FLAG_2D, icon2, 1.0f);
+            iconDispGx(&pos, ICON_FLAG_2D, 1.0f, icon2);
         } else {
             Vec pos = {0.0f, 0.0f, 0.0f};
             pos.x = -200.0f + x;
             pos.y = 70.0f + y;
-            iconDispGx(&pos, ICON_FLAG_2D, icon1, 1.0f);
+            iconDispGx(&pos, ICON_FLAG_2D, 1.0f, icon1);
         }
     } else {
         odd = (d->blinkTimer / 7) & 1;
@@ -423,13 +423,13 @@ static void actionCommandDisp(f32 x, f32 y) {
                     Vec pos = {0.0f, 0.0f, 0.0f};
                     pos.x = (-200.0f + x) + (f32)(i * 40);
                     pos.y = 70.0f + y;
-                    iconDispGx(&pos, ICON_FLAG_2D, icon, 1.0f);
+                    iconDispGx(&pos, ICON_FLAG_2D, 1.0f, icon);
                 }
             } else {
                 Vec pos = {0.0f, 0.0f, 0.0f};
                 pos.x = (-200.0f + x) + (f32)(i * 40);
                 pos.y = 70.0f + y;
-                iconDispGx(&pos, ICON_FLAG_2D, b, 0.5f);
+                iconDispGx(&pos, ICON_FLAG_2D, 0.5f, b);
             }
         }
     }
@@ -465,7 +465,7 @@ static void actionCommandDisp(f32 x, f32 y) {
         Vec pos = {0.0f, 0.0f, 0.0f};
         pos.x = (-288.0f + x) + (176.0f * r->pos) / 100.0f;
         pos.y = 45.0f + y;
-        iconDispGx(&pos, ICON_FLAG_2D, ICON_AC_GAUGE_MARKER, 1.0f);
+        iconDispGx(&pos, ICON_FLAG_2D, 1.0f, ICON_AC_GAUGE_MARKER);
     }
     d->blinkTimer++;
     d->frame2++;

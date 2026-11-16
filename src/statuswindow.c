@@ -232,10 +232,6 @@ void numberDisp(f32 x, f32 y, s32 value, BOOL small) {
     iconNumberDispGx(m, value, small, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
 }
 
-// FAKE: iconDispGx called through a scale-first function pointer cast (the scale is in f1 either way), which
-// evaluates the arguments in the retail order; the plain call changes the object.
-#define iconDispGxScaleFirst ((void (*)(f32, Vec*, s16, u16))iconDispGx)
-
 /**
  * Draws the Star Power gauge at (x, y): one 32-pixel slot per crystal star obtained,
  * full slots for each 100 of sp and the partly filled slot in 15 steps.
@@ -269,7 +265,7 @@ static void gaugeDisp(s32 sp, f32 x, f32 y) {
         pos.x = x + (f32)(full * 32);
         pos.y = y;
         pos.z = 0.0f;
-        iconDispGxScaleFirst(1.0f, &pos, ICON_FLAG_2D, gauge_wakka[part]);
+        iconDispGx(&pos, ICON_FLAG_2D, 1.0f, gauge_wakka[part]);
     }
     for (i = 0; i < sizeof(gauge_back) / sizeof(gauge_back[0]); i++) {
         Vec pos2;
@@ -279,7 +275,7 @@ static void gaugeDisp(s32 sp, f32 x, f32 y) {
         pos2.x = x + (f32)(i * 32);
         pos2.y = 12.0f + y;
         pos2.z = 0.0f;
-        iconDispGxScaleFirst(1.0f, &pos2, ICON_FLAG_2D, i < full ? gauge_back[i] : ICON_SP_ORB_EMPTY);
+        iconDispGx(&pos2, ICON_FLAG_2D, 1.0f, i < full ? gauge_back[i] : ICON_SP_ORB_EMPTY);
     }
 }
 

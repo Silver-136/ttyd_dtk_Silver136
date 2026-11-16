@@ -1386,7 +1386,7 @@ static void bakuGameDisp2D(CameraId cam, void* param) {
         }
         if (icon) {
             btlGetScreenPoint(&b->pos, &scr);
-            iconDispGx(&scr, ICON_FLAG_2D, icon, b->scale);
+            iconDispGx(&scr, ICON_FLAG_2D, b->scale, icon);
         }
     }
     full = 0;

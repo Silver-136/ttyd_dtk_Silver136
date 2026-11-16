@@ -121,8 +121,7 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | src/pmario_sound.c | calc3D | v.z read through a (Vec*) cast of &v; plain v.z changes the object | see comment |
 | Both | src/pmario_sound.c | psndSFXChk | no-op mask of the u16 serial; key != sfx->serial changes the object | see comment |
 | Both | src/pmario_sound.c | psndStrippedPool | stand-in that nothing calls; deleting it changes the object (its s32-to-f32 conversion likely shapes the constant pool, as hitStrippedPool does in hitdrv.c) | see comment |
-| Both | src/battle/battle_disp.c | btlUnitItemDisp | per-function opt_dead_assignments off keeps the unused height store; without it the object changes; float-first cast of iconDispGx (the plain call changes the object) | see comment |
-| Both | src/battle/battle_disp.c | btlUnitStolenItemDisp | float-first cast of iconDispGx; the plain call changes the object | see comment |
+| Both | src/battle/battle_disp.c | btlUnitItemDisp | per-function opt_dead_assignments off keeps the unused height store; without it the object changes | see comment |
 | Both | src/battle/battle_event_cmd.c | btlevtcmd_DrawLots | pick index and running sum kept in `s32 nv[2]` | two scalar locals: changes the object |
 | Both | src/battle/battle_icon.c | btlIconStrippedPool | not called anywhere; it only places the literals 0.0f, 1.0f and 0.5f in this object's constant pool. | see comment |
 | Both | src/battle/battle_mario.c | _mario_fire_ball_controll | `battle_mario_one`: a named global 1.0f constant for one effFireEntry scale | literal 1.0f at the call: changes the object |
@@ -131,14 +130,13 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Demos | src/sound.c | SoundDemoStrippedRate | stand-in for an unidentified dead-stripped stream/DVD function between SoundDVDPlayCh and SoundSSPlayCh (JP demo map): it only keeps the doubles 3.5 and 4.0 (@3005/@3006) | see comment |
 | Demos | src/sound.c | SoundDVDStrippedName | stand-in for the dead-stripped SoundDVDPlay/SoundDVDPlayCh (JP demo map, UNUSED): it only keeps ".adp" (@3067); bodies unknown | see comment |
 | Demos | src/sound.c | SoundSongStrippedName | stand-in for a dead-stripped song loader, probably SoundSongLoadPlayCh (JP demo map, UNUSED 0x258): it only keeps ".song" (@3563); body unknown | see comment |
-| Both | src/statuswindow.c | gaugeDisp | iconDispGx called through a scale-first function pointer cast (the scale is in f1 either way), which evaluates the arguments in the retail order; the plain call changes the object. | see comment |
 | Both | src/system.c | systemStrippedPool1 | stand-in for the stripped intplStringData/intplStringToEnum and mtxGetScaleElement: the interpolation mode names, 1.0f and the sqrtf constants in pool order (table entry @491 unknown; JP and later lack three names) | see comment |
 | Both | src/system.c | systemStrippedPool1b | stand-in for the stripped movePos2/movePos3: their doubles 1.5, 2.5, 1.7 (bodies unknown) | see comment |
 | Both | src/battle/ac/ac_timing_a.c | battleAcMain_TimingA | flags reached through a second cast of the work buffer instead of tw; tw->flags changes the object | see comment |
 | Both | src/battle/battle_stage_object.c | _nozzle_work_effect | the sum goes through rot first; rot = reviseAngle(90.0f + angle1) changes the object | see comment |
 | Both | src/battle/battle_status_effect.c | _st_chg_msg_disp | called through a cast prototype taking the color's address (WakuColByRefFunc), passing the color by value changes the object | see comment |
 | Both | src/battle/sac/sac_deka.c | yuka_disp | YUKA_POSITION macro and an explicit `fifo = &GXWGFifo` before the loop stand in for the SDK GXPosition3f32 (the volatile is the SDK's own) | GXPosition3f32(v->x, v->y, v->z) matches the z, y, x reads but puts the FIFO address load (lis) after the loop counter setup; a for loop or an earlier `i = 0` do not help |
-| Both | src/battle/sac/sac_zubastar.c | zubastar_disp2D | calls iconDispGx through a cast that passes the icon id as s32; the plain call changes the object | see comment |
+| Both | src/battle/sac/sac_zubastar.c | zubastar_disp2D | calls iconDispGx through a (Vec*, u16, f32, s32) cast that passes the icon select untruncated (FB0: seven plain forms add a clrlwi); the plain call changes the object | see comment |
 | Both | src/driver/animdrv.c | animPose_AllocBuffer | macro twin of the animPoseGetBaseData inline above, used by every caller below; calling the inline instead changes the object | see comment |
 | Both | src/driver/animdrv.c | animStrippedPool | stand-in that nothing calls; it only places the u32-to-f32 conversion constant (owned by a stripped function after ag2tg, probably animdrvtest_loadTPL; body unknown) | see comment |
 | Both | src/driver/animdrv.c | animPoseDisp_MakeExtTexture | `#pragma opt_lifetimes off` (push/pop) for this function only | removing it changes the object; the file-wide `-opt nolifetimes` changes other functions (2026-11-07) |
@@ -163,7 +161,6 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | src/manager/cardmgr.c | memcard_probe | self-assignment with no effect; without it the object changes | see comment |
 | Both | src/manager/evtmgr_cmd.c | evtGetValue | result stored back into index; return (mask & data) != 0 changes the object | see comment |
 | Both | src/manager/fontmgr.c | FontGetMessageWidthLine | empty dead test of code; removing it changes the object | see comment; tried 2026-11-01: demos checked: same empty test, no code in any version; __assert/__assert2 are UNUSED in the JP demo map; no evidence of a macro |
-| Both | src/event/evt_win.c | ICONGX2 (evt_win list displays) | iconDispGx called through a (Vec*, u16, f32, u16) function-pointer cast macro (9 uses) | plain iconDispGx(pos, flags, id, scale): changes the object |
 | Both | src/mario/mario.c | marioReInit | spare copy t of paperPoseId; testing poseId directly changes the object | see comment |
 | Both | src/mario/mario.c | marioDispBlur | `opt_dead_assignments` off keeps the never-used sin/cos quadrant computation | removing the pragma or the code changes the object; the file-wide `-opt nodeadstore` changes other functions (2026-11-07) |
 | Both | src/mario/mario_hit.c | marioHitStrippedPool2 | stand-in that nothing calls (the linker strips it); it only places 18.0f in this object's constant pool | see comment |

@@ -196,7 +196,7 @@ static void actionCommandDisp(f32 x, f32 y) {
         Vec pos = {0.0f, 0.0f, 0.0f};
         pos.x = -200.0f + x;
         pos.y = 25.0f + y;
-        iconDispGx(&pos, ICON_FLAG_2D, ICON_AC_GAUGE_FRAME, 1.0f);
+        iconDispGx(&pos, ICON_FLAG_2D, 1.0f, ICON_AC_GAUGE_FRAME);
     }
     ratio = tw->gauge / 100.0f;
     if (ratio > 1.0f) {
@@ -215,12 +215,12 @@ static void actionCommandDisp(f32 x, f32 y) {
                 y = 70.0f + y;
                 pos.x = x;
                 pos.y = y;
-                iconDispGx(&pos, ICON_FLAG_2D, ICON_TRIGGER_L, 1.0f);
+                iconDispGx(&pos, ICON_FLAG_2D, 1.0f, ICON_TRIGGER_L);
                 {
                     Vec pos2 = {0.0f, 0.0f, 0.0f};
                     pos2.x = 56.0f + x;
                     pos2.y = y;
-                    iconDispGx(&pos2, ICON_FLAG_2D, ICON_TRIGGER_R, 1.0f);
+                    iconDispGx(&pos2, ICON_FLAG_2D, 1.0f, ICON_TRIGGER_R);
                 }
                 break;
             }
@@ -231,12 +231,12 @@ static void actionCommandDisp(f32 x, f32 y) {
                 y = 70.0f + y;
                 pos.x = x;
                 pos.y = y;
-                iconDispGx(&pos, ICON_FLAG_2D, ICON_TRIGGER_L_PRESSED, 1.0f);
+                iconDispGx(&pos, ICON_FLAG_2D, 1.0f, ICON_TRIGGER_L_PRESSED);
                 {
                     Vec pos2 = {0.0f, 0.0f, 0.0f};
                     pos2.x = 56.0f + x;
                     pos2.y = y;
-                    iconDispGx(&pos2, ICON_FLAG_2D, ICON_TRIGGER_R_PRESSED, 1.0f);
+                    iconDispGx(&pos2, ICON_FLAG_2D, 1.0f, ICON_TRIGGER_R_PRESSED);
                 }
             } else {
                 Vec pos = {0.0f, 0.0f, 0.0f};
@@ -244,12 +244,12 @@ static void actionCommandDisp(f32 x, f32 y) {
                 y = 70.0f + y;
                 pos.x = x;
                 pos.y = y;
-                iconDispGx(&pos, ICON_FLAG_2D, ICON_TRIGGER_L, 1.0f);
+                iconDispGx(&pos, ICON_FLAG_2D, 1.0f, ICON_TRIGGER_L);
                 {
                     Vec pos2 = {0.0f, 0.0f, 0.0f};
                     pos2.x = 56.0f + x;
                     pos2.y = y;
-                    iconDispGx(&pos2, ICON_FLAG_2D, ICON_TRIGGER_R, 1.0f);
+                    iconDispGx(&pos2, ICON_FLAG_2D, 1.0f, ICON_TRIGGER_R);
                 }
             }
             break;

@@ -4899,7 +4899,7 @@ static USER_FUNC(_throw_item_icon) {
 /** Draws the thrown item's icon at its current position. */
 static void _disp_item_icon(CameraId cameraId, void* param) {
     EventEntry* event = param;
-    iconDispGx(&((ThrowWork*)event->userdatap[0])->pos, 0, itemDataTable[event->userdata[1]].icon_id, 1.0f);
+    iconDispGx(&((ThrowWork*)event->userdatap[0])->pos, 0, 1.0f, itemDataTable[event->userdata[1]].icon_id);
 }
 
 /**

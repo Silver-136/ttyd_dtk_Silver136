@@ -1011,7 +1011,7 @@ static const char* cmd_disable_string[] = {
 static void _disp_icon(CameraId camera, void* param) {
     EventEntry* event = param;
 
-    iconDispGx(&((IconJumpWork*)event->userdatap[0])->pos, 0, event->userdata[1], 1.0f);
+    iconDispGx(&((IconJumpWork*)event->userdatap[0])->pos, 0, 1.0f, event->userdata[1]);
 }
 
 /**

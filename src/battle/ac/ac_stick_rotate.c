@@ -428,7 +428,7 @@ static u16 _get_icon_id(s8 dir) {
     (v) = (Vec){0.0f, 0.0f, 0.0f}; \
     (v).x = -200.0f + x;           \
     (v).y = 70.0f + y;             \
-    iconDispGx(&(v), ICON_FLAG_2D, (id), 1.0f)
+    iconDispGx(&(v), ICON_FLAG_2D, 1.0f, (id))
 
 /** Stick icon for the fixed-direction mode (acFlags bit 1): shows the direction to turn to next. */
 static void actionCommandDisp(f32 x, f32 y) {

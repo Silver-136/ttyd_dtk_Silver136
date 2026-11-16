@@ -298,13 +298,13 @@ static void actionCommandDisp(s32 unused, f32 x, f32 y) {
     by = 70.0f + y;
     pos.x = lx;
     pos.y = by;
-    iconDispGx(&pos, ICON_FLAG_2D, ICON_AC_BAR_LEFT, 1.0f);
+    iconDispGx(&pos, ICON_FLAG_2D, 1.0f, ICON_AC_BAR_LEFT);
     lx += 16.0f;
     for (k = 1; k < end; k++) {
         Vec pos2 = {0.0f, 0.0f, -2.0f};
         pos2.x = lx;
         pos2.y = by;
-        iconDispGx(&pos2, ICON_FLAG_2D, ICON_AC_BAR_MIDDLE, 1.0f);
+        iconDispGx(&pos2, ICON_FLAG_2D, 1.0f, ICON_AC_BAR_MIDDLE);
         lx += 16.0f;
     }
 
@@ -312,7 +312,7 @@ static void actionCommandDisp(s32 unused, f32 x, f32 y) {
         Vec pos3 = {0.0f, 0.0f, -2.0f};
         pos3.x = lx;
         pos3.y = by;
-        iconDispGx(&pos3, ICON_FLAG_2D, ICON_AC_BAR_RIGHT, 1.0f);
+        iconDispGx(&pos3, ICON_FLAG_2D, 1.0f, ICON_AC_BAR_RIGHT);
     }
     if ((work->actionCommands.acFlags) & AC_BUTTON_DOWN_FLAG_REVEAL_ONE_BY_ONE) {
         for (count = 0; count < (work->actionCommands.params[2]); count++) {
@@ -382,12 +382,12 @@ static void actionCommandDisp(s32 unused, f32 x, f32 y) {
             Vec pos4 = {0.0f, 0.0f, 0.0f};
             pos4.x = bx + (f32)(i * 0x30);
             pos4.y = by;
-            iconDispGx(&pos4, ICON_FLAG_2D, a, 1.0f);
+            iconDispGx(&pos4, ICON_FLAG_2D, 1.0f, a);
         } else {
             Vec pos5 = {0.0f, 0.0f, 0.0f};
             pos5.x = bx + (f32)(i * 0x30);
             pos5.y = by;
-            iconDispGx(&pos5, ICON_FLAG_2D, b, 1.0f);
+            iconDispGx(&pos5, ICON_FLAG_2D, 1.0f, b);
         }
     }
 }

@@ -331,7 +331,7 @@ static void actionCommandDisp(f32 x, f32 y) {
         f32 px = -200.0f + x;
         pos.x = px;
         pos.y = 25.0f + y;
-        iconDispGx(&pos, ICON_FLAG_2D, ICON_AC_GAUGE_FRAME, 1.0f);
+        iconDispGx(&pos, ICON_FLAG_2D, 1.0f, ICON_AC_GAUGE_FRAME);
         limit = sw->speed / 100.0f;
         if (disp->gaugeRatio <= limit) {
             disp->gaugeRatio += 0.01f;

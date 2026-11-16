@@ -1131,13 +1131,13 @@ static void DrawMenuCursorAndScrollArrow(const Vec* v) {
         pos.x = 155.0f + v->x;
         pos.y = 15.0f + v->y + bob;
         pos.z = 0.0f;
-        iconDispGx(&pos, ICON_FLAG_2D, ICON_ARROW_UP, 0.75f);
+        iconDispGx(&pos, ICON_FLAG_2D, 0.75f, ICON_ARROW_UP);
     }
     if (cursor->relPos < cursor->count - 6) {
         pos.x = 155.0f + v->x;
         pos.y = 20.0f + v->y - 164.0f - bob;
         pos.z = 0.0f;
-        iconDispGx(&pos, ICON_FLAG_2D, ICON_ARROW_DOWN, 0.75f);
+        iconDispGx(&pos, ICON_FLAG_2D, 0.75f, ICON_ARROW_DOWN);
     }
     n = cursor->absPos - cursor->relPos;
     if (n < 0) {
@@ -1149,7 +1149,7 @@ static void DrawMenuCursorAndScrollArrow(const Vec* v) {
     pos.x = v->x;
     pos.y = v->y - (f32)n * 24.0f;
     pos.z = 0.0f;
-    iconDispGx(&pos, ICON_FLAG_2D | ICON_FLAG_FLIP_X, ICON_YUBI_CURSOR, 1.0f);
+    iconDispGx(&pos, ICON_FLAG_2D | ICON_FLAG_FLIP_X, 1.0f, ICON_YUBI_CURSOR);
 }
 
 /**

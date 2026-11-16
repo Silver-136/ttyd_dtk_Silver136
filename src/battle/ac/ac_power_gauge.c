@@ -311,7 +311,7 @@ static void actionCommandDisp(f32 x, f32 y) {
         Vec pos = {0.0f, 0.0f, 0.0f};
         pos.x = -288.0f + x + (f32)(ac->params[4] * 0xB0) / 100.0f;
         pos.y = 45.0f + y;
-        iconDispGx(&pos, ICON_FLAG_2D, ICON_AC_GAUGE_MARKER, 1.0f);
+        iconDispGx(&pos, ICON_FLAG_2D, 1.0f, ICON_AC_GAUGE_MARKER);
     } else {
         u16 icon;
         if (pw->gauge >= (f32)ac->params[4] && pw->gauge <= 100.0f) {
@@ -323,12 +323,12 @@ static void actionCommandDisp(f32 x, f32 y) {
             Vec pos = {0.0f, 0.0f, 0.0f};
             pos.x = 120.0f + (-200.0f + x) - 12.0f;
             pos.y = 18.0f + y;
-            iconDispGx(&pos, ICON_FLAG_2D, icon, 1.0f);
+            iconDispGx(&pos, ICON_FLAG_2D, 1.0f, icon);
         } else {
             Vec pos = {0.0f, 0.0f, 0.0f};
             pos.x = 120.0f + (-200.0f + x);
             pos.y = 18.0f + y;
-            iconDispGx(&pos, ICON_FLAG_2D, icon, 1.0f);
+            iconDispGx(&pos, ICON_FLAG_2D, 1.0f, icon);
         }
     }
 
@@ -372,18 +372,18 @@ static void actionCommandDisp(f32 x, f32 y) {
                 f32 py = 80.0f + y;
                 pos.x = px;
                 pos.y = py;
-                iconDispGx(&pos, ICON_FLAG_2D, b, 1.0f);
+                iconDispGx(&pos, ICON_FLAG_2D, 1.0f, b);
                 {
                     Vec pos2 = {0.0f, 0.0f, 0.0f};
                     pos2.x = 56.0f + px;
                     pos2.y = py;
-                    iconDispGx(&pos2, ICON_FLAG_2D, d, 1.0f);
+                    iconDispGx(&pos2, ICON_FLAG_2D, 1.0f, d);
                 }
             } else {
                 Vec pos = {0.0f, 0.0f, 0.0f};
                 pos.x = 28.0f + (-225.0f + x);
                 pos.y = 80.0f + y;
-                iconDispGx(&pos, ICON_FLAG_2D, b, 1.0f);
+                iconDispGx(&pos, ICON_FLAG_2D, 1.0f, b);
             }
             break;
         case AC_STATE_RUN:
@@ -396,18 +396,18 @@ static void actionCommandDisp(f32 x, f32 y) {
                         f32 py = 80.0f + y;
                         pos.x = px;
                         pos.y = py;
-                        iconDispGx(&pos, ICON_FLAG_2D, a, 1.0f);
+                        iconDispGx(&pos, ICON_FLAG_2D, 1.0f, a);
                         {
                             Vec pos2 = {0.0f, 0.0f, 0.0f};
                             pos2.x = 56.0f + px;
                             pos2.y = py;
-                            iconDispGx(&pos2, ICON_FLAG_2D, c, 1.0f);
+                            iconDispGx(&pos2, ICON_FLAG_2D, 1.0f, c);
                         }
                     } else {
                         Vec pos = {0.0f, 0.0f, 0.0f};
                         pos.x = 28.0f + (-225.0f + x);
                         pos.y = 80.0f + y;
-                        iconDispGx(&pos, ICON_FLAG_2D, a, 1.0f);
+                        iconDispGx(&pos, ICON_FLAG_2D, 1.0f, a);
                     }
                 } else if ((u16)c) {
                     Vec pos = {0.0f, 0.0f, 0.0f};
@@ -415,18 +415,18 @@ static void actionCommandDisp(f32 x, f32 y) {
                     f32 py = 80.0f + y;
                     pos.x = px;
                     pos.y = py;
-                    iconDispGx(&pos, ICON_FLAG_2D, b, 1.0f);
+                    iconDispGx(&pos, ICON_FLAG_2D, 1.0f, b);
                     {
                         Vec pos2 = {0.0f, 0.0f, 0.0f};
                         pos2.x = 56.0f + px;
                         pos2.y = py;
-                        iconDispGx(&pos2, ICON_FLAG_2D, d, 1.0f);
+                        iconDispGx(&pos2, ICON_FLAG_2D, 1.0f, d);
                     }
                 } else {
                     Vec pos = {0.0f, 0.0f, 0.0f};
                     pos.x = 28.0f + (-225.0f + x);
                     pos.y = 80.0f + y;
-                    iconDispGx(&pos, ICON_FLAG_2D, b, 1.0f);
+                    iconDispGx(&pos, ICON_FLAG_2D, 1.0f, b);
                 }
             } else if ((pw->gauge >= (f32)ac->params[4] && pw->gauge <= 100.0f) || ac->outputParams[0] == 0) {
                 if ((u16)c) {
@@ -435,18 +435,18 @@ static void actionCommandDisp(f32 x, f32 y) {
                     f32 py = 80.0f + y;
                     pos.x = px;
                     pos.y = py;
-                    iconDispGx(&pos, ICON_FLAG_2D, b, 1.0f);
+                    iconDispGx(&pos, ICON_FLAG_2D, 1.0f, b);
                     {
                         Vec pos2 = {0.0f, 0.0f, 0.0f};
                         pos2.x = 56.0f + px;
                         pos2.y = py;
-                        iconDispGx(&pos2, ICON_FLAG_2D, d, 1.0f);
+                        iconDispGx(&pos2, ICON_FLAG_2D, 1.0f, d);
                     }
                 } else {
                     Vec pos = {0.0f, 0.0f, 0.0f};
                     pos.x = 28.0f + (-225.0f + x);
                     pos.y = 80.0f + y;
-                    iconDispGx(&pos, ICON_FLAG_2D, b, 1.0f);
+                    iconDispGx(&pos, ICON_FLAG_2D, 1.0f, b);
                 }
             } else if ((u16)c) {
                 Vec pos = {0.0f, 0.0f, 0.0f};
@@ -454,18 +454,18 @@ static void actionCommandDisp(f32 x, f32 y) {
                 f32 py = 80.0f + y;
                 pos.x = px;
                 pos.y = py;
-                iconDispGx(&pos, ICON_FLAG_2D, a, 1.0f);
+                iconDispGx(&pos, ICON_FLAG_2D, 1.0f, a);
                 {
                     Vec pos2 = {0.0f, 0.0f, 0.0f};
                     pos2.x = 56.0f + px;
                     pos2.y = py;
-                    iconDispGx(&pos2, ICON_FLAG_2D, c, 1.0f);
+                    iconDispGx(&pos2, ICON_FLAG_2D, 1.0f, c);
                 }
             } else {
                 Vec pos = {0.0f, 0.0f, 0.0f};
                 pos.x = 28.0f + (-225.0f + x);
                 pos.y = 80.0f + y;
-                iconDispGx(&pos, ICON_FLAG_2D, a, 1.0f);
+                iconDispGx(&pos, ICON_FLAG_2D, 1.0f, a);
             }
             break;
     }

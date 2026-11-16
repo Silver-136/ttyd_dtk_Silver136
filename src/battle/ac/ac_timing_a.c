@@ -236,12 +236,12 @@ static void actionCommandDisp(f32 x, f32 y) {
         Vec pos = {0.0f, 0.0f, 0.0f};
         pos.x = -200.0f + x;
         pos.y = 50.0f + y;
-        iconDispGx(&pos, ICON_FLAG_2D, ICON_BUTTON_A_PRESSED, 1.0f);
+        iconDispGx(&pos, ICON_FLAG_2D, 1.0f, ICON_BUTTON_A_PRESSED);
     } else {
         Vec pos = {0.0f, 0.0f, 0.0f};
         pos.x = -200.0f + x;
         pos.y = 50.0f + y;
-        iconDispGx(&pos, ICON_FLAG_2D, ICON_BUTTON_A, 1.0f);
+        iconDispGx(&pos, ICON_FLAG_2D, 1.0f, ICON_BUTTON_A);
     }
     (*blinkTimer)++;
 }

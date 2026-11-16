@@ -1989,7 +1989,7 @@ void BattleCommandDisplay_WeaponMultiItemCancelCheckDisp(CameraId camId, void* p
     pos.x = -40.0f;
     pos.y = -42 - wp->commandMenu.cursor[13].absPos * 25;
     pos.z = 0.0f;
-    iconDispGx(&pos, ICON_FLAG_2D | ICON_FLAG_FLIP_X, ICON_YUBI_CURSOR, 1.0f);
+    iconDispGx(&pos, ICON_FLAG_2D | ICON_FLAG_FLIP_X, 1.0f, ICON_YUBI_CURSOR);
 }
 
 /** Opens the Tactics menu: builds its entries, starts its display (a is passed on) and shows all enemy HP. */
@@ -2319,7 +2319,7 @@ void BattleCommandDisplay_TargetSelectMenuDisp(CameraId camId, void* param) {
             icon.x = screen1.x;
             icon.y = screen1.y;
             icon.z = 0.0f;
-            iconDispGx(&icon, ICON_FLAG_2D, ICON_TARGET_CURSOR, 1.0f);
+            iconDispGx(&icon, ICON_FLAG_2D, 1.0f, ICON_TARGET_CURSOR);
             if (unit->currentKind == UNIT_YOSHI) {
                 name = pouchGetYoshiName();
             } else {
@@ -2334,7 +2334,7 @@ void BattleCommandDisplay_TargetSelectMenuDisp(CameraId camId, void* param) {
             icon.x = screen1.x;
             icon.y = screen1.y;
             icon.z = 0.0f;
-            iconDispGx(&icon, ICON_FLAG_2D | ICON_FLAG_FLIP_Y, ICON_TARGET_CURSOR, 1.0f);
+            iconDispGx(&icon, ICON_FLAG_2D | ICON_FLAG_FLIP_Y, 1.0f, ICON_TARGET_CURSOR);
             if (unit->currentKind == UNIT_YOSHI) {
                 name = pouchGetYoshiName();
             } else {
@@ -2359,7 +2359,7 @@ void BattleCommandDisplay_TargetSelectMenuDisp(CameraId camId, void* param) {
                 icon.x = screen2.x;
                 icon.y = screen2.y;
                 icon.z = 0.0f;
-                iconDispGx(&icon, ICON_FLAG_2D, ICON_TARGET_CURSOR, 1.0f);
+                iconDispGx(&icon, ICON_FLAG_2D, 1.0f, ICON_TARGET_CURSOR);
                 if (unit2->currentKind == UNIT_YOSHI) {
                     name = pouchGetYoshiName();
                 } else {
@@ -2374,7 +2374,7 @@ void BattleCommandDisplay_TargetSelectMenuDisp(CameraId camId, void* param) {
                 icon.x = screen2.x;
                 icon.y = screen2.y;
                 icon.z = 0.0f;
-                iconDispGx(&icon, ICON_FLAG_2D | ICON_FLAG_FLIP_Y, ICON_TARGET_CURSOR, 1.0f);
+                iconDispGx(&icon, ICON_FLAG_2D | ICON_FLAG_FLIP_Y, 1.0f, ICON_TARGET_CURSOR);
                 if (unit2->currentKind == UNIT_YOSHI) {
                     name = pouchGetYoshiName();
                 } else {
@@ -2425,7 +2425,7 @@ void BattleCommandDisplay_ProtectPartnerSelectMenuDisp(CameraId camId, void* par
     icon.x = screen.x;
     icon.y = screen.y;
     icon.z = 0.0f;
-    iconDispGx(&icon, ICON_FLAG_2D, ICON_TARGET_CURSOR, 1.0f);
+    iconDispGx(&icon, ICON_FLAG_2D, 1.0f, ICON_TARGET_CURSOR);
     len = strlen(msgSearch(unit->kindParams->name));
     w = 6.25f * len;
     windowDispGX_Waku_col(icon.x - w, 80.0f + icon.y, 12.5f * len, 32.0f, 10.0f, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xCF});

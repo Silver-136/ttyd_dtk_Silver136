@@ -25,6 +25,7 @@
 #include "manager/evtmgr_cmd.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
+#include "driver/icondrv.h"
 #include "manager/fontmgr.h"
 #include "driver/mobjdrv.h"
 #include "memory.h"
@@ -55,15 +56,6 @@ typedef struct KpaGameWork {
     u8 time;
 } KpaGameWork;
 static KpaGameWork* kwp;
-void iconDispGx(f32 scale, Vec* position, s16 flags, u16 iconId);
-
-// IconFlags.ICON_FLAG_2D. icondrv.h cannot be included: its iconDispGx takes the scale last, and with it the calls
-// below compile differently (the original evaluates the scale first), so the prototype above stays.
-#if VERSION <= VERSION_DEMO_JP
-#define KPA_ICON_2D 0x4
-#else
-#define KPA_ICON_2D 0x10
-#endif
 
 f32 kpaGetWidth(s32 type);
 typedef void (*voidfunctionptr)(void);
@@ -682,23 +674,23 @@ static void kpa_status_disp(CameraId camera, void* param) {
     pos.x = -210.0f;
     pos.y = 160.0f;
 #if VERSION >= VERSION_US
-    iconDispGx(1.0f, &pos, KPA_ICON_2D, kpa_status_icon_tbl[gp->language][0]);
+    iconDispGx(&pos, ICON_FLAG_2D, 1.0f, kpa_status_icon_tbl[gp->language][0]);
 #else
-    iconDispGx(1.0f, &pos, KPA_ICON_2D, gp->language ? ICON_TEXT_BOWSER : ICON_TEXT_KOOPA);
+    iconDispGx(&pos, ICON_FLAG_2D, 1.0f, gp->language ? ICON_TEXT_BOWSER : ICON_TEXT_KOOPA);
 #endif
     pos.x = 50.0f;
     pos.y = 160.0f;
 #if VERSION >= VERSION_US
-    iconDispGx(1.0f, &pos, KPA_ICON_2D, kpa_status_icon_tbl[gp->language][1]);
+    iconDispGx(&pos, ICON_FLAG_2D, 1.0f, kpa_status_icon_tbl[gp->language][1]);
 #else
-    iconDispGx(1.0f, &pos, KPA_ICON_2D, ICON_TEXT_WORLD);
+    iconDispGx(&pos, ICON_FLAG_2D, 1.0f, ICON_TEXT_WORLD);
 #endif
     pos.x = 220.0f;
     pos.y = 160.0f;
 #if VERSION >= VERSION_US
-    iconDispGx(1.0f, &pos, KPA_ICON_2D, kpa_status_icon_tbl[gp->language][2]);
+    iconDispGx(&pos, ICON_FLAG_2D, 1.0f, kpa_status_icon_tbl[gp->language][2]);
 #else
-    iconDispGx(1.0f, &pos, KPA_ICON_2D, ICON_TEXT_TIME);
+    iconDispGx(&pos, ICON_FLAG_2D, 1.0f, ICON_TEXT_TIME);
 #endif
 
     n = pouchGetKpaScore();
@@ -715,34 +707,34 @@ static void kpa_status_disp(CameraId camera, void* param) {
     digit[4] = n / 10;
     digit[5] = n % 10;
     for (i = 0; i < 6; i++) {
-        iconDispGx(1.0f, &pos, KPA_ICON_2D, numeric_id[digit[i]]);
+        iconDispGx(&pos, ICON_FLAG_2D, 1.0f, numeric_id[digit[i]]);
         pos.x += 20.0f;
     }
     pos.x += 20.0f;
-    iconDispGx(0.7f, &pos, KPA_ICON_2D, ICON_ITEM_COIN);
+    iconDispGx(&pos, ICON_FLAG_2D, 0.7f, ICON_ITEM_COIN);
     pos.x += 30.0f;
-    iconDispGx(1.0f, &pos, KPA_ICON_2D, ICON_TIMES_SMALL);
+    iconDispGx(&pos, ICON_FLAG_2D, 1.0f, ICON_TIMES_SMALL);
 
     n = pouchGetKpaCoin();
     digit[0] = n / 10;
     digit[1] = n % 10;
     pos.x += 20.0f;
     for (i = 0; i < 2; i++) {
-        iconDispGx(1.0f, &pos, KPA_ICON_2D, numeric_id[digit[i]]);
+        iconDispGx(&pos, ICON_FLAG_2D, 1.0f, numeric_id[digit[i]]);
         pos.x += 20.0f;
     }
 
     pos.x = 50.0f;
-    iconDispGx(1.0f, &pos, KPA_ICON_2D, numeric_id[kwp->stage]);
+    iconDispGx(&pos, ICON_FLAG_2D, 1.0f, numeric_id[kwp->stage]);
     pos.x += 20.0f;
-    iconDispGx(1.0f, &pos, KPA_ICON_2D, ICON_MINUS);
+    iconDispGx(&pos, ICON_FLAG_2D, 1.0f, ICON_MINUS);
 
     n = kwp->lives;
     digit[0] = n / 10;
     digit[1] = n % 10;
     pos.x += 20.0f;
     for (i = digit[0] == 0; i < 2; i++) {
-        iconDispGx(1.0f, &pos, KPA_ICON_2D, numeric_id[digit[i]]);
+        iconDispGx(&pos, ICON_FLAG_2D, 1.0f, numeric_id[digit[i]]);
         pos.x += 20.0f;
     }
 
@@ -753,7 +745,7 @@ static void kpa_status_disp(CameraId camera, void* param) {
     digit[1] = n / 10;
     digit[2] = n % 10;
     for (i = 0; i < 3; i++) {
-        iconDispGx(1.0f, &pos, KPA_ICON_2D, numeric_id[digit[i]]);
+        iconDispGx(&pos, ICON_FLAG_2D, 1.0f, numeric_id[digit[i]]);
         pos.x += 20.0f;
     }
 }

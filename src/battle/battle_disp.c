@@ -919,9 +919,7 @@ static void btlUnitItemDisp(CameraId camId, BattleUnit* unit) {
         pos.x += unit->heldItemOffset.x;
         pos.y += unit->heldItemOffset.y;
         pos.z += unit->heldItemOffset.z;
-
-        // FAKE: float-first cast of iconDispGx; the plain call changes the object
-        ((void (*)(f32, Vec*, s16, u16))iconDispGx)(1.0f, &pos, 0, itemDataTable[item].icon_id);
+        iconDispGx(&pos, 0, 1.0f, itemDataTable[item].icon_id);
     }
 }
 #pragma pop
@@ -952,9 +950,7 @@ static void btlUnitStolenItemDisp(CameraId camId, void* param) {
 
     BtlUnit_GetPos(unit, &pos.x, &pos.y, &pos.z);
     pos.y += 5.0f + unit->sizeMultiplier * (f32)BtlUnit_GetHeight(unit);
-
-    // FAKE: float-first cast of iconDispGx; the plain call changes the object
-    ((void (*)(f32, Vec*, s16, u16))iconDispGx)(1.0f, &pos, 0, itemDataTable[item].icon_id);
+    iconDispGx(&pos, 0, 1.0f, itemDataTable[item].icon_id);
 }
 
 static void btlUnitPartsBlurControl(BattleUnitPart* part, s32 unused, Mtx orientation, GXColor color, f32 rotation) {
@@ -1418,13 +1414,13 @@ static void _btlStockExpDisp(CameraId camId, void* param) {
             Vec pos = {0.0f, 0.0f, -100.0f};
             pos.x = 308.0f + x - 3.5f - 13.0f * i;
             pos.y = y - 220.0f;
-            iconDispGx(&pos, ICON_FLAG_2D, ICON_STAR_POINT, 0.35f);
+            iconDispGx(&pos, ICON_FLAG_2D, 0.35f, ICON_STAR_POINT);
         }
         for (i = 0; i < tens; i++) {
             Vec pos = {0.0f, 0.0f, -100.0f};
             pos.x = 4.0f + (308.0f + x - 10.0f - 20.0f * i);
             pos.y = 16.0f + (y - 220.0f);
-            iconDispGx(&pos, ICON_FLAG_2D, ICON_STAR_POINT, 0.5f);
+            iconDispGx(&pos, ICON_FLAG_2D, 0.5f, ICON_STAR_POINT);
         }
     }
 }

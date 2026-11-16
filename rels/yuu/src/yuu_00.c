@@ -1270,7 +1270,7 @@ static void monte_disp(CameraId camera, void* param) {
     if (monte != NULL) {
         for (i = 0; i < monte->num; i++) {
             if (monte[i].hidden == 0) {
-                iconDispGx(&monte[i].sub.pos, 0, ICON_ITEM_PIANTA_TOKEN, 1.0f);
+                iconDispGx(&monte[i].sub.pos, 0, 1.0f, ICON_ITEM_PIANTA_TOKEN);
             }
         }
     }
