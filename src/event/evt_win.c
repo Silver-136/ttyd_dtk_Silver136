@@ -308,7 +308,7 @@ void unitwin_point_disp(WinMgrEntry* entry) {
 
 /**
  * Swaps Yoshi's portrait icon for the one in the colour he hatched with; other icons pass through.
- * JP and later: inline (the early demos also call it from unitwin_window_select_func and keep it as a function).
+ * JP and later: inline (only inlined copies exist); the early demos keep it as a function (JP demo map).
  */
 #if VERSION >= VERSION_JP
 static inline s32 iconid_conv(s32 icon) {

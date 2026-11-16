@@ -622,8 +622,8 @@ EVT_BEGIN(slit_majin_lecture_init)
     // restarts every event (evtStartAll), their regular events included, while the NPCs stay NPC_STATUS_STOPPED
     // until evt_npc_start_for_event after the lecture. npcMain applies no movement to a stopped NPC, but a move
     // call its event is in keeps adding to moveOffset each frame (evt_npc_jump_position when the NPC was stopped
-    // in the air, evt_npc_homing_target in a chase; evt_npc_move_position too before US), and timed moves do not
-    // run out because moveTicks stands still. On the first frame after evt_npc_start_for_event, npcMoveXZ moves
+    // in the air, evt_npc_homing_target in a chase; evt_npc_move_position too in the early demos), and timed moves
+    // do not run out because moveTicks stands still. On the first frame after evt_npc_start_for_event, npcMoveXZ moves
     // the NPC by the whole sum in one step, stopped only by the first wall on the way, so an enemy can land far
     // outside its territory; the longer the lecture, the farther.
     CALL(lect_set_systemlevel, 0)

@@ -981,7 +981,7 @@ void gcResetCheck(void) {
             VIWaitForRetrace();
         }
         if (gp->resetType != RESET_TYPE_MENU) {
-            u32 flags = gp->flags;
+            s32 flags = gp->flags;
 
             if (!(flags & GW_FLAG_VIDEO_MODE_SET)) {
 #if VERSION <= VERSION_DEMO_JP

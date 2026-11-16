@@ -2538,9 +2538,9 @@ s32 _getHammerMotionParam(void);
 void _getHammerPoint(f32 f, f32 r, f32 angle, f32* x, f32* y, f32* z);
 void _getKaitenHammerPoint(f32 angle, f32 r, f32* x, f32* y, f32* z);
 
-// FAKE (FAKES.md): the "== 0" tests below are one front-end node longer than the "!" form (same code); with the "!" form fbatHitCheck's
-// size estimate drops under MWCC's bottom-up inline budget and the deferred inliner would expand _npcHitCheckSphere
-// and _npcHitCheckHammerAllMotion into it, which the target calls.
+// FAKE (FAKES.md): the "== 0" tests below are one front-end node longer than the "!" form (same code); with the
+// "!" form fbatHitCheck's size estimate drops under MWCC's bottom-up inline budget and the deferred inliner would
+// expand _npcHitCheckSphere and _npcHitCheckHammerAllMotion into it, which the target calls.
 #define CONTINUE_IF_NPC_NOT_HITTABLE(f1000, bit)                                                                     \
     if (npc == NULL) continue;                                                                                       \
     if ((npc->flags & NPC_FLAG_READY) == 0) continue;                                                                \
@@ -3829,6 +3829,8 @@ BOOL npcCheckEnableLookMario(void) {
  * while Vivian hides him, while he is hurt, or while the given NPC is in its post-battle hit cooldown.
  */
 // Original name and size (0xfc) from the JP demo map (UNUSED there: every call is inlined).
+// FAKE (FAKES.md, fbatHitCheck row): the five (*(T*)&((S*)p)->field) reads below are byte-offset views left from
+// fbatHitCheck's inline-budget trick; written as plain fields the DOL changes.
 inline BOOL npcCheckEnableTouchMario(NpcEntry* npc) {
     MarioWork* m = marioGetPtr();
     NpcWork* wp = npcGetWorkPtrInline();

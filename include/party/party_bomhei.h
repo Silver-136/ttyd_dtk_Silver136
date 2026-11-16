@@ -6,6 +6,7 @@
 #include "dolphin/mtx.h"
 
 void bomhei_bye(PartyEntry* party);
+void se_all_off(PartyEntry* p);
 void bomhei_exit(PartyEntry* party);
 void bomhei_use(PartyEntry* party);
 void bomhei_use_cancel(void);
