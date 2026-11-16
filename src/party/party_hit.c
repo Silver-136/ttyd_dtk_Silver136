@@ -94,8 +94,10 @@ static BOOL chkfilterNokotaro(HitCheckQuery* query, HitEntry* entry) {
  * Casts a ray with the filter for the current partner state (Yoshi, Koops' shell, or the default)
  * and on a hit returns the hit object with the distance,
  * hit position (both rounded to 0.001) and surface normal; NULL on a miss.
+ * Used by party.c, party_motion.c, party_move.c and evt_party.c; this file's callers inline it (MWCC auto-inlines
+ * plain functions of at most 30 statements, which the one-line roundings keep it under).
  */
-static inline HitEntry* partyHitCheckInl(PartyEntry* party, Vec* pos, Vec* dir, Vec* outPos, Vec* outNrm, f32* dist) {
+HitEntry* partyHitCheck(PartyEntry* party, Vec* pos, Vec* dir, Vec* outPos, Vec* outNrm, f32* dist) {
     HitCheckQuery query;
     Vec d = *dir;
     HitEntry* hit;
@@ -114,42 +116,18 @@ static inline HitEntry* partyHitCheckInl(PartyEntry* party, Vec* pos, Vec* dir, 
     if (!hit) {
         return hit;
     }
-    if (query.targetDistance >= 0.0f) {
-        rf = 0.5f;
-    } else {
-        rf = -0.5f;
-    }
+    rf = (query.targetDistance >= 0.0f) ? 0.5f : -0.5f;
     *dist = (s32)((1000.0f * query.targetDistance) + rf) / 1000.0f;
-    if (query.hitPos.x >= 0.0f) {
-        rf = 0.5f;
-    } else {
-        rf = -0.5f;
-    }
+    rf = (query.hitPos.x >= 0.0f) ? 0.5f : -0.5f;
     outPos->x = (s32)((1000.0f * query.hitPos.x) + rf) / 1000.0f;
-    if (query.hitPos.y >= 0.0f) {
-        rf = 0.5f;
-    } else {
-        rf = -0.5f;
-    }
+    rf = (query.hitPos.y >= 0.0f) ? 0.5f : -0.5f;
     outPos->y = (s32)((1000.0f * query.hitPos.y) + rf) / 1000.0f;
-    if (query.hitPos.z >= 0.0f) {
-        rf = 0.5f;
-    } else {
-        rf = -0.5f;
-    }
+    rf = (query.hitPos.z >= 0.0f) ? 0.5f : -0.5f;
     outPos->z = (s32)((1000.0f * query.hitPos.z) + rf) / 1000.0f;
     outNrm->x = query.hitNormal.x;
     outNrm->y = query.hitNormal.y;
     outNrm->z = query.hitNormal.z;
     return hit;
-}
-
-/**
- * Exported partyHitCheckInl: a partner-filtered ray cast returning the hit object,
- * rounded distance and position, and normal. Used by party.c, party_motion.c, party_move.c and evt_party.c.
- */
-HitEntry* partyHitCheck(PartyEntry* party, Vec* pos, Vec* dir, Vec* outPos, Vec* outNrm, f32* dist) {
-    return partyHitCheckInl(party, pos, dir, outPos, outNrm, dist);
 }
 
 /**
@@ -365,7 +343,7 @@ HitEntry* partySearchGround(PartyEntry* party, f32 range, f32 depth) {
         hit = partyHitCheckGnd(party, &pos, &dir, len, &gy, &outNrm);
 #else
         dist = len;
-        hit = partyHitCheckInl(party, &pos, &dir, &outPos, &outNrm, &dist);
+        hit = partyHitCheck(party, &pos, &dir, &outPos, &outNrm, &dist);
         gy = outPos.y;
 #endif
         if (hit) {
@@ -557,7 +535,7 @@ HitEntry* partyChkFrontStep(PartyEntry* party, f32 range, f32* outY, f32* outDis
         p.z = oz + mz;
         pos = p;
         dist = h + range;
-        hit = partyHitCheckInl(party, &pos, &dir, &outPos, &outNrm, &dist);
+        hit = partyHitCheck(party, &pos, &dir, &outPos, &outNrm, &dist);
     }
     if (hit) {
         Vec n = outNrm;
@@ -895,7 +873,7 @@ HitEntry* partySearchFrontWall(PartyEntry* party, Vec* pos, f32 dist, f32 ang) {
         Vec outPos = {0.0f, 0.0f, 0.0f};
         dir.x = sn;
         dir.z = cs;
-        hit = partyHitCheckInl(party, &p, &dir, &outPos, &nrm, &d);
+        hit = partyHitCheck(party, &p, &dir, &outPos, &nrm, &d);
         if (hit) {
 #if VERSION >= VERSION_JP
             party->frontWallDist = d;
@@ -914,7 +892,7 @@ HitEntry* partySearchFrontWall(PartyEntry* party, Vec* pos, f32 dist, f32 ang) {
         d = 0.5f * party->width + dist;
 #endif
         p.y += dy;
-        hit = partyHitCheckInl(party, &p, &dir, &outPos, &nrm, &d);
+        hit = partyHitCheck(party, &p, &dir, &outPos, &nrm, &d);
         if (hit) {
             if (partyNrmTo(&nrm) >= 45.0f) {
 #if VERSION >= VERSION_JP

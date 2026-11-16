@@ -178,9 +178,11 @@ static BOOL chkfilterVecVivian(HitCheckQuery* query, HitEntry* entry) {
 /**
  * Casts a ray for Mario with the filter for his current state (Vivian's shadow, tube mode or normal).
  * On a hit, *dist, outPos (rounded to 0.001) and outNrm are filled in; returns the hit or NULL.
- * The core of every check in this file.
+ * The core of every check in this file, which inlines it (MWCC auto-inlines plain functions of at most 30
+ * statements, which the one-line roundings keep it under); also called by the plane, slit and tube motions,
+ * Bowser (koopa_hit.c) and partners (party_hit.c).
  */
-static inline HitEntry* marioHitCheckVecInl(Vec* pos, Vec* dir, Vec* outPos, Vec* outNrm, f32* dist) {
+HitEntry* marioHitCheckVec(Vec* pos, Vec* dir, Vec* outPos, Vec* outNrm, f32* dist) {
     HitCheckQuery query;
     HitEntry* hit;
     f32 rf;
@@ -198,31 +200,15 @@ static inline HitEntry* marioHitCheckVecInl(Vec* pos, Vec* dir, Vec* outPos, Vec
     if (!hit) {
         return NULL;
     }
-    if (query.targetDistance >= 0.0f) {
-        rf = 0.5f;
-    } else {
-        rf = -0.5f;
-    }
+    rf = (query.targetDistance >= 0.0f) ? 0.5f : -0.5f;
     *dist = (s32)((1000.0f * query.targetDistance) + rf) / 1000.0f;
     if (outPos) {
         *outPos = query.hitPos;
-        if (outPos->x >= 0.0f) {
-            rf = 0.5f;
-        } else {
-            rf = -0.5f;
-        }
+        rf = (outPos->x >= 0.0f) ? 0.5f : -0.5f;
         outPos->x = (s32)((1000.0f * outPos->x) + rf) / 1000.0f;
-        if (outPos->y >= 0.0f) {
-            rf = 0.5f;
-        } else {
-            rf = -0.5f;
-        }
+        rf = (outPos->y >= 0.0f) ? 0.5f : -0.5f;
         outPos->y = (s32)((1000.0f * outPos->y) + rf) / 1000.0f;
-        if (outPos->z >= 0.0f) {
-            rf = 0.5f;
-        } else {
-            rf = -0.5f;
-        }
+        rf = (outPos->z >= 0.0f) ? 0.5f : -0.5f;
         outPos->z = (s32)((1000.0f * outPos->z) + rf) / 1000.0f;
     }
     if (outNrm) {
@@ -231,15 +217,7 @@ static inline HitEntry* marioHitCheckVecInl(Vec* pos, Vec* dir, Vec* outPos, Vec
     return hit;
 }
 
-/**
- * Out-of-line marioHitCheckVecInl for the plane, slit and tube motions,
- * Bowser (koopa_hit.c) and partners (party_hit.c).
- */
-HitEntry* marioHitCheckVec(Vec* pos, Vec* dir, Vec* outPos, Vec* outNrm, f32* dist) {
-    return marioHitCheckVecInl(pos, dir, outPos, outNrm, dist);
-}
-
-/** marioHitCheckVecInl with chkFilterAttr2: skips 0x4 surfaces that lack 0x800000. */
+/** marioHitCheckVec with chkFilterAttr2: skips 0x4 surfaces that lack 0x800000. */
 // Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
 // It keeps `inline`: as a plain function -inline auto leaves it out of line here (the link changes).
 inline HitEntry* marioHitCheckVec2(Vec* pos, Vec* dir, Vec* outPos, Vec* outNrm, f32* dist) {
@@ -290,7 +268,7 @@ inline HitEntry* marioHitCheckVec2(Vec* pos, Vec* dir, Vec* outPos, Vec* outNrm,
 }
 
 /**
- * Scalar wrapper of marioHitCheckVecInl: casts Mario's ray from (x, y, z) along (dx, dy, dz) for up to *dist
+ * Scalar wrapper of marioHitCheckVec: casts Mario's ray from (x, y, z) along (dx, dy, dz) for up to *dist
  * and returns the hit position, normal and distance through the pointers. Used by the plane and roll motions.
  */
 HitEntry* marioHitCheck(f32* ox, f32* oy, f32* oz, f32* dist, f32* nx, f32* ny, f32* nz, f32 x, f32 y, f32 z, f32 dx,
@@ -307,7 +285,7 @@ HitEntry* marioHitCheck(f32* ox, f32* oy, f32* oz, f32* dist, f32* nx, f32* ny, 
     dir.x = dx;
     dir.y = dy;
     dir.z = dz;
-    hit = marioHitCheckVecInl(&pos, &dir, &outPos, &outNrm, &d);
+    hit = marioHitCheckVec(&pos, &dir, &outPos, &outNrm, &d);
     *dist = d;
     *ox = outPos.x;
     *oy = outPos.y;
@@ -333,12 +311,12 @@ static HitEntry* marioHitCheck2(Vec* pos, Vec* dir, Vec* outPos, Vec* outNrm, f3
         if (!(mario->flags & MARIO_FLAG_IS_FALLING)) {
             hit = marioHitCheckVec2(pos, dir, outPos, outNrm, &d);
         } else {
-            hit = marioHitCheckVecInl(pos, dir, outPos, outNrm, &d);
+            hit = marioHitCheckVec(pos, dir, outPos, outNrm, &d);
         }
     } else if (marioGetJabaraState() == JABARA_STATE_RISING) {
         hit = marioHitCheckVec2(pos, dir, outPos, outNrm, &d);
     } else {
-        hit = marioHitCheckVecInl(pos, dir, outPos, outNrm, &d);
+        hit = marioHitCheckVec(pos, dir, outPos, outNrm, &d);
     }
     *dist = d;
     return hit;
@@ -421,7 +399,7 @@ HitEntry* marioGetSlope(MarioWork* mario, f32* gx, f32* gz) {
     pos.y += 10.0f;
     {
         Vec dir = {0.0f, -1.0f, 0.0f};
-        hit = marioHitCheckVecInl(&pos, &dir, &outPos, &outNrm, &dist);
+        hit = marioHitCheckVec(&pos, &dir, &outPos, &outNrm, &dist);
     }
     if (hit) {
         *gx = (s32)(100.0f * (angleABf(0.0f, 0.0f, 100.0f * outNrm.z, 100.0f * outNrm.y) - 180.0f) + 0.5f) / 100.0f;
@@ -450,7 +428,7 @@ HitEntry* marioSearchUnder(void) {
     pos.y += h;
     {
         Vec dir = {0.0f, -1.0f, 0.0f};
-        hit = marioHitCheckVecInl(&pos, &dir, &outPos, &outNrm, &d);
+        hit = marioHitCheckVec(&pos, &dir, &outPos, &outNrm, &d);
     }
     mario->groundY = hit ? outPos.y : -3000.0f;
     return hit;
@@ -473,7 +451,7 @@ HitEntry* searchUnder2(f32* out, f32 x, f32 y, f32 z) {
     pos2.y += 37.0f;
     {
         Vec dir = {0.0f, -1.0f, 0.0f};
-        hit = marioHitCheckVecInl(&pos2, &dir, &outPos, &outNrm, &d);
+        hit = marioHitCheckVec(&pos2, &dir, &outPos, &outNrm, &d);
     }
     *out = hit ? outPos.y : -1.0f;
     return hit;
@@ -834,7 +812,7 @@ HitEntry* marioSearchGround(f32* y, f32* b, f32* c, f32 spd, f32 h) {
             v.y = y0 + yl;
             v.z = z0 + z;
             dist = yl + spd;
-            hit = marioHitCheckVecInl(&v, &dir, &outPos, &outNrm, &dist);
+            hit = marioHitCheckVec(&v, &dir, &outPos, &outNrm, &dist);
         }
         if (hit) {
 #if VERSION <= VERSION_DEMO_JP
@@ -905,58 +883,6 @@ typedef struct LandonRay {
     Vec pos;
     Vec dir;
 } LandonRay;
-
-/** marioHitCheckVecInl taking the ray as a LandonRay (position and direction), for the landing checks. */
-static inline HitEntry* landonHitCheck(LandonRay* ray, Vec* outPos, Vec* outNrm, f32* dist) {
-    HitCheckQuery query;
-    HitEntry* hit;
-    f32 rf;
-
-    query.targetPos = ray->pos;
-    query.targetDir = ray->dir;
-    query.targetDistance = *dist;
-    if (marioGetPtr()->currMotionId == MARIO_MOTION_VIVIAN) {
-        hit = hitCheckVecFilter(&query, chkfilterVecVivian);
-    } else if (marioGetPtr()->flags & MARIO_FLAG_TUBE_MODE) {
-        hit = hitCheckVecFilter(&query, chkfilterVecRoll);
-    } else {
-        hit = hitCheckVecFilter(&query, chkfilterVec);
-    }
-    if (!hit) {
-        return NULL;
-    }
-    if (query.targetDistance >= 0.0f) {
-        rf = 0.5f;
-    } else {
-        rf = -0.5f;
-    }
-    *dist = (s32)((1000.0f * query.targetDistance) + rf) / 1000.0f;
-    if (outPos) {
-        *outPos = query.hitPos;
-        if (outPos->x >= 0.0f) {
-            rf = 0.5f;
-        } else {
-            rf = -0.5f;
-        }
-        outPos->x = (s32)((1000.0f * outPos->x) + rf) / 1000.0f;
-        if (outPos->y >= 0.0f) {
-            rf = 0.5f;
-        } else {
-            rf = -0.5f;
-        }
-        outPos->y = (s32)((1000.0f * outPos->y) + rf) / 1000.0f;
-        if (outPos->z >= 0.0f) {
-            rf = 0.5f;
-        } else {
-            rf = -0.5f;
-        }
-        outPos->z = (s32)((1000.0f * outPos->z) + rf) / 1000.0f;
-    }
-    if (outNrm) {
-        *outNrm = query.hitNormal;
-    }
-    return hit;
-}
 
 /**
  * Tube ground search: the early demos test three points and return the first accepted floor;
@@ -1090,7 +1016,7 @@ HitEntry* marioSearchGroundRoll(f32* y, f32* b, f32* c, f32 spd, f32 h) {
         ray.dir.x = 0.0f;
         ray.dir.y = -1.0f;
         ray.dir.z = 0.0f;
-        hit = landonHitCheck(&ray, &hp, &nrm, &dist);
+        hit = marioHitCheckVec(&ray.pos, &ray.dir, &hp, &nrm, &dist);
         ox = hp.x;
         oy = hp.y;
         oz = hp.z;
@@ -1187,7 +1113,7 @@ HitEntry* marioSearchGroundRoll(f32* y, f32* b, f32* c, f32 spd, f32 h) {
                 v.y = y0 + hh;
                 v.z = z0 + z;
                 dist = hh + spd;
-                hit = marioHitCheckVecInl(&v, &dir, &outPos, &outNrm, &dist);
+                hit = marioHitCheckVec(&v, &dir, &outPos, &outNrm, &dist);
             }
             if (hit) {
                 r = ABCtoAngleY(&outNrm);
@@ -1385,7 +1311,7 @@ HitEntry* marioLandonChk_old(f32* outY, f32 spd) {
         ray.dir.y = mone;
         ray.dir.z = zero;
         dist = top;
-        hit = landonHitCheck(&ray, &hp, &nrm, &dist);
+        hit = marioHitCheckVec(&ray.pos, &ray.dir, &hp, &nrm, &dist);
         hy = hp.y;
         nx = nrm.x;
         ny = nrm.y;
@@ -1402,7 +1328,7 @@ HitEntry* marioLandonChk_old(f32* outY, f32 spd) {
     return NULL;
 }
 
-/** Five-point landing probe with a vertical ofs: the early demos use the older LandonRay form; JP and later use marioHitCheckVecInl. */
+/** Five-point landing probe with a vertical ofs: the early demos use the older LandonRay form; JP and later use marioHitCheckVec. */
 HitEntry* marioChkLandon2(f32* y, f32 spd, f32 ofs) {
 #if VERSION <= VERSION_DEMO_JP
     LandonRay ray;
@@ -1521,7 +1447,7 @@ HitEntry* marioChkLandon2(f32* y, f32 spd, f32 ofs) {
         ray.dir.y = mone;
         ray.dir.z = zero;
         dist = top;
-        hit = landonHitCheck(&ray, &hp, &nrm, &dist);
+        hit = marioHitCheckVec(&ray.pos, &ray.dir, &hp, &nrm, &dist);
         hy = hp.y;
         nx = nrm.x;
         ny = nrm.y;
@@ -1577,7 +1503,7 @@ HitEntry* marioChkLandon2(f32* y, f32 spd, f32 ofs) {
                 v.y = pyl;
                 v.z = z0 + z;
                 dist = d1;
-                hit = marioHitCheckVecInl(&v, &dir, &outPos, &outNrm, &dist);
+                hit = marioHitCheckVec(&v, &dir, &outPos, &outNrm, &dist);
             }
             if (hit) {
                 mario->groundSlope = ABCtoAngleY(&outNrm);
@@ -1952,7 +1878,7 @@ HitEntry* marioSearchHead_roll(Vec* pos, f32* h, f32 d) {
             v.y = 1.0f + pos->y;
             v.z = pos->z + z;
             dist = top;
-            hit = marioHitCheckVecInl(&v, pdir, &outPos, &outNrm, &dist);
+            hit = marioHitCheckVec(&v, pdir, &outPos, &outNrm, &dist);
         }
         if (hit) {
             if (pos->y + base >= outPos.y) {
@@ -2194,7 +2120,7 @@ void marioCheckWall_roll(f32 dx, f32 dz) {
     if (mario->flags & MARIO_FLAG_IS_JUMPING) {
         f32 dist = 30.0f;
         Vec dir = {0.0f, 1.0f, 0.0f};
-        hit = marioHitCheckVecInl(&mario->position, &dir, &outPos, &outNrm, &dist);
+        hit = marioHitCheckVec(&mario->position, &dir, &outPos, &outNrm, &dist);
         if (hit && dist > 16.8f) {
             hit = NULL;
         }
@@ -2260,7 +2186,7 @@ HitEntry* marioChkFront(f32* out, const Vec* pos, f32 angle, f32 dist) {
     HitEntry* hit;
     sincosf(&s, &c, angle);
     d = dist;
-    hit = marioHitCheckVecInl((Vec*)pos, &(Vec){s, 0.0f, c}, &outPos, &outNrm, &d);
+    hit = marioHitCheckVec((Vec*)pos, &(Vec){s, 0.0f, c}, &outPos, &outNrm, &d);
     if (hit && d <= dist) {
         *out = distABf(pos->x, pos->z, outPos.x, outPos.z);
         return hit;
@@ -2376,7 +2302,7 @@ static HitEntry* searchFrontWall(Vec* pos, f32* h, f32 dx, f32 dz, f32 w) {
     for (i = 0; i < count; i++) {
         p.y = pos->y + heights[i];
         dist = range;
-        hit = marioHitCheckVecInl(&p, &dir, &hp, &nrm, &dist);
+        hit = marioHitCheckVec(&p, &dir, &hp, &nrm, &dist);
         if (hit) {
             if (chkBalloon(hit)) {
                 mario->hitobjFrontWall = hit;
@@ -2407,7 +2333,7 @@ static HitEntry* searchFrontWall(Vec* pos, f32* h, f32 dx, f32 dz, f32 w) {
         for (i = 0; i < count; i++) {
             p.y = pos->y + heights[i];
             dist = half;
-            hit2 = marioHitCheckVecInl(&p, &dir2, NULL, NULL, &dist);
+            hit2 = marioHitCheckVec(&p, &dir2, NULL, NULL, &dist);
             if (hit2) {
                 break;
             }
@@ -2419,7 +2345,7 @@ static HitEntry* searchFrontWall(Vec* pos, f32* h, f32 dx, f32 dz, f32 w) {
         for (i = 0; i < count; i++) {
             p.y = pos->y + heights[i];
             dist = half;
-            hit2 = marioHitCheckVecInl(&p, &(Vec){s2, 0.0f, c2}, NULL, NULL, &dist);
+            hit2 = marioHitCheckVec(&p, &(Vec){s2, 0.0f, c2}, NULL, NULL, &dist);
         }
     }
     if (best) {
@@ -2472,7 +2398,7 @@ HitEntry* dou10_yoko_yari(f32* out) {
         pos2.y += 60.0f;
         {
             Vec dir = {0.0f, -1.0f, 0.0f};
-            hit = marioHitCheckVecInl(&pos2, &dir, &outPos, &outNrm, &d);
+            hit = marioHitCheckVec(&pos2, &dir, &outPos, &outNrm, &d);
         }
         if (hit && (hitGetAttr(hit) & HIT_ATTR_SPIKES)) {
             mario->hitobjFront = hit;
@@ -2519,7 +2445,7 @@ HitEntry* dou10_yoko_yari2(f32* out) {
     pos2.y += 60.0f;
     {
         Vec dir = {0.0f, -1.0f, 0.0f};
-        hit = marioHitCheckVecInl(&pos2, &dir, &outPos, &outNrm, &d);
+        hit = marioHitCheckVec(&pos2, &dir, &outPos, &outNrm, &d);
     }
     if (hit && (hitGetAttr(hit) & HIT_ATTR_SPIKES)) {
         mario->hitobjFront = hit;
@@ -2618,9 +2544,10 @@ HitEntry* dou10_yoko_yari3(void) {
 }
 #endif
 
-/** marioHitCheckVecInl that stores the hit in *out and returns whether there was one. */
+/** marioHitCheckVec that stores the hit in *out and returns whether there was one. */
+// FAKE: invented inline wrapper (not in the JP demo map); written out at its one call marioChkFrontStep returns NULL in r29, not r3 (FAKES.md)
 static inline BOOL marioHitCheckVecChk(Vec* p, Vec* d, Vec* op, Vec* on, f32* di, HitEntry** out) {
-    *out = marioHitCheckVecInl(p, d, op, on, di);
+    *out = marioHitCheckVec(p, d, op, on, di);
     return *out != NULL;
 }
 
@@ -2759,8 +2686,8 @@ BOOL marioChkWallAround(Vec* pos, s32 mode, f32 unused, f32 dir, f32 w, f32 h) {
         sincosf(&s, &c, a);
         d2 = d1 = half;
         d = (Vec){s, 0.0f, c};
-        hit1 = marioHitCheckVecInl(&hi, &d, NULL, NULL, &d1);
-        hit2 = marioHitCheckVecInl(&lo, &d, NULL, NULL, &d2);
+        hit1 = marioHitCheckVec(&hi, &d, NULL, NULL, &d1);
+        hit2 = marioHitCheckVec(&lo, &d, NULL, NULL, &d2);
         if (marioChkBero(hit1)) {
             hit1 = NULL;
         }
@@ -2815,8 +2742,8 @@ BOOL marioChkWallAround(Vec* pos, s32 mode, f32 unused, f32 dir, f32 w, f32 h) {
         sincosf(&s, &c, a2);
         d2 = d1 = half;
         wallCopy(&dd, &(Vec){s, 0.0f, c});
-        hit1 = marioHitCheckVecInl(&hi, &dd, NULL, NULL, &d1);
-        hit2 = marioHitCheckVecInl(&lo, &dd, NULL, NULL, &d2);
+        hit1 = marioHitCheckVec(&hi, &dd, NULL, NULL, &d1);
+        hit2 = marioHitCheckVec(&lo, &dd, NULL, NULL, &d2);
         if (marioChkBero(hit1)) {
             hit1 = NULL;
         }
@@ -2875,7 +2802,7 @@ BOOL marioSlitChkWallAround(void) {
         sincosf(&s, &c, a);
         dir = (Vec){s, 0.0f, c};
         dist = 13.0f;
-        hit = marioHitCheckVecInl(&pos, &dir, NULL, NULL, &dist);
+        hit = marioHitCheckVec(&pos, &dir, NULL, NULL, &dist);
         if (hit && !marioChkBero(hit)) {
             flags[i] = 1;
         }
@@ -2889,7 +2816,7 @@ BOOL marioSlitChkWallAround(void) {
             sincosf(&s, &c, a);
             dir = (Vec){s, 0.0f, c};
             dist = 13.0f;
-            hit = marioHitCheckVecInl(&pos, &dir, NULL, NULL, &dist);
+            hit = marioHitCheckVec(&pos, &dir, NULL, NULL, &dist);
             if (hit && !marioChkBero(hit)) {
                 flags[i] = 1;
             }
@@ -2903,7 +2830,7 @@ BOOL marioSlitChkWallAround(void) {
             sincosf(&s, &c, a);
             dir = (Vec){s, 0.0f, c};
             dist = 13.0f;
-            hit = marioHitCheckVecInl(&pos, &dir, NULL, NULL, &dist);
+            hit = marioHitCheckVec(&pos, &dir, NULL, NULL, &dist);
             if (hit && !marioChkBero(hit)) {
                 flags[i] = 1;
             }
