@@ -743,6 +743,7 @@ void winMarioDisp(s32 camId, void* param, s32 idx) {
     winFontInit();
     winFontSet((Vec){x - 240.0f, 124.0f + y, 0.0f}, (Vec){0.7f, 0.7f, 0.7f}, black, msgSearch(BattleGetRankNameLabel(pouch->level)));
 
+    // the gear and curse bubbles, the one under the cursor drawn last so it sits on top
     for (i = 0; i < 6; i++) {
         if (w->marioSel != pri[i]) {
             fukidashi(w, pri[i], x, y);
@@ -750,6 +751,7 @@ void winMarioDisp(s32 camId, void* param, s32 idx) {
     }
     fukidashi(w, w->marioSel, x, y);
 
+    // the HP/FP/BP rows: a coloured tab with the stat's name and its ruby
     winKirinukiGX(w, 0, x - 270.0f, y - 10.0f, 264.0f, 110.0f);
     col = 50.0f + (x - 270.0f);
     for (i = 0; i < 3; i++) {
@@ -770,6 +772,7 @@ void winMarioDisp(s32 camId, void* param, s32 idx) {
         winFontSet((Vec){col - rubyW / 2.0f, 21.0f + cx, 0.0f}, (Vec){0.5f, 0.5f, 0.5f}, reds[i], msgSearch(ruby[i]));
     }
 
+    // the stat icons and values (current / maximum for HP and FP, BP alone)
     winIconInit();
     col = 110.0f + (x - 270.0f);
     row0 = 4.0f + (y - 38.0f);
@@ -795,6 +798,7 @@ void winMarioDisp(s32 camId, void* param, s32 idx) {
     winFontSet((Vec){col, row2, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, black, "%s", winZenkakuStr(pouch->maximumHP));
     winFontSet((Vec){col, rowB, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, black, "%s", winZenkakuStr(pouch->maximumFP));
 
+    // the special moves Mario has: an orb per move, lit up to the current Star Power
     if (w->mario.specialCount > 0) {
         winKirinukiGX(w, 0, 10.0f + x, (20.0f + (130.0f + y)) - 20.0f, 260.0f, 80.0f);
         winIconInit();
@@ -815,6 +819,8 @@ void winMarioDisp(s32 camId, void* param, s32 idx) {
             }
         }
     }
+
+    // the collection counters: Star Points, coins, Star Pieces, Shine Sprites, play time; then Mario himself
     left = 10.0f + x;
     winKirinukiGX(w, 0, left, 10.0f + (20.0f + y), 260.0f, 150.0f);
     winIconInit();
@@ -921,8 +927,8 @@ void winMarioDisp(s32 camId, void* param, s32 idx) {
     winZClear();
     animPoseDrawMtx(w->mario.poseId, mtx, 2, 0.0f, 5.0f);
 
+    // the special-move list
     if (w->mario.mode) {
-
         // The star power cost (s8 baseSpCost, never negative) is read unsigned (the retail code has lbz with no extsb).
 #if VERSION <= VERSION_DEMO_JP
         winWazaGX(w, 0, x - 270.0f, 160.0f, 270.0f, 254.0f);
@@ -939,6 +945,7 @@ void winMarioDisp(s32 camId, void* param, s32 idx) {
             sprintf(sbuf, "%d", (u8)superActionTable[i]->baseSpCost);
             winFontSet((Vec){numX, (f32)(130 - i * 26), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, black, sbuf);
             winFontSet((Vec){cx, (f32)(120 - i * 26), 0.0f}, (Vec){0.5f, 0.5f, 0.5f}, black, "ＳＰ");
+        }
 #else
         winWazaGX(w, 0, x - 270.0f, 160.0f, 270.0f, 254.0f);
         winFontInit();
@@ -954,8 +961,8 @@ void winMarioDisp(s32 camId, void* param, s32 idx) {
             sprintf(sbuf, "%s", winZenkakuStr((u8)superActionTable[i]->baseSpCost));
             winFontSet((Vec){x - (f32)(FontGetMessageWidth(sbuf) / 2), (f32)(130 - i * 26), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, black, sbuf);
             winFontSet((Vec){cx, (f32)(120 - i * 26), 0.0f}, (Vec){0.5f, 0.5f, 0.5f}, black, "ＳＰ");
-#endif
         }
+#endif
     }
 }
 

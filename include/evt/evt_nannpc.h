@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "version.h"
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
 #include <dolphin/os.h>
@@ -116,6 +117,10 @@ typedef struct NanNPCWork {
 extern NanNPCWork* nanNPCWork;
 void nanNPCOption(void);
 void evt_nannpc_set_animtbl_sub(NanNPC* npc, s16* tbl);
+NanNPC* nanNPCNameToPtr(char* name);
+#if VERSION <= VERSION_DEMO_JP
+char* nanNPCMakeString(char* name);
+#endif
 void nannpc_ext_main_sub_fast();
 USER_FUNC(evt_nannpc_flag_onoff);
 USER_FUNC(evt_nannpc_get_position);

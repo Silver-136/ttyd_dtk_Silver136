@@ -6646,7 +6646,7 @@ USER_FUNC(evt_puni_dokan_onoff) {
  * Inline helper that reads a Puni's save slot: the floor byte and the x, y,
  * z shorts (sign-extended) stored 7 bytes per slot from LSW base.
  */
-// FAKE: inline copy of a map function so its calls inline (the unit does not auto-inline; FAKES.md)
+// FAKE: inline copy of the map function puniswGetindex; calling it changes the registers (FAKES.md)
 static inline void puniswGetindex_inl(s32 base, s32 idx, s32* val, Vec* pos) {
     u8 zHi, b5, b4, b3, b2, b1, b0;
     s32 off;
