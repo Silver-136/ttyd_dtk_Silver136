@@ -20,13 +20,16 @@
 NanNPCWork* nanNPCWork;
 static char makestring[16];
 
-#if VERSION <= VERSION_DEMO_JP
 /**
- * The early demos turn the name into a string in a helper (same code, other register order).
- * Early demos only: in the other versions the helper's "%06x" literal would move ahead in the string pool even unused.
+ * Turns a crowd NPC name into a string: a value without the top address bit is a number, printed as six hex digits.
+ * Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+ * JP and later: inline (only inlined copies exist; plain, its "%06x" literal would move ahead in the string pool).
  */
-// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
+#if VERSION >= VERSION_JP
+static inline char* nanNPCMakeString(char* name) {
+#else
 char* nanNPCMakeString(char* name) {
+#endif
     if (!((EvtWord)name & 0x80000000)) {
         sprintf(makestring, "%06x", name);
         name = makestring;
@@ -34,7 +37,11 @@ char* nanNPCMakeString(char* name) {
     return name;
 }
 
-/** the early demos' search through that helper (nanNPCMakeString is inlined only here) */
+/**
+ * Finds the crowd NPC with the given name.
+ * Names are strings; a value without the top address bit is treated as a number
+ * and looked up by its six-digit hex form, so scripts can name crowd NPCs by index. NULL if none matches.
+ */
 // Original name and size (0xa4) from the JP demo map (UNUSED there: every call is inlined).
 NanNPC* nanNPCNameToPtr(char* name) {
     s32 i;
@@ -49,31 +56,6 @@ NanNPC* nanNPCNameToPtr(char* name) {
     }
     return NULL;
 }
-#else
-/**
- * Finds the crowd NPC with the given name.
- * Names are strings; a value without the top address bit is treated as a number
- * and looked up by its six-digit hex form, so scripts can name crowd NPCs by index. NULL if none matches.
- * JP and later: the early demos' nanNPCNameToPtr (JP demo map name) with the nanNPCMakeString step written into
- * the loop; every call is inlined (the out-of-line copy is dropped by the link).
- */
-NanNPC* nanNPCNameToPtr(char* name) {
-    s32 i;
-    NanNPC* p;
-    NanNPCWork* w = nanNPCWork;
-    for (i = 0; i < w->num; i++) {
-        p = &w->npc[i];
-        if (!((EvtWord)name & 0x80000000)) {
-            sprintf(makestring, "%06x", name);
-            name = makestring;
-        }
-        if (!strcmp((char*)p->name, name)) {
-            return p;
-        }
-    }
-    return NULL;
-}
-#endif
 
 /**
  * Moves crowd NPC npc by its move vector with map collision, casting a ray from origin along dir (length mag):
@@ -511,15 +493,7 @@ USER_FUNC(evt_nannpc_entry) {
     w = nanNPCWork;
     for (i = 0, off = 0; i < w->num; off += sizeof(NanNPC), i++) {
         p = (NanNPC*)((u8*)w->npc + off);
-#if VERSION <= VERSION_DEMO_JP
         str = nanNPCMakeString((char*)name);
-#else
-        str = (char*)name;
-        if (!((EvtWord)str & 0x80000000)) {
-            sprintf(makestring, "%06x", name);
-            str = makestring;
-        }
-#endif
         strcmp((char*)p->name, str);
         if (!p->pose) {
             strcpy((char*)p->name, str);

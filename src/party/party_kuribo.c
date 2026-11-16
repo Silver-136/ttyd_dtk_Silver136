@@ -212,8 +212,7 @@ USER_FUNC(post_kurio_use) {
     marioStSystemLevel(0);
     psndClearFlag(PSND_FLAG_MUTE_SFX);
 #if VERSION >= VERSION_JP
-    party->flags &= ~PARTY_FLAG_DISABLE_FLOORS;
-    party->flags &= ~PARTY_FLAG_FORCE_FALL;
+    kuribo_use_post(party);
 #endif
     return EVT_RETURN_DONE;
 }
@@ -344,8 +343,7 @@ void kuribo_use(PartyEntry* party) {
             partyChgMot(party, PARTY_MOTION_STAY);
             partyChgPoseId(party, PARTY_POSE_STAND);
             party->flags &= ~PARTY_FLAG_IS_BEING_USED;
-            party->flags &= ~PARTY_FLAG_DISABLE_FLOORS;
-            party->flags &= ~PARTY_FLAG_FORCE_FALL;
+            kuribo_use_post(party);
             break;
     }
     partyChkGnd(party);

@@ -676,23 +676,16 @@ inline void SoundStopAll(void) {
             if (!(stream->flags & SOUND_STREAM_FLAG_STARTED)) {
                 stream->flags |= SOUND_STREAM_FLAG_END;
                 continue;
-#else
-            if (!sound.interruptDepth) {
-                sound.interrupts = OSDisableInterrupts();
-#endif
             }
-#if VERSION >= VERSION_JP
-            sound.interruptDepth++;
+#else
+            sndDisableIRQ();
 #endif
             if (stream->flags & SOUND_STREAM_FLAG_ARAM) {
                 sound.slotUsed[stream->slot] = 0;
             }
             stream->flags = 0;
 #if VERSION <= VERSION_DEMO_JP
-            if (!sound.interruptDepth) {
-                sound.interrupts = OSDisableInterrupts();
-            }
-            sound.interruptDepth++;
+            sndDisableIRQ();
 #endif
             DVDMgrClose(stream->entries[0].dvd);
             DVDMgrClose(stream->entries[1].dvd);
@@ -700,11 +693,7 @@ inline void SoundStopAll(void) {
             if (stream->count == 2) {
                 sndStreamFree(stream->entries[1].streamId);
             }
-            if (sound.interruptDepth) {
-                if (!--sound.interruptDepth) {
-                    OSRestoreInterrupts(sound.interrupts);
-                }
-            }
+            sndEnableIRQ();
             sound.streamChannel = -1;
         }
     }
@@ -925,15 +914,10 @@ s32 SoundEfxPlayEx(SND_FXID fid, u8 priority, u8 vol, u8 pan) {
         }
     }
     sfx->flags = 0;
-    if (!sound.interruptDepth) {
-        sound.interrupts = OSDisableInterrupts();
-    }
-    ++sound.interruptDepth;
+    sndDisableIRQ();
     sfx->voiceId = sndFXStart(fid, 127, pan);
     sndFXVolume(sfx->voiceId, vol);
-    if (sound.interruptDepth && !--sound.interruptDepth) {
-        OSRestoreInterrupts(sound.interrupts);
-    }
+    sndEnableIRQ();
     if (sfx->voiceId == -1) {
         return -1;
     }

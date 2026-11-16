@@ -194,8 +194,7 @@ void bomhei_exit(PartyEntry* party) {
             p->moveMode = PARTY_MOVE_MODE_STAY;
         }
         bomheiCleanFlags(p);
-        se1_off(p);
-        se2_off(p);
+        se_all_off(p);
         bomheiFree(p);
     }
 #else
@@ -223,8 +222,7 @@ void bomhei_use_cancel(void) {
         }
         bomheiCleanFlags(p);
 #if VERSION >= VERSION_JP
-        se1_off(p);
-        se2_off(p);
+        se_all_off(p);
 #endif
         bomheiFree(p);
     }
@@ -281,8 +279,7 @@ void bomhei_use_post(PartyEntry* party) {
         party->trigFlags |= PARTY_TRIG_CHG_RUN_MODE;
     }
     party->playerPtr->flags &= ~MARIO_FLAG_IS_CARRYING_BOBBERY;
-    se1_off(party);
-    se2_off(party);
+    se_all_off(party);
     bomheiFree(party);
 #else
     MarioWork* mario = party->playerPtr;
@@ -744,7 +741,7 @@ static void bomhei_use_main(PartyEntry* party) {
         case 60: {
             EffectEntry* eff;
             se1_off(party);
-    se2_off(party);
+            se2_off(party);
 #if VERSION >= VERSION_JP
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_PBM_BOMB1), &party->position);
 #endif
