@@ -761,7 +761,7 @@ static s32 moamoa_hit_check(ExtdrvPose* pose, Moamoa* moa) {
             return 2;
         }
     }
-    if (mario->currMotionId == MARIO_MOTION_HAMMER_2 && mario->currSubMotionId == 0x14) {
+    if (mario->currMotionId == MARIO_MOTION_HAMMER_2 && mario->currSubMotionId == HAMMER2_SUB_SPIN) {
         a = (Vec){(*pose->mtx)[0][3], (*pose->mtx)[1][3], (*pose->mtx)[2][3]};
         if (PSVECDistance(&mario->position, &a) < 65.0f) {
             return 2;

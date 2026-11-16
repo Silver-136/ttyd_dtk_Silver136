@@ -122,12 +122,16 @@ typedef struct PartyWorkNokonoko { // party_nokonoko.c
         u32 word17C;             // 0x17C, zeroed as u32
         struct {
             s16 dashed;          // 0x17C, PH s16 0/1
-            s16 shellFlags;      // 0x17E, PH s16 bits 1, 2
+            s16 shellFlags;      // 0x17E, NOKONOKO_SHELL_FLAG_*
         };
     };
     u32 word180;                 // 0x180, zeroed only
     u8 pad184[0x188 - 0x184];    // 0x184
 } PartyWorkNokonoko;
+
+// PartyWorkNokonoko.shellFlags (names from the code that sets them)
+#define NOKONOKO_SHELL_FLAG_EVT_TIMED 0x1   // used by a script with a hold time (actionTime > 0)
+#define NOKONOKO_SHELL_FLAG_STEPPED_UP 0x2  // the shell was lifted onto a floor a unit or more higher
 
 typedef struct PartyWorkBomhei { // party_bomhei.c
     u8 pad174[0x178 - 0x174];    // 0x174
@@ -152,6 +156,8 @@ typedef struct PartyWorkCloud {  // party_cloud.c
     };
     s32 lockAnims;               // 0x184, cloudLockAnimationsOn/Off (US and later; unused in JP and the early demos)
 } PartyWorkCloud;
+
+#define VIVIAN_TAIL_FLAG_OFF 0x1  // tailFlags: the shadow tail is hidden (partyVivianTailStop)
 
 typedef struct PartyWorkVivian { // party_vivian.c
     f32 shadowSize;              // 0x174, 10..20; party.c reads it as the in-use shadow size
@@ -267,7 +273,7 @@ typedef struct PartyEntry {
 #endif
     s8 wallStuckFrames;                 // 0x4D, frames blocked by a wall
     s8 noFloorFrames;                   // 0x4E, frames without floor
-    s8 tailFlags;                       // 0x4F, Vivian: bit 0 = tail off
+    s8 tailFlags;                       // 0x4F, Vivian: VIVIAN_TAIL_FLAG_OFF
 #if VERSION <= VERSION_DEMO_JP
     };
 };

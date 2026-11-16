@@ -955,7 +955,7 @@ static void btlUnitStolenItemDisp(CameraId camId, void* param) {
 
 static void btlUnitPartsBlurControl(BattleUnitPart* part, s32 unused, Mtx orientation, GXColor color, f32 rotation) {
     if (part->attributes & kMotionBlur) {
-        _partsBlurControl(part, 1, orientation, color, rotation);
+        _partsBlurControl(part, PART_BLUR_ENTRY_DRAW, orientation, color, rotation);
     } else {
         _partsBlurControl(part, 0, orientation, color, rotation);
     }
@@ -979,8 +979,8 @@ static void _partsBlurControl(BattleUnitPart* part, s32 flags, Mtx orientation, 
     blur->work[0].base = color;
     blur->work[0].blurColor[0] = blur->color[0];
     blur->work[0].blurColor[1] = blur->color[1];
-    if ((blur->flags & 1) && (blur->work[1].flags & 1)) {
-        blur->work[0].flags &= ~1;
+    if ((blur->flags & 1) && (blur->work[1].flags & PART_BLUR_ENTRY_DRAW)) {
+        blur->work[0].flags &= ~PART_BLUR_ENTRY_DRAW;
     }
 }
 
@@ -1000,7 +1000,7 @@ static void btlUnitPartsBlurDisp(CameraId camId, void* payload) {
     for (i = 0; i < 10; i++) {
         entry = &blur->work[i];
         color = entry->base;
-        if (entry->flags & 1) {
+        if (entry->flags & PART_BLUR_ENTRY_DRAW) {
             c = entry->blurColor;
             color.r = color.r * (u8)((c[0].r * (10 - i)) / 10 + (c[1].r * i) / 10) / 255;
             color.g = color.g * (u8)((c[0].g * (10 - i)) / 10 + (c[1].g * i) / 10) / 255;

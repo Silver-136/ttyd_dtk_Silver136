@@ -322,10 +322,10 @@ void nokonoko_use(PartyEntry* party) {
         party->work.nokonoko.word180 = 0;
         if (party->flags & PARTY_FLAG_IS_EVT_USE) {
             if (party->actionTime > 0) {
-                party->work.nokonoko.shellFlags |= 1;
+                party->work.nokonoko.shellFlags |= NOKONOKO_SHELL_FLAG_EVT_TIMED;
             }
         } else {
-            party->work.nokonoko.shellFlags &= ~1;
+            party->work.nokonoko.shellFlags &= ~NOKONOKO_SHELL_FLAG_EVT_TIMED;
         }
         party->useMotionId = 0;
     }
@@ -450,7 +450,7 @@ void nokonoko_use(PartyEntry* party) {
                         } else {
                             party->useMotionId = 50;
                         }
-                    } else if (party->work.nokonoko.shellFlags & 1) {
+                    } else if (party->work.nokonoko.shellFlags & NOKONOKO_SHELL_FLAG_EVT_TIMED) {
                         party->moveFrames = 5;
                         party->useMotionId = 21;
                         party->work.nokonoko.dashed = 1;
@@ -513,7 +513,7 @@ void nokonoko_use(PartyEntry* party) {
                 se_off();
                 break;
             }
-            if (party->work.nokonoko.shellFlags & 1) {
+            if (party->work.nokonoko.shellFlags & NOKONOKO_SHELL_FLAG_EVT_TIMED) {
                 party->useMotionId = 80;
             } else {
                 party->useMotionId = 50;
@@ -1004,11 +1004,11 @@ static HitEntry* ccwall(PartyEntry* party, s32 mode) {
                 if (mode == 0) {
                     party->position.y = hy;
                     if (__fabsf(py - hy) >= 1.0f) {
-                        party->work.nokonoko.shellFlags |= 2;
+                        party->work.nokonoko.shellFlags |= NOKONOKO_SHELL_FLAG_STEPPED_UP;
                     }
                 }
             } else {
-                if ((party->work.nokonoko.shellFlags & 2) && mode == 1) {
+                if ((party->work.nokonoko.shellFlags & NOKONOKO_SHELL_FLAG_STEPPED_UP) && mode == 1) {
                     party->position.y = hy;
                 }
                 if (__fabsf(py - hy) <= 6.0f) {

@@ -866,7 +866,7 @@ static f32 movedir2dispdir(f32 dir) {
 BOOL checkAirPort(void) {
     BOOL ret = FALSE;
     MarioWork* mario = marioGetPtr();
-    if (mario->hitobjUnder != NULL && (hitGetAttr(mario->hitobjUnder) & 0x38)) {
+    if (mario->hitobjUnder != NULL && (hitGetAttr(mario->hitobjUnder) & HIT_ATTR_PLANE_PANEL_MASK)) {
         ret = TRUE;
     }
     return ret;

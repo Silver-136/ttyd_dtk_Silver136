@@ -25,6 +25,7 @@
 #include "mot/mot_slit.h"
 #include "mario/mario_kemuri.h"
 #include "mario/mario_hit.h"
+#include "mot/mot_damage.h"
 
 /**
  * Small horizontal camera shake (about 0.01 for 50 ms) when Mario lands back
@@ -93,12 +94,12 @@ static s32 gazigazi(EventEntry* evt, BOOL isFirstCall) {
 }
 
 /**
- * TRUE while Mario is still sinking or waiting under the water in the damage motion (sub-motions 0-9);
+ * TRUE while Mario is still sinking or waiting under the water in the damage motion (before DAMAGE_SUB_LEAP_START);
  * Yoshi's code uses it.
  */
 BOOL marioChkDamageSink(void) {
     MarioWork* mario = marioGetPtr();
-    if (mario->currMotionId == MARIO_MOTION_DAMAGE && mario->currSubMotionId >= 0 && mario->currSubMotionId < 10) {
+    if (mario->currMotionId == MARIO_MOTION_DAMAGE && mario->currSubMotionId >= DAMAGE_SUB_START && mario->currSubMotionId < DAMAGE_SUB_LEAP_START) {
         return TRUE;
     }
     return FALSE;
@@ -150,7 +151,7 @@ void mot_damage(void) {
         } else {
             marioChgEvtPose("M_F_1");
         }
-        mario->currSubMotionId = 0;
+        mario->currSubMotionId = DAMAGE_SUB_START;
         mario->airTimer = 0;
         mario->baseSpeed = 0.0f;
         mario->multiTimer = 20;
@@ -174,7 +175,7 @@ void mot_damage(void) {
     }
 
     switch (mario->currSubMotionId) {
-        case 0:
+        case DAMAGE_SUB_START:
             if (mario->position.y >= mario->mot.damage.rootY - 160.0f) {
                 marioMakeJumpPara();
                 if (mario->jumpVelocityY <= -6.0f) {
@@ -186,27 +187,27 @@ void mot_damage(void) {
                 mario->position.y += mario->jumpVelocityY;
             } else {
                 mario->jumpVelocityY = 0.3f;
-                mario->currSubMotionId = 1;
+                mario->currSubMotionId = DAMAGE_SUB_UNDERWATER;
                 mario->multiTimer = 40;
             }
             break;
-        case 1:
+        case DAMAGE_SUB_UNDERWATER:
             if (--mario->multiTimer > 0) {
                 break;
             }
             mario->multiTimer = 0;
-            mario->currSubMotionId = 10;
+            mario->currSubMotionId = DAMAGE_SUB_LEAP_START;
             mario->mot.damage.riseSpeed = 20.0f;
             break;
-        case 10:
+        case DAMAGE_SUB_LEAP_START:
             if (++mario->multiTimer == 2) {
-                mario->currSubMotionId = 11;
+                mario->currSubMotionId = DAMAGE_SUB_RISE;
                 psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_LEAP_WATER1), &mario->position);
                 if (mario->damageHit != NULL) {
                     evtEntry(evt_gazigazi, 0, 0);
                 }
             }
-        case 11: {
+        case DAMAGE_SUB_RISE: {
             f32 v;
             f32 prevY = mario->position.y;
             v = mario->mot.damage.riseSpeed;
@@ -258,18 +259,18 @@ void mot_damage(void) {
             mario->multiTimer = (s16)(d / 8);
             mario->directionView = angleABf(mario->position.x, mario->position.z, dest.x, dest.z);
             mario->mot.damage.camStepY = (dest.y - mario->mot.damage.rootY) / (f32)mario->multiTimer;
-            mario->currSubMotionId = 12;
+            mario->currSubMotionId = DAMAGE_SUB_RETURN;
             mario->dispFlags |= MARIO_DISP_FLAG_HIDE;
 #if VERSION >= VERSION_JP
             if (mario->multiTimer == 0) {
                 mario->multiTimer = 10;
                 mario->mot.damage.camStepY = (dest.y - mario->mot.damage.rootY) / (f32)mario->multiTimer;
-                mario->currSubMotionId = 14;
+                mario->currSubMotionId = DAMAGE_SUB_RETURN_IN_PLACE;
             }
 #endif
             break;
     }
-    case 12:
+    case DAMAGE_SUB_RETURN:
         mario->camTarget.y += mario->mot.damage.camStepY;
         movePos(&mario->position.x, &mario->position.z, mario->baseSpeed, mario->directionView);
         mario->camTarget.x = mario->position.x;
@@ -277,7 +278,7 @@ void mot_damage(void) {
         if (--mario->multiTimer > 0) {
             break;
         }
-        mario->currSubMotionId = 13;
+        mario->currSubMotionId = DAMAGE_SUB_FALL_WAIT;
         mario->flags |= MARIO_FLAG_STOP_AIR_MOVEMENT;
         marioSetFallPara();
         mario->dispFlags &= ~MARIO_DISP_FLAG_HIDE;
@@ -285,14 +286,14 @@ void mot_damage(void) {
         mario->multiTimer = 1;
 #endif
         break;
-    case 13:
+    case DAMAGE_SUB_FALL_WAIT:
         if (--mario->multiTimer > 0) {
             break;
         }
 #if VERSION >= VERSION_JP
-        mario->currSubMotionId = 20;
+        mario->currSubMotionId = DAMAGE_SUB_FALL;
         break;
-    case 14:
+    case DAMAGE_SUB_RETURN_IN_PLACE:
         mario->camTarget.y += mario->mot.damage.camStepY;
         mario->camTarget.x = mario->position.x;
         mario->camTarget.z = mario->position.z;
@@ -303,9 +304,9 @@ void mot_damage(void) {
         marioSetFallPara();
         mario->dispFlags &= ~MARIO_DISP_FLAG_HIDE;
 #endif
-        mario->currSubMotionId = 20;
+        mario->currSubMotionId = DAMAGE_SUB_FALL;
         break;
-    case 20:
+    case DAMAGE_SUB_FALL:
 
         mario->hitobjStandOn = NULL;
         spd = marioGetFallSpd();
@@ -342,10 +343,10 @@ void mot_damage(void) {
         if (mario->hitobjStandOn == NULL) {
             break;
         }
-    case 30:
+    case DAMAGE_SUB_LANDED:
         mario->multiTimer = 50;
-        mario->currSubMotionId = 31;
-    case 31:
+        mario->currSubMotionId = DAMAGE_SUB_LANDED_WAIT;
+    case DAMAGE_SUB_LANDED_WAIT:
         if (--mario->multiTimer > 0) {
             break;
         }
@@ -353,7 +354,7 @@ void mot_damage(void) {
             pouchAddHP(-1);
         }
         if (pouchGetHP() <= 0) {
-            mario->currSubMotionId = 33;
+            mario->currSubMotionId = DAMAGE_SUB_HP_ZERO;
             marioUpdateCamPos();
             break;
         }
@@ -361,8 +362,8 @@ void mot_damage(void) {
             marioChgPose("M_U_3");
         }
         mario->multiTimer = 12;
-        mario->currSubMotionId = 32;
-    case 32:
+        mario->currSubMotionId = DAMAGE_SUB_STAND_UP;
+    case DAMAGE_SUB_STAND_UP:
         if (--mario->multiTimer > 0) {
             break;
         }
@@ -382,7 +383,7 @@ BOOL marioWaitDamageReturnFall(void) {
     if (mario->currMotionId != MARIO_MOTION_DAMAGE) {
         return -1;
     }
-    if (mario->currSubMotionId >= 20) {
+    if (mario->currSubMotionId >= DAMAGE_SUB_FALL) {
         f32 x, y, z;
         Vec pos = mario->position;
         marioGetScreenPos(pos, &x, &y, &z);
@@ -421,7 +422,7 @@ void mot_damageToge(void) {
 #endif
         marioNoUpdateCamPos();
         bomhei_use_cancel2();
-        mario->currSubMotionId = 0;
+        mario->currSubMotionId = DAMAGE_SUB_START;
         mario->airTimer = 0;
         mario->baseSpeed = 0.0f;
         mario->mot.damage.rootY = mario->position.y;
@@ -430,7 +431,7 @@ void mot_damageToge(void) {
     }
 
     switch (mario->currSubMotionId) {
-        case 0:
+        case DAMAGE_SUB_START:
             if (--mario->multiTimer > 0) {
                 break;
             }
@@ -441,8 +442,8 @@ void mot_damageToge(void) {
             }
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_VOICE_MARIO_DAMAGED2), &mario->position);
             mario_simple_kemuri();
-            mario->currSubMotionId = 11;
-        case 11:
+            mario->currSubMotionId = DAMAGE_SUB_RISE;
+        case DAMAGE_SUB_RISE:
             v = mario->mot.damage.riseSpeed;
             mario->position.y += v;
             v -= 1.0f;
@@ -472,9 +473,9 @@ void mot_damageToge(void) {
             // BUG: no zero check (the knock-back motion above has one from JP on): with the return spot under 8 units
             // away multiTimer is 0 and camStepY divides by zero.
             mario->mot.damage.camStepY = (dest.y - mario->mot.damage.rootY) / (f32)mario->multiTimer;
-            mario->currSubMotionId = 12;
+            mario->currSubMotionId = DAMAGE_SUB_RETURN;
             break;
-        case 12:
+        case DAMAGE_SUB_RETURN:
             mario->camTarget.y += mario->mot.damage.camStepY;
             movePos(&mario->position.x, &mario->position.z, mario->baseSpeed, mario->directionView);
             mario->camTarget.x = mario->position.x;
@@ -482,17 +483,17 @@ void mot_damageToge(void) {
             if (--mario->multiTimer > 0) {
                 break;
             }
-            mario->currSubMotionId = 13;
+            mario->currSubMotionId = DAMAGE_SUB_FALL_WAIT;
             mario->flags |= MARIO_FLAG_STOP_AIR_MOVEMENT;
             marioSetFallPara();
             break;
-        case 13:
+        case DAMAGE_SUB_FALL_WAIT:
             if (--mario->multiTimer > 0) {
                 break;
             }
-            mario->currSubMotionId = 20;
+            mario->currSubMotionId = DAMAGE_SUB_FALL;
             break;
-        case 20:
+        case DAMAGE_SUB_FALL:
             mario->hitobjStandOn = NULL;
             spd = marioGetFallSpd();
             if (spd <= -10.0f) {
@@ -514,23 +515,23 @@ void mot_damageToge(void) {
             if (mario->hitobjStandOn == NULL) {
                 break;
             }
-        case 30:
+        case DAMAGE_SUB_LANDED:
             mario->multiTimer = 50;
-            mario->currSubMotionId = 31;
-        case 31:
+            mario->currSubMotionId = DAMAGE_SUB_LANDED_WAIT;
+        case DAMAGE_SUB_LANDED_WAIT:
             if (--mario->multiTimer > 0) {
                 break;
             }
             pouchAddHP(-1);
             if (pouchGetHP() <= 0) {
-                mario->currSubMotionId = 33;
+                mario->currSubMotionId = DAMAGE_SUB_HP_ZERO;
                 marioUpdateCamPos();
                 break;
             }
             marioChgPose("M_U_3");
             mario->multiTimer = 12;
-            mario->currSubMotionId = 32;
-        case 32:
+            mario->currSubMotionId = DAMAGE_SUB_STAND_UP;
+        case DAMAGE_SUB_STAND_UP:
             if (--mario->multiTimer > 0) {
                 break;
             }
@@ -549,7 +550,7 @@ BOOL marioWaitDamageTogeReturnFall(void) {
     if (mario->currMotionId != MARIO_MOTION_DAMAGE_TOGE) {
         return -1;
     }
-    if (mario->currSubMotionId >= 20) {
+    if (mario->currSubMotionId >= DAMAGE_SUB_FALL) {
         f32 x, y, z;
         Vec pos = mario->position;
         marioGetScreenPos(pos, &x, &y, &z);

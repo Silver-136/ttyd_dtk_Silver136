@@ -2341,7 +2341,7 @@ s32 check_hammer(Fan* fan) {
             return 1;
         }
     }
-    if (mario->currMotionId == MARIO_MOTION_HAMMER_2 && mario->currSubMotionId == 0x14 && PSVECDistance(&mario->position, &fan->pos) < 65.0f) {
+    if (mario->currMotionId == MARIO_MOTION_HAMMER_2 && mario->currSubMotionId == HAMMER2_SUB_SPIN && PSVECDistance(&mario->position, &fan->pos) < 65.0f) {
         return 1;
     }
     party = partyGetPtr(0);

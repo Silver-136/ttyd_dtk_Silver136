@@ -172,7 +172,7 @@ typedef struct MarioMotSlit {      // mot_slit.c (paper slit / side-step)
 #endif
     s16 timer;                     // 0x14
     s16 count;                     // 0x16
-    s16 flags;                     // 0x18, bit 0
+    s16 flags;                     // 0x18, SLIT_FLAG_* (mot_slit.c)
     s16 side;                      // 0x1A, 1 = 260 deg, 2 = 280 deg
 } MarioMotSlit;
 
@@ -213,6 +213,22 @@ typedef enum MarioMotHammer2Flags {
     HAMMER2_FLAG_LEVEL_UP = (1 << 12),     // 0x1000, a charge level was reached this frame
     HAMMER2_FLAG_CHARGED_POSE = (1 << 13), // 0x2000, the charged pose (M_H_3A/6A/9A) was set
 } MarioMotHammer2Flags;
+
+// MarioWork.currSubMotionId in mot_hammer and mot_hammer2 (names from what each step does)
+enum {
+    HAMMER_SUB_SWING = 0,     // until the impact frame
+    HAMMER_SUB_HIT_DONE = 1,  // impact done: shake, sound and effect have played
+};
+enum {
+    HAMMER2_SUB_INIT = 0,
+    HAMMER2_SUB_PAPER_ON = 1,   // one frame later: the paper hammer animation and the wind-up sound start
+    HAMMER2_SUB_CHARGE = 10,    // B held: rotating the stick raises the charge level
+    HAMMER2_SUB_CHARGED = 11,   // full charge: waits for B to be released (CHARGE falls through to this test too)
+    HAMMER2_SUB_SPIN = 20,      // the spin itself (eki_00, rsh_05, rsh_06 and tou_02 test for it)
+    HAMMER2_SUB_SPIN_END = 22,  // short wait after the spin
+    HAMMER2_SUB_END_1 = 23,     // one more frame
+    HAMMER2_SUB_END_2 = 24,     // back to the stay motion (no code sets it: END_1 falls through)
+};
 
 // MarioMotRoll.flags (mot_roll)
 #define ROLL_FLAG_SLOPE_DAMP_UNUSED (1 << 4)   // 0x10, damps the speed on flat ground; nothing sets it

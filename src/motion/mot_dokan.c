@@ -128,9 +128,9 @@ void mot_dokan(void) {
         mario->airTimer = 0;
         mario->baseSpeed = 0.0f;
         if (mario->dokanType == DOKAN_TATE_DOWNOUT) {
-            mario->currSubMotionId = 10;
+            mario->currSubMotionId = DOKAN_SUB_TATE_SHRINK;
         } else if (mario->dokanType == DOKAN_TATE_UPOUT) {
-            mario->currSubMotionId = 10;
+            mario->currSubMotionId = DOKAN_SUB_TATE_SHRINK;
         } else if (mario->dokanType == DOKAN_TATE_UPIN) {
             marioPaperOn("p_dokan_y");
             marioChgPaper("PM_D_1A");
@@ -139,7 +139,7 @@ void mot_dokan(void) {
             mario->dispFlags |= MARIO_DISP_FLAG_NO_DIR_FLIP;
             mario->dispFlags |= MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
             mario->displayDirection = mario->displayDirectionTarget;
-            mario->currSubMotionId = 20;
+            mario->currSubMotionId = DOKAN_SUB_TATE_GROW_START;
 
             // overwritten on the next line; the retail code stores both values
             mario->mot.dokan.rotSpeed = 0.0f;
@@ -151,7 +151,7 @@ void mot_dokan(void) {
             _partyEntry(1);
         } else if (mario->dokanType == DOKAN_TATE_DOWNIN) {
             _partyEntry(0);
-            mario->currSubMotionId = 30;
+            mario->currSubMotionId = DOKAN_SUB_TATE_SPIN;
         } else if (mario->dokanType == DOKAN_YOKO_OUT) {
             mario->dispFlags |= MARIO_DISP_FLAG_SHADOW_OFF;
             party = partyGetPtr(0);
@@ -186,7 +186,7 @@ void mot_dokan(void) {
             mario->displayDirection = mario->displayDirectionTarget;
             mario->mot.dokan.rotSpeed = 30.0f;
             mario->multiTimer = 20;
-            mario->currSubMotionId = 0;
+            mario->currSubMotionId = DOKAN_SUB_YOKO_SHRINK;
         } else if (mario->dokanType == DOKAN_YOKO_IN) {
             {
                 Vec v0 = {0.0f, 0.0f, 0.0f};
@@ -228,7 +228,7 @@ void mot_dokan(void) {
             mario->displayDirection = mario->displayDirectionTarget;
             mario->mot.dokan.rotSpeed = 30.0f;
 #endif
-            mario->currSubMotionId = 40;
+            mario->currSubMotionId = DOKAN_SUB_YOKO_GROW;
             _partyEntry(1);
             mario->dispFlags |= MARIO_DISP_FLAG_SHADOW_OFF;
             partyShadowOff(partyGetPtr(marioGetPartyId()));
@@ -237,7 +237,7 @@ void mot_dokan(void) {
     }
 
     switch (mario->currSubMotionId) {
-        case 10:
+        case DOKAN_SUB_TATE_SHRINK:
             mario->displayDirection = revise360(mario->displayDirection + mario->mot.dokan.rotSpeed);
             mario->scale.x += -0.005f;
             if (mario->scale.x < 0.0f) {
@@ -246,15 +246,15 @@ void mot_dokan(void) {
             mario->scale.y = mario->scale.x;
             mario->scale.z = mario->scale.x;
             break;
-        case 20: {
+        case DOKAN_SUB_TATE_GROW_START: {
             Vec v = {0.0f, 0.0f, 0.0f};
             mario->scale = v;
-            mario->currSubMotionId = 21;
+            mario->currSubMotionId = DOKAN_SUB_TATE_GROW;
             if (mario->flags & MARIO_FLAG_BG_MODE) {
                 mario->dispOfs2.y = -2.0f;
             }
     }
-    case 21:
+    case DOKAN_SUB_TATE_GROW:
         mario->displayDirection = revise360(mario->displayDirection + mario->mot.dokan.rotSpeed);
         if (mario->flags & MARIO_FLAG_BG_MODE) {
             mario->scale.x += 0.03f;
@@ -272,10 +272,10 @@ void mot_dokan(void) {
             mario->scale.z = mario->scale.x;
         }
         break;
-    case 30:
+    case DOKAN_SUB_TATE_SPIN:
         mario->displayDirection = revise360(mario->displayDirection + mario->mot.dokan.rotSpeed);
         break;
-    case 0:
+    case DOKAN_SUB_YOKO_SHRINK:
         if (--mario->multiTimer <= 0) {
             mario->rot.x += mario->mot.dokan.rotSpeed;
             mario->scale.x += -0.02f;
@@ -289,7 +289,7 @@ void mot_dokan(void) {
             mario->dispOfs.z = -3.0f;
         }
         break;
-    case 40:
+    case DOKAN_SUB_YOKO_GROW:
         mario->rot.x += mario->mot.dokan.rotSpeed;
         mario->scale.x += 0.03f;
         if (mario->scale.x >= 1.0f) {
@@ -322,32 +322,32 @@ void mot_dokan(void) {
         }
         mario->camTarget.y = mario->position.y;
         break;
-    case 100:
+    case DOKAN_SUB_END:
         if (mario->dokanType == DOKAN_TATE_UPIN) {
-            mario->currSubMotionId = 110;
+            mario->currSubMotionId = DOKAN_SUB_UPIN_END;
         } else if (mario->dokanType == DOKAN_YOKO_IN) {
             marioUpdateCamPos();
             mario->rot.x = 0.0f;
             marioChgPaper("PM_D_1B");
             mario->multiTimer = 20;
-            mario->currSubMotionId = 102;
+            mario->currSubMotionId = DOKAN_SUB_END_WAIT;
             partyDokanEnd(marioGetPartyId(), mario->dokanType);
             partyDokanEnd(marioGetExtraPartyId(), mario->dokanType);
         } else if (mario->dokanType == DOKAN_TATE_UPIN) {
-            mario->currSubMotionId = 101;
+            mario->currSubMotionId = DOKAN_SUB_END_TURN;
         } else if (mario->dokanType == DOKAN_TATE_DOWNIN) {
             marioUpdateCamPos();
-            mario->currSubMotionId = 101;
+            mario->currSubMotionId = DOKAN_SUB_END_TURN;
         } else {
-            mario->currSubMotionId = 102;
+            mario->currSubMotionId = DOKAN_SUB_END_WAIT;
         }
         break;
-    case 101:
+    case DOKAN_SUB_END_TURN:
         mario->displayDirection += mario->mot.dokan.rotSpeed;
         if (mario->displayDirection >= 540.0f) {
             marioChgPaper("PM_D_1B");
             mario->multiTimer = 20;
-            mario->currSubMotionId = 102;
+            mario->currSubMotionId = DOKAN_SUB_END_WAIT;
             mario->rot.x = 0.0f;
 #if VERSION < VERSION_US
             mario->displayDirectionTarget = revise360(180.0f + mario->displayDirectionTarget);
@@ -359,12 +359,12 @@ void mot_dokan(void) {
             partyDokanEnd(marioGetExtraPartyId(), mario->dokanType);
         }
         break;
-    case 102:
+    case DOKAN_SUB_END_WAIT:
         if (--mario->multiTimer <= 0) {
-            mario->currSubMotionId = 103;
+            mario->currSubMotionId = DOKAN_SUB_END_FINISH;
         }
         break;
-    case 103:
+    case DOKAN_SUB_END_FINISH:
         mario->returnPos = mario->position;
         {
             Vec v = {1.0f, 1.0f, 1.0f};
@@ -389,14 +389,14 @@ void mot_dokan(void) {
     }
 
     switch (mario->currSubMotionId) {
-        case 110:
+        case DOKAN_SUB_UPIN_END:
             if (!(mario->flags & MARIO_FLAG_BG_MODE)) {
                 mario->camTarget.y = mario->position.y;
             }
             marioUpdateCamPos();
             camFollowYOff();
-            mario->currSubMotionId = 111;
-        case 111:
+            mario->currSubMotionId = DOKAN_SUB_UPIN_END_TURN;
+        case DOKAN_SUB_UPIN_END_TURN:
             mario->displayDirection += mario->mot.dokan.rotSpeed;
             if (mario->displayDirection >= 540.0f) {
                 if (!(mario->flags & MARIO_FLAG_BG_MODE)) {
@@ -404,7 +404,7 @@ void mot_dokan(void) {
                 }
                 marioChgPaper("PM_D_1B");
                 mario->multiTimer = 20;
-                mario->currSubMotionId = 112;
+                mario->currSubMotionId = DOKAN_SUB_UPIN_END_WAIT;
                 mario->rot.x = 0.0f;
                 mario->displayDirectionTarget = revise360(mario->displayDirection);
                 mario->displayDirection = mario->displayDirectionTarget;
@@ -414,12 +414,12 @@ void mot_dokan(void) {
                 partyDokanEnd(marioGetExtraPartyId(), mario->dokanType);
             }
             break;
-        case 112:
+        case DOKAN_SUB_UPIN_END_WAIT:
             if (--mario->multiTimer <= 0) {
-                mario->currSubMotionId = 113;
+                mario->currSubMotionId = DOKAN_SUB_UPIN_END_FINISH;
             }
             break;
-        case 113:
+        case DOKAN_SUB_UPIN_END_FINISH:
             mario->returnPos = mario->position;
             {
                 Vec v = {1.0f, 1.0f, 1.0f};

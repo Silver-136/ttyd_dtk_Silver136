@@ -518,7 +518,7 @@ BattleUnit* BattleChangeParty(BattleWork* wp) {
     if (kind < TYPE_PARTNER_MIN || kind >= TYPE_PARTNER_MAX) {
         return NULL;
     }
-    unit = BtlUnit_Spawn(&entryunit_party[kind - TYPE_PARTNER_MIN], 1);
+    unit = BtlUnit_Spawn(&entryunit_party[kind - TYPE_PARTNER_MIN], BTL_SPAWN_QUEUE_BACK);
     for (i = 0; i < BATTLE_UNIT_SLOT_COUNT; i++) {
         s32 id = wp->movePriorityQueue[i];
         if (id != -1) {

@@ -273,7 +273,7 @@ void mot_hammer(void) {
         mario->mot.hammer.dir = hamDir(mario);
         mario->multiTimer = 0;
         mario->airTimer = 0;
-        mario->currSubMotionId = 0;
+        mario->currSubMotionId = HAMMER_SUB_SWING;
         mario->baseSpeed = 0.0f;
         mario->hitobjHammerNew = NULL;
         hit = hitEstimate(&kind);
@@ -332,7 +332,7 @@ void mot_hammer(void) {
     animPoseSetLocalTime(mario->paperAnimGroupId[marioAnimeId()], (f32)n);
     if (done) {
         quakeOn(marioGetHammerLevel());
-        mario->currSubMotionId = 1;
+        mario->currSubMotionId = HAMMER_SUB_HIT_DONE;
         mario->hitobjHammer = mario->hitobjHammerNew;
 #if VERSION >= VERSION_JP
         px = mario->position.x;
@@ -523,21 +523,21 @@ void mot_hammer2(void) {
         mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
         mario->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
         mario->mot.hammer2.flags = 0;
-        mario->currSubMotionId = 0;
+        mario->currSubMotionId = HAMMER2_SUB_INIT;
         mario->mot.hammer2.sfxId = -1;
 #if VERSION >= VERSION_US
         mario->savedDisplayDirection = mario->displayDirection;
 #endif
     }
     switch (mario->currSubMotionId) {
-        case 0:
+        case HAMMER2_SUB_INIT:
             mario->flags |= MARIO_FLAG_STOP_AIR_MOVEMENT;
             mario->dispFlags |= MARIO_DISP_FLAG_NO_REAR_POSE;
             mario->hammerChargeTimer = 0;
             mario->hammerChargeLv = 0;
             mario->baseSpeed = 0.0f;
             mario->airTimer = 0;
-            mario->currSubMotionId = 1;
+            mario->currSubMotionId = HAMMER2_SUB_PAPER_ON;
             mario->multiTimer = 30;
             if (mario->hammerChargeLv == 3) {
                 mario->mot.hammer2.spinSpeed = 38.0f;
@@ -558,10 +558,10 @@ void mot_hammer2(void) {
                 break;
             }
             mario->hitobjHammerNew = NULL;
-            mario->currSubMotionId = 1;
+            mario->currSubMotionId = HAMMER2_SUB_PAPER_ON;
             mario->multiTimer = 1;
             break;
-        case 1:
+        case HAMMER2_SUB_PAPER_ON:
             if (--mario->multiTimer > 0) {
                 break;
             }
@@ -578,9 +578,9 @@ void mot_hammer2(void) {
             mario->mot.hammer2.animTime = 0.0f;
             mario->poseTime = 0;
             animPoseSetLocalTime(mario->paperAnimGroupId[marioAnimeId()], mario->mot.hammer2.animTime);
-            mario->currSubMotionId = 10;
+            mario->currSubMotionId = HAMMER2_SUB_CHARGE;
             mario->multiTimer = 30;
-        case 10:
+        case HAMMER2_SUB_CHARGE:
             if (marioGetRub(PAD_BUTTON_B, &rubDir, &rubCount, &rubMag) == 1) {
                 mario->mot.hammer2.flags &= ~HAMMER2_FLAG_AT_LEVEL;
                 mario->hammerChargeTimer++;
@@ -593,7 +593,7 @@ void mot_hammer2(void) {
                 if (mario->mot.hammer2.animTime >= 72.0f) {
                     mario->mot.hammer2.animTime = 72.0f;
                 }
-                mario->currSubMotionId = 11;
+                mario->currSubMotionId = HAMMER2_SUB_CHARGED;
                 marioChgPaper("P_H_1B");
                 mario->hammerChargeLv = 3;
                 h2LevelUp(mario, 0.4f, 1.7f);
@@ -624,7 +624,7 @@ void mot_hammer2(void) {
             if (strcmp(mario->paperAnimName, "P_H_1A") == 0) {
                 animPoseSetLocalTime(mario->paperAnimGroupId[marioAnimeId()], mario->mot.hammer2.animTime / 6.0f);
             }
-        case 11:
+        case HAMMER2_SUB_CHARGED:
             if (!(mario->buttonHold & PAD_BUTTON_B)) {
                 if (mario->mot.hammer2.sfxId != -1) {
                     psndSFXOff(mario->mot.hammer2.sfxId);
@@ -643,7 +643,7 @@ void mot_hammer2(void) {
                     break;
                 }
                 marioChgPaper("P_H_1C");
-                mario->currSubMotionId = 20;
+                mario->currSubMotionId = HAMMER2_SUB_SPIN;
                 if (mario->hammerChargeLv == 3) {
                     mario->multiTimer = 0x30;
                 } else if (mario->hammerChargeLv == 2) {
@@ -662,7 +662,7 @@ void mot_hammer2(void) {
                 effUltraHammerEntry(mario->position.x, 20.0f + mario->position.y, mario->position.z, 1.0f, mario->hammerDir != 0, mario->multiTimer);
             }
             break;
-        case 20:
+        case HAMMER2_SUB_SPIN:
             ang = mario->displayDirection;
             mario->mot.hammer2.timer = 10;
             mario->dispFlags |= MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
@@ -695,8 +695,8 @@ void mot_hammer2(void) {
                 marioAdjustMoveDir();
                 mario->multiTimer = 30;
             }
-            mario->currSubMotionId = 22;
-        case 22:
+            mario->currSubMotionId = HAMMER2_SUB_SPIN_END;
+        case HAMMER2_SUB_SPIN_END:
             if (--mario->multiTimer > 0) {
                 break;
             }
@@ -706,21 +706,21 @@ void mot_hammer2(void) {
                 marioAdjustMoveDir();
             }
             mario->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
-            mario->currSubMotionId = 23;
+            mario->currSubMotionId = HAMMER2_SUB_END_1;
             mario->multiTimer = 1;
-        case 23:
+        case HAMMER2_SUB_END_1:
             if (--mario->multiTimer > 0) {
                 break;
             }
             mario->multiTimer = 1;
-        case 24:
+        case HAMMER2_SUB_END_2:
             if (--mario->multiTimer > 0) {
                 break;
             }
             mario->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
             mario->flags &= ~MARIO_FLAG_STOP_AIR_MOVEMENT;
             marioAdjustMoveDir();
-            marioChgMotSub(MARIO_MOTION_STAY, 0);
+            marioChgMotSub(MARIO_MOTION_STAY, FALSE);
             break;
     }
 }
@@ -734,7 +734,7 @@ f32 marioGetAngleKaitenHammer(void) {
     if (mario->currMotionId != MARIO_MOTION_HAMMER_2) {
         return -1.0f;
     }
-    if (mario->currSubMotionId != 20) {
+    if (mario->currSubMotionId != HAMMER2_SUB_SPIN) {
         return -2.0f;
     }
     return revise360(270.0f - mario->displayDirection);

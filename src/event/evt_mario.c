@@ -29,6 +29,7 @@
 #include "peach.h"
 #include "koopa_motion.h"
 #include "mot/mot_roll.h"
+#include "mot/mot_dokan.h"
 #include "mot/mot_plane.h"
 #include "eff/eff_kemuri.h"
 
@@ -335,13 +336,13 @@ const char* a_mario_group[] = {
 };
 
 /**
- * Blocks until Mario leaves the pipe motion; on the first call it sets sub-motion 100 to end it.
+ * Blocks until Mario leaves the pipe motion; on the first call it sets DOKAN_SUB_END to end it.
  * Called at the end of evt_bero's pipe arrival script.
  */
 USER_FUNC(evt_mario_dokan_end) {
     MarioWork* mp = marioGetPtr();
     if (isFirstCall && mp->currMotionId == MARIO_MOTION_DOKAN) {
-        mp->currSubMotionId = 100;
+        mp->currSubMotionId = DOKAN_SUB_END;
         return EVT_RETURN_BLOCK;
     }
     if (mp->currMotionId == MARIO_MOTION_DOKAN) {

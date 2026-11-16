@@ -174,9 +174,9 @@ void vivianUnhold(PartyEntry* party) {
 void partyVivianTailStop(PartyEntry* party) {
     if (party->currentMemberId == PARTY_VIVIAN) {
 #if VERSION <= VERSION_DEMO_JP
-        party->work.vivian.tailFlags |= 1; // the early demos keep the tail flags in the Vivian work
+        party->work.vivian.tailFlags |= VIVIAN_TAIL_FLAG_OFF; // the early demos keep the tail flags in the Vivian work
 #else
-        party->tailFlags |= 1;
+        party->tailFlags |= VIVIAN_TAIL_FLAG_OFF;
 #endif
     }
 }
@@ -185,9 +185,9 @@ void partyVivianTailStop(PartyEntry* party) {
 void partyVivianTailStart(PartyEntry* party) {
     if (party->currentMemberId == PARTY_VIVIAN) {
 #if VERSION <= VERSION_DEMO_JP
-        party->work.vivian.tailFlags &= ~1;
+        party->work.vivian.tailFlags &= ~VIVIAN_TAIL_FLAG_OFF;
 #else
-        party->tailFlags &= ~1;
+        party->tailFlags &= ~VIVIAN_TAIL_FLAG_OFF;
 #endif
     }
 }
@@ -204,7 +204,7 @@ BOOL vivianDisplayTailCheck(PartyEntry* party) {
     if (party->currentMemberId != PARTY_VIVIAN) {
         return FALSE;
     }
-    if ((party->tailFlags & 1)) {
+    if ((party->tailFlags & VIVIAN_TAIL_FLAG_OFF)) {
         return FALSE;
     }
     if (party->flags2 & PARTY_DISP_FLAG_OUT_OF_SCREEN) {

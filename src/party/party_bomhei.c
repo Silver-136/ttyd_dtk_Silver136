@@ -457,8 +457,12 @@ void bomhei_use(PartyEntry* party) {
 #endif
 }
 
+// BomheiWork.flags (bit 0x4 is tested once, on landing after the throw, and never set)
+#define BOMHEI_FLAG_FUSE_LIT 0x2  // 2.5 s left: fuse sound, lit poses L_2 / W_2
+#define BOMHEI_FLAG_IN_WATER 0x8  // landed in water (step 40), until the blast
+
 typedef struct BomheiWork {
-    u32 flags;  // 0x0
+    u32 flags;  // 0x0, BOMHEI_FLAG_*
     s32 timer;  // 0x4
 } BomheiWork;
 
@@ -537,7 +541,7 @@ static void bomhei_use_main(PartyEntry* party) {
             party->work.bomhei.state = 20;
             break;
         case 10:
-            if (BOMHEI_WORK(party)->flags & 2) {
+            if (BOMHEI_WORK(party)->flags & BOMHEI_FLAG_FUSE_LIT) {
                 partyChgPose(party, "L_2");
             }
             bomhei_hold(party);
@@ -632,7 +636,7 @@ static void bomhei_use_main(PartyEntry* party) {
             if (!(party->flags & PARTY_FLAG_IS_EVT_USE) && (gp->buttonNew[0] & PAD_BUTTON_X)) {
                 BOMHEI_WORK(party)->timer = (s16)(sysMsec2Frame(500) + 1);
             }
-            partyChgPose(party, !(BOMHEI_WORK(party)->flags & 2) ? "W_1" : "W_2");
+            partyChgPose(party, !(BOMHEI_WORK(party)->flags & BOMHEI_FLAG_FUSE_LIT) ? "W_1" : "W_2");
             party->moveSpeed = 0.6f;
             partyMove(party);
             if (BOMHEI_WORK(party)->timer <= 0) {
@@ -648,7 +652,7 @@ static void bomhei_use_main(PartyEntry* party) {
 #endif
         BOMHEI_WORK(party)->timer--;
         if (BOMHEI_WORK(party)->timer == (s16)sysMsec2Frame(2500)) {
-            BOMHEI_WORK(party)->flags |= 2;
+            BOMHEI_WORK(party)->flags |= BOMHEI_FLAG_FUSE_LIT;
 #if VERSION <= VERSION_DEMO_JP
             se1_on(party, (const char*)PSND_SFX_PARTY_PBM_FUSE1);
 #else
@@ -675,9 +679,9 @@ static void bomhei_use_main(PartyEntry* party) {
             // Called with no prototype in scope, passing the Vec by value (the callee's Vec* then points at the caller's
             // copy, same values); the copy is in the retail code, so the original called it this way.
             marioSetSplash(0, party->position);
-            BOMHEI_WORK(party)->flags |= 8;
+            BOMHEI_WORK(party)->flags |= BOMHEI_FLAG_IN_WATER;
             BOMHEI_WORK(party)->timer = (s16)(sysMsec2Frame(500) + 30);
-            BOMHEI_WORK(party)->flags |= 2;
+            BOMHEI_WORK(party)->flags |= BOMHEI_FLAG_FUSE_LIT;
             party->flags |= PARTY_FLAG_FORCE_FALL;
             party->useMotionId = 41;
             party->moveFrames = 6;
@@ -726,13 +730,13 @@ static void bomhei_use_main(PartyEntry* party) {
                 break;
             }
             se2_off(party);
-            BOMHEI_WORK(party)->flags &= ~2;
+            BOMHEI_WORK(party)->flags &= ~BOMHEI_FLAG_FUSE_LIT;
             party->hitobjAction = check_front(party);
             if (mario->flags & MARIO_FLAG_IS_CARRYING_BOBBERY) {
                 mario->flags &= ~MARIO_FLAG_IS_CARRYING_BOBBERY;
             }
             party->flags &= ~PARTY_FLAG_IS_FALLING;
-            BOMHEI_WORK(party)->flags &= ~8;
+            BOMHEI_WORK(party)->flags &= ~BOMHEI_FLAG_IN_WATER;
             party->useMotionId = 60;
             break;
     }

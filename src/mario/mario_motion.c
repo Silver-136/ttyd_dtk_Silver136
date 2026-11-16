@@ -249,13 +249,13 @@ void marioChgShipMotion(void) {
 }
 
 /**
- * Puts Mario straight into the tube (roll) motion at its sub-state 50,
+ * Puts Mario straight into the tube (roll) motion at ROLL_SUB_ROLLING_DIRECT,
  * without running the old motion's post function or the first-frame setup.
  * The Pianta Parlor tube game (yuu_02) uses it; landing in tube mode too.
  */
 void marioChgRollMotion(void) {
     MarioWork* mario = marioGetPtr();
-    mario->currSubMotionId = 50;
+    mario->currSubMotionId = ROLL_SUB_ROLLING_DIRECT;
     mario->currMotionId = MARIO_MOTION_ROLL;
 }
 

@@ -46,6 +46,7 @@ typedef enum HitAttributes {
     HIT_ATTR_NPC_ONLY = (1 << 2),          // 0x4, only NPCs collide (hitCheckAttr(4) probes skip it)
     HIT_ATTR_PLANE_PANEL_R = (1 << 4),     // 0x10, plane panel facing right (yaw 90)
     HIT_ATTR_PLANE_PANEL_L = (1 << 5),     // 0x20, plane panel facing left (yaw 270)
+    HIT_ATTR_PLANE_PANEL_MASK = 0x38,      // the mask marioChkPlanePlace and checkAirPort test: both panels and bit 3
     HIT_ATTR_SHIP_ONLY = (1 << 7),         // 0x80, only the paper boat collides
     HIT_ATTR_SHALLOW_WATER = (1 << 8),     // 0x100
     HIT_ATTR_WATER_HAZARD = (1 << 9),      // 0x200, deep water: falling in respawns Mario

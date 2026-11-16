@@ -3172,7 +3172,7 @@ static void partyPreDisp(PartyEntry* party) {
         }
     }
 #if VERSION <= VERSION_DEMO_JP
-    if (party->currentMemberId == PARTY_VIVIAN && !(party->work.vivian.tailFlags & 1)) {
+    if (party->currentMemberId == PARTY_VIVIAN && !(party->work.vivian.tailFlags & VIVIAN_TAIL_FLAG_OFF)) {
 #else
     if (vivianDisplayTailCheck(party)) {
 #endif

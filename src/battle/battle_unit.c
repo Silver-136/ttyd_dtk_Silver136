@@ -299,8 +299,8 @@ BOOL BtlUnit_Delete(BattleUnit* unit) {
 }
 
 /**
- * Creates a unit mid-battle (BtlUnit_Entry) and, with flag 2, puts it first in the move order or, with flag 1,
- * last.
+ * Creates a unit mid-battle (BtlUnit_Entry) and, with BTL_SPAWN_QUEUE_FRONT, puts it first in the move order or,
+ * with BTL_SPAWN_QUEUE_BACK, last.
  */
 BattleUnit* BtlUnit_Spawn(BattleUnitSetup* setup, s32 flags) {
     BattleWork* wp = _battleWorkPointer;
@@ -311,7 +311,7 @@ BattleUnit* BtlUnit_Spawn(BattleUnitSetup* setup, s32 flags) {
 
     unit = BtlUnit_Entry(setup);
     if (!unit) return unit;
-    if (flags & 2) {
+    if (flags & BTL_SPAWN_QUEUE_FRONT) {
         unit->moveState = MOVE_STATE_NORMAL;
         id = unit->unitId;
         for (i = 0; i < BATTLE_UNIT_MAX; i++) {
@@ -324,7 +324,7 @@ BattleUnit* BtlUnit_Spawn(BattleUnitSetup* setup, s32 flags) {
             wp->movePriorityQueue[i] = id;
             id = tmp;
         }
-    } else if (flags & 1) {
+    } else if (flags & BTL_SPAWN_QUEUE_BACK) {
         unit->moveState = MOVE_STATE_NORMAL;
         id = unit->unitId;
         for (i = 63; i >= 0; i--) {
@@ -2570,9 +2570,9 @@ void BtlUnit_HpGaugeMain(BattleUnit* unit) {
     if (gauge->visibleTimer > 0) {
         gauge->visibleTimer--;
     }
-    if ((unit->flags & BATTLE_UNIT_FLAG_SHOW_HP) && gauge->visibleTimer <= 0 && (gauge->flags & 1)) {
+    if ((unit->flags & BATTLE_UNIT_FLAG_SHOW_HP) && gauge->visibleTimer <= 0 && (gauge->flags & HP_GAUGE_FLAG_TIMED)) {
         unit->flags &= ~BATTLE_UNIT_FLAG_SHOW_HP;
-        gauge->flags &= ~1;
+        gauge->flags &= ~HP_GAUGE_FLAG_TIMED;
     }
 }
 

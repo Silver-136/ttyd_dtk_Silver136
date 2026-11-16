@@ -210,7 +210,7 @@ void* marioGetTouchNpcPtr(void) {
 
 /** TRUE if the surface is a plane panel (hit attribute bits 0x38); Mario's motion checks then turn him into a plane. */
 BOOL marioChkPlanePlace(HitEntry* hit) {
-    return (hitGetAttr(hit) & 0x38) != 0;
+    return (hitGetAttr(hit) & HIT_ATTR_PLANE_PANEL_MASK) != 0;
 }
 
 /** Records Mario's current height as the peak of the jump or fall (jumpPeakY). */

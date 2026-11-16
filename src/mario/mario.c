@@ -1041,7 +1041,7 @@ void marioReInit(void) {
     f32 moveDir;
 #if VERSION <= VERSION_DEMO_JP
     flag22 = FALSE;
-    if ((wp = mp)->flags & 0x200000) {
+    if ((wp = mp)->flags & MARIO_FLAG_GONE_THROUGH_BARS) {
         flag22 = TRUE;
     }
     dotFlag = wp->flags & MARIO_FLAG_IS_8_BIT;

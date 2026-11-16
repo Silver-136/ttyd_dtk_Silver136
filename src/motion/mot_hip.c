@@ -30,6 +30,25 @@
 #define HIP_SFX_VOICE (mario->mot.hip.sfxId[1])
 #endif
 
+// MarioWork.currSubMotionId in mot_hip (names from what each step does)
+enum {
+    HIP_SUB_START = 0,        // starts the looping sounds
+    HIP_SUB_RISE_SPIN = 1,    // first turn (20 degrees a frame) while the hop rises
+    HIP_SUB_PEAK = 2,         // 5 frames at the top
+    HIP_SUB_SECOND_SPIN = 10, // second turn (22.5 degrees a frame) in place
+    HIP_SUB_DROP_START = 20,  // 200 ms wait before the drop
+    HIP_SUB_DROP = 21,        // falls until a floor is found
+    HIP_SUB_LANDED = 22,      // MARIO_MOTION_HIP_2: 20 frames on the ground
+    HIP_SUB_STICK_SPIN = 50,  // no code sets it: hangs in the air, port 3's C stick turns Mario
+};
+
+// chkground results
+enum {
+    HIP_GROUND_NONE = 0,    // still in the air
+    HIP_GROUND_DAMAGE = 1,  // landed on water or spikes: the damage motion has started
+    HIP_GROUND_LANDED = 2,
+};
+
 /** Vertical camera shake (0.0195 for 110 ms) when Mario's spin jump lands on the ground. */
 static EVT_BEGIN(quake_evt)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.01953125f), 110)
@@ -165,16 +184,16 @@ void mot_hip(void) {
         d = 14.0f * marioGetScale() / 2.0f;
         mario->rotOfs.y += d;
         mario->dispOfs2.y = 0.0f;
-        mario->currSubMotionId = 0;
+        mario->currSubMotionId = HIP_SUB_START;
         hip_snd_reset(mario);
     }
     switch (mario->currSubMotionId) {
-        case 0:
+        case HIP_SUB_START:
             hip_snd_on(mario);
             mario->mot.hip.angle = 0.0f;
             mario->baseSpeed = 0.0f;
-            mario->currSubMotionId = 1;
-        case 1:
+            mario->currSubMotionId = HIP_SUB_RISE_SPIN;
+        case HIP_SUB_RISE_SPIN:
             if ((mario->mot.hip.angle += 20.0f) >= 360.0f) {
                 mario->mot.hip.angle = 360.0f;
             }
@@ -184,19 +203,19 @@ void mot_hip(void) {
             }
             if (360.0f == mario->mot.hip.angle && mario->jumpVelocityY <= 0.0f) {
                 mario->multiTimer = 5;
-                mario->currSubMotionId = 2;
+                mario->currSubMotionId = HIP_SUB_PEAK;
                 mario->jumpVelocityY = 2.0f;
             }
             switch (chkground()) {
-            case 1:
+            case HIP_GROUND_DAMAGE:
                 return;
-            case 2:
-                marioChgMotSub(MARIO_MOTION_STAY, 0);
+            case HIP_GROUND_LANDED:
+                marioChgMotSub(MARIO_MOTION_STAY, FALSE);
                 mot_hip_post();
                 return;
             }
             break;
-        case 2:
+        case HIP_SUB_PEAK:
             if (mario->jumpVelocityY >= 0.0f) {
                 mario->jumpVelocityY -= 1.4f;
                 if (mario->hitobjHead == NULL) {
@@ -204,42 +223,42 @@ void mot_hip(void) {
                 }
             }
             if (--mario->multiTimer <= 0) {
-                mario->currSubMotionId = 10;
+                mario->currSubMotionId = HIP_SUB_SECOND_SPIN;
             }
             switch (chkground()) {
-            case 1:
+            case HIP_GROUND_DAMAGE:
                 return;
-            case 2:
-                marioChgMotSub(MARIO_MOTION_STAY, 0);
+            case HIP_GROUND_LANDED:
+                marioChgMotSub(MARIO_MOTION_STAY, FALSE);
                 mot_hip_post();
                 return;
             }
             break;
-        case 10:
+        case HIP_SUB_SECOND_SPIN:
             marioChkLandon(&y, 0.0f);
             if ((mario->mot.hip.angle += 22.5f) >= 360.0f) {
                 mario->flags &= ~MARIO_FLAG_IS_JUMPING;
                 mario->flags |= MARIO_FLAG_IS_FALLING;
                 mario->mot.hip.angle = 0.0f;
-                mario->currSubMotionId = 20;
+                mario->currSubMotionId = HIP_SUB_DROP_START;
                 mario->jumpAccelerationY = -3.4744f;
                 mario->jumpJerkY = 0.4704f;
                 mario->jumpSnapY = -1.1904f;
                 mario->jumpVelocityY = mario->jumpAccelerationY;
             }
             switch (chkground()) {
-            case 1:
+            case HIP_GROUND_DAMAGE:
                 return;
-            case 2:
-                marioChgMotSub(MARIO_MOTION_STAY, 0);
+            case HIP_GROUND_LANDED:
+                marioChgMotSub(MARIO_MOTION_STAY, FALSE);
                 mot_hip_post();
                 return;
             }
             break;
-        case 20:
+        case HIP_SUB_DROP_START:
             mario->multiTimer = sysMsec2Frame(200);
-            mario->currSubMotionId = 21;
-        case 21:
+            mario->currSubMotionId = HIP_SUB_DROP;
+        case HIP_SUB_DROP:
             if (--mario->multiTimer > 0) {
                 break;
             }
@@ -258,7 +277,7 @@ void mot_hip(void) {
             }
             if (hit != NULL) {
                 mario->currMotionId = MARIO_MOTION_HIP_2;
-                mario->currSubMotionId = 22;
+                mario->currSubMotionId = HIP_SUB_LANDED;
                 mario->multiTimer = 20;
                 mario->hitobjStandOn = hit;
                 mario->hitobjJumpFrom = NULL;
@@ -307,8 +326,8 @@ void mot_hip(void) {
                 camFollowYOn();
             }
             break;
-        case 22:
-            if (chkground() == 1) {
+        case HIP_SUB_LANDED:
+            if (chkground() == HIP_GROUND_DAMAGE) {
                 return;
             }
             if (--mario->multiTimer <= 0) {
@@ -318,11 +337,11 @@ void mot_hip(void) {
                 }
                 mario->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
                 mario->flags &= ~MARIO_FLAG_STOP_AIR_MOVEMENT;
-                marioChgMotSub(MARIO_MOTION_STAY, 0);
+                marioChgMotSub(MARIO_MOTION_STAY, FALSE);
                 mot_hip_post();
             }
             break;
-        case 50:
+        case HIP_SUB_STICK_SPIN:
             marioChgPose("M_A_1A");
             mario->jumpVelocityY = 0.0f;
             mario->jumpAccelerationY = 0.0f;
@@ -340,8 +359,8 @@ void mot_hip(void) {
 }
 
 /**
- * Landing check for the spin jump: 0 while in the air,
- * 1 when the floor sent Mario into the water (0x200) or spike (0xC00) damage motion, 2 for a normal landing.
+ * Landing check for the spin jump: HIP_GROUND_NONE while in the air, HIP_GROUND_DAMAGE when the floor sent Mario
+ * into the water (0x200) or spike (0xC00) damage motion, HIP_GROUND_LANDED for a normal landing.
  * Also resets the spin rotation and turns camera y-follow back on (not in background mode in the PAL demo and PAL).
  */
 s32 chkground(void) {
@@ -382,15 +401,15 @@ s32 chkground(void) {
             mario->jumpSnapY = 0.0f;
 #endif
             marioChgMot(MARIO_MOTION_DAMAGE);
-            return 1;
+            return HIP_GROUND_DAMAGE;
         } else if (attr & (HIT_ATTR_SPIKES | HIT_ATTR_DAMAGE_LIQUID)) {
             set_damage_root_ypos(mario->position.y);
             marioChgMot(MARIO_MOTION_DAMAGE_TOGE);
-            return 1;
+            return HIP_GROUND_DAMAGE;
         }
-        return 2;
+        return HIP_GROUND_LANDED;
     }
-    return 0;
+    return HIP_GROUND_NONE;
 }
 
 /** Cleanup when the spin jump motion ends: resets the spin offsets and air timers and stops the looping sounds. */

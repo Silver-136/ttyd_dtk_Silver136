@@ -45,6 +45,8 @@ typedef enum SlitState {
     SLIT_STATE_LECTURE_END_3 = 0x7A,
 } SlitState;
 
+// mot.slit.flags: the dash dropped back to walking speed (slitSpeedDown); cleared when the sideways walk restarts
+#define SLIT_FLAG_SPEED_DOWN 0x1
 #if VERSION <= VERSION_DEMO_JP
 #define SLIT_FLAG_RESUME 0x10 // mot.slit.flags: resumeState holds the state motSlitContinue2 returns to
 #endif
@@ -694,7 +696,7 @@ static inline void slitSpeedDown(MarioWork* m) {
     if (!(m->trigFlags & MARIO_TRIG_FLAG_SLIT_KEEP_POSE)) {
         marioChgPose("M_R_1");
     }
-    m->mot.slit.flags |= 1;
+    m->mot.slit.flags |= SLIT_FLAG_SPEED_DOWN;
 }
 
 static inline void slitSetDisplayDir(MarioWork* m) {
@@ -875,10 +877,10 @@ void mot_slit(void) {
             if (strcmp(m->animName, "M_I_Y") == 0) {
                 marioChgPose("M_W_1");
             }
-            if (!(m->mot.slit.flags & 1)) {
+            if (!(m->mot.slit.flags & SLIT_FLAG_SPEED_DOWN)) {
                 zoomOff();
             } else {
-                m->mot.slit.flags &= ~1;
+                m->mot.slit.flags &= ~SLIT_FLAG_SPEED_DOWN;
                 zoomOff();
             }
             m->baseSpeed = _getWalkSpd();

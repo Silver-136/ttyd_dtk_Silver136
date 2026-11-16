@@ -304,7 +304,7 @@ s32 marioRollCancelDisable(void) {
 }
 
 /**
- * 0 while Mario is rolling up or unrolling (sub-motions 0-1, 0x14-0x16), 1 otherwise;
+ * 0 while Mario is rolling up or unrolling (ROLL_SUB_INIT to ROLL_UP, UNROLL_START to UNROLL_END), 1 otherwise;
  * marioChkKey treats 0 as no control.
  */
 s32 marioRollKeyDisable(void) {
@@ -314,10 +314,10 @@ s32 marioRollKeyDisable(void) {
         return 1;
     }
     sub = mario->currSubMotionId;
-    if (sub >= 0 && sub <= 1) {
+    if (sub >= ROLL_SUB_INIT && sub <= ROLL_SUB_ROLL_UP) {
         return 0;
     }
-    if (sub >= 0x14 && sub <= 0x16) {
+    if (sub >= ROLL_SUB_UNROLL_START && sub <= ROLL_SUB_UNROLL_END) {
         return 0;
     }
     return 1;
@@ -378,7 +378,7 @@ void marioForceRollAnime(void) {
 }
 
 /**
- * Starts unrolling (sub-motion 0x14) if Mario is in Tube Mode and could stand up here; returns 1 if it started.
+ * Starts unrolling (ROLL_SUB_UNROLL_START) if Mario is in Tube Mode and could stand up here; returns 1 if it started.
  * Used by evt_mario when a script needs Mario out of Tube Mode (JP and later).
  * Descriptive name (not in the symbol maps); placeholder unk_8009f9c8, JP 0x8009F9C8. See docs/NAME_PROVENANCE.md.
  */
@@ -407,14 +407,14 @@ s32 marioRollTryCancel(void) {
     }
     if (!r) {
         ret = 1;
-        mario->currSubMotionId = 0x14;
+        mario->currSubMotionId = ROLL_SUB_UNROLL_START;
         camGetPtr(CAMERA_2D)->flags |= CAMERA_FLAG_LETTER_BOX_OFF;
     }
     return ret;
 }
 
 /**
- * Starts unrolling (sub-motion 0x14) unless Tube Mode is locked (the early demos also refuse under a
+ * Starts unrolling (ROLL_SUB_UNROLL_START) unless Tube Mode is locked (the early demos also refuse under a
  * ceiling); returns 1 if it started. Called from evt_mario.
  */
 s32 marioRollCancel(void) {
@@ -431,12 +431,12 @@ s32 marioRollCancel(void) {
 #if VERSION <= VERSION_DEMO_JP
     if (!(mario->flags & MARIO_FLAG_IS_TOUCHING_CEILING)) {
         ret = 1;
-        mario->currSubMotionId = 0x14;
+        mario->currSubMotionId = ROLL_SUB_UNROLL_START;
         camGetPtr(CAMERA_2D)->flags |= CAMERA_FLAG_LETTER_BOX_OFF;
     }
     return ret;
 #else
-    mario->currSubMotionId = 0x14;
+    mario->currSubMotionId = ROLL_SUB_UNROLL_START;
     camGetPtr(CAMERA_2D)->flags |= CAMERA_FLAG_LETTER_BOX_OFF;
     return 1;
 #endif
@@ -603,7 +603,7 @@ void marioReInit_roll(void) {
     marioChgPaper("PM_R_1B");
     mario->dispFlags |= MARIO_DISP_FLAG_NO_DIR_FLIP;
     mario->dispFlags |= MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
-    mario->currSubMotionId = 0x1e;
+    mario->currSubMotionId = ROLL_SUB_ROLLING;
     roll_base_init();
     allPartyForceRideOn();
 }
@@ -669,10 +669,10 @@ void mot_roll(void) {
         marioGetPtr()->motStruct = p;
         memset(marioGetPtr()->motStruct, 0, sizeof(MotRollWork));
         roll_se_init();
-        mario->currSubMotionId = 0;
+        mario->currSubMotionId = ROLL_SUB_INIT;
     }
     switch (mario->currSubMotionId) {
-        case 0:
+        case ROLL_SUB_INIT:
             z0 = 0;
             camGetPtr(CAMERA_2D)->flags |= CAMERA_FLAG_LETTER_BOX_OFF;
             marioAdjustMoveDir();
@@ -709,9 +709,9 @@ void mot_roll(void) {
             marioGetPtr()->motRoll->squashState = 0;
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_CHANGE_ROLL1), &mario->position);
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_VOICE_MARIO_FLD_JUMP3), &mario->position);
-            mario->currSubMotionId = 1;
+            mario->currSubMotionId = ROLL_SUB_ROLL_UP;
             break;
-        case 1:
+        case ROLL_SUB_ROLL_UP:
             if (mario->multiTimer == 0x36) {
                 allPartyRideShip();
             }
@@ -732,13 +732,13 @@ void mot_roll(void) {
                     mario->moveDirection = 90.0f;
                 }
 #endif
-                mario->currSubMotionId = 0x1e;
+                mario->currSubMotionId = ROLL_SUB_ROLLING;
                 marioChgPose("M_I_U");
                 marioChgPaper("PM_R_1B");
                 camGetPtr(CAMERA_2D)->flags &= ~CAMERA_FLAG_LETTER_BOX_OFF;
             }
             break;
-        case 0x14:
+        case ROLL_SUB_UNROLL_START:
             mario->baseSpeed = 0.0f;
             mario->rot.x = 0.0f;
             mario->rot.z = 0.0f;
@@ -748,7 +748,7 @@ void mot_roll(void) {
             mario->dispOfs.x = (dir < 180.0f) ? 3.0f : -3.0f;
             mario->dispOfs.y = 0.0f;
             mario->multiTimer = 0x41;
-            mario->currSubMotionId = 0x15;
+            mario->currSubMotionId = ROLL_SUB_UNROLL;
             mario->displayDirection = 0.0f;
 #if VERSION >= VERSION_JP
             move_se_off();
@@ -761,7 +761,7 @@ void mot_roll(void) {
 #else
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_CHANGE_ROLL2), &mario->position);
 #endif
-        case 0x15:
+        case ROLL_SUB_UNROLL:
             if (--mario->multiTimer > 0) {
                 dir = revise360(mario->directionView - mario->targetYaw);
 
@@ -824,14 +824,14 @@ void mot_roll(void) {
                 }
                 allPartyRideOff();
                 camGetPtr(CAMERA_2D)->flags &= ~CAMERA_FLAG_LETTER_BOX_OFF;
-                mario->currSubMotionId = 0x16;
+                mario->currSubMotionId = ROLL_SUB_UNROLL_END;
             }
             break;
-        case 0x16:
-            marioChgMotSub(MARIO_MOTION_STAY, 0);
+        case ROLL_SUB_UNROLL_END:
+            marioChgMotSub(MARIO_MOTION_STAY, FALSE);
             break;
     }
-    if (mario->currSubMotionId < 0x1e) {
+    if (mario->currSubMotionId < ROLL_SUB_ROLLING) {
         return;
     }
     if (mario->flags & MARIO_FLAG_IS_STEPPING) {
@@ -845,7 +845,7 @@ void mot_roll(void) {
     if (mario->buttonTrg & PAD_BUTTON_B) {
         if (!rollChk()) {
 #endif
-            mario->currSubMotionId = 0x14;
+            mario->currSubMotionId = ROLL_SUB_UNROLL_START;
             camGetPtr(CAMERA_2D)->flags |= CAMERA_FLAG_LETTER_BOX_OFF;
         } else {
             mario->buttonTrg |= PAD_BUTTON_A;
@@ -1257,7 +1257,7 @@ void mot_roll(void) {
     }
 #if VERSION <= VERSION_DEMO_JP
     if (!(mario->mot.roll.flags & ROLL_FLAG_FIX) && (mario->buttonTrg & PAD_BUTTON_B) && !(mario->flags & MARIO_FLAG_IS_TOUCHING_CEILING) && mario->hitobjStandOn) {
-        mario->currSubMotionId = 0x14;
+        mario->currSubMotionId = ROLL_SUB_UNROLL_START;
         camGetPtr(CAMERA_2D)->flags |= CAMERA_FLAG_LETTER_BOX_OFF;
     }
 #endif

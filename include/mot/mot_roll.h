@@ -4,6 +4,17 @@
 
 #include "dolphin/types.h"
 
+// MarioWork.currSubMotionId in mot_roll (names from what each step does)
+enum {
+    ROLL_SUB_INIT = 0,             // sets up the tube shape and the roll-up animation (PM_R_1A)
+    ROLL_SUB_ROLL_UP = 1,          // rolling up; no control
+    ROLL_SUB_UNROLL_START = 0x14,  // B pressed (or a script): starts the unroll animation (PM_R_1C)
+    ROLL_SUB_UNROLL = 0x15,        // unrolling; no control
+    ROLL_SUB_UNROLL_END = 0x16,    // back to the stay motion
+    ROLL_SUB_ROLLING = 0x1E,       // rolled up and moving; mot_roll treats every state from here up as rolling
+    ROLL_SUB_ROLLING_DIRECT = 50,  // marioChgRollMotion: rolling, entered without the roll-up
+};
+
 extern f32 roll_grx;
 extern f32 roll_grz;
 void roll_upstairs_on(void);

@@ -676,8 +676,10 @@ enum {
     PART_LOOK_XLU = 7,           // PM_Y_1A, invisible or part color not fully opaque
 };
 
+#define PART_BLUR_ENTRY_DRAW 0x1  // BattleWorkUnitPartBlurEntry.flags: the part had kMotionBlur that frame, the copy is drawn
+
 typedef struct BattleWorkUnitPartBlurEntry {
-    s32 flags;       // 0x0
+    s32 flags;       // 0x0, PART_BLUR_ENTRY_DRAW
     Mtx orientation; // 0x4
     f32 rotation;    // 0x34
     GXColor base;    // 0x38
@@ -685,7 +687,7 @@ typedef struct BattleWorkUnitPartBlurEntry {
 } BattleWorkUnitPartBlurEntry;
 
 typedef struct BattleWorkUnitPartBlur {
-    s32 flags;                            // 0x0
+    s32 flags;                            // 0x0, bit 0 (never set): keep only every other frame
     GXColor color[2];                     // 0x4, after-image tint, newest / oldest (btlevtcmd_SetPartsBlur)
     BattleWorkUnitPartBlurEntry work[10]; // 0xC
 } BattleWorkUnitPartBlur;
@@ -1117,6 +1119,9 @@ typedef struct BattleUnitSetup {
 BOOL BtlUnit_Init(void);
 BattleUnit* BtlUnit_Entry(BattleUnitSetup* setup);
 BOOL BtlUnit_Delete(BattleUnit* unit);
+// BtlUnit_Spawn flags (btlevtcmd_SpawnUnit passes its third argument; every retail script passes 0)
+#define BTL_SPAWN_QUEUE_BACK 0x1   // enters movePriorityQueue from its last slot
+#define BTL_SPAWN_QUEUE_FRONT 0x2  // enters movePriorityQueue at slot 0
 BattleUnit* BtlUnit_Spawn(BattleUnitSetup* setup, s32 flags);
 s32 BtlUnit_GetUnitId(BattleUnit* unit);
 BattleUnitPart* BtlUnit_GetPartsPtr(BattleUnit* unit, s32 partNum);
