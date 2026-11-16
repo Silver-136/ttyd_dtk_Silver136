@@ -43,19 +43,6 @@ static HitEntry* marioChkFrontStep(f32* y, f32* h, f32* ang);
 static const Vec zv0 = {0.0f, 0.0f, 0.0f};
 static const Vec zv1 = {0.0f, 0.0f, 0.0f};
 
-/** Inline copy of marioChkBero (TRUE = Mario passes through the hit), used by the roll, ship and wall-around checks. */
-static inline BOOL marioChkBeroInl(HitEntry* hit) {
-    s32 attr = hitGetAttr(hit);
-    MarioWork* mario = marioGetPtr();
-    if ((attr & HIT_ATTR_ROLL_THROUGH) && !(mario->flags & MARIO_FLAG_TUBE_MODE)) {
-        return FALSE;
-    }
-    if (!(attr & HIT_ATTR_SHIP_ONLY)) {
-        return (attr & HIT_ATTR_BERO) ? 1 : 0;
-    }
-    return mario->currMotionId == MARIO_MOTION_SHIP;
-}
-
 /** Mario's collision height, or the riding partner's height (partyGetHeight) while he is on Yoshi. */
 // Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
 f32 marioGetHeight(void) {
@@ -2231,7 +2218,7 @@ void marioCheckWall_roll(f32 dx, f32 dz) {
     hit = searchFrontWall(&pos, &h, dx, dz, mario->wPlayerCollisionBox.z);
     if (hit) {
         mario->hitobjFront = hit;
-        if (marioChkBeroInl(hit)) {
+        if (marioChkBero(hit)) {
             if (dx) {
                 mario->hitobjPush = hit;
                 mario->hitobjWall = hit;
@@ -2774,10 +2761,10 @@ BOOL marioChkWallAround(Vec* pos, s32 mode, f32 unused, f32 dir, f32 w, f32 h) {
         d = (Vec){s, 0.0f, c};
         hit1 = marioHitCheckVecInl(&hi, &d, NULL, NULL, &d1);
         hit2 = marioHitCheckVecInl(&lo, &d, NULL, NULL, &d2);
-        if (marioChkBeroInl(hit1)) {
+        if (marioChkBero(hit1)) {
             hit1 = NULL;
         }
-        if (marioChkBeroInl(hit2)) {
+        if (marioChkBero(hit2)) {
             hit2 = NULL;
         }
         if (hit1 && hit2) {
@@ -2830,10 +2817,10 @@ BOOL marioChkWallAround(Vec* pos, s32 mode, f32 unused, f32 dir, f32 w, f32 h) {
         wallCopy(&dd, &(Vec){s, 0.0f, c});
         hit1 = marioHitCheckVecInl(&hi, &dd, NULL, NULL, &d1);
         hit2 = marioHitCheckVecInl(&lo, &dd, NULL, NULL, &d2);
-        if (marioChkBeroInl(hit1)) {
+        if (marioChkBero(hit1)) {
             hit1 = NULL;
         }
-        if (marioChkBeroInl(hit2)) {
+        if (marioChkBero(hit2)) {
             hit2 = NULL;
         }
         if (hit1 && hit2) {
@@ -2889,7 +2876,7 @@ BOOL marioSlitChkWallAround(void) {
         dir = (Vec){s, 0.0f, c};
         dist = 13.0f;
         hit = marioHitCheckVecInl(&pos, &dir, NULL, NULL, &dist);
-        if (hit && !marioChkBeroInl(hit)) {
+        if (hit && !marioChkBero(hit)) {
             flags[i] = 1;
         }
     }
@@ -2903,7 +2890,7 @@ BOOL marioSlitChkWallAround(void) {
             dir = (Vec){s, 0.0f, c};
             dist = 13.0f;
             hit = marioHitCheckVecInl(&pos, &dir, NULL, NULL, &dist);
-            if (hit && !marioChkBeroInl(hit)) {
+            if (hit && !marioChkBero(hit)) {
                 flags[i] = 1;
             }
         }
@@ -2917,7 +2904,7 @@ BOOL marioSlitChkWallAround(void) {
             dir = (Vec){s, 0.0f, c};
             dist = 13.0f;
             hit = marioHitCheckVecInl(&pos, &dir, NULL, NULL, &dist);
-            if (hit && !marioChkBeroInl(hit)) {
+            if (hit && !marioChkBero(hit)) {
                 flags[i] = 1;
             }
         }
@@ -2970,7 +2957,7 @@ void marioCheckWallShip(f32 dx, f32 dz) {
     hit = searchFrontWall(&pos, &h, dx, dz, mario->wPlayerCollisionBox.z);
     if (hit) {
         mario->hitobjFront = hit;
-        if (marioChkBeroInl(hit)) {
+        if (marioChkBero(hit)) {
             if (dx) {
                 mario->hitobjPush = hit;
                 mario->hitobjWall = hit;

@@ -39,7 +39,7 @@ typedef struct YuuNpcPose {
     f32 walkAnimSpeed;
 } YuuNpcPose;
 
-// motion: 0 stand, 1 walk, 2 run (yuunpc_stop/walk/run), 3 fall, 4 jump (YUU_JUMP); turnTimer counts the 30-frame turn
+// motion: 0 stand, 1 walk, 2 run, 3 fall, 4 jump (YUU_JUMP); turnTimer counts the 30-frame turn
 // that starts from turnBaseDir; errper (set by errper_set_rtn) is the random spread of the goal position
 typedef struct YuuNpc {
     u16 id;
@@ -440,11 +440,15 @@ static s32 yuunpc_pose_check(const char* name, const char* anim) {
 }
 
 /**
- * Inline copy of yuunpc_pose_change used by the init functions:
- * switches an NPC to pose id at the given animation speed and starting frame fraction.
+ * Switches an NPC to pose id.
+ * A speed of 0 or less freezes the pose at the given frame fraction (flag 4);
+ * a positive speed plays it at that speed from that fraction,
+ * keeping the current phase when only the speed of the same pose changes.
+ * For NPCs that have a real NPC entry it also restarts their animation.
+ * Small enough for the compiler to inline on its own: the init functions and yuunpc_pose_change2 inline it,
+ * while yuunpc_pose_minigame4_main is past the inline size budget and calls it.
  */
-// FAKE: inline copy of a map function so its calls inline (the unit does not auto-inline; FAKES.md)
-static inline void pose_change_inl(YuuNpc* npc, s16 id, f32 speed, f32 frame) {
+static void yuunpc_pose_change(YuuNpc* npc, s16 id, f32 speed, f32 frame) {
     YuuNpcPose* cur = &yuunpc_wp->pose[npc->poseId];
     YuuNpcPose* pose = &yuunpc_wp->pose[id];
 
@@ -483,57 +487,7 @@ static inline void pose_change_inl(YuuNpc* npc, s16 id, f32 speed, f32 frame) {
         case YUUNPC_SP_YUUSP2:
             animPoseSetAnim(npc->npc->poseId, pose->anim, TRUE);
             animPoseMain(npc->npc->poseId);
-            break;
-    }
-}
-
-/**
- * Switches an NPC to pose id.
- * A speed of 0 or less freezes the pose at the given frame fraction (flag 4);
- * a positive speed plays it at that speed from that fraction,
- * keeping the current phase when only the speed of the same pose changes.
- * For NPCs that have a real NPC entry it also restarts their animation.
- */
-static void yuunpc_pose_change(YuuNpc* npc, s16 id, f32 speed, f32 frame) {
-    YuuNpcPose* cur = &yuunpc_wp->pose[npc->poseId];
-    YuuNpcPose* pose = &yuunpc_wp->pose[id];
-
-    if (speed <= 0.0f) {
-        npc->flags |= YUUNPC_FLAG_POSE_HELD;
-        npc->poseId = id;
-        npc->animSpeed = 1.0f;
-        npc->time = OSMillisecondsToTicks(1000.0f * (frame * (pose->frames * npc->animSpeed)) / 60.0f);
-    } else {
-        u16 flags = npc->flags;
-        npc->flags = flags & ~4;
-        if (npc->poseId == id) {
-            f32 old = npc->animSpeed;
-            if (old != speed) {
-                if (flags & YUUNPC_FLAG_POSE_HELD) {
-                    frame = 60.0f * OSTicksToMilliseconds(npc->time) / 1000.0f;
-                    frame /= pose->frames * old;
-                } else {
-                    frame = 60.0f * OSTicksToMilliseconds(gp->renderTime - npc->time) / 1000.0f;
-                    frame /= cur->frames * old;
-                }
-            } else {
-                return;
-            }
-        } else {
-            npc->poseId = id;
-        }
-        npc->animSpeed = speed;
-        npc->time = gp->renderTime - OSMillisecondsToTicks(1000.0f * (frame * (pose->frames * npc->animSpeed)) / 60.0f);
-    }
-    switch (npc->flags & YUUNPC_SP_MASK) {
-        case 0:
-            break;
-        case YUUNPC_SP_YUUSP0:
-        case YUUNPC_SP_YUUSP1:
-        case YUUNPC_SP_YUUSP2:
-            animPoseSetAnim(npc->npc->poseId, pose->anim, TRUE);
-            animPoseMain(npc->npc->poseId);
-            break;
+            // no break here: one statement more puts the function past the compiler's 30-statement auto-inline limit
     }
 }
 
@@ -542,7 +496,7 @@ static void yuunpc_pose_change(YuuNpc* npc, s16 id, f32 speed, f32 frame) {
  * starting at a random frame so the crowd does not animate in step.
  */
 static void yuunpc_pose_change2(YuuNpc* npc, const char* name, const char* anim, f32 speed) {
-    pose_change_inl(npc, yuunpc_pose_check(name, anim), speed, rand() / 32767.0f);
+    yuunpc_pose_change(npc, yuunpc_pose_check(name, anim), speed, rand() / 32767.0f);
 }
 
 /**
@@ -671,7 +625,7 @@ static void ext_yuunpc_minigame1_init(void) {
                 npc->poses[0] = npc->poses[1] = npc->poses[2] = npc->poses[3] = id;
                 break;
         }
-        pose_change_inl(npc, npc->poses[0], 1.0f, rand() / 32767.0f);
+        yuunpc_pose_change(npc, npc->poses[0], 1.0f, rand() / 32767.0f);
     }
 }
 
@@ -784,7 +738,7 @@ static void ext_yuunpc_minigame2_init(void) {
                 npc->poses[0] = npc->poses[1] = npc->poses[2] = npc->poses[3] = id;
                 break;
         }
-        pose_change_inl(npc, npc->poses[0], 1.0f, rand() / 32767.0f);
+        yuunpc_pose_change(npc, npc->poses[0], 1.0f, rand() / 32767.0f);
     }
 }
 
@@ -906,7 +860,7 @@ static void ext_yuunpc_minigame3_init(void) {
                 npc->poses[0] = npc->poses[1] = npc->poses[2] = npc->poses[3] = id;
                 break;
         }
-        pose_change_inl(npc, npc->poses[0], 1.0f, rand() / 32767.0f);
+        yuunpc_pose_change(npc, npc->poses[0], 1.0f, rand() / 32767.0f);
     }
 }
 
@@ -1308,7 +1262,7 @@ void ext_yuunpc_minigame4_init_sub(void) {
                     npc->poses[0] = npc->poses[1] = npc->poses[2] = npc->poses[3] = id;
                     break;
             }
-            pose_change_inl(npc, npc->poses[0], 1.0f, rand() / 32767.0f);
+            yuunpc_pose_change(npc, npc->poses[0], 1.0f, rand() / 32767.0f);
         } else {
             s32 cols;
             s32 row;
@@ -1438,7 +1392,7 @@ void ext_yuunpc_minigame4_init_sub(void) {
                     break;
             }
             npc->motion = 0;
-            pose_change_inl(npc, npc->poses[0], 1.0f, rand() / 32767.0f);
+            yuunpc_pose_change(npc, npc->poses[0], 1.0f, rand() / 32767.0f);
             npc->flags |= YUUNPC_FLAG_ON_GROUND;
             errper_set_rtn(npc);
         }
@@ -1462,12 +1416,6 @@ static void ext_yuunpc_minigame4_init(void) {
 
 static inline f32 yuunpc_rnd10(YuuNpc* npc) /* */ {
     return 10.0f * ((npc->id % 101 - 50) / 50.0f);
-}
-
-static inline void yuunpc_stop(YuuNpc* npc) {
-    npc->motion = 0;
-    yuunpc_pose_change(npc, npc->poses[0], 1.0f, rand() / 32767.0f);
-    npc->speed = 0.0f;
 }
 
 #if VERSION <= VERSION_DEMO_JP
@@ -1494,26 +1442,6 @@ static inline void yuunpc_stop(YuuNpc* npc) {
         jumpSndCount++;                                                                                                                    \
     } while (0)
 #endif
-
-static inline void yuunpc_run(YuuNpc* npc) {
-    npc->motion = 2;
-    yuunpc_pose_change(npc, npc->poses[2], 1.0f, rand() / 32767.0f);
-    if (npc->flags & YUUNPC_TURN_MASK) {
-        npc->speed = 1.0f;
-    } else {
-        npc->speed = 2.25f;
-    }
-}
-
-static inline void yuunpc_walk(YuuNpc* npc) {
-    npc->motion = 1;
-    yuunpc_pose_change(npc, npc->poses[1], yuunpc_wp->pose[npc->poses[1]].walkAnimSpeed, rand() / 32767.0f);
-    if (npc->flags & YUUNPC_TURN_MASK) {
-        npc->speed = 0.5f;
-    } else {
-        npc->speed = 1.0f;
-    }
-}
 
 /**
  * Per-frame update of the Paper Mode crowd and racers. Spectators are handled like the other games.
@@ -2094,18 +2022,32 @@ void yuunpc_pose_minigame4_main(void) {
                             ha = YUUNPC_HIT_AT(75.0f + px, &npc->pos.z);
                             if (npc->state <= 3 && irand(2)) {
                                 if (hb >= npc->pos.y) {
-                                    yuunpc_walk(npc);
+                                    npc->motion = 1;
+                                    yuunpc_pose_change(npc, npc->poses[1], yuunpc_wp->pose[npc->poses[1]].walkAnimSpeed, rand() / 32767.0f);
+                                    if (npc->flags & YUUNPC_TURN_MASK) {
+                                        npc->speed = 0.5f;
+                                    } else {
+                                        npc->speed = 1.0f;
+                                    }
                                     kind = 1;
                                 }
                             } else if (!(npc->flags & YUUNPC_TURN_MASK) || ((npc->flags & YUUNPC_TURN_MASK) && (hb >= npc->pos.y || (hb < npc->pos.y && ha < npc->pos.y)))) {
-                                yuunpc_run(npc);
+                                npc->motion = 2;
+                                yuunpc_pose_change(npc, npc->poses[2], 1.0f, rand() / 32767.0f);
+                                if (npc->flags & YUUNPC_TURN_MASK) {
+                                    npc->speed = 1.0f;
+                                } else {
+                                    npc->speed = 2.25f;
+                                }
                                 kind = 1;
                             }
                         }
                         break;
                     case 1:
                         if (goalincheck(npc) == -1) {
-                            yuunpc_stop(npc);
+                            npc->motion = 0;
+                            yuunpc_pose_change(npc, npc->poses[0], 1.0f, rand() / 32767.0f);
+                            npc->speed = 0.0f;
                             break;
                         }
                         if (npc->flags & YUUNPC_TURN_MASK) {
@@ -2122,12 +2064,22 @@ void yuunpc_pose_minigame4_main(void) {
                             if (ha > npc->pos.y) {
                                 YUU_JUMP(npc);
                             } else if (hb < npc->pos.y && hc == npc->pos.y) {
-                                yuunpc_stop(npc);
+                                npc->motion = 0;
+                                yuunpc_pose_change(npc, npc->poses[0], 1.0f, rand() / 32767.0f);
+                                npc->speed = 0.0f;
                             } else if (irand(60) == 0) {
                                 if (npc->state <= 1 && irand(3) == 0) {
-                                    yuunpc_stop(npc);
+                                    npc->motion = 0;
+                                    yuunpc_pose_change(npc, npc->poses[0], 1.0f, rand() / 32767.0f);
+                                    npc->speed = 0.0f;
                                 } else if (hb >= npc->pos.y) {
-                                    yuunpc_run(npc);
+                                    npc->motion = 2;
+                                    yuunpc_pose_change(npc, npc->poses[2], 1.0f, rand() / 32767.0f);
+                                    if (npc->flags & YUUNPC_TURN_MASK) {
+                                        npc->speed = 1.0f;
+                                    } else {
+                                        npc->speed = 2.25f;
+                                    }
                                 }
                             }
                         } else {
@@ -2145,13 +2097,23 @@ void yuunpc_pose_minigame4_main(void) {
                                 if (mg->state == 0) {
                                     YUU_JUMP(npc);
                                 } else {
-                                    yuunpc_stop(npc);
+                                    npc->motion = 0;
+                                    yuunpc_pose_change(npc, npc->poses[0], 1.0f, rand() / 32767.0f);
+                                    npc->speed = 0.0f;
                                 }
                             } else if ((hb < npc->pos.y && hc == npc->pos.y) || (npc->state <= 3 && irand(60) == 0)) {
                                 if (npc->state <= 1 && irand(3) == 0) {
-                                    yuunpc_stop(npc);
+                                    npc->motion = 0;
+                                    yuunpc_pose_change(npc, npc->poses[0], 1.0f, rand() / 32767.0f);
+                                    npc->speed = 0.0f;
                                 } else {
-                                    yuunpc_run(npc);
+                                    npc->motion = 2;
+                                    yuunpc_pose_change(npc, npc->poses[2], 1.0f, rand() / 32767.0f);
+                                    if (npc->flags & YUUNPC_TURN_MASK) {
+                                        npc->speed = 1.0f;
+                                    } else {
+                                        npc->speed = 2.25f;
+                                    }
                                 }
                             }
                         }
@@ -2180,7 +2142,9 @@ void yuunpc_pose_minigame4_main(void) {
                         break;
                     case 2:
                         if (goalincheck(npc) == -1) {
-                            yuunpc_stop(npc);
+                            npc->motion = 0;
+                            yuunpc_pose_change(npc, npc->poses[0], 1.0f, rand() / 32767.0f);
+                            npc->speed = 0.0f;
                             break;
                         }
                         if (npc->flags & YUUNPC_TURN_MASK) {
@@ -2197,12 +2161,22 @@ void yuunpc_pose_minigame4_main(void) {
                             if (ha > npc->pos.y) {
                                 YUU_JUMP(npc);
                             } else if (hb < npc->pos.y && hc == npc->pos.y) {
-                                yuunpc_stop(npc);
+                                npc->motion = 0;
+                                yuunpc_pose_change(npc, npc->poses[0], 1.0f, rand() / 32767.0f);
+                                npc->speed = 0.0f;
                             } else if (npc->state <= 3 && irand(60) == 0) {
                                 if (npc->state <= 1 && irand(3) == 0) {
-                                    yuunpc_stop(npc);
+                                    npc->motion = 0;
+                                    yuunpc_pose_change(npc, npc->poses[0], 1.0f, rand() / 32767.0f);
+                                    npc->speed = 0.0f;
                                 } else if (hb >= npc->pos.y) {
-                                    yuunpc_walk(npc);
+                                    npc->motion = 1;
+                                    yuunpc_pose_change(npc, npc->poses[1], yuunpc_wp->pose[npc->poses[1]].walkAnimSpeed, rand() / 32767.0f);
+                                    if (npc->flags & YUUNPC_TURN_MASK) {
+                                        npc->speed = 0.5f;
+                                    } else {
+                                        npc->speed = 1.0f;
+                                    }
                                 }
                             }
                         } else {
@@ -2220,13 +2194,23 @@ void yuunpc_pose_minigame4_main(void) {
                                 if (mg->state == 0) {
                                     YUU_JUMP(npc);
                                 } else {
-                                    yuunpc_stop(npc);
+                                    npc->motion = 0;
+                                    yuunpc_pose_change(npc, npc->poses[0], 1.0f, rand() / 32767.0f);
+                                    npc->speed = 0.0f;
                                 }
                             } else if (npc->state <= 3 && irand(60) == 0) {
                                 if (npc->state <= 1 && irand(3) == 0) {
-                                    yuunpc_stop(npc);
+                                    npc->motion = 0;
+                                    yuunpc_pose_change(npc, npc->poses[0], 1.0f, rand() / 32767.0f);
+                                    npc->speed = 0.0f;
                                 } else if (yuunpc_hit_get(25.0f + npc->pos.x, &npc->pos.z) >= npc->pos.y) {
-                                    yuunpc_walk(npc);
+                                    npc->motion = 1;
+                                    yuunpc_pose_change(npc, npc->poses[1], yuunpc_wp->pose[npc->poses[1]].walkAnimSpeed, rand() / 32767.0f);
+                                    if (npc->flags & YUUNPC_TURN_MASK) {
+                                        npc->speed = 0.5f;
+                                    } else {
+                                        npc->speed = 1.0f;
+                                    }
                                 }
                             }
                         }

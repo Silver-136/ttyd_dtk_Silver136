@@ -646,24 +646,9 @@ USER_FUNC(evt_badgeShop_bottakuru_dec) {
     return EVT_RETURN_DONE;
 }
 
-#if VERSION <= VERSION_DEMO_JP
-/** the early demos count the thrown badges through an inline copy of badgeShop_ThrowCheck (with its bug: always 0) */
-static inline s32 badgeShop_ThrowCount(s32 itemId) {
-    int i;
-    s32 count;
-
-    for (count = 0, i = 0; i < bdsw->bargainNum; i++) {
-        if (itemId == bdsw->bargainBadges[i + bdsw->bargainNum]) {
-            count++;
-        }
-    }
-    return count;
-}
-#endif
-
 /**
  * Counts how many different badges are left in the Lovely Howz bargain_table and writes it to args[0].
- * The early demos also subtract badgeShop_ThrowCount from each badge's stock first, which is always 0.
+ * The early demos also subtract badgeShop_ThrowCheck from each badge's stock first, which is always 0.
  */
 USER_FUNC(evt_badgeShop_throw_get_kind_cnt) {
     EvtWord* args = event->args;
@@ -673,7 +658,7 @@ USER_FUNC(evt_badgeShop_throw_get_kind_cnt) {
 
     for (count = 0, i = 0; i < BADGE_COUNT; i++) {
 #if VERSION <= VERSION_DEMO_JP
-        if ((badge = badgeShop_get(bdsw->bargain_table, (s16)(i + BADGE_MIN))) - badgeShop_ThrowCount(i + BADGE_MIN) > 0) {
+        if ((badge = badgeShop_get(bdsw->bargain_table, (s16)(i + BADGE_MIN))) - badgeShop_ThrowCheck(i + BADGE_MIN) > 0) {
 #else
         badge = badgeShop_get(bdsw->bargain_table, (s16)(i + BADGE_MIN));
         if (badge > 0) {

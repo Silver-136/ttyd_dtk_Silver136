@@ -1708,16 +1708,6 @@ void puniMoveHit(PuniData* p, Vec start, Vec dir, f32 dist) {
 void puniMoveDecel(PuniData* p) {
     Vec start;
     Vec dir;
-    Vec s2;
-    Vec d2;
-    Vec old;
-    Vec refl;
-    Vec diff;
-    Vec hit;
-    Vec pa;
-    f32 d;
-    f32 c3, c2, c1;
-    f32 b3, b2, b1;
     f32 dist = PSVECMag(&p->vel);
     if (!dist) {
         return;
@@ -1739,43 +1729,10 @@ void puniMoveDecel(PuniData* p) {
 #if VERSION <= VERSION_DEMO_JP
     if (puniMoveAtari(p, start, dir, 1, dist)) {
         PSVECScale(&p->vel, &p->vel, 0.6f);
+    }
 #else
-    s2 = start;
-    d2 = dir;
-    p->hitCheck = NULL;
-    p->hitMove = NULL;
-    d = dist;
-    if (p->flags & PUNI_FLAG_WALL_CHECK) {
-        p->hitMove = hitCheckFilter(NULL, &pa.x, &pa.y, &pa.z, &d, &hit.x, &hit.y, &hit.z, s2.x, s2.y, s2.z, d2.x, d2.y, d2.z);
-    }
-    if (p->hitMove == NULL) {
-        PSVECAdd(&p->pos, &p->vel, &p->pos);
-    } else {
-        old = p->pos;
-        p->wallNrm = hit;
-        PSVECAdd(&p->pos, &p->vel, &p->pos);
-        if (p->vel.y == 0.0f) {
-            hit.y = 0.0f;
-        }
-        PSVECNormalize(&hit, &hit);
-        C_VECReflect(&d2, &hit, &refl);
-        PSVECScale(&refl, &p->vel, dist);
-        {
-            f32 dot = PSVECDotProduct(&d2, &hit);
-            PSVECScale(&hit, &hit, -(dist - d) * dot + 0.1f);
-        }
-        PSVECAdd(&p->pos, &hit, &p->pos);
-        PSVECSubtract(&p->pos, &old, &diff);
-        d = PSVECMag(&diff);
-        if (d > 0.0f) {
-            PSVECNormalize(&diff, &diff);
-            p->hitCheck = hitCheckFilter(NULL, &b1, &b2, &b3, &d, &c1, &c2, &c3, old.x, old.y + 1.0f, old.z, diff.x, diff.y, diff.z);
-            if (p->hitCheck != NULL) {
-                p->pos = old;
-            }
-        }
+    puniMoveHit(p, start, dir, dist);
 #endif
-    }
     if (p->hitMove != NULL || p->hitCheck != NULL) {
         p->flags |= PUNI_FLAG_HIT_WALL_UNUSED;
     } else {
@@ -1790,15 +1747,6 @@ void puniMoveDecel(PuniData* p) {
 void puniMoveLimitedNormal(PuniData* p) {
     Vec start;
     Vec dir;
-    Vec s2;
-    Vec d2;
-    Vec old;
-    Vec diff;
-    Vec hit;
-    Vec pa;
-    f32 d;
-    f32 c3, c2, c1;
-    f32 b3, b2, b1;
     f32 dist = PSVECMag(&p->vel);
     if (!dist) {
         return;
@@ -1810,37 +1758,7 @@ void puniMoveLimitedNormal(PuniData* p) {
     start = p->pos;
     start.y += 1.0f;
     PSVECNormalize(&p->vel, &dir);
-    d2 = dir;
-    s2 = start;
-    p->hitCheck = NULL;
-    p->hitMove = NULL;
-    d = dist;
-    p->hitMove = hitCheckFilter(NULL, &pa.x, &pa.y, &pa.z, &d, &hit.x, &hit.y, &hit.z, s2.x, s2.y, s2.z, d2.x, d2.y, d2.z);
-    if (p->hitMove == NULL) {
-        PSVECAdd(&p->pos, &p->vel, &p->pos);
-    } else if (Punigp->floor != 0x12) {
-        old = p->pos;
-        p->wallNrm = hit;
-        PSVECAdd(&p->pos, &p->vel, &p->pos);
-        if (p->vel.y == 0.0f) {
-            hit.y = 0.0f;
-        }
-        PSVECNormalize(&hit, &hit);
-        {
-            f32 dp = PSVECDotProduct(&d2, &hit);
-            PSVECScale(&hit, &hit, dp * -(dist - d) + 0.1f);
-        }
-        PSVECAdd(&p->pos, &hit, &p->pos);
-        PSVECSubtract(&p->pos, &old, &diff);
-        d = PSVECMag(&diff);
-        if (d > 0.0f) {
-            PSVECNormalize(&diff, &diff);
-            p->hitCheck = hitCheckFilter(NULL, &b1, &b2, &b3, &d, &c1, &c2, &c3, old.x, old.y + 1.0f, old.z, diff.x, diff.y, diff.z);
-            if (p->hitCheck != NULL) {
-                p->pos = old;
-            }
-        }
-    }
+    puniMoveHitLimited(p, start, dir, dist);
     if (p->hitMove != NULL || p->hitCheck != NULL) {
         p->flags |= PUNI_FLAG_HIT_WALL_UNUSED;
     } else {
@@ -1853,16 +1771,6 @@ void puniMoveLimitedNormal(PuniData* p) {
 void puniMoveNormal(PuniData* p) {
     Vec start;
     Vec dir;
-    Vec s2;
-    Vec d2;
-    Vec old;
-    Vec refl;
-    Vec diff;
-    Vec hit;
-    Vec pa;
-    f32 d;
-    f32 c3, c2, c1;
-    f32 b3, b2, b1;
     f32 dist = PSVECMag(&p->vel);
     if (!dist) {
         return;
@@ -1870,41 +1778,7 @@ void puniMoveNormal(PuniData* p) {
     start = p->pos;
     start.y += 1.0f;
     PSVECNormalize(&p->vel, &dir);
-    s2 = start;
-    d2 = dir;
-    p->hitCheck = NULL;
-    p->hitMove = NULL;
-    d = dist;
-    if (p->flags & PUNI_FLAG_WALL_CHECK) {
-        p->hitMove = hitCheckFilter(NULL, &pa.x, &pa.y, &pa.z, &d, &hit.x, &hit.y, &hit.z, s2.x, s2.y, s2.z, d2.x, d2.y, d2.z);
-    }
-    if (p->hitMove == NULL) {
-        PSVECAdd(&p->pos, &p->vel, &p->pos);
-    } else {
-        old = p->pos;
-        p->wallNrm = hit;
-        PSVECAdd(&p->pos, &p->vel, &p->pos);
-        if (p->vel.y == 0.0f) {
-            hit.y = 0.0f;
-        }
-        PSVECNormalize(&hit, &hit);
-        C_VECReflect(&d2, &hit, &refl);
-        PSVECScale(&refl, &p->vel, dist);
-        {
-            f32 dp = PSVECDotProduct(&d2, &hit);
-            PSVECScale(&hit, &hit, dp * -(dist - d) + 0.1f);
-        }
-        PSVECAdd(&p->pos, &hit, &p->pos);
-        PSVECSubtract(&p->pos, &old, &diff);
-        d = PSVECMag(&diff);
-        if (d > 0.0f) {
-            PSVECNormalize(&diff, &diff);
-            p->hitCheck = hitCheckFilter(NULL, &b1, &b2, &b3, &d, &c1, &c2, &c3, old.x, old.y + 1.0f, old.z, diff.x, diff.y, diff.z);
-            if (p->hitCheck != NULL) {
-                p->pos = old;
-            }
-        }
-    }
+    puniMoveHit(p, start, dir, dist);
     if (p->hitMove != NULL || p->hitCheck != NULL) {
         p->flags |= PUNI_FLAG_HIT_WALL_UNUSED;
     } else {
@@ -3820,57 +3694,11 @@ static void puniModeWonder(PuniData* p) {
 }
 #endif
 /**
- * Inline copy of the speed-limited wall-collision move (see puniMoveLimitedNormal) taking the start
- * and direction by pointer; used by puniModeFunbari in the US and later releases.
- */
-// FAKE: inline copy of a map function so its calls inline (the unit does not auto-inline; FAKES.md)
-static inline void puniMoveHitLimitedInl(PuniData* p, Vec* s2, Vec* d2, f32 dist) {
-    Vec pa;
-    Vec hit;
-    Vec diff;
-    Vec old;
-    f32 hitX, b2, b3;
-    f32 hitNX, c2, c3;
-    f32 d;
-    p->hitCheck = NULL;
-    p->hitMove = NULL;
-    d = dist;
-    p->hitMove = hitCheckFilter(NULL, &pa.x, &pa.y, &pa.z, &d, &hit.x, &hit.y, &hit.z, s2->x, s2->y, s2->z, d2->x, d2->y, d2->z);
-    if (p->hitMove == NULL) {
-        PSVECAdd(&p->pos, &p->vel, &p->pos);
-    } else if (Punigp->floor != 0x12) {
-        old = p->pos;
-        p->wallNrm = hit;
-        PSVECAdd(&p->pos, &p->vel, &p->pos);
-        if (p->vel.y == 0.0f) {
-            hit.y = 0.0f;
-        }
-        PSVECNormalize(&hit, &hit);
-        {
-            f32 dp = PSVECDotProduct(d2, &hit);
-            PSVECScale(&hit, &hit, dp * -(dist - d) + 0.1f);
-        }
-        PSVECAdd(&p->pos, &hit, &p->pos);
-        PSVECSubtract(&p->pos, &old, &diff);
-        d = PSVECMag(&diff);
-        if (d > 0.0f) {
-            PSVECNormalize(&diff, &diff);
-            p->hitCheck = hitCheckFilter(NULL, &hitX, &b2, &b3, &d, &hitNX, &c2, &c3, old.x, old.y + 1.0f, old.z, diff.x, diff.y, diff.z);
-            if (p->hitCheck != NULL) {
-                p->pos = old;
-            }
-        }
-    }
-}
-
-/**
  * Funbari mode ("holding on"): the Puni that came down from the bubble moves toward the gather target with one hop
  * for 68 frames, then falls back to the floor (at once when no gather target is on).
  */
 static void puniModeFunbari(PuniData* p) {
     Vec start;
-    Vec s2;
-    Vec d2;
     f32 dist;
     f32 s;
     PuniTarget* t;
@@ -3917,9 +3745,7 @@ static void puniModeFunbari(PuniData* p) {
             dist = __fabs(p->modeF2);
             p->vel.x = 0.5f * p->modeF2;
             p->vel.z = p->vel.y = 0.0f;
-            d2 = p->vel;
-            s2 = start;
-            puniMoveHitLimitedInl(p, &s2, &d2, dist);
+            puniMoveHitLimited(p, start, p->vel, dist);
             p->dispOfs.y += p->modeF1;
             if (p->timer-- == 0) {
                 p->modeStep = 10;
@@ -4803,55 +4629,6 @@ void puniModeMain(PuniData* p) {
 }
 #endif
 
-/**
- * Inline copy of the wall-collision move that reflects the velocity (puniMoveHit),
- * taking start and direction by pointer; used by puniMoveMain.
- */
-// FAKE: inline copy of a map function so its calls inline (the unit does not auto-inline; FAKES.md)
-static inline void puniMoveHitInl(PuniData* p, Vec* s2, Vec* d2, f32 dist) {
-    Vec pa;
-    Vec hit;
-    Vec diff;
-    Vec refl;
-    Vec old;
-    f32 hitX, b2, b3;
-    f32 hitNX, c2, c3;
-    f32 d;
-    p->hitCheck = NULL;
-    p->hitMove = NULL;
-    d = dist;
-    if (p->flags & PUNI_FLAG_WALL_CHECK) {
-        p->hitMove = hitCheckFilter(NULL, &pa.x, &pa.y, &pa.z, &d, &hit.x, &hit.y, &hit.z, s2->x, s2->y, s2->z, d2->x, d2->y, d2->z);
-    }
-    if (p->hitMove == NULL) {
-        PSVECAdd(&p->pos, &p->vel, &p->pos);
-    } else {
-        old = p->pos;
-        p->wallNrm = hit;
-        PSVECAdd(&p->pos, &p->vel, &p->pos);
-        if (p->vel.y == 0.0f) {
-            hit.y = 0.0f;
-        }
-        PSVECNormalize(&hit, &hit);
-        C_VECReflect(d2, &hit, &refl);
-        PSVECScale(&refl, &p->vel, dist);
-        {
-            f32 dot = PSVECDotProduct(d2, &hit);
-            PSVECScale(&hit, &hit, -(dist - d) * dot + 0.1f);
-        }
-        PSVECAdd(&p->pos, &hit, &p->pos);
-        PSVECSubtract(&p->pos, &old, &diff);
-        d = PSVECMag(&diff);
-        if (d > 0.0f) {
-            PSVECNormalize(&diff, &diff);
-            p->hitCheck = hitCheckFilter(NULL, &hitX, &b2, &b3, &d, &hitNX, &c2, &c3, old.x, old.y + 1.0f, old.z, diff.x, diff.y, diff.z);
-            if (p->hitCheck != NULL) {
-                p->pos = old;
-            }
-        }
-    }
-}
-
 // Descriptive name (not in the symbol maps); placeholder fn_19_13A90, JP mri .text+0x13A90. See docs/NAME_PROVENANCE.md.
 #if VERSION >= VERSION_JP
 /**
@@ -4862,12 +4639,6 @@ static inline void puniMoveHitInl(PuniData* p, Vec* s2, Vec* d2, f32 dist) {
  * All these modes then set the Puni's height; the other modes (updraft, fall and so on) are left alone.
  */
 void puniMoveMain(PuniData* p) {
-    Vec d2;
-    Vec s2;
-    Vec dir;
-    Vec start;
-    f32 dist;
-
     switch (p->mode) {
         case PUNI_MODE_IDLE:
         case PUNI_MODE_JOIN:
@@ -4882,133 +4653,28 @@ void puniMoveMain(PuniData* p) {
         case PUNI_MODE_ENTER:
         case PUNI_MODE_EXIT:
         case PUNI_MODE_POINT:
-            dist = PSVECMag(&p->vel);
-            if (!dist) {
-                goto mv_end1;
-            }
-            if (dist > 1.0f) {
-                if (p->vel.x < 0.0f) {
-                    p->dir = 270.0f;
-                } else {
-                    p->dir = 90.0f;
-                }
-            }
-            if (dist > p->maxSpeed) {
-                PSVECScale(&p->vel, &p->vel, p->maxSpeed / dist);
-                dist = p->maxSpeed;
-            }
-            start = p->pos;
-            start.y += 1.0f;
-            PSVECNormalize(&p->vel, &dir);
-            s2 = start;
-            d2 = dir;
-            puniMoveHitInl(p, &s2, &d2, dist);
-            if (p->hitMove != NULL || p->hitCheck != NULL) {
-                p->flags |= PUNI_FLAG_HIT_WALL_UNUSED;
-            } else {
-                PSVECScale(&p->vel, &p->vel, 0.6f);
-                p->flags &= ~PUNI_FLAG_HIT_WALL_UNUSED;
-            }
-            mv_end1:
-                puniSetYPosition(p);
-                break;
-            case PUNI_MODE_MASS: {
-                Vec d2;
-                Vec s2;
-                Vec dir;
-                Vec start;
-                f32 dist = PSVECMag(&p->vel);
-                if (!dist) {
-                    goto mv_end2;
-                }
-                if (dist > p->maxSpeed) {
-                    PSVECScale(&p->vel, &p->vel, p->maxSpeed / dist);
-                    dist = p->maxSpeed;
-                }
-                start = p->pos;
-                start.y += 1.0f;
-                PSVECNormalize(&p->vel, &dir);
-                d2 = dir;
-                s2 = start;
-                puniMoveHitLimitedInl(p, &s2, &d2, dist);
-                if (p->hitMove != NULL || p->hitCheck != NULL) {
-                    p->flags |= PUNI_FLAG_HIT_WALL_UNUSED;
-                } else {
-                    p->flags &= ~PUNI_FLAG_HIT_WALL_UNUSED;
-                }
-            }
-            mv_end2:
-                puniSetYPosition(p);
-                break;
-            case PUNI_MODE_DAMAGE: {
-                Vec d2;
-                Vec s2;
-                Vec dir;
-                Vec start;
-                f32 dist = PSVECMag(&p->vel);
-                if (!dist) {
-                    goto mv_end3;
-                }
-                start = p->pos;
-                start.y += 1.0f;
-                PSVECNormalize(&p->vel, &dir);
-                s2 = start;
-                d2 = dir;
-                puniMoveHitInl(p, &s2, &d2, dist);
-                if (p->hitMove != NULL || p->hitCheck != NULL) {
-                    p->flags |= PUNI_FLAG_HIT_WALL_UNUSED;
-                } else {
-                    p->flags &= ~PUNI_FLAG_HIT_WALL_UNUSED;
-                }
-            }
-            mv_end3:
-                puniSetYPosition(p);
-                break;
+            puniMoveDecel(p);
+            puniSetYPosition(p);
+            break;
+        case PUNI_MODE_MASS:
+            puniMoveLimitedNormal(p);
+            puniSetYPosition(p);
+            break;
+        case PUNI_MODE_DAMAGE:
+            puniMoveNormal(p);
+            puniSetYPosition(p);
+            break;
         case PUNI_MODE_FUNC:
-            if (p->moveFunc) {
-                p->moveFunc(p);
-            }
-                puniSetYPosition(p);
-                break;
+            puniMoveCustom(p);
+            puniSetYPosition(p);
+            break;
         case PUNI_MODE_AWAYJUMP:
         case PUNI_MODE_AWAY:
         case PUNI_MODE_WIND:
             puniSetYPosition(p);
             break;
-        case PUNI_MODE_TRAP: {
-            Vec d2;
-            Vec s2;
-            Vec dir;
-            Vec start;
-            f32 dist = PSVECMag(&p->vel);
-            if (!dist) {
-                goto mv_end5;
-            }
-            if (dist > 1.0f) {
-                if (p->vel.x < 0.0f) {
-                    p->dir = 270.0f;
-                } else {
-                    p->dir = 90.0f;
-                }
-            }
-            if (dist > p->maxSpeed) {
-                PSVECScale(&p->vel, &p->vel, p->maxSpeed / dist);
-                dist = p->maxSpeed;
-            }
-            start = p->pos;
-            start.y += 1.0f;
-            PSVECNormalize(&p->vel, &dir);
-            s2 = start;
-            d2 = dir;
-            puniMoveHitInl(p, &s2, &d2, dist);
-            if (p->hitMove != NULL || p->hitCheck != NULL) {
-                p->flags |= PUNI_FLAG_HIT_WALL_UNUSED;
-            } else {
-                PSVECScale(&p->vel, &p->vel, 0.6f);
-                p->flags &= ~PUNI_FLAG_HIT_WALL_UNUSED;
-            }
-        }
-        mv_end5:
+        case PUNI_MODE_TRAP:
+            puniMoveDecel(p);
             puniSetYPosition(p);
             break;
     }
