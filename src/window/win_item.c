@@ -178,7 +178,7 @@ void winMakeSkipList(WindowWork* w) {
  */
 void winItemInit(WindowWork* w) {
     s32 i;
-    w->item.state = 0;
+    w->item.state = WIN_ITEM_TABS;
     w->item.mode = 0;
     w->item.cursor[0] = 0;
     w->item.page[0] = 0;
@@ -239,12 +239,13 @@ void winItemExit(WindowWork* w) {
 }
 
 /**
- * Items window input.
- * State 0 picks the Items / Important Items tab; 10 moves through the two-column list;
- * 100 pages through one of Luigi's books; 200-202 pick and read mail (Mailbox SP);
- * 300 picks who gets a field-usable item and 301 blinks while it is applied in the menu;
- * 1000 is the Z sort menu.
- * Returns -1 on B from tab selection (state 0), -2 to close the menu (also to use an item or read the Ragged Diary in the field), else 0.
+ * Items window input (states: WinItemMainState, win_item.h).
+ * WIN_ITEM_TABS picks the Items / Important Items tab; WIN_ITEM_LIST moves through the two-column list;
+ * WIN_ITEM_BOOK pages through one of Luigi's books; WIN_ITEM_MAIL_LIST / _LOAD / _READ pick and read mail
+ * (Mailbox SP); WIN_ITEM_USE_TARGET picks who gets a field-usable item and WIN_ITEM_USE_BLINK blinks while it is
+ * applied in the menu; WIN_ITEM_SORT is the Z sort menu.
+ * Returns -1 on B from tab selection (WIN_ITEM_TABS), -2 to close the menu (also to use an item or read the
+ * Ragged Diary in the field), else 0.
  * Luigi's books are the Super Luigi key items.
  */
 s32 winItemMain(WindowWork* w) {
@@ -267,7 +268,7 @@ s32 winItemMain(WindowWork* w) {
     s32 k;
 
     switch (w->item.state) {
-        case 0:
+        case WIN_ITEM_TABS:
             if (w->buttonTrg & PAD_BUTTON_B) {
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1 | PSND_SFX_BYPASS_MUTE));
                 return -1;
@@ -285,20 +286,20 @@ s32 winItemMain(WindowWork* w) {
                 if (w->item.mode == 1 && w->item.skipCount == 0) {
                     break;
                 }
-                w->item.state = 10;
+                w->item.state = WIN_ITEM_LIST;
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
                 break;
             } else if (w->buttonTrg & PAD_TRIGGER_Z) {
                 winSortEntry(w, w->item.mode != 0, -310.0f, 150.0f);
                 w->savedState = w->item.state;
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
-                w->item.state = 1000;
+                w->item.state = WIN_ITEM_SORT;
             }
             w->helpTgtX = -275.0f;
             w->helpTgtY = (f32)(125 - w->item.mode * VERSION_PICK(40, 50));
             winMsgEntry(w, 0, w->item.mode == 0 ? "msg_menu_mochi_item" : "msg_menu_mochi_daiji", 0);
             break;
-        case 10:
+        case WIN_ITEM_LIST:
             if (w->item.mode == 0) {
                 cnt = pouchGetHaveItemCnt();
             } else {
@@ -308,7 +309,7 @@ s32 winItemMain(WindowWork* w) {
             pages = (cnt + 9) / 10;
             if (w->buttonTrg & PAD_BUTTON_B) {
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1 | PSND_SFX_BYPASS_MUTE));
-                w->item.state = 0;
+                w->item.state = WIN_ITEM_TABS;
             }
             if (w->buttonTrg & PAD_BUTTON_A) {
                 if (w->item.mode == 0) {
@@ -316,7 +317,7 @@ s32 winItemMain(WindowWork* w) {
                     if (itemDataTable[id].usable_locations & ITEM_USABLE_MENU) {
                         w->item.useItem = id;
                         w->item.useIdx = w->item.cursor[mode];
-                        w->item.state = 300;
+                        w->item.state = WIN_ITEM_USE_TARGET;
                         w->item.useTarget = 0;
                         w->item.blink = 0;
                         psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
@@ -328,7 +329,7 @@ s32 winItemMain(WindowWork* w) {
                 } else {
                     c = w->item.skip[w->item.cursor[mode]];
                     if ((u32)(c - ITEM_SUPER_LUIGI1) <= ITEM_SUPER_LUIGI4 - ITEM_SUPER_LUIGI1 || c == ITEM_SUPER_LUIGI5) {
-                        w->item.state = 100;
+                        w->item.state = WIN_ITEM_BOOK;
                         w->item.bookTgtX = -170.0f;
                         w->item.bookTgtY = 160.0f;
 #if VERSION >= VERSION_JP
@@ -342,7 +343,7 @@ s32 winItemMain(WindowWork* w) {
                         w->item.bookPages = (w->item.bookPages + 1) / 2;
                         psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
                     } else if (c == ITEM_MAILBOX_SP && pouchReceiveMailCount()) {
-                        w->item.state = 200;
+                        w->item.state = WIN_ITEM_MAIL_LIST;
                         w->item.mailTgtX = -144.0f;
                         w->item.mailTgtY = 180.0f;
                         psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
@@ -395,7 +396,7 @@ s32 winItemMain(WindowWork* w) {
                 winSortEntry(w, w->item.mode != 0, -310.0f, 150.0f);
                 w->savedState = w->item.state;
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
-                w->item.state = 1000;
+                w->item.state = WIN_ITEM_SORT;
             } else if (w->buttonTrg & PAD_BUTTON_START) {
                 return -2;
             }
@@ -408,13 +409,13 @@ s32 winItemMain(WindowWork* w) {
             }
             winMsgEntry(w, id, itemDataTable[id].description, 0);
             break;
-        case 100:
+        case WIN_ITEM_BOOK:
             if (w->buttonTrg & PAD_BUTTON_A) {
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
                 w->item.bookPage++;
                 if (w->item.bookPage >= w->item.bookPages) {
                     w->item.bookPage = w->item.bookPages - 1;
-                    w->item.state = 10;
+                    w->item.state = WIN_ITEM_LIST;
                     w->item.bookTgtX = 320.0f;
                     w->item.bookTgtY = -240.0f;
 #if VERSION <= VERSION_DEMO_JP
@@ -432,7 +433,7 @@ s32 winItemMain(WindowWork* w) {
                 w->item.bookPage--;
                 if (w->item.bookPage < 0) {
                     w->item.bookPage = 0;
-                    w->item.state = 10;
+                    w->item.state = WIN_ITEM_LIST;
                     w->item.bookTgtX = 320.0f;
                     w->item.bookTgtY = -240.0f;
 #if VERSION >= VERSION_JP
@@ -454,14 +455,14 @@ s32 winItemMain(WindowWork* w) {
             w->helpTgtX = -170.0f;
             w->helpTgtY = 150.0f;
             break;
-        case 200:
+        case WIN_ITEM_MAIL_LIST:
             if (w->buttonTrg & PAD_BUTTON_A) {
                 if (pouchCheckMail(w->item.mail[w->item.mailSel].id) == 1) {
                     pouchOpenMail(w->item.mail[w->item.mailSel].id);
                 }
                 swSet(GSWF_ID(GSWF_MAIL_TUTORIAL_REPEAT_OFF));
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_MAIL_MOVE1 | PSND_SFX_BYPASS_MUTE));
-                w->item.state = 201;
+                w->item.state = WIN_ITEM_MAIL_LOAD;
                 mail = mailGetPtr(w->item.mail[w->item.mailSel].id);
                 FontGetMessageWidthLine(msgSearch(mail->body), &w->item.mailLines);
                 w->item.mailLines++;
@@ -481,7 +482,7 @@ s32 winItemMain(WindowWork* w) {
             } else if (w->buttonTrg & PAD_BUTTON_B) {
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1 | PSND_SFX_BYPASS_MUTE));
 #endif
-                w->item.state = 10;
+                w->item.state = WIN_ITEM_LIST;
                 w->item.mailTgtX = 320.0f;
                 w->item.mailTgtY = -240.0f;
             } else if (w->dirRep & DEMO_STICK_UP) {
@@ -531,7 +532,7 @@ s32 winItemMain(WindowWork* w) {
                 winSortEntry(w, WIN_SORT_MAIL, w->item.mailTgtX, w->item.mailTgtY - 60.0f);
                 w->savedState = w->item.state;
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
-                w->item.state = 1000;
+                w->item.state = WIN_ITEM_SORT;
             } else if (w->buttonTrg & PAD_BUTTON_START) {
                 w->item.mailTgtX = 320.0f;
                 w->item.mailTgtY = -240.0f;
@@ -540,7 +541,7 @@ s32 winItemMain(WindowWork* w) {
             w->helpTgtX = -96.0f;
             w->helpTgtY = 120.0f - (f32)(w->item.mailSel % 5 * 40);
             break;
-        case 201:
+        case WIN_ITEM_MAIL_LOAD:
             mail = mailGetPtr(w->item.mail[w->item.mailSel].id);
             if (mail->flags & MAIL_FLAG_PICTURE) {
 #if VERSION <= VERSION_DEMO_JP
@@ -560,14 +561,14 @@ s32 winItemMain(WindowWork* w) {
                     w->mailRes = fileAllocf(FILE_TYPE_TPL, "%s/w/jp/mail.tpl", getMarioStDvdRoot());
 #endif
 #endif
-                    w->item.state++;
+                    w->item.state++; // WIN_ITEM_MAIL_READ
                 }
             } else {
                 w->mailRes = NULL;
-                w->item.state++;
+                w->item.state++; // WIN_ITEM_MAIL_READ
             }
             break;
-        case 202:
+        case WIN_ITEM_MAIL_READ:
             if (w->item.mailLines > 8) {
                 if (keyGetDirRep(0) & DEMO_SUBSTICK_UP) {
                     if (w->item.mailLine > 0) {
@@ -588,7 +589,7 @@ s32 winItemMain(WindowWork* w) {
                 if (w->mailRes) {
                     fileFree(w->mailRes);
                 }
-                w->item.state = 200;
+                w->item.state = WIN_ITEM_MAIL_LIST;
             } else if (w->buttonTrg & PAD_BUTTON_START) {
                 if (w->mailRes) {
                     fileFree(w->mailRes);
@@ -600,10 +601,10 @@ s32 winItemMain(WindowWork* w) {
             w->helpTgtX = -96.0f;
             w->helpTgtY = 120.0f;
             break;
-        case 300:
+        case WIN_ITEM_USE_TARGET:
             if (w->buttonTrg & PAD_BUTTON_B) {
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1 | PSND_SFX_BYPASS_MUTE));
-                w->item.state = 10;
+                w->item.state = WIN_ITEM_LIST;
                 w->item.useItem = 0;
                 winMgrClose(w->useWin[0]);
                 winMgrClose(w->useWin[1]);
@@ -668,7 +669,7 @@ s32 winItemMain(WindowWork* w) {
 #endif
                 }
                 w->item.blink = 0;
-                w->item.state = 301;
+                w->item.state = WIN_ITEM_USE_BLINK;
                 break;
             } else if (w->dirRep & DEMO_STICK_UP) {
                 old = w->item.useTarget;
@@ -705,15 +706,15 @@ s32 winItemMain(WindowWork* w) {
             }
             w->helpTgtY = (130.0f - 28.0f * old) + yoff;
             break;
-        case 301:
+        case WIN_ITEM_USE_BLINK:
             w->item.blink++;
             if (w->item.blink > gp->framerate * 2) {
                 w->item.blink = 0;
                 pouchRemoveItemIndex(w->item.useItem, w->item.useIdx);
-                w->item.state = 10;
+                w->item.state = WIN_ITEM_LIST;
                 w->item.useItem = 0;
                 if (pouchGetHaveItemCnt() == 0) {
-                    w->item.state = 0;
+                    w->item.state = WIN_ITEM_TABS;
                 } else if (w->item.cursor[0] >= pouchGetHaveItemCnt()) {
                     w->item.cursor[0] = pouchGetHaveItemCnt() - 1;
                 }
@@ -721,7 +722,7 @@ s32 winItemMain(WindowWork* w) {
                 winMgrClose(w->useWin[1]);
             }
             break;
-        case 1000:
+        case WIN_ITEM_SORT:
             if (!winSortWait(w)) {
                 w->item.state = w->savedState;
             }
@@ -968,7 +969,8 @@ enum ItemUseLayout {
  *   list[0]    entry->y - 8 - USE_ROW_H - 16 (the current partner, when there is one)
  *   -------    dotted line at entry->y - 84, drawn when there are two or more partners
  *   list[1..]  entry->y - 8 - i * USE_ROW_H - 28
- * winItemMain state 300 points the hand cursor at the same rows (helpTgtY = 130 - 28 * target + the same 0/-16/-28).
+ * winItemMain's WIN_ITEM_USE_TARGET points the hand cursor at the same rows
+ * (helpTgtY = 130 - 28 * target + the same 0/-16/-28).
  */
 static void itemUseDisp(WinMgrEntry* entry) {
     WindowWork* w = winGetPtr();
@@ -1025,7 +1027,7 @@ static void itemUseDisp(WinMgrEntry* entry) {
             } else {
                 yoff = -28.0f;
             }
-            // While the item takes effect (w->item.blink counts up for two seconds, winItemMain state 301),
+            // While the item takes effect (w->item.blink counts up for two seconds, WIN_ITEM_USE_BLINK),
             // the target is drawn in black and the other rows in gray; the target also hides 4 frames in 20
             gray = 0;
             if (w->item.blink) {

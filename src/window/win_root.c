@@ -122,8 +122,25 @@ static void winSortMain(WindowWork* wp);
 #define WR_FSTEP(n) (n)
 #endif
 
+/* WindowWork.active: winRootMain's state machine */
+typedef enum WinRootMainState {
+    WIN_ROOT_OPEN = 0,           // build the tabs and init every window; then WIN_ROOT_TABS, or straight into a page
+    WIN_ROOT_TABS = 10,          // the tab row: left / right change tab, A enters the tab's page, B / Start close
+                                 // (WIN_ROOT_CLOSE) once the page has slid in (menu[0].state 100)
+    WIN_ROOT_PAGE_MARIO = 11,    // WIN_ROOT_PAGE_MARIO + tab id: that page's own Main runs; its -1 goes back to
+                                 // WIN_ROOT_TABS, -2 closes the menu (WIN_ROOT_CLOSE)
+    WIN_ROOT_PAGE_PARTY = 12,
+    WIN_ROOT_PAGE_ITEMS = 13,
+    WIN_ROOT_PAGE_BADGES = 14,
+    WIN_ROOT_PAGE_JOURNAL = 15,
+    WIN_ROOT_CLOSE = 20,         // start closing: the tabs, pages and help box slide out
+    WIN_ROOT_CLOSING = 21,       // count up to WIN_ROOT_CLOSE_LAST (30 frames), then free the windows and return
+    WIN_ROOT_CLOSE_LAST = 50,
+    WIN_ROOT_TAB_WAIT = 100,     // never set: back to WIN_ROOT_TABS once the current tab's page has slid in
+} WinRootMainState;
+
 /**
- * Pause menu state machine, run each frame by winMain (win_main.c).
+ * Pause menu state machine (WinRootMainState), run each frame by winMain (win_main.c).
  * On open it builds the tabs (Mario, Party once Goombella joined, Items,
  * Badges once the badge tutorial is past or a badge is owned, Journal),
  * inits every page and can jump straight into the page in menuSel;
@@ -140,7 +157,7 @@ s32 winRootMain(WindowWork* w) {
     s32 ret;
 
     switch (w->active) {
-        case 0:
+        case WIN_ROOT_OPEN:
             psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_OPEN1 | PSND_SFX_BYPASS_MUTE));
             w->tabNum = 0;
             WIN_ROOT_ADD_TAB(0);
@@ -192,26 +209,26 @@ s32 winRootMain(WindowWork* w) {
             w->sortPosX = w->sortTgtX = -1000.0f;
             w->sortPosY = w->sortTgtY = -1000.0f;
             winMsgEntry(w, 0, w->tab[w->tabSel].msg, NULL);
-            w->active = 10;
+            w->active = WIN_ROOT_TABS;
             switch (w->menuSel) {
             case 1:
                 winPartyInit2(w);
-                w->active = 12;
+                w->active = WIN_ROOT_PAGE_PARTY;
                 w->flags |= WINDOW_FLAG_DIRECT_OPEN;
                 break;
             case 2:
                 winItemInit2(w);
-                w->active = 13;
+                w->active = WIN_ROOT_PAGE_ITEMS;
                 w->flags |= WINDOW_FLAG_DIRECT_OPEN;
                 break;
             case 3:
                 winBadgeInit2(w);
-                w->active = 14;
+                w->active = WIN_ROOT_PAGE_BADGES;
                 w->flags |= WINDOW_FLAG_DIRECT_OPEN;
                 break;
             case 4:
                 winLogInit2(w);
-                w->active = 15;
+                w->active = WIN_ROOT_PAGE_JOURNAL;
                 w->flags |= WINDOW_FLAG_DIRECT_OPEN;
                 break;
             }
@@ -219,7 +236,7 @@ s32 winRootMain(WindowWork* w) {
                 w->tabNum = 0;
                 WIN_ROOT_ADD_TAB(1);
                 winPartyInit2(w);
-                w->active = 12;
+                w->active = WIN_ROOT_PAGE_PARTY;
                 w->tabSel = 0;
             }
 #if VERSION >= VERSION_JP
@@ -228,17 +245,17 @@ s32 winRootMain(WindowWork* w) {
             dispEntry(CAMERA_2D, 1000.0f, DISP_MODE_OPAQUE, winRootBgCaptureDisp, w);
 #endif
             break;
-        case 10:
+        case WIN_ROOT_TABS:
             if (w->buttonTrg & (PAD_BUTTON_B | PAD_BUTTON_START)) {
                 if (w->menu[0].state == 100) {
-                    w->active = 20;
+                    w->active = WIN_ROOT_CLOSE;
                 }
             } else if (w->buttonTrg & PAD_BUTTON_A) {
                 if (w->tab[w->tabSel].id == 1 && !w->party.count) {
                     break;
                 }
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
-                w->active = w->tab[w->tabSel].id + 11;
+                w->active = w->tab[w->tabSel].id + WIN_ROOT_PAGE_MARIO;
                 switch (w->tab[w->tabSel].id) {
                 case 0:
                     winMarioInit2(w);
@@ -296,7 +313,7 @@ s32 winRootMain(WindowWork* w) {
                 winMsgEntry(w, 0, w->tab[w->tabSel].msg, NULL);
             }
             break;
-        case 100:
+        case WIN_ROOT_TAB_WAIT:
 #if VERSION >= VERSION_US
             if (w->menu[0].state == 100) {
 #else
@@ -304,28 +321,28 @@ s32 winRootMain(WindowWork* w) {
             // test menu[0].
             if (w->menu[w->tabSel].state == 100) {
 #endif
-                w->active = 10;
+                w->active = WIN_ROOT_TABS;
             }
             break;
-        case 11:
-        case 12:
-        case 13:
-        case 14:
-        case 15:
+        case WIN_ROOT_PAGE_MARIO:
+        case WIN_ROOT_PAGE_PARTY:
+        case WIN_ROOT_PAGE_ITEMS:
+        case WIN_ROOT_PAGE_BADGES:
+        case WIN_ROOT_PAGE_JOURNAL:
             switch (w->active) {
-            case 11:
+            case WIN_ROOT_PAGE_MARIO:
                 ret = winMarioMain(w);
                 break;
-            case 12:
+            case WIN_ROOT_PAGE_PARTY:
                 ret = winPartyMain(w);
                 break;
-            case 13:
+            case WIN_ROOT_PAGE_ITEMS:
                 ret = winItemMain(w);
                 break;
-            case 14:
+            case WIN_ROOT_PAGE_BADGES:
                 ret = winBadgeMain(w);
                 break;
-            case 15:
+            case WIN_ROOT_PAGE_JOURNAL:
                 ret = winLogMain(w);
                 break;
             }
@@ -335,15 +352,15 @@ s32 winRootMain(WindowWork* w) {
             if (ret == -1) {
                 w->helpTgtX = w->tabSel * 105 - 270;
                 w->helpTgtY = 185.0f;
-                w->active = 10;
+                w->active = WIN_ROOT_TABS;
                 winMsgEntry(w, 0, w->tab[w->tabSel].msg, NULL);
                 w->flags &= ~WINDOW_FLAG_DIRECT_OPEN;
             } else if (ret == -2) {
-                w->active = 20;
+                w->active = WIN_ROOT_CLOSE;
                 w->flags &= ~WINDOW_FLAG_DIRECT_OPEN;
             }
             break;
-        case 20:
+        case WIN_ROOT_CLOSE:
             psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_CLOSE1 | PSND_SFX_BYPASS_MUTE));
             for (i = 0; i < w->tabNum; i++) {
                 w->tab[i].state = 10;
@@ -356,9 +373,9 @@ s32 winRootMain(WindowWork* w) {
             mapDispOn();
             camDispOn(CAMERA_3D);
 #endif
-            w->active++;
+            w->active++; // WIN_ROOT_CLOSING
             break;
-        default:
+        default: // WIN_ROOT_CLOSING .. WIN_ROOT_CLOSE_LAST
 #if VERSION >= VERSION_JP
             if (w->texBuf) {
                 smartFree(w->texBuf);
@@ -367,7 +384,7 @@ s32 winRootMain(WindowWork* w) {
             }
 #endif
             w->active++;
-            if (w->active > 50) {
+            if (w->active > WIN_ROOT_CLOSE_LAST) {
                 winMarioExit(w);
                 winPartyExit(w);
                 winItemExit(w);
@@ -395,7 +412,7 @@ s32 winRootMain(WindowWork* w) {
     winLogMain2(w);
     winSortMain(w);
 
-    if (w->active < 20) {
+    if (w->active < WIN_ROOT_CLOSE) {
         if (w->flags & WINDOW_FLAG_DIRECT_OPEN) {
             w->helpX += (w->helpTgtX - w->helpX) / WR_FSTEP(4.0f);
             w->helpY += (w->helpTgtY - w->helpY) / WR_FSTEP(4.0f);
@@ -765,7 +782,7 @@ static void winMsgMain(WindowWork* wp) {
             break;
         case 2:
 #if VERSION >= VERSION_US
-            if (wp->item.state == 202) {
+            if (wp->item.state == WIN_ITEM_MAIL_READ) {
                 break;
             }
 #endif
@@ -900,7 +917,7 @@ static void winMsgDisp(WindowWork* wp, f32 x, f32 y) {
     // (shown 20 of every 32 frames): only the down arrow on the first two lines, only the up arrow on the last
     // pair (msgLine / 2 is the last pair's index), both in between.
 #if VERSION >= VERSION_US
-    if (wp->item.state != 202 && wp->msgLines > 2) {
+    if (wp->item.state != WIN_ITEM_MAIL_READ && wp->msgLines > 2) {
 #else
     if (wp->msgLines > 2) {
 #endif
@@ -2927,7 +2944,7 @@ static void winMailDisp(WindowWork* wp) {
         // The letter list (every state but reading): row i's line at mailY - 56 - i * MAIL_ROW_H, moved up by
         // mailScroll (eased to mailPage * 200). winMailGX left the scissor on the five visible rows; it is reset
         // to the full screen after the list.
-        if (wp->item.state != 202) {
+        if (wp->item.state != WIN_ITEM_MAIL_READ) {
             for (i = 0; i < wp->item.mailNum; i++) {
                 GXColor white;
 
