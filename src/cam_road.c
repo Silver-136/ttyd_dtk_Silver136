@@ -815,7 +815,7 @@ static void calcCamRoad(CamRoadState* out, CamRoadState* prev, f32 xA, f32 yA, f
     f32 cs2;
     f32 angle;
     f32 rot;
-    f32 f4c;
+    f32 segment;
     f32 spd1;
     f32 spd2;
     CamRoadHit hit;
@@ -922,7 +922,7 @@ static void calcCamRoad(CamRoadState* out, CamRoadState* prev, f32 xA, f32 yA, f
         angle = prev->angle;
         dist = prev->dist;
         rot = prev->rot;
-        f4c = prev->segment;
+        segment = prev->segment;
         flags = 0;
     } else {
         if (hit.t < 0.0f) {
@@ -942,7 +942,7 @@ static void calcCamRoad(CamRoadState* out, CamRoadState* prev, f32 xA, f32 yA, f
         }
         nx = -hit.dir.z;
         len2 = nx * nx + hit.dir.x * hit.dir.x;
-        f4c = hit.segment;
+        segment = hit.segment;
         nz = hit.dir.x;
         z = hit.pos.z;
         flags = hit.flags;
@@ -1130,7 +1130,7 @@ static void calcCamRoad(CamRoadState* out, CamRoadState* prev, f32 xA, f32 yA, f
     out->dist = dist;
     out->angle = angle;
     out->rot = rot;
-    out->segment = f4c;
+    out->segment = segment;
     out->time = gp->renderFieldTime;
     out->f_58 = shiftWeight;
     out->shiftXRate = curve->shiftXRate;

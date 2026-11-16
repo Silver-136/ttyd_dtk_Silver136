@@ -633,17 +633,19 @@ static inline s32 rollChk(void) {
  */
 void mot_roll(void) {
     MarioWork* mario = marioGetPtr();
-    f32 v31;
-    f32 v29;
-    f32 v28;
-    f32 v30;
-    f32 v27;
-    f32 v26;
+    f32 pushAng;
+    f32 moveAng;
+    f32 spdZSq;
+    f32 dir;
+    f32 spdX;
+    f32 spdZ;
+    f32 slopeZ;
+    f32 scaleY;
     f32 tcA;
     f32 nx;
     f32 nz;
-    f32 a31;
-    f32 b31;
+    f32 maxSpdX;
+    f32 maxSpdZ;
     f32 s;
     f32 rd;
     MarioWork* m2;
@@ -677,8 +679,8 @@ void mot_roll(void) {
 #if VERSION <= VERSION_DEMO_JP
             mario->hammerDir = 0;
 #else
-            v31 = mario->displayDirection;
-            if (v31 < 90.0f || v31 > 270.0f) {
+            dir = mario->displayDirection;
+            if (dir < 90.0f || dir > 270.0f) {
                 mario->hammerDir = 1;
                 mario->directionView = revise360(270.0f - mario->targetYaw);
                 mario->moveDirection = 270.0f;
@@ -719,8 +721,8 @@ void mot_roll(void) {
             }
             if (--mario->multiTimer <= 0) {
 #if VERSION <= VERSION_DEMO_JP
-                v31 = mario->displayDirection;
-                if (v31 < 90.0f || v31 > 270.0f) {
+                dir = mario->displayDirection;
+                if (dir < 90.0f || dir > 270.0f) {
                     mario->hammerDir = 1;
                     mario->directionView = revise360(270.0f - mario->targetYaw);
                     mario->moveDirection = 270.0f;
@@ -742,8 +744,8 @@ void mot_roll(void) {
             mario->rot.z = 0.0f;
             mario->rotOfs.x = 0.0f;
             mario->rotOfs.y = 0.0f;
-            v31 = revise360(mario->directionView - mario->targetYaw);
-            mario->dispOfs.x = (v31 < 180.0f) ? 3.0f : -3.0f;
+            dir = revise360(mario->directionView - mario->targetYaw);
+            mario->dispOfs.x = (dir < 180.0f) ? 3.0f : -3.0f;
             mario->dispOfs.y = 0.0f;
             mario->multiTimer = 0x41;
             mario->currSubMotionId = 0x15;
@@ -761,11 +763,11 @@ void mot_roll(void) {
 #endif
         case 0x15:
             if (--mario->multiTimer > 0) {
-                v31 = revise360(mario->directionView - mario->targetYaw);
+                dir = revise360(mario->directionView - mario->targetYaw);
 
                 // BUG: in both branches the parenthesis closes after the comparison, so the snap tests t - n < 1
                 // instead of |t - n| < 1 (case 0x14 sets displayDirection to 0, below t, so both tests agree here).
-                if (v31 < 180.0f) {
+                if (dir < 180.0f) {
                     f32 t = 90.0f;
                     f32 diff = t - mario->displayDirection;
                     f32 n = 0.1f * diff;
@@ -787,8 +789,8 @@ void mot_roll(void) {
                     mario->displayDirectionTarget = n;
                 }
             } else {
-                v31 = revise360(mario->directionView - mario->targetYaw);
-                if (v31 >= 180.0f) {
+                dir = revise360(mario->directionView - mario->targetYaw);
+                if (dir >= 180.0f) {
                     mario->displayDirection = 0.0f;
                     mario->displayDirectionTarget = 0.0f;
                     mario->moveDirection = 270.0f;
@@ -849,7 +851,7 @@ void mot_roll(void) {
             mario->buttonTrg |= PAD_BUTTON_A;
         }
     }
-    v26 = mario->tubeScaleY;
+    scaleY = mario->tubeScaleY;
     if (marioGetPtr()->motRoll->squashTrigger) {
 #if VERSION <= VERSION_DEMO_JP
         s32 z = 0;
@@ -860,15 +862,15 @@ void mot_roll(void) {
         marioGetPtr()->motRoll->squashTrigger = 0;
 #endif
         marioGetPtr()->motRoll->squashState = 1;
-        v26 = 1.0f;
+        scaleY = 1.0f;
     }
     switch (marioGetPtr()->motRoll->squashState) {
         case 1:
-            if (v26 < 1.4f) {
+            if (scaleY < 1.4f) {
                 f32 k = 1.0f;
-                v26 = k * (1.4499999f - v26) + v26;
-                if (v26 >= 1.4f) {
-                    v26 = 1.4f;
+                scaleY = k * (1.4499999f - scaleY) + scaleY;
+                if (scaleY >= 1.4f) {
+                    scaleY = 1.4f;
                 }
             }
             if (mario->airTimer == 0) {
@@ -879,49 +881,49 @@ void mot_roll(void) {
             }
             break;
         case 2:
-            if (v26 > 0.4f) {
-                v26 = 0.4f * (0.35f - v26) + v26;
-                if (v26 <= 0.4f) {
+            if (scaleY > 0.4f) {
+                scaleY = 0.4f * (0.35f - scaleY) + scaleY;
+                if (scaleY <= 0.4f) {
 #if VERSION <= VERSION_DEMO_JP
                     s32 t = 3;
 #endif
-                    v26 = 0.4f;
+                    scaleY = 0.4f;
                     marioGetPtr()->motRoll->squashState = 3;
                 }
             }
             break;
         case 3:
-            if (v26 < 1.0f) {
-                v26 = 0.5f * (1.05f - v26) + v26;
-                if (v26 >= 1.0f) {
+            if (scaleY < 1.0f) {
+                scaleY = 0.5f * (1.05f - scaleY) + scaleY;
+                if (scaleY >= 1.0f) {
 #if VERSION <= VERSION_DEMO_JP
                     s32 t = 0;
 #endif
                     marioGetPtr()->motRoll->squashState = 0;
-                    v26 = 1.0f;
+                    scaleY = 1.0f;
                 }
             }
             break;
     }
-    mario->tubeScaleY = v26;
+    mario->tubeScaleY = scaleY;
 #if VERSION <= VERSION_DEMO_JP
     if (mario->airTimer == 0) {
         camFollowYOn();
     }
 #endif
     if (!mario->hitobjStandOn && mario->hitobjFront && !marioChkBero(mario->hitobjFront)) {
-        v26 = marioGetPtr()->motRoll->spdX;
-        v27 = marioGetPtr()->motRoll->spdZ;
-        v26 += 0.2f * -v26;
-        v27 += 0.2f * -v27;
-        if (__fabsf(v26) < 1.0f) {
-            v26 = 0.0f;
+        f32 vx = marioGetPtr()->motRoll->spdX;
+        f32 vz = marioGetPtr()->motRoll->spdZ;
+        vx += 0.2f * -vx;
+        vz += 0.2f * -vz;
+        if (__fabsf(vx) < 1.0f) {
+            vx = 0.0f;
         }
-        if (__fabsf(v27) < 1.0f) {
-            v27 = 0.0f;
+        if (__fabsf(vz) < 1.0f) {
+            vz = 0.0f;
         }
-        marioGetPtr()->motRoll->spdX = v26;
-        marioGetPtr()->motRoll->spdZ = v27;
+        marioGetPtr()->motRoll->spdX = vx;
+        marioGetPtr()->motRoll->spdZ = vz;
     }
 #if VERSION <= VERSION_DEMO_JP
     if (mario->hitobjStandOn) {
@@ -977,40 +979,41 @@ void mot_roll(void) {
         mario->airTimer++;
 #endif
     }
-    v29 = marioGetPtr()->motRoll->spdX;
-    v28 = marioGetPtr()->motRoll->spdZ;
+    spdX = marioGetPtr()->motRoll->spdX;
+    spdZ = marioGetPtr()->motRoll->spdZ;
     nx = 0.0f;
     nz = 0.0f;
     if (!(mario->flags & (MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING))) {
         f32 stickX, stickY;
+        f32 inputAng;
         stickX = (f32)mario->wStickDir1;
         stickY = (f32)mario->wStickDir2;
         nz = distABf(nx, nx, stickX, stickY);
-        v31 = angleABf(0.0f, 0.0f, stickX, stickY);
-        v31 = revise360(mario->targetYaw + v31);
-        nx = nz * sind(v31);
-        nz = nz * -cosd(v31);
-        v31 = angleABf(0.0f, 0.0f, nx, nz);
+        inputAng = angleABf(0.0f, 0.0f, stickX, stickY);
+        inputAng = revise360(mario->targetYaw + inputAng);
+        nx = nz * sind(inputAng);
+        nz = nz * -cosd(inputAng);
+        inputAng = angleABf(0.0f, 0.0f, nx, nz);
 
         // FAKE: no-op (MarioWork*) cast on the directionView/groundRot reads below (were raw MWOFF offsets); the plain field reorders a const load
         tcA = ((MarioWork*)mario)->directionView;
-        if (angOut(tcA, 135.0f, v31) == 1) {
+        if (angOut(tcA, 135.0f, inputAng) == 1) {
             nz = distABf(0.0f, 0.0f, nx, nz);
             nx = -nz * sind(mario->directionView);
             nz = nz * cosd(((MarioWork*)mario)->directionView);
         }
     }
     if (!(mario->flags & (MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING)) && !(mario->mot.roll.flags & ROLL_FLAG_NO_SLOPE_UNUSED)) {
-        v31 = angleABf(0.0f, 0.0f, v29, -v28);
+        f32 rollAng = angleABf(0.0f, 0.0f, spdX, -spdZ);
 #if VERSION <= VERSION_DEMO_JP
         if (((MarioWork*)mario)->groundRot.z > 0.0f) {
 #else
         if (((MarioWork*)mario)->groundRot.z > 0.05f) {
 #endif
-            v26 = (v31 > 180.0f) ? getRollVal(5) : getRollVal(6);
+            f32 grip = (rollAng > 180.0f) ? getRollVal(5) : getRollVal(6);
             {
                 f32 t = sind(((MarioWork*)mario)->groundRot.z);
-                t = t * v26;
+                t = t * grip;
                 nx = nx - t;
             }
             if (nx <= -100.0f) {
@@ -1021,10 +1024,10 @@ void mot_roll(void) {
 #else
         } else if (mario->groundRot.z < -0.05f) {
 #endif
-            v26 = (v31 < 180.0f) ? getRollVal(5) : getRollVal(6);
+            f32 grip = (rollAng < 180.0f) ? getRollVal(5) : getRollVal(6);
             {
                 f32 t = sind(mario->groundRot.z);
-                t = t * v26;
+                t = t * grip;
                 nx = nx - t;
             }
             if (nx >= 100.0f) {
@@ -1036,10 +1039,10 @@ void mot_roll(void) {
 #else
         if (((MarioWork*)mario)->groundRot.x > 0.05f) {
 #endif
-            v26 = (v31 > 180.0f) ? getRollVal(5) : getRollVal(6);
+            f32 grip = (rollAng > 180.0f) ? getRollVal(5) : getRollVal(6);
             {
                 f32 t = sind(((MarioWork*)mario)->groundRot.x);
-                t = t * v26;
+                t = t * grip;
                 nz = nz - t;
             }
             if (nz <= -100.0f) {
@@ -1050,21 +1053,21 @@ void mot_roll(void) {
 #else
         } else if (mario->groundRot.x < -0.05f) {
 #endif
-            v26 = (v31 < 180.0f) ? getRollVal(5) : getRollVal(6);
+            f32 grip = (rollAng < 180.0f) ? getRollVal(5) : getRollVal(6);
             {
                 f32 t = sind(mario->groundRot.x);
-                t = t * v26;
+                t = t * grip;
                 nz = nz - t;
             }
             if (nz >= 100.0f) {
                 nz = 100.0f;
             }
         }
-        v31 = angleABf(0.0f, 0.0f, nx, nz);
+        pushAng = angleABf(0.0f, 0.0f, nx, nz);
 
         // FAKE: no-op (MarioWork*) cast on the directionView/groundRot reads below (were raw MWOFF offsets); the plain field reorders a const load
         tcA = ((MarioWork*)mario)->directionView;
-        if (angOut(tcA, 135.0f, v31) == 1) {
+        if (angOut(tcA, 135.0f, pushAng) == 1) {
             nz = distABf(0.0f, 0.0f, nx, -nz);
             nx = -nz * sind(mario->directionView);
             nz = nz * cosd(((MarioWork*)mario)->directionView);
@@ -1073,145 +1076,143 @@ void mot_roll(void) {
 #if VERSION >= VERSION_JP
     if (mario->targetNpc) {
         if (!marioChkBero(mario->hitobjFront)) {
-            v29 = 0.05f * -v29 + v29;
-            v28 = 0.05f * -v28 + v28;
-            if (__fabsf(v29) < 0.1f) {
-                v29 = 0.0f;
+            spdX = 0.05f * -spdX + spdX;
+            spdZ = 0.05f * -spdZ + spdZ;
+            if (__fabsf(spdX) < 0.1f) {
+                spdX = 0.0f;
             }
-            if (__fabsf(v28) < 0.1f) {
-                v28 = 0.0f;
+            if (__fabsf(spdZ) < 0.1f) {
+                spdZ = 0.0f;
             }
         }
     }
 #endif
     if (mario->hitobjFront && !mario->wStickDir1 && !mario->wStickDir2 && !marioChkBero(mario->hitobjFront)) {
-        v29 = 0.6f * -v29 + v29;
-        v28 = 0.6f * -v28 + v28;
-        if (__fabsf(v29) < 0.1f) {
-            v29 = 0.0f;
+        spdX = 0.6f * -spdX + spdX;
+        spdZ = 0.6f * -spdZ + spdZ;
+        if (__fabsf(spdX) < 0.1f) {
+            spdX = 0.0f;
         }
-        if (__fabsf(v28) < 0.1f) {
-            v28 = 0.0f;
+        if (__fabsf(spdZ) < 0.1f) {
+            spdZ = 0.0f;
         }
     }
     if (mario->forceMoveTimer == 0 && !nx && !nz) {
         if (mario->hitobjWall) {
             if (!marioChkBero(mario->hitobjWall)) {
-                v29 = v29 * getRollVal(2) + v29;
-                v28 = v28 * getRollVal(2) + v28;
+                spdX = spdX * getRollVal(2) + spdX;
+                spdZ = spdZ * getRollVal(2) + spdZ;
             }
         } else if (mario->hitobjStandOn && mario->airTimer == 0) {
             // BUG: the parenthesis closes after the comparison, so this tests groundSlope <= 1 (true for any
             // negative slope) instead of |groundSlope| <= 1.
             if (__fabsf((f32)(mario->groundSlope <= 1.0f))) {
-                v29 = v29 * getRollVal(1) + v29;
-                v28 = v28 * getRollVal(1) + v28;
+                spdX = spdX * getRollVal(1) + spdX;
+                spdZ = spdZ * getRollVal(1) + spdZ;
             } else {
-                f32 a = v29 * getRollVal(1);
-                f32 b = v28 * getRollVal(1);
-                v29 = 6.4f * a + v29;
-                v28 = 6.4f * b + v28;
+                f32 a = spdX * getRollVal(1);
+                f32 b = spdZ * getRollVal(1);
+                spdX = 6.4f * a + spdX;
+                spdZ = 6.4f * b + spdZ;
             }
         }
-        if (__fabsf(v29) < getRollVal(3)) {
-            v29 = 0.0f;
+        if (__fabsf(spdX) < getRollVal(3)) {
+            spdX = 0.0f;
         }
-        if (__fabsf(v28) < getRollVal(3)) {
-            v28 = 0.0f;
+        if (__fabsf(spdZ) < getRollVal(3)) {
+            spdZ = 0.0f;
         }
     } else {  // the speed clamp runs only on this path
         f32 accel = 0.025f;
+        f32 slopeX;
         if ((mario->mot.roll.flags & ROLL_FLAG_SLOPE_DAMP_UNUSED) && mario->groundRot.z == 0.0f) {
             if (stickAngOut(135.0f) == 1) {
-                v29 = 0.2f * -v29 + v29;
-                v28 = 0.2f * -v28 + v28;
-                if (__fabsf(v29) < 1.0f) {
-                    v29 = 0.0f;
+                spdX = 0.2f * -spdX + spdX;
+                spdZ = 0.2f * -spdZ + spdZ;
+                if (__fabsf(spdX) < 1.0f) {
+                    spdX = 0.0f;
                 }
-                if (__fabsf(v28) < 1.0f) {
-                    v28 = 0.0f;
+                if (__fabsf(spdZ) < 1.0f) {
+                    spdZ = 0.0f;
                 }
-                if (v29 == 0.0f && v28 == 0.0f) {
+                if (spdX == 0.0f && spdZ == 0.0f) {
                     mario->moveDirection = revise360(180.0f + mario->moveDirection);
                     mario->directionView = mario->moveDirection;
                 }
             }
         }
-        a31 = getRollVal(0) / 0.05f;
-        v26 = 1.0f;
-        if (mario->forceMoveTimer == 0 && __fabsf(mario->groundSlope) >= v26) {
-            f32 ang = angleABf(0.0f, 0.0f, v29, -v28);
+        maxSpdX = getRollVal(0) / 0.05f;
+        slopeX = 1.0f;
+        if (mario->forceMoveTimer == 0 && __fabsf(mario->groundSlope) >= slopeX) {
+            f32 ang = angleABf(0.0f, 0.0f, spdX, -spdZ);
             f32 sp = mario->groundRot.z;
             if (sp > 0.0f) {
                 if (ang > 180.0f) {
-                    v26 = getRollVal(9);
+                    slopeX = getRollVal(9);
                 } else {
-                    v26 = 1.0f;
+                    slopeX = 1.0f;
                 }
             } else if (sp < 0.0f) {
                 if (ang < 180.0f) {
-                    v26 = getRollVal(9);
+                    slopeX = getRollVal(9);
                 } else {
-                    v26 = 1.0f;
+                    slopeX = 1.0f;
                 }
             }
         }
-        a31 = a31 * v26;
-        v26 = v28 * v28;
-        if (v29 * v29 + v26 <= a31 * a31) {
-            v29 = nx * accel + v29;
+        maxSpdX = maxSpdX * slopeX;
+        spdZSq = spdZ * spdZ;
+        if (spdX * spdX + spdZSq <= maxSpdX * maxSpdX) {
+            spdX = nx * accel + spdX;
         } else {
-            f32 n = -a31;
-            v29 = nx * accel + v29;
-            if (v29 < n) {
-                v29 = n;
+            f32 n = -maxSpdX;
+            spdX = nx * accel + spdX;
+            if (spdX < n) {
+                spdX = n;
             }
-            if (v29 > a31) {
-                v29 = a31;
+            if (spdX > maxSpdX) {
+                spdX = maxSpdX;
             }
         }
-        b31 = getRollVal(0) / 0.05f;
-        v30 = 1.0f;
-        if (mario->forceMoveTimer == 0 && __fabsf(mario->groundSlope) >= v30) {
-            f32 ang = angleABf(0.0f, 0.0f, v29, -v28);
+        maxSpdZ = getRollVal(0) / 0.05f;
+        slopeZ = 1.0f;
+        if (mario->forceMoveTimer == 0 && __fabsf(mario->groundSlope) >= slopeZ) {
+            f32 ang = angleABf(0.0f, 0.0f, spdX, -spdZ);
             f32 sp = mario->groundRot.x;
             if (sp > 0.0f) {
                 if (ang > 180.0f) {
-                    v30 = getRollVal(9);
+                    slopeZ = getRollVal(9);
                 } else {
-                    v30 = 1.0f;
+                    slopeZ = 1.0f;
                 }
             } else if (sp < 0.0f) {
                 if (ang < 180.0f) {
-                    v30 = getRollVal(9);
+                    slopeZ = getRollVal(9);
                 } else {
-                    v30 = 1.0f;
+                    slopeZ = 1.0f;
                 }
             }
         }
-        b31 = b31 * v30;
-        if (v29 * v29 + v26 <= b31 * b31) {
-            v28 = v28 - nz * accel;
+        maxSpdZ = maxSpdZ * slopeZ;
+        if (spdX * spdX + spdZSq <= maxSpdZ * maxSpdZ) {
+            spdZ = spdZ - nz * accel;
         } else {
-            f32 n = -b31;
-            v28 = v28 - nz * accel;
-            if (v28 < n) {
-                v28 = n;
+            f32 n = -maxSpdZ;
+            spdZ = spdZ - nz * accel;
+            if (spdZ < n) {
+                spdZ = n;
             }
-            if (v28 > b31) {
-                v28 = b31;
+            if (spdZ > maxSpdZ) {
+                spdZ = maxSpdZ;
             }
         }
     }
-    marioGetPtr()->motRoll->spdX = v29;
-    marioGetPtr()->motRoll->spdZ = v28;
-    v31 = -v28;
-    v30 = angleABf(0.0f, 0.0f, v29, v31);
-    v26 = cosd(v30);
-    v27 = distABf(0.0f, 0.0f, v29 * sind(v30), v28 * v26);
-    s = 0.05f * v27;
+    marioGetPtr()->motRoll->spdX = spdX;
+    marioGetPtr()->motRoll->spdZ = spdZ;
+    moveAng = angleABf(0.0f, 0.0f, spdX, -spdZ);
+    s = 0.05f * distABf(0.0f, 0.0f, spdX * sind(moveAng), spdZ * cosd(moveAng));
     if (!getRollEvtFlag() && mario->forceMoveTimer == 0) {
-        v30 = angleABf(0.0f, 0.0f, v29, v31);
+        moveAng = angleABf(0.0f, 0.0f, spdX, -spdZ);
         if (!(mario->mot.roll.flags & ROLL_FLAG_NO_SLOPE_SPEED_UNUSED)) {
             s = s * mario->playerGravity;
             if (s < 0.05f) {
@@ -1219,7 +1220,7 @@ void mot_roll(void) {
             }
             mario->baseSpeed = s;
             if (s) {
-                mario->directionView = v30;
+                mario->directionView = moveAng;
             }
         }
     }
@@ -1240,11 +1241,11 @@ void mot_roll(void) {
     sgn = (flip == 1) ? -1.0f : 1.0f;
     mario->rot.z = revise360(pre * sgn + mario->rot.z);
     if (mario->forceMoveTimer == 0 && !getRollEvtFlag() && s) {
-        v31 = mario->moveDirection;
+        dir = mario->moveDirection;
         m2 = marioGetPtr();
-        DISPDIR_BODY2(v30, v31, m2)
-        ((MarioWork*)mario)->directionView = v31;
-        mario->moveDirection = v31;
+        DISPDIR_BODY2(moveAng, dir, m2)
+        ((MarioWork*)mario)->directionView = dir;
+        mario->moveDirection = dir;
     }
     if (mario->groundRot.z != 0.0f) {
         mario->rot.x = revise360(-mario->groundRot.z * sind(mario->displayDirection));

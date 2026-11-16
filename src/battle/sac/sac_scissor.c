@@ -193,7 +193,7 @@ static s32 scissor_intersection(f32 x1, f32 y1, f32 x2, f32 y2, f32 x3, f32 y3, 
     f32 dx1, dy1, dx2, dy2;
     f32 minx, miny, maxx, maxy;
     f32 minx2, miny2, maxx2, maxy2;
-    s32 f1, f2;
+    s32 kind1, kind2; // per segment: 0 sloped, 1 vertical (dx 0), 2 horizontal (dy 0)
 
     if (x1 <= x2) {
         minx = x1;
@@ -224,25 +224,25 @@ static s32 scissor_intersection(f32 x1, f32 y1, f32 x2, f32 y2, f32 x3, f32 y3, 
         maxy2 = y3;
     }
     dx1 = x2 - x1;
-    f1 = 0;
+    kind1 = 0;
     if (dx1 == 0.0f) {
-        f1 = 1;
+        kind1 = 1;
     }
     dy1 = y2 - y1;
     if (dy1 == 0.0f) {
-        f1 = 2;
+        kind1 = 2;
     }
     dx2 = x4 - x3;
-    f2 = 0;
+    kind2 = 0;
     if (dx2 == 0.0f) {
-        f2 = 1;
+        kind2 = 1;
     }
     dy2 = y4 - y3;
     if (dy2 == 0.0f) {
-        f2 = 2;
+        kind2 = 2;
     }
 
-    if (f1 == 0 && f2 == 0) {
+    if (kind1 == 0 && kind2 == 0) {
         if (fabs(dx1) > fabs(dy1)) {
             a1 = dy1 / dx1;
             if (fabs(dx2) > fabs(dy2)) {
@@ -292,7 +292,7 @@ static s32 scissor_intersection(f32 x1, f32 y1, f32 x2, f32 y2, f32 x3, f32 y3, 
         }
         return 0;
     }
-    if (f1 == 0 && f2 == 1) {
+    if (kind1 == 0 && kind2 == 1) {
         a1 = dy1 / dx1;
         *ox = x3;
         *oy = a1 * (*ox - x1) + y1;
@@ -301,7 +301,7 @@ static s32 scissor_intersection(f32 x1, f32 y1, f32 x2, f32 y2, f32 x3, f32 y3, 
         }
         return 0;
     }
-    if (f1 == 1 && f2 == 0) {
+    if (kind1 == 1 && kind2 == 0) {
         a2 = dy2 / dx2;
         *ox = x1;
         *oy = a2 * (*ox - x3) + y3;
@@ -310,7 +310,7 @@ static s32 scissor_intersection(f32 x1, f32 y1, f32 x2, f32 y2, f32 x3, f32 y3, 
         }
         return 0;
     }
-    if (f1 == 0 && f2 == 2) {
+    if (kind1 == 0 && kind2 == 2) {
         a1 = dy1 / dx1;
         *oy = y3;
         *ox = (*oy - y1 + a1 * x1) / a1;
@@ -319,7 +319,7 @@ static s32 scissor_intersection(f32 x1, f32 y1, f32 x2, f32 y2, f32 x3, f32 y3, 
         }
         return 0;
     }
-    if (f1 == 2 && f2 == 0) {
+    if (kind1 == 2 && kind2 == 0) {
         a2 = dy2 / dx2;
         *oy = y1;
         *ox = (*oy - y3 + a2 * x3) / a2;
@@ -328,7 +328,7 @@ static s32 scissor_intersection(f32 x1, f32 y1, f32 x2, f32 y2, f32 x3, f32 y3, 
         }
         return 0;
     }
-    if (f1 == 1 && f2 == 1) {
+    if (kind1 == 1 && kind2 == 1) {
         if (x1 == x3) {
             *ox = x3;
             *oy = y3;
@@ -338,7 +338,7 @@ static s32 scissor_intersection(f32 x1, f32 y1, f32 x2, f32 y2, f32 x3, f32 y3, 
         }
         return 0;
     }
-    if (f1 == 1 && f2 == 2) {
+    if (kind1 == 1 && kind2 == 2) {
         *ox = x1;
         *oy = y3;
         if (x1 >= minx2 && x1 <= maxx2 && y3 >= miny && y3 <= maxy) {
@@ -346,7 +346,7 @@ static s32 scissor_intersection(f32 x1, f32 y1, f32 x2, f32 y2, f32 x3, f32 y3, 
         }
         return 0;
     }
-    if (f1 == 2 && f2 == 1) {
+    if (kind1 == 2 && kind2 == 1) {
         *ox = x3;
         *oy = y1;
         if (x3 >= minx && x3 <= maxx && y1 >= miny2 && y1 <= maxy2) {
@@ -354,7 +354,7 @@ static s32 scissor_intersection(f32 x1, f32 y1, f32 x2, f32 y2, f32 x3, f32 y3, 
         }
         return 0;
     }
-    if (f1 == 2 && f2 == 2) {
+    if (kind1 == 2 && kind2 == 2) {
         if (y1 == y3) {
             *ox = x3;
             *oy = y3;

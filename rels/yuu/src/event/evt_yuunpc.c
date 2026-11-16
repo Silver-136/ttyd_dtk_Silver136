@@ -1488,10 +1488,10 @@ static inline void yuunpc_stop(YuuNpc* npc) {
         (npc)->vy = 6.5f;                                                                                                                  \
         (npc)->dir.x = 1.0f;                                                                                                               \
         (npc)->dir.z = 0.0f;                                                                                                               \
-        if (!(c26 & 0x1f)) {                                                                                                               \
+        if (!(jumpSndCount & 0x1f)) {                                                                                                      \
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_EVT_GAME_SLIT_NPC_JUMP1), &(npc)->pos);                                                    \
         }                                                                                                                                  \
-        c26++;                                                                                                                             \
+        jumpSndCount++;                                                                                                                    \
     } while (0)
 #endif
 
@@ -1533,9 +1533,10 @@ void yuunpc_pose_minigame4_main(void) {
     f32 camX = camGetPtr(CAMERA_3D)->cameraAt.x;
     f32 y, z, x;
     YuuNpc* npc;
-    s32 c28;
-    s32 c27;
-    s32 c26;
+    // walkers, runners and jumpers seen this frame: only every 64th (32nd for jumps) may start its sound
+    s32 walkSndCount;
+    s32 runSndCount;
+    s32 jumpSndCount;
     SlitWork* mg;
 #if VERSION >= VERSION_JP
     s32 kind;
@@ -1559,7 +1560,7 @@ void yuunpc_pose_minigame4_main(void) {
     s32 n;
     u32 t;
 
-    c28 = c27 = c26 = 0;
+    walkSndCount = runSndCount = jumpSndCount = 0;
     ext = extGetPosePtr();
     npc = yuunpc_wp->npcs;
     right = 500.0f + camX;
@@ -2164,7 +2165,7 @@ void yuunpc_pose_minigame4_main(void) {
                             }
                         }
 #else
-                        if (!(c28 & 0x3f)) {
+                        if (!(walkSndCount & 0x3f)) {
                             t = gp->retraceCount + i;
                             if (!(t & 0xf)) {
                                 if (t & 0x10) {
@@ -2174,7 +2175,7 @@ void yuunpc_pose_minigame4_main(void) {
                                 }
                             }
                         }
-                        c28++;
+                        walkSndCount++;
 #endif
                         break;
                     case 2:
@@ -2239,7 +2240,7 @@ void yuunpc_pose_minigame4_main(void) {
                             }
                         }
 #else
-                        if (!(c27 & 0x3f)) {
+                        if (!(runSndCount & 0x3f)) {
                             t = gp->retraceCount + i;
                             if (!(t & 7)) {
                                 if (t & 8) {
@@ -2249,7 +2250,7 @@ void yuunpc_pose_minigame4_main(void) {
                                 }
                             }
                         }
-                        c27++;
+                        runSndCount++;
 #endif
                         break;
                     case 3:
