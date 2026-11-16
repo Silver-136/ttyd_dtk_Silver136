@@ -184,7 +184,7 @@ static void effSstarMain(EffectEntry* effect) {
         pz = w->position.z - 32.0f * (w->velocity.z * len);
         len = 64.0f;
         if (w->type != 0 && w->velocity.y < 0.0f &&
-            hitCheckFilter(NULL, &hx, &hx, &hz, &len, &hnx, &hny, &hnz, px, py, pz, 0.0f, -1.0f, 0.0f) &&
+            hitCheckFilter(NULL, px, py, pz, 0.0f, -1.0f, 0.0f, &hx, &hx, &hz, &len, &hnx, &hny, &hnz) &&
             len < 42.0f) {
             w->velocity.y = 0.6f * -w->velocity.y;
             w->velocity.x *= 0.7f;

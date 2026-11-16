@@ -630,7 +630,7 @@ static void effStarStoneMain(EffectEntry* effect) {
             hit = 0;
             if (w->speedY < 0.0f) {
                 dist = 10.0f + __fabsf(w->speedY);
-                if (hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, w->position.x, w->position.y, w->position.z, 0.0f, -1.0f, 0.0f)) {
+                if (hitCheckFilter(NULL, w->position.x, w->position.y, w->position.z, 0.0f, -1.0f, 0.0f, &hx, &hy, &hz, &dist, &nx, &ny, &nz)) {
                     hit = 1;
                     w->position.y = 10.0f + hy;
                     w->speedY *= -0.5f;

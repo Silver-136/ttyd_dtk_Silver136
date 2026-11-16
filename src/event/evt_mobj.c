@@ -1491,7 +1491,7 @@ USER_FUNC(evt_mobj_lv_blk) {
 EvtWord _mobj_check_ground(MapObjectEntry* m) {
     f32 hx, hy, hz, dist, nx, ny, nz;
     dist = 1.0f + (f32)__fabs(m->velocity.y);
-    return (EvtWord)hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, m->position.x, m->position.y + 0.5f, m->position.z, 0.0f, -1.0f, 0.0f);
+    return (EvtWord)hitCheckFilter(NULL, m->position.x, m->position.y + 0.5f, m->position.z, 0.0f, -1.0f, 0.0f, &hx, &hy, &hz, &dist, &nx, &ny, &nz);
 }
 
 /**
@@ -1984,7 +1984,7 @@ static s32 mobj_lock(MapObjectEntry* mobj) {
             break;
         case 5:
             dist = 1.0f + (f32)__fabs(mobj->velocity.y);
-            if (hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, mobj->position.x, 1.0f + mobj->position.y, mobj->position.z, 0.0f, mobj->velocity.y, 0.0f)) {
+            if (hitCheckFilter(NULL, mobj->position.x, 1.0f + mobj->position.y, mobj->position.z, 0.0f, mobj->velocity.y, 0.0f, &hx, &hy, &hz, &dist, &nx, &ny, &nz)) {
                 mobj->position.y = hy;
                 mobj->velocity.y *= -0.8f;
                 mobj->bounce += 1.0f;
@@ -2272,7 +2272,7 @@ USER_FUNC(evt_mobj_itembox) {
         mobj->state = 99;
     }
     dist = 5.0f + (f32)__fabs(mobj->velocity.y);
-    if (hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, mobj->position.x, 1.0f + mobj->position.y, mobj->position.z, 0.0f, -1.0f, 0.0f)) {
+    if (hitCheckFilter(NULL, mobj->position.x, 1.0f + mobj->position.y, mobj->position.z, 0.0f, -1.0f, 0.0f, &hx, &hy, &hz, &dist, &nx, &ny, &nz)) {
         mobj->flags |= MOBJ_FLAG_NO_SHADOW;
         mobj->flags &= ~MOBJ_FLAG_GRAVITY;
     }

@@ -126,7 +126,7 @@ void* check_stopper(f32 ang) {
     f32 pz = mario->position.z;
     dist = 0.5f * mario->wPlayerCollisionBox.x;
     sincosf(&sn, &cs, ang);
-    return hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, px, py, pz, sn, 0.0f, cs);
+    return hitCheckFilter(NULL, px, py, pz, sn, 0.0f, cs, &hx, &hy, &hz, &dist, &nx, &ny, &nz);
 }
 
 /**

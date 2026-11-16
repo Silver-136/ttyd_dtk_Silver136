@@ -1007,7 +1007,7 @@ inline BOOL chkGndAttr(Vec* pos, f32 dist, f32 angle) {
     z = pos->z;
     movePos(&x, &z, dist, angle);
     d = 4.0f;
-    hit = hitCheckFilter(NULL, &hx, &hy, &hz, &d, &nx, &ny, &nz, x, 2.0f + y, z, 0.0f, -1.0f, 0.0f);
+    hit = hitCheckFilter(NULL, x, 2.0f + y, z, 0.0f, -1.0f, 0.0f, &hx, &hy, &hz, &d, &nx, &ny, &nz);
     if (hit != NULL && !(hitGetAttr(hit) & (HIT_ATTR_WATER_HAZARD | HIT_ATTR_DAMAGE_LIQUID | HIT_ATTR_SPIKES))) {
         pos->x = x;
         pos->y = y;
@@ -1078,7 +1078,7 @@ void partyGetReturnPos(Vec* out) {
     dist = mario->wPlayerCollisionBox.x;
     angle = mario->targetYaw;
     sincosf(&s, &c, angle);
-    if (hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, x, y, z, s, 0.0f, c) == NULL) {
+    if (hitCheckFilter(NULL, x, y, z, s, 0.0f, c, &hx, &hy, &hz, &dist, &nx, &ny, &nz) == NULL) {
         p = mario->position;
         if (chkGndAttr(&p, 6.0f, angle)) {
             out->x = p.x;
@@ -1094,7 +1094,7 @@ void partyGetReturnPos(Vec* out) {
     dist = mario->wPlayerCollisionBox.x;
     angle = revise360(toMovedirSimple(mario->displayDirectionTarget) - 180.0f);
     sincosf(&s, &c, angle);
-    if (hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, x, y, z, s, 0.0f, c) == NULL) {
+    if (hitCheckFilter(NULL, x, y, z, s, 0.0f, c, &hx, &hy, &hz, &dist, &nx, &ny, &nz) == NULL) {
         p = mario->position;
         if (chkGndAttr(&p, mario->wPlayerCollisionBox.x, angle)) {
             out->x = p.x;
@@ -1106,7 +1106,7 @@ void partyGetReturnPos(Vec* out) {
 
     angle = toMovedirSimple(mario->displayDirectionTarget);
     sincosf(&s, &c, angle);
-    if (hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, x, y, z, s, 0.0f, c) == NULL) {
+    if (hitCheckFilter(NULL, x, y, z, s, 0.0f, c, &hx, &hy, &hz, &dist, &nx, &ny, &nz) == NULL) {
         p = mario->position;
         if (chkGndAttr(&p, mario->wPlayerCollisionBox.x, angle)) {
             out->x = p.x;

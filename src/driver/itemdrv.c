@@ -497,7 +497,7 @@ void itemMain(void) {
                     f32 px = entry->position.x, py = entry->position.y + 20.0f, pz = entry->position.z;
 
                     hitDist = 20.0 + fabs(-1.0);
-                    hit = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ, px, py, pz, 0.0f, -1.0f, 0.0f);
+                    hit = hitCheckFilter(NULL, px, py, pz, 0.0f, -1.0f, 0.0f, &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ);
 #if VERSION <= VERSION_DEMO_JP
                     hit = hit ? hit : NULL;
 #else
@@ -970,7 +970,7 @@ ItemEntry* itemHitCheck(f32 x, f32 y, f32 z, f32 range) {
                 if (y < entry->position.y) {
                     hitDist = 10.0f + (entry->position.y - y);
                     if (hitDist > 0.0f) {
-                        hit = hitCheckAttr(HIT_ATTR_MOBJ, &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ, x, y, z, 0.0f, 1.0f, 0.0f);
+                        hit = hitCheckAttr(HIT_ATTR_MOBJ, x, y, z, 0.0f, 1.0f, 0.0f, &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ);
                     }
                 }
                 if (!hit) {
@@ -1970,8 +1970,8 @@ static HitEntry* itemHitCheckSide(ItemEntry* entry, f32* outX, f32 dx, f32* outZ
     sincosf(&dirSin, &dirCos, angleABf(0.0f, 0.0f, dx, dz));
     h = 15.0f;
     hitDist = 10.0f + sqrtf(dx * dx + dz * dz);
-    hit = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ,
-        entry->position.x, entry->position.y + h, entry->position.z, dirSin, 0.0f, dirCos);
+    hit = hitCheckFilter(NULL, entry->position.x, entry->position.y + h, entry->position.z, dirSin, 0.0f, dirCos,
+                         &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ);
     if (hit) {
         _reflect(dx, hitNX, dz, hitNZ, &ox, &oz);
         *outX += ox;
@@ -1983,8 +1983,8 @@ static HitEntry* itemHitCheckSide(ItemEntry* entry, f32* outX, f32 dx, f32* outZ
     }
     h = 15.0f;
     hitDist = 10.0f + sqrtf(dx * dx + dz * dz);
-    hit = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ,
-        entry->position.x, entry->position.y + h, entry->position.z, dirSin, 0.0f, dirCos);
+    hit = hitCheckFilter(NULL, entry->position.x, entry->position.y + h, entry->position.z, dirSin, 0.0f, dirCos,
+                         &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ);
     if (hit) {
         _reflect(dx, hitNX, dz, hitNZ, &ox, &oz);
         *outX += ox;
@@ -2023,7 +2023,7 @@ HitEntry* itemHitCheckGround(ItemEntry* entry, f32* outY, f32 vy) {
     y = 20.0f + entry->position.y;
     z = entry->position.z;
     hitDist = 20.0 + fabs(vy);
-    if ((hit = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ, x, y, z, 0.0f, -1.0f, 0.0f)) != NULL) {
+    if ((hit = hitCheckFilter(NULL, x, y, z, 0.0f, -1.0f, 0.0f, &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ)) != NULL) {
         *outY = hitY;
         return hit;
     }
@@ -2050,7 +2050,7 @@ HitEntry* itemHitCheckCeil(ItemEntry* entry, f32* outY, f32 vy) {
     z = entry->position.z;
 
     hitDist = 20.0 + fabs(vy);
-    if ((hit = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ, x, y, z, 0.0f, 1.0f, 0.0f)) != NULL) {
+    if ((hit = hitCheckFilter(NULL, x, y, z, 0.0f, 1.0f, 0.0f, &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ)) != NULL) {
         *outY = hitY - 20.0f - 4.0f;
         return hit;
     }
@@ -2059,7 +2059,7 @@ HitEntry* itemHitCheckCeil(ItemEntry* entry, f32* outY, f32 vy) {
     z = entry->position.z;
 
     hitDist = 20.0 + fabs(vy);
-    if ((hit = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ, x, y, z, 0.0f, 1.0f, 0.0f)) != NULL) {
+    if ((hit = hitCheckFilter(NULL, x, y, z, 0.0f, 1.0f, 0.0f, &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ)) != NULL) {
         *outY = hitY - 20.0f;
         return hit;
     }

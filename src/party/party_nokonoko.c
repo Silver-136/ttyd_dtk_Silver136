@@ -990,8 +990,7 @@ static HitEntry* ccwall(PartyEntry* party, s32 mode) {
     y0 = party->position.y + (w = party->height);
     dist = w + (yofs + 20.0f);
     y0 = yofs + y0;
-    hit = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, x,
-                         y0, z, 0.0f, -1.0f, 0.0f);
+    hit = hitCheckFilter(NULL, x, y0, z, 0.0f, -1.0f, 0.0f, &hx, &hy, &hz, &dist, &nx, &ny, &nz);
     if (chkWater(hit) == 1) {
         hit = NULL;
     }
@@ -1026,7 +1025,7 @@ static HitEntry* ccwall(PartyEntry* party, s32 mode) {
     y = party->position.y + yofs;
     dist = 0.5f * party->width + party->moveSpeed;
     sincosf(&s, &c, party->targetDir);
-    hit = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, x, y, z, s, 0.0f, c);
+    hit = hitCheckFilter(NULL, x, y, z, s, 0.0f, c, &hx, &hy, &hz, &dist, &nx, &ny, &nz);
     if (hit != NULL && !(hitGetAttr(hit) & (HIT_ATTR_SHELL_THROUGH | HIT_ATTR_NPC_ONLY))) {
         sincosf(&s1, &c1, 180.0f + party->targetDir);
         party->position.x = hx + 0.5f * (s1 * party->width);
@@ -1049,7 +1048,7 @@ static HitEntry* ccwall(PartyEntry* party, s32 mode) {
     y = party->position.y + yofs;
     dist = 0.4f * party->width + party->moveSpeed;
     sincosf(&s, &c, party->targetDir);
-    hit = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, x, y, z, s, 0.0f, c);
+    hit = hitCheckFilter(NULL, x, y, z, s, 0.0f, c, &hx, &hy, &hz, &dist, &nx, &ny, &nz);
     if (hit != NULL && !(hitGetAttr(hit) & (HIT_ATTR_SHELL_THROUGH | HIT_ATTR_NPC_ONLY))) {
         sincosf(&s2, &c2, 180.0f + party->targetDir);
         party->position.x = hx + 0.5f * (s2 * party->width);
@@ -1082,7 +1081,7 @@ static HitEntry* ccwall(PartyEntry* party, s32 mode) {
     dist = 0.4f * party->width + party->moveSpeed;
     dist = 0.4f * party->width + party->moveSpeed;
     sincosf(&s, &c, party->targetDir);
-    hit = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, x, y, z, s, 0.0f, c);
+    hit = hitCheckFilter(NULL, x, y, z, s, 0.0f, c, &hx, &hy, &hz, &dist, &nx, &ny, &nz);
     if (hit != NULL && !(hitGetAttr(hit) & (HIT_ATTR_SHELL_THROUGH | HIT_ATTR_NPC_ONLY))) {
         sincosf(&s3, &c3, 180.0f + party->targetDir);
         party->position.x = hx + 0.5f * (s3 * party->width);
@@ -1160,7 +1159,7 @@ static u32 lookupSafetyPos(Vec pos, f32 height, Vec* out) {
 
     top = y + height;
     dist = 0.1f + height;
-    h0 = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, x, top, z, 0.0f, (-1.0f), 0.0f);
+    h0 = hitCheckFilter(NULL, x, top, z, 0.0f, (-1.0f), 0.0f, &hx, &hy, &hz, &dist, &nx, &ny, &nz);
     deg = revise360(toMovedir(player->displayDirectionTarget) - 90.0f);
     x = w * (f32)sin((3.1415927f * deg) / 180.0f) + pos.x;
     p[2].x = x;
@@ -1171,7 +1170,7 @@ static u32 lookupSafetyPos(Vec pos, f32 height, Vec* out) {
     p[2].z = z;
     top = y + height;
     dist = 0.1f + height;
-    h1 = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, x, top, z, 0.0f, (-1.0f), 0.0f);
+    h1 = hitCheckFilter(NULL, x, top, z, 0.0f, (-1.0f), 0.0f, &hx, &hy, &hz, &dist, &nx, &ny, &nz);
     deg = revise360(90.0f + toMovedir(player->displayDirectionTarget));
     x = w * (f32)sin((3.1415927f * deg) / 180.0f) + pos.x;
     p[1].x = x;
@@ -1182,7 +1181,7 @@ static u32 lookupSafetyPos(Vec pos, f32 height, Vec* out) {
     p[1].z = z;
     top = y + height;
     dist = 0.1f + height;
-    h2 = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, x, top, z, 0.0f, (-1.0f), 0.0f);
+    h2 = hitCheckFilter(NULL, x, top, z, 0.0f, (-1.0f), 0.0f, &hx, &hy, &hz, &dist, &nx, &ny, &nz);
     deg = revise360(toMovedir(player->displayDirectionTarget));
     x = w * (f32)sin((3.1415927f * deg) / 180.0f) + pos.x;
     p[0].x = x;
@@ -1193,7 +1192,7 @@ static u32 lookupSafetyPos(Vec pos, f32 height, Vec* out) {
     p[0].z = z;
     top = y + height;
     dist = 0.1f + height;
-    h3 = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, x, top, z, 0.0f, (-1.0f), 0.0f);
+    h3 = hitCheckFilter(NULL, x, top, z, 0.0f, (-1.0f), 0.0f, &hx, &hy, &hz, &dist, &nx, &ny, &nz);
     flags = 0;
     if (h2) {
         flags |= 4;
@@ -1301,7 +1300,7 @@ static void lookupSafetyPos2(Vec pos, f32 height, Vec* out) {
     z = pos.z + offsetZ;
     d = 0.1f + height;
     dist = d;
-    if (hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, x, y + height, z, 0.0f, (-1.0f), 0.0f) != NULL) {
+    if (hitCheckFilter(NULL, x, y + height, z, 0.0f, (-1.0f), 0.0f, &hx, &hy, &hz, &dist, &nx, &ny, &nz) != NULL) {
         out->x = x;
         out->z = z;
         out->y = y;
@@ -1316,7 +1315,7 @@ static void lookupSafetyPos2(Vec pos, f32 height, Vec* out) {
     y = pos.y;
     z = pos.z + offsetZ;
     dist = d;
-    if (hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, x, y + height, z, 0.0f, (-1.0f), 0.0f) != NULL) {
+    if (hitCheckFilter(NULL, x, y + height, z, 0.0f, (-1.0f), 0.0f, &hx, &hy, &hz, &dist, &nx, &ny, &nz) != NULL) {
         out->x = x;
         out->z = z;
         out->y = y;
@@ -1329,7 +1328,7 @@ static void lookupSafetyPos2(Vec pos, f32 height, Vec* out) {
     z = pos.z;
     y = pos.y;
     dist = d;
-    if (hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, x, y + height, z, 0.0f, (-1.0f), 0.0f) != NULL) {
+    if (hitCheckFilter(NULL, x, y + height, z, 0.0f, (-1.0f), 0.0f, &hx, &hy, &hz, &dist, &nx, &ny, &nz) != NULL) {
         out->x = x;
         out->z = z;
         out->y = y;
@@ -1344,7 +1343,7 @@ static void lookupSafetyPos2(Vec pos, f32 height, Vec* out) {
     y = pos.y;
     z = pos.z + offsetZ;
     dist = d;
-    if (hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, x, y + height, z, 0.0f, (-1.0f), 0.0f) != NULL) {
+    if (hitCheckFilter(NULL, x, y + height, z, 0.0f, (-1.0f), 0.0f, &hx, &hy, &hz, &dist, &nx, &ny, &nz) != NULL) {
         out->x = x;
         out->z = z;
         out->y = y;
@@ -1389,7 +1388,7 @@ static void lookupSafetyPos3(Vec pos, f32 height, Vec* out) {
     z = pos.z + offsetZ;
     d = 0.1f + height;
     dist = d;
-    if (hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, x, y + height, z, 0.0f, -1.0f, 0.0f) != NULL) {
+    if (hitCheckFilter(NULL, x, y + height, z, 0.0f, -1.0f, 0.0f, &hx, &hy, &hz, &dist, &nx, &ny, &nz) != NULL) {
         out->x = x;
         out->z = z;
         out->y = y;
@@ -1404,7 +1403,7 @@ static void lookupSafetyPos3(Vec pos, f32 height, Vec* out) {
     y = pos.y;
     z2 = pos.z + offsetZ;
     dist = d;
-    if (hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, x, y + height, z2, 0.0f, -1.0f, 0.0f) != NULL) {
+    if (hitCheckFilter(NULL, x, y + height, z2, 0.0f, -1.0f, 0.0f, &hx, &hy, &hz, &dist, &nx, &ny, &nz) != NULL) {
         out->x = x;
         out->z = z2;
         out->y = y;
@@ -1438,7 +1437,7 @@ static void lookupSafetyPosSub(Vec pos, f32 height, f32 angle, Vec* out) {
     z = w * -nokoCos(rad) + pos.z;
     y = pos.y + height;
     dist = 0.1f + height;
-    if (hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, x, y, z, 0.0f, (-1.0f), 0.0f) != NULL) {
+    if (hitCheckFilter(NULL, x, y, z, 0.0f, (-1.0f), 0.0f, &hx, &hy, &hz, &dist, &nx, &ny, &nz) != NULL) {
         Vec v = {0.0f, 0.0f, 0.0f};
         v.x = x;
         v.y = y;

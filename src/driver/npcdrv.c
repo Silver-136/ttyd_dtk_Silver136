@@ -1007,8 +1007,8 @@ void npcMain(void) {
                                 Vec floorPos = entry->position;
                                 f32 hitX, hitY, hitZ, hitDist, hitNX, hitNY, hitNZ;
                                 hitDist = 100.0f;
-                                if (hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ,
-                                                   floorPos.x, 1.0f + floorPos.y, floorPos.z, 0.0f, -1.0f, 0.0f)) {
+                                if (hitCheckFilter(NULL, floorPos.x, 1.0f + floorPos.y, floorPos.z, 0.0f, -1.0f, 0.0f,
+                                                   &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ)) {
                                     floorPos.y = hitY;
                                 }
                                 animPoseVivianMain(entry->poseId, &floorPos);
@@ -1354,21 +1354,21 @@ static void npcMoveG(NpcEntry* npc) {
 
             // US and later: also probe the floor at both side edges of the NPC
 #if VERSION >= VERSION_US
-            if ((npc->groundHit = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &dist, &hitNX, &hitNY, &hitNZ,
-                                              npc->position.x, npc->position.y + probeHeight, npc->position.z, 0.0f,
-                                              -1.0f, 0.0f)) != NULL) {
+            if ((npc->groundHit = hitCheckFilter(NULL, npc->position.x, npc->position.y + probeHeight,
+                                                 npc->position.z, 0.0f, -1.0f, 0.0f, &hitX, &hitY, &hitZ, &dist,
+                                                 &hitNX, &hitNY, &hitNZ)) != NULL) {
                 npc->statusFlags &= ~NPC_STATUS_AIRBORNE;
                 npc->position.y = hitY;
                 npc->jumpTicks = 0;
-            } else if ((npc->groundHit = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &dist, &hitNX, &hitNY, &hitNZ,
-                                              npc->position.x + 0.5f * npc->width, npc->position.y + probeHeight,
-                                              npc->position.z, 0.0f, -1.0f, 0.0f)) != NULL) {
+            } else if ((npc->groundHit = hitCheckFilter(NULL, npc->position.x + 0.5f * npc->width,
+                                                        npc->position.y + probeHeight, npc->position.z, 0.0f, -1.0f,
+                                                        0.0f, &hitX, &hitY, &hitZ, &dist, &hitNX, &hitNY, &hitNZ)) != NULL) {
                 npc->statusFlags &= ~NPC_STATUS_AIRBORNE;
                 npc->position.y = hitY;
                 npc->jumpTicks = 0;
-            } else if ((npc->groundHit = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &dist, &hitNX, &hitNY, &hitNZ,
-                                              npc->position.x - 0.5f * npc->width, npc->position.y + probeHeight,
-                                              npc->position.z, 0.0f, -1.0f, 0.0f)) != NULL) {
+            } else if ((npc->groundHit = hitCheckFilter(NULL, npc->position.x - 0.5f * npc->width,
+                                                        npc->position.y + probeHeight, npc->position.z, 0.0f, -1.0f,
+                                                        0.0f, &hitX, &hitY, &hitZ, &dist, &hitNX, &hitNY, &hitNZ)) != NULL) {
                 npc->statusFlags &= ~NPC_STATUS_AIRBORNE;
                 npc->position.y = hitY;
                 npc->jumpTicks = 0;
@@ -1377,9 +1377,9 @@ static void npcMoveG(NpcEntry* npc) {
                 npc->position.y += dy;
             }
 #else
-            if ((npc->groundHit = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &dist, &hitNX, &hitNY, &hitNZ,
-                                              npc->position.x, npc->position.y + probeHeight, npc->position.z, 0.0f,
-                                              -1.0f, 0.0f)) == NULL) {
+            if ((npc->groundHit = hitCheckFilter(NULL, npc->position.x, npc->position.y + probeHeight,
+                                                 npc->position.z, 0.0f, -1.0f, 0.0f, &hitX, &hitY, &hitZ, &dist,
+                                                 &hitNX, &hitNY, &hitNZ)) == NULL) {
                 npc->statusFlags |= NPC_STATUS_AIRBORNE;
                 npc->position.y += dy;
             } else {
@@ -1441,9 +1441,9 @@ HitEntry* npcHitCheckSide(NpcEntry* npc, f32* outX, f32* outZ, f32* angle, f32 d
         height = 10.0f;
     }
     if (npc->flags & NPC_FLAG_PASS_NPC_ONLY_WALLS) {
-        hit = hitCheckAttr(HIT_ATTR_NPC_ONLY, &hx, &hy, &hz, &dist, &nx, &ny, &nz, npc->position.x, npc->position.y + height, npc->position.z, s, 0.0f, c);
+        hit = hitCheckAttr(HIT_ATTR_NPC_ONLY, npc->position.x, npc->position.y + height, npc->position.z, s, 0.0f, c, &hx, &hy, &hz, &dist, &nx, &ny, &nz);
     } else {
-        hit = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, npc->position.x, npc->position.y + height, npc->position.z, s, 0.0f, c);
+        hit = hitCheckFilter(NULL, npc->position.x, npc->position.y + height, npc->position.z, s, 0.0f, c, &hx, &hy, &hz, &dist, &nx, &ny, &nz);
     }
     if (hit) {
         _reflect(dx, nx, dz, nz, &mx, &mz);
@@ -1460,9 +1460,9 @@ HitEntry* npcHitCheckSide(NpcEntry* npc, f32* outX, f32* outZ, f32* angle, f32 d
     dist = sqrtf(dx * dx + dz * dz) + 0.75f * npc->width;
     height = 0.4f * npc->height;
     if (npc->flags & NPC_FLAG_PASS_NPC_ONLY_WALLS) {
-        hit = hitCheckAttr(HIT_ATTR_NPC_ONLY, &hx, &hy, &hz, &dist, &nx, &ny, &nz, npc->position.x, npc->position.y + height, npc->position.z, s, 0.0f, c);
+        hit = hitCheckAttr(HIT_ATTR_NPC_ONLY, npc->position.x, npc->position.y + height, npc->position.z, s, 0.0f, c, &hx, &hy, &hz, &dist, &nx, &ny, &nz);
     } else {
-        hit = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, npc->position.x, npc->position.y + height, npc->position.z, s, 0.0f, c);
+        hit = hitCheckFilter(NULL, npc->position.x, npc->position.y + height, npc->position.z, s, 0.0f, c, &hx, &hy, &hz, &dist, &nx, &ny, &nz);
     }
     if (hit && angleABf(0.0f, 0.0f, sqrtf(nx * nx + nz * nz), -ny) >= 45.0f) {
         _reflect(dx, nx, dz, nz, &mx, &mz);
@@ -1479,9 +1479,9 @@ HitEntry* npcHitCheckSide(NpcEntry* npc, f32* outX, f32* outZ, f32* angle, f32 d
     dist = sqrtf(dx * dx + dz * dz) + 0.75f * npc->width;
     height = 0.75f * npc->height;
     if (npc->flags & NPC_FLAG_PASS_NPC_ONLY_WALLS) {
-        hit = hitCheckAttr(HIT_ATTR_NPC_ONLY, &hx, &hy, &hz, &dist, &nx, &ny, &nz, npc->position.x, npc->position.y + height, npc->position.z, s, 0.0f, c);
+        hit = hitCheckAttr(HIT_ATTR_NPC_ONLY, npc->position.x, npc->position.y + height, npc->position.z, s, 0.0f, c, &hx, &hy, &hz, &dist, &nx, &ny, &nz);
     } else {
-        hit = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, npc->position.x, npc->position.y + height, npc->position.z, s, 0.0f, c);
+        hit = hitCheckFilter(NULL, npc->position.x, npc->position.y + height, npc->position.z, s, 0.0f, c, &hx, &hy, &hz, &dist, &nx, &ny, &nz);
     }
     if (hit) {
         _reflect(dx, nx, dz, nz, &mx, &mz);
@@ -2060,7 +2060,7 @@ void fbatEncountCheck(void) {
                         f32 nz;
                         sincosf(&s, &c, angleABf(0.0f, 0.0f, dx, dz));
                         len = sqrtf((dx * dx) + (dz * dz));
-                        if (!hitCheckFilter(NULL, &hx, &hy, &hz, &len, &nx, &ny, &nz, mario->position.x, mario->position.y + (0.75f * mario->wPlayerCollisionBox.y), mario->position.z, s, 0.0f, c)) {
+                        if (!hitCheckFilter(NULL, mario->position.x, mario->position.y + (0.75f * mario->wPlayerCollisionBox.y), mario->position.z, s, 0.0f, c, &hx, &hy, &hz, &len, &nx, &ny, &nz)) {
                             hit = 1;
                             if (dist < best) {
                                 best = dist;

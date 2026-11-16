@@ -268,8 +268,8 @@ static USER_FUNC(yuka_fall_check) {
 
             dist = 3.0f;
             pos = puni->pos;
-            if (hitCheckFilter(NULL, &hit.x, &hit.y, &hit.z, &dist, &n.x, &n.y, &n.z, pos.x, pos.y, pos.z, dir.x, dir.y,
-                               dir.z)) {
+            if (hitCheckFilter(NULL, pos.x, pos.y, pos.z, dir.x, dir.y, dir.z, &hit.x, &hit.y, &hit.z, &dist, &n.x,
+                               &n.y, &n.z)) {
                 puni->pos = hit;
             } else {
                 PSVECAdd(&puni->pos, &fall, &puni->pos);

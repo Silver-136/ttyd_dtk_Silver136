@@ -241,7 +241,7 @@ HitEntry* kpaSearchGround(f32 range, f32* outY, f32* outDepth, f32* outAng) {
                 break;
         }
         dist = bd;
-        hit = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, px + ox, yh, pz + oz, 0.0f, -1.0f, 0.0f);
+        hit = hitCheckFilter(NULL, px + ox, yh, pz + oz, 0.0f, -1.0f, 0.0f, &hx, &hy, &hz, &dist, &nx, &ny, &nz);
         if (hit) {
             if (ABCtoAngleY(nx, ny, nz) >= 50.0f) {
                 hit = NULL;
@@ -358,7 +358,7 @@ HitEntry* kpaSearchHead(f32 hgt, Vec* pos, f32* outB) {
         y = mario->position.y + oy;
         z = mario->position.z + oz;
         d = off;
-        hit = hitCheckFilter(NULL, &hx, &hy, &hz, &d, &nx, &ny, &nz, x, y, z, 0.0f, 1.0f, 0.0f);
+        hit = hitCheckFilter(NULL, x, y, z, 0.0f, 1.0f, 0.0f, &hx, &hy, &hz, &d, &nx, &ny, &nz);
         if (hit) {
             hy = (s32)(100.0f * hy + 0.5f) / 100.0f;
             if (y + off >= hy) {

@@ -694,8 +694,6 @@ BOOL BattleStatusChangeMsgMain(BattleWork* wp) {
     return ret;
 }
 
-typedef void (*WakuColByRefFunc)(u16, GXColor*, f32, f32, f32, f32, f32);
-
 /**
  * Draws the current status-change text centred in the lower half of the screen (y -120) in a white-bordered window
  * sized to the text, 29 units per line.
@@ -707,18 +705,13 @@ static void _st_chg_msg_disp(void) {
     f32 center = 0.0f;
     u16 width;
     u16 lines;
-    GXColor col0;
     width = FontGetMessageWidthLine((const char*)st->text, &lines);
     lines++;
-    col0 = (GXColor){0xFF, 0xFF, 0xFF, 0xFF};
-
-    // center is a variable: the retail code computes 0.0f - width / 2 at run time (lfs 0.0f, fsubs); a literal
-    // 0.0f folds to fneg
-    x = center - (width / 2);
     y = -120.0f;
 
-    // FAKE: called through a cast prototype with the color's address (no caller copy); passing col0 by value changes the object
-    ((WakuColByRefFunc)windowDispGX_Waku_col)(0, &col0, x - 20.0f, ((lines - 1) * 29) + -117.0f, (f32)(width + 40), (f32)(lines * 29 + 1), 10.0f);
+    // center is a variable: the retail code computes 0.0f - width / 2 at run time (lfs 0.0f, fsubs); a literal
+    // 0.0f folds to fneg. x is assigned inside the call, as in battle_ac_help.c's window.
+    windowDispGX_Waku_col((x = center - (width / 2)) - 20.0f, ((lines - 1) * 29) + -117.0f, (f32)(width + 40), (f32)(lines * 29 + 1), 10.0f, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
     FontDrawStart();
     FontDrawMessage(x, (s32)y + (lines - 1) * 29, (const char*)st->text);
 }

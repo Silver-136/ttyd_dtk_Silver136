@@ -107,7 +107,7 @@ s32 getSeaPos(HitEntry* hit, Vec* out);
     tz = 40.0f * cs + m->position.z;                                                                \
     ty = 20.0f + m->position.y;                                                                     \
     dist = 40.0f;                                                                                   \
-    hit = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, tx, ty, tz, 0.0f, -1.0f, 0.0f); \
+    hit = hitCheckFilter(NULL, tx, ty, tz, 0.0f, -1.0f, 0.0f, &hx, &hy, &hz, &dist, &nx, &ny, &nz); \
     if (hit != NULL && getHarborType(hit) != 0) {                                                      \
         hitObjGetPos(hitGetName(hit), &POS);                                                        \
         roundedX = (s32)((100.0f * POS.x + 0.5f) / 100.0f);                                         \

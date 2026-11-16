@@ -773,9 +773,8 @@ static HitEntry* getHitBreatheout(PartyEntry* party, f32 angle) {
     sincosf(&dirSin, &dirCos, toMovedir(CLOUD_WORK(party)->breathDir));
     sincosf(&ys, &yc, angle);
     dist = CLOUD_WORK(party)->breathDist;
-    hit = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz,
-                         party->position.x, 18.0f + mario->position.y, party->position.z,
-                         dirSin, ys, dirCos);
+    hit = hitCheckFilter(NULL, party->position.x, 18.0f + mario->position.y, party->position.z, dirSin, ys, dirCos,
+                         &hx, &hy, &hz, &dist, &nx, &ny, &nz);
     if (hit != NULL && (hitGetAttr(hit) & HIT_ATTR_NPC_ONLY)) {
         hit = NULL;
     }
@@ -819,9 +818,8 @@ static void getHitBreatheout2(PartyEntry* party, f32 angle) {
     dir = toMovedir(CLOUD_WORK(party)->breathDir);
     sincosf(&dirSin, &dirCos, dir);
     dist = CLOUD_WORK(party)->breathDist;
-    hit = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz,
-                         party->position.x, mario->position.y + height, party->position.z,
-                         dirSin, ys, dirCos);
+    hit = hitCheckFilter(NULL, party->position.x, mario->position.y + height, party->position.z, dirSin, ys, dirCos,
+                         &hx, &hy, &hz, &dist, &nx, &ny, &nz);
     if (hit != NULL && (hitGetAttr(hit) & HIT_ATTR_NPC_ONLY)) {
         hit = NULL;
     }
@@ -867,9 +865,8 @@ static void getHitBreatheout2(PartyEntry* party, f32 angle) {
     cl = CLOUD_WORK(party);
     sincosf(&dirSin, &dirCos, toMovedir(cl->sweep[0].angle * sign + cl->breathDir));
     dist = CLOUD_WORK(party)->breathDist;
-    hit = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz,
-                         party->position.x, mario->position.y + height, party->position.z,
-                         dirSin, ys, dirCos);
+    hit = hitCheckFilter(NULL, party->position.x, mario->position.y + height, party->position.z, dirSin, ys, dirCos,
+                         &hx, &hy, &hz, &dist, &nx, &ny, &nz);
     if (hit != NULL && (hitGetAttr(hit) & HIT_ATTR_NPC_ONLY)) {
         hit = NULL;
     }
@@ -879,9 +876,8 @@ static void getHitBreatheout2(PartyEntry* party, f32 angle) {
     cl = CLOUD_WORK(party);
     sincosf(&dirSin, &dirCos, toMovedir(cl->sweep[1].angle * sign + cl->breathDir));
     dist = CLOUD_WORK(party)->breathDist;
-    hit = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz,
-                         party->position.x, mario->position.y + height, party->position.z,
-                         dirSin, ys, dirCos);
+    hit = hitCheckFilter(NULL, party->position.x, mario->position.y + height, party->position.z, dirSin, ys, dirCos,
+                         &hx, &hy, &hz, &dist, &nx, &ny, &nz);
     if (hit != NULL && (hitGetAttr(hit) & HIT_ATTR_NPC_ONLY)) {
         hit = NULL;
     }

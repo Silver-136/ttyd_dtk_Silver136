@@ -2785,7 +2785,7 @@ USER_FUNC(evt_fbat_trans_floor_position) {
 
     distance = evtGetFloat(event, *args++);
 
-    if (hitCheckFilter(0, &hitX, &hitY, &hitZ, &distance, &hitNX, &hitNY, &hitNZ, x, 1.0f + y, z, 0.0f, -1.0f, 0.0f)) {
+    if (hitCheckFilter(0, x, 1.0f + y, z, 0.0f, -1.0f, 0.0f, &hitX, &hitY, &hitZ, &distance, &hitNX, &hitNY, &hitNZ)) {
         y = (hitY + floor);
     }
 
@@ -2819,17 +2819,17 @@ USER_FUNC(evt_fbat_trans_floor_position_wide) {
     distance = dist;
 
     y = 1.0f + y;
-    if (hitCheckFilter(0, &hitX, &hitY, &hitZ, &distance, &hitNX, &hitNY, &hitNZ, x, y, z, 0.0f, -1.0f, 0.0f)) {
+    if (hitCheckFilter(0, x, y, z, 0.0f, -1.0f, 0.0f, &hitX, &hitY, &hitZ, &distance, &hitNX, &hitNY, &hitNZ)) {
         y2 = (hitY + floor);
     }
     half = width * 0.5f;
-    if (hitCheckFilter(0, &hitX, &hitY, &hitZ, &distance, &hitNX, &hitNY, &hitNZ, x + half, y, z, 0.0f, -1.0f, 0.0f)) {
+    if (hitCheckFilter(0, x + half, y, z, 0.0f, -1.0f, 0.0f, &hitX, &hitY, &hitZ, &distance, &hitNX, &hitNY, &hitNZ)) {
         h = hitY + floor;
         if (h > y2) {
             y2 = h;
         }
     }
-    if (hitCheckFilter(0, &hitX, &hitY, &hitZ, &distance, &hitNX, &hitNY, &hitNZ, x - half, y, z, 0.0f, -1.0f, 0.0f)) {
+    if (hitCheckFilter(0, x - half, y, z, 0.0f, -1.0f, 0.0f, &hitX, &hitY, &hitZ, &distance, &hitNX, &hitNY, &hitNZ)) {
         h = hitY + floor;
         if (h > y2) {
             y2 = h;

@@ -575,7 +575,7 @@ static void ext_kyaku_init(void) {
                     continue;
                 }
                 hd = 100000.0f;
-                if (hitCheckFilter(NULL, &hx, &hy, &hz, &hd, &nx, &ny, &nz, x, 100.0f, z, 0.0f, -1.0f, 0.0f) == NULL) {
+                if (hitCheckFilter(NULL, x, 100.0f, z, 0.0f, -1.0f, 0.0f, &hx, &hy, &hz, &hd, &nx, &ny, &nz) == NULL) {
                     continue;
                 }
                 if (0.0f != hy) {
@@ -586,7 +586,7 @@ static void ext_kyaku_init(void) {
                 pose->dir = angleABf(0.0f, 0.0f, hx, hz);
             } else {
                 hd = 100000.0f;
-                if (hitCheckFilter(NULL, &hx, &hy, &hz, &hd, &nx, &ny, &nz, x, 500.0f, z, 0.0f, -1.0f, 0.0f) == NULL) {
+                if (hitCheckFilter(NULL, x, 500.0f, z, 0.0f, -1.0f, 0.0f, &hx, &hy, &hz, &hd, &nx, &ny, &nz) == NULL) {
                     continue;
                 }
                 (*pose->mtx)[0][3] = hx;

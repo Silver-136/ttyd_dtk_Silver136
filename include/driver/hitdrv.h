@@ -114,13 +114,13 @@ void hitMain(void);
 
 void hitReCalcMatrix(HitEntry* hit, Mtx mtx);
 HitEntry* hitCheckVecFilter(HitCheckQuery* query, HitFilterCallback callback);
-HitEntry* hitCheckFilter(HitFilterCallback callback, f32* hitX, f32* hitY, f32* hitZ, f32* distance, f32* hitNX,
-                         f32* hitNY, f32* hitNZ, f32 x, f32 y, f32 z, f32 nx, f32 ny, f32 nz);
+HitEntry* hitCheckFilter(HitFilterCallback callback, f32 x, f32 y, f32 z, f32 nx, f32 ny, f32 nz, f32* hitX,
+                         f32* hitY, f32* hitZ, f32* distance, f32* hitNX, f32* hitNY, f32* hitNZ);
 BOOL hitCheckVecHitObjXZ(HitCheckQuery* query, HitEntry* entry);
-HitEntry* hitCheckAttr(s32 user0, f32* hitX, f32* hitY, f32* hitZ, f32* distance, f32* hitNX, f32* hitNY, f32* hitNZ,
-                       f32 x, f32 y, f32 z, f32 nx, f32 ny, f32 nz);
-HitEntry* hitCheckAttrOnly(s32 user0, s32 user1, f32* hitX, f32* hitY, f32* hitZ, f32* distance, f32* hitNX,
-                           f32* hitNY, f32* hitNZ, f32 x, f32 y, f32 z, f32 nx, f32 ny, f32 nz);
+HitEntry* hitCheckAttr(s32 user0, f32 x, f32 y, f32 z, f32 nx, f32 ny, f32 nz, f32* hitX, f32* hitY, f32* hitZ,
+                       f32* distance, f32* hitNX, f32* hitNY, f32* hitNZ);
+HitEntry* hitCheckAttrOnly(s32 user0, s32 user1, f32 x, f32 y, f32 z, f32 nx, f32 ny, f32 nz, f32* hitX, f32* hitY,
+                           f32* hitZ, f32* distance, f32* hitNX, f32* hitNY, f32* hitNZ);
 HitEntry* hitCheckSphereFilter(HitFilterCallback callback, f32 x, f32 y, f32 z, f32 distance);
 HitEntry* hitNameToPtr(const char* name);
 void hitObjGetPos(const char* name, Vec* position);

@@ -82,8 +82,8 @@ inline s32 nanNPCMoveAtari(NanNPC* npc, Vec origin, Vec dir, f32 mag) {
     npc->hit1 = NULL;
     npc->hit0 = NULL;
     dist = mag;
-    npc->hit0 = hitCheckFilter(NULL, &hitPos.x, &hitPos.y, &hitPos.z, &dist, &normal.x, &normal.y, &normal.z,
-                               origin.x, origin.y, origin.z, dir.x, dir.y, dir.z);
+    npc->hit0 = hitCheckFilter(NULL, origin.x, origin.y, origin.z, dir.x, dir.y, dir.z, &hitPos.x, &hitPos.y,
+                               &hitPos.z, &dist, &normal.x, &normal.y, &normal.z);
     if (!npc->hit0) {
         PSVECAdd(&npc->pos, &npc->move, &npc->pos);
     } else {
@@ -105,9 +105,8 @@ inline s32 nanNPCMoveAtari(NanNPC* npc, Vec origin, Vec dir, f32 mag) {
         if (dist > 0.0f) {
             PSVECNormalize(&step, &step);
             origin = prevPos;
-            npc->hit1 = hitCheckFilter(
-                NULL, &hitX, &hitY, &hitZ, &dist, &normX, &normY, &normZ, prevPos.x, 1.0f + prevPos.y, prevPos.z,
-                step.x, step.y, step.z);
+            npc->hit1 = hitCheckFilter(NULL, prevPos.x, 1.0f + prevPos.y, prevPos.z, step.x, step.y, step.z, &hitX,
+                                       &hitY, &hitZ, &dist, &normX, &normY, &normZ);
             if (npc->hit1) {
                 npc->pos = prevPos;
             }

@@ -21,7 +21,6 @@ typedef enum DokanType {
     DOKAN_YOKO_OUT = 5,
 } DokanType;
 
-#pragma enumsalwaysint off
 typedef enum MarioMotion {
     MARIO_MOTION_STAY,         // 0x0
     MARIO_MOTION_WALK,         // 0x1
@@ -64,9 +63,7 @@ typedef enum MarioMotion {
     MARIO_MOTION_KPA_POW_UP,   // 0x26
     MARIO_MOTION_KPA_POW_DOWN, // 0x27
     MARIO_MOTION_DUMMY,        // 0x28
-    MARIO_MOTION_MOTION_MAX = 0xFFFF
 } MarioMotion;
-#pragma enumsalwaysint on
 
 #pragma enumsalwaysint off
 typedef enum MarioFlags {
@@ -423,8 +420,8 @@ typedef struct MarioWork {
     u8 pad_24[0x28 - 0x24];             // 0x24, never accessed
     u16 poseTime;                       // 0x28
     u8 pad_2A[0x2E - 0x2A];             // 0x2A, never accessed
-    MarioMotion currMotionId;           // 0x2E
-    MarioMotion prevMotionId;           // 0x30, currMotionId before the last motion change (marioChgMot)
+    u16 currMotionId;                   // 0x2E, a MarioMotion
+    u16 prevMotionId;                   // 0x30, a MarioMotion: currMotionId before the last motion change (marioChgMot)
     u32 frameCounter;                   // 0x34, +1 every marioMain frame; bit0 drives blinking
     s8 ctrlOffCount;                    // 0x38
     s8 keyOffCount;                     // 0x39

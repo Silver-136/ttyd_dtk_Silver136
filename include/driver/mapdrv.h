@@ -457,7 +457,7 @@ typedef struct MapTevCallbackInfo {
 } MapTevCallbackInfo;
 
 void mapSetTevCallback(s32 index, MapTevCallback callback);
-void mapSetMaterialTev(s32 texCount, s32 drawMode, s32 flags, Mtx mtx);
+void mapSetMaterialTev(int texCount, s32 drawMode, s32 flags, Mtx mtx);
 
 MapObject* mapGetMapObj(const char* name);
 MapFileJoint* mapSearchDmdJoint(MapFileJoint* joint, const char* name);

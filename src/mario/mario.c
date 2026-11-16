@@ -1024,7 +1024,7 @@ void marioReInit(void) {
     s32 anim0;
     s32 trigFlags;
     s32 peachFlags;
-    MarioMotion motion;
+    u16 motion;
     s32 charId;
     s32 dotFlag;
 #if VERSION <= VERSION_DEMO_JP
@@ -1430,7 +1430,7 @@ static inline BOOL marioChkRollMot(void) {
  */
 static void marioCtrlOff2Main(void) {
     MarioWork* wp = mp;
-    MarioMotion mot = wp->currMotionId;
+    u16 mot = wp->currMotionId;
     f32 y;
 
     if (mot == MARIO_MOTION_PLANE) {
@@ -1786,7 +1786,7 @@ s32 marioAnimeId(void) {
 #if VERSION >= VERSION_JP
 void marioChgDamagePose(void) {
     MarioWork* wp = mp;
-    MarioMotion mot = wp->currMotionId;
+    u16 mot = wp->currMotionId;
 
     if (mot != MARIO_MOTION_SHIP && mot != MARIO_MOTION_ROLL && mot != MARIO_MOTION_PLANE && mot != MARIO_MOTION_JABARA && mot != MARIO_MOTION_YOSHI) {
         // A switch with a single case: a plain if compiles differently, so the original most likely had the switch too

@@ -691,7 +691,7 @@ USER_FUNC(bero_get_position_normal) {
 
         // dist is stored again before the second probe; the store is in the retail code
         dist = 1000000.0f;
-        if (hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, tmp.x, tmp.y, tmp.z, 0.0f, -1.0f, 0.0f)) {
+        if (hitCheckFilter(NULL, tmp.x, tmp.y, tmp.z, 0.0f, -1.0f, 0.0f, &hx, &hy, &hz, &dist, &nx, &ny, &nz)) {
             tmp.y = hy;
         }
         tmp2 = tmp;
@@ -737,14 +737,14 @@ static void bero_get_position_pipe_sub(s32 id, s32 a, EvtWord name, s32 kind, Ve
                 end->x = start->x + a;
                 end->y = start->y;
                 end->z = start->z;
-                hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, end->x, end->y, end->z, 0.0f, -1.0f, 0.0f);
+                hitCheckFilter(NULL, end->x, end->y, end->z, 0.0f, -1.0f, 0.0f, &hx, &hy, &hz, &dist, &nx, &ny, &nz);
             } else {
                 hitObjGetPos((const char*)name, end);
                 end->x -= ofs;
                 start->x = end->x + a;
                 start->y = end->y;
                 start->z = end->z;
-                hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, start->x, start->y, start->z, 0.0f, -1.0f, 0.0f);
+                hitCheckFilter(NULL, start->x, start->y, start->z, 0.0f, -1.0f, 0.0f, &hx, &hy, &hz, &dist, &nx, &ny, &nz);
             }
             end->y = start->y = hy;
             break;

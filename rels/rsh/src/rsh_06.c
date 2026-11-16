@@ -764,7 +764,7 @@ static void ext_moamoa_init(void) {
         (*pose->mtx)[2][3] = randf(-45.0f, 45.0f);
         hitX = hitY = hitZ = 0.0f;
         dist = 1000000.0f;
-        if (hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &dist, &nx, &ny, &nz, (*pose->mtx)[0][3], 100.0f + (*pose->mtx)[1][3], (*pose->mtx)[2][3], 0.0f, -1.0f, 0.0f)) {
+        if (hitCheckFilter(NULL, (*pose->mtx)[0][3], 100.0f + (*pose->mtx)[1][3], (*pose->mtx)[2][3], 0.0f, -1.0f, 0.0f, &hitX, &hitY, &hitZ, &dist, &nx, &ny, &nz)) {
             (*pose->mtx)[1][3] = hitY;
         } else {
             pose->flags |= EXT_POSE_FLAG_NO_SHADOW;
@@ -855,7 +855,7 @@ static void moamoa_jump(ExtdrvPose* pose, Moamoa* moa, f32 x, f32 y, f32 z, f32 
     if (checkGround) {
         hitX = hitY = hitZ = 0.0f;
         dist = 1000000.0f;
-        if (hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &dist, &nx, &ny, &nz, x, 100.0f + y, z, 0.0f, -1.0f, 0.0f)) {
+        if (hitCheckFilter(NULL, x, 100.0f + y, z, 0.0f, -1.0f, 0.0f, &hitX, &hitY, &hitZ, &dist, &nx, &ny, &nz)) {
             if (__fabs(y - hitY) > 30.0) {
                 speed -= 0.1f;
                 gravity += 0.1f;

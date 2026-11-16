@@ -991,7 +991,7 @@ HitEntry* partySearchHead(PartyEntry* party, Vec* pos, f32* dist, f32 angle) {
     if ((t.z && t.z) && t.z) {
     }
     probeHeight = 10.0f;
-    hit = hitCheckFilter(NULL, &hx0, &hy0, &hz0, &d0, &nx0, &ny0, &nz0, t.x, probeHeight + ty, t.z, zero, one, zero);
+    hit = hitCheckFilter(NULL, t.x, probeHeight + ty, t.z, zero, one, zero, &hx0, &hy0, &hz0, &d0, &nx0, &ny0, &nz0);
     if (hit && (best >= d0)) {
         best = d0;
     }
@@ -1005,7 +1005,7 @@ HitEntry* partySearchHead(PartyEntry* party, Vec* pos, f32* dist, f32 angle) {
         // FAKE: empty barrier (no code) steers scheduling of the 10.0f + t.y argument
         if ((t.z && t.z) && t.z) { }
         d1 = best;
-        hit = hitCheckFilter(NULL, &hx1, &hy1, &hz1, &d1, &nx1, &ny1, &nz1, t.x, probeHeight + ty, t.z, zero, one, zero);
+        hit = hitCheckFilter(NULL, t.x, probeHeight + ty, t.z, zero, one, zero, &hx1, &hy1, &hz1, &d1, &nx1, &ny1, &nz1);
         if (hit && (best >= d1)) {
             best = d1;
         }
@@ -1019,7 +1019,7 @@ HitEntry* partySearchHead(PartyEntry* party, Vec* pos, f32* dist, f32 angle) {
             // FAKE: empty barrier (no code) steers scheduling of the 10.0f + t.y argument
             if ((t.z && t.z) && t.z) { }
             d2 = best;
-            hit = hitCheckFilter(NULL, &hx2, &hy2, &hz2, &d2, &nx2, &ny2, &nz2, t.x, probeHeight + ty, t.z, zero, one, zero);
+            hit = hitCheckFilter(NULL, t.x, probeHeight + ty, t.z, zero, one, zero, &hx2, &hy2, &hz2, &d2, &nx2, &ny2, &nz2);
             if (hit && (best >= d2)) {
                 best = d2;
             }
@@ -1033,7 +1033,7 @@ HitEntry* partySearchHead(PartyEntry* party, Vec* pos, f32* dist, f32 angle) {
                 // FAKE: empty barrier (no code) steers scheduling of the 10.0f + t.y argument
                 if ((t.z && t.z) && t.z) { }
                 d3 = best;
-                hit = hitCheckFilter(NULL, &hx3, &hy3, &hz3, &d3, &nx3, &ny3, &nz3, t.x, probeHeight + ty, t.z, zero, one, zero);
+                hit = hitCheckFilter(NULL, t.x, probeHeight + ty, t.z, zero, one, zero, &hx3, &hy3, &hz3, &d3, &nx3, &ny3, &nz3);
                 if (hit && (best >= d3)) {
                     best = d3;
                 }

@@ -922,8 +922,7 @@ USER_FUNC(evt_mario_get_motion) {
 }
 
 USER_FUNC(evt_mario_set_motion) {
-    // FAKE: function-pointer cast passes the s32 without narrowing to MarioMotion; marioChgMot(evtGetValue(...)) changes the object
-    ((void (*)(s32))marioChgMot)(evtGetValue(event, event->args[0]));
+    marioChgMot(evtGetValue(event, event->args[0]));
     return EVT_RETURN_DONE;
 }
 

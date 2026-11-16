@@ -1613,7 +1613,7 @@ f32 marioChkOverhead(void) {
                 if (mario->baseSpeed == 0.0f) {
                     marioChgStayMotion();
                 } else {
-                    marioChgMot(mario->baseSpeed > mario->baseWalkSpeed ? 2 : 1);
+                    marioChgMot(mario->baseSpeed > mario->baseWalkSpeed ? MARIO_MOTION_DASH : MARIO_MOTION_WALK);
 #else
             if (!(mario->flags & MARIO_FLAG_TUBE_MODE) && mario->currMotionId != MARIO_MOTION_SHIP && mario->currMotionId != MARIO_MOTION_PLANE &&
                 mario->currMotionId != MARIO_MOTION_VIVIAN && mario->characterId != CHARACTER_BOWSER && !marioChkSlitEnd()) {
@@ -1627,11 +1627,11 @@ f32 marioChkOverhead(void) {
                         /* The second test is redundant, but both compares (a double beq) are in the retail code */
                         s32 m = mario->baseSpeed > mario->baseWalkSpeed ? 2 : 1;
                         if (m != mario->prevMotionId && m != mario->prevMotionId) {
-                            marioChgMot(mario->baseSpeed > mario->baseWalkSpeed ? 2 : 1);
+                            marioChgMot(mario->baseSpeed > mario->baseWalkSpeed ? MARIO_MOTION_DASH : MARIO_MOTION_WALK);
                         }
                     }
 #else
-                    marioChgMot(mario->baseSpeed > mario->baseWalkSpeed ? 2 : 1);
+                    marioChgMot(mario->baseSpeed > mario->baseWalkSpeed ? MARIO_MOTION_DASH : MARIO_MOTION_WALK);
 #endif
 #endif
                 }

@@ -1526,7 +1526,7 @@ static s32 puniPositionCheck(PuniData* p) {
     pos.y += 1.0f;
     dir = (Vec){0.0f, -1.0f, 0.0f};
     dist = 3.0f;
-    if (hitCheckFilter(NULL, &hit.x, &hit.y, &hit.z, &dist, &nrm.x, &nrm.y, &nrm.z, pos.x, pos.y, pos.z, dir.x, dir.y, dir.z) == NULL) {
+    if (hitCheckFilter(NULL, pos.x, pos.y, pos.z, dir.x, dir.y, dir.z, &hit.x, &hit.y, &hit.z, &dist, &nrm.x, &nrm.y, &nrm.z) == NULL) {
         return 2;
     }
     return 0;
@@ -1566,7 +1566,7 @@ int puniMoveAtari(PuniData* p, Vec start, Vec dir, int reflect, f32 dist) {
     p->hitMove = NULL;
     d = dist;
     if (p->flags & PUNI_FLAG_WALL_CHECK) {
-        p->hitMove = hitCheckFilter(NULL, &hit.x, &hit.y, &hit.z, &d, &n.x, &n.y, &n.z, start.x, start.y, start.z, dir.x, dir.y, dir.z);
+        p->hitMove = hitCheckFilter(NULL, start.x, start.y, start.z, dir.x, dir.y, dir.z, &hit.x, &hit.y, &hit.z, &d, &n.x, &n.y, &n.z);
     }
     if (p->hitMove == NULL) {
         PSVECAdd(&p->pos, &p->vel, &p->pos);
@@ -1593,7 +1593,7 @@ int puniMoveAtari(PuniData* p, Vec start, Vec dir, int reflect, f32 dist) {
             PSVECNormalize(&diff, &diff);
             start = old;
             start.y += 1.0f;
-            p->hitCheck = hitCheckFilter(NULL, &hx, &hy, &hz, &d, &nx, &ny, &nz, old.x, old.y + 1.0f, old.z, diff.x, diff.y, diff.z);
+            p->hitCheck = hitCheckFilter(NULL, old.x, old.y + 1.0f, old.z, diff.x, diff.y, diff.z, &hx, &hy, &hz, &d, &nx, &ny, &nz);
             if (p->hitCheck != NULL) {
                 p->pos = old;
             }
@@ -1601,11 +1601,6 @@ int puniMoveAtari(PuniData* p, Vec start, Vec dir, int reflect, f32 dist) {
     }
     return ret;
 }
-
-/* FAKE: hitCheckFilter called through a cast with the three start floats listed first. EABI assigns float and
-   pointer args to f1-f6 and r3-r10 independently, so the registers and the call are identical; the reorder makes
-   the start loads code-generate before the pointer args, so they read r4 directly (scheduling). */
-typedef void* (*PuniHitCheckStartFirst)(f32, f32, f32, void*, f32*, f32*, f32*, f32*, f32*, f32*, f32*, f32, f32, f32);
 
 // Descriptive name (not in the symbol maps); placeholder unk_mri_000095f0, JP mri .text+0x952C. See docs/NAME_PROVENANCE.md.
 #if VERSION >= VERSION_JP
@@ -1624,7 +1619,7 @@ void puniMoveHitLimited(PuniData* p, Vec start, Vec dir, f32 dist) {
     p->hitCheck = NULL;
     p->hitMove = NULL;
     d = dist;
-    p->hitMove = ((PuniHitCheckStartFirst)hitCheckFilter)(start.x, start.y, start.z, NULL, &pa.x, &pa.y, &pa.z, &d, &hit.x, &hit.y, &hit.z, dir.x, dir.y, dir.z);
+    p->hitMove = hitCheckFilter(NULL, start.x, start.y, start.z, dir.x, dir.y, dir.z, &pa.x, &pa.y, &pa.z, &d, &hit.x, &hit.y, &hit.z);
     if (p->hitMove == NULL) {
         PSVECAdd(&p->pos, &p->vel, &p->pos);
     } else if (Punigp->floor != 18) {
@@ -1644,7 +1639,7 @@ void puniMoveHitLimited(PuniData* p, Vec start, Vec dir, f32 dist) {
         d = PSVECMag(&diff);
         if (d > 0.0f) {
             PSVECNormalize(&diff, &diff);
-            p->hitCheck = hitCheckFilter(NULL, &hitX, &b2, &b3, &d, &hitNX, &c2, &c3, old.x, old.y + 1.0f, old.z, diff.x, diff.y, diff.z);
+            p->hitCheck = hitCheckFilter(NULL, old.x, old.y + 1.0f, old.z, diff.x, diff.y, diff.z, &hitX, &b2, &b3, &d, &hitNX, &c2, &c3);
             if (p->hitCheck != NULL) {
                 p->pos = old;
             }
@@ -1673,7 +1668,7 @@ void puniMoveHit(PuniData* p, Vec start, Vec dir, f32 dist) {
     p->hitMove = NULL;
     d = dist;
     if (p->flags & PUNI_FLAG_WALL_CHECK) {
-        p->hitMove = hitCheckFilter(NULL, &pa.x, &pa.y, &pa.z, &d, &hit.x, &hit.y, &hit.z, start.x, start.y, start.z, dir.x, dir.y, dir.z);
+        p->hitMove = hitCheckFilter(NULL, start.x, start.y, start.z, dir.x, dir.y, dir.z, &pa.x, &pa.y, &pa.z, &d, &hit.x, &hit.y, &hit.z);
     }
     if (p->hitMove == NULL) {
         PSVECAdd(&p->pos, &p->vel, &p->pos);
@@ -1698,7 +1693,7 @@ void puniMoveHit(PuniData* p, Vec start, Vec dir, f32 dist) {
             PSVECNormalize(&diff, &diff);
             start = old;
             start.y += 1.0f;
-            p->hitCheck = hitCheckFilter(NULL, &hitX, &b2, &b3, &d, &hitNX, &c2, &c3, old.x, old.y + 1.0f, old.z, diff.x, diff.y, diff.z);
+            p->hitCheck = hitCheckFilter(NULL, old.x, old.y + 1.0f, old.z, diff.x, diff.y, diff.z, &hitX, &b2, &b3, &d, &hitNX, &c2, &c3);
             if (p->hitCheck != NULL) {
                 p->pos = old;
             }
@@ -2170,7 +2165,7 @@ static void puniModeChangeFallCheck(void) {
         pos.y = 1.0f + pos.y;
         dir = (Vec){0.0f, -1.0f, 0.0f}; // straight down
         dist = 2.0f;
-        if (hitCheckFilter(NULL, &hit.x, &hit.y, &hit.z, &dist, &nrm.x, &nrm.y, &nrm.z, pos.x, pos.y, pos.z, dir.x, dir.y, dir.z) ==
+        if (hitCheckFilter(NULL, pos.x, pos.y, pos.z, dir.x, dir.y, dir.z, &hit.x, &hit.y, &hit.z, &dist, &nrm.x, &nrm.y, &nrm.z) ==
             NULL) {
             PuniDokuritsu(p);
             {
@@ -2824,7 +2819,7 @@ static void puniModeAway(PuniData* p) {
             }
             dist = 2.0f;
             start.y += 0.2f;
-            if (hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, start.x, start.y, start.z, sub.x, sub.y, sub.z) == NULL) {
+            if (hitCheckFilter(NULL, start.x, start.y, start.z, sub.x, sub.y, sub.z, &hx, &hy, &hz, &dist, &nx, &ny, &nz) == NULL) {
                 {
                     Vec v = {0.0f, 0.0f, 0.0f};
                     p->vel = v;
@@ -3315,7 +3310,7 @@ static void puniModeWind(PuniData* p) {
             dist = 2.0f;
             d = (Vec){0.0f, -1.0f, 0.0f};
             start.y += 0.2f;
-            if (hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, start.x, start.y, start.z, d.x, d.y, d.z) == NULL) {
+            if (hitCheckFilter(NULL, start.x, start.y, start.z, d.x, d.y, d.z, &hx, &hy, &hz, &dist, &nx, &ny, &nz) == NULL) {
                 p->vel = (Vec){0.0f, 0.0f, 0.0f};
                 p->mode = PUNI_MODE_FALL;
                 p->anim = 0;
@@ -6044,7 +6039,7 @@ static BOOL _puniVAtari(PuniData* p, Vec* from, Vec* to) {
     start = *from;
     PSVECNormalize(&dir, &dir);
     dist = PSVECMag(&dir);
-    if (hitCheckFilter(NULL, &hit.x, &hit.y, &hit.z, &dist, &nrm.x, &nrm.y, &nrm.z, start.x, start.y, start.z, dir.x, dir.y, dir.z) ==
+    if (hitCheckFilter(NULL, start.x, start.y, start.z, dir.x, dir.y, dir.z, &hit.x, &hit.y, &hit.z, &dist, &nrm.x, &nrm.y, &nrm.z) ==
         NULL) {
         p->pos = *to;
         return TRUE;

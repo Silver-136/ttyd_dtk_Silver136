@@ -424,7 +424,7 @@ void marioChgMotAuto(void) {
 void mot_stay_post(void) {
     MarioWork* mario;
 #if VERSION >= VERSION_JP
-    MarioMotion id = marioGetPtr()->currMotionId;
+    u16 id = marioGetPtr()->currMotionId;
     if (id != MARIO_MOTION_HAMMER_2 && id != MARIO_MOTION_JABARA) {
         stopVoice();
     } else {

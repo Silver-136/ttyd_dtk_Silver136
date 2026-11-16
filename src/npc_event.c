@@ -85,7 +85,7 @@ static USER_FUNC(pressCheck) {
         return EVT_RETURN_DONE;
     }
     dist = 5.0f;
-    if (hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, npc->position.x, 1.0f + npc->position.y, npc->position.z, 0.0f, -1.0f, 0.0f)) {
+    if (hitCheckFilter(NULL, npc->position.x, 1.0f + npc->position.y, npc->position.z, 0.0f, -1.0f, 0.0f, &hx, &hy, &hz, &dist, &nx, &ny, &nz)) {
         evtSetValue(event, args[0], 1);
     } else {
         evtSetValue(event, args[0], 0);
@@ -4272,9 +4272,9 @@ static USER_FUNC(cliffCheck) {
         dirv = -1.0f;
     }
     dist = 5.0f;
-    floorBelow = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, npc->position.x, 1.0f + npc->position.y, npc->position.z, 0.0f, -1.0f, 0.0f);
+    floorBelow = hitCheckFilter(NULL, npc->position.x, 1.0f + npc->position.y, npc->position.z, 0.0f, -1.0f, 0.0f, &hx, &hy, &hz, &dist, &nx, &ny, &nz);
     dist = 5.0f;
-    floorAhead = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, npc->position.x, 1.0f + npc->position.y, npc->position.z, dirv, -1.0f, 0.0f);
+    floorAhead = hitCheckFilter(NULL, npc->position.x, 1.0f + npc->position.y, npc->position.z, dirv, -1.0f, 0.0f, &hx, &hy, &hz, &dist, &nx, &ny, &nz);
     if (floorBelow && floorAhead) {
         evtSetValue(event, args[0], 0);
     } else if (floorBelow && !floorAhead) {
@@ -4296,8 +4296,8 @@ static USER_FUNC(upperCheck) {
     HitEntry* ceilingLeft;
     HitEntry* ceilingRight;
     dist = 5.0f;
-    ceilingLeft = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, npc->position.x - 15.0f, 30.0f + npc->position.y, npc->position.z, 0.0f, 2.0f, 0.0f);
-    ceilingRight = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, 15.0f + npc->position.x, 30.0f + npc->position.y, npc->position.z, 0.0f, 2.0f, 0.0f);
+    ceilingLeft = hitCheckFilter(NULL, npc->position.x - 15.0f, 30.0f + npc->position.y, npc->position.z, 0.0f, 2.0f, 0.0f, &hx, &hy, &hz, &dist, &nx, &ny, &nz);
+    ceilingRight = hitCheckFilter(NULL, 15.0f + npc->position.x, 30.0f + npc->position.y, npc->position.z, 0.0f, 2.0f, 0.0f, &hx, &hy, &hz, &dist, &nx, &ny, &nz);
     if (ceilingLeft || ceilingRight) {
         evtSetValue(event, args[0], 1);
     } else {
@@ -4846,7 +4846,7 @@ static USER_FUNC(gesso_ground_check) {
     NpcEntry* npc = evtNpcNameToPtr(event, "me");
     f32 hx, hy, hz, dist, nx, ny, nz;
     dist = 5.0f;
-    if (hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, npc->position.x, 1.0f + npc->position.y, npc->position.z, 0.0f, -1.0f, 0.0f)) {
+    if (hitCheckFilter(NULL, npc->position.x, 1.0f + npc->position.y, npc->position.z, 0.0f, -1.0f, 0.0f, &hx, &hy, &hz, &dist, &nx, &ny, &nz)) {
         evtSetValue(event, args[0], 1);
     } else {
         evtSetValue(event, args[0], 0);

@@ -897,7 +897,7 @@ void mobjMain(void) {
             entry->flags &= ~MOBJ_FLAG_HIT;
         }
         {
-            MarioMotion motion = marioGetPtr()->currMotionId;
+            u16 motion = marioGetPtr()->currMotionId;
             if (motion == MARIO_MOTION_DAMAGE || motion == MARIO_MOTION_DAMAGE_TOGE) {
                 entry->flags &= ~MOBJ_FLAG_HIT;
             }
@@ -1120,12 +1120,12 @@ void mobjHitCheckGround(MapObjectEntry* entry) {
     } else {
 #if VERSION <= VERSION_DEMO_JP
         dist = 1.0f + (f32)__fabs(entry->velocity.y);
-        if (hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, entry->position.x,
-                           10.0f + entry->position.y, entry->position.z, 0.0f, -10.0f, 0.0f) != NULL) {
+        if (hitCheckFilter(NULL, entry->position.x, 10.0f + entry->position.y, entry->position.z, 0.0f, -10.0f, 0.0f,
+                           &hx, &hy, &hz, &dist, &nx, &ny, &nz) != NULL) {
 #else
         dist = 10.0f + (1.0f + (f32)__fabs(entry->velocity.y));
-        if (hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, entry->position.x,
-                           10.0f + entry->position.y, entry->position.z, 0.0f, -1.0f, 0.0f) != NULL) {
+        if (hitCheckFilter(NULL, entry->position.x, 10.0f + entry->position.y, entry->position.z, 0.0f, -1.0f, 0.0f,
+                           &hx, &hy, &hz, &dist, &nx, &ny, &nz) != NULL) {
 #endif
             entry->position.y = hy;
             entry->velocity.y = (-0.5f * entry->bounce) * entry->velocity.y;

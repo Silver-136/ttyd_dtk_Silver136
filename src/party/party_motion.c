@@ -3433,7 +3433,7 @@ static f32 partyGetGndY(f32 x, f32 y, f32 z) {
     HitEntry* hit;
     y += touch_wall_ct;
     dist = 1000.0f;
-    hit = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, x, y, z, 0.0f, -1.0f, 0.0f);
+    hit = hitCheckFilter(NULL, x, y, z, 0.0f, -1.0f, 0.0f, &hx, &hy, &hz, &dist, &nx, &ny, &nz);
     if (!hit) {
         r = -2000.0f;
     } else {
@@ -3460,7 +3460,7 @@ static u32 _getFrontFloor2(f32* out, f32 x, f32 y, f32 z) {
     y += touch_wall_ct;
 #endif
     dist = 1000.0f;
-    hit = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, x, y, z, 0.0f, -1.0f, 0.0f);
+    hit = hitCheckFilter(NULL, x, y, z, 0.0f, -1.0f, 0.0f, &hx, &hy, &hz, &dist, &nx, &ny, &nz);
     if (!hit) {
         *out = -2000.0f;
         return 0;
@@ -4304,7 +4304,7 @@ void party_motion_behind_mario(PartyEntry* party) {
         f32 nz, ny, nx, dd, hz, hy, hx;
         py += 40.0f;
         dd = 1000.0f;
-        hit = hitCheckFilter(NULL, &hx, &hy, &hz, &dd, &nx, &ny, &nz, x, py, z, 0.0f, -1.0f, 0.0f);
+        hit = hitCheckFilter(NULL, x, py, z, 0.0f, -1.0f, 0.0f, &hx, &hy, &hz, &dd, &nx, &ny, &nz);
         if (!hit) {
             gy = -2000.0f;
         } else {
@@ -4354,7 +4354,7 @@ void party_motion_behind_mario(PartyEntry* party) {
                 f32 nz, ny, nx, dd, hz, hy, hx;
                 py += 40.0f;
                 dd = 1000.0f;
-                hit = hitCheckFilter(NULL, &hx, &hy, &hz, &dd, &nx, &ny, &nz, x, py, z, 0.0f, -1.0f, 0.0f);
+                hit = hitCheckFilter(NULL, x, py, z, 0.0f, -1.0f, 0.0f, &hx, &hy, &hz, &dd, &nx, &ny, &nz);
                 if (!hit) {
                     GG = -2000.0f;
                 } else {
@@ -4381,7 +4381,7 @@ void party_motion_behind_mario(PartyEntry* party) {
                 f32 nz, ny, nx, dd, hz, hy, hx;
                 py += 40.0f;
                 dd = 1000.0f;
-                hit = hitCheckFilter(NULL, &hx, &hy, &hz, &dd, &nx, &ny, &nz, x, py, z, 0.0f, -1.0f, 0.0f);
+                hit = hitCheckFilter(NULL, x, py, z, 0.0f, -1.0f, 0.0f, &hx, &hy, &hz, &dd, &nx, &ny, &nz);
                 if (!hit) {
                     GG = -2000.0f;
                 } else {

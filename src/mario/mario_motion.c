@@ -312,7 +312,7 @@ void marioChgSmallJumpMotion(void) {
 BOOL marioChkItemGetMotion(void) {
     BOOL ret = FALSE;
     MarioWork* mario = marioGetPtr();
-    MarioMotion cur = mario->currMotionId;
+    u16 cur = mario->currMotionId;
     if (!cur || cur == MARIO_MOTION_WALK || cur == MARIO_MOTION_DASH ||
         cur == MARIO_MOTION_YOSHI || cur == MARIO_MOTION_ROLL || cur == MARIO_MOTION_SLIT) {
         if (!(mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION)) {

@@ -2297,7 +2297,7 @@ static u32 texture_0[64] ATTRIBUTE_ALIGN(32) = {
  * depth and projected shadows, the flash colour, a pulsing glow, a shimmer texture and a per-map TEV callback.
  * Also used by animdrv for models.
  */
-void mapSetMaterialTev(s32 texCount, s32 drawMode, s32 flags, Mtx mtx) {
+void mapSetMaterialTev(int texCount, s32 drawMode, s32 flags, Mtx mtx) {
     static f32 scrl_uv[4] = {0.0f, 0.0f, 0.0f, 0.0f};
     GXTexMapID map;
     GXTexCoordID coord;
@@ -2306,12 +2306,11 @@ void mapSetMaterialTev(s32 texCount, s32 drawMode, s32 flags, Mtx mtx) {
     s32 i;
     Mtx queen_mtx;
 
-    map = (GXTexMapID)texCount;
-    coord = (GXTexCoordID)texCount;
+    map = texCount;
+    coord = texCount;
     indStages = 0;
 
-    // FAKE: no-op (s32) cast on the s32 texCount; `texCount > 0` schedules the static's address load earlier
-    if ((s32)texCount > 0) {
+    if (texCount > 0) {
         switch (drawMode) {
             case 0:
                 GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);

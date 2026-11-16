@@ -929,7 +929,7 @@ static HitEntry* hammerHitWall(f32 ang, f32* s, f32* co, f32* len, f32* hx, f32*
     MarioWork* mario = marioGetPtr();
     sincosf(s, co, ang);
     *len = 2.0f * mario->wPlayerCollisionBox.x;
-    return hitCheckFilter(NULL, hx, hy, hz, len, nx, ny, nz, mario->position.x, 0.5f * mario->wPlayerCollisionBox.y + mario->position.y, mario->position.z, *s, 0.0f, *co);
+    return hitCheckFilter(NULL, mario->position.x, 0.5f * mario->wPlayerCollisionBox.y + mario->position.y, mario->position.z, *s, 0.0f, *co, hx, hy, hz, len, nx, ny, nz);
 }
 
 /**
