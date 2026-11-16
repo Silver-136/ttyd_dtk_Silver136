@@ -231,6 +231,7 @@ static void moamoa_pose_init(void) {
     } while ((++data)->group != NULL);
     wp->numDefs++;
 }
+#pragma dont_inline reset
 
 /**
  * Per-frame update of every Moamoa sprite's animation:
@@ -258,7 +259,6 @@ static void moamoa_pose_main(void) {
         pose->texId = def->start + (s32)((def->count - 1) * t);
     }
 }
-#pragma dont_inline reset
 
 // Inlined into the S_1 callers and called out of line by the D_1 callers below, as in the target (the JP demo REL
 // map lists it as a function and names its table group_tbl$582).
