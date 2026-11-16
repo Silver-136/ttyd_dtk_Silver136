@@ -152,6 +152,10 @@ static void vtx_copy(effN64Vtx* dst, effN64Vtx* src, Mtx mtx) {
     OSf32tos16(&v.z, &dst->z);
 }
 
+/** Sine and cosine of an angle in degrees (as in eff_kemuri3_n64.c; Paper Mario 64's whirlwind effect calls sin_deg / cos_deg here). */
+static inline f32 sind(f32 deg) { return sin(6.2831855f * deg / 360.0f); }
+static inline f32 cosd(f32 deg) { return cos(6.2831855f * deg / 360.0f); }
+
 /**
  * Builds a 16-point ring of vertices (15 segments drawn) and draws seven stacked, twisted layers, each tilted and scaled,
  * using texture 0x6C on both texture maps.
@@ -170,17 +174,18 @@ static void effKamekiTornadeDisp(CameraId cameraId, void* payload) {
     s32 j;
     CameraEntry* camera;
     s32 a;
+    f32 rad;
     f32 s;
-    f32* scales;
-    f32 r;
-    f32 ang;
+    f32 dist;
+    f32 deg;
+    f32 sn;
+    f32 dist2;
     Mtx mtx;
     Mtx tex;
     Mtx rot;
     Mtx base;
     GXTexObj texObj;
     Vec axis;
-    f32 cosVal;
 
     camera = camGetPtr(cameraId);
     work = effect->userdata;
@@ -216,16 +221,16 @@ static void effKamekiTornadeDisp(CameraId cameraId, void* payload) {
     tmpl = (effN64Vtx*)smartAlloc(sizeof(effN64Vtx) * 32, SMART_GROUP_TEMP)->address;
     for (i = 0, k = 0; i < 16; i++, k += 128) {
         p = &tmpl[i];
-        r = (6.2831855f * (f32)(i * 360 / 15)) / 360.0f;
-        p->x = 100.0f * (f32)cos(r);
+        rad = (6.2831855f * (f32)(i * 360 / 15)) / 360.0f;
+        p->x = 100.0f * (f32)cos(rad);
         p->y = 0.0f;
-        p->z = 100.0f * (f32)sin(r);
+        p->z = 100.0f * (f32)sin(rad);
         p->s = k;
         p->t = 0;
         q = &tmpl[i + 16];
-        q->x = 100.0f * (f32)cos(r);
+        q->x = 100.0f * (f32)cos(rad);
         q->y = 0.0f;
-        q->z = 100.0f * (f32)sin(r);
+        q->z = 100.0f * (f32)sin(rad);
         q->s = (i * 16) << 5;
         q->t = 1024;
     }
@@ -247,13 +252,10 @@ static void effKamekiTornadeDisp(CameraId cameraId, void* payload) {
         }
         PSMTXScale(tex, s, scale, s);
         PSMTXConcat(mtx, tex, mtx);
-        ang = 10.0f * work->radius[i];
-        s = 6.2831855f * work->ang[i] / 360.0f;
-        r = (f32)sin(s);
-
-        // FAKE: cos(s) through a temp (same call order: sin, then cos, then PSMTXTrans)
-        cosVal = (f32)cos(s);
-        PSMTXTrans(tex, ang * r, 0, ang * cosVal);
+        dist = 10.0f * work->radius[i];
+        deg = work->ang[i];
+        sn = sind(deg);
+        PSMTXTrans(tex, dist * sn, 0.0f, dist * cosd(deg));
         PSMTXConcat(mtx, tex, mtx);
         PSMTXConcat(base, mtx, mtx);
         for (j = 0; j < 16; j++) {
@@ -261,18 +263,15 @@ static void effKamekiTornadeDisp(CameraId cameraId, void* payload) {
         }
         PSMTXTrans(mtx, 10.0f * work->px[i + 1], 10.0f * work->py[i + 1], 10.0f * work->pz[i + 1]);
         PSMTXRotRad(rot, 'z', 0.017453292f * work->rot[i + 1]);
-
-        // FAKE: alias of the work->sc array (address only, no load) used for the second scale argument
-        scales = work->sc;
         PSMTXConcat(mtx, rot, mtx);
         axis = (Vec){0.03f, 1.0f, 0.0f};
         PSMTXRotAxisRad(rot, &axis, 0.017453292f * (work->twist + (f32)(i * i)));
         PSMTXConcat(mtx, rot, mtx);
-        PSMTXScale(tex, work->sc[i + 1] * scale, scale, scales[i + 1] * scale);
+        PSMTXScale(tex, work->sc[i + 1] * scale, scale, work->sc[i + 1] * scale);
         PSMTXConcat(mtx, tex, mtx);
-        r = 10.0f * work->radius[i];
-        s = (f32)sin(6.2831855f * work->ang[i] / 360.0f);
-        PSMTXTrans(tex, r * s, 0.0f, r * (f32)cos(6.2831855f * work->ang[i] / 360.0f));
+        dist2 = 10.0f * work->radius[i];
+        sn = sind(work->ang[i]);
+        PSMTXTrans(tex, dist2 * sn, 0.0f, dist2 * cosd(work->ang[i]));
         PSMTXConcat(mtx, tex, mtx);
         PSMTXConcat(base, mtx, mtx);
         for (j = 16; j < 32; j++) {

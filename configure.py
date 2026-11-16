@@ -656,7 +656,7 @@ config.libs = [
             Object(MatchingFor("G8MJ01", "G8ME01"), "effect/n64/eff_hokori_n64.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "effect/n64/eff_holography_n64.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "effect/n64/eff_horao_spell_n64.c"),
-            Object(MatchingFor("G8MJ01", "G8ME01"), "effect/n64/eff_ice_n64.c", extra_cflags=["-opt nolifetimes"]),
+            Object(MatchingFor("G8MJ01", "G8ME01"), "effect/n64/eff_ice_n64.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "effect/n64/eff_kameki_tornade_n64.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "effect/n64/eff_kemuri1_n64.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "effect/n64/eff_kemuri2_n64.c"),
