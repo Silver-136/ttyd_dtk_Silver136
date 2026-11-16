@@ -43,6 +43,7 @@ static void SoundEfxMain(void);
 inline void SoundEfxMuteCh(u32 chan);
 static void SoundDVDMain(void);
 static void SoundDVDStopCh(u32 chan);
+static void SoundDVDSetPanCh(u32 chan, u8 pan);
 
 static void SoundSSMainInt(void);
 static void SoundSSMain(void);
@@ -195,27 +196,8 @@ void SoundInit(void) {
     sndAuxCallbackPrepareDelay(&dly);
     sndSetAuxProcessingCallbacks(0, sndAuxCallbackReverbHI, &revH, 0xFF, 0, sndAuxCallbackChorus, &cho, 0xFF, 0);
     sndVolume(0x7F, 0, 0xFF);
-#if VERSION <= VERSION_DEMO_JP
-    sound.outputMode = SND_OUTPUTMODE_STEREO;
-    sndOutputMode(SND_OUTPUTMODE_STEREO);
-    sound.callback = AIRegisterDMACallback(SoundAIDMACallback);
-#else
-    if (sound.outputMode != SND_OUTPUTMODE_STEREO) {
-        sound.outputMode = SND_OUTPUTMODE_STEREO;
-        sndOutputMode(SND_OUTPUTMODE_STEREO);
-    }
-    sound.callback = AIRegisterDMACallback(SoundAIDMACallback);
-#if VERSION >= VERSION_US
-    sound.dmaAddress = (u8*)(AIGetDMAStartAddr() | 0x80000000);
-    sound.dmaLength = AIGetDMALength();
-    if (sound.dmaLength > 0x280) {
-        while (1)
-            ;
-    }
-#endif
-#endif
-    sound.sampleBank = 0;
-    sound.sampleIndex = 0;
+    SoundSetOutputMode(SND_OUTPUTMODE_STEREO);
+    SoundInitAI();
     sound.fadeIn = 10;
     sound.fadeOut = 500;
     sound.dataId = 0;
@@ -342,21 +324,9 @@ void SoundInit(void) {
     slot->seqId = 0;
 }
 
-/**
- * Per-frame sound update: notices songs that ended on their own (marks their group and frees the channel),
- * then runs the effect, DVD-audio and stream updates.
- */
+/** Per-frame sound update: runs the song, effect, DVD-audio and stream updates. */
 void SoundMain(void) {
-    int i;
-    SoundSong* song;
-
-    for (i = 0, song = sound.songs; i < SOUND_SONG_MAX; i++, song++) {
-        if (song->group && song->seqId != -1 && sndSeqGetValid(song->seqId) != TRUE) {
-            song->group->flags |= SOUND_GROUP_SONG_ENDED_UNUSED;
-            sndSeqStop(song->seqId);
-            song->seqId = -1;
-        }
-    }
+    SoundSongMain();
     SoundEfxMain();
     SoundDVDMain();
     SoundSSMain();
@@ -712,6 +682,13 @@ void SoundSetOutputMode(SND_OUTPUTMODE mode) {
 #endif
 }
 
+/** Returns the output mode last set. */
+// Original name and size (0x10) from the JP demo map (UNUSED there: nothing calls it); the getter of
+// SoundSetOutputMode's field.
+SND_OUTPUTMODE SoundGetOutputMode(void) {
+    return sound.outputMode;
+}
+
 /** Called when the disc cover opens: mutes sound until it is closed. */
 void SoundOpenCover(void) {
     if (!sound.coverState) {
@@ -747,6 +724,16 @@ void SoundCloseCover(void) {
             sound.coverState = SOUND_COVER_CLOSED;
         }
     }
+}
+
+/** SoundSongPlayCh for song channel 0. */
+// The channel-0 forms (SoundSongPlay, SoundSongContinue, SoundSongStop, SoundSongFadeout, SoundSongFadein,
+// SoundSongSetVol, SoundDVDStop, SoundDVDSetPan, SoundSSPlay, SoundSSStop, SoundSSFadeout, SoundSSFademute,
+// SoundSSContinue, SoundSSSetPan, SoundSSSetVol, SoundSSSetSrndPan, SoundSSSetPlayFreq):
+// original names and sizes from the JP demo map (UNUSED there: nothing calls them). The map lists each right before
+// its ...Ch function, and each size is the ...Ch body inlined for channel 0 (0x100 here).
+void SoundSongPlay(u32 groupInfo) {
+    SoundSongPlayCh(0, groupInfo);
 }
 
 /**
@@ -786,6 +773,12 @@ const char* SoundSongStrippedName(void) {
 }
 #endif
 
+/** SoundSongContinueCh for song channel 0. */
+// Original name and size (0x60) from the JP demo map (see SoundSongPlay).
+void SoundSongContinue(void) {
+    SoundSongContinueCh(0);
+}
+
 /** Resumes a paused song on chan at its volume. */
 void SoundSongContinueCh(s32 chan) {
     SoundSong* song = &sound.songs[chan];
@@ -794,6 +787,12 @@ void SoundSongContinueCh(s32 chan) {
         sndSeqContinue(song->seqId);
         sndSeqVolume((u8)song->vol, 0, song->seqId, SND_SEQVOL_CONTINUE);
     }
+}
+
+/** SoundSongStopCh for song channel 0. */
+// Original name and size (0x50) from the JP demo map (see SoundSongPlay).
+void SoundSongStop(void) {
+    SoundSongStopCh(0);
 }
 
 /** Stops the song on chan at once. */
@@ -806,6 +805,12 @@ void SoundSongStopCh(s32 chan) {
     }
 }
 
+/** SoundSongFadeoutCh for song channel 0. */
+// Original name and size (0x64) from the JP demo map (see SoundSongPlay).
+void SoundSongFadeout(void) {
+    SoundSongFadeoutCh(0);
+}
+
 /** Fades the song on chan out over the fade-out time and releases the channel. */
 void SoundSongFadeoutCh(s32 chan) {
     SoundSong* song = &sound.songs[chan];
@@ -816,6 +821,12 @@ void SoundSongFadeoutCh(s32 chan) {
     }
 }
 
+/** SoundSongFadeinCh for song channel 0. */
+// Original name and size (0x60) from the JP demo map (see SoundSongPlay).
+void SoundSongFadein(void) {
+    SoundSongFadeinCh(0);
+}
+
 /** Fades the song on chan in to its volume over the fade-in time. */
 void SoundSongFadeinCh(s32 chan) {
     SoundSong* song = &sound.songs[chan];
@@ -823,6 +834,12 @@ void SoundSongFadeinCh(s32 chan) {
     if (sndSeqGetValid(song->seqId)) {
         sndSeqVolume((u8)song->vol, sound.fadeIn, song->seqId, SND_SEQVOL_CONTINUE);
     }
+}
+
+/** SoundSongSetVolCh for song channel 0. */
+// Original name and size (0x7c) from the JP demo map (see SoundSongPlay).
+void SoundSongSetVol(u8 vol) {
+    SoundSongSetVolCh(0, vol);
 }
 
 /** Sets the volume (0-127) of the song on chan. */
@@ -853,6 +870,21 @@ u32 SoundSongCheck(s32 chan) {
     return sndSeqGetValid(sound.songs[chan].seqId) != 0;
 }
 
+/** Per-frame song update: notices songs that ended on their own (marks their group and frees the channel). */
+// Original name and size (0x9c) from the JP demo map (UNUSED there: its one call, in SoundMain, is inlined).
+void SoundSongMain(void) {
+    SoundSong* song;
+    int i;
+
+    for (i = 0, song = sound.songs; i < SOUND_SONG_MAX; i++, song++) {
+        if (song->group && song->seqId != -1 && sndSeqGetValid(song->seqId) != TRUE) {
+            song->group->flags |= SOUND_GROUP_SONG_ENDED_UNUSED;
+            sndSeqStop(song->seqId);
+            song->seqId = -1;
+        }
+    }
+}
+
 /** Stops the sound effect on effect channel chan and frees the channel (and its 3D emitter). */
 inline void SoundEfxMuteCh(u32 chan) {
     SoundEffect* sfx = &sound.effects[chan];
@@ -863,28 +895,6 @@ inline void SoundEfxMuteCh(u32 chan) {
         }
         sfx->flags = 0;
     }
-}
-
-/** Returns whether the effect on chan is still sounding (it does not free the channel). */
-inline u32 SoundEfxCheckPlay(s32 chan) {
-    SoundEffect* sfx = &sound.effects[chan];
-    SND_VOICEID vid;
-    if (!sfx->flags) {
-        return FALSE;
-    }
-    if (!(sfx->flags & SOUND_EFX_FLAG_EMITTER_UNUSED)) {
-        if (sfx->flags & SOUND_EFX_FLAG_EMITTER_UNUSED) {
-            vid = sndFXCheck(sndEmitterVoiceID(&sfx->emitter));
-        } else {
-            vid = sndFXCheck(sfx->voiceId);
-        }
-        if (sndFXCheck(vid) == -1) {
-            return FALSE;
-        }
-    } else if (!sndCheckEmitter(&sfx->emitter)) {
-        return FALSE;
-    }
-    return TRUE;
 }
 
 /**
@@ -930,7 +940,7 @@ s32 SoundEfxPlayEx(SND_FXID fid, u8 priority, u8 vol, u8 pan) {
     if (sound.coverState) {
         sndFXVolume(sfx->voiceId, 0);
     }
-    if (!SoundEfxCheckPlay(chan)) {
+    if (!SoundEfxCheck(chan)) {
         chan = -1;
     }
     return chan;
@@ -973,6 +983,15 @@ SND_VOICEID SoundEfxGetVoiceID(s32 chan) {
     return sndFXCheck(sfx->voiceId);
 }
 
+/** Returns the MusyX effect id playing on chan. */
+// Original name and size (0x1c) from the JP demo map (UNUSED there: nothing calls it); returns the id
+// SoundEfxPlayEx stores, like SoundEfxGetVolume.
+SND_FXID SoundEfxGetFXID(s32 chan) {
+    SoundEffect* sfx = &sound.effects[chan];
+
+    return sfx->fid;
+}
+
 /** Bends the pitch of the effect on chan (0 = unchanged; 0x2000 is MusyX's centre). */
 void SoundEfxSetPitch(s32 chan, s16 pitch) {
     SND_VOICEID vid;
@@ -980,6 +999,18 @@ void SoundEfxSetPitch(s32 chan, s16 pitch) {
     vid = SoundEfxGetVoiceID(chan);
     if (vid != -1) {
         sndFXPitchBend(vid, (u16)(pitch + 0x2000));
+    }
+}
+
+/** Sets the MusyX pitch bend value of the effect on chan as it is (0x2000 = unchanged). */
+// Original name and size (0x78) from the JP demo map (UNUSED there: nothing calls it); SoundEfxSetPitch without
+// the 0x2000 centre.
+void SoundEfxSetPitchDirect(s32 chan, u16 pitch) {
+    SND_VOICEID vid;
+
+    vid = SoundEfxGetVoiceID(chan);
+    if (vid != -1) {
+        sndFXPitchBend(vid, pitch);
     }
 }
 
@@ -1013,6 +1044,18 @@ void SoundEfxSetAux1(s32 chan, u8 reverb) {
     vid = SoundEfxGetVoiceID(chan);
     if (vid != -1) {
         sndFXReverb(vid, reverb);
+    }
+}
+
+/** Sets the chorus send of the effect on chan. */
+// Original name and size (0x78) from the JP demo map (UNUSED there: nothing calls it); SoundEfxSetAux1 for the
+// second of the two MusyX effect sends (SoundInit puts the reverb on aux A and the chorus on aux B).
+void SoundEfxSetAux2(s32 chan, u8 chorus) {
+    SND_VOICEID vid;
+
+    vid = SoundEfxGetVoiceID(chan);
+    if (vid != -1) {
+        sndFXChorus(vid, chorus);
     }
 }
 
@@ -1182,6 +1225,12 @@ const char* SoundDVDStrippedName(void) {
 }
 #endif
 
+/** SoundDVDStopCh for DVD audio channel 0. */
+// Original name and size (0x6c) from the JP demo map (see SoundSongPlay).
+void SoundDVDStop(void) {
+    SoundDVDStopCh(0);
+}
+
 /** Stops the DVD audio stream (the disc's streamed music) on chan and closes its file. */
 static void SoundDVDStopCh(u32 chan) {
     SoundDVD* dvd = &sound.dvds[chan];
@@ -1192,6 +1241,12 @@ static void SoundDVDStopCh(u32 chan) {
         DVDCancelStream(&dvd->info.cb);
         DVDClose(&dvd->info);
     }
+}
+
+/** SoundDVDSetPanCh for DVD audio channel 0. */
+// Original name and size (0xd8) from the JP demo map (see SoundSongPlay).
+void SoundDVDSetPan(u8 pan) {
+    SoundDVDSetPanCh(0, pan);
 }
 
 /** Applies pan and the current volume of DVD audio channel chan to the hardware stream volume. */
@@ -1901,6 +1956,12 @@ f64 SoundDemoStrippedRate(f64 t) {
 #endif
 void SoundSSPlayChEx(s32 chan, const char* name, s32 aram);
 
+/** SoundSSPlayCh for stream channel 0. */
+// Original name and size (0x2c) from the JP demo map (see SoundSongPlay).
+void SoundSSPlay(const char* name) {
+    SoundSSPlayCh(0, name);
+}
+
 /** Plays stream name on stream channel chan from the disc (see SoundSSPlayChEx). */
 void SoundSSPlayCh(s32 chan, const char* name) {
     SoundSSPlayChEx(chan, name, 0);
@@ -2107,6 +2168,12 @@ static void SoundSSPlayChEx_main(s32 result, DVDFileInfo* fileInfo) {
     }
 }
 
+/** SoundSSStopCh for stream channel 0. */
+// Original name and size (0x114) from the JP demo map (see SoundSongPlay).
+void SoundSSStop(void) {
+    SoundSSStopCh(0);
+}
+
 /**
  * Stops stream chan and frees its MusyX streams and files;
  * the early demos defer the stop when the stream has not started.
@@ -2142,6 +2209,12 @@ void SoundSSStopCh(u32 chan) {
     }
 }
 
+/** SoundSSFadeoutCh for stream channel 0. */
+// Original name and size (0x74) from the JP demo map (see SoundSongPlay).
+void SoundSSFadeout(void) {
+    SoundSSFadeoutCh(0);
+}
+
 /** Fades stream chan out over the fade-out time (converted to frames at the current frame rate in US and later). */
 void SoundSSFadeoutCh(s32 chan) {
     SoundStream* stream = &sound.streams[chan];
@@ -2161,6 +2234,39 @@ void SoundSSFadeoutCh(s32 chan) {
     }
 }
 
+/** SoundSSFademuteCh for stream channel 0. */
+// Original name and size (0x74) from the JP demo map (see SoundSongPlay).
+void SoundSSFademute(void) {
+    SoundSSFademuteCh(0);
+}
+
+/** Fades stream chan out over the fade-out time and pauses it at silence (SoundSSMain sets the mute flag). */
+// Original name and size (0x7c) from the JP demo map (UNUSED there: nothing calls it); SoundSSFadeoutCh for
+// SOUND_STREAM_FLAG_FADEMUTE, the fade SoundSSMain runs on the same fadeStep.
+void SoundSSFademuteCh(s32 chan) {
+    SoundStream* stream = &sound.streams[chan];
+    f32 frames;
+
+    if (stream->flags) {
+#if VERSION >= VERSION_US
+        frames = sound.fadeOut / (1000.0f / gp->framerate);
+#else
+        frames = sound.fadeOut / 16.666666f;
+#endif
+        if (frames < 1.0f) {
+            frames = 1.0f;
+        }
+        stream->fadeStep = stream->curVol / frames;
+        stream->flags |= SOUND_STREAM_FLAG_FADEMUTE;
+    }
+}
+
+/** SoundSSContinueCh for stream channel 0. */
+// Original name and size (0x38) from the JP demo map (see SoundSongPlay).
+void SoundSSContinue(void) {
+    SoundSSContinueCh(0);
+}
+
 /** Resumes a paused stream on chan and fades it back in to its volume. */
 void SoundSSContinueCh(s32 chan) {
     SoundStream* stream = &sound.streams[chan];
@@ -2170,6 +2276,12 @@ void SoundSSContinueCh(s32 chan) {
         stream->fadeStep = stream->vol;
         stream->flags |= SOUND_STREAM_FLAG_FADEIN;
     }
+}
+
+/** SoundSSSetPanCh for stream channel 0. */
+// Original name and size (0x158) from the JP demo map (see SoundSongPlay).
+void SoundSSSetPan(u8 pan) {
+    SoundSSSetPanCh(0, pan);
 }
 
 /**
@@ -2201,6 +2313,12 @@ void SoundSSSetPanCh(u32 chan, u8 pan) {
     }
 }
 
+/** SoundSSSetVolCh for stream channel 0. */
+// Original name and size (0x18c) from the JP demo map (see SoundSongPlay).
+void SoundSSSetVol(u8 vol) {
+    SoundSSSetVolCh(0, vol);
+}
+
 /** Sets the volume of stream chan. */
 void SoundSSSetVolCh(u32 chan, u8 vol) {
     SoundStream* stream;
@@ -2226,6 +2344,12 @@ u8 SoundSSGetVolCh(s32 chan) {
     }
 }
 
+/** SoundSSSetSrndPanCh for stream channel 0. */
+// Original name and size (0x178) from the JP demo map (see SoundSongPlay).
+void SoundSSSetSrndPan(u8 span) {
+    SoundSSSetSrndPanCh(0, span);
+}
+
 /** Sets the surround (front-back) pan of stream chan. */
 void SoundSSSetSrndPanCh(u32 chan, u8 span) {
     SoundStream* stream = &sound.streams[chan];
@@ -2236,6 +2360,12 @@ void SoundSSSetSrndPanCh(u32 chan, u8 span) {
             SoundSSSetPanCh(chan, stream->pan);
         }
     }
+}
+
+/** SoundSSSetPlayFreqCh for stream channel 0. */
+// Original name and size (0xcc) from the JP demo map (see SoundSongPlay).
+void SoundSSSetPlayFreq(u16 freq) {
+    SoundSSSetPlayFreqCh(0, freq);
 }
 
 /** Sets the playback sample rate of stream chan (both channels of a stereo stream). */
@@ -2389,6 +2519,25 @@ static void SoundSSMainInt(void) {
             }
         }
     }
+}
+
+/**
+ * Hooks the audio DMA interrupt (keeping the previous callback for SoundAIDMACallback to chain to) and restarts
+ * the sample record; US and later also note the DMA buffer and hang if it is longer than 0x280 bytes.
+ */
+// Original name and size (0x40) from the JP demo map (UNUSED there: its one call, in SoundInit, is inlined).
+void SoundInitAI(void) {
+    sound.callback = AIRegisterDMACallback(SoundAIDMACallback);
+#if VERSION >= VERSION_US
+    sound.dmaAddress = (u8*)(AIGetDMAStartAddr() | 0x80000000);
+    sound.dmaLength = AIGetDMALength();
+    if (sound.dmaLength > 0x280) {
+        while (1)
+            ;
+    }
+#endif
+    sound.sampleBank = 0;
+    sound.sampleIndex = 0;
 }
 
 /**
