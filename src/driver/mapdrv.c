@@ -113,6 +113,12 @@ MapWork* mapGetWork(void) {
     return &mapWork[activeGroup];
 }
 
+/** Makes MapWork group (0 field, 1 battle) the active one. */
+// Original name and size (0x8) from the JP demo map (UNUSED there).
+void mapSetActiveGroup(s32 group) {
+    activeGroup = group;
+}
+
 /** Which MapWork is active (0 field, 1 battle); lightdrv picks its light set from it. */
 s32 mapGetActiveGroup(void) {
     return activeGroup;
@@ -182,6 +188,36 @@ void mapInit(void) {
     memset(mapWork, 0, sizeof(MapWork) * 2);
     activeGroup = 0;
     mapClipOffFlag = FALSE;
+}
+
+/**
+ * Frees the map objects, animation lists and display lists of every map entry of the active MapWork
+ * (the map files stay loaded).
+ */
+// Original name and size (0xb8) from the JP demo map (UNUSED there: its call in mapUnLoad is inlined; bmapUnLoad
+// keeps the loop written out: with the call it matches the JP demo but not US retail (registers differ)).
+void mapReInit(void) {
+    MapWork* wp = mapGetWork();
+    MapEntry* entry = wp->entries;
+    int i;
+
+    for (i = 0; i < wp->entries[0].count; entry++, i++) {
+        if (entry->objects) {
+            _mapFree(entry->objects);
+            entry->numJoints = 0;
+            entry->objects = NULL;
+        }
+        if (entry->animData) {
+            _mapFree(entry->animData);
+            entry->numAnims = 0;
+            entry->animData = NULL;
+        }
+        if (entry->dispListBuf) {
+            _mapFree(entry->dispListBuf);
+            entry->dispListBuf = NULL;
+            entry->dispListSize = 0;
+        }
+    }
 }
 
 /** Index of the texture called name in the map's texture_table chunk, or -1. */
@@ -491,6 +527,75 @@ static void makeDisplayList(BOOL group) {
 }
 
 /**
+ * Marks the objects of map entry group that got a display list from makeDisplayList (same eligibility test)
+ * to draw from it.
+ */
+// Original name and size (0xd0) from the JP demo map (UNUSED there: its only call, in _mapLoad, is inlined).
+void useDisplayList(BOOL group) {
+    MapWork* wp = &mapWork[activeGroup];
+    MapObject* obj = wp->entries[group].objects;
+    int i;
+
+    for (i = 0; i < wp->entries[group].numJoints; i++, obj++) {
+        MapJointDrawMode* dm;
+        if (obj->joints->partCount < 1 || obj->joints->partCount > 8) {
+            continue;
+        }
+        dm = obj->joints->drawMode;
+        if (dm->modeFlags & DRAW_MODE_MAP_LIGHTS) {
+            continue;
+        }
+        if (dm->lightMask) {
+            continue;
+        }
+        if (shadowGetCharShadowProjection() && (obj->flags & MAP_OBJ_FLAG_CHAR_SHADOW)) {
+            continue;
+        }
+        if (!(wp->entries[group].flags & MAP_ENTRY_VER_1_02)) {
+            continue;
+        }
+        obj->flags |= MAP_OBJ_FLAG_DISPLAY_LIST;
+    }
+}
+
+/** Frees the display list buffer of map entry group of the active MapWork. */
+// Original name and size (0x6c) from the JP demo map (UNUSED there: its only call, in bmapLoad, is inlined).
+void freeDisplayList(BOOL group) {
+    MapWork* wp = &mapWork[activeGroup];
+
+    if (wp->entries[group].dispListBuf) {
+        _mapFree(wp->entries[group].dispListBuf);
+    }
+    wp->entries[group].dispListSize = 0;
+    wp->entries[group].dispListBuf = NULL;
+}
+
+/**
+ * The clock map animation anim runs on: the system level clock its MAP_ANIM_FLAG_LV*_TIME flag names,
+ * else the battle or field render clock.
+ */
+// Original name and size (0x94) from the JP demo map (UNUSED there: its calls, in mapPlayAnimationLv and mapMain,
+// are inlined).
+void mapGetTime(MapAnim* anim, OSTime* time) {
+    OSTime t;
+
+    if (anim->flags & MAP_ANIM_FLAG_LV0_TIME) {
+        t = gp->systemLv0Time;
+    } else if (anim->flags & MAP_ANIM_FLAG_LV1_TIME) {
+        t = gp->systemLv1Time;
+    } else if (anim->flags & MAP_ANIM_FLAG_LV2_TIME) {
+        t = gp->systemLv2Time;
+    } else if (anim->flags & MAP_ANIM_FLAG_LV3_TIME) {
+        t = gp->systemLv3Time;
+    } else if (gp->inBattle) {
+        t = gp->renderTime;
+    } else {
+        t = gp->renderFieldTime;
+    }
+    *time = t;
+}
+
+/**
  * The playing map animation called animName in the active group's entries,
  * or NULL (inline twin of mapSearchAnmObj).
  */
@@ -595,19 +700,7 @@ void mapPlayAnimationLv(const char* name, s32 mode, s32 level) {
                 anim->flags |= MAP_ANIM_FLAG_LV3_TIME;
                 break;
         }
-        if (anim->flags & MAP_ANIM_FLAG_LV0_TIME) {
-            t = gp->systemLv0Time;
-        } else if (anim->flags & MAP_ANIM_FLAG_LV1_TIME) {
-            t = gp->systemLv1Time;
-        } else if (anim->flags & MAP_ANIM_FLAG_LV2_TIME) {
-            t = gp->systemLv2Time;
-        } else if (anim->flags & MAP_ANIM_FLAG_LV3_TIME) {
-            t = gp->systemLv3Time;
-        } else if (gp->inBattle) {
-            t = gp->renderTime;
-        } else {
-            t = gp->renderFieldTime;
-        }
+        mapGetTime(anim, &t);
         anim->startTime = OSTicksToMilliseconds(t);
         anim->time = 0.0f;
         anim->rate = 1.0f;
@@ -714,6 +807,32 @@ void mapSetPlayRate(const char* name, f32 rate) {
     if (anim) {
         anim->rate = rate;
     }
+}
+
+/**
+ * Frees the map files of entry group of wp (map.dat and texture.tpl unless they live in the map archive, and the
+ * archive itself) and clears its name.
+ */
+// Original name and size (0xc4) from the JP demo map (UNUSED there: its call in mapUnLoad is inlined; bmapUnLoad
+// keeps the loop written out: with the call it matches the JP demo but not US retail (registers differ)).
+void _mapUnLoad(MapWork* wp, BOOL group) {
+    if (wp->entries[group].dat) {
+        if (!arcDataCheck(wp->entries[group].dat)) {
+            _mapFree(wp->entries[group].dat);
+        }
+        wp->entries[group].dat = NULL;
+    }
+    if (wp->entries[group].tpl) {
+        if (!arcDataCheck(wp->entries[group].tpl)) {
+            _mapFree(wp->entries[group].tpl);
+        }
+        wp->entries[group].tpl = NULL;
+    }
+    if (wp->entries[group].arcData) {
+        _mapFree(wp->entries[group].arcData);
+        wp->entries[group].arcData = NULL;
+    }
+    strncpy(wp->entries[group].name, "", sizeof(wp->entries[group].name));
 }
 
 // The early demos still use the long map file names.
@@ -866,30 +985,7 @@ static void _mapLoad(MapWork* wp, BOOL group, const char* map) {
         mapEntryAnimation(group);
     }
     makeDisplayList(group);
-    {
-        MapWork* w3 = &mapWork[activeGroup];
-        MapObject* o = w3->entries[group].objects;
-        for (i = 0; i < w3->entries[group].numJoints; i++, o++) {
-            MapJointDrawMode* dm;
-            if (o->joints->partCount < 1 || o->joints->partCount > 8) {
-                continue;
-            }
-            dm = o->joints->drawMode;
-            if (dm->modeFlags & DRAW_MODE_MAP_LIGHTS) {
-                continue;
-            }
-            if (dm->lightMask) {
-                continue;
-            }
-            if (shadowGetCharShadowProjection() && (o->flags & MAP_OBJ_FLAG_CHAR_SHADOW)) {
-                continue;
-            }
-            if (!(w3->entries[group].flags & MAP_ENTRY_VER_1_02)) {
-                continue;
-            }
-            o->flags |= MAP_OBJ_FLAG_DISPLAY_LIST;
-        }
-    }
+    useDisplayList(group);
 #if VERSION >= VERSION_JP
     disableMapDraw = FALSE;
 #endif
@@ -901,33 +997,14 @@ static void _mapLoad(MapWork* wp, BOOL group, const char* map) {
  * Called by seq_mapchange when leaving a map.
  */
 void mapUnLoad(void) {
-    MapEntry* entry2;
-    MapEntry* entry;
     int i;
     MapWork* wp;
 #if VERSION >= VERSION_JP
     sysWaitDrawSync();
 #endif
-    entry = mapWork->entries;
-    wp = mapWork;
-    activeGroup = i = 0;
-    for (; i < wp->entries[0].count; entry++, i++) {
-        if (entry->objects) {
-            _mapFree(entry->objects);
-            entry->numJoints = 0;
-            entry->objects = NULL;
-        }
-        if (entry->animData) {
-            _mapFree(entry->animData);
-            entry->numAnims = 0;
-            entry->animData = NULL;
-        }
-        if (entry->dispListBuf) {
-            _mapFree(entry->dispListBuf);
-            entry->dispListBuf = NULL;
-            entry->dispListSize = 0;
-        }
-    }
+    activeGroup = 0;
+    wp = mapGetWork();
+    mapReInit();
 #if VERSION >= VERSION_JP
     disableMapDraw = FALSE;
 #endif
@@ -936,25 +1013,8 @@ void mapUnLoad(void) {
     envReInit();
     camUnLoadRoad(CAMERA_3D);
     camSetTypePersp(CAMERA_3D);
-    entry2 = wp->entries;
-    for (i = 0; i < wp->entries[0].count; entry2++, i++) {
-        if (entry2->dat) {
-            if (!arcDataCheck(entry2->dat)) {
-                _mapFree(entry2->dat);
-            }
-            entry2->dat = NULL;
-        }
-        if (entry2->tpl) {
-            if (!arcDataCheck(entry2->tpl)) {
-                _mapFree(entry2->tpl);
-            }
-            entry2->tpl = NULL;
-        }
-        if (entry2->arcData) {
-            _mapFree(entry2->arcData);
-            entry2->arcData = NULL;
-        }
-        strncpy(entry2->name, "", sizeof(entry2->name));
+    for (i = 0; i < wp->entries[0].count; i++) {
+        _mapUnLoad(wp, i);
     }
     arcDelete(1);
     memset(wp, 0, sizeof(MapWork));
@@ -1198,7 +1258,6 @@ void bmapLoad(const char* map, const char* map2) {
 #endif
     MapWork* wp;
     MapEntry* entry;
-    MapEntry* e;
     int i;
 #if VERSION <= VERSION_DEMO_JP
     FileEntry* file;
@@ -1215,13 +1274,8 @@ void bmapLoad(const char* map, const char* map2) {
     activeGroup = 0;
     wp = mapGetWork();
     for (i = 0; i < wp->entries[0].count; i++) {
-        e = &mapWork[activeGroup].entries[i];
+        freeDisplayList(i);
         entry = &wp->entries[i];
-        if (e->dispListBuf) {
-            _mapFree(e->dispListBuf);
-        }
-        e->dispListSize = 0;
-        e->dispListBuf = NULL;
 
         // the tpl ARAM copy is kept in the word after the entry (MAPENT_TPLARAM)
         entry->datAram = NULL;
@@ -1694,19 +1748,7 @@ void mapMain(void) {
             if (!(anim->flags & MAP_ANIM_FLAG_ACTIVE) || (anim->flags & MAP_ANIM_FLAG_END)) {
                 continue;
             }
-            if (anim->flags & MAP_ANIM_FLAG_LV0_TIME) {
-                t = gp->systemLv0Time;
-            } else if (anim->flags & MAP_ANIM_FLAG_LV1_TIME) {
-                t = gp->systemLv1Time;
-            } else if (anim->flags & MAP_ANIM_FLAG_LV2_TIME) {
-                t = gp->systemLv2Time;
-            } else if (anim->flags & MAP_ANIM_FLAG_LV3_TIME) {
-                t = gp->systemLv3Time;
-            } else if (gp->inBattle) {
-                t = gp->renderTime;
-            } else {
-                t = gp->renderFieldTime;
-            }
+            mapGetTime(anim, &t);
             if (!(anim->flags & MAP_ANIM_FLAG_PAUSE)) {
                 ms = OSTicksToMilliseconds(t);
 #if VERSION >= VERSION_DEMO_EU
