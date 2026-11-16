@@ -118,7 +118,6 @@ EffectEntry* effIbukiEntry(s32 type, s32 life, f32 x, f32 y, f32 z) {
     EffIbukiWork* work;
     EffIbukiWork* p;
     s32 i;
-    f32 a;
 
     effect = effEntry();
     effect->type = "Ibuki";
@@ -155,7 +154,6 @@ EffectEntry* effIbukiEntry(s32 type, s32 life, f32 x, f32 y, f32 z) {
 static void effIbukiMain(EffectEntry* effect) {
     EffIbukiWork* work = effect->userdata;
     s32 i;
-    f32 a;
     Mtx rot;
     Vec position;
     Vec spawn;

@@ -378,9 +378,6 @@ void winPartyDisp(s32 camId, void* param, s32 idx) {
     GXColor white;
     GXColor black;
 #if VERSION <= VERSION_DEMO_JP
-    GXColor white0;
-    GXColor black0;
-    GXColor* kp;
     f32 scale;
     f32 costX;
 #else

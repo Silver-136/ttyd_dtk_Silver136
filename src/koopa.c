@@ -934,6 +934,7 @@ static void kpaFireMain(void) {
     Mtx m80;
     Mtx m50;
     Mtx m20;
+    f32 fireX;
     Vec out;
     Vec zero;
     s32 lv;
@@ -941,7 +942,7 @@ static void kpaFireMain(void) {
     EffGonbabaBreathWork* w;
     s32 i;
     f32 ballScale;
-    f32 f30;
+    f32 radius;
     f32 headScale;
     mario->kpaWork->flameHit = NULL;
     if (fireefp) {
@@ -952,17 +953,17 @@ static void kpaFireMain(void) {
         s32 t;
         dir = (mario->displayDirection >= 90.0f && mario->displayDirection <= 270.0f) ? 1.0f : -1.0f;
         scale = kpaGetBaseScale(kpaGetLevel());
-        f30 = 40.0f * dir * scale + mario->position.x;
+        fireX = 40.0f * dir * scale + mario->position.x;
         t = (marioGetPtr()->stageFlags & KPA_STAGE_FLAG_SIDE_SCROLLING) ^ 1;
         y = mario->position.y + (20.0f * scale + (t == 1 ? 6.0f : 0.0f));
         z = mario->position.z;
-        ((EffGonbabaBreathWork*)fireefp->userdata)->position.x = f30;
+        ((EffGonbabaBreathWork*)fireefp->userdata)->position.x = fireX;
         ((EffGonbabaBreathWork*)fireefp->userdata)->position.y = y;
         ((EffGonbabaBreathWork*)fireefp->userdata)->position.z = z;
         {
             EffectEntry* w2 = ((EffGonbabaBreathWork*)fireefp->userdata)->child;
             if (w2) {
-                ((EffGonbabaBreathWork*)w2->userdata)->position.x = f30;
+                ((EffGonbabaBreathWork*)w2->userdata)->position.x = fireX;
                 ((EffGonbabaBreathWork*)((EffGonbabaBreathWork*)fireefp->userdata)->child->userdata)->position.y = y;
                 ((EffGonbabaBreathWork*)((EffGonbabaBreathWork*)fireefp->userdata)->child->userdata)->position.z = z;
             }
@@ -1021,15 +1022,15 @@ static void kpaFireMain(void) {
     }
 #else
                     ballScale = 7.0f * w->scale;
-                    f30 = ballScale * headScale;
-                    if (!(f30 < 7.0f)) {
+                    radius = ballScale * headScale;
+                    if (!(radius < 7.0f)) {
                         PSMTXTrans(m80, w->position.x, w->position.y, w->position.z);
                         PSMTXScale(mb0, ballScale, ballScale, ballScale);
                         PSMTXConcat(m80, mb0, m80);
                         PSMTXConcat(m20, m80, m80);
                         zero = (Vec){0.0f, 0.0f, 0.0f};
                         PSMTXMultVec(m80, &zero, &out);
-                        hit = kpaFlameHitCheck(out.x, out.y, out.z, f30);
+                        hit = kpaFlameHitCheck(out.x, out.y, out.z, radius);
                         if (hit) {
                             mario->kpaWork->flameHit = hit;
                             break;

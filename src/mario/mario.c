@@ -177,7 +177,6 @@ void marioSetCharMode(s32 mode) {
     MarioWork* wp = mp;
     u32 matFlag;
     u32 lightFlag;
-    s32 color;
     if (mode == CHARACTER_PEACH) {
         wp->characterId = CHARACTER_PEACH;
         peachPreInit();
@@ -2507,7 +2506,6 @@ static void marioDisp(CameraId camId, void* param) {
     f32 scale;
     f32 angle;
 #if VERSION <= VERSION_DEMO_JP
-    f32 angle2;
     f32 yofs = 0.0f;
 #endif
     scale = marioGetScale();

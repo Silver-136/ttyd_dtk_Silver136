@@ -5277,9 +5277,7 @@ static BOOL party_slit(PartyEntry* party) {
 
 static BOOL party_roll(PartyEntry* party) {
     BOOL ret = TRUE;
-    f32 d;
     f32 x;
-    f32 t;
 
     if (party->slitOn != 2) {
         return TRUE;

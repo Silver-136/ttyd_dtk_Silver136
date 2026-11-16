@@ -807,7 +807,6 @@ static inline void partyChgRunMo(PartyEntry* party);
  */
 static inline void partyLeaveRunMode(PartyEntry* party) {
     MarioWork* mario;
-    PartyFunc func;
 
     if (party->runMode != PARTY_RUN_FORCE_WALK && party->runMode != PARTY_RUN_USE) {
         party->prevRunMode = party->runMode;

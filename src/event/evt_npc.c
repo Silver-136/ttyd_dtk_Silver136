@@ -2586,7 +2586,6 @@ USER_FUNC(evt_npc_kamek_move_position) {
     f32 dist;
     f32 dist1, dist2;
     f32 step;
-    s32 sfxFlag;
     f32 temp;
 
     npc->statusFlags |= NPC_STATUS_UPDATE;

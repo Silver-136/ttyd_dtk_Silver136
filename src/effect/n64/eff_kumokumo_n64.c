@@ -462,7 +462,7 @@ static void effKumokumoMain(EffectEntry* effect) {
                     work->delay = i * 15;
                     work->rot = 0.0f;
                 }
-                work->rot = (f32)(u32)(rz_tbl[(u32)work->frame % 31] + (u32)(work->frame * 180) / 31);
+                work->rot = (f32)(rz_tbl[(u32)work->frame % 31] + (u32)(work->frame * 180) / 31);
                 work->rot = fmod(work->rot, 360.0);
                 break;
             case 3:

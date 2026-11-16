@@ -70,7 +70,6 @@ static void effTimestampDisp(CameraId cameraId, void* param);
 EffectEntry* effTimestampN64Entry(s32 type, f32 x, f32 y, f32 z, f32 scale, s32 lifetime) {
     EffectEntry* effect;
     EffTimestampN64Work* work;
-    s32* p;
     s32 i;
 
     effect = effEntry();

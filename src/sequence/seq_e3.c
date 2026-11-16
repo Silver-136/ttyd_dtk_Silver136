@@ -626,7 +626,7 @@ static void e3Disp(CameraId cameraId, void* param) {
     s32 px, py;
     s32 row, col;
     s32 inset, pass, step;
-    f32 t, dx, dy;
+    f32 t, dy;
     s32 mode;
 #else
     s32 dy, x;

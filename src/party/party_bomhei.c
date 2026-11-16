@@ -929,7 +929,6 @@ s32 mario_bomhei_keychk2(void) {
  */
 static void mario_controll(PartyEntry* party) {
     MarioWork* player = party->playerPtr;
-    s32 cnt;
 
     switch (party->work.bomhei.state) {
         case 10:

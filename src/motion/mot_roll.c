@@ -590,8 +590,6 @@ static void roll_base_init(void) {
 void marioReInit_roll(void) {
     void* p;
     MarioWork* mario = marioGetPtr();
-    f32 z0;
-    f32 z1;
     p = __memAlloc(HEAP_DEFAULT, sizeof(MotRollWork));
     marioGetPtr()->motStruct = p;
     memset(marioGetPtr()->motStruct, 0, sizeof(MotRollWork));
@@ -1334,7 +1332,6 @@ void mot_fall_roll(void) {
 // Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
 static void makeOfs(void) {
     MarioWork* mario = marioGetPtr();
-    f32 v26;
     f32 t1;
     f32 t2;
     {

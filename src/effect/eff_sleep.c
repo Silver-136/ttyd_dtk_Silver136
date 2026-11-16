@@ -172,8 +172,8 @@ static void effSleepDisp(CameraId camId, void* param) {
             j = 0;
             off = 0;
             while (j < 8) {
-                s0 = 0.5f * sleepSin(tau * (f32)(u32)(gp->retraceCount + base + off));
-                s1 = 0.5f * sleepSin(tau * (f32)(u32)(gp->retraceCount + base + (j + 1) * 10));
+                s0 = 0.5f * sleepSin(tau * (f32)(gp->retraceCount + base + off));
+                s1 = 0.5f * sleepSin(tau * (f32)(gp->retraceCount + base + (j + 1) * 10));
                 xh = x0 / 2.0f;
                 GXBegin(GX_QUADS, GX_VTXFMT0, 4);
                 GXPosition3f32(xh + s1, height * (j + 1), 0.0f);

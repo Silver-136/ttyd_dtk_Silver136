@@ -192,7 +192,6 @@ f32 angleABf(f32 x1, f32 y1, f32 x2, f32 y2) {
 f32 intplGetValue(s32 mode, f32 start, f32 end, s32 currStep, s32 steps) {
     f32 step;
     f32 total;
-    f32 f0, f1, f2, f3, f4;
 
     if (!steps) {
         return end;
@@ -208,51 +207,58 @@ f32 intplGetValue(s32 mode, f32 start, f32 end, s32 currStep, s32 steps) {
             return start + (((step * step * step) * (end - start)) / (total * total * total));
         case EASING_QUARTIC_IN:
             return start + (((step * step * step * step) * (end - start)) / (total * (total * (total * total))));
-        case EASING_WAVE_SHRINKING:
-            f2 = (f32)cos(4.0f * (3.141592f * (step / total)));
-            f1 = (end - start);
-            f3 = (total - step);
-            return end - ((f3 * (f3 * (f1 * f2))) / (total * total));
-        case EASING_WAVE_SHRINKING_FASTER:
-            f2 = (f32)cos((4.0f * (3.141592f * ((step * step) / total))) / ((15.0f * total) / 100.0f));
-            f1 = (end - start);
-            f3 = (total - step);
-            return end - ((f3 * (f3 * (f1 * f2))) / (total * total));
+        case EASING_WAVE_SHRINKING: {
+            f32 wave = (f32)cos(4.0f * (3.141592f * (step / total)));
+            f32 range = (end - start);
+            f32 left = (total - step);
+            return end - ((left * (left * (range * wave))) / (total * total));
+        }
+        case EASING_WAVE_SHRINKING_FASTER: {
+            f32 wave = (f32)cos((4.0f * (3.141592f * ((step * step) / total))) / ((15.0f * total) / 100.0f));
+            f32 range = (end - start);
+            f32 left = (total - step);
+            return end - ((left * (left * (range * wave))) / (total * total));
+        }
         case EASING_WAVE_GROWING_FASTER:
             return end - ((step * (step * ((end - start) * (f32)cos((4.0f * (3.141592f * ((step * step) / total))) /
                                                                     ((15.0f * total) / 100.0f))))) /
                           (total * total));
-        case EASING_QUADRATIC_OUT:
-            f1 = (total - step);
-            return (start + (end - start)) - (((f1 * f1) * (end - start)) / (total * total));
-        case EASING_CUBIC_OUT:
-            f4 = (total - step);
-            return (start + (end - start)) - (((f4 * f4 * f4) * (end - start)) / (total * total * total));
-        case EASING_QUARTIC_OUT:
-            f4 = (total - step);
-            return (start + (end - start)) - (((f4 * f4 * f4 * f4) * (end - start)) / (total * total * total * total));
-        case EASING_BOUNCE_SHRINKING:
-            f2 = (f32)cos((4.0f * (3.141592f * ((step * step) / total))) / ((40.0f * total) / 100.0f));
-            f3 = (total - step);
-            f1 = (f3 * (f3 * f2)) / (total * total);
-            if (f1 < 0.0f) {
-                f1 = -f1;
+        case EASING_QUADRATIC_OUT: {
+            f32 left = (total - step);
+            return (start + (end - start)) - (((left * left) * (end - start)) / (total * total));
+        }
+        case EASING_CUBIC_OUT: {
+            f32 left = (total - step);
+            return (start + (end - start)) - (((left * left * left) * (end - start)) / (total * total * total));
+        }
+        case EASING_QUARTIC_OUT: {
+            f32 left = (total - step);
+            return (start + (end - start)) - (((left * left * left * left) * (end - start)) / (total * total * total * total));
+        }
+        case EASING_BOUNCE_SHRINKING: {
+            f32 wave = (f32)cos((4.0f * (3.141592f * ((step * step) / total))) / ((40.0f * total) / 100.0f));
+            f32 left = (total - step);
+            f32 bounce = (left * (left * wave)) / (total * total);
+            if (bounce < 0.0f) {
+                bounce = -bounce;
             }
-            return -((f1 * (end - start)) - end);
-        case EASING_SINE_IN_OUT:
-            f3 = (f32)cos((3.141592f * step) / total);
-            f2 = (end - start);
-            f0 = 0.5f;
-            f1 = (f2 * (1.0f - f3));
-            return start + (f1 * f0);
-        case EASING_SINE_OUT:
-            f1 = (f32)sin((HALF_PI * step) / total);
-            f0 = (end - start);
-            return start + (f0 * f1);
-        case EASING_SINE_IN:
-            f2 = (f32)cos((HALF_PI * step) / total);
-            f1 = (end - start);
-            return start + (f1 * (1.0f - f2));
+            return -((bounce * (end - start)) - end);
+        }
+        case EASING_SINE_IN_OUT: {
+            f32 c = (f32)cos((3.141592f * step) / total);
+            f32 range = (end - start);
+            return start + (range * (1.0f - c)) / 2.0f;
+        }
+        case EASING_SINE_OUT: {
+            f32 s = (f32)sin((HALF_PI * step) / total);
+            f32 range = (end - start);
+            return start + (range * s);
+        }
+        case EASING_SINE_IN: {
+            f32 c = (f32)cos((HALF_PI * step) / total);
+            f32 range = (end - start);
+            return start + (range * (1.0f - c));
+        }
         default:
             return ((f32 (*)(s32, s32, f32, f32))mode)(currStep, steps, start, end);
     }
@@ -537,7 +543,6 @@ static inline DEMOPadStatus* getDemoPadStatus(u32 i) {
 void makeKey(void) {
 #if VERSION <= VERSION_DEMO_JP || VERSION == VERSION_DEMO_US_2 || VERSION == VERSION_DEMO_EU
     // the demos keep button/dirs in 32-bit locals
-    s32 delay;
     u32 button;
     u32 dirs;
 #else

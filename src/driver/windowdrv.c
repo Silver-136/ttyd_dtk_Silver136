@@ -83,7 +83,6 @@ void windowLoadTpl(const char* name) {
     u32 size;
     u32 len;
     char path[128];
-    s32 i;
 
     arcOpen(name, (void**)&winTpl, &size);
     if (winTpl) {

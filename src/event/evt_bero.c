@@ -626,8 +626,6 @@ USER_FUNC(bero_get_position_normal) {
     MarioWork* wp = marioGetPtr();
 #endif
     s32 dir = evtGetValue(event, args[0]);
-    float halfTurn;
-    f32 respawnZ;
     f32 len = evtGetFloat(event, args[1]);
     s32* pos = (s32*)event->lwData[6];
     const char* name = (const char*)event->lwData[3];

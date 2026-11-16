@@ -4906,6 +4906,7 @@ static void _disp_item_icon(CameraId cameraId, void* param) {
  * Shows the cook's ghostly image (c_cook) at args[0..2] for 60 frames, fading and growing in the last 30,
  * for Zess Dynamite.
  */
+// FAKE: the image position is read/written as three s32 words through ((s32*)&event->userdata3)[0..2] (FAKES.md)
 static USER_FUNC(_nancy_mirage) {
     EvtWord* args = event->args;
     f32 x = evtGetFloat(event, args[0]);
@@ -4936,6 +4937,7 @@ static USER_FUNC(_nancy_mirage) {
 }
 
 /** Draws the cook's image for _nancy_mirage, scaled up and translucent as it fades. */
+// FAKE: the image position is read/written as three s32 words through ((s32*)&event->userdata3)[0..2] (FAKES.md)
 static void _nancy_disp(CameraId cameraId, void* param) {
     EventEntry* event = param;
     Mtx mtx;

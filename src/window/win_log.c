@@ -1914,8 +1914,6 @@ static void monosiri_disp(CameraId camera, void* param) {
     u16 th;
 #if VERSION <= VERSION_DEMO_JP
     s32 d;
-    GXColor c0;
-    GXColor c;
 
     x = m->curX;
     y = m->curY;

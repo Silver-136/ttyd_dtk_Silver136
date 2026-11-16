@@ -257,8 +257,6 @@ static void effSstarDisp(CameraId cameraId, void* param) {
     Mtx sc;
     Mtx tmp;
     GXTexObj tex;
-    Vec v0;
-    Vec v1;
 
     camera = camGetPtr(cameraId);
     w = effect->userdata;

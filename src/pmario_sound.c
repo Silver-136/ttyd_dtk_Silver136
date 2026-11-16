@@ -9660,7 +9660,6 @@ static void psndBGMMain(void) {
     PaperSoundFade* fade;
     s32 i;
     s32 maxv = 100;
-    PaperSoundFade* fade2;
     s32 vol;
     u8 a;
     s32 c;

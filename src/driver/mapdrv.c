@@ -733,16 +733,8 @@ void mapSetPlayRate(const char* name, f32 rate) {
  * textures, bounding box corners, animation table and display lists.
  */
 static void _mapLoad(MapWork* wp, BOOL group, const char* map) {
-#if VERSION <= VERSION_DEMO_JP
-    MapFileInfo* info;
-    u32 datSize, k;
-    int i;
-    u32 r4, r7, r0;
-    u32 sizeCheck;
-#else
     MapFileInfo* info;
     int i;
-#endif
     char str1[128];
     char str2[128];
     char str3[128];

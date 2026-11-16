@@ -1444,7 +1444,6 @@ void party_move_mode_wait(PartyEntry* party) {
  */
 void partyWalkInit(PartyEntry* party) {
 #if VERSION <= VERSION_DEMO_JP
-    u8* p114;
     MarioWork* mario = party->playerPtr;
 
     party->flags |= PARTY_FLAG_IS_GROUNDED;

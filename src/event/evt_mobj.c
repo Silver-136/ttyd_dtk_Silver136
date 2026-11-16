@@ -4996,7 +4996,7 @@ USER_FUNC(evt_mobj_koopa_fireber_dodai) {
     EvtWord* args = event->args;
     MapObjectEntry* mobj;
     NpcEntry* npc;
-    f32 x, y, z, spd, base, step;
+    f32 x, y, z, spd;
     char buf[32];
     s32 inBattle;
     dir = evtGetValue(event, args[0]);

@@ -44,7 +44,6 @@ typedef struct RepeatedlyLvWork {
 static void _init_param(BattleWork* work) {
     BattleActions* ac = &work->actionCommands;
     RepeatedlyLvWork* p = (RepeatedlyLvWork*)ac->work;
-    s32 v;
     p->maxMask = 0;
     p->countOnPress = 1;
     switch (ac->params[0]) {

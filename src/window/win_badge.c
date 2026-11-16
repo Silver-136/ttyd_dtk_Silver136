@@ -399,7 +399,6 @@ static void badge_disp(WindowWork* w, f32 xo, f32 yo) {
     f32 scroll;
     f32 width;
 #if VERSION <= VERSION_DEMO_JP
-    s32 tw;
     colA = (GXColor){255, 255, 255, 255};
     colB = (GXColor){0, 0, 0, 255};
     colU = colA;

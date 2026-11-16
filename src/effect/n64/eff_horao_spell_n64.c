@@ -179,8 +179,6 @@ static void effHoraoSpellDisp(CameraId cameraId, void* payload) {
     Mtx rot;
     Mtx base;
     Mtx mtx2;
-    Vec v1;
-    Vec v2;
     effN64Vtx* p;
     effN64Vtx* q;
     EffHoraoSpellN64Work* work;

@@ -1708,7 +1708,6 @@ static USER_FUNC(_lvup_spot_move) {
     BattleSpotWork* spot = BatSpotGetPtr();
     s32 n = evtGetValue(event, event->args[0]);
     BattleSpotEntry* e = spot->entries + n;
-    f32 s;
 
     if (isFirstCall) {
         event->userdata[0] = 0;

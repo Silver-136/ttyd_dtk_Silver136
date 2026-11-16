@@ -46,8 +46,6 @@ EffectEntry* effMist2Entry(s32 type, s32 life, f32 x, f32 y, f32 z, f32 a, f32 b
     EffMist2Work* p;
     s32 i;
     s32 count;
-    f32 ang;
-    f32 amp;
 
     effect = effEntry();
     count = (type == 0 ? 30 : 10) + 1;
@@ -93,8 +91,6 @@ static void effMist2Main(EffectEntry* effect) {
     Vec v = {0.0f, 0.0f, 0.0f};
     s32 i;
     s32 type;
-    f32 ang;
-    f32 amp;
 
     v.x = work->position.x;
     v.y = work->position.y;

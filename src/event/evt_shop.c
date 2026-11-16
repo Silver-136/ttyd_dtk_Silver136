@@ -660,7 +660,6 @@ static USER_FUNC(chk_shop_point) {
     s32 i = 0;
     s32 j;
     ShopPoint* p;
-    ShopPoint* q;
     s32 v;
 
     for (p = shopPointList; (v = p->pts) != -1; i++, p++) {
