@@ -290,7 +290,7 @@ EvtWord mony_run_away[108];
 
 #if VERSION >= VERSION_JP
 EvtWord peton_run_away[88];
-EvtWord mony_peton_depart[VERSION_PICK(61, 64)];
+static EvtWord mony_peton_event[VERSION_PICK(61, 64)];
 #endif
 
 static EvtWord gor_00_koopa_evt[1095];
@@ -4835,7 +4835,7 @@ EVT_END()
  * Mario, the partners, Cortez and, in the Frankie and Francesca step (STG5_64_02_F_F_SAIL_OFF),
  * the couple are placed on the ship, which slides in 600 units from the right with the ghost ship music
  * and arrival sound.
- * At the dock the couple get off (mony_peton_event in the early demos, mony_peton_depart in JP and later),
+ * At the dock the couple get off (mony_peton_event),
  * the music changes back to Rogueport's and Mario gets control.
  */
 EVT_BEGIN(into_gor_ship)
@@ -4919,11 +4919,7 @@ EVT_BEGIN(into_gor_ship)
 
     // If the couple is aboard, Frankie and Francesca get off the ship.
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_64_02_F_F_SAIL_OFF)
-#if VERSION <= VERSION_DEMO_JP
         CALL_CHILD(mony_peton_event)
-#else
-        CALL_CHILD(mony_peton_depart)
-#endif
     END_IF
 
     // Control returns to Mario.
@@ -5035,9 +5031,11 @@ EVT_END()
  * Frankie and Francesca's goodbye after the voyage:
  * sets STG5_64_03_F_F_ARRIVE, they speak (mac_5_038, mac_5_039),
  * and then each jumps off the ship at the dock and runs off in turn.
- * In US and later it also clears GF(15). Used in JP and later (the early demos use mony_peton_event).
+ * In US and later it also clears GF(15). This is the JP and later form of mony_peton_event: the early demos'
+ * script above (the JP demo map's name, at this place between into_gor_ship and gor_00_koopa_evt) ran both
+ * runs itself; from JP on they are mony_run_away and peton_run_away, restarted as the couple's regular events.
  */
-EVT_BEGIN(mony_peton_depart)
+static EVT_BEGIN(mony_peton_event)
     SET_VALUE(GSW_STORY_PROGRESS, STG5_64_03_F_F_ARRIVE)
 #if VERSION >= VERSION_US
     SET_VALUE(GF(15), 0)

@@ -780,11 +780,13 @@ f32 partyUpdMoveSpd(PartyEntry* party) {
 
 /**
  * Plays the partner landing sound (0x928) at the partner, when a jump or fall ends (party_motion.c).
- * Descriptive name (not in the symbol maps).
+ * Original name from the JP demo map: there it is the last function of party_motion.c (UNUSED, 0x2c, the size of
+ * this body; the demo's four landing sites play the sound directly). From JP on it sits here beside partyWalkSe,
+ * which moved from party_motion.c with it.
  */
 #if VERSION >= VERSION_JP
 
-void partyPlaySfxPartyLanding1(PartyEntry* party) {
+void partyLandonSe(PartyEntry* party) {
     psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_LANDING1), &party->position);
 }
 #endif

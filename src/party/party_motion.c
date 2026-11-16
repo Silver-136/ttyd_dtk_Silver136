@@ -2548,7 +2548,7 @@ void party_motion_jump(PartyEntry* party) {
                     // stays near 0, so the smaller the rise (above 1 unit), the higher and farther the partner flies.
 #endif
                     party->flags &= ~(PARTY_FLAG_IS_JUMPING | PARTY_FLAG_IS_FALLING | PARTY_FLAG_IS_STEPPING);
-                    partyPlaySfxPartyLanding1(party);
+                    partyLandonSe(party);
                     party->velY = 0.0f;
                     partyChgMot(party, PARTY_MOTION_STAY);
                     party->trigFlags |= PARTY_TRIG_LANDED;
@@ -2634,7 +2634,7 @@ void party_motion_jump2(PartyEntry* party) {
                 party->position.y = pos.y;
                 party->hitobjStandOn = hit;
                 if (hit) {
-                    partyPlaySfxPartyLanding1(party);
+                    partyLandonSe(party);
                     party->flags &= ~(PARTY_FLAG_IS_JUMPING | PARTY_FLAG_IS_FALLING | PARTY_FLAG_IS_STEPPING);
                     party->flags |= PARTY_FLAG_IS_GROUNDED;
 #if VERSION >= VERSION_US
@@ -2743,7 +2743,7 @@ s32 party_motion_fall(PartyEntry* party) {
         } else {
             partyChgMot(party, PARTY_MOTION_WALK);
         }
-        partyPlaySfxPartyLanding1(party);
+        partyLandonSe(party);
         return 3;
     }
     party->flags &= ~PARTY_FLAG_MOT_SLIT_FLOOR;
@@ -2759,7 +2759,7 @@ s32 party_motion_fall(PartyEntry* party) {
     } else {
         partyChgMot(party, PARTY_MOTION_WALK);
     }
-    partyPlaySfxPartyLanding1(party);
+    partyLandonSe(party);
     if (!(party->flags & PARTY_FLAG_IS_PARTNER)) {
         partyClearFootmark();
     } else {
@@ -5373,5 +5373,14 @@ static BOOL party_roll(PartyEntry* party) {
             break;
     }
     return ret;
+}
+
+/**
+ * Plays the partner landing sound at the partner.
+ * Original name and size (0x2c) from the JP demo map (UNUSED there: nothing calls it; the landing sites above play
+ * the sound directly). From JP on it lives in party_move.c and those sites call it.
+ */
+void partyLandonSe(PartyEntry* party) {
+    psndSFXOn_3D((const char*)PSND_SFX_PARTY_LANDING1, &party->position);
 }
 #endif
