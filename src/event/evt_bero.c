@@ -164,6 +164,20 @@ s32 bero_get_BeroNUM(void) {
     return BeroNUM;
 }
 
+// bero_get_BeroOX, bero_get_BeroOY and bero_get_BeroOZ: original names and sizes (0x8 each) from the JP demo map
+// (UNUSED there: nothing calls them); the getters of the saved offset, like the six position getters below.
+f32 bero_get_BeroOX(void) {
+    return BeroOX;
+}
+
+f32 bero_get_BeroOY(void) {
+    return BeroOY;
+}
+
+f32 bero_get_BeroOZ(void) {
+    return BeroOZ;
+}
+
 f32 bero_get_BeroSX(void) {
     return BeroSX;
 }
@@ -191,6 +205,13 @@ f32 bero_get_BeroEZ(void) {
 /** Returns the current map's table of 16 entrance pointers (BeroINFOARR, NULL-terminated). */
 BeroEntry** bero_get_ptr(void) {
     return BeroINFOARR;
+}
+
+/** Returns the table of the 16 entrances' registered marks (BeroSW). */
+// Original name and size (0xc) from the JP demo map (UNUSED there: nothing calls it); bero_get_ptr for the switch
+// table.
+s32* bero_get_sw_ptr(void) {
+    return BeroSW;
 }
 
 /** Zeroes the saved Mario display offset (BeroOX/OY/OZ) that pipe travel restores; called from mot_yoshi. */

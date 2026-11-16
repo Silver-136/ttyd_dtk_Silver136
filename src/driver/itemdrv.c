@@ -2147,6 +2147,12 @@ void itemStatusOn(ItemEntry* entry, u32 flags) {
     entry->flags2 |= flags;
 }
 
+// Original name and size (0x10) from the JP demo map (UNUSED there: nothing calls it); itemStatusOn's counterpart
+// in the form of itemFlagOff.
+void itemStatusOff(ItemEntry* entry, u32 flags) {
+    entry->flags2 &= ~flags;
+}
+
 u32 itemStatus(ItemEntry* entry, u32 flags) {
     return entry->flags2 & flags;
 }

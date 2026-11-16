@@ -134,9 +134,20 @@ u32 BattlePadGetTrigger(void) {
     return _battleWorkPointer->padWork[0].buttonsPressedHistory[0];
 }
 
+// BattlePadGetRepeat, BattlePadGetUp and the four ...RecordNow / ...RecordRepeat functions below: original names and
+// sizes from the JP demo map (UNUSED there: nothing calls them). Each is its Trigger sibling reading the history
+// that the MultiCheckNow / MultiCheckUp / MultiCheckRepeat function of the same word reads.
+u32 BattlePadGetRepeat(void) {
+    return _battleWorkPointer->padWork[0].buttonsHeldHistory[0];
+}
+
 /** Buttons held this frame on controller 1, with the stick-direction bits. */
 u32 BattlePadGetNow(void) {
     return _battleWorkPointer->padWork[0].buttonsHistory[0];
+}
+
+u32 BattlePadGetUp(void) {
+    return _battleWorkPointer->padWork[0].buttonsReleasedHistory[0];
 }
 
 /** Nonzero if any button in mask was newly pressed this frame on controller 1. */
@@ -186,6 +197,15 @@ u32 BattlePadMultiCheckUp(s32 chan, s32 mask) {
     return history[0] & mask;
 }
 
+BOOL BattlePadCheckRecordNow(s32 frame, s32 mask) {
+    return BattlePadMultiCheckRecordNow(0, frame, mask);
+}
+
+u32 BattlePadMultiCheckRecordNow(s32 chan, s32 frame, s32 mask) {
+    BattleWorkPad* pad = &_battleWorkPointer->padWork[chan];
+    return pad->buttonsHistory[frame] & mask;
+}
+
 /** Nonzero if any button in mask fired its press-or-hold repeat this frame on controller 1 (menu cursor movement). */
 s32 BattlePadCheckRepeat(s32 mask) {
     return BattlePadMultiCheckRepeat(0, mask);
@@ -195,4 +215,13 @@ s32 BattlePadCheckRepeat(s32 mask) {
 u32 BattlePadMultiCheckRepeat(s32 chan, s32 mask) {
     u32* history = _battleWorkPointer->padWork[chan].buttonsHeldHistory;
     return history[0] & mask;
+}
+
+BOOL BattlePadCheckRecordRepeat(s32 frame, s32 mask) {
+    return BattlePadMultiCheckRecordRepeat(0, frame, mask);
+}
+
+u32 BattlePadMultiCheckRecordRepeat(s32 chan, s32 frame, s32 mask) {
+    BattleWorkPad* pad = &_battleWorkPointer->padWork[chan];
+    return pad->buttonsHeldHistory[frame] & mask;
 }

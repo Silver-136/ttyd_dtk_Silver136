@@ -26,6 +26,13 @@ static ImageWork* wp = &work;
 
 static void imgShadowDisp(CameraId camId, void* param);
 
+/** The image driver's work. */
+// Original name and size (0x8) from the JP demo map (UNUSED there: nothing calls it); returns the unit's work
+// pointer, like animGetPtr.
+ImageWork* imgGetWorkPtr(void) {
+    return wp;
+}
+
 /**
  * Draws a full-view quad at depth -1000 that writes only depth (a Z8 texture of 0xFF,
  * colour and alpha updates off), so the image drawn next is not hidden behind the scene.

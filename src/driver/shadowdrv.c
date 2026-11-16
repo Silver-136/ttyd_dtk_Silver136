@@ -253,6 +253,18 @@ inline CharShadowWork* shadowGetCharShadowWork(void) {
     return cswp;
 }
 
+/** The projected shadow work. */
+// Original name and size (0x8) from the JP demo map (UNUSED there: nothing calls it), as shadowGetDepthShadowWork
+// below; shadowGetCharShadowWork for the other two works.
+ProjShadowWork* shadowGetProjShadowWork(void) {
+    return pswp;
+}
+
+/** The depth shadow work. */
+DepthShadowWork* shadowGetDepthShadowWork(void) {
+    return dswp;
+}
+
 /**
  * Sets up the shadow system at boot: the character shadows, the depth shadow (with the 8-bit and 16-bit ramp
  * textures that depth shadows use to compare depths) and the projected shadow.
@@ -950,6 +962,14 @@ void shadowSetSize(s32 id, f32 size) {
     entry->size = size;
 }
 
+/** The radius of shadow id. */
+// Original name and size (0x18) from the JP demo map (UNUSED there: nothing calls it); the getter of
+// shadowSetSize's field.
+f32 shadowGetSize(s32 id) {
+    ShadowEntry* entry = &cswp->entries[id];
+    return entry->size;
+}
+
 /** Sets the camera shadow id is drawn with. */
 void shadowSetCamId(s32 id, s32 camId) {
     ShadowEntry* entry = &cswp->entries[id];
@@ -971,6 +991,12 @@ void shadowFlagOn(s32 id, u16 flags) {
     cswp->entries[id].flags |= flags;
 }
 
+/** Clears flag bits on shadow id. */
+// Original name and size (0x1c) from the JP demo map (UNUSED there: nothing calls it); shadowFlagOn's counterpart.
+void shadowFlagOff(s32 id, u16 flags) {
+    cswp->entries[id].flags &= ~flags;
+}
+
 /** Returns the character shadow texture rendered this frame, or NULL if none was. */
 GXTexObj* shadowGetCharShadowTexObj(void) {
     if (cswp->base.flags & SHADOW_WORK_READY) {
@@ -986,6 +1012,13 @@ f32 (*shadowGetCharShadowProjTexMtx(void))[4] {
 /** Returns the character shadow colour (semi-transparent black by default). */
 GXColor shadowGetCharShadowColor(void) {
     return cswp->base.color;
+}
+
+/** Sets whether character shadows are projected with the shadow camera. */
+// Original name and size (0xc) from the JP demo map (UNUSED there: nothing calls it); the setter of
+// shadowGetCharShadowProjection's field.
+void shadowSetCharShadowProjection(s32 projection) {
+    cswp->projection = projection;
 }
 
 /** Returns whether character shadows are projected with the shadow camera (shadowMain then queues that pass). */

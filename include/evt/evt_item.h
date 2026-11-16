@@ -7,6 +7,7 @@
 USER_FUNC(evt_item_delete);
 USER_FUNC(evt_item_flag_on);
 USER_FUNC(evt_item_status_on);
+USER_FUNC(evt_item_status_off);
 USER_FUNC(evt_item_change_mode);
 USER_FUNC(evt_item_delete_check);
 USER_FUNC(evt_item_entry);

@@ -110,6 +110,13 @@ void partyPaperLightOff(PartyEntry* party) {
     animPoseSetMaterialLightFlagOff(party->paperAnimGroup, MATERIAL_LIGHT_PAPER);
 }
 
+/** Turns paper-mode lighting on the partner's model back on. */
+// Original name and size (0x28) from the JP demo map (UNUSED there: nothing calls it); partyPaperLightOff's
+// counterpart.
+void partyPaperLightOn(PartyEntry* party) {
+    animPoseSetMaterialLightFlagOn(party->paperAnimGroup, MATERIAL_LIGHT_PAPER);
+}
+
 /** Copies Mario's current material and light flags to the partner's model, so it is lit and tinted like him. */
 static void setAnimPoseMaterialFlag(PartyEntry* party) {
     MarioWork* player = party->playerPtr;
@@ -3008,6 +3015,13 @@ void partyInitCamId(PartyEntry* party) {
     party->camId = marioGetCamId();
 }
 
+/** The camera the partner is drawn with. */
+// Original name and size (0x8) from the JP demo map (UNUSED there: nothing calls it); the getter of partySetCamId's
+// field.
+s32 partyGetCamId(PartyEntry* party) {
+    return party->camId;
+}
+
 /** Draws the partner with camera cameraId instead of Mario's (evt_party). */
 void partySetCamId(PartyEntry* party, s32 cameraId) {
     party->camId = cameraId;
@@ -3295,6 +3309,19 @@ void partyKeyOn(void) {
  * switched off.
  */
 void partyKeyOff(void) {
+}
+
+/** Sets the controller port the partner reads (partyUpdateKeyData). */
+// Original names and sizes (0x8, 0xc) from the JP demo map (UNUSED there: nothing calls them): the setter and the
+// getter of the controller number; the getter's size is that of a sign-extended byte read, and port is the entry's
+// only controller number.
+void partySetContNo(PartyEntry* party, s32 port) {
+    party->port = port;
+}
+
+/** The controller port the partner reads. */
+s32 partyGetContNo(PartyEntry* party) {
+    return party->port;
 }
 
 /** Clears the partner's copy of the controller state. */

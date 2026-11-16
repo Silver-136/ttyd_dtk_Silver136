@@ -2995,6 +2995,18 @@ void BattleAudience_GetRotate(s32 index, f32* x, f32* y, f32* z) {
     *z = member->rotation.z;
 }
 
+/** Reads the point member index rotates about. */
+// Original name and size (0x4c) from the JP demo map (UNUSED there: nothing calls it); the getter of
+// BattleAudience_SetRotateOffset's field in the form of BattleAudience_GetRotate.
+void BattleAudience_GetRotateOffset(s32 index, f32* x, f32* y, f32* z) {
+    BattleAudienceMember* member;
+
+    member = BattleAudienceGetPtr(index);
+    *x = member->rotationOffset.x;
+    *y = member->rotationOffset.y;
+    *z = member->rotationOffset.z;
+}
+
 /** Moves member index to (x, y, z); used by audience scripts, Clock Out and the Shadow Queen battle. */
 void BattleAudience_SetPosition(s32 index, f32 x, f32 y, f32 z) {
     BattleAudienceMember* member;
@@ -5018,6 +5030,14 @@ void BattleAudience_Case_AcrobatNoTry(void) {
 #else
     BattleAudienceBaseGetPtr();
 #endif
+}
+
+// Original names and sizes (0x4 each: a bare return) from the JP demo map (UNUSED there: nothing calls them):
+// empty hooks for a good and a bad Super Action Command, like BattleAudience_Case_JumpNewRecord below.
+void BattleAudience_Case_SuperActionCommandGood(void) {
+}
+
+void BattleAudience_Case_SuperActionCommandBad(void) {
 }
 
 /** Hook for Mario taking damage (from the damage code); the crowd does nothing with it. */

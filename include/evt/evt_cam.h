@@ -25,6 +25,7 @@ USER_FUNC(evt_cam3d_evt_set_xyz);
 USER_FUNC(evt_cam3d_evt_xyz_off);
 USER_FUNC(evt_cam3d_road_shift_onoff);
 USER_FUNC(evt_cam_ctrl_onoff);
+USER_FUNC(evt_cam_disp_onoff);
 USER_FUNC(evt_cam_get_pos);
 USER_FUNC(evt_cam_letter_box_camid);
 USER_FUNC(evt_cam_letter_box_disable);

@@ -3255,6 +3255,13 @@ void mapResetPaperAmbColor(void) {
     paper_ambient = (GXColor){0x70, 0x70, 0x70, 0xFF};
 }
 
+/** Sets the ambient colour used with the paper-craft light. */
+// Original name and size (0xc) from the JP demo map (UNUSED there: nothing calls it); mapSetPaperAmbColor for the
+// colour mapResetPaperCraftAmbColor resets.
+void mapSetPaperCraftAmbColor(GXColor* color) {
+    paperCraft_ambient = *color;
+}
+
 /** Resets the paper-craft light's ambient colour to grey 0x70; done on every map load. */
 static void mapResetPaperCraftAmbColor(void) {
     paperCraft_ambient = (GXColor){0x70, 0x70, 0x70, 0xFF};
@@ -4033,6 +4040,13 @@ void mapSetProjTexObj(GXTexObj* obj, void* imgRef) {
 /** Stores the projection matrix of the MAP_OBJ_FLAG_PROJ_TEX texture stage; called by hei_00 and tou_01. */
 void mapSetProjMtx(Mtx mtx) {
     MTXCopy(mtx, projMtx);
+}
+
+/** The projection matrix of the MAP_OBJ_FLAG_PROJ_TEX texture stage. */
+// Original name and size (0xc) from the JP demo map (UNUSED there: nothing calls it); the getter of mapSetProjMtx's
+// matrix.
+Mtx* mapGetProjMtx(void) {
+    return &projMtx;
 }
 
 /**

@@ -78,6 +78,19 @@ USER_FUNC(evt_item_status_on) {
     return EVT_RETURN_DONE;
 }
 
+// Original name and size (0x50) from the JP demo map (UNUSED there: no script uses it); evt_item_status_on with
+// itemStatusOff.
+USER_FUNC(evt_item_status_off) {
+    EvtWord* args = event->args;
+    ItemEntry* item = itemNameToPtr((char*)evtGetValue(event, args[0]));
+    u32 flags = args[1];
+    if (item == NULL) {
+        return EVT_RETURN_DONE;
+    }
+    itemStatusOff(item, flags);
+    return EVT_RETURN_DONE;
+}
+
 /** Sets the field item's direction (args[1], degrees) and horizontal speed (args[2], float) for its next launch. */
 USER_FUNC(evt_item_set_move_dir_speed) {
     EvtWord* args = event->args;

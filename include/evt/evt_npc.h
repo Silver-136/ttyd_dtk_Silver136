@@ -53,6 +53,7 @@ USER_FUNC(evt_npc_get_rotate);
 USER_FUNC(evt_npc_set_rotate);
 USER_FUNC(evt_npc_add_rotate);
 USER_FUNC(evt_npc_set_rotate_offset);
+USER_FUNC(evt_npc_get_rotate_offset);
 USER_FUNC(evt_npc_move_position);
 
 NpcEntry* evtNpcNameToPtr(EventEntry* event, const char* name);
@@ -74,6 +75,7 @@ USER_FUNC(evt_npc_set_anim);
 USER_FUNC(evt_npc_set_autotalkpose);
 USER_FUNC(evt_npc_set_battle_info);
 USER_FUNC(evt_npc_set_camid);
+USER_FUNC(evt_npc_get_camid);
 USER_FUNC(evt_npc_set_color);
 USER_FUNC(evt_npc_set_ry);
 USER_FUNC(evt_npc_sound_data_reset);

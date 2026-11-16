@@ -50,6 +50,7 @@ typedef struct FileManagerWork {
 } FileManagerWork;
 
 void fileInit(void);
+FileManagerWork* fileGetWorkPtr(void);
 void fileGarbageMoveMem(void* data, FileEntry* file);
 void _fileGarbage(BOOL agePreloadedEntries);
 FileEntry* fileAllocf(s32 type, const char* format, ...);

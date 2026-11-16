@@ -17,6 +17,19 @@ USER_FUNC(evt_audience_base_flag_on) {
     return EVT_RETURN_DONE;
 }
 
+/** s32* mask */
+// Original name and size (0x48) from the JP demo map (UNUSED there: no script uses it); evt_audience_base_flag_on's
+// counterpart.
+USER_FUNC(evt_audience_base_flag_off) {
+    BattleAudience* audience;
+    s32 mask;
+
+    mask = evtGetValue(event, *event->args);
+    audience = BattleAudienceBaseGetPtr();
+    audience->flags &= ~mask;
+    return EVT_RETURN_DONE;
+}
+
 /** s32* memberId, s32* flags, s32 retIndex */
 USER_FUNC(evt_audience_flag_check) {
     EvtWord* args = event->args;
@@ -98,6 +111,22 @@ USER_FUNC(evt_audience_set_rotate) {
     return EVT_RETURN_DONE;
 }
 
+/** s32* memberId, s32 retX, s32 retY, s32 retZ */
+// Original name and size (0x80) from the JP demo map (UNUSED there: no script uses it), as
+// evt_audience_get_rotate_offset below; evt_audience_get_position for the rotation and the rotation offset.
+USER_FUNC(evt_audience_get_rotate) {
+    BattleAudienceMember* member;
+    EvtWord* args = event->args;
+    s32 id;
+
+    id = evtGetValue(event, args[0]);
+    member = BattleAudienceGetPtr(id);
+    evtSetFloat(event, args[1], member->rotation.x);
+    evtSetFloat(event, args[2], member->rotation.y);
+    evtSetFloat(event, args[3], member->rotation.z);
+    return EVT_RETURN_DONE;
+}
+
 /** s32* memberId, f32* x, f32* y, f32* z */
 USER_FUNC(evt_audience_set_rotate_offset) {
     EvtWord* args = event->args;
@@ -109,6 +138,20 @@ USER_FUNC(evt_audience_set_rotate_offset) {
     y = evtGetFloat(event, args[2]);
     z = evtGetFloat(event, args[3]);
     BattleAudience_SetRotateOffset(id, x, y, z);
+    return EVT_RETURN_DONE;
+}
+
+/** s32* memberId, s32 retX, s32 retY, s32 retZ */
+USER_FUNC(evt_audience_get_rotate_offset) {
+    BattleAudienceMember* member;
+    EvtWord* args = event->args;
+    s32 id;
+
+    id = evtGetValue(event, args[0]);
+    member = BattleAudienceGetPtr(id);
+    evtSetFloat(event, args[1], member->rotationOffset.x);
+    evtSetFloat(event, args[2], member->rotationOffset.y);
+    evtSetFloat(event, args[3], member->rotationOffset.z);
     return EVT_RETURN_DONE;
 }
 
@@ -417,6 +460,25 @@ USER_FUNC(evt_audience_abnormal_natural_all) {
     return EVT_RETURN_DONE;
 }
 
+// evt_audience_sound_booing, _clap, _handbeat, _whistle, _set_vol, _set_vol_all and _stop: original names and sizes
+// from the JP demo map (UNUSED there: no script uses them). Each passes its arguments to the BattleAudienceSound
+// function its name gives, in the form of evt_audience_sound_cheer (two arguments, 0x60), evt_audience_joy_ending
+// (none, 0x24) or evt_audience_delete (one, 0x30).
+USER_FUNC(evt_audience_sound_booing) {
+    BattleAudienceSoundBooing();
+    return EVT_RETURN_DONE;
+}
+
+USER_FUNC(evt_audience_sound_clap) {
+    EvtWord* args = event->args;
+    s32 a, b;
+
+    a = evtGetValue(event, args[0]);
+    b = evtGetValue(event, args[1]);
+    BattleAudienceSoundClap(a, b);
+    return EVT_RETURN_DONE;
+}
+
 /**
  * Plays the crowd cheer sized to the current audience (BattleAudienceSoundCheer):
  * args[0] duration, args[1] fade time. The default battle events call it with 45, 25.
@@ -428,6 +490,42 @@ USER_FUNC(evt_audience_sound_cheer) {
     a = evtGetValue(event, args[0]);
     b = evtGetValue(event, args[1]);
     BattleAudienceSoundCheer(a, b);
+    return EVT_RETURN_DONE;
+}
+
+USER_FUNC(evt_audience_sound_handbeat) {
+    BattleAudienceSoundHandBeat();
+    return EVT_RETURN_DONE;
+}
+
+USER_FUNC(evt_audience_sound_whistle) {
+    BattleAudienceSoundWhistle();
+    return EVT_RETURN_DONE;
+}
+
+USER_FUNC(evt_audience_sound_set_vol) {
+    EvtWord* args = event->args;
+    s32 id, vol, length;
+
+    id = evtGetValue(event, args[0]);
+    vol = evtGetValue(event, args[1]);
+    length = evtGetValue(event, args[2]);
+    BattleAudienceSoundSetVol(id, vol, length);
+    return EVT_RETURN_DONE;
+}
+
+USER_FUNC(evt_audience_sound_set_vol_all) {
+    EvtWord* args = event->args;
+    s32 vol, length;
+
+    vol = evtGetValue(event, args[0]);
+    length = evtGetValue(event, args[1]);
+    BattleAudienceSoundSetVolAll(vol, length);
+    return EVT_RETURN_DONE;
+}
+
+USER_FUNC(evt_audience_sound_stop) {
+    BattleAudienceSoundStop(evtGetValue(event, event->args[0]));
     return EVT_RETURN_DONE;
 }
 

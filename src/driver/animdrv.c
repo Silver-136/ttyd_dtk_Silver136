@@ -1049,6 +1049,14 @@ void animPoseSetMaterialEvtColor(s32 poseId, GXColor color) {
     pose->materialColor = color;
 }
 
+/** Sets pose poseId's second material colour. */
+// animPoseSetMaterialAnmColor and animPoseGetMaterialAnmColor: original names and sizes (0x1c, 0x18) from the JP
+// demo map (UNUSED there: nothing calls them); the EvtColor pair for the pose's other material colour.
+void animPoseSetMaterialAnmColor(s32 poseId, GXColor color) {
+    AnimationPose* pose = &wp->poses[poseId];
+    pose->materialColor2 = color;
+}
+
 /** Pose poseId's material flags. */
 u32 animPoseGetMaterialFlag(s32 poseId) {
     AnimationPose* pose = &wp->poses[poseId];
@@ -1065,6 +1073,12 @@ u32 animPoseGetMaterialLightFlag(s32 poseId) {
 GXColor animPoseGetMaterialEvtColor(s32 poseId) {
     AnimationPose* pose = &wp->poses[poseId];
     return pose->materialColor;
+}
+
+/** Pose poseId's second material colour. */
+GXColor animPoseGetMaterialAnmColor(s32 poseId) {
+    AnimationPose* pose = &wp->poses[poseId];
+    return pose->materialColor2;
 }
 
 // FAKE: t3 = t * t2 through an inline so t3 is an inline return temp (numbered above the LICM temp of t2),
@@ -3720,10 +3734,24 @@ AnimationPoseData* animPoseGetAnimBaseDataPtr(s32 poseId) {
     return *wp->files[pose->fileId].handle->data;
 }
 
+/** Returns loaded animation file id. */
+// Original name and size (0x14) from the JP demo map (UNUSED there: nothing calls it); animPoseGetAnimPosePtr for
+// the work's table of animation files (the map's "anim groups": animGroupBaseAsync, animGroupRelease).
+AnimationPoseFile* animPoseGetAnimGroupPtr(s32 id) {
+    return &wp->files[id];
+}
+
 /** Returns the table entry (name and data) of pose poseId's current animation. */
 AnimTableEntry* animPoseGetCurrentAnim(s32 poseId) {
     AnimationPoseData* data = animPoseGetAnimBaseDataPtr(poseId);
     return &data->anims[animPoseGetAnimPosePtr(poseId)->animId];
+}
+
+/** Tells whether pose poseId's animation file has opaque parts (ANIM_DATA_STAGE_OPAQUE). */
+// Original name and size (0x38) from the JP demo map (UNUSED there: nothing calls it); animPoseTestXLU for the
+// opaque stage's flag.
+BOOL animPoseTestOPA(s32 poseId) {
+    return (animPoseGetAnimBaseDataPtr(poseId)->flags >> 1) & 1;
 }
 
 /** Tells whether pose poseId's animation file has translucent parts (ANIM_DATA_STAGE_XLU). */
@@ -3880,6 +3908,19 @@ void animPoseWorldMatrixEvalOn(s32 poseId) {
     }
 }
 
+/** Stops pose poseId recording group world matrices and frees the buffer. */
+// Original name and size (0x58) from the JP demo map (UNUSED there: nothing calls it); animPoseWorldPositionEvalOff
+// for the flag and buffer of animPoseWorldMatrixEvalOn.
+void animPoseWorldMatrixEvalOff(s32 poseId) {
+    AnimationPose* pose = &wp->poses[poseId];
+
+    if (pose->flags & ANIM_POSE_FLAG_WORLD_MATRIX_EVAL) {
+        pose->flags &= ~ANIM_POSE_FLAG_WORLD_MATRIX_EVAL;
+        smartFree(pose->worldMatrices);
+        pose->worldMatrices = NULL;
+    }
+}
+
 /** Updates Vivian's (or Marilyn's or Beldam's) hair and tail chain this frame with the character's position pos. */
 void animPoseVivianMain(s32 poseId, Vec* pos) {
     AnimationPose* pose = &wp->poses[poseId];
@@ -4033,6 +4074,13 @@ s32 animPoseGetGroupIdx(s32 poseId, const char* name) {
         }
     }
     return -1;
+}
+
+/** Returns the name of shape number shape in pose poseId's animation file. */
+// Original name and size (0x3c) from the JP demo map (UNUSED there: nothing calls it); animPoseGetGroupName for
+// the file's shapes.
+const char* animPoseGetShapeName(s32 poseId, s32 shape) {
+    return animPoseGetAnimBaseDataPtr(poseId)->shapes[shape].name;
 }
 
 /** Returns the name of group group of pose poseId's animation file. */

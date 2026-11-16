@@ -21,3 +21,7 @@ USER_FUNC(unitwin_window_select_func);
 #endif
 
 USER_FUNC(unitwincoin_wait);
+USER_FUNC(unitwinsupercoin_disp_onoff);
+USER_FUNC(unitwinsupercoin_wait);
+USER_FUNC(unitwinstarpiece_disp_onoff);
+USER_FUNC(unitwinstarpiece_wait);

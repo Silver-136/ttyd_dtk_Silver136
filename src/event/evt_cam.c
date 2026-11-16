@@ -17,6 +17,21 @@
 #include "cam_shift.h"
 
 /** CameraId id, BOOL on */
+// Original name and size (0x6c) from the JP demo map (UNUSED there: no script uses it); evt_cam_ctrl_onoff with
+// camDispOn and camDispOff.
+USER_FUNC(evt_cam_disp_onoff) {
+    EvtWord* args = event->args;
+    CameraId id = evtGetValue(event, args[0]);
+
+    if (evtGetValue(event, args[1])) {
+        camDispOn(id);
+    } else {
+        camDispOff(id);
+    }
+    return EVT_RETURN_DONE;
+}
+
+/** CameraId id, BOOL on */
 USER_FUNC(evt_cam_ctrl_onoff) {
     EvtWord* args = event->args;
     CameraId id = evtGetValue(event, args[0]);

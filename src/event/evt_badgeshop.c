@@ -145,6 +145,13 @@ BadgeShopWork badgeshopwork;
 //.sbss
 BadgeShopWork* bdsw;
 
+/** Number of items in Charlieton's Rogueport list (without the ITEM_NULL end). */
+// Original name and size (0x8) from the JP demo map (UNUSED there: nothing calls it); the count of the fourth
+// shop table in the form of the three functions below.
+s32 getBadgeBottakuruTableMaxCount(void) {
+    return (sizeof(badge_bottakuru_table) / sizeof(s32)) - 1;
+}
+
 /** Number of items in Charlieton's Pit of 100 Trials list (without the ITEM_NULL end); winmgr sizes that menu by it. */
 s32 getBadgeBottakuru100TableMaxCount(void) {
     return (sizeof(badge_bottakuru100_table) / sizeof(s32)) - 1;
@@ -614,6 +621,18 @@ USER_FUNC(evt_badgeShop_throw_dec) {
     return EVT_RETURN_DONE;
 }
 
+// evt_badgeShop_special_inc, _starmaniac_inc, _bottakuru_inc, _bteresa_inc and _bteresa_dec: original names and
+// sizes (0x40 each) from the JP demo map (UNUSED there: no script uses them). Each has the size of
+// evt_badgeShop_special_dec and adds one to (inc) or takes one from (dec) the stock table its name gives.
+/** Adds one of the badge in args[0] to the Lovely Howz special stock. */
+USER_FUNC(evt_badgeShop_special_inc) {
+    s32 value;
+
+    value = evtGetValue(event, *event->args);
+    badgeShop_add(bdsw->special_table, (s16)value, 1);
+    return EVT_RETURN_DONE;
+}
+
 /** Removes one of the badge in args[0] from the Lovely Howz special stock only. */
 USER_FUNC(evt_badgeShop_special_dec) {
     s32 value;
@@ -623,12 +642,30 @@ USER_FUNC(evt_badgeShop_special_dec) {
     return EVT_RETURN_DONE;
 }
 
+/** Adds one of the badge in args[0] to Dazzle's stock. */
+USER_FUNC(evt_badgeShop_starmaniac_inc) {
+    s32 value;
+
+    value = evtGetValue(event, *event->args);
+    badgeShop_add(bdsw->starmaniac_table, (s16)value, 1);
+    return EVT_RETURN_DONE;
+}
+
 /** Removes one of the badge in args[0] from Dazzle's stock (bought with Star Pieces). */
 USER_FUNC(evt_badgeShop_starmaniac_dec) {
     s32 value;
 
     value = (s16)evtGetValue(event, *event->args);
     badgeShop_add(bdsw->starmaniac_table, (s16)value, -1);
+    return EVT_RETURN_DONE;
+}
+
+/** Adds one of the item in args[0] to Charlieton's stock. */
+USER_FUNC(evt_badgeShop_bottakuru_inc) {
+    s32 value;
+
+    value = evtGetValue(event, *event->args);
+    badgeShop_add(bdsw->bottakuru_table, (s16)value, 1);
     return EVT_RETURN_DONE;
 }
 
@@ -643,6 +680,24 @@ USER_FUNC(evt_badgeShop_bottakuru_dec) {
             evtSetValue(event, i + GSW_BADGESHOP_CHARLIETON_STOCK, (sizeof(badge_bottakuru_table) / sizeof(s32)) - 1); // index of the ITEM_NULL terminator
         }
     }
+    return EVT_RETURN_DONE;
+}
+
+/** Adds one of the prize in args[0] to the Pianta Parlor stock. */
+USER_FUNC(evt_badgeShop_bteresa_inc) {
+    s32 value;
+
+    value = evtGetValue(event, *event->args);
+    badgeShop_add(bdsw->bteresa_table, (s16)value, 1);
+    return EVT_RETURN_DONE;
+}
+
+/** Removes one of the prize in args[0] from the Pianta Parlor stock. */
+USER_FUNC(evt_badgeShop_bteresa_dec) {
+    s32 value;
+
+    value = evtGetValue(event, *event->args);
+    badgeShop_add(bdsw->bteresa_table, (s16)value, -1);
     return EVT_RETURN_DONE;
 }
 

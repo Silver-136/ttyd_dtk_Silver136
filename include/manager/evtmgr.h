@@ -293,6 +293,8 @@ void evtDeleteID(s32 eventId);
 BOOL evtCheckID(s32 eventId);
 void evtSetPri(EventEntry* entry, u32 priority);
 void evtSetSpeed(EventEntry* entry, f32 speed);
+void evtSetSysSpd(f32 speed);
+f32 evtGetSysSpd(void);
 void evtSetType(EventEntry* entry, u32 type);
 void evtStop(EventEntry* entry, u32 type);
 void evtStart(EventEntry* entry, u32 type);

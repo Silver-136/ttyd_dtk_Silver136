@@ -70,6 +70,7 @@ typedef struct ImageWork {
 } ImageWork;
 
 void imgInit(void);
+ImageWork* imgGetWorkPtr(void);
 void imgAutoRelease(s32 type);
 s32 imgEntry(const char* name, s32 type);
 void imgMain(void);

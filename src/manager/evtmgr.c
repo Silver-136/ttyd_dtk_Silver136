@@ -607,6 +607,18 @@ void evtSetSpeed(EventEntry* entry, f32 speed) {
     entry->timescale = speed * evtSpd;
 }
 
+/** Sets the system speed every event's own speed is multiplied by (evtSetSpeed, evtEntry). */
+// Original names and sizes (0x8 each) from the JP demo map (UNUSED there: nothing calls them): the setter and the
+// getter of the system speed, evtSpd.
+void evtSetSysSpd(f32 speed) {
+    evtSpd = speed;
+}
+
+/** The system speed every event's own speed is multiplied by. */
+f32 evtGetSysSpd(void) {
+    return evtSpd;
+}
+
 /** Changes an event's type mask, the set of system levels that pause it. */
 void evtSetType(EventEntry* entry, u32 type) {
     entry->type = (u8)type;

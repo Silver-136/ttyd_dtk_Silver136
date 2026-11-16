@@ -487,6 +487,15 @@ USER_FUNC(evt_mario_set_camid) {
     return EVT_RETURN_DONE;
 }
 
+/** Writes the camera Mario is drawn with to args[0]. */
+// Original name and size (0x4c) from the JP demo map (UNUSED there: no script uses it); the getter of
+// evt_mario_set_camid, with marioGetCamId in the form of evt_mario_get_pose.
+USER_FUNC(evt_mario_get_camid) {
+    EvtWord* args = event->args;
+    evtSetValue(event, args[0], marioGetCamId());
+    return EVT_RETURN_DONE;
+}
+
 /** Writes Mario's position to args 1-3 as floats; a non-zero arg 0 reports Y one unit lower. */
 USER_FUNC(evt_mario_get_pos) {
     EvtWord* args = event->args;
@@ -2407,6 +2416,40 @@ USER_FUNC(evt_mario_check_key_item) {
 /** Removes one of item arg 0 from Mario's pouch (muj_05, usu_00, win_04). */
 USER_FUNC(evt_mario_dump_item) {
     pouchRemoveItem(evtGetValue(event, event->args[0]));
+    return EVT_RETURN_DONE;
+}
+
+// evt_mario_get_hitobj_head, _ride, _under, _front and _push: original names and sizes (0x54 each) from the JP demo
+// map (UNUSED there: no script uses them). Each returns in args[0] the hit object whose name the
+// evt_mario_get_name_hitobj_ command of the same word returns, in the form of evt_mario_get_mode. The map's
+// _ridejump, _touch and _item forms are not restored (their fields are not known).
+USER_FUNC(evt_mario_get_hitobj_head) {
+    s32 id = event->args[0];
+    evtSetValue(event, id, (EvtWord)marioGetPtr()->hitobjHead);
+    return EVT_RETURN_DONE;
+}
+
+USER_FUNC(evt_mario_get_hitobj_ride) {
+    s32 id = event->args[0];
+    evtSetValue(event, id, (EvtWord)marioGetPtr()->hitobjStandOn);
+    return EVT_RETURN_DONE;
+}
+
+USER_FUNC(evt_mario_get_hitobj_under) {
+    s32 id = event->args[0];
+    evtSetValue(event, id, (EvtWord)marioGetPtr()->hitobjUnder);
+    return EVT_RETURN_DONE;
+}
+
+USER_FUNC(evt_mario_get_hitobj_front) {
+    s32 id = event->args[0];
+    evtSetValue(event, id, (EvtWord)marioGetPtr()->hitobjFront);
+    return EVT_RETURN_DONE;
+}
+
+USER_FUNC(evt_mario_get_hitobj_push) {
+    s32 id = event->args[0];
+    evtSetValue(event, id, (EvtWord)marioGetPtr()->hitobjPush);
     return EVT_RETURN_DONE;
 }
 

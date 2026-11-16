@@ -36,7 +36,9 @@ void BtlPad_WorkInit(BattleWorkPad* pad);
 void BtlPad_WorkUpdate(BattleWorkPad* pad, s32 chan);
 
 u32 BattlePadGetTrigger(void);
+u32 BattlePadGetRepeat(void);
 u32 BattlePadGetNow(void);
+u32 BattlePadGetUp(void);
 
 BOOL BattlePadCheckTrigger(s32 mask);
 BOOL BattlePadMultiCheckTrigger(s32 chan, s32 mask);
@@ -49,9 +51,13 @@ BOOL BattlePadMultiCheckNow(s32 chan, s32 mask);
 
 s32 BattlePadCheckUp(s32 mask);
 u32 BattlePadMultiCheckUp(s32 chan, s32 mask);
+BOOL BattlePadCheckRecordNow(s32 frame, s32 mask);
+u32 BattlePadMultiCheckRecordNow(s32 chan, s32 frame, s32 mask);
 
 s32 BattlePadCheckRepeat(s32 mask);
 u32 BattlePadMultiCheckRepeat(s32 chan, s32 mask);
+BOOL BattlePadCheckRecordRepeat(s32 frame, s32 mask);
+u32 BattlePadMultiCheckRecordRepeat(s32 chan, s32 frame, s32 mask);
 
 // Names from LLCOOLT's tree.
 #define BTL_PAD_STICK_LEFT (1 << 18)

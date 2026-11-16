@@ -6,13 +6,16 @@
 #include <dolphin/types.h>
 
 USER_FUNC(evt_audience_base_flag_on);
+USER_FUNC(evt_audience_base_flag_off);
 USER_FUNC(evt_audience_flag_check);
 USER_FUNC(evt_audience_flag_on);
 USER_FUNC(evt_audience_flag_off);
 USER_FUNC(evt_audience_set_position);
 USER_FUNC(evt_audience_get_position);
 USER_FUNC(evt_audience_set_rotate);
+USER_FUNC(evt_audience_get_rotate);
 USER_FUNC(evt_audience_set_rotate_offset);
+USER_FUNC(evt_audience_get_rotate_offset);
 USER_FUNC(evt_audience_move_position_frame);
 USER_FUNC(evt_audience_move_position_speed);
 USER_FUNC(evt_audience_jump_position_firstsp);
@@ -28,3 +31,10 @@ USER_FUNC(evt_audience_acrobat_notry);
 USER_FUNC(evt_audience_num_updown_in_event);
 USER_FUNC(evt_audience_joy_ending);
 USER_FUNC(evt_audience_sound_cheer);
+USER_FUNC(evt_audience_sound_booing);
+USER_FUNC(evt_audience_sound_clap);
+USER_FUNC(evt_audience_sound_handbeat);
+USER_FUNC(evt_audience_sound_whistle);
+USER_FUNC(evt_audience_sound_set_vol);
+USER_FUNC(evt_audience_sound_set_vol_all);
+USER_FUNC(evt_audience_sound_stop);

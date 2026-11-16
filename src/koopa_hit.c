@@ -270,6 +270,19 @@ HitEntry* kpaSearchGround(f32 range, f32* outY, f32* outDepth, f32* outAng) {
     return best;
 }
 
+/** The ceiling probe points of Bowser's size level: a count, then x, y and a jump-only mark for each point. */
+// Original name and size (0x14) from the JP demo map (UNUSED there: kpaSearchHead's call is inlined). The map lists
+// the tables as this unit's only function statics (_ofs0$577 .. headchkofs$581), reached from kpaSearchHead.
+s32* kpaGetHeadchkofs(s32 level) {
+    static s32 _ofs0[] = {3, 12, 16, 1, 0, 16, 0, -9, 16, 0};
+    static s32 _ofs1[] = {4, 25, 74, 0, 50, 65, 1, 0, 67, 0, -25, 62, 0};
+    static s32 _ofs2[] = {6, 50, 102, 0, 76, 90, 1, 25, 100, 0, 0, 94, 0, -25, 90, 0, -45, 68, 0};
+    static s32 _ofs3[] = {13, 170, 194, 1, 145, 204, 0, 120, 232, 0, 95, 227, 0, 70, 232, 0, 55, 232, 0,
+                          30, 194, 0, 5, 187, 0, -20, 210, 0, -45, 201, 0, -70, 181, 0, -95, 153, 0, -120, 56, 0};
+    static s32* headchkofs[] = {_ofs0, _ofs1, _ofs2, _ofs3};
+    return headchkofs[level];
+}
+
 /**
  * Bowser's ceiling probe for mario_hit: casts rays up from a per-level set of points over his head (some only
  * while jumping), at a reach set by level and motion.
@@ -277,12 +290,6 @@ HitEntry* kpaSearchGround(f32 range, f32* outY, f32* outDepth, f32* outAng) {
  * Not used while falling.
  */
 HitEntry* kpaSearchHead(f32 hgt, Vec* pos, f32* outB) {
-    static s32 _ofs0[] = {3, 12, 16, 1, 0, 16, 0, -9, 16, 0};
-    static s32 _ofs1[] = {4, 25, 74, 0, 50, 65, 1, 0, 67, 0, -25, 62, 0};
-    static s32 _ofs2[] = {6, 50, 102, 0, 76, 90, 1, 25, 100, 0, 0, 94, 0, -25, 90, 0, -45, 68, 0};
-    static s32 _ofs3[] = {13, 170, 194, 1, 145, 204, 0, 120, 232, 0, 95, 227, 0, 70, 232, 0, 55, 232, 0,
-                          30, 194, 0, 5, 187, 0, -20, 210, 0, -45, 201, 0, -70, 181, 0, -95, 153, 0, -120, 56, 0};
-    static s32* headchkofs[] = {_ofs0, _ofs1, _ofs2, _ofs3};
     s32 i, n;
     s32* tbl;
     HitEntry* hit;
@@ -305,7 +312,7 @@ HitEntry* kpaSearchHead(f32 hgt, Vec* pos, f32* outB) {
     off = *outB;
     *outB = -1.0f;
     kpaClearHitobjHead();
-    tbl = headchkofs[kpaGetLevel()];
+    tbl = kpaGetHeadchkofs(kpaGetLevel());
     n = *tbl++;
     if (!(mario->flags & MARIO_FLAG_IS_JUMPING)) {
         switch (kpaGetLevel()) {
@@ -415,6 +422,18 @@ void kpaClearHitobjHead(void) {
     }
 }
 
+/** Records ceiling probe i's offset (the head counterpart of kpaSetHitofsRide). */
+// Original names and sizes (0x48, 0x3c) from the JP demo map (UNUSED there: nothing calls them): the head forms of
+// kpaSetHitofsRide and kpaGetHitofsRide, on the float array kpaClearHitobjHead resets next to headHit.
+void kpaSetHitofsHead(s32 i, f32 ofs) {
+    marioGetPtr()->kpaWork->headDist[i] = ofs;
+}
+
+/** Ceiling probe i's recorded offset (1000.0f when clear). */
+f32 kpaGetHitofsHead(s32 i) {
+    return marioGetPtr()->kpaWork->headDist[i];
+}
+
 /** Records the object floor probe i stands on (kpaGetHitobjRide reads it). */
 // Original name and size (0x48) from the JP demo map (UNUSED there: every call is inlined).
 void kpaSetHitobjRide(s32 i, HitEntry* hit) {
@@ -492,6 +511,13 @@ long kpaClearHitobjRide(void) {
 // Original name and size (0x48) from the JP demo map (UNUSED there: every call is inlined).
 void kpaSetHitofsRide(s32 i, f32 ofs) {
     marioGetPtr()->kpaWork->rideProbeX[i] = ofs;
+}
+
+/** Floor probe i's recorded x offset (1000.0f when clear). */
+// Original name and size (0x3c) from the JP demo map (UNUSED there: nothing calls it); the getter of
+// kpaSetHitofsRide's field.
+f32 kpaGetHitofsRide(s32 i) {
+    return marioGetPtr()->kpaWork->rideProbeX[i];
 }
 
 /** The object Bowser's body spheres touched this frame (kpaHitCheck), or NULL when the player is not Bowser. */

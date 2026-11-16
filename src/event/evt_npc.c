@@ -420,6 +420,26 @@ USER_FUNC(evt_npc_add_rotate) {
     return EVT_RETURN_DONE;
 }
 
+/** const char* lookupName, s32 xStoreIndex, s32 yStoreIndex, s32 zStoreIndex */
+// Original name and size (0x84) from the JP demo map (UNUSED there: no script uses it); evt_npc_get_rotate for
+// evt_npc_set_rotate_offset's field.
+USER_FUNC(evt_npc_get_rotate_offset) {
+    EvtWord* args = event->args;
+    const char* name;
+    NpcEntry* npc;
+    s32 x, y, z;
+
+    name = (const char*)evtGetValue(event, args[0]);
+    x = args[1];
+    y = args[2];
+    z = args[3];
+    npc = evtNpcNameToPtr(event, name);
+    evtSetFloat(event, x, npc->rotationOffset.x);
+    evtSetFloat(event, y, npc->rotationOffset.y);
+    evtSetFloat(event, z, npc->rotationOffset.z);
+    return EVT_RETURN_DONE;
+}
+
 /**
  * devs forgot to use evtGetFloat when copypasting, fix in rewrite const char* lookupName, f32 x, f32 y, f32 z
  */
@@ -1492,6 +1512,20 @@ USER_FUNC(evt_npc_set_camid) {
     name = (const char*)evtGetValue(event, args[0]);
     cameraId = evtGetValue(event, args[1]);
     evtNpcNameToPtr(event, name)->cameraId = cameraId;
+    return EVT_RETURN_DONE;
+}
+
+/** const char* lookupName, s32 storeIndex */
+// Original name and size (0x58) from the JP demo map (UNUSED there: no script uses it); the getter of
+// evt_npc_set_camid's field in the form of evt_npc_get_reglid.
+USER_FUNC(evt_npc_get_camid) {
+    EvtWord* args = event->args;
+    const char* name;
+    NpcEntry* npc;
+
+    name = (const char*)evtGetValue(event, args[0]);
+    npc = evtNpcNameToPtr(event, name);
+    evtSetValue(event, args[1], npc->cameraId);
     return EVT_RETURN_DONE;
 }
 

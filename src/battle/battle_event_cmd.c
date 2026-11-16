@@ -466,6 +466,26 @@ USER_FUNC(btlevtcmd_SetDispOffset) {
     return EVT_RETURN_DONE;
 }
 
+/** s32* battleId, s32* x, s32* y, s32* z */
+// Original name and size (0x128) from the JP demo map (UNUSED there: no script uses it); the form of
+// btlevtcmd_SetDispOffset.
+USER_FUNC(btlevtcmd_AddDispOffset) {
+    EvtWord* args = event->args;
+    BattleUnit* unit;
+    f32 x, y, z;
+    s32 id;
+
+    id = evtGetValue(event, args[0]);
+
+    id = BattleTransID(event, id);
+    x = (f32)evtGetValue(event, args[1]);
+    y = (f32)evtGetValue(event, args[2]);
+    z = (f32)evtGetValue(event, args[3]);
+    unit = BattleGetUnitPtr(_battleWorkPointer, id);
+    BtlUnit_AddDispOffset(unit, x, y, z);
+    return EVT_RETURN_DONE;
+}
+
 /** s32* battleId, s32* partId, s32* x, s32* y, s32* z */
 USER_FUNC(btlevtcmd_SetPartsDispOffset) {
     EvtWord* args = event->args;
@@ -590,6 +610,30 @@ USER_FUNC(btlevtcmd_AddHomePos) {
     return EVT_RETURN_DONE;
 }
 
+/** s32* battleId, s32* partId, s32 indexX, s32 indexY, s32 indexZ */
+// Original name and size (0xd8) from the JP demo map (UNUSED there: no script uses it); the form of
+// btlevtcmd_GetPartsRotate.
+USER_FUNC(btlevtcmd_GetPartsHomePos) {
+    EvtWord* args = event->args;
+    s32 id, partId, indexX, indexY, indexZ;
+    BattleUnitPart* part;
+    f32 x, y, z;
+
+    id = evtGetValue(event, args[0]);
+
+    id = BattleTransID(event, id);
+    partId = evtGetValue(event, args[1]);
+    part = BattleGetUnitPartsPtr(id, partId);
+    indexX = args[2];
+    indexY = args[3];
+    indexZ = args[4];
+    BtlUnit_GetPartsHomePos(part, &x, &y, &z);
+    evtSetValue(event, indexX, (s32)x);
+    evtSetValue(event, indexY, (s32)y);
+    evtSetValue(event, indexZ, (s32)z);
+    return EVT_RETURN_DONE;
+}
+
 /** s32* battleId, s32* partId, s32* x, s32* y, s32* z */
 USER_FUNC(btlevtcmd_SetPartsHomePos) {
     EvtWord* args = event->args;
@@ -606,6 +650,27 @@ USER_FUNC(btlevtcmd_SetPartsHomePos) {
     z = evtGetValue(event, args[4]);
     part = BattleGetUnitPartsPtr(id, partId);
     BtlUnit_SetPartsHomePos(part, (f32)x, (f32)y, (f32)z);
+    return EVT_RETURN_DONE;
+}
+
+/** s32* battleId, s32* partId, s32* x, s32* y, s32* z */
+// Original name and size (0xe4) from the JP demo map (UNUSED there: no script uses it); the form of
+// btlevtcmd_SetPartsHomePos.
+USER_FUNC(btlevtcmd_AddPartsHomePos) {
+    EvtWord* args = event->args;
+    BattleUnitPart* part;
+    s32 id, partId;
+    s32 x, y, z;
+
+    id = evtGetValue(event, args[0]);
+
+    id = BattleTransID(event, id);
+    partId = evtGetValue(event, args[1]);
+    x = evtGetValue(event, args[2]);
+    y = evtGetValue(event, args[3]);
+    z = evtGetValue(event, args[4]);
+    part = BattleGetUnitPartsPtr(id, partId);
+    BtlUnit_AddPartsHomePos(part, (f32)x, (f32)y, (f32)z);
     return EVT_RETURN_DONE;
 }
 
@@ -715,6 +780,24 @@ USER_FUNC(btlevtcmd_GetHeight) {
     return EVT_RETURN_DONE;
 }
 
+/** s32* battleId, s16* width */
+// Original name and size (0x70) from the JP demo map (UNUSED there: no script uses it); the form of
+// btlevtcmd_SetHeight.
+USER_FUNC(btlevtcmd_SetWidth) {
+    EvtWord* args = event->args;
+    BattleWork* wp = _battleWorkPointer;
+    s32 width;
+    s32 id;
+    BattleUnit* unit;
+
+    id = evtGetValue(event, args[0]);
+    width = evtGetValue(event, args[1]);
+    id = BattleTransID(event, id);
+    unit = BattleGetUnitPtr(wp, id);
+    BtlUnit_SetWidth(unit, (s16)width);
+    return EVT_RETURN_DONE;
+}
+
 /** s32* battleId, s16* height */
 USER_FUNC(btlevtcmd_SetHeight) {
     EvtWord* args = event->args;
@@ -810,6 +893,24 @@ USER_FUNC(btlevtcmd_GetHpGaugeOffset) {
     if (y != EVT_NULLPTR) {
         evtSetValue(event, indexY, y);
     }
+    return EVT_RETURN_DONE;
+}
+
+/** Script: returns in args[2] the alpha of part args[1] of the unit args[0]. */
+// Original name and size (0x78) from the JP demo map (UNUSED there: no script uses it); the getter of
+// btlevtcmd_SetAlpha's field.
+USER_FUNC(btlevtcmd_GetAlpha) {
+    EvtWord* args = event->args;
+    BattleUnitPart* part;
+    s32 id, btlId, partId;
+    s32 index;
+
+    btlId = evtGetValue(event, args[0]);
+    partId = evtGetValue(event, args[1]);
+    index = args[2];
+    id = BattleTransID(event, btlId);
+    part = BattleGetUnitPartsPtr(id, partId);
+    evtSetValue(event, index, part->color.a);
     return EVT_RETURN_DONE;
 }
 
@@ -1006,6 +1107,36 @@ USER_FUNC(btlevtcmd_AddPartsRotate) {
     return EVT_RETURN_DONE;
 }
 
+/** s32* battleId, s32 indexX, s32 indexY, s32 indexZ */
+// Original name and size (0xe8) from the JP demo map (UNUSED there: no script uses it); the form of
+// btlevtcmd_GetRotate.
+USER_FUNC(btlevtcmd_GetBaseRotate) {
+    EvtWord* args = event->args;
+    f32 rotateX, rotateY, rotateZ;
+    s32 indexX, indexY, indexZ;
+    BattleUnit* unit;
+    s32 id;
+
+    id = evtGetValue(event, args[0]);
+
+    id = BattleTransID(event, id);
+    unit = BattleGetUnitPtr(_battleWorkPointer, id);
+    indexX = args[1];
+    indexY = args[2];
+    indexZ = args[3];
+    BtlUnit_GetBaseRotate(unit, &rotateX, &rotateY, &rotateZ);
+    if (indexX != EVTDAT_POINTER_MAX) {
+        evtSetValue(event, indexX, (s32)rotateX);
+    }
+    if (indexY != EVTDAT_POINTER_MAX) {
+        evtSetValue(event, indexY, (s32)rotateY);
+    }
+    if (indexZ != EVTDAT_POINTER_MAX) {
+        evtSetValue(event, indexZ, (s32)rotateZ);
+    }
+    return EVT_RETURN_DONE;
+}
+
 /** s32* battleId, s32* x, s32* y, s32* z (can be EVTDAT_POINTER_MAX to skip) */
 USER_FUNC(btlevtcmd_SetBaseRotate) {
     EvtWord* args = event->args;
@@ -1034,6 +1165,30 @@ USER_FUNC(btlevtcmd_SetBaseRotate) {
         z = currZ;
     }
     BtlUnit_SetBaseRotate(unit, x, y, z);
+    return EVT_RETURN_DONE;
+}
+
+/** s32* battleId, s32* partId, s32 indexX, s32 indexY, s32 indexZ */
+// Original name and size (0xd8) from the JP demo map (UNUSED there: no script uses it); the form of
+// btlevtcmd_GetPartsRotate.
+USER_FUNC(btlevtcmd_GetPartsBaseRotate) {
+    EvtWord* args = event->args;
+    s32 id, partId, indexX, indexY, indexZ;
+    BattleUnitPart* part;
+    f32 x, y, z;
+
+    id = evtGetValue(event, args[0]);
+
+    id = BattleTransID(event, id);
+    partId = evtGetValue(event, args[1]);
+    part = BattleGetUnitPartsPtr(id, partId);
+    indexX = args[2];
+    indexY = args[3];
+    indexZ = args[4];
+    BtlUnit_GetPartsBaseRotate(part, &x, &y, &z);
+    evtSetValue(event, indexX, (s32)x);
+    evtSetValue(event, indexY, (s32)y);
+    evtSetValue(event, indexZ, (s32)z);
     return EVT_RETURN_DONE;
 }
 
@@ -1082,6 +1237,50 @@ USER_FUNC(btlevtcmd_SetRotateOffset) {
     z = (f32)evtGetValue(event, args[3]);
     unit = BattleGetUnitPtr(_battleWorkPointer, id);
     BtlUnit_SetRotateOffset(unit, x, y, z);
+    return EVT_RETURN_DONE;
+}
+
+/** s32* battleId, s32* x, s32* y, s32* z */
+// Original name and size (0x128) from the JP demo map (UNUSED there: no script uses it); the form of
+// btlevtcmd_SetRotateOffset.
+USER_FUNC(btlevtcmd_AddRotateOffset) {
+    EvtWord* args = event->args;
+    BattleUnit* unit;
+    f32 x, y, z;
+    s32 id;
+
+    id = evtGetValue(event, args[0]);
+
+    id = BattleTransID(event, id);
+    x = (f32)evtGetValue(event, args[1]);
+    y = (f32)evtGetValue(event, args[2]);
+    z = (f32)evtGetValue(event, args[3]);
+    unit = BattleGetUnitPtr(_battleWorkPointer, id);
+    BtlUnit_AddRotateOffset(unit, x, y, z);
+    return EVT_RETURN_DONE;
+}
+
+/** s32* battleId, s32* partId, s32 indexX, s32 indexY, s32 indexZ */
+// Original name and size (0xd8) from the JP demo map (UNUSED there: no script uses it); the form of
+// btlevtcmd_GetPartsRotate.
+USER_FUNC(btlevtcmd_GetPartsRotateOffset) {
+    EvtWord* args = event->args;
+    s32 id, partId, indexX, indexY, indexZ;
+    BattleUnitPart* part;
+    f32 x, y, z;
+
+    id = evtGetValue(event, args[0]);
+
+    id = BattleTransID(event, id);
+    partId = evtGetValue(event, args[1]);
+    part = BattleGetUnitPartsPtr(id, partId);
+    indexX = args[2];
+    indexY = args[3];
+    indexZ = args[4];
+    BtlUnit_GetPartsRotateOffset(part, &x, &y, &z);
+    evtSetValue(event, indexX, (s32)x);
+    evtSetValue(event, indexY, (s32)y);
+    evtSetValue(event, indexZ, (s32)z);
     return EVT_RETURN_DONE;
 }
 
@@ -1556,6 +1755,27 @@ USER_FUNC(btlevtcmd_SetMaxFp) {
     return EVT_RETURN_DONE;
 }
 
+/** Script: returns in args[1] the unit args[0]'s swallowRate. */
+// btlevtcmd_GetSwallowParam and btlevtcmd_GetSwallowAttribute: original names and sizes (0x74, 0x70) from the JP
+// demo map (UNUSED there: no script uses them); the getters of the Set commands' fields. The Attribute getter's
+// size has no room for the Set commands' NULL test: it has the form of btlevtcmd_GetOverTurnCount.
+USER_FUNC(btlevtcmd_GetSwallowParam) {
+    EvtWord* args = event->args;
+    BattleWork* wp = _battleWorkPointer;
+    BattleUnit* unit;
+    s32 id;
+    s32 index;
+
+    id = evtGetValue(event, args[0]);
+    id = BattleTransID(event, id);
+    unit = BattleGetUnitPtr(wp, id);
+    index = args[1];
+    if (unit) {
+        evtSetValue(event, index, unit->swallowRate);
+    }
+    return EVT_RETURN_DONE;
+}
+
 /** Script: sets the chance (swallowRate) that Yoshi's Gulp can swallow the unit args[0]. */
 USER_FUNC(btlevtcmd_SetSwallowParam) {
     EvtWord* args = event->args;
@@ -1571,6 +1791,20 @@ USER_FUNC(btlevtcmd_SetSwallowParam) {
     if (unit) {
         unit->swallowRate = value;
     }
+    return EVT_RETURN_DONE;
+}
+
+/** Script: returns in args[1] the unit args[0]'s swallowAttribute. */
+USER_FUNC(btlevtcmd_GetSwallowAttribute) {
+    EvtWord* args = event->args;
+    BattleUnit* unit;
+    s32 btlId, id, index;
+
+    btlId = evtGetValue(event, args[0]);
+    id = BattleTransID(event, btlId);
+    index = args[1];
+    unit = BattleGetUnitPtr(_battleWorkPointer, id);
+    evtSetValue(event, index, unit->swallowAttribute);
     return EVT_RETURN_DONE;
 }
 
@@ -1764,6 +1998,25 @@ USER_FUNC(btlevtcmd_SetOverTurnCount) {
     return EVT_RETURN_DONE;
 }
 
+/** Script: adds args[1] to the unit args[0]'s flipped-turn count. */
+// Original name and size (0x74) from the JP demo map (UNUSED there: no script uses it); btlevtcmd_SetOverTurnCount
+// adding to its field.
+USER_FUNC(btlevtcmd_AddOverTurnCount) {
+    s32 id;
+    EvtWord* args = event->args;
+    s32 btlId;
+    s32 value;
+    BattleUnit* unit;
+
+    btlId = evtGetValue(event, args[0]);
+    id = BattleTransID(event, btlId);
+    value = evtGetValue(event, args[1]);
+
+    unit = BattleGetUnitPtr(_battleWorkPointer, id);
+    unit->flippedTurns += value;
+    return EVT_RETURN_DONE;
+}
+
 /**
  * Script: returns in args[2] the unit args[0]'s script work slot args[1],
  * free storage that unit scripts use between events.
@@ -1843,6 +2096,24 @@ USER_FUNC(btlevtcmd_SetUnitWorkFloat) {
     return EVT_RETURN_DONE;
 }
 
+/** Script: adds the float args[2] to work slot args[1] of the unit args[0]. */
+// btlevtcmd_AddUnitWorkFloat and, below, btlevtcmd_AddPartsWork, btlevtcmd_GetPartsWorkFloat,
+// btlevtcmd_SetPartsWorkFloat and btlevtcmd_AddPartsWorkFloat: original names and sizes (0x9c, 0xa4, 0xa0, 0xa4, 0xb4)
+// from the JP demo map (UNUSED there: no script uses them). They fill the Get / Set / Add table of the unit and part
+// work slots, each in the form of its unit or integer sibling.
+USER_FUNC(btlevtcmd_AddUnitWorkFloat) {
+    EvtWord* args = event->args;
+    s32 btlId, id, slot;
+    f32 value;
+
+    btlId = evtGetValue(event, args[0]);
+    id = BattleTransID(event, btlId);
+    slot = evtGetValue(event, args[1]);
+    value = evtGetFloat(event, args[2]);
+    *(f32*)&BattleGetUnitPtr(_battleWorkPointer, id)->work[slot] += value;
+    return EVT_RETURN_DONE;
+}
+
 /** Script: returns in args[3] work slot args[2] of part args[1] of the unit args[0]. */
 USER_FUNC(btlevtcmd_GetPartsWork) {
     EvtWord* args = event->args;
@@ -1877,6 +2148,81 @@ USER_FUNC(btlevtcmd_SetPartsWork) {
     unit = BattleGetUnitPtr(_battleWorkPointer, id);
     part = BtlUnit_GetPartsPtr(unit, partId);
     part->work[slot] = value;
+    return EVT_RETURN_DONE;
+}
+
+/** Script: adds args[3] to work slot args[2] of part args[1] of the unit args[0]. */
+USER_FUNC(btlevtcmd_AddPartsWork) {
+    EvtWord* args = event->args;
+    s32 btlId, id, partId, slot;
+    EvtWord value;
+    BattleUnitPart* part;
+    BattleUnit* unit;
+
+    btlId = evtGetValue(event, args[0]);
+    id = BattleTransID(event, btlId);
+    partId = evtGetValue(event, args[1]);
+    slot = evtGetValue(event, args[2]);
+    value = evtGetValue(event, args[3]);
+    unit = BattleGetUnitPtr(_battleWorkPointer, id);
+    part = BtlUnit_GetPartsPtr(unit, partId);
+    part->work[slot] += value;
+    return EVT_RETURN_DONE;
+}
+
+/** Script: returns in args[3] work slot args[2] of part args[1] of the unit args[0], as a float. */
+USER_FUNC(btlevtcmd_GetPartsWorkFloat) {
+    EvtWord* args = event->args;
+    s32 id, partId, slot, outVar;
+    BattleUnitPart* part;
+    BattleUnit* unit;
+
+    id = evtGetValue(event, args[0]);
+    id = BattleTransID(event, id);
+    partId = evtGetValue(event, args[1]);
+    slot = evtGetValue(event, args[2]);
+    outVar = args[3];
+    unit = BattleGetUnitPtr(_battleWorkPointer, id);
+    part = BtlUnit_GetPartsPtr(unit, partId);
+    evtSetFloat(event, outVar, *(f32*)&part->work[slot]);
+    return EVT_RETURN_DONE;
+}
+
+/** Script: sets work slot args[2] of part args[1] of the unit args[0] to the float args[3]. */
+USER_FUNC(btlevtcmd_SetPartsWorkFloat) {
+    EvtWord* args = event->args;
+    s32 btlId, id, partId, slot;
+    f32 value;
+    BattleUnitPart* part;
+    BattleUnit* unit;
+
+    btlId = evtGetValue(event, args[0]);
+    id = BattleTransID(event, btlId);
+    partId = evtGetValue(event, args[1]);
+    slot = evtGetValue(event, args[2]);
+    value = evtGetFloat(event, args[3]);
+    unit = BattleGetUnitPtr(_battleWorkPointer, id);
+    part = BtlUnit_GetPartsPtr(unit, partId);
+    *(f32*)&part->work[slot] = value;
+    return EVT_RETURN_DONE;
+}
+
+/** Script: adds the float args[3] to work slot args[2] of part args[1] of the unit args[0]. */
+USER_FUNC(btlevtcmd_AddPartsWorkFloat) {
+    EvtWord* args = event->args;
+    s32 btlId, id, partId, slot;
+    f32 value;
+    BattleUnitPart* part;
+    BattleUnit* unit;
+
+    btlId = evtGetValue(event, args[0]);
+    id = BattleTransID(event, btlId);
+    partId = evtGetValue(event, args[1]);
+    slot = evtGetValue(event, args[2]);
+    value = evtGetFloat(event, args[3]);
+    unit = BattleGetUnitPtr(_battleWorkPointer, id);
+    part = BtlUnit_GetPartsPtr(unit, partId);
+    *(f32*)&part->work[slot] += value;
     return EVT_RETURN_DONE;
 }
 
@@ -2415,6 +2761,24 @@ USER_FUNC(btlevtcmd_ChangeFaceDirection) {
 
     unit = BattleGetUnitPtr(_battleWorkPointer, id);
     unit->faceDirection = value;
+    return EVT_RETURN_DONE;
+}
+
+/** Script: returns in args[2] the direction part args[1] of the unit args[0] faces. */
+// Original name and size (0x80) from the JP demo map (UNUSED there: no script uses it); the getter of
+// btlevtcmd_ChangePartsFaceDirection's field.
+USER_FUNC(btlevtcmd_GetPartsFaceDirection) {
+    EvtWord* args = event->args;
+    s32 btlId, id, partId;
+    s32 index;
+    BattleUnitPart* part;
+
+    btlId = evtGetValue(event, args[0]);
+    id = BattleTransID(event, btlId);
+    partId = evtGetValue(event, args[1]);
+    index = args[2];
+    part = BattleGetUnitPartsPtr(id, partId);
+    evtSetValue(event, index, part->faceDirection);
     return EVT_RETURN_DONE;
 }
 
@@ -3419,6 +3783,58 @@ USER_FUNC(btlevtcmd_FaceDirectionAdd) {
     dir = value * unit->faceDirection;
     value = evtGetValue(event, index);
     value += dir;
+    evtSetValue(event, index, value);
+    return EVT_RETURN_DONE;
+}
+
+/** Script: adds args[3] in the direction part args[1] of the unit args[0] faces to the variable args[2]. */
+// Original name and size (0xb0) from the JP demo map (UNUSED there: no script uses it);
+// btlevtcmd_PartsFaceDirectionSub with the sign and the closing statements of btlevtcmd_FaceDirectionAdd (the size
+// needs them).
+USER_FUNC(btlevtcmd_PartsFaceDirectionAdd) {
+    EvtWord* args = event->args;
+    BattleWork* wp = _battleWorkPointer;
+    BattleUnit* unit;
+    s32 id, partId, index, value, dir;
+
+    id = evtGetValue(event, args[0]);
+    id = BattleTransID(event, id);
+    partId = evtGetValue(event, args[1]);
+    index = args[2];
+    value = evtGetValue(event, args[3]);
+    unit = BattleGetUnitPtr(wp, id);
+    dir = value * BtlUnit_GetPartsPtr(unit, partId)->faceDirection;
+    value = evtGetValue(event, index);
+    value += dir;
+    evtSetValue(event, index, value);
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script: subtracts args[2] in the direction the unit args[0] moves (or faces, when it has no move direction)
+ * from the variable args[1].
+ */
+// Original name and size (0xb0) from the JP demo map (UNUSED there: no script uses it); btlevtcmd_MoveDirectionAdd
+// with the sign of btlevtcmd_FaceDirectionSub.
+USER_FUNC(btlevtcmd_MoveDirectionSub) {
+    s32 btlId, id, value;
+    EvtWord* args = event->args;
+    BattleWork* wp = _battleWorkPointer;
+    BattleUnit* unit;
+    s32 index, dir;
+
+    btlId = evtGetValue(event, args[0]);
+    id = BattleTransID(event, btlId);
+    index = args[1];
+    value = evtGetValue(event, args[2]);
+    unit = BattleGetUnitPtr(wp, id);
+    if (unit->moveDirection) {
+        dir = value * unit->moveDirection;
+    } else {
+        dir = value * unit->faceDirection;
+    }
+    value = evtGetValue(event, index);
+    value -= dir;
     evtSetValue(event, index, value);
     return EVT_RETURN_DONE;
 }
@@ -4634,6 +5050,22 @@ USER_FUNC(btlevtcmd_SetPartsMoveSpeed) {
     pno = evtGetValue(event, args[1]);
     speed = evtGetFloat(event, args[2]);
     BtlUnit_SetPartsMoveSpeed(BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, id), pno), speed);
+    return EVT_RETURN_DONE;
+}
+
+/** Script: sets the jump speed of part args[1] of the unit args[0], for parts that move on their own. */
+// Original name and size (0x90) from the JP demo map (UNUSED there: no script uses it); the form of
+// btlevtcmd_SetPartsMoveSpeed.
+USER_FUNC(btlevtcmd_SetPartsJumpSpeed) {
+    EvtWord* args = event->args;
+    s32 id, pno;
+    f32 speed;
+
+    id = evtGetValue(event, args[0]);
+    id = BattleTransID(event, id);
+    pno = evtGetValue(event, args[1]);
+    speed = evtGetFloat(event, args[2]);
+    BtlUnit_SetPartsJumpSpeed(BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, id), pno), speed);
     return EVT_RETURN_DONE;
 }
 
@@ -6088,6 +6520,28 @@ USER_FUNC(btlevtcmd_ClearAllStatus) {
     id = evtGetValue(event, event->args[0]);
     id = BattleTransID(event, id);
     BtlUnit_ClearStatus(BattleGetUnitPtr(_battleWorkPointer, id));
+    return EVT_RETURN_DONE;
+}
+
+/** Script: sets args[2] to whether the unit args[0] has any of the status flags args[1]. */
+// Original name and size (0x90) from the JP demo map (UNUSED there: no script uses it); btlevtcmd_CheckUnitFlag
+// with BtlUnit_CheckStatusFlag.
+USER_FUNC(btlevtcmd_CheckStatusFlag) {
+    EvtWord* args = event->args;
+    BattleUnit* unit;
+    s32 id, index;
+    s32 flags;
+
+    id = evtGetValue(event, args[0]);
+    id = BattleTransID(event, id);
+    flags = args[1];
+    index = args[2];
+    unit = BattleGetUnitPtr(_battleWorkPointer, id);
+    if (BtlUnit_CheckStatusFlag(unit, flags)) {
+        evtSetValue(event, index, TRUE);
+    } else {
+        evtSetValue(event, index, FALSE);
+    }
     return EVT_RETURN_DONE;
 }
 

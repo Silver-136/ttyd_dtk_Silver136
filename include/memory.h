@@ -90,6 +90,7 @@ void smartAutoFree(s32 allocType);
 void smartFree(smartEntry* entry);
 smartEntry* smartAlloc(u32 size, u8 type);
 GXTexObj* smartTexObj(GXTexObj* obj, void** image_ptr);
+SmartWork* smartGetWorkPtr(void);
 
 extern BOOL g_bFirstSmartAlloc;
 

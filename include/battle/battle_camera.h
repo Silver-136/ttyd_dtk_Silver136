@@ -65,6 +65,8 @@ USER_FUNC(evt_btl_camera_nomove_y_onoff);
 USER_FUNC(evt_btl_camera_nomove_z_onoff);
 USER_FUNC(evt_btl_camera_noshake);
 USER_FUNC(evt_btl_camera_off_posoffset_manual);
+void btl_camera_set_rumble_off_flag(s32 pri, s32 on);
+USER_FUNC(evt_btl_camera_set_rumble_off_flag);
 USER_FUNC(evt_btl_camera_set_homing_unit);
 USER_FUNC(evt_btl_camera_set_homing_unit_audience);
 USER_FUNC(evt_btl_camera_set_homing_unitparts);
@@ -115,7 +117,9 @@ enum {
 void battleCameraMain(void);
 void btl_camera_set_mode(s32 pri, s32 mode);
 void btl_camera_set_moveSpeedLv(s32 pri, s32 lv);
+s32 battleCameraGetCurrentMode(void);
 f32 battleCameraGetPosMoveSpeed(void);
+f32 battleCameraGetTargetMoveSpeed(void);
 void btl_camera_noshake(s32 pri);
 void btl_camera_set_posoffset(s32 pri, f32 x, f32 y, f32 z);
 void btl_camera_shake_h(s32 pri, f32 a, f32 b, s32 frames, s32 type);

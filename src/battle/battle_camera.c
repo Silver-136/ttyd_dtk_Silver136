@@ -738,12 +738,30 @@ void battleCameraMoveTo(s32 applyOffsets, s32 clampX, f32 x, f32 y, f32 z, f32 a
     }
 }
 
+/** The battle camera's current mode (btl_camera_set_mode). */
+// Original name and size (0xc) from the JP demo map (UNUSED there: nothing calls it); the getter of the camera
+// work's mode.
+s32 battleCameraGetCurrentMode(void) {
+    return _battleWorkPointer->cameraWork.mode;
+}
+
 /** Returns how far the battle camera's eye moved this frame (length of cameraWork.moveSpeed). */
 f32 battleCameraGetPosMoveSpeed(void) {
     BattleWork* wp = _battleWorkPointer;
     f32 x = wp->cameraWork.moveSpeed.x;
     f32 y = wp->cameraWork.moveSpeed.y;
     f32 z = wp->cameraWork.moveSpeed.z;
+    return sqrt(x * x + y * y + z * z);
+}
+
+/** Returns how far the battle camera's look-at point moved this frame (length of cameraWork.moveSpeedAt). */
+// Original name and size (0x40) from the JP demo map (UNUSED there: nothing calls it); battleCameraGetPosMoveSpeed
+// for the camera work's other move speed.
+f32 battleCameraGetTargetMoveSpeed(void) {
+    BattleWork* wp = _battleWorkPointer;
+    f32 x = wp->cameraWork.moveSpeedAt.x;
+    f32 y = wp->cameraWork.moveSpeedAt.y;
+    f32 z = wp->cameraWork.moveSpeedAt.z;
     return sqrt(x * x + y * y + z * z);
 }
 
@@ -1201,6 +1219,29 @@ void btl_camera_off_posoffset_manual(s32 pri) {
 /** Script helper: args[0] priority; removes the manual camera offset. */
 USER_FUNC(evt_btl_camera_off_posoffset_manual) {
     btl_camera_off_posoffset_manual(evtGetValue(event, event->args[0]));
+    return EVT_RETURN_DONE;
+}
+
+/** Turns the controller rumble of camera shakes off (on == 1) or back on if pri passes the floor. */
+// Original names and sizes (0x38, 0x58) from the JP demo map (UNUSED there: no script uses them), as the script
+// helper below: the btl_camera_nomove_x_onoff pair for the flag the shakes test before rumbling.
+void btl_camera_set_rumble_off_flag(s32 pri, s32 on) {
+    BattleWork* wp = _battleWorkPointer;
+    if (pri >= wp->cameraWork.priLimit) {
+        if (on == 1) {
+            wp->cameraWork.flags |= BTL_CAM_FLAG_NO_RUMBLE_UNUSED;
+        } else {
+            wp->cameraWork.flags &= ~BTL_CAM_FLAG_NO_RUMBLE_UNUSED;
+        }
+    }
+}
+
+/** Script helper: args[0] priority, args[1] 1 for shakes without rumble, 0 for rumble. */
+USER_FUNC(evt_btl_camera_set_rumble_off_flag) {
+    EvtWord* args = event->args;
+    s32 pri = evtGetValue(event, args[0]);
+    s32 val = evtGetValue(event, args[1]);
+    btl_camera_set_rumble_off_flag(pri, val);
     return EVT_RETURN_DONE;
 }
 

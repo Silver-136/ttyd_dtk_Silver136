@@ -24,6 +24,7 @@ typedef struct BadgeShopWork {
 } BadgeShopWork;
 
 s32 getBadgeBottakuru100TableMaxCount(void); // Charlieton Pit of 100 Trials
+s32 getBadgeBottakuruTableMaxCount(void); // Charlieton Rogueport
 s32 getBadgeStarmaniacTableMaxCount(void); // Dazzle
 s32 getBadgeBteresaTableMaxCount(void); // Pianta Parlor
 void badgeShop_init(void);
@@ -39,6 +40,11 @@ USER_FUNC(evt_badgeShop_throw_dec);
 USER_FUNC(evt_badgeShop_special_dec);
 USER_FUNC(evt_badgeShop_starmaniac_dec);
 USER_FUNC(evt_badgeShop_bottakuru_dec);
+USER_FUNC(evt_badgeShop_special_inc);
+USER_FUNC(evt_badgeShop_starmaniac_inc);
+USER_FUNC(evt_badgeShop_bottakuru_inc);
+USER_FUNC(evt_badgeShop_bteresa_inc);
+USER_FUNC(evt_badgeShop_bteresa_dec);
 USER_FUNC(evt_badgeShop_throw_get_kind_cnt);
 USER_FUNC(evt_badgeShop_starmaniac_get_kind_cnt);
 USER_FUNC(evt_badgeShop_bottakuru_get_kind_cnt);

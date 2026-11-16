@@ -719,3 +719,10 @@ GXTexObj* smartTexObj(GXTexObj* obj, void** image_ptr) {
     }
     return obj;
 }
+
+/** The smart heap's work. */
+// Original name and size (0x8) from the JP demo map (UNUSED there: nothing calls it); returns the unit's work
+// pointer, like animGetPtr.
+SmartWork* smartGetWorkPtr(void) {
+    return wp;
+}

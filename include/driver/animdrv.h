@@ -404,6 +404,8 @@ void animPoseSetEffectAnim(s32 poseId, const char* animName, BOOL reset);
 
 AnimTableEntry* animPoseGetCurrentAnim(s32 poseId);
 AnimationPoseData* animPoseGetAnimBaseDataPtr(s32 poseId);
+AnimationPoseFile* animPoseGetAnimGroupPtr(s32 id);
+AnimationPoseFile* animPoseGetAnimGroupPtr(s32 id);
 AnimData* animPoseGetAnimDataPtr(s32 poseId);
 AnimationPose* animPoseGetAnimPosePtr(s32 poseId);
 
@@ -411,9 +413,13 @@ void animPaperPoseRelease(s32 poseId);
 void animPoseRelease(s32 poseId);
 
 GXColor animPoseGetMaterialEvtColor(s32 poseId);
+GXColor animPoseGetMaterialAnmColor(s32 poseId);
+GXColor animPoseGetMaterialAnmColor(s32 poseId);
 u32 animPoseGetMaterialLightFlag(s32 poseId);
 u32 animPoseGetMaterialFlag(s32 poseId);
 void animPoseSetMaterialEvtColor(s32 poseId, GXColor color);
+void animPoseSetMaterialAnmColor(s32 poseId, GXColor color);
+void animPoseSetMaterialAnmColor(s32 poseId, GXColor color);
 void animPoseSetMaterialLightFlagOff(s32 poseId, u32 mask);
 void animPoseSetMaterialLightFlagOn(s32 poseId, u32 mask);
 void animPoseSetMaterialFlagOff(s32 poseId, u32 mask);
@@ -429,6 +435,7 @@ f32 animPoseGetLoopTimes(s32 id);
 
 void animPoseWorldPositionEvalOn(s32 poseId);
 void animPoseWorldMatrixEvalOn(s32 poseId);
+void animPoseWorldMatrixEvalOff(s32 poseId);
 void animPoseMain(s32 poseId);
 
 BOOL animGroupBaseAsync(const char* name, s32 group, void* callback);
@@ -439,6 +446,8 @@ void animPoseSetGXFunc(s32 poseId, void (*callback)(s32 wXluStage), BOOL disable
 s32 animPoseGetShapeIdx(s32 poseId, const char* name);
 s32 animPoseGetGroupIdx(s32 poseId, const char* name);
 const char* animPoseGetGroupName(s32 poseId, s32 group);
+const char* animPoseGetShapeName(s32 poseId, s32 shape);
+const char* animPoseGetShapeName(s32 poseId, s32 shape);
 
 void animSetPaperTexMtx(Mtx mtx1, Mtx mtx2, Mtx mtx3);
 void animSetPaperTexObj(GXTexObj* obj1, GXTexObj* obj2, GXTexObj* obj3, void* data1, void* data2, void* data3, s32 texMode, s32 unused);
@@ -460,6 +469,8 @@ void animPoseAutoRelease(s32 type);
 void animPoseWorldPositionEvalOff(s32 poseId);
 void animPoseDrawShape(s32 poseId, s32 shapeId);
 BOOL animPoseTestXLU(s32 poseId);
+BOOL animPoseTestOPA(s32 poseId);
+BOOL animPoseTestOPA(s32 poseId);
 void animPoseVivianMain(s32 poseId, Vec* pos);
 void animPoseDisp_MakeExtTexture(const char* group, const char* anim, f32 frame, f32 scale, GXTexObj* obj,
                                  smartEntry** image, s32* x0, s32* y0, s32* x1, s32* y1);

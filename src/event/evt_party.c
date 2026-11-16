@@ -133,6 +133,20 @@ USER_FUNC(evt_party_set_camid) {
     return EVT_RETURN_DONE;
 }
 
+/** Writes the camera the partner in slot args[0] is drawn with to args[1]. */
+// Original name and size (0x74) from the JP demo map (UNUSED there: no script uses it); evt_party_set_camid with
+// partyGetCamId.
+USER_FUNC(evt_party_get_camid) {
+    PartyEntry* p;
+    EvtWord* args = event->args;
+    p = GETPARTY(args);
+    if (p == NULL) {
+        return EVT_RETURN_DONE;
+    }
+    evtSetValue(event, args[1], partyGetCamId(p));
+    return EVT_RETURN_DONE;
+}
+
 /**
  * If the partner is off screen, walks it toward Mario a unit at a time,
  * snapping it to the floor below (or Mario's height), until it is on screen; clears its footmarks first.
@@ -757,6 +771,32 @@ USER_FUNC(evt_party_get_status) {
             evtSetValue(event, dst, bomheiGetStatus());
             break;
     }
+    return EVT_RETURN_DONE;
+}
+
+// evt_party_get_hitobj_head and evt_party_get_hitobj_ride: original names and sizes (0x70 each) from the JP demo
+// map (UNUSED there: no script uses them). Each writes to args[1] the hit object whose name the
+// evt_party_get_name_hitobj_ command of the same word writes. The map's other six forms (and the six missing
+// name forms) are not restored: no existing command shows their fields.
+USER_FUNC(evt_party_get_hitobj_head) {
+    PartyEntry* p;
+    EvtWord* args = event->args;
+    p = GETPARTY(args);
+    if (p == NULL) {
+        return EVT_RETURN_DONE;
+    }
+    evtSetValue(event, args[1], (EvtWord)p->hitobjHead);
+    return EVT_RETURN_DONE;
+}
+
+USER_FUNC(evt_party_get_hitobj_ride) {
+    PartyEntry* p;
+    EvtWord* args = event->args;
+    p = GETPARTY(args);
+    if (p == NULL) {
+        return EVT_RETURN_DONE;
+    }
+    evtSetValue(event, args[1], (EvtWord)p->hitobjStandOn);
     return EVT_RETURN_DONE;
 }
 

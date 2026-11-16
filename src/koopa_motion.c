@@ -66,6 +66,13 @@ BOOL kpaHipAttackOk(void) {
     return ((mario->kpaWork->flags >> 4) & 1) ^ 1;
 }
 
+/** Turns Bowser's ground pound back on. */
+// Original name and size (0x30) from the JP demo map (UNUSED there: nothing calls it); kpaHipAttackOff's
+// counterpart.
+static void kpaHipAttackOn(void) {
+    marioGetPtr()->kpaWork->flags &= ~KPA_WORK_FLAG_NO_HIP_ATTACK;
+}
+
 /** Turns Bowser's ground pound off (KPA_WORK_FLAG_NO_HIP_ATTACK, read by kpaHipAttackOk). */
 // Original name and size (0x30) from the JP demo map (UNUSED there: every call is inlined).
 static void kpaHipAttackOff(void) {

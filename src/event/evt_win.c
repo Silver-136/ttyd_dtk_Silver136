@@ -592,6 +592,59 @@ USER_FUNC(unitwincoin_wait) {
     return EVT_RETURN_DONE;
 }
 
+// unitwinsupercoin_disp_onoff / _wait and unitwinstarpiece_disp_onoff / _wait: original names and sizes (0x7c,
+// 0x4c) from the JP demo map (UNUSED there: no script uses them). The coin pair above for the Shine Sprite and
+// Star Piece counters: the window draw shares the coin counter's fields and reads pouchGetSuperCoin under
+// UNITWIN_FLAG_SHINE_UNUSED and pouchGetStarPiece under UNITWIN_FLAG_STAR_PIECE_UNUSED. (The other Shine Sprite
+// flag, UNITWIN_FLAG_SHINE_WINDOW_UNUSED, draws from its own field and reads the count without pouchGetSuperCoin.)
+USER_FUNC(unitwinsupercoin_disp_onoff) {
+    s32 on = evtGetValue(event, event->args[0]);
+    UnitWinWork* wp;
+    pouchGetPtr();
+    wp = _wp;
+    wp->coin = pouchGetSuperCoin();
+    wp->coinTick = 0;
+    if (on) {
+        wp->flags |= UNITWIN_FLAG_SHINE_UNUSED;
+    } else {
+        wp->flags &= ~UNITWIN_FLAG_SHINE_UNUSED;
+    }
+    return EVT_RETURN_DONE;
+}
+
+USER_FUNC(unitwinsupercoin_wait) {
+    UnitWinWork* wp = _wp;
+    pouchGetPtr();
+    if (wp->coin != pouchGetSuperCoin()) {
+        return EVT_RETURN_BLOCK;
+    }
+    return EVT_RETURN_DONE;
+}
+
+USER_FUNC(unitwinstarpiece_disp_onoff) {
+    s32 on = evtGetValue(event, event->args[0]);
+    UnitWinWork* wp;
+    pouchGetPtr();
+    wp = _wp;
+    wp->coin = pouchGetStarPiece();
+    wp->coinTick = 0;
+    if (on) {
+        wp->flags |= UNITWIN_FLAG_STAR_PIECE_UNUSED;
+    } else {
+        wp->flags &= ~UNITWIN_FLAG_STAR_PIECE_UNUSED;
+    }
+    return EVT_RETURN_DONE;
+}
+
+USER_FUNC(unitwinstarpiece_wait) {
+    UnitWinWork* wp = _wp;
+    pouchGetPtr();
+    if (wp->coin != pouchGetStarPiece()) {
+        return EVT_RETURN_BLOCK;
+    }
+    return EVT_RETURN_DONE;
+}
+
 /**
  * Shows (args[0] nonzero) or hides the lottery ticket number (from evt_lottery) in the unit window;
  * it is drawn only while the lottery reports a ticket.

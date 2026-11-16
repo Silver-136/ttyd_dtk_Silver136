@@ -34,6 +34,13 @@ static FileManagerWork* afp = &fileWork;
 static FileEntry* _fileAlloc(const char* filename, s32 type, void (*callback)(FileEntry*));
 FileEntry* fileAsync(const char* filename, s32 type, FileCallback callback);
 
+/** The file manager's work. */
+// Original name and size (0x8) from the JP demo map (UNUSED there: nothing calls it); returns the unit's work
+// pointer, like animGetPtr.
+FileManagerWork* fileGetWorkPtr(void) {
+    return afp;
+}
+
 /** Boot-time setup: allocates the 1024 file entries and chains them all into the free list. */
 void fileInit(void) {
     FileEntry* ptr;

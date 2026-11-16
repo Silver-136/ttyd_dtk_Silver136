@@ -186,6 +186,17 @@ USER_FUNC(btlevtcmd_BtlIconSetPosition) {
     return EVT_RETURN_DONE;
 }
 
+/** Script: sets the jump speed of battle icon args[0] (read by btlevtcmd_BtlIconJumpPosition). */
+// Original name and size (0x50) from the JP demo map (UNUSED there: no script uses it);
+// btlevtcmd_BtlIconSetFallAccel for the icon's jump speed.
+USER_FUNC(btlevtcmd_BtlIconSetJumpSpeed) {
+    EvtWord* args = event->args;
+    s32 index = evtGetValue(event, args[0]);
+    BattleIcon* icon = BtlIconGetPtr(index);
+    icon->jumpSpeed = evtGetFloat(event, args[1]);
+    return EVT_RETURN_DONE;
+}
+
 /**
  * s32 index for BtlIconGetPtr, f32 fallAccel Script:
  * sets the gravity per frame used by btlevtcmd_BtlIconJumpPosition for that icon.
