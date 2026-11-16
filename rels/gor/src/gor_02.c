@@ -1137,6 +1137,10 @@ static EVT_BEGIN(powerupya_party_rtn)
         IF_INT_NOT_EQUAL(LW(1), LW(8))
             CALL(evt_mario_goodbye_party, 0)
             CALL(evt_mario_hello_party, 0, LW(1))
+            // BUG (JP and the JP demo): evt_mario_hello_party leaves the new partner in run mode 1 (waiting,
+            // following Mario), and only the partner of the talk start was stopped (powerupya_table_talk). So the
+            // new partner keeps its own wait motion, which replaces the poses powerupya_party_lank_rtn sets for
+            // it. US and later stop it here.
 #if VERSION >= VERSION_US
             CALL(evt_party_stop, 0)
 #endif

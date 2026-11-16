@@ -656,6 +656,11 @@ void marioFBattlePrepare(void) {
 #if VERSION >= VERSION_JP
     R_last_position = wp->position;
 #endif
+    // BUG: no check for the slit motion. During a pass through a gap (SLIT_STATE_GAP_PASS, walls off) this turns
+    // Mario face-on (displayDirection 0 or 180, still in Paper Mode) and points directionView along the screen
+    // instead of through the gap; PRE_BATTLE_PHYSICS zeroes only moveDist, and marioMove's walls-off branch keeps
+    // moving him at baseSpeed along the new direction until SLIT_STATE_GAP_EXIT turns the walls back on, so he can
+    // be left inside the gap.
     marioAdjustMoveDir();
 #if VERSION >= VERSION_JP
     if (wp->currMotionId != MARIO_MOTION_JABARA) {
@@ -1176,6 +1181,11 @@ void marioMain(void) {
         return;
     }
 #if VERSION >= VERSION_JP
+    // BUG: marioChkUseParty reads the raw pad (gp->buttonNew), not Mario's key data, and does not check whether a
+    // menu can open (keys off, marioCheckMenuDisable). With Slow Go equipped, Start or a D-pad press in a scene with
+    // the keys off still sets MARIO_TRIG_FLAG_CHG_ANIM below, and marioPreDisp restarts Mario's current pose from
+    // poseTime. While control is off (marioCtrlOff, also evt_mario_cont_onoff) the test is TRUE on every frame, so
+    // the pose is restarted on every frame.
     if (marioChkUseParty()) {
         marioSuperEmblemChk();
         p = mp;
@@ -1663,6 +1673,12 @@ static void marioMoveMain(void) {
         vz = spd * cs;
     }
     spd = wp->baseSpeed;
+    // BUG: hitobjStandOn here is the floor found by the previous frame's ground check (marioChkGnd / marioChkGnd2
+    // run after marioMove), and a jump started this frame has already cleared it (marioPreJump), so the hazard
+    // return floor is recorded only on the second grounded frame, and never when this function returned early
+    // above (control off, forced movement). marioReInit clears damageHit on every map change, so until Mario has
+    // stood two frames on such a floor in the new map, mot_damage / mot_damageToge send him to their fallback
+    // point (the map origin, or the fixed points for muj_00, gor_00 and gor_04).
     if (wp->hitobjStandOn) {
         if (hitGetAttr(wp->hitobjStandOn) & HIT_ATTR_DAMAGE_RETURN) {
             wp->damageHit = wp->hitobjStandOn;

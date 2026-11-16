@@ -1001,6 +1001,11 @@ ItemEntry* itemNearDistCheck(f32 x, f32 y, f32 z, f32 range) {
     i = 0;
     pos = (Vec){ x, y, z };
     for (; i < wp->count; i++, entry++) {
+        // BUG (JP and later): the early demos skip items Mario cannot touch (ITEM_FLAG_NO_TOUCH_GET); from JP on
+        // only ITEM_FLAG2_NO_PARTNER items are skipped, and the scripts set that flag only on the Skull Gem
+        // (gor_01) and Glitzville's two cakes (tou). So Koops's shell picks up, and itemNokoForceGet collects,
+        // field items that are meant to be taken only through a script, e.g. the Garnet Star on pik_03's altar
+        // and the Puni Orb on the mri pedestals (mri_punipuni_setup).
 #if VERSION <= VERSION_DEMO_JP
         if (!(entry->flags & ITEM_FLAG_ACTIVE)) {
             continue;

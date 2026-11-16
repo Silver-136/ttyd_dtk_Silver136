@@ -142,6 +142,9 @@ EVT_BEGIN(pik_03_init_evt)
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_PIK3"))
     CALL(evt_snd_set_rev_mode, 2)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_53_THE_REAL_GARNET_STAR)
+        // BUG (JP and later): the star is not given ITEM_FLAG2_NO_PARTNER, so Koops's shell can collect it
+        // (itemNearDistCheck). It then goes into the pouch without evt_daiza: the story stays before
+        // STG6_53_THE_REAL_GARNET_STAR and the altar's examine script stays set up for an item that is gone.
         CALL(evt_item_entry, STRING("star"), ITEM_GARNET_STAR, 0, 45, -950, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
     END_IF
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_53_THE_REAL_GARNET_STAR)

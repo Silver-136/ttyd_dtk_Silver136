@@ -7494,6 +7494,12 @@ EVT_BEGIN(cooking_evt)
     IF_INT_EQUAL(LW(0), -1)
         CALL(evt_msg_print, 0, STRING("gor_01_cook_008"), 0, STRING("ナンシー"))
         CALL(evt_msg_select, 0, STRING("gor_01_select"))
+        // BUG: both cases leave this SWITCH by GOTO, so END_SWITCH never runs and every pass keeps one more switch
+        // level (evt_switch raises switchDepth with no limit; the event has 8). From the 9th pass on, evt_switch
+        // stores the value (1, "No") past switchValues into the event's own fields: readAddr, uwBase, ufBase,
+        // eventId, unitId and, on the 14th pass, timescale. With timescale holding the bits of 1 (about 1.4e-45)
+        // commandsLeft never reaches 1 again, so the event stops after the evt_msg_continue below and Mario's
+        // controls stay off. The second-ingredient SWITCH below leaks the same way; the passes add up.
         SWITCH(LW(0))
             CASE_EQUAL(0)
                 GOTO(0)
@@ -7531,11 +7537,16 @@ EVT_BEGIN(cooking_evt)
                 IF_INT_EQUAL(LW(0), -1)
                     CALL(evt_msg_print, 0, STRING("gor_01_cook_010"), 0, STRING("ナンシー"))
                     CALL(evt_msg_select, 0, STRING("gor_01_cook_select"))
+                    // BUG: as at LABEL(1), every case leaves this SWITCH by GOTO, so each "I'll pick another"
+                    // (GOTO(2)) keeps one more switch level.
                     SWITCH(LW(0))
                         CASE_EQUAL(0)
                             SET_VALUE(LF(0), 1)
                             GOTO(3)
                         CASE_EQUAL(1)
+                            // BUG (the JP demo): without this evt_msg_continue the gor_01_cook_010 window stays
+                            // open at its <o> stop; each pass opens another, and the 7 window slots run out
+                            // (msgWindow_Entry).
 #if VERSION >= VERSION_JP
                             CALL(evt_msg_continue)
 #endif

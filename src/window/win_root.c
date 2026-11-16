@@ -2545,6 +2545,7 @@ static void winSortMain(WindowWork* wp) {
     // BUG: Start is only seen when B, the stick and A are not pressed in the same frame. With A (or the stick) and
     // Start together, the pause menu closes on Start while this branch never runs, so sortActive stays set and the
     // hidden sort menu still takes input when the pause menu is opened again (until winReInit on a map change).
+    // With the mail sort left active, A while reading a letter re-sorts the list and can crash (winMailDisp).
     // US checks Start first.
     else if (trg & PAD_BUTTON_START) {
         wp->sortActive = 0;
@@ -2878,6 +2879,11 @@ static void winMailDisp(WindowWork* wp) {
             winTexInit((TEXPalette*)*wp->res->data);
             winTexSet(0x77, (Vec){ 4.0f + (208.0f + wp->item.mailX), (wp->item.mailY - 56.0f) - 80.0f, 0.0f }, (Vec){ 1.0f, 7.5f, 1.0f }, col);
             winFontInit();
+            // BUG (reachable in JP and the early demos): the picture below is drawn from mailRes, which winItemMain
+            // state 201 loaded, or set to NULL, for the letter selected when it was opened. A mail sort while the
+            // letter is read sets mailSel to 0 (sort_8_1_func, sort_8_2_func); when the letter now at the top has
+            // MAIL_FLAG_PICTURE and the opened one had none, mailRes is NULL and the read through it crashes.
+            // Only the sort menu that winSortMain's Start bug leaves active can sort here (A while reading).
 #if VERSION <= VERSION_DEMO_JP
             winFontSetLabel((Vec){80.0f + wp->item.mailX, (wp->item.mailY - 80.0f) + (f32)(wp->item.mailLine * 21), 0.0f}, (Vec){0.75f, 0.75f, 0.75f}, (GXColor){0x00, 0x00, 0x00, 0xFF}, mail->body);
             if (mail->flags & MAIL_FLAG_PICTURE) {

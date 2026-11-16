@@ -857,6 +857,11 @@ HitEntry* partySearchFrontWall(PartyEntry* party, Vec* pos, f32 dist, f32 ang) {
     sincosf(&sn, &cs, ang);
 #if VERSION >= VERSION_US
     // US and later: in paper mode (PARTY_FLAG_PAPER_MODE) the partner checks walls with a width of 6
+    // BUG: from US on a partner turns paper whenever Mario is in Paper Mode (party_slit), and Mario's push
+    // (partyMarioHosei) still uses the partner's full width, up to 4 units a frame. With the 6-unit width this
+    // probe reaches only 3 units past the move, and partyChkWallAround's push-out rays are 3 units long and move it
+    // at most 1 unit a frame, so in a corner the reflect2 slide can carry the partner past the other wall even when
+    // it is following Mario (run mode 2), as in run mode 1 (see party_motion_wait).
     w = party->width;
     if (party->flags & PARTY_FLAG_PAPER_MODE) {
         w = 6.0f;

@@ -412,6 +412,10 @@ EVT_BEGIN(mri_punipuni_setup)
 #else
     CALL(evt_item_entry, LW(10), ITEM_PUNI_ORB, 0, -20000, 0, ITEM_TYPE_STILL, -1, 0)
 #endif
+    // BUG (JP and later): only ITEM_FLAG_NO_TOUCH_GET is set, not ITEM_FLAG2_NO_PARTNER, so once the orb sits on a
+    // pedestal Koops's shell can collect it (itemNearDistCheck). The orb goes back into the pouch while the
+    // room's "orb placed" flag stays set; taking it off the pedestal then (mri_punipuni_itemremove) adds a
+    // second Puni Orb.
     CALL(evt_item_flag_on, LW(10), ITEM_FLAG_NO_TOUCH_GET)
     RETURN
 EVT_END()

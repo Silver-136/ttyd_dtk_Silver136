@@ -190,6 +190,11 @@ void marioChgMoveMotion(void) {
     }
 
     // At zero speed this calls the stay transition and then continues into the walk/dash selection below (no return).
+    // BUG: the walk/dash change below does not check whether Mario is in the air or what the stick does. It runs
+    // on the second frame after a field battle (fbatBattleMode state 4), after control came back on the first
+    // (battle_exit). A jump started on those frames, or a jump or fall the battle began in, becomes mot_walk or
+    // mot_dash, whose first frame clears the jumping and falling flags, sets the walk or dash speed and calls
+    // marioChkJump, so A on that frame starts a new jump in mid-air.
     if (!mario->baseSpeed) {
         marioChgStayMotion();
     }

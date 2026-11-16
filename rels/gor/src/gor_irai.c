@@ -326,6 +326,11 @@ EVT_END()
 static EvtWord* irai_end_event[] = {
     irai_end_event01, irai_end_event_null, irai_end_event_null, irai_end_event04, irai_end_event_null, irai_end_event_null, irai_end_event_null, irai_end_event_null,
     irai_end_event_null, irai_end_event_null, irai_end_event_null, irai_end_event_null, irai_end_event_null, irai_end_event_null, irai_end_event_null, irai_end_event_null,
+    // BUG (JP and the JP demo): request 19 has no end script, so cancelling it leaves the Wedding Ring "wr"
+    // that gor_02's iri_19_init placed in this room. irai_cancel_func has already cleared the request's work
+    // flags and taken the rings from the pouch, but picking the ring up gives Mario a Wedding Ring again and
+    // sets GSWF_TROUBLE_WORK(1), the ring's collect flag, with no request active (or for the next request taken
+    // at the board before leaving the room). US and later add irai_end_event19, which deletes the ring.
 #if VERSION >= VERSION_US
     irai_end_event_null, irai_end_event_null, irai_end_event19, irai_end_event_null, irai_end_event_null, irai_end_event_null, irai_end_event_null, irai_end_event_null,
 #else
