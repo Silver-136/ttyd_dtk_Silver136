@@ -8,6 +8,21 @@ generated from (maps made before 2026-11-13 have no such line).
 One entry per push, newest first: date, the pushed commit, whether maps from the previous push are now obsolete,
 and what changed in plain words.
 
+## 2026-11-15 - pushed commit: the one that adds this entry (maps stamped 301027e38)
+
+Old maps obsolete: **yes**. Regenerate them.
+
+- Format fixes (Zephiles' feedback): library members are named from the build (both `main.o` objects told apart,
+  `.C` sources, `os.a __ppc_eabi_init.cpp`); REL `.bss` offsets are rounded up to the section alignment; extab and
+  extabindex get their own blocks; no trailing spaces; `_savegpr_N` / `_restgpr_N` / `_savefpr_N` / `_restfpr_N`
+  are listed as ordinary linked entries instead of UNUSED; `gTRKInterruptVectorTable` has its real size (0x1f34).
+- About 130 more UNUSED entries in every version: stripped functions restored under their JP demo map names, for
+  example `animPose_ResetTime`, `battleStageLoad`, `camSetAt` / `camSetPos` / `camSetUp`, `capture`, the `fbat*`
+  mode functions, `_getFrontFloor2`, `eff_splash`, `distABCf`, `nanNPCNameToPtr`.
+- Some data names this project had made up are gone: the objects are now function statics or literals as in the
+  original (for example `cardFileName`, `cardGameTitle`, `bgColor`, `camDir`, `coin_fmt`, `R_no_messages_*`), so
+  they appear as `name$N` or `@N` entries; the `$N` numbers of many function statics changed with them.
+
 ## 2026-11-14 (second push) - pushed commit: the one that adds this entry (maps stamped 917a33ddd)
 
 Old maps obsolete: **yes** (format). Regenerate them.
