@@ -2044,6 +2044,13 @@ static void msgWindow_Delete(WindowEntry* window) {
 void msgWindow_Add(char* msg, s32 id) {
     WindowEntry* window = windowGetPointer(id);
 
+    // BUG: no check that window id is still open. The scripts rely on the text of the message before: one that
+    // ends with <o> (or a choice) leaves its window open for the next add. When the window has closed instead,
+    // windowDelete has set its userdata to NULL and msgAdd reads the message data through it. msgSearch's
+    // ErrMessage text ends with <key>, so a missing message closes its window after A and the next
+    // evt_msg_print_add crashes here (msgWindow_Continue does the same through msgContinue, and evt_msg_select
+    // reads sel through NULL when its choice text is missing).
+
     msgAdd(window->userdata, msg);
     window->state = MSG_WIN_STATE_PRINT;
     window->flags |= WINDOW_FLAG_BUSY;

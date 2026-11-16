@@ -386,6 +386,13 @@ void marioStInit(void) {
     gp->areaFadeOutDuration = 300;
 
     // game language: 1 English, 2 German, 3 French, 4 Spanish, 5 Italian
+    // BUG (JP, the September PAL demo and PAL): the language comes from the console's font encoding, with no check
+    // that the disc has text for it. JP picks English (msgdrv's "emsg" folder) when the console's font is not
+    // Shift-JIS; PAL picks Japanese ("msg/JP") when it is. Neither disc has that folder, so every message file
+    // fails to load and msgSearch returns the "No messages." error text for every message. That text ends with a
+    // key wait and closes its window, so the first script that expects a window to stay open and adds to it reads
+    // the deleted window through NULL (msgWindow_Add): evt_memcard_check, the file select's memory card check,
+    // crashes after its first message.
 #if VERSION <= VERSION_DEMO_JP
 #if VERSION == VERSION_DEMO_JP
     gp->language = LANGUAGE_JP;
