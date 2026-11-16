@@ -1442,6 +1442,8 @@ static void PuniChildHagure(PuniData* p) {
     if (p->child1 != NULL) {
         PuniData* c = p->child1;
         c->mode = PUNI_MODE_HAGURE;
+        // BUG: resets p's step instead of c's (also below); harmless, a follower in PUNI_MODE_PARENT is always at
+        // step 0 (puniModeParentpre), so its lost mode starts at step 0 anyway.
         p->modeStep = 0;
         PuniChildHagure(c);
         PuniDokuritsu(c);

@@ -618,6 +618,14 @@ static USER_FUNC(bgm_start_wait) {
  * system level 0, a fixed lecture camera shot, Mario facing right.
  */
 EVT_BEGIN(slit_majin_lecture_init)
+    // BUG: gon_06's evt_majin2 stopped the field NPCs (evt_npc_stop_for_event) before this. marioStSystemLevel(0)
+    // restarts every event (evtStartAll), their regular events included, while the NPCs stay NPC_STATUS_STOPPED
+    // until evt_npc_start_for_event after the lecture. npcMain applies no movement to a stopped NPC, but a move
+    // call its event is in keeps adding to moveOffset each frame (evt_npc_jump_position when the NPC was stopped
+    // in the air, evt_npc_homing_target in a chase; evt_npc_move_position too before US), and timed moves do not
+    // run out because moveTicks stands still. On the first frame after evt_npc_start_for_event, npcMoveXZ moves
+    // the NPC by the whole sum in one step, stopped only by the first wall on the way, so an enemy can land far
+    // outside its territory; the longer the lecture, the farther.
     CALL(lect_set_systemlevel, 0)
     CALL(lect_test_systemlevel)
     CALL(evt_cam3d_evt_set_rel, FLOAT(0.0f), FLOAT(98.0f), FLOAT(558.0f), FLOAT(0.0f), FLOAT(42.0f), FLOAT(-101.799805f), 1000, EASING_LINEAR)

@@ -1534,6 +1534,11 @@ EVT_BEGIN(chorobon_move_event)
     CALL(evt_sub_random, 3, LW(4))
     ADD(LW(4), 2)
     LOOP(LW(4))
+        // BUG: before US there is no frame between the jumps. evt_npc_jump_position sets NPC_STATUS_NO_FIND_ONCE
+        // on every frame it runs, the landing frame included, and the next jump starts on the following frame, so
+        // npcCheckInterrupt starts no find, lost or return event during the 2 to 5 jumps: before US a Fuzzy can only
+        // notice Mario, or turn back at its territory edge, in the 10 to 509 ms pause after them. US and later wait
+        // one frame before each jump.
 #if VERSION >= VERSION_US
         WAIT_FRAMES(1)
 #endif

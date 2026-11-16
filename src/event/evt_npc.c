@@ -534,6 +534,8 @@ USER_FUNC(evt_npc_move_position) {
             npcTuningRy(npc, npc->moveDir);
         }
     }
+    // Before US the offset also grows while the NPC is stopped; see the BUG in slit_majin_lecture_init
+    // (rels/gon/src/event/evt_lect_gon.c).
 #if VERSION <= VERSION_DEMO_JP
     {
 #else
@@ -719,6 +721,9 @@ USER_FUNC(evt_npc_jump_position) {
         }
     }
 
+    // No NPC_STATUS_STOPPED check (evt_npc_move_position has one from US on): while the NPC is stopped in the air,
+    // npcMain applies no movement and the jump never lands, so moveOffset grows every frame; see the BUG in
+    // slit_majin_lecture_init (rels/gon/src/event/evt_lect_gon.c).
     temp = (f32)sin(npc->moveDir * 6.2831855f / 360.0f);
     npc->moveOffset.x += npc->moveDt * (npc->moveSpeed * temp);
     temp = (f32)cos(npc->moveDir * 6.2831855f / 360.0f);
@@ -1085,6 +1090,9 @@ USER_FUNC(evt_npc_homing_target) {
         return EVT_RETURN_YIELD;
     }
 
+    // No NPC_STATUS_STOPPED check: a stopped NPC does not move and its moveTicks stands still, so the homing
+    // move never meets its end test and moveOffset grows every frame; see the BUG in slit_majin_lecture_init
+    // (rels/gon/src/event/evt_lect_gon.c).
     temp = (f32)sin(6.2831855f * npc->moveDir / 360.0f);
     npc->moveOffset.x += npc->moveDt * (npc->moveSpeed * temp);
     temp = (f32)cos(6.2831855f * npc->moveDir / 360.0f);
