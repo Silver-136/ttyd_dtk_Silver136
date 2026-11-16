@@ -911,7 +911,7 @@ static void calcCamRoad(CamRoadState* out, CamRoadState* prev, f32 xA, f32 yA, f
         }
         x = xA;
         if (wp->state == CAM_ROAD_FORMAT_101 && curve != NULL && curve->fixYOn != 0) {
-            y = curve->f_24;
+            y = curve->fixY;
         } else {
             y = yA;
         }
@@ -933,10 +933,10 @@ static void calcCamRoad(CamRoadState* out, CamRoadState* prev, f32 xA, f32 yA, f
         }
         angle = curve->angle;
         rot = curve->rot;
-        dist = curve->f_58;
+        dist = curve->dist;
         x = hit.pos.x;
         if (wp->state == CAM_ROAD_FORMAT_101 && curve->fixYOn != 0) {
-            y = curve->f_24;
+            y = curve->fixY;
         } else {
             y = yA;
         }
@@ -976,7 +976,7 @@ static void calcCamRoad(CamRoadState* out, CamRoadState* prev, f32 xA, f32 yA, f
             cs = camRoadCos(fov);
             sn = camRoadSin(fov);
             mnz = -nz;
-            w = 0.01f * (prev->f_58 * (zoom * (640.0f * (dist * sn / cs) / 480.0f)));
+            w = 0.01f * (prev->shiftWeight * (zoom * (640.0f * (dist * sn / cs) / 480.0f)));
             found = 0;
             p = posA;
             ox = w * mnz;
@@ -1132,7 +1132,7 @@ static void calcCamRoad(CamRoadState* out, CamRoadState* prev, f32 xA, f32 yA, f
     out->rot = rot;
     out->segment = segment;
     out->time = gp->renderFieldTime;
-    out->f_58 = shiftWeight;
+    out->shiftWeight = shiftWeight;
     out->shiftXRate = curve->shiftXRate;
 }
 

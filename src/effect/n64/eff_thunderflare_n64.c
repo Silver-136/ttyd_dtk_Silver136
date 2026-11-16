@@ -12,7 +12,7 @@
 #include "libc_decls.h"
 
 typedef struct EffThunderflareN64Elem {
-    s32 unk0;     // 0x0
+    s32 reserved_0; // 0x0, only set to 0
     s32 type;     // 0x4
     Vec position; // 0x8
     s32 alpha;    // 0x14
@@ -91,7 +91,7 @@ EffectEntry* effThunderflareN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z
         e->rotA = (i - 1) * 3240 / 30;
         e->rotB = 0.0f;
         e->dist = (i - 1) * 100 / 30;
-        e->unk0 = 0;
+        e->reserved_0 = 0;
     }
     return effect;
 }

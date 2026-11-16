@@ -10,7 +10,7 @@
 typedef struct CamRoadCurve {
     char name[0x20];       // 0x0
     u32 fixYOn;              // 0x20
-    f32 f_24;              // 0x24
+    f32 fixY;              // 0x24, camera y used instead of the target's when fixYOn is set (format 101)
     u32 off;               // 0x28
     u8 pad_2c[0x40 - 0x2c];
     s32 idxA;              // 0x40
@@ -18,7 +18,7 @@ typedef struct CamRoadCurve {
     f32 limA;              // 0x48
     f32 limB;              // 0x4c
     u8 pad_50[0x58 - 0x50];
-    f32 f_58;              // 0x58
+    f32 dist;              // 0x58, camera distance on this curve (copied into CamRoadState.dist)
     u8 pad_5c[0x64 - 0x5c];
     f32 angle;              // 0x64
     u8 pad_68[0x70 - 0x68];
@@ -76,7 +76,7 @@ typedef struct CamRoadState {
     f32 rot;               // 0x48
     f32 segment;              // 0x4c
     OSTime time;           // 0x50
-    f32 f_58;              // 0x58
+    f32 shiftWeight;       // 0x58, calcCamRoad's shiftWeight argument; the next frame scales its side shift by it
     f32 shiftXRate;        // 0x5c
 } CamRoadState;
 

@@ -12,7 +12,7 @@ typedef struct effScanningData {
     f32 scale; // 0x10
     s32 animId; // 0x14
     s32 state; // 0x18
-    s32 field_0x1C; // 0x1C
+    s32 reserved_1C; // 0x1C, only set to 0
     s32 alpha; // 0x20
 } effScanningData;
 

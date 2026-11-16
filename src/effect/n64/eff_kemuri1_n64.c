@@ -17,12 +17,14 @@ typedef struct EffKemuri1Work {
     u16 type;           // 0x0
     Vec position;       // 0x4
     f32 hSpeed;         // 0x10, along (dirX, dirZ)
-    f32 f14, f18, f1C;  // 0x14, per type: horizontal speed factors
+    f32 hStep, hStep2, hStep3;  // 0x14, types 0/1: hStep3 adds to hStep2, hStep2 to hStep, hStep to hSpeed;
+                                // types 4-7: hSpeed *= hStep
     f32 vSpeed;         // 0x20
-    f32 f24, f28, f2C;  // 0x24, per type: vertical speed factors
+    f32 vStep, vStep2, vStep3;  // 0x24, vStep adds to vSpeed; types 0/1: vStep3 adds to vStep2, vStep2 to vStep;
+                                // types 3-7: vStep *= vStep2; types 4-7: vSpeed *= vStep3
     f32 dirX;           // 0x30, sin of the puff's direction
     f32 dirZ;           // 0x34, cos of the puff's direction
-    s32 field_0x38;     // 0x38, header: 0/3/2 by type, never read
+    s32 reserved_38;    // 0x38, header: 0/3/2 by type, never read
     s32 frame;          // 0x3C, header: frames elapsed
     s32 animFrame;      // 0x40, header: texture frame (0..15); puffs with one above 15 are not drawn
     u8 r, g, b;         // 0x44, puff colour
@@ -36,23 +38,23 @@ static void effKemuri1Main(EffectEntry* effect);
 /** Moves one puff of types 0 and 1 (the landing puffs): speeds ramp by their factors, out along its direction and up. */
 // Original name and size from the JP demo map (UNUSED there: every call is inlined).
 static void kemuri_land(EffKemuri1Work* work) {
-    work->f18 += work->f1C;
-    work->f14 += work->f18;
-    work->hSpeed += work->f14;
+    work->hStep2 += work->hStep3;
+    work->hStep += work->hStep2;
+    work->hSpeed += work->hStep;
     work->position.x += work->hSpeed * work->dirX;
     work->position.z += work->hSpeed * work->dirZ;
-    work->f28 += work->f2C;
-    work->f24 += work->f28;
-    work->vSpeed += work->f24;
+    work->vStep2 += work->vStep3;
+    work->vStep += work->vStep2;
+    work->vSpeed += work->vStep;
     work->position.y += work->vSpeed;
 }
 
-/** Moves one puff of type 3: up by its speed, which eases by f24 (itself scaled by f28 each frame). */
+/** Moves one puff of type 3: up by its speed, which eases by vStep (itself scaled by vStep2 each frame). */
 // Original name and size from the JP demo map (UNUSED there: every call is inlined).
 static void kemuri_dosun(EffKemuri1Work* work) {
     work->position.y += work->vSpeed;
-    work->vSpeed += work->f24;
-    work->f24 *= work->f28;
+    work->vSpeed += work->vStep;
+    work->vStep *= work->vStep2;
 }
 
 /** Moves one puff of types 4-7 (the ring): out along its direction and up, each speed scaled down every frame. */
@@ -60,11 +62,11 @@ static void kemuri_dosun(EffKemuri1Work* work) {
 static void kemuri_dosun2(EffKemuri1Work* work) {
     work->position.x += work->hSpeed * work->dirX;
     work->position.z += work->hSpeed * work->dirZ;
-    work->hSpeed *= work->f14;
+    work->hSpeed *= work->hStep;
     work->position.y += work->vSpeed;
-    work->vSpeed += work->f24;
-    work->f24 *= work->f28;
-    work->vSpeed *= work->f2C;
+    work->vSpeed += work->vStep;
+    work->vStep *= work->vStep2;
+    work->vSpeed *= work->vStep3;
 }
 
 EffectEntry* effKemuri1N64Entry(s32 type, f32 x, f32 y, f32 z, f32 angleOfs) {
@@ -103,22 +105,22 @@ EffectEntry* effKemuri1N64Entry(s32 type, f32 x, f32 y, f32 z, f32 angleOfs) {
     switch (type) {
         case 0:
         case 1:
-            data->field_0x38 = 0;
+            data->reserved_38 = 0;
             data->duration = 15;
             break;
         case 2:
-            data->field_0x38 = 3;
+            data->reserved_38 = 3;
             data->duration = 65;
             break;
         case 3:
-            data->field_0x38 = 2;
+            data->reserved_38 = 2;
             data->duration = 129;
             break;
         case 4:
         case 5:
         case 6:
         case 7:
-            data->field_0x38 = 3;
+            data->reserved_38 = 3;
             data->duration = 65;
             break;
     }
@@ -133,13 +135,13 @@ EffectEntry* effKemuri1N64Entry(s32 type, f32 x, f32 y, f32 z, f32 angleOfs) {
         case 1:
             for (i = 1; i < effCount; i++, data++) {
                 data->hSpeed = -3.0f;
-                data->f14 = 0.29999998f;
-                data->f18 = 0.0f;
-                data->f1C = 0.0f;
+                data->hStep = 0.29999998f;
+                data->hStep2 = 0.0f;
+                data->hStep3 = 0.0f;
                 data->vSpeed = 1.75f;
-                data->f24 = -0.16f;
-                data->f28 = 0.0f;
-                data->f2C = 0.0f;
+                data->vStep = -0.16f;
+                data->vStep2 = 0.0f;
+                data->vStep3 = 0.0f;
                 data->position.x = 0.0f;
                 data->position.y = 0.0f;
                 data->position.z = 4.0f;
@@ -163,8 +165,8 @@ EffectEntry* effKemuri1N64Entry(s32 type, f32 x, f32 y, f32 z, f32 angleOfs) {
                         tmp = cos(angle);
                         data->position.z = 25.0f * -tmp;
                         data->vSpeed = 0.95f;
-                        data->f24 = -0.04f;
-                        data->f28 = 0.94f;
+                        data->vStep = -0.04f;
+                        data->vStep2 = 0.94f;
                         break;
                     case 1:
                         angle = -2.3561945f;
@@ -174,8 +176,8 @@ EffectEntry* effKemuri1N64Entry(s32 type, f32 x, f32 y, f32 z, f32 angleOfs) {
                         tmp = cos(angle);
                         data->position.z = 25.0f * -tmp;
                         data->vSpeed = 0.84999996f;
-                        data->f24 = -0.04f;
-                        data->f28 = 0.94f;
+                        data->vStep = -0.04f;
+                        data->vStep2 = 0.94f;
                         break;
                     case 2:
                         angle = 0.34906587f;
@@ -185,8 +187,8 @@ EffectEntry* effKemuri1N64Entry(s32 type, f32 x, f32 y, f32 z, f32 angleOfs) {
                         tmp = cos(angle);
                         data->position.z = 25.0f * -tmp;
                         data->vSpeed = 0.75f;
-                        data->f24 = -0.04f;
-                        data->f28 = 0.94f;
+                        data->vStep = -0.04f;
+                        data->vStep2 = 0.94f;
                         break;
                 }
                 data->dirX = 0.0f;
@@ -202,11 +204,11 @@ EffectEntry* effKemuri1N64Entry(s32 type, f32 x, f32 y, f32 z, f32 angleOfs) {
         case 7:
             for (i = 1; i < effCount; i++, data++) {
                 data->hSpeed = -3.0f;
-                data->f14 = 0.93f;
+                data->hStep = 0.93f;
                 data->vSpeed = 0.0f;
-                data->f24 = 0.099999994f;
-                data->f28 = 0.94f;
-                data->f2C = 0.94f;
+                data->vStep = 0.099999994f;
+                data->vStep2 = 0.94f;
+                data->vStep3 = 0.94f;
                 angle2 = (angleOfs + (f32)(((i - 1) * 360) / (effCount - 1))) * 6.2831855f / 360.0f;
                 tmp = sin(angle2);
                 data->position.x = 10.0f * -tmp;

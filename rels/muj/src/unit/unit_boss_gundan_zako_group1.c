@@ -690,7 +690,7 @@ void zakogun_ext_init123_common(ExtdrvPose* pose, s32 i) {
     (*pose->mtx)[1][3] = -1000.0f;
     (*pose->mtx)[2][3] = 0.0f;
     pose->dir = 90.0f;
-    zakogun[i].field_0x0 = 0;
+    zakogun[i].reserved_0 = 0;
     zakogun[i].state = 0;
     zakogun[i].timer = 0;
     zakogun[i].pos = (Vec){0.0f, -1000.0f, 0.0f};

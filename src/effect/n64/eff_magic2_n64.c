@@ -29,8 +29,8 @@ typedef struct EffMagic2N64Work {
     s32 tex0ScrollYStep; // 0x44, per-frame step of tex0ScrollY (-2 for type 0, else 0)
     s32 tex1ScrollY; // 0x48, Y translation (/4) of texture matrix GX_TEXMTX1; += tex1ScrollYStep, wrapped by +0x100 when negative
     s32 tex1ScrollYStep; // 0x4C, per-frame step of tex1ScrollY (-4 for type 0, else 0)
-    f32 f50;
-    f32 f54;
+    f32 reserved_50; // 0x50, starts 0, += reserved_54 every frame; nothing else reads it
+    f32 reserved_54; // 0x54, only set to 0
     f32 angle;
     f32 angleStep;
 } EffMagic2N64Work;
@@ -135,8 +135,8 @@ EffectEntry* effMagic2N64Entry(s32 type, s32 life, f32 x, f32 y, f32 z, f32 scal
     w->scale = 10.0f;
     w->angle = (f32)(rand() % 360);
     w->angleStep = 4.0f;
-    w->f50 = 0.0f;
-    w->f54 = 0.0f;
+    w->reserved_50 = 0.0f;
+    w->reserved_54 = 0.0f;
     if (type == 1) {
         w->tex1ScrollXStep = 0x60;
         w->scaleTarget = scale;
@@ -204,7 +204,7 @@ static void effMagic2Main(EffectEntry* effect) {
     w->offset.z = 0.0f;
     for (i = 0; i < effect->count; i++, w++) {
         w->angle += w->angleStep;
-        w->f50 += w->f54;
+        w->reserved_50 += w->reserved_54;
         w->tex0ScrollX += w->tex0ScrollXStep;
         w->tex1ScrollX += w->tex1ScrollXStep;
         w->tex0ScrollY += w->tex0ScrollYStep;

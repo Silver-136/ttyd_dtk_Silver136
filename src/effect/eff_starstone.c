@@ -517,7 +517,7 @@ EffectEntry* effStarStoneEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
     work->half0OffsetX = 0.0f;
     work->half1OffsetZ = 0.0f;
     work->half1OffsetX = 0.0f;
-    work->f58 = 90.0f;
+    work->reserved_58 = 90.0f;
     work->r = 255;
     work->g = 255;
     work->b = 255;

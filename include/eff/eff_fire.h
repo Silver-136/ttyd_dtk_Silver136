@@ -26,7 +26,7 @@ typedef struct EffFireWork {
     s32 keyFrame;           // 0x40
     f32 pulseScale;         // 0x44, keyframed scale (FireScaleKey table)
     f32 pad48[1];
-    f32 f4c[6];             // 0x4C
+    f32 reserved_4C[6];     // 0x4C, only set to 0
     s32 bboxValid;          // 0x64, set once the screen bbox is computed
     s32 scrMinX;            // 0x68, screen-space bbox
     s32 scrMaxX;            // 0x6C

@@ -63,7 +63,7 @@ EffectEntry* effRippleN64Entry(s32 type, f32 x, f32 y, f32 z, f32 yOffset) {
     }
     work->lifetime = 32;
     work->offset = rand() % 32;
-    work->unk28 = y + yOffset;
+    work->reserved_28 = y + yOffset;
     return effect;
 }
 

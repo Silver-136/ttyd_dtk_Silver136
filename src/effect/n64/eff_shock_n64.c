@@ -130,7 +130,7 @@ EffectEntry* effShockN64Entry(s32 type, f32 x, f32 y, f32 z, f32 a, f32 b) {
     w->type = type;
     w->age = 0;
     w->life = 30;
-    w->c10 = 255;
+    w->reserved_10 = 255;
     w->flashAlpha = 255;
     w->alpha = 255;
     w->position.x = x;
@@ -207,9 +207,9 @@ static void effShockMain(EffectEntry* effect) {
         w->alpha *= 0.8f;
     }
     if (age > 6) {
-        w->c10 -= 13;
-        if (w->c10 < 0) {
-            w->c10 = 0;
+        w->reserved_10 -= 13;
+        if (w->reserved_10 < 0) {
+            w->reserved_10 = 0;
         }
     }
     dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effShockDisp, effect);

@@ -38,7 +38,7 @@ static EvtWord dmg_evt[100];
 
 typedef struct DekaTiming {
     s32 state;  // 0x0
-    s32 unk4;   // 0x4
+    s32 reserved_4;   // 0x4, only set to 0
     s32 type;   // 0x8
     f32 pos;    // 0xC
     Vec off;    // 0x10
@@ -557,7 +557,7 @@ static void main_timing(s32 idx) {
         case 3:
             t->state = 4;
             t->alpha = 255;
-            t->unk4 = 0;
+            t->reserved_4 = 0;
             break;
         case 4:
             break;

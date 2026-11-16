@@ -44,7 +44,7 @@ typedef struct IraiWork {
     s32 top;
     s32 yubiX;
     s32 yubiY;
-    s32 field_0x94;
+    s32 reserved_94; // 0x94, only set to 0
     f32 scroll;
 #if VERSION >= VERSION_DEMO_EU
     char client[30][101];
@@ -682,7 +682,7 @@ static USER_FUNC(irai_init_func) {
     wp->cursor = 0;
     wp->last = wp->cursor;
     wp->top = 0;
-    wp->field_0x94 = 0;
+    wp->reserved_94 = 0;
     wp->scroll = 0.0f;
     event->lwData[10] = (EvtWord)wp;
     return EVT_RETURN_DONE;
@@ -792,7 +792,7 @@ static USER_FUNC(irai_main_func) {
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1));
             }
             if (wp->cursor != wp->last) {
-                wp->field_0x94 = 0;
+                wp->reserved_94 = 0;
             }
             wp->last = wp->cursor;
             wp->scroll += (wp->top * 30 - wp->scroll) / 6.0f;

@@ -54,7 +54,7 @@ typedef struct ScreenWork {
     f32 yTarget;
     s32 count;
     s32 mode;
-    f32 field_0x28;
+    f32 reserved_28; // 0x28, only set to -1.0f, never read
     u8* noise;
 } ScreenWork;
 static f32 randf(f32 min, f32 max);
@@ -3927,7 +3927,7 @@ static s32 screen_init(EventEntry* event, BOOL isFirstCall) {
     screen_wp->x = screen_wp->xTarget = 0.0f;
     screen_wp->y = screen_wp->yTarget = 0.0f;
     screen_wp->count = 0;
-    screen_wp->field_0x28 = -1.0f;
+    screen_wp->reserved_28 = -1.0f;
 #if VERSION >= VERSION_US
     size = GXGetTexBufferSize(64, 64, GX_TF_I8, GX_FALSE, 0);
     screen_wp->noise = _mapAlloc(size);

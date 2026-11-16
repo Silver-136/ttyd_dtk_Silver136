@@ -25,7 +25,7 @@ typedef struct EffMiniGameWork {
     f32 vel;    // 0x20
     f32 acc;    // 0x24
     s32 delay;  // 0x28
-    s32 pad2c;  // 0x2C
+    s32 reserved_2C; // 0x2C, only set to 0
     s32 state;  // 0x30
     s32 alpha;  // 0x34
 } EffMiniGameWork;
@@ -134,7 +134,7 @@ EffectEntry* effMiniGameEntry(s32 type, f32 x, f32 y, f32 z) {
     work->scaleX = 1.0f;
     work->rotB = 0.0f;
     work->delay = 0;
-    work->pad2c = 0;
+    work->reserved_2C = 0;
     for (i = 1, work = work + 1; i < effect->count; i++, work++) {
 #if VERSION >= VERSION_US
         if (type == 0) {
@@ -159,7 +159,7 @@ EffectEntry* effMiniGameEntry(s32 type, f32 x, f32 y, f32 z) {
                 work->scaleY = 0.0f;
                 work->scaleX = 0.0f;
                 work->rotA = 0.0f;
-                work->pad2c = 0;
+                work->reserved_2C = 0;
                 work->alpha = 0;
                 break;
             case 30:
@@ -177,7 +177,7 @@ EffectEntry* effMiniGameEntry(s32 type, f32 x, f32 y, f32 z) {
                 work->scaleY = 1.0f;
                 work->scaleX = 1.0f;
                 work->rotA = 0.0f;
-                work->pad2c = 0;
+                work->reserved_2C = 0;
                 work->vel = 0.0f;
                 work->acc = 1.0f;
                 break;
@@ -198,7 +198,7 @@ EffectEntry* effMiniGameEntry(s32 type, f32 x, f32 y, f32 z) {
                     work->x = 26.0f * (f32)(i - 3) - 26.0f * (f32)(effect->count - 3) / 2.0f;
                     work->alpha = 0;
                 }
-                work->pad2c = 0;
+                work->reserved_2C = 0;
                 work->vel = 0.0f;
                 work->acc = 1.0f;
                 break;

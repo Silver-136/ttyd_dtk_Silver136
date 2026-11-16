@@ -8,7 +8,7 @@
 
 // One X-Naut of the horde
 typedef struct ZakoGun {
-    s8 field_0x0;
+    s8 reserved_0; // 0x0, only set to 0
     s8 state;
     s32 timer;
     s32 timerMax;

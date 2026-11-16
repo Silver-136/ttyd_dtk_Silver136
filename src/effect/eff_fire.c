@@ -151,12 +151,12 @@ EffectEntry* effFireEntry(s32 type, s32 duration, f32 x, f32 y, f32 z, f32 scale
     work->range = rand() % 30 + 30;
     work->smokePhase0 = 0;
     work->smokePhase1 = 0;
-    work->f4c[0] = 0.0f;
-    work->f4c[1] = 0.0f;
-    work->f4c[2] = 0.0f;
-    work->f4c[3] = 0.0f;
-    work->f4c[4] = 0.0f;
-    work->f4c[5] = 0.0f;
+    work->reserved_4C[0] = 0.0f;
+    work->reserved_4C[1] = 0.0f;
+    work->reserved_4C[2] = 0.0f;
+    work->reserved_4C[3] = 0.0f;
+    work->reserved_4C[4] = 0.0f;
+    work->reserved_4C[5] = 0.0f;
     switch (type) {
         case 0:
             work->smokeLife = 12;

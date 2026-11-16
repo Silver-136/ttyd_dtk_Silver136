@@ -25,7 +25,7 @@ typedef struct EffSstarN64Work {
     f32 bounce;        // 0x1c
     f32 rotZ;          // 0x20
     f32 rotZ2;         // 0x24
-    f32 unk28;         // 0x28
+    f32 reserved_28;   // 0x28, only set to 0
     f32 rotSpeed;      // 0x2c
     s32 life;          // 0x30
     f32 screenVelX;    // 0x34
@@ -100,7 +100,7 @@ EffectEntry* effSstarN64Entry(s32 type, f32 x, f32 y, f32 z, f32 tx, f32 ty, f32
     w->position.z = z;
     w->bounce = 0.0f;
     w->rotZ2 = 0.0f;
-    w->unk28 = 0.0f;
+    w->reserved_28 = 0.0f;
     w->subtype = type;
     if (type == 3) {
         w->scale = 0.2f;

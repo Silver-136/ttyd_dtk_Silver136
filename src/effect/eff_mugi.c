@@ -26,7 +26,7 @@ typedef struct effMugiKemuriData {
     f32 speed; // 0x2C
     f32 hSpeedScale; // 0x30, horizontal step per frame = direction * vertical speed * this
     f32 rising; // 0x34, 1.0 until the vertical speed turns negative
-    f32 field_0x38; // 0x38
+    f32 reserved_38; // 0x38, only set to 0
     f32 vy; // 0x3C
     f32 ay; // 0x40
     f32 jy; // 0x44
@@ -76,7 +76,7 @@ EffectEntry* effMugiKemuriEntry(f32 x, f32 y, f32 z, f32 angle) {
         data->flag = 1;
         data->hSpeedScale = 0.29999998f;
         data->rising = 0.0f;
-        data->field_0x38 = 0.0f;
+        data->reserved_38 = 0.0f;
         data->pos.x = x;
         data->pos.y = y;
         data->pos.z = z;
@@ -131,7 +131,7 @@ EffectEntry* effMugiKemuri2Entry(s32 type, f32 x, f32 y, f32 z, f32 angle, f32 d
     for (i = 0; i < 5; i++, data++) {
         data->flag = 1;
         data->type = type;
-        data->field_0x38 = 0.0f;
+        data->reserved_38 = 0.0f;
         data->pos.x = x;
         data->pos.y = y;
         data->pos.z = z;

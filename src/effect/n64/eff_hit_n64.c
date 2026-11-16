@@ -12,11 +12,11 @@
 typedef struct EffHitN64Work {
     s32 type;     // 0x0
     Vec position; // 0x4
-    f32 vel10;    // 0x10
-    f32 vel14;    // 0x14
+    f32 reserved_10;    // 0x10, only set to 0
+    f32 reserved_14;    // 0x14, only set to 0
     f32 pad18;    // 0x18
     f32 rotZ;     // 0x1C
-    f32 pad20;    // 0x20
+    f32 reserved_20;    // 0x20, only set to 0
     f32 rotY;     // 0x24
     f32 scale;    // 0x28
     s32 alpha;    // 0x2C
@@ -135,13 +135,13 @@ EffectEntry* effHitN64Entry(s32 type, s32 size, f32 x, f32 y, f32 z, f32 scale) 
         p->position.x = 0.0f;
         p->position.y = 0.0f;
         p->position.z = 0.0f;
-        p->vel10 = 0.0f;
-        p->vel14 = 0.0f;
-        p->pad20 = 0.0f;
+        p->reserved_10 = 0.0f;
+        p->reserved_14 = 0.0f;
+        p->reserved_20 = 0.0f;
         p->type = 0;
         p->rotZ = (f32)(i * 360 / (count - 1));
         p->rotY = r;
-        p->vel10 = 0.0f;
+        p->reserved_10 = 0.0f;
         p->alpha = 255;
     }
     return effect;

@@ -16,7 +16,7 @@ typedef struct EffRippleN64Work {
     s32 lifetime; // 0x1C
     s32 frame;    // 0x20
     s32 offset;   // 0x24
-    f32 unk28;    // 0x28
+    f32 reserved_28; // 0x28, set to y + yOffset at entry, never read
     f32 rx;       // 0x2C
     f32 rz;       // 0x30
     CameraId cameraId; // 0x34, dispEntry camera

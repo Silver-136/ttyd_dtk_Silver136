@@ -10,7 +10,7 @@
 typedef struct EffShockN64Work {
     s32 type;     // 0x0
     Vec position; // 0x4
-    s32 c10;      // 0x10
+    s32 reserved_10; // 0x10, starts 255, -13 per frame after frame 6 (floor 0); nothing draws with it
     s32 flashAlpha; // 0x14, TEV alpha of the yellow flash drawn for type 1; starts 255, *= 0.9 per frame
     s32 alpha;    // 0x18, TEV alpha of col0; starts 255, *= 0.8 per frame in the last 5 frames
     s32 life;     // 0x1c

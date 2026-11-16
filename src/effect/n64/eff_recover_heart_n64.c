@@ -18,7 +18,7 @@ typedef struct EffRecoverHeartN64Work {
     f32 velY;     // 0x14
     f32 velZ;     // 0x18
     f32 rotZ;     // 0x1C
-    f32 unk20;    // 0x20
+    f32 reserved_20;    // 0x20, only set to 0
     f32 offX;     // 0x24
     s32 alpha;    // 0x28
     s32 frame;    // 0x2C
@@ -146,7 +146,7 @@ EffectEntry* effRecoverHeartN64Entry(s32 type, s32 count, f32 x, f32 y, f32 z) {
         p->offX = 0.0f;
         p->velX = 0.0f;
         p->velZ = 0.0f;
-        p->unk20 = 0.0f;
+        p->reserved_20 = 0.0f;
         p->rotZ = 0.0f;
         if (i == 1) {
             p->position.x = 0.0f;

@@ -39,7 +39,7 @@ typedef struct EffStarStoneWork {
     f32 half0OffsetZ; // 0x4C, z offset of the first stone half (dl_0)
     f32 half1OffsetX; // 0x50, x offset of the second stone half (dl_1), moves opposite to half0OffsetX
     f32 half1OffsetZ; // 0x54, z offset of the second stone half (dl_1)
-    f32 f58;         // 0x58
+    f32 reserved_58; // 0x58, only set to 90.0f, never read
     u8 r, g, b, a;   // 0x5C
     s32 sfx;         // 0x60
 } EffStarStoneWork;

@@ -43,8 +43,8 @@ typedef struct Teresa {
     Vec pos;
     Vec dst;
     f32 t;
-    f32 field_0x1C;
-    f32 field_0x20;
+    f32 reserved_1C; // 0x1C, only set to 0, never read
+    f32 reserved_20; // 0x20, set to randf(-0.1, 0.1) at setup, never read
     f32 startTangentX; // start tangent (x) of the Hermite path
     s32 wait;
     u8 state;
@@ -297,8 +297,8 @@ static void senteresa_ext_init(void) {
         pTeresa[i].dst.x = 200.0f;
         pTeresa[i].dst.y = pTeresa[i].pos.y + randf(27.0f, 170.0f);
         pTeresa[i].dst.z = pTeresa[i].pos.z + r * cosf(a);
-        pTeresa[i].field_0x1C = 0.0f;
-        pTeresa[i].field_0x20 = randf(-0.1f, 0.1f);
+        pTeresa[i].reserved_1C = 0.0f;
+        pTeresa[i].reserved_20 = randf(-0.1f, 0.1f);
         pTeresa[i].t = 0.0f;
         pTeresa[i].wait = 1.7f * (i + 1);
         pTeresa[i].state = 0;

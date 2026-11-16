@@ -45,7 +45,7 @@ typedef struct FirebarSetup {
     u8 field_0x2[2];
     Vec pos;
     f32 spacing;
-    f32 field_0x14;
+    f32 reserved_14; // 0x14, 25.0f in every entry; copied to the work's reserved_20
     f32 speed;
     void* callback;
     f32 param;
@@ -60,7 +60,7 @@ typedef struct FirebarWork {
     f32 angle;
     f32 speed;
     f32 spacing;
-    f32 field_0x20;
+    f32 reserved_20; // 0x20, copied from the setup's reserved_14, never read
     f32 scale;
     f32 endX;
     f32 radius;
@@ -232,7 +232,7 @@ static FirebarSetup firebardesc[] = {
         {0}, // field_0x2
         {-700.0f, 80.0f, -55.0f}, // pos
         25.0f, // spacing
-        25.0f, // field_0x14
+        25.0f, // reserved_14
         0.04f, // speed
         firebar_cb, // callback
         0.0f, 0.0f, // param, radius
@@ -243,7 +243,7 @@ static FirebarSetup firebardesc[] = {
         {0}, // field_0x2
         {-500.0f, 80.0f, 55.0f}, // pos
         25.0f, // spacing
-        25.0f, // field_0x14
+        25.0f, // reserved_14
         -0.04f, // speed
         firebar_cb, // callback
         0.0f, 0.0f, // param, radius
@@ -254,7 +254,7 @@ static FirebarSetup firebardesc[] = {
         {0}, // field_0x2
         {-300.0f, 80.0f, -55.0f}, // pos
         25.0f, // spacing
-        25.0f, // field_0x14
+        25.0f, // reserved_14
         0.04f, // speed
         firebar_cb, // callback
         0.0f, 0.0f, // param, radius
@@ -265,7 +265,7 @@ static FirebarSetup firebardesc[] = {
         {0}, // field_0x2
         {0.0f, 80.0f, 0.0f}, // pos
         25.0f, // spacing
-        25.0f, // field_0x14
+        25.0f, // reserved_14
         0.03f, // speed
         firebar_cb, // callback
         0.0f, // param
@@ -277,7 +277,7 @@ static FirebarSetup firebardesc[] = {
         {0}, // field_0x2
         {0.0f, 80.0f, 0.0f}, // pos
         25.0f, // spacing
-        25.0f, // field_0x14
+        25.0f, // reserved_14
         0.03f, // speed
         firebar_cb, // callback
         3.1415927f, // param
@@ -289,7 +289,7 @@ static FirebarSetup firebardesc[] = {
         {0}, // field_0x2
         {800.0f, -10.0f, -50.0f}, // pos
         25.0f, // spacing
-        25.0f, // field_0x14
+        25.0f, // reserved_14
         1.5f, // speed
         firebar_cb, // callback
         225.0f, // param
@@ -301,7 +301,7 @@ static FirebarSetup firebardesc[] = {
         {0}, // field_0x2
         {800.0f, 15.0f, -50.0f}, // pos
         25.0f, // spacing
-        25.0f, // field_0x14
+        25.0f, // reserved_14
         1.5f, // speed
         firebar_cb, // callback
         225.0f, // param
@@ -630,7 +630,7 @@ static USER_FUNC(firebar_entry) {
         wp->pos = setup->pos;
         wp->count = setup->count;
         wp->callback = setup->callback;
-        wp->field_0x20 = setup->field_0x14;
+        wp->reserved_20 = setup->reserved_14;
         wp->spacing = setup->spacing;
         wp->speed = setup->speed;
         wp->scale = 1.0f;
