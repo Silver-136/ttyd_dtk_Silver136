@@ -1255,7 +1255,7 @@ USER_FUNC(yuu_00_cam_shift_reset) {
  * Returns TRUE when two points are within 20 units in 3D and within 20 in height,
  * i.e. Mario is touching a floating coin.
  */
-static inline BOOL get_monte_check(Vec* a, Vec* b) {
+static BOOL get_monte_check(Vec* a, Vec* b) {
     if (PSVECDistance(a, b) < 20.0f && __fabs(a->y - b->y) < 20.0) {
         return TRUE;
     }
@@ -1263,7 +1263,7 @@ static inline BOOL get_monte_check(Vec* a, Vec* b) {
 }
 
 /** Draw callback that renders every coin icon of a Monte array that has not been collected yet. */
-static inline void monte_disp(CameraId camera, void* param) {
+static void monte_disp(CameraId camera, void* param) {
     Monte* monte = param;
     s32 i;
 
@@ -1300,9 +1300,6 @@ static USER_FUNC(fall_rtn) {
     Vec v;
     Monte* m;
 
-    // FAKE: taking the inline's address keeps its uncalled out-of-line copy (the JP demo map lists get_monte_check
-    // in yuu_00 after monte_disp); -inline auto,deferred with a plain static changes JP (cleanup_notes/bf/E2)
-    (void)&get_monte_check;
     if (isFirstCall) {
         if (monte_p != NULL) {
             exists = TRUE;
@@ -1528,66 +1525,68 @@ void yuuminigame_disp_1hikoki(CameraId camera, void* param) {
     monteCountDisp();
 }
 
+// With the motion local this body has more than 30 statements in every version, so the unit's auto-inlining
+// leaves it a call in yuuminigame_main_1hikoki, as in the target.
 BOOL yuuminigame1_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp, HikokiWork* data) {
     MarioWork* mario = marioGetPtr();
-
 #if VERSION >= VERSION_US
     EventEntry* sub;
+#endif
 
     if (mario->hitobjStandOn != NULL) {
+        u16 motion;
+
+#if VERSION >= VERSION_US
         sub = evtEntry(minigame01_floor_delete, 0, 0);
         sub->lwData[0] = event->lwData[0];
-        if ((u16)((mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) ? mario->prevMotionId : mario->currMotionId) != MARIO_MOTION_PLANE) {
-#else
-    if (mario->hitobjStandOn != NULL && (u16)((mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) ? mario->prevMotionId : mario->currMotionId) != MARIO_MOTION_PLANE) {
 #endif
-        data->result = 1;
-        data->coins = yuucounter_get_data();
-        if (!strcmp("A_dai_01", hitGetName(mario->hitobjStandOn))) {
-            data->result = 2;
-        }
-        if (!strcmp("A_dai_02", hitGetName(mario->hitobjStandOn))) {
-            data->result = 2;
-        }
-        if (!strcmp("A_dai_03", hitGetName(mario->hitobjStandOn))) {
-            data->result = 2;
-        }
-        if (!strcmp("A_dai_04", hitGetName(mario->hitobjStandOn))) {
+        motion = (mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) ? mario->prevMotionId : mario->currMotionId;
+        if (motion != MARIO_MOTION_PLANE) {
+            data->result = 1;
+            data->coins = yuucounter_get_data();
+            if (!strcmp("A_dai_01", hitGetName(mario->hitobjStandOn))) {
+                data->result = 2;
+            }
+            if (!strcmp("A_dai_02", hitGetName(mario->hitobjStandOn))) {
+                data->result = 2;
+            }
+            if (!strcmp("A_dai_03", hitGetName(mario->hitobjStandOn))) {
+                data->result = 2;
+            }
+            if (!strcmp("A_dai_04", hitGetName(mario->hitobjStandOn))) {
 #if VERSION >= VERSION_US
-            data->result = 2;
+                data->result = 2;
 #else
-            data->result = 3;
+                data->result = 3;
 #endif
-        }
-        if (!strcmp("A_dai_05", hitGetName(mario->hitobjStandOn))) {
+            }
+            if (!strcmp("A_dai_05", hitGetName(mario->hitobjStandOn))) {
 #if VERSION >= VERSION_US
-            data->result = 3;
+                data->result = 3;
 #else
-            data->result = 5;
+                data->result = 5;
 #endif
+            }
+            if (!strcmp("A_ground_02", hitGetName(mario->hitobjStandOn))) {
+                data->result = -5;
+            }
+            if (!strcmp("A_ground_05", hitGetName(mario->hitobjStandOn))) {
+                data->result = -5;
+            }
+            if (!strcmp("A_ground_03", hitGetName(mario->hitobjStandOn))) {
+                data->result = -10;
+            }
+            if (!strcmp("A_ground_06", hitGetName(mario->hitobjStandOn))) {
+                data->result = -15;
+            }
+            if (!strcmp("A_ground_04", hitGetName(mario->hitobjStandOn))) {
+                data->result = -20;
+            }
+            marioKeyOff();
+            partyKeyOff();
+            yuucounter_flag_on(2);
+            return TRUE;
         }
-        if (!strcmp("A_ground_02", hitGetName(mario->hitobjStandOn))) {
-            data->result = -5;
-        }
-        if (!strcmp("A_ground_05", hitGetName(mario->hitobjStandOn))) {
-            data->result = -5;
-        }
-        if (!strcmp("A_ground_03", hitGetName(mario->hitobjStandOn))) {
-            data->result = -10;
-        }
-        if (!strcmp("A_ground_06", hitGetName(mario->hitobjStandOn))) {
-            data->result = -15;
-        }
-        if (!strcmp("A_ground_04", hitGetName(mario->hitobjStandOn))) {
-            data->result = -20;
-        }
-        marioKeyOff();
-        partyKeyOff();
-        yuucounter_flag_on(2);
-        return TRUE;
-#if VERSION >= VERSION_US
-    }
-#endif
     }
     return FALSE;
 }

@@ -2061,7 +2061,7 @@ config.libs = [
             Object(MatchingFor("G8MJ01", "G8ME01"), "event/evt_yuuranking.c", extra_cflags=["-inline auto,deferred"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "yuu_01.c", extra_cflags=["-inline auto,deferred"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "event/evt_yuucounter.c", extra_cflags=["-inline auto,deferred"]),
-            Object(MatchingFor("G8MJ01", "G8ME01"), "yuu_00.c", extra_cflags=["-inline noauto,deferred"]),
+            Object(MatchingFor("G8MJ01", "G8ME01"), "yuu_00.c", extra_cflags=["-inline auto,deferred"]),
         ]
     ),
     Rel(
@@ -2220,7 +2220,7 @@ config.libs = [
             Object(MatchingFor("G8MP01", "G8MJ01_DEMO"), "unit/unit_ufo.c"),
             Object(MatchingFor("G8MP01", "G8MJ01_DEMO"), "unit/unit_ura_noko.c"),
             Object(MatchingFor("G8MP01", "G8MJ01_DEMO"), "unit/unit_ura_pata.c"),
-            Object(MatchingFor("G8MP01", "G8MJ01_DEMO"), "unit/unit_wanawana.c", extra_cflags=["-inline noauto,deferred"]),
+            Object(MatchingFor("G8MP01", "G8MJ01_DEMO"), "unit/unit_wanawana.c", extra_cflags=["-inline auto,deferred"]),
             Object(MatchingFor("G8MP01", "G8MJ01_DEMO"), "unit/unit_wanwan.c"),
             Object(MatchingFor("G8MP01", "G8MJ01_DEMO"), "unit/unit_yami_kuriboo.c"),
             Object(MatchingFor("G8MP01", "G8MJ01_DEMO"), "unit/unit_yami_noko.c"),
