@@ -27,14 +27,11 @@ typedef struct EffMagic3N64Work {
 static void effMagic3Main(EffectEntry* effect);
 static void effMagic3Disp(CameraId cameraId, void* payload);
 
-// FAKE: opt_propagation off for effMagic3N64Entry only
-#pragma opt_propagation off
 /**
  * Spawns five sparks at (x, y, z) that shoot upward in a 100-degree fan facing the camera and
  * then die out over life frames. Via evt_eff64 "magic3_n64"; no script callers found.
  */
 EffectEntry* effMagic3N64Entry(s32 type, f32 x, f32 y, f32 z, s32 life) {
-    s32 j;
     EffectEntry* effect;
     EffMagic3N64Work* w;
     f32 nx, ny, nz;
@@ -46,12 +43,10 @@ EffectEntry* effMagic3N64Entry(s32 type, f32 x, f32 y, f32 z, s32 life) {
     Vec axis;
 
     effect = effEntry();
-    nz = 0.0f;
+    nx = nz = 0.0f;
     ny = -1.0f;
-    nx = 0.0f;
 
-    // FAKE: nx * nx + ny * ny + nz * nz with ny * ny written as 1.0f and nz * nz as nz (exact for ny = -1, nz = 0); the plain sum changes the object
-    inv = nz + (nx * nx + 1.0f);
+    inv = nx * nx + ny * ny + nz * nz;
     if (!inv) {
         return NULL;
     }
@@ -89,7 +84,7 @@ EffectEntry* effMagic3N64Entry(s32 type, f32 x, f32 y, f32 z, s32 life) {
     w = __memAlloc(HEAP_EFFECT, sizeof(EffMagic3N64Work) * 5);
     effect->userdata = w;
     effect->callback = effMagic3Main;
-    for (i = 0, j = 0; i < 5; i++, w++, j += 100) {
+    for (i = 0; i < 5; i++, w++) {
         rad = 6.2831855f * camGetPtr(CAMERA_3D)->viewYaw / 360.0f;
         {
             Vec dir = {0.0f, 0.0f, 0.0f};
@@ -105,7 +100,7 @@ EffectEntry* effMagic3N64Entry(s32 type, f32 x, f32 y, f32 z, s32 life) {
         w->velocity.x = 0.6f * (mtx[0][0] * nx + mtx[0][1] * ny + mtx[0][2] * nz);
         w->velocity.y = mtx[1][0] * nx + mtx[1][1] * ny + mtx[1][2] * nz;
         w->velocity.z = 0.6f * (mtx[2][0] * nx + mtx[2][1] * ny + mtx[2][2] * nz);
-        w->rot = -(j / 4 - 50);
+        w->rot = -(i * 100 / 4 - 50);
         w->scale = 0.5f;
         w->life = life;
         w->age = 0;
@@ -114,7 +109,6 @@ EffectEntry* effMagic3N64Entry(s32 type, f32 x, f32 y, f32 z, s32 life) {
     return effect;
 }
 
-#pragma opt_propagation reset
 /** Returns 3 * a + b: the spark size from its two sine waves (alpha wave a, time wave b). */
 inline f32 magic3_scale(f32 a, f32 b) { return 3.0f * a + b; }
 

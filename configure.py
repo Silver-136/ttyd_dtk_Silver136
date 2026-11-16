@@ -675,7 +675,7 @@ config.libs = [
             Object(MatchingFor("G8MJ01", "G8ME01"), "effect/n64/eff_lensflare_n64.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "effect/n64/eff_magic1_n64.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "effect/n64/eff_magic2_n64.c"),
-            Object(MatchingFor("G8MJ01", "G8ME01"), "effect/n64/eff_magic3_n64.c", extra_cflags=["-opt nostrength"]),
+            Object(MatchingFor("G8MJ01", "G8ME01"), "effect/n64/eff_magic3_n64.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "effect/n64/eff_magic_horao_n64.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "effect/n64/eff_n64.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "effect/n64/eff_onpu_n64.c"),
