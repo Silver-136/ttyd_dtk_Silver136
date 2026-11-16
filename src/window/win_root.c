@@ -629,7 +629,14 @@ static void winBgMain(WindowWork* wp) {
 /**
  * Draws a tab page's 570x320 background panel at (x, y), tinted per tab:
  * type 0 Mario (red), 1 Party (pink), 2 Items (yellow), 3 Badges (green), 4 Journal (blue).
- * Texture 7 is the panel shape, texture 6 the pattern on it.
+ * The panel is centred at (x, y + 18) and drawn in two passes of plain quads (no chips):
+ * - the shape: texture 7 as an alpha mask (alpha test >= 0x80) in TEV colour 0, as two 285 x 320 halves, the
+ *   right half with its texture coordinates running back from 1 to 0 (a mirror image of the left). The texture
+ *   matrix scales them by 570 / width across and 320 / height down; texture 7 is 16x16 and clamped (US
+ *   win.tpl), so only the outer 8 pixels of each side and the top 16 rows sample distinct texels, the rest
+ *   repeats its edge texels.
+ * - the pattern: texture 6 (128x64, repeating) over the middle 570 x 288 at one texel per pixel, its colour
+ *   blending from TEV colour 1 to TEV colour 2 by the texture's intensity, alpha from colour 2.
  */
 void winBgGX(WindowWork* wp, s32 type, f32 x, f32 y) {
     Mtx m;
@@ -799,12 +806,21 @@ static void winMsgMain(WindowWork* wp) {
     }
 }
 
+/** The help box's text: two lines are visible, msgLine scrolls them. */
+enum HelpBoxLayout {
+    HELP_LINE_H = 28, // one text line
+};
+
 /**
  * Draws the help box at offset (x, y): the frame, the item icon when msgItem > 0,
  * the title plate when msgName is set (shifted left for msgItem -2;
  * US and later squeeze titles over 210 wide), the text scrolled by msgLine,
  * and blinking scroll arrows when it has more than two lines.
  * "msg_lottery_number" gets the Lottery Pick number filled in.
+ *
+ * (x, y) is (msgOfsX, msgOfsY): (0, -170) at rest, sliding in from x -800 (winMsgMain). Screen coordinates have
+ * the origin at the centre and y growing upwards. The frame is 500 x 80 with its top-left corner at
+ * (x - 250, y + 40), so its middle is at (x, y).
  */
 static void winMsgDisp(WindowWork* wp, f32 x, f32 y) {
     GXColor white = { 0xFF, 0xFF, 0xFF, 0xFF };
@@ -820,10 +836,12 @@ static void winMsgDisp(WindowWork* wp, f32 x, f32 y) {
     const char* m;
     s32 n;
 
+    // the frame (windowDispGX_Waku_col, corner radius 20), top-left corner (x - 250, y + 40)
     bx = (10.0f + (x - 250.0f)) - 10.0f;
     by = 40.0f + y;
     windowDispGX_Waku_col(bx, by, 500.0f, 80.0f, 20.0f, 0, waku);
 
+    // The item's icon, centred on the frame's top-left corner over texture 0x25 (64x64 in the US win.tpl).
     // The != 0 test is redundant; both compares are in the retail code
     if (wp->msgItem != 0 && wp->msgItem > 0) {
         winTexInit((TEXPalette*)*wp->res->data);
@@ -831,6 +849,9 @@ static void winMsgDisp(WindowWork* wp, f32 x, f32 y) {
         winIconInit();
         winIconSet(itemDataTable[wp->msgItem].icon_id, (Vec){ bx, by, 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f }, white);
     }
+    // The title plate (winNameGX type 1, 240 x 32) with its top-left at (x - 120, y + 64), so it stands 24 pixels
+    // above the frame's top edge and overlaps it by 8; msgItem -2 moves it 130 to the left, to the frame's left
+    // edge. The title is centred on the plate in white with an outline, 4 pixels below the plate's top.
     if (wp->msgName != NULL) {
         if (wp->msgItem == -2) {
             ofs = -130.0f;
@@ -846,25 +867,38 @@ static void winMsgDisp(WindowWork* wp, f32 x, f32 y) {
             fw = 210.0f;
         }
         winFontInit();
-        winFontSetEdgeWidth((Vec){ ofs + ((x - 120.0f) + (240.0f - fw) / 2.0f), ny - 4.0f, 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f }, white, 210.0f, m);
+        winFontSetEdgeWidth((Vec){ ofs + ((x - 120.0f) + (240.0f - fw) / 2.0f), ny - 4.0f, 0.0f },
+                            (Vec){ 1.0f, 1.0f, 1.0f }, white, 210.0f, m);
 #else
         winFontInit();
-        winFontSetEdge((Vec){ ofs + ((x - 120.0f) + (240.0f - fw) / 2.0f), ny - 4.0f, 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f }, white, m);
+        winFontSetEdge((Vec){ ofs + ((x - 120.0f) + (240.0f - fw) / 2.0f), ny - 4.0f, 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f },
+                       white, m);
 #endif
     }
+    // The text, from (x - 220, y + 26), moved up HELP_LINE_H per scrolled line. The scissor (full screen width)
+    // shows the 56 rows (two lines) below y + 26 and is reset to the full 608 x 480 screen afterwards.
+    // "msg_lottery_number" is a format string; the current Lottery ticket number (lotteryGetPtr()->number) is
+    // filled in first.
     if (wp->msg != NULL) {
         GXSetScissor(0, (u32)(240.0f - (by -= 14.0f)), 0x260, 0x38);
         if (strcmp(wp->msg, "msg_lottery_number") == 0) {
             n = lotteryGetPtr()->number;
             sprintf(buf, msgSearch(wp->msg), n);
             winFontInit();
-            winFontSet((Vec){ (40.0f + (x - 250.0f)) - 10.0f, by + (f32)(wp->msgLine * 28), 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f }, black, buf);
+            winFontSet((Vec){ (40.0f + (x - 250.0f)) - 10.0f, by + (f32)(wp->msgLine * HELP_LINE_H), 0.0f },
+                       (Vec){ 1.0f, 1.0f, 1.0f }, black, buf);
         } else {
             winFontInit();
-            winFontSetLabel((Vec){ (40.0f + (x - 250.0f)) - 10.0f, by + (f32)(wp->msgLine * 28), 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f }, black, wp->msg);
+            winFontSetLabel((Vec){ (40.0f + (x - 250.0f)) - 10.0f, by + (f32)(wp->msgLine * HELP_LINE_H), 0.0f },
+                            (Vec){ 1.0f, 1.0f, 1.0f }, black, wp->msg);
         }
         GXSetScissor(0, 0, 0x260, 0x1E0);
     }
+    // Scroll arrows for text of more than two lines (US and later: not while a letter is read, item.state 202,
+    // when the C-stick scrolls the letter instead), at the frame's right end: the C-stick icon at (x + 240, y)
+    // (written 40 + (y - 40)), the up arrow 24 above it, the down arrow 24 below, scale 0.6. The arrows blink
+    // (shown 20 of every 32 frames): only the down arrow on the first two lines, only the up arrow on the last
+    // pair (msgLine / 2 is the last pair's index), both in between.
 #if VERSION >= VERSION_US
     if (wp->item.state != 202 && wp->msgLines > 2) {
 #else
@@ -873,18 +907,24 @@ static void winMsgDisp(WindowWork* wp, f32 x, f32 y) {
         winIconInit();
         if (wp->msgLine == 0) {
             if ((gp->retraceCount & 0x1F) < 0x14) {
-                winIconSet(ICON_ARROW_DOWN, (Vec){ (250.0f + x) - 10.0f, (40.0f + (y - 40.0f)) - 24.0f, 0.0f }, (Vec){ 0.6f, 0.6f, 0.6f }, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
+                winIconSet(ICON_ARROW_DOWN, (Vec){ (250.0f + x) - 10.0f, (40.0f + (y - 40.0f)) - 24.0f, 0.0f },
+                           (Vec){ 0.6f, 0.6f, 0.6f }, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
             }
         } else if (wp->msgLine / 2 == (wp->msgLines + 1) / 2 - 1) {
             if ((gp->retraceCount & 0x1F) < 0x14) {
-                winIconSet(ICON_ARROW_UP, (Vec){ (250.0f + x) - 10.0f, 24.0f + (40.0f + (y - 40.0f)), 0.0f }, (Vec){ 0.6f, 0.6f, 0.6f }, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
+                winIconSet(ICON_ARROW_UP, (Vec){ (250.0f + x) - 10.0f, 24.0f + (40.0f + (y - 40.0f)), 0.0f },
+                           (Vec){ 0.6f, 0.6f, 0.6f }, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
             }
         } else if ((gp->retraceCount & 0x1F) < 0x14) {
+            // by is reused here as the arrows' middle y
             ix = (250.0f + x) - 10.0f;
-            winIconSet(ICON_ARROW_UP, (Vec){ ix, 24.0f + (by = 40.0f + (y - 40.0f)), 0.0f }, (Vec){ 0.6f, 0.6f, 0.6f }, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
-            winIconSet(ICON_ARROW_DOWN, (Vec){ ix, by - 24.0f, 0.0f }, (Vec){ 0.6f, 0.6f, 0.6f }, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
+            winIconSet(ICON_ARROW_UP, (Vec){ ix, 24.0f + (by = 40.0f + (y - 40.0f)), 0.0f }, (Vec){ 0.6f, 0.6f, 0.6f },
+                       (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
+            winIconSet(ICON_ARROW_DOWN, (Vec){ ix, by - 24.0f, 0.0f }, (Vec){ 0.6f, 0.6f, 0.6f },
+                       (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
         }
-        winIconSet(ICON_SUBSTICK_NEUTRAL, (Vec){ (250.0f + x) - 10.0f, 40.0f + (y - 40.0f), 0.0f }, (Vec){ 0.6f, 0.6f, 0.6f }, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
+        winIconSet(ICON_SUBSTICK_NEUTRAL, (Vec){ (250.0f + x) - 10.0f, 40.0f + (y - 40.0f), 0.0f },
+                   (Vec){ 0.6f, 0.6f, 0.6f }, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
     }
 }
 
@@ -918,7 +958,13 @@ void winMsgEntry(WindowWork* wp, s32 item, const char* msg, const char* name) {
     }
 }
 
-/** Draws win.tpl texture id stretched over a w x h quad with its top-left at (x, y); the caller sets up GX first. */
+/**
+ * Draws win.tpl texture id over a w x h quad with its top-left at (x, y); the caller sets up GX first.
+ * The texture is not stretched: the texture matrix scales its coordinates by |w| / width and |h| / height, one
+ * texel per screen pixel, so past the texture's own size the TPL's wrap mode decides what is drawn (a clamped
+ * 8x8 piece repeats its last texel column or row, a repeating one tiles). A negative w or h draws the piece
+ * mirrored (the quad runs the other way, the scale uses the absolute value).
+ */
 // Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
 static void chip(WindowWork* wp, s32 id, f32 x, f32 y, f32 w, f32 h) {
     GXTexObj obj;
@@ -951,6 +997,15 @@ static void chip(WindowWork* wp, s32 id, f32 x, f32 y, f32 w, f32 h) {
  * used for the boxes inside the pages.
  * Type 1 adds a tab under the bottom-right edge for the Badges page's remaining-BP label;
  * US and later size that tab to the "msg_menu_badge_nokori" text instead of a fixed 90.
+ *
+ * (x, y) is the top-left corner. The pieces are win.tpl textures 0x8-0xE, 8x8 and clamped (US win.tpl), drawn
+ * by chip at one texel per pixel, so a longer edge or the fill repeats the piece's last texel column or row:
+ * 0xB, 0xD, 0xC and 0xE are the top-left, top-right, bottom-left and bottom-right corners, 0x9 the top edge,
+ * 0xA the left edge and 0x8 the fill. Only the top and left have edge pieces; the fill runs to the right edge
+ * (w - 8 wide) and fills the bottom row between the corners. Type 1 has no bottom-right corner (the fill runs
+ * on to the right edge) and hangs a tab under the right end, from x + w - nk + 8 to the right edge and three
+ * 8-pixel rows high: row one starts with texture 0xF (16x8, repeating) at x + w - nk, reaching 8 pixels left of
+ * the tab, row two with the left edge 0xA, row three with the corners 0xC and 0xE; fill between.
  */
 void winKirinukiGX(WindowWork* wp, s32 type, f32 x, f32 y, f32 w, f32 h) {
     GXSetBlendMode(GX_BM_NONE, GX_BL_ONE, GX_BL_ZERO, GX_LO_CLEAR);
@@ -1092,10 +1147,21 @@ void winNameGX(WindowWork* wp, s32 type, f32 x, f32 y, f32 w, f32 h) {
 
 /**
  * Draws an open two-page book at (x, y).
- * a == 0 is a Super Luigi book read from the Items page:
+ * type 0 is a Super Luigi book read from the Items page:
  * the two current pages of luigi_book_list text and, from JP on,
  * an animated page-turn prompt (more pages or the end).
- * a == 1 is the Journal's Tattle Log book, 32 shorter, with eight entry slots in two columns.
+ * type 1 is the Journal's Tattle Log book, 32 shorter, with eight entry slots in two columns.
+ *
+ * (x, y) is the top-left corner; the book is 448 wide and 280 high (the spine's foot reaches 8 lower), 32 less
+ * for type 1. Pieces (chip, one texel per pixel; sizes from the US win.tpl): the page fill 0x33 (8x8, clamped)
+ * from (x + 8, y - 8); a top row of 0x28 and 0x2A (16x8 corners), 0x2C and 0x2D (184x8 page tops) and the
+ * spine's head 0x26 (48x16) at x + 200; the side edges 0x30 and 0x31 (8x8) and the spine 0x32 (16x8) at
+ * x + 208, repeated down by clamping; a 16-high bottom row of 0x29 and 0x2B (corners) and 0x2E and 0x2F (page
+ * bottoms) with the spine's foot 0x27 (48x24). Type 1's slots are texture 0x34 (192x32) from (x + 16, y - 32),
+ * the columns 216 apart, the rows 48. Type 0's text is a spread of two strings of luigi_book_list[bookIdx]
+ * (bookPage * 2 and the next) at (x + 20, y - 14) and (x + 240, y - 14), scale 0.8; the prompt is the message
+ * window's pose (poseId of msgGetWork()) at (x + 425, y - 275): "HOS_C_1" while more spreads follow, "HOS_E_1"
+ * on the last.
  */
 void winBookGX(WindowWork* w, s32 type, f32 x, f32 y) {
     f32 off;
@@ -1159,16 +1225,17 @@ void winBookGX(WindowWork* w, s32 type, f32 x, f32 y) {
         winFontSetLabel((Vec){220.0f + lx, y - 14.0f, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, (GXColor){0x00, 0x00, 0x00, 0xFF},
                         luigi_book_list[w->item.bookIdx][w->item.bookPage * 2 + 1]);
 #if VERSION >= VERSION_JP
-                        pose = ((MessageWork*)msgGetWork())->poseId;
-                        anim = animPoseGetAnimDataPtr(pose);
-                        if (w->item.bookPage < w->item.bookPages - 1) {
-                            animPoseSetAnim(pose, "HOS_C_1", 0);
-                        } else {
-                            animPoseSetAnim(pose, "HOS_E_1", 0);
-                        }
-                        animPoseSetLocalTime(pose, gp->retraceCount % (s32)anim->loopInfo->end);
-                        animPoseMain(pose);
-                        animPoseDraw(pose, 425.0f + x, y - 275.0f, 0.0f, 180.0f, 5.0f, 2);
+        // the page-turn prompt, looping on the frame counter
+        pose = ((MessageWork*)msgGetWork())->poseId;
+        anim = animPoseGetAnimDataPtr(pose);
+        if (w->item.bookPage < w->item.bookPages - 1) {
+            animPoseSetAnim(pose, "HOS_C_1", 0);
+        } else {
+            animPoseSetAnim(pose, "HOS_E_1", 0);
+        }
+        animPoseSetLocalTime(pose, gp->retraceCount % (s32)anim->loopInfo->end);
+        animPoseMain(pose);
+        animPoseDraw(pose, 425.0f + x, y - 275.0f, 0.0f, 180.0f, 5.0f, 2);
 #endif
     }
 }
@@ -1265,6 +1332,14 @@ void winHalfBookGX(TEXPalette* tpl, s32 a, f32 x, f32 y) {
 /**
  * Draws the mail window's frame at (x, y) for winMailDisp,
  * then leaves the scissor clipped to the letter list area (winMailDisp restores it).
+ *
+ * (x, y) is the top-left corner; the frame is 416 x 304. Pieces (chip, one texel per pixel; sizes and wrap
+ * modes from the US win.tpl): the corners 0x4D and 0x4E (top) and 0x4F and 0x50 (bottom), between them the top
+ * bar 0x63 (8x8, repeating) with piece 0x64 (16x24) on it at x + 200 and the bottom bar 0x53, the sides 0x51
+ * (16 wide, left and again at x + 392) and 0x52 (the outer 8 pixels on the right). Inside them a band of 0x55
+ * (16 pixels at the left and right, 8 at the top, 24 at the bottom) around the fill 0x5C, and the inner corner
+ * 0x54 drawn four times, mirrored into place by negative sizes. The list scissor has its top-left at
+ * (x + 32, y - 33) and is 344 x 200, five letter rows.
  */
 void winMailGX(WindowWork* wp, f32 x, f32 y) {
     GXSetBlendMode(GX_BM_NONE, GX_BL_ONE, GX_BL_ZERO, GX_LO_CLEAR);
@@ -1311,6 +1386,18 @@ void winMailGX(WindowWork* wp, f32 x, f32 y) {
  * Draws a Journal collection grid ("hako" = box) at (x, y): a == 0 the badge log, 1 the recipe log.
  * Pages of 7x4 cells scroll vertically; found badges (GSWF_BADGE_FOUND_BASE) and cooked recipes show their icon,
  * the rest a blank mark. Adds page-up/down arrows and the "msg_menu_sort_narabikae" sort hint.
+ *
+ * (x, y) is the grid's top-left corner. A page is 400 x 232 (seven 56-pixel columns plus an 8-pixel right edge,
+ * four rows plus an 8-pixel bottom edge), the pages stacked 232 apart and moved up by scroll; a scissor with its
+ * top-left at (x, y), 400 x 228, shows one page. Pieces (chip, one texel per pixel; sizes from the US win.tpl;
+ * recipe log ids are 13 higher): the cells 0x7B and 0x7C (56x56) as a checkerboard; under each column, in the
+ * bottom edge, an 8x8 joint (0x7D at the left, then 0x7F and 0x86 alternating) and an edge piece 0x7E or 0x80
+ * (8x8, clamped, so it repeats across 48); the right edge at x + 392 the same way down (joints 0x85, 0x83,
+ * 0x87, edge pieces 0x84 and 0x82) with the corner 0x81 at the bottom. Entry n of a page sits centred in its
+ * cell at x + 28 + column * 56: the blank mark 0x97 (24x24) or the icon at scale 0.8. The arrows (texture 0x17,
+ * scaled by -1 for "up", with the L or R button icon) are at x + 395, above the grid's top while page > 0
+ * and at its bottom while entries follow this page; the sort hint (scale 0.7) ends at x + 380, under the grid,
+ * with the Z icon 30 to its left.
  */
 void winHakoGX(WindowWork* w, s32 type, f32 x, f32 y) {
     f32 scroll;
@@ -1486,7 +1573,8 @@ void winHakoGX(WindowWork* w, s32 type, f32 x, f32 y) {
         fx = 395.0f + x;
         winTexSet(0x17, (Vec){fx, y - 235.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
         winIconInit();
-        winIconSet(ICON_TRIGGER_R, (Vec){fx, y - 220.0f, 0.0f}, (Vec){0.6f, 0.6f, 0.6f}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+        winIconSet(ICON_TRIGGER_R, (Vec){fx, y - 220.0f, 0.0f}, (Vec){0.6f, 0.6f, 0.6f},
+                   (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
     }
 
     msg = msgSearch("msg_menu_sort_narabikae");
@@ -1495,7 +1583,8 @@ void winHakoGX(WindowWork* w, s32 type, f32 x, f32 y) {
     fx = x + (380.0f - mw);
     winFontSet((Vec){fx, y - 228.0f, 0.0f}, (Vec){0.7f, 0.7f, 0.7f}, (GXColor){0x00, 0x00, 0x00, 0xFF}, msg);
     winIconInit();
-    winIconSet(ICON_TRIGGER_Z_ALT, (Vec){fx - 30.0f, y - 237.0f, 0.0f}, (Vec){0.6f, 0.6f, 0.6f}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+    winIconSet(ICON_TRIGGER_Z_ALT, (Vec){fx - 30.0f, y - 237.0f, 0.0f}, (Vec){0.6f, 0.6f, 0.6f},
+               (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
 }
 
 /** Draws win.tpl texture id stretched over a w x h quad at (x, y), for winWazaGX. */
@@ -2561,7 +2650,7 @@ static void winSortMain(WindowWork* wp) {
     wp->sortPosY += (wp->sortTgtY - wp->sortPosY) / 8.0f;
 }
 
-/** Draws win.tpl texture id stretched over a w x h quad at (x, y), for the sort menu panel. */
+/** Draws win.tpl texture id over a w x h quad at (x, y), one texel per pixel as chip does, for the sort menu panel. */
 static inline void winSortTex(WindowWork* wp, s32 id, f32 x, f32 y, f32 w, f32 h) {
     GXTexObj obj;
     Mtx m;
@@ -2589,6 +2678,18 @@ static inline void winSortTex(WindowWork* wp, s32 id, f32 x, f32 y, f32 w, f32 h
  * Draws the sort menu panel at sortPosX/Y with one 40-high row per option,
  * each showing its label texture (chosen from the option's message tag);
  * the selected row is lit with a shadow, the rest grey. The mail sort is clipped to the mail window.
+ *
+ * (x, y) = (sortPosX, sortPosY) is the top-left corner; the panel is 152 wide and 48 + 40 * sortNum high.
+ * Pieces (winSortTex, one texel per pixel; sizes and wrap modes from the US win.tpl): the top and bottom bars
+ * 0xA5 and 0xA7 (32x24, repeating across) 128 wide, the right corners 0xA3 and 0xA4 (24x24) at x + 128, one
+ * right edge piece 0xA6 (16x40) per row at x + 136, and the fill 0xA8 (8x8, clamped) 136 wide. There is no left
+ * edge: the panel slides in from x -1000 (winSortEntry) and stops at -310, 6 pixels past the screen's left
+ * edge (-304); the mail sort stops at the mail window's x and its scissor (top-left (mailX + 32, mailY - 40),
+ * 512 x 192) cuts off the part left of the window's inside.
+ * Row i's label is centred at (x + 84, y - 44 - i * 40): the texture for the option's tag (0xA9 for
+ * msg_menu_sort_aiueo, 0xAC kind, 0xAA bp, 0xAD number, 0xAE place, 0xAA for any other) cut to the shape 0xB6
+ * (winTexSet_x2). The selected row first draws the shape in half-transparent black at x + 83 as a shadow, then
+ * its label in white 6 pixels up and to the left; the other rows draw their label in grey.
  */
 static void winSortGX(WindowWork* wp) {
     f32 x = wp->sortPosX;
@@ -2793,12 +2894,26 @@ void winZClear(void) {
     GXSetColorUpdate(GX_TRUE);
 }
 
+/** The mail list's rows and a letter's lines. */
+enum MailLayout {
+    MAIL_ROW_H = 40,  // letter row to letter row; five rows a page (winItemMain2 scrolls by 200 per page)
+    MAIL_LINE_H = 21, // one line of a letter's body
+};
+
 /**
  * Draws the mail window opened from the Items page while it is on screen.
  * As a list: one row per letter with a sender colour (MailData flags 1/2/4), an opened/unopened envelope,
  * its two-digit number and title.
  * While a letter is read (item.state 202): its header, the body scrolled by mailLine,
  * its picture (MAIL_FLAG_PICTURE) and scroll arrows.
+ *
+ * Positions are relative to (mailX, mailY), the mail window's top-left corner (winMailGX): it eases to
+ * (-144, 180) when the window opens and back to (320, -240) when it closes (winItemMain); nothing is drawn once
+ * it is back there. Screen coordinates have the origin at the centre and y growing upwards. A row's line is at
+ * mailY - 56 for the first row; the colour strip (texture 0x77, 304x32 in the US win.tpl) is centred on it at
+ * mailX + 212, tinted by sender (Peach pink, Trouble Center yellow, info mail blue, others light grey), the
+ * envelope (24x24) at mailX + 72, the two digits (textures 0x65 + digit, 16x24) at mailX + 90 and mailX + 106,
+ * and the title (scale 0.75; US and later squeezed to 230 wide) from mailX + 120, 8 above the line.
  */
 static void winMailDisp(WindowWork* wp) {
     s32 i;
@@ -2809,6 +2924,9 @@ static void winMailDisp(WindowWork* wp) {
 
     if (wp->item.mailX < 320.0f && wp->item.mailY > -240.0f) {
         winMailGX(wp, wp->item.mailX, wp->item.mailY);
+        // The letter list (every state but reading): row i's line at mailY - 56 - i * MAIL_ROW_H, moved up by
+        // mailScroll (eased to mailPage * 200). winMailGX left the scissor on the five visible rows; it is reset
+        // to the full screen after the list.
         if (wp->item.state != 202) {
             for (i = 0; i < wp->item.mailNum; i++) {
                 GXColor white;
@@ -2829,16 +2947,45 @@ static void winMailDisp(WindowWork* wp) {
                         col = (GXColor){ 0xE1, 0xE1, 0xE1, 0xFF };
                     }
                     winTexInit((TEXPalette*)*wp->res->data);
-                    winTexSet(0x77, (Vec){ 4.0f + (208.0f + wp->item.mailX), wp->item.mailScroll + ((wp->item.mailY - 56.0f) - (f32)(i * 40)), 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f }, col);
+                    winTexSet(0x77,
+                              (Vec){ 4.0f + (208.0f + wp->item.mailX),
+                                     wp->item.mailScroll + ((wp->item.mailY - 56.0f) - (f32)(i * MAIL_ROW_H)), 0.0f },
+                              (Vec){ 1.0f, 1.0f, 1.0f }, col);
+                    // the envelope, open once the letter was read (pouchCheckMail 2), 3 below the line
                     white = (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF };
-                    winTexSet(pouchCheckMail(id) == 2 ? WIN_TEX_MAIL_READ : WIN_TEX_MAIL_UNREAD, (Vec){ 72.0f + wp->item.mailX, wp->item.mailScroll + (((wp->item.mailY - 56.0f) - (f32)(i * 40)) - 3.0f), 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f }, white);
-                    winTexSet(0x65 + (kind + 1) / 10, (Vec){ 2.0f + (88.0f + wp->item.mailX), wp->item.mailScroll + (((wp->item.mailY - 56.0f) - (f32)(i * 40)) - 3.0f), 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f }, white);
-                    winTexSet(0x65 + (kind + 1) % 10, (Vec){ 2.0f + (104.0f + wp->item.mailX), wp->item.mailScroll + (((wp->item.mailY - 56.0f) - (f32)(i * 40)) - 3.0f), 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f }, white);
+                    winTexSet(pouchCheckMail(id) == 2 ? WIN_TEX_MAIL_READ : WIN_TEX_MAIL_UNREAD,
+                              (Vec){ 72.0f + wp->item.mailX,
+                                     wp->item.mailScroll +
+                                         (((wp->item.mailY - 56.0f) - (f32)(i * MAIL_ROW_H)) - 3.0f),
+                                     0.0f },
+                              (Vec){ 1.0f, 1.0f, 1.0f }, white);
+                    // The letter's number, two digits: kind + 1, its place in arrival order (kind is its index
+                    // in pouchGetPtr()->emailIds, winItemInit; the list starts with the newest).
+                    winTexSet(0x65 + (kind + 1) / 10,
+                              (Vec){ 2.0f + (88.0f + wp->item.mailX),
+                                     wp->item.mailScroll +
+                                         (((wp->item.mailY - 56.0f) - (f32)(i * MAIL_ROW_H)) - 3.0f),
+                                     0.0f },
+                              (Vec){ 1.0f, 1.0f, 1.0f }, white);
+                    winTexSet(0x65 + (kind + 1) % 10,
+                              (Vec){ 2.0f + (104.0f + wp->item.mailX),
+                                     wp->item.mailScroll +
+                                         (((wp->item.mailY - 56.0f) - (f32)(i * MAIL_ROW_H)) - 3.0f),
+                                     0.0f },
+                              (Vec){ 1.0f, 1.0f, 1.0f }, white);
                     winFontInit();
 #if VERSION >= VERSION_US
-                    winFontSetWidth((Vec){ 120.0f + wp->item.mailX, wp->item.mailScroll + (8.0f + ((wp->item.mailY - 56.0f) - (f32)(i * 40))), 0.0f }, (Vec){ 0.75f, 0.75f, 0.75f }, black, 230.0f, msgSearch(mail->name));
+                    winFontSetWidth((Vec){ 120.0f + wp->item.mailX,
+                                           wp->item.mailScroll +
+                                               (8.0f + ((wp->item.mailY - 56.0f) - (f32)(i * MAIL_ROW_H))),
+                                           0.0f },
+                                    (Vec){ 0.75f, 0.75f, 0.75f }, black, 230.0f, msgSearch(mail->name));
 #else
-                    winFontSetLabel((Vec){ 120.0f + wp->item.mailX, wp->item.mailScroll + (8.0f + ((wp->item.mailY - 56.0f) - (f32)(i * 40))), 0.0f }, (Vec){ 0.75f, 0.75f, 0.75f }, black, mail->name);
+                    winFontSetLabel((Vec){ 120.0f + wp->item.mailX,
+                                           wp->item.mailScroll +
+                                               (8.0f + ((wp->item.mailY - 56.0f) - (f32)(i * MAIL_ROW_H))),
+                                           0.0f },
+                                    (Vec){ 0.75f, 0.75f, 0.75f }, black, mail->name);
 #endif
                 }
             }
@@ -2859,25 +3006,50 @@ static void winMailDisp(WindowWork* wp) {
             } else {
                 col = (GXColor){ 0xE1, 0xE1, 0xE1, 0xFF };
             }
+            // The letter's header in the first row's place, not scrolled: strip, the open envelope (level with the
+            // line, unlike the list's), number and title.
             winTexInit((TEXPalette*)*wp->res->data);
-            winTexSet(0x77, (Vec){ 4.0f + (208.0f + wp->item.mailX), wp->item.mailY - 56.0f, 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f }, col);
-            winTexSet(0x5E, (Vec){ 72.0f + wp->item.mailX, wp->item.mailY - 56.0f, 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f }, white);
-            winTexSet(0x65 + (kind2 + 1) / 10, (Vec){ 2.0f + (88.0f + wp->item.mailX), (wp->item.mailY - 56.0f) - 3.0f, 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f }, white);
-            winTexSet(0x65 + (kind2 + 1) % 10, (Vec){ 2.0f + (104.0f + wp->item.mailX), (wp->item.mailY - 56.0f) - 3.0f, 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f }, white);
+            winTexSet(0x77, (Vec){ 4.0f + (208.0f + wp->item.mailX), wp->item.mailY - 56.0f, 0.0f },
+                      (Vec){ 1.0f, 1.0f, 1.0f }, col);
+            winTexSet(WIN_TEX_MAIL_READ, (Vec){ 72.0f + wp->item.mailX, wp->item.mailY - 56.0f, 0.0f },
+                      (Vec){ 1.0f, 1.0f, 1.0f }, white);
+            winTexSet(0x65 + (kind2 + 1) / 10,
+                      (Vec){ 2.0f + (88.0f + wp->item.mailX), (wp->item.mailY - 56.0f) - 3.0f, 0.0f },
+                      (Vec){ 1.0f, 1.0f, 1.0f }, white);
+            winTexSet(0x65 + (kind2 + 1) % 10,
+                      (Vec){ 2.0f + (104.0f + wp->item.mailX), (wp->item.mailY - 56.0f) - 3.0f, 0.0f },
+                      (Vec){ 1.0f, 1.0f, 1.0f }, white);
             winFontInit();
+            // The title, then the body's scissor: top-left (mailX + 32, mailY - 72), 344 wide, 174 (early demos)
+            // or 177 high.
 #if VERSION <= VERSION_DEMO_JP
-            winFontSetLabel((Vec){120.0f + wp->item.mailX, 8.0f + (wp->item.mailY - 56.0f), 0.0f}, (Vec){0.75f, 0.75f, 0.75f}, black, mail->name);
-            GXSetScissor((u32)(32.0f + (304.0f + wp->item.mailX)), (u32)(72.0f + (240.0f - wp->item.mailY)), 0x158, 0xAE);
+            winFontSetLabel((Vec){120.0f + wp->item.mailX, 8.0f + (wp->item.mailY - 56.0f), 0.0f},
+                            (Vec){0.75f, 0.75f, 0.75f}, black, mail->name);
+            GXSetScissor((u32)(32.0f + (304.0f + wp->item.mailX)), (u32)(72.0f + (240.0f - wp->item.mailY)), 0x158,
+                         0xAE);
 #else
 #if VERSION >= VERSION_US
-            winFontSetWidth((Vec){ 120.0f + wp->item.mailX, 8.0f + (wp->item.mailY - 56.0f), 0.0f }, (Vec){ 0.75f, 0.75f, 0.75f }, black, 230.0f, msgSearch(mail->name));
+            winFontSetWidth((Vec){ 120.0f + wp->item.mailX, 8.0f + (wp->item.mailY - 56.0f), 0.0f },
+                            (Vec){ 0.75f, 0.75f, 0.75f }, black, 230.0f, msgSearch(mail->name));
 #else
-            winFontSetLabel((Vec){ 120.0f + wp->item.mailX, 8.0f + (wp->item.mailY - 56.0f), 0.0f }, (Vec){ 0.75f, 0.75f, 0.75f }, black, mail->name);
+            winFontSetLabel((Vec){ 120.0f + wp->item.mailX, 8.0f + (wp->item.mailY - 56.0f), 0.0f },
+                            (Vec){ 0.75f, 0.75f, 0.75f }, black, mail->name);
 #endif
-            GXSetScissor((u32)(32.0f + (304.0f + wp->item.mailX)), (u32)(72.0f + (240.0f - wp->item.mailY)), 0x158, 0xB1);
+            GXSetScissor((u32)(32.0f + (304.0f + wp->item.mailX)), (u32)(72.0f + (240.0f - wp->item.mailY)), 0x158,
+                         0xB1);
 #endif
+            // the paper behind the body: the sender-coloured strip stretched 7.5 times high (240), centred at
+            // (mailX + 212, mailY - 136)
             winTexInit((TEXPalette*)*wp->res->data);
-            winTexSet(0x77, (Vec){ 4.0f + (208.0f + wp->item.mailX), (wp->item.mailY - 56.0f) - 80.0f, 0.0f }, (Vec){ 1.0f, 7.5f, 1.0f }, col);
+            winTexSet(0x77, (Vec){ 4.0f + (208.0f + wp->item.mailX), (wp->item.mailY - 56.0f) - 80.0f, 0.0f },
+                      (Vec){ 1.0f, 7.5f, 1.0f }, col);
+            // The body from (mailX + 80, mailY - 80), scale 0.75 (US and later squeezed to 280 wide), moved up
+            // MAIL_LINE_H per scrolled line. The picture (mail->icon in mail.tpl) is centred at mailX + 210, below
+            // the text: its y counts back from the end of mailLines, which winItemMain state 200 lengthened for it
+            // (7 lines in the early demos, 10 later), and it scrolls with the body. Then the scissor is reset and
+            // the scroll arrows follow: JP and later only when the letter can scroll (mailLines > 8, the test
+            // winItemMain state 202 makes); the early demos draw them for every letter, so one that cannot scroll
+            // still shows a blinking down arrow.
             winFontInit();
             // BUG (reachable in JP and the early demos): the picture below is drawn from mailRes, which winItemMain
             // state 201 loaded, or set to NULL, for the letter selected when it was opened. A mail sort while the
@@ -2885,30 +3057,54 @@ static void winMailDisp(WindowWork* wp) {
             // MAIL_FLAG_PICTURE and the opened one had none, mailRes is NULL and the read through it crashes.
             // Only the sort menu that winSortMain's Start bug leaves active can sort here (A while reading).
 #if VERSION <= VERSION_DEMO_JP
-            winFontSetLabel((Vec){80.0f + wp->item.mailX, (wp->item.mailY - 80.0f) + (f32)(wp->item.mailLine * 21), 0.0f}, (Vec){0.75f, 0.75f, 0.75f}, (GXColor){0x00, 0x00, 0x00, 0xFF}, mail->body);
+            winFontSetLabel((Vec){80.0f + wp->item.mailX,
+                                  (wp->item.mailY - 80.0f) + (f32)(wp->item.mailLine * MAIL_LINE_H), 0.0f},
+                            (Vec){0.75f, 0.75f, 0.75f}, (GXColor){0x00, 0x00, 0x00, 0xFF}, mail->body);
             if (mail->flags & MAIL_FLAG_PICTURE) {
                 winTexInit((TEXPalette*)*wp->mailRes->data);
-                winTexSet(mail->icon, (Vec){210.0f + wp->item.mailX, (wp->item.mailY - (f32)((wp->item.mailLines - 3) * 21)) + (f32)(wp->item.mailLine * 21), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+                winTexSet(mail->icon,
+                          (Vec){210.0f + wp->item.mailX,
+                                (wp->item.mailY - (f32)((wp->item.mailLines - 3) * MAIL_LINE_H)) +
+                                    (f32)(wp->item.mailLine * MAIL_LINE_H),
+                                0.0f},
+                          (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
             }
             GXSetScissor(0, 0, 0x260, 0x1E0);
             {
 #else
 #if VERSION >= VERSION_US
-            winFontSetWidth((Vec){ 80.0f + wp->item.mailX, (wp->item.mailY - 80.0f) + (f32)(wp->item.mailLine * 21), 0.0f }, (Vec){ 0.75f, 0.75f, 0.75f }, (GXColor){ 0x00, 0x00, 0x00, 0xFF }, 280.0f, msgSearch(mail->body));
+            winFontSetWidth((Vec){ 80.0f + wp->item.mailX,
+                                   (wp->item.mailY - 80.0f) + (f32)(wp->item.mailLine * MAIL_LINE_H), 0.0f },
+                            (Vec){ 0.75f, 0.75f, 0.75f }, (GXColor){ 0x00, 0x00, 0x00, 0xFF }, 280.0f,
+                            msgSearch(mail->body));
 #else
-            winFontSetLabel((Vec){ 80.0f + wp->item.mailX, (wp->item.mailY - 80.0f) + (f32)(wp->item.mailLine * 21), 0.0f }, (Vec){ 0.75f, 0.75f, 0.75f }, (GXColor){ 0x00, 0x00, 0x00, 0xFF }, mail->body);
+            winFontSetLabel((Vec){ 80.0f + wp->item.mailX,
+                                   (wp->item.mailY - 80.0f) + (f32)(wp->item.mailLine * MAIL_LINE_H), 0.0f },
+                            (Vec){ 0.75f, 0.75f, 0.75f }, (GXColor){ 0x00, 0x00, 0x00, 0xFF }, mail->body);
 #endif
             if (mail->flags & MAIL_FLAG_PICTURE) {
                 winTexInit((TEXPalette*)*wp->mailRes->data);
-                winTexSet(mail->icon, (Vec){ 210.0f + wp->item.mailX, 7.0f + ((wp->item.mailY - (f32)((wp->item.mailLines - 1) * 21)) + (f32)(wp->item.mailLine * 21)), 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f }, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
+                winTexSet(mail->icon,
+                          (Vec){ 210.0f + wp->item.mailX,
+                                 7.0f + ((wp->item.mailY - (f32)((wp->item.mailLines - 1) * MAIL_LINE_H)) +
+                                         (f32)(wp->item.mailLine * MAIL_LINE_H)),
+                                 0.0f },
+                          (Vec){ 1.0f, 1.0f, 1.0f }, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
             }
             GXSetScissor(0, 0, 0x260, 0x1E0);
             if (wp->item.mailLines > 8) {
 #endif
+                // The C-stick icon at (mailX + 360, mailY - 210) (written 20 + (mailY - 230)), the up arrow 24
+                // above it, the down arrow 24 below, scale 0.6. The arrows blink (shown 20 of every 32 frames):
+                // only the down arrow on the first line, only the up arrow at the last scroll position (where
+                // winItemMain state 202 stops: mailLine + 8 == mailLines in the early demos, + 6 later), both in
+                // between.
                 winIconInit();
                 if (wp->item.mailLine == 0) {
                     if ((gp->retraceCount & 0x1F) < 0x14) {
-                        winIconSet(ICON_ARROW_DOWN, (Vec){ 360.0f + wp->item.mailX, (20.0f + (wp->item.mailY - 230.0f)) - 24.0f, 0.0f }, (Vec){ 0.6f, 0.6f, 0.6f }, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
+                        winIconSet(ICON_ARROW_DOWN,
+                                   (Vec){ 360.0f + wp->item.mailX, (20.0f + (wp->item.mailY - 230.0f)) - 24.0f, 0.0f },
+                                   (Vec){ 0.6f, 0.6f, 0.6f }, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
                     }
 #if VERSION <= VERSION_DEMO_JP
                 } else if (wp->item.mailLine + 8 == wp->item.mailLines) {
@@ -2916,13 +3112,21 @@ static void winMailDisp(WindowWork* wp) {
                 } else if (wp->item.mailLine + 6 == wp->item.mailLines) {
 #endif
                     if ((gp->retraceCount & 0x1F) < 0x14) {
-                        winIconSet(ICON_ARROW_UP, (Vec){ 360.0f + wp->item.mailX, 24.0f + (20.0f + (wp->item.mailY - 230.0f)), 0.0f }, (Vec){ 0.6f, 0.6f, 0.6f }, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
+                        winIconSet(ICON_ARROW_UP,
+                                   (Vec){ 360.0f + wp->item.mailX, 24.0f + (20.0f + (wp->item.mailY - 230.0f)), 0.0f },
+                                   (Vec){ 0.6f, 0.6f, 0.6f }, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
                     }
                 } else if ((gp->retraceCount & 0x1F) < 0x14) {
-                    winIconSet(ICON_ARROW_UP, (Vec){ 360.0f + wp->item.mailX, 24.0f + (20.0f + (wp->item.mailY - 230.0f)), 0.0f }, (Vec){ 0.6f, 0.6f, 0.6f }, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
-                    winIconSet(ICON_ARROW_DOWN, (Vec){ 360.0f + wp->item.mailX, (20.0f + (wp->item.mailY - 230.0f)) - 24.0f, 0.0f }, (Vec){ 0.6f, 0.6f, 0.6f }, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
+                    winIconSet(ICON_ARROW_UP,
+                               (Vec){ 360.0f + wp->item.mailX, 24.0f + (20.0f + (wp->item.mailY - 230.0f)), 0.0f },
+                               (Vec){ 0.6f, 0.6f, 0.6f }, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
+                    winIconSet(ICON_ARROW_DOWN,
+                               (Vec){ 360.0f + wp->item.mailX, (20.0f + (wp->item.mailY - 230.0f)) - 24.0f, 0.0f },
+                               (Vec){ 0.6f, 0.6f, 0.6f }, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
                 }
-                winIconSet(ICON_SUBSTICK_NEUTRAL, (Vec){ 360.0f + wp->item.mailX, 20.0f + (wp->item.mailY - 230.0f), 0.0f }, (Vec){ 0.6f, 0.6f, 0.6f }, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
+                winIconSet(ICON_SUBSTICK_NEUTRAL,
+                           (Vec){ 360.0f + wp->item.mailX, 20.0f + (wp->item.mailY - 230.0f), 0.0f },
+                           (Vec){ 0.6f, 0.6f, 0.6f }, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
             }
         }
     }
