@@ -424,6 +424,9 @@ typedef struct MapWork {
     struct ARAMEntry* lastTplAram; // 0x2F0, entries[1]'s tpl ARAM copy (MAPENT_TPLARAM(&entries[1]))
 } MapWork;
 
+// FAKE (FAKES.md, MW0): this layout (entries[] at 0, count inside entries[0], the tpl handle in the next
+// element's first word) only fits the codegen; the bytes fit `{ s32 count; MapEntry entries[2]; }` with the
+// handle as the entry's own last field (+0x174), so 0x2F0 is entries[1]'s handle, never used (NWPlayer123).
 // tpl ARAM copy of a map entry: stored in the word after it (the next entry's count slot, or lastTplAram)
 #define MAPENT_TPLARAM(entry) ((entry) + 1)->prevTplAram
 
