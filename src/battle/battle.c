@@ -537,6 +537,9 @@ BattleUnit* BattleChangeParty(BattleWork* wp) {
     if (wp->activeUnitId == oldId) {
         wp->activeUnitId = unit->unitId;
     }
+    // BUG: this also copies a Double or Triple Dip in progress from a partner KO'd in the middle of it; the new
+    // partner then continues that Dip with the list of the last command chosen (see CMD_STATE_INIT in
+    // BattleCommandInput).
     unit->moveState = party->moveState;
     unit->movesRemaining = party->movesRemaining;
     unit->maxMovesThisTurn = party->maxMovesThisTurn;

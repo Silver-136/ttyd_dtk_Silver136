@@ -1228,6 +1228,16 @@ s32 BattleCommandInput(BattleWork* work) {
                 cmd->cancelled = 0;
                 wp->dispFlags |= BATTLE_DISP_FLAG_COMMAND_MENU;
                 BtlUnit_SetCommandAnimPose(unit);
+                // BUG: a Double or Triple Dip in progress reopens the list of cmd->actType, the last command any unit
+                // chose, without setting it back to CMD_ACT_ITEM. It is something else when the Dip state came from
+                // another unit (BattleChangeParty copies a KO'd partner's Dip state to the partner Quick Change brings
+                // in, and actType holds Mario's Change Partner or a later Jump) or when a KO during an audience item's
+                // scene cleared attackAudience (_disable_restore_command_cursor), so the test above did not put
+                // prevActType back and actType is still CMD_ACT_AUDIENCE_PRESENT. That list opens with the ring
+                // animation, B goes to the action menu instead of the cancel prompt, and the unit can pick another
+                // unit's moves. For a type _btlcmd_MakeSelectWeaponTable does not build (Tactics) the cursor keeps an
+                // old count, 0 when that list was never built, and Up on the first row sets it to -1; for the audience
+                // types _btlcmd_GetCursorPtr sets no cursor, so the menu uses whatever its local held.
                 if (unit->moveState >= MOVE_STATE_TRIPLE_DIP_1 && unit->moveState <= MOVE_STATE_DOUBLE_DIP_2) {
                     BattleStageOnLightInCommand();
                     BattleStageOffLightFriendInCommand();
@@ -2432,6 +2442,11 @@ void BattleCommandDisplay_ProtectPartnerSelectMenuEnd(BattleWork* wp) {
  * _check_present_item calls it when an audience item interrupts input.
  */
 void BattleCommandDisplay_AllEnd(BattleWork* wp) {
+    // BUG: CMD_MENU_MULTI_ITEM stays set, so the Double Dip list stays drawn during the audience item's scene. The
+    // restore after it normally passes the Double Dip menu again, which clears the flag; when a KO in that scene
+    // cancels the restore (_disable_restore_command_cursor), DrawMultiItemWin keeps drawing with the next menu's
+    // sub-menu and reads through the NULL sub-menu as soon as a menu closes without opening another (target
+    // selection, a decided command).
     wp->commandMenu.flags &= ~(CMD_MENU_ACT | CMD_MENU_WEAPON_SELECT | CMD_MENU_OPERATION | CMD_MENU_CHANGE_PARTY | CMD_MENU_TARGET_SELECT | CMD_MENU_PROTECT_PARTNER);
 }
 
