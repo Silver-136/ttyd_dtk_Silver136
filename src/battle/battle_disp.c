@@ -550,10 +550,8 @@ next:
                         if (!(part->animFlags & PART_ANIM_NO_DISP)) {
                             dispEntry(CAMERA_3D, dispCalcZ(&zpos), DISP_MODE_XLU, btlUnitPartsDisp, part);
                         }
-                    } else {
-                        if (!(part->animFlags & PART_ANIM_NO_DISP)) {
-                            dispEntry(CAMERA_3D, dispCalcZ(&zpos), DISP_MODE_ALPHA_TEST, btlUnitPartsDisp, part);
-                        }
+                    } else if (!(part->animFlags & PART_ANIM_NO_DISP)) {
+                        dispEntry(CAMERA_3D, dispCalcZ(&zpos), DISP_MODE_ALPHA_TEST, btlUnitPartsDisp, part);
                     }
                 }
                 if (part->attributes & kMotionBlur) {

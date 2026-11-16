@@ -29,7 +29,6 @@
 #include "battle/unit/unit_boss_gonbaba.h"
 #include "driver/lightdrv.h"
 
-
 static USER_FUNC(_leg_smoke_effect);
 static USER_FUNC(_btlgon_get_escape_param);
 static USER_FUNC(_set_gonbaba_light);

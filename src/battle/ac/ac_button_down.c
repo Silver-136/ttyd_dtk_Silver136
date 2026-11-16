@@ -28,9 +28,9 @@ static u32 _button_table[7] = {PAD_BUTTON_A, PAD_BUTTON_B, PAD_BUTTON_X, PAD_BUT
 
 static void actionCommandDisp(s32 unused, f32 x, f32 y);
 
-s32 battleAcMain_ButtonDown(BattleWork *work) {
-    BattleActions *ac = &work->actionCommands;
-    BDWork *p = (BDWork*)work->actionCommands.work;
+s32 battleAcMain_ButtonDown(BattleWork* work) {
+    BattleActions* ac = &work->actionCommands;
+    BDWork* p = (BDWork*)work->actionCommands.work;
     BattleACDispParams* disp = &work->actionCommands.disp;
     s32 allDone;
     s32 i;
@@ -285,13 +285,13 @@ void battleAcDelete_ButtonDown(BattleWork* work) {
  * Used by action command 10 (Tornado Jump's second part, Vivian's Veil and Fiery Jinx).
  */
 static void actionCommandDisp(s32 unused, f32 x, f32 y) {
-    BattleWork *work = _battleWorkPointer;
-    BDWork *p = (BDWork*)work->actionCommands.work;
+    BattleWork* work = _battleWorkPointer;
+    BDWork* p = (BDWork*)work->actionCommands.work;
     s32 k;
     s32 end = ((work->actionCommands.params[2]) * 3) + 2;
     s32 i;
     s32 count;
-    f32 bx = (-200.0f) + x;
+    f32 bx = -200.0f + x;
     f32 by;
     f32 lx = bx - 40.0f;
     Vec pos = {0.0f, 0.0f, -2.0f};

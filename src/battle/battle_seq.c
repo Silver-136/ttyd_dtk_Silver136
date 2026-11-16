@@ -1011,7 +1011,7 @@ static void btlseqTurn(BattleWork* wp) {
             break;
 
         case 0x3000020: {
-                BattleUnit *unit;
+                BattleUnit* unit;
                 sfxName = "SFX_CONDITION_BREAK_ICE1";
                 for (i = 0; i < BATTLE_UNIT_MAX; i++) {
                     unit = BattleGetUnitPtr(wp, i);

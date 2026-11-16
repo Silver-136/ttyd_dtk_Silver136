@@ -964,25 +964,23 @@ static void senkaron_ext_main(void) {
                                 psndSFXOn_3D(SFX_NAME_WORD("SFX_STG1_HONE_FLY1"), &pos);
                             }
                         }
-                    } else {
-                        if ((*pose->mtx)[0][3] < mario->position.x && (*pose->mtx)[0][3] > mario->position.x - 1.5f * (6.0f * scale)) {
-                            f32 dx;
-                            f32 dz;
+                    } else if ((*pose->mtx)[0][3] < mario->position.x && (*pose->mtx)[0][3] > mario->position.x - 1.5f * (6.0f * scale)) {
+                        f32 dx;
+                        f32 dz;
 
-                            dz = (*pose->mtx)[2][3] - mario->position.z;
-                            dx = (*pose->mtx)[0][3] - mario->position.x;
-                            dist = sqrt(dx * dx + dz * dz);
-                            senkaron[i].vx = 1.0f + 3.0f * dx / dist;
-                            senkaron[i].vy = randf(5.0f, 10.0f);
-                            senkaron[i].vz = randf(-5.0f, 10.0f);
-                            senkaron[i].state = 0x61;
-                            {
-                                Vec pos = {0.0f, 0.0f, 0.0f};
-                                pos.x = (*pose->mtx)[0][3];
-                                pos.y = (*pose->mtx)[1][3];
-                                pos.z = (*pose->mtx)[2][3];
-                                psndSFXOn_3D(SFX_NAME_WORD("SFX_STG1_HONE_FLY1"), &pos);
-                            }
+                        dz = (*pose->mtx)[2][3] - mario->position.z;
+                        dx = (*pose->mtx)[0][3] - mario->position.x;
+                        dist = sqrt(dx * dx + dz * dz);
+                        senkaron[i].vx = 1.0f + 3.0f * dx / dist;
+                        senkaron[i].vy = randf(5.0f, 10.0f);
+                        senkaron[i].vz = randf(-5.0f, 10.0f);
+                        senkaron[i].state = 0x61;
+                        {
+                            Vec pos = {0.0f, 0.0f, 0.0f};
+                            pos.x = (*pose->mtx)[0][3];
+                            pos.y = (*pose->mtx)[1][3];
+                            pos.z = (*pose->mtx)[2][3];
+                            psndSFXOn_3D(SFX_NAME_WORD("SFX_STG1_HONE_FLY1"), &pos);
                         }
                     }
                 }
@@ -996,12 +994,10 @@ static void senkaron_ext_main(void) {
                     } else {
                         pose->dir = 90.0f;
                     }
+                } else if (senkaron[i].flags & 1) {
+                    pose->dir = 90.0f;
                 } else {
-                    if (senkaron[i].flags & 1) {
-                        pose->dir = 90.0f;
-                    } else {
-                        pose->dir = 270.0f;
-                    }
+                    pose->dir = 270.0f;
                 }
                 if (senkaron[i].timer == 0) {
                     f32 dx;

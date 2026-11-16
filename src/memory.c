@@ -471,7 +471,6 @@ void smartAutoFree(s32 allocType) {
     smartEntry* entry;
     smartEntry* next;
 
-
     for (entry = wp->allocHead; entry; entry = next) {
         next = entry->next;
         if (entry->type == (u16)allocType) {

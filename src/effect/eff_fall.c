@@ -729,7 +729,7 @@ static void effFallMain(EffectEntry* effect) {
                         e->speedY -= e->gravity;
                         e->pos.x += 5.0f * polySinf((6.2831855f * e->rotY) / 360.0f);
                         e->pos.z += 5.0f * -polyCosf((6.2831855f * e->rotY) / 360.0f);
-                        if ((--e->timer) < 0) {
+                        if (--e->timer < 0) {
                             e->pos.x = e->vel.x;
                             e->pos.y = e->vel.y;
                             e->pos.z = e->vel.z;

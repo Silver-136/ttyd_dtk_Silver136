@@ -313,12 +313,10 @@ USER_FUNC(evt_mapobj_flag_onoff) {
         } else {
             mapObjFlagOn(name, flags);
         }
+    } else if (on == 0) {
+        mapGrpFlagOff(name, flags);
     } else {
-        if (on == 0) {
-            mapGrpFlagOff(name, flags);
-        } else {
-            mapGrpFlagOn(name, flags);
-        }
+        mapGrpFlagOn(name, flags);
     }
     return EVT_RETURN_DONE;
 }
@@ -387,12 +385,10 @@ USER_FUNC(evt_map_set_flush_onoff) {
         } else {
             mapObjFlushOff(name);
         }
+    } else if (on) {
+        mapGrpFlushOn(name);
     } else {
-        if (on) {
-            mapGrpFlushOn(name);
-        } else {
-            mapGrpFlushOff(name);
-        }
+        mapGrpFlushOff(name);
     }
     return EVT_RETURN_DONE;
 }

@@ -237,10 +237,8 @@ static void effFlameMain(EffectEntry* effect) {
             if (frame <= 10) {
                 work->alpha = (s32)(0.5f * (f32)(128 - work->alpha) + (f32)work->alpha);
             }
-        } else {
-            if (frame <= 10) {
-                work->alpha = frame * 255 / 10;
-            }
+        } else if (frame <= 10) {
+            work->alpha = frame * 255 / 10;
         }
         if (life < 16) {
             work->alpha = life * 16;

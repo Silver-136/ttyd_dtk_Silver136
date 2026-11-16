@@ -879,12 +879,10 @@ static void winMsgDisp(WindowWork* wp, f32 x, f32 y) {
             if ((gp->retraceCount & 0x1F) < 0x14) {
                 winIconSet(ICON_ARROW_UP, (Vec){ (250.0f + x) - 10.0f, 24.0f + (40.0f + (y - 40.0f)), 0.0f }, (Vec){ 0.6f, 0.6f, 0.6f }, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
             }
-        } else {
-            if ((gp->retraceCount & 0x1F) < 0x14) {
-                ix = (250.0f + x) - 10.0f;
-                winIconSet(ICON_ARROW_UP, (Vec){ ix, 24.0f + (by = 40.0f + (y - 40.0f)), 0.0f }, (Vec){ 0.6f, 0.6f, 0.6f }, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
-                winIconSet(ICON_ARROW_DOWN, (Vec){ ix, by - 24.0f, 0.0f }, (Vec){ 0.6f, 0.6f, 0.6f }, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
-            }
+        } else if ((gp->retraceCount & 0x1F) < 0x14) {
+            ix = (250.0f + x) - 10.0f;
+            winIconSet(ICON_ARROW_UP, (Vec){ ix, 24.0f + (by = 40.0f + (y - 40.0f)), 0.0f }, (Vec){ 0.6f, 0.6f, 0.6f }, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
+            winIconSet(ICON_ARROW_DOWN, (Vec){ ix, by - 24.0f, 0.0f }, (Vec){ 0.6f, 0.6f, 0.6f }, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
         }
         winIconSet(ICON_SUBSTICK_NEUTRAL, (Vec){ (250.0f + x) - 10.0f, 40.0f + (y - 40.0f), 0.0f }, (Vec){ 0.6f, 0.6f, 0.6f }, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
     }
@@ -1439,10 +1437,8 @@ void winHakoGX(WindowWork* w, s32 type, f32 x, f32 y) {
                     if (swGet(w->log.badgeIds[n] + GSWF_BADGE_FOUND_BASE)) {
                         continue;
                     }
-                } else {
-                    if (swGet(w->log.recipeIds[n] + GSWF_RECIPE_FOUND_BASE)) {
-                        continue;
-                    }
+                } else if (swGet(w->log.recipeIds[n] + GSWF_RECIPE_FOUND_BASE)) {
+                    continue;
                 }
                 winTexSet(0x97, (Vec){4.0f + (24.0f + (x + i * 56)), yy, 0.0f}, (Vec){1.0f, 1.0f, 1.0f},
                           (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
@@ -2916,11 +2912,9 @@ static void winMailDisp(WindowWork* wp) {
                     if ((gp->retraceCount & 0x1F) < 0x14) {
                         winIconSet(ICON_ARROW_UP, (Vec){ 360.0f + wp->item.mailX, 24.0f + (20.0f + (wp->item.mailY - 230.0f)), 0.0f }, (Vec){ 0.6f, 0.6f, 0.6f }, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
                     }
-                } else {
-                    if ((gp->retraceCount & 0x1F) < 0x14) {
-                        winIconSet(ICON_ARROW_UP, (Vec){ 360.0f + wp->item.mailX, 24.0f + (20.0f + (wp->item.mailY - 230.0f)), 0.0f }, (Vec){ 0.6f, 0.6f, 0.6f }, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
-                        winIconSet(ICON_ARROW_DOWN, (Vec){ 360.0f + wp->item.mailX, (20.0f + (wp->item.mailY - 230.0f)) - 24.0f, 0.0f }, (Vec){ 0.6f, 0.6f, 0.6f }, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
-                    }
+                } else if ((gp->retraceCount & 0x1F) < 0x14) {
+                    winIconSet(ICON_ARROW_UP, (Vec){ 360.0f + wp->item.mailX, 24.0f + (20.0f + (wp->item.mailY - 230.0f)), 0.0f }, (Vec){ 0.6f, 0.6f, 0.6f }, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
+                    winIconSet(ICON_ARROW_DOWN, (Vec){ 360.0f + wp->item.mailX, (20.0f + (wp->item.mailY - 230.0f)) - 24.0f, 0.0f }, (Vec){ 0.6f, 0.6f, 0.6f }, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
                 }
                 winIconSet(ICON_SUBSTICK_NEUTRAL, (Vec){ 360.0f + wp->item.mailX, 20.0f + (wp->item.mailY - 230.0f), 0.0f }, (Vec){ 0.6f, 0.6f, 0.6f }, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
             }

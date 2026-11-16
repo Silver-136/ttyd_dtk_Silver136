@@ -161,7 +161,6 @@ inline void nanNPCMoveDecel(NanNPC* npc) {
     }
 }
 
-
 // FAKE: opt_dead_assignments off keeps the dead origin = prevPos struct copy in the inlined nanNPCMoveAtari (the retail code stores it, never reads it)
 #pragma push
 #pragma opt_dead_assignments off

@@ -206,11 +206,9 @@ void BattleStageMain(void) {
                 l->up.y = intplGetValue(l->upMode, l->upStart.y, l->upTarget.y, l->upMax - l->upTime, l->upMax);
                 l->up.z = intplGetValue(l->upMode, l->upStart.z, l->upTarget.z, l->upMax - l->upTime, l->upMax);
             }
-        } else {
-            if (l->data != NULL) {
-                STG_FREE(l->data);
-                l->data = NULL;
-            }
+        } else if (l->data != NULL) {
+            STG_FREE(l->data);
+            l->data = NULL;
         }
     }
     if (s->stgDark.time > 0) {

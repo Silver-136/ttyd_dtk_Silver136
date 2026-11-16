@@ -16,7 +16,7 @@
 #include "mario/mariost.h"
 #include "evt/evt_cmd.h"
 #include "manager/evtmgr_cmd.h"
-static s32 __psndSFXOn(const char *name, u8 vol, u8 pan, u16 pitch, Vec *pos, u32 posOnly, u16 dist, s32 ignoreSfxOff);
+static s32 __psndSFXOn(const char* name, u8 vol, u8 pan, u16 pitch, Vec* pos, u32 posOnly, u16 dist, s32 ignoreSfxOff);
 
 #if VERSION >= VERSION_US
 #define PSND_FPS gp->framerate
@@ -9089,33 +9089,27 @@ static f32 angleABf(f32 x1, f32 y1, f32 x2, f32 y2) {
             } else {
                 angle = 90.0f - delta;
             }
+        } else if (ydiff >= 0.0f) {
+            angle = 270.0f - delta;
         } else {
-            if (ydiff >= 0.0f) {
-                angle = 270.0f - delta;
-            } else {
-                angle = 270.0f + delta;
-            }
+            angle = 270.0f + delta;
         }
+    } else if (yabs == 0.0f) {
+        return 0.0f;
     } else {
-        if (yabs == 0.0f) {
-            return 0.0f;
-        } else {
-            approxY = 45.0f * (xabs / yabs);
-            index = roundi(2.0f * approxY);
-            delta = approxY * angleABTBL[index];
-            if (ydiff >= 0.0f) {
-                if (xdiff >= 0.0f) {
-                    angle = 180.0f - delta;
-                } else {
-                    angle = 180.0f + delta;
-                }
+        approxY = 45.0f * (xabs / yabs);
+        index = roundi(2.0f * approxY);
+        delta = approxY * angleABTBL[index];
+        if (ydiff >= 0.0f) {
+            if (xdiff >= 0.0f) {
+                angle = 180.0f - delta;
             } else {
-                if (xdiff >= 0.0f) {
-                    angle = 0.0f + delta;
-                } else {
-                    angle = 360.0f - delta;
-                }
+                angle = 180.0f + delta;
             }
+        } else if (xdiff >= 0.0f) {
+            angle = 0.0f + delta;
+        } else {
+            angle = 360.0f - delta;
         }
     }
     return angle;
@@ -9884,7 +9878,7 @@ BOOL psndBGMOn_f_d(u32 flags, const char* bgm_name, u32 fadetime, u32 fadeout, s
         }
     }
     if ((evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG2_23_TIME_BOMB_ACTIVATED) && (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG2_24_BOSS_BATTLE)) {
-        PaperSoundBGM *b0;
+        PaperSoundBGM* b0;
         if (id == PSND_BGM_STG2_MRI1) {
             id = PSND_BGM_EVT_DANGER4;
         }
@@ -9918,7 +9912,7 @@ BOOL psndBGMOn_f_d(u32 flags, const char* bgm_name, u32 fadetime, u32 fadeout, s
         }
     }
     if ((evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG3_00_WELCOME_TO_GLITZVILLE) && (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG4_00_WELCOME_TO_STAGE_4)) {
-        PaperSoundBGM *b0;
+        PaperSoundBGM* b0;
         if (id == PSND_BGM_BOSS_STG8_KOOPA) {
 #else
     }
@@ -10581,9 +10575,9 @@ sgfound:
 static s32 __psndSFXOn(const char* name, u8 vol, u8 pan, u16 pitch, Vec* pos, u32 posOnly, u16 dist, s32 ignoreSfxOff) {
     s32 sid;
     s32 k;
-    PaperSoundEffect *s;
-    PaperSoundEffect *sfx = NULL;
-    SoundEffectEntry *entry;
+    PaperSoundEffect* s;
+    PaperSoundEffect* sfx = NULL;
+    SoundEffectEntry* entry;
     s32 idx = 0;
     s32 delay;
     s32 i;
@@ -10598,7 +10592,7 @@ static s32 __psndSFXOn(const char* name, u8 vol, u8 pan, u16 pitch, Vec* pos, u3
         return -1;
     }
 #if VERSION >= VERSION_JP
-    if ((((sid == 0x5B) || (sid == 0x8CA)) || (((u32) (sid - 0x1BE)) <= 1)) || (sid == PSND_SFX_COIN_GET1)) {
+    if ((((sid == 0x5B) || (sid == 0x8CA)) || (((u32)(sid - 0x1BE)) <= 1)) || (sid == PSND_SFX_COIN_GET1)) {
         if (psnd.sfxCooldown) {
             return -1;
         }
@@ -10610,7 +10604,7 @@ static s32 __psndSFXOn(const char* name, u8 vol, u8 pan, u16 pitch, Vec* pos, u3
     }
     delay = 0;
     for (i = 0; i < 40; i++) {
-        PaperSoundEffect *t = pssfx + i;
+        PaperSoundEffect* t = pssfx + i;
         if (t->listId != 0xFFFFFFFF && (t->listId & PSND_SFX_INDEX_MASK) == (u32)sid && (t->flags & PSFX_FLAG_NEW) && delay == 0) {
             delay = (psnd.sfxDelay += 8);
         }

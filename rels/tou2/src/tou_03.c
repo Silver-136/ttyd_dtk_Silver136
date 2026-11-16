@@ -4120,10 +4120,8 @@ static s32 burst_chain(EventEntry* event, BOOL isFirstCall) {
             if (b->position.y < 0.0f) {
                 b->position.y = 0.0f;
             }
-        } else {
-            if (b->position.y < 60.0f) {
-                b->position.y = 60.0f;
-            }
+        } else if (b->position.y < 60.0f) {
+            b->position.y = 60.0f;
         }
     }
     return EVT_RETURN_BLOCK;

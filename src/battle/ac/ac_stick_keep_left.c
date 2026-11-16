@@ -171,11 +171,9 @@ s32 battleAcMain_StickKeepLeft(BattleWork* work) {
                         if (cw->sfx[j] == -1) {
                             cw->sfx[j] = psndSFXOn(sfx[0]);
                         }
-                    } else {
-                        if (cw->sfx[j] == -1) {
-                            cw->sfx[j] = psndSFXOn(sfx[1]);
-                            work->actionCommands.params[STICK_KEEP_PARAM_LAST_SIGNAL] = 1;
-                        }
+                    } else if (cw->sfx[j] == -1) {
+                        cw->sfx[j] = psndSFXOn(sfx[1]);
+                        work->actionCommands.params[STICK_KEEP_PARAM_LAST_SIGNAL] = 1;
                     }
                     cw->timer = work->actionCommands.params[STICK_KEEP_PARAM_INTERVAL];
                 } else {

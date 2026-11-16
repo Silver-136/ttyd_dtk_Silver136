@@ -25,7 +25,6 @@
 #include "mot/mot_hammer.h"
 #include "libc_decls.h"
 
-
 static HitEntry* hitEstimate(int* out);
 
 // hitEstimate's *out: what the swing will hit; it picks the pose, the effect and the swing length.

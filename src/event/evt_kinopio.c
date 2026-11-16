@@ -32,7 +32,6 @@
 #include "mario/mario_pouch.h"
 #include "driver/mapdrv.h"
 
-
 // These values describe this shared inn event, not generic story progress.
 enum { INN_COMMEMORATIVE_STAY = 50, INN_STAY_COUNT_CAP = 100 };
 

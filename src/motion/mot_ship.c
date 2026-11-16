@@ -425,10 +425,8 @@ void mot_ship(void) {
                 if (marioGetPtr()->motShip->turnSpeed >= 30.0f) {
                     marioGetPtr()->motShip->turnSpeed = 30.0f;
                 }
-            } else {
-                if (marioGetPtr()->motShip->turnSpeed <= -30.0f) {
-                    marioGetPtr()->motShip->turnSpeed = -30.0f;
-                }
+            } else if (marioGetPtr()->motShip->turnSpeed <= -30.0f) {
+                marioGetPtr()->motShip->turnSpeed = -30.0f;
             }
             m->displayDirection += marioGetPtr()->motShip->turnSpeed;
             reached = 0;
@@ -436,10 +434,8 @@ void mot_ship(void) {
                 if (m->displayDirection >= 270.0f) {
                     reached = 1;
                 }
-            } else {
-                if (m->displayDirection <= -270.0f) {
-                    reached = 1;
-                }
+            } else if (m->displayDirection <= -270.0f) {
+                reached = 1;
             }
             if (reached) {
                 m->currSubMotionId = 2;
@@ -467,10 +463,8 @@ void mot_ship(void) {
                 if (m->displayDirection >= 1260.0f) {
                     reached = 1;
                 }
-            } else {
-                if (m->displayDirection <= -1080.0f) {
-                    reached = 1;
-                }
+            } else if (m->displayDirection <= -1080.0f) {
+                reached = 1;
             }
             if (reached) {
                 m->multiTimer = 40;
@@ -507,11 +501,9 @@ void mot_ship(void) {
                     m->displayDirection = 1620.0f;
                     reached = 1;
                 }
-            } else {
-                if (m->displayDirection <= -1440.0f) {
-                    m->displayDirection = -1440.0f;
-                    reached = 1;
-                }
+            } else if (m->displayDirection <= -1440.0f) {
+                m->displayDirection = -1440.0f;
+                reached = 1;
             }
             if (reached) {
                 if (m->currSubMotionId == 4) {
@@ -672,10 +664,8 @@ void mot_ship(void) {
             if (marioGetPtr()->motShip->turnSpeed >= 20.0f) {
                 marioGetPtr()->motShip->turnSpeed = 20.0f;
             }
-        } else {
-            if (marioGetPtr()->motShip->turnSpeed <= -20.0f) {
-                marioGetPtr()->motShip->turnSpeed = -20.0f;
-            }
+        } else if (marioGetPtr()->motShip->turnSpeed <= -20.0f) {
+            marioGetPtr()->motShip->turnSpeed = -20.0f;
         }
         m->displayDirection += marioGetPtr()->motShip->turnSpeed;
         if (m->mot.ship.animTime == 0x2c) {
@@ -723,11 +713,9 @@ void mot_ship(void) {
                 m->displayDirection = revise360(m->displayDirection);
                 reached = 1;
             }
-        } else {
-            if (m->displayDirection <= -360.0f) {
-                m->displayDirection = revise360(m->displayDirection);
-                reached = 1;
-            }
+        } else if (m->displayDirection <= -360.0f) {
+            m->displayDirection = revise360(m->displayDirection);
+            reached = 1;
         }
         if (!reached) {
             break;

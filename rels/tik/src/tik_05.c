@@ -1180,12 +1180,10 @@ USER_FUNC(tiz_broken) {
                     } else {
                         p->dir = 1;
                     }
+                } else if (dx < 0.0f) {
+                    p->dir = 2;
                 } else {
-                    if (dx < 0.0f) {
-                        p->dir = 2;
-                    } else {
-                        p->dir = 3;
-                    }
+                    p->dir = 3;
                 }
                 if (dx || dy) {
 #if VERSION >= VERSION_US

@@ -9,7 +9,6 @@
 #include <dolphin/os.h>
 #include "poly_trig.h"
 
-
 /**
  * Spawns a field item: args are name, item id, x, y, z (integers), ItemEntryType,
  * the collect flag (GSWF/LSWF passed unevaluated, or -1) and a pickup script. Wraps itemEntry.

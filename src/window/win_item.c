@@ -371,10 +371,8 @@ s32 winItemMain(WindowWork* w) {
                     if ((n = w->item.cursor[mode] - 1) >= 0 && n < cnt) {
                         w->item.cursor[mode]--;
                     }
-                } else {
-                    if ((n = w->item.cursor[mode] + 1) >= 0 && n < cnt) {
-                        w->item.cursor[mode]++;
-                    }
+                } else if ((n = w->item.cursor[mode] + 1) >= 0 && n < cnt) {
+                    w->item.cursor[mode]++;
                 }
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_TABI_MOVE1 | PSND_SFX_BYPASS_MUTE));
             } else if (w->dirRep & DEMO_STICK_UP) {

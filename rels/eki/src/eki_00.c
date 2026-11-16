@@ -504,14 +504,12 @@ static s32 evt_moamoa_kind_onoff(EventEntry* event, BOOL isFirstCall) {
             } else {
                 moa->flags |= MOAMOA_FLAG_SHOW_KIND;
             }
-        } else {
-            if (!all) {
-                if (moa->kind != MOAMOA_KIND_MOA_B) {
-                    moa->flags &= ~MOAMOA_FLAG_SHOW_KIND;
-                }
-            } else {
+        } else if (!all) {
+            if (moa->kind != MOAMOA_KIND_MOA_B) {
                 moa->flags &= ~MOAMOA_FLAG_SHOW_KIND;
             }
+        } else {
+            moa->flags &= ~MOAMOA_FLAG_SHOW_KIND;
         }
         moamoa_pose_change(moa, "c_n_moa_a", "S_1");
     }
@@ -823,14 +821,14 @@ __declspec(section ".rodata") static Vec moamoa_zero_vec = {0.0f, 0.0f, 0.0f};
 // FAKE: the random values are hand-inlined copies of this file's randf (`r * (k = b - a) + a`, dead k
 // holders); calling randf matches at only one site (FAKES.md)
 static void ext_moamoa_main(void) {
-    MarioWork *mario = marioGetPtr();
-    PartyEntry *party = partyGetPtr(0);
-    CameraEntry *cam = camGetPtr(CAMERA_3D);
+    MarioWork* mario = marioGetPtr();
+    PartyEntry* party = partyGetPtr(0);
+    CameraEntry* cam = camGetPtr(CAMERA_3D);
     s32 sndFlag;
     s32 i;
     s32 ret;
-    ExtdrvPose *pose;
-    Moamoa *moa;
+    ExtdrvPose* pose;
+    Moamoa* moa;
     f32 a2;
     f32 rad;
     f32 angle;
@@ -889,7 +887,7 @@ static void ext_moamoa_main(void) {
     }
     if (wp->hitCount > 250) {
         s32 j;
-        Moamoa *mm;
+        Moamoa* mm;
         extGetPosePtr();
         for (j = 0, mm = wp->moa; j < wp->count; j++, mm++) {
             if (mm->flags & MOAMOA_FLAG_HIT) {
@@ -1018,7 +1016,7 @@ static void ext_moamoa_main(void) {
                 break;
 
             case MOAMOA_STATE_GATHER_WAIT_UNUSED:
-                if ((--moa->timer) < 0) {
+                if (--moa->timer < 0) {
                     moa->timer = 0;
                     moa->state++;
                 }
@@ -1039,10 +1037,10 @@ static void ext_moamoa_main(void) {
                 tx = wp->target[i % 3].x;
                 ty = wp->target[i % 3].y;
                 tz = wp->target[i % 3].z;
-                tx += s * (moa->circleRadius * ((f32) sin(((f32) (i + gp->retraceCount)) / 4.0f)));
+                tx += s * (moa->circleRadius * ((f32)sin(((f32)(i + gp->retraceCount)) / 4.0f)));
                 r = i + gp->retraceCount;
                 ty += moa->circleHeight * s;
-                tz += s * ((-moa->circleRadius) * ((f32) cos(r / 4.0f)));
+                tz += s * ((-moa->circleRadius) * ((f32)cos(r / 4.0f)));
                 (*pose->mtx)[0][3] += (tx - (*pose->mtx)[0][3]) / 15.0f;
                 (*pose->mtx)[1][3] += (ty - (*pose->mtx)[1][3]) / 15.0f;
                 (*pose->mtx)[2][3] += (tz - (*pose->mtx)[2][3]) / 15.0f;
@@ -1105,7 +1103,7 @@ static void ext_moamoa_main(void) {
                     (*pose->mtx)[0][3] += moa->speed * polySinf(rad);
                     (*pose->mtx)[2][3] = (*pose->mtx)[2][3] + (moa->speed * (-polyCosf(rad)));
                 }
-                if ((--moa->jumpTimer) < 0) {
+                if (--moa->jumpTimer < 0) {
                     (*pose->mtx)[0][3] = moa->target.x;
                     (*pose->mtx)[1][3] = moa->target.y;
                     (*pose->mtx)[2][3] = moa->target.z;
@@ -1117,7 +1115,7 @@ static void ext_moamoa_main(void) {
                 break;
 
             case MOAMOA_STATE_LAND:
-                if ((++moa->timer) > 4) {
+                if (++moa->timer > 4) {
                     moa->state = moa->next;
                 }
                 break;
@@ -1161,7 +1159,7 @@ static void ext_moamoa_main(void) {
                     break;
 
             case MOAMOA_STATE_SHRINK:
-                if ((++moa->timer) < 30) {
+                if (++moa->timer < 30) {
                     (*pose->mtx)[0][0] *= 0.9f;
                     (*pose->mtx)[1][1] *= 0.9f;
                     (*pose->mtx)[2][2] *= 0.9f;
@@ -1200,7 +1198,7 @@ static void ext_moamoa_main(void) {
                 break;
 
             case MOAMOA_STATE_BLOWN_DRIFT:
-                if ((--moa->driftTimer) > 0) {
+                if (--moa->driftTimer > 0) {
                     moa->driftVel.x += moa->driftAccelX;
                     moa->driftVel.y += moa->driftAccelY;
                     moa->driftVel.z += moa->driftAccelZ;
@@ -1244,7 +1242,7 @@ static void ext_moamoa_main(void) {
                 break;
 
             case MOAMOA_STATE_ESCAPE_WAIT:
-                if ((--moa->timer) < 0) {
+                if (--moa->timer < 0) {
                     moa->state++;
                 }
                 break;
@@ -1288,7 +1286,7 @@ static void ext_moamoa_main(void) {
                 break;
 
             case MOAMOA_STATE_BLOW_WAIT:
-                if ((--moa->timer) < 0) {
+                if (--moa->timer < 0) {
                     moa->state++;
                 }
                 break;
@@ -1303,7 +1301,7 @@ static void ext_moamoa_main(void) {
                 PSMTXRotRad(rot2, 'y', 0.20943952f);
                 PSMTXConcat(*pose->mtx, rot2, *pose->mtx);
                 pose->flags &= ~EXT_POSE_FLAG_BILLBOARD;
-                if ((*pose->mtx)[0][3] < (-1000.0f)) {
+                if ((*pose->mtx)[0][3] < -1000.0f) {
                     moa->state = MOAMOA_STATE_GONE;
                 }
                 break;
@@ -1313,13 +1311,13 @@ static void ext_moamoa_main(void) {
             if ((*pose->mtx)[0][3] > 280.0f) {
                 (*pose->mtx)[0][3] = 280.0f;
             }
-            if ((*pose->mtx)[0][3] < (-120.0f)) {
+            if ((*pose->mtx)[0][3] < -120.0f) {
                 (*pose->mtx)[0][3] = -120.0f;
             }
             if ((*pose->mtx)[2][3] > 70.0f) {
                 (*pose->mtx)[2][3] = 70.0f;
             }
-            if ((*pose->mtx)[2][3] < (-70.0f)) {
+            if ((*pose->mtx)[2][3] < -70.0f) {
                 (*pose->mtx)[2][3] = -70.0f;
             }
         }

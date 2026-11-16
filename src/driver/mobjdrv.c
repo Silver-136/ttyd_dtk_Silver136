@@ -956,14 +956,12 @@ void mobjMain(void) {
                 dispEntry(entry->camId, dispCalcZ(&entry->position), DISP_MODE_ALPHA_TEST, mobjDisp, entry);
                 dispEntry(entry->camId, dispCalcZ(&entry->position), DISP_MODE_XLU, mobjDisp, entry);
             }
+        } else if ((animPoseGetMaterialFlag(entry->poseId) & MAP_OBJ_FLAG_COLOR) && evt.a != 0xff) {
+            dispEntry(CAMERA_OFFSCREEN2, dispCalcZ(&entry->position), DISP_MODE_XLU, mobjDisp_OffscreenXLU, entry);
         } else {
-            if ((animPoseGetMaterialFlag(entry->poseId) & MAP_OBJ_FLAG_COLOR) && evt.a != 0xff) {
-                dispEntry(CAMERA_OFFSCREEN2, dispCalcZ(&entry->position), DISP_MODE_XLU, mobjDisp_OffscreenXLU, entry);
-            } else {
-                dispEntry(CAMERA_OFFSCREEN2, dispCalcZ(&entry->position), DISP_MODE_OPAQUE, mobjDisp_OffscreenXLU, entry);
-                dispEntry(CAMERA_OFFSCREEN2, dispCalcZ(&entry->position), DISP_MODE_ALPHA_TEST, mobjDisp_OffscreenXLU, entry);
-                dispEntry(CAMERA_OFFSCREEN2, dispCalcZ(&entry->position), DISP_MODE_XLU, mobjDisp_OffscreenXLU, entry);
-            }
+            dispEntry(CAMERA_OFFSCREEN2, dispCalcZ(&entry->position), DISP_MODE_OPAQUE, mobjDisp_OffscreenXLU, entry);
+            dispEntry(CAMERA_OFFSCREEN2, dispCalcZ(&entry->position), DISP_MODE_ALPHA_TEST, mobjDisp_OffscreenXLU, entry);
+            dispEntry(CAMERA_OFFSCREEN2, dispCalcZ(&entry->position), DISP_MODE_XLU, mobjDisp_OffscreenXLU, entry);
         }
     }
 }
@@ -1311,4 +1309,3 @@ int mobjCheckKururingFloorItem(MapObjectEntry* entry) {
         return 0;
     }
 }
-

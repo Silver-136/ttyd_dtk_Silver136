@@ -250,10 +250,8 @@ void mot_plane(void) {
                 if (mp->displayDirection >= 630.0f) {
                     done = TRUE;
                 }
-            } else {
-                if (mp->displayDirection <= -630.0f) {
-                    done = TRUE;
-                }
+            } else if (mp->displayDirection <= -630.0f) {
+                done = TRUE;
             }
             if (done) {
                 mp->currSubMotionId = 2;
@@ -284,11 +282,9 @@ void mot_plane(void) {
                     mp->displayDirection = 1260.0f;
                     done = TRUE;
                 }
-            } else {
-                if (mp->displayDirection <= -1080.0f) {
-                    mp->displayDirection = -1080.0f;
-                    done = TRUE;
-                }
+            } else if (mp->displayDirection <= -1080.0f) {
+                mp->displayDirection = -1080.0f;
+                done = TRUE;
             }
             if (done) {
                 mp->multiTimer = 60;
@@ -740,10 +736,8 @@ static void flyMain(void) {
                 if (mp->wStickDir1 > 0 && mp->motPlane->pitchSpeed >= 1.0f) {
                     mp->motPlane->pitchSpeed = 1.0f;
                 }
-            } else {
-                if (mp->wStickDir1 < 0 && mp->motPlane->pitchSpeed >= 1.0f) {
-                    mp->motPlane->pitchSpeed = 1.0f;
-                }
+            } else if (mp->wStickDir1 < 0 && mp->motPlane->pitchSpeed >= 1.0f) {
+                mp->motPlane->pitchSpeed = 1.0f;
             }
             if (!checkAirPort()) {
                 mp->motPlane->pitchRecover += 0.1f * (1.0f - mp->motPlane->pitchRecover);
@@ -785,13 +779,11 @@ static void flyMain(void) {
                     return;
                 }
             }
-        } else {
-            if ((f32)mp->wStickDir1 > 0.0f) {
-                if (++mp->motPlane->stallTimer >= stallFrames) {
-                    mp->mot.plane.groundY = mp->position.y;
-                    mp->currSubMotionId = 60;
-                    return;
-                }
+        } else if ((f32)mp->wStickDir1 > 0.0f) {
+            if (++mp->motPlane->stallTimer >= stallFrames) {
+                mp->mot.plane.groundY = mp->position.y;
+                mp->currSubMotionId = 60;
+                return;
             }
         }
     } else {

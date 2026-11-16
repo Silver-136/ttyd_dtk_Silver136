@@ -736,76 +736,74 @@ static void MixAudio(s16* destination, s16* source, u32 sample) {
         } else {
             memcpy(destination, source, sample << 2);
         }
-    } else {
-        if (SimpleControl.open && SimpleControl.audioState == TRUE && SimpleControl.audioExist) {
-            requestSample = sample;
-            dst = destination;
+    } else if (SimpleControl.open && SimpleControl.audioState == TRUE && SimpleControl.audioExist) {
+        requestSample = sample;
+        dst = destination;
 
-            while (1) {
-                if (SimpleControl.audioBuffer[SimpleControl.audioOutputIndex].validSample) {
-                    if (SimpleControl.audioBuffer[SimpleControl.audioOutputIndex].validSample >= requestSample) {
-                        sampleNum = requestSample;
-                    } else {
-                        sampleNum = SimpleControl.audioBuffer[SimpleControl.audioOutputIndex].validSample;
-                    }
-
-                    thpsrc = SimpleControl.audioBuffer[SimpleControl.audioOutputIndex].curPtr;
-                    for (i = 0; i < sampleNum; i++) {
-                        if (SimpleControl.rampCount) {
-                            SimpleControl.rampCount--;
-                            SimpleControl.curVolume += SimpleControl.deltaVolume;
-                        } else {
-                            SimpleControl.curVolume = SimpleControl.targetVolume;
-                        }
-
-                        attenuation = VolumeTable[(s32)SimpleControl.curVolume];
-
-                        mix = (attenuation * (*thpsrc)) >> 15;
-                        if (mix < -32768) {
-                            mix = -32768;
-                        }
-                        if (mix > 32767) {
-                            mix = 32767;
-                        }
-                        *dst = (s16)mix;
-                        dst++;
-                        thpsrc++;
-
-                        mix = (attenuation * (*thpsrc)) >> 15;
-                        if (mix < -32768) {
-                            mix = -32768;
-                        }
-                        if (mix > 32767) {
-                            mix = 32767;
-                        }
-                        *dst = (s16)mix;
-                        dst++;
-                        thpsrc++;
-                    }
-
-                    requestSample -= sampleNum;
-
-                    SimpleControl.audioBuffer[SimpleControl.audioOutputIndex].validSample -= sampleNum;
-                    SimpleControl.audioBuffer[SimpleControl.audioOutputIndex].curPtr = thpsrc;
-
-                    if (SimpleControl.audioBuffer[SimpleControl.audioOutputIndex].validSample == 0) {
-                        SimpleControl.audioOutputIndex++;
-                        if (SimpleControl.audioOutputIndex >= AUDIO_BUFFER_NUM) {
-                            SimpleControl.audioOutputIndex = 0;
-                        }
-                    }
-
-                    if (!requestSample) {
-                        break;
-                    }
+        while (1) {
+            if (SimpleControl.audioBuffer[SimpleControl.audioOutputIndex].validSample) {
+                if (SimpleControl.audioBuffer[SimpleControl.audioOutputIndex].validSample >= requestSample) {
+                    sampleNum = requestSample;
                 } else {
-                    memset(dst, 0, requestSample << 2);
+                    sampleNum = SimpleControl.audioBuffer[SimpleControl.audioOutputIndex].validSample;
+                }
+
+                thpsrc = SimpleControl.audioBuffer[SimpleControl.audioOutputIndex].curPtr;
+                for (i = 0; i < sampleNum; i++) {
+                    if (SimpleControl.rampCount) {
+                        SimpleControl.rampCount--;
+                        SimpleControl.curVolume += SimpleControl.deltaVolume;
+                    } else {
+                        SimpleControl.curVolume = SimpleControl.targetVolume;
+                    }
+
+                    attenuation = VolumeTable[(s32)SimpleControl.curVolume];
+
+                    mix = (attenuation * (*thpsrc)) >> 15;
+                    if (mix < -32768) {
+                        mix = -32768;
+                    }
+                    if (mix > 32767) {
+                        mix = 32767;
+                    }
+                    *dst = (s16)mix;
+                    dst++;
+                    thpsrc++;
+
+                    mix = (attenuation * (*thpsrc)) >> 15;
+                    if (mix < -32768) {
+                        mix = -32768;
+                    }
+                    if (mix > 32767) {
+                        mix = 32767;
+                    }
+                    *dst = (s16)mix;
+                    dst++;
+                    thpsrc++;
+                }
+
+                requestSample -= sampleNum;
+
+                SimpleControl.audioBuffer[SimpleControl.audioOutputIndex].validSample -= sampleNum;
+                SimpleControl.audioBuffer[SimpleControl.audioOutputIndex].curPtr = thpsrc;
+
+                if (SimpleControl.audioBuffer[SimpleControl.audioOutputIndex].validSample == 0) {
+                    SimpleControl.audioOutputIndex++;
+                    if (SimpleControl.audioOutputIndex >= AUDIO_BUFFER_NUM) {
+                        SimpleControl.audioOutputIndex = 0;
+                    }
+                }
+
+                if (!requestSample) {
                     break;
                 }
+            } else {
+                memset(dst, 0, requestSample << 2);
+                break;
             }
-        } else {
-            memset(destination, 0, sample << 2);
         }
+    } else {
+        memset(destination, 0, sample << 2);
     }
 }
 

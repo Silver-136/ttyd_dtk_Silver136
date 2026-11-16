@@ -143,7 +143,6 @@ static void effKemuri5Main(EffectEntry* effect) {
     }
 }
 
-
 /** Draws each puff as a camera-facing (Y-billboarded) textured quad using effect texture 0x4E. */
 static void effKemuri5Disp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;

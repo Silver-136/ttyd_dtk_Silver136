@@ -304,11 +304,9 @@ void kpa_walk(void) {
                 marioChgMot(MARIO_MOTION_STAY);
                 return;
             }
-        } else {
-            if (!m->controlStickSensitivity && !(m->flags & MARIO_FLAG_FORCED_MOVEMENT)) {
-                marioChgMot(MARIO_MOTION_STAY);
-                return;
-            }
+        } else if (!m->controlStickSensitivity && !(m->flags & MARIO_FLAG_FORCED_MOVEMENT)) {
+            marioChgMot(MARIO_MOTION_STAY);
+            return;
         }
         if (!marioKeyOffChk()) {
             marioCamZoomOffReq();
@@ -370,11 +368,9 @@ void kpa_dash(void) {
                 marioChgMot(MARIO_MOTION_STAY);
                 return;
             }
-        } else {
-            if (!m->controlStickSensitivity && !(m->flags & MARIO_FLAG_FORCED_MOVEMENT)) {
-                marioChgMot(MARIO_MOTION_STAY);
-                return;
-            }
+        } else if (!m->controlStickSensitivity && !(m->flags & MARIO_FLAG_FORCED_MOVEMENT)) {
+            marioChgMot(MARIO_MOTION_STAY);
+            return;
         }
         if (!marioKeyOffChk()) {
             marioCamZoomOffReq();

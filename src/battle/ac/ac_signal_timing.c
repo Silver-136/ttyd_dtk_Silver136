@@ -86,13 +86,13 @@ static s32 _get_ok_frame_range(s32 difficulty) {
  * Counts hits in outputParams[0] ([1] is the last answer, 1 or -1) and succeeds with params[3] or more.
  * JP and later also stop taking presses once every signal is answered.
  */
-s32 battleAcMain_SignalTiming(BattleWork *work) {
+s32 battleAcMain_SignalTiming(BattleWork* work) {
     s32 j;
     s32 i;
     s32 k;
     BOOL unique;
-    BattleActions *ac = &work->actionCommands;
-    SignalTimingWork *w = (SignalTimingWork*)ac->work;
+    BattleActions* ac = &work->actionCommands;
+    SignalTimingWork* w = (SignalTimingWork*)ac->work;
     BattleACDispParams* disp = &ac->disp;
     BOOL loop;
     BOOL autoCommand = 0;

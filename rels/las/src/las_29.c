@@ -524,12 +524,10 @@ static USER_FUNC(hikari_se) {
         } else {
             psndSFXOn_3D("SFX_STG8_CANDLE_DARK_ON1", &pos);
         }
+    } else if (!dark) {
+        psndSFXOn_3D("SFX_STG8_CANDLE_OFF1", &pos);
     } else {
-        if (!dark) {
-            psndSFXOn_3D("SFX_STG8_CANDLE_OFF1", &pos);
-        } else {
-            psndSFXOn_3D("SFX_STG8_CANDLE_DARK_OFF1", &pos);
-        }
+        psndSFXOn_3D("SFX_STG8_CANDLE_DARK_OFF1", &pos);
     }
     return EVT_RETURN_DONE;
 }

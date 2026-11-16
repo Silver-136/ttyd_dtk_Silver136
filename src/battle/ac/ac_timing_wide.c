@@ -348,12 +348,10 @@ static void actionCommandDisp(f32 x, f32 y) {
                 } else {
                     DRAW_BUTTON_ICON(b);
                 }
+            } else if (tw->mode > 0) {
+                DRAW_BUTTON_ICON(b);
             } else {
-                if (tw->mode > 0) {
-                    DRAW_BUTTON_ICON(b);
-                } else {
-                    DRAW_BUTTON_ICON(a);
-                }
+                DRAW_BUTTON_ICON(a);
             }
             break;
         case 1:
@@ -364,19 +362,15 @@ static void actionCommandDisp(f32 x, f32 y) {
                     } else {
                         DRAW_BUTTON_ICON(a);
                     }
-                } else {
-                    if (tw->mode > 0) {
-                        DRAW_BUTTON_ICON(a);
-                    } else {
-                        DRAW_BUTTON_ICON(b);
-                    }
-                }
-            } else {
-                if (tw->frame >= ac->params[2]) {
+                } else if (tw->mode > 0) {
                     DRAW_BUTTON_ICON(a);
                 } else {
                     DRAW_BUTTON_ICON(b);
                 }
+            } else if (tw->frame >= ac->params[2]) {
+                DRAW_BUTTON_ICON(a);
+            } else {
+                DRAW_BUTTON_ICON(b);
             }
             break;
     }

@@ -140,10 +140,8 @@ static void effOpukuWprotectMain(EffectEntry* effect) {
         if (frame < 16) {
             work->alpha2 = work->alpha = (frame << 4) + 15;
         }
-    } else {
-        if (frame < 4) {
-            work->alpha2 = work->alpha = (frame << 6) + 63;
-        }
+    } else if (frame < 4) {
+        work->alpha2 = work->alpha = (frame << 6) + 63;
     }
     u = (f32)sin(6.2831855f * (f32)(frame + frame * 6) / 360.0f);
     work->colorG = (u8)(127.0f + 32.0f * u);

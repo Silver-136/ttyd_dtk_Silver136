@@ -516,24 +516,24 @@ found:
  * allocates the vertex buffers and resets time, material and turning state;
  * Vivian, Marilyn and Beldam get their hair and tail chain data.
  */
-s32 animPoseEntry(const char *animName, s32 type) {
+s32 animPoseEntry(const char* animName, s32 type) {
     static s32 _dummy = -1;
 
     // FAKE: counters and found-slot temps are one-element s32 arrays (IRO scalarizes them into @ window temps, giving the
     // target's `li c,0; mr off,c` loop starts and @ numbering). pc is the pose-loop counter, copied into poseId on a hit
     // (poseId then numbers below pose), and reused as both texture loops' counter (its second web gets a late @ label).
-    AnimationPose *t[1];
-    AnimationTextureFile *tt[1];
-    AnimationPoseFile *file;
-    AnimationTextureFile *tex[1];
-    AnimationPoseData *data;
-    FileEntry *handle;
+    AnimationPose* t[1];
+    AnimationTextureFile* tt[1];
+    AnimationPoseFile* file;
+    AnimationTextureFile* tex[1];
+    AnimationPoseData* data;
+    FileEntry* handle;
     s32 poseId[1];
     s32 pc[1];
     s32 fileId[1];
     s32 count;
     s32 gz;
-    AnimationPose *pose;
+    AnimationPose* pose;
     char textureName[256];
     switch (type) {
         case 0:
@@ -1576,10 +1576,8 @@ void animPoseMain(s32 poseId) {
                 }
             }
         }
-    } else {
-        if (pose->lastFrameTime > t) {
-            pose->lastFrameTime = 0.0f;
-        }
+    } else if (pose->lastFrameTime > t) {
+        pose->lastFrameTime = 0.0f;
     }
     if (frame == nextFrame) {
 #if VERSION <= VERSION_DEMO_JP
@@ -2031,7 +2029,7 @@ static void pushGXModelMtx_JointNode__(AnimPoseNode* node, f32 sx, f32 sy, f32 s
  * (rotation, translation, scale).
  * The local declaration order is load-bearing: it decides the register colouring (see the FAKE note below).
  */
-static void animSetMaterial_Texture(s32 texCount_, s32 *texIdRemap_, AnimPoseTexEntry *pTexEntries_, AnimTexMtx *animEntries, s32 texBindsCapacity, AnimTexBind *texBinds, AnimationTextureFile *texFile) {
+static void animSetMaterial_Texture(s32 texCount_, s32* texIdRemap_, AnimPoseTexEntry* pTexEntries_, AnimTexMtx* animEntries, s32 texBindsCapacity, AnimTexBind* texBinds, AnimationTextureFile* texFile) {
     s32 texCount;
     s32* texIdRemap;
     AnimPoseTexEntry* pTexEntries;
@@ -2042,13 +2040,13 @@ static void animSetMaterial_Texture(s32 texCount_, s32 *texIdRemap_, AnimPoseTex
     Mtx rot;
     Mtx trans;
     MtxPtr m;
-    TEXHeader *hdr;
+    TEXHeader* hdr;
     u32 flags;
-    AnimTexMtx *anim;
+    AnimTexMtx* anim;
     u32 texId;
     s32 texMtx;
     u32 j;
-    TEXDescriptor *desc;
+    TEXDescriptor* desc;
     f32 scaleS;
     f32 scaleT;
     GXTexObj obj;
@@ -2070,7 +2068,7 @@ static void animSetMaterial_Texture(s32 texCount_, s32 *texIdRemap_, AnimPoseTex
     pTexEntries = pTexEntries_;
     for (i[0] = 0; i[0] < texCount; i[0]++) {
         s32 tex2;
-        AnimPoseTexEntry *entry;
+        AnimPoseTexEntry* entry;
         s32 id;
         int slot = texCount - i[0] - 1;
 
@@ -2473,23 +2471,23 @@ static s32 tbl[4] = { GX_CULL_BACK, GX_CULL_FRONT, GX_CULL_ALL, GX_CULL_NONE }; 
  * including substituted paper textures.
  */
 static void materialProc(s32 shapeId, s32 xluStage) {
-    AnimationPoseData *cd;
+    AnimationPoseData* cd;
     int i;
     s32 drawCount;
-    AnimPoseShapeDraw *draw;
-    CameraEntry *camera;
-    AnimationPose *pose;
-    GXTexObj *texObj;
-    GXTexObj *currTexObj;
+    AnimPoseShapeDraw* draw;
+    CameraEntry* camera;
+    AnimationPose* pose;
+    GXTexObj* texObj;
+    GXTexObj* currTexObj;
     BOOL texChange1;
     BOOL check1;
     s32 dispMode;
-    AnimPoseShape *shape;
+    AnimPoseShape* shape;
     Mtx camMtx;
     Mtx invCamMtx;
     Vec lightPos;
 #if VERSION <= VERSION_DEMO_JP
-    if (shapeId != (-1)) {
+    if (shapeId != -1) {
 #else
     if (shapeId != -1) {
         camera = camGetCurPtr();
@@ -2556,7 +2554,7 @@ static void materialProc(s32 shapeId, s32 xluStage) {
                     }
                 }
                 {
-                AnimationPose *pose2;
+                AnimationPose* pose2;
                 pose2 = wp->curPose;
                 if (pose2->flags & ANIM_POSE_FLAG_CHANGE_TEXTURE) {
                     texObj = wp->texObjs[0];
@@ -3172,10 +3170,10 @@ void animPoseDrawMtx(s32 poseId, Mtx matrix, s32 xluMode, f32 rotY, f32 scale) {
     Mtx m1;
     static Mtx mtx;
     Mtx m2;
-    const char *name;
-    AnimationPose *paper;
-    AnimationPose *pose;
-    AnimationPoseData *pd;
+    const char* name;
+    AnimationPose* paper;
+    AnimationPose* pose;
+    AnimationPoseData* pd;
     pose = &wp->poses[poseId];
     if (pose->paperId != -1) {
         if (pose->flags & (ANIM_POSE_FLAG_WORLD_POSITION_EVAL | ANIM_POSE_FLAG_WORLD_MATRIX_EVAL)) {
@@ -3736,10 +3734,10 @@ BOOL animPoseTestXLU(s32 poseId) {
 // Original name and size (0x120) from the JP demo map (UNUSED there: every call is inlined).
 void _animPoseEvalMtx(AnimationPose* pose, Mtx matrix, f32 rotY, f32 scale) {
     Mtx tmp;
-    Mtx *m;
+    Mtx* m;
     Mtx rot;
     Mtx scl;
-    AnimationPoseData *data;
+    AnimationPoseData* data;
     data = *((AnimationPoseData**)wp->files[pose->fileId].handle->data);
     m = (Mtx*)matrix;
     if ((!(pose->flags & ANIM_POSE_FLAG_PERA)) && rotY) {
@@ -4041,4 +4039,3 @@ s32 animPoseGetGroupIdx(s32 poseId, const char* name) {
 const char* animPoseGetGroupName(s32 poseId, s32 group) {
     return animPoseGetAnimBaseDataPtr(poseId)->groups[group].name;
 }
-

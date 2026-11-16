@@ -41,13 +41,13 @@ static void actionCommandDisp(f32 x, f32 y);
  * JP and later also wait until every target is hit or missed and stop at the first target a press reaches;
  * the early demos end on the time limit.
  */
-s32 battleAcMain_GaugeTiming2(BattleWork *work) {
+s32 battleAcMain_GaugeTiming2(BattleWork* work) {
     BOOL pressed;
     BOOL allDone;
     BOOL found;
     s32 i3;
     s32 i4;
-    GT2Work *gw = (GT2Work*)work->actionCommands.work;
+    GT2Work* gw = (GT2Work*)work->actionCommands.work;
     BOOL autoCommand = 0;
     BattleACDispParams* disp = &work->actionCommands.disp;
     s32 i;
@@ -73,7 +73,7 @@ s32 battleAcMain_GaugeTiming2(BattleWork *work) {
             work->actionCommands.outputParams[0] = 0;
             gw->width = work->actionCommands.params[2] * 60;
             for (i = 0; i < work->actionCommands.params[2]; i++) {
-                gw->targets[i] = (f32) ((100 / work->actionCommands.params[2]) * (i + 1));
+                gw->targets[i] = (f32)((100 / work->actionCommands.params[2]) * (i + 1));
                 gw->targets[i] -= 4.0f;
                 gw->state[i] = 0;
                 gw->earlyPress[i] = 0;
@@ -133,7 +133,7 @@ s32 battleAcMain_GaugeTiming2(BattleWork *work) {
                 break;
             }
             gw->frame2++;
-            gw->cursor = (100.0f * ((f32) gw->frame2)) / ((f32) gw->totalFrames);
+            gw->cursor = (100.0f * ((f32)gw->frame2)) / ((f32)gw->totalFrames);
             for (i3 = 0; i3 < work->actionCommands.params[2]; i3++) {
                 if ((!gw->state[i3]) && (gw->cursor > (6.0f + gw->targets[i3]))) {
                     gw->state[i3] = -1;
@@ -144,7 +144,7 @@ s32 battleAcMain_GaugeTiming2(BattleWork *work) {
             for (i = 0; i < work->actionCommands.params[2]; i++) {
                 if ((!gw->state[i]) && (__fabs(gw->cursor - gw->targets[i]) <= 6.0)) {
                     gw->hit = 1;
-                    if (gw->sfx[i] == (-1)) {
+                    if (gw->sfx[i] == -1) {
                         gw->sfx[i] = psndSFXOn(SFX_NAME_WORD("SFX_AC_PONE1"));
                     }
                 }
@@ -327,7 +327,7 @@ static void actionCommandDisp(f32 x, f32 y) {
     gw = (GT2Work*)ac->work;
     cam = camGetPtr(CAMERA_2D);
     v = gw->width - 16;
-    x0 = (-288.0f) + x;
+    x0 = -288.0f + x;
     y0 = 49.0f + y;
     y1 = y0 - 8.0f;
     q = 0;

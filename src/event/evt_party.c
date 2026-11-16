@@ -300,15 +300,13 @@ USER_FUNC(evt_party_set_dir) {
         count = event->userdata[2] + 1;
         event->userdata[2] = count;
         return count > frames ? EVT_RETURN_YIELD : EVT_RETURN_BLOCK;
-    } else {
-        if (frames < 0) {
-            p->displayDirectionTarget = revise360(270.0f - angle);
-            p->targetDir = toMovedirSimple(p->displayDirectionTarget);
-        } else if (frames == 0) {
-            p->displayDirection = revise360(270.0f - angle);
-            p->displayDirectionTarget = p->displayDirection;
-            p->targetDir = toMovedirSimple(p->displayDirectionTarget);
-        }
+    } else if (frames < 0) {
+        p->displayDirectionTarget = revise360(270.0f - angle);
+        p->targetDir = toMovedirSimple(p->displayDirectionTarget);
+    } else if (frames == 0) {
+        p->displayDirection = revise360(270.0f - angle);
+        p->displayDirectionTarget = p->displayDirection;
+        p->targetDir = toMovedirSimple(p->displayDirectionTarget);
     }
     return EVT_RETURN_DONE;
 }
@@ -913,11 +911,9 @@ USER_FUNC(evt_party_yoshi_ride) {
             p->flags &= ~PARTY_FLAG_IS_EVT_USE;
             return EVT_RETURN_DONE;
         }
-    } else {
-        if (yoshiGetStatus() == YOSHI_STATUS_INACTIVE) {
-            p->flags &= ~PARTY_FLAG_IS_EVT_USE;
-            return EVT_RETURN_DONE;
-        }
+    } else if (yoshiGetStatus() == YOSHI_STATUS_INACTIVE) {
+        p->flags &= ~PARTY_FLAG_IS_EVT_USE;
+        return EVT_RETURN_DONE;
     }
     return EVT_RETURN_BLOCK;
 }

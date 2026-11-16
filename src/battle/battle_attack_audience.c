@@ -32,7 +32,6 @@
 static EvtWord btlataudevtPresentItem_Damage[14];
 static EvtWord btlataudevtPresentItem_Get[49];
 
-
 /**
  * Script helper: finds the audience member currently holding an item to throw and returns its index (args[0])
  * and its position (args[1..3], whole units); any argument may be EVT_NULLPTR to skip it.

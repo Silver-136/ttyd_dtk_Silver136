@@ -735,17 +735,15 @@ void mot_jabara(void) {
                                         mario->mot.jabara.animFrame = 0x20;
                                     }
                                 }
+                            } else if (mario->displayDirection >= 90.0f && mario->displayDirection <= 270.0f) {
+                                mario->mot.jabara.animFrame--;
+                                if (mario->mot.jabara.animFrame < 0) {
+                                    mario->mot.jabara.animFrame = 0x20;
+                                }
                             } else {
-                                if (mario->displayDirection >= 90.0f && mario->displayDirection <= 270.0f) {
-                                    mario->mot.jabara.animFrame--;
-                                    if (mario->mot.jabara.animFrame < 0) {
-                                        mario->mot.jabara.animFrame = 0x20;
-                                    }
-                                } else {
-                                    mario->mot.jabara.animFrame++;
-                                    if (mario->mot.jabara.animFrame > 0x20) {
-                                        mario->mot.jabara.animFrame = 0;
-                                    }
+                                mario->mot.jabara.animFrame++;
+                                if (mario->mot.jabara.animFrame > 0x20) {
+                                    mario->mot.jabara.animFrame = 0;
                                 }
                             }
                             if (mario->mot.jabara.animFrame == 0) {

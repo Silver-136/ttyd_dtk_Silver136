@@ -693,21 +693,15 @@ static s32 checkOneRevolution(s32 dir) {
             if (start < v || cur <= start) {
                 ret = 1;
             }
-        } else {
-            if (cur <= start && start < v) {
-                ret = 1;
-            }
+        } else if (cur <= start && start < v) {
+            ret = 1;
         }
-    } else {
-        if (cur < v) {
-            if (start > v || start <= cur) {
-                ret = 1;
-            }
-        } else {
-            if (cur >= start && start > v) {
-                ret = 1;
-            }
+    } else if (cur < v) {
+        if (start > v || start <= cur) {
+            ret = 1;
         }
+    } else if (cur >= start && start > v) {
+        ret = 1;
     }
     return ret;
 }

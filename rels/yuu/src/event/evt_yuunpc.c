@@ -716,11 +716,9 @@ static void yuunpc_pose_minigame1_main(void) {
                         y += -1000.0f;
                         (*ext->mtx)[1][3] = y;
                     }
-                } else {
-                    if (y < -500.0f) {
-                        y -= -1000.0f;
-                        (*ext->mtx)[1][3] = y;
-                    }
+                } else if (y < -500.0f) {
+                    y -= -1000.0f;
+                    (*ext->mtx)[1][3] = y;
                 }
             }
             if (irand(150) == 0) {
@@ -835,15 +833,11 @@ static void yuunpc_pose_minigame2_main(void) {
                         if (y > -500.0f) {
                             (*ext->mtx)[1][3] = (y += -1000.0f);
                         }
-                    } else {
-                        if (y < -500.0f) {
-                            (*ext->mtx)[1][3] = y - -1000.0f;
-                        }
-                    }
-                } else {
-                    if (y < -500.0f) {
+                    } else if (y < -500.0f) {
                         (*ext->mtx)[1][3] = y - -1000.0f;
                     }
+                } else if (y < -500.0f) {
+                    (*ext->mtx)[1][3] = y - -1000.0f;
                 }
             }
             if (irand(150) == 0) {
@@ -957,11 +951,9 @@ static void yuunpc_pose_minigame3_main(void) {
                         y += -1000.0f;
                         (*ext->mtx)[1][3] = y;
                     }
-                } else {
-                    if (y < -500.0f) {
-                        y -= -1000.0f;
-                        (*ext->mtx)[1][3] = y;
-                    }
+                } else if (y < -500.0f) {
+                    y -= -1000.0f;
+                    (*ext->mtx)[1][3] = y;
                 }
             }
             if (irand(180) == 0) {
@@ -1596,11 +1588,9 @@ void yuunpc_pose_minigame4_main(void) {
                         y += -1000.0f;
                         (*ext->mtx)[1][3] = y;
                     }
-                } else {
-                    if (y < -500.0f) {
-                        y -= -1000.0f;
-                        (*ext->mtx)[1][3] = y;
-                    }
+                } else if (y < -500.0f) {
+                    y -= -1000.0f;
+                    (*ext->mtx)[1][3] = y;
                 }
             }
 #if VERSION <= VERSION_DEMO_JP

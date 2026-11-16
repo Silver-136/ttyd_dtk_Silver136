@@ -219,4 +219,3 @@ static EVT_BEGIN(twoddisp_main_event)
     END_LOOP
     RETURN
 EVT_END()
-

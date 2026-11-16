@@ -852,7 +852,7 @@ void nokonoko_use(PartyEntry* party) {
         case 111:
             party->position.y += party->velY;
             marioGetScreenPos(party->position, &s2x, &s2y, &s2z);
-            if (s2y <= (-300.0f)) {
+            if (s2y <= -300.0f) {
                 party->moveFrames = sysMsec2Frame(800);
                 party->useMotionId = 112;
             }
@@ -875,7 +875,7 @@ void nokonoko_use(PartyEntry* party) {
             party->position.y = 1000.0f + rp.y;
             party->position.z = rp.z;
             party->velY = 0.0f;
-            party->accelY = (-1.0f);
+            party->accelY = -1.0f;
             party->moveSpeed = 0.0f;
             party->flags |= PARTY_FLAG_IS_FALLING;
             party->flags |= PARTY_FLAG_FORCE_FALL;
@@ -892,11 +892,11 @@ void nokonoko_use(PartyEntry* party) {
                 party->flags &= ~PARTY_FLAG_FORCE_FALL;
             }
             partyMove(party);
-            if (party->velY <= (-6.0f)) {
+            if (party->velY <= -6.0f) {
                 party->accelY = 0.0f;
-                party->velY = (-6.0f);
+                party->velY = -6.0f;
             }
-            if (party->position.y < (-2000.0f)) {
+            if (party->position.y < -2000.0f) {
                 party->position = mario->position;
                 party->position.y += 200.0f;
             }

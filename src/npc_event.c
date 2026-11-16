@@ -164,10 +164,8 @@ static USER_FUNC(_2d_dead_jump) {
                     npc->jumpYScale = h / apex;
                 }
             }
-        } else {
-            if (dy >= 0.0f) {
-                return EVT_RETURN_YIELD;
-            }
+        } else if (dy >= 0.0f) {
+            return EVT_RETURN_YIELD;
         }
         return EVT_RETURN_BLOCK;
     }

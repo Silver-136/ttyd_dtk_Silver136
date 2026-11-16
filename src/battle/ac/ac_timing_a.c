@@ -53,7 +53,6 @@ static TimingAEntry* _ac_timing_a_timing_tbl[] = {
 
 static void actionCommandDisp(f32 x, f32 y);
 
-
 /**
  * Per-frame driver of action command 1, used by Mario's jumps,
  * Goombella's Headbonk and Multibonk and Frankly's lesson.

@@ -1400,12 +1400,10 @@ static void memcard_open(void) {
                         return;
                     }
                 }
-            } else {
-                if ((result == CARD_RESULT_FATAL_ERROR) || (result == CARD_RESULT_NOCARD)) {
-                    wp->result = result;
-                    wp->flags &= ~CARD_FLAG_BUSY;
-                    return;
-                }
+            } else if ((result == CARD_RESULT_FATAL_ERROR) || (result == CARD_RESULT_NOCARD)) {
+                wp->result = result;
+                wp->flags &= ~CARD_FLAG_BUSY;
+                return;
             }
         }
     }

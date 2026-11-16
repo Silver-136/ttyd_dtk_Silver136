@@ -481,9 +481,9 @@ static void disp_sight(CameraId camera, void* param) {
         if (n > 7) {
             n = 7;
         }
-        x = (-240.0f) + 20.0f * i;
+        x = -240.0f + 20.0f * i;
         for (j = 0; j < n; j++) {
-            y = (-190.0f) + 16.0f * j;
+            y = -190.0f + 16.0f * j;
             if (j == 6) {
                 drawBG(10, x, y, 1.0f, 1.0f, 0.0f);
             } else {
@@ -491,7 +491,7 @@ static void disp_sight(CameraId camera, void* param) {
             }
         }
         for (j = n; j < 7; j++) {
-            y = (-190.0f) + 16.0f * j;
+            y = -190.0f + 16.0f * j;
             if (j == 6) {
                 drawBG(12, x, y, 1.0f, 1.0f, 0.0f);
             } else {
@@ -1028,7 +1028,8 @@ static void ext_main(void) {
 
         switch ((s8)wp->bom[i].state) {
             case 0:
-                val = PSVECDistance(&center, &pos) ; if (val > 280.0f) {
+                val = PSVECDistance(&center, &pos);
+                if (val > 280.0f) {
                     PSVECSubtract(&center, &pos, &dir);
                     PSVECNormalize(&dir, &dir);
                     PSVECScale(&dir, &move, 3.0f);
@@ -1047,20 +1048,20 @@ static void ext_main(void) {
                 f32 gravity;
                 f32 speed;
 
-                angle = ( 6.2831855f * rand() ) / 32767.0f;
-                dist = 150.0f + (( 30.0f * rand() ) / 32767.0f) ;
-                gravity = 0.1f + (( 0.1f * rand() ) / 32767.0f) ;
-                speed = 3.0f + ( rand() / 32767.0f) ;
-                z = dist * ( -chb_cos(angle) );
+                angle = (6.2831855f * rand()) / 32767.0f;
+                dist = 150.0f + ((30.0f * rand()) / 32767.0f);
+                gravity = 0.1f + ((0.1f * rand()) / 32767.0f);
+                speed = 3.0f + (rand() / 32767.0f);
+                z = dist * (-chb_cos(angle));
                 jump(i, 2, dist * chb_sin(angle), 150.0f, z, speed, gravity);
                 break;
             }
             case 2:
-                angle = ( 6.2831855f * rand() ) / 32767.0f;
-                dist = 50.0f + (( 30.0f * rand() ) / 32767.0f) ;
-                z = 0.1f + (( 0.1f * rand() ) / 32767.0f);
-                speed = 3.0f + ( rand() / 32767.0f) ;
-                gravity = dist * ( -chb_cos(angle) );
+                angle = (6.2831855f * rand()) / 32767.0f;
+                dist = 50.0f + ((30.0f * rand()) / 32767.0f);
+                z = 0.1f + ((0.1f * rand()) / 32767.0f);
+                speed = 3.0f + (rand() / 32767.0f);
+                gravity = dist * (-chb_cos(angle));
                 dist = dist * chb_sin(angle);
                 jump(i, 3, dist, 400.0f, gravity, speed, z);
                 break;
@@ -1070,17 +1071,17 @@ static void ext_main(void) {
                 f32 gravity;
                 f32 speed;
 
-                angle = ( 6.2831855f * rand() ) / 32767.0f;
-                dist = ( 70.0f * rand() ) / 32767.0f;
+                angle = (6.2831855f * rand()) / 32767.0f;
+                dist = (70.0f * rand()) / 32767.0f;
 
                 // z stays 0.1f (+196) and speed 3.0f: both rand() results are unused, as in the game
                 rand();
                 z = 0.1f;
                 rand();
                 speed = 3.0f;
-                gravity = dist * ( -chb_cos(angle)) ;
-                dist = ( dist * chb_sin(angle) ) + (100.0f + ( i % 100) );
-                jump(i, 4, dist, 350.0f + ( i % 150) , gravity, speed, z);
+                gravity = dist * (-chb_cos(angle));
+                dist = (dist * chb_sin(angle)) + (100.0f + (i % 100));
+                jump(i, 4, dist, 350.0f + (i % 150), gravity, speed, z);
                 break;
             }
             case 4:
@@ -1091,10 +1092,10 @@ static void ext_main(void) {
             case 100:
                 (*pose->mtx)[1][3] += wp->bom[i].vy;
                 wp->bom[i].vy -= wp->bom[i].gravity;
-                rad = ( 3.1415927f * angleABf((*pose->mtx)[0][3], (*pose->mtx)[2][3], wp->bom[i].target.x, wp->bom[i].target.z) ) / 180.0f;
+                rad = (3.1415927f * angleABf((*pose->mtx)[0][3], (*pose->mtx)[2][3], wp->bom[i].target.x, wp->bom[i].target.z)) / 180.0f;
                 (*pose->mtx)[0][3] += wp->bom[i].speed * chb_sin(rad);
-                (*pose->mtx)[2][3] += wp->bom[i].speed * ( -chb_cos(rad)) ;
-                if ( (--wp->bom[i].timer ) < 0) {
+                (*pose->mtx)[2][3] += wp->bom[i].speed * (-chb_cos(rad));
+                if (--wp->bom[i].timer < 0) {
                     (*pose->mtx)[0][3] = wp->bom[i].target.x;
                     (*pose->mtx)[1][3] = wp->bom[i].target.y;
                     (*pose->mtx)[2][3] = wp->bom[i].target.z;
@@ -1102,7 +1103,7 @@ static void ext_main(void) {
                 }
                 break;
             case 127:
-                if ((*pose->mtx)[1][3] > ( -1000.0f) ) { // tests y, not z, as in the game
+                if ((*pose->mtx)[1][3] > -1000.0f) { // tests y, not z, as in the game
                     (*pose->mtx)[1][3] = (*pose->mtx)[1][3] - 2.0f;
                     pose->flags &= ~EXT_POSE_FLAG_BILLBOARD;
                     PSMTXTrans(m1, 0.0f, -20.0f, 0.0f);

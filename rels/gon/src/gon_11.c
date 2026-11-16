@@ -818,21 +818,21 @@ static USER_FUNC(evt_cloud_main) {
     MarioWork* mario = marioGetPtr();
     PartyEntry* party = partyGetPtr(0);
 #else
-static s32 evt_cloud_main(EventEntry *event, BOOL isFirstCall) {
+static s32 evt_cloud_main(EventEntry* event, BOOL isFirstCall) {
 #endif
 
-    HitEntry *hit0;
-    HitEntry *hit1;
-    HitEntry *hit2;
-    HitEntry *hit3;
+    HitEntry* hit0;
+    HitEntry* hit1;
+    HitEntry* hit2;
+    HitEntry* hit3;
 #if VERSION >= VERSION_JP
-    MarioWork *mario;
-    CloudRoomWork *wp;
-    PartyEntry *ptmp;
+    MarioWork* mario;
+    CloudRoomWork* wp;
+    PartyEntry* ptmp;
 #endif
-    HitEntry *hit;
-    OffscreenEntry *off;
-    ImageEntry *img;
+    HitEntry* hit;
+    OffscreenEntry* off;
+    ImageEntry* img;
 #if VERSION >= VERSION_JP
     BOOL inBattle;
     wp = (CloudRoomWork*)event->lwData[0];

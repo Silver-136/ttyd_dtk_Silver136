@@ -484,7 +484,7 @@ s32 pouchCheckItem(u32 itemId) {
 }
 
 /** Clears slot i of a list (and of its parallel worn-badge list, if any) and moves the later slots up one. */
-static inline void pouchShift(s16 *table1, s16 *table2, int i, s32 maximum) {
+static inline void pouchShift(s16* table1, s16* table2, int i, s32 maximum) {
     table1[i] = ITEM_NULL;
     if (table2 != NULL) {
         table2[i] = ITEM_NULL;
@@ -501,8 +501,8 @@ static inline void pouchShift(s16 *table1, s16 *table2, int i, s32 maximum) {
 
 /** Removes the first copy of an item, key item or badge from its list and closes the gap; FALSE if Mario lacks it. */
 BOOL pouchRemoveItem(ItemType type) {
-    s16 *table1;
-    s16 *table2;
+    s16* table1;
+    s16* table2;
     s32 maximum;
     int i;
 

@@ -26,12 +26,10 @@ USER_FUNC(evt_hitobj_onoff) {
         } else {
             hitObjFlagOn(name, HIT_FLAG_OFF);
         }
+    } else if (on != 0) {
+        hitGrpFlagOff(name, HIT_FLAG_OFF);
     } else {
-        if (on != 0) {
-            hitGrpFlagOff(name, HIT_FLAG_OFF);
-        } else {
-            hitGrpFlagOn(name, HIT_FLAG_OFF);
-        }
+        hitGrpFlagOn(name, HIT_FLAG_OFF);
     }
     return EVT_RETURN_DONE;
 }
@@ -119,12 +117,10 @@ USER_FUNC(evt_hitobj_flag_onoff) {
         } else {
             hitObjFlagOn(name, flag);
         }
+    } else if (on == 0) {
+        hitGrpFlagOff(name, flag);
     } else {
-        if (on == 0) {
-            hitGrpFlagOff(name, flag);
-        } else {
-            hitGrpFlagOn(name, flag);
-        }
+        hitGrpFlagOn(name, flag);
     }
     return EVT_RETURN_DONE;
 }
@@ -146,12 +142,10 @@ USER_FUNC(evt_hitobj_attr_onoff) {
         } else {
             hitObjAttrOn(name, attr);
         }
+    } else if (on == 0) {
+        hitGrpAttrOff(name, attr);
     } else {
-        if (on == 0) {
-            hitGrpAttrOff(name, attr);
-        } else {
-            hitGrpAttrOn(name, attr);
-        }
+        hitGrpAttrOn(name, attr);
     }
     return EVT_RETURN_DONE;
 }

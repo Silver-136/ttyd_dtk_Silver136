@@ -618,10 +618,8 @@ void npcDelete(NpcEntry* entry) {
         } else {
             entry->prev->next = NULL;
         }
-    } else {
-        if (entry->next) {
-            entry->next->prev = NULL;
-        }
+    } else if (entry->next) {
+        entry->next->prev = NULL;
     }
     entry->flags &= ~NPC_FLAG_READY;
     if (entry->poseId >= 0) {
@@ -775,11 +773,9 @@ void npcMain(void) {
                                 animPoseSetAnim(entry->poseId, entry->tribe->walkAnimation, TRUE);
                                 entry->moveAnimState = 2;
                             }
-                        } else {
-                            if (entry->moveAnimState != 3) {
-                                animPoseSetAnim(entry->poseId, entry->tribe->runAnimation, TRUE);
-                                entry->moveAnimState = 3;
-                            }
+                        } else if (entry->moveAnimState != 3) {
+                            animPoseSetAnim(entry->poseId, entry->tribe->runAnimation, TRUE);
+                            entry->moveAnimState = 3;
                         }
                     }
                 }
@@ -1891,7 +1887,7 @@ void fbatEncountCheck(void) {
     kind = (u32*)&data->hitKind;
     npc = fbatHitCheck(FBAT_CHECK_ENEMY | FBAT_CHECK_BOMB | FBAT_CHECK_SHELL | FBAT_CHECK_SPIN_HAMMER | FBAT_CHECK_HAMMER | FBAT_CHECK_JUMP | FBAT_CHECK_TOUCH | FBAT_CHECK_CURRENT, kind);
     if (npc && (data->mode == FBAT_MODE_FIELD)) {
-        AnimationPose *pose;
+        AnimationPose* pose;
         f32 rel;
         f32 ang;
         if (!fbatChangeMode_Battle(npc)) {
@@ -1934,7 +1930,7 @@ void fbatEncountCheck(void) {
         rel = reviseAngle(-npc->direction);
         rel += -90.0f;
         ang = reviseAngle(camGetRy() - rel);
-        if (((ang > 90.0f) && (ang <= 270.0f)) || ((ang < (-90.0f)) && (ang >= (-270.0f)))) {
+        if (((ang > 90.0f) && (ang <= 270.0f)) || ((ang < -90.0f) && (ang >= -270.0f))) {
             pose->peraTargetRotY = reviseAngle(180.0f + camGetRy());
         } else {
             pose->peraTargetRotY = camGetRy();
@@ -1943,7 +1939,7 @@ void fbatEncountCheck(void) {
             pose->rotationY += 360.0f;
         }
 
-        while ((pose->peraTargetRotY - pose->rotationY) < (-180.0f)) {
+        while ((pose->peraTargetRotY - pose->rotationY) < -180.0f) {
             pose->rotationY -= 360.0f;
         }
 
@@ -2091,7 +2087,7 @@ void fbatEncountCheck(void) {
     }
     data = gp->fbatData;
     if (data->mode == FBAT_MODE_FIELD) {
-        u32 *kind = (u32*)&data->hitKind;
+        u32* kind = (u32*)&data->hitKind;
 #if VERSION <= VERSION_DEMO_JP
         npc = fbatHitCheck(FBAT_CHECK_REACTION | FBAT_CHECK_SHELL | FBAT_CHECK_HAMMER | FBAT_CHECK_JUMP | FBAT_CHECK_CURRENT, kind);
 #else
@@ -2720,10 +2716,8 @@ void* fbatHitCheck(u32 flags, void* result) {
                         if (!(npc->flags & NPC_FLAG_ENEMY)) {
                             continue;
                         }
-                    } else {
-                        if (npc->flags & NPC_FLAG_ENEMY) {
-                            continue;
-                        }
+                    } else if (npc->flags & NPC_FLAG_ENEMY) {
+                        continue;
                     }
                     if (soft && !(npc->reactionFlags & NPC_REACTION_HAMMER)) {
                         continue;
@@ -2823,10 +2817,8 @@ void* fbatHitCheck(u32 flags, void* result) {
                         if (!(npc->flags & NPC_FLAG_ENEMY)) {
                             continue;
                         }
-                    } else {
-                        if (npc->flags & NPC_FLAG_ENEMY) {
-                            continue;
-                        }
+                    } else if (npc->flags & NPC_FLAG_ENEMY) {
+                        continue;
                     }
                     if (soft && !(npc->reactionFlags & NPC_REACTION_HAMMER)) {
                         continue;

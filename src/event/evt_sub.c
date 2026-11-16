@@ -2221,22 +2221,18 @@ USER_FUNC(evt_sub_check_intersect) {
             evtSetValue(event, args[8], 0);
             return EVT_RETURN_DONE;
         }
-    } else {
-        if ((p2x < q1x && p2x < q2x) || (p1x > q1x && p1x > q2x)) {
-            evtSetValue(event, args[8], 0);
-            return EVT_RETURN_DONE;
-        }
+    } else if ((p2x < q1x && p2x < q2x) || (p1x > q1x && p1x > q2x)) {
+        evtSetValue(event, args[8], 0);
+        return EVT_RETURN_DONE;
     }
     if (p1y >= p2y) {
         if ((p1y < q1y && p1y < q2y) || (p2y > q1y && p2y > q2y)) {
             evtSetValue(event, args[8], 0);
             return EVT_RETURN_DONE;
         }
-    } else {
-        if ((p2y < q1y && p2y < q2y) || (p1y > q1y && p1y > q2y)) {
-            evtSetValue(event, args[8], 0);
-            return EVT_RETURN_DONE;
-        }
+    } else if ((p2y < q1y && p2y < q2y) || (p1y > q1y && p1y > q2y)) {
+        evtSetValue(event, args[8], 0);
+        return EVT_RETURN_DONE;
     }
     t1 = (p1x - p2x) * (q1y - p1y) + (p1y - p2y) * (p1x - q1x);
     t2 = (p1x - p2x) * (q2y - p1y) + (p1y - p2y) * (p1x - q2x);

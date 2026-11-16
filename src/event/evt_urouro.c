@@ -170,10 +170,8 @@ USER_FUNC(urouro_main_func) {
                         if (npc->footstepSfxA != 0) {
                             psndSFXOnEx_3D(SFX_NAME_WORD(sfxFlag | searchPSSFXList(npc->footstepSfxA)), &npc->position, 0xff, 0xff, 0, 8);
                         }
-                    } else {
-                        if (npc->footstepSfxB != 0) {
-                            psndSFXOnEx_3D(SFX_NAME_WORD(sfxFlag | searchPSSFXList(npc->footstepSfxB)), &npc->position, 0xff, 0xff, 0, 8);
-                        }
+                    } else if (npc->footstepSfxB != 0) {
+                        psndSFXOnEx_3D(SFX_NAME_WORD(sfxFlag | searchPSSFXList(npc->footstepSfxB)), &npc->position, 0xff, 0xff, 0, 8);
                     }
                     npc->footstepAccum = 0.0f;
                     npc->footstepToggle = (s8)(1 - npc->footstepToggle);

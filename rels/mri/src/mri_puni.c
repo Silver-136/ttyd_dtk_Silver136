@@ -253,7 +253,6 @@ static void puniAnimationInit(s16** a, s16** b) {
     }
 }
 
-
 /**
  * Fills Punigp->animNames with the pose names the guide NPCs use for each Puni animation id (S_1 stand,
  * W_1 walk, R_1 run, D_1/D_2 damage and down, F_1 fall, Z_1, J_1A/J_1B jump, B_1) for the guide, the sister,
@@ -349,7 +348,7 @@ static void puniAnimation(PuniData* p, PunidrvPose* t) {
             p->animTime++;
         } else {
             if (p->mode != PUNI_MODE_PARENT) {
-                ofs = p->index ;
+                ofs = p->index;
             } else {
                 ofs /= 8;
                 if (p->anim == 0) {
@@ -363,9 +362,11 @@ static void puniAnimation(PuniData* p, PunidrvPose* t) {
             animPoseSetLocalTime(npc->poseId, p->animTime);
         }
         show = 0;
-        if (p->flags & PUNI_FLAG_ACTIVE) { show = 1;
+        if (p->flags & PUNI_FLAG_ACTIVE) {
+            show = 1;
         }
-        if (p->flags & PUNI_FLAG_HIDDEN) { show = 0;
+        if (p->flags & PUNI_FLAG_HIDDEN) {
+            show = 0;
         }
         if (show) {
             npc->position.x = p->pos.x + p->dispOfs.x;
@@ -386,9 +387,11 @@ static void puniAnimation(PuniData* p, PunidrvPose* t) {
         npc->rotationOffset.y = p->rotOffsetY;
     } else {
         set = &Punigp->anim[0];
-        if (p->flags & PUNI_FLAG_SPRITE_PUNI) { set = &Punigp->anim[0];
+        if (p->flags & PUNI_FLAG_SPRITE_PUNI) {
+            set = &Punigp->anim[0];
         }
-        if (p->flags & PUNI_FLAG_SPRITE_TOGE) { set = &Punigp->anim[1];
+        if (p->flags & PUNI_FLAG_SPRITE_TOGE) {
+            set = &Punigp->anim[1];
         }
         tbl = set->table[p->anim];
         cnt = set->count[p->anim];
@@ -396,7 +399,8 @@ static void puniAnimation(PuniData* p, PunidrvPose* t) {
         ofs = p->marioDist;
         if (p->flags & PUNI_FLAG_OWN_ANIM_TIME) {
             f = p->animTime % cnt;
-            if (( end == ( -2 )) && ( cnt <= p->animTime) ) { f = cnt - 1;
+            if ((end == -2) && (cnt <= p->animTime)) {
+                f = cnt - 1;
             }
             t->texId = tbl[f];
             p->animTime++;
@@ -412,9 +416,11 @@ static void puniAnimation(PuniData* p, PunidrvPose* t) {
             t->texId = tbl[(gp->retraceCount + ofs) % set->count[p->anim]];
         }
         show = 0;
-        if (p->flags & PUNI_FLAG_ACTIVE) { show = 1;
+        if (p->flags & PUNI_FLAG_ACTIVE) {
+            show = 1;
         }
-        if (p->flags & PUNI_FLAG_HIDDEN) { show = 0;
+        if (p->flags & PUNI_FLAG_HIDDEN) {
+            show = 0;
         }
         if (show) {
             (*t->mtx)[0][3] = p->pos.x + p->dispOfs.x;
@@ -583,7 +589,7 @@ static void _ymode_mri_16_01(PuniData* p) {
             else STAIR_Y_BY_X(-90.0f, 30.0f)
             else STAIR_Y_BY_X(-70.0f, 20.0f)
             else STAIR_Y_BY_X(-50.0f, 10.0f)
-            else if (p->pos.x <= (-30.0f)) {
+            else if (p->pos.x <= -30.0f) {
                 f32 t = ((-30.0f) - p->pos.x) / 20.0f;
                 f32 u;
                 if (t > 0.5f) {
@@ -1432,16 +1438,16 @@ static PuniData* PuniSakanobori(PuniData* p) {
  * Sends all the Punies behind p in the follow chain astray:
  * each descendant goes to the hagure (lost) mode and is detached from the chain.
  */
-static void PuniChildHagure(PuniData *p) {
+static void PuniChildHagure(PuniData* p) {
     if (p->child1 != NULL) {
-        PuniData *c = p->child1;
+        PuniData* c = p->child1;
         c->mode = PUNI_MODE_HAGURE;
         p->modeStep = 0;
         PuniChildHagure(c);
         PuniDokuritsu(c);
     }
     if (p->child2 != NULL) {
-        PuniData *c = p->child2;
+        PuniData* c = p->child2;
         c->mode = PUNI_MODE_HAGURE;
         p->modeStep = 0;
         PuniChildHagure(c);
@@ -3762,8 +3768,8 @@ static void puniModePreupdraft(PuniData* p) {
  * When it hits a wall (other than the pushing kind) or rises above y=0 the bubble pops
  * and it goes to the wonder mode.
  */
-static void puniModeUpdraft(PuniData *p) {
-    MarioWork *mario = marioGetPtr();
+static void puniModeUpdraft(PuniData* p) {
+    MarioWork* mario = marioGetPtr();
     Vec d;
     Vec save;
     Vec savev;
@@ -3790,7 +3796,7 @@ static void puniModeUpdraft(PuniData *p) {
     } else {
         t = t - 3;
     }
-    p->dispOfs.x = 0.5f * ((f32) t);
+    p->dispOfs.x = 0.5f * ((f32)t);
     switch (p->modeStep) {
         case 0:
             if (p->breathPower > 10.0f) {
@@ -5298,8 +5304,8 @@ void puniCollideAll(void) {
  */
 static void puniSound(void) {
     int i;
-    PuniData *p;
-    PuniData *d;
+    PuniData* p;
+    PuniData* d;
     int n;
     int special;
     int div;
@@ -5858,10 +5864,10 @@ USER_FUNC(evt_puni_mem_init) {
  * afterwards it registers the animation patterns, pose names and the texture table, and finishes.
  * args[0] to args[3] are passed to puniEntry (draw and update hooks).
  */
-s32 evt_puni_init(EventEntry *event, BOOL isFirstCall) {
-    EvtWord *args = event->args;
+s32 evt_puni_init(EventEntry* event, BOOL isFirstCall) {
+    EvtWord* args = event->args;
     s32 a = evtGetValue(event, args[0]);
-    PuniTexInfo *tex = Punitex;
+    PuniTexInfo* tex = Punitex;
     EvtWord b = evtGetValue(event, args[1]);
     EvtWord c = evtGetValue(event, args[2]);
     EvtWord d = evtGetValue(event, args[3]);
@@ -6168,7 +6174,7 @@ static inline void puni_swget_idx(s32 idx, s32* val, Vec* pos) {
  * Debug listing: formats a line per Puni (following Mario, lost in some map with its position, not yet joined,
  * caught in a trap, or waiting at the cell in mri_03) into a buffer; the text is never shown.
  */
-static s32 evt_puni_debug_info(EventEntry *event, BOOL isFirstCall) {
+static s32 evt_puni_debug_info(EventEntry* event, BOOL isFirstCall) {
     char buf[256];
     s32 i;
     for (i = 1; i <= PUNI_ALLY_LAST; i++) {
@@ -6219,7 +6225,7 @@ static s32 evt_puni_debug_info(EventEntry *event, BOOL isFirstCall) {
                 if (b0 == 0) {
                     sprintf(buf, "No%03d,ついて来ています\n", i);
                 } else {
-                    sprintf(buf, "No%03d,はぐれています area = mri_%02d, x = %04d, y = %04d, z = %04d,\n", i, b0 - 1, (s32) fx, (s32) fy, (s32) fz);
+                    sprintf(buf, "No%03d,はぐれています area = mri_%02d, x = %04d, y = %04d, z = %04d,\n", i, b0 - 1, (s32)fx, (s32)fy, (s32)fz);
                 }
             } else {
                 sprintf(buf, "No%03d,＜まだ仲間になっていません＞\n", i);
@@ -6414,14 +6420,14 @@ USER_FUNC(evt_puni_setup) {
  * args[1] to args[3] give the centre (x, y, z).
  * Each Jabbi is placed at a random spot within 50 units in x and 120 in z, with the stats of toge_init_para.
  */
-static s32 evt_toge_setup(EventEntry *event, BOOL isFirstCall) {
-    EvtWord *args = event->args;
+static s32 evt_toge_setup(EventEntry* event, BOOL isFirstCall) {
+    EvtWord* args = event->args;
     s32 end = 1;
     s32 kind = evtGetValue(event, args[0]);
     f32 x = evtGetValue(event, args[1]);
     f32 y = evtGetValue(event, args[2]);
     f32 z = evtGetValue(event, args[3]);
-    PuniData *p;
+    PuniData* p;
     switch (kind) {
         case 0:
             return 2;
@@ -7503,12 +7509,12 @@ static const char* npcGetTribeName(const char** name) {
  * snapped to the nearest floor height within 50 units, flagged to repel the crowd.
  * Targets of NPCs that are not near any floor are left off.
  */
-static s32 puni_piders_check_func(EventEntry *event, BOOL isFirstCall) {
+static s32 puni_piders_check_func(EventEntry* event, BOOL isFirstCall) {
     s32 k;
     s32 count;
-    NpcEntry *npc;
+    NpcEntry* npc;
     s32 i;
-    NpcWork *work;
+    NpcWork* work;
     work = npcGetWorkPtr();
     count = work->total;
     npc = work->entries;
@@ -7538,7 +7544,7 @@ static s32 puni_piders_check_func(EventEntry *event, BOOL isFirstCall) {
                 v.y = Punigp->posY[3];
             }
             if (found) {
-                PuniTarget *t = &Punigp->targets[k];
+                PuniTarget* t = &Punigp->targets[k];
                 t->pos = v;
                 t->flags |= PUNI_TARGET_FLAG_ON | PUNI_TARGET_FLAG_AWAY;
             }

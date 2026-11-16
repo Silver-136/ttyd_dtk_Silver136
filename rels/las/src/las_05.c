@@ -426,10 +426,8 @@ static USER_FUNC(kurokaron_move_position) {
             if (npc->footstepSfxA != NULL) {
                 psndSFXOn_3D(npc->footstepSfxA, &npc->position);
             }
-        } else {
-            if (npc->footstepSfxB != NULL) {
-                psndSFXOn_3D(npc->footstepSfxB, &npc->position);
-            }
+        } else if (npc->footstepSfxB != NULL) {
+            psndSFXOn_3D(npc->footstepSfxB, &npc->position);
         }
         npc->footstepAccum = 0.0f;
         npc->footstepToggle = (s8)(1 - npc->footstepToggle);
@@ -577,11 +575,9 @@ static s32 party_hit_check(f32 x, f32 z, f32* dir) {
                         hit = 1;
                         *dir = -1.0f;
                     }
-                } else {
-                    if (x < party->position.x) {
-                        hit = 1;
-                        *dir = 1.0f;
-                    }
+                } else if (x < party->position.x) {
+                    hit = 1;
+                    *dir = 1.0f;
                 }
             }
             break;
@@ -921,12 +917,10 @@ static void senkaron_ext_main(void) {
                     } else {
                         ep->dir = 90.0f;
                     }
+                } else if (s->flags & 1) {
+                    ep->dir = 90.0f;
                 } else {
-                    if (s->flags & 1) {
-                        ep->dir = 90.0f;
-                    } else {
-                        ep->dir = 270.0f;
-                    }
+                    ep->dir = 270.0f;
                 }
                 if (skwp->mesPushing) {
                     break;
@@ -937,11 +931,9 @@ static void senkaron_ext_main(void) {
                             hit = 1;
                             push = 1.0f;
                         }
-                    } else {
-                        if ((*ep->mtx)[0][3] < mario->position.x && adx < range) {
-                            hit = 1;
-                            push = -1.0f;
-                        }
+                    } else if ((*ep->mtx)[0][3] < mario->position.x && adx < range) {
+                        hit = 1;
+                        push = -1.0f;
                     }
                 }
                 angle = marioGetAngleKaitenHammer();
@@ -961,11 +953,9 @@ static void senkaron_ext_main(void) {
                             hit = 1;
                             push = -1.0f;
                         }
-                    } else {
-                        if ((*ep->mtx)[2][3] < mario->position.z && (*ep->mtx)[0][3] > mario->position.x) {
-                            hit = 1;
-                            push = -1.0f;
-                        }
+                    } else if ((*ep->mtx)[2][3] < mario->position.z && (*ep->mtx)[0][3] > mario->position.x) {
+                        hit = 1;
+                        push = -1.0f;
                     }
                 }
                 dir = 0.0f;
@@ -1006,10 +996,8 @@ static void senkaron_ext_main(void) {
                         if ((*ep->mtx)[0][3] > mario->position.x + scale - 10.0f && (*ep->mtx)[0][3] < mario->position.x + near) {
                             skwp->marioPushed |= 1;
                         }
-                    } else {
-                        if ((*ep->mtx)[0][3] > mario->position.x - near && (*ep->mtx)[0][3] < 10.0f + (mario->position.x - scale)) {
-                            skwp->marioPushed |= 2;
-                        }
+                    } else if ((*ep->mtx)[0][3] > mario->position.x - near && (*ep->mtx)[0][3] < 10.0f + (mario->position.x - scale)) {
+                        skwp->marioPushed |= 2;
                     }
                 }
                 if (s->timer == 0) {

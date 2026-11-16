@@ -214,7 +214,7 @@ static void envCapture2(CameraId camId, void* param) {
  * depth of field, motion blur and the radial lines of envDisp_FF,
  * restoring the viewport and projection afterwards.
  */
-static void envDisp(CameraId camId, void *param) {
+static void envDisp(CameraId camId, void* param) {
     f32 vp[GX_VIEWPORT_SZ];
     f32 pm[GX_PROJECTION_SZ];
 
@@ -232,7 +232,7 @@ static void envDisp(CameraId camId, void *param) {
  * DISP_MODE_CUSTOM_LAST band): draws the glare (bloom) filter the current type picks (envGlare0..3) over its
  * screen rectangle, restoring the viewport and projection afterwards.
  */
-static void envDisp2(CameraId camId, void *param) {
+static void envDisp2(CameraId camId, void* param) {
     f32 vp[GX_VIEWPORT_SZ];
     f32 pm[GX_PROJECTION_SZ];
     EnvironmentWork* wp;
@@ -917,7 +917,7 @@ static void envTevLoadTexMtxImm(s32 type, GXTexMtx id, GXTexMtx id2, GXTexMtxTyp
             light2.z = (f32)cos(rx) * (f32)cos(ry);
             PSMTXMultVecSR(wp->texMtxWork.view, &light2, &light2);
             dot = PSVECDotProduct(&light2, &v2);
-            if (dot == (-1.0f)) {
+            if (dot == -1.0f) {
                 PSMTXScale(m0, 0.0f, 0.0f, 0.0f);
                 GXLoadTexMtxImm(m0, id, GX_MTX2x4);
                 break;

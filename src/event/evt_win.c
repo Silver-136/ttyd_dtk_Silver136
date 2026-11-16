@@ -1054,12 +1054,10 @@ USER_FUNC(unitwin_window_select_func) {
                     } else {
                         ng = 1;
                     }
+                } else if (pouch->partyData[party_id_table[i]].techLevel < 2) {
+                    ng = 0;
                 } else {
-                    if (pouch->partyData[party_id_table[i]].techLevel < 2) {
-                        ng = 0;
-                    } else {
-                        ng = 2;
-                    }
+                    ng = 2;
                 }
                 if (ng) {
                     break;
@@ -1769,16 +1767,14 @@ static void evt_unitwin_disp_func(CameraId cameraId, void* param) {
                                 lv = 1;
                                 flag = ICON_FLAG_GRAY;
                             }
+                        } else if (pouch->partyData[party_id_table[i]].techLevel < 2) {
+                            color = (GXColor){0x00, 0x00, 0x00, 0xFF};
+                            lv = 0;
+                            flag = 0;
                         } else {
-                            if (pouch->partyData[party_id_table[i]].techLevel < 2) {
-                                color = (GXColor){0x00, 0x00, 0x00, 0xFF};
-                                lv = 0;
-                                flag = 0;
-                            } else {
-                                color = (GXColor){0xA0, 0xA0, 0xA0, 0xFF};
-                                lv = 2;
-                                flag = ICON_FLAG_GRAY;
-                            }
+                            color = (GXColor){0xA0, 0xA0, 0xA0, 0xFF};
+                            lv = 2;
+                            flag = ICON_FLAG_GRAY;
                         }
                     } else {
                         if (!partyChkJoin(party_id_table[i])) {

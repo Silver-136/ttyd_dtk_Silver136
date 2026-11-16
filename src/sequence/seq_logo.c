@@ -108,12 +108,10 @@ void seq_logoInit(SequenceWork* work) {
         if (VIGetDTVStatus()) {
             if (OSGetProgressiveMode() == 1) {
                 wp->progressive = TRUE;
+            } else if (keyGetButton(0) & PAD_BUTTON_B) {
+                wp->progressive = TRUE;
             } else {
-                if (keyGetButton(0) & PAD_BUTTON_B) {
-                    wp->progressive = TRUE;
-                } else {
-                    wp->progressive = FALSE;
-                }
+                wp->progressive = FALSE;
             }
         } else {
             if (OSGetProgressiveMode() == 1) {
@@ -516,12 +514,10 @@ static void logoDisp(CameraId camId, void* param) {
             } else {
                 rmode = &sRMObjHReso_prog;
             }
+        } else if (OSGetProgressiveMode() != 1) {
+            rmode = &sRMObjHReso;
         } else {
-            if (OSGetProgressiveMode() != 1) {
-                rmode = &sRMObjHReso;
-            } else {
-                rmode = &sRMObjHReso_prog;
-            }
+            rmode = &sRMObjHReso_prog;
         }
 #else
         if (OSGetProgressiveMode() != 1) {
@@ -803,12 +799,10 @@ static void dummy_draw(CameraId camId, void* param) {
         } else {
             rmode = &GXNtsc480ProgMarioSt;
         }
+    } else if (OSGetProgressiveMode() != 1) {
+        rmode = &GXNtsc480IntDfMarioSt;
     } else {
-        if (OSGetProgressiveMode() != 1) {
-            rmode = &GXNtsc480IntDfMarioSt;
-        } else {
-            rmode = &GXNtsc480ProgMarioSt;
-        }
+        rmode = &GXNtsc480ProgMarioSt;
     }
 #else
     if (OSGetEuRgb60Mode() != 1) {

@@ -32,7 +32,6 @@ extern BattleUnitKind unit_patakuri;
 extern BattleUnitKind unit_patapata;
 extern BattleUnitKind unit_togekuri;
 
-
 // Area-local saved values (GON; swReInit clears them on every area change), named from the area's
 // scripts
 // gon_09 floating block blk_0, toggled by switch sw_0 (main_0); init_0: 0 = block 200 units above its placed

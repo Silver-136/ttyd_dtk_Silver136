@@ -559,10 +559,8 @@ USER_FUNC(evt_npc_move_position) {
             if (npc->footstepSfxA != 0) {
                 psndSFXOnEx_3D(SFX_NAME_WORD(sfxFlag | searchPSSFXList(npc->footstepSfxA)), &npc->position, 0xff, 0xff, 0, 8);
             }
-        } else {
-            if (npc->footstepSfxB != 0) {
-                psndSFXOnEx_3D(SFX_NAME_WORD(sfxFlag | searchPSSFXList(npc->footstepSfxB)), &npc->position, 0xff, 0xff, 0, 8);
-            }
+        } else if (npc->footstepSfxB != 0) {
+            psndSFXOnEx_3D(SFX_NAME_WORD(sfxFlag | searchPSSFXList(npc->footstepSfxB)), &npc->position, 0xff, 0xff, 0, 8);
         }
         npc->footstepAccum = 0.0f;
         npc->footstepToggle = (s8)(1 - npc->footstepToggle); // alternate L/R
@@ -936,10 +934,8 @@ USER_FUNC(evt_npc_glide_position) {
             if (npc->footstepSfxA != 0) {
                 psndSFXOnEx_3D(SFX_NAME_WORD(sfxFlag | searchPSSFXList(npc->footstepSfxA)), &npc->position, 0xff, 0xff, 0, 8);
             }
-        } else {
-            if (npc->footstepSfxB != 0) {
-                psndSFXOnEx_3D(SFX_NAME_WORD(sfxFlag | searchPSSFXList(npc->footstepSfxB)), &npc->position, 0xff, 0xff, 0, 8);
-            }
+        } else if (npc->footstepSfxB != 0) {
+            psndSFXOnEx_3D(SFX_NAME_WORD(sfxFlag | searchPSSFXList(npc->footstepSfxB)), &npc->position, 0xff, 0xff, 0, 8);
         }
         npc->footstepAccum = 0.0f;
         npc->footstepToggle = (s8)(1 - npc->footstepToggle);
@@ -1107,10 +1103,8 @@ USER_FUNC(evt_npc_homing_target) {
             if (npc->footstepSfxA != 0) {
                 psndSFXOnEx_3D(SFX_NAME_WORD(sfxFlag | searchPSSFXList(npc->footstepSfxA)), &npc->position, 0xff, 0xff, 0, 8);
             }
-        } else {
-            if (npc->footstepSfxB != 0) {
-                psndSFXOnEx_3D(SFX_NAME_WORD(sfxFlag | searchPSSFXList(npc->footstepSfxB)), &npc->position, 0xff, 0xff, 0, 8);
-            }
+        } else if (npc->footstepSfxB != 0) {
+            psndSFXOnEx_3D(SFX_NAME_WORD(sfxFlag | searchPSSFXList(npc->footstepSfxB)), &npc->position, 0xff, 0xff, 0, 8);
         }
         npc->footstepAccum = 0.0f;
         npc->footstepToggle = (s8)(1 - npc->footstepToggle);
@@ -1684,12 +1678,10 @@ USER_FUNC(evt_npc_facedirection_add) {
         } else {
             sign = -1.0f;
         }
+    } else if (90.0f == npcTransRytoFaceDir(evtNpcNameToPtr(event, name))) {
+        sign = 1.0f;
     } else {
-        if (90.0f == npcTransRytoFaceDir(evtNpcNameToPtr(event, name))) {
-            sign = 1.0f;
-        } else {
-            sign = -1.0f;
-        }
+        sign = -1.0f;
     }
     evtSetValue(event, event->args[1], (s32)(base + amount * sign));
     return EVT_RETURN_DONE;

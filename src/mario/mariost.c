@@ -710,10 +710,8 @@ static void viPostCallback(u32 retraceCount) {
             if (OSGetResetButtonState()) {
                 gp->resetButtonDown = TRUE;
             }
-        } else {
-            if (!OSGetResetButtonState()) {
-                gp->resetType = RESET_TYPE_SOFT;
-            }
+        } else if (!OSGetResetButtonState()) {
+            gp->resetType = RESET_TYPE_SOFT;
         }
         if (gp->keyDataValid) {
             if (OSIsRestart() && !gp->restartChecked) {
@@ -989,12 +987,10 @@ void gcResetCheck(void) {
 #else
                 code = RESET_CODE_NO_VIDEO_MODE;
 #endif
+            } else if (!(gp->flags & GW_FLAG_PROGRESSIVE)) {
+                code = RESET_CODE_INTERLACED;
             } else {
-                if (!(gp->flags & GW_FLAG_PROGRESSIVE)) {
-                    code = RESET_CODE_INTERLACED;
-                } else {
-                    code = RESET_CODE_PROGRESSIVE;
-                }
+                code = RESET_CODE_PROGRESSIVE;
             }
 #if VERSION >= VERSION_US
             code |= gp->language << 2;

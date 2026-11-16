@@ -174,12 +174,10 @@ s32 battleAcMain_Repeatedly(BattleWork* work) {
                             pressed = 1;
                             r->count++;
                         }
-                    } else {
-                        if (OSGetResetButtonState()) {
-                            r->resetFlag = 1;
-                            pressed = 1;
-                            r->count++;
-                        }
+                    } else if (OSGetResetButtonState()) {
+                        r->resetFlag = 1;
+                        pressed = 1;
+                        r->count++;
                     }
                     break;
                 case 9:
@@ -189,12 +187,10 @@ s32 battleAcMain_Repeatedly(BattleWork* work) {
                             pressed = 1;
                             r->count++;
                         }
-                    } else {
-                        if (SIProbe(0) != SI_ERROR_NO_RESPONSE && SIProbe(0) != SI_ERROR_BUSY) {
-                            r->resetFlag = 1;
-                            pressed = 1;
-                            r->count++;
-                        }
+                    } else if (SIProbe(0) != SI_ERROR_NO_RESPONSE && SIProbe(0) != SI_ERROR_BUSY) {
+                        r->resetFlag = 1;
+                        pressed = 1;
+                        r->count++;
                     }
                     break;
                 case 16:

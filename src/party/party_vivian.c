@@ -706,4 +706,3 @@ void vivian_use(PartyEntry* party) {
             break;
     }
 }
-

@@ -251,11 +251,9 @@ static void _btlcmd_MakeActClassTable(BattleWork* wp) {
                 cmd->act[num].enabled = 0;
                 cmd->act[num].disableReason = CMD_DISABLE_NOT_SELECTABLE;
             }
-        } else {
-            if (VERSION_PICK(wp->commandDisabled[4] > 0, unit->usCommandDisabled[1] != 0)) {
-                cmd->act[num].enabled = 0;
-                cmd->act[num].disableReason = CMD_DISABLE_NOT_SELECTABLE;
-            }
+        } else if (VERSION_PICK(wp->commandDisabled[4] > 0, unit->usCommandDisabled[1] != 0)) {
+            cmd->act[num].enabled = 0;
+            cmd->act[num].disableReason = CMD_DISABLE_NOT_SELECTABLE;
         }
         if (wp->flags & (BATTLE_FLAG_LECTURE_NO_COMMAND | BATTLE_FLAG_LECTURE_JUMP | BATTLE_FLAG_LECTURE_HAMMER | BATTLE_FLAG_LECTURE_SPECIAL | BATTLE_FLAG_LECTURE_FREE | BATTLE_FLAG_LECTURE_ATTACK)) {
             cmd->act[num].enabled = 0;
@@ -1144,11 +1142,9 @@ static s32 _btlcmd_SelectWeaponDecide(BattleWork* wp, s32 type, s32 index) {
                 if (belong == BtlUnit_GetBelong(BattleGetUnitPtr(wp, target->unitIdx))) {
                     selected = i;
                 }
-            } else {
-                if (belong != BtlUnit_GetBelong(BattleGetUnitPtr(wp, target->unitIdx))) {
-                    selected = i;
-                    break;
-                }
+            } else if (belong != BtlUnit_GetBelong(BattleGetUnitPtr(wp, target->unitIdx))) {
+                selected = i;
+                break;
             }
         }
         if (selected >= 0) {
@@ -1824,12 +1820,10 @@ s32 BattleCommandDisplay_WeaponSelectMenuMain(BattleWork* wp, s32 type) {
                 psndSFXOn("SFX_BTL_CURSOR_MOVE2");
                 break;
             }
-        } else {
-            if (BattlePadCheckTrigger(BATTLE_PAD_STICK_DOWN)) {
-                cursor->absPos = 0;
-                psndSFXOn("SFX_BTL_CURSOR_MOVE2");
-                break;
-            }
+        } else if (BattlePadCheckTrigger(BATTLE_PAD_STICK_DOWN)) {
+            cursor->absPos = 0;
+            psndSFXOn("SFX_BTL_CURSOR_MOVE2");
+            break;
         }
         if (cursor->absPos > 0) {
             if (BattlePadCheckRepeat(BATTLE_PAD_STICK_UP)) {
@@ -1837,12 +1831,10 @@ s32 BattleCommandDisplay_WeaponSelectMenuMain(BattleWork* wp, s32 type) {
                 psndSFXOn("SFX_BTL_CURSOR_MOVE2");
                 break;
             }
-        } else {
-            if (BattlePadCheckTrigger(BATTLE_PAD_STICK_UP)) {
-                cursor->absPos = cursor->count - 1;
-                psndSFXOn("SFX_BTL_CURSOR_MOVE2");
-                break;
-            }
+        } else if (BattlePadCheckTrigger(BATTLE_PAD_STICK_UP)) {
+            cursor->absPos = cursor->count - 1;
+            psndSFXOn("SFX_BTL_CURSOR_MOVE2");
+            break;
         }
         if (BattlePadCheckTrigger(PAD_BUTTON_B)) {
             if (type == CMD_ACT_ITEM && (unit->badgesEquipped.DoubleDip || unit->badgesEquipped.TripleDip)) {
@@ -1911,23 +1903,19 @@ s32 BattleCommandDisplay_WeaponMultiItemCancelCheckMain(BattleWork* wp) {
             psndSFXOn("SFX_BTL_CURSOR_MOVE2");
             goto check;
         }
-    } else {
-        if (BattlePadCheckTrigger(BATTLE_PAD_STICK_DOWN)) {
-            cursor->absPos = 0;
-            psndSFXOn("SFX_BTL_CURSOR_MOVE2");
-            goto check;
-        }
+    } else if (BattlePadCheckTrigger(BATTLE_PAD_STICK_DOWN)) {
+        cursor->absPos = 0;
+        psndSFXOn("SFX_BTL_CURSOR_MOVE2");
+        goto check;
     }
     if (cursor->absPos > 0) {
         if (BattlePadCheckRepeat(BATTLE_PAD_STICK_UP)) {
             cursor->absPos--;
             psndSFXOn("SFX_BTL_CURSOR_MOVE2");
         }
-    } else {
-        if (BattlePadCheckTrigger(BATTLE_PAD_STICK_UP)) {
-            cursor->absPos = cursor->count - 1;
-            psndSFXOn("SFX_BTL_CURSOR_MOVE2");
-        }
+    } else if (BattlePadCheckTrigger(BATTLE_PAD_STICK_UP)) {
+        cursor->absPos = cursor->count - 1;
+        psndSFXOn("SFX_BTL_CURSOR_MOVE2");
     }
 check:
     if (BattlePadCheckTrigger(PAD_BUTTON_B)) {
@@ -2063,12 +2051,10 @@ s32 BattleCommandDisplay_OperationMenuMain(BattleWork* wp) {
                 psndSFXOn("SFX_BTL_CURSOR_MOVE2");
                 goto end;
             }
-        } else {
-            if (BattlePadCheckTrigger(BATTLE_PAD_STICK_DOWN)) {
-                cursor->absPos = 0;
-                psndSFXOn("SFX_BTL_CURSOR_MOVE2");
-                goto end;
-            }
+        } else if (BattlePadCheckTrigger(BATTLE_PAD_STICK_DOWN)) {
+            cursor->absPos = 0;
+            psndSFXOn("SFX_BTL_CURSOR_MOVE2");
+            goto end;
         }
         if (cursor->absPos > 0) {
             if (BattlePadCheckRepeat(BATTLE_PAD_STICK_UP)) {
@@ -2076,12 +2062,10 @@ s32 BattleCommandDisplay_OperationMenuMain(BattleWork* wp) {
                 psndSFXOn("SFX_BTL_CURSOR_MOVE2");
                 goto end;
             }
-        } else {
-            if (BattlePadCheckTrigger(BATTLE_PAD_STICK_UP)) {
-                cursor->absPos = cursor->count - 1;
-                psndSFXOn("SFX_BTL_CURSOR_MOVE2");
-                goto end;
-            }
+        } else if (BattlePadCheckTrigger(BATTLE_PAD_STICK_UP)) {
+            cursor->absPos = cursor->count - 1;
+            psndSFXOn("SFX_BTL_CURSOR_MOVE2");
+            goto end;
         }
         if (BattlePadCheckTrigger(PAD_BUTTON_B)) {
             psndSFXOn(SFX_NAME_WORD(PSND_SFX_BTL_CURSOR_CANCEL1));
@@ -2156,12 +2140,10 @@ s32 BattleCommandDisplay_MultiItemMenuMain(BattleWork* wp) {
                 psndSFXOn("SFX_BTL_CURSOR_MOVE2");
                 goto end;
             }
-        } else {
-            if (BattlePadCheckTrigger(BATTLE_PAD_STICK_DOWN)) {
-                cursor->absPos = 0;
-                psndSFXOn("SFX_BTL_CURSOR_MOVE2");
-                goto end;
-            }
+        } else if (BattlePadCheckTrigger(BATTLE_PAD_STICK_DOWN)) {
+            cursor->absPos = 0;
+            psndSFXOn("SFX_BTL_CURSOR_MOVE2");
+            goto end;
         }
         if (cursor->absPos > 0) {
             if (BattlePadCheckRepeat(BATTLE_PAD_STICK_UP)) {
@@ -2169,12 +2151,10 @@ s32 BattleCommandDisplay_MultiItemMenuMain(BattleWork* wp) {
                 psndSFXOn("SFX_BTL_CURSOR_MOVE2");
                 goto end;
             }
-        } else {
-            if (BattlePadCheckTrigger(BATTLE_PAD_STICK_UP)) {
-                cursor->absPos = cursor->count - 1;
-                psndSFXOn("SFX_BTL_CURSOR_MOVE2");
-                goto end;
-            }
+        } else if (BattlePadCheckTrigger(BATTLE_PAD_STICK_UP)) {
+            cursor->absPos = cursor->count - 1;
+            psndSFXOn("SFX_BTL_CURSOR_MOVE2");
+            goto end;
         }
         if (BattlePadCheckTrigger(PAD_BUTTON_B)) {
             psndSFXOn(SFX_NAME_WORD(PSND_SFX_BTL_CURSOR_CANCEL1));
@@ -2241,12 +2221,10 @@ s32 BattleCommandDisplay_ChangePartySelectMenuMain(BattleWork* wp) {
                 psndSFXOn("SFX_BTL_CURSOR_MOVE2");
                 goto end;
             }
-        } else {
-            if (BattlePadCheckTrigger(BATTLE_PAD_STICK_DOWN)) {
-                cursor->absPos = 0;
-                psndSFXOn("SFX_BTL_CURSOR_MOVE2");
-                goto end;
-            }
+        } else if (BattlePadCheckTrigger(BATTLE_PAD_STICK_DOWN)) {
+            cursor->absPos = 0;
+            psndSFXOn("SFX_BTL_CURSOR_MOVE2");
+            goto end;
         }
         if (cursor->absPos > 0) {
             if (BattlePadCheckRepeat(BATTLE_PAD_STICK_UP)) {
@@ -2254,12 +2232,10 @@ s32 BattleCommandDisplay_ChangePartySelectMenuMain(BattleWork* wp) {
                 psndSFXOn("SFX_BTL_CURSOR_MOVE2");
                 goto end;
             }
-        } else {
-            if (BattlePadCheckTrigger(BATTLE_PAD_STICK_UP)) {
-                cursor->absPos = cursor->count - 1;
-                psndSFXOn("SFX_BTL_CURSOR_MOVE2");
-                goto end;
-            }
+        } else if (BattlePadCheckTrigger(BATTLE_PAD_STICK_UP)) {
+            cursor->absPos = cursor->count - 1;
+            psndSFXOn("SFX_BTL_CURSOR_MOVE2");
+            goto end;
         }
         if (BattlePadCheckTrigger(PAD_BUTTON_B)) {
             psndSFXOn(SFX_NAME_WORD(PSND_SFX_BTL_CURSOR_CANCEL1));
@@ -2622,12 +2598,10 @@ static void _btlcmd_SetAttackEvent(BattleUnit* unit, BattleCommand* cmd) {
                     } else {
                         BtlActRec_AddCount(&wp->actRecord.marioSupportItems);
                     }
+                } else if (_check_weapon_type_attack(weapon)) {
+                    BtlActRec_AddCount(&wp->actRecord.partnerAttackItems);
                 } else {
-                    if (_check_weapon_type_attack(weapon)) {
-                        BtlActRec_AddCount(&wp->actRecord.partnerAttackItems);
-                    } else {
-                        BtlActRec_AddCount(&wp->actRecord.partnerSupportItems);
-                    }
+                    BtlActRec_AddCount(&wp->actRecord.partnerSupportItems);
                 }
                 break;
             case CMD_ACT_PARTY_MOVE:

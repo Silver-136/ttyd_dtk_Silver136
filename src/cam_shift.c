@@ -148,10 +148,8 @@ void camShiftMain(CameraEntry* camera, MarioWork* mario, f32* out) {
             if (wp->current < wp->target) {
                 wp->current = wp->target;
             }
-        } else {
-            if (wp->current > wp->target) {
-                wp->current = wp->target;
-            }
+        } else if (wp->current > wp->target) {
+            wp->current = wp->target;
         }
     } else {
         wp->rate = 0.0f;

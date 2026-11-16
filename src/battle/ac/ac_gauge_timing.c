@@ -147,10 +147,8 @@ s32 battleAcMain_GaugeTiming(BattleWork* work) {
                         if (cw->button == BattlePadGetNow() && BattlePadCheckTrigger(cw->button)) {
                             cw->phase = 2;
                         }
-                    } else {
-                        if (!BattlePadCheckNow(cw->button) && BattlePadCheckUp(cw->button)) {
-                            cw->phase = 2;
-                        }
+                    } else if (!BattlePadCheckNow(cw->button) && BattlePadCheckUp(cw->button)) {
+                        cw->phase = 2;
                     }
                     break;
             }
@@ -162,12 +160,10 @@ s32 battleAcMain_GaugeTiming(BattleWork* work) {
                     work->actionCommands.outputParams[0] = 2;
                     break;
                 }
-            } else {
-                if (cw->frame > cw->maxFrames) {
-                    work->actionCommands.result = 0;
-                    work->actionCommands.acState = AC_STATE_RUN + 3;
-                    break;
-                }
+            } else if (cw->frame > cw->maxFrames) {
+                work->actionCommands.result = 0;
+                work->actionCommands.acState = AC_STATE_RUN + 3;
+                break;
             }
             if (work->actionCommands.acState == AC_STATE_RUN) {
                 break;
@@ -511,72 +507,66 @@ static void actionCommandDisp(f32 x, f32 y) {
                         pos.y = 55.0f + y;
                         iconDispGx(&pos, ICON_FLAG_2D, pressed, 1.0f);
                     }
-                } else {
-                    if (pressed2) {
-                        Vec pos = {0.0f, 0.0f, 0.0f};
-                        f32 rx, ry;
-                        rx = -228.0f + x;
-                        ry = 55.0f + y;
-                        pos.x = rx;
-                        pos.y = ry;
-                        iconDispGx(&pos, ICON_FLAG_2D, unpressed, 1.0f);
-                        {
-                            Vec pos2 = {0.0f, 0.0f, 0.0f};
-                            pos2.x = 56.0f + rx;
-                            pos2.y = ry;
-                            iconDispGx(&pos2, ICON_FLAG_2D, unpressed2, 1.0f);
-                        }
-                    } else {
-                        Vec pos = {0.0f, 0.0f, 0.0f};
-                        pos.x = 28.0f + (-228.0f + x);
-                        pos.y = 55.0f + y;
-                        iconDispGx(&pos, ICON_FLAG_2D, unpressed, 1.0f);
+                } else if (pressed2) {
+                    Vec pos = {0.0f, 0.0f, 0.0f};
+                    f32 rx, ry;
+                    rx = -228.0f + x;
+                    ry = 55.0f + y;
+                    pos.x = rx;
+                    pos.y = ry;
+                    iconDispGx(&pos, ICON_FLAG_2D, unpressed, 1.0f);
+                    {
+                        Vec pos2 = {0.0f, 0.0f, 0.0f};
+                        pos2.x = 56.0f + rx;
+                        pos2.y = ry;
+                        iconDispGx(&pos2, ICON_FLAG_2D, unpressed2, 1.0f);
                     }
+                } else {
+                    Vec pos = {0.0f, 0.0f, 0.0f};
+                    pos.x = 28.0f + (-228.0f + x);
+                    pos.y = 55.0f + y;
+                    iconDispGx(&pos, ICON_FLAG_2D, unpressed, 1.0f);
+                }
+            } else if (cw->inRange) {
+                if (pressed2) {
+                    Vec pos = {0.0f, 0.0f, 0.0f};
+                    f32 rx, ry;
+                    rx = -228.0f + x;
+                    ry = 55.0f + y;
+                    pos.x = rx;
+                    pos.y = ry;
+                    iconDispGx(&pos, ICON_FLAG_2D, unpressed, 1.0f);
+                    {
+                        Vec pos2 = {0.0f, 0.0f, 0.0f};
+                        pos2.x = 56.0f + rx;
+                        pos2.y = ry;
+                        iconDispGx(&pos2, ICON_FLAG_2D, unpressed2, 1.0f);
+                    }
+                } else {
+                    Vec pos = {0.0f, 0.0f, 0.0f};
+                    pos.x = 28.0f + (-228.0f + x);
+                    pos.y = 55.0f + y;
+                    iconDispGx(&pos, ICON_FLAG_2D, unpressed, 1.0f);
+                }
+            } else if (pressed2) {
+                Vec pos = {0.0f, 0.0f, 0.0f};
+                f32 rx, ry;
+                rx = -228.0f + x;
+                ry = 55.0f + y;
+                pos.x = rx;
+                pos.y = ry;
+                iconDispGx(&pos, ICON_FLAG_2D, pressed, 1.0f);
+                {
+                    Vec pos2 = {0.0f, 0.0f, 0.0f};
+                    pos2.x = 56.0f + rx;
+                    pos2.y = ry;
+                    iconDispGx(&pos2, ICON_FLAG_2D, pressed2, 1.0f);
                 }
             } else {
-                if (cw->inRange) {
-                    if (pressed2) {
-                        Vec pos = {0.0f, 0.0f, 0.0f};
-                        f32 rx, ry;
-                        rx = -228.0f + x;
-                        ry = 55.0f + y;
-                        pos.x = rx;
-                        pos.y = ry;
-                        iconDispGx(&pos, ICON_FLAG_2D, unpressed, 1.0f);
-                        {
-                            Vec pos2 = {0.0f, 0.0f, 0.0f};
-                            pos2.x = 56.0f + rx;
-                            pos2.y = ry;
-                            iconDispGx(&pos2, ICON_FLAG_2D, unpressed2, 1.0f);
-                        }
-                    } else {
-                        Vec pos = {0.0f, 0.0f, 0.0f};
-                        pos.x = 28.0f + (-228.0f + x);
-                        pos.y = 55.0f + y;
-                        iconDispGx(&pos, ICON_FLAG_2D, unpressed, 1.0f);
-                    }
-                } else {
-                    if (pressed2) {
-                        Vec pos = {0.0f, 0.0f, 0.0f};
-                        f32 rx, ry;
-                        rx = -228.0f + x;
-                        ry = 55.0f + y;
-                        pos.x = rx;
-                        pos.y = ry;
-                        iconDispGx(&pos, ICON_FLAG_2D, pressed, 1.0f);
-                        {
-                            Vec pos2 = {0.0f, 0.0f, 0.0f};
-                            pos2.x = 56.0f + rx;
-                            pos2.y = ry;
-                            iconDispGx(&pos2, ICON_FLAG_2D, pressed2, 1.0f);
-                        }
-                    } else {
-                        Vec pos = {0.0f, 0.0f, 0.0f};
-                        pos.x = 28.0f + (-228.0f + x);
-                        pos.y = 55.0f + y;
-                        iconDispGx(&pos, ICON_FLAG_2D, pressed, 1.0f);
-                    }
-                }
+                Vec pos = {0.0f, 0.0f, 0.0f};
+                pos.x = 28.0f + (-228.0f + x);
+                pos.y = 55.0f + y;
+                iconDispGx(&pos, ICON_FLAG_2D, pressed, 1.0f);
             }
             break;
     }

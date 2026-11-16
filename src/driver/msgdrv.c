@@ -663,25 +663,23 @@ static BOOL msgDisp(smartEntry* smart, u8 alpha, f32 x, f32 y) {
                                 GXSetTevColor(GX_TEVREG0, col2);
                             }
                         }
+                    } else if (c->y + data->pageY[page + 1] > 0) {
+                        hide = 1;
                     } else {
-                        if (c->y + data->pageY[page + 1] > 0) {
+                        d = data->scrollPos - py;
+                        if (d > 100) {
+                            d = 100;
+                        }
+                        a = d * 255 / 100;
+                        if (page != data->pageCount - 2) {
+                            if (c->y + data->pageY[page + 2] <= 0) {
+                                break;
+                            }
                             hide = 1;
                         } else {
-                            d = data->scrollPos - py;
-                            if (d > 100) {
-                                d = 100;
-                            }
-                            a = d * 255 / 100;
-                            if (page != data->pageCount - 2) {
-                                if (c->y + data->pageY[page + 2] <= 0) {
-                                    break;
-                                }
-                                hide = 1;
-                            } else {
-                                col2 = FontGetDrawColor();
-                                col2.a = col2.a * a / 255;
-                                GXSetTevColor(GX_TEVREG0, col2);
-                            }
+                            col2 = FontGetDrawColor();
+                            col2.a = col2.a * a / 255;
+                            GXSetTevColor(GX_TEVREG0, col2);
                         }
                     }
                 }

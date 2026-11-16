@@ -150,33 +150,27 @@ f32 angleABf(f32 x1, f32 y1, f32 x2, f32 y2) {
             } else {
                 angle = 90.0f - corrected;
             }
+        } else if (ydiff >= 0.0f) {
+            angle = 270.0f - corrected;
         } else {
-            if (ydiff >= 0.0f) {
-                angle = 270.0f - corrected;
-            } else {
-                angle = 270.0f + corrected;
-            }
+            angle = 270.0f + corrected;
         }
+    } else if (yabs == 0.0f) {
+        return 0.0f;
     } else {
-        if (yabs == 0.0f) {
-            return 0.0f;
-        } else {
-            approxY = 45.0f * (xabs / yabs);
-            tableIndex = roundi(2.0f * approxY);
-            corrected = approxY * angleABTBL[tableIndex];
-            if (ydiff >= 0.0f) {
-                if (xdiff >= 0.0f) {
-                    angle = 180.0f - corrected;
-                } else {
-                    angle = 180.0f + corrected;
-                }
+        approxY = 45.0f * (xabs / yabs);
+        tableIndex = roundi(2.0f * approxY);
+        corrected = approxY * angleABTBL[tableIndex];
+        if (ydiff >= 0.0f) {
+            if (xdiff >= 0.0f) {
+                angle = 180.0f - corrected;
             } else {
-                if (xdiff >= 0.0f) {
-                    angle = 0.0f + corrected;
-                } else {
-                    angle = 360.0f - corrected;
-                }
+                angle = 180.0f + corrected;
             }
+        } else if (xdiff >= 0.0f) {
+            angle = 0.0f + corrected;
+        } else {
+            angle = 360.0f - corrected;
         }
     }
     return angle;
@@ -619,21 +613,19 @@ void makeKey(void) {
         for (i = 0; i < 4; i++) {
             if (gp->rumbleHardStop[i]) {
                 PADControlMotor(i, PAD_MOTOR_STOP_HARD);
-            } else {
-                if (gp->prevRumbleStatus[i] != gp->rumbleStatus[i]) {
-                    switch (gp->rumbleStatus[i]) {
-                        case PAD_MOTOR_STOP:
-                            PADControlMotor(i, PAD_MOTOR_STOP);
-                            break;
-                        case PAD_MOTOR_RUMBLE:
-                            PADControlMotor(i, PAD_MOTOR_RUMBLE);
-                            break;
-                        case PAD_MOTOR_STOP_HARD:
-                            PADControlMotor(i, PAD_MOTOR_STOP_HARD);
-                            break;
-                    }
-                    gp->prevRumbleStatus[i] = gp->rumbleStatus[i];
+            } else if (gp->prevRumbleStatus[i] != gp->rumbleStatus[i]) {
+                switch (gp->rumbleStatus[i]) {
+                    case PAD_MOTOR_STOP:
+                        PADControlMotor(i, PAD_MOTOR_STOP);
+                        break;
+                    case PAD_MOTOR_RUMBLE:
+                        PADControlMotor(i, PAD_MOTOR_RUMBLE);
+                        break;
+                    case PAD_MOTOR_STOP_HARD:
+                        PADControlMotor(i, PAD_MOTOR_STOP_HARD);
+                        break;
                 }
+                gp->prevRumbleStatus[i] = gp->rumbleStatus[i];
             }
         }
     }

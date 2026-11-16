@@ -597,14 +597,12 @@ static s32 evt_moamoa_kind_onoff(EventEntry* event, BOOL isFirstCall) {
             } else {
                 moa->flags |= MOAMOA_FLAG_SHOW_KIND;
             }
-        } else {
-            if (!all) {
-                if (moa->kind != MOAMOA_KIND_MOA_B) {
-                    moa->flags &= ~MOAMOA_FLAG_SHOW_KIND;
-                }
-            } else {
+        } else if (!all) {
+            if (moa->kind != MOAMOA_KIND_MOA_B) {
                 moa->flags &= ~MOAMOA_FLAG_SHOW_KIND;
             }
+        } else {
+            moa->flags &= ~MOAMOA_FLAG_SHOW_KIND;
         }
         moamoa_pose_change(moa, "c_n_moa_a", "S_1");
     }
@@ -1053,12 +1051,12 @@ static void ext_moamoa_main(void) {
     }
     wp->breathDir = -1.0f;
     wp->breathDist = -1.0f;
-    if (( party->currentMemberId == PARTY_FLURRIE ) && (party->flags & PARTY_FLAG_IS_BEING_USED)) {
+    if ((party->currentMemberId == PARTY_FLURRIE) && (party->flags & PARTY_FLAG_IS_BEING_USED)) {
         wp->breathDir = cloudGetBreathDir();
         wp->breathDist = cloudGetBreathDist();
-        wp->breathPos.x = ( wp->breathDist * moa_sinx(( 6.2831855f * wp->breathDir ) / 360.0f) ) + party->position.x;
+        wp->breathPos.x = (wp->breathDist * moa_sinx((6.2831855f * wp->breathDir) / 360.0f)) + party->position.x;
         wp->breathPos.y = party->position.y;
-        wp->breathPos.z = party->position.z - ( wp->breathDist * moa_cosx(( 6.2831855f * wp->breathDir ) / 360.0f) );
+        wp->breathPos.z = party->position.z - (wp->breathDist * moa_cosx((6.2831855f * wp->breathDir) / 360.0f));
     }
 
     pose = extGetPosePtr();
@@ -1067,13 +1065,13 @@ static void ext_moamoa_main(void) {
     for (i = 0; i < wp->count; i++, pose++, m++) {
         wp->angle = angleABf(mario->position.x, mario->position.z, (*pose->mtx)[0][3], (*pose->mtx)[2][3]);
         wp->dist = distABf(mario->position.x, mario->position.z, (*pose->mtx)[0][3], (*pose->mtx)[2][3]);
-        if ((( !(m->flags & (MOAMOA_FLAG_HIT | MOAMOA_FLAG_ESCAPING | MOAMOA_FLAG_OFF_ROOF | MOAMOA_FLAG_FUSING)) ) && ( mario->position.y > 200.0f )) && ( wp->dist < 30.0f) ) {
+        if (((!(m->flags & (MOAMOA_FLAG_HIT | MOAMOA_FLAG_ESCAPING | MOAMOA_FLAG_OFF_ROOF | MOAMOA_FLAG_FUSING))) && (mario->position.y > 200.0f)) && (wp->dist < 30.0f)) {
             cnt += 1.0f;
         }
 #if VERSION <= VERSION_DEMO_JP
         if ((((wp->flags & MOAMOA_WORK_FLAG_ACTIVE) && (!(wp->flags & MOAMOA_WORK_FLAG_NO_HIT))) && (!hit)) && (!(m->flags & (MOAMOA_FLAG_HIT | MOAMOA_FLAG_ESCAPING | MOAMOA_FLAG_OFF_ROOF | MOAMOA_FLAG_FUSING)))) {
 #else
-        if (((((( wp->flags & MOAMOA_WORK_FLAG_ACTIVE) && ( !(wp->flags & MOAMOA_WORK_FLAG_NO_HIT) )) && ( !marioKeyOffChk() )) && ( !marioCtrlOffChk() )) && ( !hit )) && ( !(m->flags & (MOAMOA_FLAG_HIT | MOAMOA_FLAG_ESCAPING | MOAMOA_FLAG_OFF_ROOF | MOAMOA_FLAG_FUSING)) )) {
+        if ((((((wp->flags & MOAMOA_WORK_FLAG_ACTIVE) && (!(wp->flags & MOAMOA_WORK_FLAG_NO_HIT))) && (!marioKeyOffChk())) && (!marioCtrlOffChk())) && (!hit)) && (!(m->flags & (MOAMOA_FLAG_HIT | MOAMOA_FLAG_ESCAPING | MOAMOA_FLAG_OFF_ROOF | MOAMOA_FLAG_FUSING)))) {
 #endif
             ret = moamoa_hit_check(pose, m);
             if (ret == 1) {
@@ -1082,7 +1080,7 @@ static void ext_moamoa_main(void) {
                 wp->hitCount++;
                 moamoa_pose_change(m, "c_n_moa_a", "D_1");
                 hit = 1;
-            } else if (( ret == 2 ) || ( ret == 4) ) {
+            } else if ((ret == 2) || (ret == 4)) {
                 m->flags |= (MOAMOA_FLAG_HIT | MOAMOA_FLAG_KNOCKED_AWAY);
                 m->state = MOAMOA_STATE_KNOCKED_AWAY;
                 wp->hitCount++;
@@ -1097,24 +1095,25 @@ static void ext_moamoa_main(void) {
                 m->driftVel = moamoa_zero_vec;
                 {
                     spd = randf(0.1f, 0.2f);
-                    rad = ( 6.2831855f * angle ) / 360.0f;
+                    rad = (6.2831855f * angle) / 360.0f;
                     m->driftAccelX = spd * moa_sinx(rad);
                     m->driftAccelY = randf(0.03f, 0.06f);
-                    m->driftAccelZ = spd * ( -moa_cosx(rad)) ; }
+                    m->driftAccelZ = spd * (-moa_cosx(rad));
+                }
                 m->driftTimer = 120;
                 wp->hitCount++;
                 moamoa_pose_change(m, "c_n_moa_a", "D_1");
                 hit = 1;
             }
         }
-        if ((wp->flags & MOAMOA_WORK_FLAG_ACTIVE) && ( !(m->flags & (MOAMOA_FLAG_TO_TARGET | MOAMOA_FLAG_HIT | MOAMOA_FLAG_ESCAPING | MOAMOA_FLAG_OFF_ROOF | MOAMOA_FLAG_FUSING))) ) {
+        if ((wp->flags & MOAMOA_WORK_FLAG_ACTIVE) && (!(m->flags & (MOAMOA_FLAG_TO_TARGET | MOAMOA_FLAG_HIT | MOAMOA_FLAG_ESCAPING | MOAMOA_FLAG_OFF_ROOF | MOAMOA_FLAG_FUSING)))) {
 #if VERSION <= VERSION_DEMO_JP
             if (mario->currMotionId == MARIO_MOTION_STAY || mario->currMotionId == MARIO_MOTION_WALK || mario->currMotionId == MARIO_MOTION_DASH) {
 #else
-            if ((( (mario->currMotionId == MARIO_MOTION_STAY ) || (( (u16)(mario->currMotionId - MARIO_MOTION_WALK) ) <= 1 )) || (( (u16)(mario->currMotionId - MARIO_MOTION_SLIT) ) <= 1 )) ||
-                ( mario->currMotionId == MARIO_MOTION_YOSHI) ) {
+            if ((((mario->currMotionId == MARIO_MOTION_STAY) || (((u16)(mario->currMotionId - MARIO_MOTION_WALK)) <= 1)) || (((u16)(mario->currMotionId - MARIO_MOTION_SLIT)) <= 1)) ||
+                (mario->currMotionId == MARIO_MOTION_YOSHI)) {
 #endif
-                if ((( (mario->position.y > 200.0f ) && ( wp->dist > 30.0f )) && ( wp->dist < 100.0f )) && (i & 1)) {
+                if ((((mario->position.y > 200.0f) && (wp->dist > 30.0f)) && (wp->dist < 100.0f)) && (i & 1)) {
                     if (m->flags & MOAMOA_FLAG_JUMPING) {
                         m->next = MOAMOA_STATE_APPROACH;
                     } else {
@@ -1129,7 +1128,7 @@ static void ext_moamoa_main(void) {
                 }
             }
         }
-        if (((( wp->flags & MOAMOA_WORK_FLAG_ACTIVE) && ( !(m->flags & (MOAMOA_FLAG_HIT | MOAMOA_FLAG_OFF_ROOF | MOAMOA_FLAG_FUSED)) )) && ( i == ( gp->retraceCount % wp->count ))) && ( irand(1000) < 200) ) {
+        if ((((wp->flags & MOAMOA_WORK_FLAG_ACTIVE) && (!(m->flags & (MOAMOA_FLAG_HIT | MOAMOA_FLAG_OFF_ROOF | MOAMOA_FLAG_FUSED)))) && (i == (gp->retraceCount % wp->count))) && (irand(1000) < 200)) {
             {
                 Vec tmp = {0.0f, 0.0f, 0.0f};
                 tmp.x = (*pose->mtx)[0][3];
@@ -1151,8 +1150,8 @@ static void ext_moamoa_main(void) {
                     f32 rr;
                     f32 r = rand() / 32767.0f;
                     rr = (6.2831855f * ((r * mmI(360.0f - 0.0f)) + (mn = 0.0f))) / 360.0f;
-                    x0 = ( 5.0f * moa_sinx(rr) ) + (*pose->mtx)[0][3];
-                    z0 = (*pose->mtx)[2][3] - ( 5.0f * moa_cosx(rr) );
+                    x0 = (5.0f * moa_sinx(rr)) + (*pose->mtx)[0][3];
+                    z0 = (*pose->mtx)[2][3] - (5.0f * moa_cosx(rr));
                 }
                 {
                     f32 k1;
@@ -1163,7 +1162,7 @@ static void ext_moamoa_main(void) {
                 }
                 break;
             case MOAMOA_STATE_FUSION_WAIT:
-                if (( --m->timer ) < 0) {
+                if (--m->timer < 0) {
                     m->timer = 0;
                     m->state++;
                 }
@@ -1172,8 +1171,8 @@ static void ext_moamoa_main(void) {
                 dist = distABf((*pose->mtx)[0][3], (*pose->mtx)[2][3], wp->target[i % 3].x, wp->target[i % 3].z);
                 angle = angleABf((*pose->mtx)[0][3], (*pose->mtx)[2][3], wp->target[i % 3].x, wp->target[i % 3].z);
                 if (dist > 31.0f) {
-                    x1 = ( 30.0f * moa_sinx(( 6.2831855f * angle ) / 360.0f) ) + (*pose->mtx)[0][3];
-                    dist = (*pose->mtx)[2][3] - ( 30.0f * moa_cosx(( 6.2831855f * angle ) / 360.0f) );
+                    x1 = (30.0f * moa_sinx((6.2831855f * angle) / 360.0f)) + (*pose->mtx)[0][3];
+                    dist = (*pose->mtx)[2][3] - (30.0f * moa_cosx((6.2831855f * angle) / 360.0f));
                     {
                         // FAKE: `aa` is a never-read holder kept by opt_dead_assignments off (in-argument sum stays in argument order, numbered below k/r2)
                         f32 k;
@@ -1205,7 +1204,7 @@ static void ext_moamoa_main(void) {
                 (*pose->mtx)[2][3] = pv.z;
                 break;
             case MOAMOA_STATE_GATHER_WAIT_UNUSED:
-                if (( --m->timer ) < 0) {
+                if (--m->timer < 0) {
                     m->timer = 0;
                     m->state++;
                 }
@@ -1228,10 +1227,10 @@ static void ext_moamoa_main(void) {
                     tx = wp->target[i % 3].x;
                     ty = wp->target[i % 3].y;
                     tz = wp->target[i % 3].z;
-                    tx += s * (m->circleRadius * ((f32) sin(((f32) (i + gp->retraceCount)) / 4.0f)));
+                    tx += s * (m->circleRadius * ((f32)sin(((f32)(i + gp->retraceCount)) / 4.0f)));
                     r = i + gp->retraceCount;
                     ty += m->circleHeight * s;
-                    tz += s * ((-m->circleRadius) * ((f32) cos(r / 4.0f)));
+                    tz += s * ((-m->circleRadius) * ((f32)cos(r / 4.0f)));
                     (*pose->mtx)[0][3] += (tx - (*pose->mtx)[0][3]) / 15.0f;
                     (*pose->mtx)[1][3] += (ty - (*pose->mtx)[1][3]) / 15.0f;
                     (*pose->mtx)[2][3] += (tz - (*pose->mtx)[2][3]) / 15.0f;
@@ -1312,7 +1311,7 @@ static void ext_moamoa_main(void) {
                     (*pose->mtx)[0][3] += m->speed * moa_sinx(rad);
                     (*pose->mtx)[2][3] = (*pose->mtx)[2][3] + (m->speed * (-moa_cosx(rad)));
                 }
-                if ((--m->jumpTimer) < 0) {
+                if (--m->jumpTimer < 0) {
                     (*pose->mtx)[0][3] = m->target.x;
                     (*pose->mtx)[1][3] = m->target.y;
                     (*pose->mtx)[2][3] = m->target.z;
@@ -1324,7 +1323,7 @@ static void ext_moamoa_main(void) {
                 break;
 
             case MOAMOA_STATE_LAND:
-                if (( ++m->timer ) > 4) {
+                if (++m->timer > 4) {
                     m->state = m->next;
                 }
                 break;
@@ -1364,7 +1363,7 @@ static void ext_moamoa_main(void) {
                 break;
 
             case MOAMOA_STATE_SHRINK:
-                if (( ++m->timer ) < 30) {
+                if (++m->timer < 30) {
                     (*pose->mtx)[0][0] *= 0.9f;
                     (*pose->mtx)[1][1] *= 0.9f;
                     (*pose->mtx)[2][2] *= 0.9f;
@@ -1400,7 +1399,7 @@ static void ext_moamoa_main(void) {
                 break;
 
             case MOAMOA_STATE_BLOWN_DRIFT:
-                if (( --m->driftTimer ) > 0) {
+                if (--m->driftTimer > 0) {
                     m->driftVel.x += m->driftAccelX;
                     m->driftVel.y += m->driftAccelY;
                     m->driftVel.z += m->driftAccelZ;
@@ -1420,7 +1419,8 @@ static void ext_moamoa_main(void) {
                     do {
                         idx = rand() % 700;
                         mm = &wp->moa[idx];
-                    } while ((( mm->state != MOAMOA_STATE_WANDER ) && ( mm->state != MOAMOA_STATE_JUMP) ) || (mm->flags & MOAMOA_FLAG_OFF_ROOF)); }
+                    } while (((mm->state != MOAMOA_STATE_WANDER) && (mm->state != MOAMOA_STATE_JUMP)) || (mm->flags & MOAMOA_FLAG_OFF_ROOF));
+                }
                 other = extGetPosePtr() + idx;
                 (*pose->mtx)[0][3] = (*other->mtx)[0][3];
                 (*pose->mtx)[1][3] = 215.0f;
@@ -1446,7 +1446,7 @@ static void ext_moamoa_main(void) {
                 break;
 
             case MOAMOA_STATE_BLOW_WAIT:
-                if (( --m->timer ) < 0) {
+                if (--m->timer < 0) {
                     m->state++;
                 }
                 break;
@@ -1460,21 +1460,21 @@ static void ext_moamoa_main(void) {
                 PSMTXRotRad(rot, 'y', 0.20943952f);
                 PSMTXConcat(*pose->mtx, rot, *pose->mtx);
                 pose->flags &= ~EXT_POSE_FLAG_BILLBOARD;
-                if ((*pose->mtx)[0][3] < ( -1000.0f) ) {
+                if ((*pose->mtx)[0][3] < -1000.0f) {
                     m->state = MOAMOA_STATE_GONE;
                 }
                 break;
         }
         if (!(m->flags & (MOAMOA_FLAG_KNOCKED_AWAY | MOAMOA_FLAG_BLOWN | MOAMOA_FLAG_FUSING | MOAMOA_FLAG_FUSED))) {
             f32 nx;
-            if ( (cam->cameraAt.x - (*pose->mtx)[0][3] ) > 250.0f) {
+            if ((cam->cameraAt.x - (*pose->mtx)[0][3]) > 250.0f) {
                 nx = 450.0f + (*pose->mtx)[0][3];
-                if (nx < ( -50.0f) ) {
+                if (nx < -50.0f) {
                     (*pose->mtx)[0][3] = nx;
                 }
-            } else if (( (*pose->mtx)[0][3] - cam->cameraAt.x ) > 250.0f) {
+            } else if (((*pose->mtx)[0][3] - cam->cameraAt.x) > 250.0f) {
                 nx = (*pose->mtx)[0][3] - 450.0f;
-                if (nx > ( -1870.0f) ) {
+                if (nx > -1870.0f) {
                     (*pose->mtx)[0][3] = nx;
                 }
             }
@@ -1524,7 +1524,7 @@ static void ext_moamoa_main(void) {
         mario->position.x -= cnt / 20.0f;
 #else
     if (!(wp->flags & (MOAMOA_WORK_FLAG_NO_PUSH | MOAMOA_WORK_FLAG_PARTY_IN_USE))) {
-        mario->floorMove.x = ( -cnt ) / 20.0f;
+        mario->floorMove.x = (-cnt) / 20.0f;
 #endif
     }
 }
@@ -2746,4 +2746,3 @@ static s32 npc_anim_wait(EventEntry* event, BOOL isFirstCall) {
     }
     return EVT_RETURN_BLOCK;
 }
-

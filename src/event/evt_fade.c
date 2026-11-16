@@ -164,12 +164,10 @@ USER_FUNC(evt_fade_tec_onoff) {
         } else {
             fadeTecOn();
         }
+    } else if (soft) {
+        fadeTecSoftOff();
     } else {
-        if (soft) {
-            fadeTecSoftOff();
-        } else {
-            fadeTecOff();
-        }
+        fadeTecOff();
     }
     return EVT_RETURN_DONE;
 }

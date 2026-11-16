@@ -322,30 +322,28 @@ static void BattleAudienceCtrlProcessKinopioWait(s32 index, u8 front) {
                 threshold = 10;
                 if (rnd < threshold) {
                     BattleAudience_ChangeStatus(index, AUDIENCE_STATUS_WAIT_HURIMUKI);
+                } else if (rnd < (threshold += 10)) {
+                    BattleAudience_ChangeStatus(index, AUDIENCE_STATUS_WAIT_KUBI_KATAMUKE);
                 } else {
-                    if (rnd < (threshold += 10)) {
-                        BattleAudience_ChangeStatus(index, AUDIENCE_STATUS_WAIT_KUBI_KATAMUKE);
-                    } else {
-                        const f32 cheerRange = 10.0f * a;
-                        threshold += cheerRange;
-                        if (rnd < threshold) {
-                            BattleAudience_ChangeStatus(index, AUDIENCE_STATUS_JOY_RAISE_ARM);
-                        } else if (BattleBreakSlot_GetBreakTurn() >= 1 || base->excited == 1) {
-                            if (rnd < threshold + 300) {
-                                if (m->type != AUDIENCE_PIRANHA_PLANT) {
-                                    BattleAudience_ChangeStatus(index, AUDIENCE_STATUS_WAIT_JUMP);
-                                }
+                    const f32 cheerRange = 10.0f * a;
+                    threshold += cheerRange;
+                    if (rnd < threshold) {
+                        BattleAudience_ChangeStatus(index, AUDIENCE_STATUS_JOY_RAISE_ARM);
+                    } else if (BattleBreakSlot_GetBreakTurn() >= 1 || base->excited == 1) {
+                        if (rnd < threshold + 300) {
+                            if (m->type != AUDIENCE_PIRANHA_PLANT) {
+                                BattleAudience_ChangeStatus(index, AUDIENCE_STATUS_WAIT_JUMP);
                             }
-                        } else {
-                            threshold += (s32)(10.0f * b);
-                            if (rnd < threshold) {
-                                n = BattleAudience_GetAudienceNoFromOffset(index, 0, 1);
-                                if (n != -1) {
-                                    BattleAudienceGetPtr(n);
-                                    if (m->type != AUDIENCE_PIRANHA_PLANT) {
-                                        if (BattleAudience_GetExist(n) == 1) {
-                                            BattleAudience_ChangeStatus(index, AUDIENCE_STATUS_WAIT_JUMP);
-                                        }
+                        }
+                    } else {
+                        threshold += (s32)(10.0f * b);
+                        if (rnd < threshold) {
+                            n = BattleAudience_GetAudienceNoFromOffset(index, 0, 1);
+                            if (n != -1) {
+                                BattleAudienceGetPtr(n);
+                                if (m->type != AUDIENCE_PIRANHA_PLANT) {
+                                    if (BattleAudience_GetExist(n) == 1) {
+                                        BattleAudience_ChangeStatus(index, AUDIENCE_STATUS_WAIT_JUMP);
                                     }
                                 }
                             }
@@ -582,10 +580,8 @@ static void BattleAudienceCtrlProcessKinopioItemThrow(s32 index, u8 front) {
         if (!(BattleAudienceItemGetPtr(0)->itemType >= ITEM_AUDIENCE_CAN && BattleAudienceItemGetPtr(0)->itemType < BADGE_MIN)) {
             BattleAudienceAddTargetNum(-0.14999999f * BattleAudienceBaseGetPtr()->audienceDeltaMultiplier, 0.0f);
         }
-    } else {
-        if (m->flags & AUDIENCE_MEMBER_FLAG_TARGETED) {
-            return;
-        }
+    } else if (m->flags & AUDIENCE_MEMBER_FLAG_TARGETED) {
+        return;
     }
 }
 

@@ -460,10 +460,8 @@ void BattleStageObjectMain(void) {
             if (!(mapGetMapObj(obj->data->name)->flags & MAP_OBJ_FLAG_HIDDEN)) {
                 mapGrpFlagOn(obj->data->name, MAP_OBJ_FLAG_HIDDEN);
             }
-        } else {
-            if (mapGetMapObj(obj->data->name)->flags & MAP_OBJ_FLAG_HIDDEN) {
-                mapGrpFlagOff(obj->data->name, MAP_OBJ_FLAG_HIDDEN);
-            }
+        } else if (mapGetMapObj(obj->data->name)->flags & MAP_OBJ_FLAG_HIDDEN) {
+            mapGrpFlagOff(obj->data->name, MAP_OBJ_FLAG_HIDDEN);
         }
     }
     BattleObjectConfig();

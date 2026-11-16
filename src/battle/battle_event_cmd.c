@@ -180,7 +180,7 @@ USER_FUNC(btlevtcmd_GetRandomValue) {
 USER_FUNC(btlevtcmd_DrawLots) {
     EvtWord* args = event->args;
     s32 index = *args++;
-    s32 *alloc;
+    s32* alloc;
     s32 i, count, max;
     s32 ceiling;
 
@@ -3275,12 +3275,10 @@ USER_FUNC(btlevtcmd_DivePosition) {
             neg = 1;
         } else if (unit->moveTargetPos.x - unit->moveStartPos.x < 0.0f) {
             neg = 0;
+        } else if (unit->moveTargetPos.y - unit->moveStartPos.y < 0.0f) {
+            neg = 0;
         } else {
-            if (unit->moveTargetPos.y - unit->moveStartPos.y < 0.0f) {
-                neg = 0;
-            } else {
-                neg = 1;
-            }
+            neg = 1;
         }
         if (d == 0.0f) {
             d = 1.0f;
@@ -3752,10 +3750,8 @@ USER_FUNC(btlevtcmd_ConsumeItemReserve) {
             }
         }
         bec_coin(unit, item);
-    } else {
-        if (unit->heldItem == ITEM_LIFE_SHROOM) {
-            unit->heldItem = ITEM_NULL;
-        }
+    } else if (unit->heldItem == ITEM_LIFE_SHROOM) {
+        unit->heldItem = ITEM_NULL;
     }
     return EVT_RETURN_DONE;
 }
@@ -4613,12 +4609,10 @@ USER_FUNC(btlevtcmd_GetTakeoffPosition) {
             } else {
                 hx += wp->alliances[belong].attackDirection * 60;
             }
+        } else if (back) {
+            hx += wp->alliances[belong].attackDirection * -30;
         } else {
-            if (back) {
-                hx += wp->alliances[belong].attackDirection * -30;
-            } else {
-                hx += wp->alliances[belong].attackDirection * 30;
-            }
+            hx += wp->alliances[belong].attackDirection * 30;
         }
     } else {
         hx += wp->alliances[belong].attackDirection * 60;
@@ -4952,12 +4946,10 @@ USER_FUNC(btlevtcmd_DivePartsPosition) {
             neg = 1;
         } else if (part->moveTargetPos.x - part->moveStartPos.x < 0.0f) {
             neg = 0;
+        } else if (part->moveTargetPos.y - part->moveStartPos.y < 0.0f) {
+            neg = 0;
         } else {
-            if (part->moveTargetPos.y - part->moveStartPos.y < 0.0f) {
-                neg = 0;
-            } else {
-                neg = 1;
-            }
+            neg = 1;
         }
         if (d == 0.0f) {
             d = 1.0f;
@@ -7048,12 +7040,10 @@ USER_FUNC(btlevtcmd_SacBgsetMove) {
                         } else {
                             val = -intplGetValue(mode, 450.0f, 0.0f, event->userdata[0], 45);
                         }
+                    } else if (obj->position.x >= 0.0f) {
+                        val = intplGetValue(mode, 0.0f, 450.0f, event->userdata[0], 45);
                     } else {
-                        if (obj->position.x >= 0.0f) {
-                            val = intplGetValue(mode, 0.0f, 450.0f, event->userdata[0], 45);
-                        } else {
-                            val = -intplGetValue(mode, 0.0f, 450.0f, event->userdata[0], 45);
-                        }
+                        val = -intplGetValue(mode, 0.0f, 450.0f, event->userdata[0], 45);
                     }
                     obj->positionOffset2.x = val;
                     break;

@@ -908,7 +908,7 @@ static void _LvupParamConfirmDisp(CameraId camId, void* param) {
     // zero is a variable: the retail code computes 0.0f - w at run time (lfs 0.0f, fsubs); a literal 0.0f folds to fneg
     f32 zero = 0.0f;
     u32 len;
-    BattleCursor *cursor;
+    BattleCursor* cursor;
     f32 w;
     char buf[0x14];
     BattleSeqEndWork* work = ((BattleWork*)param)->seqEndWork;

@@ -558,12 +558,10 @@ void marioChkGnd(void) {
                 marioSetFallPara();
                 return;
             }
-        } else {
-            if (mario->airTimer == 0) {
-                marioChgMot(MARIO_MOTION_FALL);
-                marioSetFallPara();
-                return;
-            }
+        } else if (mario->airTimer == 0) {
+            marioChgMot(MARIO_MOTION_FALL);
+            marioSetFallPara();
+            return;
         }
     }
     if (mario->currMotionId == MARIO_MOTION_SHIP) {
@@ -1742,12 +1740,10 @@ f32 marioChkOverhead(void) {
         } else {
             mario->flags &= ~MARIO_FLAG_IS_TOUCHING_CEILING;
         }
+    } else if (h >= 0.0f && h + mario->wPlayerCollisionBox.y <= 47.0f) {
+        mario->flags |= MARIO_FLAG_IS_TOUCHING_CEILING;
     } else {
-        if (h >= 0.0f && h + mario->wPlayerCollisionBox.y <= 47.0f) {
-            mario->flags |= MARIO_FLAG_IS_TOUCHING_CEILING;
-        } else {
-            mario->flags &= ~MARIO_FLAG_IS_TOUCHING_CEILING;
-        }
+        mario->flags &= ~MARIO_FLAG_IS_TOUCHING_CEILING;
     }
     return pos.y;
 }
@@ -2054,12 +2050,10 @@ void marioCheckWall(f32 dx, f32 dz) {
             mario->wallPushDist = dx;
             mario->wallPushDir = dz;
             mario->wallPushHold = 14;
-        } else {
-            if (--mario->wallPushHold <= 0) {
-                mario->wallPushHold = 0;
-                mario->wallPushDist = dx;
-                mario->wallPushDir = dz;
-            }
+        } else if (--mario->wallPushHold <= 0) {
+            mario->wallPushHold = 0;
+            mario->wallPushDist = dx;
+            mario->wallPushDir = dz;
         }
         mario->moveDirection = mario->wallPushDir;
     } else {
@@ -2199,12 +2193,10 @@ void marioCheckWall_roll(f32 dx, f32 dz) {
             mario->wallPushDist = dx;
             mario->wallPushDir = dz;
             mario->wallPushHold = 14;
-        } else {
-            if (--mario->wallPushHold <= 0) {
-                mario->wallPushHold = 0;
-                mario->wallPushDist = dx;
-                mario->wallPushDir = dz;
-            }
+        } else if (--mario->wallPushHold <= 0) {
+            mario->wallPushHold = 0;
+            mario->wallPushDist = dx;
+            mario->wallPushDir = dz;
         }
     } else {
         mario->wallPushDist = 0.0f;
@@ -2959,12 +2951,10 @@ void marioCheckWallShip(f32 dx, f32 dz) {
             mario->wallPushDist = dx;
             mario->wallPushDir = dz;
             mario->wallPushHold = 14;
-        } else {
-            if (--mario->wallPushHold <= 0) {
-                mario->wallPushHold = 0;
-                mario->wallPushDist = dx;
-                mario->wallPushDir = dz;
-            }
+        } else if (--mario->wallPushHold <= 0) {
+            mario->wallPushHold = 0;
+            mario->wallPushDist = dx;
+            mario->wallPushDir = dz;
         }
     } else {
         mario->wallPushDist = 0.0f;

@@ -236,12 +236,10 @@ USER_FUNC(evt_win_party_lankup_chk) {
                 } else {
                     max = 1;
                 }
+            } else if (pouch->partyData[*p].techLevel < 2) {
+                max = 0;
             } else {
-                if (pouch->partyData[*p].techLevel < 2) {
-                    max = 0;
-                } else {
-                    max = 2;
-                }
+                max = 2;
             }
             if (max == 0) {
                 evtSetValue(event, args[0], 1);
@@ -285,12 +283,10 @@ USER_FUNC(evt_win_party_lankdown_chk) {
                 } else {
                     max = 1;
                 }
+            } else if (pouch->partyData[*p].techLevel < 2) {
+                max = 0;
             } else {
-                if (pouch->partyData[*p].techLevel < 2) {
-                    max = 0;
-                } else {
-                    max = 2;
-                }
+                max = 2;
             }
             if (max == 0) {
                 canRank = 1;
@@ -819,10 +815,8 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL cancelOk) {
                         if (pouch->partyData[party_id_table[i]].techLevel >= 1) {
                             sel->items[sel->numItems].flags |= (SELECT_ITEM_GRAY | SELECT_ITEM_DISABLED);
                         }
-                    } else {
-                        if (pouch->partyData[party_id_table[i]].techLevel >= 2) {
-                            sel->items[sel->numItems].flags |= (SELECT_ITEM_GRAY | SELECT_ITEM_DISABLED);
-                        }
+                    } else if (pouch->partyData[party_id_table[i]].techLevel >= 2) {
+                        sel->items[sel->numItems].flags |= (SELECT_ITEM_GRAY | SELECT_ITEM_DISABLED);
                     }
                     sel->numItems++;
                 }

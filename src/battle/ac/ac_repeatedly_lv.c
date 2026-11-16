@@ -212,17 +212,13 @@ s32 battleAcMain_RepeatedlyLv(BattleWork* work) {
                         hit = 1;
                         p->pressCount++;
                     }
-                } else {
-                    if (BattlePadCheckTrigger(p->mask)) {
-                        hit = 1;
-                        p->pressCount++;
-                    }
-                }
-            } else {
-                if (BattlePadCheckUp(p->mask)) {
+                } else if (BattlePadCheckTrigger(p->mask)) {
                     hit = 1;
                     p->pressCount++;
                 }
+            } else if (BattlePadCheckUp(p->mask)) {
+                hit = 1;
+                p->pressCount++;
             }
             if (autoCmd && !hit) {
                 hit = 1;
@@ -418,29 +414,27 @@ static void actionCommandDisp(f32 x, f32 y) {
                 pos.y = 70.0f + y;
                 iconDispGx(&pos, ICON_FLAG_2D, pressedA, 1.0f);
             }
+        } else if ((phase & 1) == 1) {
+            Vec pos = {0.0f, 0.0f, 0.0f};
+            pos.x = -225.0f + x + off0;
+            pos.y = 70.0f + y;
+            iconDispGx(&pos, ICON_FLAG_2D, idleA, 1.0f);
+            {
+                Vec pos2 = {0.0f, 0.0f, 0.0f};
+                pos2.x = -175.0f + x + off1;
+                pos2.y = 70.0f + y;
+                iconDispGx(&pos2, ICON_FLAG_2D, pressedB, 1.0f);
+            }
         } else {
-            if ((phase & 1) == 1) {
-                Vec pos = {0.0f, 0.0f, 0.0f};
-                pos.x = -225.0f + x + off0;
-                pos.y = 70.0f + y;
-                iconDispGx(&pos, ICON_FLAG_2D, idleA, 1.0f);
-                {
-                    Vec pos2 = {0.0f, 0.0f, 0.0f};
-                    pos2.x = -175.0f + x + off1;
-                    pos2.y = 70.0f + y;
-                    iconDispGx(&pos2, ICON_FLAG_2D, pressedB, 1.0f);
-                }
-            } else {
-                Vec pos = {0.0f, 0.0f, 0.0f};
-                pos.x = -225.0f + x + off0;
-                pos.y = 70.0f + y;
-                iconDispGx(&pos, ICON_FLAG_2D, pressedA, 1.0f);
-                {
-                    Vec pos2 = {0.0f, 0.0f, 0.0f};
-                    pos2.x = -175.0f + x + off1;
-                    pos2.y = 70.0f + y;
-                    iconDispGx(&pos2, ICON_FLAG_2D, idleB, 1.0f);
-                }
+            Vec pos = {0.0f, 0.0f, 0.0f};
+            pos.x = -225.0f + x + off0;
+            pos.y = 70.0f + y;
+            iconDispGx(&pos, ICON_FLAG_2D, pressedA, 1.0f);
+            {
+                Vec pos2 = {0.0f, 0.0f, 0.0f};
+                pos2.x = -175.0f + x + off1;
+                pos2.y = 70.0f + y;
+                iconDispGx(&pos2, ICON_FLAG_2D, idleB, 1.0f);
             }
         }
     }

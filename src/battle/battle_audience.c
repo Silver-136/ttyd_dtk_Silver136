@@ -800,7 +800,7 @@ u8 BattleAudience_CheckReactionPerPhase(void) {
                         break;
                     case 3:
                         if (audience->typeWeights[AUDIENCE_PUNI]) {
-                            for (i = 0; i < audience->maxAudience; ) {
+                            for (i = 0; i < audience->maxAudience;) {
                                 if (!BattleAudience_GetExist(i)) {
                                     BattleAudienceAddPhaseEvtList(3);
                                     break;
@@ -4091,7 +4091,6 @@ static void BattleAudienceJoy_Sub(s32 a, s32 b, s32 c, s32 type) {
         }
     }
 }
-
 
 /**
  * Returns the seat dir columns beside Piranha Plant index

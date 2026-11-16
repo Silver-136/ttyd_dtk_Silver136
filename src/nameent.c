@@ -661,19 +661,17 @@ static s32 nameMain(void) {
                             }
                             psndSFXOn(SFX_NAME_WORD(PSND_SFX_FILE_MOJI_DELETE1));
                         }
+                    } else if (wp->nameLen == 0 && wp->type == NAMEENT_FILE && !strncmp(wp->name, " ", 1)) {
+                        psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1));
+                        wp->state = 101;
+                        wp->flags |= 2;
                     } else {
-                        if (wp->nameLen == 0 && wp->type == NAMEENT_FILE && !strncmp(wp->name, " ", 1)) {
-                            psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1));
-                            wp->state = 101;
-                            wp->flags |= 2;
-                        } else {
-                            wp->name[wp->nameLen] = *" ";
-                            wp->nameLen--;
-                            if (wp->nameLen < 0) {
-                                wp->nameLen = 0;
-                            }
-                            psndSFXOn(SFX_NAME_WORD(PSND_SFX_FILE_MOJI_DELETE1));
+                        wp->name[wp->nameLen] = *" ";
+                        wp->nameLen--;
+                        if (wp->nameLen < 0) {
+                            wp->nameLen = 0;
                         }
+                        psndSFXOn(SFX_NAME_WORD(PSND_SFX_FILE_MOJI_DELETE1));
                     }
 #else
                     if (wp->nameLen == 0 && wp->type == NAMEENT_FILE && !strncmp(wp->name, "　", 2)) {

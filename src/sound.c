@@ -1103,10 +1103,8 @@ u32 SoundEfxCheck(s32 chan) {
         if (sndFXCheck(vid) == -1) {
             return FALSE;
         }
-    } else {
-        if (!sndCheckEmitter(&sfx->emitter)) {
-            return FALSE;
-        }
+    } else if (!sndCheckEmitter(&sfx->emitter)) {
+        return FALSE;
     }
     return TRUE;
 }

@@ -1182,10 +1182,8 @@ void fadeMain(void) {
                                 if (entry->scaleTimer < FPS_FRAMES(180)) {
                                     entry->scale = intplGetValue(EASING_SINE_OUT, 3.0f, 1.0f, ++entry->scaleTimer, FPS_FRAMES(180));
                                 }
-                            } else {
-                                if (entry->scaleTimer < FPS_FRAMES(90)) {
-                                    entry->scale = intplGetValue(EASING_SINE_OUT, 1.5f, 1.0f, ++entry->scaleTimer, FPS_FRAMES(90));
-                                }
+                            } else if (entry->scaleTimer < FPS_FRAMES(90)) {
+                                entry->scale = intplGetValue(EASING_SINE_OUT, 1.5f, 1.0f, ++entry->scaleTimer, FPS_FRAMES(90));
                             }
                         }
                         if (animPoseGetLoopTimes(entry->poseId) >= 1.0f) {
@@ -1195,11 +1193,9 @@ void fadeMain(void) {
                                         entry->flags |= FADE_FLAG_DONE;
                                         entry->state++;
                                     }
-                                } else {
-                                    if (entry->scaleTimer == FPS_FRAMES(90)) {
-                                        entry->flags |= FADE_FLAG_DONE;
-                                        entry->state++;
-                                    }
+                                } else if (entry->scaleTimer == FPS_FRAMES(90)) {
+                                    entry->flags |= FADE_FLAG_DONE;
+                                    entry->state++;
                                 }
                             } else {
                                 entry->flags |= FADE_FLAG_DONE;

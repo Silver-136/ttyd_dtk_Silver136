@@ -71,7 +71,6 @@ static void mot_shadow(void);
 static void mot_partyUse(void);
 static void mot_dummy(void);
 
-
 /**
  * Mario's motions by motion id (standing, walking, dashing, jumping, ... and Bowser's): the function that runs
  * each frame, an unused slot and the cleanup run when Mario leaves the motion; marioMotion calls through it.

@@ -1583,7 +1583,7 @@ s32 evt_set_type(EventEntry* entry) { // 99
 s32 evt_stop_all(EventEntry* entry) { // 100
     u32 mask;
 
-    mask = (u32) evtGetValue(entry, *entry->args);
+    mask = (u32)evtGetValue(entry, *entry->args);
     evtStopAll(mask);
 
     return EVT_RETURN_DONE;
@@ -1593,7 +1593,7 @@ s32 evt_stop_all(EventEntry* entry) { // 100
 s32 evt_start_all(EventEntry* entry) { // 101
     u32 mask;
 
-    mask = (u32) evtGetValue(entry, *entry->args);
+    mask = (u32)evtGetValue(entry, *entry->args);
     evtStartAll(mask);
 
     return EVT_RETURN_DONE;
@@ -1603,7 +1603,7 @@ s32 evt_start_all(EventEntry* entry) { // 101
 s32 evt_stop_other(EventEntry* entry) { // 102
     u32 mask;
 
-    mask = (u32) evtGetValue(entry, *entry->args);
+    mask = (u32)evtGetValue(entry, *entry->args);
     evtStopOther(entry, mask);
 
     return EVT_RETURN_DONE;
@@ -1613,7 +1613,7 @@ s32 evt_stop_other(EventEntry* entry) { // 102
 s32 evt_start_other(EventEntry* entry) { // 103
     u32 mask;
 
-    mask = (u32) evtGetValue(entry, *entry->args);
+    mask = (u32)evtGetValue(entry, *entry->args);
     evtStartOther(entry, mask);
 
     return EVT_RETURN_DONE;

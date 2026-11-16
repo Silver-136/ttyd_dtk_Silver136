@@ -815,10 +815,8 @@ static void _windowDispGX_Message(s32 type, s32 tailFlags, u8 alpha, BOOL dark, 
             if (r > tailX) {
                 r = tailX;
             }
-        } else {
-            if (r < tailX) {
-                r = tailX;
-            }
+        } else if (r < tailX) {
+            r = tailX;
         }
 
         switch (type) {
