@@ -524,6 +524,10 @@ static EVT_BEGIN(sell_evt)
         CALL(evt_msg_print, 0, STRING("badgeshop_06"), 0, STRING("バッジ店員"))
         RETURN
     END_IF
+    // BUG: LABEL(0) comes before evt_win_coin_on, and the "No" answer to badgeshop_24 below jumps back to it
+    // without evt_win_coin_off. Every "No" opens another coin window and overwrites LW(12), so the earlier
+    // windows are never closed: they stay on screen until the map changes, and winMgrEntry, which has no
+    // full check, writes past its 32-slot table once they fill it. JP and later open the window before the label.
     LABEL(0)
     CALL(evt_win_coin_on, COIN_WINDOW_COINS, LW(12))
 #else
@@ -628,6 +632,8 @@ static EVT_BEGIN(zaiko_buy_evt)
         CALL(evt_msg_print, 0, STRING("badgeshop_37"), 0, STRING("バッジ店員"))
         RETURN
     END_IF
+    // BUG: as in sell_evt, the "No" answer to badgeshop_24 jumps back to LABEL(0) without evt_win_coin_off, so
+    // each "No" leaves one more coin window open (LW(12) only keeps the newest).
     LABEL(0)
     CALL(evt_win_coin_on, COIN_WINDOW_COINS, LW(12))
 #else
