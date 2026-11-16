@@ -733,10 +733,9 @@ static void envGlare(EnvironmentGlare* glare) {
  * and x0/y0..x1/y1 the screen rectangle it covers (rounded out to even pixels and clamped to the frame);
  * type 0 turns it off. Called from the eki_03 and hom_00 room code.
  */
-void envGlareFilter(s32 type, s32 y0, s32 x0, s32 y1, s32 x1) {
+void envGlareFilter(s32 type, s16 y0, s16 x0, s16 y1, s16 x1) {
     EnvironmentWork* wp = envGetWork();
     EnvironmentGlareFilter* f = &wp->filter;
-    s16 sx1, sy1, sx0, sy0;
 
     if (type == 0) {
         f->type = 0;
@@ -747,27 +746,27 @@ void envGlareFilter(s32 type, s32 y0, s32 x0, s32 y1, s32 x1) {
         wp->flags &= ~ENV_FLAG_GLARE_FILTER;
         return;
     }
-    sx0 = x0 - (x0 & 1);
-    sy0 = y0 - (y0 & 1);
-    sx1 = x1 + (x1 & 1);
-    sy1 = y1 + (y1 & 1);
-    if (sx0 < 0) {
-        sx0 = 0;
+    x0 -= x0 & 1;
+    y0 -= y0 & 1;
+    x1 += x1 & 1;
+    y1 += y1 & 1;
+    if (x0 < 0) {
+        x0 = 0;
     }
-    if (sy0 < 0) {
-        sy0 = 0;
+    if (y0 < 0) {
+        y0 = 0;
     }
-    if (sx1 > gp->fbWidth) {
-        sx1 = gp->fbWidth;
+    if (x1 > gp->fbWidth) {
+        x1 = gp->fbWidth;
     }
-    if (sy1 > gp->efbHeight) {
-        sy1 = gp->efbHeight;
+    if (y1 > gp->efbHeight) {
+        y1 = gp->efbHeight;
     }
     f->type = type;
-    f->y0 = sy0;
-    f->x0 = sx0;
-    f->y1 = sy1;
-    f->x1 = sx1;
+    f->y0 = y0;
+    f->x0 = x0;
+    f->y1 = y1;
+    f->x1 = x1;
     f->zscale = 0.0f;
     f->flags &= ~ENV_GLARE_FILTER_Z;
     wp->flags |= ENV_FLAG_GLARE_FILTER;

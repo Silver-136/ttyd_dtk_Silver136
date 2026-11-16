@@ -118,7 +118,7 @@ static const Vec decay_tbl[] = {
     {0.0f, 0.0f, 0.01f}
 };
 
-s32 lightEntry(const char* name, s32 type, Vec* position, Vec* rotation, const GXColor* color, f32 spotAngle, f32 attenAngle, s32 attenType, s32 flags) {
+s32 lightEntry(const char* name, s32 type, Vec* position, Vec* rotation, GXColor color, f32 spotAngle, f32 attenAngle, s32 attenType, s32 flags) {
     LightWork* wp = lightGetWork();
     LightEntry* entry;
     s32 i, j, n;
@@ -160,7 +160,7 @@ s32 lightEntry(const char* name, s32 type, Vec* position, Vec* rotation, const G
     entry->position = *position;
     entry->rotation = *rotation;
     entry->basePosition = *position;
-    entry->color = *color;
+    entry->color = color;
     entry->spotAngle = spotAngle;
     entry->attenAngle = attenAngle;
     entry->attenDistCoef.x = decay_tbl[attenType].x;

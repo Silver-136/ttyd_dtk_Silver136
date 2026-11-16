@@ -16,7 +16,6 @@
 
 static void puniMakeTexture(CameraId camId, void* param);
 
-void animPoseDisp_MakeExtTexture(const char* group, const char* anim, f32 frame, f32 scale, GXTexObj* obj, void*** image, s32* x0, s32* y0, s32* x1, s32* y1);
 static f32 camGetRy(void);
 static s32 compare(const void* a, const void* b);
 
@@ -358,7 +357,7 @@ void puniPoseDraw(s32 index) {
         texId = pose->texId;
         if (wp->curTex != texId) {
             tex = &wp->texs[texId];
-            GXLoadTexObjPreLoaded(smartTexObj(&tex->obj, tex->image), &tex->region, GX_TEXMAP0);
+            GXLoadTexObjPreLoaded(smartTexObj(&tex->obj, &tex->image->address), &tex->region, GX_TEXMAP0);
             wp->curTex = texId;
         }
         PSMTXConcat(camGetCurPtr()->view, *pose->mtx, mtx);
@@ -390,7 +389,7 @@ void puniDraw(void) {
             texId = pose->texId;
             if (texId != wp->curTex) {
                 tex = &wp->texs[texId];
-                GXLoadTexObjPreLoaded(smartTexObj(&tex->obj, tex->image), &tex->region, GX_TEXMAP0);
+                GXLoadTexObjPreLoaded(smartTexObj(&tex->obj, &tex->image->address), &tex->region, GX_TEXMAP0);
                 wp->curTex = texId;
             }
             PSMTXTrans(trans, 0.0f, pose->offsetY, 0.0f);
@@ -455,7 +454,7 @@ void puniLoadTexture(void) {
             offset = 0x80000;
         }
         GXInitTexPreLoadRegion(&tex->region, offset, size, 0, 0);
-        GXPreLoadEntireTexture(smartTexObj(&tex->obj, tex->image), &tex->region);
+        GXPreLoadEntireTexture(smartTexObj(&tex->obj, &tex->image->address), &tex->region);
         offset += size;
     }
     wp->usedTmem = offset;

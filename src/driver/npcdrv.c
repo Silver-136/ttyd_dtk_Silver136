@@ -1998,7 +1998,6 @@ void fbatEncountCheck(void) {
                 f32 dir;
                 f32 a;
                 f32 yaw;
-                s32 k;
                 pos.x = mario->position.x;
                 pos.z = mario->position.z;
                 pos.y = npc->position.y;
@@ -2010,23 +2009,17 @@ void fbatEncountCheck(void) {
                 yaw = camGetPtr(CAMERA_3D)->viewYaw;
                 dir = reviseAngle(marioGetDispDir() - yaw);
                 for (j = 0; j < 3; j++) {
-                    // FAKE: dead int-guarded re-definition inside the loop keeps dir a named web (COLOURING M; no code, no preheader split)
-                    k = 0;
-                    if (k != 0) dir = 0.0f;
                     switch (j) {
                         case 0:
-                            yaw = camGetPtr(CAMERA_3D)->viewYaw;
-                            a = reviseAngle(angleABf(mario->position.x, mario->position.z, npc->position.x, npc->position.z) - yaw);
+                            a = reviseAngle(angleABf(mario->position.x, mario->position.z, npc->position.x, npc->position.z) - camGetPtr(CAMERA_3D)->viewYaw);
                             break;
 
                         case 1:
-                            yaw = camGetPtr(CAMERA_3D)->viewYaw;
-                            a = reviseAngle(angleABf(mario->position.x, mario->position.z, npc->position.x + (0.5f * npc->width), npc->position.z) - yaw);
+                            a = reviseAngle(angleABf(mario->position.x, mario->position.z, npc->position.x + (0.5f * npc->width), npc->position.z) - camGetPtr(CAMERA_3D)->viewYaw);
                             break;
 
                         default:
-                            yaw = camGetPtr(CAMERA_3D)->viewYaw;
-                            a = reviseAngle(angleABf(mario->position.x, mario->position.z, npc->position.x - (0.5f * npc->width), npc->position.z) - yaw);
+                            a = reviseAngle(angleABf(mario->position.x, mario->position.z, npc->position.x - (0.5f * npc->width), npc->position.z) - camGetPtr(CAMERA_3D)->viewYaw);
                             break;
                     }
 

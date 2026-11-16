@@ -178,8 +178,6 @@ void BattleAudienceCtrlProcessKinopio(s32 index) {
     }
 }
 
-// lifetimes optimisation off for BattleAudienceCtrlProcessKinopioWait: the original register allocation and scheduling need it
-#pragma opt_lifetimes off
 /**
  * Status 0, idle: faces the stage (or away, for back-facing seats) and now and
  * then starts a fidget (turn around, tilt the head, hop) or a cheer,
@@ -193,6 +191,7 @@ static void BattleAudienceCtrlProcessKinopioWait(s32 index, u8 front) {
     f32 periodScale;
     f32 stepScale;
     f32 crowdRatio;
+    s32 flags;
     s32 threshold;
     s32 rnd;
     s32 n;
@@ -307,55 +306,57 @@ static void BattleAudienceCtrlProcessKinopioWait(s32 index, u8 front) {
             m->timer++;
             break;
     }
-    if (m->flags & AUDIENCE_MEMBER_FLAG_ATTACKED) {
-        m->flags &= ~(AUDIENCE_MEMBER_FLAG_TARGETED | AUDIENCE_MEMBER_FLAG_ATTACKED);
+    flags = m->flags;
+    if (flags & AUDIENCE_MEMBER_FLAG_ATTACKED) {
+        m->flags = flags & ~(AUDIENCE_MEMBER_FLAG_TARGETED | AUDIENCE_MEMBER_FLAG_ATTACKED);
         BattleAudience_ChangeStatus(index, AUDIENCE_STATUS_DAMAGE);
 
         // BUG: tests the type of item slot 0, which belongs to whichever member took it, not to this member.
         if (!(BattleAudienceItemGetPtr(0)->itemType >= ITEM_AUDIENCE_CAN && BattleAudienceItemGetPtr(0)->itemType < BADGE_MIN)) {
             BattleAudienceAddTargetNum(-0.14999999f * BattleAudienceBaseGetPtr()->audienceDeltaMultiplier, 0.0f);
         }
-    } else if (!(m->flags & AUDIENCE_MEMBER_FLAG_TARGETED)) {
+    } else if (!(flags & AUDIENCE_MEMBER_FLAG_TARGETED)) {
         switch (m->itemId) {
             case -1:
-                rnd = irand(360000);
-                threshold = 10;
-                if (rnd < threshold) {
-                    BattleAudience_ChangeStatus(index, AUDIENCE_STATUS_WAIT_HURIMUKI);
-                } else if (rnd < (threshold += 10)) {
-                    BattleAudience_ChangeStatus(index, AUDIENCE_STATUS_WAIT_KUBI_KATAMUKE);
-                } else {
-                    const f32 cheerRange = 10.0f * a;
-                    threshold += cheerRange;
-                    if (rnd < threshold) {
-                        BattleAudience_ChangeStatus(index, AUDIENCE_STATUS_JOY_RAISE_ARM);
-                    } else if (BattleBreakSlot_GetBreakTurn() >= 1 || base->excited == 1) {
-                        if (rnd < threshold + 300) {
-                            if (m->type != AUDIENCE_PIRANHA_PLANT) {
-                                BattleAudience_ChangeStatus(index, AUDIENCE_STATUS_WAIT_JUMP);
-                            }
-                        }
-                    } else {
-                        threshold += (s32)(10.0f * b);
-                        if (rnd < threshold) {
-                            n = BattleAudience_GetAudienceNoFromOffset(index, 0, 1);
-                            if (n != -1) {
-                                BattleAudienceGetPtr(n);
-                                if (m->type != AUDIENCE_PIRANHA_PLANT) {
-                                    if (BattleAudience_GetExist(n) == 1) {
-                                        BattleAudience_ChangeStatus(index, AUDIENCE_STATUS_WAIT_JUMP);
-                                    }
-                                }
-                            }
-                        }
+                break;
+            default:
+                return;
+        }
+        rnd = irand(360000);
+        if (rnd < 10) {
+            BattleAudience_ChangeStatus(index, AUDIENCE_STATUS_WAIT_HURIMUKI);
+            return;
+        }
+        if (rnd < (threshold = 20)) {
+            BattleAudience_ChangeStatus(index, AUDIENCE_STATUS_WAIT_KUBI_KATAMUKE);
+            return;
+        }
+        {
+            const f32 cheerRange = 10.0f * a;
+            threshold += cheerRange;
+        }
+        if (rnd < threshold) {
+            BattleAudience_ChangeStatus(index, AUDIENCE_STATUS_JOY_RAISE_ARM);
+            return;
+        }
+        if (BattleBreakSlot_GetBreakTurn() >= 1 || base->excited == 1) {
+            if (rnd < threshold + 300 && m->type != AUDIENCE_PIRANHA_PLANT) {
+                BattleAudience_ChangeStatus(index, AUDIENCE_STATUS_WAIT_JUMP);
+            }
+        } else {
+            threshold += (s32)(10.0f * b);
+            if (rnd < threshold) {
+                n = BattleAudience_GetAudienceNoFromOffset(index, 0, 1);
+                if (n != -1) {
+                    BattleAudienceGetPtr(n);
+                    if (m->type != AUDIENCE_PIRANHA_PLANT && BattleAudience_GetExist(n) == 1) {
+                        BattleAudience_ChangeStatus(index, AUDIENCE_STATUS_WAIT_JUMP);
                     }
                 }
-                break;
+            }
         }
     }
 }
-
-#pragma opt_lifetimes reset
 /** Status 1, "furimuki" (looking back): turns 180 degrees over 15 frames, holds, turns back, then idles again. */
 static void BattleAudienceCtrlProcessKinopioWaitHurimuki(s32 index, u8 front) {
     BattleAudienceMember* m = BattleAudienceGetPtr(index);

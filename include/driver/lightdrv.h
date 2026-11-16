@@ -51,7 +51,7 @@ typedef struct LightWork {
 void lightInit(void);
 void lightReInit(void);
 void lightMain(void);
-s32 lightEntry(const char* name, s32 type, Vec* position, Vec* rotation, const GXColor* color, f32 spotAngle, f32 attenAngle, s32 attenType, s32 flags);
+s32 lightEntry(const char* name, s32 type, Vec* position, Vec* rotation, GXColor color, f32 spotAngle, f32 attenAngle, s32 attenType, s32 flags);
 LightEntry* lightNameToPtr(const char* name);
 LightEntry* lightNumberToPtr(s32 index);
 LightEntry* lightGetPaperCraft(void);

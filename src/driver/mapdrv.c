@@ -797,7 +797,6 @@ static void _mapLoad(MapWork* wp, BOOL group, const char* map) {
         for (i = 0; i < wp->entries[group].lightTable->count; i++) {
             MapFileLight* light = wp->entries[group].lightTable->lights[i];
             Vec pos;
-            GXColor lcolor;
             s32 type = LIGHT_TYPE_POINT;
             s32 lflags = 0;
             PSVECScale(&light->position, &pos, 10.0f);
@@ -813,8 +812,7 @@ static void _mapLoad(MapWork* wp, BOOL group, const char* map) {
             if (light->magic == MAP_LIGHT_LFLAGS_MAGIC) {
                 lflags = light->lflags;
             }
-            lcolor = light->color;
-            lightEntry(light->name, type, &pos, &light->rotation, &lcolor, light->spotAngle, light->attenAngle, light->attenType, lflags);
+            lightEntry(light->name, type, &pos, &light->rotation, light->color, light->spotAngle, light->attenAngle, light->attenType, lflags);
         }
         mapResetPaperAmbColor();
         mapResetPaperCraftAmbColor();

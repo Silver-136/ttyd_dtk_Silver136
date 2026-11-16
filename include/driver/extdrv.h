@@ -33,7 +33,7 @@ typedef struct ExtdrvPose {
 } ExtdrvPose;
 
 typedef struct ExtdrvTex {
-    void** image;       // 0x0
+    struct smartEntry* image; // 0x0, smart heap block of the texture image
     GXTexObj obj;       // 0x4
     GXTexRegion region; // 0x24
 } ExtdrvTex;

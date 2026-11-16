@@ -461,6 +461,8 @@ void animPoseWorldPositionEvalOff(s32 poseId);
 void animPoseDrawShape(s32 poseId, s32 shapeId);
 BOOL animPoseTestXLU(s32 poseId);
 void animPoseVivianMain(s32 poseId, Vec* pos);
+void animPoseDisp_MakeExtTexture(const char* group, const char* anim, f32 frame, f32 scale, GXTexObj* obj,
+                                 smartEntry** image, s32* x0, s32* y0, s32* x1, s32* y1);
 
 void animPoseSetDispCallBack(s32 poseId, AnimPoseDispCallback callback, void* userData);
 

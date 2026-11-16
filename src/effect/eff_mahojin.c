@@ -287,54 +287,53 @@ static void effMahojinMain(EffectEntry* effect) {
  * with fog off; in the second pass it also calls each piece's attached draw function (gor_01's star stones).
  */
 static void effMahojinDisp(CameraId cameraId, void* payload) {
-    EffectEntry* effect = payload;
+    s32 j;
+    EffMahojinWork* work;
+    s32 pass;
+    MapWork* map;
+    s32 ti;
+    s32 alpha;
+    s32 i;
+    f32 tz;
+    EffectEntry* effect;
+    u16 flags;
+    s32 n;
+    EffMahojinWork* p;
     Mtx mtx;
     f32 z[16];
     s32 idx[16];
-    f32* zp;
-    s32* idxp;
-    MapWork* map;
-    s32 i;
-    s32 j;
-    s32 k;
-    s32 n;
-    EffMahojinWork* work = effect->userdata;
-    s32 pass;
-    s32 alpha;
-    u16 flags;
 
+    effect = payload;
+    work = effect->userdata;
     camGetPtr(cameraId);
     alpha = work->alpha;
     map = mapGetWork();
-    zp = z;
     flags = map->entries[0].flags;
 
     for (pass = 0; pass < 2; pass++) {
         n = 0;
         if (pass == 0) {
-            zp[0] = -9999.0f;
+            z[n] = -9999.0f;
             idx[n++] = 0;
             z[n] = -10000.0f;
             idx[n++] = 1;
         } else {
-            zp[0] = -10000.0f;
+            z[n] = -10000.0f;
             idx[n++] = 0;
             z[n] = 10000.0f;
             idx[n++] = 1;
         }
         for (i = 2; i < effect->count; i++) {
-            f32 d = dispCalcZ(&pos_tbl[i - 2]);
-            z[n] = d;
+            z[n] = dispCalcZ(&pos_tbl[i - 2]);
             idx[n++] = i;
         }
-        idxp = idx;
         for (i = 0; i < effect->count - 1; i++) {
             for (j = i + 1; j < effect->count; j++) {
-                if (zp[i] > z[j]) {
-                    s32 ti = idxp[i];
-                    f32 tz = zp[i];
-                    zp[i] = z[j];
-                    idxp[i] = idx[j];
+                if (z[i] > z[j]) {
+                    tz = z[i];
+                    ti = idx[i];
+                    z[i] = z[j];
+                    idx[i] = idx[j];
                     z[j] = tz;
                     idx[j] = ti;
                 }
@@ -342,8 +341,8 @@ static void effMahojinDisp(CameraId cameraId, void* payload) {
         }
         map->entries[0].flags &= ~MAP_ENTRY_FOG;
         PSMTXTrans(mtx, work->position.x, work->position.y, work->position.z);
-        for (k = 0; k < effect->count; k++) {
-            EffMahojinWork* p = &work[idxp[k]];
+        for (i = 0; i < effect->count; i++) {
+            p = &work[idx[i]];
             if (pass == 1 && p->arg != NULL) {
                 p->func(cameraId, p->arg);
             }

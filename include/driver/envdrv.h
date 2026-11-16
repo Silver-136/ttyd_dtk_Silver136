@@ -105,5 +105,6 @@ void envSetWater(struct MapTevCallbackInfo* info);
 void envSetYami(struct MapTevCallbackInfo* info);
 void envAddTev(s32 type, struct MapTevCallbackInfo* info);
 
+void envGlareFilter(s32 type, s16 y0, s16 x0, s16 y1, s16 x1);
 void envGlareFilterZ(f32 zscale);
 void envSetYamiView(Mtx view);
