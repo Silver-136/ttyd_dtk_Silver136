@@ -70,12 +70,10 @@ static USER_FUNC(ss_set) {
 
 /** Returns in args[1] the index stored in the Puni data of the slot args[0]. */
 static USER_FUNC(puni_get_id) {
-    s32 offset;
     EvtWord* args = event->args;
     PuniData* puni;
 
-    offset = evtGetValue(event, args[0]) * sizeof(PuniData);
-    puni = (PuniData*)((u8*)puniGetPunidat() + offset);
+    puni = &puniGetPunidat()[evtGetValue(event, args[0])];
     evtSetValue(event, args[1], puni->index);
     return EVT_RETURN_DONE;
 }

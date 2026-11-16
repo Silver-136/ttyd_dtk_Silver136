@@ -847,6 +847,7 @@ USER_FUNC(chorogun_approach_target) {
  * Script helper: args[0] is the flight time in frames.
  * Picks a random living Fuzzy, launches it at the target unit on a ballistic arc with that frame timer, plays the attack sound and writes the Fuzzy's index to args[1].
  */
+// FAKE: chorogun[i & 0xFFFFFFFFFFFFFFFFu]: the no-op 64-bit mask only renumbers the index (FAKES.md)
 USER_FUNC(chorogun_dive_target) {
     ExtdrvPose* pose;
     s32 frames;

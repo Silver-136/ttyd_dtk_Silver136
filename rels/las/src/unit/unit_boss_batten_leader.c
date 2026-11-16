@@ -90,7 +90,7 @@ static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
 static BattleUnitDefenseAttr defence_attr_muteki;
 static StatusVulnerability regist;
-static u8 defencecopy[5] __attribute__((aligned(4)));
+static u8 defencecopy[5];
 static PoseTableEntry pose_table[18];
 static PoseTableEntry pose_table_furafura[18];
 static BattleDataEntry data_table[3];
@@ -619,7 +619,7 @@ static StatusVulnerability regist = {
 };
 #endif
 
-static u8 defencecopy[5] __attribute__((aligned(4))) = { // defenses[5] copied into the part defense
+static u8 defencecopy[5] = { // defenses[5] copied into the part defense
     1, 1, 1, 1, 1,
 };
 

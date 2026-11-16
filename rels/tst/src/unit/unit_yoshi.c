@@ -101,7 +101,7 @@ static EvtWord party_win_reaction[25];
 static EvtWord attack_audience_event[290];
 static EvtWord attack_event[2];
 static EvtWord wait_event[6];
-u8 _yoshig_tpl_no_tbl[8] __attribute__((aligned(4)));
+u8 _yoshig_tpl_no_tbl[8];
 
 /** Yoshi's damage reduction: none. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
@@ -2028,7 +2028,7 @@ EVT_BEGIN(partyYoshiAttack_CallGuard)
     RETURN
 EVT_END()
 
-u8 _yoshig_tpl_no_tbl[8] __attribute__((aligned(4))) = { // battle tex id per sweat frame (tst ids: JP +7, JP demo: JP)
+u8 _yoshig_tpl_no_tbl[8] = { // battle tex id per sweat frame (tst ids: JP +7, JP demo: JP)
 #if VERSION <= VERSION_DEMO_JP
     0x46, 0x49, 0x47, 0x46, 0x4A, 0x48, 0, 0,
 #else
@@ -2329,8 +2329,6 @@ USER_FUNC(btl_yoshi_yoroyoro_jump_move) {
     if (unit->moveCurrentPos.x != unit->moveTargetPos.x) {
         if (__fabs(unit->moveTargetPos.x - unit->moveCurrentPos.x) < unit->moveSpeedXZ) {
             unit->moveCurrentPos.x = unit->moveTargetPos.x;
-            if (!unit->moveCurrentPos.z) {
-            }
         } else {
             unit->moveCurrentPos.x += unit->moveSpeedXZ * unit->moveDirection;
         }

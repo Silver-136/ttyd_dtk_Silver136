@@ -284,8 +284,7 @@ static USER_FUNC(yuka_fall_check) {
  * clears its offsets, spin and velocity so it stands still.
  */
 static USER_FUNC(evt_puni_force_pose) {
-    s32 offset = evtGetValue(event, event->args[0]) * sizeof(PuniData);
-    PuniData* puni = (PuniData*)((u8*)puniGetPunidat() + offset);
+    PuniData* puni = &puniGetPunidat()[evtGetValue(event, event->args[0])];
 
     puni->dispOfs.y = puni->spin = puni->rotOffsetY = 0.0f;
     puni->vel = (Vec){0.0f, 0.0f, 0.0f};

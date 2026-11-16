@@ -261,7 +261,7 @@ static void puniAnimationInit(s16** a, s16** b) {
  */
 static void puniAnimationInit2(void) {
     char (*n)[16];
-    n = (char (*)[16])&Punigp->animNames[0];
+    n = Punigp->animNames[0];
     strcpy(n[0], "S_1");
     strcpy(n[1], "W_1");
     strcpy(n[2], "R_1");
@@ -272,7 +272,7 @@ static void puniAnimationInit2(void) {
     strcpy(n[7], "J_1A");
     strcpy(n[8], "J_1B");
     strcpy(n[9], "B_1");
-    n = (char (*)[16])&Punigp->animNames[160];
+    n = Punigp->animNames[1];
     strcpy(n[0], "S_1");
     strcpy(n[1], "W_1");
     strcpy(n[2], "R_1");
@@ -283,7 +283,7 @@ static void puniAnimationInit2(void) {
     strcpy(n[7], "J_1A");
     strcpy(n[8], "J_1B");
     strcpy(n[9], "B_1");
-    n = (char (*)[16])&Punigp->animNames[320];
+    n = Punigp->animNames[2];
     strcpy(n[0], "S_1");
     strcpy(n[1], "W_1");
     strcpy(n[2], "R_1");
@@ -294,7 +294,7 @@ static void puniAnimationInit2(void) {
     strcpy(n[7], "J_1A");
     strcpy(n[8], "J_1B");
     strcpy(n[9], "B_1");
-    n = (char (*)[16])&Punigp->animNames[480];
+    n = Punigp->animNames[3];
     strcpy(n[0], "S_1");
     strcpy(n[1], "W_1");
     strcpy(n[2], "R_1");
@@ -317,7 +317,7 @@ static void puniAnimationInit2(void) {
  */
 static void puniAnimation(PuniData* p, PunidrvPose* t) {
     NpcEntry* npc;
-    char* names;
+    char (*names)[16];
     PuniAnimSet* set;
     s32 cnt;
     s16* tbl;
@@ -330,19 +330,19 @@ static void puniAnimation(PuniData* p, PunidrvPose* t) {
     if (p->flags & (PUNI_FLAG_NPC_GUIDE | PUNI_FLAG_NPC_GUIDE_SISTER | PUNI_FLAG_NPC_CHIBI_TOGE | PUNI_FLAG_NPC_RIVAL)) {
         if (p->flags & PUNI_FLAG_NPC_GUIDE) {
             npc = npcNameToPtr("ガイドsp");
-            names = (char*)( &Punigp->animNames[0]) ;
+            names = Punigp->animNames[0];
         } else if (p->flags & PUNI_FLAG_NPC_GUIDE_SISTER) {
             npc = npcNameToPtr("ガイド妹sp");
-            names = (char*)( &Punigp->animNames[160]) ;
+            names = Punigp->animNames[1];
         } else if (p->flags & PUNI_FLAG_NPC_CHIBI_TOGE) {
             npc = npcNameToPtr("ちびトゲsp");
-            names = (char*)( &Punigp->animNames[320]) ;
+            names = Punigp->animNames[2];
         } else if (p->flags & PUNI_FLAG_NPC_RIVAL) {
             npc = npcNameToPtr("ライバルsp");
-            names = (char*)( &Punigp->animNames[480]) ;
+            names = Punigp->animNames[3];
         } else {
             npc = npcNameToPtr("ライバルsp");
-            names = (char*)( &Punigp->animNames[480]) ;
+            names = Punigp->animNames[3];
         }
         ofs = p->marioDist;
         if (p->flags & PUNI_FLAG_OWN_ANIM_TIME) {
@@ -359,7 +359,7 @@ static void puniAnimation(PuniData* p, PunidrvPose* t) {
             p->animTime = gp->retraceCount + ofs;
         }
         if (!(p->flags & PUNI_FLAG_SCRIPT_ANIM)) {
-            animPoseSetAnim(npc->poseId, names + ( p->anim * 16) , 1);
+            animPoseSetAnim(npc->poseId, names[p->anim], 1);
             animPoseSetLocalTime(npc->poseId, p->animTime);
         }
         show = 0;
@@ -402,14 +402,14 @@ static void puniAnimation(PuniData* p, PunidrvPose* t) {
             p->animTime++;
         } else {
             if (p->mode != PUNI_MODE_PARENT) {
-                ofs = *(( s16*)( &p->index)) ;
+                ofs = p->index;
             } else {
                 ofs /= 8;
                 if (p->anim == 0) {
-                    ofs += ( *( (s16*)( &p->index ))) * (cnt / 3);
+                    ofs += p->index * (cnt / 3);
                 }
             }
-            t->texId = tbl[(( u32)(gp->retraceCount + ofs) ) % ( (u32)set->count [p->anim])];
+            t->texId = tbl[(gp->retraceCount + ofs) % set->count[p->anim]];
         }
         show = 0;
         if (p->flags & PUNI_FLAG_ACTIVE) { show = 1;
@@ -613,15 +613,6 @@ static void _ymode_mri_16_01(PuniData* p) {
     }
 }
 
-#define IN_RECT_XZ(p, x0, x1, z0, z1) \
-    (_aok = 1, \
-     _ax = (p)->pos.x, \
-     _az = (p)->pos.z, \
-     ((x0) > _ax ? _aok = 0 : 0), \
-     ((x1) < _ax ? _aok = 0 : 0), \
-     ((z0) > _az ? _aok = 0 : 0), \
-     ((z1) < _az ? _aok = 0 : 0), \
-     _aok)
 /**
  * Sets a Puni's height from the map's floor mode (Punigp->ymode):
  * flat floors, the mri_02 weight floor, the stairs of mri_09, the broken floors of mri_09,
@@ -630,21 +621,51 @@ static void _ymode_mri_16_01(PuniData* p) {
  */
 static void puniSetYPosition(PuniData* p) {
     if (p->flags & PUNI_FLAG_PUNI) {
-        BOOL _aok;
-        f32 _ax, _az;
+        BOOL inside;
+        f32 x, z;
         switch (Punigp->ymode) {
             case 0:
                 break;
             case 1:
                 p->pos.y = 0.0f;
-                if (IN_RECT_XZ(p, -49.0f, 49.0f, -69.0f, 29.0f)) {
+                inside = TRUE;
+                x = p->pos.x;
+                z = p->pos.z;
+                if (-49.0f > x) {
+                    inside = FALSE;
+                }
+                if (49.0f < x) {
+                    inside = FALSE;
+                }
+                if (-69.0f > z) {
+                    inside = FALSE;
+                }
+                if (29.0f < z) {
+                    inside = FALSE;
+                }
+                if (inside) {
                     p->pos.y = getMri02Yuka();
                 }
                 break;
             case 2:
                 _ymode_mri_09(p);
                 if (!swGet(GSWF_ID(GSWF_MRI_09_BREAKING_FLOOR_BROKEN))) {
-                    if (IN_RECT_XZ(p, -35.0f, 35.0f, 40.0f, 110.0f)) {
+                    inside = TRUE;
+                    x = p->pos.x;
+                    z = p->pos.z;
+                    if (-35.0f > x) {
+                        inside = FALSE;
+                    }
+                    if (35.0f < x) {
+                        inside = FALSE;
+                    }
+                    if (40.0f > z) {
+                        inside = FALSE;
+                    }
+                    if (110.0f < z) {
+                        inside = FALSE;
+                    }
+                    if (inside) {
                         p->pos.y = 6.0f;
                     }
                 }
@@ -652,7 +673,22 @@ static void puniSetYPosition(PuniData* p) {
             case 3:
                 p->pos.y = 0.0f;
                 if (!swGet(GSWF_ID(GSWF_MRI_12_BREAKING_FLOOR_BROKEN))) {
-                    if (IN_RECT_XZ(p, -80.0f, -10.0f, -99.0f, -29.0f)) {
+                    inside = TRUE;
+                    x = p->pos.x;
+                    z = p->pos.z;
+                    if (-80.0f > x) {
+                        inside = FALSE;
+                    }
+                    if (-10.0f < x) {
+                        inside = FALSE;
+                    }
+                    if (-99.0f > z) {
+                        inside = FALSE;
+                    }
+                    if (-29.0f < z) {
+                        inside = FALSE;
+                    }
+                    if (inside) {
                         p->pos.y = 6.0f;
                     }
                 }
@@ -666,7 +702,22 @@ static void puniSetYPosition(PuniData* p) {
             case 6:
                 p->pos.y = 0.0f;
                 if (!swGet(GSWF_ID(GSWF_MRI_17_BREAKING_FLOOR_BROKEN))) {
-                    if (IN_RECT_XZ(p, -35.0f, 35.0f, -70.0f, 0.0f)) {
+                    inside = TRUE;
+                    x = p->pos.x;
+                    z = p->pos.z;
+                    if (-35.0f > x) {
+                        inside = FALSE;
+                    }
+                    if (35.0f < x) {
+                        inside = FALSE;
+                    }
+                    if (-70.0f > z) {
+                        inside = FALSE;
+                    }
+                    if (0.0f < z) {
+                        inside = FALSE;
+                    }
+                    if (inside) {
                         p->pos.y = 6.0f;
                     }
                 }
@@ -1513,7 +1564,7 @@ int puniMoveAtari(PuniData* p, Vec start, Vec dir, int reflect, f32 dist) {
         PSVECAdd(&p->pos, &p->vel, &p->pos);
     } else {
         old = p->pos;
-        *&p->wallNrm = n;
+        p->wallNrm = n;
         PSVECAdd(&p->pos, &p->vel, &p->pos);
         if (p->vel.y == 0.0f) {
             n.y = 0.0f;
@@ -1570,7 +1621,7 @@ void puniMoveHitLimited(PuniData* p, Vec start, Vec dir, f32 dist) {
         PSVECAdd(&p->pos, &p->vel, &p->pos);
     } else if (Punigp->floor != 18) {
         old = p->pos;
-        *&p->wallNrm = hit;
+        p->wallNrm = hit;
         PSVECAdd(&p->pos, &p->vel, &p->pos);
         if (p->vel.y == 0.0f) {
             hit.y = 0.0f;
@@ -1620,7 +1671,7 @@ void puniMoveHit(PuniData* p, Vec start, Vec dir, f32 dist) {
         PSVECAdd(&p->pos, &p->vel, &p->pos);
     } else {
         old = p->pos;
-        *&p->wallNrm = hit;
+        p->wallNrm = hit;
         PSVECAdd(&p->pos, &p->vel, &p->pos);
         if (p->vel.y == 0.0f) {
             hit.y = 0.0f;
@@ -1695,7 +1746,7 @@ void puniMoveDecel(PuniData* p) {
         PSVECAdd(&p->pos, &p->vel, &p->pos);
     } else {
         old = p->pos;
-        *&p->wallNrm = hit;
+        p->wallNrm = hit;
         PSVECAdd(&p->pos, &p->vel, &p->pos);
         if (p->vel.y == 0.0f) {
             hit.y = 0.0f;
@@ -1763,7 +1814,7 @@ void puniMoveLimitedNormal(PuniData* p) {
         PSVECAdd(&p->pos, &p->vel, &p->pos);
     } else if (Punigp->floor != 0x12) {
         old = p->pos;
-        *&p->wallNrm = hit;
+        p->wallNrm = hit;
         PSVECAdd(&p->pos, &p->vel, &p->pos);
         if (p->vel.y == 0.0f) {
             hit.y = 0.0f;
@@ -1825,7 +1876,7 @@ void puniMoveNormal(PuniData* p) {
         PSVECAdd(&p->pos, &p->vel, &p->pos);
     } else {
         old = p->pos;
-        *&p->wallNrm = hit;
+        p->wallNrm = hit;
         PSVECAdd(&p->pos, &p->vel, &p->pos);
         if (p->vel.y == 0.0f) {
             hit.y = 0.0f;
@@ -2258,7 +2309,7 @@ static PuniData* searchBattleTeki(PuniData* self) {
  * a Jabbi for a Puni, a Puni for a Jabbi.
  */
 static void puniSearch(PuniData* p) {
-    if ((s32)(gp->retraceCount & 3) == (*( s16*)( &p->index) & 3)) {
+    if ((s32)(gp->retraceCount & 3) == (p->index & 3)) {
         if (p->flags & PUNI_FLAG_PUNI) {
             p->target = searchBattleTeki_inl(p);
         } else {
@@ -2698,13 +2749,13 @@ static void puniModeSearch(PuniData* p) {
     m3 = cd & 0xFF;
     switch (find) {
         case 0x000:
-            if (m0 == move && __abs((s32)h0 - (s32)takasa) <= 0x1000) {
+            if (m0 == move && __abs(h0 - takasa) <= 0x1000) {
                 PUNI_MAPDATA_GETPOS(bz, bx - 1);
-            } else if (m1 == move && __abs((s32)h1 - (s32)takasa) <= 0x1000) {
+            } else if (m1 == move && __abs(h1 - takasa) <= 0x1000) {
                 PUNI_MAPDATA_GETPOS(bz - 1, bx);
-            } else if (m2 == move && __abs((s32)h2 - (s32)takasa) <= 0x1000) {
+            } else if (m2 == move && __abs(h2 - takasa) <= 0x1000) {
                 PUNI_MAPDATA_GETPOS(bz, bx + 1);
-            } else if (m3 == move && __abs((s32)h3 - (s32)takasa) <= 0x1000) {
+            } else if (m3 == move && __abs(h3 - takasa) <= 0x1000) {
                 PUNI_MAPDATA_GETPOS(bz + 1, bx);
             } else {
                 tgx = 0.0f;
@@ -2712,13 +2763,13 @@ static void puniModeSearch(PuniData* p) {
             }
             break;
         case 0x100:
-            if (m1 == move && __abs((s32)h1 - (s32)takasa) <= 0x1000) {
+            if (m1 == move && __abs(h1 - takasa) <= 0x1000) {
                 PUNI_MAPDATA_GETPOS(bz - 1, bx);
-            } else if (m2 == move && __abs((s32)h2 - (s32)takasa) <= 0x1000) {
+            } else if (m2 == move && __abs(h2 - takasa) <= 0x1000) {
                 PUNI_MAPDATA_GETPOS(bz, bx + 1);
-            } else if (m3 == move && __abs((s32)h3 - (s32)takasa) <= 0x1000) {
+            } else if (m3 == move && __abs(h3 - takasa) <= 0x1000) {
                 PUNI_MAPDATA_GETPOS(bz + 1, bx);
-            } else if (m0 == move && __abs((s32)h0 - (s32)takasa) <= 0x1000) {
+            } else if (m0 == move && __abs(h0 - takasa) <= 0x1000) {
                 PUNI_MAPDATA_GETPOS(bz, bx - 1);
             } else {
                 tgx = 0.0f;
@@ -2726,13 +2777,13 @@ static void puniModeSearch(PuniData* p) {
             }
             break;
         case 0x200:
-            if (m2 == move && __abs((s32)h2 - (s32)takasa) <= 0x1000) {
+            if (m2 == move && __abs(h2 - takasa) <= 0x1000) {
                 PUNI_MAPDATA_GETPOS(bz, bx + 1);
-            } else if (m3 == move && __abs((s32)h3 - (s32)takasa) <= 0x1000) {
+            } else if (m3 == move && __abs(h3 - takasa) <= 0x1000) {
                 PUNI_MAPDATA_GETPOS(bz + 1, bx);
-            } else if (m0 == move && __abs((s32)h0 - (s32)takasa) <= 0x1000) {
+            } else if (m0 == move && __abs(h0 - takasa) <= 0x1000) {
                 PUNI_MAPDATA_GETPOS(bz, bx - 1);
-            } else if (m1 == move && __abs((s32)h1 - (s32)takasa) <= 0x1000) {
+            } else if (m1 == move && __abs(h1 - takasa) <= 0x1000) {
                 PUNI_MAPDATA_GETPOS(bz - 1, bx);
             } else {
                 tgx = 0.0f;
@@ -2740,13 +2791,13 @@ static void puniModeSearch(PuniData* p) {
             }
             break;
         case 0x300:
-            if (m3 == move && __abs((s32)h3 - (s32)takasa) <= 0x1000) {
+            if (m3 == move && __abs(h3 - takasa) <= 0x1000) {
                 PUNI_MAPDATA_GETPOS(bz + 1, bx);
-            } else if (m0 == move && __abs((s32)h0 - (s32)takasa) <= 0x1000) {
+            } else if (m0 == move && __abs(h0 - takasa) <= 0x1000) {
                 PUNI_MAPDATA_GETPOS(bz, bx - 1);
-            } else if (m1 == move && __abs((s32)h1 - (s32)takasa) <= 0x1000) {
+            } else if (m1 == move && __abs(h1 - takasa) <= 0x1000) {
                 PUNI_MAPDATA_GETPOS(bz - 1, bx);
-            } else if (m2 == move && __abs((s32)h2 - (s32)takasa) <= 0x1000) {
+            } else if (m2 == move && __abs(h2 - takasa) <= 0x1000) {
                 PUNI_MAPDATA_GETPOS(bz, bx + 1);
             } else {
                 tgx = 0.0f;
@@ -2801,7 +2852,7 @@ void puniModeMass(PuniData* p) {
 #if VERSION <= VERSION_DEMO_JP
     b = p->index & 0xF;
 #else
-    b = *(s16*)( &p->index ) & 0xF;
+    b = p->index & 0xF;
     if (Punigp->floor == 18) {
         a = b;
     }
@@ -3289,7 +3340,7 @@ static void puniModeRecover(PuniData* p) {
                 p->mode = PUNI_MODE_WIND;
                 p->modeStep = 0;
             } else {
-                if (((s32)gp->retraceCount & 3) == (*(s16*)(&p->index) & 3)) {
+                if (((s32)gp->retraceCount & 3) == (p->index & 3)) {
                     if (p->flags & PUNI_FLAG_PUNI) {
                         p->target = searchBattleTeki_inl(p);
                     } else {
@@ -3645,7 +3696,7 @@ void puniModeFall(PuniData* p) {
 #if VERSION >= VERSION_JP
                 if (Punigp->floor == 0x12 && p->pos.y < -300.0f) {
                     s32 zero = 0;
-                    puniswTrapSetindex(*(s16*)(&p->index), &zero);
+                    puniswTrapSetindex(p->index, &zero);
                     p->flags &= ~PUNI_FLAG_NOT_IN_PARTY;
                 }
 #endif
@@ -3907,7 +3958,7 @@ static inline void puniMoveHitLimitedInl(PuniData* p, Vec* s2, Vec* d2, f32 dist
         PSVECAdd(&p->pos, &p->vel, &p->pos);
     } else if (Punigp->floor != 0x12) {
         old = p->pos;
-        *&p->wallNrm = hit;
+        p->wallNrm = hit;
         PSVECAdd(&p->pos, &p->vel, &p->pos);
         if (p->vel.y == 0.0f) {
             hit.y = 0.0f;
@@ -4551,7 +4602,6 @@ static void puniModeCustom(PuniData* p) {
  */
 static void puni_puni_disp(CameraId camId, void* param) {
     MapTevCallbackInfo info;
-    s32 off;
     MapTevCallbackInfo* ip;
     s32 i;
     PunidrvPose* pose;
@@ -4563,8 +4613,8 @@ static void puni_puni_disp(CameraId camId, void* param) {
     if (!_swGet(3)) { // LSWF_MRI_00_DARKNESS_ON
         puniDraw();
     } else {
-        for (ip = &info, i = 0, off = 0; i < puniGetPoseNum(); i++, off += sizeof(PunidrvPose)) {
-            pose = (PunidrvPose*)((u8*)puniGetPosePtr() + off);
+        for (ip = &info, i = 0; i < puniGetPoseNum(); i++) {
+            pose = &puniGetPosePtr()[i];
             ip->tevStage = 1;
             ip->texMap = 1;
             ip->texCoord = 1;
@@ -4895,7 +4945,7 @@ static inline void puniMoveHitInl(PuniData* p, Vec* s2, Vec* d2, f32 dist) {
         PSVECAdd(&p->pos, &p->vel, &p->pos);
     } else {
         old = p->pos;
-        *&p->wallNrm = hit;
+        p->wallNrm = hit;
         PSVECAdd(&p->pos, &p->vel, &p->pos);
         if (p->vel.y == 0.0f) {
             hit.y = 0.0f;
@@ -5343,16 +5393,16 @@ static void puniSound(void) {
     }
     d = Punidat;
     if (special != 0) {
-        if (((u32) ((s32)Punigp->sfxTogetti)) == 0) {
+        if (Punigp->sfxTogetti == 0) {
             Punigp->sfxTogetti = psndSFXOn_3D("SFX_STG2_TOGETTI_MOVE1", &d[3].pos);
         }
     } else
-        if (((u32) ((s32)Punigp->sfxTogetti)) != 0) {
-        psndSFXOff((s32)Punigp->sfxTogetti);
+        if (Punigp->sfxTogetti != 0) {
+        psndSFXOff(Punigp->sfxTogetti);
         Punigp->sfxTogetti = 0;
     }
-    if (((u32) ((s32)Punigp->sfxTogetti)) != 0) {
-        psndSFX_pos((s32)Punigp->sfxTogetti, &d[3].pos);
+    if (Punigp->sfxTogetti != 0) {
+        psndSFX_pos(Punigp->sfxTogetti, &d[3].pos);
     }
     k = 0;
     for (i = PUNI_ENEMY_FIRST; i < PUNI_ENEMY_END; i++) {
@@ -5374,8 +5424,8 @@ static void puniSound(void) {
         Punigp->togeMoveLevel = 3;
     }
     if ((Punigp->togeMoveLevel) != (Punigp->togeMoveLevelPrev)) {
-        if (((u32) ((s32)Punigp->sfx468)) != 0) {
-            psndSFXOff((s32)Punigp->sfx468);
+        if (Punigp->sfx468 != 0) {
+            psndSFXOff(Punigp->sfx468);
         }
         switch (Punigp->togeMoveLevel) {
             case 1:
@@ -5549,7 +5599,7 @@ void puni_puni_main(void) {
 
                         // the name goes through the integer word, as in the original (the demo's loop hoists it; see
                         // sfx_name_word.h)
-                        puniModeDeadSfx(p, (const char*)(u32)"SFX_STG2_FIGHT_TOGE3");
+                        puniModeDeadSfx(p, SFX_NAME_WORD("SFX_STG2_FIGHT_TOGE3"));
                         break;
                     case PUNI_MODE_WIND:
                         p->flags &= ~PUNI_FLAG_STRAY;
@@ -5577,7 +5627,7 @@ void puni_puni_main(void) {
                         p->flags |= PUNI_FLAG_STRAY;
 
                         // the integer word, as for PUNI_MODE_DEAD
-                        puniModeWonderSfx(p, (const char*)(u32) "SFX_STG2_SOAPBALL_BREAK1");
+                        puniModeWonderSfx(p, SFX_NAME_WORD("SFX_STG2_SOAPBALL_BREAK1"));
                         break;
                     case PUNI_MODE_FUNBARI:
                         p->flags |= PUNI_FLAG_STRAY;

@@ -82,7 +82,7 @@ typedef enum PuniWorkFlags {
 typedef struct PuniWork {
     s32 systemMode;           // 0x0
     PuniAnimSet anim[2];      // 0x4
-    u8 animNames[0x324 - 0xA4];   // 0xA4
+    char animNames[4][10][16]; // 0xA4, pose names per story Puni (guide, sister, little Jabbi, rival) and animation id
     u32 flags;               // 0x324, PuniWorkFlags
     s32 floor;               // 0x328
     f32 posY[4];              // 0x32C

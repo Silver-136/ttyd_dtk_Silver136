@@ -1203,8 +1203,7 @@ static void puniModeEventparent(PuniData* puni) {
  * picks its side (x past -180 or not) and its place in the line there. Returns nothing.
  */
 static USER_FUNC(puni_parent) {
-    s32 offset = evtGetValue(event, event->args[0]) * sizeof(PuniData);
-    PuniData* puni = (PuniData*)((u8*)puniGetPunidat() + offset);
+    PuniData* puni = &puniGetPunidat()[evtGetValue(event, event->args[0])];
     s16 side;
 
     if (puni->pos.x > -180.0f) {
@@ -1231,8 +1230,7 @@ static USER_FUNC(puni_parent) {
  * (-160, 40), where Punio and Petuni meet.
  */
 static USER_FUNC(puni_away) {
-    s32 offset = evtGetValue(event, event->args[0]) * sizeof(PuniData);
-    PuniData* puni = (PuniData*)((u8*)puniGetPunidat() + offset);
+    PuniData* puni = &puniGetPunidat()[evtGetValue(event, event->args[0])];
 
     puni->modeStep = 10;
     return EVT_RETURN_DONE;
