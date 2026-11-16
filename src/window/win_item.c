@@ -747,7 +747,12 @@ void winItemMain2(WindowWork* w) {
     w->item.mailScroll += (w->item.mailScrollTgt - w->item.mailScroll) / 4.0f;
 }
 
-/** Draws the Items window (menu slot n): background, the two tab labels, then the item list via item_disp. */
+/**
+ * Draws the Items window (menu slot n): background, the two tab labels, then the item list via item_disp.
+ * (x, y) is the window's position (w->menu[n]); screen coordinates have the origin at the centre and y growing
+ * upwards. Most y values in winItemDisp and item_disp are written "20.0f + (...)", a 20-pixel lift added
+ * around the rest (win_badge.c's page arrows do the same); where it comes from is not known.
+ */
 void winItemDisp(s32 camId, void* param, s32 n) {
     GXColor white = {255, 255, 255, 255};
     f32 c;
@@ -763,7 +768,12 @@ void winItemDisp(s32 camId, void* param, s32 n) {
     y = w->menu[n].y;
 
     winBgGX(w, 2, x, y);
+    // the inset list panel: top-left corner (x - 150, y + 140), 415 x 210
     winKirinukiGX(w, 0, x - 150.0f, 20.0f + (120.0f + y), 415.0f, 210.0f);
+    // The two tabs (i = 0 Items, 1 Important Items) down the left side, centred at x - 215 and 40 (JP)
+    // or 50 (US) pixels apart. Texture 0xB3 is the tab shape; 0x18 + i the tab's label, cut to that shape
+    // (winTexSet_x2). The open tab draws a half-transparent black copy of the shape as a shadow, then the
+    // label in white 4 pixels up and to the left of it; the other tab draws its label in gray.
     a = 105.0f + y;
     c = (x - 215.0f) - 4.0f;
     b = 4.0f + a;
@@ -775,15 +785,32 @@ void winItemDisp(s32 camId, void* param, s32 n) {
             winTexSet_x2(i + 0x18, 0xB3, (Vec){c, 20.0f + (b - off), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);
         } else {
             winTexInit_x2(*w->res->data);
-            winTexSet_x2(i + 0x18, 0xB3, (Vec){x - 215.0f, 20.0f + (a - off), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0x80, 0x80, 0x80, 0xFF});
+            winTexSet_x2(i + 0x18, 0xB3, (Vec){x - 215.0f, 20.0f + (a - off), 0.0f}, (Vec){1.0f, 1.0f, 1.0f},
+                         (GXColor){0x80, 0x80, 0x80, 0xFF});
         }
     }
     item_disp(w, x, y);
 }
 
 /**
+ * Grid of the item list: two columns, five rows per page (10 items). winItemMain2 scrolls by 190.0f
+ * (5 * ITEM_LIST_ROW_H) per page; winItemMain moves the hand cursor on the same grid
+ * (helpTgtX = column * 204 - 155, helpTgtY = 110 - row * 38).
+ */
+enum ItemListLayout {
+    ITEM_LIST_COL_W = 204,  // left column to right column
+    ITEM_LIST_ROW_H = 38,   // one row
+    ITEM_LIST_PAGE = 10,    // items per page
+};
+
+/**
  * Draws the scrolling two-column item list (items not usable in the field are grayed on the Items tab),
  * the page arrows, the Z sort hint, and the open book panel.
+ *
+ * Item i sits in column i % 2 and row i / 2. Row 0 has its icon at (xo - 125, yo + 110) (scale 0.8 on the
+ * Items tab, 2/3 on Important Items) and its name 20 pixels to the right and 10 up, at (xo - 105, yo + 120);
+ * each column moves ITEM_LIST_COL_W right, each row ITEM_LIST_ROW_H down, and the list scrolls up by
+ * w->item.scroll[mode]. A scissor box clips the list to screen lines 109 to 300 (of 480), inside the panel.
  */
 static void item_disp(WindowWork* w, f32 xo, f32 yo) {
     GXColor white = {255, 255, 255, 255};
@@ -803,9 +830,9 @@ static void item_disp(WindowWork* w, f32 xo, f32 yo) {
     s32 id;
     s32 cnt;
     f32 scroll;
-    f32 leftArrowX;
+    f32 upArrowX;
     f32 sortWidth;
-    f32 rightArrowX;
+    f32 downArrowX;
     f32 sortX;
 
     // FAKE: white is copied through white4 into white2 and white3; using white for all of them changes the object
@@ -831,7 +858,9 @@ static void item_disp(WindowWork* w, f32 xo, f32 yo) {
         }
         scroll = w->item.scroll[w->item.mode];
         grayed = (w->item.mode != 0 || (itemDataTable[id].usable_locations & ITEM_USABLE_MENU)) == 0;
-        y = scroll + (20.0f + ((yBase = (100.0f + yo) - row * 38) - 10.0f));
+        // y: the icon centre; yBase: the row's text line minus the 20-pixel lift
+        y = scroll + (20.0f + ((yBase = (100.0f + yo) - row * ITEM_LIST_ROW_H) - 10.0f));
+        // rows above the screen are skipped; the first row below it ends the list
         if (y > 240.0f) {
             continue;
         }
@@ -843,35 +872,47 @@ static void item_disp(WindowWork* w, f32 xo, f32 yo) {
         } else {
             winIconInit();
         }
-        winIconSet(itemDataTable[id].icon_id, (Vec){(xo - 125.0f) + (cx = col * 204), y, 0.0f}, w->item.mode == 0 ? (Vec){0.8f, 0.8f, 0.8f} : (Vec){0.6666667f, 0.6666667f, 0.6666667f}, white3);
+        winIconSet(itemDataTable[id].icon_id, (Vec){(xo - 125.0f) + (cx = col * ITEM_LIST_COL_W), y, 0.0f},
+                   w->item.mode == 0 ? (Vec){0.8f, 0.8f, 0.8f} : (Vec){0.6666667f, 0.6666667f, 0.6666667f}, white3);
         winFontInit();
 #if VERSION >= VERSION_US
-        winFontSetWidth((Vec){(xo - 105.0f) + cx, scroll + (20.0f + yBase), 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, grayed ? grayc : black, 155.0f, msgSearch(itemDataTable[id].name));
+        // the name, squeezed to at most 155 pixels wide
+        winFontSetWidth((Vec){(xo - 105.0f) + cx, scroll + (20.0f + yBase), 0.0f}, (Vec){0.9f, 0.9f, 0.9f},
+                        grayed ? grayc : black, 155.0f, msgSearch(itemDataTable[id].name));
 #else
-        winFontSetPitch(20.0f, (Vec){(xo - 105.0f) + cx, scroll + (20.0f + yBase), 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, grayed ? grayc : black, msgSearch(itemDataTable[id].name));
+        winFontSetPitch(20.0f, (Vec){(xo - 105.0f) + cx, scroll + (20.0f + yBase), 0.0f}, (Vec){0.9f, 0.9f, 0.9f},
+                        grayed ? grayc : black, msgSearch(itemDataTable[id].name));
 #endif
     }
     GXSetScissor(0, 0, 0x260, 0x1E0);
+    // Page arrows right of the panel at xo + 250 (texture 0x17; scale -1 turns it to point up): up arrow at
+    // yo + 148 with the L button icon under it when there is a previous page, down arrow at yo - 85 with the
+    // R button icon above it when there is a next page
     if (w->item.page[w->item.mode] > 0) {
         winTexInit(*w->res->data);
-        leftArrowX = 250.0f + xo;
-        winTexSet(0x17, (Vec){leftArrowX, 20.0f + (18.0f + (110.0f + yo)), 0.0f}, (Vec){-1.0f, -1.0f, -1.0f}, white2);
+        upArrowX = 250.0f + xo;
+        winTexSet(0x17, (Vec){upArrowX, 20.0f + (18.0f + (110.0f + yo)), 0.0f}, (Vec){-1.0f, -1.0f, -1.0f}, white2);
         winIconInit();
-        winIconSet(ICON_TRIGGER_L, (Vec){leftArrowX, 20.0f + (113.0f + yo), 0.0f}, (Vec){0.6f, 0.6f, 0.6f}, white2);
+        winIconSet(ICON_TRIGGER_L, (Vec){upArrowX, 20.0f + (113.0f + yo), 0.0f}, (Vec){0.6f, 0.6f, 0.6f}, white2);
     }
-    if (cnt > w->item.page[w->item.mode] * 10 + 10) {
+    if (cnt > w->item.page[w->item.mode] * ITEM_LIST_PAGE + ITEM_LIST_PAGE) {
         winTexInit(*w->res->data);
-        rightArrowX = 250.0f + xo;
-        winTexSet(0x17, (Vec){rightArrowX, 20.0f + ((yo - 90.0f) - 15.0f), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white2);
+        downArrowX = 250.0f + xo;
+        winTexSet(0x17, (Vec){downArrowX, 20.0f + ((yo - 90.0f) - 15.0f), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white2);
         winIconInit();
-        winIconSet(ICON_TRIGGER_R, (Vec){rightArrowX, 20.0f + (yo - 90.0f), 0.0f}, (Vec){0.6f, 0.6f, 0.6f}, white2);
+        winIconSet(ICON_TRIGGER_R, (Vec){downArrowX, 20.0f + (yo - 90.0f), 0.0f}, (Vec){0.6f, 0.6f, 0.6f}, white2);
     }
+    // Sort hint under the panel: the "sort" text (scale 0.7) ends at xo + 220, the Z button icon 30 pixels
+    // left of it
     sortWidth = 0.7f * (f32)FontGetMessageWidth(msgSearch("msg_menu_sort_narabikae"));
     winFontInit();
     sortX = xo + (220.0f - sortWidth);
-    winFontSet((Vec){sortX, 20.0f + ((yo - 92.0f) - 10.0f), 0.0f}, (Vec){0.7f, 0.7f, 0.7f}, black, msgSearch("msg_menu_sort_narabikae"));
+    winFontSet((Vec){sortX, 20.0f + ((yo - 92.0f) - 10.0f), 0.0f}, (Vec){0.7f, 0.7f, 0.7f}, black,
+               msgSearch("msg_menu_sort_narabikae"));
     winIconInit();
-    winIconSet(ICON_TRIGGER_Z_ALT, (Vec){sortX - 30.0f, 20.0f + ((yo - 100.0f) - 10.0f), 0.0f}, (Vec){0.6f, 0.6f, 0.6f}, white2);
+    winIconSet(ICON_TRIGGER_Z_ALT, (Vec){sortX - 30.0f, 20.0f + ((yo - 100.0f) - 10.0f), 0.0f}, (Vec){0.6f, 0.6f, 0.6f},
+               white2);
+    // the book panel, once it has moved in from its parked position (320, -240)
     if (w->item.bookX < 320.0f && w->item.bookY > -240.0f) {
         winBookGX(w, 0, w->item.bookX, w->item.bookY);
     }
@@ -903,8 +944,31 @@ static const char* hpfp_name_table[7][2] = {
 #endif
 
 /**
+ * Layout of the item target window (window_desc[0], 350 x 264 at (-70, 150)). Screen coordinates have the
+ * origin at the centre and y growing upwards; entry->x / entry->y are the window's top-left corner.
+ * Column x offsets from the window's left edge, and the line spacing (lines go down from the top edge):
+ */
+enum ItemUseLayout {
+    USE_ICON_X = 30,  // centre of the Mario / partner icon
+    USE_NAME_X = 50,   // name
+    USE_STAT_X = 220,  // "HP" / "FP" label (a coloured plate is drawn behind it)
+    USE_VALUE_X = 245, // current value, right-aligned to the width of "999" (winFontSetR)
+    USE_SLASH_X = 267, // "/", right-aligned the same way
+    USE_MAX_X = 310,   // maximum value
+    USE_LINE_H = 22,   // Mario's HP line to his FP line
+    USE_ROW_H = 28,    // one row of the list (partners; Mario's row is row 0)
+};
+
+/**
  * winMgr draw callback for the item target window: Mario with his HP and FP, then each partner with HP;
  * the chosen target blinks while the item takes effect and the others gray out. Also draws the hand cursor.
+ *
+ * Rows (text lines; icons sit 12 lower, the HP/FP plates 11 (Mario) or 14 (partners) lower):
+ *   Mario      HP at entry->y - 8, FP one USE_LINE_H lower
+ *   list[0]    entry->y - 8 - USE_ROW_H - 16 (the current partner, when there is one)
+ *   -------    dotted line at entry->y - 84, drawn when there are two or more partners
+ *   list[1..]  entry->y - 8 - i * USE_ROW_H - 28
+ * winItemMain state 300 points the hand cursor at the same rows (helpTgtY = 130 - 28 * target + the same 0/-16/-28).
  */
 static void itemUseDisp(WinMgrEntry* entry) {
     WindowWork* w = winGetPtr();
@@ -930,6 +994,9 @@ static void itemUseDisp(WinMgrEntry* entry) {
     white2 = white;
     white3 = white2;
     if (!winMgrAction(w->useWin[0])) {
+        // List order: the current partner first (in background mode the one saved in prevPartyMemberId[0]),
+        // then the others in winPartyDt order (PAL demo and later: only partners who have joined and are
+        // not away). Only the first w->party.count entries are drawn.
         party = !marioBgmodeChk() ? marioGetParty() : marioGetPtr()->prevPartyMemberId[0];
         n = 0;
         for (i = 0; i < 7; i++) {
@@ -947,8 +1014,10 @@ static void itemUseDisp(WinMgrEntry* entry) {
                 list[n++] = &winPartyDt[i];
             }
         }
+        // Row 0 is Mario, rows 1..count the partners in list[]
         for (i = 0; i < w->party.count + 1; i++) {
-            off = i * 22;
+            off = i * USE_LINE_H; // only used for Mario (i == 0), so always 0
+            // extra drop below row i: 16 for list[0], 28 for the rest (room for Mario's FP line and the dotted line)
             if (i == 0) {
                 yoff = 0.0f;
             } else if (i == 1) {
@@ -956,6 +1025,8 @@ static void itemUseDisp(WinMgrEntry* entry) {
             } else {
                 yoff = -28.0f;
             }
+            // While the item takes effect (w->item.blink counts up for two seconds, winItemMain state 301),
+            // the target is drawn in black and the other rows in gray; the target also hides 4 frames in 20
             gray = 0;
             if (w->item.blink) {
                 if (i == w->item.useTarget) {
@@ -966,6 +1037,7 @@ static void itemUseDisp(WinMgrEntry* entry) {
                 }
             }
             if (i == 0) {
+                // Mario: icon and name, HP on the first line, FP (shared by the party) on the second
                 if (w->item.blink % 20 > 15 && i == w->item.useTarget) {
                     continue;
                 }
@@ -974,34 +1046,64 @@ static void itemUseDisp(WinMgrEntry* entry) {
                 } else {
                     winIconInit();
                 }
-                winIconSet(ICON_MARIO, (Vec){entry->x + 30, entry->y - 20 - off, 0.0f}, (Vec){0.65f, 0.65f, 0.65f}, white3);
+                winIconSet(ICON_MARIO, (Vec){entry->x + USE_ICON_X, entry->y - 20 - off, 0.0f}, (Vec){0.65f, 0.65f, 0.65f},
+                           white3);
+                // HP (pink) and FP (yellow) plates, centred under the labels: texture 0xAF is used only as an alpha
+                // mask (TEV colour = C0, the colour passed to winTexSet); alpha 0xFE makes winTexSet blend
                 winTexInit(*w->res->data);
                 GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_C0);
                 GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_A0, GX_CA_TEXA, GX_CA_ZERO);
-                winTexSet(0xAF, (Vec){entry->x + 220 + 0.9f * FontGetMessageWidth(WI_HP_NAME) / 2, entry->y - 19 - off, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0xCB, 0x8C, 0xA2, 0xFE});
-                winTexSet(0xAF, (Vec){entry->x + 220 + 0.9f * FontGetMessageWidth(WI_HP_NAME) / 2, entry->y - 19 - (off3 = (i + 1) * 22), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0xCB, 0xBE, 0x89, 0xFE});
+                winTexSet(0xAF,
+                          (Vec){entry->x + USE_STAT_X + 0.9f * FontGetMessageWidth(WI_HP_NAME) / 2,
+                                entry->y - 19 - off,
+                                0.0f},
+                          (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0xCB, 0x8C, 0xA2, 0xFE});
+                winTexSet(0xAF,
+                          (Vec){entry->x + USE_STAT_X + 0.9f * FontGetMessageWidth(WI_HP_NAME) / 2,
+                                entry->y - 19 - (off3 = (i + 1) * USE_LINE_H),
+                                0.0f},
+                          (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0xCB, 0xBE, 0x89, 0xFE});
                 winFontInit();
-                winFontSet((Vec){entry->x + 50, entry->y - 8 - off, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, black, msgSearch("name_mario"));
-                winFontSet((Vec){entry->x + 220, entry->y - 8 - off, 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, black, WI_HP_NAME);
+                winFontSet((Vec){entry->x + USE_NAME_X, entry->y - 8 - off, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, black,
+                           msgSearch("name_mario"));
+                // HP line: "HP  cur / max" (the maximum is smaller and 2 lower)
+                winFontSet((Vec){entry->x + USE_STAT_X, entry->y - 8 - off, 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, black,
+                           WI_HP_NAME);
 #if VERSION <= VERSION_DEMO_JP
-                winFontSetR((Vec){entry->x + 245, entry->y - 8 - off, 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, black, "%d", pouchGetHP());
-                winFontSetR((Vec){entry->x + 267, entry->y - 8 - off, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, WI_SLASH);
-                winFontSet((Vec){entry->x + 310, entry->y - 10 - off, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, "%d", pouchGetMaxHP());
+                winFontSetR((Vec){entry->x + USE_VALUE_X, entry->y - 8 - off, 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, black,
+                            "%d", pouchGetHP());
+                winFontSetR((Vec){entry->x + USE_SLASH_X, entry->y - 8 - off, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black,
+                            WI_SLASH);
+                winFontSet((Vec){entry->x + USE_MAX_X, entry->y - 10 - off, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black,
+                           "%d", pouchGetMaxHP());
+                // FP line
                 winFontInit();
-                winFontSet((Vec){entry->x + 220, entry->y - 8 - off3, 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, black, WI_FP_NAME);
-                winFontSetR((Vec){entry->x + 245, entry->y - 8 - off3, 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, black, "%d", pouchGetFP());
-                winFontSetR((Vec){entry->x + 267, entry->y - 8 - off3, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, WI_SLASH);
-                winFontSet((Vec){entry->x + 310, entry->y - 10 - off3, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, "%d", pouchGetMaxFP());
+                winFontSet((Vec){entry->x + USE_STAT_X, entry->y - 8 - off3, 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, black,
+                           WI_FP_NAME);
+                winFontSetR((Vec){entry->x + USE_VALUE_X, entry->y - 8 - off3, 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, black,
+                            "%d", pouchGetFP());
+                winFontSetR((Vec){entry->x + USE_SLASH_X, entry->y - 8 - off3, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black,
+                            WI_SLASH);
+                winFontSet((Vec){entry->x + USE_MAX_X, entry->y - 10 - off3, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black,
+                           "%d", pouchGetMaxFP());
 #else
+                // (PAL demo and later squeeze the numbers to 30 px)
 #if VERSION >= VERSION_DEMO_EU
-                winFontSetRWidth((Vec){entry->x + 245, entry->y - 8 - off, 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, black, 30.0f, "%d", pouchGetHP());
-                winFontSetR((Vec){entry->x + 267, entry->y - 8 - off, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, WI_SLASH);
-                winFontSetWidth((Vec){entry->x + 310, entry->y - 10 - off, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, 30.0f, "%d", pouchGetMaxHP());
+                winFontSetRWidth((Vec){entry->x + USE_VALUE_X, entry->y - 8 - off, 0.0f}, (Vec){0.9f, 0.9f, 0.9f},
+                                 black, 30.0f, "%d", pouchGetHP());
+                winFontSetR((Vec){entry->x + USE_SLASH_X, entry->y - 8 - off, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black,
+                            WI_SLASH);
+                winFontSetWidth((Vec){entry->x + USE_MAX_X, entry->y - 10 - off, 0.0f}, (Vec){0.8f, 0.8f, 0.8f},
+                                black, 30.0f, "%d", pouchGetMaxHP());
 #else
-                winFontSetR((Vec){entry->x + 245, entry->y - 8 - off, 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, black, "%d", pouchGetHP());
-                winFontSetR((Vec){entry->x + 267, entry->y - 8 - off, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, WI_SLASH);
-                winFontSet((Vec){entry->x + 310, entry->y - 10 - off, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, "%d", pouchGetMaxHP());
+                winFontSetR((Vec){entry->x + USE_VALUE_X, entry->y - 8 - off, 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, black,
+                            "%d", pouchGetHP());
+                winFontSetR((Vec){entry->x + USE_SLASH_X, entry->y - 8 - off, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black,
+                            WI_SLASH);
+                winFontSet((Vec){entry->x + USE_MAX_X, entry->y - 10 - off, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black,
+                           "%d", pouchGetMaxHP());
 #endif
+                // FP line: an FP item makes it blink and stay black whoever the target is (FP is shared)
                 if (itemDataTable[w->item.useItem].fp_restored) {
                     if (w->item.blink % 20 > 15) {
                         continue;
@@ -1009,18 +1111,26 @@ static void itemUseDisp(WinMgrEntry* entry) {
                     black = (GXColor){0, 0, 0, 255};
                 }
                 winFontInit();
-                winFontSet((Vec){entry->x + 220, entry->y - 8 - off3, 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, black, WI_FP_NAME);
+                winFontSet((Vec){entry->x + USE_STAT_X, entry->y - 8 - off3, 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, black,
+                           WI_FP_NAME);
 #if VERSION >= VERSION_DEMO_EU
-                winFontSetRWidth((Vec){entry->x + 245, entry->y - 8 - off3, 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, black, 30.0f, "%d", pouchGetFP());
-                winFontSetR((Vec){entry->x + 267, entry->y - 8 - off3, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, WI_SLASH);
-                winFontSetWidth((Vec){entry->x + 310, entry->y - 10 - off3, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, 30.0f, "%d", pouchGetMaxFP());
+                winFontSetRWidth((Vec){entry->x + USE_VALUE_X, entry->y - 8 - off3, 0.0f}, (Vec){0.9f, 0.9f, 0.9f},
+                                 black, 30.0f, "%d", pouchGetFP());
+                winFontSetR((Vec){entry->x + USE_SLASH_X, entry->y - 8 - off3, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black,
+                            WI_SLASH);
+                winFontSetWidth((Vec){entry->x + USE_MAX_X, entry->y - 10 - off3, 0.0f}, (Vec){0.8f, 0.8f, 0.8f},
+                                black, 30.0f, "%d", pouchGetMaxFP());
 #else
-                winFontSetR((Vec){entry->x + 245, entry->y - 8 - off3, 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, black, "%d", pouchGetFP());
-                winFontSetR((Vec){entry->x + 267, entry->y - 8 - off3, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, WI_SLASH);
-                winFontSet((Vec){entry->x + 310, entry->y - 10 - off3, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, "%d", pouchGetMaxFP());
+                winFontSetR((Vec){entry->x + USE_VALUE_X, entry->y - 8 - off3, 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, black,
+                            "%d", pouchGetFP());
+                winFontSetR((Vec){entry->x + USE_SLASH_X, entry->y - 8 - off3, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black,
+                            WI_SLASH);
+                winFontSet((Vec){entry->x + USE_MAX_X, entry->y - 10 - off3, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black,
+                           "%d", pouchGetMaxFP());
 #endif
 #endif
             } else {
+                // Partner row i (list[i - 1]): HP plate, icon, name (Yoshi: the name the player gave him), HP
                 name = list[i - 1]->partyId != PARTY_YOSHI ? msgSearch(list[i - 1]->name) : pouchGetYoshiName();
                 if (w->item.blink % 20 > 15 && i == w->item.useTarget) {
                     continue;
@@ -1028,42 +1138,69 @@ static void itemUseDisp(WinMgrEntry* entry) {
                 winTexInit(*w->res->data);
                 GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_C0);
                 GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_A0, GX_CA_TEXA, GX_CA_ZERO);
-                winTexSet(0xAF, (Vec){entry->x + 220 + 0.9f * FontGetMessageWidth(WI_HP_NAME) / 2, (yoff + (entry->y - 8 - i * 28)) - 14.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0xCB, 0x8C, 0xA2, 0xF4});
+                winTexSet(0xAF,
+                          (Vec){entry->x + USE_STAT_X + 0.9f * FontGetMessageWidth(WI_HP_NAME) / 2,
+                                (yoff + (entry->y - 8 - i * USE_ROW_H)) - 14.0f,
+                                0.0f},
+                          (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0xCB, 0x8C, 0xA2, 0xF4});
                 if (gray) {
                     winIconGrayInit();
                 } else {
                     winIconInit();
                 }
-                winIconSet(list[i - 1]->iconId, (Vec){entry->x + 30, yoff + (entry->y - 20 - i * 28), 0.0f}, (Vec){0.65f, 0.65f, 0.65f}, white3);
+                winIconSet(list[i - 1]->iconId, (Vec){entry->x + USE_ICON_X, yoff + (entry->y - 20 - i * USE_ROW_H), 0.0f},
+                           (Vec){0.65f, 0.65f, 0.65f}, white3);
                 winFontInit();
 #if VERSION <= VERSION_DEMO_JP
-                winFontSet((Vec){entry->x + 50, yoff + (entry->y - 8 - i * 28), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, black, name);
-                winFontSet((Vec){entry->x + 220, yoff + (entry->y - 8 - i * 28), 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, black, WI_HP_NAME);
-                winFontSetR((Vec){entry->x + 245, yoff + (entry->y - 8 - i * 28), 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, black, "%d", pouchGetPtr()->partyData[list[i - 1]->partyId].currentHP);
-                winFontSetR((Vec){entry->x + 267, yoff + (entry->y - 8 - i * 28), 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, WI_SLASH);
-                winFontSet((Vec){entry->x + 310, (yoff + (entry->y - 8 - i * 28)) - 2.0f, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, "%d", pouchGetPtr()->partyData[list[i - 1]->partyId].maximumHP);
+                winFontSet((Vec){entry->x + USE_NAME_X, yoff + (entry->y - 8 - i * USE_ROW_H), 0.0f},
+                           (Vec){1.0f, 1.0f, 1.0f}, black, name);
+                winFontSet((Vec){entry->x + USE_STAT_X, yoff + (entry->y - 8 - i * USE_ROW_H), 0.0f},
+                           (Vec){0.9f, 0.9f, 0.9f}, black, WI_HP_NAME);
+                winFontSetR((Vec){entry->x + USE_VALUE_X, yoff + (entry->y - 8 - i * USE_ROW_H), 0.0f},
+                            (Vec){0.9f, 0.9f, 0.9f}, black, "%d", pouchGetPtr()->partyData[list[i - 1]->partyId].currentHP);
+                winFontSetR((Vec){entry->x + USE_SLASH_X, yoff + (entry->y - 8 - i * USE_ROW_H), 0.0f},
+                            (Vec){0.8f, 0.8f, 0.8f}, black, WI_SLASH);
+                winFontSet((Vec){entry->x + USE_MAX_X, (yoff + (entry->y - 8 - i * USE_ROW_H)) - 2.0f, 0.0f},
+                           (Vec){0.8f, 0.8f, 0.8f}, black, "%d", pouchGetPtr()->partyData[list[i - 1]->partyId].maximumHP);
 #else
-                winFontSet((Vec){entry->x + 50, yoff + (entry->y - 8 - i * 28), 0.0f}, (Vec){FontGetMessageWidth(name) < 160.0f ? 1.0f : 160.0f / FontGetMessageWidth(name), 1.0f, 1.0f}, black, name);
-                winFontSet((Vec){entry->x + 220, yoff + (entry->y - 8 - i * 28), 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, black, WI_HP_NAME);
+                // the name is squeezed horizontally to at most 160 px
+                winFontSet((Vec){entry->x + USE_NAME_X, yoff + (entry->y - 8 - i * USE_ROW_H), 0.0f},
+                           (Vec){FontGetMessageWidth(name) < 160.0f ? 1.0f : 160.0f / FontGetMessageWidth(name), 1.0f, 1.0f},
+                           black, name);
+                winFontSet((Vec){entry->x + USE_STAT_X, yoff + (entry->y - 8 - i * USE_ROW_H), 0.0f},
+                           (Vec){0.9f, 0.9f, 0.9f}, black, WI_HP_NAME);
 #if VERSION >= VERSION_DEMO_EU
-                winFontSetRWidth((Vec){entry->x + 245, yoff + (entry->y - 8 - i * 28), 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, black, 30.0f, "%d", pouchGetPtr()->partyData[list[i - 1]->partyId].currentHP);
-                winFontSetR((Vec){entry->x + 267, yoff + (entry->y - 8 - i * 28), 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, WI_SLASH);
-                winFontSetWidth((Vec){entry->x + 310, (yoff + (entry->y - 8 - i * 28)) - 2.0f, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, 30.0f, "%d", pouchGetPtr()->partyData[list[i - 1]->partyId].maximumHP);
+                winFontSetRWidth((Vec){entry->x + USE_VALUE_X, yoff + (entry->y - 8 - i * USE_ROW_H), 0.0f},
+                                 (Vec){0.9f, 0.9f, 0.9f}, black, 30.0f,
+                                 "%d", pouchGetPtr()->partyData[list[i - 1]->partyId].currentHP);
+                winFontSetR((Vec){entry->x + USE_SLASH_X, yoff + (entry->y - 8 - i * USE_ROW_H), 0.0f},
+                            (Vec){0.8f, 0.8f, 0.8f}, black, WI_SLASH);
+                winFontSetWidth((Vec){entry->x + USE_MAX_X, (yoff + (entry->y - 8 - i * USE_ROW_H)) - 2.0f, 0.0f},
+                                (Vec){0.8f, 0.8f, 0.8f}, black, 30.0f,
+                                "%d", pouchGetPtr()->partyData[list[i - 1]->partyId].maximumHP);
 #else
-                winFontSetR((Vec){entry->x + 245, yoff + (entry->y - 8 - i * 28), 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, black, "%d", pouchGetPtr()->partyData[list[i - 1]->partyId].currentHP);
-                winFontSetR((Vec){entry->x + 267, yoff + (entry->y - 8 - i * 28), 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, WI_SLASH);
-                winFontSet((Vec){entry->x + 310, (yoff + (entry->y - 8 - i * 28)) - 2.0f, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, "%d", pouchGetPtr()->partyData[list[i - 1]->partyId].maximumHP);
+                winFontSetR((Vec){entry->x + USE_VALUE_X, yoff + (entry->y - 8 - i * USE_ROW_H), 0.0f},
+                            (Vec){0.9f, 0.9f, 0.9f}, black, "%d", pouchGetPtr()->partyData[list[i - 1]->partyId].currentHP);
+                winFontSetR((Vec){entry->x + USE_SLASH_X, yoff + (entry->y - 8 - i * USE_ROW_H), 0.0f},
+                            (Vec){0.8f, 0.8f, 0.8f}, black, WI_SLASH);
+                winFontSet((Vec){entry->x + USE_MAX_X, (yoff + (entry->y - 8 - i * USE_ROW_H)) - 2.0f, 0.0f},
+                           (Vec){0.8f, 0.8f, 0.8f}, black, "%d", pouchGetPtr()->partyData[list[i - 1]->partyId].maximumHP);
 #endif
 #endif
             }
         }
+        // Dotted line between list[0] and the other partners: 28 SP orb icons at 0.15 scale,
+        // one every width / 31 px (11 px for this window), from dot 2 to dot 29
         if (w->party.count > 1) {
             winIconInit();
             for (i = 2; i < 30; i++) {
-                winIconSet(ICON_SP_ORB_1, (Vec){entry->x + (entry->width / 31) * i, entry->y - 84, 0.0f}, (Vec){0.15f, 0.15f, 0.15f}, black);
+                winIconSet(ICON_SP_ORB_1, (Vec){entry->x + (entry->width / 31) * i, entry->y - 84, 0.0f},
+                           (Vec){0.15f, 0.15f, 0.15f}, black);
             }
         }
     }
+    // The hand cursor (texture 0 of win.tpl) at helpX / helpY, over a half-transparent black shadow 2 px right
+    // and 2 px down
     winTexInit(*w->res->data);
     winTexSet(0, (Vec){2.0f + w->helpX, w->helpY - 2.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0, 0, 0, 0x80});
     winTexSet(0, (Vec){w->helpX, w->helpY, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);
