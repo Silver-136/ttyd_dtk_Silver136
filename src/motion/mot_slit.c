@@ -788,6 +788,11 @@ void mot_slit(void) {
                 m->directionView = m->controlStickAngle;
             }
 #else
+            // BUG: nothing in the turn into paper (SLIT_STATE_INIT, then 30 frames here) sets directionView or
+            // baseSpeed from the stick, so Mario keeps moving at the speed and in the direction he had when the
+            // paper button was pressed (a dash is cut to walking speed in SLIT_STATE_INIT); letting go of the stick
+            // sets the speed to 0 for the rest of the turn. The stick steers him again from SLIT_STATE_SIDEWAYS,
+            // on the 32nd frame.
             if (!m->controlStickSensitivity) {
                 m->baseSpeed = 0.0f;
                 marioChgPose("M_S_1");
@@ -1236,6 +1241,11 @@ void mot_slit(void) {
                 m->directionView = m->controlStickAngle;
             }
 #else
+            // BUG: nothing in the turn back (SLIT_STATE_END_1 and the 30 frames here, the first in the same frame)
+            // sets directionView or baseSpeed from the stick, so Mario keeps the speed and direction he had when the
+            // paper button was released (from SLIT_STATE_READY: the stick direction of that frame); letting go of
+            // the stick sets the speed to 0 for the rest of the turn. SLIT_STATE_END_3 on the 31st frame changes to
+            // the stay motion, which runs in the same frame and can already start the walk from the stick.
             if (!m->controlStickSensitivity) {
                 m->baseSpeed = 0.0f;
                 marioChgPose("M_S_1");

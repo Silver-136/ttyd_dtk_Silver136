@@ -746,6 +746,11 @@ void marioFall(void) {
         }
     }
 #else
+    // BUG: the Spring Jump check at the landing below needs only the Ultra Boots, A held and the stick turning one
+    // way on the landing frame (marioGetRub >= 0: tilt 50 or more, at least 4 of the last 10 stick steps turning
+    // the same way and none back); marioGetRub runs on every falling frame. Nothing checks how the jump began, so
+    // a jump taken while running, with A still held and the stick swept round as Mario comes down (for example
+    // left, up, then right), lands as a Spring Jump.
     rub = marioGetRub(PAD_BUTTON_A, &a, &b, &c);
 #endif
     spd = marioGetFallSpd();
