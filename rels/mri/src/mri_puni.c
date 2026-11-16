@@ -76,7 +76,7 @@ static u16 puni_wan_patern_data[] = { 104, 105, 106, 107, 108, 109, 110, 111, 65
 /**
  * The ten Puni action sequences in the order of the animation sets
  * (idle, walk, run, damage, down, roll, stray, jump up, jump down, wander); registered with
- * puniAnimationInit_inl.
+ * puniAnimationInit.
  */
 static u16* puni_patern_table[] = { puni_nom_patern_data, puni_wlk_patern_data, puni_run_patern_data, puni_dmg_patern_data,
                              puni_dwn_patern_data, puni_rol_patern_data, puni_hag_patern_data, puni_jpu_patern_data,
@@ -218,7 +218,7 @@ static USER_FUNC(evt_make_texbuf) {
  * and stores the terminating value in *end.
  */
 static void puniAnimCount(s16* pattern, s16* count, s16* end) {
-    s16 n = 0;
+    s32 n = 0;
     s32 i = 0;
 
     while (TRUE) {
@@ -243,32 +243,16 @@ static void puniAnimCount(s16* pattern, s16* count, s16* end) {
 static void puniAnimationInit(s16** a, s16** b) {
     PuniAnimSet* s0 = &Punigp->anim[0];
     PuniAnimSet* s1 = &Punigp->anim[1];
-    s32 j;
     s32 i;
-    s16* p;
-    s16 v;
-    s32 k;
 
     for (i = 0; i < 10; i++) {
         s0->table[i] = a[i];
         puniAnimCount(a[i], &s0->count[i], &s0->end[i]);
         s1->table[i] = b[i];
-        k = 0;
-        j = 0;
-        for (p = b[i];; j++, k++) {
-            v = p[k];
-            if (v == -1) {
-                s1->end[i] = v;
-                break;
-            }
-            if (v == -2) {
-                s1->end[i] = v;
-                break;
-            }
-        }
-        s1->count[i] = j;
+        puniAnimCount(b[i], &s1->count[i], &s1->end[i]);
     }
 }
+
 
 /**
  * Fills Punigp->animNames with the pose names the guide NPCs use for each Puni animation id (S_1 stand,
@@ -5818,22 +5802,6 @@ USER_FUNC(evt_puni_mem_init) {
     return EVT_RETURN_DONE;
 }
 
-// FAKE: second copy of puniAnimationInit in its natural form (puniAnimCount for both tables); evt_puni_init
-// inlines it and reaches 100%, while the out-of-line puniAnimationInit above only matches with its hand-written
-// second loop. Same effect as the old open-coded loops (count up to the first -1/-2, store it in end[i]).
-static inline void puniAnimationInit_inl(s16** a, s16** b) {
-    PuniAnimSet* s0 = &Punigp->anim[0];
-    PuniAnimSet* s1 = &Punigp->anim[1];
-    s32 i;
-
-    for (i = 0; i < 10; i++) {
-        s0->table[i] = a[i];
-        puniAnimCount(a[i], &s0->count[i], &s0->end[i]);
-        s1->table[i] = b[i];
-        puniAnimCount(b[i], &s1->count[i], &s1->end[i]);
-    }
-}
-
 /**
  * Script call that starts the Puni drawing system:
  * on its first call it initializes the Puni renderer (puniInit);
@@ -5851,7 +5819,7 @@ s32 evt_puni_init(EventEntry *event, BOOL isFirstCall) {
         puniInit();
         return EVT_RETURN_BLOCK;
     }
-    puniAnimationInit_inl((s16**)puni_patern_table, (s16**)toge_patern_table);
+    puniAnimationInit((s16**)puni_patern_table, (s16**)toge_patern_table);
     puniAnimationInit2();
     puniEntry(a, (PunidrvTexInfo*)tex, (void*)b, (void*)c, (void*)d);
     return EVT_RETURN_DONE;
