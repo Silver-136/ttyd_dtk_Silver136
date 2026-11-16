@@ -6325,6 +6325,13 @@ EVT_BEGIN(kuzi_bomb_talk_normal)
         CALL(evt_msg_print, 0, STRING("kuji_bomb_008"), 0, STRING("グルメボム兵"))
         LABEL(0)
         CALL(evt_msg_select, 0, STRING("kuji_bomb_009"))
+        // BUG: case 1 (the explanation again) leaves this SWITCH by GOTO(0), so END_SWITCH never runs and every
+        // explanation keeps one more switch level (evt_switch raises switchDepth with no limit; the event has 8).
+        // From the 9th time this menu is answered, evt_switch stores the choice past switchValues into the
+        // event's own fields: readAddr, uwBase, ufBase, eventId, unitId and, on the 14th, timescale. With timescale
+        // holding the bits of 0, 1 or 2 (0.0 or a denormal) commandsLeft never reaches 1 again, so the chosen case
+        // runs to its first message and the event stops there; the talk event waits on it for good and Mario's
+        // controls stay off.
         SWITCH(LW(0))
             CASE_EQUAL(0)
                 CALL(evt_pouch_check_item, ITEM_LOTTERY_PICK, LW(0))
