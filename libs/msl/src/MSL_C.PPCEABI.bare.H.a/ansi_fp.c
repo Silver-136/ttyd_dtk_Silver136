@@ -343,10 +343,17 @@ static void __two_exp(decimal* result, long exp) {
 }
 
 static BOOL __equals_dec(const decimal* x, const decimal* y) {
-    if (x->sig.text[0] == 0)
-        return y->sig.text[0] == 0;
-    if (y->sig.text[0] == 0)
-        return x->sig.text[0] == 0;
+    if (x->sig.text[0] == 0) {
+        if (y->sig.text[0] == 0)
+            return TRUE;
+        return FALSE;
+    }
+
+    if (y->sig.text[0] == 0) {
+        if (x->sig.text[0] == 0)
+            return TRUE;
+        return FALSE;
+    }
 
     if (x->exp == y->exp) {
         int i;

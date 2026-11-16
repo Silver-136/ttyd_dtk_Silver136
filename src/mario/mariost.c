@@ -981,13 +981,15 @@ void gcResetCheck(void) {
             VIWaitForRetrace();
         }
         if (gp->resetType != RESET_TYPE_MENU) {
-            if (!(gp->flags & GW_FLAG_VIDEO_MODE_SET)) {
+            u32 flags = gp->flags;
+
+            if (!(flags & GW_FLAG_VIDEO_MODE_SET)) {
 #if VERSION <= VERSION_DEMO_JP
                 code = RESET_CODE_INTERLACED;
 #else
                 code = RESET_CODE_NO_VIDEO_MODE;
 #endif
-            } else if (!(gp->flags & GW_FLAG_PROGRESSIVE)) {
+            } else if (!(flags & GW_FLAG_PROGRESSIVE)) {
                 code = RESET_CODE_INTERLACED;
             } else {
                 code = RESET_CODE_PROGRESSIVE;
