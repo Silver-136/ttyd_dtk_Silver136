@@ -39,8 +39,8 @@ void hitReInit(void) {
     HitEntry* hit;
 
     wp = mapGetWork();
-    entry = wp->entries;
-    for (i = 0; i < wp->entries->count; entry++, i++) {
+    for (i = 0; i < wp->count; i++) {
+        entry = &wp->entries[i];
         hit = entry->hitEntries;
         if (hit != NULL) {
             for (j = 0; j < entry->hitNumJoints; j++, hit++) {
@@ -198,7 +198,7 @@ void hitDelete(const char* name) {
     s32 j;
     s32 i;
 
-    for (i = 0; i < wp->entries->count; i++) {
+    for (i = 0; i < wp->count; i++) {
         HitEntry* hit;
 
         for (j = 0, hit = wp->entries[i].hitEntries; j < wp->entries[i].hitNumJoints; j++, hit++) {
@@ -234,8 +234,8 @@ void hitMain(void) {
     Mtx mtx;
 
     hitPreCheck();
-    entry = wp->entries;
-    for (i = 0; i < wp->entries->count; entry++, i++) {
+    for (i = 0; i < wp->count; i++) {
+        entry = &wp->entries[i];
         anim = entry->animData;
         for (recalc = FALSE, j = 0; j < entry->numAnims; j++, anim++) {
             list = (HitAnimJointList*)anim->anim->jointAnims;
@@ -786,7 +786,7 @@ HitEntry* hitCheckVecFilter(HitCheckQuery* query, HitFilterCallback callback) {
 #if VERSION <= VERSION_DEMO_JP
     HitVector* vector2;
     HitVector* vector3;
-    MapEntry* map = mapGetWork()->entries;
+    MapWork* wp = mapGetWork();
     HitEntry* hit2;
     HitEntry* hit3;
     HitEntry* hit;
@@ -834,7 +834,8 @@ HitEntry* hitCheckVecFilter(HitCheckQuery* query, HitFilterCallback callback) {
     PSVECAdd(&query->targetPos, &endPos, &endPos);
 #if VERSION <= VERSION_DEMO_JP
     if (query->targetDir.x == 0.0f && query->targetDir.y == -1.0f && query->targetDir.z == 0.0f) {
-        for (mapEntry = map, i = 0; i < map->count; mapEntry++, i++) {
+        for (i = 0; i < wp->count; i++) {
+            mapEntry = &wp->entries[i];
             for (j = 0, hit = mapEntry->hitEntries; j < mapEntry->hitNumJoints; j++, hit++) {
                 if (hit->flags & (HIT_FLAG_NO_GEOMETRY | HIT_FLAG_DELETED | HIT_FLAG_OFF)) {
                     continue;
@@ -866,7 +867,8 @@ HitEntry* hitCheckVecFilter(HitCheckQuery* query, HitFilterCallback callback) {
             }
         }
     } else if (query->targetDir.y == 0.0f) {
-        for (mapEntry = map, i = 0; i < map->count; mapEntry++, i++) {
+        for (i = 0; i < wp->count; i++) {
+            mapEntry = &wp->entries[i];
             for (j = 0, hit2 = mapEntry->hitEntries; j < mapEntry->hitNumJoints; j++, hit2++) {
                 if (hit2->flags & (HIT_FLAG_NO_GEOMETRY | HIT_FLAG_DELETED | HIT_FLAG_OFF)) {
                     continue;
@@ -898,7 +900,8 @@ HitEntry* hitCheckVecFilter(HitCheckQuery* query, HitFilterCallback callback) {
             }
         }
     } else {
-        for (mapEntry = map, i = 0; i < map->count; mapEntry++, i++) {
+        for (i = 0; i < wp->count; i++) {
+            mapEntry = &wp->entries[i];
             for (j = 0, hit3 = mapEntry->hitEntries; j < mapEntry->hitNumJoints; j++, hit3++) {
                 if (hit3->flags & (HIT_FLAG_NO_GEOMETRY | HIT_FLAG_DELETED | HIT_FLAG_OFF)) {
                     continue;
@@ -1049,7 +1052,7 @@ HitEntry* hitCheckVecFilter(HitCheckQuery* query, HitFilterCallback callback) {
     query->hitPos = position;
     query->hitNormal = normal;
 #if VERSION <= VERSION_DEMO_JP
-    return &map[mapIdx].hitEntries[hitIdx];
+    return &wp->entries[mapIdx].hitEntries[hitIdx];
 #else
     return closest;
 #endif
@@ -1252,8 +1255,7 @@ HitEntry* hitCheckAttrOnly(s32 user0, s32 user1, f32* hitX, f32* hitY, f32* hitZ
 
 HitEntry* hitCheckSphereFilter(HitFilterCallback callback, f32 x, f32 y, f32 z,
                                f32 distance) {
-    MapEntry* map = mapGetWork()->entries;
-    MapEntry* mapEntry = map;
+    MapWork* wp = mapGetWork();
     int i;
     Vec center;
     int j;
@@ -1275,9 +1277,9 @@ HitEntry* hitCheckSphereFilter(HitFilterCallback callback, f32 x, f32 y, f32 z,
     objectId = -1;
     query = &temp;
     center = (Vec){ x, y, z };
-    for (i = 0; i < map->count; mapEntry++, i++) {
-        hitObj = mapEntry->hitEntries;
-        for (j = 0; j < mapEntry->hitNumJoints; j++, hitObj++) {
+    for (i = 0; i < wp->count; i++) {
+        hitObj = wp->entries[i].hitEntries;
+        for (j = 0; j < wp->entries[i].hitNumJoints; j++, hitObj++) {
             if ((hitObj->attributes & HIT_ATTR_MOBJ) && (hitObj->joint->partCount != 0)) {
                 entryFlags = hitObj->flags;
                 if (!(entryFlags & HIT_FLAG_OFF) && !(entryFlags & HIT_FLAG_DELETED)) {
@@ -1301,11 +1303,10 @@ HitEntry* hitCheckSphereFilter(HitFilterCallback callback, f32 x, f32 y, f32 z,
     }
 #if VERSION >= VERSION_JP
     if (minDist < (0.5f * radius)) {
-        return &map[entryId].hitEntries[objectId];
+        return &wp->entries[entryId].hitEntries[objectId];
     }
 #endif
-    map = &map[entryId];
-    bestEntry = &map->hitEntries[objectId];
+    bestEntry = &wp->entries[entryId].hitEntries[objectId];
     PSVECSubtract(&bestEntry->centerWorld, &center, &query->targetDir);
     PSVECNormalize(&query->targetDir, &query->targetDir);
     minVecDist = -1.0f;
@@ -1332,7 +1333,7 @@ HitEntry* hitCheckSphereFilter(HitFilterCallback callback, f32 x, f32 y, f32 z,
     if (found < 0) {
         return NULL;
     }
-    return &map->hitEntries[objectId];
+    return &wp->entries[entryId].hitEntries[objectId];
 }
 
 /**
@@ -1350,9 +1351,8 @@ static void hitPreCheck(void) {
 
     prev = hitActiveListTop = NULL;
 #endif
-    i = 0;
-    entry = wp->entries;
-    for (; i < wp->entries->count; entry++, i++) {
+    for (i = 0; i < wp->count; i++) {
+        entry = &wp->entries[i];
         hit = entry->hitEntries;
         for (j = 0; j < entry->hitNumJoints; j++, hit++) {
 #if VERSION <= VERSION_DEMO_JP
@@ -1391,7 +1391,7 @@ HitEntry* hitNameToPtr(const char* name) {
     if (name == NULL) {
         return NULL;
     }
-    for (i = 0; i < wp->entries->count; i++) {
+    for (i = 0; i < wp->count; i++) {
         map = &wp->entries[i];
         hit = map->hitEntries;
         for (j = 0; j < map->hitNumJoints; j++, hit++) {
@@ -1464,6 +1464,7 @@ void hitObjGetNormal(const char* name, Vec* normal) {
  */
 #if VERSION >= VERSION_JP
 const char* hitGetName(HitEntry* hit) {
+    MapWork* wp;
     MapEntry* map;
     s32 count;
     int i;
@@ -1473,9 +1474,10 @@ const char* hitGetName(HitEntry* hit) {
     if (hit == NULL) {
         return NULL;
     }
-    map = mapGetWork()->entries;
-    count = map->count;
-    for (i = 0; i < count; map++, i++) {
+    wp = mapGetWork();
+    count = wp->count;
+    for (i = 0; i < count; i++) {
+        map = &wp->entries[i];
         start = (u8*)map->hitEntries;
         size = OSRoundUp32B((map->hitNumJoints + 0x80) * sizeof(HitEntry));
         if ((u8*)hit >= start && (u8*)hit < start + size) {

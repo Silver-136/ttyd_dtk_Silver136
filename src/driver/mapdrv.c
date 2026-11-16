@@ -194,28 +194,27 @@ void mapInit(void) {
  * Frees the map objects, animation lists and display lists of every map entry of the active MapWork
  * (the map files stay loaded).
  */
-// Original name and size (0xb8) from the JP demo map (UNUSED there: its call in mapUnLoad is inlined; bmapUnLoad
-// keeps the loop written out: with the call it matches the JP demo but not US retail (registers differ)).
+// Original name and size (0xb8) from the JP demo map (UNUSED there: its calls in mapUnLoad and bmapUnLoad are
+// inlined).
 void mapReInit(void) {
     MapWork* wp = mapGetWork();
-    MapEntry* entry = wp->entries;
     int i;
 
-    for (i = 0; i < wp->entries[0].count; entry++, i++) {
-        if (entry->objects) {
-            _mapFree(entry->objects);
-            entry->numJoints = 0;
-            entry->objects = NULL;
+    for (i = 0; i < wp->count; i++) {
+        if (wp->entries[i].objects) {
+            _mapFree(wp->entries[i].objects);
+            wp->entries[i].numJoints = 0;
+            wp->entries[i].objects = NULL;
         }
-        if (entry->animData) {
-            _mapFree(entry->animData);
-            entry->numAnims = 0;
-            entry->animData = NULL;
+        if (wp->entries[i].animData) {
+            _mapFree(wp->entries[i].animData);
+            wp->entries[i].numAnims = 0;
+            wp->entries[i].animData = NULL;
         }
-        if (entry->dispListBuf) {
-            _mapFree(entry->dispListBuf);
-            entry->dispListBuf = NULL;
-            entry->dispListSize = 0;
+        if (wp->entries[i].dispListBuf) {
+            _mapFree(wp->entries[i].dispListBuf);
+            wp->entries[i].dispListBuf = NULL;
+            wp->entries[i].dispListSize = 0;
         }
     }
 }
@@ -606,8 +605,8 @@ static inline MapAnim* mapSearchAnmObj_inl(const char* animName) {
     int i;
     MapAnim* anim;
 
-    entry = wp->entries;
-    for (i = 0; i < wp->entries[0].count; entry++, i++) {
+    for (i = 0; i < wp->count; i++) {
+        entry = &wp->entries[i];
         anim = (MapAnim*)entry->animData;
         for (j = 0; j < entry->numAnims; j++, anim++) {
             if ((anim->flags & MAP_ANIM_FLAG_ACTIVE) && !strcmp(anim->anim->name, animName)) {
@@ -620,14 +619,14 @@ static inline MapAnim* mapSearchAnmObj_inl(const char* animName) {
 
 /** The playing map animation called animName in the active group's entries, or NULL; called from aji_06 and aji_11. */
 MapEntryAnimData* mapSearchAnmObj(const char* animName) {
-    MapWork* wp = &mapWork[activeGroup];
     MapEntry* entry;
+    MapWork* wp = mapGetWork();
     int j;
     int i;
     MapAnim* anim;
 
-    entry = wp->entries;
-    for (i = 0; i < wp->entries[0].count; entry++, i++) {
+    for (i = 0; i < wp->count; i++) {
+        entry = wp->entries + i;
         anim = (MapAnim*)entry->animData;
         for (j = 0; j < entry->numAnims; j++, anim++) {
             if ((anim->flags & MAP_ANIM_FLAG_ACTIVE) && !strcmp(anim->anim->name, animName)) {
@@ -668,9 +667,9 @@ void mapPlayAnimationLv(const char* name, s32 mode, s32 level) {
     BOOL found = FALSE;
     OSTime t;
 
-    wp = &mapWork[activeGroup];
-    entry = wp->entries;
-    for (i = 0; i < wp->entries[0].count; entry++, i++) {
+    wp = mapGetWork();
+    for (i = 0; i < wp->count; i++) {
+        entry = &wp->entries[i];
         anim = (MapAnim*)entry->animData;
         for (j = 0; j < entry->numAnims; j++, anim++) {
             if (!strcmp(anim->anim->name, name)) {
@@ -720,31 +719,23 @@ void mapPlayAnimationLv(const char* name, s32 mode, s32 level) {
  */
 // Original name and size (0x124) from the JP demo map (UNUSED there: its only call, in _mapLoad, is inlined).
 void mapEntryAnimation(BOOL group) {
-    MapWork* w;
+    MapWork* wp = mapGetWork();
     u32* animTbl;
-    u32 n;
-    u32 k;
     MapEntryAnimData* a;
+    MapHeader* header;
+    u32 n;
     int i;
-    MapEntry* e2;
-    w = &mapWork[activeGroup];
-    e2 = &w->entries[group];
-    for (k = 0; k < e2->header.file.chunkCount; k++) {
-        if (!strcmp(&e2->header.strings[e2->header.chunks[k].string], "animation_table")) {
-            animTbl = (u32*)((u8*)e2->header.data + e2->header.chunks[k].offset);
-            goto found;
-        }
-    }
-    animTbl = NULL;
-found:
+
+    header = &wp->entries[group].header;
+    animTbl = HSD_ArchiveGetPublicAddress(header, "animation_table");
     if (animTbl != NULL) {
-        w->entries[group].numAnims = animTbl[0];
-        if (w->entries[group].numAnims != 0) {
-            n = OSRoundUp32B(w->entries[group].numAnims * 32);
-            w->entries[group].animData = _mapAlloc(n);
-            memset(w->entries[group].animData, 0, n);
-            a = w->entries[group].animData;
-            for (i = 0; i < w->entries[group].numAnims; i++) {
+        wp->entries[group].numAnims = animTbl[0];
+        if (wp->entries[group].numAnims != 0) {
+            n = OSRoundUp32B(wp->entries[group].numAnims * 32);
+            wp->entries[group].animData = _mapAlloc(n);
+            memset(wp->entries[group].animData, 0, n);
+            a = wp->entries[group].animData;
+            for (i = 0; i < wp->entries[group].numAnims; i++) {
                 a->flags = 0;
                 a->anim = (MapAnimHeader*)*++animTbl;
                 a++;
@@ -771,13 +762,14 @@ void mapReStartAnimation(const char* name) {
 
 /** Pauses every map animation of the active group; the name argument is ignored. */
 void mapPauseAnimationAll(const char* name) {
-    MapWork* wp = &mapWork[activeGroup];
-    MapEntry* entry = wp->entries;
+    MapEntry* entry;
+    MapWork* wp = mapGetWork();
     int j;
     int i;
     MapAnim* anim;
 
-    for (i = 0; i < wp->entries[0].count; entry++, i++) {
+    for (i = 0; i < wp->count; i++) {
+        entry = &wp->entries[i];
         anim = (MapAnim*)entry->animData;
         for (j = 0; j < entry->numAnims; j++, anim++) {
             anim->flags |= MAP_ANIM_FLAG_PAUSE;
@@ -787,13 +779,14 @@ void mapPauseAnimationAll(const char* name) {
 
 /** Resumes every paused map animation of the active group; the name argument is ignored. */
 void mapReStartAnimationAll(const char* name) {
-    MapWork* wp = &mapWork[activeGroup];
-    MapEntry* entry = wp->entries;
+    MapEntry* entry;
+    MapWork* wp = mapGetWork();
     int j;
     int i;
     MapAnim* anim;
 
-    for (i = 0; i < wp->entries[0].count; entry++, i++) {
+    for (i = 0; i < wp->count; i++) {
+        entry = &wp->entries[i];
         anim = (MapAnim*)entry->animData;
         for (j = 0; j < entry->numAnims; j++, anim++) {
             anim->flags |= MAP_ANIM_FLAG_RESTART;
@@ -813,8 +806,8 @@ void mapSetPlayRate(const char* name, f32 rate) {
  * Frees the map files of entry group of wp (map.dat and texture.tpl unless they live in the map archive, and the
  * archive itself) and clears its name.
  */
-// Original name and size (0xc4) from the JP demo map (UNUSED there: its call in mapUnLoad is inlined; bmapUnLoad
-// keeps the loop written out: with the call it matches the JP demo but not US retail (registers differ)).
+// Original name and size (0xc4) from the JP demo map (UNUSED there: its calls in mapUnLoad and bmapUnLoad are
+// inlined).
 void _mapUnLoad(MapWork* wp, BOOL group) {
     if (wp->entries[group].dat) {
         if (!arcDataCheck(wp->entries[group].dat)) {
@@ -893,7 +886,7 @@ static void _mapLoad(MapWork* wp, BOOL group, const char* map) {
     }
 
     GXInvalidateVtxCache();
-    HSD_ArchiveParse(&wp->entries[group]);
+    HSD_ArchiveParse(&wp->entries[group].header, wp->entries[group].dat, wp->entries[group].datSize);
     header = &wp->entries[group].header;
     info = (MapFileInfo*)HSD_ArchiveGetPublicAddress(header, "information");
     wp->entries[group].textureTable = HSD_ArchiveGetPublicAddress(header, "texture_table");
@@ -1013,7 +1006,7 @@ void mapUnLoad(void) {
     envReInit();
     camUnLoadRoad(CAMERA_3D);
     camSetTypePersp(CAMERA_3D);
-    for (i = 0; i < wp->entries[0].count; i++) {
+    for (i = 0; i < wp->count; i++) {
         _mapUnLoad(wp, i);
     }
     arcDelete(1);
@@ -1038,7 +1031,7 @@ void mapLoad(const char* map) {
     activeGroup = 0;
     memset(wp = mapWork, 0, sizeof(MapWork));
     _mapLoad(wp, 0, map);
-    wp->entries[0].count = 1;
+    wp->count = 1;
 }
 #endif
 
@@ -1091,127 +1084,48 @@ void mapLoad(const char* map) {
         fileFree(file);
     }
     _mapLoad(wp, 0, map);
-    wp->entries[0].count = 1;
+    wp->count = 1;
 }
 #endif
 
-// FAKE: opt_common_subs off for bmapUnLoad. With CSE on, `wp = mapWork` (last loop) becomes a CSE temp created
-// before the lifetime-split temps, so wp's register lands above i's. With it off, the second web of the reused `wp`
-// is a split temp; split temps are created in order of the variables' first reference (i before wp before entry),
-// which gives the target's i r31 / wp r30 / entry r29. Code is otherwise identical.
-#pragma opt_common_subs off
 /**
  * Frees the battle stage maps (MapWork slot 1) at the end of a battle,
  * then copies the field map's files back from ARAM and rebuilds its display lists so the field can resume.
  */
 void bmapUnLoad(void) {
-#if VERSION <= VERSION_DEMO_JP
-    MapWork* wp2;
-    MapEntry* entry3;
-    int j;
     MapWork* wp;
     MapEntry* entry;
-    MapEntry* entry2;
     int i;
-    s32 gz;
-#else
-    MapEntry* entry2;
-    MapEntry* entry;
-    int i;
-    MapWork* wp;
 
+#if VERSION >= VERSION_JP
     sysWaitDrawSync();
 #endif
-    i = 0;
     wp = &mapWork[1];
     activeGroup = 1;
-    for (entry = wp->entries; i < wp->entries[0].count; entry++, i++) {
-        if (entry->objects) {
-            _mapFree(entry->objects);
-            entry->numJoints = 0;
-            entry->objects = NULL;
-        }
-        if (entry->animData) {
-            _mapFree(entry->animData);
-            entry->numAnims = 0;
-            entry->animData = NULL;
-        }
-        if (entry->dispListBuf) {
-            _mapFree(entry->dispListBuf);
-            entry->dispListBuf = NULL;
-            entry->dispListSize = 0;
-        }
-    }
+    mapReInit();
 #if VERSION >= VERSION_JP
     disableMapDraw = FALSE;
 #endif
     hitReInit();
     lightReInit();
     envReInit();
-    entry2 = wp->entries;
-    for (i = 0; i < wp->entries[0].count; entry2++, i++) {
-        if (entry2->dat) {
-            if (!arcDataCheck(entry2->dat)) {
-                _mapFree(entry2->dat);
-            }
-            entry2->dat = NULL;
-        }
-        if (entry2->tpl) {
-            if (!arcDataCheck(entry2->tpl)) {
-                _mapFree(entry2->tpl);
-            }
-            entry2->tpl = NULL;
-        }
-        if (entry2->arcData) {
-            _mapFree(entry2->arcData);
-            entry2->arcData = NULL;
-        }
-        strncpy(entry2->name, "", sizeof(entry2->name));
+    for (i = 0; i < wp->count; i++) {
+        _mapUnLoad(wp, i);
     }
     arcDelete(1);
     arcDelete(2);
     memset(wp, 0, sizeof(MapWork));
-
-    // the tpl ARAM copy is kept in the word after the entry (MAPENT_TPLARAM)
-#if VERSION <= VERSION_DEMO_JP
-    j = 0;
-    gz = 0;
-    if (gz != 0) {
-        j = 0;
-    }
-    wp2 = mapWork;
-    activeGroup = j;
-    for (entry3 = wp2->entries; j < wp2->entries[0].count; entry3++, j++) {
-
-        // the tpl ARAM copy sits in the word after the entry (MAPENT_TPLARAM; a MapWork { count; entries@4 } layout was tried and changes codegen: the original addresses entries from wp itself)
-        if (entry3->datAram) {
-            entry3->dat = _mapAllocTail(entry3->datSize);
-            entry3->tpl = _mapAllocTail(entry3->tplSize);
-            aramMgrToMram(entry3->datAram, entry3->dat);
-            aramMgrToMram(MAPENT_TPLARAM(entry3), entry3->tpl);
-            entry3->datAram = NULL;
-            MAPENT_TPLARAM(entry3) = NULL;
-        } else {
-            entry3->arcData = _mapAllocTail(entry3->arcSize);
-            aramMgrToMram(entry3->arcAram, entry3->arcData);
-            entry3->arcAram = NULL;
-        }
-        makeDisplayList(j);
-    }
-    if (wp2->entries->arcData) {
-        arcEntry(1, wp2->entries->arcData, wp2->entries->arcSize);
-    }
-#else
-    wp = mapWork;
     activeGroup = 0;
-    for (i = 0, entry = wp->entries; i < wp->entries[0].count; entry++, i++) {
+    wp = mapGetWork();
+    for (i = 0; i < wp->count; i++) {
+        entry = &wp->entries[i];
         if (entry->datAram) {
             entry->dat = _mapAllocTail(entry->datSize);
             entry->tpl = _mapAllocTail(entry->tplSize);
             aramMgrToMram(entry->datAram, entry->dat);
-            aramMgrToMram(MAPENT_TPLARAM(entry), entry->tpl);
+            aramMgrToMram(entry->tplAram, entry->tpl);
             entry->datAram = NULL;
-            MAPENT_TPLARAM(entry) = NULL;
+            entry->tplAram = NULL;
         } else {
             entry->arcData = _mapAllocTail(entry->arcSize);
             aramMgrToMram(entry->arcAram, entry->arcData);
@@ -1219,12 +1133,10 @@ void bmapUnLoad(void) {
         }
         makeDisplayList(i);
     }
-    if (wp->entries->arcData) {
-        arcEntry(1, wp->entries->arcData, wp->entries->arcSize);
+    if (wp->entries[0].arcData) {
+        arcEntry(1, wp->entries[0].arcData, wp->entries[0].arcSize);
     }
-#endif
 }
-#pragma opt_common_subs reset
 
 #if VERSION <= VERSION_DEMO_JP
 /**
@@ -1273,18 +1185,17 @@ void bmapLoad(const char* map, const char* map2) {
 #endif
     activeGroup = 0;
     wp = mapGetWork();
-    for (i = 0; i < wp->entries[0].count; i++) {
+    for (i = 0; i < wp->count; i++) {
         freeDisplayList(i);
         entry = &wp->entries[i];
 
-        // the tpl ARAM copy is kept in the word after the entry (MAPENT_TPLARAM)
         entry->datAram = NULL;
-        MAPENT_TPLARAM(entry) = NULL;
+        entry->tplAram = NULL;
         entry->arcAram = NULL;
         if (entry->dat) {
             if (!arcDataCheck(entry->dat)) {
                 entry->datAram = aramMgrToAram(entry->dat, entry->datSize);
-                MAPENT_TPLARAM(entry) = aramMgrToAram(entry->tpl, entry->tplSize);
+                entry->tplAram = aramMgrToAram(entry->tpl, entry->tplSize);
                 _mapFree(entry->tpl);
                 _mapFree(entry->dat);
                 entry->tpl = NULL;
@@ -1337,10 +1248,10 @@ void bmapLoad(const char* map, const char* map2) {
     }
 #endif
     _mapLoad(wp, 0, map);
-    wp->entries[0].count = 1;
+    wp->count = 1;
     if (map2) {
         _mapLoad(wp, 1, map2);
-        wp->entries[0].count = 2;
+        wp->count = 2;
     }
 }
 
@@ -1718,8 +1629,8 @@ static void mapReCalcMatrix(MapObject* obj, Mtx mtx, BOOL force) {
 void mapMain(void) {
     MapObject* o;
     f32 cur;
-    MapWork* wp = &mapWork[activeGroup];
     MapEntry* entry;
+    MapWork* wp = &mapWork[activeGroup];
     char mbuf[0x100];
     s32 i, j;
     s32 k;
@@ -1730,11 +1641,11 @@ void mapMain(void) {
     Mtx scale;
     f32 cv[5];
 #if VERSION <= VERSION_DEMO_JP
-    for (i = 0; i < wp->entries[0].count; i++) {
+    for (i = 0; i < wp->count; i++) {
         entry = &wp->entries[i];
 #else
-    entry = wp->entries;
-    for (i = 0; i < wp->entries[0].count; entry++, i++) {
+    for (i = 0; i < wp->count; i++) {
+        entry = &wp->entries[i];
 #endif
         changed = FALSE;
         anim = (MapAnim*)entry->animData;
@@ -2071,14 +1982,15 @@ static void mapDispMapGrp_off(CameraId cam, void* payload) {
  * the sac_deka action command uses it the same way to photograph the stage floor.
  */
 void test_kururing_mapdisp(CameraId cam) {
-    MapWork* wp = &mapWork[activeGroup];
-    MapEntry* entry = wp->entries;
+    MapEntry* entry;
+    MapWork* wp = mapGetWork();
     u32 flags;
     int j;
     int i;
     MapObject* obj;
 
-    for (i = 0; i < wp->entries[0].count; entry++, i++) {
+    for (i = 0; i < wp->count; i++) {
+        entry = &wp->entries[i];
         obj = entry->objects;
         for (j = 0; j < entry->numJoints; j++, obj++) {
             flags = obj->flags;
@@ -2173,7 +2085,7 @@ static const GXLightID lightid_tbl[8] = {GX_LIGHT0, GX_LIGHT1, GX_LIGHT2, GX_LIG
  * plus its offscreen and screen-rectangle passes. Does nothing after mapDispOff.
  */
 void mapDisp(void) {
-    MapWork* wp = &mapWork[activeGroup];
+    MapWork* wp = mapGetWork();
     CameraEntry* camera = camGetPtr(CAMERA_3D);
     MapEntry* entry;
     MapObject* obj;
@@ -2191,8 +2103,8 @@ void mapDisp(void) {
         return;
     }
 #endif
-    entry = wp->entries;
-    for (i = 0; i < wp->entries[0].count; entry++, i++) {
+    for (i = 0; i < wp->count; i++) {
+        entry = &wp->entries[i];
         if (entry->rootMapObj != NULL) {
             PSMTXScale(scale, 10.0f, 10.0f, 10.0f);
             mapReCalcMatrix(entry->rootMapObj, scale, FALSE);
@@ -3703,7 +3615,7 @@ MapMaterial* mapSearchDmdMaterial(const char* name) {
 
     wp = &mapWork[activeGroup];
 #endif
-    for (i = 0; i < wp->entries[0].count; i++) {
+    for (i = 0; i < wp->count; i++) {
         entry = &wp->entries[i];
         if (!entry->materialNameTable) {
             return NULL;
@@ -3733,7 +3645,7 @@ MapObject* mapGetMapObj(const char* name) {
     if (!name) {
         return NULL;
     }
-    for (i = 0; i < wp->entries[0].count; i++) {
+    for (i = 0; i < wp->count; i++) {
         entry = &wp->entries[i];
         object = entry->objects;
         for (j = 0; j < entry->numJoints; j++, object++) {
@@ -3862,31 +3774,8 @@ static void _setOffScrnId(MapObject* obj, s32 id, BOOL doNext) {
 
 /** Makes the map object name also draw into the offscreen buffer called offscreen (evt_map). */
 void mapObjSetOffScreen(const char* name, const char* offscreen) {
-    MapObject* obj;
-    MapObject* object;
-    int i;
-    int j;
-    MapWork* wp;
-    MapEntry* entry;
+    MapObject* obj = mapGetMapObj(name);
 
-    // the search exits through `done` (an inline helper returning the object, or a flag, changes the code)
-    wp = &mapWork[activeGroup];
-    if (!name) {
-        obj = NULL;
-        goto done;
-    }
-    entry = &wp->entries[0];
-    for (i = 0; i < wp->entries[0].count; entry++, i++) {
-        object = entry->objects;
-        for (j = 0; j < entry->numJoints; j++, object++) {
-            if (!strcmp(object->joints->name, name)) {
-                obj = object;
-                goto done;
-            }
-        }
-    }
-    obj = NULL;
-done:
     // BUG: obj is NULL when no map object has this name, and it is written through anyway
     obj->offscreenId = offscreenNameToId(offscreen);
     obj->flags |= MAP_OBJ_FLAG_OFFSCREEN;
@@ -4258,12 +4147,12 @@ void spline_getvalue(Vec* out, f32 t, s32 n, Vec* pts, f32* ts, Vec* tbl) {
  * base.
  */
 // Original name and size (0x48) from the JP demo map (UNUSED there: every call is inlined).
-void Locate(MapEntry* entry) {
+void Locate(MapHeader* header) {
     u32 k;
-    for (k = 0; k < entry->header.file.relCount; k++) {
-        u32* rel = (u32*)((u8*)entry->header.data + entry->header.rel[k]);
+    for (k = 0; k < header->file.relCount; k++) {
+        u32* rel = (u32*)((u8*)header->data + header->rel[k]);
         if (*rel <= 0x80000000) {
-            *rel += (u32)entry->header.data;
+            *rel += (u32)header->data;
         }
     }
 }
@@ -4285,48 +4174,48 @@ void* HSD_ArchiveGetPublicAddress(MapHeader* header, const char* name) {
 }
 
 /**
- * Parses the map.dat header of entry: locates the data, relocation, chunk,
+ * Reads the map.dat header from data into header: locates the data, relocation, chunk,
  * extern and string sections after it and relocates the pointers.
- * Does nothing if the stored file size does not match the loaded size.
+ * Returns -1 (header left cleared) if header is NULL or the stored file size does not match datSize, else 0.
  */
-// Original name and size (0x168) from the JP demo map (UNUSED there: its only call, in _mapLoad, is inlined).
-s32 HSD_ArchiveParse(MapEntry* entry) {
-    u32 datSize = entry->datSize;
-    u8* data = (u8*)entry->dat;
+// Original name and size (0x168) from the JP demo map (UNUSED there: its only call, in _mapLoad, is inlined). The
+// (header, data, size) parameters and -1 returns are the form whose out-of-line copy is exactly 0x168 and whose
+// inlined copy matches _mapLoad; it is the shape of sysdolphin's HSD_ArchiveParse (MapHeader is its HSD_Archive).
+s32 HSD_ArchiveParse(MapHeader* header, u8* data, u32 datSize) {
     u32 sizeCheck;
-    MapHeader* header = &entry->header;
 
-    // header is the address of a member and never NULL; the test is in the retail code all the same
-    if (header != NULL) {
-        memset(header, 0, sizeof(MapHeader));
-        entry->header.loadFlags |= 1;
-        memcpy(header, data, sizeof(MapFileHeader));
-        if (entry->header.file.fileSize == datSize) {
-            sizeCheck = sizeof(MapFileHeader);
-            if (entry->header.file.dataSize != 0) {
-                entry->header.data = &data[sizeCheck];
-                sizeCheck = entry->header.file.dataSize;
-                sizeCheck += sizeof(MapFileHeader);
-            }
-            if (entry->header.file.relCount != 0) {
-                entry->header.rel = (u32*)&data[sizeCheck];
-                sizeCheck += 4 * entry->header.file.relCount;
-            }
-            if (entry->header.file.chunkCount != 0) {
-                entry->header.chunks = (MapFileChunk*)&data[sizeCheck];
-                sizeCheck += sizeof(MapFileChunk) * entry->header.file.chunkCount;
-            }
-            if (entry->header.file.unused != 0) {
-                entry->header.unused = &data[sizeCheck];
-                sizeCheck += 8 * entry->header.file.unused;
-            }
-            if (sizeCheck < entry->header.file.fileSize) {
-                entry->header.strings = (const char*)&data[sizeCheck];
-            }
-            entry->header.rawFile = data;
-            Locate(entry);
-        }
+    if (header == NULL) {
+        return -1;
     }
+    memset(header, 0, sizeof(MapHeader));
+    header->loadFlags |= 1;
+    memcpy(header, data, sizeof(MapFileHeader));
+    if (header->file.fileSize != datSize) {
+        return -1;
+    }
+    sizeCheck = sizeof(MapFileHeader);
+    if (header->file.dataSize != 0) {
+        header->data = &data[sizeCheck];
+        sizeCheck = header->file.dataSize;
+        sizeCheck += sizeof(MapFileHeader);
+    }
+    if (header->file.relCount != 0) {
+        header->rel = (u32*)&data[sizeCheck];
+        sizeCheck += 4 * header->file.relCount;
+    }
+    if (header->file.chunkCount != 0) {
+        header->chunks = (MapFileChunk*)&data[sizeCheck];
+        sizeCheck += sizeof(MapFileChunk) * header->file.chunkCount;
+    }
+    if (header->file.unused != 0) {
+        header->unused = &data[sizeCheck];
+        sizeCheck += 8 * header->file.unused;
+    }
+    if (sizeCheck < header->file.fileSize) {
+        header->strings = (const char*)&data[sizeCheck];
+    }
+    header->rawFile = data;
+    Locate(header);
     return 0;
 }
 

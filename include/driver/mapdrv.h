@@ -376,59 +376,49 @@ typedef struct MapTevCallbackInfo MapTevCallbackInfo;
 typedef void (*MapTevCallback)(MapTevCallbackInfo* info);
 
 typedef struct MapEntry {
-    union {
-        s32 count;                 // 0x0, entries[0]: number of active entries
-        struct ARAMEntry* prevTplAram; // 0x0, entries[1] / MapWork.lastTplAram: the previous entry's tpl ARAM copy (MAPENT_TPLARAM)
-    };
-    u16 flags;                     // 0x4
-    char name[16];                 // 0x6
-    GXColor blend;                 // 0x16
-    GXColor blend2;                // 0x1A
-    GXColor color;                 // 0x1E
-    s32 fogEnable;                 // 0x24, fog_table word 0
-    s32 fogType;                   // 0x28
-    f32 fogStart;                  // 0x2C
-    f32 fogEnd;                    // 0x30
-    GXColor fogColor;              // 0x34
-    MapHeader header;              // 0x38
-    void* dat;                     // 0x7C, ./map/%s/map.dat
-    u32 datSize;                   // 0x80
-    void* tpl;                     // 0x84, ./map/%s/texture.tpl
-    u32 tplSize;                   // 0x88
-    void* arcData;                 // 0x8C, buffer kept in ARAM (arcAram) when dat is an archive
-    u32 arcSize;                   // 0x90
-    MapTexTable* textureTable;     // 0x94, "texture_table" chunk
-    MapFileLightTable* lightTable; // 0x98, "light_table" chunk
-    MapFileFog* fogTable;          // 0x9C, "fog_table" chunk
-    MapMaterialNameTable* materialNameTable; // 0xA0, "material_name_table" chunk
-    MapVcdTable* vcdTable;         // 0xA4, "vcd_table" chunk
-    MapObject* rootMapObj;         // 0xA8
-    struct HitEntry* rootHitObj;     // 0xAC
-    Vec bbox[8];                   // 0xB0
-    MapTevCallback tevCallbacks[16];        // 0x110
-    s32 numJoints;                 // 0x150
-    MapObject* objects;            // 0x154
-    s32 hitNumJoints;              // 0x158
-    struct HitEntry* hitEntries;     // 0x15C
-    s32 numAnims;                  // 0x160
-    MapEntryAnimData* animData;    // 0x164
-    u32 dispListSize;              // 0x168, total display-list bytes (makeDisplayList)
-    void* dispListBuf;             // 0x16C, _mapAllocTail(dispListSize); freed in bmapLoad
-    struct ARAMEntry* datAram;     // 0x170, ARAM copy of dat (bmapLoad / bmapUnLoad)
-    struct ARAMEntry* arcAram;     // 0x174, ARAM copy of arcData
-    // the tpl ARAM copy has no slot of its own: it lives in the first word after the entry (MAPENT_TPLARAM)
+    u16 flags;                     // 0x0
+    char name[16];                 // 0x2
+    GXColor blend;                 // 0x12
+    GXColor blend2;                // 0x16
+    GXColor color;                 // 0x1A
+    s32 fogEnable;                 // 0x20, fog_table word 0
+    s32 fogType;                   // 0x24
+    f32 fogStart;                  // 0x28
+    f32 fogEnd;                    // 0x2C
+    GXColor fogColor;              // 0x30
+    MapHeader header;              // 0x34
+    void* dat;                     // 0x78, ./map/%s/map.dat
+    u32 datSize;                   // 0x7C
+    void* tpl;                     // 0x80, ./map/%s/texture.tpl
+    u32 tplSize;                   // 0x84
+    void* arcData;                 // 0x88, buffer kept in ARAM (arcAram) when dat is an archive
+    u32 arcSize;                   // 0x8C
+    MapTexTable* textureTable;     // 0x90, "texture_table" chunk
+    MapFileLightTable* lightTable; // 0x94, "light_table" chunk
+    MapFileFog* fogTable;          // 0x98, "fog_table" chunk
+    MapMaterialNameTable* materialNameTable; // 0x9C, "material_name_table" chunk
+    MapVcdTable* vcdTable;         // 0xA0, "vcd_table" chunk
+    MapObject* rootMapObj;         // 0xA4
+    struct HitEntry* rootHitObj;     // 0xA8
+    Vec bbox[8];                   // 0xAC
+    MapTevCallback tevCallbacks[16];        // 0x10C
+    s32 numJoints;                 // 0x14C
+    MapObject* objects;            // 0x150
+    s32 hitNumJoints;              // 0x154
+    struct HitEntry* hitEntries;     // 0x158
+    s32 numAnims;                  // 0x15C
+    MapEntryAnimData* animData;    // 0x160
+    u32 dispListSize;              // 0x164, total display-list bytes (makeDisplayList)
+    void* dispListBuf;             // 0x168, _mapAllocTail(dispListSize); freed in bmapLoad
+    struct ARAMEntry* datAram;     // 0x16C, ARAM copy of dat (bmapLoad / bmapUnLoad)
+    struct ARAMEntry* arcAram;     // 0x170, ARAM copy of arcData
+    struct ARAMEntry* tplAram;     // 0x174, ARAM copy of tpl
 } MapEntry;
 
 typedef struct MapWork {
-    MapEntry entries[2]; // 0x0
-    struct ARAMEntry* lastTplAram; // 0x2F0, entries[1]'s tpl ARAM copy (MAPENT_TPLARAM(&entries[1]))
+    s32 count;           // 0x0, number of loaded entries
+    MapEntry entries[2]; // 0x4
 } MapWork;
-
-// FAKE (FAKES.md, MW0): this layout (entries[] at 0, count inside entries[0], the tpl handle in the next
-// element's first word) only fits the codegen; the bytes fit `{ s32 count; MapEntry entries[2]; }` with the
-// handle as the entry's own last field (+0x174), so 0x2F0 is entries[1]'s handle, never used (NWPlayer123).
-// tpl ARAM copy of a map entry: stored in the word after it (the next entry's count slot, or lastTplAram)
-#define MAPENT_TPLARAM(entry) ((entry) + 1)->prevTplAram
 
 void mapErrorEntry(s32 type, const char* name);
 const char* getMapDataDvdRoot(void);
@@ -473,9 +463,9 @@ MapObject* mapGetMapObj(const char* name);
 MapFileJoint* mapSearchDmdJoint(MapFileJoint* joint, const char* name);
 MapMaterial* mapSearchDmdMaterial(const char* name);
 void mapSetPolygonGeometry(MapFileMesh* mesh);
-void Locate(MapEntry* entry);
+void Locate(MapHeader* header);
 void* HSD_ArchiveGetPublicAddress(MapHeader* header, const char* name);
-s32 HSD_ArchiveParse(MapEntry* entry);
+s32 HSD_ArchiveParse(MapHeader* header, u8* data, u32 datSize);
 
 void mapSetBlend(GXColor color);
 void mapSetBlend2(GXColor color);
