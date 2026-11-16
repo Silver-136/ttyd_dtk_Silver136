@@ -182,42 +182,9 @@ static const char name_party5[12];
 static const char name_party2[12];
 static const char name_party6[12];
 
-#if VERSION <= VERSION_DEMO_JP
-// The early demos keep these two as real functions at the end of the file.
+// Defined at the end of the file.
 static const char* party_name_table_rtn(s32 id);
 static s32 iconid_conv(s32 icon);
-static inline const char* select_party_name(s32 id) {
-    return party_name_table_rtn(id);
-}
-#else
-static inline const char* select_party_name(u16 id) {
-    const char* name;
-    switch (id) {
-        case 0:
-            name = msgSearch(name_party0);
-            break;
-        case 1:
-            name = msgSearch(name_party1);
-            break;
-        case 2:
-            name = msgSearch(name_party4);
-            break;
-        case 3:
-            name = pouchGetYoshiName();
-            break;
-        case 4:
-            name = msgSearch(name_party5);
-            break;
-        case 5:
-            name = msgSearch(name_party2);
-            break;
-        case 6:
-            name = msgSearch(name_party6);
-            break;
-    }
-    return name;
-}
-#endif
 
 // Descriptive name (not in the symbol maps); placeholder unk_80239b2c, JP 0x80239B2C. See docs/NAME_PROVENANCE.md.
 #if VERSION >= VERSION_JP
@@ -1118,12 +1085,12 @@ s32 winMgrSelectOther(WinMgrSelect* sel, EventEntry* evt) {
             case SELECT_TYPE_PARTY_RANK_UP:
             case SELECT_TYPE_PARTY_SWAP_RANK_UP:
                 evt->lwData[1] = party_id_table[id];
-                name = select_party_name(id);
+                name = party_name_table_rtn(id);
                 evt->lwData[3] = (EvtWord)name;
                 break;
             case SELECT_TYPE_PARTY_SWAP_RANK_DOWN:
                 evt->lwData[2] = party_id_table[id];
-                name = select_party_name(id);
+                name = party_name_table_rtn(id);
                 evt->lwData[4] = (EvtWord)name;
                 break;
             case SELECT_TYPE_STAT_SWAP_UP:
@@ -1552,37 +1519,6 @@ static void select_disp(WinMgrEntry* entry) {
     }
 }
 
-static inline s32 select_party_icon(u16 id) {
-    s32 icon = party_icon_table[id];
-    if (icon == ICON_PARTY_YOSHI) {
-        switch (pouchGetPartyColor(PARTY_YOSHI)) {
-            case 0:
-                icon = ICON_PARTY_YOSHI;
-                break;
-            case 1:
-                icon = ICON_PARTY_YOSHI_1;
-                break;
-            case 2:
-                icon = ICON_PARTY_YOSHI_2;
-                break;
-            case 3:
-                icon = ICON_PARTY_YOSHI_3;
-                break;
-            case 4:
-                icon = ICON_PARTY_YOSHI_4;
-                break;
-            case 5:
-                icon = ICON_PARTY_YOSHI_5;
-                break;
-            case 6:
-            default:
-                icon = ICON_PARTY_YOSHI_6;
-                break;
-        }
-    }
-    return icon;
-}
-
 /**
  * Draws the partner list of the rank-up and rank-swap menus:
  * name, portrait (Yoshi in his colour) and one rank icon per rank already earned, with the two column titles,
@@ -1640,9 +1576,9 @@ static void select_disp_party(WinMgrEntry* entry) {
             winFontSet((Vec){entry->x + 60, sel->scrollY + (ofs + (entry->y - 32 - i * 24)), 0.0f}, (Vec){1.0f, 1.0f, 1.0f},
 #else
             winFontSet((Vec){entry->x + 60, sel->scrollY + (ofs + (entry->y - 32 - i * 24)), 0.0f},
-                       (Vec){FontGetMessageWidth(select_party_name(sel->items[i].id)) > 170 ? 170.0f / FontGetMessageWidth(select_party_name(sel->items[i].id)) : 1.0f, 1.0f, 1.0f},
+                       (Vec){FontGetMessageWidth(party_name_table_rtn(sel->items[i].id)) > 170 ? 170.0f / FontGetMessageWidth(party_name_table_rtn(sel->items[i].id)) : 1.0f, 1.0f, 1.0f},
 #endif
-                       *((sel->items[i].flags & SELECT_ITEM_GRAY) ? &gray : &black), select_party_name(sel->items[i].id));
+                       *((sel->items[i].flags & SELECT_ITEM_GRAY) ? &gray : &black), party_name_table_rtn(sel->items[i].id));
             if (sel->items[i].flags & SELECT_ITEM_GRAY) {
                 winIconGrayInit();
             } else {
@@ -1653,7 +1589,7 @@ static void select_disp_party(WinMgrEntry* entry) {
             winIconInit();
             for (j = 0; j < pouch->partyData[party_id_table[sel->items[i].id]].techLevel; j++) {
 #else
-            winIconSet(select_party_icon(sel->items[i].id), (Vec){entry->x + 35, sel->scrollY + (ofs + (entry->y - 44 - i * 24)), 0.0f}, (Vec){0.55f, 0.55f, 0.55f}, iconcol);
+            winIconSet(iconid_conv(party_icon_table[sel->items[i].id]), (Vec){entry->x + 35, sel->scrollY + (ofs + (entry->y - 44 - i * 24)), 0.0f}, (Vec){0.55f, 0.55f, 0.55f}, iconcol);
             for (j = 0; j < pouch->partyData[party_id_table[sel->items[i].id]].techLevel; j++) {
                 if (sel->items[i].flags & SELECT_ITEM_GRAY) {
                     winIconGrayInit();
@@ -2110,9 +2046,12 @@ static const char name_party5[] = "name_party5";
 static const char name_party2[] = "name_party2";
 static const char name_party6[] = "name_party6";
 
-#if VERSION <= VERSION_DEMO_JP
 /** Swaps Yoshi's portrait icon for the one in the colour he hatched with; other icons pass through. */
+#if VERSION >= VERSION_JP
+static inline s32 iconid_conv(s32 icon) {
+#else
 static s32 iconid_conv(s32 icon) {
+#endif
     if (icon == ICON_PARTY_YOSHI) {
         switch (pouchGetPartyColor(PARTY_YOSHI)) {
             case 0:
@@ -2143,7 +2082,11 @@ static s32 iconid_conv(s32 icon) {
 }
 
 /** A partner's display name by party_id_table index (Yoshi's is the name the player gave him). */
+#if VERSION >= VERSION_JP
+static inline const char* party_name_table_rtn(s32 id) {
+#else
 static const char* party_name_table_rtn(s32 id) {
+#endif
     const char* name;
     switch (id) {
         case 0:
@@ -2170,4 +2113,3 @@ static const char* party_name_table_rtn(s32 id) {
     }
     return name;
 }
-#endif

@@ -63,45 +63,6 @@ static s32 fontlenpitch(const char* str, s32 pitch) {
 }
 
 #if VERSION >= VERSION_US
-/** US and later: centered in [x, x + width], squeezed to fit width. */
-// FAKE: invented one-use inline helper (no map name); writing it out changes the code (FAKES.md)
-static inline void yuuDrawCenter(f32 x, f32 y, f32 scale, const char* msg, s32 width) {
-    Mtx trans;
-    Mtx scl;
-    Mtx mtx;
-    f32 sx;
-    s32 w;
-
-    if (FontGetMessageWidth(msg) > width) {
-        sx = (width * scale) / FontGetMessageWidth(msg);
-    } else {
-        sx = scale;
-    }
-    w = sx * FontGetMessageWidth(msg);
-    PSMTXTrans(trans, (width - w) / 2.0f + x, y, 0.0f);
-    PSMTXScale(scl, sx, scale, scale);
-    PSMTXConcat(trans, scl, mtx);
-    FontDrawMessageMtx(mtx, msg);
-}
-
-/** US and later: left-aligned at x, squeezed to fit width. */
-static inline void yuuDrawLeft(f32 x, f32 y, f32 scale, const char* msg, s32 width) {
-    Mtx trans;
-    Mtx scl;
-    Mtx mtx;
-    f32 sx;
-
-    PSMTXTrans(trans, x, y, 0.0f);
-    if (FontGetMessageWidth(msg) > width) {
-        sx = (width * scale) / FontGetMessageWidth(msg);
-    } else {
-        sx = scale;
-    }
-    PSMTXScale(scl, sx, scale, scale);
-    PSMTXConcat(trans, scl, mtx);
-    FontDrawMessageMtx(mtx, msg);
-}
-
 // US and later: right-aligned at x, squeezed to fit width.
 // FAKE: x offset + work pointer instead of x, so wp->x is read after the width test as in the target
 static inline void yuuDrawRight(f32 xo, f32 y, f32 scale, const char* msg, s32 width, YuuRankingWork* wp) {
@@ -445,7 +406,7 @@ static void evt_yuuranking_disp_func(CameraId camera, void* param) {
                         sprintf(buf, msgSearch("menu_error_minigame3"));
                     }
 #if VERSION >= VERSION_US
-                    yuuDrawLeft(37.59999f + wp->x, 56.0f + wp->y, 1.0f, buf, 140);
+                    yuuranking_draw_msg_fit(37.59999f + wp->x, 56.0f + wp->y, 1.0f, buf, 140);
 #else
                     FontDrawStringPitch(wp->x + (150.4f - fontlenpitch(buf, 18)), 56.0f + wp->y, 18.0f, buf);
 #endif
@@ -493,7 +454,7 @@ static void evt_yuuranking_disp_func(CameraId camera, void* param) {
                     FontDrawColor((GXColor){0xFF, 0x3F, 0x3F, 0xFF});
                     sprintf(buf, msgSearch("menu_error_minigame4"));
 #if VERSION >= VERSION_US
-                    yuuDrawLeft(37.59999f + wp->x, 56.0f + wp->y, 1.0f, buf, 140);
+                    yuuranking_draw_msg_fit(37.59999f + wp->x, 56.0f + wp->y, 1.0f, buf, 140);
 #else
                     FontDrawStringPitch(wp->x + (150.4f - fontlenpitch(buf, 18)), 56.0f + wp->y, 18.0f, buf);
 #endif
@@ -519,8 +480,8 @@ static void evt_yuuranking_disp_func(CameraId camera, void* param) {
         FontDrawStart();
         FontDrawScale(1.0f);
 #if VERSION >= VERSION_US
-        yuuDrawLeft(-150.4f + wp->x, 80.0f + wp->y, 1.0f, msgSearch("menu_subtitle5_rank"), 60);
-        yuuDrawLeft(75.19998f + wp->x, 80.0f + wp->y, 1.0f, msgSearch("menu_subtitle1_monte"), 100);
+        yuuranking_draw_msg_fit(-150.4f + wp->x, 80.0f + wp->y, 1.0f, msgSearch("menu_subtitle5_rank"), 60);
+        yuuranking_draw_msg_fit(75.19998f + wp->x, 80.0f + wp->y, 1.0f, msgSearch("menu_subtitle1_monte"), 100);
         switch (wp->type) {
             case 0:
                 head = msgSearch("menu_subtitle1_minigame1");
@@ -535,7 +496,7 @@ static void evt_yuuranking_disp_func(CameraId camera, void* param) {
                 head = msgSearch("menu_subtitle1_minigame4");
                 break;
         }
-        yuuDrawCenter(-75.200005f + wp->x, 80.0f + wp->y, 1.0f, head, 130);
+        yuuranking_draw_msg_fit_center(-75.200005f + wp->x, 80.0f + wp->y, 1.0f, head, 130);
 #else
         FontDrawMessage(-150.4f + wp->x, 80.0f + wp->y, msgSearch("menu_subtitle5_rank"));
         FontDrawMessage(75.19998f + wp->x, 80.0f + wp->y, msgSearch("menu_subtitle1_monte"));
@@ -582,7 +543,7 @@ static void evt_yuuranking_disp_func(CameraId camera, void* param) {
 #if VERSION <= VERSION_DEMO_JP
                 FontDrawMessage(-188.0f + wp->x, wp->y + (104.0f - 24.0f * ofs), (const char*)rk);
 #elif VERSION >= VERSION_US
-                yuuDrawLeft(18.8f + (-188.0f + wp->x), wp->y + (104.0f - 24.0f * ofs), 1.0f, (const char*)rk, 80);
+                yuuranking_draw_msg_fit(18.8f + (-188.0f + wp->x), wp->y + (104.0f - 24.0f * ofs), 1.0f, (const char*)rk, 80);
 #else
                 FontDrawMessage(18.8f + (-188.0f + wp->x), wp->y + (104.0f - 24.0f * ofs), (const char*)rk);
 #endif
@@ -621,7 +582,7 @@ static void evt_yuuranking_disp_func(CameraId camera, void* param) {
                         FontDrawStringPitch(75.19998f + wp->x, wp->y + (104.0f - 24.0f * ofs), 18.0f, buf);
                     } else {
 #if VERSION >= VERSION_US
-                        yuuDrawLeft(-75.200005f + wp->x, wp->y + (104.0f - 24.0f * ofs), 1.0f, msgSearch("menu_error_minigame1"), 160);
+                        yuuranking_draw_msg_fit(-75.200005f + wp->x, wp->y + (104.0f - 24.0f * ofs), 1.0f, msgSearch("menu_error_minigame1"), 160);
 #else
                         sprintf(buf, msgSearch("menu_error_minigame1"));
                         FontDrawMessage(-75.200005f + wp->x, wp->y + (104.0f - 24.0f * ofs), buf);
@@ -664,7 +625,7 @@ static void evt_yuuranking_disp_func(CameraId camera, void* param) {
                         } else {
                             sprintf(buf, msgSearch("menu_error_minigame3"));
                         }
-                        yuuDrawLeft(-75.200005f + wp->x, wp->y + (104.0f - 24.0f * ofs), 1.0f, buf, 160);
+                        yuuranking_draw_msg_fit(-75.200005f + wp->x, wp->y + (104.0f - 24.0f * ofs), 1.0f, buf, 160);
                     }
 #endif
                     break;
@@ -680,7 +641,7 @@ static void evt_yuuranking_disp_func(CameraId camera, void* param) {
                         FontDrawStringPitch(75.19998f + wp->x, wp->y + (104.0f - 24.0f * ofs), 18.0f, buf);
                     } else {
 #if VERSION >= VERSION_US
-                        yuuDrawLeft(-75.200005f + wp->x, wp->y + (104.0f - 24.0f * ofs), 1.0f, msgSearch("menu_error_minigame4"), 160);
+                        yuuranking_draw_msg_fit(-75.200005f + wp->x, wp->y + (104.0f - 24.0f * ofs), 1.0f, msgSearch("menu_error_minigame4"), 160);
 #else
                         sprintf(buf, msgSearch("menu_error_minigame4"));
                         FontDrawMessage(-75.200005f + wp->x, wp->y + (104.0f - 24.0f * ofs), buf);

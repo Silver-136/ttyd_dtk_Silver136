@@ -304,8 +304,17 @@ void unitwin_point_disp(WinMgrEntry* entry) {
         }
     }
 }
+#endif
+
+/**
+ * Swaps Yoshi's portrait icon for the one in the colour he hatched with; other icons pass through.
+ * JP and later: inline (the early demos also call it from unitwin_window_select_func and keep it as a function).
+ */
+#if VERSION >= VERSION_JP
+static inline s32 iconid_conv(s32 icon) {
 #else
 static s32 iconid_conv(s32 icon) {
+#endif
     if (icon == ICON_PARTY_YOSHI) {
         switch (pouchGetPartyColor(PARTY_YOSHI)) {
             case 0:
@@ -338,8 +347,13 @@ static s32 iconid_conv(s32 icon) {
 /**
  * Returns the display name of the partner in list row i (Goombella, Koops, Flurrie,
  * Yoshi by the player's chosen name, Vivian, Bobbery, Ms. Mowz order).
+ * JP and later: inline, as iconid_conv.
  */
+#if VERSION >= VERSION_JP
+static inline const char* party_name_table_rtn(s32 i) {
+#else
 static const char* party_name_table_rtn(s32 i) {
+#endif
     const char* name;
     switch (i) {
         case 0:
@@ -366,7 +380,6 @@ static const char* party_name_table_rtn(s32 i) {
     }
     return name;
 }
-#endif
 
 /**
  * Sets up the unit window work (_wp), the pointing-finger cursor icon,
@@ -1208,66 +1221,8 @@ static USER_FUNC(evt_unitwin_main_func) {
     return EVT_RETURN_BLOCK;
 }
 
-static inline s32 unitwin_party_icon(s32 icon) {
-    if (icon == ICON_PARTY_YOSHI) {
-        switch (pouchGetPartyColor(PARTY_YOSHI)) {
-            case 0:
-                icon = ICON_PARTY_YOSHI;
-                break;
-            case 1:
-                icon = ICON_PARTY_YOSHI_1;
-                break;
-            case 2:
-                icon = ICON_PARTY_YOSHI_2;
-                break;
-            case 3:
-                icon = ICON_PARTY_YOSHI_3;
-                break;
-            case 4:
-                icon = ICON_PARTY_YOSHI_4;
-                break;
-            case 5:
-                icon = ICON_PARTY_YOSHI_5;
-                break;
-            case 6:
-            default:
-                icon = ICON_PARTY_YOSHI_6;
-                break;
-        }
-    }
-    return icon;
-}
-
 // FAKE: function-pointer cast of iconDispGx (Vec*, u16, f32, u16); plain iconDispGx calls change the object
 #define ICONGX2 ((void (*)(Vec*, u16, f32, u16))iconDispGx)
-
-static inline const char* unitwin_party_name(s32 i) {
-    const char* name;
-    switch (i) {
-        case 0:
-            name = msgSearch("name_party0");
-            break;
-        case 1:
-            name = msgSearch("name_party1");
-            break;
-        case 2:
-            name = msgSearch("name_party4");
-            break;
-        case 3:
-            name = pouchGetYoshiName();
-            break;
-        case 4:
-            name = msgSearch("name_party5");
-            break;
-        case 5:
-            name = msgSearch("name_party2");
-            break;
-        case 6:
-            name = msgSearch("name_party6");
-            break;
-    }
-    return name;
-}
 
 /**
  * Draws the unit window each frame: the item name and description for the highlighted counter slot with prices,
@@ -1793,10 +1748,10 @@ static void evt_unitwin_disp_func(CameraId cameraId, void* param) {
                             flag = ICON_FLAG_GRAY;
                         }
                     }
-                    ICONGX2(&(Vec){11.0f, wp->scroll + (56 - row * 24), 0.0f}, flag | ICON_FLAG_2D, 0.5f, unitwin_party_icon(party_icon_table[i]));
+                    ICONGX2(&(Vec){11.0f, wp->scroll + (56 - row * 24), 0.0f}, flag | ICON_FLAG_2D, 0.5f, iconid_conv(party_icon_table[i]));
                     FontDrawStart();
                     FontDrawColor(color);
-                    name = unitwin_party_name(i);
+                    name = party_name_table_rtn(i);
                     ty = 80 - row * 24;
                     FontDrawString(36.0f, wp->scroll + ty, name);
                     sprintf(buf, "%d", pouch->partyData[party_id_table[i]].techLevel);
