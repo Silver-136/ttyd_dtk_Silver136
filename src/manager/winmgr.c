@@ -1297,10 +1297,30 @@ static void select_main(WinMgrEntry* entry) {
 }
 
 /**
+ * Layout of the selection list windows (select_disp, select_disp_party, select_disp_mario, select_disp_luigi;
+ * the list window is 300 x 240 at (-24, 116), see select_desc). Screen coordinates have the origin at the centre
+ * and y growing upwards; entry->x / entry->y are the window's top-left corner. Row i has its icon at
+ * entry->y - 44 - i * SELECT_ROW_H and its text line 12 higher (entry->y - 32 - ...), both moved up by
+ * sel->scrollY; select_main eases scrollY toward 24 * scrollTop and the hand cursor toward
+ * (entry->x, entry->y - 54 - 24 * (cursor - scrollTop)), and scrolls so that SELECT_ROWS_SHOWN rows fit.
+ */
+enum SelectListLayout {
+    SELECT_ICON_X = 35,     // icon centre, from the window's left edge
+    SELECT_NAME_X = 60,     // name
+    SELECT_ROW_H = 24,      // one row
+    SELECT_ROWS_SHOWN = 8,  // rows in view; more than this gets the scroll arrows
+};
+
+/**
  * Draws an item or badge list: icon, name and (for the sell and shop types) price per row,
  * the divider under a new item, the title by type,
  * a currency icon above the price column (coin; Star Piece for 13, Pianta token for 16), the hand cursor and scroll arrows.
  * From US on, worn badges in the sell list get a mark.
+ *
+ * Rows: the equipped mark (US and later) at entry->x + 15 and the icon (scale 0.5) at SELECT_ICON_X, then on the
+ * text line the name at SELECT_NAME_X (US and later: squeezed to at most 185 pixels) and the price ending 10
+ * pixels inside the window's right edge. Gray rows (SELECT_ITEM_GRAY, JP and later) draw a gray icon and gray
+ * (0xA0) text.
  */
 static void select_disp(WinMgrEntry* entry) {
     WinMgrSelect* sel = entry->param;
@@ -1331,13 +1351,17 @@ static void select_disp(WinMgrEntry* entry) {
 
     if (!(wp->entries[sel->descriptorId[0]].flags & WINMGR_FLAG_ANIMATING)) {
         GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+        // Clip the rows to the window: the scissor box (in frame pixels, which have (304, 240) at the screen
+        // centre and y growing downwards) is the window's width and starts 34 below its top edge; height - 50
+        // tall, it ends 16 above the bottom edge. The previous scissor box is put back after the rows.
         GXGetScissor(&left, &top, &wd, &ht);
         GXSetScissor(entry->x + 304, 274 - entry->y, entry->width, entry->height - 50);
         ofs = 0.0f;
         for (i = 0; i < sel->numItems; i++) {
             f32 py;
             item = &itemDataTable[sel->items[i].id];
-            py = sel->scrollY + (ofs + (entry->y - 44 - i * 24));
+            // py: the row's icon y; rows more than 32 above the top edge or 32 below the bottom edge are skipped
+            py = sel->scrollY + (ofs + (entry->y - 44 - i * SELECT_ROW_H));
             if ((f32)entry->y < py - 32.0f || (f32)(entry->y - entry->height) > py + 32.0f) {
                 continue;
             }
@@ -1349,19 +1373,28 @@ static void select_disp(WinMgrEntry* entry) {
             }
 #if VERSION <= VERSION_DEMO_JP
             winIconInit();
-            winIconSet(item->icon_id, (Vec){entry->x + 35, sel->scrollY + (ofs + (entry->y - 44 - i * 24)), 0.0f}, (Vec){0.5f, 0.5f, 0.5f}, iconcol);
+            winIconSet(item->icon_id,
+                       (Vec){entry->x + SELECT_ICON_X,
+                             sel->scrollY + (ofs + (entry->y - 44 - i * SELECT_ROW_H)),
+                             0.0f},
+                       (Vec){0.5f, 0.5f, 0.5f}, iconcol);
             winFontInit();
-            winFontSet((Vec){entry->x + 60, sel->scrollY + (ofs + (entry->y - 32 - i * 24)), 0.0f}, (Vec){1.0f, 1.0f, 1.0f},
-                                   black, msgSearch(item->name));
+            winFontSet((Vec){entry->x + SELECT_NAME_X, sel->scrollY + (ofs + (entry->y - 32 - i * SELECT_ROW_H)), 0.0f},
+                       (Vec){1.0f, 1.0f, 1.0f}, black, msgSearch(item->name));
 #else
 #if VERSION >= VERSION_US
+            // an equipped badge: the lamp icon, three-quarters opaque, left of the badge's icon
             if (sel->items[i].flags & SELECT_ITEM_EQUIPPED) {
                 if (sel->items[i].flags & SELECT_ITEM_GRAY) {
                     winIconGrayInit();
                 } else {
                     winIconInit();
                 }
-                winIconSet(ICON_AC_LAMP_1, (Vec){entry->x + 15, sel->scrollY + (ofs + (entry->y - 44 - i * 24)), 0.0f}, (Vec){0.6f, 0.6f, 0.6f}, (GXColor){0xFF, 0xFF, 0xFF, 0xC0});
+                winIconSet(ICON_AC_LAMP_1,
+                           (Vec){entry->x + 15,
+                                 sel->scrollY + (ofs + (entry->y - 44 - i * SELECT_ROW_H)),
+                                 0.0f},
+                           (Vec){0.6f, 0.6f, 0.6f}, (GXColor){0xFF, 0xFF, 0xFF, 0xC0});
             }
 #endif
             if (sel->items[i].flags & SELECT_ITEM_GRAY) {
@@ -1369,16 +1402,25 @@ static void select_disp(WinMgrEntry* entry) {
             } else {
                 winIconInit();
             }
-            winIconSet(item->icon_id, (Vec){entry->x + 35, sel->scrollY + (ofs + (entry->y - 44 - i * 24)), 0.0f}, (Vec){0.5f, 0.5f, 0.5f}, iconcol);
+            winIconSet(item->icon_id,
+                       (Vec){entry->x + SELECT_ICON_X,
+                             sel->scrollY + (ofs + (entry->y - 44 - i * SELECT_ROW_H)),
+                             0.0f},
+                       (Vec){0.5f, 0.5f, 0.5f}, iconcol);
             winFontInit();
 #if VERSION >= VERSION_US
-            winFontSetWidth((Vec){entry->x + 60, sel->scrollY + (ofs + (entry->y - 32 - i * 24)), 0.0f}, (Vec){1.0f, 1.0f, 1.0f},
-                       *((sel->items[i].flags & SELECT_ITEM_GRAY) ? &gray : &black), 185.0f, msgSearch(item->name));
+            winFontSetWidth((Vec){entry->x + SELECT_NAME_X,
+                                  sel->scrollY + (ofs + (entry->y - 32 - i * SELECT_ROW_H)),
+                                  0.0f},
+                            (Vec){1.0f, 1.0f, 1.0f}, *((sel->items[i].flags & SELECT_ITEM_GRAY) ? &gray : &black),
+                            185.0f, msgSearch(item->name));
 #else
-            winFontSet((Vec){entry->x + 60, sel->scrollY + (ofs + (entry->y - 32 - i * 24)), 0.0f}, (Vec){1.0f, 1.0f, 1.0f},
-                       *((sel->items[i].flags & SELECT_ITEM_GRAY) ? &gray : &black), msgSearch(item->name));
+            winFontSet((Vec){entry->x + SELECT_NAME_X, sel->scrollY + (ofs + (entry->y - 32 - i * SELECT_ROW_H)), 0.0f},
+                       (Vec){1.0f, 1.0f, 1.0f}, *((sel->items[i].flags & SELECT_ITEM_GRAY) ? &gray : &black),
+                       msgSearch(item->name));
 #endif
 #endif
+            // the price column: only the shop types have one
             show = FALSE;
             switch (sel->type) {
                 case SELECT_TYPE_BADGE_BUY:
@@ -1395,14 +1437,17 @@ static void select_disp(WinMgrEntry* entry) {
                     show = TRUE;
                     break;
                 case SELECT_TYPE_BADGE_CHARLIETON:
+                    // 120 % of the buy price
                     price = item->buy_price * 12 / 10;
                     show = TRUE;
                     break;
                 case SELECT_TYPE_BADGE_CHARLIETON_PIT:
+                    // (floor + 11) tenths of the buy price
                     price = item->buy_price * (evtGetValue(NULL, GSW_PIT_FLOOR) + 11) / 10;
                     show = TRUE;
                     break;
                 case SELECT_TYPE_BADGE_PIANTA_TOKEN:
+                    // two thirds of the buy price, rounded up
                     price = (item->buy_price * 2 + 2) / 3;
                     show = TRUE;
                     break;
@@ -1410,32 +1455,45 @@ static void select_disp(WinMgrEntry* entry) {
             if (!show) {
                 continue;
             }
+            // the price ends 10 pixels inside the right edge (US and later: at most 30 pixels wide, squeezed)
             sprintf(buf, "%d", price);
             tw = FontGetMessageWidth(buf);
 #if VERSION <= VERSION_DEMO_JP
             winFontInit();
-            winFontSet((Vec){entry->x + entry->width - 10 - tw, sel->scrollY + (ofs + (entry->y - 32 - i * 24)), 0.0f}, (Vec){1.0f, 1.0f, 1.0f},
-                       black, buf);
+            winFontSet((Vec){entry->x + entry->width - 10 - tw,
+                             sel->scrollY + (ofs + (entry->y - 32 - i * SELECT_ROW_H)),
+                             0.0f},
+                       (Vec){1.0f, 1.0f, 1.0f}, black, buf);
 #elif VERSION >= VERSION_US
             if (tw > 30.0) {
                 tw = 30.0f;
             }
             winFontInit();
-            winFontSetWidth((Vec){entry->x + entry->width - 10 - tw, sel->scrollY + (ofs + (entry->y - 32 - i * 24)), 0.0f}, (Vec){1.0f, 1.0f, 1.0f},
-                       *((sel->items[i].flags & SELECT_ITEM_GRAY) ? &gray : &black), 30.0f, buf);
+            winFontSetWidth((Vec){entry->x + entry->width - 10 - tw,
+                                  sel->scrollY + (ofs + (entry->y - 32 - i * SELECT_ROW_H)),
+                                  0.0f},
+                            (Vec){1.0f, 1.0f, 1.0f}, *((sel->items[i].flags & SELECT_ITEM_GRAY) ? &gray : &black),
+                            30.0f, buf);
 #else
             winFontInit();
-            winFontSet((Vec){entry->x + entry->width - 10 - tw, sel->scrollY + (ofs + (entry->y - 32 - i * 24)), 0.0f}, (Vec){1.0f, 1.0f, 1.0f},
-                       *((sel->items[i].flags & SELECT_ITEM_GRAY) ? &gray : &black), buf);
+            winFontSet((Vec){entry->x + entry->width - 10 - tw,
+                             sel->scrollY + (ofs + (entry->y - 32 - i * SELECT_ROW_H)),
+                             0.0f},
+                       (Vec){1.0f, 1.0f, 1.0f}, *((sel->items[i].flags & SELECT_ITEM_GRAY) ? &gray : &black), buf);
 #endif
         }
+        // Divider under row 0 (the new item) when there is one: 28 SP orb icons at 0.15 scale at entry->y - 56,
+        // halfway between row 0's and row 1's icons, one every width / 31 pixels from dot 2 to dot 29
         if (sel->newItem) {
             winIconInit();
             for (k = 2; k < 30; k++) {
-                winIconSet(ICON_SP_ORB_1, (Vec){entry->x + k * entry->width / 31, (entry->y - 56) + sel->scrollY, 0.0f}, (Vec){0.15f, 0.15f, 0.15f}, black);
+                winIconSet(ICON_SP_ORB_1, (Vec){entry->x + k * entry->width / 31, (entry->y - 56) + sel->scrollY, 0.0f},
+                           (Vec){0.15f, 0.15f, 0.15f}, black);
             }
         }
         GXSetScissor(left, top, wd, ht);
+        // The title (msg_window_title_1 to _5 by type), centred across the window at entry->y + 14, in white with
+        // an edge (US and later: at most 120 pixels wide, squeezed)
         switch (sel->type) {
 #if VERSION >= VERSION_JP
             case SELECT_TYPE_BADGE:
@@ -1475,6 +1533,8 @@ static void select_disp(WinMgrEntry* entry) {
         winFontSetEdge((Vec){entry->x + w, entry->y + 14, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white, msg);
 #endif
 
+        // The currency over the price column, at entry->x + 268: ICON_CURRENCY_PLATE tinted 0xF0F0F0 at
+        // entry->y - 18, and the coin, Star Piece or Pianta token icon 6 higher, both at scale 0.6
         switch (sel->type) {
             case SELECT_TYPE_ITEM_SELL:
             case SELECT_TYPE_BADGE_BUY:
@@ -1507,13 +1567,18 @@ static void select_disp(WinMgrEntry* entry) {
                 iconDispGx(&(Vec){entry->x + 268, entry->y - 12, 0.0f}, ICON_FLAG_2D, ICON_ITEM_PIANTA_TOKEN, 0.6f);
                 break;
         }
+        // the hand cursor (mirrored) at the position select_main eases it to
         iconDispGx(&(Vec){sel->cursorX, sel->cursorY, 1.0f}, ICON_FLAG_2D | ICON_FLAG_FLIP_X, ICON_YUBI_CURSOR, 1.0f);
-        if (sel->numItems > 8 && (gp->retraceCount & 31) < 20) {
+        // Scroll arrows when the list is longer than the view, shown 20 frames in every 32: up at entry->y - 36
+        // when rows are hidden above, down 12 below the bottom edge when rows are hidden below
+        if (sel->numItems > SELECT_ROWS_SHOWN && (gp->retraceCount & 31) < 20) {
             if (sel->scrollTop != 0) {
-                iconDispGx(&(Vec){entry->x + entry->width / 2.0f, entry->y - 36, 1.0f}, ICON_FLAG_2D, ICON_ARROW_UP, 0.6f);
+                iconDispGx(&(Vec){entry->x + entry->width / 2.0f, entry->y - 36, 1.0f}, ICON_FLAG_2D, ICON_ARROW_UP,
+                           0.6f);
             }
-            if (sel->scrollTop != sel->numItems - 8) {
-                iconDispGx(&(Vec){entry->x + entry->width / 2.0f, entry->y - entry->height - 12, 1.0f}, ICON_FLAG_2D, ICON_ARROW_DOWN, 0.6f);
+            if (sel->scrollTop != sel->numItems - SELECT_ROWS_SHOWN) {
+                iconDispGx(&(Vec){entry->x + entry->width / 2.0f, entry->y - entry->height - 12, 1.0f}, ICON_FLAG_2D,
+                           ICON_ARROW_DOWN, 0.6f);
             }
         }
     }
@@ -1523,6 +1588,14 @@ static void select_disp(WinMgrEntry* entry) {
  * Draws the partner list of the rank-up and rank-swap menus:
  * name, portrait (Yoshi in his colour) and one rank icon per rank already earned, with the two column titles,
  * cursor and scroll arrows.
+ *
+ * Rows (SelectListLayout): the name on the text line at SELECT_NAME_X (JP and later: squeezed to at most 170
+ * pixels), the portrait (scale 0.55) at SELECT_ICON_X, and from entry->x + 253 one Shine Sprite icon (scale 0.55)
+ * per rank, 27 pixels apart. Gray rows draw gray (0xA0) text and a gray portrait; JP and later gray the Shine
+ * Sprites too. The two column headings (msg_window_title_7 over the partners, _8 over the ranks) sit at
+ * entry->y + 14: the first centred in a 120-pixel slot in the left three fifths of the window (two thirds of the
+ * spare room left of it), the second in an 85-pixel slot in the right two fifths (a third of the spare room left
+ * of it); US and later squeeze them to at most 100 and 65 pixels.
  */
 static void select_disp_party(WinMgrEntry* entry) {
 #if VERSION <= VERSION_DEMO_JP
@@ -1558,10 +1631,11 @@ static void select_disp_party(WinMgrEntry* entry) {
         GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
         GXGetScissor(&left, &top, &wd, &ht);
         GXSetScissor(entry->x + 304, 274 - entry->y, entry->width, entry->height - 50);
+        // rows clipped and skipped as in select_disp
         ofs = 0.0f;
         for (i = 0; i < sel->numItems; i++) {
             f32 py;
-            py = sel->scrollY + (ofs + (entry->y - 44 - i * 24));
+            py = sel->scrollY + (ofs + (entry->y - 44 - i * SELECT_ROW_H));
             if ((f32)entry->y < py - 32.0f || (f32)(entry->y - entry->height) > py + 32.0f) {
                 continue;
             }
@@ -1573,10 +1647,14 @@ static void select_disp_party(WinMgrEntry* entry) {
             }
             winFontInit();
 #if VERSION <= VERSION_DEMO_JP
-            winFontSet((Vec){entry->x + 60, sel->scrollY + (ofs + (entry->y - 32 - i * 24)), 0.0f}, (Vec){1.0f, 1.0f, 1.0f},
+            winFontSet((Vec){entry->x + SELECT_NAME_X, sel->scrollY + (ofs + (entry->y - 32 - i * SELECT_ROW_H)), 0.0f},
+                       (Vec){1.0f, 1.0f, 1.0f},
 #else
-            winFontSet((Vec){entry->x + 60, sel->scrollY + (ofs + (entry->y - 32 - i * 24)), 0.0f},
-                       (Vec){FontGetMessageWidth(party_name_table_rtn(sel->items[i].id)) > 170 ? 170.0f / FontGetMessageWidth(party_name_table_rtn(sel->items[i].id)) : 1.0f, 1.0f, 1.0f},
+            winFontSet((Vec){entry->x + SELECT_NAME_X, sel->scrollY + (ofs + (entry->y - 32 - i * SELECT_ROW_H)), 0.0f},
+                       (Vec){FontGetMessageWidth(party_name_table_rtn(sel->items[i].id)) > 170
+                                 ? 170.0f / FontGetMessageWidth(party_name_table_rtn(sel->items[i].id))
+                                 : 1.0f,
+                             1.0f, 1.0f},
 #endif
                        *((sel->items[i].flags & SELECT_ITEM_GRAY) ? &gray : &black), party_name_table_rtn(sel->items[i].id));
             if (sel->items[i].flags & SELECT_ITEM_GRAY) {
@@ -1584,12 +1662,17 @@ static void select_disp_party(WinMgrEntry* entry) {
             } else {
                 winIconInit();
             }
+            // the portrait (iconid_conv: Yoshi's in his colour), then one Shine Sprite per rank (techLevel)
 #if VERSION <= VERSION_DEMO_JP
-            winIconSet(iconid_conv(party_icon_table[sel->items[i].id]), (Vec){entry->x + 35, sel->scrollY + (ofs + (entry->y - 44 - i * 24)), 0.0f}, (Vec){0.55f, 0.55f, 0.55f}, iconcol);
+            winIconSet(iconid_conv(party_icon_table[sel->items[i].id]),
+                       (Vec){entry->x + SELECT_ICON_X, sel->scrollY + (ofs + (entry->y - 44 - i * SELECT_ROW_H)), 0.0f},
+                       (Vec){0.55f, 0.55f, 0.55f}, iconcol);
             winIconInit();
             for (j = 0; j < pouch->partyData[party_id_table[sel->items[i].id]].techLevel; j++) {
 #else
-            winIconSet(iconid_conv(party_icon_table[sel->items[i].id]), (Vec){entry->x + 35, sel->scrollY + (ofs + (entry->y - 44 - i * 24)), 0.0f}, (Vec){0.55f, 0.55f, 0.55f}, iconcol);
+            winIconSet(iconid_conv(party_icon_table[sel->items[i].id]),
+                       (Vec){entry->x + SELECT_ICON_X, sel->scrollY + (ofs + (entry->y - 44 - i * SELECT_ROW_H)), 0.0f},
+                       (Vec){0.55f, 0.55f, 0.55f}, iconcol);
             for (j = 0; j < pouch->partyData[party_id_table[sel->items[i].id]].techLevel; j++) {
                 if (sel->items[i].flags & SELECT_ITEM_GRAY) {
                     winIconGrayInit();
@@ -1597,10 +1680,15 @@ static void select_disp_party(WinMgrEntry* entry) {
                     winIconInit();
                 }
 #endif
-                winIconSet(ICON_ITEM_SHINE_SPRITE, (Vec){entry->x + 253 + j * 27, sel->scrollY + (ofs + (entry->y - 44 - i * 24)), 0.0f}, (Vec){0.55f, 0.55f, 0.55f}, iconcol);
+                winIconSet(ICON_ITEM_SHINE_SPRITE,
+                           (Vec){entry->x + 253 + j * 27,
+                                 sel->scrollY + (ofs + (entry->y - 44 - i * SELECT_ROW_H)),
+                                 0.0f},
+                           (Vec){0.55f, 0.55f, 0.55f}, iconcol);
             }
         }
         GXSetScissor(left, top, wd, ht);
+        // the partner column's heading: a 120-pixel slot in the left three fifths
         msg = msgSearch("msg_window_title_7");
 #if VERSION >= VERSION_US
         tw = FontGetMessageWidth(msg);
@@ -1609,12 +1697,15 @@ static void select_disp_party(WinMgrEntry* entry) {
         }
         w = (120 - tw) / 2.0f;
         winFontInit();
-        winFontSetEdgeWidth((Vec){entry->x + (entry->width * 3 / 5 - 120) * 2 / 3 + w, entry->y + 14, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white, 100.0f, msg);
+        winFontSetEdgeWidth((Vec){entry->x + (entry->width * 3 / 5 - 120) * 2 / 3 + w, entry->y + 14, 0.0f},
+                            (Vec){1.0f, 1.0f, 1.0f}, white, 100.0f, msg);
 #else
         w = (120 - FontGetMessageWidth(msg)) / 2;
         winFontInit();
-        winFontSetEdge((Vec){entry->x + (entry->width * 3 / 5 - 120) * 2 / 3 + w, entry->y + 14, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white, msg);
+        winFontSetEdge((Vec){entry->x + (entry->width * 3 / 5 - 120) * 2 / 3 + w, entry->y + 14, 0.0f},
+                       (Vec){1.0f, 1.0f, 1.0f}, white, msg);
 #endif
+        // the rank column's heading: an 85-pixel slot in the right two fifths
         msg = msgSearch("msg_window_title_8");
 #if VERSION >= VERSION_US
         tw = FontGetMessageWidth(msg);
@@ -1623,19 +1714,26 @@ static void select_disp_party(WinMgrEntry* entry) {
         }
         w = (85 - tw) / 2.0f;
         winFontInit();
-        winFontSetEdgeWidth((Vec){entry->x + entry->width * 3 / 5 + (entry->width * 2 / 5 - 85) / 3 + w, entry->y + 14, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white, 65.0f, msg);
+        winFontSetEdgeWidth((Vec){entry->x + entry->width * 3 / 5 + (entry->width * 2 / 5 - 85) / 3 + w,
+                                  entry->y + 14,
+                                  0.0f},
+                            (Vec){1.0f, 1.0f, 1.0f}, white, 65.0f, msg);
 #else
         w = (85 - FontGetMessageWidth(msg)) / 2;
         winFontInit();
-        winFontSetEdge((Vec){entry->x + entry->width * 3 / 5 + (entry->width * 2 / 5 - 85) / 3 + w, entry->y + 14, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white, msg);
+        winFontSetEdge((Vec){entry->x + entry->width * 3 / 5 + (entry->width * 2 / 5 - 85) / 3 + w, entry->y + 14, 0.0f},
+                       (Vec){1.0f, 1.0f, 1.0f}, white, msg);
 #endif
+        // hand cursor and scroll arrows as in select_disp
         iconDispGx(&(Vec){sel->cursorX, sel->cursorY, 1.0f}, ICON_FLAG_2D | ICON_FLAG_FLIP_X, ICON_YUBI_CURSOR, 1.0f);
-        if (sel->numItems > 8 && (gp->retraceCount & 31) < 20) {
+        if (sel->numItems > SELECT_ROWS_SHOWN && (gp->retraceCount & 31) < 20) {
             if (sel->scrollTop != 0) {
-                iconDispGx(&(Vec){entry->x + entry->width / 2.0f, entry->y - 36, 1.0f}, ICON_FLAG_2D, ICON_ARROW_UP, 0.6f);
+                iconDispGx(&(Vec){entry->x + entry->width / 2.0f, entry->y - 36, 1.0f}, ICON_FLAG_2D, ICON_ARROW_UP,
+                           0.6f);
             }
-            if (sel->scrollTop != sel->numItems - 8) {
-                iconDispGx(&(Vec){entry->x + entry->width / 2.0f, entry->y - entry->height - 12, 1.0f}, ICON_FLAG_2D, ICON_ARROW_DOWN, 0.6f);
+            if (sel->scrollTop != sel->numItems - SELECT_ROWS_SHOWN) {
+                iconDispGx(&(Vec){entry->x + entry->width / 2.0f, entry->y - entry->height - 12, 1.0f}, ICON_FLAG_2D,
+                           ICON_ARROW_DOWN, 0.6f);
             }
         }
     }
@@ -1645,6 +1743,11 @@ static void select_disp_party(WinMgrEntry* entry) {
  * Draws the HP/FP/BP list of the power-down shop:
  * the stat's name, icon, current value and, unless refused,
  * the value after raising or lowering it by its step (5, 5, 3).
+ *
+ * Rows (SelectListLayout): the stat's name at SELECT_NAME_X and its icon (scale 0.55) at SELECT_ICON_X, the
+ * current value ("%3d") at entry->x + 160, and unless the row is SELECT_ITEM_DISABLED the ICON_ARROW icon
+ * mirrored (x scale -0.55) at entry->x + 220 and the new value at entry->x + 240. Gray rows draw gray (0xA0) text
+ * and a gray stat icon. The column headings (msg_window_title_9 and _10) are placed as in select_disp_party.
  */
 static void select_disp_mario(WinMgrEntry* entry) {
 #if VERSION >= VERSION_US
@@ -1674,10 +1777,11 @@ static void select_disp_mario(WinMgrEntry* entry) {
         GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
         GXGetScissor(&left, &top, &wd, &ht);
         GXSetScissor(entry->x + 304, 274 - entry->y, entry->width, entry->height - 50);
+        // rows clipped and skipped as in select_disp
         ofs = 0.0f;
         for (i = 0; i < sel->numItems; i++) {
             f32 py;
-            py = sel->scrollY + (ofs + (entry->y - 44 - i * 24));
+            py = sel->scrollY + (ofs + (entry->y - 44 - i * SELECT_ROW_H));
             id = sel->items[i].id;
             if ((f32)entry->y < py - 32.0f || (f32)(entry->y - entry->height) > py + 32.0f) {
                 continue;
@@ -1693,23 +1797,29 @@ static void select_disp_mario(WinMgrEntry* entry) {
             if (sel->items[i].flags & SELECT_ITEM_GRAY) {
                 col = &gray;
             }
-            winFontSet((Vec){entry->x + 60, sel->scrollY + (ofs + (entry->y - 32 - i * 24)), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, *col, MARIO_STATUS_NAME(id));
+            winFontSet((Vec){entry->x + SELECT_NAME_X, sel->scrollY + (ofs + (entry->y - 32 - i * SELECT_ROW_H)), 0.0f},
+                       (Vec){1.0f, 1.0f, 1.0f}, *col, MARIO_STATUS_NAME(id));
             if (sel->items[i].flags & SELECT_ITEM_GRAY) {
                 winIconGrayInit();
             } else {
                 winIconInit();
             }
-            winIconSet(mario_status_icon_table[id], (Vec){entry->x + 35, sel->scrollY + (ofs + (entry->y - 44 - i * 24)), 0.0f}, (Vec){0.55f, 0.55f, 0.55f}, iconcol);
+            winIconSet(mario_status_icon_table[id],
+                       (Vec){entry->x + SELECT_ICON_X, sel->scrollY + (ofs + (entry->y - 44 - i * SELECT_ROW_H)), 0.0f},
+                       (Vec){0.55f, 0.55f, 0.55f}, iconcol);
+            // the current value
             sprintf(buf, "%3d", *mario_status_point_table[id]);
             winFontInit();
             col = &black;
             if (sel->items[i].flags & SELECT_ITEM_GRAY) {
                 col = &gray;
             }
-            winFontSet((Vec){entry->x + 160, sel->scrollY + (ofs + (entry->y - 32 - i * 24)), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, *col, buf);
+            winFontSet((Vec){entry->x + 160, sel->scrollY + (ofs + (entry->y - 32 - i * SELECT_ROW_H)), 0.0f},
+                       (Vec){1.0f, 1.0f, 1.0f}, *col, buf);
             if (sel->items[i].flags & SELECT_ITEM_DISABLED) {
                 continue;
             }
+            // the value after the change: up by the stat's step for SELECT_TYPE_STAT_SWAP_UP, else down
             switch (sel->type) {
                 case SELECT_TYPE_STAT_SWAP_UP:
                     sprintf(buf, "%3d", *mario_status_point_table[id] + mario_status_henka_table[id]);
@@ -1724,11 +1834,17 @@ static void select_disp_mario(WinMgrEntry* entry) {
             if (sel->items[i].flags & SELECT_ITEM_GRAY) {
                 col = &gray;
             }
-            winFontSet((Vec){entry->x + 240, sel->scrollY + (ofs + (entry->y - 32 - i * 24)), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, *col, buf);
+            winFontSet((Vec){entry->x + 240, sel->scrollY + (ofs + (entry->y - 32 - i * SELECT_ROW_H)), 0.0f},
+                       (Vec){1.0f, 1.0f, 1.0f}, *col, buf);
             winIconInit();
-            winIconSet(ICON_ARROW, (Vec){entry->x + 220, sel->scrollY + (ofs + (entry->y - 44 - i * 24)), 0.0f}, (Vec){-0.55f, 0.55f, 0.55f}, iconcol);
+            winIconSet(ICON_ARROW,
+                       (Vec){entry->x + 220,
+                             sel->scrollY + (ofs + (entry->y - 44 - i * SELECT_ROW_H)),
+                             0.0f},
+                       (Vec){-0.55f, 0.55f, 0.55f}, iconcol);
         }
         GXSetScissor(left, top, wd, ht);
+        // the column headings, placed as in select_disp_party
         msg = msgSearch("msg_window_title_9");
 #if VERSION >= VERSION_US
         tw = FontGetMessageWidth(msg);
@@ -1737,11 +1853,13 @@ static void select_disp_mario(WinMgrEntry* entry) {
         }
         w = (120 - tw) / 2.0f;
         winFontInit();
-        winFontSetEdgeWidth((Vec){entry->x + (entry->width * 3 / 5 - 120) * 2 / 3 + w, entry->y + 14, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white, 100.0f, msg);
+        winFontSetEdgeWidth((Vec){entry->x + (entry->width * 3 / 5 - 120) * 2 / 3 + w, entry->y + 14, 0.0f},
+                            (Vec){1.0f, 1.0f, 1.0f}, white, 100.0f, msg);
 #else
         w = (120 - FontGetMessageWidth(msg)) / 2;
         winFontInit();
-        winFontSetEdge((Vec){entry->x + (entry->width * 3 / 5 - 120) * 2 / 3 + w, entry->y + 14, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white, msg);
+        winFontSetEdge((Vec){entry->x + (entry->width * 3 / 5 - 120) * 2 / 3 + w, entry->y + 14, 0.0f},
+                       (Vec){1.0f, 1.0f, 1.0f}, white, msg);
 #endif
         msg = msgSearch("msg_window_title_10");
 #if VERSION >= VERSION_US
@@ -1751,19 +1869,26 @@ static void select_disp_mario(WinMgrEntry* entry) {
         }
         w = (85 - tw) / 2.0f;
         winFontInit();
-        winFontSetEdgeWidth((Vec){entry->x + entry->width * 3 / 5 + (entry->width * 2 / 5 - 85) / 3 + w, entry->y + 14, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white, 65.0f, msg);
+        winFontSetEdgeWidth((Vec){entry->x + entry->width * 3 / 5 + (entry->width * 2 / 5 - 85) / 3 + w,
+                                  entry->y + 14,
+                                  0.0f},
+                            (Vec){1.0f, 1.0f, 1.0f}, white, 65.0f, msg);
 #else
         w = (85 - FontGetMessageWidth(msg)) / 2;
         winFontInit();
-        winFontSetEdge((Vec){entry->x + entry->width * 3 / 5 + (entry->width * 2 / 5 - 85) / 3 + w, entry->y + 14, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white, msg);
+        winFontSetEdge((Vec){entry->x + entry->width * 3 / 5 + (entry->width * 2 / 5 - 85) / 3 + w, entry->y + 14, 0.0f},
+                       (Vec){1.0f, 1.0f, 1.0f}, white, msg);
 #endif
+        // hand cursor and scroll arrows as in select_disp
         iconDispGx(&(Vec){sel->cursorX, sel->cursorY, 1.0f}, ICON_FLAG_2D | ICON_FLAG_FLIP_X, ICON_YUBI_CURSOR, 1.0f);
-        if (sel->numItems > 8 && (gp->retraceCount & 31) < 20) {
+        if (sel->numItems > SELECT_ROWS_SHOWN && (gp->retraceCount & 31) < 20) {
             if (sel->scrollTop != 0) {
-                iconDispGx(&(Vec){entry->x + entry->width / 2.0f, entry->y - 36, 1.0f}, ICON_FLAG_2D, ICON_ARROW_UP, 0.6f);
+                iconDispGx(&(Vec){entry->x + entry->width / 2.0f, entry->y - 36, 1.0f}, ICON_FLAG_2D, ICON_ARROW_UP,
+                           0.6f);
             }
-            if (sel->scrollTop != sel->numItems - 8) {
-                iconDispGx(&(Vec){entry->x + entry->width / 2.0f, entry->y - entry->height - 12, 1.0f}, ICON_FLAG_2D, ICON_ARROW_DOWN, 0.6f);
+            if (sel->scrollTop != sel->numItems - SELECT_ROWS_SHOWN) {
+                iconDispGx(&(Vec){entry->x + entry->width / 2.0f, entry->y - entry->height - 12, 1.0f}, ICON_FLAG_2D,
+                           ICON_ARROW_DOWN, 0.6f);
             }
         }
     }
@@ -1772,6 +1897,10 @@ static void select_disp_mario(WinMgrEntry* entry) {
 /**
  * Draws the informant lists: each entry's title cut at its tag end, read ones in grey,
  * and for type 17 the price of unread entries (with a coin icon from JP on). Despite the name it serves both 17 and 18.
+ *
+ * Rows (SelectListLayout, no icon): the title on the text line at entry->x + 25, scale 0.8 (US and later: squeezed
+ * to at most 200 pixels); the price ("%3d") at entry->x + 245. The window title (msg_window_title_6; JP and later
+ * _5 for type 17), the coin, the hand cursor and the scroll arrows are drawn as in select_disp.
  */
 static void select_disp_luigi(WinMgrEntry* entry) {
 #if VERSION >= VERSION_US
@@ -1800,12 +1929,15 @@ static void select_disp_luigi(WinMgrEntry* entry) {
         GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
         GXGetScissor(&left, &top, &wd, &ht);
         GXSetScissor(entry->x + 304, 274 - entry->y, entry->width, entry->height - 50);
+        // rows clipped and skipped as in select_disp
         info = jdt->info;
         for (i = 0; i < sel->numItems; i++, info++) {
-            py = sel->scrollY + (zero + (entry->y - 44 - i * 24));
+            py = sel->scrollY + (zero + (entry->y - 44 - i * SELECT_ROW_H));
             if ((f32)entry->y < py - 32.0f || (f32)(entry->y - entry->height) > py + 32.0f) {
                 continue;
             }
+            // the entry's text is drawn only up to its tag end: a 0 is written there for the draw and the saved
+            // character put back after it
             winFontInit();
             save = info->initEndPos[info->tagEndPos];
             info->initEndPos[info->tagEndPos] = 0;
@@ -1815,11 +1947,14 @@ static void select_disp_luigi(WinMgrEntry* entry) {
                 col = &black;
             }
 #if VERSION >= VERSION_US
-            winFontSetWidth((Vec){entry->x + 25, sel->scrollY + (zero + (entry->y - 32 - i * 24)), 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, *col, 200.0f, info->initEndPos);
+            winFontSetWidth((Vec){entry->x + 25, sel->scrollY + (zero + (entry->y - 32 - i * SELECT_ROW_H)), 0.0f},
+                            (Vec){0.8f, 0.8f, 0.8f}, *col, 200.0f, info->initEndPos);
 #else
-            winFontSet((Vec){entry->x + 25, sel->scrollY + (zero + (entry->y - 32 - i * 24)), 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, *col, info->initEndPos);
+            winFontSet((Vec){entry->x + 25, sel->scrollY + (zero + (entry->y - 32 - i * SELECT_ROW_H)), 0.0f},
+                       (Vec){0.8f, 0.8f, 0.8f}, *col, info->initEndPos);
 #endif
             info->initEndPos[info->tagEndPos] = save;
+            // type 17: the price of an entry not read yet (gray rows have none)
             if (sel->type == SELECT_TYPE_INFORMANT_PERFECT && !(sel->items[i].flags & SELECT_ITEM_GRAY)) {
                 sprintf(buf, "%3d", info->cost);
                 winFontInit();
@@ -1827,7 +1962,8 @@ static void select_disp_luigi(WinMgrEntry* entry) {
                 if (sel->items[i].flags & SELECT_ITEM_GRAY) {
                     col = &gray;
                 }
-                winFontSet((Vec){entry->x + 245, sel->scrollY + (zero + (entry->y - 32 - i * 24)), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, *col, buf);
+                winFontSet((Vec){entry->x + 245, sel->scrollY + (zero + (entry->y - 32 - i * SELECT_ROW_H)), 0.0f},
+                           (Vec){1.0f, 1.0f, 1.0f}, *col, buf);
             }
         }
         GXSetScissor(left, top, wd, ht);
@@ -1871,12 +2007,14 @@ static void select_disp_luigi(WinMgrEntry* entry) {
         }
         iconDispGx(&(Vec){sel->cursorX, sel->cursorY, 1.0f}, ICON_FLAG_2D | ICON_FLAG_FLIP_X, ICON_YUBI_CURSOR, 1.0f);
 #endif
-        if (sel->numItems > 8 && (gp->retraceCount & 31) < 20) {
+        if (sel->numItems > SELECT_ROWS_SHOWN && (gp->retraceCount & 31) < 20) {
             if (sel->scrollTop != 0) {
-                iconDispGx(&(Vec){entry->x + entry->width / 2.0f, entry->y - 36, 1.0f}, ICON_FLAG_2D, ICON_ARROW_UP, 0.6f);
+                iconDispGx(&(Vec){entry->x + entry->width / 2.0f, entry->y - 36, 1.0f}, ICON_FLAG_2D, ICON_ARROW_UP,
+                           0.6f);
             }
-            if (sel->scrollTop != sel->numItems - 8) {
-                iconDispGx(&(Vec){entry->x + entry->width / 2.0f, entry->y - entry->height - 12, 1.0f}, ICON_FLAG_2D, ICON_ARROW_DOWN, 0.6f);
+            if (sel->scrollTop != sel->numItems - SELECT_ROWS_SHOWN) {
+                iconDispGx(&(Vec){entry->x + entry->width / 2.0f, entry->y - entry->height - 12, 1.0f}, ICON_FLAG_2D,
+                           ICON_ARROW_DOWN, 0.6f);
             }
         }
     }

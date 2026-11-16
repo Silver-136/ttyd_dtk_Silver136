@@ -295,8 +295,23 @@ void winBadgeMain2(WindowWork* w) {
 static void badge_disp(WindowWork* w, f32 xo, f32 yo);
 
 /**
+ * BP pips (textures WIN_TEX_BP_LIT / WIN_TEX_BP_DARK): in the BP panel one per BP point, ten to a row; in the
+ * badge list one per point of a badge's cost. The BP panel is 28 + rows * BP_PIP_STEP high, where rows =
+ * (maximumBP + 9) / BP_PIPS_PER_ROW is the number of pip rows Mario's maximum BP needs; written out it is
+ * 158 - (BP_PIP_ROWS - rows) * BP_PIP_STEP, the full ten-row height (28 + 10 * 13 = 158) less the rows not needed.
+ */
+enum BadgeBpLayout {
+    BP_PIP_STEP = 13,     // pip to pip, across and down
+    BP_PIPS_PER_ROW = 10, // pips in one row of the BP panel
+    BP_PIP_ROWS = 10,     // pip rows of the full-height BP panel
+};
+
+/**
  * Draws the Badges window (menu slot n): the two tabs,
  * the BP panel with total and remaining BP and a pip per BP point, then the badge list via badge_disp.
+ * (x, y) is the window's position (w->menu[n]); screen coordinates have the origin at the centre and y growing
+ * upwards. As in win_item.c, most y values here are written "20.0f + (...)", a 20-pixel lift added around the
+ * rest; where it comes from is not known.
  */
 void winBadgeDisp(s32 camId, void* param, s32 n) {
     WindowWork* w = param;
@@ -317,7 +332,13 @@ void winBadgeDisp(s32 camId, void* param, s32 n) {
 #endif
 
     winBgGX(w, 3, x, y);
+    // the inset list panel: top-left corner (x - 100, y + 140), 365 x 210
     winKirinukiGX(w, 0, x - 100.0f, 20.0f + (120.0f + y), 365.0f, 210.0f);
+    // The two tabs (i = 0 All Badges, 1 Equipped) left of the panel, centred at x - 190, the first at y + 125
+    // (JP) or y + 130 (US) and 40 (JP) or 45 (US) pixels apart. Texture 0xB4 is the tab shape; 0x1A + i the
+    // tab's label, cut to that shape (winTexSet_x2). The open tab draws a half-transparent black copy of the shape
+    // as a shadow, then the label in white 4 pixels up and to the left of it; the other tab draws its label in
+    // gray. winBadgeMain state 0 points the hand cursor at the same y (helpTgtY).
     a = 105.0f + y;
     c = (x - 190.0f) - 4.0f;
     b = 4.0f + a;
@@ -325,23 +346,41 @@ void winBadgeDisp(s32 camId, void* param, s32 n) {
         off = i * VERSION_PICK(40, 45);
         if (i == w->badge.tab) {
             winTexInit(*w->res->data);
-            winTexSet(0xB4, (Vec){x - 190.0f, VERSION_PICK(20.0f, 25.0f) + (a - off), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0, 0, 0, 0x80});
+            winTexSet(0xB4, (Vec){x - 190.0f, VERSION_PICK(20.0f, 25.0f) + (a - off), 0.0f}, (Vec){1.0f, 1.0f, 1.0f},
+                      (GXColor){0, 0, 0, 0x80});
             winTexInit_x2(*w->res->data);
-            winTexSet_x2(i + 0x1A, 0xB4, (Vec){c, VERSION_PICK(20.0f, 25.0f) + (b - off), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);
+            winTexSet_x2(i + 0x1A, 0xB4, (Vec){c, VERSION_PICK(20.0f, 25.0f) + (b - off), 0.0f}, (Vec){1.0f, 1.0f, 1.0f},
+                         white);
         } else {
             winTexInit_x2(*w->res->data);
-            winTexSet_x2(i + 0x1A, 0xB4, (Vec){x - 190.0f, VERSION_PICK(20.0f, 25.0f) + (a - off), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0x80, 0x80, 0x80, 0xFF});
+            winTexSet_x2(i + 0x1A, 0xB4, (Vec){x - 190.0f, VERSION_PICK(20.0f, 25.0f) + (a - off), 0.0f},
+                         (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0x80, 0x80, 0x80, 0xFF});
         }
     }
+    // The BP panel under the tabs: top-left corner (x - 260, y + 60), 150 wide, as high as the pip rows need
+    // (BadgeBpLayout). Type 1 adds the tab under its bottom-right edge that holds the "remaining" label
+    // (msg_menu_badge_nokori) and the remaining BP; their y follows the panel's bottom edge, BP_PIP_STEP per
+    // pip row. Inside the panel: "BP" (scale 0.8) at x - 220 with Mario's maximum BP after it.
 #if VERSION <= VERSION_DEMO_JP
-    winKirinukiGX(w, 1, x - 260.0f, yy = 20.0f + (40.0f + y), 150.0f, 158 - (10 - ((pouch->maximumBP + 9) / 10)) * 13);
+    winKirinukiGX(w, 1, x - 260.0f, yy = 20.0f + (40.0f + y), 150.0f,
+                  158 - (BP_PIP_ROWS - ((pouch->maximumBP + 9) / BP_PIPS_PER_ROW)) * BP_PIP_STEP);
     winFontInit();
     winFontSet((Vec){x - 220.0f, yy = yy - 4.0f, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, "ＢＰ");
+    // early demos: the numbers are written left-aligned with "%d"
     winFontSet((Vec){x - 175.0f, yy, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, "%d", pouch->maximumBP);
-    winFontSet((Vec){x - 180.0f, ((20.0f + (y - 108.0f)) - 18.0f) + (10 - ((pouch->maximumBP + 9) / 10)) * 13, 0.0f}, (Vec){0.5f, 0.5f, 0.5f}, black, msgSearch("msg_menu_badge_nokori"));
-    winFontSet((Vec){x - 145.0f, ((20.0f + (y - 102.0f)) - 18.0f) + (10 - ((pouch->maximumBP + 9) / 10)) * 13, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, "%d", pouch->availableBP);
+    winFontSet((Vec){x - 180.0f,
+                     ((20.0f + (y - 108.0f)) - 18.0f) +
+                         (BP_PIP_ROWS - ((pouch->maximumBP + 9) / BP_PIPS_PER_ROW)) * BP_PIP_STEP,
+                     0.0f},
+               (Vec){0.5f, 0.5f, 0.5f}, black, msgSearch("msg_menu_badge_nokori"));
+    winFontSet((Vec){x - 145.0f,
+                     ((20.0f + (y - 102.0f)) - 18.0f) +
+                         (BP_PIP_ROWS - ((pouch->maximumBP + 9) / BP_PIPS_PER_ROW)) * BP_PIP_STEP,
+                     0.0f},
+               (Vec){0.8f, 0.8f, 0.8f}, black, "%d", pouch->availableBP);
 #else
-    winKirinukiGX(w, 1, x - 260.0f, yy = 20.0f + (40.0f + y), 150.0f, 158 - (10 - (pouch->maximumBP + 9) / 10) * 13);
+    winKirinukiGX(w, 1, x - 260.0f, yy = 20.0f + (40.0f + y), 150.0f,
+                  158 - (BP_PIP_ROWS - (pouch->maximumBP + 9) / BP_PIPS_PER_ROW) * BP_PIP_STEP);
     winFontInit();
 #if VERSION >= VERSION_US
     {
@@ -353,30 +392,75 @@ void winBadgeDisp(s32 camId, void* param, s32 n) {
 #else
     winFontSet((Vec){x - 220.0f, yy = yy - 4.0f, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, "ＢＰ");
 #endif
-    winFontSetR((Vec){(x - 175.0f) - 18.0f, yy, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, "%s", winZenkakuStr(pouch->maximumBP));
+    // JP and later: the numbers are right-aligned (winFontSetR) and written by winZenkakuStr (full-width digits
+    // in JP, ASCII in US and later); the maximum BP ends at x - 193
+    winFontSetR((Vec){(x - 175.0f) - 18.0f, yy, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, "%s",
+                winZenkakuStr(pouch->maximumBP));
 #if VERSION >= VERSION_US
+    // The "remaining" label starts 20 pixels into the tab under the panel (the tab is tw wide and ends at the
+    // panel's right edge, as winKirinukiGX sizes it; 16 is its corner piece). JP's fixed x - 180 is the same
+    // place for JP's fixed 90-pixel tab.
     tw = FontGetMessageWidth(msgSearch("msg_menu_badge_nokori")) * 0.5f + 60.0f;
-    winFontSet((Vec){4.0f + (16.0f + ((x - 260.0f) + (150.0f - tw))), ((20.0f + (y - 108.0f)) - 18.0f) + (10 - (pouch->maximumBP + 9) / 10) * 13, 0.0f}, (Vec){0.5f, 0.5f, 0.5f}, black, msgSearch("msg_menu_badge_nokori"));
+    winFontSet((Vec){4.0f + (16.0f + ((x - 260.0f) + (150.0f - tw))),
+                     ((20.0f + (y - 108.0f)) - 18.0f) +
+                         (BP_PIP_ROWS - (pouch->maximumBP + 9) / BP_PIPS_PER_ROW) * BP_PIP_STEP,
+                     0.0f},
+               (Vec){0.5f, 0.5f, 0.5f}, black, msgSearch("msg_menu_badge_nokori"));
 #else
-    winFontSet((Vec){x - 180.0f, ((20.0f + (y - 108.0f)) - 18.0f) + (10 - (pouch->maximumBP + 9) / 10) * 13, 0.0f}, (Vec){0.5f, 0.5f, 0.5f}, black, msgSearch("msg_menu_badge_nokori"));
+    winFontSet((Vec){x - 180.0f,
+                     ((20.0f + (y - 108.0f)) - 18.0f) +
+                         (BP_PIP_ROWS - (pouch->maximumBP + 9) / BP_PIPS_PER_ROW) * BP_PIP_STEP,
+                     0.0f},
+               (Vec){0.5f, 0.5f, 0.5f}, black, msgSearch("msg_menu_badge_nokori"));
 #endif
-    winFontSetR((Vec){VERSION_PICK((x - 145.0f) - 16.0f, 4.0f + ((x - 145.0f) - 16.0f)), ((20.0f + (y - 102.0f)) - 18.0f) + (10 - (pouch->maximumBP + 9) / 10) * 13, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, "%s", winZenkakuStr(pouch->availableBP));
+    // the remaining BP, ending at x - 161 (JP) or x - 157 (US and later)
+    winFontSetR((Vec){VERSION_PICK((x - 145.0f) - 16.0f, 4.0f + ((x - 145.0f) - 16.0f)),
+                      ((20.0f + (y - 102.0f)) - 18.0f) +
+                          (BP_PIP_ROWS - (pouch->maximumBP + 9) / BP_PIPS_PER_ROW) * BP_PIP_STEP,
+                      0.0f},
+                (Vec){0.8f, 0.8f, 0.8f}, black, "%s", winZenkakuStr(pouch->availableBP));
 #endif
+    // One pip per BP point, BP_PIPS_PER_ROW to a row: pip i at (x - 242, y + 30) plus (i % 10) steps right and
+    // (i / 10) steps down. The available BP are lit, the rest up to the maximum (used by equipped badges) dark.
     winTexInit(*w->res->data);
     d = 28.0f + y;
     for (i = 0; i < pouch->availableBP; i++) {
-        winTexSet(WIN_TEX_BP_LIT, (Vec){(x - 242.0f) + (i % 10) * 13, (20.0f + (d - (i / 10) * 13)) - 18.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);
+        winTexSet(WIN_TEX_BP_LIT,
+                  (Vec){(x - 242.0f) + (i % BP_PIPS_PER_ROW) * BP_PIP_STEP,
+                        (20.0f + (d - (i / BP_PIPS_PER_ROW) * BP_PIP_STEP)) - 18.0f,
+                        0.0f},
+                  (Vec){1.0f, 1.0f, 1.0f}, white);
     }
     for (i = pouch->availableBP; i < pouch->maximumBP; i++) {
-        winTexSet(WIN_TEX_BP_DARK, (Vec){(x - 242.0f) + (i % 10) * 13, (20.0f + (d - (i / 10) * 13)) - 18.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);
+        winTexSet(WIN_TEX_BP_DARK,
+                  (Vec){(x - 242.0f) + (i % BP_PIPS_PER_ROW) * BP_PIP_STEP,
+                        (20.0f + (d - (i / BP_PIPS_PER_ROW) * BP_PIP_STEP)) - 18.0f,
+                        0.0f},
+                  (Vec){1.0f, 1.0f, 1.0f}, white);
     }
     badge_disp(w, x, y);
 }
 
 /**
+ * The badge list: one column, eight rows per page. winBadgeMain2 scrolls by 184.0f (8 * BADGE_LIST_ROW_H) per
+ * page; winBadgeMain state 10 moves the hand cursor on the same rows (helpTgtX = -110, helpTgtY = 110 - row * 23).
+ */
+enum BadgeListLayout {
+    BADGE_LIST_ROW_H = 23, // one row
+    BADGE_LIST_PAGE = 8,   // badges per page
+};
+
+/**
  * Draws the scrolling badge list for the current tab:
  * equipped highlight, icon, name, BP cost and cost pips, plus the page arrows and the Z sort hint.
  * JP and later gray out badges Mario cannot afford.
+ *
+ * Row i (badge i of the tab's list) has its line at y = yo + 110 - i * BADGE_LIST_ROW_H, scrolled up by
+ * w->badge.scroll[tab] (unlike win_item.c's rows, without the 20-pixel lift): the equipped highlight centred
+ * at xo + 82, the icon at (xo - 75, y) (scale 0.54), then 12 higher the name at xo - 55 and the BP cost (early
+ * demos at xo + 130, later around xo + 142), and the cost pips from xo + 160 at the icon's height, one
+ * BP_PIP_STEP apart. The "BP needed" heading (msg_menu_badge_hituyou) sits over the cost column at
+ * (xo + 120, yo + 135). A scissor box clips the list to screen lines 119 to 302 (of 480), one page of rows.
  */
 static void badge_disp(WindowWork* w, f32 xo, f32 yo) {
     ItemData* item;
@@ -422,27 +506,37 @@ static void badge_disp(WindowWork* w, f32 xo, f32 yo) {
         } else {
             equipped = w->badge.list[i].equipped;
         }
-        if ((scroll + ((yo + 110.0f) - (f32)(i * 23))) > 240.0f) {
+        // rows above the screen are skipped; the first row below it ends the list
+        if ((scroll + ((yo + 110.0f) - (f32)(i * BADGE_LIST_ROW_H))) > 240.0f) {
             continue;
         }
-        if ((scroll + ((yo + 110.0f) - (f32)(i * 23))) < -240.0f) {
+        if ((scroll + ((yo + 110.0f) - (f32)(i * BADGE_LIST_ROW_H))) < -240.0f) {
             break;
         }
+        // equipped: texture 0x1E stretched 44 times wide, centred at xo + 82, drawn first so it lies behind the row
         if (equipped) {
             winTexInit(*w->res->data);
 #if VERSION <= VERSION_DEMO_JP
-            winTexSet(0x1E, (Vec){82.0f + xo, (scroll + ((yo + 110.0f) - (f32)(i * 23))), 0.0f}, (Vec){44.0f, 1.0f, 1.0f}, colA);
+            winTexSet(0x1E, (Vec){82.0f + xo, (scroll + ((yo + 110.0f) - (f32)(i * BADGE_LIST_ROW_H))), 0.0f},
+                      (Vec){44.0f, 1.0f, 1.0f}, colA);
         }
         winIconInit();
-        winIconSet(itemDataTable[badge].icon_id, (Vec){xo - 75.0f, (scroll + ((yo + 110.0f) - (f32)(i * 23))), 0.0f}, (Vec){0.54f, 0.54f, 0.54f}, colA);
+        winIconSet(itemDataTable[badge].icon_id,
+                   (Vec){xo - 75.0f, (scroll + ((yo + 110.0f) - (f32)(i * BADGE_LIST_ROW_H))), 0.0f},
+                   (Vec){0.54f, 0.54f, 0.54f}, colA);
         item = &itemDataTable[badge];
         winFontInit();
-        winFontSet((Vec){xo - 55.0f, scroll + (12.0f + ((yo + 110.0f) - (f32)(i * 23))), 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, colB, item->id);
+        // early demos: the name is item->id (the Japanese name) as it is, the cost a "%d" at xo + 130
+        winFontSet((Vec){xo - 55.0f, scroll + (12.0f + ((yo + 110.0f) - (f32)(i * BADGE_LIST_ROW_H))), 0.0f},
+                   (Vec){0.9f, 0.9f, 0.9f}, colB, item->id);
         cost = &item->bp_cost;
-        winFontSet((Vec){130.0f + xo, scroll + (12.0f + ((yo + 110.0f) - (f32)(i * 23))), 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, colB, "%d", *cost);
+        winFontSet((Vec){130.0f + xo, scroll + (12.0f + ((yo + 110.0f) - (f32)(i * BADGE_LIST_ROW_H))), 0.0f},
+                   (Vec){0.9f, 0.9f, 0.9f}, colB, "%d", *cost);
 #else
-            winTexSet(0x1E, (Vec){82.0f + xo, (scroll + ((yo + 110.0f) - (f32)(i * 23))), 0.0f}, (Vec){44.0f, 1.0f, 1.0f}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+            winTexSet(0x1E, (Vec){82.0f + xo, (scroll + ((yo + 110.0f) - (f32)(i * BADGE_LIST_ROW_H))), 0.0f},
+                      (Vec){44.0f, 1.0f, 1.0f}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
         }
+        // a badge that is not equipped and costs more than the BP left: gray icon and gray (0x7F) text
         if (!equipped && itemDataTable[badge].bp_cost > pouchGetPtr()->availableBP) {
             colB = (GXColor){0x7F, 0x7F, 0x7F, 0xFF};
             gray = 1;
@@ -455,58 +549,85 @@ static void badge_disp(WindowWork* w, f32 xo, f32 yo) {
         } else {
             winIconGrayInit();
         }
-        winIconSet(itemDataTable[badge].icon_id, (Vec){xo - 75.0f, (scroll + ((yo + 110.0f) - (f32)(i * 23))), 0.0f}, (Vec){0.54f, 0.54f, 0.54f}, colA);
+        winIconSet(itemDataTable[badge].icon_id,
+                   (Vec){xo - 75.0f, (scroll + ((yo + 110.0f) - (f32)(i * BADGE_LIST_ROW_H))), 0.0f},
+                   (Vec){0.54f, 0.54f, 0.54f}, colA);
         item = &itemDataTable[badge];
         winFontInit();
 #if VERSION >= VERSION_US
-        winFontSetWidth((Vec){xo - 55.0f, scroll + (12.0f + ((yo + 110.0f) - (f32)(i * 23))), 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, colB, 170.0f, msgSearch(item->name));
+        // the name, squeezed to at most 170 pixels wide
+        winFontSetWidth((Vec){xo - 55.0f, scroll + (12.0f + ((yo + 110.0f) - (f32)(i * BADGE_LIST_ROW_H))), 0.0f},
+                        (Vec){0.9f, 0.9f, 0.9f}, colB, 170.0f, msgSearch(item->name));
 #else
-        winFontSet((Vec){xo - 55.0f, scroll + (12.0f + ((yo + 110.0f) - (f32)(i * 23))), 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, colB, item->id);
+        // JP: the name is item->id (the Japanese name) as it is
+        winFontSet((Vec){xo - 55.0f, scroll + (12.0f + ((yo + 110.0f) - (f32)(i * BADGE_LIST_ROW_H))), 0.0f},
+                   (Vec){0.9f, 0.9f, 0.9f}, colB, item->id);
 #endif
+        // the cost (winZenkakuStr: full-width digits in JP, ASCII in US and later), starting half its unscaled
+        // width left of xo + 142
         cost = &item->bp_cost;
         sprintf(buf, "%s", winZenkakuStr(*cost));
-        winFontSet((Vec){(142.0f + xo) - (f32)(FontGetMessageWidth(buf) / 2), scroll + (12.0f + ((yo + 110.0f) - (f32)(i * 23))), 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, colB, buf);
+        winFontSet((Vec){(142.0f + xo) - (f32)(FontGetMessageWidth(buf) / 2),
+                         scroll + (12.0f + ((yo + 110.0f) - (f32)(i * BADGE_LIST_ROW_H))),
+                         0.0f},
+                   (Vec){0.9f, 0.9f, 0.9f}, colB, buf);
 #endif
+        // one pip per point of the cost, lit when the badge is equipped
         winTexInit(*w->res->data);
         for (j = 0; j < *cost; j++) {
 #if VERSION <= VERSION_DEMO_JP
-            winTexSet(equipped ? WIN_TEX_BP_LIT : WIN_TEX_BP_DARK, (Vec){(160.0f + xo) + j * 13, (scroll + ((yo + 110.0f) - (f32)(i * 23))), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, colA);
+            winTexSet(equipped ? WIN_TEX_BP_LIT : WIN_TEX_BP_DARK,
+                      (Vec){(160.0f + xo) + j * BP_PIP_STEP,
+                            (scroll + ((yo + 110.0f) - (f32)(i * BADGE_LIST_ROW_H))),
+                            0.0f},
+                      (Vec){1.0f, 1.0f, 1.0f}, colA);
 #else
             winTexSet(equipped ? WIN_TEX_BP_LIT : WIN_TEX_BP_DARK,
-                      (Vec){(160.0f + xo) + j * 13, (scroll + ((yo + 110.0f) - (f32)(i * 23))), 0.0f},
+                      (Vec){(160.0f + xo) + j * BP_PIP_STEP,
+                            (scroll + ((yo + 110.0f) - (f32)(i * BADGE_LIST_ROW_H))),
+                            0.0f},
                       (Vec){1.0f, 1.0f, 1.0f}, colA);
 #endif
         }
     }
     GXSetScissor(0, 0, 0x260, 0x1E0);
     {
-        f32 ax;
+        f32 arrowX;
 #if VERSION >= VERSION_JP
         colU = (GXColor){255, 255, 255, 255};
         colD = (GXColor){0, 0, 0, 255};
 #endif
 
+        // Page arrows right of the panel at xo + 250 (texture 0x17; scale -1 turns it to point up): up arrow at
+        // yo + 148 with the L button icon under it when there is a previous page, down arrow at yo - 85 with the
+        // R button icon above it when there is a next page (the same places as in win_item.c)
         if (w->badge.page[w->badge.tab] > 0) {
             winTexInit(*w->res->data);
-            ax = 250.0f + xo;
-            winTexSet(0x17, (Vec){ax, 20.0f + (18.0f + (110.0f + yo)), 0.0f}, (Vec){-1.0f, -1.0f, -1.0f}, colU);
+            arrowX = 250.0f + xo;
+            winTexSet(0x17, (Vec){arrowX, 20.0f + (18.0f + (110.0f + yo)), 0.0f}, (Vec){-1.0f, -1.0f, -1.0f}, colU);
             winIconInit();
-            winIconSet(ICON_TRIGGER_L, (Vec){ax, 20.0f + (113.0f + yo), 0.0f}, (Vec){0.6f, 0.6f, 0.6f}, colU);
+            winIconSet(ICON_TRIGGER_L, (Vec){arrowX, 20.0f + (113.0f + yo), 0.0f}, (Vec){0.6f, 0.6f, 0.6f}, colU);
         }
-        if (cnt > w->badge.page[w->badge.tab] * 8 + 8) {
+        if (cnt > w->badge.page[w->badge.tab] * BADGE_LIST_PAGE + BADGE_LIST_PAGE) {
             winTexInit(*w->res->data);
-            ax = 250.0f + xo;
-            winTexSet(0x17, (Vec){ax, 20.0f + ((yo - 90.0f) - 15.0f), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, colU);
+            arrowX = 250.0f + xo;
+            winTexSet(0x17, (Vec){arrowX, 20.0f + ((yo - 90.0f) - 15.0f), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, colU);
             winIconInit();
-            winIconSet(ICON_TRIGGER_R, (Vec){ax, 20.0f + (yo - 90.0f), 0.0f}, (Vec){0.6f, 0.6f, 0.6f}, colU);
+            winIconSet(ICON_TRIGGER_R, (Vec){arrowX, 20.0f + (yo - 90.0f), 0.0f}, (Vec){0.6f, 0.6f, 0.6f}, colU);
         }
+        // Sort hint under the panel: the "sort" text (scale 0.7) ends at xo + 220, the Z button icon 30 pixels
+        // left of it (width holds the text's width, then its x)
         width = 0.7f * (f32)FontGetMessageWidth(msgSearch("msg_menu_sort_narabikae"));
         winFontInit();
         width = xo + (220.0f - width);
-        winFontSet((Vec){width, 20.0f + ((yo - 92.0f) - 10.0f), 0.0f}, (Vec){0.7f, 0.7f, 0.7f}, colD, msgSearch("msg_menu_sort_narabikae"));
+        winFontSet((Vec){width, 20.0f + ((yo - 92.0f) - 10.0f), 0.0f}, (Vec){0.7f, 0.7f, 0.7f}, colD,
+                   msgSearch("msg_menu_sort_narabikae"));
         winIconInit();
-        winIconSet(ICON_TRIGGER_Z_ALT, (Vec){width - 30.0f, 20.0f + ((yo - 100.0f) - 10.0f), 0.0f}, (Vec){0.6f, 0.6f, 0.6f}, colU);
+        winIconSet(ICON_TRIGGER_Z_ALT, (Vec){width - 30.0f, 20.0f + ((yo - 100.0f) - 10.0f), 0.0f},
+                   (Vec){0.6f, 0.6f, 0.6f}, colU);
+        // the cost column's "BP needed" heading (scale 0.5)
         winFontInit();
-        winFontSet((Vec){120.0f + xo, 135.0f + yo, 0.0f}, (Vec){0.5f, 0.5f, 0.5f}, colD, msgSearch("msg_menu_badge_hituyou"));
+        winFontSet((Vec){120.0f + xo, 135.0f + yo, 0.0f}, (Vec){0.5f, 0.5f, 0.5f}, colD,
+                   msgSearch("msg_menu_badge_hituyou"));
     }
 }
