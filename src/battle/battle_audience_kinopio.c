@@ -326,8 +326,8 @@ static void BattleAudienceCtrlProcessKinopioWait(s32 index, u8 front) {
                     if (rnd < (threshold += 10)) {
                         BattleAudience_ChangeStatus(index, AUDIENCE_STATUS_WAIT_KUBI_KATAMUKE);
                     } else {
-                        // FAKE: (f32) cast on the product keeps the multiply apart from the add (no fmadd)
-                        threshold = (s32)(threshold + (f32)(10.0f * a));
+                        const f32 cheerRange = 10.0f * a;
+                        threshold += cheerRange;
                         if (rnd < threshold) {
                             BattleAudience_ChangeStatus(index, AUDIENCE_STATUS_JOY_RAISE_ARM);
                         } else if (BattleBreakSlot_GetBreakTurn() >= 1 || base->excited == 1) {
