@@ -355,17 +355,6 @@ static inline void escape(ExtdrvPose* pose, Chorobon* chb, s32 next, f32 x, f32 
     chb_jump(pose, chb, next, x, y, z, 2.0f * (rs * (smax - smin) + smin), rg * (gmax - gmin) + gmin);
 }
 
-/**
- * Random hop for a Fuzzy that is idling: speed 0.3..0.5, gravity 0.5..0.8,
- * returning to its current state afterwards.
- */
-// FAKE: invented one-use inline helper (no map name); writing it out changes the code (FAKES.md)
-static inline void jump_r(ExtdrvPose* pose, Chorobon* chb, f32 x, f32 y, f32 z) {
-    f32 rs = rand() / 32767.0f;
-    f32 rg = rand01();
-    jump(pose, chb, chb->state, x, y, z, rs, 0.3f, 0.5f, rg, 0.5f, 0.8f);
-}
-
 /** Random flee hop: speed 1.0..1.2 doubled, gravity 0.8. */
 // FAKE: invented one-use inline helper (no map name); writing it out changes the code (FAKES.md)
 static inline void escape_r(ExtdrvPose* pose, Chorobon* chb, f32 x, f32 y, f32 z) {
@@ -409,7 +398,13 @@ static void ext_main(void) {
                     y = (*pose->mtx)[1][3];
                     z = (*pose->mtx)[2][3] - dist * chb_cos(rad);
                 }
-                jump_r(pose, chb, x, y, z);
+                {
+                    // random hop: speed 0.3..0.5, gravity 0.5..0.8, back to the current state afterwards
+                    f32 rs = rand() / 32767.0f;
+                    f32 rg = rand01();
+
+                    jump(pose, chb, chb->state, x, y, z, rs, 0.3f, 0.5f, rg, 0.5f, 0.8f);
+                }
                 break;
             }
             case 1:

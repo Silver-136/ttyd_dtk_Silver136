@@ -1170,7 +1170,10 @@ static f32 hair_offset[] = {
 };
 
 /** Initializes the hand lighting vector used by pose_init. */
-// FAKE: invented one-use inline helper (no map name); writing it out changes the code (FAKES.md)
+// Descriptive name (NAME_PROVENANCE.md): the original had an inline function here. Its {-200, 100, 500} template
+// is the target's @231, laid out at this place of the file (between the strings before shadow_queen_1000);
+// written out in pose_init it moves to codegen order and .rodata grows by 0xc. The REL map lists no function for it
+// because every call is inlined, so its name is not known.
 inline void hand_light_init(void) {
     Mtx mtx;
     LightEntry* light = lightGetPaperCraft();
