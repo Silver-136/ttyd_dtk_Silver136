@@ -2605,9 +2605,3 @@ static void _btlYoshiDisp(CameraId camera, YoshiGundanPart* p) {
     btlDispTexPlane(p->x, p->y + 20.0f, p->z, s, 0.4f, _yoshig_tpl_no_tbl[p->frame], (GXColor){255,255,255,255}, 0);
 #endif
 }
-
-// FAKE: stand-in that nothing calls; its s32-to-f32 conversion likely shapes the constant pool;
-// removing it changes the object
-void yoshiStrippedPool(f32* f, s32 i) {
-    *f = (f32)i;
-}

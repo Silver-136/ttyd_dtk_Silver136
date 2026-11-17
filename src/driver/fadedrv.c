@@ -1710,7 +1710,10 @@ static void disp_maku(CameraId camId, void* param) {
     sysWaitDrawSync();
 }
 
-// FAKE: stand-in that nothing calls; it only adds its 3.141592f literal to this object's constant pool
+// FAKE: stand-in that nothing calls; it only adds its 3.141592f literal to this object's constant pool. The JP demo
+// map has no stripped function here: 3.141592f is disp_maku's own, numbered right before its other constants (@1222,
+// then 0.5f, 180.0f, 24.0f ... @1223-@1232), while disp_maku as written numbers it after 0.5f and 180.0f. Writing the
+// tan argument as one expression gets that order but colours the three constant registers differently (10 lines).
 void fadeStrippedPool(f32* f) {
     f[0] = 3.141592f;
 }

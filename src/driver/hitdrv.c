@@ -1589,10 +1589,13 @@ void hitBindUpdate(const char* name) {
     }
 }
 
-// FAKE: stand-in for code the linker stripped from the original object; its 0.0f and 0.1f are the first
-// literals in the target .sdata2 pool (codegen runs bottom-up, so it must sit last in the file). The JP demo map
-// lists three stripped hitdrv functions, hitNumberToPtr (0x4C bytes), hitGetEntNum (0x38) and bounding_box
-// (0x528); no build contains their code, so the original cannot be restored.
+// FAKE: stand-in for code the linker stripped from the original object; its 0.0f and 0.1f are the first linked
+// literals in the target .sdata2 pool (codegen runs bottom-up, so it must sit last in the file). JP demo map: the
+// last five functions of the file are stripped (hitNumberToPtr 0x4c, hitGetEntNum 0x38, bounding_box 0x528,
+// bounding_sphere 0x22c, dbg_hitObjDisp 0x6a4, in codegen order); the pool starts with their constants: UNUSED
+// @1184, @1206, @1249, then 0.0f (@1250), then 0.1f (@1392) next to UNUSED @1393-@1395 (and the UNUSED .rodata
+// culling_tbl, attribute_rgb, @1397), so 0.0f and 0.1f most likely belong to the debug drawers.
+// No build contains their code, so the original cannot be restored.
 void hitStrippedPool(f32* f) {
     f[0] = 0.0f;
     f[1] = 0.1f;

@@ -1114,8 +1114,11 @@ static HitEntry* ccwall(PartyEntry* party, s32 mode) {
     return NULL;
 }
 
-// FAKE: stand-in that nothing calls (in no symbol map); it only places these literals in this object's constant
-// pool. Removing it changes the object.
+// FAKE: stand-in that nothing calls; it only places these literals in this object's constant pool. Removing it
+// changes the object. They are ccwall's first new constants (10, 30 = yofs + 20 folded, 100, 11, 6, then 1.0, 0.4),
+// which the JP demo map numbers without a gap (@1227-@1233) after the UNUSED @1156; this is the slot of the stripped
+// ccground (0xa4) and ccwall2 (0x580), compiled right before ccwall, so one of them (probably ccwall2, a near copy of
+// ccwall) placed them first. Their bodies are not known.
 void nokoStrippedPool(f32* p) {
     p[0] = 10.0f;
     p[1] = 30.0f;

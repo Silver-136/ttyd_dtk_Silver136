@@ -996,7 +996,9 @@ static BOOL chkCollision(f32* outY) {
     return ret;
 }
 
-// FAKE: stand-in that nothing calls; it only places its 4.0f literal in this object's constant pool
+// FAKE: stand-in that nothing calls; it only places its 4.0f literal in this object's constant pool. JP demo map:
+// the last function of the file is the stripped marioGetPlaneRidePos (UNUSED 0x1c8, compiled first), whose first
+// constants are 4.0f and 90.0f (@802, @803); its body is not known.
 static f32 planeDead4(void) {
     return 4.0f;
 }

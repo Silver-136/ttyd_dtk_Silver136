@@ -1220,8 +1220,11 @@ USER_FUNC(evt_party_cloud_lock_animations_on_off) {
 }
 #endif
 
-// FAKE: stand-in that nothing calls (in neither symbol map); it only fixes the order of these literals in the
-// constant pool; removing it changes the object
+// FAKE: stand-in that nothing calls; it only fixes the order of these literals in the constant pool; removing it
+// changes the object. JP demo map: 1.0f (@1357) comes first, then the UNUSED @1454 and 0.5f, 20.0f, 0.0f
+// (@1455-@1457), then -1000.0f (@1504); all are evt_party_jump_pos's values, but the run after @1454 is placed by
+// the stripped evt_party_jump_jumpstand (UNUSED 0x834, compiled right before evt_party_jump_pos), and 1.0f by an
+// earlier stripped command (evt_party_set_size 0xc0 is the likely one). Bodies not known.
 void evtPartyStrippedPool(f32* f) {
     f[0] = 1.0f;
     f[1] = 0.5f;

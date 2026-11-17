@@ -1328,6 +1328,21 @@ void mot_fall_roll(void) {
     }
 }
 
+// FAKE: stand-in that nothing calls (the linker strips it); it only places 270.0f, 360.0f, 10.0f, 135.0f and 1.2f in
+// this object's constant pool. JP demo map: this is the slot of six stripped functions (makeMovedir 0x340,
+// chkReverseDir 0xe4, chkReverseDir2 0x17c, chkDirSide 0x9c, movedir2dispdir 0x118, rollMove 0xc8, in source order),
+// compiled right after makeOfs (the last function); makeOfs places its own constants first (@987-@1000), and these five
+// are the next first uses (@1006, @1015, @1019, @1101, @1102), so they belong to those six functions, whose bodies are
+// not known (chkReverseDir: three bodies fit its size).
+void marioRollStrippedPool(void) {
+    MarioWork* mario = marioGetPtr();
+    mario->rot.x = 270.0f;
+    mario->rot.y = 360.0f;
+    mario->rot.z = 10.0f;
+    mario->scale.x = 135.0f;
+    mario->scale.y = 1.2f;
+}
+
 /**
  * Offsets the tube's display position by the slope of the ground under Mario when the slope is under
  * 45 degrees (the side ray cast for steeper slopes has no effect).
@@ -1390,32 +1405,4 @@ static void makeOfs(void) {
             }
         }
     }
-}
-
-/**
- * Never called (the link strips it): its stores only place float constants in the order the rest of the file
- * expects in the constant pool.
- */
-// FAKE: stand-in that nothing calls; it only places these literals in this object's constant pool
-void marioRollStrippedPool(void) {
-    MarioWork* mario = marioGetPtr();
-    mario->dispOfs.x = 100.0f;
-    mario->dispOfs.y = 0.0f;
-#if VERSION <= VERSION_DEMO_JP
-    mario->jumpVelocityY = -1.0f;
-#endif
-    mario->dispOfs.z = 0.5f;
-    mario->dispOfs2.x = 3.1415927f;
-    mario->dispOfs2.y = 180.0f;
-    mario->dispOfs2.z = 6.0f;
-    mario->rotOfs.x = 5.0f;
-    mario->rotOfs.y = -4.0f;
-    mario->rotOfs.z = 90.0f;
-    mario->rot.x = 270.0f;
-    mario->rot.y = 360.0f;
-    mario->rot.z = 10.0f;
-    mario->scale.x = 135.0f;
-    mario->scale.y = 1.2f;
-    mario->scale.z = sqrtf(mario->fallStartPos.x);
-    mario->fallStartPos.y = __fabsf(mario->fallStartPos.z) < 45.0;
 }

@@ -1717,7 +1717,9 @@ BOOL winLectureCheck(void) {
 const volatile f32 float_0p5_8041dc98 __attribute__((aligned(8))) = 0.5f;
 
 // FAKE: stand-in; nothing calls it. It only places the int-to-float conversion constant in this object's
-// constant pool. Removing it changes the object.
+// constant pool. Removing it changes the object. JP demo map: the constant (@1059) is the stripped winNumSet's
+// (UNUSED 0x228, after wait in codegen order): it follows winNumSet's UNUSED .sdata2 constants @1051, @1052, @1054
+// and its 0.5f (@1053, the global float_0p5_8041dc98 above stands in for it); winNumSet's body is not known.
 void winMainStrippedPool(f32* f, s32 i) {
     *f = (f32)i;
 }

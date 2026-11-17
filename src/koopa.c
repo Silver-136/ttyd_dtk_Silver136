@@ -626,7 +626,10 @@ static void kpaFall(void) {
 }
 
 // FAKE: stand-in, never called (the linker strips it); it only puts kpaSetFallPara's eight literals into the
-// .sdata2 pool; removing it changes the object
+// .sdata2 pool; removing it changes the object. JP demo map: this is the slot of the stripped kpaJumpInWater
+// (UNUSED 0x134, compiled right before kpaFall), and the pool has its own UNUSED @1520 followed at once by the
+// eight (@1521-@1528), before kpaFall's -20.0f: kpaJumpInWater uses one constant of its own, then kpaSetFallPara's
+// (an inlined call). Its body is not known.
 void kpaStrippedFallPool(f32* f) {
     f[0] = -0.05f;
     f[1] = -0.08f;
