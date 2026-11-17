@@ -117,12 +117,30 @@ s32 evt_get_yoshi_frm(void) {
  * while Mario rides on the ground and is not jumping or falling,
  * makes it Mario's stand-on object too so moving floors carry both.
  * Name from the JP demo map, which lists yoshi_hitobj_ride and sweatEntry (both stripped there) in this slot of
- * the source; the body fits yoshi_hitobj_ride, and the sweat effect is entered inline in yoshi_use.
+ * the source; the body fits yoshi_hitobj_ride.
  */
 void yoshi_hitobj_ride(PartyEntry* party, void* hit) {
     party->hitobjStandOn = hit;
     if (yoshiGetStatus() == YOSHI_STATUS_RIDING && !(party->playerPtr->flags & (MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP))) {
         party->playerPtr->hitobjStandOn = hit;
+    }
+}
+
+/**
+ * Spawns the flutter jump's sweat-drop effect 18 above Yoshi (fan angle 70 or -70 by his facing) unless one is
+ * already out, and starts its 20-frame timer (sweatMain). Called from yoshi_use's flutter.
+ */
+// Original name and size (0x94) from the JP demo map (UNUSED there: its one call is inlined), between
+// yoshi_hitobj_ride and sweatMain. Body: yoshi_use's flutter code, which was written out there; the out-of-line
+// copy is 0x94 and yoshi_use stays the same with the locals in sweatMain's x, y, z order (the bytes allow
+// several orders).
+void sweatEntry(PartyEntry* party) {
+    f32 x = party->position.x;
+    f32 y = 18.0f + party->position.y;
+    f32 z = party->position.z;
+    if (YOSHI_WORK(party)->effect == NULL) {
+        YOSHI_WORK(party)->effect = effSweatN64Entry(1, x, y, z, 1.0f, 70.0f * (party->displayDirectionTarget == 180.0f ? -1.0f : 1.0f), 0x16);
+        YOSHI_WORK(party)->timer = 20;
     }
 }
 
@@ -517,9 +535,6 @@ void yoshi_use(PartyEntry* party) {
     f32 oz;
     MarioWork* m;
     f32 prev;
-    f32 y;
-    f32 x;
-    f32 z;
     f32 s;
 
 #if VERSION >= VERSION_JP
@@ -883,13 +898,7 @@ void yoshi_use(PartyEntry* party) {
                 party->useMotionId = 22;
             }
         case 22:
-            y = 18.0f + party->position.y;
-            x = party->position.x;
-            z = party->position.z;
-            if (YOSHI_WORK(party)->effect == NULL) {
-                YOSHI_WORK(party)->effect = effSweatN64Entry(1, x, y, z, 1.0f, 70.0f * (party->displayDirectionTarget == 180.0f ? -1.0f : 1.0f), 0x16);
-                YOSHI_WORK(party)->timer = 20;
-            }
+            sweatEntry(party);
 #if VERSION <= VERSION_DEMO_JP
             party->position.y += mario->mot.yoshi.bobSpeed;
 #else

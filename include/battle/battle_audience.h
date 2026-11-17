@@ -443,6 +443,7 @@ void BattleAudienceSoundStop(s32 index);
 void BattleAudienceSoundWhistle(void);
 s32 BattleAudienceDetectPakkunEatTarget(s32 index);
 BattleUnit* BattleAudienceDetectTargetAll(void);
+BattleUnit* BattleAudienceDetectTargetEnemy(void);
 BOOL BattleAudienceItemOn(s32 index, u16 itemId, s32 numItems);
 void BattleAudienceJoySACLecture(void);
 void BattleAudienceNumToTarget(void);

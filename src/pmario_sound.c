@@ -9596,6 +9596,13 @@ s8 psndGetSFXUseNum(void) {
     return psnd.sfxActiveCount[0];
 }
 
+#if VERSION >= VERSION_JP
+/**
+ * Ends the battle start: clears PSND_FLAG_BATTLE_START and stops the playing effects marked as battle-start
+ * sounds (except environment and mute-bypassing ones).
+ */
+// New in JP: the early demos clear the flag inline at its three callers, and the JP demo map lists no function
+// here (only the stripped psndGetSFXUseNum and psndBGM_stop around this place).
 void L_psndBGM_stop(void) {
     PaperSoundEffect* sfx;
     int i;
@@ -9608,6 +9615,7 @@ void L_psndBGM_stop(void) {
         }
     }
 }
+#endif
 
 /**
  * Stops BGM channel id at once (ignored when the channel is free) and frees it.

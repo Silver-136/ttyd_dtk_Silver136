@@ -217,7 +217,9 @@ typedef enum PsndFlags {
 #define PSND_SILENT_LEVEL(n) ((n) << 12) // dip target silent_tbl[n] = (n + 1) * 10 % of the volume, n = 0..9
 void psndSetFlag(s32 flag);
 void psndSFXOff(s32 id);
+#if VERSION >= VERSION_JP
 void L_psndBGM_stop(void);
+#endif
 void psndClearFlag(s32 flag);
 
 void psndSetPosDirListener(Vec* position, f32 direction);

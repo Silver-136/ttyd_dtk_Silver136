@@ -1871,6 +1871,39 @@ BattleUnit* BattleAudienceDetectTargetPlayer(void) {
 }
 
 /**
+ * Picks a random targetable unit on the enemy side (alliance 1), or NULL.
+ */
+// Original name and size (0xc4) from the JP demo map (UNUSED there: nothing calls it), after
+// BattleAudienceDetectTargetPlayer. Body: BattleAudienceDetectTargetPlayer's form on ALLIANCE_ENEMY, which is 0xd0;
+// 0xc4 is that form without the HP test (without the parts test 0xb0, alliance test alone 0xa4). Disclosed: the
+// bytes do not fix the alliance compare (`!= ALLIANCE_PLAYER` is the same size) or the order of the two tests.
+BattleUnit* BattleAudienceDetectTargetEnemy(void) {
+    s32 i;
+    BattleWork* wp = _battleWorkPointer;
+    BattleUnit* unit;
+    s32 count;
+    BattleUnitPart* part;
+    s32 ids[64];
+
+    BattleAudienceBaseGetPtr();
+    count = 0;
+    for (i = 0; i < BATTLE_UNIT_MAX; i++) {
+        unit = wp->units[i];
+        if (unit != NULL) {
+            part = BattleGetUnitPartsPtr(i, BtlUnit_GetBodyPartsId(unit));
+            if (unit->alliance == ALLIANCE_ENEMY && !(part->attributes & kNotTargetable)) {
+                ids[count++] = i;
+            }
+        }
+    }
+    if (count == 0) {
+        return NULL;
+    }
+    i = irand(count);
+    return BattleGetUnitPtr(wp, ids[i]);
+}
+
+/**
  * Per-frame update of thrown audience items: picks the item from the thrower's kind table,
  * flies it in an arc to Mario or his partner, then either hands it over as a gift (if the pouch has room) or,
  * for junk (can, rock, bone, hammer), loads the matching weapon so it does damage,
