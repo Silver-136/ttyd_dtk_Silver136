@@ -78,3 +78,5 @@ s32 memcmp_as4(const void* a, const void* b, u32 count);
 
 extern const char* build_date_ptr;
 extern const char* build_time_ptr;
+extern s32 osreport_log_loop;
+extern s32 osreport_log_index;

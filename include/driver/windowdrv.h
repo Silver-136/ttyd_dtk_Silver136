@@ -71,5 +71,6 @@ WindowEntry* windowGetPointer(s32 id);
 GXTexObj* getWakuTexObj(s32 id);
 
 extern GXTexObj* wakuTexObj;
+extern s16 windowTexNumber;
 
 extern BOOL tpl_loaded;

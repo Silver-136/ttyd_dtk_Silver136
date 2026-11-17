@@ -24,6 +24,26 @@
 #include "pmario_sound.h"
 #include <string.h>
 #include "driver/mobjdrv.h"
+#include "evt/evt_cmd.h"
+#include "evt/evt_cam.h"
+
+// Stripped copies of mot_hammer's three hammer-impact camera shakes: nothing here runs them (JP demo map: UNUSED,
+// 0x20 each, first in this file's .data). Same names and sizes as the linked scripts in mot_hammer.o, whose
+// contents they take.
+static EVT_BEGIN(lv1quake_evt)
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.009765625f), 90)
+    RETURN
+EVT_END()
+
+static EVT_BEGIN(lv2quake_evt)
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.01953125f), 110)
+    RETURN
+EVT_END()
+
+static EVT_BEGIN(lv3quake_evt)
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.029296875f), 140)
+    RETURN
+EVT_END()
 
 /**
  * Jump curves (speed, acceleration, jerk, snap): Mario's launch off a blue jump stand (mot_jumpStand), with its

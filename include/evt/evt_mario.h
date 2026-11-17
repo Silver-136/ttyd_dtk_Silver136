@@ -32,6 +32,8 @@ USER_FUNC(evt_mario_wait_landon);
 USER_FUNC(evt_mario_wait_move_end);
 
 extern const char* a_mario_group[];
+extern EvtWord mario_balloon_tenten_evt[];
+extern EvtWord mario_balloon_off_evt[];
 USER_FUNC(evt_mario_keyon_wait);
 USER_FUNC(evt_mario_party_door_halve_hitbox);
 USER_FUNC(evt_koopa_chk_dead);

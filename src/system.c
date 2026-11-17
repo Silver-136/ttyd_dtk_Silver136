@@ -754,6 +754,13 @@ s32 irand(s32 scalar) {
     return rand() % scalar;
 }
 
+// Stripped: nothing in any version reads or writes them (JP demo map: UNUSED, 4 bytes each, in .sbss after
+// sysGetToken's token and before fsort's statics; declared in this order, loop first, the emission comes out
+// as in the map). The names point to an OSReport log ring that sysOSReport does not use (the JP demo's 0xc8
+// sysOSReport is this file's); their types are not shown by any byte (s32 chosen, like the other counters here).
+s32 osreport_log_loop;
+s32 osreport_log_index;
+
 /** Returns the next 16-bit draw sync token. */
 u16 sysGetToken(void) {
     static u16 token;

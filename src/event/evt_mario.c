@@ -130,6 +130,20 @@ USER_FUNC(evt_mario_dokan_prepare) {
     return EVT_RETURN_DONE;
 }
 
+// Stripped scripts (JP demo map: UNUSED, 0x10 each, first in this file's .data): nothing runs them. 0x10 is one
+// user call with no argument, RETURN and the end word; the names give the call (both functions read no
+// argument). The map lists twelve more stripped scripts after these (party and test scripts) whose arguments
+// no byte shows.
+EVT_BEGIN(mario_balloon_tenten_evt)
+    CALL(evt_mario_balloon_tenten)
+    RETURN
+EVT_END()
+
+EVT_BEGIN(mario_balloon_off_evt)
+    CALL(evt_mario_balloon_off)
+    RETURN
+EVT_END()
+
 // Debug names of the DokanType values. Original name from the JP demo's link map (UNUSED there): nothing reads
 // the table, so the linker strips it; its six strings stay in .rodata.
 static const char* dbg_dokan_name[] = {
