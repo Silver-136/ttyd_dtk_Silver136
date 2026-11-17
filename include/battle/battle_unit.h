@@ -1126,6 +1126,7 @@ BattleUnit* BtlUnit_Spawn(BattleUnitSetup* setup, s32 flags);
 s32 BtlUnit_GetUnitId(BattleUnit* unit);
 BattleUnitPart* BtlUnit_GetPartsPtr(BattleUnit* unit, s32 partNum);
 s32 BtlUnit_GetBodyPartsId(BattleUnit* unit);
+s32 BtlUnit_GetGuardBodyPartsId(BattleUnit* unit);
 void BtlUnit_GetPos(BattleUnit* unit, f32* x, f32* y, f32* z);
 void BtlUnit_SetPos(BattleUnit* unit, f32 x, f32 y, f32 z);
 void BtlUnit_AddPos(BattleUnit* unit, f32 x, f32 y, f32 z);

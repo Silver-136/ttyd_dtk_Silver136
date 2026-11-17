@@ -2100,6 +2100,22 @@ USER_FUNC(evt_mario_chk_join_party) {
     return EVT_RETURN_DONE;
 }
 
+/** Adds the partner member id in arg 0 to the party (partyJoin). */
+// evt_mario_add_party and evt_mario_del_party: original names and sizes (0x30 each) from the JP demo map (UNUSED
+// there: no script uses them; the map lists them after evt_mario_chk_join_party). The setters beside
+// evt_mario_chk_join_party's partyChkJoin: partyJoin and partyLeft, the two mario_party functions of the same
+// signature, in the form of evt_mario_dump_item.
+USER_FUNC(evt_mario_add_party) {
+    partyJoin(evtGetValue(event, event->args[0]));
+    return EVT_RETURN_DONE;
+}
+
+/** Removes the partner member id in arg 0 from the party (partyLeft). */
+USER_FUNC(evt_mario_del_party) {
+    partyLeft(evtGetValue(event, event->args[0]));
+    return EVT_RETURN_DONE;
+}
+
 /** Writes the partner's member id to arg 0 while Mario is using the partner's field ability, else 0. */
 USER_FUNC(evt_mario_party_use_check) {
     s32 id = event->args[0];

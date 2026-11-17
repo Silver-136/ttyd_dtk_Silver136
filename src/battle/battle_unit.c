@@ -380,6 +380,25 @@ s32 BtlUnit_GetBodyPartsId(BattleUnit* unit) {
     return ret;
 }
 
+/** Returns the part number of the unit's bodyguard target part (kGuardTargetPart), or -1. */
+// Original name and size (0x40) from the JP demo map (UNUSED there: nothing calls it; the map lists it after
+// BtlUnit_GetBodyPartsId). BtlUnit_GetBodyPartsId's search for the part attribute its name gives: kGuardTargetPart
+// is the one guard attribute (battle_damage.c finds the bodyguard's part by it).
+s32 BtlUnit_GetGuardBodyPartsId(BattleUnit* unit) {
+    BattleUnitPart* part;
+    s32 ret = -1;
+
+    if (unit) {
+        for (part = unit->parts; part; part = part->nextPart) {
+            if (part->attributes & kGuardTargetPart) {
+                ret = part->kindPartParams->partNum;
+                break;
+            }
+        }
+    }
+    return ret;
+}
+
 /** Reads the unit's battle position (stage coordinates). */
 void BtlUnit_GetPos(BattleUnit* unit, f32* x, f32* y, f32* z) {
     *x = unit->position.x;

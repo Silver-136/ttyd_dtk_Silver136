@@ -186,14 +186,28 @@ USER_FUNC(btlevtcmd_BtlIconSetPosition) {
     return EVT_RETURN_DONE;
 }
 
-/** Script: sets the jump speed of battle icon args[0] (read by btlevtcmd_BtlIconJumpPosition). */
-// Original name and size (0x50) from the JP demo map (UNUSED there: no script uses it);
-// btlevtcmd_BtlIconSetFallAccel for the icon's jump speed.
-USER_FUNC(btlevtcmd_BtlIconSetJumpSpeed) {
+// btlevtcmd_BtlIconSetMoveSpeed and btlevtcmd_BtlIconSetJumpSpeed: original names and sizes (0x50 each) from the JP
+// demo map (UNUSED there: no script uses them; listed in this order between btlevtcmd_BtlIconSetPosition and
+// btlevtcmd_BtlIconSetFallAccel, as btlevtcmd_SetMoveSpeed, _SetJumpSpeed and _SetFallAccel are for units). Both
+// are btlevtcmd_BtlIconSetFallAccel's form. btlevtcmd_BtlIconJumpPosition is btlevtcmd_JumpPosition on the icon's
+// fields, which pairs them: jumpSpeed is the unit's moveSpeedXZ (BtlUnit_SetMoveSpeed) and jumpVelY its
+// moveSpeedY (BtlUnit_SetJumpSpeed).
+
+/** Script: sets the horizontal speed of battle icon args[0] (read by btlevtcmd_BtlIconJumpPosition). */
+USER_FUNC(btlevtcmd_BtlIconSetMoveSpeed) {
     EvtWord* args = event->args;
     s32 index = evtGetValue(event, args[0]);
     BattleIcon* icon = BtlIconGetPtr(index);
     icon->jumpSpeed = evtGetFloat(event, args[1]);
+    return EVT_RETURN_DONE;
+}
+
+/** Script: sets the vertical speed of battle icon args[0] (btlevtcmd_BtlIconJumpPosition recomputes it). */
+USER_FUNC(btlevtcmd_BtlIconSetJumpSpeed) {
+    EvtWord* args = event->args;
+    s32 index = evtGetValue(event, args[0]);
+    BattleIcon* icon = BtlIconGetPtr(index);
+    icon->jumpVelY = evtGetFloat(event, args[1]);
     return EVT_RETURN_DONE;
 }
 

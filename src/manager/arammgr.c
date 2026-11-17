@@ -196,14 +196,32 @@ static void arqCallbackToMram(u32 request) {
 }
 
 /**
- * Copies an entry back from ARAM to dest, waiting for its upload to finish first and then for the copy itself.
- * Each entry is read back once; mapdrv restores a stashed map with it.
+ * Starts copying an entry back from ARAM to dest once its upload has finished; arqCallbackToMram marks it done
+ * (and free).
  */
-void aramMgrToMram(ARAMEntry* entry, void* dest) {
+// Original name and size (0x7c) from the JP demo map (UNUSED there: its one call, in aramMgrToMram, is inlined).
+// aramMgrToMram is this plus the wait, as aramMgrToAram is aramMgrToAramAsync plus the wait.
+void aramMgrToMramAsync(ARAMEntry* entry, void* dest) {
     while (!(entry->flags & ARAM_FLAG_IN_ARAM)) {}
     ARQPostRequest(&entry->request, ARAM_OWNER, ARQ_TYPE_ARAM_TO_MRAM, ARQ_PRIORITY_LOW,
         entry->aramAddr, (u32)dest, entry->size, arqCallbackToMram);
     entry->flags |= ARAM_FLAG_TO_MRAM;
     entry->dest = dest;
+}
+
+/**
+ * Copies an entry back from ARAM to dest, waiting for its upload to finish first and then for the copy itself.
+ * Each entry is read back once; mapdrv restores a stashed map with it.
+ */
+void aramMgrToMram(ARAMEntry* entry, void* dest) {
+    aramMgrToMramAsync(entry, dest);
     while (!(entry->flags & ARAM_FLAG_IN_MRAM)) {}
+}
+
+/** Gives up an entry without copying it back: aramMgrGarbage drops it and reuses its space. */
+// Original name and size (0x10) from the JP demo map (UNUSED there: nothing calls it; listed after aramMgrToMram).
+// The ARAM_FLAG_FREE mark that arqCallbackToMram sets after a copy back, the flag aramMgrGarbage collects by
+// (a plain store instead of |= is 0xc).
+void aramMgrDeleteAram(ARAMEntry* entry) {
+    entry->flags |= ARAM_FLAG_FREE;
 }

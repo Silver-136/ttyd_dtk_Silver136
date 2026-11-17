@@ -9582,6 +9582,14 @@ void psndSFXAllOff(void) {
     }
 }
 
+/** The number of active sound effect slots psndSFXMain counted in its last frame. */
+// Original name and size (0x14) from the JP demo map (UNUSED there: nothing calls it; listed after psndSFXAllOff).
+// The getter of the count psndSFXMain stores. The size fixes a sign extension (lbz + extsb): the s8 return type
+// is a choice, the count field may as well have been an s8 returned as s32 (a u8 read without it is 0x10).
+s8 psndGetSFXUseNum(void) {
+    return psnd.sfxActiveCount[0];
+}
+
 void L_psndBGM_stop(void) {
     PaperSoundEffect* sfx;
     int i;
@@ -10727,6 +10735,14 @@ s32 psndSFXOn(const char* name) {
 /** Plays effect name at volume vol. */
 s32 psndSFXOnVol(const char* name, u8 vol) {
     return __psndSFXOn(name, vol, 0xFF, 0, NULL, 0, 0x10, 0);
+}
+
+/** Plays effect name with volume, pan and a start delay of delayMs milliseconds. */
+// Original name and size (0x30) from the JP demo map (UNUSED there: nothing calls it; the map lists it between
+// psndSFXOnVol and psndSFXOn_3D). psndSFXOnEx_3D without the position; the same size also allows a trailing
+// u16 dist parameter (passed on instead of 0x10), the bytes do not decide it.
+s32 psndSFXOnEx(const char* name, u8 vol, u8 pan, u16 delayMs) {
+    return __psndSFXOn(name, vol, pan, delayMs, NULL, 0, 0x10, 0);
 }
 
 /** Plays effect name as a 3D sound at position. */

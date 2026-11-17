@@ -151,6 +151,17 @@ TEXPalette* iconGetTpl(void) {
     return icon_tpl;
 }
 
+/** The number of icons in the loaded icon.bin, 0 before it is loaded. */
+// Original name and size (0x1c) from the JP demo map (UNUSED there: nothing calls it; listed between iconGetTpl and
+// iconReInit). The getter of IconBinary.count; the size fixes a NULL test on icon_bin (the plain read is 0xc, an
+// icon_bin_ok test 0x20). The s32 return is a choice (u16 is the same size).
+s32 iconBinNum(void) {
+    if (icon_bin == NULL) {
+        return 0;
+    }
+    return icon_bin->count;
+}
+
 /** Clears every icon of the current (field or battle) set. */
 void iconReInit(void) {
     IconWork* wp = iconGetWork();

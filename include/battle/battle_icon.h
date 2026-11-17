@@ -47,4 +47,5 @@ USER_FUNC(btlevtcmd_BtlIconFallPosition);
 USER_FUNC(btlevtcmd_BtlIconJumpPosition);
 USER_FUNC(btlevtcmd_BtlIconSetFallAccel);
 USER_FUNC(btlevtcmd_BtlIconSetPosition);
+USER_FUNC(btlevtcmd_BtlIconSetMoveSpeed);
 USER_FUNC(btlevtcmd_BtlIconSetJumpSpeed);

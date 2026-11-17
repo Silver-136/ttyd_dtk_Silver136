@@ -28,8 +28,30 @@ typedef struct ARCFileInfo {
     u32 length;
 } ARCFileInfo;
 
+// ARCOpenDir / ARCReadDir (stripped from every build): DVDDir and DVDDirEntry with the archive handle first, as in
+// ARCFileInfo (ARCReadDir has no handle parameter and reads the file table through dir->handle). The order is fixed
+// only by those two stripped functions' sizes, not by any live code.
+typedef struct ARCDir {
+    ARCHandle* handle;
+    u32 entryNum;
+    u32 location;
+    u32 next;
+} ARCDir;
+
+typedef struct ARCDirEntry {
+    ARCHandle* handle;
+    u32 entryNum;
+    BOOL isDir;
+    char* name;
+} ARCDirEntry;
+
 s32 ARCConvertPathToEntrynum(ARCHandle* handle, const char* path);
 BOOL ARCOpen(ARCHandle* handle, const char* filename, ARCFileInfo* info);
+BOOL ARCFastOpen(ARCHandle* handle, s32 entrynum, ARCFileInfo* info);
+BOOL ARCChangeDir(ARCHandle* handle, const char* dirName);
+BOOL ARCOpenDir(ARCHandle* handle, const char* dirName, ARCDir* dir);
+BOOL ARCReadDir(ARCDir* dir, ARCDirEntry* dirent);
+BOOL ARCCloseDir(ARCDir* dir);
 BOOL ARCInitHandle(void* arcStart, ARCHandle* handle);
 BOOL ARCGetCurrentDir(ARCHandle* handle, char* path, u32 maxlen);
 

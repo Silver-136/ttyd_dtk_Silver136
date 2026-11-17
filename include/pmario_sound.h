@@ -174,10 +174,12 @@ BOOL psndBGMOn(u32 flags, char* bgm_name);
 void psndStopAllFadeOut(void);
 BOOL psndENVOff(u32 flags);
 void psndSFXAllOff(void);
+s8 psndGetSFXUseNum(void);
 
 #include "sfx_name_word.h"
 
 s32 psndSFXOn(const char* name);
+s32 psndSFXOnEx(const char* name, u8 vol, u8 pan, u16 delayMs);
 s32 psndSFXOn_3D(const char* name, Vec* position);
 s32 psndSFXOnEx_3D(const char* name, Vec* position, u8 vol, u8 pan, u16 delayMs, u16 dist);
 

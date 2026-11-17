@@ -72,6 +72,23 @@ BOOL ARCOpen(ARCHandle* handle, const char* filename, ARCFileInfo* info) {
     return TRUE;
 }
 
+/** Opens a file by its file-table entry number; FALSE if the number is out of range or names a directory. */
+// Original name and size (0x5c) from the JP demo map (UNUSED there: nothing calls it; the map lists it between
+// ARCOpen and isSame). The DVD file system's DVDFastOpen (libs dvdfs.c) on the archive handle, filling the
+// ARCFileInfo as ARCOpen does. ARCChangeDir, ARCOpenDir and ARCReadDir below are DVDChangeDir, DVDOpenDir and
+// DVDReadDir the same way.
+BOOL ARCFastOpen(ARCHandle* handle, s32 entrynum, ARCFileInfo* info) {
+    FSTEntry* FstStart = (FSTEntry*)handle->FSTStart;
+
+    if ((entrynum < 0) || (entrynum >= handle->entryNum) || entryIsDir(entrynum)) {
+        return FALSE;
+    }
+    info->handle = handle;
+    info->startOffset = filePosition(entrynum);
+    info->length = fileLength(entrynum);
+    return TRUE;
+}
+
 /** Case-insensitive compare of one path component against an entry name. */
 static BOOL isSame(const char* path, const char* string) {
     while (*string != '\0') {
@@ -228,5 +245,67 @@ u32 ARCGetLength(ARCFileInfo* info) {
 
 /** Closes an opened file; nothing to release, always TRUE. */
 BOOL ARCClose(ARCFileInfo* info) {
+    return TRUE;
+}
+
+// ARCChangeDir, ARCOpenDir and ARCReadDir: original names and sizes (0x58, 0x88, 0x8c) from the JP demo map (UNUSED
+// there: nothing calls them; listed after ARCClose, before ARCCloseDir). The sizes fix two details that differ from
+// the DVD forms: the file table pointer is read after the path lookup (read before it, both lookups are 8 bytes
+// larger), and ARCOpenDir has no ARCGetCurrentDir call on a missing path (ARCOpen keeps one; with it 0xa0).
+
+/** Makes the directory dirName the archive's current directory; FALSE if it is missing or not a directory. */
+BOOL ARCChangeDir(ARCHandle* handle, const char* dirName) {
+    s32 entry;
+    FSTEntry* FstStart;
+
+    entry = ARCConvertPathToEntrynum(handle, dirName);
+    FstStart = (FSTEntry*)handle->FSTStart;
+    if ((entry < 0) || (entryIsDir(entry) == FALSE)) {
+        return FALSE;
+    }
+    handle->currDir = (u32)entry;
+    return TRUE;
+}
+
+/** Opens the directory dirName for ARCReadDir; FALSE if it is missing or not a directory. */
+BOOL ARCOpenDir(ARCHandle* handle, const char* dirName, ARCDir* dir) {
+    s32 entry;
+    FSTEntry* FstStart;
+
+    entry = ARCConvertPathToEntrynum(handle, dirName);
+    FstStart = (FSTEntry*)handle->FSTStart;
+    if ((entry < 0) || !entryIsDir(entry)) {
+        return FALSE;
+    }
+    dir->handle = handle;
+    dir->entryNum = (u32)entry;
+    dir->location = (u32)entry + 1;
+    dir->next = nextDir(entry);
+    return TRUE;
+}
+
+/** Reads the next entry of an opened directory into dirent; FALSE after the last one. */
+BOOL ARCReadDir(ARCDir* dir, ARCDirEntry* dirent) {
+    u32 loc;
+    FSTEntry* FstStart;
+    ARCHandle* handle;
+
+    handle = dir->handle;
+    FstStart = (FSTEntry*)handle->FSTStart;
+    loc = dir->location;
+    if ((loc <= dir->entryNum) || (dir->next <= loc)) {
+        return FALSE;
+    }
+    dirent->handle = handle;
+    dirent->entryNum = loc;
+    dirent->isDir = entryIsDir(loc);
+    dirent->name = handle->FSTStringStart + stringOff(loc);
+    dir->location = entryIsDir(loc) ? nextDir(loc) : (loc + 1);
+    return TRUE;
+}
+
+/** Closes a directory opened by ARCOpenDir; nothing to release, always TRUE. */
+// Original name and size (0x8) from the JP demo map (UNUSED, the file's last function): ARCClose's form.
+BOOL ARCCloseDir(ARCDir* dir) {
     return TRUE;
 }

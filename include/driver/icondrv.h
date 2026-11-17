@@ -103,6 +103,7 @@ typedef struct IconWork {
 void iconInit(void);
 void iconTexSetup(void);
 TEXPalette* iconGetTpl(void);
+s32 iconBinNum(void);
 void iconReInit(void);
 void iconMain(void);
 void iconEntry(const char* name, u16 iconId);

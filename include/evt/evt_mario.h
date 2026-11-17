@@ -54,6 +54,8 @@ USER_FUNC(evt_mario_check_key_item);
 USER_FUNC(evt_mario_check_landon);
 USER_FUNC(evt_mario_chk_hipbump);
 USER_FUNC(evt_mario_chk_join_party);
+USER_FUNC(evt_mario_add_party);
+USER_FUNC(evt_mario_del_party);
 USER_FUNC(evt_mario_clear_party);
 USER_FUNC(evt_mario_dokan_end);
 USER_FUNC(evt_mario_dokan_prepare);

@@ -7,6 +7,15 @@
 #include "eff/eff_magic1_n64.h"
 #include "system.h"
 
+/** Sine and cosine of an angle in degrees at once (into *s and *c). */
+// Original name and size (0x6c) from the JP demo map (UNUSED there: nothing calls it; listed before sinfd). sinfd's
+// and cosfd's bodies together (calling them is 0x4c, system's sincosf 0x30). The parameter order is sincosf's; the
+// bytes do not fix it (the float goes in f1 wherever it stands).
+void sincosfd(f32* s, f32* c, f32 deg) {
+    *s = sin((6.2831855f * deg) / 360.0f);
+    *c = cos((6.2831855f * deg) / 360.0f);
+}
+
 /** Sine of an angle in degrees, used throughout battle code for motion and bobbing. */
 f32 sinfd(f32 deg) {
     return sin((6.2831855f * deg) / 360.0f);

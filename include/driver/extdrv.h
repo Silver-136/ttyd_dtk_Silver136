@@ -74,6 +74,7 @@ void extDraw(void);
 void extLoadRenderMode(void);
 void extLoadVertex(void);
 void extLoadTexture(void);
+u32 extGetUsedTmemSize(void);
 void extLoadTextureExit(void);
 void extLoadTev(void);
 void extLoadShadowVertex(void);

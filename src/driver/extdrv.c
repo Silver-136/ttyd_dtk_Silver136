@@ -435,6 +435,15 @@ void extLoadTexture(void) {
     GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
 }
 
+/** The texture memory the crowd textures took in the last extLoadTexture (bytes). */
+// Original name and size (0x24) from the JP demo map (UNUSED there: nothing calls it; listed between
+// extLoadTexture and extLoadTextureExit). The getter of the usedTmem field extLoadTexture sets.
+u32 extGetUsedTmemSize(void) {
+    ExtdrvWork* wp = extGetWork();
+
+    return wp->usedTmem;
+}
+
 /** Waits for the texture preloads from extLoadTexture to finish. */
 void extLoadTextureExit(void) {
     GXTexModeSync();

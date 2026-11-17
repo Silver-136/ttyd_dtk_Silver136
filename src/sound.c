@@ -44,6 +44,9 @@ inline void SoundEfxMuteCh(u32 chan);
 static void SoundDVDMain(void);
 static void SoundDVDStopCh(u32 chan);
 static void SoundDVDSetPanCh(u32 chan, u8 pan);
+static void SoundDVDFadeoutCh(u32 chan);
+static void SoundDVDFademuteCh(u32 chan);
+static void SoundDVDFadeinCh(u32 chan);
 
 static void SoundSSMainInt(void);
 static void SoundSSMain(void);
@@ -821,6 +824,23 @@ void SoundSongFadeoutCh(s32 chan) {
     }
 }
 
+/** SoundSongFademuteCh for song channel 0. */
+// Original name and size (0x5c) from the JP demo map (see SoundSongPlay).
+void SoundSongFademute(void) {
+    SoundSongFademuteCh(0);
+}
+
+/** Fades the song on chan out over the fade-out time and pauses it there (SoundSongContinueCh resumes it). */
+// Original name and size (0x68) from the JP demo map (UNUSED there: nothing calls it); SoundSongFadeoutCh with
+// MusyX's SND_SEQVOL_PAUSE and the channel kept (SoundSSFademuteCh is the stream form).
+void SoundSongFademuteCh(s32 chan) {
+    SoundSong* song = &sound.songs[chan];
+
+    if (sndSeqGetValid(song->seqId)) {
+        sndSeqVolume(0, sound.fadeOut, song->seqId, SND_SEQVOL_PAUSE);
+    }
+}
+
 /** SoundSongFadeinCh for song channel 0. */
 // Original name and size (0x60) from the JP demo map (see SoundSongPlay).
 void SoundSongFadein(void) {
@@ -865,9 +885,101 @@ u8 SoundSongGetVolCh(s32 chan) {
     return (u8)song->vol;
 }
 
+// The track-mute and MIDI-controller functions below: original names and sizes from the JP demo map (UNUSED there:
+// nothing calls them; the map lists them between SoundSongGetVolCh and SoundSongMain). song->mask is the
+// sndSeqMute track mask SoundSongPlayCh starts at 0xFFFFFFFF; MusyX plays a track while its bit is set (seq.c), so
+// muting a track clears its bit. The track parameter is u8 (MusyX's track id type); s8, or s32 with `track & 31`,
+// give the same sizes.
+
+/** SoundSongMuteTrackOnCh for song channel 0. */
+// Size 0x74.
+void SoundSongMuteTrackOn(u8 track) {
+    SoundSongMuteTrackOnCh(0, track);
+}
+
+/** Mutes one track of the song on chan. */
+// Size 0x7c.
+void SoundSongMuteTrackOnCh(s32 chan, u8 track) {
+    SoundSong* song = &sound.songs[chan];
+
+    if (sndSeqGetValid(song->seqId)) {
+        song->mask &= ~(1 << track);
+        sndSeqMute(song->seqId, song->mask, 0);
+    }
+}
+
+/** SoundSongMuteTrackOffCh for song channel 0. */
+// Size 0x74.
+void SoundSongMuteTrackOff(u8 track) {
+    SoundSongMuteTrackOffCh(0, track);
+}
+
+/** Unmutes one track of the song on chan. */
+// Size 0x7c.
+void SoundSongMuteTrackOffCh(s32 chan, u8 track) {
+    SoundSong* song = &sound.songs[chan];
+
+    if (sndSeqGetValid(song->seqId)) {
+        song->mask |= (1 << track);
+        sndSeqMute(song->seqId, song->mask, 0);
+    }
+}
+
+/** SoundSongSetMuteTrackCh for song channel 0. */
+// Size 0x60.
+void SoundSongSetMuteTrack(u32 mask) {
+    SoundSongSetMuteTrackCh(0, mask);
+}
+
+/** Sets the whole track mask (bit set: track plays) of the song on chan. */
+// Size 0x68.
+void SoundSongSetMuteTrackCh(s32 chan, u32 mask) {
+    SoundSong* song = &sound.songs[chan];
+
+    if (sndSeqGetValid(song->seqId)) {
+        song->mask = mask;
+        sndSeqMute(song->seqId, song->mask, 0);
+    }
+}
+
 /** Returns whether a song is playing on chan. */
 u32 SoundSongCheck(s32 chan) {
     return sndSeqGetValid(sound.songs[chan].seqId) != 0;
+}
+
+/** SoundSongGetMIDICtrlCh for song channel 0. */
+// Original name and size (0x70) from the JP demo map, like the MIDI-controller functions below.
+u8 SoundSongGetMIDICtrl(u8 channel, u8 ctrl) {
+    return SoundSongGetMIDICtrlCh(0, channel, ctrl);
+}
+
+/** Returns MIDI controller ctrl of MIDI channel channel in the song on chan, 0 when none plays. */
+// Size 0x7c.
+u8 SoundSongGetMIDICtrlCh(s32 chan, u8 channel, u8 ctrl) {
+    SoundSong* song = &sound.songs[chan];
+
+    if (sndSeqGetValid(song->seqId)) {
+        return sndSeqGetMidiCtrl(song->seqId, channel, ctrl);
+    }
+    return 0;
+}
+
+/** SoundSongSetMIDICtrlCh for song channel 0. */
+// Size 0x80: it passes the result on (a void form is 0x78).
+BOOL SoundSongSetMIDICtrl(u8 channel, u8 ctrl, u8 value) {
+    return SoundSongSetMIDICtrlCh(0, channel, ctrl, value);
+}
+
+/** Sets MIDI controller ctrl of MIDI channel channel in the song on chan; returns sndSeqSetMidiCtrl's result. */
+// Size 0x6c: it returns sndSeqSetMidiCtrl's result, FALSE when no song plays (a void form is 0x64). BOOL is a
+// choice: the bytes do not fix the return type's name.
+BOOL SoundSongSetMIDICtrlCh(s32 chan, u8 channel, u8 ctrl, u8 value) {
+    SoundSong* song = &sound.songs[chan];
+
+    if (sndSeqGetValid(song->seqId)) {
+        return sndSeqSetMidiCtrl(song->seqId, channel, ctrl, value);
+    }
+    return FALSE;
 }
 
 /** Per-frame song update: notices songs that ended on their own (marks their group and frees the channel). */
@@ -944,6 +1056,25 @@ s32 SoundEfxPlayEx(SND_FXID fid, u8 priority, u8 vol, u8 pan) {
         chan = -1;
     }
     return chan;
+}
+
+/** Sets the listener position and facing (degrees) that SoundEfxMain hands to MusyX each frame. */
+// Original name and size (0x28) from the JP demo map (UNUSED there: nothing calls it; listed between the stripped
+// SoundEfxPlayEmitter and SoundEfxSetPosEmitter). pmario_sound's psndSetPosDirListener form on the sound.pos and
+// sound.listenerDir fields SoundEfxMain reads (nothing else writes them). The SND_FVECTOR* parameter type is a
+// choice (a Vec* with field copies is the same size).
+void SoundEfxSetPosDirListener(SND_FVECTOR* pos, f32 dir) {
+    sound.pos = *pos;
+    sound.listenerDir = dir;
+}
+
+/** Sets the 3D position of the emitter effect on chan. */
+// Original name and size (0x34) from the JP demo map (UNUSED there: nothing calls it; listed right before
+// SoundEfxStop). The listener setter's form for the SoundEffect.pos field (a Vec* parameter is the same size).
+void SoundEfxSetPosEmitter(s32 chan, SND_FVECTOR* pos) {
+    SoundEffect* effect = &sound.effects[chan];
+
+    effect->pos = *pos;
 }
 
 /** Stops the effect on chan and frees the channel. */
@@ -1270,6 +1401,18 @@ static void SoundDVDSetPanCh(u32 chan, u8 pan) {
     AISetStreamVolRight(right);
 }
 
+// The DVD audio volume and fade setters below: original names and sizes from the JP demo map (UNUSED there:
+// nothing calls them; the map lists them in this order between SoundDVDSetPanCh and SoundDVDMain). With SoundDVDSetVolCh
+// they are the stream forms (SoundSSSetVolCh, SoundSSFadeoutCh, SoundSSFademuteCh) on the SoundDVD fields
+// SoundDVDMain fades, without the stream forms' in-use test, like SoundDVDSetPanCh (with it each is 0xc larger). The fades use
+// SoundSSFadeoutCh's frame time in each version (only the JP demo sizes are known).
+
+/** SoundDVDSetVolCh for DVD audio channel 0. */
+// Size 0xf8.
+void SoundDVDSetVol(u8 vol) {
+    SoundDVDSetVolCh(0, vol);
+}
+
 /** Sets the volume of DVD audio channel chan (also the fade-in target) and applies it with the current pan. */
 // Original name and size (0x104) from the JP demo map (UNUSED there: nothing calls it), after SoundDVDSetPanCh.
 // Body: SoundSSSetVolCh's form for the DVD channel (target and current volume set together, then the pan update);
@@ -1278,6 +1421,80 @@ void SoundDVDSetVolCh(u32 chan, u8 vol) {
     SoundDVD* dvd = &sound.dvds[chan];
     dvd->volTarget = dvd->vol = vol;
     SoundDVDSetPanCh(chan, dvd->pan);
+}
+
+/** SoundDVDFadeoutCh for DVD audio channel 0. */
+// Size 0x68.
+void SoundDVDFadeout(void) {
+    SoundDVDFadeoutCh(0);
+}
+
+/** Fades DVD audio channel chan out over the fade-out time (SoundDVDMain stops it at silence). */
+// Size 0x70.
+static void SoundDVDFadeoutCh(u32 chan) {
+    SoundDVD* dvd = &sound.dvds[chan];
+    f32 frames;
+
+#if VERSION >= VERSION_US
+    frames = sound.fadeOut / (1000.0f / gp->framerate);
+#else
+    frames = sound.fadeOut / 16.666666f;
+#endif
+    if (frames < 1.0f) {
+        frames = 1.0f;
+    }
+    dvd->volStep = dvd->vol / frames;
+    dvd->flags |= SOUND_DVD_FLAG_FADEOUT;
+}
+
+/** SoundDVDFademuteCh for DVD audio channel 0. */
+// Size 0x68.
+void SoundDVDFademute(void) {
+    SoundDVDFademuteCh(0);
+}
+
+/** Fades DVD audio channel chan out over the fade-out time and pauses it there (SoundDVDMain). */
+// Size 0x70.
+static void SoundDVDFademuteCh(u32 chan) {
+    SoundDVD* dvd = &sound.dvds[chan];
+    f32 frames;
+
+#if VERSION >= VERSION_US
+    frames = sound.fadeOut / (1000.0f / gp->framerate);
+#else
+    frames = sound.fadeOut / 16.666666f;
+#endif
+    if (frames < 1.0f) {
+        frames = 1.0f;
+    }
+    dvd->volStep = dvd->vol / frames;
+    dvd->flags |= SOUND_DVD_FLAG_FADEMUTE;
+}
+
+/** SoundDVDFadeinCh for DVD audio channel 0. */
+// Size 0x70.
+void SoundDVDFadein(void) {
+    SoundDVDFadeinCh(0);
+}
+
+/** Fades DVD audio channel chan in from silence to its volume over the fade-in time. */
+// Size 0x78: the fade-out form plus one store; starting from silence (vol = 0) is the store that fits
+// SoundDVDMain's fade-in, where it is placed is a choice.
+static void SoundDVDFadeinCh(u32 chan) {
+    SoundDVD* dvd = &sound.dvds[chan];
+    f32 frames;
+
+#if VERSION >= VERSION_US
+    frames = sound.fadeIn / (1000.0f / gp->framerate);
+#else
+    frames = sound.fadeIn / 16.666666f;
+#endif
+    if (frames < 1.0f) {
+        frames = 1.0f;
+    }
+    dvd->vol = 0.0f;
+    dvd->volStep = dvd->volTarget / frames;
+    dvd->flags |= SOUND_DVD_FLAG_FADEIN;
 }
 
 /**
@@ -2298,6 +2515,44 @@ void SoundSSFademuteCh(s32 chan) {
         }
         stream->fadeStep = stream->curVol / frames;
         stream->flags |= SOUND_STREAM_FLAG_FADEMUTE;
+    }
+}
+
+/** SoundSSFadeinCh for stream channel 0. */
+// Original name and size (0x80) from the JP demo map, like SoundSSFadeinCh (0x88) and SoundSSFadeinChEx (0x84)
+// (UNUSED there: nothing calls them; the map lists them in this order between SoundSSFademuteCh and
+// SoundSSContinue).
+void SoundSSFadein(void) {
+    SoundSSFadeinCh(0);
+}
+
+/** SoundSSFadeinChEx with the fade-in time. */
+void SoundSSFadeinCh(s32 chan) {
+    SoundSSFadeinChEx(chan, sound.fadeIn);
+}
+
+/**
+ * Fades stream chan in from silence to its volume over time milliseconds (SoundSSMain adds fadeStep per frame).
+ * SoundSSFadeoutCh's form for SOUND_STREAM_FLAG_FADEIN with the time as a parameter. The sizes fix an s32 time
+ * (u16 makes SoundSSFadeinCh 0x84) and one more store: the silent start (curVol = 0) that SoundSSMain's fade-in
+ * needs; where it is placed is a choice.
+ */
+void SoundSSFadeinChEx(s32 chan, s32 time) {
+    SoundStream* stream = &sound.streams[chan];
+    f32 frames;
+
+    if (stream->flags) {
+#if VERSION >= VERSION_US
+        frames = time / (1000.0f / gp->framerate);
+#else
+        frames = time / 16.666666f;
+#endif
+        if (frames < 1.0f) {
+            frames = 1.0f;
+        }
+        stream->curVol = 0.0f;
+        stream->fadeStep = stream->vol / frames;
+        stream->flags |= SOUND_STREAM_FLAG_FADEIN;
     }
 }
 
