@@ -1119,6 +1119,7 @@ typedef struct BattleUnitSetup {
 BOOL BtlUnit_Init(void);
 BattleUnit* BtlUnit_Entry(BattleUnitSetup* setup);
 BOOL BtlUnit_Delete(BattleUnit* unit);
+
 // BtlUnit_Spawn flags (btlevtcmd_SpawnUnit passes its third argument; every retail script passes 0)
 #define BTL_SPAWN_QUEUE_BACK 0x1   // enters movePriorityQueue from its last slot
 #define BTL_SPAWN_QUEUE_FRONT 0x2  // enters movePriorityQueue at slot 0

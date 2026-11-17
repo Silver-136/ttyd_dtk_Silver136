@@ -768,8 +768,10 @@ void winItemDisp(s32 camId, void* param, s32 n) {
     y = w->menu[n].y;
 
     winBgGX(w, 2, x, y);
+
     // the inset list panel: top-left corner (x - 150, y + 140), 415 x 210
     winKirinukiGX(w, 0, x - 150.0f, 20.0f + (120.0f + y), 415.0f, 210.0f);
+
     // The two tabs (i = 0 Items, 1 Important Items) down the left side, centred at x - 215 and 40 (JP)
     // or 50 (US) pixels apart. Texture 0xB3 is the tab shape; 0x18 + i the tab's label, cut to that shape
     // (winTexSet_x2). The open tab draws a half-transparent black copy of the shape as a shadow, then the
@@ -858,8 +860,10 @@ static void item_disp(WindowWork* w, f32 xo, f32 yo) {
         }
         scroll = w->item.scroll[w->item.mode];
         grayed = (w->item.mode != 0 || (itemDataTable[id].usable_locations & ITEM_USABLE_MENU)) == 0;
+
         // y: the icon centre; yBase: the row's text line minus the 20-pixel lift
         y = scroll + (20.0f + ((yBase = (100.0f + yo) - row * ITEM_LIST_ROW_H) - 10.0f));
+
         // rows above the screen are skipped; the first row below it ends the list
         if (y > 240.0f) {
             continue;
@@ -885,6 +889,7 @@ static void item_disp(WindowWork* w, f32 xo, f32 yo) {
 #endif
     }
     GXSetScissor(0, 0, 0x260, 0x1E0);
+
     // Page arrows right of the panel at xo + 250 (texture 0x17; scale -1 turns it to point up): up arrow at
     // yo + 148 with the L button icon under it when there is a previous page, down arrow at yo - 85 with the
     // R button icon above it when there is a next page
@@ -902,6 +907,7 @@ static void item_disp(WindowWork* w, f32 xo, f32 yo) {
         winIconInit();
         winIconSet(ICON_TRIGGER_R, (Vec){downArrowX, 20.0f + (yo - 90.0f), 0.0f}, (Vec){0.6f, 0.6f, 0.6f}, white2);
     }
+
     // Sort hint under the panel: the "sort" text (scale 0.7) ends at xo + 220, the Z button icon 30 pixels
     // left of it
     sortWidth = 0.7f * (f32)FontGetMessageWidth(msgSearch("msg_menu_sort_narabikae"));
@@ -912,6 +918,7 @@ static void item_disp(WindowWork* w, f32 xo, f32 yo) {
     winIconInit();
     winIconSet(ICON_TRIGGER_Z_ALT, (Vec){sortX - 30.0f, 20.0f + ((yo - 100.0f) - 10.0f), 0.0f}, (Vec){0.6f, 0.6f, 0.6f},
                white2);
+
     // the book panel, once it has moved in from its parked position (320, -240)
     if (w->item.bookX < 320.0f && w->item.bookY > -240.0f) {
         winBookGX(w, 0, w->item.bookX, w->item.bookY);
@@ -1015,6 +1022,7 @@ static void itemUseDisp(WinMgrEntry* entry) {
                 list[n++] = &winPartyDt[i];
             }
         }
+
         // Row 0 is Mario, rows 1..count the partners in list[]
         for (i = 0; i < w->party.count + 1; i++) {
             off = i * USE_LINE_H; // only used for Mario (i == 0), so always 0
@@ -1026,6 +1034,7 @@ static void itemUseDisp(WinMgrEntry* entry) {
             } else {
                 yoff = -28.0f;
             }
+
             // While the item takes effect (w->item.blink counts up for two seconds, WIN_ITEM_USE_BLINK),
             // the target is drawn in black and the other rows in gray; the target also hides 4 frames in 20
             gray = 0;
@@ -1049,6 +1058,7 @@ static void itemUseDisp(WinMgrEntry* entry) {
                 }
                 winIconSet(ICON_MARIO, (Vec){entry->x + USE_ICON_X, entry->y - 20 - off, 0.0f}, (Vec){0.65f, 0.65f, 0.65f},
                            white3);
+
                 // HP (pink) and FP (yellow) plates, centred under the labels: texture 0xAF is used only as an alpha
                 // mask (TEV colour = C0, the colour passed to winTexSet); alpha 0xFE makes winTexSet blend
                 winTexInit(*w->res->data);
@@ -1067,6 +1077,7 @@ static void itemUseDisp(WinMgrEntry* entry) {
                 winFontInit();
                 winFontSet((Vec){entry->x + USE_NAME_X, entry->y - 8 - off, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, black,
                            msgSearch("name_mario"));
+
                 // HP line: "HP  cur / max" (the maximum is smaller and 2 lower)
                 winFontSet((Vec){entry->x + USE_STAT_X, entry->y - 8 - off, 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, black,
                            WI_HP_NAME);
@@ -1077,6 +1088,7 @@ static void itemUseDisp(WinMgrEntry* entry) {
                             WI_SLASH);
                 winFontSet((Vec){entry->x + USE_MAX_X, entry->y - 10 - off, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black,
                            "%d", pouchGetMaxHP());
+
                 // FP line
                 winFontInit();
                 winFontSet((Vec){entry->x + USE_STAT_X, entry->y - 8 - off3, 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, black,
@@ -1190,6 +1202,7 @@ static void itemUseDisp(WinMgrEntry* entry) {
 #endif
             }
         }
+
         // Dotted line between list[0] and the other partners: 28 SP orb icons at 0.15 scale,
         // one every width / 31 px (11 px for this window), from dot 2 to dot 29
         if (w->party.count > 1) {
@@ -1200,6 +1213,7 @@ static void itemUseDisp(WinMgrEntry* entry) {
             }
         }
     }
+
     // The hand cursor (texture 0 of win.tpl) at helpX / helpY, over a half-transparent black shadow 2 px right
     // and 2 px down
     winTexInit(*w->res->data);

@@ -37,6 +37,7 @@ static const Vec unk_vec0 = {0.0f, 1.0f, 0.0f};
 static const Vec unk_vec1 = {90.0f, 110.0f, 13.0f};
 static const Vec unk_vec2 = {-110.0f, -70.0f, -190.0f};
 static CamRoadWork work;
+
 // Stripped (UNUSED in the JP demo map, 0x30 = one Mtx, before work in .bss); nothing reads it.
 Mtx g_viewing_mtx;
 static CamRoadWork* wp = &work;

@@ -703,8 +703,10 @@ s32 winLogMain(WindowWork* w) {
                     w->log.menu[i].state = WIN_LOG_BUTTON_HIDE;
                 }
                 w->log.menu[w->log.cursor].state = WIN_LOG_BUTTON_PICK;
+
                 // the page states WIN_LOG_MAP .. WIN_LOG_TATTLE follow the entry ids
                 w->log.state = w->log.menu[w->log.cursor].id + WIN_LOG_MAP;
+
                 // move the page's panels in
                 switch (w->log.menu[w->log.cursor].id) {
                 case WIN_LOG_ENTRY_MAP:
@@ -1261,10 +1263,12 @@ void winLogDisp(CameraId cam, void* param, s32 idx) {
 
     // the Journal's blue background panel
     winBgGX(w, 4, x, y);
+
     // world map panel (open at y + 20, parked at y - 480)
     if (y + w->log.mapWinY > -480.0f) {
         mapGX(w, x + w->log.mapWinX, y + w->log.mapWinY);
     }
+
     // Crystal Stars: a band behind the ring (texture 0x24 stretched 60 times wide) faded by stoneAlpha, then the
     // seven stars on a ring of radius 170 about the vertical axis, tilted 25 degrees (0.436 rad) about x, star i at
     // i * 360 / 7 degrees less stoneAngle. Each star effect sits 20 above its ring point; its shadow 30 below it.
@@ -1272,6 +1276,7 @@ void winLogDisp(CameraId cam, void* param, s32 idx) {
         winTexInit(*w->res->data);
         winTexSet(0x24, (Vec){x + w->log.stoneWinX, y + w->log.stoneWinY, 0.0f}, (Vec){60.0f, 1.0f, 1.0f},
                   (GXColor){0xFF, 0xFF, 0xFF, w->log.stoneAlpha});
+
         // the early demos leave the stars to the effect system; from JP on they are drawn here, after the shadows
         // (STAR_STONE_FLAG_EXTERNAL_DRAW, set in winLogInit)
 #if VERSION <= VERSION_DEMO_JP
@@ -1313,6 +1318,7 @@ void winLogDisp(CameraId cam, void* param, s32 idx) {
         }
 #endif
     }
+
     // Badge log: the grid box (winHakoGX) while it is in from its parked position (320, -240), then the box for
     // the selected badge at (iconX, iconY), relative to the window: from US on with a found / total counter under
     // it (a 100 x 30 inset whose top is 120 below the box's centre, the text centred in it at scale 0.75;
@@ -1345,6 +1351,7 @@ void winLogDisp(CameraId cam, void* param, s32 idx) {
                        c2);
         }
     }
+
     // Recipe log: the same with box type 1, frame texture 0x96 and the recipe's icon 10 lower
     if (w->log.recipe.x < 320.0f && w->log.recipe.y > -240.0f) {
         winHakoGX(w, 1, x + w->log.recipe.x, y + w->log.recipe.y);
@@ -1374,6 +1381,7 @@ void winLogDisp(CameraId cam, void* param, s32 idx) {
                        c2);
         }
     }
+
     // Tattle log list (its page has no sliding panel: it is drawn only in the Tattle states), top-left corner
     // (x - 170, y + 130)
     if (w->log.state == WIN_LOG_TATTLE || w->log.state == WIN_LOG_TATTLE_UNUSED ||
@@ -1381,6 +1389,7 @@ void winLogDisp(CameraId cam, void* param, s32 idx) {
         w->log.state == WIN_LOG_TATTLE_SORT) {
         monoshiriGX(w, x - 170.0f, 130.0f + y);
     }
+
     // The entry buttons, last so they are on top. Texture 0xB5 is the button shape; 0x1F + id the entry's label,
     // cut to that shape (winTexSet_x2). The selected button draws a half-transparent black copy of the shape as a
     // shadow, then the label in white 8 pixels up and to the left of it; the others draw their label in gray.
@@ -1466,11 +1475,13 @@ static void mapGX(WindowWork* w, f32 x, f32 y) {
     my = 120.0f + (y + w->log.scrollY);
     if (w->mapRes) {
         top = 120.0f + y;
+
         // Clip to the view and a 2-pixel border: the scissor takes screen pixels (608 x 480, y down), so the
         // view's top-left corner (x - 230, top) is pixel (304 + x - 230, 240 - top); 0x1D0 x 0xF4 = 464 x 244.
         GXSetScissor(((304.0f + x) - 230.0f) - 2.0f, (240.0f - top) - 2.0f, 0x1D0, 0xF4);
         winTexInit(*(TEXPalette**)w->mapRes->data);
         winTexSet(0, (Vec){mx, my, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);
+
         // the route dots revealed by story progress (or by tubuCheck's flags, from JP on); the early demos stop
         // at the first dot not yet reached, since the table is in story order
         winTexInit(*w->res->data);
@@ -1493,6 +1504,7 @@ static void mapGX(WindowWork* w, f32 x, f32 y) {
                 }
             }
         }
+
         // The goal icon of the chapter under way (k = chapter - 1), from that chapter's briefing at Frankly's
         // (chapter 1: from the prologue's visit) until the story reaches the chapter's boss or Crystal Star.
         // The early demos pair the chapters with other icons.
@@ -1538,10 +1550,12 @@ static void mapGX(WindowWork* w, f32 x, f32 y) {
         }
         if (id != -1) {
             winIconInit();
+
             // 45 above the chapter's goal dot
             winIconSet(id, (Vec){mx + pos_tbl[k][0], 45.0f + (my + pos_tbl[k][1]), 0.0f}, (Vec){1.0f, 1.0f, 1.0f},
                        white);
         }
+
         // Mario's marker (the pose winLogMain loads) on the dot of his current area (mapIdx), at scale 1.5
         // (3 for the 8-bit Mario)
         if (w->log.pose != -1) {
@@ -1561,12 +1575,14 @@ static void mapGX(WindowWork* w, f32 x, f32 y) {
             animPoseDrawMtx(w->log.pose, m, 3, 0.0f, scale);
         }
         GXSetScissor(0, 0, 0x260, 0x1E0);
+
         // the frame: texture 0xBF stretched into bars 4 outside each edge of the view (left, right, top, bottom)
         winTexInit(*w->res->data);
         winTexSet(0xBF, (Vec){(x - 230.0f) - 4.0f, y, 0.0f}, (Vec){1.0f, 32.0f, 1.0f}, white);
         winTexSet(0xBF, (Vec){4.0f + (230.0f + x), y, 0.0f}, (Vec){1.0f, 32.0f, 1.0f}, white);
         winTexSet(0xBF, (Vec){x, 4.0f + top, 0.0f}, (Vec){59.5f, 1.0f, 1.0f}, white);
         winTexSet(0xBF, (Vec){x, (y - 120.0f) - 4.0f, 0.0f}, (Vec){59.5f, 1.0f, 1.0f}, white);
+
         // The arrows, each bobbing outwards by s (0 to 2 pixels) unless the map is already scrolled to that edge:
         // 0xBD at the top (still once scrollY is -240), 0xBC right (still at scrollX -148), 0xBE at the bottom
         // (scrollY 0), 0xBB left (scrollX 0).
@@ -1612,6 +1628,7 @@ static void monoshiriGX(WindowWork* w, f32 x, f32 y) {
 
     k1 = (GXColor){0x00, 0x00, 0x00, 0xFF};
     k2 = k1;
+
     // the book panel behind the list, and the count box to its left: a 100 x 50 inset at (x - 110, y - 160) with
     // the msg_menu_monosiri_kazu label and "known/total" under it, both centred in it at scale 0.75
     winBookGX(w, 1, x, y);
@@ -1636,6 +1653,7 @@ static void monoshiriGX(WindowWork* w, f32 x, f32 y) {
     tw = 0.75f * FontGetMessageWidth(buf);
     winFontSet((Vec){(x - 108.0f) + (100 - tw) / 2, y - 184.0f, 0.0f}, (Vec){0.75f, 0.75f, 0.75f}, k1, buf);
     winFontInit();
+
     // the page's entries, until the list runs out
     for (i = 0; i < TATTLE_LIST_PAGE; i++) {
 #if VERSION <= VERSION_DEMO_JP
@@ -1669,6 +1687,7 @@ static void monoshiriGX(WindowWork* w, f32 x, f32 y) {
             name = "？？？";
 #endif
         }
+
         // the log number (enemy_monoshiri_sort_table) and the name; from US on squeezed into 40 and 145 pixels
 #if VERSION >= VERSION_US
         sprintf(num, gp->language != LANGUAGE_JP ? "%d. " : "%d．", enemy_monoshiri_sort_table[id]);
@@ -1688,6 +1707,7 @@ static void monoshiriGX(WindowWork* w, f32 x, f32 y) {
                    (Vec){0.75f, 0.75f, 0.75f}, k2, name);
 #endif
     }
+
     // Page arrows at x + 440, right of the list: texture 0x17 flipped (scale -1) above the L button icon while there
     // is a previous page; 0x17 below the R button icon (at y - 240) while there is a next page.
     if (w->log.enemyPage > 0) {
@@ -1702,6 +1722,7 @@ static void monoshiriGX(WindowWork* w, f32 x, f32 y) {
         winIconInit();
         winIconSet(ICON_TRIGGER_R, (Vec){440.0f + x, y - 240.0f, 0.0f}, (Vec){0.6f, 0.6f, 0.6f}, white);
     }
+
     // Sort hint under the list: the "sort" text (scale 0.7) ends at x + 420, the Z button icon 30 pixels left of it
 #if VERSION <= VERSION_DEMO_JP
     {
@@ -2084,6 +2105,7 @@ static void monosiri_disp(CameraId camera, void* param) {
     if (m->winTpl) {
 #endif
         winHalfBookGX(*(TEXPalette**)m->winTpl->data, 0, x, y);
+
         // Texture 0x37 of win.tpl sets the size of the portrait buffer (as in monosiriMain and capture) and is
         // also map 0 of the blend below; map 1 is the captured portrait (RGB5A3).
         TEXGetGXTexObjFromPalette(*(TEXPalette**)m->winTpl->data, &tex, 0x37);
@@ -2095,6 +2117,7 @@ static void monosiri_disp(CameraId camera, void* param) {
         GXInitTexObj(&tex, m->smart->address, tw, th, GX_TF_RGB5A3, GX_CLAMP, GX_CLAMP, GX_FALSE);
         GXInitTexObjLOD(&tex, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
         GXLoadTexObj(&tex, GX_TEXMAP1);
+
         // eight texture coordinates, scaled about the texture's centre by 0.72 (i = 0) up to 1.0 (i = 7)
         GXSetNumTexGens(8);
         for (i = 0; i < 8; i++) {
@@ -2108,10 +2131,12 @@ static void monosiri_disp(CameraId camera, void* param) {
             GXLoadTexMtxImm(t1, mtx, GX_MTX2x4);
             GXSetTexCoordGen2(i, GX_TG_MTX2x4, GX_TG_TEX0, mtx, GX_FALSE, GX_PTIDENTITY);
         }
+
         // C0 is the paper colour, A1 the fade-in alpha
         GXSetTevColor(GX_TEVREG0, (GXColor){0xCF, 0xBC, 0x9E, 0xFF});
         GXSetTevColor(GX_TEVREG1, (GXColor){0x00, 0x00, 0x00, m->alpha});
         GXSetNumTevStages(12);
+
         // stages 0-7: colour = the paper colour; alpha = the sum of 1/8 of the portrait's alpha at each of the
         // eight scales (a soft edge around the enemy's outline)
         for (i = 0; i < 8; i++) {
@@ -2122,6 +2147,7 @@ static void monosiri_disp(CameraId camera, void* param) {
             GXSetTevAlphaIn(i, GX_CA_ZERO, GX_CA_TEXA, GX_CA_KONST, i == 0 ? GX_CA_ZERO : GX_CA_APREV);
             GXSetTevKAlphaSel(i, GX_TEV_KASEL_1_8);
         }
+
         // stage 8: the portrait at full size over the paper colour, by its alpha; alpha =
         // prev * (1 - portrait alpha) + portrait alpha
         GXSetTevOrder(GX_TEVSTAGE8, GX_TEXCOORD7, GX_TEXMAP1, GX_COLOR_NULL);
@@ -2129,18 +2155,21 @@ static void monosiri_disp(CameraId camera, void* param) {
         GXSetTevAlphaOp(GX_TEVSTAGE8, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
         GXSetTevColorIn(GX_TEVSTAGE8, GX_CC_CPREV, GX_CC_TEXC, GX_CC_TEXA, GX_CC_ZERO);
         GXSetTevAlphaIn(GX_TEVSTAGE8, GX_CA_APREV, GX_CA_ZERO, GX_CA_TEXA, GX_CA_TEXA);
+
         // stage 9: alpha times the fade-in alpha (A1)
         GXSetTevOrder(GX_TEVSTAGE9, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR_NULL);
         GXSetTevColorOp(GX_TEVSTAGE9, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
         GXSetTevAlphaOp(GX_TEVSTAGE9, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
         GXSetTevColorIn(GX_TEVSTAGE9, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_CPREV);
         GXSetTevAlphaIn(GX_TEVSTAGE9, GX_CA_ZERO, GX_CA_APREV, GX_CA_A1, GX_CA_ZERO);
+
         // stage 10: colour times texture 0x37's colour
         GXSetTevOrder(GX_TEVSTAGE10, GX_TEXCOORD7, GX_TEXMAP0, GX_COLOR_NULL);
         GXSetTevColorOp(GX_TEVSTAGE10, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
         GXSetTevAlphaOp(GX_TEVSTAGE10, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
         GXSetTevColorIn(GX_TEVSTAGE10, GX_CC_ZERO, GX_CC_TEXC, GX_CC_CPREV, GX_CC_ZERO);
         GXSetTevAlphaIn(GX_TEVSTAGE10, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_APREV);
+
         // stage 11: colour = texture 0x37's colour blended toward that result by the alpha; alpha = texture 0x37's
         GXSetTevOrder(GX_TEVSTAGE11, GX_TEXCOORD7, GX_TEXMAP0, GX_COLOR_NULL);
         GXSetTevColorOp(GX_TEVSTAGE11, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
@@ -2161,6 +2190,7 @@ static void monosiri_disp(CameraId camera, void* param) {
             GXPosition3f32(x1 + qw, y1, 0.0f);
             GXTexCoord2f32(1.0f, 0.0f);
         }
+
         // "N. name" (log number from enemy_monoshiri_sort_table), centred at y - 180
         id = m->id;
         te = battleGetUnitMonosiriPtr(id);
@@ -2193,6 +2223,7 @@ static void monosiri_disp(CameraId camera, void* param) {
         w = 0.75f * FontGetMessageWidth(buf);
         winFontInit();
         winFontSet((Vec){(16.0f + x) + (248.0f - w) / 2.0f, y - 180.0f, 0.0f}, (Vec){0.75f, 0.75f, 0.75f}, black, buf);
+
         // "Found: place" (menu_monosiri_derutokoro and the enemy's location text) at y - 210, from JP on one
         // pixel further right
 #if VERSION <= VERSION_DEMO_JP

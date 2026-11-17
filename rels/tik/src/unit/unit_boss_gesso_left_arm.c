@@ -191,6 +191,7 @@ static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(btldefaultevt_Damage)
+
     // BUG: the same unchecked body id as in gesso_arm_dead_event. When one hit defeats the body and this
     // tentacle, btldefaultevt_Damage can return after this tentacle's death script still in the frame the body was
     // freed (before this tentacle's own deletion ends this script), and btlevtcmd_GetUnitWork reads through a NULL

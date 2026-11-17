@@ -505,6 +505,7 @@ void winMarioDisp(s32 camId, void* param, s32 idx) {
     x = w->menu[idx].x;
     y = w->menu[idx].y;
     winBgGX(w, 0, x, y);
+
     // Name plate (190 wide, top-left (x - 265, y + 154)): "Mario" in white outlined text at 0.8 scale, a Mario
     // icon 20 pixels after it, then "Lvl." (at most 45 pixels wide) 20 pixels further on
     winNameGX(w, 2, x - 265.0f, 154.0f + y, 190.0f, 24.0f);
@@ -519,6 +520,7 @@ void winMarioDisp(s32 camId, void* param, s32 idx) {
     winFontInit();
     winFontSetEdgeWidth((Vec){cx, 152.0f + y, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, white, 45.0f,
                         msgSearch("msg_menu_mario_level"));
+
     // the level number near the plate's right end: it starts 10 + its unscaled width (at most 20) pixels
     // before the end and is squeezed to at most 20 pixels wide
     sprintf(buf, "%s", winZenkakuStr(pouch->level));
@@ -529,6 +531,7 @@ void winMarioDisp(s32 camId, void* param, s32 idx) {
     winFontInit();
     winFontSetEdgeWidth((Vec){(190.0f + (x - 265.0f)) - nameW - 10.0f, 152.0f + y, 0.0f}, (Vec){0.8f, 0.8f, 0.8f},
                         white, 20.0f, buf);
+
     // Star Rank: the medal (texture 0xB0) at (x - 255, y + 112), the rank's name to its right (at most 140 wide)
     winTexInit(*w->res->data);
     winTexSet(0xB0, (Vec){x - 255.0f, 112.0f + y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);
@@ -683,6 +686,7 @@ void winMarioDisp(s32 camId, void* param, s32 idx) {
             min = secs / 60;
         }
     }
+
     // hours (two digits) right-aligned from x + 168, minutes (two digits) from x + 215, the ":" at x + 220
     winFontSetR((Vec){2.0f + (2.0f + ((8.0f + (172.0f + x)) - 16.0f)), 10.0f + ((12.0f + y) - 112.0f), 0.0f},
                 (Vec){0.9f, 0.9f, 0.9f}, black, "%s", winZenkakuStrPad(hour, 2));
@@ -800,6 +804,7 @@ void winMarioDisp(s32 camId, void* param, s32 idx) {
     x = w->menu[idx].x;
     y = w->menu[idx].y;
     winBgGX(w, 0, x, y);
+
     // name plate: "Mario", a Mario icon, "Lvl." and the level number (ending 10 pixels before the plate's end)
     winNameGX(w, 2, x - 265.0f, 154.0f + y, 190.0f, 24.0f);
     cx = 10.0f + (x - 265.0f);
@@ -816,6 +821,7 @@ void winMarioDisp(s32 camId, void* param, s32 idx) {
     winFontInit();
     winFontSetEdge((Vec){(190.0f + (x - 265.0f)) - 0.8f * FontGetMessageWidth(buf) - 10.0f, 152.0f + y, 0.0f},
                    (Vec){0.8f, 0.8f, 0.8f}, white, buf);
+
     // Star Rank: the medal (texture 0xB0) and the rank's name
     winTexInit(*w->res->data);
     winTexSet(0xB0, (Vec){x - 255.0f, 112.0f + y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);
@@ -933,6 +939,7 @@ void winMarioDisp(s32 camId, void* param, s32 idx) {
                msgSearch("msg_menu_mario_num_super_coin"));
     rowA = 10.0f + (rowA - 112.0f);
     winFontSet((Vec){col, rowA, 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, black, msgSearch("msg_menu_mario_num_playtime"));
+
     // the values with "%d", right-aligned to the width of "９９９" from x + 213
     numX = 8.0f + (205.0f + x);
     winFontSetR((Vec){numX, row0, 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, black, "%d", pouch->starPoints);
@@ -1032,6 +1039,7 @@ void winMarioDisp(s32 camId, void* param, s32 idx) {
         winFontInit();
         winFontSetEdge((Vec){(90.0f + x) - 270.0f, 155.0f, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, white,
                        msgSearch("msg_menu_mario_sac_waza"));
+
         // rows: the name from x - 260, the cost with "%d" from x - 50 (under the header's "ＳＰ"), the small
         // "ＳＰ" at x - 33, 10 lower
         numX = rowB - 270.0f;
@@ -1053,6 +1061,7 @@ void winMarioDisp(s32 camId, void* param, s32 idx) {
         winFontSetEdge((Vec){(90.0f + x) - 270.0f, 155.0f, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, white,
                        msgSearch("msg_menu_mario_sac_waza"));
         winFontSetEdge((Vec){rowB - 270.0f, 155.0f, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, white, "ＳＰ");
+
         // rows as in US: the name from x - 250, the cost centred on x - 42, the small "ＳＰ" at x - 29, 10 lower
         y = 10.0f + (left - 270.0f);
         x = (228.0f + x) - 270.0f;

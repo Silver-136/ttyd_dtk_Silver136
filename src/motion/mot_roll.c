@@ -33,6 +33,7 @@ typedef struct MotRollWork {
 
 f32 roll_grx;
 f32 roll_grz;
+
 // flyout_vy, flyout_vx, roll_flyout_flag and roll_flyout_trig: stripped (UNUSED in the JP demo map, 4 bytes each,
 // .sbss order trig, flag, flag2, vx, vy); nothing reads them. Types from the names and roll_grx/roll_flyout_flag2.
 f32 flyout_vy;

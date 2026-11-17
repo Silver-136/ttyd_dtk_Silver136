@@ -332,8 +332,10 @@ void winBadgeDisp(s32 camId, void* param, s32 n) {
 #endif
 
     winBgGX(w, 3, x, y);
+
     // the inset list panel: top-left corner (x - 100, y + 140), 365 x 210
     winKirinukiGX(w, 0, x - 100.0f, 20.0f + (120.0f + y), 365.0f, 210.0f);
+
     // The two tabs (i = 0 All Badges, 1 Equipped) left of the panel, centred at x - 190, the first at y + 125
     // (JP) or y + 130 (US) and 40 (JP) or 45 (US) pixels apart. Texture 0xB4 is the tab shape; 0x1A + i the
     // tab's label, cut to that shape (winTexSet_x2). The open tab draws a half-transparent black copy of the shape
@@ -357,6 +359,7 @@ void winBadgeDisp(s32 camId, void* param, s32 n) {
                          (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0x80, 0x80, 0x80, 0xFF});
         }
     }
+
     // The BP panel under the tabs: top-left corner (x - 260, y + 60), 150 wide, as high as the pip rows need
     // (BadgeBpLayout). Type 1 adds the tab under its bottom-right edge that holds the "remaining" label
     // (msg_menu_badge_nokori) and the remaining BP; their y follows the panel's bottom edge, BP_PIP_STEP per
@@ -366,6 +369,7 @@ void winBadgeDisp(s32 camId, void* param, s32 n) {
                   158 - (BP_PIP_ROWS - ((pouch->maximumBP + 9) / BP_PIPS_PER_ROW)) * BP_PIP_STEP);
     winFontInit();
     winFontSet((Vec){x - 220.0f, yy = yy - 4.0f, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, "ＢＰ");
+
     // early demos: the numbers are written left-aligned with "%d"
     winFontSet((Vec){x - 175.0f, yy, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, "%d", pouch->maximumBP);
     winFontSet((Vec){x - 180.0f,
@@ -506,6 +510,7 @@ static void badge_disp(WindowWork* w, f32 xo, f32 yo) {
         } else {
             equipped = w->badge.list[i].equipped;
         }
+
         // rows above the screen are skipped; the first row below it ends the list
         if ((scroll + ((yo + 110.0f) - (f32)(i * BADGE_LIST_ROW_H))) > 240.0f) {
             continue;
@@ -513,6 +518,7 @@ static void badge_disp(WindowWork* w, f32 xo, f32 yo) {
         if ((scroll + ((yo + 110.0f) - (f32)(i * BADGE_LIST_ROW_H))) < -240.0f) {
             break;
         }
+
         // equipped: texture 0x1E stretched 44 times wide, centred at xo + 82, drawn first so it lies behind the row
         if (equipped) {
             winTexInit(*w->res->data);
@@ -526,6 +532,7 @@ static void badge_disp(WindowWork* w, f32 xo, f32 yo) {
                    (Vec){0.54f, 0.54f, 0.54f}, colA);
         item = &itemDataTable[badge];
         winFontInit();
+
         // early demos: the name is item->id (the Japanese name) as it is, the cost a "%d" at xo + 130
         winFontSet((Vec){xo - 55.0f, scroll + (12.0f + ((yo + 110.0f) - (f32)(i * BADGE_LIST_ROW_H))), 0.0f},
                    (Vec){0.9f, 0.9f, 0.9f}, colB, item->id);
@@ -536,6 +543,7 @@ static void badge_disp(WindowWork* w, f32 xo, f32 yo) {
             winTexSet(0x1E, (Vec){82.0f + xo, (scroll + ((yo + 110.0f) - (f32)(i * BADGE_LIST_ROW_H))), 0.0f},
                       (Vec){44.0f, 1.0f, 1.0f}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
         }
+
         // a badge that is not equipped and costs more than the BP left: gray icon and gray (0x7F) text
         if (!equipped && itemDataTable[badge].bp_cost > pouchGetPtr()->availableBP) {
             colB = (GXColor){0x7F, 0x7F, 0x7F, 0xFF};
@@ -615,6 +623,7 @@ static void badge_disp(WindowWork* w, f32 xo, f32 yo) {
             winIconInit();
             winIconSet(ICON_TRIGGER_R, (Vec){arrowX, 20.0f + (yo - 90.0f), 0.0f}, (Vec){0.6f, 0.6f, 0.6f}, colU);
         }
+
         // Sort hint under the panel: the "sort" text (scale 0.7) ends at xo + 220, the Z button icon 30 pixels
         // left of it (width holds the text's width, then its x)
         width = 0.7f * (f32)FontGetMessageWidth(msgSearch("msg_menu_sort_narabikae"));
@@ -625,6 +634,7 @@ static void badge_disp(WindowWork* w, f32 xo, f32 yo) {
         winIconInit();
         winIconSet(ICON_TRIGGER_Z_ALT, (Vec){width - 30.0f, 20.0f + ((yo - 100.0f) - 10.0f), 0.0f},
                    (Vec){0.6f, 0.6f, 0.6f}, colU);
+
         // the cost column's "BP needed" heading (scale 0.5)
         winFontInit();
         winFontSet((Vec){120.0f + xo, 135.0f + yo, 0.0f}, (Vec){0.5f, 0.5f, 0.5f}, colD,

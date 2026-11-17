@@ -686,6 +686,7 @@ void winPartyDisp(s32 camId, void* param, s32 idx) {
     winFontSet((Vec){fy, y - 100.0f, 0.0f}, (Vec){0.7f, 0.7f, 0.7f}, black, msgSearch("msg_menu_party_waza_kakunin"));
     winIconInit();
     winIconSet(ICON_BUTTON_X_ALT, (Vec){fy - 20.0f, y - 110.0f, 0.0f}, (Vec){0.7f, 0.7f, 0.7f}, white);
+
     // The move list: a 260 x 144 panel (early demos 140 high) with top-left (x - 5, y + 50); in its header
     // strip "Moves" (white, outlined, 0.8) centred in the 200 pixels from x and "FP" at x + 210. Row i (text
     // line (y + 20) - i * PARTY_MOVE_ROW_H): the move's name from x + 10 (US and later: at most 175 wide);

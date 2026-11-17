@@ -866,6 +866,7 @@ static void winMsgDisp(WindowWork* wp, f32 x, f32 y) {
         winIconInit();
         winIconSet(itemDataTable[wp->msgItem].icon_id, (Vec){ bx, by, 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f }, white);
     }
+
     // The title plate (winNameGX type 1, 240 x 32) with its top-left at (x - 120, y + 64), so it stands 24 pixels
     // above the frame's top edge and overlaps it by 8; msgItem -2 moves it 130 to the left, to the frame's left
     // edge. The title is centred on the plate in white with an outline, 4 pixels below the plate's top.
@@ -892,6 +893,7 @@ static void winMsgDisp(WindowWork* wp, f32 x, f32 y) {
                        white, m);
 #endif
     }
+
     // The text, from (x - 220, y + 26), moved up HELP_LINE_H per scrolled line. The scissor (full screen width)
     // shows the 56 rows (two lines) below y + 26 and is reset to the full 608 x 480 screen afterwards.
     // "msg_lottery_number" is a format string; the current Lottery ticket number (lotteryGetPtr()->number) is
@@ -911,6 +913,7 @@ static void winMsgDisp(WindowWork* wp, f32 x, f32 y) {
         }
         GXSetScissor(0, 0, 0x260, 0x1E0);
     }
+
     // Scroll arrows for text of more than two lines (US and later: not while a letter is read, item.state 202,
     // when the C-stick scrolls the letter instead), at the frame's right end: the C-stick icon at (x + 240, y)
     // (written 40 + (y - 40)), the up arrow 24 above it, the down arrow 24 below, scale 0.6. The arrows blink
@@ -2940,6 +2943,7 @@ static void winMailDisp(WindowWork* wp) {
 
     if (wp->item.mailX < 320.0f && wp->item.mailY > -240.0f) {
         winMailGX(wp, wp->item.mailX, wp->item.mailY);
+
         // The letter list (every state but reading): row i's line at mailY - 56 - i * MAIL_ROW_H, moved up by
         // mailScroll (eased to mailPage * 200). winMailGX left the scissor on the five visible rows; it is reset
         // to the full screen after the list.
@@ -2967,6 +2971,7 @@ static void winMailDisp(WindowWork* wp) {
                               (Vec){ 4.0f + (208.0f + wp->item.mailX),
                                      wp->item.mailScroll + ((wp->item.mailY - 56.0f) - (f32)(i * MAIL_ROW_H)), 0.0f },
                               (Vec){ 1.0f, 1.0f, 1.0f }, col);
+
                     // the envelope, open once the letter was read (pouchCheckMail 2), 3 below the line
                     white = (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF };
                     winTexSet(pouchCheckMail(id) == 2 ? WIN_TEX_MAIL_READ : WIN_TEX_MAIL_UNREAD,
@@ -2975,6 +2980,7 @@ static void winMailDisp(WindowWork* wp) {
                                          (((wp->item.mailY - 56.0f) - (f32)(i * MAIL_ROW_H)) - 3.0f),
                                      0.0f },
                               (Vec){ 1.0f, 1.0f, 1.0f }, white);
+
                     // The letter's number, two digits: kind + 1, its place in arrival order (kind is its index
                     // in pouchGetPtr()->emailIds, winItemInit; the list starts with the newest).
                     winTexSet(0x65 + (kind + 1) / 10,
@@ -3022,6 +3028,7 @@ static void winMailDisp(WindowWork* wp) {
             } else {
                 col = (GXColor){ 0xE1, 0xE1, 0xE1, 0xFF };
             }
+
             // The letter's header in the first row's place, not scrolled: strip, the open envelope (level with the
             // line, unlike the list's), number and title.
             winTexInit((TEXPalette*)*wp->res->data);
@@ -3036,6 +3043,7 @@ static void winMailDisp(WindowWork* wp) {
                       (Vec){ 2.0f + (104.0f + wp->item.mailX), (wp->item.mailY - 56.0f) - 3.0f, 0.0f },
                       (Vec){ 1.0f, 1.0f, 1.0f }, white);
             winFontInit();
+
             // The title, then the body's scissor: top-left (mailX + 32, mailY - 72), 344 wide, 174 (early demos)
             // or 177 high.
 #if VERSION <= VERSION_DEMO_JP
@@ -3059,6 +3067,7 @@ static void winMailDisp(WindowWork* wp) {
             winTexInit((TEXPalette*)*wp->res->data);
             winTexSet(0x77, (Vec){ 4.0f + (208.0f + wp->item.mailX), (wp->item.mailY - 56.0f) - 80.0f, 0.0f },
                       (Vec){ 1.0f, 7.5f, 1.0f }, col);
+
             // The body from (mailX + 80, mailY - 80), scale 0.75 (US and later squeezed to 280 wide), moved up
             // MAIL_LINE_H per scrolled line. The picture (mail->icon in mail.tpl) is centred at mailX + 210, below
             // the text: its y counts back from the end of mailLines, which winItemMain state 200 lengthened for it

@@ -1351,6 +1351,7 @@ static void select_disp(WinMgrEntry* entry) {
 
     if (!(wp->entries[sel->descriptorId[0]].flags & WINMGR_FLAG_ANIMATING)) {
         GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+
         // Clip the rows to the window: the scissor box (in frame pixels, which have (304, 240) at the screen
         // centre and y growing downwards) is the window's width and starts 34 below its top edge; height - 50
         // tall, it ends 16 above the bottom edge. The previous scissor box is put back after the rows.
@@ -1360,6 +1361,7 @@ static void select_disp(WinMgrEntry* entry) {
         for (i = 0; i < sel->numItems; i++) {
             f32 py;
             item = &itemDataTable[sel->items[i].id];
+
             // py: the row's icon y; rows more than 32 above the top edge or 32 below the bottom edge are skipped
             py = sel->scrollY + (ofs + (entry->y - 44 - i * SELECT_ROW_H));
             if ((f32)entry->y < py - 32.0f || (f32)(entry->y - entry->height) > py + 32.0f) {
@@ -1455,6 +1457,7 @@ static void select_disp(WinMgrEntry* entry) {
             if (!show) {
                 continue;
             }
+
             // the price ends 10 pixels inside the right edge (US and later: at most 30 pixels wide, squeezed)
             sprintf(buf, "%d", price);
             tw = FontGetMessageWidth(buf);
@@ -1482,6 +1485,7 @@ static void select_disp(WinMgrEntry* entry) {
                        (Vec){1.0f, 1.0f, 1.0f}, *((sel->items[i].flags & SELECT_ITEM_GRAY) ? &gray : &black), buf);
 #endif
         }
+
         // Divider under row 0 (the new item) when there is one: 28 SP orb icons at 0.15 scale at entry->y - 56,
         // halfway between row 0's and row 1's icons, one every width / 31 pixels from dot 2 to dot 29
         if (sel->newItem) {
@@ -1492,6 +1496,7 @@ static void select_disp(WinMgrEntry* entry) {
             }
         }
         GXSetScissor(left, top, wd, ht);
+
         // The title (msg_window_title_1 to _5 by type), centred across the window at entry->y + 14, in white with
         // an edge (US and later: at most 120 pixels wide, squeezed)
         switch (sel->type) {
@@ -1567,8 +1572,10 @@ static void select_disp(WinMgrEntry* entry) {
                 iconDispGx(&(Vec){entry->x + 268, entry->y - 12, 0.0f}, ICON_FLAG_2D, 0.6f, ICON_ITEM_PIANTA_TOKEN);
                 break;
         }
+
         // the hand cursor (mirrored) at the position select_main eases it to
         iconDispGx(&(Vec){sel->cursorX, sel->cursorY, 1.0f}, ICON_FLAG_2D | ICON_FLAG_FLIP_X, 1.0f, ICON_YUBI_CURSOR);
+
         // Scroll arrows when the list is longer than the view, shown 20 frames in every 32: up at entry->y - 36
         // when rows are hidden above, down 12 below the bottom edge when rows are hidden below
         if (sel->numItems > SELECT_ROWS_SHOWN && (gp->retraceCount & 31) < 20) {
@@ -1631,6 +1638,7 @@ static void select_disp_party(WinMgrEntry* entry) {
         GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
         GXGetScissor(&left, &top, &wd, &ht);
         GXSetScissor(entry->x + 304, 274 - entry->y, entry->width, entry->height - 50);
+
         // rows clipped and skipped as in select_disp
         ofs = 0.0f;
         for (i = 0; i < sel->numItems; i++) {
@@ -1662,6 +1670,7 @@ static void select_disp_party(WinMgrEntry* entry) {
             } else {
                 winIconInit();
             }
+
             // the portrait (iconid_conv: Yoshi's in his colour), then one Shine Sprite per rank (techLevel)
 #if VERSION <= VERSION_DEMO_JP
             winIconSet(iconid_conv(party_icon_table[sel->items[i].id]),
@@ -1688,6 +1697,7 @@ static void select_disp_party(WinMgrEntry* entry) {
             }
         }
         GXSetScissor(left, top, wd, ht);
+
         // the partner column's heading: a 120-pixel slot in the left three fifths
         msg = msgSearch("msg_window_title_7");
 #if VERSION >= VERSION_US
@@ -1777,6 +1787,7 @@ static void select_disp_mario(WinMgrEntry* entry) {
         GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
         GXGetScissor(&left, &top, &wd, &ht);
         GXSetScissor(entry->x + 304, 274 - entry->y, entry->width, entry->height - 50);
+
         // rows clipped and skipped as in select_disp
         ofs = 0.0f;
         for (i = 0; i < sel->numItems; i++) {
@@ -1807,6 +1818,7 @@ static void select_disp_mario(WinMgrEntry* entry) {
             winIconSet(mario_status_icon_table[id],
                        (Vec){entry->x + SELECT_ICON_X, sel->scrollY + (ofs + (entry->y - 44 - i * SELECT_ROW_H)), 0.0f},
                        (Vec){0.55f, 0.55f, 0.55f}, iconcol);
+
             // the current value
             sprintf(buf, "%3d", *mario_status_point_table[id]);
             winFontInit();
@@ -1819,6 +1831,7 @@ static void select_disp_mario(WinMgrEntry* entry) {
             if (sel->items[i].flags & SELECT_ITEM_DISABLED) {
                 continue;
             }
+
             // the value after the change: up by the stat's step for SELECT_TYPE_STAT_SWAP_UP, else down
             switch (sel->type) {
                 case SELECT_TYPE_STAT_SWAP_UP:
@@ -1844,6 +1857,7 @@ static void select_disp_mario(WinMgrEntry* entry) {
                        (Vec){-0.55f, 0.55f, 0.55f}, iconcol);
         }
         GXSetScissor(left, top, wd, ht);
+
         // the column headings, placed as in select_disp_party
         msg = msgSearch("msg_window_title_9");
 #if VERSION >= VERSION_US
@@ -1929,6 +1943,7 @@ static void select_disp_luigi(WinMgrEntry* entry) {
         GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
         GXGetScissor(&left, &top, &wd, &ht);
         GXSetScissor(entry->x + 304, 274 - entry->y, entry->width, entry->height - 50);
+
         // rows clipped and skipped as in select_disp
         info = jdt->info;
         for (i = 0; i < sel->numItems; i++, info++) {
@@ -1936,6 +1951,7 @@ static void select_disp_luigi(WinMgrEntry* entry) {
             if ((f32)entry->y < py - 32.0f || (f32)(entry->y - entry->height) > py + 32.0f) {
                 continue;
             }
+
             // the entry's text is drawn only up to its tag end: a 0 is written there for the draw and the saved
             // character put back after it
             winFontInit();
@@ -1954,6 +1970,7 @@ static void select_disp_luigi(WinMgrEntry* entry) {
                        (Vec){0.8f, 0.8f, 0.8f}, *col, info->initEndPos);
 #endif
             info->initEndPos[info->tagEndPos] = save;
+
             // type 17: the price of an entry not read yet (gray rows have none)
             if (sel->type == SELECT_TYPE_INFORMANT_PERFECT && !(sel->items[i].flags & SELECT_ITEM_GRAY)) {
                 sprintf(buf, "%3d", info->cost);

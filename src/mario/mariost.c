@@ -78,6 +78,7 @@ BOOL R_bReset; // before DvdCheckTreadOn: .sbss is emitted in reverse
 #endif
 
 static BOOL DvdCheckTreadOn;
+
 // Stripped (UNUSED in the JP demo map, 4 bytes, first in .sbss); nothing reads it. BOOL from the name.
 BOOL movie_record_on;
 
