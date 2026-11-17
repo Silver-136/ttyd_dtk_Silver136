@@ -4037,6 +4037,38 @@ USER_FUNC(btlevtcmd_MoveDirectionAdd) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script: adds args[3] in the direction part args[1] of the unit args[0] moves (or faces, when it has no move
+ * direction) to the variable args[2].
+ */
+// Original name and size (0xc8) from the JP demo map (UNUSED there: no script uses it); btlevtcmd_PartsFaceDirectionAdd
+// with the move-direction test of btlevtcmd_MoveDirectionAdd on the part's own moveDirection / faceDirection
+// (0xb0 + the 0x18 the test adds to the unit commands).
+USER_FUNC(btlevtcmd_PartsMoveDirectionAdd) {
+    EvtWord* args = event->args;
+    BattleWork* wp = _battleWorkPointer;
+    BattleUnit* unit;
+    BattleUnitPart* part;
+    s32 id, partId, index, value, dir;
+
+    id = evtGetValue(event, args[0]);
+    id = BattleTransID(event, id);
+    partId = evtGetValue(event, args[1]);
+    index = args[2];
+    value = evtGetValue(event, args[3]);
+    unit = BattleGetUnitPtr(wp, id);
+    part = BtlUnit_GetPartsPtr(unit, partId);
+    if (part->moveDirection) {
+        dir = value * part->moveDirection;
+    } else {
+        dir = value * part->faceDirection;
+    }
+    value = evtGetValue(event, index);
+    value += dir;
+    evtSetValue(event, index, value);
+    return EVT_RETURN_DONE;
+}
+
 /** Script: adds args[2] in the direction the unit args[0] faces to the variable args[1] (positions in front of it). */
 USER_FUNC(btlevtcmd_FaceDirectionAdd) {
     s32 btlId, id, value;
@@ -4106,6 +4138,35 @@ USER_FUNC(btlevtcmd_MoveDirectionSub) {
     value = evtGetValue(event, index);
     value -= dir;
     evtSetValue(event, index, value);
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script: subtracts args[3] in the direction part args[1] of the unit args[0] moves (or faces, when it has no move
+ * direction) from the variable args[2].
+ */
+// Original name and size (0xc8) from the JP demo map (UNUSED there: no script uses it);
+// btlevtcmd_PartsMoveDirectionAdd with the closing subtraction of btlevtcmd_PartsFaceDirectionSub.
+USER_FUNC(btlevtcmd_PartsMoveDirectionSub) {
+    EvtWord* args = event->args;
+    BattleWork* wp = _battleWorkPointer;
+    BattleUnit* unit;
+    BattleUnitPart* part;
+    s32 id, partId, index, value, dir;
+
+    id = evtGetValue(event, args[0]);
+    id = BattleTransID(event, id);
+    partId = evtGetValue(event, args[1]);
+    index = args[2];
+    value = evtGetValue(event, args[3]);
+    unit = BattleGetUnitPtr(wp, id);
+    part = BtlUnit_GetPartsPtr(unit, partId);
+    if (part->moveDirection) {
+        dir = value * part->moveDirection;
+    } else {
+        dir = value * part->faceDirection;
+    }
+    evtSetValue(event, index, evtGetValue(event, index) - dir);
     return EVT_RETURN_DONE;
 }
 

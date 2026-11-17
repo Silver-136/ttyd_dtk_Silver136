@@ -4326,6 +4326,19 @@ void mapObjGetFlushColor(const char* name, u8* r, u8* g, u8* b, u8* a) {
     *a = obj->color.a;
 }
 
+/** Turns off the camera clipping of map objects (mapDisp then draws those with the clip flag unconditionally). */
+// mapClipOff and mapClipOn: original names and sizes (0xc each) from the JP demo map (UNUSED there: nothing calls
+// them), in this order near the end of the file; each is one store to mapClipOffFlag (an original name, .sbss).
+void mapClipOff(void) {
+    mapClipOffFlag = TRUE;
+}
+
+/** Turns the camera clipping of map objects back on. */
+// Original name and size from the JP demo map (see mapClipOff).
+void mapClipOn(void) {
+    mapClipOffFlag = FALSE;
+}
+
 // FAKE: stand-in for functions the linker dead-stripped; it only keeps the constants they left behind in
 // .rodata/.sdata2, in their original order. Nothing calls it. The JP demo map lists stripped functions in this
 // file (UNUSED): mapGetConvertDate (0x26c, with a function-static date$2457, 0x20 .bss), mapGetAnmDt (0xa8) and

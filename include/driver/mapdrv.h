@@ -498,6 +498,8 @@ void mapObjFlagOn(const char* name, u32 flags);
 void mapObjFlushOff(const char* name);
 void mapObjFlushOn(const char* name);
 void mapObjGetFlushColor(const char* name, u8* r, u8* g, u8* b, u8* a);
+void mapClipOff(void);
+void mapClipOn(void);
 void mapObjRotate(const char* name, f32 x, f32 y, f32 z);
 void mapObjScale(const char* name, f32 x, f32 y, f32 z);
 void mapObjSetFlushColor(const char* name, u8 r, u8 g, u8 b, u8 a);

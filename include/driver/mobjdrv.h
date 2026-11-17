@@ -99,6 +99,7 @@ void mobjInit(void);
 void mobjMain(void);
 MapObjectEntry* mobjNameToPtrNoAssert(const char* name);
 MapObjectEntry* mobjNameToPtr(const char* name);
+MapObjectEntry* mobjNumberToPtr(s32 index);
 void mobjCalcMtx(MapObjectEntry* mobj);
 void mobjCalcMtx2(MapObjectEntry* mobj);
 void mobjHitCheckGround(MapObjectEntry* entry);

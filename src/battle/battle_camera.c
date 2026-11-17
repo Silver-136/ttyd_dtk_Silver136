@@ -1042,6 +1042,24 @@ USER_FUNC(evt_btl_camera_set_moveto) {
     return EVT_RETURN_DONE;
 }
 
+/** Stops a timed camera glide (btl_camera_set_moveto) if pri passes the priority floor. */
+// Original name and size (0x1c) from the JP demo map (UNUSED there: nothing calls it), right after the moveto pair.
+// The size is the priority test of its neighbours plus one store of zero; the glide runs only while moveToTimer is
+// above zero (battleCameraMain), and battleCameraMain clears that same field to stop it.
+void btl_camera_move_stop(s32 pri) {
+    BattleWork* wp = _battleWorkPointer;
+    if (pri >= wp->cameraWork.priLimit) {
+        wp->cameraWork.moveToTimer = 0;
+    }
+}
+
+/** Script helper: args[0] priority; stops the timed camera glide. */
+// Original name and size (0x30) from the JP demo map (UNUSED there: no script uses it); evt_btl_camera_noshake's form.
+USER_FUNC(evt_btl_camera_move_stop) {
+    btl_camera_move_stop(evtGetValue(event, event->args[0]));
+    return EVT_RETURN_DONE;
+}
+
 /**
  * Starts a horizontal camera shake whose amplitude goes from a to b over frames with interpolation type,
  * and rumbles the controller unless rumble is disabled for the camera.

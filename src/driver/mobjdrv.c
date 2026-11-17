@@ -341,6 +341,19 @@ static MapObjectWork* mobjGetWork(void) {
     }
 }
 
+/** Returns map object slot index of the table in use if it is active, else NULL. */
+// Original name and size (0x58) from the JP demo map (UNUSED there: nothing calls it), right after mobjGetWork;
+// lightNumberToPtr's form on this unit's table and active flag (without the flag test the size is 0x48).
+MapObjectEntry* mobjNumberToPtr(s32 index) {
+    MapObjectWork* wp = mobjGetWork();
+    MapObjectEntry* entry = &wp->entries[index];
+
+    if (entry->flags & MOBJ_FLAG_ACTIVE) {
+        return entry;
+    }
+    return NULL;
+}
+
 /** Builds a scale, x/y/z rotation (degrees) and translation matrix. */
 static void calcMtx(Mtx mtx, Vec* pos, Vec* sc, Vec* rot) {
     Mtx trans;
