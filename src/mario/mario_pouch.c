@@ -1398,6 +1398,13 @@ s32 pouchGetPartyMaxHpBase(s32 partyId, s32 hpLevel) {
     return _party_max_hp_table[partyId][hpLevel];
 }
 
+/** Mario's rank. */
+// Original name and size (0xc) from the JP demo map (UNUSED there: nothing calls it); the getter of the rank field,
+// like pouchGetStarPoint after it.
+s16 pouchGetStarRank(void) {
+    return mpp->rank;
+}
+
 /** Mario's Star Points toward the next level, for the status window. */
 s16 pouchGetStarPoint(void) {
     return mpp->starPoints;

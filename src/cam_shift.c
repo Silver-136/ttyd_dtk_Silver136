@@ -162,6 +162,13 @@ void camShiftPostMain(void) {
     wp->prevTime = CAM_SHIFT_TIME;
 }
 
+/** The camera shift's work. */
+// Original name and size (0x8) from the JP demo map (UNUSED there: nothing calls it); returns the unit's work
+// pointer, like animGetPtr.
+CamShiftWork* camShiftGetWorkPtr(void) {
+    return wp;
+}
+
 /**
  * Snaps the sideways camera lead back to zero with the default tuning (same as camShiftInit).
  * Called on map changes, door transitions, game over and by camera scripts.

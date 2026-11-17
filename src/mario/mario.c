@@ -2025,6 +2025,19 @@ f32 marioGetScale(void) {
     return mp->flags & MARIO_FLAG_BG_MODE ? 1.2f : 2.0f;
 }
 
+/** Ends marioDispLeftOnlyOn: Mario is drawn facing his own direction again. */
+// Original name and size (0x14) from the JP demo map (UNUSED there: nothing calls it); clears the flag the same
+// way as marioItemGetEnable.
+void marioDispLeftOnlyOff(void) {
+    mp->dispFlags &= ~MARIO_DISP_FLAG_LEFT_ONLY;
+}
+
+/** Ends marioDispRightOnlyOn: Mario is drawn facing his own direction again. */
+// Original name and size (0x14) from the JP demo map (see marioDispLeftOnlyOff).
+void marioDispRightOnlyOff(void) {
+    mp->dispFlags &= ~MARIO_DISP_FLAG_RIGHT_ONLY;
+}
+
 /** Resets the motion-blur trail: every slot to Mario's position, the write index to 0. */
 // Original name and size (0x84) from the JP demo map (UNUSED there: every call is inlined).
 static void marioBlurInit(void) {
@@ -2034,6 +2047,12 @@ static void marioBlurInit(void) {
     for (i = 0; i < 8; i++) {
         blurPos[i] = mp->position;
     }
+}
+
+/** Turns Mario's motion-blur trail off. */
+// Original name and size (0x14) from the JP demo map (see marioDispLeftOnlyOff).
+void marioBlurOff(void) {
+    mp->dispFlags &= ~MARIO_DISP_FLAG_BLUR;
 }
 
 /**

@@ -751,6 +751,13 @@ BOOL animEffectAsync(const char* animName, u32 group) {
 #define ANIM_NAME_INDEX(name) ((s32)(AddrWord)(name))
 #define ANIM_INDEX_NAME(idx) ((const char*)(AddrWord)(idx))
 
+/** Returns pose poseId's entry. */
+// Original name and size (0x14) from the JP demo map (UNUSED there: nothing calls it); the map lists it right before
+// getAnimDataId, and its size is that of animPoseGetAnimPosePtr, which does the same.
+AnimationPose* getAnimPose(s32 poseId) {
+    return &wp->poses[poseId];
+}
+
 /**
  * Looks up an animation of pose's file: by name, or directly by index when name holds a non-negative index.
  * Unknown names and indices give 0.

@@ -144,6 +144,13 @@ void iconTexSetup(void) {
     ; // stubbed
 }
 
+/** The loaded icon.tpl. */
+// Original name and size (0x8) from the JP demo map (UNUSED there: nothing calls it); returns the unit's icon_tpl
+// pointer.
+TEXPalette* iconGetTpl(void) {
+    return icon_tpl;
+}
+
 /** Clears every icon of the current (field or battle) set. */
 void iconReInit(void) {
     IconWork* wp = iconGetWork();

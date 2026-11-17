@@ -101,3 +101,29 @@ void gxsubFillGX(s32 x, s32 y, s32 w, s32 h, GXColor* color) {
 void gxsubFillSetTexObj(GXTexObj* obj) {
     pFillTexObj = obj;
 }
+
+/** Sets fillTexAlphaOff. */
+// The four switches (gxsubFillTexAlphaOff, gxsubFillTexAlphaOn, gxsubFillTexEdgeOn, gxsubFillTexEdgeOff): original
+// names and sizes (0xc each) from the JP demo map (UNUSED there: nothing calls them); each stores the value its name
+// gives in the unit's flag of that name, which gxsubFillGX reads.
+void gxsubFillTexAlphaOff(void) {
+    fillTexAlphaOff = TRUE;
+}
+
+/** Clears fillTexAlphaOff. */
+// Original name and size from the JP demo map (see gxsubFillTexAlphaOff).
+void gxsubFillTexAlphaOn(void) {
+    fillTexAlphaOff = FALSE;
+}
+
+/** Sets fillTexEdgeOn. */
+// Original name and size from the JP demo map (see gxsubFillTexAlphaOff).
+void gxsubFillTexEdgeOn(void) {
+    fillTexEdgeOn = TRUE;
+}
+
+/** Clears fillTexEdgeOn. */
+// Original name and size from the JP demo map (see gxsubFillTexAlphaOff).
+void gxsubFillTexEdgeOff(void) {
+    fillTexEdgeOn = FALSE;
+}

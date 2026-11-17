@@ -214,6 +214,13 @@ void* ARCGetStartAddrInMem(ARCFileInfo* info) {
     return (void*)((u32)handle->archiveStartAddr + info->startOffset);
 }
 
+/** Returns an opened file's offset in the archive. */
+// Original name and size (0x8) from the JP demo map (UNUSED there: nothing calls it); the getter of the startOffset
+// field, like ARCGetLength.
+u32 ARCGetStartOffset(ARCFileInfo* info) {
+    return info->startOffset;
+}
+
 /** Returns an opened file's length in bytes. */
 u32 ARCGetLength(ARCFileInfo* info) {
     return info->length;

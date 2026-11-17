@@ -503,6 +503,7 @@ void pouchReviseMarioParam(void);
 void pouchRevisePartyParam(void);
 s32 pouchGetPartyMaxHpBase(s32 partyId, s32 hpLevel);
 s16 pouchGetStarPoint(void);
+s16 pouchGetStarRank(void);
 BOOL pouchEquipBadgeIndex(s32 index);
 BOOL pouchUnEquipBadgeIndex(s32 index);
 s32 pouchEquipCheckBadge(s32 badgeId);

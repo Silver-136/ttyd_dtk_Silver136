@@ -193,3 +193,10 @@ f32 dispCalcZ(Vec* input) {
 DispEntry* dispGetCurWork(void) {
     return currentWorkPtr;
 }
+
+/** The number of draw requests queued this frame. */
+// Original name and size (0x8) from the JP demo map (UNUSED there: nothing calls it); returns the unit's entry_n
+// counter.
+s32 dispGetEntNum(void) {
+    return entry_n;
+}

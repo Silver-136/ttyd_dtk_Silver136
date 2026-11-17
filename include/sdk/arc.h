@@ -34,5 +34,6 @@ BOOL ARCInitHandle(void* arcStart, ARCHandle* handle);
 BOOL ARCGetCurrentDir(ARCHandle* handle, char* path, u32 maxlen);
 
 void* ARCGetStartAddrInMem(ARCFileInfo* info);
+u32 ARCGetStartOffset(ARCFileInfo* info);
 u32 ARCGetLength(ARCFileInfo* info);
 BOOL ARCClose(ARCFileInfo* info);

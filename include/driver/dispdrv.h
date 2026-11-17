@@ -38,3 +38,4 @@ void dispSort(void);
 void dispDraw(CameraId cameraId);
 f32 dispCalcZ(Vec* input);
 DispEntry* dispGetCurWork(void);
+s32 dispGetEntNum(void);

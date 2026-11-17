@@ -13,6 +13,7 @@ then numIcons frames of {u16 tplId, u16 delay}
 #include "version.h"
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
+#include "sdk/texPalette.h"
 
 #define numBinEntries 0x218
 
@@ -101,6 +102,7 @@ typedef struct IconWork {
 
 void iconInit(void);
 void iconTexSetup(void);
+TEXPalette* iconGetTpl(void);
 void iconReInit(void);
 void iconMain(void);
 void iconEntry(const char* name, u16 iconId);
