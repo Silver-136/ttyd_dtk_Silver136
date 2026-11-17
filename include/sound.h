@@ -290,6 +290,7 @@ u32 SoundEfxCheck(s32 chan);
 
 void SoundDVDStop(void);
 void SoundDVDSetPan(u8 pan);
+void SoundDVDSetVolCh(u32 chan, u8 vol);
 
 void SoundSSMuteOff(s32 chan);
 u32 SoundSSCheck(s32 chan);

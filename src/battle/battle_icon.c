@@ -286,9 +286,74 @@ USER_FUNC(btlevtcmd_BtlIconJumpPosition) {
     return EVT_RETURN_BLOCK;
 }
 
-// FAKE: not called anywhere; it only places the literals 0.0f, 1.0f and 0.5f in this object's constant pool.
-void btlIconStrippedPool(f32* f) {
-    f[0] = 0.0f;
-    f[1] = 1.0f;
-    f[2] = 0.5f;
+/**
+ * Script: drops a battle icon from its position to (x, y, z) over args[4] frames (0 = from its speed), starting
+ * with no upward speed and choosing the gravity to land exactly; blocks the script until it lands.
+ */
+// Original name and size (0x348) from the JP demo map (UNUSED there: no script uses it), after
+// btlevtcmd_BtlIconJumpPosition. Body: btlevtcmd_FallPosition (also 0x348) on the icon's fields, as
+// btlevtcmd_BtlIconJumpPosition mirrors btlevtcmd_JumpPosition; the size fits exactly. Its 1.0f is the constant the
+// former stand-in btlIconStrippedPool kept in the pool.
+USER_FUNC(btlevtcmd_BtlIconFallPosition) {
+    EvtWord* args = event->args;
+    BattleIcon* icon;
+    s32 index, frames;
+    f32 sx, sy, sz;
+    f32 x, y, z;
+    f32 dy;
+
+    index = evtGetValue(event, args[0]);
+    x = (f32)evtGetValue(event, args[1]);
+    y = (f32)evtGetValue(event, args[2]);
+    z = (f32)evtGetValue(event, args[3]);
+    frames = evtGetValue(event, args[4]);
+    icon = BtlIconGetPtr(index);
+    if (isFirstCall) {
+        event->blocked = 1;
+        icon->jumpFrames = frames;
+        icon->jumpTarget.x = x;
+        icon->jumpTarget.y = y;
+        icon->jumpTarget.z = z;
+        sx = icon->position.x;
+        sz = icon->position.z;
+        sy = icon->position.y;
+        icon->jumpPos.x = sx;
+        icon->jumpPos.y = sy;
+        icon->jumpPos.z = sz;
+        icon->jumpAngle = angleABf(sx, sz, x, z);
+        icon->jumpDist = distABf(sx, sz, x, z);
+        if (x - sx > 0.0f) {
+            icon->jumpDir = 1;
+        } else if (x - sx < 0.0f) {
+            icon->jumpDir = -1;
+        }
+        dy = y - sy;
+        if (icon->jumpFrames == 0) {
+            if (icon->jumpSpeed == 0.0f) {
+                icon->jumpSpeed = 1.0f;
+            }
+            icon->jumpFrames = icon->jumpDist / icon->jumpSpeed;
+            if (icon->jumpFrames == 0) {
+                icon->jumpFrames = 1;
+            }
+        } else {
+            icon->jumpSpeed = icon->jumpDist / icon->jumpFrames;
+        }
+        icon->jumpVelY = 0.0f;
+        icon->fallAccel = (dy / icon->jumpFrames - icon->jumpVelY) / (-icon->jumpFrames / 2.0f);
+    }
+    icon->jumpPos.y += icon->jumpVelY;
+    icon->jumpVelY -= icon->fallAccel;
+    btlMovePos(icon->jumpSpeed, icon->jumpAngle, &icon->jumpPos.x, &icon->jumpPos.z);
+    icon->position.x = icon->jumpPos.x;
+    icon->position.y = icon->jumpPos.y;
+    icon->position.z = icon->jumpPos.z;
+    icon->jumpFrames--;
+    if (icon->jumpFrames <= 0) {
+        icon->position.x = icon->jumpTarget.x;
+        icon->position.y = icon->jumpTarget.y;
+        icon->position.z = icon->jumpTarget.z;
+        return EVT_RETURN_YIELD;
+    }
+    return EVT_RETURN_BLOCK;
 }

@@ -1270,6 +1270,16 @@ static void SoundDVDSetPanCh(u32 chan, u8 pan) {
     AISetStreamVolRight(right);
 }
 
+/** Sets the volume of DVD audio channel chan (also the fade-in target) and applies it with the current pan. */
+// Original name and size (0x104) from the JP demo map (UNUSED there: nothing calls it), after SoundDVDSetPanCh.
+// Body: SoundSSSetVolCh's form for the DVD channel (target and current volume set together, then the pan update);
+// the size fits exactly. The order of the two stores in the chained assignment is not fixed by the size.
+void SoundDVDSetVolCh(u32 chan, u8 vol) {
+    SoundDVD* dvd = &sound.dvds[chan];
+    dvd->volTarget = dvd->vol = vol;
+    SoundDVDSetPanCh(chan, dvd->pan);
+}
+
 /**
  * Per-frame DVD audio update: runs fade-outs (stopping or pausing at silence, remembering the sample position)
  * and fade-ins.
@@ -1358,22 +1368,52 @@ static inline u32 _ssCalcLen(SoundStreamEntry* entry) {
     return len;
 }
 
-/**
- * Starts the asynchronous disc read of the next chunk of stream channel ch (0 or 1,
- * the second channel's data follows the first's) into its load buffer.
- */
-inline void _ssDVDReadAsync(SoundStream* stream, int ch) {
+// _ssDVDReadAsync_l and _ssDVDReadAsync_r: original names and sizes (0x16c, 0x180) from the JP demo map (UNUSED there:
+// every call is inlined), after the also stripped _ssDVDReadAsync_sub (0x174) between cache_flush and
+// _ssDVDReadAsync_cache_aram. The two bodies (each written out, the first and second channel, as the READ_L / READ_R
+// flags name them) compile to exactly those sizes; written as calls of one shared helper, the callers' code changes.
+
+/** Starts the asynchronous disc read of the next chunk of the stream's first (left) channel into its load buffer. */
+inline void _ssDVDReadAsync_l(SoundStream* stream) {
     SoundStreamEntry* entry;
     u32 extra;
     u32 len;
     u32 aligned;
     u32 addr;
 
-    entry = &stream->entries[ch];
+    entry = &stream->entries[0];
     extra = 0;
-    if (ch) {
-        extra = entry->size + (0x20 - (entry->size % 0x20));
+#if VERSION <= VERSION_DEMO_JP
+    aligned = len = _ssCalcLen(entry);
+    if (len < SS_LOAD_BUFFER_SIZE) {
+        aligned = SS_LOAD_BUFFER_SIZE;
     }
+    aligned = (aligned + 0x1F) & ~0x1F;
+#else
+    aligned = _ssAlign32(len = _ssCalcLen(entry));
+#endif
+    if (!(stream->flags & SOUND_STREAM_FLAG_ARAM)) {
+        DVDMgrReadAsync(entry->dvd, entry->loadBuffer[1 - entry->curBuf], aligned,
+                        stream->dataOffset + entry->offset + extra, _ssDVDReadAsync_activeChk);
+    } else {
+        addr = stream->dataOffset + entry->offset + extra + sound.aramAddr[stream->slot];
+        DCInvalidateRange(entry->loadBuffer[1 - entry->curBuf], SS_LOAD_BUFFER_SIZE);
+        ARQPostRequest(&entry->request, (u32)entry, 1, 0, addr, (u32)entry->loadBuffer[1 - entry->curBuf], aligned,
+                       cache_flush);
+    }
+    entry->requestLength = len;
+}
+
+/** The same for the second (right) channel, whose data follows the first's in the stream. */
+inline void _ssDVDReadAsync_r(SoundStream* stream) {
+    SoundStreamEntry* entry;
+    u32 extra;
+    u32 len;
+    u32 aligned;
+    u32 addr;
+
+    entry = &stream->entries[1];
+    extra = entry->size + (0x20 - (entry->size % 0x20));
 #if VERSION <= VERSION_DEMO_JP
     aligned = len = _ssCalcLen(entry);
     if (len < SS_LOAD_BUFFER_SIZE) {
@@ -1574,10 +1614,10 @@ static void _ssDVDReadAsync_cache_aram(u32 pointerToARQRequest) {
         stream->entries[1].offset = 0;
         stream->entries[1].pos = 0;
         stream->entries[0].curBuf = 1;
-        _ssDVDReadAsync(stream, 0);
+        _ssDVDReadAsync_l(stream);
         if (stream->count == 2) {
             stream->entries[1].curBuf = 1;
-            _ssDVDReadAsync(stream, 1);
+            _ssDVDReadAsync_r(stream);
         }
     } else {
         len = DVDMgrGetLength(stream->entries[0].dvd);
@@ -2097,13 +2137,13 @@ static void SoundSSPlayChEx_main(s32 result, DVDFileInfo* fileInfo) {
         _ssResetEntries(stream);
         if (!(stream->flags & SOUND_STREAM_FLAG_ARAM)) {
             stream->entries[0].curBuf = 1;
-            _ssDVDReadAsync(stream, 0);
+            _ssDVDReadAsync_l(stream);
 #if VERSION >= VERSION_JP
             stream->flags |= SOUND_STREAM_FLAG_READ_L;
 #endif
             if (stream->count == 2) {
                 stream->entries[1].curBuf = 1;
-                _ssDVDReadAsync(stream, 1);
+                _ssDVDReadAsync_r(stream);
 #if VERSION >= VERSION_JP
                 stream->flags |= SOUND_STREAM_FLAG_READ_R;
 #endif
@@ -2471,7 +2511,7 @@ static void SoundSSMainInt(void) {
         if ((stream->flags & SOUND_STREAM_FLAG_STARTED) && !(stream->flags & SOUND_STREAM_FLAG_MUTE)) {
             if (stream->flags & SOUND_STREAM_FLAG_PLAY) {
                 if (stream->entries[0].srcPos != 0 && stream->entries[0].loaded == 0 && !(stream->flags & SOUND_STREAM_FLAG_READ_L)) {
-                    _ssDVDReadAsync(stream, 0);
+                    _ssDVDReadAsync_l(stream);
                     stream->flags |= SOUND_STREAM_FLAG_READ_L;
                     if (stream->flags & SOUND_STREAM_FLAG_ARAM) {
                         stream->entries[0].loaded = 1;
@@ -2479,7 +2519,7 @@ static void SoundSSMainInt(void) {
                 }
                 if (stream->count == 2 && stream->entries[1].srcPos != 0 && stream->entries[1].loaded == 0 &&
                     !(stream->flags & SOUND_STREAM_FLAG_READ_R)) {
-                    _ssDVDReadAsync(stream, 1);
+                    _ssDVDReadAsync_r(stream);
                     stream->flags |= SOUND_STREAM_FLAG_READ_R;
                     if (stream->flags & SOUND_STREAM_FLAG_ARAM) {
                         stream->entries[1].loaded = 1;
@@ -2502,7 +2542,7 @@ static void SoundSSMainInt(void) {
 #else
         if ((stream->flags & SOUND_STREAM_FLAG_STARTED) && !(stream->flags & SOUND_STREAM_FLAG_MUTE) && (stream->flags & SOUND_STREAM_FLAG_PLAY)) {
             if (stream->entries[0].srcPos != 0 && stream->entries[0].loaded == 0 && !(stream->flags & SOUND_STREAM_FLAG_READ_L)) {
-                _ssDVDReadAsync(stream, 0);
+                _ssDVDReadAsync_l(stream);
                 stream->flags |= SOUND_STREAM_FLAG_READ_L;
                 if (stream->flags & SOUND_STREAM_FLAG_ARAM) {
                     stream->entries[0].loaded = 1;
@@ -2510,7 +2550,7 @@ static void SoundSSMainInt(void) {
             }
             if (stream->count == 2 && stream->entries[1].srcPos != 0 && stream->entries[1].loaded == 0 &&
                 !(stream->flags & SOUND_STREAM_FLAG_READ_R)) {
-                _ssDVDReadAsync(stream, 1);
+                _ssDVDReadAsync_r(stream);
                 stream->flags |= SOUND_STREAM_FLAG_READ_R;
                 if (stream->flags & SOUND_STREAM_FLAG_ARAM) {
                     stream->entries[1].loaded = 1;

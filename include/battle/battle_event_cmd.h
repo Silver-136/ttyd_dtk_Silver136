@@ -246,6 +246,7 @@ USER_FUNC(btlevtcmd_MoveDirectionSub);
 USER_FUNC(btlevtcmd_FaceDirectionSub);
 USER_FUNC(btlevtcmd_FallPartsPosition);
 USER_FUNC(btlevtcmd_FallPosition);
+USER_FUNC(btlevtcmd_MovePartsPosition);
 USER_FUNC(btlevtcmd_GetBackItem);
 USER_FUNC(btlevtcmd_GetCoin);
 USER_FUNC(btlevtcmd_GetDataFromDataTable);

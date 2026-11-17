@@ -7,6 +7,8 @@
 #include "manager/evtmgr.h"
 #include "manager/evtmgr_cmd.h"
 #include "mario/mario.h"
+#include "mario/mario_party.h"
+#include "party.h"
 #include "mario/mariost.h"
 #include "pmario_sound.h"
 #include "system.h"
@@ -199,10 +201,6 @@ USER_FUNC(evt_cam3d_evt_set_at) {
     curve = evtGetValue(event, args[5]);
     camera = camGetPtr(CAMERA_3D);
     at = (Vec){x, y, z};
-    {
-        // Never read; unused in the original too: its initializer template is in the retail code
-        Vec unused = {0.0f, 0.0f, 0.0f};
-    }
     PSVECSubtract(&at, &camera->cameraPos, &pos);
     PSVECScale(&pos, &pos, (f32)percent / 100.0f);
     PSVECAdd(&pos, &camera->cameraPos, &pos);
@@ -210,6 +208,36 @@ USER_FUNC(evt_cam3d_evt_set_at) {
     camera->presetAt = camera->cameraAt;
     camera->storedPos = pos;
     camera->storedAt = at;
+    camera->startTimeA = gp->renderTime;
+    camera->durationA = OSMillisecondsToTicks(msec);
+    camera->stateA = CAM_MOVE_TO_STORED;
+    camera->curveA = curve;
+    return EVT_RETURN_DONE;
+}
+
+/** s32 x, s32 y, s32 z, s32 msec, s32 curve: moves the camera position to (x, y, z), keeping the current at */
+// Original name and size (0x1a8) from the JP demo map (UNUSED there: nothing calls it), between evt_cam3d_evt_set_at
+// and evt_cam3d_evt_set. Body: evt_cam3d_evt_set's move with only the position given and the at kept as
+// evt_cam3d_evt_zoom_in keeps it (storedAt = cameraAt); the size fits exactly, and its position template is the one
+// the "unused" zero Vec in evt_cam3d_evt_set_at stood in for (dropped; .rodata unchanged). The argument list (no
+// percent, unlike evt_cam3d_evt_set_at) is what the size leaves.
+USER_FUNC(evt_cam3d_evt_set_pos) {
+    EvtWord* args = event->args;
+    s32 x, y, z, msec, curve;
+    CameraEntry* camera;
+    Vec pos;
+
+    x = evtGetValue(event, args[0]);
+    y = evtGetValue(event, args[1]);
+    z = evtGetValue(event, args[2]);
+    msec = evtGetValue(event, args[3]);
+    curve = evtGetValue(event, args[4]);
+    camera = camGetPtr(CAMERA_3D);
+    pos = (Vec){x, y, z};
+    camera->presetPos = camera->cameraPos;
+    camera->presetAt = camera->cameraAt;
+    camera->storedPos = pos;
+    camera->storedAt = camera->cameraAt;
     camera->startTimeA = gp->renderTime;
     camera->durationA = OSMillisecondsToTicks(msec);
     camera->stateA = CAM_MOVE_TO_STORED;
@@ -268,10 +296,6 @@ USER_FUNC(evt_cam3d_evt_set_rel) {
     {
         Vec pos, at;
 
-        // Never read; unused in the original too: their initializer templates are in the retail code
-        Vec unused0 = {0.0f, 0.0f, 0.0f};
-        Vec unused1 = {0.0f, 0.0f, 0.0f};
-
         ax = mario->position.x + ax;
         ay = mario->position.y + ay;
         az = mario->position.z + az;
@@ -287,6 +311,46 @@ USER_FUNC(evt_cam3d_evt_set_rel) {
         camera->storedPos = pos;
         camera->storedAt = at;
     }
+    camera->startTimeA = gp->renderTime;
+    camera->durationA = OSMillisecondsToTicks(msec);
+    camera->stateA = CAM_MOVE_TO_STORED;
+    camera->curveA = curve;
+    return EVT_RETURN_DONE;
+}
+
+/** s32 posX, posY, posZ, atX, atY, atZ (relative to the partner), msec, curve */
+// Original name and size (0x340) from the JP demo map (UNUSED there: nothing calls it), between evt_cam3d_evt_set_rel
+// and evt_cam3d_evt_set_npc_rel. Body: evt_cam3d_evt_set_npc_rel for Mario's partner (no name argument); the size
+// fits exactly, and its two templates are the ones the two "unused" zero Vecs in evt_cam3d_evt_set_rel stood in for
+// (dropped; .rodata unchanged). The partner lookup partyGetPtr(marioGetPartyId()) is the common form; partyGetPtr(0)
+// or anotherPartyGetPtr(0) give the same size.
+USER_FUNC(evt_cam3d_evt_set_party_rel) {
+    EvtWord* args = event->args;
+    f32 px, py, pz, ax, ay, az;
+    s32 msec, curve;
+    CameraEntry* camera;
+    PartyEntry* party;
+    Vec partyPos, partyAt;
+    Vec pos, at;
+
+    px = evtGetValue(event, args[0]);
+    py = evtGetValue(event, args[1]);
+    pz = evtGetValue(event, args[2]);
+    ax = evtGetValue(event, args[3]);
+    ay = evtGetValue(event, args[4]);
+    az = evtGetValue(event, args[5]);
+    msec = evtGetValue(event, args[6]);
+    curve = evtGetValue(event, args[7]);
+    camera = camGetPtr(CAMERA_3D);
+    party = partyGetPtr(marioGetPartyId());
+    pos = (Vec){px, py, pz};
+    at = (Vec){ax, ay, az};
+    PSVECAdd(&party->position, &at, &partyAt);
+    PSVECAdd(&partyAt, &pos, &partyPos);
+    camera->presetPos = camera->cameraPos;
+    camera->presetAt = camera->cameraAt;
+    camera->storedPos = partyPos;
+    camera->storedAt = partyAt;
     camera->startTimeA = gp->renderTime;
     camera->durationA = OSMillisecondsToTicks(msec);
     camera->stateA = CAM_MOVE_TO_STORED;

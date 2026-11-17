@@ -217,22 +217,13 @@ void _marioRefresh(void) {
     mario->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
 }
 
-static inline void jabaraLand(f32 y, void* hit) {
-    MarioWork* mario = marioGetPtr();
-    mario->airTimer = 0;
-    mario->jumpPeakAirTime = 0;
-    mario->hitobjStandOn = hit;
-    mario->hitobjJumpFrom = NULL;
-    mario->position.y = y;
-    mario->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
-}
-
 static inline void animStep(MarioWork* mario) {
     animPoseSetLocalTime(mario->paperAnimGroupId[marioAnimeId()], (f32)mario->mot.jabara.animFrame);
 }
 
 static void swingMain(void);
 void setCatchSwing(s32 s);
+void landonJabaraEnd(f32 y, HitEntry* hit);
 void setPutiSwing(void);
 
 /**
@@ -444,11 +435,9 @@ void mot_jabara(void) {
 #endif
                 marioPaperOff();
                 {
-                    void* standOn = mario->hitobjStandOn;
-                    jabaraLand(mario->lastGroundPos.y, standOn);
+                    HitEntry* standOn = mario->hitobjStandOn;
+                    landonJabaraEnd(mario->lastGroundPos.y, standOn);
                 }
-                camFollowYOn();
-                jabaraEnd();
                 return;
             }
             mario->position.y = hitY;
@@ -494,9 +483,7 @@ void mot_jabara(void) {
             allPartyRideOff();
 #endif
             marioPaperOff();
-            jabaraLand(hitY, land);
-            camFollowYOn();
-            jabaraEnd();
+            landonJabaraEnd(hitY, land);
             return;
     }
     switch (mario->currSubMotionId) {
@@ -816,6 +803,23 @@ void jabaraEnd(void) {
         __memFree(HEAP_DEFAULT, marioGetPtr()->motStruct);
         marioGetPtr()->motStruct = NULL;
     }
+}
+
+/** Lands Mario at height y on hit, ends the jump state, lets the camera follow him again and ends the Spring Jump. */
+// Original name and size (0x144) from the JP demo map (UNUSED there: every call is inlined), next to jabaraEnd. Its
+// body is the block both landing sites wrote out (the invented jabaraLand helper, camFollowYOn, jabaraEnd); compiled
+// out of line it gives exactly 0x144 (with the callers' marioPaperOff or allPartyRideOff inside, 0x150-0x158).
+void landonJabaraEnd(f32 y, HitEntry* hit) {
+    MarioWork* mario = marioGetPtr();
+
+    mario->airTimer = 0;
+    mario->jumpPeakAirTime = 0;
+    mario->hitobjStandOn = hit;
+    mario->hitobjJumpFrom = NULL;
+    mario->position.y = y;
+    mario->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
+    camFollowYOn();
+    jabaraEnd();
 }
 
 /**

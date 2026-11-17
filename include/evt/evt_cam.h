@@ -20,6 +20,8 @@ USER_FUNC(evt_cam_shake);
 USER_FUNC(evt_cam3d_evt_set_at);
 USER_FUNC(evt_cam3d_evt_set_now);
 USER_FUNC(evt_cam3d_evt_set_npc_rel);
+USER_FUNC(evt_cam3d_evt_set_party_rel);
+USER_FUNC(evt_cam3d_evt_set_pos);
 USER_FUNC(evt_cam3d_evt_set_rel);
 USER_FUNC(evt_cam3d_evt_set_rel_dir);
 USER_FUNC(evt_cam3d_evt_set_xyz);

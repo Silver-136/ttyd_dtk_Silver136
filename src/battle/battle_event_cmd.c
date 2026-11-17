@@ -5607,6 +5607,68 @@ USER_FUNC(btlevtcmd_FallPartsPosition) {
 }
 
 /**
+ * Script: walks part args[1] of the unit args[0] in a straight line to (args[2..4]) over args[5] frames, playing
+ * the footstep sounds of sound set args[6] in mode args[7]; the part version of btlevtcmd_MovePosition.
+ */
+// Original name and size (0x34c) from the JP demo map (UNUSED there: nothing calls it), at its slot between
+// FallPartsPosition and DivePartsPosition. Body: btlevtcmd_MovePosition with the part changes FallPartsPosition and
+// DivePartsPosition make to their unit versions (part number args[1], later arguments one up); the size fits exactly.
+USER_FUNC(btlevtcmd_MovePartsPosition) {
+    s32 id;
+    EvtWord* args = event->args;
+    s32 pno;
+    BattleUnitPart* part;
+    s32 kind, mode, frames;
+    f32 tx, ty, tz;
+    f32 x, y, z;
+
+    id = evtGetValue(event, args[0]);
+    id = BattleTransID(event, id);
+    pno = evtGetValue(event, args[1]);
+    tx = (f32)evtGetValue(event, args[2]);
+    ty = (f32)evtGetValue(event, args[3]);
+    tz = (f32)evtGetValue(event, args[4]);
+    frames = evtGetValue(event, args[5]);
+    kind = evtGetValue(event, args[6]);
+    mode = evtGetValue(event, args[7]);
+    part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, id), pno);
+    if (isFirstCall) {
+        event->blocked = 1;
+        part->moveTotalFrames = frames;
+        BtlUnit_GetPartsPos(part, &x, &y, &z);
+        BtlUnit_SetPartsMoveCurrentPos(part, x, y, z);
+        BtlUnit_SetPartsMoveTargetPos(part, tx, ty, tz);
+        part->moveAngle = angleABf(x, z, tx, tz);
+        part->moveDistance = distABf(x, z, tx, tz);
+        if (tx - x > 0.0f) {
+            part->moveDirection = 1;
+        } else if (tx - x < 0.0f) {
+            part->moveDirection = -1;
+        }
+        if (part->moveTotalFrames == 0) {
+            part->moveTotalFrames = part->moveDistance / part->moveSpeedXZ;
+            if (part->moveTotalFrames == 0) {
+                part->moveTotalFrames = 1;
+            }
+            part->moveSpeedXZ = part->moveSpeedXZ + (part->moveDistance - part->moveTotalFrames * part->moveSpeedXZ) / part->moveTotalFrames;
+        } else {
+            part->moveSpeedXZ = part->moveDistance / part->moveTotalFrames;
+        }
+        BtlUnit_LoadSeMode(mode, kind, &part->moveSndTable, &part->moveSnd);
+    }
+    btlMovePos(part->moveSpeedXZ, part->moveAngle, &part->moveCurrentPos.x, &part->moveCurrentPos.z);
+    BtlUnit_SetPartsPos(part, part->moveCurrentPos.x, part->moveCurrentPos.y, part->moveCurrentPos.z);
+    part->moveTotalFrames--;
+    if (part->moveTotalFrames <= 0) {
+        BtlUnit_SetPartsPos(part, part->moveTargetPos.x, part->moveTargetPos.y, part->moveTargetPos.z);
+        _PartsMoveSoundControlEnd(part);
+        return EVT_RETURN_YIELD;
+    }
+    _PartsMoveSoundControl(part);
+    return EVT_RETURN_BLOCK;
+}
+
+/**
  * Script: flies part args[1] of the unit args[0] to (args[2..4]) along a bowed curve;
  * the part version of btlevtcmd_DivePosition (frames args[5], bow args[6], mode args[7], type args[8],
  * sound set args[9]).
