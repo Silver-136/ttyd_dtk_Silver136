@@ -386,7 +386,8 @@ static void effCloudDisp(CameraId cameraId, void* param) {
         }
         DCFlushRange(vtx, 0x690);
         GXInvalidateVtxCache();
-        for (j = first, k = first * 2; j < 29; k += 2, j++) {
+        for (j = first; j < 29; j++) {
+            k = j * 2;
             GXBegin(GX_TRIANGLES, GX_VTXFMT0, 6);
             tri2(k, k + 2, k + 1, k, k + 1, k + 2, k + 3, k);
         }

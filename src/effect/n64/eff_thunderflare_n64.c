@@ -47,7 +47,6 @@ static void effThunderflareDisp(CameraId cameraId, void* payload);
 EffectEntry* effThunderflareN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 scale) {
     EffectEntry* effect;
     EffThunderflareN64Elem* work;
-    EffThunderflareN64Elem* e;
     s32 i;
 
     effect = effEntry();
@@ -86,12 +85,12 @@ EffectEntry* effThunderflareN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z
             work->color[5] = 10;
             break;
     }
-    e = work + 1;
-    for (i = 1; i < 31; i++, e++) {
-        e->rotA = (i - 1) * 3240 / 30;
-        e->rotB = 0.0f;
-        e->dist = (i - 1) * 100 / 30;
-        e->reserved_0 = 0;
+    work++;
+    for (i = 1; i < 31; i++, work++) {
+        work->rotA = (i - 1) * 3240 / 30;
+        work->rotB = 0.0f;
+        work->dist = (i - 1) * 100 / 30;
+        work->reserved_0 = 0;
     }
     return effect;
 }

@@ -22,7 +22,6 @@ void effNumberGX(Mtx mtx, s32 type, s32 number, u8 alpha, s32 extra) {
     Mtx scaleMtx;
     s8 buf[32];
     s32 len;
-    s32 offset;
     s32 pass;
     f32 lo;
     f32 hi;
@@ -68,7 +67,7 @@ void effNumberGX(Mtx mtx, s32 type, s32 number, u8 alpha, s32 extra) {
     sprintf((char*)buf, "%d", number);
     len = strlen((char*)buf);
     half = len / 2;
-    for (pass = 0, offset = 0; pass < extra + 1; offset += 2, pass++) {
+    for (pass = 0; pass < extra + 1; pass++) {
         if (pass == 0) {
             effGetTexObj(1, &texObj);
             GXLoadTexObj(&texObj, GX_TEXMAP0);
@@ -106,7 +105,7 @@ void effNumberGX(Mtx mtx, s32 type, s32 number, u8 alpha, s32 extra) {
             GXSetTevSwapMode(GX_TEVSTAGE2, GX_TEV_SWAP0, GX_TEV_SWAP0);
         }
         for (i = 0; i < len; i++) {
-            PSMTXTrans(posMtx, 32.0f * (f32)(half - i) - (f32)offset, (f32)offset, 0.0f);
+            PSMTXTrans(posMtx, 32.0f * (f32)(half - i) - (f32)(pass * 2), (f32)(pass * 2), 0.0f);
             PSMTXConcat(mtx, posMtx, posMtx);
             PSMTXConcat(cam->view, posMtx, posMtx);
             GXLoadPosMtxImm(posMtx, GX_PNMTX0);

@@ -194,7 +194,6 @@ static void effRecoveryDisp4(CameraId cameraId, void* param);
 EffectEntry* effRecoveryEntry(s32 type, s32 amount, f32 x, f32 y, f32 z) {
     EffectEntry* effect;
     RecoveryWork* work;
-    s32 delay;
     RecoveryWork* pp;
     s32 size;
     s32 i;
@@ -283,7 +282,7 @@ EffectEntry* effRecoveryEntry(s32 type, s32 amount, f32 x, f32 y, f32 z) {
     }
 
     pp = work + 1;
-    for (i = 1, delay = 8; i < effect->count; delay += 8, i++, pp++) {
+    for (i = 1; i < effect->count; i++, pp++) {
         pp->position.x = 0.0f;
         switch (type) {
             case 4:
@@ -317,7 +316,7 @@ EffectEntry* effRecoveryEntry(s32 type, s32 amount, f32 x, f32 y, f32 z) {
                     pp->velocity.x = 1.8f * (f32)cos(6.2831855f * pp->angle / 360.0f);
                     pp->velocity.y = 1.8f * (f32)sin(6.2831855f * pp->angle / 360.0f);
                     pp->alpha = 255;
-                    pp->delay = delay;
+                    pp->delay = i * 8;
                 }
                 break;
         }

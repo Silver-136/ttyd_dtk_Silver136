@@ -142,7 +142,6 @@ static void effRappaMain(EffectEntry* effect) {
 static void effRappaDisp(CameraId cameraId, void* payload) {
     EffectEntry* effect = payload;
     CameraEntry* camera;
-    s32 j0, j1, j2;
     EffRappaN64Work* work;
     s32 i;
     s32 alpha;
@@ -173,11 +172,12 @@ static void effRappaDisp(CameraId cameraId, void* payload) {
     GXSetCullMode(GX_CULL_NONE);
     effSetVtxDescN64(size16x16_tex32x32_vtx);
     work++;
-    j0 = idx + 3;
-    j1 = idx + 4;
-    j2 = idx + 5;
-    for (i = 1; i < effect->count; j0 += 3, j1 += 3, j2 += 3, i++, work++) {
-        GXSetTevColor(GX_TEVREG0, (GXColor){color_rotation_data[j0 % 36], color_rotation_data[j1 % 36], color_rotation_data[j2 % 36], alpha});
+    for (i = 1; i < effect->count; i++, work++) {
+        s32 rIdx = idx + i * 3;
+        s32 gIdx = idx + 1 + i * 3;
+        s32 bIdx = idx + 2 + i * 3;
+
+        GXSetTevColor(GX_TEVREG0, (GXColor){color_rotation_data[rIdx % 36], color_rotation_data[gIdx % 36], color_rotation_data[bIdx % 36], alpha});
         PSMTXTrans(mtx, work->position.x, work->position.y, work->position.z);
         PSMTXRotRad(rot, 'y', 0.017453292f * -camGetPtr(CAMERA_3D)->viewYaw);
         PSMTXScale(scale, work->scaleOfs, work->scaleOfs, 1.0f);

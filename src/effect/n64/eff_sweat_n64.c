@@ -20,7 +20,6 @@ static void effSweatDisp(CameraId cameraId, void* payload);
 EffectEntry* effSweatN64Entry(s32 type, f32 x, f32 y, f32 z, f32 base, f32 angle, s32 life) {
     EffectEntry* effect;
     EffSweatN64Work* work;
-    EffSweatN64Work* w;
     s32 count;
     s32 i;
     f32 rot;
@@ -48,8 +47,8 @@ EffectEntry* effSweatN64Entry(s32 type, f32 x, f32 y, f32 z, f32 base, f32 angle
     work->position.x = x;
     work->position.y = y;
     work->position.z = z;
-    w = work + 1;
-    for (i = 1; i < effect->count; i++, w++) {
+    work++;
+    for (i = 1; i < effect->count; i++, work++) {
         Vec axis;
         Vec dir = {0.0f, 0.0f, 0.0f};
         f32 yaw = 0.0f;
@@ -70,21 +69,21 @@ EffectEntry* effSweatN64Entry(s32 type, f32 x, f32 y, f32 z, f32 base, f32 angle
         }
         rot = angle + spread;
         PSMTXRotAxisRad(mtx, &axis, 0.017453292f * -rot);
-        w->position.x = mtx[0][1] * len;
-        w->position.y = mtx[1][1] * len;
+        work->position.x = mtx[0][1] * len;
+        work->position.y = mtx[1][1] * len;
 
         // Z position uses column 2, unlike X/Y and the velocity below.
-        w->position.z = mtx[2][2] * len;
-        w->velocity.x = mtx[0][1];
-        w->velocity.y = mtx[1][1];
-        w->velocity.z = mtx[2][1];
-        w->rot = rot;
-        w->life = life;
-        w->age = 0;
-        w->delay = irand(10);
-        w->alpha = 0;
+        work->position.z = mtx[2][2] * len;
+        work->velocity.x = mtx[0][1];
+        work->velocity.y = mtx[1][1];
+        work->velocity.z = mtx[2][1];
+        work->rot = rot;
+        work->life = life;
+        work->age = 0;
+        work->delay = irand(10);
+        work->alpha = 0;
         if (type == 0 && i >= 4) {
-            w->delay += 16;
+            work->delay += 16;
         }
     }
     return effect;

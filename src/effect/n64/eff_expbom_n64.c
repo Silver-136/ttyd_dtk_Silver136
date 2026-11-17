@@ -60,8 +60,6 @@ EffectEntry* effExpBomN64Entry(f32 x, f32 y, f32 z) {
     EffectEntry* effect;
     f32 sv, cv;
     f32 rad, spd;
-    f32* direction;
-    f32* speed;
     EffExpBomN64Work* data;
     s16 random;
     int i;
@@ -72,7 +70,7 @@ EffectEntry* effExpBomN64Entry(f32 x, f32 y, f32 z) {
     data = __memAlloc(HEAP_EFFECT, sizeof(EffExpBomN64Work) * 10);
     effect->userdata = data;
     effect->callback = effExpBomMain;
-    for (i = 0, direction = bom_dir, speed = bom_spd; i < effect->count; direction++, speed++, i++, data++) {
+    for (i = 0; i < effect->count; i++, data++) {
         data->age = 0;
         random = rand() % 6 + 16;
         data->lifetime = random;
@@ -84,14 +82,9 @@ EffectEntry* effExpBomN64Entry(f32 x, f32 y, f32 z) {
         data->position.z = z;
         data->offsetX = 0.0f;
         data->offsetY = 0.0f;
-#if VERSION <= VERSION_DEMO_JP
         sv = bom_dir[i];
         spd = 2.0f * bom_spd[i];
         rad = ((6.2831855f * (90.0f + sv)) / 360.0f);
-#else
-        spd = 2.0f * *speed;
-        rad = ((6.2831855f * (90.0f + *direction)) / 360.0f);
-#endif
         sv = sin(rad);
         cv = cos(rad);
         data->velX = spd * sv;
@@ -181,8 +174,6 @@ static void bomb_init_dl(void) {
  */
 static void effExpBomDisp(CameraId camId, void* param) {
     EffectEntry* effect = param;
-    f32* scl;
-    f32* ry;
     EffExpBomN64Work* data;
     int n;
     int i;
@@ -199,20 +190,7 @@ static void effExpBomDisp(CameraId camId, void* param) {
     PSMTXRotRad(rot, 'y', 0.017453292f * -camGetPtr(camId)->viewYaw);
     PSMTXConcat(mtx, rot, base);
     PSMTXConcat(camera->view, base, base);
-#if VERSION <= VERSION_DEMO_JP
     for (i = 0; i < effect->count; i++, data++) {
-        if (data->lifeLeft < 0 || data->startDelay >= 0) {
-                continue;
-        }
-        n = data->lifeLeft;
-        if (n > 16) {
-            n = 16;
-        }
-        PSMTXTrans(mtx, data->offsetX, data->offsetY, 0.0f);
-        PSMTXScale(scale, bom_scale[i], bom_scale[i], bom_scale[i]);
-        PSMTXRotRad(rot, 'z', 0.017453292f * bom_ry[i]);
-#else
-    for (i = 0, scl = bom_scale, ry = bom_ry; i < effect->count; scl++, ry++, i++, data++) {
         if (data->lifeLeft < 0 || data->startDelay >= 0) {
             continue;
         }
@@ -221,9 +199,8 @@ static void effExpBomDisp(CameraId camId, void* param) {
             n = 16;
         }
         PSMTXTrans(mtx, data->offsetX, data->offsetY, 0.0f);
-        PSMTXScale(scale, *scl, *scl, *scl);
-        PSMTXRotRad(rot, 'z', 0.017453292f * *ry);
-#endif
+        PSMTXScale(scale, bom_scale[i], bom_scale[i], bom_scale[i]);
+        PSMTXRotRad(rot, 'z', 0.017453292f * bom_ry[i]);
         PSMTXConcat(mtx, scale, mtx);
         PSMTXConcat(mtx, rot, rot);
         PSMTXConcat(base, rot, rot);

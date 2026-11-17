@@ -136,8 +136,6 @@ EffectEntry* effPokopiPchargeN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 
     }
     work->alpha = 0;
     work->position.x = x;
-
-    p = work + 1;
     work->position.y = y;
     work->position.z = z;
     work->scale = scale;
@@ -149,6 +147,7 @@ EffectEntry* effPokopiPchargeN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 
     work->b2 = 0;
     work->mult = 1.0f;
     work->speed = (f32)vx_data[type];
+    p = work + 1;
     base = (f32)(rand() % 360);
     for (i = 1; i < effect->count; i++, p++) {
         p->type = type % 3;

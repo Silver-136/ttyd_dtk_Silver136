@@ -74,7 +74,6 @@ static void main_dl(EffectEntry* effect, Mtx mtx);
 EffectEntry* effHitN64Entry(s32 type, s32 size, f32 x, f32 y, f32 z, f32 scale) {
     EffectEntry* effect;
     EffHitN64Work* work;
-    EffHitN64Work* p;
     s32 i;
     s32 count;
     f32 r;
@@ -129,20 +128,20 @@ EffectEntry* effHitN64Entry(s32 type, s32 size, f32 x, f32 y, f32 z, f32 scale) 
             break;
     }
     work->scale = scale;
-    p = work + 1;
-    for (i = 1; i < count; i++, p++) {
+    work++;
+    for (i = 1; i < count; i++, work++) {
         r = rand() % 360;
-        p->position.x = 0.0f;
-        p->position.y = 0.0f;
-        p->position.z = 0.0f;
-        p->reserved_10 = 0.0f;
-        p->reserved_14 = 0.0f;
-        p->reserved_20 = 0.0f;
-        p->type = 0;
-        p->rotZ = (f32)(i * 360 / (count - 1));
-        p->rotY = r;
-        p->reserved_10 = 0.0f;
-        p->alpha = 255;
+        work->position.x = 0.0f;
+        work->position.y = 0.0f;
+        work->position.z = 0.0f;
+        work->reserved_10 = 0.0f;
+        work->reserved_14 = 0.0f;
+        work->reserved_20 = 0.0f;
+        work->type = 0;
+        work->rotZ = (f32)(i * 360 / (count - 1));
+        work->rotY = r;
+        work->reserved_10 = 0.0f;
+        work->alpha = 255;
     }
     return effect;
 }

@@ -238,7 +238,6 @@ static void batten_polygon_0(void) {
 EffectEntry* effKumokumoN64Entry(s32 type, s32 time, f32 x, f32 y, f32 z, f32 rot, f32 unused, f32 scale) {
     EffectEntry* effect;
     EffKumokumoN64Particle* work;
-    EffKumokumoN64Particle* p;
     s32 count;
     s32 i;
 
@@ -321,51 +320,51 @@ EffectEntry* effKumokumoN64Entry(s32 type, s32 time, f32 x, f32 y, f32 z, f32 ro
             work->b2 = 0;
             break;
     }
-    p = work + 1;
-    for (i = 1; i < effect->count; i++, p++) {
+    work++;
+    for (i = 1; i < effect->count; i++, work++) {
         switch (type) {
             case 0:
             case 1:
-                p->x = 0.0f;
-                p->y = 3.0f;
-                p->z = 0.0f;
-                p->scale = 0.0f;
-                p->alpha = 204;
-                p->delay = i * 30;
-                p->rot = (f32)-irand(20);
-                p->s1 = 8.0f;
+                work->x = 0.0f;
+                work->y = 3.0f;
+                work->z = 0.0f;
+                work->scale = 0.0f;
+                work->alpha = 204;
+                work->delay = i * 30;
+                work->rot = (f32)-irand(20);
+                work->s1 = 8.0f;
                 break;
             case 2:
-                p->x = (f32)(200 - irand(400));
-                p->y = -(f32)(irand(50) + 200);
-                p->z = 0.0f;
-                p->scale = 1.0f;
-                p->alpha = 0;
-                p->delay = i * 15;
-                p->rot = 0.0f;
+                work->x = (f32)(200 - irand(400));
+                work->y = -(f32)(irand(50) + 200);
+                work->z = 0.0f;
+                work->scale = 1.0f;
+                work->alpha = 0;
+                work->delay = i * 15;
+                work->rot = 0.0f;
                 break;
             case 3:
                 rot = (f32)irand(360);
                 scale = 200.0f + (f32)irand(200);
                 rot = 6.2831855f * rot / 360.0f;
-                p->x = scale * (f32)sin(rot);
-                p->y = scale * (f32)cos(rot);
-                p->z = 0.0f;
-                p->scale = 2.0f;
-                p->alpha = 0;
-                p->delay = i * 15;
-                p->rot = 0.0f;
+                work->x = scale * (f32)sin(rot);
+                work->y = scale * (f32)cos(rot);
+                work->z = 0.0f;
+                work->scale = 2.0f;
+                work->alpha = 0;
+                work->delay = i * 15;
+                work->rot = 0.0f;
                 break;
             case 4:
             default:
-                p->x = 0.0f;
-                p->y = 3.0f;
-                p->z = 0.0f;
-                p->scale = 0.0f;
-                p->alpha = 204;
-                p->delay = i * 30;
-                p->rot = (f32)-irand(20);
-                p->s1 = 8.0f;
+                work->x = 0.0f;
+                work->y = 3.0f;
+                work->z = 0.0f;
+                work->scale = 0.0f;
+                work->alpha = 204;
+                work->delay = i * 30;
+                work->rot = (f32)-irand(20);
+                work->s1 = 8.0f;
                 break;
         }
     }

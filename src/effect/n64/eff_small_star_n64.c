@@ -266,7 +266,6 @@ static effN64Vtx size16x16_tex32x32_vtx[] = {
 static void effSmallStarDisp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
     CameraEntry* camera;
-    s32 a, b, c;
     EffSmallStarN64Work* w;
     s32 i;
     GXTexObj texObj;
@@ -294,14 +293,15 @@ static void effSmallStarDisp(CameraId cameraId, void* param) {
     effSetVtxDescN64(size16x16_tex32x32_vtx);
     t = (w->frame - 1) * 3;
     t = t % 36;
-    a = t;
-    b = t + 1;
-    c = t + 2;
-    for (i = 0; i < effect->count; a += 3, b += 3, c += 3, i++, w++) {
+    for (i = 0; i < effect->count; i++, w++) {
+        s32 rIdx = t + i * 3;
+        s32 gIdx = t + 1 + i * 3;
+        s32 bIdx = t + 2 + i * 3;
+
         color = (GXColor){0, 0, 0, 0};
-        color.r = color_rotation_data[a % 36];
-        color.g = color_rotation_data[b % 36];
-        color.b = color_rotation_data[c % 36];
+        color.r = color_rotation_data[rIdx % 36];
+        color.g = color_rotation_data[gIdx % 36];
+        color.b = color_rotation_data[bIdx % 36];
         color.a = w->alpha;
         GXSetTevColor(GX_TEVREG0, color);
         PSMTXTrans(mtx, w->position.x, w->position.y, w->position.z);

@@ -72,7 +72,6 @@ EffectEntry* effAkariPoseN64Entry(s32 type, s32 count, s32 lifetime, f32 x, f32 
     f32 half;
     EffectEntry* effect;
     EffAkariPoseN64Work* work;
-    EffAkariPoseN64Work* w;
     s32 i;
 
     effect = effEntry();
@@ -95,9 +94,9 @@ EffectEntry* effAkariPoseN64Entry(s32 type, s32 count, s32 lifetime, f32 x, f32 
     work->position.z = z;
     work->scale = scale;
     half = max_seq_num[type] / 2.0f;
-    w = work + 1;
-    for (i = 1; i < count + 1; i++, w++) {
-        w->seq = -1.0f - half * (i & 1);
+    work++;
+    for (i = 1; i < count + 1; i++, work++) {
+        work->seq = -1.0f - half * (i & 1);
     }
     return effect;
 }

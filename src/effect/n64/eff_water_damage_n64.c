@@ -74,13 +74,11 @@ static void effWaterDamageDisp2(CameraId cameraId, void* param);
  * Used by Mario's water code (mario_kemuri), eff_splash, eff_fall, gor_00, muj_20, muj_21 and event scripts.
  */
 EffectEntry* effWaterDamageN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 scale) {
-    s32 variant;
-    s32 j;
     EffectEntry* effect;
-    EffWaterDamageN64Work* p;
-    s32 i;
     EffWaterDamageN64Work* work;
     s32 count;
+    s32 i;
+    s32 variant;
     f32 a;
     MarioWork* mario;
 
@@ -127,71 +125,71 @@ EffectEntry* effWaterDamageN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z,
     work->g = 180;
     work->b = 255;
     work->variant = variant;
-    p = work + 1;
-    for (i = 1, j = 3; i < effect->count; j += 3, i++, p++) {
-        p->position.x = 0.0f;
-        p->position.y = 0.0f;
-        p->position.z = 0.0f;
-        p->scale = 2.0f;
+    work++;
+    for (i = 1; i < effect->count; i++, work++) {
+        work->position.x = 0.0f;
+        work->position.y = 0.0f;
+        work->position.z = 0.0f;
+        work->scale = 2.0f;
         switch (type) {
             case 0:
-                p->velX = rand() % 11 - 2;
-                p->velY = rand() % 11 - 5;
-                p->velZ = rand() % 11 - 5;
+                work->velX = rand() % 11 - 2;
+                work->velY = rand() % 11 - 5;
+                work->velZ = rand() % 11 - 5;
                 break;
             case 1:
-                p->velX = -(rand() % 11 - 2);
-                p->velY = rand() % 11 - 5;
-                p->velZ = rand() % 11 - 5;
+                work->velX = -(rand() % 11 - 2);
+                work->velY = rand() % 11 - 5;
+                work->velZ = rand() % 11 - 5;
                 break;
             case 2:
-                p->velX = 0.07f * (rand() % 100 - 50);
-                p->velY = 0.2f * (rand() % 100 + 10);
-                p->velZ = 0.07f * (rand() % 100 - 50);
+                work->velX = 0.07f * (rand() % 100 - 50);
+                work->velY = 0.2f * (rand() % 100 + 10);
+                work->velZ = 0.07f * (rand() % 100 - 50);
                 break;
             case 3:
-                p->velX = 0.5f * (rand() % 10 - 5);
-                p->velY = 0.5f * (rand() % 10 - 5);
-                p->velZ = 0.5f * (rand() % 10 - 5);
-                p->scale = 0.4f;
-                p->lifetime = i;
+                work->velX = 0.5f * (rand() % 10 - 5);
+                work->velY = 0.5f * (rand() % 10 - 5);
+                work->velZ = 0.5f * (rand() % 10 - 5);
+                work->scale = 0.4f;
+                work->lifetime = i;
                 break;
             case 4:
-                p->velX = rand() % 7 - 3;
-                p->velY = rand() % 3 + 1;
-                p->velZ = rand() % 7 - 3;
+                work->velX = rand() % 7 - 3;
+                work->velY = rand() % 3 + 1;
+                work->velZ = rand() % 7 - 3;
                 break;
             case 5:
-                p->velX = 0.3f * (rand() % 10 - 5);
-                p->velY = 0.3f * (rand() % 10 + 5);
-                p->velZ = 0.3f * (rand() % 10 - 5);
-                p->scale = 1.0f;
-                p->lifetime = i;
+                work->velX = 0.3f * (rand() % 10 - 5);
+                work->velY = 0.3f * (rand() % 10 + 5);
+                work->velZ = 0.3f * (rand() % 10 - 5);
+                work->scale = 1.0f;
+                work->lifetime = i;
                 break;
             case 6:
                 a = 6.2831855f * i;
-                p->position.x = 10.0f * (f32)sin(a / effect->count);
-                p->position.z = 10.0f * (f32)cos(a / effect->count);
-                p->velX = p->position.x / 12.0f;
-                p->velY = 0.3f * (rand() % 5);
-                p->velZ = p->position.z / 12.0f;
-                p->scale = 1.0f;
-                p->lifetime = i;
+                work->position.x = 10.0f * (f32)sin(a / effect->count);
+                work->position.z = 10.0f * (f32)cos(a / effect->count);
+                work->velX = work->position.x / 12.0f;
+                work->velY = 0.3f * (rand() % 5);
+                work->velZ = work->position.z / 12.0f;
+                work->scale = 1.0f;
+                work->lifetime = i;
                 break;
             case 7:
             default:
                 mario = marioGetPtr();
                 a = irand(90) - 45;
-                p->position.x = (f32)sin(6.2831855f * (a + (-mario->directionView + camGetPtr(CAMERA_3D)->viewYaw)) / 360.0f);
-                p->position.z = (f32)cos(6.2831855f * (a + (-mario->directionView + camGetPtr(CAMERA_3D)->viewYaw)) / 360.0f);
-                p->velX = mario->baseSpeed * p->position.x / 2.0f;
-                p->velY = 0.1f * (rand() % 10 + 5);
-                p->velZ = mario->baseSpeed * p->position.z / 2.0f;
-                p->scale = 1.0f;
-                p->lifetime = j;
+                work->position.x = (f32)sin(6.2831855f * (a + (-mario->directionView + camGetPtr(CAMERA_3D)->viewYaw)) / 360.0f);
+                work->position.z = (f32)cos(6.2831855f * (a + (-mario->directionView + camGetPtr(CAMERA_3D)->viewYaw)) / 360.0f);
+                work->velX = mario->baseSpeed * work->position.x / 2.0f;
+                work->velY = 0.1f * (rand() % 10 + 5);
+                work->velZ = mario->baseSpeed * work->position.z / 2.0f;
+                work->scale = 1.0f;
+                work->lifetime = i * 3;
                 break;
         }
-        p->alpha = 255;
+        work->alpha = 255;
     }
     return effect;
 }

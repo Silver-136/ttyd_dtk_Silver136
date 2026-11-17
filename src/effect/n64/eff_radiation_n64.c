@@ -68,14 +68,14 @@ static void type1_init(EffRadiationN64Work* p, s32 n) {
     p->frame = 0;
 }
 
-/** Respawns a ray of type 2 or later on its fixed r_data pose j (life lf) with its scroll and spin reset; returns the next ray. */
+/** Respawns a ray of type 2 or later on its fixed r_data pose j (life j * 2 + 30) with its scroll and spin reset. */
 // Original name and size (0x114) from the JP demo's link map (UNUSED there): every call is inlined.
-static EffRadiationN64Work* type2_init(EffRadiationN64Work* p, s32 j, s32 lf) {
+static void type2_init(EffRadiationN64Work* p, s32 j) {
     s32 k;
 
     p->y = 0.0f;
     k = (j - 1) * 5;
-    p->life = lf;
+    p->life = j * 2 + 30;
     p->rotX = (f32)r_data[k++];
     p->rotY = (f32)r_data[k++];
     p->rotZ = (f32)r_data[k++];
@@ -94,7 +94,6 @@ static EffRadiationN64Work* type2_init(EffRadiationN64Work* p, s32 j, s32 lf) {
     k++;
     p->rotVelZ = 0.1f * (f32)r_data[k++];
     p->delay = 0;
-    return p + 1;
 }
 
 /**
@@ -105,13 +104,10 @@ static EffRadiationN64Work* type2_init(EffRadiationN64Work* p, s32 j, s32 lf) {
 EffectEntry* effRadiationN64Entry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
     EffectEntry* effect;
     EffRadiationN64Work* work;
-    EffRadiationN64Work* p;
     s32 count;
     s32 camera;
-    s32 lf;
     s32 i;
     s32 flag;
-    s32 j;
 
     effect = effEntry();
     flag = 0;
@@ -139,23 +135,21 @@ EffectEntry* effRadiationN64Entry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
     work->scale1c = scale;
     work->flag = flag;
     work->camera = CAMERA_3D;
-    p = work;
     switch (type) {
         case 0:
         case 1:
-            p++;
-            for (i = 1; i < effect->count; i++) {
-                p->initY = (f32)((i - 1) * 30 / (count - 1) - 10);
-                p->initLife = 50 - (i - 1) * 20 / (count - 1);
-                p->initYVel = 2.5f + 25.0f / (f32)p->initLife;
-                type1_init(p, i);
-                p++;
+            work++;
+            for (i = 1; i < effect->count; i++, work++) {
+                work->initY = (f32)((i - 1) * 30 / (count - 1) - 10);
+                work->initLife = 50 - (i - 1) * 20 / (count - 1);
+                work->initYVel = 2.5f + 25.0f / (f32)work->initLife;
+                type1_init(work, i);
             }
             break;
         default:
-            p++;
-            for (j = 1, lf = 0x20; j < effect->count; lf += 2, j++) {
-                p = type2_init(p, j, lf);
+            work++;
+            for (i = 1; i < effect->count; i++, work++) {
+                type2_init(work, i);
             }
             break;
     }
@@ -213,8 +207,6 @@ static void effRadiationMain(EffectEntry* effect) {
     s32 type;
     s32 life;
     s32 i;
-    s32 lf;
-    s32 j;
 
     // BUG: pos0 is never written (Entry fills position), so the depth passed to dispCalcZ below comes from
     // uncleared heap memory.
@@ -258,7 +250,7 @@ static void effRadiationMain(EffectEntry* effect) {
             break;
         default:
             p++;
-            for (j = 1, lf = 0x20; j < effect->count; lf += 2, j++, p++) {
+            for (i = 1; i < effect->count; i++, p++) {
                 tx_scroll(p);
                 p->life--;
                 p->frame++;
@@ -272,7 +264,7 @@ static void effRadiationMain(EffectEntry* effect) {
                     p->alpha = p->alpha * life / 10;
                 }
                 if (p->life <= 0) {
-                    type2_init(p, j, lf);
+                    type2_init(p, i);
                 }
 
                 if (p->delay > 0) {

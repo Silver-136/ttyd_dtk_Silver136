@@ -170,7 +170,6 @@ static void effKamekiTornadeDisp(CameraId cameraId, void* payload) {
     effN64Vtx* vtx;
     effN64Vtx* p;
     effN64Vtx* q;
-    s32 k;
     s32 j;
     CameraEntry* camera;
     s32 a;
@@ -219,13 +218,13 @@ static void effKamekiTornadeDisp(CameraId cameraId, void* payload) {
     GXSetTevColor(GX_TEVREG1, (GXColor){work->c1r, work->c1g, work->c1b, 32});
     GXSetCullMode(GX_CULL_NONE);
     tmpl = (effN64Vtx*)smartAlloc(sizeof(effN64Vtx) * 32, SMART_GROUP_TEMP)->address;
-    for (i = 0, k = 0; i < 16; i++, k += 128) {
+    for (i = 0; i < 16; i++) {
         p = &tmpl[i];
         rad = (6.2831855f * (f32)(i * 360 / 15)) / 360.0f;
         p->x = 100.0f * (f32)cos(rad);
         p->y = 0.0f;
         p->z = 100.0f * (f32)sin(rad);
-        p->s = k;
+        p->s = (i * 4) << 5;
         p->t = 0;
         q = &tmpl[i + 16];
         q->x = 100.0f * (f32)cos(rad);

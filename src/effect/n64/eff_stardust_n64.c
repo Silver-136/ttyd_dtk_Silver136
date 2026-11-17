@@ -83,15 +83,10 @@ static void effStardustMain(EffectEntry* effect);
 static void effStardustDisp(CameraId cameraId, void* param);
 
 EffectEntry* effStardustN64Entry(s32 type, f32 x, f32 y, f32 z, f32 a) {
-    s32 lifeA;
-    s32 lifeB;
-    s32 randA;
-    s32 randB;
     EffectEntry* effect;
-    EffStardustN64Work* p;
+    EffStardustN64Work* work;
     s32 count;
     s32 i;
-    EffStardustN64Work* work;
     f32 ay;
     f32 sn;
     f32 radius;
@@ -141,28 +136,23 @@ EffectEntry* effStardustN64Entry(s32 type, f32 x, f32 y, f32 z, f32 a) {
     work->camera = CAMERA_3D;
     work->scale = 1.0f;
 
-    i = 1;
-    randA = (s32)(a * 1000.0f);
-    randB = (s32)(radius * 1000.0f);
-    p = work + 1;
-    lifeA = 32;
-    lifeB = 20;
-    for (; i < count + 1; lifeA += 2, lifeB += 2, i++, p++) {
-        fa = (f32)(rand() % randA) / 1000.0f;
-        fb = (f32)(rand() % randB) / 1000.0f;
+    work++;
+    for (i = 1; i < count + 1; i++, work++) {
+        fa = (f32)(rand() % (s32)(a * 1000.0f)) / 1000.0f;
+        fb = (f32)(rand() % (s32)(radius * 1000.0f)) / 1000.0f;
         switch (type) {
             case 0:
-                p->ay = 0.0f;
+                work->ay = 0.0f;
                 a1 = 6.2831855f * (1800.0f / (f32)count * (f32)i - 90.0f) / 360.0f;
                 sn = (f32)sin(a1);
                 a2 = 6.2831855f * (360.0f / (f32)count * (f32)i) / 360.0f;
                 angle = (f32)sin(a2);
-                p->vx = (angle * (85.0f - 15.0f * sn - (f32)((i & 1) * 5)) / 100.0f) * a;
+                work->vx = (angle * (85.0f - 15.0f * sn - (f32)((i & 1) * 5)) / 100.0f) * a;
                 sn = (f32)sin(a1);
                 angle = (f32)cos(a2);
-                p->vy = (angle * (85.0f - 15.0f * sn - (f32)((i & 1) * 5)) / 100.0f) * a;
-                p->position.z = 0.0f;
-                p->sub = 0;
+                work->vy = (angle * (85.0f - 15.0f * sn - (f32)((i & 1) * 5)) / 100.0f) * a;
+                work->position.z = 0.0f;
+                work->sub = 0;
                 break;
             case 1:
             case 2:
@@ -173,17 +163,17 @@ EffectEntry* effStardustN64Entry(s32 type, f32 x, f32 y, f32 z, f32 a) {
                 } else {
                     ay = 0.0f;
                 }
-                p->ay = ay;
-                p->vx = 0.0f;
-                p->vy = 0.0f;
+                work->ay = ay;
+                work->vx = 0.0f;
+                work->vy = 0.0f;
                 angle = 6.2831855f * angle / 360.0f;
-                p->position.x = (f32)sin(angle) * fa;
-                p->position.y = (f32)cos(angle) * fb;
-                p->position.z = 0.0f;
-                p->sub = i % 3;
-                p->scale = 1.0f;
-                p->lifetime = lifeA;
-                p->frame = 0;
+                work->position.x = (f32)sin(angle) * fa;
+                work->position.y = (f32)cos(angle) * fb;
+                work->position.z = 0.0f;
+                work->sub = i % 3;
+                work->scale = 1.0f;
+                work->lifetime = i * 2 + 30;
+                work->frame = 0;
                 break;
             case 3:
             case 4:
@@ -191,17 +181,17 @@ EffectEntry* effStardustN64Entry(s32 type, f32 x, f32 y, f32 z, f32 a) {
                 angle = 360.0f / (f32)count * (f32)i + (f32)(rand() % 360);
 
                 // BUG: rand() % 50 / 1000 is an integer division and always 0, so ay is always -0.05
-                p->ay = -(0.05f + (f32)(rand() % 50 / 1000));
+                work->ay = -(0.05f + (f32)(rand() % 50 / 1000));
                 angle = 6.2831855f * angle / 360.0f;
-                p->vx = 0.0f;
-                p->vy = 0.0f;
-                p->position.x = (f32)sin(angle) * fa;
-                p->position.y = (f32)cos(angle) * fb;
-                p->position.z = 0.0f;
-                p->sub = i % 3;
-                p->scale = 1.0f;
-                p->lifetime = lifeB;
-                p->frame = 0;
+                work->vx = 0.0f;
+                work->vy = 0.0f;
+                work->position.x = (f32)sin(angle) * fa;
+                work->position.y = (f32)cos(angle) * fb;
+                work->position.z = 0.0f;
+                work->sub = i % 3;
+                work->scale = 1.0f;
+                work->lifetime = i * 2 + 18;
+                work->frame = 0;
                 break;
         }
     }

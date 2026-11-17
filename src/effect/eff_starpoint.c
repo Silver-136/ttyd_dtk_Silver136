@@ -84,7 +84,6 @@ static inline f32 _cosf(register f32 x) {
  * and release delay (staggered every 3 frames). Caller: the evt_eff "star_point" effect (battle event scripts).
  */
 EffectEntry* effStarPointEntry(s32 type, s32 count, f32 x, f32 y, f32 z) {
-    s32 delay;
     EffectEntry* effect;
     EffStarPointWork* work;
     s32 i;
@@ -104,7 +103,7 @@ EffectEntry* effStarPointEntry(s32 type, s32 count, f32 x, f32 y, f32 z) {
     work->timer = 60;
     work->frame = 0;
 
-    for (i = 1, delay = 4, work++; i < effect->count; i++, delay += 3, work++) {
+    for (i = 1, work++; i < effect->count; i++, work++) {
         r = (f32)(rand() % 360);
         work->position.x = 0.0f;
         work->position.y = 0.0f;
@@ -115,7 +114,7 @@ EffectEntry* effStarPointEntry(s32 type, s32 count, f32 x, f32 y, f32 z) {
         work->velY = 14.0f;
         work->gravity = 2.0f;
         work->alpha = 0;
-        work->delay = delay;
+        work->delay = i * 3 + 1;
     }
     return effect;
 }

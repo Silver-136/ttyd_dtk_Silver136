@@ -79,7 +79,6 @@ static void effFireFlowerDisp(CameraId cameraId, void* param);
 EffectEntry* effFireFlowerN64Entry(s32 type, f32 x, f32 y, f32 z, s32 lifetime) {
     EffectEntry* effect;
     EffFireFlowerN64Work* work;
-    EffFireFlowerN64Work* p;
     s32 i;
 
     effect = effEntry();
@@ -109,24 +108,24 @@ EffectEntry* effFireFlowerN64Entry(s32 type, f32 x, f32 y, f32 z, s32 lifetime) 
     work->alpha2 = 0;
     work->rotX = 0.0f;
     work->offsetY = -10.0f;
-    p = work + 1;
-    for (i = 1; i < 31; i++, p++) {
-        p->type = 1;
-        p->position.x = 0.0f;
-        p->position.y = 0.0f;
-        p->position.z = 0.0f;
-        p->velX = 8.0f;
-        p->velY = 0.0f;
-        p->velZ = (f32)(rand() % 20 - 8);
-        p->accelY = 0.05f * (f32)(rand() % 10 - 5);
-        p->rotY = (f32)(rand() % 80 + 5);
-        p->alpha = 255;
-        p->delay = i - 1;
-        p->timer = 10;
-        p->velX /= 1.5f;
-        p->velY /= 1.5f;
-        p->velZ /= 1.5f;
-        p->delay <<= 1;
+    work++;
+    for (i = 1; i < 31; i++, work++) {
+        work->type = 1;
+        work->position.x = 0.0f;
+        work->position.y = 0.0f;
+        work->position.z = 0.0f;
+        work->velX = 8.0f;
+        work->velY = 0.0f;
+        work->velZ = (f32)(rand() % 20 - 8);
+        work->accelY = 0.05f * (f32)(rand() % 10 - 5);
+        work->rotY = (f32)(rand() % 80 + 5);
+        work->alpha = 255;
+        work->delay = i - 1;
+        work->timer = 10;
+        work->velX /= 1.5f;
+        work->velY /= 1.5f;
+        work->velZ /= 1.5f;
+        work->delay <<= 1;
     }
     return effect;
 }

@@ -81,9 +81,9 @@ EffectEntry* effSandarsEntry(s32 type, f32 x, f32 y, f32 z, f32 radius) {
     }
     ang = 6.2831855f * radius / 360.0f;
     work++;
-    for (i = 1, camId = 10; i < effect->count; camId += 10, i++, work++) {
-        work->position.x = (f32)camId * (f32)cos(ang);
-        work->position.y = (f32)camId * (f32)sin(ang);
+    for (i = 1; i < effect->count; i++, work++) {
+        work->position.x = (f32)(i * 10) * (f32)cos(ang);
+        work->position.y = (f32)(i * 10) * (f32)sin(ang);
         work->position.z = 0.0f;
         work->scale2 = 0.2f * i;
         work->scale = 0.0f;

@@ -82,7 +82,6 @@ EffectEntry* effStardust2N64Entry(s32 type, s32 count, s32 lifetime, f32 x, f32 
     s32 n;
     EffectEntry* effect;
     EffStardust2N64Work* w;
-    EffStardust2N64Work* p;
     s32 i;
     f32 a, sn, cs, b, fy;
     s32 r;
@@ -115,8 +114,8 @@ EffectEntry* effStardust2N64Entry(s32 type, s32 count, s32 lifetime, f32 x, f32 
     by = 0.1f * vy;
     ax = 0.4f * vx;
     ay = 0.4f * vy;
-    p = w + 1;
-    for (i = 1; i < n; i++, p++) {
+    w++;
+    for (i = 1; i < n; i++, w++) {
         f32 spread = 360.0f / nm * (f32)i;
         if (type > 1) {
             r = rand() % 360;
@@ -130,40 +129,40 @@ EffectEntry* effStardust2N64Entry(s32 type, s32 count, s32 lifetime, f32 x, f32 
         fy = ((f32)i - 1.0f) * (vy / nm);
         tx = ax - bx * b;
         ty = ay - by * b;
-        p->life = i + 30;
-        p->frame = 0;
-        p->scale = 1.0f;
+        w->life = i + 30;
+        w->frame = 0;
+        w->scale = 1.0f;
         switch (type) {
             case 0:
             case 1:
-                p->velocity.z = 0.0f;
-                p->velocity.x = sn * tx;
-                p->velocity.y = cs * ty;
-                p->position.z = 0.0f;
+                w->velocity.z = 0.0f;
+                w->velocity.x = sn * tx;
+                w->velocity.y = cs * ty;
+                w->position.z = 0.0f;
                 break;
             case 2:
             case 5:
-                p->velocity.x = sn * tx;
-                p->position.y = fy;
-                p->position.z = cs * tx;
-                p->velocity.y = 0.03f * (f32)(-(rand() % 10));
-                p->velocity.z = 0.04f * (f32)(rand() % 10) + 0.01f;
+                w->velocity.x = sn * tx;
+                w->position.y = fy;
+                w->position.z = cs * tx;
+                w->velocity.y = 0.03f * (f32)(-(rand() % 10));
+                w->velocity.z = 0.04f * (f32)(rand() % 10) + 0.01f;
                 break;
             case 3:
-                p->position.x = 0.005f * (sn * vx * (f32)(rand() % 100));
-                p->position.y = 0.005f * (cs * vy * (f32)(rand() % 100));
-                p->position.z = 0.0f;
-                p->velocity.y = 0.0f;
-                p->velocity.x = 0.0f;
-                p->velocity.z = 0.0f;
-                p->life += i + i;
+                w->position.x = 0.005f * (sn * vx * (f32)(rand() % 100));
+                w->position.y = 0.005f * (cs * vy * (f32)(rand() % 100));
+                w->position.z = 0.0f;
+                w->velocity.y = 0.0f;
+                w->velocity.x = 0.0f;
+                w->velocity.z = 0.0f;
+                w->life += i + i;
                 break;
             default:
-                p->velocity.x = sn * tx;
-                p->position.y = fy;
-                p->position.z = cs * tx;
-                p->velocity.y = 0.03f * (f32)(-(rand() % 10));
-                p->velocity.z = 0.04f * (f32)(rand() % 10) + 0.01f;
+                w->velocity.x = sn * tx;
+                w->position.y = fy;
+                w->position.z = cs * tx;
+                w->velocity.y = 0.03f * (f32)(-(rand() % 10));
+                w->velocity.z = 0.04f * (f32)(rand() % 10) + 0.01f;
                 break;
         }
     }

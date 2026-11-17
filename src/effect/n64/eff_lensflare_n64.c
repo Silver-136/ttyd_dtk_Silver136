@@ -65,7 +65,6 @@ static void effLensflareDisp(CameraId cameraId, void* payload);
 EffectEntry* effLensflareN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 unused) {
     EffectEntry* effect;
     EffLensflareN64Elem* work;
-    EffLensflareN64Elem* e;
     s32 i;
 
     effect = effEntry();
@@ -86,12 +85,12 @@ EffectEntry* effLensflareN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f
     work->position.x = x;
     work->position.y = y;
     work->position.z = z;
-    e = work + 1;
-    for (i = 1; i < 6; i++, e++) {
-        e->angle = (f32)(rand() % 360);
-        e->offset = (f32)((i * 2) % 20 + 60);
-        e->scale = 0.1f * (f32)(rand() % 16) + 0.4f;
-        e->speed = 0.1f * (f32)(rand() % 11) + 0.1f;
+    work++;
+    for (i = 1; i < 6; i++, work++) {
+        work->angle = (f32)(rand() % 360);
+        work->offset = (f32)((i * 2) % 20 + 60);
+        work->scale = 0.1f * (f32)(rand() % 16) + 0.4f;
+        work->speed = 0.1f * (f32)(rand() % 11) + 0.1f;
     }
     return effect;
 }
@@ -149,9 +148,7 @@ static void effLensflareMain(EffectEntry* effect) {
  */
 static void effLensflareDisp(CameraId cameraId, void* payload) {
     EffectEntry* effect = payload;
-    s32 ang1;
     s32 odd;
-    s32 ang2;
     EffLensflareN64Elem* e;
     s32 frame;
     CameraEntry* camera;
@@ -203,7 +200,8 @@ static void effLensflareDisp(CameraId cameraId, void* payload) {
     PSMTXScale(D, 0.03125f, 0.0078125f, 0.0f);
     GXLoadTexMtxImm(D, GX_TEXMTX0, GX_MTX2x4);
     effSetVtxDescN64(size10x10_tex32x32_vtx);
-    for (i = 1, ang1 = 10, ang2 = 35, e++; i < effect->count; ang1 += 10, ang2 += 35, i++, e++) {
+    e++;
+    for (i = 1; i < effect->count; i++, e++) {
         f32 scale = e->scale;
         if (!scale) {
             continue;
@@ -244,7 +242,7 @@ static void effLensflareDisp(CameraId cameraId, void* payload) {
         GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_C0, GX_CC_C1, GX_CC_TEXC, GX_CC_ZERO);
         GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_A0, GX_CA_TEXA, GX_CA_ZERO);
         PSMTXRotRad(B, 'z', 0.017453292f * (14.0f + e->angle));
-        PSMTXRotRad(A, 'y', 0.017453292f * (f32)(frame + ang1 % 45));
+        PSMTXRotRad(A, 'y', 0.017453292f * (f32)(frame + (i * 10) % 45));
         PSMTXConcat(B, A, B);
         PSMTXTrans(A, 20.0f, 0.0f, 0.0f);
         PSMTXConcat(B, A, A);
@@ -257,7 +255,7 @@ static void effLensflareDisp(CameraId cameraId, void* payload) {
         tri2(4, 5, 6, 0, 4, 6, 7, 0);
         GXSetTevColor(GX_TEVREG0, (GXColor){0xFF, 0x40, 0x40, (e->alpha * alpha) >> 8});
         PSMTXRotRad(B, 'z', 0.017453292f * (34.0f + e->angle + (f32)frame));
-        PSMTXRotRad(A, 'y', 0.017453292f * (f32)ang2);
+        PSMTXRotRad(A, 'y', 0.017453292f * (f32)(i * 35));
         PSMTXConcat(B, A, B);
         PSMTXTrans(A, 15.0f, 0.0f, 0.0f);
         PSMTXConcat(B, A, A);

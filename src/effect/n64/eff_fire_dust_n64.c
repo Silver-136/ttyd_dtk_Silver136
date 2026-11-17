@@ -85,7 +85,6 @@ static void main_dl(EffectEntry* effect, Mtx mtx);
 EffectEntry* effFireDustN64Entry(s32 type, s32 count, s32 lifetime, f32 x, f32 y, f32 z, f32 range, f32 height) {
     EffectEntry* effect;
     EffFireDustWork* work;
-    EffFireDustWork* p;
     f32 step;
     s32 i;
 
@@ -117,14 +116,14 @@ EffectEntry* effFireDustN64Entry(s32 type, s32 count, s32 lifetime, f32 x, f32 y
     work->g = 255;
     work->b = 127;
     work->ca = 255;
-    p = work + 1;
+    work++;
     if (lifetime < 20) {
         step = 20.0f / (count + 1);
     } else {
         step = (f32)lifetime / (count + 1);
     }
-    for (i = 1; i < count + 2; i++, p++) {
-        p->index = (s32)(-(f32)i * step) - 1;
+    for (i = 1; i < count + 2; i++, work++) {
+        work->index = (s32)(-(f32)i * step) - 1;
     }
     return effect;
 }

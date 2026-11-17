@@ -24,7 +24,6 @@ static void effSleepDisp(CameraId camId, void* param);
  */
 EffectEntry* effSleepEntry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 scale, f32 rotation) {
     EffectEntry* effect;
-    s32 delay;
     effSleepData* data;
     f32 radians;
     int i;
@@ -51,13 +50,13 @@ EffectEntry* effSleepEntry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 scal
     data->age = 0;
 
     radians = (6.2831855f * rotation) / 360.0f;
-    for (data++, i = 1, delay = 16; i < effect->count; i++, delay += 16, data++) {
+    for (data++, i = 1; i < effect->count; i++, data++) {
         data->position.x = (r = 16.0f * (f32)i) * (f32)cos(radians);
         data->position.y = r * (f32)sin(radians);
         data->position.z = 0.0f;
         data->scale = (0.2f * (f32)i) + 1.0f;
         data->alpha = 0;
-        data->delay = delay;
+        data->delay = i * 16;
     }
     return effect;
 }
@@ -109,12 +108,10 @@ static inline f32 sleepSin(f32 t) { return sin(t / 64.0f); }
  */
 static void effSleepDisp(CameraId camId, void* param) {
     EffectEntry* effect = param;
-    s32 off;
     f32 tau;
     f32 x0;
     Mtx mtx;
     Mtx scale;
-    s32 base;
     Mtx rot;
     Mtx res;
     GXTexObj texObj;
@@ -159,7 +156,7 @@ static void effSleepDisp(CameraId camId, void* param) {
     height = 1.0f;
     x0 = -w;
 
-    for (i = 1, data++, base = 50; i < effect->count; base += 50, i++, data++) {
+    for (i = 1, data++; i < effect->count; i++, data++) {
         if (data->delay == 0) {
             GXSetChanMatColor(GX_COLOR0A0, (GXColor){ 0xFF, 0xFF, 0xFF, data->alpha * alpha / 255 });
             PSMTXTrans(mtx, data->position.x, data->position.y, data->position.z);
@@ -169,11 +166,9 @@ static void effSleepDisp(CameraId camId, void* param) {
             GXLoadPosMtxImm(mtx, GX_PNMTX0);
             GXSetCurrentMtx(GX_PNMTX0);
             tau = 6.2831855f;
-            j = 0;
-            off = 0;
-            while (j < 8) {
-                s0 = 0.5f * sleepSin(tau * (f32)(gp->retraceCount + base + off));
-                s1 = 0.5f * sleepSin(tau * (f32)(gp->retraceCount + base + (j + 1) * 10));
+            for (j = 0; j < 8; j++) {
+                s0 = 0.5f * sleepSin(tau * (f32)(gp->retraceCount + i * 50 + j * 10));
+                s1 = 0.5f * sleepSin(tau * (f32)(gp->retraceCount + i * 50 + (j + 1) * 10));
                 xh = x0 / 2.0f;
                 GXBegin(GX_QUADS, GX_VTXFMT0, 4);
                 GXPosition3f32(xh + s1, height * (j + 1), 0.0f);
@@ -184,8 +179,6 @@ static void effSleepDisp(CameraId camId, void* param) {
                 GXTexCoord2f32(1.0f, 0.125f * (f32)(8 - j));
                 GXPosition3f32(xh + s0, height * j, 0.0f);
                 GXTexCoord2f32(0.0f, 0.125f * (f32)(8 - j));
-                j++;
-                off += 10;
             }
         }
     }

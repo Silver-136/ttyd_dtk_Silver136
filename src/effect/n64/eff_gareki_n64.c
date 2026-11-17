@@ -37,7 +37,7 @@ static f32 vx_data[] = {-1.0f, -0.5f, 0.5f, 1.0f, -1.0f, -0.5f, 0.5f, 1.0f};
 #endif
 
 /** Starting (x, y) offset of each of the eight rubble pieces from the chunk's centre. */
-static f32 trans_data[] = {-5.0f, -4.0f, -3.0f, -2.0f, 2.0f, -3.0f, 5.0f, -4.0f, -4.0f, 2.0f, -1.0f, 4.0f, 3.0f, 2.0f, 5.0f, 4.0f};
+static f32 trans_data[][2] = {{-5.0f, -4.0f}, {-3.0f, -2.0f}, {2.0f, -3.0f}, {5.0f, -4.0f}, {-4.0f, 2.0f}, {-1.0f, 4.0f}, {3.0f, 2.0f}, {5.0f, 4.0f}};
 
 /** Rubble mesh: the whole chunk first, then the eight pieces it breaks into. */
 static effN64Vtx stg__s_v[] = {
@@ -114,11 +114,8 @@ static f32 vx_data[] = {-1.0f, -0.5f, 0.5f, 1.0f, -1.0f, -0.5f, 0.5f, 1.0f};
  * spawns it.
  */
 EffectEntry* effGarekiN64Entry(s32 type, f32 x, f32 y, f32 z, f32 groundY) {
-    f32* tp;
-    EffGarekiN64Work* work;
-    f32* vp;
     EffectEntry* effect;
-    EffGarekiN64Work* piece;
+    EffGarekiN64Work* work;
     s32 i;
 
     effect = effEntry();
@@ -140,19 +137,17 @@ EffectEntry* effGarekiN64Entry(s32 type, f32 x, f32 y, f32 z, f32 groundY) {
     work->rotVelX = rand() % 60 - 30;
     work->rotVelY = 0.25f * work->rotVelX;
     work->lifetime = 20;
-    tp = trans_data + 2;
-    vp = vx_data + 1;
-    piece = work + 1;
-    for (i = 1; i < 9; i++, piece++, tp += 2, vp++) {
-        piece->offsetX = tp[-2];
-        piece->offsetY = tp[-1];
-        piece->position.x = 0.0f;
-        piece->position.y = 0.0f;
-        piece->position.z = 0.0f;
-        piece->velX = 2.0f * vp[-1];
-        piece->velY = 2.0f * (0.1f * (rand() % 10)) + 1.0f;
-        piece->rotX = 0.0f;
-        piece->rotZ = 0.0f;
+    work++;
+    for (i = 1; i < 9; i++, work++) {
+        work->offsetX = trans_data[i - 1][0];
+        work->offsetY = trans_data[i - 1][1];
+        work->position.x = 0.0f;
+        work->position.y = 0.0f;
+        work->position.z = 0.0f;
+        work->velX = 2.0f * vx_data[i - 1];
+        work->velY = 2.0f * (0.1f * (rand() % 10)) + 1.0f;
+        work->rotX = 0.0f;
+        work->rotZ = 0.0f;
     }
     return effect;
 }

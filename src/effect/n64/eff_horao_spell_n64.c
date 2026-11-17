@@ -261,7 +261,8 @@ static void effHoraoSpellDisp(CameraId cameraId, void* payload) {
         DCFlushRange(vtx, sizeof(effN64Vtx) * 32);
         GXInvalidateVtxCache();
         effSetVtxDescN64(vtx);
-        for (j = 0, k = 0; j < 15; j++, k += 2) {
+        for (j = 0; j < 15; j++) {
+            k = j * 2;
             GXBegin(GX_TRIANGLES, GX_VTXFMT0, 6);
             tri2(k, k + 2, k + 1, k, k + 1, k + 2, k + 3, k);
         }

@@ -80,7 +80,6 @@ static effN64Vtx size32x32_tex32x32_vtx[5] = {
 EffectEntry* effSnowDustN64Entry(s32 type, s32 count, s32 lifetime, f32 x, f32 y, f32 z, f32 w, f32 h, f32 scale) {
     EffectEntry* effect;
     EffSnowDustN64Work* work;
-    EffSnowDustN64Work* wp;
     f32 step;
     s32 i;
 
@@ -152,9 +151,9 @@ EffectEntry* effSnowDustN64Entry(s32 type, s32 count, s32 lifetime, f32 x, f32 y
     } else {
         step = 30.0f / (f32)count;
     }
-    wp = work + 1;
-    for (i = 1; i < count + 1; i++, wp++) {
-        wp->seq = (s32)(-(f32)i * step) - 1;
+    work++;
+    for (i = 1; i < count + 1; i++, work++) {
+        work->seq = (s32)(-(f32)i * step) - 1;
     }
     return effect;
 }

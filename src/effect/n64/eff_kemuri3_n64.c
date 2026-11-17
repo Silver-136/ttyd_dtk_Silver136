@@ -83,7 +83,6 @@ static inline f32 cosd(f32 deg) { return cos(6.2831855f * deg / 360.0f); }
  * 60 frames. Called via evt_eff64 "kemuri3_n64".
  */
 EffectEntry* effKemuri3N64Entry(f32 x, f32 y, f32 z, f32 angle) {
-    s32 ofs;
     EffectEntry* effect;
     EffKemuri3N64Work* work;
     s32 i;
@@ -95,7 +94,7 @@ EffectEntry* effKemuri3N64Entry(f32 x, f32 y, f32 z, f32 angle) {
     work = __memAlloc(HEAP_EFFECT, sizeof(EffKemuri3N64Work) * 5);
     effect->userdata = work;
     effect->callback = effKemuri3Main;
-    for (i = 0, ofs = 0; i < 5; i++, ofs += 72, work++) {
+    for (i = 0; i < 5; i++, work++) {
         work->active = TRUE;
         work->hSpeedScale = 0.29999998f;
         work->rising = 0.0f;
@@ -109,7 +108,7 @@ EffectEntry* effKemuri3N64Entry(f32 x, f32 y, f32 z, f32 angle) {
         work->alpha = 255;
         work->timer = 60;
         work->rotation.x = 0.0f;
-        work->rotation.y = angle + (f32)ofs;
+        work->rotation.y = angle + (f32)(i * 72);
         work->rotation.z = 0.0f;
         work->vSpeed = 1.75f;
         work->vAccel = -0.08f;

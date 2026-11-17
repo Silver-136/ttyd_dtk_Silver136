@@ -60,7 +60,6 @@ static void effKemuri9Disp(CameraId cameraId, EffectEntry* effect);
 EffectEntry* effKemuri9N64Entry(s32 type, s32 count, s32 life, f32 x, f32 y, f32 z, f32 radiusEnd, f32 angle) {
     EffectEntry* effect;
     EffKemuri9N64Work* work;
-    EffKemuri9N64Work* p;
     s32 i;
     f32 twoPi;
     f32 zero;
@@ -96,15 +95,15 @@ EffectEntry* effKemuri9N64Entry(s32 type, s32 count, s32 life, f32 x, f32 y, f32
     zero = 0.0f;
     twoPi = 6.2831855f;
 #endif
-    p = work + 1;
-    for (i = 1; i < count + 1; i++, p++) {
-        p->position.x = zero;
-        p->position.y = zero;
-        p->position.z = zero;
+    work++;
+    for (i = 1; i < count + 1; i++, work++) {
+        work->position.x = zero;
+        work->position.y = zero;
+        work->position.z = zero;
         ang = twoPi * (angle + (f32)((i - 1) * 360 / count)) / 360.0f;
-        p->dirX = sin(ang);
-        p->velY = zero;
-        p->dirZ = cos(ang);
+        work->dirX = sin(ang);
+        work->velY = zero;
+        work->dirZ = cos(ang);
     }
     return effect;
 }

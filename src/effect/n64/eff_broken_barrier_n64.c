@@ -89,7 +89,6 @@ static effN64Vtx size8x8_tex22x22_vtx[] = {
 EffectEntry* effBrokenBarrierN64Entry(s32 type, s32 life, f32 x, f32 y, f32 z, f32 scale) {
     EffectEntry* effect;
     EffBrokenBarrierN64Work* work;
-    EffBrokenBarrierN64Work* piece;
     f32 step;
     s32 i;
 
@@ -109,7 +108,6 @@ EffectEntry* effBrokenBarrierN64Entry(s32 type, s32 life, f32 x, f32 y, f32 z, f
     }
     work->alpha = 255;
     work->position.x = x;
-    piece = work + 1;
     work->position.y = y;
     work->position.z = z;
     work->scale = scale;
@@ -122,13 +120,14 @@ EffectEntry* effBrokenBarrierN64Entry(s32 type, s32 life, f32 x, f32 y, f32 z, f
     work->g2 = 255;
     work->b2 = 235;
     work->alpha2 = 255;
+    work++;
     if (life < 20) {
         step = 1.0f / 3.0f;
     } else {
         step = (f32)life / 60.0f;
     }
-    for (i = 1; i < 61; i++, piece++) {
-        piece->timer = (s32)(-(f32)i * step) - 1;
+    for (i = 1; i < 61; i++, work++) {
+        work->timer = (s32)(-(f32)i * step) - 1;
     }
     return effect;
 }

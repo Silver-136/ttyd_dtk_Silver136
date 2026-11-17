@@ -275,7 +275,8 @@ static void effTimestampDisp(CameraId cameraId, void* param) {
         GXLoadPosMtxImm(trans, GX_PNMTX0);
         GXSetCurrentMtx(GX_PNMTX0);
         GXSetTevColor(GX_TEVREG0, (GXColor){colr[i], colg[i], colb[i], bright * work->digitAlpha[i] / 255});
-        for (n = 0, k = 0; n < 15; n++, k += 2) {
+        for (n = 0; n < 15; n++) {
+            k = n * 2;
             GXBegin(GX_TRIANGLES, GX_VTXFMT0, 6);
             tri2(k, k + 2, k + 1, k, k + 1, k + 2, k + 3, k);
         }

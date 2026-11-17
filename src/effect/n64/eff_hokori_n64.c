@@ -41,7 +41,6 @@ EffectEntry* effHokoriN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z) {
     s32 count;
     EffectEntry* effect;
     EffHokoriN64Work* work;
-    EffHokoriN64Work* p;
     s32 i;
 
     effect = effEntry();
@@ -63,28 +62,28 @@ EffectEntry* effHokoriN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z) {
     work->r2 = 160;
     work->g2 = 160;
     work->b2 = 140;
-    p = work + 1;
-    for (i = 1; i < count; i++, p++) {
-        p->position.x = rand() % 200 - 100;
-        p->position.y = rand() % 50;
-        p->position.z = 0.0f;
-        p->velY = -1.0f;
-        p->gravity = 0.0f;
-        p->scaleY = 1.0f;
-        p->scaleX = 1.0f;
-        p->growth = (rand() % 10) / 200.0f;
+    work++;
+    for (i = 1; i < count; i++, work++) {
+        work->position.x = rand() % 200 - 100;
+        work->position.y = rand() % 50;
+        work->position.z = 0.0f;
+        work->velY = -1.0f;
+        work->gravity = 0.0f;
+        work->scaleY = 1.0f;
+        work->scaleX = 1.0f;
+        work->growth = (rand() % 10) / 200.0f;
         switch (type) {
             case 0:
-                p->growth2 = 0.1f * p->growth;
+                work->growth2 = 0.1f * work->growth;
                 break;
             case 1:
-                p->growth2 = 0.2f * p->growth;
+                work->growth2 = 0.2f * work->growth;
                 break;
             default:
-                p->growth2 = p->growth = 0.4f;
-                p->velY = 0.0f;
-                p->position.x = 0.1f * (rand() % 40 - 20);
-                p->position.y = 0.1f * (rand() % 40 - 20);
+                work->growth2 = work->growth = 0.4f;
+                work->velY = 0.0f;
+                work->position.x = 0.1f * (rand() % 40 - 20);
+                work->position.y = 0.1f * (rand() % 40 - 20);
                 break;
         }
     }
