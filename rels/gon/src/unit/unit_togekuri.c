@@ -23,7 +23,7 @@
 #include "libc_decls.h"
 
 static USER_FUNC(get_attacker);
-static u16 krb_comp_dir(f32 x, f32 z);
+static s32 krb_comp_dir(f32 x, f32 z);
 __declspec(weak) f32 hypotf(f32 x, f32 y);
 static USER_FUNC(krb_get_dir);
 
@@ -311,7 +311,7 @@ EVT_END()
  * finds the whole degree whose sine in SinTable is closest to |z| / length by bisection and
  * then maps it into the right quadrant.
  */
-static u16 krb_comp_dir(f32 x, f32 z) {
+static s32 krb_comp_dir(f32 x, f32 z) {
     f32 dist = hypotf(x, z);
     f32 s = __fabs(z) / dist;
     u16 i;
@@ -323,8 +323,7 @@ static u16 krb_comp_dir(f32 x, f32 z) {
         mid = lo + (hi - lo) / 2;
         if (SinTable[mid] < s) {
             lo = mid;
-        }
-        if (!(SinTable[(u16)mid] < s)) {
+        } else {
             hi = mid;
         }
     }
@@ -338,7 +337,7 @@ static u16 krb_comp_dir(f32 x, f32 z) {
     if (x >= 0.0f && z < 0.0f) {
         mid = 360 - mid;
     }
-    return (u16)mid;
+    return mid;
 }
 
 /** Single-precision wrapper around hypot, so the code that calls hypotf(x, z) gets a float result. */

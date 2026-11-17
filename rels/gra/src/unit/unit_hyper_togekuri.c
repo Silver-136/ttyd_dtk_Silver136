@@ -23,7 +23,7 @@
 
 static USER_FUNC(get_attacker);
 static USER_FUNC(krb_get_dir);
-static u16 krb_comp_dir(f32 x, f32 z);
+static s32 krb_comp_dir(f32 x, f32 z);
 
 BattleUnitKind unit_hyper_togekuri;
 static BattleUnitDefense defence;
@@ -40,6 +40,21 @@ static EvtWord damage_event[10];
 static f32 SinTable[91];
 static EvtWord attack_event[738];
 static EvtWord wait_event[6];
+
+static USER_FUNC(get_attacker) {
+    BattleWork* wp = _battleWorkPointer;
+    EvtWord* args = event->args;
+    BattleUnit* unit = BattleGetUnitPtr(wp, wp->activeUnitId);
+
+    if (unit->initialKind == UNIT_MARIO) {
+        evtSetValue(event, args[0], 0);
+    } else if (unit->initialKind == UNIT_GOOMBELLA) {
+        evtSetValue(event, args[0], 1);
+    } else {
+        evtSetValue(event, args[0], 2);
+    }
+    return EVT_RETURN_DONE;
+}
 
 /**
  * Unit kind of the H. S. Goomba:
@@ -304,6 +319,61 @@ static EVT_BEGIN(dmg_avoid_counter_thorn_head_event)
     RETURN
 EVT_END()
 
+/**
+ * Finds the direction in degrees (0 to 360) of the vector (x, z) with a binary search over SinTable (seven
+ * halvings between 0 and 90 degrees), then reflects the result into the right quadrant.
+ */
+static s32 krb_comp_dir(f32 x, f32 z) {
+    f32 dist = hypot(x, z);
+    f32 s = __fabs(z) / dist;
+    u16 i;
+    u16 lo = 0;
+    u16 hi = 90;
+    u16 mid;
+
+    for (i = 0; i < 7; i++) {
+        mid = lo + (hi - lo) / 2;
+        if (SinTable[mid] < s) {
+            lo = mid;
+        } else {
+            hi = mid;
+        }
+    }
+    mid = __fabs(SinTable[lo] - s) < __fabs(SinTable[hi] - s) ? lo : hi;
+    if (x < 0.0f && z >= 0.0f) {
+        mid = 180 - mid;
+    }
+    if (x < 0.0f && z < 0.0f) {
+        mid += 180;
+    }
+    if (x >= 0.0f && z < 0.0f) {
+        mid = 360 - mid;
+    }
+    return mid;
+}
+
+/**
+ * Script helper: computes the direction (degrees) opposite the X/Y displacement from point (args[0], args[1])
+ * to (args[2], args[3]) and stores it in args[4]; if both points coincide args[4] is left as it was.
+ */
+static USER_FUNC(krb_get_dir) {
+    EvtWord* args = event->args;
+    f32 x1 = evtGetFloat(event, args[0]);
+    f32 z1 = evtGetFloat(event, args[1]);
+    f32 x2 = evtGetFloat(event, args[2]);
+    f32 z2 = evtGetFloat(event, args[3]);
+    s32 dir = evtGetValue(event, args[4]);
+    f32 dx = x2 - x1;
+    f32 dz = z2 - z1;
+
+    if (dx == 0.0f && dz == 0.0f) {
+        evtSetValue(event, args[4], dir);
+        return EVT_RETURN_DONE;
+    }
+    evtSetValue(event, args[4], angleABf(dx, dz, 0.0f, 0.0f));
+    return EVT_RETURN_DONE;
+}
+
 /** Damage reaction of the Spiky Goomba: the default damage script. */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
@@ -559,77 +629,6 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
-
-/**
- * Script helper: computes the direction (degrees) opposite the X/Y displacement from point (args[0], args[1])
- * to (args[2], args[3]) and stores it in args[4]; if both points coincide args[4] is left as it was.
- */
-static USER_FUNC(krb_get_dir) {
-    EvtWord* args = event->args;
-    f32 x1 = evtGetFloat(event, args[0]);
-    f32 z1 = evtGetFloat(event, args[1]);
-    f32 x2 = evtGetFloat(event, args[2]);
-    f32 z2 = evtGetFloat(event, args[3]);
-    s32 dir = evtGetValue(event, args[4]);
-    f32 dx = x2 - x1;
-    f32 dz = z2 - z1;
-
-    if (dx == 0.0f && dz == 0.0f) {
-        evtSetValue(event, args[4], dir);
-        return EVT_RETURN_DONE;
-    }
-    evtSetValue(event, args[4], angleABf(dx, dz, 0.0f, 0.0f));
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Finds the direction in degrees (0 to 360) of the vector (x, z) with a binary search over SinTable (seven
- * halvings between 0 and 90 degrees), then reflects the result into the right quadrant.
- */
-static u16 krb_comp_dir(f32 x, f32 z) {
-    f32 dist = hypot(x, z);
-    f32 s = __fabs(z) / dist;
-    u16 i;
-    u16 lo = 0;
-    u16 hi = 90;
-    u16 mid;
-
-    for (i = 0; i < 7; i++) {
-        mid = lo + (hi - lo) / 2;
-        if (SinTable[mid] < s) {
-            lo = mid;
-        }
-        if (!(SinTable[(u16)mid] < s)) {
-            hi = mid;
-        }
-    }
-    mid = __fabs(SinTable[lo] - s) < __fabs(SinTable[hi] - s) ? lo : hi;
-    if (x < 0.0f && z >= 0.0f) {
-        mid = 180 - mid;
-    }
-    if (x < 0.0f && z < 0.0f) {
-        mid += 180;
-    }
-    if (x >= 0.0f && z < 0.0f) {
-        mid = 360 - mid;
-    }
-    return (u16)mid;
-}
-
-static USER_FUNC(get_attacker) {
-    BattleWork* wp = _battleWorkPointer;
-    EvtWord* args = event->args;
-    BattleUnit* unit = BattleGetUnitPtr(wp, wp->activeUnitId);
-
-    if (unit->initialKind == UNIT_MARIO) {
-        evtSetValue(event, args[0], 0);
-    } else if (unit->initialKind == UNIT_GOOMBELLA) {
-        evtSetValue(event, args[0], 1);
-    } else {
-        evtSetValue(event, args[0], 2);
-    }
-    return EVT_RETURN_DONE;
-}
 
 /** Wait (idle) event of the Hyper Spiky Goomba: shows the idle pose from the pose table. */
 static EVT_BEGIN(wait_event)

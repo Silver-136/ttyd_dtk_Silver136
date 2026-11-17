@@ -23,7 +23,7 @@
 
 static USER_FUNC(get_attacker);
 static USER_FUNC(krb_get_dir);
-static u16 krb_comp_dir(f32 x, f32 z);
+static s32 krb_comp_dir(f32 x, f32 z);
 
 BattleUnitKind unit_yami_togekuri;
 static BattleUnitDefense defence;
@@ -39,6 +39,25 @@ static EvtWord damage_event[10];
 static f32 SinTable[91];
 static EvtWord attack_event[597];
 static EvtWord wait_event[6];
+
+/**
+ * Script helper: returns in args[0] who is acting: 0 if the active unit began as Mario (kind 0xDE),
+ * 1 if as Goombella (0xE0), else 2. Picks the tutorial line in dmg_avoid_counter_thorn_head_event.
+ */
+static USER_FUNC(get_attacker) {
+    BattleWork* wp = _battleWorkPointer;
+    EvtWord* args = event->args;
+    BattleUnit* unit = BattleGetUnitPtr(wp, wp->activeUnitId);
+
+    if (unit->initialKind == UNIT_MARIO) {
+        evtSetValue(event, args[0], 0);
+    } else if (unit->initialKind == UNIT_GOOMBELLA) {
+        evtSetValue(event, args[0], 1);
+    } else {
+        evtSetValue(event, args[0], 2);
+    }
+    return EVT_RETURN_DONE;
+}
 
 /**
  * Unit data of the Spiky Gloomba in the Pit of 100 Trials: 7 HP, level 13;
@@ -268,6 +287,63 @@ static EVT_BEGIN(dmg_avoid_counter_thorn_head_event)
     RETURN
 EVT_END()
 
+/**
+ * Angle in degrees (0-360) of the vector (x, z) from the sine table,
+ * found by a seven-step binary search of SinTable and then placed in the right quadrant.
+ * Not called anywhere in this file.
+ */
+static s32 krb_comp_dir(f32 x, f32 z) {
+    f32 dist = hypot(x, z);
+    f32 s = __fabs(z) / dist;
+    u16 i;
+    u16 lo = 0;
+    u16 hi = 90;
+    u16 mid;
+
+    for (i = 0; i < 7; i++) {
+        mid = lo + (hi - lo) / 2;
+        if (SinTable[mid] < s) {
+            lo = mid;
+        } else {
+            hi = mid;
+        }
+    }
+    mid = __fabs(SinTable[lo] - s) < __fabs(SinTable[hi] - s) ? lo : hi;
+    if (x < 0.0f && z >= 0.0f) {
+        mid = 180 - mid;
+    }
+    if (x < 0.0f && z < 0.0f) {
+        mid += 180;
+    }
+    if (x >= 0.0f && z < 0.0f) {
+        mid = 360 - mid;
+    }
+    return mid;
+}
+
+/**
+ * Script helper: args[0..1] = X, Y of the first point, args[2..3] = X, Y of the second,
+ * args[4] = angle in and out.
+ * Returns the angle (degrees) opposite the displacement from the first point to the second; unchanged if the points coincide.
+ */
+static USER_FUNC(krb_get_dir) {
+    EvtWord* args = event->args;
+    f32 x1 = evtGetFloat(event, args[0]);
+    f32 z1 = evtGetFloat(event, args[1]);
+    f32 x2 = evtGetFloat(event, args[2]);
+    f32 z2 = evtGetFloat(event, args[3]);
+    s32 dir = evtGetValue(event, args[4]);
+    f32 dx = x2 - x1;
+    f32 dz = z2 - z1;
+
+    if (dx == 0.0f && dz == 0.0f) {
+        evtSetValue(event, args[4], dir);
+        return EVT_RETURN_DONE;
+    }
+    evtSetValue(event, args[4], angleABf(dx, dz, 0.0f, 0.0f));
+    return EVT_RETURN_DONE;
+}
+
 /** Damage event of the Spiky Gloomba: runs the default damage handling with LW(10) = -2 and LW(11) = 1. */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
@@ -495,83 +571,6 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
-
-/**
- * Script helper: args[0..1] = X, Y of the first point, args[2..3] = X, Y of the second,
- * args[4] = angle in and out.
- * Returns the angle (degrees) opposite the displacement from the first point to the second; unchanged if the points coincide.
- */
-static USER_FUNC(krb_get_dir) {
-    EvtWord* args = event->args;
-    f32 x1 = evtGetFloat(event, args[0]);
-    f32 z1 = evtGetFloat(event, args[1]);
-    f32 x2 = evtGetFloat(event, args[2]);
-    f32 z2 = evtGetFloat(event, args[3]);
-    s32 dir = evtGetValue(event, args[4]);
-    f32 dx = x2 - x1;
-    f32 dz = z2 - z1;
-
-    if (dx == 0.0f && dz == 0.0f) {
-        evtSetValue(event, args[4], dir);
-        return EVT_RETURN_DONE;
-    }
-    evtSetValue(event, args[4], angleABf(dx, dz, 0.0f, 0.0f));
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Angle in degrees (0-360) of the vector (x, z) from the sine table,
- * found by a seven-step binary search of SinTable and then placed in the right quadrant.
- * Not called anywhere in this file.
- */
-static u16 krb_comp_dir(f32 x, f32 z) {
-    f32 dist = hypot(x, z);
-    f32 s = __fabs(z) / dist;
-    u16 i;
-    u16 lo = 0;
-    u16 hi = 90;
-    u16 mid;
-
-    for (i = 0; i < 7; i++) {
-        mid = lo + (hi - lo) / 2;
-        if (SinTable[mid] < s) {
-            lo = mid;
-        }
-        if (!(SinTable[(u16)mid] < s)) {
-            hi = mid;
-        }
-    }
-    mid = __fabs(SinTable[lo] - s) < __fabs(SinTable[hi] - s) ? lo : hi;
-    if (x < 0.0f && z >= 0.0f) {
-        mid = 180 - mid;
-    }
-    if (x < 0.0f && z < 0.0f) {
-        mid += 180;
-    }
-    if (x >= 0.0f && z < 0.0f) {
-        mid = 360 - mid;
-    }
-    return (u16)mid;
-}
-
-/**
- * Script helper: returns in args[0] who is acting: 0 if the active unit began as Mario (kind 0xDE),
- * 1 if as Goombella (0xE0), else 2. Picks the tutorial line in dmg_avoid_counter_thorn_head_event.
- */
-static USER_FUNC(get_attacker) {
-    BattleWork* wp = _battleWorkPointer;
-    EvtWord* args = event->args;
-    BattleUnit* unit = BattleGetUnitPtr(wp, wp->activeUnitId);
-
-    if (unit->initialKind == UNIT_MARIO) {
-        evtSetValue(event, args[0], 0);
-    } else if (unit->initialKind == UNIT_GOOMBELLA) {
-        evtSetValue(event, args[0], 1);
-    } else {
-        evtSetValue(event, args[0], 2);
-    }
-    return EVT_RETURN_DONE;
-}
 
 /** Idle event: shows the unit's table pose for part 1. */
 static EVT_BEGIN(wait_event)
