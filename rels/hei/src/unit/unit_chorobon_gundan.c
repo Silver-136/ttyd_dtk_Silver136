@@ -817,16 +817,15 @@ USER_FUNC(chorogun_approach_target) {
  * sets its dive toward the target with a timer of args[0] frames,
  * plays the attack sound and returns the chosen Fuzzy's index in args[1].
  */
-// FAKE: chorogun[i & 0xFFFFFFFFFFFFFFFFu]: the no-op 64-bit mask only renumbers the index (FAKES.md)
 USER_FUNC(chorogun_dive_target) {
     ExtdrvPose* pose;
     s32 frames;
+    s32 i;
     s32 n;
     s32 sel;
     EvtWord* args;
     Chorogun* c;
     s32 list[1000];
-    s32 i;
     f32 t;
     f32* row;
     f32 x, y, z;
@@ -840,7 +839,7 @@ USER_FUNC(chorogun_dive_target) {
     t = frames;
     pose = extGetPosePtr();
     for (i = 0; i < extGetPoseNum(); i++) {
-        if (chorogun[i & 0xFFFFFFFFFFFFFFFFu].flags & 1) {
+        if (chorogun[i].flags & 1) {
             list[n++] = i;
         }
     }

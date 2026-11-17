@@ -42,28 +42,6 @@ static EvtWord attack_event[597];
 static EvtWord wait_event[6];
 
 /**
- * Script helper: classifies the unit that is attacking right now by its initial kind:
- * 0xDE (Mario) gives 0, 0xE0 (Goombella) gives 1, anything else 2.
- * dmg_avoid_counter_thorn_head_event uses it to pick the lecture unit's scolding line for whoever jumped on the
- * Spiky Goomba (mac_0_092_06 to Mario, mac_0_092_07 to Goombella).
- */
-// Return this tutorial's attacker category: Mario = 0, Goombella = 1, everyone else = 2.
-static USER_FUNC(get_attacker) {
-    BattleWork* wp = _battleWorkPointer;
-    EvtWord* args = event->args;
-    BattleUnit* unit = BattleGetUnitPtr(wp, wp->activeUnitId);
-
-    if (unit->initialKind == UNIT_MARIO) {
-        evtSetValue(event, args[0], 0);
-    } else if (unit->initialKind == UNIT_GOOMBELLA) {
-        evtSetValue(event, args[0], 1);
-    } else {
-        evtSetValue(event, args[0], 2);
-    }
-    return EVT_RETURN_DONE;
-}
-
-/**
  * Unit kind of the Spiky Goomba:
  * 2 HP, level 8, with its size, sounds and the links to its parts, status vulnerability and scripts.
  */
@@ -258,6 +236,28 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
+
+/**
+ * Script helper: classifies the unit that is attacking right now by its initial kind:
+ * 0xDE (Mario) gives 0, 0xE0 (Goombella) gives 1, anything else 2.
+ * dmg_avoid_counter_thorn_head_event uses it to pick the lecture unit's scolding line for whoever jumped on the
+ * Spiky Goomba (mac_0_092_06 to Mario, mac_0_092_07 to Goombella).
+ */
+// Return this tutorial's attacker category: Mario = 0, Goombella = 1, everyone else = 2.
+static USER_FUNC(get_attacker) {
+    BattleWork* wp = _battleWorkPointer;
+    EvtWord* args = event->args;
+    BattleUnit* unit = BattleGetUnitPtr(wp, wp->activeUnitId);
+
+    if (unit->initialKind == UNIT_MARIO) {
+        evtSetValue(event, args[0], 0);
+    } else if (unit->initialKind == UNIT_GOOMBELLA) {
+        evtSetValue(event, args[0], 1);
+    } else {
+        evtSetValue(event, args[0], 2);
+    }
+    return EVT_RETURN_DONE;
+}
 
 /**
  * Runs when an attack on the spiky head is stopped by the thorns (the counter damage to the attacker).

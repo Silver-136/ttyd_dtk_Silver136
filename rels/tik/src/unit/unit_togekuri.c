@@ -40,23 +40,6 @@ static f32 SinTable[91];
 static EvtWord attack_event[597];
 static EvtWord wait_event[6];
 
-/** Script helper. Stores in args[0] who is attacking: 0 for Mario, 1 for Goombella, 2 for anyone else. */
-// Classify the active attacker as Mario (0), Goombella (1), or another unit (2).
-static USER_FUNC(get_attacker) {
-    BattleWork* wp = _battleWorkPointer;
-    EvtWord* args = event->args;
-    BattleUnit* unit = BattleGetUnitPtr(wp, wp->activeUnitId);
-
-    if (unit->initialKind == UNIT_MARIO) {
-        evtSetValue(event, args[0], 0);
-    } else if (unit->initialKind == UNIT_GOOMBELLA) {
-        evtSetValue(event, args[0], 1);
-    } else {
-        evtSetValue(event, args[0], 2);
-    }
-    return EVT_RETURN_DONE;
-}
-
 /**
  * Unit kind of the Spiky Goomba (HP 2, level 8):
  * its size, offsets, damage sounds, status vulnerability, parts and init event.
@@ -237,6 +220,23 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
+
+/** Script helper. Stores in args[0] who is attacking: 0 for Mario, 1 for Goombella, 2 for anyone else. */
+// Classify the active attacker as Mario (0), Goombella (1), or another unit (2).
+static USER_FUNC(get_attacker) {
+    BattleWork* wp = _battleWorkPointer;
+    EvtWord* args = event->args;
+    BattleUnit* unit = BattleGetUnitPtr(wp, wp->activeUnitId);
+
+    if (unit->initialKind == UNIT_MARIO) {
+        evtSetValue(event, args[0], 0);
+    } else if (unit->initialKind == UNIT_GOOMBELLA) {
+        evtSetValue(event, args[0], 1);
+    } else {
+        evtSetValue(event, args[0], 2);
+    }
+    return EVT_RETURN_DONE;
+}
 
 /**
  * Runs when an attack on the spiky head is stopped by the thorns (the counter damage to the attacker).

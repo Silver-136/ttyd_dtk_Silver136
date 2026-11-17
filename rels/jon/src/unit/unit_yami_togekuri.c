@@ -41,25 +41,6 @@ static EvtWord attack_event[597];
 static EvtWord wait_event[6];
 
 /**
- * Script helper: returns in args[0] who is acting: 0 if the active unit began as Mario (kind 0xDE),
- * 1 if as Goombella (0xE0), else 2. Picks the tutorial line in dmg_avoid_counter_thorn_head_event.
- */
-static USER_FUNC(get_attacker) {
-    BattleWork* wp = _battleWorkPointer;
-    EvtWord* args = event->args;
-    BattleUnit* unit = BattleGetUnitPtr(wp, wp->activeUnitId);
-
-    if (unit->initialKind == UNIT_MARIO) {
-        evtSetValue(event, args[0], 0);
-    } else if (unit->initialKind == UNIT_GOOMBELLA) {
-        evtSetValue(event, args[0], 1);
-    } else {
-        evtSetValue(event, args[0], 2);
-    }
-    return EVT_RETURN_DONE;
-}
-
-/**
  * Unit data of the Spiky Gloomba in the Pit of 100 Trials: 7 HP, level 13;
  * names its parts, status table and init script.
  */
@@ -244,6 +225,25 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
+
+/**
+ * Script helper: returns in args[0] who is acting: 0 if the active unit began as Mario (kind 0xDE),
+ * 1 if as Goombella (0xE0), else 2. Picks the tutorial line in dmg_avoid_counter_thorn_head_event.
+ */
+static USER_FUNC(get_attacker) {
+    BattleWork* wp = _battleWorkPointer;
+    EvtWord* args = event->args;
+    BattleUnit* unit = BattleGetUnitPtr(wp, wp->activeUnitId);
+
+    if (unit->initialKind == UNIT_MARIO) {
+        evtSetValue(event, args[0], 0);
+    } else if (unit->initialKind == UNIT_GOOMBELLA) {
+        evtSetValue(event, args[0], 1);
+    } else {
+        evtSetValue(event, args[0], 2);
+    }
+    return EVT_RETURN_DONE;
+}
 
 static EVT_BEGIN(dmg_avoid_counter_thorn_head_event)
     WAIT_FRAMES(30)
