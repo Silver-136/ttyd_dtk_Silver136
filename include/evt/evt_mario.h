@@ -91,6 +91,7 @@ USER_FUNC(evt_mario_set_dir_npc);
 USER_FUNC(evt_mario_set_dir_pos);
 USER_FUNC(evt_mario_set_dispdir);
 USER_FUNC(evt_mario_set_enable_key);
+USER_FUNC(evt_mario_shadow_onoff);
 USER_FUNC(evt_mario_set_force_dir);
 USER_FUNC(evt_mario_set_hosei_xyz);
 USER_FUNC(evt_mario_set_motion);

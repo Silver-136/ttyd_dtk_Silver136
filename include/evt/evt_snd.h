@@ -21,3 +21,4 @@ USER_FUNC(evt_snd_sfx_span);
 USER_FUNC(evt_snd_sfxon_);
 USER_FUNC(evt_snd_sfxon_3d_ex);
 USER_FUNC(evt_snd_sfxon__);
+USER_FUNC(evt_snd_sfxon_ex);

@@ -204,6 +204,20 @@ void partyChgPaper(PartyEntry* party, char* paper) {
     }
 }
 
+/** Like partyChgPaper but starts the new paper animation at the given frame. */
+// Original name and size (0x78) from the JP demo map (UNUSED there: nothing calls it), after partyChgPaper:
+// partyChgPaper with the frame stored in poseTime, as marioChgPaperTime is to marioChgPaper (both 8 bytes longer);
+// the size fits exactly. The frame type (s16 as in marioChgPoseTime) is not fixed by the size.
+void partyChgPaperTime(PartyEntry* party, char* paper, s16 frames) {
+    if (!(party->flags2 & PARTY_DISP_FLAG_POSE_LOCK)) {
+        if (party->paperAnimName == NULL || strcmp(party->paperAnimName, paper)) {
+            party->paperAnimName = paper;
+            party->poseTime = frames;
+            party->trigFlags |= PARTY_TRIG_CHG_PAPER_ANIM;
+        }
+    }
+}
+
 /**
  * Freezes both partner slots (PARTY_FLAG_CTRL_OFF): driveParty only draws them.
  * Used by events, battles and windows while the partner must stand still.

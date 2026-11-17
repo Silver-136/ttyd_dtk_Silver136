@@ -460,6 +460,20 @@ USER_FUNC(evt_mario_set_enable_key) {
     return EVT_RETURN_DONE;
 }
 
+/** Arg 0 = on/off: shows or hides Mario's shadow (MARIO_DISP_FLAG_SHADOW_OFF). */
+// Original name and size (0x70) from the JP demo map (UNUSED there: no script uses it), between
+// evt_mario_set_enable_key and evt_mario_bgmode_on: evt_party_shadow_onoff's flag change for Mario's flag, with
+// evt_mario_cont_onoff's test; the size fits exactly (with marioGetPtr in each arm 0x58).
+USER_FUNC(evt_mario_shadow_onoff) {
+    MarioWork* mp = marioGetPtr();
+    if (!evtGetValue(event, event->args[0])) {
+        mp->dispFlags |= MARIO_DISP_FLAG_SHADOW_OFF;
+    } else {
+        mp->dispFlags &= ~MARIO_DISP_FLAG_SHADOW_OFF;
+    }
+    return EVT_RETURN_DONE;
+}
+
 /** Puts Mario in background mode (marioBgmodeOn), used when he walks into the scenery depth. */
 USER_FUNC(evt_mario_bgmode_on) {
     marioBgmodeOn();

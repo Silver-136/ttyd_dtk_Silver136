@@ -551,6 +551,18 @@ USER_FUNC(evt_audience_sound_clap) {
     return EVT_RETURN_DONE;
 }
 
+// Original name and size (0x60) from the JP demo map (UNUSED there: no script uses it), between _clap and _cheer:
+// evt_audience_sound_clap's form for BattleAudienceSoundNoise.
+USER_FUNC(evt_audience_sound_noise) {
+    EvtWord* args = event->args;
+    s32 a, b;
+
+    a = evtGetValue(event, args[0]);
+    b = evtGetValue(event, args[1]);
+    BattleAudienceSoundNoise(a, b);
+    return EVT_RETURN_DONE;
+}
+
 /**
  * Plays the crowd cheer sized to the current audience (BattleAudienceSoundCheer):
  * args[0] duration, args[1] fade time. The default battle events call it with 45, 25.

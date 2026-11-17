@@ -4319,6 +4319,47 @@ void BattleAudienceSoundNoiseAlways(void) {
 }
 
 /**
+ * Plays the crowd's background noise (SFX_AUDIENCE_NOISY1-4 by crowd size) once for duration frames, fading out
+ * over the last fade, like BattleAudienceSoundClap.
+ */
+// Original name and size (0x148) from the JP demo map (UNUSED there: nothing calls it), between
+// BattleAudienceSoundNoiseAlways and BattleAudienceSoundCheer. Body: BattleAudienceSoundClap (also 0x148) with
+// BattleAudienceSoundNoiseAlways's sounds; the size fits exactly and the strings are NoiseAlways's (with Clap's
+// strings the .rodata order changes). The channel (AUD_SOUND_NOISE, NoiseAlways's) is not fixed by the size.
+void BattleAudienceSoundNoise(s32 duration, s32 fade) {
+    char name[64];
+    BattleAudienceSound* sound;
+    s32 right, left, sum;
+
+    BattleAudienceBaseGetPtr();
+    sound = BattleAudienceSoundGetPtr(AUD_SOUND_NOISE);
+    right = BattleAudience_GetPPAudienceNum_R();
+    left = BattleAudience_GetPPAudienceNum_L();
+    sum = right + left;
+    BattleAudienceSoundStop(AUD_SOUND_NOISE);
+    if (sum >= 1 && sum <= 49) {
+        strcpy(name, "SFX_AUDIENCE_NOISY1");
+        sound->kind = 1;
+    }
+    if (sum >= 50 && sum <= 99) {
+        strcpy(name, "SFX_AUDIENCE_NOISY2");
+        sound->kind = 2;
+    }
+    if (sum >= 100 && sum <= 149) {
+        strcpy(name, "SFX_AUDIENCE_NOISY3");
+        sound->kind = 3;
+    }
+    if (sum >= 150) {
+        strcpy(name, "SFX_AUDIENCE_NOISY4");
+        sound->kind = 4;
+    }
+
+    // BUG: with no member taking part (sum 0) name is never written, so an uninitialised buffer is played.
+    sound->sfxId = BattleAudienceSound1(name, right, left);
+    AUD_SOUND_START(sound, duration + fade, fade);
+}
+
+/**
  * Plays the crowd's cheer (BattleAudienceSoundCheerKind) at the tier for the members taking part
  * (1-49, 50-99, 100-149, 150 and more) for duration frames, fading over the last fade.
  */

@@ -103,6 +103,7 @@ f32 kpaSetFallPara(void);
 void kpaFireDelete(void);
 void kpaMain(void);
 s32 kpaNoHitEnemyCheck(void);
+void kpaPauseSE(void);
 void kpaPauseSE2(void);
 void kpaPreInit(void);
 void kpaPostClear(void);

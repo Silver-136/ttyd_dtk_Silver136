@@ -108,6 +108,26 @@ USER_FUNC(evt_snd_sfxon_) {
     return EVT_RETURN_DONE;
 }
 
+// Original name and size (0xa0) from the JP demo map (UNUSED there: no script uses it), between evt_snd_sfxon_ and
+// evt_snd_sfxon_3d: evt_snd_sfxon_3d_ex's form without the position (name, volume, pan and delay; result to
+// args[4]) for psndSFXOnEx; the size fits exactly (s32 locals 0xa8, with the EVT_NULLPTR test 0xac).
+USER_FUNC(evt_snd_sfxon_ex) {
+    EvtWord* args = event->args;
+    const char* name = (const char*)args[0];
+    u16 vol, pan, delayMs;
+    s32 out;
+    vol = evtGetValue(event, args[1]);
+    pan = evtGetValue(event, args[2]);
+    delayMs = evtGetValue(event, args[3]);
+    out = args[4];
+    if (!out) {
+        psndSFXOnEx(name, vol, pan, delayMs);
+    } else {
+        evtSetValue(event, out, psndSFXOnEx(name, vol, pan, delayMs));
+    }
+    return EVT_RETURN_DONE;
+}
+
 USER_FUNC(evt_snd_sfxon_3d) {
     EvtWord* args = event->args;
     const char* name = (const char*)args[0];

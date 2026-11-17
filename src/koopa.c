@@ -1088,6 +1088,13 @@ s32 kpaJumpChk(void) {
     return marioGetPtr()->airTimer != 0;
 }
 
+/** Plays one of Bowser's 28 random voice clips (kpaPauseSeTable), without kpaPauseSE2's mute bypass. */
+// Original name and size (0x38) from the JP demo map (UNUSED there: nothing calls it), before kpaPauseSE2:
+// kpaPauseSE2 without PSND_SFX_BYPASS_MUTE (the size fits exactly; with the flag it is kpaPauseSE2's 0x3c).
+void kpaPauseSE(void) {
+    psndSFXOn(SFX_NAME_WORD(kpaPauseSeTable[irand(28)]));
+}
+
 /**
  * Plays one of Bowser's 28 random voice clips (kpaPauseSeTable) when the pause menu is opened as Bowser and
  * when Start is pressed in it.

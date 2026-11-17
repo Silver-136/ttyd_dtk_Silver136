@@ -740,6 +740,36 @@ static void envGlare(EnvironmentGlare* glare) {
     }
 }
 
+/** Draws the glare filter the current type picks (envGlare0..3), without envDisp2's viewport save. */
+// Original name and size (0xac) from the JP demo map (UNUSED there: nothing calls it), between envGlare and
+// envGlareFilter. Body: envDisp2's glare switch on its own; the size fits exactly (without the empty case 0
+// 0xa8). envDisp2 comes earlier in the file, so it cannot have inlined this copy.
+static void envDisp_Glare(void) {
+    EnvironmentWork* wp;
+    EnvironmentGlareFilter* filter;
+
+    wp = envGetWork();
+    filter = &wp->filter;
+    if (wp->flags & ENV_FLAG_GLARE_FILTER) {
+        switch (filter->type) {
+            case 0:
+                break;
+            case 1:
+                envGlare(&envGlare0);
+                break;
+            case 2:
+                envGlare(&envGlare1);
+                break;
+            case 3:
+                envGlare(&envGlare2);
+                break;
+            case 4:
+                envGlare(&envGlare3);
+                break;
+        }
+    }
+}
+
 /**
  * Sets the glare filter: type 1..4 picks the glare pattern
  * and x0/y0..x1/y1 the screen rectangle it covers (rounded out to even pixels and clamped to the frame);

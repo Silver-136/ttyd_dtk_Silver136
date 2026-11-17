@@ -9610,6 +9610,26 @@ void L_psndBGM_stop(void) {
 }
 
 /**
+ * Stops BGM channel id at once (ignored when the channel is free) and frees it.
+ * Original name and size (0x80) from the JP demo map (UNUSED there: nothing calls it; listed after
+ * psndGetSFXUseNum, before psndBGM_check). Body: psndBGM_vol's channel lookup with psndBGMOff_f_d's immediate-stop
+ * arm (the stream or song stop, then the free slot mark); the size fits exactly (0x70 without the mark).
+ */
+static void psndBGM_stop(s32 id) {
+    PaperSoundBGM* bgm = &psbgm[id & 0xF];
+
+    if (bgm->listId == 0xFFFFFFFF) {
+        return;
+    }
+    if (psbgmlist[bgm->listId].flags & PSND_BGM_STREAM) {
+        SoundSSStopCh(bgm->streamId);
+    } else {
+        SoundSongStopCh(bgm->streamId);
+    }
+    bgm->listId = -1;
+}
+
+/**
  * Returns whether BGM channel bgm is still playing: FALSE when it is free or its stream or song has ended.
  * Original name and size (0x7c) from the JP demo map (UNUSED there: every call is inlined).
  */
@@ -10746,7 +10766,8 @@ s32 psndSFXOnVol(const char* name, u8 vol) {
 /** Plays effect name with volume, pan and a start delay of delayMs milliseconds. */
 // Original name and size (0x30) from the JP demo map (UNUSED there: nothing calls it; the map lists it between
 // psndSFXOnVol and psndSFXOn_3D). psndSFXOnEx_3D without the position; the same size also allows a trailing
-// u16 dist parameter (passed on instead of 0x10), the bytes do not decide it.
+// u16 dist parameter (passed on instead of 0x10). Its stripped script command evt_snd_sfxon_ex (0xa0) fits these
+// four arguments exactly, which speaks for the form without dist.
 s32 psndSFXOnEx(const char* name, u8 vol, u8 pan, u16 delayMs) {
     return __psndSFXOn(name, vol, pan, delayMs, NULL, 0, 0x10, 0);
 }

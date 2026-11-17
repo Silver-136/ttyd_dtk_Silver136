@@ -443,6 +443,7 @@ BOOL partyChkHerohero(PartyEntry* party);
 void partyUpdateKeyData(PartyEntry* party);
 s32 yoshiSetColor(void);
 void partyChgPaper(PartyEntry* party, char* paper);
+void partyChgPaperTime(PartyEntry* party, char* paper, s16 frames);
 BOOL partyDoWork(void);
 s32 partyEntry(s32 memberId);
 s32 partyEntry2(s32 memberId);

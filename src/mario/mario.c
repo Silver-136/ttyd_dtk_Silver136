@@ -1914,6 +1914,36 @@ void marioChgPaper(const char* name) {
     }
 }
 
+/** Like marioChgPaper but starts the new paper animation at the given frame. */
+// marioChgPaperTime and marioSetAnimeLocalTime: original names and sizes (0x90, 0x84) from the JP demo map (UNUSED
+// there: nothing calls them), in this order between marioChgPaper and marioSetPaperAnimeLocalTime. marioChgPaperTime
+// is marioChgPaper with marioChgPoseTime's frame store (as marioChgPoseTime is to marioChgPose; partyChgPaperTime is
+// the same pair for the partner); marioSetAnimeLocalTime is marioSetPaperAnimeLocalTime without the paper pose. Both
+// sizes fit exactly. The frame types are not fixed by the sizes (s16 as in marioChgPoseTime, s32 as in
+// marioSetPaperAnimeLocalTime; an s16 there is 0x88).
+void marioChgPaperTime(const char* name, s16 frames) {
+    MarioWork* wp = mp;
+    s32 flags = wp->dispFlags;
+    const char* animName;
+
+    if (flags & MARIO_DISP_FLAG_PAPER && !(flags & MARIO_DISP_FLAG_POSE_LOCK) && !(mp->flags & MARIO_FLAG_IS_8_BIT)) {
+        animName = mp->paperAnimName;
+        if (!animName || strcmp(animName, name)) {
+            wp->paperAnimName = name;
+            wp->poseTime = frames;
+            wp->trigFlags |= MARIO_TRIG_FLAG_CHG_PAPER_ANIM;
+        }
+    }
+}
+
+/** Sets the current frame of Mario's pose. */
+void marioSetAnimeLocalTime(s32 frames) {
+    MarioWork* wp = mp;
+
+    wp->poseTime = frames;
+    animPoseSetLocalTime(wp->paperAnimGroupId[marioAnimeId()], frames);
+}
+
 /** Sets the current frame of Mario's paper animation and of his pose; used by mot_ship for the boat. */
 void marioSetPaperAnimeLocalTime(s32 frames) {
     MarioWork* wp = mp;
@@ -2062,6 +2092,18 @@ static void marioBlurInit(void) {
     blurPosId = 0;
     for (i = 0; i < 8; i++) {
         blurPos[i] = mp->position;
+    }
+}
+
+/** Turns Mario's motion-blur trail on, starting a fresh trail when it was off. */
+// Original name and size (0x9c) from the JP demo map (UNUSED there: nothing calls it), between marioBlurInit and
+// marioBlurOff: marioBlurOff's flag set on, with the trail reset of marioBlurInit (inlined, 0x84). Both alone are
+// 0x90; the size fits exactly only with the flag test around them. The order of the reset and the flag set inside
+// the test (and an early return instead of the test) give the same size and are not fixed.
+void marioBlurOn(void) {
+    if (!(mp->dispFlags & MARIO_DISP_FLAG_BLUR)) {
+        marioBlurInit();
+        mp->dispFlags |= MARIO_DISP_FLAG_BLUR;
     }
 }
 

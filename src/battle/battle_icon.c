@@ -301,6 +301,46 @@ USER_FUNC(btlevtcmd_BtlIconJumpPosition) {
 }
 
 /**
+ * Script: continues the fall of battle icon args[0] from its position with its current speeds (no target) until it
+ * reaches the battle floor; blocks the script until then.
+ */
+// Original name and size (0xfc) from the JP demo map (UNUSED there: no script uses it), between
+// btlevtcmd_BtlIconJumpPosition and btlevtcmd_BtlIconFallPosition, as btlevtcmd_JumpContinue sits between the unit
+// commands. Body: btlevtcmd_JumpContinue (0x118) on the icon's fields, as btlevtcmd_BtlIconJumpPosition mirrors
+// btlevtcmd_JumpPosition (the unit's moveCurrentPos is the icon's jumpPos, BtlUnit_SetPos the position stores);
+// the size fits exactly. Copying the position through x/y/z locals, as the unit command does with BtlUnit_GetPos,
+// gives the same bytes.
+USER_FUNC(btlevtcmd_BtlIconJumpContinue) {
+    BattleIcon* icon;
+    s32 index;
+    f32 h;
+
+    index = evtGetValue(event, event->args[0]);
+    icon = BtlIconGetPtr(index);
+    if (isFirstCall) {
+        event->blocked = 1;
+        icon->jumpPos.x = icon->position.x;
+        icon->jumpPos.y = icon->position.y;
+        icon->jumpPos.z = icon->position.z;
+    }
+    icon->jumpPos.y += icon->jumpVelY;
+    icon->jumpVelY -= icon->fallAccel;
+    btlMovePos(icon->jumpSpeed, icon->jumpAngle, &icon->jumpPos.x, &icon->jumpPos.z);
+    icon->position.x = icon->jumpPos.x;
+    icon->position.y = icon->jumpPos.y;
+    icon->position.z = icon->jumpPos.z;
+    h = BattleGetFloorHeight(_battleWorkPointer, icon->jumpPos.x, icon->jumpPos.y, icon->jumpPos.z);
+    if (icon->jumpPos.y < h) {
+        icon->jumpPos.y = h;
+        icon->position.x = icon->jumpPos.x;
+        icon->position.y = icon->jumpPos.y;
+        icon->position.z = icon->jumpPos.z;
+        return EVT_RETURN_YIELD;
+    }
+    return EVT_RETURN_BLOCK;
+}
+
+/**
  * Script: drops a battle icon from its position to (x, y, z) over args[4] frames (0 = from its speed), starting
  * with no upward speed and choosing the gravity to land exactly; blocks the script until it lands.
  */

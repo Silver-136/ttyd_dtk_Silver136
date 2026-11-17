@@ -37,6 +37,7 @@ USER_FUNC(evt_audience_joy_ending);
 USER_FUNC(evt_audience_sound_cheer);
 USER_FUNC(evt_audience_sound_booing);
 USER_FUNC(evt_audience_sound_clap);
+USER_FUNC(evt_audience_sound_noise);
 USER_FUNC(evt_audience_sound_handbeat);
 USER_FUNC(evt_audience_sound_whistle);
 USER_FUNC(evt_audience_sound_set_vol);

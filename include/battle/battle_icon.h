@@ -44,6 +44,7 @@ USER_FUNC(btlevtcmd_BtlIconDelete);
 USER_FUNC(btlevtcmd_BtlIconEntry);
 USER_FUNC(btlevtcmd_BtlIconEntryItemId);
 USER_FUNC(btlevtcmd_BtlIconFallPosition);
+USER_FUNC(btlevtcmd_BtlIconJumpContinue);
 USER_FUNC(btlevtcmd_BtlIconJumpPosition);
 USER_FUNC(btlevtcmd_BtlIconSetFallAccel);
 USER_FUNC(btlevtcmd_BtlIconSetPosition);
