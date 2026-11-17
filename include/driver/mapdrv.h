@@ -157,20 +157,41 @@ typedef struct MapFileJoint {
     MapFileJointPart parts[1];   // 0x60, partCount entries; a joint with none still takes this one (0x68 in the files)
 } MapFileJoint;
 
-typedef struct MapFileHeader {
-    u32 fileSize;     // 0x0
-    u32 dataSize;     // 0x4
-    u32 relCount;     // 0x8
-    u32 chunkCount;   // 0xC
-    u32 unused;       // 0x10, count of a table of 8-byte entries the loader steps over; 0 in every retail map
-    u8 reserved[0xC]; // 0x14
-} MapFileHeader;
+/*
+ * map.dat is a sysdolphin (HAL) archive: the JP demo map lists HSD_ArchiveParse and HSD_ArchiveGetPublicAddress
+ * in mapdrv.o. The HSD_Archive* type, field and flag names are sysdolphin's, as NWPlayer123 passed them on
+ * (2026-11-17); the layout matches the loader below byte for byte.
+ */
+typedef struct HSD_ArchiveHeader {
+    u32 file_size; // 0x0
+    u32 data_size; // 0x4
+    u32 nb_reloc;  // 0x8
+    u32 nb_public; // 0xC
+    u32 nb_extern; // 0x10, 0 in every retail map
+    u8 version[4]; // 0x14
+    u32 pad[2];    // 0x18
+} HSD_ArchiveHeader;
 
-// entry in the chunk table
-typedef struct MapFileChunk {
+// entry in the relocation table: offset into data of a pointer to rebase
+typedef struct HSD_ArchiveRelocationInfo {
+    u32 offset; // 0x0
+} HSD_ArchiveRelocationInfo;
+
+// entry in the public (exported chunk) table
+typedef struct HSD_ArchivePublicInfo {
     u32 offset; // 0x0, relative offset into data
-    u32 string; // 0x4, relative offset into strings
-} MapFileChunk;
+    u32 symbol; // 0x4, relative offset into symbols
+} HSD_ArchivePublicInfo;
+
+// entry in the extern table (no retail map has one)
+typedef struct HSD_ArchiveExternInfo {
+    u32 offset; // 0x0
+    u32 symbol; // 0x4
+} HSD_ArchiveExternInfo;
+
+typedef enum HSD_ArchiveFlag {
+    HSD_ARCHIVE_DONT_FREE = 1,
+} HSD_ArchiveFlag;
 
 typedef struct MapFileInfo {
     const char* version; // 0x0
@@ -180,17 +201,18 @@ typedef struct MapFileInfo {
     const char* exportDate; // 0x10, ver1.02 only: when the map was exported ("yy/mm/dd hh:mm:ss"); never read
 } MapFileInfo;
 
-typedef struct MapHeader {
-    MapFileHeader file;         // 0x0
-    void* data;                 // 0x20
-    u32* rel;                   // 0x24, relocation table: offsets into data of the pointers to rebase
-    MapFileChunk* chunks;       // 0x28
-    void* unused;               // 0x2C, that table (MapFileHeader.unused); no retail map has one
-    const char* strings;        // 0x30
-    u8 pad_34[0x3C - 0x34]; // 0x34, never accessed
-    s32 loadFlags;             // 0x3C, bit 1 set by HSD_ArchiveParse before the header copy
-    void* rawFile;          // 0x40, the map.dat buffer the header was read from (SPM MapFileContext.rawFile)
-} MapHeader;
+typedef struct HSD_Archive {
+    HSD_ArchiveHeader header;               // 0x0
+    u8* data;                               // 0x20
+    HSD_ArchiveRelocationInfo* reloc_info;  // 0x24
+    HSD_ArchivePublicInfo* public_info;     // 0x28
+    HSD_ArchiveExternInfo* extern_info;     // 0x2C
+    char* symbols;                          // 0x30
+    struct HSD_Archive* next;               // 0x34, never accessed in TTYD
+    char* name;                             // 0x38, never accessed in TTYD
+    HSD_ArchiveFlag flags;                  // 0x3C, HSD_ArchiveParse sets HSD_ARCHIVE_DONT_FREE before the header copy
+    void* top_ptr;                          // 0x40, the map.dat buffer the archive was read from
+} HSD_Archive;
 
 // MapObject.flags, named from mapdrv (draw passes, _mapEnt, the mapObj* setters) and envdrv. Bits 24-27 are not
 // flags but the index of the TEV callback (MAP_OBJ_TEV_CALLBACK). 0x80000000 (only set on animation poses, which
@@ -386,7 +408,7 @@ typedef struct MapEntry {
     f32 fogStart;                  // 0x28
     f32 fogEnd;                    // 0x2C
     GXColor fogColor;              // 0x30
-    MapHeader header;              // 0x34
+    HSD_Archive header;             // 0x34
     void* dat;                     // 0x78, ./map/%s/map.dat
     u32 datSize;                   // 0x7C
     void* tpl;                     // 0x80, ./map/%s/texture.tpl
@@ -463,9 +485,9 @@ MapObject* mapGetMapObj(const char* name);
 MapFileJoint* mapSearchDmdJoint(MapFileJoint* joint, const char* name);
 MapMaterial* mapSearchDmdMaterial(const char* name);
 void mapSetPolygonGeometry(MapFileMesh* mesh);
-void Locate(MapHeader* header);
-void* HSD_ArchiveGetPublicAddress(MapHeader* header, const char* name);
-s32 HSD_ArchiveParse(MapHeader* header, u8* data, u32 datSize);
+void Locate(HSD_Archive* archive);
+void* HSD_ArchiveGetPublicAddress(HSD_Archive* archive, const char* name);
+s32 HSD_ArchiveParse(HSD_Archive* archive, u8* data, u32 datSize);
 
 void mapSetBlend(GXColor color);
 void mapSetBlend2(GXColor color);

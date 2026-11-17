@@ -722,7 +722,7 @@ void mapEntryAnimation(BOOL group) {
     MapWork* wp = mapGetWork();
     u32* animTbl;
     MapEntryAnimData* a;
-    MapHeader* header;
+    HSD_Archive* header;
     u32 n;
     int i;
 
@@ -856,7 +856,7 @@ static void _mapLoad(MapWork* wp, BOOL group, const char* map) {
     char str2[128];
     char str3[128];
     DVDEntry* dvd;
-    MapHeader* header;
+    HSD_Archive* header;
 
     error_flag = FALSE;
     error_count = 0;
@@ -4161,79 +4161,78 @@ void spline_getvalue(Vec* out, f32 t, s32 n, Vec* pts, f32* ts, Vec* tbl) {
 }
 
 /**
- * Turns the file-relative pointers listed in the map.dat relocation table into real addresses by adding the data
+ * Turns the file-relative pointers listed in the archive's relocation table into real addresses by adding the data
  * base.
  */
 // Original name and size (0x48) from the JP demo map (UNUSED there: every call is inlined).
-void Locate(MapHeader* header) {
+void Locate(HSD_Archive* archive) {
     u32 k;
-    for (k = 0; k < header->file.relCount; k++) {
-        u32* rel = (u32*)((u8*)header->data + header->rel[k]);
+    for (k = 0; k < archive->header.nb_reloc; k++) {
+        u32* rel = (u32*)(archive->data + archive->reloc_info[k].offset);
         if (*rel <= 0x80000000) {
-            *rel += (u32)header->data;
+            *rel += (u32)archive->data;
         }
     }
 }
 
 /**
- * Pointer to the map.dat chunk with the given name (information, texture_table, light_table, ...) via the file's
- * chunk table, or NULL.
+ * Pointer to the map.dat chunk with the given public name (information, texture_table, light_table, ...), or NULL.
  */
 // Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
-void* HSD_ArchiveGetPublicAddress(MapHeader* header, const char* name) {
+void* HSD_ArchiveGetPublicAddress(HSD_Archive* archive, const char* name) {
     u32 k;
 
-    for (k = 0; k < header->file.chunkCount; k++) {
-        if (!strcmp(&header->strings[header->chunks[k].string], name)) {
-            return (u8*)header->data + header->chunks[k].offset;
+    for (k = 0; k < archive->header.nb_public; k++) {
+        if (!strcmp(&archive->symbols[archive->public_info[k].symbol], name)) {
+            return archive->data + archive->public_info[k].offset;
         }
     }
     return NULL;
 }
 
 /**
- * Reads the map.dat header from data into header: locates the data, relocation, chunk,
- * extern and string sections after it and relocates the pointers.
- * Returns -1 (header left cleared) if header is NULL or the stored file size does not match datSize, else 0.
+ * Reads the archive header from data into archive: locates the data, relocation, public, extern and symbol
+ * sections after it and relocates the pointers.
+ * Returns -1 (archive left cleared) if archive is NULL or the stored file size does not match datSize, else 0.
  */
 // Original name and size (0x168) from the JP demo map (UNUSED there: its only call, in _mapLoad, is inlined). The
-// (header, data, size) parameters and -1 returns are the form whose out-of-line copy is exactly 0x168 and whose
-// inlined copy matches _mapLoad; it is the shape of sysdolphin's HSD_ArchiveParse (MapHeader is its HSD_Archive).
-s32 HSD_ArchiveParse(MapHeader* header, u8* data, u32 datSize) {
+// (archive, data, size) parameters and -1 returns are the form whose out-of-line copy is exactly 0x168 and whose
+// inlined copy matches _mapLoad.
+s32 HSD_ArchiveParse(HSD_Archive* archive, u8* data, u32 datSize) {
     u32 sizeCheck;
 
-    if (header == NULL) {
+    if (archive == NULL) {
         return -1;
     }
-    memset(header, 0, sizeof(MapHeader));
-    header->loadFlags |= 1;
-    memcpy(header, data, sizeof(MapFileHeader));
-    if (header->file.fileSize != datSize) {
+    memset(archive, 0, sizeof(HSD_Archive));
+    archive->flags |= HSD_ARCHIVE_DONT_FREE;
+    memcpy(archive, data, sizeof(HSD_ArchiveHeader));
+    if (archive->header.file_size != datSize) {
         return -1;
     }
-    sizeCheck = sizeof(MapFileHeader);
-    if (header->file.dataSize != 0) {
-        header->data = &data[sizeCheck];
-        sizeCheck = header->file.dataSize;
-        sizeCheck += sizeof(MapFileHeader);
+    sizeCheck = sizeof(HSD_ArchiveHeader);
+    if (archive->header.data_size != 0) {
+        archive->data = &data[sizeCheck];
+        sizeCheck = archive->header.data_size;
+        sizeCheck += sizeof(HSD_ArchiveHeader);
     }
-    if (header->file.relCount != 0) {
-        header->rel = (u32*)&data[sizeCheck];
-        sizeCheck += 4 * header->file.relCount;
+    if (archive->header.nb_reloc != 0) {
+        archive->reloc_info = (HSD_ArchiveRelocationInfo*)&data[sizeCheck];
+        sizeCheck += sizeof(HSD_ArchiveRelocationInfo) * archive->header.nb_reloc;
     }
-    if (header->file.chunkCount != 0) {
-        header->chunks = (MapFileChunk*)&data[sizeCheck];
-        sizeCheck += sizeof(MapFileChunk) * header->file.chunkCount;
+    if (archive->header.nb_public != 0) {
+        archive->public_info = (HSD_ArchivePublicInfo*)&data[sizeCheck];
+        sizeCheck += sizeof(HSD_ArchivePublicInfo) * archive->header.nb_public;
     }
-    if (header->file.unused != 0) {
-        header->unused = &data[sizeCheck];
-        sizeCheck += 8 * header->file.unused;
+    if (archive->header.nb_extern != 0) {
+        archive->extern_info = (HSD_ArchiveExternInfo*)&data[sizeCheck];
+        sizeCheck += sizeof(HSD_ArchiveExternInfo) * archive->header.nb_extern;
     }
-    if (sizeCheck < header->file.fileSize) {
-        header->strings = (const char*)&data[sizeCheck];
+    if (sizeCheck < archive->header.file_size) {
+        archive->symbols = (char*)&data[sizeCheck];
     }
-    header->rawFile = data;
-    Locate(header);
+    archive->top_ptr = data;
+    Locate(archive);
     return 0;
 }
 
