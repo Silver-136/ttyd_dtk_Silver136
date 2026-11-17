@@ -749,39 +749,39 @@ static s32 collisionCurve(s32 mode, void* curve, Vec pos, CamRoadHit* hit) {
 static inline f32 camRoadCos(f32 x) { return (f32)cos(x); }
 static inline f32 camRoadSin(f32 x) { return (f32)sin(x); }
 
-// FAKE: l2 through an inline so it is an inline @ temp (numbered with the sgn ?: temps) -> 2nd-web lim1/lim2 colour f27/f25 as in the target
-static inline f32 crMul(f32 a, f32 b) { return a * b; }
+/**
+ * Splits v into its parts along a and b (the curve direction and its sideways direction, both in the XZ plane):
+ * v = s * a + t * b. Stores s * a in *ra and t * b in *rb (x and z only) and the signs of s and t in *sa and *sb.
+ */
+// Original name and size (0xe8) from the JP demo's link map (UNUSED there, at this slot between collisionCurve and
+// calcCamRoad): its one call in calcCamRoad is inlined. The body is the block calcCamRoad held written out (the
+// solve, the two products and the two signs), which gives 0xe8 out of line with the signs stored through the
+// pointers (0xe0 with conditional expressions or sign locals). Not fixed by the bytes: the parameter order and
+// names.
+static void getVec(Vec* a, Vec* b, Vec* v, Vec* ra, Vec* rb, f32* sa, f32* sb) {
+    f32 s, t;
 
-// FAKE: the t/s solve through an inline (s via pointer) so t is the inline return @ temp, numbered above the CSE temps
-// (v2.x load, frsp dB.x) -> t is simplified before the r1/r2 products and colours f5 as in the target
-static inline f32 camRoadSolve(f32 ax, f32 az, Vec* dB, Vec* v2, f32* sp) {
-    f32 t;
-    if (__fabs(az) > __fabs(ax)) {
-        t = (v2->x - ax * (v2->z / az)) / (dB->x - dB->z * (ax / az));
-        *sp = (v2->z - t * dB->z) / az;
+    if (__fabs(a->z) > __fabs(a->x)) {
+        t = (v->x - a->x * (v->z / a->z)) / (b->x - b->z * (a->x / a->z));
+        s = (v->z - t * b->z) / a->z;
     } else {
-        t = (v2->z - az * (v2->x / ax)) / (dB->z - az * (dB->x / ax));
-        *sp = (v2->x - t * dB->x) / ax;
+        t = (v->z - a->z * (v->x / a->x)) / (b->z - a->z * (b->x / a->x));
+        s = (v->x - t * b->x) / a->x;
     }
-    return t;
-}
-
-// FAKE: sgn1/sgn2 as if/else locals of an inline: inline locals get their @ labels at definition time, so the sgn webs
-// are numbered above l2 (crMul) and below cs; with ax/az numbered low this gives the target l2 f14 / sgn1 f15 / sgn2 f28
-static inline void camRoadSgn2(f32 s, f32 t, f32* p1, f32* p2) {
-    f32 a, b;
+    ra->x = s * a->x;
+    ra->z = s * a->z;
+    rb->x = t * b->x;
+    rb->z = t * b->z;
     if (s < 0.0f) {
-        a = -1.0f;
+        *sa = -1.0f;
     } else {
-        a = 1.0f;
+        *sa = 1.0f;
     }
     if (t < 0.0f) {
-        b = -1.0f;
+        *sb = -1.0f;
     } else {
-        b = 1.0f;
+        *sb = 1.0f;
     }
-    *p1 = a;
-    *p2 = b;
 }
 
 /**
@@ -793,7 +793,6 @@ static inline void camRoadSgn2(f32 s, f32 t, f32* p1, f32* p2) {
  * Without a curve it keeps the previous one, or passes the inputs through.
  */
 static void calcCamRoad(CamRoadState* out, CamRoadState* prev, f32 xA, f32 yA, f32 zA, f32 xB, f32 yB, f32 zB, f32 shiftWeight) {
-    f32 ax, az; // FAKE: named dA.x/dA.z copies declared first (numbered low, below l2) -> see camRoadSgn2
     f32 nx;
     f32 ny;
     f32 nz;
@@ -811,7 +810,7 @@ static void calcCamRoad(CamRoadState* out, CamRoadState* prev, f32 xA, f32 yA, f
     CamRoadStrip* strip;
     s32 k;
     s32* idx;
-    f32 pz, qz, qx;
+    f32 pz, qx, qz;
     f32 cs2;
     f32 angle;
     f32 rot;
@@ -832,6 +831,7 @@ static void calcCamRoad(CamRoadState* out, CamRoadState* prev, f32 xA, f32 yA, f
     Vec dB;
     Vec r1;
     Vec r2;
+    f32 l2;
     f32 best;
     f32 zoom;
     f32 px;
@@ -839,12 +839,12 @@ static void calcCamRoad(CamRoadState* out, CamRoadState* prev, f32 xA, f32 yA, f
     f32 y;
     f32 z;
     f32 dist;
-    f32 s, t, sgn1, sgn2, len2, len;
+    f32 sgn1, sgn2, len2, len;
     u32 flags;
     s32 found, found2;
     s32 i;
     f32 fov;
-    f32 l1, l2, lim2, lim1;
+    f32 l1, lim2, lim1;
     curve = wp->map->curves;
     best = -100000000.0f;
     hitCurve = NULL;
@@ -1069,25 +1069,18 @@ static void calcCamRoad(CamRoadState* out, CamRoadState* prev, f32 xA, f32 yA, f
             lim1 += getV60FPS(wp->tuning[0], prev->time, gp->renderFieldTime);
             lim2 = getV60FPS(wp->tuning[1], prev->time, gp->renderFieldTime);
             l1 = lim1 * wp->tuning[4];
-            l2 = crMul(lim1, wp->tuning[5]);
+            l2 = lim1 * wp->tuning[5];
             spd1 = lim2 * wp->tuning[4];
             spd2 = lim2 * wp->tuning[5];
             dA.x = mnz;
             dA.z = nx;
-            ax = dA.x;
-            az = dA.z;
-            dB.x = -az;
-            dB.z = ax;
+            dB.x = -dA.z;
+            dB.z = dA.x;
             dA.y = 0.0f;
             dB.y = 0.0f;
             r1.y = 0.0f;
             r2.y = 0.0f;
-            t = camRoadSolve(ax, az, &dB, &v2, &s);
-            r1.x = s * dA.x;
-            r1.z = s * dA.z;
-            r2.x = t * dB.x;
-            r2.z = t * dB.z;
-            camRoadSgn2(s, t, &sgn1, &sgn2);
+            getVec(&dA, &dB, &v2, &r1, &r2, &sgn1, &sgn2);
             lim1 = PSVECMag(&r1);
             lim2 = PSVECMag(&r2);
             if (lim1 > l1 && lim1 > spd1) {
