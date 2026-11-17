@@ -361,7 +361,7 @@ void monteCountDisp(void) {
                 if (delta != 0) {
                     delta = delta / 10;
                     if (delta == 0) {
-                        delta = (s32)yuwp->tokens > (s32)yuwp->dispTokens ? 1 : -1;
+                        delta = yuwp->tokens > (s32)yuwp->dispTokens ? 1 : -1;
                     }
                     yuwp->dispTokens += delta;
                 }
@@ -406,7 +406,7 @@ void monteCountDisp(void) {
         if (delta != 0) {
             delta = delta / 10;
             if (delta == 0) {
-                delta = (s32)yuwp->tokens > (s32)yuwp->dispTokens ? 1 : -1;
+                delta = yuwp->tokens > (s32)yuwp->dispTokens ? 1 : -1;
             }
             yuwp->dispTokens += delta;
         }

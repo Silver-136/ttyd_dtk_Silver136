@@ -1105,7 +1105,7 @@ s32 pouchSetStarPiece(s32 count) {
 }
 
 /** Adds HP to Mario (negative for damage), clamped to 0..maximumHP; returns the new HP. */
-s16 pouchAddHP(s16 points) {
+s16 pouchAddHP(s32 points) {
     mpp->currentHP += (s16)points;
     if (mpp->currentHP < 0) {
         mpp->currentHP = 0;

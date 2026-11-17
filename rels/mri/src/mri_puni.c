@@ -6472,7 +6472,7 @@ USER_FUNC(evt_puni_jump_position) {
     f32 z = evtGetValue(event, args[3]);
     s32 frames = evtGetValue(event, args[4]);
     f32 h = evtGetValue(event, args[5]);
-    s32 t;
+    int t;
     f32 r;
 
     if (isFirstCall) {
@@ -6485,8 +6485,8 @@ USER_FUNC(evt_puni_jump_position) {
     t = OSTicksToMilliseconds((u32)gp->renderTime - (u32)p->startTime);
     if (t < frames) {
         r = (f32)t / (f32)frames;
-        p->pos.x = intplGetValue(EASING_LINEAR, p->moveStart.x, x, (s32)t, frames);
-        p->pos.z = intplGetValue(EASING_LINEAR, p->moveStart.z, z, (s32)t, frames);
+        p->pos.x = intplGetValue(EASING_LINEAR, p->moveStart.x, x, t, frames);
+        p->pos.z = intplGetValue(EASING_LINEAR, p->moveStart.z, z, t, frames);
         p->pos.y = r * (p->modeF0 * r + p->modeF1) + p->moveStart.y;
         return EVT_RETURN_BLOCK;
     }

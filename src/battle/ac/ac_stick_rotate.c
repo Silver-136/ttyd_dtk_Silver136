@@ -248,7 +248,7 @@ s32 battleAcMain_StickRotate(BattleWork* work) {
                             }
                             sw->expectDir = sw->dir;
                             sw->nextDir = t;
-                        } else if ((s8)sw->roll != (s8)r) {
+                        } else if ((s8)sw->roll != r) {
                             stickRotateEnd(work);
                             restart = TRUE;
                             break;
@@ -276,7 +276,7 @@ s32 battleAcMain_StickRotate(BattleWork* work) {
                                     }
                                 }
                                 sw->stepFrames = 0;
-                                if (sw->roll != 0 && (s8)sw->roll != (s8)r) {
+                                if (sw->roll != 0 && (s8)sw->roll != r) {
                                     stickRotateEnd(work);
                                     restart = TRUE;
                                     break;

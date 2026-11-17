@@ -471,7 +471,7 @@ s32 pouchSetSuperCoin(s32 count);
 s32 pouchGetStarPiece(void);
 s32 pouchAddStarPiece(s32 count);
 s32 pouchSetStarPiece(s32 count);
-s16 pouchAddHP(s16 points);
+s16 pouchAddHP(s32 points);
 s32 pouchGetHP(void);
 s32 pouchGetMaxHP(void);
 void pouchSetHP(s32 points);

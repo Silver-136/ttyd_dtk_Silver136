@@ -299,7 +299,7 @@ static void effOpukuJetwDisp(CameraId cameraId, void* payload) {
                     PSMTXTrans(mtx, (f32)ptr[idx].x, 10.0f + (f32)ptr[idx].y, 0.0f);
 
                     // Scale and alpha come from tbl[idx] (the first group) for every group; only position and rotation use the group's own rows.
-                    PSMTXScale(scale, 0.01f * (f32)tbl[idx].sx, 0.01f * (f32)tbl[idx].sy, 1.0f);
+                    PSMTXScale(scale, 0.01f * tbl[idx].sx, 0.01f * tbl[idx].sy, 1.0f);
                     PSMTXConcat(mtx, scale, mtx);
                     PSMTXRotRad(rot, 'z', 0.017453292f * ((f32)ptr[idx].rot + (f32)dat_ry[(j + i) & 7]));
                     PSMTXConcat(mtx, rot, mtx);

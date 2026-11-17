@@ -10443,8 +10443,7 @@ sgfound:
                 if (sfx[0]->channel != none) {
                     rv = e->reverb;
                     if (rv > 0) {
-                        // FAKE: reverb (s16) read through a u16 pointer; (u16)psnd.reverb changes the object
-                        rv += *(u16*)&psnd.reverb;
+                        rv += psnd.reverb;
                     }
                     if (rv > 127) {
                         rv = 127;
@@ -10819,15 +10818,15 @@ s32 psndSFXChk(s32 id) {
     PaperSoundEffect* sfx;
     u32 uid = id;
     u32 key;
+    unsigned int serial;
 
     if (id == 0xFFFFFFFF) {
         return -1;
     }
     key = (uid >> 8) & 0xFFFF;
     sfx = &pssfx[uid & 0xFF];
-
-    // FAKE: no-op mask of the u16 serial; key != sfx->serial changes the object
-    if (key != (sfx->serial & 0xFFFFu)) {
+    serial = sfx->serial;
+    if (key != serial) {
         return -1;
     }
     if (sfx->listId == 0xFFFFFFFF) {

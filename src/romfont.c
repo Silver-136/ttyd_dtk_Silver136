@@ -448,7 +448,7 @@ void romFontPrintGX(f32 x, f32 y, f32 scale, GXColor* color, const char* msg, ..
     va_list ap;
     s32 i = 0;
     s32 curX = 0;
-    s16 curY = 0;
+    s32 curY = 0;
     RomFontChar* glyph;
 
     // --- camera: place the eye so 1 unit == 1 px at the target plane ---

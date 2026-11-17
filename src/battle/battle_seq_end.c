@@ -804,7 +804,7 @@ void btlseqEnd(BattleWork* wp) {
         mw = marioGetPtr();
         mw->dispFlags &= ~MARIO_DISP_FLAG_HIDE;
         if (kind) {
-            marioPartyEntry((s32)id);
+            marioPartyEntry(id);
         } else {
             marioPartyKill();
         }

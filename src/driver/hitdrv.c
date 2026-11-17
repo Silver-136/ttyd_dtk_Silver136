@@ -517,7 +517,7 @@ static s32 hitCalcVtxPosition(HitEntry* hit) {
             wp = mapGetWork();
             m = 0; // FAKE: popcount accumulated in m (later reused as the i0 pointer) so stride is a single-def web
             for (bit = 0; bit < 12; bit++) {
-                m += ((u32)mesh->elementMask >> bit) & 1;
+                m += (mesh->elementMask >> bit) & 1;
             }
             stride = m * 2;
             for (k = 0; k < mesh->displayListCount; k++) {

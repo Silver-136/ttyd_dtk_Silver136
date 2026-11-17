@@ -2163,7 +2163,7 @@ void BtlUnit_SetMaxFp(BattleUnit* unit, s32 value) {
  * JP and later cap it at 999.
  */
 s32 BtlUnit_GetWeaponCost(BattleUnit* unit, BattleWeapon* weapon) {
-    s32 cost = (u8)weapon->baseFpCost;
+    s32 cost = weapon->baseFpCost;
     s32 count;
 
     if (weapon->itemId) {

@@ -648,7 +648,7 @@ s32 THPSimpleDrawCurrentFrame(GXRenderModeObj* rmode, u32 x, u32 y, u32 polygonW
                          SimpleControl.textureSet.vtexture, x, y, SimpleControl.videoInfo.xSize,
                          (s16)SimpleControl.videoInfo.ySize, polygonW, polygonH);
         THPGXRestore();
-        return (s32)SimpleControl.textureSet.frameNumber;
+        return SimpleControl.textureSet.frameNumber;
     }
     return -1;
 }

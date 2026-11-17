@@ -465,7 +465,7 @@ s16 badgeShop_set(u8* table, s16 id, s16 val) {
     } else {
         bound = BADGE_MIN;
     }
-    temp = (s16)id;
+    temp = id;
     if (temp < bound || temp >= BADGE_MAX) {
         return 0;
     }
@@ -555,7 +555,7 @@ s32 badgeShop_add(u8* table, s16 id, s32 value) {
     } else {
         bound = BADGE_MIN;
     }
-    temp = (s16)id;
+    temp = id;
     if (temp < bound || temp >= BADGE_MAX) {
         return 0;
     }

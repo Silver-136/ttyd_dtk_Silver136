@@ -148,7 +148,7 @@ typedef struct PaperSoundWork {
     f32 direction;                  // 0x3C
     char mapName[0x10];             // 0x40, map the sound state was set up for (psndMapChange)
     u16 sfxSerial;                  // 0x50, incremented per SFX start, packed into SFX ids
-    s16 reverb;                     // 0x52, psndSetReverb level (0/20/40/60)
+    u16 reverb;                     // 0x52, psndSetReverb level (0/20/40/60)
     u16 sfxDelay;                   // 0x54, +8 for each repeat of a SFX already playing this frame, reset each frame
     u16 flags;                      // 0x56, psndSetFlag/psndClearFlag/psndGetFlag
     s8 bgmVolume;                   // 0x58, BGM master volume, ramps toward 100 (65 with PSND_FLAG_LETTER_BOX)

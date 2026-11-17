@@ -1767,7 +1767,7 @@ s32 partyDokanMain(PartyEntry* party) {
 #if VERSION <= VERSION_DEMO_JP
             party->trailPos = party->position;
             partyChgRunMode(party, PARTY_RUN_WAIT);
-            if ((s8)party->dirKind == DOKAN_YOKO_IN) {
+            if (party->dirKind == DOKAN_YOKO_IN) {
                 party->position.z += -4.0f;
             }
             if (party->currentSlotId == 1) {

@@ -366,7 +366,7 @@ static void actionCommandDisp(f32 x, f32 y) {
         case AC_STATE_RUN + 3:
         case AC_STATE_RUN + 4:
         case AC_STATE_RUN + 5:
-            if ((u16)c) {
+            if (c) {
                 Vec pos = {0.0f, 0.0f, 0.0f};
                 f32 px = -225.0f + x;
                 f32 py = 80.0f + y;
@@ -390,7 +390,7 @@ static void actionCommandDisp(f32 x, f32 y) {
         case AC_STATE_RUN + 1:
             if (pw->mode) {
                 if (pw->gauge >= (f32)ac->params[4] && pw->gauge <= 100.0f) {
-                    if ((u16)c) {
+                    if (c) {
                         Vec pos = {0.0f, 0.0f, 0.0f};
                         f32 px = -225.0f + x;
                         f32 py = 80.0f + y;
@@ -409,7 +409,7 @@ static void actionCommandDisp(f32 x, f32 y) {
                         pos.y = 80.0f + y;
                         iconDispGx(&pos, ICON_FLAG_2D, 1.0f, a);
                     }
-                } else if ((u16)c) {
+                } else if (c) {
                     Vec pos = {0.0f, 0.0f, 0.0f};
                     f32 px = -225.0f + x;
                     f32 py = 80.0f + y;
@@ -429,7 +429,7 @@ static void actionCommandDisp(f32 x, f32 y) {
                     iconDispGx(&pos, ICON_FLAG_2D, 1.0f, b);
                 }
             } else if ((pw->gauge >= (f32)ac->params[4] && pw->gauge <= 100.0f) || ac->outputParams[0] == 0) {
-                if ((u16)c) {
+                if (c) {
                     Vec pos = {0.0f, 0.0f, 0.0f};
                     f32 px = -225.0f + x;
                     f32 py = 80.0f + y;
@@ -448,7 +448,7 @@ static void actionCommandDisp(f32 x, f32 y) {
                     pos.y = 80.0f + y;
                     iconDispGx(&pos, ICON_FLAG_2D, 1.0f, b);
                 }
-            } else if ((u16)c) {
+            } else if (c) {
                 Vec pos = {0.0f, 0.0f, 0.0f};
                 f32 px = -225.0f + x;
                 f32 py = 80.0f + y;

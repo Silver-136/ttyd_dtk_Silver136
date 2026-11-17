@@ -2492,6 +2492,7 @@ static void _chuchu_item_check(BattleUnit* unit, u32 item) {
 }
 
 static USER_FUNC(_chuchu_item_steal) {
+    ItemType stolen;
     ItemDropData* table;
     BattleWork* wp;
     s32 acResult;
@@ -2551,8 +2552,8 @@ static USER_FUNC(_chuchu_item_steal) {
         return EVT_RETURN_DONE;
     }
 
-    // FAKE: no-op (u16) cast (item is u16); the plain call changes the object
-    if (pouchGetItem((u16)item) == 0) {
+    stolen = item;
+    if (pouchGetItem(stolen) == 0) {
         evtSetValue(event, out, 0);
         return EVT_RETURN_DONE;
     }
@@ -2570,8 +2571,7 @@ static USER_FUNC(_chuchu_item_steal) {
     }
     _chuchu_item_check(unit, item);
 
-    // FAKE: no-op (u16) cast (item is u16); the plain call changes the object
-    evtSetValue(event, out, (u16)item);
+    evtSetValue(event, out, stolen);
     return EVT_RETURN_DONE;
 }
 
