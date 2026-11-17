@@ -49,6 +49,7 @@ static void mountDetachCallback(s32 chan, s32 result);
 static void mountAttachCallback(s32 chan, s32 result);
 static void checkCallback(s32 chan, s32 result);
 static void formatCallback(s32 chan, s32 result);
+static void deleteCallback(s32 chan, s32 result);
 static void createCallback(s32 chan, s32 result);
 static void writeCallback(s32 chan, s32 result);
 static void readCallback(s32 chan, s32 result);
@@ -1112,6 +1113,17 @@ static void formatCallback(s32 chan, s32 result) {
 static void memcard_format(void) {
     wp->flags |= CARD_FLAG_CALL_BUSY;
     CARDFormatAsync(wp->chan, formatCallback);
+}
+
+/** Delete completion for an asynchronous delete: a missing file counts as success. Nothing uses it. */
+// Original name, size (0x28) and place from the JP demo map (UNUSED there: memcard_delete calls CARDDelete and waits).
+// The body is the other callbacks' (0x1c) with memcard_delete's NOFILE test, as mountAttachCallback has its own.
+static void deleteCallback(s32 chan, s32 result) {
+    if (result == CARD_RESULT_NOFILE) {
+        result = CARD_RESULT_READY;
+    }
+    wp->result = result;
+    wp->flags &= ~CARD_FLAG_CALL_BUSY;
 }
 
 /** Deletes the save file, retrying while busy; a missing file counts as success. */
