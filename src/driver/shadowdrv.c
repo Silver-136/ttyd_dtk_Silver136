@@ -386,6 +386,12 @@ static void shadowDisp(CameraId cameraId, void* param) {
     }
 }
 
+/** Returns the number of shadow configs; no version calls it (JP demo map: UNUSED, 0x8; the same form as
+ * shadowGetConfig_DispModeNum, the count is the length of shadowConfig). */
+s32 shadowGetConfigNum(void) {
+    return 2;
+}
+
 /** The shadow config at index idx. */
 inline ShadowConfig* shadowGetConfig(s32 idx) {
     return &shadowConfig[idx];
@@ -1242,6 +1248,12 @@ inline void CreateRampTex16(GXTexObj* obj) {
     GXInitTexObj(obj, ramp, 0x100, 0x100, GX_TF_IA8, GX_CLAMP, GX_REPEAT, GX_FALSE);
     GXInitTexObjLOD(obj, GX_NEAR, GX_NEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
     DCFlushRange(ramp, size);
+}
+
+/** Returns the number of shadow texture sizes; no version calls it (JP demo map: UNUSED, 0x8; the same form as
+ * shadowGetConfig_DispModeNum, the count is the length of ShadowSizeTbl). */
+s32 shadowGetConfig_ShadowTexSizeNum(void) {
+    return 4;
 }
 
 /**

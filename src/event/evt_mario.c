@@ -980,6 +980,15 @@ USER_FUNC(evt_mario_set_ship_motion2) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Empty in every version: returns at once without reading its argument. Original name, place and size (0x8) from
+ * the JP demo map (UNUSED); an 8-byte command can only return, and EVT_RETURN_DONE is what the linked empty
+ * commands return.
+ */
+USER_FUNC(evt_mario_set_anm_spd) {
+    return EVT_RETURN_DONE;
+}
+
 /** Writes the name of Mario's current animation to arg 0. */
 USER_FUNC(evt_mario_get_pose) {
     EvtWord* args = event->args;
@@ -2522,4 +2531,17 @@ USER_FUNC(evt_mario_paper_plane) {
         return EVT_RETURN_DONE;
     }
     return EVT_RETURN_BLOCK;
+}
+
+/**
+ * Empty in every version: evt_mario_recover_full_hp and evt_mario_recover_full_star_pwr return at once. Original
+ * names, place and sizes (0x8 each) from the JP demo map (UNUSED); an 8-byte command can only return, and
+ * EVT_RETURN_DONE is what the linked empty commands return.
+ */
+USER_FUNC(evt_mario_recover_full_hp) {
+    return EVT_RETURN_DONE;
+}
+
+USER_FUNC(evt_mario_recover_full_star_pwr) {
+    return EVT_RETURN_DONE;
 }
