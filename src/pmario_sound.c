@@ -10853,13 +10853,11 @@ u8 psndSFX_get_vol(s32 id) {
 /** Returns a free environment sound entry, or NULL when all 16 are in use. */
 // Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
 PaperSoundEnv* searchEmptyPSENV(void) {
-    PaperSoundEnv* p = psenv;
     s32 j;
     for (j = 0; j < 16; j++) {
-        if (p->id == 0) {
+        if (psenv[j].id == 0) {
             return &psenv[j];
         }
-        p++;
     }
     return NULL;
 }

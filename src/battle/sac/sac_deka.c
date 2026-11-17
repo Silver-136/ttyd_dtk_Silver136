@@ -1292,8 +1292,7 @@ static void yuka_disp(CameraId cam, void* param) {
             GXLoadPosMtxImm(camera->view, GX_PNMTX0);
             GXSetCurrentMtx(GX_PNMTX0);
             fifo = &GXWGFifo;
-            i = 0;
-            do {
+            for (i = 0; i < 128; i++) {
                 GXBegin(GX_QUADS, GX_VTXFMT0, 4);
                 YUKA_POSITION(fifo, &m->disp[0][i]);
                 GXTexCoord2f32(m->u[0][i], m->v[0][i]);
@@ -1303,8 +1302,7 @@ static void yuka_disp(CameraId cam, void* param) {
                 GXTexCoord2f32(m->u[1][i + 1], m->v[1][i + 1]);
                 YUKA_POSITION(fifo, &m->disp[0][i + 1]);
                 GXTexCoord2f32(m->u[0][i + 1], m->v[0][i + 1]);
-                i++;
-            } while (i < 128);
+            }
         }
     }
 }

@@ -218,7 +218,6 @@ static USER_FUNC(evt_make_texbuf) {
  * and stores the terminating value in *end.
  */
 static void puniAnimCount(s16* pattern, s16* count, s16* end) {
-    s32 n = 0;
     s32 i = 0;
 
     while (TRUE) {
@@ -230,10 +229,9 @@ static void puniAnimCount(s16* pattern, s16* count, s16* end) {
             *end = pattern[i];
             break;
         }
-        n++;
         i++;
     }
-    *count = n;
+    *count = i;
 }
 
 /**

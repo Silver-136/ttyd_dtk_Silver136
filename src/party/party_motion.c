@@ -844,10 +844,9 @@ void party_motion_homing_walk(PartyEntry* party) {
         }
     }
     px = party->position.x;
-    i = 0;
     py = party->position.y;
     pz = party->position.z;
-    do {
+    for (i = 0; i <= 10; i++) {
         fm = partyGetFootmarkPtr(id);
         t = fm->pos;
         dir = angleABf(px, pz, t.x, t.z);
@@ -857,7 +856,7 @@ void party_motion_homing_walk(PartyEntry* party) {
         }
         partyNextReadId(id);
         partyGetReadId2(id, &t);
-    } while (++i <= 10);
+    }
     t = marioGetPtr()->position;
 found:
     p2 = party->position;
@@ -1248,10 +1247,9 @@ void party_motion_homing_walk(PartyEntry* party) {
         party->moveSpeed = 2.0f;
     }
     px = party->position.x;
-    i = 0;
     py = party->position.y;
     pz = party->position.z;
-    do {
+    for (i = 0; i <= 10; i++) {
         fm = partyGetFootmarkPtr(id);
         t = fm->pos;
 
@@ -1262,7 +1260,7 @@ void party_motion_homing_walk(PartyEntry* party) {
         }
         partyNextReadId(id);
         partyGetReadId2(id, &t);
-    } while (++i <= 10);
+    }
     t = marioGetPtr()->position;
     found:
     p2 = party->position;

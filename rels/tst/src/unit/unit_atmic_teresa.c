@@ -1063,7 +1063,6 @@ void teresa_ext_main(void) {
     AtmTeresa* t;
     BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, atmic_teresa_id[0]);
     BattleUnit* target = BattleGetUnitPtr(_battleWorkPointer, target_unit_id[0]);
-    s32 n;
     f32 angle;
     s32 waits[8] = {0, 2, 5, 7, 10, 12, 15, 17};
     f32 ofs[30][2] = {
@@ -1250,14 +1249,12 @@ void teresa_ext_main(void) {
                 t->vel.x = (t->target.x - (*pose->mtx)[0][3]) / 20.0f;
                 t->vel.y = (t->target.y - (*pose->mtx)[1][3]) / 20.0f;
                 t->vel.z = (t->target.z - (*pose->mtx)[2][3]) / 20.0f;
-                n = 0;
                 for (j = 0; j < 8; j++) {
                     if (teresa[j].state != 15) {
                         break;
                     }
-                    n++;
                 }
-                if (n == 8) {
+                if (j == 8) {
                     for (j = 0; j < 8; j++) {
                         AtmTeresa* p = &teresa[j];
                         p->state = 20;

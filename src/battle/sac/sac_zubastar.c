@@ -838,7 +838,6 @@ static USER_FUNC(zubastar_bomb) {
     ZubaStarWork* w = GetZubaStarPtr();
     s32 i;
     s32 k;
-    s32 c;
     if (isFirstCall) {
         dispEntry(CAMERA_2D, 0.0f, DISP_MODE_OPAQUE, zubastar_capture, NULL);
         w->phase = 0;
@@ -846,14 +845,12 @@ static USER_FUNC(zubastar_bomb) {
     }
     switch (w->phase) {
         case 0:
-            c = 0;
             for (i = 0; i < w->count; i++) {
                 if (w->ptrs[i]->state != 10) {
                     break;
                 }
-                c++;
             }
-            if (c == w->count) {
+            if (i == w->count) {
                 return 2;
             }
     }

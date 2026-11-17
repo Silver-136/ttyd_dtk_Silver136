@@ -2796,8 +2796,7 @@ void winSortEntry(WindowWork* wp, s32 type, f32 x, f32 y) {
     s32 n;
 
     n = 0;
-    while (sd->name != NULL) {
-        sd++;
+    while (sd[n].name != NULL) {
         n++;
     }
     wp->sortType = type;

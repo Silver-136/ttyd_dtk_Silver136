@@ -1908,7 +1908,6 @@ static void BattleAudienceItemCtrlProcess(void) {
                 it->flags |= AUDIENCE_ITEM_FLAG_VISIBLE;
                 if (it->itemType == ITEM_NULL) {
                     BattleAudienceItemKind* tbl = kd->itemTable;
-                    s32 cnt = 0;
                     s32 sum;
                     s32 acc;
                     s32 r;
@@ -1919,10 +1918,9 @@ static void BattleAudienceItemCtrlProcess(void) {
                             break;
                         }
                         sum += tbl[j].chance;
-                        cnt++;
                         j++;
                     }
-                    if (cnt == 0) {
+                    if (j == 0) {
                         goto done;
                     }
                     r = irand(sum);
@@ -2176,7 +2174,6 @@ static void BattleAudienceApSrcCtrlProcess(void) {
     BattleAudience* base = BattleAudienceBaseGetPtr();
     s32 cnt;
     s32 i;
-    s32 k;
     f32 dy;
     f32 dx;
 
@@ -2200,13 +2197,12 @@ static void BattleAudienceApSrcCtrlProcess(void) {
             base->apStarSfxId = psndSFXOn("SFX_BTL_SYS_AP_STAR1");
         }
     } else {
-        for (k = 0, i = 0; i < AUDIENCE_ITEM_MAX; i++) {
+        for (i = 0; i < AUDIENCE_ITEM_MAX; i++) {
             if (base->starpower[i].flags & AUDIENCE_STAR_FLAG_ACTIVE) {
                 break;
             }
-            k++;
         }
-        if (k == 100) {
+        if (i == AUDIENCE_ITEM_MAX) {
             base->flags &= ~AUDIENCE_FLAG_SP_GAINED;
             psndSFXOff(base->apStarSfxId);
             base->apStarSfxId = 0;

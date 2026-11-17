@@ -207,14 +207,12 @@ static void main_base(void) {
                 w->o3d[i].state = 1;
             }
         case 2:
-            n = 0;
             for (i = 0; i < 9; i++) {
                 if (w->o3d[i].state != 4) {
                     break;
                 }
-                n++;
             }
-            if (n == 9) {
+            if (i == 9) {
                 w->state = 3;
                 w->timer = 0;
             }
@@ -266,14 +264,12 @@ static void main_base(void) {
             }
             break;
         case 5:
-            n = 0;
             for (i = 0; i < 9; i++) {
                 if (w->o3d[i].state != 8) {
                     break;
                 }
-                n++;
             }
-            if (n == 9) {
+            if (i == 9) {
                 w->state = 6;
                 w->timer = 0;
             }

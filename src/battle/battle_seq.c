@@ -504,13 +504,12 @@ static void btlseqFirstAct(BattleWork* wp) {
         case 0x200000A:
             wp->luckEventId = 0;
             flag = 0;
-            k = 0;
-            do {
+            for (k = 0; k < BATTLE_UNIT_MAX; k++) {
                 unit = BattleGetUnitPtr(wp, k);
                 if (unit && unit->badgesEquipped.LuckyStart && !BtlUnit_CheckStatus(unit, STATUS_DEAD)) {
                     flag = 1;
                 }
-            } while (++k < BATTLE_UNIT_MAX);
+            }
             if (flag) {
                 evt = evtEntry(nanika_luck_event, 10, 0);
                 evt->unitId = UNIT_ID_SYSTEM;

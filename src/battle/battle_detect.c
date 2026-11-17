@@ -607,21 +607,18 @@ void BattleChoiceSamplingEnemy(BattleWorkWeaponTargets* d, u32 flags, s32* unitO
         } else {
             s32 sum = 0;
             s32 r;
-            s32 pick;
             for (i = 0; i < 74; i++) {
                 sum += w[i];
             }
             r = irand(sum);
-            pick = 0;
             for (i = 0; i < 74; i++) {
                 r -= w[i];
                 if (r <= 0) {
                     break;
                 }
-                pick++;
             }
-            *unitOut = d->targets[pick].unitIdx;
-            *partOut = d->targets[pick].partIdx;
+            *unitOut = d->targets[i].unitIdx;
+            *partOut = d->targets[i].partIdx;
         }
     }
 }

@@ -573,10 +573,9 @@ void evt_nannpc_set_animtbl_sub(NanNPC* npc, s16* tbl) {
     npc->animtbl = tbl;
     n = 0;
     while (TRUE) {
-        if (*tbl == -1) {
+        if (tbl[n] == -1) {
             break;
         }
-        tbl++;
         n++;
     }
     npc->animnum = n;
@@ -595,10 +594,9 @@ USER_FUNC(evt_nannpc_set_animtbl) {
     npc->animtbl = tbl;
     n = 0;
     while (TRUE) {
-        if (*tbl == -1) {
+        if (tbl[n] == -1) {
             break;
         }
-        tbl++;
         n++;
     }
     npc->animnum = n;

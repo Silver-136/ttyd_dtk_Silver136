@@ -841,7 +841,6 @@ s32 iconNumberDispGx(Mtx mtx, s32 number, BOOL small, GXColor color) {
     s32 digits[5];
     Mtx m;
     s32 n;
-    s32* dp;
     s32 i;
     s32 count;
     s32 ret;
@@ -872,10 +871,10 @@ s32 iconNumberDispGx(Mtx mtx, s32 number, BOOL small, GXColor color) {
     } else {
         count = 1;
     }
-    for (dp = digits, i = 0; i < count; dp++, i++) {
+    for (i = 0; i < count; i++) {
         MTXTrans(m, (f32)-i * width, 0.0f, 0.0f);
         MTXConcat(mtx, m, m);
-        iconDispGxCol(m, ICON_FLAG_2D, !small ? (s32)suuji[*dp] : (s32)suuji_s[*dp], color);
+        iconDispGxCol(m, ICON_FLAG_2D, !small ? (s32)suuji[digits[i]] : (s32)suuji_s[digits[i]], color);
         ret += width;
     }
     return ret;
@@ -891,7 +890,6 @@ s32 iconNumberDispGx3D(Mtx mtx, s32 number, BOOL small, GXColor color) {
     s32 digits[4];
     Mtx m;
     s32 n;
-    s32* dp;
     s32 i;
     s32 count;
     s32 ret;
@@ -922,10 +920,10 @@ s32 iconNumberDispGx3D(Mtx mtx, s32 number, BOOL small, GXColor color) {
     } else {
         count = 1;
     }
-    for (dp = digits, i = 0; i < count; dp++, i++) {
+    for (i = 0; i < count; i++) {
         MTXTrans(m, (f32)-i * width, 0.0f, 0.0f);
         MTXConcat(mtx, m, m);
-        iconDispGxCol(m, 0, !small ? (s32)suuji[*dp] : (s32)suuji_s[*dp], color);
+        iconDispGxCol(m, 0, !small ? (s32)suuji[digits[i]] : (s32)suuji_s[digits[i]], color);
         ret += width;
     }
     return ret;

@@ -468,9 +468,8 @@ USER_FUNC(evt_bero_get_info) {
         if (!e->hitName) {
             break;
         }
-        *table = e;
+        table[i] = e;
         switches[i] = -1;
-        table++;
         i++;
         e++;
     }

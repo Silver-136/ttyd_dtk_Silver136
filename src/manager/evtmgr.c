@@ -474,8 +474,6 @@ void evtmgrMain(void) {
     BOOL finished;
     OSTime delta;
     int i, ret;
-    s32* entryNum;
-    s32* eventId;
 
     runMainF = TRUE; // entries created while this runs are added to this frame's run table
 
@@ -490,11 +488,9 @@ void evtmgrMain(void) {
     wp->lastUpdate = gp->renderTime;
     make_pri_table();
 
-    entryNum = priTbl;
-    eventId = priIDTbl;
     for (i = 0; i < priTblNum; i++) {
-        entry = &wp->entries[*entryNum];
-        if ((entry->flags & EVENT_ACTIVE) && (entry->eventId == *eventId)) {
+        entry = &wp->entries[priTbl[i]];
+        if ((entry->flags & EVENT_ACTIVE) && (entry->eventId == priIDTbl[i])) {
             if (!(entry->flags & (0x80 | EVENT_WAITING_ON_CHILD | EVENT_STOPPED))) {
                 finished = FALSE;
                 entry->lifetime += delta;
@@ -520,8 +516,6 @@ void evtmgrMain(void) {
                 }
             }
         }
-        entryNum++;
-        eventId++;
     }
     runMainF = FALSE;
 }

@@ -606,29 +606,18 @@ s32 _getBufId(s32 ofs) {
  * 0 one way, 1 the other (no steps against it and at least four with it), or -1 when it is not turning steadily.
  */
 static s32 chkRevolveDir(s32* cw, s32* ccw) {
-    s32 base;
     s32 i;
     RubWork* rw = &rubwork;
     s32 off = 0;
     s32 cwCount = 0;
     s32 cur;
-    s32 j;
     s32 ccwCount = 0;
-    s32 prev;
     s32 d;
+    s32 prev;
 
-    base = rw->idx;
     for (i = 0; i < 10; i++) {
-        j = base + off;
-        while (j < 0) {
-            j += 20;
-        }
-        cur = rw->hist[j];
-        d = base + (off - 1);
-        while (d < 0) {
-            d += 20;
-        }
-        prev = rw->hist[d];
+        cur = rw->hist[_getBufId(off)];
+        prev = rw->hist[_getBufId(off - 1)];
         off--;
         if (i == 0 && cur == prev) {
             continue;

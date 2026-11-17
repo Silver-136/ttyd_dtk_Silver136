@@ -790,7 +790,6 @@ USER_FUNC(unitwin_window_select_func) {
     s32 j;
     s32 n;
     s32 ng;
-    s32* p;
     s32 t;
     s32 id;
     InformantWork* jdt = &_jdt;
@@ -1139,8 +1138,8 @@ USER_FUNC(unitwin_window_select_func) {
                 return EVT_RETURN_YIELD;
             case UNITWIN_MODE_PARTY_RANK_DOWN_UNUSED:
                 pouch = pouchGetPtr();
-                for (i = 0, p = party_id_table; (id = *p) != 0; p++, i++) {
-                    if (partyChkJoin(id) && wp->skipEntry != *p) {
+                for (i = 0; (id = party_id_table[i]) != 0; i++) {
+                    if (partyChkJoin(id) && wp->skipEntry != party_id_table[i]) {
                         if (n == wp->cursor) {
                             break;
                         }

@@ -799,7 +799,6 @@ static void calcCamRoad(CamRoadState* out, CamRoadState* prev, f32 xA, f32 yA, f
     f32 mnz;
     f32 cs, sn, w, ox, oz;
     s32 cnt;
-    s32* idxp;
     s32 j;
     s32 l;
     CamRoadCurve* curve;
@@ -878,9 +877,8 @@ static void calcCamRoad(CamRoadState* out, CamRoadState* prev, f32 xA, f32 yA, f
                 cnt = strip->num;
                 cnt--;
                 idx = &wp->map->stripIdx[strip->idxOfs];
-                idxp = idx + 1;
-                for (l = 1; cnt > l; idxp++, l++) {
-                    if (collisionTri_simple(posB, verts[idx[0]], verts[idxp[0]], verts[idxp[1]], &best)) {
+                for (l = 1; cnt > l; l++) {
+                    if (collisionTri_simple(posB, verts[idx[0]], verts[idx[l]], verts[idx[l + 1]], &best)) {
                         hitCurve = curve;
                         break;
                     }
