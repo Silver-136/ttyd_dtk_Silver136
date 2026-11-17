@@ -191,6 +191,11 @@ static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(btldefaultevt_Damage)
+    // BUG: the same unchecked body id as in gesso_arm_dead_event. When one hit defeats the body and this
+    // tentacle, btldefaultevt_Damage can return after this tentacle's death script still in the frame the body was
+    // freed (before this tentacle's own deletion ends this script), and btlevtcmd_GetUnitWork reads through a NULL
+    // unit pointer. Retail crashes earlier, in the death script's
+    // SetUnitWork, so this read is only reached once that one is fixed.
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, GESSO_ARM_WORK_BODY, LW(3))
     IF_INT_NOT_EQUAL(LW(3), -1)
         CALL(btlevtcmd_GetUnitWork, LW(3), GESSO_UNIT_WORK_BUSY, LW(0))
