@@ -44,10 +44,16 @@ static CardWork* wp;
 //.sdata
 static const char* version = VERSION_PICK("009", "010");
 
+// The helpers below (check_sum, headerCheck, dataCheck, make_default, make_header, make_data, cardCopy2Buffer and
+// the memcard_* calls) have the names and the shape the JP demo map gives them (see cardmgr_demo.inc). These
+// versions have no map: the evidence here is that the same functions, inlined, give the retail code in every
+// version (make_header is a real call on PAL, where the language switch makes it too long to inline).
+
 // local prototypes
-static void check_sum(CardSaveSlot* save);
+static u32 check_sum(u8* data, s32 size);
+static void make_default(void);
 static void make_header(void);
-static void make_data(void);
+static void make_data(s32 slot);
 
 static void memcard_probe(void);
 static void memcard_mount(void);
@@ -73,7 +79,7 @@ static void format_main(void);
 static void delete_main(void);
 
 static BOOL headerCheck(void* buf);
-static BOOL dataCheck(void);
+static BOOL dataCheck(void* buf);
 
 /**
  * The in-memory copy of the save file: the header (comment, banner, icon, settings)
@@ -103,8 +109,7 @@ void cardBufReset(void) {
         wp->flags &= ~CARD_FLAG_BUSY;
     }
 
-    make_header();
-    make_data();
+    make_default();
 
     wp->chan = -1;
     wp->fileNo = -1;
@@ -131,8 +136,7 @@ void cardInit(void) {
     wp->writeBuf = __memAlloc(HEAP_DEFAULT, sizeof(CardSaveSlot));
     memset(wp->writeBuf, 0, sizeof(CardSaveSlot));
 
-    make_header();
-    make_data();
+    make_default();
 
     wp->chan = -1;
     wp->fileNo = -1;
@@ -249,6 +253,53 @@ void cardMain(void) {
 }
 
 /**
+ * Snapshots the running game into a save slot of the file image (the reverse of cardCopy2Main): records Mario's
+ * position, both partners, the save time and count, then copies the global work, pouch, defeated-NPC records,
+ * badge shop, Pianta Parlor and informant state and stamps the slot with the version, size and checksums.
+ */
+// Name and place from the JP demo map (see cardmgr_demo.inc). Its only call, in cardWrite, is inlined, which the
+// compiler does for a function of at most 30 statements: the two partner lines fit as conditional expressions, and
+// from US on the two added soft-reset lines fit only as one statement (the chained form is a choice, another
+// way to save one statement would give the same code).
+void cardCopy2Buffer(s32 slot) {
+    CardSaveSlot* save;
+    MarioWork* mario;
+    PartyEntry* party;
+
+    save = &wp->data->saves[slot];
+    mario = marioGetPtr();
+    memset(save, 0, sizeof(CardSaveSlot));
+    gp->savePlayerPos = mario->position;
+    party = partyGetPtr(marioGetPartyId());
+    gp->savePartyId[0] = (party != NULL) ? party->currentMemberId : mario->prevPartyMemberId[0];
+    party = partyGetPtr(marioGetExtraPartyId());
+    gp->savePartyId[1] = (party != NULL) ? party->currentMemberId : mario->prevPartyMemberId[1];
+    gp->saveTime = OSGetTime();
+    gp->saveCount++;
+    gp->flags &= ~GW_FLAG_SAVE_LOADED;
+    gp->flags &= ~GW_FLAG_NO_ENTRANCE;
+    gp->resetType = 0;
+#if VERSION >= VERSION_US
+    gp->softResetWait = gp->resetButtonDown = 0;
+#endif
+    gp->dvdError = 0;
+    memcpy(&save->data.global, gp, sizeof(GlobalWork));
+    memcpy(&save->data.pouch, pouchGetPtr(), sizeof(PouchData));
+    memcpy(save->data.deadInfo, fbatGetPointer()->deadInfo, sizeof(save->data.deadInfo));
+    memcpy(&save->data.badgeShop, bdsw, sizeof(BadgeShopWork));
+    memcpy(&save->data.parlor, yuwp, sizeof(PiantaParlorWork));
+    memcpy(&save->data.informant, &_jdt.readFlags, sizeof(_jdt.readFlags));
+    save->data.flags &= ~CARD_SAVE_FLAG_ERASED;
+    save->data.flags &= ~CARD_SAVE_FLAG_NO_VALID_COPY;
+    strcpy(save->version, version);
+    save->size = sizeof(save->data);
+    save->checksum1 = 0;
+    save->checksum2 = ~0u;
+    save->checksum1 = check_sum((u8*)&save->data, sizeof(save->data));
+    save->checksum2 = ~save->checksum1;
+}
+
+/**
  * Loads a save slot into the running game: copies its global work, pouch, defeated-NPC records, badge shop,
  * Pianta Parlor and informant state over the live ones,
  * keeping the console settings (sound mode, rumble, last slot, progressive scan, and the language,
@@ -298,7 +349,7 @@ void cardCopy2Main(s32 slot) {
     memcpy(&_jdt.readFlags, &save->data.informant, sizeof(InformantReadFlags));
     gp->resetType = 0;
     gp->resetButtonDown = 0;
-    // BUG (JP and the early demos, fixed in US here and in cardWrite): softResetWait is not cleared on save or on
+    // BUG (JP and the early demos, fixed in US here and in cardCopy2Buffer): softResetWait is not cleared on save or on
     // load. A file saved while the soft-reset buttons were held keeps softResetWait set, its old softResetTimeout
     // and the held buttons (gp->button); after this copy, viPostCallback's reset check sees them before the next
     // key read, finds the timeout long past and soft-resets, so the file resets the game every time it is loaded.
@@ -331,8 +382,6 @@ void cardCopy2Main(s32 slot) {
 
 /** Starts erasing a save slot: writes an empty slot marked erased (flag 1) over both its copies on the card. */
 void cardErase(s32 slotNo) {
-    CardSaveSlot* save;
-
     if (!(wp->flags & CARD_FLAG_EXEC)) {
         wp->op = CARD_OP_WRITE;
         wp->currSlot = slotNo;
@@ -341,10 +390,7 @@ void cardErase(s32 slotNo) {
         wp->flags |= CARD_FLAG_EXEC;
         wp->flags &= ~(CARD_FLAG_DONE | CARD_FLAG_FAILED);
         wp->flags |= CARD_FLAG_ERASE;
-        save = wp->writeBuf;
-        memset(save, 0, sizeof(save->data));
-        save->data.flags |= CARD_SAVE_FLAG_ERASED;
-        check_sum(save);
+        make_data(-1);
     }
 }
 
@@ -362,17 +408,8 @@ void cardCopy(s32 from, s32 to) {
     }
 }
 
-/**
- * Saves the game into a slot: records Mario's position, both partners, the save time and count,
- * then snapshots the global work, pouch, defeated-NPC records, badge shop, Pianta Parlor and informant state,
- * checksums it and starts the write.
- */
+/** Saves the game into a slot: snapshots the running game into the slot of the file image and starts the write. */
 void cardWrite(s32 slot) {
-    CardSaveSlot* save;
-    MarioWork* mario;
-    PartyEntry* party;
-    s8 partyId;
-
     if (!(wp->flags & CARD_FLAG_EXEC)) {
         wp->op = CARD_OP_WRITE;
         wp->currSlot = slot;
@@ -381,43 +418,7 @@ void cardWrite(s32 slot) {
         wp->flags |= CARD_FLAG_EXEC;
         wp->flags &= ~(CARD_FLAG_DONE | CARD_FLAG_FAILED);
         wp->flags &= ~CARD_FLAG_ERASE;
-        save = &wp->data->saves[slot];
-        mario = marioGetPtr();
-        memset(save, 0, sizeof(CardSaveSlot));
-        gp->savePlayerPos = mario->position;
-        party = partyGetPtr(marioGetPartyId());
-        if (party != NULL) {
-            partyId = party->currentMemberId;
-        } else {
-            partyId = mario->prevPartyMemberId[0];
-        }
-        gp->savePartyId[0] = partyId;
-        party = partyGetPtr(marioGetExtraPartyId());
-        if (party != NULL) {
-            partyId = party->currentMemberId;
-        } else {
-            partyId = mario->prevPartyMemberId[1];
-        }
-        gp->savePartyId[1] = partyId;
-        gp->saveTime = OSGetTime();
-        gp->saveCount++;
-        gp->flags &= ~GW_FLAG_SAVE_LOADED;
-        gp->flags &= ~GW_FLAG_NO_ENTRANCE;
-        gp->resetType = 0;
-#if VERSION >= VERSION_US
-        gp->resetButtonDown = 0;
-        gp->softResetWait = 0;
-#endif
-        gp->dvdError = 0;
-        memcpy(&save->data.global, gp, sizeof(GlobalWork));
-        memcpy(&save->data.pouch, pouchGetPtr(), sizeof(PouchData));
-        memcpy(save->data.deadInfo, fbatGetPointer()->deadInfo, sizeof(save->data.deadInfo));
-        memcpy(&save->data.badgeShop, bdsw, sizeof(BadgeShopWork));
-        memcpy(&save->data.parlor, yuwp, sizeof(PiantaParlorWork));
-        memcpy(&save->data.informant, &_jdt.readFlags, sizeof(_jdt.readFlags));
-        save->data.flags &= ~CARD_SAVE_FLAG_ERASED;
-        save->data.flags &= ~CARD_SAVE_FLAG_NO_VALID_COPY;
-        check_sum(save);
+        cardCopy2Buffer(slot);
     }
 }
 
@@ -494,13 +495,13 @@ static void write_main(void) {
                 memcard_read(wp->readBuf, sizeof(CardSaveSlot), (s32)(sizeof(CardMetadata) + (wp->currSlot * sizeof(CardSaveSlot))));
                 break;
             case 7:
-                wp->validSave1 = dataCheck();
+                wp->validSave1 = dataCheck(wp->readBuf);
                 break;
             case 8:
                 memcard_read(wp->readBuf, sizeof(CardSaveSlot), (s32)(sizeof(CardData) + (wp->currSlot * sizeof(CardSaveSlot))));
                 break;
             case 9:
-                wp->validSave2 = dataCheck();
+                wp->validSave2 = dataCheck(wp->readBuf);
                 break;
             case 10:
                 if (wp->validSave1 && !wp->validSave2) {
@@ -663,14 +664,14 @@ static void read_main(void) {
                 memcard_read(wp->readBuf, sizeof(CardSaveSlot), (s32)((wp->opSlot * sizeof(CardSaveSlot)) + sizeof(CardMetadata)));
                 break;
             case 7:
-                wp->validSave1 = dataCheck();
+                wp->validSave1 = dataCheck(wp->readBuf);
                 wp->lastSaveTime1 = ((CardSaveSlot*)wp->readBuf)->data.global.saveTime;
                 break;
             case 8:
                 memcard_read(wp->readBuf, sizeof(CardSaveSlot), (s32)((wp->opSlot * sizeof(CardSaveSlot)) + sizeof(CardData)));
                 break;
             case 9:
-                wp->validSave2 = dataCheck();
+                wp->validSave2 = dataCheck(wp->readBuf);
                 wp->lastSaveTime2 = ((CardSaveSlot*)wp->readBuf)->data.global.saveTime;
                 break;
             case 10:
@@ -766,14 +767,14 @@ static void read_all_main(void) {
                 memcard_read(wp->readBuf, sizeof(CardSaveSlot), (s32)((wp->opSlot * sizeof(CardSaveSlot)) + sizeof(CardMetadata)));
                 break;
             case 7:
-                wp->validSave1 = dataCheck();
+                wp->validSave1 = dataCheck(wp->readBuf);
                 wp->lastSaveTime1 = ((CardSaveSlot*)wp->readBuf)->data.global.saveTime;
                 break;
             case 8:
                 memcard_read(wp->readBuf, sizeof(CardSaveSlot), (s32)((wp->opSlot * sizeof(CardSaveSlot)) + sizeof(CardData)));
                 break;
             case 9:
-                wp->validSave2 = dataCheck();
+                wp->validSave2 = dataCheck(wp->readBuf);
                 wp->lastSaveTime2 = ((CardSaveSlot*)wp->readBuf)->data.global.saveTime;
                 break;
             case 10:
@@ -864,8 +865,7 @@ static void create_main(void) {
                 memcard_create();
                 break;
             case 5:
-                make_header();
-                make_data();
+                make_default();
                 memcard_write(wp->data, sizeof(CardData), 0);
                 break;
             case 6:
@@ -1017,87 +1017,8 @@ static void delete_main(void) {
     }
 }
 
-/** Stamps a slot with the save version string and size and its checksums (byte sum and its complement). */
-static void check_sum(CardSaveSlot* save) {
-    s32 i;
-    u8* temp;
-    u32 checksum;
-
-    strcpy(save->version, version);
-    save->size = sizeof(save->data);
-    save->checksum1 = (checksum = 0u);
-    save->checksum2 = ~0u;
-
-    temp = (u8*)&save->data;
-    for (i = 0; i < (s32)sizeof(save->data); i++) {
-        checksum += temp[i];
-    }
-    save->checksum1 = checksum;
-    save->checksum2 = ~save->checksum1;
-}
-
-/**
- * TRUE if the file header at buf has matching checksums: the read buffer after a header read, or the file image
- * that cardReadAll reads straight into.
- */
-static BOOL headerCheck(void* buf) {
-    s32 i;
-    s32 checksum;
-    u8* temp;
-    CardMetadata* metadata;
-
-    metadata = buf;
-    if (metadata->checksum2 != ~metadata->checksum1) {
-        return FALSE;
-    } else {
-        checksum = 0;
-        temp = (u8*)&metadata->data;
-        for (i = 0; i < (s32)sizeof(metadata->data); i++) {
-            checksum += temp[i];
-        }
-        if (metadata->checksum1 != checksum) {
-            return FALSE;
-        } else {
-            return TRUE;
-        }
-    }
-}
-
-/**
- * TRUE if the slot in the read buffer has the right size, this release's version string and matching checksums,
- * so a save from a different version reads as corrupt.
- */
-static BOOL dataCheck(void) {
-    s32 i;
-    u32 checksum;
-    u8* temp;
-    CardSaveSlot* save;
-
-    save = wp->readBuf;
-    if (save->size != sizeof(save->data)) {
-        return FALSE;
-    } else if (strcmp(save->version, version)) {
-        return FALSE;
-    } else if (save->checksum2 != ~save->checksum1) {
-        return FALSE;
-    } else {
-        checksum = 0;
-        temp = (u8*)&save->data;
-        for (i = 0; i < (s32)sizeof(save->data); i++) {
-            checksum += temp[i];
-        }
-        if (save->checksum1 != checksum) {
-            return FALSE;
-        } else {
-            return TRUE;
-        }
-    }
-}
-
-#if VERSION >= VERSION_DEMO_EU
-/** Byte sum of the save file header (PAL: an inline; JP and US spell the loop out in make_header). */
-// FAKE: invented one-use inline helper (no map name); writing it out changes the code (FAKES.md)
-static inline u32 header_sum(u8* data, s32 size) {
+/** Byte sum; the file header and each save slot store it and its complement as their checksums. */
+static u32 check_sum(u8* data, s32 size) {
     s32 i;
     u32 sum;
 
@@ -1107,16 +1028,62 @@ static inline u32 header_sum(u8* data, s32 size) {
     }
     return sum;
 }
-#endif
+
+/**
+ * TRUE if the file header at buf has matching checksums: the read buffer after a header read, or the file image
+ * that cardReadAll reads straight into.
+ */
+static BOOL headerCheck(void* buf) {
+    CardMetadata* metadata;
+
+    metadata = buf;
+    if (metadata->checksum2 != ~metadata->checksum1) {
+        return FALSE;
+    } else {
+        if (metadata->checksum1 != check_sum((u8*)&metadata->data, sizeof(metadata->data))) {
+            return FALSE;
+        } else {
+            return TRUE;
+        }
+    }
+}
+
+/**
+ * TRUE if the slot at buf (always the read buffer) has the right size, this release's version string and matching
+ * checksums, so a save from a different version reads as corrupt.
+ */
+static BOOL dataCheck(void* buf) {
+    CardSaveSlot* save;
+
+    save = buf;
+    if (save->size != sizeof(save->data)) {
+        return FALSE;
+    } else if (strcmp(save->version, version)) {
+        return FALSE;
+    } else if (save->checksum2 != ~save->checksum1) {
+        return FALSE;
+    } else {
+        if (save->checksum1 != check_sum((u8*)&save->data, sizeof(save->data))) {
+            return FALSE;
+        } else {
+            return TRUE;
+        }
+    }
+}
+
+/** Builds an empty save file image: a fresh header and four erased slots. */
+static void make_default(void) {
+    s32 i;
+
+    make_header();
+    for (i = 0; i < 4; i++) {
+        make_data(i);
+    }
+}
 
 /** PAL: not inlined; the comment and its date order follow gp->language */
 static void make_header(void) {
     CardMetadata* metadata;
-#if VERSION < VERSION_DEMO_EU
-    s32 i;
-    u8* temp;
-    u32 checksum;
-#endif
     OSCalendarTime td;
 
     metadata = &cardGetFilePtr()->metadata;
@@ -1165,39 +1132,32 @@ static void make_header(void) {
     metadata->data.rumbleEnabled = (gp->rumbleEnabled != 0);
     metadata->data.soundMode = (u16)gp->soundMode;
     metadata->data.lastSlot = (u16)gp->lastSlot;
-#if VERSION >= VERSION_DEMO_EU
     metadata->checksum1 = 0;
     metadata->checksum2 = ~0u;
-    metadata->checksum1 = header_sum((u8*)&metadata->data, sizeof(metadata->data));
-#else
-    metadata->checksum1 = (checksum = 0u);
-    metadata->checksum2 = ~0u;
-
-    temp = (u8*)&metadata->data;
-    for (i = 0; i < (s32)sizeof(metadata->data); i++) {
-        checksum += temp[i];
-    }
-    metadata->checksum1 = checksum;
-#endif
+    metadata->checksum1 = check_sum((u8*)&metadata->data, sizeof(metadata->data));
     metadata->checksum2 = ~metadata->checksum1;
 }
 
-/** Clears the four slots of the file image to erased, checksummed empty saves. */
-static void make_data(void) {
+/**
+ * Makes a slot an erased, checksummed empty save: one of the four slots of the file image, or with -1 the slot
+ * staged for writing (cardErase).
+ */
+static void make_data(s32 slot) {
     CardSaveSlot* save;
-    s32 i;
 
-    for (i = 0; i < 4; i++) {
-        // i is never -1 here; the test is in the retail code all the same
-        if (i != -1) {
-            save = &cardGetFilePtr()->saves[i];
-        } else {
-            save = wp->writeBuf;
-        }
-        memset(save, 0, sizeof(save->data));
-        save->data.flags |= CARD_SAVE_FLAG_ERASED;
-        check_sum(save);
+    if (slot != -1) {
+        save = &cardGetFilePtr()->saves[slot];
+    } else {
+        save = wp->writeBuf;
     }
+    memset(save, 0, sizeof(save->data));
+    save->data.flags |= CARD_SAVE_FLAG_ERASED;
+    strcpy(save->version, version);
+    save->size = sizeof(save->data);
+    save->checksum1 = 0;
+    save->checksum2 = ~0u;
+    save->checksum1 = check_sum((u8*)&save->data, sizeof(save->data));
+    save->checksum2 = ~save->checksum1;
 }
 
 /** Card-removed callback for CARDMountAsync; does nothing. */

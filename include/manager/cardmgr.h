@@ -113,9 +113,7 @@ BOOL cardInsertChanged(void); // called by evt_memcard
 BOOL cardIsExec(void);
 s32 cardGetCode(void);
 void cardMain(void);
-#if VERSION <= VERSION_DEMO_JP
-void cardCopy2Buffer(s32 slot); // inlined into cardWrite; the later versions have no such function
-#endif
+void cardCopy2Buffer(s32 slot); // inlined into cardWrite
 void cardCopy2Main(s32 slot);
 void cardErase(s32 slot);
 void cardCopy(s32 from, s32 to);
