@@ -187,10 +187,6 @@ static ExtTexInfo ext_moamoa_data[] = {
     {0},
 };
 
-// Kept: the JP demo REL map lists this Smorg helper as its own function, and the target calls it, not inlined;
-// under -inline auto nothing else keeps a short static function out of line.
-#pragma dont_inline on
-
 /**
  * Builds the swarm's animation table (wp->defs) from ext_moamoa_data:
  * consecutive rows with the same model and animation name become one MoamoaPoseDef (first texture frame,
@@ -231,7 +227,6 @@ static void moamoa_pose_init(void) {
     } while ((++data)->group != NULL);
     wp->numDefs++;
 }
-#pragma dont_inline reset
 
 /**
  * Per-frame update of every Moamoa sprite's animation:
@@ -489,6 +484,7 @@ static f32 randf(f32 min, f32 max) {
  * looks up the train map object and runs 600 frames of the swarm logic so the swarm starts already spread out.
  */
 static void ext_moamoa_init(void) {
+    void moamoa_pose_init(void);
     s32 i;
     ExtdrvPose* pose;
     Moamoa* moa;

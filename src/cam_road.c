@@ -1337,6 +1337,7 @@ static void calcHokanCamRoad(s32 type, CamRoadState* from, CamRoadState* to, Cam
  * and some rooms (hei_00, pik_00).
  */
 void camRoadMain(CameraParams* out, f32 xA, f32 yA, f32 zA, f32 xB, f32 yB, f32 zB, f32 shiftWeight) {
+    void calcHokanCamRoad(s32 type, CamRoadState* from, CamRoadState* to, CamRoadState* unused, CamRoadState* out, f32 t);
     u32 flags;
     wp->in[0] = xA;
     wp->in[1] = yA;

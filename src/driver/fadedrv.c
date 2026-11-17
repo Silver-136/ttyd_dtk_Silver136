@@ -1522,9 +1522,6 @@ static void disp_texture(CameraId camId, void* param) {
     GXSetProjectionv(proj);
 }
 
-// kept: the target calls z (a local function in the JP demo map) from disp_maku; a function this small is auto-
-// inlined otherwise, and -inline noauto for the file changes other functions
-#pragma dont_inline on
 /**
  * Depth scale for the curtain animation drawn at a world position:
  * how its depth on the 3D camera compares with its depth on the fade camera, so it hides behind closer scenery.
@@ -1554,8 +1551,6 @@ static f32 z(void) {
     return (camera->viewport[5] + (camera->viewport[5] - camera->viewport[4]) *
         (one * (camera->projection[2][2] * pos.z + camera->projection[2][3]))) / base;
 }
-
-#pragma dont_inline reset
 
 /**
  * Writes the far depth into the depth buffer over the whole camera view without touching colour,
@@ -1621,6 +1616,7 @@ static void zFill(void) {
  * with the depth set up by z or zFill.
  */
 static void disp_maku(CameraId camId, void* param) {
+    f32 z(void);
     FadeEntry* entry = param;
     CameraEntry* camera;
     f32 scale, depth, sx, mag;

@@ -186,10 +186,6 @@ static ExtTexInfo moamoa_data[] = {
     {0},
 };
 
-// Kept: the REL maps and the target show this Smorg helper called, not inlined (eki_00, rsh_00, rsh_05 and rsh_06
-// alike); under -inline auto nothing else keeps a short static function out of line.
-#pragma dont_inline on
-
 /**
  * Builds the work area's animation table (wp->defs) from moamoa_data:
  * consecutive rows with the same model and animation name become one MoamoaPoseDef (first texture frame,
@@ -229,8 +225,6 @@ static void moamoa_pose_init(void) {
     } while ((++data)->group != NULL);
     wp->numDefs++;
 }
-
-#pragma dont_inline reset
 
 /**
  * Per-frame update of every Smorg (moamoa) sprite:
@@ -300,6 +294,7 @@ static f32 randf(f32 min, f32 max) {
  * with a yaw for the sprites that will climb in from the side.
  */
 static void moamoa_init(void) {
+    void moamoa_pose_init(void);
     s32 i;
     ExtdrvPose* pose;
     MoamoaSprite* moa;

@@ -816,9 +816,6 @@ void kpaChgModeSwimDown(void) {
     mario->kpaSpeed = 0.0f;
 }
 
-// kept: the target calls kpaSwimMove (a local function in the JP demo map) from kpa_swim; a function this small is
-// auto-inlined otherwise, and -inline noauto for the file changes other functions
-#pragma dont_inline on
 /**
  * Underwater horizontal movement: accelerates kpaSpeed from the stick up to 40
  * and turns it into a walking speed (JP and later cap it at 2; the early demos cap it at 1 and also move him here).
@@ -873,14 +870,13 @@ static void kpaSwimMove(void) {
 #endif
 }
 
-#pragma dont_inline reset
-
 /**
  * Swimming motion in kpa_03: A starts a swim stroke upward (limited near the surface),
  * he sinks slowly between strokes, B breathes fire (which freezes the stick),
  * and stepping onto a platform stops him. Also spawns the droplet effects.
  */
 void kpa_swim(void) {
+    void kpaSwimMove(void);
     MarioWork* mario = marioGetPtr();
     f32 v;
     f32 d;

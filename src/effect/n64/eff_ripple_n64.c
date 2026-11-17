@@ -75,6 +75,7 @@ EffectEntry* effRippleN64Entry(s32 type, f32 x, f32 y, f32 z, f32 yOffset) {
  * Deletes when the lifetime runs out; drawn on the work's camera, layer 2.
  */
 static void effRippleMain(EffectEntry* effect) {
+    EffectEntry* effRippleN64Entry(s32 type, f32 x, f32 y, f32 z, f32 yOffset);
     EffRippleN64Work* work;
     EffectEntry* e;
     EffRippleN64Work* w;

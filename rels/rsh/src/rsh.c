@@ -1741,6 +1741,7 @@ static RshRndNpc* _get_rnd_npc_data(s32 room, s32 group, s32 index) {
  * Args: [0] room, [1] group, [2] index; [3] receives the model (animation) name, [4] the Japanese tribe name.
  */
 static USER_FUNC(evt_rsh_get_rnd_npc_data) {
+    RshRndNpc* _get_rnd_npc_data(s32 room, s32 group, s32 index);
     EvtWord* args = event->args;
     s32 room = evtGetValue(event, args[0]);
     s32 group = evtGetValue(event, args[1]);
@@ -1757,6 +1758,7 @@ static USER_FUNC(evt_rsh_get_rnd_npc_data) {
  * Args: [0] room (0 = rsh_01, 1 = rsh_03, 2 = rsh_04), [1] group, [2] index; [3] receives the script address.
  */
 static USER_FUNC(evt_rsh_get_rnd_npc_talk_evt) {
+    RshRndNpc* _get_rnd_npc_data(s32 room, s32 group, s32 index);
     EvtWord* args = event->args;
     s32 room = evtGetValue(event, args[0]);
     s32 group = evtGetValue(event, args[1]);

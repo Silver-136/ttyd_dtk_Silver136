@@ -913,11 +913,6 @@ void partyChgRunMode(PartyEntry* party, s32 mode) {
 }
 #pragma dont_inline reset
 
-#if VERSION >= VERSION_JP
-// kept: the target calls partyChgRunMode2 from party_force_ride_yoshi and allPartyForceRideOn; a function this
-// small is auto-inlined otherwise, and -inline noauto for the file changes other functions
-#pragma dont_inline on
-#endif
 /**
  * Like partyChgRunMode but enters mode already at motion step sub,
  * without the mode's start-up (the change trigger is cleared).
@@ -939,7 +934,6 @@ void partyChgRunMode2(PartyEntry* party, s32 mode, s32 sub) {
 #endif
     party->motionStep = sub;
 }
-#pragma dont_inline reset
 
 /**
  * Returns the partner to the run mode it had before the current one,
@@ -1269,6 +1263,7 @@ static void partyHelloInit(PartyEntry* party) {
  * Step 10 places it at once, 20 just stands it still, 30 puts it on Mario's ride. Returns 1 when done.
  */
 s32 partyHelloMain(PartyEntry* party) {
+    void allPartyForceRideOn(void);
     s32 ret = 0;
     MarioWork* mario = party->playerPtr;
 
@@ -1939,15 +1934,15 @@ static void getRidePos(PartyEntry* party, Vec* pos) {
     }
 }
 
-// kept: the target calls allPartyForceRideOn from partyHelloMain (early demos the same); a function this small is
-// auto-inlined otherwise, and -inline noauto for the file changes other functions
-#pragma dont_inline on
 /**
  * Puts both partners straight into the riding-along state (run mode 11, step 11) without shadow (and hidden
  * in JP and later),
  * e.g. when Mario is already rolling, flying or sailing as they appear.
  */
 void allPartyForceRideOn(void) {
+#if VERSION >= VERSION_JP
+    void partyChgRunMode2(PartyEntry* party, s32 mode, s32 sub);
+#endif
     PartyEntry* party = partyGetPtr(marioGetPartyId());
     if (party) {
         partyChgRunMode2(party, 11, 11);
@@ -1965,7 +1960,6 @@ void allPartyForceRideOn(void) {
         partyShadowOff(party);
     }
 }
-#pragma dont_inline reset
 
 /**
  * Puts both partners in the ride mode (11) to hop onto Mario (the bellows motion, mot_jabara, in JP and later;
@@ -2769,6 +2763,9 @@ const Vec party_unused_zero_vec1 = {0.0f, 0.0f, 0.0f};
  * Nothing in the source calls it.
  */
 void party_force_ride_yoshi(PartyEntry* party) {
+#if VERSION >= VERSION_JP
+    void partyChgRunMode2(PartyEntry* party, s32 mode, s32 sub);
+#endif
     Vec pos;
 
     partyChgRunMode2(party, 12, 10);

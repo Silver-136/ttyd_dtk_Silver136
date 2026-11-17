@@ -1010,11 +1010,6 @@ static s32 hitcheck(YuuNpc* npc) {
     return 0;
 }
 
-// Kept: JP and later call fallcheck (the early demos inline it); under -inline auto nothing else keeps it out of line.
-#if VERSION >= VERSION_JP
-#pragma dont_inline on
-#endif
-
 /**
  * Applies gravity to a racing NPC (0.533 per frame, terminal speed 16.7)
  * and lands it on the floor height under it. Returns -1 when it lands, else 0.
@@ -1045,7 +1040,6 @@ static s32 fallcheck(YuuNpc* npc) {
     }
     return 0;
 }
-#pragma dont_inline reset
 
 /**
  * Returns -1 and snaps the NPC to its destination
@@ -1454,6 +1448,9 @@ static inline f32 yuunpc_rnd10(YuuNpc* npc) /* */ {
 static void yuunpc_pose_minigame4_main(void) {
 #else
 void yuunpc_pose_minigame4_main(void) {
+#endif
+#if VERSION >= VERSION_JP
+    s32 fallcheck(YuuNpc* npc);
 #endif
     s32 i;
     ExtdrvPose* ext;

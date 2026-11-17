@@ -253,6 +253,8 @@ void battleMapAlloc(void) {
  * Descriptive name (not in the symbol maps).
  */
 void battleMapFree(void) {
+    void (_mapFree)(void* base, void* alloc);
+
     (_mapFree)(mapalloc_base_ptr, R_battlemapalloc_base_ptr);
     R_battlemapalloc_base_ptr = NULL;
 }
@@ -372,10 +374,6 @@ void* (_mapAllocTail)(MAPBASE_PARAM u32 size) {
     }
 }
 
-#if VERSION >= VERSION_US
-#pragma dont_inline on // battleMapFree (US and later) calls it
-#endif
-
 void (_mapFree)(MAPBASE_PARAM void* alloc) {
     MapAllocEntry* loopEntry;
     MapAllocEntry* nextEntry;
@@ -413,10 +411,6 @@ void (_mapFree)(MAPBASE_PARAM void* alloc) {
     entry->size = newSize;
     entry->inuse = 0;
 }
-
-#if VERSION >= VERSION_US
-#pragma dont_inline reset
-#endif
 
 /**
  * Allocates a fixed 7 MiB block from the default heap in the early demos, or the dedicated smart heap minus 32 bytes in JP and later,
@@ -480,9 +474,6 @@ void smartReInit(void) {
     g_bFirstSmartAlloc = FALSE;
 }
 
-// kept: the target calls smartAutoFree from smartAlloc; a function this small is auto-inlined otherwise, and
-// -inline noauto for the file changes other functions
-#pragma dont_inline on
 /**
  * Frees the smart heap blocks of group type; group 4 blocks are demoted to group 3 instead of freed.
  * A group 3 request also demotes the remaining group 4 blocks.
@@ -510,7 +501,6 @@ void smartAutoFree(s32 allocType) {
     }
 }
 
-#pragma dont_inline reset
 /**
  * Frees a smart heap block, giving its bytes to the block before it (or back to the start of the heap)
  * and returning the descriptor to the free list.
@@ -570,6 +560,7 @@ void smartFree(smartEntry* entry) {
  * Blocks can move during compaction, so callers keep the entry, not the address.
  */
 smartEntry* smartAlloc(u32 size, u8 type) {
+    void smartAutoFree(s32 allocType);
     smartEntry* prevEntry;
     smartEntry* entry;
     int i;

@@ -632,6 +632,7 @@ static inline s32 rollChk(void) {
  * and unrolls with B when there is room. Plays the rolling loop sound and squashes the tube on landing.
  */
 void mot_roll(void) {
+    void roll_upstairs(void);
     MarioWork* mario = marioGetPtr();
     f32 pushAng;
     f32 moveAng;
@@ -1287,9 +1288,6 @@ void roll_upstairs_on(void) {
     mario->jumpSnapY = -0.01f;
 }
 
-// kept: the target calls roll_upstairs from mot_roll; a function this small is auto-inlined otherwise, and -inline
-// noauto for the file changes other functions
-#pragma dont_inline on
 /** Advances the rolling step climb started by roll_upstairs_on, clearing the step flags when it ends. */
 void roll_upstairs(void) {
     MarioWork* mario = marioGetPtr();
@@ -1300,8 +1298,6 @@ void roll_upstairs(void) {
         mario->flags &= ~MARIO_FLAG_IS_STEPPING;
     }
 }
-
-#pragma dont_inline reset
 
 /** Falling in Tube Mode: drops at up to 10 units a frame and lands on the first floor found. */
 void mot_fall_roll(void) {

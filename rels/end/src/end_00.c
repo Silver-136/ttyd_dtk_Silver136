@@ -209,6 +209,7 @@ void _prolog(void) {
  * in the US and later versions, lets the 2D letterbox bars come back.
  */
 void _epilog(void) {
+    void end_staff_roll_exit(void);
     voidfunctionptr* dtor;
 
     for (dtor = _dtors; *dtor != NULL; dtor++) {
@@ -2041,8 +2042,6 @@ USER_FUNC(evt_end_staff_roll_init) {
     return 2;
 }
 
-// Kept: the target calls end_staff_roll_exit; under -inline auto nothing else keeps a short function out of line.
-#pragma dont_inline on
 // Descriptive name (not in the symbol maps); placeholder unk_end_00000a14, JP end .text+0x950. See docs/NAME_PROVENANCE.md.
 /**
  * Cleans up after the staff roll: frees the ending picture file, lets sound effects play again and,
@@ -2062,7 +2061,6 @@ void end_staff_roll_exit(void) {
     JUTFontSetup(0);
 #endif
 }
-#pragma dont_inline reset
 
 // Descriptive name (not in the symbol maps); placeholder unk_end_000009cc, JP end .text+0x908. See docs/NAME_PROVENANCE.md.
 /**

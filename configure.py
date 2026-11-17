@@ -695,7 +695,7 @@ config.libs = [
             Object(MatchingFor("G8MJ01", "G8ME01"), "effect/n64/eff_rappa_n64.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "effect/n64/eff_recover_heart_n64.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "effect/n64/eff_release_n64.c"),
-            Object(MatchingFor("G8MJ01", "G8ME01"), "effect/n64/eff_ripple_n64.c", extra_cflags=["-inline noauto"]),
+            Object(MatchingFor("G8MJ01", "G8ME01"), "effect/n64/eff_ripple_n64.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "effect/n64/eff_rothammer_fail_n64.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "effect/n64/eff_rothammer_success_n64.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "effect/n64/eff_rubble_n64.c"),
@@ -804,7 +804,7 @@ config.libs = [
             Object(MatchingFor("G8MJ01", "G8ME01"), "mario/mario_sbr.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "mario/mario_pouch.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "mario/mario_balloon.c"),
-            Object(MatchingFor("G8MJ01", "G8ME01"), "mario/mario_kemuri.c", extra_cflags=["-inline noauto"]),
+            Object(MatchingFor("G8MJ01", "G8ME01"), "mario/mario_kemuri.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "mario/mario_party.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "mario/mario_cam.c"),
         ],
@@ -929,7 +929,7 @@ config.libs = [
         "cflags": cflags_static,
         "progress_category": "game",
         "objects": [
-            Object(MatchingFor("G8MJ01", "G8ME01"), "cam_road.c", extra_cflags=["-inline noauto"]),
+            Object(MatchingFor("G8MJ01", "G8ME01"), "cam_road.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "cam_shift.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "countdown.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "database.c"),
@@ -1990,7 +1990,7 @@ config.libs = [
             Object(MatchingFor("G8MJ01", "G8ME01"), "rsh_05.c", extra_cflags=["-inline auto,deferred"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "unit/unit_boss_moamoa.c", extra_cflags=["-inline auto,deferred"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "rsh_00.c", extra_cflags=["-inline auto,deferred"]),
-            Object(MatchingFor("G8MJ01", "G8ME01"), "rsh.c", extra_cflags=["-inline noauto,deferred"]),
+            Object(MatchingFor("G8MJ01", "G8ME01"), "rsh.c", extra_cflags=["-inline auto,deferred"]),
         ]
     ),
     Rel(

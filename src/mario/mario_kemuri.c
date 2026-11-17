@@ -35,6 +35,9 @@ static void partyKemuri(PartyEntry* party);
  * Nothing in tube mode, while entering a pipe or at a raised system level.
  */
 void mario_kemuri(void) {
+#if VERSION >= VERSION_JP
+    void kemuri_water(void);
+#endif
     static s32 ct = 8;
     static s32 left_or_right = 0;
     MarioWork* mario = marioGetPtr();
@@ -107,6 +110,9 @@ void mario_simple_kemuri(void) {
 // Original name from the JP demo map, where mot_jabara calls it; there the water splash below is the stripped
 // kemuri_water (0x1a4, inlined everywhere).
 void mario_kemuri_landon(void) {
+#if VERSION >= VERSION_JP
+    void kemuri_water(void);
+#endif
     MarioWork* mario = marioGetPtr();
     HitEntry* hit = mario->hitobjStandOn;
     u32 attr;
