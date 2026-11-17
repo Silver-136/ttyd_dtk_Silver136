@@ -6,6 +6,10 @@
 
 USER_FUNC(evt_pouch_all_party_recovery);
 USER_FUNC(evt_pouch_mario_recovery);
+USER_FUNC(evt_pouch_get_party_hp);
+USER_FUNC(evt_pouch_get_party_max_hp);
+USER_FUNC(evt_pouch_set_party_hp);
+USER_FUNC(evt_pouch_set_party_max_hp);
 USER_FUNC(evt_pouch_remove_item_index);
 USER_FUNC(evt_pouch_add_item);
 USER_FUNC(evt_pouch_add_keepitem);

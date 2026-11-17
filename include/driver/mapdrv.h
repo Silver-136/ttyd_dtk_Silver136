@@ -504,6 +504,7 @@ void mapObjSetFlushColor(const char* name, u8 r, u8 g, u8 b, u8 a);
 void mapObjTranslate(const char* name, f32 x, f32 y, f32 z);
 void mapEntryAnimation(BOOL group);
 void mapPauseAnimation(const char* name);
+void mapDeleteAnimation(const char* name);
 void mapPauseAnimationAll(const char* name);
 
 // mapPlayAnimationLv / evt_map_playanim mode

@@ -233,6 +233,13 @@ s32 offscreenNameToId(const char* name) {
     return i;
 }
 
+/** The name of entry id. */
+// Original name and size (0x30) from the JP demo map (UNUSED there: nothing calls it); the reverse of
+// offscreenNameToId, listed before offscreenNameToPtr.
+const char* offscreenIdToName(s32 id) {
+    return offscreenGetWorkGp()->entries[id].name;
+}
+
 /** Returns the entry with this name (one past the table if none). */
 OffscreenEntry* offscreenNameToPtr(const char* name) {
     OffscreenWork* wp = offscreenGetWorkGp();

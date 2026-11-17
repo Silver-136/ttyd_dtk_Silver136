@@ -195,6 +195,10 @@ void peachTransformOff(void) {
 /** Called by marioSetCharMode when the player becomes Peach; does nothing. */
 void peachPreInit(void) {}
 
+// Original name and size (0x4: a bare return) from the JP demo map (UNUSED there: nothing calls it); empty like
+// peachPreInit, which the map lists right before it.
+void peachPostClear(void) {}
+
 /**
  * Peach's per-frame player update, run by marioMain instead of Mario's:
  * moves her, handles stepping, jumping and falling against the ground, counts down forced movement,

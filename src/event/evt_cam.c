@@ -44,6 +44,18 @@ USER_FUNC(evt_cam_ctrl_onoff) {
     return EVT_RETURN_DONE;
 }
 
+/** CameraId id, s32 mode */
+// Original name and size (0x60) from the JP demo map (UNUSED there: no script uses it); the two arguments of
+// camSetMode, which its name gives.
+USER_FUNC(evt_cam_set_mode) {
+    EvtWord* args = event->args;
+    CameraId id = evtGetValue(event, args[0]);
+    s32 mode = evtGetValue(event, args[1]);
+
+    camSetMode(id, mode);
+    return EVT_RETURN_DONE;
+}
+
 /** Returns the eye position of camera args[0] in the float variables args[1..3]. */
 USER_FUNC(evt_cam_get_pos) {
     EvtWord* args = event->args;
@@ -437,6 +449,16 @@ USER_FUNC(evt_cam3d_evt_xyz_off) {
     camera->durationB = OSMillisecondsToTicks(msec);
     camera->stateB = 1;
     camera->curveB = curve;
+    return EVT_RETURN_DONE;
+}
+
+/** f32 fovY: sets the 3D camera's vertical field of view */
+// Original name and size (0x54) from the JP demo map (UNUSED there: no script uses it); one float stored in the 3D
+// camera's fovY.
+USER_FUNC(evt_cam3d_set_fovy) {
+    CameraEntry* camera = camGetPtr(CAMERA_3D);
+
+    camera->fovY = evtGetFloat(event, event->args[0]);
     return EVT_RETURN_DONE;
 }
 

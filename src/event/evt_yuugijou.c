@@ -443,6 +443,22 @@ USER_FUNC(yuugijou_add_montemedal) {
     return EVT_RETURN_DONE;
 }
 
+#if VERSION <= VERSION_DEMO_JP
+/** Sets the Pianta tokens to args[1]; a nonzero args[0] snaps the counter display to the new total. */
+// Original name and size (0x6c) from the JP demo map (UNUSED there: no script uses it); the early demos'
+// yuugijou_add_montemedal storing the value instead of adding it. Whether JP and later kept it (and capped it like
+// their yuugijou_add_montemedal) is not known, so only the early demos build it.
+USER_FUNC(yuugijou_set_montemedal) {
+    EvtWord* args = event->args;
+    s32 immediate = evtGetValue(event, args[0]);
+    yuwp->tokens = evtGetValue(event, args[1]);
+    if (immediate != 0) {
+        yuwp->dispTokens = yuwp->tokens;
+    }
+    return EVT_RETURN_DONE;
+}
+#endif
+
 /** Writes the Pianta tokens Mario is holding to args[0]. */
 USER_FUNC(yuugijou_get_montemedal) {
     evtSetValue(event, event->args[0], yuwp->tokens);
@@ -471,6 +487,18 @@ USER_FUNC(yuugijou_add_montemedal_moto) {
     evtGetValue(event, args[0]);
     if (yuwp->flags & PARLOR_FLAG_TOKENS_OUT) {
         yuwp->keptTokens += evtGetValue(event, args[1]);
+    }
+    return EVT_RETURN_DONE;
+}
+
+/** Sets keptTokens to args[1] while the tokens are taken out; args[0] is read but ignored. */
+// Original name and size (0x64) from the JP demo map (UNUSED there: no script uses it);
+// yuugijou_add_montemedal_moto storing the value instead of adding it.
+USER_FUNC(yuugijou_set_montemedal_moto) {
+    EvtWord* args = event->args;
+    evtGetValue(event, args[0]);
+    if (yuwp->flags & PARLOR_FLAG_TOKENS_OUT) {
+        yuwp->keptTokens = evtGetValue(event, args[1]);
     }
     return EVT_RETURN_DONE;
 }

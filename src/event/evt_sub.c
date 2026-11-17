@@ -1707,6 +1707,25 @@ USER_FUNC(evt_sub_get_stopwatch) {
     return EVT_RETURN_DONE;
 }
 
+/** Converts args[0] milliseconds to frames (sysMsec2Frame) and returns them in args[1]. */
+// evt_sub_msec2frame and evt_sub_msec2frame_f: original names and sizes (0x54, 0x50) from the JP demo map (UNUSED
+// there: no script uses them); the integer and the float conversion their names give.
+USER_FUNC(evt_sub_msec2frame) {
+    EvtWord* args = event->args;
+    s32 msec = evtGetValue(event, args[0]);
+    evtSetValue(event, args[1], sysMsec2Frame(msec));
+    return EVT_RETURN_DONE;
+}
+
+/** Converts the float args[0] milliseconds to frames (sysMsec2FrameFloat) and returns them in the float args[1]. */
+// Original name and size from the JP demo map (see evt_sub_msec2frame).
+USER_FUNC(evt_sub_msec2frame_f) {
+    EvtWord* args = event->args;
+    f32 msec = evtGetFloat(event, args[0]);
+    evtSetFloat(event, args[1], sysMsec2FrameFloat(msec));
+    return EVT_RETURN_DONE;
+}
+
 /**
  * Tests whether the point (args[4], args[5]) lies inside a shape at (args[1], args[2]) of size args[3]:
  * mode args[0] 0 is a circle of that radius, 1 a square of that half-width. Result 1 or 0 in args[6].

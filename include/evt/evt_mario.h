@@ -93,6 +93,8 @@ USER_FUNC(evt_mario_set_prev_party_dokan);
 USER_FUNC(evt_mario_set_prev_party_pos);
 USER_FUNC(evt_mario_set_reardir);
 USER_FUNC(evt_mario_set_talk_motion);
+USER_FUNC(evt_mario_set_roll_motion2);
+USER_FUNC(evt_mario_set_ship_motion2);
 USER_FUNC(evt_mario_sleep_off);
 USER_FUNC(evt_mario_sleep_on);
 USER_FUNC(evt_mario_wait_movable);

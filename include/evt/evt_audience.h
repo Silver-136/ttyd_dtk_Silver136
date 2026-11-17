@@ -23,6 +23,8 @@ USER_FUNC(evt_audience_jump_position_gravity);
 USER_FUNC(evt_audience_set_animpose);
 USER_FUNC(evt_audience_entry);
 USER_FUNC(evt_audience_delete);
+USER_FUNC(evt_audience_base_flag_check);
+USER_FUNC(evt_audience_exist);
 USER_FUNC(evt_audience_ap_recovery);
 USER_FUNC(evt_audience_reflesh_natural_all);
 USER_FUNC(evt_audience_abnormal_natural_all);

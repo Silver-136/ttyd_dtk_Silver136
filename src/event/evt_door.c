@@ -1680,6 +1680,19 @@ void door_position_sub(s32 type, const char* map, const char* hitIn, const char*
     }
 }
 
+/** The standing spots inside and outside door d, measured from the door (door_position_sub). */
+// door_position and door_position_mario: original names and sizes (0x40 each) from the JP demo map (UNUSED there:
+// every call is inlined); the map lists them after door_position_sub, and evt_door_param calls each twice.
+void door_position(DoorParam* d, Vec* in, Vec* out) {
+    door_position_sub(d->type, d->mapobj, d->hitIn, d->hitOut, in, out, FALSE);
+}
+
+/** The standing spots inside and outside door d, measured from Mario's position. */
+// Original name and size from the JP demo map (see door_position).
+void door_position_mario(DoorParam* d, Vec* in, Vec* out) {
+    door_position_sub(d->type, d->mapobj, d->hitIn, d->hitOut, in, out, TRUE);
+}
+
 // Generator: the same body for the On and Off variants (FN, ICONFN).
 #define DARK_SUB_BODY(FN, ICONFN)                                                               \
     if (mario) {                                                                                \
@@ -1747,12 +1760,6 @@ USER_FUNC(door_dark_flag) {
     return EVT_RETURN_DONE;
 }
 
-#define DOOR_PARAM_POS(V, M)                                                  \
-    door_position_sub(d->type, d->mapobj, d->hitIn, d->hitOut, &in, &out, M); \
-    evtSetValue(event, args[2], V.x);                                         \
-    evtSetValue(event, args[3], V.y);                                         \
-    evtSetValue(event, args[4], V.z);
-
 /**
  * Reads a field of the DoorParam in args[0] into args[2..];
  * args[1] picks it: 0 type, 1 map object and hits, 2 outside, 3 inside, 4/5 inside/outside standing spot,
@@ -1784,13 +1791,13 @@ USER_FUNC(evt_door_param) {
             evtSetValue(event, args[3], (EvtWord)d->insideHit);
             break;
         case DOOR_PARAM_IN_POS:
-            door_position_sub(d->type, d->mapobj, d->hitIn, d->hitOut, &in, &out, FALSE);
+            door_position(d, &in, &out);
             evtSetValue(event, args[2], in.x);
             evtSetValue(event, args[3], in.y);
             evtSetValue(event, args[4], in.z);
             break;
         case DOOR_PARAM_OUT_POS:
-            door_position_sub(d->type, d->mapobj, d->hitIn, d->hitOut, &in, &out, FALSE);
+            door_position(d, &in, &out);
             evtSetValue(event, args[2], out.x);
             evtSetValue(event, args[3], out.y);
             evtSetValue(event, args[4], out.z);
@@ -1811,13 +1818,13 @@ USER_FUNC(evt_door_param) {
             evtSetValue(event, args[2], d->flags);
             break;
         case DOOR_PARAM_IN_POS_FROM_MARIO:
-            door_position_sub(d->type, d->mapobj, d->hitIn, d->hitOut, &in, &out, TRUE);
+            door_position_mario(d, &in, &out);
             evtSetValue(event, args[2], in.x);
             evtSetValue(event, args[3], in.y);
             evtSetValue(event, args[4], in.z);
             break;
         case DOOR_PARAM_OUT_POS_FROM_MARIO:
-            door_position_sub(d->type, d->mapobj, d->hitIn, d->hitOut, &in, &out, TRUE);
+            door_position_mario(d, &in, &out);
             evtSetValue(event, args[2], out.x);
             evtSetValue(event, args[3], out.y);
             evtSetValue(event, args[4], out.z);

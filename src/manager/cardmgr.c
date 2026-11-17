@@ -198,7 +198,7 @@ s32 cardGetCode(void) {
  * Advances the running card operation by one step each frame (from mariost.c):
  * write, header write, read, read all, create, format; also samples slot A for the insert watch.
  * Each step starts one SDK call and the next frame continues once its callback has stored the result.
- * Delete (op 7) has no starter function.
+ * Delete (op 7) is started only by cardDelete, which nothing calls.
  */
 void cardMain(void) {
     s32 inserted;
@@ -610,6 +610,21 @@ static void write_header_main(void) {
     }
 }
 
+/** Starts reading one save slot from the card (read_main, op 3). */
+// Original name and size (0x68) from the JP demo map (UNUSED there: nothing calls it); the map lists it right before
+// read_main. The body is cardReadAll's (the same size) with read_main's operation and the slot it reads.
+void cardRead(s32 slot) {
+    if (!(wp->flags & CARD_FLAG_EXEC)) {
+        wp->op = CARD_OP_READ;
+        wp->opSlot = slot;
+        wp->opStep = 0;
+        wp->result = CARD_RESULT_READY;
+        wp->flags |= CARD_FLAG_EXEC;
+        wp->flags &= ~(CARD_FLAG_DONE | CARD_FLAG_FAILED | CARD_FLAG_HEADER_INVALID);
+        wp->flags &= ~CARD_FLAG_WRITTEN;
+    }
+}
+
 /**
  * Step machine for reading one slot (opSlot): validates both copies
  * and loads the newer valid one into the file image, or marks the slot corrupt (flag 2) if neither is valid.
@@ -941,6 +956,20 @@ static void format_main(void) {
     } else if (CARDGetResultCode(wp->chan) != CARD_RESULT_BUSY && wp->result != CARDGetResultCode(wp->chan)) {
         wp->result = CARDGetResultCode(wp->chan);
         wp->flags &= ~CARD_FLAG_BUSY;
+    }
+}
+
+/** Starts deleting the save file from the card (delete_main, op 7). */
+// Original name and size (0x60) from the JP demo map (UNUSED there: nothing calls it); the map lists it right before
+// delete_main. The body is cardFormat's (the same size) with delete_main's operation.
+void cardDelete(void) {
+    if (!(wp->flags & CARD_FLAG_EXEC)) {
+        wp->op = CARD_OP_DELETE;
+        wp->opStep = 0;
+        wp->result = CARD_RESULT_READY;
+        wp->flags |= CARD_FLAG_EXEC;
+        wp->flags &= ~(CARD_FLAG_DONE | CARD_FLAG_FAILED | CARD_FLAG_HEADER_INVALID);
+        wp->flags &= ~CARD_FLAG_WRITTEN;
     }
 }
 

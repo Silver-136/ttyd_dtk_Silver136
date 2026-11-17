@@ -315,6 +315,17 @@ USER_FUNC(evt_mobj_set_camid) {
     return EVT_RETURN_DONE;
 }
 
+/** Writes the camera (CameraId) the map object args[0] is drawn with to args[1]. */
+// Original name and size (0x80) from the JP demo map (UNUSED there: no script uses it); the getter of
+// evt_mobj_set_camid's field in the form of evt_mobj_get_x_position (the same size).
+USER_FUNC(evt_mobj_get_camid) {
+    EvtWord* args = event->args;
+    const char* name = (const char*)evtGetValue(event, args[0]);
+    MapObjectEntry* mobj = mobjPtrOrSelf(event, name);
+    evtSetValue(event, args[1], mobj->camId);
+    return EVT_RETURN_DONE;
+}
+
 /** Enables (args[1] nonzero) or disables the hit event of the map object args[0], so hitting it does nothing. */
 USER_FUNC(evt_mobj_hitevt_onoff) {
     EvtWord* args = event->args;

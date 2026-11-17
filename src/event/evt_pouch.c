@@ -163,6 +163,47 @@ SETTER(evt_pouch_party_join, partyJoin)
 SETTER(evt_pouch_party_left, partyLeft)
 GETTER(evt_pouch_get_hammer_lv, pouchGetHammerLv) // unused
 
+/** Writes the current HP of partner args[0] to args[1]. */
+// evt_pouch_get_party_hp, evt_pouch_get_party_max_hp, evt_pouch_set_party_hp and evt_pouch_set_party_max_hp: original
+// names and sizes (0x6c, 0x6c, 0x64, 0x64) from the JP demo map (UNUSED there: no script uses them). The sizes are
+// those of reads and stores through pouchGetPtr, as evt_pouch_all_party_recovery does (calls of pouchGetPartyHP and
+// pouchSetPartyHP come out shorter), so the setters do not clamp.
+USER_FUNC(evt_pouch_get_party_hp) {
+    EvtWord* args = event->args;
+    PouchData* pouch = pouchGetPtr();
+    s32 id = evtGetValue(event, args[0]);
+    evtSetValue(event, args[1], pouch->partyData[id].currentHP);
+    return EVT_RETURN_DONE;
+}
+
+/** Writes the maximum HP of partner args[0] to args[1]. */
+// Original name and size from the JP demo map (see evt_pouch_get_party_hp).
+USER_FUNC(evt_pouch_get_party_max_hp) {
+    EvtWord* args = event->args;
+    PouchData* pouch = pouchGetPtr();
+    s32 id = evtGetValue(event, args[0]);
+    evtSetValue(event, args[1], pouch->partyData[id].maximumHP);
+    return EVT_RETURN_DONE;
+}
+
+/** Sets the current HP of partner args[0] to args[1]. */
+// Original name and size from the JP demo map (see evt_pouch_get_party_hp).
+USER_FUNC(evt_pouch_set_party_hp) {
+    EvtWord* args = event->args;
+    s32 id = evtGetValue(event, args[0]);
+    pouchGetPtr()->partyData[id].currentHP = evtGetValue(event, args[1]);
+    return EVT_RETURN_DONE;
+}
+
+/** Sets the maximum HP of partner args[0] to args[1]. */
+// Original name and size from the JP demo map (see evt_pouch_get_party_hp).
+USER_FUNC(evt_pouch_set_party_max_hp) {
+    EvtWord* args = event->args;
+    s32 id = evtGetValue(event, args[0]);
+    pouchGetPtr()->partyData[id].maximumHP = evtGetValue(event, args[1]);
+    return EVT_RETURN_DONE;
+}
+
 USER_FUNC(evt_pouch_mario_recovery) {
     pouchSetHP(pouchGetMaxHP());
     pouchSetFP(pouchGetMaxFP());

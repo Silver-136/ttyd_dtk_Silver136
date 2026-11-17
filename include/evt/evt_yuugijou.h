@@ -126,6 +126,10 @@ void monteCountDisp(void);
 USER_FUNC(yuugijou_add_montemedal);
 USER_FUNC(yuugijou_add_montemedal_moto);
 USER_FUNC(yuugijou_get_montemedal);
+#if VERSION <= VERSION_DEMO_JP
+USER_FUNC(yuugijou_set_montemedal);
+#endif
+USER_FUNC(yuugijou_set_montemedal_moto);
 USER_FUNC(yuugijou_get_montemedal_keep);
 USER_FUNC(yuugijou_get_takeoutflag);
 USER_FUNC(yuugijou_montemedal_disp_onoff);

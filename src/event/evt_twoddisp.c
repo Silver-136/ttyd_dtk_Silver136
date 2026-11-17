@@ -190,6 +190,21 @@ USER_FUNC(evt_twoddisp_set_base_position) {
     return EVT_RETURN_DONE;
 }
 
+/** Sets the scale of overlay args[0] to the float args[1]. */
+// Original name and size (0x88) from the JP demo map (UNUSED there: no script uses it); evt_twoddisp_set_position
+// with one value, stored in the entry's scale. The map's evt_twoddisp_set_type and evt_twoddisp_set_pri (the same
+// size, listed before it) are not restored: their fields are not known.
+USER_FUNC(evt_twoddisp_set_scale) {
+    EvtWord* args = event->args;
+    char* name = (char*)evtGetValue(event, args[0]);
+    TwodEntry* p;
+
+    // twodNameToPtr returns NULL for a name that is not registered; the result is not checked.
+    p = twodNameToPtr(name);
+    p->scale = evtGetFloat(event, args[1]);
+    return EVT_RETURN_DONE;
+}
+
 /** Sets (args[0] nonzero) or clears flag bits args[2] on overlay args[1]; flag 0x1 makes it visible. */
 USER_FUNC(evt_twoddisp_flag_onoff) {
     s32 onoff;

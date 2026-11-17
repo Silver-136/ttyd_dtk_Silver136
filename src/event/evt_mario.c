@@ -946,6 +946,15 @@ USER_FUNC(evt_mario_set_talk_motion) {
     return EVT_RETURN_DONE;
 }
 
+/** Puts Mario in his rolling Tube Mode motion (marioChgRollMotion). */
+// evt_mario_set_roll_motion2 and evt_mario_set_ship_motion2: original names and sizes (0x24 each) from the JP demo
+// map (UNUSED there: no script uses them); evt_mario_set_talk_motion's form (one call without arguments) for the
+// roll and boat motions' marioChg functions.
+USER_FUNC(evt_mario_set_roll_motion2) {
+    marioChgRollMotion();
+    return EVT_RETURN_DONE;
+}
+
 /**
  * Takes Mario out of Tube Mode and blocks until the tube flag clears; used in gor_02.
  * The early demos call marioRollCancel instead of marioRollTryCancel.
@@ -961,6 +970,13 @@ USER_FUNC(evt_mario_cancel_roll_motion) {
     if (marioGetPtr()->flags & MARIO_FLAG_TUBE_MODE) {
         return EVT_RETURN_BLOCK;
     }
+    return EVT_RETURN_DONE;
+}
+
+/** Puts Mario in his Boat Mode motion (marioChgShipMotion). */
+// Original name and size from the JP demo map (see evt_mario_set_roll_motion2).
+USER_FUNC(evt_mario_set_ship_motion2) {
+    marioChgShipMotion();
     return EVT_RETURN_DONE;
 }
 

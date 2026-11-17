@@ -1582,6 +1582,11 @@ void winIconSet(s32 iconId, Vec translate, Vec scale, GXColor color) {
     GXSetTevSwapMode(GX_TEVSTAGE2, GX_TEV_SWAP0, GX_TEV_SWAP0);
 }
 
+// Original name and size (0x4: a bare return) from the JP demo map (UNUSED there: nothing calls it); the empty
+// counterpart of winIconInit for the stripped winNumSet, which the map lists after it.
+void winNumInit(void) {
+}
+
 /**
  * evt_lecture_msg step: blocks until the tutorial has reached step args[0].
  * In JP and later it clears WINDOW_FLAG_LECTURE_KEY_MASK on the first call and sets it once the step is reached;

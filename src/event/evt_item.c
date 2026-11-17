@@ -45,6 +45,17 @@ USER_FUNC(evt_item_delete_check) {
     return EVT_RETURN_DONE;
 }
 
+/** Blocks the script until no field item named args[0] exists any more (collected or deleted). */
+// Original name and size (0x40) from the JP demo map (UNUSED there: no script uses it); evt_item_delete_check's
+// lookup, waited on instead of reported.
+USER_FUNC(evt_item_delete_wait) {
+    ItemEntry* item = itemNameToPtr((char*)evtGetValue(event, event->args[0]));
+    if (item != NULL) {
+        return EVT_RETURN_BLOCK;
+    }
+    return EVT_RETURN_DONE;
+}
+
 USER_FUNC(evt_item_flag_on) {
     EvtWord* args = event->args;
     ItemEntry* item = itemNameToPtr((char*)evtGetValue(event, args[0]));

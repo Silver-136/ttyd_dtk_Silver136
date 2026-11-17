@@ -1101,6 +1101,19 @@ NpcEntry* npcNameToPtr_NoAssert(const char* name) {
     return entry;
 }
 
+/** The stay animation npcSetStayPose uses for "mario" (set by npcSetMarioAutoTalkPose). */
+// npcGetMarioStayPose and npcGetMarioTalkPose: original names and sizes (0xc each) from the JP demo map (UNUSED
+// there: nothing calls them); the map lists them right before npcSetMarioAutoTalkPose, whose two buffers they return.
+const char* npcGetMarioStayPose(void) {
+    return MarioStayPose;
+}
+
+/** The talk animation npcSetTalkPose uses for "mario" (set by npcSetMarioAutoTalkPose). */
+// Original name and size from the JP demo map (see npcGetMarioStayPose).
+const char* npcGetMarioTalkPose(void) {
+    return MarioTalkPose;
+}
+
 /**
  * Sets the stay and talk animations npcSetStayPose and npcSetTalkPose use for "mario";
  * mario.c and peach.c switch them for Mario's forms, Peach and Bowser, and a script helper in evt_npc.c can set
@@ -2210,6 +2223,11 @@ static inline void fbatRecoverItems(NpcEntry* npc) {
     } while (i < 8);
 }
 
+// Original name and size (0x4: a bare return) from the JP demo map (UNUSED there: nothing calls it); an empty mode
+// function between fbatTalkMode and fbatBattleMode.
+void fbatTouchMode(void) {
+}
+
 /**
  * Field battle mode 5, the battle with the enemy hit or touched.
  * Skips the fight with a win when Bump Attack (or First Attack after Mario struck first) beats a weaker enemy;
@@ -2466,6 +2484,11 @@ void fbatBattleMode(void) {
             }
             break;
     }
+}
+
+// Original name and size (0x4: a bare return) from the JP demo map (UNUSED there: nothing calls it); an empty mode
+// function after fbatBattleMode.
+void fbatWaitBattleMode(void) {
 }
 
 /**

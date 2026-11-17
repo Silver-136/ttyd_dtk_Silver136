@@ -45,6 +45,7 @@ USER_FUNC(evt_npc_set_width);
 USER_FUNC(evt_npc_set_height);
 USER_FUNC(evt_npc_get_height);
 USER_FUNC(evt_npc_set_scale);
+USER_FUNC(evt_npc_add_scale);
 USER_FUNC(evt_npc_get_scale);
 USER_FUNC(evt_npc_get_position);
 USER_FUNC(evt_npc_get_home_position);

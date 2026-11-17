@@ -25,6 +25,21 @@
 // Macro, not inline: as static inline evtGetParty(args) the object changes.
 #define GETPARTY(args) partyGetPtr((args)[0] == 0 ? partyCtrlNo : 1)
 
+/** Sets the partner slot the commands below use for slot argument 0 (partyCtrlNo) to args[0]. */
+// evt_party_set_ctrl_no and evt_party_get_ctrl_no: original names and sizes (0x30 each) from the JP demo map (UNUSED
+// there: no script uses them); they store and return partyCtrlNo, which every command of this file reads.
+USER_FUNC(evt_party_set_ctrl_no) {
+    partyCtrlNo = evtGetValue(event, event->args[0]);
+    return EVT_RETURN_DONE;
+}
+
+/** Writes partyCtrlNo to args[0]. */
+// Original name and size from the JP demo map (see evt_party_set_ctrl_no).
+USER_FUNC(evt_party_get_ctrl_no) {
+    evtSetValue(event, event->args[0], partyCtrlNo);
+    return EVT_RETURN_DONE;
+}
+
 /**
  * Sets or clears PartyFlags bits on a partner slot.
  * args: slot (0 = the active partner, else the follower slot), the flag mask (literal), and on/off.
@@ -771,6 +786,14 @@ USER_FUNC(evt_party_get_status) {
             evtSetValue(event, dst, bomheiGetStatus());
             break;
     }
+    return EVT_RETURN_DONE;
+}
+
+/** Gives the Yoshi partner his colour (yoshiSetColor). */
+// Original name and size (0x24) from the JP demo map (UNUSED there: no script uses it); one call without arguments,
+// to the function its name gives.
+USER_FUNC(evt_party_auto_set_yoshi_color) {
+    yoshiSetColor();
     return EVT_RETURN_DONE;
 }
 

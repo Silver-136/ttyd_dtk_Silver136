@@ -7,6 +7,7 @@
 #include <dolphin/types.h>
 
 USER_FUNC(evt_map_playanim);
+USER_FUNC(evt_map_delanim);
 
 USER_FUNC(evt_map_blend_off);
 USER_FUNC(evt_map_get_fog);

@@ -287,6 +287,26 @@ USER_FUNC(evt_npc_set_scale) {
     return EVT_RETURN_DONE;
 }
 
+/** const char* lookupName, f32 x, f32 y, f32 z */
+// Original name and size (0xcc) from the JP demo map (UNUSED there: no script uses it); evt_npc_set_scale adding
+// to the scale.
+USER_FUNC(evt_npc_add_scale) {
+    EvtWord* args = event->args;
+    const char* name;
+    NpcEntry* npc;
+    f32 x, y, z;
+
+    name = (const char*)evtGetValue(event, args[0]);
+    x = evtGetFloat(event, args[1]);
+    y = evtGetFloat(event, args[2]);
+    z = evtGetFloat(event, args[3]);
+    npc = evtNpcNameToPtr(event, name);
+    npc->scale.x += x;
+    npc->scale.y += y;
+    npc->scale.z += z;
+    return EVT_RETURN_DONE;
+}
+
 /** const char* lookupName, s32 xStoreIndex, s32 yStoreIndex, s32 zStoreIndex */
 USER_FUNC(evt_npc_get_scale) {
     EvtWord* args = event->args;

@@ -24,6 +24,8 @@ USER_FUNC(evt_sub_countdown_flag_onoff);
 USER_FUNC(evt_sub_get_dir);
 USER_FUNC(evt_sub_get_sincos);
 USER_FUNC(evt_sub_get_stopwatch);
+USER_FUNC(evt_sub_msec2frame);
+USER_FUNC(evt_sub_msec2frame_f);
 USER_FUNC(evt_sub_get_system_flag);
 USER_FUNC(evt_sub_intpl_get_float);
 USER_FUNC(evt_sub_intpl_get_value);

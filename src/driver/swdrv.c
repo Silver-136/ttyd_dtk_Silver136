@@ -43,6 +43,18 @@ void swClear(s32 index) {
     gp->gSWF[index / 32] &= ~(1 << (index % 32));
 }
 
+/** Flips global saved flag GSWF(index). */
+// swToggle and _swToggle: original names and sizes (0x54 each) from the JP demo map (UNUSED there: nothing calls
+// them); each follows its Set, Get and Clear in the map. The size is the inlined Get test with the Clear and the Set
+// as its two arms (a plain exclusive-or would be 0x40).
+void swToggle(s32 index) {
+    if (swGet(index)) {
+        swClear(index);
+    } else {
+        swSet(index);
+    }
+}
+
 // Global Saved Work --------------------------------------------
 
 /** Sets global saved word GSW(index); GSW(0), the story progress, is a full 32-bit value, the others are bytes. */
@@ -78,6 +90,16 @@ BOOL _swGet(s32 index) {
 /** Clears area-local saved flag LSWF(index). */
 void _swClear(s32 index) {
     gp->lSWF[index / 32] &= ~(1 << (index % 32));
+}
+
+/** Flips area-local saved flag LSWF(index). */
+// Original name and size from the JP demo map (see swToggle).
+void _swToggle(s32 index) {
+    if (_swGet(index)) {
+        _swClear(index);
+    } else {
+        _swSet(index);
+    }
 }
 
 // Local Saved Work ---------------------------------------------

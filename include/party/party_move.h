@@ -33,6 +33,10 @@ void party_move_mode_behind_mario(PartyEntry* party);
 void party_move_mode_beside_mario(PartyEntry* party);
 void party_move_mode_stay(PartyEntry* party);
 void party_move_mode_walk(PartyEntry* party);
+void party_move_mode_stay_post(PartyEntry* party);
+void party_move_mode_walk_post(PartyEntry* party);
+void party_move_mode_behind_mario_post(PartyEntry* party);
+void party_move_mode_beside_mario_post(PartyEntry* party);
 
 void partyLandonSe(PartyEntry* party);
 void partyChgMoveMode(PartyEntry* party, s32 mode);

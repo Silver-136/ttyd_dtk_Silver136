@@ -345,6 +345,7 @@ void winFontInit(void);
 BOOL winGhostDiaryChk(void);
 void winIconGrayInit(void);
 void winIconInit(void);
+void winNumInit(void);
 BOOL winLectureCheck(void);
 void winLectureOn(void);
 void winTexInit_x2(TEXPalette* texture);

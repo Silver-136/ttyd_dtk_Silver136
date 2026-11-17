@@ -6,6 +6,24 @@
 #include "manager/evtmgr_cmd.h"
 #include "libc_decls.h"
 
+/** s32* mask, s32 retIndex */
+// Original name and size (0x80) from the JP demo map (UNUSED there: no script uses it); evt_audience_flag_check for
+// the flags evt_audience_base_flag_on sets.
+USER_FUNC(evt_audience_base_flag_check) {
+    EvtWord* args = event->args;
+    s32 flags;
+    u32 fl;
+
+    flags = evtGetValue(event, args[0]);
+    fl = BattleAudienceBaseGetPtr()->flags;
+    if (fl & flags) {
+        evtSetValue(event, args[1], TRUE);
+    } else {
+        evtSetValue(event, args[1], FALSE);
+    }
+    return EVT_RETURN_DONE;
+}
+
 /** s32* mask */
 USER_FUNC(evt_audience_base_flag_on) {
     BattleAudience* audience;
@@ -399,6 +417,22 @@ USER_FUNC(evt_audience_entry) {
 USER_FUNC(evt_audience_delete) {
     s32 id = evtGetValue(event, *event->args);
     BattleAudience_Delete(id);
+    return EVT_RETURN_DONE;
+}
+
+/** s32* memberId, s32 retIndex: whether the member exists (BattleAudience_GetExist) */
+// Original name and size (0x74) from the JP demo map (UNUSED there: no script uses it); the size is the call its
+// name gives compared with TRUE (as evt_audience_entry does) and the two results of evt_audience_flag_check.
+USER_FUNC(evt_audience_exist) {
+    EvtWord* args = event->args;
+    s32 id;
+
+    id = evtGetValue(event, args[0]);
+    if (BattleAudience_GetExist(id) == TRUE) {
+        evtSetValue(event, args[1], TRUE);
+    } else {
+        evtSetValue(event, args[1], FALSE);
+    }
     return EVT_RETURN_DONE;
 }
 

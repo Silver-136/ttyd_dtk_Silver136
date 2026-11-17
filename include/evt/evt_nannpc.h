@@ -123,6 +123,7 @@ char* nanNPCMakeString(char* name);
 #endif
 void nannpc_ext_main_sub_fast();
 USER_FUNC(evt_nannpc_flag_onoff);
+USER_FUNC(evt_nannpc_get_flag);
 USER_FUNC(evt_nannpc_get_position);
 USER_FUNC(evt_nannpc_get_work);
 USER_FUNC(evt_nannpc_init);

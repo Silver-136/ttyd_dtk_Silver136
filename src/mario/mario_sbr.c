@@ -204,6 +204,13 @@ static void marioSetGravity(f32 g) {
     marioGetPtr()->playerGravity = g;
 }
 
+/** Mario's gravity multiplier (playerGravity; 1.0 is normal). */
+// Original name and size (0x24) from the JP demo map (UNUSED there: nothing calls it); the getter of
+// marioSetGravity's field, listed right after it.
+f32 marioGetGravity(void) {
+    return marioGetPtr()->playerGravity;
+}
+
 void* marioGetTouchNpcPtr(void) {
     return marioGetPtr()->touchNpc;
 }

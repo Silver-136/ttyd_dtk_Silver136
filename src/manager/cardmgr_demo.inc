@@ -157,7 +157,7 @@ s32 cardGetCode(void) {
  * Advances the running card operation by one step each frame (from mariost.c):
  * write, header write, read, read all, create, format (no insert watch in the early demos).
  * Each step starts one SDK call and the next frame continues once its callback has stored the result.
- * Delete (op 7) has no starter function.
+ * Read (op 3) and delete (op 7) are started only by cardRead and cardDelete, which nothing calls.
  */
 void cardMain(void) {
     switch (wp->op) {
@@ -550,10 +550,25 @@ static void write_header_main(void) {
     }
 }
 
+/** Starts reading one save slot from the card (read_main, op 3). */
+// Original name and size (0x68) from the JP demo map (UNUSED there: nothing calls it); the map lists it right before
+// read_main. The body is cardReadAll's (the same size) with read_main's operation and the slot it reads.
+void cardRead(s32 slot) {
+    if (!(wp->flags & CARD_FLAG_OP_BUSY)) {
+        wp->op = 3;
+        wp->opSlot = slot;
+        wp->opStep = 0;
+        wp->result = 0;
+        wp->flags |= CARD_FLAG_OP_BUSY;
+        wp->flags &= ~(CARD_FLAG_OP_DONE | CARD_FLAG_OP_FAILED | CARD_FLAG_BAD_HEADER);
+        wp->flags &= ~CARD_FLAG_SERIAL;
+    }
+}
+
 /**
  * Step machine for reading one slot (opSlot): validates both copies
  * and loads the newer valid one into the file image, or marks the slot corrupt (flag 2) if neither is valid.
- * No starter in this file sets its op (3).
+ * Its starter cardRead has no caller.
  */
 static void read_main(void) {
     s32 saveType; // invalid = -1, main = 0, backup = 1
@@ -887,6 +902,20 @@ static void format_main(void) {
     } else if (CARDGetResultCode(wp->chan) != CARD_RESULT_BUSY && wp->result != CARDGetResultCode(wp->chan)) {
         wp->result = CARDGetResultCode(wp->chan);
         wp->flags &= ~CARD_FLAG_CALL_BUSY;
+    }
+}
+
+/** Starts deleting the save file from the card (delete_main, op 7). */
+// Original name and size (0x60) from the JP demo map (UNUSED there: nothing calls it); the map lists it right before
+// delete_main. The body is cardFormat's (the same size) with delete_main's operation.
+void cardDelete(void) {
+    if (!(wp->flags & CARD_FLAG_OP_BUSY)) {
+        wp->op = 7;
+        wp->opStep = 0;
+        wp->result = 0;
+        wp->flags |= CARD_FLAG_OP_BUSY;
+        wp->flags &= ~(CARD_FLAG_OP_DONE | CARD_FLAG_OP_FAILED | CARD_FLAG_BAD_HEADER);
+        wp->flags &= ~CARD_FLAG_SERIAL;
     }
 }
 

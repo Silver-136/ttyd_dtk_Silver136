@@ -7,4 +7,5 @@
 #include <dolphin/types.h>
 
 USER_FUNC(evt_seq_set_seq);
+USER_FUNC(evt_seq_get_seq);
 USER_FUNC(evt_seq_wait);

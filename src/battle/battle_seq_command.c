@@ -1992,6 +1992,11 @@ void BattleCommandDisplay_WeaponMultiItemCancelCheckDisp(CameraId camId, void* p
     iconDispGx(&pos, ICON_FLAG_2D | ICON_FLAG_FLIP_X, 1.0f, ICON_YUBI_CURSOR);
 }
 
+// Original name and size (0x4: a bare return) from the JP demo map (UNUSED there: nothing calls it); the empty End
+// step of the cancel check, listed after its Disp function.
+void BattleCommandDisplay_WeaponMultiItemCancelCheckEnd(BattleWork* wp) {
+}
+
 /** Opens the Tactics menu: builds its entries, starts its display (a is passed on) and shows all enemy HP. */
 void BattleCommandDisplay_OperationMenuSetup(BattleWork* wp, s32 a) {
     _btlcmd_MakeOperationTable(wp);
@@ -2279,6 +2284,12 @@ void BattleCommandDisplay_TargetSelectMenuSetup(BattleWork* wp) {
     BtlUnit_SetAnimType(BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit)), POSE_TYPE_WALK);
 }
 
+// BattleCommandDisplay_TargetSelectMenuMain and BattleCommandDisplay_ProtectPartnerSelectMenuMain: original names and
+// sizes (0x4 each: a bare return) from the JP demo map (UNUSED there: nothing calls them); the empty Main steps the
+// map lists between each menu's Setup and Disp functions.
+void BattleCommandDisplay_TargetSelectMenuMain(BattleWork* wp) {
+}
+
 /**
  * Draws target selection: the hand cursor on the current target with its name boxed at the top left,
  * or for multi-target moves a cursor on every target and their names stacked (flipped for ceiling units;
@@ -2406,6 +2417,10 @@ void BattleCommandDisplay_ProtectPartnerSelectMenuSetup(BattleWork* wp) {
     BattleGetPartnerPtr(wp, unit);
     wp->commandMenu.flags |= CMD_MENU_PROTECT_PARTNER;
     wp->commandMenu.flags &= ~CMD_MENU_ENEMY_HP;
+}
+
+// Original name and size from the JP demo map (see BattleCommandDisplay_TargetSelectMenuMain).
+void BattleCommandDisplay_ProtectPartnerSelectMenuMain(BattleWork* wp) {
 }
 
 /** Draws the hand cursor and name box over the partner for the protect-partner choice. */

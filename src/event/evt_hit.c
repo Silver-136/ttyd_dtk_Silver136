@@ -100,6 +100,20 @@ USER_FUNC(evt_hit_get_position) {
     return EVT_RETURN_DONE;
 }
 
+/** Returns the normal of hit object args[0] in the float variables args[1..3]. */
+// Original name and size (0x78) from the JP demo map (UNUSED there: no script uses it); evt_hit_get_position (the
+// same size) with hitObjGetNormal.
+USER_FUNC(evt_hit_get_normal) {
+    EvtWord* args = event->args;
+    Vec normal;
+
+    hitObjGetNormal((const char*)evtGetValue(event, args[0]), &normal);
+    evtSetFloat(event, args[1], normal.x);
+    evtSetFloat(event, args[2], normal.y);
+    evtSetFloat(event, args[3], normal.z);
+    return EVT_RETURN_DONE;
+}
+
 /**
  * Sets (args[1] nonzero) or clears hit flag mask args[3] (a literal, not a variable) on hit object args[2],
  * or on its whole group when args[0] is nonzero.

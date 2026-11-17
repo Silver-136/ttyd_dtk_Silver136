@@ -744,6 +744,18 @@ USER_FUNC(evt_nannpc_flag_onoff) {
     return EVT_RETURN_DONE;
 }
 
+/** Writes the flags of crowd NPC args[0] to args[1]. */
+// Original name and size (0xc0) from the JP demo map (UNUSED there: no script uses it); the getter of
+// evt_nannpc_flag_onoff's word in the form of evt_nannpc_set_func (the same size). The map's evt_nannpc_sta_onoff and
+// evt_nannpc_get_sta are not restored (their word and the sense of on/off are not known).
+USER_FUNC(evt_nannpc_get_flag) {
+    EvtWord* args = event->args;
+    char* name = (char*)evtGetValue(event, args[0]);
+    NanNPC* npc = nanNPCNameToPtr(name);
+    evtSetValue(event, args[1], npc->flags);
+    return EVT_RETURN_DONE;
+}
+
 /** Changes crowd NPC args[0]'s extdrv pose flags: args[1] nonzero clears the bits in args[2], zero sets them. */
 USER_FUNC(evt_nannpc_ppflag_onoff) {
     EvtWord* args = event->args;

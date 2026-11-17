@@ -59,6 +59,8 @@ void memInit(void);
 void memClear(HEAP_TYPE heap);
 void* __memAlloc(HEAP_TYPE heap, u32 size);
 void __memFree(HEAP_TYPE heap, void* ptr);
+void* __memAllocDBG(HEAP_TYPE heap, u32 size);
+void __memFreeDBG(HEAP_TYPE heap, void* ptr);
 
 #if VERSION >= VERSION_US // US and later: the map heap functions take the heap base; these macros pass mapalloc_base_ptr
 extern void* mapalloc_base_ptr;

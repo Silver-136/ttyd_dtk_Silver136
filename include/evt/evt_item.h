@@ -11,6 +11,7 @@ USER_FUNC(evt_item_status_off);
 USER_FUNC(evt_item_status_set);
 USER_FUNC(evt_item_change_mode);
 USER_FUNC(evt_item_delete_check);
+USER_FUNC(evt_item_delete_wait);
 USER_FUNC(evt_item_entry);
 USER_FUNC(evt_item_flag_off);
 USER_FUNC(evt_item_flag_set);

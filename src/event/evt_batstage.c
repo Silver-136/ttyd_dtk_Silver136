@@ -75,6 +75,86 @@ USER_FUNC(evt_batstage_return_aud_dark_base) {
     return EVT_RETURN_DONE;
 }
 
+/** Switches stage light args[0] off over args[1] frames with curve mode args[2] (BattleStageLightRelease). */
+// evt_batstage_light_release, _set_lightcolor, _set_width, _set_position, _set_target and _set_upvec: original names
+// and sizes (0x7c, 0xa8, 0x98, 0xcc, 0xcc, 0xcc) from the JP demo map (UNUSED there: no script uses them). Each passes
+// its arguments to the BattleStageLight function its name gives, in the form of evt_batstage_set_stg_dark; the sizes
+// fit the light being given by its number. The map's _entry, _release_all and _set_target_by_ commands are not
+// restored (their bodies or the functions they call are not known).
+USER_FUNC(evt_batstage_light_release) {
+    EvtWord* args = event->args;
+    s32 idx = evtGetValue(event, args[0]);
+    s32 time = evtGetValue(event, args[1]);
+    s32 mode = evtGetValue(event, args[2]);
+    BattleStageLightRelease(idx, time, mode);
+    return EVT_RETURN_DONE;
+}
+
+/** Fades stage light args[0] to the colour args[1..3] over args[4] frames with curve mode args[5]. */
+// Original name and size from the JP demo map (see evt_batstage_light_release).
+USER_FUNC(evt_batstage_light_set_lightcolor) {
+    EvtWord* args = event->args;
+    s32 idx = evtGetValue(event, args[0]);
+    u8 r = evtGetValue(event, args[1]);
+    u8 g = evtGetValue(event, args[2]);
+    u8 b = evtGetValue(event, args[3]);
+    s32 time = evtGetValue(event, args[4]);
+    s32 mode = evtGetValue(event, args[5]);
+    BattleStageLightSetLightColor(idx, r, g, b, time, mode);
+    return EVT_RETURN_DONE;
+}
+
+/** Changes the width of stage light args[0] to args[1] over args[2] frames with curve mode args[3]. */
+// Original name and size from the JP demo map (see evt_batstage_light_release).
+USER_FUNC(evt_batstage_light_set_width) {
+    EvtWord* args = event->args;
+    s32 idx = evtGetValue(event, args[0]);
+    s32 width = evtGetValue(event, args[1]);
+    s32 time = evtGetValue(event, args[2]);
+    s32 mode = evtGetValue(event, args[3]);
+    BattleStageLightSetWidth(idx, width, time, mode);
+    return EVT_RETURN_DONE;
+}
+
+/** Moves stage light args[0] to the floats args[1..3] over args[4] frames with curve mode args[5]. */
+// Original name and size from the JP demo map (see evt_batstage_light_release).
+USER_FUNC(evt_batstage_light_set_position) {
+    EvtWord* args = event->args;
+    s32 idx = evtGetValue(event, args[0]);
+    f32 x = evtGetFloat(event, args[1]);
+    f32 y = evtGetFloat(event, args[2]);
+    f32 z = evtGetFloat(event, args[3]);
+    s32 time = evtGetValue(event, args[4]);
+    BattleStageLightSetPosition(idx, x, y, z, time, evtGetValue(event, args[5]));
+    return EVT_RETURN_DONE;
+}
+
+/** Moves the target of stage light args[0] to the floats args[1..3] over args[4] frames with curve mode args[5]. */
+// Original name and size from the JP demo map (see evt_batstage_light_release).
+USER_FUNC(evt_batstage_light_set_target) {
+    EvtWord* args = event->args;
+    s32 idx = evtGetValue(event, args[0]);
+    f32 x = evtGetFloat(event, args[1]);
+    f32 y = evtGetFloat(event, args[2]);
+    f32 z = evtGetFloat(event, args[3]);
+    s32 time = evtGetValue(event, args[4]);
+    BattleStageLightSetTarget(idx, x, y, z, time, evtGetValue(event, args[5]));
+    return EVT_RETURN_DONE;
+}
+
+/** Turns the up vector of stage light args[0] to the floats args[1..3] over args[4] frames with curve mode args[5]. */
+// Original name and size from the JP demo map (see evt_batstage_light_release).
+USER_FUNC(evt_batstage_light_set_upvec) {
+    EvtWord* args = event->args;
+    s32 idx = evtGetValue(event, args[0]);
+    f32 x = evtGetFloat(event, args[1]);
+    f32 y = evtGetFloat(event, args[2]);
+    f32 z = evtGetFloat(event, args[3]);
+    s32 time = evtGetValue(event, args[4]);
+    BattleStageLightSetUpVec(idx, x, y, z, time, evtGetValue(event, args[5]));
+    return EVT_RETURN_DONE;
+}
+
 USER_FUNC(evt_batstage_light_set_player_on) {
     EvtWord* args = event->args;
     BattleWork* bw = _battleWorkPointer;

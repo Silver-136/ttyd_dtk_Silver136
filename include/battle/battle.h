@@ -401,6 +401,8 @@ struct BattleWork {
 extern BattleWork* _battleWorkPointer;
 
 void battleMain(void);
+void battleInit(void);
+void battleEnd(void);
 
 void BattleAfterReactionQueueInit(void);
 

@@ -40,6 +40,11 @@ static void _EquipItem(BattleUnit* unit, EquipFlags flags, ItemType type);
 static void BattlePartyInfoWorkInit(BattleWork* wp);
 static void BattleCheckUnitBroken(BattleWork* wp);
 
+// battleInit and battleEnd: original names and sizes (0x4 each: a bare return) from the JP demo map (UNUSED there:
+// nothing calls them); the empty partners of battleMain, which the map lists between them.
+void battleInit(void) {
+}
+
 /**
  * Per-frame battle entry, called every frame from the main loop (marioStMain);
  * flags BATTLE_SEQ_END once BattleMain reports the battle is over.
@@ -50,6 +55,10 @@ void battleMain(void) {
     if (wp && BattleMain() == 0) {
         wp->flags |= BATTLE_SEQ_END;
     }
+}
+
+// Original name and size from the JP demo map (see battleInit).
+void battleEnd(void) {
 }
 
 /**

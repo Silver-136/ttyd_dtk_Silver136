@@ -1578,6 +1578,12 @@ void party_move_mode_stay(PartyEntry* party) {
     checkMapAttr(party);
 }
 
+// party_move_mode_stay_post, _walk_post, _behind_mario_post and _beside_mario_post: original names and sizes (0x4
+// each: a bare return) from the JP demo map (UNUSED there: nothing calls them); each follows its move mode's
+// function in the map, an empty hook for leaving that mode.
+void party_move_mode_stay_post(PartyEntry* party) {
+}
+
 /**
  * Move mode 1: the partner follows its footmark trail (walking or flying homing motion), with jump, fall,
  * step and damage motions.
@@ -1614,6 +1620,10 @@ void party_move_mode_walk(PartyEntry* party) {
     checkMapAttr(party);
 }
 
+// Original name and size from the JP demo map (see party_move_mode_stay_post).
+void party_move_mode_walk_post(PartyEntry* party) {
+}
+
 /**
  * Move mode 2: the partner heads for its spot behind Mario (walking or flying), with jump, fall,
  * step and damage motions.
@@ -1647,6 +1657,10 @@ void party_move_mode_behind_mario(PartyEntry* party) {
     party->moveDir = party->targetDir;
 }
 
+// Original name and size from the JP demo map (see party_move_mode_stay_post).
+void party_move_mode_behind_mario_post(PartyEntry* party) {
+}
+
 /** Move mode 3: the partner heads for its spot beside Mario, with jump, fall, step and damage motions. */
 void party_move_mode_beside_mario(PartyEntry* party) {
     if (party->trigFlags & PARTY_TRIG_CHG_MOVE_MODE) {
@@ -1671,6 +1685,10 @@ void party_move_mode_beside_mario(PartyEntry* party) {
             break;
     }
     party->moveDir = party->targetDir;
+}
+
+// Original name and size from the JP demo map (see party_move_mode_stay_post).
+void party_move_mode_beside_mario_post(PartyEntry* party) {
 }
 
 /**

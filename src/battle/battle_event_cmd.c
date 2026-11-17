@@ -1222,6 +1222,30 @@ USER_FUNC(btlevtcmd_SetPartsBaseRotate) {
     return EVT_RETURN_DONE;
 }
 
+/** s32* battleId, s32 indexX, s32 indexY, s32 indexZ */
+// Original name and size (0xc4) from the JP demo map (UNUSED there: no script uses it); btlevtcmd_GetHomePos's form
+// and size with BtlUnit_GetRotateOffset.
+USER_FUNC(btlevtcmd_GetRotateOffset) {
+    EvtWord* args = event->args;
+    s32 indexX, indexY, indexZ;
+    BattleUnit* unit;
+    f32 x, y, z;
+    s32 id;
+
+    id = evtGetValue(event, args[0]);
+
+    id = BattleTransID(event, id);
+    unit = BattleGetUnitPtr(_battleWorkPointer, id);
+    indexX = args[1];
+    indexY = args[2];
+    indexZ = args[3];
+    BtlUnit_GetRotateOffset(unit, &x, &y, &z);
+    evtSetValue(event, indexX, (s32)x);
+    evtSetValue(event, indexY, (s32)y);
+    evtSetValue(event, indexZ, (s32)z);
+    return EVT_RETURN_DONE;
+}
+
 /** s32* battleId, s32* x, s32* y, s32* z */
 USER_FUNC(btlevtcmd_SetRotateOffset) {
     EvtWord* args = event->args;
@@ -1335,6 +1359,28 @@ USER_FUNC(btlevtcmd_SetRotateOffsetFromCenterOffset) {
 }
 
 /** s32* battleId, s32* x, s32* y, s32* z */
+// Original name and size (0x124) from the JP demo map (UNUSED there: no script uses it); btlevtcmd_SetCutBaseOffset's
+// form and size for offsetCenter, the member btlevtcmd_SetRotateOffsetFromCenterOffset reads.
+USER_FUNC(btlevtcmd_SetRotateOffsetCenter) {
+    EvtWord* args = event->args;
+    BattleUnit* unit;
+    f32 x, y, z;
+    s32 id;
+
+    id = evtGetValue(event, args[0]);
+
+    id = BattleTransID(event, id);
+    x = (f32)evtGetValue(event, args[1]);
+    y = (f32)evtGetValue(event, args[2]);
+    z = (f32)evtGetValue(event, args[3]);
+    unit = BattleGetUnitPtr(_battleWorkPointer, id);
+    unit->offsetCenter.x = x;
+    unit->offsetCenter.y = y;
+    unit->offsetCenter.z = z;
+    return EVT_RETURN_DONE;
+}
+
+/** s32* battleId, s32* x, s32* y, s32* z */
 USER_FUNC(btlevtcmd_SetCutBaseOffset) {
     EvtWord* args = event->args;
     BattleUnit* unit;
@@ -1424,6 +1470,35 @@ USER_FUNC(btlevtcmd_SetCutHeight) {
     return EVT_RETURN_DONE;
 }
 
+/** s32* battleId, s32 indexX, s32 indexY, s32 indexZ (can be EVTDAT_POINTER_MAX to skip) */
+// btlevtcmd_GetPossessionItemOffset, btlevtcmd_GetPossessionItemBaseOffset and btlevtcmd_SetPossessionItemBaseOffset:
+// original names and sizes (0xdc, 0xdc, 0x124) from the JP demo map (UNUSED there: no script uses them); the getters
+// of btlevtcmd_SetPossessionItemOffset's member with its skip tests, and the same pair for heldItemBaseOffset.
+USER_FUNC(btlevtcmd_GetPossessionItemOffset) {
+    EvtWord* args = event->args;
+    BattleWork* wp = _battleWorkPointer;
+    s32 id, indexX, indexY, indexZ;
+    BattleUnit* unit;
+
+    id = evtGetValue(event, args[0]);
+
+    id = BattleTransID(event, id);
+    unit = BattleGetUnitPtr(wp, id);
+    indexX = args[1];
+    indexY = args[2];
+    indexZ = args[3];
+    if (indexX != EVTDAT_POINTER_MAX) {
+        evtSetValue(event, indexX, (s32)unit->heldItemOffset.x);
+    }
+    if (indexY != EVTDAT_POINTER_MAX) {
+        evtSetValue(event, indexY, (s32)unit->heldItemOffset.y);
+    }
+    if (indexZ != EVTDAT_POINTER_MAX) {
+        evtSetValue(event, indexZ, (s32)unit->heldItemOffset.z);
+    }
+    return EVT_RETURN_DONE;
+}
+
 /** s32* battleId, s32* x, s32* y, s32* z (can be EVTDAT_POINTER_MAX to skip) */
 USER_FUNC(btlevtcmd_SetPossessionItemOffset) {
     EvtWord* args = event->args;
@@ -1449,6 +1524,63 @@ USER_FUNC(btlevtcmd_SetPossessionItemOffset) {
     }
     if (indexZ != EVTDAT_POINTER_MAX) {
         unit->heldItemOffset.z = (f32)z;
+    }
+    return EVT_RETURN_DONE;
+}
+
+/** s32* battleId, s32 indexX, s32 indexY, s32 indexZ (can be EVTDAT_POINTER_MAX to skip) */
+// Original name and size from the JP demo map (see btlevtcmd_GetPossessionItemOffset).
+USER_FUNC(btlevtcmd_GetPossessionItemBaseOffset) {
+    EvtWord* args = event->args;
+    BattleWork* wp = _battleWorkPointer;
+    s32 id, indexX, indexY, indexZ;
+    BattleUnit* unit;
+
+    id = evtGetValue(event, args[0]);
+
+    id = BattleTransID(event, id);
+    unit = BattleGetUnitPtr(wp, id);
+    indexX = args[1];
+    indexY = args[2];
+    indexZ = args[3];
+    if (indexX != EVTDAT_POINTER_MAX) {
+        evtSetValue(event, indexX, (s32)unit->heldItemBaseOffset.x);
+    }
+    if (indexY != EVTDAT_POINTER_MAX) {
+        evtSetValue(event, indexY, (s32)unit->heldItemBaseOffset.y);
+    }
+    if (indexZ != EVTDAT_POINTER_MAX) {
+        evtSetValue(event, indexZ, (s32)unit->heldItemBaseOffset.z);
+    }
+    return EVT_RETURN_DONE;
+}
+
+/** s32* battleId, s32* x, s32* y, s32* z (can be EVTDAT_POINTER_MAX to skip) */
+// Original name and size from the JP demo map (see btlevtcmd_GetPossessionItemOffset).
+USER_FUNC(btlevtcmd_SetPossessionItemBaseOffset) {
+    EvtWord* args = event->args;
+    BattleWork* wp = _battleWorkPointer;
+    s32 id, x, y, z, indexX, indexY, indexZ;
+    BattleUnit* unit;
+
+    id = evtGetValue(event, args[0]);
+
+    id = BattleTransID(event, id);
+    unit = BattleGetUnitPtr(wp, id);
+    indexX = args[1];
+    x = evtGetValue(event, indexX);
+    indexY = args[2];
+    y = evtGetValue(event, indexY);
+    indexZ = args[3];
+    z = evtGetValue(event, indexZ);
+    if (indexX != EVTDAT_POINTER_MAX) {
+        unit->heldItemBaseOffset.x = (f32)x;
+    }
+    if (indexY != EVTDAT_POINTER_MAX) {
+        unit->heldItemBaseOffset.y = (f32)y;
+    }
+    if (indexZ != EVTDAT_POINTER_MAX) {
+        unit->heldItemBaseOffset.z = (f32)z;
     }
     return EVT_RETURN_DONE;
 }
@@ -1576,6 +1708,33 @@ USER_FUNC(btlevtcmd_AddScale) {
     y = evtGetFloat(event, args[2]);
     z = evtGetFloat(event, args[3]);
     BtlUnit_AddScale(unit, x, y, z);
+    return EVT_RETURN_DONE;
+}
+
+/** s32* battleId, s32* partId, s32 indexX, s32 indexY, s32 indexZ (floats) */
+// Original name and size (0xc4) from the JP demo map (UNUSED there: no script uses it); the lookup of
+// btlevtcmd_SetPartsScale with BtlUnit_GetPartsScale, the three values returned as floats.
+USER_FUNC(btlevtcmd_GetPartsScale) {
+    EvtWord* args = event->args;
+    s32 id, partId, indexX, indexY, indexZ;
+    BattleUnitPart* part;
+    f32 x, y, z;
+
+    id = evtGetValue(event, args[0]);
+
+    id = BattleTransID(event, id);
+    if (id == UNIT_ID_NONE) {
+        return EVT_RETURN_DONE;
+    }
+    partId = evtGetValue(event, args[1]);
+    part = BattleGetUnitPartsPtr(id, partId);
+    indexX = args[2];
+    indexY = args[3];
+    indexZ = args[4];
+    BtlUnit_GetPartsScale(part, &x, &y, &z);
+    evtSetFloat(event, indexX, x);
+    evtSetFloat(event, indexY, y);
+    evtSetFloat(event, indexZ, z);
     return EVT_RETURN_DONE;
 }
 
@@ -1737,6 +1896,25 @@ USER_FUNC(btlevtcmd_SetFp) {
     return EVT_RETURN_DONE;
 }
 
+/** Script: sets the maximum HP of the unit args[0] to args[1]. */
+// Original name and size (0x7c) from the JP demo map (UNUSED there: no script uses it); the lookup of
+// btlevtcmd_SetHp and one store (the HP gauge is left alone).
+USER_FUNC(btlevtcmd_SetMaxHp) {
+    EvtWord* args = event->args;
+    BattleWork* wp = _battleWorkPointer;
+    BattleUnit* unit;
+    s32 btlId, id;
+
+    btlId = evtGetValue(event, args[0]);
+    id = BattleTransID(event, btlId);
+    if (id == UNIT_ID_NONE) {
+        return EVT_RETURN_DONE;
+    }
+    unit = BattleGetUnitPtr(wp, id);
+    unit->maxHp = (s16)evtGetValue(event, args[1]);
+    return EVT_RETURN_DONE;
+}
+
 /** Script: sets the maximum FP of the unit args[0] to args[1]. */
 USER_FUNC(btlevtcmd_SetMaxFp) {
     EvtWord* args = event->args;
@@ -1883,6 +2061,27 @@ USER_FUNC(btlevtcmd_GetHpDamage) {
     return EVT_RETURN_DONE;
 }
 
+/** Script: returns in args[1] the HP damage the unit args[0] has taken in total (totalHpDamageTaken). */
+// btlevtcmd_GetTotalHpDamage, btlevtcmd_GetTotalFpDamage, btlevtcmd_GetFpRealDamage and btlevtcmd_GetTotalFpRealDamage:
+// original names and sizes (0x78, 0x78, 0x7c, 0x78) from the JP demo map (UNUSED there: no script uses them);
+// btlevtcmd_GetHpDamage's form for the unit's three running totals and the FP actually lost to the last hit. The
+// sizes fit the members' widths (a 32-bit total is one instruction shorter than a signed byte).
+USER_FUNC(btlevtcmd_GetTotalHpDamage) {
+    EvtWord* args = event->args;
+    BattleWork* wp = _battleWorkPointer;
+    BattleUnit* unit;
+    s32 btlId, id;
+
+    btlId = evtGetValue(event, args[0]);
+    id = BattleTransID(event, btlId);
+    if (id == UNIT_ID_NONE) {
+        return EVT_RETURN_DONE;
+    }
+    unit = BattleGetUnitPtr(wp, id);
+    evtSetValue(event, args[1], unit->totalHpDamageTaken);
+    return EVT_RETURN_DONE;
+}
+
 /** Script: returns in args[1] the FP damage the unit args[0] took from the last hit. */
 USER_FUNC(btlevtcmd_GetFpDamage) {
     EvtWord* args = event->args;
@@ -1897,6 +2096,60 @@ USER_FUNC(btlevtcmd_GetFpDamage) {
     }
     unit = BattleGetUnitPtr(wp, id);
     evtSetValue(event, args[1], unit->fpDamageTaken);
+    return EVT_RETURN_DONE;
+}
+
+/** Script: returns in args[1] the FP damage the unit args[0] has taken in total (totalFpDamageTaken). */
+// Original name and size from the JP demo map (see btlevtcmd_GetTotalHpDamage).
+USER_FUNC(btlevtcmd_GetTotalFpDamage) {
+    EvtWord* args = event->args;
+    BattleWork* wp = _battleWorkPointer;
+    BattleUnit* unit;
+    s32 btlId, id;
+
+    btlId = evtGetValue(event, args[0]);
+    id = BattleTransID(event, btlId);
+    if (id == UNIT_ID_NONE) {
+        return EVT_RETURN_DONE;
+    }
+    unit = BattleGetUnitPtr(wp, id);
+    evtSetValue(event, args[1], unit->totalFpDamageTaken);
+    return EVT_RETURN_DONE;
+}
+
+/** Script: returns in args[1] the FP the unit args[0] actually lost to the last hit (fpLost). */
+// Original name and size from the JP demo map (see btlevtcmd_GetTotalHpDamage).
+USER_FUNC(btlevtcmd_GetFpRealDamage) {
+    EvtWord* args = event->args;
+    BattleWork* wp = _battleWorkPointer;
+    BattleUnit* unit;
+    s32 btlId, id;
+
+    btlId = evtGetValue(event, args[0]);
+    id = BattleTransID(event, btlId);
+    if (id == UNIT_ID_NONE) {
+        return EVT_RETURN_DONE;
+    }
+    unit = BattleGetUnitPtr(wp, id);
+    evtSetValue(event, args[1], unit->fpLost);
+    return EVT_RETURN_DONE;
+}
+
+/** Script: returns in args[1] the FP the unit args[0] has actually lost in total (totalFpLost). */
+// Original name and size from the JP demo map (see btlevtcmd_GetTotalHpDamage).
+USER_FUNC(btlevtcmd_GetTotalFpRealDamage) {
+    EvtWord* args = event->args;
+    BattleWork* wp = _battleWorkPointer;
+    BattleUnit* unit;
+    s32 btlId, id;
+
+    btlId = evtGetValue(event, args[0]);
+    id = BattleTransID(event, btlId);
+    if (id == UNIT_ID_NONE) {
+        return EVT_RETURN_DONE;
+    }
+    unit = BattleGetUnitPtr(wp, id);
+    evtSetValue(event, args[1], unit->totalFpLost);
     return EVT_RETURN_DONE;
 }
 
@@ -2337,6 +2590,23 @@ USER_FUNC(btlevtcmd_RunHitEventDirect) {
     code = (void*)evtGetValue(event, args[2]);
     unit->damagePattern = evtGetValue(event, args[3]);
     BattleRunHitEventDirect(unit, damageCode | DAMAGE_RESULT_FINAL_HIT, code);
+    return EVT_RETURN_DONE;
+}
+
+/** Script: returns in args[1] the damage pattern of the last hit on the unit args[0]. */
+// Original name and size (0x6c) from the JP demo map (UNUSED there: no script uses it); btlevtcmd_GetStatusMg's form
+// for the member btlevtcmd_CheckDamagePattern compares.
+USER_FUNC(btlevtcmd_GetDamagePattern) {
+    EvtWord* args = event->args;
+    BattleWork* wp = _battleWorkPointer;
+    BattleUnit* unit;
+    s32 id, index;
+
+    id = evtGetValue(event, args[0]);
+    index = args[1];
+    id = BattleTransID(event, id);
+    unit = BattleGetUnitPtr(wp, id);
+    evtSetValue(event, index, unit->damagePattern);
     return EVT_RETURN_DONE;
 }
 

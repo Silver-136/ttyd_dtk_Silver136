@@ -119,5 +119,7 @@ void cardCopy(s32 from, s32 to);
 void cardWrite(s32 slot);
 void cardWriteHeader(void);
 void cardReadAll(void);
+void cardRead(s32 slot);
 void cardCreate(void);
 void cardFormat(void);
+void cardDelete(void);

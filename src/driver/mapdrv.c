@@ -744,6 +744,11 @@ void mapEntryAnimation(BOOL group) {
     }
 }
 
+// Original name and size (0x4: a bare return) from the JP demo map (UNUSED there: its one caller, the script
+// command evt_map_delanim, is unused too); evt_map_delanim's size shows the one argument it passes.
+void mapDeleteAnimation(const char* name) {
+}
+
 /** Pauses the playing map animation name; mapMain stops advancing it. */
 void mapPauseAnimation(const char* name) {
     MapAnim* anim = mapSearchAnmObj_inl(name);

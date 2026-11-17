@@ -61,3 +61,6 @@ USER_FUNC(evt_door_param);
 USER_FUNC(evt_door_save_mapflag);
 USER_FUNC(evt_door_set_param);
 void door_position_sub(s32 type, const char* map, const char* hitIn, const char* hitOut, Vec* in, Vec* out, BOOL mario);
+struct DoorParam;
+void door_position(struct DoorParam* d, Vec* in, Vec* out);
+void door_position_mario(struct DoorParam* d, Vec* in, Vec* out);

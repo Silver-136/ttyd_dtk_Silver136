@@ -4,6 +4,7 @@ void peachChgPose(const char* name);
 void peach_dash(void);
 void peach_walk(void);
 void peachPreInit(void);
+void peachPostClear(void);
 void peachSetStsAftershower(void);
 void peachSetStsAngry(void);
 void peachSetStsCarry(void);

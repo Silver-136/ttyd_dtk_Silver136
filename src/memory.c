@@ -162,8 +162,29 @@ void* __memAlloc(HEAP_TYPE heap, u32 size) {
     return ptr;
 }
 
+/** __memAlloc under its debug name. */
+// __memAllocDBG and __memFreeDBG: original names and sizes (0x68, 0x30) from the JP demo map (UNUSED there: nothing
+// calls them); the map lists each right after the function whose size it has, so each has that function's body.
+// Parameters the bodies do not read (a debug build would pass more) are not known.
+void* __memAllocDBG(HEAP_TYPE heap, u32 size) {
+    void* ptr;
+
+    ptr = OSAllocFromHeap(heapHandle[heap], size);
+    if (ptr) {
+        memset(ptr, 0, size);
+        DCFlushRange(ptr, size);
+    }
+    return ptr;
+}
+
 /** Returns a block from __memAlloc to its heap. */
 void __memFree(HEAP_TYPE heap, void* ptr) {
+    OSFreeToHeap(heapHandle[heap], ptr);
+}
+
+/** __memFree under its debug name. */
+// Original name and size from the JP demo map (see __memAllocDBG).
+void __memFreeDBG(HEAP_TYPE heap, void* ptr) {
     OSFreeToHeap(heapHandle[heap], ptr);
 }
 

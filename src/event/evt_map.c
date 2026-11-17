@@ -253,6 +253,14 @@ USER_FUNC(evt_map_playanim) {
     return EVT_RETURN_DONE;
 }
 
+/** Deletes the map animation named in args[0] (mapDeleteAnimation, which does nothing). */
+// Original name and size (0x30) from the JP demo map (UNUSED there: no script uses it); the map lists it between
+// evt_map_playanim and evt_map_checkanim, and the size is one evtGetValue and one call.
+USER_FUNC(evt_map_delanim) {
+    mapDeleteAnimation((const char*)evtGetValue(event, event->args[0]));
+    return EVT_RETURN_DONE;
+}
+
 /**
  * Returns whether the map animation in args[0] is valid (args[1]) and the milliseconds it has left (args[2]),
  * which scripts pass straight to WAIT_MS.
