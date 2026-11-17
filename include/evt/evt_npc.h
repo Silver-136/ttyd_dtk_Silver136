@@ -130,6 +130,7 @@ USER_FUNC(evt_npc_set_battle_rule);
 USER_FUNC(evt_npc_set_btlsetup_work);
 USER_FUNC(evt_npc_set_force_regl_anim);
 USER_FUNC(evt_npc_set_link);
+USER_FUNC(evt_npc_set_slave);
 USER_FUNC(evt_npc_set_offscreen);
 USER_FUNC(evt_npc_set_paper);
 USER_FUNC(evt_npc_set_paper_anim);

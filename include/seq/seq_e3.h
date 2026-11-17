@@ -24,3 +24,4 @@ typedef struct seq_e3_work {
 void seq_e3Init(SequenceWork* work);
 void seq_e3Main(SequenceWork* work);
 void seq_e3Exit(SequenceWork* work);
+OSTime e3GetTime(void);

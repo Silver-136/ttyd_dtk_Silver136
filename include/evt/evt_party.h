@@ -46,6 +46,8 @@ USER_FUNC(evt_party_set_dispdir);
 USER_FUNC(evt_party_set_homing_dist);
 USER_FUNC(evt_party_set_hosei_xyz);
 USER_FUNC(evt_party_set_pose);
+USER_FUNC(evt_party_get_pose);
+USER_FUNC(evt_party_shadow_onoff);
 USER_FUNC(evt_party_sleep_off);
 USER_FUNC(evt_party_sleep_on);
 USER_FUNC(evt_party_thunders_use);

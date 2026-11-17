@@ -174,6 +174,13 @@ EVT_BEGIN(e3_pose_evt)
 EVT_END()
 #endif
 
+/** When the kiosk play-time alarm was started (wp->initTime). */
+// Original name and size (0x10) from the JP demo map (UNUSED there: nothing calls it), before alarm_handler: the
+// getter of the work's one OSTime (the work pointer, two loads and the return).
+OSTime e3GetTime(void) {
+    return wp->initTime;
+}
+
 static void alarm_handler(OSAlarm* alarm, OSContext* context) {
     gp->flags |= GW_FLAG_E3_TIMEOUT;
 }

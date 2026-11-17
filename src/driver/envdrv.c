@@ -503,6 +503,18 @@ static void envDisp_DepthOfField(void) {
     }
 }
 
+/** Stops the depth of field and the frame and depth captures it draws from. */
+// Original name and size (0x44) from the JP demo map (UNUSED there: nothing calls it), between the stripped
+// envSetDoFThresholdZ and envDisp_Blur. The size is the three clears (one clear is 0x2c, two 0x38); envCapture's
+// two flags are the copies envDisp_DepthOfField reads. The order of the clears is not fixed by the size.
+void envDoFOff(void) {
+    EnvironmentWork* wp = envGetWork();
+
+    wp->flags &= ~ENV_FLAG_CAPTURE_COLOR_UNUSED;
+    wp->flags &= ~ENV_FLAG_CAPTURE_DEPTH_UNUSED;
+    wp->flags &= ~ENV_FLAG_DOF_UNUSED;
+}
+
 /**
  * Draws the motion blur: the captured earlier frame over the screen at a constant alpha, or,
  * when envBlurOn gave a duration, fading out over it (type 1 from fully opaque, otherwise from 248 to 128).
@@ -829,6 +841,26 @@ static void envDisp_FF(void) {
             GXTexCoord2f32(0.5f, 0.5f);
         }
     }
+}
+
+/** Starts the radial streak of envDisp_FF and the frame capture it is textured with. */
+// envFFOn and envFFOff: original names and sizes (0x38 each) from the JP demo map (UNUSED there: nothing calls
+// them), after envDisp_FF in this order. Each size is two flag changes (one is 0x2c): the effect's flag and the
+// capture flag envDisp_FF's texture comes from (envCapture). The order of the two is not fixed by the size; these
+// follow envBlurOn / envBlurOff.
+void envFFOn(void) {
+    EnvironmentWork* wp = envGetWork();
+
+    wp->flags |= ENV_FLAG_FF_UNUSED;
+    wp->flags |= ENV_FLAG_CAPTURE_COLOR_UNUSED;
+}
+
+/** Stops the radial streak and its frame capture. */
+void envFFOff(void) {
+    EnvironmentWork* wp = envGetWork();
+
+    wp->flags &= ~ENV_FLAG_CAPTURE_COLOR_UNUSED;
+    wp->flags &= ~ENV_FLAG_FF_UNUSED;
 }
 
 double acos(double);

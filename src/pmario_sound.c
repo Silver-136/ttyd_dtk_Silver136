@@ -9477,6 +9477,30 @@ void psndSetReverb(s32 mode) {
     }
 }
 
+/** The reverb mode psndSetReverb last set (0-3), from the stored reverb level. */
+// Original name and size (0x60) from the JP demo map (UNUSED there: nothing calls it), between psndSetReverb and
+// psndSetFlag: psndSetReverb's switch turned around into a mode local (returning from each case is 0x64, a mode
+// without a start value 0x5c). The start value for an unknown level (0 here) is not fixed by the size.
+s32 psndGetReverb(void) {
+    s32 mode = 0;
+
+    switch (psnd.reverb) {
+        case 0:
+            mode = 0;
+            break;
+        case 20:
+            mode = 1;
+            break;
+        case 40:
+            mode = 2;
+            break;
+        case 60:
+            mode = 3;
+            break;
+    }
+    return mode;
+}
+
 /** Sets psnd flags; PSND_FLAG_BGM_OFF also stops both BGM channels and PSND_FLAG_ENV_OFF both environment channels. */
 void psndSetFlag(s32 flag) {
     psnd.flags |= flag;
@@ -10747,6 +10771,54 @@ void psndSFX_pit(s32 id, s16 pitch) {
         if (!(entry->fxId & SFX_FLAG_STREAM)) {
             if (!(entry->fxId & SFX_FLAG_STREAM)) { // the same test twice, as in the game code
                 SoundEfxSetPitch(sfx->channel, pitch);
+            }
+        }
+    }
+}
+
+/** Sets the surround pan of playing effect id once it has started (a pending effect keeps none). */
+// psndSFX_span and psndSFX_LPF: original names and sizes (0x84, 0x8c) from the JP demo map (UNUSED there: nothing
+// calls them), between psndSFX_pit and psndSFX_pos in this order. Both are psndSFX_pit's form: psndSFX_LPF exactly
+// (0x8c) with the lpf field and SoundEfxSetLPF; psndSFX_span without the pending store (0x84), as PaperSoundEffect has
+// no surround pan field.
+void psndSFX_span(s32 id, u8 span) {
+    PaperSoundEffect* sfx;
+
+    if (id == 0xFFFFFFFF) {
+        return;
+    }
+    sfx = &pssfx[id & 0xFF];
+    if (sfx->listId == 0xFFFFFFFF) {
+        return;
+    }
+    if (!(sfx->flags & PSFX_FLAG_START)) {
+        SoundEffectEntry* entry = &pssfxlist[sfx->listId & PSND_SFX_INDEX_MASK];
+        if (!(entry->fxId & SFX_FLAG_STREAM)) {
+            if (!(entry->fxId & SFX_FLAG_STREAM)) { // the same test twice, as in psndSFX_pit
+                SoundEfxSetSrndPan(sfx->channel, span);
+            }
+        }
+    }
+}
+
+/** Sets the low-pass filter of playing effect id (stored until it starts if still pending). */
+void psndSFX_LPF(s32 id, s16 lpf) {
+    PaperSoundEffect* sfx;
+
+    if (id == 0xFFFFFFFF) {
+        return;
+    }
+    sfx = &pssfx[id & 0xFF];
+    if (sfx->listId == 0xFFFFFFFF) {
+        return;
+    }
+    if (sfx->flags & PSFX_FLAG_START) {
+        sfx->lpf = lpf;
+    } else {
+        SoundEffectEntry* entry = &pssfxlist[sfx->listId & PSND_SFX_INDEX_MASK];
+        if (!(entry->fxId & SFX_FLAG_STREAM)) {
+            if (!(entry->fxId & SFX_FLAG_STREAM)) { // the same test twice, as in psndSFX_pit
+                SoundEfxSetLPF(sfx->channel, lpf);
             }
         }
     }

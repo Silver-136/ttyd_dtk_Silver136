@@ -87,6 +87,44 @@ USER_FUNC(evt_audience_flag_off) {
     return EVT_RETURN_DONE;
 }
 
+/** s32* flags: sets the flags on every member in use */
+// evt_audience_flag_on_all and evt_audience_flag_off_all: original names and sizes (0x100, 0x104) from the JP demo
+// map (UNUSED there: no script uses them), between evt_audience_flag_off and evt_audience_set_position in this order.
+// Both sizes are evt_audience_flag_on / _off's change over evt_audience_reflesh_natural_all's member loop with its
+// in-use test (without the test 0xc8 / 0xcc).
+USER_FUNC(evt_audience_flag_on_all) {
+    EvtWord* args = event->args;
+    BattleAudienceMember* member;
+    s32 flags, i;
+
+    flags = evtGetValue(event, args[0]);
+    i = 0;
+    member = BattleAudienceGetPtr(0);
+    for (; i < AUDIENCE_MEMBER_MAX; i++, member++) {
+        if (member->flags & AUDIENCE_MEMBER_FLAG_USED) {
+            member->flags |= flags;
+        }
+    }
+    return EVT_RETURN_DONE;
+}
+
+/** s32* flags: clears the flags on every member in use */
+USER_FUNC(evt_audience_flag_off_all) {
+    EvtWord* args = event->args;
+    BattleAudienceMember* member;
+    s32 flags, i;
+
+    flags = evtGetValue(event, args[0]);
+    i = 0;
+    member = BattleAudienceGetPtr(0);
+    for (; i < AUDIENCE_MEMBER_MAX; i++, member++) {
+        if (member->flags & AUDIENCE_MEMBER_FLAG_USED) {
+            member->flags &= ~flags;
+        }
+    }
+    return EVT_RETURN_DONE;
+}
+
 /** s32* memberId, f32* x, f32* y, f32* z */
 USER_FUNC(evt_audience_set_position) {
     EvtWord* args = event->args;

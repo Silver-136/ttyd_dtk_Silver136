@@ -112,6 +112,7 @@ MapObjectEntry* mobjHitObjPtrToPtr(HitEntry* hitObj);
 BOOL mobjCheckExec(void);
 void mobjReset(BOOL inBattle);
 void mobjSetPosition(const char* name, f32 x, f32 y, f32 z);
+void mobjGetPosition(const char* name, f32* x, f32* y, f32* z);
 void mobjKoopaOn(void);
 s32 mobjCheckItemboxOpen(MapObjectEntry* entry);
 BOOL mobjGetHint(MapObjectEntry* entry);

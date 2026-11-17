@@ -878,7 +878,10 @@ static void cylinderShadowDraw(CameraId cameraId, void* param) {
 }
 
 s32 shadowEntry(f32 x, f32 y, f32 z, f32 size) {
-    // unused; its zero template is in the original data (an anonymous object in the JP demo map)
+    // unused: a stand-in for the (Vec){x, y, z} template of the stripped shadowEntryAllSetting (JP demo map:
+    // UNUSED, 0xd4, just before shadowEntry), whose body is not known. The map's five Vec templates of these
+    // functions are evenly numbered: shadowEntryAllSetting, shadowEntry, shadowEntryOffscreen, shadowEntryMode and
+    // shadowSetPos, one compound literal each.
     Vec unused = {0.0f, 0.0f, 0.0f};
     s32 id = cswp->numEntries;
     ShadowEntry* entry = &cswp->entries[id];
@@ -904,13 +907,41 @@ s32 shadowEntry(f32 x, f32 y, f32 z, f32 size) {
     return id;
 }
 
+/** Adds a shadow for this frame like shadowEntry that also draws into offscreen buffer offscreenId. */
+// Original name and size (0xe4) from the JP demo map (UNUSED there: nothing calls it), between shadowEntry and
+// shadowEntryMode: shadowEntry's body (the same size) with offscreenId (-1 there) from a parameter placed first as in
+// shadowEntryMode; cylinderShadowDraw reports the drawn box to that buffer. Its camera (CAMERA_3D as in shadowEntry)
+// is not fixed by the size.
+s32 shadowEntryOffscreen(s32 offscreenId, f32 x, f32 y, f32 z, f32 size) {
+    s32 id = cswp->numEntries;
+    ShadowEntry* entry = &cswp->entries[id];
+
+    entry->flags = 0;
+    if (cswp->defaultEnabled) {
+        entry->flags |= SHADOW_ENTRY_GROUND;
+    }
+    entry->pos = (Vec){x, y, z};
+    entry->size = size;
+    entry->sizeY = cswp->defaultSizeY;
+    entry->mode = cswp->defaultMode;
+    entry->type = SHADOW_TYPE_CYLINDER;
+    entry->offscreenId = offscreenId;
+    entry->camId = CAMERA_3D;
+    entry->volume = 1.0f;
+    entry->decay = 0.2f;
+    entry->decay2 = 0.4f;
+#if VERSION >= VERSION_JP
+    entry->alpha = 0xFF;
+#endif
+    cswp->numEntries++;
+    return id;
+}
+
 /**
  * Adds a shadow for this frame like shadowEntry with an explicit mode:
  * 0 polygon, 1 textured, 2 cylinder, 3 projected.
  */
 s32 shadowEntryMode(s32 mode, f32 x, f32 y, f32 z, f32 size) {
-    // unused; its zero template is in the original data (an anonymous object in the JP demo map)
-    Vec unused = {0.0f, 0.0f, 0.0f};
     s32 id = cswp->numEntries;
     ShadowEntry* entry = &cswp->entries[id];
 
@@ -937,8 +968,6 @@ s32 shadowEntryMode(s32 mode, f32 x, f32 y, f32 z, f32 size) {
 
 /** Sets the volume shape of shadow id: 0 cylinder, 1 cube. */
 void shadowSetType(s32 id, u8 type) {
-    // unused; its zero template is in the original data (an anonymous object in the JP demo map)
-    Vec unused = {0.0f, 0.0f, 0.0f};
     ShadowEntry* entry = &cswp->entries[id];
     entry->type = type;
 }
@@ -953,6 +982,22 @@ void shadowSetMode(s32 id, u8 alpha) {
     entry->alpha = alpha;
 }
 #endif
+
+/** Moves shadow id to (x, y, z). */
+// shadowSetPos and shadowGetPos: original names and sizes (0x60, 0x30) from the JP demo map (UNUSED there: nothing
+// calls them), after shadowSetType in this order. shadowSetPos is shadowEntry's position store (0x60; three field
+// stores are 0x20) and owns the Vec template the map numbers after shadowEntryMode's. shadowGetPos copies the
+// position out (0x30; three f32 out-pointers are 0x2c); a Vec return value is also 0x30, the out-pointer is a guess.
+void shadowSetPos(s32 id, f32 x, f32 y, f32 z) {
+    ShadowEntry* entry = &cswp->entries[id];
+    entry->pos = (Vec){x, y, z};
+}
+
+/** Copies the position of shadow id to pos. */
+void shadowGetPos(s32 id, Vec* pos) {
+    ShadowEntry* entry = &cswp->entries[id];
+    *pos = entry->pos;
+}
 
 /** Sets how a cylinder shadow fades with height: its volume and the two decay factors. */
 void shadowSetVolumeDecay(s32 id, f32 volume, f32 decay, f32 decay2) {
@@ -990,6 +1035,15 @@ void shadowSetSize(s32 id, f32 size) {
 f32 shadowGetSize(s32 id) {
     ShadowEntry* entry = &cswp->entries[id];
     return entry->size;
+}
+
+/** Sets the height of the shadow volume of shadow id (its sizeY, the y scale of the drawn volume). */
+// Original name and size (0x18) from the JP demo map (UNUSED there: nothing calls it), between shadowGetSize and
+// shadowSetCamId: shadowSetSize's form; sizeY is the only entry value besides the position that no kept setter
+// changes, and the collision draw uses it as the volume's y scale.
+void shadowSetVolumeHeight(s32 id, f32 height) {
+    ShadowEntry* entry = &cswp->entries[id];
+    entry->sizeY = height;
 }
 
 /** Sets the camera shadow id is drawn with. */
@@ -1248,6 +1302,15 @@ inline void CreateRampTex16(GXTexObj* obj) {
     GXInitTexObj(obj, ramp, 0x100, 0x100, GX_TF_IA8, GX_CLAMP, GX_REPEAT, GX_FALSE);
     GXInitTexObjLOD(obj, GX_NEAR, GX_NEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
     DCFlushRange(ramp, size);
+}
+
+/** The shadow texture size (in texels) of size index idx (ShadowSizeTbl). */
+// Original name and size (0x10) from the JP demo map (UNUSED there: nothing calls it), before the stripped
+// shadowGetConfig_ShadowTexSizeNum and shadowGetConfig_DispMode; the texture-size counterpart of
+// shadowGetConfig_DispMode. Returning the table itself, as shadowGetConfig_DispMode does, is 0x8; one entry of the
+// small-data u16 table is 0x10 (as u16 or s32, so the return type is not fixed by the size).
+u16 shadowGetConfig_ShadowTexSize(s32 idx) {
+    return ShadowSizeTbl[idx];
 }
 
 /** Returns the number of shadow texture sizes; no version calls it (JP demo map: UNUSED, 0x8; the same form as

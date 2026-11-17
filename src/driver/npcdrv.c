@@ -3267,6 +3267,18 @@ void npcSetupBattleInfo(NpcEntry* npc, NpcSetupBattleInfo* setup) {
     }
 }
 
+/** Sets (on) or clears battle setup flags (battleInfo.battleFlags, NpcBattleFlags) on an NPC. */
+// Original name and size (0x28) from the JP demo map (UNUSED there: nothing calls it), between npcSetupBattleInfo
+// and npcSetBattleInfo: one flag word set or cleared (0x28 for either parameter order; the order is a guess).
+// battleFlags is the only flag word of NpcBattleInfo, the one npcSetupBattleInfo copies from the battle setup.
+void npcOnOffBtlSetupFlag(NpcEntry* npc, BOOL on, u32 flags) {
+    if (on) {
+        npc->battleInfo.battleFlags |= flags;
+    } else {
+        npc->battleInfo.battleFlags &= ~flags;
+    }
+}
+
 /**
  * Gives an NPC the battle setup number battleInfoId from the current area's btlSetupTbl (-1 for none)
  * and copies the result to its slaves.

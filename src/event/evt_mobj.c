@@ -270,6 +270,19 @@ USER_FUNC(evt_mobj_exec_cancel) {
     return EVT_RETURN_DONE;
 }
 
+/** Writes the falling gravity and bounce factor of the map object args[0] ("me" allowed) to args[1] and args[2]. */
+// Original name and size (0x90) from the JP demo map (UNUSED there: no script uses it), between evt_mobj_exec_cancel
+// and evt_mobj_set_gravity_bound: the getter of evt_mobj_set_gravity_bound's two fields in the form of
+// evt_mobj_get_x_position.
+USER_FUNC(evt_mobj_get_gravity_bound) {
+    EvtWord* args = event->args;
+    const char* name = (const char*)evtGetValue(event, args[0]);
+    MapObjectEntry* mobj = mobjPtrOrSelf(event, name);
+    evtSetFloat(event, args[1], mobj->gravity);
+    evtSetFloat(event, args[2], mobj->bounce);
+    return EVT_RETURN_DONE;
+}
+
 /**
  * Sets the gravity (args[1]) and bounce factor (args[2]) used when the map object args[0] falls,
  * e.g. an item block or switch dropped onto the floor.

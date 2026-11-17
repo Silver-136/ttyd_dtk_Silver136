@@ -1054,6 +1054,11 @@ static void zubastar_disp2D(CameraId cam, void* param) {
     }
 }
 
+// Original name and size (0x4) from the JP demo map (UNUSED there: nothing registers it), after zubastar_disp2D: an
+// empty 3D-camera draw callback of zubastar_disp2D's signature (sac_scissor has the same star_disp2D/star_disp3D pair).
+static void zubastar_disp3D(CameraId cam, void* param) {
+}
+
 static inline void setG(u8 a) {
     GXColor col = {0, 0, 0, 0xff};
     col.r = a;

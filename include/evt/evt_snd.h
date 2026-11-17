@@ -17,6 +17,7 @@ USER_FUNC(evt_snd_envoff_f);
 USER_FUNC(evt_snd_envon_f);
 USER_FUNC(evt_snd_sfx_all_stop);
 USER_FUNC(evt_snd_sfx_dist);
+USER_FUNC(evt_snd_sfx_span);
 USER_FUNC(evt_snd_sfxon_);
 USER_FUNC(evt_snd_sfxon_3d_ex);
 USER_FUNC(evt_snd_sfxon__);

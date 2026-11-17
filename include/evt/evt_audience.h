@@ -10,6 +10,8 @@ USER_FUNC(evt_audience_base_flag_off);
 USER_FUNC(evt_audience_flag_check);
 USER_FUNC(evt_audience_flag_on);
 USER_FUNC(evt_audience_flag_off);
+USER_FUNC(evt_audience_flag_on_all);
+USER_FUNC(evt_audience_flag_off_all);
 USER_FUNC(evt_audience_set_position);
 USER_FUNC(evt_audience_get_position);
 USER_FUNC(evt_audience_set_rotate);

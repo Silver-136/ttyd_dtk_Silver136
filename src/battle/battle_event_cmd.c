@@ -6302,6 +6302,15 @@ USER_FUNC(btlevtcmd_ac_timing_get_success_frame) {
     return EVT_RETURN_DONE;
 }
 
+/** Script: hides the action command help text. */
+// Original name and size (0x28) from the JP demo map (UNUSED there: no script uses it), between
+// btlevtcmd_ac_timing_get_success_frame and btlevtcmd_ACHelpSet: btlevtcmd_ACHelpSet's display call with
+// AC_HELP_DISP_OFF, as btlevtcmd_StopAC hides the help.
+USER_FUNC(btlevtcmd_ACHelpDispOff) {
+    BattleAcHelpSetDispType(AC_HELP_DISP_OFF);
+    return EVT_RETURN_DONE;
+}
+
 /** Script: shows the action command help text of the weapon args[0]. */
 USER_FUNC(btlevtcmd_ACHelpSet) {
     BattleWeapon* weapon = (BattleWeapon*)evtGetValue(event, event->args[0]);

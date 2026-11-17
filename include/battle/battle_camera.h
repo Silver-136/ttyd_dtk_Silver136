@@ -66,6 +66,7 @@ USER_FUNC(evt_btl_camera_nomove_z_onoff);
 USER_FUNC(evt_btl_camera_noshake);
 USER_FUNC(evt_btl_camera_off_posoffset_manual);
 void btl_camera_set_rumble_off_flag(s32 pri, s32 on);
+void btl_camera_set_homing_audience(s32 pri, s32 audienceId);
 USER_FUNC(evt_btl_camera_set_rumble_off_flag);
 USER_FUNC(evt_btl_camera_set_homing_unit);
 USER_FUNC(evt_btl_camera_set_homing_unit_audience);

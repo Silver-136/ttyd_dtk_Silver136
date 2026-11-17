@@ -190,6 +190,7 @@ USER_FUNC(btlevtcmd_SetEventConfusion);
 USER_FUNC(btlevtcmd_StartWaitEvent);
 
 USER_FUNC(btlevtcmd_ACHelpSet);
+USER_FUNC(btlevtcmd_ACHelpDispOff);
 USER_FUNC(btlevtcmd_ACSuccessEffect);
 USER_FUNC(btlevtcmd_AcGetDifficulty);
 USER_FUNC(btlevtcmd_AcGetOutputParam);

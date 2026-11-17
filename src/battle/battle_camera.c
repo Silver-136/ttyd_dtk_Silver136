@@ -1263,6 +1263,18 @@ USER_FUNC(evt_btl_camera_set_rumble_off_flag) {
     return EVT_RETURN_DONE;
 }
 
+/** Sets the audience member the camera follows (BTL_CAM_MODE_AUDIENCE_MEMBER) if pri passes the floor. */
+// Original name and size (0x18) from the JP demo map (UNUSED there: nothing calls it), between
+// evt_btl_camera_set_rumble_off_flag and evt_btl_camera_wait_move_end: the priority test of every btl_camera_*
+// setter and one store (0x18), into audienceId, the member the audience modes follow (the field is taken from the
+// name; any one-word store has this size).
+void btl_camera_set_homing_audience(s32 pri, s32 audienceId) {
+    BattleWork* wp = _battleWorkPointer;
+    if (pri >= wp->cameraWork.priLimit) {
+        wp->cameraWork.audienceId = audienceId;
+    }
+}
+
 /** Script helper: blocks until the camera has settled (moving less than 2 units a frame). */
 USER_FUNC(evt_btl_camera_wait_move_end) {
     if (battleCameraGetPosMoveSpeed() >= 2.0f) {

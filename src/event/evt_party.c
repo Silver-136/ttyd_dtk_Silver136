@@ -692,6 +692,39 @@ USER_FUNC(evt_party_set_homing_dist) {
     return EVT_RETURN_DONE;
 }
 
+/** Shows (args[1] nonzero) or hides the partner's shadow (PARTY_DISP_FLAG_SHADOW_OFF). args: slot, on/off. */
+// Original name and size (0x98) from the JP demo map (UNUSED there: no script uses it), between
+// evt_party_set_homing_dist and the stripped evt_party_set_size: evt_party_cont_onoff's form on the flag
+// partyShadowOff sets (a partyShadowOff call in the off arm is 0x94).
+USER_FUNC(evt_party_shadow_onoff) {
+    PartyEntry* p;
+    EvtWord* args = event->args;
+    p = GETPARTY(args);
+    if (p == NULL) {
+        return EVT_RETURN_DONE;
+    }
+    if (evtGetValue(event, args[1]) == 0) {
+        p->flags2 |= PARTY_DISP_FLAG_SHADOW_OFF;
+    } else {
+        p->flags2 &= ~PARTY_DISP_FLAG_SHADOW_OFF;
+    }
+    return EVT_RETURN_DONE;
+}
+
+/** Writes the name of the partner's current animation pose to args[1]. args: slot, out. */
+// Original name and size (0x70) from the JP demo map (UNUSED there: no script uses it), between the stripped
+// evt_party_set_size and evt_party_set_pose: evt_party_set_pose's form with evt_mario_get_pose's field (animName).
+USER_FUNC(evt_party_get_pose) {
+    PartyEntry* p;
+    EvtWord* args = event->args;
+    p = GETPARTY(args);
+    if (p == NULL) {
+        return EVT_RETURN_DONE;
+    }
+    evtSetValue(event, args[1], (EvtWord)p->animName);
+    return EVT_RETURN_DONE;
+}
+
 /**
  * Plays the named animation pose in args[1] on the partner (partyChgPose),
  * e.g. a talking or surprised pose in a cutscene.

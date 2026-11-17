@@ -105,6 +105,7 @@ void kpaMain(void);
 s32 kpaNoHitEnemyCheck(void);
 void kpaPauseSE2(void);
 void kpaPreInit(void);
+void kpaPostClear(void);
 void kpaSetLevel(s32 lv);
 void kpa_jumpNpc(void);
 s32 kpaCamFollow(void);

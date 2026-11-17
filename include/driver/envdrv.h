@@ -48,11 +48,12 @@ typedef struct EnvironmentDof {
 
 // EnvironmentWork.flags
 typedef enum EnvironmentFlags {
-    ENV_FLAG_CAPTURE_COLOR_UNUSED = (1 << 0), // 0x1, envCapture copies the screen colour; nothing sets it
-    ENV_FLAG_CAPTURE_DEPTH_UNUSED = (1 << 1), // 0x2, envCapture copies the screen depth; nothing sets it
+    ENV_FLAG_CAPTURE_COLOR_UNUSED = (1 << 0), // 0x1, envCapture copies the screen colour; only the stripped envFFOn
+                                              // sets it (and so the stripped envDoFOn, by the size of envDoFOff)
+    ENV_FLAG_CAPTURE_DEPTH_UNUSED = (1 << 1), // 0x2, envCapture copies the screen depth; nothing that is kept sets it
     ENV_FLAG_BLUR_CAPTURE = (1 << 2),         // 0x4, envCapture2 copies the screen for the blur
     ENV_FLAG_BLUR_CAPTURED = (1 << 3),        // 0x8, a blur frame was captured
-    ENV_FLAG_FF_UNUSED = (1 << 28),           // 0x10000000, envDisp_FF draws; nothing sets it
+    ENV_FLAG_FF_UNUSED = (1 << 28),           // 0x10000000, envDisp_FF draws; only the stripped envFFOn sets it
     ENV_FLAG_GLARE_FILTER = (1 << 29),        // 0x20000000, envGlareFilter with a type
     ENV_FLAG_BLUR = (1 << 30),                // 0x40000000, envBlurOn
 } EnvironmentFlags;
@@ -100,6 +101,9 @@ void envTexSetup(void);
 void envMain(void);
 void envBlurOn(s32 type, s32 msec);
 void envBlurOff(void);
+void envFFOn(void);
+void envFFOff(void);
+void envDoFOff(void);
 struct MapTevCallbackInfo;
 void envSetWater(struct MapTevCallbackInfo* info);
 void envSetYami(struct MapTevCallbackInfo* info);

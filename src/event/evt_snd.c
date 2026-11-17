@@ -158,6 +158,17 @@ USER_FUNC(evt_snd_sfxchk) {
     return EVT_RETURN_DONE;
 }
 
+// Original name and size (0x60) from the JP demo map (UNUSED there: no script uses it), between evt_snd_sfxchk and
+// evt_snd_sfx_pit (the stripped evt_snd_sfx_pan, whose psndSFX_pan body is not known, sits before it):
+// evt_snd_sfx_pit's form (the same size) for psndSFX_span.
+USER_FUNC(evt_snd_sfx_span) {
+    EvtWord* args = event->args;
+    s32 id = evtGetValue(event, args[0]);
+    s32 span = evtGetValue(event, args[1]);
+    psndSFX_span(id, span);
+    return EVT_RETURN_DONE;
+}
+
 USER_FUNC(evt_snd_sfx_pit) {
     EvtWord* args = event->args;
     s32 id = evtGetValue(event, args[0]);

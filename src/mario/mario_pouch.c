@@ -96,9 +96,9 @@ void pouchInit(void) {
     mpp->currentHP = mpp->maximumHP;
     mpp->currentFP = mpp->maximumFP;
     mpp->currentSP = 0;
-    mpp->reserved_7E = 0;
+    mpp->currentPP = 0;
     mpp->maximumSP = 0;
-    mpp->reserved_80 = 0;
+    mpp->maximumPP = 0;
     mpp->audienceCount = 0.0f;
     mpp->rank = 0;
     mpp->level = 1;
@@ -1210,6 +1210,27 @@ void pouchSetAP(s32 points) {
 /** Star Power maximum in hundredths of a gauge unit (100 per Crystal Star). */
 s32 pouchGetMaxAP(void) {
     return mpp->maximumSP;
+}
+
+/** The PP count (currentPP). */
+// pouchGetPP and pouchSetPP: original names and sizes (0xc, 0x3c) from the JP demo map (UNUSED there: nothing calls
+// them), between the stripped pouchSetMaxAP and pouchGetAudienceNum, with the stripped pouchAddPP (0x80, body not
+// known) between them. They are pouchGetAP and pouchSetAP (the same sizes) for the pouch's other current/maximum
+// pair, the two halfwords after maximumSP that pouchInit zeroes along with currentSP and maximumSP; which of the two
+// is the maximum is taken from that order (current first, as for HP, FP and SP).
+s32 pouchGetPP(void) {
+    return mpp->currentPP;
+}
+
+/** Sets the PP count, clamped to 0..maximumPP. */
+void pouchSetPP(s32 points) {
+    mpp->currentPP = points;
+    if (mpp->currentPP < 0) {
+        mpp->currentPP = 0;
+    }
+    if (mpp->currentPP > mpp->maximumPP) {
+        mpp->currentPP = mpp->maximumPP;
+    }
 }
 
 /** Audience size carried between battles; the next battle's starting crowd is drawn around it. */

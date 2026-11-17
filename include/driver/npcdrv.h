@@ -504,6 +504,7 @@ FieldBattleData* fbatGetPointer(void);
 
 void npcSetSlave(NpcEntry* npc, NpcEntry* slave, s32 id);
 void npcSetBattleInfo(NpcEntry* npc, s32 battleInfoId);
+void npcOnOffBtlSetupFlag(NpcEntry* npc, BOOL on, u32 flags);
 void fbatChangeMode(s16 mode);
 void fbatInit(void);
 void fbatReInit(void);

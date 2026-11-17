@@ -151,6 +151,12 @@ static void __DEMOInitVI(void) {
     }
 }
 
+// Original name and size (0x4) from the JP demo map (UNUSED there), between __DEMOInitVI and DEMOBeforeRender:
+// an empty function in the form of the other __DEMOInit helpers. Whether DEMOInit called it (an empty call leaves no
+// code) is not visible in the bytes.
+static void __DEMOInitForEmu(void) {
+}
+
 /**
  * Start of a frame: arms the hang-watch draw sync if enabled,
  * sets the viewport (jittered per field in field rendering) and invalidates the vertex and texture caches.

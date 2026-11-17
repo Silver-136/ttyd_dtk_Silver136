@@ -2025,10 +2025,26 @@ f32 marioGetScale(void) {
     return mp->flags & MARIO_FLAG_BG_MODE ? 1.2f : 2.0f;
 }
 
+/** Mario is always drawn facing direction 0 (left), whichever way he moves. */
+// marioDispLeftOnlyOn and marioDispRightOnlyOn: original names and sizes (0x24 each) from the JP demo map (UNUSED
+// there: nothing calls them), before their Off functions. Each size is two flag changes (one is 0x14, as the Off
+// functions): its own flag on and the other side's off, since the drawing code takes either. The order of the two
+// changes is not fixed by the size.
+void marioDispLeftOnlyOn(void) {
+    mp->dispFlags |= MARIO_DISP_FLAG_LEFT_ONLY;
+    mp->dispFlags &= ~MARIO_DISP_FLAG_RIGHT_ONLY;
+}
+
 /** Ends marioDispLeftOnlyOn: Mario is drawn facing his own direction again. */
 // Original name and size (0x14) from the JP demo map (UNUSED there: nothing calls it); clears the flag the same
 // way as marioItemGetEnable.
 void marioDispLeftOnlyOff(void) {
+    mp->dispFlags &= ~MARIO_DISP_FLAG_LEFT_ONLY;
+}
+
+/** Mario is always drawn facing direction 180 (right), whichever way he moves. */
+void marioDispRightOnlyOn(void) {
+    mp->dispFlags |= MARIO_DISP_FLAG_RIGHT_ONLY;
     mp->dispFlags &= ~MARIO_DISP_FLAG_LEFT_ONLY;
 }
 

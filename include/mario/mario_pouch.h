@@ -406,8 +406,8 @@ typedef struct PouchData {
     s16 coins;                         // 0x78
     s16 currentSP;                     // 0x7A
     s16 maximumSP;                     // 0x7C
-    s16 reserved_7E;                    // 0x7E, pouchInit zeroes, never read
-    s16 reserved_80;                    // 0x80, pouchInit zeroes, never read
+    s16 currentPP;                     // 0x7E, read only by the stripped pouchGetPP / pouchSetPP; pouchInit zeroes it
+    s16 maximumPP;                     // 0x80, the cap pouchSetPP clamps to; only pouchInit writes it
     s16 pad_82;                    // 0x82, never accessed
     f32 audienceCount;                 // 0x84
     s16 rank;                          // 0x88
@@ -486,6 +486,8 @@ s32 pouchGetAP(void);
 void pouchAddAP(s32 points);
 void pouchSetAP(s32 points);
 s32 pouchGetMaxAP(void);
+s32 pouchGetPP(void);
+void pouchSetPP(s32 points);
 f32 pouchGetAudienceNum(void);
 void pouchSetAudienceNum(f32 num);
 s32 pouchGetJumpLv(void);

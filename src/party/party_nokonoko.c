@@ -175,8 +175,15 @@ void nokonoko_move(PartyEntry* party) {
             party_move_mode_beside_mario(party);
             break;
         case 4:
+            party_move_mode_special(party);
             break;
     }
+}
+
+/** Move mode 4: Koops stays as he is (nothing to do). */
+// Original name and size (0x4) from the JP demo map (UNUSED there: its one call, nokonoko_move's case 4, is inlined),
+// between the stripped walkMain and hitstar: an empty function with the party_move_mode_* signature.
+void party_move_mode_special(PartyEntry* party) {
 }
 
 /**

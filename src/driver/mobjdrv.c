@@ -686,6 +686,28 @@ void mobjSetPosition(const char* name, f32 x, f32 y, f32 z) {
     entry->position.z = z;
 }
 
+/** Reads the position of the named map object. */
+// Original name and size (0xc4) from the JP demo map (UNUSED there: nothing calls it), between mobjSetPosition and
+// mobjMain: mobjSetPosition's lookup with the position read out (without its 0.1 lift; with it 0xcc, a Vec out 0xbc).
+void mobjGetPosition(const char* name, f32* x, f32* y, f32* z) {
+    MapObjectWork* wp = mobjGetWork();
+    MapObjectEntry* entry;
+    s32 entryCount;
+    int i;
+
+    entryCount = wp->count;
+    entry = wp->entries;
+    for (i = 0; i < entryCount; i++, entry++) {
+        if ((entry->flags & MOBJ_FLAG_ACTIVE) && strcmp(entry->name, name) == 0) {
+            break;
+        }
+    }
+
+    *x = entry->position.x;
+    *y = entry->position.y;
+    *z = entry->position.z;
+}
+
 /**
  * Per-frame update of all map objects: works out which one Mario hammered, hit from below, stood on,
  * spun on or touched with an action, which one a partner, a Bobbery bomb or Bowser hit,

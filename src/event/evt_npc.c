@@ -2103,6 +2103,27 @@ USER_FUNC(evt_npc_set_btlsetup_work) {
     return EVT_RETURN_DONE;
 }
 
+/** const char* lookupName, const char* slaveName, s32 slot: makes the second NPC slave slot (0-3) of the first */
+// Original name and size (0x94) from the JP demo map (UNUSED there: no script uses it), between
+// evt_npc_set_btlsetup_work and evt_npc_set_link: evt_npc_set_link's form for npcSetSlave with its slot argument
+// (read with the names: 0x94; read inside the call: 0x90).
+USER_FUNC(evt_npc_set_slave) {
+    EvtWord* args = event->args;
+    const char* name;
+    const char* slaveName;
+    NpcEntry* npc;
+    NpcEntry* slave;
+    s32 id;
+
+    name = (const char*)evtGetValue(event, args[0]);
+    slaveName = (const char*)evtGetValue(event, args[1]);
+    id = evtGetValue(event, args[2]);
+    npc = evtNpcNameToPtr(event, name);
+    slave = evtNpcNameToPtr(event, slaveName);
+    npcSetSlave(npc, slave, id);
+    return EVT_RETURN_DONE;
+}
+
 /** const char* lookupName, const char* otherName */
 USER_FUNC(evt_npc_set_link) {
     EvtWord* args = event->args;

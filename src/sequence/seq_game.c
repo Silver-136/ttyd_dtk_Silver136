@@ -19,7 +19,14 @@ static EVT_BEGIN(maku_spread)
     RETURN
 EVT_END()
 
-/** Field sequence entry: records the time (none_key, otherwise unused here), clears SYSTEM_LEVEL_NO_FIELD_BATTLE. */
+/** The time seq_gameInit recorded in none_key. */
+// Original name and size (0xc) from the JP demo map (UNUSED there: nothing calls it), before seq_gameInit: the getter
+// of this file's one static, none_key (two loads of the OSTime and the return).
+OSTime e3GetNoneKeyTime(void) {
+    return none_key;
+}
+
+/** Field sequence entry: records the time (none_key, read only by the stripped e3GetNoneKeyTime), clears SYSTEM_LEVEL_NO_FIELD_BATTLE. */
 void seq_gameInit(SequenceWork* wp) {
     none_key = OSGetTime();
     gp->systemLevelFlags &= ~SYSTEM_LEVEL_NO_FIELD_BATTLE;

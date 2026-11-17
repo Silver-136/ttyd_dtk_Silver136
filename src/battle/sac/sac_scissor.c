@@ -749,6 +749,11 @@ static s32 star_control(EventEntry* evt, BOOL first) {
     return 0;
 }
 
+// Original name and size (0x4) from the JP demo map (UNUSED there: nothing registers it), between star_control and
+// star_disp2D: an empty 3D-camera draw callback of star_disp2D's signature (sac_bakugame keeps such a 2D/3D pair).
+static void star_disp3D(CameraId camera, void* param) {
+}
+
 /** Draws the drawing cursor with its four fading trail copies. */
 static void star_disp2D(CameraId camera, void* param) {
     ScissorWork* w = GetScissorPtr();

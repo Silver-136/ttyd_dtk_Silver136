@@ -47,7 +47,7 @@
 typedef struct MarioJumpData {
     f32 jump[4];   // 0x0
     f32 fall[4];   // 0x10
-    f32 unk20;     // 0x20
+    f32 maxJump;   // 0x20, read only by the stripped marioGetMaxJumpSpd
     f32 minFall;   // 0x24
 } MarioJumpData;
 
@@ -593,6 +593,13 @@ void marioSetFallPara(void) {
         mario->jumpJerkY = -0.01f;
         mario->jumpSnapY = 0.0f;
     }
+}
+
+/** The fastest rise speed (marioJumpData.maxJump, 32 units per frame). */
+// Original name and size (0x10) from the JP demo map (UNUSED there: nothing calls it), between marioSetFallPara and
+// marioGetMaxFallSpd: marioGetMaxFallSpd's form for the field before minFall.
+static f32 marioGetMaxJumpSpd(void) {
+    return marioJumpData.maxJump;
 }
 
 /** The fastest fall speed (marioJumpData.minFall, -18 units per frame). */

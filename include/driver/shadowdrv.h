@@ -111,6 +111,11 @@ s32 shadowEntry(f32 x, f32 y, f32 z, f32 size);
 void shadowProjShadowDrawCountUp(void);
 void shadowSetSize(s32 id, f32 size);
 f32 shadowGetSize(s32 id);
+void shadowSetVolumeHeight(s32 id, f32 height);
+s32 shadowEntryOffscreen(s32 offscreenId, f32 x, f32 y, f32 z, f32 size);
+void shadowSetPos(s32 id, f32 x, f32 y, f32 z);
+void shadowGetPos(s32 id, Vec* pos);
+u16 shadowGetConfig_ShadowTexSize(s32 idx);
 
 void shadowSetMode(s32 id, u8 alpha);
 s32 shadowGetCharShadowProjection(void);

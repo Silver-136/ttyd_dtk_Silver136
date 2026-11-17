@@ -252,6 +252,19 @@ void kpaPreInit(void) {
     fireefp = NULL;
 }
 
+/** Frees the Bowser work kpaPreInit allocated. */
+// Original name and size (0x48) from the JP demo map (UNUSED there: nothing calls it), between kpaPreInit and
+// kpaMain: kpaPreInit's allocation undone (a free without the NULL test is 0x40, without clearing the pointer 0x34;
+// clearing the pointer outside the test is also 0x48). peachPostClear, the counterpart of peachPreInit, which
+// allocates nothing, is a bare return.
+void kpaPostClear(void) {
+    MarioWork* mario = marioGetPtr();
+    if (mario->kpaWork) {
+        __memFree(HEAP_DEFAULT, mario->kpaWork);
+        mario->kpaWork = NULL;
+    }
+}
+
 f32 __fabsf(f32);
 
 /** Per-frame player update while playing as Bowser: the side-scrolling or the 3D version. */

@@ -503,6 +503,21 @@ USER_FUNC(yuugijou_set_montemedal_moto) {
     return EVT_RETURN_DONE;
 }
 
+/** Writes keptTokens to args[0] while the tokens are taken out, otherwise 0. */
+// Original name and size (0x50) from the JP demo map (UNUSED there: no script uses it), between
+// yuugijou_set_montemedal_moto and yuugijou_montemedal_disp_onoff: yuugijou_get_montemedal_keep's form (the same
+// size) for the moto commands' case, the tokens taken out (a plain read is 0x34). Which arm returns 0 is not fixed by
+// the size; this follows the _moto setters, which act only while the tokens are out.
+USER_FUNC(yuugijou_get_montemedal_moto) {
+    EvtWord* args = event->args;
+    if (yuwp->flags & PARLOR_FLAG_TOKENS_OUT) {
+        evtSetValue(event, args[0], yuwp->keptTokens);
+    } else {
+        evtSetValue(event, args[0], 0);
+    }
+    return EVT_RETURN_DONE;
+}
+
 /** Shows (args[0] nonzero, display snapped to the real count) or hides the Pianta token counter. */
 USER_FUNC(yuugijou_montemedal_disp_onoff) {
     if (evtGetValue(event, event->args[0]) != 0) {
