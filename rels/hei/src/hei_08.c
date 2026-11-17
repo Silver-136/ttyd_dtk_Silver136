@@ -19,10 +19,10 @@
 #include "driver/npcdrv.h"
 #include "evt/evt_bero.h"
 #include "npc_event.h"
+#include "hei.h"
 
 static USER_FUNC(npc_dead);
 static USER_FUNC(npc_set_me);
-void hei_test_water_tev(MapTevCallbackInfo* info);
 
 static BeroEntry bero_entry_data[2];
 static EvtWord evt_chorobon[136];

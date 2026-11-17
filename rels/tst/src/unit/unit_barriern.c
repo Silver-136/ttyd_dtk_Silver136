@@ -29,7 +29,6 @@
 #include "battle/battle_camera.h"
 #include "battle/unit/unit_barriern.h"
 
-s32 irand(s32 scalar);
 static u8 barriernSatelliteTo_Init(BattleUnit* unit, s32 n, Vec* table);
 static u8 barriernSatelliteTo_Main(BattleUnit* unit, s32 n);
 

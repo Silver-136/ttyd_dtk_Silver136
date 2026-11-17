@@ -20,6 +20,7 @@
 #include "evt/evt_seq.h"
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
+#include "evt/evt_shuryolight.h"
 #include "driver/mapdrv.h"
 #include "driver/casedrv.h"
 #include <dolphin/pad.h>
@@ -85,11 +86,6 @@ static s32 dance_reverse(EventEntry* event, BOOL isFirstCall);
 static s32 disp_horogram_evt(EventEntry* event, BOOL isFirstCall);
 static s32 evt_fuki_btn(EventEntry* event, BOOL isFirstCall);
 static s32 evt_fuki_btn_set_batu(EventEntry* event, BOOL isFirstCall);
-s32 evt_shuryolight_init(EventEntry* event, BOOL isFirstCall);
-s32 evt_shuryolight_run_evt(EventEntry* event, BOOL isFirstCall);
-s32 evt_snd_envoff_f(EventEntry* event, BOOL isFirstCall);
-s32 evt_snd_envon_f(EventEntry* event, BOOL isFirstCall);
-s32 evt_snd_sfx_all_stop(EventEntry* event, BOOL isFirstCall);
 static s32 get_center(EventEntry* event, BOOL isFirstCall);
 static s32 get_local_rotate(EventEntry* event, BOOL isFirstCall);
 static s32 horogram_cap_evt(EventEntry* event, BOOL isFirstCall);

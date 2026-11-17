@@ -214,14 +214,11 @@ static void pose_init(void);
 static void pose_main(void);
 static void ext_disp(CameraId camera, void* param);
 static void depthDisp(CameraId camera, void* param);
-void envSetYami(MapTevCallbackInfo* info);
 
 static s32 anim_tevcallback(EventEntry* event, BOOL isFirstCall);
 static USER_FUNC(anim_tevcallback);
 static s32 depth(EventEntry* event, BOOL isFirstCall);
 static USER_FUNC(depth);
-s32 evt_mario_dispflag_onoff(EventEntry* event, BOOL isFirstCall);
-s32 evt_snd_env_lpf(EventEntry* event, BOOL isFirstCall);
 static s32 make_name(EventEntry* event, BOOL isFirstCall);
 static USER_FUNC(make_name);
 static s32 starstone_entry(EventEntry* event, BOOL isFirstCall);

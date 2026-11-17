@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "version.h"
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
 #include <dolphin/os.h>
@@ -545,6 +546,9 @@ void mapResetPaperAmbColor(void);
 void mapSetPaperCraftAmbColor(GXColor* color);
 void mapSetPlayRate(const char* name, f32 rate);
 void bmapLoad(const char *map, const char *map2);
+#if VERSION <= VERSION_DEMO_JP
+BOOL bmapPreLoad(const char* map, const char* map2);
+#endif
 void mapObjGetPos(const char* name, Vec* pos);
 void mapObjSetColor(const char* name, GXColor color);
 void mapGrpSetColor(const char* name, GXColor color);

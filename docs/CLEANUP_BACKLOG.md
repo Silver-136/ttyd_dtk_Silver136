@@ -40,13 +40,15 @@ in `docs/FAKES.md` and in the mweppc review record.
   Settled: BtlUnit_SetAnim, partyChgPose, effMarioBalloonEntry, spline_getvalue / spline_maketable, envAddTev,
   envSetYamiView, iconDispGxCol, iconGetTexObj (header prototypes); BattleAcDrawGauge (callers agree with the
   definition except ac_repeatedly, unprototyped, and ac_repeatedly_lv, ratio first: both change code otherwise).
-- Private function declarations without a header: 404 (85 are each REL's own `_prolog`/`_epilog`/`_unresolved`;
-  114 are tou_03, which cannot include the evt headers because it defines its own out-of-line GXSetTexCoordGen).
-  Most of the rest are retail mismatches the bytes prove: different argument counts (partyWalkInit, winBadgeExit,
-  effStageClearEndChk, effThunderflareN64Entry), narrowed parameters or returns (BattleStageSet*Dark*,
-  psndSFX_pit/vol, hankakuSearch per version), Vec/GXColor by value vs pointer
-  (cloudGetBreathPower, mapObjSetColor, mapSetBlend, partyNrmToAngle, marioCreviceWallChk), argument order that
-  changes code (intpl_sub, marioSetForceMove, gor_irai's FontDrawString).
+- Private function declarations of other units' functions (file scope, 2026-11-17): 227. 87 are each REL's own
+  `_prolog`/`_epilog`/`_unresolved`; 111 are tou_03, which cannot include the evt headers because it defines its
+  own out-of-line GXSetTexCoordGen; 9 are compiler intrinsics (`__fabsf`, `__abs`, `abs`), glu's DebugEvent and
+  tou_03's macro-defined evt functions; glu/normal.c keeps its MSL `sqrt` (SGI code). The other 19 are retail
+  mismatches the bytes prove: unprototyped calls with arguments the definition does not take or types it does not
+  have (partyWalkInit x2, winBadgeExit, winMarioMain2, dou10_yoko_yari3, msgWindow_Add, FontDrawStringCenterMtx,
+  winLogDisp: a win_log.h prototype changes the US DOL, tried 2026-11-17), narrowed parameters or returns
+  (BattleStage*Dark* x6, hankakuSearch per version, iconDispGxCol in evt_yuucounter, iconGetTexObj in win_main,
+  pouchEquipBadge in winmgr), and FontDrawStringVecPitch in win_main (Vec by pointer, pitch last).
 - From the certification pilot (2026-10-27): qqsort has no live prototype (system.h's is commented out with a
   `const void**` comparator; dispdrv calls it undeclared, lightdrv/extdrv carry private `const void*` copies);
   fbatNpcTalkCheck is declared `void*` in four files but returns NpcEntry*; extdrv's private

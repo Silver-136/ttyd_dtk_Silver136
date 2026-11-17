@@ -723,9 +723,6 @@ void hitcheck_party_motion_stay_fly(PartyEntry* party) {
 }
 #endif
 
-void partyGetReadId2(s32 id, Vec* pos);
-void L_getTargetPos(s32 id, Vec* pos);
-
 #if VERSION >= VERSION_JP
 
 /**

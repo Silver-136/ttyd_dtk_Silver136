@@ -42,7 +42,6 @@ static BOOL battle_init(void);
 #include "data/mapdata.h"
 
 static void battle_init(void);
-BOOL bmapPreLoad(const char* map, const char* map2);
 #endif
 
 static s32 debug_battle_flag;

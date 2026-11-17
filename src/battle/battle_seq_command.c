@@ -53,7 +53,6 @@
 #define BATTLE_COMMAND_VISIBLE_WEAPON_ROWS (6)
 
 void BattleCommandDisplay_ActMenuEnd(BattleWork* wp);
-unsigned long strlen(const char* s);
 static BOOL BattleCommandAttackAudienceCheck(void);
 void BattleCommandDisplay_WeaponMultiItemCancelCheckDisp(CameraId camId, void* param);
 static USER_FUNC(_get_msg);

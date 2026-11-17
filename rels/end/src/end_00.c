@@ -134,7 +134,6 @@ USER_FUNC(evt_end_image_disp_entry);
 USER_FUNC(evt_end_credit_npc_main);
 USER_FUNC(evt_end_credit_npc_get_wait_type);
 USER_FUNC(end_bgm_wait_stop);
-void end_staff_roll_exit(void);
 void _unresolved(void);
 void _epilog(void);
 void _prolog(void);

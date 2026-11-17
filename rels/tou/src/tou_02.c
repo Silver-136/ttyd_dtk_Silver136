@@ -46,6 +46,8 @@
 #include "evt/evt_npc.h"
 #include "driver/extdrv.h"
 #include "driver/seqdrv.h"
+#include "evt/evt_cloud.h"
+#include "tou.h"
 #include <dolphin/pad.h>
 
 typedef struct Fan {
@@ -90,12 +92,7 @@ s32 check_hammer(Fan* fan);
 #endif
 static void pose_main(void);
 
-s32 evt_cloud_ent(EventEntry* event, BOOL isFirstCall);
-s32 evt_cloud_init(EventEntry* event, BOOL isFirstCall);
 static s32 evt_end_count(EventEntry* event, BOOL isFirstCall);
-s32 evt_pouch_open_mail(EventEntry* event, BOOL isFirstCall);
-s32 evt_pouch_receive_mail(EventEntry* event, BOOL isFirstCall);
-s32 evt_tou_get_ranking(EventEntry* event, BOOL isFirstCall);
 static void ext_fan_dispent(void);
 
 static EvtWord s_door_open[58];

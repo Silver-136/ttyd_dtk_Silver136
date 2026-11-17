@@ -27,7 +27,6 @@ typedef struct CamRoadHit {
     s32 segment;           // 0x24
     u32 flags;             // 0x28
 } CamRoadHit;
-double acos(double);
 
 // FAKE: unk_vec0-2 stand in for local Vec initializers of a dead-stripped function; nothing reads them. In the JP
 // demo map they are the anonymous @443-@445 at the start of .rodata, just below collisionTri_simple's {0, -1, 0}

@@ -18,8 +18,6 @@
 #include "libc_decls.h"
 #include "mario/mario_kemuri.h"
 
-extern EffectEntry* effKemuri2Entry(s32 type, f32 x, f32 y, f32 z, f32 dx, f32 dz);
-
 static void kemuri(void);
 static void kemuri_mugi(void);
 void kemuri_water(void);

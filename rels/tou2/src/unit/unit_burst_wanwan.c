@@ -17,9 +17,8 @@
 #include "battle/battle_database_common.h"
 #include "manager/evtmgr_cmd.h"
 #include "battle/battle_damage.h"
+#include "libc_decls.h"
 #include "battle/unit/unit_burst_wanwan.h"
-
-double sqrt(double x);
 
 static USER_FUNC(chain_init);
 static USER_FUNC(chain_main);

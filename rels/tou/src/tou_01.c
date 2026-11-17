@@ -85,7 +85,6 @@ USER_FUNC(tou_01_kanban_moji_flag_sync);
 #endif
 
 static USER_FUNC(yami_view);
-void envSetYami(MapTevCallbackInfo* info);
 
 static EvtWord n_door_open[60];
 static EvtWord n_door_close[58];

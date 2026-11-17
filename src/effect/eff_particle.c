@@ -12,8 +12,6 @@
 #include <math.h>
 #include "eff/eff_particle.h"
 
-double log(double);
-
 typedef struct ParticleItem {
     s32 next;  // 0x0
     Vec pos;   // 0x4

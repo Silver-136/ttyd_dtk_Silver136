@@ -36,6 +36,7 @@
 #include "data/mapdata.h"
 #include "evt/evt_sub.h"
 #include "kpa.h"
+#include "koopa.h"
 #include "driver/seqdrv.h"
 #include "icon_ids.h"
 
@@ -57,7 +58,6 @@ typedef struct KpaGameWork {
 } KpaGameWork;
 static KpaGameWork* kwp;
 
-f32 kpaGetWidth(s32 type);
 typedef void (*voidfunctionptr)(void);
 extern voidfunctionptr _ctors[];
 extern voidfunctionptr _dtors[];

@@ -50,6 +50,8 @@ Footmark* partyGetFootmarkPtr(s32 id);
 s32 partyGetFootmarkReadId(s32 id);
 s32 partyGetFootmarkWriteId(s32 id);
 void partyGetReadId(s32 id, f32* x, f32* y, f32* z);
+void partyGetReadId2(s32 id, Vec* pos);
+void L_getTargetPos(s32 id, Vec* pos);
 f32 partyGetTargetDir(s32 id, f32 x, f32 z);
 f32 partyGetTargetDist(s32 id, f32 x, f32 z);
 f32 partyGetTargetDistY(s32 id, f32 y);

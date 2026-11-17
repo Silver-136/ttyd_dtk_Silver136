@@ -248,7 +248,6 @@ static inline f32 moa_cosx(register f32 x) {
 
 static void moamoa_joint_position(Moamoa* moa, Vec* out);
 
-s32 evt_mario_dispflag_onoff(EventEntry* event, BOOL isFirstCall);
 static s32 npc_anim_wait(EventEntry* event, BOOL isFirstCall);
 static s32 ramp_r(EventEntry* event, BOOL isFirstCall);
 static void resha_tev(MapTevCallbackInfo* info);

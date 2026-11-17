@@ -40,7 +40,6 @@ USER_FUNC(shake_ceil);
 USER_FUNC(zakogun_attack2);
 USER_FUNC(zakogun_attack2_yusuri);
 USER_FUNC(zakogun_dead2);
-USER_FUNC(down_ceil);
 
 BattleUnitKind unit_boss_gundan_zako_group2;
 static BattleUnitDefense defence;

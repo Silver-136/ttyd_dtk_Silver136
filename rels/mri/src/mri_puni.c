@@ -41,8 +41,8 @@
 #include "driver/seqdrv.h"
 #include "evt/evt_save_flags.h"
 #include "icon_ids.h"
+#include "driver/envdrv.h"
 extern int abs(int);
-void envSetYami(MapTevCallbackInfo* info);
 
 /**
  * Animation frame sequences of the Puni, one per action, each a list of frame numbers ending with 65535 or 65534:

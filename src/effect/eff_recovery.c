@@ -20,8 +20,6 @@
 #include "eff/eff_number.h"
 #include "eff/eff_stardust.h"
 
-u32 strlen(const char* s);
-
 #if VERSION <= VERSION_DEMO_JP
 static u8 color_rotation_data[] = {
     0xFE, 0xAC, 0xAC, 0xFE, 0xAC, 0xD5, 0xFE, 0xB4, 0x9A, 0xD5, 0xB4, 0xFE,

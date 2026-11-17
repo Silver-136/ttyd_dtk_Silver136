@@ -30,7 +30,6 @@
 
 USER_FUNC(check_exist_group);
 USER_FUNC(check_exist_kenkyu);
-USER_FUNC(down_ceil);
 extern BattleUnitKind unit_boss_gundan_zako_group2;
 extern BattleUnitKind unit_boss_gundan_zako_group3;
 extern BattleUnitKind unit_gundan_zako_magician;

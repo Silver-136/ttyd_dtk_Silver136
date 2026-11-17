@@ -8,3 +8,5 @@ extern const char* end_moa_ext_anim;
 extern const char* end_moa_ext_pose;
 
 extern s32 end_overlay_tex_tbl[6];
+
+void end_staff_roll_exit(void);

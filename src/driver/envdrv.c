@@ -863,8 +863,6 @@ void envFFOff(void) {
     wp->flags &= ~ENV_FLAG_FF_UNUSED;
 }
 
-double acos(double);
-
 /**
  * Builds and loads the texture matrix for environment TEV type type (reflection maps from the surface normals as
  * seen by the camera, scrolled or spun by the env work's angles).

@@ -50,6 +50,7 @@ typedef struct ZakoGunWork {
     ZakoGun* zako;
 } ZakoGunWork;
 
+USER_FUNC(down_ceil);
 USER_FUNC(zakogun_escape3);
 USER_FUNC(zakogun_ext_init2);
 USER_FUNC(zakogun_get_kanbu_id_evtcmd);

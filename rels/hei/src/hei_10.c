@@ -30,6 +30,7 @@
 #include "evt/evt_bero.h"
 #include "data_tables.h"
 #include "driver/extdrv.h"
+#include "hei.h"
 
 typedef struct Chorobon {
     s16 flags;
@@ -156,7 +157,6 @@ static void ext_dispent(void);
 static void ext_main(void);
 static void ext_shadow_disp(CameraId camera, void* param);
 static void ext_init(void);
-void hei_test_water_tev(MapTevCallbackInfo* info);
 
 static BeroEntry bero_entry_data[4];
 static ExtTexInfo ext_data[21];

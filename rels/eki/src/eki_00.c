@@ -36,6 +36,7 @@
 
 #include "manager/evtmgr.h"
 #include "driver/mapdrv.h"
+#include "evt/evt_window.h"
 #include "string.h"
 #include "memory.h"
 #include "dolphin/os.h"
@@ -165,7 +166,6 @@ static void moamoa_jump(ExtdrvPose* pose, Moamoa* moa, f32 x, f32 y, f32 z, f32 
 static void ext_disp(CameraId camera, void* param);
 static void ext_shadow_disp(CameraId camera, void* param);
 
-s32 evt_mario_dispflag_onoff(EventEntry* event, BOOL isFirstCall);
 static s32 evt_moamoa_blow(EventEntry* event, BOOL isFirstCall);
 static s32 evt_moamoa_flag_onoff(EventEntry* event, BOOL isFirstCall);
 static s32 evt_moamoa_fusion(EventEntry* event, BOOL isFirstCall);
@@ -177,8 +177,6 @@ static s32 evt_moamoa_target_off(EventEntry* event, BOOL isFirstCall);
 static s32 evt_moamoa_end_wait(EventEntry* event, BOOL isFirstCall);
 static s32 evt_moamoa_ry_reset(EventEntry* event, BOOL isFirstCall);
 static s32 evt_moamoa_exit(EventEntry* event, BOOL isFirstCall);
-
-s32 evt_win_item_select(EventEntry* event, BOOL isFirstCall);
 
 static ExtTexInfo ext_moamoa_data[47];
 static EvtWord e_door_close[12];

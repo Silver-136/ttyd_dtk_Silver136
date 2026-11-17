@@ -72,7 +72,6 @@ typedef struct ExchangeRyokin {
     s32 ryokin;
     s32 medal;
 } ExchangeRyokin;
-s32 yuugijou_montemedal_keep(EventEntry* event, BOOL isFirstCall);
 typedef struct SlotWork {
     u32 flags;
     s32 phase;
