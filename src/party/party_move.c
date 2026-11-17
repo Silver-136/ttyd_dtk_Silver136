@@ -578,6 +578,7 @@ void partyClearFootmark2(void) {
  * switching between the two restarts the trail (footmarkMode).
  */
 void partyRecordFootmark(PartyEntry* party) {
+    void partyClearFootmark2(void);
     MarioWork* mario = party->playerPtr;
     u32 flags = 0;
     PartyEntry* other;
@@ -625,9 +626,7 @@ void partyRecordFootmark(PartyEntry* party) {
         } else {
             if (party->footmarkMode == 1) {
                 party->footmarkMode = 0;
-
-                // FAKE: call through a no-op function-pointer cast; the plain call changes the object
-                ((void (*)(void))partyClearFootmark2)();
+                partyClearFootmark2();
             }
             if (footmarkGetJumpTrig()) {
                 flags |= FOOTMARK_FLAG_JUMP;

@@ -731,6 +731,7 @@ void L_getTargetPos(s32 id, Vec* pos);
  * falls off edges and enters slits.
  */
 void party_motion_homing_walk(PartyEntry* party) {
+    void partyChgMotSlitFloor(PartyEntry* party);
     HitEntry* hit = NULL;
     s32 id;
     MarioWork* mario;
@@ -911,8 +912,7 @@ found:
                     py = distABf(px, pz, t.x, t.z);
                     dir = angleABf(px, pz, t.x, t.z);
                     if (py <= 5.0f) {
-                        // FAKE: no-op function-pointer cast; the plain call changes the object
-                        ((void (*)(PartyEntry*))partyChgMotSlitFloor)(party);
+                        partyChgMotSlitFloor(party);
                     }
                 }
                 break;
@@ -1023,8 +1023,7 @@ found:
         }
         if ((party->flags & PARTY_FLAG_IS_GROUNDED) && (fm->flag & FOOTMARK_FLAG_SLIT)) {
             if (distABf(px, pz, t.x, t.z) <= 5.0f) {
-                // FAKE: no-op function-pointer cast; the plain call changes the object
-                ((void (*)(PartyEntry*))partyChgMotSlitFloor)(party);
+                partyChgMotSlitFloor(party);
             }
             break;
         }
@@ -1175,6 +1174,7 @@ found:
  * Older and simpler than the JP-and-later copy.
  */
 void party_motion_homing_walk(PartyEntry* party) {
+    void partyChgMotSlitFloor(PartyEntry* party);
     HitEntry* hit;
     s32 id;
     MarioWork* mario;
@@ -1297,9 +1297,7 @@ void party_motion_homing_walk(PartyEntry* party) {
                     d3 = distABf(px, pz, t.x, t.z);
                     dir = angleABf(px, pz, t.x, t.z);
                     if (d3 <= 5.0f) {
-                        // FAKE: called through a cast so it stays a call (a direct call is inlined here; see docs/FAKES.md)
-                        // FAKE: no-op function-pointer cast; the plain call changes the object
-                        ((void (*)(PartyEntry*))partyChgMotSlitFloor)(party);
+                        partyChgMotSlitFloor(party);
                     }
                 }
                 break;
@@ -1375,8 +1373,7 @@ void party_motion_homing_walk(PartyEntry* party) {
         if ((party->flags & PARTY_FLAG_IS_GROUNDED) && (fm->flag & FOOTMARK_FLAG_SLIT)) {
             d3 = distABf(px, pz, t.x, t.z);
             if (d3 <= 5.0f) {
-                // FAKE: called through a cast so it stays a call (a direct call is inlined here; see docs/FAKES.md)
-                ((void (*)(PartyEntry*))partyChgMotSlitFloor)(party);
+                partyChgMotSlitFloor(party);
             }
             break;
         }
@@ -1519,6 +1516,7 @@ void party_motion_homing_walk(PartyEntry* party) {
  * noFloorFrames counts frames against a wall with no floor behind it; after 10 it heads straight for Mario.
  */
 void party_motion_homing_fly(PartyEntry* party) {
+    void partyChgMotSlitFloor(PartyEntry* party);
     MarioWork* mario = party->playerPtr;
     s32 id;
     s32 near;
@@ -1668,8 +1666,7 @@ void party_motion_homing_fly(PartyEntry* party) {
                     py = distABf(px, pz, s2.x, s2.z);
                     dir = angleABf(px, pz, s2.x, s2.z);
                     if (py <= 5.0f) {
-                        // FAKE: no-op function-pointer cast; the plain call changes the object
-                        ((void (*)(PartyEntry*))partyChgMotSlitFloor)(party);
+                        partyChgMotSlitFloor(party);
                     }
                 }
                 break;
