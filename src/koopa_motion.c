@@ -624,13 +624,42 @@ void kpaSetSpec(void) {
 }
 
 /**
+ * End of the power-up motion: applies the new level's collision box and the camera shift for his size (20 per
+ * level, to the left); reaching the giant level also starts star invincibility.
+ */
+// Original names, slot and sizes (0xf8 / 0xe4) from the JP demo's link map (UNUSED there: the one call of each is
+// inlined). kpa_powup / kpa_powdown held these bodies written out behind a second marioGetPtr(). No caller reads
+// the result: declared void each is one instruction short of the map size, so they return a constant like their
+// siblings kpaPowUp / kpaPowDown (BOOL); TRUE is a guess (FALSE has the same size).
+static BOOL _kpaPowUp(void) {
+    MarioWork* mario = marioGetPtr();
+    if (mario->kpaWork->level == 3) {
+        kpaMSetMutekiTimer();
+        kpaMutekiOn();
+    }
+    kpaSetSpec();
+    marioResetCamShiftRate();
+    mario->camShiftTargetX = 20.0f * (f32)(-mario->kpaWork->level);
+    return TRUE;
+}
+
+/** End of the power-down motion: ends invincibility, then the new collision box and camera shift as _kpaPowUp. */
+static BOOL _kpaPowDown(void) {
+    MarioWork* mario = marioGetPtr();
+    kpaMutekiOff();
+    kpaSetSpec();
+    marioResetCamShiftRate();
+    mario->camShiftTargetX = 20.0f * (f32)(-mario->kpaWork->level);
+    return TRUE;
+}
+
+/**
  * Power-up motion: flickers Bowser's scale between the old and new level size in nine 5-frame steps (scaleDt),
  * then applies the new collision, shifts the camera for his size and returns to standing;
  * reaching giant also starts star invincibility.
  */
 void kpa_powup(void) {
     MarioWork* m = marioGetPtr();
-    MarioWork* m2;
     f32 step;
     f32 base;
     s32 lv;
@@ -672,14 +701,7 @@ void kpa_powup(void) {
             m->scale.y = m->scale.x;
             m->currSubMotionId++;
             if (5.0f == k) {
-                m2 = marioGetPtr();
-                if (m2->kpaWork->level == 3) {
-                    kpaMSetMutekiTimer();
-                    kpaMutekiOn();
-                }
-                kpaSetSpec();
-                marioResetCamShiftRate();
-                m2->camShiftTargetX = 20.0f * (f32)(-m2->kpaWork->level);
+                _kpaPowUp();
                 m->flags &= ~MARIO_FLAG_CHG_MOT_DISABLED;
                 marioChgMot(MARIO_MOTION_STAY);
                 m->mutekiTimer = 0;
@@ -690,7 +712,6 @@ void kpa_powup(void) {
 /** Power-down motion: the shrinking version of kpa_powup, ending invincibility at the end. */
 void kpa_powdown(void) {
     MarioWork* m = marioGetPtr();
-    MarioWork* m2;
     f32 step;
     f32 base;
     s32 lv;
@@ -732,11 +753,7 @@ void kpa_powdown(void) {
             m->scale.y = m->scale.x;
             m->currSubMotionId++;
             if (5.0f == k) {
-                m2 = marioGetPtr();
-                kpaMutekiOff();
-                kpaSetSpec();
-                marioResetCamShiftRate();
-                m2->camShiftTargetX = 20.0f * (f32)(-m2->kpaWork->level);
+                _kpaPowDown();
                 m->flags &= ~MARIO_FLAG_CHG_MOT_DISABLED;
                 marioChgMot(MARIO_MOTION_STAY);
             }
