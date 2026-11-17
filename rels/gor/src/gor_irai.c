@@ -887,17 +887,6 @@ static USER_FUNC(irai_end_func) {
     FontDrawStringMtx(trans, msg);                                 \
 }
 
-// US: one row cell, x-squeezed to fit maxW. "y" is stored in the caller's float var v (this keeps the MWCC
-// float register choice).
-// FAKE: the row y goes through the caller's width variable w (a new f32 local at any slot swaps f27/f28)
-#define iraiDrawFit(msg, x, y, maxW, v) {                                               \
-    f32 w_;                                                                             \
-    v = (y);                                                                            \
-    w_ = FontGetMessageWidth(msg);                                                      \
-    FontDrawScaleVec((Vec){w_ > (maxW) ? 0.85f * ((maxW) / w_) : 0.85f, 0.85f, 0.85f}); \
-    FontDrawString(x, v, msg);                                                          \
-}
-
 /**
  * Draw callback of the request window (US and later):
  * draws the blue title frames and header texts,
@@ -1003,8 +992,24 @@ static void irai_window_disp(CameraId camera, void* param) {
         }
         no = wp->list[i] - 1;
 #if VERSION >= VERSION_US
-        iraiDrawFit(wp->client[no], -119.0f, wp->scroll + (140 - i * 30), 180.0f, w);
-        iraiDrawFit(wp->contents[no], 51.0f, wp->scroll + (140 - i * 30), 260.0f, w);
+        // client and contents cells, each x-squeezed to fit its column (180 and 260 wide)
+        {
+            f32 textW;
+
+            // FAKE: the row y goes through the width variable w (a new f32 local at any slot swaps f27/f28)
+            w = wp->scroll + (140 - i * 30);
+            textW = FontGetMessageWidth(wp->client[no]);
+            FontDrawScaleVec((Vec){textW > 180.0f ? 0.85f * (180.0f / textW) : 0.85f, 0.85f, 0.85f});
+            FontDrawString(-119.0f, w, wp->client[no]);
+        }
+        {
+            f32 textW;
+
+            w = wp->scroll + (140 - i * 30);
+            textW = FontGetMessageWidth(wp->contents[no]);
+            FontDrawScaleVec((Vec){textW > 260.0f ? 0.85f * (260.0f / textW) : 0.85f, 0.85f, 0.85f});
+            FontDrawString(51.0f, w, wp->contents[no]);
+        }
 #else
         FontDrawString(-119.0f, iraiLineY(wp->scroll, i), wp->client[no]);
         FontDrawString(51.0f, iraiLineY(wp->scroll, i), wp->contents[no]);
