@@ -56,6 +56,8 @@ static HitEntry* itemHitCheckSide(ItemEntry* entry, f32* outX, f32 dx, f32* outZ
 static void itemseq_GetItem(ItemEntry* entry);
 
 //.bss
+// Stripped (UNUSED in the JP demo map, 0x64 bytes, after work in .bss); nothing reads it. char from the name.
+char itemGetMessageBuffer[100];
 static ItemWork work[2];
 
 //.data

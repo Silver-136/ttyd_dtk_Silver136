@@ -1343,6 +1343,26 @@ ItemDropData battle_item_fire_bros[] = {
     {0},
 };
 
+/** Stripped (UNUSED in the JP demo map, 8 bytes = one row): holds and drops no items. */
+ItemDropData battle_item_hyper_met[] = {
+    {0},
+};
+
+/** Stripped (UNUSED in the JP demo map, 8 bytes = one row): holds and drops no items. */
+ItemDropData battle_item_hyper_patamet[] = {
+    {0},
+};
+
+/** Stripped (UNUSED in the JP demo map, 8 bytes = one row): holds and drops no items. */
+ItemDropData battle_item_hyper_patatogemet[] = {
+    {0},
+};
+
+/** Stripped (UNUSED in the JP demo map, 8 bytes = one row): holds and drops no items. */
+ItemDropData battle_item_kamec_bunsin[] = {
+    {0},
+};
+
 /** Red Bones: holds and drops no items. */
 ItemDropData battle_item_red_honenoko[] = {
     {0},
@@ -1395,8 +1415,18 @@ ItemDropData battle_item_churantalar[] = {
 };
 #endif
 
+/** Stripped (UNUSED in the JP demo map, 8 bytes = one row): holds and drops no items. */
+ItemDropData battle_item_black_karon[] = {
+    {0},
+};
+
 /** Yux: holds and drops no items. */
 ItemDropData battle_item_barriern[] = {
+    {0},
+};
+
+/** Stripped (UNUSED in the JP demo map, 8 bytes = one row): holds and drops no items. */
+ItemDropData battle_item_barriern_satellite[] = {
     {0},
 };
 
@@ -1405,8 +1435,18 @@ ItemDropData battle_item_barriern_z[] = {
     {0},
 };
 
+/** Stripped (UNUSED in the JP demo map, 8 bytes = one row): holds and drops no items. */
+ItemDropData battle_item_barriern_satellite_z[] = {
+    {0},
+};
+
 /** X-Yux: holds and drops no items. */
 ItemDropData battle_item_barriern_custom[] = {
+    {0},
+};
+
+/** Stripped (UNUSED in the JP demo map, 8 bytes = one row): holds and drops no items. */
+ItemDropData battle_item_barriern_customn_satellite[] = {
     {0},
 };
 
@@ -1457,8 +1497,28 @@ ItemDropData battle_item_super_killer_cannon[] = {
 };
 #endif
 
+/** Stripped (UNUSED in the JP demo map, 8 bytes = one row): holds and drops no items. */
+ItemDropData battle_item_hyper_bomhei[] = {
+    {0},
+};
+
+/** Stripped (UNUSED in the JP demo map, 8 bytes = one row): holds and drops no items. */
+ItemDropData battle_item_ultra_bomhei[] = {
+    {0},
+};
+
 /** Big Bandit: holds and drops no items. */
 ItemDropData battle_item_borodo_king[] = {
+    {0},
+};
+
+/** Stripped (UNUSED in the JP demo map, 8 bytes = one row): holds and drops no items. */
+ItemDropData battle_item_super_mahorn_bunsin[] = {
+    {0},
+};
+
+/** Stripped (UNUSED in the JP demo map, 8 bytes = one row): holds and drops no items. */
+ItemDropData battle_item_ufo[] = {
     {0},
 };
 
@@ -1469,6 +1529,11 @@ ItemDropData battle_item_monban[] = {
 
 /** Gold Fuzzy: holds and drops no items. */
 ItemDropData battle_item_gold_chorobon[] = {
+    {0},
+};
+
+/** Stripped (UNUSED in the JP demo map, 8 bytes = one row): holds and drops no items. */
+ItemDropData battle_item_chorobon_gundan[] = {
     {0},
 };
 
@@ -1493,6 +1558,16 @@ ItemDropData battle_item_yamitogedaruma[] = {
 };
 #endif
 
+/** Stripped (UNUSED in the JP demo map, 8 bytes = one row): holds and drops no items. */
+ItemDropData battle_item_majolyne1[] = {
+    {0},
+};
+
+/** Stripped (UNUSED in the JP demo map, 8 bytes = one row): holds and drops no items. */
+ItemDropData battle_item_marilyn1[] = {
+    {0},
+};
+
 /** Vivian: holds and drops no items. */
 ItemDropData battle_item_vivian1[] = {
     {0},
@@ -1510,6 +1585,16 @@ ItemDropData battle_item_gonbaba[] = {
 
 /** Smorg: holds and drops no items. */
 ItemDropData battle_item_moamoa[] = {
+    {0},
+};
+
+/** Stripped (UNUSED in the JP demo map, 8 bytes = one row): holds and drops no items. */
+ItemDropData battle_item_powan[] = {
+    {0},
+};
+
+/** Stripped (UNUSED in the JP demo map, 8 bytes = one row): holds and drops no items. */
+ItemDropData battle_item_fighter[] = {
     {0},
 };
 
@@ -1538,6 +1623,11 @@ ItemDropData battle_item_magnum_battender[] = {
     {0},
 };
 
+/** Stripped (UNUSED in the JP demo map, 8 bytes = one row): holds and drops no items. */
+ItemDropData battle_item_magnum_battender_mkii[] = {
+    {0},
+};
+
 /** Macho Grubba: holds and drops no items. */
 ItemDropData battle_item_macho_gance[] = {
     {0},
@@ -1553,6 +1643,36 @@ ItemDropData battle_item_kanbu1[] = {
     {0},
 };
 
+/** Stripped (UNUSED in the JP demo map, 8 bytes = one row): holds and drops no items. */
+ItemDropData battle_item_koopa[] = {
+    {0},
+};
+
+/** Stripped (UNUSED in the JP demo map, 8 bytes = one row): holds and drops no items. */
+ItemDropData battle_item_kamec_obaba[] = {
+    {0},
+};
+
+/** Stripped (UNUSED in the JP demo map, 8 bytes = one row): holds and drops no items. */
+ItemDropData battle_item_batten_leader[] = {
+    {0},
+};
+
+/** Stripped (UNUSED in the JP demo map, 8 bytes = one row): holds and drops no items. */
+ItemDropData battle_item_batten_satellite[] = {
+    {0},
+};
+
+/** Stripped (UNUSED in the JP demo map, 8 bytes = one row): holds and drops no items. */
+ItemDropData battle_item_black_peach[] = {
+    {0},
+};
+
+/** Stripped (UNUSED in the JP demo map, 8 bytes = one row): holds and drops no items. */
+ItemDropData battle_item_shadow_queen[] = {
+    {0},
+};
+
 /** Bonetail: holds and drops no items. */
 ItemDropData battle_item_zonbaba[] = {
     {0},
@@ -1563,78 +1683,137 @@ ItemDropData battle_item_default_param_list[] = {
     {0},
 };
 
-#if VERSION <= VERSION_DEMO_JP
-ItemDropData battle_item_kinoko[] = {
-    {0},
-};
-ItemDropData battle_item_funyafunya_kun[] = {
-    {0},
-};
-ItemDropData battle_item_pow_block[] = {
-    {0},
-};
-ItemDropData battle_item_dekadeka_drink[] = {
-    {0},
-};
-ItemDropData battle_item_kirakira_otoshi[] = {
-    {0},
-};
-ItemDropData battle_item_koorino_ibuki[] = {
-    {0},
-};
-ItemDropData battle_item_fire_flower[] = {
-    {0},
-};
-ItemDropData battle_item_yurayura_jishin[] = {
-    {0},
-};
-ItemDropData battle_item_suitooru[] = {
-    {0},
-};
-ItemDropData battle_item_sinabita_kinoko[] = {
-    {0},
-};
-#endif
-
-#if VERSION >= VERSION_DEMO_EU
-// Empty drop tables of tst.rel's test battles (PAL)
+/** Linked where tst.rel's test battles use it (early demos, PAL demo, PAL); stripped elsewhere: no items. */
 ItemDropData battle_item_kinoko[] = {
     {0},
 };
 
+/** Stripped (UNUSED in the JP demo map, 8 bytes = one row): holds and drops no items. */
+ItemDropData battle_item_super_kinoko[] = {
+    {0},
+};
+
+/** Stripped (UNUSED in the JP demo map, 8 bytes = one row): holds and drops no items. */
+ItemDropData battle_item_ultra_kinoko[] = {
+    {0},
+};
+
+/** Stripped (UNUSED in the JP demo map, 8 bytes = one row): holds and drops no items. */
+ItemDropData battle_item_kaminari_gorogoro[] = {
+    {0},
+};
+
+/** Stripped (UNUSED in the JP demo map, 8 bytes = one row): holds and drops no items. */
+ItemDropData battle_item_kaminari_dokkan[] = {
+    {0},
+};
+
+/** Stripped (UNUSED in the JP demo map, 8 bytes = one row): holds and drops no items. */
+ItemDropData battle_item_nemure_yoikoyo[] = {
+    {0},
+};
+
+/** Stripped (UNUSED in the JP demo map, 8 bytes = one row): holds and drops no items. */
+ItemDropData battle_item_stop_watch[] = {
+    {0},
+};
+
+/** Stripped (UNUSED in the JP demo map, 8 bytes = one row): holds and drops no items. */
+ItemDropData battle_item_guruguru_memawashi[] = {
+    {0},
+};
+
+/** Stripped (UNUSED in the JP demo map, 8 bytes = one row): holds and drops no items. */
+ItemDropData battle_item_minimini_kun[] = {
+    {0},
+};
+
+/** Linked where tst.rel's test battles use it (early demos, PAL demo, PAL); stripped elsewhere: no items. */
 ItemDropData battle_item_funyafunya_kun[] = {
     {0},
 };
 
+/** Linked where tst.rel's test battles use it (early demos, PAL demo, PAL); stripped elsewhere: no items. */
 ItemDropData battle_item_pow_block[] = {
     {0},
 };
 
+/** Linked where tst.rel's test battles use it (early demos, PAL demo, PAL); stripped elsewhere: no items. */
 ItemDropData battle_item_dekadeka_drink[] = {
     {0},
 };
 
+/** Stripped (UNUSED in the JP demo map, 8 bytes = one row): holds and drops no items. */
+ItemDropData battle_item_katikati_koura[] = {
+    {0},
+};
+
+/** Stripped (UNUSED in the JP demo map, 8 bytes = one row): holds and drops no items. */
+ItemDropData battle_item_teresano_fuku[] = {
+    {0},
+};
+
+/** Stripped (UNUSED in the JP demo map, 8 bytes = one row): holds and drops no items. */
+ItemDropData battle_item_biribiri_kinoko[] = {
+    {0},
+};
+
+/** Stripped (UNUSED in the JP demo map, 8 bytes = one row): holds and drops no items. */
+ItemDropData battle_item_teki_yokeeru[] = {
+    {0},
+};
+
+/** Stripped (UNUSED in the JP demo map, 8 bytes = one row): holds and drops no items. */
+ItemDropData battle_item_madowaseno_kona[] = {
+    {0},
+};
+
+/** Stripped (UNUSED in the JP demo map, 8 bytes = one row): holds and drops no items. */
+ItemDropData battle_item_kinkyuu_kinoko[] = {
+    {0},
+};
+
+/** Stripped (UNUSED in the JP demo map, 8 bytes = one row): holds and drops no items. */
+ItemDropData battle_item_sukkiri_drink[] = {
+    {0},
+};
+
+/** Linked where tst.rel's test battles use it (early demos, PAL demo, PAL); stripped elsewhere: no items. */
 ItemDropData battle_item_kirakira_otoshi[] = {
     {0},
 };
 
+/** Linked where tst.rel's test battles use it (early demos, PAL demo, PAL); stripped elsewhere: no items. */
 ItemDropData battle_item_koorino_ibuki[] = {
     {0},
 };
 
+/** Linked where tst.rel's test battles use it (early demos, PAL demo, PAL); stripped elsewhere: no items. */
 ItemDropData battle_item_fire_flower[] = {
     {0},
 };
 
+/** Linked where tst.rel's test battles use it (early demos, PAL demo, PAL); stripped elsewhere: no items. */
 ItemDropData battle_item_yurayura_jishin[] = {
     {0},
 };
 
+/** Linked where tst.rel's test battles use it (early demos, PAL demo, PAL); stripped elsewhere: no items. */
 ItemDropData battle_item_suitooru[] = {
     {0},
 };
 
+/** Stripped (UNUSED in the JP demo map, 8 bytes = one row): holds and drops no items. */
+ItemDropData battle_item_naniga_okorukana[] = {
+    {0},
+};
+
+/** Linked where tst.rel's test battles use it (early demos, PAL demo, PAL); stripped elsewhere: no items. */
 ItemDropData battle_item_sinabita_kinoko[] = {
     {0},
 };
-#endif
+
+/** Stripped (UNUSED in the JP demo map, 8 bytes = one row): holds and drops no items. */
+ItemDropData battle_item_jiwajiwa_kinoko[] = {
+    {0},
+};

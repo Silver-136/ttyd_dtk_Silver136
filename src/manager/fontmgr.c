@@ -42,6 +42,9 @@ static const char* fontname[2] = {"papermarioset_JPN", "popjoyB22"};
 #endif
 
 //.sbss
+// fontNoiseTexObj and fontTpl: stripped (UNUSED in the JP demo map: fontNoiseTexObj 0x20 after fontScale in .bss,
+// fontTpl 4 bytes first in .sbss); nothing reads them. Types from the names, fgTexObj and windowdrv's winTpl.
+GXTexObj fontNoiseTexObj;
 static Vec fontScale;
 static GXColor fontColor;
 static u8 fontAlpha;
@@ -50,6 +53,7 @@ BinaryFontInfo* pfi; // pointer to font info
 BinaryFontGlyph* blockGlyph;
 GXTexObj fgTexObj;
 BinaryFontHeader* pfh; // pointer to font header
+TEXPalette* fontTpl;
 
 // US and later pass single-byte characters to JUTFont_CodeToGlyph zero-extended
 #if VERSION >= VERSION_US
