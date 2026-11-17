@@ -44,8 +44,8 @@ static s32 touch_wall_ct;
 
 static BOOL party_slit(PartyEntry* party);
 static BOOL party_roll(PartyEntry* party);
-void partyFlyAdjustY(PartyEntry* party);
-void partyWalkChkGnd(PartyEntry* party);
+void hitcheck_party_motion_stay_fly(PartyEntry* party);
+void hitcheck_party_motion_stay(PartyEntry* party);
 
 // Descriptive name (not in the symbol maps); placeholder unk_8014c47c, JP 0x8014C47C. See docs/NAME_PROVENANCE.md.
 #if VERSION >= VERSION_JP
@@ -329,10 +329,10 @@ void party_motion_stay(PartyEntry* party) {
     party->position.x = v.x;
     party->position.z = v.z;
     if (party->moveKind == 1) {
-        partyFlyAdjustY(party);
+        hitcheck_party_motion_stay_fly(party);
         return;
     }
-    partyWalkChkGnd(party);
+    hitcheck_party_motion_stay(party);
     party_force_reset_outofscreen(party);
     if (party->currentMemberId == PARTY_MS_MOWZ && !(party->flags2 & PARTY_DISP_FLAG_FAMICOM) && !marioKeyOffChk() && marioChkDeepSleep() != 1 &&
         chuchu_searchObject()) {
@@ -398,9 +398,9 @@ void party_motion_wait(PartyEntry* party) {
     if (mario->currMotionId == MARIO_MOTION_TALK && !(party->flags & PARTY_FLAG_IS_BEHIND_MARIO)) {
         partyMoveBehindMario(party, 0);
     } else if (party->moveKind == 1) {
-        partyFlyAdjustY(party);
+        hitcheck_party_motion_stay_fly(party);
     } else {
-        partyWalkChkGnd(party);
+        hitcheck_party_motion_stay(party);
         if (party->currentMemberId == PARTY_MS_MOWZ && !(party->flags2 & PARTY_DISP_FLAG_FAMICOM) && !marioKeyOffChk() &&
             marioChkDeepSleep() != 1 && chuchu_searchObject()) {
             switch (party->useMotionId) {
@@ -429,11 +429,12 @@ void party_motion_wait(PartyEntry* party) {
 /**
  * Head and floor probe for a walking partner: snaps it to the floor, flags shallow water and damage floors,
  * falls (motion 3) or splashes when there is none, and jumps off objects that cannot be stood on.
- * Descriptive name (not in the symbol maps); placeholder unk_8014ba3c, JP 0x8014BA3C. See docs/NAME_PROVENANCE.md.
+ * JP and later form of the early demos' hitcheck_party_motion_stay (JP demo map name): the same probe at the same
+ * call in party_motion_stay and the same place in the object, just before it; the JP body grew (0x158 -> 0x18c).
  */
 #if VERSION >= VERSION_JP
 
-void partyWalkChkGnd(PartyEntry* party) {
+void hitcheck_party_motion_stay(PartyEntry* party) {
     Vec pos;
     f32 height;
     HitEntry* head;
@@ -595,11 +596,13 @@ static inline void partyFlyHeadCheck(PartyEntry* party) {
  * JP and later: keeps a flying partner at Mario's height or the floor's,
  * whichever is higher (faster when below the floor), and hands floors with attribute 0x800 to run mode 13.
  * US and later also push it down from las_10's ceilings.
- * Descriptive name (not in the symbol maps); placeholder unk_8014b824, JP 0x8014B824. See docs/NAME_PROVENANCE.md.
+ * JP and later form of the early demos' hitcheck_party_motion_stay_fly (JP demo map name): the same flying branch
+ * of party_motion_stay and the same place in the object, just before hitcheck_party_motion_stay; the JP body grew
+ * (0x90 -> 0x218).
  */
 #if VERSION >= VERSION_JP
 
-void partyFlyAdjustY(PartyEntry* party) {
+void hitcheck_party_motion_stay_fly(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;
     HitEntry* hit;
     s32 attr;
