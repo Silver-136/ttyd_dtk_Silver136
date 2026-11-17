@@ -97,9 +97,7 @@ EffectEntry* effHibashiraEntry(s32 type, s32 count, s32 duration, f32 x, f32 y, 
  * frame, and fades the whole effect over 16 frames on soft delete or at the end of the duration.
  */
 static void effHibashiraMain(EffectEntry* effect) {
-    s32 k;
     EffHibashiraWork* work = effect->userdata;
-    EffHibashiraWork* pillar;
     Vec position;
     s32 type;
     s32 i;
@@ -137,16 +135,16 @@ static void effHibashiraMain(EffectEntry* effect) {
         work->alpha = work->timer * 16;
     }
     if (work->timer < 0) {
-        for (i = 0, pillar = work; i < effect->count; pillar++, i++) {
-            if (pillar->poseId != -1) {
-                animPoseRelease(pillar->poseId);
+        for (i = 0; i < effect->count; i++) {
+            if (work[i].poseId != -1) {
+                animPoseRelease(work[i].poseId);
             }
         }
         effDelete(effect);
         return;
     }
 
-    for (work++, k = 1; k < effect->count; k++, work++) {
+    for (work++, i = 1; i < effect->count; i++, work++) {
         if (work->delay) {
             work->delay--;
             continue;

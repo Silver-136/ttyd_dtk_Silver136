@@ -138,7 +138,6 @@ static void effMahojinMain(EffectEntry* effect) {
     f32 loops;
     Vec position;
     Vec tmp = { 0.0f, 0.0f, 0.0f };
-    EffMahojinWork* q;
     s32 k;
 
     tmp.x = work->position.x;
@@ -212,10 +211,9 @@ static void effMahojinMain(EffectEntry* effect) {
             if (type == 7) {
                 if (animPoseGetLoopTimes(p[effect->count - 1].poseId[0]) > 1.0f) {
                     mapSetTevCallback(10, callback);
-                    q = p;
-                    for (k = 0; k < effect->count; q++, k++) {
-                        animPoseSetMaterialFlagOn(q->poseId[0], MAP_OBJ_TEV_CALLBACK(10));
-                        animPoseSetMaterialFlagOn(q->poseId[1], MAP_OBJ_TEV_CALLBACK(10));
+                    for (k = 0; k < effect->count; k++) {
+                        animPoseSetMaterialFlagOn(p[k].poseId[0], MAP_OBJ_TEV_CALLBACK(10));
+                        animPoseSetMaterialFlagOn(p[k].poseId[1], MAP_OBJ_TEV_CALLBACK(10));
                     }
                     mahojin_rate = 0;
                     p->state++;

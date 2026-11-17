@@ -690,8 +690,8 @@ static void effFireDisp3(CameraId cameraId, EffectEntry* effect) {
     work->scrMaxY = -10000;
     work->scrMaxX = -10000;
     work->scrMinY = 10000;
-    col = col_tbl[type - 5];
     for (pass = 0; pass < 2; pass++) {
+        col = &col_tbl[type - 5][pass * 4];
         switch (pass) {
             case 0:
                 PSMTXIdentity(scaleMtx);
@@ -800,7 +800,6 @@ static void effFireDisp3(CameraId cameraId, EffectEntry* effect) {
         if (scr.y < work->scrMinY) {
             work->scrMinY = scr.y;
         }
-        col += 4;
     }
     work->scrMinX += 304;
     work->scrMaxX += 304;

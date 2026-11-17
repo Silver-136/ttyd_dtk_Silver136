@@ -208,7 +208,8 @@ static void main_dl(EffectEntry* effect, Mtx base) {
         PSMTXConcat(mc8, mf8, mf8);
         PSMTXConcat(mf8, m98, m68);
 
-        for (j = 0, a = anime_data; j < 3; j++) {
+        for (j = 0; j < 3; j++) {
+            a = &anime_data[j * 4];
             t = 6.2831855f * ang / 360.0f;
             c = (f32)cos(t);
             s = (f32)sin(t);
@@ -241,7 +242,6 @@ static void main_dl(EffectEntry* effect, Mtx base) {
             GXTexCoord2f32(1.0f, 1.0f);
             GXPosition3s16(-sz, -sz, 0);
             GXTexCoord2f32(0.0f, 1.0f);
-            a += 4;
         }
     }
 }

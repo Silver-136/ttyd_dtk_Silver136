@@ -181,7 +181,7 @@ static void effKemuri10Main(EffectEntry* effect) {
         effDelete(effect);
         return;
     }
-    for (i = 0; i < effect->count; i++) {
+    for (i = 0; i < effect->count; i++, work++) {
         if (timer > 5) {
             work->alpha += 0.3f * (255 - work->alpha);
             work->velocity.x *= 0.8f;
@@ -199,7 +199,6 @@ static void effKemuri10Main(EffectEntry* effect) {
         work->position.z += work->velocity.z;
         work->texOffset += work->texSpeed;
         work->scale *= 1.05f;
-        work++;
     }
 #if VERSION <= VERSION_DEMO_JP
     dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effKemuri10Disp, effect);

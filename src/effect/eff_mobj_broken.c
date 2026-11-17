@@ -141,7 +141,6 @@ EffectEntry* effMObjBrokenEntry(s32 type, f32 x, f32 y, f32 z) {
  */
 static void effMObjBrokenMain(EffectEntry* effect) {
     EffMObjBrokenWork* work = effect->userdata;
-    EffMObjBrokenWork* w2;
     s32 k;
     s32 i;
     s32 type;
@@ -200,11 +199,10 @@ static void effMObjBrokenMain(EffectEntry* effect) {
         }
     }
     if (done >= effect->count - 1) {
-        w2 = effect->userdata;
-
-        for (k = 0; k < effect->count; k++, w2++) {
-            if (w2->poseId != -1) {
-                animPoseRelease(w2->poseId);
+        w = effect->userdata;
+        for (k = 0; k < effect->count; k++, w++) {
+            if (w->poseId != -1) {
+                animPoseRelease(w->poseId);
             }
         }
         effDelete(effect);

@@ -148,7 +148,7 @@ EffectEntry* effPeachDustN64Entry(s32 type, f32 x, f32 y, f32 z, f32 unused, f32
             break;
         }
     }
-    for (; count < 101; count++) {
+    for (; count < 101; count++, work++) {
         work->scale = 0.0f;
         work->velocity.z = 0.0f;
         work->velocity.y = 0.0f;
@@ -158,7 +158,6 @@ EffectEntry* effPeachDustN64Entry(s32 type, f32 x, f32 y, f32 z, f32 unused, f32
         work->position.x = 0.0f;
         work->lifetime = -1;
         work->frame = 0;
-        work++;
     }
     return effect;
 }

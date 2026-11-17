@@ -261,7 +261,7 @@ static void effOpukuWprotectDisp(CameraId cameraId, void* param) {
     vtx = p = (effN64Vtx*)smartAlloc(sizeof(effN64Vtx) * 80, SMART_GROUP_TEMP)->address;
     pd = point_data;
     r = gp->retraceCount >> 1;
-    for (i = 0; i < 40; i++) {
+    for (i = 0; i < 40; i++, pd++, p++) {
         x = pd->x * 10;
         y = pd->y * 10;
         z = pd->z * 10;
@@ -288,8 +288,6 @@ static void effOpukuWprotectDisp(CameraId cameraId, void* param) {
         p->g = pd->g;
         p->b = pd->b;
         p->a = 80;
-        pd++;
-        p++;
     }
     GXSetTevColor(GX_TEVREG0, (GXColor){255, 255, 255, alpha});
     GXSetTevColor(GX_TEVREG1, (GXColor){0, 0, 255, work->alpha2});

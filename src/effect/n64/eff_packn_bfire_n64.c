@@ -117,7 +117,7 @@ EffectEntry* effPacknBfireN64Entry(s32 type, s32 frames, s32 life, f32 x, f32 y,
             work->color[6] = 123;
             work->color[7] = 255;
             base = (f32)(rand() % 361);
-            for (i = 0; i < count; i++) {
+            for (i = 0; i < count; i++, work++) {
                 work->pos.x = x;
                 work->pos.y = y;
                 work->pos.z = z;
@@ -132,7 +132,6 @@ EffectEntry* effPacknBfireN64Entry(s32 type, s32 frames, s32 life, f32 x, f32 y,
                 work->duvy = 0.0f;
                 work->rot = -45.0f;
                 work->drot = -10.0f;
-                work++;
             }
             break;
     }
@@ -192,7 +191,7 @@ static void effPacknBfireMain(EffectEntry* effect) {
                 work->rot += work->drot;
                 break;
             case 2:
-                for (i = 0; i < effect->count; i++) {
+                for (i = 0; i < effect->count; i++, work++) {
                     work->vel.x *= 0.9f;
                     work->vel.y -= 0.2f;
                     work->pos.x += work->vel.x;
@@ -206,7 +205,6 @@ static void effPacknBfireMain(EffectEntry* effect) {
                     work->sx += 0.07f * -work->sx;
                     work->sy += 0.05f * -work->sy;
                     work->rot += work->drot;
-                    work++;
                 }
                 break;
         }

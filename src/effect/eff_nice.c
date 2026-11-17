@@ -136,7 +136,7 @@ static void rendermodeFunc(s32 wXluStage) {
  * battle_damage.c and battle_event_cmd.c call it for Action Command ratings.
  */
 EffectEntry* effNiceEntry(s32 type, f32 x, f32 y, f32 z) {
-    NiceEffectWork *userdata, *ptr;
+    NiceEffectWork* userdata;
     EffectEntry* effect;
     u32 size, count;
     int i;
@@ -182,16 +182,15 @@ EffectEntry* effNiceEntry(s32 type, f32 x, f32 y, f32 z) {
     userdata->poseId = -1;
     switch (type) {
         case 7:
-            ptr = userdata + 1;
-            for (i = 1; i < effect->count; i++, ptr++) {
-                ptr->position.x = 1000.0f;
-                ptr->position.y = 0.0f;
-                ptr->position.z = 0.0f;
-                ptr->scaleX = 1.0f;
-                ptr->scaleY = 1.0f;
-                ptr->scaleZ = 1.0f;
-                ptr->state = 0;
-                ptr->timer = 0;
+            for (i = 1; i < effect->count; i++) {
+                userdata[i].position.x = 1000.0f;
+                userdata[i].position.y = 0.0f;
+                userdata[i].position.z = 0.0f;
+                userdata[i].scaleX = 1.0f;
+                userdata[i].scaleY = 1.0f;
+                userdata[i].scaleZ = 1.0f;
+                userdata[i].state = 0;
+                userdata[i].timer = 0;
             }
             break;
         default:
