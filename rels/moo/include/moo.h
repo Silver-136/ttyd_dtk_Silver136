@@ -19,4 +19,5 @@ extern EvtWord moo_07_init_evt[];
 extern BattleUnitKind unit_kuriboo;
 extern BattleUnitKind unit_sinemon;
 
-extern s32 rock_main[];
+// US and later: moo_00 defines the rock script once for moo_01..07 (before US each unit has its own static copy).
+extern EvtWord rock_main[];

@@ -316,8 +316,8 @@ void effTexSetup(void) {
     effTexSetupN64();
 }
 
-void effGetTexObj(u32 id, GXTexObj* obj) {
-    if ((s32)id < EFF_NTEX) { // number of images in effect.tpl
+void effGetTexObj(s32 id, GXTexObj* obj) {
+    if (id < EFF_NTEX) { // number of images in effect.tpl
         if (!wp->texLoaded) {
             static char dummy[] ATTRIBUTE_ALIGN(32) = "";
             GXInitTexObj(obj, dummy, 1, 1, GX_TF_I4, GX_CLAMP, GX_CLAMP, GX_FALSE);
@@ -411,7 +411,7 @@ void effMain(void) {
             }
         }
     }
-    if ((u32)wp->language != gp->language) {
+    if (wp->language != gp->language) {
         if (wp->handle) {
             fileFree(wp->handle);
             wp->handle = NULL;

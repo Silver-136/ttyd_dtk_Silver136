@@ -52,13 +52,6 @@ s32 _gundan_part_update(YoshiGundanPart* p, s32 i);
 
 // Slot 3 is set to -1 when Ground Pound starts (as the partner Yoshi does) and never read, so it keeps its number.
 
-typedef struct YoshiSweatWork {
-    s32 pad0;
-    f32 x;
-    f32 y;
-    f32 z;
-} YoshiSweatWork;
-
 USER_FUNC(yoshi_original_color_anim_set);
 USER_FUNC(_gundan_yoshi_run_effect);
 USER_FUNC(_wait_yoshig_complete);
@@ -2360,9 +2353,9 @@ USER_FUNC(btl_yoshi_yoroyoro_jump_move) {
     } else {
         eff = (EffectEntry*)event->userdata[2];
         if (event->userdata[1] < 16) {
-            ((YoshiSweatWork*)eff->userdata)->x = unit->moveCurrentPos.x;
-            ((YoshiSweatWork*)eff->userdata)->y = unit->moveCurrentPos.y + unit->sizeMultiplier * (0.5f * BtlUnit_GetHeight(unit));
-            ((YoshiSweatWork*)eff->userdata)->z = unit->moveCurrentPos.z;
+            ((EffSweatN64Work*)eff->userdata)->position.x = unit->moveCurrentPos.x;
+            ((EffSweatN64Work*)eff->userdata)->position.y = unit->moveCurrentPos.y + unit->sizeMultiplier * (0.5f * BtlUnit_GetHeight(unit));
+            ((EffSweatN64Work*)eff->userdata)->position.z = unit->moveCurrentPos.z;
         }
     }
     unit->moveFrames--;

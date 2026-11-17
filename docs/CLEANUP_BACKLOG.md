@@ -49,18 +49,20 @@ in `docs/FAKES.md` and in the mweppc review record.
   winLogDisp: a win_log.h prototype changes the US DOL, tried 2026-11-17), narrowed parameters or returns
   (BattleStage*Dark* x6, hankakuSearch per version, iconDispGxCol in evt_yuucounter, iconGetTexObj in win_main,
   pouchEquipBadge in winmgr), and FontDrawStringVecPitch in win_main (Vec by pointer, pitch last).
-- From the certification pilot (2026-10-27): qqsort has no live prototype (system.h's is commented out with a
-  `const void**` comparator; dispdrv calls it undeclared, lightdrv/extdrv carry private `const void*` copies);
-  fbatNpcTalkCheck is declared `void*` in four files but returns NpcEntry*; extdrv's private
-  animPoseDisp_MakeExtTexture takes `void***` where the definition takes `smartEntry**`; GlobalWork.language is
-  compared unsigned in some places (`(u32)` casts) and signed in others; effGetTexObj tests `(s32)id`.
+- From the certification pilot (2026-10-27), all settled: qqsort has one prototype in system.h (`QSortCompare`,
+  `const void*` arguments; eca5d4b2b); fbatNpcTalkCheck returns NpcEntry* everywhere (npcdrv.h);
+  animPoseDisp_MakeExtTexture has one animdrv.h prototype; GlobalWork.language is u32 with no casts left
+  (EffectWork.language, its copy in effdrv, is u32 too, GA14 2026-11-17); effGetTexObj takes `s32 id` (the retail
+  test is signed; no `(s32)id` cast).
 - `itemEntry` has no header prototype because evt_mobj needs a float-first private declaration (FAKES row).
-- Double casts `(s32)(u8)x` / `(s32)(s8)x`: the 11 in equality tests against small constants were removed
-  (2026-10-27, no byte change). Left: evt_mobj's four `(s32)(s8)linkedName[0]` truth tests (char is unsigned
-  here; the plain test compiles differently), and the value conversions (damageCode, attackDirection, Mario's
-  stick directions). Audience getters: GetWaiting returns u8 (its callers' casts are gone); GetExist, GetSysCtrl
-  and GetEscapeChangeOK return int but every caller casts to u8 (header comment).
-- Data declared through private views of another unit's struct (a few effect and map work structs).
+- Double casts `(s32)(u8)x` / `(s32)(s8)x`: none left (2026-11-17). What remains are float truncations
+  `(f32)(s32)x` and conversions of u32 results, which are real conversions. Audience getters GetExist, GetSysCtrl,
+  GetEscapeChangeOK and GetWaiting return u8 (0de024340).
+- Data declared through private views of another unit's struct: none left that has an owner type (2026-11-17,
+  `cleanup_tools/private_views.py` plus extern/cast scans): tst unit_yoshi now writes EffSweatN64Work, moo.h's
+  rock_main is EvtWord. Kept: koopa.c's unsized `extern f32 marioJumpData[]` (incomplete type gives the retail
+  lis/addi addressing; comment there) and tst unit_yoshi's YoshiSlideAcWork (BattleActions.work of an AC with no
+  struct of its own yet).
 
 ## 3. Names
 

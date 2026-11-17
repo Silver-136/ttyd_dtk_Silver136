@@ -86,12 +86,12 @@ typedef struct EffectWork {
     TEXPalette* texture;  // 0x8
     BOOL texLoaded;       // 0xC
     FileEntry* handle;    // 0x10
-    s32 language;         // 0x14
+    u32 language;         // 0x14, gp->language of the loaded second texture file (-1: none yet)
 } EffectWork;
 
 void effInit(void);
 void effTexSetup(void);
-void effGetTexObj(u32 id, GXTexObj* obj);
+void effGetTexObj(s32 id, GXTexObj* obj);
 void effAutoRelease(BOOL inBattle);
 EffectEntry* effEntry(void);
 void effSetName(EffectEntry* effect, const char* name);
