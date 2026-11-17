@@ -6573,27 +6573,28 @@ USER_FUNC(evt_puni_dokan_onoff) {
 }
 
 /**
- * Inline helper that reads a Puni's save slot: the floor byte and the x, y,
- * z shorts (sign-extended) stored 7 bytes per slot from LSW base.
+ * Script helper: reads LSW slot args[1] from base args[0]: floor into args[2] and x, y, z into args[3] to args[5].
+ * The slot is read as in puniswGetindex, written out here.
  */
-// FAKE: inline copy of the map function puniswGetindex; calling it changes the registers (FAKES.md)
-static inline void puniswGetindex_inl(s32 base, s32 idx, s32* val, Vec* pos) {
-    u8 zHi, b5, b4, b3, b2, b1, b0;
-    s32 off;
-    s32 x;
-    s32 y;
-    s32 z;
+USER_FUNC(evt_puni_get_lsw_index) {
+    s32 z, y, x;
+    u8 slotFloor, b1, b2, b3, b4, b5, b6;
+    EvtWord* args = event->args;
+    s32 base = args[0];
+    s32 idx = evtGetValue(event, args[1]);
+    s32 val;
+    Vec pos;
 
-    off = base + idx * PUNI_LSW_SLOT_SIZE;
-    b0 = _swByteGet(off + EVTDAT_LSW_BASE);
-    b1 = _swByteGet(off + 150000001);
-    b2 = _swByteGet(off + 150000002);
-    b3 = _swByteGet(off + 150000003);
-    b4 = _swByteGet(off + 150000004);
-    b5 = _swByteGet(off + 150000005);
-    zHi = _swByteGet(off + 150000006);
+    base += idx * PUNI_LSW_SLOT_SIZE;
+    slotFloor = _swByteGet(base + EVTDAT_LSW_BASE);
+    b1 = _swByteGet(base + 150000001);
+    b2 = _swByteGet(base + 150000002);
+    b3 = _swByteGet(base + 150000003);
+    b4 = _swByteGet(base + 150000004);
+    b5 = _swByteGet(base + 150000005);
+    b6 = _swByteGet(base + 150000006);
 
-    *val = b0;
+    val = slotFloor;
     x = b1 + (b2 << 8);
     if (x & 0x8000) {
         x |= 0xFFFF0000;
@@ -6602,24 +6603,13 @@ static inline void puniswGetindex_inl(s32 base, s32 idx, s32* val, Vec* pos) {
     if (y & 0x8000) {
         y |= 0xFFFF0000;
     }
-    z = b5 + (zHi << 8);
+    z = b5 + (b6 << 8);
     if (z & 0x8000) {
         z |= 0xFFFF0000;
     }
-    pos->x = x;
-    pos->y = y;
-    pos->z = z;
-}
-
-/** Script helper: reads LSW slot args[1] from base args[0]: floor into args[2] and x, y, z into args[3] to args[5]. */
-USER_FUNC(evt_puni_get_lsw_index) {
-    EvtWord* args = event->args;
-    s32 base = args[0];
-    s32 idx = evtGetValue(event, args[1]);
-    s32 val;
-    Vec pos;
-    base += idx * PUNI_LSW_SLOT_SIZE;
-    puniswGetindex_inl(base, 0, &val, &pos);
+    pos.x = x;
+    pos.y = y;
+    pos.z = z;
     evtSetValue(event, args[2], val);
     evtSetValue(event, args[3], (s32)pos.x);
     evtSetValue(event, args[4], (s32)pos.y);
