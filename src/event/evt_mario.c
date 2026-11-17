@@ -132,8 +132,8 @@ USER_FUNC(evt_mario_dokan_prepare) {
 
 // Stripped scripts (JP demo map: UNUSED, 0x10 each, first in this file's .data): nothing runs them. 0x10 is one
 // user call with no argument, RETURN and the end word; the names give the call (both functions read no
-// argument). The map lists twelve more stripped scripts after these (party and test scripts) whose arguments
-// no byte shows.
+// argument). The map lists twelve more stripped scripts after these (party and test scripts); three follow below,
+// the others need a member or arguments no byte shows.
 EVT_BEGIN(mario_balloon_tenten_evt)
     CALL(evt_mario_balloon_tenten)
     RETURN
@@ -141,6 +141,25 @@ EVT_END()
 
 EVT_BEGIN(mario_balloon_off_evt)
     CALL(evt_mario_balloon_off)
+    RETURN
+EVT_END()
+
+// Stripped scripts (JP demo map: UNUSED, 0x14 each, after the two 0x18 mario_hello_extra_party_evt scripts): 0x14 is
+// one user call with one argument, RETURN and the end word. The call is the script's name, as above; the argument
+// is the party slot, named as in this file's functions (get_party / get_exparty, hello_party / hello_exparty_pos):
+// "extra" is slot 1, plain "party" slot 0.
+EVT_BEGIN(mario_set_prev_extra_party_evt)
+    CALL(evt_mario_set_prev_party, 1)
+    RETURN
+EVT_END()
+
+EVT_BEGIN(mario_kill_extra_party_evt)
+    CALL(evt_mario_kill_party, 1)
+    RETURN
+EVT_END()
+
+EVT_BEGIN(mario_goodbye_party_evt)
+    CALL(evt_mario_goodbye_party, 0)
     RETURN
 EVT_END()
 

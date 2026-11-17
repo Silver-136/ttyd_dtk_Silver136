@@ -57,9 +57,19 @@ int ddh_cc_post_stop(void);
 int ddh_cc_peek(void);
 int ddh_cc_initinterrupts(void);
 
-DBCommTable gDBCommTable = {0};
+/*
+ * The UART buffers and counters of the stripped TRKReadUARTPoll, WriteUART1 and WriteUARTFlush (JP demo map,
+ * UNUSED); declarations as in the Mario Party 4 and Animal Crossing decompilations (CC0).
+ */
+u8 gWriteBuf[0x110A];
+u8 gReadBuf[0x110A];
 BOOL _MetroTRK_Has_Framing;
+int gReadCount;
+int gReadPos;
+int gWritePos;
 u8 TRK_Use_BBA;
+
+DBCommTable gDBCommTable = {0};
 
 asm void TRKLoadContext(void* ctx, u32 val) {
     nofralloc

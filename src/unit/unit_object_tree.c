@@ -28,6 +28,7 @@ static BattleUnitDefenseAttr defence_attr;
 static StatusVulnerability regist;
 static PoseTableEntry pose_table[4];
 static BattleDataEntry data_table[1];
+static EvtWord phase_event[2];
 static EvtWord attack_event[5];
 static EvtWord wait_event[2];
 
@@ -207,6 +208,15 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 #endif
+
+/**
+ * Phase event: nothing. No unit data registers it, so the linker strips it (JP demo map: UNUSED, 8 bytes, in
+ * .sdata between data_table and wait_event); 8 bytes leave room only for RETURN and the end word, the empty
+ * phase_event of the other units.
+ */
+static EVT_BEGIN(phase_event)
+    RETURN
+EVT_END()
 
 /** The tree never acts on its own turn; it just returns to its (empty) idle script. */
 static EVT_BEGIN(attack_event)

@@ -31,6 +31,9 @@ static CircleBuffer gRecvCB;
 static u8 gRecvBuf[DDH_BUF_SIZE];
 static BOOL gIsInitialized;
 
+/* Stripped (JP demo map, UNUSED); error codes are int here. */
+static int gLastError;
+
 int ddh_cc_initialize(void* inputPendingPtrRef, void* monitorCallback) {
     MWTRACE(1, "CALLING EXI2_Init\n");
     EXI2_Init(inputPendingPtrRef, monitorCallback);

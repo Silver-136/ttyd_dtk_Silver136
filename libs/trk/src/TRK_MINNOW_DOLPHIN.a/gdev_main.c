@@ -31,6 +31,9 @@ static CircleBuffer gRecvCB;
 static u8 gRecvBuf[GDEV_BUF_SIZE];
 static BOOL gIsInitialized;
 
+/* Stripped (JP demo map, UNUSED); error codes are int here. */
+static int gLastError;
+
 int gdev_cc_initialize(void* inputPendingPtrRef, void* monitorCallback) {
     MWTRACE(1, "CALLING EXI2_Init\n");
     DBInitComm(inputPendingPtrRef, monitorCallback);

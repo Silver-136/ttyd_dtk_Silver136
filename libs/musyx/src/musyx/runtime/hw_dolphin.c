@@ -14,6 +14,10 @@ static u16 dram_image[4096] ATTRIBUTE_ALIGN(32);
 
 #if MUSY_VERSION >= MUSY_VERSION_CHECK(2, 0, 3)
 // Uninitialized, so MWCC lays these out in reverse declaration order
+// aramBase and aramSize are stripped in the game (JP demo map: UNUSED, after userCallback); types as in AxioDL's
+// MusyX decompilation, where they end the file
+u8* aramBase;
+u32 aramSize;
 static SND_SOME_CALLBACK userCallback;
 u8 salAIBufferIndex;
 static void* salAIBufferBase;

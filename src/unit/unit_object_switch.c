@@ -119,6 +119,7 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+static EvtWord phase_event[2];
 static EvtWord attack_event[5];
 static EvtWord wait_event[2];
 static EvtWord damage_event[22];
@@ -145,6 +146,15 @@ static EVT_BEGIN(damage_event)
     END_IF
     CALL(evt_map_playanim, STRING("switch_a"), MAP_ANIM_PLAY_ONCE, 0)
     WAIT_MS(500)
+    RETURN
+EVT_END()
+
+/**
+ * Phase event: nothing. No unit data registers it, so the linker strips it (JP demo map: UNUSED, 8 bytes, in
+ * .sdata between data_table and wait_event); 8 bytes leave room only for RETURN and the end word, the empty
+ * phase_event of the other units.
+ */
+static EVT_BEGIN(phase_event)
     RETURN
 EVT_END()
 

@@ -9403,8 +9403,10 @@ void psndExit(void) {
  * marks sound as ready and returns FALSE.
  */
 u32 psndPushGroup(void) {
+    // group has an explicit zero: the JP demo map numbers it before tbl and lays it out first, which only an
+    // initialised static does (uninitialised ones are laid out in reverse order after it).
+    static s32 group = 0;
     static u8 tbl[2];
-    static s32 group;
 
     if (_psndPushGroup_trg) {
         return TRUE;
@@ -9422,6 +9424,10 @@ u32 psndPushGroup(void) {
     group++;
     return TRUE;
 }
+
+// Stripped (JP demo map: UNUSED, 4 bytes in .sbss between psndPushGroup's group and tbl): nothing reads or writes
+// it; declared after psndPushGroup, the layout comes out as in the map. Nothing shows its type (void* from the name).
+void* _p;
 
 /**
  * Sets the listener position and facing direction (degrees) used to place 3D sound effects;

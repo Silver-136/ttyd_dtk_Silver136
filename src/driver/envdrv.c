@@ -962,6 +962,11 @@ static void envTevLoadTexMtxImm(s32 type, GXTexMtx id, GXTexMtx id2, GXTexMtxTyp
             if (dot == 1.0f) {
                 PSMTXIdentity(m6);
             } else {
+                // Unused (JP demo map: v$652, UNUSED, 4 bytes in .sbss between frame_cnt and case 5's a): its
+                // number puts it in this branch; a zero initializer, since it is laid out in source order like a.
+                // f32 as a is a guess.
+                static f32 v = 0.0f;
+
                 PSVECCrossProduct(&h, &v2, &axis);
                 PSMTXRotAxisRad(m6, &axis, (f32)acos(PSVECDotProduct(&v2, &h)));
             }
