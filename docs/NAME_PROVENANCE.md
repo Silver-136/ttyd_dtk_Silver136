@@ -361,7 +361,6 @@ this file.
 | `marioForceVivianAnime` | src/party/party_vivian.c |
 | `vivianDisplayTailCheck` | src/party/party_vivian.c |
 | `chgMotion` | src/party/party_yoshi.c |
-| `fall` | src/party/party_yoshi.c |
 | `searchHead` | src/party/party_yoshi.c |
 | `partyLeaveRunMode` | src/party.c |
 | `evt_snd_bgm_unpause` | src/sequence/seq_gameover.c |

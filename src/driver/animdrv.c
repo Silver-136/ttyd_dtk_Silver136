@@ -428,6 +428,131 @@ void animMain(void) {
     dispEntry(CAMERA_OFFSCREEN, 0.0f, DISP_MODE_ALPHA_TEST, animPaperPoseDisp, NULL);
 }
 
+// The five functions below: original names and sizes (0x58, 0x58, 0x58, 0x13c, 0x26c) from the JP demo map
+// (UNUSED there, at this slot: every call is inlined into animPoseEntry).
+
+/** Finds a free pose slot: stores it in *entry and returns its index, or stores NULL and returns -1. */
+s32 animPoseNew(AnimationPose** entry) {
+    s32 i;
+    AnimationPose* p;
+
+    for (i = 0; i < wp->totalPoses; i++) {
+        p = &wp->poses[i];
+        if (!p->flags) {
+            *entry = p;
+            return i;
+        }
+    }
+    *entry = NULL;
+    return -1;
+}
+
+/** Finds a free animation file slot: stores it in *entry and returns its index, or stores NULL and returns -1. */
+s32 animGroupNew(AnimationPoseFile** entry) {
+    s32 i;
+    AnimationPoseFile* p;
+
+    for (i = 0; i < wp->totalFiles; i++) {
+        p = &wp->files[i];
+        if (!p->active) {
+            *entry = p;
+            return i;
+        }
+    }
+    *entry = NULL;
+    return -1;
+}
+
+/** Finds a free texture file slot: stores it in *entry and returns its index, or stores NULL and returns -1. */
+s32 textureGroupNew(AnimationTextureFile** entry) {
+    s32 i;
+    AnimationTextureFile* p;
+
+    for (i = 0; i < wp->totalTextures; i++) {
+        p = &wp->textures[i];
+        if (!p->active) {
+            *entry = p;
+            return i;
+        }
+    }
+    *entry = NULL;
+    return -1;
+}
+
+/**
+ * Returns the index of texture file "a/<name>-", adding a reference; loads it into a free slot first when it is
+ * not loaded yet. With no free slot the NULL from textureGroupNew is written through.
+ */
+s32 textureGroupEntry(const char* name) {
+    s32 count;
+    AnimationTextureFile* tex;
+    AnimationTextureFile* newTex;
+    s32 id;
+    s32 i;
+    char textureName[256];
+
+    sprintf(textureName, "%s/%s-", "a", name);
+    count = wp->totalTextures;
+    for (i = 0; i < count; i++) {
+        tex = &wp->textures[i];
+        if (tex->active && tex->handle && !strcmp(tex->handle->filename, textureName)) {
+            tex->references++;
+            return i;
+        }
+    }
+    id = textureGroupNew(&newTex);
+    newTex->active = 1;
+    newTex->references++;
+    newTex->handle = fileAlloc(textureName, FILE_TYPE_TPL);
+    return id;
+}
+
+/**
+ * Returns the index of animation file animName, adding a reference; loads "a/<animName>" and its texture file
+ * into a free slot first when it is not loaded yet. Returns -2 when the file cannot be loaded.
+ * With no free slot the NULL from animGroupNew is written through.
+ */
+s32 animGroupEntry(const char* animName) {
+    s32 count;
+    AnimationPoseFile* file;
+    AnimationPoseFile* newFile;
+    AnimationPoseData* data;
+    FileEntry* handle;
+    s32 id;
+    s32 i;
+
+    count = wp->totalFiles;
+    for (i = 0; i < count; i++) {
+        file = &wp->files[i];
+        if (file->active) {
+            data = *file->handle->data;
+            if (!strcmp(data->fileName, animName)) {
+                file->references++;
+                return i;
+            }
+        }
+    }
+    id = animGroupNew(&newFile);
+    newFile->active = 1;
+    newFile->references++;
+    newFile->handle = fileAllocf(FILE_TYPE_ANIM, "%s/%s", "a", animName);
+    handle = newFile->handle;
+    if (!newFile->handle) {
+        newFile->active = 0;
+        newFile->references--;
+        return -2;
+    }
+    data = *newFile->handle->data;
+    if (!data) {
+        fileFree(handle);
+        newFile->active = 0;
+        newFile->references--;
+        return -2;
+    }
+    newFile->textureId = textureGroupEntry(data->textureName);
+    return id;
+}
+
 /** The animation file data of pose pose. */
 inline AnimationPoseData* animPoseGetBaseData(AnimationPose* pose) {
     return *wp->files[pose->fileId].handle->data;
@@ -492,23 +617,6 @@ void animPoseBattleInit(void) {
     animPoseRefresh();
 }
 
-// FAKE: free-file search as an inline: its local p gets a definition-time @ label (numbered above the call-site @ temps), as the target colouring needs; the result goes through q (hit copies p, not-found sets q = NULL before id = -1) so the not-found exit emits `li ptr,0` before `li idx,-1` and the hit keeps its `bne; b` pair
-static inline AnimationPoseFile* apeFreeFile(s32* id) {
-    AnimationPoseFile* p;
-    AnimationPoseFile* q;
-    for (id[0] = 0; id[0] < wp->totalFiles; id[0]++) {
-        p = &wp->files[id[0]];
-        if (!p->active) {
-            q = p;
-            goto found;
-        }
-    }
-    q = NULL;
-    id[0] = -1;
-found:
-    return q;
-}
-
 /**
  * Creates a pose for animation file animName (e.g. "c_kuribo") and returns its id,
  * or -2 if it could not be loaded. type picks the archive and clock: 0 field, 1 battle, 2 shared.
@@ -519,22 +627,9 @@ found:
 s32 animPoseEntry(const char* animName, s32 type) {
     static s32 _dummy = -1;
 
-    // FAKE: counters and found-slot temps are one-element s32 arrays (IRO scalarizes them into @ window temps, giving the
-    // target's `li c,0; mr off,c` loop starts and @ numbering). pc is the pose-loop counter, copied into poseId on a hit
-    // (poseId then numbers below pose), and reused as both texture loops' counter (its second web gets a late @ label).
-    AnimationPose* t[1];
-    AnimationTextureFile* tt[1];
-    AnimationPoseFile* file;
-    AnimationTextureFile* tex[1];
-    AnimationPoseData* data;
-    FileEntry* handle;
-    s32 poseId[1];
-    s32 pc[1];
-    s32 fileId[1];
-    s32 count;
-    s32 gz;
+    s32 poseId;
     AnimationPose* pose;
-    char textureName[256];
+
     switch (type) {
         case 0:
             fileSetCurrentArchiveType(1);
@@ -550,93 +645,11 @@ s32 animPoseEntry(const char* animName, s32 type) {
 
     }
 
-    for (pc[0] = 0; pc[0] < wp->totalPoses; pc[0]++) {
-        t[0] = &wp->poses[pc[0]];
-        if (!t[0]->flags) {
-            pose = t[0];
-            poseId[0] = pc[0];
-            goto poseFound;
-        }
-    }
-
-    // With no free pose slot, pose stays NULL and is written through below.
-    pose = NULL;
-    poseId[0] = -1;
-poseFound:
+    // With no free pose slot, pose is NULL here and is written through below.
+    poseId = animPoseNew(&pose);
     pose->flags |= ANIM_POSE_FLAG_ACTIVE;
-
-    pose->references = pose->typeFlags = fileId[0] = 0;
-    count = wp->totalFiles;
-    for (; fileId[0] < count; fileId[0]++) {
-        file = &wp->files[fileId[0]];
-        if (file->active) {
-            data = *file->handle->data;
-            if (!strcmp(data->fileName, animName)) {
-                file->references++;
-                goto fileReady;
-            }
-        }
-    }
-
-    file = apeFreeFile(fileId);
-    file->active = 1;
-
-    file->references++;
-    file->handle = fileAllocf(FILE_TYPE_ANIM, "%s/%s", "a", animName);
-    handle = file->handle;
-    if (!file->handle) {
-        fileId[0] = -2;
-        file->active = 0;
-        file->references--;
-    } else {
-        data = *file->handle->data;
-        if (!data) {
-            fileFree(handle);
-            fileId[0] = -2;
-            file->active = 0;
-            file->references--;
-        } else {
-            sprintf(textureName, "%s/%s-", "a", data->textureName);
-            count = wp->totalTextures;
-            for (pc[0] = 0; pc[0] < count; pc[0]++) {
-                tex[0] = &wp->textures[pc[0]];
-
-                // FAKE: the BOOL active is read through a u32 view; the plain field changes the object
-                if (*((u32*)(&tex[0]->active))) {
-                    if (tex[0]->handle) {
-                        if (!strcmp(tex[0]->handle->filename, textureName)) {
-                            // FAKE: dead int guard (COLOURING W), deleted after colouring; its division temps add the texture pointer/count neighbours
-                            gz = 0;
-                            if (gz != 0) pc[0] = (((s32)(AddrWord)tex[0] / count) / (count / (s32)(AddrWord)tex[0])) / ((pc[0] / count) / (count / pc[0]));
-                            tex[0]->references++;
-                            goto textureReady;
-                        }
-                    }
-                }
-            }
-
-            for (pc[0] = 0; pc[0] < wp->totalTextures; pc[0]++) {
-                tt[0] = &wp->textures[pc[0]];
-
-                // FAKE: the BOOL active is read through a u32 view; the plain field changes the object
-                if (!(*((u32*)(&tt[0]->active)))) {
-                    tex[0] = tt[0];
-                    goto textureSlotFound;
-                }
-            }
-            tex[0] = NULL;
-            pc[0] = -1;
-textureSlotFound:
-            tex[0]->active = 1;
-
-            tex[0]->references++;
-            tex[0]->handle = fileAlloc(textureName, FILE_TYPE_TPL);
-textureReady:
-            file->textureId = pc[0];
-        }
-    }
-fileReady:
-    pose->fileId = fileId[0];
+    pose->references = pose->typeFlags = 0;
+    pose->fileId = animGroupEntry(animName);
 
     if (pose->fileId == -2) {
         pose->flags = 0;
@@ -682,7 +695,7 @@ fileReady:
     }
     pose->dispCallback = NULL;
     pose->dispUserDataCallback = NULL;
-    return poseId[0];
+    return poseId;
 }
 
 /**
@@ -744,6 +757,23 @@ BOOL animEffectAsync(const char* animName, u32 group) {
         ret = TRUE;
     }
     return ret;
+}
+
+/** Creates a paper overlay pose owned by one pose (not shared), returning its id or -2. */
+// Original name and size (0x58) from the JP demo map (UNUSED there, at this slot: its call in animPoseSetEffect is inlined).
+s32 animEffectEntry(const char* animName, s32 group) {
+    s32 i;
+    AnimationPose* pose;
+
+    i = animPoseEntry(animName, group);
+    if (i == -2) {
+        return i;
+    }
+    pose = animPoseGetAnimPosePtr(i);
+    pose->typeFlags = ANIM_POSE_TYPE_SUB;
+    pose->references = 0;
+    pose->flags |= ANIM_POSE_FLAG_ACTIVE;
+    return i;
 }
 
 /* An anim name parameter holds a name (an address in main memory, negative as
@@ -921,22 +951,6 @@ void animPoseSetPaperAnim(s32 poseId, const char* animName, BOOL reset) {
 
 void animGroupRelease(s32 fileId);
 
-/** Creates a paper overlay pose owned by one pose (not shared), returning its id or -2. */
-inline s32 animEffectPoseEntry(const char* animName, s32 group) {
-    s32 i;
-    AnimationPose* pose;
-
-    i = animPoseEntry(animName, group);
-    if (i == -2) {
-        return i;
-    }
-    pose = animPoseGetAnimPosePtr(i);
-    pose->typeFlags = ANIM_POSE_TYPE_SUB;
-    pose->references = 0;
-    pose->flags |= ANIM_POSE_FLAG_ACTIVE;
-    return i;
-}
-
 /**
  * Gives pose poseId its own paper overlay loaded from animName (e.g. a status or transformation effect),
  * releasing the previous one; NULL removes it.
@@ -964,7 +978,7 @@ void animPoseSetEffect(s32 poseId, const char* animName, BOOL paperGroup) {
         animPoseSetMaterialLightFlagOff(poseId, MATERIAL_LIGHT_PAPER);
         return;
     }
-    pose->paperId = animEffectPoseEntry(animName, pose->type);
+    pose->paperId = animEffectEntry(animName, pose->type);
     pose->paperAnimIdx = -1;
     pose->localTimeInit = animTimeGetTime(pose->type);
     if (paperGroup) {
@@ -1086,6 +1100,36 @@ GXColor animPoseGetMaterialEvtColor(s32 poseId) {
 GXColor animPoseGetMaterialAnmColor(s32 poseId) {
     AnimationPose* pose = &wp->poses[poseId];
     return pose->materialColor2;
+}
+
+// mod360 and camGetRy: original names and sizes (0x3c, 0x98) from the JP demo map (UNUSED there, at this slot before
+// animPoseMain: every call is inlined). Inferred from the sizes: mod360's pointer parameter (a value form is 0x34)
+// and camGetRy's separate radians local (0x94 without it).
+
+/** Wraps *angle (degrees) into -360..360. */
+static void mod360(f32* angle) {
+    f32 a = *angle;
+
+    while (a < -360.0f) {
+        a += 360.0f;
+    }
+    while (a >= 360.0f) {
+        a -= 360.0f;
+    }
+    *angle = a;
+}
+
+/** The 3D camera's yaw in degrees (0..360), from the direction it looks along. */
+static f32 camGetRy(void) {
+    CameraEntry* cam = camGetPtr(CAMERA_3D);
+    f32 rad = (f32)atan2(-(cam->cameraAt.x - cam->cameraPos.x), -(cam->cameraAt.z - cam->cameraPos.z));
+    f32 ry = 57.29579f * rad;
+
+    mod360(&ry);
+    if (ry < 0.0f) {
+        ry += 360.0f;
+    }
+    return ry;
 }
 
 // FAKE: t3 = t * t2 through an inline so t3 is an inline return temp (numbered above the LICM temp of t2),
@@ -1735,37 +1779,50 @@ void animPoseMain(s32 poseId) {
     pose->lastFrameZero = frame;
     pose->lastFrameTime = t;
     if (pose->flags & ANIM_POSE_FLAG_PERA) {
-        CameraEntry* cam = camGetPtr(CAMERA_3D);
-        f = 57.29579f * (f32)atan2(-(cam->cameraAt.x - cam->cameraPos.x), -(cam->cameraAt.z - cam->cameraPos.z));
-        while (f < -360.0f) {
-            f += 360.0f;
-        }
-        while (f >= 360.0f) {
-            f -= 360.0f;
-        }
-        if (f < 0.0f) {
-            f += 360.0f;
-        }
-        f -= pose->rotationY;
-#if VERSION <= VERSION_DEMO_JP
-        while (f < -360.0f)
-            f += 360.0f;
-        while (f >= 360.0f)
-            f -= 360.0f;
-#else
-        while (f < -360.0f) {
-            f += 360.0f;
-        }
-        while (f >= 360.0f) {
-            f -= 360.0f;
-        }
-#endif
+        f = camGetRy() - pose->rotationY;
+        mod360(&f);
         if ((f > 90.0f && f <= 270.0f) || (f < -90.0f && f >= -270.0f)) {
             pose->scaleZFlip = -1.0f;
         } else {
             pose->scaleZFlip = 1.0f;
         }
     }
+}
+
+// dispSetRenderMode and dispGetRenderMode: original names and sizes (0x12c, 0xc) from the JP demo map (UNUSED
+// there: every call is inlined). The map lists them after the pushGXModelMtx functions, right before
+// dispSetCullingMode; they sit here, ahead of that version block. Inferred: which reads of currDispMode went
+// through the getter (an inlined getter leaves no trace; every read uses it here).
+
+/** Sets the Z, blend and alpha-compare state for draw stage mode (1 opaque, 0 and 2 alpha test, 3 translucent) and remembers it. */
+static void dispSetRenderMode(s32 mode) {
+    switch (mode) {
+        case 1:
+            GXSetZMode(GX_TRUE, GX_LEQUAL, GX_TRUE);
+            GXSetBlendMode(GX_BM_NONE, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
+            GXSetZCompLoc(GX_TRUE);
+            GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
+            break;
+        case 0:
+        case 2:
+            GXSetZMode(GX_TRUE, GX_LEQUAL, GX_TRUE);
+            GXSetBlendMode(GX_BM_NONE, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
+            GXSetZCompLoc(GX_FALSE);
+            GXSetAlphaCompare(GX_GEQUAL, 0x80, GX_AOP_OR, GX_NEVER, 0);
+            break;
+        case 3:
+            GXSetZMode(GX_TRUE, GX_LEQUAL, GX_FALSE);
+            GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
+            GXSetZCompLoc(GX_TRUE);
+            GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
+            break;
+    }
+    wp->currDispMode = mode;
+}
+
+/** The draw stage last set by dispSetRenderMode. */
+static s32 dispGetRenderMode(void) {
+    return wp->currDispMode;
 }
 
 /** the early demos always build every matrix and concatenate them all; JP and later build only the parts in use */
@@ -2522,7 +2579,7 @@ static void materialProc(s32 shapeId, s32 xluStage) {
         dispMode = shape->dispMode;
         drawCount = shape->shapeDrawCount;
         draw = &wp->curPoseData->draws[shape->shapeDrawStart];
-        if ((dispMode == 0 && wp->currDispMode == 2) || dispMode == wp->currDispMode || wp->curPose->materialColor.a != 0xFF || wp->curPose->materialColor2.a != 0xFF) {
+        if ((dispMode == 0 && dispGetRenderMode() == 2) || dispMode == dispGetRenderMode() || wp->curPose->materialColor.a != 0xFF || wp->curPose->materialColor2.a != 0xFF) {
 #if VERSION <= VERSION_DEMO_JP
             dispSetCullingMode(shape->cullMode);
 #else
@@ -2555,7 +2612,7 @@ static void materialProc(s32 shapeId, s32 xluStage) {
                         currTexObj = wp->curTexObj;
                         if (currTexObj) {
                             smartTexObj(currTexObj, wp->curTexData);
-                            if (wp->currDispMode != 3) {
+                            if (dispGetRenderMode() != 3) {
                                 GXSetZMode(GX_TRUE, GX_LEQUAL, GX_TRUE);
                                 GXSetBlendMode(GX_BM_NONE, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
                                 GXSetZCompLoc(GX_FALSE);
@@ -2656,7 +2713,7 @@ static void renderProc(s32 shapeId, s32 unused) {
         drawCount = shape->shapeDrawCount;
         draw = &draws[drawId];
 
-        if ((dispMode == 0 && wp->currDispMode == 2) || dispMode == wp->currDispMode ||
+        if ((dispMode == 0 && dispGetRenderMode() == 2) || dispMode == dispGetRenderMode() ||
             wp->curPose->materialColor.a != 0xFF || wp->curPose->materialColor2.a != 0xFF) {
             f32* buffer;
             s32 firstDrawId;
@@ -2730,7 +2787,7 @@ static void renderProc(s32 shapeId, s32 unused) {
                         currTexObj = wp->curTexObj;
                         if (currTexObj) {
                             smartTexObj(currTexObj, wp->curTexData);
-                            if (wp->currDispMode != 3) {
+                            if (dispGetRenderMode() != 3) {
                                 GXSetZMode(GX_TRUE, GX_LEQUAL, GX_TRUE);
                                 GXSetBlendMode(GX_BM_NONE, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
                                 GXSetZCompLoc(GX_FALSE);
@@ -2976,37 +3033,6 @@ void animPoseDraw(s32 poseId, f32 x, f32 y, f32 z, f32 rotY, f32 scale, s32 xluM
 // _animPoseDrawMtx
 void animPoseMainSub(AnimationPose* pose);
 
-/** Wraps an angle in degrees into 0..360. */
-static inline f32 _animClampAngle(f32 a) {
-    while (a < -360.0f) {
-        a += 360.0f;
-    }
-    while (a >= 360.0f) {
-        a -= 360.0f;
-    }
-    if (a < 0.0f) {
-        a += 360.0f;
-    }
-    return a;
-}
-
-/** Wraps an angle in degrees into -360..360. */
-static inline f32 _animClampAngle2(f32 a) {
-    while (a < -360.0f) {
-        a += 360.0f;
-    }
-    while (a >= 360.0f) {
-        a -= 360.0f;
-    }
-    return a;
-}
-
-/** The 3D camera's yaw in degrees (0..360), from the direction it looks along. */
-static inline f32 _animCamAngle(void) {
-    CameraEntry* cam = camGetPtr(CAMERA_3D);
-    return _animClampAngle(57.29579f * (f32)atan2(-(cam->cameraAt.x - cam->cameraPos.x), -(cam->cameraAt.z - cam->cameraPos.z)));
-}
-
 /**
  * Draws a pose with matrix for draw stage xluMode (skipped when the animation file has nothing for that stage,
  * or for a field pose in battle and a battle pose on the field):
@@ -3053,37 +3079,20 @@ void _animPoseDrawMtx(AnimationPose* pose, Mtx matrix, s32 xluMode, f32 rotY, f3
     if (pose->gxCallback != NULL) {
         pose->gxCallback(mode);
     } else {
-        switch (mode) {
-            case 1:
-                GXSetZMode(GX_TRUE, GX_LEQUAL, GX_TRUE);
-                GXSetBlendMode(GX_BM_NONE, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
-                GXSetZCompLoc(GX_TRUE);
-                GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
-                break;
-            case 0:
-            case 2:
-                GXSetZMode(GX_TRUE, GX_LEQUAL, GX_TRUE);
-                GXSetBlendMode(GX_BM_NONE, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
-                GXSetZCompLoc(GX_FALSE);
-                GXSetAlphaCompare(GX_GEQUAL, 0x80, GX_AOP_OR, GX_NEVER, 0);
-                break;
-            case 3:
-                GXSetZMode(GX_TRUE, GX_LEQUAL, GX_FALSE);
-                GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
-                GXSetZCompLoc(GX_TRUE);
-                GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
-                break;
-        }
-        wp->currDispMode = mode;
+        dispSetRenderMode(mode);
     }
     if (pose->flags & ANIM_POSE_FLAG_PERA) {
         rotY += -90.0f;
         pose->peraRotY = rotY;
-        diff = _animClampAngle2(_animCamAngle() - pose->peraRotY);
+        diff = camGetRy() - pose->peraRotY;
+        mod360(&diff);
         if ((diff > 90.0f && diff <= 270.0f) || (diff < -90.0f && diff >= -270.0f)) {
-            pose->peraTargetRotY = _animClampAngle2(180.0f + _animCamAngle());
+            f32 ry = 180.0f + camGetRy();
+
+            mod360(&ry);
+            pose->peraTargetRotY = ry;
         } else {
-            pose->peraTargetRotY = _animCamAngle();
+            pose->peraTargetRotY = camGetRy();
         }
         while (pose->peraTargetRotY - pose->rotationY > 180.0f) {
             pose->rotationY += 360.0f;

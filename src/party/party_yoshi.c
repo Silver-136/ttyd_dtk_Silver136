@@ -77,6 +77,11 @@ static void inertia(PartyEntry* party);
 static void searchGround(PartyEntry* party);
 static void searchGround2(PartyEntry* party);
 static void checkWall(PartyEntry* party, f32 spd, f32 dir);
+static void makeFallPara(PartyEntry* party);
+static void _setFallAcc(PartyEntry* party);
+static f32 _makeFallAcc(PartyEntry* party);
+static void _setJumpAcc(PartyEntry* party);
+static f32 _makeJumpAcc(PartyEntry* party);
 void getStick(PartyEntry* party, f32* angle, f32* speed);
 
 #if VERSION <= VERSION_DEMO_JP
@@ -262,27 +267,6 @@ static inline u32 chgMotion(PartyEntry* party, u8 motion) {
 }
 
 /**
- * Applies one frame of ride gravity: starts the fall curve the first time,
- * then integrates the jerk and acceleration into party->gravity, capped at -15 per frame.
- * Descriptive name (inline helper; not in the symbol maps).
- */
-static inline void fall(PartyEntry* party) {
-    if (!(party->flags & PARTY_FLAG_IS_FALLING)) {
-        party->flags |= PARTY_FLAG_IS_FALLING;
-        party->gravity = -0.4f;
-        party->work.common.accelY = -0.4f;
-        party->work.yoshi.gravityAccel = 0.0f;
-        party->accelY = 0.0f;
-    }
-    party->work.yoshi.gravityAccel += party->accelY;
-    party->work.common.accelY += party->work.yoshi.gravityAccel;
-    party->gravity += party->work.common.accelY;
-    if (party->gravity < -15.0f) {
-        party->gravity = -15.0f;
-    }
-}
-
-/**
  * Ends the ride at once (no dismount animation):
  * resets the offsets and Mario's pose, frees Yoshi's work area and returns him to follow mode.
  * Called on damage, after a field battle (marioFBattlePost) and from yoshi_exit.
@@ -449,6 +433,56 @@ void yoshi_init(PartyEntry* party) {
     party->width = 20.0f;
 #endif
     party->yoshiPsndSFXId = -1;
+}
+
+// The five functions below: original names and sizes (0x34, 0x1c, 0x4c, 0x28, 0x38) from the JP demo map (UNUSED
+// there, in this order between yoshi_init and moveHosei: every call is inlined). The bodies are the blocks their
+// callers held written out, and each compiles to its map size. Inferred: the f32 returns of the two _make
+// functions (no caller reads them; they give the last 4 bytes, as marioMakeJumpPara and marioGetFallSpd return
+// the speed) and makeFallPara's body (a plain three-line step is 0x34 too; the block with the flags is what
+// yoshi_use holds twice). The map's makeJumpPara (0x34) and _setFallPara (0xc), before makeFallPara, stay out:
+// no caller block decides their bodies.
+
+/** Starts a fall: loads the fall curve and swaps the jumping flag for the falling flag. */
+static void makeFallPara(PartyEntry* party) {
+    _setFallAcc(party);
+    party->flags &= ~PARTY_FLAG_IS_JUMPING;
+    party->flags |= PARTY_FLAG_IS_FALLING;
+}
+
+/** Loads the start of the fall curve: speed and acceleration -0.4, no jerk or snap. */
+static void _setFallAcc(PartyEntry* party) {
+    party->gravity = -0.4f;
+    party->work.common.accelY = -0.4f;
+    party->work.yoshi.gravityAccel = 0.0f;
+    party->accelY = 0.0f;
+}
+
+/** Steps the fall curve one frame and returns the new vertical speed, capped at -15 per frame. */
+static f32 _makeFallAcc(PartyEntry* party) {
+    party->work.yoshi.gravityAccel += party->accelY;
+    party->work.common.accelY += party->work.yoshi.gravityAccel;
+    party->gravity += party->work.common.accelY;
+    if (party->gravity < -15.0f) {
+        party->gravity = -15.0f;
+    }
+    return party->gravity;
+}
+
+/** Loads the jump curve of Mario's standing jump (marioJumpStandData). */
+static void _setJumpAcc(PartyEntry* party) {
+    party->gravity = marioJumpStandData[0];
+    party->work.common.accelY = marioJumpStandData[1];
+    party->work.yoshi.gravityAccel = marioJumpStandData[2];
+    party->accelY = marioJumpStandData[3];
+}
+
+/** Steps the jump curve one frame (snap into jerk into acceleration into speed) and returns the new vertical speed. */
+static f32 _makeJumpAcc(PartyEntry* party) {
+    party->work.yoshi.gravityAccel += party->accelY;
+    party->work.common.accelY += party->work.yoshi.gravityAccel;
+    party->gravity += party->work.common.accelY;
+    return party->gravity;
 }
 
 /** Moves Yoshi with the floor he stands on (a moving platform): adds its movement to his position. */
@@ -986,15 +1020,10 @@ void yoshi_use(PartyEntry* party) {
             mario->jumpDistance = 0.0f;
             party->useMotionId = 61;
             party->moveFrames = 0;
-            party->gravity = marioJumpStandData[0];
-            party->work.common.accelY = marioJumpStandData[1];
-            party->work.yoshi.gravityAccel = marioJumpStandData[2];
-            party->accelY = marioJumpStandData[3];
+            _setJumpAcc(party);
         case 61:
             prev = party->gravity;
-            party->work.yoshi.gravityAccel += party->accelY;
-            party->work.common.accelY += party->work.yoshi.gravityAccel;
-            party->gravity += party->work.common.accelY;
+            _makeJumpAcc(party);
             if (prev >= party->gravity) {
                 party->useMotionId = 62;
             }
@@ -1015,27 +1044,15 @@ void yoshi_use(PartyEntry* party) {
             if (party->gravity <= 0.0f) {
                 party->useMotionId = 64;
                 marioSetPeakYpos();
-                party->gravity = -0.4f;
-                party->work.common.accelY = -0.4f;
-                party->work.yoshi.gravityAccel = 0.0f;
-                party->accelY = 0.0f;
-                party->flags &= ~PARTY_FLAG_IS_JUMPING;
-                party->flags |= PARTY_FLAG_IS_FALLING;
+                makeFallPara(party);
                 party->useMotionId = 64;
             }
             break;
         case 64:
-            party->work.yoshi.gravityAccel += party->accelY;
-            party->work.common.accelY += party->work.yoshi.gravityAccel;
-            party->gravity += party->work.common.accelY;
+            _makeJumpAcc(party);
             if (party->gravity <= 0.0f) {
                 marioSetPeakYpos();
-                party->gravity = -0.4f;
-                party->work.common.accelY = -0.4f;
-                party->work.yoshi.gravityAccel = 0.0f;
-                party->accelY = 0.0f;
-                party->flags &= ~PARTY_FLAG_IS_JUMPING;
-                party->flags |= PARTY_FLAG_IS_FALLING;
+                makeFallPara(party);
                 party->useMotionId = 65;
             }
             party->position.y += party->gravity;
@@ -1360,7 +1377,11 @@ static void searchGround(PartyEntry* party) {
             pos = party->position;
             marioSetSplash(0, &pos);
             yoshi_hitobj_ride(party, NULL);
-            fall(party);
+            if (!(party->flags & PARTY_FLAG_IS_FALLING)) {
+                party->flags |= PARTY_FLAG_IS_FALLING;
+                _setFallAcc(party);
+            }
+            _makeFallAcc(party);
             party->position.y += party->gravity;
             set_damage_root_ypos(mario->position.y - 8.0f);
             reset_all_ofs(party);
@@ -1422,7 +1443,11 @@ static void searchGround(PartyEntry* party) {
     yoshi_hitobj_ride(party, hit);
     if (hit == NULL) {
         party->flags &= ~PARTY_FLAG_IS_GROUNDED;
-        fall(party);
+        if (!(party->flags & PARTY_FLAG_IS_FALLING)) {
+            party->flags |= PARTY_FLAG_IS_FALLING;
+            _setFallAcc(party);
+        }
+        _makeFallAcc(party);
         party->position.y += party->gravity;
     } else {
         party->flags |= PARTY_FLAG_IS_GROUNDED;
@@ -1478,16 +1503,8 @@ static void searchGround2(PartyEntry* party) {
         Vec pos = party->position;
         marioSetSplash(0, &pos);
         yoshi_hitobj_ride(party, NULL);
-        party->gravity = -0.4f;
-        party->work.common.accelY = -0.4f;
-        party->work.yoshi.gravityAccel = 0.0f;
-        party->accelY = 0.0f;
-        party->work.yoshi.gravityAccel += party->accelY;
-        party->work.common.accelY += party->work.yoshi.gravityAccel;
-        party->gravity += party->work.common.accelY;
-        if (party->gravity < -15.0f) {
-            party->gravity = -15.0f;
-        }
+        _setFallAcc(party);
+        _makeFallAcc(party);
         party->position.y += party->gravity;
         party->useMotionId = 70;
         return;

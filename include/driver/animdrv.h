@@ -332,7 +332,7 @@ typedef struct AnimationPoseFile {
 } AnimationPoseFile;
 
 typedef struct AnimationTextureFile {
-    BOOL active;       // 0x0
+    u32 active;        // 0x0, in use or not, unsigned
     s32 references;    // 0x4
     FileEntry* handle; // 0x8
 } AnimationTextureFile;
@@ -377,10 +377,16 @@ void animSetCommonBuf(AnimationPose* pose);
 void animClearCommonBuf(void);
 void animPoseBattleInit(void);
 
+s32 animPoseNew(AnimationPose** entry);
+s32 animGroupNew(AnimationPoseFile** entry);
+s32 textureGroupNew(AnimationTextureFile** entry);
+s32 textureGroupEntry(const char* name);
+s32 animGroupEntry(const char* animName);
 s32 animPoseEntry(const char* animName, s32 type);
 s32 animPaperPoseEntry(const char* animName, s32 type);
 
 BOOL animEffectAsync(const char* animName, u32 group);
+s32 animEffectEntry(const char* animName, s32 group);
 void animPose_ResetTime(AnimationPose* pose);
 s32 getAnimDataId(AnimationPose* pose, const char* name);
 
