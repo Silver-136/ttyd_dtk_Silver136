@@ -645,8 +645,8 @@ s32 THPSimpleDrawCurrentFrame(GXRenderModeObj* rmode, u32 x, u32 y, u32 polygonW
     if (SimpleControl.textureSet.frameNumber >= 0) {
         THPGXYuv2RgbSetup(rmode);
         THPGXYuv2RgbDraw(SimpleControl.textureSet.ytexture, SimpleControl.textureSet.utexture,
-                         SimpleControl.textureSet.vtexture, (s16)x, (s16)y, (s16)SimpleControl.videoInfo.xSize,
-                         (s16)SimpleControl.videoInfo.ySize, (s16)polygonW, (s16)polygonH);
+                         SimpleControl.textureSet.vtexture, x, y, SimpleControl.videoInfo.xSize,
+                         (s16)SimpleControl.videoInfo.ySize, polygonW, polygonH);
         THPGXRestore();
         return (s32)SimpleControl.textureSet.frameNumber;
     }
@@ -1032,7 +1032,7 @@ void THPGXYuv2RgbDraw(u8* y_data, u8* u_data, u8* v_data, s16 x, s16 y, s16 text
                       s16 polygonWidth, s16 polygonHeight) {
     GXTexObj tobj0, tobj1, tobj2;
 
-    GXInitTexObj(&tobj0, y_data, (u16)textureWidth, (u16)textureHeight, GX_TF_I8, GX_CLAMP, GX_CLAMP, GX_FALSE);
+    GXInitTexObj(&tobj0, y_data, textureWidth, textureHeight, GX_TF_I8, GX_CLAMP, GX_CLAMP, GX_FALSE);
     GXInitTexObjLOD(&tobj0, GX_NEAR, GX_NEAR, 0, 0, 0, GX_FALSE, GX_FALSE, GX_ANISO_1);
     GXLoadTexObj(&tobj0, GX_TEXMAP0);
 

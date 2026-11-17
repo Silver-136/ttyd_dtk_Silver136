@@ -450,7 +450,7 @@ static void effFunemizuDisp(CameraId cameraId, EffectEntry* effect) {
     GXGetViewportv(vp);
     GXProject(work->position.x, work->position.y, work->position.z, cam->view, proj, vp, &sx, &sy, &sz);
     if (sx > 0.0f && sx < 608.0f && sy > 0.0f && sy < 480.0f) {
-        GXPeekARGB((u16)sx, (u16)sy, (u32*)argb);
+        GXPeekARGB(sx, sy, (u32*)argb);
         if (type == 0) {
             r = funemizu_color0_tbl[0];
             g = funemizu_color0_tbl[1];

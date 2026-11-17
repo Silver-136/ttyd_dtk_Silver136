@@ -123,7 +123,6 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | src/battle/battle_event_cmd.c | btlevtcmd_DrawLots | pick index and running sum kept in `s32 nv[2]` | two scalar locals: changes the object |
 | Both | src/battle/battle_icon.c | btlIconStrippedPool | not called anywhere; it only places the literals 0.0f, 1.0f and 0.5f in this object's constant pool. | see comment |
 | Both | src/battle/battle_mario.c | _mario_fire_ball_controll | `battle_mario_one`: a named global 1.0f constant for one effFireEntry scale | literal 1.0f at the call: changes the object |
-| Both | src/battle/battle_seq_command.c | _btlcmd_SelectWeaponDecide | (s32) cast on the s8 attackDirection passed as s8; dropping it changes the object | BattleSamplingEnemy with s32 belong (7 units change) |
 | Both | src/battle/battle_seq_command.c | _btlcmd_SetAttackEvent | compares the pointers as signed integers (cmpw); the plain pointer compare changes the object | see comment |
 | Demos | src/sound.c | SoundDemoStrippedRate | stand-in for an unidentified dead-stripped stream/DVD function between SoundDVDPlayCh and SoundSSPlayCh (JP demo map): it only keeps the doubles 3.5 and 4.0 (@3005/@3006) | see comment |
 | Demos | src/sound.c | SoundDVDStrippedName | stand-in for the dead-stripped SoundDVDPlay/SoundDVDPlayCh (JP demo map, UNUSED): it only keeps ".adp" (@3067); bodies unknown | see comment |
@@ -179,7 +178,6 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Demos | src/battle/battle_unit.c | BtlUnit_GetStatus, BtlUnit_SetStatus, BtlUnit_CheckRecoveryStatus, BtlUnit_CheckStatus | BATTLE_UNIT_STATUS_ENUM: the file sees the enum prototypes while its callers see s8 (same bytes retail reads through s8) | one prototype for all units: the callers then lose their sign extension |
 | All demos | src/battle/battle_seq_end.c | _LvupParamHelpMsgDisp | stripped in every demo: only the strings stay compiled there, so its numbers stay out of the pool | full body |
 | Demos | src/manager/cardmgr_demo.inc | (demo copy of cardmgr.c) | no-op self-assignment the target compiles to a register copy; | see comment |
-| Both | src/battle/battle_enemy_item.c | _check_hp_recover_item, _check_fp_recover_item, _check_attack_item, _check_status_attack_item, _check_status_support_item, _check_status_recover_item | `(s32)(s8)` no-op casts on the s8 attackDirection passed to BattleSamplingEnemy | the plain field at all six: changes the object |
 | Both | src/effect/eff_kemuri.c | effKemuri2Entry | `opt_propagation` off for the function (its spare temporaries only make sense under it) | removing it changes the object; the file-wide `-opt noprop` changes other functions (2026-11-07) |
 | Demos | libs/msl/include/dtrigf.h | (file: `DTRIGF_PLAIN_DATA` block) | the early demos' main.dol units take the paired dtrigf constants as plain data in source order (LLCOOLT's form) instead of the inline-assembly form | see comment |
 | Both | rels/las/src/las_04.c | firebar_entry | `*(s32*)&wp = event->userdata[0]` stores through &wp, so wp keeps a stack slot for the whole function | `wp = event->userdatap[0]`: see comment |

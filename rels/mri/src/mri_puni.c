@@ -6922,7 +6922,7 @@ USER_FUNC(evt_puni_all_save) {
                 puniHagurePos(p);
                 pos = p->pos;
                 off = (p->index- 1) * 7;
-                puni_exit_swset(off, (u8)Punigp->floor, &pos);
+                puni_exit_swset(off, Punigp->floor, &pos);
             } else {
                 pos = puni_save_zero;
                 off = (p->index- 1) * 7;

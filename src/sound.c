@@ -750,14 +750,14 @@ void SoundSongPlayCh(s32 chan, u32 groupInfo) {
         sndSeqStop(song->seqId);
     }
     song->vol = 127;
-    group = searchSongPtr((u8)groupInfo);
+    group = searchSongPtr(groupInfo);
     if (group) {
         song->group = group;
         group->groupId = (SND_GROUPID)((groupInfo >> 16) & 0xFF);
         group->songId = (SND_SONGID)((groupInfo >> 8) & 0xFF);
         song->mask = 0xFFFFFFFF;
         song->seqId = sndSeqPlayEx(group->groupId, group->songId, group->arrfile, 0, 0);
-        sndSeqVolume((u8)song->vol, 0, song->seqId, SND_SEQVOL_CONTINUE);
+        sndSeqVolume(song->vol, 0, song->seqId, SND_SEQVOL_CONTINUE);
         sndSeqContinue(song->seqId);
         sndSeqMute(song->seqId, song->mask, 0);
     }
@@ -785,7 +785,7 @@ void SoundSongContinueCh(s32 chan) {
 
     if (sndSeqGetValid(song->seqId)) {
         sndSeqContinue(song->seqId);
-        sndSeqVolume((u8)song->vol, 0, song->seqId, SND_SEQVOL_CONTINUE);
+        sndSeqVolume(song->vol, 0, song->seqId, SND_SEQVOL_CONTINUE);
     }
 }
 
@@ -832,7 +832,7 @@ void SoundSongFadeinCh(s32 chan) {
     SoundSong* song = &sound.songs[chan];
 
     if (sndSeqGetValid(song->seqId)) {
-        sndSeqVolume((u8)song->vol, sound.fadeIn, song->seqId, SND_SEQVOL_CONTINUE);
+        sndSeqVolume(song->vol, sound.fadeIn, song->seqId, SND_SEQVOL_CONTINUE);
     }
 }
 
@@ -851,7 +851,7 @@ void SoundSongSetVolCh(s32 chan, u8 vol) {
             vol = 127;
         }
         song->vol = vol;
-        sndSeqVolume((u8)song->vol, 0, song->seqId, SND_SEQVOL_CONTINUE);
+        sndSeqVolume(song->vol, 0, song->seqId, SND_SEQVOL_CONTINUE);
     }
 }
 
@@ -1181,7 +1181,7 @@ static void SoundEfxMain(void) {
     sound.up.x = 0.0f;
     sound.up.y = 1.0f;
     sound.up.z = 0.0f;
-    sndUpdateListener(&sound.listener, &sound.pos, dir, &sound.heading, &sound.up, (u8)sound.listenerVol, NULL);
+    sndUpdateListener(&sound.listener, &sound.pos, dir, &sound.heading, &sound.up, sound.listenerVol, NULL);
 
     effect = sound.effects;
     for (i = 0; i < SOUND_EFFECT_MAX; i++, effect++) {
@@ -1193,7 +1193,7 @@ static void SoundEfxMain(void) {
                 effect->prevPos.x = effect->pos.x;
                 effect->prevPos.y = effect->pos.y;
                 effect->prevPos.z = effect->pos.z;
-                sndUpdateEmitter(&effect->emitter, &effect->pos, &effect->dir, (u8)effect->vol, NULL);
+                sndUpdateEmitter(&effect->emitter, &effect->pos, &effect->dir, effect->vol, NULL);
             }
         }
     }
@@ -1266,8 +1266,8 @@ static void SoundDVDSetPanCh(u32 chan, u8 pan) {
     if (!((u32)(pan - 64) >> 31)) {
         left = (((f32)(127 - pan) * dvd->vol) / 63.0f);
     }
-    AISetStreamVolLeft((u8)left);
-    AISetStreamVolRight((u8)right);
+    AISetStreamVolLeft(left);
+    AISetStreamVolRight(right);
 }
 
 /**
@@ -1292,7 +1292,7 @@ static void SoundDVDMain(void) {
                 if (dvd->vol <= 0.0f) {
                     dvd->vol = 0.0f;
                 }
-                SoundDVDSetPanCh(i, (u8)dvd->pan);
+                SoundDVDSetPanCh(i, dvd->pan);
             }
             if (dvd->flags & SOUND_DVD_FLAG_FADEOUT) {
                 if (dvd->vol == 0.0f) {
@@ -1304,7 +1304,7 @@ static void SoundDVDMain(void) {
                 if (dvd->vol <= 0.0f) {
                     dvd->vol = 0.0f;
                 }
-                SoundDVDSetPanCh(i, (u8)dvd->pan);
+                SoundDVDSetPanCh(i, dvd->pan);
             }
             if (dvd->flags & SOUND_DVD_FLAG_FADEIN) {
                 dvd->vol += dvd->volStep;
@@ -1313,7 +1313,7 @@ static void SoundDVDMain(void) {
                     dvd->volStep = 0.0f;
                     dvd->flags &= ~SOUND_DVD_FLAG_FADEIN;
                 }
-                SoundDVDSetPanCh(i, (u8)dvd->pan);
+                SoundDVDSetPanCh(i, dvd->pan);
             }
         }
     }

@@ -794,7 +794,7 @@ USER_FUNC(btlevtcmd_SetWidth) {
     width = evtGetValue(event, args[1]);
     id = BattleTransID(event, id);
     unit = BattleGetUnitPtr(wp, id);
-    BtlUnit_SetWidth(unit, (s16)width);
+    BtlUnit_SetWidth(unit, width);
     return EVT_RETURN_DONE;
 }
 
@@ -810,7 +810,7 @@ USER_FUNC(btlevtcmd_SetHeight) {
     height = evtGetValue(event, args[1]);
     id = BattleTransID(event, id);
     unit = BattleGetUnitPtr(wp, id);
-    BtlUnit_SetHeight(unit, (s16)height);
+    BtlUnit_SetHeight(unit, height);
     return EVT_RETURN_DONE;
 }
 
@@ -6776,7 +6776,7 @@ USER_FUNC(btlevtcmd_OnOffStatus) {
     onoff = evtGetValue(event, args[4]);
     unit = BattleGetUnitPtr(_battleWorkPointer, id);
     if (onoff) {
-        BtlUnit_SetStatus(unit, type, (s8)turns, (s8)strength);
+        BtlUnit_SetStatus(unit, type, turns, strength);
     } else {
         BtlUnit_SetStatus(unit, type, 0, 0);
     }

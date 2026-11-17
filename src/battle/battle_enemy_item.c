@@ -95,6 +95,8 @@ static void* _check_hp_recover_item(BattleUnit* self) {
     s32 itemId;
     BattleWorkWeaponTargets* targets;
     BattleWeapon* weapon;
+    s8 belong;
+    s32 dir;
     s32 i;
     BattleUnit* unit;
 
@@ -103,10 +105,10 @@ static void* _check_hp_recover_item(BattleUnit* self) {
     targets = &wp->weaponTargets;
     weapon = itemDataTable[itemId].battle_params;
 
-    // FAKE: (s32)(s8) casts on the s8 attackDirection (no-ops); the plain field changes the object
-    BattleSamplingEnemy(targets, weapon, self->unitId, BtlUnit_GetEnemyBelong(self),
-                        weapon->targetClassFlags, weapon->targetPropertyFlags,
-                        (s32)(s8)wp->alliances[self->alliance].attackDirection);
+    belong = BtlUnit_GetEnemyBelong(self);
+    dir = wp->alliances[self->alliance].attackDirection;
+    BattleSamplingEnemy(targets, weapon, self->unitId, belong, weapon->targetClassFlags,
+                        weapon->targetPropertyFlags, dir);
     for (i = 0; i < targets->numTargets; i++) {
         unit = BattleGetUnitPtr(wp, targets->targets[targets->targetIndices[i]].unitIdx);
         if (!(self->attributeFlags & kInactive)) {
@@ -124,6 +126,8 @@ static void* _check_fp_recover_item(BattleUnit* self) {
     s32 itemId;
     BattleWorkWeaponTargets* targets;
     BattleWeapon* weapon;
+    s8 belong;
+    s32 dir;
     s32 i;
     BattleUnit* unit;
 
@@ -132,10 +136,10 @@ static void* _check_fp_recover_item(BattleUnit* self) {
     targets = &wp->weaponTargets;
     weapon = itemDataTable[itemId].battle_params;
 
-    // FAKE: (s32)(s8) casts on the s8 attackDirection (no-ops); the plain field changes the object
-    BattleSamplingEnemy(targets, weapon, self->unitId, BtlUnit_GetEnemyBelong(self),
-                        weapon->targetClassFlags, weapon->targetPropertyFlags,
-                        (s32)(s8)wp->alliances[self->alliance].attackDirection);
+    belong = BtlUnit_GetEnemyBelong(self);
+    dir = wp->alliances[self->alliance].attackDirection;
+    BattleSamplingEnemy(targets, weapon, self->unitId, belong, weapon->targetClassFlags,
+                        weapon->targetPropertyFlags, dir);
     for (i = 0; i < targets->numTargets; i++) {
         s32 max;
         unit = BattleGetUnitPtr(wp, targets->targets[targets->targetIndices[i]].unitIdx);
@@ -158,6 +162,8 @@ static void* _check_attack_item(BattleUnit* self) {
     s32 itemId;
     BattleWorkWeaponTargets* targets;
     BattleWeapon* weapon;
+    s8 belong;
+    s32 dir;
     s32 i;
     BattleUnit* unit;
 
@@ -166,10 +172,10 @@ static void* _check_attack_item(BattleUnit* self) {
     targets = &wp->weaponTargets;
     weapon = itemDataTable[itemId].battle_params;
 
-    // FAKE: (s32)(s8) casts on the s8 attackDirection (no-ops); the plain field changes the object
-    BattleSamplingEnemy(targets, weapon, self->unitId, BtlUnit_GetEnemyBelong(self),
-                        weapon->targetClassFlags, weapon->targetPropertyFlags,
-                        (s32)(s8)wp->alliances[self->alliance].attackDirection);
+    belong = BtlUnit_GetEnemyBelong(self);
+    dir = wp->alliances[self->alliance].attackDirection;
+    BattleSamplingEnemy(targets, weapon, self->unitId, belong, weapon->targetClassFlags,
+                        weapon->targetPropertyFlags, dir);
     if (targets->numTargets <= 0) {
         return NULL;
     }
@@ -197,6 +203,8 @@ static void* _check_status_attack_item(BattleUnit* self) {
     s32 itemId;
     BattleWorkWeaponTargets* targets;
     BattleWeapon* weapon;
+    s8 belong;
+    s32 dir;
     s32 i;
     BattleUnit* unit;
 
@@ -205,10 +213,10 @@ static void* _check_status_attack_item(BattleUnit* self) {
     targets = &wp->weaponTargets;
     weapon = itemDataTable[itemId].battle_params;
 
-    // FAKE: (s32)(s8) casts on the s8 attackDirection (no-ops); the plain field changes the object
-    BattleSamplingEnemy(targets, weapon, self->unitId, BtlUnit_GetEnemyBelong(self),
-                        weapon->targetClassFlags, weapon->targetPropertyFlags,
-                        (s32)(s8)wp->alliances[self->alliance].attackDirection);
+    belong = BtlUnit_GetEnemyBelong(self);
+    dir = wp->alliances[self->alliance].attackDirection;
+    BattleSamplingEnemy(targets, weapon, self->unitId, belong, weapon->targetClassFlags,
+                        weapon->targetPropertyFlags, dir);
     if (targets->numTargets <= 0) {
         return NULL;
     }
@@ -258,6 +266,8 @@ static void* _check_status_support_item(BattleUnit* self) {
     s32 itemId;
     BattleWorkWeaponTargets* targets;
     BattleWeapon* weapon;
+    s8 belong;
+    s32 dir;
     s32 i;
     BattleUnit* unit;
 
@@ -266,10 +276,10 @@ static void* _check_status_support_item(BattleUnit* self) {
     targets = &wp->weaponTargets;
     weapon = itemDataTable[itemId].battle_params;
 
-    // FAKE: (s32)(s8) casts on the s8 attackDirection (no-ops); the plain field changes the object
-    BattleSamplingEnemy(targets, weapon, self->unitId, BtlUnit_GetEnemyBelong(self),
-                        weapon->targetClassFlags, weapon->targetPropertyFlags,
-                        (s32)(s8)wp->alliances[self->alliance].attackDirection);
+    belong = BtlUnit_GetEnemyBelong(self);
+    dir = wp->alliances[self->alliance].attackDirection;
+    BattleSamplingEnemy(targets, weapon, self->unitId, belong, weapon->targetClassFlags,
+                        weapon->targetPropertyFlags, dir);
     if (targets->numTargets <= 0) {
         return NULL;
     }
@@ -317,6 +327,8 @@ static void* _check_status_recover_item(BattleUnit* self) {
     s32 itemId;
     BattleWorkWeaponTargets* targets;
     BattleWeapon* weapon;
+    s8 belong;
+    s32 dir;
     s32 i;
     BattleUnit* unit;
 
@@ -325,10 +337,10 @@ static void* _check_status_recover_item(BattleUnit* self) {
     targets = &wp->weaponTargets;
     weapon = itemDataTable[itemId].battle_params;
 
-    // FAKE: (s32)(s8) casts on the s8 attackDirection (no-ops); the plain field changes the object
-    BattleSamplingEnemy(targets, weapon, self->unitId, BtlUnit_GetEnemyBelong(self),
-                        weapon->targetClassFlags, weapon->targetPropertyFlags,
-                        (s32)(s8)wp->alliances[self->alliance].attackDirection);
+    belong = BtlUnit_GetEnemyBelong(self);
+    dir = wp->alliances[self->alliance].attackDirection;
+    BattleSamplingEnemy(targets, weapon, self->unitId, belong, weapon->targetClassFlags,
+                        weapon->targetPropertyFlags, dir);
     if (targets->numTargets <= 0) {
         return NULL;
     }

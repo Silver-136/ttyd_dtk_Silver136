@@ -448,8 +448,8 @@ static void envDisp_DepthOfField(void) {
             GXSetTevAlphaIn(stage, GX_CA_TEXA, GX_CA_KONST, GX_CA_A0, GX_CA_ZERO);
             GXSetTevSwapMode(stage, GX_TEV_SWAP0, GX_TEV_SWAP0);
             stage++;
-            GXSetNumTexGens((u8)coord);
-            GXSetNumTevStages((u8)stage);
+            GXSetNumTexGens(coord);
+            GXSetNumTevStages(stage);
             GXBegin(GX_QUADS, GX_VTXFMT0, 4);
             DOF_QUAD(gp, 2.0f);
         }
@@ -495,8 +495,8 @@ static void envDisp_DepthOfField(void) {
             GXSetTevAlphaIn((GXTevStageID)(stage + 1), GX_CA_A0, GX_CA_ZERO, GX_CA_APREV, GX_CA_ZERO);
             GXSetTevSwapMode((GXTevStageID)(stage + 1), GX_TEV_SWAP0, GX_TEV_SWAP0);
             stage += 2;
-            GXSetNumTexGens((u8)coord);
-            GXSetNumTevStages((u8)stage);
+            GXSetNumTexGens(coord);
+            GXSetNumTevStages(stage);
             GXBegin(GX_QUADS, GX_VTXFMT0, 4);
             DOF_QUAD(gp, 2.0f);
         }
@@ -637,13 +637,13 @@ static void envGlare(EnvironmentGlare* glare) {
     height = (u16)(envWork->filter.y1 - y0);
     texH = height >> 1;
     texW = width >> 1;
-    size = GXGetTexBufferSize((u16)texW, (u16)texH, GX_TF_RGB565, GX_FALSE, 0);
+    size = GXGetTexBufferSize(texW, texH, GX_TF_RGB565, GX_FALSE, 0);
     texBuf = smartAlloc(size, SMART_GROUP_TEMP)->address;
     GXSetTexCopySrc(x0, y0, width, height);
-    GXSetTexCopyDst((u16)texW, (u16)texH, GX_TF_RGB565, GX_TRUE);
+    GXSetTexCopyDst(texW, texH, GX_TF_RGB565, GX_TRUE);
     GXCopyTex(texBuf, GX_FALSE);
     GXPixModeSync();
-    GXInitTexObj(&texObj, texBuf, (u16)texW, (u16)texH, GX_TF_RGB565, GX_CLAMP, GX_CLAMP, GX_FALSE);
+    GXInitTexObj(&texObj, texBuf, texW, texH, GX_TF_RGB565, GX_CLAMP, GX_CLAMP, GX_FALSE);
     GXInitTexObjLOD(&texObj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
     GXLoadTexObj(&texObj, GX_TEXMAP0);
     glareCount = glare->count;
@@ -715,15 +715,15 @@ static void envGlare(EnvironmentGlare* glare) {
             doneCount += 1;
         }
         GXSetNumTevStages((u8)(batchCount * 2));
-        GXSetNumTexGens((u8)batchCount);
+        GXSetNumTexGens(batchCount);
         GXBegin(GX_QUADS, GX_VTXFMT7, 4);
         GXPosition3s16(sx, sy, 0);
         GXTexCoord2u16(0, 0);
-        GXPosition3s16((s16)x1v, sy, 0);
+        GXPosition3s16(x1v, sy, 0);
         GXTexCoord2u16(1, 0);
-        GXPosition3s16((s16)x1v, (s16)y1v, 0);
+        GXPosition3s16(x1v, y1v, 0);
         GXTexCoord2u16(1, 1);
-        GXPosition3s16(sx, (s16)y1v, 0);
+        GXPosition3s16(sx, y1v, 0);
         GXTexCoord2u16(0, 1);
     }
 }
@@ -1275,13 +1275,13 @@ void envSetWater(MapTevCallbackInfo* info) {
     w = x1 - x0;
     hw = w / 2;
     hh = h / 2;
-    buf = smartAlloc(GXGetTexBufferSize((u16)hw, (u16)hh, GX_TF_RGB565, GX_FALSE, 0), SMART_GROUP_TEMP)->address;
-    GXSetTexCopySrc((u16)x0, (u16)y0, (u16)w, (u16)h);
-    GXSetTexCopyDst((u16)hw, (u16)hh, GX_TF_RGB565, GX_TRUE);
+    buf = smartAlloc(GXGetTexBufferSize(hw, hh, GX_TF_RGB565, GX_FALSE, 0), SMART_GROUP_TEMP)->address;
+    GXSetTexCopySrc(x0, y0, w, h);
+    GXSetTexCopyDst(hw, hh, GX_TF_RGB565, GX_TRUE);
     GXCopyTex(buf, GX_FALSE);
     GXPixModeSync();
     GXTexModeSync();
-    GXInitTexObj(&obj1, buf, (u16)hw, (u16)hh, GX_TF_RGB565, GX_CLAMP, GX_CLAMP, GX_FALSE);
+    GXInitTexObj(&obj1, buf, hw, hh, GX_TF_RGB565, GX_CLAMP, GX_CLAMP, GX_FALSE);
     GXInitTexObjLOD(&obj1, GX_NEAR, GX_NEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
     PSMTXMultVec(info->mtx, &info->mapObj->center, &pos);
     scale = 1000.0f / PSVECDistance(&camGetCurPtr()->cameraPos, &pos);

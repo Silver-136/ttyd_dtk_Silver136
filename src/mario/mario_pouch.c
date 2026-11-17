@@ -1499,9 +1499,9 @@ BOOL pouchUnEquipBadgeID(s32 badgeId) {
  */
 s32 pouchArriveBadge(s32 id) {
 #if VERSION <= VERSION_DEMO_JP
-    return badgeShop_add(bdsw->bargain_table, (s16)id, 1);
+    return badgeShop_add(bdsw->bargain_table, id, 1);
 #else
-    return badgeShop_add(bdsw->special_table, (s16)id, 1);
+    return badgeShop_add(bdsw->special_table, id, 1);
 #endif
 }
 

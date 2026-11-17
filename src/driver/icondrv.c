@@ -573,7 +573,7 @@ void iconGetTexObj(GXTexObj* texObj, s32 iconId) {
 #if VERSION >= VERSION_US
     data = iconBinPtr(iconId);
 #else
-    data = iconBinPtr((u16)iconId);
+    data = iconBinPtr(iconId);
 #endif
 
     tplId = data->frames[0].tplId;

@@ -369,7 +369,7 @@ static void effSplashGetCol(CameraId cameraId, EffectEntry* effect) {
     GXProject(work->position.x, work->position.y, work->position.z, cam->view, proj, vp, &sx, &sy, &sz);
     if (sx > 0.0f && sx < 608.0f && sy > 0.0f && sy < 480.0f) {
         sysWaitDrawSync();
-        GXPeekARGB((u16)sx, (u16)sy, &pixel.word);
+        GXPeekARGB(sx, sy, &pixel.word);
         work->color.r = pixel.color.r;
         work->color.g = pixel.color.g;
         work->color.b = pixel.color.b;

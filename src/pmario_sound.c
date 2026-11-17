@@ -10435,7 +10435,7 @@ sgfound:
                         SoundEfxSetPitch(sfx[0]->channel, sfx[0]->pitch);
                     }
                 } else {
-                    sfx[0]->channel = SoundEfxPlayEx((u16)f, 0, sfxvol(sfx[0]), sfx[0]->pan);
+                    sfx[0]->channel = SoundEfxPlayEx(f, 0, sfxvol(sfx[0]), sfx[0]->pan);
                     if (sfx[0]->channel != none) {
                         SoundEfxSetPitch(sfx[0]->channel, sfx[0]->pitch);
                     }
@@ -11024,7 +11024,7 @@ static inline void psndENVApply(PaperSoundEnv* e) {
             if (sfx->flags & PSFX_FLAG_START) {
             } else if (!(entry->fxId & SFX_FLAG_STREAM)) {
                 if (!(entry->fxId & SFX_FLAG_STREAM)) {
-                    SoundEfxSetLPF(sfx->channel, (s16)lpf);
+                    SoundEfxSetLPF(sfx->channel, lpf);
                 }
             }
         }

@@ -938,7 +938,7 @@ void mot_slit(void) {
                     s32 sum;
                     m->mot.slit.count = 0;
 #if VERSION <= VERSION_DEMO_JP
-                    sum = __abs((s8)m->wStickDir1) + __abs((s8)m->wStickDir2);
+                    sum = __abs(m->wStickDir1) + __abs(m->wStickDir2);
 #else
                     sum = __abs(m->wStickDir1) + __abs(m->wStickDir2);
 #endif

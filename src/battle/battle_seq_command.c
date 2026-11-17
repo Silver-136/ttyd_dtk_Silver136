@@ -1123,15 +1123,16 @@ static s32 _btlcmd_SelectWeaponDecide(BattleWork* wp, s32 type, s32 index) {
     BattleWorkTarget* target;
     s32 i;
     s32 belong;
+    s32 dir;
 
     targets = &wp->weaponTargets;
     unit = BattleGetUnitPtr(wp, wp->activeUnitId);
     _btlcmd_MakeSelectWeaponTable(wp, type);
     weapon = wp->commandMenu.weapon[index].weapon;
 
-    // FAKE: (s32) cast on the s8 attackDirection passed as s8; dropping it changes the object
+    dir = wp->alliances[unit->alliance].attackDirection;
     BattleSamplingEnemy(targets, weapon, wp->activeUnitId, BtlUnit_GetEnemyBelong(unit), weapon->targetClassFlags,
-        weapon->targetPropertyFlags, (s32)wp->alliances[unit->alliance].attackDirection);
+        weapon->targetPropertyFlags, dir);
     targets->currentTarget = 0;
     if (weapon->targetPropertyFlags & (TARGET_PROP_SAME_SIDE_FIRST | TARGET_PROP_OPPOSITE_SIDE_FIRST)) {
         selected = -1;

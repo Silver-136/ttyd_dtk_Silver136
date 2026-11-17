@@ -693,7 +693,7 @@ static BOOL msgDisp(smartEntry* smart, u8 alpha, f32 x, f32 y) {
                     pos.x = 20.0f + (x + c->x);
                     pos.y = c->iconY + (c->y + (y + data->scrollPos) - 40.0f);
                     pos.z = 0.0f;
-                    iconDispGxAlpha(&pos, ICON_FLAG_2D, c->scale, (u16)c->value, a * al / 255);
+                    iconDispGxAlpha(&pos, ICON_FLAG_2D, c->scale, c->value, a * al / 255);
                     FontDrawStart_alpha(alpha);
                     FontDrawColor(col4);
                     break;

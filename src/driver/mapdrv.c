@@ -2987,9 +2987,9 @@ void mapSetMaterialTev(int texCount, s32 drawMode, s32 flags, Mtx mtx) {
         indStages = info.indStage;
     }
 
-    GXSetNumTexGens((u8)coord);
-    GXSetNumTevStages((u8)tevStage);
-    GXSetNumIndStages((u8)indStages);
+    GXSetNumTexGens(coord);
+    GXSetNumTevStages(tevStage);
+    GXSetNumIndStages(indStages);
 }
 #pragma pop
 
@@ -3451,7 +3451,7 @@ static void mapSetPolygon(MapObject* obj, MapFileMesh* mesh) {
         }
         for (i = 0; i < mesh->displayListCount; i++) {
             dl = mesh->displayLists.normalLists[i];
-            GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, (u16)dl->count);
+            GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, dl->count);
             for (j = 0; j < dl->count; j++) {
                 v = &dl->vtx[j];
                 GXPosition1x16(v->pos);
