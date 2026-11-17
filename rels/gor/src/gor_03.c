@@ -4073,6 +4073,7 @@ void goryuugijo_main_slot(EventEntry* event, BOOL isFirstCall) {
 }
 
 void goryuugijo_disp_slot(CameraId camera, void* param) {
+    void iconDispGx2(Mtx mtx, s16 flags, u16 iconId); // the id is u16 here; before US the definition takes s16
     SlotWork* data = ((MiniGameWork*)param)->data;
     // Icon numbers of the three prompts drawn beside the spinning slot reel
     s32 icons[3] = {ICON_BUTTON_A_ALT, ICON_BUTTON_A_ALT, ICON_BUTTON_A_ALT};
@@ -4106,7 +4107,7 @@ void goryuugijo_disp_slot(CameraId camera, void* param) {
             iconDispGx2(mtx, ICON_FLAG_2D, ICON_FUKIDASHI);
             PSMTXTrans(trans, -304.0f + sx, 31.35f + (240.0f - sy), 0.0f);
             PSMTXConcat(trans, scale, mtx);
-            ((void (*)(Mtx, s16, u16))iconDispGx2)(mtx, ICON_FLAG_2D, icons[i]);
+            iconDispGx2(mtx, ICON_FLAG_2D, icons[i]);
         }
     }
 }

@@ -2726,6 +2726,7 @@ static void BattleAudienceDispAudience(CameraId camId, void* param) {
  * and spun about a point 20 units above it (display callback queued by BattleAudience_Disp).
  */
 static void BattleAudienceDispItem(CameraId camId, void* param) {
+    void iconDispGx2(Mtx mtx, s16 flags, u16 iconId); // the id is u16 here; before US the definition takes s16
     BattleAudienceItem* item;
     s32 i;
     u16 iconId;
@@ -2744,7 +2745,7 @@ static void BattleAudienceDispItem(CameraId camId, void* param) {
             PSMTXTransApply(mtx, mtx, 0.0f, 20.0f, 0.0f);
             PSMTXScaleApply(mtx, mtx, item->scale, item->scale, 1.0f);
             PSMTXTransApply(mtx, mtx, item->position.x, item->position.y, item->position.z);
-            ((void (*)(Mtx, s16, u16))iconDispGx2)(mtx, 0, iconId);
+            iconDispGx2(mtx, 0, iconId);
         }
     }
 }

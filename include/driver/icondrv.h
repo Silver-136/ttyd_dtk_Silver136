@@ -112,7 +112,7 @@ void iconChange(const char* name, u16 iconId);
 void iconDispGxAlpha(Vec* position, u16 flags, f32 scale, u16 iconId, u8 alpha);
 void iconDispGx(Vec* position, u16 flags, f32 scale, u16 iconId);
 // The id is u16 from US on (every US caller's code fits it). Before US the definition takes s16 while some
-// callers need a u16 parameter, so those call it through a (Mtx, s16, u16) cast (the US prototype's own type).
+// callers need a u16 parameter, so those declare it locally with the US prototype's type (Mtx, s16, u16).
 #if VERSION >= VERSION_US
 void iconDispGx2(Mtx mtx, s16 flags, u16 iconId);
 #else

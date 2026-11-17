@@ -1000,6 +1000,7 @@ static inline void dispA(Mtx m, s32 i);
  * and the cursor with its trail while it slashes.
  */
 static void zubastar_disp2D(CameraId cam, void* param) {
+    void iconDispGx(Vec* position, u16 flags, f32 scale, s32 iconId); // the id is passed as s32; the definition takes u16
     ZubaStarWork* w = GetZubaStarPtr();
     ZSCursor* cur = &w->cursor;
     ZSLine* l;
@@ -1010,8 +1011,7 @@ static void zubastar_disp2D(CameraId cam, void* param) {
         pos.x = w->gaugePos.x - 200.0f;
         pos.y = 60.0f + w->gaugePos.y;
 
-        // FAKE: calls iconDispGx through a cast that passes the icon id as s32; the plain call changes the object
-        ((void (*)(Vec*, u16, f32, s32))iconDispGx)(&pos, ICON_FLAG_2D, 1.0f, icon);
+        iconDispGx(&pos, ICON_FLAG_2D, 1.0f, icon);
         BattleAcDrawGauge(w->gaugePos.x, w->gaugePos.y, 0.01f * w->gauge, 0xb1, 4, 0x1a, 0x34, 0x4e, 0);
     }
     GXSetCullMode(GX_CULL_NONE);

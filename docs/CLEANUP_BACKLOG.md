@@ -29,12 +29,12 @@ in `docs/FAKES.md` and in the mweppc review record.
   purpose, 13 partly named; left: 32 with no evidence in the code (write-only values, nothing reads them) and 16
   small ones a name would barely help: element counts, a few one-site flags).
 
-- Calls through function-pointer casts: 37 (icon drawing 10, window frame 5, party slit-floor motion 4, marioChgMot 2,
-  sound pitch 2, cos 2, party menu setup 2, puni map data getters 3, single sites). Each needs a prototype that the
-  definition and every caller compile identically with. Tested without a fit (retail mismatches, Codex rounds 12-13,
-  cleanup_notes/codex_round13_intake.md): iconDispGx (best 14/22), iconDispGx2 (JP definition), windowDispGX_Waku_col
-  float-first (fits all but msgdrv), BtlUnit_snd_se_pos word pitch, typed puni getidx calls (the casts cross
-  pointer/scalar argument shapes; worth a look as a possible retail ABI mismatch).
+- Calls through function-pointer casts to named functions: 0 in game code (37 in the earlier count; the last ones,
+  iconDispGx2 x5 and iconDispGx in zubastar_disp2D, became plain calls with a block-scope prototype in the caller,
+  GA8 2026-11-17). Where the caller's signature differs from the definition (a retail ABI mismatch: iconDispGx2's
+  u16 id before US, zubastar's s32 icon id) the prototype says so. Left on purpose: real function-pointer values
+  (system.c interpolation modes, REL prolog/epilog, evt_ext/evt_nannpc script functions) and the tst REL's
+  dbgDraw* macros, which call `_unresolved` for functions not in the build.
 - Disagreeing private declarations: FontDrawString (14 position-first copies fit; JP gor_irai needs its
   string-first calls and includes fontmgr.h, so no header prototype yet), psndSFX_pit 9 (no width fits all).
   Settled: BtlUnit_SetAnim, partyChgPose, effMarioBalloonEntry, spline_getvalue / spline_maketable, envAddTev,

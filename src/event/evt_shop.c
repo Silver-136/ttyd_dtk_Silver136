@@ -206,7 +206,7 @@ static void point_disp(WinMgrEntry* entry) {
 #if VERSION >= VERSION_US
     PSMTXScale(s, gp->language != LANGUAGE_JP ? 0.8f : 1.1f, 1.1f, 1.1f);
     PSMTXConcat(m, s, m);
-    ((void (*)(Mtx, s16, u16))iconDispGx2)(m, ICON_FLAG_2D, point_disp_icons[gp->language]);
+    iconDispGx2(m, ICON_FLAG_2D, point_disp_icons[gp->language]);
 #else
     if (gp->language == LANGUAGE_JP) {
         PSMTXScale(s, 1.1f, 1.1f, 1.1f);

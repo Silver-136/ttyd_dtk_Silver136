@@ -216,6 +216,7 @@ static void DrawMainIcon(BattleSubMenu* menu, BattleCommandAct* acts, Mtx* iconM
  * US and later squeeze names wider than 90 units.
  */
 static void DrawMainIconHukidasi(BattleSubMenu* menu, BattleCommandAct* act, Mtx m, f32 s) {
+    void iconDispGx2(Mtx mtx, s16 flags, u16 iconId); // the id is u16 here; before US the definition takes s16
     GXColor tev;
     GXColor col;
     Mtx rot;
@@ -275,9 +276,9 @@ static void DrawMainIconHukidasi(BattleSubMenu* menu, BattleCommandAct* act, Mtx
         icon = ICON_ITEM_COIN;
     }
     if (act->enabled == 1) {
-        ((void (*)(Mtx, s16, u16))iconDispGx2)(out, ICON_FLAG_2D, icon);
+        iconDispGx2(out, ICON_FLAG_2D, icon);
     } else {
-        ((void (*)(Mtx, s16, u16))iconDispGx2)(out, ICON_FLAG_2D | ICON_FLAG_GRAY, icon);
+        iconDispGx2(out, ICON_FLAG_2D | ICON_FLAG_GRAY, icon);
     }
     name = act->name;
     PSMTXTrans(trn, 0.0f, 52.5f, 0.0f);
