@@ -147,9 +147,6 @@ void BattleStageObjectMain(void);
 
 void BattleStageObjectInit(void);
 
-extern BattleStageObjectData _object_nozzle_data[];
-extern BattleStageObjectData _object_spot_light_data[];
-
 BOOL BattleFogForceStop(void);
 void BattleStage_DestroyA1(void);
 void BattleStage_DestroyA2(void);

@@ -35,6 +35,7 @@ static u8 color_rotation_data[] = {
 
 static void effMagic3Main(EffectEntry* effect);
 static void effMagic3Disp(CameraId cameraId, void* payload);
+static effN64Vtx size32x16_tex64x32_vtx[4];
 
 /**
  * Spawns five sparks at (x, y, z) that shoot upward in a 100-degree fan facing the camera and
@@ -216,7 +217,7 @@ static void effMagic3Disp(CameraId cameraId, void* payload) {
 }
 
 /** Camera-facing 32x16 streak each magic spark is drawn with. */
-effN64Vtx size32x16_tex64x32_vtx[] = {
+static effN64Vtx size32x16_tex64x32_vtx[] = {
     {-16, -8, 0, 0, 0, 0, 0, 0, 255},
     {16, -8, 0, 2048, 0, 0, 0, 0, 255},
     {16, 8, 0, 2048, 1024, 0, 0, 0, 255},

@@ -9,9 +9,6 @@
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
 
-/** A table of plus and minus ones that nothing in this effect reads. */
-f32 vaporUnused[16] = {-1.0f, 1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, -1.0f};
-
 /**
  * Sideways offset of the steam puff over its first 30 frames, one row of 30 per type (type 1 drifts left).
  */

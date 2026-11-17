@@ -355,7 +355,7 @@ USER_FUNC(evt_mario_paper_pose_dokan) {
     return ret;
 }
 
-const char* a_mario_group[] = {
+static const char* a_mario_group[] = {
     "M_Z_1", "M_Z_9", "M_S_1", "M_S_3", "M_W_1", "M_R_1", "M_J_1A", "M_J_1B", "M_J_1C", "M_H_1",
     "M_H_2", "M_H_3", "M_H_3A", "M_H_3B", "M_H_4", "M_H_5", "M_H_6", "M_H_6A", "M_H_6B", "M_H_7",
     "M_H_8", "M_H_9", "M_H_9A", "M_H_9B", "M_O_1", "M_O_2", "M_B_1", "M_B_2", "M_D_1", "M_D_2",

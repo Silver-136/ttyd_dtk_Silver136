@@ -66,7 +66,7 @@ BOOL g_bFirstSmartAlloc;
 static u16 count;
 #define COUNT count
 #else
-u32 count;
+static u32 count;
 #define COUNT (*(u16*)&count)
 #endif
 #define MAPBASE_PARAM

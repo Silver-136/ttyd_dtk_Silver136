@@ -31,7 +31,6 @@ USER_FUNC(evt_mario_set_pose);
 USER_FUNC(evt_mario_wait_landon);
 USER_FUNC(evt_mario_wait_move_end);
 
-extern const char* a_mario_group[];
 extern EvtWord mario_balloon_tenten_evt[];
 extern EvtWord mario_balloon_off_evt[];
 extern EvtWord mario_set_prev_extra_party_evt[];

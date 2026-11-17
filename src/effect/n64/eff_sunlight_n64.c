@@ -25,6 +25,7 @@ typedef struct EffSunlightN64Work {
 
 static void effSunlightMain(EffectEntry* effect);
 static void effSunlightDisp(CameraId cameraId, void* payload);
+static effN64Vtx testsrc__s_v[28];
 
 /**
  * Spawns sunlight beams at (x, y, z); `w` is stored but never read. A lifetime of 0 or less lasts until soft-deleted.
@@ -242,7 +243,7 @@ static void effSunlightDisp(CameraId cameraId, void* payload) {
 }
 
 /** Five long slanted light shafts in screen space (shafts 0 and 3 two quads each, the rest one), drawn for the sunlight beams. */
-effN64Vtx testsrc__s_v[] = {
+static effN64Vtx testsrc__s_v[] = {
     {531, 442, 25, 0, 0, 255, 255, 255, 255},
     {707, 284, 25, 512, 0, 255, 255, 255, 255},
     {1610, 1287, 25, 512, 2048, 255, 255, 255, 255},

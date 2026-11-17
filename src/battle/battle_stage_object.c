@@ -30,6 +30,9 @@
 #include "unit/unit_object_tree.h"
 #include "unit/unit_object_switch.h"
 #include "battle/battle_status_effect.h"
+
+static BattleStageObjectData _object_nozzle_data[3];
+static BattleStageObjectData _object_spot_light_data[2];
 #include "battle/battle_camera.h"
 #include "battle/battle_seq.h"
 #include "battle/battle_sub.h"
@@ -2426,7 +2429,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
 };
 
 /** The three stage nozzles (left, centre, right) at the front of the stage, placed from Mario's rank 1 up. */
-BattleStageObjectData _object_nozzle_data[] = {
+static BattleStageObjectData _object_nozzle_data[] = {
     {"nozzle_l", 3, STAGE_LAYER_NOZZLE, {-120.0f, 0.0f, 90.0f}, 0, 0},
     {"nozzle_c", 3, STAGE_LAYER_NOZZLE, {0.0f, 0.0f, 90.0f}, 0, 0},
     {"nozzle_r", 3, STAGE_LAYER_NOZZLE, {120.0f, 0.0f, 90.0f}, 0, 0},
@@ -2434,7 +2437,7 @@ BattleStageObjectData _object_nozzle_data[] = {
 
 #if VERSION <= VERSION_DEMO_JP
 static BattleStageObjectData _object_wall_data = {"escape_wall", 4, STAGE_LAYER_WALL, {-175.0f, 0.0f, 0.0f}, 0, 0};
-BattleStageObjectData _object_spot_light_data[] = {
+static BattleStageObjectData _object_spot_light_data[] = {
     {"spotlight", 6, STAGE_LAYER_SPOTLIGHT, {0.0f, 240.0f, 0.0f}, 0, 0},
     {NULL, 6, 7, {0.0f, 0.0f, 0.0f}, 0, 0},
 };
@@ -2695,7 +2698,7 @@ EVT_END()
 static BattleStageObjectData _object_wall_data = {"escape_wall", 4, STAGE_LAYER_WALL, {-175.0f, 0.0f, 0.0f}, 0, 0};
 
 /** The overhead spotlight; the entry with no name ends the list. */
-BattleStageObjectData _object_spot_light_data[] = {
+static BattleStageObjectData _object_spot_light_data[] = {
     {"spotlight", 6, STAGE_LAYER_SPOTLIGHT, {0.0f, 240.0f, 0.0f}, 0, 0},
     {NULL, 6, 7, {0.0f, 0.0f, 0.0f}, 0, 0},
 };

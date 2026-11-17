@@ -3,14 +3,14 @@
 
 typedef void (*InterruptHandlerLike)(s32, OSContext*);
 
-u8 EXIInputFlag;
-u8* pEXIInputFlag;
-s32 RecvDataLeng;
-u32 SendMailData;
-InterruptHandlerLike DBGCallback;
-InterruptHandlerLike MTRCallback;
+static InterruptHandlerLike MTRCallback;
+static InterruptHandlerLike DBGCallback;
+static u32 SendMailData;
+static s32 RecvDataLeng;
+static u8* pEXIInputFlag;
+static u8 EXIInputFlag;
 
-u8 SendCount = 0x80;
+static u8 SendCount = 0x80;
 
 
 

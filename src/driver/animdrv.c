@@ -288,7 +288,7 @@ MoaChain g_moamoa_chain_tbl[47] = {
 
 //.bss (uninitialised objects are emitted in reverse definition order: g_modeling_mtx_stack, work, tanfTbl)
 static f32 tanfTbl[0xB2];
-AnimationWork work;
+static AnimationWork work;
 static Mtx g_modeling_mtx_stack[32];
 
 //.sdata

@@ -499,8 +499,6 @@ BOOL mapTestXLU(u32 flags, GXColor* color, GXColor* matColor);
 extern BOOL __mapdrv_make_dl; // mapdrv.c
 void mapGrpFlagOn(const char* name, u32 flags);
 
-extern const GXCullMode culling[4];
-
 void mapGrpFlagOff(const char* name, u32 flags);
 void bmapUnLoad(void);
 void mapBlendOff(void);

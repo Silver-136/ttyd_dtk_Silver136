@@ -24,6 +24,7 @@
 #include "driver/dispdrv.h"
 static void makeDisplayList(BOOL group);
 static MapObject* _mapEnt(MapFileJoint* joint, MapObject* parent, Mtx mtx, s32 index);
+static const GXCullMode culling[4];
 
 #define TWO_PI 6.28318530717958647692528676655900576839433879875021f
 
@@ -2070,7 +2071,7 @@ static void mapDispMapGrp_bbox(CameraId cam, void* payload) {
  * Lookup tables of the map drawing: a map part's cull mode, texture matrix and light slots by index, its
  * texture wrap modes, and the GX texture and palette formats for the map file's codes (these two unused).
  */
-const GXCullMode culling[4] = {GX_CULL_FRONT, GX_CULL_BACK, GX_CULL_ALL, GX_CULL_NONE};
+static const GXCullMode culling[4] = {GX_CULL_FRONT, GX_CULL_BACK, GX_CULL_ALL, GX_CULL_NONE};
 static const GXTexMtx texmtx_tbl[10] = {GX_TEXMTX0, GX_TEXMTX1, GX_TEXMTX2, GX_TEXMTX3, GX_TEXMTX4, GX_TEXMTX5, GX_TEXMTX6, GX_TEXMTX7, GX_TEXMTX8, GX_TEXMTX9};
 static const s32 texfmt_tbl[11] = {4, 5, 6, 14, 0, 1, 2, 3, 8, 9, 10};
 static const s32 texwrap_tbl[3] = {GX_CLAMP, GX_REPEAT, GX_MIRROR};

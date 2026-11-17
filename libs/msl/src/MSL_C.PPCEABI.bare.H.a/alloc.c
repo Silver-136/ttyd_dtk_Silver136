@@ -50,6 +50,11 @@ typedef struct __mem_pool_obj {
     FixStart fix_start[num_fix_pools];
 } __mem_pool_obj;
 
+/* The pool as callers see it (MSL pool_alloc.h): opaque storage at least as large as __mem_pool_obj. */
+typedef struct __mem_pool {
+    void* reserved[14];
+} __mem_pool;
+
 static const mem_size fix_pool_sizes[] = {4, 12, 20, 36, 52, 68};
 
 #define max_fix_pool_size 68
@@ -220,11 +225,14 @@ void deallocate_from_fixed_pools(__mem_pool_obj* pool_obj, void* ptr, mem_size s
     }
 }
 
-void __pool_free(__mem_pool_obj* pool_obj, void* ptr) {
+void __pool_free(__mem_pool* pool, void* ptr) {
+    __mem_pool_obj* pool_obj;
     mem_size size;
 
     if (ptr == NULL)
         return;
+
+    pool_obj = (__mem_pool_obj*)pool;
 
     size = !classify(ptr) ? FixSubBlock_from_pointer(ptr)->block_->client_size_ : SubBlock_size(SubBlock_from_pointer(ptr)) - 8;
 
@@ -234,12 +242,16 @@ void __pool_free(__mem_pool_obj* pool_obj, void* ptr) {
         deallocate_from_var_pools(pool_obj, ptr);
 }
 
-static __mem_pool_obj* get_malloc_pool(void) {
-    static __mem_pool_obj protopool;
+void __init_pool_obj(__mem_pool* pool_obj) {
+    memset(pool_obj, 0, sizeof(__mem_pool_obj));
+}
+
+static __mem_pool* get_malloc_pool(void) {
+    static __mem_pool protopool;
     static unsigned char init = 0;
 
     if (!init) {
-        memset(&protopool, 0, sizeof(__mem_pool_obj));
+        __init_pool_obj(&protopool);
         init = 1;
     }
     return &protopool;
