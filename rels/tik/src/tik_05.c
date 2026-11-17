@@ -1032,8 +1032,6 @@ void tiz_broken_draw(CameraId cameraId, void* param) {
     s32 x;
     s32 y;
     BrokenPiece* p;
-    s32 yo;
-    s32 xo;
     f32 py;
     f32 rz;
 
@@ -1076,15 +1074,15 @@ void tiz_broken_draw(CameraId cameraId, void* param) {
 #endif
     // Each row has thirty-eight drawn pieces followed by one skipped entry.
     p = broken_wp->pieces->address;
-    for (y = 0, yo = 0; y < 30; y++, yo += 16, p++) {
-        py = 232.0f - yo;
-        for (x = 0, xo = 0; x < 38; x++, xo += 16, p++) {
+    for (y = 0; y < 30; y++, p++) {
+        py = 232.0f - y * 16;
+        for (x = 0; x < 38; x++, p++) {
             if (p->delay == 0) {
                 PSMTXScale(scale, 1.0f / 38.0f, 1.0f / 30.0f, 1.0f);
                 PSMTXTrans(mtx, x, y, 0.0f);
                 PSMTXConcat(scale, mtx, mtx);
                 GXLoadTexMtxImm(mtx, GX_TEXMTX0, GX_MTX2x4);
-                PSMTXTrans(mtx, -296.0f + xo, py, 0.0f);
+                PSMTXTrans(mtx, -296.0f + x * 16, py, 0.0f);
                 switch (p->dir) {
                     case 0:
                         rz = -45.0f;

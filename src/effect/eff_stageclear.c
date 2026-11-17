@@ -133,7 +133,6 @@ static u8 scale_dt[] = {0x00, 0x00, 0x16, 0x2E, 0x47, 0x5D, 0x6E, 0x78, 0x77, 0x
 EffectEntry* effStageClearEntry(s32 type, f32 x, f32 y, f32 z) {
     EffectEntry* effect;
     StageClearWork* work;
-    StageClearWork* p;
     s32 i;
 #if VERSION >= VERSION_US
     s32 n;
@@ -179,7 +178,7 @@ EffectEntry* effStageClearEntry(s32 type, f32 x, f32 y, f32 z) {
     work->frame = 0;
     work->confetti = irand(5) + 1;
     work->done = 0;
-    for (i = 1, p = work + 1; i < effect->count; i++, p++) {
+    for (i = 1, work++; i < effect->count; i++, work++) {
 #if VERSION >= VERSION_US
         a = 0.0f;
         b = a;
@@ -205,19 +204,19 @@ EffectEntry* effStageClearEntry(s32 type, f32 x, f32 y, f32 z) {
                 b += 8.0f;
             }
         }
-        p->position.x = a - b;
+        work->position.x = a - b;
 #else
-        p->position.x = (f32)((i - 1) * 38 - (effect->count - 1) * 38 / 2 + 20);
+        work->position.x = (f32)((i - 1) * 38 - (effect->count - 1) * 38 / 2 + 20);
 #endif
-        p->position.y = 0.0f;
-        p->position.z = 0.0f;
-        p->scale = 0.0f;
-        p->delay = (s32)((f32)i * (0.2f * (f32)gp->framerate));
+        work->position.y = 0.0f;
+        work->position.z = 0.0f;
+        work->scale = 0.0f;
+        work->delay = (s32)((f32)i * (0.2f * (f32)gp->framerate));
 #if VERSION >= VERSION_US
-        p->delay = (s32)((f32)gp->framerate * (96.0f * (f32)i / (f32)texid_tbl[gp->language].count) / 60.0f);
+        work->delay = (s32)((f32)gp->framerate * (96.0f * (f32)i / (f32)texid_tbl[gp->language].count) / 60.0f);
 #endif
-        p->frame = 0;
-        p->shake = NULL;
+        work->frame = 0;
+        work->shake = NULL;
     }
     return effect;
 }

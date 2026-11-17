@@ -78,7 +78,6 @@ static u8 color_rotation_data[] = {
 EffectEntry* effKissEntry(s32 type, f32 x, f32 y, f32 z, f32 angle) {
     EffectEntry* effect;
     KissWork* work;
-    KissWork* p;
     s32 i;
     s32 n;
     f32 rad;
@@ -107,42 +106,42 @@ EffectEntry* effKissEntry(s32 type, f32 x, f32 y, f32 z, f32 angle) {
     work->alpha = 0xFF;
     work->angle = angle;
     work->rotation = 0.0f;
-    p = work + 1;
-    for (i = 1; i < effect->count; i++, p++) {
-        p->position.x = 0.0f;
-        p->position.y = 0.0f;
-        p->position.z = 0.0f;
-        p->rotation = 0.0f;
-        p->life = 0;
-        p->frame = 0;
+    work++;
+    for (i = 1; i < effect->count; i++, work++) {
+        work->position.x = 0.0f;
+        work->position.y = 0.0f;
+        work->position.z = 0.0f;
+        work->rotation = 0.0f;
+        work->life = 0;
+        work->frame = 0;
         switch (type) {
             case 0:
             case 3:
-                p->scaleY = 1.0f;
-                p->scaleX = 1.0f;
+                work->scaleY = 1.0f;
+                work->scaleX = 1.0f;
                 rad = angle2pi / 360.0f;
-                p->vx = 3.0f * (f32)sin(rad);
-                p->vy = 3.0f * (f32)cos(rad);
+                work->vx = 3.0f * (f32)sin(rad);
+                work->vy = 3.0f * (f32)cos(rad);
                 break;
             case 1:
             case 2:
-                p->scaleY = 0.0f;
-                p->scaleX = 0.0f;
+                work->scaleY = 0.0f;
+                work->scaleX = 0.0f;
                 rad = angle2pi / 360.0f;
-                p->vx = 3.0f * (f32)sin(rad);
-                p->vy = 3.0f * (f32)cos(rad);
+                work->vx = 3.0f * (f32)sin(rad);
+                work->vy = 3.0f * (f32)cos(rad);
                 break;
             case 4:
-                p->scaleY = 1.0f;
-                p->scaleX = 1.0f;
+                work->scaleY = 1.0f;
+                work->scaleX = 1.0f;
                 break;
             case 5:
-                p->scaleY = 1.5f;
-                p->scaleX = 1.5f;
-                p->rotation = (360.0f * (f32)i) / (f32)(effect->count - 1);
-                p->vx = 3.0f * (f32)sin(6.2831855f * p->rotation / 360.0f);
-                p->vy = 3.0f * (f32)cos(6.2831855f * p->rotation / 360.0f);
-                p->rotation *= -1.0f;
+                work->scaleY = 1.5f;
+                work->scaleX = 1.5f;
+                work->rotation = (360.0f * (f32)i) / (f32)(effect->count - 1);
+                work->vx = 3.0f * (f32)sin(6.2831855f * work->rotation / 360.0f);
+                work->vy = 3.0f * (f32)cos(6.2831855f * work->rotation / 360.0f);
+                work->rotation *= -1.0f;
                 break;
         }
     }

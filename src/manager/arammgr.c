@@ -56,7 +56,6 @@ static void aramMgrGarbage(void) {
     ARAMEntry* entry;
     ARAMEntry* prev;
     ARAMEntry* first;
-    u32 offset;
     u32 addr;
     ARAMEntry* curr;
     int i, n;
@@ -98,14 +97,14 @@ static void aramMgrGarbage(void) {
             wp->bufferSize = ARAM_GARBAGE_BUFFER_SIZE;
             wp->buffer = __memAlloc(HEAP_DEFAULT, wp->bufferSize);
             n = (curr->size + (wp->bufferSize - 1)) / wp->bufferSize;
-            for (i = 0, offset = 0; i < n; i++, offset += ARAM_GARBAGE_BUFFER_SIZE) {
+            for (i = 0; i < n; i++) {
                 wp->busy = 1;
                 ARQPostRequest(&wp->request, ARAM_OWNER, ARQ_TYPE_ARAM_TO_MRAM, ARQ_PRIORITY_LOW,
-                    curr->aramAddr + offset, (u32)wp->buffer, wp->bufferSize, aramCallbackGarbage);
+                    curr->aramAddr + i * ARAM_GARBAGE_BUFFER_SIZE, (u32)wp->buffer, wp->bufferSize, aramCallbackGarbage);
                 while (wp->busy) {}
                 wp->busy = 1;
                 ARQPostRequest(&wp->request, ARAM_OWNER, ARQ_TYPE_MRAM_TO_ARAM, ARQ_PRIORITY_LOW,
-                    (u32)wp->buffer, addr + offset, wp->bufferSize, aramCallbackGarbage);
+                    (u32)wp->buffer, addr + i * ARAM_GARBAGE_BUFFER_SIZE, wp->bufferSize, aramCallbackGarbage);
                 while (wp->busy) {}
             }
             __memFree(HEAP_DEFAULT, wp->buffer);

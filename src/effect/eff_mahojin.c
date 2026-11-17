@@ -71,7 +71,6 @@ static void callback(MapTevCallbackInfo* info) {
 EffectEntry* effMahojinEntry(s32 type, f32 x, f32 y, f32 z) {
     EffectEntry* effect;
     EffMahojinWork* work;
-    EffMahojinWork* p;
     s32 n;
 
     effect = effEntry();
@@ -83,44 +82,44 @@ EffectEntry* effMahojinEntry(s32 type, f32 x, f32 y, f32 z) {
     effect->callback = effMahojinMain;
     effect->flags |= EFFECT_FLAG_SOFT_DELETABLE;
 
-    p = work;
-    p->type = type;
-    p->position.x = x;
-    p->position.y = y;
-    p->position.z = z;
-    p->timer = 1000;
-    p->reserved_14 = 0;
-    p->poseId[0] = -1;
-    p->poseId[1] = -1;
-    p->alpha = 255;
-    p->state = 0;
-    p->arg = NULL;
-    p->func = NULL;
+    work->type = type;
+    work->position.x = x;
+    work->position.y = y;
+    work->position.z = z;
+    work->timer = 1000;
+    work->reserved_14 = 0;
+    work->poseId[0] = -1;
+    work->poseId[1] = -1;
+    work->alpha = 255;
+    work->state = 0;
+    work->arg = NULL;
+    work->func = NULL;
 
-    p = work + 1;
-    p->type = type;
-    p->position.x = x;
-    p->position.y = y;
-    p->position.z = z;
-    p->timer = 1000;
-    p->reserved_14 = 0;
-    p->poseId[0] = -1;
-    p->poseId[1] = -1;
-    p->alpha = 255;
-    p->state = 0;
-    p->arg = NULL;
-    p->func = NULL;
+    work++;
+    work->type = type;
+    work->position.x = x;
+    work->position.y = y;
+    work->position.z = z;
+    work->timer = 1000;
+    work->reserved_14 = 0;
+    work->poseId[0] = -1;
+    work->poseId[1] = -1;
+    work->alpha = 255;
+    work->state = 0;
+    work->arg = NULL;
+    work->func = NULL;
 
-    for (p = work + 2, n = 2; n < effect->count; n++, p++) {
-        p->position.x = x;
-        p->position.y = y;
-        p->position.z = z;
-        p->poseId[0] = -1;
-        p->poseId[1] = -1;
-        p->alpha = 0;
-        p->state = 0;
-        p->arg = NULL;
-        p->func = NULL;
+    work++;
+    for (n = 2; n < effect->count; n++, work++) {
+        work->position.x = x;
+        work->position.y = y;
+        work->position.z = z;
+        work->poseId[0] = -1;
+        work->poseId[1] = -1;
+        work->alpha = 0;
+        work->state = 0;
+        work->arg = NULL;
+        work->func = NULL;
     }
     return effect;
 }

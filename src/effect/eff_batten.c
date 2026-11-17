@@ -37,7 +37,6 @@ static void effBattenDisp2(CameraId cameraId, void* payload);
 EffectEntry* effBattenEntry(s32 type, s32 duration, f32 x, f32 y, f32 z, f32 scale) {
     EffectEntry* effect;
     EffBattenWork* work;
-    EffBattenWork* p;
     s32 count;
     s32 i;
 
@@ -62,14 +61,14 @@ EffectEntry* effBattenEntry(s32 type, s32 duration, f32 x, f32 y, f32 z, f32 sca
     }
     work->poseId = -1;
     PSMTXIdentity(work->mtx);
-    for (i = 1, p = work + 1; i < effect->count; i++, p++) {
-        p->position.x = 0.0f;
-        p->position.y = 0.0f;
-        p->position.z = 0.0f;
-        p->alpha = 0;
-        p->scale = 3.0f;
-        p->state = 0;
-        p->frame = (i - 1) * 10;
+    for (i = 1, work++; i < effect->count; i++, work++) {
+        work->position.x = 0.0f;
+        work->position.y = 0.0f;
+        work->position.z = 0.0f;
+        work->alpha = 0;
+        work->scale = 3.0f;
+        work->state = 0;
+        work->frame = (i - 1) * 10;
     }
     return effect;
 }

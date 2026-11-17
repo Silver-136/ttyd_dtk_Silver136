@@ -270,7 +270,6 @@ static void gor_fune_polygon_1(void) {
 EffectEntry* effFunemizuEntry(s32 type, f32 x, f32 y, f32 z, f32 size, f32 yaw) {
     EffectEntry* effect;
     EffFunemizuWork* work;
-    EffFunemizuWork* p;
     s32 i;
     s32 count;
 
@@ -301,16 +300,16 @@ EffectEntry* effFunemizuEntry(s32 type, f32 x, f32 y, f32 z, f32 size, f32 yaw) 
     work->timer = 0;
     work->scale = 1.0f;
     work->cam = CAMERA_3D;
-    for (i = 1, p = work + 1; i < effect->count; i++, p++) {
-        p->position.x = 0.0f;
-        p->position.y = 0.0f;
-        p->position.z = 0.0f;
-        p->size = size / 2;
-        p->yaw = yaw;
-        p->speedY = p->size + irand(2);
-        p->gravity = 0.1f + irand(10) / 100.0f;
-        p->delay = irand(5);
-        p->alpha = 255;
+    for (i = 1, work++; i < effect->count; i++, work++) {
+        work->position.x = 0.0f;
+        work->position.y = 0.0f;
+        work->position.z = 0.0f;
+        work->size = size / 2;
+        work->yaw = yaw;
+        work->speedY = work->size + irand(2);
+        work->gravity = 0.1f + irand(10) / 100.0f;
+        work->delay = irand(5);
+        work->alpha = 255;
     }
     return effect;
 }

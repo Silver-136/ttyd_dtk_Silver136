@@ -41,7 +41,6 @@ static void effChargeMain(EffectEntry* effect);
 EffectEntry* effChargeEntry(s32 type, s32 duration, f32 x, f32 y, f32 z, f32 scale) {
     EffectEntry* effect;
     EffChargeWork* work;
-    EffChargeWork* p;
     s32 i;
 
     effect = effEntry();
@@ -85,11 +84,11 @@ EffectEntry* effChargeEntry(s32 type, s32 duration, f32 x, f32 y, f32 z, f32 sca
             work->b1 = 255;
             break;
     }
-    for (i = 1, p = work + 1; i <= 30; i++, p++) {
-        p->yaw = 9.0f * (360.0f * (i - 1)) / 30.0f;
-        p->pitch = 0.0f;
-        p->dist = (i - 1) * 100 / 30;
-        p->state = 0;
+    for (i = 1, work++; i <= 30; i++, work++) {
+        work->yaw = 9.0f * (360.0f * (i - 1)) / 30.0f;
+        work->pitch = 0.0f;
+        work->dist = (i - 1) * 100 / 30;
+        work->state = 0;
     }
     return effect;
 }

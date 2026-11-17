@@ -439,7 +439,6 @@ static void npcDisp_offscreen(CameraId camId, void* param) {
  * then restores the material flags.
  */
 static void npcDisp_blur(CameraId camId, void* param) {
-    s32 alpha;
     NpcEntry* entry = param;
     s32 i;
     s32 flag;
@@ -453,19 +452,15 @@ static void npcDisp_blur(CameraId camId, void* param) {
     x = 2.0f * polySinf((6.2831855f * camGetPtr(camId)->viewYaw) / 360.0f);
     z = 2.0f * -polyCosf((6.2831855f * camGetPtr(camId)->viewYaw) / 360.0f);
     animPoseMain(entry->poseId);
-    i = 4;
-    alpha = 100;
-    do {
+    for (i = 4; i > 0; i--) {
         mtx_setup(entry, mtx, i);
         MTXTransApply(mtx, mtx, x, 0.0f, z);
         animPoseSetMaterialFlagOn(entry->poseId, MAP_OBJ_FLAG_COLOR);
-        animPoseSetMaterialEvtColor(entry->poseId, (GXColor){0xFF, 0xFF, 0xFF, (u8)(0x80 - alpha)});
+        animPoseSetMaterialEvtColor(entry->poseId, (GXColor){0xFF, 0xFF, 0xFF, (u8)(0x80 - i * 25)});
         animPoseDrawMtx(entry->poseId, mtx, 1, rotY, 2.0f);
         animPoseDrawMtx(entry->poseId, mtx, 2, rotY, 2.0f);
         animPoseDrawMtx(entry->poseId, mtx, 3, rotY, 2.0f);
-        i--;
-        alpha -= 25;
-    } while (i > 0);
+    }
     animPoseSetMaterialFlagOff(entry->poseId, MAP_OBJ_FLAG_COLOR);
     animPoseSetMaterialFlagOn(entry->poseId, flag);
 }

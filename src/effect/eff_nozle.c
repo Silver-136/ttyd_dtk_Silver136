@@ -553,7 +553,6 @@ static u8 scale_dt[][2] = {{0, 0}, {11, 13}, {22, 27}, {34, 41}, {46, 55}, {57, 
 EffectEntry* effNozleEntry(s32 type, f32 x, f32 y, f32 z, f32 rx, f32 ry, s32 life) {
     EffectEntry* effect;
     EffNozleWork* work;
-    EffNozleWork* p;
     s32 count;
     s32 i;
 
@@ -595,15 +594,15 @@ EffectEntry* effNozleEntry(s32 type, f32 x, f32 y, f32 z, f32 rx, f32 ry, s32 li
     work->alpha = 255;
     work->rotX = rx;
     work->rotY = ry;
-    for (i = 1, p = work + 1; i < effect->count; i++, p++) {
-        p->position.x = (i & 1 ? -1 : 1) * 400;
-        p->position.y = 0.0f;
-        p->position.z = 20.0f * i;
-        p->sx = (i & 1 ? 1 : -1);
-        p->sy = 1.0f;
-        p->u1 = p->v1 = p->u0 = p->v0 = 0.0f;
-        p->alpha = 255;
-        p->flag = 0;
+    for (i = 1, work++; i < effect->count; i++, work++) {
+        work->position.x = (i & 1 ? -1 : 1) * 400;
+        work->position.y = 0.0f;
+        work->position.z = 20.0f * i;
+        work->sx = (i & 1 ? 1 : -1);
+        work->sy = 1.0f;
+        work->u1 = work->v1 = work->u0 = work->v0 = 0.0f;
+        work->alpha = 255;
+        work->flag = 0;
     }
     return effect;
 }

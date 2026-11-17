@@ -311,10 +311,9 @@ static void main_dl(EffectEntry* effect, Mtx mtx) {
     Mtx trans;
     Mtx rotZ;
     Mtx rotY;
-    EffHitN64Work* work = effect->userdata;
     effN64Vtx* vtx;
+    EffHitN64Work* work = effect->userdata;
     s32 idx;
-    EffHitN64Work* p;
     s32 flag;
     s32 i;
     f32 f;
@@ -337,11 +336,11 @@ static void main_dl(EffectEntry* effect, Mtx mtx) {
         GXLoadTexMtxImm(texMtx, GX_TEXMTX1, GX_MTX2x4);
     }
     vtx = size32x32_tex32x32_vtx + idx * 4;
-    p = work + 1;
-    for (i = 1; i < effect->count; i++, p++) {
-        PSMTXRotRad(rotY, 'y', 0.017453292f * p->rotY);
-        PSMTXRotRad(rotZ, 'z', 0.017453292f * p->rotZ);
-        PSMTXTrans(trans, p->position.x, p->position.y, p->position.z);
+    work++;
+    for (i = 1; i < effect->count; i++, work++) {
+        PSMTXRotRad(rotY, 'y', 0.017453292f * work->rotY);
+        PSMTXRotRad(rotZ, 'z', 0.017453292f * work->rotZ);
+        PSMTXTrans(trans, work->position.x, work->position.y, work->position.z);
         PSMTXConcat(rotY, rotZ, rotZ);
         PSMTXConcat(rotZ, trans, trans);
         PSMTXConcat(mtx, trans, trans);

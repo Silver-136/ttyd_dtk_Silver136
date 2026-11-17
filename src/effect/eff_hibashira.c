@@ -33,7 +33,6 @@ EffectEntry* effHibashiraEntry(s32 type, s32 count, s32 duration, f32 x, f32 y, 
                                f32 endY, f32 endZ, f32 scale) {
     EffectEntry* effect;
     EffHibashiraWork* work;
-    EffHibashiraWork* pillar;
     s32 num, i;
     f32 dx, dy, dz;
     f32 s;
@@ -72,23 +71,23 @@ EffectEntry* effHibashiraEntry(s32 type, s32 count, s32 duration, f32 x, f32 y, 
     }
     work->frame = 0;
 
-    // spread the pillars evenly from the start toward the end (the last one stops one step short of it)
+    // spread the works evenly from the start toward the end (the last one stops one step short of it)
     dx = endX - x;
     dy = endY - y;
     dz = endZ - z;
-    pillar = work + 1;
-    for (i = 1; i < effect->count; i++, pillar++) {
-        pillar->position.x = (i - 1) * (dx / (num - 1));
-        pillar->position.y = (i - 1) * (dy / (num - 1));
-        pillar->position.z = (i - 1) * (dz / (num - 1));
+    work++;
+    for (i = 1; i < effect->count; i++, work++) {
+        work->position.x = (i - 1) * (dx / (num - 1));
+        work->position.y = (i - 1) * (dy / (num - 1));
+        work->position.z = (i - 1) * (dz / (num - 1));
 
         s = sin(3.1415927f * i / (effect->count - 1));
-        pillar->scale = s + 0.5f;
-        pillar->poseId = -1;
-        pillar->alpha = 255;
-        pillar->timer = 0;
-        pillar->frame = 0;
-        pillar->delay = (i - 1) * 4;
+        work->scale = s + 0.5f;
+        work->poseId = -1;
+        work->alpha = 255;
+        work->timer = 0;
+        work->frame = 0;
+        work->delay = (i - 1) * 4;
     }
     return effect;
 }

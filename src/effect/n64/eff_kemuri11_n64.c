@@ -64,7 +64,6 @@ EffectEntry* effKemuri11N64Entry(s32 type, f32 x, f32 y, f32 z) {
     EffectEntry* effect;
     EffKemuri11N64Work* work;
     s32 n;
-    s32 ang;
     s32 i;
 
     effect = effEntry();
@@ -178,7 +177,7 @@ EffectEntry* effKemuri11N64Entry(s32 type, f32 x, f32 y, f32 z) {
             break;
     }
     work++;
-    for (i = 1, ang = 30; i < n + 1; i++, work++) {
+    for (i = 1; i < n + 1; i++, work++) {
         switch (type) {
             case 0:
             case 1:
@@ -189,8 +188,7 @@ EffectEntry* effKemuri11N64Entry(s32 type, f32 x, f32 y, f32 z) {
                 break;
         }
         work->rotZ = 0.0f;
-        work->rotY = (f32)ang;
-        ang += 30;
+        work->rotY = (f32)(i * 30);
     }
     if (type == 6) {
         effKemuri1N64Entry(5, x, y, z, 0.0f);

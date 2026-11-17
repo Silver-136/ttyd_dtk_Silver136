@@ -48,7 +48,6 @@ static u8 heavy_scale[30][2] = {
  * Spawned when Mario lands or moves (mario_kemuri.c, evt_mario.c) and by event scripts.
  */
 EffectEntry* effKemuriEntry(s32 type, f32 x, f32 y, f32 z, f32 dir) {
-    effKemuriData* d;
     effKemuriData* data;
     s32 numEffects, i;
 
@@ -81,34 +80,34 @@ EffectEntry* effKemuriEntry(s32 type, f32 x, f32 y, f32 z, f32 dir) {
     data->scaleX = 1.0f;
     data->scaleY = 1.0f;
     data->scale = 1.0f;
-    for (i = 1, d = data + 1; i < entry->count; i++, d++) {
-        d->x = 0.0f;
-        d->y = 0.0f;
-        d->z = 0.0f;
+    for (i = 1, data++; i < entry->count; i++, data++) {
+        data->x = 0.0f;
+        data->y = 0.0f;
+        data->z = 0.0f;
 
-        d->scaleX = 1.0f;
-        d->scaleY = 1.0f;
-        d->scale = 1.0f;
+        data->scaleX = 1.0f;
+        data->scaleY = 1.0f;
+        data->scale = 1.0f;
 
-        d->offsetX = 0.0f;
-        d->reserved_5C = 0.0f;
+        data->offsetX = 0.0f;
+        data->reserved_5C = 0.0f;
 
-        d->frame = 0;
-        d->texFrame0 = 0;
-        d->texFrame1 = 0;
+        data->frame = 0;
+        data->texFrame0 = 0;
+        data->texFrame1 = 0;
 
         switch (type) {
             case 0:
-                d->velX = i & 1 ? 3.0f : -3.0f;
-                d->lifetime = 32;
+                data->velX = i & 1 ? 3.0f : -3.0f;
+                data->lifetime = 32;
                 break;
             case 1:
-                d->velX = 0.0f;
-                d->lifetime = 32;
+                data->velX = 0.0f;
+                data->lifetime = 32;
                 break;
             case 2:
-                d->velX = 0.0f;
-                d->lifetime = 64;
+                data->velX = 0.0f;
+                data->lifetime = 64;
                 break;
         }
     }

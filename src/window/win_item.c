@@ -761,7 +761,6 @@ void winItemDisp(s32 camId, void* param, s32 n) {
     f32 a;
     f32 x;
     f32 y;
-    s32 off;
     WindowWork* w = param;
     s32 i;
 
@@ -778,15 +777,15 @@ void winItemDisp(s32 camId, void* param, s32 n) {
     a = 105.0f + y;
     c = (x - 215.0f) - 4.0f;
     b = 4.0f + a;
-    for (i = 0, off = 0; i < 2; i++, off += VERSION_PICK(40, 50)) {
+    for (i = 0; i < 2; i++) {
         if (i == w->item.mode) {
             winTexInit(*w->res->data);
-            winTexSet(0xB3, (Vec){x - 215.0f, 20.0f + (a - off), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0, 0, 0, 0x80});
+            winTexSet(0xB3, (Vec){x - 215.0f, 20.0f + (a - i * VERSION_PICK(40, 50)), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0, 0, 0, 0x80});
             winTexInit_x2(*w->res->data);
-            winTexSet_x2(i + 0x18, 0xB3, (Vec){c, 20.0f + (b - off), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);
+            winTexSet_x2(i + 0x18, 0xB3, (Vec){c, 20.0f + (b - i * VERSION_PICK(40, 50)), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);
         } else {
             winTexInit_x2(*w->res->data);
-            winTexSet_x2(i + 0x18, 0xB3, (Vec){x - 215.0f, 20.0f + (a - off), 0.0f}, (Vec){1.0f, 1.0f, 1.0f},
+            winTexSet_x2(i + 0x18, 0xB3, (Vec){x - 215.0f, 20.0f + (a - i * VERSION_PICK(40, 50)), 0.0f}, (Vec){1.0f, 1.0f, 1.0f},
                          (GXColor){0x80, 0x80, 0x80, 0xFF});
         }
     }

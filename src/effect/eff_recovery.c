@@ -194,7 +194,6 @@ static void effRecoveryDisp4(CameraId cameraId, void* param);
 EffectEntry* effRecoveryEntry(s32 type, s32 amount, f32 x, f32 y, f32 z) {
     EffectEntry* effect;
     RecoveryWork* work;
-    RecoveryWork* pp;
     s32 size;
     s32 i;
 
@@ -280,43 +279,42 @@ EffectEntry* effRecoveryEntry(s32 type, s32 amount, f32 x, f32 y, f32 z) {
             work->timer = 180;
             break;
     }
-
-    pp = work + 1;
-    for (i = 1; i < effect->count; i++, pp++) {
-        pp->position.x = 0.0f;
+    work++;
+    for (i = 1; i < effect->count; i++, work++) {
+        work->position.x = 0.0f;
         switch (type) {
             case 4:
             case 5:
-                pp->position.y = (i < 10) ? 0.0f : -15.0f;
+                work->position.y = (i < 10) ? 0.0f : -15.0f;
                 break;
             default:
-                pp->position.y = 0.0f;
+                work->position.y = 0.0f;
                 break;
         }
-        pp->position.z = 0.0f;
-        pp->scale.x = 0.0f;
-        pp->scale.y = 0.0f;
-        pp->scale.z = 0.0f;
-        pp->velocity.x = 0.0f;
-        pp->velocity.y = 0.0f;
-        pp->velocity.z = 0.0f;
-        pp->timer = 0;
-        pp->state = 0;
-        pp->alpha = 255;
-        pp->angle = 0.0f;
+        work->position.z = 0.0f;
+        work->scale.x = 0.0f;
+        work->scale.y = 0.0f;
+        work->scale.z = 0.0f;
+        work->velocity.x = 0.0f;
+        work->velocity.y = 0.0f;
+        work->velocity.z = 0.0f;
+        work->timer = 0;
+        work->state = 0;
+        work->alpha = 255;
+        work->angle = 0.0f;
         switch (type) {
             case 6:
                 if (i == 1) {
-                    pp->scale.x = pp->scale.y = pp->scale.z = 1.5f;
-                    pp->alpha = 0;
-                    pp->delay = 0;
+                    work->scale.x = work->scale.y = work->scale.z = 1.5f;
+                    work->alpha = 0;
+                    work->delay = 0;
                 } else {
-                    pp->scale.x = pp->scale.y = pp->scale.z = 0.3f;
-                    pp->angle = (f32)(((i & 1) ? irand(80) : -irand(80)) + 90);
-                    pp->velocity.x = 1.8f * (f32)cos(6.2831855f * pp->angle / 360.0f);
-                    pp->velocity.y = 1.8f * (f32)sin(6.2831855f * pp->angle / 360.0f);
-                    pp->alpha = 255;
-                    pp->delay = i * 8;
+                    work->scale.x = work->scale.y = work->scale.z = 0.3f;
+                    work->angle = (f32)(((i & 1) ? irand(80) : -irand(80)) + 90);
+                    work->velocity.x = 1.8f * (f32)cos(6.2831855f * work->angle / 360.0f);
+                    work->velocity.y = 1.8f * (f32)sin(6.2831855f * work->angle / 360.0f);
+                    work->alpha = 255;
+                    work->delay = i * 8;
                 }
                 break;
         }

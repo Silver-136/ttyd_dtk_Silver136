@@ -622,16 +622,11 @@ static void e3Disp(CameraId cameraId, void* param) {
     s32 active;
     s32 alpha;
     s32 i;
-#if VERSION <= VERSION_DEMO_JP
-    s32 px, py;
-    s32 row, col;
-    s32 inset, pass, step;
-    f32 t, dy;
-    s32 mode;
-#else
-    s32 dy, x;
     s32 col, row;
-    s32 inset, pass, step;
+    s32 pass, step;
+#if VERSION <= VERSION_DEMO_JP
+    f32 t;
+    s32 mode;
 #endif
 
     active = wp->curScreen;
@@ -668,9 +663,9 @@ static void e3Disp(CameraId cameraId, void* param) {
         pressStartGX(alpha, 0.0f, -110.0f);
     } else {
         winTexInit(*wp->handle->data);
-        for (row = 0, py = -304; row < 40; row++, py += 16) {
-            for (col = 0, px = 0; col < 32; col++, px += 16) {
-                winTexSet(TEX_TILE, (Vec){(f32)py, (f32)(240 - px), 0.0f}, (Vec){1.0f, 1.0f, 1.0f},
+        for (col = 0; col < 40; col++) {
+            for (row = 0; row < 32; row++) {
+                winTexSet(TEX_TILE, (Vec){(f32)(col * 16 - 304), (f32)(240 - row * 16), 0.0f}, (Vec){1.0f, 1.0f, 1.0f},
 #else
         // Title screen: background tiles, the four characters and the title textures
         mode = (s32)((f32)sin(e3BlinkTime()) * 459.0f);
@@ -682,25 +677,25 @@ static void e3Disp(CameraId cameraId, void* param) {
         }
 
         winTexInit(*wp->handle->data);
-        for (row = 0, py = -304; row < 6; row++, py += 128) {
-            for (col = 0, px = 0; col < 9; col++, px += 64) {
-                winTexSet(8, (Vec){(f32)py, (f32)(240 - px), 0.0f}, (Vec){1.0f, 1.0f, 1.0f},
+        for (col = 0; col < 6; col++) {
+            for (row = 0; row < 9; row++) {
+                winTexSet(8, (Vec){(f32)(col * 128 - 304), (f32)(240 - row * 64), 0.0f}, (Vec){1.0f, 1.0f, 1.0f},
                           (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
             }
         }
 
-        for (row = 0; row < 4; row++) {
+        for (col = 0; col < 4; col++) {
 
-            t = 180.0f - 120.0f * (f32)row;
+            t = 180.0f - 120.0f * (f32)col;
             e3DispShadow(t, -150.0f, 0.0f);
             MTXTrans(poseMtx, t, -150.0f, 0.0f);
             MTXScale(poseScale, 3.0f, 3.0f, 3.0f);
             MTXConcat(poseMtx, poseScale, poseMtx);
-            animPoseMain(wp->poseIds[row]);
-            animPoseDrawMtx(wp->poseIds[row], poseMtx, 1, wp->poseRotY, 2.0f);
-            animPoseDrawMtx(wp->poseIds[row], poseMtx, 2, wp->poseRotY, 2.0f);
-            animPoseDrawMtx(wp->poseIds[row], poseMtx, 3, wp->poseRotY, 2.0f);
-            animPoseGetAnimPosePtr(wp->poseIds[row])->flags &= ~ANIM_POSE_FLAG_INSTANT_TURN;
+            animPoseMain(wp->poseIds[col]);
+            animPoseDrawMtx(wp->poseIds[col], poseMtx, 1, wp->poseRotY, 2.0f);
+            animPoseDrawMtx(wp->poseIds[col], poseMtx, 2, wp->poseRotY, 2.0f);
+            animPoseDrawMtx(wp->poseIds[col], poseMtx, 3, wp->poseRotY, 2.0f);
+            animPoseGetAnimPosePtr(wp->poseIds[col])->flags &= ~ANIM_POSE_FLAG_INSTANT_TURN;
         }
 
         winTexInit(*wp->handle->data);
@@ -709,11 +704,10 @@ static void e3Disp(CameraId cameraId, void* param) {
         winTexSet(10, (Vec){0.0f, -170.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
     } else {
         // Tiled background fill (40 x 32 quads)
-        // Same fill as below; the US demo compiles it with the counters held in these variables.
         winTexInit(*wp->handle->data);
-        for (col = 0, py = -304; col < 40; col++, py += 16) {
-            for (px = 0, row = 0; px < 32; px++, row += 16) {
-                winTexSet(E3_TEX_TILE, (Vec){(f32)py, (f32)(240 - row), 0.0f}, (Vec){1.0f, 1.0f, 1.0f},
+        for (col = 0; col < 40; col++) {
+            for (row = 0; row < 32; row++) {
+                winTexSet(E3_TEX_TILE, (Vec){(f32)(col * 16 - 304), (f32)(240 - row * 16), 0.0f}, (Vec){1.0f, 1.0f, 1.0f},
 #endif
                           (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
             }
@@ -788,9 +782,9 @@ static void e3Disp(CameraId cameraId, void* param) {
     } else {
         // Tiled background: 40 columns x 32 rows of 16-unit tiles, from x = -304 and down from y = 240
         winTexInit(*wp->handle->data);
-        for (col = 0, x = -304; col < 40; col++, x += 16) {
-            for (row = 0, dy = 0; row < 32; row++, dy += 16) {
-                winTexSet(TEX_TILE, (Vec){ (f32)x, (f32)(240 - dy), 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f },
+        for (col = 0; col < 40; col++) {
+            for (row = 0; row < 32; row++) {
+                winTexSet(TEX_TILE, (Vec){ (f32)(col * 16 - 304), (f32)(240 - row * 16), 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f },
                           (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
             }
         }
@@ -846,7 +840,7 @@ static void e3Disp(CameraId cameraId, void* param) {
 
         // Two passes of four mirrored window corners (shadow and content)
         winTexInit(*wp->handle->data);
-        for (pass = 1, inset = 5; pass >= 0; pass--, inset -= 5) {
+        for (pass = 1; pass >= 0; pass--) {
 
             // Top-Left
 #if VERSION <= VERSION_DEMO_JP
@@ -858,7 +852,7 @@ static void e3Disp(CameraId cameraId, void* param) {
 #else
             winTexSet(((gp->retraceCount >> 4) & 1) ? TEX_CURSOR_A : TEX_CURSOR_B,
 #endif
-                      (Vec){ (110.0f + wp->curX) + (f32)inset, (90.0f + wp->curY) - (f32)inset, 0.0f },
+                      (Vec){ (110.0f + wp->curX) + (f32)(pass * 5), (90.0f + wp->curY) - (f32)(pass * 5), 0.0f },
                       (Vec){ 1.0f, 1.0f, 1.0f },
                       (pass != 0) ? (GXColor){ 0x00, 0x00, 0x00, 0x40 } : (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
 
@@ -872,7 +866,7 @@ static void e3Disp(CameraId cameraId, void* param) {
 #else
                       winTexSet(((gp->retraceCount >> 4) & 1) ? TEX_CURSOR_A : TEX_CURSOR_B,
 #endif
-                      (Vec){ (wp->curX - 110.0f) + (f32)inset, (90.0f + wp->curY) - (f32)inset, 0.0f },
+                      (Vec){ (wp->curX - 110.0f) + (f32)(pass * 5), (90.0f + wp->curY) - (f32)(pass * 5), 0.0f },
                       (Vec){ -1.0f, 1.0f, 1.0f },
                       (pass != 0) ? (GXColor){ 0x00, 0x00, 0x00, 0x40 } : (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
 
@@ -886,7 +880,7 @@ static void e3Disp(CameraId cameraId, void* param) {
 #else
                       winTexSet(((gp->retraceCount >> 4) & 1) ? TEX_CURSOR_A : TEX_CURSOR_B,
 #endif
-                      (Vec){ (110.0f + wp->curX) + (f32)inset, (wp->curY - 90.0f) - (f32)inset, 0.0f },
+                      (Vec){ (110.0f + wp->curX) + (f32)(pass * 5), (wp->curY - 90.0f) - (f32)(pass * 5), 0.0f },
                       (Vec){ 1.0f, -1.0f, 1.0f },
                       (pass != 0) ? (GXColor){ 0x00, 0x00, 0x00, 0x40 } : (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
 
@@ -900,7 +894,7 @@ static void e3Disp(CameraId cameraId, void* param) {
 #else
                       winTexSet(((gp->retraceCount >> 4) & 1) ? TEX_CURSOR_A : TEX_CURSOR_B,
 #endif
-                      (Vec){ (wp->curX - 110.0f) + (f32)inset, (wp->curY - 90.0f) - (f32)inset, 0.0f },
+                      (Vec){ (wp->curX - 110.0f) + (f32)(pass * 5), (wp->curY - 90.0f) - (f32)(pass * 5), 0.0f },
                       (Vec){ -1.0f, -1.0f, 1.0f },
                       (pass != 0) ? (GXColor){ 0x00, 0x00, 0x00, 0x40 } : (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
         }

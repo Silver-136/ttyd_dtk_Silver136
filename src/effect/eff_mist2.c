@@ -43,7 +43,6 @@ static void _init_mist(EffMist2Work* p) {
 EffectEntry* effMist2Entry(s32 type, s32 life, f32 x, f32 y, f32 z, f32 a, f32 b) {
     EffectEntry* effect;
     EffMist2Work* work;
-    EffMist2Work* p;
     s32 i;
     s32 count;
 
@@ -70,15 +69,15 @@ EffectEntry* effMist2Entry(s32 type, s32 life, f32 x, f32 y, f32 z, f32 a, f32 b
     work->r = 0;
     work->g = 0;
     work->b8 = 0;
-    for (i = 1, p = work + 1; i < effect->count; i++, p++) {
-        p->spawnRadius = a;
-        p->spawnHeight = b;
-        _init_mist(p);
+    for (i = 1, work++; i < effect->count; i++, work++) {
+        work->spawnRadius = a;
+        work->spawnHeight = b;
+        _init_mist(work);
         if (type == 1) {
             f32 t = 6.2831855f * irand(360) / 360.0f;
-            p->position.x = p->spawnRadius * (f32)sin(t);
-            p->position.y = p->spawnHeight;
-            p->position.z = p->spawnRadius * (f32)cos(t);
+            work->position.x = work->spawnRadius * (f32)sin(t);
+            work->position.y = work->spawnHeight;
+            work->position.z = work->spawnRadius * (f32)cos(t);
         }
     }
     return effect;

@@ -119,7 +119,7 @@ static void telop(CameraId cameraId, void* param) {
     f32 y, x, scale;
     s32 alpha, a;
     const char* msg;
-    s32 k, i;
+    s32 i;
     u16 width;
 
     camera = camGetPtr(cameraId);
@@ -175,15 +175,13 @@ static void telop(CameraId cameraId, void* param) {
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
 
-    i = 1;
-    k = 5;
-    do {
+    for (i = 1; i >= 0; i--) {
         if (i != 0) {
             GXSetTevColor(GX_TEVREG1, (GXColor){0, 0, 0, 0x60});
         } else {
             GXSetTevColor(GX_TEVREG1, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
         }
-        PSMTXTrans(mtx, -15.0f + (f32)k, -105.0f - (f32)k, 0.0f);
+        PSMTXTrans(mtx, -15.0f + (f32)(i * 5), -105.0f - (f32)(i * 5), 0.0f);
         PSMTXConcat(camera->view, mtx, mtx);
         GXLoadPosMtxImm(mtx, GX_PNMTX0);
         GXSetCurrentMtx(GX_PNMTX0);
@@ -196,8 +194,7 @@ static void telop(CameraId cameraId, void* param) {
         GXTexCoord2f32(1.0f, 1.0f);
         GXPosition3f32(0.0f, -texH, 0.0f);
         GXTexCoord2f32(0.0f, 1.0f);
-        k -= 5;
-    } while (--i >= 0);
+    }
 
 #if VERSION >= VERSION_US
     {

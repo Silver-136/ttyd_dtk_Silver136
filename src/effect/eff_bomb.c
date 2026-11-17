@@ -57,7 +57,6 @@ static void effBombMain(EffectEntry* effect);
 EffectEntry* effBombEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
     EffectEntry* effect;
     EffBombWork* work;
-    EffBombWork* bomb;
     f32 size;
     f32 s;
     s32 i;
@@ -76,18 +75,18 @@ EffectEntry* effBombEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
     work->scale = scale;
     work->frame = 0;
     work->offset = 0;
-    bomb = work + 1;
-    for (i = 1; i < effect->count; i++, bomb++) {
-        bomb->angle = 90.0f * (f32)(i - 1) + (i > 4 ? 45.0f : 0.0f);
-        s = sin(0.017453292f * bomb->angle);
-        bomb->position.x = size * s;
-        s = cos(0.017453292f * bomb->angle);
-        bomb->position.y = size * s;
-        bomb->position.z = 0.0f;
-        bomb->scaleX = 0.0f;
-        bomb->scaleY = 0.0f;
-        bomb->offset = 0;
-        bomb->frame = 0;
+    work++;
+    for (i = 1; i < effect->count; i++, work++) {
+        work->angle = 90.0f * (f32)(i - 1) + (i > 4 ? 45.0f : 0.0f);
+        s = sin(0.017453292f * work->angle);
+        work->position.x = size * s;
+        s = cos(0.017453292f * work->angle);
+        work->position.y = size * s;
+        work->position.z = 0.0f;
+        work->scaleX = 0.0f;
+        work->scaleY = 0.0f;
+        work->offset = 0;
+        work->frame = 0;
     }
     effConfettiEntry(4, 40, x, y, z);
     return effect;

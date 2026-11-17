@@ -53,7 +53,6 @@ static inline f32 cosd(f32 deg) { return cos(6.2831855f * deg / 360.0f); }
  * with randomized sizes; 30 frames. Called via evt_eff64 "kemuri5_n64".
  */
 EffectEntry* effKemuri5N64Entry(f32 x, f32 y, f32 z, f32 angle) {
-    s32 ang;
     EffectEntry* effect;
     EffKemuri5N64Work* work;
     f32 angF;
@@ -66,7 +65,7 @@ EffectEntry* effKemuri5N64Entry(f32 x, f32 y, f32 z, f32 angle) {
     work = __memAlloc(HEAP_EFFECT, 8 * sizeof(EffKemuri5N64Work));
     effect->userdata = work;
     effect->callback = effKemuri5Main;
-    for (i = 0, ang = 0; i < 8; i++, work++) {
+    for (i = 0; i < 8; i++, work++) {
 
         work->active = 1;
         work->reserved_40 = 0.0f;
@@ -81,7 +80,7 @@ EffectEntry* effKemuri5N64Entry(f32 x, f32 y, f32 z, f32 angle) {
         work->baseScaleY = 0.03f * (f32)(rand() % 11) + 1.7f;
         work->angle = (f32)(rand() % 61);
         work->timer = 30;
-        angF = ang;
+        angF = i * 45;
         work->velY = 0.5f;
         work->accelY = -0.02f;
         work->accelY2 = 0.00005f;
@@ -89,7 +88,6 @@ EffectEntry* effKemuri5N64Entry(f32 x, f32 y, f32 z, f32 angle) {
         deg = reviseAngle(angle + angF);
         work->dirX = sind(deg);
         work->dirZ = cosd(deg);
-        ang += 45;
     }
     return effect;
 }

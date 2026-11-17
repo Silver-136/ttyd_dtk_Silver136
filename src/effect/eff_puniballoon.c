@@ -24,7 +24,6 @@ static void balloon_0(CameraId cameraId, EffectEntry* effect);
 EffectEntry* effPuniBalloonEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
     EffectEntry* effect;
     PuniBalloonWork* work;
-    PuniBalloonWork* p;
     s32 i;
     s32 n;
 
@@ -53,14 +52,14 @@ EffectEntry* effPuniBalloonEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
     work->frame = 0;
     work->scale = 0.0f;
     work->baseScale = scale;
-    for (i = 1, p = work + 1; i < effect->count; i++, p++) {
-        p->position.x = 0.0f;
-        p->position.y = 0.0f;
-        p->position.z = 0.0f;
-        p->scale = scale;
-        p->velocity.x = (f32)(rand() % 11 - 5);
-        p->velocity.y = (f32)(rand() % 11 - 5);
-        p->velocity.z = (f32)(rand() % 11 - 5);
+    for (i = 1, work++; i < effect->count; i++, work++) {
+        work->position.x = 0.0f;
+        work->position.y = 0.0f;
+        work->position.z = 0.0f;
+        work->scale = scale;
+        work->velocity.x = (f32)(rand() % 11 - 5);
+        work->velocity.y = (f32)(rand() % 11 - 5);
+        work->velocity.z = (f32)(rand() % 11 - 5);
     }
     return effect;
 }

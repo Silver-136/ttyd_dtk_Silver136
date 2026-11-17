@@ -346,12 +346,12 @@ void nameEntMain(void) {
 /** The early demos have no cursor travel check, no all-blank name check and no default partner name. */
 static s32 nameMain(void) {
 #if VERSION <= VERSION_DEMO_JP
-    s32 off;
+    s32 col;
     s32 idx;
 #else
     s32 len;
     s32 j;
-    s32 off;
+    s32 col;
     s32 idx;
 #if VERSION >= VERSION_US
     s32 cmdRow; // first row of the command column
@@ -364,11 +364,11 @@ static s32 nameMain(void) {
         case 0:
             if ((wp->flags & NAMEENT_FLAG_INPUT_ON) && gp->debugFlag == 0) {
                 if (keyGetButtonTrg(0) & PAD_BUTTON_A) {
-                    off = wp->cursorX;
+                    col = wp->cursorX;
 #if VERSION >= VERSION_US
-                    if (off >= 10 && wp->cursorY >= (cmdRow = gp->language == LANGUAGE_JP ? 4 : 6)) {
+                    if (col >= 10 && wp->cursorY >= (cmdRow = gp->language == LANGUAGE_JP ? 4 : 6)) {
 #else
-                    if (off >= 10 && wp->cursorY >= 4) {
+                    if (col >= 10 && wp->cursorY >= 4) {
 #endif
                         switch (wp->cursorY) {
                             case 4:
@@ -394,12 +394,11 @@ static s32 nameMain(void) {
                             case 7: {
                                 s32 n;
                                 s32 k;
-                                s32 o;
 #if VERSION >= VERSION_US
                                 if (gp->language == LANGUAGE_JP) {
                                     n = strlen(wp->name) / 2;
-                                    for (k = 0, o = 0; k < n; o += 2, k++) {
-                                        if (strncmp(&wp->name[o], "　", 2)) {
+                                    for (k = 0; k < n; k++) {
+                                        if (strncmp(&wp->name[k * 2], "　", 2)) {
                                             break;
                                         }
                                     }
@@ -447,8 +446,8 @@ static s32 nameMain(void) {
                                 }
 #else
                                 n = strlen(wp->name) / 2;
-                                for (k = 0, o = 0; k < n; o += 2, k++) {
-                                    if (strncmp(&wp->name[o], "　", 2)) {
+                                for (k = 0; k < n; k++) {
+                                    if (strncmp(&wp->name[k * 2], "　", 2)) {
                                         break;
                                     }
                                 }
@@ -470,18 +469,18 @@ static s32 nameMain(void) {
                         }
                     } else if (wp->nameLen < 8) {
 #if VERSION <= VERSION_DEMO_JP
-                        ((u16*)wp->name)[wp->nameLen] = *(const u16*)wp->charTable[wp->cursorY * NAMEENT_COLS + off];
+                        ((u16*)wp->name)[wp->nameLen] = *(const u16*)wp->charTable[wp->cursorY * NAMEENT_COLS + col];
                         wp->nameLen++;
                         if (wp->nameLen >= 8) {
 #else
 #if VERSION >= VERSION_US
                         if (gp->language == LANGUAGE_JP) {
-                            ((u16*)wp->name)[wp->nameLen] = *(u16*)wp->charTable[wp->cursorY * NAMEENT_COLS + off];
+                            ((u16*)wp->name)[wp->nameLen] = *(u16*)wp->charTable[wp->cursorY * NAMEENT_COLS + col];
                         } else {
-                            wp->name[wp->nameLen] = *wp->charTable[wp->cursorY * NAMEENT_COLS + off];
+                            wp->name[wp->nameLen] = *wp->charTable[wp->cursorY * NAMEENT_COLS + col];
                         }
 #else
-                        ((u16*)wp->name)[wp->nameLen] = *(u16*)wp->charTable[wp->cursorY * NAMEENT_COLS + off];
+                        ((u16*)wp->name)[wp->nameLen] = *(u16*)wp->charTable[wp->cursorY * NAMEENT_COLS + col];
 #endif
                         wp->nameLen++;
                         if (wp->nameLen >= 8) {
@@ -493,7 +492,7 @@ static s32 nameMain(void) {
 #if VERSION <= VERSION_DEMO_JP
                         psndSFXOn((const char*)PSND_SFX_FILE_MOJI_SET1);
                     } else if (wp->nameLen == 8) {
-                        ((u16*)wp->name)[wp->nameLen - 1] = *(const u16*)wp->charTable[wp->cursorY * NAMEENT_COLS + off];
+                        ((u16*)wp->name)[wp->nameLen - 1] = *(const u16*)wp->charTable[wp->cursorY * NAMEENT_COLS + col];
                         wp->cursorX = 10;
                         wp->cursorY = 7;
                         psndSFXOn((const char*)PSND_SFX_FILE_MOJI_SET1);
@@ -580,8 +579,8 @@ static s32 nameMain(void) {
 #if VERSION >= VERSION_US
                     if (gp->language == LANGUAGE_JP) {
                         len = strlen(wp->name) / 2;
-                        for (j = 0, off = 0; j < len; off += 2, j++) {
-                            if (strncmp(&wp->name[off], "　", 2)) {
+                        for (j = 0; j < len; j++) {
+                            if (strncmp(&wp->name[j * 2], "　", 2)) {
                                 break;
                             }
                         }
@@ -629,8 +628,8 @@ static s32 nameMain(void) {
                     }
 #else
                     len = strlen(wp->name) / 2;
-                    for (j = 0, off = 0; j < len; off += 2, j++) {
-                        if (strncmp(&wp->name[off], "　", 2)) {
+                    for (j = 0; j < len; j++) {
+                        if (strncmp(&wp->name[j * 2], "　", 2)) {
                             break;
                         }
                     }

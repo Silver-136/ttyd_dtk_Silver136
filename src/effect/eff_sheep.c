@@ -39,7 +39,6 @@ static void effSheepMain(EffectEntry* effect);
 EffectEntry* effSheepEntry(s32 type, f32 x, f32 y, f32 z) {
     EffectEntry* effect;
     EffSheepWork* work;
-    EffSheepWork* p;
     s32 i;
 
     effect = effEntry();
@@ -58,27 +57,27 @@ EffectEntry* effSheepEntry(s32 type, f32 x, f32 y, f32 z) {
     work->position.z = z;
     work->scale = 1.0f;
     work->state = 0;
-    for (i = 1, p = work + 1; i < effect->count; i++, p++) {
-        p->type = irand(100) < 20;
-        p->position.x = -500.0f;
-        p->position.y = 0.0f;
-        p->position.z = 0.0f;
-        p->poseId = -1;
-        p->state = 0;
-        p->scale = (irand(5) + 8) / 10.0f;
-        p->speed = (irand(20) + 20) / 10.0f;
-        p->timer = i + irand(30);
-        p->position.z = 100 - irand(200);
-        if (p->type != 0) {
-            p->hopFrames = (s32)((irand(50) + 50) / p->speed);
-            p->gravity = 0.2f;
-            p->velY = p->gravity * p->hopFrames / 2.0f;
+    for (i = 1, work++; i < effect->count; i++, work++) {
+        work->type = irand(100) < 20;
+        work->position.x = -500.0f;
+        work->position.y = 0.0f;
+        work->position.z = 0.0f;
+        work->poseId = -1;
+        work->state = 0;
+        work->scale = (irand(5) + 8) / 10.0f;
+        work->speed = (irand(20) + 20) / 10.0f;
+        work->timer = i + irand(30);
+        work->position.z = 100 - irand(200);
+        if (work->type != 0) {
+            work->hopFrames = (s32)((irand(50) + 50) / work->speed);
+            work->gravity = 0.2f;
+            work->velY = work->gravity * work->hopFrames / 2.0f;
         }
         if (effect->count - 1 == i) {
-            p->position.z = 0.0f;
-            p->type = 0;
-            p->scale = 1.0f;
-            p->timer = effect->count + 200;
+            work->position.z = 0.0f;
+            work->type = 0;
+            work->scale = 1.0f;
+            work->timer = effect->count + 200;
         }
     }
     return effect;

@@ -37,7 +37,6 @@ static u8 scale_dt2[] = {
 EffectEntry* effMahornEntry(s32 type, s32 count, s32 duration, f32 x, f32 y, f32 z, f32 scale) {
     EffectEntry* effect;
     EffMahornWork* work;
-    EffMahornWork* ring;
     s32 i, num;
 
     effect = effEntry();
@@ -59,16 +58,15 @@ EffectEntry* effMahornEntry(s32 type, s32 count, s32 duration, f32 x, f32 y, f32
     work->position.z = z;
     work->scale = scale;
     work->alpha = 255;
-
-    ring = work + 1;
-    for (i = 1; i < effect->count; i++, ring++) {
-        ring->position.x = 0.0f;
-        ring->position.y = 0.0f;
-        ring->position.z = 0.0f;
-        ring->scale = 0.0f;
-        ring->scale2 = 0.0f;
-        ring->alpha = 255;
-        ring->delay = i * 4;
+    work++;
+    for (i = 1; i < effect->count; i++, work++) {
+        work->position.x = 0.0f;
+        work->position.y = 0.0f;
+        work->position.z = 0.0f;
+        work->scale = 0.0f;
+        work->scale2 = 0.0f;
+        work->alpha = 255;
+        work->delay = i * 4;
     }
     return effect;
 }

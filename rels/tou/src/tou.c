@@ -995,7 +995,6 @@ static void disp_proc(CameraId cameraId, void* param) {
 #if VERSION >= VERSION_US
     const char* name;
 #endif
-    s32 yoff;
     s32 w;
     f32 winW;
     f32 top;
@@ -1045,10 +1044,9 @@ static void disp_proc(CameraId cameraId, void* param) {
     sh = 220.0f;
     GXSetScissor(sx, (u16)sy, sw, (u16)sh);
     rank = 0;
-    yoff = 0;
     for (i = 0; i < rank_wp->count; i++) {
         tx = 10.0f + x;
-        y = dwp->scroll + (top - yoff - 40.0f);
+        y = dwp->scroll + (top - rank * 20 - 40.0f);
         if (!(rank_wp->entries[i].flags & RANK_FLAG_HIDDEN)) {
             PSMTXScale(scale, 0.8f, 0.8f, 0.8f);
             if (rank != 0) {
@@ -1097,7 +1095,6 @@ static void disp_proc(CameraId cameraId, void* param) {
             FontDrawMessageMtx(mtx, msgSearch(dt[rank_wp->entries[i].id].name));
 #endif
             rank++;
-            yoff += 20;
         }
     }
     sy = 137.0f;

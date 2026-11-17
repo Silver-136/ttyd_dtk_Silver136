@@ -479,7 +479,6 @@ USER_FUNC(evt_nannpc_entry) {
     NanNPC* p;
     ExtdrvPose* pose;
     char* str;
-    s32 off;
     EvtWord name;
     s32 i;
     EvtWord* args;
@@ -490,8 +489,8 @@ USER_FUNC(evt_nannpc_entry) {
     // FAKE: the value goes through a long long cast; plain name = evtGetValue(...) changes the object
     name = (long long) evtGetValue(event, args[0]);
     w = nanNPCWork;
-    for (i = 0, off = 0; i < w->num; off += sizeof(NanNPC), i++) {
-        p = (NanNPC*)((u8*)w->npc + off);
+    for (i = 0; i < w->num; i++) {
+        p = &w->npc[i];
         str = nanNPCMakeString((char*)name);
         strcmp((char*)p->name, str);
         if (!p->pose) {

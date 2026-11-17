@@ -116,7 +116,6 @@ static void _init(EffIbukiWork* p, s32 i) {
 EffectEntry* effIbukiEntry(s32 type, s32 life, f32 x, f32 y, f32 z) {
     EffectEntry* effect;
     EffIbukiWork* work;
-    EffIbukiWork* p;
     s32 i;
 
     effect = effEntry();
@@ -143,9 +142,9 @@ EffectEntry* effIbukiEntry(s32 type, s32 life, f32 x, f32 y, f32 z) {
     work->tex[1] = 0.0f;
     work->tex[2] = 0.0f;
     work->tex[3] = 0.0f;
-    p = work + 1;
-    for (i = 1; i < effect->count; i++, p++) {
-        _init(p, i);
+    work++;
+    for (i = 1; i < effect->count; i++, work++) {
+        _init(work, i);
     }
     return effect;
 }

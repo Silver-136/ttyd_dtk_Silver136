@@ -98,7 +98,6 @@ static inline s32 getX(s32 i) {
 EffectEntry* effLevelupEntry(s32 type, f32 x, f32 y, f32 z, s32 limit) {
     EffectEntry* effect;
     EffLevelupWork* work;
-    EffLevelupWork* w;
     s32 i;
 #if VERSION >= VERSION_US
     GXTexObj texObj;
@@ -120,8 +119,8 @@ EffectEntry* effLevelupEntry(s32 type, f32 x, f32 y, f32 z, s32 limit) {
     work->z = z;
     work->timer = limit;
     work->state = 0;
-    w = work + 1;
-    for (i = 1; i < effect->count; i++, w++) {
+    work++;
+    for (i = 1; i < effect->count; i++, work++) {
 #if VERSION >= VERSION_US
         a = 0.0f;
         b = a;
@@ -136,16 +135,16 @@ EffectEntry* effLevelupEntry(s32 type, f32 x, f32 y, f32 z, s32 limit) {
             effGetTexObj(texid_tbl[gp->language][j], &texObj);
             b += s * ((f32)GXGetTexObjWidth(&texObj) / 2.0f);
         }
-        w->x = a - b;
+        work->x = a - b;
 #else
-        w->x = getX(i);
+        work->x = getX(i);
 #endif
-        w->y = y_trans[0];
-        w->z = 0.0f;
-        w->xOffset = 0.0f;
-        w->state = 0;
-        w->scaleX = 1.0f;
-        w->scaleY = i < 3 ? 1.0f : 0.0f;
+        work->y = y_trans[0];
+        work->z = 0.0f;
+        work->xOffset = 0.0f;
+        work->state = 0;
+        work->scaleX = 1.0f;
+        work->scaleY = i < 3 ? 1.0f : 0.0f;
     }
     return effect;
 }

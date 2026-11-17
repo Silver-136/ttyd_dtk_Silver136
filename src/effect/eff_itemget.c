@@ -52,7 +52,6 @@ static u8 size_tbl[10] = { 0x32, 0x32, 0x32, 0x28, 0x0C, 0x0C, 0x0C, 0x0A, 0x0A,
 EffectEntry* effItemGetEntry(s32 type, f32 x, f32 y, f32 z) {
     EffectEntry* effect;
     ItemGetWork* work;
-    ItemGetWork* elem;
     s32 i;
     s32 count;
     f32 cv;
@@ -81,26 +80,26 @@ EffectEntry* effItemGetEntry(s32 type, f32 x, f32 y, f32 z) {
     work->camera = CAMERA_3D;
     work->alpha = 255;
     work->lifetime = 1000;
-    elem = work + 1;
-    for (i = 1; i < effect->count; i++, elem++) {
-        elem->position.x = 0.0f;
-        elem->position.y = 0.0f;
-        elem->position.z = 0.0f;
+    work++;
+    for (i = 1; i < effect->count; i++, work++) {
+        work->position.x = 0.0f;
+        work->position.y = 0.0f;
+        work->position.z = 0.0f;
         if (type == 10) {
-            elem->angle = 1.0471976f + 6.2831855f * (f32)(i - 1) / 6.0f;
-            elem->velocity.x = 5.0f * (f32)sin(elem->angle);
+            work->angle = 1.0471976f + 6.2831855f * (f32)(i - 1) / 6.0f;
+            work->velocity.x = 5.0f * (f32)sin(work->angle);
 
-            cv = (f32)cos(elem->angle);
-            elem->velocity.y = 5.0f * -cv;
-            elem->velocity.z = 0.0f;
+            cv = (f32)cos(work->angle);
+            work->velocity.y = 5.0f * -cv;
+            work->velocity.z = 0.0f;
         } else {
-            elem->angle = 6.2831855f * (f32)(i - 1) / (f32)(effect->count - 1);
-            elem->velocity.x = (f32)sin(elem->angle);
-            elem->velocity.y = -(f32)cos(elem->angle);
-            elem->velocity.z = 0.0f;
+            work->angle = 6.2831855f * (f32)(i - 1) / (f32)(effect->count - 1);
+            work->velocity.x = (f32)sin(work->angle);
+            work->velocity.y = -(f32)cos(work->angle);
+            work->velocity.z = 0.0f;
         }
-        elem->alpha = 0;
-        elem->timer = 0;
+        work->alpha = 0;
+        work->timer = 0;
     }
     return effect;
 }

@@ -70,7 +70,6 @@ static f32 ty_data2[] = {
 EffectEntry* effBreakEntry(s32 type, s32 duration, f32 x, f32 y, f32 z) {
     EffectEntry* effect;
     EffBreakWork* work;
-    EffBreakWork* w;
     s32 count;
     s32 i;
 
@@ -102,8 +101,8 @@ EffectEntry* effBreakEntry(s32 type, s32 duration, f32 x, f32 y, f32 z) {
     work->position.z = z;
     work->timer = duration;
     work->scale = 2.0f;
-    w = work + 1;
-    for (i = 1; i < effect->count; i++, w++) {
+    work++;
+    for (i = 1; i < effect->count; i++, work++) {
 #if VERSION >= VERSION_US
         // a: centre of this letter (letters 72 apart), b: half the word width; the texture objects fetched in
         // these loops are not used
@@ -119,16 +118,16 @@ EffectEntry* effBreakEntry(s32 type, s32 duration, f32 x, f32 y, f32 z) {
             effGetTexObj(texid_tbl[gp->language].ids[j], &texObj);
             b += 36.0f;
         }
-        w->position.x = a - b;
+        work->position.x = a - b;
 #else
-        w->position.x = 2.0f * (s32)((i - 1) * 36 + 18 - (((effect->count - 2) * 36 + 24) / 2));
+        work->position.x = 2.0f * (s32)((i - 1) * 36 + 18 - (((effect->count - 2) * 36 + 24) / 2));
 #endif
-        w->position.y = 0.0f;
-        w->position.z = 0.0f;
-        w->offsetY = 10.0f;
-        w->counter = 0;
-        w->timer = (i - 1) * 21;
-        w->state = 0;
+        work->position.y = 0.0f;
+        work->position.z = 0.0f;
+        work->offsetY = 10.0f;
+        work->counter = 0;
+        work->timer = (i - 1) * 21;
+        work->state = 0;
     }
     return effect;
 }

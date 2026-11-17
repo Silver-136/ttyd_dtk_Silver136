@@ -37,7 +37,6 @@ static void effMistDisp(CameraId cameraId, void* param);
 EffectEntry* effMistEntry(s32 type, s32 life, f32 x, f32 y, f32 z, f32 yaw) {
     EffectEntry* effect;
     EffMistWork* work;
-    EffMistWork* p;
     s32 i;
     s32 count;
     f32 t;
@@ -62,66 +61,66 @@ EffectEntry* effMistEntry(s32 type, s32 life, f32 x, f32 y, f32 z, f32 yaw) {
     work->timer = 0;
     work->alpha = 255.0f;
     work->yaw = yaw - camGetPtr(CAMERA_3D)->viewYaw;
-    for (i = 1, p = work + 1; i < effect->count; i++, p++) {
-        p->position.x = irand(50) - 25;
-        p->position.y = irand(50) - 25;
-        p->position.z = 0.0f;
-        p->scale.x = p->scale.y = p->scale.z = 0.8f + irand(12) / 10.0f;
-        p->velocity.x = (irand(10) - 5) / 20.0f;
-        p->velocity.y = (irand(10) - 5) / 20.0f;
-        p->velocity.z = 0.0f;
-        p->alpha = 0.0f;
-        p->life = irand(30) + 30;
-        p->timer = 0;
-        p->yaw = yaw - camGetPtr(CAMERA_3D)->viewYaw;
+    for (i = 1, work++; i < effect->count; i++, work++) {
+        work->position.x = irand(50) - 25;
+        work->position.y = irand(50) - 25;
+        work->position.z = 0.0f;
+        work->scale.x = work->scale.y = work->scale.z = 0.8f + irand(12) / 10.0f;
+        work->velocity.x = (irand(10) - 5) / 20.0f;
+        work->velocity.y = (irand(10) - 5) / 20.0f;
+        work->velocity.z = 0.0f;
+        work->alpha = 0.0f;
+        work->life = irand(30) + 30;
+        work->timer = 0;
+        work->yaw = yaw - camGetPtr(CAMERA_3D)->viewYaw;
         switch (type) {
             case 0:
-                p->r = 255;
-                p->g = 255;
-                p->b = 255;
+                work->r = 255;
+                work->g = 255;
+                work->b = 255;
                 break;
             case 1:
-                p->r = 11;
-                p->g = 9;
-                p->b = 96;
+                work->r = 11;
+                work->g = 9;
+                work->b = 96;
                 break;
             case 2:
-                p->r = 225;
-                p->g = 153;
-                p->b = 175;
+                work->r = 225;
+                work->g = 153;
+                work->b = 175;
                 break;
             case 3:
-                p->r = 73;
-                p->g = 101;
-                p->b = 0;
+                work->r = 73;
+                work->g = 101;
+                work->b = 0;
                 break;
             case 4:
-                p->position.x = 0.0f;
-                p->position.y = 0.0f;
-                p->position.z = 1.0f;
-                t = sin(6.2831855f * p->yaw / 360.0f);
-                p->velocity.x = 1.1f * t;
-                p->velocity.y = -2.0f;
-                t = cos(6.2831855f * p->yaw / 360.0f);
-                p->velocity.z = 1.1f * -t;
-                p->accel.x = 0.95f;
-                p->accel.y = -0.04f;
-                p->accel.z = 0.94f;
-                p->r = 255;
-                p->g = 255;
-                p->b = 255;
-                p->scale.z = p->scale.y = p->scale.x = 0.3f;
-                p->alpha = 200.0f;
+                work->position.x = 0.0f;
+                work->position.y = 0.0f;
+                work->position.z = 1.0f;
+                t = sin(6.2831855f * work->yaw / 360.0f);
+                work->velocity.x = 1.1f * t;
+                work->velocity.y = -2.0f;
+                t = cos(6.2831855f * work->yaw / 360.0f);
+                work->velocity.z = 1.1f * -t;
+                work->accel.x = 0.95f;
+                work->accel.y = -0.04f;
+                work->accel.z = 0.94f;
+                work->r = 255;
+                work->g = 255;
+                work->b = 255;
+                work->scale.z = work->scale.y = work->scale.x = 0.3f;
+                work->alpha = 200.0f;
                 break;
             case 5:
-                p->r = 70;
-                p->g = 0;
-                p->b = 50;
+                work->r = 70;
+                work->g = 0;
+                work->b = 50;
                 break;
             case 6:
-                p->r = 0;
-                p->g = 0;
-                p->b = 0;
+                work->r = 0;
+                work->g = 0;
+                work->b = 0;
                 break;
         }
     }
