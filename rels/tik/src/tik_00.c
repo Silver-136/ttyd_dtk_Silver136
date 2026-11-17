@@ -75,7 +75,6 @@ typedef struct UranaiWork {
     s32 w;
     s32 h;
 } UranaiWork;
-static inline f32 tanf(f32 x) { return tan(x); }
 static s32 ssf;
 static UranaiWork* uranai_wp;
 static char* uranaisi_msgp;

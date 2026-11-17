@@ -41,8 +41,6 @@
 #include "evt/evt_eff.h"
 #include "evt/evt_mario.h"
 #undef GXSetTexCoordGen
-__declspec(weak) f32 cosf(f32 x);
-__declspec(weak) f32 sinf(f32 x);
 typedef struct ScreenWork {
     void* buf;
     s32 ready;
@@ -4142,33 +4140,26 @@ static s32 confupose(EventEntry* event, BOOL isFirstCall) {
     return EVT_RETURN_DONE;
 }
 
-__declspec(weak) f32 sinf(f32 x) {
-    return sin(x);
-}
-
-__declspec(weak) f32 cosf(f32 x) {
-    return cos(x);
-}
-
 /**
- * Moves the item named "stone" (the Star Stone) along a ballistic arc towards the target (arg0..arg2) at the
- * given horizontal speed and gravity, each frame, and plays the Star Stone jump sound on landing.
+ * Script helper: makes the item named "stone" (the Star Stone) jump to the position in arg0..arg2 along a ballistic
+ * arc (horizontal speed 1, gravity 0.5), one step each frame, and plays the Star Stone jump sound on landing.
  * Returns EVT_RETURN_BLOCK until it arrives.
  */
-// FAKE: invented one-use inline helper (no map name); writing it out changes the code (FAKES.md)
-static inline s32 item_jump_sub(EventEntry* event, BOOL isFirstCall, f32 speed, f32 g) {
+static s32 item_jump(EventEntry* event, BOOL isFirstCall) {
+    EvtWord* args = event->args;
     // unused: nothing reads it, but its zero template is in the retail .rodata (JP demo map @1041, 4 numbers
     // before this function's own tmp template @1045)
     Vec zero = {0.0f, 0.0f, 0.0f};
-    EvtWord* args = event->args;
-    f32 z;
-    f32 y;
     f32 x;
+    f32 y;
+    f32 z;
     ItemEntry* item;
-    f32 angle;
-    f32 dy;
-    f32 t;
     f32 vy;
+    f32 t;
+    f32 dy;
+    f32 angle;
+    f32 speed = 1.0f;
+    f32 g = 0.5f;
 
     x = evtGetFloat(event, args[0]);
     y = evtGetFloat(event, args[1]);
@@ -4198,8 +4189,8 @@ static inline s32 item_jump_sub(EventEntry* event, BOOL isFirstCall, f32 speed, 
         item->position.y = y;
         item->position.z = z;
         {
-            Vec tmp = {0.0f, 0.0f, 0.0f};
             Vec pos;
+            Vec tmp = {0.0f, 0.0f, 0.0f};
 
             tmp.x = item->position.x;
             tmp.y = item->position.y;
@@ -4213,11 +4204,6 @@ static inline s32 item_jump_sub(EventEntry* event, BOOL isFirstCall, f32 speed, 
     event->userdata[0] = *(s32*)&t;
     event->userdata[1] = *(s32*)&vy;
     return EVT_RETURN_BLOCK;
-}
-
-/** Script helper: makes the Star Stone item jump to the position in arg0..arg2 (speed 1, gravity 0.5). */
-static s32 item_jump(EventEntry* event, BOOL isFirstCall) {
-    return item_jump_sub(event, isFirstCall, 1.0f, 0.5f);
 }
 
 /**

@@ -16,9 +16,17 @@ double fabs(double x);
 double sin(double x);
 double cos(double x);
 
-float sinf(float x);
-float cosf(float x);
-float tanf(float x);
+double tan(double x);
+double atan2(double y, double x);
+double hypot(double x, double y);
+
+/* Single-precision wrappers around the double routines, inline in the header. A unit that is compiled with inlining
+ * off (the gon and tou2 RELs) calls them and gets its own weak copy right after the first function that uses one. */
+inline float sinf(float x) { return sin(x); }
+inline float cosf(float x) { return cos(x); }
+inline float tanf(float x) { return tan(x); }
+inline float atan2f(float y, float x) { return atan2(y, x); }
+inline float hypotf(float x, float y) { return hypot(x, y); }
 float acosf(float x);
 float powf(float base, float exponent);
 

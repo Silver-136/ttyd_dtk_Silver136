@@ -292,7 +292,7 @@ EVT_END()
  * apparently unused by this unit's scripts.
  */
 static s32 krb_comp_dir(f32 x, f32 z) {
-    f32 dist = hypot(x, z);
+    f32 dist = hypotf(x, z);
     f32 s = __fabs(z) / dist;
     u16 i;
     u16 lo = 0;

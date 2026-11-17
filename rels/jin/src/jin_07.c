@@ -52,7 +52,6 @@ typedef struct Teresa {
 static Teresa* pTeresa;
 static s32 g_nNumEndProc[1];
 static s32 g_nNumOutBox[1];
-static inline f32 cosf(f32 x) { return cos(x); }
 
 static USER_FUNC(senteresa_okure_move);
 static USER_FUNC(senteresa_okure_move_init);

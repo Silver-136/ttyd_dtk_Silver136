@@ -35,11 +35,6 @@ static EvtWord damage_event[10];
 static EvtWord attack_event[19];
 static EvtWord wait_event[6];
 
-/** tan in single precision, as in tou2's unit_wanawana.c. */
-static inline f32 tanf(f32 x) {
-    return tan(x);
-}
-
 /**
  * Unit definition of the trap unit `wanawana`: 2 HP and level 1, with its sizes, damage sounds,
  * status vulnerability, parts and init script.

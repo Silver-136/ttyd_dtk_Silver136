@@ -164,7 +164,6 @@ static const char* suuji[] = { "０", "１", "２", "３", "４", "５", "６", 
 
 // local prototypes
 static f32 camGetRy(void);
-__declspec(weak) f32 atan2f(f32 y, f32 x);
 static void disp_proc(CameraId cameraId, void* param);
 static void printRanking(void);
 static void rankingControll(void);
@@ -1197,11 +1196,6 @@ USER_FUNC(evt_tou_print_ranking) {
     dwp->scroll += (dwp->target - dwp->scroll) / 8.0f;
     dispEntry(CAMERA_2D, 300.0f, DISP_MODE_OPAQUE, disp_proc, NULL);
     return EVT_RETURN_BLOCK;
-}
-
-/** Single-precision wrapper around atan2 (radians). */
-__declspec(weak) f32 atan2f(f32 y, f32 x) {
-    return atan2(y, x);
 }
 
 /** Returns the 3D camera's yaw in degrees (0 to 360), computed from the camera position and look-at point. */

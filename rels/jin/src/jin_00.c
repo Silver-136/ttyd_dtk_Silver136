@@ -71,10 +71,8 @@ static s32 g_nNumHarituku[1];
 static s32 g_nNumEndProc[1];
 static f32 g_fSpeed;
 static f32 randf(f32 min, f32 max);
-static inline f32 sinf(f32 x) { return sin(x); }
 static void computePos(Teresa* ter, Vec* out);
 static void senteresa_ext_disp(CameraId camera, void* param);
-static inline f32 cosf(f32 x) { return cos(x); }
 
 static USER_FUNC(get_npc_color);
 static USER_FUNC(teresa_eff);

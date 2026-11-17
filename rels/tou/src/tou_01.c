@@ -784,9 +784,6 @@ static USER_FUNC(proj_on) {
     return EVT_RETURN_DONE;
 }
 
-/** tan as f32 (as end_00 and tik_00 define it). */
-static inline f32 tanf(f32 x) { return tan(x); }
-
 /**
  * Display callback: renders a scaled sphere from above into a 128x128 texture,
  * the source for the blimp shadow projected on the plaza.

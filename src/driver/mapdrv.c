@@ -56,9 +56,6 @@ static void mapSetMaterial(MapObject* obj, void* material);
 static void mapSetPolygon(MapObject* obj, MapFileMesh* mesh);
 static void mapSetPolygonVtxDesc(MapObject* obj, MapFileMesh* mesh);
 
-/** Single-precision sine for this file, routed through the double sin() of math.h. */
-static inline f32 sinf(f32 x) { return sin(x); }
-
 /** Frames per second of the map animation clock. PAL keeps it at 60 even when the display runs at 50 Hz. */
 static inline s32 mapAnimFps(void) {
 #if VERSION >= VERSION_DEMO_EU
