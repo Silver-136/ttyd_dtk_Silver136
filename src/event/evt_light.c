@@ -76,6 +76,16 @@ USER_FUNC(evt_light_npc_lighting_onoff) {
     return EVT_RETURN_DONE;
 }
 
+/** const char* lightName, out: the light's flags */
+// Original name and size (0x54) from the JP demo map (UNUSED there: no script uses it); looks the light up as
+// evt_light_bind_mapobj does and returns its flags word.
+USER_FUNC(evt_light_get_flag) {
+    EvtWord* args = event->args;
+    LightEntry* light = lightNameToPtr((const char*)evtGetValue(event, args[0]));
+    evtSetValue(event, args[1], light->flags);
+    return EVT_RETURN_DONE;
+}
+
 /** const char* lightName, const char* mapobjName, s32 mode */
 USER_FUNC(evt_light_bind_mapobj) {
     EvtWord* args = event->args;

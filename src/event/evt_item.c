@@ -67,6 +67,19 @@ USER_FUNC(evt_item_flag_off) {
     return EVT_RETURN_DONE;
 }
 
+// Original name and size (0x54) from the JP demo map (UNUSED there: no script uses it); listed after
+// evt_item_flag_off. Same form with the flags stored whole (itemdrv has no setter function in the map).
+USER_FUNC(evt_item_flag_set) {
+    EvtWord* args = event->args;
+    ItemEntry* item = itemNameToPtr((char*)evtGetValue(event, args[0]));
+    u16 flags = args[1];
+    if (item == NULL) {
+        return EVT_RETURN_DONE;
+    }
+    item->flags = flags;
+    return EVT_RETURN_DONE;
+}
+
 USER_FUNC(evt_item_status_on) {
     EvtWord* args = event->args;
     ItemEntry* item = itemNameToPtr((char*)evtGetValue(event, args[0]));
@@ -88,6 +101,19 @@ USER_FUNC(evt_item_status_off) {
         return EVT_RETURN_DONE;
     }
     itemStatusOff(item, flags);
+    return EVT_RETURN_DONE;
+}
+
+// Original name and size (0x50) from the JP demo map (UNUSED there: no script uses it); listed after
+// evt_item_status_off. Same form with the status word stored whole (itemdrv has no setter function in the map).
+USER_FUNC(evt_item_status_set) {
+    EvtWord* args = event->args;
+    ItemEntry* item = itemNameToPtr((char*)evtGetValue(event, args[0]));
+    u32 flags = args[1];
+    if (item == NULL) {
+        return EVT_RETURN_DONE;
+    }
+    item->flags2 = flags;
     return EVT_RETURN_DONE;
 }
 

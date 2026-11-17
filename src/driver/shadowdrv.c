@@ -956,6 +956,22 @@ void shadowSetVolumeDecay(s32 id, f32 volume, f32 decay, f32 decay2) {
     entry->decay2 = decay2;
 }
 
+/** Reads back what shadowSetVolumeDecay set; each output may be NULL. */
+// Original name and size (0x44) from the JP demo map (UNUSED there: nothing calls it); the getter of
+// shadowSetVolumeDecay's three fields.
+void shadowGetVolumeDecay(s32 id, f32* volume, f32* decay, f32* decay2) {
+    ShadowEntry* entry = &cswp->entries[id];
+    if (volume != NULL) {
+        *volume = entry->volume;
+    }
+    if (decay != NULL) {
+        *decay = entry->decay;
+    }
+    if (decay2 != NULL) {
+        *decay2 = entry->decay2;
+    }
+}
+
 /** Sets the radius of shadow id. */
 void shadowSetSize(s32 id, f32 size) {
     ShadowEntry* entry = &cswp->entries[id];

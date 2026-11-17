@@ -119,6 +119,7 @@ ShadowConfig* shadowGetDepthShadowConfig(void);
 ShadowConfig* shadowGetProjShadowConfig(void);
 s32 shadowEntryMode(s32 mode, f32 x, f32 y, f32 z, f32 size);
 void shadowSetVolumeDecay(s32 id, f32 volume, f32 decay, f32 decay2);
+void shadowGetVolumeDecay(s32 id, f32* volume, f32* decay, f32* decay2);
 void shadowFlagOn(s32 id, u16 flags);
 void shadowFlagOff(s32 id, u16 flags);
 void shadowSetCollision(s32 id, BOOL enable);
