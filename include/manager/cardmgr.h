@@ -68,7 +68,7 @@ typedef enum CardFlags {
     CARD_FLAG_DONE = (1 << 8),            // 0x100, the last operation finished
     CARD_FLAG_FAILED = (1 << 9),          // 0x200, the last operation stopped with a card error
     CARD_FLAG_HEADER_INVALID = (1 << 10), // 0x400, read_main / read_all_main: headerCheck failed (cleared when the next operation starts)
-    CARD_FLAG_ERASE = (1 << 11),          // 0x800, cardErase: clear the slot copy once the write is done
+    CARD_FLAG_ERASE = (1 << 11),          // 0x800, set by cardErase and cardCopy: write_main writes writeBuf instead of the slot and copies it into the slot when done
     CARD_FLAG_WRITTEN = (1 << 13),        // 0x2000, a write completed (memcard_open rechecks the serial)
     CARD_FLAG_INSERT_CHANGED = (1 << 14), // 0x4000, cardInsertChanged
     CARD_FLAG_INSERT_WATCH = (1 << 15),   // 0x8000, cardInsertWatchStart .. cardInsertWatchEnd

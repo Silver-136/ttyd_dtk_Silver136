@@ -414,6 +414,7 @@ AnimationPoseFile* animPoseGetAnimGroupPtr(s32 id);
 AnimationPoseFile* animPoseGetAnimGroupPtr(s32 id);
 AnimData* animPoseGetAnimDataPtr(s32 poseId);
 AnimationPose* animPoseGetAnimPosePtr(s32 poseId);
+AnimationPose* getAnimPose(s32 poseId);
 
 void animPaperPoseRelease(s32 poseId);
 void animPoseRelease(s32 poseId);

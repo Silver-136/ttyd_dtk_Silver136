@@ -142,6 +142,8 @@ f32 (*shadowGetCharShadowProjTexMtx(void))[4];
 f32 (*shadowGetDepthShadowDepthMtx(void))[4];
 f32 (*shadowGetDepthShadowProjTexMtx(void))[4];
 f32 (*shadowGetProjShadowProjTexMtx(void))[4];
+ProjShadowWork* shadowGetProjShadowWork(void);
+DepthShadowWork* shadowGetDepthShadowWork(void);
 s32 shadowGetConfigNum(void);
 s32 shadowGetConfig_ShadowTexSizeNum(void);
 const char** shadowGetConfig_DispMode(void);

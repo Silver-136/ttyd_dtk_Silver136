@@ -36,11 +36,15 @@
 #include "aji.h"
 #include "driver/seqdrv.h"
 
-typedef struct YukaAnimData { u16 flags; u8 field_0x2[6]; OSTime time; f32 frame; f32 speed; struct { u8 header[8]; f32 length; }* data; } YukaAnimData;
 typedef struct YukaAnim {
-    YukaAnimData* anim;
-    u32 flags;
+    MapEntryAnimData* anim; // the map animation "yuka"
+    u32 flags; // YUKA_ANIM_FLAG_*
 } YukaAnim;
+
+// YukaAnim.flags
+#define YUKA_ANIM_FLAG_PAUSE 1 // set by yuka_anim_reverse_pause, cleared by yuka_anim_reverse_replay
+#define YUKA_ANIM_FLAG_END 2   // set by yuka_anim_reverse_end: yuka_anim_reverse_play returns
+
 #define YUKA_NOW() OSTicksToMilliseconds(gp->inBattle ? gp->renderTime : gp->renderFieldTime)
 YukaAnim yuka_anim;
 s32 g_Kusuri1_No;
@@ -2024,20 +2028,21 @@ EVT_BEGIN(aji_06_init_evt)
     RETURN
 EVT_END()
 
+/** Script function: ends the reverse playback of the "yuka" animation (yuka_anim_reverse_play returns). */
 static USER_FUNC(yuka_anim_reverse_end) {
-    yuka_anim.flags |= 2;
+    yuka_anim.flags |= YUKA_ANIM_FLAG_END;
     return EVT_RETURN_DONE;
 }
 
 /** Script function: pauses the reverse playback of the "yuka" animation. */
 static USER_FUNC(yuka_anim_reverse_pause) {
-    yuka_anim.flags |= 1;
+    yuka_anim.flags |= YUKA_ANIM_FLAG_PAUSE;
     return EVT_RETURN_DONE;
 }
 
 /** Script function: resumes the reverse playback of the "yuka" animation after a pause. */
 static USER_FUNC(yuka_anim_reverse_replay) {
-    yuka_anim.flags &= ~1;
+    yuka_anim.flags &= ~YUKA_ANIM_FLAG_PAUSE;
     return EVT_RETURN_DONE;
 }
 
@@ -2052,28 +2057,28 @@ static USER_FUNC(yuka_anim_reverse_play) {
     f32 dt;
 
     if (isFirstCall) {
-        yuka_anim.anim = (YukaAnimData*)mapSearchAnmObj("yuka");
+        yuka_anim.anim = mapSearchAnmObj("yuka");
         yuka_anim.flags = 0;
-        yuka_anim.anim->time = YUKA_NOW();
-        yuka_anim.anim->flags |= 0x10;
-        yuka_anim.anim->flags &= ~0x20;
+        yuka_anim.anim->startTime = YUKA_NOW();
+        yuka_anim.anim->flags |= MAP_ANIM_FLAG_PAUSE;
+        yuka_anim.anim->flags &= ~MAP_ANIM_FLAG_RESTART;
     }
-    if (yuka_anim.flags & 2) {
+    if (yuka_anim.flags & YUKA_ANIM_FLAG_END) {
         return EVT_RETURN_DONE;
     }
-    if (!(yuka_anim.flags & 1)) {
-        dt = 60.0f * (f32)(u64)(YUKA_NOW() - yuka_anim.anim->time) / 1000.0f;
+    if (!(yuka_anim.flags & YUKA_ANIM_FLAG_PAUSE)) {
+        dt = 60.0f * (f32)(u64)(YUKA_NOW() - yuka_anim.anim->startTime) / 1000.0f;
 
-        yuka_anim.anim->frame -= dt * yuka_anim.anim->speed;
-        if (yuka_anim.anim->frame <= 0.0f) {
-            for (frame = yuka_anim.anim->frame; frame < 0.0f; frame += yuka_anim.anim->data->length) {
+        yuka_anim.anim->time -= dt * yuka_anim.anim->rate;
+        if (yuka_anim.anim->time <= 0.0f) {
+            for (frame = yuka_anim.anim->time; frame < 0.0f; frame += yuka_anim.anim->anim->length) {
             }
-            yuka_anim.anim->frame = frame;
+            yuka_anim.anim->time = frame;
         }
     }
 
     // Refresh the time baseline even while reverse playback is paused.
-    yuka_anim.anim->time = YUKA_NOW();
+    yuka_anim.anim->startTime = YUKA_NOW();
     return EVT_RETURN_BLOCK;
 }
 

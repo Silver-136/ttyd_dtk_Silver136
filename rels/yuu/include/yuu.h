@@ -77,7 +77,10 @@ extern EvtWord yuu_03_icon_monte_entry_evt[];
 
 extern EvtWord minigame01_floor_delete[];
 void yuucounter_flag_on(u32 mask);
+void yuucounter_flag_off(u32 mask);
+u32 yuucounter_flag(u32 mask);
 s32 yuucounter_get_data(void);
+void yuucounter_set_data(s32 data);
 void yuuminigame_disp_4slit(CameraId camera, void* param);
 void yuuminigame_disp_3roll(CameraId camera, void* param);
 void yuuminigame_disp_2fune(CameraId camera, void* param);
@@ -87,7 +90,9 @@ s32 yuunpc_juni(Vec* pos);
 
 // yuunpc_wp_flag_on/off/check
 #define YUUNPC_WP_FLAG_WAIT 1 // race NPCs hold their start until yuunpc_go
+void yuunpc_wp_flag_on(u16 flag);
 void yuunpc_wp_flag_off(u16 flag);
+u16 yuunpc_wp_flag_check(u16 flag);
 void yuuminigame_init_1hikoki(struct EventEntry* event, BOOL isFirstCall);
 void yuuminigame_main_1hikoki(struct EventEntry* event, BOOL isFirstCall);
 void yuuminigame_init_2fune(struct EventEntry* event, BOOL isFirstCall);

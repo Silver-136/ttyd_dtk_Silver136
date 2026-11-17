@@ -5,22 +5,7 @@
 #include "mario/mariost.h"
 #include "system.h"
 #include "cam_road.h"
-
-typedef struct CamShiftWork {
-    f32 current;        // 0x0
-    f32 target;         // 0x4
-    f32 rate;           // 0x8
-    f32 stickAccum;     // 0xC
-    f32 active;         // 0x10
-    u8 pad_14[0x18 - 0x14]; // 0x14, never accessed
-    OSTime prevTime;    // 0x18
-    f32 stickLimit;     // 0x20
-    f32 maxSpeed;       // 0x24
-    f32 accel;          // 0x28
-    f32 lastX;          // 0x2C
-    f32 lastZ;          // 0x30
-    u8 pad_34[0x38 - 0x34]; // 0x34, never accessed
-} CamShiftWork;
+#include "cam_shift.h"
 
 // The early demos use the field clock; JP and later use the render clock.
 #if VERSION <= VERSION_DEMO_JP

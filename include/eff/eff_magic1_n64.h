@@ -21,5 +21,3 @@ typedef struct EffMagic1N64Work {
 static inline f32 effMagic1SinDeg(f32 deg) { return sin(6.2831855f * deg / 360.0f); }
 
 EffectEntry* effMagic1N64Entry(s32 type, s32 life, f32 x, f32 y, f32 z, f32 tx, f32 ty, f32 tz);
-
-extern GXColor magic1_zero_color;

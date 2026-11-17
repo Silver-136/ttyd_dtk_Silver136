@@ -74,7 +74,8 @@ in `docs/FAKES.md` and in the mweppc review record.
   (called from party_motion) of the static getTargetPos that party_move's callers inline; one function for both
   makes three of those callers 0x18 bytes shorter (tested), so the name stays taken, and
   `L_psndBGM_stop` sits in a slot of four stripped demo functions while its body stops battle-start sound effects,
-  not the BGM (new in JP; the demos clear the flag inline).
+  not the BGM (new in JP; the demos clear the flag inline). Rechecked 2026-11-17: both still stand as described;
+  neither has a NAME_PROVENANCE.md row yet (row text proposed in cleanup_notes/bf/GB8/log.md).
 - DONE (2026-10-27): descriptive function names (user): each of the 147 functions whose name is not in the symbol maps
   (docs/NAME_PROVENANCE.md, kind `function`) gets a comment at its definition saying the name is descriptive and
   giving the placeholder it replaced and its JP address (e.g. `unk_8013be14`, JP 0x8013BE14), so readers can search
@@ -84,13 +85,16 @@ in `docs/FAKES.md` and in the mweppc review record.
   PARTS_WORK_*), with shared names in include/battle/unit_work.h (C-read slots, the sisters' line, Barriern
   satellites, Bobbery's bomb, Mario, the lecture units, Vivian's Veil) and family headers
   rels/rsh|tik|muj|las/include/unit_boss_*.h; units built in several RELs (60) share include/battle/unit/<unit>.h
-  (0f45e78cd, cleanup_tools/unit_work_headers.py). 153 numeric slot arguments left (cleanup_tools/work_slots_left.py,
-  2026-11-07); slots no script reads have nothing to name them from.
-- Placeholder struct fields: the remaining `field_0x..` / `unk..` uses (83 in 35 files, debt_inventory 2026-11-07); write-only or
+  (0f45e78cd, cleanup_tools/unit_work_headers.py). 53 numeric slot arguments left (cleanup_tools/work_slots_left.py,
+  rechecked 2026-11-17); slots no script reads have nothing to name them from.
+- Placeholder struct fields: the remaining `field_0x..` / `unk..` uses (83 in 35 files, debt_inventory 2026-11-07;
+  65 `field_0x..`/`unk_0x..`/`unkNN` tokens in 29 files by a plain grep, 2026-11-17); write-only or
   unused fields keep offset names unless their meaning is clear (then `_UNUSED`). Checked 2026-11-08: the 20 code
   uses left are all one-time writes at setup that nothing reads (effects, gor_irai, jin_07, las_04, muj, tou_03,
   sac_deka); none of the written values shows what the field is, so they keep offset names.
-- Padding arrays (`u8 pad_..[n]`, `u8 field_..[n]`) in struct layouts: 394 (2026-11-08). The views among them were
+- Padding arrays (`u8 pad_..[n]`, `u8 field_..[n]`) in struct layouts: 394 (2026-11-08); 292 `pad_`/`field_`/`unk_`
+  member arrays of any type in src/include/rels on 2026-11-17 (GB8 also dropped cam_shift's two pads when
+  CamShiftWork moved to its header). The views among them were
   turned into the real types earlier (section 4); the large gaps left are documented "never accessed" bytes or
   unread file-data fields (cam_road.h's curve record: one value read per 12-byte group, layout unknown). Alignment pads
   (user: remove, 2026-11-08): 80 hand-written 1-3 byte pads that sat exactly where the compiler pads by itself
@@ -105,7 +109,14 @@ in `docs/FAKES.md` and in the mweppc review record.
   itemHitCheckGround/Ceil (then itemHitCheckY/Up), breakableMobj, effMugiEntry, evt_mobj_rideswitch, mobj_sign,
   mobj_koopa_stone_blk, THPSimpleGetFrameRate/Volume, rndi; itemdrv.h now includes hitdrv.h for HitEntry).
   Not covered: FAKE stand-ins (`*Stripped*`, forceSdata), non-static inline helpers, partyNrmToAngle (its
-  pointer prototype in party.c is a FAKES row); cleanup_tools/uncalled_protos.py lists the rest.
+  pointer prototype in party.c is a FAKES row); cleanup_tools/uncalled_protos.py lists the rest. 2026-11-17 (GB8):
+  camShiftGetWorkPtr (CamShiftWork moved into cam_shift.h; cam_shift.c now includes its header), getAnimPose,
+  shadowGetProjShadowWork/DepthShadowWork, and yuu.h's yuucounter_set_data/flag_off/flag and
+  yuunpc_wp_flag_on/check got prototypes. Left in the tool's no-declaration list: the FAKE `*StrippedPool`
+  stand-ins, the battleAc*_ functions (declared by ac_table.h's token-pasting macro, which the tool cannot see),
+  three empty BattleCommandDisplay_* stubs, the JP+ yuu_02_icon_monte_on/off and the two
+  `*yuuranking_draw_msg_fit_right` copies. Seven dead header externs of objects that are now local initialisers
+  were removed (vec3_802f972c.., vec3_802fe200, magic1_zero_color, mapchange_zero_color).
 - One-line brace blocks (`{ decl; stmt; }`): laid out one statement per line (2026-11-08, 36 sites,
   cleanup_tools/split_blocks.py); SGI's GLU code keeps its own style.
 - Names come only from the game's own data (symbols, strings, labels, message keys, model and event names) or
@@ -123,13 +134,17 @@ in `docs/FAKES.md` and in the mweppc review record.
   cleanup_tools/area_flag_uses.py). The tst test rooms keep numbers: each room numbers its map objects' state
   flags from 0, so one number means a different object per room. C code that uses saved values by index (`swSet(0x994)`) cannot use the names;
   each such line ends with the name as a comment (save_flags.py cnotes).
-- Names with an address suffix: 5 unreferenced .sbss words with no name evidence (the JP demo map names the
-  neighbouring objects only), the JP-only party init copies, jumptable_80374848, and the shadowdrv debug strings
-  by address (`str_8...`, 6; open research).
+- Names with an address suffix (rechecked 2026-11-17): left in code are three unreferenced .sbss words with no
+  name evidence (`unk_8041840C` hitdrv, `unk_804186EC` mario, `unk_804189f4` party_motion; the JP demo map names
+  the neighbouring objects only), party_move's two unused zero vectors `vec3_802ce0ac/b8` (names invented) and
+  win_main's FAKE stand-in `float_0p5_8041dc98` (FAKES row). Gone: the JP-only party init copies (efed9b727),
+  jumptable_80374848 and the shadowdrv `str_8...` strings. Other `unk_8...` text is the placeholder named in
+  descriptive-name comments, on purpose.
 - Ghidra- or m2c-style local names: none left (2026-10-26). JP demo map: every invented function was checked
   against it (cleanup_tools/demo_names.py); no further original name fits (2026-10-26).
 - Battle values still unnamed: pose types 32-34 and 53-55 (no code found selects them; only Mario's pose table
-  lists 32). Dead bits (no reader): weapon special 0x200, target weighting 0x2000.
+  lists 32). Dead bits (no reader): weapon special 0x200, target weighting 0x2000. Still open 2026-11-17 (the
+  PoseType enum in battle_unit.h jumps from 31 to 35 and from 52 to 56).
 - Comments from the game's own data: place comments per room and NPC identities where the game's data (debug story
   list maps, NPC tribe table, messages) shows them. Message paraphrases next to message calls: not added (decided
   2026-11-08 after community feedback: more clutter than help, since text editing tools already show the
@@ -140,9 +155,9 @@ in `docs/FAKES.md` and in the mweppc review record.
   tou.c's own FighterData copy (tou2.c has the FighterFlags names), matrix-part masks in animdrv (fine as numbers),
   and bits with no setter or no known meaning (kept numeric: MapObjectFlags 0x20, GlobalWorkFlags 0x40,
   MarioDispFlags bit 29, PartyFlags bits 15/18, MarioTrigFlags bit 15, HitAttributes bit 10, ItemEntry flags bit 7,
-  MapObjectFlags 0x20 (set on A-button objects, never read), damage result 0x10000,
-  unit attribute 0x100). Tools: flag_names.py (struct fields), word_masks.py (values by source, also locals),
-  material_flags.py (pose material word).
+  damage result 0x10000, unit attribute 0x100; MapObjectFlags 0x20 is set on A-button objects and never read).
+  Tools: flag_names.py (struct fields), word_masks.py (values by source, also locals), material_flags.py (pose
+  material word). Still open; the count was not rerun on 2026-11-17.
 - **English identity for developer and Japanese names (user idea, 2026-11-08):** the original symbols and the
   Japanese strings name characters, NPCs, objects, items and maps in the developers' own words, which do not always
   map cleanly to the English game (example: the symbols `mony_*`/`peton_*` and the NPC strings モニー/ピートン are
@@ -174,13 +189,19 @@ in `docs/FAKES.md` and in the mweppc review record.
   tail), not views; the ac_*.c views of BattleActions and
   BattleACDispParams and battle_seq_end's SeqEndWork view are gone (real fields, per-command param-slot enums,
   BattleSeqEndWork in its header; 2026-10-27).
-- Offset-only field names: 89 named from their uses (2026-10-26); the rest are write-only or unclear (about 120).
-- Hand-expanded code that a macro or inline probably produced: psndENVMain's `ENVAPPLY` cases and psndENVOn_f_d's
-  offset sum, the Smorg hop code's temporaries (hand-inlined `randf` in map units: settled as written, Codex round 9
-  found the inline call changes literal-pool order).
-- Zero/template vector globals placed by hand (part of the 17 placements).
-- JP-only local duplicates of party init functions (`*_init_800...` names), shared US float constants.
-- Long one-line statements in some map units (nested blocks on one line).
+- Offset-only field names: 89 named from their uses (2026-10-26); the rest are write-only or unclear (about 120
+  then; see the placeholder-field count in section 3 for the current number).
+- Hand-expanded code that a macro or inline probably produced: open. psndENVMain's US+ arm still expands its four
+  cases through the local `ENVAPPLY` macro (comment there: a static inline over `ent` changes the object);
+  psndENVOn_f_d's offset sum; the Smorg hop code's temporaries (hand-inlined `randf` in map units: settled as
+  written, Codex round 9 found the inline call changes literal-pool order).
+- Zero/template vector globals placed by hand: 4 game section placements are left (2026-11-17): seq_load's US+
+  `seq_logo_zero_color` (.sdata2) and the three `moamoa_zero_vec` copies in eki_00, rsh_05, rsh_06 (.rodata), all
+  FAKE-commented and tried many times (bf logs DM, T1, T6, W1b, X2b, Y2, Y7, Z4). The others became local
+  initialisers or literals.
+- JP-only local duplicates of party init functions (`*_init_800...` names): done (efed9b727, "JP init aliases gone").
+- Long one-line statements in map units: done (split_blocks.py, 2026-11-08). Left on purpose: psndENVMain's four
+  `case N: switch (...) { case M: ENVAPPLY } break;` lines (they go with the macro) and union/struct one-liners.
 
 ## 5. Open research (outside review)
 
@@ -189,14 +210,27 @@ placements and force_active blocks, end_00's math statics, evt_mobj's itemEntry 
 psndENVMain, why scripts pass the fade-out bit to the BGM start call, the shadowdrv name table, and a review of the
 latest naming batches.
 
+State 2026-11-17: Codex no longer works in the repo, so this list is a record, not a queue. Settled since:
+sound-name temporaries (SFX option C, 455bb2877; the integer round trip is original, cleanup_notes/bf/SFX), the
+force_active blocks (0 left), the shadowdrv name table (`str_8...` names gone). Still open: the 4 game section
+placements (section 4), end_00's math statics (FAKES row `fd_end_00_*`), psndENVMain (section 4). Not rechecked
+on 2026-11-17: evt_mobj's itemEntry order, the cast-call families (FAKES rows), the BGM fade-out bit.
+
 ## 6. Readability ideas beyond the debt list (no byte change)
 
-- Name the saved-game flags (`GSWF`/`GSW`) from the scripts that set them, per chapter.
-- Turn private struct views and padding views into the real struct types where the layout is known.
+Status rechecked 2026-11-17 in brackets.
+
+- Name the saved-game flags (`GSWF`/`GSW`) from the scripts that set them, per chapter. [Done: section 3.]
+- Turn private struct views and padding views into the real struct types where the layout is known. [Done for
+  every view with an owner type: sections 2 and 4.]
 - Replace remaining raw case labels and comparisons with the enums that now exist (states, kinds, sequence ids).
+  [Ongoing on contact; no count.]
 - Split very long functions' nested one-line blocks into normal statements (whitespace-only, checked per unit).
+  [Done: section 4.]
 - Comment retail bugs and oddities met during cleanup with `// BUG:` (the code keeps the retail behaviour).
-- Certification pass per object against the cleanup standard once the classes above are done.
+  [Standing practice; notable ones in KNOWN_GAME_BUGS.md, records in cleanup_notes/bugs.]
+- Certification pass per object against the cleanup standard once the classes above are done. [Open: waits for
+  the FAKES rows.]
 - Certification review notes rechecked against the code (2026-11-05): `other` (476) and `trick`/`comment`/`dead`/`macro`
   (342) by read-only agents; outcomes in `cleanup_notes/certification/other_notes_outcome.tsv` and
   `trick_notes_safe_log.tsv`. Classes found and done: case bodies at their label's indent (3,114 lines), 1,300
@@ -213,7 +247,8 @@ latest naming batches.
   SYNTH_CFLAG_*, SYNTH_DIRTY_*, MIXER_CTRL_*, DSP_CHANGED_*, SAMPLE_COMP_TYPE, MACRO_OP_* (from the handlers), TRK
   DSErrorCode/DSReplyError (since renamed to the MetroTRK spellings), 207 address-named asm labels renamed by role (generic loop/done/skip names).
   PI/MI/DI/SI/EXI/AI register indices and bits named from YAGCD and Dolphin (2026-11-07,
-  cleanup_notes/hw_register_names.md; undocumented MI offsets stay raw). Open: DSP mail words. TRK codes
+  cleanup_notes/hw_register_names.md; undocumented MI offsets stay raw). Open: DSP mail words (15 raw
+  `DSPSendMailToDSP(0x...)` words left on 2026-11-17). TRK codes
   now carry the MetroTRK spellings (DS_*, DSREPLY_*, DSSTEP_*; 0x704-0x706 named, 2026-11-07). Game section placements (18 then, 17 now) retested: all needed, all commented. The rest of
   libs/ (MSL, TRK, runtime, smaller SDK folders) was read the same day: shared MSL/TRK private headers, names,
   BUG comments (libs_review_{msl,trk,sdk1,sdk2}.tsv).
@@ -239,13 +274,15 @@ never copied in). What the raw counts above mean for the libraries:
   TRK's .init routines.
 - **Scaffolding, keep until a natural layout is found:** no library `gap_*` objects are left
   (hw_dspctrl 2 x 4, snd3d 7 and OSError 12 went 2026-11-10: the linker leaves that space itself). The game-code fillers
-  in dispdrv (28, JP+) and eff_gonbaba_breath (28/20, JP+) are real space: removing them moves the DOL. The synth_dbtab (24) and snd_service (16) gaps are gone
+  in dispdrv (28, JP+) and eff_gonbaba_breath (28/20, JP+) are gone too (ab2d48dfe, PD: split alignment instead of
+  padding objects; no `gap_*` object is left anywhere, rechecked 2026-11-17).
+  The synth_dbtab (24) and snd_service (16) gaps are gone
   (2026-11-07): compressorTable is 32-byte aligned as in AxioDL's 2.0.2-2.0.3 source; the vi gap (20) was only the
   alignment pad before DEMOFontBitmap, which the linker inserts itself.
 - **MCC is not built** (no configure entry): its 17 `int unused[N]` frame pads (FAKES.md) are not active debt. The
   original debug records show no extra locals, so a fake buffer would not be a fix either.
-- **Padclamp:** the original type is ten one-byte fields (10-byte symbol). The plain type matches US; JP loses two
-  bytes, so the wrapper stays (FAKES.md) until the JP object extent is understood.
+- **Padclamp:** done (ab2d48dfe, PD): `ClampRegion` is a plain `static const PADClampRegion`; the wrapper and its
+  FAKES row are gone.
 - **sndSeqPlayEx:** done 2026-11-07: a separate `static inline _seqPlaySong` copy (AxioDL's 2.0.2-2.0.3 form).
 - **dont_inline:** OSLink's pair became the unit flag `-inline noauto` (round 16, both versions identical). VI's two
   pairs (`__VIGetLatch0Position`, `__VIGetLatch1Position`) stay: a whole-unit flag changes other helpers.
@@ -260,10 +297,13 @@ never copied in). What the raw counts above mean for the libraries:
 
 - Version tests in game code rose from about 2,700 lines to about 9,800 even after 4,040 no-effect demo guards were removed
   (`demo_collapse.py`). Most that are left are real demo differences; a block with `==` tests or inside a header was not tried.
+  Now 8,465 tests in 873 game files (PROGRESS.md, 2026-11-16; identical arms collapsed, `#else`+`#if` -> `#elif`).
 - Demo text is imported: `if (x) return` forms, old local names and Ghidra-like shapes sit inside demo branches. Tidy
-  where it helps the US reader; demo-only tricks do not count as debt.
-- `src/manager/cardmgr_demo.inc` holds the demo view of a whole file (about 1,430 lines); per-function guards might be smaller.
-- Tables kept once in `.inc` files for demo data order (`eff_ice_face`, `battle_audience_*`, `battle_monosiri_*`).
+  where it helps the US reader; demo-only tricks do not count as debt. [Ongoing on contact.]
+- `src/manager/cardmgr_demo.inc` holds the demo view of a whole file (1,357 lines on 2026-11-17, included by
+  cardmgr.c); per-function guards might be smaller. Still open.
+- Tables kept once in `.inc` files for demo data order: still `eff_ice_face`, four `battle_audience_*` and two
+  `battle_monosiri_*` files (2026-11-17).
 - A few column-0 statements remain inside guarded or macro text; guard indentation elsewhere was normalised by tool.
 
 ## 9. Codex round 20: order of work (decided 2026-11-01)
@@ -280,13 +320,25 @@ pushed commit (cleanup_notes, round 22):
 - G: the 107 library sources built in no version
 - H: one inventory for the progress numbers
 
-## 10. Comment accuracy review and header placement (2026-11-04)
+State 2026-11-17: no longer a Codex queue (Codex stopped on 2026-11-12; Claude owns the work). Done: C (the
+`other` notes, section 6), D (libs/ review, section 6), G (39 removed 2026-11-03, 62 kept, section 7), H
+(`cleanup_tools/progress_counts.py` writes PROGRESS.md and this file's counts). E: the game `gap_*` fillers are gone
+and 4 section placements are left (sections 4 and 7). F: carried on as the FAKES brute-force waves
+(cleanup_notes/bf). B: cardmgr_demo.inc is still one file (section 8); its CARD_FLAG_* duplicates are gone
+(2026-11-17, GB8: it uses cardmgr.h's CardFlags names and cardmgr.c's CARD_OP_* names; only the demo's own serial
+bit CARD_FLAG_SERIAL 0x4000 stays local). Still open from the comment decision:
+comments inside a version side that describe shared flow (about 600 starts then; not recounted).
+
+## 10. Comment accuracy review and header placement (2026-11-04; rechecked 2026-11-17)
 - Comment review against the code (brief cleanup_notes/rels_comment_brief.md): DONE for src/, include/ and every
   rels/ module (rooms, events, battle units; last rooms 3c0e439d8, aa556d4f0). Logs cleanup_notes/rels_fix_*.tsv,
   unit_fix_*.tsv, src_fix_*.tsv.
 - Code oddities: DONE (e09e6f110). All ~300 checked against the code; verdicts cleanup_notes/oddity_groups/
   verdict_*.tsv (bug 172 with BUG comments, harmless 99, intended 22, wrong 11, unsure 14). Left: the 14 unsure
-  rows; GSWF_TOU_RAWK_HAWK_OPENING_SEEN (GSWF 2399) is never set anywhere, so its name is unproven.
+  rows; GSWF_TOU_RAWK_HAWK_OPENING_SEEN (GSWF 2399): corrected 2026-11-17, it is set in one place,
+  src/event.c's stg3_30_init (story point STG3_30, with the other Rawk Hawk scene flags), and cleared by stg3_34_init,
+  tou.c and tou_01.c; no room script sets it, and tou_04's guard (talk_g_2, the opening scene lines
+  stg3_tou_423_01/02 at STG3_21) and tou.c read it. The name stays a reading of those uses, not proven.
 - Brace blocks (Zephiles/NWPlayer123, 2026-11-04): about 445 block-local declarations hoisted where the bytes allow
   (55c3dfe57..9664a3b09, cleanup_tools/brace_hoist.py, brace_rounds.py); 154 blocks the bytes need stay (authentic
   C89 scoping). Left: ~420 blocks of forms the tool skips (name reused elsewhere in the function, multi-declarator
@@ -303,3 +355,7 @@ pushed commit (cleanup_notes, round 22):
   placeholder names in headers: done (part attribute 0x40 = kIntangiblePart; GLU_UNKNOWN is the real GLU name).
   Imported "Names from LLCOOLT's tree" blocks: duplicates folded (f48c01840), the rest moved into their families or
   regrouped one family per enum in value order (tools fold_imported_names.py, regroup_imported_names.py).
+  Rerun 2026-11-17 (`header_placement_scan.py --detail types`): 9 "shared" hits, all the kept ones above plus
+  sac_scissor's ScissorWork, whose hit is only its member name `stars` also used in seq_load (not a shared type).
+  GB8 moved CamShiftWork into cam_shift.h (a global, camShiftGetWorkPtr, returns it) and replaced
+  cardmgr_demo.inc's private copies of the CardFlags bits with cardmgr.h's names (same bits, same uses).
