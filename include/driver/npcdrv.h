@@ -214,25 +214,25 @@ typedef enum NpcKoopaEncount {
 
 typedef struct NpcEntry {
     s32 flags;                      // 0x0, NpcFlags
-    u32 reactionFlags;              // 0x4
-    char description[32];           // 0x8
-    NpcTribeInfo* tribe;            // 0x28
-    char currentAnim[32];           // 0x2C
-    char stayAnim[32];              // 0x4C
-    char talkAnim[32];              // 0x6C
+    u32 reactionFlags;              // 0x4, NPC_REACTION_* (soft touch/hammer reactions; setup file)
+    char description[32];           // 0x8, NPC name, the key of npcNameToPtr
+    NpcTribeInfo* tribe;            // 0x28, tribe data: anims, size, sounds
+    char currentAnim[32];           // 0x2C, anim set at entry (tribe initialAnim)
+    char stayAnim[32];              // 0x4C, standing anim (tribe stayAnim)
+    char talkAnim[32];              // 0x6C, talking anim (tribe talkAnim)
     Vec position;                   // 0x8C
-    Vec prevPosition;               // 0x98
-    Vec positionHistory[5];         // 0xA4
+    Vec prevPosition;               // 0x98, position of the last npcMain frame
+    Vec positionHistory[5];         // 0xA4, last 5 positions for NPC_FLAG_BLUR, every 2nd frame
     Vec scale;                      // 0xE0
     Vec rotation;                   // 0xEC
     Vec rotationOffset;             // 0xF8
-    s32 poseId;                     // 0x104
+    s32 poseId;                     // 0x104, animPose of the NPC
     s32 moveAnimState;              // 0x108, 1 stay, 2 walk, 3 run anim currently set by npcMain
     const char* checkPose;          // 0x10C, anim name, "M_I_2" by default (tik_02 geso_set_checkpose sets "M_S_1")
-    s32 offscreenId;                // 0x110
-    GXColor color;                  // 0x114
-    s32 initEvtId;                  // 0x118
-    s32 regularEvtId;               // 0x11C
+    s32 offscreenId;                // 0x110, offscreen buffer drawn into, -1 = none
+    GXColor color;                  // 0x114, material colour, white = none (npcSetColor)
+    s32 initEvtId;                  // 0x118, id of the running initEvent, 0 = none
+    s32 regularEvtId;               // 0x11C, id of the running move/find/lost/return event
     EvtWord* initEvent;             // 0x120
     EvtWord* moveEvent;             // 0x124
     EvtWord* talkEvt;               // 0x128
@@ -244,11 +244,11 @@ typedef struct NpcEntry {
     u32 interruptFlags;             // 0x140, NpcInterruptFlags
     f32 direction;                  // 0x144, angle we're facing at
     f32 savedDirection;             // 0x148, saved during field battle
-    f32 width;                      // 0x14C
-    f32 height;                     // 0x150
-    f32 shadowScale;                // 0x154
-    Vec jumpStartPos;               // 0x158
-    Vec jumpTargetPos;              // 0x164
+    f32 width;                      // 0x14C, horizontal size (shadow, touch range); npcEntry takes animPoseGetHeight
+    f32 height;                     // 0x150, vertical size (touch checks); npcEntry takes animPoseGetRadius
+    f32 shadowScale;                // 0x154, shadow size factor (1.0 default)
+    Vec jumpStartPos;               // 0x158, start of the current evt move or jump
+    Vec jumpTargetPos;              // 0x164, target of the current evt move or jump
     u8 pad_170[0x178 - 0x170];      // 0x170
     OSTime jumpTicks;               // 0x178, OSTime accumulated while jumping/falling, 0 on landing
     f32 jumpElapsed;                // 0x180, jumpTicks in seconds
@@ -257,51 +257,51 @@ typedef struct NpcEntry {
     OSTime dtTicks;                 // 0x190, frame delta (capped to 16 ms after a >500 ms gap)
     OSTime lastUpdateTicks;         // 0x198, gp->renderTime of the last update
     f32 moveElapsed;                // 0x1A0, moveTicks in seconds (compared with moveTime)
-    f32 moveDt;                     // 0x1A4
+    f32 moveDt;                     // 0x1A4, frame delta in seconds (dtTicks)
     f32 lastUpdateTime;             // 0x1A8, lastUpdateTicks in seconds
-    f32 moveDir;                    // 0x1AC
-    f32 moveSpeed;                  // 0x1B0
-    Vec moveOffset;                 // 0x1B4
-    f32 moveTime;                   // 0x1C0
-    f32 jumpVelY;                   // 0x1C4
-    f32 jumpYScale;                 // 0x1C8
-    f32 jumpGravity;                // 0x1CC
+    f32 moveDir;                    // 0x1AC, direction of the current evt move (degrees)
+    f32 moveSpeed;                  // 0x1B0, speed of the current evt move (units per second)
+    Vec moveOffset;                 // 0x1B4, movement requested this frame; npcMoveXZ / npcMoveG apply and clear it
+    f32 moveTime;                   // 0x1C0, evt move duration; 0 = move by speed
+    f32 jumpVelY;                   // 0x1C4, jump arc start velocity
+    f32 jumpYScale;                 // 0x1C8, jump arc height factor
+    f32 jumpGravity;                // 0x1CC, jump gravity factor (times 980 units/s^2)
     f32 maxFallSpeed;               // 0x1D0, fall speed limit, 100 in kpa_03 water
     u32 statusFlags;                // 0x1D4, NpcStatusFlags (evt_npc_status_onoff)
-    s16 footstepToggle;             // 0x1D8
-    f32 footstepAccum;              // 0x1DC
-    const char* footstepSfxA;       // 0x1E0
-    const char* footstepSfxB;       // 0x1E4
-    u16 footstepStride;             // 0x1E8
-    const char* jumpSfx;            // 0x1EC
-    const char* landSfx;            // 0x1F0
+    s16 footstepToggle;             // 0x1D8, alternates footstepSfxA / footstepSfxB
+    f32 footstepAccum;              // 0x1DC, ms walked since the last footstep
+    const char* footstepSfxA;       // 0x1E0, first footstep sound (tribe)
+    const char* footstepSfxB;       // 0x1E4, second footstep sound (tribe)
+    u16 footstepStride;             // 0x1E8, footstep spacing; a step every stride / moveSpeed ms
+    const char* jumpSfx;            // 0x1EC, jump sound (tribe)
+    const char* landSfx;            // 0x1F0, landing sound (tribe)
     s32 cameraId;                   // 0x1F4, CameraId
-    NpcTerritoryType territoryType; // 0x1F8
-    Vec territoryBase;              // 0x1FC
-    Vec territoryLoiter;            // 0x208
-    Vec territoryHoming;            // 0x214
-    f32 searchRange;                // 0x220
-    f32 searchAngle;                // 0x224
-    f32 homingRange;                // 0x228
-    f32 homingAngle;                // 0x22C
+    NpcTerritoryType territoryType; // 0x1F8, none, circle or square (setup file)
+    Vec territoryBase;              // 0x1FC, territory centre
+    Vec territoryLoiter;            // 0x208, wander extent (square x/z; .y height limit)
+    Vec territoryHoming;            // 0x214, chase extent (circle radius in .x; square x/z)
+    f32 searchRange;                // 0x220, distance at which the NPC finds Mario (<search_range>)
+    f32 searchAngle;                // 0x224, view cone for finding Mario (<search_angle>)
+    f32 homingRange;                // 0x228, chase distance (<homing_range>)
+    f32 homingAngle;                // 0x22C, chase angle (<homing_angle>)
     NpcBattleInfo battleInfo;       // 0x230
     s32 attackMode;                 // 0x2F8, evt_npc_set_attack_mode
     struct HitEntry* wallHit;       // 0x2FC, npcHitCheckSide result
     struct HitEntry* groundHit;     // 0x300, hit object found by the fall/landing checks
-    void* unitWork[4];              // 0x304
+    void* unitWork[4];              // 0x304, script work slots (evt_npc_get_unitwork / evt_npc_set_unitwork)
     u8 setupIndex;                  // 0x314, slot in the setup list (dead-mask bit)
-    u8 btlCoinDropCount;            // 0x315
-    u8 baseCoinCount;               // 0x316
-    s8 balloonType;                 // 0x317
+    u8 btlCoinDropCount;            // 0x315, coins dropped after the battle
+    u8 baseCoinCount;               // 0x316, unit kind's baseCoin
+    s8 balloonType;                 // 0x317, talk balloon type (1 default; mario_balloon reads it)
     u32 fbatHitKind;                // 0x318, kind from fbatHitCheck when this NPC triggered the battle
     u16 koopaEncounterType;         // 0x31C, NpcKoopaEncount
     u16 hazardFlags;                // 0x31E, NpcKoopaEncount bits the NPC is immune to
-    u16 hitCooldown;                // 0x320
+    u16 hitCooldown;                // 0x320, frames before the NPC can start a battle again (90 after one)
     u8 pad_322[2];                  // 0x322
-    struct NpcEntry* prev;          // 0x324
-    struct NpcEntry* next;          // 0x328
-    struct NpcEntry* master;        // 0x32C
-    struct NpcEntry* slaves[4];     // 0x330
+    struct NpcEntry* prev;          // 0x324, previous NPC of the group (npcSetLink)
+    struct NpcEntry* next;          // 0x328, next NPC of the group
+    struct NpcEntry* master;        // 0x32C, NPC this one is a slave of (npcSetSlave)
+    struct NpcEntry* slaves[4];     // 0x330, slaves deleted, killed and given battle info with this NPC
 } NpcEntry;
 
 typedef struct NpcFieldEntry {

@@ -177,23 +177,23 @@ typedef enum NpcEventType {
 } NpcEventType;
 
 struct EventEntry {
-    OSTime lifetime;                   // 0x0
-    u8 flags;                          // 0x8, validated
+    OSTime lifetime;                   // 0x0, ticks the event has run (evtmgrMain adds the frame delta)
+    u8 flags;                          // 0x8, validated, EventEntry_Flags
     u8 params;                         // 0x9, number of params
     u8 opcode;                         // 0xA, EventOpcode
-    u8 priority;                       // 0xB, validated
-    u8 type;                           // 0xC
-    u8 blocked;                        // 0xD
-    s8 loopDepth;                      // 0xE, validated
-    s8 switchDepth;                    // 0xF, validated
+    u8 priority;                       // 0xB, validated, run order, highest first; a child gets parent + 1
+    u8 type;                           // 0xC, stop/start mask (EVENT_TYPE_DEFAULT)
+    u8 blocked;                        // 0xD, FALSE on a command's first call; commands that wait set TRUE
+    s8 loopDepth;                      // 0xE, validated, current DO nesting, index into loopStartPtrs / loopCounters
+    s8 switchDepth;                    // 0xF, validated, current SWITCH nesting, index into switchValues / switchStates
     u8 wNpcEventType;                  // 0x10, NpcEventType
-    EvtWord* nextCommand;                 // 0x14, validated
-    EvtWord* args;                     // 0x18, validated
-    s8 labelIdTable[16];               // 0x1C
-    EvtWord* labelAddressTable[16];    // 0x2C
+    EvtWord* nextCommand;                 // 0x14, validated, next script command to run
+    EvtWord* args;                     // 0x18, validated, arguments of the command being run
+    s8 labelIdTable[16];               // 0x1C, LBL ids found by make_jump_table (-1 = unused)
+    EvtWord* labelAddressTable[16];    // 0x2C, command after each LBL, for GOTO
     struct EventEntry* waitingEvent;   // 0x6C, this parent event is waiting on us
     struct EventEntry* waitingOnEvent; // 0x70, we are waiting on some child event
-    struct EventEntry* brotherEvent;   // 0x74
+    struct EventEntry* brotherEvent;   // 0x74, event this one was started beside (evtBrotherEntry)
     union {
         struct {
             union {
@@ -223,27 +223,27 @@ struct EventEntry {
             s32 partId;              // 0x94
         } heart; // 0x78, Vivian's heart icon (_disp_heart_entry)
     };
-    UserFunction userfunc;     // 0x98
+    UserFunction userfunc;     // 0x98, user function the USER_FUNC command is calling
     union {
         EvtWord lwData[16];    // 0x9C, validated
         f32 lwDataF[16];       // 0x9C, the same words used as floats
     };
-    s32 lfData[3];             // 0xDC, validated
-    EvtWord* loopStartPtrs[8];    // 0xE8
-    EvtWord loopCounters[8];   // 0x108
-    s8 switchStates[8];        // 0x128, validated
-    EvtWord switchValues[8];   // 0x130, validated
+    s32 lfData[3];             // 0xDC, validated, LF flag words (copied from and back to the parent)
+    EvtWord* loopStartPtrs[8];    // 0xE8, start of each open DO loop
+    EvtWord loopCounters[8];   // 0x108, count left in each open DO loop
+    s8 switchStates[8];        // 0x128, validated, per depth: 1 no CASE matched yet, 0 matched
+    EvtWord switchValues[8];   // 0x130, validated, per depth: the SWITCH value
     union {                    // Current addr for read/readf instructions
         EvtWord* readAddr;
         f32* readfAddr;
     }; // 0x150
-    EvtWord* uwBase;            // 0x154, validated
-    s32* ufBase;                // 0x158, validated
-    s32 eventId;                // 0x15C, validated
-    s32 unitId;                 // 0x160
+    EvtWord* uwBase;            // 0x154, validated, UW array (SET_UW_BASE / ALLOCATE_UW)
+    s32* ufBase;                // 0x158, validated, UF flag array (SET_UF_BASE)
+    s32 eventId;                // 0x15C, validated, unique id (evtGetPtrID, evtCheckID)
+    s32 unitId;                 // 0x160, battle unit the event belongs to, -1 = none
     f32 timescale;              // 0x164, number of instructions per frame
-    f32 commandsLeft;           // 0x168
-    s32 caseId;                 // 0x16C
+    f32 commandsLeft;           // 0x168, commands still to run this frame (+timescale per frame)
+    s32 caseId;                 // 0x16C, case (evt_case) that started the event, -1 = none
     NpcEntry* ownerNPC;         // 0x170, verified
     MapObjectEntry* thisMapObj; // 0x174, verified
     s32 printWindowId;          // 0x178, verified
@@ -259,11 +259,11 @@ struct EventEntry {
         };
         Vec msgPosVec;                  // 0x184, x/y/z as one Vec (evt_msg speaker position)
     };
-    u32 msgPriority;            // 0x190
-    OSTime savedTime;           // 0x198
-    void* restartFrom;          // 0x1A0, validated
-    const char* name;           // 0x1A4
-    void* currCommand;          // 0x1A8
+    u32 msgPriority;            // 0x190, priority for the next message window (msgWindow_Entry); 0 after use
+    OSTime savedTime;           // 0x198, start time saved by timed user functions
+    void* restartFrom;          // 0x1A0, validated, script start; evtRestart runs it again from here
+    const char* name;           // 0x1A4, DEBUG_NAME string, NULL by default
+    void* currCommand;          // 0x1A8, command being run
 };
 
 typedef struct EventWork {

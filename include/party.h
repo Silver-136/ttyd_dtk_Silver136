@@ -217,12 +217,12 @@ typedef enum PartyTrigFlags {
 } PartyTrigFlags;
 
 typedef struct PartyEntry {
-    u32 flags;                          // 0x0
+    u32 flags;                          // 0x0, PartyFlags
     u32 flags2;                         // 0x4, PartyDispFlags
     u32 trigFlags;                      // 0x8, PartyTrigFlags
-    s32 paperAnimGroup;                 // 0xC
+    s32 paperAnimGroup;                 // 0xC, animPose of the partner model (-1 = none)
     s32 reserved_10;                    // 0x10, only set to -1 at entry
-    s32 paperPoseId;                    // 0x14
+    s32 paperPoseId;                    // 0x14, paper pose while in a paper form (partyPaperOn; -1 = none)
     const char* animName;               // 0x18, current pose name (strcmp'd with "PYS_S_2" etc.)
     const char* paperAnimName;          // 0x1C, partyChgPaper anim name, as MarioWork.paperAnimName
     u16 poseTime;                       // 0x20, cleared on every pose/paper change (MarioWork.poseTime)
@@ -238,7 +238,7 @@ typedef struct PartyEntry {
     s8 kemuriTimer;                     // 0x2C, frames between effKemuri2Entry dust puffs (mario_kemuri)
     s8 footstepTimer;                   // 0x2D, partyWalkSe frame counter
     s8 dirKind;                         // 0x2E, set from the pipe exit dir (partyDokanEnd)
-    s8 currentSlotId;                   // 0x2F
+    s8 currentSlotId;                   // 0x2F, partner slot 0/1 (MarioWork.currPartySlotId)
     s8 port;                            // 0x30, controller port (partyUpdateKeyData)
     s8 currentMemberId;                 // 0x31, PartyMembers
     u8 moveKind;                        // 0x32, 1 = flying partner (cloud, vivian)
@@ -248,7 +248,7 @@ typedef struct PartyEntry {
     u8 motionId;                        // 0x36, partyChgMot
     u8 slitOn;                          // 0x37, 1 while squeezing through a slit (allPartySlitOn); blocks marioUseParty
     u8 motionStep;                      // 0x38, sub-step of the current motion (ride, jump)
-    u8 useMotionId;                     // 0x39
+    u8 useMotionId;                     // 0x39, state of the partner action (each party_*.c use motion)
     u8 slitStep;                        // 0x3A, party_slit state (0/2/10/20/40)
     u8 moveMode;                        // 0x3B, partyChgMoveMode
     u8 pad_3C;                          // 0x3C, never accessed
@@ -288,7 +288,7 @@ typedef struct PartyEntry {
             f32 rotation;               // 0x6C, rot.z: degrees, fmod 360
         };
     };
-    Vec scale;                          // 0x70
+    Vec scale;                          // 0x70, draw scale
     Vec dispOfs;                        // 0x7C, added to position when drawing (cloud hover bob, vivian sink)
     union {
         Vec rotOfs;                     // 0x88, rotation pivot (MarioWork.rotOfs)
@@ -328,8 +328,8 @@ typedef struct PartyEntry {
 #if VERSION >= VERSION_JP
     f32 frontWallDist;                  // 0xEC, distance to the front wall (-1 = none)
 #endif
-    f32 height;                         // 0xF0
-    f32 width;                          // 0xF4
+    f32 height;                         // 0xF0, partner height, set by each *_init
+    f32 width;                          // 0xF4, partner width, set by each *_init
     f32 camDir;                         // 0xF8, camera yaw; stick input is rotated by it
     f32 moveDir;                        // 0xFC, copied from targetDir when moving
     f32 targetDir;                      // 0x100, angleABf from position to the move target
@@ -358,17 +358,17 @@ typedef struct PartyEntry {
     u16 buttonTrg;                      // 0x152, gp->buttonNew
     u16 buttonRepeat;                   // 0x154, gp->buttonRepeat
     u16 buttonUp;                       // 0x156, gp->buttonUp
-    s8 stickX;                          // 0x158
+    s8 stickX;                          // 0x158, main stick x (partyUpdateKeyData)
     s8 stickY;                          // 0x159, negated
-    s8 subStickX;                       // 0x15A
+    s8 subStickX;                       // 0x15A, C-stick x
     s8 subStickY;                       // 0x15B, negated
-    s8 triggerL;                        // 0x15C
-    s8 triggerR;                        // 0x15D
+    s8 triggerL;                        // 0x15C, analog L
+    s8 triggerR;                        // 0x15D, analog R
     s8 analogA;                    // 0x15E, cleared with the controller state, never read
     s8 analogB;                    // 0x15F, cleared with the controller state, never read
-    MarioWork* playerPtr;               // 0x160
-    s32 camId;                          // 0x164
-    u32 yoshiPsndSFXId;                 // 0x168
+    MarioWork* playerPtr;               // 0x160, Mario's MarioWork
+    s32 camId;                          // 0x164, camera the partner is drawn with (marioGetCamId)
+    u32 yoshiPsndSFXId;                 // 0x168, Yoshi's looping flutter sound id, -1 when none
     s32 actionTime;                     // 0x16C, msec for an evt-driven action (nokotaro kick hold, cloud breathout)
     void* useStruct;                    // 0x170, per-partner heap work (PartyCloud*, YoshiWork*, ...)
     PartyWork work;                     // 0x174, per-partner scratch views

@@ -152,33 +152,33 @@ typedef u32 (*BattleWeaponDamageFn)(struct BattleUnit* attacker,
 
 typedef struct BattleWeapon {
     const char* name;                 // 0x0, msg tag
-    u16 icon;                         // 0x4
+    u16 icon;                         // 0x4, IconType shown in the battle menu
     u8 pad_06[0x8 - 0x6];             // 0x6, always 0, never accessed
-    s32 itemId;                       // 0x8
-    const char* description;          // 0xC
-    u8 baseAccuracy;                  // 0x10
-    u8 baseFpCost;                    // 0x11
-    s8 baseSpCost;                    // 0x12
-    u8 superguardsAllowed;            // 0x13
+    s32 itemId;                       // 0x8, item or badge the move belongs to (0 = none)
+    const char* description;          // 0xC, msg tag of the battle menu help text
+    u8 baseAccuracy;                  // 0x10, hit chance % (halved when the attacker is dizzy or in fog)
+    u8 baseFpCost;                    // 0x11, FP cost
+    s8 baseSpCost;                    // 0x12, Star Power cost
+    u8 superguardsAllowed;            // 0x13, 0 = cannot be superguarded; 1-4 choose the result (BattleCheckDamage)
     f32 reserved_14;                  // 0x14, 1.0f in every weapon table, never read
-    s8 stylishCommandMultiplier;     // 0x18
+    s8 stylishCommandMultiplier;     // 0x18, audience bonus factor for action commands / Stylish
     s8 reserved_19;                   // 0x19, 1 (5 on player moves); copied to StarPowerInfo.weaponParam, never read
-    s8 bingoSlotChance;              // 0x1A
+    s8 bingoSlotChance;              // 0x1A, % chance to fill a bingo slot (battle_audience)
     s8 reserved_1B;                   // 0x1B, 1 (50 on player moves), never read
-    BattleWeaponDamageFn hpDamageFn;                 // 0x1C
-    u32 hpDamageWork[8];              // 0x20
-    BattleWeaponDamageFn fpDamageFn;                 // 0x40
-    u32 fpDamageWork[8];              // 0x44
-    u32 targetClassFlags;             // 0x64
-    u32 targetPropertyFlags;          // 0x68
-    u8 element;                       // 0x6C
-    u8 damagePattern;                 // 0x6D
-    s8 acLevel;                       // 0x6E
+    BattleWeaponDamageFn hpDamageFn;                 // 0x1C, computes the HP damage (default: hpDamageWork[0])
+    u32 hpDamageWork[8];              // 0x20, parameters of hpDamageFn
+    BattleWeaponDamageFn fpDamageFn;                 // 0x40, computes the FP damage (default: fpDamageWork[0])
+    u32 fpDamageWork[8];              // 0x44, parameters of fpDamageFn
+    u32 targetClassFlags;             // 0x64, TARGET_CLASS_* (who can be targeted)
+    u32 targetPropertyFlags;          // 0x68, TARGET_PROP_* (which parts can be targeted)
+    u8 element;                       // 0x6C, BattleWeaponElement
+    u8 damagePattern;                 // 0x6D, BattleDamagePattern, the target's hit reaction
+    s8 acLevel;                       // 0x6E, action command level, read by scripts (btlevtcmd)
     s8 reserved_6F;                   // 0x6F, 2 in every weapon table, never read
-    const char* acHelpMsg;            // 0x70
+    const char* acHelpMsg;            // 0x70, msg tag of the action command help
     BattleWeaponSpecialFlags special; // 0x74
-    u32 counterResistFlags;           // 0x78
-    u32 targetWeightFlags;            // 0x7C
+    u32 counterResistFlags;           // 0x78, BattleWeaponCounterResist_Flags
+    u32 targetWeightFlags;            // 0x7C, TARGET_WEIGHT_* (how an enemy picks its target)
     u8 sleepChance;                   // 0x80, status chances are % (0-100), times in turns
     s8 sleepTime;                     // 0x81
     u8 stopChance;                    // 0x82
