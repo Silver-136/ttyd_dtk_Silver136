@@ -884,6 +884,13 @@ void envFFOff(void) {
     wp->flags &= ~ENV_FLAG_FF_UNUSED;
 }
 
+static void MTXInvXposeNormal(Mtx src, Mtx dst) {
+    PSMTXInvXpose(src, dst);
+    PSVECNormalize((Vec*)dst[0], (Vec*)dst[0]);
+    PSVECNormalize((Vec*)dst[1], (Vec*)dst[1]);
+    PSVECNormalize((Vec*)dst[2], (Vec*)dst[2]);
+}
+
 /**
  * Builds and loads the texture matrix for environment TEV type type (reflection maps from the surface normals as
  * seen by the camera, scrolled or spun by the env work's angles).
@@ -900,10 +907,7 @@ static void envTevLoadTexMtxImm(s32 type, GXTexMtx id, GXTexMtx id2, GXTexMtxTyp
             PSMTXRotRad(m0, 'Y', 0.017453292f * wp->texMtxWork.rotY);
             PSMTXRotRad(m1, 'Z', 0.017453292f * -wp->texMtxWork.rotX);
             PSMTXConcat(m0, m1, m0);
-            PSMTXInvXpose(m0, m0);
-            PSVECNormalize((Vec*)m0[0], (Vec*)m0[0]);
-            PSVECNormalize((Vec*)m0[1], (Vec*)m0[1]);
-            PSVECNormalize((Vec*)m0[2], (Vec*)m0[2]);
+            MTXInvXposeNormal(m0, m0);
             PSMTXScale(m2, 0.5f, 0.5f, 1.0f);
             PSMTXConcat(m2, m0, m0);
             PSMTXTrans(m2, 0.5f, 0.5f, 0.0f);
@@ -913,10 +917,7 @@ static void envTevLoadTexMtxImm(s32 type, GXTexMtx id, GXTexMtx id2, GXTexMtxTyp
         case 1:
             PSMTXRotRad(m0, 'Y', (-1.5707964f));
             PSMTXConcat(m0, wp->texMtxWork.model, m0);
-            PSMTXInvXpose(m0, m0);
-            PSVECNormalize((Vec*)m0[0], (Vec*)m0[0]);
-            PSVECNormalize((Vec*)m0[1], (Vec*)m0[1]);
-            PSVECNormalize((Vec*)m0[2], (Vec*)m0[2]);
+            MTXInvXposeNormal(m0, m0);
             PSMTXScale(m3, 0.5f - 0.25f * wp->texMtxWork.scale, 0.5f, 1.0f);
             PSMTXConcat(m3, m0, m0);
             PSMTXTrans(m3, 0.5f, 0.5f, 0.0f);
@@ -936,10 +937,7 @@ static void envTevLoadTexMtxImm(s32 type, GXTexMtx id, GXTexMtx id2, GXTexMtxTyp
             light.z = -(f32)cos(rx2) * (f32)cos(ry2);
             PSMTXMultVecSR(wp->texMtxWork.view, &light, &light);
             C_VECHalfAngle(&light, &v, &half);
-            PSMTXInvXpose(wp->texMtxWork.model, m0);
-            PSVECNormalize((Vec*)m0[0], (Vec*)m0[0]);
-            PSVECNormalize((Vec*)m0[1], (Vec*)m0[1]);
-            PSVECNormalize((Vec*)m0[2], (Vec*)m0[2]);
+            MTXInvXposeNormal(wp->texMtxWork.model, m0);
             PSMTXIdentity(m4);
             m4[0][0] = half.x;
             m4[0][1] = half.y;
@@ -976,10 +974,7 @@ static void envTevLoadTexMtxImm(s32 type, GXTexMtx id, GXTexMtx id2, GXTexMtxTyp
             h.x = -h.x;
             h.y = -h.y;
             h.z = -h.z;
-            PSMTXInvXpose(wp->texMtxWork.model, m5);
-            PSVECNormalize((Vec*)m5[0], (Vec*)m5[0]);
-            PSVECNormalize((Vec*)m5[1], (Vec*)m5[1]);
-            PSVECNormalize((Vec*)m5[2], (Vec*)m5[2]);
+            MTXInvXposeNormal(wp->texMtxWork.model, m5);
             if (dot == 1.0f) {
                 PSMTXIdentity(m6);
             } else {
@@ -1000,10 +995,7 @@ static void envTevLoadTexMtxImm(s32 type, GXTexMtx id, GXTexMtx id2, GXTexMtxTyp
             break;
         }
         case 4:
-            PSMTXInvXpose(wp->texMtxWork.model, m0);
-            PSVECNormalize((Vec*)m0[0], (Vec*)m0[0]);
-            PSVECNormalize((Vec*)m0[1], (Vec*)m0[1]);
-            PSVECNormalize((Vec*)m0[2], (Vec*)m0[2]);
+            MTXInvXposeNormal(wp->texMtxWork.model, m0);
             GXLoadTexMtxImm(m0, id, GX_MTX2x4);
             PSMTXScale(m7, 0.5f, 0.5f, 0.0f);
             PSMTXTrans(m0, 0.5f, 0.5f, 1.0f);
