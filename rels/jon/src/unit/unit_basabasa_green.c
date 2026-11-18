@@ -403,6 +403,14 @@ static EVT_BEGIN(ceil_fall_ready_event)
     RETURN
 EVT_END()
 
+/**
+ * Attack event of the Swampire, a draining bite: after the item-use check it picks a target (a confused one with
+ * none is flustered), drops off the ceiling first if it hangs there, flaps in place and swoops in. A miss or dodge
+ * makes it back off and pause. On a hit, when the target would counter (CHECK_COUNTER_ELECTRIFIED or
+ * CHECK_COUNTER_HOLD_FAST) the damage check uses the no-damage weapon_basabasa_drain_attack_biribiri_counterd and
+ * the script ends; otherwise it bites while pulsing in size (SFX_ENM_BASA_SUCK1) and recovers HP equal to the
+ * damage dealt. Then it flies home, back up to the ceiling if it hung there.
+ */
 static EVT_BEGIN(attack_event)
     // Use the item event selected by the item-use check; otherwise pick a target (a confused Swampire with nobody to bite gets
     // flustered).

@@ -372,7 +372,13 @@ EVT_BEGIN(evt_hiki_close)
     RETURN
 EVT_END()
 
-// LW(0)/LW(1) carry the drawer object and its bound hit name across open/close trigger swaps.
+/**
+ * Case event that opens one of the desk drawers (LW(0) the drawer map object, LW(1) its hit object): Mario steps
+ * up, the drawer slides out with SFX_STG3_DRAWER_OPEN1 and a push case to shut it again (evt_hiki_close) is
+ * registered. hikidasi_H before STG3_31_GRUBBAS_PLANS also brings the partner over and plays evt_takurami;
+ * hikidasi_N gives a Star Piece the first time (GSWF_TOU_05_DRAWER_STAR_PIECE, GSWF_STARPIECE_58). JP and later
+ * lock the keys and disable the letter box during it.
+ */
 EVT_BEGIN(evt_hiki_open)
 #if VERSION >= VERSION_JP
     CALL(evt_cam_letter_box_disable, 1)
@@ -567,6 +573,14 @@ static EVT_BEGIN(init_kinoshikowa)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of Jolene. Trouble Center request 13 (TROUBLE_HELP_WANTED): irai_13_00 the first time, then 13_02,
+ * until Mario holds 20 Battle Trunks (13_03_b the first time, else 13_04; GSWF_TROUBLE_WORK(1) set); after that
+ * 13_04 while he still carries any, and with none left she pays 30 coins (13_03, 13_05), saves the play time
+ * (GSW_TOU_HELP_WANTED_DONE_TIME) and the request is finished. Request 23 (TROUBLE_I_MUST_HAVE_THAT_BOOK): with a
+ * Wrestling Mag already in the pouch irai_23_03; otherwise 23_00, 23_01, she fetches it and hands it over (23_02).
+ * Outside the requests she says nothing before STG3_32_BOSS_BATTLE and stg3_tou_re_008 later.
+ */
 static EVT_BEGIN(talk_kinoshikowa)
     // First confirm all 20 trunks; after that acknowledgement, reward the player only once none remain.
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_HELP_WANTED)

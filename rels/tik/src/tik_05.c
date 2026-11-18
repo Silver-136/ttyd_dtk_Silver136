@@ -1613,6 +1613,13 @@ static USER_FUNC(is_dol_viewer) {
 }
 #endif
 
+/**
+ * Magical Map scene of the pedestal (GW(15) = 0 in the prologue, else the Crystal Star whose place is shown): the
+ * map rises over Mario with wave, orb and map effects; in the prologue the partner speaks mac_0_098 and the camera
+ * circles the pedestal (cam_kaiten helpers). A laser and white flashes follow, the star's place appears on the map
+ * with star dust (TIZ_stg_N, tiz_stone), the screen fades in from white and shatters into the item-get view, and
+ * the message for that star follows (mac_0_099, mac_1_001_01, ...); at the end the fog closes in again.
+ */
 EVT_BEGIN(evt_mapwrite)
     // The camera moves in: in the prologue Goombella calls out to Frankly; later Mario just raises his hands.
     WAIT_MS(800)

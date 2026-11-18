@@ -204,6 +204,11 @@ static BattleWeapon weapon_kuriboo_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Init event of the Goomba: sets its wait, attack, damage and confusion events (confusion runs attack_event) and
+ * its run, walk and jump sounds (SFX_ENM_KURI_MOVE1/2, SFX_ENM_KURI_JUMP1, SFX_ENM_KURI_LANDING1), then starts
+ * the wait event.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))

@@ -1425,6 +1425,10 @@ static EVT_BEGIN(ekiin_talk)
     RETURN
 EVT_END()
 
+/**
+ * Init event of the Lakitu NPC: puts him at (-80, 80, 85), except at STG4_15_05_PEACH_X_NAUT_PHD_REPORT, when he
+ * is left where he is.
+ */
 static EVT_BEGIN(jugemu_a_init)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG4_15_05_PEACH_X_NAUT_PHD_REPORT)
         RETURN

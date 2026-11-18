@@ -1927,6 +1927,17 @@ static void btlseqPhase(BattleWork* wp) {
     }
 }
 
+/**
+ * SEQ_MOVE steps of one phase, run each frame by btlseqPhase (steps that finish at once loop on): the start-of-phase
+ * bookkeeping (btlseqPhaseFirstProcess); at the enemy phase Merlee's Defense charm when it is the next curse
+ * (marioAttackEvent_MajinaiDefenceUp); the units' unison phase events, then each queued phase event in turn
+ * (phaseEvtTable), ending the battle when one decides it. Then, until BattlePhaseEndCheck (or
+ * BATTLE_FLAG_RESET_TURN), the bonuses and per-unit damage counters are cleared and the first unit in
+ * movePriorityQueue that can still act becomes the active unit and acts (btlseqAct); for Mario
+ * BATTLE_FLAG_JUMP_NO_SUBMENU / BATTLE_FLAG_HAMMER_NO_SUBMENU are set unless a jump or hammer badge is equipped or
+ * the boots or hammer are upgraded. At the end the Defense charm state is cleared, the audience reacts
+ * (BattleAudience_PerPhase), and the status-change announcements and messages finish before the next phase.
+ */
 static void btlseqMove(BattleWork* wp) {
     int j;
     BattleUnit* unit;

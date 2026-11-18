@@ -420,6 +420,12 @@ static EVT_BEGIN(dead_event)
     RETURN
 EVT_END()
 
+/**
+ * Attack event of the Chain-Chomp: in a first strike the first-attack target; otherwise an enemy item if one
+ * fits, else a target for weapon_wanwan_attack (a confused unit with none is flustered). It hops twice in place,
+ * hops back to wind up and lunges at the target (SFX_ENM_WAN_ATTACK1, 2); a dodge plays the avoid reaction and it
+ * drops back to its base position, a hit shakes the camera and applies the guard result and the damage.
+ */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)

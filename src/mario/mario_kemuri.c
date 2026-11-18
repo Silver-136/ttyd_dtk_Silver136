@@ -180,10 +180,9 @@ void kemuri_water(void) {
 }
 
 /**
- * Effects for floors with hit attribute 0x1000.
- * On the Great Tree maps (mri) it makes water-drop effects while standing and walking;
- * elsewhere it throws up mugi (wheat) puffs on jumping and every few frames while walking or dashing.
- * Guess: 0x1000 marks tall grass or wet ground, from the effects used.
+ * Effects for floors with HIT_ATTR_GRASS. On the Great Tree maps (mri) water-drop effects: every 30 frames while
+ * Mario stands, every 20 frames (and on landing) while he walks or dashes. Elsewhere mugi (wheat) puffs: on the first
+ * frame of a jump (at most every 10 frames) and every few frames while he walks or dashes.
  */
 static void kemuri_mugi(void) {
     static f32 dir = 0;

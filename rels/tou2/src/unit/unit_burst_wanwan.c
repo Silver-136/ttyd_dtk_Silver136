@@ -371,6 +371,12 @@ static EVT_BEGIN(counter_damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Dead event of the Red Chomp (unit LW(10)): it spins its parts with the defeat sound for 48 frames, puffs smoke,
+ * stores its coins and EXP (btlevtcmd_StoreCoin, btlevtcmd_StoreExp) with the star_point effect, spins the parts
+ * 30 frames more, gives back a stolen item (btlevtcmd_GetBackItem) and is removed (btlevtcmd_KillUnit mode 0 with
+ * DAMAGE_RESULT_DEATH, else 2).
+ */
 static EVT_BEGIN(dead_event)
     SET_VALUE(LW(0), 48)
     CALL(btlevtcmd_snd_se, LW(10), STRING("SFX_BTL_ENEMY_DIE1_1"), EVT_NULLPTR, 0, EVT_NULLPTR)

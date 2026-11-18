@@ -1790,6 +1790,13 @@ EVT_BEGIN(peach_damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Change from the possessed Peach to the Shadow Queen's true form: the status window hides, she speaks
+ * (stg8_las_141_01, 02), her statuses are cleared, the mist and queen effects appear and her head, body and hand
+ * parts fade in; the two big hands (entry_shadow_hand_1, entry_shadow_hand_2) are spawned, she speaks
+ * stg8_las_141_03, and she and both hands get the queen_muteki defence, defence attribute and status tables. Her
+ * phase, attack, damage and wait events become the queen's (queen_*_event) and her attack and message steps reset.
+ */
 static EVT_BEGIN(peach_change_evt)
     // The status window is hidden and the camera moves in on the Shadow Queen (possessing Peach).
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
@@ -2776,6 +2783,13 @@ static EVT_BEGIN(queen_hand_small_life_check_evt)
     RETURN
 EVT_END()
 
+/**
+ * HP drain scene: she speaks stg8_las_144, the big hands leave (queen_hand_1_dead_event, queen_hand_2_dead_event)
+ * and a swarm of small hands (entry_shadow_hand_small) appears if none is out; the hands drag the audience under
+ * the floor (queen_hp_drain_1_evt to 4_evt, with a long camera shake and panic screams), she recovers to full HP
+ * (btlevtcmd_RecoverHp with her maximum HP), the audience area returns, she speaks stg8_las_142_01, GW(11) becomes
+ * 2 and the turn is reset (btlevtcmd_reset_turn).
+ */
 EVT_BEGIN(queen_hp_drain_evt)
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)

@@ -817,6 +817,12 @@ static EVT_BEGIN(evt_ufo_sousaban)
     RETURN
 EVT_END()
 
+/**
+ * Runs when a crane switch is pressed: nothing until GSWF_AJI_03_SWITCH_1_PRESSED to _3_PRESSED are all set. The
+ * first time (GSWF_AJI_03_SWITCH_PUZZLE_SOLVED) the camera pans, the siren sounds (SFX_STG7_CRANE_SIREN1), the
+ * S_pato4 light turns (evt_kaitentou), the meta_* plates swap, both needles start (evt_hari) and A_sui_01 gets the
+ * control panel case script evt_ufo_sousaban.
+ */
 static EVT_BEGIN(evt_sw)
     IF_INT_EQUAL(GSWF_AJI_03_SWITCH_1_PRESSED, 0)
         RETURN

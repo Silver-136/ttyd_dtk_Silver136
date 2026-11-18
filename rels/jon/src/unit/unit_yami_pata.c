@@ -319,6 +319,13 @@ static EVT_BEGIN(patapata_dmg_first_attack_pos)
     RETURN
 EVT_END()
 
+/**
+ * Attack event of the flying Dark Paratroopa: during a first strike it takes the first-strike target and the
+ * damage pre-check uses DAMAGE_RESULT_NO_EVADE; otherwise item use or a sampled target for weapon_patapata_attack
+ * (a confused one with none is flustered). It dives toward the target (PTP_A_1, SFX_ENM_PATA_MOVE sounds) and
+ * swoops onto it (PTP_A_4). A miss carries it past; a hit deals the damage with the guard check. It then flies
+ * home.
+ */
 static EVT_BEGIN(attack_event_patapata)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)

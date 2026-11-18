@@ -442,6 +442,10 @@ static EVT_BEGIN(nokonoko_K_talk)
     RETURN
 EVT_END()
 
+/**
+ * First talk with Mayor Kroop: Mario jumps back in surprise (from US on the partner then moves behind him), then
+ * stg1_nok_37 to 46 with yes/no questions and Mario's reaction poses; sets STG1_02_TALKING_WITH_KROOP.
+ */
 static EVT_BEGIN(boss_noko_open_gate)
     CALL(evt_msg_print, 0, STRING("stg1_nok_37"), 0, STRING("me"))
     CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
@@ -1369,6 +1373,12 @@ static EVT_BEGIN(sekai_yami_evt)
     RETURN
 EVT_END()
 
+/**
+ * Chapter 8 'everyone's voices' scene in Petalburg: Mario and the partner are hidden, the village is darkened
+ * (envSetYami, yami_view), and Mayor Kroop, Koops's father and Koopie Koo watch a spinning Crystal Star (the
+ * starstone effect) come down; they talk (stg8_las_148_03 to 09) and the scene moves to mri_00 (entrance
+ * minnnanokoe).
+ */
 static EVT_BEGIN(minnnanokoe_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)

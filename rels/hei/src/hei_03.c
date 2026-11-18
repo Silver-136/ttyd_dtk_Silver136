@@ -66,6 +66,10 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Dead event of the first gate-pillar Bald Cleft: sets both GSWF_HEI_03_PILLAR_ENEMY_1_DEFEATED and
+ * GSWF_HEI_03_PILLAR_ENEMY_2_DEFEATED, then the common enemy death (enemy_common_dead_event).
+ */
 static EVT_BEGIN(dead_evt1)
     SET_VALUE(GSWF_HEI_03_PILLAR_ENEMY_1_DEFEATED, 1)
     SET_VALUE(GSWF_HEI_03_PILLAR_ENEMY_2_DEFEATED, 1)
@@ -73,6 +77,7 @@ static EVT_BEGIN(dead_evt1)
     RETURN
 EVT_END()
 
+/** Dead event of the second gate-pillar Bald Cleft: like dead_evt1, both pillar flags are set. */
 static EVT_BEGIN(dead_evt2)
     SET_VALUE(GSWF_HEI_03_PILLAR_ENEMY_2_DEFEATED, 1)
     SET_VALUE(GSWF_HEI_03_PILLAR_ENEMY_1_DEFEATED, 1)
@@ -126,6 +131,11 @@ static NpcSetupInfo npcEnt[] = {
     {0},
 };
 
+/**
+ * Opens the gate: the ground quakes (SFX_STG1_QUAKE3), the camera turns to the gate and the grid rises (anm_mon)
+ * with the SFX_STG1_GRID_UP2 / GRID_UP1 sounds; then the a_mon hit object is turned off and the story becomes
+ * STG1_04_BALD_CLEFT.
+ */
 static EVT_BEGIN(door_open)
     CALL(evt_mario_key_onoff, 0)
     WAIT_MS(800)

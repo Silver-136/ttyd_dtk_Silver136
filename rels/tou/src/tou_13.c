@@ -57,7 +57,11 @@ static BeroEntry bero_data[] = {
     {0},
 };
 
-// First opening advances the story; later openings record the separately reset exit state.
+/**
+ * Case event that knocks out the duct exit: a camera shake and SFX_STG3_DUCT_KOUSHI_HIT1, the s_deguti group
+ * hidden and hit object deguti off, and bero_case_switch_on with LW(0) = 1. Before STG3_30_04_AIR_DUCT_EXIT the
+ * story advances to it; otherwise GSWF_TOU_13_DUCT_EXIT_REOPENED is set. Then the case event exits.
+ */
 static EVT_BEGIN(evt_dakuto)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.049804688f), FLOAT(0.0f), 500)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG3_DUCT_KOUSHI_HIT1"), 188, 0, 0, 0)

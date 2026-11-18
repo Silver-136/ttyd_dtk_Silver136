@@ -1067,6 +1067,11 @@ static EVT_BEGIN(bunsin_kill_event)
     RETURN
 EVT_END()
 
+/**
+ * The Dark Wizzerd's punch with the weapon in LW(9): it hops up beside the target with its four hands blurred
+ * white and flailing at random (SFX_ENM_MAHO_ATTACK2), then the hands slam in; the target dodges or takes the
+ * damage with the guard check. It then hops back home and the hands settle.
+ */
 static EVT_BEGIN(attack_punch_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -1225,6 +1230,11 @@ static EVT_BEGIN(start_avoid)
     RETURN
 EVT_END()
 
+/**
+ * Shared body of the Dark Wizzerd's magic attack (weapon in LW(9), target LW(3) / LW(4)): the wizard and each of
+ * its copies (mahorn_get_bunsin) charge (attack_enemy_common_event_sub1) and cast, and magic orbs fly at the
+ * target. On a miss the orbs fly past it and it avoids them; on a hit they strike with the guard check.
+ */
 static EVT_BEGIN(attack_enemy_common_event)
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
@@ -1418,6 +1428,11 @@ static EVT_BEGIN(attack_enemy_all_common_event)
         RETURN
 EVT_END()
 
+/**
+ * Charge pose of a Dark Wizzerd or copy (unit id in LW(15); -1 = none, nothing happens): stops its wait event,
+ * shows the akari_charge_n64 effect above it, takes pose MAH_A_4 with its four hands in MAH_S_5A at their raised
+ * offsets, and waits 50 frames.
+ */
 static EVT_BEGIN(attack_enemy_common_event_sub1)
     IF_INT_EQUAL(LW(15), -1)
         RETURN

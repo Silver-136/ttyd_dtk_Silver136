@@ -105,7 +105,11 @@ static TreeAccess ki_data[] = {
     {7, NULL, NULL, NULL, 0, NULL},
 };
 
-// Award Horsetail at ten hammer hits, at most once until this room is initialized again.
+/**
+ * Hammer-hit script of the can: unless GF(0) is set, counts the hit in GSW_HEI_13_HAMMER_HIT_COUNT; at 10 (or when
+ * the count already stands at 10) it sets GF(0) and drops a Horsetail (item_tukushi). The can animation anm_kan_1
+ * plays every time.
+ */
 static EVT_BEGIN(evt_anm_kan)
     IF_INT_EQUAL(GF(0), 1)
         GOTO(99)

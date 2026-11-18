@@ -618,6 +618,12 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/**
+ * The Shady Koopa's attack from its back (weapon_ura_noko_ura_attack), run by wakeup_event while it is still
+ * flipped: with the eff_aura aura it spins on its shell faster and faster (NKT_A_2, SFX_ENM_URANOKO_MOVE sounds;
+ * UNIT_WORK_SPIN_SPEED), travels to the target and hits or slides past it, then spins back home and sets
+ * UNIT_WORK_SPIN_DONE, which ends the spin loop.
+ */
 static EVT_BEGIN(ura_attack_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
 

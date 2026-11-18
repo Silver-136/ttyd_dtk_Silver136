@@ -621,6 +621,10 @@ static EVT_BEGIN(tou_00_koopa_evt)
     RETURN
 EVT_END()
 
+/**
+ * Init event of the flying Bowser NPC (Bowser in his airship): sets NPC_STATUS_FACE_MOVE_DIR, so it faces the way
+ * it moves.
+ */
 static EVT_BEGIN(hkoopa_init)
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     RETURN

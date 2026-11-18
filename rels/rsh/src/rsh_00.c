@@ -1124,6 +1124,13 @@ EVT_BEGIN(rsh_00_c_init_evt)
     RETURN
 EVT_END()
 
+/**
+ * Shared second-visit init of rsh_00: unless the train stands at Riverside, Poshley Heights or Rogueport the
+ * shaking and scenery animations play (the rt_* set toward Rogueport); then the NPCs, the save block, the flipping
+ * floor panel (Star Piece GSWF_STARPIECE_81) and evt_access_entry. Music: BGM_STG6_PIK1 at Poshley Heights,
+ * BGM_STG0_GOR1 at Rogueport, otherwise the train themes of rsh_00_a and rsh_00_c (rsh_00_b keeps what plays). The
+ * early demos test Rogueport separately after the Poshley Heights test.
+ */
 static EVT_BEGIN(rsh_00_init_evt_nidome)
     IF_INT_EQUAL(GSWF_HOM_TRAIN_STOPPED_AT_RIVERSIDE, 0)
         IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_POSHLEY, 0)

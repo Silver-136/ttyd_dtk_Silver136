@@ -266,7 +266,11 @@ static EVT_BEGIN(puni_soguu_2)
     RETURN
 EVT_END()
 
-// Accept only the two intended landing surfaces; otherwise show the hint and watch the next flight.
+/**
+ * Paper-plane landing check: waits until Mario is in MARIO_MOTION_PLANE and lands; on a_dai_1 or MOBJ_block it
+ * sets GSWF_TIK_04_PLANE_FLIGHT_LANDED and ends. Otherwise the partner gives a hint (mac_0_094_01 the first time,
+ * GSWF_TIK_04_PLANE_HINT_SEEN; then mac_0_094_01_1) and the check is spawned again.
+ */
 static EVT_BEGIN(plane_tobashi_check)
     LOOP(0)
         CALL(evt_mario_get_motion, LW(0))

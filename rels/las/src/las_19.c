@@ -237,6 +237,12 @@ static EVT_BEGIN(cam_shake)
     RETURN
 EVT_END()
 
+/**
+ * Staircase scene, spawned when Mario arrives through entrance chgmap_evt: Mario and the partner are hidden, the
+ * camera pans along the raised staircase pieces (S_kai_02 to S_kai_25), which then settle 30 units per wave with
+ * SFX_STG8_MAP_MOVE1 and camera shakes as the camera drops to the foot of the tower; then the map changes to
+ * las_10 (entrance ret_chgmap_evt).
+ */
 static EVT_BEGIN(change_map_evt)
     // Mario and his partner are hidden under the floor and the camera starts at the staircase.
     CALL(evt_mario_key_onoff, 0)

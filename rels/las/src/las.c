@@ -220,6 +220,10 @@ EVT_BEGIN(move_dai)
     RETURN
 EVT_END()
 
+/**
+ * Plays one of the six map animations hikari_01 to hikari_06 at random (evt_sub_random 5), waits for it to finish,
+ * and repeats forever.
+ */
 EVT_BEGIN(hikari_evt)
     LOOP(0)
         CALL(evt_sub_random, 5, LW(0))

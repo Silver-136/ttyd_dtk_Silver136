@@ -490,6 +490,12 @@ static EVT_BEGIN(evt_champion)
     RETURN
 EVT_END()
 
+/**
+ * Champion's-room scene after Mario wins the title back (from STG3_34_RETURN_TO_ROGUEPORT on while
+ * GSWF_TOU_CHAMPION_TITLE_REGAINED is clear): Jolene speaks stg3_tou_re_140 and Mario gets the Champ's Belt (JP
+ * and later also show it as a belt NPC with a starstone glow above him); she speaks re_141 to re_143 and leaves
+ * through the door. Sets GSWF_TOU_CHAMPION_TITLE_REGAINED.
+ */
 EVT_BEGIN(evt_champion_re)
     // Jolene waits in the champion's room with Mario and his partner; the camera frames her.
     CALL(evt_mario_key_onoff, 0)

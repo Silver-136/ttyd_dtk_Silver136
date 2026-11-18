@@ -2529,6 +2529,11 @@ static const char* pose_name[] = {
     "S_3",
 };
 
+/**
+ * Debug scene, spawned by rsh_06_a's init in place of the normal set-up when the system flag GW_FLAG_NO_ENTRANCE
+ * is set: the Smorg models, the passenger NPCs (hidden), the giant body (base, c_g_moamoa), the swarm ext (700
+ * entries, ACTIVE and NO_HIT), evt_moamoa_fusion_debug, and A cycles the body's animation through pose_name.
+ */
 static EVT_BEGIN(moamoa_debug)
     CALL(evt_npc_entry, STRING("moa_a"), STRING("c_n_moa_a"))
     CALL(evt_npc_entry, STRING("moa_b"), STRING("c_n_moa_b"))

@@ -122,6 +122,12 @@ static USER_FUNC(evt_chuchu_back_loop) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * First meeting with Ms. Mowz: from STG1_15_MS_MOWZ_W_GOOMBELLA on she is only moved away. Otherwise Mario walks
+ * in, the story becomes STG1_15_MS_MOWZ_W_GOOMBELLA, her theme plays, they talk (stg1_gon_18_01 to _17), she
+ * kisses Mario and leaps away (SFX_STG1_CHURINA_ sounds). JP and later set GSWF_GON_12_MOWZ_MET_WITH_KOOPS when
+ * Koops is the partner.
+ */
 static EVT_BEGIN(chuchurina_sogu)
     // Ms. Mowz is only met once; after that she is removed from the room.
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG1_15_MS_MOWZ_W_GOOMBELLA)

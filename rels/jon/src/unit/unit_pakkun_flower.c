@@ -441,6 +441,12 @@ static EVT_BEGIN(return_event)
     RETURN
 EVT_END()
 
+/**
+ * The Piranha Plant's bite: during a first strike it pauses 750 ms and takes the first-strike target, otherwise it
+ * samples a target (a confused one with none is flustered). It burrows (its shadow shrinks; pose PKF_E_2, or
+ * PKF_E_4 on the ceiling), pops up in front of the target, winds up (PKF_A_1A, PKF_A_1B, SFX_ENM_PAKKUN_ATTACK1)
+ * and bites (PKF_A_1C); the target dodges or takes the damage. It then burrows back home (return_event).
+ */
 static EVT_BEGIN(normal_attack_event)
     // During a First Strike it pauses a moment; otherwise it picks a target (a confused Piranha Plant with
     // nobody to bite gets flustered).

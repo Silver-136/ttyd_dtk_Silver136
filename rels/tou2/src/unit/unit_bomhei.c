@@ -271,6 +271,12 @@ static BattleWeapon weapon_bomhei_bomb = {
     {0, 25, 25, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * The Bob-omb explodes: camera shake, the unit and its shadow hidden, its fuse sound stopped
+ * (UNIT_WORK_SPARK_SFX), the explosion sounds and the sandars effect, the fog cleared (btlevtcmd_StageDispellFog),
+ * its coins and EXP stored (btlevtcmd_StoreCoin, btlevtcmd_StoreExp), a one-second wait, and the unit is removed
+ * (btlevtcmd_KillUnit). With LW(15) = 1 (set by the damage events) it first waits for the attack to end.
+ */
 static EVT_BEGIN(bomb_event)
     CALL(evt_btl_camera_shake_w, 0, 5, 0, 15, 0)
     CALL(btlevtcmd_OnAttribute, UNIT_ID_SELF, kUnitHidden)

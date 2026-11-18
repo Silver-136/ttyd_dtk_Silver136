@@ -179,6 +179,12 @@ static BattleWeapon weapon_chorobon_drain_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Attack event of the Green Fuzzy: an enemy item if one fits. Otherwise a roll (0 to 99) under 50 runs
+ * drain_attack_event; if not, it looks for a free spot 40 units at a time to one side (up to x 170), then the
+ * other (btlevtcmd_CheckSpace), and splits there (friend_event), waiting half a second; with no free spot it rolls
+ * again.
+ */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)

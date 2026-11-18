@@ -42,6 +42,12 @@ static EVT_BEGIN(in_evt)
     RETURN
 EVT_END()
 
+/**
+ * Exit event of w_bero_1 (JP and later first try to release a roll; when that fails Mario lands and walks to
+ * (-315, -15)): Mario and the partners walk to the door, the camera holds, Mario is switched to background mode
+ * (evt_mario_bgmode_on, camera y off), the partners are removed, and Mario is placed at (-242, 10, -450) and walks
+ * on with the camera released. Returns 1 in LW(0).
+ */
 static EVT_BEGIN(out_evt)
     CALL(evt_mario_key_onoff, 0)
 #if VERSION >= VERSION_JP

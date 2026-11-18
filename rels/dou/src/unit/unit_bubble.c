@@ -339,6 +339,11 @@ static EVT_BEGIN(avoid_fire_event)
     RETURN
 EVT_END()
 
+/**
+ * UNIT_DATA_DAMAGE_FIRE_EXPLOSION_EVENT of the Lava Bubble: pose A_2B, then it looks for a free spot, first in 40
+ * unit steps back while x is at most 170 (z + 10 a step), then forward while x is at least 10 (z - 10); at the
+ * first free spot (btlevtcmd_CheckSpace) it splits there (friend_event).
+ */
 static EVT_BEGIN(damage_fire_explosion_event)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_2B"))
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))

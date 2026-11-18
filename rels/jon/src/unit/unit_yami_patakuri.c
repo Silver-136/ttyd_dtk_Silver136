@@ -294,6 +294,11 @@ static EVT_BEGIN(patakuri_dmg_first_attack_pos)
     RETURN
 EVT_END()
 
+/**
+ * Attack event of the flying Paragloomba (weapon_patakuri_attack): item use, or a sampled target (a confused one
+ * with none is flustered); it flies in front of the target and swoops at it (SFX_ENM_PATAKURI_MOVE sounds). A miss
+ * flutters it past; a hit deals the damage with the guard check. It then flies home.
+ */
 static EVT_BEGIN(attack_event_patakuri)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)

@@ -137,7 +137,11 @@ static NpcSetupInfo npcEnt[] = {
     {0},
 };
 
-// Mark this scene seen before starting the guard choreography and map transition.
+/**
+ * Arrival before the title match (spawned while GSWF_GLITZ_PIT_TITLE_MATCH_BOOKED is set), once
+ * (GSWF_TOU_11_LOCKED_IN_SEEN, set first): with the music stopped a guard leads Mario and the partner in, says
+ * stg3_tou_409 and leaves through the door; the partner speaks stg3_tou_409_01 and the scene irises out to tou_03.
+ */
 static EVT_BEGIN(evt_tojikome)
     // Plays only once, with the music stopped.
     IF_INT_EQUAL(GSWF_TOU_11_LOCKED_IN_SEEN, 1)

@@ -3559,12 +3559,14 @@ static EVT_BEGIN(marioAttackEvent_GatsuDokaJump)
 EVT_END()
 
 #if VERSION <= VERSION_DEMO_JP
+/** Power Jump badge attack: marioAttackEvent_GatsuDokaJump with badgeWeapon_GatsunJump in LW(12). */
 static EVT_BEGIN(marioAttackEvent_GatsunJump)
     SET_VALUE(LW(12), PTR(&badgeWeapon_GatsunJump))
     CALL_CHILD(marioAttackEvent_GatsuDokaJump)
     RETURN
 EVT_END()
 
+/** Mega Jump badge attack: marioAttackEvent_GatsuDokaJump with badgeWeapon_DokanJump in LW(12). */
 static EVT_BEGIN(marioAttackEvent_DokanJump)
     SET_VALUE(LW(12), PTR(&badgeWeapon_DokanJump))
     CALL_CHILD(marioAttackEvent_GatsuDokaJump)
@@ -4689,12 +4691,17 @@ static EVT_BEGIN(marioAttackEvent_TugiTugiJump)
 EVT_END()
 
 #if VERSION <= VERSION_DEMO_JP
+/** Mario's plain Hammer attack: marioAttackEvent_NormalHammer_Core with LW(14) = 0 (the non-badge swing). */
 static EVT_BEGIN(marioAttackEvent_NormalHammer)
     SET_VALUE(LW(14), 0)
     CALL_CHILD(marioAttackEvent_NormalHammer_Core)
     RETURN
 EVT_END()
 
+/**
+ * Power Smash and Mega Smash badge attack (badgeWeapon_GatsunHammer, badgeWeapon_DokanHammer):
+ * marioAttackEvent_NormalHammer_Core with LW(14) = 1 (the badge variant of the swing).
+ */
 static EVT_BEGIN(marioAttackEvent_GatsunHammer)
     SET_VALUE(LW(14), 1)
     CALL_CHILD(marioAttackEvent_NormalHammer_Core)
@@ -4710,6 +4717,10 @@ static EVT_BEGIN(marioAttackEvent_IceNaguri)
     RETURN
 EVT_END()
 
+/**
+ * Piercing Blow badge attack: marioAttackEvent_NormalHammer_Core with LW(14) = 1; the defense piercing comes from
+ * badgeWeapon_TsuranukiNaguri (SPECIAL_PIERCE_DEFENSE).
+ */
 static EVT_BEGIN(marioAttackEvent_TsuranukiHammer)
     SET_VALUE(LW(14), 1)
     CALL_CHILD(marioAttackEvent_NormalHammer_Core)
@@ -5569,6 +5580,11 @@ static EVT_BEGIN(marioAttackEvent_FirstAttackKaitenHammer)
     RETURN
 EVT_END()
 
+/**
+ * Quake Hammer badge attack, declared on every enemy: Mario walks to the middle of the stage, charges with the
+ * hold-and-release command (jumping up first at full charge) and slams the ground. The stage shakes, every enemy
+ * the quake reaches takes damage (more after a success), then the Stylish window and the walk home.
+ */
 static EVT_BEGIN(marioAttackEvent_JishinHammer)
     // The attack is declared on every enemy, FP are paid, Merlee's charm is checked and the hold-and-release
     // Action Command is set up.
@@ -6128,6 +6144,10 @@ static EVT_BEGIN(marioAttackEvent_UltraJishinHammer)
     RETURN
 EVT_END()
 
+/**
+ * Spins the thrown hammer (Mario's part 3) by -25 degrees every frame forever; marioAttackEvent_HammerNageru_object
+ * spawns it and deletes it when the flight ends.
+ */
 static EVT_BEGIN(marioAttackEvent_HammerRotate)
     SET_VALUE(LW(0), -25)
     CALL(btlevtcmd_SetPartsRotateOffset, UNIT_ID_SELF, 3, 0, 12, 0)
@@ -6138,6 +6158,11 @@ static EVT_BEGIN(marioAttackEvent_HammerRotate)
     RETURN
 EVT_END()
 
+/**
+ * Hammer Throw badge attack on the chosen enemy: Mario winds up with the hold-and-release command and on release
+ * throws his hammer, whose flight marioAttackEvent_HammerNageru_object runs; then the Stylish window, the wait for
+ * the flight and the walk home.
+ */
 static EVT_BEGIN(marioAttackEvent_HammerNageru)
     // The attack is declared on the chosen enemy, FP are paid, Merlee's charm is checked and the hold-and-release
     // Action Command is set up.
@@ -6283,6 +6308,11 @@ static EVT_BEGIN(marioAttackEvent_HammerNageru)
     RETURN
 EVT_END()
 
+/**
+ * The thrown hammer's flight for Hammer Throw: shows part 3 above Mario, spins it (marioAttackEvent_HammerRotate)
+ * and arcs it to the target. LW(6) is the damage pre-check: anything but a hit makes the target dodge (lucky, dodgy
+ * or miss) and the hammer hops on past it; a hit deals the damage (more after a success) and shakes the camera.
+ */
 EVT_BEGIN(marioAttackEvent_HammerNageru_object)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     ADD(LW(1), 25)
@@ -6353,6 +6383,12 @@ EVT_END()
 
 extern const f32 battle_mario_one;
 
+/**
+ * Fire Drive badge attack, declared on every enemy: a fireball drops toward Mario from the top of the stage; once
+ * the player holds the stick left Mario charges his hammer, and a timely release smashes the fireball along the
+ * floor through the enemies (marioAttackEvent_FireNaguri_object). On a miss the fireball fizzles out in smoke and no
+ * enemy is hurt.
+ */
 static EVT_BEGIN(marioAttackEvent_FireNaguri)
     // The attack is declared on every enemy, FP are paid, Merlee's charm is checked and the Action Command is set
     // up.
@@ -6794,12 +6830,14 @@ EVT_BEGIN(_SuperCharge_core)
 EVT_END()
 
 #if VERSION >= VERSION_JP
+/** Power Jump badge attack: marioAttackEvent_GatsuDokaJump with badgeWeapon_GatsunJump in LW(12). */
 static EVT_BEGIN(marioAttackEvent_GatsunJump)
     SET_VALUE(LW(12), PTR(&badgeWeapon_GatsunJump))
     CALL_CHILD(marioAttackEvent_GatsuDokaJump)
     RETURN
 EVT_END()
 
+/** Mega Jump badge attack: marioAttackEvent_GatsuDokaJump with badgeWeapon_DokanJump in LW(12). */
 static EVT_BEGIN(marioAttackEvent_DokanJump)
     SET_VALUE(LW(12), PTR(&badgeWeapon_DokanJump))
     CALL_CHILD(marioAttackEvent_GatsuDokaJump)
@@ -6830,12 +6868,17 @@ static EVT_BEGIN(marioAttackEvent_FunyafunyaJump)
     RETURN
 EVT_END()
 
+/** Mario's plain Hammer attack: marioAttackEvent_NormalHammer_Core with LW(14) = 0 (the non-badge swing). */
 static EVT_BEGIN(marioAttackEvent_NormalHammer)
     SET_VALUE(LW(14), 0)
     CALL_CHILD(marioAttackEvent_NormalHammer_Core)
     RETURN
 EVT_END()
 
+/**
+ * Power Smash and Mega Smash badge attack (badgeWeapon_GatsunHammer, badgeWeapon_DokanHammer):
+ * marioAttackEvent_NormalHammer_Core with LW(14) = 1 (the badge variant of the swing).
+ */
 static EVT_BEGIN(marioAttackEvent_GatsunHammer)
     SET_VALUE(LW(14), 1)
     CALL_CHILD(marioAttackEvent_NormalHammer_Core)
@@ -6851,6 +6894,10 @@ static EVT_BEGIN(marioAttackEvent_IceNaguri)
     RETURN
 EVT_END()
 
+/**
+ * Piercing Blow badge attack: marioAttackEvent_NormalHammer_Core with LW(14) = 1; the defense piercing comes from
+ * badgeWeapon_TsuranukiNaguri (SPECIAL_PIERCE_DEFENSE).
+ */
 static EVT_BEGIN(marioAttackEvent_TsuranukiHammer)
     SET_VALUE(LW(14), 1)
     CALL_CHILD(marioAttackEvent_NormalHammer_Core)
@@ -6921,6 +6968,7 @@ static EVT_BEGIN(marioAttackEvent_MajinaiPowerUpCheck)
     RETURN
 EVT_END()
 
+/** Mario's little hop during a Merlee charm, skipped when he cannot act (btlevtcmd_CheckActStatus gives 0). */
 EVT_BEGIN(marioAttackEvent_MajinaiJump)
     CALL(btlevtcmd_CheckActStatus, UNIT_ID_SELF, LW(0))
     IF_INT_EQUAL(LW(0), 0)

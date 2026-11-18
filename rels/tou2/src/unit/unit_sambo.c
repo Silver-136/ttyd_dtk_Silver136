@@ -1623,6 +1623,11 @@ static EVT_BEGIN(attack_spike_event)
     RETURN
 EVT_END()
 
+/**
+ * The Pokey calls a friend: it sways with SFX_ENM_SAMBO_SEND_GROUP1_3 to 1_1 and SEND_GROUP2; a new Pokey
+ * (entry_sambo) appears 80 units below LW(6) to LW(8) in a puff of kemuri_test smoke and jumps up to that spot,
+ * its home, with UNIT_WORK_CALL_DEPTH one higher than the caller's.
+ */
 static EVT_BEGIN(call_friend_event)
     // The Pokey signals for help with a series of calls.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("SNB_S_1"))

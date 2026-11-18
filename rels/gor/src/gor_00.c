@@ -1358,6 +1358,12 @@ static EVT_BEGIN(suifubomb_a_regl)
     RETURN
 EVT_END()
 
+/**
+ * Talk event of sailor Bob-omb A. While TROUBLE_IM_HUNGRY is the accepted trouble, the first talk takes the
+ * request (GSWF_TROUBLE_WORK(0)) and later talks let Mario pick an item to hand over (make_itemsel_table), for 11
+ * coins, which ends the trouble. Otherwise one line per story stage (gor_00_01_01 on), with a short pose scene
+ * before STG4_32_CHATTING_WITH_FLAVIO.
+ */
 static EVT_BEGIN(suifubomb_a_talk)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_IM_HUNGRY)
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
@@ -1662,6 +1668,11 @@ static EVT_BEGIN(tenin_talk)
     RETURN
 EVT_END()
 
+/**
+ * Init event of the thief NPC for TROUBLE_FIND_THIS_GUY: while it is the accepted trouble with
+ * GSWF_TROUBLE_WORK(0) and (1) set and (2) clear, enters him (c_borodo_n) at (-168, 15, -540) with borodo2_talk as
+ * his talk event.
+ */
 static EVT_BEGIN(borodo2_init)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_FIND_THIS_GUY)
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 1)
@@ -1723,6 +1734,12 @@ static EVT_BEGIN(mokorim_init)
     RETURN
 EVT_END()
 
+/**
+ * Talk event of Lumpy. From STG0_15_THE_PEDESTAL to STG3_END_TO_STAGE_4 Mario can invest 100 coins per talk, up to
+ * three times (GSW_GOR_LUMPY_INVESTMENT_COUNT); the first talk (GSWF_GOR_LUMPY_FIRST_TALK_DONE) switches to
+ * BGM_EVT_DANGER3. From STG6_56_ROGUEPORT_STATION on, the first talk pays back 300, 500 (600 from US on) or 999
+ * coins by the count; later talks offer his journal entries (salari_after_009 to salari_after_015).
+ */
 static EVT_BEGIN(mokorim_talk)
     SET_VALUE(LF(15), 0)
     SWITCH(GSW_STORY_PROGRESS)
@@ -3060,6 +3077,11 @@ static EVT_BEGIN(gundan1000tai_kemuri)
     RETURN
 EVT_END()
 
+/**
+ * Plays the X-Naut army sound SFX_STG0_3RD_TOGETHER1 (10 times, every 100 ms) with its L and R variants (20 times
+ * each, every 50 ms) in three parallel inline events, each from a random point on the army's ellipse
+ * (gundan1000tai_circle_pos_func).
+ */
 static EVT_BEGIN(gundan1000tai_zaza_se)
     BEGIN_INLINE_EVENT
         LOOP(10)
@@ -6604,6 +6626,10 @@ static EVT_BEGIN(epilogue_npc_entry2)
     RETURN
 EVT_END()
 
+/**
+ * Short second ending scene: Mario hidden, the camera on the dock, ep_46 printed, Goombella walks off, the music
+ * fades and the map changes to aaa_00 (entrance epilogue2).
+ */
 static EVT_BEGIN(epilogue_evt2)
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_mario_key_onoff, 0)

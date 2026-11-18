@@ -738,6 +738,13 @@ static EVT_BEGIN(s_bero_out)
     RETURN
 EVT_END()
 
+/**
+ * Peach's chapter 3 setup of this room: before STG3_33_02_PEACH_INCOGNITO the uniform R_fuku_g can be taken
+ * (peach_evt_fuku_g); later the outfit models (S_fuku*) follow GSWF_AJI_PEACH_IN_UNIFORM and
+ * GSWF_AJI_09_CHANGED_IN_BOOTH_1. The booth scripts (peach_evt_kou1_in / out, kou2_in / out) are attached and the
+ * s_bero exit is rewired; STG3_33_01_PEACH_TECS_REQUEST prints peach_aji_132, STG3_33_03_PEACH_GRODUS
+ * peach_aji_152 and 153 with a camera move.
+ */
 static EVT_BEGIN(peach_evt_stg3)
     CALL(evt_mario_key_onoff, 0)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_33_02_PEACH_INCOGNITO)

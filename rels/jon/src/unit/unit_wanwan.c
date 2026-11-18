@@ -433,6 +433,12 @@ static EVT_BEGIN(dead_event)
     RETURN
 EVT_END()
 
+/**
+ * Attack event of the Chain-Chomp: during a first strike it pauses 750 ms and takes the first-strike target,
+ * otherwise item use or a sampled target (a confused one with none is flustered). It hops twice on the spot, then
+ * lunges at the target with its chain stretched (SFX_ENM_WAN_ATTACK1 and 2) and bites. The target dodges, or the
+ * bite lands with the guard check and a camera shake. It then jumps back to its place.
+ */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)

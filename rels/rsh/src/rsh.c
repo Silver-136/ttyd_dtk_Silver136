@@ -1853,7 +1853,11 @@ static USER_FUNC(debug_print_func) {
     return EVT_RETURN_DONE;
 }
 
-// Nine passenger choices: three in rsh_01, two in rsh_03, four in rsh_04.
+/**
+ * Rolls the train's random passengers: clears GSW_RSH_01_RANDOM_NPCS, GSW_RSH_03_RANDOM_NPCS and
+ * GSW_RSH_04_RANDOM_NPCS, then picks a random candidate for each of the nine passenger slots (three in rsh_01, two
+ * in rsh_03, four in rsh_04) with evt_rsh_set_rnd_npc, and prints them (debug_print_rnd_npc).
+ */
 EVT_BEGIN(evt_rsh_rnd_npc_init)
     SET_VALUE(GSW_RSH_01_RANDOM_NPCS, 0)
     SET_VALUE(GSW_RSH_03_RANDOM_NPCS, 0)
@@ -1934,6 +1938,10 @@ static NpcSetupInfo rsh_03_rnd_npc_2_ent[] = {
     {0},
 };
 
+/**
+ * Spawns the two random passengers of rsh_03 from the stored picks (model, tribe, talk event); passenger 2 also
+ * gets rsh_03_rnd_npc_2_ent, the npc_urouro wander events around (-360, -10).
+ */
 EVT_BEGIN(evt_rsh_03_rnd_npc_entry)
     CALL(evt_rsh_get_rnd_npc, 1, 0, LW(0))
     CALL(evt_rsh_get_rnd_npc_data, 1, 0, LW(0), LW(1), LW(2))
@@ -1975,6 +1983,11 @@ static NpcSetupInfo rsh_04_rnd_npc_3_ent[] = {
     {0},
 };
 
+/**
+ * Spawns the four random passengers of rsh_04 from the stored picks (model, tribe, talk event); passenger 3 also
+ * gets rsh_04_rnd_npc_3_ent, the npc_urouro wander events around (-180, -145). Passenger 4 stands at
+ * (-50, 30, -260) in the early demos and at (-85, 16, -255) from JP on.
+ */
 EVT_BEGIN(evt_rsh_04_rnd_npc_entry)
     CALL(evt_rsh_get_rnd_npc, 2, 0, LW(0))
     CALL(evt_rsh_get_rnd_npc_data, 2, 0, LW(0), LW(1), LW(2))

@@ -505,6 +505,12 @@ static EVT_BEGIN(nokkosu_init)
     RETURN
 EVT_END()
 
+/**
+ * Talk event of Koopook (TROUBLE_TRY_TO_FIND_ME): Mario and the partner come up (US and later walk them to set
+ * spots), Koops is swapped in when another partner is out, the request is told (irai_07_*), Koopook gives a
+ * Special Card and jumps down out of sight; the play time is saved in GSW_GON_TRY_TO_FIND_ME_DONE_TIME and the
+ * trouble is done.
+ */
 static EVT_BEGIN(nokkosu_talk)
     // Koopook is made intangible so he can move freely.
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)

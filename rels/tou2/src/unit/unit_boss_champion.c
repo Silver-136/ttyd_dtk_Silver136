@@ -772,6 +772,10 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Ceiling-fall event (registered with btlevtcmd_SetEventCeilFall when he climbs to the iron frame): clears itself
+ * and drops him to the floor (to_floor).
+ */
 static EVT_BEGIN(ceil_fall_ready_event)
     CALL(btlevtcmd_SetEventCeilFall, UNIT_ID_SELF, 0)
     CALL_CHILD(to_floor)

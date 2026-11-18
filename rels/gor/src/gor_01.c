@@ -800,12 +800,20 @@ static EVT_BEGIN(buy_evt)
 EVT_END()
 
 #if VERSION <= VERSION_DEMO_JP
+/**
+ * Early demos: the clerk's first-visit greeting (badgeshop_30), run once (GSWF(2)) by badgeshopper_talk_evt and
+ * buy_evt in place of the menu.
+ */
 static EVT_BEGIN(first_shopping_evt)
     CALL(evt_msg_print, 0, STRING("badgeshop_30"), 0, STRING("バッジ店員"))
     RETURN
 EVT_END()
 #endif
 
+/**
+ * Talk event of the badge shop clerk: asks whether Mario wants to buy, sell or leave, then runs buy_evt or
+ * sell_evt. The early demos show first_shopping_evt instead the first time (GSWF(2)).
+ */
 EVT_BEGIN(badgeshopper_talk_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(unitwin_get_work_ptr, LW(10))
@@ -2050,6 +2058,11 @@ static EVT_BEGIN(kuribo3_regl)
     RETURN
 EVT_END()
 
+/**
+ * Talk event of the third Goomba villager. While TROUBLE_SAFE_DELIVERY is the accepted trouble, the first talk
+ * gives Mario the Box (GSWF_TROUBLE_WORK(0)) and, once it is delivered (GSWF_TROUBLE_WORK(1)), he pays 20 coins
+ * and the trouble is done; otherwise one line per story stage (gor_01_028_00 to _08).
+ */
 static EVT_BEGIN(kuribo3_talk)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_SAFE_DELIVERY)
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 0)
@@ -2166,6 +2179,11 @@ static EVT_BEGIN(chusan1_dead)
     RETURN
 EVT_END()
 
+/**
+ * TROUBLE_HIT_ME_PLEASE timer: after GF(9) clears, the mouse reacts to the hammer (hits counted in GW(9) by
+ * chusan1_dead) and only PAD_BUTTON_B is enabled for 15 seconds. With 11 or more hits the trouble is done;
+ * otherwise he asks to try again (irai_05_016), sets GF(9) and the event starts over.
+ */
 static EVT_BEGIN(chusan1_naguru)
     WAIT_WHILE(GF(9))
     CALL(evt_mario_key_onoff, 0)
@@ -2660,6 +2678,10 @@ static NpcSetupInfo kick2Ent[] = {
     {0},
 };
 
+/**
+ * Init event of the thief NPC for TROUBLE_FIND_THIS_GUY: with GSWF_TROUBLE_WORK(0) to (2) set and (3) clear,
+ * enters him (c_borodo_n) at (402, 0, -302) facing 90 with borodo2_talk as his talk event.
+ */
 static EVT_BEGIN(borodo2_init)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_FIND_THIS_GUY)
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 1)
@@ -2763,6 +2785,12 @@ static EVT_BEGIN(thief_init)
     RETURN
 EVT_END()
 
+/**
+ * Talk event of the thief. From STG0_08_STOLEN_COINS to STG0_END_TO_STAGE_1 the first talk gives the stolen coins
+ * back (GSW_GOR_STOLEN_COINS_LOW + 256 * GSW_GOR_STOLEN_COINS_HIGH; none, another line) and sets
+ * GSWF_GOR_THIEF_FOUND_IN_HIDEOUT; later talks pick a line by GSWF_GOR_THIEF_HIDEOUT_LEFT. Later story stages give
+ * one line each (mac_0_065_04 to _12).
+ */
 static EVT_BEGIN(thief_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG0_08_STOLEN_COINS, STG0_END_TO_STAGE_1)
@@ -5623,6 +5651,12 @@ static EVT_BEGIN(iri_09_init)
     RETURN
 EVT_END()
 
+/**
+ * TROUBLE_ORDER_ME_AN_ITEM hook of the shop manager's talk: once the trouble is done it returns 0 in LW(0). The
+ * first talk takes the request (GSWF_TROUBLE_WORK(0)); later talks let Mario hand over Courage Shells one at a
+ * time, counted in GSW_TROUBLE_WORK(0); at 5 he gives an Ultra Shroom and the trouble is done. Otherwise LW(0) is
+ * -1 or -100.
+ */
 EVT_BEGIN(iri_09_tentyo_talk)
     IF_INT_EQUAL(GSWF_TROUBLE_DONE(TROUBLE_ORDER_ME_AN_ITEM), 1)
         SET_VALUE(LW(0), 0)

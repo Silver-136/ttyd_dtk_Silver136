@@ -778,6 +778,12 @@ static EVT_BEGIN(all_fire_attackEvent_sub)
     RETURN
 EVT_END()
 
+/**
+ * Flame attack on every target with the weapon in LW(9); nothing in this file starts it. The Phantom Ember moves
+ * aside (to x -40; from US on also to z -15), shakes, spawns ten all_fire_attackEvent_sub flames and checks each
+ * target in turn (btlevtcmd_GetSelectEnemy, btlevtcmd_GetSelectNextEnemy), the guard check only on the first; the
+ * first target that avoids it ends the sweep. It then returns home.
+ */
 static EVT_BEGIN(all_fire_attack_event)
     // Pick the target (the First Strike target or a sampled enemy); a confused Phantom
     // Ember with nobody to hit gets flustered.

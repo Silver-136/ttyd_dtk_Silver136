@@ -1098,6 +1098,14 @@ static BeroEntry gor_bero[] = {
     {0},
 };
 
+/**
+ * Shared second-visit init of rsh_01: unless the train stands at Riverside, Poshley Heights or Rogueport the
+ * shaking and scenery animations play (the rt_* set toward Rogueport) and, once the entry is done, the side exit
+ * s_bero is replaced by the stg6_rsh_261 message case. Also the cabin doors (door_3, door_4), evt_access_entry,
+ * the music for the station (BGM_STG6_PIK1, BGM_STG0_GOR1, or the train themes of rsh_01_a and rsh_01_c), the
+ * random passengers (evt_rsh_01_rnd_npc_entry) and, toward Rogueport, the conductor at (395, -90) with
+ * talk_syasyou and e_bero switched off.
+ */
 EVT_BEGIN(rsh_01_init_evt_nidome)
     IF_INT_EQUAL(GSWF_HOM_TRAIN_STOPPED_AT_RIVERSIDE, 0)
         IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_POSHLEY, 0)
@@ -1182,6 +1190,11 @@ EVT_BEGIN(rsh_01_init_evt_nidome)
     RETURN
 EVT_END()
 
+/**
+ * Init script of rsh_01_a on the second visit: the outbound or return-trip exits (bero_data_a or bero_data_a_return),
+ * rsh_01_init_evt_nidome and npc_data_2; sets GSWF_RSH_REVISIT_MAP_A and clears _B and _C, and at Rogueport
+ * (GSWF_RSH_TRAIN_AT_ROGUEPORT) points s_bero at gor_bero.
+ */
 // Each revisit variant records one route flag for the shared rsh_08_a return map.
 EVT_BEGIN(rsh_01_a_init_evt_nidome)
     IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)

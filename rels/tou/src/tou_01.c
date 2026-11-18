@@ -1806,6 +1806,14 @@ static EVT_BEGIN(select_number)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of the salaryman, client of Trouble Center request 24 (TROUBLE_SECURITY_CODE). While it is accepted
+ * the first talk explains it (GSWF_TROUBLE_WORK(0)); later Mario gives four numbers (select_number; right answers
+ * 2, 6, 2 and 5) and any wrong one ends the talk. With all four right he pitches to the hot dog vendor and after a
+ * fade gives Mario a Hot Sauce (left on the ground, GSWF_TOU_01_HOT_SAUCE_REWARD, when the pouch is full); the
+ * request is finished (GSWF_TROUBLE_DONE). After that he sells Hot Sauce for 10 coins (checks coins and pouch
+ * room); otherwise he chats (stg3_tou_16_1).
+ */
 static EVT_BEGIN(talk_sarary)
     // During his Trouble Center request: Mario and the partner walk over to him.
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_SECURITY_CODE)

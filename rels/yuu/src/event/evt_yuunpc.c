@@ -2367,6 +2367,12 @@ EVT_BEGIN(evt_yuunpc_minigame3)
     RETURN
 EVT_END()
 
+/**
+ * Sets up the Paper Mode crowd: hidden, intangible template NPCs (yuunpc0 to yuunpc5, including the Bob-omb and
+ * Squeek templates) and the special racers yuusp0 to yuusp2 (Luigi, Koopie Koo, Wonky), then the crowd ext
+ * (evt_ext_entry with 900 entries, 1000 in the early demos); once SEQ_GAME is reached the yuunpc templates are
+ * deleted.
+ */
 EVT_BEGIN(evt_yuunpc_minigame4)
     CALL(evt_npc_entry, STRING("yuunpc0"), STRING("c_kinopiko"))
     CALL(evt_npc_entry, STRING("yuunpc1"), STRING("c_roten"))

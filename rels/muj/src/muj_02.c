@@ -578,6 +578,10 @@ static EVT_BEGIN(evt_switch_init)
     RETURN
 EVT_END()
 
+/**
+ * Tree treeb_01 hit: while item_treeb_01 is not out (evt_item_delete_check) a Keel Mango falls from it
+ * (ITEM_TYPE_FALL_NO_PICKUP, flag GSWF_MUJ_02_KEEL_MANGO_TREE).
+ */
 static EVT_BEGIN(evt_treeb_01)
     CALL(evt_item_delete_check, STRING("item_treeb_01"), LW(0))
     IF_INT_EQUAL(LW(0), 1)

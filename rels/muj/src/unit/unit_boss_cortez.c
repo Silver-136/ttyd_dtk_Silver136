@@ -1299,6 +1299,11 @@ static EVT_BEGIN(attack_event_mode2)
     RETURN
 EVT_END()
 
+/**
+ * Cortez's head attack (weapon_cortez_mode2_head_attack) on one target: pose KRT_1A_1 to 4 by the target's side
+ * (_check_zenei_kouei) and whether his ribs are open (CORTEZ_UNIT_WORK_RIB_OPEN_TURNS), the two head-attack
+ * sounds, then the damage check (avoid reactions on a miss).
+ */
 static EVT_BEGIN(at2_head_bat_event)
     SET_VALUE(LW(12), PTR(&weapon_cortez_mode2_head_attack))
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
@@ -1370,6 +1375,11 @@ static EVT_BEGIN(at2_head_bat_event)
     RETURN
 EVT_END()
 
+/**
+ * Cortez's charge: sets CORTEZ_UNIT_WORK_CHARGED, moves the camera back and plays the charge pose for his mode
+ * (CORTEZ_UNIT_WORK_MODE 1 to 3; another pose with the ribs open), the inhale sound, then resets his pose table
+ * and charges himself (weapon_cortez_mode2_charge).
+ */
 static EVT_BEGIN(at2_hone_charge_event)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, CORTEZ_UNIT_WORK_CHARGED, 1)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, CORTEZ_UNIT_WORK_RIB_OPEN_TURNS, LW(1))

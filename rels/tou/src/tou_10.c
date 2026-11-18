@@ -376,6 +376,12 @@ static EVT_BEGIN(init_octo)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of Octor: before STG3_34_RETURN_TO_ROGUEPORT one line per rank from 20 to 11 (stg3_npc_10_02_04 to
+ * 13); at a better rank 02_14, or 02_15 from STG3_20_02_BACK_TO_THE_MINORS to STG3_20_04_CONFISCATED while
+ * GSWF_TOU_04_CONFISCATED_EXIT_SEEN is clear. Later stg3_npc_re_065, or re_066 once
+ * GSWF_TOU_REMATCH_DEMOTED_TO_MINORS is set.
+ */
 static EVT_BEGIN(talk_octo)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
         CALL(evt_tou_get_ranking, LW(0))

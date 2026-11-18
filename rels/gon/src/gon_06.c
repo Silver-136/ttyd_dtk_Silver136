@@ -271,7 +271,12 @@ static s32 key_tbl[] = {
     ITEM_BLACK_KEY_0x22, -1,
 };
 
-// First contact only sets the talk flag; later contacts check/select the Black Key before opening.
+/**
+ * First script of the black chest (box, evt_mobj_itembox): the first time
+ * (GSWF_GON_06_BLACK_CHEST_FIRST_TALK_DONE) the chest swings and talks to Mario (stg1_gon_12_01 to _07) while he
+ * reacts. Later, without the Black Key it reminds him (stg1_gon_12_08); with it, Mario may hand the key over
+ * (stg1_gon_12_09 to _11).
+ */
 static EVT_BEGIN(evt_majin)
     // Mario is frozen and turns toward the black chest.
     CALL(evt_mario_key_onoff, 0)

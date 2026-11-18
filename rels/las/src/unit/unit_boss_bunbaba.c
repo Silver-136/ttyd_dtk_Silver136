@@ -603,6 +603,11 @@ static EVT_BEGIN(bunbaba_damage_sub_event)
     RETURN
 EVT_END()
 
+/**
+ * Dead event of Gloomtail: collapse pose GNB_X_1 with SFX_BOSS_GNB_DOWN1; after the last attack the camera closes
+ * in and the status window hides for its last line (stg8_las_49_08); then the fall (GNB_D_3, GNB_H_1 to 3) with a
+ * camera shake, the EXP is stored (btlevtcmd_StoreExp) and the unit is removed (btlevtcmd_KillUnit mode 1).
+ */
 static EVT_BEGIN(dead_event)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("GNB_X_1"))
     CALL(btlevtcmd_snd_se_offset, UNIT_ID_SELF, STRING("SFX_BOSS_GNB_DOWN1"), EVT_NULLPTR, 0, -250, 0, 0, LW(15))

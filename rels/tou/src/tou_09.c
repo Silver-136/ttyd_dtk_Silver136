@@ -60,7 +60,10 @@ static EVT_BEGIN(n_door_close)
     RETURN
 EVT_END()
 
-// Entering clears both room warp markers; exiting marks only this room pending.
+/**
+ * Enter event of the toilet pipe: clears both toilet warp markers (GSWF_TOU_09_TOILET_WARP_PENDING and
+ * GSWF_TOU_08_TOILET_WARP_PENDING) and sets LW(0) to 0.
+ */
 static EVT_BEGIN(toile_in)
     SET_VALUE(GSWF_TOU_09_TOILET_WARP_PENDING, 0)
     SET_VALUE(GSWF_TOU_08_TOILET_WARP_PENDING, 0)

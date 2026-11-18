@@ -353,18 +353,24 @@ static EVT_BEGIN(evt_action_1_2)
     RETURN
 EVT_END()
 
+/** Parade action for mask bit 1: evt_action_1_2 with LF(0) = 0. */
 static EVT_BEGIN(evt_action_1)
     SET_VALUE(LF(0), 0)
     CALL_CHILD(evt_action_1_2)
     RETURN
 EVT_END()
 
+/** Parade action for mask bit 2: evt_action_1_2 with LF(0) = 1. */
 static EVT_BEGIN(evt_action_2)
     SET_VALUE(LF(0), 1)
     CALL_CHILD(evt_action_1_2)
     RETURN
 EVT_END()
 
+/**
+ * Parade action for mask bit 4: the character (LW(10)) is put at a random x below the screen, facing a random way,
+ * makes one high jump (height 250, 1500 ms) back to the same spot and is deleted.
+ */
 static EVT_BEGIN(evt_action_jump)
     CALL(evt_sub_random, 400, LW(0))
     SUBTRACT(LW(0), 200)
@@ -378,6 +384,10 @@ static EVT_BEGIN(evt_action_jump)
     RETURN
 EVT_END()
 
+/**
+ * Parade action for mask bit 8: the character (LW(10)) starts above the screen at a random x and falls with
+ * gravity (gravity_scale) until it is below -300, then is deleted.
+ */
 static EVT_BEGIN(evt_action_fall)
     CALL(evt_sub_random, 400, LW(0))
     SUBTRACT(LW(0), 200)
@@ -396,6 +406,10 @@ static EVT_BEGIN(evt_action_fall)
     RETURN
 EVT_END()
 
+/**
+ * Parade action for mask bit 16: the character (LW(10)) walks across the screen at a random height, from either
+ * side, at speed 80, then is deleted.
+ */
 static EVT_BEGIN(evt_action_walk)
     CALL(evt_sub_random, 320, LW(0))
     SUBTRACT(LW(0), 160)
@@ -413,6 +427,11 @@ static EVT_BEGIN(evt_action_walk)
     RETURN
 EVT_END()
 
+/**
+ * Parade driver: forever picks a character (evt_action_sub), enters it at double size and spawns the action script
+ * for its bit (1, 2, 4, 8, 16: evt_action_1, _2, _jump, _fall, _walk; 32: its own script, or it is deleted when it
+ * has none), then waits 3 to 6 seconds.
+ */
 static EVT_BEGIN(evt_action)
     LOOP(0)
         CALL(evt_action_sub, LW(0), LW(1), LW(2), LW(3))

@@ -111,7 +111,10 @@ void BtlIcon_Delete(BattleIcon* icon) {
     }
 }
 
-// args: icon id, x, y, z (read as integers), variable that receives the battle icon index
+/**
+ * Script: creates a battle icon (BtlIcon_Entry) of icon id args[0] at args[1], args[2], args[3] (read as integers)
+ * and stores its index in the variable args[4], which the other btlevtcmd_BtlIcon* commands take.
+ */
 USER_FUNC(btlevtcmd_BtlIconEntry) {
     EvtWord* args = event->args;
     BattleIcon* icon;

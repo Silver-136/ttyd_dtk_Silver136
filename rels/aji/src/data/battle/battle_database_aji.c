@@ -1360,6 +1360,10 @@ NpcTerritoryInfo btl_aji_setup_no_tbl[] = {
     {0},
 };
 
+/**
+ * Background script (bgCEvt) of the space battle stage: turns the star layers star_01, star_02 and star_03 about z
+ * forever (_space_rotate), one full turn per 7500, 6750 and 6000 frames.
+ */
 static EVT_BEGIN(bgset_aji_space_event)
     SET_VALUE(LW(0), 0)
     SET_VALUE(LW(1), 0)

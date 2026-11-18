@@ -133,6 +133,12 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * End of Trouble Center request 12 (TROUBLE_HELP_MY_DADDY) with Kino and Makkino: both face Mario and talk
+ * (irai_12_001_3 to 5), Makkino first steps over when he was the one spoken to (LW(0) = 1), Kino walks up and
+ * Mario gets the Silver Card; after irai_12_001_6 both hop off to the right and vanish, the play time is saved
+ * (GSW_TIK_HELP_MY_DADDY_DONE_TIME), the request is finished (GSWF_TROUBLE_DONE) and sys_request_finish is shown.
+ */
 static EVT_BEGIN(iri_12_kino_makkino_talk)
     CALL(evt_set_dir_to_target, STRING("キーノ"), STRING("mario"))
     CALL(evt_set_dir_to_target, STRING("マッキノ"), STRING("mario"))

@@ -286,6 +286,11 @@ static EVT_BEGIN(wall_roll)
     RETURN
 EVT_END()
 
+/**
+ * Init script of the breaking floor: JP and later switch hit group A_f2_rak_02 off while
+ * GSWF_MRI_09_BREAKING_FLOOR_BROKEN is clear and on once it is set. The early demos switch it off when the flag is
+ * set and leave it alone otherwise.
+ */
 static EVT_BEGIN(breakyuka_init)
 #if VERSION >= VERSION_JP
     IF_INT_EQUAL(GSWF_MRI_09_BREAKING_FLOOR_BROKEN, 0)

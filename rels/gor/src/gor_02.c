@@ -1818,6 +1818,13 @@ static EVT_BEGIN(kurihakase_init)
     RETURN
 EVT_END()
 
+/**
+ * Talk event of Professor Frankly in his house: one line per story stage (gor_02_013 on, and mac_1_000 to
+ * mac_6_000 in each chapter's span), with extras: before Chapter 4, after the tik_08 pipe turned Mario away
+ * (GSWF_TIK_08_PIPE_REJECTED), a partner scene the first time (GSWF_GOR_FRANKLY_DARKLY_HINT_DONE); at
+ * STG4_33_MEET_BOBBERY mac_4_048 and GSWF_GOR_BOBBERY_HOME_LEARNED; at STG6_71_FRANKLYS_HOUSE_STG_6 a line by the
+ * time since GSW_GOR_FRANKLY_STG6_START_TIME (mac_6_006_01 to _06), and kurihakase_after3minutes after 3 minutes.
+ */
 static EVT_BEGIN(kurihakase_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG0_10_01_FRANKLYS_TUTORIAL)
@@ -2367,6 +2374,10 @@ static EVT_BEGIN(mario_yokeru)
     RETURN
 EVT_END()
 
+/**
+ * End of TROUBLE_NEED_A_KEY once the thief's house lock is open: he thanks Mario (irai_01_03), pays 20 coins,
+ * jumps down and goes into his house (door_data_06), and the trouble is marked done.
+ */
 static EVT_BEGIN(evt_unlock_mario)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_npc_flag_onoff, 1, STRING("盗賊団２"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
@@ -2750,6 +2761,11 @@ static s32 item_tbl[] = {
     ITEM_BOX, -1,
 };
 
+/**
+ * Talk event of the fourth Goomba villager. For TROUBLE_SAFE_DELIVERY (GSWF_TROUBLE_WORK(0) set) he takes the Box
+ * Mario hands over and sets GSWF_TROUBLE_WORK(1); for TROUBLE_HELP_WANTED (GSWF_TROUBLE_WORK(1) set) he takes
+ * Battle Trunks one at a time from a list; otherwise one line per story stage.
+ */
 EVT_BEGIN(kuribo4_talk)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_SAFE_DELIVERY)
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 1)
@@ -2899,6 +2915,11 @@ static EVT_BEGIN(roten3_init)
     RETURN
 EVT_END()
 
+/**
+ * Talk event of the third street-stall seller. For TROUBLE_PRICE_ADJUSTMENT he asks whether to start (No ends the
+ * talk), asks three questions whose answers are not used, pays 20 coins and the trouble is done; otherwise one
+ * line per story stage (gor_02_032_00 to _08).
+ */
 static EVT_BEGIN(roten3_talk)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_PRICE_ADJUSTMENT)
         SET_VALUE(LW(1), 0)
@@ -3015,6 +3036,10 @@ static EVT_BEGIN(borodo1_talk)
     RETURN
 EVT_END()
 
+/**
+ * Init event of the thief NPC: lets him pass through walls; during TROUBLE_FIND_THIS_GUY with
+ * GSWF_TROUBLE_WORK(1) set he is hidden below the map, otherwise he stands at (-475, 0, -180).
+ */
 static EVT_BEGIN(borodo2_init)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_WALL_COLLISION)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_FIND_THIS_GUY)
@@ -3048,6 +3073,11 @@ static EVT_BEGIN(borodo2_escape)
     RETURN
 EVT_END()
 
+/**
+ * Talk event of the thief NPC: for TROUBLE_FIND_THIS_GUY (GSWF_TROUBLE_WORK(0) set, (1) clear) he says
+ * irai_04_003, sets GSWF_TROUBLE_WORK(1) and runs off (borodo2_escape); otherwise one line per story stage
+ * (gor_02_033_00_2 on).
+ */
 static EVT_BEGIN(borodo2_talk)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_FIND_THIS_GUY)
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 1)
@@ -4184,6 +4214,10 @@ static EVT_BEGIN(evt_door_04_01)
     RETURN
 EVT_END()
 
+/**
+ * Wall callback of house 04: when LW(6) is 0 it clears MAP_OBJ_FLAG_NO_MAP_BLEND2 on the map group S_i04_msk; it
+ * turns S_ie_04_B and S_ie_04_ura_B about x by 0.5 and -0.5 times LW(0).
+ */
 static EVT_BEGIN(evt_wall_04)
     IF_INT_EQUAL(LW(6), 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_i04_msk"), MAP_OBJ_FLAG_NO_MAP_BLEND2)
@@ -5319,6 +5353,11 @@ static EVT_BEGIN(cam_yurasu_event)
     RETURN
 EVT_END()
 
+/**
+ * Cutscene at STG0_07_GOOMBELLA_JOINS (started by gor_02_event_00): the thief runs into Mario from the right and
+ * sends him spinning; when Mario has coins, half are taken and the amount is kept in GSW_GOR_STOLEN_COINS_LOW and
+ * GSW_GOR_STOLEN_COINS_HIGH (low and high byte) for thief_talk to give back. Ends with STG0_08_STOLEN_COINS.
+ */
 static EVT_BEGIN(steel_coin)
     // Setup: the thief is placed to their right and Mario and the partner come in from the left edge.
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kmn"), MAP_OBJ_FLAG_CLIP)
@@ -5958,6 +5997,10 @@ static EVT_BEGIN(kurihakase_lecture_badge)
     RETURN
 EVT_END()
 
+/**
+ * Puts Mario at (-190, 0, -215) and the partner at (-225, 0, -215) in Frankly's house, both facing 90; spawned by
+ * epigraphy_map and the epigraphy_map_after_stage1 to 6 scenes.
+ */
 static EVT_BEGIN(Mario_Party_position)
     CALL(evt_mario_set_pos, -190, 0, -215)
     CALL(evt_mario_set_dir, 90, 0, 0)
@@ -6824,6 +6867,11 @@ static HitDamageReturn hitDmgRetPoints[] = {
     {0},
 };
 
+/**
+ * Loops forever, moving the cockroach object S_goki_01: it picks a random direction (evt_npc_get_loiter_dir), a
+ * target 50 units away kept clear of the villagers (evt_gor_villager_urouro_check_func), moves there over 50
+ * frames facing left or right, then waits 0.5 to 3.5 seconds.
+ */
 static EVT_BEGIN(gor_goki1_urouro)
     SET_VALUE(LW(4), 0)
     SET_VALUE(LW(5), 0)
@@ -7112,6 +7160,11 @@ static EVT_BEGIN(epilogue_evt_sub)
     RETURN
 EVT_END()
 
+/**
+ * Ending scene in Frankly's house: BGM_STG0_GOR1, Mario hidden, the open book (S_open_book) shown and S_tizu_on
+ * hidden, Frankly at (-140, 0, -225), the door opened, the camera on the room while epilogue_evt_sub runs; ep_36
+ * is printed and the map changes to hei_00.
+ */
 static EVT_BEGIN(epilogue_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
     CALL(evt_snd_envoff, PSND_FADEOUT)

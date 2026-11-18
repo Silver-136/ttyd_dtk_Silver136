@@ -603,6 +603,13 @@ static EVT_BEGIN(_borodo_normal_attack)
     RETURN
 EVT_END()
 
+/**
+ * The Big Bandit's steal attack (weapon_borodo_attack): it runs around in front of the target and lunges. On a hit
+ * with a guard result of 3 or less (btlevtcmd_GetResultACDefence) it tries _steal_item; a stolen item announces
+ * btl_msg_steal_item_lost, jumps the item icon away, sets BATTLE_UNIT_FLAG_STOLEN_ITEM and switches to the
+ * loot-bag pose table (pose_table_item_have) with a laugh. With nothing taken it falls over, gets up and walks
+ * home.
+ */
 static EVT_BEGIN(_borodo_steal_attack)
     // Choose a target; a confused Bandit with none is flustered, and either way the turn ends.
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))

@@ -498,6 +498,11 @@ static EVT_BEGIN(counter_event)
     RETURN
 EVT_END()
 
+/**
+ * Before the player's phase, when the Ruff Puff can act and has no kCounterElectric on part 1, it has a 50 in 100
+ * chance to change height: from low (UNIT_WORK_LOWERED 1) up to 40, where kHammerlikeCannotTarget and
+ * kShellTosslikeCannotTarget are set on part 1, or from high down to 10, where they are cleared.
+ */
 static EVT_BEGIN(unison_phase_event)
     CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_BEFORE_PLAYER)
     IF_INT_EQUAL(LW(0), 0)

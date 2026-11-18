@@ -264,6 +264,10 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Footstep loop for the first Goomba bully: SFX_STG0_KURI_MOVE1L and 1R at his position, alternating every 50 ms,
+ * forever; the bully scenes spawn it and delete it.
+ */
 static EVT_BEGIN(ashioto)
     LOOP(0)
         CALL(evt_npc_get_position, STRING("クリボー１"), LW(0), LW(1), LW(2))
@@ -464,7 +468,12 @@ static EVT_BEGIN(gorotuki_sanninngumi)
     RETURN
 EVT_END()
 
-// Skip the capture animation only when both bounding-box dimensions are zero.
+/**
+ * Bobbery case event (CASE_BOBBERY on a_dom_kabe_1) of the first cracked wall bom_kabe_1: the break sound, hit
+ * object a_dom_kabe_1 off and a_dom_kabe_2 on, GSWF_TIK_01_WALL_BOMBED set, then the paper collapse animation
+ * OFF_d_bom_ver2 over a capture of the wall (skipped when its bounding box is empty) as bom_kabe_1 is hidden and
+ * bom_kabe_2 shown.
+ */
 static EVT_BEGIN(wall_bomb00)
     BEGIN_INLINE_EVENT
         WAIT_MS(200)
@@ -505,7 +514,11 @@ static EVT_BEGIN(wall_bomb00)
     RETURN
 EVT_END()
 
-// Skip the capture animation only when both bounding-box dimensions are zero.
+/**
+ * Bobbery case event (CASE_BOBBERY on e_bero_2) of the second cracked wall bom_kabe_3: as wall_bomb00, but it
+ * switches on exit e_bero_2 (bero_case_switch_on, hit attribute 4 on), sets GSWF_TIK_01_EAST_WALL_BOMBED and swaps
+ * bom_kabe_3 for bom_kabe_4.
+ */
 static EVT_BEGIN(wall_bomb01)
     BEGIN_INLINE_EVENT
         WAIT_MS(200)

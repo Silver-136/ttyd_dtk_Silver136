@@ -876,6 +876,11 @@ static EVT_BEGIN(critical_bite_attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Bowser's fire breath (weapon in LW(9)), declared on every target (btlevtcmd_AttackDeclareAll): he stomps out in
+ * front of the party, inhales with a roar and breathes fire (gonbaba_breath scaled by his size) for about 1.5
+ * seconds, checking each target in turn (the guard only for the first), then walks back home.
+ */
 static EVT_BEGIN(fire_attack_event)
     // Choose the targets; a confused Bowser with none is flustered.
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))

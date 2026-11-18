@@ -1403,6 +1403,11 @@ static s32 npc_jump(EventEntry* event, BOOL isFirstCall) {
     return 0;
 }
 
+/**
+ * Starts the Smorg swarm: the two hidden Smorg models (moa_a, moa_b), the swarm ext (evt_ext_entry, 400 entries)
+ * and MOAMOA_WORK_FLAG_ACTIVE. A freed waitress (GSWF_RSH_SMORG_WAITRESS_FREED) or conductor
+ * (GSWF_RSH_SMORG_CONDUCTOR_FREED) is taken off the targets (evt_moamoa_target_off) and gets its talk script back.
+ */
 static EVT_BEGIN(evt_moamoa_init)
     CALL(evt_npc_entry, STRING("moa_a"), STRING("c_n_moa_a")) // hidden Smorg model A for the swarm sprites
     CALL(evt_npc_set_position, STRING("moa_a"), 0, -1000, 0)

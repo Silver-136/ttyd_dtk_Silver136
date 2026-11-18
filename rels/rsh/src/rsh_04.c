@@ -343,8 +343,12 @@ static const char* door_5[] = {
     "5_door_close",
 };
 
-// Both hints are required. US and PAL advance the story only if needed; JP and the early demos write this story step
-// unconditionally.
+/**
+ * Partner remark once Mario has heard both hints (GSWF_RSH_CONDUCTOR_BUB_HINT_HEARD and
+ * GSWF_RSH_ZIP_TOAD_BUB_HINT_HEARD; otherwise nothing): the current partner speaks its stg6_rsh_107_N line and the
+ * story moves to STG6_10_THE_CONDUCTOR_ZIP_TOAD (from US on only when it is not there yet; JP and the early demos
+ * always set it).
+ */
 EVT_BEGIN(evt_rsh_konarikin_irai_party_talk)
     IF_INT_EQUAL(GSWF_RSH_CONDUCTOR_BUB_HINT_HEARD, 0)
         RETURN
@@ -1514,7 +1518,12 @@ static EVT_BEGIN(evt_door_msg)
     RETURN
 EVT_END()
 
-// GW(14)/GW(15) hold the two repeat-message event IDs for the active room.
+/**
+ * Watcher loop for room 5: while Mario is inside (GSWF_RSH_04_IN_ROOM_5) and mario_flag gives 0 (no talk, no ghost
+ * diary), it runs the repeating lines talk_papa_repeat and talk_mama_repeat (from STG6_06_PENNINGTONS_ASSISTANT to
+ * STG6_18_BLANKET_EXCHANGE; event ids in GW(14), GW(15)); when a talk starts or he leaves it deletes them and
+ * closes stg6_rsh_85_01 and 85_02.
+ */
 static EVT_BEGIN(evt_narikin_room)
     SET_TYPE(0)
     SET_VALUE(LF(0), 0)

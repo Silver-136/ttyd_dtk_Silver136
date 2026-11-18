@@ -451,6 +451,11 @@ static EVT_BEGIN(monitor_init)
     RETURN
 EVT_END()
 
+/**
+ * Peach's first scene in Grodus's room (spawned by the init at STG1_17_FATHER_SON_REUNITED): the viewport opens
+ * out to the full screen, the underlings bring Peach in, the scene runs through peach_aji_00_01 to peach_aji_33
+ * (the Shadow Sirens at the end), and the map changes to aji_01 (entrance peach_evt_stg1).
+ */
 static EVT_BEGIN(peach_evt_stg1)
     // The scene opens: Peach is led through the fortress by X-Naut underlings.
     // The viewport expands from 1 by 1 to the full screen.

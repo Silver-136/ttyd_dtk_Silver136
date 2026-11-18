@@ -906,6 +906,12 @@ static s32 iri_26_item_tbl[] = {
     ITEM_HONEY_CANDY, -1,
 };
 
+/**
+ * Talk event of villager H. For TROUBLE_I_CANT_SPEAK, when Mario has a Honey Candy: irai_26_01 to 04 with choices
+ * and an item menu; handing it over makes him jump three times, speak (irai_26_05), pay 20 coins, save the play
+ * time in GSW_BOM_I_CANT_SPEAK_DONE_TIME and finish the trouble. Without the candy irai_26_00. Otherwise one line
+ * per story stage (stg7_bom_16_00 to stg7_bom_17_1).
+ */
 static EVT_BEGIN(talk_murabito_h)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_I_CANT_SPEAK)
         CALL(evt_pouch_check_item, ITEM_HONEY_CANDY, LW(0))

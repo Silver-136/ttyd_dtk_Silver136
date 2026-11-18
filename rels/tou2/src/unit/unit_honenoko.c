@@ -393,6 +393,12 @@ static EVT_BEGIN(rebirth_event)
     RETURN
 EVT_END()
 
+/**
+ * Attack event of the Dull Bones: in a first strike normal_attack_event; a heap of bones (UNIT_WORK_REBIRTH_TURNS set)
+ * runs rebirth_event. Otherwise an enemy item if one fits, then a roll under 85 in 100 picks normal_attack_event; else
+ * it checks the spot 40 units to one side, then to the other (btlevtcmd_CheckSpace), and calls a friend there
+ * (call_friend_event); with neither free it rolls again.
+ */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)

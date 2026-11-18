@@ -47,7 +47,11 @@ static EvtWord puni_nakama[93];
 static EvtWord tik03_switch_evt[70];
 EvtWord tik_03_init_evt[116];
 
-// Returning after the boss clears the visit-local gift and game-win flags.
+/**
+ * Custom enter hook of bero_05: from STG2_25_AFTER_THE_BOSS_BATTLE on it sets GSWF_MRI_LEFT_AFTER_BOSS_BATTLE and
+ * clears the per-visit flags GSWF_MRI_04_BABY_JABBI_GIFT_THIS_VISIT and GSWF_MRI_PETUNI_GAME_WON_THIS_VISIT.
+ * Returns 0 in LW(0).
+ */
 static EVT_BEGIN(bero_05_custom_in)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG2_25_AFTER_THE_BOSS_BATTLE)
         IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 0)

@@ -1624,6 +1624,12 @@ static EVT_BEGIN(ele_2)
     RETURN
 EVT_END()
 
+/**
+ * Sets up the elevator key panels A_ekagi1 to 6 by the story: before STG7_10_ELEVATOR_ACTIVATED panel 1 shows its
+ * red lamp and runs elv_unlock1, afterwards panels 1 to 3 show the lit lamps and run ele_1; likewise panels 4 to 6
+ * with elv_unlock2 / ele_2 around STG7_15_ELEVATOR_ACTIVATED_2. From STG7_20_LORD_CRUMP_DEFEATED to
+ * STG7_25_00_1_BOWSER_POSHLEY_SANCTUM panels 1 to 3 run last_elv_lock.
+ */
 static EVT_BEGIN(evt_elv_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG7_20_LORD_CRUMP_DEFEATED, STG7_25_00_1_BOWSER_POSHLEY_SANCTUM)
@@ -1689,7 +1695,10 @@ static EVT_BEGIN(key_lock)
     RETURN
 EVT_END()
 
-// Door and elevator lock messages share the same capped three-attempt counter.
+/**
+ * Case script of the exits evt_key_init locks after Lord Crump's defeat: prints stg7_aji_45_02 and counts tries in
+ * GSW_AJI_01_LOCKED_EXIT_TRIES up to 3; on the third the partner adds stg7_aji_45_03.
+ */
 static EVT_BEGIN(last_key_lock)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_print, 0, STRING("stg7_aji_45_02"), 0, 0)
@@ -2457,6 +2466,11 @@ static EVT_BEGIN(peach_evt_init)
     RETURN
 EVT_END()
 
+/**
+ * Init of the first X-Naut underling: at STG3_33_02_PEACH_INCOGNITO it is moved to (100, 1000, -50) and left as
+ * is; at every other story point it is hidden and intangible and its interrupt 1 is cleared. Interrupt 6 is
+ * cleared in that case too.
+ */
 static EVT_BEGIN(teshita1_init)
     CALL_CHILD(npc_init_evt)
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_STOP_FOR_EVENT)
@@ -2481,6 +2495,11 @@ static EVT_BEGIN(teshita1_talk)
     RETURN
 EVT_END()
 
+/**
+ * Init of the second X-Naut underling: moved to (0, 1000, -15) at STG3_33_02_PEACH_INCOGNITO (then left as is) and
+ * from STG5_45_PEACH_POTION_PUZZLE to STG5_47_PEACH_TEC_TALK; at every other story point it is hidden and
+ * intangible with interrupt 1 cleared. Interrupt 6 is cleared except at STG3_33_02.
+ */
 static EVT_BEGIN(teshita2_init)
     CALL_CHILD(npc_init_evt)
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_STOP_FOR_EVENT)

@@ -255,7 +255,13 @@ static EVT_BEGIN(irekawatta_mario_init)
     RETURN
 EVT_END()
 
-// LW(0)==1 resumes after the staged Star Stone scene; both paths continue with the partner departure.
+/**
+ * The swap scene after Doopliss wins the first battle: Mario spins to the floor, Doopliss bounces the Ruby Star
+ * across the floor on his head and the Star scene plays (evt_sub_starstone; before the music fade in the early
+ * demos, after it from JP on). Then the partner talks to the fake Mario, Doopliss and the fake Mario jump away and
+ * the partners leave the party. Ends with STG4_10_02_TRADING_PLACES and GSWF_JIN_TRADING_PLACES_ACTIVE. With LW(0)
+ * = 1 (the map entered at STG4_10_DOOPLISS_BATTLE) it starts at the re-entry path, which rebuilds the scene.
+ */
 EVT_BEGIN(irekawatta_mario)
     IF_INT_EQUAL(LW(0), 1)
         GOTO(100)

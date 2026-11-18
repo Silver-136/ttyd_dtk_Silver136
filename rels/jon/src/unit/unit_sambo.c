@@ -1650,6 +1650,12 @@ static EVT_BEGIN(attack_spike_event)
     RETURN
 EVT_END()
 
+/**
+ * The Pokey calls another Pokey: it sways back and forth with the SFX_ENM_SAMBO_SEND_GROUP sounds, then spawns
+ * entry_sambo (btlevtcmd_SpawnUnit) at the free spot attack_event found (LW(6) to LW(8)): the new Pokey rises
+ * through a smoke puff and jumps there, which becomes its home. Its UNIT_WORK_CALL_DEPTH is one more than the
+ * caller's.
+ */
 static EVT_BEGIN(call_friend_event)
     // The Pokey sways back and forth, calling to a friend.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("SNB_S_1"))

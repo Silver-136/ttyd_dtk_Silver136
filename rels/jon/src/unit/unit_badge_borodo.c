@@ -823,6 +823,13 @@ static EVT_BEGIN(wait_event)
     RETURN
 EVT_END()
 #if VERSION >= VERSION_US
+/**
+ * US and later: the Badge Bandit's Life Shroom revival (UNIT_DATA_EMERGENCY_REVIVAL_EVENT; unit LW(10), part
+ * LW(11)). It hides its held item and spins, clears its statuses, uses up the reserved Life Shroom
+ * (btlevtcmd_ConsumeItemReserve) and shows its icon, then clears STATUS_DEAD and recovers 10 HP from 0. It hops in
+ * place, clears BATTLE_UNIT_FLAG_HIDE_HELD_ITEM and BATTLE_UNIT_FLAG_STOLEN_ITEM, takes the plain pose table and
+ * restarts its wait event.
+ */
 EVT_BEGIN(_badge_borodo_emergency_revival_event)
     CALL(btlevtcmd_OnUnitFlag, LW(10), BATTLE_UNIT_FLAG_HIDE_HELD_ITEM)
     SET_VALUE(LW(0), 48)

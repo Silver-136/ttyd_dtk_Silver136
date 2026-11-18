@@ -2210,6 +2210,12 @@ static s32 iri_19_item_tbl[] = {
     ITEM_WEDDING_RING, -1,
 };
 
+/**
+ * Shared talk script of Frankie. For TROUBLE_IMPORTANT_THING the first talk takes the request
+ * (GSWF_TROUBLE_WORK(0)); once GSWF_TROUBLE_WORK(1) is set he takes the Wedding Ring Mario hands over, gives a
+ * Gold Card, walks to his spot for the story stage and the trouble is done. Otherwise one line per story stage.
+ * After STG5_65_TRAIN_TICKET LSWF_GOR_03_TALK_SCENE_ACTIVE is set during the talk.
+ */
 EVT_BEGIN(peton_talk_common)
     IF_INT_GREATER(GSW_STORY_PROGRESS, STG5_65_TRAIN_TICKET)
         SET_VALUE(LSWF_GOR_03_TALK_SCENE_ACTIVE, 1)
@@ -5786,6 +5792,10 @@ static DoorParam door_data_04 = {
     evt_door_04_close_snd, // evtClose
 };
 
+/**
+ * Case event of house 4's door (CASE_FRONT), registered by evt_door_04_entry and evt_door_04_close: runs
+ * evt_door_close_roll, then exits the case.
+ */
 static EVT_BEGIN(evt_door_04_caseclose)
     CALL_CHILD(evt_door_close_roll)
     CALL(evt_exit_case_evt)

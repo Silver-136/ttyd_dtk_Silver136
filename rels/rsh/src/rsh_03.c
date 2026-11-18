@@ -419,6 +419,12 @@ static s32 iri_22_item_tbl[] = {
     -1, -1, -1, -1,
 };
 
+/**
+ * Talk script of the cook. During Trouble Center request 22 (TROUBLE_GET_THESE_INGREDIENTS) Mario hands over the
+ * Golden Leaf, Mystic Egg and Keel Mango one at a time (evt_win_item_select; bits 1, 2 and 4 of
+ * GSW_TROUBLE_WORK(0)); with all three he pays 40 coins and the request is finished (GSWF_TROUBLE_DONE). Otherwise
+ * he takes the Galley Pot back when Mario has it (talk_cook_nabe_return), or says a line by story stage.
+ */
 EVT_BEGIN(talk_cook)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_GET_THESE_INGREDIENTS)
         CALL(iri_22_make_item_tbl, LW(0), LW(1))

@@ -535,6 +535,10 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Wait event of the Bristle: its pose from the pose table, then every frame kCounterPreemptiveFrontSpiky on part 1
+ * is turned off while it is asleep, stopped, dizzy, poisoned, confused or frozen, and on otherwise.
+ */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     LABEL(0)

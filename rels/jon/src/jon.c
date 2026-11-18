@@ -2753,6 +2753,10 @@ static EVT_BEGIN(iri_12_dokan_in_sub)
     RETURN
 EVT_END()
 
+/**
+ * Starts iri_12_dokan_in_sub while TROUBLE_HELP_MY_DADDY is the accepted trouble, GSWF_TROUBLE_WORK(1) is set and
+ * GSWF_TROUBLE_WORK(2) is not.
+ */
 static EVT_BEGIN(iri_12_dokan_in)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_HELP_MY_DADDY)
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 1)

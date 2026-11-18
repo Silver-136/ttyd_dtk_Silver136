@@ -113,6 +113,12 @@ EVT_BEGIN(kpa_init)
     RETURN
 EVT_END()
 
+/**
+ * Builds a stage's map objects from the int stream in LW(0) (a kpa_act_stg*_mobj table): each record is a type id
+ * and its values, -1 ends the list (at most 100 records). Types: 0 / 1 big blocks (MOBJ_Lv1BigBlock,
+ * MOBJ_Lv2BigBlock), 2-5 bricks, 6 badge block, 7 hidden block, 8 plain block, 9-11 pipes, 12 coral, 13 / 14
+ * fire-bar bases, 15 the goal pole (kpa_stage_clear, LSWF_KPA_STAGE_ENDED), 16 / 17 red / blue jump stands.
+ */
 EVT_BEGIN(kpa_read_mobj)
     SET_INT_READ_ADDR(LW(0))
     LOOP(100)

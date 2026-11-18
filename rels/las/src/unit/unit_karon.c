@@ -888,6 +888,11 @@ static EVT_BEGIN(link_attack_event_sub)
     RETURN
 EVT_END()
 
+/**
+ * Call for help of the Dry Bones: the camera closes in and six times it tosses up a bone (part 5, KRN_H_N) that
+ * lands in a growing pile (part 6, KRN_C_N); the pile stands up (KRN_D_3, KRN_D_4) and a new Dry Bones
+ * (entry_honenoko, kind unit_karon) is spawned there with the caller's size status (honenoko_copy_status).
+ */
 static EVT_BEGIN(call_friend_event)
     // The camera zooms in on the Dry Bones as it starts calling for help.
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)

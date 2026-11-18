@@ -569,6 +569,13 @@ static const char* MOAMOA_TAIJOU[] = {
     NULL,
 };
 
+/**
+ * Dead event of the Smorg main body: after the last attack the tentacles still alive (unit work 3 to 5; in the
+ * mouth form, MOAMOA_UNIT_WORK_MOUTH_FORM, the mouth in unit work 6) collapse and are removed one by one; the body
+ * plays its defeat animations (MOAMOA_TAIJOU), the swarm swirls (moamoa_guruguru), the coins, EXP and star points
+ * are stored (btlevtcmd_StoreCoin, btlevtcmd_StoreExp), the explosion scatters the swarm (moamoa_bomb), the main
+ * unit id is cleared (evt_moamoa_mainUnitIdClear) and the unit is removed.
+ */
 static EVT_BEGIN(dead_event)
     // Once the last attack has finished, Smorg's remaining tentacles (or, in the mouth form, its mouth) collapse
     // and vanish one by one.

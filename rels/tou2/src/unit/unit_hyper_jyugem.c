@@ -547,6 +547,12 @@ static EVT_BEGIN(dmg_first_attack_pos_event)
     RETURN
 EVT_END()
 
+/**
+ * Attack event of the Dark Lakitu: an enemy item if one fits. Then a draw between calling a friend (40 in 130 on
+ * turn 1, 40 in 110 later), which needs a free spot found on either side (btlevtcmd_CheckSpace, friend_event), and
+ * attacking. Charged (UNIT_WORK_CHARGED) it always throws; otherwise a draw picks a plain throw, a throw that can
+ * rebound into a new Spiny (UNIT_WORK_REBOUND_SPAWN = 1) or a charge (30, 30, 30 on turn 1; 30, 30, 10 later).
+ */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)

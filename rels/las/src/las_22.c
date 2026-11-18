@@ -223,6 +223,11 @@ static const char* haguruma_kage2[] = {
     "S_hgm_17b",
 };
 
+/**
+ * Turns the gears every frame: haguruma_hontai and haguruma_kage (13 and 11 objects) by +1 degree from 20,
+ * haguruma_hontai2 and haguruma_kage2 (7 and 6) by -1 degree, and the pairs S_hgm_21a/b, 22a/b and 23a/b rock on a
+ * sine (41, 22 and 110 degrees).
+ */
 static EVT_BEGIN(haguruma_evt)
     SET_FLOAT_VALUE(LW(0), FLOAT(20.0f))
     SET_FLOAT_VALUE(LW(1), FLOAT(0.0f))

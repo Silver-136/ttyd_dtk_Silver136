@@ -723,6 +723,10 @@ static EVT_BEGIN(damage_event_bodylost)
     RETURN
 EVT_END()
 
+/**
+ * Poison Pokey segment-loss helper (unit LW(10), part LW(11)): pose type LW(14), then lifts the unit 18 units and
+ * drops it back with a small bounce over about 15 frames (btlevtcmd_SetPos steps).
+ */
 static EVT_BEGIN(subset_dmg_sambo_fall)
     CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), LW(14))
     CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
@@ -1689,6 +1693,12 @@ static EVT_BEGIN(attack_spike_event)
     RETURN
 EVT_END()
 
+/**
+ * The Poison Pokey calls a friend: it sways its stack with the SFX_ENM_SAMBO_SEND_GROUP sounds, shakes the camera
+ * and spawns entry_sambo (btlevtcmd_SpawnUnit), which rises through a smoke puff and jumps to the free spot in
+ * LW(6) to LW(8), its new home; the new unit's UNIT_WORK_CALL_GENERATION is the caller's plus one. Then it settles
+ * upright.
+ */
 static EVT_BEGIN(call_friend_event)
     // The Pokey rocks its stack from side to side, with a calling sound for each swing.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("SNB_S_1"))

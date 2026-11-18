@@ -818,6 +818,12 @@ static KinopioData kino_dt = {
     NULL, NULL, // toBedEvt..fromBedEvt
 };
 
+/**
+ * First-arrival scene, spawned before STG1_01A_PETALBURG_1ST_TIME: controls locked, a camera sweep with the area
+ * title (evt_telop_entry 2), Koopa A walks up and speaks (stg1_nok_01, 01_01), a partner is called out if none is,
+ * and they talk (stg1_nok_01_02 to 04). Then BGM_STG1_NOK1, the story becomes STG1_01A_PETALBURG_1ST_TIME, JP and
+ * later set the fall respawn point to Mario's position, and the partner and the controls come back.
+ */
 EVT_BEGIN(first_time_camera)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_snd_bgm_scope, 0, 1)

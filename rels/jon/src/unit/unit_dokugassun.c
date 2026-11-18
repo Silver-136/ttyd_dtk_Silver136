@@ -720,6 +720,10 @@ static USER_FUNC(eff_poison_breath) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Charge-up of the Poison Puff: the camera zooms in, a charge sound plays and the poison barrier is raised
+ * (counter attribute kCounterPoisonStatus on part 1) with its charge poses.
+ */
 static EVT_BEGIN(charge_event)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, -1)

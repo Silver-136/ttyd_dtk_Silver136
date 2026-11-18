@@ -64,7 +64,10 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
-// Either linked enemy death marks both pillar enemies defeated before common death handling.
+/**
+ * Dead event of the first gate-pillar guard: sets both GSWF_HEI_05_PILLAR_ENEMY_1_DEFEATED and
+ * GSWF_HEI_05_PILLAR_ENEMY_2_DEFEATED, then the common enemy death (enemy_common_dead_event).
+ */
 static EVT_BEGIN(dead_evt1)
     SET_VALUE(GSWF_HEI_05_PILLAR_ENEMY_1_DEFEATED, 1)
     SET_VALUE(GSWF_HEI_05_PILLAR_ENEMY_2_DEFEATED, 1)
@@ -72,6 +75,7 @@ static EVT_BEGIN(dead_evt1)
     RETURN
 EVT_END()
 
+/** Dead event of the second gate-pillar guard: like dead_evt1, both pillar flags are set. */
 static EVT_BEGIN(dead_evt2)
     SET_VALUE(GSWF_HEI_05_PILLAR_ENEMY_2_DEFEATED, 1)
     SET_VALUE(GSWF_HEI_05_PILLAR_ENEMY_1_DEFEATED, 1)

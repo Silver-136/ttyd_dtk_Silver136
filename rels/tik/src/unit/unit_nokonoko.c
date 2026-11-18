@@ -250,7 +250,11 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
-// Use the overturned defense and poses, then require two recovery turns before standing up.
+/**
+ * Flip event (UNIT_DATA_DAMAGE_TURN_EVENT): the hit offset drops, the flipped defence and pose tables
+ * (defence_turn, pose_table_turn) are set, UNIT_STATUS_FLAG_FLIPPED with an over-turn count of 2 (two turns before
+ * it stands up), then NKT_D_1 with SFX_ENM_INSIDE1, two hops in place and NKT_S_2.
+ */
 static EVT_BEGIN(dmg_turn_event)
     CALL(btlevtcmd_SetHitOffset, UNIT_ID_SELF, 1, 0, -15, 0)
     SET_VALUE(LW(10), UNIT_ID_SELF)
@@ -270,7 +274,11 @@ static EVT_BEGIN(dmg_turn_event)
     RETURN
 EVT_END()
 
-// Decrement the recovery counter; restore the upright state only when it reaches zero.
+/**
+ * Wakeup event of a flipped Koopa Troopa (attack_event runs it instead of attacking): counts the over-turn counter
+ * down by one; while turns remain it wriggles (NKT_S_3) for 400 ms. At zero it restores the upright defence and
+ * pose tables, clears UNIT_STATUS_FLAG_FLIPPED, hops back on its feet and resets the hit offset.
+ */
 static EVT_BEGIN(wakeup_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)

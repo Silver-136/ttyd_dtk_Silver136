@@ -351,6 +351,12 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Gus's charge with the weapon in LW(9): first-strike target or a sampled one (a confused Gus with none is
+ * flustered); he stomps in place (SFX_ENM_MONBAN_MOVE sounds) and charges at the target, which dodges (he runs on
+ * past) or takes the blow with the guard check (he recoils in two hops). Then he walks home and laughs
+ * (SFX_ENM_MONBAN_LAUGH1).
+ */
 static EVT_BEGIN(normal_attack_event)
     // Target: the first-strike target if the battle opened that way, otherwise one picked for his attack.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)

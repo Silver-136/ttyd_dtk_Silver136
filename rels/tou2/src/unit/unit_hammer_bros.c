@@ -558,6 +558,13 @@ static EVT_BEGIN(hammer_bros_attack_common_event3)
     RETURN
 EVT_END()
 
+/**
+ * Resolves one thrown hammer (weapon LW(9), target and part LW(3) / LW(4)): anything but a hit on the pre-check
+ * plays hammer_bros_attack_common_event1. On a hit with LW(11) = 1 it first records the hit (UNIT_WORK_THROW_HIT
+ * for weapon_hammer_bros_renzoku_attack, else unit work 10 plus the target's index in the list in unit work 0-4 /
+ * 5-9), then hammer_bros_attack_common_event2, the guard result, the damage (DAMAGE_RESULT_FINAL_HIT when LW(10) =
+ * 1) and hammer_bros_attack_common_event3.
+ */
 static EVT_BEGIN(damage_check_event_sub)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), 0, LW(5))
     SWITCH(LW(5))

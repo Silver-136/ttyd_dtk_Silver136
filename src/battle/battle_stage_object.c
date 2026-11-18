@@ -2466,6 +2466,14 @@ static EVT_BEGIN(_object_turn_event_B)
 EVT_END()
 #endif
 
+/**
+ * Topples background layer LW(9) (0 A1, 1 A2, 2 B): the pieces wobble until the other battle events are over
+ * (_set_mobj_shake) and fall flat (_set_mobj_rotate_x), with a camera shake except for A2; dust and landing sounds
+ * follow, and except for A2 the audience's reaction. Unless BATTLE_FLAG_PARTY_IN_AUDIENCE is set or the layer has
+ * no weapon (_get_bgset_attack_data), the units that weapon targets (btlevtcmd_SamplingEnemy) are hit, the first one
+ * able to guard with an Action Command defence. After 50 frames the layer fades out over 51 frames and is destroyed
+ * (_mobj_destroy).
+ */
 static EVT_BEGIN(_object_turn_event_core)
     CALL(_set_mobj_shake_init, LW(9))
     CALL(_set_mobj_shake, LW(9))

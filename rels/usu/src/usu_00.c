@@ -2563,6 +2563,10 @@ static EVT_BEGIN(kusa_01_evt)
     RETURN
 EVT_END()
 
+/**
+ * Bush kusa_04 (kusa_tbl): unless GF(1) is set (Bowser's interlude), drops a Star Piece (flag GSWF_STARPIECE_61)
+ * while item_kusa_04 is not out (evt_item_delete_check).
+ */
 static EVT_BEGIN(evt_kusa_04)
     IF_INT_EQUAL(GF(1), 1)
         RETURN
@@ -2574,6 +2578,10 @@ static EVT_BEGIN(evt_kusa_04)
     RETURN
 EVT_END()
 
+/**
+ * Bush kusa_06 (kusa_tbl): unless GF(1) is set (Bowser's interlude), drops a coin (flag GSWF_USU_00_COIN_BUSH)
+ * while item_kusa_06 is not out (evt_item_delete_check).
+ */
 static EVT_BEGIN(evt_kusa_06)
     IF_INT_EQUAL(GF(1), 1)
         RETURN

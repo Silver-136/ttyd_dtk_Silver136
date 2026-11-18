@@ -2082,6 +2082,12 @@ static USER_FUNC(kamec_get_live_num) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Spawns one clone (entry_kamec) into LW(3) at LW(0) to LW(2), which becomes its home: part 1 at alpha 0
+ * (alpha_up_event fades it in), the caster's UNIT_WORK_SKY, a copy of its HP and status turns (kamec_copy_status)
+ * and, JP and later, its HP gauge shown (kUnitNoHpGauge off). It is marked as a clone (UNIT_WORK_BUNSIN = 1) with
+ * this attack event, the clone status table (regist_bunsin) and kClone on part 1.
+ */
 static EVT_BEGIN(spawn_event)
     CALL(btlevtcmd_SpawnUnit, LW(3), PTR(&entry_kamec), 0)
     CALL(btlevtcmd_SetAlpha, LW(3), 1, 0)

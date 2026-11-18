@@ -400,6 +400,12 @@ void marioRollForceCancel(void) {
     }
 }
 
+/**
+ * Tube Mode facing while a script moves Mario (MARIO_FLAG_FORCED_MOVEMENT; called from mario.c before movePos):
+ * takes moveDirection turned toward directionView (makeMovedir) as dir, flips the roll side (hammerDir) when the
+ * current facing lies outside the 270-degree arc around dir (chkReverseDir), and sets displayDirection to
+ * 270 + targetYaw - dir (180 less on the flipped side), computed again when it is at or above 200 or below 170.
+ */
 void marioSetRollDispDir(void) {
     MarioWork* mario = marioGetPtr();
     f32 dir = makeMovedir(mario->moveDirection, mario->directionView);

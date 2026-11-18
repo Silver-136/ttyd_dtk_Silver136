@@ -255,6 +255,11 @@ static USER_FUNC(replace_evt) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Init event of the unused wanawana trap unit: sets its wait, attack and damage events (confusion:
+ * btldefaultevt_Confuse), turns MAP_OBJ_FLAG_KURURING on for the S_yuka map object group, so test_kururing_mapdisp
+ * draws that floor into the trap's texture (replace_disp), runs replace_evt and starts the wait event.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))

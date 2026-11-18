@@ -654,6 +654,12 @@ static USER_FUNC(reset_stone_cam) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Garnet Star scene, spawned by the map init before STG6_51_3_SURPRISE_GUESTS: the doors shut behind Mario, the
+ * partner and Pennington; the Garnet Star hops over to Beldam (stg6_pik_13), Beldam and Marilyn vanish in star
+ * dust, Doopliss (stg6_pik_14) hops away, the partner (stg6_pik_15_N) and Pennington (stg6_pik_16 to 18) comment,
+ * and the story becomes STG6_51_3_SURPRISE_GUESTS.
+ */
 EVT_BEGIN(evt_garnet)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mapobj_rotate, 1, STRING("door_1_a"), 0, 70, 0)

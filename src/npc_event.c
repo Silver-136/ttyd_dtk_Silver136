@@ -4527,6 +4527,10 @@ EVT_BEGIN(hbross_dead_event)
     RETURN
 EVT_END()
 
+/**
+ * Dead event of side-scrolling X-Naut PhDs: clears the dead status of its bottle helper (slave_0), then the
+ * side-scrolling defeat (enemy_2d_common_dead_event). The early demos define it further down.
+ */
 EVT_BEGIN(zakoM2D_dead_event)
     CALL(evt_npc_status_onoff, 0, STRING("slave_0"), NPC_STATUS_DEAD)
     CALL_CHILD(enemy_2d_common_dead_event)
@@ -5115,6 +5119,10 @@ EVT_BEGIN(fall2D_regl_event)
     RETURN
 EVT_END()
 
+/**
+ * Init event of X-Naut PhDs in Bowser's side-scrolling stage: enemy flags, side-scrolling mode, speed limit 400 and
+ * its bottle helper (slave_0, c_zako_km) parked out of sight (set_bottle_flag_init).
+ */
 EVT_BEGIN(zakoM2D_init_event)
     CALL_CHILD(enemy_common_flag_init_event)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_2D)
@@ -5127,6 +5135,10 @@ EVT_BEGIN(zakoM2D_init_event)
     RETURN
 EVT_END()
 
+/**
+ * Move event of side-scrolling X-Naut PhDs: stays in place, and once alive and on screen (at most 250 units right of
+ * the camera) keeps turning to face Mario.
+ */
 EVT_BEGIN(zakoM2D_move_event)
     CALL(evt_npc_set_anim, STRING("me"), STRING("S_1"))
     LABEL(2)
@@ -5209,6 +5221,11 @@ EVT_BEGIN(zakoM2D_find_throw_event)
 EVT_END()
 #endif
 
+/**
+ * Find event of side-scrolling X-Naut PhDs: turns to Mario, keeps his distance in LW(10) (at least 30), plays the
+ * throw animation and throws the bottle (inline in the early demos, zakoM2D_find_throw_event from JP on), then
+ * waits 100 frames and returns to the move event.
+ */
 // Original name from the JP demo map, where this find script still holds the throw itself (split out from JP on
 // into zakoM2D_find_throw_event, a descriptive name).
 EVT_BEGIN(zakoM2D_find_event)

@@ -527,7 +527,12 @@ static EVT_BEGIN(dmg_turn_event)
     RETURN
 EVT_END()
 
-// Recovery consumes this attack opportunity, including the turn that restores the standing stance.
+/**
+ * Wakeup event of a flipped Koopatrol, run in place of its attack: counts the over-turn counter down by one and
+ * just ends the turn while turns remain. At zero it restores the normal defence, defence attribute, status, pose
+ * and data tables, clears UNIT_STATUS_FLAG_FLIPPED, turns kCounterTopSpiky back on, hops up (S_1,
+ * SFX_ENM_INSIDE2), resets the hit offset and clears UNIT_WORK_GUARD.
+ */
 static EVT_BEGIN(wakeup_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)

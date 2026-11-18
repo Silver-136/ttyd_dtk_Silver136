@@ -261,6 +261,11 @@ static EVT_BEGIN(dmg_avoid_counter_thorn_head_event)
     RETURN
 EVT_END()
 
+/**
+ * Reaction when the Dark Bristle's front spikes hurt an attacker (UNIT_DATA_AVOID_THORN_EVENT and
+ * UNIT_DATA_AVOID_THORN_FRONT_EVENT): SFX_ENM_TOGEDA_MOVE1 and a pose (TGD_J_3 then J_4 when STATUS_FLIPPED, else
+ * J_1 then J_2), then the toge_flush spike flash in front of it, placed for Huge and Tiny.
+ */
 static EVT_BEGIN(dmg_avoid_counter_thorn_front_event)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_TOGEDA_MOVE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     BEGIN_SIBLING_EVENT
@@ -349,6 +354,11 @@ static EVT_BEGIN(dmg_turn_event)
     RETURN
 EVT_END()
 
+/**
+ * Run while the Dark Bristle is flipped: counts the over-turn down by one and, until it reaches 0, only restarts
+ * the wait event. At 0 it takes the normal defence and pose tables, clears UNIT_STATUS_FLAG_FLIPPED, rolls over
+ * for 10 frames during a hop (SFX_ENM_TOGEDA_MOVE6) and lands in TGD_S_4 at height 0, its new home position.
+ */
 static EVT_BEGIN(wakeup_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)

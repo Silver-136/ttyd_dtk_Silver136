@@ -481,6 +481,12 @@ static EVT_BEGIN(kuribo_init)
     RETURN
 EVT_END()
 
+/**
+ * Talk event of the Goomba Kurichero, only during TROUBLE_LOOKING_FOR_A_GAL: the first talk sets
+ * GSWF_TROUBLE_WORK(0) (irai_21_001). Later, with Goombella as the partner, he falls for her, a Couples Cake
+ * appears (GSWF_DOU_04_COUPLES_CAKE), he runs off, Mario gets the cake (left on the ground when the pouch is full)
+ * and the trouble is done; any other partner gets a refusal line of its own.
+ */
 static EVT_BEGIN(kuribo_talk)
     // Only while job 21 is active does he have anything to say.
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_LOOKING_FOR_A_GAL)

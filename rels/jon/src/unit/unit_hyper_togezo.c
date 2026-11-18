@@ -804,6 +804,10 @@ static EVT_BEGIN(normal_attack_event)
     RETURN
 EVT_END()
 
+/**
+ * The Sky-Blue Spiny curls into a ball (TGZ_P_1, SFX_ENM_TOGEZO_TURN1): it takes the guard defence, status, pose
+ * and data tables, clears kIsShelled on part 1 and sets UNIT_WORK_GUARD to 1.
+ */
 static EVT_BEGIN(guard_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -831,6 +835,10 @@ static EVT_BEGIN(guard_event)
     RETURN
 EVT_END()
 
+/**
+ * The Sky-Blue Spiny unrolls (TGZ_S_1, SFX_ENM_TOGEZO_TURN2): it takes the normal defence, status, pose and data
+ * tables back, sets kIsShelled on part 1 again and clears UNIT_WORK_GUARD.
+ */
 static EVT_BEGIN(guard_cancel_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)

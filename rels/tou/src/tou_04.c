@@ -1464,6 +1464,12 @@ static USER_FUNC(make_list) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Talk script of Brots (the Seven Wonders): stg3_tou_hushigi_00 to 02 with Mario's poses the first time,
+ * hushigi_03 later, then a yes/no. The first answer: hushigi_05 and the list of the seven wonders (make_list), the
+ * one picked is told (hushigi_11 to 17; hushigi_08 when cancelled). The second: hushigi_06 the first time,
+ * hushigi_07 later. Sets GSWF_TOU_04_SEVEN_WONDERS_HEARD.
+ */
 static EVT_BEGIN(talk_brots)
     IF_INT_EQUAL(GSWF_TOU_04_SEVEN_WONDERS_HEARD, 0)
         CALL(evt_msg_print, 0, STRING("stg3_tou_hushigi_00"), 0, 0)
@@ -1765,7 +1771,11 @@ static EVT_BEGIN(evt_gans)
     RETURN
 EVT_END()
 
-// The minors-room escort waits for the concurrent dialogue to finish before opening the destination door.
+/**
+ * Jolene's escort to the minors' room: Mario, the partner and Jolene start at door 5, which opens and shuts again;
+ * they walk the corridor via (-350, -505), (-550, -505) and (-550, 250) while Jolene speaks stg3_tou_62. Once the
+ * message is done she opens door 7, GSWF_TOU_JOLENE_ESCORT_TO_MINORS is cleared and the map changes to tou_10.
+ */
 static EVT_BEGIN(evt_kinoshikowa)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_npc_set_position, STRING("キノシコワ"), -350, 0, -570)
@@ -2404,7 +2414,13 @@ static EVT_BEGIN(evt_lock)
     RETURN
 EVT_END()
 
-// Trigger once Mario enters the central X interval; the seen flag is set only after the conversation.
+/**
+ * Storage-room scene with Jolene and guard 5, spawned at rank 11 or better before
+ * STG3_20_07_00_STORAGE_ROOM_UNLOCKED (unless an escort to the majors or the champion's room is pending); once
+ * (GSWF_TOU_04_STORAGE_ROOM_TALK_SEEN, set after the talk). When Mario is within x -140 to 140 the camera moves
+ * in, they speak (stg3_tou_240_02 to 04), the guard walks off, Jolene looks around, spots Mario, walks up, speaks
+ * stg3_tou_240_05 and leaves.
+ */
 static EVT_BEGIN(evt_souko_talk)
     IF_INT_EQUAL(GSWF_TOU_04_STORAGE_ROOM_TALK_SEEN, 1)
         RETURN

@@ -280,6 +280,11 @@ static BattleWeapon weapon_dokugassun_poisongas_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Attack event of the Poison Puff (also its confusion event): an enemy item if one fits; with its poison barrier
+ * up (kCounterPoisonStatus on part 1, set by charge_event) it breathes poison gas (poisongas_event); otherwise a
+ * roll picks the normal attack (65 in 100; 70 in the early demos) or charge_event.
+ */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -519,6 +524,10 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/**
+ * Loop spawned by the init event: every 31 frames, while the unit exists, draws the poison barrier puffs
+ * (eff_poison_barrier) when kCounterPoisonStatus is set on part 1.
+ */
 static EVT_BEGIN(barrier_event)
     LABEL(0)
     WAIT_FRAMES(31)
@@ -728,6 +737,10 @@ static EVT_BEGIN(normal_attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Charge event of the Poison Puff: the camera closes in, SFX_ENM_DOKU_KUMO_CHARGE1 plays and the poison barrier is
+ * raised (kCounterPoisonStatus on part 1) during the charge poses A_2A and A_2B, then back to S_1.
+ */
 static EVT_BEGIN(charge_event)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, -1)

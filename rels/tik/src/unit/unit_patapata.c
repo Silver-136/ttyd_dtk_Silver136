@@ -684,7 +684,11 @@ static EVT_BEGIN(dmg_turn_event)
     RETURN
 EVT_END()
 
-// Use this turn to reduce the overturned count; reaching zero restores the standing form without attacking.
+/**
+ * Wakeup event of a flipped Koopa (attack_event runs it instead of attacking): counts the over-turn counter down
+ * by one; while turns remain it wriggles (NKT_S_3) for 400 ms. At zero it restores the upright defence and pose
+ * tables, clears UNIT_STATUS_FLAG_FLIPPED, hops back on its feet and resets the hit offset.
+ */
 static EVT_BEGIN(wakeup_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)

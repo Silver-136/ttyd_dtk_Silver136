@@ -840,6 +840,11 @@ static EVT_BEGIN(mario_vs_witchtrio)
     RETURN
 EVT_END()
 
+/**
+ * Pickup script of the necklace item (evt_item_entry): waits while the item is still active
+ * (item_check_necklace_exist), stops the NPCs, turns Mario and the partner toward the second party member
+ * (extparty), who speaks stg2_win_e08_03, then gives control back.
+ */
 static EVT_BEGIN(get_necklace)
     CALL(item_check_necklace_exist)
     CALL(evt_npc_change_fbat_mode, FBAT_MODE_EVENT)
@@ -1071,6 +1076,11 @@ static TreeAccess tree_access_data[] = {
     {7, NULL, NULL, NULL, 0, NULL},
 };
 
+/**
+ * End of Trouble Center request 28, spawned by iri_28_enemy_dead once three enemies are down: Fabio walks up to
+ * Mario (irai_28_003), pays 20 coins (irai_28_005) and walks off; the request is finished
+ * (GSWF_TROUBLE_DONE(TROUBLE_ROUST_THESE_CADS)) and sys_request_finish is shown.
+ */
 static EVT_BEGIN(iri_28_enemy_all_dead)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_wait_landon)

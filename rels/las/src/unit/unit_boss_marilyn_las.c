@@ -423,6 +423,12 @@ static EVT_BEGIN(dead_event)
     RETURN
 EVT_END()
 
+/**
+ * Marilyn's unison-phase script; nothing in this file installs it. After the player's phase it runs
+ * majo_unison_phase_event, and when MAJO_WORK_NEXT_LINE_POS differs from MAJO_WORK_LINE_POS she sinks
+ * (marilyn_down), takes the new home spot (x 55 / 105 / 155) and rises again (marilyn_up), then the turn order is
+ * re-sorted (btlevtcmd_SortPhaseMoveTable).
+ */
 static EVT_BEGIN(unison_phase_event)
     CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_AFTER_PLAYER)
     IF_INT_NOT_EQUAL(LW(0), 0)
