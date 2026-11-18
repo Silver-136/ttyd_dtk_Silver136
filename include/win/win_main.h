@@ -77,35 +77,35 @@ typedef struct WinPartyState {
 } WinPartyState;
 
 typedef struct WinItemState {
-    s32 state;              // 0x20C
-    s32 mode;               // 0x210
-    s32 cursor[2];          // 0x214
-    s32 page[2];            // 0x21C
-    f32 scroll[2];          // 0x224
-    f32 scrollTgt[2];       // 0x22C
-    f32 bookX;              // 0x234
+    s32 state;              // 0x20C, WinItemMainState
+    s32 mode;               // 0x210, tab: 0 items, 1 important items
+    s32 cursor[2];          // 0x214, selected entry per tab
+    s32 page[2];            // 0x21C, page per tab (10 entries a page)
+    f32 scroll[2];          // 0x224, list scroll per tab, eases to scrollTgt
+    f32 scrollTgt[2];       // 0x22C, 190 * page
+    f32 bookX;              // 0x234, Luigi's book panel position, eases to bookTgtX
     f32 bookTgtX;           // 0x238
     f32 bookY;              // 0x23C
     f32 bookTgtY;           // 0x240
-    f32 mailX;              // 0x244
+    f32 mailX;              // 0x244, mail list panel position, eases to mailTgtX
     f32 mailTgtX;           // 0x248
     f32 mailY;              // 0x24C
     f32 mailTgtY;           // 0x250
-    s32 mailNum;            // 0x254
-    s32 mailSel;            // 0x258
-    s32 mailPage;           // 0x25C
-    f32 mailScroll;         // 0x260
+    s32 mailNum;            // 0x254, letters received (pouchReceiveMailCount)
+    s32 mailSel;            // 0x258, selected letter
+    s32 mailPage;           // 0x25C, mailSel / 5
+    f32 mailScroll;         // 0x260, letter list scroll, eases to mailScrollTgt
     f32 mailScrollTgt;      // 0x264
-    s32 mailLine;           // 0x268
-    u16 mailLines;          // 0x26C
-    WinSortEnt mail[45];    // 0x26E
+    s32 mailLine;           // 0x268, first line shown of the open letter
+    u16 mailLines;          // 0x26C, line count of the open letter (scroll limit)
+    WinSortEnt mail[45];    // 0x26E, letter list, in reverse received order
     s32 bookIdx;            // 0x2C8, luigi_book_list row
-    s32 bookPages;          // 0x2CC
-    s32 bookPage;           // 0x2D0
+    s32 bookPages;          // 0x2CC, page pairs in the open book
+    s32 bookPage;           // 0x2D0, page pair shown
     s32 useItem;            // 0x2D4, item being used (itemUseFunc)
     s32 useIdx;             // 0x2D8, its pouch index
     s32 useTarget;          // 0x2DC, 0 = Mario, else party slot + 1
-    s32 blink;              // 0x2E0
+    s32 blink;              // 0x2E0, frames of the used item's blink (2 s, then removed)
     u8 pad_2E4[0x2E8 - 0x2E4]; // 0x2E4
     s16 skip[121];          // 0x2E8, important-item list (winMakeSkipList)
     s16 skipCount;          // 0x3DA
@@ -231,52 +231,52 @@ typedef enum WindowWorkFlags {
 
 typedef struct WindowWork {
     u16 flags;                  // 0x0, WindowWorkFlags
-    s32 buttonTrg;              // 0x4
-    s32 buttonRep;              // 0x8
-    s32 dirTrg;                 // 0xC
-    s32 dirRep;                 // 0x10
-    s32 lectureStep;            // 0x14
-    EventEntry* lectureEvent;   // 0x18
+    s32 buttonTrg;              // 0x4, pad 0 buttons pressed this frame (winMain)
+    s32 buttonRep;              // 0x8, pad 0 buttons with key repeat
+    s32 dirTrg;                 // 0xC, stick directions pressed, D-pad folded in
+    s32 dirRep;                 // 0x10, stick directions with key repeat, D-pad folded in
+    s32 lectureStep;            // 0x14, badge tutorial step (winLectureKeyMask)
+    EventEntry* lectureEvent;   // 0x18, the tutorial's evt_lecture_msg script
     s32 menuSel;                // 0x1C, tab to open on
-    s32 menuState;              // 0x20
-    s32 active;                 // 0x24
+    s32 menuState;              // 0x20, WinMenuState of winMain
+    s32 active;                 // 0x24, WinRootMainState of winRootMain
     FileEntry* res;             // 0x28, win.tpl
     FileEntry* mailRes;         // 0x2C, mail tpl
     FileEntry* mapRes;          // 0x30, log map tpl
 #if VERSION >= VERSION_JP
     smartEntry* texBuf;         // 0x34, background capture texture
-    s32 texBufValid;            // 0x38
+    s32 texBufValid;            // 0x38, 1 once texBuf holds the captured frame
 #endif
-    EventEntry* currentEvent;   // 0x3C
-    s32 tabSel;                 // 0x40
-    s32 tabNum;                 // 0x44
+    EventEntry* currentEvent;   // 0x3C, item-use or diary script winMain waits on
+    s32 tabSel;                 // 0x40, selected tab (index in tab)
+    s32 tabNum;                 // 0x44, tabs in use
     WinTab tab[5];              // 0x48
     WinMenu menu[5];            // 0xC0
     s32 savedState;             // 0x124, window state kept while the sort menu is up
-    f32 msgOfsX;                // 0x128
+    f32 msgOfsX;                // 0x128, help box slide offset
     f32 msgOfsY;                // 0x12C
-    s32 msgState;               // 0x130
-    s32 msgTimer;               // 0x134
+    s32 msgState;               // 0x130, help box step (winMsgMain): 0-2 open, 10-12 close
+    s32 msgTimer;               // 0x134, frames of the help box slide
     s32 msgItem;                // 0x138, item icon id, or -1/-2 for a titled help box
-    const char* msg;            // 0x13C
+    const char* msg;            // 0x13C, msg tag of the help text
     const char* msgName;        // 0x140, help box title
-    const char* lastMsg;        // 0x144
-    s32 msgLine;                // 0x148
-    s32 msgLines;               // 0x14C
-    f32 helpX;                  // 0x150
+    const char* lastMsg;        // 0x144, msg last passed to winMsgEntry
+    s32 msgLine;                // 0x148, first help line shown (steps of 2)
+    s32 msgLines;               // 0x14C, lines in the help text
+    f32 helpX;                  // 0x150, hand cursor position
     f32 helpY;                  // 0x154
-    f32 helpTgtX;               // 0x158
+    f32 helpTgtX;               // 0x158, where the hand cursor moves to
     f32 helpTgtY;               // 0x15C
     s32 marioSel;               // 0x160, win_mario linkDt cursor
-    f32 sortPosX;               // 0x164
+    f32 sortPosX;               // 0x164, sort menu position
     f32 sortPosY;               // 0x168
-    f32 sortTgtX;               // 0x16C
+    f32 sortTgtX;               // 0x16C, where the sort menu slides to
     f32 sortTgtY;               // 0x170
-    s32 sortSel;                // 0x174
-    s32 sortNum;                // 0x178
-    s32 sortActive;             // 0x17C
-    s32 sortRev;                // 0x180
-    s32 sortType;               // 0x184
+    s32 sortSel;                // 0x174, selected sort option
+    s32 sortNum;                // 0x178, sort options in sortType's list
+    s32 sortActive;             // 0x17C, 1 while the sort menu takes input
+    s32 sortRev;                // 0x180, 1: the next sort runs reversed; toggles per run
+    s32 sortType;               // 0x184, which sort_data list (WIN_SORT_*)
     WinMarioState mario;        // 0x188
     WinPartyState party;        // 0x19C
     WinItemState item;          // 0x20C

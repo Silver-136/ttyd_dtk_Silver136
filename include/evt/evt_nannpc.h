@@ -16,11 +16,11 @@ struct TobiWork;
 // func callback and keep their own state in the slots evt_nannpc leaves to the user; those slots are
 // unions with the per-user names.
 typedef struct NanNPC {
-    s8 name[0x10];    // 0x0
+    s8 name[0x10];    // 0x0, looked up by nanNPCNameToPtr; empty = free slot
     struct ExtdrvPose* pose; // 0x10, its extdrv pose
-    u16 flags;        // 0x14
-    u16 flags2;     // 0x16
-    Vec pos;          // 0x18
+    u16 flags;        // 0x14, NANNPC_FLAG_*
+    u16 flags2;     // 0x16, cleared at entry, never read
+    Vec pos;          // 0x18, world position, copied to the extdrv pose
     union {
         Vec hosei;    // 0x24, display offset (evt_nannpc_set_hosei_position)
         Vec start;    // 0x24, muj_00: jump start position
@@ -30,15 +30,15 @@ typedef struct NanNPC {
         Vec target;   // 0x30, move target (y -1000: none)
         Vec basePos;  // 0x30, muj_10: base position of the bob; gor_00: walk start / where it stopped
     };
-    Vec move;         // 0x3C
-    f32 sizeX;        // 0x48
-    f32 sizeY;        // 0x4C
-    OSTime startTime; // 0x50
-    s16* animtbl;     // 0x58
-    s16 animnum;      // 0x5C
-    s16 anim;         // 0x5E
-    f32 dir;          // 0x60
-    void (*func)(struct NanNPC*); // 0x64
+    Vec move;         // 0x3C, per-frame step; nanNPCMoveDecel scales it by 0.6
+    f32 sizeX;        // 0x48, width (evt_nannpc_set_size; 32 default)
+    f32 sizeY;        // 0x4C, height; push-apart distance in nanNPCOption
+    OSTime startTime; // 0x50, gp->renderTime at the start of a timed step (jump, rel states)
+    s16* animtbl;     // 0x58, texture ids ended by -1; NULL = none
+    s16 animnum;      // 0x5C, entries in animtbl
+    s16 anim;         // 0x5E, texture id, -> pose texId
+    f32 dir;          // 0x60, facing; the pose gets -dir
+    void (*func)(struct NanNPC*); // 0x64, per-frame callback of the map rel
     union {
         s32 ipos[3];  // 0x68, integer start position of evt_nannpc_jump
         struct {

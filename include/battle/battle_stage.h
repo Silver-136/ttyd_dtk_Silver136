@@ -53,38 +53,38 @@ typedef struct BattleStageData {
 
 typedef struct StageLight {
     u32 flags;              // 0x0, STAGE_LIGHT_*
-    char name[0x20];        // 0x4
-    GXColor color;          // 0x24
-    GXColor colorStart;     // 0x28
-    GXColor colorTarget;    // 0x2C
-    s32 colorTime;          // 0x30
-    s32 colorMax;           // 0x34
-    s8 colorMode;           // 0x38
-    f32 width;              // 0x3C
-    f32 widthStart;         // 0x40
-    f32 widthTarget;        // 0x44
-    s32 widthTime;          // 0x48
-    s32 widthMax;           // 0x4C
-    s8 widthMode;           // 0x50
-    Vec pos;                // 0x54
-    Vec posStart;           // 0x60
-    Vec posTarget;          // 0x6C
-    s32 posTime;            // 0x78
-    s32 posMax;             // 0x7C
-    s8 posMode;             // 0x80
-    Vec target;             // 0x84
-    Vec targetStart;        // 0x90
-    Vec targetTarget;       // 0x9C
-    s32 targetTime;         // 0xA8
-    s32 targetMax;          // 0xAC
-    s8 targetMode;          // 0xB0
-    Vec up;                 // 0xB4
-    Vec upStart;            // 0xC0
-    Vec upTarget;           // 0xCC
-    s32 upTime;             // 0xD8
-    s32 upMax;              // 0xDC
-    s8 upMode;              // 0xE0
-    void* data;             // 0xE4
+    char name[0x20];        // 0x4, found by name (strcmp) among the active lights
+    GXColor color;          // 0x24, current; fades colorStart -> colorTarget
+    GXColor colorStart;     // 0x28, fade start
+    GXColor colorTarget;    // 0x2C, fade end
+    s32 colorTime;          // 0x30, fade frames left (counts down)
+    s32 colorMax;           // 0x34, fade length in frames
+    s8 colorMode;           // 0x38, intplGetValue easing of the fade
+    f32 width;              // 0x3C, current radius of the light cone
+    f32 widthStart;         // 0x40, fade start
+    f32 widthTarget;        // 0x44, fade end
+    s32 widthTime;          // 0x48, frames left
+    s32 widthMax;           // 0x4C, fade length
+    s8 widthMode;           // 0x50, easing
+    Vec pos;                // 0x54, current light position (cone tip)
+    Vec posStart;           // 0x60, move start
+    Vec posTarget;          // 0x6C, move end
+    s32 posTime;            // 0x78, frames left
+    s32 posMax;             // 0x7C, move length
+    s8 posMode;             // 0x80, easing
+    Vec target;             // 0x84, current point the light aims at
+    Vec targetStart;        // 0x90, move start
+    Vec targetTarget;       // 0x9C, move end
+    s32 targetTime;         // 0xA8, frames left; spline frame with the spline flag
+    s32 targetMax;          // 0xAC, move length
+    s8 targetMode;          // 0xB0, easing
+    Vec up;                 // 0xB4, current up vector of the cone
+    Vec upStart;            // 0xC0, move start
+    Vec upTarget;           // 0xCC, move end
+    s32 upTime;             // 0xD8, frames left
+    s32 upMax;              // 0xDC, move length
+    s8 upMode;              // 0xE0, easing
+    void* data;             // 0xE4, LightSpline of the spline flag; freed otherwise
 } StageLight;
 
 typedef struct StageDark {

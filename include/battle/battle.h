@@ -319,43 +319,43 @@ typedef enum BattleBadgeFlags {
 } BattleBadgeFlags;
 
 struct BattleWork {
-    s16 turnCount;                      // 0x0
-    u16 turnSubSeq;                     // 0x2
-    s32 seqUnknownValue;                // 0x4
-    BattleAlliance alliances[3];        // 0x8
-    BattleUnit* units[64];              // 0x20
-    s32 movePriorityQueue[64];          // 0x120
-    BattlePhaseEvtEntry phaseEvtTable[64]; // 0x220
-    s32 activeUnitId;                   // 0x420
+    s16 turnCount;                      // 0x0, battle turn, +1 per turn (0 at BattleInit)
+    u16 turnSubSeq;                     // 0x2, sub-step of turn step 0x3000009 (start-of-turn Burn)
+    s32 seqUnknownValue;                // 0x4, BattleSetSeq/BattleGetSeq SEQ_UNKNOWN step
+    BattleAlliance alliances[3];        // 0x8, per alliance (BattleUnit.alliance)
+    BattleUnit* units[64];              // 0x20, by unitId (BattleGetUnitPtr); NULL = free
+    s32 movePriorityQueue[64];          // 0x120, unit ids in turn order; -1 = none
+    BattlePhaseEvtEntry phaseEvtTable[64]; // 0x220, units whose phase events run, in order
+    s32 activeUnitId;                   // 0x420, unit acting now; -1 = none
     s32 lectureUnitId;                  // 0x424, unit id -6 resolves to (_battle_set_lecture_unit_id); its weapons replace the menu weapons, -1 = none
-    BattleWorkWeaponTargets weaponTargets; // 0x428
+    BattleWorkWeaponTargets weaponTargets; // 0x428, targets of the weapon being aimed (battle_detect)
     u32 flags;                          // 0xEF4, BattleFlags
-    s32 dispFlags;                      // 0xEF8
-    s32 ruleDispTimer;                  // 0xEFC
+    s32 dispFlags;                      // 0xEF8, BATTLE_DISP_FLAG_*
+    s32 ruleDispTimer;                  // 0xEFC, frames left in first-act step 0x2000001
     s32 stockExp;                       // 0xF00, BattleStoreExp/BattleGetStockExp
     s32 stockExpDisp;                   // 0xF04, counts up to stockExp in BattleStockExpDisp
     s32 stockExpTimer;                  // 0xF08, frame counter for that count-up
-    s32 seqInitValue;                   // 0xF0C
-    s32 seqFirstActValue;               // 0xF10
-    s32 seqTurnValue;                   // 0xF14
-    s32 seqPhaseValue;                  // 0xF18
-    s32 seqMoveValue;                   // 0xF1C
-    s32 seqActValue;                    // 0xF20
-    s32 seqEndValue;                    // 0xF24
+    s32 seqInitValue;                   // 0xF0C, SEQ_INIT step (BattleSetSeq / BattleGetSeq)
+    s32 seqFirstActValue;               // 0xF10, SEQ_FIRST_ACT step
+    s32 seqTurnValue;                   // 0xF14, SEQ_TURN step
+    s32 seqPhaseValue;                  // 0xF18, SEQ_PHASE step
+    s32 seqMoveValue;                   // 0xF1C, SEQ_MOVE step
+    s32 seqActValue;                    // 0xF20, SEQ_ACT step
+    s32 seqEndValue;                    // 0xF24, SEQ_END step
     BattleSeqEndWork* seqEndWork;       // 0xF28
-    BattleWorkPad padWork[4];           // 0xF2C
+    BattleWorkPad padWork[4];           // 0xF2C, input history of the four controllers (battle_pad)
     BattleCommand commandMenu;          // 0x171C
     BattleActions actionCommands;       // 0x1C90
-    s32 stylishCurFrame;               // 0x271C
-    s32 stylishWindowStart;            // 0x2720
-    s32 stylishWindowEnd;              // 0x2724
-    s32 stylishEndFrame;               // 0x2728
-    s32 stylishUnitId;                 // 0x272C
-    s32 stylishResult;                 // 0x2730
-    s32 stylishEarlyFrames;            // 0x2734
-    FieldBattleInfo* fbatInfo;          // 0x2738
-    s32 statusWindowOff;                // 0x273C
-    s32 lectureMode;                    // 0x2740
+    s32 stylishCurFrame;               // 0x271C, frames since BattleAcrobatStart
+    s32 stylishWindowStart;            // 0x2720, the Stylish A press counts after this frame
+    s32 stylishWindowEnd;              // 0x2724, the A press counts through this frame
+    s32 stylishEndFrame;               // 0x2728, the check gives up at this frame
+    s32 stylishUnitId;                 // 0x272C, unit doing the Stylish move
+    s32 stylishResult;                 // 0x2730, STYLISH_RESULT_*
+    s32 stylishEarlyFrames;            // 0x2734, pad history frames checked for an early press
+    FieldBattleInfo* fbatInfo;          // 0x2738, field battle info passed to BattleInit
+    s32 statusWindowOff;                // 0x273C, 1 keeps the status window closed (BattleStatusWindowCheck)
+    s32 lectureMode;                    // 0x2740, 1 during a tutorial lecture: status window closed
     s32 statusWindowSystemOn;           // 0x2744, BattleStatusWindowSystemOn/Off
     s32 statusWindowEventOn;            // 0x2748, BattleStatusWindowEventOn/Off
     s32 statusWindowAPRecoveryOn;       // 0x274C, BattleStatusWindowAPRecoveryOn/Off
@@ -363,10 +363,10 @@ struct BattleWork {
     BattleCameraWork cameraWork;        // 0x2754
     BattleAudience audience;            // 0x2858
     BreakSlotWork breakSlot;            // 0x1616C, battle_break_slot.c
-    BattleWorkPartyInfo partyInfo[7];   // 0x162A0
-    u32 tattledUnitTypeFlags[8];        // 0x163B8
+    BattleWorkPartyInfo partyInfo[7];   // 0x162A0, partner state kept while switched out (BtlUnit_SetParamToPouch)
+    u32 tattledUnitTypeFlags[8];        // 0x163B8, one bit per unit kind tattled (battle_monosiri)
     s32 badgeEquippedFlags;             // 0x163D8, BattleBadgeFlags
-    FileEntry* menuTex;                 // 0x163DC
+    FileEntry* menuTex;                 // 0x163DC, battle menu texture file (battle_menu_disp)
     BattleStage stage;                  // 0x163E0
     BattleActRecord actRecord;          // 0x16F1C, battle condition counters (battle_actrecord)
     BattleMarioAcCount marioAc;         // 0x16F3C
@@ -376,10 +376,10 @@ struct BattleWork {
     BattleStageObjectWork stageObjectWork; // 0x180C0, battle_stage_object.c (flags: BattleStageFlags)
     BattleIcon icons[16];               // 0x182B0
     BattleAnnounce announce;            // 0x18C70
-    s8 alertTick;                       // 0x18FE0
-    u8 majinaiState;                    // 0x18FE1
-    u16 luckTimer;                      // 0x18FE2
-    StarPowerInfo impendingBonuses;     // 0x18FE4
+    s8 alertTick;                       // 0x18FE0, frames to the next danger/peril alarm sound (60)
+    u8 majinaiState;                    // 0x18FE1, MajinaiType of the Merlee charm in effect
+    u16 luckTimer;                      // 0x18FE2, frames of the Lucky Start event, up to 300
+    StarPowerInfo impendingBonuses;     // 0x18FE4, Star Power bonus for the last action command
     BattleAcHelpWork acHelp;            // 0x18FF0, battle_ac_help.c
     u8 pad_18FF8[0x19038 - 0x18FF8];    // 0x18FF8, never accessed
 #if VERSION >= VERSION_US
@@ -387,8 +387,8 @@ struct BattleWork {
 #else
     s32 commandDisabled[5];             // 0x19038, set to 3 by Bowser's command-blocking attacks
 #endif
-    s32 luckEventId;                    // 0x1904C
-    s32 reserveItems[4];                // 0x19050
+    s32 luckEventId;                    // 0x1904C, id of the running Lucky Start event
+    s32 reserveItems[4];                // 0x19050, items used this turn, removed by BattleConsumeReserveItem
     u32 curtainSfxId;                    // 0x19060 (u32: its -1 tests are unsigned compares in the retail code)
     u8 lastAcSuccess;                   // 0x19064 (US 0x19074), 1 after a successful action command (btlevtcmd_AudienceDeclareACResult)
     u8 pad_19065[0x19068 - 0x19065];    // 0x19065, never accessed

@@ -187,17 +187,17 @@ enum {
 #define SOUND_STREAM_MAX 3  // SoundStream
 
 typedef struct SoundWork {
-    void* poolData[8];         // 0x0
-    void* projData[8];         // 0x20
-    void* sdirData[8];         // 0x40
-    void* slibData[8];         // 0x60
-    void* stblData[8];         // 0x80
-    void* etblData[8];         // 0xA0
-    u32 groupCount[8];         // 0xC0
+    void* poolData[8];         // 0x0, .pool file of each loaded project (SoundLoadDVD2), by dataId
+    void* projData[8];         // 0x20, .proj file, by dataId
+    void* sdirData[8];         // 0x40, .sdir file, by dataId
+    void* slibData[8];         // 0x60, .slib song library file, by slibId (SoundSLibLoadDVD)
+    void* stblData[8];         // 0x80, .stbl file, by slibId
+    void* etblData[8];         // 0xA0, .etbl file, by slibId
+    u32 groupCount[8];         // 0xC0, groups pushed from each project (SoundLoadDVD2PushGroup)
     u32 dataId;                // 0xE0, not incremented, memory leak if SoundLoadDVD2 called multiple times
-    u32 slibId;                // 0xE4
+    u32 slibId;                // 0xE4, next slibData slot (up to 8)
     s32 nextGroupId;           // 0xE8, next SND_GROUPID pushed by SoundLoadDVD2
-    SoundGroup* groups;        // 0xEC
+    SoundGroup* groups;        // 0xEC, SoundGroup list, one per .slib song (next links)
     SoundSong* songs;          // 0xF0, SOUND_SONG_MAX entries (SoundInit)
     SoundEffect* effects;      // 0xF4, SOUND_EFFECT_MAX
     SoundDVD* dvds;            // 0xF8, SOUND_DVD_MAX
@@ -205,33 +205,33 @@ typedef struct SoundWork {
     SoundStream* streams;      // 0x100, SOUND_STREAM_MAX
     s32 streamChannel;         // 0x104, channel of the last started SoundSS stream, -1 after stop
     SoundTemp aux[2];          // 0x108, aux A/B (reverb HI, chorus) callback setup
-    SND_LISTENER listener;     // 0x128
-    SND_FVECTOR pos;           // 0x1B8
-    SND_FVECTOR prevPos;       // 0x1C4
-    SND_FVECTOR dir;           // 0x1D0
-    SND_FVECTOR heading;       // 0x1DC
-    SND_FVECTOR up;            // 0x1E8
+    SND_LISTENER listener;     // 0x128, MusyX listener (sndUpdateListener in SoundEfxMain)
+    SND_FVECTOR pos;           // 0x1B8, listener position
+    SND_FVECTOR prevPos;       // 0x1C4, pos last frame; the difference is the listener velocity
+    SND_FVECTOR dir;           // 0x1D0, listener velocity (pos - prevPos)
+    SND_FVECTOR heading;       // 0x1DC, listener heading, from listenerDir
+    SND_FVECTOR up;            // 0x1E8, listener up vector, (0, 1, 0)
     f32 listenerDir;           // 0x1F4, degrees, turned into the listener heading in SoundMain; never written in C
     u8 pad_1F8[0x204 - 0x1F8]; // 0x1F8
-    u32 listenerVol;           // 0x204
-    u16 fadeIn;                // 0x208
-    u16 fadeOut;               // 0x20A
+    u32 listenerVol;           // 0x204, volume passed to sndUpdateListener; never written in C
+    u16 fadeIn;                // 0x208, song/stream fade-in ms (SoundSetFadeTime; 10 at SoundInit)
+    u16 fadeOut;               // 0x20A, song/stream fade-out ms (500 at SoundInit)
     u16 interruptDepth;        // 0x20C, OSDisableInterrupts nesting count
-    BOOL interrupts;           // 0x210
+    BOOL interrupts;           // 0x210, OSDisableInterrupts state restored by sndEnableIRQ
     u16 coverState;            // 0x214, 0: closed, 1: cover opened, 2: waiting for streams to reload after close
-    SND_OUTPUTMODE outputMode; // 0x218
-    u32 aramAddr[2];           // 0x21C
-    u16 slotCount;             // 0x224
-    u16 slotUsed[2];           // 0x226
-    char filepath[0x100];      // 0x22A
-    void* filedata;            // 0x32C
-    u16 sampleBank;            // 0x330
-    u8* dmaAddress;            // 0x334
-    u32 dmaLength;             // 0x338
-    u16 dmaBuf[0x140];         // 0x33C
-    AIDCallback callback;      // 0x5BC
-    s16 samples[2][0x400];     // 0x5C0
-    u32 sampleIndex;           // 0x15C0
+    SND_OUTPUTMODE outputMode; // 0x218, SoundSetOutputMode (stereo at SoundInit)
+    u32 aramAddr[2];           // 0x21C, ARAM base of each stream slot; never written in C
+    u16 slotCount;             // 0x224, ARAM stream slots; only set to 0, so SoundSSPlayChEx's aram path returns
+    u16 slotUsed[2];           // 0x226, 1 while a stream holds that ARAM slot
+    char filepath[0x100];      // 0x22A, .samp file the sample upload callback reads
+    void* filedata;            // 0x32C, 0x20000-byte sample upload buffer (SoundInit)
+    u16 sampleBank;            // 0x330, samples bank being filled (0/1)
+    u8* dmaAddress;            // 0x334, audio DMA buffer (AIGetDMAStartAddr)
+    u32 dmaLength;             // 0x338, its length in bytes
+    u16 dmaBuf[0x140];         // 0x33C, byte-swapped copy of the DMA buffer
+    AIDCallback callback;      // 0x5BC, previous AI DMA callback, chained by SoundAIDMACallback
+    s16 samples[2][0x400];     // 0x5C0, record of the output, two banks of 0x400 samples (one channel)
+    u32 sampleIndex;           // 0x15C0, next sample in the current bank
 } SoundWork;
 
 extern SoundWork sound;

@@ -176,7 +176,7 @@ typedef struct BattleWeapon {
     s8 acLevel;                       // 0x6E, action command level, read by scripts (btlevtcmd)
     s8 reserved_6F;                   // 0x6F, 2 in every weapon table, never read
     const char* acHelpMsg;            // 0x70, msg tag of the action command help
-    BattleWeaponSpecialFlags special; // 0x74
+    BattleWeaponSpecialFlags special; // 0x74, BattleWeaponSpecialFlags
     u32 counterResistFlags;           // 0x78, BattleWeaponCounterResist_Flags
     u32 targetWeightFlags;            // 0x7C, TARGET_WEIGHT_* (how an enemy picks its target)
     u8 sleepChance;                   // 0x80, status chances are % (0-100), times in turns
@@ -209,24 +209,24 @@ typedef struct BattleWeapon {
     s8 defChangeStrength;             // 0x9B, >0 up, <0 down
     u8 allergicChance;                // 0x9C
     s8 allergicTime;                  // 0x9D
-    s8 ohkoChance;                    // 0x9E
-    s8 chargeStrength;                // 0x9F
+    s8 ohkoChance;                    // 0x9E, % chance of STATUS_DEAD (instant KO); also its turns
+    s8 chargeStrength;                // 0x9F, Charge given; nonzero always applies it (early demos: >0)
     u8 fastChance;                    // 0xA0
     s8 fastTime;                      // 0xA1
     u8 slowChance;                    // 0xA2
     s8 slowTime;                      // 0xA3
-    u8 frightChance;                  // 0xA4
-    u8 galeForceChance;               // 0xA5
-    s8 paybackTime;                   // 0xA6
-    s8 holdFastTime;                  // 0xA7
+    u8 frightChance;                  // 0xA4, % chance of STATUS_FRIGHT
+    u8 galeForceChance;               // 0xA5, % chance of STATUS_GALE_FORCE
+    s8 paybackTime;                   // 0xA6, Payback turns; nonzero always applies it (early demos: >0)
+    s8 holdFastTime;                  // 0xA7, Hold Fast turns; >0 always applies it
     u8 invisibleChance;               // 0xA8
     s8 invisibleTime;                 // 0xA9
-    s8 hpRegenTime;                   // 0xAA
+    s8 hpRegenTime;                   // 0xAA, >0 always applies HP Regen
     s8 hpRegenStrength;               // 0xAB
-    s8 fpRegenTime;                   // 0xAC
+    s8 fpRegenTime;                   // 0xAC, >0 always applies FP Regen
     s8 fpRegenStrength;               // 0xAD
     u8 pad_AE[0xB0 - 0xAE];           // 0xAE, always 0, never accessed
-    EvtWord* attackEvtScript;           // 0xB0
+    EvtWord* attackEvtScript;           // 0xB0, the move's attack script (-> BattleUnit.attackEventCode)
     u8 stageEffectRates[0xC0 - 0xB4]; // 0xB4, btlevtcmd_WeaponAftereffect: [0..3] A1+A2 / A1 / A2 / none fall weights, [4] B destroy, [5] nozzle turn, [6] nozzle fire, [7] iron frame fall, [8] object fall (%), [9..11] unused
 } BattleWeapon;
 

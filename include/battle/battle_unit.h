@@ -885,7 +885,7 @@ typedef struct BattleUnit {
     BattleUnitType initialKind;                               // 0x4, unit kind at entry
     BattleUnitType currentKind;                               // 0x8, unit kind now
     s8 alliance;                                              // 0xC, side (ALLIANCE_PLAYER, ...)
-    u8 level;                                                 // 0xD
+    u8 level;                                                 // 0xD, kind level; Mario/partners: Mario's (pouch)
     s8 groupSetupId;                                          // 0xE, index in the enemy group setup; -1 = none
     struct BattleUnitKind* kindParams;                        // 0x10, the unit kind's data
     BattleUnitPart* parts;                                    // 0x14, first part (list via nextPart)
@@ -894,27 +894,27 @@ typedef struct BattleUnit {
     s8 moveState;                                             // 0x20, BattleMoveState
     s8 maxMoveCount;                                          // 0x21, moves per turn; caps movesRemaining
     s8 movesRemaining;                                        // 0x22, moves left this turn
-    s8 maxMovesThisTurn;                                      // 0x23
+    s8 maxMovesThisTurn;                                      // 0x23, movesRemaining at the turn start
     s8 activeTurns;                                           // 0x24, turns since entry (+1 per turn)
     s8 swallowRate;                                           // 0x25, chance Yoshi can swallow it (kind swallowChance)
     s8 swallowAttribute;                                      // 0x26, from the kind's swallowAttributes
     s32 movePriority;                                         // 0x28, turn order: kind turnOrder +- variance
     s32 attackPhase;                                          // 0x2C, phase the unit acts in
     Vec homePosition;                                         // 0x30, position set at entry (BtlUnit_SetHomePos)
-    Vec position;                                             // 0x3C
-    Vec positionOffset;                                       // 0x48
-    Vec displayOffset;                                        // 0x54
-    Vec baseRotation;                                         // 0x60
-    Vec rotation;                                             // 0x6C
-    Vec rotationOffset;                                       // 0x78
+    Vec position;                                             // 0x3C, battle position (stage coordinates)
+    Vec positionOffset;                                       // 0x48, set to the entry position; never read
+    Vec displayOffset;                                        // 0x54, draw offset, added after rotation
+    Vec baseRotation;                                         // 0x60, degrees, added to rotation when drawn
+    Vec rotation;                                             // 0x6C, rotation in degrees (BtlUnit_SetRotate, 0..360)
+    Vec rotationOffset;                                       // 0x78, pivot the unit rotates around
     Vec offsetCenter;                                         // 0x84, rotation centre (btlevtcmd)
-    Vec mScale;                                               // 0x90
-    Vec baseScale;                                            // 0x9C
+    Vec mScale;                                               // 0x90, animated scale, times baseScale
+    Vec baseScale;                                            // 0x9C, normal scale (BtlUnit_SetBaseScale)
     Vec togeOffset;                                           // 0xA8, speech bubble tail offset (GetTalkTogePos)
     Vec heldItemBaseOffset;                                   // 0xB4, copied from BattleUnitKind.heldItemBaseOffset
     Vec heldItemOffset;                                       // 0xC0, draw offset of the held item
     s16 width;                                                // 0xCC, from the kind (BtlUnit_GetWidth)
-    s16 height;                                               // 0xCE
+    s16 height;                                               // 0xCE, from the kind; BtlUnit_SetHeight changes it
     s16 statusIconOffset[2];                                  // 0xD0, status icon x/y offset
     s16 hpGaugeOffset[2];                                     // 0xD4, HP gauge x/y offset
     Vec cutBaseOffset;                                        // 0xD8, sac_scissor cut box offset
@@ -922,13 +922,13 @@ typedef struct BattleUnit {
     f32 cutHeight;                                            // 0xE8, sac_scissor cut box height
     Vec bintaHitOffset;                                       // 0xEC, Love Slap
     Vec kissHitOffset;                                        // 0xF8, Lip Lock
-    BattleUnitAttribute_Flags attributeFlags;                 // 0x104
-    s16 maxHp;                                                // 0x108
+    BattleUnitAttribute_Flags attributeFlags;                 // 0x104, from the kind's attributeFlags
+    s16 maxHp;                                                // 0x108, baseMaxHp + 5 per HP Plus (BtlUnit_ReviseHpFp)
     s16 baseMaxHp;                                            // 0x10A, max HP before badges (kind or pouch)
     s16 currentHp;                                            // 0x10C
-    s16 maxFp;                                                // 0x10E
-    s16 baseMaxFp;                                            // 0x110
-    s16 currentFp;                                            // 0x112
+    s16 maxFp;                                                // 0x10E, baseMaxFp + 5 per FP Plus; partners: Mario's
+    s16 baseMaxFp;                                            // 0x110, max FP before badges (kind or pouch)
+    s16 currentFp;                                            // 0x112, partners use Mario's (BtlUnit_GetFp)
     f32 sizeMultiplier;                                       // 0x114, size scale from Huge/Tiny (battle_disp)
     union {
         struct {
@@ -965,32 +965,32 @@ typedef struct BattleUnit {
         };
         BtlStatusCopy statusTurns;                            // 0x118, the 0x1E status bytes as one block (party info save/restore)
     };
-    s32 statusFlags;                                          // 0x138
+    s32 statusFlags;                                          // 0x138, UNIT_STATUS_FLAG_* (flipped, danger, peril, ...)
 #if VERSION >= VERSION_US
     u16 usCommandDisabled[2];                                 // US and later (+4 from here): per-unit turns left for the two command blocks JP keeps in BattleWork commandDisabled[3..4]
 #endif
-    s32 protectId;                                            // 0x13C
+    s32 protectId;                                            // 0x13C, unit it bodyguards (SetGuard); -1 = none
     BattleVulnerableStatus* vulnStatus;                       // 0x140, status vulnerability (kind)
-    Vec moveStartPos;                                         // 0x144
-    Vec moveCurrentPos;                                       // 0x150
-    Vec moveTargetPos;                                        // 0x15C
+    Vec moveStartPos;                                         // 0x144, start of the scripted move (walk, jump)
+    Vec moveCurrentPos;                                       // 0x150, position along the scripted move
+    Vec moveTargetPos;                                        // 0x15C, end of the scripted move
     s32 moveFrames;                                           // 0x168, move/jump frame count (BEC_MVFRAME)
-    f32 moveSpeedXZ;                                          // 0x16C
-    f32 fallAccel;                                            // 0x170
-    f32 moveSpeedY;                                           // 0x174
+    f32 moveSpeedXZ;                                          // 0x16C, horizontal speed of scripted moves
+    f32 fallAccel;                                            // 0x170, gravity of scripted jumps and falls
+    f32 moveSpeedY;                                           // 0x174, vertical speed of scripted jumps
     f32 mMoveDirection;                                       // 0x178, XZ angle of a unit move
     f32 moveDistance;                                         // 0x17C, XZ distance of the move (moveSpeedXZ = this / moveFrames)
     f32 moveTotalFrames;                                      // 0x180, moveFrames at the move start (as f32)
-    s8 moveDirection;                                         // 0x184
-    s8 faceDirection;                                         // 0x185
-    BecSndWork moveSnd;                                       // 0x188 (US 0x18C)
+    s8 moveDirection;                                         // 0x184, x sign of the last move (1/-1), 0 before
+    s8 faceDirection;                                         // 0x185, 1 or -1; starts as attackDirection
+    BecSndWork moveSnd;                                       // 0x188 (US 0x18C), move-sound loop (BtlUnit_LoadSeMode)
     Vec jumpStep;                                             // 0x1A4 (US 0x1A8), per-frame XZ/Y step of btlevtcmd_MarioJumpPosition
     f32 jumpAngle;                                            // 0x1B0 (US 0x1B4), arc angle in degrees
     f32 jumpAngleStep;                                        // 0x1B4 (US 0x1B8), arc angle added per frame
     f32 jumpBaseY;                                            // 0x1B8 (US 0x1BC), last Y position of the jump
     u8 pad_1BC[0x1C0 - 0x1BC];                                // 0x1BC (US 0x1C0), never accessed
     BtlPoseSoundTable moveSndTable;                           // 0x1C0 (US 0x1C4), jump names + run/walk/dive entries (btlevtcmd_SetJump/Run/Walk/DiveSound)
-    BattleWorkHpGauge hpGauge;                                // 0x1F8
+    BattleWorkHpGauge hpGauge;                                // 0x1F8, HP gauge state (BtlUnit_HpGaugeMain)
     EvtWord work[16];                                         // 0x214, unit work words (btlevtcmd_SetUnitWork / GetUnitWork): numbers, effect and work pointers; floats stored in the word (SetUnitWorkFloat / GetUnitWorkFloat)
     BattleUnitPart* currentTarget;                            // 0x254, part being targeted
     s32 reserved_258;                                         // 0x258 (US 0x25C), cleared when the unit's action ends (btlseqAct 0x6000009)
@@ -1004,28 +1004,28 @@ typedef struct BattleUnit {
     s8 attackerHitCountTaken;                                 // 0x26F (US 0x273), the attacker's attackHitCount after its hit on this unit
     u32 damagePattern;                                        // 0x270, damage pattern of the last hit (selects the hurt pose), 0 when cleared
     s32 damageCode;                                           // 0x274, DAMAGE_CODE_* of the last hit
-    BattleUnitToken_Flags tokenFlags;                         // 0x278
+    BattleUnitToken_Flags tokenFlags;                         // 0x278, BattleUnitToken_Flags
     s32 attackHitCount;                                       // 0x27C (US 0x280), hits this unit resolved as attacker this turn (BattleCheckDamage counts every one);
                                                  // SPECIAL_DIMINISH_BY_TARGET subtracts it from damage
     s32 totalDamageDealt;                                     // 0x280, damage this unit dealt as attacker
     s32 initEventId;                                          // 0x284, id of the running init event
     EvtWord* waitEventCode;                                   // 0x288, idle script (btlevtcmd)
-    s32 waitEventId;                                          // 0x28C
+    s32 waitEventId;                                          // 0x28C, id of the running idle script
     EvtWord* unisonPhaseEventCode;                            // 0x290, phase script (BattleRunPhaseEvent)
     EvtWord* phaseEventCode;                                  // 0x294, phase script (BattleRunPhaseEvent)
-    s32 phaseEventId;                                         // 0x298
+    s32 phaseEventId;                                         // 0x298, id of the running phase script
     EvtWord* attackEventCode;                                 // 0x29C, btlevtcmd_SetEventAttack / BtlUnit_GetData(unit, 2/3)
     EvtWord* confusionEventCode;                              // 0x2A0, btlevtcmd_SetEventConfusion
     s32 attackEventId;                                        // 0x2A4, id of the running attack event
     s32 attackEventFlags;                                     // 0x2A8, ActEventFlags (0 by SetEventAttack)
     EvtWord* damageEventCode;                                 // 0x2AC, damage reaction script
-    s32 damageEventId;                                        // 0x2B0
+    s32 damageEventId;                                        // 0x2B0, id of the running damage reaction script
     EvtWord* entryEventCode;                                  // 0x2B4 (US 0x2B8), btlevtcmd_SetEventEntry
     s32 entryEventId;                                         // 0x2B8 (US 0x2BC), id of the battle entry event
     EvtWord* ceilFallEventCode;                               // 0x2BC (US 0x2C0), btlevtcmd_SetEventCeilFall, run by the stage ceiling fall
     s32 ceilFallEventId;                                      // 0x2C0 (US 0x2C4), id of the falling-from-ceiling event
     EvtWord* actEndEvent;                                     // 0x2C4 (US 0x2C8), run when the unit's action ends (battle_seq)
-    s32 actEndEventId;                                        // 0x2C8 (US 0x2CC)
+    s32 actEndEventId;                                        // 0x2C8 (US 0x2CC), id of the running actEndEvent
 #if VERSION >= VERSION_DEMO_EU
     s32 slideReturnEventId;                                   // PAL and the PAL demo (+4 from here): enemy_slide_return_evt of sac_enemy_slide_return, waited on by BattleWaitAllActiveEvtEnd_NoBgSetEndWait
 #endif
@@ -1051,62 +1051,62 @@ typedef struct BattleUnit {
     EffectEntry* iceEff;                                      // 0x328, freeze status effect
     EffectEntry* sparkEff;                                    // 0x32C, electric status effect
     struct IconEntry* kageIcon;                               // 0x330, BSE_Kagegakure
-    u16 burnDamageFlameState;                                 // 0x334
-    u16 mbBurnDamageFlameActive;                              // 0x336
-    s32 burnDamageFlameAnimTimer;                             // 0x338
-    f32 burnDamageFlameScale;                                 // 0x33C
-    EffectEntry* burnDamageFlameEff;                          // 0x340
-    BattleWorkStatusIcon statusIconWork;                      // 0x344
+    u16 burnDamageFlameState;                                 // 0x334, Burn flame step: 0 off, 1 spawn, 2 pulse, 3 end
+    u16 mbBurnDamageFlameActive;                              // 0x336, BSE_TurnFirstProcessEffectEntry; 0 = none
+    s32 burnDamageFlameAnimTimer;                             // 0x338, frames of the flame pulse (ends at 60)
+    f32 burnDamageFlameScale;                                 // 0x33C, flame scale, 0.4 to 2.0
+    EffectEntry* burnDamageFlameEff;                          // 0x340, the Burn flame effect (effFireEntry)
+    BattleWorkStatusIcon statusIconWork;                      // 0x344, status icon state (battle_status_icon)
     StChgInfo statusChangeInfo[6];                            // 0xAE4, BattleStatusChangeInfoWorkInit
     s32 stageObjectId;                                        // 0xB2C, stage object the unit stands for (tree, switch)
 } BattleUnit;
 
 typedef struct BattleUnitKind {
-    BattleUnitType unitType;                 // 0x0
-    const char* name;                         // 0x4
-    s16 maxHp;                                // 0x8
-    s16 maxFp;                                // 0xA
-    u8 dangerHP;                             // 0xC
-    u8 perilHP;                              // 0xD
-    u8 level;                                // 0xE
-    u8 bonusExp;                             // 0xF
-    u8 bonusCoin;                             // 0x10
-    u8 bonusCoinRate;                         // 0x11
-    u8 baseCoin;                              // 0x12
-    u8 runRate;                               // 0x13
-    u16 pbSoftCap;                            // 0x14
-    s16 width;                                // 0x16
-    s16 height;                               // 0x18
-    s16 hitOffset[2];                         // 0x1A
-    Vec centerOffset;                         // 0x20
-    s16 hpGaugeOffset[2];                     // 0x2C
-    Vec talkTogeBaseOffset;                   // 0x30
-    Vec heldItemBaseOffset;                   // 0x3C
-    Vec burnFlameOffset;                      // 0x48
+    BattleUnitType unitType;                 // 0x0, -> BattleUnit.initialKind and currentKind
+    const char* name;                         // 0x4, msg tag of the name (msgSearch; protect-partner menu)
+    s16 maxHp;                                // 0x8, -> BattleUnit.baseMaxHp, maxHp and currentHp
+    s16 maxFp;                                // 0xA, -> BattleUnit.baseMaxFp, maxFp and currentFp
+    u8 dangerHP;                             // 0xC, HP at or below it (under max) sets UNIT_STATUS_FLAG_DANGER
+    u8 perilHP;                              // 0xD, HP at or below it (under max) sets UNIT_STATUS_FLAG_PERIL
+    u8 level;                                // 0xE, -> BattleUnit.level; npcdrv compares it with Mario's level
+    u8 bonusExp;                             // 0xF, Star Points added on defeat (BtlUnit_GetExp)
+    u8 bonusCoin;                             // 0x10, bonus coin rolls on defeat (BtlUnit_GetCoin)
+    u8 bonusCoinRate;                         // 0x11, percent chance of each bonus coin roll
+    u8 baseCoin;                              // 0x12, coins always dropped; also the field NPC's baseCoinCount
+    u8 runRate;                               // 0x13, escape rate of the group's first enemy (_get_escape_rate)
+    u16 pbSoftCap;                            // 0x14, Power Bounce soft cap (mario_get_renzoku_count_max)
+    s16 width;                                // 0x16, -> BattleUnit.width
+    s16 height;                               // 0x18, -> BattleUnit.height
+    s16 hitOffset[2];                         // 0x1A, -> BattleUnit.statusIconOffset
+    Vec centerOffset;                         // 0x20, -> BattleUnit.offsetCenter
+    s16 hpGaugeOffset[2];                     // 0x2C, -> BattleUnit.hpGaugeOffset
+    Vec talkTogeBaseOffset;                   // 0x30, speech bubble tail offset, plus BattleUnit.togeOffset
+    Vec heldItemBaseOffset;                   // 0x3C, -> BattleUnit.heldItemBaseOffset
+    Vec burnFlameOffset;                      // 0x48, offset of the Burn status flame, scaled by size
     f32 vivianOffsetX;                        // 0x54, _get_vivian_attack_position: x offset (times facing and scale x)
     f32 vivianOffsetZ;                        // 0x58, _get_vivian_attack_position: z offset (times scale z)
-    Vec bintaHitOffset;                       // 0x5C
-    Vec kissHitOffset;                        // 0x68
-    Vec cutBaseOffset;                        // 0x74
-    f32 cutWidth;                             // 0x80
-    f32 cutHeight;                            // 0x84
-    s8 turnOrder;                             // 0x88
-    s8 turnOrderVariance;                     // 0x89
-    s8 swallowChance;                         // 0x8A
-    u8 swallowAttributes;                     // 0x8B
-    u8 hammerKnockbackChance;                 // 0x8C
-    u8 itemStealParam;                        // 0x8D
-    Vec starPointDispOffset;                  // 0x90
-    const char* damageSfxName;                // 0x9C
-    const char* fireDamageSfxName;            // 0xA0
-    const char* iceDamageSfxName;             // 0xA4
-    const char* electricDamageSfxName;       // 0xA8
-    u32 attributeFlags;                       // 0xAC
-    StatusVulnerability* statusVulnerability; // 0xB0
-    s8 numParts;                              // 0xB4
-    BattleUnitKindPart* parts;               // 0xB8
-    EvtWord* initEventCode;                      // 0xBC
-    BattleDataEntry* dataTable;               // 0xC0
+    Vec bintaHitOffset;                       // 0x5C, -> BattleUnit.bintaHitOffset
+    Vec kissHitOffset;                        // 0x68, -> BattleUnit.kissHitOffset
+    Vec cutBaseOffset;                        // 0x74, -> BattleUnit.cutBaseOffset
+    f32 cutWidth;                             // 0x80, -> BattleUnit.cutWidth
+    f32 cutHeight;                            // 0x84, -> BattleUnit.cutHeight
+    s8 turnOrder;                             // 0x88, base of BattleUnit.movePriority
+    s8 turnOrderVariance;                     // 0x89, random spread of movePriority around turnOrder
+    s8 swallowChance;                         // 0x8A, -> BattleUnit.swallowRate
+    u8 swallowAttributes;                     // 0x8B, -> BattleUnit.swallowAttribute (Gulp)
+    u8 hammerKnockbackChance;                 // 0x8C, percent chance Spin/Ultra Hammer knocks it away
+    u8 itemStealParam;                        // 0x8D, Kiss Thief (_get_itemsteal_param) returns 100 - this
+    Vec starPointDispOffset;                  // 0x90, where the Star Points pop up, from the unit
+    const char* damageSfxName;                // 0x9C, hurt sound on every damaging hit
+    const char* fireDamageSfxName;            // 0xA0, extra hurt sound on fire hits
+    const char* iceDamageSfxName;             // 0xA4, extra hurt sound on ice hits
+    const char* electricDamageSfxName;       // 0xA8, extra hurt sound on electric hits
+    u32 attributeFlags;                       // 0xAC, -> BattleUnit.attributeFlags (BattleUnitAttribute_Flags)
+    StatusVulnerability* statusVulnerability; // 0xB0, -> BattleUnit.vulnStatus
+    s8 numParts;                              // 0xB4, entries in parts
+    BattleUnitKindPart* parts;               // 0xB8, the kind's parts, one BattleUnitPart each
+    EvtWord* initEventCode;                      // 0xBC, run at entry (BtlUnit_Entry)
+    BattleDataEntry* dataTable;               // 0xC0, -> BattleUnit.dataTable
 } BattleUnitKind;
 
 typedef struct BattleUnitSetup {

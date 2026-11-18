@@ -313,8 +313,8 @@ typedef struct BattleAudience {
     s32 flags;                         // 0x0, BattleAudienceFlags
     EventEntry* event;                 // 0x4
     s32 apStarSfxId;                   // 0x8, SFX_BTL_SYS_AP_STAR1 handle
-    FileEntry* normalTex;              // 0xC
-    FileEntry* guestTex[2];            // 0x10
+    FileEntry* normalTex;              // 0xC, audience_normal.tpl
+    FileEntry* guestTex[2];            // 0x10, guest member textures (BattleAudienceGuestTPLRead)
     u8 guestType[2];                   // 0x18, AudienceMemberType
     u8 pad_1A[0x1BC - 0x1A];           // 0x1A, never accessed
     BattleAudienceMember members[200]; // 0x1BC
@@ -325,15 +325,15 @@ typedef struct BattleAudience {
     BattleAudienceWindow window;       // 0x1375C
 #endif
     f32 audienceDeltaMultiplier;      // 0x13778
-    f32 targetAudienceCount;          // 0x1377C
+    f32 targetAudienceCount;          // 0x1377C, audience size aimed for, capped at maxAudience; saved to the pouch
     f32 addedAudienceCount;           // 0x13780
-    s32 currentAudienceIntCount;      // 0x13784
-    s32 currentAudienceIntCountRight; // 0x13788
-    s32 currentAudienceIntCountLeft;  // 0x1378C
+    s32 currentAudienceIntCount;      // 0x13784, members present (left + right)
+    s32 currentAudienceIntCountRight; // 0x13788, present members in the right half of each row
+    s32 currentAudienceIntCountLeft;  // 0x1378C, present members in the left half of each row
 #if VERSION <= VERSION_DEMO_JP
     s32 presentCount;                     // 0x13414, members that exist and are not in status 12 (BattleAudienceNumToTargetSub)
 #endif
-    s32 maxAudience;                  // 0x13790
+    s32 maxAudience;                  // 0x13790, 50/100/150/200 by pouch rank; 0 with no Star Power yet
     s32 typeWeights[12];               // 0x13794, per-type audience weights (BattleAudienceSettingAudience)
     s32 starPowerGain;                 // 0x137C4, star power gained this action
 #if VERSION <= VERSION_DEMO_JP
@@ -357,18 +357,18 @@ typedef struct BattleAudience {
 #if VERSION <= VERSION_DEMO_JP
     s32 joyLevel;                         // 0x13474
 #endif
-    s32 presentItemNo;                 // 0x137E4
-    s32 presentItemType;               // 0x137E8
-    s32 presentTargetUnitId;           // 0x137EC
+    s32 presentItemNo;                 // 0x137E4, item a landed throw delivers; 0 once used
+    s32 presentItemType;               // 0x137E8, gift (0) or damaging junk (1)
+    s32 presentTargetUnitId;           // 0x137EC, unit a landed throw goes to
     s32 itemThrowCount;                // 0x137F0, audience item throws this battle
     s32 itemThrowMax;                  // 0x137F4, throw limit rolled at battle start (0-3; 10000 when forced)
     s32 presentHitCount;               // 0x137F8, thrown items that landed, capped at 3; adds to presentWeapon damage
     BattleWeapon presentWeapon;        // 0x137FC, BattleWeapon copy (0xC0) for a thrown hazard item, passed to BattleCheckDamage
-    s32 itemOnMemberId;               // 0x138BC
-    Vec itemOnMemberPos;              // 0x138C0
+    s32 itemOnMemberId;               // 0x138BC, member holding an item (BattleAudience_GetItemOn)
+    Vec itemOnMemberPos;              // 0x138C0, that member's position, z + 3
     s32 phaseList[14];                 // 0x138CC
     s32 phaseListCount;                // 0x13904
-    s32 turnEndPhaseEventChance;      // 0x13908
+    s32 turnEndPhaseEventChance;      // 0x13908, +3 per turn end, up to 100
 #if VERSION <= VERSION_DEMO_JP
     BattleAudienceSound sounds[24];       // 0x135A0
     BattleAudienceWindow window;          // 0x13900

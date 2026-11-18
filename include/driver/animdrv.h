@@ -266,11 +266,11 @@ typedef void (*AnimPoseDispCallback)(void* userdata, s32 group, Mtx* modeling);
 typedef struct AnimationPose {
     u32 flags;                          // 0x0, AnimationPoseFlags
     u32 typeFlags;                      // 0x4, AnimPoseTypeFlags
-    s32 references;                     // 0x8
-    s32 type;                           // 0xC
-    s32 fileId;                         // 0x10
+    s32 references;                     // 0x8, extra users of a shared paper pose
+    s32 type;                           // 0xC, 0 field, 1 battle, 2 shared: archive and clock
+    s32 fileId;                         // 0x10, entry in the driver's files (animGroupEntry)
     s32 animId;                         // 0x14, current animation from AnimPoseData
-    OSTime localTime;                   // 0x18
+    OSTime localTime;                   // 0x18, animTimeGetTime ms the animation counts from
     f32 rawFrame;                       // 0x20, elapsed frames before loop wrap (SPM frmCounter)
     f32 localFrame;                     // 0x24
     s32 keyframeIdx;                    // 0x28, current AnimKeyframe index (also the renderProc frame)
@@ -278,9 +278,9 @@ typedef struct AnimationPose {
     f32 keyframeBlend;                  // 0x30, t between keyframeIdx and nextKeyframeIdx
     s32 valueKeyIdx;                    // 0x34, current AnimValueKey index
     s32 nextValueKeyIdx;                // 0x38, next AnimValueKey index
-    s32 lastFrameZero;                  // 0x3C
+    s32 lastFrameZero;                  // 0x3C, last keyframe applied; -1 = none yet
     f32 lastFrameTime;                  // 0x40
-    f32 localTimeRate;                  // 0x44
+    f32 localTimeRate;                  // 0x44, playback speed, 1.0 normal
     Vec* bufferVtxPos;                // 0x48
     Vec* vtxArrayPos;                 // 0x4C
     Vec* bufferVtxNrm;                // 0x50
@@ -292,23 +292,23 @@ typedef struct AnimationPose {
     AnimTexMtx* bufferTexAnimEntries; // 0x68
     AnimTexMtx* texAnimEntries;       // 0x6C
     f32 peraRotY;                       // 0x70, base Y rotation for the paper turn (flags & 8)
-    f32 rotationY;                      // 0x74
+    f32 rotationY;                      // 0x74, paper turn angle, eases toward peraTargetRotY
     f32 scaleZFlip;                     // 0x78, -1.0f mirrors Z (saved in NpcFieldEntry.scaleZFlip)
     f32 peraTargetRotY;                 // 0x7C, rotationY turns toward this; animPoseGetPeraEnd checks it
     s32 curKeyValue;                    // 0x80, AnimValueKey.value of valueKeyIdx; not read in C
-    f32 loopTime;                       // 0x84
-    OSTime localTimeInit;              // 0x88
-    s32 paperId;                        // 0x90
+    f32 loopTime;                       // 0x84, times the animation has looped (fractional)
+    OSTime localTimeInit;              // 0x88, clock start handed to the paper overlay when drawn
+    s32 paperId;                        // 0x90, pose id of its paper overlay; -1 = none
     s32 paperAnimIdx;                  // 0x94, paper anim index from getAnimDataId, -1 = none (not a string; passed to animPoseSetAnim as its name arg)
     struct smartEntry* paperCapture0;   // 0x98, smartEntry of the paper capture texture
     struct smartEntry* paperCapture1;   // 0x9C, second paper capture (never allocated in C)
     GXTexObj paperTexObj[2];            // 0xA0, texture objects for paperCapture0 / paperCapture1
-    void (*gxCallback)(s32 wXluStage);  // 0xE0
-    u32 disableDraw;                   // 0xE4
-    s32 materialFlag;                   // 0xE8
+    void (*gxCallback)(s32 wXluStage);  // 0xE0, run before each draw stage (animPoseSetGXFunc)
+    u32 disableDraw;                   // 0xE4, nonzero skips the normal drawing
+    s32 materialFlag;                   // 0xE8, draw modifier bits (animPoseSetMaterialFlagOn)
     s32 materialLightFlag;              // 0xEC, MaterialLightFlags
-    GXColor materialColor;              // 0xF0
-    GXColor materialColor2;             // 0xF4
+    GXColor materialColor;              // 0xF0, event tint colour (animPoseSetMaterialEvtColor)
+    GXColor materialColor2;             // 0xF4, second colour (animPoseSetMaterialAnmColor)
     f32 paperScaleXZ;                   // 0xF8, paper-mode draw scale
     f32 paperScaleY;                    // 0xFC
     f32 paperOfsY;                      // 0x100, paper-mode Y offset (doubled in battle)
@@ -320,15 +320,15 @@ typedef struct AnimationPose {
     s16 paperRectRight;                 // 0x116, paper capture rect, screen x
     s16 paperRectTop;                   // 0x118, paper capture rect, screen y
     s16 paperRectBottom;                // 0x11A, paper capture rect, screen y
-    s32 vivianType;                     // 0x11C
-    s32* vivianGroupNo;                 // 0x120
-    Mtx matrix;                         // 0x124
-    AnimPoseDispCallback dispCallback;                 // 0x154
-    void* dispUserDataCallback;         // 0x158
+    s32 vivianType;                     // 0x11C, chain hair/tail: 0 none, 1 Vivian, 2 Marilyn, 3 Beldam
+    s32* vivianGroupNo;                 // 0x120, the character's vivihimoTailGroupNo entry
+    Mtx matrix;                         // 0x124, chain base; translation from animPoseVivianMain
+    AnimPoseDispCallback dispCallback;                 // 0x154, called per drawn group with the model matrix
+    void* dispUserDataCallback;         // 0x158, first argument of dispCallback
     smartEntry* worldPositions;               // 0x15C, filled while animPoseWorldPositionEvalOn is set
-    s32 numWorldPositions;              // 0x160
+    s32 numWorldPositions;              // 0x160, entries in worldPositions (group count)
     smartEntry* worldMatrices;                // 0x164, filled while animPoseWorldMatrixEvalOn is set
-    s32 numWorldMatrices;               // 0x168
+    s32 numWorldMatrices;               // 0x168, entries in worldMatrices
 } AnimationPose;
 
 typedef struct AnimationPoseFile {
