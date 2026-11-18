@@ -759,7 +759,7 @@ USER_FUNC(aud_suikomi) {
                     mem->interpFrameCounter++;
                 } else {
                     done++;
-                    mem->flags &= ~4;
+                    mem->flags &= ~AUDIENCE_MEMBER_FLAG_DISP;
                     mem->flags |= AUDIENCE_MEMBER_FLAG_NOT_EXIST;
                 }
                 mem->position.x = intplGetValue(EASING_QUADRATIC_OUT, mem->homePosition.x, x2, mem->interpFrameCounter, mem->interpFramesTotal);
@@ -848,7 +848,7 @@ static USER_FUNC(aud_fire_hit) {
             mem->counter = 0;
             mem->rotation.y = 0.0f;
             mem->baseScale.x = mem->baseScale.y = 1.0f;
-            mem->flags |= 4;
+            mem->flags |= AUDIENCE_MEMBER_FLAG_DISP;
             evt = evtEntry(aud_hit_event, 0, EVENT_START_IMMEDIATE);
             evt->lwData[0] = list[i];
             evt->lwData[1] = (s32)(1024.0f * hx) - EVTDAT_FLOAT_BASE;
@@ -901,7 +901,7 @@ static USER_FUNC(aud_fire_no_hit) {
             mem->counter = 0;
             mem->rotation.y = 0.0f;
             mem->baseScale.x = mem->baseScale.y = 1.0f;
-            mem->flags |= 4;
+            mem->flags |= AUDIENCE_MEMBER_FLAG_DISP;
             evt = evtEntry(aud_hit_event, 0, EVENT_START_IMMEDIATE);
             evt->lwData[0] = list[i];
 

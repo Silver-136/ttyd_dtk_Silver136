@@ -686,8 +686,11 @@ typedef struct BattleWorkUnitPartBlurEntry {
     GXColor blurColor[2]; // 0x3C, newest / oldest after-image tint (copied from BattleWorkUnitPartBlur.color)
 } BattleWorkUnitPartBlurEntry;
 
+// BattleWorkUnitPartBlur.flags: nothing sets it; battle_disp would then keep only every other frame
+#define PART_BLUR_SKIP_FRAME_UNUSED 0x1
+
 typedef struct BattleWorkUnitPartBlur {
-    s32 flags;                            // 0x0, bit 0 (never set): keep only every other frame
+    s32 flags;                            // 0x0, PART_BLUR_SKIP_FRAME_UNUSED
     GXColor color[2];                     // 0x4, after-image tint, newest / oldest (btlevtcmd_SetPartsBlur)
     BattleWorkUnitPartBlurEntry work[10]; // 0xC
 } BattleWorkUnitPartBlur;

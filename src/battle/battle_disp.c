@@ -979,7 +979,7 @@ static void _partsBlurControl(BattleUnitPart* part, s32 flags, Mtx orientation, 
     blur->work[0].base = color;
     blur->work[0].blurColor[0] = blur->color[0];
     blur->work[0].blurColor[1] = blur->color[1];
-    if ((blur->flags & 1) && (blur->work[1].flags & PART_BLUR_ENTRY_DRAW)) {
+    if ((blur->flags & PART_BLUR_SKIP_FRAME_UNUSED) && (blur->work[1].flags & PART_BLUR_ENTRY_DRAW)) {
         blur->work[0].flags &= ~PART_BLUR_ENTRY_DRAW;
     }
 }

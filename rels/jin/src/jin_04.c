@@ -1104,6 +1104,6 @@ static USER_FUNC(getYoshiColor) {
 
 /** Script helper: sets a flag in Vivian's party data so she is treated as having left the party. */
 static USER_FUNC(vivian_away) {
-    pouchGetPtr()->partyData[PARTY_VIVIAN].flags |= 2;
+    pouchGetPtr()->partyData[PARTY_VIVIAN].flags |= POUCH_PARTY_FLAG_AWAY;
     return EVT_RETURN_DONE;
 }

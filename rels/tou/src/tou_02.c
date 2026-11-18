@@ -1760,7 +1760,7 @@ void ext_fan_init(void) {
         }
     }
 #if VERSION <= VERSION_DEMO_JP
-    extGetPosePtr()->flags &= ~1;
+    extGetPosePtr()->flags &= ~EXT_POSE_FLAG_VISIBLE;
 #endif
     fan_wp->sfxId = psndSFXOn_3D("SFX_STG3_AUDIENCE_FAN1", &(Vec){0.0f, 0.0f, 0.0f});
     fan_wp->vol = psndSFX_get_vol(fan_wp->sfxId);
@@ -2119,7 +2119,7 @@ void ext_fan_main(void) {
                 }
                 break;
             case 100:
-                pose->flags &= ~3;
+                pose->flags &= ~(EXT_POSE_FLAG_VISIBLE | EXT_POSE_FLAG_BILLBOARD);
                 fan->state++;
                 break;
             case 101:

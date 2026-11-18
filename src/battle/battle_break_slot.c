@@ -582,9 +582,9 @@ void BattleBreakSlot_Main(void) {
                 BattleAudienceAddTargetNum(0.0f, updown);
                 slot->phase = 8;
 #if VERSION <= VERSION_DEMO_JP
-                slot->flags &= ~2; // the demo's force-star flag
+                slot->flags &= ~BREAK_SLOT_FLAG_QUEEN_FORCE_STAR;
 #else
-                slot->flags &= ~4;
+                slot->flags &= ~BREAK_SLOT_FLAG_QUEEN_FORCE_SHINE;
 #endif
 #if VERSION >= VERSION_US
                 {
@@ -634,12 +634,12 @@ void BattleBreakSlot_Main(void) {
     for (; i < 3; i++, rr++) {
         switch (rr->state) {
             case 0:
-                rr->flags &= ~1;
+                rr->flags &= ~BREAK_SLOT_REEL_FLAG_DISP;
                 rr->alpha = 255;
                 break;
             case 1:
                 if (i != 2) {
-                    rr->flags |= 1;
+                    rr->flags |= BREAK_SLOT_REEL_FLAG_DISP;
                 }
                 rr->counter++;
                 if (rr->counter <= 5) {
@@ -671,8 +671,8 @@ void BattleBreakSlot_Main(void) {
                 rr->pos = (Vec){42.0f * i + 226.0f, 142.0f, 0.0f};
                 rr->scale = (Vec){0.8f, 0.8f, 0.8f};
                 rr->rot = (Vec){0.0f, 0.0f, 0.0f};
-                if (rr->flags & 2) {
-                    rr->flags &= ~2;
+                if (rr->flags & BREAK_SLOT_REEL_FLAG_HIDE) {
+                    rr->flags &= ~BREAK_SLOT_REEL_FLAG_HIDE;
                     rr->state = 3;
                     rr->counter = 0;
                 }
@@ -686,7 +686,7 @@ void BattleBreakSlot_Main(void) {
                 if (rr->counter > 20) {
                     rr->state = 0;
                     rr->counter = 0;
-                    rr->flags &= ~1;
+                    rr->flags &= ~BREAK_SLOT_REEL_FLAG_DISP;
                 }
                 break;
             case 4:
@@ -702,7 +702,7 @@ void BattleBreakSlot_Main(void) {
                 }
                 break;
             case 5:
-                rr->flags |= 1;
+                rr->flags |= BREAK_SLOT_REEL_FLAG_DISP;
                 y = intplGetValue(EASING_LINEAR, -128.0f, 0.0f, rr->counter, 40);
                 rr->pos = (Vec){i * 128 - 128, y, 0.0f};
                 rr->scale = (Vec){1.0f, 1.0f, 1.0f};
@@ -774,7 +774,7 @@ void BattleBreakSlot_Main(void) {
                         break;
                     }
 #if VERSION >= VERSION_JP
-                    if ((slot->flags & 2) && BattleBreakSlotReelGetPtr(0)->item == 4 &&
+                    if ((slot->flags & BREAK_SLOT_FLAG_NO_POISON_BINGO) && BattleBreakSlotReelGetPtr(0)->item == 4 &&
                         BattleBreakSlotReelGetPtr(1)->item == 4 && rr->item == 4) {
                         break;
                     }
@@ -783,11 +783,11 @@ void BattleBreakSlot_Main(void) {
                         break;
                     }
 #if VERSION <= VERSION_DEMO_JP
-                    if ((slot->flags & 2) && rr->item != 2) {
+                    if ((slot->flags & BREAK_SLOT_FLAG_QUEEN_FORCE_STAR) && rr->item != 2) {
                         break;
                     }
 #else
-                    if ((slot->flags & 4) && rr->item != 3) {
+                    if ((slot->flags & BREAK_SLOT_FLAG_QUEEN_FORCE_SHINE) && rr->item != 3) {
                         break;
                     }
 #endif
@@ -816,7 +816,7 @@ void BattleBreakSlot_Main(void) {
                 rr->counter++;
                 if (rr->counter > 60) {
                     rr->state = 13;
-                    rr->flags &= ~1;
+                    rr->flags &= ~BREAK_SLOT_REEL_FLAG_DISP;
                 }
                 break;
             case 12:
@@ -829,7 +829,7 @@ void BattleBreakSlot_Main(void) {
                 rr->counter++;
                 if (rr->counter > 40) {
                     rr->state = 13;
-                    rr->flags &= ~1;
+                    rr->flags &= ~BREAK_SLOT_REEL_FLAG_DISP;
                 }
                 break;
             case 13:
@@ -867,7 +867,7 @@ static void BattleBreakSlotDispReel(CameraId camId, void* param) {
     i = 0;
     reel = BattleBreakSlotReelGetPtr(0);
     for (; i < 3; i++, reel++) {
-        if ((reel->flags & 1) && reel->state >= 1 && reel->state <= 4) {
+        if ((reel->flags & BREAK_SLOT_REEL_FLAG_DISP) && reel->state >= 1 && reel->state <= 4) {
             PSMTXTrans(trans, 42.0f * i + 226.0f, 122.0f, 0.0f);
             iconDispGxCol(trans, ICON_FLAG_2D, ICON_SLOT_REEL_BOX, (GXColor){0xFF, 0xFF, 0xFF, 0xD0});
         }
@@ -887,7 +887,7 @@ static void BattleBreakSlotDispReel(CameraId camId, void* param) {
     i = 0;
     reel = BattleBreakSlotReelGetPtr(0);
     for (; i < 3; i++, reel++) {
-        if (!(reel->flags & 1)) {
+        if (!(reel->flags & BREAK_SLOT_REEL_FLAG_DISP)) {
             continue;
         }
         GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
@@ -942,7 +942,8 @@ void BattleBreakSlot_End(void) {
  * called from BattleAudience_ApRecoveryBuild with the weapon's bingoSlotChance,
  * never before the first crystal star.
  * The third card is always drawn different from the second (the real result comes from the spin).
- * Debug flags and slot->flags force a card (Shine Sprite; the early demos' bit 1 forces a Star).
+ * Debug flags and slot->flags force a card: BREAK_SLOT_FLAG_LECTURE and (from JP on) the Shadow Queen's flag a
+ * Shine Sprite, the early demos' queen flag a Star.
  */
 // Writes reels[reelNo] before the reelNo > 3 test below: reelNo must be below 3 on entry.
 void BattleBreakSlot_PointInc(void) {
@@ -976,11 +977,11 @@ void BattleBreakSlot_PointInc(void) {
                 item_appear_force(reel, 3);
             }
 #if VERSION <= VERSION_DEMO_JP
-            if (slot->flags & 2) {
+            if (slot->flags & BREAK_SLOT_FLAG_QUEEN_FORCE_STAR) {
                 item_appear_force(reel, 2);
             }
 #else
-            if (slot->flags & 4) {
+            if (slot->flags & BREAK_SLOT_FLAG_QUEEN_FORCE_SHINE) {
                 item_appear_force(reel, 3);
             }
 #endif
@@ -998,11 +999,11 @@ void BattleBreakSlot_PointInc(void) {
                 item_appear_force(reel, 3);
             }
 #if VERSION <= VERSION_DEMO_JP
-            if (slot->flags & 2) {
+            if (slot->flags & BREAK_SLOT_FLAG_QUEEN_FORCE_STAR) {
                 item_appear_force(reel, 2);
             }
 #else
-            if (slot->flags & 4) {
+            if (slot->flags & BREAK_SLOT_FLAG_QUEEN_FORCE_SHINE) {
                 item_appear_force(reel, 3);
             }
 #endif
@@ -1080,7 +1081,7 @@ void BattleBreakSlot_HideReel(void) {
     s32 i;
 
     for (i = 0; i < 3; i++, reel++) {
-        reel->flags |= 2;
+        reel->flags |= BREAK_SLOT_REEL_FLAG_HIDE;
     }
     slot->reelNo = 0;
 }

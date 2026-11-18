@@ -783,7 +783,7 @@ static USER_FUNC(starstone_entry) {
         sprintf(name, "starstone%d", i);
         eff = effStarStoneEntry(i, r * c + x, y, r * s + z, 1.0f);
         effSetName(eff, name);
-        ((EffStarStoneWork*)eff->userdata)->flags &= ~4;
+        ((EffStarStoneWork*)eff->userdata)->flags &= ~STAR_STONE_FLAG_SHINE_SFX;
     }
     return EVT_RETURN_DONE;
 }

@@ -910,7 +910,7 @@ USER_FUNC(evt_mri_puni_win_init) {
             puni->rotOffsetY = 0.0f;
             puni->spin = 0.0f;
             puni->dispOfs.y = 0.0f;
-            puni->flags2 &= ~1;
+            puni->flags2 &= ~PUNI_FLAG2_HEALED;
         }
     }
     return EVT_RETURN_DONE;

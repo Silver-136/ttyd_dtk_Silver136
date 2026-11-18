@@ -70,9 +70,13 @@ typedef struct EnvTexMtxWork {
                   // azimuth) for types 2 and 3
 } EnvTexMtxWork;
 
+// EnvBlurWork.flags. FADE_OUT: set by envBlurOn for type != 0: capture stops after the first frame and the blur alpha
+// fades from 255 to 0; otherwise it keeps capturing
+#define ENV_BLUR_FLAG_FADE_OUT 0x1
+
 // EnvironmentWork.blur (envBlurOn, envDisp_Blur)
 typedef struct EnvBlurWork {
-    u16 flags;     // 0x0, bit 0: set by envBlurOn for type != 0: capture stops after the first frame and the blur alpha fades from 255 to 0; otherwise it keeps capturing
+    u16 flags;     // 0x0, ENV_BLUR_FLAG_FADE_OUT
     u8 pad_02[6];  // 0x2, never accessed
     OSTime time;   // 0x8
     s32 msec;      // 0x10

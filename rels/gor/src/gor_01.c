@@ -6762,8 +6762,8 @@ static USER_FUNC(starstone_entry) {
         sprintf(name, "starstone%d", i);
         eff = effStarStoneEntry(i, 140.0f * s + x, y, z - 140.0f * c, 1.0f);
         effSetName(eff, name);
-        ((EffStarStoneWork*)eff->userdata)->flags &= ~4;
-        ((EffStarStoneWork*)eff->userdata)->flags |= 0x20;
+        ((EffStarStoneWork*)eff->userdata)->flags &= ~STAR_STONE_FLAG_SHINE_SFX;
+        ((EffStarStoneWork*)eff->userdata)->flags |= STAR_STONE_FLAG_EXTERNAL_DRAW;
         ((EffMahojinWork*)effNameToPtr("mahojin")->userdata)[i + 2].arg = eff;
         ((EffMahojinWork*)effNameToPtr("mahojin")->userdata)[i + 2].func = (DispCallback)effStarStoneDraw;
     }

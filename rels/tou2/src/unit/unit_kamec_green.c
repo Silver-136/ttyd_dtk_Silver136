@@ -1925,7 +1925,7 @@ static USER_FUNC(eff_staff2) {
     if (isFirstCall) {
         unit->work[UNIT_WORK_STAFF_EFFECT] = (EvtWord)effPokopiPchargeN64Entry(0, 60, 0.0f, -1000.0f, 0.0f, 1.0f);
     }
-    if (!(((EffectEntry*)unit->work[UNIT_WORK_STAFF_EFFECT])->flags & 1)) {
+    if (!(((EffectEntry*)unit->work[UNIT_WORK_STAFF_EFFECT])->flags & EFFECT_FLAG_ACTIVE)) {
         return EVT_RETURN_DONE;
     }
     wk = ((EffectEntry*)unit->work[UNIT_WORK_STAFF_EFFECT])->userdata;
@@ -1949,7 +1949,7 @@ static USER_FUNC(eff_staff1) {
     if (isFirstCall) {
         unit->work[UNIT_WORK_STAFF_EFFECT] = (EvtWord)effThunderflareN64Entry(0, 60, 0.0f, -1000.0f, 0.0f, 1.0f);
     }
-    if (!(((EffectEntry*)unit->work[UNIT_WORK_STAFF_EFFECT])->flags & 1)) {
+    if (!(((EffectEntry*)unit->work[UNIT_WORK_STAFF_EFFECT])->flags & EFFECT_FLAG_ACTIVE)) {
         return EVT_RETURN_DONE;
     }
     wk = ((EffectEntry*)unit->work[UNIT_WORK_STAFF_EFFECT])->userdata;

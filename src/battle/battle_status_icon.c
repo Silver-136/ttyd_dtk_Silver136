@@ -175,7 +175,7 @@ void BattleStatusIconMain(BattleUnit* unit) {
     u32 i;
 
     icon->numStatusIcons = 0;
-    if (work->flags & BATTLE_FLAG_FORCE_STATUS_ICONS_UNUSED || work->dispFlags & 1) {
+    if (work->flags & BATTLE_FLAG_FORCE_STATUS_ICONS_UNUSED || work->dispFlags & BATTLE_DISP_FLAG_COMMAND_MENU) {
         BtlUnit_GetPos(unit, &icon->position.x, &icon->position.y, &icon->position.z);
         icon->position.x += ((f32)(unit->statusIconOffset[0]) * unit->sizeMultiplier);
         icon->position.y += ((f32)(unit->statusIconOffset[1]) * unit->sizeMultiplier);

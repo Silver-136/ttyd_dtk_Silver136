@@ -116,7 +116,7 @@ USER_FUNC(boss_rampell_sync_max_moves) {
 
 /** Battle script helper: clears the "away" flag in Vivian's party data so she is back in the party; returns 1. */
 static USER_FUNC(vivian_comeback) {
-    pouchGetPtr()->partyData[PARTY_VIVIAN].flags &= ~2;
+    pouchGetPtr()->partyData[PARTY_VIVIAN].flags &= ~POUCH_PARTY_FLAG_AWAY;
     return EVT_RETURN_YIELD;
 }
 

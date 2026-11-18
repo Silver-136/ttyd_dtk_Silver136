@@ -163,7 +163,17 @@ in `docs/FAKES.md` and in the mweppc review record.
   MarioDispFlags bit 29, PartyFlags bits 15/18, MarioTrigFlags bit 15, HitAttributes bit 10, ItemEntry flags bit 7,
   damage result 0x10000, unit attribute 0x100; MapObjectFlags 0x20 is set on A-button objects and never read).
   Tools: flag_names.py (struct fields), word_masks.py (values by source, also locals), material_flags.py (pose
-  material word). Still open; the count was not rerun on 2026-11-17.
+  material word). Rechecked 2026-11-17 (GB14): flag_names.py over every header field whose comment names its enum
+  finds nothing left; numbers reached through casts, getters and array elements now use the names
+  (EffStarStoneWork, EffectEntry, ExtdrvPose, PouchPartyData, SoundStream, BattleWork.dispFlags, AC doneFlags), and
+  new names with a setter and a reader: BreakSlotWork / BreakSlotReel flags (Shadow Queen bits, reel draw / hide),
+  ShopWork flags (item selected, buying), EnvBlurWork FADE_OUT, PART_BLUR_SKIP_FRAME_UNUSED. Script CALL masks
+  (flag_onoff, attribute and unit-flag commands) carry no hex masks. A scan for `x.flags/attr/status OP number`
+  (outside FAKE lines and shifts) counts 218 left (297 before; 40 in src/, was 77): nearly all are file-local work
+  structs with no names (sac_* games, gor_03, aji_17, las_04/05, the yuu minigames, evt_yuuranking), plus the bits
+  above. Kept numeric with reasons: EventEntry 0x80 (tested only) and 0x40 (set by inline/sibling events, never
+  read), SeqEndDispFlags 0x1 (only cleared), BattleWorkStatusIcon.flags 0x1 (read only), FieldBattleData
+  firstAttackFlags (may be written by fbatHitCheck's 16-byte copy), party_bomhei 0x4 (read only).
 - **English identity for developer and Japanese names (user idea, 2026-11-08):** the original symbols and the
   Japanese strings name characters, NPCs, objects, items and maps in the developers' own words, which do not always
   map cleanly to the English game (example: the symbols `mony_*`/`peton_*` and the NPC strings モニー/ピートン are
@@ -333,7 +343,11 @@ and 4 section placements are left (sections 4 and 7). F: carried on as the FAKES
 (cleanup_notes/bf). B: cardmgr_demo.inc is still one file (section 8); its CARD_FLAG_* duplicates are gone
 (2026-11-17, GB8: it uses cardmgr.h's CardFlags names and cardmgr.c's CARD_OP_* names; only the demo's own serial
 bit CARD_FLAG_SERIAL 0x4000 stays local). Still open from the comment decision:
-comments inside a version side that describe shared flow (about 600 starts then; not recounted).
+comments inside a version side that describe shared flow (about 600 starts then). Recounted 2026-11-17 (GB14)
+by three scans: no version block has the same comment opening every arm; 8 comments end an arm right before its
+`#endif`/`#else`, all about that version's code; 28 comments open an arm without naming a version, and the ones
+checked (evt_npc, seq_title, win_root, memory, tou_02, black_peach) describe the arm's own code. No move was
+needed; whatever is left would need reading block by block.
 
 ## 10. Comment accuracy review and header placement (2026-11-04; rechecked 2026-11-17)
 - Comment review against the code (brief cleanup_notes/rels_comment_brief.md): DONE for src/, include/ and every

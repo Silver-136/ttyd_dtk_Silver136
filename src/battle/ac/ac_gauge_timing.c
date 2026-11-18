@@ -271,14 +271,14 @@ s32 battleAcMain_GaugeTiming(BattleWork* work) {
                 } else {
                     work->actionCommands.result = 0;
                 }
-                work->actionCommands.doneFlags |= 1;
+                work->actionCommands.doneFlags |= AC_DONE_FLAG_FINISHED;
                 return 0;
             }
             break;
         case AC_STATE_RUN + 3:
             work->actionCommands.acState = AC_STATE_RUN + 4;
         case AC_STATE_RUN + 4:
-            work->actionCommands.doneFlags |= 1;
+            work->actionCommands.doneFlags |= AC_DONE_FLAG_FINISHED;
             cw->endTimer = 60;
             work->actionCommands.acState = AC_STATE_RUN + 5;
             if (cw->sfxId != -1) {
@@ -345,7 +345,7 @@ void battleAcDisp_GaugeTiming(CameraId cameraId, void* param) {
  * (which would stop sfxId, but this command never starts a sound: it stays -1).
  */
 void battleAcDelete_GaugeTiming(BattleWork* work) {
-    if (!(work->actionCommands.doneFlags & 1)) {
+    if (!(work->actionCommands.doneFlags & AC_DONE_FLAG_FINISHED)) {
         work->actionCommands.acState = AC_STATE_RUN + 4;
     }
 }

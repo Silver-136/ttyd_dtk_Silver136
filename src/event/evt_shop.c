@@ -731,7 +731,7 @@ static USER_FUNC(shopper_name) {
 
 static USER_FUNC(disp_off) {
     ShopWork* wp = (ShopWork*)evtGetValue(event, event->args[0]);
-    wp->flags &= ~1;
+    wp->flags &= ~SHOP_FLAG_ITEM_SELECTED;
     return EVT_RETURN_DONE;
 }
 
@@ -866,7 +866,7 @@ USER_FUNC(evt_shop_main_func) {
     mario = marioGetPtr();
     party = partyGetPtr(0);
     hit = mario->hitobjStandOn;
-    wp->flags &= ~1;
+    wp->flags &= ~SHOP_FLAG_ITEM_SELECTED;
     trg = keyGetButtonTrg(0);
 
     // each negation is a value: the retail code materialises it (cntlzw, srwi.) before the test (as in select_func)
@@ -898,7 +898,7 @@ USER_FUNC(evt_shop_main_func) {
         }
         return EVT_RETURN_BLOCK;
     }
-    if (!(wp->flags & 2)) {
+    if (!(wp->flags & SHOP_FLAG_BUYING)) {
         if (hit) {
             for (i = 0; i < wp->count; i++) {
                 if (!strcmp(wp->objs[i].hit, hitGetName(hit))) {
@@ -907,7 +907,7 @@ USER_FUNC(evt_shop_main_func) {
             }
 
             // itemFlags[i] is read before the i < wp->count test; a full six-item shop with no matching hit reads one past itemFlags.
-            if (!(wp->itemFlags[i] & 1) && i < wp->count) {
+            if (!(wp->itemFlags[i] & SHOP_ITEM_FLAG_SOLD_OUT) && i < wp->count) {
                 if (wp->sel != i) {
                     if (wp->sel == -1) {
                         winMgrOpen(wp->win[0]);
@@ -926,12 +926,12 @@ USER_FUNC(evt_shop_main_func) {
             winMgrClose(wp->win[1]);
         }
         if (wp->sel != -1) {
-            wp->flags |= 1;
+            wp->flags |= SHOP_FLAG_ITEM_SELECTED;
             if (trg & PAD_BUTTON_A) {
                 marioKeyOff();
                 wp->buyEvt = evtEntry(buy_evt, 0, 0);
                 wp->buyEvt->lwData[0] = (EvtWord)wp;
-                wp->flags |= 2;
+                wp->flags |= SHOP_FLAG_BUYING;
                 winMgrClose(wp->win[0]);
                 winMgrClose(wp->win[1]);
                 wp->sel = -1;
@@ -939,32 +939,32 @@ USER_FUNC(evt_shop_main_func) {
             }
         }
     } else if (!evtCheckID(wp->buyEvt->eventId)) {
-        wp->flags &= ~2;
+        wp->flags &= ~SHOP_FLAG_BUYING;
         marioKeyOn();
         if (wp->buyItem == ITEM_CONTACT_LENS) {
-            wp->itemFlags[wp->cur] |= 1;
+            wp->itemFlags[wp->cur] |= SHOP_ITEM_FLAG_SOLD_OUT;
         }
         if (wp->buyItem == ITEM_SUPER_LUIGI1) {
-            wp->itemFlags[wp->cur] |= 1;
+            wp->itemFlags[wp->cur] |= SHOP_ITEM_FLAG_SOLD_OUT;
         }
         if (wp->buyItem == ITEM_SUPER_LUIGI2) {
-            wp->itemFlags[wp->cur] |= 1;
+            wp->itemFlags[wp->cur] |= SHOP_ITEM_FLAG_SOLD_OUT;
         }
         if (wp->buyItem == ITEM_SUPER_LUIGI3) {
-            wp->itemFlags[wp->cur] |= 1;
+            wp->itemFlags[wp->cur] |= SHOP_ITEM_FLAG_SOLD_OUT;
         }
         if (wp->buyItem == ITEM_SUPER_LUIGI4) {
-            wp->itemFlags[wp->cur] |= 1;
+            wp->itemFlags[wp->cur] |= SHOP_ITEM_FLAG_SOLD_OUT;
         }
         if (wp->buyItem == ITEM_SUPER_LUIGI5) {
-            wp->itemFlags[wp->cur] |= 1;
+            wp->itemFlags[wp->cur] |= SHOP_ITEM_FLAG_SOLD_OUT;
         }
     }
     for (i = 0; i < wp->count; i++) {
         mobj = mapGetMapObj(wp->objs[i].mobj);
         if (mobj) {
             sprintf(buf, "shp%d", i);
-            if (wp->itemFlags[i] & 1) {
+            if (wp->itemFlags[i] & SHOP_ITEM_FLAG_SOLD_OUT) {
                 iconFlagOn(buf, ICON_FLAG_HIDDEN);
             } else if (mobj->flags & MAP_OBJ_FLAG_HIDDEN) {
                 iconFlagOn(buf, ICON_FLAG_HIDDEN);

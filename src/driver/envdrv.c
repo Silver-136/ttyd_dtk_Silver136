@@ -202,7 +202,7 @@ static void envCapture2(CameraId camId, void* param) {
         GXInitTexObjLOD(&wp->envBlurObj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
     }
     if (wp->flags & ENV_FLAG_BLUR) {
-        if ((wp->blur.flags & 1) && (wp->flags & ENV_FLAG_BLUR_CAPTURED)) {
+        if ((wp->blur.flags & ENV_BLUR_FLAG_FADE_OUT) && (wp->flags & ENV_FLAG_BLUR_CAPTURED)) {
             wp->flags &= ~ENV_FLAG_BLUR_CAPTURE;
         }
         wp->flags |= ENV_FLAG_BLUR_CAPTURED;
@@ -551,7 +551,7 @@ static void envDisp_Blur(void) {
             if (t > 1.0f) {
                 t = 1.0f;
             }
-            if (blur->flags & 1) {
+            if (blur->flags & ENV_BLUR_FLAG_FADE_OUT) {
                 alpha = 255.0f * (1.0f - t);
             } else {
                 alpha = 120.0f * (1.0f - t) + 128.0f;
@@ -591,7 +591,7 @@ void envBlurOn(s32 type, s32 msec) {
     blur->time = gp->renderTime;
     blur->msec = msec;
     if (type) {
-        blur->flags |= 1;
+        blur->flags |= ENV_BLUR_FLAG_FADE_OUT;
     }
     wp->envBlur = _mapAlloc(GXGetTexBufferSize(gp->fbWidth / 2, gp->efbHeight / 2, GX_TF_RGB565, GX_FALSE, 0));
 }

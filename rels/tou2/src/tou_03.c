@@ -4272,10 +4272,10 @@ static s32 starstone_sound_onoff(EventEntry* event, BOOL isFirstCall) {
 
     if (eff) {
         if (flag == 0) {
-            ((EffStarStoneWork*)eff->userdata)->flags &= ~4;
+            ((EffStarStoneWork*)eff->userdata)->flags &= ~STAR_STONE_FLAG_SHINE_SFX;
         }
         if (flag == 1) {
-            ((EffStarStoneWork*)eff->userdata)->flags |= 4;
+            ((EffStarStoneWork*)eff->userdata)->flags |= STAR_STONE_FLAG_SHINE_SFX;
         }
     }
     return EVT_RETURN_DONE;

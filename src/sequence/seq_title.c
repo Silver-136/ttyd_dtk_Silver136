@@ -109,12 +109,12 @@ void titleInit(SequenceWork* work) {
             psndBGMOn(PSND_FADEOUT, "BGM_DIGEST1");
 
             if (psbgm[0].streamId != -1) {
-                sound.streams[psbgm[0].streamId].flags |= 0x8000;
+                sound.streams[psbgm[0].streamId].flags |= SOUND_STREAM_FLAG_PAUSE;
             }
         } else {
             psndBGMOn(PSND_FADEOUT, "BGM_TITLE1");
             if (psbgm[0].streamId != -1) {
-                sound.streams[psbgm[0].streamId].flags |= 0x8000;
+                sound.streams[psbgm[0].streamId].flags |= SOUND_STREAM_FLAG_PAUSE;
             }
         }
     }

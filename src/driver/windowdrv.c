@@ -228,6 +228,7 @@ void windowDispGX_setup(void) {
     GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
     GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_OR);
     GXSetZMode(GX_TRUE, GX_ALWAYS, GX_FALSE);
+
     // Fog off: window frames are 2D and must not be fogged. The white colour has no effect.
     {
         GXColor fog_color = {0xFF, 0xFF, 0xFF, 0xFF};

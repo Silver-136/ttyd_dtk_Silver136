@@ -627,7 +627,7 @@ static USER_FUNC(starstone_entry) {
     EffectEntry* eff = effStarStoneEntry(type, x, y, z, scale);
 
     effSetName(eff, name);
-    ((EffStarStoneWork*)eff->userdata)->flags |= 0x10;
+    ((EffStarStoneWork*)eff->userdata)->flags |= STAR_STONE_FLAG_NO_JUMP_SFX;
     return EVT_RETURN_DONE;
 }
 

@@ -226,7 +226,7 @@ static USER_FUNC(lecture_init) {
     s32 seat;
     s32 i;
 
-    slot->flags |= 1;
+    slot->flags |= BREAK_SLOT_FLAG_LECTURE;
     aud->flags |= AUDIENCE_FLAG_EVENT_CTRL;
     for (i = 0; i < AUDIENCE_MEMBER_MAX; i++) {
         BattleAudience_Delete(i);

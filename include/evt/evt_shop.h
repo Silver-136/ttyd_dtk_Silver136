@@ -35,12 +35,12 @@ typedef struct ShopDb {
 } ShopDb;
 
 typedef struct ShopWork {
-    u16 flags; // 0x0
+    u16 flags; // 0x0, SHOP_FLAG_*
     ShopObj* objs; // 0x4
     ShopItem* items; // 0x8
     ShopperData* shopper; // 0xC
     ShopDb* db; // 0x10
-    u16 itemFlags[6]; // 0x14
+    u16 itemFlags[6]; // 0x14, SHOP_ITEM_FLAG_*
     s32 count; // 0x20
     EventEntry* mainEvt; // 0x24
     EventEntry* buyEvt; // 0x28
@@ -65,6 +65,9 @@ enum {
     SHOP_ITEM_FLAG_SOLD_OUT = 1,
 };
 
+// ShopWork.flags (evtShopIsActive: any bit set). TALKING is a name from LLCOOLT's tree.
 enum {
+    SHOP_FLAG_ITEM_SELECTED = 1, // an item on the shelf is picked (its windows are up); evt_shop_main_func and disp_off clear it
+    SHOP_FLAG_BUYING = 1 << 1,   // A pressed: the buy event runs, the shelf is not checked until it ends
     SHOP_FLAG_TALKING = 16384,
 };

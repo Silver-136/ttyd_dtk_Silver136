@@ -324,7 +324,7 @@ s32 battleAcMain_SignalTiming(BattleWork* work) {
                 break;
 
             case AC_STATE_RUN + 4:
-                work->actionCommands.doneFlags |= 1;
+                work->actionCommands.doneFlags |= AC_DONE_FLAG_FINISHED;
                 w->okFlag = 0;
                 w->endTimer = 60;
                 ac->acState = AC_STATE_RUN + 5;

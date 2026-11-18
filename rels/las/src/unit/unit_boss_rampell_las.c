@@ -4831,11 +4831,11 @@ USER_FUNC(mario_shadow_guard_check) {
 #endif
 
 /**
- * Script helper: clears flag 2 on Vivian's partner data (the pouch's partyData[6] flags) and returns 1.
+ * Script helper: clears the "away" flag in Vivian's party data so she is back in the party; returns 1.
  * Nothing in this file calls it.
  */
 static USER_FUNC(vivian_comeback) {
-    pouchGetPtr()->partyData[6].flags &= ~2;
+    pouchGetPtr()->partyData[PARTY_VIVIAN].flags &= ~POUCH_PARTY_FLAG_AWAY;
     return 1;
 }
 

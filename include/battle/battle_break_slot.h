@@ -50,8 +50,18 @@ void BattleBreakSlot_Disp(void);
 s32 BattleBreakSlot_GetBreakTurn(void);
 void BattleBreakSlot_PointInc(void);
 
-// Names from LLCOOLT's tree.
+// BreakSlotWork.flags. LECTURE and QUEEN_FORCE_STAR are names from LLCOOLT's tree. The Shadow Queen's script sets
+// the queen bits (slot_init, and from JP on queen_break_slot_flag2_on at her entry); bit 1 means a different thing in
+// the early demos than from JP on.
 enum {
     BREAK_SLOT_FLAG_LECTURE = 1,
-    BREAK_SLOT_FLAG_QUEEN_FORCE_STAR = 1 << 1,
+    BREAK_SLOT_FLAG_QUEEN_FORCE_STAR = 1 << 1,  // early demos: the reels are forced to Star cards
+    BREAK_SLOT_FLAG_NO_POISON_BINGO = 1 << 1,   // JP on: a spinning reel does not stop on a third Poison Mushroom
+    BREAK_SLOT_FLAG_QUEEN_FORCE_SHINE = 1 << 2, // JP on: the reels are forced to Shine Sprite cards
+};
+
+// BreakSlotReel.flags
+enum {
+    BREAK_SLOT_REEL_FLAG_DISP = 1,      // drawn by BattleBreakSlot_Disp
+    BREAK_SLOT_REEL_FLAG_HIDE = 1 << 1, // BattleBreakSlot_HideReel: a shown card slides out
 };

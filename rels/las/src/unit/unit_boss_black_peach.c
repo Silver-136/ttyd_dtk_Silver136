@@ -5298,7 +5298,7 @@ static USER_FUNC(slot_init) {
 #if VERSION <= VERSION_DEMO_JP
     BattleBreakSlotGetPtr()->flags |= BREAK_SLOT_FLAG_QUEEN_FORCE_STAR;
 #else
-    BattleBreakSlotGetPtr()->flags |= 4;
+    BattleBreakSlotGetPtr()->flags |= BREAK_SLOT_FLAG_QUEEN_FORCE_SHINE;
 #endif
     return EVT_RETURN_DONE;
 }
@@ -5667,7 +5667,7 @@ static USER_FUNC(eff_queen_set_alpha_evt) {
 // Descriptive name (not in the symbol maps); placeholder unk_las_0000af38, JP las .text+0xAE6C. See docs/NAME_PROVENANCE.md.
 #if VERSION >= VERSION_JP
 USER_FUNC(queen_break_slot_flag2_on) {
-    BattleBreakSlotGetPtr()->flags |= 2;
+    BattleBreakSlotGetPtr()->flags |= BREAK_SLOT_FLAG_NO_POISON_BINGO;
     return EVT_RETURN_DONE;
 }
 #endif
