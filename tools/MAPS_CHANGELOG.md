@@ -8,6 +8,25 @@ generated from (maps made before 2026-11-13 have no such line).
 One entry per push, newest first: date, the pushed commit, whether maps from the previous push are now obsolete,
 and what changed in plain words.
 
+## 2026-11-18 - pushed commit: the one that adds this entry (maps stamped ae3f60062)
+
+Old maps obsolete: **yes**. Regenerate them.
+
+- About 500 more UNUSED entries in every version (US 1,542 -> 2,047): stripped functions and data restored under
+  their JP demo map names, for example `ARCOpenDir` / `ARCReadDir` / `ARCCloseDir`, `BattleStageLightReleaseAll`,
+  the `BattlePad*` and `BtlUnit_Add*` helpers, `sweatEntry`, `makeMovedir`, `getVec`, `gcDvdCheckInit`, the
+  sound.c `SoundSong*` / `SoundSS*` / `SoundDVD*` families, 41 one-row `battle_item_*` drop tables and the MSL
+  float.c constants.
+- Scopes and sizes of data symbols now match the objects in every version: about 15,000 statics that the DOL
+  configs still listed as global are local, the weak sqrt statics and `__OSIsGcam` are weak, and 89 objects lost
+  padding that had been counted into them (for example `ice_effHermit_*`, `shadow_vtx`, `midi2TimeTab`).
+- Names this project had made up are gone or replaced by original ones: `partyWalkChkGnd` / `partyFlyAdjustY` are
+  `hitcheck_party_motion_stay` / `hitcheck_party_motion_stay_fly`, tou2's `GXEnd_` / `GXPosition3f32_` are the SDK's
+  `GXEnd` / `GXPosition3f32` (local), `float_0p5_8041dc98` is `winMainHalf`, `vec3_802ce0ac/b8` are
+  `party_unused_zero_vec0/1`; stand-ins such as `vaporUnused`, `unusedSignTbl` and `yoshiSignTbl` are gone (their
+  bytes are the precompiled header's math statics, named as such).
+- No address of a linked function or object changed; many function-static `$N` and literal `@N` numbers did.
+
 ## 2026-11-16 - pushed commit: the one that adds this entry (maps stamped 188651e23)
 
 Old maps obsolete: **slightly**. Regenerate them if you use mapdrv names or function-static `$N` numbers.
