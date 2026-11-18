@@ -608,6 +608,10 @@ static EVT_BEGIN(bgset_bom_snow_event)
     RETURN
 EVT_END()
 
+/**
+ * Script helper (no arguments): starts the snowfall effect (effSnowfallN64Entry) on its first call, then keeps
+ * blocking.
+ */
 static USER_FUNC(_snow_control) {
     if (isFirstCall) {
         effSnowfallN64Entry(0, 64);

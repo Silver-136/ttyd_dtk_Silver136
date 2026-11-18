@@ -989,6 +989,10 @@ static void callback(s32 type, void** work) {
 #endif
 }
 
+/**
+ * Message callback (JP and later): on type 5 it starts the event UNK_0x00022c3c and keeps it in LW(8), unless the one
+ * there is still running.
+ */
 // Descriptive name (not in the symbol maps); placeholder unk_aji_00000ed0, JP aji .text+0xE0C. See docs/NAME_PROVENANCE.md.
 #if VERSION >= VERSION_JP
 void kuti_callback(s32 type, void** work) {

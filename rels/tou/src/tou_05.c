@@ -1664,7 +1664,7 @@ EVT_BEGIN(tou_05_init_evt)
     RETURN
 EVT_END()
 
-// Type-2 page notifications advance the counter used by the synchronized Mario reaction.
+/** Message callback: each type 2 notification adds 1 to GW(10). */
 static void gans_msg_callback(s32 type, void** work) {
     EventEntry* evt = ((MsgWinData*)*work)->event;
     if (type == 2) {

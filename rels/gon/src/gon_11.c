@@ -990,6 +990,10 @@ static s32 evt_cloud_main(EventEntry* event, BOOL isFirstCall) {
     return 0;
 }
 
+/**
+ * Script helper: allocates the 16 cloud slots of the room (CloudRoomWork), marks them unused, names their image and
+ * off-screen entries i_name_<n> and o_name_<n> and clears cloud_once_flag.
+ */
 static USER_FUNC(evt_iri_16_cloud_init) {
     s32 i;
 

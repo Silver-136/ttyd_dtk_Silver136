@@ -390,6 +390,10 @@ static EVT_BEGIN(punipuni_ball01_init)
     RETURN
 EVT_END()
 
+/**
+ * Script helper: starts a Puni balloon effect (effPuniBalloonEntry) of type args[0] at (args[1], args[2], args[3]) with
+ * last parameter 2.5 and keeps it in marioeff.
+ */
 static USER_FUNC(mario_shabon_eff) {
     EvtWord* args = event->args;
     s32 type = evtGetValue(event, args[0]);
@@ -550,6 +554,7 @@ static EVT_BEGIN(mario_shabon_check)
     RETURN
 EVT_END()
 
+/** Script helper: moves the charge effect named args[0] to (args[1], args[2] + 15, args[3]). */
 static USER_FUNC(evt_pcharge_pos) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);

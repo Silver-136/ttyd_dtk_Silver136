@@ -647,7 +647,7 @@ static EVT_BEGIN(wait_event)
     RETURN
 EVT_END()
 
-// Return the first occupied slot whose initial kind is Gold Fuzzy, or -1 if none exists.
+/** Script helper: returns in args[0] the first unit slot whose initial kind is Gold Fuzzy, or -1 if there is none. */
 USER_FUNC(get_gold_chorobon_id) {
     EvtWord* args = event->args;
     BattleWork* wp = _battleWorkPointer;

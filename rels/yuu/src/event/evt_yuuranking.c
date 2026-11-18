@@ -63,7 +63,10 @@ static s32 fontlenpitch(const char* str, s32 pitch) {
 }
 
 #if VERSION >= VERSION_US
-// US and later: right-aligned at x, squeezed to fit width.
+/**
+ * US and later: draws msg at height y with the given scale, right-aligned at xo + wp->x, and squeezed horizontally when
+ * it is wider than width.
+ */
 // FAKE: x offset + work pointer instead of x, so wp->x is read after the width test as in the target
 static inline void yuuDrawRight(f32 xo, f32 y, f32 scale, const char* msg, s32 width, YuuRankingWork* wp) {
     Mtx trans;

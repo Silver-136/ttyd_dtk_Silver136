@@ -461,6 +461,10 @@ EVT_BEGIN(kpa_07_init_evt)
     RETURN
 EVT_END()
 
+/**
+ * Message callback: on type 3 at page 1 it sets the stay and talk animations of the NPC ブレッドハート to S_5 and T_5, at page
+ * 2 back to S_1 and T_1.
+ */
 static void kpa_stg6_014_cb(s32 type, smartEntry* smart) {
     MsgWinData* info = smart->address;
     NpcEntry* npc;

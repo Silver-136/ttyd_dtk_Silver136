@@ -1256,6 +1256,10 @@ EVT_BEGIN(recover_magic_event)
     RETURN
 EVT_END()
 
+/**
+ * Script helper (args[0] = battle unit, args[1] = 0 or 1): spawns a stardust effect (effStardustEntry type 6) 30 units
+ * in front of the unit and 10 (type 0) or 50 (type 1) units up, both scaled by its size.
+ */
 static USER_FUNC(eff_magic_support) {
     EvtWord* args = event->args;
     s32 id = BattleTransID(event, evtGetValue(event, args[0]));

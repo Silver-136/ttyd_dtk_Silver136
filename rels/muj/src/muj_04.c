@@ -631,6 +631,10 @@ EVT_BEGIN(muj_04_init_evt)
     RETURN
 EVT_END()
 
+/**
+ * Script helper: sets LW(0) to the map animation (mapanim) of the hitname segment Mario stands on when he has just
+ * stepped onto a new one, else 0; LW(1) keeps the current segment's name.
+ */
 static USER_FUNC(mario_moveride_check) {
     s32 i;
     const char* name;

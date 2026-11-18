@@ -507,6 +507,7 @@ static USER_FUNC(get_value) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: blocks until marioChkKey() reports TRUE. */
 static USER_FUNC(mario_keyoff_wait) {
     switch (!marioChkKey()) {
         default:
@@ -3645,6 +3646,7 @@ static USER_FUNC(evt_osreport) {
     return EVT_RETURN_DONE;
 }
 
+/** Hides every NPC in use that is parked at y <= -1000 and shows the rest; returns 0. */
 static s32 npc_process(void) {
     NpcWork* wp = npcGetWorkPtr();
     NpcEntry* npc = wp->entries;
@@ -6997,6 +6999,7 @@ USER_FUNC(cook_chk2) {
 }
 #endif
 
+/** Returns TRUE when file is (FileEntry*)-1. */
 static inline BOOL fileAsyncMissing(FileEntry* file) {
     return (s32)file == -1;
 }
@@ -7180,7 +7183,6 @@ static USER_FUNC(get_item_name) {
  * 1 for items below the Mushroom's id, a few non-food items (Point Swap, Fright Mask, Mystery, Inn Coupon,
  * Spite Pouch, Koopa Curse) and explosive dishes (smoke and explosion), 0 for the rest, the Mistake included (fire).
  */
-
 // The cooking animation for an item: 0 = flames, 1 = explosion puff (cook_effect).
 static s32 chk_cook_eff_type(s32 item) {
     if (item < ITEM_MUSHROOM) {

@@ -171,6 +171,10 @@ EVT_BEGIN(las_02_init_evt)
     RETURN
 EVT_END()
 
+/**
+ * Script helper: builds the torch map-object name "hi<args[0]>" and returns it in args[1] (in the early demos the
+ * buffer is a local array).
+ */
 static USER_FUNC(make_name) {
     EvtWord* args = event->args;
 #if VERSION <= VERSION_DEMO_JP

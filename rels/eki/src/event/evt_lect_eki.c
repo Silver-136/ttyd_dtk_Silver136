@@ -878,6 +878,10 @@ static USER_FUNC(juyoitem_goato) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper (args[0] = map object name, "me" for the script's own): sets the two no-map-blend material flags on the
+ * map object's pose.
+ */
 USER_FUNC(lect_mobj_set_nosysblend) {
     const char* name = (const char*)evtGetValue(event, event->args[0]);
     MapObjectEntry* mobj;

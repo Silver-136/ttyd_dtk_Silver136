@@ -82,8 +82,6 @@ static void hammer_bros_get_target(s32* unitIdx, s32* partIdx) {
  * It lists every target of the weapon and then picks five targets at random (repeats allowed),
  * writing their unit and part ids into the five pairs of variables passed in args.
  */
-
-// Collect the sampled targets, then choose five unit/part pairs independently with replacement.
 static USER_FUNC(hammer_bros_nagemakuri_set_target) {
     EvtWord* args = event->args;
     s32 unitIdx[20];

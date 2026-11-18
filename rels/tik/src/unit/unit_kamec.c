@@ -1886,6 +1886,12 @@ static EVT_BEGIN(bunsin_magic_event)
     RETURN
 EVT_END()
 
+/**
+ * Script helper that fires a Magikoopa's magic shot: args[0] is the caster, args[1] to args[3] the target point and
+ * args[4] the lifetime in frames (effMagic1N64Entry type 0 flies from the start to the target over that time). It
+ * starts at the wand tip (25 units ahead, 20 up, scaled by size, 5 toward the camera); the effect is kept in the
+ * caster's UNIT_WORK_MAGIC_EFFECT and scaled to the caster's size.
+ */
 static USER_FUNC(eff_magic) {
     EvtWord* args = event->args;
     s32 id = BattleTransID(event, evtGetValue(event, args[0]));

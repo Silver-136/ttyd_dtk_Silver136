@@ -1703,6 +1703,7 @@ static EVT_BEGIN(evt_drop)
     RETURN
 EVT_END()
 
+/** Script helper that does nothing. */
 static USER_FUNC(kemuri_stop) {
     return EVT_RETURN_DONE;
 }

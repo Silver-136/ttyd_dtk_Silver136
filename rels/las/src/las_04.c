@@ -383,6 +383,11 @@ static EVT_BEGIN(firebar_evt)
     RETURN
 EVT_END()
 
+/**
+ * Returns 1 when Mario touches fire bar ball `ball`: vertically within 0.8 * 15 * scale above it or his collision
+ * height below it, and horizontally within a quarter of his collision width plus half the scaled ball spacing, while
+ * Vivian is not sinking or hidden. Returns 0 while the bar has flag 2 or FIREBAR_FLAG_MARIO_HURT.
+ */
 static s32 _firebar_hitCheck(FirebarWork* wp, FirebarBall* ball) {
     MarioWork* mario = marioGetPtr();
     f32 dx;

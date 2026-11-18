@@ -585,7 +585,10 @@ static EVT_BEGIN(wait_event)
     RETURN
 EVT_END()
 
-// Unit work[0] saves the shadow scale as a numeric word; work[1] advances from 0 through 15.
+/**
+ * Script helper (args[0] is a battle unit): grows part 1's shadow back from zero to the scale saved in unit work[0]
+ * over 15 frames (work[1] counts them); blocks until done.
+ */
 static USER_FUNC(shadow_scale_return) {
     s32 id = BattleTransID(event, evtGetValue(event, event->args[0]));
     BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);

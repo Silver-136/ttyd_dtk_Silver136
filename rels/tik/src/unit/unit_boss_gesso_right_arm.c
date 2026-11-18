@@ -595,7 +595,10 @@ EVT_BEGIN(gesso_arm_damage_pose_event)
     RETURN
 EVT_END()
 
-// Select the arm animation from the target position, with X = -120 on the front side.
+/**
+ * Script helper (args[0] = battle unit): returns 0 in args[1] when the unit stands at x >= -120 (the front side), else
+ * 1.
+ */
 static USER_FUNC(_check_zenei_kouei) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;

@@ -2469,6 +2469,7 @@ static EVT_BEGIN(wait_event_r)
     RETURN
 EVT_END()
 
+/** Script helper (no arguments): allocates the work of the two arms and zeroes their pos and prevPos. */
 static USER_FUNC(arm_init) {
     s32 i;
 

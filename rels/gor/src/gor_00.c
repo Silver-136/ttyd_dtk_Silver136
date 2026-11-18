@@ -5629,6 +5629,7 @@ static EVT_BEGIN(gor_muj_ship_pera)
     RETURN
 EVT_END()
 
+/** Message callback: on type 3 at page 1 it sets LSWF_GOR_00_KOOPA_MSG_CUE. */
 static void gor_stg4_018_cb(s32 type, smartEntry* smart) {
     MsgWinData* info = smart->address;
 

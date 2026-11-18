@@ -558,6 +558,10 @@ static EVT_BEGIN(gor_irai_tenshu_main)
     RETURN
 EVT_END()
 
+/**
+ * Clears the trouble work flags GSWF_TROUBLE_WORK(0) to (16) and zeroes the trouble work bytes GSW_TROUBLE_WORK(0) to
+ * (5).
+ */
 static void irai_flag_clear(void) {
     s32 i;
 

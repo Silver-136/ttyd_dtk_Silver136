@@ -179,6 +179,10 @@ EVT_BEGIN(shuryolight_tue_normal)
     RETURN
 EVT_END()
 
+/**
+ * Pose draw callback (param = the five ShuryoLight entries): for the first light bound to the drawn group, advances its
+ * NPC's animation (JP and later) and draws its shape.
+ */
 static void shuryolight_callback(void* param, s32 group, Mtx* modeling) {
     ShuryoLight* lights = param;
     s32 i;

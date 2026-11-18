@@ -643,6 +643,10 @@ EVT_BEGIN(dou_10_init_evt)
     RETURN
 EVT_END()
 
+/**
+ * Script helper: when point (args[0], args[1], args[2]) is closer to Mario than the squared distance in LW(7) (as an
+ * integer), stores its distance in LW(7) and copies LW(10) into LW(6).
+ */
 static USER_FUNC(namiyoke_se_check) {
     EvtWord* args = event->args;
     MarioWork* mario = marioGetPtr();
@@ -774,6 +778,7 @@ static USER_FUNC(nami_running_init_func) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: moves map object namiyoke_mapobj[args[0]] to (args[1], args[2], args[3]). */
 static USER_FUNC(namiyoke_set_mapobj) {
     EvtWord* args = event->args;
     s32 idx = evtGetValue(event, args[0]);

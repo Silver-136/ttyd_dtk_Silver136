@@ -99,6 +99,10 @@ static EVT_BEGIN(box_evt)
     RETURN
 EVT_END()
 
+/**
+ * Script helper: sets the alpha of map object "switch" to args[0] (white material colour), without a shadow at alpha
+ * 0x24 or lower; does nothing if it does not exist.
+ */
 static USER_FUNC(switch_set_alpha) {
     s32 alpha = evtGetValue(event, event->args[0]);
     MapObjectEntry* mobj = mobjNameToPtrNoAssert("switch");
@@ -179,6 +183,7 @@ static EVT_BEGIN(vivian_check)
     RETURN
 EVT_END()
 
+/** Script helper: returns in args[1] the state of map object args[0], or 1 when it does not exist. */
 static USER_FUNC(get_mobj_seq) {
     EvtWord* args = event->args;
     MapObjectEntry* mobj = mobjNameToPtrNoAssert((const char*)evtGetValue(event, args[0]));

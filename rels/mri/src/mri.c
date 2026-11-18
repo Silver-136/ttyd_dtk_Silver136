@@ -321,6 +321,10 @@ EVT_BEGIN(evt_mri_door_naname_close)
     RETURN
 EVT_END()
 
+/**
+ * Script helper: moves map object args[0] in x and z from (args[1], args[2]) to (args[3], args[4]) over args[5] ms with
+ * interpolation mode args[6]; blocks until done.
+ */
 static USER_FUNC(evt_mri_door_naname_func) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
@@ -463,6 +467,10 @@ EVT_BEGIN(mri_punipuni_itemremove)
     RETURN
 EVT_END()
 
+/**
+ * Script helper: while args[1] <= args[2], colours map group args[0] with a hue that cycles with the retrace count;
+ * otherwise sets it white.
+ */
 static USER_FUNC(hakari_color) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
@@ -516,6 +524,10 @@ EVT_BEGIN(mri_hikari_color)
     RETURN
 EVT_END()
 
+/**
+ * Script helper: shakes NPC args[0] along axis args[1] (0 x, 1 y, 2 z) between -args[2] and +args[2], switching every
+ * args[3] ms. After args[4] ms (never when it is 0) it puts the NPC back where it started and returns.
+ */
 USER_FUNC(mri_npc_buruburu) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
@@ -726,6 +738,10 @@ EVT_BEGIN(mri_puni_jump_se)
     RETURN
 EVT_END()
 
+/**
+ * Among the active, chained Puni slots 110 to 209 of `group`, finds one other than self with no child1 and the lowest
+ * depth, and hangs self under it (parent, depth + 1, group). Returns FALSE when there is none.
+ */
 BOOL toge_searchParent(PuniData* self, s16 group) {
     s32 i;
     s32 order = 10000;

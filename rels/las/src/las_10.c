@@ -1460,6 +1460,7 @@ EVT_BEGIN(las_10_init_evt)
     RETURN
 EVT_END()
 
+/** Script helper: returns in args[0] 1 when there is no partner or the partner is at y >= 360, else 0. */
 static USER_FUNC(check_party_pos) {
     EvtWord* args = event->args;
     PartyEntry* party = partyGetPtr(partyCtrlNo);

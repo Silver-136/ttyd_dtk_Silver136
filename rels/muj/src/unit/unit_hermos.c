@@ -641,6 +641,11 @@ static EVT_BEGIN(normal_attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Script helper (args[0] = battle unit): creates a fire effect (effFireEntry type 6) on the first call and keeps it at
+ * part 2's position, growing it by 0.1 times the unit's size multiplier per call, up to that multiplier. Never
+ * finishes.
+ */
 static USER_FUNC(eff_fire) {
     s32 id = BattleTransID(event, evtGetValue(event, event->args[0]));
     BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
@@ -792,6 +797,11 @@ static EVT_BEGIN(fire_attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Script helper (args[0] = battle unit, args[1] = index 0 to 9): creates fire effect `index` (effFireEntry type 6) on
+ * the first call, its height scaled by the unit's size and a per-index factor of 1 to 2.25, then keeps it 24 * (index +
+ * 1) units in front of the unit. Never finishes.
+ */
 static USER_FUNC(eff_all_fire) {
     EvtWord* args = event->args;
     s32 id = BattleTransID(event, evtGetValue(event, args[0]));

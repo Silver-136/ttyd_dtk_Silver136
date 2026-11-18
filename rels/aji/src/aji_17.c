@@ -1129,6 +1129,7 @@ static EVT_BEGIN(peach_evt_stg1)
     RETURN
 EVT_END()
 
+/** Script helper: queues noiseDisp on the 2D camera for this frame, with args[0] as its alpha. */
 static s32 noise(EventEntry* event, BOOL isFirstCall) {
     EvtWord alpha = evtGetValue(event, event->args[0]);
     dispEntry(CAMERA_2D, 1100.0f, DISP_MODE_OPAQUE, noiseDisp, (void*)alpha);

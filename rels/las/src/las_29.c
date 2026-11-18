@@ -417,6 +417,10 @@ static EVT_BEGIN(hikari_on_evt)
     RETURN
 EVT_END()
 
+/**
+ * Starts a fire effect named `name` (effFireEntry of `type`, lifetime 1000) 7 units below map object `name`, scaled by
+ * `scale`.
+ */
 static void _hikariEntry(const char* name, s32 type, f32 scale) {
     Vec pos;
     EffectEntry* eff;

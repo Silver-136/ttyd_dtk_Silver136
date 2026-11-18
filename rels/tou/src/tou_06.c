@@ -795,7 +795,7 @@ EVT_BEGIN(tou_06_init_evt)
     RETURN
 EVT_END()
 
-// The returned pointer uses one shared buffer; callers consume the name before requesting the next.
+/** Script helper: formats "pants<args[0]>" (two digits) into one static buffer and returns it in args[1]. */
 static USER_FUNC(iri_13_make_name) {
     static char name[8];
     EvtWord* args = event->args;
@@ -826,7 +826,6 @@ static USER_FUNC(get_pos) {
 }
 
 /** Script helper: builds a shuffled table of the 25 candidate locations for the Battle Trunks. */
-
 // Shuffle indices with 50 random pair swaps; this is not a Fisher-Yates shuffle.
 static USER_FUNC(make_tbl) {
     s32 i;

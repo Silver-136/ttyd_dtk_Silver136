@@ -253,6 +253,10 @@ static EVT_BEGIN(yuka_slot)
     RETURN
 EVT_END()
 
+/**
+ * Script helper: drops each active Puni in slots 1 to 102 by 3 units, onto the floor when a hit check finds one within
+ * 3 units below.
+ */
 static USER_FUNC(yuka_fall_check) {
     s32 i;
 

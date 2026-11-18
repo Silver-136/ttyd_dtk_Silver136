@@ -552,6 +552,11 @@ static EVT_BEGIN(battle_entry_event)
     RETURN
 EVT_END()
 
+/**
+ * Script helper (args[0], args[1] = x, y; out args[2], args[3], args[4]): takes the angle from (100, 205) to (x, y),
+ * limited to 90-270 degrees, and returns the offset 500 units along it (dx, dy) and a random speed of 0.67 times 6 to
+ * 11.
+ */
 static USER_FUNC(_btlgon_get_escape_param) {
     EvtWord* args = event->args;
     s32 x = evtGetValue(event, args[0]);
@@ -1127,6 +1132,7 @@ static EVT_BEGIN(negotiation_event)
     RETURN
 EVT_END()
 
+/** Script helper (no arguments): moves the paper-craft light to (-200, 50, 500) scaled by 3. */
 static USER_FUNC(_set_gonbaba_light) {
     LightEntry* light = lightGetPaperCraft();
     Mtx mtx;
@@ -1264,6 +1270,10 @@ EVT_BEGIN(gon_extra_eaten_event)
     RETURN
 EVT_END()
 
+/**
+ * Script helper (args[0] = battle unit): blocks while the unit's damage event is still running; done at once if the
+ * unit does not exist.
+ */
 static USER_FUNC(_wait_damage_event_end) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;

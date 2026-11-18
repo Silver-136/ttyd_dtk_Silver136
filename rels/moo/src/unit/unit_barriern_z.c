@@ -1553,6 +1553,11 @@ static EVT_BEGIN(wait_event)
     RETURN
 EVT_END()
 
+/**
+ * Starts satellite n's flight along the 5-point spline `table`: allocates its SatelliteSpline in the unit's work,
+ * builds the spline and stores `table` in the satellite's part 1 work. Returns FALSE when satellite slot n is empty
+ * (-1), else TRUE.
+ */
 static u8 barriernSatelliteTo_Init(BattleUnit* unit, s32 n, Vec* table) {
     SatelliteSpline* sp;
 
@@ -1774,6 +1779,10 @@ static USER_FUNC(barriernSatelliteToOutside) {
     return moving == FALSE ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }
 
+/**
+ * Script function: tags the first args[1] satellites (1 to 4) of the unit args[0] with their outer spline tables
+ * (splineTableOut1_1 to 4_4) by storing them in the satellite's body part work[2].
+ */
 static USER_FUNC(outSplineTableSet) {
     EvtWord* args = event->args;
     s32 id = BattleTransID(event, evtGetValue(event, args[0]));

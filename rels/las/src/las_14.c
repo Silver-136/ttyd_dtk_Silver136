@@ -495,6 +495,10 @@ static USER_FUNC(evt_cloud_main) {
     return EVT_RETURN_BLOCK;
 }
 
+/**
+ * Script helper: allocates the 16 cloud slots of the room (CloudRoomWork), marks them unused, names their image and
+ * off-screen entries i_name_<n> and o_name_<n> and clears cloud_once_flag.
+ */
 static USER_FUNC(evt_las_cloud_init) {
     s32 i;
 

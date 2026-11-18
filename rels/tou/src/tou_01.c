@@ -2286,6 +2286,7 @@ EVT_BEGIN(evt_uron)
     RETURN
 EVT_END()
 
+/** Script helper: starts the sleep effect "eff_sleep" 16 units above the NPC たまご unless it already exists. */
 static USER_FUNC(eff_sleep_on) {
     EffectEntry* eff = effNameToPtr("eff_sleep");
     NpcEntry* npc = npcNameToPtr_NoAssert("たまご");
@@ -3062,6 +3063,10 @@ EVT_BEGIN(evt_peach_after)
     RETURN
 EVT_END()
 
+/**
+ * Script helper: sets the darkness view (envSetYamiView) to look at the point args[0] units along the 3D camera's yaw +
+ * 90 direction (at y 0), from 100 units further back and 100 up.
+ */
 static USER_FUNC(yami_view) {
     f32 s;
     f32 c;
@@ -3469,6 +3474,10 @@ static EVT_BEGIN(evt_mail)
     RETURN
 EVT_END()
 
+/**
+ * Script helper: args[0] is an NPC name and args[1] picks a TEV callback slot (low four bits); turns that callback on
+ * in the NPC's animation materials. Does nothing if the NPC does not exist.
+ */
 static USER_FUNC(anim_tevcallback) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
@@ -4025,7 +4034,10 @@ EVT_BEGIN(tou_01_init_evt)
 EVT_END()
 
 #if VERSION >= VERSION_US
-// US and PAL: copy the sign board's map-blend exemptions onto the localized letter objects
+/**
+ * US and later: copies the sign board's two no-map-blend flags onto map object `name` (the localized letters), if it
+ * exists.
+ */
 static inline void kanbanCopyFlags(MapObject* kanban, const char* name) {
     MapObject* obj = mapGetMapObj(name);
     if (obj != NULL) {

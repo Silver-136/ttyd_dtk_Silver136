@@ -212,6 +212,7 @@ static EVT_BEGIN(evt_sw_complete)
     RETURN
 EVT_END()
 
+/** Adds 1 to GW(0), GW(1) or GW(2) for the switch map object MOBJ_eki_06_su1, su2 or su3. */
 // The three switch counters target 1, 10 and 3 hits. A counter resets one hit past its target.
 static void sw_cntup(MapObjectEntry* mobj) {
     if (strcmp(mobj->name, "MOBJ_eki_06_su1") == 0) {

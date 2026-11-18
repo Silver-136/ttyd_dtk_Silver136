@@ -212,6 +212,10 @@ EVT_BEGIN(tegami_init_evt)
     RETURN
 EVT_END()
 
+/**
+ * Draw callback: draws two black bars, GW(1) units tall, down from the top and up from the bottom edge of the screen
+ * (the eyelids, mabuta).
+ */
 static void mabutaDisp(CameraId camera, void* param) {
     f32 h = evtGetFloat(NULL, GW(1));
     CameraEntry* cam = camGetPtr(camera);

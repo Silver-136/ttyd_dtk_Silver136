@@ -394,6 +394,7 @@ EVT_BEGIN(kpa_fall_sub)
     RETURN
 EVT_END()
 
+/** Script helper (no arguments): clears MarioWork's kpaNoHitTimer. */
 static USER_FUNC(kpa_nohitenemy_ct_clear) {
     MarioWork* mario = marioGetPtr();
 
@@ -645,6 +646,10 @@ EVT_BEGIN(kpa_time)
     RETURN
 EVT_END()
 
+/**
+ * Script helper: returns in args[0] the message name kpa_start_NNN for the current lives (capped at 30) and stage, NNN
+ * = lives + (stage - 1) * 30 - 1; the name is kept in a static buffer.
+ */
 static USER_FUNC(kpa_get_msg) {
     static char label[16];
     EvtWord* args = event->args;
@@ -849,6 +854,7 @@ EVT_BEGIN(kpa_stage_clear)
     RETURN
 EVT_END()
 
+/** Script helper (no arguments): queues kpa_stageclear_disp on the 2D camera for this frame. */
 static USER_FUNC(kpa_stageclear_disp_entry) {
     dispEntry(CAMERA_2D, 1000.0f, DISP_MODE_OPAQUE, kpa_stageclear_disp, NULL);
     return EVT_RETURN_DONE;

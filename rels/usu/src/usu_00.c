@@ -2896,6 +2896,7 @@ static EVT_BEGIN(kanbu_regl)
     RETURN
 EVT_END()
 
+/** Ext display callback: queues kpaSen_ext_disp and its shadows (kpaSen_ext_shadow_disp) on the 3D camera. */
 static void kpaSen_ext_dispent(void) {
     dispEntry(CAMERA_3D, 0.0f, DISP_MODE_ALPHA_TEST, kpaSen_ext_disp, NULL);
     dispEntry(CAMERA_3D, 0.0f, DISP_MODE_XLU, kpaSen_ext_shadow_disp, NULL);
@@ -3505,6 +3506,7 @@ static EVT_BEGIN(usu_00_koopa_second_evt)
     RETURN
 EVT_END()
 
+/** Sets the darkness projection view from (0, 100, 100 + z) toward (0, 0, z), with z from args[0]. */
 static USER_FUNC(yami_view) {
     f32 z = evtGetFloat(event, event->args[0]);
     Mtx mtx;
@@ -3925,6 +3927,7 @@ static EVT_BEGIN(evt_after_peach)
     RETURN
 EVT_END()
 
+/** Script helper that never finishes: each frame it hides any NPC parked at y <= -1000 and shows the rest. */
 static USER_FUNC(npc_process) {
     NpcWork* wp = npcGetWorkPtr();
     NpcEntry* npc = wp->entries;

@@ -2023,7 +2023,10 @@ EVT_BEGIN(rsh_04_c_init_evt_nidome)
     RETURN
 EVT_END()
 
-// Suspend room-repeat dialogue while field-battle mode 2 or the ghost-diary window is active.
+/**
+ * Script helper: returns 1 in args[0] while the field battle is in FBAT_MODE_TALK or the ghost diary window is open,
+ * else 0.
+ */
 static USER_FUNC(mario_flag) {
     EvtWord* args = event->args;
     MarioWork* mario = marioGetPtr();

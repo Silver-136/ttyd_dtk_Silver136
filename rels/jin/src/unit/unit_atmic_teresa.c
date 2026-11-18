@@ -1024,6 +1024,10 @@ static EVT_BEGIN(teresa_entry)
     RETURN
 EVT_END()
 
+/**
+ * Ext-pose init of the Atomic Boo's small Boos: allocates 30 AtmTeresa entries, puts every pose, visible, at y -1000
+ * with direction 90, and starts every Boo at state 0 with no velocity.
+ */
 static void teresa_ext_init(void) {
     s32 i;
     ExtdrvPose* pose = extGetPosePtr();

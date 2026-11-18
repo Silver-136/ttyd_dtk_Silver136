@@ -2671,6 +2671,7 @@ EVT_BEGIN(aji_01_init_evt)
     RETURN
 EVT_END()
 
+/** Script helper: returns in args[0] the message text stg7_aji_password. */
 static USER_FUNC(get_password) {
     EvtWord* args = event->args;
 

@@ -258,6 +258,7 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/** Script helper: stores who is attacking in args[0]: 0 for Mario, 1 for Goombella, 2 for anyone else. */
 static USER_FUNC(get_attacker) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;

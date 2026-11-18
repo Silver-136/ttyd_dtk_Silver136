@@ -105,7 +105,6 @@ EvtWord minigame04_end[256];
 EvtWord yuu_03_init_evt[VERSION_PICK(26, 140)];
 
 /** Resets the camera shift offset (camShiftReset) so the camera returns to its normal framing after the minigame. */
-
 // Descriptive name (not in the symbol maps); placeholder unk_yuu_0000371c, JP yuu .text+0x3650. See docs/NAME_PROVENANCE.md.
 #if VERSION >= VERSION_JP
 USER_FUNC(yuu_03_cam_shift_reset) {
@@ -143,7 +142,6 @@ void yuu_03_icon_monte_disp(CameraId camera, void* param) {
  * View event that creates the single marker icon on its first call,
  * keeps it 40 units above Mario every frame and draws it through yuu_03_icon_monte_disp. Blocks forever.
  */
-
 // Descriptive name (not in the symbol maps); placeholder unk_yuu_000034bc, JP yuu .text+0x33F0. See docs/NAME_PROVENANCE.md.
 #if VERSION >= VERSION_JP
 USER_FUNC(yuu_03_icon_monte_entry) {
@@ -196,7 +194,6 @@ USER_FUNC(yuu_03_icon_monte_entry) {
  * Rebuilds the marker icon view event for the next round:
  * stops the old event, frees the icon array and starts a new one.
  */
-
 // Descriptive name (not in the symbol maps); placeholder unk_yuu_0000341c, JP yuu .text+0x3350. See docs/NAME_PROVENANCE.md.
 #if VERSION >= VERSION_JP
 USER_FUNC(yuu_03_icon_monte_restart) {
@@ -953,6 +950,10 @@ EVT_BEGIN(yuu_03_init_evt)
     RETURN
 EVT_END()
 
+/**
+ * Start of the slit minigame: starts the coin icon event yuu_03_icon_monte_entry_evt (JP and later), sets
+ * SLIT_FLAG_OPENING and runs evt_ryushi_init.
+ */
 void yuuminigame_init_4slit(EventEntry* event, BOOL isFirstCall) {
     SlitWork* data = ((MiniGameWork*)event->lwData[0])->data;
 #if VERSION >= VERSION_JP

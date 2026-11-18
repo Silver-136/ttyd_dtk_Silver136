@@ -424,6 +424,7 @@ EVT_BEGIN(aji_11_init_evt)
     RETURN
 EVT_END()
 
+/** Script helper: clears the bits args[1] in the flags of map animation args[0], if it exists. */
 static USER_FUNC(map_anim_flag_off) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);

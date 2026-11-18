@@ -1299,6 +1299,10 @@ EVT_BEGIN(nok_00_init_evt)
     RETURN
 EVT_END()
 
+/**
+ * Script helper: allocates the poster work, finds shape pPlaneShape2 of the NPC "poster" and group locator7 of the NPC
+ * ノコノコA, and gives ノコノコA's pose the draw callback draw_poster.
+ */
 static USER_FUNC(pposter_init) {
     NpcEntry* npc;
 

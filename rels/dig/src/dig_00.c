@@ -169,6 +169,11 @@ static USER_FUNC(gravity_scale) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: picks a random anim_tbl entry (of 48) whose NPC does not exist yet and a random one of the up to six
+ * bits set in its mask, and returns in args[0..3] the model and NPC names (a_mario and にせマリオ２ when EXI channel 0 device
+ * 2 reports type 0x05070000), the bit and the entry's anim.
+ */
 static USER_FUNC(evt_action_sub) {
     EvtWord* args = event->args;
     s32 idx;

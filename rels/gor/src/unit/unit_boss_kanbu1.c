@@ -615,6 +615,7 @@ static EVT_BEGIN(normal_attack_event)
         RETURN
 EVT_END()
 
+/** Script helper: returns in args[0] the success value of Mario's action command (marioAc.success). */
 static USER_FUNC(_mario_ac_success_check) {
     evtSetValue(event, event->args[0], _battleWorkPointer->marioAc.success);
     return EVT_RETURN_DONE;

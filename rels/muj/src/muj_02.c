@@ -697,6 +697,10 @@ EVT_BEGIN(muj_02_init_evt)
     RETURN
 EVT_END()
 
+/**
+ * Draw callback: prints the counter GW(0) as "<n>回" with a small "かい" next to it. US and later pick the layout by
+ * language: 0 that Japanese one, 1 and 6 "times", 2 "-mal", 4 "veces", 3 and 5 the number alone.
+ */
 static void printCount(CameraId camera, void* param) {
 #if VERSION >= VERSION_US
     char buf[32];

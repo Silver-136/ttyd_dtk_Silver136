@@ -1493,6 +1493,10 @@ static EVT_BEGIN(e3_talk)
     RETURN
 EVT_END()
 
+/**
+ * Script helper: args[0] is an NPC name and args[1] picks a TEV callback slot (low four bits); turns that callback on
+ * in the NPC's animation materials. Does nothing if the NPC does not exist.
+ */
 static USER_FUNC(anim_tevcallback) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);

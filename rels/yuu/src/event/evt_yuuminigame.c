@@ -22,6 +22,7 @@ USER_FUNC(evt_yuuminigame_free);
 
 static EvtWord main_evt[4];
 
+/** Script helper (no arguments): resets the value stack pointer (stackp) to 0. */
 USER_FUNC(yuu_atai_init) {
     stackp = 0;
     return EVT_RETURN_DONE;

@@ -770,6 +770,10 @@ EVT_BEGIN(dou_04_init_evt)
     RETURN
 EVT_END()
 
+/**
+ * Script helper (never finishes): writes into args[0] each frame a bobbing height: -25 plus two sine waves of 1.5 and
+ * 0.7 units (2 and 1 degrees per frame), each shifted so its top is 0.
+ */
 static USER_FUNC(evt_box_pukapuka) {
     EvtWord* args = event->args;
     f32 y;

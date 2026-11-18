@@ -64,7 +64,10 @@ static s32 fontlenpitch(const char* str, s32 pitch) {
 }
 
 #if VERSION >= VERSION_US
-// US: right-aligned at x, squeezed to fit width.
+/**
+ * US and later: draws msg at height y with the given scale, right-aligned at xo + wp->x, and squeezed horizontally when
+ * it is wider than width.
+ */
 // FAKE: x offset + work pointer instead of x, so wp->x is read after the width test as in the target
 static inline void yuuDrawRight(f32 xo, f32 y, f32 scale, const char* msg, s32 width, YuuRankingWork* wp) {
     Mtx trans;
@@ -649,6 +652,11 @@ static void evt_yuuranking_disp_func(CameraId camera, void* param) {
     }
 }
 
+/**
+ * Body of the ranking event, run every frame. In mode 0 it steps the score tally through its phases (wait, count the
+ * score up with a sound, show the bonus, count the monte up, apply the multiplier, finish); it always queues the draw
+ * callback and stops once the free request flag is set.
+ */
 static USER_FUNC(evt_yuuranking_main_func) {
     YuuRankingWork* wp = (YuuRankingWork*)event->lwData[0];
     static s32 snd_id;
@@ -1107,6 +1115,7 @@ USER_FUNC(yuuranking_wait_button) {
     return EVT_RETURN_BLOCK;
 }
 
+/** args[0] = output. Returns the monte (medals) earned in the current tally. */
 USER_FUNC(yuuranking_get_monte) {
     evtSetValue(event, event->args[0], _wp->monte);
     return EVT_RETURN_DONE;

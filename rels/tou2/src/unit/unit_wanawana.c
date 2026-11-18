@@ -148,6 +148,11 @@ static BattleUnitKindPart parts[] = {
     {1, "btl_un_wanawana", "nakayama_test4", 0.0f, 0.0f, 0.0f, 0.0f, 40.0f, 0.0f, 0.0f, 40.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
 };
 
+/**
+ * Shadow-camera draw callback (param = WanaWork): renders test_kururing_mapdisp from straight above part 1 into the
+ * WanaWork texture (sized from the pose's bounding box, copied at half size), restores the camera and marks the texture
+ * ready.
+ */
 static void replace_disp(CameraId camera, void* param) {
     WanaWork* wp = param;
     CameraEntry saved;
@@ -213,6 +218,10 @@ static void replace_callback(BattleUnitPart* part, s32 type) {
     }
 }
 
+/**
+ * Script helper: allocates a WanaWork with a texture half the size of the body pose's bounding box (x by z, doubled),
+ * gives part 1 replace_callback as its draw callback and queues replace_disp to render into the texture.
+ */
 static USER_FUNC(replace_evt) {
     BattleUnitPart* part = BattleGetUnitPartsPtr(BattleTransID(event, UNIT_ID_SELF), 1);
     BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, BattleTransID(event, UNIT_ID_SELF));

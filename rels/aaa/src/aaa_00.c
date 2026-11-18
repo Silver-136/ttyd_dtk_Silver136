@@ -873,6 +873,10 @@ EVT_BEGIN(aaa_00_init_evt)
     RETURN
 EVT_END()
 
+/**
+ * Script helper (never finishes): loads mariost.tpl on the first call, then each frame raises the alpha by 2 and queues
+ * draw; once the alpha reaches 255 it sets GF(0).
+ */
 static USER_FUNC(mapdraw) {
     if (isFirstCall) {
         wp = _mapAlloc(sizeof(AaaWork));

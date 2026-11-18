@@ -190,6 +190,7 @@ static EVT_BEGIN(minigame_view_monte)
     RETURN
 EVT_END()
 
+/** Script helper (JP and later): resets the camera shift (camShiftReset). */
 // Descriptive name (not in the symbol maps); placeholder unk_yuu_00001210, JP yuu .text+0x1144. See docs/NAME_PROVENANCE.md.
 #if VERSION >= VERSION_JP
 USER_FUNC(yuu_02_cam_shift_reset) {

@@ -3254,6 +3254,8 @@ EVT_END()
 
 /** The fall start position of a payout medal: (-113, 70, 0). Placed at the slot_mess_01 spot in the original. */
 static inline Vec fall_pos0(void) { Vec v = {-113.0f, 70.0f, 0.0f}; return v; } /* @place "slot_mess_01" */
+
+/** The start velocity of a payout medal: (0, 10, 0); also placed at the slot_mess_01 spot. */
 static inline Vec fall_vel0(void) { Vec v = {0.0f, 10.0f, 0.0f}; return v; } /* @place "slot_mess_01" */
 
 /**
@@ -3418,6 +3420,12 @@ static s32 upsidegara[2][3][8] = {
     },
 };
 
+/**
+ * Script helper for a slot machine payout: on the first call it makes one medal (GMonte) per coin paid out at
+ * fall_pos0, at the current slot's z with a random spread, with a random sideways speed and start delay. Each frame the
+ * medals wait, fly and bounce; Mario collects one by touching it (a token, up to 99999, 0x7FFFFFFF in the early demos),
+ * and a resting medal blinks and vanishes after 300 frames. Blocks, drawing them, until all are done.
+ */
 static USER_FUNC(fall_rtn) {
     Vec pos;
     SlotWork* data;
@@ -7271,6 +7279,7 @@ EVT_BEGIN(gor_03_init_evt)
     RETURN
 EVT_END()
 
+/** Script helper: blocks until marioChkKey() reports TRUE. */
 static USER_FUNC(mario_keyoff_wait) {
     switch (!marioChkKey()) {
         default:

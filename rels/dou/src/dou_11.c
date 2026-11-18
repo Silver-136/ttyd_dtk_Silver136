@@ -2049,7 +2049,10 @@ static EVT_BEGIN(dai3_shurai_after)
     RETURN
 EVT_END()
 
-// Carry the rider by the ship's XY rotation delta only after a previous sample on the same named hit group.
+/**
+ * Script helper (never finishes): while Mario stands on hit group args[0], moves him (floorMove) around the group's
+ * position by the change of its x-y rotation since the last frame; the first frame on a group only records it.
+ */
 static USER_FUNC(dou_mario_kaiten_hosei) {
     const char* name = (const char*)evtGetValue(event, event->args[0]);
     HitEntry* hit = hitNameToPtr(name);

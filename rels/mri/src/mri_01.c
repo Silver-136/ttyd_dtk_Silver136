@@ -2196,6 +2196,10 @@ static EVT_BEGIN(elder_kaisetsu)
     RETURN
 EVT_END()
 
+/**
+ * Draw callback (param = alpha): draws the NPC ボスロボットバツ (the cross mark) at the boss robot's locator23, turned with it
+ * and 0.2 units in front, with that alpha, in the current render mode.
+ */
 static void bossrobot_batu(CameraId camera, void* param) {
     u8* alpha = param;
     NpcEntry* robot = npcNameToPtr("ボスロボット");

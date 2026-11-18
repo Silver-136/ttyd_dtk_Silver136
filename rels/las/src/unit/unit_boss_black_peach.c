@@ -4858,6 +4858,10 @@ static EVT_BEGIN(queen_hand_small_wait_event)
     RETURN
 EVT_END()
 
+/**
+ * Script helper (args[0..2] = integer offset): adds the offset to the position of every element of the small hands'
+ * swarm (hand_wp).
+ */
 static USER_FUNC(queen_hand_small_1000hand_set_offset_evt) {
     EvtWord* args = event->args;
     s32 x = evtGetValue(event, args[0]);
@@ -5930,6 +5934,11 @@ static USER_FUNC(make_pattern) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper that keeps part 3's pose in step with part 1's: part 3 plays KRT_T_1 while part 1 plays a talk pose
+ * (KRT_T_1 to KRT_T_3), KRT_D_1 while part 1 plays KRT_D_1, and goes back to KRT_S_1 when part 1 leaves them. It
+ * changes at most one pose per call and never finishes.
+ */
 static USER_FUNC(peach_talk_synchro_shadow_head_evt) {
     BattleUnitPart* part;
 

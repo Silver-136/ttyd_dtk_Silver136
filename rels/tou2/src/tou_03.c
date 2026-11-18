@@ -404,6 +404,10 @@ static ExtTexInfo ext_kyaku_data[] = {
 static EVT_BEGIN(x)
 EVT_END()
 
+/**
+ * Script helper: makes the field battle start with an enemy first strike (FBAT_HIT_ENEMY_FIRST, parameter 0x10, flag 1
+ * cleared) and enables its announcement.
+ */
 static s32 _firstattack_setting(EventEntry* event, BOOL isFirstCall) {
     FieldBattleData* fbat = fbatGetPointer();
 
@@ -3896,6 +3900,10 @@ static EVT_BEGIN(evt_champion2)
     RETURN
 EVT_END()
 
+/**
+ * Draw callback of the ext poses: loads the ext render mode, vertices, textures and TEV, draws them and resets the
+ * textures.
+ */
 static void kyaku_disp(CameraId camera, void* param) {
     extLoadRenderMode();
     extLoadVertex();
@@ -4266,6 +4274,10 @@ static EVT_BEGIN(evt_boss_stone)
     RETURN
 EVT_END()
 
+/**
+ * Script helper: puts the NPC ガンス 100 units above map object block_5 while that is higher than group151, else at (0,
+ * group151's y, 0).
+ */
 static s32 getY(EventEntry* event, BOOL isFirstCall) {
     NpcEntry* npc = npcNameToPtr("ガンス");
     MapObject* obj = mapGetMapObj("block_5");

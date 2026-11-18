@@ -341,6 +341,12 @@ static void moamoa_pose_main(void) {
     }
 }
 
+/**
+ * Switches one Moamoa sprite to the pose def of model/anim and restarts its animation clock. With MOAMOA_FLAG_SHOW_KIND
+ * set, the model (and from MOAMOA_KIND_KINOPIO on also the animation) comes from its kind's group_tbl row, S_2 for
+ * MOAMOA_KIND_MOA_A_S2_UNUSED. A hit sprite only takes D poses and an escaping one only R poses; nothing changes when
+ * the pose is not found or already set.
+ */
 static void moamoa_pose_change(Moamoa* moa, const char* model, const char* anim) {
     static const char* group_tbl[][2] = {
         {"c_n_moa_a", "S_1"},
@@ -480,6 +486,11 @@ static s32 evt_moamoa_fusion(EventEntry* event, BOOL isFirstCall) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper (args[0] = on, args[1] = all): sets (on) or clears MOAMOA_FLAG_SHOW_KIND on every Moamoa; with all = 0,
+ * turning it on affects only the MOA_B ones and turning it off only the others. Then it refreshes every sprite's pose
+ * (moamoa_pose_change with c_n_moa_a S_1).
+ */
 static s32 evt_moamoa_kind_onoff(EventEntry* event, BOOL isFirstCall) {
     EvtWord* args = event->args;
     s32 on = evtGetValue(event, args[0]);
@@ -549,6 +560,10 @@ static s32 evt_moamoa_fusion_debug(EventEntry* event, BOOL isFirstCall) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper (args[0] = 0 or 1): moves swarm target args[0] onto the other one (1 - args[0]), sets its hit count to
+ * 100 and marks it cleared (MOAMOA_WORK_FLAG_TARGET0_CLEARED or _TARGET1_CLEARED).
+ */
 static s32 evt_moamoa_target_off(EventEntry* event, BOOL isFirstCall) {
     s32 i = evtGetValue(event, event->args[0]);
 
@@ -1329,6 +1344,11 @@ static void ext_moamoa_main(void) {
         }
     }
 }
+
+/**
+ * Registers the swarm's draw callbacks each frame (sprites and shadows on the 3D camera and, if enabled, on the
+ * offscreen camera).
+ */
 static void ext_moamoa_dispent(void) {
     if (wp->flags & MOAMOA_WORK_FLAG_ACTIVE) {
         dispEntry(CAMERA_3D, (0.0f), DISP_MODE_ALPHA_TEST, ext_disp, NULL);
@@ -1631,6 +1651,10 @@ static EVT_BEGIN(evt_moamoa_escape)
     RETURN
 EVT_END()
 
+/**
+ * Script helper: colours image args[0] (the battle image when in battle) with the RGBA args[1] to args[4] through its
+ * material event colour.
+ */
 static s32 img_set_color(EventEntry* event, BOOL isFirstCall) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);

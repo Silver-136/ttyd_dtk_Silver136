@@ -1256,6 +1256,7 @@ EVT_BEGIN(yuu_00_init_evt)
     RETURN
 EVT_END()
 
+/** Script helper (JP and later): resets the camera shift (camShiftReset). */
 // Descriptive name (not in the symbol maps); placeholder unk_yuu_00004250, JP yuu .text+0x4184. See docs/NAME_PROVENANCE.md.
 #if VERSION >= VERSION_JP
 USER_FUNC(yuu_00_cam_shift_reset) {
@@ -1538,6 +1539,12 @@ void yuuminigame_disp_1hikoki(CameraId camera, void* param) {
     monteCountDisp();
 }
 
+/**
+ * Rule check of the plane minigame: once Mario stands on a hit object outside the plane motion, it stores the landing
+ * result (A_dai_01 to A_dai_05 give 2, 2, 2, 2, 3 in US and later and 2, 2, 2, 3, 5 before; the A_ground hits -5 to
+ * -20; anything else 1) and the coin count, freezes the counter and the keys and returns TRUE (US and later also start
+ * minigame01_floor_delete). Otherwise it returns FALSE.
+ */
 // With the motion local this body has more than 30 statements in every version, so the unit's auto-inlining
 // leaves it a call in yuuminigame_main_1hikoki, as in the target.
 BOOL yuuminigame1_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp, HikokiWork* data) {

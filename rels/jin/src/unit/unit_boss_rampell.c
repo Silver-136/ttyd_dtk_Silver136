@@ -99,7 +99,10 @@ static USER_FUNC(_mario_makkuro_set) {
 
 #if VERSION >= VERSION_US
 
-// US and later: set this turn's maximum move count to the remaining-move count.
+/**
+ * Script helper (args[0] = battle unit, US and later): sets the unit's maximum move count for this turn to its
+ * remaining move count.
+ */
 USER_FUNC(boss_rampell_sync_max_moves) {
     BattleUnit* unit;
     s32 id = evtGetValue(event, event->args[0]);

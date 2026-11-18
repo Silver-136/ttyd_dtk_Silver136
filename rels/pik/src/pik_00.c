@@ -2419,6 +2419,7 @@ static USER_FUNC(under) {
 }
 #endif
 
+/** Script helper: sets the two no-map-blend material flags on image "img" (the battle one when in battle). */
 static USER_FUNC(img_flag) {
     animPoseSetMaterialFlagOn(imgNameToPtr("img", gp->inBattle != 0)->poseId, (MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2));
     return EVT_RETURN_DONE;

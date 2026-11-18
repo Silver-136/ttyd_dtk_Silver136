@@ -1019,6 +1019,7 @@ static EVT_BEGIN(evt_champion_win)
     RETURN
 EVT_END()
 
+/** Script helper (JP and later): moves the effect "belt" and the NPC ベルト to camera CAMERA_3D_EFFECTB. */
 // Descriptive name (not in the symbol maps); placeholder unk_tou_00006e08, JP tou .text+0x6D44. See docs/NAME_PROVENANCE.md.
 #if VERSION >= VERSION_JP
 USER_FUNC(tou_08_belt_camid) {
@@ -1421,6 +1422,7 @@ EVT_BEGIN(tou_08_init_evt)
     RETURN
 EVT_END()
 
+/** Returns in args[0] the color number of Mario's Yoshi partner (pouchGetPartyColor(PARTY_YOSHI)). */
 static USER_FUNC(get_yoshi_color) {
     EvtWord* args = event->args;
     evtSetValue(event, args[0], pouchGetPartyColor(PARTY_YOSHI));

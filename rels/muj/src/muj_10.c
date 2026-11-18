@@ -833,6 +833,7 @@ EVT_BEGIN(muj_10_init_evt)
     RETURN
 EVT_END()
 
+/** NanNPC callback: waits a random 0 to 999 ms, then fades the NPC's alpha in from 0 toward 255 over 500 ms. */
 static void elmosalpha_func(NanNPC* npc) {
     s32 elapsed;
 

@@ -2030,7 +2030,10 @@ EVT_BEGIN(tou_10_init_evt)
     RETURN
 EVT_END()
 
-// Only the single full-width-space placeholder selects the default localized name.
+/**
+ * Script helper: replaces the name in args[0] with the default name_party3 message when it is a single full-width
+ * space.
+ */
 static USER_FUNC(name_check) {
     EvtWord* args = event->args;
 

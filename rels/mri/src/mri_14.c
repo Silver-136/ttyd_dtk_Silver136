@@ -301,6 +301,10 @@ static EVT_BEGIN(flash_and_wait)
     RETURN
 EVT_END()
 
+/**
+ * Script helper (never finishes): sets the y rotation of item args[0]'s star stone effect to args[1], an integer, each
+ * frame.
+ */
 static USER_FUNC(starstone_rotate_func) {
     EvtWord* args = event->args;
     char* name = (char*)evtGetValue(event, args[0]);

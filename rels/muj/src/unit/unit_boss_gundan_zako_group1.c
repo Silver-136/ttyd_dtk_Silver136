@@ -588,6 +588,10 @@ EVT_BEGIN(zakogun_entry)
     RETURN
 EVT_END()
 
+/**
+ * Ext-pose init of the X-Naut horde: allocates the work and 500 ZakoGun entries, moves the stage objects if_wire and
+ * if_body to (0, 250, 0) and sets STAGE_FLAG_NO_IRON_FRAME and STAGE_FLAG_KEEP_IRON_FRAME_UNUSED.
+ */
 static void zakogun_ext_init(void) {
     u8* flags = &_battleWorkPointer->stageObjectWork.flags;
     BattleStageObject* body;

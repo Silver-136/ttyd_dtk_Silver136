@@ -245,6 +245,10 @@ static USER_FUNC(mario_chk) {
     return EVT_RETURN_BLOCK;
 }
 
+/**
+ * Returns whether hit entry target is the hit group `group` or one of the hit entries below it, comparing joint names
+ * (_hitIsGroupSub).
+ */
 static BOOL hitIsGroup(HitEntry* target, HitEntry* group) {
     // Compare joint names through the child-first search, excluding the root's siblings.
     return _hitIsGroupSub(target, group, FALSE);

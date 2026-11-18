@@ -382,7 +382,10 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
-// Preserve the previous angle when the two sampled positions coincide.
+/**
+ * Script helper (args[0..3] = x1, z1, x2, z2; args[4] = direction in and out): sets args[4] to the angle of the step
+ * from (x1, z1) to (x2, z2), or keeps its value when the two points are the same.
+ */
 static USER_FUNC(krb_get_dir) {
     EvtWord* args = event->args;
     f32 x1 = evtGetFloat(event, args[0]);

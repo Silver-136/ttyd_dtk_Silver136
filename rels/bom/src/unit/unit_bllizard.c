@@ -677,6 +677,10 @@ static EVT_BEGIN(normal_attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Script helper: args[0] = unit. Keeps the cold cloud effect (a Kumokumo particle, created on the first call and stored
+ * in UNIT_WORK_BARRIER_EFFECT) hovering at the Ice Puff's position, scaled by its size.
+ */
 static USER_FUNC(eff_ice_barrier) {
     s32 id = BattleTransID(event, evtGetValue(event, event->args[0]));
     BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);

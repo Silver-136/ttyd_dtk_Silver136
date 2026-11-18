@@ -2092,6 +2092,7 @@ USER_FUNC(evt_end_font_restore) {
     return 2;
 }
 
+/** Script helper: sets the sound flag PSND_FLAG_BGM_WAIT_0. */
 // Descriptive name (not in the symbol maps); placeholder unk_end_000009a4, JP end .text+0x8E0. See docs/NAME_PROVENANCE.md.
 USER_FUNC(end_bgm_wait_stop) {
     psndSetFlag(PSND_FLAG_BGM_WAIT_0);

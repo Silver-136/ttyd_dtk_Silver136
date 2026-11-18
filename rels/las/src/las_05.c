@@ -1787,6 +1787,10 @@ EVT_BEGIN(las_05_init_evt)
     RETURN
 EVT_END()
 
+/**
+ * Script helper: formats "S_shan_<args[0]>_rou_<args[1]>" (two digits each) into a static buffer and returns it in
+ * args[2].
+ */
 static USER_FUNC(make_name) {
     static char name[20];
     EvtWord* args = event->args;

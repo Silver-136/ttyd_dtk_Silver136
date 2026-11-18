@@ -1345,6 +1345,12 @@ static EVT_BEGIN(evt_start)
     RETURN
 EVT_END()
 
+/**
+ * Script helper (args[0] = title type; never finishes): shows the title's letters. The first call lays the letters of
+ * lang_tbl out in a row; state 0 loads effect_sys.tpl, and in state 2 each letter waits its turn (20 frames apart),
+ * starts with a stardust burst and spins in over 90 frames, after which the angle turns and the alpha rises. Once
+ * loading has finished it queues display_func (US and later also sys_01_msg_tex_capture_func).
+ */
 #if VERSION <= VERSION_DEMO_JP
 static USER_FUNC(display) {
     SysWork* wp;
@@ -1484,6 +1490,10 @@ USER_FUNC(display) {
     return EVT_RETURN_BLOCK;
 }
 
+/**
+ * Script helper (no arguments): opens the curtain (GW_FLAG_CURTAIN_OPEN), blocks until display has loaded its texture
+ * (state 1 or later), then advances display's state.
+ */
 static USER_FUNC(start) {
     SysWork* wp = g_wp;
 

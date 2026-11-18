@@ -140,6 +140,7 @@ EVT_BEGIN(dou_00_init_evt)
     RETURN
 EVT_END()
 
+/** Map TEV callback: hands the stage setup to envSetWater. */
 static void water_tev(MapTevCallbackInfo* info) {
     envSetWater(info);
 }

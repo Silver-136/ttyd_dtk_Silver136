@@ -252,7 +252,7 @@ EVT_BEGIN(aji_08_init_evt)
     RETURN
 EVT_END()
 
-// Return the camera target height as an integer event value, truncating its fractional part.
+/** Script helper: returns the 3D camera's target height in args[0] as an integer (fraction dropped). */
 static USER_FUNC(camAtY) {
     EvtWord* args = event->args;
 

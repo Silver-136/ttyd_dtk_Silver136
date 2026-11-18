@@ -749,6 +749,12 @@ static EVT_BEGIN(wait_sound_event2)
     RETURN
 EVT_END()
 
+/**
+ * Per-frame script helper that animates the Chomp's chain (parts 2-9). args[0] = unit. Part 9 is the stake, behind the
+ * chomp; when work[2] is 2 the current link layout is recorded relative to the stake and when it is 1 the links keep
+ * that shape. Otherwise the links hang as a sagging chain between the Chomp (part 1, capped at y = 110 in JP and later)
+ * and the stake, each link moved to a fixed distance from its neighbour and held above the floor.
+ */
 static USER_FUNC(chain_main) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;

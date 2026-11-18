@@ -318,6 +318,11 @@ EVT_BEGIN(aji_02_init_evt)
     RETURN
 EVT_END()
 
+/**
+ * Script helper for the lit floor tiles: when Mario touches hit object A_hikaru_NN (JP and later: the hit he stands on,
+ * or with Yoshi carrying him the one he stands on or jumped from), tile NN stays lit for 30 frames (hikaru_NN shown,
+ * nashi_NN hidden); the other tiles go dark. 30 tiles; blocks until the story reaches STG7_09_ELEVATOR_KEY_A_LIT_FLOOR.
+ */
 static USER_FUNC(ride_chk) {
     static s32 onoff[30];
     char hitName[64];

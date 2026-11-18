@@ -461,6 +461,7 @@ EVT_BEGIN(moo_00_init_evt)
     RETURN
 EVT_END()
 
+/** Script helper: resets partner 0's scale to 1 and its rotation offset and rotation to 0. */
 static USER_FUNC(party_reset) {
     PartyEntry* party = partyGetPtr(0);
 

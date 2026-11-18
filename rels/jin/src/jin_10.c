@@ -325,6 +325,7 @@ EVT_BEGIN(jin_10_init_evt)
     RETURN
 EVT_END()
 
+/** Script helper: returns in args[1] 0.8 times the width of party entry args[0]. */
 static USER_FUNC(get_width) {
     EvtWord* args = event->args;
     PartyEntry* party = partyGetPtr(evtGetValue(event, args[0]));

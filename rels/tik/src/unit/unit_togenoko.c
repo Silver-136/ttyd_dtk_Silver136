@@ -1152,7 +1152,7 @@ static EVT_BEGIN(wait_event)
     RETURN
 EVT_END()
 
-// Count occupied slots whose current kind is Koopatrol, without filtering alliance or HP.
+/** Script helper: returns in args[0] the number of units whose current kind is Koopatrol (any alliance, any HP). */
 static USER_FUNC(togenoko_getnum) {
     EvtWord* args = event->args;
     s32 num = 0;

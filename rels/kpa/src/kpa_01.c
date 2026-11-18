@@ -1213,6 +1213,7 @@ EVT_BEGIN(kpa_01_init_evt)
     RETURN
 EVT_END()
 
+/** Script helper: formats the name "hi_<args[0]>" into a static buffer and returns its address in args[1]. */
 static USER_FUNC(make_name) {
     EvtWord* args = event->args;
     static char name[8];

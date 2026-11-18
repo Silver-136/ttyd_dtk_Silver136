@@ -2324,6 +2324,7 @@ static EVT_BEGIN(evt_key)
     RETURN
 EVT_END()
 
+/** Ext display callback of the fans: runs pose_main (not in the early demos) and queues fan_disp. */
 static void ext_fan_dispent(void) {
 #if VERSION <= VERSION_DEMO_JP
 #else

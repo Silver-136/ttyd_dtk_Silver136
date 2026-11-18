@@ -200,6 +200,10 @@ EVT_BEGIN(lookat_house)
     RETURN
 EVT_END()
 
+/**
+ * Script helper: slides the 3D camera (at (290, 150, 491), looking at (290, 90, -6)) along x from -10 by 2.5 per frame,
+ * slowing by 0.01 per frame near the end so it stops after 300 units; blocks until then.
+ */
 static USER_FUNC(camera_action) {
     CameraEntry* cam = camGetPtr(CAMERA_3D);
     Vec pos = {290.0f, 150.0f, 491.0f};

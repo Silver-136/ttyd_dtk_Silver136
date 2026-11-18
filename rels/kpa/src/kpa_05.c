@@ -161,6 +161,7 @@ EVT_BEGIN(kpa_05_init_evt)
     RETURN
 EVT_END()
 
+/** Script helper: returns kpaGetLevel() in args[0]. */
 static USER_FUNC(kpa_get_level) {
     EvtWord* args = event->args;
     evtSetValue(event, args[0], kpaGetLevel());

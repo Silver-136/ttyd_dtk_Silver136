@@ -167,6 +167,10 @@ void evt_icon_disp_func(CameraId camId, void* param) {
     }
 }
 
+/**
+ * Fills `count` PunidrvTexInfo entries from texbuf with copies of group and anim (12-byte map allocations) and the
+ * frames frame, frame + 1, ...; returns the entry after the last.
+ */
 static PunidrvTexInfo* _make_texbuf(PunidrvTexInfo* texbuf, s32 count, const char* group, const char* anim, f32 frame) {
     s32 i;
 
@@ -1671,6 +1675,12 @@ void puniMoveHit(PuniData* p, Vec start, Vec dir, f32 dist) {
 }
 #endif
 
+/**
+ * Moves Puni p by its velocity: faces left or right when faster than 1, limits the speed to maxSpeed and runs the wall
+ * check (puniMoveHit; puniMoveAtari in the early demos). On a hit it sets PUNI_FLAG_HIT_WALL_UNUSED, otherwise it
+ * clears it. The velocity is cut to 0.6 times after a free move (JP and later) or when puniMoveAtari returns TRUE
+ * (early demos).
+ */
 void puniMoveDecel(PuniData* p) {
     Vec start;
     Vec dir;
@@ -1733,6 +1743,10 @@ void puniMoveLimitedNormal(PuniData* p) {
 }
 #endif
 
+/**
+ * JP and later: moves Puni p by its velocity with the wall check (puniMoveHit), setting PUNI_FLAG_HIT_WALL_UNUSED on a
+ * hit and clearing it otherwise.
+ */
 #if VERSION >= VERSION_JP
 void puniMoveNormal(PuniData* p) {
     Vec start;
@@ -1924,6 +1938,7 @@ static BOOL puniParaRecoverCheck(PuniData* p) {
     return p->hp >= p->maxHp;
 }
 
+/** Random number from 0 to n - 1 from the Puni work's two seeds (the same values as qrnd). */
 // FAKE: qrnd with the abs as `v = seed1; if (v < 0) v = -seed1;` (this numbers the seed1 load web after the
 // start + count temp, so start + count is coloured first and takes r7): gives the target registers here, but
 // the standalone qrnd only matches with the ternary form, so puniSearchRandom gets its own copy. Same values.
@@ -4408,6 +4423,11 @@ static inline void puniModeCheckPos(PuniData* p) {
     }
 }
 
+/**
+ * JP and later: runs Puni p's current mode handler (puniMode*) and sets or clears PUNI_FLAG_STRAY for it. In idle mode
+ * it switches to wind mode when blown (breathPower over 10) or to join mode when Mario is within 150; join mode hangs
+ * it under a parent (searchParent).
+ */
 // Descriptive name (not in the symbol maps); placeholder unk_mri_00012d58, JP mri .text+0x12C94. See docs/NAME_PROVENANCE.md.
 #if VERSION >= VERSION_JP
 void puniModeMain(PuniData* p) {
@@ -4607,6 +4627,12 @@ void puniMoveMain(PuniData* p) {
     }
 }
 
+/**
+ * Pushes the active, colliding Punis apart, friends (slots below PUNI_ENEMY_FIRST) among slots 0 to 109 and enemies
+ * among PUNI_ENEMY_FIRST to 209. An obstacle pushes back by the overlap; others in range set PUNI_FLAG_NEAR and, with
+ * PUNI_FLAG_PUSHING on, share a small push. Then PUNI_FLAG_PUSHING is cleared where not near and (JP and later) speeds
+ * are capped at 8.
+ */
 void puniOption(void) {
 #else
 static void puniOption(void) {
@@ -5387,6 +5413,10 @@ USER_FUNC(evt_puni_set_hamari) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Sets up the Puni map data: the origin (x, z) and, for a non-NULL src, the w by h size and a map buffer for the data
+ * (4 bytes per cell); a NULL src turns it off.
+ */
 static inline void puniMapDataSetI(s32 w, s32 h, u8* src, f32 x, f32 z) {
     Punimap->x = x;
     Punimap->z = z;
@@ -5977,7 +6007,7 @@ static BOOL _puniVAtari(PuniData* p, Vec* from, Vec* to) {
     return FALSE;
 }
 
-// Integer part of v, one lower for negative v (so not a true floor for negative whole numbers).
+/** Integer part of v, one lower for negative v (so not a true floor for negative whole numbers). */
 static inline s32 puniFloor(f32 v) {
     s32 i = v;
     if (v < 0.0f) {
@@ -6875,6 +6905,7 @@ USER_FUNC(evt_puni_force_se_off) {
 static const Vec puni_save_zero = { 0.0f, 0.0f, 0.0f };
 #pragma push
 
+/** Writes val and the x, y and z of pos (low and high byte each) into the seven save bytes from off. */
 // FAKE: the zero-position branch of evt_puni_all_save inlines its own copy of puni_exit_swset with another local
 // declaration order (register colouring only)
 static inline void puni_set3(s32 off, s32 val, Vec* pos) {

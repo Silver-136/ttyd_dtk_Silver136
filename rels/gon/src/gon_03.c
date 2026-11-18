@@ -788,6 +788,7 @@ static EVT_BEGIN(senkaron_escape_event)
     RETURN
 EVT_END()
 
+/** Callback that changes the partner's pose: types 0 and 3 give nokotaro_pose[1], types 1 and 2 nokotaro_pose[0]. */
 static void nokotaro_callback(s32 type) {
     PartyEntry* party = partyGetPtr(partyCtrlNo);
 

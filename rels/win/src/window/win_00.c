@@ -1214,6 +1214,7 @@ EVT_BEGIN(win_00_init_evt)
     RETURN
 EVT_END()
 
+/** Script helper: blocks while Mario is in forced movement (MARIO_FLAG_FORCED_MOVEMENT). */
 static USER_FUNC(mariowalk_wait) {
     return !(marioGetPtr()->flags & MARIO_FLAG_FORCED_MOVEMENT);
 }

@@ -2191,6 +2191,9 @@ static USER_FUNC(kusuri_list_init) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Map TEV callback: adds a stage that outputs the colour g_Kusuri_Src_Col[g_Kusuri4_No] and keeps the previous alpha.
+ */
 static void kusuri_4_color_tev(MapTevCallbackInfo* info) {
     GXTevStageID stage = info->tevStage;
 
@@ -2242,6 +2245,10 @@ static void kusuri_1_color_tev(MapTevCallbackInfo* info) {
     info->tevStage++;
 }
 
+/**
+ * Map TEV callback: replaces stage 0 by one that outputs the colour g_Kusuri_Col with the rasterized alpha, and resets
+ * the stage, texture coordinate and texture map counters to 1, 0 and 0.
+ */
 static void kusuri_naka_color_tev(MapTevCallbackInfo* info) {
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
     GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
@@ -2254,6 +2261,7 @@ static void kusuri_naka_color_tev(MapTevCallbackInfo* info) {
     info->texMap = 0;
 }
 
+/** Script helper: returns the red, green and blue of g_Kusuri_Col in args[0], args[1] and args[2]. */
 static USER_FUNC(kusuri_color_get) {
     EvtWord* args = event->args;
 
@@ -2263,6 +2271,7 @@ static USER_FUNC(kusuri_color_get) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: sets the red, green and blue of g_Kusuri_Col to args[0], args[1] and args[2]. */
 static USER_FUNC(kusuri_color_set_rgb) {
     EvtWord* args = event->args;
     s32 r = evtGetValue(event, args[0]);

@@ -744,6 +744,10 @@ static EVT_BEGIN(gesso_ikasumi_attack)
     RETURN
 EVT_END()
 
+/**
+ * Script helper (args[0] = battle unit, args[1] = count): sprays black ink (effOpukuJetwN64Entry with every colour
+ * black, turned 135 degrees) from 95 units left of and 75 units above the unit.
+ */
 static USER_FUNC(_ikasumi_effect) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;

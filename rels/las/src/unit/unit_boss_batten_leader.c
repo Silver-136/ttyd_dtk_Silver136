@@ -701,6 +701,10 @@ static EVT_BEGIN(hakai_snd_event)
     RETURN
 EVT_END()
 
+/**
+ * Script helper (args[0..2] = position): strikes three thunderbolts (effPokopiThunderN64Entry, one of type 0 and two of
+ * type 1) from 250 units above the point down to it.
+ */
 static USER_FUNC(evt_eff_pokopi_thunder) {
     f32 top;
     EvtWord* args = event->args;
@@ -2806,6 +2810,10 @@ static EVT_BEGIN(wait_event)
     RETURN
 EVT_END()
 
+/**
+ * Script helper (args[0] = battle unit, args[1] = part number): returns in args[2] the part's current animation
+ * (animPoseGetCurrentAnim).
+ */
 static USER_FUNC(btlevtcmd_AnimeGetPose) {
     s32 id;
     EvtWord* args = event->args;

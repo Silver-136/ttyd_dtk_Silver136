@@ -2843,6 +2843,7 @@ EVT_BEGIN(tensou_init_event)
     RETURN
 EVT_END()
 
+/** Script helper: sets the camera of map object args[0] to args[1], if it exists. */
 static USER_FUNC(card_camid) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);

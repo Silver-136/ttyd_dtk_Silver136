@@ -1633,7 +1633,10 @@ static USER_FUNC(evt_rsh_get_rnd_npc) {
     return EVT_RETURN_DONE;
 }
 
-// OR a choice into its packed field; the initializer clears each saved word before setting choices.
+/**
+ * Script helper (args[0] = room 0 to 2 for rsh_01, rsh_03, rsh_04; args[1] = group; args[2] = choice): ORs the choice
+ * into the group's bit field of that room's GSW_RSH_*_RANDOM_NPCS word. It only ORs, so the word must be cleared first.
+ */
 static USER_FUNC(evt_rsh_set_rnd_npc) {
     EvtWord* args = event->args;
     s32 room = evtGetValue(event, args[0]);
@@ -1788,6 +1791,10 @@ static USER_FUNC(evt_rsh_set_rnd_npc_talk_evt) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Debug script helper (args = room, group, index, value): formats "RSH_0x:<group>(<random NPC name>, <value>)" into a
+ * local buffer; nothing prints it.
+ */
 static USER_FUNC(debug_print_func) {
     EvtWord* args = event->args;
     s32 room = evtGetValue(event, args[0]);

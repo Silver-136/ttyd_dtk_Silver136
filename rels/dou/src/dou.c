@@ -139,6 +139,7 @@ EVT_BEGIN(dou_mario_pos_osreport)
     RETURN
 EVT_END()
 
+/** REL module epilog: runs the static destructors (_dtors) when dou.rel is unloaded. */
 void _epilog(void) {
     voidfunctionptr* dtor;
 

@@ -133,6 +133,10 @@ static BOOL _hitIsGroupSub(HitEntry* target, HitEntry* node, BOOL checkSibling) 
     return FALSE;
 }
 
+/**
+ * Returns whether hit entry target is the hit group `group` or one of the hit entries below it, comparing joint names
+ * (_hitIsGroupSub).
+ */
 static BOOL hitIsGroup(HitEntry* target, HitEntry* group) {
     // Search by joint name, excluding the root sibling chain; child recursion skips the current node's siblings.
     return _hitIsGroupSub(target, group, FALSE);
@@ -1181,6 +1185,10 @@ EVT_BEGIN(aji_13_init_evt)
     RETURN
 EVT_END()
 
+/**
+ * Script helper (JP and later): returns TRUE in args[2] when hit objects args[0] and args[1] exist and the first
+ * belongs to the second's group (hitIsGroup), else FALSE.
+ */
 // Descriptive name (not in the symbol maps); placeholder unk_aji_000035a0, JP aji .text+0x34DC. See docs/NAME_PROVENANCE.md.
 #if VERSION >= VERSION_JP
 USER_FUNC(hit_group_chk) {

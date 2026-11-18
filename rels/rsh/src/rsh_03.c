@@ -1370,6 +1370,7 @@ static EVT_BEGIN(shop_door_close)
     RETURN
 EVT_END()
 
+/** Script helper (JP and later): sets the alpha of every ready NPC except 店員 to args[0]. */
 // Descriptive name (not in the symbol maps); placeholder unk_rsh_00002634, JP rsh .text+0x2570. See docs/NAME_PROVENANCE.md.
 #if VERSION >= VERSION_JP
 USER_FUNC(npc_alpha_except_tenin) {
@@ -1604,6 +1605,10 @@ static EVT_BEGIN(evt_shop_close)
     RETURN
 EVT_END()
 
+/**
+ * Script helper: disables map object args[0] and starts a fire effect (effFireEntry type 3, scale 0.5) 4 units below
+ * it.
+ */
 static USER_FUNC(fire) {
     const char* name = (const char*)evtGetValue(event, event->args[0]);
     Vec pos;

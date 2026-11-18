@@ -434,6 +434,7 @@ static USER_FUNC(effitemget_open_ptr) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: moves the 3D camera and its target 2016 units up (args[0] nonzero) or down (args[0] zero). */
 static USER_FUNC(effitemget_busaiku) {
     s32 up = evtGetValue(event, event->args[0]);
     CameraEntry* camera = camGetPtr(CAMERA_3D);

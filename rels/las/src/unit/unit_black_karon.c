@@ -985,6 +985,10 @@ static EVT_BEGIN(wait_event)
     RETURN
 EVT_END()
 
+/**
+ * Script helper (args[0], args[1] = battle units): copies only the size-change turns and strength of unit args[0] to
+ * unit args[1].
+ */
 static USER_FUNC(honenoko_copy_status) {
     EvtWord* args = event->args;
     s32 id1 = BattleTransID(event, evtGetValue(event, args[0]));

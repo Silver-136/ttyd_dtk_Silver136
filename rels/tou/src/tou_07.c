@@ -935,7 +935,10 @@ EVT_BEGIN(tou_07_init_evt)
     RETURN
 EVT_END()
 
-// Hold the sleeping paper pose/direction until the bed event deletes this blocking child.
+/**
+ * Script helper (never finishes): on the first call it turns Mario into the p_slit paper form with pose M_S_1 and paper
+ * pose PM_S_3A; every frame it sets his displayed direction to args[0].
+ */
 static USER_FUNC(paper_on) {
     f32 value = evtGetFloat(event, event->args[0]);
     MarioWork* mario = marioGetPtr();

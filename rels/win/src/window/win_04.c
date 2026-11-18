@@ -617,6 +617,7 @@ static EVT_BEGIN(dummy2_jump)
     RETURN
 EVT_END()
 
+/** Script helper: returns ssf[args[0]] as a float in args[1]. */
 static USER_FUNC(ss_ch_check) {
     EvtWord* args = event->args;
     s32 index = evtGetValue(event, *args++);
@@ -1436,6 +1437,7 @@ static EVT_BEGIN(flower_disp_pos)
     RETURN
 EVT_END()
 
+/** Adds environment TEV effect 10 with param. */
 static void mirror_ball(void* param) {
     envAddTev(10, param);
 }
@@ -1568,6 +1570,7 @@ EVT_BEGIN(win_04_init_evt)
     RETURN
 EVT_END()
 
+/** Returns a random float between min and max using rand() / 32767. */
 static f32 randf(f32 min, f32 max) {
     f32 r = rand() / 32767.0f;
 

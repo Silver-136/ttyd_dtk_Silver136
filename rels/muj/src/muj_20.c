@@ -204,6 +204,10 @@ static EVT_BEGIN(yoru_hiru_event)
     RETURN
 EVT_END()
 
+/**
+ * Script helper: moves NPC args[0] in x and z from (args[1], args[2]) to (args[3], args[4]) over args[6] ms with
+ * interpolation mode args[7], turning it left or right with the motion unless args[5] is set; blocks until done.
+ */
 static USER_FUNC(urouro_func) {
     int t;
     EvtWord* args = event->args;
@@ -324,6 +328,10 @@ static EVT_BEGIN(urouro)
     RETURN
 EVT_END()
 
+/**
+ * Script helper: allocates the ship sway work (marcoship) with angle 0, speed 0.02, maximum 1.5 and everything else
+ * cleared.
+ */
 static USER_FUNC(marcoship_yure_init_func) {
     MarcoShip* ms;
 
@@ -598,6 +606,7 @@ static EVT_BEGIN(moya_effect05)
     RETURN
 EVT_END()
 
+/** Map TEV callback: adds a stage that multiplies the previous alpha by the alpha at _ap; the colour passes through. */
 static void alpha_tev(MapTevCallbackInfo* info) {
     s32 stage = info->tevStage;
     u8* alpha = _ap;
@@ -1898,6 +1907,11 @@ EVT_BEGIN(anm_neji)
     RETURN
 EVT_END()
 
+/**
+ * Script helper (never finishes): keeps two wake effects (effFunemizuEntry types 0 and 2) at the ship map object
+ * S_fune_m, sized by how far it moved since the last frame (2 at STG0_02_MARIOS_HOUSE), and adds a water splash every
+ * 15 frames while it moves faster than 1.
+ */
 static USER_FUNC(fune_eff) {
     EffectEntry* eff1;
     EffectEntry* eff2;
@@ -2035,6 +2049,10 @@ EVT_BEGIN(anm_yure)
     RETURN
 EVT_END()
 
+/**
+ * Draws the PRESS START text of the title screen at (x, y) with the given alpha, its gradient texture scrolling over it
+ * with the retrace count; the texture numbers differ between versions.
+ */
 static void pressStartGX(MujLogoWork* wp, s32 alpha, f32 x, f32 y) {
     CameraEntry* camera = camGetCurPtr();
     GXTexObj startText, gradient;
@@ -2427,6 +2445,11 @@ EVT_BEGIN(muj_20_init_evt)
     RETURN
 EVT_END()
 
+/**
+ * Script helper: shows the title logo from mariost.tpl. It fades the logo in while its y goes from -50 to 0, waits once
+ * GF(0) is set for A, B or START (A or START in the early demos) and sets GF(1), fades it out while y goes to 100, then
+ * frees it, sets GF(2) and returns. The counter steps twice per frame, so each fade takes half its frame count.
+ */
 static USER_FUNC(logo) {
 
     MujLogoWork* wp;

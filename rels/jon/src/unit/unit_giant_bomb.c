@@ -844,6 +844,11 @@ static EVT_BEGIN(explosion_event)
     RETURN
 EVT_END()
 
+/**
+ * Pose draw callback of the bomb's body (userdata is part 1): while the fuse is lit (UNIT_WORK_FUSE_LIT), draws part
+ * 2's flame shape pPlaneShape3 when the drawn group is the fuse locator for the current UNIT_WORK_FUSE_LEFT value (0:
+ * locator11, 1: locator10, 2: locator9, otherwise locator8).
+ */
 static void _fire_point_callback(void* userdata, s32 group, Mtx* modeling) {
     BattleUnitPart* part = userdata;
     BattleUnit* unit = part->owner;

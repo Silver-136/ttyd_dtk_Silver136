@@ -918,6 +918,10 @@ EVT_BEGIN(aji_09_init_evt)
     RETURN
 EVT_END()
 
+/**
+ * Script helper: blocks until the d_mario animation group has loaded, then switches Mario and the partner to the
+ * Famicom (8-bit) mode.
+ */
 static USER_FUNC(dot_mario) {
     PartyEntry* party = partyGetPtr(0);
 

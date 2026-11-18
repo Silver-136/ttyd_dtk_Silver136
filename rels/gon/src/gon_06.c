@@ -243,7 +243,10 @@ EVT_BEGIN(tsuritenjo_event)
     RETURN
 EVT_END()
 
-// Keep the chest talking on callbacks 0/5; callback 2 returns it to its idle animation.
+/**
+ * Message callback for the black chest's speech: type 0 plays the chest's talking animation A_2, type 5 restarts it
+ * once it has looped, type 2 returns it to the idle S_1.
+ */
 static void majin_callback(s32 type) {
     MapObjectEntry* mobj = mobjNameToPtr("box");
 

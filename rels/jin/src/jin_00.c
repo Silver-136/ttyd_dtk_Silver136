@@ -2459,6 +2459,10 @@ EVT_BEGIN(jin_00_init_evt)
     RETURN
 EVT_END()
 
+/**
+ * Script helper: clears g_nNumEndProc[0] and, for every Boo of the ext swarm (pTeresa), moves one in seq 6 to seq 80
+ * and gives the others, except those in seq 9, a wait of 99999.
+ */
 static USER_FUNC(senteresa_turiageru) {
     s32 n = extGetPoseNum();
     s32 i;

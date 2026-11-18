@@ -308,6 +308,7 @@ static EVT_BEGIN(first_evt)
     RETURN
 EVT_END()
 
+/** Script helper: puts the effect "baria" on the NPC ピーチ姫, offset (0, -8, 10) turned to face the 3D camera. */
 static USER_FUNC(syuryo_baria_recalc_pos) {
     // ピーチ単
     NpcEntry* npc = npcNameToPtr("ピーチ姫");
@@ -818,6 +819,10 @@ EVT_BEGIN(syuryo_evt)
     RETURN
 EVT_END()
 
+/**
+ * Script helper (args[0] = effect name, args[1..3] = position, args[4] = last effect parameter): starts a named swirl
+ * effect (effGuruguruN64Entry 0, 3) at the position with scale 0.8.
+ */
 static USER_FUNC(eff_guruguru) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
@@ -1446,6 +1451,10 @@ EVT_BEGIN(las_28_init_evt)
     RETURN
 EVT_END()
 
+/**
+ * Script helper: builds the torch map-object name "hi<args[0]>" and returns it in args[1] (in the early demos the
+ * buffer is a local array).
+ */
 static USER_FUNC(make_name) {
     EvtWord* args = event->args;
 #if VERSION <= VERSION_DEMO_JP

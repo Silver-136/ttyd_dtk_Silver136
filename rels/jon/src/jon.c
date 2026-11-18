@@ -3509,6 +3509,10 @@ static USER_FUNC(iri_12_paper_init) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper (args[0] = 0 to 3): sets one battle flag on the enemy NPC: 0 no partner change, 1 no hammer, 2 no jump,
+ * 3 extra coins.
+ */
 static USER_FUNC(shikakeFlag) {
     s32 type = evtGetValue(event, event->args[0]);
     NpcEntry* npc = npcNameToPtr("敵");

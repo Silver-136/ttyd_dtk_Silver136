@@ -4806,6 +4806,10 @@ static EVT_BEGIN(wait_event_chuchurina)
     RETURN
 EVT_END()
 
+/**
+ * Script helper (args[0] = battle unit, args[1..3] = position): starts a scanning effect (effScanningEntry type 0) at
+ * the position, scaled by the unit's size.
+ */
 static USER_FUNC(eff_scanning) {
     EvtWord* args = event->args;
     s32 id = BattleTransID(event, evtGetValue(event, args[0]));

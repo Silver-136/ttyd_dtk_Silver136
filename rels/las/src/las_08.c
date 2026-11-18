@@ -463,6 +463,10 @@ EVT_BEGIN(las_08_init_evt)
     RETURN
 EVT_END()
 
+/**
+ * Script helper: shows torch map object args[0] of taimatu_data (args[1] nonzero) and lights a named torch effect at
+ * its hit object, or hides it and removes that effect.
+ */
 static USER_FUNC(hi_onoff) {
     EvtWord* args = event->args;
     s32 index = evtGetValue(event, args[0]);

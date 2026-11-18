@@ -106,6 +106,7 @@ static EVT_BEGIN(peach_evt_yuge)
     RETURN
 EVT_END()
 
+/** Script helper: sets the player's position (MarioWork) to (args[0], args[1], args[2]). */
 static USER_FUNC(peach_set_pos) {
     EvtWord* args = event->args;
     f32 x = evtGetFloat(event, args[0]);
@@ -433,6 +434,7 @@ EVT_BEGIN(aji_15_init_evt)
     RETURN
 EVT_END()
 
+/** Script helper: returns 1 in args[0] when PEACH_FLAG_AFTERSHOWER is set, else 0. */
 static USER_FUNC(peach_chk_aftershower) {
     EvtWord* args = event->args;
 

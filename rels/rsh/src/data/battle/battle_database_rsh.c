@@ -142,7 +142,11 @@ static EVT_BEGIN(bgset_rsh_bg_event)
     RETURN
 EVT_END()
 
-// Write the current linear offset before decrementing; total..0 is an inclusive cycle.
+/**
+ * Script helper (args[0] = stage object name, args[1] = step variable, args[2] = total, args[3] = base, args[4] =
+ * amplitude): sets the object's x offset to base + amplitude * step / total, then counts the step down, wrapping from 0
+ * back to total.
+ */
 static USER_FUNC(_set_offset) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);

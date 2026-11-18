@@ -113,6 +113,11 @@ static f32 sintbl[450] = {
     0.999391f, 0.999848f,
 };
 
+/**
+ * Starts the Puni driver: counts the texture groups in texInfo (up to the NULL group), allocates the work arrays for
+ * poseNum poses on the EXT heap, keeps mainFunc and mainFunc2, queues puniMakeTexture on the off-screen camera and runs
+ * initFunc if there is one.
+ */
 void puniEntry(s32 poseNum, PunidrvTexInfo* texInfo, void (*initFunc)(void), void (*mainFunc)(void),
                void (*mainFunc2)(void)) {
     static f32 Normals[] = {0.0f, 0.0f, 1.0f, 0.0f, 0.0f, -1.0f};

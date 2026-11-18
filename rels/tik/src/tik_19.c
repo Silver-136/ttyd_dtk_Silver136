@@ -312,7 +312,10 @@ EVT_BEGIN(tik_19_init_evt)
     RETURN
 EVT_END()
 
-// Restart the chest animation after each completed loop, then return to idle when requested.
+/**
+ * Message callback for the black chest's speech: type 0 plays the chest's talking animation A_2, type 5 restarts it
+ * once it has looped, type 2 returns it to the idle S_1.
+ */
 static void majin_callback(s32 type) {
     MapObjectEntry* mobj = mobjNameToPtr("box");
 

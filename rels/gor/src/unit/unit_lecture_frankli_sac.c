@@ -188,6 +188,9 @@ static EVT_BEGIN(_test_event)
     RETURN
 EVT_END()
 
+/**
+ * Script helper (args[0] = battle unit, args[1] = script): sets the script as the unit's act-end event (actEndEvent).
+ */
 static USER_FUNC(_set_actend_event) {
     EvtWord* args = event->args;
     BattleWork* wp = _battleWorkPointer;

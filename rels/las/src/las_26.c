@@ -410,6 +410,7 @@ static EVT_BEGIN(bonbaba_init)
     RETURN
 EVT_END()
 
+/** Script helper: blocks until the NPC ボンババ touches the ground (groundHit). */
 static USER_FUNC(bonbaba_wait_landon) {
     // ボンババ
     return npcNameToPtr("ボンババ")->groundHit ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;

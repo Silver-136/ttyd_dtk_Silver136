@@ -192,7 +192,6 @@ static ExtTexInfo ext_moamoa_data[] = {
  * consecutive rows with the same model and animation name become one MoamoaPoseDef (first texture frame,
  * frame count, last sampled frame, and looping unless the animation name starts with J).
  */
-
 // Group contiguous model/animation samples; the last sampled frame becomes the playback duration.
 static void moamoa_pose_init(void) {
     ExtTexInfo* data = ext_moamoa_data;
@@ -255,6 +254,12 @@ static void moamoa_pose_main(void) {
     }
 }
 
+/**
+ * Switches one Moamoa sprite to the pose def of model/anim and restarts its animation clock. With MOAMOA_FLAG_SHOW_KIND
+ * set, the model (and from MOAMOA_KIND_KINOPIO on also the animation) comes from its kind's group_tbl row, S_2 for
+ * MOAMOA_KIND_MOA_A_S2_UNUSED. A hit sprite only takes D poses and an escaping one only R poses; nothing changes when
+ * the pose is not found or already set.
+ */
 // Inlined into the S_1 callers and called out of line by the D_1 callers below, as in the target (the JP demo REL
 // map lists it as a function and names its table group_tbl$582).
 static void moamoa_pose_change(Moamoa* moa, const char* model, const char* anim) {
@@ -337,7 +342,6 @@ static s32 evt_moamoa_ry_reset(EventEntry* event, BOOL isFirstCall) {
 }
 
 /** Script helper: blocks the calling script until every Moamoa has finished leaving (MOAMOA_FLAG_GONE). */
-
 // Block until every member has entered GONE; the escape scene resets the ext controller afterward.
 static s32 evt_moamoa_end_wait(EventEntry* event, BOOL isFirstCall) {
     s32 i;
@@ -353,6 +357,11 @@ static s32 evt_moamoa_end_wait(EventEntry* event, BOOL isFirstCall) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: puts every Moamoa in MOAMOA_STATE_FUSION_WAIT with staggered timers and blocks until all have
+ * MOAMOA_FLAG_FUSION_ARRIVED; then it marks them all as merged into the big Smorg (MOAMOA_FLAG_FUSED, no shadow) and
+ * gives them the c_n_moa_a standing pose.
+ */
 static s32 evt_moamoa_fusion(EventEntry* event, BOOL isFirstCall) {
     s32 i;
     ExtdrvPose* pose;
@@ -389,6 +398,11 @@ static s32 evt_moamoa_fusion(EventEntry* event, BOOL isFirstCall) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper (args[0] = on, args[1] = all): sets (on) or clears MOAMOA_FLAG_SHOW_KIND on every Moamoa; with all = 0,
+ * turning it on affects only the MOA_B ones and turning it off only the others. Then it refreshes every sprite's pose
+ * (moamoa_pose_change with c_n_moa_a S_1).
+ */
 static s32 evt_moamoa_kind_onoff(EventEntry* event, BOOL isFirstCall) {
     EvtWord* args = event->args;
     s32 on = evtGetValue(event, args[0]);
@@ -458,6 +472,10 @@ static s32 evt_moamoa_fusion_debug(EventEntry* event, BOOL isFirstCall) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper (args[0] = 0 or 1): moves swarm target args[0] onto the other one (1 - args[0]), sets its hit count to
+ * 100 and marks it cleared (MOAMOA_WORK_FLAG_TARGET0_CLEARED or _TARGET1_CLEARED).
+ */
 static s32 evt_moamoa_target_off(EventEntry* event, BOOL isFirstCall) {
     s32 i = evtGetValue(event, event->args[0]);
 

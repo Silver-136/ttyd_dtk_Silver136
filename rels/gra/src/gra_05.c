@@ -581,6 +581,7 @@ EVT_BEGIN(gra_05_init_evt)
     RETURN
 EVT_END()
 
+/** Script helper: turns off the camera road curve |MarioSt_CameraRoad|curve2 (camRoadCurveOff). */
 static USER_FUNC(camera_curve_off) {
     camRoadCurveOff("|MarioSt_CameraRoad|curve2");
     return EVT_RETURN_DONE;

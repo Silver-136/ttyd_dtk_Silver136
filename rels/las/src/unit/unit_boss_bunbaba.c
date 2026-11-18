@@ -1262,6 +1262,7 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/** Script helper: spawns a puff of dust (an N64-style kemuri effect) at the position (args[0], args[1], args[2]). */
 static USER_FUNC(_leg_smoke_effect) {
     EvtWord* args = event->args;
     f32 x = evtGetFloat(event, args[0]);

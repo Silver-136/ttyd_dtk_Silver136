@@ -1805,6 +1805,10 @@ static EVT_BEGIN(evt_switch_init)
     RETURN
 EVT_END()
 
+/**
+ * Script helper: if a save file was just loaded (GW_FLAG_SAVE_LOADED), clears that flag and starts the
+ * FADE_CURTAIN_SIDES_A2 fade.
+ */
 static USER_FUNC(sysflag) {
     if (gp->flags & GW_FLAG_SAVE_LOADED) {
         gp->flags &= ~GW_FLAG_SAVE_LOADED;

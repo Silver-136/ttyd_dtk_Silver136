@@ -1532,6 +1532,11 @@ static EVT_BEGIN(party_change_event)
     RETURN
 EVT_END()
 
+/**
+ * Script helper: allocates four FakerParam entries (kept in the unit's countersetWeapon field) for Goombella, Koops,
+ * Flurrie and Yoshi, each at size 1 with no status, full HP from that partner's base max HP and full FP from the
+ * pouch's base max FP; US and later also clear their two disabled-command flags.
+ */
 static USER_FUNC(_gullible_party_info_init) {
     PouchData* pouch = pouchGetPtr();
     s32 id = BattleTransID(event, UNIT_ID_SELF);
@@ -1572,7 +1577,10 @@ static USER_FUNC(_gullible_party_info_init) {
 
 #if VERSION >= VERSION_US
 
-// US/PAL: set this turn's maximum move count to the remaining-move count.
+/**
+ * Script helper (args[0] = battle unit, US and later): sets the unit's maximum move count for this turn to its
+ * remaining move count.
+ */
 USER_FUNC(faker_mario_sync_max_moves) {
     BattleUnit* unit;
     s32 id = evtGetValue(event, event->args[0]);

@@ -143,6 +143,10 @@ EvtWord rsh_02_b_init_evt_nidome[213];
 EvtWord rsh_02_c_init_evt_nidome[136];
 static EvtWord evt_nidome_bed[126];
 
+/**
+ * Script helper (JP and later): blocks while Mario's roll cancel is disabled or his slit movement goes on
+ * (marioRollCancelDisable, marioSlitContinueChk).
+ */
 // Descriptive name (not in the symbol maps); placeholder unk_rsh_00002384, JP rsh .text+0x22C0. See docs/NAME_PROVENANCE.md.
 // Wait until neither roll-cancel protection nor continued slit movement prevents normalization.
 #if VERSION >= VERSION_JP
@@ -751,7 +755,10 @@ EVT_BEGIN(talk_yuurei)
     RETURN
 EVT_END()
 
-// Report contact with this NPC only while player input/control and the system level permit it.
+/**
+ * Script helper: sets LW(10) to 1 when the NPC トロン is the one Mario touches (fbatHitCheckAll) while his keys and
+ * control are on and the system level is 0, else 0.
+ */
 static USER_FUNC(toron_check) {
     NpcEntry* hit = fbatHitCheckAll();
 
@@ -938,7 +945,10 @@ static EVT_BEGIN(evt_1day_end)
     RETURN
 EVT_END()
 
-// When armed, the first type-3 notification starts shaking and the second stops that event.
+/**
+ * Message callback: once LW(13) of the message's event is set, each type 3 counts LW(14); the first starts evt_shake
+ * (kept in LW(15)) and the second deletes it and starts evt_shake2.
+ */
 static void yuurei_callback(s32 type, void* param) {
     EventEntry* ev = (*(MsgWinData**)param)->event;
 
@@ -957,7 +967,6 @@ static void yuurei_callback(s32 type, void* param) {
  * Message-window callback for Pennington's speech in evt_nabe:
  * on the second page turn it starts evt_powan_msg (counts pages in LW(10)).
  */
-
 // Start the reaction on the second type-3 notification (the counter starts at zero).
 static void powan_callback(s32 type, void* param) {
     MsgWinData* work = *(MsgWinData**)param;
@@ -975,6 +984,7 @@ static void powan_callback(s32 type, void* param) {
     }
 }
 
+/** Script helper: sets the sound flag PSND_FLAG_BGM_WAIT_0. */
 static USER_FUNC(bgm_wait_stop) {
     psndSetFlag(PSND_FLAG_BGM_WAIT_0);
     return EVT_RETURN_DONE;

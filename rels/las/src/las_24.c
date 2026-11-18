@@ -371,6 +371,10 @@ EVT_BEGIN(las_24_init_evt)
     RETURN
 EVT_END()
 
+/**
+ * Script helper (US and later): returns in args[1] the value args[0], multiplied by 1.2 when the game does not run at
+ * 60 fps.
+ */
 #if VERSION >= VERSION_US
 USER_FUNC(las_24_adjust_for_framerate) {
     EvtWord* args = event->args;

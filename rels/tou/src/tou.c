@@ -1466,7 +1466,11 @@ static void gans_tex(CameraId cameraId, void* param) {
     wp->ready = 1;
 }
 
-// Wait for the story-selected NPC, then update the monitor texture and fade while remaining active.
+/**
+ * Script helper (never finishes): waits until the story's NPC (one before STG3_34_RETURN_TO_ROGUEPORT, another after)
+ * exists, then each frame allocates a 128x128 RGB5A3 texture for the monitor, fades its alpha up to 0x80 while onoff is
+ * set or down to 0, and queues gans_tex to draw it.
+ */
 static USER_FUNC(make_monitor) {
     NpcEntry* npc = npcNameToPtr_NoAssert(evtGetValue(NULL, GSW_STORY_PROGRESS) < STG3_34_RETURN_TO_ROGUEPORT ? "ガンス" : "キノシコワ");
     GansWork* wp;

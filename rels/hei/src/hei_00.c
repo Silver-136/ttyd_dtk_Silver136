@@ -338,6 +338,11 @@ static EVT_BEGIN(evt_gonbaba_shadow)
     RETURN
 EVT_END()
 
+/**
+ * Script helper: works out a camera from the camera road, centred between Mario and the partner: LW(3) to LW(5) get the
+ * target (the road target plus that midpoint in x and z) and LW(0) to LW(2) a point 250 units back along the road's
+ * view direction.
+ */
 static USER_FUNC(cam_test) {
     MarioWork* mario = marioGetPtr();
     PartyEntry* party = partyGetPtr(marioGetPartyId());
@@ -818,7 +823,7 @@ static EVT_BEGIN(evt_snd)
     RETURN
 EVT_END()
 
-// Report whether the current partner is within 100 units of the pipe's fixed reference point.
+/** Script helper: sets LW(0) to 1 when the partner is within 100 units of (150, 25, 0), else 0. */
 static USER_FUNC(dist_check) {
     MarioWork* mario = marioGetPtr();
     PartyEntry* party = partyGetPtr(marioGetPartyId());
@@ -1058,6 +1063,10 @@ static EVT_BEGIN(dokan_evt)
     RETURN
 EVT_END()
 
+/**
+ * Script helper (JP and later): returns TRUE in args[0] while Mario's keys or control are off (marioKeyOffChk or
+ * marioCtrlOffChk), else FALSE.
+ */
 // Descriptive name (not in the symbol maps); placeholder unk_hei_000002a8, JP hei .text+0x1E4. See docs/NAME_PROVENANCE.md.
 #if VERSION >= VERSION_JP
 USER_FUNC(hei_00_mario_keyoff_check) {

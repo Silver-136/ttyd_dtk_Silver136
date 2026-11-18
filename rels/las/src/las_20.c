@@ -548,6 +548,7 @@ EVT_BEGIN(las_20_init_evt)
     RETURN
 EVT_END()
 
+/** Script helper: returns the two names of hosi_name pair args[0] in args[1] and args[2]. */
 static USER_FUNC(get_hosi_name) {
     EvtWord* args = event->args;
     s32 idx = evtGetValue(event, args[0]);

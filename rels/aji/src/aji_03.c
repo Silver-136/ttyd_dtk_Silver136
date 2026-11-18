@@ -1223,6 +1223,10 @@ EVT_BEGIN(aji_03_init_evt)
     RETURN
 EVT_END()
 
+/**
+ * Script helper: queues icon_disp on the 2D camera for this frame with type args[0] at (args[1], args[2]), kept in the
+ * event's userdata.
+ */
 static USER_FUNC(evt_sousa_icon) {
     EvtWord* args = event->args;
     s32 type = evtGetValue(event, args[0]);

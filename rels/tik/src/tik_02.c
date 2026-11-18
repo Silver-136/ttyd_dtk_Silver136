@@ -75,7 +75,6 @@ EvtWord tik_02_init_evt[207];
  * The NPC is nudged between +amplitude and -amplitude every half period and returns to where it started
  * when the time is up.
  */
-
 // Alternate the offset every period milliseconds; zero duration keeps shaking until the event is stopped.
 static USER_FUNC(tik_npc_buruburu) {
     EvtWord* args = event->args;

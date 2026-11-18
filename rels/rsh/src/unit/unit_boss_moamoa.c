@@ -1371,6 +1371,10 @@ static EVT_BEGIN(evt_moamoa)
     RETURN
 EVT_END()
 
+/**
+ * Switches a swarm element to the texture group of its type (an animation and pose name from group_tbl), restarting its
+ * frame clock, when it uses another group.
+ */
 static void moamoa_pose(ExtMoamoa* elem) {
     static const char* group_tbl[][2] = {
         {"c_n_moa_a", "S_1"},
@@ -1433,6 +1437,11 @@ static EVT_BEGIN(MOAMOA_SET_BODYSCALE)
     RETURN
 EVT_END()
 
+/**
+ * Ext-pose main of the Smorg swarm: steps each element's texture frame. While the main body exists, each element sits
+ * between two points of its unit's chain plus its offset (hidden at y -1000 when its unit is gone); otherwise the
+ * driven elements circle the centre while the radius shrinks to 0.8. Queues moamoa_draw.
+ */
 static void ext_moamoa_main(void) {
     ExtMoamoa* elem;
     ExtMoamoa* e4;

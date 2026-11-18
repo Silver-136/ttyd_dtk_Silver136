@@ -1089,6 +1089,10 @@ EVT_BEGIN(las_09_init_evt)
     RETURN
 EVT_END()
 
+/**
+ * Script helper (args[0] = effect name, args[1..3] = position, args[4] = last effect parameter): starts a named swirl
+ * effect (effGuruguruN64Entry 0, 3) at the position with scale 0.8.
+ */
 static USER_FUNC(eff_guruguru) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);

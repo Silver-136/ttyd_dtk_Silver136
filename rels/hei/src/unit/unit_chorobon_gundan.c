@@ -449,6 +449,11 @@ EVT_BEGIN(chorogun_entry)
     RETURN
 EVT_END()
 
+/**
+ * Ext-pose init of the Fuzzy Horde: allocates 1000 Chorogun entries, starts each pose visible at y -1000 and lays the
+ * Fuzzies on a 50-wide grid (5 units apart in x, 7 in z, with a little random jitter) with a random start delay (22 for
+ * the first). Then it swaps the positions of 500 random pairs.
+ */
 static void chorogun_ext_init(void) {
     s32 i;
     s32 a, b;
