@@ -685,6 +685,45 @@ void PSMTXRotTrig(register Mtx m, register char axis, register f32 sinA, registe
     }
 }
 
+void C_MTXRotAxisRad(Mtx m, const Vec* axis, f32 rad) {
+    Vec vN;
+    f32 s;
+    f32 c;
+    f32 t;
+    f32 x;
+    f32 y;
+    f32 z;
+    f32 xSq;
+    f32 ySq;
+    f32 zSq;
+
+    ASSERTMSGLINE(1677, m, "MTXRotAxisRad():  NULL MtxPtr 'm' ");
+    ASSERTMSGLINE(1678, axis, "MTXRotAxisRad():  NULL VecPtr 'axis' ");
+
+    s = sinf(rad);
+    c = cosf(rad);
+    t = 1 - c;
+    C_VECNormalize(axis, &vN);
+    x = vN.x;
+    y = vN.y;
+    z = vN.z;
+    xSq = (x * x);
+    ySq = (y * y);
+    zSq = (z * z);
+    m[0][0] = (c + (t * xSq));
+    m[0][1] = (y * (t * x)) - (s * z);
+    m[0][2] = (z * (t * x)) + (s * y);
+    m[0][3] = 0;
+    m[1][0] = ((y * (t * x)) + (s * z));
+    m[1][1] = (c + (t * ySq));
+    m[1][2] = ((z * (t * y)) - (s * x));
+    m[1][3] = 0;
+    m[2][0] = ((z * (t * x)) - (s * y));
+    m[2][1] = ((z * (t * y)) + (s * x));
+    m[2][2] = (c + (t * zSq));
+    m[2][3] = 0;
+}
+
 static void __PSMTXRotAxisRadInternal(register Mtx m, const register Vec* axis, register f32 sT, register f32 cT) {
     register f32 tT, fc0;
     register f32 tmp0, tmp1, tmp2, tmp3, tmp4;
@@ -744,45 +783,6 @@ void PSMTXRotAxisRad(Mtx m, const Vec* axis, f32 rad) {
     cosT = cosf(rad);
 
     __PSMTXRotAxisRadInternal(m, axis, sinT, cosT);
-}
-
-void C_MTXRotAxisRad(Mtx m, const Vec* axis, f32 rad) {
-    Vec vN;
-    f32 s;
-    f32 c;
-    f32 t;
-    f32 x;
-    f32 y;
-    f32 z;
-    f32 xSq;
-    f32 ySq;
-    f32 zSq;
-
-    ASSERTMSGLINE(1677, m, "MTXRotAxisRad():  NULL MtxPtr 'm' ");
-    ASSERTMSGLINE(1678, axis, "MTXRotAxisRad():  NULL VecPtr 'axis' ");
-
-    s = sinf(rad);
-    c = cosf(rad);
-    t = 1 - c;
-    C_VECNormalize(axis, &vN);
-    x = vN.x;
-    y = vN.y;
-    z = vN.z;
-    xSq = (x * x);
-    ySq = (y * y);
-    zSq = (z * z);
-    m[0][0] = (c + (t * xSq));
-    m[0][1] = (y * (t * x)) - (s * z);
-    m[0][2] = (z * (t * x)) + (s * y);
-    m[0][3] = 0;
-    m[1][0] = ((y * (t * x)) + (s * z));
-    m[1][1] = (c + (t * ySq));
-    m[1][2] = ((z * (t * y)) - (s * x));
-    m[1][3] = 0;
-    m[2][0] = ((z * (t * x)) - (s * y));
-    m[2][1] = ((z * (t * y)) + (s * x));
-    m[2][2] = (c + (t * zSq));
-    m[2][3] = 0;
 }
 
 void C_MTXTrans(Mtx m, f32 xT, f32 yT, f32 zT) {

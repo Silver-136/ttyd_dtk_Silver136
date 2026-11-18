@@ -69,15 +69,6 @@ static inline void TRKSendReply(u8 replyError) {
     TRKWriteUARTN(&reply, sizeof(CommandReply));
 }
 
-DSError TRKSendACK(TRKBuffer* buffer) {
-    DSError err;
-
-    MWTRACE(1, "SendACK : Calling MessageSend\n");
-    err = TRKMessageSend(buffer);
-    MWTRACE(1, "MessageSend err : %ld\n", err);
-    return err;
-}
-
 void OutputData(u8* data, int length) {
     int i;
 
@@ -96,6 +87,15 @@ BOOL GetTRKConnected(void) {
 
 void SetTRKConnected(BOOL connected) {
     IsTRKConnected = connected;
+}
+
+DSError TRKSendACK(TRKBuffer* buffer) {
+    DSError err;
+
+    MWTRACE(1, "SendACK : Calling MessageSend\n");
+    err = TRKMessageSend(buffer);
+    MWTRACE(1, "MessageSend err : %ld\n", err);
+    return err;
 }
 
 DSError TRKDoConnect(TRKBuffer* buffer) {

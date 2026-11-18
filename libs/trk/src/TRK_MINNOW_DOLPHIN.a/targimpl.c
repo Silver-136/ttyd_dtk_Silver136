@@ -44,6 +44,17 @@ typedef struct TRKStepStatus {
     u32 rangeEnd;
 } TRKStepStatus;
 
+/* The TRKTargetCPUType reply (MetroTRK layout, as in the Mario Party 4 decompilation). */
+typedef struct DSCPUType {
+    u8 cpuMajor;
+    u8 cpuMinor;
+    u8 bigEndian;
+    u8 defaultTypeSize;
+    u8 fpTypeSize;
+    u8 extended1TypeSize;
+    u8 extended2TypeSize;
+} DSCPUType;
+
 typedef struct TRKRestoreFlags_PPC {
     u8 TBR;
     u8 DEC;
@@ -71,6 +82,9 @@ DSError TRKSuppAccessFile(u32 file_handle, u8* data, size_t* count, DSIOResult* 
 void TRKSaveExtended1Block(void);
 void TRKRestoreExtended1Block(void);
 void TRKUARTInterruptHandler(void);
+u8 TRKTargetCPUMinorType(void);
+
+extern BOOL gTRKBigEndian;
 
 
 static u16 TRK_saved_exceptionID = 0;
@@ -124,6 +138,108 @@ asm u32 __TRK_get_MSR(void) {
 asm void __TRK_set_MSR(register u32 msr) {
     nofralloc
     mtmsr r3
+    blr
+}
+
+asm u32 __TRK_get_PVR(void) {
+    nofralloc
+    mfspr r3, 287
+    blr
+}
+
+asm u32 __TRK_get_IBAT0U(void) {
+    nofralloc
+    mfspr r3, 528
+    blr
+}
+
+asm u32 __TRK_get_IBAT0L(void) {
+    nofralloc
+    mfspr r3, 529
+    blr
+}
+
+asm u32 __TRK_get_IBAT1U(void) {
+    nofralloc
+    mfspr r3, 530
+    blr
+}
+
+asm u32 __TRK_get_IBAT1L(void) {
+    nofralloc
+    mfspr r3, 531
+    blr
+}
+
+asm u32 __TRK_get_IBAT2U(void) {
+    nofralloc
+    mfspr r3, 532
+    blr
+}
+
+asm u32 __TRK_get_IBAT2L(void) {
+    nofralloc
+    mfspr r3, 533
+    blr
+}
+
+asm u32 __TRK_get_IBAT3U(void) {
+    nofralloc
+    mfspr r3, 534
+    blr
+}
+
+asm u32 __TRK_get_IBAT3L(void) {
+    nofralloc
+    mfspr r3, 535
+    blr
+}
+
+asm u32 __TRK_get_DBAT0U(void) {
+    nofralloc
+    mfspr r3, 536
+    blr
+}
+
+asm u32 __TRK_get_DBAT0L(void) {
+    nofralloc
+    mfspr r3, 537
+    blr
+}
+
+asm u32 __TRK_get_DBAT1U(void) {
+    nofralloc
+    mfspr r3, 538
+    blr
+}
+
+asm u32 __TRK_get_DBAT1L(void) {
+    nofralloc
+    mfspr r3, 539
+    blr
+}
+
+asm u32 __TRK_get_DBAT2U(void) {
+    nofralloc
+    mfspr r3, 540
+    blr
+}
+
+asm u32 __TRK_get_DBAT2L(void) {
+    nofralloc
+    mfspr r3, 541
+    blr
+}
+
+asm u32 __TRK_get_DBAT3U(void) {
+    nofralloc
+    mfspr r3, 542
+    blr
+}
+
+asm u32 __TRK_get_DBAT3L(void) {
+    nofralloc
+    mfspr r3, 543
     blr
 }
 
@@ -718,6 +834,17 @@ DSError TRKTargetAccessExtended2(u32 firstRegister, u32 lastRegister, TRKBuffer*
     return error;
 }
 
+DSError TRKTargetCPUType(DSCPUType* cpuType) {
+    cpuType->cpuMajor = 0;
+    cpuType->cpuMinor = TRKTargetCPUMinorType();
+    cpuType->bigEndian = gTRKBigEndian;
+    cpuType->defaultTypeSize = 4;
+    cpuType->fpTypeSize = 8;
+    cpuType->extended1TypeSize = 4;
+    cpuType->extended2TypeSize = 8;
+    return DS_NoError;
+}
+
 void TRKPostInterruptEvent(void) {
     int eventType;
     u32 inst;
@@ -746,6 +873,15 @@ void TRKPostInterruptEvent(void) {
     }
 }
 
+static DSError TRKTargetEnableTrace(BOOL val) {
+    if (val)
+        gTRKCPUState.Extended1.MSR |= 0x400;
+    else
+        gTRKCPUState.Extended1.MSR &= ~0x400;
+
+    return 0;
+}
+
 BOOL TRKTargetStepDone(void) {
     BOOL result = 1;
 
@@ -771,7 +907,7 @@ BOOL TRKTargetStepDone(void) {
 DSError TRKTargetDoStep(void) {
     gTRKStepStatus.active = 1;
     MWTRACE(1, "TargetDoStep()\n");
-    gTRKCPUState.Extended1.MSR |= 0x400;
+    TRKTargetEnableTrace(1);
 
     if (gTRKStepStatus.type == 0 || gTRKStepStatus.type == 0x10)
         gTRKStepStatus.count--;
@@ -782,7 +918,7 @@ DSError TRKTargetDoStep(void) {
 
 BOOL TRKTargetCheckStep(void) {
     if (gTRKStepStatus.active) {
-        gTRKCPUState.Extended1.MSR &= ~0x400;
+        TRKTargetEnableTrace(0);
 
         if (TRKTargetStepDone())
             gTRKStepStatus.active = 0;
@@ -923,6 +1059,15 @@ DSError TRKTargetSupportRequest(void) {
 
     gTRKCPUState.Default.PC += 4;
     return error;
+}
+
+DSError TRKTargetFlushCache(u8 accessOptions, void* start, void* end) {
+    if (start < end) {
+        TRK_flush_cache((u32)start, (u32)end - (u32)start);
+        return DS_NoError;
+    }
+
+    return DS_InvalidMemory;
 }
 
 BOOL TRKTargetStopped(void) {

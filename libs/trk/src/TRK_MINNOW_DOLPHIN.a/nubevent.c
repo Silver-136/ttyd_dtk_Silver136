@@ -35,13 +35,17 @@ DSError TRKInitializeEventQueue(void) {
     return 0;
 }
 
+void TRKCopyEvent(TRKEvent* dstEvent, const TRKEvent* srcEvent) {
+    TRK_memcpy(dstEvent, srcEvent, sizeof(TRKEvent));
+}
+
 BOOL TRKGetNextEvent(TRKEvent* event) {
     BOOL status = 0;
 
     TRKAcquireMutex(&gTRKEventQueue);
 
     if (0 < gTRKEventQueue.count) {
-        TRK_memcpy(event, &gTRKEventQueue.events[gTRKEventQueue.next], sizeof(TRKEvent));
+        TRKCopyEvent(event, &gTRKEventQueue.events[gTRKEventQueue.next]);
         gTRKEventQueue.count--;
 
         if (++gTRKEventQueue.next == 2)
@@ -64,7 +68,7 @@ DSError TRKPostEvent(TRKEvent* event) {
         ret = DS_EventQueueFull;
     } else {
         nextEventID = (gTRKEventQueue.next + gTRKEventQueue.count) % 2;
-        TRK_memcpy(&gTRKEventQueue.events[nextEventID], event, sizeof(TRKEvent));
+        TRKCopyEvent(&gTRKEventQueue.events[nextEventID], event);
         gTRKEventQueue.events[nextEventID].eventID = gTRKEventQueue.eventID;
         gTRKEventQueue.eventID++;
 

@@ -71,6 +71,23 @@ static BOOL DBGEXIImm(void* data, s32 byte_size, u32 write)
     return TRUE;
 }
 
+static BOOL DBGWriteMailbox(u32 mailbox)
+{
+    BOOL error = FALSE;
+    u32 value;
+
+    if (!DBGEXISelect(4)) {
+        return FALSE;
+    }
+
+    value = (mailbox & 0x1fffffff) | 0xc0000000;
+    error |= !DBGEXIImm((u8*)&value, sizeof(value), 1);
+    error |= !DBGEXISync();
+    error |= !DBGEXIDeselect();
+
+    return !error;
+}
+
 static BOOL DBGReadMailbox(void* mailbox)
 {
     BOOL error = FALSE;
@@ -84,23 +101,6 @@ static BOOL DBGReadMailbox(void* mailbox)
     error |= !DBGEXIImm((u8*)&command, 2, 1);
     error |= !DBGEXISync();
     error |= !DBGEXIImm(mailbox, sizeof(mailbox), 0); // sizeof a pointer: 4, the size of the mailbox word
-    error |= !DBGEXISync();
-    error |= !DBGEXIDeselect();
-
-    return !error;
-}
-
-static BOOL DBGWriteMailbox(u32 mailbox)
-{
-    BOOL error = FALSE;
-    u32 value;
-
-    if (!DBGEXISelect(4)) {
-        return FALSE;
-    }
-
-    value = (mailbox & 0x1fffffff) | 0xc0000000;
-    error |= !DBGEXIImm((u8*)&value, sizeof(value), 1);
     error |= !DBGEXISync();
     error |= !DBGEXIDeselect();
 
@@ -204,22 +204,6 @@ static void DBGHandler(__OSInterrupt interrupt, OSContext* context)
     }
 }
 
-static void CheckMailBox(void)
-{
-    u32 mail[2]; // the status word, then the mailbox word
-
-    DBGReadStatus(mail);
-    if (mail[0] & 1) {
-        DBGReadMailbox(mail);
-        mail[0] &= ~0xE0000000;
-        if ((mail[0] & 0x1f000000) == 0x1f000000) {
-            SendMailData = mail[0];
-            RecvDataLeng = mail[0] & 0x7fff;
-            EXIInputFlag = 1;
-        }
-    }
-}
-
 void DBInitComm(u8** inputPendingPtrRef, InterruptHandlerLike monitorCallback)
 {
     BOOL enabled;
@@ -239,6 +223,22 @@ void DBInitInterrupts(void)
     DBGCallback = MWCallback;
     __OSSetInterruptHandler(0x19, DBGHandler);
     __OSUnmaskInterrupts(0x40);
+}
+
+static void CheckMailBox(void)
+{
+    u32 mail[2]; // the status word, then the mailbox word
+
+    DBGReadStatus(mail);
+    if (mail[0] & 1) {
+        DBGReadMailbox(mail);
+        mail[0] &= ~0xE0000000;
+        if ((mail[0] & 0x1f000000) == 0x1f000000) {
+            SendMailData = mail[0];
+            RecvDataLeng = mail[0] & 0x7fff;
+            EXIInputFlag = 1;
+        }
+    }
 }
 
 u32 DBQueryData(void)

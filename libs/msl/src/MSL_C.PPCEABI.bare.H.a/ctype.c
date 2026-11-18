@@ -1,3 +1,5 @@
+#include "ctype_map.h"
+
 #define EOF (-1)
 
 /* Character class bits (ctype_map.h): 0x01 control, 0x02 motion (\t..\r), 0x04 space, 0x08 punctuation,
@@ -60,7 +62,56 @@ unsigned char __upper_map[256] = {
     0xF0, 0xF1, 0xF2, 0xF3, 0xF4, 0xF5, 0xF6, 0xF7, 0xF8, 0xF9, 0xFA, 0xFB, 0xFC, 0xFD, 0xFE, 0xFF,
 };
 
+int toupper(int c) {
+    if (c == EOF) return EOF;
+    return __upper_map[c & 0xff];
+}
+
 __declspec(weak) int tolower(int c) {
     if (c == EOF) return EOF;
     return __lower_map[c & 0xff];
+}
+
+int isxdigit(int c) {
+    return __ctype_map[(unsigned char)c] & __hex_digit;
+}
+
+int isupper(int c) {
+    return __ctype_map[(unsigned char)c] & __upper_case;
+}
+
+int isspace(int c) {
+    return __ctype_map[(unsigned char)c] & __whitespace;
+}
+
+int ispunct(int c) {
+    return __ctype_map[(unsigned char)c] & __punctuation;
+}
+
+int isprint(int c) {
+    return __ctype_map[(unsigned char)c] & __printable;
+}
+
+int islower(int c) {
+    return __ctype_map[(unsigned char)c] & __lower_case;
+}
+
+int isgraph(int c) {
+    return __ctype_map[(unsigned char)c] & __graphic;
+}
+
+int isdigit(int c) {
+    return __ctype_map[(unsigned char)c] & __digit;
+}
+
+int iscntrl(int c) {
+    return __ctype_map[(unsigned char)c] & __control;
+}
+
+int isalpha(int c) {
+    return __ctype_map[(unsigned char)c] & __letter;
+}
+
+int isalnum(int c) {
+    return __ctype_map[(unsigned char)c] & __alphanumeric;
 }

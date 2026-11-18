@@ -18,28 +18,7 @@ extern void* gTRKInputPendingPtr;
 
 BOOL gTRKBigEndian;
 
-BOOL TRKInitializeEndian(void) {
-    unsigned char bendian[4];
-    BOOL result = 0;
-
-    // set first and again below (both stores are in the game code)
-    gTRKBigEndian = 1;
-
-    // read the four bytes back as one word to tell the byte order
-    bendian[0] = 0x12;
-    bendian[1] = 0x34;
-    bendian[2] = 0x56;
-    bendian[3] = 0x78;
-
-    if (*(unsigned long*)bendian == 0x12345678)
-        gTRKBigEndian = 1;
-    else if (*(unsigned long*)bendian == 0x78563412)
-        gTRKBigEndian = 0;
-    else
-        result = 1;
-
-    return result;
-}
+BOOL TRKInitializeEndian(void);
 
 DSError TRKInitializeNub(void) {
     DSError result;
@@ -87,4 +66,27 @@ DSError TRKTerminateNub(void) {
 
 void TRKNubWelcome(void) {
     TRK_board_display("MetroTRK for GAMECUBE v2.6");
+}
+
+BOOL TRKInitializeEndian(void) {
+    unsigned char bendian[4];
+    BOOL result = 0;
+
+    // set first and again below (both stores are in the game code)
+    gTRKBigEndian = 1;
+
+    // read the four bytes back as one word to tell the byte order
+    bendian[0] = 0x12;
+    bendian[1] = 0x34;
+    bendian[2] = 0x56;
+    bendian[3] = 0x78;
+
+    if (*(unsigned long*)bendian == 0x12345678)
+        gTRKBigEndian = 1;
+    else if (*(unsigned long*)bendian == 0x78563412)
+        gTRKBigEndian = 0;
+    else
+        result = 1;
+
+    return result;
 }

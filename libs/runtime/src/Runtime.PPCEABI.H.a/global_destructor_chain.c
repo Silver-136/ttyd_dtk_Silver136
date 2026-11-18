@@ -15,5 +15,13 @@ void __destroy_global_chain(void) {
     }
 }
 
+void* __register_global_object(void* object, void* destructor, void* regmem) {
+    ((DestructorChain*)regmem)->next = __global_destructor_chain;
+    ((DestructorChain*)regmem)->destructor = destructor;
+    ((DestructorChain*)regmem)->object = object;
+    __global_destructor_chain = (DestructorChain*)regmem;
+    return object;
+}
+
 /* Listed in .dtors, so the global destructor chain runs at exit. */
 __declspec(section ".dtors") static void* const __destroy_global_chain_reference = __destroy_global_chain;

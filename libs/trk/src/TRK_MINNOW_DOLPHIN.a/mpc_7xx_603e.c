@@ -237,3 +237,6 @@ done:
     blr
 }
 
+unsigned char TRKTargetCPUMinorType(void) {
+    return 0x54;
+}

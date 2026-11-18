@@ -14,7 +14,6 @@ typedef struct GSROOT {
 } GSROOT;
 
 static GSROOT gsDefault;
-static s32 gsUnused;
 static GSROOT* gsRoot;
 static GSROOT* gsCurrent;
 static s32 gsNextID;

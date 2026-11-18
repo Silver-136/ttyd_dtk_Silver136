@@ -21,8 +21,21 @@ void TRKGetInput(void);
 BOOL TRKTargetStopped(void);
 DSError TRKTargetContinue(void);
 
+void TRKHandleRequestEvent(TRKEvent* event) {
+    void* buffer = TRKGetBuffer(event->msgBufID);
+    TRKDispatchMessage(buffer);
+}
+
+void TRKHandleSupportEvent(TRKEvent* event) {
+    TRKTargetSupportRequest();
+}
+
+void TRKIdle(void) {
+    if (TRKTargetStopped() == 0)
+        TRKTargetContinue();
+}
+
 void TRKNubMainLoop(void) {
-    void* msg;
     TRKEvent event;
     BOOL isShutdownRequested = 0;
     BOOL isNewInput = 0;
@@ -35,8 +48,7 @@ void TRKNubMainLoop(void) {
             case TRK_EVENT_NULL:
                 break;
             case TRK_EVENT_REQUEST:
-                msg = TRKGetBuffer(event.msgBufID);
-                TRKDispatchMessage(msg);
+                TRKHandleRequestEvent(&event);
                 break;
             case TRK_EVENT_SHUTDOWN:
                 isShutdownRequested = 1;
@@ -46,7 +58,7 @@ void TRKNubMainLoop(void) {
                 TRKTargetInterrupt(&event);
                 break;
             case TRK_EVENT_SUPPORT:
-                TRKTargetSupportRequest();
+                TRKHandleSupportEvent(&event);
                 break;
             }
 
@@ -61,9 +73,7 @@ void TRKNubMainLoop(void) {
             continue;
         }
 
-        if (TRKTargetStopped() == 0)
-            TRKTargetContinue();
-
+        TRKIdle();
         isNewInput = 0;
     }
 }

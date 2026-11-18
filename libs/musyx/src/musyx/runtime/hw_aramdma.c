@@ -33,7 +33,9 @@ typedef struct ARAMTransferQueue {
 } ARAMTransferQueue;
 
 static u32 aramTop;                                               // size: 0x4
+#if MUSY_VERSION < MUSY_VERSION_CHECK(2, 0, 2)
 static u32 aramWrite;                                             // size: 0x4
+#endif
 static u32 aramStream;                                            // size: 0x4
 static void* (*aramUploadCallback)(u32, u32); // size: 0x4
 static u32 aramUploadChunkSize;                                   // size: 0x4

@@ -199,6 +199,54 @@ int TRKWriteUARTN(const void* bytes, u32 length) {
     return writeErr == 0 ? 0 : -1;
 }
 
+int WriteUARTFlush(void) {
+    int readErr = 0;
+
+    while (gWritePos < 0x800) {
+        gWriteBuf[gWritePos] = 0;
+        gWritePos++;
+    }
+
+    if (gWritePos != 0) {
+        readErr = TRKWriteUARTN(gWriteBuf, gWritePos);
+        gWritePos = 0;
+    }
+
+    return readErr;
+}
+
+int WriteUART1(u8 arg0) {
+    gWriteBuf[gWritePos++] = arg0;
+    return 0;
+}
+
+int TRKReadUARTPoll(u8* arg0) {
+    int readErr = 4;
+    int cnt;
+
+    if (gReadPos >= gReadCount) {
+        gReadPos = 0;
+        cnt = gReadCount = TRKPollUART();
+
+        if (cnt > 0) {
+            if (cnt > 0x110A)
+                gReadCount = 0x110A;
+
+            readErr = TRKReadUARTN(gReadBuf, gReadCount);
+
+            if (readErr != 0)
+                gReadCount = 0;
+        }
+    }
+
+    if (gReadPos < gReadCount) {
+        *arg0 = gReadBuf[gReadPos++];
+        readErr = 0;
+    }
+
+    return readErr;
+}
+
 void ReserveEXI2Port(void) {
     gDBCommTable.post_stop_func();
 }
