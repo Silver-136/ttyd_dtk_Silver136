@@ -176,13 +176,13 @@ void npcRecoveryFiledNpc(void) {
  * For the Luigi model only: swaps each animation in luigi_pose for its "R" twin
  * when the camera sees him from behind, and back again when it sees him from the front.
  */
-// Original name and size (0x1b4) from the JP demo map (UNUSED there: every call is inlined).
-inline void luigiMain(NpcEntry* entry) {
+// Original name and size (0x1b4) from the JP demo map (UNUSED there: every call is inlined, so the body has at most
+// 30 statements: the camera direction is written inside the atan2 call and the first angle inside the 0 test).
+void luigiMain(NpcEntry* entry) {
     if (entry->flags & NPC_FLAG_LUIGI_POSE_FLIP) {
         AnimationPose* animPose;
         AnimTableEntry* anim;
         CameraEntry* camera;
-        f32 dx, dz;
         f32 angle;
 
         animPoseGetCurrentAnim(entry->poseId);
@@ -190,14 +190,11 @@ inline void luigiMain(NpcEntry* entry) {
         anim = animPoseGetCurrentAnim(entry->poseId);
 
         camera = camGetPtr(CAMERA_3D);
-        dx = camera->cameraAt.x - camera->cameraPos.x;
-        dz = camera->cameraAt.z - camera->cameraPos.z;
-        angle = reviseAngle(NPC_RAD2DEG((f32)atan2(-dx, -dz)));
-        if (angle < 0.0f) {
+        if ((angle = reviseAngle(NPC_RAD2DEG((f32)atan2(-(camera->cameraAt.x - camera->cameraPos.x),
+                                                         -(camera->cameraAt.z - camera->cameraPos.z))))) < 0.0f) {
             angle += 360.0f;
         }
-        angle = angle - animPose->rotationY;
-        angle = reviseAngle(angle);
+        angle = reviseAngle(angle - animPose->rotationY);
 
         if ((angle > 90.0f && angle <= 270.0f) || (angle < -90.0f && angle >= -270.0f)) {
             u32 i;

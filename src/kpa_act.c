@@ -34,6 +34,49 @@ static EVT_BEGIN(kpa_score_disp_evt)
     RETURN
 EVT_END()
 
+/**
+ * Takes the first free popup slot and shows score (without leading zeros) centred 20 units above pos for 30
+ * frames; does nothing when all 50 are in use.
+ */
+// Original name, size (0x268) and slot (before kpaScoreDisp) from the JP demo map (UNUSED there: every call is
+// inlined, so the body has at most 30 statements; the first remainder is taken inside the d[1] line).
+void kpaScoreDispEntry(s32 score, Vec* pos) {
+    char* p;
+    char* str;
+    s32 t;
+    s8 d[5];
+    s32 j;
+    s32 n;
+    s32 i;
+    for (i = 0; i < KPA_SCORE_SLOT_COUNT; i++) {
+        if (ksdp[i].timer == 0) {
+            d[0] = score / 10000;
+            d[1] = (t = score % 10000) / 1000;
+            t %= 1000;
+            d[2] = t / 100;
+            t %= 100;
+            d[3] = t / 10;
+            d[4] = t % 10;
+            p = ksdp[i].str;
+
+            str = ksdp[i].str;
+            n = 0;
+            for (j = 0; j < 5; j++) {
+                if (n != 0 || d[j] != 0) {
+                    *p++ = d[j] + '0';
+                    n++;
+                }
+            }
+            str[n] = 0;
+            ksdp[i].timer = 30;
+            ksdp[i].pos.x = pos->x - 0.5f * (10.0f * (f32)strlen(ksdp[i].str));
+            ksdp[i].pos.y = 20.0f + pos->y;
+            ksdp[i].pos.z = 0.0f;
+            break;
+        }
+    }
+}
+
 /** Draws the active score popups as half-size white text at their positions. */
 static void kpaScoreDisp(CameraId cameraId, void* param) {
     Mtx m;
@@ -93,49 +136,6 @@ USER_FUNC(kpa_score_disp_init) {
         ksdp[i].pos = (Vec){0.0f, 0.0f, 0.0f};
     }
     return EVT_RETURN_DONE;
-}
-
-/**
- * Takes the first free popup slot and shows score (without leading zeros) centred 20 units above pos for 30
- * frames; does nothing when all 50 are in use.
- */
-// Original name and size (0x268) from the JP demo map (UNUSED there: every call is inlined).
-inline void kpaScoreDispEntry(s32 score, Vec* pos) {
-    char* p;
-    char* str;
-    s32 t;
-    s8 d[5];
-    s32 j;
-    s32 n;
-    s32 i;
-    for (i = 0; i < KPA_SCORE_SLOT_COUNT; i++) {
-        if (ksdp[i].timer == 0) {
-            d[0] = score / 10000;
-            t = score % 10000;
-            d[1] = t / 1000;
-            t %= 1000;
-            d[2] = t / 100;
-            t %= 100;
-            d[3] = t / 10;
-            d[4] = t % 10;
-            p = ksdp[i].str;
-
-            str = ksdp[i].str;
-            n = 0;
-            for (j = 0; j < 5; j++) {
-                if (n != 0 || d[j] != 0) {
-                    *p++ = d[j] + '0';
-                    n++;
-                }
-            }
-            str[n] = 0;
-            ksdp[i].timer = 30;
-            ksdp[i].pos.x = pos->x - 0.5f * (10.0f * (f32)strlen(ksdp[i].str));
-            ksdp[i].pos.y = 20.0f + pos->y;
-            ksdp[i].pos.z = 0.0f;
-            break;
-        }
-    }
 }
 
 /** Adds coins to Bowser's coin count; when it rolls over, also adds the rollover bonus to his score. */

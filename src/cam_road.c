@@ -241,8 +241,9 @@ static void calcCurrentCamState(CameraParams* out) {
 }
 
 /** Vector a scaled by s, by value. */
-// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
-inline Vec mulV(Vec a, f32 s) {
+// Original name and size (0x48) from the JP demo's link map (UNUSED there): every call is inlined, so
+// the linker strips it.
+Vec mulV(Vec a, f32 s) {
     Vec r;
     r.x = a.x * s;
     r.y = a.y * s;
@@ -251,8 +252,9 @@ inline Vec mulV(Vec a, f32 s) {
 }
 
 /** Vector a + b by value. */
-// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
-inline Vec addV(Vec a, Vec b) {
+// Original name and size (0x54) from the JP demo's link map (UNUSED there): every call is inlined, so
+// the linker strips it.
+Vec addV(Vec a, Vec b) {
     Vec r;
     r.x = a.x + b.x;
     r.y = a.y + b.y;
@@ -261,9 +263,9 @@ inline Vec addV(Vec a, Vec b) {
 }
 
 /** Vector a - b by value. */
-// subV..inV keep `inline`: as plain functions with by-value Vec arguments -inline auto leaves them out of line.
-// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
-inline Vec subV(Vec a, Vec b) {
+// Original name and size (0x54) from the JP demo's link map (UNUSED there): every call is inlined, so
+// the linker strips it.
+Vec subV(Vec a, Vec b) {
     Vec r;
     r.x = a.x - b.x;
     r.y = a.y - b.y;
@@ -272,8 +274,9 @@ inline Vec subV(Vec a, Vec b) {
 }
 
 /** Cross product a x b by value. */
-// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
-inline Vec outV(Vec a, Vec b) {
+// Original name and size (0x60) from the JP demo's link map (UNUSED there): every call is inlined, so
+// the linker strips it.
+Vec outV(Vec a, Vec b) {
     Vec r;
     r.x = a.y * b.z - a.z * b.y;
     r.y = a.z * b.x - a.x * b.z;
@@ -282,8 +285,9 @@ inline Vec outV(Vec a, Vec b) {
 }
 
 /** Dot product of a and b. */
-// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
-inline f32 inV(Vec a, Vec b) {
+// Original name and size (0x28) from the JP demo's link map (UNUSED there): every call is inlined, so
+// the linker strips it.
+f32 inV(Vec a, Vec b) {
     return a.x * b.x + a.y * b.y + a.z * b.z;
 }
 

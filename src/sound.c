@@ -609,6 +609,9 @@ BOOL SoundDropData(void) {
  * Stops every song, effect, DVD-audio track and stream. Only SoundDropData calls it (inlined); the JP demo map
  * lists its out-of-line copy as stripped (SoundStopAll, 0x208 bytes, which this body compiles to there).
  */
+// The effect, DVD and stream loops call their channel stops (inlined: the same code as writing them out); with
+// them the body has 23 statements, so it would also be auto-inlined as a plain function. It keeps `inline`:
+// emitting the plain copy moves the unit's JP demo @N numbering further from the map (cleanup_notes\bf\GD9).
 inline void SoundStopAll(void) {
     u32 i;
 
@@ -620,55 +623,15 @@ inline void SoundStopAll(void) {
         }
     }
     for (i = 0; i < SOUND_EFFECT_MAX; i++) {
-        SoundEffect* effect = &sound.effects[i];
-        if (effect->flags) {
-            sndFXKeyOff(effect->voiceId);
-            if (effect->flags & SOUND_EFX_FLAG_EMITTER_UNUSED) {
-                sndRemoveEmitter(&effect->emitter);
-            }
-            effect->flags = 0;
-        }
+        SoundEfxMuteCh(i);
     }
 
     for (i = 0; i < SOUND_DVD_MAX; i++) {
-        SoundDVD* dvd = &sound.dvds[i];
-        if (dvd->flags & (SOUND_DVD_FLAG_PLAY | SOUND_DVD_FLAG_MUTE)) {
-            AISetStreamPlayState(0);
-            dvd->flags = 0;
-            sound.dvdChannel = -1;
-            DVDCancelStream(&dvd->info.cb);
-            DVDClose(&dvd->info);
-        }
+        SoundDVDStopCh(i);
     }
 
     for (i = 0; i < SOUND_STREAM_MAX; i++) {
-        SoundStream* stream;
-        if (sound.streams[i].flags) {
-            stream = &sound.streams[i];
-#if VERSION <= VERSION_DEMO_JP
-            if (!(stream->flags & SOUND_STREAM_FLAG_STARTED)) {
-                stream->flags |= SOUND_STREAM_FLAG_END;
-                continue;
-            }
-#else
-            sndDisableIRQ();
-#endif
-            if (stream->flags & SOUND_STREAM_FLAG_ARAM) {
-                sound.slotUsed[stream->slot] = 0;
-            }
-            stream->flags = 0;
-#if VERSION <= VERSION_DEMO_JP
-            sndDisableIRQ();
-#endif
-            DVDMgrClose(stream->entries[0].dvd);
-            DVDMgrClose(stream->entries[1].dvd);
-            sndStreamFree(stream->entries[0].streamId);
-            if (stream->count == 2) {
-                sndStreamFree(stream->entries[1].streamId);
-            }
-            sndEnableIRQ();
-            sound.streamChannel = -1;
-        }
+        SoundSSStopCh(i);
     }
 }
 

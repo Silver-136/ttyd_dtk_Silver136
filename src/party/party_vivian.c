@@ -306,10 +306,10 @@ void vivian_move(PartyEntry* party) {
  * around Mario. The early demos search the ground in vivian_use instead.
  */
 // The early demos' set_vivian_pos/vivian_use are older (fixed hide offset, ground search in vivian_use): one copy each
-// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
-// It keeps `inline`: as a plain function -inline auto leaves it out of line here (the link changes).
+// Original name and size (0xb8, the early demo body) from the JP demo's link map (UNUSED there): every call is
+// inlined, so the linker strips it. The JP+ body keeps `inline` (no map to check its out-of-line size against).
 #if VERSION <= VERSION_DEMO_JP
-inline void set_vivian_pos(PartyEntry* party) {
+void set_vivian_pos(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;
     f32 ofs;
 

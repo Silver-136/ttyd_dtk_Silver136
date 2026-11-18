@@ -661,9 +661,8 @@ void fire_se_off(void) {
 }
 
 /** Marks the fire breath loop as not playing (fireSfxId -1). */
-// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
-// It keeps `inline`: kpaPreInit calls it before this definition, and as a plain function it stays out of line there.
-inline void fire_se_init(void) {
+// Original name and size (0x2c) from the JP demo map (UNUSED there): every call is inlined, so the linker strips it.
+void fire_se_init(void) {
     MarioWork* mario = marioGetPtr();
     mario->kpaWork->fireSfxId = -1;
 }
@@ -882,7 +881,8 @@ static void kpaFire(Vec pos) {
  * offset by his size and facing, flame size by level (level 3 uses the big flame type),
  * both flame layers turned to his facing.
  */
-static inline void kpaFireEntry(Vec pos) {
+// A plain function inlined into kpaFire, so at most 30 statements: the two facing tests are one-line assignments.
+static void kpaFireEntry(Vec pos) {
     MarioWork* mario = marioGetPtr();
     if (fireefp == NULL) {
         s32 flag = 0;
@@ -920,17 +920,11 @@ static inline void kpaFireEntry(Vec pos) {
                 break;
         }
         fireefp = effGonbabaBreathEntry(type, 0, x, y, z, sz);
-        flag = 0;
-        if (mario->displayDirectionTarget >= 90.0f && mario->displayDirectionTarget <= 270.0f) {
-            flag = 1;
-        }
+        flag = mario->displayDirectionTarget >= 90.0f && mario->displayDirectionTarget <= 270.0f;
         ((EffGonbabaBreathWork*)fireefp->userdata)->yaw = (f32)(flag ? 180 : 0);
         child = ((EffGonbabaBreathWork*)fireefp->userdata)->child;
         if (child) {
-            flag = 0;
-            if (mario->displayDirectionTarget >= 90.0f && mario->displayDirectionTarget <= 270.0f) {
-                flag = 1;
-            }
+            flag = mario->displayDirectionTarget >= 90.0f && mario->displayDirectionTarget <= 270.0f;
             ang = flag ? 180 : 0;
             ((EffGonbabaBreathWork*)child->userdata)->yaw = (f32)ang;
         }
