@@ -4292,12 +4292,12 @@ static USER_FUNC(_object_fall_attack) {
                                     p.x -= 45.0f;
                                     eff = effNiceEntry(NICE_EFFECT_LUCKY, p.x, p.y, p.z);
                                     ((NiceEffectWork*)eff->userdata)->overallScale = 0.75f;
-                                    unit2->damagePattern = 0;
+                                    unit2->damagePattern = ATTACKPATTERN_NULL;
                                     BattleRunHitEvent(unit2, DAMAGE_RESULT_FINAL_HIT | DAMAGE_CODE_LUCKY);
                                     break;
 
                                 case PRECHECK_DODGY:
-                                    unit2->damagePattern = 0;
+                                    unit2->damagePattern = ATTACKPATTERN_NULL;
                                     BattleRunHitEvent(unit2, DAMAGE_RESULT_FINAL_HIT | DAMAGE_CODE_DODGY);
                                     break;
 

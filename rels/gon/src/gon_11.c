@@ -884,9 +884,9 @@ static s32 evt_cloud_main(EventEntry* event, BOOL isFirstCall) {
             offscreenEntry(wp->offscreenName);
             off = offscreenNameToPtr(wp->offscreenName);
 #if VERSION <= VERSION_DEMO_JP
-            off->texFmt = off->copyFmt = 6;
+            off->texFmt = off->copyFmt = GX_TF_RGBA8;
 #else
-            off->texFmt = (off->copyFmt = 4);
+            off->texFmt = (off->copyFmt = GX_TF_RGB565);
 #endif
             _mapsetofs_all(wp);
             wp->state++;

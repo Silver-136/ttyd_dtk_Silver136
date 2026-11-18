@@ -2570,7 +2570,7 @@ USER_FUNC(btlevtcmd_StartAvoid) {
         entry = effNiceEntry(NICE_EFFECT_LUCKY, pos.x, pos.y, pos.z);
         ((NiceEffectWork*)entry->userdata)->overallScale = 0.75f;
     }
-    unit->damagePattern = 0;
+    unit->damagePattern = ATTACKPATTERN_NULL;
     BattleRunHitEvent(unit, damageCode);
     return EVT_RETURN_DONE;
 }
@@ -5017,7 +5017,7 @@ USER_FUNC(btlevtcmd_RunDataEventChild) {
         return EVT_RETURN_DONE;
     }
     child = evtChildEntry(event, evt, 0);
-    event->opcode = 0;
+    event->opcode = OPCODE_NEXT;
     child->unitId = id;
     return EVT_RETURN_FINISH;
 }
@@ -6237,25 +6237,25 @@ USER_FUNC(btlevtcmd_ACSuccessEffect) {
     scale = 0.75f;
 #if VERSION >= VERSION_US
     switch (gp->language) {
-        case 1:
+        case LANGUAGE_US:
             lang = 1;
             break;
-        case 2:
+        case LANGUAGE_GE:
             lang = 2;
             break;
-        case 3:
+        case LANGUAGE_FR:
             lang = 3;
             break;
-        case 4:
+        case LANGUAGE_SP:
             lang = 4;
             break;
-        case 5:
+        case LANGUAGE_IT:
             lang = 5;
             break;
-        case 6:
+        case LANGUAGE_DU:
             lang = 6;
             break;
-        case 0:
+        case LANGUAGE_JP:
         default:
             lang = 0;
             break;
@@ -7907,8 +7907,8 @@ USER_FUNC(btlevtcmd_SacBgsetMove) {
         obj = &wp->stageObjects[i];
         if (obj->id > 0) {
             switch (obj->data->layer) {
-                case 0:
-                case 1:
+                case STAGE_LAYER_A1:
+                case STAGE_LAYER_A2:
                     if (on) {
                         if (obj->position.x >= 0.0f) {
                             val = intplGetValue(mode, 450.0f, 0.0f, event->userdata[0], 45);
@@ -7922,7 +7922,7 @@ USER_FUNC(btlevtcmd_SacBgsetMove) {
                     }
                     obj->positionOffset2.x = val;
                     break;
-                case 2:
+                case STAGE_LAYER_B:
                     if (on) {
                         val = intplGetValue(mode, 260.0f, 0.0f, event->userdata[0], 45);
                     } else {

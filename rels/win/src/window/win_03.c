@@ -248,7 +248,7 @@ static USER_FUNC(camera_action) {
     cam->storedAt = at;
     cam->startTimeA = gp->renderTime;
     cam->durationA = 0;
-    cam->stateA = 3;
+    cam->stateA = CAM_MOVE_TO_STORED;
     cam->curveA = EASING_SINE_IN_OUT;
     return event->lwData[10] == 0 ? EVT_RETURN_BLOCK : EVT_RETURN_DONE;
 }

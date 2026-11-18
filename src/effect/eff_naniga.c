@@ -164,7 +164,7 @@ static void effNanigaMain(EffectEntry* effect) {
                 for (i = 0; i < 4; i++) {
                     effKemuTestDrawCam(effKemuTestEntry(2, work->screen.x, work->screen.y, work->screen.z,
                                                         0.5f + (f32)irand(200) / 100.0f),
-                                       8);
+                                       CAMERA_2D);
                 }
                 psndSFXOn_3D("SFX_ITEM_WHAT1", &pos);
             }

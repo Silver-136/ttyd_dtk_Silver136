@@ -166,7 +166,7 @@ void BattleInformationSetDropMaterial(FieldBattleInfo* info) {
             p = drop;
             if (drop) {
                 sum = 0;
-                for (; p->dropWeight > 0 || p->type != 0; p++) {
+                for (; p->dropWeight > 0 || p->type != ITEM_NULL; p++) {
                     sum += p->dropWeight;
                 }
                 if (sum > 0) {

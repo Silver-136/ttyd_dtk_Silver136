@@ -97,7 +97,7 @@ USER_FUNC(lect_cam_load) {
     camera->storedAt = stAt;
     camera->startTimeA = gp->renderTime;
     camera->durationA = OSMillisecondsToTicks(msec);
-    camera->stateA = 3;
+    camera->stateA = CAM_MOVE_TO_STORED;
     camera->curveA = EASING_SINE_IN_OUT;
 
     mario->position = stMpos;

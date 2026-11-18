@@ -1041,7 +1041,7 @@ static void teresa_ext_init(void) {
         (*pose->mtx)[2][3] = 0.0f;
         pose->dir = 90.0f;
         teresa[i].state = 0;
-        teresa[i].animType = 0;
+        teresa[i].animType = ATM_TERESA_ANIM_FLOAT;
         teresa[i].animFrame = 0;
         {
             Vec zero = {0.0f, 0.0f, 0.0f};
@@ -1107,7 +1107,7 @@ static void teresa_ext_main(void) {
     for (i = 0; i < extGetPoseNum(); i++, pose++) {
         t = &teresa[i];
         switch (t->animType) {
-            case 1:
+            case ATM_TERESA_ANIM_GATHER:
                 t->animFrame++;
                 if (t->animFrame <= 30) {
                     pose->texId = 8;
@@ -1233,7 +1233,7 @@ static void teresa_ext_main(void) {
                     for (j = 0; j < 8; j++) {
                         AtmTeresa* p = &teresa[j];
                         p->state = 20;
-                        p->animType = 1;
+                        p->animType = ATM_TERESA_ANIM_GATHER;
                         p->animFrame = 0;
                         p->vel.x = 0.0f;
                         p->vel.y = 0.0f;
@@ -1244,7 +1244,7 @@ static void teresa_ext_main(void) {
             case 20:
                 if (t->animFrame >= 180) {
                     t->state = 23;
-                    t->animType = 0;
+                    t->animType = ATM_TERESA_ANIM_FLOAT;
                     t->animFrame = 0;
                     t->timer = 60;
                     t->wait = waits[i];

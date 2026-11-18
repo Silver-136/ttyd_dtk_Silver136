@@ -104,11 +104,11 @@ USER_FUNC(evt_cam_shake) {
     now = event->lifetime;
     if (isFirstCall) {
         event->userdata[0] = 0;
-        ((u32*)&event->userdata[1])[0] = (now >> 32) & 0xFFFFFFFF;
-        ((u32*)&event->userdata[1])[1] = now & 0xFFFFFFFF;
+        event->userdata[1] = (now >> 32) & 0xFFFFFFFF;
+        event->userdata[2] = now & 0xFFFFFFFF;
         event->userWork[3] = 0;
-        ((u32*)&event->wInterpRelatedTime)[0] = (now >> 32) & 0xFFFFFFFF;
-        ((u32*)&event->wInterpRelatedTime)[1] = now & 0xFFFFFFFF;
+        event->userWork[4] = (now >> 32) & 0xFFFFFFFF; // userWork[4..5]: wInterpRelatedTime, phase start
+        event->userWork[5] = now & 0xFFFFFFFF;
     }
     event->userdata[0]++;
     event->userdata[0] %= 4;
@@ -140,15 +140,15 @@ USER_FUNC(evt_cam_shake) {
             padRumbleOn(0);
             if (onTime < OSTicksToMilliseconds(now - last)) {
                 event->userWork[3] = 1 - event->userWork[3];
-                ((u32*)&event->wInterpRelatedTime)[0] = (now >> 32) & 0xFFFFFFFF;
-                ((u32*)&event->wInterpRelatedTime)[1] = now & 0xFFFFFFFF;
+                event->userWork[4] = (now >> 32) & 0xFFFFFFFF;
+                event->userWork[5] = now & 0xFFFFFFFF;
             }
         } else {
             padRumbleOff(0);
             if (offTime < OSTicksToMilliseconds(now - last)) {
                 event->userWork[3] = 1 - event->userWork[3];
-                ((u32*)&event->wInterpRelatedTime)[0] = (now >> 32) & 0xFFFFFFFF;
-                ((u32*)&event->wInterpRelatedTime)[1] = now & 0xFFFFFFFF;
+                event->userWork[4] = (now >> 32) & 0xFFFFFFFF;
+                event->userWork[5] = now & 0xFFFFFFFF;
             }
         }
     }

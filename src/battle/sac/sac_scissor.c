@@ -1196,7 +1196,7 @@ static void scissor_disp_control(CameraId camera, void* param) {
     }
 #if VERSION <= VERSION_DEMO_JP
     wp = _battleWorkPointer;
-    GXSetChanMatColor(4, (GXColor){0xFF, 0x00, 0x00, 0xFF});
+    GXSetChanMatColor(GX_COLOR0A0, (GXColor){0xFF, 0x00, 0x00, 0xFF});
     for (i = 0; i < BATTLE_UNIT_MAX; i++) {
         unit = BattleGetUnitPtr(wp, i);
         if (unit == NULL) {
@@ -1231,7 +1231,7 @@ static void scissor_disp_control(CameraId camera, void* param) {
         b.y = pos.y + hh;
         b.z = pos.z;
         btlGetScreenPoint(&b, &b);
-        GXBegin(0xA8, 0, 2);
+        GXBegin(GX_LINES, GX_VTXFMT0, 2);
         GXPosition3f32(a.x, a.y, 0.0f);
         GXPosition3f32(b.x, b.y, 0.0f);
         a.x = pos.x + hw;
@@ -1242,7 +1242,7 @@ static void scissor_disp_control(CameraId camera, void* param) {
         b.y = pos.y - hh;
         b.z = pos.z;
         btlGetScreenPoint(&b, &b);
-        GXBegin(0xA8, 0, 2);
+        GXBegin(GX_LINES, GX_VTXFMT0, 2);
         GXPosition3f32(a.x, a.y, 0.0f);
         GXPosition3f32(b.x, b.y, 0.0f);
         a.x = pos.x + hw;
@@ -1253,7 +1253,7 @@ static void scissor_disp_control(CameraId camera, void* param) {
         b.y = pos.y - hh;
         b.z = pos.z;
         btlGetScreenPoint(&b, &b);
-        GXBegin(0xA8, 0, 2);
+        GXBegin(GX_LINES, GX_VTXFMT0, 2);
         GXPosition3f32(a.x, a.y, 0.0f);
         GXPosition3f32(b.x, b.y, 0.0f);
         a.x = pos.x - hw;
@@ -1264,7 +1264,7 @@ static void scissor_disp_control(CameraId camera, void* param) {
         b.y = pos.y + hh;
         b.z = pos.z;
         btlGetScreenPoint(&b, &b);
-        GXBegin(0xA8, 0, 2);
+        GXBegin(GX_LINES, GX_VTXFMT0, 2);
         GXPosition3f32(a.x, a.y, 0.0f);
         GXPosition3f32(b.x, b.y, 0.0f);
     }

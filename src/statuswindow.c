@@ -522,7 +522,7 @@ static void statusGetValue(StatusValue* values) {
             values->partyHp = party->currentHp;
             values->partyMaxHp = party->maxHp;
         } else {
-            values->party = 0;
+            values->party = PARTY_NONE;
             values->partyHp = 0;
             values->partyMaxHp = 0;
         }

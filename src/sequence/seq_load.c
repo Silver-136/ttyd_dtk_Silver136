@@ -233,10 +233,10 @@ void seq_loadMain(SequenceWork* seq) {
                         wp->soundMode = 0;
 #if VERSION <= VERSION_DEMO_JP
                     } else if (gp->soundMode == 0) {
-                        SoundSetOutputMode(1);
+                        SoundSetOutputMode(SND_OUTPUTMODE_STEREO);
                         wp->soundMode = 1;
                     } else {
-                        SoundSetOutputMode(2);
+                        SoundSetOutputMode(SND_OUTPUTMODE_SURROUND);
                         wp->soundMode = 2;
 #else
                     } else {
@@ -744,8 +744,8 @@ static void loadMain(SequenceWork* seq) {
             } else if (trg & PAD_BUTTON_A) {
                 switch (wp->soundModeSel) {
                     case 0:
-                        OSSetSoundMode(0);
-                        SoundSetOutputMode(OS_SOUND_MODE_MONO);
+                        OSSetSoundMode(OS_SOUND_MODE_MONO);
+                        SoundSetOutputMode(SND_OUTPUTMODE_MONO);
 #else
             sound = wp->soundModeSel;
             if (dir & DEMO_STICK_UP) {
@@ -764,14 +764,14 @@ static void loadMain(SequenceWork* seq) {
                     case 1:
                         OSSetSoundMode(OS_SOUND_MODE_STEREO);
 #if VERSION <= VERSION_DEMO_JP
-                        SoundSetOutputMode(1);
+                        SoundSetOutputMode(SND_OUTPUTMODE_STEREO);
 #endif
                         gp->soundMode = 0;
                         break;
                     case 2:
                         OSSetSoundMode(OS_SOUND_MODE_STEREO);
 #if VERSION <= VERSION_DEMO_JP
-                        SoundSetOutputMode(2);
+                        SoundSetOutputMode(SND_OUTPUTMODE_SURROUND);
 #endif
                         gp->soundMode = 1;
                         break;
@@ -1469,7 +1469,7 @@ static void continueGame(void) {
     gp->flags |= GW_FLAG_SAVE_LOADED;
     switch (swByteGet(GSW_ID(GSW_SAVE_RESUME_POINT))) {
         case 0:
-            gp->areaFadeOutType = 0;
+            gp->areaFadeOutType = FADE_NONE;
             gp->areaFadeInType = FADE_CURTAIN_SIDES_A2;
             seqSetSeq(SEQ_MAP_CHANGE, gp->currentMapName, 0);
             break;

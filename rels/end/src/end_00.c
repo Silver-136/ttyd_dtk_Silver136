@@ -2058,12 +2058,12 @@ void end_staff_roll_exit(void) {
     fileFree(end_wp->tpl);
     psndClearFlag(PSND_FLAG_NO_SFX);
 #if VERSION <= VERSION_DEMO_JP
-    gp->language = 0;
+    gp->language = LANGUAGE_JP;
     JUTFont_Free();
     JUTFontSetup(0);
     msgLoad("global", 1);
 #elif VERSION < VERSION_US
-    gp->language = 0;
+    gp->language = LANGUAGE_JP;
     JUTFont_Free();
     JUTFontSetup(0);
 #endif
@@ -2077,13 +2077,13 @@ void end_staff_roll_exit(void) {
  */
 USER_FUNC(evt_end_font_restore) {
 #if VERSION <= VERSION_DEMO_JP
-    gp->language = 0;
+    gp->language = LANGUAGE_JP;
     JUTFont_Free();
     JUTFontSetup(0);
     msgLoad("global", 1);
 #else
 #if VERSION < VERSION_US
-    gp->language = 0;
+    gp->language = LANGUAGE_JP;
     JUTFont_Free();
     JUTFontSetup(0);
 #endif

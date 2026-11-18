@@ -1064,8 +1064,8 @@ static void driveParty(PartyEntry* party) {
         case 5:
         case 6:
         case 7:
-        case 8:
-        case 14:
+        case PARTY_RUN_GOODBYE:
+        case PARTY_RUN_DELETE:
             break;
         default:
             if (!(party->flags & PARTY_FLAG_CTRL_OFF)) {
@@ -1088,7 +1088,7 @@ static void driveParty(PartyEntry* party) {
     party->hitobjPush = NULL;
     party->hitobjAction = NULL;
     switch (party->runMode) {
-        case 0:
+        case PARTY_RUN_MOVE_RESET:
             if ((party->flags & PARTY_FLAG_CTRL_OFF) && !(party->flags & PARTY_FLAG_RUN_OFF)) {
                 break;
             }
@@ -1102,7 +1102,7 @@ static void driveParty(PartyEntry* party) {
             party_dp = &partyDataTbl[party->currentMemberId];
             party_dp->move_func(party);
             break;
-        case 1:
+        case PARTY_RUN_WAIT:
 #if VERSION <= VERSION_DEMO_JP
             if ((party->flags & PARTY_FLAG_CTRL_OFF) && !(party->flags & PARTY_FLAG_RUN_OFF)) {
                 break;
@@ -1538,8 +1538,8 @@ s32 partyDokanInit(PartyEntry* party) {
 #endif
     party->flags2 |= PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
     switch (mario->dokanType) {
-        case 2:
-        case 3:
+        case DOKAN_TATE_DOWNOUT:
+        case DOKAN_TATE_UPOUT:
             partyPaperOn(party, "p_dokan_y");
 #if VERSION >= VERSION_US
             partyChgPaper(party, "PM_D_1A");
@@ -1554,13 +1554,13 @@ s32 partyDokanInit(PartyEntry* party) {
             party->motionStep = 0;
 #endif
             break;
-        case 0:
+        case DOKAN_TATE_DOWNIN:
             party->scale = (Vec){0.0f, 0.0f, 0.0f};
 #if VERSION >= VERSION_US
             party->flags2 |= PARTY_DISP_FLAG_NO_FLIP;
             party->flags2 |= PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
             animPoseSetMaterialLightFlagOff(party->paperAnimGroup, MATERIAL_LIGHT_PAPER);
-        case 1:
+        case DOKAN_TATE_UPIN:
             partyPaperOn(party, "p_dokan_y");
             partyChgPaper(party, "PM_D_1A");
             partyChgPoseId(party, PARTY_POSE_PIPE);
@@ -1572,13 +1572,13 @@ s32 partyDokanInit(PartyEntry* party) {
             party->flags2 |= PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
             animPoseSetMaterialLightFlagOff(party->paperAnimGroup, MATERIAL_LIGHT_PAPER);
 #else
-        case 1:
+        case DOKAN_TATE_UPIN:
             partyPaperOn(party, "p_dokan_y");
             party->spinSpeed = 30.0f;
             party->motionStep = 0;
 #endif
             break;
-        case 5:
+        case DOKAN_YOKO_OUT:
             partyPaperOn(party, "p_dokan_x");
 #if VERSION >= VERSION_US
             partyChgPaper(party, "PM_D_1A");
@@ -1589,7 +1589,7 @@ s32 partyDokanInit(PartyEntry* party) {
             party->rotOfsY = 10.0f;
 #if VERSION <= VERSION_DEMO_JP
             break;
-        case 4:
+        case DOKAN_YOKO_IN:
             partyPaperOn(party, "p_dokan_x");
             party->spinSpeed = -26.0f;
             party->motionStep = 10;

@@ -279,7 +279,7 @@ void cardCopy2Buffer(s32 slot) {
     gp->saveCount++;
     gp->flags &= ~GW_FLAG_SAVE_LOADED;
     gp->flags &= ~GW_FLAG_NO_ENTRANCE;
-    gp->resetType = 0;
+    gp->resetType = RESET_TYPE_NONE;
 #if VERSION >= VERSION_US
     gp->softResetWait = gp->resetButtonDown = 0;
 #endif
@@ -348,7 +348,7 @@ void cardCopy2Main(s32 slot) {
     memcpy(bdsw, &save->data.badgeShop, sizeof(BadgeShopWork));
     memcpy(yuwp, &save->data.parlor, sizeof(PiantaParlorWork));
     memcpy(&_jdt.readFlags, &save->data.informant, sizeof(InformantReadFlags));
-    gp->resetType = 0;
+    gp->resetType = RESET_TYPE_NONE;
     gp->resetButtonDown = 0;
 
     // BUG (JP and the early demos, fixed in US here and in cardCopy2Buffer): softResetWait is not cleared on save or on
@@ -1103,28 +1103,28 @@ static void make_header(void) {
 #if VERSION >= VERSION_DEMO_EU
     OSTicksToCalendarTime(OSGetTime(), &td);
     switch (gp->language) {
-        case 0:
+        case LANGUAGE_JP:
             strcpy(metadata->data.fileName, "ペーパーマリオＲＰＧ");
             sprintf(metadata->data.dateString, "%2d月%2d日のセーブデータです", td.mon + 1, td.mday);
             break;
-        case 1:
-        case 6:
+        case LANGUAGE_US:
+        case LANGUAGE_DU:
             strcpy(metadata->data.fileName, "Paper Mario");
             sprintf(metadata->data.dateString, "%2d/%2d save data", td.mon + 1, td.mday);
             break;
-        case 2:
+        case LANGUAGE_GE:
             strcpy(metadata->data.fileName, "Paper Mario");
             sprintf(metadata->data.dateString, "Spielstand vom: %2d/%2d", td.mday, td.mon + 1);
             break;
-        case 3:
+        case LANGUAGE_FR:
             strcpy(metadata->data.fileName, "Paper Mario");
             sprintf(metadata->data.dateString, "Sauvegarde du %2d/%2d", td.mday, td.mon + 1);
             break;
-        case 4:
+        case LANGUAGE_SP:
             strcpy(metadata->data.fileName, "Paper Mario");
             sprintf(metadata->data.dateString, "Datos guardados el %2d/%2d", td.mday, td.mon + 1);
             break;
-        case 5:
+        case LANGUAGE_IT:
             strcpy(metadata->data.fileName, "Paper Mario");
             sprintf(metadata->data.dateString, "Salvataggio: %2d/%2d", td.mday, td.mon + 1);
             break;

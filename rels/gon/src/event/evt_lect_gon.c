@@ -452,7 +452,7 @@ static USER_FUNC(effitemget_busaiku) {
     PSVECAdd(&camera->cameraAt, &ofs, &camera->storedAt);
     camera->startTimeA = gp->renderTime;
     camera->durationA = 0;
-    camera->stateA = 3;
+    camera->stateA = CAM_MOVE_TO_STORED;
     camera->curveA = EASING_SINE_IN_OUT;
     return EVT_RETURN_DONE;
 }

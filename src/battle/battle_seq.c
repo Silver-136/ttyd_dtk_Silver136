@@ -2004,7 +2004,7 @@ static void btlseqMove(BattleWork* wp) {
                 break;
             case 0x5000006:
                 for (i = 0; i < BATTLE_UNIT_MAX; i++) {
-                    if (wp->phaseEvtTable[i].unitId != -1) {
+                    if (wp->phaseEvtTable[i].unitId != UNIT_ID_NONE) {
                         unit = BattleGetUnitPtr(wp, wp->phaseEvtTable[i].unitId);
                         if (unit && unit->phaseEventCode) {
                             break;
@@ -2013,7 +2013,7 @@ static void btlseqMove(BattleWork* wp) {
                 }
                 if (i < BATTLE_UNIT_MAX) {
                     BattleRunPhaseEvent(unit, FALSE);
-                    wp->phaseEvtTable[i].unitId = -1;
+                    wp->phaseEvtTable[i].unitId = UNIT_ID_NONE;
                     BattleIncSeq(wp, SEQ_MOVE);
                 } else {
                     BattleSetSeq(wp, SEQ_MOVE, 0x500000A);
@@ -2605,7 +2605,7 @@ static void battleMakePhaseEvtTable(BattleWork* wp) {
 
     table = wp->phaseEvtTable;
     for (i = 0; i < BATTLE_UNIT_MAX; i++) {
-        table[i].unitId = -1;
+        table[i].unitId = UNIT_ID_NONE;
         table[i].priority = 0;
     }
     count = 0;
@@ -2891,7 +2891,7 @@ static USER_FUNC(_set_haikei_entry_scale) {
                 }
                 for (i = 0; i < BATTLE_STAGE_OBJECT_MAX; i++) {
                     obj = &wp->stageObjects[i];
-                    if (obj->id > 0 && obj->data->layer == 0) {
+                    if (obj->id > 0 && obj->data->layer == STAGE_LAYER_A1) {
                         mapObjScale(obj->data->name, sx / 100.0f, sy / 100.0f, 1.0f);
                         obj->flags |= STAGE_OBJECT_FLAG_UPDATE;
                     }

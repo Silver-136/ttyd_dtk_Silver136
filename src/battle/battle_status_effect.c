@@ -645,10 +645,10 @@ void BattleStatusChangeMsgAdjust(BattleWork* wp) {
             }
         }
         if (!msg->flags) {
-            msg->unitId = -1;
+            msg->unitId = UNIT_ID_NONE;
             msg->type = -1;
         } else if (*(s64*)&base->maskHi & (s64)(1 << t)) {
-            msg->unitId = -1;
+            msg->unitId = UNIT_ID_NONE;
             msg->type = -1;
         }
     }

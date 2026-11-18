@@ -2335,7 +2335,7 @@ static USER_FUNC(_chuchu_make_extra_work_area) {
 
 #define ADD_WEAPON(w)                                                               \
     command->weapon[*count].index = -1;                                             \
-    command->weapon[*count].itemId = 0;                                             \
+    command->weapon[*count].itemId = ITEM_NULL;                                             \
     command->weapon[*count].weapon = (BattleWeapon*)(w);                            \
     command->weapon[*count].enabled = 0;                                            \
     command->weapon[*count].icon = command->weapon[*count].weapon->icon;            \
@@ -2353,7 +2353,7 @@ static void __makeTechMenuFunc(BattleCommand* command, s32* count) {
     techLv = partyGetTechLv(BattleTransPartyId(BattleGetPartyPtr(_battleWorkPointer)->currentKind));
 
     command->weapon[*count].index = -1;
-    command->weapon[*count].itemId = 0;
+    command->weapon[*count].itemId = ITEM_NULL;
     command->weapon[*count].weapon = &partyWeapon_ChuchurinaNormalAttackLeftLast;
     command->weapon[*count].enabled = 0;
     command->weapon[*count].icon = command->weapon[*count].weapon->icon;
@@ -2362,7 +2362,7 @@ static void __makeTechMenuFunc(BattleCommand* command, s32* count) {
 
     if (techLv >= 0) {
         command->weapon[*count].index = -1;
-        command->weapon[*count].itemId = 0;
+        command->weapon[*count].itemId = ITEM_NULL;
         command->weapon[*count].weapon = &partyWeapon_ChuchurinaItemSteal;
         command->weapon[*count].enabled = 0;
         command->weapon[*count].icon = command->weapon[*count].weapon->icon;
@@ -2371,7 +2371,7 @@ static void __makeTechMenuFunc(BattleCommand* command, s32* count) {
     }
     if (techLv >= 1) {
         command->weapon[*count].index = -1;
-        command->weapon[*count].itemId = 0;
+        command->weapon[*count].itemId = ITEM_NULL;
         command->weapon[*count].weapon = &partyWeapon_ChuchurinaMadowaseAttack;
         command->weapon[*count].enabled = 0;
         command->weapon[*count].icon = command->weapon[*count].weapon->icon;
@@ -2380,7 +2380,7 @@ static void __makeTechMenuFunc(BattleCommand* command, s32* count) {
     }
     if (techLv >= 2) {
         command->weapon[*count].index = -1;
-        command->weapon[*count].itemId = 0;
+        command->weapon[*count].itemId = ITEM_NULL;
         command->weapon[*count].weapon = &partyWeapon_ChuchurinaKiss;
         command->weapon[*count].enabled = 0;
         command->weapon[*count].icon = command->weapon[*count].weapon->icon;
@@ -2528,7 +2528,7 @@ static USER_FUNC(_chuchu_item_steal) {
             if (table != NULL) {
                 s32 i;
                 total = 0;
-                for (i = 0; table[i].holdWeight > 0 || table[i].type != 0; i++) {
+                for (i = 0; table[i].holdWeight > 0 || table[i].type != ITEM_NULL; i++) {
                     total += table[i].holdWeight;
                 }
                 if (total > 0) {

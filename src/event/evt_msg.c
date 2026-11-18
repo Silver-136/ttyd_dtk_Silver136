@@ -516,7 +516,7 @@ void evtMsgFmtStr(char* buf, const char* name) {
 
     switch (gp->language) {
         case LANGUAGE_US:
-        case 6:
+        case LANGUAGE_DU:
             initial = *name;
             switch (initial) {
                 case 'A':
@@ -838,7 +838,7 @@ void evtMsgFmtInt(char* buf, s32 count) {
     switch (gp->language) {
         case LANGUAGE_US:
         case LANGUAGE_SP:
-        case 6:
+        case LANGUAGE_DU:
             if ((marker = strstr(msg_num_buf, "<S>")) != NULL) {
                 len = strlen(msg_num_buf) - strlen(marker);
                 strncpy(msg_plural_buf, msg_num_buf, len);

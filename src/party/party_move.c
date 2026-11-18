@@ -1436,18 +1436,18 @@ void party_move_mode_wait(PartyEntry* party) {
         }
     }
     switch (party->motionId) {
-        case 0:
+        case PARTY_MOTION_STAY:
             party_motion_wait(party);
             if (party->currentMemberId == PARTY_FLURRIE) {
                 cloud_hover_main(party);
             }
             break;
-        case 1:
-        case 2:
-        case 6:
+        case PARTY_MOTION_WALK:
+        case PARTY_MOTION_JUMP:
+        case PARTY_MOTION_UPSTAIRS:
             partyChgMot(party, PARTY_MOTION_STAY);
             break;
-        case 3:
+        case PARTY_MOTION_FALL:
             party_motion_fall(party);
             break;
     }
@@ -1575,20 +1575,20 @@ void party_move_mode_stay(PartyEntry* party) {
 #endif
     }
     switch (party->motionId) {
-        case 0:
+        case PARTY_MOTION_STAY:
             party_motion_stay(party);
 #if VERSION >= VERSION_JP
             if (party->currentMemberId == PARTY_FLURRIE) {
                 cloud_hover_main(party);
             }
             break;
-        case 1:
-        case 2:
-        case 6:
+        case PARTY_MOTION_WALK:
+        case PARTY_MOTION_JUMP:
+        case PARTY_MOTION_UPSTAIRS:
             partyChgMot(party, PARTY_MOTION_STAY);
 #endif
             break;
-        case 3:
+        case PARTY_MOTION_FALL:
             party_motion_fall(party);
             break;
     }
@@ -1612,26 +1612,26 @@ void party_move_mode_walk(PartyEntry* party) {
         party->trigFlags &= ~PARTY_TRIG_CHG_MOVE_MODE;
     }
     switch (party->motionId) {
-        case 0:
+        case PARTY_MOTION_STAY:
             party_motion_stay(party);
             break;
-        case 1:
+        case PARTY_MOTION_WALK:
             if (party->moveKind == 0) {
                 party_motion_homing_walk(party);
             } else {
                 party_motion_homing_fly(party);
             }
             break;
-        case 2:
+        case PARTY_MOTION_JUMP:
             party_motion_jump(party);
             break;
-        case 3:
+        case PARTY_MOTION_FALL:
             party_motion_fall(party);
             break;
-        case 6:
+        case PARTY_MOTION_UPSTAIRS:
             party_motion_upstairs(party);
             break;
-        case 7:
+        case PARTY_MOTION_DAMAGE:
             party_motion_damage(party);
             break;
     }
@@ -1653,24 +1653,24 @@ void party_move_mode_behind_mario(PartyEntry* party) {
         party->trigFlags &= ~PARTY_TRIG_CHG_MOVE_MODE;
     }
     switch (party->motionId) {
-        case 0:
-        case 1:
+        case PARTY_MOTION_STAY:
+        case PARTY_MOTION_WALK:
             if (party->moveKind == 0) {
                 party_motion_behind_mario(party);
             } else {
                 party_motion_behind_mario_fly(party);
             }
             break;
-        case 2:
+        case PARTY_MOTION_JUMP:
             party_motion_jump2(party);
             break;
-        case 3:
+        case PARTY_MOTION_FALL:
             party_motion_fall(party);
             break;
-        case 6:
+        case PARTY_MOTION_UPSTAIRS:
             party_motion_upstairs(party);
             break;
-        case 7:
+        case PARTY_MOTION_DAMAGE:
             party_motion_damage(party);
             break;
     }
@@ -1688,20 +1688,20 @@ void party_move_mode_beside_mario(PartyEntry* party) {
         party->trigFlags &= ~PARTY_TRIG_CHG_MOVE_MODE;
     }
     switch (party->motionId) {
-        case 0:
-        case 1:
+        case PARTY_MOTION_STAY:
+        case PARTY_MOTION_WALK:
             party_motion_beside_mario(party);
             break;
-        case 2:
+        case PARTY_MOTION_JUMP:
             party_motion_jump2(party);
             break;
-        case 3:
+        case PARTY_MOTION_FALL:
             party_motion_fall(party);
             break;
-        case 6:
+        case PARTY_MOTION_UPSTAIRS:
             party_motion_upstairs(party);
             break;
-        case 7:
+        case PARTY_MOTION_DAMAGE:
             party_motion_damage(party);
             break;
     }
@@ -1739,8 +1739,8 @@ void partyForceWalk(PartyEntry* party) {
         }
     }
     switch (party->motionId) {
-        case 0:
-        case 1:
+        case PARTY_MOTION_STAY:
+        case PARTY_MOTION_WALK:
             if (party->forceMoveFrames <= 0) {
                 party->forceMoveFrames = 0;
                 partyPrevRunMode(party);
@@ -1884,24 +1884,24 @@ static inline void party_move_mode_behind_mario_continue(PartyEntry* party) {
         party->trigFlags &= ~PARTY_TRIG_CHG_MOVE_MODE;
     }
     switch (party->motionId) {
-        case 0:
-        case 1:
+        case PARTY_MOTION_STAY:
+        case PARTY_MOTION_WALK:
             if (party->moveKind == 0) {
                 party_motion_behind_mario_continue(party);
             } else {
                 party_motion_behind_mario_fly(party);
             }
             break;
-        case 2:
+        case PARTY_MOTION_JUMP:
             party_motion_jump2(party);
             break;
-        case 3:
+        case PARTY_MOTION_FALL:
             party_motion_fall(party);
             break;
-        case 6:
+        case PARTY_MOTION_UPSTAIRS:
             party_motion_upstairs(party);
             break;
-        case 7:
+        case PARTY_MOTION_DAMAGE:
             party_motion_damage(party);
             break;
     }

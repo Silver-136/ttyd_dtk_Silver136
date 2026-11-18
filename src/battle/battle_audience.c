@@ -1679,19 +1679,19 @@ static void BattleAudienceCtrlProcess(void) {
             }
         } else if (BattleAudience_GetExist(i)) {
             switch (member->type) {
-                case 0: BattleAudienceCtrlProcessKinopio(i); break;
-                case 1: BattleAudienceCtrlProcessKinopio(i); break;
-                case 2: BattleAudienceCtrlProcessKinopio(i); break;
-                case 3: BattleAudienceCtrlProcessKinopio(i); break;
-                case 4: BattleAudienceCtrlProcessKinopio(i); break;
-                case 5: BattleAudienceCtrlProcessKinopio(i); break;
-                case 6: BattleAudienceCtrlProcessKinopio(i); break;
-                case 7: BattleAudienceCtrlProcessKinopio(i); break;
-                case 8: BattleAudienceCtrlProcessKinopio(i); break;
-                case 9: BattleAudienceCtrlProcessKinopio(i); break;
-                case 10: BattleAudienceCtrlProcessKinopio(i); break;
-                case 11: BattleAudienceCtrlProcessKinopio(i); break;
-                case 12: BattleAudienceCtrlProcessKinopio(i); break;
+                case AUDIENCE_TOAD: BattleAudienceCtrlProcessKinopio(i); break;
+                case AUDIENCE_XNAUT: BattleAudienceCtrlProcessKinopio(i); break;
+                case AUDIENCE_BOO: BattleAudienceCtrlProcessKinopio(i); break;
+                case AUDIENCE_HAMMER_BRO: BattleAudienceCtrlProcessKinopio(i); break;
+                case AUDIENCE_DULL_BONES: BattleAudienceCtrlProcessKinopio(i); break;
+                case AUDIENCE_SHY_GUY: BattleAudienceCtrlProcessKinopio(i); break;
+                case AUDIENCE_CRAZY_DAYZEE: BattleAudienceCtrlProcessKinopio(i); break;
+                case AUDIENCE_PUNI: BattleAudienceCtrlProcessKinopio(i); break;
+                case AUDIENCE_KOOPA: BattleAudienceCtrlProcessKinopio(i); break;
+                case AUDIENCE_BULKY_BOBOMB: BattleAudienceCtrlProcessKinopio(i); break;
+                case AUDIENCE_GOOMBA: BattleAudienceCtrlProcessKinopio(i); break;
+                case AUDIENCE_PIRANHA_PLANT: BattleAudienceCtrlProcessKinopio(i); break;
+                case AUDIENCE_LUIGI: BattleAudienceCtrlProcessKinopio(i); break;
             }
         }
     }
@@ -2642,7 +2642,7 @@ static void BattleAudienceDispAudience(CameraId camId, void* param) {
         scl[2][3] += oz;
         PSMTXConcat(rot, scl, scl);
 #if VERSION <= VERSION_DEMO_JP
-        if (m->type != 2) {
+        if (m->type != AUDIENCE_BOO) {
             scl[0][3] = scl[0][3] + (m->hopX + (-ox + m->position.x));
             scl[1][3] = scl[1][3] + (m->hopY + (-oy + m->position.y));
             scl[2][3] = scl[2][3] + (m->hopZ + (-oz + m->position.z));
@@ -3157,7 +3157,7 @@ void BattleAudience_SetTarget(s32 index) {
     s32 i;
 #if VERSION <= VERSION_DEMO_JP
     member = BattleAudienceGetPtr(index);
-    if (member->status == 7 && member->itemId != -1) {
+    if (member->status == AUDIENCE_STATUS_ITEM_ON && member->itemId != -1) {
         member->flags |= AUDIENCE_MEMBER_FLAG_TARGETED;
         for (i = 0; i < AUDIENCE_MEMBER_MAX; i++) {
             if (i != index && BattleAudience_GetExist(i)) {

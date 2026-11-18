@@ -1736,7 +1736,7 @@ void _fbatFitstAttackAnnounceMain(FirstStrikeInfo* firstStrike) {
                     firstStrike->x = intplGetValue(EASING_QUADRATIC_IN, 0.0f, 600.0f, firstStrike->timer - 80, 20);
 #endif
                 } else {
-                    firstStrike->hitKind = 0;
+                    firstStrike->hitKind = FBAT_HIT_NONE;
                     break;
                 }
                 firstStrike->y = 0.0f;
@@ -1752,7 +1752,7 @@ void _fbatFitstAttackAnnounceMain(FirstStrikeInfo* firstStrike) {
                 firstStrike->timer++;
 #endif
                 if (firstStrike->timer > 60) {
-                    firstStrike->hitKind = 0;
+                    firstStrike->hitKind = FBAT_HIT_NONE;
                     break;
                 }
                 firstStrike->x = 0.0f;

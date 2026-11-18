@@ -948,7 +948,7 @@ void cloudGetAt(Vec* position) {
     if ((mario->dispFlags & MARIO_DISP_FLAG_ZOOM) == 0) {
         CameraEntry* camera = camGetPtr(CAMERA_3D);
 
-        if (camera->stateA == 0) {
+        if (camera->stateA == CAM_MOVE_NONE) {
             cloud_at = *position;
         } else {
             *position = cloud_at;

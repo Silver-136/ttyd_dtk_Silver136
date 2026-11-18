@@ -1092,16 +1092,16 @@ static void senkaron_ext_main(void) {
         dz = -mario->position.z;
         dist = sqrt(dx * dx + dz * dz);
         switch (mario->currMotionId) {
-            case 0x12:
+            case MARIO_MOTION_HAMMER:
                 speed = 0.0f;
                 break;
-            case 1:
+            case MARIO_MOTION_WALK:
                 speed = randf(2.0f, 2.5f);
                 break;
-            case 2:
+            case MARIO_MOTION_DASH:
                 speed = randf(2.8f, 3.3f);
                 break;
-            case 3:
+            case MARIO_MOTION_JUMP:
                 speed = randf(2.3f, 2.8f);
                 break;
             default:

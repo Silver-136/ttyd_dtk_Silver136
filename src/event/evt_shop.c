@@ -940,7 +940,7 @@ USER_FUNC(evt_shop_main_func) {
                 winMgrClose(wp->win[0]);
                 winMgrClose(wp->win[1]);
                 wp->sel = -1;
-                wp->buyItem = 0;
+                wp->buyItem = ITEM_NULL;
             }
         }
     } else if (!evtCheckID(wp->buyEvt->eventId)) {

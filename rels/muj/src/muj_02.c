@@ -718,7 +718,7 @@ static void printCount(CameraId camera, void* param) {
 #if VERSION >= VERSION_US
     FontDrawStart();
     switch (gp->language) {
-        case 0:
+        case LANGUAGE_JP:
             // %3d回
             sprintf(buf, "%3d回", n);
             FontDrawStringPitch(90.0f, 120.0f, 20.0f, buf);
@@ -729,24 +729,24 @@ static void printCount(CameraId camera, void* param) {
             FontDrawScale(0.55f);
             FontDrawStringPitch(148.0f, 131.0f, 20.0f, buf);
             break;
-        case 1:
-        case 6:
+        case LANGUAGE_US:
+        case LANGUAGE_DU:
             sprintf(buf, "%3d", n);
             FontDrawStringPitch(68.0f, 120.0f, 16.0f, buf);
             FontDrawString(125.0f, 120.0f, "times");
             break;
-        case 2:
+        case LANGUAGE_GE:
             sprintf(buf, "%3d", n);
             FontDrawStringPitch(73.0f, 120.0f, 16.0f, buf);
             FontDrawString(125.0f, 120.0f, "-mal");
             break;
-        case 4:
+        case LANGUAGE_SP:
             sprintf(buf, "%3d", n);
             FontDrawStringPitch(68.0f, 120.0f, 16.0f, buf);
             FontDrawString(125.0f, 120.0f, "veces");
             break;
-        case 3:
-        case 5:
+        case LANGUAGE_FR:
+        case LANGUAGE_IT:
             sprintf(buf, "%3d", n);
             FontDrawString(110.0f, 120.0f, buf);
             break;

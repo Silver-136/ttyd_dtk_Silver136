@@ -2172,7 +2172,7 @@ static void __makeTechMenuFunc(BattleCommand* command, s32* count) {
     techLv = partyGetTechLv(BattleTransPartyId(BattleGetPartyPtr(_battleWorkPointer)->currentKind));
 
     command->weapon[*count].index = -1;
-    command->weapon[*count].itemId = 0;
+    command->weapon[*count].itemId = ITEM_NULL;
     command->weapon[*count].weapon = &partyWeapon_YoshiNormalAttack;
     command->weapon[*count].enabled = 0;
     command->weapon[*count].icon = command->weapon[*count].weapon->icon;
@@ -2181,7 +2181,7 @@ static void __makeTechMenuFunc(BattleCommand* command, s32* count) {
 
     if (techLv >= 0) {
         command->weapon[*count].index = -1;
-        command->weapon[*count].itemId = 0;
+        command->weapon[*count].itemId = ITEM_NULL;
         command->weapon[*count].weapon = &partyWeapon_YoshiNomikomi_Shot;
         command->weapon[*count].enabled = 0;
         command->weapon[*count].icon = command->weapon[*count].weapon->icon;
@@ -2190,7 +2190,7 @@ static void __makeTechMenuFunc(BattleCommand* command, s32* count) {
     }
     if (techLv >= 1) {
         command->weapon[*count].index = -1;
-        command->weapon[*count].itemId = 0;
+        command->weapon[*count].itemId = ITEM_NULL;
         command->weapon[*count].weapon = &partyWeapon_YoshiEggAttack_Minimini;
         command->weapon[*count].enabled = 0;
         command->weapon[*count].icon = command->weapon[*count].weapon->icon;
@@ -2199,7 +2199,7 @@ static void __makeTechMenuFunc(BattleCommand* command, s32* count) {
     }
     if (techLv >= 2) {
         command->weapon[*count].index = -1;
-        command->weapon[*count].itemId = 0;
+        command->weapon[*count].itemId = ITEM_NULL;
         command->weapon[*count].weapon = &partyWeapon_YoshiCallGuard;
         command->weapon[*count].enabled = 0;
         command->weapon[*count].icon = command->weapon[*count].weapon->icon;

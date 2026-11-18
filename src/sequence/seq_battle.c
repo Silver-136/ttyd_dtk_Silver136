@@ -242,7 +242,7 @@ BOOL battleStageLoad(void) {
         switch (fbat->firstStrike.type) {
             case FIRST_STRIKE_ENEMY:
             case FIRST_STRIKE_MARIO:
-                if (fbat->firstStrike.hitKind != 0) {
+                if (fbat->firstStrike.hitKind != FBAT_HIT_NONE) {
                     ok = FALSE;
                 }
                 break;

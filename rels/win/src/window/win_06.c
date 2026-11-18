@@ -292,7 +292,7 @@ static USER_FUNC(cam_kaiten_set_direct) {
     camera->storedAt = ckpw->target;
     camera->startTimeA = gp->renderTime;
     camera->durationA = 0;
-    camera->stateA = 3;
+    camera->stateA = CAM_MOVE_TO_STORED;
     camera->curveA = EASING_SINE_IN_OUT;
     return EVT_RETURN_DONE;
 }

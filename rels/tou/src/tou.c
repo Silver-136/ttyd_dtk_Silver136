@@ -327,7 +327,7 @@ static void rankingInit(void) {
         } else {
             entry->points.total = fighterDt[entry->id].startPoints;
         }
-        if (entry->id == 20) {
+        if (entry->id == FIGHTER_PLAYER) {
             entry->flags |= RANK_FLAG_PLAYER;
         }
     }
@@ -535,7 +535,7 @@ static void rankingControll(void) {
         work[i] = rank_wp->entries[win[i]];
     }
     work[nwin].flags = RANK_FLAG_PLAYER;
-    work[nwin].id = 20;
+    work[nwin].id = FIGHTER_PLAYER;
     work[nwin].points.total = 0;
     for (i = 0; i < nlose; i++) {
         work[nwin + 1 + i] = rank_wp->entries[lose[i]];

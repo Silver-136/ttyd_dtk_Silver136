@@ -199,7 +199,7 @@ void winItemInit(WindowWork* w) {
         w->item.mail[i].kind = w->item.mailNum - i - 1;
         w->item.mail[i].id = pouchGetPtr()->emailIds[w->item.mailNum - i - 1];
     }
-    w->item.useItem = 0;
+    w->item.useItem = ITEM_NULL;
     winMakeSkipList(w);
     w->useWin[0] = winMgrEntry(&window_desc[0]);
     w->useWin[1] = winMgrEntry(&window_desc[1]);
@@ -229,7 +229,7 @@ void winItemInit2(WindowWork* w) {
     w->item.mailY = w->item.mailTgtY = -240.0f;
     w->item.mailScroll = w->item.mailScrollTgt = (f32)(w->item.mailSel * 200);
     winMsgEntry(w, 0, w->item.mode == 0 ? "msg_menu_mochi_item" : "msg_menu_mochi_daiji", 0);
-    w->item.useItem = 0;
+    w->item.useItem = ITEM_NULL;
 }
 
 /** Frees the two item-use windows created by winItemInit. */
@@ -605,7 +605,7 @@ s32 winItemMain(WindowWork* w) {
             if (w->buttonTrg & PAD_BUTTON_B) {
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1 | PSND_SFX_BYPASS_MUTE));
                 w->item.state = WIN_ITEM_LIST;
-                w->item.useItem = 0;
+                w->item.useItem = ITEM_NULL;
                 winMgrClose(w->useWin[0]);
                 winMgrClose(w->useWin[1]);
             } else if (w->buttonTrg & PAD_BUTTON_A) {
@@ -690,7 +690,7 @@ s32 winItemMain(WindowWork* w) {
                     psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1 | PSND_SFX_BYPASS_MUTE));
                 }
             } else if (w->buttonTrg & PAD_BUTTON_START) {
-                w->item.useItem = 0;
+                w->item.useItem = ITEM_NULL;
                 winMgrClose(w->useWin[0]);
                 winMgrClose(w->useWin[1]);
                 return -2;
@@ -712,7 +712,7 @@ s32 winItemMain(WindowWork* w) {
                 w->item.blink = 0;
                 pouchRemoveItemIndex(w->item.useItem, w->item.useIdx);
                 w->item.state = WIN_ITEM_LIST;
-                w->item.useItem = 0;
+                w->item.useItem = ITEM_NULL;
                 if (pouchGetHaveItemCnt() == 0) {
                     w->item.state = WIN_ITEM_TABS;
                 } else if (w->item.cursor[0] >= pouchGetHaveItemCnt()) {

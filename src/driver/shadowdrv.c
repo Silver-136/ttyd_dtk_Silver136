@@ -1237,7 +1237,7 @@ inline void GetTexProjMtx(ProjShadowWork* wp, Mtx texMtx, Mtx depthMtx) {
     is16 = cfg->format > 2;
 #endif
     if (texMtx) {
-        if (cfg->projType == 0) {
+        if (cfg->projType == GX_PERSPECTIVE) {
             C_MTXLightFrustum(m, -cfg->top, cfg->top, cfg->left, -cfg->left, cfg->near, 0.5f, 0.5f, 0.5f, 0.5f);
         } else {
             C_MTXLightOrtho(m, -cfg->top, cfg->top, cfg->left, -cfg->left, 0.5f, 0.5f, 0.5f, 0.5f);
@@ -1250,7 +1250,7 @@ inline void GetTexProjMtx(ProjShadowWork* wp, Mtx texMtx, Mtx depthMtx) {
         d = f - n;
         PSMTXScale(dm, 0.0f, 0.0f, 0.0f);
         scale = is16 ? 256.0f : 16.0f;
-        if (cfg->projType == 0) {
+        if (cfg->projType == GX_PERSPECTIVE) {
             dm[0][2] = f / d;
             dm[0][3] = (f * n) / d;
             dm[1][2] = dm[0][2] * scale;
@@ -1273,7 +1273,7 @@ void SetCamera(ShadowConfig* cfg, Mtx view, Mtx44 proj) {
     Vec pos = cfg->pos;
 
     C_MTXLookAt(view, &pos, &cfg->up, &cfg->target);
-    if (cfg->projType == 0) {
+    if (cfg->projType == GX_PERSPECTIVE) {
         C_MTXFrustum(proj, cfg->top, -cfg->top, cfg->left, -cfg->left, cfg->near, cfg->far);
     } else {
         C_MTXOrtho(proj, cfg->top, -cfg->top, cfg->left, -cfg->left, cfg->near, cfg->far);

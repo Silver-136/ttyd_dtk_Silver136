@@ -421,8 +421,8 @@ static void envDisp_DepthOfField(void) {
 
         GXSetCullMode(GX_CULL_NONE);
         if ((dof->flags & ENV_DOF_PASS1) && dof->radius1) {
-            coord = 0;
-            stage = 0;
+            coord = GX_TEXCOORD0;
+            stage = GX_TEVSTAGE0;
             for (i = 0; i < 4; coord++, i++, stage++) {
                 ang = 6.2831855f * i / 4.0f;
                 PSMTXTrans(mtx, dof->radius1 * env_sin(ang) / 100.0f, dof->radius1 * env_cos(ang) / 100.0f, 0.0f);
@@ -461,8 +461,8 @@ static void envDisp_DepthOfField(void) {
             DOF_QUAD(gp, 2.0f);
         }
         if ((dof->flags & ENV_DOF_PASS2) && dof->radius2) {
-            coord = 0;
-            stage = 0;
+            coord = GX_TEXCOORD0;
+            stage = GX_TEVSTAGE0;
             for (i = 0; i < 4; coord++, i++, stage++) {
                 ang2 = 6.2831855f * i / 4.0f;
                 PSMTXTrans(mtx2, dof->radius2 * env_sin(ang2) / 100.0f, dof->radius2 * env_cos(ang2) / 100.0f, 0.0f);

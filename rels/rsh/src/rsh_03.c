@@ -239,7 +239,7 @@ static USER_FUNC(omiseFukki) {
     cam->storedAt = camAt;
     cam->startTimeA = gp->renderTime;
     cam->durationA = OSMillisecondsToTicks(500);
-    cam->stateA = 3;
+    cam->stateA = CAM_MOVE_TO_STORED;
     cam->curveA = EASING_SINE_IN_OUT;
     return EVT_RETURN_DONE;
 }

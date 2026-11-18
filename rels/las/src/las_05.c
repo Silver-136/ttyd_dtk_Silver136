@@ -567,7 +567,7 @@ static s32 party_hit_check(f32 x, f32 z, f32* dir) {
                 }
             }
             break;
-        case 3:
+        case PARTY_BOBBERY:
             if (partyGetPtr(0)->useMotionId == 0x46 && dx < 80.0f && dz < 80.0f) {
                 hit = 1;
                 if (x < party->position.x) {
@@ -577,7 +577,7 @@ static s32 party_hit_check(f32 x, f32 z, f32* dir) {
                 }
             }
             break;
-        case 5:
+        case PARTY_FLURRIE:
             if ((party->flags & PARTY_FLAG_IS_BEING_USED) && dx < cloudGetBreathDist() && dz < 30.0f) {
                 if (cloudGetBreathDir() < 180.0f) {
                     if (x > party->position.x) {
@@ -1117,17 +1117,17 @@ static void senkaron_ext_main(void) {
         }
 
         switch (mario->currMotionId) {
-            case 0x12:
-            case 0x13:
+            case MARIO_MOTION_HAMMER:
+            case MARIO_MOTION_HAMMER_2:
                 speed = 0.0f;
                 break;
-            case 1:
+            case MARIO_MOTION_WALK:
                 speed = randf(3.0f, 3.5f);
                 break;
-            case 2:
+            case MARIO_MOTION_DASH:
                 speed = randf(3.8f, 4.3f);
                 break;
-            case 3:
+            case MARIO_MOTION_JUMP:
                 speed = randf(3.3f, 3.8f);
                 break;
             default:

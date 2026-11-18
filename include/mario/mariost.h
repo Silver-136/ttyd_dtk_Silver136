@@ -38,7 +38,7 @@ typedef enum GlobalWorkFlags {
 } GlobalWorkFlags;
 
 // GlobalWork.language: index into the game's language prefix tables ("jp", "us", "ge", "fr", "sp", "it" in
-// seq_load, nameent and seq_mapchange; effdrv and seq_mapchange also list "du")
+// seq_load, nameent and seq_mapchange; effdrv, seq_mapchange and sys also list "du")
 typedef enum Language {
     LANGUAGE_JP = 0,
     LANGUAGE_US = 1,
@@ -46,6 +46,7 @@ typedef enum Language {
     LANGUAGE_FR = 3,
     LANGUAGE_SP = 4,
     LANGUAGE_IT = 5,
+    LANGUAGE_DU = 6, // "du": 7th prefix in effdrv, seq_mapchange and sys; cardmgr, evt_msg, muj_02 treat it as US
 } Language;
 
 // GlobalWork.resetType

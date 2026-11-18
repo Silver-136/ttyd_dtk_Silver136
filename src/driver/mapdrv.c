@@ -361,11 +361,11 @@ static MapObject* _mapEnt(MapFileJoint* joint, MapObject* parent, Mtx mtx, s32 i
                 obj->flags |= MAP_OBJ_FLAG_DEPTH_OFFSET;
             }
             switch (joint->drawMode->blendType) {
-                case 0: obj->blendMode = 2; break;
-                case 1: obj->blendMode = 0; break;
-                case 2: obj->blendMode = 1; break;
+                case 0: obj->blendMode = DISP_MODE_XLU; break;
+                case 1: obj->blendMode = DISP_MODE_OPAQUE; break;
+                case 2: obj->blendMode = DISP_MODE_ALPHA_TEST; break;
                 case 3:
-                    default: obj->blendMode = 2; break;
+                    default: obj->blendMode = DISP_MODE_XLU; break;
             }
         }
         if (obj->flags & MAP_OBJ_FLAG_GROUP) {

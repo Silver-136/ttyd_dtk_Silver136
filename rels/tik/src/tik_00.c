@@ -2860,13 +2860,13 @@ static USER_FUNC(card_camid) {
 
 /**
  * Script helper (JP and later).
- * Sets the blend mode of the "supotto" spotlight map object to 10
+ * Sets the blend mode of the "supotto" spotlight map object to DISP_MODE_XLU_AFTER
  * so it fades with the house walls during the card reading.
  */
 USER_FUNC(supotto_blendmode) {
     MapObject* obj = mapGetMapObj("supotto");
 
-    obj->blendMode = 10;
+    obj->blendMode = DISP_MODE_XLU_AFTER;
     return EVT_RETURN_DONE;
 }
 #endif

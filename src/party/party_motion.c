@@ -297,7 +297,7 @@ void party_motion_stay(PartyEntry* party) {
                         distABf(party->position.x, party->position.z, mario->position.x, mario->position.z) >= lim) {
                         partyChgMot(party, PARTY_MOTION_WALK);
                     }
-                } else if (!(other->flags & PARTY_FLAG_IS_BEING_USED) || other->currentMemberId == 4) {
+                } else if (!(other->flags & PARTY_FLAG_IS_BEING_USED) || other->currentMemberId == PARTY_YOSHI) {
                     if (distABf(party->position.x, party->position.z, other->position.x, other->position.z) >= lim) {
                         partyChgMot(party, PARTY_MOTION_WALK);
                     }
@@ -4862,12 +4862,12 @@ void party_motion_stay(PartyEntry* party) {
                     }
 
                     // 3 = PARTY_BOBBERY, 4 = PARTY_YOSHI: the char-sized enum constants change the s8 compares
-                } else if (other->currentMemberId == 3 && other->runMode == PARTY_RUN_USE) {
+                } else if (other->currentMemberId == PARTY_BOBBERY && other->runMode == PARTY_RUN_USE) {
                     if (mario->currMotionId != MARIO_MOTION_DAMAGE && mario->currMotionId != MARIO_MOTION_HIP && mario->currMotionId != MARIO_MOTION_HIP_2 &&
                         distABf(party->position.x, party->position.z, mario->position.x, mario->position.z) >= lim) {
                         partyChgMot(party, PARTY_MOTION_WALK);
                     }
-                } else if (!(other->flags & PARTY_FLAG_IS_BEING_USED) || other->currentMemberId == 4) {
+                } else if (!(other->flags & PARTY_FLAG_IS_BEING_USED) || other->currentMemberId == PARTY_YOSHI) {
                     if (distABf(party->position.x, party->position.z, other->position.x, other->position.z) >= lim) {
                         partyChgMot(party, PARTY_MOTION_WALK);
                     }
@@ -5071,7 +5071,7 @@ void party_motion_damage(PartyEntry* party) {
         case 12:
             if (--party->moveFrames <= 0) {
                 partyChgRunMode(party, PARTY_RUN_MOVE);
-                party->moveMode = 0;
+                party->moveMode = PARTY_MOVE_MODE_STAY;
                 party->flags2 &= ~PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
             }
             break;

@@ -203,7 +203,7 @@ f32 moamoa_randf(f32 min, f32 max) {
  * Called from evt_moamoa_mainUnitIdClear.
  */
 static void moamoa_mainUnitIdClear(void) {
-    wp->unitId = -1;
+    wp->unitId = UNIT_ID_NONE;
 }
 
 /**
@@ -1495,7 +1495,7 @@ static void ext_moamoa_main(void) {
         pose->texId = grp->start + n;
     }
 
-    if (wp->unitId != -1) {
+    if (wp->unitId != UNIT_ID_NONE) {
         unit = BattleGetUnitPtr(_battleWorkPointer, wp->unitId);
         for (j = 0; j < 5; j++) {
             if (j == 0 || unit->work[j + 2] != -1) {

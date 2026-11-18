@@ -73,7 +73,7 @@ s32 marioUseParty(void) {
     if (party->currentMemberId == PARTY_GOOMBELLA && !(party->flags & PARTY_FLAG_IS_GROUNDED)) {
         return 0;
     }
-    if (party->currentMemberId == 4 && yoshiGetStatus()) {
+    if (party->currentMemberId == PARTY_YOSHI && yoshiGetStatus()) {
         return 0;
     }
     if (!(mario->trigFlags & MARIO_TRIG_FLAG_USE_PARTNER) && (mario->buttonTrg & PAD_BUTTON_X)) {
@@ -267,10 +267,10 @@ s32 marioUseParty(void) {
     }
 
     // 1 = PARTY_GOOMBELLA, 4 = PARTY_YOSHI: the char-sized enum constants change the s8 compares
-    if (party->currentMemberId == 1 && !(party->flags & PARTY_FLAG_IS_GROUNDED)) {
+    if (party->currentMemberId == PARTY_GOOMBELLA && !(party->flags & PARTY_FLAG_IS_GROUNDED)) {
         return 0;
     }
-    if (party->currentMemberId == 4 && yoshiGetStatus()) {
+    if (party->currentMemberId == PARTY_YOSHI && yoshiGetStatus()) {
         return 0;
     }
     if (!(mario->trigFlags & MARIO_TRIG_FLAG_JABARA_CHK)) {

@@ -217,8 +217,8 @@ static USER_FUNC(enzan_cam_turn_keisan_f) {
     cam->storedAt = cam->cameraAt;
     cam->startTimeA = gp->renderTime;
     cam->durationA = 0;
-    cam->stateA = 3;
-    cam->curveA = 0;
+    cam->stateA = CAM_MOVE_TO_STORED;
+    cam->curveA = EASING_LINEAR;
     return EVT_RETURN_DONE;
 }
 

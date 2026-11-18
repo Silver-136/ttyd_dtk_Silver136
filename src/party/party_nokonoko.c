@@ -162,16 +162,16 @@ void nokonoko_move(PartyEntry* party) {
 #endif
     partyRecordFootmark(party);
     switch (party->moveMode) {
-        case 0:
+        case PARTY_MOVE_MODE_STAY:
             party_move_mode_stay(party);
             break;
-        case 1:
+        case PARTY_MOVE_MODE_WALK:
             party_move_mode_walk(party);
             break;
-        case 2:
+        case PARTY_MOVE_MODE_BEHIND_MARIO:
             party_move_mode_behind_mario(party);
             break;
-        case 3:
+        case PARTY_MOVE_MODE_BESIDE_MARIO:
             party_move_mode_beside_mario(party);
             break;
         case 4:

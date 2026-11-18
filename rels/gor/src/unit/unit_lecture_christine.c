@@ -62,16 +62,16 @@ static USER_FUNC(_get_defence_ac_result) {
     s32 result = 0;
 
     switch (wp->actionCommands.defenseResult) {
-        case 1:
+        case GUARD_RESULT_MASHED:
             result = 2;
             break;
-        case 2:
+        case GUARD_RESULT_NO_PRESS:
             result = 3;
             break;
-        case 4:
+        case GUARD_RESULT_GUARD:
             result = 1;
             break;
-        case 5:
+        case GUARD_RESULT_SUPERGUARD:
             result = 0;
             break;
     }
@@ -89,7 +89,7 @@ static USER_FUNC(_config_key_record) {
     BattleWork* wp = _battleWorkPointer;
     BattleWorkPad* pad = &wp->actionCommands.pad;
 
-    wp->actionCommands.defenseResult = 4;
+    wp->actionCommands.defenseResult = GUARD_RESULT_GUARD;
     BtlPad_WorkInit(pad);
     pad->buttonsPressedHistory[0] = record;
     return EVT_RETURN_DONE;
