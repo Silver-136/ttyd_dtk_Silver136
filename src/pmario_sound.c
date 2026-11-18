@@ -9132,6 +9132,21 @@ static f32 compAngle(f32 from, f32 to) {
     return to - from;
 }
 
+/**
+ * Moves the point (*x, *z) by dist in direction dir (degrees) (this file's copy of system.c's movePos).
+ * Original name and size (0x98) from the JP demo map (UNUSED there).
+ */
+// The body is sound.c's sndMovePos (same size, its inlined copy in SoundEfxMain fits) and the copy written out in
+// psndENVMain; the parameter order follows system.c's movePos (without the angle local the size is the same).
+// Nothing here calls it: an inlined call in psndENVMain builds the same size but swaps the registers (f30/f31) of
+// the angle and the distance.
+static void movePos(f32* x, f32* z, f32 dist, f32 dir) {
+    f32 angle = 6.2831855f * dir / 360.0f;
+
+    *x += dist * (f32)sin(angle);
+    *z -= dist * (f32)cos(angle);
+}
+
 /** calc3D, returns the packed 3D sound info word (vol, pan, span, unused) */
 // Volume, pan and surround pan of a 3D sound as heard by the listener, packed in bytes 0, 1 and 2 of the returned word
 // (byte 3 unused). With dist != 0 the volume falls from full at 200 units to 0 at 200 + dist * 100 units.
@@ -11215,6 +11230,8 @@ static void psndENVMain(void) {
                     e->position.z = 0.0f;
                     ang = irand(360);
                     rr = irand(e->radiusRange * 10) + e->radiusMin * 10;
+
+                    // movePos(&e->position.x, &e->position.z, r, ang), written out
                     a2 = 6.2831855f * ang / 360.0f;
                     r = rr;
                     e->position.x += r * (f32)sin(a2);
