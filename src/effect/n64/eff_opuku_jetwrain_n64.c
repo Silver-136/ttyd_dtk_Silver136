@@ -50,9 +50,6 @@ static effN64Vtx opuku_jetwrain_vtx[16] = {
 static void effOpukuJetwrainDisp(CameraId cameraId, void* param);
 static void effOpukuJetwrainMain(EffectEntry* effect);
 
-/** Returns the sine of an angle given in degrees. */
-static inline f32 sind(f32 deg) { return sin(6.2831855f * deg / 360.0f); }
-
 /**
  * Spawns a water-ripple screen distortion for lifetime frames (<= 0 means until deleted), scaled by scale;
  * the position is stored but the draw covers the whole screen. Via evt_eff64 "opuku_jetwrain_n64".
@@ -112,6 +109,7 @@ static void effOpukuJetwrainMain(EffectEntry* effect) {
     s32 frame;
     s32 alpha;
     f32 a;
+    f32 s;
 
     work = effect->userdata;
     tmp.x = work->position.x;
@@ -142,7 +140,8 @@ static void effOpukuJetwrainMain(EffectEntry* effect) {
     work->alpha = alpha;
     a = (f32)alpha / 255.0f;
     for (i = 1; i < 18; i++) {
-        work->h[i][6] = a * (-64.0f * sind((f32)((frame - i) * -20)));
+        s = sin(6.2831855f * (f32)((frame - i) * -20) / 360.0f);
+        work->h[i][6] = a * (-64.0f * s);
     }
     for (i = 1; i < 18; i++) {
         for (j = 1; j < 12; j++) {

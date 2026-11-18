@@ -186,6 +186,16 @@ USER_FUNC(evt_img_release) {
     return EVT_RETURN_DONE;
 }
 
+/** Writes how many times image args[0]'s animation has played through (whole loops) to args[1]. */
+// Original name and size (0x70) from the JP demo map (UNUSED there: no script uses it), at this slot between
+// evt_img_release and evt_img_wait_animend. Body: their image lookup and wait_animend's loopTimes. The size picks
+// the integer write (evtSetValue, 0x70) over evtSetFloat (0x64).
+USER_FUNC(evt_img_get_loop_times) {
+    ImageEntry* img = imgNameToPtr((const char*)evtGetValue(event, event->args[0]), gp->inBattle != 0);
+    evtSetValue(event, event->args[1], (s32)img->loopTimes);
+    return EVT_RETURN_DONE;
+}
+
 /** Blocks until image args[0]'s animation has played through at least once. */
 USER_FUNC(evt_img_wait_animend) {
     ImageEntry* img = imgNameToPtr((const char*)evtGetValue(event, event->args[0]), gp->inBattle != 0);

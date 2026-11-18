@@ -397,7 +397,7 @@ function names) and `strupr` (a C library name).
 
 ## Inline helper names (2026-11-17)
 
-214 names of `static inline` (and a few plain `inline`) helpers in the game code that no map lists and no table
+211 names of `static inline` (and a few plain `inline`) helpers in the game code that no map lists and no table
 above names. An inline function leaves no symbol when every call is inlined, so no map can name it: the names
 were chosen when the code was decompiled (LLCOOLT or this fork) and are not original. Each helper reads as
 code a programmer would write (a small getter, a repeated draw or copy step, a private sine), so it is not
@@ -409,11 +409,13 @@ JP demo maps, the configs and this file (GB9, cleanup_notes/bf/GB9).
 
 GB13 (2026-11-17) tried the (1) names written out at their call. Eleven built the same and are gone (mobjPtrOrSelf2,
 shipLerpWake, fogOff, marioSearchHeadOfs, chkRevDir, _caseEntry, partyFlyHeadCheck, psndENVVolume, getX,
-fontDrawPairX, fontDrawPairY). Why the other (1) names stay (lines = instructions that differ; record
+fontDrawPairX, fontDrawPairY); GC2 wrote out three more (itemdrv sind and cosd, eff_opuku_jetwrain sind: the result in a
+local on its own line keeps the pool order). Why the other (1) names stay (lines = instructions that differ; record
 cleanup_notes/bf/GB13/log.md):
 - written out, different code: hokanRate (+0xc), effMayaKeyInterp, effMayaSetGQR, envWaterParent (+4), fadeTecAlpha,
-  checkTriVecUp and partyHitCheckDistNrm (not tried: early returns, called as conditions), the itemdrv / eff_itemget /
-  eff_kemuri3 sind and cosd, eff_opuku_jetwrain sind and eff_opuku_wgun dsin (their pool constants move),
+  checkTriVecUp and partyHitCheckDistNrm (not tried: early returns, called as conditions), the eff_itemget /
+  eff_kemuri3 sind and cosd and eff_opuku_wgun dsin (GC2: the inline's result temp colours differently from any
+  named local; eff_kemuri3 builds the same only with one-store holder locals),
   shadowSetTev, shadowSetMatZero, partyStepSize (one instruction short), marioChkGndOk, wallCopy, chkBlock, rollChk,
   hand_pose_inl, CheckPrefetch, orbit_update, gor_00 / tik_05 fid (see below);
 - the same code only in a less natural form: marioChkCtrl2 (only `(x ? 0 : 1) ? 0 : 1`), mot_ham (only with a second
@@ -446,7 +448,7 @@ helper: no written-out form builds the same; it should be a FAKES row.
 | src/driver/fadedrv.c | `fadeCapture`, `fadeTecAlpha` (1) |
 | src/driver/hitdrv.c | `hitDequant`, `checkTriVecDown`, `checkTriVecUp` (1), `checkTriVecDir` |
 | src/driver/icondrv.c | `iconGetWork`, `iconFindIn` |
-| src/driver/itemdrv.c | `itemGetWork`, `itemGetEnd`, `sind` (1), `cosd` (1) |
+| src/driver/itemdrv.c | `itemGetWork`, `itemGetEnd` |
 | src/driver/mapdrv.c | `mapAnimFps`, `mapSearchAnmObj_inl`, `mapHermiteCh`, `mapObjIsTranslucent` |
 | src/driver/mobjdrv.c | `mobjGetWorkFlag` |
 | src/driver/msgdrv.c | `msgEntryText`, `msgCheckSkip` |
@@ -470,7 +472,6 @@ helper: no written-out form builds the same; it should be a FAKES row.
 | src/effect/n64/eff_kemuri8_n64.c | `ringOffset` |
 | src/effect/n64/eff_magic3_n64.c | `magic3_scale` |
 | src/effect/n64/eff_magic_horao_n64.c | `shade` |
-| src/effect/n64/eff_opuku_jetwrain_n64.c | `sind` (1) |
 | src/effect/n64/eff_opuku_wgun_n64.c | `dsin` (1) |
 | src/effect/n64/eff_pokopi_thunder_n64.c | `pt_dx`, `pt_dy`, `pt_dz` (1) |
 | src/effect/n64/eff_small_star_n64.c | `alphaf` |

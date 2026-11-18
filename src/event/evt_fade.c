@@ -53,6 +53,17 @@ USER_FUNC(evt_fade_entry) {
     return EVT_RETURN_DONE;
 }
 
+/** Writes TRUE to args[0] when the last fade started has finished, FALSE while it runs. */
+// Original name and size (0x54) from the JP demo map (UNUSED there: no script uses it), at this slot between
+// evt_fade_entry and evt_fade_end_wait. Body: end_wait's fadeIsFinish() != TRUE test as a value, with evt_fade_in's
+// args local (without it 0x4c). Any comparison with TRUE builds the same code; `!= 0` is the same size but other code.
+USER_FUNC(evt_fade_end_check) {
+    EvtWord* args = event->args;
+
+    evtSetValue(event, args[0], fadeIsFinish() == TRUE);
+    return EVT_RETURN_DONE;
+}
+
 /** Blocks the script until the last fade started has finished. */
 USER_FUNC(evt_fade_end_wait) {
     return fadeIsFinish() != TRUE ? EVT_RETURN_BLOCK : EVT_RETURN_DONE;
