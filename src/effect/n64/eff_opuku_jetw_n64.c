@@ -82,9 +82,7 @@ static JetwEnt adata[] = {
     {0, 50, 210, 140, 180, 10, 0},
 };
 
-static struct {
-    JetwEnt e[33];
-} a2data = {{
+static JetwEnt a2data[] = {
     {0, 0, 30, 140, 0, 255, 0},
     {0, 6, 30, 120, 0, 240, 0},
     {1, 12, 30, 110, -5, 230, 0},
@@ -118,7 +116,7 @@ static struct {
     {0, 36, 100, 77, 70, 120, 0},
     {0, 39, 110, 65, 80, 80, 0},
     {0, 42, 120, 54, 90, 40, 0},
-}};
+};
 
 #if VERSION <= VERSION_DEMO_JP
 static s32 dat_ry[] = {0, 40, 55, 190, 20, 130, 270, 300};
@@ -251,7 +249,7 @@ static void effOpukuJetwDisp(CameraId cameraId, void* payload) {
             m = 3;
             break;
         default:
-            tbl = a2data.e;
+            tbl = a2data;
             n = 11;
             m = 3;
             break;

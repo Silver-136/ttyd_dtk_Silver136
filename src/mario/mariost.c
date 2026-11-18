@@ -83,11 +83,6 @@ static BOOL DvdCheckTreadOn;
 BOOL movie_record_on;
 
 //.data
-#if VERSION == VERSION_DEMO_US_2
-// Unreferenced; the early demos carry the same table at the start of winmgr.c's and win_log.c's .data.
-static f32 unusedSignTbl[16] = {-1.0f, 1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, -1.0f};
-#endif
-
 // The September US demo runs on PAL consoles too: each NTSC mode below has a PAL twin that marioStInit copies
 // over it there.
 GXRenderModeObj sRMObjHReso = {

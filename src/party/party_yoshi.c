@@ -36,9 +36,6 @@ typedef struct YoshiWork {
 } YoshiWork;
 
 #if VERSION <= VERSION_DEMO_JP
-static f32 yoshiSignTbl[16] = {
-    -1.0f, 1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, -1.0f,
-};
 static f32 marioJumpStandData[10] = {1.52f, -0.188f, 2.925f, -0.847f, -0.1f, -0.4f, 0.024f, -0.004f, 0.125f, 0.7f};
 #endif
 

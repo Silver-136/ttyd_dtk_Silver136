@@ -1,6 +1,12 @@
 // Pause menu: the journal window (map, crystal stars, badge and recipe logs, tattle log).
 
 #include "version.h"
+
+// The early demos keep the dtrigf constants at the start of this unit's .data.
+#if VERSION <= VERSION_DEMO_JP
+#define DTRIGF_PLAIN_DATA
+#include <dtrigf.h>
+#endif
 #include "win/win_main.h"
 #include "evt/evt_story.h"
 #include "driver/animdrv.h"
@@ -166,8 +172,6 @@ static TubuDt tubuDt[] = {
     {-33, -62, 0, 0, STG8_00_START, "gor"},
     {-33, -74, 1, 0, STG8_00_START, "las"},
 };
-#else
-static f32 unusedSignTbl[16] = {-1.0f, 1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, -1.0f};
 #endif
 
 static s32 stone_tbl[] = {ITEM_DIAMOND_STAR, ITEM_EMERALD_STAR, ITEM_GOLD_STAR, ITEM_RUBY_STAR, ITEM_SAPPHIRE_STAR, ITEM_GARNET_STAR, ITEM_CRYSTAL_STAR};

@@ -67,10 +67,6 @@ static s16* mario_status_point_table[3];
 //.sdata
 static WinMgrWork* wp = &work;
 
-#if VERSION <= VERSION_DEMO_JP
-static f32 unusedSignTbl[16] = {-1.0f, 1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, -1.0f};
-#endif
-
 static u16 party_id_table[] = {
     PARTY_GOOMBELLA, PARTY_KOOPS, PARTY_FLURRIE, PARTY_YOSHI,
     PARTY_VIVIAN, PARTY_BOBBERY, PARTY_MS_MOWZ, PARTY_NONE
