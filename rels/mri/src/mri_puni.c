@@ -4334,13 +4334,10 @@ static void puni_puni_init(void) {
     PuniData* p;
     MarioWork* mario;
     PunidrvPose* pose;
-    f32 r;
-    f32 lo = 0.0f;
 
     pose = puniGetPosePtr();
     mario = marioGetPtr();
-    r = (f32)rand() / 32767.0f;
-    Punigp->seed0 = (s32)(lo + r * (100000000.0f - lo)) + (u32)gp->renderTime + 0x3A3B01F9;
+    Punigp->seed0 = (s32)randf(0.0f, 100000000.0f) + (u32)gp->renderTime + 0x3A3B01F9;
     Punigp->seed1 = 0x21708331;
     p = Punidat;
     Punigp->marioPuni = p;

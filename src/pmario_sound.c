@@ -11090,19 +11090,26 @@ static u16 psndENV_calclpf(PaperSoundEnv* e) {
 
 #if VERSION <= VERSION_DEMO_JP
 
-/** Volume of environment sound e under its channel's fade; the early demos write it through a pointer. */
-static inline void psndENVVolume(PaperSoundEnv* e, PaperSoundWork* p, u8* vol) {
+/**
+ * a playing ENV sound follows its channel volume and low-pass value; the volume is the sound's own under its
+ * channel's fade.
+ */
+static inline void psndENVApply(PaperSoundEnv* e) {
+    PaperSoundEffect* sfx;
+    u8 vol;
+    u16 lpf;
+    u32 id;
     PaperSoundFade* f = NULL;
     s16 dip;
 
-    if (p->envId[0] == e->id) {
-        f = &p->fade[0];
+    if (psnd.envId[0] == e->id) {
+        f = &psnd.fade[0];
     }
-    if (p->envId[1] == e->id) {
-        f = &p->fade[1];
+    if (psnd.envId[1] == e->id) {
+        f = &psnd.fade[1];
     }
     if (f == NULL) {
-        *vol = e->volume * p->envVolume / 100;
+        vol = e->volume * psnd.envVolume / 100;
     } else {
         if (f->dipState == PSND_DIP_STATE_IDLE) {
             dip = 0x7F;
@@ -11110,22 +11117,12 @@ static inline void psndENVVolume(PaperSoundEnv* e, PaperSoundWork* p, u8* vol) {
             dip = f->dipTime * 0x7F / f->dipTimeMax;
         }
         if (f->state == PSND_FADE_STATE_IDLE) {
-            *vol = p->envVolume * (e->volume * dip / 127) / 100;
+            vol = psnd.envVolume * (e->volume * dip / 127) / 100;
         } else {
             s16 faded = f->timeMax * (e->volume * dip / 127) / f->time;
-            *vol = faded * p->envVolume / 100;
+            vol = faded * psnd.envVolume / 100;
         }
     }
-}
-
-/** a playing ENV sound follows its channel volume and low-pass value */
-static inline void psndENVApply(PaperSoundEnv* e) {
-    PaperSoundEffect* sfx;
-    u8 vol;
-    u16 lpf;
-    u32 id;
-
-    psndENVVolume(e, &psnd, &vol);
 
     id = e->sfx;
     if (id != -1) {

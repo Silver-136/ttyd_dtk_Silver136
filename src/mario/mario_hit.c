@@ -1703,15 +1703,6 @@ f32 marioChkOverheadJabara(s32* sideOut, f32* distOut) {
     return pos.y;
 }
 
-/** Offset of half of Mario's width (less 0.5) in the direction deg (degrees), for marioSearchHead's side rays. */
-static inline void marioSearchHeadOfs(MarioWork* mario, f32 deg, f32* px, f32* pz) {
-    f32 t;
-    t = sind(deg);
-    *px = 0.5f * ((mario->wPlayerCollisionBox.x - 0.5f) * t);
-    t = cosd(deg);
-    *pz = 0.5f * ((mario->wPlayerCollisionBox.x - 0.5f) * -t);
-}
-
 /**
  * Finds a ceiling over pos: five rays up from half of *h (Mario's height) for up to *h + dd,
  * ignoring walls outside tube mode (slopes of 50-130 degrees normally, 75-105 in paper/slit mode).
@@ -1737,7 +1728,10 @@ HitEntry* marioSearchHead(Vec* pos, f32* h, f32 dd) {
     } else {
         hh = toMovedir(mario->displayDirection);
     }
-    marioSearchHeadOfs(mario, hh, &sx, &sz);
+
+    // Side ray offset: half of Mario's width (less 0.5) in the direction hh.
+    sx = 0.5f * ((mario->wPlayerCollisionBox.x - 0.5f) * sind(hh));
+    sz = 0.5f * ((mario->wPlayerCollisionBox.x - 0.5f) * -cosd(hh));
     a = *h;
     hh = 0.5f * a;
     top = a + dd;

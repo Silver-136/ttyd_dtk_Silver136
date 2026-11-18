@@ -1585,21 +1585,21 @@ static inline u32 _ssCalcLen(SoundStreamEntry* entry) {
     return len;
 }
 
-// _ssDVDReadAsync_l and _ssDVDReadAsync_r: original names and sizes (0x16c, 0x180) from the JP demo map (UNUSED there:
-// every call is inlined), after the also stripped _ssDVDReadAsync_sub (0x174) between cache_flush and
-// _ssDVDReadAsync_cache_aram. The two bodies (each written out, the first and second channel, as the READ_L / READ_R
-// flags name them) compile to exactly those sizes; written as calls of one shared helper, the callers' code changes.
+// _ssDVDReadAsync_sub, _ssDVDReadAsync_l and _ssDVDReadAsync_r: original names, sizes (0x174, 0x16c, 0x180) and order
+// from the JP demo map (all UNUSED there: every call is inlined), between cache_flush and _ssDVDReadAsync_cache_aram.
+// _l and _r call _sub for the first and second channel (as the READ_L / READ_R flags name them); this form compiles to
+// exactly the three map sizes and leaves every caller unchanged (GB13). Not fixed by the bytes: the order of _sub's
+// parameters (all four orders tried build the same) and the order of its locals.
 
-/** Starts the asynchronous disc read of the next chunk of the stream's first (left) channel into its load buffer. */
-inline void _ssDVDReadAsync_l(SoundStream* stream) {
-    SoundStreamEntry* entry;
-    u32 extra;
+/**
+ * Starts the asynchronous disc read of the next chunk of one stream channel (entry), whose data starts extra bytes
+ * into the stream's data.
+ */
+inline void _ssDVDReadAsync_sub(SoundStream* stream, SoundStreamEntry* entry, u32 extra) {
     u32 len;
     u32 aligned;
     u32 addr;
 
-    entry = &stream->entries[0];
-    extra = 0;
 #if VERSION <= VERSION_DEMO_JP
     aligned = len = _ssCalcLen(entry);
     if (len < SS_LOAD_BUFFER_SIZE) {
@@ -1621,35 +1621,18 @@ inline void _ssDVDReadAsync_l(SoundStream* stream) {
     entry->requestLength = len;
 }
 
+/** Starts the asynchronous disc read of the next chunk of the stream's first (left) channel into its load buffer. */
+inline void _ssDVDReadAsync_l(SoundStream* stream) {
+    SoundStreamEntry* entry = &stream->entries[0];
+
+    _ssDVDReadAsync_sub(stream, entry, 0);
+}
+
 /** The same for the second (right) channel, whose data follows the first's in the stream. */
 inline void _ssDVDReadAsync_r(SoundStream* stream) {
-    SoundStreamEntry* entry;
-    u32 extra;
-    u32 len;
-    u32 aligned;
-    u32 addr;
+    SoundStreamEntry* entry = &stream->entries[1];
 
-    entry = &stream->entries[1];
-    extra = entry->size + (0x20 - (entry->size % 0x20));
-#if VERSION <= VERSION_DEMO_JP
-    aligned = len = _ssCalcLen(entry);
-    if (len < SS_LOAD_BUFFER_SIZE) {
-        aligned = SS_LOAD_BUFFER_SIZE;
-    }
-    aligned = (aligned + 0x1F) & ~0x1F;
-#else
-    aligned = _ssAlign32(len = _ssCalcLen(entry));
-#endif
-    if (!(stream->flags & SOUND_STREAM_FLAG_ARAM)) {
-        DVDMgrReadAsync(entry->dvd, entry->loadBuffer[1 - entry->curBuf], aligned,
-                        stream->dataOffset + entry->offset + extra, _ssDVDReadAsync_activeChk);
-    } else {
-        addr = stream->dataOffset + entry->offset + extra + sound.aramAddr[stream->slot];
-        DCInvalidateRange(entry->loadBuffer[1 - entry->curBuf], SS_LOAD_BUFFER_SIZE);
-        ARQPostRequest(&entry->request, (u32)entry, 1, 0, addr, (u32)entry->loadBuffer[1 - entry->curBuf], aligned,
-                       cache_flush);
-    }
-    entry->requestLength = len;
+    _ssDVDReadAsync_sub(stream, entry, entry->size + (0x20 - (entry->size % 0x20)));
 }
 
 /** Rewinds both channels of a stream to the start of their data. */

@@ -409,31 +409,27 @@ void FontDrawStringVecPitch(Vec pos, f32 pitch, const s8* msg) {
     }
 }
 
-/** The left/right pair of outline copies for a float position (truncated to pixels). */
-static inline void fontDrawPairX(u16 code, f32 x, f32 y) {
-    const s16 ix = x;
-    const s16 iy = y;
-
-    _JUTFont_DrawPos(code, ix - 2, iy);
-    _JUTFont_DrawPos(code, ix + 2, iy);
-}
-
-/** The down/up pair of outline copies for a float position (truncated to pixels). */
-static inline void fontDrawPairY(u16 code, f32 x, f32 y) {
-    const s16 ix = x;
-    const s16 iy = y;
-
-    _JUTFont_DrawPos(code, ix, iy - 2);
-    _JUTFont_DrawPos(code, ix, iy + 2);
-}
-
 /** Draws one glyph at x, y in the already-loaded matrix, with the outline first when FontDrawEdge is on. */
 static inline void fontDrawCodeEdgeXY(u16 code, f32 x, f32 y) {
     if (fontEdge) {
         GXColor save = fontColor;
         FontDrawColorIDX(0);
-        fontDrawPairX(code, x, y);
-        fontDrawPairY(code, x, y);
+
+        // Outline: copies 2 pixels left and right, then down and up, at the position truncated to pixels.
+        {
+            const s16 ix = x;
+            const s16 iy = y;
+
+            _JUTFont_DrawPos(code, ix - 2, iy);
+            _JUTFont_DrawPos(code, ix + 2, iy);
+        }
+        {
+            const s16 ix = x;
+            const s16 iy = y;
+
+            _JUTFont_DrawPos(code, ix, iy - 2);
+            _JUTFont_DrawPos(code, ix, iy + 2);
+        }
         FontDrawColor(save);
     }
     _JUTFont_DrawPos(code, x, y);

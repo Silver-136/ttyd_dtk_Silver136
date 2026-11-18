@@ -8,33 +8,9 @@
 
 /**
  * Registers a case event with casedrv: conditionId is what triggers it (with CASE_SETUP_SHOW_HINT when flag is
- * set), hitObjName and swFlag pick the hit object, evtCode runs with lwData copied in (or zeroed).
- * Returns the case id.
+ * set), hitObjName and swFlag pick the hit object, evtCode runs with a copy of the calling script's LW
+ * variables. Returns the case id.
  */
-static inline s32 _caseEntry(s32 conditionId, BOOL flag, const char* hitObjName, u32 swFlag,
-                             void* evtCode, EvtWord* lwData, s32 priority) {
-    CaseSetup setup;
-
-    CaseSetup* ptr = &setup;
-
-    if (flag) {
-        conditionId |= CASE_SETUP_SHOW_HINT;
-    }
-    ptr->conditionId = conditionId;
-    ptr->hitObjName = hitObjName;
-    ptr->swFlag = swFlag;
-    ptr->activeFunc = NULL;
-    ptr->evtCode = evtCode;
-    ptr->priority = priority;
-    if (lwData) {
-        memcpy(ptr->lwData, lwData, sizeof(setup.lwData));
-    } else {
-        memset(ptr->lwData, 0, sizeof(setup.lwData));
-    }
-    return caseEntry(ptr);
-}
-
-/** Same as _caseEntry, but the case script gets a copy of the calling script's LW variables. */
 static inline s32 _evtCaseEntry(EventEntry* event, s32 conditionId, BOOL flag,
                                 const char* hitObjName, u32 swFlag, void* evtCode, s32 priority) {
     CaseSetup setup;
@@ -103,12 +79,31 @@ USER_FUNC(evt_run_case_evt_bero) {
 }
 
 /**
- * C entry point for registering a case event at priority 0 (_caseEntry);
+ * C entry point for registering a case event at priority 0, with lwData copied into its LW variables (or
+ * them zeroed);
  * evt_map.c uses it for the airport ride cases, evt_shop.c and evt_win.c for theirs. Returns the case id.
  */
 s32 evtRunCaseEntry(s32 conditionId, BOOL flag, const char* hitObjName, u32 swFlag, void* evtCode,
                     EvtWord* lwData) {
-    return _caseEntry(conditionId, flag, hitObjName, swFlag, evtCode, lwData, 0);
+    CaseSetup setup;
+
+    CaseSetup* ptr = &setup;
+
+    if (flag) {
+        conditionId |= CASE_SETUP_SHOW_HINT;
+    }
+    ptr->conditionId = conditionId;
+    ptr->hitObjName = hitObjName;
+    ptr->swFlag = swFlag;
+    ptr->activeFunc = NULL;
+    ptr->evtCode = evtCode;
+    ptr->priority = 0;
+    if (lwData) {
+        memcpy(ptr->lwData, lwData, sizeof(setup.lwData));
+    } else {
+        memset(ptr->lwData, 0, sizeof(setup.lwData));
+    }
+    return caseEntry(ptr);
 }
 
 /** Deletes the case that started the running script (event->caseId), so it no longer triggers. */

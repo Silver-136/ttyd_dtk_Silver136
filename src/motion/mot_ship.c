@@ -171,11 +171,6 @@ static void move_se_off(void) {
 
 static s32 shipYureguai(void);
 
-/** Eases the wake effect scale toward t by rate k. */
-static inline void shipLerpWake(f32 t, f32 k) {
-    marioGetPtr()->motShip->wakeScale += k * (t - marioGetPtr()->motShip->wakeScale);
-}
-
 /**
  * Moves the wake effect to the boat, dy above Mario's feet, and sets its size:
  * s when moving, otherwise a gentle 0.3/0.6 pulse following the bob.
@@ -188,7 +183,9 @@ static void eff_splash(f32 s, f32 dy) {
 
     if (!s) {
         s = shipYureguai() ? 0.3f : 0.6f;
-        shipLerpWake(s, 0.1f);
+
+        // Ease the wake scale toward s.
+        marioGetPtr()->motShip->wakeScale += 0.1f * (s - marioGetPtr()->motShip->wakeScale);
         s = marioGetPtr()->motShip->wakeScale;
     }
     ((EffFunemizuWork*)marioGetPtr()->motShip->wakeEff->userdata)->position.x = mario->position.x;

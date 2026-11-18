@@ -77,6 +77,8 @@ static KaitenParam* ckp1;
 static KaitenParam* ckpw;
 
 /** Returns its f32 argument unchanged. */
+// FAKE: invented identity inline on one of two otherwise identical atan2 lines; written out, the FPR colouring
+// differs (12 forms, GB13). See FAKES.md.
 static inline f32 fid(f32 x) { return x; }
 static void gundan1000tai_seq01(NanNPC* npc);
 static void gundan1000tai_seq00(NanNPC* npc);

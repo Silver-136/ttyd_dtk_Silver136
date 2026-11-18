@@ -397,7 +397,7 @@ function names) and `strupr` (a C library name).
 
 ## Inline helper names (2026-11-17)
 
-225 names of `static inline` (and a few plain `inline`) helpers in the game code that no map lists and no table
+214 names of `static inline` (and a few plain `inline`) helpers in the game code that no map lists and no table
 above names. An inline function leaves no symbol when every call is inlined, so no map can name it: the names
 were chosen when the code was decompiled (LLCOOLT or this fork) and are not original. Each helper reads as
 code a programmer would write (a small getter, a repeated draw or copy step, a private sine), so it is not
@@ -406,6 +406,29 @@ _ssCalcLen and iraiLineY, two or three forms each; apmCopy4 per its comment), wh
 original at those calls. Helpers with a FAKE comment are in docs/FAKES.md instead. A name marked (1) has a single
 call in its file: those are the first to try writing out. Found by a scan of the `inline` definitions against the
 JP demo maps, the configs and this file (GB9, cleanup_notes/bf/GB9).
+
+GB13 (2026-11-17) tried the (1) names written out at their call. Eleven built the same and are gone (mobjPtrOrSelf2,
+shipLerpWake, fogOff, marioSearchHeadOfs, chkRevDir, _caseEntry, partyFlyHeadCheck, psndENVVolume, getX,
+fontDrawPairX, fontDrawPairY). Why the other (1) names stay (lines = instructions that differ; record
+cleanup_notes/bf/GB13/log.md):
+- written out, different code: hokanRate (+0xc), effMayaKeyInterp, effMayaSetGQR, envWaterParent (+4), fadeTecAlpha,
+  checkTriVecUp and partyHitCheckDistNrm (not tried: early returns, called as conditions), the itemdrv / eff_itemget /
+  eff_kemuri3 sind and cosd, eff_opuku_jetwrain sind and eff_opuku_wgun dsin (their pool constants move),
+  shadowSetTev, shadowSetMatZero, partyStepSize (one instruction short), marioChkGndOk, wallCopy, chkBlock, rollChk,
+  hand_pose_inl, CheckPrefetch, orbit_update, gor_00 / tik_05 fid (see below);
+- the same code only in a less natural form: marioChkCtrl2 (only `(x ? 0 : 1) ? 0 : 1`), mot_ham (only with a second
+  marioGetPtr() pointer next to h2LevelUp's `mario`);
+- members of a family whose other members do not build written out: pt_dz (pt_dx, pt_dy), hip_snd_off
+  (hip_snd_reset, hip_snd_on), apmCopy (apmCopy4, apmCopyTo);
+- stand-ins for map functions: envTexObj / envTexObjCI = the JP demo's UNUSED _TEXGetGXTexObjFromPalette (0x124) /
+  _TEXGetGXTexObjFromPaletteCI (0x138), sizes not reached yet (DW, Y0); written out they build the same;
+- placement: gor_03 fall_pos0 / fall_vel0 exist to put their Vec templates at the slot_mess_01 spot, so the
+  original had a function there;
+- FAKE-marked or in docs/FAKES.md: _cosf, partyJumpHeight (inside partyJumpCalc), fontPos;
+- stickAngOut: not tried (the call is the condition of a long branch).
+- _ssCalcLen: one call now (in the restored _ssDVDReadAsync_sub); written out there, US differs (60 lines).
+gor_00 and tik_05 `fid` (identity on one of two otherwise identical atan2 lines) is a codegen device, not a
+helper: no written-out form builds the same; it should be a FAKES row.
 
 | File | Names (calls in the file, when only one) |
 | --- | --- |
@@ -430,13 +453,13 @@ JP demo maps, the configs and this file (GB9, cleanup_notes/bf/GB9).
 | src/driver/npcdrv.c | `npcGetWorkPtr2`, `npcDimColor` |
 | src/driver/offscreendrv.c | `offscreenGetWorkGp` |
 | src/driver/shadowdrv.c | `shadowSetupPolygon`, `shadowSetMat`, `shadowDrawVolume`, `shadowSetTev` (1), `shadowSetMatZero` (1), `shadowRestoreView` |
-| src/driver/windowdrv.c | `fogOff` (1), `windowTplReady` |
+| src/driver/windowdrv.c | `windowTplReady` |
 | src/effect/eff_fire.c | `effFireQuad` |
 | src/effect/eff_fukidashi.c | `fukidashiSetPos`, `getAnim` |
 | src/effect/eff_itemget.c | `cosd` (1), `sind` (1) |
 | src/effect/eff_kemutest.c | `sind`, `cosd` |
 | src/effect/eff_kiss.c | `effKissGXSetup` |
-| src/effect/eff_levelup.c | `isJapanese`, `getX` (1) |
+| src/effect/eff_levelup.c | `isJapanese` |
 | src/effect/eff_sleep.c | `sleepSin` |
 | src/effect/eff_starpoint.c | `_cosf` (1) |
 | src/effect/eff_starstone.c | `starStoneBlendState` |
@@ -452,9 +475,9 @@ JP demo maps, the configs and this file (GB9, cleanup_notes/bf/GB9).
 | src/effect/n64/eff_pokopi_thunder_n64.c | `pt_dx`, `pt_dy`, `pt_dz` (1) |
 | src/effect/n64/eff_small_star_n64.c | `alphaf` |
 | src/event/evt_bero.c | `sind`, `cosd` |
-| src/event/evt_case.c | `_caseEntry` (1), `_evtCaseEntry` |
+| src/event/evt_case.c | `_evtCaseEntry` |
 | src/event/evt_mario.c | `doorAngle` |
-| src/event/evt_mobj.c | `mobjPtrOrSelf`, `mobjPtrOrSelf2` (1) |
+| src/event/evt_mobj.c | `mobjPtrOrSelf` |
 | src/event/evt_movefloor.c | `movingFloorArg` |
 | src/event/evt_party.c | `partyStepSize` (1) |
 | src/event/evt_win.c | `unitWinClose` |
@@ -462,33 +485,33 @@ JP demo maps, the configs and this file (GB9, cleanup_notes/bf/GB9).
 | src/himo.c | `himoMtx` |
 | src/koopa.c | `kpaSetJumpParams` |
 | src/koopa_motion.c | `kpa_hip_launch` |
-| src/manager/fontmgr.c | `fontByteGlyph`, `fontDrawPairX` (1), `fontDrawPairY` (1), `fontDrawCodeEdgeXY`, `fontHueX`, `fontPos` (1) |
+| src/manager/fontmgr.c | `fontByteGlyph`, `fontDrawCodeEdgeXY`, `fontHueX`, `fontPos` (1) |
 | src/mario/mario.c | `marioCharPoseRelease`, `marioChkCtrl2` (1), `marioCtrlDisable`, `marioKeyDisable`, `marioChkRollMot2`, `marioChkRollMot`, `marioChkRevDir` |
-| src/mario/mario_hit.c | `sind`, `cosd`, `marioChkGndOk` (1), `marioSearchHeadOfs` (1), `wallBase`, `wallCopy` (1) |
+| src/mario/mario_hit.c | `sind`, `cosd`, `marioChkGndOk` (1), `wallBase`, `wallCopy` (1) |
 | src/mario/mario_motion.c | `marioChkBackAngle` |
 | src/mario/mario_pouch.c | `pouchShift`, `pouchAiueoConv` |
-| src/motion/mot_hammer.c | `chkRevDir` (1), `hamDir`, `chkBlock` (1), `mot_ham` (1), `h2LevelUp`, `h2Ramp`, `h2ClrPaper` |
+| src/motion/mot_hammer.c | `hamDir`, `chkBlock` (1), `mot_ham` (1), `h2LevelUp`, `h2Ramp`, `h2ClrPaper` |
 | src/motion/mot_hip.c | `hip_snd_reset` (1), `hip_snd_on` (1), `hip_snd_off` (1) |
 | src/motion/mot_jabara.c | `jabaraSetSpd`, `animStep` |
 | src/motion/mot_jump.c | `chgPoseB`, `chgPoseC`, `jumpSfx` |
 | src/motion/mot_plane.c | `planeRoll1` |
 | src/motion/mot_roll.c | `trunc10`, `angOut`, `sind`, `cosd`, `stickAngOut` (1), `rollChk` (1) |
-| src/motion/mot_ship.c | `shipLerpWake` (1), `shipLerpTurn` |
+| src/motion/mot_ship.c | `shipLerpTurn` |
 | src/motion/mot_slit.c | `slitContinueChk`, `slitSpeedDown`, `slitSetDisplayDir` |
 | src/party/party_bomhei.c | `bomheiCleanFlags`, `bomheiFree` |
 | src/party/party_chuchu.c | `chuchu_findTreasure` |
 | src/party/party_cloud.c | `breathParticles`, `cloudSweep` |
 | src/party/party_hit.c | `partyNrmTo`, `partyHitCheckGnd`, `partyHitCheckDistNrm` (1), `partyHitCheckNrm`, `partyHitNrm` |
-| src/party/party_motion.c | `partyBehindGround`, `partyFlyMoveY`, `partyFlyHeadCheck` (1), `partyJumpHeight` (1), `partyJumpCalc` (1), `partyChkWaterHazard` |
+| src/party/party_motion.c | `partyBehindGround`, `partyFlyMoveY`, `partyJumpHeight` (1), `partyJumpCalc` (1), `partyChkWaterHazard` |
 | src/party/party_move.c | `partySpdRate`, `party_move_mode_behind_mario_continue`, `partyAppearMoveBack`, `partyAppearAdjustY` |
 | src/party/party_nokonoko.c | `nokoSin`, `nokoCos` |
 | src/party/party_yoshi.c | `yoshiSyncMario` |
 | src/party.c | `partyChgRunM`, `partyChgRunMo`, `partyAppearMoveBack` |
-| src/pmario_sound.c | `sfxvol`, `psndENVVolume` (1), `psndENVApply` |
+| src/pmario_sound.c | `sfxvol`, `psndENVApply` |
 | src/sequence/seq_battle.c | `loadTpl` |
 | src/sequence/seq_demo.c | `CheckPrefetch` (1) |
 | src/sequence/seq_mapchange.c | `getAreaName` |
-| src/sound.c | `_ssGetStr`, `SoundEfxMuteCh`, `SoundEfxCheckCh`, `_ssCalcLen`, `_ssResetEntries` |
+| src/sound.c | `_ssGetStr`, `SoundEfxMuteCh`, `SoundEfxCheckCh`, `_ssCalcLen` (1), `_ssResetEntries` |
 | src/system.c | `getDemoPadStatus` |
 | src/window/win_log.c | `tubuCheck` |
 | src/window/win_mario.c | `fukiKey`, `fukiTool` |

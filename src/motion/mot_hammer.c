@@ -138,14 +138,6 @@ static void zoomOff(void) {
     m->camShiftRate.z = 0.01f;
 }
 
-static inline BOOL chkRevDir(f32 angle) {
-    BOOL ret = FALSE;
-    if (angle >= 90.0f && angle <= 270.0f) {
-        ret = TRUE;
-    }
-    return ret;
-}
-
 /**
  * The hammer swing direction: 180 (left) or 0 (right) from Mario's facing,
  * turned 30 degrees when Mario shows his back.
@@ -157,7 +149,7 @@ static inline f32 hamDir(MarioWork* mario) {
     f32 r;
     f32 off = 0.0f;
     if (p->dispFlags & MARIO_DISP_FLAG_REAR_POSE) {
-        off = chkRevDir(p->displayDirection) ? 30.0f : -30.0f;
+        off = (p->displayDirection >= 90.0f && p->displayDirection <= 270.0f) ? 30.0f : -30.0f;
     }
     if (a >= 90.0f && a <= 270.0f) {
         r = revise360(180.0f + off);

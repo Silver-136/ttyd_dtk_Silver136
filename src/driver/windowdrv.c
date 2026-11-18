@@ -27,14 +27,6 @@ typedef enum WakuTexId {
     WAKU_MAJO_ARROW_DARK = 8
 } WakuTexId;
 
-/** Turns GX fog off before drawing window frames (they are 2D and must not be fogged). */
-static inline void fogOff(void) {
-    // White fog colour; with fog off it has no effect.
-    GXColor fog_color = {0xFF, 0xFF, 0xFF, 0xFF};
-
-    GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, fog_color);
-}
-
 /**
  * Allocates the 7 window slots and marks them free; called once at boot.
  * JP and later also forget the frame texture so windowTexSetup reloads it.
@@ -236,7 +228,12 @@ void windowDispGX_setup(void) {
     GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
     GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_OR);
     GXSetZMode(GX_TRUE, GX_ALWAYS, GX_FALSE);
-    fogOff();
+    // Fog off: window frames are 2D and must not be fogged. The white colour has no effect.
+    {
+        GXColor fog_color = {0xFF, 0xFF, 0xFF, 0xFF};
+
+        GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, fog_color);
+    }
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
     GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);

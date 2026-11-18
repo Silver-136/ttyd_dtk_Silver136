@@ -83,12 +83,6 @@ EVT_END()
 static inline BOOL isJapanese(void) {
     return !gp->language;
 }
-
-static inline s32 getX(s32 i) {
-    s32 arr[2][5] = { { 0, 64, 188, 260, 136 }, { 0, 88, 210, 256, 134 } };
-
-    return arr[isJapanese() ? 0 : 1][i] - arr[isJapanese() ? 0 : 1][4];
-}
 #endif
 
 /**
@@ -137,7 +131,12 @@ EffectEntry* effLevelupEntry(s32 type, f32 x, f32 y, f32 z, s32 limit) {
         }
         work->x = a - b;
 #else
-        work->x = getX(i);
+        // Letter x offsets per language (Japanese first), relative to entry 4.
+        {
+            s32 arr[2][5] = { { 0, 64, 188, 260, 136 }, { 0, 88, 210, 256, 134 } };
+
+            work->x = arr[isJapanese() ? 0 : 1][i] - arr[isJapanese() ? 0 : 1][4];
+        }
 #endif
         work->y = y_trans[0];
         work->z = 0.0f;

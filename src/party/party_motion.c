@@ -566,30 +566,6 @@ static inline void partyFlyMoveY(PartyEntry* party, f32 target, f32 rate) {
         party->position.y += diff * rate;
     }
 }
-
-/** US and later: on las_10 the flying partner is pushed down out of low ceilings */
-
-static inline void partyFlyHeadCheck(PartyEntry* party) {
-    Vec pos;
-    f32 height;
-    HitEntry* head;
-    f32 diff;
-    f32 rate;
-
-    if (!strcmp(gp->currentMapName, "las_10")) {
-        pos = party->position;
-        height = party->height;
-        head = partySearchHead(party, &pos, &height, party->displayDirection);
-        if (head) {
-            party->hitobjHead = head;
-            diff = pos.y - party->height - party->position.y;
-            if (-5.0f > diff || diff >= 0.0f) {
-                rate = 0.1f;
-                party->position.y += diff * rate;
-            }
-        }
-    }
-}
 #endif
 
 /**
@@ -617,7 +593,26 @@ void hitcheck_party_motion_stay_fly(PartyEntry* party) {
         return;
     }
 #if VERSION >= VERSION_US
-    partyFlyHeadCheck(party);
+    // On las_10 the flying partner is pushed down out of low ceilings.
+    if (!strcmp(gp->currentMapName, "las_10")) {
+        Vec pos;
+        f32 height;
+        HitEntry* head;
+        f32 diff;
+        f32 rate;
+
+        pos = party->position;
+        height = party->height;
+        head = partySearchHead(party, &pos, &height, party->displayDirection);
+        if (head) {
+            party->hitobjHead = head;
+            diff = pos.y - party->height - party->position.y;
+            if (-5.0f > diff || diff >= 0.0f) {
+                rate = 0.1f;
+                party->position.y += diff * rate;
+            }
+        }
+    }
 #endif
     hit = partySearchGround(party, 10.0f, 0.0f);
     if (hit) {

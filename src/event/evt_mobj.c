@@ -67,11 +67,6 @@ static inline MapObjectEntry* mobjPtrOrSelf(EventEntry* event, const char* name)
     return strcmp(name, "me") ? mobjNameToPtr(name) : event->thisMapObj;
 }
 
-/** Same lookup as mobjPtrOrSelf with the test written the other way round; evt_mobj_set_scale needs this form. */
-static inline MapObjectEntry* mobjPtrOrSelf2(EventEntry* event, const char* name) {
-    return !strcmp(name, "me") ? event->thisMapObj : mobjNameToPtr(name);
-}
-
 /** Shakes the 3D camera vertically (0.01) for 200 ms; started when Mario hits a timer switch. */
 static EVT_BEGIN(evt_shake)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.009765625f), 200)
@@ -160,7 +155,7 @@ USER_FUNC(evt_mobj_get_kindname) {
 USER_FUNC(evt_mobj_set_scale) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
-    MapObjectEntry* mobj = mobjPtrOrSelf2(event, name);
+    MapObjectEntry* mobj = !strcmp(name, "me") ? event->thisMapObj : mobjNameToPtr(name);
     f32 x = evtGetFloat(event, args[1]);
     f32 y = evtGetFloat(event, args[2]);
     f32 z = evtGetFloat(event, args[3]);
