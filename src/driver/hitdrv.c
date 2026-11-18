@@ -18,9 +18,6 @@ static s32 hitCalcVtxPosition(HitEntry* hit);
 static void hitReCalcMatrix2(HitEntry* hit, Mtx mtx, BOOL recursion);
 static void hitPreCheck(void);
 
-// Unused 4-byte object, read by nothing; the original had it too (its storage is in the retail .sbss). Name invented.
-s32 unk_8041840C;
-
 #if VERSION >= VERSION_JP
 HitEntry* hitActiveListTop; // head of the active hit list (descriptive name, see docs/NAME_PROVENANCE.md)
 #endif

@@ -31,9 +31,6 @@
 static BOOL noSeatchMotion(PartyEntry* party);
 void partyChgMotSlitFloor(PartyEntry* party);
 
-// Unused 4-byte object, read by nothing; the original had it too (its storage is in the retail .sbss). Name invented.
-static s32 unk_804189f4;
-
 #if VERSION >= VERSION_JP
 static f32 touch_wall_ct;
 static s32 upstairs_count;

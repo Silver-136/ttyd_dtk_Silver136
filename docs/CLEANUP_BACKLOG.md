@@ -143,11 +143,13 @@ in `docs/FAKES.md` and in the mweppc review record.
   cleanup_tools/area_flag_uses.py). The tst test rooms keep numbers: each room numbers its map objects' state
   flags from 0, so one number means a different object per room. C code that uses saved values by index (`swSet(0x994)`) cannot use the names;
   each such line ends with the name as a comment (save_flags.py cnotes).
-- Names with an address suffix (rechecked 2026-11-17): left in code are three unreferenced .sbss words with no
-  name evidence (`unk_8041840C` hitdrv, `unk_804186EC` mario, `unk_804189f4` party_motion; the JP demo map names
-  the neighbouring objects only), party_move's two unused zero vectors `vec3_802ce0ac/b8` (names invented) and
-  win_main's FAKE stand-in `float_0p5_8041dc98` (FAKES row). Gone: the JP-only party init copies (efed9b727),
-  jumptable_80374848 and the shadowdrv `str_8...` strings. Other `unk_8...` text is the placeholder named in
+- Names with an address suffix: none left in code (2026-11-17, GC11). The three .sbss words `unk_8041840C`
+  (hitdrv), `unk_804186EC` (mario) and `unk_804189f4` (party_motion) were each unit's end-of-.sbss alignment gap
+  (every unit's .sbss starts on 8 bytes in the JP demo map), so they are gone; party_move's zero vectors
+  `vec3_802ce0ac/b8` now carry party.c's early-demo names `party_unused_zero_vec0/1` (JP demo map: compiler labels,
+  compound literals of a stripped function), and win_main's FAKE stand-in `float_0p5_8041dc98` is `winMainHalf`
+  (FAKES row). Gone earlier: the JP-only party init copies (efed9b727), jumptable_80374848 and the shadowdrv
+  `str_8...` strings. Other `unk_8...` text is the placeholder named in
   descriptive-name comments, on purpose.
 - Ghidra- or m2c-style local names: none left (2026-10-26). JP demo map: every invented function was checked
   against it (cleanup_tools/demo_names.py); no further original name fits (2026-10-26).

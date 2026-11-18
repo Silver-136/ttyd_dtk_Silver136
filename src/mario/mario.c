@@ -74,8 +74,6 @@ static const char* marioAnimeGroupData[4][3] = {
 static Vec blurPos[8];
 
 //.sbss
-// Unused 4-byte object, read by nothing; the original had it too (its storage is in the retail .sbss). Name invented.
-s32 unk_804186EC;
 static MarioWork* mp;
 
 #if VERSION >= VERSION_JP

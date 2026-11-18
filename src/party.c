@@ -2772,6 +2772,9 @@ BOOL partyGetAppearPos4(PartyEntry* party, Vec* out) {
     return FALSE;
 }
 
+// Two zero vectors read by nothing. The JP demo map has compiler labels here (@1630, @1632): by their numbering,
+// two (Vec){0.0f, 0.0f, 0.0f} compound literals of the stripped partyGetFrontPos (UNUSED, 0x214, next in source),
+// whose body is not known. Names invented.
 const Vec party_unused_zero_vec0 = {0.0f, 0.0f, 0.0f};
 const Vec party_unused_zero_vec1 = {0.0f, 0.0f, 0.0f};
 #endif

@@ -2432,9 +2432,11 @@ BOOL partyGetAppearPos4(PartyEntry* party, Vec* out) {
     return FALSE;
 }
 
-// Two unused zero vectors, read by nothing; the original had them too (their storage is in the retail .rodata). Names invented.
-const Vec vec3_802ce0ac = {0.0f, 0.0f, 0.0f};
-const Vec vec3_802ce0b8 = {0.0f, 0.0f, 0.0f};
+// Two zero vectors read by nothing, as in party.c's early-demo copy of this group (same names there). The JP demo
+// map has compiler labels at that place (@1630, @1632 in party.o): by their numbering, two (Vec){0.0f, 0.0f, 0.0f}
+// compound literals of the stripped function after partyGetAppearPos4, whose body is not known. Names invented.
+const Vec party_unused_zero_vec0 = {0.0f, 0.0f, 0.0f};
+const Vec party_unused_zero_vec1 = {0.0f, 0.0f, 0.0f};
 #endif
 
 // FAKE: stand-in for a function the linker stripped; nothing calls it. It places 90.0f and 20.0f (0.0f in the
