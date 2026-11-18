@@ -59,7 +59,7 @@ int ddh_cc_initinterrupts(void);
 
 /*
  * The UART buffers and counters of the stripped TRKReadUARTPoll, WriteUART1 and WriteUARTFlush (JP demo map,
- * UNUSED); declarations as in the Mario Party 4 and Animal Crossing decompilations (CC0).
+ * UNUSED); declarations as in the Animal Crossing and BfBB decompilations (CC0).
  */
 u8 gWriteBuf[0x110A];
 u8 gReadBuf[0x110A];

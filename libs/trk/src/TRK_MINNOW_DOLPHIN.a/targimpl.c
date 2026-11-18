@@ -44,7 +44,7 @@ typedef struct TRKStepStatus {
     u32 rangeEnd;
 } TRKStepStatus;
 
-/* The TRKTargetCPUType reply (MetroTRK layout, as in the Mario Party 4 decompilation). */
+/* The TRKTargetCPUType reply (MetroTRK layout, as in the BfBB decompilation, trkenum.h). */
 typedef struct DSCPUType {
     u8 cpuMajor;
     u8 cpuMinor;
