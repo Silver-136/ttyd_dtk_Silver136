@@ -40,21 +40,21 @@ typedef enum WinMgrFlags {
 
 struct WinMgrEntry {
     s32 flags; // 0x0, WinMgrFlags
-    s32 state; // 0x4
-    s32 timer; // 0x8
-    s32 alpha; // 0xC
-    f32 scale; // 0x10
-    f32 rotation; // 0x14
-    s32 x; // 0x18
+    s32 state; // 0x4, open/close step (winMgrSeq): 0 idle, 1 opening, 2 closing
+    s32 timer; // 0x8, frames into the open or close animation
+    s32 alpha; // 0xC, frame and fill alpha (255, or faded by the fade animation)
+    f32 scale; // 0x10, draw scale (0 to 1 while opening)
+    f32 rotation; // 0x14, z rotation in degrees (spin animation)
+    s32 x; // 0x18, top left corner, y up (from the descriptor; winMgrSetSize)
     s32 y; // 0x1C
     s32 width; // 0x20
     s32 height; // 0x24
-    WinMgrDesc* description; // 0x28
-    void* param; // 0x2C
+    WinMgrDesc* description; // 0x28, the window's descriptor (animation type, colour, main and disp functions)
+    void* param; // 0x2C, caller data for the descriptor's main and disp functions (winMgrSetParam)
     s32 priority; // 0x30, gets cast to float for dispEntry
-    const char* msg; // 0x34
-    s32 scroll; // 0x38
-    s32 lines; // 0x3C
+    const char* msg; // 0x34, help text (msgSearch result) of a help window; winMgrHelpMain counts its lines
+    s32 scroll; // 0x38, first help text line shown (steps of 2 on the C stick)
+    s32 lines; // 0x3C, help text line count
     u8 pad_40[0x44 - 0x40]; // 0x40
 };
 

@@ -143,14 +143,14 @@ typedef struct WinLogPage {
 } WinLogPage;
 
 typedef struct WinLogMenu {
-    s32 id;           // 0x0
-    f32 x;            // 0x4
-    f32 y;            // 0x8
-    f32 tx;           // 0xC
-    f32 ty;           // 0x10
-    s32 state;        // 0x14
-    s32 timer;        // 0x18
-    const char* msg;  // 0x1C
+    s32 id;           // 0x0, WinLogEntryId; its page state is WIN_LOG_MAP + id, its label texture id + 0x1F
+    f32 x;            // 0x4, x offset of the button; eases toward tx
+    f32 y;            // 0x8, y offset of the button; eases toward ty
+    f32 tx;           // 0xC, target of x
+    f32 ty;           // 0x10, target of y (45 apart in the column)
+    s32 state;        // 0x14, WinLogButtonState: the button's slide
+    s32 timer;        // 0x18, frames in a *_WAIT state (the next target after 8)
+    const char* msg;  // 0x1C, help text shown while the button is selected (msg_menu_kiroku_*)
 } WinLogMenu;
 
 struct EffectEntry;
@@ -158,22 +158,22 @@ struct MonosiriWork;
 
 typedef struct WinLogState {
     s32 state;                  // 0xD68, log window state machine (switch in the log main: 0 menu, 10+ sub page by menu id, 1000/1001 sort menu, back via savedState)
-    s32 cursor;                 // 0xD6C
-    s32 count;                  // 0xD70
-    WinLogMenu menu[5];         // 0xD74
+    s32 cursor;                 // 0xD6C, selected entry button (menu index)
+    s32 count;                  // 0xD70, entry buttons in use (logEntry adds one per unlocked entry)
+    WinLogMenu menu[5];         // 0xD74, the entry buttons (logEntry)
     s32 mapSel;                 // 0xE14, tubuDt point nearest the map cursor (-1: none); help text, blinking marker, cursor pull toward it
-    s32 mapIdx;                 // 0xE18
-    s32 pose;                   // 0xE1C
-    f32 mapX;                   // 0xE20
-    f32 mapY;                   // 0xE24
+    s32 mapIdx;                 // 0xE18, tubuDt point of the current area; Mario's marker is drawn there
+    s32 pose;                   // 0xE1C, Mario's map marker (animPoseEntry; -1 = none); win_badge re-creates it
+    f32 mapX;                   // 0xE20, map cursor x on the map (16 to 604); starts at the mapIdx point
+    f32 mapY;                   // 0xE24, map cursor y on the map (8 to 468)
     f32 mapWinTgtX;             // 0xE28, target of mapWinX
     f32 mapWinX;                // 0xE2C, x of the map panel passed to mapGX; eases toward mapWinTgtX
     f32 mapWinTgtY;             // 0xE30, target of mapWinY (20 open, -480 closed)
     f32 mapWinY;                // 0xE34, y of the map panel passed to mapGX (drawn while > -480); eases toward mapWinTgtY
-    f32 scrollX;                // 0xE38
-    f32 scrollY;                // 0xE3C
-    s32 stoneNum;               // 0xE40
-    struct EffectEntry* eff[7]; // 0xE44
+    f32 scrollX;                // 0xE38, map scroll x (0 to -148), keeps the cursor in view
+    f32 scrollY;                // 0xE3C, map scroll y (0 to -240)
+    s32 stoneNum;               // 0xE40, crystal stars Mario has (pouchCheckItem over stone_tbl)
+    struct EffectEntry* eff[7]; // 0xE44, star stone effect of each stone_tbl entry (grey for the ones Mario lacks)
     s32 stoneSel;               // 0xE60, selected crystal star (0-6, stone_tbl index; left/right wrap); help text when < stoneNum
     f32 stoneWinTgtX;           // 0xE64, target of stoneWinX
     f32 stoneWinX;              // 0xE68, x of the crystal star ring (texture 0x24, shadows, star stone effects); eases toward stoneWinTgtX
@@ -183,23 +183,23 @@ typedef struct WinLogState {
     f32 stoneAlpha;             // 0xE78, alpha of the ring background (texture 0x24); eases toward stoneAlphaTgt
     f32 stoneAngleTgt;          // 0xE7C, target ring angle: 51.43 (360/7) * stoneSel
     f32 stoneAngle;             // 0xE80, ring angle in degrees: stone i is drawn at 51.43 * i - stoneAngle about y; eases toward stoneAngleTgt
-    WinLogPage badge;           // 0xE84
-    s16 badgeIds[100];          // 0xEB8, badge ids - 0xF0
-    WinLogPage recipe;          // 0xF80 (US 0xF84)
-    s16 recipeIds[58];          // 0xFB4, item ids - 0xB3
-    f32 enemyX;                  // 0x1028
-    f32 enemyTx;                  // 0x102C
-    f32 enemyY;                  // 0x1030
-    f32 enemyTy;                  // 0x1034
-    s32 enemyNum;               // 0x1038
-    s32 enemyKnown;             // 0x103C
-    s32 enemySel;               // 0x1040
-    s32 enemyPage;              // 0x1044
-    f32 enemyScroll;                  // 0x1048
-    f32 enemyScrollTgt;                  // 0x104C
-    WinSortEnt enemy[0xD8];     // 0x1050, tattle log
-    struct MonosiriWork* mono;  // 0x1200
-    u8 pad_1204[0x1208 - 0x1204]; // 0x1204
+    WinLogPage badge;           // 0xE84, badge log page
+    s16 badgeIds[100];          // 0xEB8 (US 0xEBC), badge ids - 0xF0
+    WinLogPage recipe;          // 0xF80 (US 0xF84), recipe log page
+    s16 recipeIds[58];          // 0xFB4 (US 0xFBC), item ids - 0xB3
+    f32 enemyX;                 // 0x1028 (US 0x1030), cleared by winLogInit; never read
+    f32 enemyTx;                // 0x102C (US 0x1034), 0 at init, 320 when the Tattle log closes; never read
+    f32 enemyY;                 // 0x1030 (US 0x1038), cleared by winLogInit; never read
+    f32 enemyTy;                // 0x1034 (US 0x103C), 0 at init, -240 when the Tattle log closes; never read
+    s32 enemyNum;               // 0x1038 (US 0x1040), entries in enemy (units with a tattleLogTag)
+    s32 enemyKnown;             // 0x103C (US 0x1044), entries with their GSWF_TATTLE flag set; shown as known/enemyNum
+    s32 enemySel;               // 0x1040 (US 0x1048), selected entry (index in enemy)
+    s32 enemyPage;              // 0x1044 (US 0x104C), page shown (TATTLE_LIST_PAGE entries a page; L / R)
+    f32 enemyScroll;            // 0x1048 (US 0x1050), cleared by winLogInit; never read
+    f32 enemyScrollTgt;         // 0x104C (US 0x1054), cleared by winLogInit; never read
+    WinSortEnt enemy[0xD8];     // 0x1050 (US 0x1058), tattle log
+    struct MonosiriWork* mono;  // 0x1200 (US 0x1208), the open Tattle card (monosiriInit on A)
+    u8 pad_1204[0x1208 - 0x1204]; // 0x1204 (US 0x120C)
 } WinLogState;
 
 /* WinMainWork.menuState: winMain's state machine */

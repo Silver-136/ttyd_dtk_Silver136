@@ -13,25 +13,25 @@
 #define EVT_NPC_PTR_MARIO ((NpcEntry*)-3)
 
 typedef struct NpcSetupInfo {
-    const char* name; // 0x0
-    s32 flags; // 0x4
-    s32 reactionFlags; // 0x8
-    EvtWord* initEvent; // 0xC
-    EvtWord* regularEvent; // 0x10
-    EvtWord* talkEvent; // 0x14
-    EvtWord* deadEvent; // 0x18
-    EvtWord* findEvent; // 0x1C
-    EvtWord* lostEvent; // 0x20
-    EvtWord* returnEvent; // 0x24
-    EvtWord* blowEvent; // 0x28
-    NpcTerritoryType territoryType; // 0x2C
-    Vec territoryBase; // 0x30
-    Vec territoryLoiter; // 0x3C
-    f32 searchRange; // 0x48
-    f32 searchAngle; // 0x4C
-    f32 homingRange; // 0x50
-    f32 homingAngle; // 0x54
-    s32 battleInfoId; // 0x58
+    const char* name; // 0x0, NPC the entry sets up (npcNameToPtr_NoAssert; skipped if absent); NULL ends the list
+    s32 flags; // 0x4, ORed into NpcEntry.flags
+    s32 reactionFlags; // 0x8, ORed into NpcEntry.reactionFlags
+    EvtWord* initEvent; // 0xC, started at once (NPC_EVENT_INIT), replacing a running init event
+    EvtWord* regularEvent; // 0x10, -> NpcEntry.moveEvent
+    EvtWord* talkEvent; // 0x14, -> NpcEntry.talkEvt
+    EvtWord* deadEvent; // 0x18, -> NpcEntry.deadEvent
+    EvtWord* findEvent; // 0x1C, -> NpcEntry.findEvent
+    EvtWord* lostEvent; // 0x20, -> NpcEntry.lostEvent
+    EvtWord* returnEvent; // 0x24, -> NpcEntry.returnEvent
+    EvtWord* blowEvent; // 0x28, -> NpcEntry.blowEvent
+    NpcTerritoryType territoryType; // 0x2C, -> NpcEntry.territoryType
+    Vec territoryBase; // 0x30, -> NpcEntry.territoryBase
+    Vec territoryLoiter; // 0x3C, -> NpcEntry.territoryLoiter and territoryHoming
+    f32 searchRange; // 0x48, -> NpcEntry.searchRange
+    f32 searchAngle; // 0x4C, -> NpcEntry.searchAngle
+    f32 homingRange; // 0x50, -> NpcEntry.homingRange
+    f32 homingAngle; // 0x54, -> NpcEntry.homingAngle
+    s32 battleInfoId; // 0x58, npcSetBattleInfo argument
 } NpcSetupInfo;
 
 USER_FUNC(evt_npc_entry);

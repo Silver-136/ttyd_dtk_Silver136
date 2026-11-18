@@ -237,7 +237,7 @@ typedef struct BattleAnnounce {
 #else
     char text[0x104];                // 0x14
 #endif
-    StChgWork stChg;                 // 0x118, status-change message queue (battle_status_effect)
+    StChgWork stChg;                 // 0x118 (US 0x114), status-change message queue (battle_status_effect)
 } BattleAnnounce;
 
 /**
@@ -364,34 +364,34 @@ struct BattleWork {
     BattleAudience audience;            // 0x2858
     BreakSlotWork breakSlot;            // 0x1616C, battle_break_slot.c
     BattleWorkPartyInfo partyInfo[7];   // 0x162A0, partner state kept while switched out (BtlUnit_SetParamToPouch)
-    u32 tattledUnitTypeFlags[8];        // 0x163B8, one bit per unit kind tattled (battle_monosiri)
-    s32 badgeEquippedFlags;             // 0x163D8, BattleBadgeFlags
-    FileEntry* menuTex;                 // 0x163DC, battle menu texture file (battle_menu_disp)
-    BattleStage stage;                  // 0x163E0
-    BattleActRecord actRecord;          // 0x16F1C, battle condition counters (battle_actrecord)
-    BattleMarioAcCount marioAc;         // 0x16F3C
+    u32 tattledUnitTypeFlags[8];        // 0x163B8 (US 0x163D4), one bit per unit kind tattled (battle_monosiri)
+    s32 badgeEquippedFlags;             // 0x163D8 (US 0x163F4), BattleBadgeFlags
+    FileEntry* menuTex;                 // 0x163DC (US 0x163F8), battle menu texture file (battle_menu_disp)
+    BattleStage stage;                  // 0x163E0 (US 0x163FC)
+    BattleActRecord actRecord;          // 0x16F1C (US 0x16F38), battle condition counters (battle_actrecord)
+    BattleMarioAcCount marioAc;         // 0x16F3C (US 0x16F58)
     u8 pad_16F3E[0x16F40 - 0x16F3E];    // 0x16F3E (US 0x16F5A), never accessed
     BattleAfterReaction afterReactions[64]; // 0x16F40 (US 0x16F5C), BattleAfterReactionEntry/Release/Main queue
-    BattleStageObject stageObjects[32]; // 0x17140
-    BattleStageObjectWork stageObjectWork; // 0x180C0, battle_stage_object.c (flags: BattleStageFlags)
-    BattleIcon icons[16];               // 0x182B0
-    BattleAnnounce announce;            // 0x18C70
-    s8 alertTick;                       // 0x18FE0, frames to the next danger/peril alarm sound (60)
-    u8 majinaiState;                    // 0x18FE1, MajinaiType of the Merlee charm in effect
-    u16 luckTimer;                      // 0x18FE2, frames of the Lucky Start event, up to 300
-    StarPowerInfo impendingBonuses;     // 0x18FE4, Star Power bonus for the last action command
-    BattleAcHelpWork acHelp;            // 0x18FF0, battle_ac_help.c
-    u8 pad_18FF8[0x19038 - 0x18FF8];    // 0x18FF8, never accessed
+    BattleStageObject stageObjects[32]; // 0x17140 (US 0x1715C)
+    BattleStageObjectWork stageObjectWork; // 0x180C0 (US 0x180DC), battle_stage_object.c (flags: BattleStageFlags)
+    BattleIcon icons[16];               // 0x182B0 (US 0x182CC)
+    BattleAnnounce announce;            // 0x18C70 (US 0x18C8C)
+    s8 alertTick;                       // 0x18FE0 (US 0x18FF8), frames to the next danger/peril alarm sound (60)
+    u8 majinaiState;                    // 0x18FE1 (US 0x18FF9), MajinaiType of the Merlee charm in effect
+    u16 luckTimer;                      // 0x18FE2 (US 0x18FFA), frames of the Lucky Start event, up to 300
+    StarPowerInfo impendingBonuses;     // 0x18FE4 (US 0x18FFC), Star Power bonus for the last action command
+    BattleAcHelpWork acHelp;            // 0x18FF0 (US 0x19008), battle_ac_help.c
+    u8 pad_18FF8[0x19038 - 0x18FF8];    // 0x18FF8 (US 0x19010), never accessed
 #if VERSION >= VERSION_US
     s32 commandDisabled[3]; // US and later
 #else
-    s32 commandDisabled[5];             // 0x19038, set to 3 by Bowser's command-blocking attacks
+    s32 commandDisabled[5];             // 0x19038 (US 0x19050), set to 3 by Bowser's command-blocking attacks
 #endif
-    s32 luckEventId;                    // 0x1904C, id of the running Lucky Start event
-    s32 reserveItems[4];                // 0x19050, items used this turn, removed by BattleConsumeReserveItem
-    u32 curtainSfxId;                    // 0x19060 (u32: its -1 tests are unsigned compares in the retail code)
+    s32 luckEventId;                    // 0x1904C (US 0x1905C), id of the running Lucky Start event
+    s32 reserveItems[4];                // 0x19050 (US 0x19060), items used this turn (BattleConsumeReserveItem)
+    u32 curtainSfxId;                    // 0x19060 (US 0x19070); u32: its -1 tests are unsigned in the retail code
     u8 lastAcSuccess;                   // 0x19064 (US 0x19074), 1 after a successful action command (btlevtcmd_AudienceDeclareACResult)
-    u8 pad_19065[0x19068 - 0x19065];    // 0x19065, never accessed
+    u8 pad_19065[0x19068 - 0x19065];    // 0x19065 (US 0x19075), never accessed
     BattleDebugCtrl debug;              // 0x19068 (US 0x19078), debug overrides read by the audience and break slot
     u32 lectureFlags;                   // 0x19080 (US 0x19090), bit 0 set by the Frankly lecture (aud_attack_init/end); continues msgWindow lectureWindowId
     s32 lectureWindowId;                // 0x19084 (US 0x19094)

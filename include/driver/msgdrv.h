@@ -64,15 +64,15 @@ typedef enum MsgWinFlags {
 } MsgWinFlags;
 
 typedef struct MsgWinData {
-    const char* tag; // 0x0
+    const char* tag; // 0x0, message tag ("DIRECT" for direct text; evt_msg); msgWindow_ForceClose matches it
     u32 flags; // 0x4, MsgWinFlags
     u16 curPage; // 0x8, page being shown (page-break entries carry their page number)
     u16 pageState; // 0xA, 1: waiting for the key, 2: advance to the next page
-    u16 pageAdvanced; // 0xC
+    u16 pageAdvanced; // 0xC, set to 1 when the next page starts; never read
     s32 nextEntry; // 0x10, index into entries
     OSTime openTime; // 0x18, set when the window opens; drives the open anim (SPM openTime)
     s32 playTime; // 0x20, playback clock (ms) compared with entries[].time
-    s32 scrollTarget; // 0x24
+    s32 scrollTarget; // 0x24, scroll position scrollPos eases toward (scroll entries lower it; msgPageAdd logs it)
     s32 scrollPos; // 0x28, eases toward scrollTarget
     OSTime lastUpdateTime; // 0x30, reset every msgMain; the delta advances the scroll
     s32 charCount; // 0x38, MsgChar entries in use
@@ -81,31 +81,31 @@ typedef struct MsgWinData {
 #else
     MsgChar entries[0x500]; // 0x3C
 #endif
-    s32 page; // 0x783C
-    s32 pageCount; // 0x7840, number of pageY entries
-    s32 pageY[(0x79FC - 0x7844) / 4]; // 0x7844
-    MsgWindowCallback callback; // 0x79FC, message event callback
+    s32 page; // 0x783C (US 0xF03C), pageY index shown while paging back with Z
+    s32 pageCount; // 0x7840 (US 0xF040), number of pageY entries
+    s32 pageY[(0x79FC - 0x7844) / 4]; // 0x7844 (US 0xF044), scroll position of each logged page (msgPageAdd, up to 110)
+    MsgWindowCallback callback; // 0x79FC (US 0xF1FC), message event callback
     struct EventEntry* event; // 0x7A00 (US 0xF200), event that opened the window; read by map msg callbacks
-    char speakerName[0x20]; // 0x7A04, speaker NPC name, passed to npcNameToPtr (SPM npcName)
-    s32 unitId; // 0x7A24
-    s32 talkSfxGroup; // 0x7A28, <se n> tag value (0xFFFA entry); not read in C
-    u8 talkVolume; // 0x7A2C, default 0x7F
-    s32 parseTime; // 0x7A30, msgAnalize state
-    s16 parseX; // 0x7A34
-    s16 parseY; // 0x7A36
-    s16 parsePage; // 0x7A38, msgAnalize: key-wait counter stored in 0xFFFE entries' x
-    s16 parseScroll; // 0x7A3A, msgAnalize: pending scroll stored in 0xFFFD entries' y
-    s32 parseSpeed; // 0x7A3C, text speed (default 25)
-    s8 numSel; // 0x7A40
-    s8 defSel; // 0x7A41
-    s8 cancel; // 0x7A42
-    s8 sel; // 0x7A43
-    s16 selWidth; // 0x7A44
-    s16 selY; // 0x7A46
-    f32 cursorY; // 0x7A48
-    WindowEntry* window; // 0x7A4C
-    s32 talkTimer; // 0x7A50, frames until the talk pose is set
-    s32 talkPoseSet; // 0x7A54
+    char speakerName[0x20]; // 0x7A04 (US 0xF204), speaker NPC name, passed to npcNameToPtr (SPM npcName)
+    s32 unitId; // 0x7A24 (US 0xF224), battle unit that speaks (evt_msg; MSG_WIN_FLAG_BATTLE_UNIT windows)
+    s32 talkSfxGroup; // 0x7A28 (US 0xF228), <se n> tag value (0xFFFA entry); not read in C
+    u8 talkVolume; // 0x7A2C (US 0xF22C), default 0x7F
+    s32 parseTime; // 0x7A30 (US 0xF230), msgAnalize state
+    s16 parseX; // 0x7A34 (US 0xF234), msgAnalize: x of the next character
+    s16 parseY; // 0x7A36 (US 0xF236)
+    s16 parsePage; // 0x7A38 (US 0xF238), msgAnalize: key-wait counter stored in 0xFFFE entries' x
+    s16 parseScroll; // 0x7A3A (US 0xF23A), msgAnalize: pending scroll stored in 0xFFFD entries' y
+    s32 parseSpeed; // 0x7A3C (US 0xF23C), text speed (default 25)
+    s8 numSel; // 0x7A40 (US 0xF240), choices of the select window
+    s8 defSel; // 0x7A41 (US 0xF241), choice selected when it opens (first <select> number)
+    s8 cancel; // 0x7A42 (US 0xF242), B: -1 ignored, -2 closes with sel = -1, else closes with sel = cancel
+    s8 sel; // 0x7A43 (US 0xF243), selected choice (wraps)
+    s16 selWidth; // 0x7A44 (US 0xF244), select window width (<select> value; 0: widest row + 80)
+    s16 selY; // 0x7A46 (US 0xF246), select window y (<select> value)
+    f32 cursorY; // 0x7A48 (US 0xF248), y of the choice cursor; eases toward the selected row
+    WindowEntry* window; // 0x7A4C (US 0xF24C), the window this data belongs to
+    s32 talkTimer; // 0x7A50 (US 0xF250), frames the talk pose lasts (15 from msgTalkPoseOn); at 0 the stay pose returns
+    s32 talkPoseSet; // 0x7A54 (US 0xF254), 1 while the talk pose is on (msgTalkPoseMain)
 } MsgWinData;
 
 typedef struct MessageEntry {

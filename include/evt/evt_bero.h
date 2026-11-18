@@ -25,22 +25,22 @@ enum {
 };
 
 typedef struct BeroEntry {
-    const char* hitName; // 0x0
+    const char* hitName; // 0x0, entrance hit object (n_ .. nw_ prefix for BERO_DIR_AUTO); NULL ends the table
     u16 type; // 0x4, BERO_TYPE_KIND_MASK: the exit kind (0 and 1 the edge exits w_/e_/n_/s_bero, 2 pipe
               //     dokan, 0xF00 holes and some s_bero; 3 rare) | BERO_TYPE_BG_MODE | 0x2000 (on some pipes)
-    u16 sfxId; // 0x6
+    u16 sfxId; // 0x6, door sound kind (evt_bero_get_info_kinddir)
     s32 directionId; // 0x8, 45-degree steps from north, 8 up, 9 down
     s32 centerPosition; // 0xC, x of centerPosition[3]
     s32 centerPositionY; // 0x10
     s32 centerPositionZ; // 0x14
     s32 length; // 0x18, -1 = default for type
-    EvtWord* enterEvent; // 0x1C;
+    EvtWord* enterEvent; // 0x1C, enter script; NULL = default_entevt
     s32 caseType; // 0x20, -1 = default for type
-    EvtWord* exitEvent; // 0x24
-    const char* nextMapName; // 0x28
-    const char* nextBeroName; // 0x2C
-    u16 enterAnimeType; // 0x30
-    u16 exitAnimeType; // 0x32
+    EvtWord* exitEvent; // 0x24, exit script; NULL = default_outevt
+    const char* nextMapName; // 0x28, destination map
+    const char* nextBeroName; // 0x2C, destination entrance in that map
+    u16 enterAnimeType; // 0x30, kind of enterAnimeArg (evt_bero_get_info_anime)
+    u16 exitAnimeType; // 0x32, kind of exitAnimeArg
     const void* enterAnimeArg; // 0x34, map animation name or script, by anime type
     const void* exitAnimeArg; // 0x38, map animation name or script, by anime type
 } BeroEntry;

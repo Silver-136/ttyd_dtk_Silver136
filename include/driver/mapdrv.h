@@ -251,20 +251,20 @@ typedef enum MapObjFlags {
 
 typedef struct MapObject {
     u32 flags;                             // 0x0, MapObjFlags
-    u8 blendMode;                          // 0x4
+    u8 blendMode;                          // 0x4, DISP_MODE_*, from the joint's draw mode or materials
     u8 cameraId;                           // 0x5, dispEntry camera (4 by default; set by evt_lect_* / tik_00)
-    MapFileJoint* joints;                  // 0x8
-    GXColor color;                         // 0xC
-    Vec center;                            // 0x10
-    Mtx modelWorldMtx;                     // 0x1C
-    Mtx localMtx;                          // 0x4C
+    MapFileJoint* joints;                  // 0x8, map file joint it was built from; NULL = free slot
+    GXColor color;                         // 0xC, tint (mapObjSetColor, MAP_OBJ_FLAG_COLOR); alpha 0 hides it
+    Vec center;                            // 0x10, joint bounding box centre (its translation without parts)
+    Mtx modelWorldMtx;                     // 0x1C, parent's world matrix times localMtx
+    Mtx localMtx;                          // 0x4C, the joint's translation, rotation and scale
     Mtx animMtx;                           // 0x7C, mapCalcAnimMatrix output, concatenated into modelWorldMtx
     Mtx transformMtx;                      // 0xAC, mapObjRotate/mapObjTrans/mapObjScale matrix (identity at load)
-    s16 offscreenId;                       // 0xDC
-    s16 groupIndex;                        // 0xDE
-    struct MapObject* parent;              // 0xE0
-    struct MapObject* child;               // 0xE4
-    struct MapObject* next;                // 0xE8
+    s16 offscreenId;                       // 0xDC, offscreen buffer it also draws into; -1 = none
+    s16 groupIndex;                        // 0xDE, MapWork entry it belongs to (its lights and textures)
+    struct MapObject* parent;              // 0xE0, object of the parent joint
+    struct MapObject* child;               // 0xE4, first child object
+    struct MapObject* next;                // 0xE8, next object with the same parent
     u16 screenRect[4];                     // 0xEC, projected bounds (0x3FF when off screen)
     void* displayList[8];                  // 0xF4, prebuilt display lists (makeDisplayList)
     u32 displayListSize[8];                // 0x114, their sizes; MAP_OBJ_FLAG_DISPLAY_LIST only sticks when [0] is nonzero

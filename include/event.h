@@ -14,9 +14,9 @@ typedef struct EventData {
 #if VERSION >= VERSION_US
     const char* nameEn;      // 0x10
 #endif
-    const char* mapName;     // 0x10 (0x14 from US on)
-    const char* beroName;    // 0x14 (0x18 from US on)
-    void (*initEvent)(void); // 0x18 (0x1C from US on)
+    const char* mapName;     // 0x10 (US 0x14)
+    const char* beroName;    // 0x14 (US 0x18)
+    void (*initEvent)(void); // 0x18 (US 0x1C)
 } EventData;
 
 typedef struct EventStage {
@@ -24,8 +24,8 @@ typedef struct EventStage {
 #if VERSION >= VERSION_US
     const char* nameEn; // 0x4
 #endif
-    EventData* data;  // 0x4 (0x8 from US on)
-    s32 count;        // 0x8 (0xC from US on)
+    EventData* data;  // 0x4 (US 0x8)
+    s32 count;        // 0x8 (US 0xC)
 } EventStage;
 
 void stg0_00_init(void);

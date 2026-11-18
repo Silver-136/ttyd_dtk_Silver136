@@ -24,22 +24,22 @@ typedef struct PoseSoundTiming {
 /* door_entry / evt_door_set_param: per-door parameter block (npcs/mobjs/items are NULL-terminated name lists) */
 typedef struct DoorParam {
     s32 flags;              // 0x0, evt_door_param kind 9; 1 = hide/show NPCs through the door, 2 = skip the open SFX
-    s32 type;               // 0x4
-    s32 se;                 // 0x8
-    const char* mapobj;     // 0xC
-    const char* hitIn;      // 0x10
-    const char* hitOut;     // 0x14
-    const char* outside;    // 0x18
+    s32 type;               // 0x4, hinge side for door_position_sub (0/1 or 2: which way the outside spot shifts)
+    s32 se;                 // 0x8, door sound set (door_open_se; 0 = silent)
+    const char* mapobj;     // 0xC, the door's map object; its width sets the outside spot's sideways shift
+    const char* hitIn;      // 0x10, inside spot is measured from it (its normal); door sounds play there
+    const char* hitOut;     // 0x14, hit object the outside spot is measured from (its normal)
+    const char* outside;    // 0x18, map object group of the outside (evt_door_open saves its flags)
     const char* outsideHit; // 0x1C
-    const char* inside;     // 0x20
-    const char* insideHit;  // 0x24
+    const char* inside;     // 0x20, map object group of the inside (evt_door_open shows it)
+    const char* insideHit;  // 0x24, hit object evt_door_open switches on with the inside
     EvtWord* evtIn;            // 0x28
     EvtWord* evtOut;           // 0x2C
-    EvtWord* evtWall;          // 0x30
-    const char** npcs;      // 0x34
-    const char** mobjs;     // 0x38
-    const char** items;     // 0x3C
-    EvtWord* evtOpen;          // 0x40
+    EvtWord* evtWall;          // 0x30, script evt_door_open runs with house_open_se under DOOR_OPT_HOUSE_ANIM_FIRST
+    const char** npcs;      // 0x34, NPCs left out of the map blend (door_dark_flag)
+    const char** mobjs;     // 0x38, mobjs left out of the map blend
+    const char** items;     // 0x3C, items left out of the map blend
+    EvtWord* evtOpen;          // 0x40, script spawned when evt_door_open starts
     EvtWord* evtClose;         // 0x44
 } DoorParam;
 

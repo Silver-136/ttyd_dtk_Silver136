@@ -85,27 +85,27 @@ typedef enum HitEntryFlags {
 struct HitEntry {
     u16 flags;                      // 0x0, HitEntryFlags
     s32 attributes;                 // 0x4, HitAttributes
-    MapFileJoint* joint;            // 0x8
-    Mtx worldMtx;                   // 0xC
-    Mtx localMtx;                   // 0x3C
+    MapFileJoint* joint;            // 0x8, map file joint it was built from; NULL = free slot
+    Mtx worldMtx;                   // 0xC, parent's world matrix times localMtx
+    Mtx localMtx;                   // 0x3C, the joint's translation, rotation and scale
     Mtx animMtx;                    // 0x6C, joint animation matrix (output of mapCalcAnimMatrix, concatenated into worldMtx)
-    Vec centerLocal;                // 0x9C
+    Vec centerLocal;                // 0x9C, centre of the joint's bounding box (its translation when it has no parts)
     s16 vectorCount;                // 0xA8, number of HitVector triangles (set from hitCalcVtxPosition)
-    s16 mapIndex;                   // 0xAA
-    HitVector* vectors;             // 0xAC
-    HitDamageReturn* damage;        // 0xB0
+    s16 mapIndex;                   // 0xAA, MapWork entry it belongs to (vertex format of hitCalcVtxPosition)
+    HitVector* vectors;             // 0xAC, the triangles (_mapAlloc; vectorCount of them)
+    HitDamageReturn* damage;        // 0xB0, spot of a HIT_ATTR_DAMAGE_RETURN surface (hitDamageReturnSet)
     u8 pad_B4[0xC0 - 0xB4];          // 0xB4, never accessed
-    Vec centerWorld;                // 0xC0
-    f32 radius;                     // 0xCC
+    Vec centerWorld;                // 0xC0, centerLocal in world space
+    f32 radius;                     // 0xCC, bounding radius around centerWorld (quick reject in the checks)
     union {                         // 0xD0, owner: map object, or the mobj for mobj hit objects
         MapObject* mapObj;
         struct MapObjectEntry* mobj;
     };
-    struct HitEntry* parent;        // 0xD4
-    struct HitEntry* child;         // 0xD8
-    struct HitEntry* sibling;       // 0xDC
+    struct HitEntry* parent;        // 0xD4, object of the parent joint
+    struct HitEntry* child;         // 0xD8, first child object
+    struct HitEntry* sibling;       // 0xDC, next object with the same parent
 #if VERSION >= VERSION_JP
-    struct HitEntry* siblingActive; // 0xE0
+    struct HitEntry* siblingActive; // 0xE0, next live object with geometry (list from hitActiveListTop)
 #endif
 };
 

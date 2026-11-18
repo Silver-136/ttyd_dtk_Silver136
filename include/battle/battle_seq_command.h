@@ -128,28 +128,28 @@ typedef struct BattleCommandMultiItem {
 } BattleCommandMultiItem;
 
 typedef struct BattleSubMenu {
-    BattleCursor* cursor;           // 0x0
-    BattleCommandAct* acts;         // 0x4
-    BattleCommandWeapon* weapons;   // 0x8
-    s32 scrollState;                    // 0xC
-    s32 reserved_10;                   // 0x10
-    u8 shown;                    // 0x14
-    s32 prevAbsPos;                   // 0x18
-    s32 iconsArrived;                   // 0x1C
-    s32 iconFlags[5];                // 0x20
-    s32 iconState[5];                // 0x34
-    s32 iconTimer[15];               // 0x48
-    s32 iconSlot[5];                // 0x84
-    f32 scrollPos;                   // 0x98
-    f32 scrollFrom;                   // 0x9C
-    f32 scrollTo;                   // 0xA0
+    BattleCursor* cursor;           // 0x0, the menu's cursor
+    BattleCommandAct* acts;         // 0x4, act menu entries (ActMenuSetup)
+    BattleCommandWeapon* weapons;   // 0x8, weapon list entries (WeaponSelectMenuSetup)
+    s32 scrollState;                // 0xC
+    s32 reserved_10;                // 0x10, cleared at setup and with every scroll start; never read
+    u8 shown;                       // 0x14, set once the menu has finished opening; BattleMenuKeyOKInACT waits for it
+    s32 prevAbsPos;                 // 0x18
+    s32 iconsArrived;               // 0x1C, 1 once the picked icon is 3 frames into its move (bubble facing)
+    s32 iconFlags[5];               // 0x20
+    s32 iconState[5];               // 0x34
+    s32 iconTimer[15];              // 0x48
+    s32 iconSlot[5];                // 0x84, ring position of each command icon
+    f32 scrollPos;                  // 0x98
+    f32 scrollFrom;                 // 0x9C, scrollPos at the scroll start
+    f32 scrollTo;                   // 0xA0, scrollPos at the scroll end
     s32 rowFlags[7];                // 0xA4
     s32 rowState[7];                // 0xC0
     s32 rowTimer[7];                // 0xDC
-    s32 reserved_F8[7];                // 0xF8
-    u8 reserved_114[8];
-    s32 bobTimer; // 0x11C
-    f32 partyBtnAngle; // 0x120
+    s32 reserved_F8[7];             // 0xF8, cleared at setup; never read
+    u8 reserved_114[8];             // 0x114, set to 0xFF; never read
+    s32 bobTimer;                   // 0x11C, frame counter of the cursor bob (12 frames at 60 fps)
+    f32 partyBtnAngle;              // 0x120, partner change button swing: 90 off, down 5 a frame to 0
 } BattleSubMenu;
 
 // BattleCommand.flags: the menus BattleCommandDisplay draws (set by each *MenuSetup, cleared by its *MenuEnd)

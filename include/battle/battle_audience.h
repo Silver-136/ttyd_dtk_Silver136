@@ -83,7 +83,7 @@ typedef struct BattleAudienceMember {
     f32 workF1;                // 0x10, per-status float, cleared on status change
     f32 workF2;                // 0x14, per-status float, cleared on status change
     s8 colorStep;              // 0x18, added to colorB each frame (+-4)
-    u8 status;                 // 0x19
+    u8 status;                 // 0x19, BattleAudienceStatus: picks the status handler
     u8 texId;                  // 0x1A, palette texture index for the member quad
     u8 type;                   // 0x1B, AudienceMemberType
     s16 itemId;                // 0x1C, -1 is invalid
@@ -98,16 +98,16 @@ typedef struct BattleAudienceMember {
     u8 colorG;                 // 0x42
     u8 colorB;                 // 0x43
     u8 colorA;                 // 0x44, 0xFF = opaque (separate draw pass)
-    Vec position;              // 0x48
+    Vec position;              // 0x48, BattleAudience_SetPosition
     Vec scale;                 // 0x54, final draw scale: baseScale * kind texture size (PSMTXScale in the member draw)
-    Vec baseScale;             // 0x60
+    Vec baseScale;             // 0x60, scale before the texture size factor (1 at entry)
     Vec dispOffset;            // 0x6C, added to position for the drawn quad
     Vec velocity;              // 0x78, added to position each frame
     Vec accel;                 // 0x84, added to velocity
     Vec facingDir;             // 0x90, (0,0,-1) rotated by the member matrix; dot-product facing test
-    Vec rotation;             // 0x9C
-    Vec rotationOffset;       // 0xA8
-    Vec homePosition;         // 0xB4
+    Vec rotation;              // 0x9C, degrees, applied in the member draw
+    Vec rotationOffset;        // 0xA8, rotation pivot, times scale in the member draw
+    Vec homePosition;          // 0xB4, seat position set at entry; the kinopio handlers return the member to it
     f32 drawPosX;              // 0xC0, position + hop (+ bob), used as the thrown-item origin
     f32 drawPosY;              // 0xC4
     f32 drawPosZ;              // 0xC8
@@ -124,16 +124,16 @@ typedef struct BattleAudienceMember {
     s32 statusDelay;           // 0xF4, countdown before AUDIENCE_STATUS_SLEEP -> AUDIENCE_STATUS_WAIT_JUMP
     s32 interpFrameCounter;    // 0xF8, remaining frames for evt_audience movement; elapsed frames for Magnus 2
                                // (unit_boss_magnum_battender_mkII) audience suction
-    s32 interpFramesTotal;     // 0xFC
-    f32 startPosX;             // 0x100
-    f32 targetPosX;            // 0x104
+    s32 interpFramesTotal;     // 0xFC, frames of the evt_audience move (and of the Magnus 2 suction)
+    f32 startPosX;             // 0x100, start of evt_audience_move_position_frame (x; Y and Z follow)
+    f32 targetPosX;            // 0x104, end of the evt_audience moves, set when the move ends (x; Y and Z follow)
     f32 startPosY;             // 0x108
     f32 targetPosY;            // 0x10C
     f32 startPosZ;             // 0x110
     f32 targetPosZ;            // 0x114
-    Vec interpDelta;           // 0x118
-    f32 interpGravity;         // 0x124
-    s32 interpType;            // 0x128
+    Vec interpDelta;           // 0x118, per-frame step of the speed and jump moves
+    f32 interpGravity;         // 0x124, added to interpDelta.y each frame of the jump moves
+    s32 interpType;            // 0x128, easing of evt_audience_move_position_frame (intplGetValue)
     union {
         s32 statusTimer;       // 0x12C, set to 5 and counted down while status == AUDIENCE_STATUS_IGNITE or SHELL;
                                // some handlers keep an event id or a member index here
