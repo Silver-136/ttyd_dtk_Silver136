@@ -11,9 +11,15 @@
 #include "driver/camdrv.h"
 #include "manager/fontmgr.h"
 
+// YuuTitleWork.flags
+enum {
+    YUUTITLE_FLAG_QUIT = 1,           // set by evt_yuutitle_free; the title event stops on it
+    YUUTITLE_FLAG_QUIT_DONE = 1 << 1, // the event has stopped; evt_yuutitle_free then frees the work
+};
+
 typedef struct YuuTitleWork {
     EventEntry* event;
-    u16 flags;
+    u16 flags; // YUUTITLE_FLAG_*
     f32 x;
     f32 y;
     f32 startX;
@@ -67,8 +73,8 @@ static void evt_yuutitle_disp_func(CameraId camera, void* param) {
 static USER_FUNC(evt_yuutitle_main_func) {
     YuuTitleWork* wp = (YuuTitleWork*)event->lwData[0];
 
-    if (wp->flags & 1) {
-        wp->flags |= 2;
+    if (wp->flags & YUUTITLE_FLAG_QUIT) {
+        wp->flags |= YUUTITLE_FLAG_QUIT_DONE;
         return EVT_RETURN_DONE;
     }
     dispEntry(CAMERA_2D, 1000.0f, DISP_MODE_OPAQUE, evt_yuutitle_disp_func, wp);
@@ -104,9 +110,9 @@ USER_FUNC(evt_yuutitle_free) {
         return EVT_RETURN_DONE;
     }
     if (isFirstCall) {
-        wp->flags |= 1;
+        wp->flags |= YUUTITLE_FLAG_QUIT;
     }
-    if (!(wp->flags & 2)) {
+    if (!(wp->flags & YUUTITLE_FLAG_QUIT_DONE)) {
         return EVT_RETURN_BLOCK;
     }
     _mapFree(_wp);

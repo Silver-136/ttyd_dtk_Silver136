@@ -50,8 +50,13 @@
 #include "tou.h"
 #include <dolphin/pad.h>
 
+// Fan.flags
+enum {
+    FAN_FLAG_STAND_IN = 1, // the fan stands in for Mario or the champion (hidden, not counted; JP on: never knocked away)
+};
+
 typedef struct Fan {
-    u16 flags;
+    u16 flags; // FAN_FLAG_*
     s16 state;
     s16 animIdx;
     u64 time;
@@ -1819,7 +1824,7 @@ void ext_fan_main(void) {
                 fan->pos = mario->position;
                 target = fan->pos;
                 pose->flags &= ~EXT_POSE_FLAG_VISIBLE;
-                fan->flags |= 1;
+                fan->flags |= FAN_FLAG_STAND_IN;
                 break;
             }
         }
@@ -1836,12 +1841,12 @@ void ext_fan_main(void) {
                     found = 1;
                     fan->pos = mario->position;
                     pose->flags &= ~EXT_POSE_FLAG_VISIBLE;
-                    fan->flags |= 1;
+                    fan->flags |= FAN_FLAG_STAND_IN;
                 } else {
                     fan->pos = npcNameToPtr("チャンピョン")->position;
                     target = fan->pos;
                     pose->flags &= ~EXT_POSE_FLAG_VISIBLE;
-                    fan->flags |= 1;
+                    fan->flags |= FAN_FLAG_STAND_IN;
                     break;
                 }
             }
@@ -2067,7 +2072,7 @@ void ext_fan_main(void) {
                 case 101:
                     break;
             }
-            if (lfan->flags & 1) {
+            if (lfan->flags & FAN_FLAG_STAND_IN) {
                 fan_wp->count--;
             } else if (lfan->state != 0) {
                 fan_wp->count--;
@@ -2309,7 +2314,7 @@ static void ext_fan_dispent(void) {
  * more than 10 callback updates, when the fan is within 35 of the point 35 units ahead,
  * or his spin hammer (submotion 0x14) is within 65;
  * 2 when Flurrie's gust reaches within 30 of it; 0 otherwise. In JP and later, the fan standing in for Mario or
- * the champion (flags bit 1) is never hit.
+ * the champion (FAN_FLAG_STAND_IN) is never hit.
  */
 s32 check_hammer(Fan* fan) {
     MarioWork* mario = marioGetPtr();
@@ -2325,7 +2330,7 @@ s32 check_hammer(Fan* fan) {
         return 0;
     }
 #if VERSION >= VERSION_JP
-    if (fan->flags & 1) {
+    if (fan->flags & FAN_FLAG_STAND_IN) {
         return 0;
     }
 #endif

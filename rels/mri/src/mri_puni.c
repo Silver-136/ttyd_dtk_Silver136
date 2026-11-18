@@ -4350,8 +4350,8 @@ static void puni_puni_init(void) {
     p->groupId = 0;
     p = &Punidat[1];
     for (i = 1; i < PUNI_DATA_MAX; i++) {
-        pose->flags = 1;
-        pose->flags |= 2;
+        pose->flags = PUNIDRV_POSE_FLAG_DISP;
+        pose->flags |= PUNIDRV_POSE_FLAG_SMOOTH_TURN;
         pose->dir = 0.0f;
         PSMTXIdentity(*pose->mtx);
         (*pose->mtx)[0][3] = 0.0f;
@@ -5173,16 +5173,16 @@ void puni_puni_main(void) {
                 p->awayTarget = -1;
                 p->awayTargetDistSq = 1000000.0f;
                 for (jj = 0; jj < 10; jj++, tt++) {
-                    if (tt->flags & 1) {
+                    if (tt->flags & PUNI_TARGET_FLAG_ON) {
                         if (!(32.0 < __fabs(p->pos.y - tt->pos.y))) {
-                            if (tt->flags & 4) {
+                            if (tt->flags & PUNI_TARGET_FLAG_AWAY) {
                                 f32 d = PSVECSquareDistance(&p->pos, &tt->pos);
                                 if (p->awayTargetDistSq > d) {
                                     p->awayTarget = jj;
                                     p->awayTargetDistSq = d;
                                 }
                             }
-                            if (tt->flags & 2) {
+                            if (tt->flags & PUNI_TARGET_FLAG_MASS) {
                                 f32 d = PSVECSquareDistance(&p->pos, &tt->pos);
                                 if (p->massTargetDistSq > d) {
                                     p->massTarget = jj;

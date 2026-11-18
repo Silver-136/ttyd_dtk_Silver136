@@ -12,5 +12,11 @@ typedef struct Senkaron {
     f32 vx;
     f32 vy;
     f32 vz;
-    u32 flags;
+    u32 flags;  // SENKARON_FLAG_*
 } Senkaron;
+
+// Senkaron.flags. The code clears TURNED with `&= 0xFFFE`, which also clears the (unused) upper 16 bits.
+enum {
+    SENKARON_FLAG_TURNED = 1,       // faces the other way while pushed (1 in 50 when a push starts)
+    SENKARON_FLAG_CROWDED = 1 << 1, // las_05: shares a floor cell with a bone nearer Mario; moves backwards
+};

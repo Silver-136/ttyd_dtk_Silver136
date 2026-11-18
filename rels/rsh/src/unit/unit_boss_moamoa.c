@@ -38,8 +38,14 @@ typedef struct ExtMoamoaGroup {
     s32 start;
     s32 num;
 } ExtMoamoaGroup;
+
+// ExtMoamoa.flags
+enum {
+    EXT_MOAMOA_FLAG_DRIVEN = 1, // moved by the death scripts: picked for the swirl (moamoa_guruguru) or launched (moamoa_bomb)
+};
+
 typedef struct ExtMoamoa {
-    u16 flags;
+    u16 flags; // EXT_MOAMOA_FLAG_*
     u8 field_0x2[2];
     Vec pos;
     s16 group;
@@ -989,7 +995,7 @@ static USER_FUNC(moamoa_guruguru) {
             v.y = (*pose->mtx)[1][3];
             v.z = (*pose->mtx)[2][3];
             if (v.y >= 0.0f) {
-                elem->flags |= 1;
+                elem->flags |= EXT_MOAMOA_FLAG_DRIVEN;
                 cnt += 1.0f;
                 PSVECAdd(&v, &wp->center, &wp->center);
             }
@@ -1002,7 +1008,7 @@ static USER_FUNC(moamoa_guruguru) {
     elem = wp->elems;
     ang = 0.0f;
     for (i = 0; i < wp->count; i++, pose++, elem++) {
-        if (elem->flags & 1) {
+        if (elem->flags & EXT_MOAMOA_FLAG_DRIVEN) {
             elem->vel.x = (*pose->mtx)[0][3];
             elem->vel.y = (*pose->mtx)[1][3];
             elem->vel.z = (*pose->mtx)[2][3];
@@ -1040,7 +1046,7 @@ static USER_FUNC(moamoa_bomb) {
         elem = wp->elems;
         for (i = 0; i < wp->count; i++, elem++) {
             if (*elem->owner != -1) {
-                elem->flags &= ~1;
+                elem->flags &= ~EXT_MOAMOA_FLAG_DRIVEN;
             }
         }
     }
@@ -1049,9 +1055,9 @@ static USER_FUNC(moamoa_bomb) {
         n = 0;
         e2 = wp->elems;
         for (k = 0; k < wp->count; k++, p2++, e2++) {
-            if ((*p2->mtx)[1][3] >= 0.0f && !(e2->flags & 1)) {
-                e2->flags |= 1;
-                if (e2->flags & 1) {
+            if ((*p2->mtx)[1][3] >= 0.0f && !(e2->flags & EXT_MOAMOA_FLAG_DRIVEN)) {
+                e2->flags |= EXT_MOAMOA_FLAG_DRIVEN;
+                if (e2->flags & EXT_MOAMOA_FLAG_DRIVEN) {
                     e2->vel.x = randf(0.0f, 60.0f) - 30.0f;
                     e2->vel.y = randf(0.0f, 35.0f);
                     e2->vel.z = 60.0f + randf(0.0f, 30.0f);
@@ -1069,7 +1075,7 @@ static USER_FUNC(moamoa_bomb) {
     pose = extGetPosePtr();
     elem = wp->elems;
     for (i = 0; i < wp->count; i++, pose++, elem++) {
-        if (elem->flags & 1) {
+        if (elem->flags & EXT_MOAMOA_FLAG_DRIVEN) {
             if (elem->pos2.y >= -500.0f) {
                 elem->pos2.x += elem->vel.x;
                 elem->pos2.y += elem->vel.y;
@@ -1532,7 +1538,7 @@ static void ext_moamoa_main(void) {
         pose = extGetPosePtr();
         elem = wp->elems;
         for (k3 = 0; k3 < wp->count; k3++, pose++, elem++) {
-            if (elem->flags & 1) {
+            if (elem->flags & EXT_MOAMOA_FLAG_DRIVEN) {
                 PSVECSubtract(&elem->vel, &wp->center, &r);
                 PSMTXRotAxisRad(m, &elem->pos2, 0.017453292f * wp->angle);
                 PSMTXMultVec(m, &r, &r);

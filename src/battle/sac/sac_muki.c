@@ -53,8 +53,13 @@ typedef struct Muki3D { // 0x24
     MukiObj* link;     // 0x20
 } Muki3D;
 
+// MukiWork.flags
+enum {
+    MUKI_FLAG_DIZZY = 1, // set by a poison mushroom hit, cleared after 120 frames (hazardTimer); the cursor moves slower
+};
+
 typedef struct MukiWork {
-    u32 flags;             // 0x0
+    u32 flags;             // 0x0, MUKI_FLAG_*
     s32 state;             // 0x4
     s32 timer;             // 0x8
     s32 timeLeft;          // 0xc
@@ -230,7 +235,7 @@ static void main_base(void) {
             }
             break;
         case 4:
-            if (w->flags & 1) {
+            if (w->flags & MUKI_FLAG_DIZZY) {
                 w->hazardTimer++;
                 if (w->hazardTimer == 30) {
                     BtlUnit_SetAnim(part, "M_X_1");
@@ -368,7 +373,7 @@ static void main_cursor(void) {
             w->cursorColor = (GXColor){0xFF, 0xFF, 0xFF, 0xFF};
             if (w->hazardTimer >= 120) {
                 BtlUnit_SetAnim(part, "M_I_Y");
-                w->flags &= ~1;
+                w->flags &= ~MUKI_FLAG_DIZZY;
                 w->hazardTimer = 0;
             }
             if (keyGetButtonTrg(0) & PAD_BUTTON_A) {
@@ -419,7 +424,7 @@ static void main_cursor(void) {
                         ((EffStampN64Work*)eff->userdata)->g2 = 10;
                         ((EffStampN64Work*)eff->userdata)->b2 = 0;
                         w->hazardTimer = 0;
-                        w->flags |= 1;
+                        w->flags |= MUKI_FLAG_DIZZY;
                         psndSFXOn("SFX_BTL_SAC_BODY5");
                         if (num >= 1 && num <= 49) {
                             BattleAudienceSoundBooingKind(1);
@@ -471,7 +476,7 @@ static void main_cursor(void) {
         case 4:
             w->cursorTimer++;
             w->cursorColor = (GXColor){0x0, 0x0, 0xFF, 0xFF};
-            if (!(w->flags & 1)) {
+            if (!(w->flags & MUKI_FLAG_DIZZY)) {
                 w->cpos.x = intplGetValue(EASING_QUADRATIC_OUT, w->cfrom.x, w->cto.x, w->cursorTimer, 5);
                 w->cpos.y = intplGetValue(EASING_QUADRATIC_OUT, w->cfrom.y, w->cto.y, w->cursorTimer, 5);
                 if (w->cursorTimer >= 5) {

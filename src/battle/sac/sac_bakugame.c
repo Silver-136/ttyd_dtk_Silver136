@@ -48,8 +48,14 @@ typedef struct BakuBtn {
     f32 scale;  // 0x20
 } BakuBtn;
 
+// BakuWork.flags, both set when bakuGameMain starts
+enum {
+    BAKU_FLAG_STAND_IN = 1,                 // a big (width 100+) or all-ceiling enemy party: the Shy Guy stand-in catches the bomb
+    BAKU_FLAG_NO_AUDIENCE_THROWER = 1 << 1, // no throwing audience seat is waiting: the crowd cannot throw the bomb back
+};
+
 typedef struct BakuWork {
-    u32 flags;          // 0x0
+    u32 flags;          // 0x0, BAKU_FLAG_*
     s32 state;          // 0x4
     s32 timer;          // 0x8
     BakuBtn btn[3];     // 0xC
@@ -373,9 +379,9 @@ USER_FUNC(bakuGameMain) {
             }
         }
         if (!flag) {
-            w->flags &= ~1;
+            w->flags &= ~BAKU_FLAG_STAND_IN;
         } else {
-            w->flags |= 1;
+            w->flags |= BAKU_FLAG_STAND_IN;
         }
         flag = 0;
         for (i = 0; i < AUDIENCE_MEMBER_MAX; i++) {
@@ -384,9 +390,9 @@ USER_FUNC(bakuGameMain) {
             }
         }
         if (!flag) {
-            w->flags |= 2;
+            w->flags |= BAKU_FLAG_NO_AUDIENCE_THROWER;
         } else {
-            w->flags &= ~2;
+            w->flags &= ~BAKU_FLAG_NO_AUDIENCE_THROWER;
         }
     }
 
@@ -400,7 +406,7 @@ USER_FUNC(bakuGameMain) {
             if (w->phase != 8) {
                 break;
             }
-            if ((w->flags & 1) && w->hstate != 5) {
+            if ((w->flags & BAKU_FLAG_STAND_IN) && w->hstate != 5) {
                 break;
             }
             w->state = 5;
@@ -523,7 +529,7 @@ state_end:
 
     switch (w->hstate) {
         case 0:
-            if (!(w->flags & 1)) {
+            if (!(w->flags & BAKU_FLAG_STAND_IN)) {
                 break;
             }
             {
@@ -703,7 +709,7 @@ state_end:
             w->c0 = 70.0f;
         case 11:
 #if VERSION <= VERSION_DEMO_JP
-            if (w->holder == 2 && !(w->flags & 2)) {
+            if (w->holder == 2 && !(w->flags & BAKU_FLAG_NO_AUDIENCE_THROWER)) {
                 w->c0 = 70.0f;
             } else if (w->frame < 14) {
                 w->c0 -= 0.7f;
@@ -810,7 +816,7 @@ state_end:
                 }
                 break;
             case 1:
-                if (!(w->flags & 1)) {
+                if (!(w->flags & BAKU_FLAG_STAND_IN)) {
                     if (w->frame == 26) {
                         w->hvy = -v100 / 20.0f;
                         w->hpos.y = 0.0f;
@@ -867,7 +873,7 @@ state_end:
                 } else {
                     k = 1.0f;
                 }
-                if (w->flags & 2) {
+                if (w->flags & BAKU_FLAG_NO_AUDIENCE_THROWER) {
                     w->phase = 30;
                     goto main_end;
                 }
@@ -916,7 +922,7 @@ state_end:
             case 1:
                 w->pos = (Vec){125.0f, 0.0f, -30.0f};
                 w->from = w->pos;
-                if (w->flags & 1) {
+                if (w->flags & BAKU_FLAG_STAND_IN) {
                     w->pos = w->hpos;
                     w->from = w->pos;
                     w->from.y = w->pos.y = 30.0f + w->hpos.y;
@@ -938,7 +944,7 @@ state_end:
                 break;
             case 1:
                 w->to = (Vec){125.0f, 0.0f, -30.0f};
-                if (w->flags & 1) {
+                if (w->flags & BAKU_FLAG_STAND_IN) {
 #if VERSION <= VERSION_DEMO_JP
                     w->to = w->hpos;
                     w->to.y = 30.0f + w->hpos.y;
@@ -950,7 +956,7 @@ state_end:
                 bakuGameEnemySurprise();
                 break;
             case 2:
-                if (w->flags & 2) {
+                if (w->flags & BAKU_FLAG_NO_AUDIENCE_THROWER) {
                     w->to = (Vec){0.0f, -50.0f, 150.0f};
                 } else {
                     w->to = (Vec){0.0f, -50.0f, 150.0f};
@@ -1035,7 +1041,7 @@ state_end:
                 if (w->hpos.y < 0.0f) {
                     w->hpos.y = 0.0f;
                 }
-                if (!(w->flags & 1)) {
+                if (!(w->flags & BAKU_FLAG_STAND_IN)) {
                     for (i = 0; i < BATTLE_UNIT_MAX; i++) {
                         u = BattleGetUnitPtr(bw, i);
                         if (u != NULL && u->alliance == ALLIANCE_ENEMY && BtlUnit_CanActStatus(u) &&
@@ -1091,7 +1097,7 @@ state_end:
             for (i = 0; i < 3; i++) {
                 w->btn[i].hp = 100.0f;
             }
-            if (w->holder == 1 && (w->flags & 1)) {
+            if (w->holder == 1 && (w->flags & BAKU_FLAG_STAND_IN)) {
                 w->hstate = 10;
             }
             if (w->throwTarget == 0) {
@@ -1138,7 +1144,7 @@ USER_FUNC(bakuGameHeihoReturn) {
     BakuWork* w = GetBakuGamePtr();
     s32 r;
 
-    if (!(w->flags & 1)) {
+    if (!(w->flags & BAKU_FLAG_STAND_IN)) {
         return EVT_RETURN_DONE;
     }
     if (isFirstCall) {
@@ -1426,7 +1432,7 @@ static void bakuGameDisp3D(CameraId cam, void* param) {
     if (w->poseId != -1) {
         animPoseDrawMtx(w->poseId, mtx, 2, 180.0f, w->bombScale);
     }
-    if (w->flags & 1) {
+    if (w->flags & BAKU_FLAG_STAND_IN) {
         GXSetCullMode(GX_CULL_NONE);
         GXClearVtxDesc();
         GXSetVtxDesc(GX_VA_POS, GX_DIRECT);

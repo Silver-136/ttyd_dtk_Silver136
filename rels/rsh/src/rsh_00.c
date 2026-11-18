@@ -42,8 +42,13 @@
 #include "moamoa.h"
 
 // The cab-window Smorg sprites: smaller records than the field swarm's Moamoa/MoamoaWork in moamoa.h.
+// MoamoaSprite.flags. Bit 1 (always use the c_n_moa_b model, moamoa_pose_change) is read but never set.
+enum {
+    MOAMOA_SPRITE_FLAG_SIDEWAYS = 1, // the pose is turned to face sideways (done once); the pop-up then rises straight
+};
+
 typedef struct MoamoaSprite {
-    u16 flags;
+    u16 flags; // MOAMOA_SPRITE_FLAG_*
     s16 state;
     s16 timer;
     Vec pos;
@@ -349,12 +354,12 @@ static void moamoa_init(void) {
                     Mtx m;
                     PSMTXRotRad(m, 'y', -0.7853982f);
                     PSMTXConcat(*pose->mtx, m, *pose->mtx);
-                    moa->flags |= 1;
+                    moa->flags |= MOAMOA_SPRITE_FLAG_SIDEWAYS;
                 } else {
                     Mtx m;
                     PSMTXRotRad(m, 'y', 1.5707964f);
                     PSMTXConcat(*pose->mtx, m, *pose->mtx);
-                    moa->flags |= 1;
+                    moa->flags |= MOAMOA_SPRITE_FLAG_SIDEWAYS;
                 }
             }
         } else {
@@ -428,7 +433,7 @@ static void moamoa_main(void) {
                 break;
             case 3:
                 if (moa->timer < 20) {
-                    if (!(moa->flags & 1)) {
+                    if (!(moa->flags & MOAMOA_SPRITE_FLAG_SIDEWAYS)) {
                         r = intplGetValue(EASING_CUBIC_IN, 50.0f, 0.0f, ++moa->timer, 20);
                         (*pose->mtx)[0][3] = moa->pos.x + r * (f32)sin(moa->angle);
                         (*pose->mtx)[1][3] = moa->pos.y - r * (f32)cos(moa->angle);
@@ -478,10 +483,10 @@ static USER_FUNC(evt_moamoa_set_one) {
     moa = wp->moa;
     moa[idx].state = 3;
     moa[idx].pos = (Vec){x, y, z};
-    if (!(moa[idx].flags & 1)) {
+    if (!(moa[idx].flags & MOAMOA_SPRITE_FLAG_SIDEWAYS)) {
         PSMTXRotRad(m, 'y', 1.5707964f);
         PSMTXConcat(*pose[idx].mtx, m, *pose[idx].mtx);
-        moa[idx].flags |= 1;
+        moa[idx].flags |= MOAMOA_SPRITE_FLAG_SIDEWAYS;
     }
     return EVT_RETURN_DONE;
 }

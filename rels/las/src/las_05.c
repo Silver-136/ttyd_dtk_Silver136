@@ -473,7 +473,7 @@ static void senkaron_ext_init(void) {
 }
 
 /**
- * Marks bones that overlap in the same floor cell (sk.area) by setting flag 2 on the one farther from Mario,
+ * Marks bones that overlap in the same floor cell (sk.area) by setting SENKARON_FLAG_CROWDED on the one farther from Mario,
  * so crowded bones get pushed apart.
  */
 static void move_check(ExtdrvPose* pose, s32 idx) {
@@ -498,10 +498,10 @@ static void move_check(ExtdrvPose* pose, s32 idx) {
 
                 if (dx1 * dx1 + dz1 * dz1 > dx2 * dx2 + dz2 * dz2) {
                     if (__fabsf(__fabsf((*pose->mtx)[0][3] - (*pose2->mtx)[0][3]) - __fabsf((*pose->mtx)[2][3] - (*pose2->mtx)[2][3])) < 20.0f) {
-                        sk[idx].flags |= 2;
+                        sk[idx].flags |= SENKARON_FLAG_CROWDED;
                     }
                 } else {
-                    sk[j].flags |= 2;
+                    sk[j].flags |= SENKARON_FLAG_CROWDED;
                 }
             }
         }
@@ -843,7 +843,7 @@ static void senkaron_ext_main(void) {
     end = move_check_list[group];
     p = &pose[start];
     for (i = start; i < end; i++, p++) {
-        sk[i].flags &= ~2;
+        sk[i].flags &= ~SENKARON_FLAG_CROWDED;
         calc_area(i, (*p->mtx)[0][3], (*p->mtx)[2][3]);
     }
     p = &extGetPosePtr()[start];
@@ -912,12 +912,12 @@ static void senkaron_ext_main(void) {
                 adx = __fabsf(dx);
                 adz = __fabsf((*ep->mtx)[2][3] - mario->position.z);
                 if ((*ep->mtx)[0][3] >= mario->position.x) {
-                    if (s->flags & 1) {
+                    if (s->flags & SENKARON_FLAG_TURNED) {
                         ep->dir = 270.0f;
                     } else {
                         ep->dir = 90.0f;
                     }
-                } else if (s->flags & 1) {
+                } else if (s->flags & SENKARON_FLAG_TURNED) {
                     ep->dir = 90.0f;
                 } else {
                     ep->dir = 270.0f;
@@ -1011,14 +1011,14 @@ static void senkaron_ext_main(void) {
                     s->vx -= tx / td;
                     s->vz -= tz / td;
                     if (r == 1) {
-                        s->flags |= 1;
+                        s->flags |= SENKARON_FLAG_TURNED;
                     } else {
                         s->flags &= 0xFFFE;
                     }
                     s->timer = 60;
                 }
                 s->timer--;
-                if (s->flags & 2) {
+                if (s->flags & SENKARON_FLAG_CROWDED) {
                     (*ep->mtx)[0][3] -= s->vx;
                     (*ep->mtx)[2][3] -= s->vz;
                 } else {

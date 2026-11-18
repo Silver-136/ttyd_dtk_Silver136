@@ -38,8 +38,14 @@
 #include "icon_ids.h"
 #include <dolphin/pad.h>
 
+// HikokiWork.flags
+enum {
+    HIKOKI_FLAG_OPENING = 1,    // set at init; the opening cutscene (course fly-over) is still pending
+    HIKOKI_FLAG_FLOOR = 1 << 1, // US and later: the moving platforms exist (minigame01_floor_delete removes them once)
+};
+
 typedef struct HikokiWork {
-    u32 flags;
+    u32 flags; // HIKOKI_FLAG_*
     s32 phase;
     s32 coins;
     s32 result;
@@ -1413,29 +1419,29 @@ static USER_FUNC(yuuminigame1_set_phase) {
 
 /**
  * args[0] = minigame work pointer, args[1] = on/off.
- * Sets or clears the "opening cutscene pending" bit (flags bit 0).
+ * Sets or clears HIKOKI_FLAG_OPENING (the opening cutscene is pending).
  */
 static USER_FUNC(yuuminigame1_opening_on_off) {
     EvtWord* args = event->args;
     HikokiWork* data = ((MiniGameWork*)evtGetValue(event, args[0]))->data;
 
     if (evtGetValue(event, args[1])) {
-        data->flags |= 1;
+        data->flags |= HIKOKI_FLAG_OPENING;
     } else {
-        data->flags &= ~1;
+        data->flags &= ~HIKOKI_FLAG_OPENING;
     }
     return EVT_RETURN_DONE;
 }
 
 /**
  * args[0] = minigame work pointer, args[1] = output.
- * Writes 1 if the opening cutscene is still pending (flags bit 0), else 0.
+ * Writes 1 if the opening cutscene is still pending (HIKOKI_FLAG_OPENING), else 0.
  */
 static USER_FUNC(yuuminigame1_opening_chk) {
     EvtWord* args = event->args;
     MiniGameWork* wp = (MiniGameWork*)evtGetValue(event, args[0]);
 
-    if (((HikokiWork*)wp->data)->flags & 1) {
+    if (((HikokiWork*)wp->data)->flags & HIKOKI_FLAG_OPENING) {
         evtSetValue(event, args[1], 1);
     } else {
         evtSetValue(event, args[1], 0);
@@ -1444,28 +1450,28 @@ static USER_FUNC(yuuminigame1_opening_chk) {
 }
 
 #if VERSION >= VERSION_US
-/** args[0] = minigame work pointer, args[1] = on/off. Sets or clears the "platforms exist" bit (flags bit 1). */
+/** args[0] = minigame work pointer, args[1] = on/off. Sets or clears HIKOKI_FLAG_FLOOR (the platforms exist). */
 USER_FUNC(yuuminigame1_floor_on_off) {
     EvtWord* args = event->args;
     u32* flags = &((HikokiWork*)((MiniGameWork*)evtGetValue(event, args[0]))->data)->flags;
 
     if (evtGetValue(event, args[1])) {
-        *flags |= 2;
+        *flags |= HIKOKI_FLAG_FLOOR;
     } else {
-        *flags &= ~2;
+        *flags &= ~HIKOKI_FLAG_FLOOR;
     }
     return EVT_RETURN_DONE;
 }
 
 /**
  * args[0] = minigame work pointer, args[1] = output.
- * Writes 1 if the platforms currently exist (flags bit 1), else 0.
+ * Writes 1 if the platforms currently exist (HIKOKI_FLAG_FLOOR), else 0.
  */
 USER_FUNC(yuuminigame1_floor_chk) {
     EvtWord* args = event->args;
     u32* flags = &((HikokiWork*)((MiniGameWork*)evtGetValue(event, args[0]))->data)->flags;
 
-    if (*flags & 2) {
+    if (*flags & HIKOKI_FLAG_FLOOR) {
         evtSetValue(event, args[1], 1);
     } else {
         evtSetValue(event, args[1], 0);
@@ -1480,7 +1486,7 @@ void yuuminigame_init_1hikoki(EventEntry* event, BOOL isFirstCall) {
 
     data->viewEvent = evtEntryType(minigame_view_monte, 0, 0, 0);
     data->viewEvent->lwData[0] = event->lwData[0];
-    data->flags |= 1;
+    data->flags |= HIKOKI_FLAG_OPENING;
 }
 
 /**
@@ -1584,7 +1590,7 @@ BOOL yuuminigame1_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp
             }
             marioKeyOff();
             partyKeyOff();
-            yuucounter_flag_on(2);
+            yuucounter_flag_on(YUUCOUNTER_FLAG_FREEZE);
             return TRUE;
         }
     }

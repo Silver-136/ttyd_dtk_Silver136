@@ -664,8 +664,8 @@ static USER_FUNC(evt_yuuranking_main_func) {
     static s32 snd_id;
     s32 target;
 
-    if (wp->flags & 1) {
-        wp->flags |= 2;
+    if (wp->flags & YUURANKING_FLAG_QUIT) {
+        wp->flags |= YUURANKING_FLAG_QUIT_DONE;
         return EVT_RETURN_DONE;
     }
     dispEntry(CAMERA_2D, 1000.0f, DISP_MODE_OPAQUE, evt_yuuranking_disp_func, wp);
@@ -819,7 +819,7 @@ static USER_FUNC(evt_yuuranking_main_func) {
                 }
                 break;
             case 9:
-                wp->dispFlags &= ~4;
+                wp->dispFlags &= ~YUURANKING_DISP_FLAG_TALLY;
                 break;
         }
     }
@@ -1070,7 +1070,7 @@ USER_FUNC(evt_yuuranking_alloc) {
             break;
     }
     if (wp->mode == 0) {
-        wp->dispFlags |= 4;
+        wp->dispFlags |= YUURANKING_DISP_FLAG_TALLY;
     }
     wp->event = evtEntry(main_evt, 0, 0);
     wp->event->lwData[0] = (EvtWord)wp;
@@ -1085,9 +1085,9 @@ USER_FUNC(evt_yuuranking_free) {
         return EVT_RETURN_DONE;
     }
     if (isFirstCall) {
-        wp->flags |= 1;
+        wp->flags |= YUURANKING_FLAG_QUIT;
     }
-    if (!(wp->flags & 2)) {
+    if (!(wp->flags & YUURANKING_FLAG_QUIT_DONE)) {
         return EVT_RETURN_BLOCK;
     }
     _mapFree(_wp);
@@ -1102,7 +1102,7 @@ USER_FUNC(yuuranking_wait_button) {
     if (isFirstCall) {
         wp->dispFlags |= 2;
     }
-    if (!(wp->dispFlags & 4) && (keyGetButtonTrg(0) & (PAD_BUTTON_A | PAD_BUTTON_B))) {
+    if (!(wp->dispFlags & YUURANKING_DISP_FLAG_TALLY) && (keyGetButtonTrg(0) & (PAD_BUTTON_A | PAD_BUTTON_B))) {
         wp->dispFlags &= ~2;
         psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1));
         return EVT_RETURN_DONE;

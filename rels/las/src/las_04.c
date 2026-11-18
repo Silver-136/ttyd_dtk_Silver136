@@ -51,10 +51,16 @@ typedef struct FirebarSetup {
     f32 param;
     f32 radius;
 } FirebarSetup; // param: type 0 start angle, type 1 end x
+// FirebarWork.flags. Bits 0 (ball positions not updated) and 1 (no hit check) are read but never set.
+enum {
+    FIREBAR_FLAG_MARIO_HURT = 1 << 2, // Mario is in a damage motion or invincible: the bar does not hit him
+    FIREBAR_FLAG_REMOVE = 1 << 3,     // firebar_cb after the tenth jump over a rotating bar: the bar is deleted
+};
+
 typedef struct FirebarWork {
     u8 type;
     u8 count;
-    u16 flags;
+    u16 flags; // FIREBAR_FLAG_*
     Vec pos;
     f32 prevAngle;
     f32 angle;
@@ -384,7 +390,7 @@ static s32 _firebar_hitCheck(FirebarWork* wp, FirebarBall* ball) {
     f32 dy;
     BOOL near = FALSE;
 
-    if (wp->flags & 6) {
+    if (wp->flags & (2 | FIREBAR_FLAG_MARIO_HURT)) {
         return 0;
     }
     dx = mario->position.x - ball->pos.x;
@@ -423,7 +429,7 @@ static s32 _firebar_hitCheck2(FirebarWork* wp) {
     f32 r;
     BOOL near;
 
-    if (wp->flags & 6) {
+    if (wp->flags & (2 | FIREBAR_FLAG_MARIO_HURT)) {
         return 0;
     }
     dy = mario->position.y - wp->pos.y;
@@ -505,7 +511,7 @@ static void _firebar_rot(FirebarWork* wp) {
         if (wp->callback != NULL) {
             wp->callback(wp, 2);
         }
-    } else if (dist > wp->radius && dist < limit && !(wp->flags & 6) && hit == 0 && vivianGetStatus() != VIVIAN_STATUS_SINKING && vivianGetStatus() != VIVIAN_STATUS_HIDDEN) {
+    } else if (dist > wp->radius && dist < limit && !(wp->flags & (2 | FIREBAR_FLAG_MARIO_HURT)) && hit == 0 && vivianGetStatus() != VIVIAN_STATUS_SINKING && vivianGetStatus() != VIVIAN_STATUS_HIDDEN) {
         if (wp->speed > 0.0f) {
             if (wp->prevAngle < 0.0f && diff > 0.0f && wp->pos.y < mario->position.y) {
                 wp->hitCount++;
@@ -590,7 +596,7 @@ static void _firebar_trans(FirebarWork* wp) {
             if (wp->callback != NULL) {
                 wp->callback(wp, 2);
             }
-        } else if (!(wp->flags & 6) && hit == 0 && vivianGetStatus() != VIVIAN_STATUS_SINKING && vivianGetStatus() != VIVIAN_STATUS_HIDDEN) {
+        } else if (!(wp->flags & (2 | FIREBAR_FLAG_MARIO_HURT)) && hit == 0 && vivianGetStatus() != VIVIAN_STATUS_SINKING && vivianGetStatus() != VIVIAN_STATUS_HIDDEN) {
             if (wp->prevAngle < 0.0f && diff > 0.0f && wp->pos.y < mario->position.y) {
                 wp->hitCount++;
                 if (wp->callback != NULL) {
@@ -671,7 +677,7 @@ static USER_FUNC(firebar_entry) {
     // FAKE: storing through &wp keeps wp in a stack slot for the whole function, as in the original
     // code; it is the same as wp = event->userdatap[0].
     *(s32*)&wp = event->userdata[0];
-    if (wp->flags & 8) {
+    if (wp->flags & FIREBAR_FLAG_REMOVE) {
         if (psndSFXChk(wp->sfxId) == 0) {
             psndSFXOff(wp->sfxId);
             wp->sfxId = -1;
@@ -696,9 +702,9 @@ static USER_FUNC(firebar_entry) {
     }
     mario = marioGetPtr();
     if (mario->currMotionId == MARIO_MOTION_DAMAGE_TOGE || mario->currMotionId == MARIO_MOTION_DAMAGE || mario->mutekiTimer > 0) {
-        wp->flags |= 4;
+        wp->flags |= FIREBAR_FLAG_MARIO_HURT;
     } else {
-        wp->flags &= ~4;
+        wp->flags &= ~FIREBAR_FLAG_MARIO_HURT;
     }
     if (__fabsf(mario->position.x - wp->pos.x) < 120.0f) {
         if (psndSFXChk(wp->sfxId)) {
@@ -804,7 +810,7 @@ static void firebar_cb(FirebarWork* wp, s32 type) {
     switch (type) {
         case 1:
             if (wp->hitCount >= 10 && wp->type == 0) {
-                wp->flags |= 8;
+                wp->flags |= FIREBAR_FLAG_REMOVE;
                 evt = evtEntry(firebar_coin, 0, 0);
                 evt->lwData[0] = wp->pos.x;
                 evt->lwData[1] = wp->pos.y;

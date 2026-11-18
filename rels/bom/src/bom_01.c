@@ -92,8 +92,14 @@ typedef struct Bom {
     u8 pad_24[4];
     OSTime time;
 } Bom;
+
+// BomWork.flags (bom_flag)
+enum {
+    BOM_FLAG_HIDE = 1, // the crowd is not drawn and its hop sounds are muted
+};
+
 typedef struct BomWork {
-    u16 flags;
+    u16 flags; // BOM_FLAG_*
     s32 count;
     BomAnim anims[8];
     s32 animCount;
@@ -577,7 +583,7 @@ static s32 sight_dir(EventEntry* event, BOOL isFirstCall) {
 
 /**
  * Script helper: args[0] switches the bits in args[1] on
- * or off in the crowd work flags (bit 0 hides the crowd and mutes the Bob-omb hop sounds).
+ * or off in the crowd work flags (BOM_FLAG_*).
  */
 static s32 bom_flag(EventEntry* event, BOOL isFirstCall) {
     EvtWord* args = event->args;
@@ -985,7 +991,7 @@ static void jump(s32 i, s32 next, f32 x, f32 y, f32 z, f32 speed, f32 gravity) {
     wp->bom[i].next = next;
     wp->bom[i].state = 100;
     pose->dir = angleABf(x, z, (*pose->mtx)[0][3], (*pose->mtx)[2][3]);
-    if (i % 20 == 0 && !(wp->flags & 1)) {
+    if (i % 20 == 0 && !(wp->flags & BOM_FLAG_HIDE)) {
         Vec pos = (Vec){(*pose->mtx)[0][3], (*pose->mtx)[1][3], (*pose->mtx)[2][3]};
 
         // sound name passed as an integer word, as in the original (only loops show it; see sfx_name_word.h)
@@ -1125,11 +1131,11 @@ static void ext_main(void) {
 }
 #pragma opt_propagation reset
 
-/** Queues ext_disp every frame for the crowd unless bit 0 of the BomWork flags is set (it also mutes the hops). */
+/** Queues ext_disp every frame for the crowd unless BOM_FLAG_HIDE is set (it also mutes the hops). */
 static void ext_dispent(void) {
     BomWork* wp = lp->address;
 
-    if (!(wp->flags & 1)) {
+    if (!(wp->flags & BOM_FLAG_HIDE)) {
         dispEntry(CAMERA_3D, 0.0f, DISP_MODE_ALPHA_TEST, ext_disp, NULL);
     }
 }
@@ -1971,12 +1977,12 @@ static EVT_BEGIN(evt_taihou)
     CALL(evt_cam3d_evt_set, -120, 697, 788, 39, 556, 265, 0, EASING_SINE_IN_OUT)
     WAIT_MS(5000)
     CALL(evt_snd_sfxon, STRING("SFX_STG7_CANNON_SYS_ACTIVE2"), LW(10))
-    CALL(bom_flag, 1, 1)
+    CALL(bom_flag, 1, BOM_FLAG_HIDE)
     CALL_CHILD(cam_inside2)
     WAIT_MS(300)
     CALL(evt_msg_print, 0, STRING("stg7_bom_85"), 0, STRING("ホワイト"))
     WAIT_MS(300)
-    CALL(bom_flag, 0, 1)
+    CALL(bom_flag, 0, BOM_FLAG_HIDE)
     CALL(evt_snd_sfxoff, LW(10))
     CALL(evt_cam3d_evt_set, -120, 697, 788, 39, 556, 265, 0, EASING_SINE_IN_OUT)
     CALL_CHILD(cam_outside)
@@ -2012,7 +2018,7 @@ static EVT_BEGIN(evt_taihou)
     CALL(evt_msg_print, 0, STRING("stg7_bom_85_6"), 0, 0)
     WAIT_MS(300)
     CALL(evt_npc_reverse_ry, STRING("村長"))
-    CALL(bom_flag, 1, 1)
+    CALL(bom_flag, 1, BOM_FLAG_HIDE)
     CALL(evt_snd_sfxon, STRING("SFX_STG7_CANNON_SYS_ACTIVE2"), LW(10))
     CALL_CHILD(cam_inside)
     WAIT_MS(300)
@@ -2085,7 +2091,7 @@ static EVT_BEGIN(evt_taihou)
         CALL(evt_msg_toge, MSG_TOGE_AT_POS, 373, 135, -590)
         CALL(evt_msg_print, 0, STRING("stg7_bom_90"), 0, 0)
     END_INLINE_EVENT
-    CALL(bom_flag, 0, 1)
+    CALL(bom_flag, 0, BOM_FLAG_HIDE)
     CALL(bom_fall)
     WAIT_MS(6000)
     CALL(evt_ext_reset)

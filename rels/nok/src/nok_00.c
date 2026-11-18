@@ -46,8 +46,13 @@
 #include "driver/seqdrv.h"
 #include "nok.h"
 
+// PosterWork.flags
+enum {
+    POSTER_FLAG_DISP = 1, // set by pposter_nok_on; draw_poster draws the poster only with it
+};
+
 typedef struct PosterWork {
-    u32 flags;
+    u32 flags; // POSTER_FLAG_*
     s32 group;
     s32 shape;
 } PosterWork;
@@ -126,11 +131,11 @@ static void nok_stg2_013_cb(s32 type, void** work) {
 }
 
 /**
- * Makes the poster visible: sets bit 0 of the PosterWork flags,
+ * Makes the poster visible: sets POSTER_FLAG_DISP,
  * which draw_poster checks before drawing the Peach poster onto the Koopa's locator.
  */
 static USER_FUNC(pposter_nok_on) {
-    poster->flags |= 1;
+    poster->flags |= POSTER_FLAG_DISP;
     return EVT_RETURN_DONE;
 }
 
@@ -1304,7 +1309,7 @@ static USER_FUNC(pposter_init) {
 static void draw_poster(void* userdata, s32 group, Mtx* modeling) {
     NpcEntry* npc = npcNameToPtr("poster");
 
-    if (group != poster->group || !(poster->flags & 1)) {
+    if (group != poster->group || !(poster->flags & POSTER_FLAG_DISP)) {
         return;
     }
     animPoseDrawShape(npc->poseId, poster->shape);

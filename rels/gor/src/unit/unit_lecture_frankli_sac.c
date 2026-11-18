@@ -296,14 +296,14 @@ static USER_FUNC(hammer_on) {
 static USER_FUNC(aud_attack_init) {
     BattleWork* wp = _battleWorkPointer;
 
-    wp->lectureFlags |= 1;
+    wp->lectureFlags |= LECTURE_FLAG_CONTINUE_WINDOW;
     wp->lectureWindowId = event->printWindowId;
     return EVT_RETURN_DONE;
 }
 
 /** Script helper that ends the audience attack part: sets the lecture flag. */
 static USER_FUNC(aud_attack_end) {
-    _battleWorkPointer->lectureFlags |= 1;
+    _battleWorkPointer->lectureFlags |= LECTURE_FLAG_CONTINUE_WINDOW;
     return EVT_RETURN_DONE;
 }
 

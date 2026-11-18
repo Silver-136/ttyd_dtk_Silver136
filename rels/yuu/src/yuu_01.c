@@ -40,8 +40,13 @@
 #include "driver/seqdrv.h"
 #include <dolphin/pad.h>
 
+// FuneWork.flags
+enum {
+    FUNE_FLAG_OPENING = 1, // set at init; the opening cutscene is still pending
+};
+
 typedef struct FuneWork {
-    u32 flags;
+    u32 flags; // FUNE_FLAG_*
     s32 phase;
     s32 coins;
     s32 result;
@@ -994,29 +999,29 @@ static USER_FUNC(yuuminigame2_get_name) {
 
 /**
  * args[0] = minigame work pointer, args[1] = on/off.
- * Sets or clears the "opening cutscene pending" bit (flags bit 0).
+ * Sets or clears FUNE_FLAG_OPENING (the opening cutscene is pending).
  */
 static USER_FUNC(yuuminigame2_opening_on_off) {
     EvtWord* args = event->args;
     FuneWork* data = ((MiniGameWork*)evtGetValue(event, args[0]))->data;
 
     if (evtGetValue(event, args[1])) {
-        data->flags |= 1;
+        data->flags |= FUNE_FLAG_OPENING;
     } else {
-        data->flags &= ~1;
+        data->flags &= ~FUNE_FLAG_OPENING;
     }
     return EVT_RETURN_DONE;
 }
 
 /**
  * args[0] = minigame work pointer, args[1] = output.
- * Writes 1 if the opening cutscene is still pending (flags bit 0), else 0.
+ * Writes 1 if the opening cutscene is still pending (FUNE_FLAG_OPENING), else 0.
  */
 static USER_FUNC(yuuminigame2_opening_chk) {
     EvtWord* args = event->args;
     MiniGameWork* wp = (MiniGameWork*)evtGetValue(event, args[0]);
 
-    if (((FuneWork*)wp->data)->flags & 1) {
+    if (((FuneWork*)wp->data)->flags & FUNE_FLAG_OPENING) {
         evtSetValue(event, args[1], 1);
     } else {
         evtSetValue(event, args[1], 0);
@@ -1033,7 +1038,7 @@ void yuuminigame_init_2fune(EventEntry* event, BOOL isFirstCall) {
 
     data->viewEvent = evtEntryType(minigame_view_monte, 0, 0, 0);
     data->viewEvent->lwData[0] = event->lwData[0];
-    data->flags |= 1;
+    data->flags |= FUNE_FLAG_OPENING;
     marioChgShipMotion();
 }
 
@@ -1114,7 +1119,7 @@ BOOL yuuminigame2_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp
             data->coins = yuucounter_get_data();
             marioKeyOff();
             partyKeyOff();
-            yuucounter_flag_on(2);
+            yuucounter_flag_on(YUUCOUNTER_FLAG_FREEZE);
             return TRUE;
         }
     }

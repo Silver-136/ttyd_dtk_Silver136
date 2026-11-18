@@ -39,8 +39,13 @@ typedef struct MonteTable {
 } MonteTable;
 
 // minigame 4 (yuu_03) work
+// SlitWork.flags
+enum {
+    SLIT_FLAG_OPENING = 1, // set at init; the opening cutscene is still pending
+};
+
 typedef struct SlitWork {
-    u32 flags;
+    u32 flags; // SLIT_FLAG_*
     s32 phase;
     s32 coins;
     s32 result;
@@ -76,6 +81,14 @@ extern EvtWord yuu_02_jumpret[];
 extern EvtWord yuu_03_icon_monte_entry_evt[];
 
 extern EvtWord minigame01_floor_delete[];
+
+// Display flags of the minigame counter (yuucounter_flag_on / _off / yuucounter_flag; yuucounter_disp_flag_onoff)
+enum {
+    YUUCOUNTER_FLAG_HIDE = 1,              // the counter is not drawn
+    YUUCOUNTER_FLAG_FREEZE = 1 << 1,       // the value is no longer updated (set when a round ends)
+    YUUCOUNTER_FLAG_RESTART_TIME = 1 << 2, // JP and later: the timer restarts its time baseline (after the pause window)
+};
+
 void yuucounter_flag_on(u32 mask);
 void yuucounter_flag_off(u32 mask);
 u32 yuucounter_flag(u32 mask);

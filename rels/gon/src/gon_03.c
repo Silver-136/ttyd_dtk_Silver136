@@ -989,12 +989,12 @@ static void senkaron_ext_main(void) {
                     marioPushedFlag = 1;
                 }
                 if ((*pose->mtx)[0][3] >= mario->position.x) {
-                    if (senkaron[i].flags & 1) {
+                    if (senkaron[i].flags & SENKARON_FLAG_TURNED) {
                         pose->dir = 270.0f;
                     } else {
                         pose->dir = 90.0f;
                     }
-                } else if (senkaron[i].flags & 1) {
+                } else if (senkaron[i].flags & SENKARON_FLAG_TURNED) {
                     pose->dir = 90.0f;
                 } else {
                     pose->dir = 270.0f;
@@ -1013,7 +1013,7 @@ static void senkaron_ext_main(void) {
                     senkaron[i].vx -= dx / dist;
                     senkaron[i].vz -= dz / dist;
                     if (r == 1) {
-                        senkaron[i].flags |= 1;
+                        senkaron[i].flags |= SENKARON_FLAG_TURNED;
                     } else {
                         senkaron[i].flags &= 0xFFFE;
                     }

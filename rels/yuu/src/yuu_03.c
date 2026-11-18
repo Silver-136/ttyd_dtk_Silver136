@@ -276,29 +276,29 @@ static USER_FUNC(evt_nomal_cange) {
 
 /**
  * args[0] = minigame work pointer, args[1] = on/off.
- * Sets or clears the "opening cutscene pending" bit (flags bit 0).
+ * Sets or clears SLIT_FLAG_OPENING (the opening cutscene is pending).
  */
 static USER_FUNC(yuuminigame4_opening_on_off) {
     EvtWord* args = event->args;
     SlitWork* data = ((MiniGameWork*)evtGetValue(event, args[0]))->data;
 
     if (evtGetValue(event, args[1])) {
-        data->flags |= 1;
+        data->flags |= SLIT_FLAG_OPENING;
     } else {
-        data->flags &= ~1;
+        data->flags &= ~SLIT_FLAG_OPENING;
     }
     return EVT_RETURN_DONE;
 }
 
 /**
  * args[0] = minigame work pointer, args[1] = output.
- * Writes 1 if the opening cutscene is still pending (flags bit 0), else 0.
+ * Writes 1 if the opening cutscene is still pending (SLIT_FLAG_OPENING), else 0.
  */
 static USER_FUNC(yuuminigame4_opening_chk) {
     EvtWord* args = event->args;
     MiniGameWork* wp = (MiniGameWork*)evtGetValue(event, args[0]);
 
-    if (((SlitWork*)wp->data)->flags & 1) {
+    if (((SlitWork*)wp->data)->flags & SLIT_FLAG_OPENING) {
         evtSetValue(event, args[1], 1);
     } else {
         evtSetValue(event, args[1], 0);
@@ -947,7 +947,7 @@ void yuuminigame_init_4slit(EventEntry* event, BOOL isFirstCall) {
     data->viewEvent = evtEntryType(yuu_03_icon_monte_entry_evt, 0, 0, 0);
     data->viewEvent->lwData[0] = event->lwData[0];
 #endif
-    data->flags |= 1;
+    data->flags |= SLIT_FLAG_OPENING;
     evt_ryushi_init(event, isFirstCall);
 }
 
@@ -1232,7 +1232,7 @@ BOOL yuuminigame4_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp
     if (mario->position.y <= -100.0f || mario->position.x >= 1500.0f) {
         if (mario->position.y <= -100.0f) {
             data->coins = 701;
-            yuucounter_flag_on(1);
+            yuucounter_flag_on(YUUCOUNTER_FLAG_HIDE);
         } else {
             data->coins = yuucounter_get_data();
         }
@@ -1240,7 +1240,7 @@ BOOL yuuminigame4_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp
         data->timer = (irand(3901) + 100) * 60 / 1000;
         marioKeyOff();
         partyKeyOff();
-        yuucounter_flag_on(2);
+        yuucounter_flag_on(YUUCOUNTER_FLAG_FREEZE);
         return TRUE;
     }
     return FALSE;

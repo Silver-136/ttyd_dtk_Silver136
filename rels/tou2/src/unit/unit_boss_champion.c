@@ -84,7 +84,7 @@ static EvtWord wait_event[6];
 static USER_FUNC(ceil_exist) {
     EvtWord* args = event->args;
 
-    if (_battleWorkPointer->stageObjectWork.flags & 0x20) {
+    if (_battleWorkPointer->stageObjectWork.flags & STAGE_FLAG_NO_IRON_FRAME) {
         evtSetValue(event, args[0], 0);
     } else {
         evtSetValue(event, args[0], 1);
@@ -1585,7 +1585,7 @@ static USER_FUNC(down_ceil) {
 
 /** Script helper: LW(1) receives non-zero when the iron frame is gone from the ceiling. */
 static USER_FUNC(check_ceil) {
-    event->lwData[1] = _battleWorkPointer->stageObjectWork.flags & 0x20;
+    event->lwData[1] = _battleWorkPointer->stageObjectWork.flags & STAGE_FLAG_NO_IRON_FRAME;
     return EVT_RETURN_DONE;
 }
 

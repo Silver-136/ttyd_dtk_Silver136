@@ -16,7 +16,7 @@ static EvtWord twoddisp_main_event[9];
 
 typedef struct TwodEntry {
     char name[0x10];  // 0x0
-    u16 flags;        // 0x10
+    u16 flags;        // 0x10, TWOD_FLAG_*
     u16 flags2;        // 0x12
     f32 x;            // 0x14
     f32 y;            // 0x18
@@ -59,7 +59,7 @@ static void twoddisp_disp(CameraId camera, void* param) {
 
     for (i = 0; i < 100; i++) {
         p = &twodPtr[i];
-        if (p->name[0] != 0 && (p->flags & 1)) {
+        if (p->name[0] != 0 && (p->flags & TWOD_FLAG_DISP)) {
             if (!(p->id & 0x80000000)) {
                 pos.x = p->baseX + p->x;
                 pos.y = p->baseY + p->y;
@@ -150,7 +150,7 @@ USER_FUNC(evt_twoddisp_entry) {
         strcmp(p->name, name);
         if (p->name[0] == 0) {
             strcpy(p->name, name);
-            p->flags = 1;
+            p->flags = TWOD_FLAG_DISP;
             p->flags2 = 0;
             p->x = 0.0f;
             p->baseX = 0.0f;
@@ -205,7 +205,7 @@ USER_FUNC(evt_twoddisp_set_scale) {
     return EVT_RETURN_DONE;
 }
 
-/** Sets (args[0] nonzero) or clears flag bits args[2] on overlay args[1]; flag 0x1 makes it visible. */
+/** Sets (args[0] nonzero) or clears flag bits args[2] on overlay args[1]; TWOD_FLAG_DISP makes it visible. */
 USER_FUNC(evt_twoddisp_flag_onoff) {
     s32 onoff;
     TwodEntry* p;

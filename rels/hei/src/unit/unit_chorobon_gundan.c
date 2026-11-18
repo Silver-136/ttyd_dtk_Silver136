@@ -748,7 +748,7 @@ USER_FUNC(chorogun_get_alive_num) {
     s32 n = 0;
 
     for (i = 0; i < extGetPoseNum(); i++) {
-        if (chorogun[i].flags & 1) {
+        if (chorogun[i].flags & CHOROGUN_FLAG_ALIVE) {
             n++;
         }
     }
@@ -799,13 +799,13 @@ USER_FUNC(chorogun_approach_target) {
 
     if (isFirstCall) {
         for (i = 0; i < extGetPoseNum(); i++) {
-            if (chorogun[i].flags & 1) {
+            if (chorogun[i].flags & CHOROGUN_FLAG_ALIVE) {
                 chorogun[i].state = 30;
             }
         }
     }
     for (i = 0; i < extGetPoseNum(); i++) {
-        if ((chorogun[i].flags & 1) && chorogun[i].state != 40) {
+        if ((chorogun[i].flags & CHOROGUN_FLAG_ALIVE) && chorogun[i].state != 40) {
             return 0;
         }
     }
@@ -839,7 +839,7 @@ USER_FUNC(chorogun_dive_target) {
     t = frames;
     pose = extGetPosePtr();
     for (i = 0; i < extGetPoseNum(); i++) {
-        if (chorogun[i].flags & 1) {
+        if (chorogun[i].flags & CHOROGUN_FLAG_ALIVE) {
             list[n++] = i;
         }
     }
@@ -887,7 +887,7 @@ USER_FUNC(chorogun_after_attack) {
 
     if (isFirstCall) {
         for (i = 0; i < extGetPoseNum(); i++) {
-            if (chorogun[i].flags & 1) {
+            if (chorogun[i].flags & CHOROGUN_FLAG_ALIVE) {
                 chorogun[i].state = 50;
             }
         }
@@ -911,7 +911,7 @@ USER_FUNC(chorogun_escape) {
     s32 ti;
 
     for (i = 0; i < extGetPoseNum(); i++, pose++) {
-        if (chorogun[i].flags & 1) {
+        if (chorogun[i].flags & CHOROGUN_FLAG_ALIVE) {
             dx = unit->homePosition.x - (*pose->mtx)[0][3];
             dz = unit->homePosition.z - (*pose->mtx)[2][3];
             d = dx * dx + dz * dz;
@@ -946,7 +946,7 @@ USER_FUNC(chorogun_escape) {
     m = n >= 50 ? 50 : n;
     for (i = 0; i < m; i++) {
         c = &chorogun[idx[i]];
-        c->flags &= ~1;
+        c->flags &= ~CHOROGUN_FLAG_ALIVE;
         c->state = 60;
     }
     return 2;

@@ -261,7 +261,7 @@ static USER_FUNC(lecture_button_rtn) {
                 }
                 break;
             case 4:
-                btn->flags |= 1;
+                btn->flags |= LECT_BUTTON_FLAG_HIDDEN;
                 done++;
                 break;
         }

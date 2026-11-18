@@ -41,8 +41,14 @@
 #include "driver/seqdrv.h"
 #include <dolphin/pad.h>
 
+// RollWork.flags
+enum {
+    ROLL_FLAG_OPENING = 1,          // set at init; the opening cutscene is still pending
+    ROLL_FLAG_FALL_RETURN = 1 << 1, // Mario fell off: yuu_02_jumpret is putting him back at the checkpoint
+};
+
 typedef struct RollWork {
-    u32 flags;
+    u32 flags; // ROLL_FLAG_*
     s32 phase;
     s32 coins;
     s32 result;
@@ -524,29 +530,29 @@ static USER_FUNC(yuuminigame3_roll_fix_off) {
 
 /**
  * args[0] = minigame work pointer, args[1] = on/off.
- * Sets or clears the "opening cutscene pending" bit (flags bit 0).
+ * Sets or clears ROLL_FLAG_OPENING (the opening cutscene is pending).
  */
 static USER_FUNC(yuuminigame3_opening_on_off) {
     EvtWord* args = event->args;
     RollWork* data = ((MiniGameWork*)evtGetValue(event, args[0]))->data;
 
     if (evtGetValue(event, args[1])) {
-        data->flags |= 1;
+        data->flags |= ROLL_FLAG_OPENING;
     } else {
-        data->flags &= ~1;
+        data->flags &= ~ROLL_FLAG_OPENING;
     }
     return EVT_RETURN_DONE;
 }
 
 /**
  * args[0] = minigame work pointer, args[1] = output.
- * Writes 1 if the opening cutscene is still pending (flags bit 0), else 0.
+ * Writes 1 if the opening cutscene is still pending (ROLL_FLAG_OPENING), else 0.
  */
 static USER_FUNC(yuuminigame3_opening_chk) {
     EvtWord* args = event->args;
     MiniGameWork* wp = (MiniGameWork*)evtGetValue(event, args[0]);
 
-    if (((RollWork*)wp->data)->flags & 1) {
+    if (((RollWork*)wp->data)->flags & ROLL_FLAG_OPENING) {
         evtSetValue(event, args[1], 1);
     } else {
         evtSetValue(event, args[1], 0);
@@ -568,7 +574,7 @@ void yuuminigame_init_3roll(EventEntry* event, BOOL isFirstCall) {
 #endif
     data->viewEvent = evtEntryType(minigame_view_monte, 0, 0, 0);
     data->viewEvent->lwData[0] = event->lwData[0];
-    data->flags |= 1;
+    data->flags |= ROLL_FLAG_OPENING;
     marioChgRollMotion();
 }
 
@@ -647,8 +653,8 @@ static USER_FUNC(yuu_roll_reset) {
 BOOL yuuminigame3_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp, RollWork* data) {
     MarioWork* mario = marioGetPtr();
 
-    if (!(data->flags & 2) && mario->position.y <= -50.0f) {
-        data->flags |= 2;
+    if (!(data->flags & ROLL_FLAG_FALL_RETURN) && mario->position.y <= -50.0f) {
+        data->flags |= ROLL_FLAG_FALL_RETURN;
         data->jumpEvent = evtEntry(yuu_02_jumpret, 0, 0);
 #if VERSION <= VERSION_DEMO_JP
         data->jumpEvent->lwData[0] = (s32)fukkipoint[data->index].x;
@@ -660,7 +666,7 @@ BOOL yuuminigame3_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp
         data->jumpEvent->lwData[3] = (s32)fukkipoint[data->index].y;
         data->result--;
     }
-    if (!(data->flags & 2)) {
+    if (!(data->flags & ROLL_FLAG_FALL_RETURN)) {
 #if VERSION <= VERSION_DEMO_JP
         if (mario->position.z * fukkipoint[data->index + 1].z >= 0.0f && mario->position.y >= fukkipoint[data->index + 1].y - 1.0f) {
             if ((data->pos.x < fukkipoint[data->index + 1].x && mario->position.x >= fukkipoint[data->index + 1].x) ||
@@ -694,7 +700,7 @@ BOOL yuuminigame3_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp
             data->index = 0;
             marioKeyOff();
             partyKeyOff();
-            yuucounter_flag_on(2);
+            yuucounter_flag_on(YUUCOUNTER_FLAG_FREEZE);
 #if VERSION >= VERSION_JP
             icon_monte_p->hidden = 1;
 #endif
@@ -705,7 +711,7 @@ BOOL yuuminigame3_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp
         data->pos = mario->position;
 #endif
         if (!evtCheckID(data->jumpEvent->eventId)) {
-            data->flags &= ~2;
+            data->flags &= ~ROLL_FLAG_FALL_RETURN;
         }
     }
     return FALSE;

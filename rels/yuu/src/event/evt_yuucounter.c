@@ -17,10 +17,16 @@
 #include "driver/camdrv.h"
 #include "icon_ids.h"
 
+// YuuCounterWork.flags
+enum {
+    YUUCOUNTER_WORK_FLAG_QUIT = 1,           // set by evt_yuucounter_free; the counter's event stops on it
+    YUUCOUNTER_WORK_FLAG_QUIT_DONE = 1 << 1, // the event has stopped; evt_yuucounter_free then frees the work
+};
+
 typedef struct YuuCounterWork {
     EventEntry* event;
-    u16 flags;
-    u32 dispFlags;
+    u16 flags;      // YUUCOUNTER_WORK_FLAG_*
+    u32 dispFlags;  // YUUCOUNTER_FLAG_* (yuu.h)
     s32 type;
     f32 x;
     f32 y;
@@ -112,7 +118,7 @@ static void evt_yuucounter_disp_func(CameraId camera, void* param) {
     numColor = color;
     switch (wp->type) {
         case 0:
-            if (!(wp->dispFlags & 2)) {
+            if (!(wp->dispFlags & YUUCOUNTER_FLAG_FREEZE)) {
                 mario = marioGetPtr();
                 wp->data = (s32)(200.0f * (1300.0f + mario->position.x));
             }
@@ -124,11 +130,11 @@ static void evt_yuucounter_disp_func(CameraId camera, void* param) {
             }
             break;
         case 1:
-            if (!(wp->dispFlags & 2)) {
+            if (!(wp->dispFlags & YUUCOUNTER_FLAG_FREEZE)) {
                 if (wp->data >= 0) {
 #if VERSION >= VERSION_JP
-                    if (wp->dispFlags & 4) {
-                        wp->dispFlags &= ~4;
+                    if (wp->dispFlags & YUUCOUNTER_FLAG_RESTART_TIME) {
+                        wp->dispFlags &= ~YUUCOUNTER_FLAG_RESTART_TIME;
                         wp->lastTime = gp->renderTime;
                     }
 #endif
@@ -144,7 +150,7 @@ static void evt_yuucounter_disp_func(CameraId camera, void* param) {
             xOfs = -42.0f;
             break;
         case 2:
-            if (!(wp->dispFlags & 2)) {
+            if (!(wp->dispFlags & YUUCOUNTER_FLAG_FREEZE)) {
                 mario = marioGetPtr();
                 pos = mario->position;
                 wp->data = yuunpc_juni(&pos);
@@ -155,7 +161,7 @@ static void evt_yuucounter_disp_func(CameraId camera, void* param) {
             break;
     }
 
-    if (wp->dispFlags & 1) {
+    if (wp->dispFlags & YUUCOUNTER_FLAG_HIDE) {
         return;
     }
     value = wp->data;
@@ -263,8 +269,8 @@ static void evt_yuucounter_disp_func(CameraId camera, void* param) {
 static USER_FUNC(evt_yuucounter_main_func) {
     YuuCounterWork* wp = (YuuCounterWork*)event->lwData[0];
 
-    if (wp->flags & 1) {
-        wp->flags |= 2;
+    if (wp->flags & YUUCOUNTER_WORK_FLAG_QUIT) {
+        wp->flags |= YUUCOUNTER_WORK_FLAG_QUIT_DONE;
         return EVT_RETURN_DONE;
     }
     dispEntry(CAMERA_2D, 1000.0f, DISP_MODE_OPAQUE, evt_yuucounter_disp_func, wp);
@@ -321,9 +327,9 @@ USER_FUNC(evt_yuucounter_free) {
         return EVT_RETURN_DONE;
     }
     if (isFirstCall) {
-        wp->flags |= 1;
+        wp->flags |= YUUCOUNTER_WORK_FLAG_QUIT;
     }
-    if (!(wp->flags & 2)) {
+    if (!(wp->flags & YUUCOUNTER_WORK_FLAG_QUIT_DONE)) {
         return EVT_RETURN_BLOCK;
     }
     _mapFree(_wp);
@@ -351,7 +357,7 @@ void yuucounter_set_data(s32 data) {
 }
 
 /**
- * Sets the masked display flag bits of the counter (the minigames use 2 to freeze the value when a round ends);
+ * Sets the masked display flag bits of the counter (the minigames use YUUCOUNTER_FLAG_FREEZE when a round ends);
  * does nothing if no counter exists.
  */
 void yuucounter_flag_on(u32 mask) {
@@ -370,8 +376,7 @@ void yuucounter_flag_off(u32 mask) {
 }
 
 /**
- * Returns the bits of the counter's display flags selected by mask (1 hide, 2 freeze the value,
- * 4 restart the timer baseline in retail versions), or 0 if no counter exists.
+ * Returns the bits of the counter's display flags (YUUCOUNTER_FLAG_*) selected by mask, or 0 if no counter exists.
  */
 u32 yuucounter_flag(u32 mask) {
     if (_wp == NULL) {
@@ -388,11 +393,11 @@ EVT_END()
 
 #if VERSION >= VERSION_JP
 /**
- * Script run for timer counters: sets display flag 4 so the timer restarts its baseline
+ * Script run for timer counters: sets YUUCOUNTER_FLAG_RESTART_TIME so the timer restarts its baseline
  * when the window opens (JP and later).
  */
 EVT_BEGIN(yuucounter_window_disp_evt)
-    CALL(yuucounter_disp_flag_onoff, 1, 4)
+    CALL(yuucounter_disp_flag_onoff, 1, YUUCOUNTER_FLAG_RESTART_TIME)
     RETURN
 EVT_END()
 

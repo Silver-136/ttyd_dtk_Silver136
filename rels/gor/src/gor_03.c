@@ -72,8 +72,17 @@ typedef struct ExchangeRyokin {
     s32 ryokin;
     s32 medal;
 } ExchangeRyokin;
+
+// SlotWork.flags
+enum {
+    SLOT_FLAG_WON = 1,               // a winning line: the lever cases are deleted until the spin ends (phase 11 re-enters them)
+    SLOT_FLAG_LUCKY = 1 << 1,        // slow "lucky" spin with more neon flashes (slot_neon_sub clears it right after its roll)
+    SLOT_FLAG_WINDOW_MATCH = 1 << 2, // the three faces of the small window above the reels are equal
+    SLOT_FLAG_WIN_NEON = 1 << 3,     // the win neon animation (neon[2]) is looping
+};
+
 typedef struct SlotWork {
-    u32 flags;
+    u32 flags; // SLOT_FLAG_*
     s32 phase;
     f32 reberAngle;
     f32 angle[2][3];
@@ -3560,7 +3569,7 @@ void goryuugijo_init_slot(EventEntry* event, BOOL isFirstCall) {
     data->counter = 0;
     data->reberAngle = 0.0f;
     data->monteEvt = NULL;
-    data->flags &= ~1;
+    data->flags &= ~SLOT_FLAG_WON;
 }
 
 /**
@@ -3569,8 +3578,8 @@ void goryuugijo_init_slot(EventEntry* event, BOOL isFirstCall) {
  * other frame, then assigns faces 0, 1 and 2 there and starts the reels at full speed;
  * the neon animation plays once at
  * frame 24.
- * Flag 2 would pick a slow "lucky" spin with more neon flashes, but it is cleared right after its 1-in-10
- * roll, and flag 4 (all three window faces equal) cannot be set with faces 0, 1 and 2.
+ * SLOT_FLAG_LUCKY would pick a slow spin with more neon flashes, but it is cleared right after its 1-in-10
+ * roll, and SLOT_FLAG_WINDOW_MATCH (all three window faces equal) cannot be set with faces 0, 1 and 2.
  */
 void slot_neon_sub(MiniGameWork* wp, SlotWork* data) {
     s32 i;
@@ -3581,9 +3590,9 @@ void slot_neon_sub(MiniGameWork* wp, SlotWork* data) {
     }
     if (data->neonCount == 0) {
         if (irand(10) == 0) {
-            data->flags |= 2;
+            data->flags |= SLOT_FLAG_LUCKY;
         }
-        data->flags &= ~2;
+        data->flags &= ~SLOT_FLAG_LUCKY;
     }
     if (data->neonCount < 27) {
         if (data->neonCount & 1) {
@@ -3593,7 +3602,7 @@ void slot_neon_sub(MiniGameWork* wp, SlotWork* data) {
                     r = (r + 1) & 7;
                 }
                 data->face[data->nowSlot][i] = upsidegara[data->nowSlot][i][r];
-                if (data->flags & 2) {
+                if (data->flags & SLOT_FLAG_LUCKY) {
                     goryuugijo_upsidewindow_disp_sub(data->nowSlot, i);
                 } else {
                     goryuugijo_upsidewindow_dispoff_sub(data->nowSlot, i);
@@ -3606,15 +3615,15 @@ void slot_neon_sub(MiniGameWork* wp, SlotWork* data) {
             goryuugijo_upsidewindow_disp_sub(data->nowSlot, i);
         }
         if (data->face[data->nowSlot][0] == data->face[data->nowSlot][1] && data->face[data->nowSlot][1] == data->face[data->nowSlot][2]) {
-            data->flags |= 4;
+            data->flags |= SLOT_FLAG_WINDOW_MATCH;
         }
-        if ((data->flags & 4) && (data->flags & 2)) {
+        if ((data->flags & SLOT_FLAG_WINDOW_MATCH) && (data->flags & SLOT_FLAG_LUCKY)) {
             data->speed[0] = data->speed[1] = data->speed[2] = 2.8125f;
         } else {
             data->speed[0] = data->speed[1] = data->speed[2] = VERSION_PICK(11.25f, 15.0f);
         }
         data->state[0] = data->state[1] = data->state[2] = 2;
-    } else if (data->flags & 4) {
+    } else if (data->flags & SLOT_FLAG_WINDOW_MATCH) {
         if (data->neonCount == 33 || data->neonCount == 51 || data->neonCount == 69) {
             for (i = 0; i < 3; i++) {
                 goryuugijo_upsidewindow_dispoff_sub(data->nowSlot, i);
@@ -3626,7 +3635,7 @@ void slot_neon_sub(MiniGameWork* wp, SlotWork* data) {
             }
         }
     }
-    if (data->flags & 2) {
+    if (data->flags & SLOT_FLAG_LUCKY) {
         if (data->neonCount == 0 || data->neonCount == 12 || data->neonCount == 24) {
             mapPlayAnimationLv(drumname[data->nowSlot].neon[0], MAP_ANIM_PLAY_ONCE, 0);
         }
@@ -3747,8 +3756,8 @@ void goryuugijo_main_slot(EventEntry* event, BOOL isFirstCall) {
             data->extra[0] = data->extra[1] = data->extra[2] = 0;
             data->state[0] = data->state[1] = data->state[2] = 1;
             data->speed[0] = data->speed[1] = data->speed[2] = 0.0f;
-            data->flags &= ~2;
-            data->flags &= ~4;
+            data->flags &= ~SLOT_FLAG_LUCKY;
+            data->flags &= ~SLOT_FLAG_WINDOW_MATCH;
             data->phase++;
             break;
         case 2:
@@ -3832,7 +3841,7 @@ void goryuugijo_main_slot(EventEntry* event, BOOL isFirstCall) {
                 }
                 if (press && data->state[j] == 2) {
                     data->state[j] = 3;
-                    if (data->flags & 2) {
+                    if (data->flags & SLOT_FLAG_LUCKY) {
                         data->stopCount[j] = 0;
                     } else {
                         data->stopCount[j] = irand(2);
@@ -3862,7 +3871,7 @@ void goryuugijo_main_slot(EventEntry* event, BOOL isFirstCall) {
                     data->phase = 6;
                     break;
                 }
-                if (!(data->flags & 4)) {
+                if (!(data->flags & SLOT_FLAG_WINDOW_MATCH)) {
                     data->phase = 6;
                     break;
                 }
@@ -3986,9 +3995,9 @@ void goryuugijo_main_slot(EventEntry* event, BOOL isFirstCall) {
                 }
                 caseDelete(data->caseId[0]);
                 caseDelete(data->caseId[1]);
-                data->flags |= 1;
+                data->flags |= SLOT_FLAG_WON;
                 mapPlayAnimationLv(drumname[data->nowSlot].neon[2], MAP_ANIM_PLAY_LOOP, 0);
-                data->flags |= 8;
+                data->flags |= SLOT_FLAG_WIN_NEON;
             } else {
                 data->phase = 11;
             }
@@ -4023,7 +4032,7 @@ void goryuugijo_main_slot(EventEntry* event, BOOL isFirstCall) {
         case 10:
             if (data->monteEvt == NULL || !evtCheckID(data->monteEvt->eventId)) {
                 mapPlayAnimationLv(drumname[data->nowSlot].neon[2], MAP_ANIM_PLAY_AT_END, 0);
-                data->flags &= ~8;
+                data->flags &= ~SLOT_FLAG_WIN_NEON;
                 mapPlayAnimationLv(drumname[data->nowSlot].neon[1], MAP_ANIM_PLAY_ONCE, 0);
                 data->counter = 0;
                 data->monteEvt = NULL;
@@ -4044,8 +4053,8 @@ void goryuugijo_main_slot(EventEntry* event, BOOL isFirstCall) {
             data->phase = 0;
             data->wait[0] = data->wait[1] = data->wait[2] = 0;
             data->extra[0] = data->extra[1] = data->extra[2] = 0;
-            if (data->flags & 1) {
-                data->flags &= ~1;
+            if (data->flags & SLOT_FLAG_WON) {
+                data->flags &= ~SLOT_FLAG_WON;
                 {
                     s32 n;
                     CaseSetup* s = &setup;
@@ -4062,9 +4071,9 @@ void goryuugijo_main_slot(EventEntry* event, BOOL isFirstCall) {
                     }
                 }
             }
-            if (data->flags & 8) {
+            if (data->flags & SLOT_FLAG_WIN_NEON) {
                 mapPlayAnimationLv(drumname[data->nowSlot].neon[2], MAP_ANIM_PLAY_AT_END, 0);
-                data->flags &= ~8;
+                data->flags &= ~SLOT_FLAG_WIN_NEON;
                 mapPlayAnimationLv(drumname[data->nowSlot].neon[1], MAP_ANIM_PLAY_ONCE, 0);
             }
             break;

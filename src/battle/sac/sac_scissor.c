@@ -48,8 +48,13 @@ typedef struct Pt {
     f32 x, y;
 } Pt;
 
+// ScissorWork.flags
+enum {
+    SCISSOR_FLAG_REGION_DRAWN = 1, // the loop drawn off-screen covered pixels (GXReadBoundingBox); scissor_ofscreen_ok
+};
+
 typedef struct ScissorWork {
-    /* 0x000 */ u32 flags;
+    /* 0x000 */ u32 flags; // SCISSOR_FLAG_*
     /* 0x004 */ u8 pad0[8];
     /* 0x00C */ s32 loopCount;
     /* 0x010 */ s32 blinkFrame;
@@ -894,7 +899,7 @@ static s32 scissor_control(EventEntry* evt, BOOL first) {
         w->stars.velX = 0.0f;
         w->stars.velY = 0.0f;
         memset(buf, 0, 0x1000);
-        w->flags &= ~1;
+        w->flags &= ~SCISSOR_FLAG_REGION_DRAWN;
     }
     w->stars.prevStickX = w->stars.stickX;
     w->stars.prevStickY = w->stars.stickY;
@@ -1123,7 +1128,7 @@ static s32 scissor_damage_sub2(Vec pt) {
 static s32 scissor_ofscreen_ok(EventEntry* evt) {
     EvtWord* args = evt->args;
     ScissorWork* w = GetScissorPtr();
-    if (w->flags & 1) {
+    if (w->flags & SCISSOR_FLAG_REGION_DRAWN) {
         evtSetValue(evt, args[0], 1);
     } else {
         evtSetValue(evt, args[0], 0);
@@ -1322,9 +1327,9 @@ static void scissor_disp_region(CameraId camera, void* param) {
     }
     GXReadBoundingBox(&left, &top, &right, &bottom);
     if (left == 0x3FF && right == 0 && top == 0x3FF && bottom == 0) {
-        w->flags &= ~1;
+        w->flags &= ~SCISSOR_FLAG_REGION_DRAWN;
     } else {
-        w->flags |= 1;
+        w->flags |= SCISSOR_FLAG_REGION_DRAWN;
     }
     offscreenAddBoundingBox(offscreenNameToId("ofs"), left, top, right, bottom);
 }

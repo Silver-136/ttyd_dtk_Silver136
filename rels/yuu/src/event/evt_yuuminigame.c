@@ -109,9 +109,9 @@ USER_FUNC(evt_yuuminigame_free) {
         return EVT_RETURN_DONE;
     }
     if (isFirstCall) {
-        wp->flags |= 1;
+        wp->flags |= MINIGAME_FLAG_QUIT;
     }
-    if (!(wp->flags & 2)) {
+    if (!(wp->flags & MINIGAME_FLAG_QUIT_DONE)) {
         return EVT_RETURN_BLOCK;
     }
     switch (wp->type) {
@@ -190,8 +190,8 @@ USER_FUNC(evt_yuuminigame_alloc) {
 static USER_FUNC(evt_yuuminigame_main_func) {
     MiniGameWork* wp = (MiniGameWork*)event->lwData[0];
 
-    if (wp->flags & 1) {
-        wp->flags |= 2;
+    if (wp->flags & MINIGAME_FLAG_QUIT) {
+        wp->flags |= MINIGAME_FLAG_QUIT_DONE;
         return EVT_RETURN_DONE;
     }
     if (wp->subEvent != NULL) {

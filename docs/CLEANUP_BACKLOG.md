@@ -172,9 +172,18 @@ in `docs/FAKES.md` and in the mweppc review record.
   new names with a setter and a reader: BreakSlotWork / BreakSlotReel flags (Shadow Queen bits, reel draw / hide),
   ShopWork flags (item selected, buying), EnvBlurWork FADE_OUT, PART_BLUR_SKIP_FRAME_UNUSED. Script CALL masks
   (flag_onoff, attribute and unit-flag commands) carry no hex masks. A scan for `x.flags/attr/status OP number`
-  (outside FAKE lines and shifts) counts 218 left (297 before; 40 in src/, was 77): nearly all are file-local work
-  structs with no names (sac_* games, gor_03, aji_17, las_04/05, the yuu minigames, evt_yuuranking), plus the bits
-  above. Kept numeric with reasons: EventEntry 0x80 (tested only) and 0x40 (set by inline/sibling events, never
+  (outside FAKE lines and shifts) counted 218 left after GB14 (297 before). GB17 (2026-11-17) named the file-local
+  work-struct bits with a setter and a reader (sac_bakugame/muki/scissor, evt_twoddisp, gor_03 slot, MiniGameWork,
+  aji_17 dance and hologram, the yuu minigames, yuu counter / ranking / title, Senkaron, las_04 fire bars, Smorg
+  swarm and sprites, tou_02 fans, punidrv poses, nok_00 poster, bom_01 crowd) and used existing names where the bits
+  already had them (CHOROGUN_FLAG_ALIVE, NAMEENT_FLAG_CANCELLED, PUNI_TARGET_FLAG_*, LECT_BUTTON_FLAG_HIDDEN,
+  STAGE_FLAG_NO_IRON_FRAME, LECTURE_FLAG_CONTINUE_WINDOW, NANNPC_WORK_DEPTH_SORT, EXT_POSE_FLAG_NO_SHADOW). GB17's
+  scan (also matching dispFlags/hitFlags, 226 at its start) counts 40 left (16 in src/). Kept numeric with reasons:
+  mot_ship MotShipWork.flags (assigned whole direction codes 0/1/2), cam_road CamRoadHit flags (curve hit bits,
+  meaning unclear), las_04 fire bar bits 0x1/0x2 and MoamoaSprite 0x2 and PunidrvPose 0x4/0x10 (read, never set),
+  Senkaron `&= 0xFFFE` (u32 field: also clears the upper half, not `~1`), YuuRankingWork dispFlags 0x2 (never
+  read), tou_03 kyaku 0x1 and evt_yuunpc pose 0x1 (only set), rsh_06 0x18, eff_peach_fukidashi `& 3` (a button
+  index), tst unit_yoshi ac flags. Also kept numeric with reasons: EventEntry 0x80 (tested only) and 0x40 (set by inline/sibling events, never
   read), SeqEndDispFlags 0x1 (only cleared), BattleWorkStatusIcon.flags 0x1 (read only), FieldBattleData
   firstAttackFlags (may be written by fbatHitCheck's 16-byte copy), party_bomhei 0x4 (read only).
 - **English identity for developer and Japanese names (user idea, 2026-11-08):** the original symbols and the

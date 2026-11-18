@@ -641,10 +641,10 @@ static USER_FUNC(elmos1000tai_init) {
     f32 dist;
     f32 fdeg;
 
-    wp->flags |= 1;
+    wp->flags |= NANNPC_WORK_DEPTH_SORT;
     for (i = 0; i < wp->num; i++) {
         npc = &wp->npc[i];
-        npc->pose->flags |= 4;
+        npc->pose->flags |= EXT_POSE_FLAG_NO_SHADOW;
         npc->color.a = 0;
         npc->dir = 90.0f;
         npc->index = i;

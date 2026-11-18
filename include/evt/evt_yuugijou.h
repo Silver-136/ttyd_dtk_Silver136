@@ -13,13 +13,19 @@
 typedef struct MiniGameWork {
     EventEntry* event;
     EventEntry* subEvent;
-    u16 flags;
+    u16 flags; // MINIGAME_FLAG_*
     s32 type;
     void (*init)(EventEntry* event, BOOL isFirstCall);
     void (*main)(EventEntry* event, BOOL isFirstCall);
     void (*disp)(CameraId camera, void* param);
     void* data;
 } MiniGameWork;
+
+// MiniGameWork.flags
+enum {
+    MINIGAME_FLAG_QUIT = 1,           // set by the free command; the driver's main function stops on it
+    MINIGAME_FLAG_QUIT_DONE = 1 << 1, // the driver has stopped; the free command then frees the work
+};
 
 typedef struct PiantaParlorWork {
     u32 flags; // 0x00, 1: token counter shown, 2: tokens taken out (playing), 4: counter raised, 8: window closed

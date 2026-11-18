@@ -273,7 +273,7 @@ void puniMain(void) {
     for (i = wp->poseNum - 1; i >= 0; i--, pose++, sort++) {
         flags = pose->flags;
         sort->index = i;
-        if (flags & 1) {
+        if (flags & PUNIDRV_POSE_FLAG_DISP) {
             sort->z = pose->texId;
         }
         angle = 90.0f + (ry - pose->dir);
@@ -294,7 +294,7 @@ void puniMain(void) {
         while ((diff = pose->targetRy - pose->ry) < -180.0f) {
             pose->ry -= 360.0f;
         }
-        if (flags & 2) {
+        if (flags & PUNIDRV_POSE_FLAG_SMOOTH_TURN) {
             pose->ry = pose->ry + diff * 0.1f;
         } else {
             pose->ry = pose->targetRy;
@@ -353,7 +353,7 @@ void puniPoseDraw(s32 index) {
     PunidrvTex* tex;
     Mtx mtx;
 
-    if (pose->flags & 1) {
+    if (pose->flags & PUNIDRV_POSE_FLAG_DISP) {
         texId = pose->texId;
         if (wp->curTex != texId) {
             tex = &wp->texs[texId];
@@ -385,7 +385,7 @@ void puniDraw(void) {
 
     for (i = wp->poseNum - 1, sort = wp->sort; i >= 0; i--, sort++) {
         pose = &wp->poses[sort->index];
-        if (pose->flags & 1) {
+        if (pose->flags & PUNIDRV_POSE_FLAG_DISP) {
             texId = pose->texId;
             if (texId != wp->curTex) {
                 tex = &wp->texs[texId];

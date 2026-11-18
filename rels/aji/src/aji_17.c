@@ -48,8 +48,19 @@
 #include "aji.h"
 #include "driver/seqdrv.h"
 
+// DanceData.flags (dance_flag_onoff / dance_flag_check)
+enum {
+    DANCE_FLAG_REVERSE = 1,      // the waltz path runs backwards (dance_reverse)
+    DANCE_FLAG_ACTION = 1 << 1,  // a dance action (turn, reverse or stumble) is in progress
+    DANCE_FLAG_MOVING = 1 << 2,  // move_center is moving the couple
+    DANCE_FLAG_FAIL = 1 << 3,    // stumbling after a wrong or missing press: peach_dance_pose is skipped
+    DANCE_FLAG_BTN_01 = 1 << 12, // the button bubble btn_01 is shown
+    DANCE_FLAG_BTN_02 = 1 << 13, // the button bubble btn_02 is shown
+    DANCE_FLAG_BTN_03 = 1 << 14, // the button bubble btn_03 is shown
+};
+
 typedef struct DanceData {
-    u16 flags;
+    u16 flags; // DANCE_FLAG_*
     u8 step;
     u8 movePos;
     f32 cx;
@@ -62,8 +73,15 @@ typedef struct HorogramWork {
     GXTexObj tex0;
     GXTexObj tex1;
     u16 ready;
-    u16 flags;
+    u16 flags; // HOROGRAM_FLAG_*
 } HorogramWork;
+
+// HorogramWork.flags (horogram_flag_onoff)
+enum {
+    HOROGRAM_FLAG_MIRROR_NPC = 1,    // peach_capture draws the mirrored NPC ホログラム2 while the hologram faces away
+    HOROGRAM_FLAG_MIRRORED = 1 << 1, // peach_capture drew ホログラム2 last frame (its animation restarts on a switch)
+    HOROGRAM_FLAG_TURN = 1 << 2,     // the hologram picture is drawn turned by 180 degrees
+};
 static HorogramWork* horogram_wp;
 DanceData dance_dt;
 
@@ -181,12 +199,12 @@ static s32 bgm_start_wait(EventEntry* event, BOOL isFirstCall) {
 }
 
 #if VERSION >= VERSION_DEMO_EU
-/** PAL: at 50 Hz the next dance move waits for the previous one to end (dance_dt flag 4). */
+/** PAL: at 50 Hz the next dance move waits for the previous one to end (DANCE_FLAG_MOVING). */
 static s32 wait_move_end_50hz(EventEntry* event, BOOL isFirstCall) {
     if (gp->framerate != 50) {
         return EVT_RETURN_DONE;
     }
-    return (dance_dt.flags & 4) ? EVT_RETURN_BLOCK : EVT_RETURN_DONE;
+    return (dance_dt.flags & DANCE_FLAG_MOVING) ? EVT_RETURN_BLOCK : EVT_RETURN_DONE;
 }
 #endif
 
@@ -1144,7 +1162,7 @@ static void polygon(f32 x, f32 y, f32 w, f32 h, f32 s, f32 t) {
 /**
  * Draw callback that draws the dance hologram: the captured Peach picture (colour texture buf0, depth-like buf1)
  * on a quad at the hologram NPC's position, with Y rotation derived from its direction and the camera yaw
- * (plus 180 degrees when flag 4 is set), using the NPC's colour as the channel material.
+ * (plus 180 degrees with HOROGRAM_FLAG_TURN), using the NPC's colour as the channel material.
  */
 static void disp_horogram(CameraId cameraId, void* param) {
     GXCullMode cull;
@@ -1164,7 +1182,7 @@ static void disp_horogram(CameraId cameraId, void* param) {
         PSMTXTrans(trans, npc->position.x, npc->position.y, npc->position.z);
         angle = reviseAngle(-npc->direction);
         angle -= camGetPtr(cameraId)->viewYaw;
-        angle += (horogram_wp->flags & 4) ? 180.0f : 0.0f;
+        angle += (horogram_wp->flags & HOROGRAM_FLAG_TURN) ? 180.0f : 0.0f;
         PSMTXRotRad(rot, 'y', 0.017453292f * angle);
         PSMTXConcat(trans, rot, mtx);
         PSMTXConcat(camGetPtr(cameraId)->view, mtx, mtx);
@@ -1217,7 +1235,7 @@ static s32 disp_horogram_evt(EventEntry* event, BOOL isFirstCall) {
 
 /**
  * Draw callback that renders the picture of the hologram:
- * with flag 1 set, picks the normal or mirrored hologram NPC by facing direction; otherwise uses the normal NPC,
+ * with HOROGRAM_FLAG_MIRROR_NPC, picks the normal or mirrored hologram NPC by facing direction; otherwise uses the normal NPC,
  * sets up a 608 by 480 viewport and a close camera,
  * draws the NPC's pose into the frame buffer and copies the colour and depth into horogram_wp->buf0 and buf1.
  */
@@ -1237,18 +1255,18 @@ static void peach_capture(CameraId cameraId, void* param) {
     holo2 = npcNameToPtr("ホログラム2");
     if (90.0f <= holo->direction && holo->direction < 270.0f) {
         npc = holo2;
-        if (!(horogram_wp->flags & 2)) {
+        if (!(horogram_wp->flags & HOROGRAM_FLAG_MIRRORED)) {
             animPoseSetLocalTime(holo2->poseId, 0.0f);
         }
-        horogram_wp->flags |= 2;
+        horogram_wp->flags |= HOROGRAM_FLAG_MIRRORED;
     } else {
         npc = holo;
-        if (horogram_wp->flags & 2) {
+        if (horogram_wp->flags & HOROGRAM_FLAG_MIRRORED) {
             animPoseSetLocalTime(holo->poseId, 0.0f);
         }
-        horogram_wp->flags &= ~2;
+        horogram_wp->flags &= ~HOROGRAM_FLAG_MIRRORED;
     }
-    if (!(horogram_wp->flags & 1)) {
+    if (!(horogram_wp->flags & HOROGRAM_FLAG_MIRROR_NPC)) {
         npc = holo;
     }
     GXGetViewportv(viewport);
@@ -1319,7 +1337,7 @@ static EVT_BEGIN(peach_dance_move)
     WAIT_FRAMES(1)
     SPAWN_EVENT(peach_dance_pose)
     LOOP(0)
-        CALL(dance_flag_check, 4, LW(0))
+        CALL(dance_flag_check, DANCE_FLAG_MOVING, LW(0))
         IF_INT_EQUAL(LW(0), 0)
             BREAK_LOOP
         END_IF
@@ -1340,7 +1358,7 @@ EVT_END()
  * P_O_F_1, P_O_R_1 or P_O_N_1 for dance step 0, 1 or 2 (skipped during a failed move).
  */
 static EVT_BEGIN(peach_dance_pose)
-    CALL(dance_flag_check, 8, LW(0))
+    CALL(dance_flag_check, DANCE_FLAG_FAIL, LW(0))
     IF_INT_EQUAL(LW(0), 1)
         RETURN
     END_IF
@@ -1410,11 +1428,11 @@ static EVT_BEGIN(dance_action_turn_sub)
     RETURN
 EVT_END()
 
-/** Dance action for a turn (button B): marks an action in progress (flag 2), does the half turn and clears the mark. */
+/** Dance action for a turn (button B): marks an action in progress (DANCE_FLAG_ACTION), does the half turn and clears the mark. */
 static EVT_BEGIN(peach_dance_action_turn)
-    CALL(dance_flag_onoff, 2, 1)
+    CALL(dance_flag_onoff, DANCE_FLAG_ACTION, 1)
     CALL_CHILD(dance_action_turn_sub)
-    CALL(dance_flag_onoff, 2, 0)
+    CALL(dance_flag_onoff, DANCE_FLAG_ACTION, 0)
     RETURN
 EVT_END()
 
@@ -1423,28 +1441,28 @@ EVT_END()
  * then the waltz path is run backwards (dance_reverse) from the next beat.
  */
 static EVT_BEGIN(peach_dance_action_reverse)
-    CALL(dance_flag_onoff, 2, 1)
+    CALL(dance_flag_onoff, DANCE_FLAG_ACTION, 1)
     CALL_CHILD(dance_action_turn_sub)
     CALL(dance_reverse)
-    CALL(dance_flag_check, 1, LW(0))
-    CALL(dance_flag_onoff, 2, 0)
+    CALL(dance_flag_check, DANCE_FLAG_REVERSE, LW(0))
+    CALL(dance_flag_onoff, DANCE_FLAG_ACTION, 0)
     RETURN
 EVT_END()
 
 /**
  * Dance action for a wrong button or none: marks the action,
  * switches Peach to the fall pose P_O_D_1 and then back to P_O_F_1 (peach_dance_after_fail),
- * with flags 2 and 8 set meanwhile.
+ * with DANCE_FLAG_ACTION and DANCE_FLAG_FAIL set meanwhile.
  */
 static EVT_BEGIN(peach_dance_action_fail)
-    CALL(dance_flag_onoff, 2, 1)
-    CALL(dance_flag_onoff, 8, 1)
+    CALL(dance_flag_onoff, DANCE_FLAG_ACTION, 1)
+    CALL(dance_flag_onoff, DANCE_FLAG_FAIL, 1)
     CALL(peach_set_pose, STRING("P_O_D_1"))
     CALL(horogram_set_pose, STRING("P_O_F_2"))
     WAIT_MS(400)
     CALL(peach_dance_after_fail)
-    CALL(dance_flag_onoff, 8, 0)
-    CALL(dance_flag_onoff, 2, 0)
+    CALL(dance_flag_onoff, DANCE_FLAG_FAIL, 0)
+    CALL(dance_flag_onoff, DANCE_FLAG_ACTION, 0)
     RETURN
 EVT_END()
 
@@ -1475,18 +1493,17 @@ static EVT_BEGIN(dance_btn_disp_sub)
 EVT_END()
 
 /**
- * Shows a button prompt for the dance: sets the flag for the bubble that is used (4096, 8192 or 16384 for LW(1)
- * = 0, 1,
- * 2) and creates it with dance_btn_disp_sub.
+ * Shows a button prompt for the dance: sets the flag for the bubble that is used (DANCE_FLAG_BTN_01, _02 or _03
+ * for LW(1) = 0, 1, 2) and creates it with dance_btn_disp_sub.
  */
 static EVT_BEGIN(dance_btn_disp)
     SWITCH(LW(1))
         CASE_EQUAL(0)
-            CALL(dance_flag_onoff, 4096, 1)
+            CALL(dance_flag_onoff, DANCE_FLAG_BTN_01, 1)
         CASE_EQUAL(1)
-            CALL(dance_flag_onoff, 8192, 1)
+            CALL(dance_flag_onoff, DANCE_FLAG_BTN_02, 1)
         CASE_EQUAL(2)
-            CALL(dance_flag_onoff, 16384, 1)
+            CALL(dance_flag_onoff, DANCE_FLAG_BTN_03, 1)
     END_SWITCH
     CALL_CHILD(dance_btn_disp_sub)
     RETURN
@@ -1512,22 +1529,22 @@ EVT_END()
 static EVT_BEGIN(dance_btn_clear)
     SWITCH(LW(1))
         CASE_EQUAL(0)
-            CALL(dance_flag_check, 4096, LW(3))
+            CALL(dance_flag_check, DANCE_FLAG_BTN_01, LW(3))
             IF_INT_EQUAL(LW(3), 1)
                 CALL(evt_eff_softdelete, STRING("btn_01"))
-                CALL(dance_flag_onoff, 4096, 0)
+                CALL(dance_flag_onoff, DANCE_FLAG_BTN_01, 0)
             END_IF
         CASE_EQUAL(1)
-            CALL(dance_flag_check, 8192, LW(3))
+            CALL(dance_flag_check, DANCE_FLAG_BTN_02, LW(3))
             IF_INT_EQUAL(LW(3), 1)
                 CALL(evt_eff_softdelete, STRING("btn_02"))
-                CALL(dance_flag_onoff, 8192, 0)
+                CALL(dance_flag_onoff, DANCE_FLAG_BTN_02, 0)
             END_IF
         CASE_EQUAL(2)
-            CALL(dance_flag_check, 16384, LW(3))
+            CALL(dance_flag_check, DANCE_FLAG_BTN_03, LW(3))
             IF_INT_EQUAL(LW(3), 1)
                 CALL(evt_eff_softdelete, STRING("btn_03"))
-                CALL(dance_flag_onoff, 16384, 0)
+                CALL(dance_flag_onoff, DANCE_FLAG_BTN_03, 0)
             END_IF
     END_SWITCH
     RETURN
@@ -1535,20 +1552,20 @@ EVT_END()
 
 /** Removes every button bubble of the dance that is still shown. */
 static EVT_BEGIN(dance_btn_clear_all)
-    CALL(dance_flag_check, 4096, LW(0))
+    CALL(dance_flag_check, DANCE_FLAG_BTN_01, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(evt_eff_softdelete, STRING("btn_01"))
-        CALL(dance_flag_onoff, 4096, 0)
+        CALL(dance_flag_onoff, DANCE_FLAG_BTN_01, 0)
     END_IF
-    CALL(dance_flag_check, 8192, LW(0))
+    CALL(dance_flag_check, DANCE_FLAG_BTN_02, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(evt_eff_softdelete, STRING("btn_02"))
-        CALL(dance_flag_onoff, 8192, 0)
+        CALL(dance_flag_onoff, DANCE_FLAG_BTN_02, 0)
     END_IF
-    CALL(dance_flag_check, 16384, LW(0))
+    CALL(dance_flag_check, DANCE_FLAG_BTN_03, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(evt_eff_softdelete, STRING("btn_03"))
-        CALL(dance_flag_onoff, 16384, 0)
+        CALL(dance_flag_onoff, DANCE_FLAG_BTN_03, 0)
     END_IF
     RETURN
 EVT_END()
@@ -1730,11 +1747,11 @@ EVT_BEGIN(peach_evt_dance)
         CALL_CHILD(dance_btn_clear_all) // PAL clears the buttons at once, as JP does
 #elif VERSION >= VERSION_US
         BEGIN_INLINE_EVENT
-            CALL(dance_flag_check, 4096, LW(5))
+            CALL(dance_flag_check, DANCE_FLAG_BTN_01, LW(5))
             IF_INT_NOT_EQUAL(LW(5), 0)
                 WAIT_MS(400)
                 CALL(evt_eff_softdelete, STRING("btn_01"))
-                CALL(dance_flag_onoff, 4096, 0)
+                CALL(dance_flag_onoff, DANCE_FLAG_BTN_01, 0)
             END_IF
         END_INLINE_EVENT
 #else
@@ -1756,7 +1773,7 @@ EVT_BEGIN(peach_evt_dance)
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
     CALL(evt_snd_envon_f, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI4"), 2000)
     WAIT_MS(400)
-    CALL(horogram_flag_onoff, 1, 4)
+    CALL(horogram_flag_onoff, 1, HOROGRAM_FLAG_TURN)
     CALL(peach_set_pose, STRING("P_S_1"))
     CALL(horogram_set_pose, STRING("P_S_1"))
     WAIT_MS(300)
@@ -1791,7 +1808,7 @@ EVT_BEGIN(peach_evt_dance)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_npc_set_position, STRING("ダミー"), LW(0), LW(1), LW(2))
         CALL(evt_msg_print, 0, STRING("peach_aji_95"), 0, STRING("ダミー"))
-        CALL(horogram_flag_onoff, 0, 4)
+        CALL(horogram_flag_onoff, 0, HOROGRAM_FLAG_TURN)
         CALL(evt_npc_set_ry, STRING("ホログラム"), 180)
         CALL_CHILD(peach_dance_dark)
         CALL(compute_horogram_pos, 0, -80, LW(2), LW(3))
@@ -1957,7 +1974,7 @@ static EVT_BEGIN(peach_evt_stg2)
         CALL(evt_npc_set_ry, STRING("ホログラム"), 180)
         CALL(evt_npc_set_anim, STRING("ホログラム"), STRING("P_S_1"))
         CALL(evt_npc_set_anim, STRING("ホログラム2"), STRING("P_S_1R"))
-        CALL(horogram_flag_onoff, 1, 1)
+        CALL(horogram_flag_onoff, 1, HOROGRAM_FLAG_MIRROR_NPC)
     END_INLINE_EVENT
     CALL(evt_mario_mov_pos2, LW(0), LW(1), FLOAT(48.0f))
     CALL(evt_mario_set_dir, 90, 200, 0)
@@ -3602,9 +3619,7 @@ static s32 dance_data_init(EventEntry* event, BOOL isFirstCall) {
 }
 
 /**
- * Script function: turns the dance flag mask args[0] on (args[1] nonzero) or off.
- * Flags: 1 = path runs backwards, 2 = action in progress, 4 = couple moving, 8 = stumbling, 4096,
- * 8192 and 16384 = button bubbles shown.
+ * Script function: turns the dance flag mask args[0] (DANCE_FLAG_*) on (args[1] nonzero) or off.
  */
 static s32 dance_flag_onoff(EventEntry* event, BOOL isFirstCall) {
     EvtWord* args = event->args;
@@ -3632,19 +3647,19 @@ static s32 dance_flag_check(EventEntry* event, BOOL isFirstCall) {
     return EVT_RETURN_DONE;
 }
 
-/** Script function: toggles the dance flag 1 (the waltz path runs backwards). */
+/** Script function: toggles DANCE_FLAG_REVERSE (the waltz path runs backwards). */
 static s32 dance_reverse(EventEntry* event, BOOL isFirstCall) {
-    if (dance_dt.flags & 1) {
-        dance_dt.flags &= ~1;
+    if (dance_dt.flags & DANCE_FLAG_REVERSE) {
+        dance_dt.flags &= ~DANCE_FLAG_REVERSE;
     } else {
-        dance_dt.flags |= 1;
+        dance_dt.flags |= DANCE_FLAG_REVERSE;
     }
     return EVT_RETURN_DONE;
 }
 
 /**
  * Script function: moves the dance center from (args[0], args[1]) to (args[2], args[3]) over args[4] ms with
- * smooth interpolation (flag 4 while moving), then advances the dance step modulo 3. Blocks until done.
+ * smooth interpolation (DANCE_FLAG_MOVING while moving), then advances the dance step modulo 3. Blocks until done.
  */
 static s32 move_center(EventEntry* event, BOOL isFirstCall) {
     EvtWord* args = event->args;
@@ -3657,7 +3672,7 @@ static s32 move_center(EventEntry* event, BOOL isFirstCall) {
     s32 elapsed;
 
     if (isFirstCall) {
-        dance_dt.flags |= 4;
+        dance_dt.flags |= DANCE_FLAG_MOVING;
         event->userdata[0] = ((u64)now >> 32) & 0xFFFFFFFF;
         event->userdata[1] = now & 0xFFFFFFFF;
         return EVT_RETURN_BLOCK;
@@ -3670,7 +3685,7 @@ static s32 move_center(EventEntry* event, BOOL isFirstCall) {
     }
     dance_dt.cx = x1;
     dance_dt.cy = z1;
-    dance_dt.flags &= ~4;
+    dance_dt.flags &= ~DANCE_FLAG_MOVING;
     if (++dance_dt.step >= 3) {
         dance_dt.step = 0;
     }
@@ -3684,7 +3699,7 @@ static s32 move_center(EventEntry* event, BOOL isFirstCall) {
 static s32 compute_move_pos(EventEntry* event, BOOL isFirstCall) {
     EvtWord* args = event->args;
 
-    if (!(dance_dt.flags & 1)) {
+    if (!(dance_dt.flags & DANCE_FLAG_REVERSE)) {
         dance_dt.movePos = (dance_dt.movePos + 1) % 15;
     } else if (dance_dt.movePos != 0) {
         dance_dt.movePos--;
@@ -3729,19 +3744,19 @@ static s32 compute_horogram_pos(EventEntry* event, BOOL isFirstCall) {
     return EVT_RETURN_DONE;
 }
 
-/** Script function: blocks while a dance action (flag 2) is in progress. */
+/** Script function: blocks while a dance action (DANCE_FLAG_ACTION) is in progress. */
 static s32 wait_action_end(EventEntry* event, BOOL isFirstCall) {
-    return (dance_dt.flags & 2) ? EVT_RETURN_BLOCK : EVT_RETURN_DONE;
+    return (dance_dt.flags & DANCE_FLAG_ACTION) ? EVT_RETURN_BLOCK : EVT_RETURN_DONE;
 }
 
-/** Script function: blocks until a dance action (flag 2) begins. */
+/** Script function: blocks until a dance action (DANCE_FLAG_ACTION) begins. */
 static s32 wait_action_begin(EventEntry* event, BOOL isFirstCall) {
-    return (dance_dt.flags & 2) ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
+    return (dance_dt.flags & DANCE_FLAG_ACTION) ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }
 
-/** Script function: blocks while the couple is moving (flag 4). */
+/** Script function: blocks while the couple is moving (DANCE_FLAG_MOVING). */
 static s32 wait_move_end(EventEntry* event, BOOL isFirstCall) {
-    return (dance_dt.flags & 4) ? EVT_RETURN_BLOCK : EVT_RETURN_DONE;
+    return (dance_dt.flags & DANCE_FLAG_MOVING) ? EVT_RETURN_BLOCK : EVT_RETURN_DONE;
 }
 
 /**
