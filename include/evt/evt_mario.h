@@ -79,6 +79,7 @@ USER_FUNC(evt_mario_get_state);
 USER_FUNC(evt_mario_goodbye_party);
 USER_FUNC(evt_mario_hello_exparty_pos);
 USER_FUNC(evt_mario_hello_party);
+USER_FUNC(evt_mario_hello_prev_party);
 USER_FUNC(evt_mario_jump_jumpstand);
 USER_FUNC(evt_mario_paper_pose_dokan);
 USER_FUNC(evt_mario_paper_pose_off);

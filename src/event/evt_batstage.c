@@ -79,7 +79,7 @@ USER_FUNC(evt_batstage_return_aud_dark_base) {
 // evt_batstage_light_release, _set_lightcolor, _set_width, _set_position, _set_target and _set_upvec: original names
 // and sizes (0x7c, 0xa8, 0x98, 0xcc, 0xcc, 0xcc) from the JP demo map (UNUSED there: no script uses them). Each passes
 // its arguments to the BattleStageLight function its name gives, in the form of evt_batstage_set_stg_dark; the sizes
-// fit the light being given by its number. The map's _entry, _release_all and _set_target_by_ commands are not
+// fit the light being given by its number. The map's _entry and _set_target_by_ commands are not
 // restored (their bodies or the functions they call are not known).
 USER_FUNC(evt_batstage_light_release) {
     EvtWord* args = event->args;
@@ -87,6 +87,17 @@ USER_FUNC(evt_batstage_light_release) {
     s32 time = evtGetValue(event, args[1]);
     s32 mode = evtGetValue(event, args[2]);
     BattleStageLightRelease(idx, time, mode);
+    return EVT_RETURN_DONE;
+}
+
+/** Switches every stage light off over args[0] frames with curve mode args[1] (BattleStageLightReleaseAll). */
+// Original name and size (0x60) from the JP demo map (UNUSED there: no script uses it), listed right after
+// evt_batstage_light_release: that command's form for BattleStageLightReleaseAll, which takes no light number.
+USER_FUNC(evt_batstage_light_release_all) {
+    EvtWord* args = event->args;
+    s32 time = evtGetValue(event, args[0]);
+    s32 mode = evtGetValue(event, args[1]);
+    BattleStageLightReleaseAll(time, mode);
     return EVT_RETURN_DONE;
 }
 

@@ -4284,6 +4284,28 @@ USER_FUNC(btlevtcmd_ChoiceSamplingEnemy) {
 }
 
 /**
+ * Script: picks the preferred target from the target list with the target weight flags given in args[0] and
+ * returns its unit and part in args[1] and args[2].
+ */
+// Original name and size (0x70) from the JP demo map (UNUSED there: no script uses it), listed right after
+// btlevtcmd_ChoiceSamplingEnemy: that command with the weapon's targetWeightFlags replaced by flags written in the
+// script (args[0] read as a literal, like btlevtcmd_onoff_battleflag's flags; through evtGetValue it is 0x7c).
+USER_FUNC(btlevtcmd_ChoiceSamplingEnemyDetail) {
+    EvtWord* args = event->args;
+    BattleWorkWeaponTargets* targets = &_battleWorkPointer->weaponTargets;
+    u32 flags;
+    s32 unitIndex, partIndex, unitId, partId;
+
+    flags = args[0];
+    unitIndex = args[1];
+    partIndex = args[2];
+    BattleChoiceSamplingEnemy(targets, flags, &unitId, &partId);
+    evtSetValue(event, unitIndex, unitId);
+    evtSetValue(event, partIndex, partId);
+    return EVT_RETURN_DONE;
+}
+
+/**
  * Script: returns the current target of the target list in args[0] (unit) and args[1] (part),
  * or -1 when the list is empty.
  */
@@ -7095,6 +7117,28 @@ USER_FUNC(btlevtcmd_CheckWeaponPluralTarget) {
         evtSetValue(event, out, 0);
     } else {
         evtSetValue(event, out, 1);
+    }
+    return EVT_RETURN_DONE;
+}
+
+/** Script: returns 1 in args[2] when the unit args[0] can pay the weapon args[1]'s cost, else 0. */
+// Original name and size (0xa4) from the JP demo map (UNUSED there: no script uses it), listed between
+// btlevtcmd_CheckWeaponPluralTarget and btlevtcmd_PayWeaponCost: PayWeaponCost's unit and weapon arguments with
+// CheckWeaponPluralTarget's 1/0 result in the next argument. Passing the BOOL straight to evtSetValue gives 0x84.
+USER_FUNC(btlevtcmd_CheckWeaponCost) {
+    EvtWord* args = event->args;
+    BattleWeapon* weapon;
+    s32 id;
+    s32 index;
+
+    id = evtGetValue(event, args[0]);
+    id = BattleTransID(event, id);
+    weapon = (BattleWeapon*)evtGetValue(event, args[1]);
+    index = args[2];
+    if (BtlUnit_CheckWeaponCost(BattleGetUnitPtr(_battleWorkPointer, id), weapon)) {
+        evtSetValue(event, index, 1);
+    } else {
+        evtSetValue(event, index, 0);
     }
     return EVT_RETURN_DONE;
 }

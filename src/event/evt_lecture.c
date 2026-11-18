@@ -6,6 +6,7 @@
 #include "mario/mario.h"
 #include "mario/mario_party.h"
 #include "mario/mariost.h"
+#include "pmario_sound.h"
 #include "party.h"
 #include "system.h"
 
@@ -120,6 +121,13 @@ USER_FUNC(lect_cam_load) {
         extra->moveDir = stXdir4;
     }
     return EVT_RETURN_DONE;
+}
+
+/** Blocks until the music started on channel 1 has begun playing. */
+// Original name and size (0x38) from the JP demo map (UNUSED there: nothing in this file calls it), listed between
+// lect_cam_load and lect_juyoitem_rel_set: evt_sub.c's static bgm_start_wait (0x38), the same name and size.
+static USER_FUNC(bgm_start_wait) {
+    return psndBGMStartCheck(1) ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }
 
 /** void* evt */

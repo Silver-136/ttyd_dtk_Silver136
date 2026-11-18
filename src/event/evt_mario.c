@@ -2278,6 +2278,51 @@ USER_FUNC(evt_mario_hello_party) {
 }
 
 /**
+ * Brings back the partner that was in slot arg 0 before (prevPartyMemberId) with its greeting entrance, if any and
+ * the slot is free, blocking until it is out and in run mode 1.
+ */
+// Original name and size (0xe4) from the JP demo map (UNUSED there: no script uses it), listed between
+// evt_mario_hello_party and evt_mario_hello_exparty_pos: evt_mario_hello_party's greeting entrance and wait with
+// evt_mario_set_prev_party's member (prevPartyMemberId) and partner lookup (partyGetPtr of the slot's party id).
+// The hello_party lookup (partyGetPtr(slot)) gives 0xdc.
+USER_FUNC(evt_mario_hello_prev_party) {
+    s32 slot;
+    EvtWord* args = event->args;
+    MarioWork* mp = marioGetPtr();
+    PartyEntry* party;
+    slot = args[0];
+    if (isFirstCall) {
+        s32 id;
+        s32 prev;
+        if (mp->currPartySlotId[slot] >= 0) {
+            return EVT_RETURN_DONE;
+        }
+        prev = mp->prevPartyMemberId[slot];
+        if (!prev) {
+            return EVT_RETURN_DONE;
+        }
+        if (slot == 0) {
+            id = partyEntryHello(prev);
+        } else {
+            id = partyEntry2Hello(prev);
+        }
+        if (id < 0) {
+            return EVT_RETURN_DONE;
+        }
+        mp->currPartySlotId[slot] = id;
+        return EVT_RETURN_BLOCK;
+    }
+    party = partyGetPtr(mp->currPartySlotId[slot]);
+    if (!party) {
+        return EVT_RETURN_DONE;
+    }
+    if (!(party->flags & PARTY_FLAG_IS_ACTIVE) || party->runMode != PARTY_RUN_WAIT) {
+        return EVT_RETURN_BLOCK;
+    }
+    return EVT_RETURN_DONE;
+}
+
+/**
  * Brings follower member arg 0 into the second party slot with its entrance and waits for it;
  * the position args 1-3 are read but unused. Used in muj_01.
  */
@@ -2571,7 +2616,6 @@ USER_FUNC(evt_mario_get_hitobj_push) {
     return EVT_RETURN_DONE;
 }
 
-#if VERSION >= VERSION_JP
 HITOBJ(head, hitobjHead)
 
 HITOBJ(ride, hitobjStandOn)
@@ -2583,21 +2627,13 @@ HITOBJ(front, hitobjFront)
 HITOBJ(push, hitobjPush)
 
 /** Blocks while button input is switched off (marioKeyOffChk nonzero). */
+// In every version: the early demos' DOL maps list it as UNUSED (0x38 in the JP demo map), as no script of theirs
+// uses it; JP and later call it from muj_00.
 USER_FUNC(evt_mario_keyon_wait) {
     marioGetPtr();
     return marioKeyOffChk() ? EVT_RETURN_BLOCK : EVT_RETURN_DONE;
 }
-#else
-HITOBJ(head, hitobjHead)
 
-HITOBJ(ride, hitobjStandOn)
-
-HITOBJ(under, hitobjUnder)
-
-HITOBJ(front, hitobjFront)
-
-HITOBJ(push, hitobjPush)
-#endif
 /**
  * Plane mode: a literal args[0] of 0 cancels it (mario_plane_cancel) and blocks until Mario stands
  * (MARIO_MOTION_STAY on a hit object); any other value switches him to MARIO_MOTION_PLANE with

@@ -594,6 +594,18 @@ USER_FUNC(evt_nannpc_set_animtbl) {
     return EVT_RETURN_DONE;
 }
 
+/** Sets crowd NPC args[0]'s texture id to args[1] (the pose's texId; an animation table overrides it). */
+// Original name and size (0xc0) from the JP demo map (UNUSED there: no script uses it), listed between
+// evt_nannpc_set_dir and evt_nannpc_set_animtbl: evt_nannpc_set_dir's form on the NPC's texture number (anim, the
+// value copied to pose->texId). Writing pose->texId directly gives 0xc4; also clearing animtbl 0xc8.
+USER_FUNC(evt_nannpc_set_texno) {
+    EvtWord* args = event->args;
+    char* name = (char*)evtGetValue(event, args[0]);
+    NanNPC* npc = nanNPCNameToPtr(name);
+    npc->anim = evtGetValue(event, args[1]);
+    return EVT_RETURN_DONE;
+}
+
 /** Sets crowd NPC args[0]'s facing to args[1] degrees. */
 USER_FUNC(evt_nannpc_set_dir) {
     EvtWord* args = event->args;
@@ -762,6 +774,17 @@ USER_FUNC(evt_nannpc_set_func) {
     char* name = (char*)evtGetValue(event, args[0]);
     NanNPC* npc = nanNPCNameToPtr(name);
     npc->func = (void (*)(NanNPC*))evtGetValue(event, args[1]);
+    return EVT_RETURN_DONE;
+}
+
+/** Clears crowd NPC args[0]'s per-frame function (NULL, as evt_nannpc_init leaves it; NULL is not called). */
+// Original name and size (0xb4) from the JP demo map (UNUSED there: no script uses it), listed right after
+// evt_nannpc_set_func: that command's form with the NULL value init uses.
+USER_FUNC(evt_nannpc_reset_func) {
+    EvtWord* args = event->args;
+    char* name = (char*)evtGetValue(event, args[0]);
+    NanNPC* npc = nanNPCNameToPtr(name);
+    npc->func = NULL;
     return EVT_RETURN_DONE;
 }
 

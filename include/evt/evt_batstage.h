@@ -7,6 +7,7 @@
 USER_FUNC(evt_batstage_light_set_player_off);
 USER_FUNC(evt_batstage_light_set_player_on);
 USER_FUNC(evt_batstage_light_release);
+USER_FUNC(evt_batstage_light_release_all);
 USER_FUNC(evt_batstage_light_set_lightcolor);
 USER_FUNC(evt_batstage_light_set_width);
 USER_FUNC(evt_batstage_light_set_position);
