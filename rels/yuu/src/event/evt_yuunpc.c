@@ -1412,8 +1412,10 @@ static inline f32 yuunpc_rnd10(YuuNpc* npc) /* */ {
     return 10.0f * ((npc->id % 101 - 50) / 50.0f);
 }
 
+// A macro, not an inline function: a static inline yuunpcJump(npc, count) returning the new count is not inlined
+// into yuunpc_pose_minigame4_main (0x3600 bytes with the calls, against 0x37b0; GD15, 2026-11-18).
 #if VERSION <= VERSION_DEMO_JP
-#define YUU_JUMP(npc)                                                                                                                      \
+#define YUU_JUMP(npc)                                                                                                                    \
     do {                                                                                                                                   \
         (npc)->motion = 4;                                                                                                                 \
         yuunpc_pose_change((npc), (npc)->poses[3], 0.0f, yuunpc_wp->pose[(npc)->poses[3]].jump / yuunpc_wp->pose[(npc)->poses[3]].frames); \

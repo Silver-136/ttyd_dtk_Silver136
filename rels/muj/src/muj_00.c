@@ -67,6 +67,8 @@ typedef struct OrbitData {
 static OrbitData* _op;
 
 // Advance actor i by d degrees around (cx, cz), using the caller's t, rad, r and x.
+// A macro, not an inline function: a static inline orbitMove(&op[i], d, cx, cz, &pos) with its own t, r, rad and x
+// (six declaration orders tried) swaps float registers in mario_main_func (GD15, 2026-11-18).
 #define ORBIT(i, p)           \
     op[i].angle += d;         \
     t = op[i].angle;          \

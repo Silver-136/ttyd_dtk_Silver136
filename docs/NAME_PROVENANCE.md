@@ -397,7 +397,7 @@ function names) and `strupr` (a C library name).
 
 ## Inline helper names (2026-11-17)
 
-217 names of `static inline` (and a few plain `inline`) helpers in the game code that no map lists and no table
+220 names of `static inline` (and a few plain `inline`) helpers in the game code that no map lists and no table
 above names. An inline function leaves no symbol when every call is inlined, so no map can name it: the names
 were chosen when the code was decompiled (LLCOOLT or this fork) and are not original. Each helper reads as
 code a programmer would write (a small getter, a repeated draw or copy step, a private sine), so it is not
@@ -517,7 +517,7 @@ helper: no written-out form builds the same; it should be a FAKES row.
 | src/sound.c | `_ssGetStr`, `SoundEfxMuteCh`, `SoundEfxCheckCh`, `_ssCalcLen` (1), `_ssResetEntries` |
 | src/system.c | `getDemoPadStatus` |
 | src/window/win_log.c | `tubuCheck` |
-| src/window/win_mario.c | `fukiKey`, `fukiTool` |
+| src/window/win_mario.c | `fukiKey`, `fukiTool`, `colorAnimName` |
 | src/window/win_root.c | `nameTex`, `nameQuad`, `winWazaQuad`, `winSortTex` |
 | rels/aji/src/aji_06.c | `yukaNow` |
 | rels/aji/src/aji_19.c | `beltSpeed` |
@@ -529,7 +529,7 @@ helper: no written-out form builds the same; it should be a FAKES row.
 | rels/gor/src/gor_irai.c | `iraiLineY` |
 | rels/hei/src/hei_10.c | `chb_sin`, `chb_cos` |
 | rels/las/src/unit/unit_boss_black_peach.c | `hand_pose_inl` (1) |
-| rels/mri/src/mri_puni.c | `puniModeDeadSfx`, `puniModeWonderSfx`, `puniModeCheckPos`, `puniMapDataSetI`, `puni_swget_idx`, `puniFloor`, `puni_exit_swset` |
+| rels/mri/src/mri_puni.c | `puniModeDeadSfx`, `puniModeWonderSfx`, `puniModeCheckPos`, `puniMapDataSetI`, `puni_swget_idx`, `puniFloor`, `puni_exit_swset`, `puniSpreadLevel`, `puniTrapStandIn` |
 | rels/muj/src/muj_00.c | `sinf_l`, `cosf_l`, `orbit_update` (1) |
 | rels/rsh/src/rsh_06.c | `moa_cos`, `moa_sinx`, `moa_cosx` |
 | rels/sys/src/sys.c | `setChanMatColor` |

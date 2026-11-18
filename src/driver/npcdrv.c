@@ -2582,7 +2582,10 @@ s32 _getHammerMotionParam(void);
 void _getHammerPoint(f32 f, f32 r, f32 angle, f32* x, f32* y, f32* z);
 void _getKaitenHammerPoint(f32 angle, f32 r, f32* x, f32* y, f32* z);
 
-#define CONTINUE_IF_NPC_NOT_HITTABLE(f1000, bit)                                                                     \
+// A macro, not an inline function: `if (!npcHittable(npc, enemyOnly, soft, bit)) continue;` with an inline of
+// early `return FALSE`s makes fbatHitCheck 0x1f68 bytes, a single `return a && b && ...` 0x20e4, against 0x1dd8
+// (GD15, 2026-11-18).
+#define CONTINUE_IF_NPC_NOT_HITTABLE(f1000, bit)                                                                   \
     if (npc == NULL) continue;                                                                                       \
     if (!(npc->flags & NPC_FLAG_READY)) continue;                                                                    \
     if (f1000) { \

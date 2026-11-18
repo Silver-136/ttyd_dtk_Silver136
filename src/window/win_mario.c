@@ -162,24 +162,32 @@ void winMarioExit(WindowWork* w) {
     animPoseRelease(w->mario.poseId);
 }
 
-#define COLOR_ANIM(var, base)            \
-    if (strcmp(base, "S_1") == 0) {      \
-        switch (marioGetColor()) {       \
-            case 0: var = "S_1"; break;  \
-            case 1: var = "S_2"; break;  \
-            case 2: var = "S_3"; break;  \
-            case 3: var = "S_4"; break;  \
-        }                                \
-    } else {                             \
-        switch (marioGetColor()) {       \
-            case 0: var = "R_1"; break;  \
-            case 1: var = "R_15"; break; \
-            case 2: var = "R_17"; break; \
-            case 3: var = "R_18"; break; \
-        }                                \
+/**
+ * Animation name for Mario's colour (marioGetColor 0 to 3) in the 8-bit window mode: S_1 to S_4 for the standing
+ * pose base "S_1", otherwise R_1, R_15, R_17 or R_18. Returns anim unchanged for any other colour value.
+ */
+static inline const char* colorAnimName(const char* anim, const char* base) {
+    if (strcmp(base, "S_1") == 0) {
+        switch (marioGetColor()) {
+            case 0: anim = "S_1"; break;
+            case 1: anim = "S_2"; break;
+            case 2: anim = "S_3"; break;
+            case 3: anim = "S_4"; break;
+        }
+    } else {
+        switch (marioGetColor()) {
+            case 0: anim = "R_1"; break;
+            case 1: anim = "R_15"; break;
+            case 2: anim = "R_17"; break;
+            case 3: anim = "R_18"; break;
+        }
     }
+    return anim;
+}
 
-#define MOVE_MARIO_CURSOR(n)                                       \
+// A macro, not an inline function: a static inline moveMarioCursor(w, n) with its own LinkDt* p (s32 or int n)
+// matches every instruction but colours winMarioMain's anims[1] in r28 instead of r30 (GD15, 2026-11-18).
+#define MOVE_MARIO_CURSOR(n)                                     \
     w->marioSel = linkDt[w->marioSel].links[n];                    \
     p = &linkDt[w->marioSel];                                      \
     while (1) {                                                    \
@@ -219,7 +227,7 @@ s32 winMarioMain(WindowWork* w) {
                 animPoseSetAnim(w->mario.poseId, (w->flags & WINDOW_FLAG_8BIT) ? "S_1" : "M_S_1", 0);
 #else
                 if (w->flags & WINDOW_FLAG_8BIT) {
-                    COLOR_ANIM(anims[1], "S_1")
+                    anims[1] = colorAnimName(anims[1], "S_1");
                 } else {
                     anims[1] = "M_S_1";
                 }
@@ -243,7 +251,7 @@ s32 winMarioMain(WindowWork* w) {
             switch (w->marioSel) {
                 case 2:
                     if (w->flags & WINDOW_FLAG_8BIT) {
-                        COLOR_ANIM(anims[0], lp->pose2)
+                        anims[0] = colorAnimName(anims[0], lp->pose2);
                     } else {
                         anims[0] = hammer_pose[pouchGetHammerLv()];
                     }
@@ -266,7 +274,7 @@ s32 winMarioMain(WindowWork* w) {
                     w->mario.hammerHold = 0;
 #endif
                     if (w->flags & WINDOW_FLAG_8BIT) {
-                        COLOR_ANIM(anims[0], lp->pose2)
+                        anims[0] = colorAnimName(anims[0], lp->pose2);
                     } else {
                         anims[0] = lp->pose0;
                     }

@@ -59,7 +59,10 @@
         return EVT_RETURN_DONE;                        \
     }
 
-// Macro, not inline: as static inline setposeBody(mp, name) the pose functions change.
+// Macro, not inline: as static inline setposeBody(mp, name) the pose functions change. Retest (GD15, 2026-11-18):
+// a void inline with its own i and notFound loses one of the two return paths (8 bytes shorter); returning
+// EVT_RETURN_DONE from it gives the right size but swaps the loop pointer and notFound registers (r29/r30) in
+// either declaration order.
 #define SETPOSE_BODY                                    \
     if (mp->flags & MARIO_FLAG_IS_8_BIT) {              \
         name = toDotMarioPose(name);                    \

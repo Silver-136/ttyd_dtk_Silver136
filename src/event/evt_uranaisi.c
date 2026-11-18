@@ -209,6 +209,8 @@ s32 uranaisi_data_make_starpiece(const char* prefix, s32 type);
 s32 uranaisi_data_make_next(const char* prefix, s32 type);
 
 // Statement macro: parses one <tag,...> into the caller's tag, tagNum, mbbpos, tagdone, tagdata, initEndPos and tagEndPos.
+// A macro, not an inline function: a static inline (tagdata, tag, &initEndPos, &tagEndPos) with its own tagNum,
+// mbbpos and tagdone changes the registers of all three callers and adds one instruction to each (GD15, 2026-11-18).
 #define URANAI_PARSE_TAG()                          \
     tagNum = 0;                                     \
     mbbpos = 0;                                     \

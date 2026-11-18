@@ -2357,6 +2357,8 @@ USER_FUNC(evt_sub_check_intersect) {
 }
 
 // Statement macro on irai_mail_check's locals (i, u, ret, arg): for an active, unfinished request more than 7200 s old it sets ret and, if arg, marks it done and sends the mail.
+// A macro, not an inline function: a static inline with its own i and union (ret through a pointer) gives each of
+// the six copies its own 8-byte union slot (frame 48 -> 80 bytes) and swaps the loop registers (GD15, 2026-11-18).
 #define IRAI_CHECK(flag, done, base, mail)                         \
     if (swGet(flag) && !swGet(done)) {                             \
         for (i = 0; i < 8; i++) {                                  \

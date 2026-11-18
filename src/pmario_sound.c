@@ -11406,7 +11406,9 @@ static void psndENVMain(void) {
         }
     }
 #else
-// Macro, not inline: as a static inline over ent (US and later) the object changes.
+// Macro, not inline: as a static inline over ent (US and later) the object changes. Retest (GD15, 2026-11-18): a
+// JP+ psndENVApply(ent) next to the early-demo one keeps psndENVMain's size but changes its registers and
+// instruction order.
 #define ENVAPPLY                                                                             \
     {                                                                                        \
         u8 vol;                                                                              \

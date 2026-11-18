@@ -475,18 +475,6 @@ static BOOL _areacheck(f32 x, f32 z, f32 r, f32 px, f32 pz) {
     return ret;
 }
 
-#define STAIR_Y_BY_Z(thr, base)             \
-    if (p->pos.z <= (thr)) {                \
-        f32 t = ((thr) - p->pos.z) / 20.0f; \
-        f32 u;                              \
-        if (t > 0.5f) {                     \
-            u = (t - 0.5f) / 0.5f;          \
-        } else {                            \
-            u = floorY;                     \
-        }                                   \
-        p->pos.y = 10.0f * u + (base);      \
-    }
-
 /**
  * Height of a Puni on the slanted floors of mri_09 (floor ymode 2):
  * on the stair slope east of x=200 it follows 10-unit steps down from 100 to 0 along z;
@@ -498,17 +486,27 @@ static void _ymode_mri_09(PuniData* p) {
     if (p->pos.x <= 400.0f && p->pos.x > 200.0f && p->pos.y <= 100.0f && p->pos.y >= floorY) {
         if (p->pos.z <= -55.0f) {
             p->pos.y = 100.0f;
-        } else STAIR_Y_BY_Z(-35.0f, 90.0f)
-        else STAIR_Y_BY_Z(-15.0f, 80.0f)
-        else STAIR_Y_BY_Z(5.0f, 70.0f)
-        else STAIR_Y_BY_Z(25.0f, 60.0f)
-        else STAIR_Y_BY_Z(45.0f, 50.0f)
-        else STAIR_Y_BY_Z(65.0f, 40.0f)
-        else STAIR_Y_BY_Z(85.0f, 30.0f)
-        else STAIR_Y_BY_Z(105.0f, 20.0f)
-        else STAIR_Y_BY_Z(125.0f, 10.0f)
-        else STAIR_Y_BY_Z(145.0f, floorY)
-        else {
+        } else if (p->pos.z <= -35.0f) {
+            p->pos.y = _chukanhosei(p->pos.z, -55.0f, 90.0f);
+        } else if (p->pos.z <= -15.0f) {
+            p->pos.y = _chukanhosei(p->pos.z, -35.0f, 80.0f);
+        } else if (p->pos.z <= 5.0f) {
+            p->pos.y = _chukanhosei(p->pos.z, -15.0f, 70.0f);
+        } else if (p->pos.z <= 25.0f) {
+            p->pos.y = _chukanhosei(p->pos.z, 5.0f, 60.0f);
+        } else if (p->pos.z <= 45.0f) {
+            p->pos.y = _chukanhosei(p->pos.z, 25.0f, 50.0f);
+        } else if (p->pos.z <= 65.0f) {
+            p->pos.y = _chukanhosei(p->pos.z, 45.0f, 40.0f);
+        } else if (p->pos.z <= 85.0f) {
+            p->pos.y = _chukanhosei(p->pos.z, 65.0f, 30.0f);
+        } else if (p->pos.z <= 105.0f) {
+            p->pos.y = _chukanhosei(p->pos.z, 85.0f, 20.0f);
+        } else if (p->pos.z <= 125.0f) {
+            p->pos.y = _chukanhosei(p->pos.z, 105.0f, 10.0f);
+        } else if (p->pos.z <= 145.0f) {
+            p->pos.y = _chukanhosei(p->pos.z, 125.0f, floorY);
+        } else {
             p->pos.y = floorY;
         }
     }
@@ -516,18 +514,6 @@ static void _ymode_mri_09(PuniData* p) {
         p->pos.y = 0.0f;
     }
 }
-
-#define STAIR_Y_BY_X(thr, base)             \
-    if (p->pos.x <= (thr)) {                \
-        f32 t = ((thr) - p->pos.x) / 20.0f; \
-        f32 u;                              \
-        if (t > 0.5f) {                     \
-            u = (t - 0.5f) / 0.5f;          \
-        } else {                            \
-            u = 0.0f;                       \
-        }                                   \
-        p->pos.y = 10.0f * u + (base);      \
-    }
 
 /**
  * Height of a Puni on the lower sloped floor of mri_16 (ymode 4):
@@ -541,15 +527,23 @@ static void _ymode_mri_16_00(PuniData* p) {
         if (p->pos.x <= 40.0f && p->pos.x >= -210.0f && p->pos.z <= -76.46314f && p->pos.z >= -200.0f) {
             if (p->pos.x <= -190.0f) {
                 p->pos.y = -320.0f;
-            } else STAIR_Y_BY_X(-170.0f, -330.0f)
-            else STAIR_Y_BY_X(-150.0f, -340.0f)
-            else STAIR_Y_BY_X(-130.0f, -350.0f)
-            else STAIR_Y_BY_X(-110.0f, -360.0f)
-            else STAIR_Y_BY_X(-90.0f, -370.0f)
-            else STAIR_Y_BY_X(-70.0f, -380.0f)
-            else STAIR_Y_BY_X(-50.0f, -390.0f)
-            else STAIR_Y_BY_X(-30.0f, -400.0f)
-            else {
+            } else if (p->pos.x <= -170.0f) {
+                p->pos.y = _chukanhosei(p->pos.x, -190.0f, -330.0f);
+            } else if (p->pos.x <= -150.0f) {
+                p->pos.y = _chukanhosei(p->pos.x, -170.0f, -340.0f);
+            } else if (p->pos.x <= -130.0f) {
+                p->pos.y = _chukanhosei(p->pos.x, -150.0f, -350.0f);
+            } else if (p->pos.x <= -110.0f) {
+                p->pos.y = _chukanhosei(p->pos.x, -130.0f, -360.0f);
+            } else if (p->pos.x <= -90.0f) {
+                p->pos.y = _chukanhosei(p->pos.x, -110.0f, -370.0f);
+            } else if (p->pos.x <= -70.0f) {
+                p->pos.y = _chukanhosei(p->pos.x, -90.0f, -380.0f);
+            } else if (p->pos.x <= -50.0f) {
+                p->pos.y = _chukanhosei(p->pos.x, -70.0f, -390.0f);
+            } else if (p->pos.x <= -30.0f) {
+                p->pos.y = _chukanhosei(p->pos.x, -50.0f, -400.0f);
+            } else {
                 p->pos.y = -400.0f;
             }
             if (p->pos.y < -320.0f && p->pos.y > -400.0f) {
@@ -575,7 +569,6 @@ static void _ymode_mri_16_00(PuniData* p) {
  */
 static void _ymode_mri_16_01(PuniData* p) {
     u32 old = p->flags2;
-    f32 bz;
     p->flags2 &= ~PUNI_FLAG2_ON_SLOPE;
     if (p->pos.y <= 100.0f && p->pos.y >= 0.0f) {
         if (p->pos.x <= 40.0f && p->pos.x >= -200.0f && p->pos.z > -200.0f && p->pos.z < 200.0f) {
@@ -584,23 +577,22 @@ static void _ymode_mri_16_01(PuniData* p) {
         if (p->pos.x <= 40.0f && p->pos.x >= -210.0f && p->pos.z <= 60.00006f && p->pos.z >= -10.00012f) {
             if (p->pos.x <= -190.0f) {
                 p->pos.y = 80.0f;
-            } else STAIR_Y_BY_X(-170.0f, 70.0f)
-            else STAIR_Y_BY_X(-150.0f, 60.0f)
-            else STAIR_Y_BY_X(-130.0f, 50.0f)
-            else STAIR_Y_BY_X(-110.0f, 40.0f)
-            else STAIR_Y_BY_X(-90.0f, 30.0f)
-            else STAIR_Y_BY_X(-70.0f, 20.0f)
-            else STAIR_Y_BY_X(-50.0f, 10.0f)
-            else if (p->pos.x <= -30.0f) {
-                f32 t = ((-30.0f) - p->pos.x) / 20.0f;
-                f32 u;
-                if (t > 0.5f) {
-                    u = (t - 0.5f) / 0.5f;
-                } else {
-                    u = 0.0f;
-                }
-                bz = (0.0f);
-                p->pos.y = 10.0f * u + bz;
+            } else if (p->pos.x <= -170.0f) {
+                p->pos.y = _chukanhosei(p->pos.x, -190.0f, 70.0f);
+            } else if (p->pos.x <= -150.0f) {
+                p->pos.y = _chukanhosei(p->pos.x, -170.0f, 60.0f);
+            } else if (p->pos.x <= -130.0f) {
+                p->pos.y = _chukanhosei(p->pos.x, -150.0f, 50.0f);
+            } else if (p->pos.x <= -110.0f) {
+                p->pos.y = _chukanhosei(p->pos.x, -130.0f, 40.0f);
+            } else if (p->pos.x <= -90.0f) {
+                p->pos.y = _chukanhosei(p->pos.x, -110.0f, 30.0f);
+            } else if (p->pos.x <= -70.0f) {
+                p->pos.y = _chukanhosei(p->pos.x, -90.0f, 20.0f);
+            } else if (p->pos.x <= -50.0f) {
+                p->pos.y = _chukanhosei(p->pos.x, -70.0f, 10.0f);
+            } else if (p->pos.x <= -30.0f) {
+                p->pos.y = _chukanhosei(p->pos.x, -50.0f, 0.0f);
             } else {
                 p->pos.y = 0.0f;
             }
@@ -1094,6 +1086,19 @@ static void puniMapDataSet(s32 w, s32 h, void* src, f32 x, f32 z) {
 }
 
 /**
+ * One step of the maze flood for neighbour k of a block at distance l and height bits h: a neighbour with no
+ * distance yet and at most one height step away gets distance l + 1, and *changed is set.
+ */
+static inline void puniSpreadLevel(u16* k, u16 h, u16 l, s32* changed) {
+    if ((*k & 0xFF) == 0 && (*k & 0xFF) < l) {
+        if (__abs((*k & 0xF000) - h) <= 0x1000) {
+            *k |= (u16)(l + 1);
+            *changed = 1;
+        }
+    }
+}
+
+/**
  * Floods the loaded maze grid with walking distances from the block under pos:
  * copies the clean grid, marks the start block and
  * then repeatedly gives each neighbouring block (within one height step) the distance plus one,
@@ -1135,18 +1140,10 @@ static void puniMapFindbuff(Vec pos) {
                             u16* k1 = &d[i + Punimap->width];
                             u16* k2 = &d[i - 1];
                             u16* k3 = &d[i + 1];
-#define SPREAD_LEVEL(k)                           \
-    if ((*k & 0xFF) == 0 && (*k & 0xFF) < l) {    \
-        if (__abs((*k & 0xF000) - h) <= 0x1000) { \
-            *k |= (u16)(l + 1);                   \
-            changed = 1;                          \
-        }                                         \
-    }
-                            SPREAD_LEVEL(k0)
-                            SPREAD_LEVEL(k1)
-                            SPREAD_LEVEL(k2)
-                            SPREAD_LEVEL(k3)
-#undef SPREAD_LEVEL
+                            puniSpreadLevel(k0, h, l, &changed);
+                            puniSpreadLevel(k1, h, l, &changed);
+                            puniSpreadLevel(k2, h, l, &changed);
+                            puniSpreadLevel(k3, h, l, &changed);
                         }
                     }
                     if (!changed) break;
@@ -3945,56 +3942,49 @@ static void puniModeTrap_sub(PuniData* p) {
     }
 }
 
-#define TRAP_NPC(name, setpos)        \
-    {                                 \
-        n = npcNameToPtr(name);       \
-        p->flags |= PUNI_FLAG_HIDDEN; \
-        n->position.x = p->pos.x;     \
-        n->position.y = p->pos.y;     \
-        n->position.z = p->pos.z;     \
-        n->direction = p->dir;        \
-        n->flags |= NPC_FLAG_NO_HIT;  \
-    }
-#define TRAP_HIDE(name)                \
-    {                                  \
-        n = npcNameToPtr(name);        \
-        p->flags &= ~PUNI_FLAG_HIDDEN; \
-        p->flags |= PUNI_FLAG_COLLIDE; \
-        n->flags &= ~NPC_FLAG_NO_HIT;  \
-        n->position.x = 0.0f;          \
-        n->position.y = -1000.0f;      \
-        n->position.z = 0.0f;          \
-    }
+/** Hides a trapped Puni and puts the stand-in NPC name at its position and direction, without collision. */
+static inline void puniTrapStandIn(PuniData* p, const char* name) {
+    NpcEntry* n = npcNameToPtr(name);
+
+    p->flags |= PUNI_FLAG_HIDDEN;
+    n->position.x = p->pos.x;
+    n->position.y = p->pos.y;
+    n->position.z = p->pos.z;
+    n->direction = p->dir;
+    n->flags |= NPC_FLAG_NO_HIT;
+}
 
 /**
  * Trapped mode: the Puni is caught in the cage trap of mri_17; the guide, sister or rival NPC stands in for it.
  * Flurrie's breath or a gather target frees it again.
  */
 static void puniModeTrap(PuniData* p) {
-    NpcEntry* n;
     if (p->modeStep == 0) {
         p->flags |= PUNI_FLAG_COLLIDE;
-        if (p->flags & PUNI_FLAG_NPC_GUIDE) TRAP_NPC("ガイド", 0)
-        if (p->flags & PUNI_FLAG_NPC_GUIDE_SISTER) TRAP_NPC("ガイド妹", 0)
-        if (p->flags & PUNI_FLAG_NPC_RIVAL) TRAP_NPC("ライバル", 0) {
+        if (p->flags & PUNI_FLAG_NPC_GUIDE) {
+            puniTrapStandIn(p, "ガイド");
+        }
+        if (p->flags & PUNI_FLAG_NPC_GUIDE_SISTER) {
+            puniTrapStandIn(p, "ガイド妹");
+        }
+        if (p->flags & PUNI_FLAG_NPC_RIVAL) {
+            puniTrapStandIn(p, "ライバル");
+        }
+        {
             Vec v_ = {0.0f, 0.0f, 0.0f};
             p->vel = v_;
         }
         p->prevMode = p->mode;
     }
     if (p->breathPower > 10.0f) {
-        if (p->flags & PUNI_FLAG_NPC_GUIDE) TRAP_HIDE("ガイド")
-        if (p->flags & PUNI_FLAG_NPC_GUIDE_SISTER) TRAP_HIDE("ガイド妹")
-        if (p->flags & PUNI_FLAG_NPC_RIVAL) TRAP_HIDE("ライバル")
+        puniModeTrap_sub(p);
         PuniDokuritsu(p);
         p->target = Punigp->marioPuni;
         p->prevMode = p->mode;
         p->mode = PUNI_MODE_WIND;
         p->modeStep = 0;
     } else if (p->massTarget != -1) {
-        if (p->flags & PUNI_FLAG_NPC_GUIDE) TRAP_HIDE("ガイド")
-        if (p->flags & PUNI_FLAG_NPC_GUIDE_SISTER) TRAP_HIDE("ガイド妹")
-        if (p->flags & PUNI_FLAG_NPC_RIVAL) TRAP_HIDE("ライバル")
+        puniModeTrap_sub(p);
         PuniDokuritsu(p);
         p->prevMode = p->mode;
         p->mode = PUNI_MODE_MASS;
