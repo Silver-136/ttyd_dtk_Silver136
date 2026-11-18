@@ -22,6 +22,10 @@ u32 CBGetBytesAvailableForRead(CircleBuffer* cb) {
     return cb->mBytesToRead;
 }
 
+u32 CBGetBytesAvailableForWrite(CircleBuffer* cb) {
+    return cb->mBytesToWrite;
+}
+
 void CircleBufferInitialize(CircleBuffer* cb, u8* buf, u32 size) {
     cb->start_ptr = buf;
     cb->size = size;

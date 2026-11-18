@@ -8,22 +8,37 @@ unsigned char GetUseSerialIO(void);
 unsigned char TRKAccessFile(unsigned int cmd, unsigned int file_handle, size_t* length, unsigned char* buffer);
 unsigned char TRKCloseFile(unsigned int cmd, unsigned int file_handle);
 
+int __read_file(unsigned int handle, unsigned char* buffer, size_t* count, void* ref_con);
+int __write_file(unsigned int handle, unsigned char* buffer, size_t* count, void* ref_con);
+int __close_file(unsigned int handle);
 int __access_file(unsigned int handle, unsigned char* buffer, size_t* count, void* ref_con,
                                 unsigned int cmd);
 
 int __read_console(unsigned long handle, unsigned char* buffer, size_t* count, void* ref_con) {
     if (GetUseSerialIO() == 0)
         return DS_IOError;
-    return __access_file(DS_Stdin, buffer, count, ref_con, DSMSG_ReadFile);
+    return __read_file(DS_Stdin, buffer, count, ref_con);
 }
 
 int __TRK_write_console(unsigned long handle, unsigned char* buffer, size_t* count, void* ref_con) {
     if (GetUseSerialIO() == 0)
         return DS_IOError;
-    return __access_file(DS_Stdout, buffer, count, ref_con, DSMSG_WriteFile);
+    return __write_file(DS_Stdout, buffer, count, ref_con);
 }
 
 int __close_console(unsigned long handle) {
+    return __close_file(handle);
+}
+
+int __read_file(unsigned int handle, unsigned char* buffer, size_t* count, void* ref_con) {
+    return __access_file(handle, buffer, count, ref_con, DSMSG_ReadFile);
+}
+
+int __write_file(unsigned int handle, unsigned char* buffer, size_t* count, void* ref_con) {
+    return __access_file(handle, buffer, count, ref_con, DSMSG_WriteFile);
+}
+
+int __close_file(unsigned int handle) {
     unsigned int ioResult;
 
     if (GetTRKConnected() == 0)

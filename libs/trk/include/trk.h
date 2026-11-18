@@ -59,13 +59,14 @@ enum DSErrorCode {
     DS_Error800 = 0x800                /* TRKRequestSend: no reply after all tries */
 };
 
-/* Reply error byte of the DSMSG_ReplyACK message (TRKSendReply); the handlers map a DSError to it. MetroTRK
+/* Reply error byte of the DSMSG_ReplyACK message (TRKStandardACK); the handlers map a DSError to it. MetroTRK
    spellings, as above. */
 enum DSReplyError {
     DSREPLY_NoError = 0,
     DSREPLY_Error = 1,                    /* TRKDoStop: any other stop result */
     DSREPLY_PacketSizeError = 2,          /* DS_MessageBufferReadError */
     DSREPLY_CWDSError = 3,                /* any other error */
+    DSREPLY_UnsupportedCommandError = 0x10, /* TRKDoUnsupported */
     DSREPLY_ParameterError = 0x11,        /* TRKDoStep: zero count or pc outside the range */
     DSREPLY_UnsupportedOptionError = 0x12, /* DS_UnsupportedError; unknown option bit or step kind */
     DSREPLY_InvalidMemoryRange = 0x13,    /* DS_InvalidMemory */

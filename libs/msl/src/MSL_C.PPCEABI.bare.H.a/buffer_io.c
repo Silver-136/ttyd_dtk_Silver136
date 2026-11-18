@@ -1,5 +1,9 @@
 #include "ansi_files.h"
 
+void __convert_from_newlines(unsigned char* buf, size_t* n) {}
+
+void __convert_to_newlines(unsigned char* buf, size_t* n) {}
+
 void __prep_buffer(FILE* file) {
     file->buffer_ptr = file->buffer;
     file->buffer_len = file->buffer_size;

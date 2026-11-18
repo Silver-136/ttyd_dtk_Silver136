@@ -3,74 +3,38 @@ typedef unsigned short wchar_t;
 
 char* strncpy(char* dst, const char* src, size_t n);
 
-static int is_utf8_complete(const char* s, size_t n);
+/* Length of the UTF-8 sequence at s: 0 for a NUL byte, 1..3 for a complete sequence, -2 when the n bytes end
+   inside a sequence, -1 when it is invalid. utf8_to_unicode only tests for a negative result. */
+static int is_utf8_complete(const char* s, size_t n) {
+    if (n == 0)
+        return -1;
 
-static int unicode_to_UTF8(char* s, wchar_t wchar) {
-    int number_of_bytes;
-    wchar_t wide_char;
-    char* target_ptr;
-    char first_byte_mark[4] = {0x00, 0x00, 0xC0, 0xE0};
-
-    if (!s)
+    if (*s == 0x00)
         return 0;
 
-    wide_char = wchar;
-
-    // one byte below 0x80, two below 0x800, else three; the cases below fall through
-    if (wide_char < 0x80)
-        number_of_bytes = 1;
-    else if (wide_char < 0x800)
-        number_of_bytes = 2;
-    else
-        number_of_bytes = 3;
-
-    target_ptr = s + number_of_bytes;
-
-    switch (number_of_bytes) {
-    case 3:
-        *--target_ptr = (wide_char & 0x3F) | 0x80;
-        wide_char >>= 6;
-    case 2:
-        *--target_ptr = (wide_char & 0x3F) | 0x80;
-        wide_char >>= 6;
-    case 1:
-        *--target_ptr = wide_char | first_byte_mark[number_of_bytes];
-    }
-
-    return number_of_bytes;
+    if ((*s & 0x80) == 0x00)
+        return 1;
+    else if ((*s & 0xE0) == 0xC0) {
+        if (n >= 2) {
+            if ((*(s + 1) & 0x80) == 0x80)
+                return 2;
+            return -1;
+        } else
+            return -2;
+    } else if ((*s & 0xF0) == 0xE0) {
+        if (n >= 3) {
+            if (((*(s + 1) & 0x80) == 0x80) && ((*(s + 2) & 0x80) == 0x80))
+                return 3;
+            return -1;
+        } else if (((n == 2) && ((*(s + 1) & 0x80) == 0x80)) || (n == 1))
+            return -2;
+        return -1;
+    } else
+        return -1;
 }
 
-size_t wcstombs(char* s, const wchar_t* pwcs, size_t n) {
-    int chars_written = 0;
-    int result;
-    char temp[3];
-    wchar_t* source;
-
-    if (!s || !pwcs)
-        return 0;
-
-    source = (wchar_t*)pwcs;
-
-    // BUG: the loop runs while chars_written <= n, so when n bytes are already written the terminating '\0'
-    // goes to s[n], one byte past the limit.
-    while (chars_written <= n) {
-        if (!*source) {
-            *(s + chars_written) = '\0';
-            break;
-        } else {
-            result = unicode_to_UTF8(temp, *source++);
-            if ((chars_written + result) <= n) {
-                strncpy(s + chars_written, temp, result);
-                chars_written += result;
-            } else
-                break;
-        }
-    }
-
-    return chars_written;
-}
-
-static inline int __mbtowc_noconv(wchar_t* pwc, const char* s, size_t n) {
+static int utf8_to_unicode(wchar_t* pwc, const char* s, size_t n) {
+    int is_utf8_complete(const char* s, size_t n);
     int number_of_bytes;
     int check_byte_count;
     char* source;
@@ -119,35 +83,74 @@ static inline int __mbtowc_noconv(wchar_t* pwc, const char* s, size_t n) {
 }
 
 int mbtowc(wchar_t* pwc, const char* s, size_t n) {
-    return __mbtowc_noconv(pwc, s, n);
+    return utf8_to_unicode(pwc, s, n);
 }
 
-/* Length of the UTF-8 sequence at s: 0 for a NUL byte, 1..3 for a complete sequence, -2 when the n bytes end
-   inside a sequence, -1 when it is invalid. __mbtowc_noconv only tests for a negative result. */
-static int is_utf8_complete(const char* s, size_t n) {
-    if (n == 0)
-        return -1;
+static int unicode_to_UTF8(char* s, wchar_t wchar) {
+    int number_of_bytes;
+    wchar_t wide_char;
+    char* target_ptr;
+    char first_byte_mark[4] = {0x00, 0x00, 0xC0, 0xE0};
 
-    if (*s == 0x00)
+    if (!s)
         return 0;
 
-    if ((*s & 0x80) == 0x00)
-        return 1;
-    else if ((*s & 0xE0) == 0xC0) {
-        if (n >= 2) {
-            if ((*(s + 1) & 0x80) == 0x80)
-                return 2;
-            return -1;
-        } else
-            return -2;
-    } else if ((*s & 0xF0) == 0xE0) {
-        if (n >= 3) {
-            if (((*(s + 1) & 0x80) == 0x80) && ((*(s + 2) & 0x80) == 0x80))
-                return 3;
-            return -1;
-        } else if (((n == 2) && ((*(s + 1) & 0x80) == 0x80)) || (n == 1))
-            return -2;
-        return -1;
-    } else
-        return -1;
+    wide_char = wchar;
+
+    // one byte below 0x80, two below 0x800, else three; the cases below fall through
+    if (wide_char < 0x80)
+        number_of_bytes = 1;
+    else if (wide_char < 0x800)
+        number_of_bytes = 2;
+    else
+        number_of_bytes = 3;
+
+    target_ptr = s + number_of_bytes;
+
+    switch (number_of_bytes) {
+    case 3:
+        *--target_ptr = (wide_char & 0x3F) | 0x80;
+        wide_char >>= 6;
+    case 2:
+        *--target_ptr = (wide_char & 0x3F) | 0x80;
+        wide_char >>= 6;
+    case 1:
+        *--target_ptr = wide_char | first_byte_mark[number_of_bytes];
+    }
+
+    return number_of_bytes;
+}
+
+int wctomb(char* s, wchar_t wchar) {
+    return unicode_to_UTF8(s, wchar);
+}
+
+size_t wcstombs(char* s, const wchar_t* pwcs, size_t n) {
+    int chars_written = 0;
+    int result;
+    char temp[3];
+    wchar_t* source;
+
+    if (!s || !pwcs)
+        return 0;
+
+    source = (wchar_t*)pwcs;
+
+    // BUG: the loop runs while chars_written <= n, so when n bytes are already written the terminating '\0'
+    // goes to s[n], one byte past the limit.
+    while (chars_written <= n) {
+        if (!*source) {
+            *(s + chars_written) = '\0';
+            break;
+        } else {
+            result = wctomb(temp, *source++);
+            if ((chars_written + result) <= n) {
+                strncpy(s + chars_written, temp, result);
+                chars_written += result;
+            } else
+                break;
+        }
+    }
+
+    return chars_written;
 }

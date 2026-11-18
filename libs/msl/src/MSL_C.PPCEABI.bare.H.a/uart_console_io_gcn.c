@@ -7,19 +7,23 @@ int InitializeUART(unsigned long baudRate);
 int WriteUARTN(const void* buf, unsigned long len);
 int __TRK_write_console(__file_handle handle, unsigned char* buffer, size_t* count, __idle_proc idle_proc);
 
-__declspec(weak) int __write_console(__file_handle handle, unsigned char* buffer, size_t* count, __idle_proc idle_proc) {
+int __init_uart_console(void) {
     static int initialized = 0;
-    int ret;
+    int ret = 0;
 
+    if (initialized == 0) {
+        ret = InitializeUART(57600);
+        if (ret == 0)
+            initialized = 1;
+    }
+
+    return ret;
+}
+
+__declspec(weak) int __write_console(__file_handle handle, unsigned char* buffer, size_t* count, __idle_proc idle_proc) {
     // 0x20000000 = OS_CONSOLE_TDEV (dolphin/os.h): only consoles other than a TDEV use the UART, at 57600 baud
     if ((OSGetConsoleType() & 0x20000000) == 0) {
-        ret = 0;
-        if (initialized == 0) {
-            ret = InitializeUART(57600);
-            if (ret == 0)
-                initialized = 1;
-        }
-        if (ret != 0)
+        if (__init_uart_console() != 0)
             return __io_error;
         if (WriteUARTN(buffer, *count) != 0) {
             *count = 0;

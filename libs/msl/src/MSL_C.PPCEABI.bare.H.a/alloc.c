@@ -92,6 +92,33 @@ static inline void SubBlock_set_free(SubBlock* ths) {
     if (SubBlock_is_free((ths)))                                           \
         *(mem_size*)((char*)(ths) + (sz) - sizeof(mem_size)) = (sz)
 
+static SubBlock* SubBlock_merge_prev(SubBlock* ths, SubBlock** start);
+static void SubBlock_merge_next(SubBlock* ths, SubBlock** start);
+
+void Block_link(Block* ths, SubBlock* sb) {
+    SubBlock** st;
+
+    SubBlock_set_free(sb);
+    st = &Block_start(ths);
+
+    if (*st != NULL) {
+        sb->prev_ = (*st)->prev_;
+        sb->prev_->next_ = sb;
+        sb->next_ = *st;
+        (*st)->prev_ = sb;
+        *st = sb;
+        *st = SubBlock_merge_prev(*st, st);
+        SubBlock_merge_next(*st, st);
+    } else {
+        *st = sb;
+        sb->prev_ = sb;
+        sb->next_ = sb;
+    }
+
+    if (ths->max_size_ < SubBlock_size(*st))
+        ths->max_size_ = SubBlock_size(*st);
+}
+
 static SubBlock* SubBlock_merge_prev(SubBlock* ths, SubBlock** start) {
     mem_size prevsz;
     SubBlock* p;
@@ -132,27 +159,24 @@ static void SubBlock_merge_next(SubBlock* ths, SubBlock** start) {
     }
 }
 
-#define Block_link(ths, sb)                                  \
-    {                                                        \
-        SubBlock** st;                                       \
-        SubBlock_set_free((sb));                             \
-        st = &Block_start((ths));                            \
-        if (*st != NULL) {                                   \
-            (sb)->prev_ = (*st)->prev_;                      \
-            (sb)->prev_->next_ = (sb);                       \
-            (sb)->next_ = *st;                               \
-            (*st)->prev_ = (sb);                             \
-            *st = (sb);                                      \
-            *st = SubBlock_merge_prev(*st, st);              \
-            SubBlock_merge_next(*st, st);                    \
-        } else {                                             \
-            *st = (sb);                                      \
-            (sb)->prev_ = (sb);                              \
-            (sb)->next_ = (sb);                              \
-        }                                                    \
-        if ((ths)->max_size_ < SubBlock_size(*st))           \
-            (ths)->max_size_ = SubBlock_size(*st);           \
+static Block* __unlink(__mem_pool_obj* pool_obj, Block* bp) {
+    Block* result = bp->next_;
+
+    if (result == bp)
+        result = NULL;
+
+    if (pool_obj->start_ == bp)
+        pool_obj->start_ = result;
+
+    if (result != NULL) {
+        result->prev_ = bp->prev_;
+        result->prev_->next_ = result;
     }
+
+    bp->next_ = NULL;
+    bp->prev_ = NULL;
+    return result;
+}
 
 static inline int Block_empty(Block* ths) {
     SubBlock* sb = (SubBlock*)((char*)ths + sizeof(Block));
@@ -165,18 +189,24 @@ static void deallocate_from_var_pools(__mem_pool_obj* pool_obj, void* ptr) {
 
     Block_link(bp, sb);
     if (Block_empty(bp)) {
-        Block* next = bp->next_;
-        if (next == bp)
-            next = NULL;
-        if (pool_obj->start_ == bp)
-            pool_obj->start_ = next;
-        if (next != NULL) {
-            next->prev_ = bp->prev_;
-            next->prev_->next_ = next;
-        }
-        bp->prev_ = bp->next_ = NULL;
+        __unlink(pool_obj, bp);
         __sys_free(bp);
     }
+}
+
+void __init_pool_obj(__mem_pool* pool_obj) {
+    memset(pool_obj, 0, sizeof(__mem_pool_obj));
+}
+
+static __mem_pool* get_malloc_pool(void) {
+    static __mem_pool protopool;
+    static unsigned char init = 0;
+
+    if (!init) {
+        __init_pool_obj(&protopool);
+        init = 1;
+    }
+    return &protopool;
 }
 
 void deallocate_from_fixed_pools(__mem_pool_obj* pool_obj, void* ptr, mem_size size) {
@@ -240,21 +270,6 @@ void __pool_free(__mem_pool* pool, void* ptr) {
         deallocate_from_fixed_pools(pool_obj, ptr, size);
     else
         deallocate_from_var_pools(pool_obj, ptr);
-}
-
-void __init_pool_obj(__mem_pool* pool_obj) {
-    memset(pool_obj, 0, sizeof(__mem_pool_obj));
-}
-
-static __mem_pool* get_malloc_pool(void) {
-    static __mem_pool protopool;
-    static unsigned char init = 0;
-
-    if (!init) {
-        __init_pool_obj(&protopool);
-        init = 1;
-    }
-    return &protopool;
 }
 
 void free(void* ptr) {

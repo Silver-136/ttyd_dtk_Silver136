@@ -1,7 +1,31 @@
 #include "ansi_files.h"
+#include "ctype_map.h"
+
+static inline int tolower(int c) { return (c == EOF) ? EOF : (int)__lower_map[(unsigned char)c]; }
 
 int __flush_all(void);
 long ftell(FILE* file);
+
+int __msl_strnicmp(const char* str1, const char* str2, int n) {
+    int i;
+    char c1, c2;
+
+    for (i = 0; i < n; i++) {
+        c1 = tolower(*str1++);
+        c2 = tolower(*str2++);
+
+        if (c1 < c2)
+            return -1;
+
+        if (c1 > c2)
+            return 1;
+
+        if (c1 == '\0')
+            return 0;
+    }
+
+    return 0;
+}
 
 int fflush(FILE* file) {
     fpos_t position;

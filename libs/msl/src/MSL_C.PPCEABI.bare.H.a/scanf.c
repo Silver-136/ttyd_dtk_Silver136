@@ -27,51 +27,181 @@ typedef struct {
 #define set_char_map(map, ch) map[(unsigned char)(ch) >> 3] |= (1 << ((ch) & 7))
 #define bad_conversion 0xFF
 
-static const char* parse_format(const char* format_string, scan_format* format);
-
-
 extern int mbtowc(unsigned short*, const char*, unsigned long);
 
 #define sc_isspace(c) (__ctype_map[(unsigned char)(c)] & __whitespace)
 #define tst_char_map(map, ch) (map[(unsigned char)(ch) >> 3] & (1 << ((ch) & 7)))
 
-static int __sformatter(int (*ReadProc)(void*, int, int), void* ReadProcArg, const char* format_str, va_list arg);
+static const char* parse_format(const char* format_string, scan_format* format) {
+    const char* s = format_string;
+    int c;
+    int flag_found;
+    scan_format f = {0, 0, normal_argument, 0, 0x7FFFFFFF, {0}};
 
-int sscanf(const char* buffer, const char* format, ...) {
-    va_list args;
-    __InStr s;
-    va_start(args, format);
-    s.str = (char*)buffer;
-    if (buffer == 0 || *buffer == 0) {
-        return -1;
+    if ((c = *++s) == '%') {
+        f.conversion_char = c;
+        *format = f;
+        return ((const char*)s + 1);
     }
-    s.eos = 0;
-    return __sformatter(__StringRead, &s, format, args);
-}
 
-int __StringRead(void* arg, int ch, int behavior) {
-    __InStr* s = (__InStr*)arg;
-    char c;
-    switch (behavior) {
-    case __GetAChar:
-        c = *s->str;
-        if (c == 0) {
-            s->eos = 1;
-            return -1;
-        }
-        s->str++;
-        return (unsigned char)c;
-    case __UngetAChar:
-        if (s->eos == 0) {
-            s->str--;
-        } else {
-            s->eos = 0;
-        }
-        return ch;
-    case __TestForError:
-        return s->eos;
+    if (c == '*') {
+        f.suppress_assignment = 1;
+        c = *++s;
     }
-    return 0;
+
+    if (__ctype_map[(unsigned char)c] & __digit) {
+        f.field_width = 0;
+        do {
+            f.field_width = (f.field_width * 10) + (c - '0');
+            c = *++s;
+        } while (__ctype_map[(unsigned char)c] & __digit);
+
+        if (f.field_width == 0) {
+            f.conversion_char = bad_conversion;
+            *format = f;
+            return ((const char*)s + 1);
+        }
+        f.field_width_specified = 1;
+    }
+
+    flag_found = 1;
+
+    switch (c) {
+    case 'h':
+        f.argument_options = short_argument;
+        if (s[1] == 'h') {
+            f.argument_options = char_argument;
+            c = *++s;
+        }
+        break;
+    case 'l':
+        f.argument_options = long_argument;
+        if (s[1] == 'l') {
+            f.argument_options = long_long_argument;
+            c = *++s;
+        }
+        break;
+    case 'L':
+        f.argument_options = long_double_argument;
+        break;
+    default:
+        flag_found = 0;
+    }
+
+    if (flag_found) {
+        c = *++s;
+    }
+
+    f.conversion_char = c;
+
+    switch (c) {
+    case 'd':
+    case 'i':
+    case 'u':
+    case 'o':
+    case 'x':
+    case 'X':
+        if (f.argument_options == long_double_argument) {
+            f.conversion_char = bad_conversion;
+            break;
+        }
+        break;
+    case 'a':
+    case 'f':
+    case 'e':
+    case 'E':
+    case 'g':
+    case 'G':
+        if (f.argument_options == char_argument || f.argument_options == short_argument
+            || f.argument_options == long_long_argument) {
+            f.conversion_char = bad_conversion;
+            break;
+        }
+        if (f.argument_options == long_argument) {
+            f.argument_options = double_argument;
+        }
+        break;
+    case 'p':
+        f.argument_options = long_argument;
+        f.conversion_char = 'x';
+        break;
+    case 'c':
+        if (f.argument_options == long_argument) {
+            f.argument_options = wchar_argument;
+        } else if (f.argument_options != normal_argument) {
+            f.conversion_char = bad_conversion;
+        }
+        break;
+    case 's':
+        if (f.argument_options == long_argument) {
+            f.argument_options = wchar_argument;
+        } else if (f.argument_options != normal_argument) {
+            f.conversion_char = bad_conversion;
+        }
+        {
+            int i;
+            unsigned char* p;
+            for (i = sizeof(f.char_set), p = f.char_set; i; --i) {
+                *p++ = 0xFF;
+            }
+
+            // every character but whitespace: 0xC1 clears '\t'..'\r' (0x09-0x0D), 0xFE clears ' ' (0x20)
+            f.char_set[1] = 0xC1;
+            f.char_set[4] = 0xFE;
+        }
+        break;
+    case 'n':
+        break;
+    case '[':
+        if (f.argument_options == long_argument) {
+            f.argument_options = wchar_argument;
+        } else if (f.argument_options != normal_argument) {
+            f.conversion_char = bad_conversion;
+        }
+        c = *++s;
+        {
+            int invert = 0;
+            if (c == '^') {
+                invert = 1;
+                c = *++s;
+            }
+            if (c == ']') {
+                set_char_map(f.char_set, ']');
+                c = *++s;
+            }
+            while (c && c != ']') {
+                int d;
+                set_char_map(f.char_set, c);
+                if (*(s + 1) == '-' && (d = *(s + 2)) != 0 && d != ']') {
+                    while (++c <= d) {
+                        set_char_map(f.char_set, c);
+                    }
+                    c = *(s += 3);
+                } else {
+                    c = *++s;
+                }
+            }
+            if (!c) {
+                f.conversion_char = bad_conversion;
+                break;
+            }
+            if (invert) {
+                int i;
+                unsigned char* p;
+                for (i = sizeof(f.char_set), p = f.char_set; i; --i, ++p) {
+                    *p = ~*p;
+                }
+                break;
+            }
+        }
+        break;
+    default:
+        f.conversion_char = bad_conversion;
+        break;
+    }
+
+    *format = f;
+    return ((const char*)s + 1);
 }
 
 static int __sformatter(int (*ReadProc)(void*, int, int), void* ReadProcArg, const char* format_str, va_list arg) {
@@ -385,176 +515,44 @@ exit:
     return items_assigned;
 }
 
-
-
-static const char* parse_format(const char* format_string, scan_format* format) {
-    const char* s = format_string;
-    int c;
-    int flag_found;
-    scan_format f = {0, 0, normal_argument, 0, 0x7FFFFFFF, {0}};
-
-    if ((c = *++s) == '%') {
-        f.conversion_char = c;
-        *format = f;
-        return ((const char*)s + 1);
+int __StringRead(void* arg, int ch, int behavior) {
+    __InStr* s = (__InStr*)arg;
+    char c;
+    switch (behavior) {
+    case __GetAChar:
+        c = *s->str;
+        if (c == 0) {
+            s->eos = 1;
+            return -1;
+        }
+        s->str++;
+        return (unsigned char)c;
+    case __UngetAChar:
+        if (s->eos == 0) {
+            s->str--;
+        } else {
+            s->eos = 0;
+        }
+        return ch;
+    case __TestForError:
+        return s->eos;
     }
+    return 0;
+}
 
-    if (c == '*') {
-        f.suppress_assignment = 1;
-        c = *++s;
-    }
+int vsscanf(const char* s, const char* format, va_list arg) {
+    __InStr isc;
 
-    if (__ctype_map[(unsigned char)c] & __digit) {
-        f.field_width = 0;
-        do {
-            f.field_width = (f.field_width * 10) + (c - '0');
-            c = *++s;
-        } while (__ctype_map[(unsigned char)c] & __digit);
+    isc.str = (char*)s;
+    if (s == 0 || *isc.str == 0)
+        return -1;
+    isc.eos = 0;
+    return __sformatter(__StringRead, &isc, format, arg);
+}
 
-        if (f.field_width == 0) {
-            f.conversion_char = bad_conversion;
-            *format = f;
-            return ((const char*)s + 1);
-        }
-        f.field_width_specified = 1;
-    }
+int sscanf(const char* s, const char* format, ...) {
+    va_list args;
 
-    flag_found = 1;
-
-    switch (c) {
-    case 'h':
-        f.argument_options = short_argument;
-        if (s[1] == 'h') {
-            f.argument_options = char_argument;
-            c = *++s;
-        }
-        break;
-    case 'l':
-        f.argument_options = long_argument;
-        if (s[1] == 'l') {
-            f.argument_options = long_long_argument;
-            c = *++s;
-        }
-        break;
-    case 'L':
-        f.argument_options = long_double_argument;
-        break;
-    default:
-        flag_found = 0;
-    }
-
-    if (flag_found) {
-        c = *++s;
-    }
-
-    f.conversion_char = c;
-
-    switch (c) {
-    case 'd':
-    case 'i':
-    case 'u':
-    case 'o':
-    case 'x':
-    case 'X':
-        if (f.argument_options == long_double_argument) {
-            f.conversion_char = bad_conversion;
-            break;
-        }
-        break;
-    case 'a':
-    case 'f':
-    case 'e':
-    case 'E':
-    case 'g':
-    case 'G':
-        if (f.argument_options == char_argument || f.argument_options == short_argument
-            || f.argument_options == long_long_argument) {
-            f.conversion_char = bad_conversion;
-            break;
-        }
-        if (f.argument_options == long_argument) {
-            f.argument_options = double_argument;
-        }
-        break;
-    case 'p':
-        f.argument_options = long_argument;
-        f.conversion_char = 'x';
-        break;
-    case 'c':
-        if (f.argument_options == long_argument) {
-            f.argument_options = wchar_argument;
-        } else if (f.argument_options != normal_argument) {
-            f.conversion_char = bad_conversion;
-        }
-        break;
-    case 's':
-        if (f.argument_options == long_argument) {
-            f.argument_options = wchar_argument;
-        } else if (f.argument_options != normal_argument) {
-            f.conversion_char = bad_conversion;
-        }
-        {
-            int i;
-            unsigned char* p;
-            for (i = sizeof(f.char_set), p = f.char_set; i; --i) {
-                *p++ = 0xFF;
-            }
-
-            // every character but whitespace: 0xC1 clears '\t'..'\r' (0x09-0x0D), 0xFE clears ' ' (0x20)
-            f.char_set[1] = 0xC1;
-            f.char_set[4] = 0xFE;
-        }
-        break;
-    case 'n':
-        break;
-    case '[':
-        if (f.argument_options == long_argument) {
-            f.argument_options = wchar_argument;
-        } else if (f.argument_options != normal_argument) {
-            f.conversion_char = bad_conversion;
-        }
-        c = *++s;
-        {
-            int invert = 0;
-            if (c == '^') {
-                invert = 1;
-                c = *++s;
-            }
-            if (c == ']') {
-                set_char_map(f.char_set, ']');
-                c = *++s;
-            }
-            while (c && c != ']') {
-                int d;
-                set_char_map(f.char_set, c);
-                if (*(s + 1) == '-' && (d = *(s + 2)) != 0 && d != ']') {
-                    while (++c <= d) {
-                        set_char_map(f.char_set, c);
-                    }
-                    c = *(s += 3);
-                } else {
-                    c = *++s;
-                }
-            }
-            if (!c) {
-                f.conversion_char = bad_conversion;
-                break;
-            }
-            if (invert) {
-                int i;
-                unsigned char* p;
-                for (i = sizeof(f.char_set), p = f.char_set; i; --i, ++p) {
-                    *p = ~*p;
-                }
-                break;
-            }
-        }
-        break;
-    default:
-        f.conversion_char = bad_conversion;
-        break;
-    }
-
-    *format = f;
-    return ((const char*)s + 1);
+    va_start(args, format);
+    return vsscanf(s, format, args);
 }
