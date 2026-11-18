@@ -1391,6 +1391,14 @@ static EVT_BEGIN(first_shopping_evt)
     RETURN
 EVT_END()
 
+/**
+ * Selling at a shop counter (menu choice 1 of the counter script): refuses when Mario carries no items
+ * (sell_pouchcheck_func); otherwise shows the coin window, lets him pick an item (SELECT_TYPE_ITEM_SELL), offers its
+ * sell price, and on yes removes it and adds the coins; repeats while he has items and answers yes. Lines come from the
+ * shop's message table (get_msg ids 6-11, 22, 24). Before US the name and price are inserted into the line (in swapped
+ * order for non-JP languages); US and later format them in for non-JP languages; JP and later remove the item by pouch
+ * index.
+ */
 static EVT_BEGIN(sell_evt)
     CALL(sell_pouchcheck_func)
     IF_INT_EQUAL(LW(0), 0)

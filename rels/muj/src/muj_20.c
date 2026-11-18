@@ -469,6 +469,7 @@ static EVT_BEGIN(urouro_fuwafuwa)
     RETURN
 EVT_END()
 
+/** After a random 100 to 300 ms, shakes NPC LW(0) (muj_npc_buruburu); spawned by onryo_event for two sailors. */
 static EVT_BEGIN(buruburu)
     CALL(evt_npc_flag_onoff, 0, LW(0), NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_sub_random, 200, LW(10))
@@ -478,6 +479,7 @@ static EVT_BEGIN(buruburu)
     RETURN
 EVT_END()
 
+/** Makes NPC LW(0) float up and down for good (muj_npc_fuwafuwa); spawned by onryo_event. */
 static EVT_BEGIN(fuwafuwa)
     CALL(evt_npc_flag_onoff, 0, LW(0), NPC_FLAG_AUTO_MOVE_ANIM)
     LOOP(0)
@@ -486,6 +488,7 @@ static EVT_BEGIN(fuwafuwa)
     RETURN
 EVT_END()
 
+/** Spins NPC LW(10) one full turn every 500 ms for good; spawned by onryo_event. */
 static EVT_BEGIN(kirimomi)
     LOOP(0)
         CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 0, 360, 500)
@@ -501,6 +504,10 @@ static EVT_BEGIN(kirimomi)
     RETURN
 EVT_END()
 
+/**
+ * Rocks the ship S_a1 (its hit object A_a1 bound to it) by marcoship_yure_func until that reports the end; spawned by
+ * onryo_event.
+ */
 static EVT_BEGIN(marco_ship_yure)
     CALL(marcoship_yure_init_func)
     CALL(evt_hit_bind_mapobj, STRING("A_a1"), STRING("S_a1"))
@@ -515,6 +522,10 @@ static EVT_BEGIN(marco_ship_yure)
     RETURN
 EVT_END()
 
+/**
+ * Shows mist bank 01 (S_hai_l_01, S_hai_r_01) and slides its halves in from 1500 units out over 7 s; spawned by
+ * moya_effect with banks 02 to 05.
+ */
 static EVT_BEGIN(moya_effect01)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_hai_l_01"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_hai_r_01"), MAP_OBJ_FLAG_HIDDEN)
@@ -533,6 +544,7 @@ static EVT_BEGIN(moya_effect01)
     RETURN
 EVT_END()
 
+/** moya_effect01 for mist bank 02 (S_hai_l_02, S_hai_r_02). */
 static EVT_BEGIN(moya_effect02)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_hai_l_02"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_hai_r_02"), MAP_OBJ_FLAG_HIDDEN)
@@ -551,6 +563,7 @@ static EVT_BEGIN(moya_effect02)
     RETURN
 EVT_END()
 
+/** moya_effect01 for mist bank 03 (S_hai_l_03, S_hai_r_03). */
 static EVT_BEGIN(moya_effect03)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_hai_l_03"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_hai_r_03"), MAP_OBJ_FLAG_HIDDEN)
@@ -569,6 +582,7 @@ static EVT_BEGIN(moya_effect03)
     RETURN
 EVT_END()
 
+/** moya_effect01 for mist bank 04 (S_hai_l_04, S_hai_r_04). */
 static EVT_BEGIN(moya_effect04)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_hai_l_04"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_hai_r_04"), MAP_OBJ_FLAG_HIDDEN)
@@ -587,6 +601,7 @@ static EVT_BEGIN(moya_effect04)
     RETURN
 EVT_END()
 
+/** moya_effect01 for mist bank 05 (S_hai_l_05, S_hai_r_05). */
 static EVT_BEGIN(moya_effect05)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_hai_l_05"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_hai_r_05"), MAP_OBJ_FLAG_HIDDEN)
@@ -1048,6 +1063,10 @@ static EVT_BEGIN(mist_setup)
     RETURN
 EVT_END()
 
+/**
+ * The ship sinks 300 units over 8 s with SFX_STG5_SHIP_QUAKE1 (marcoship_shizumu_func), carrying Flavio, the sailors
+ * and the shop and inn clerks down with it; spawned at the end of onryo_event.
+ */
 static EVT_BEGIN(marcoship_shizumu)
     CALL(evt_snd_sfxon, STRING("SFX_STG5_SHIP_QUAKE1"), LW(10))
     SET_FLOAT_VALUE(LW(2), FLOAT(0.0f))
@@ -1090,6 +1109,12 @@ static EVT_BEGIN(marcoship_shizumu)
     RETURN
 EVT_END()
 
+/**
+ * The voyage to Keelhaul Key, spawned by the map's init script: unless GSW_STORY_PROGRESS is already STG5_00_LOGBOOK,
+ * three days and nights pass with messages stg5_sea_00, 28 and 29 and the story value is set to STG5_00_LOGBOOK. Then
+ * the crew talk, the mist rises (moya_effect) and the Embers attack, ending with the ship sinking (marcoship_shizumu),
+ * GSW_STORY_PROGRESS STG5_10_HAUNTED and a map change to muj_00.
+ */
 EVT_BEGIN(onryo_event)
     BEGIN_INLINE_EVENT
         CALL(evt_map_anim_rate)
@@ -1640,6 +1665,11 @@ EVT_BEGIN(onryo_event)
     RETURN
 EVT_END()
 
+/**
+ * Bowser interlude at STG4_15_05_PEACH_X_NAUT_PHD_REPORT, spawned by the map's init script: Bowser's airship NPC falls
+ * from y 500 into the sea with SFX_KUPPA_AIRSHIP_FALL1 / SFX_KUPPA_AIRSHIP_DOWN_SEA1 and a splash, then
+ * GSW_STORY_PROGRESS becomes STG4_15_06_BOWSER_BLIMP_AREA and the map changes to kpa_03.
+ */
 static EVT_BEGIN(muj_20_koopa_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)
@@ -1688,6 +1718,10 @@ static EVT_BEGIN(muj_20_koopa_evt)
     RETURN
 EVT_END()
 
+/**
+ * Waves the ship's flag S_b_02_hata 40 degrees each way every 2.5 s, with half-second pauses, for good; spawned by
+ * gor_muj_ship and muj_gor_ship.
+ */
 static EVT_BEGIN(kaizoku_hata)
     LOOP(0)
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, -4000, 4000, 2500)
@@ -1716,6 +1750,11 @@ static EVT_BEGIN(kaizoku_hata)
     RETURN
 EVT_END()
 
+/**
+ * Sailing scene toward Keelhaul Key (GSWF_GOR_SAILING_TO_KEELHAUL), spawned by the map's init script: hides Mario and
+ * the partners, shows ship S_b crossing the sea from x -1000 to 1000 over 15 s with its flag (kaizoku_hata) and a
+ * day-night cycle; pressing A changes the map to muj_00.
+ */
 static EVT_BEGIN(gor_muj_ship)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)
@@ -1775,6 +1814,10 @@ static EVT_BEGIN(gor_muj_ship)
     RETURN
 EVT_END()
 
+/**
+ * gor_muj_ship in the other direction (GSWF_MUJ_SAILING_TO_ROGUEPORT): the ship faces the other way and crosses from x
+ * 1000 to -1000; A changes the map to gor_00.
+ */
 static EVT_BEGIN(muj_gor_ship)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)
@@ -1834,6 +1877,7 @@ static EVT_BEGIN(muj_gor_ship)
     RETURN
 EVT_END()
 
+/** Rocks map object S_f_drin 5 degrees each way about X every 2 s for good; spawned for the prologue. */
 EVT_BEGIN(anm_kaji)
     LOOP(0)
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 500, -500, 2000)
@@ -1860,6 +1904,9 @@ EVT_BEGIN(anm_kaji)
     RETURN
 EVT_END()
 
+/**
+ * Turns the wheels S_f_wa_l and S_f_wa_r about Z at 2 times GW(10) degrees a frame for good; spawned for the prologue.
+ */
 EVT_BEGIN(anm_wakka)
     SET_FLOAT_VALUE(LW(1), FLOAT(0.0f))
     LOOP(0)
@@ -1876,6 +1923,7 @@ EVT_BEGIN(anm_wakka)
     RETURN
 EVT_END()
 
+/** Turns map object S_f_en01 about Y at 2 times GW(10) degrees a frame for good; spawned for the prologue. */
 EVT_BEGIN(anm_entotsu)
     SET_FLOAT_VALUE(LW(1), FLOAT(0.0f))
     LOOP(0)
@@ -1891,6 +1939,7 @@ EVT_BEGIN(anm_entotsu)
     RETURN
 EVT_END()
 
+/** Turns the screw S_skr about X at 2 times GW(10) degrees a frame for good; spawned for the prologue. */
 EVT_BEGIN(anm_neji)
     SET_FLOAT_VALUE(LW(1), FLOAT(0.0f))
     LOOP(0)
@@ -2261,6 +2310,10 @@ static EVT_BEGIN(evt_prologue)
     RETURN
 EVT_END()
 
+/**
+ * Epilogue (STG8_END_AFTER_THE_BATTLE): creates Cortez (c_korutesu3) on the ship at (-830, 147, -98) facing 90; run by
+ * the map's init script before epilogue_evt.
+ */
 static EVT_BEGIN(epilogue_npc_entry)
     CALL(evt_npc_entry, STRING("コルテス"), STRING("c_korutesu3")) // Cortez
     CALL(evt_npc_set_tribe, STRING("コルテス"), STRING("コルテス"))
@@ -2270,6 +2323,10 @@ static EVT_BEGIN(epilogue_npc_entry)
     RETURN
 EVT_END()
 
+/**
+ * Epilogue: moves ship S_b (and its wake S_umi_l_siro_b) 2 units a frame from x -700 with a gentle roll and its moving
+ * sound, carrying Cortez, Bobbery and two sailors along; spawned by epilogue_evt.
+ */
 static EVT_BEGIN(fune_move)
     BEGIN_INLINE_EVENT
         CALL(kaizoku_fune_eff)
@@ -2309,6 +2366,11 @@ static EVT_BEGIN(fune_move)
     RETURN
 EVT_END()
 
+/**
+ * Epilogue (STG8_END_AFTER_THE_BATTLE), spawned by the map's init script: BGM_STG5_MUJ1 and ENV_END_MUJ3, Mario hidden,
+ * Bobbery and two sailors placed on the ship, which sails off (fune_move); after 10 s the map changes to muj_01 with a
+ * black fade.
+ */
 static EVT_BEGIN(epilogue_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG5_MUJ1"))
     CALL(evt_snd_bgm_scope, 0, 1)
@@ -2334,6 +2396,12 @@ static EVT_BEGIN(epilogue_evt)
     RETURN
 EVT_END()
 
+/**
+ * Init script of muj_20: binds the ship's six point lights to S_b, hides the mist banks and S_fune_m, and by story
+ * state starts the Bowser interlude (STG4_15_05, muj_20_koopa_evt), the sailing scenes (gor_muj_ship, muj_gor_ship),
+ * the voyage (onryo_event), the prologue (enter name "prologue": the opening ship and its animations, evt_prologue) or
+ * the epilogue (STG8_END_AFTER_THE_BATTLE).
+ */
 EVT_BEGIN(muj_20_init_evt)
     BEGIN_INLINE_EVENT
         CALL(evt_light_bind_mapobj, STRING("fune_b_pointLight1"), STRING("S_b"), 1)

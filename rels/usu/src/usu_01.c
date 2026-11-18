@@ -3512,6 +3512,10 @@ static EVT_BEGIN(evt_majin)
     RETURN
 EVT_END()
 
+/**
+ * Black chest pera_box (GSWF_USU_01_BLACK_CHEST_OPENED): gives ITEM_TUBE_CURSE, then the Paper Mage scene with
+ * BGM_EVT_PERAMAJIN1 and the curse lecture. The early demos normalize Mario first.
+ */
 static EVT_BEGIN(evt_majin2)
     CALL(evt_mario_key_onoff, 0)
 #if VERSION <= VERSION_DEMO_JP

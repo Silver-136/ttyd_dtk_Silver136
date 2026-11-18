@@ -1431,6 +1431,10 @@ static EVT_BEGIN(last_evt_2)
     RETURN
 EVT_END()
 
+/**
+ * JP and the early demos: enters the stand-in Mario NPC (c_mario, pose EM_S_1) parked out of sight, facing east and
+ * turning instantly.
+ */
 #if VERSION < VERSION_US  // JP and JP demo only (US and PAL dropped it)
 static EVT_BEGIN(last_evt_3_npc_entry)
     CALL(evt_npc_entry, STRING("にせマリオ"), STRING("c_mario")) // stand-in Mario swapped in at the bad-ending choice (JP)

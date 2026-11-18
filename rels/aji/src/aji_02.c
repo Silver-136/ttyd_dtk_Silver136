@@ -275,6 +275,13 @@ static EVT_BEGIN(peach_evt_stg1)
     RETURN
 EVT_END()
 
+/**
+ * Map init of aji_02 (relSetEvtAddr in aji.c): BGM_STG7_DUN1 before STG7_00_START, BGM_STG7_DUN2 from then, with
+ * ENV_STG7_AJI1 (JP and later set reverb mode 1). Entering at the peach_evt_stg1 entrance places Peach (Mario mode 1,
+ * no partner) and spawns peach_evt_stg1 instead of the normal arrival. Otherwise runs the entrances, sets up the lit
+ * floor (hikaru_yuka_init before STG7_09, the finished floor after), the Super Shroom block
+ * (GSWF_AJI_02_SUPER_SHROOM_BLOCK) and evt_emergency.
+ */
 EVT_BEGIN(aji_02_init_evt)
     CALL(evt_bero_get_entername, LW(0))
 #if VERSION >= VERSION_JP

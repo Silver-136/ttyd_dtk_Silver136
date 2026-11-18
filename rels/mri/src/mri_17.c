@@ -741,6 +741,11 @@ static EVT_BEGIN(breakyuka_init)
     RETURN
 EVT_END()
 
+/**
+ * Breaking floor mobj_bf00 (evt_mobj_breaking_floor, GSWF_MRI_17_BREAKING_FLOOR_BROKEN): Mario and the Punis fall; the
+ * guide Puni says stg2_mri_e18_00_13, the guide, its sister and the rival are hidden if trapped, every trapped Puni (1
+ * to 102) is set to PUNI_MODE_HAGURE, and GSW_STORY_PROGRESS becomes STG2_21_04_ESCAPE with BGM_STG2_MRI1.
+ */
 static EVT_BEGIN(breakyuka_main)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_hitobj_onoff, STRING("A_f2_rak_01"), 1, 1)
@@ -811,6 +816,10 @@ static EVT_BEGIN(strange_statue)
     RETURN
 EVT_END()
 
+/**
+ * Blue switch "switch" (evt_mobj_switch_blue): a quake sound and camera shake, then the partner's line
+ * stg2_mri_e18_00_10 and GSW_STORY_PROGRESS STG2_21_01_MYSTERY_PILLAR. JP and later stop the partner during the line.
+ */
 EVT_BEGIN(switch_event)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)

@@ -1657,6 +1657,10 @@ static EVT_BEGIN(attack_audience_event)
     RETURN
 EVT_END()
 
+/**
+ * JP and later, Bobbery's battle-end event (UNIT_DATA_BATTLE_END_HIDE_EVENT): clears STATUS_HOLD_FAST and restores his
+ * normal pose table (pose_table_sanders_stay).
+ */
 #if VERSION >= VERSION_JP
 EVT_BEGIN(sanders_battle_end_event)
     CALL(btlevtcmd_OnOffStatus, UNIT_ID_SELF, STATUS_HOLD_FAST, 0, 0, 0)

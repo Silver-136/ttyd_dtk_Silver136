@@ -1113,6 +1113,14 @@ static EVT_BEGIN(evt_door_msg)
     RETURN
 EVT_END()
 
+/**
+ * Map init of aji_13 (relSetEvtAddr in aji.c): BGM_STG7_DUN2 and ENV_STG7_AJI7 (JP and later set reverb mode 1), the
+ * entrances, shikake_init and the hikou1 airport harbor. Before STG7_17 the conveyor switch
+ * (GSWF_AJI_13_CONVEYOR_SWITCH_PRESSED, evt_bcv_sw) is placed, else the conveyor runs (kon, evt_ramp); the meta panels
+ * show the matching state. Also the card key (GSWF_AJI_13_CARD_KEY, evt_key_get), before STG7_18 the stairs switch
+ * (evt_sw) with the stairs hidden, before STG7_19 the locked e_bero door (evt_door_msg), the save and recovery blocks,
+ * an Ultra Shroom (JP and later at 0.6 scale), and from STG7_20 the wizard underling and Yux Z NPCs deleted.
+ */
 EVT_BEGIN(aji_13_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI7"))

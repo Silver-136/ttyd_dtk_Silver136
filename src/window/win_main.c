@@ -592,6 +592,10 @@ static EVT_BEGIN(kime_pose2)
     RETURN
 EVT_END()
 
+/**
+ * JP and later, run by evt_item_use: sets the partner's pose id 1 (evt_party_set_breed_pose) unless
+ * evt_party_nokotaro_get_status returns nonzero in LW(0).
+ */
 #if VERSION >= VERSION_JP
 EVT_BEGIN(win_main_child_evt)
     CALL(evt_party_nokotaro_get_status, 0, LW(0))

@@ -6737,6 +6737,11 @@ EVT_BEGIN(kuzi_bomb_talk_husei)
     RETURN
 EVT_END()
 
+/**
+ * Lucky's explosion gag for a jackpot or second prize (from kuzi_keiziban_normal, prize level in LW(0)): after 40
+ * frames he bursts (SFX_EVT_LOTTERY_BOMB_BURST1 and 2, pose J_1A), flies up for 60 frames with kuzi_bomb_bomb_eff, then
+ * falls back (J_1B) to the ground. JP and later play SFX_PARTY_PBM_DOWN1 on landing.
+ */
 EVT_BEGIN(kuzi_bomb_bomb)
     SET_VALUE(LW(15), LW(0))
     WAIT_FRAMES(40)
@@ -6789,6 +6794,12 @@ EVT_BEGIN(kuzi_bomb_bomb)
     RETURN
 EVT_END()
 
+/**
+ * Reading the lottery board (from kuzi_keiziban_entry): shows today's number (kuji_bomb_023); if Mario holds a Lottery
+ * Pick and the draw is done, Lucky announces his prize (jackpot to fourth, kuji_bomb_024 to 027, with kuzi_bomb_bomb
+ * for the top two) and hands it over (kuzi_get_keihin), giving a new pick after a jackpot; with no win he gives a
+ * Mushroom. The PAL demo and PAL print kuji_bomb_028 without the number in language 4.
+ */
 EVT_BEGIN(kuzi_keiziban_normal)
     // Mario reads the board, which shows today's winning number.
     CALL(evt_mario_key_onoff, 0)
@@ -6945,6 +6956,7 @@ EVT_BEGIN(kuzi_keiziban_normal)
     RETURN
 EVT_END()
 
+/** Lottery board when the lottery reports a clock error: prints kuji_bomb_036. */
 static EVT_BEGIN(kuzi_keiziban_husei)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_print, 0, STRING("kuji_bomb_036"), 0, 0)
@@ -6952,6 +6964,10 @@ static EVT_BEGIN(kuzi_keiziban_husei)
     RETURN
 EVT_END()
 
+/**
+ * Lucky's talk: runs kuzi_bomb_talk_husei when the lottery reports a clock error (LOTTERY_FLAG_CLOCK_ERROR), else
+ * kuzi_bomb_talk_normal.
+ */
 static EVT_BEGIN(kuzi_bomb_talk)
     CALL(evt_lottery, 0, LW(0), LW(1))
     IF_BITS_SET(LW(0), LOTTERY_FLAG_CLOCK_ERROR)
@@ -6962,6 +6978,11 @@ static EVT_BEGIN(kuzi_bomb_talk)
     RETURN
 EVT_END()
 
+/**
+ * Case script of the lottery board (A_kuzi): runs kuzi_keiziban_husei on a lottery clock error
+ * (LOTTERY_FLAG_CLOCK_ERROR), else kuzi_keiziban_normal. JP and later open the unit window with the lottery display
+ * while it runs.
+ */
 EVT_BEGIN(kuzi_keiziban_entry)
 #if VERSION >= VERSION_JP
     CALL(evt_unitwin_alloc, 0)
@@ -6980,16 +7001,23 @@ EVT_BEGIN(kuzi_keiziban_entry)
     RETURN
 EVT_END()
 
+/** Makes the shop clerk NPC bob (gor_npc_fuwafuwa, 0.5); spawned by gor_03_init_evt. */
 static EVT_BEGIN(tenin_fuwafuwa)
     CALL(gor_npc_fuwafuwa, STRING("店員"), FLOAT(0.5f), 0)
     RETURN
 EVT_END()
 
+/** Makes the casino staff Boo NPC bob (gor_npc_fuwafuwa, 0.5); spawned by gor_03_init_evt. */
 static EVT_BEGIN(casino_fuwafuwa)
     CALL(gor_npc_fuwafuwa, STRING("バニーテレサ"), FLOAT(0.5f), 0)
     RETURN
 EVT_END()
 
+/**
+ * Run by gor_03_init_evt when the map was entered with no entrance name at one of the story points STG2_41, STG2_45,
+ * STG2_46, STG5_61, STG5_64_03 or STG5_65: if system flag 0x40 is set it clears it and places Mario and the partner at
+ * (-327, 155, -432) with the camera reset there.
+ */
 static EVT_BEGIN(debug_event_mode)
     CALL(evt_bero_get_entername, LW(0))
     IF_STR_NOT_EQUAL(LW(0), 0)
@@ -7039,6 +7067,11 @@ static EVT_BEGIN(debug_event_mode)
     RETURN
 EVT_END()
 
+/**
+ * Door-close case script of the doors set up by monte_evt_door_entry: saves the script's LW values, runs
+ * exchange_keep_sub without control (the early demos also stop the partner), restores the values and runs
+ * evt_door_close.
+ */
 EVT_BEGIN(monte_evt_door_close)
     CALL(enzan_lw_save)
     CALL(evt_mario_key_onoff, 0)
@@ -7083,6 +7116,15 @@ EVT_BEGIN(monte_evt_door_entry)
     RETURN
 EVT_END()
 
+/**
+ * Map init of gor_03 (relSetEvtAddr in gor.c): BGM_STG0_GOR1 and ENV_STG0_GOR4 (JP and later stay silent when returning
+ * from a minigame, GSWF_GOR_RETURNING_FROM_MINIGAME), the pipe, exits, Luigi and NPCs, the ring tribes of Francesca and
+ * Frankie by story point, the canal water, the doors (evt_door_entry, monte_evt_door_entry and the roll doors), the
+ * bombable wall, the shop, Star Pieces and Shine Sprite blocks, the hedges by chapter, the parlor machines, ranking
+ * board and Pianta Changer, the minigame return and Peach mail scenes, the bobbing shop clerk and casino staff, the
+ * mail event, the lottery board, the Pianta syndicate scenes and the office desk and bed talk triggers. US and later
+ * also switch the sign and slot-light map objects to the current language.
+ */
 EVT_BEGIN(gor_03_init_evt)
 #if VERSION <= VERSION_DEMO_JP
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))

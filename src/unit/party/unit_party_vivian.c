@@ -823,6 +823,11 @@ static EVT_BEGIN(partyVivianAttack_NormalAttack)
     RETURN
 EVT_END()
 
+/**
+ * Attack event of Veil: Vivian walks to Mario and, on a successful action command, both sink into the shadow
+ * (battle_evt_majo_disp_off): Mario becomes kVeiled and hidden, Vivian untargetable and hidden for one turn
+ * (VIVIAN_WORK_HIDE_TURNS 1). On a failed command she walks back home.
+ */
 EVT_BEGIN(partyVivianAttack_ShadowGuard)
     SET_VALUE(LW(3), UNIT_ID_MARIO)
     CALL(btlevtcmd_GetBodyId, LW(3), LW(4))
@@ -941,6 +946,10 @@ EVT_BEGIN(partyVivianAttack_ShadowGuard)
     RETURN
 EVT_END()
 
+/**
+ * Attack event of Fiery Jinx: after the action command (and an optional stylish), hits every enemy in turn with a
+ * "kemuri_test" puff; the number of correct presses sets the prize level (see the BUG note on the damage call).
+ */
 EVT_BEGIN(partyVivianAttack_MagicalPowder)
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
     IF_INT_EQUAL(LW(3), -1)
@@ -1087,6 +1096,11 @@ EVT_BEGIN(partyVivianAttack_MagicalPowder)
     RETURN
 EVT_END()
 
+/**
+ * Attack event of Infatuate: for each enemy in turn Vivian blows a kiss with a timed action command (a heart shows on
+ * the target while it runs); a success lets the confusion status land (otherwise DAMAGE_RESULT_NO_STATUS), with an
+ * optional stylish per target.
+ */
 EVT_BEGIN(partyVivianAttack_CharmKissAttack)
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
     IF_INT_EQUAL(LW(3), -1)
@@ -1237,6 +1251,10 @@ EVT_BEGIN(partyVivianAttack_CharmKissAttack)
     RETURN
 EVT_END()
 
+/**
+ * Spawned by Vivian's init_event: every frame while the unit exists and SHADOW_TAIL_WORK_HOLD is 0, stores Vivian's
+ * floor position in SHADOW_TAIL_WORK_X/Y/Z.
+ */
 EVT_BEGIN(vivian_shadow_tail_event)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_TransStageFloorPosition, LW(0), LW(1), LW(2))
@@ -1261,6 +1279,11 @@ EVT_BEGIN(vivian_shadow_tail_event)
     RETURN
 EVT_END()
 
+/**
+ * Vivian's reaction to every contact counter (spiky, fiery, icy, electric, explosive, poison, payback, hold-fast): she
+ * is knocked back and up; if SHADOW_TAIL_WORK_HOLD is set she dives to the stored shadow position, sinks, and
+ * resurfaces at home, otherwise she drops straight back home.
+ */
 static EVT_BEGIN(vivian_counter_damage_event)
     CALL(btlevtcmd_SetScale, UNIT_ID_SELF, FLOAT(1.0f), FLOAT(1.0f), FLOAT(1.0f))
     CALL(btlevtcmd_OnUnitFlag, UNIT_ID_SELF, BATTLE_UNIT_FLAG_SHOW_HP)
@@ -1300,6 +1323,10 @@ static EVT_BEGIN(vivian_counter_damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Appeal (UNIT_DATA_APPEAL_EVENT): Vivian poses (PTR_O_1, PTR_O_2) with SFX_MARIO_APPEAL1, blows a "kiss" effect and
+ * the audience reacts.
+ */
 static EVT_BEGIN(vivian_appeal_event)
     CALL(btlevtcmd_RunDataEventChild, UNIT_ID_SELF, UNIT_DATA_ATTACK_READY_EVENT)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PTR_O_1"))
@@ -1321,6 +1348,7 @@ static EVT_BEGIN(vivian_appeal_event)
     RETURN
 EVT_END()
 
+/** Victory reaction (data tag 64): plays Vivian's PTR_Y_1 pose to the end, holds it 500 ms, then POSE_TYPE_NEUTRAL. */
 static EVT_BEGIN(party_win_reaction)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PTR_Y_1"))
     CALL(btlevtcmd_AnimeWaitPlayComplete, UNIT_ID_SELF, 1)
@@ -1329,6 +1357,10 @@ static EVT_BEGIN(party_win_reaction)
     RETURN
 EVT_END()
 
+/**
+ * Audience-attack reaction (data tag 6): Vivian runs offstage, reappears in the audience, strikes the chosen audience
+ * member (PTR_A1_2, SFX_BTL_VIVIAN_ATTACK4, _attack_aud) and runs back home.
+ */
 static EVT_BEGIN(attack_audience_event)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_GetStageSize, LW(3), EVT_NULLPTR, EVT_NULLPTR)

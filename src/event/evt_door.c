@@ -308,6 +308,10 @@ EVT_BEGIN(house_close_se)
 EVT_END()
 #endif
 
+/**
+ * Fades the first map blend colour (mapSetBlend) from white to black over 300 ms, then sets it to black with alpha 0;
+ * spawned by house_in.
+ */
 static EVT_BEGIN(evt_dark)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 255, 0, 300)
     LOOP(0)
@@ -322,6 +326,7 @@ static EVT_BEGIN(evt_dark)
     RETURN
 EVT_END()
 
+/** evt_dark for the second map blend colour (mapSetBlend2); spawned by house_in after in_houseanim. */
 static EVT_BEGIN(evt_dark2)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 255, 0, 300)
     LOOP(0)
@@ -336,6 +341,10 @@ static EVT_BEGIN(evt_dark2)
     RETURN
 EVT_END()
 
+/**
+ * Fades the first map blend colour from black back to white over 300 ms, then turns that blend off (evt_map_blend_off);
+ * spawned by house_out.
+ */
 static EVT_BEGIN(evt_light)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 255, 300)
     LOOP(0)
@@ -350,6 +359,7 @@ static EVT_BEGIN(evt_light)
     RETURN
 EVT_END()
 
+/** evt_light for the second map blend colour; spawned by house_out before out_houseanim. */
 static EVT_BEGIN(evt_light2)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 255, 300)
     LOOP(0)
@@ -364,10 +374,12 @@ static EVT_BEGIN(evt_light2)
     RETURN
 EVT_END()
 
+/** Empty: the closing counterpart of door_down_se plays no sound. Spawned by evt_door_close. */
 EVT_BEGIN(door_up_se)
     RETURN
 EVT_END()
 
+/** Plays the house sound on closing: runs house_open_se, so the same SFX_HOUSE_OPEN1 is heard. */
 #if VERSION >= VERSION_JP
 EVT_BEGIN(house_close_se)
     CALL_CHILD(house_open_se)
@@ -375,6 +387,11 @@ EVT_BEGIN(house_close_se)
 EVT_END()
 #endif
 
+/**
+ * House entry animation for house_in (house in LW(10)): after 500 ms plays the house's opening map animation
+ * (HouseData.anim[0]) once and waits for it to end, with SFX_HOUSE_OPEN1 at the door group; the shop shutter
+ * "S_mise_open" also plays SFX_HOUSE_DOWN1 four times.
+ */
 static EVT_BEGIN(in_houseanim)
     WAIT_MS(500)
     CALL(animation, LW(10), LW(0), LW(1), LW(2), LW(3))
@@ -401,6 +418,11 @@ static EVT_BEGIN(in_houseanim)
     RETURN
 EVT_END()
 
+/**
+ * House exit animation for house_out (house in LW(10)): plays the closing map animation (HouseData.anim[2]) once and
+ * waits for it, then plays SFX_HOUSE_SHUT1 at the door group; the shop shutter "S_mise_close" plays SFX_HOUSE_DOWN1
+ * four times while it runs.
+ */
 static EVT_BEGIN(out_houseanim)
     CALL(animation, LW(10), LW(0), LW(1), LW(2), LW(3))
     IF_INT_NOT_EQUAL(LW(2), 0)
@@ -426,6 +448,10 @@ static EVT_BEGIN(out_houseanim)
     RETURN
 EVT_END()
 
+/**
+ * Swings the house's door map group (house in LW(10)) for house_in: opens it 80 degrees about Y, holds it 500 ms, shuts
+ * it, then tips it 90 degrees about X; plays SFX_DOOR_OPEN1, SFX_DOOR_SHUT1 and SFX_DOOR_FALL1 at the door.
+ */
 static EVT_BEGIN(in_dooranim)
     CALL(door_group, LW(10), LW(9))
     BEGIN_INLINE_EVENT
@@ -466,6 +492,10 @@ static EVT_BEGIN(in_dooranim)
     RETURN
 EVT_END()
 
+/**
+ * Reverse of in_dooranim for house_out: tips the door group back up from 90 degrees about X, opens it 80 degrees about
+ * Y, holds it 500 ms and shuts it; plays SFX_DOOR_OPEN1 and SFX_DOOR_SHUT1.
+ */
 static EVT_BEGIN(out_dooranim)
     CALL(door_group, LW(10), LW(9))
     BEGIN_INLINE_EVENT
@@ -504,6 +534,14 @@ static EVT_BEGIN(out_dooranim)
     RETURN
 EVT_END()
 
+/**
+ * Case script of a house's outside hit object (house in LW(10), set by evt_door_setup): takes Mario inside. Does
+ * nothing while another house script runs (DoorFLAG). Lowers the music and environment sound, takes Mario's controls,
+ * moves the camera to the inside spot, turns view culling off for the HouseData.noclip groups, shows the interior and
+ * its hit object, walks Mario to the door and then inside (in_dooranim with the door), fades the map blend colours to
+ * black (evt_dark, evt_dark2) while npc_dark keeps the house's NPCs lit, and runs in_houseanim. Gives the controls back
+ * and waits for the door animation. JP and later also halve the party hitbox for the walk and call snd_door_in.
+ */
 EVT_BEGIN(house_in)
     PEEK_INT(LW(0), PTR(&DoorFLAG))
     IF_INT_EQUAL(LW(0), 1)
@@ -576,6 +614,13 @@ EVT_BEGIN(house_in)
     RETURN
 EVT_END()
 
+/**
+ * Case script of a house's inside hit object: takes Mario back out, the reverse of house_in. Restores the music and
+ * environment sound, moves the camera to the outside spot, fades the blend colours back (evt_light2, out_houseanim,
+ * evt_light), swings the door (out_dooranim) and walks Mario out, turns view culling back on, hides the interior and
+ * its hit object and clears the no-blend flags. JP and later also halve the party hitbox for the walk and call
+ * snd_door_out.
+ */
 EVT_BEGIN(house_out)
     PEEK_INT(LW(0), PTR(&DoorFLAG))
     IF_INT_EQUAL(LW(0), 1)
@@ -643,6 +688,10 @@ EVT_BEGIN(house_out)
     RETURN
 EVT_END()
 
+/**
+ * Sets up a house from the HouseData in LW(0) (door_entry; the HouseWork goes to LW(10)): hides the initial interior
+ * group and its hit object, and registers case events on the house's hit objects that run house_in and house_out.
+ */
 EVT_BEGIN(evt_door_setup)
     CALL(door_entry, LW(0), LW(10))
     POKE_INT(0, PTR(&DoorFLAG))
@@ -659,6 +708,11 @@ EVT_BEGIN(evt_door_setup)
     RETURN
 EVT_END()
 
+/**
+ * Fades the first map blend colour (mapSetBlend) from white to black over 300 ms, then sets it to black with alpha 0;
+ * spawned by the door scripts (evt_door_open, evt_door_open_roll, evt_door_open_bom_01) when Mario goes through a door,
+ * unless DOOR_OPT_NO_DARK.
+ */
 EVT_BEGIN(door_dark)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 255, 0, 300)
     LABEL(0)
@@ -672,6 +726,7 @@ EVT_BEGIN(door_dark)
     RETURN
 EVT_END()
 
+/** door_dark for the second map blend colour (mapSetBlend2); spawned later in the same door scripts. */
 EVT_BEGIN(door_dark2)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 255, 0, 300)
     LABEL(0)
@@ -685,6 +740,10 @@ EVT_BEGIN(door_dark2)
     RETURN
 EVT_END()
 
+/**
+ * Fades the first map blend colour from black back to white over 300 ms and turns that blend off; spawned by
+ * evt_door_close (unless DOOR_OPT_NO_DARK) and evt_door_close_roll.
+ */
 EVT_BEGIN(door_light)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 255, 300)
     LABEL(0)
@@ -698,6 +757,7 @@ EVT_BEGIN(door_light)
     RETURN
 EVT_END()
 
+/** door_light for the second map blend colour; spawned at the start of evt_door_close and evt_door_close_roll. */
 EVT_BEGIN(door_light2)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 255, 300)
     LABEL(0)
@@ -711,6 +771,16 @@ EVT_BEGIN(door_light2)
     RETURN
 EVT_END()
 
+/**
+ * Takes Mario and the partners through a door into the room behind it (DoorParam in LW(0), DOOR_OPT_* options in
+ * LW(15)); run by evt_door_entry's case event on the hitOut hit object and by map scripts. Takes the controls and sets
+ * DoorFLAG, runs the door's open script (evtOpen), saves and unclips the outside group, moves the camera to the inside
+ * spot, shows the inside group and its hit object, exempts the door's NPCs, map objects and items from the blend
+ * (door_dark_flag) and shows the DoorParam's NPCs (DOOR_FLAG_HIDE_NPCS). Walks Mario to the outside spot and then
+ * inside while the door (evtIn), house wall (evtWall) and out-piece (evtOut) scripts swing from 0 to 180 and back with
+ * their sounds, and the outside darkens (door_dark, door_dark2). Ends with the camera back on Mario, the controls back
+ * and snd_door_in. JP and later halve the party hitbox for the walk.
+ */
 EVT_BEGIN(evt_door_open)
     CALL(evt_cam_letter_box_disable, 1)
     CALL(evt_mario_key_onoff, 0)
@@ -883,6 +953,11 @@ EVT_BEGIN(evt_door_open)
     RETURN
 EVT_END()
 
+/**
+ * evt_door_open for bom_01: the same room set-up and door swings, without moving the camera, walking Mario or taking
+ * the controls; holds the door open with GF(0) set until the map's cutscene clears it. JP alone halves the party
+ * hitbox.
+ */
 EVT_BEGIN(evt_door_open_bom_01)
     // Run the door's open script, then set up the rooms as evt_door_open does, without moving the camera.
     // The indoor sound takes over.
@@ -1014,6 +1089,11 @@ EVT_BEGIN(evt_door_open_bom_01)
     RETURN
 EVT_END()
 
+/**
+ * evt_door_open without Mario's walk, the camera move or the door (evtIn) swing, run by map scripts: takes the
+ * controls, sets up the rooms, darkens the outside and runs only the house wall (evtWall) and out-piece (evtOut)
+ * scripts; ends with snd_door_in.
+ */
 EVT_BEGIN(evt_door_open_roll)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_door_param, LW(0), DOOR_PARAM_OPEN_CLOSE_EVTS, LW(1), LW(2))
@@ -1086,6 +1166,15 @@ EVT_BEGIN(evt_door_open_roll)
     RETURN
 EVT_END()
 
+/**
+ * Takes Mario and the partners back out through a door (DoorParam in LW(0), DOOR_OPT_* options in LW(15)); run by
+ * evt_door_entry's case event on the hitIn hit object and by map scripts. The reverse of evt_door_open: the camera
+ * moves to the outside spot (or one measured from Mario, DOOR_OPT_POS_FROM_MARIO), the outside lights up (door_light2,
+ * door_light), the out-piece, house wall and door swing back from 180 to 0, Mario walks out (unless
+ * DOOR_OPT_NO_MARIO_MOVE), then the inside group is hidden (unless DOOR_OPT_KEEP_INSIDE_SHOWN) with its hit object, the
+ * no-blend flags and the outside group's saved flags are restored, the DoorParam's NPCs are hidden
+ * (DOOR_FLAG_HIDE_NPCS), and snd_door_out ends it.
+ */
 EVT_BEGIN(evt_door_close)
     CALL(evt_cam_letter_box_disable, 1)
     CALL(evt_mario_key_onoff, 0)
@@ -1237,6 +1326,10 @@ EVT_BEGIN(evt_door_close)
     RETURN
 EVT_END()
 
+/**
+ * evt_door_close without Mario's walk or the door (evtIn) swing, run by map scripts: runs the close script (evtClose),
+ * lights the outside again, swings the out-piece and house wall back and restores the rooms; ends with snd_door_out.
+ */
 EVT_BEGIN(evt_door_close_roll)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_door_param, LW(0), DOOR_PARAM_OPEN_CLOSE_EVTS, LW(1), LW(2))
@@ -1315,6 +1408,12 @@ EVT_BEGIN(evt_door_close_roll)
     RETURN
 EVT_END()
 
+/**
+ * Sets a door's rooms to the open state at once, with no walk, sound or fade (map scripts, e.g. gor_03): runs the open
+ * script (evtOpen), unclips the outside group, sets the camera for the inside spot at once (evt_cam3d_event_from_road),
+ * shows the inside group and its hit object, sets both map blend colours to (0, 0, 0, 0) and calls the house wall
+ * (evtWall) and out-piece (evtOut) scripts once at 180; ends with snd_door_in.
+ */
 EVT_BEGIN(evt_door_open_quick)
     CALL(evt_door_param, LW(0), DOOR_PARAM_OPEN_CLOSE_EVTS, LW(1), LW(2))
     IF_INT_NOT_EQUAL(LW(1), 0)
@@ -1375,6 +1474,11 @@ EVT_BEGIN(evt_door_open_quick)
     RETURN
 EVT_END()
 
+/**
+ * Sets up a door from the DoorParam in LW(0), called by map set-up scripts: hides the inside group and its hit object,
+ * registers A-button case events (CASE_FRONT_A) on hitIn running evt_door_close and on hitOut running evt_door_open
+ * (both with LW(15) 0), and hides the DoorParam's NPCs (DOOR_FLAG_HIDE_NPCS).
+ */
 EVT_BEGIN(evt_door_entry)
     CALL(evt_door_param, LW(0), DOOR_PARAM_INSIDE, LW(1), LW(2))
     IF_INT_NOT_EQUAL(LW(1), 0)

@@ -517,6 +517,13 @@ EVT_BEGIN(gesso_arm_dead_event)
     RETURN
 EVT_END()
 
+/**
+ * Run by a dying tentacle with the Blooper's body in LW(3): once both tentacles are gone, no fall is under way
+ * (GESSO_UNIT_WORK_BUSY 2) and the body is still up (GESSO_UNIT_WORK_STATE not 1), the Blooper falls to the floor
+ * (GSO_F_1, GSO_F_2, SFX_BOSS_GESSO_FALL1 and SFX_BOSS_GESSO_DOWN1) and switches to its fallen tables (poses, defence,
+ * statuses, offsets), with a camera shake; GESSO_UNIT_WORK_STATE becomes 1 and its wait event restarts. See the BUG
+ * note on the icon offset.
+ */
 // Start the body fall only after both arms are gone and no fall is already in progress.
 EVT_BEGIN(gesso_fall_check)
     CALL(btlevtcmd_GetUnitWork, LW(3), GESSO_UNIT_WORK_LEFT_ARM, LW(0))

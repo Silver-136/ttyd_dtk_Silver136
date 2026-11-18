@@ -2034,6 +2034,10 @@ static EVT_BEGIN(bombwall_after)
     RETURN
 EVT_END()
 
+/**
+ * Every 1.5 to 4 s (random) shakes the camera and drops dust (hokori_n64) 250 above Mario, without end; spawned by the
+ * map init from STG5_40_TRUE_IDENTITY until STG5_41_RETURN_TO_THE_GROTTO.
+ */
 static EVT_BEGIN(dai3_shurai_after)
     LOOP(0)
         CALL(evt_sub_random, 2500, LW(10))

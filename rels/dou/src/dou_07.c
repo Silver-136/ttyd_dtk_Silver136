@@ -299,6 +299,13 @@ EVT_BEGIN(peramajin_before)
     RETURN
 EVT_END()
 
+/**
+ * After-open script of the black chest mobj_box00 (GSWF_DOU_07_BOAT_CURSE_CHEST): gives the Boat Curse, plays
+ * BGM_EVT_PERAMAJIN1, fades s02_moku and shows the paper genie image (OFF_d_kusya) with its sounds, runs the boat
+ * lecture (ship_majin_lecture_init, ship_majin_lecture), flashes Mario back to his spot, removes the image, prints the
+ * partner line stg1_gon_majin4_19 and sets STG5_21_01_BOAT_MOD_OBTAINED, then restores the field music. JP and later
+ * run the partner during the lecture and point the message tail at the partner.
+ */
 EVT_BEGIN(peramajin_after)
     // The chest has opened: Mario receives the Boat Curse and the music changes.
     CALL(evt_mario_key_onoff, 0)

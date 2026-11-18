@@ -2667,12 +2667,17 @@ static EVT_BEGIN(evt_door_stg7_open)
     RETURN
 EVT_END()
 
+/** Case event of door 04's inside hit: sets GSWF_TIK_00_STG7_DOOR_OPENED and spawns evt_door_close. */
 static EVT_BEGIN(evt_door_stg7_close)
     SET_VALUE(GSWF_TIK_00_STG7_DOOR_OPENED, 1)
     SPAWN_EVENT(evt_door_close)
     RETURN
 EVT_END()
 
+/**
+ * evt_door_entry for door 04 (DoorParam in LW(0)), run by the map's init script: hides the inside group and its hit,
+ * and registers A-button case events running evt_door_stg7_close on hitIn and evt_door_stg7_open on hitOut.
+ */
 static EVT_BEGIN(evt_door_04_entry)
     CALL(evt_door_param, LW(0), DOOR_PARAM_INSIDE, LW(1), LW(2))
     IF_INT_NOT_EQUAL(LW(1), 0)
@@ -2693,6 +2698,11 @@ static EVT_BEGIN(evt_door_04_entry)
     RETURN
 EVT_END()
 
+/**
+ * Arrival through the teleporter A_tensou (run by tensou_init_event): takes the controls, plays anm_wa-p and the warp
+ * light sound, spins Mario and the partner for 4 s while scaling them back up (scale_func), then fades the warp ring
+ * wa_pu out and gives control back.
+ */
 static EVT_BEGIN(tensou_return)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
@@ -2775,6 +2785,13 @@ static EVT_BEGIN(tensou_return)
     RETURN
 EVT_END()
 
+/**
+ * Spawned by the map's init script: loops the anm_PC, anm_Terop and anm_tiktik animations before
+ * STG7_26_THE_HIDEOUT_EXPLODES (JP and later also from STG9_02_RETURN_TO_ROGUEPORT on); if
+ * GSWF_AJI_TELEPORT_TO_TIK_PENDING is set it clears it, places Mario and the partners by the teleporter, opens door 04
+ * at once and runs tensou_return, followed by the partner's line tik_00_tensou_0 (once,
+ * GSWF_TIK_00_TELEPORT_ARRIVAL_TALK_DONE) or stg7_tik_01 by story stage.
+ */
 EVT_BEGIN(tensou_init_event)
     SET_VALUE(GW(10), 0)
 #if VERSION <= VERSION_DEMO_JP

@@ -1283,6 +1283,10 @@ EVT_BEGIN(evt_match_after_stop_npcs)
 EVT_END()
 #endif
 
+/**
+ * Init script of tou_08: raises GSW_STORY_PROGRESS to the minimum for Mario's rank, applies the pending story-jump
+ * flags (GSWF_TOU_08_JUMP_STORY_*), then sets up the room for the story stage.
+ */
 EVT_BEGIN(tou_08_init_evt)
     // The story is moved up to match Mario's rank, then the pending story-jump flags are applied.
     CALL(evt_tou_get_ranking, LW(0))

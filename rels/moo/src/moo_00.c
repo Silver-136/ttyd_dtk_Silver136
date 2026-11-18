@@ -379,6 +379,11 @@ static EVT_BEGIN(rock_main)
     RETURN
 EVT_END()
 
+/**
+ * Bobbery case event of rock A_iwa_01 (CASE_BOBBERY): sets GSWF_MOO_00_ROCK_01_BLOWN and blows up rock S_iwa_01 with
+ * rock_main, then ends the case event. Before US the flag is set after rock_main and Mario's controls are taken during
+ * it.
+ */
 static EVT_BEGIN(rock_evt0)
 #if VERSION >= VERSION_US
     SET_VALUE(GSWF_MOO_00_ROCK_01_BLOWN, 1)
@@ -396,6 +401,7 @@ static EVT_BEGIN(rock_evt0)
     RETURN
 EVT_END()
 
+/** rock_evt0 for rock 08 (A_iwa_08 / S_iwa_08, GSWF_MOO_00_ROCK_08_BLOWN). */
 static EVT_BEGIN(rock_evt1)
 #if VERSION >= VERSION_US
     SET_VALUE(GSWF_MOO_00_ROCK_08_BLOWN, 1)

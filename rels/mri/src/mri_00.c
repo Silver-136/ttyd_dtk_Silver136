@@ -1797,6 +1797,10 @@ static EVT_BEGIN(minnnanokoe_evt)
     RETURN
 EVT_END()
 
+/**
+ * Until the pipe is raised (GSWF_TIK_16_MRI_PIPE_RAISED), hides map group S_dakan and turns off hit object A_dokan; run
+ * by the map's init script.
+ */
 static EVT_BEGIN(evt_switch_init)
     IF_INT_EQUAL(GSWF_TIK_16_MRI_PIPE_RAISED, 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_dakan"), MAP_OBJ_FLAG_HIDDEN)

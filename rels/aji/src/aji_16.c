@@ -251,6 +251,10 @@ static EVT_BEGIN(peach_evt_door_open)
     RETURN
 EVT_END()
 
+/**
+ * Peach's first scene (entrance peach_evt_stg1, from aji_02): Peach appears at the centre, the camera closes in,
+ * peach_aji_34 and peach_aji_34_01 print, STG1_18_PEACH_CAUGHT is set and BGM_EVT_PEACH1 starts.
+ */
 static EVT_BEGIN(peach_evt_stg1)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI2"))
@@ -278,6 +282,11 @@ static EVT_BEGIN(peach_evt_stg1)
     RETURN
 EVT_END()
 
+/**
+ * Peach scene at STG1_18 after the shower room (GSWF_AJI_15_VISITED): she is startled, the door opens
+ * (peach_evt_door_open), peach_aji_38 prints, the e_bero exit is replaced with bero_peach_data and its blocking case
+ * removed, and STG1_18_01_PEACH_AN_OPEN_DOOR is set.
+ */
 static EVT_BEGIN(peach_evt_stg1_1)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_seq_wait, SEQ_GAME)
@@ -306,6 +315,11 @@ static EVT_BEGIN(peach_evt_stg1_1)
     RETURN
 EVT_END()
 
+/**
+ * Peach scene at STG2_25 once GSWF_AJI_16_PEACH_STG2_SCENE_SEEN is set: after 5 s she is startled, turns, the door
+ * opens, peach_aji_75 prints, STG2_25_01_PEACH_CRUMP_X_NAUTS is set and the e_bero exit is replaced with
+ * bero_peach_data (its blocking case removed).
+ */
 static EVT_BEGIN(peach_evt_stg2_1)
     CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
@@ -376,6 +390,11 @@ static EVT_BEGIN(peach_evt_stg2)
     RETURN
 EVT_END()
 
+/**
+ * Peach scene at the peach_evt_stg3 entrance (from aji_10): the camera pans to her, she sighs (SFX_VOICE_PEACH_SAD1_1,
+ * peach_aji_112 and 113), the door opens and the e_bero exit is replaced with bero_peach_data, peach_aji_114 prints and
+ * STG3_33_PEACH_THE_SECRET_WEAPON is set.
+ */
 static EVT_BEGIN(peach_evt_stg3)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_PEACH1"))
@@ -416,6 +435,10 @@ static EVT_BEGIN(peach_evt_stg3)
     RETURN
 EVT_END()
 
+/**
+ * Peach scene at the peach_evt_stg6 entrance (from aji_10): after 2 s peach_aji_280 prints, she turns, the door opens,
+ * peach_aji_281 prints, the e_bero exit is replaced with bero_peach_data and STG6_55_PEACH_GRODUS_X_NAUT is set.
+ */
 static EVT_BEGIN(peach_evt_stg6)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_PEACH1"))
@@ -468,6 +491,14 @@ static EVT_BEGIN(peach_evt_door_stop)
     RETURN
 EVT_END()
 
+/**
+ * Map init of aji_16 (relSetEvtAddr in aji.c): the "peach" entrance runs evt_last_mail_init and stops. Otherwise starts
+ * the Peach scene of the entrance or story point (peach_evt_stg1 by entrance, peach_evt_stg1_1 at STG1_18 after
+ * GSWF_AJI_15_VISITED, peach_evt_stg2 or peach_evt_stg2_1 at STG2_25, peach_evt_stg3 and peach_evt_stg6 by entrance),
+ * runs the entrances, blocks the e_bero door with peach_evt_door_stop before STG1_18_01 and at STG2_25, puts Peach in
+ * mode 1 without a partner before STG7_00_START (BGM_EVT_PEACH1 from then; JP and later set reverb mode 1), turns off
+ * the four door hit objects and spawns evt_emergency.
+ */
 EVT_BEGIN(aji_16_init_evt)
     CALL(evt_bero_get_entername, LW(0))
 

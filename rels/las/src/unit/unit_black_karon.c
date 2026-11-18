@@ -888,6 +888,12 @@ static EVT_BEGIN(link_attack_event_sub)
     RETURN
 EVT_END()
 
+/**
+ * The Dark Bones builds a new Dry Bones (entry_honenoko) at the spot in LW(0)-LW(2), run by its attack event: with the
+ * camera on it, it throws six spinning bones there (SFX_ENM_HONENOKO_SEND_GROUP1/2) that pile up, the pile reassembles
+ * (SFX_ENM_HONENOKO_UNITE1/2) and the new unit is spawned there, home position set, copying the caller's size change
+ * (honenoko_copy_status).
+ */
 static EVT_BEGIN(call_friend_event)
     // The camera zooms in on the Dark Bones.
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)

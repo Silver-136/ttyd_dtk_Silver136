@@ -143,6 +143,10 @@ USER_FUNC(lect_juyoitem_rel_get) {
 }
 
 // clang-format off
+/**
+ * Runs the key-item lecture script that the current map REL stored with lect_juyoitem_rel_set
+ * (all_juyoitem_lecture_rel).
+ */
 EVT_BEGIN(all_juyoitem_lecture)
     CALL(lect_juyoitem_rel_get, LW(0))
     CALL_CHILD(LW(0))

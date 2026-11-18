@@ -217,6 +217,11 @@ static EVT_BEGIN(evt_majin)
     RETURN
 EVT_END()
 
+/**
+ * Black chest "box" (GSWF_TIK_19_BLACK_CHEST_OPENED): gives ITEM_PLANE_CURSE, then the Paper Mage scene with
+ * BGM_EVT_PERAMAJIN1 and the plane lecture (plane_majin_lecture), the partner's line mac_majin_20 and
+ * GSW_STORY_PROGRESS STG0_12_02_PAPER_MAGE_1. The early demos normalize Mario first.
+ */
 static EVT_BEGIN(evt_majin2)
     CALL(evt_mario_key_onoff, 0)
 #if VERSION <= VERSION_DEMO_JP

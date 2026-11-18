@@ -2129,6 +2129,10 @@ static EVT_BEGIN(evt_box_sound1)
     RETURN
 EVT_END()
 
+/**
+ * Opening sounds for the other treasure chests (not normal, grey or black) at LW(0)-LW(2):
+ * SFX_MOBJ_TREASURE_BOX_SWING2, then SFX_MOBJ_TREASURE_BOX_OPEN2.
+ */
 static EVT_BEGIN(evt_box_sound2)
     WAIT_MS(100)
     CALL(evt_snd_sfxon_3d, STRING("SFX_MOBJ_TREASURE_BOX_SWING2"), LW(0), LW(1), LW(2), 0)
@@ -2137,6 +2141,10 @@ static EVT_BEGIN(evt_box_sound2)
     RETURN
 EVT_END()
 
+/**
+ * Opening sounds for the black chest (MOBJ_BlackTreasureBox) at LW(0)-LW(2): SFX_MOBJ_BLACKBOX_SWING1, stopped after
+ * 200 ms, then SFX_MOBJ_BLACKBOX_OPEN1.
+ */
 static EVT_BEGIN(evt_box_sound3)
     WAIT_MS(100)
     CALL(evt_snd_sfxon_3d, STRING("SFX_MOBJ_BLACKBOX_SWING1"), LW(0), LW(1), LW(2), LW(15))
@@ -5415,6 +5423,11 @@ static EVT_BEGIN(kpa_pole)
     RETURN
 EVT_END()
 
+/**
+ * Goal pole sequence for big Bowser (levels 2-3), run by mobj_koopa_pole_evt: takes the controls and, for 100 frames,
+ * throws the goal pole and its flag (kpa_get_pole_name, kpa_get_hata_name) up and away on an arc while scaling them up
+ * to 3 times, with SFX_KUPPA_POST_THROW1.
+ */
 static EVT_BEGIN(kpa_pole_move)
     CALL(evt_cam_letter_box_disable, 1)
     CALL(evt_cam_letter_box_onoff, 0, 0)
@@ -5463,6 +5476,12 @@ static EVT_BEGIN(kpa_pole_move)
     RETURN
 EVT_END()
 
+/**
+ * Walks Bowser to the fort map object after the goal pole ("toride" in kpa_06, "toride_" elsewhere), run by
+ * mobj_koopa_pole_evt: sets LSWF(5) (LSWF_KPA_GOAL_WALK_STARTED); at levels 0-1 he walks to 100 past it, at levels 2-3
+ * he stops 1.2 times his width (kpa_get_width) short, struggles for 2 s (SFX_KUPPA_STRUGGLE1, pose locked) and takes
+ * pose KPA2_S_1.
+ */
 static EVT_BEGIN(kpa_move_to_toride)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_wait_landon)

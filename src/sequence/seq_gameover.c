@@ -77,6 +77,11 @@ static EVT_BEGIN(_fall_char_last)
     RETURN
 EVT_END()
 
+/**
+ * Drops the letters of GAME OVER one after another (_fall_char; the last "r" with _fall_char_last) and waits for the
+ * last one, then holds the word: 1 s in US and later, 2 s in the September 2004 demos, 60 frames in JP, 120 in the
+ * early demos. Before US the gaps are counted in frames.
+ */
 static EVT_BEGIN(fall_gameover)
     SET_VALUE(LW(0), STRING("g"))
     SPAWN_EVENT(_fall_char)
@@ -142,6 +147,10 @@ static EVT_BEGIN(fall_gameover)
     RETURN
 EVT_END()
 
+/**
+ * US and later, Spanish (LANGUAGE_SP): the letter-drop of fall_gameover for the Spanish Game Over word's map objects
+ * (f, i, n, d, e3, l, j, u, e4, g1, then o289 last).
+ */
 #if VERSION >= VERSION_US
 EVT_BEGIN(fall_gameover_es)
     SET_VALUE(LW(0), STRING("f"))

@@ -973,6 +973,11 @@ static EVT_BEGIN(peach_mail)
     RETURN
 EVT_END()
 
+/**
+ * Partner tip on entering hei_01 before STG1_01_THE_FLIP_BRIDGE (spawned by the map init while
+ * GSWF_HEI_01_GOOMBELLA_TATTLE_TIP_SEEN is 0): stops the partner and NPCs, Mario turns, the partner says
+ * stg1_hei_02_02, Mario nods and the flag is set. Of the early demos only the JP demo spawns it.
+ */
 static EVT_BEGIN(christine_hei_01)
     CALL(evt_mario_key_onoff, 0)
 #if VERSION >= VERSION_JP

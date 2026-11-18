@@ -3833,6 +3833,11 @@ static EVT_BEGIN(muj_gor_ship_sub)
     RETURN
 EVT_END()
 
+/**
+ * Sets up the ship for the voyage back to Rogueport, run by the map's init script: places Cortez at (655, 40, -542),
+ * sets up the alpha TEV callback on water object S_mizu_06 and spawns muj_gor_ship_sub and the bobbing muj_ship_puka
+ * (its id in GW(10)).
+ */
 static EVT_BEGIN(muj_gor_ship)
     CALL(evt_npc_set_position, STRING("コルテス"), 655, 40, -542)
     CALL(evt_npc_set_ry, STRING("コルテス"), 90)

@@ -596,6 +596,11 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/**
+ * Damage event of the Bulky Bob-omb: when frozen it puts out a lit fuse (sound off, UNIT_WORK_FUSE_LIT cleared, pose
+ * table for the fuse left in UNIT_WORK_COUNTDOWN); a final hit with damage code 24, 25, 27, 46, 50, 52 or 54 plays
+ * POSE_TYPE_DAMAGE_FIRE and runs dead_event, any other damage btldefaultevt_Damage.
+ */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -641,6 +646,11 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Phase event of the Bulky Bob-omb: after the player's phase (BATTLE_PHASE_AFTER_PLAYER), while the fuse is lit, it
+ * burns down one step (UNIT_WORK_COUNTDOWN) with SFX_ENM_HEAVYB_WAIT2 and the matching pose tables; at 0 it takes pose
+ * K_4 and queues its UNIT_DATA_EXPLOSION_EVENT (explosion_event).
+ */
 static EVT_BEGIN(phase_event)
     CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_AFTER_PLAYER)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -684,6 +694,11 @@ static EVT_BEGIN(phase_event)
     RETURN
 EVT_END()
 
+/**
+ * Attack event of the Bulky Bob-omb: with SFX_ENM_HEAVYB_ATTACK1 and the G_1 to G_4 pose for the fuse left, it lights
+ * its fuse (fuse sound, UNIT_WORK_FUSE_LIT, BATTLE_UNIT_FLAG_FUSE_LIT_UNUSED) when unlit; when already lit it uses the
+ * next of its three guard weapons on itself in turn (UNIT_WORK_GUARD_STEP).
+ */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_HEAVYB_ATTACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_FUSE_LIT, LW(0))
@@ -737,11 +752,16 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/** Wait event of the Bulky Bob-omb: sets its pose from the pose table. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
 
+/**
+ * Dead event of the Bulky Bob-omb: stops the fuse sound; with damage code 24, 25, 27, 46, 50, 52 or 54 it queues its
+ * UNIT_DATA_EXPLOSION_EVENT (explosion_event), otherwise it dies normally (subsetevt_dead_core).
+ */
 static EVT_BEGIN(dead_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_FUSE_SFX, LW(0))
     IF_INT_NOT_EQUAL(LW(0), -1)
@@ -768,6 +788,12 @@ static EVT_BEGIN(dead_event)
     RETURN
 EVT_END()
 
+/**
+ * Explosion of the Bulky Bob-omb (UNIT_DATA_EXPLOSION_EVENT): stops the fuse sound, plays SFX_ENM_HEAVYB_ATTACK3 with a
+ * series of "bomb" effects and clears the stage fog (btlevtcmd_StageDispellFog), hits every target
+ * weapon_heavy_bomb_super_explosion reaches (each precheck hit takes the damage), then dies (subsetevt_dead_core) and
+ * removes itself (btlevtcmd_KillUnit). US and later also shake the camera.
+ */
 // Visit every selected target, including after a failed precheck, then remove this unit.
 static EVT_BEGIN(explosion_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_FUSE_SFX, LW(0))

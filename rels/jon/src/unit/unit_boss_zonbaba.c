@@ -1157,6 +1157,10 @@ static EVT_BEGIN(breath2_attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Self-heal of Bonetail (weapon_zonbaba_recover, from attack_event): prints tik_boss_14 (meant only once, see the BUG
+ * note), uses up one of UNIT_WORK_RECOVERS_LEFT, pays the cost and recovers 20 HP with the "recovery" effect.
+ */
 static EVT_BEGIN(recover_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_RECOVER_TALK_DONE, LW(0))
     IF_INT_EQUAL(LW(0), 0)
@@ -1312,6 +1316,7 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/** Wait event of Bonetail: sets his pose from the pose table. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN

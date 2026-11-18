@@ -134,6 +134,7 @@ EVT_BEGIN(dou_puka_event)
     RETURN
 EVT_END()
 
+/** Calls dou_mario_pos_osreport_func; no script or table in this tree runs it. */
 EVT_BEGIN(dou_mario_pos_osreport)
     CALL(dou_mario_pos_osreport_func)
     RETURN

@@ -2101,6 +2101,7 @@ static EVT_BEGIN(satellite_blur_on)
     RETURN
 EVT_END()
 
+/** Clears the blur attribute (kMotionBlur) on the body parts of the satellites in unit work slots 9 to 12. */
 static EVT_BEGIN(satellite_blur_off)
     SET_VALUE(LW(2), 9)
     LOOP(4)
@@ -2114,6 +2115,11 @@ static EVT_BEGIN(satellite_blur_off)
     RETURN
 EVT_END()
 
+/**
+ * Spawns up to LW(6) new satellites (entry_batten_satellite) into the empty slots among unit work 9 to 12, with LW(0)
+ * counting the satellites out; then sends them all out along their splines (battenSatelliteToOutside) blurred, with
+ * SFX_BOSS_SRYO_SPLIT2, and stores the count in UNIT_WORK_SATELLITE_COUNT.
+ */
 static EVT_BEGIN(sub_call_satellite)
     CALL(btlevtcmd_GetUnitId, UNIT_ID_SELF, LW(4))
     SET_VALUE(LW(1), 9)
@@ -2145,6 +2151,11 @@ static EVT_BEGIN(sub_call_satellite)
     RETURN
 EVT_END()
 
+/**
+ * Before each player phase from turn 2 on, while Sir Grodus can act and has fewer than four satellites: pulls the
+ * satellites in (battenSatelliteToInside) with SFX_BOSS_SRYO_SPLIT1, packs the slots 9 to 12 so the empty ones come
+ * last, and calls up to two new ones (sub_call_satellite with LW(6) 2). Run by phase_event.
+ */
 static EVT_BEGIN(player_before_phase_event)
     CALL(btlevtcmd_StopWaitEvent, UNIT_ID_SELF)
     CALL(btlevtcmd_get_turn, LW(0))
@@ -2211,6 +2222,11 @@ static EVT_BEGIN(player_before_phase_event)
     RETURN
 EVT_END()
 
+/**
+ * Attack event of Sir Grodus: on turn 1 the thunder spell; afterwards one spell drawn by lots with weights 60, 40, 30,
+ * 20, 20, 20 for thunder, fire, ice, shikaeshi, yokeyoke and stop (the same table whatever UNIT_WORK_HP_STAGE is). The
+ * spell's weapon is passed in LW(9).
+ */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_get_turn, LW(0))
     IF_INT_LESS_OR_EQUAL(LW(0), 1)
@@ -2269,6 +2285,13 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Thunder spell of Sir Grodus (weapon_batten_leader_thunder): raises his staff (poses A_1A, A_1B with eff_staff, then
+ * A_2; SFX_BOSS_SRYO_STUFF_* sounds), sets the rod light to btl_shuryolight_rod_normal and rolls
+ * UNIT_WORK_MISFIRE_CHANCE (cleared after the roll): on a misfire the spell fizzles into smoke and ends. Otherwise
+ * lightning bolts (evt_eff_pokopi_thunder, SFX_BOSS_SRYO_THUNDER1) strike in pairs while every target the weapon
+ * reaches is hit in turn; lucky, dodgy and miss results dodge. See the BUG note on the target check.
+ */
 static EVT_BEGIN(batten_leader_thunder_attack_event)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_SRYO_STUFF_PUTOUT1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_1A"))
@@ -2387,6 +2410,13 @@ static EVT_BEGIN(batten_leader_thunder_attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Fire spell of Sir Grodus (weapon_batten_leader_fire): raises his staff (poses A_1A, A_1B with eff_staff, then A_2;
+ * SFX_BOSS_SRYO_STUFF_* sounds), sets the rod light to btl_shuryolight_rod_normal and rolls UNIT_WORK_MISFIRE_CHANCE
+ * (cleared after the roll): on a misfire the spell fizzles into smoke and ends. Otherwise a pillar of fire
+ * ("hibashira", SFX_BOSS_SRYO_FIRE1) sweeps 400 units along the floor and every target the weapon reaches is hit 150 ms
+ * apart, the first hit shaking the camera. See the BUG note on the target check.
+ */
 static EVT_BEGIN(batten_leader_fire_attack_event)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_SRYO_STUFF_PUTOUT1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_1A"))
@@ -2510,6 +2540,13 @@ static EVT_BEGIN(batten_leader_fire_attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Ice spell of Sir Grodus (weapon_batten_leader_ice) on one target: raises his staff (poses A_1A, A_1B with eff_staff,
+ * then A_2; SFX_BOSS_SRYO_STUFF_* sounds), sets the rod light to btl_shuryolight_rod_normal and rolls
+ * UNIT_WORK_MISFIRE_CHANCE (cleared after the roll): on a misfire the spell fizzles into smoke and ends. Otherwise an
+ * ice shot (opuku_wgun_n64, SFX_BOSS_SRYO_ICE1) flies to the target, which is hit or dodges; he takes POSE_TYPE_ACTION
+ * after. A confused Grodus with no target flusters (subsetevt_confuse_flustered).
+ */
 static EVT_BEGIN(batten_leader_ice_attack_event)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_SRYO_STUFF_PUTOUT1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_1A"))
@@ -2605,6 +2642,12 @@ static EVT_BEGIN(batten_leader_ice_attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Shikaeshi spell of Sir Grodus on himself (weapon_batten_leader_shikaeshi): raises his staff (poses A_1A, A_1B with
+ * eff_staff, then A_1C; SFX_BOSS_SRYO_STUFF_* sounds), sets the rod light to btl_shuryolight_rod_normal and rolls
+ * UNIT_WORK_MISFIRE_CHANCE (cleared after the roll): on a misfire the spell fizzles into smoke and ends. Otherwise the
+ * camera homes in on him, UNIT_WORK_SELF_SPELL is set to 4 and the weapon hits him.
+ */
 static EVT_BEGIN(batten_leader_shikaeshi_attack_event)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_SRYO_STUFF_PUTOUT1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_1A"))
@@ -2652,6 +2695,12 @@ static EVT_BEGIN(batten_leader_shikaeshi_attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Yokeyoke spell of Sir Grodus on himself (weapon_batten_leader_yokeyoke, Dodgy): raises his staff (poses A_1A, A_1B
+ * with eff_staff, then A_1C; SFX_BOSS_SRYO_STUFF_* sounds), sets the rod light to btl_shuryolight_rod_normal and rolls
+ * UNIT_WORK_MISFIRE_CHANCE (cleared after the roll): on a misfire the spell fizzles into smoke and ends. Otherwise the
+ * camera homes in on him, UNIT_WORK_SELF_SPELL is set to 5 and the weapon hits him.
+ */
 static EVT_BEGIN(batten_leader_yokeyoke_attack_event)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_SRYO_STUFF_PUTOUT1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_1A"))
@@ -2699,6 +2748,13 @@ static EVT_BEGIN(batten_leader_yokeyoke_attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Stop spell of Sir Grodus (weapon_batten_leader_stop): raises his staff (poses A_1A, A_1B with eff_staff, then A_2;
+ * SFX_BOSS_SRYO_STUFF_* sounds), sets the rod light to btl_shuryolight_rod_normal and rolls UNIT_WORK_MISFIRE_CHANCE
+ * (cleared after the roll): on a misfire the spell fizzles into smoke and ends. Otherwise the time-stop effect
+ * (timestamp_n64, SFX_BOSS_SRYO_STOP1) plays for 2.5 s, then every target the weapon reaches is hit in turn. A confused
+ * Grodus with no target flusters (subsetevt_confuse_flustered).
+ */
 static EVT_BEGIN(batten_leader_stop_attack_event)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_SRYO_STUFF_PUTOUT1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_1A"))
@@ -2800,6 +2856,9 @@ static EVT_BEGIN(batten_leader_stop_attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Wait event of Sir Grodus: sets his pose from the pose table and checks his satellites every frame (check_satellite).
+ */
 static EVT_BEGIN(wait_event)
     CALL(check_satellite)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)

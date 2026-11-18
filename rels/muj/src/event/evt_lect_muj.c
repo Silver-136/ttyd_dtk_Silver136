@@ -516,6 +516,13 @@ static EVT_BEGIN(all_party_lecture_otosub)
     RETURN
 EVT_END()
 
+/**
+ * Partner-join lecture for partner LW(9) (NPC LW(8) stands in for him), run by the map scripts where a partner joins
+ * (gor_01, hei_01, muj_05 and others): unless he is already out (partner 1), the current partner leaves (partner 5
+ * replaces it at once), he joins the party at the NPC's spot, the item-get backdrop appears with the partner's
+ * lecture_friends message, then the lecture music (BGM_EVT_LECTURE1) plays while his move demonstration runs; music,
+ * cameras and controls are restored at the end.
+ */
 EVT_BEGIN(all_party_lecture)
     CALL(evt_mario_normalize)
     IF_INT_NOT_EQUAL(LW(9), 1)

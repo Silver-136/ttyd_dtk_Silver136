@@ -1300,6 +1300,12 @@ static EVT_BEGIN(sekai_yami_npc)
     RETURN
 EVT_END()
 
+/**
+ * The darkness passes over the village, spawned by the map's init script: hides Mario and the partner, stops three
+ * Koopa NPCs' regular scripts, dims the background, switches the map and NPCs to the envSetYami TEV callback and sweeps
+ * GW(0) from -600 to 600 while sekai_yami_npc reacts per NPC; Mayor Kroop says stg8_dark_01 and the map changes to
+ * mri_00 (entrance sekai_yami1).
+ */
 static EVT_BEGIN(sekai_yami_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)
@@ -1489,6 +1495,10 @@ static EVT_BEGIN(minnnanokoe_evt)
     RETURN
 EVT_END()
 
+/**
+ * Until the pipe is raised (GSWF_TIK_16_NOK_PIPE_RAISED), hides map group S_dakan and turns off hit object A_dokan;
+ * spawned by the map's init script.
+ */
 static EVT_BEGIN(evt_switch_init)
     IF_INT_EQUAL(GSWF_TIK_16_NOK_PIPE_RAISED, 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_dakan"), MAP_OBJ_FLAG_HIDDEN)
@@ -1497,6 +1507,10 @@ static EVT_BEGIN(evt_switch_init)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of the gate Koopa when the E3 system flag (GW_FLAG_E3) is set: prints nok_01_for_E3 and changes the map
+ * to kpa_02.
+ */
 static EVT_BEGIN(e3_talk)
     CALL(evt_msg_print, 0, STRING("nok_01_for_E3"), 0, 0)
     CALL(evt_bero_mapchange, STRING("kpa_02"), 0)

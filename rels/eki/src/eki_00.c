@@ -1459,6 +1459,12 @@ EVT_BEGIN(evt_bridge)
     RETURN
 EVT_END()
 
+/**
+ * Puts the map straight into the lowered-bridge state when the bridge scene flag is set (spawned by the map init): the
+ * bridge piece s_eki_07 shown with its hit object and s_eki_00 hidden, the fold stairs shown, anm_ere_1 at its end,
+ * Mario and the partner placed at the bridge, an item still lying here moved 2000 below, the lever turned, GF(0) set,
+ * STG6_42_DRAWBRIDGE_DOWN set and GSWF_EKI_BRIDGE_LOWERING_IN_PROGRESS cleared.
+ */
 static EVT_BEGIN(evt_bridge2)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("s_eki_07"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("a_eki_07"), 1, 1)
@@ -1487,6 +1493,13 @@ static EVT_BEGIN(evt_bridge2)
     RETURN
 EVT_END()
 
+/**
+ * Case script of the lever (a_lever, registered by evt_moamoa_escape and the map init): Mario pulls s_lever
+ * (SFX_STG6_SWITCH_MOVE1), the camera turns to the wall, the anm_ori fold animation shows the stairs (kaidann, ori; the
+ * new hit object kaidann_A on) with SFX_STG6_ORIGAMI_APPEAR1, then the bridge switch (bridge_sw, evt_bridge,
+ * GSWF_EKI_00_BRIDGE_SWITCH_PRESSED) appears and grows; sets STG6_41_ORIGAMI_STAIRS. The early demos wait for the fold
+ * animation's own length, later versions 1.6 s. eki_01 registers it on its origami switch too.
+ */
 static EVT_BEGIN(evt_origami)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
@@ -1634,6 +1647,11 @@ static EVT_BEGIN(evt_meet_moamoa)
     RETURN
 EVT_END()
 
+/**
+ * Started (as escapeEvt) when the Smorg swarm has taken enough hits: the camera pulls back, the music fades, the swarm
+ * leaves (evt_moamoa_end_wait, evt_moamoa_exit), and after 3 s the lever gets evt_origami; sets
+ * STG6_40_SWATTING_SMORGS.
+ */
 static EVT_BEGIN(evt_moamoa_escape)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_cam3d_evt_set, 0, 151, 528, 0, 56, -12, 500, EASING_SINE_IN_OUT)

@@ -1161,6 +1161,10 @@ static EVT_BEGIN(mega_attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Charge-up of Gloomtail (weapon_bunbaba_charge, in LW(9)): pays the cost, plays SFX_BOSS_GNB_CHARGE1 with the "charge"
+ * effect at his head (part 2) for a second, then the weapon hits himself.
+ */
 static EVT_BEGIN(charge_event)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(9))
     CALL(btlevtcmd_snd_se_offset, UNIT_ID_SELF, STRING("SFX_BOSS_GNB_CHARGE1"), EVT_NULLPTR, 0, -250, 0, 0, LW(15))
@@ -1173,6 +1177,13 @@ static EVT_BEGIN(charge_event)
     RETURN
 EVT_END()
 
+/**
+ * Attack event of Gloomtail: uses an item when btlevtcmd_EnemyItemUseCheck picks one; otherwise acts by
+ * UNIT_WORK_ATTACK_STAGE: 0 poison breath (then 1); 1 stomp, bite or poison breath by lots 10/10/20; 2 earthquake (then
+ * 3); 3 stomp, bite, poison breath or earthquake by lots 10/10/20/15 (the early demos 10/10/20/10); 4 charge (then 5);
+ * 5 Mega Breath and message stg8_las_49_06 (then 7); 6 Mega Breath (then 7); 7 stomp, bite, poison breath, earthquake,
+ * charge (then 6) or Mega Breath by lots 10/10/20/10/20/0. The weapon goes in LW(9).
+ */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)

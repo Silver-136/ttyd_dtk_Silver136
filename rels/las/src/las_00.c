@@ -223,6 +223,10 @@ static EVT_BEGIN(shan_init)
     RETURN
 EVT_END()
 
+/**
+ * Map init of las_00 (relSetEvtAddr in las.c): BGM_STG8_LST1 and ENV_STG8_LAS1 (JP and later reverb mode 2); the normal
+ * arrival from STG8_00_START, before it spawns first_evt instead; lights the candles (shan_init).
+ */
 EVT_BEGIN(las_00_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS1"))

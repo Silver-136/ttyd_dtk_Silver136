@@ -1364,6 +1364,10 @@ EVT_BEGIN(_curtain_close_event)
     RETURN
 EVT_END()
 
+/**
+ * Level-up confetti: spawns a "confetti" effect (type 3) every 20 frames, looping until the level-up deletes the script
+ * (_set_confetti_control_evtid).
+ */
 static EVT_BEGIN(_confetti_control_event)
     SET_VALUE(LW(0), 1)
     SET_VALUE(LW(5), 5)
@@ -1379,6 +1383,12 @@ static EVT_BEGIN(_confetti_control_event)
     RETURN
 EVT_END()
 
+/**
+ * Level-up choice made (started by btlseqEnd at SEQ_END_LEVEL_UP_JUMP_WAIT): the unchosen blocks fade out, the chosen
+ * block moves over Mario with SFX_BTL_LVUP_BLOCK_MOVE1, and Mario jumps into it; 10 frames in the block is hit
+ * (SFX_BTL_LVUP_BLOCK_HIT1, a camera shake, _lvup_object_decide_bound). He lands with SFX_VOICE_MARIO_PAUSE2 in pose
+ * M_V_2 and the crowd cheers.
+ */
 static EVT_BEGIN(_jump_event)
     BEGIN_SIBLING_EVENT
         CALL(_lvup_object_noselect_delete)
@@ -1401,6 +1411,10 @@ static EVT_BEGIN(_jump_event)
     RETURN
 EVT_END()
 
+/**
+ * Level-up cursor moves to the HP block (selection 0): plays SFX_BTL_LVUP_CURSOR1, dims all three blocks and hides the
+ * help text, turns the spotlight to -30 degrees over 10 frames, then brightens block 0 and shows the help again.
+ */
 static EVT_BEGIN(_move_to_heart_event)
     CALL(evt_snd_sfxon_3d, STRING("SFX_BTL_LVUP_CURSOR1"), 0, 125, 0, 0)
     CALL(_lvup_obj_set_color, 0, 100, 128, 128, 255)
@@ -1419,6 +1433,10 @@ static EVT_BEGIN(_move_to_heart_event)
     RETURN
 EVT_END()
 
+/**
+ * _move_to_heart_event for the FP block (selection 1): the spotlight turns from its current angle back to 0 and block 1
+ * brightens.
+ */
 static EVT_BEGIN(_move_to_flower_event)
     CALL(evt_snd_sfxon_3d, STRING("SFX_BTL_LVUP_CURSOR1"), 0, 125, 0, 0)
     CALL(_lvup_obj_set_color, 0, 100, 128, 128, 255)
@@ -1438,6 +1456,7 @@ static EVT_BEGIN(_move_to_flower_event)
     RETURN
 EVT_END()
 
+/** _move_to_heart_event for the BP block (selection 2): the spotlight turns to 30 degrees and block 2 brightens. */
 static EVT_BEGIN(_move_to_badge_point_event)
     CALL(evt_snd_sfxon_3d, STRING("SFX_BTL_LVUP_CURSOR1"), 0, 125, 0, 0)
     CALL(_lvup_obj_set_color, 0, 100, 128, 128, 255)
@@ -1456,6 +1475,10 @@ static EVT_BEGIN(_move_to_badge_point_event)
     RETURN
 EVT_END()
 
+/**
+ * Runs the UNIT_DATA_DESTROY_EVENT of the shell guarding Mario (_check_guard_koura), if any; started by
+ * _BattleMarioKouraDelete.
+ */
 static EVT_BEGIN(_koura_delete_event)
     CALL(_check_guard_koura, UNIT_ID_MARIO, LW(10))
     IF_INT_NOT_EQUAL(LW(10), -1)

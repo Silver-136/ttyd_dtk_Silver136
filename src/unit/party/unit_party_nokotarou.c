@@ -1364,6 +1364,11 @@ static BattleUnitSetup entry_koura = {
 };
 #endif
 
+/**
+ * Attack event of Shell Shield: removes a shell already guarding Mario, spawns the giant shell (entry_koura) high above
+ * him and lowers it onto him with the action command, whose result also gives the shell its HP; the shell then guards
+ * Mario; the audience reacts and Koops returns to waiting.
+ */
 EVT_BEGIN(partyNokotarouAttack_KouraGuard)
     // Find Mario as the target and pay for the move; with no target, skip to the end.
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
@@ -1962,6 +1967,10 @@ static EVT_BEGIN(partyNokotarouAttack_TsuranukiKoura)
     RETURN
 EVT_END()
 
+/**
+ * Appeal (UNIT_DATA_APPEAL_EVENT): Koops strikes POSE_TYPE_APPEAL with SFX_MARIO_APPEAL1 and the audience reacts
+ * (btlevtcmd_AudienceAppeal).
+ */
 static EVT_BEGIN(nokotarou_appeal_event)
     CALL(btlevtcmd_RunDataEventChild, UNIT_ID_SELF, UNIT_DATA_ATTACK_READY_EVENT)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_APPEAL)
@@ -1974,6 +1983,7 @@ static EVT_BEGIN(nokotarou_appeal_event)
     RETURN
 EVT_END()
 
+/** Victory reaction (data tag 64): Koops's PNK_Y_1 pose, unless he is flipped (STATUS_FLIPPED). */
 static EVT_BEGIN(party_win_reaction)
     CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_FLIPPED, LW(0))
     IF_INT_EQUAL(LW(0), 0)
@@ -1982,6 +1992,11 @@ static EVT_BEGIN(party_win_reaction)
     RETURN
 EVT_END()
 
+/**
+ * Audience-attack reaction (data tag 6): Koops runs offstage, reappears in the audience, spins up his shell and rams
+ * the chosen audience member (_attack_aud, SFX_BTL_NOKO_ATTACK2), bounces three times, takes his normal pose back
+ * (_restore_koura_pose) and runs home.
+ */
 static EVT_BEGIN(attack_audience_event)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_GetStageSize, LW(3), EVT_NULLPTR, EVT_NULLPTR)
@@ -2049,6 +2064,10 @@ static EVT_BEGIN(attack_audience_event)
     RETURN
 EVT_END()
 
+/**
+ * JP and later, Koops's revive event (UNIT_DATA_REVIVE_EVENT): restores his standing defence table and pose table and
+ * clears UNIT_STATUS_FLAG_FLIPPED.
+ */
 #if VERSION >= VERSION_JP
 EVT_BEGIN(nokotarou_revive_event)
     CALL(btlevtcmd_SetPartsDefenceTable, LW(10), LW(11), PTR(&defence))

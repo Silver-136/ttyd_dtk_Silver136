@@ -1507,6 +1507,11 @@ EVT_BEGIN(subset_ultra_hammer_acrobat_damage_event)
     RETURN
 EVT_END()
 
+/**
+ * A confused unit with no target flusters: the camera homes in on it (zoom 200) while its body plays POSE_TYPE_CONFUSE
+ * for 1.5 s, then the camera returns to default and, a second later, the unit's wait event restarts. Enemy attack
+ * scripts run it when a kConfusedAction turn finds no target.
+ */
 EVT_BEGIN(subsetevt_confuse_flustered)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, -1)
@@ -1641,6 +1646,10 @@ EVT_BEGIN(subsetevt_status_recovery)
     RETURN
 EVT_END()
 
+/**
+ * JP and later: sets LW(0) to 0 when unit LW(3) is dead (STATUS_DEAD), frozen or stopped, otherwise 1. No script in
+ * this tree runs it.
+ */
 #if VERSION >= VERSION_JP
 EVT_BEGIN(subsetevt_check_target_movable)
     CALL(btlevtcmd_CheckStatus, LW(3), STATUS_DEAD, LW(0))

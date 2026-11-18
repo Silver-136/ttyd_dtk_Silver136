@@ -380,6 +380,12 @@ static EVT_BEGIN(evt_rokka_open)
     RETURN
 EVT_END()
 
+/**
+ * Closes a locker opened by evt_rokka_open (its map object, hit objects and case ids in LW(0) to LW(4), LW(11),
+ * LW(12)): deletes the other closing case, plays SFX_PEACH_LOCKER_CLOSE1 and swings the door from 120 back to 0 degrees
+ * (40 frames when LW(10) is 0, else 20), then re-attaches evt_rokka_open (on A press, or on push when LW(10) is
+ * nonzero).
+ */
 static EVT_BEGIN(evt_rokka_close)
     IF_INT_EQUAL(LW(10), 0)
         CALL(evt_del_case_evt, 0, LW(12))
@@ -430,6 +436,10 @@ static EVT_BEGIN(evt_rokka_close)
     RETURN
 EVT_END()
 
+/**
+ * Binds each locker's hit object to its map object and attaches evt_rokka_open (A press) for every entry of rokka_data;
+ * run by aji_09_init_evt.
+ */
 static EVT_BEGIN(evt_rokka_init)
     SET_INT_READ_ADDR(PTR(&rokka_data))
     LOOP(0)
@@ -461,6 +471,7 @@ static EVT_BEGIN(peach_evt_fuku_g)
     RETURN
 EVT_END()
 
+/** Opens the booth curtain map object in LW(0): SFX_PEACH_CURTAIN_OPEN1 and an X scale from 1 to 0.1 over 500 ms. */
 static EVT_BEGIN(peach_evt_ka_open)
     SET_VALUE(LW(2), LW(0))
     CALL(evt_mapobj_get_position, LW(0), LW(1), LW(3), LW(4))
@@ -477,6 +488,9 @@ static EVT_BEGIN(peach_evt_ka_open)
     RETURN
 EVT_END()
 
+/**
+ * Closes the booth curtain map object in LW(0): SFX_PEACH_CURTAIN_CLOSE1 and an X scale from 0.1 back to 1 over 500 ms.
+ */
 static EVT_BEGIN(peach_evt_ka_close)
     SET_VALUE(LW(2), LW(0))
     CALL(evt_mapobj_get_position, LW(0), LW(1), LW(3), LW(4))
@@ -564,6 +578,12 @@ static EVT_BEGIN(peach_evt_kou_in)
     RETURN
 EVT_END()
 
+/**
+ * Peach steps out of a changing booth (x in LW(0), curtain in LW(1)): restores the field music, opens the curtain,
+ * walks to z -55 and closes it. With the uniform taken (GSWF_AJI_09_UNIFORM_TAKEN) it prints peach_aji_137_01 at
+ * STG3_33_01, and at STG3_33_03 in the booth she changed in prints peach_aji_155 once
+ * (GSWF_AJI_09_PEACH_DRESS_BACK_ON).
+ */
 static EVT_BEGIN(peach_evt_kou_out)
     SET_VALUE(LW(10), LW(0))
     SET_VALUE(LW(9), LW(1))
@@ -600,6 +620,11 @@ static EVT_BEGIN(peach_evt_kou_out)
     RETURN
 EVT_END()
 
+/**
+ * Case script of booth 1's front (A_kou1_ka_omo) in Peach's scenes: runs peach_evt_kou_in for S_kou1_ka and, when she
+ * changed (LW(15) 0) with the uniform taken, shows the clothes she left in the booth (S_fuku1_g or S_fuku1_p by
+ * GSWF_AJI_PEACH_IN_UNIFORM). The letterbox is off unless check_kou_evt says otherwise.
+ */
 static EVT_BEGIN(peach_evt_kou1_in)
     CALL(check_kou_evt, 0, 1, LF(0))
     IF_INT_EQUAL(LF(0), 0)
@@ -627,6 +652,10 @@ static EVT_BEGIN(peach_evt_kou1_in)
     RETURN
 EVT_END()
 
+/**
+ * Case script of booth 1's back (A_kou1_ka_ura): runs peach_evt_kou_out for S_kou1_ka; when check_kou_evt reports a
+ * change it moves STG3_33_01 on to STG3_33_02_PEACH_INCOGNITO.
+ */
 static EVT_BEGIN(peach_evt_kou1_out)
     CALL(check_kou_evt, 1, 1, LF(0))
     IF_INT_EQUAL(LF(0), 0)
@@ -647,6 +676,7 @@ static EVT_BEGIN(peach_evt_kou1_out)
     RETURN
 EVT_END()
 
+/** peach_evt_kou1_in for booth 2 (A_kou2_ka_omo, S_kou2_ka, clothes S_fuku2_g / S_fuku2_p). */
 static EVT_BEGIN(peach_evt_kou2_in)
     CALL(check_kou_evt, 0, 0, LF(0))
     IF_INT_EQUAL(LF(0), 0)
@@ -674,6 +704,7 @@ static EVT_BEGIN(peach_evt_kou2_in)
     RETURN
 EVT_END()
 
+/** peach_evt_kou1_out for booth 2 (A_kou2_ka_ura, S_kou2_ka). */
 static EVT_BEGIN(peach_evt_kou2_out)
     CALL(check_kou_evt, 1, 0, LF(0))
     IF_INT_EQUAL(LF(0), 0)
@@ -694,6 +725,11 @@ static EVT_BEGIN(peach_evt_kou2_out)
     RETURN
 EVT_END()
 
+/**
+ * Case script of the s_bero door in Peach's scenes: out of uniform (GSWF_AJI_PEACH_IN_UNIFORM 0) the door opens
+ * (s_door_open), Peach walks out, the screen fades and the map changes to aji_17 at w_bero; in uniform peach_aji_155_01
+ * prints. US and later take the controls first in both cases.
+ */
 static EVT_BEGIN(s_bero_out)
 #if VERSION >= VERSION_US
     CALL(evt_mario_key_onoff, 0)
@@ -813,6 +849,10 @@ static EVT_BEGIN(peach_evt_stg3)
     RETURN
 EVT_END()
 
+/**
+ * Case script of note 1 (A_memo1; aji_06 registers a script of the same name): prints stg7_aji_33 and raises the story
+ * to STG7_11_PASSWORD_FOR_TODAY if it is lower.
+ */
 static EVT_BEGIN(evt_memo1)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_print, 0, STRING("stg7_aji_33"), 0, 0)
@@ -823,6 +863,7 @@ static EVT_BEGIN(evt_memo1)
     RETURN
 EVT_END()
 
+/** Case script of note 2 (A_memo2; aji_06 registers a script of the same name): prints stg7_aji_33_01. */
 static EVT_BEGIN(evt_memo2)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_print, 0, STRING("stg7_aji_33_01"), 0, 0)
@@ -830,6 +871,14 @@ static EVT_BEGIN(evt_memo2)
     RETURN
 EVT_END()
 
+/**
+ * Map init of aji_09 (relSetEvtAddr in aji.c): the entrances, the changing-room clothes and their hit object hidden.
+ * From STG3_33_01 to STG3_33_03 Peach (mode 1, no partner) runs peach_evt_stg3; otherwise the two changing booths get
+ * evt_kou1 and evt_kou2. Then the lockers (evt_rokka_init), the ceiling (tenjo) entrance drop (the PAL demo and PAL
+ * also pull the partner down to Mario), evt_emergency, and as Mario the two notes (evt_memo1, evt_memo2) with
+ * BGM_STG7_DUN2, as Peach BGM_EVT_PEACH1 with the notes hidden. The early demos place a Repel Cape from STG6_53; JP and
+ * later set reverb mode 1.
+ */
 EVT_BEGIN(aji_09_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
 

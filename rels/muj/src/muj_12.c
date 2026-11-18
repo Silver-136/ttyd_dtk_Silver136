@@ -531,6 +531,12 @@ static EVT_BEGIN(starstone_fuwafuwa)
     RETURN
 EVT_END()
 
+/**
+ * Cortez's first appearance in his lair, spawned by the map's init script for its story stage: takes Mario's controls,
+ * moaning (stg5_dou_21) and light flashes, then Cortez appears (korutesu_apper) with BGM_EVT_STG5_KORTESS1 and speaks,
+ * the battle with him starts, and afterwards he gives up the stone (starstone_fuwafuwa) and GSW_STORY_PROGRESS becomes
+ * STG5_33_CORTEZ_AND_THE_TREASURE.
+ */
 static EVT_BEGIN(korutesu_event)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S"), MAP_OBJ_FLAG_CLIP)
 
@@ -717,6 +723,11 @@ static EVT_BEGIN(korutesu_event)
     RETURN
 EVT_END()
 
+/**
+ * After Cortez's defeat, spawned by the map's init script: places Mario, the partner and Cortez, opens the doors
+ * S_t_doa02 / S_t_doa03, Cortez says stg5_dou_30, the screen darkens (back_dark) for stg5_dou_39, then
+ * GSW_STORY_PROGRESS becomes STG5_33_CORTEZ_AND_THE_TREASURE and the map changes to muj_10.
+ */
 static EVT_BEGIN(korutesu_event_after)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_set_pos, -65, 0, 0)

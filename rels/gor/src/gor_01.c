@@ -4487,6 +4487,10 @@ static EVT_BEGIN(bar_door_anime)
     RETURN
 EVT_END()
 
+/**
+ * Enters the four NPCs of Goombella's joining scene, Vinny and Tony (Piantas, c_m_buka) and Gus and Garf of the Robbos
+ * (c_monban), with their tribes, parked out of sight at y -1000; run by the map init.
+ */
 static EVT_BEGIN(christine_nakama_init)
     CALL(evt_npc_entry, STRING("マフィア１"), STRING("c_m_buka")) // Vinny, a Pianta
     CALL(evt_npc_set_tribe, STRING("マフィア１"), STRING("マフィア"))
@@ -4503,6 +4507,12 @@ static EVT_BEGIN(christine_nakama_init)
     RETURN
 EVT_END()
 
+/**
+ * Goombella joins (started by this map's joining check): she joins the party and walks up to Mario, kisses him
+ * (mac_0_034 to 041), Toadsworth (mac_0_042 to 047_02) leads into the bar, the partner lecture (all_party_lecture)
+ * runs, BGM_STG0_GOR1 starts and STG0_07_GOOMBELLA_JOINS is set; spawns maffia_assault meanwhile (synchronised through
+ * GF(10) and GF(11)) and christine_nakama_after at the end.
+ */
 static EVT_BEGIN(christine_nakama)
     SET_VALUE(GF(10), 1)
     SPAWN_EVENT(maffia_assault)
@@ -4707,6 +4717,10 @@ static EVT_BEGIN(christine_nakama)
     RETURN
 EVT_END()
 
+/**
+ * One scuffle of the Robbos for maffia_assault: fight sounds, smoke at Gus and Garf (maffia_kemuri) and both spun two
+ * turns in 360 ms.
+ */
 static EVT_BEGIN(maffia_turn)
     CALL(evt_snd_sfxon, STRING("SFX_STG0_THIEF_FIGHT1"), 0)
     CALL(evt_npc_get_position, STRING("盗賊団１"), LW(0), LW(1), LW(2))
@@ -4733,6 +4747,11 @@ static EVT_BEGIN(maffia_turn)
     RETURN
 EVT_END()
 
+/**
+ * Background scene during christine_nakama: Vinny and Tony walk up and beat Gus and Garf of the Robbos (maffia_turn
+ * three times, mac_0_054 to 061), then all four leave and are parked out of sight. Waits on GF(10) between parts; JP
+ * and later hold GF(11) set while it runs.
+ */
 EVT_BEGIN(maffia_assault)
 #if VERSION >= VERSION_JP
     SET_VALUE(GF(11), 1)
@@ -4937,6 +4956,11 @@ EVT_BEGIN(maffia_assault)
     RETURN
 EVT_END()
 
+/**
+ * Save reminder after Goombella joins (unless GW_FLAG_NO_SAVE_BLOCK): waits until Mario reaches the area x >= 440, z
+ * -10 to 190 without having saved (GSWF_MAIN_SAVED_SINCE_GOOMBELLA_JOINED), then the partner says mac_0_061_01 and
+ * GSWF_GOR_01_SAVE_REMINDER_DONE is set.
+ */
 static EVT_BEGIN(christine_nakama_after)
     CALL(evt_sub_get_system_flag, LW(0))
     IF_BITS_SET(LW(0), GW_FLAG_NO_SAVE_BLOCK)
@@ -4970,6 +4994,10 @@ static EVT_BEGIN(christine_nakama_after)
     RETURN
 EVT_END()
 
+/**
+ * Keeps the Ultra Hammer chest (mobj_box00) at the position of the invisible stand-in NPC every frame; spawned by
+ * ultrahammer_check.
+ */
 static EVT_BEGIN(box_copy)
     LOOP(0)
         CALL(evt_npc_get_position, STRING("ダミー"), LW(0), LW(1), LW(2))
@@ -4979,6 +5007,11 @@ static EVT_BEGIN(box_copy)
     RETURN
 EVT_END()
 
+/**
+ * Waits until Mario in motion 20 is within x 315 to 360, y 60 to 78, z -40 to 0, then drops the Ultra Hammer chest: an
+ * invisible stand-in NPC carries it (box_copy) in a jump to (275, 0, 75) with the fall sounds, three smoke puffs and a
+ * camera shake; sets GSWF_GOR_01_ULTRA_HAMMER_CHEST_FELL.
+ */
 static EVT_BEGIN(ultrahammer_check)
     CALL(evt_npc_entry, STRING("ダミー"), STRING("c_kinopio")) // invisible stand-in that carries the item box in a jump
     CALL(evt_mobj_get_position, STRING("mobj_box00"), LW(0), LW(1), LW(2))
@@ -5036,6 +5069,10 @@ static EVT_BEGIN(ultrahammer_check)
     RETURN
 EVT_END()
 
+/**
+ * After-open script of the Ultra Hammer chest (GSWF_GOR_01_ULTRA_HAMMER_CHEST): sets the key-item lecture
+ * (lect_juyoitem_rel_set) and gives the Ultra Hammer as an important item.
+ */
 static EVT_BEGIN(ultrahammer_get)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("mobj_box00"), LW(0), LW(1), LW(2))
@@ -5049,6 +5086,11 @@ static EVT_BEGIN(ultrahammer_get)
     RETURN
 EVT_END()
 
+/**
+ * Case script of the notice board front (A_keizi_mae): prints the one message that matches the current story point from
+ * the kj_omote data (keijiban_joho_check); with none or several matches it prints a direct-text debug notice listing
+ * the event number or the duplicate labels.
+ */
 static EVT_BEGIN(keijiban_omote_joho)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
@@ -5081,6 +5123,7 @@ static EVT_BEGIN(keijiban_omote_joho)
     RETURN
 EVT_END()
 
+/** keijiban_omote_joho for the board's back (A_keizi_ura, kj_ura data). */
 static EVT_BEGIN(keijiban_ura_joho)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
@@ -5113,6 +5156,10 @@ static EVT_BEGIN(keijiban_ura_joho)
     RETURN
 EVT_END()
 
+/**
+ * Every frame hides the gate wall groups S_gai_kabe_k and S_gai_kabe_k_01 while Mario's z is above -100 and shows them
+ * otherwise.
+ */
 static EVT_BEGIN(gate_disp)
     LOOP(0)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -5128,6 +5175,11 @@ static EVT_BEGIN(gate_disp)
     RETURN
 EVT_END()
 
+/**
+ * Moves the cockroach map object S_goki_01 without end: 50-unit hops in a wandering direction, kept within 70 of its
+ * start (evt_gor_villager_urouro_check_func), each over 50 frames and facing its way, with 0.5 to 3.5 s pauses. Also
+ * spawned by gor_02.
+ */
 static EVT_BEGIN(gor_goki1_urouro)
     SET_VALUE(LW(4), 0)
     SET_VALUE(LW(5), 0)
@@ -5163,6 +5215,9 @@ static EVT_BEGIN(gor_goki1_urouro)
     RETURN
 EVT_END()
 
+/**
+ * gor_goki1_urouro for the second cockroach S_goki_02 (another base offset, kept within 65). Also spawned by gor_02.
+ */
 static EVT_BEGIN(gor_goki2_urouro)
     SET_VALUE(LW(4), 0)
     SET_VALUE(LW(5), 0)
@@ -5198,6 +5253,10 @@ static EVT_BEGIN(gor_goki2_urouro)
     RETURN
 EVT_END()
 
+/**
+ * Enters Kammy Koopa (c_kamek_be) for the Bowser scene, parked out of sight, with talk pose and auto animation,
+ * NPC_STATUS_FACE_MOVE_DIR and a 30 by 40 size; run by the map init.
+ */
 static EVT_BEGIN(koopa_npc_entry)
     CALL(evt_npc_entry, STRING("ババ"), STRING("c_kamek_be")) // Kammy Koopa (chapter 6 Bowser interlude)
     CALL(evt_npc_set_tribe, STRING("ババ"), STRING("カメックババ"))
@@ -5210,6 +5269,11 @@ static EVT_BEGIN(koopa_npc_entry)
     RETURN
 EVT_END()
 
+/**
+ * Bowser's visit to Rogueport (spawned by the map init): three townsfolk NPCs flee (kpa_stg6_000 to 002), Bowser talks
+ * with Kammy Koopa as she flies in (kpa_stg6_003 to 008), Luigi looks round and leaves, STG6_55_02_BOWSER_ROGUEPORT is
+ * set and the map changes to kpa_05.
+ */
 static EVT_BEGIN(gor_01_koopa_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(delete_npc_regl_evt, STRING("ロテン１"))

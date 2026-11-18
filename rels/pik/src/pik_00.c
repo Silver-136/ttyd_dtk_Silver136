@@ -2072,6 +2072,10 @@ static EVT_BEGIN(evt_rot_door)
     RETURN
 EVT_END()
 
+/**
+ * Case event (CASE_UNDER) of the house floor a_home_yuka: unless GF(11) is set, hides the house shell ie_1 once Mario
+ * is under it (GF(10) tracks it). Early demos only (with appear_house).
+ */
 #if VERSION <= VERSION_DEMO_JP
 static EVT_BEGIN(erase_house)
     IF_INT_EQUAL(GF(11), 1)
@@ -2085,6 +2089,10 @@ static EVT_BEGIN(erase_house)
     RETURN
 EVT_END()
 
+/**
+ * Case event (CASE_NOT_UNDER) of the house floor a_home_yuka: unless GF(11) is set, shows the house shell ie_1 again
+ * and hides the inside group naka when Mario leaves. Early demos only.
+ */
 static EVT_BEGIN(appear_house)
     IF_INT_EQUAL(GF(11), 1)
         RETURN
@@ -2189,6 +2197,10 @@ EVT_BEGIN(evt_seacret)
     RETURN
 EVT_END()
 
+/**
+ * Item of treasure chest mobj_badge_gat (GSWF_PIK_00_HP_DRAIN_P_CHEST): an HP Drain P badge (ITEM_HP_DRAIN_P) appears
+ * at the chest and Mario takes it when the opening animation ends.
+ */
 static EVT_BEGIN(mobj_box00)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("mobj_badge_gat"), LW(0), LW(1), LW(2))

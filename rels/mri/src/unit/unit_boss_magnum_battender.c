@@ -1367,6 +1367,10 @@ static EVT_BEGIN(init_event_r)
     RETURN
 EVT_END()
 
+/**
+ * Per-frame loop of a rocket fist of Magnus von Grapple, spawned by init_event_r: updates the trail of its side
+ * (arm_main; sides 0 and 2 use trail slot 0, 1 and 3 slot 1) until the fist unit is gone, then runs arm_event_end.
+ */
 static EVT_BEGIN(arm_event)
     LABEL(0)
     WAIT_FRAMES(1)
@@ -1393,6 +1397,7 @@ static EVT_BEGIN(arm_event)
     RETURN
 EVT_END()
 
+/** Removes the trail effect of the rocket fist's side (arm_end; slot 0 for sides 0 and 2, slot 1 for 1 and 3). */
 static EVT_BEGIN(arm_event_end)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, ROCKET_PUNCH_WORK_SIDE, LW(0))
     IF_INT_EQUAL(LW(0), 0)
@@ -1410,6 +1415,10 @@ static EVT_BEGIN(arm_event_end)
     RETURN
 EVT_END()
 
+/**
+ * Damage event of the rocket fist: btldefaultevt_Damage; when the hit leaves it at 0 HP and it is not revived
+ * (DAMAGE_RESULT_ZERO_HP without DAMAGE_RESULT_REVIVAL), removes its trail (arm_event_end).
+ */
 static EVT_BEGIN(damage_event_r)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -1424,6 +1433,13 @@ static EVT_BEGIN(damage_event_r)
     RETURN
 EVT_END()
 
+/**
+ * Attack event of the rocket fist: skips the turn while ROCKET_PUNCH_WORK_WAIT, counted down each turn, is still 1 or
+ * more; otherwise sets it back to 1 and flies at one target (weapon_batten_rocket_attack) on one of two random paths
+ * with SFX_BOSS_MBTN_PUNCH_FLY1, dealing the damage and a camera shake as it passes the target on a hit (the target
+ * dodges on a lucky, dodgy or miss result), then flies in from the side back to its home position. A confused fist with
+ * no target flusters (subsetevt_confuse_flustered). See the BUG note on the precheck's default case.
+ */
 static EVT_BEGIN(attack_event_r)
     CALL(btlevtcmd_AddUnitWork, UNIT_ID_SELF, ROCKET_PUNCH_WORK_WAIT, -1)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, ROCKET_PUNCH_WORK_WAIT, LW(0))
@@ -1530,6 +1546,7 @@ static EVT_BEGIN(attack_event_r)
     RETURN
 EVT_END()
 
+/** Wait event of the rocket fist: clears its rotation, sets its pose from the pose table and idles. */
 static EVT_BEGIN(wait_event_r)
     CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)

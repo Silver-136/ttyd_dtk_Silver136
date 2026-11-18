@@ -2224,6 +2224,11 @@ EVT_BEGIN(mario_momikucha_msg)
     RETURN
 EVT_END()
 
+/**
+ * Fan mob scene on the first visit after STG3_06_1ST_MATCH (GSWF_TOU_02_FANS_MOB_RAWK_HAWK_SEEN) or the first time
+ * Mario is champion (rank 0, GSWF_TOU_02_FANS_MOB_MARIO_SEEN, GF(10) 1): creates hidden Toad and Lakitu templates and
+ * the fan crowd (evt_ext_entry, 200 fans; 250 in the early demos); run by the map's init script.
+ */
 // If both first-time mob scenes qualify, the champion Mario selection takes priority.
 static EVT_BEGIN(evt_momikucha)
     SET_VALUE(LF(0), 0)
@@ -2266,6 +2271,10 @@ static EVT_BEGIN(evt_momikucha)
     RETURN
 EVT_END()
 
+/**
+ * Pickup callback of the storage key (ITEM_STORAGE_KEY_0x13): sets GSW_STORY_PROGRESS to STG3_20_14_LOBBY_POSTER, the
+ * partner says stg3_tou_307_08, then a mail arrives (BGM_FF_MAIL_RECEPTION2) and is read after Mario presses A.
+ */
 static EVT_BEGIN(evt_key)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)

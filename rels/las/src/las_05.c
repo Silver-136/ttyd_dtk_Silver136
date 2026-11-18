@@ -1526,6 +1526,10 @@ static EVT_BEGIN(senkaron_event)
     RETURN
 EVT_END()
 
+/**
+ * Init event of the Dark Bones NPC table entry in las_05: at STG8_00_START it stands at (570, 0, 0) facing west in pose
+ * KRN_Z_2 with NPC_STATUS_FACE_MOVE_DIR and balloon type 0.
+ */
 static EVT_BEGIN(kurokaron_init)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_00_START)
         CALL(evt_npc_set_position, STRING("me"), 570, 0, 0)
@@ -1729,6 +1733,10 @@ static EVT_BEGIN(key_check_evt)
     RETURN
 EVT_END()
 
+/**
+ * Unlock script of the las_05 door lock (also registered by las_22 and las_25): sets STG8_01_02_LOCK and turns the
+ * e_bero_1 exit on.
+ */
 static EVT_BEGIN(unlock_evt)
     SET_VALUE(GSW_STORY_PROGRESS, STG8_01_02_LOCK)
     SET_VALUE(LW(0), STRING("e_bero_1"))
@@ -1736,6 +1744,10 @@ static EVT_BEGIN(unlock_evt)
     RETURN
 EVT_END()
 
+/**
+ * Hides the candle-flame map groups (make_name: 8 in row 1, 4 each in rows 2 and 3) and puts a looping fire effect 7
+ * below each one. Run by the map init.
+ */
 static EVT_BEGIN(shan_init)
     SET_VALUE(LW(0), 1)
     LOOP(3)
@@ -1763,6 +1775,11 @@ static EVT_BEGIN(shan_init)
     RETURN
 EVT_END()
 
+/**
+ * Map init of las_05 (relSetEvtAddr in las.c): BGM_STG8_LST1 and ENV_STG8_LAS1 (JP and later reverb mode 2), the
+ * entrances, the NPCs at STG8_00_START, the Palace Key (key_evt) at STG8_01_1000_DRY_BONES, before STG8_01_02_LOCK the
+ * lock (key_check_evt, unlock_evt) with the e_bero_1 exit off, and the candles (shan_init).
+ */
 EVT_BEGIN(las_05_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS1"))

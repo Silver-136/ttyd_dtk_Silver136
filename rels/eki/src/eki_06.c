@@ -134,6 +134,12 @@ static EVT_BEGIN(evt_box_open)
     RETURN
 EVT_END()
 
+/**
+ * Started when the three switches are done: the camera moves over them, the three switch map objects (MOBJ_eki_06_su1
+ * to su3) play their pop animation 400 ms apart with their sounds and are deleted, then the origami group unfolds into
+ * stairs (anm_kaidan167, oku_1 to oku_3 hidden in turn, a_ori on) with its paper sounds; BGM_FF_ENV_SUCCESS1 plays and
+ * STG6_35_ORIGAMI_STAIRS is set.
+ */
 static EVT_BEGIN(evt_sw_complete)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_cam3d_evt_set, -140, 152, 528, -140, 57, -12, 500, EASING_SINE_IN_OUT)

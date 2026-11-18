@@ -448,6 +448,10 @@ static EVT_BEGIN(punipuni_ball01)
     RETURN
 EVT_END()
 
+/**
+ * Plays SFX_STG2_SOAPBALL_MOVE1 at LW(0)-LW(2) every 500 ms while Mario rides a bubble; spawned and deleted by
+ * mario_shabon_check.
+ */
 static EVT_BEGIN(mario_shabon_move_sound)
     LOOP(0)
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG2_SOAPBALL_MOVE1"), LW(0), LW(1), LW(2), 0)
@@ -456,11 +460,18 @@ static EVT_BEGIN(mario_shabon_move_sound)
     RETURN
 EVT_END()
 
+/** Plays SFX_STG2_SOAPBALL_BREAK1 at LW(0)-LW(2) when the bubble bursts (mario_shabon_check). */
 static EVT_BEGIN(mario_shabon_break_sound)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG2_SOAPBALL_BREAK1"), LW(0), LW(1), LW(2), 0)
     RETURN
 EVT_END()
 
+/**
+ * Bubble ride, spawned by the map's init script and again by itself at the end: waits until Mario has stood on
+ * A_syabon_yuka for 60 frames out of state 1, then takes the controls and stops the partner, closes a bubble round him
+ * (mario_shabon_init, mario_shabon_eff) and lifts him 40 units over 1.5 s with the move sound, bursts it
+ * (SFX_STG2_SOAPBALL_BREAK1) and drops him back, then gives control back.
+ */
 static EVT_BEGIN(mario_shabon_check)
     SET_VALUE(LW(1), 0)
     SET_VALUE(LW(2), 0)

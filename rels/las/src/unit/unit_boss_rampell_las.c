@@ -4489,6 +4489,10 @@ static EVT_BEGIN(init_event_chuchurina)
     RETURN
 EVT_END()
 
+/**
+ * Dead event of Doopliss as Ms. Mowz: walks back to his home position if needed, plays the fall pose (PCH_D_3) with
+ * SFX_BOSS_NM_DOWN3 (JP and later also SFX_PARTY_BATTLE_DIE1), then runs the common dead_event.
+ */
 EVT_BEGIN(dead_event_chuchurina)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(3), LW(4), LW(5))
@@ -4516,6 +4520,10 @@ EVT_BEGIN(dead_event_chuchurina)
     RETURN
 EVT_END()
 
+/**
+ * Attack event of Doopliss as Ms. Mowz: uses an item when btlevtcmd_EnemyItemUseCheck picks one, otherwise the slap
+ * attack_event_chuchurina_normal with enemyWeapon_ChuchurinaNormalAttackR.
+ */
 static EVT_BEGIN(attack_event_chuchurina)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -4529,6 +4537,11 @@ static EVT_BEGIN(attack_event_chuchurina)
     RETURN
 EVT_END()
 
+/**
+ * Ms. Mowz's slaps as Doopliss uses them (weapon in LW(12)): walks up to the target and slaps it repeatedly (PCH_A1/A2
+ * poses, SFX_BTL_CHUCHURINA_ATTACK1 to 3), switching between the enemyWeapon_ChuchurinaNormalAttack R/L and last
+ * variants; a lucky, dodgy or miss result ends the series with a dodge. Then walks back home.
+ */
 static EVT_BEGIN(attack_event_chuchurina_normal)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(12))
@@ -4801,6 +4814,7 @@ static EVT_BEGIN(attack_event_chuchurina_normal)
     RETURN
 EVT_END()
 
+/** Wait event of Doopliss as Ms. Mowz: sets the pose from the pose table. */
 static EVT_BEGIN(wait_event_chuchurina)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN

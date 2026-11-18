@@ -740,6 +740,10 @@ static EVT_BEGIN(hom_10_evt_resha_sub)
     RETURN
 EVT_END()
 
+/**
+ * Runs hom_10_evt_resha_sub, then (outside rsh_06_a) hides train cars 7 and 8 and couplers 6 and 7. Used by
+ * hom_10_init_evt, hom_00, hom_11 and hom_12.
+ */
 EVT_BEGIN(hom_10_evt_resha_right)
     CALL_CHILD(hom_10_evt_resha_sub)
     CALL(evt_sub_get_mapname, LW(0))
@@ -752,6 +756,10 @@ EVT_BEGIN(hom_10_evt_resha_right)
     RETURN
 EVT_END()
 
+/**
+ * Runs hom_10_evt_resha_sub, then hides train cars 1 and 6 and couplers 1 and 5. Used by hom_10_init_evt, hom_00,
+ * hom_11 and hom_12.
+ */
 EVT_BEGIN(hom_10_evt_resha_left)
     CALL_CHILD(hom_10_evt_resha_sub)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("train_1"), MAP_OBJ_FLAG_HIDDEN)
@@ -761,6 +769,13 @@ EVT_BEGIN(hom_10_evt_resha_left)
     RETURN
 EVT_END()
 
+/**
+ * Map init of hom_10 (relSetEvtAddr in hom.c): no music, ENV_STG6_RSH2, Mario and the partners parked out of sight at y
+ * -1000 without control. Before GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT the train is set up for the right-hand run
+ * (hom_10_evt_resha_right, hom_10_evt_resha_start3; JP and later show couplers 1 to 5 in place of renketu), otherwise
+ * for the left-hand run (resha_left, resha_start4, train at x -1500). The letterboxed camera pans along the train for 8
+ * s and after 4 s the map changes to rsh_02_a at the nidome entrance.
+ */
 EVT_BEGIN(hom_10_init_evt)
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_RSH2"))

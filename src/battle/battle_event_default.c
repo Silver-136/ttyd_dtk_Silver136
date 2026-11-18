@@ -1084,6 +1084,9 @@ EVT_BEGIN(btldefaultevt_ProtectPartner)
 EVT_END()
 #endif
 
+/**
+ * Empty script for data-table slots that do nothing (Mario's UNIT_DATA_FIRST_ATTACK_POS_EVENT and many enemy tables).
+ */
 EVT_BEGIN(btldefaultevt_Dummy)
     RETURN
 EVT_END()

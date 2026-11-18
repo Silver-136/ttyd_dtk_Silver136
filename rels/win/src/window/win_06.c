@@ -107,6 +107,10 @@ static EVT_BEGIN(welcome_wonderforest_init)
     RETURN
 EVT_END()
 
+/**
+ * Arrival in Boggly Woods at STG1_END_TO_STAGE_2, spawned by win_06_init_evt: takes the controls, shows the area title
+ * card (telop 4) after 5 s, orbits the camera around the map (cam_kaiten) and then lets Mario out of the pipe (GF(0)).
+ */
 static EVT_BEGIN(welcome_wonderforest)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)
@@ -185,6 +189,10 @@ static EVT_BEGIN(welcome_wonderforest)
     RETURN
 EVT_END()
 
+/**
+ * Init script of win_06: before STG2_00_BOGGLY_WOODS the music starts 9 s late, else at once; arrival, view culling off
+ * for the tree and grass groups, the welcome scene at STG1_END_TO_STAGE_2 (welcome_wonderforest) and the save block.
+ */
 EVT_BEGIN(win_06_init_evt)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG2_00_BOGGLY_WOODS)
         BEGIN_INLINE_EVENT

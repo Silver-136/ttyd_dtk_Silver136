@@ -202,6 +202,12 @@ static EVT_BEGIN(heya_tenura_onoff)
     RETURN
 EVT_END()
 
+/**
+ * Map init of aji_08 (relSetEvtAddr in aji.c): BGM_STG7_DUN2 and ENV_STG7_AJI2 (JP and later set reverb mode 1), the
+ * entrances, heya_tenura_onoff, evt_emergency and slit_chk; loops the bari, awa1 and awa2 animations, places a Star
+ * Piece (GSWF_STARPIECE_99) and swings the S_ita ceiling back and forth with SFX_STG7_AMB_CEILING_MOVE1. From
+ * STG7_20_LORD_CRUMP_DEFEATED the wizard underling NPC is deleted.
+ */
 EVT_BEGIN(aji_08_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI2"))

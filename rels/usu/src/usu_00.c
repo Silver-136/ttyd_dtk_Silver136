@@ -2968,6 +2968,10 @@ static EVT_BEGIN(kanbu_talk)
     RETURN
 EVT_END()
 
+/**
+ * Bowser interlude NPCs: stops and deletes the town NPCs, then creates Kammy Koopa, Lord Crump and hidden Koopatrol,
+ * Hammer Bro, Magikoopa and X-Naut models for the army crowd; run by the map's init script.
+ */
 static EVT_BEGIN(koopa_npc_entry)
     CALL(evt_npc_get_reglid, STRING("ビビアン"), LW(0))
     DELETE_EVENT(LW(0))
@@ -3025,6 +3029,10 @@ static EVT_BEGIN(koopa_npc_entry)
     RETURN
 EVT_END()
 
+/**
+ * First Bowser interlude (STG5_47_PEACH_TEC_TALK), spawned by the map's init script: Bowser (as "mario") walks in with
+ * Kammy flying alongside, they talk (kpa_stg5_000 to 002) and GSW_STORY_PROGRESS becomes STG5_48_BOWSER_TWILIGHT_TOWN.
+ */
 static EVT_BEGIN(usu_00_koopa_first_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_set_pos, -300, 0, 50)
@@ -3080,6 +3088,10 @@ static EVT_BEGIN(usu_00_koopa_first_evt)
     RETURN
 EVT_END()
 
+/**
+ * Explosion smoke: a burst of bakuhatu_kemuri puffs at fixed offsets over about 350 ms; spawned during
+ * usu_00_koopa_second_evt.
+ */
 static EVT_BEGIN(bakuhatu_evt)
     CALL(bakuhatu_kemuri, FLOAT(0.0f), FLOAT(0.0f))
     WAIT_MS(100)
@@ -3102,6 +3114,10 @@ static EVT_BEGIN(bakuhatu_evt)
     RETURN
 EVT_END()
 
+/**
+ * The townsfolk run off: stops their regular scripts and moves each villager out of the map, then away (y -1000);
+ * spawned during usu_00_koopa_second_evt.
+ */
 static EVT_BEGIN(murabito_out)
     CALL(delete_npc_regl_evt, STRING("村人Ｃ"))
     CALL(delete_npc_regl_evt, STRING("村人Ｅ"))
@@ -3148,6 +3164,12 @@ static EVT_BEGIN(murabito_out)
     RETURN
 EVT_END()
 
+/**
+ * Second Bowser interlude (STG5_48_BOWSER_TWILIGHT_TOWN; spawned on entry from "player" or run by talking to Lord
+ * Crump, kanbu_talk): Lord Crump, Kammy and Bowser talk (kpa_stg5_010 and on), an explosion (bakuhatu_evt) scatters the
+ * townsfolk (murabito_out) and the army crowd appears; GSW_STORY_PROGRESS becomes STG5_49_BOWSER_TWILIGHT_TOWN_2 and
+ * the map changes to muj_00.
+ */
 static EVT_BEGIN(usu_00_koopa_second_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_set_motion, MARIO_MOTION_STAY)

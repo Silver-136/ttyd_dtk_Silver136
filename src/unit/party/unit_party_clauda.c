@@ -1342,6 +1342,11 @@ static EVT_BEGIN(attack_bad_audience_event)
     RETURN
 EVT_END()
 
+/**
+ * Flurrie's reaction to an audience member holding a real item (from attack_audience_event): she floats over to it with
+ * the camera following, kisses it (SFX_BTL_CLAUD_KISS1 and 2, "kiss" effect), knocks it out of the crowd (_attack_aud)
+ * and floats back home.
+ */
 static EVT_BEGIN(attack_good_audience_event)
     CALL(btlevtcmd_OffUnitFlag, UNIT_ID_SELF, BATTLE_UNIT_FLAG_FLOAT_ACTIVE)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PWD_A1_1"))

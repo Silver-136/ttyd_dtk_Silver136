@@ -1151,6 +1151,11 @@ EVT_BEGIN(koopa_door_evt)
     RETURN
 EVT_END()
 
+/**
+ * Bowser scene, spawned by the map's init script: Bowser (as "mario") and Kammy enter with her flying sound, they talk
+ * (kpa_stg7_000 to kpa_stg7_002) and GSW_STORY_PROGRESS becomes STG7_25_00_BOWSER_POSHLEY_HEIGHTS. JP and later wait
+ * for the entrance to finish first.
+ */
 EVT_BEGIN(pik_01_koopa_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_set_pos, -325, -5, -325)

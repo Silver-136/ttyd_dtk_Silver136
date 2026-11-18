@@ -436,6 +436,10 @@ static QuizEntry kuizu_data[] = {
     {"anm_7mon", "stg7_aji_18", "stg7_aji_19", 3},
 };
 
+/**
+ * JP and later: confetti 150 above Mario, the dennshoku sign shown instead of dennshoku_2 and the looping anm_seikai
+ * animation, then a 1.8 s wait. Spawned by this map's answer check.
+ */
 #if VERSION >= VERSION_JP
 EVT_BEGIN(UNK_0x00022a90)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -479,6 +483,10 @@ EVT_BEGIN(quiz_ng)
     RETURN
 EVT_END()
 
+/**
+ * JP and later: dennshoku_2 shown instead of dennshoku and the anm_fuseikai animation played once, then a 1.5 s wait.
+ * Run by this map's answer check.
+ */
 #if VERSION >= VERSION_JP
 EVT_BEGIN(UNK_0x00022be8)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("dennshoku"), MAP_OBJ_FLAG_HIDDEN)

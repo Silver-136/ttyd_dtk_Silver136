@@ -1469,6 +1469,13 @@ static EVT_BEGIN(marioAttackEvent_KaitenHammer)
     RETURN
 EVT_END()
 
+/**
+ * Switches in Doopliss's next partner double (from his phase event): advances GW(18) and spawns the matching entry (0
+ * Goombella, 1 Koops, 2 Flurrie, 3 Yoshi; anything else does nothing), clears GW(20) and stores the new unit in GW(17).
+ * The old double shrinks and jumps to the fake Mario (SFX_PARTY_IN1), its parameters are saved and the new one's loaded
+ * (_save_param, _load_param), the new double grows and jumps to its home spot (SFX_PARTY_CHANGE1, SFX_PARTY_OUT1, its
+ * UNIT_DATA_CHANGE_PARTY_SPAWN_INIT_EVENT if any), and the old one is removed.
+ */
 // Advance to the next staged partner; indices outside 0..3 return without spawning.
 static EVT_BEGIN(party_change_event)
     ADD(GW(18), 1)

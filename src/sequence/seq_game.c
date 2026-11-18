@@ -13,6 +13,10 @@
 static OSTime none_key;
 
 //.sdata
+/**
+ * After 2 s, opens the title-screen curtain (TITLE_SCREEN_CURTAIN_LEAVE_GRADUAL2); started by seq_gameMain when
+ * GW_FLAG_CURTAIN_OPEN is set.
+ */
 static EVT_BEGIN(maku_spread)
     WAIT_MS(2000)
     CALL(evt_fade_entry, TITLE_SCREEN_CURTAIN_LEAVE_GRADUAL2, 0, 0, 0, 0)

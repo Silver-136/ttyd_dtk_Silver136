@@ -424,6 +424,10 @@ EVT_BEGIN(mri_punipuni_setup)
     RETURN
 EVT_END()
 
+/**
+ * Shared by the Puni orb pedestals (mri_14, mri_17): without an ITEM_PUNI_ORB prints sys_no_item_to_put_on; otherwise
+ * opens the item selection (mri_itemsel_table). Returns LW(1) 1 when an item was chosen, else 0.
+ */
 EVT_BEGIN(mri_punipuni_itemselect)
     SET_VALUE(LW(1), 0)
     CALL(evt_pouch_check_item, ITEM_PUNI_ORB, LW(0))
@@ -444,6 +448,10 @@ EVT_BEGIN(mri_punipuni_itemselect)
     RETURN
 EVT_END()
 
+/**
+ * Puts a Puni orb on a pedestal (mri_14, mri_17): clears flags on target LW(11), removes one ITEM_PUNI_ORB from the
+ * pouch, plays SFX_STG2_PUNIDAMA_SET1 at item LW(10) and prints sys_stg2_punitama_on.
+ */
 EVT_BEGIN(mri_punipuni_itemset)
     CALL(evt_target_flag_onoff, LW(11), 0, 3)
     CALL(evt_pouch_remove_item, ITEM_PUNI_ORB, LW(0))
@@ -454,6 +462,10 @@ EVT_BEGIN(mri_punipuni_itemset)
     RETURN
 EVT_END()
 
+/**
+ * Takes the Puni orb off a pedestal (mri_14, mri_17): sets the flags on target LW(11) again, gives an ITEM_PUNI_ORB
+ * back, moves item LW(10) out of sight (y -1000; JP and later -20000) and prints sys_stg2_punitama_off.
+ */
 EVT_BEGIN(mri_punipuni_itemremove)
     CALL(evt_target_flag_onoff, LW(11), 1, 1)
     CALL(evt_pouch_add_item, ITEM_PUNI_ORB, LW(0))
@@ -660,6 +672,10 @@ EVT_BEGIN(mri_countdown)
     RETURN
 EVT_END()
 
+/**
+ * Endless waterfall splash at LW(0)-LW(2) (10 lower), size LW(3): a water_damage_n64 effect every 150 ms; spawned twice
+ * by mri_00.
+ */
 EVT_BEGIN(mri_waterfall_effect)
     ADD(LW(1), -10)
     LOOP(0)
@@ -669,6 +685,11 @@ EVT_BEGIN(mri_waterfall_effect)
     RETURN
 EVT_END()
 
+/**
+ * Sets LW(1) to the guide Puni's (Puni 1) state: 1 when the LSW_MRI_PUNI_RECORDS entry says it is in another area, 2
+ * when its mode is 16 (lost in this area), 0 otherwise; JP and later also return 3 when it is caught in a trap (checked
+ * first, so the later tests win). Used by mri_guide_goryu.
+ */
 EVT_BEGIN(mri_guide_hagure_check)
 #if VERSION <= VERSION_DEMO_JP
     CALL(evt_puni_get_lsw_index, LSW_MRI_PUNI_RECORDS, 0, LW(0), LW(1), LW(2), LW(3))
@@ -698,6 +719,11 @@ EVT_BEGIN(mri_guide_hagure_check)
     RETURN
 EVT_END()
 
+/**
+ * Brings a lost guide Puni (Puni 1) back to Mario: when mri_guide_hagure_check reports it lost, clears its
+ * LSW_MRI_PUNI_RECORDS entry (JP and later also its trap index), re-creates it and places it 10 units beside and behind
+ * Mario. Run by mri_17.
+ */
 EVT_BEGIN(mri_guide_goryu)
     CALL_CHILD(mri_guide_hagure_check)
     IF_INT_EQUAL(LW(1), 0)
@@ -723,6 +749,10 @@ EVT_BEGIN(mri_guide_goryu)
     RETURN
 EVT_END()
 
+/**
+ * Plays SFX_STG2_PUNI_MOVE2_1 at the NPC named in LW(0) every 5 frames until deleted; spawned by the Puni walk scenes
+ * (mri_00, mri_01 and others).
+ */
 EVT_BEGIN(mri_puni_walk_se)
     LOOP(0)
         CALL(evt_npc_get_position, LW(0), LW(10), LW(11), LW(12))
@@ -732,6 +762,7 @@ EVT_BEGIN(mri_puni_walk_se)
     RETURN
 EVT_END()
 
+/** Plays SFX_STG2_PUNI_JUMP1 once at the NPC named in LW(0). */
 EVT_BEGIN(mri_puni_jump_se)
     CALL(evt_npc_get_position, LW(0), LW(10), LW(11), LW(12))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG2_PUNI_JUMP1"), LW(10), LW(11), LW(12), 0)

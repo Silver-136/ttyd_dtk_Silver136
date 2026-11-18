@@ -29,6 +29,10 @@ static f32 _intplGetFloat(s32 mode, f32 t);
 
 // clang-format off
 // .sdata
+/**
+ * Shared NPC init script: sets NPC_FLAG_TALK_POSE and NPC_FLAG_AUTO_MOVE_ANIM on the running NPC ("me"). Map NPC init
+ * scripts run it with CALL_CHILD.
+ */
 EVT_BEGIN(npc_init_evt)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     RETURN

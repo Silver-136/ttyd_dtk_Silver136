@@ -308,6 +308,10 @@ static EVT_BEGIN(jump_evt)
     RETURN
 EVT_END()
 
+/**
+ * Switch script of the moving platform (S_move_dai, A_move_dai): runs move_dai with a time of 7200 (US and later scaled
+ * by las_24_adjust_for_framerate). las_20 and las_22 register it on their own switches too.
+ */
 static EVT_BEGIN(dai_evt)
     SET_VALUE(LW(0), STRING("S_move_dai"))
     SET_VALUE(LW(1), STRING("A_move_dai"))
@@ -319,6 +323,10 @@ static EVT_BEGIN(dai_evt)
     RETURN
 EVT_END()
 
+/**
+ * After-open script of the Palace Key chest ("box"): gives the key and sets STG8_13_KEY. las_11 to las_18 register it
+ * on their chests too.
+ */
 static EVT_BEGIN(box_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("box"), LW(0), LW(1), LW(2))
@@ -330,6 +338,13 @@ static EVT_BEGIN(box_evt)
     RETURN
 EVT_END()
 
+/**
+ * Map init of las_24 (relSetEvtAddr in las.c): BGM_STG8_LST3 and ENV_STG8_LAS7 (JP and later reverb mode 2), the
+ * entrances, the gears (haguruma_evt) and chain animation, the crate with a cloud case (S_hako, cloud_blk_evt, until
+ * GSWF_LAS_24_HAKO_BLOWN_AWAY or STG8_12), the big block (GSWF_LAS_24_BIG_BLOCK_BROKEN), the breaking floor, the red
+ * jump stand, the moving platform with its float switch (dai_evt), the coin and hidden Point Swap blocks and the Palace
+ * Key chest (box_evt, GSWF_LAS_24_PALACE_KEY_CHEST).
+ */
 EVT_BEGIN(las_24_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST3"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS7"))

@@ -917,6 +917,11 @@ EVT_BEGIN(minigame04_end)
     RETURN
 EVT_END()
 
+/**
+ * Init script of yuu_03: loops the yajirushi, tama, gurade and kyaku animations, spawns minigame04_main and sets up the
+ * minigame NPCs (evt_yuunpc_minigame4). US and later enable only the sign groups for the current language (J_mon,
+ * E_mon, D_mon, F_mon, Sp_mon, I_mon, with mon_10 for languages 0, 2 and 4).
+ */
 EVT_BEGIN(yuu_03_init_evt)
     CALL(evt_map_playanim, STRING("yajirushi"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("tama"), MAP_ANIM_PLAY_LOOP, 0)

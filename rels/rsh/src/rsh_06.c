@@ -1674,6 +1674,11 @@ static EVT_BEGIN(evt_clank)
     RETURN
 EVT_END()
 
+/**
+ * Scrolls the scenery by the train's travel GW(0) each frame while GSWF_HOM_TRAIN_MOVING is set: the ground jimen wraps
+ * every 800 units, the mountains iwayama and yama every 2400 (before US: ground and yama every 2400, iwayama every
+ * 7200); spawned by the map's init script.
+ */
 static EVT_BEGIN(evt_bg)
     SET_FLOAT_VALUE(LW(10), FLOAT(0.0f))
     SET_FLOAT_VALUE(LW(11), FLOAT(0.0f))
@@ -2628,6 +2633,10 @@ static EVT_BEGIN(rsh_06_init_evt)
     RETURN
 EVT_END()
 
+/**
+ * Init script of rsh_06_a: places Mario, runs the arrival (bero_data_a) and rsh_06_init_evt; with GW_FLAG_NO_ENTRANCE
+ * set it spawns moamoa_debug instead, otherwise before STG6_48_SMORG_MIASMA it sets up the Smorg (evt_moamoa_init).
+ */
 EVT_BEGIN(rsh_06_a_init_evt)
     CALL(evt_mario_set_pos, -500, 250, 0)
     SET_VALUE(LW(0), PTR(bero_data_a))

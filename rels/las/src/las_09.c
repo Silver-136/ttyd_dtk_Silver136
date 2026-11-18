@@ -832,6 +832,12 @@ static EVT_BEGIN(majyorin_evt_npc_entry)
     RETURN
 EVT_END()
 
+/**
+ * Beldam's ambush at STG8_06: Beldam and Marilyn rise out of the shadows (evt_npc_majo_disp_on), a stand-in NPC walks
+ * in and turns into Doopliss, they talk with Mario's partner (stg8_las_12 to 23, BGM_EVT_WITCH1) and the battle starts
+ * (battle info 8); afterwards all three sit dazed (eff_guruguru, stg8_las_24 to 26) with goikkou_talk as their talk
+ * script, and STG8_07_BELDAM_CONFRONTATION is set.
+ */
 static EVT_BEGIN(majyorin_evt_main)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
@@ -991,6 +997,10 @@ static EVT_BEGIN(majyorin_evt_main)
     RETURN
 EVT_END()
 
+/**
+ * Waits until Mario is inside the area at (620, 90) on the floor (y 0 to -5, not riding mod_38) or past x 640, then
+ * spawns majyorin_evt_main.
+ */
 static EVT_BEGIN(majyorin_evt)
     CALL(evt_seq_wait, SEQ_GAME)
     SET_VALUE(LF(0), 0)
@@ -1016,6 +1026,14 @@ static EVT_BEGIN(majyorin_evt)
     RETURN
 EVT_END()
 
+/**
+ * Map init of las_09 (relSetEvtAddr in las.c): no music, ENV_STG8_LAS3 (JP and later reverb mode 2), the entrances (not
+ * at STG8_02, which spawns first_evt), the damage return point, evt_gazigazi_entry, the water, the NPCs, recovery and
+ * save blocks, the two Chain Chomp objects with Bobbery cases (GSWF_LAS_09_CHAIN_CHOMP_1/2_BLOWN_UP), the two blue
+ * switches with their raised platforms and ship panels (GSWF_LAS_09_SWITCH_1/2_PRESSED), at STG8_06_MOVING_PLANETS the
+ * Beldam scene (majyorin_evt_main at the majyorin_evt entrance, else majyorin_evt), and
+ * GSWF_LAS_09_VISITED_AFTER_GLOOMTAIL from STG8_04_GLOOMTAIL.
+ */
 EVT_BEGIN(las_09_init_evt)
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS3"))

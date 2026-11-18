@@ -1424,6 +1424,7 @@ static EVT_BEGIN(flower_event)
     RETURN
 EVT_END()
 
+/** Waits for button bit 0x100 on pad 0, then calls flower_pos_report once; nothing in this file starts it. */
 static EVT_BEGIN(flower_disp_pos)
     LOOP(0)
         WAIT_FRAMES(1)
@@ -1533,6 +1534,11 @@ static EVT_BEGIN(cloud_toujou)
     RETURN
 EVT_END()
 
+/**
+ * Init script of win_04: arrival, music and muffled environment sound, the save block, the Flurrie scenes at STG2_04
+ * and STG2_05 (meet_clouda, meet_clouda2), the Shadow Sirens exit w_bero at STG2_05_02, and up to STG2_08 the door
+ * e_bero replaced by touch_door. JP and later set GSWF_WIN_04_ENTERED first.
+ */
 EVT_BEGIN(win_04_init_evt)
 #if VERSION >= VERSION_JP
     SET_VALUE(GSWF_WIN_04_ENTERED, 1)

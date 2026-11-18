@@ -1767,6 +1767,10 @@ static EVT_BEGIN(bed_entry)
     RETURN
 EVT_END()
 
+/**
+ * Spawned by evt_syorui: Jolene waits in the room until Mario comes back past x -270, then scolds him (stg3_tou_297_16,
+ * 17) and confiscates the Dubious Paper.
+ */
 static EVT_BEGIN(evt_okorareru)
     // Jolene waits in the room until Mario comes back out through the broken wall.
     CALL(evt_npc_set_position, STRING("キノシコワ"), 0, 0, -85)
@@ -1861,6 +1865,10 @@ static EVT_BEGIN(evt_okorareru)
     RETURN
 EVT_END()
 
+/**
+ * Pickup callback of the Dubious Paper (ITEM_DUBIOUS_PAPER, "syorui"): Mario reads it, the partner comments
+ * (stg3_tou_297_14, 15) and evt_okorareru starts.
+ */
 static EVT_BEGIN(evt_syorui)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
@@ -1893,6 +1901,9 @@ static EVT_BEGIN(evt_syorui)
     RETURN
 EVT_END()
 
+/**
+ * First-entry talk, spawned by the map's init script: Mario and the partner step in and the partner says stg3_tou_256.
+ */
 static EVT_BEGIN(first_tamago)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
@@ -1913,11 +1924,19 @@ static EVT_BEGIN(first_tamago)
     RETURN
 EVT_END()
 
+/**
+ * Break event of the big block blk (GSWF_TOU_10_BIG_BIG_BLOCK_BROKEN): sets GSW_STORY_PROGRESS to
+ * STG3_20_03_THE_YELLOW_BLOCK.
+ */
 static EVT_BEGIN(evt_block)
     SET_VALUE(GSW_STORY_PROGRESS, STG3_20_03_THE_YELLOW_BLOCK)
     RETURN
 EVT_END()
 
+/**
+ * Init script of tou_10: music and environment sound for the story stage, the story jump to STG3_12_THE_MINI_YOSHI_EGG
+ * (GSWF_TOU_10_JUMP_STORY_TO_EGG), then the door, lockers, fighters and the match terminal and monitor.
+ */
 EVT_BEGIN(tou_10_init_evt)
     // Music for the story stage, and the story jump to the Yoshi egg stage (GSWF_TOU_10_JUMP_STORY_TO_EGG).
     SWITCH(GSW_STORY_PROGRESS)

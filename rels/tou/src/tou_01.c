@@ -2816,6 +2816,10 @@ static EVT_BEGIN(evt_gondora_updown)
     RETURN
 EVT_END()
 
+/**
+ * Swings the gondola door g_mon (hit a_g_mon bound to it) about Y from LW(0) to LW(1) degrees over 800 ms with
+ * SFX_STG3_AIR_SHIP_GONDOLA_DOOR1; used by evt_gondora and evt_gondora2.
+ */
 static EVT_BEGIN(evt_gondora_mon)
     SET_VALUE(LW(3), LW(0))
     SET_VALUE(LW(4), LW(1))
@@ -2837,6 +2841,11 @@ static EVT_BEGIN(evt_gondora_mon)
     RETURN
 EVT_END()
 
+/**
+ * Arrival by blimp gondola, spawned by the map's init script: places Mario and the partners in the gondola, lowers it
+ * from 300 while the camera follows, opens its door (evt_gondora_mon) and walks them out. JP and later normalize Mario
+ * first.
+ */
 EVT_BEGIN(evt_gondora)
     CALL(evt_mario_key_onoff, 0)
 #if VERSION >= VERSION_JP
@@ -2887,6 +2896,11 @@ EVT_BEGIN(evt_gondora)
     RETURN
 EVT_END()
 
+/**
+ * Departure by blimp gondola: walks Mario and the partners in, fades the music, raises the gondola and closes its door;
+ * from STG3_34_RETURN_TO_ROGUEPORT the first time it sets GSWF_TOU_LEFT_AFTER_CHAPTER, and the map changes to tou_00
+ * (entrance modoru). JP and later normalize Mario and bring a distant partner to him first.
+ */
 EVT_BEGIN(evt_gondora2)
     CALL(evt_mario_key_onoff, 0)
 #if VERSION >= VERSION_JP
@@ -2962,6 +2976,10 @@ EVT_BEGIN(evt_gondora2)
     RETURN
 EVT_END()
 
+/**
+ * Sweeps searchlight map object LW(0) between -50 and 50 degrees about Z over 3 s each way, pausing 0.5 to 3 s at
+ * random between sweeps, for good; spawned twice by the map's init script.
+ */
 static EVT_BEGIN(evt_search_light)
     SET_VALUE(LW(8), LW(0))
     LOOP(0)
@@ -2993,6 +3011,11 @@ static EVT_BEGIN(evt_search_light)
     RETURN
 EVT_END()
 
+/**
+ * Blue tornado switch dummy_sw (GSWF_TOU_01_TORNADO_SWITCH_PRESSED): sets GF(10), turns the camera to the sign, flips
+ * the neon groups with the stair sounds while anm_kan plays, then shows neon_3, turns on the stairs hit a_sak_kaidan
+ * and off a_hasira, and gives control back.
+ */
 static EVT_BEGIN(evt_dummy_sw)
     SET_VALUE(GF(10), 1)
     CALL(evt_mario_key_onoff, 0)
@@ -3042,6 +3065,11 @@ static EVT_BEGIN(evt_dummy_sw)
     RETURN
 EVT_END()
 
+/**
+ * After the chapter's Peach interlude, spawned by the map's init script: Mario and the partner walk in, the partner
+ * says stg3_tou_479 and Mario nods; GSW_STORY_PROGRESS becomes STG3_34_RETURN_TO_ROGUEPORT. JP and later also put the
+ * woman NPC away (y -1000).
+ */
 EVT_BEGIN(evt_peach_after)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_cam3d_evt_set, 0, 130, 134, 0, 75, -312, 0, EASING_SINE_IN_OUT)
@@ -3124,6 +3152,10 @@ static EVT_BEGIN(sekai_yami_npc_init)
     RETURN
 EVT_END()
 
+/**
+ * Per-NPC part of sekai_yami_evt (NPC in LW(0)): waits until the darkness sweep GW(0) covers it (yami_oowareru_check),
+ * stops its regular script, shows a balloon, then turns it about at random intervals for good.
+ */
 static EVT_BEGIN(sekai_yami_npc)
     LOOP(0)
         CALL(evt_npc_get_position, LW(0), LW(1), LW(2), LW(3))
@@ -3148,6 +3180,11 @@ static EVT_BEGIN(sekai_yami_npc)
     RETURN
 EVT_END()
 
+/**
+ * The darkness passes over the town (STG8_15_GRODUS, entrance sekai_yami1): hides Mario and the partner, dims the
+ * background, switches the map and NPCs to the envSetYami TEV callback and sweeps GW(0) from -600 to 600 with
+ * sekai_yami_npc per NPC; Jolene says stg8_dark_03 and the map changes to las_29 (entrance sekai_yami1).
+ */
 static EVT_BEGIN(sekai_yami_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)
@@ -3216,6 +3253,10 @@ static EVT_BEGIN(sekai_yami_evt)
     RETURN
 EVT_END()
 
+/**
+ * Creates the NPCs of the everyone's-voices scene (entrance minnnanokoe): Jolene, Rawk Hawk, two Iron Clefts (scaled
+ * 1.5 in JP and later), a reporter and others at fixed spots; run by the map's init script before minnnanokoe_evt.
+ */
 static EVT_BEGIN(minnnanokoe_npc_entry)
     CALL(evt_npc_entry, STRING("キノシコワ"), STRING("c_ksikowa"))
     CALL(evt_npc_set_tribe, STRING("キノシコワ"), STRING("キノシコワ"))
@@ -3265,6 +3306,10 @@ static EVT_BEGIN(minnnanokoe_npc_entry)
     RETURN
 EVT_END()
 
+/**
+ * Everyone's-voices scene (entrance minnnanokoe): hides Mario and the partner, darkens the town (envSetYami,
+ * yami_view), and the townsfolk speak (stg8_las_148_18 to 25); the map changes to usu_00 (entrance minnnanokoe).
+ */
 static EVT_BEGIN(minnnanokoe_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)
@@ -3386,6 +3431,10 @@ static EVT_BEGIN(minnnanokoe_evt)
     RETURN
 EVT_END()
 
+/**
+ * Case event (A at a_telbox) of the phone box tel_box: plays SFX_STG3_TELEPHONE1 and prints one of the lines
+ * stg3_tel_01 to stg3_tel_10 at random. JP and later normalize Mario first.
+ */
 EVT_BEGIN(evt_telbox)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG3_TELEPHONE1"), LW(0), LW(1), LW(2), 0)
@@ -3423,6 +3472,11 @@ EVT_BEGIN(evt_telbox)
     RETURN
 EVT_END()
 
+/**
+ * Spawned at STG3_20_07_STORAGE_KEY: waits until Mario walks past x -675, then the mail arrives
+ * (BGM_FF_MAIL_RECEPTION2, vibration), Mario presses A, the messages stg3_tou_297_28 and 29 play and mail 11 is
+ * received and opened.
+ */
 static EVT_BEGIN(evt_mail)
     LABEL(0)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))

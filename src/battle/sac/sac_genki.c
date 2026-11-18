@@ -1336,6 +1336,7 @@ static EVT_BEGIN(genki_evt_common)
     RETURN
 EVT_END()
 
+/** Attack event of Sweet Treat (marioWeapon_Genki0): runs genki_evt_common in mode 0. */
 EVT_BEGIN(marioAttackEvent_Genki0)
     SET_VALUE(LW(15), 0)
     CALL_CHILD(genki_evt_common)

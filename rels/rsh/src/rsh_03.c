@@ -1477,6 +1477,11 @@ EVT_BEGIN(evt_shop_open)
     RETURN
 EVT_END()
 
+/**
+ * Case event (A at door hit tobira_omise_heya) for leaving the train shop: takes the controls, restores the shop
+ * (omiseFukki), turns the page back to the dining car (capture_img), shows the car groups again and slides the shop
+ * door open and shut by map and story state; JP and later also fade the other NPCs back in (npc_alpha_except_tenin).
+ */
 static EVT_BEGIN(evt_shop_close)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)

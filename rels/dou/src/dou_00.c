@@ -100,6 +100,10 @@ static EVT_BEGIN(back_light)
     RETURN
 EVT_END()
 
+/**
+ * Arrival cutscene of dou_00 (run from the map init): blends the map to black, prints stg5_dou_00 after a second,
+ * spawns back_light, sets STG5_19_01_ENTERING_THE_GROTTO and shows title card 10 (evt_telop_entry).
+ */
 static EVT_BEGIN(totsunyu_event)
     CALL(evt_map_set_blend, 0, 0, 0, 0, 255)
     CALL(evt_mario_key_onoff, 0)

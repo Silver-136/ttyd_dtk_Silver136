@@ -450,6 +450,10 @@ static EVT_BEGIN(mugen_kairou_init)
     RETURN
 EVT_END()
 
+/**
+ * Map init of las_08 (relSetEvtAddr in las.c): BGM_STG8_LST1 and ENV_STG8_LAS1 (JP and later reverb mode 2), the
+ * entrances and mugen_kairou_init.
+ */
 EVT_BEGIN(las_08_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS1"))

@@ -538,6 +538,7 @@ static USER_FUNC(_get_mario_hammer_lv) {
     return EVT_RETURN_DONE;
 }
 
+/** The early demos' damage event for Mario: runs btldefaultevt_Damage on part 1 of himself. */
 #if VERSION <= VERSION_DEMO_JP
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
@@ -546,6 +547,7 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/** The early demos' wait event for Mario: sets part 1's pose from its pose table. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN

@@ -743,6 +743,7 @@ static EVT_BEGIN(cam_shake)
     RETURN
 EVT_END()
 
+/** Horizontal camera shake that fades from 0.01 to 0 over 30 frames; run by the stone-breaking scene of this map. */
 static EVT_BEGIN(cam_shake2)
     CALL(evt_sub_intpl_init, EASING_SINE_IN_OUT, 10, 0, 30)
     LABEL(0)
@@ -755,6 +756,10 @@ static EVT_BEGIN(cam_shake2)
     RETURN
 EVT_END()
 
+/**
+ * Plays SFX_OFF1_ROCK_BREAK1 at Mario's position 20 times at irregular short intervals; spawned when the rock image
+ * breaks in this map's stone scene.
+ */
 static EVT_BEGIN(evt_snd)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     WAIT_MS(33)

@@ -1339,6 +1339,10 @@ static EVT_BEGIN(koopa_evt)
     RETURN
 EVT_END()
 
+/**
+ * From STG8_14_LOCK until STG8_15_GRODUS, sets up Grodus's light effects (evt_shuryolight_init) with their normal
+ * power, head and staff scripts. Also run by las_29.
+ */
 static EVT_BEGIN(shuryolight_init)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG8_14_LOCK)
         IF_INT_LESS(GSW_STORY_PROGRESS, STG8_15_GRODUS)
@@ -1349,6 +1353,10 @@ static EVT_BEGIN(shuryolight_init)
     RETURN
 EVT_END()
 
+/**
+ * Hides the 20 candle-flame map groups (make_name) and puts a looping fire effect 9 below each one. Run by the map
+ * init.
+ */
 static EVT_BEGIN(shan_init)
     SET_VALUE(LW(0), 1)
     LOOP(20)
@@ -1366,6 +1374,13 @@ static EVT_BEGIN(shan_init)
     RETURN
 EVT_END()
 
+/**
+ * Map init of las_28 (relSetEvtAddr in las.c): BGM_EVT_DANGER2 at STG8_15_GRODUS, else no music (JP and later switch
+ * ENV_STG8_LAS9 off at STG8_15 and on otherwise; the early demos always start it; JP and later reverb mode 2), the
+ * entrances (not at STG8_14_LOCK, which spawns first_evt), the NPCs, Grodus's lights (shuryolight_init), the throne
+ * pieces by story point and the candles; at STG8_14_01 the koopa_evt entrance sets up Bowser's scene with Grodus and
+ * Peach (koopa_evt), other entrances run syuryo_evt; the from26 entrance drops Mario and the partner in from above.
+ */
 EVT_BEGIN(las_28_init_evt)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_15_GRODUS)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_DANGER2"))

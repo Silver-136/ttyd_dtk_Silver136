@@ -328,6 +328,10 @@ static EVT_BEGIN(peach_evt_tana1)
     RETURN
 EVT_END()
 
+/**
+ * Case script of the shelf ("tana") once the data disk has been played: removes the data disk from the pouch, prints
+ * peach_aji_249 and sets STG5_46_PEACH_DISK_SEARCH.
+ */
 static EVT_BEGIN(peach_evt_tana2)
     CALL(evt_mario_key_onoff, 0)
 
@@ -385,6 +389,12 @@ static EVT_BEGIN(peach_evt_stg5)
     RETURN
 EVT_END()
 
+/**
+ * Map init of aji_11 (relSetEvtAddr in aji.c): BGM_STG7_DUN1 from STG5_45 to STG5_46, else BGM_STG7_DUN2, with
+ * ENV_STG7_AJI6 (JP and later set reverb mode 1); the entrances, the looping water and screen animations, the card key
+ * (until GSWF_AJI_11_CARD_KEY, from STG7_00_START, picked up through key_evt), monitors 2 and 3 hidden. From STG5_45 to
+ * STG5_46 Peach (Mario mode 1, no partner) runs peach_evt_stg5. Also spawns evt_gajigaji and evt_emergency.
+ */
 EVT_BEGIN(aji_11_init_evt)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG5_45_PEACH_POTION_PUZZLE, STG5_46_PEACH_DISK_SEARCH)

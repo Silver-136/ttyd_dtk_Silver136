@@ -2745,6 +2745,11 @@ static EVT_BEGIN(_nozzle_turn_event)
 EVT_END()
 #endif
 
+/**
+ * Started once per battle when the escape wall closes (see below): waits for the running attack to end, then shows the
+ * wall banner. JP and the early demos draw it with _announce_wall_message; US and later show btl_msg_escape_wall_close2
+ * with btlevtcmd_AnnounceMessage for 180 frames.
+ */
 #if VERSION == VERSION_JP
 static EVT_BEGIN(_close_wall_event)
     CALL(btlevtcmd_WaitAttackEnd)

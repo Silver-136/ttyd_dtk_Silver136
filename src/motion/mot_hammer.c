@@ -55,11 +55,13 @@ static EVT_BEGIN(lv1quake_evt)
     RETURN
 EVT_END()
 
+/** Medium camera shake at the impact frame of every swing with the Super Hammer (level 2). */
 static EVT_BEGIN(lv2quake_evt)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.01953125f), 110)
     RETURN
 EVT_END()
 
+/** Strong camera shake at the impact frame of every swing with the Ultra Hammer (level 3). */
 static EVT_BEGIN(lv3quake_evt)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.029296875f), 140)
     RETURN

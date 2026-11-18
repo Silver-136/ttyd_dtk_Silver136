@@ -274,6 +274,7 @@ static BattleUnitKindPart parts[] = {
     {1, "btl_un_gesso", "c_gesso", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 103, -175, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
 };
 
+/** Before US only: runs _test_rtn. */
 #if VERSION < VERSION_US
 static EVT_BEGIN(test_event)
     CALL(_test_rtn)

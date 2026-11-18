@@ -882,6 +882,12 @@ static EVT_BEGIN(evt_bero_nonride_check)
     RETURN
 EVT_END()
 
+/**
+ * Plays the door-open sound of the current entrance (evt_bero_get_info_num into LW(1)) at hit object LW(3), or at the
+ * origin when LW(3) is 0; BeroEntry.sfxId picks it: 1 plain, 2-4 wood, 5-6 iron, 7 grille, 8 sliding, 9 turning, 10
+ * electric, 11 stone, 12-13 castle, 14 metal, 15 SFX_STG3_AUTO_DOOR1, 16 SFX_STG3_LOCKER_OPEN1, 17
+ * SFX_DOOR_OPEN_SLIDE1_3; 0 stays silent. Spawned by bero_play_out_anime and by map door scripts.
+ */
 EVT_BEGIN(bero_open_door_play_se)
     CALL(evt_bero_get_info_num, LW(1))
     SET_VALUE(LW(4), 0)
@@ -931,6 +937,11 @@ EVT_BEGIN(bero_open_door_play_se)
     RETURN
 EVT_END()
 
+/**
+ * The door-shut sound for bero_open_door_play_se's sfxId table (11 stone reuses SFX_DOOR_OPEN_STONE1, 4 the second wood
+ * sound, 15 SFX_STG3_AUTO_DOOR1 again, 16 SFX_STG3_LOCKER_CLOSE1). Spawned by bero_play_enter_anime and by map door
+ * scripts.
+ */
 EVT_BEGIN(bero_close_door_play_se)
     CALL(evt_bero_get_info_num, LW(1))
     SET_VALUE(LW(4), 0)
@@ -980,6 +991,13 @@ EVT_BEGIN(bero_close_door_play_se)
     RETURN
 EVT_END()
 
+/**
+ * Plays the door animation of the arrival entrance LW(1) by its BeroEntry.enterAnimeType, with enterAnimeArg: 1 plays
+ * the map animation, pauses it for 700 ms, then plays the shut sound and lets it finish (Mario may walk after 200 ms);
+ * 2 swings the map object from -80 degrees shut over 500 ms; 4 spawns the script; 5 runs the script with LW(0) from 180
+ * down to 0 over 500 ms. Calls evt_bero_mario_go when Mario may walk in (kind 4 leaves that to its script); spawned by
+ * evt_bero_info_run_door.
+ */
 EVT_BEGIN(bero_play_enter_anime)
     CALL(evt_bero_get_info_anime, LW(1), LW(10), LW(11), LW(12), LW(13))
     SWITCH(LW(10))
@@ -1042,6 +1060,12 @@ EVT_BEGIN(bero_play_enter_anime)
     RETURN
 EVT_END()
 
+/**
+ * Plays the door animation of the exit entrance LW(1) by its BeroEntry.exitAnimeType, with exitAnimeArg: 1 plays the
+ * map animation once with the open sound and lets Mario go when it ends (500 ms without one); 2 swings the map object
+ * open to 80 degrees over 500 ms; 4 spawns the script; 5 runs the script with LW(0) from 0 up to 180 over 500 ms. Calls
+ * evt_bero_mario_go when Mario may walk (kind 4 leaves that to its script); spawned by bero_case_exec_door.
+ */
 EVT_BEGIN(bero_play_out_anime)
     CALL(evt_bero_get_info_anime, LW(1), LW(10), LW(11), LW(12), LW(13))
     SWITCH(LW(11))
@@ -1396,6 +1420,11 @@ static EVT_BEGIN(bero_case_init_check)
     RETURN
 EVT_END()
 
+/**
+ * Exit trigger for entrances with no walk-out: after bero_case_init_check, takes the controls, marks the exit busy and
+ * changes map (evt_bero_mapchange), waiting a second first before sys_01 (evt_bero_1stcheck). JP and later take the
+ * controls during bero_case_init_check too.
+ */
 EVT_BEGIN(bero_case_exec_none)
 #if VERSION <= VERSION_DEMO_JP
     CALL_CHILD(bero_case_init_check)
@@ -1420,6 +1449,11 @@ EVT_BEGIN(bero_case_exec_none)
     RETURN
 EVT_END()
 
+/**
+ * Exit trigger for road entrances: after bero_case_init_check, turns Mario to the exit's direction (LW(5) times 45
+ * degrees), walks him 150 units past the exit point and changes map after 150 ms (a second later before sys_01). JP and
+ * later take the controls during bero_case_init_check too.
+ */
 EVT_BEGIN(bero_case_exec_road)
 #if VERSION <= VERSION_DEMO_JP
     CALL_CHILD(bero_case_init_check)
@@ -1455,6 +1489,12 @@ EVT_BEGIN(bero_case_exec_road)
     RETURN
 EVT_END()
 
+/**
+ * Exit trigger for door entrances: after bero_case_init_check, clears HIT_ATTR_BERO on the exit's hit object, spawns
+ * bero_play_out_anime, turns Mario to the exit's direction and, once the door lets him go, walks him 150 units past the
+ * exit point, then changes map (a second later before sys_01). JP and later take the controls during
+ * bero_case_init_check too; the PAL demo and PAL retail walk only 40 units in tou_04.
+ */
 EVT_BEGIN(bero_case_exec_door)
 #if VERSION <= VERSION_DEMO_JP
     CALL_CHILD(bero_case_init_check)

@@ -196,6 +196,10 @@ static EVT_BEGIN(kpa_coin_evt)
     RETURN
 EVT_END()
 
+/**
+ * Places the stage coins from the (x, y) table at LW(0), ended by -1: each gets a fresh name (kpa_make_item_name),
+ * ITEM_FLAG_QUICK_GET and the pickup script kpa_coin_evt. Run by kpa_02, kpa_03 and kpa_05.
+ */
 EVT_BEGIN(kpa_read_item)
     SET_INT_READ_ADDR(LW(0))
     LOOP(0)
@@ -383,6 +387,10 @@ EVT_BEGIN(kpa_dead)
     RETURN
 EVT_END()
 
+/**
+ * Pit fall handler of Bowser's side-scrolling stages (kpa_02 to kpa_05): turns off the letterbox, controls and camera,
+ * waits until Bowser rides some hit object again and runs kpa_dead.
+ */
 EVT_BEGIN(kpa_fall_sub)
     CALL(evt_cam_letter_box_disable, 1)
     CALL(evt_cam_letter_box_onoff, 0, 0)
@@ -610,6 +618,12 @@ static EVT_BEGIN(kpa_status_main_evt)
     RETURN
 EVT_END()
 
+/**
+ * Stage clock of Bowser's side-scrolling stages (spawned by kpa_02 to kpa_06): once LSWF_KPA_TIMER_STARTED is set it
+ * runs a stopwatch on from the time already used and keeps GSW_KPA_TIME_LEFT up to date (kpa_set_time) until 180 s have
+ * passed in total, stops when LSWF_KPA_STAGE_ENDED is set, and at zero turns off the goal pole (kpa_pole_hitoff) and
+ * runs kpa_dead.
+ */
 EVT_BEGIN(kpa_time)
     CALL(evt_seq_wait, SEQ_GAME)
     SET_VALUE(LW(1), 180)

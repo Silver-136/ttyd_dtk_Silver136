@@ -482,6 +482,11 @@ static EVT_BEGIN(hosi_08_sw_evt)
     RETURN
 EVT_END()
 
+/**
+ * Star puzzle set-up (spawned by the map init): before STG8_11_STAR_PUZZLE hides the star groups S_hosi_02a to 08a,
+ * clears LSWF_LAS_20_STAR_02_LIT to 08_LIT and places the seven red float switches (hosi_02_sw_evt to hosi_08_sw_evt);
+ * from then hides the S_hosi_02b to 08b groups instead.
+ */
 static EVT_BEGIN(hosi_init)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG8_11_STAR_PUZZLE)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_hosi_02a"), MAP_OBJ_FLAG_HIDDEN)

@@ -1984,6 +1984,11 @@ EVT_BEGIN(rsh_04_init_evt_nidome)
     RETURN
 EVT_END()
 
+/**
+ * Init script of rsh_04_a on a later visit: runs the arrival (bero_data_a, or bero_data_a_return once
+ * GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT is set), the shared rsh_04_init_evt_nidome, and marks map A as the last one
+ * (GSWF_RSH_REVISIT_MAP_A on, B and C off).
+ */
 EVT_BEGIN(rsh_04_a_init_evt_nidome)
     IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
         SET_VALUE(LW(0), PTR(bero_data_a))
@@ -1999,6 +2004,7 @@ EVT_BEGIN(rsh_04_a_init_evt_nidome)
     RETURN
 EVT_END()
 
+/** rsh_04_a_init_evt_nidome for rsh_04_b (bero_data_b / bero_data_b_return, GSWF_RSH_REVISIT_MAP_B). */
 EVT_BEGIN(rsh_04_b_init_evt_nidome)
     IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
         SET_VALUE(LW(0), PTR(bero_data_b))
@@ -2014,6 +2020,10 @@ EVT_BEGIN(rsh_04_b_init_evt_nidome)
     RETURN
 EVT_END()
 
+/**
+ * rsh_04_a_init_evt_nidome for rsh_04_c (bero_data_c / bero_data_c_return, GSWF_RSH_REVISIT_MAP_C); also loops the
+ * ranpu lamp animation and starts the window scenery (evt_rsh_window with window_tbl).
+ */
 EVT_BEGIN(rsh_04_c_init_evt_nidome)
     IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
         SET_VALUE(LW(0), PTR(bero_data_c))

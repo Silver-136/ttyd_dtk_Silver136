@@ -354,6 +354,13 @@ static EVT_BEGIN(dead_event)
     RETURN
 EVT_END()
 
+/**
+ * Attack event of X-Naut horde group 3 (weapon_gundan_zako_group3_attack): a confused group with no target flusters
+ * (subsetevt_confuse_flustered, see the BUG note). Otherwise Lord Crump (zakogun_get_kanbu_id_evtcmd) steps back while
+ * the X-Nauts gather into a ball (zakogun_attack3_1, SFX_BOSS_TEAM_3RD_ADHERE1), he jumps onto it and rides it
+ * (zakogun_kanbu_on_ball) as it rolls at the target (zakogun_attack3_2, SFX_BOSS_TEAM_3RD_ROUND1, hit_check_event),
+ * then he jumps down. JP and later do Crump's part only while he can act.
+ */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_REACHED_TARGET, 0)
     SET_VALUE(LW(9), PTR(&weapon_gundan_zako_group3_attack))

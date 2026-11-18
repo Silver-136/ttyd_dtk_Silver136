@@ -400,6 +400,10 @@ static ExtTexInfo ext_kyaku_data[] = {
     {0},
 };
 
+/**
+ * A one-word script holding only the end word; nothing runs it. Its word is the seed state of the file's crowd random
+ * generator (__tou_srand, __tou_rand).
+ */
 static EVT_BEGIN(x)
 EVT_END()
 
@@ -3839,6 +3843,11 @@ static EVT_BEGIN(evt_champion)
     RETURN
 EVT_END()
 
+/**
+ * Title-match scene when the intro was already seen (spawned by the map's init script with a title match booked and
+ * GSWF_TOU_03_TITLE_MATCH_INTRO_SEEN set): with BGM_STG3_TOU2, Grubba and the champion in the belt (tou_champion_belt)
+ * talk (stg3_tou_418 to 421), then the map changes to tou_11 (entrance sandome) with an iris fade.
+ */
 static EVT_BEGIN(evt_champion2)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
@@ -4251,6 +4260,10 @@ static EVT_BEGIN(evt_shake)
     RETURN
 EVT_END()
 
+/**
+ * Creates the Gold Star (ITEM_GOLD_STAR, not touchable) and keeps it bobbing 20 units above the turntable kaiten_souti,
+ * with its sound on only while it is above height 50; its id goes to GW(10).
+ */
 static EVT_BEGIN(evt_boss_stone)
     SET_VALUE(LW(10), 0)
     CALL(evt_item_entry, STRING("stone"), ITEM_GOLD_STAR, 0, 0, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)

@@ -193,6 +193,10 @@ static EVT_BEGIN(main_evt)
     RETURN
 EVT_END()
 
+/**
+ * Runs select_func, the unit-window goods selection. The early demos run it as a hit-object case event per goods entry;
+ * JP and later start it once to poll the selection.
+ */
 static EVT_BEGIN(select_evt)
     CALL(select_func)
     RETURN

@@ -939,6 +939,12 @@ static EVT_BEGIN(unison_phase_event)
     RETURN
 EVT_END()
 
+/**
+ * Attack event of the Yux: on a first strike (BATTLE_FLAG_FIRST_ATTACK) the single-ring attack (wakka_attack_event);
+ * otherwise an item when btlevtcmd_EnemyItemUseCheck picks one; with all 2 Mini-Yux able to act and not confused the
+ * combined ring attack (wawawa_attack_event); else wakka_attack_event (the recovery_event branch has zero weight: the
+ * roll is always below 100).
+ */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_SetRGB, UNIT_ID_SELF, 1, 255, 255, 255)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
@@ -986,6 +992,10 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Rest turn of the Yux (from attack_event): the camera homes in on it, it holds pose S_3 for 120 frames, then shows the
+ * "recovery" effect and calls btlevtcmd_RecoverHp with 0 HP.
+ */
 static EVT_BEGIN(recovery_event)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, -1)
@@ -1004,6 +1014,7 @@ static EVT_BEGIN(recovery_event)
     RETURN
 EVT_END()
 
+/** Plays the dodge reaction of target LW(3) for the precheck result in LW(5): lucky (3), dodgy (6) or miss (2). */
 static EVT_BEGIN(start_avoid)
     IF_INT_EQUAL(LW(5), 3)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
@@ -1017,6 +1028,12 @@ static EVT_BEGIN(start_avoid)
     RETURN
 EVT_END()
 
+/**
+ * Fires ring part LW(15) from unit LW(12) (pose Z_3) at a target LW(3)/LW(4) it will miss: the ring pulses as it flies
+ * past the target to the stage edge, and the target plays its dodge reaction (start_avoid) as the ring reaches it. In
+ * the combined attack (UNIT_WORK_WAWAWA_ATTACK set) the ring has motion blur, flies faster and is parked at y -1000
+ * after.
+ */
 static EVT_BEGIN(wakka_attack_common_event_no_hit)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_WAWAWA_ATTACK, LW(6))
     IF_INT_EQUAL(LW(6), 0)
@@ -1105,6 +1122,10 @@ static EVT_BEGIN(wakka_attack_common_event_no_hit)
     RETURN
 EVT_END()
 
+/**
+ * Fires ring part LW(15) from unit LW(12) (pose Z_3) to the hit position of target LW(3)/LW(4); in the combined attack
+ * (UNIT_WORK_WAWAWA_ATTACK set) the ring has motion blur, flies faster and is parked at y -1000 after.
+ */
 static EVT_BEGIN(wakka_attack_common_event_hit)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_WAWAWA_ATTACK, LW(6))
     IF_INT_EQUAL(LW(6), 0)
@@ -1162,6 +1183,11 @@ static EVT_BEGIN(wakka_attack_common_event_hit)
     RETURN
 EVT_END()
 
+/**
+ * Prechecks weapon LW(9) against target LW(3)/LW(4): an intangible, lucky, dodgy or miss result fires a missing ring
+ * (wakka_attack_common_event_no_hit); a hit marks the target as hit in part 1's work, fires the hitting ring and
+ * applies the damage (with DAMAGE_RESULT_FINAL_HIT when LW(10) is 1). Ring part LW(15) ends parked at y -1000.
+ */
 static EVT_BEGIN(damage_check_event_sub)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), 0, LW(5))
     SWITCH(LW(5))
@@ -1214,6 +1240,12 @@ static EVT_BEGIN(damage_check_event_sub)
     RETURN
 EVT_END()
 
+/**
+ * Single-ring attack of the Yux (weapon_wakka_attack) on one target: a confused Yux with no target flusters
+ * (subsetevt_confuse_flustered). Otherwise the camera homes in, it turns toward the target with afterimages
+ * (barriern_zanzou, barriern_zanzou2) and the SFX_ENM_BARRI_ATTACK sounds, winds up through poses A_1 to A_4 and fires
+ * ring part 7 (damage_check_event_sub).
+ */
 static EVT_BEGIN(wakka_attack_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_wakka_attack))
@@ -1284,12 +1316,22 @@ static EVT_BEGIN(wakka_attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Afterimages of satellite LW(0) (barriern_satellite_zanzou, barriern_satellite_zanzou2); spawned twice by
+ * wawawa_attack_event.
+ */
 static EVT_BEGIN(wawawa_attack_event_satellite_blur)
     CALL(barriern_satellite_zanzou, UNIT_ID_SELF, LW(0))
     CALL(barriern_satellite_zanzou2, UNIT_ID_SELF, LW(0))
     RETURN
 EVT_END()
 
+/**
+ * Combined ring attack of the Yux and its 2 Mini-Yux (weapon_wawawa_attack) on every target: targets are picked
+ * (barriern_wawawa_set_target) into part 1's work, then the Yux and the satellites wind up together (poses F_1, F_2,
+ * A_1 to A_4) and each fires a ring in turn (wawawa_attack_event_sub, the Yux first); waits until all 3 rings are done
+ * (UNIT_WORK_SHOTS_DONE). A confused Yux with no target flusters (subsetevt_confuse_flustered).
+ */
 static EVT_BEGIN(wawawa_attack_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_wawawa_attack))
@@ -1454,6 +1496,11 @@ static EVT_BEGIN(wawawa_attack_event)
     RETURN
 EVT_END()
 
+/**
+ * One ring of wawawa_attack_event (shooter LW(12), target slot LW(13)/LW(14) in part 1's work, ring part LW(15)), with
+ * its sounds: when a later shooter in the volley aims at the same target it runs wawawa_attack_event_sub_no_last,
+ * otherwise wawawa_attack_event_sub_last; then counts the ring in UNIT_WORK_SHOTS_DONE.
+ */
 static EVT_BEGIN(wawawa_attack_event_sub)
     CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, 1, LW(13), LW(3))
     CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, 1, LW(14), LW(4))
@@ -1482,6 +1529,10 @@ static EVT_BEGIN(wawawa_attack_event_sub)
     RETURN
 EVT_END()
 
+/**
+ * A ring of the combined attack that is not the last on its target: damage_check_event_sub with weapon_wawawa_attack
+ * and no DAMAGE_RESULT_FINAL_HIT.
+ */
 static EVT_BEGIN(wawawa_attack_event_sub_no_last)
     SET_VALUE(LW(9), PTR(&weapon_wawawa_attack))
     SET_VALUE(LW(10), 0)
@@ -1489,6 +1540,11 @@ static EVT_BEGIN(wawawa_attack_event_sub_no_last)
     RETURN
 EVT_END()
 
+/**
+ * The last ring of the combined attack on its target: when an earlier ring already hit that target (part 1's hit flags)
+ * this one hits too with DAMAGE_RESULT_FINAL_HIT and is then hidden; otherwise it goes through damage_check_event_sub
+ * with DAMAGE_RESULT_FINAL_HIT.
+ */
 static EVT_BEGIN(wawawa_attack_event_sub_last)
     SET_VALUE(LW(13), 0)
     SET_VALUE(LW(14), 5)
@@ -1521,6 +1577,11 @@ static EVT_BEGIN(wawawa_attack_event_sub_last)
     RETURN
 EVT_END()
 
+/**
+ * Wait event of the Yux: sets each Mini-Yux's idle-pose flag (BARRIERN_SATELLITE_WORK_IDLE_POSE), keeps
+ * _check_satellite running every frame and, every 30 to 149 frames while it can act and is not confused, dizzy or
+ * poisoned, plays pose S_3 for 180 frames.
+ */
 static EVT_BEGIN(wait_event)
     CALL(_check_satellite)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)

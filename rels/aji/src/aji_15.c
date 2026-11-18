@@ -386,6 +386,10 @@ static EVT_BEGIN(peach_evt_syawa_main)
     RETURN
 EVT_END()
 
+/**
+ * Shower set-up for aji_15_init_evt: hides p_fuku and taoru, flattens S_syawa and loops the syawa animation. In mode 1
+ * (Peach) it removes the partner, plays the taoru animation once and attaches peach_evt_syawa_main to A_furo.
+ */
 static EVT_BEGIN(peach_evt_syawa_init)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("p_fuku"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("taoru"), MAP_OBJ_FLAG_HIDDEN)
@@ -404,6 +408,11 @@ static EVT_BEGIN(peach_evt_syawa_init)
     RETURN
 EVT_END()
 
+/**
+ * Map init of aji_15 (relSetEvtAddr in aji.c): the entrances, BGM_EVT_PEACH1 with the environment sound off,
+ * peach_evt_syawa_init (JP and later set reverb mode 1 first), GSWF_AJI_15_VISITED set and evt_emergency. The elite
+ * underling NPC is deleted from STG7_20_LORD_CRUMP_DEFEATED, or always when Mario is in mode 1 (Peach).
+ */
 EVT_BEGIN(aji_15_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)

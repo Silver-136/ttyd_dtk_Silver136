@@ -236,6 +236,12 @@ static EVT_BEGIN(kanbu_urouro)
     RETURN
 EVT_END()
 
+/**
+ * Lord Crump's appearance, spawned by the map's init script: hides Mario and the partner, pans the camera, has him
+ * wander (kanbu_urouro) and turn about, prints stg2_mri_e22_00 and stg2_mri_e22_01, then sets
+ * GSWF_MRI_14_CRUMP_REENTRY_PENDING and GSW_STORY_PROGRESS STG2_22_LORD_CRUMP_APPEARS and re-enters mri_14 at w_bero
+ * with an iris fade.
+ */
 static EVT_BEGIN(dai3_kanbu)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)

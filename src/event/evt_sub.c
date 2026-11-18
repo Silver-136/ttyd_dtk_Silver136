@@ -1141,6 +1141,10 @@ static EVT_BEGIN(mail_evt_bom_01)
     RETURN
 EVT_END()
 
+/**
+ * Rogueport Sewers (tik_00): at STG7_50_A sends mails 25 and 33 (GSWF_MAIL_GHOST_T_SENT) when Mario crosses x = 470 or
+ * x = -500.
+ */
 static EVT_BEGIN(mail_evt_tik_00)
     IF_INT_EQUAL(GSWF_MAIL_GHOST_T_SENT, 1)
         RETURN
@@ -1198,6 +1202,10 @@ static EVT_BEGIN(mail_evt_win_01)
     RETURN
 EVT_END()
 
+/**
+ * Glitzville (tou_01): at STG3_12 sends mail 28 (RDM issue 2) when Mario crosses x = -50 and starts the mri_07
+ * double-points sale (GSWF_SHOP_MRI_07_DOUBLE_POINTS_SALE, start time in GSW_SHOP_MRI_07_SALE_START_TIME).
+ */
 static EVT_BEGIN(mail_evt_tou_01)
     IF_INT_EQUAL(GSWF_MAIL_RDM_ISSUE_2_SENT, 1)
         RETURN
@@ -1256,6 +1264,11 @@ static EVT_BEGIN(mail_evt_usu_01)
     RETURN
 EVT_END()
 
+/**
+ * Rogueport (gor_01): loops for as long as the map runs; each time Mario crosses z = 200 it sends mail 30 (RDM issue 4)
+ * once at STG5_59_01 and starts the usu_01 double-points sale, and delivers due Trouble Center follow-up mail
+ * (irai_mail_check), running mail_evt when anything arrived.
+ */
 static EVT_BEGIN(mail_evt_gor_01_2)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     LOOP(0)
@@ -1347,6 +1360,12 @@ static EVT_BEGIN(mail_evt_pik_00)
     RETURN
 EVT_END()
 
+/**
+ * Mail trigger of the map scripts: unless the E3 system flag (GW_FLAG_E3) is set or Mario is not in mode 0, runs the
+ * mail_evt_<map> script of the current map (nok_01, gor_01 to gor_04, rsh_02_a / rsh_03_a, hom_00, bom_01, tik_00,
+ * win_01, tou_01, usu_01, pik_00); gor_01 and gor_02 also spawn their looping second script. US and later check the
+ * Pa-Patch mail in rsh_02_a; JP and the early demos in rsh_03_a after the RDM issue 5 check.
+ */
 EVT_BEGIN(evt_sub_mail_event)
     CALL(evt_sub_get_system_flag, LW(0))
     IF_BITS_SET(LW(0), GW_FLAG_E3)

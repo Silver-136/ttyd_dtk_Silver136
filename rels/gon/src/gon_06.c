@@ -190,6 +190,12 @@ static EVT_BEGIN(evt_ori_open)
     RETURN
 EVT_END()
 
+/**
+ * Arrival at STG1_13_A_SUSPICIOUS_ROOM (spawned by gon_06_init_evt): the music stops, Mario and the partner are placed
+ * by the door and walk in after its enter animation, the partner speaks (stg1_gon_18_00), Mario nods, BGM_STG1_GON1 and
+ * ENV_STG1_GON1 start and STG1_13_01_50_SECONDS_TO_ESCAPE is set. JP and later reset the road camera and set the
+ * bottomless-fall respawn point to Mario's position.
+ */
 EVT_BEGIN(tsuritenjo_event)
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
     CALL(evt_snd_envoff, PSND_FADEOUT)

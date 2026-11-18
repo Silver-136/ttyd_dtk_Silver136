@@ -2529,6 +2529,11 @@ EVT_BEGIN(evt_eat_doku_cake)
     RETURN
 EVT_END()
 
+/**
+ * At 3rd place, once (GSWF_TOU_POISON_CAKE_DELIVERED, set by the caller): after 2 s Jolene comes in through door_1 with
+ * the door sounds, says stg3_tou_295_doku and leaves the poisoned cake (ITEM_POISONED_CAKE, not touchable, partner
+ * cannot take it) on the table, then she is put away and GSWF_TOU_POISON_CAKE_ON_TABLE_UNUSED is set.
+ */
 EVT_BEGIN(evt_doku_cake)
     WAIT_MS(2000)
     CALL(evt_npc_set_position, STRING("キノシコワ"), 0, 0, -180)
@@ -2607,6 +2612,10 @@ EVT_BEGIN(evt_doku_cake)
     RETURN
 EVT_END()
 
+/**
+ * King K's good-luck scene the first time his match is booked (GSW_GLITZ_PIT_OPPONENT 18,
+ * GSWF_TOU_KING_K_PREMATCH_TALK_SEEN): Mario and the partner face him, he walks up and says stg3_npc_10_01_01.
+ */
 static EVT_BEGIN(evt_michel_1)
     BEGIN_INLINE_EVENT
         CALL(evt_mario_set_dir_npc, STRING("マイケル"))
@@ -2619,6 +2628,10 @@ static EVT_BEGIN(evt_michel_1)
     RETURN
 EVT_END()
 
+/**
+ * King K's talk at rank 18 (GSWF_TOU_RANK_18_KING_K_TALK_DONE): he walks over, says stg3_npc_10_01_02 and goes back to
+ * his spot facing 270.
+ */
 static EVT_BEGIN(evt_michel_2)
     CALL(evt_cam3d_evt_set, -45, 105, 288, -45, 60, -9, 2000, EASING_SINE_IN_OUT)
     CALL(evt_npc_move_position, STRING("マイケル"), 0, -80, 0, FLOAT(60.0f), 1)
@@ -2629,6 +2642,10 @@ static EVT_BEGIN(evt_michel_2)
     RETURN
 EVT_END()
 
+/**
+ * Walks the NPC named in LW(0) out of the locker room: to the door, opens door_1 with its sound, out through it and
+ * away (y -1000), then shuts the door; used by evt_michel_3.
+ */
 static EVT_BEGIN(evt_michel_3_sub)
     SET_VALUE(LW(3), LW(0))
     CALL(evt_npc_move_position, LW(3), 0, -130, 0, FLOAT(80.0f), 1)
@@ -2664,6 +2681,10 @@ static EVT_BEGIN(evt_michel_3_sub)
     RETURN
 EVT_END()
 
+/**
+ * King K's talk at rank 17 (GSWF_TOU_RANK_17_KING_K_TALK_DONE): he speaks (stg3_tou_93_17, 18), Jolene comes in with
+ * Bandy Andy, they talk (stg3_tou_93_19 to 23_01) and both leave through the door (evt_michel_3_sub).
+ */
 static EVT_BEGIN(evt_michel_3)
     CALL(evt_set_dir_to_target, STRING("マイケル"), STRING("mario"))
     CALL(evt_msg_print, 0, STRING("stg3_tou_93_17"), 0, STRING("マイケル"))
@@ -2730,6 +2751,11 @@ static EVT_BEGIN(evt_michel_3)
     RETURN
 EVT_END()
 
+/**
+ * King K's talk at rank 16 (GSWF_TOU_RANK_16_KING_K_TALK_DONE): he says stg3_tou_93_24, Mario, the partner and King K
+ * are startled, and the camera pans along the room while unseen voices speak (stg3_tou_93_24_01 to 24_10, balloons
+ * placed at positions), then King K talks again (24_11, 24_12).
+ */
 static EVT_BEGIN(evt_michel_4)
     CALL(evt_cam3d_evt_set, -45, 105, 288, -45, 60, -9, 2000, EASING_SINE_IN_OUT)
     CALL(evt_npc_move_position, STRING("マイケル"), 0, -80, 0, FLOAT(60.0f), 1)
@@ -2794,6 +2820,10 @@ static EVT_BEGIN(evt_michel_4)
     RETURN
 EVT_END()
 
+/**
+ * King K's talk at rank 15 (GSWF_TOU_RANK_15_KING_K_TALK_DONE): he walks over, says stg3_tou_93_25 and goes back to his
+ * spot.
+ */
 static EVT_BEGIN(evt_michel_5)
     CALL(evt_cam3d_evt_set, -45, 105, 288, -45, 60, -9, 2000, EASING_SINE_IN_OUT)
     CALL(evt_npc_move_position, STRING("マイケル"), 0, -80, 0, FLOAT(60.0f), 1)
@@ -2804,6 +2834,7 @@ static EVT_BEGIN(evt_michel_5)
     RETURN
 EVT_END()
 
+/** King K's talk at rank 14 (GSWF_TOU_RANK_14_KING_K_TALK_DONE): as evt_michel_5 with stg3_tou_93_26. */
 static EVT_BEGIN(evt_michel_6)
     CALL(evt_cam3d_evt_set, -45, 105, 288, -45, 60, -9, 2000, EASING_SINE_IN_OUT)
     CALL(evt_npc_move_position, STRING("マイケル"), 0, -80, 0, FLOAT(60.0f), 1)
@@ -2814,6 +2845,7 @@ static EVT_BEGIN(evt_michel_6)
     RETURN
 EVT_END()
 
+/** King K's talk at rank 13 (GSWF_TOU_RANK_13_KING_K_TALK_DONE): as evt_michel_5 with stg3_tou_93_27. */
 static EVT_BEGIN(evt_michel_7)
     CALL(evt_cam3d_evt_set, -45, 105, 288, -45, 60, -9, 2000, EASING_SINE_IN_OUT)
     CALL(evt_npc_move_position, STRING("マイケル"), 0, -80, 0, FLOAT(60.0f), 1)
