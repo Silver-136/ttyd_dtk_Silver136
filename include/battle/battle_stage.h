@@ -131,6 +131,7 @@ void BattleStageOnLightFriendInCommand(void);
 void BattleStageOnLightInCommand(void);
 s32 BattleStageSysLightEntry(const char* name);
 void BattleStageLightRelease(s32 idx, s32 time, u8 mode);
+void BattleStageLightReleaseAll(s32 time, u8 mode);
 void BattleStageLightSetLightColor(s32 idx, u8 r, u8 g, u8 b, s32 time, u8 mode);
 void BattleStageLightSetPosition(s32 idx, f32 x, f32 y, f32 z, s32 time, u8 mode);
 void BattleStageLightSetTarget(s32 idx, f32 x, f32 y, f32 z, s32 time, u8 mode);

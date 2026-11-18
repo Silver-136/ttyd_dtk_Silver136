@@ -491,6 +491,34 @@ void BattleStageLightRelease(s32 idx, s32 time, u8 mode) {
     }
 }
 
+/**
+ * Switches every active light off the way BattleStageLightRelease does: at once when time is 0, otherwise by a
+ * fade to black over time frames (curve mode). Nothing calls it (the JP demo map lists it as UNUSED, 0x98,
+ * between BattleStageLightRelease and BattleStageLightSetLightColor). Release's body for all 12 slots is
+ * exactly 0x98, and the map numbering agrees: the gap holds two UNUSED zero templates (@700, @702) and about 21
+ * numbers, of which this body gives 19. The slot count (12, the lights array) and the parameter types (as in
+ * Release) are not fixed by the bytes.
+ */
+void BattleStageLightReleaseAll(s32 time, u8 mode) {
+    BattleStage* s = BattleStageGetPtr();
+    s32 i;
+
+    for (i = 0; i < 12; i++) {
+        if (s->lights[i].flags & STAGE_LIGHT_ACTIVE) {
+            if (time == 0) {
+                s->lights[i].flags = 0;
+            } else {
+                s->lights[i].flags |= STAGE_LIGHT_RELEASING;
+                s->lights[i].colorStart = (GXColor){s->lights[i].color.r, s->lights[i].color.g, s->lights[i].color.b};
+                s->lights[i].colorTarget = (GXColor){0, 0, 0};
+                s->lights[i].colorTime = time;
+                s->lights[i].colorMax = time;
+                s->lights[i].colorMode = mode;
+            }
+        }
+    }
+}
+
 // propagation optimisation off for BattleStageLightSetLightColor: the original register allocation and scheduling need it
 #pragma opt_propagation off
 /**

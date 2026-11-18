@@ -2102,6 +2102,37 @@ static s32 compare_func5_2_r(const void* a, const void* b) {
     return 0;
 }
 
+/**
+ * qqsort compare for the Journal badge log by bp_cost. Nothing calls it: sort_5_3_func sorts by BP cost with its
+ * own loops. The JP demo map lists it and compare_func5_3_r as UNUSED (0x60 each) right after compare_func5_2_r;
+ * compare_func5_2's form on bp_cost is exactly 0x60 (the s8 field adds the two sign extensions). Static as most
+ * of its siblings (the map does not show the scope of a stripped function).
+ */
+static s32 compare_func5_3(const void* a, const void* b) {
+    s16 ia = itemDataTable[(s16)(*(s16*)a + BADGE_MIN)].bp_cost;
+    s16 ib = itemDataTable[(s16)(*(s16*)b + BADGE_MIN)].bp_cost;
+
+    if (ia > ib) {
+        return 1;
+    } else if (ia < ib) {
+        return -1;
+    }
+    return 0;
+}
+
+/** Reverse of compare_func5_3. */
+static s32 compare_func5_3_r(const void* a, const void* b) {
+    s16 ia = itemDataTable[(s16)(*(s16*)a + BADGE_MIN)].bp_cost;
+    s16 ib = itemDataTable[(s16)(*(s16*)b + BADGE_MIN)].bp_cost;
+
+    if (ia < ib) {
+        return 1;
+    } else if (ia > ib) {
+        return -1;
+    }
+    return 0;
+}
+
 /** Journal badge log (log.badgeIds) by name. */
 static void sort_5_1_func(WindowWork* wp) {
     if (!wp->sortRev) {
