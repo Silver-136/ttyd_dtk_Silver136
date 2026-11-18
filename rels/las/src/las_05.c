@@ -56,6 +56,15 @@ static u8 kurokaron_move_index;
 static u8 kurokaron_move_flag;
 static f32 kurokaron_move_list[6][2];
 
+// kurokaron_move_flag: Dark Bones' patrol and flee state.
+enum {
+    KUROKARON_MOVE_FLAG_BACKWARD = 1 << 0, // the patrol counts the waypoint index down (_kurokaron_next_move_index)
+    KUROKARON_MOVE_FLAG_FLEE = 1 << 1,     // running from Mario (kurokaron_move2 steers; 1.8 times speed while
+                                           // kurokaron_run_cnt runs)
+    KUROKARON_MOVE_FLAG_EDGE = 1 << 2,     // this frame he was outside the walking limits and turned along the edge
+    KUROKARON_MOVE_FLAG_TURN_NEG = 1 << 3, // he steers 90 degrees below the away-from-Mario angle, else above
+};
+
 typedef struct SenkaronWork {
     s32 attackStart;
     s32 escape;
@@ -122,8 +131,8 @@ EvtWord las_05_init_evt[63];
 #endif
 
 /**
- * Script helper: returns in args[1] the bits of kurokaron_move_flag selected by the mask args[0] (bit 2 is "Dark
- * Bones is running from Mario").
+ * Script helper: returns in args[1] the bits of kurokaron_move_flag selected by the mask args[0] (the script asks
+ * for KUROKARON_MOVE_FLAG_FLEE).
  */
 static USER_FUNC(kurokaron_flag_check) {
     EvtWord* args = event->args;
@@ -166,7 +175,7 @@ static s32 _kurokaron_run_away(f32 x, f32 z, f32 tx, f32 tz) {
 
     base = angleABf(x, z, tx, tz);
     cur = kurokaron_move_index;
-    if (!(kurokaron_move_flag & 1)) {
+    if (!(kurokaron_move_flag & KUROKARON_MOVE_FLAG_BACKWARD)) {
         if (cur == 0) {
             next = 5;
         } else {
@@ -191,22 +200,22 @@ static s32 _kurokaron_run_away(f32 x, f32 z, f32 tx, f32 tz) {
     if (cnt > 0) {
         result = cand[rand() % cnt];
         if (curDiff < 90.0f) {
-            if (!(kurokaron_move_flag & 1)) {
-                kurokaron_move_flag |= 1;
+            if (!(kurokaron_move_flag & KUROKARON_MOVE_FLAG_BACKWARD)) {
+                kurokaron_move_flag |= KUROKARON_MOVE_FLAG_BACKWARD;
             } else {
-                kurokaron_move_flag &= ~1;
+                kurokaron_move_flag &= ~KUROKARON_MOVE_FLAG_BACKWARD;
             }
         }
     } else if (curDiff < nextDiff) {
-        if (!(kurokaron_move_flag & 1)) {
+        if (!(kurokaron_move_flag & KUROKARON_MOVE_FLAG_BACKWARD)) {
             if (kurokaron_move_index == 0) {
                 result = 5;
             } else {
                 result = kurokaron_move_index - 1;
             }
-            kurokaron_move_flag |= 1;
+            kurokaron_move_flag |= KUROKARON_MOVE_FLAG_BACKWARD;
         } else {
-            kurokaron_move_flag &= ~1;
+            kurokaron_move_flag &= ~KUROKARON_MOVE_FLAG_BACKWARD;
             result = (kurokaron_move_index + 1) % 6;
         }
     }
@@ -218,7 +227,7 @@ static s32 _kurokaron_run_away(f32 x, f32 z, f32 tx, f32 tz) {
 /** Which of the six waypoints of kurokaron_move_list Dark Bones is currently heading for. */
 static u8 kurokaron_move_index = 0;
 
-/** State bits of Dark Bones: 1 patrol direction, 2 fleeing from Mario, 4 and 8 flee steering state. */
+/** State bits of Dark Bones (KUROKARON_MOVE_FLAG_*): patrol direction, fleeing from Mario, flee steering. */
 static u8 kurokaron_move_flag = 0;
 
 /** How many times in a row Dark Bones picked the same waypoint. */
@@ -234,7 +243,7 @@ static u8 kurokaron_stop_cnt = 0;
 static u16 kurokaron_run_cnt = 0;
 
 /**
- * Per-frame flee steering for Dark Bones (kurokaron_move_flag bit 2 set):
+ * Per-frame flee steering for Dark Bones (KUROKARON_MOVE_FLAG_FLEE set):
  * if it is outside the room's walking limits it turns along the wall around Mario,
  * if Mario is within 100 units it moves directly away from him (or along the edge),
  * otherwise it picks a new waypoint once via _kurokaron_run_away. Returns 1 when a new waypoint was chosen.
@@ -244,26 +253,26 @@ static s32 kurokaron_move2(NpcEntry* npc, MarioWork* mario) {
     static s32 count = 0;
     f32 angle;
 
-    if (!(kurokaron_move_flag & 2)) {
+    if (!(kurokaron_move_flag & KUROKARON_MOVE_FLAG_FLEE)) {
         flag = 0;
         return 0;
     }
-    kurokaron_move_flag &= ~4;
+    kurokaron_move_flag &= ~KUROKARON_MOVE_FLAG_EDGE;
     if (npc->position.x < -560.0f || npc->position.x > 560.0f || npc->position.z < -260.0f || npc->position.z > 260.0f) {
         if (rand() % 100 == 0) {
-            if (kurokaron_move_flag & 8) {
-                kurokaron_move_flag &= ~8;
+            if (kurokaron_move_flag & KUROKARON_MOVE_FLAG_TURN_NEG) {
+                kurokaron_move_flag &= ~KUROKARON_MOVE_FLAG_TURN_NEG;
             } else {
-                kurokaron_move_flag |= 8;
+                kurokaron_move_flag |= KUROKARON_MOVE_FLAG_TURN_NEG;
             }
         }
         angle = angleABf(mario->position.x, mario->position.z, npc->position.x, npc->position.z);
-        if (kurokaron_move_flag & 8) {
+        if (kurokaron_move_flag & KUROKARON_MOVE_FLAG_TURN_NEG) {
             npc->moveDir = reviseAngle(angle - 90.0f);
         } else {
             npc->moveDir = reviseAngle(angle + 90.0f);
         }
-        kurokaron_move_flag |= 4;
+        kurokaron_move_flag |= KUROKARON_MOVE_FLAG_EDGE;
         flag = 0;
         return 0;
     }
@@ -273,7 +282,7 @@ static s32 kurokaron_move2(NpcEntry* npc, MarioWork* mario) {
         } else {
             if (npc->position.x < -490.0f || npc->position.x > 490.0f || npc->position.z < -190.0f || npc->position.z > 190.0f) {
                 angle = angleABf(mario->position.x, mario->position.z, npc->position.x, npc->position.z);
-                if (kurokaron_move_flag & 8) {
+                if (kurokaron_move_flag & KUROKARON_MOVE_FLAG_TURN_NEG) {
                     npc->moveDir = angle - 90.0f;
                 } else {
                     npc->moveDir = angle + 90.0f;
@@ -297,10 +306,10 @@ static s32 kurokaron_move2(NpcEntry* npc, MarioWork* mario) {
 
 /**
  * Advances Dark Bones' patrol index to the next waypoint,
- * forward or backward around the six points depending on kurokaron_move_flag bit 1.
+ * forward or backward around the six points depending on KUROKARON_MOVE_FLAG_BACKWARD.
  */
 static void _kurokaron_next_move_index(void) {
-    if (kurokaron_move_flag & 1) {
+    if (kurokaron_move_flag & KUROKARON_MOVE_FLAG_BACKWARD) {
         if (kurokaron_move_index == 0) {
             kurokaron_move_index = 5;
         } else {
@@ -367,11 +376,11 @@ static USER_FUNC(kurokaron_move_position) {
         kurokaron_stop_cnt--;
         return EVT_RETURN_BLOCK;
     }
-    if (!(kurokaron_move_flag & 2) && vivianGetStatus() != VIVIAN_STATUS_SINKING && vivianGetStatus() != VIVIAN_STATUS_HIDDEN && vivianGetStatus() != VIVIAN_STATUS_RISING &&
+    if (!(kurokaron_move_flag & KUROKARON_MOVE_FLAG_FLEE) && vivianGetStatus() != VIVIAN_STATUS_SINKING && vivianGetStatus() != VIVIAN_STATUS_HIDDEN && vivianGetStatus() != VIVIAN_STATUS_RISING &&
         marioDist < 80.0f) {
         kurokaron_move_index = _kurokaron_run_away(npc->position.x, npc->position.z, mario->position.x, mario->position.z);
         kurokaron_run_cnt = 350;
-        kurokaron_move_flag |= 2;
+        kurokaron_move_flag |= KUROKARON_MOVE_FLAG_FLEE;
         return EVT_RETURN_DONE;
     }
     if (kurokaron_move2(npc, mario)) {
@@ -383,24 +392,24 @@ static USER_FUNC(kurokaron_move_position) {
     if (npc->wallHit) {
         f32 angle = angleABf(mario->position.x, mario->position.z, npc->position.x, npc->position.z);
 
-        if (kurokaron_move_flag & 4) {
-            if (kurokaron_move_flag & 8) {
-                kurokaron_move_flag &= ~8;
+        if (kurokaron_move_flag & KUROKARON_MOVE_FLAG_EDGE) {
+            if (kurokaron_move_flag & KUROKARON_MOVE_FLAG_TURN_NEG) {
+                kurokaron_move_flag &= ~KUROKARON_MOVE_FLAG_TURN_NEG;
                 npc->moveDir = reviseAngle(angle + 90.0f);
             } else {
-                kurokaron_move_flag |= 8;
+                kurokaron_move_flag |= KUROKARON_MOVE_FLAG_TURN_NEG;
                 npc->moveDir = reviseAngle(angle - 90.0f);
             }
         }
         kurokaron_run_cnt = 350;
-        kurokaron_move_flag |= 2;
+        kurokaron_move_flag |= KUROKARON_MOVE_FLAG_FLEE;
     }
     if (dist <= step && marioDist > 100.0f) {
         npc->moveSpeed = 0.0f;
-        kurokaron_move_flag &= ~2;
+        kurokaron_move_flag &= ~KUROKARON_MOVE_FLAG_FLEE;
         if (kurokaron_prev_goal == kurokaron_move_index) {
             if (++kurokaron_same_goal > 3) {
-                kurokaron_move_flag |= 2;
+                kurokaron_move_flag |= KUROKARON_MOVE_FLAG_FLEE;
             }
         } else {
             kurokaron_same_goal = 0;
@@ -412,7 +421,7 @@ static USER_FUNC(kurokaron_move_position) {
     if ((npc->statusFlags & NPC_STATUS_FACE_MOVE_DIR) && npc->moveSpeed > 0.1f) {
         npcTuningRy(npc, npc->moveDir);
     }
-    if ((kurokaron_move_flag & 2) && kurokaron_run_cnt != 0) {
+    if ((kurokaron_move_flag & KUROKARON_MOVE_FLAG_FLEE) && kurokaron_run_cnt != 0) {
         speed = 1.8f * npc->moveSpeed;
     } else {
         speed = npc->moveSpeed;
@@ -717,7 +726,7 @@ static EVT_BEGIN(kurokaron_move)
     LOOP(0)
         CALL(kurokaron_get_move_pos, LW(0), LW(1))
         CALL(kurokaron_move_position, STRING("黒カロン"), LW(0), LW(1), GW(0))
-        CALL(kurokaron_flag_check, 2, LW(2))
+        CALL(kurokaron_flag_check, KUROKARON_MOVE_FLAG_FLEE, LW(2))
         IF_INT_NOT_EQUAL(LW(2), 0)
             IF_INT_EQUAL(LW(3), 0)
                 IF_INT_EQUAL(LF(0), 0)

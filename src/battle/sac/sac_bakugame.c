@@ -1398,7 +1398,7 @@ static void bakuGameDisp2D(CameraId cam, void* param) {
     full = 0;
     if (w->gauge >= 100.0f) {
         disp->color.r = 0;
-        full = 1;
+        full = AC_GAUGE_FLAG_FULL;
         disp->color.a = 0xFF;
         disp->color.g += disp->colorStep[1];
         disp->color.b += disp->colorStep[2];

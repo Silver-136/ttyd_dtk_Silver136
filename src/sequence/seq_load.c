@@ -541,7 +541,7 @@ static void loadMain(SequenceWork* seq) {
                         m->prevPartyMemberId[1] = 0;
                     }
                     gp->areaFadeOutType = FADE_NONE;
-                    gp->areaFadeInType = 25;
+                    gp->areaFadeInType = FADE_CURTAIN_SIDES_A2_3D;
                     swInit();
                     swByteSet(GSW_ID(GSW_STORY_PROGRESS), STG0_00_PROLOGUE);
                     if (code == 0) {
@@ -1514,8 +1514,8 @@ static void continueGame(void) {
             gp->areaFadeOutType = FADE_STORY_PEACH_A2;
             gp->areaFadeInType = FADE_STORY_PEACH_A3;
 #else
-            gp->areaFadeOutType = 0;
-            gp->areaFadeInType = 28;
+            gp->areaFadeOutType = FADE_NONE;
+            gp->areaFadeInType = FADE_CURTAIN_SIDES_A2;
 #endif
             seqSetSeq(SEQ_MAP_CHANGE, "usu_00", 0);
             break;
@@ -1534,8 +1534,8 @@ static void continueGame(void) {
             gp->areaFadeOutType = FADE_STORY_MARIO_A2;
             gp->areaFadeInType = FADE_STORY_MARIO_A3;
 #else
-            gp->areaFadeOutType = 0;
-            gp->areaFadeInType = 28;
+            gp->areaFadeOutType = FADE_NONE;
+            gp->areaFadeInType = FADE_CURTAIN_SIDES_A2;
 #endif
             seqSetSeq(SEQ_MAP_CHANGE, "muj_12", 0);
             break;
@@ -1554,8 +1554,8 @@ static void continueGame(void) {
             gp->areaFadeOutType = FADE_STORY_MARIO_A2;
             gp->areaFadeInType = FADE_STORY_MARIO_A3;
 #else
-            gp->areaFadeOutType = 0;
-            gp->areaFadeInType = 28;
+            gp->areaFadeOutType = FADE_NONE;
+            gp->areaFadeInType = FADE_CURTAIN_SIDES_A2;
 #endif
             seqSetSeq(SEQ_MAP_CHANGE, "pik_03", "next");
             break;
@@ -1589,8 +1589,8 @@ static void continueGame(void) {
             gp->areaFadeOutType = FADE_STORY_MARIO_A2;
             gp->areaFadeInType = FADE_STORY_MARIO_A3;
 #else
-            gp->areaFadeOutType = 0;
-            gp->areaFadeInType = 28;
+            gp->areaFadeOutType = FADE_NONE;
+            gp->areaFadeInType = FADE_CURTAIN_SIDES_A2;
 #endif
             seqSetSeq(SEQ_MAP_CHANGE, "jin_04", 0);
             break;

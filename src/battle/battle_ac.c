@@ -510,8 +510,8 @@ void BattleAcDrawGauge(s32 x, s32 y, f32 ratio, s32 width, s32 level, s32 a, s32
         return;
     }
 
-    if (flags & 3) {
-        if (flags & 1) {
+    if (flags & (AC_GAUGE_FLAG_FULL | AC_GAUGE_FLAG_OVERHEAT)) {
+        if (flags & AC_GAUGE_FLAG_FULL) {
             color.r = color.r * mod->r / 255;
             color.g = color.g * mod->g / 255;
             color.b = color.b * mod->b / 255;

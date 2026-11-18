@@ -1293,7 +1293,7 @@ static void itemseq_GetItem(ItemEntry* entry) {
             } else if (entry->itemId == ITEM_STAR_PIECE) {
                 type = 8;
                 bgm = 0;
-            } else if (entry->itemId < 0xC) {
+            } else if (entry->itemId < ITEM_CASTLE_KEY_0x0C) {
                 type = 3;
                 bgm = 3;
             } else if (entry->itemId < ITEM_DIAMOND_STAR) {
@@ -1313,20 +1313,20 @@ static void itemseq_GetItem(ItemEntry* entry) {
 #if VERSION <= VERSION_DEMO_JP
             if (type == 0 || type == 3) {
                 if (entry->flags2 & ITEM_FLAG2_UPGRADE_GET) {
-                    ((ItemGetWork*)wp->effect->userdata)->camera = 5;
+                    ((ItemGetWork*)wp->effect->userdata)->camera = CAMERA_3D_EFFECTA;
                     marioSetCamId(CAMERA_3D_EFFECTB);
-                    iconFlagOn(entry->name, 0x100);
+                    iconFlagOn(entry->name, ICON_FLAG_CAM_EFFECT_B);
                 } else {
-                    ((ItemGetWork*)wp->effect->userdata)->camera = 5;
+                    ((ItemGetWork*)wp->effect->userdata)->camera = CAMERA_3D_EFFECTA;
                     marioSetCamId(CAMERA_3D_EFFECTA);
-                    iconFlagOn(entry->name, 0x40);
+                    iconFlagOn(entry->name, ICON_FLAG_CAM_EFFECT_A);
 #else
             if (entry->flags2 & ITEM_FLAG2_UPGRADE_GET) {
-                ((ItemGetWork*)wp->effect->userdata)->camera = 5;
+                ((ItemGetWork*)wp->effect->userdata)->camera = CAMERA_3D_EFFECTA;
                 iconFlagOn(entry->name, ICON_FLAG_CAM_EFFECT_B);
                 marioSetCamId(CAMERA_3D_EFFECTB);
             } else {
-                ((ItemGetWork*)wp->effect->userdata)->camera = 5;
+                ((ItemGetWork*)wp->effect->userdata)->camera = CAMERA_3D_EFFECTA;
                 iconFlagOn(entry->name, ICON_FLAG_CAM_EFFECT_A);
                 if (type == 0 || type == 3) {
                     marioSetCamId(CAMERA_3D_EFFECTA);
@@ -1456,7 +1456,7 @@ static void itemseq_GetItem(ItemEntry* entry) {
             effSoftDelete(wp->effect);
             marioSetCamId(CAMERA_3D);
 #if VERSION <= VERSION_DEMO_JP
-            iconFlagOff(entry->name, 0x40);
+            iconFlagOff(entry->name, ICON_FLAG_CAM_EFFECT_A);
             if (entry->itemId == ITEM_WEDDING_RING) {
                 iconChange(entry->name, ICON_WEDDING_RING_SMALL);
 #else

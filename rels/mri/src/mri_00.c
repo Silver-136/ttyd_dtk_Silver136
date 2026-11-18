@@ -938,7 +938,7 @@ static USER_FUNC(evt_cloud_main) {
         return EVT_RETURN_BLOCK;
     }
 #if VERSION <= VERSION_DEMO_JP
-    if (party->currentMemberId != 5) {
+    if (party->currentMemberId != PARTY_FLURRIE) {
         return EVT_RETURN_BLOCK;
     }
     hit0 = (HitEntry*)cloudGetHitBreathout(0);

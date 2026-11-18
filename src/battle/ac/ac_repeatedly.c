@@ -447,7 +447,7 @@ static void actionCommandDisp(f32 x, f32 y) {
     }
     flags = 0;
     if (r->done == 1 && d->gaugeRatio >= 1.0f) {
-        flags |= 1;
+        flags |= AC_GAUGE_FLAG_FULL;
         d->color.g += d->colorStep[1];
         d->color.b += d->colorStep[2];
         if (d->color.g <= 0x80 && d->colorStep[1] < 0) {
@@ -458,7 +458,7 @@ static void actionCommandDisp(f32 x, f32 y) {
         }
     }
     if (r->done == -1) {
-        flags |= 2;
+        flags |= AC_GAUGE_FLAG_OVERHEAT;
     }
     BattleAcDrawGauge((s32)x, (s32)y, d->gaugeRatio, r->gaugeWidth, 2, (acw->acFlags & AC_REPEATEDLY_FLAG_PLAIN_GAUGE) ? 100 : (s32)r->pos, 100, 100, flags);
     {

@@ -35,8 +35,17 @@
 #include "party.h"
 #include "mario/mario_hit.h"
 
+// MotShipWork.flags: the boat's facing, a whole code (getHarborDir, or Mario's facing when docking). The boat
+// spins toward positive angles for SHIP_DIR_RIGHT (bit 0, SHIP_DIR) and toward negative ones otherwise; bit 1 is
+// marioShipGetDir, which party.c uses to seat the partners.
+enum ShipDir {
+    SHIP_DIR_NONE = 0,  // the panel has none of the four ship-panel attributes
+    SHIP_DIR_RIGHT = 1, // docking: Mario faces right (MARIO_TRIG_FLAG_DISP_DIR_LEFT clear)
+    SHIP_DIR_LEFT = 2,  // docking: Mario faces left (MARIO_TRIG_FLAG_DISP_DIR_LEFT set)
+};
+
 typedef struct MotShipWork {
-    u32 flags;                    // 0x00: bit0 = facing (SHIP_DIR), bit1 = marioShipGetDir; set to 0/1/2 from getHarborDir
+    u32 flags;                    // 0x00, ShipDir
     f32 baseY;                    // 0x04: y the hull floats at; copied from harborPos.y when docking
     f32 bobAngle;                 // 0x08: bob phase in degrees, dispOfs.y = 3 sin(bobAngle) - 13
     f32 bobSpeed;                 // 0x0C: 4.25 degrees per frame
@@ -121,7 +130,7 @@ s32 getSeaPos(HitEntry* hit, Vec* out);
 
 static BOOL checkHarbor(Vec* out);
 
-#define SHIP_DIR (marioGetPtr()->motShip->flags & 1)
+#define SHIP_DIR (marioGetPtr()->motShip->flags & SHIP_DIR_RIGHT)
 
 static void shipMove(void);
 static BOOL chkgnd(f32 vy);
@@ -133,7 +142,7 @@ static f32 getShipVal(s32 i) {
 }
 
 /**
- * Facing bit of the boat (motShip flag 2) for the partner follow code in party.c,
+ * Facing bit of the boat (1 for SHIP_DIR_LEFT) for the partner follow code in party.c,
  * which seats the partners on the matching side; 0 when no boat work is allocated.
  * Descriptive name (not in the symbol maps).
  */
@@ -608,7 +617,7 @@ void mot_ship(void) {
         m->directionView = angleABf(m->position.x, m->position.z, marioGetPtr()->motShip->harborPos.x, marioGetPtr()->motShip->harborPos.z);
         m->moveDirection = m->directionView;
 
-        // 1, or 2 when MARIO_TRIG_FLAG_DISP_DIR_LEFT (bit 9) is set
+        // SHIP_DIR_RIGHT, or SHIP_DIR_LEFT when MARIO_TRIG_FLAG_DISP_DIR_LEFT (bit 9) is set
         marioGetPtr()->motShip->flags = ((m->trigFlags >> 9) & 1) + 1;
         tt = 0.5f * (f32)n;
         qq = 80.0f / (tt * tt - tt);
@@ -680,7 +689,7 @@ void mot_ship(void) {
             m->currSubMotionId = 0x2d;
             m->multiTimer = 6;
             m->displayDirection = revise360(m->displayDirection);
-            if (marioGetPtr()->motShip->flags & 2) {
+            if (marioGetPtr()->motShip->flags & SHIP_DIR_LEFT) {
                 m->displayDirection = m->displayDirection - 360.0f;
             }
         }
@@ -718,7 +727,7 @@ void mot_ship(void) {
             break;
         }
         m->displayDirection = revise360(m->displayDirection);
-        if (marioGetPtr()->motShip->flags & 2) {
+        if (marioGetPtr()->motShip->flags & SHIP_DIR_LEFT) {
             m->displayDirection = m->displayDirection - 360.0f;
         }
         marioPaperOff();
@@ -1051,23 +1060,23 @@ s32 getHarborType(HitEntry* hit) {
 s32 getHarborDir(HitEntry* hit) {
     MarioWork* m = marioGetPtr();
     s32 attr = hitGetAttr(hit);
-    s32 dir = 0;
+    s32 dir = SHIP_DIR_NONE;
     if (attr & HIT_ATTR_SHIP_PANEL1) {
         Vec pos;
         f32 ang;
         hitObjGetPos(hitGetName(m->hitobjJumpFrom), &pos);
         ang = revise360(angleABf(m->position.x, m->position.z, pos.x, pos.z) - m->targetYaw);
-        dir = (ang >= 180.0f) ? 2 : 1;
+        dir = (ang >= 180.0f) ? SHIP_DIR_LEFT : SHIP_DIR_RIGHT;
     } else if (attr & HIT_ATTR_SHIP_PANEL2) {
         Vec pos;
         f32 ang;
         hitObjGetPos(hitGetName(m->hitobjJumpFrom), &pos);
         ang = revise360(angleABf(m->position.x, m->position.z, pos.x, pos.z) - m->targetYaw);
-        dir = (ang >= 180.0f) ? 2 : 1;
+        dir = (ang >= 180.0f) ? SHIP_DIR_LEFT : SHIP_DIR_RIGHT;
     } else if (attr & HIT_ATTR_SHIP_PANEL3) {
-        dir = 2;
+        dir = SHIP_DIR_LEFT;
     } else if (attr & HIT_ATTR_SHIP_PANEL4) {
-        dir = 1;
+        dir = SHIP_DIR_RIGHT;
     }
     return dir;
 }

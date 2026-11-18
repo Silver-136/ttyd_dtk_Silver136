@@ -25,8 +25,15 @@ typedef struct CamRoadHit {
     Vec pos;               // 0x0c
     Vec dir;               // 0x18
     s32 segment;           // 0x24
-    u32 flags;             // 0x28
+    u32 flags;             // 0x28, CamRoadHitFlags
 } CamRoadHit;
+
+// CamRoadHit.flags and CamRoadState.hitFlags: where collisionCurve held the point back. calcCamRoad resets the
+// matching follow rate (tuning[4] along the curve, tuning[5] sideways) when a bit clears.
+enum CamRoadHitFlags {
+    CAM_ROAD_HIT_END = 1 << 0,        // snapped to an end of the curve (idxA or idxB); a group strip sets both bits
+    CAM_ROAD_HIT_SIDE_LIMIT = 1 << 1, // sideways distance clamped to the curve's limA / limB, or back into the strip
+};
 
 // FAKE: unk_vec0-2 stand in for local Vec initializers of a dead-stripped function; nothing reads them. In the JP
 // demo map they are the anonymous @443-@445 at the start of .rodata, just below collisionTri_simple's {0, -1, 0}
@@ -341,7 +348,7 @@ static s32 collisionTri_simple(Vec P, Vec A, Vec B, Vec C, f32* dist) {
 /**
  * Projects pos onto a camera curve (mode 0) or a curve group strip (mode 1):
  * finds the curve segment beside pos and fills hit with the interpolated point, direction and height,
- * clamping the sideways distance to the curve's limits (flag 2 when clamped). Returns 1 on a hit.
+ * clamping the sideways distance to the curve's limits (CamRoadHitFlags). Returns 1 on a hit.
  */
 static s32 collisionCurve(s32 mode, void* curve, Vec pos, CamRoadHit* hit) {
     f32 lx0;
@@ -476,24 +483,24 @@ static s32 collisionCurve(s32 mode, void* curve, Vec pos, CamRoadHit* hit) {
                         if (sgn < 0.0f) {
                             if (d > limA) {
                                 d = limA;
-                                fl |= 2;
+                                fl |= CAM_ROAD_HIT_SIDE_LIMIT;
                             }
                         } else {
                             if (d > limB) {
                                 d = limB;
-                                fl |= 2;
+                                fl |= CAM_ROAD_HIT_SIDE_LIMIT;
                             }
                             d = -d;
                         }
                     } else if (sgn < 0.0f) {
                         if (d > limB) {
                             d = limB;
-                            fl |= 2;
+                            fl |= CAM_ROAD_HIT_SIDE_LIMIT;
                         }
                         d = -d;
                     } else if (d > limA) {
                         d = limA;
-                        fl |= 2;
+                        fl |= CAM_ROAD_HIT_SIDE_LIMIT;
                     }
                     ret = 1;
                     hit->t = yA;
@@ -505,7 +512,7 @@ static s32 collisionCurve(s32 mode, void* curve, Vec pos, CamRoadHit* hit) {
                     hit->dir.z = nrm[idxA].z;
                     hit->y = y0;
                     hit->segment = idxA;
-                    hit->flags = fl | 1;
+                    hit->flags = fl | CAM_ROAD_HIT_END;
                     continue;
                 }
                 if (yy > yB) {
@@ -513,24 +520,24 @@ static s32 collisionCurve(s32 mode, void* curve, Vec pos, CamRoadHit* hit) {
                         if (sgn < 0.0f) {
                             if (d > limA) {
                                 d = limA;
-                                fl |= 2;
+                                fl |= CAM_ROAD_HIT_SIDE_LIMIT;
                             }
                         } else {
                             if (d > limB) {
                                 d = limB;
-                                fl |= 2;
+                                fl |= CAM_ROAD_HIT_SIDE_LIMIT;
                             }
                             d = -d;
                         }
                     } else if (sgn < 0.0f) {
                         if (d > limB) {
                             d = limB;
-                            fl |= 2;
+                            fl |= CAM_ROAD_HIT_SIDE_LIMIT;
                         }
                         d = -d;
                     } else if (d > limA) {
                         d = limA;
-                        fl |= 2;
+                        fl |= CAM_ROAD_HIT_SIDE_LIMIT;
                     }
                     ret = 1;
                     hit->t = yB;
@@ -542,7 +549,7 @@ static s32 collisionCurve(s32 mode, void* curve, Vec pos, CamRoadHit* hit) {
                     hit->dir.z = nrm[idxB].z;
                     hit->y = y0;
                     hit->segment = idxB;
-                    hit->flags = fl | 1;
+                    hit->flags = fl | CAM_ROAD_HIT_END;
                     continue;
                 }
                 if (cross > 0.0) {
@@ -550,7 +557,7 @@ static s32 collisionCurve(s32 mode, void* curve, Vec pos, CamRoadHit* hit) {
                         if (d > limA) {
                             dpx /= rp;
                             dpz /= rp;
-                            fl |= 2;
+                            fl |= CAM_ROAD_HIT_SIDE_LIMIT;
                             rp += d - limA;
                             dpx *= rp;
                             dpz *= rp;
@@ -558,7 +565,7 @@ static s32 collisionCurve(s32 mode, void* curve, Vec pos, CamRoadHit* hit) {
                     } else if (d > limB) {
                         dpx /= rp;
                         dpz /= rp;
-                        fl |= 2;
+                        fl |= CAM_ROAD_HIT_SIDE_LIMIT;
                         rp -= d - limB;
                         dpx *= rp;
                         dpz *= rp;
@@ -568,7 +575,7 @@ static s32 collisionCurve(s32 mode, void* curve, Vec pos, CamRoadHit* hit) {
                         if (d > limB) {
                             dpx /= rp;
                             dpz /= rp;
-                            fl |= 2;
+                            fl |= CAM_ROAD_HIT_SIDE_LIMIT;
                             rp += d - limB;
                             dpx *= rp;
                             dpz *= rp;
@@ -576,7 +583,7 @@ static s32 collisionCurve(s32 mode, void* curve, Vec pos, CamRoadHit* hit) {
                     } else if (d > limA) {
                         dpx /= rp;
                         dpz /= rp;
-                        fl |= 2;
+                        fl |= CAM_ROAD_HIT_SIDE_LIMIT;
                         rp -= d - limA;
                         dpx *= rp;
                         dpz *= rp;
@@ -588,7 +595,7 @@ static s32 collisionCurve(s32 mode, void* curve, Vec pos, CamRoadHit* hit) {
                     if (!(sgn < 0.0f) && d > 0.0f) {
                         dpx /= rp;
                         dpz /= rp;
-                        fl = 3;
+                        fl = CAM_ROAD_HIT_END | CAM_ROAD_HIT_SIDE_LIMIT;
                         rp -= d;
                         dpx *= rp;
                         dpz *= rp;
@@ -597,7 +604,7 @@ static s32 collisionCurve(s32 mode, void* curve, Vec pos, CamRoadHit* hit) {
                     if (sgn < 0.0f && d > 0.0f) {
                         dpx /= rp;
                         dpz /= rp;
-                        fl = 3;
+                        fl = CAM_ROAD_HIT_END | CAM_ROAD_HIT_SIDE_LIMIT;
                         rp += d;
                         dpx *= rp;
                         dpz *= rp;
@@ -668,12 +675,12 @@ static s32 collisionCurve(s32 mode, void* curve, Vec pos, CamRoadHit* hit) {
                     if (cr < 0.0f) {
                         if (dist > limA) {
                             dist = limA;
-                            fl |= 2;
+                            fl |= CAM_ROAD_HIT_SIDE_LIMIT;
                         }
                     } else {
                         if (dist > limB) {
                             dist = limB;
-                            fl |= 2;
+                            fl |= CAM_ROAD_HIT_SIDE_LIMIT;
                         }
                         dist = -dist;
                     }
@@ -687,7 +694,7 @@ static s32 collisionCurve(s32 mode, void* curve, Vec pos, CamRoadHit* hit) {
                     hit->dir.z = nrm[idxA].z;
                     hit->y = y0;
                     hit->segment = idxA;
-                    hit->flags = fl | 1;
+                    hit->flags = fl | CAM_ROAD_HIT_END;
                     continue;
                 }
                 if (yy > yB) {
@@ -695,12 +702,12 @@ static s32 collisionCurve(s32 mode, void* curve, Vec pos, CamRoadHit* hit) {
                     if (cr < 0.0f) {
                         if (dist > limA) {
                             dist = limA;
-                            fl |= 2;
+                            fl |= CAM_ROAD_HIT_SIDE_LIMIT;
                         }
                     } else {
                         if (dist > limB) {
                             dist = limB;
-                            fl |= 2;
+                            fl |= CAM_ROAD_HIT_SIDE_LIMIT;
                         }
                         dist = -dist;
                     }
@@ -714,7 +721,7 @@ static s32 collisionCurve(s32 mode, void* curve, Vec pos, CamRoadHit* hit) {
                     hit->dir.z = nrm[idxB].z;
                     hit->y = y0;
                     hit->segment = idxB;
-                    hit->flags = fl | 1;
+                    hit->flags = fl | CAM_ROAD_HIT_END;
                     continue;
                 }
                 cr = dx2 * su1x + dz2 * dx;
@@ -722,12 +729,12 @@ static s32 collisionCurve(s32 mode, void* curve, Vec pos, CamRoadHit* hit) {
                     if (dist > limA) {
                         dx2 = limA * (dx2 / dist);
                         dz2 = limA * (dz2 / dist);
-                        fl |= 2;
+                        fl |= CAM_ROAD_HIT_SIDE_LIMIT;
                     }
                 } else if (dist > limB) {
                     dx2 = limB * (dx2 / dist);
                     dz2 = limB * (dz2 / dist);
-                    fl |= 2;
+                    fl |= CAM_ROAD_HIT_SIDE_LIMIT;
                 }
             }
             hit->t = yy;
@@ -1049,10 +1056,10 @@ static void calcCamRoad(CamRoadState* out, CamRoadState* prev, f32 xA, f32 yA, f
             if (found2) {
                 px = p2.x;
                 pz = p2.z;
-                if (!(hit3.flags & 1) && (prev->hitFlags & 1)) {
+                if (!(hit3.flags & CAM_ROAD_HIT_END) && (prev->hitFlags & CAM_ROAD_HIT_END)) {
                     wp->tuning[4] = 0.0f;
                 }
-                if (!(hit3.flags & 2) && (prev->hitFlags & 2)) {
+                if (!(hit3.flags & CAM_ROAD_HIT_SIDE_LIMIT) && (prev->hitFlags & CAM_ROAD_HIT_SIDE_LIMIT)) {
                     wp->tuning[5] = 0.0f;
                 }
             } else {
@@ -1147,7 +1154,7 @@ static u32 compareCamRoad(CamRoadState* a, CamRoadState* b, f32* outSpeed) {
     if (!b->on) {
         return 0;
     }
-    if (a->cam == b->cam && !(a->onCollCurve == 1 && b->onCollCurve == 0) && !(a->onCollCurve == 0 && b->hitFlags == 1)) {
+    if (a->cam == b->cam && !(a->onCollCurve == 1 && b->onCollCurve == 0) && !(a->onCollCurve == 0 && b->hitFlags == CAM_ROAD_HIT_END)) {
         d = (s32)a->segment - (s32)b->segment;
         if (__abs(d) <= 1) {
             return 0;
@@ -1167,7 +1174,7 @@ static u32 compareCamRoad(CamRoadState* a, CamRoadState* b, f32* outSpeed) {
     if (a->onCollCurve == 1 && b->onCollCurve == 0) {
         flags |= 2;
     }
-    if (a->onCollCurve == 0 && b->hitFlags == 1) {
+    if (a->onCollCurve == 0 && b->hitFlags == CAM_ROAD_HIT_END) {
         flags |= 4;
     }
     if (!(__fabs(a->segment - b->segment) <= 1.0)) {

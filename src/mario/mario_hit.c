@@ -2231,7 +2231,7 @@ static HitEntry* searchFrontWall(Vec* pos, f32* h, f32 dx, f32 dz, f32 w) {
 
     mario = marioGetPtr();
 #if VERSION <= VERSION_DEMO_JP
-    if (mario->characterId == 2 && (mario->stageFlags & KPA_STAGE_FLAG_SIDE_SCROLLING)) {
+    if (mario->characterId == CHARACTER_BOWSER && (mario->stageFlags & KPA_STAGE_FLAG_SIDE_SCROLLING)) {
         return kpaSearchWallFront(pos, h, dx, dz);
     }
 #endif

@@ -1206,7 +1206,7 @@ void party_motion_homing_walk(PartyEntry* party) {
         lim = 40.0f;
     }
     lim2 = party->homingDist;
-    if (mario->characterId == 2) {
+    if (mario->characterId == CHARACTER_BOWSER) {
         lim2 = 70.0f;
     }
     if (!strcmp(gp->currentMapName, "aji_02") || !strcmp(gp->currentMapName, "aji_05") ||
@@ -4794,7 +4794,7 @@ void party_motion_stay(PartyEntry* party) {
         party->flags &= ~PARTY_FLAG_IS_BEHIND_MARIO;
     }
     lim = party->homingDist;
-    if (mario->characterId == 2) {
+    if (mario->characterId == CHARACTER_BOWSER) {
         lim = 70.0f;
     }
     if (!strcmp(gp->currentMapName, "aji_02") || !strcmp(gp->currentMapName, "aji_05") ||

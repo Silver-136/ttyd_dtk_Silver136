@@ -467,7 +467,7 @@ static void actionCommandDisp(f32 x, f32 y) {
     count = 0;
     flags = 0;
     if (p->state == 1 && disp->gaugeRatio >= 1.0f) {
-        flags |= 1;
+        flags |= AC_GAUGE_FLAG_FULL;
         disp->color.g += disp->colorStep[1];
         disp->color.b += disp->colorStep[2];
         if (disp->color.g <= 0x80 && disp->colorStep[1] < 0) {
@@ -478,7 +478,7 @@ static void actionCommandDisp(f32 x, f32 y) {
         }
     }
     if (p->state == -1) {
-        flags |= 2;
+        flags |= AC_GAUGE_FLAG_OVERHEAT;
     }
     for (i = 0; i < 4; i++) {
         arr[i] = 100;

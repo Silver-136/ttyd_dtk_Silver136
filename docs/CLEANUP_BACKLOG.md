@@ -178,12 +178,17 @@ in `docs/FAKES.md` and in the mweppc review record.
   swarm and sprites, tou_02 fans, punidrv poses, nok_00 poster, bom_01 crowd) and used existing names where the bits
   already had them (CHOROGUN_FLAG_ALIVE, NAMEENT_FLAG_CANCELLED, PUNI_TARGET_FLAG_*, LECT_BUTTON_FLAG_HIDDEN,
   STAGE_FLAG_NO_IRON_FRAME, LECTURE_FLAG_CONTINUE_WINDOW, NANNPC_WORK_DEPTH_SORT, EXT_POSE_FLAG_NO_SHADOW). GB17's
-  scan (also matching dispFlags/hitFlags, 226 at its start) counts 40 left (16 in src/). Kept numeric with reasons:
-  mot_ship MotShipWork.flags (assigned whole direction codes 0/1/2), cam_road CamRoadHit flags (curve hit bits,
-  meaning unclear), las_04 fire bar bits 0x1/0x2 and MoamoaSprite 0x2 and PunidrvPose 0x4/0x10 (read, never set),
+  scan (also matching dispFlags/hitFlags, 226 at its start) counted 40 left (16 in src/). GC0 (2026-11-17) named
+  cam_road CamRoadHitFlags (END / SIDE_LIMIT), mot_ship ShipDir (whole codes NONE / RIGHT / LEFT), las_05
+  KUROKARON_MOVE_FLAG_*, BattleAcDrawGauge AC_GAUGE_FLAG_FULL / OVERHEAT, the rsh_06 early-demo 0x18 and the badge
+  shop restock clear (u16 field, so `~1` is exact). Its scan (scratchpad GC0\scan2.py, which adds `*x` and bare
+  local / static forms) counts 31 field and 72 local hits left. The locals are mostly per-function argument words,
+  return-value accumulators, index masks and animdrv matrix bits. Kept numeric with reasons:
+  compareCamRoad's return bits (cmpFlags is never read), PoseSoundTiming.flags bit 0 (every table entry sets it),
+  las_04 fire bar bits 0x1/0x2 and MoamoaSprite 0x2 and PunidrvPose 0x4/0x10 (read, never set),
   Senkaron `&= 0xFFFE` (u32 field: also clears the upper half, not `~1`), YuuRankingWork dispFlags 0x2 (never
-  read), tou_03 kyaku 0x1 and evt_yuunpc pose 0x1 (only set), rsh_06 0x18, eff_peach_fukidashi `& 3` (a button
-  index), tst unit_yoshi ac flags. Also kept numeric with reasons: EventEntry 0x80 (tested only) and 0x40 (set by inline/sibling events, never
+  read), tou_03 kyaku 0x1 and evt_yuunpc pose 0x1 (only set), eff_peach_fukidashi `& 3` (a button
+  index), tst unit_yoshi ac flags (uncalled; the AC is not identified). Also kept numeric with reasons: EventEntry 0x80 (tested only) and 0x40 (set by inline/sibling events, never
   read), SeqEndDispFlags 0x1 (only cleared), BattleWorkStatusIcon.flags 0x1 (read only), FieldBattleData
   firstAttackFlags (may be written by fbatHitCheck's 16-byte copy), party_bomhei 0x4 (read only).
 - **English identity for developer and Japanese names (user idea, 2026-11-08):** the original symbols and the

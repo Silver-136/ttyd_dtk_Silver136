@@ -6978,7 +6978,7 @@ static USER_FUNC(cook_chk) {
     char result[128];
     char result2[128];
 
-    if (item == 163) {
+    if (item == ITEM_MYSTERY) {
         item = naniga_okorukana_cook();
         evtSetValue(event, *args++, item);
         evtSetValue(event, *args++, item);
@@ -7037,7 +7037,7 @@ static USER_FUNC(cook_chk2) {
     char b[128];
     char out[128];
 
-    if (item1 == 163 || item2 == 163) {
+    if (item1 == ITEM_MYSTERY || item2 == ITEM_MYSTERY) {
         item2 = naniga_okorukana_cook();
         evtSetValue(event, *args++, item2);
         return EVT_RETURN_DONE;

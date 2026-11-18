@@ -314,7 +314,7 @@ void party_kemuri(PartyEntry* party) {
                     } else {
                         party->kemuriTimer = 4;
                     }
-                } else if (party->motionId == 1) {
+                } else if (party->motionId == PARTY_MOTION_WALK) {
                     if (party->hitobjStandOn != NULL) {
                         if (!(hitGetAttr(party->hitobjStandOn) & HIT_ATTR_SHALLOW_WATER)) {
                             partyKemuri(party);
@@ -331,7 +331,7 @@ void party_kemuri(PartyEntry* party) {
             } else {
                 party->kemuriTimer = 4;
             }
-        } else if (party->motionId == 1) {
+        } else if (party->motionId == PARTY_MOTION_WALK) {
             if (party->hitobjStandOn != NULL) {
                 partyKemuri(party);
             } else {

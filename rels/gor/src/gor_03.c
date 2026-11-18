@@ -4060,7 +4060,7 @@ void goryuugijo_main_slot(EventEntry* event, BOOL isFirstCall) {
                     CaseSetup* s = &setup;
 
                     for (n = 0; n < 2; n++) {
-                        s->conditionId = 0x8009;
+                        s->conditionId = CASE_SETUP_SHOW_HINT | CASE_FRONT_A;
                         s->hitObjName = drumname[n].anim;
                         s->swFlag = 0;
                         s->activeFunc = NULL;

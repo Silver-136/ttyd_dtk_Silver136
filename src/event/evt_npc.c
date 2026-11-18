@@ -186,7 +186,7 @@ USER_FUNC(evt_npc_setup) {
                 }
             }
         }
-        fbatChangeMode(1);
+        fbatChangeMode(FBAT_MODE_FIELD);
         return EVT_RETURN_BLOCK; // call this function again
     } else {
         for (setup = setuplist; setup->name; setup++) {

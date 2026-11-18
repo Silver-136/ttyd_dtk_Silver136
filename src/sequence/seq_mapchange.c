@@ -154,7 +154,7 @@ void seq_mapChangeInit(SequenceWork* work) {
     } else if (!c2 && bdsw->restockFlags & BADGESHOP_RESTOCK_PENDING) {
         badgeShop_bargainGeneration();
         badgeShop_bottakuruGeneration();
-        bdsw->restockFlags &= 0xFFFE;
+        bdsw->restockFlags &= ~BADGESHOP_RESTOCK_PENDING;
     }
 }
 

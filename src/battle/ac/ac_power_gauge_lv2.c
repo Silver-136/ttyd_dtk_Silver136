@@ -276,7 +276,7 @@ static void actionCommandDisp(f32 x, f32 y) {
         ac->disp.color.g += ac->disp.colorStep[1];
         ac->disp.color.b += ac->disp.colorStep[2];
         if (ac->disp.gaugeRatio >= 1.0f) {
-            full |= 1;
+            full |= AC_GAUGE_FLAG_FULL;
         }
         if (ac->disp.color.g <= 0x80 && ac->disp.colorStep[1] < 0) {
             ac->disp.colorStep[1] = ac->disp.colorStep[2] = 0x10;

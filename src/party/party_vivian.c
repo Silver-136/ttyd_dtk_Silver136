@@ -113,7 +113,7 @@ void mot_vivian_post(void) {
 }
 
 void vivian_init(PartyEntry* party) {
-    party->memberKind = 6;
+    party->memberKind = PARTY_VIVIAN;
     party->moveKind = 1;
     party->height = 35.0f;
     party->width = 24.0f;

@@ -1176,7 +1176,7 @@ void winFontSetRWidth(Vec pos, Vec scale, GXColor color, f32 width, const char* 
     } else {
         msg = fmt;
     }
-    if (gp->language != 0) {
+    if (gp->language != LANGUAGE_JP) {
         ref = scale.x * FontGetMessageWidth("999");
     } else {
         ref = scale.x * FontGetMessageWidth("９９９");
