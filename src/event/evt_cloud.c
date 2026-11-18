@@ -62,6 +62,30 @@ static EVT_BEGIN(evt_cloud_main_evt)
 EVT_END()
 
 /**
+ * Calls evt_img_alloc_capture with these eight values as its script arguments: image name, capture slot,
+ * offscreen name (or 0), allocation mode and the screen rectangle x, y, width, height.
+ */
+// Original name, size (0x50) and slot (first .text function) from the JP demo map (UNUSED there: every call is
+// inlined); the call in evt_cloud_main replaces a written-out copy that built the same. Same function as
+// fadedrv.c's test_img_alloc_capture (see there for the parameter types).
+static void _img_alloc_capture(EvtWord name, EvtWord slot, EvtWord off, EvtWord mode, EvtWord x, EvtWord y,
+        EvtWord w, EvtWord h) {
+    EventEntry evt;
+    EvtWord args[10];
+
+    evt.args = args;
+    args[0] = name;
+    args[1] = slot;
+    args[2] = off;
+    args[3] = mode;
+    args[4] = x;
+    args[5] = y;
+    args[6] = w;
+    args[7] = h;
+    evt_img_alloc_capture(&evt, TRUE);
+}
+
+/**
  * Per-frame states of one blow-away piece (LW(0) = its CloudWork); it never finishes. It waits until one of the four
  * breath hits (cloudGetHitBreathout) is on the piece's hit object, then loads the paper pose "P_oof_cloud_2" or
  * "P_oof_cloud_1" (by Mario's facing), draws the map group(s) into the offscreen target, captures the piece's screen
@@ -138,8 +162,6 @@ static USER_FUNC(evt_cloud_main) {
             u16 uw, uh;
             s32 halfWidth, halfHeight;
             Vec pos;
-            EventEntry evt;
-            EvtWord args[10];
 
             if (wp->w != 0 && wp->h != 0) {
                 mapObjGetPos(wp->groupName, &pos);
@@ -189,16 +211,7 @@ static USER_FUNC(evt_cloud_main) {
             img->flags |= IMAGE_FLAG_HIDE;
             img->poseId = animPaperPoseGetId(wp->animName, group);
             img->animTime = animTimeGetTime(group);
-            evt.args = args;
-            args[0] = (EvtWord)wp->imgName;
-            args[1] = 0;
-            args[2] = (EvtWord)wp->offscreenName;
-            args[3] = 1;
-            args[4] = x;
-            args[5] = y;
-            args[6] = w;
-            args[7] = h;
-            evt_img_alloc_capture(&evt, TRUE);
+            _img_alloc_capture((EvtWord)wp->imgName, 0, (EvtWord)wp->offscreenName, 1, x, y, w, h);
             imgClearVirtualPoint(img);
             imgSetShadow(img, 2);
             wp->state++;

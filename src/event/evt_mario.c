@@ -2578,10 +2578,16 @@ USER_FUNC(evt_mario_dump_item) {
 }
 
 /** Returns MarioWork.hitobjHead (the hit object itself, not its name) in args[0]. */
-// evt_mario_get_hitobj_head, _ride, _under, _front and _push: original names and sizes (0x54 each) from the JP demo
-// map (UNUSED there: no script uses them). Each returns in args[0] the hit object whose name the
-// evt_mario_get_name_hitobj_ command of the same word returns, in the form of evt_mario_get_mode. The map's
-// _ridejump, _touch and _item forms are not restored (their fields are not known).
+// evt_mario_get_hitobj_head, _ride, _ridejump, _under, _front, _push and _touch: original names and sizes (0x54
+// each) from the JP demo map (UNUSED there: no script uses them), in its order (the map lists them in reverse).
+// Each returns in args[0] the hit object whose name the evt_mario_get_name_hitobj_ command of the same word
+// returns, in the form of evt_mario_get_mode.
+// _touch (and evt_mario_get_name_hitobj_touch, 0x70) read hitobjFrontA: marioBalloonMain applies the original
+// chkBalloonTypeTouch to hitobjFrontA, next to chkBalloonTypeFront on hitobjFront and chkBalloonTypeRide on
+// hitobjStandOn, the fields of the linked _front and _ride commands.
+// _ridejump (and evt_mario_get_name_hitobj_ridejump, 0x70) read hitobjJumpFrom, the field a jump start copies
+// from hitobjStandOn (the _ride field; mot_jump.c).
+// The map's _item form is not restored (no evidence fixes its field).
 USER_FUNC(evt_mario_get_hitobj_head) {
     s32 id = event->args[0];
     evtSetValue(event, id, (EvtWord)marioGetPtr()->hitobjHead);
@@ -2592,6 +2598,13 @@ USER_FUNC(evt_mario_get_hitobj_head) {
 USER_FUNC(evt_mario_get_hitobj_ride) {
     s32 id = event->args[0];
     evtSetValue(event, id, (EvtWord)marioGetPtr()->hitobjStandOn);
+    return EVT_RETURN_DONE;
+}
+
+/** Returns MarioWork.hitobjJumpFrom (the floor his last jump started from; not its name) in args[0]. */
+USER_FUNC(evt_mario_get_hitobj_ridejump) {
+    s32 id = event->args[0];
+    evtSetValue(event, id, (EvtWord)marioGetPtr()->hitobjJumpFrom);
     return EVT_RETURN_DONE;
 }
 
@@ -2616,15 +2629,26 @@ USER_FUNC(evt_mario_get_hitobj_push) {
     return EVT_RETURN_DONE;
 }
 
+/** Returns MarioWork.hitobjFrontA, the wall found in front on an A press (not its name), in args[0]. */
+USER_FUNC(evt_mario_get_hitobj_touch) {
+    s32 id = event->args[0];
+    evtSetValue(event, id, (EvtWord)marioGetPtr()->hitobjFrontA);
+    return EVT_RETURN_DONE;
+}
+
 HITOBJ(head, hitobjHead)
 
 HITOBJ(ride, hitobjStandOn)
+
+HITOBJ(ridejump, hitobjJumpFrom)
 
 HITOBJ(under, hitobjUnder)
 
 HITOBJ(front, hitobjFront)
 
 HITOBJ(push, hitobjPush)
+
+HITOBJ(touch, hitobjFrontA)
 
 /** Blocks while button input is switched off (marioKeyOffChk nonzero). */
 // In every version: the early demos' DOL maps list it as UNUSED (0x38 in the JP demo map), as no script of theirs

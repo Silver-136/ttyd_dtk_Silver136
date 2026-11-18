@@ -77,6 +77,7 @@ USER_FUNC(evt_mobj_breaking_rock);
 USER_FUNC(evt_mobj_trap_floor);
 USER_FUNC(evt_mobj_arrow);
 USER_FUNC(evt_mobj_tornadoswitch_red);
+USER_FUNC(evt_mobj_set_offscreen);
 USER_FUNC(evt_mobj_set_camid);
 USER_FUNC(evt_mobj_get_camid);
 USER_FUNC(evt_mobj_set_gravity_bound);

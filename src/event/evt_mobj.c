@@ -313,6 +313,24 @@ USER_FUNC(evt_mobj_wait_animation_end) {
     return EVT_RETURN_BLOCK;
 }
 
+/** Draws the map object args[0] into the offscreen target named args[1] (NULL: none, offscreen id -1). */
+// Original name and size (0xa8) from the JP demo map (UNUSED there: no script uses it), listed between
+// evt_mobj_wait_animation_end and evt_mobj_set_camid: evt_npc_set_offscreen (linked) for a map object, with the
+// map object lookup of evt_mobj_set_camid. Both arm orders of the NULL test give 0xa8; evt_npc_set_offscreen's
+// (NULL first) is taken.
+USER_FUNC(evt_mobj_set_offscreen) {
+    EvtWord* args = event->args;
+    const char* name = (const char*)evtGetValue(event, args[0]);
+    const char* oname = (const char*)evtGetValue(event, args[1]);
+    MapObjectEntry* mobj = mobjPtrOrSelf(event, name);
+    if (oname == NULL) {
+        mobj->offscreenId = -1;
+    } else {
+        mobj->offscreenId = offscreenNameToId(oname);
+    }
+    return EVT_RETURN_DONE;
+}
+
 /** Moves the map object args[0] to camera args[1] (CameraId), e.g. to draw it in a 2D/overlay camera. */
 USER_FUNC(evt_mobj_set_camid) {
     EvtWord* args = event->args;
@@ -1348,6 +1366,30 @@ USER_FUNC(evt_mobj_jumpstand_blue) {
 }
 
 /**
+ * Calls evt_img_alloc_capture with these eight values as its script arguments: image name, capture slot,
+ * offscreen name (or 0), allocation mode and the screen rectangle x, y, width, height.
+ */
+// Original name, size (0x50) and slot (between evt_mobj_jumpstand_blue and mobj_lv_blk_evt) from the JP demo
+// map (UNUSED there: every call is inlined); the six calls replace written-out copies that built the same.
+// Same function as fadedrv.c's test_img_alloc_capture (see there for the parameter types).
+static void test_img_alloc_capture(EvtWord name, EvtWord slot, EvtWord off, EvtWord mode, EvtWord x, EvtWord y,
+        EvtWord w, EvtWord h) {
+    EventEntry evt;
+    EvtWord args[10];
+
+    evt.args = args;
+    args[0] = name;
+    args[1] = slot;
+    args[2] = off;
+    args[3] = mode;
+    args[4] = x;
+    args[5] = y;
+    args[6] = w;
+    args[7] = h;
+    evt_img_alloc_capture(&evt, TRUE);
+}
+
+/**
  * Main function of the hammer-level blocks: a hit only counts with a strong enough hammer (Lv1 any,
  * Lv1 huge block needs Super Hammer and a spin-charged hammer, Lv2 needs Ultra Hammer).
  * It then runs the event, sets the flag variable
@@ -1356,10 +1398,6 @@ USER_FUNC(evt_mobj_jumpstand_blue) {
 static s32 mobj_lv_blk_evt(MapObjectEntry* mobj) {
     char oname[16] = "o_";
     char iname[16] = "i_";
-    EventEntry ev1;
-    EventEntry ev2;
-    EvtWord args1[10];
-    EvtWord args2[10];
     ImageEntry* img;
     s32 type = gp->inBattle != 0;
     MarioWork* mario = marioGetPtr();
@@ -1401,26 +1439,8 @@ static s32 mobj_lv_blk_evt(MapObjectEntry* mobj) {
             offscreenEntry(oname);
             imgEntry(iname, type);
             mobj->offscreenId = offscreenNameToId(oname);
-            ev1.args = args1;
-            args1[0] = (EvtWord)iname;
-            args1[1] = 0;
-            args1[2] = (EvtWord)oname;
-            args1[3] = 1;
-            args1[4] = 0;
-            args1[5] = 0;
-            args1[6] = 0;
-            args1[7] = 0;
-            evt_img_alloc_capture(&ev1, TRUE);
-            ev2.args = args2;
-            args2[0] = (EvtWord)iname;
-            args2[1] = 1;
-            args2[2] = (EvtWord)oname;
-            args2[3] = 1;
-            args2[4] = 0;
-            args2[5] = 0;
-            args2[6] = 0;
-            args2[7] = 0;
-            evt_img_alloc_capture(&ev2, TRUE);
+            test_img_alloc_capture((EvtWord)iname, 0, (EvtWord)oname, 1, 0, 0, 0, 0);
+            test_img_alloc_capture((EvtWord)iname, 1, (EvtWord)oname, 1, 0, 0, 0, 0);
             img = imgNameToPtr(iname, type);
             img->poseId = animPaperPoseGetId("P_box_y", type);
             img->animName = "A_1";
@@ -3205,10 +3225,6 @@ USER_FUNC(evt_mobj_powerupblk) {
 static s32 mobj_brickblk(MapObjectEntry* mobj) {
     char oname[16] = "o_";
     char iname[16] = "i_";
-    EventEntry ev1;
-    EventEntry ev2;
-    EvtWord args1[10];
-    EvtWord args2[10];
     ImageEntry* img;
     s32 type = gp->inBattle != 0;
     strcat(oname, mobj->name);
@@ -3229,26 +3245,8 @@ static s32 mobj_brickblk(MapObjectEntry* mobj) {
             offscreenEntry(oname);
             imgEntry(iname, type);
             mobj->offscreenId = offscreenNameToId(oname);
-            ev1.args = args1;
-            args1[0] = (EvtWord)iname;
-            args1[1] = 0;
-            args1[2] = (EvtWord)oname;
-            args1[3] = 1;
-            args1[4] = 0;
-            args1[5] = 0;
-            args1[6] = 0;
-            args1[7] = 0;
-            evt_img_alloc_capture(&ev1, TRUE);
-            ev2.args = args2;
-            args2[0] = (EvtWord)iname;
-            args2[1] = 1;
-            args2[2] = (EvtWord)oname;
-            args2[3] = 1;
-            args2[4] = 0;
-            args2[5] = 0;
-            args2[6] = 0;
-            args2[7] = 0;
-            evt_img_alloc_capture(&ev2, TRUE);
+            test_img_alloc_capture((EvtWord)iname, 0, (EvtWord)oname, 1, 0, 0, 0, 0);
+            test_img_alloc_capture((EvtWord)iname, 1, (EvtWord)oname, 1, 0, 0, 0, 0);
             img = imgNameToPtr(iname, type);
             img->poseId = animPaperPoseGetId("P_box_y", type);
             img->animName = "A_1";
@@ -3960,10 +3958,6 @@ USER_FUNC(evt_mobj_trap_floor) {
 static s32 mobj_breaking_rock(MapObjectEntry* mobj) {
     char oname[16] = "o_";
     char iname[16] = "i_";
-    EventEntry ev1;
-    EventEntry ev2;
-    EvtWord args1[10];
-    EvtWord args2[10];
     ImageEntry* img;
     s32 type = gp->inBattle != 0;
     strcat(oname, mobj->name);
@@ -3985,26 +3979,8 @@ static s32 mobj_breaking_rock(MapObjectEntry* mobj) {
             offscreenEntry(oname);
             imgEntry(iname, type);
             mobj->offscreenId = offscreenNameToId(oname);
-            ev1.args = args1;
-            args1[0] = (EvtWord)iname;
-            args1[1] = 0;
-            args1[2] = (EvtWord)oname;
-            args1[3] = 1;
-            args1[4] = 0;
-            args1[5] = 0;
-            args1[6] = 0;
-            args1[7] = 0;
-            evt_img_alloc_capture(&ev1, TRUE);
-            ev2.args = args2;
-            args2[0] = (EvtWord)iname;
-            args2[1] = 1;
-            args2[2] = (EvtWord)oname;
-            args2[3] = 1;
-            args2[4] = 0;
-            args2[5] = 0;
-            args2[6] = 0;
-            args2[7] = 0;
-            evt_img_alloc_capture(&ev2, TRUE);
+            test_img_alloc_capture((EvtWord)iname, 0, (EvtWord)oname, 1, 0, 0, 0, 0);
+            test_img_alloc_capture((EvtWord)iname, 1, (EvtWord)oname, 1, 0, 0, 0, 0);
             img = imgNameToPtr(iname, type);
             img->poseId = animPaperPoseGetId("OFF_d_bom", type);
             img->animName = "A_1";

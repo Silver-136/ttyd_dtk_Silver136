@@ -93,6 +93,32 @@ void fadeTexSetup(void) {
 }
 
 /**
+ * Calls evt_img_alloc_capture with these eight values as its script arguments: image name, capture slot,
+ * offscreen name (or 0), allocation mode and the screen rectangle x, y, width, height.
+ */
+// Original name, size (0x50) and slot (between fadeTexSetup and fadeEntry) from the JP demo map (UNUSED there:
+// every call is inlined). The body is the one that fits 0x50 with every value a parameter; the same function
+// sits in evt_mobj.c and (as _img_alloc_capture) in evt_cloud.c, whose written-out copies build the same as
+// calls. EvtWord parameters (no casts inside): the JP demo @N numbering leaves room for one label here, the
+// form with two casts takes three.
+static void test_img_alloc_capture(EvtWord name, EvtWord slot, EvtWord off, EvtWord mode, EvtWord x, EvtWord y,
+        EvtWord w, EvtWord h) {
+    EventEntry evt;
+    EvtWord args[10];
+
+    evt.args = args;
+    args[0] = name;
+    args[1] = slot;
+    args[2] = off;
+    args[3] = mode;
+    args[4] = x;
+    args[5] = y;
+    args[6] = w;
+    args[7] = h;
+    evt_img_alloc_capture(&evt, TRUE);
+}
+
+/**
  * Starts screen transition type over duration milliseconds in color.
  * The white fades become the colour fades in light grey; iris and spot fades last at least one second
  * (except JP and later's FADE_IN_SPOT2/FADE_OUT_SPOT2, which become spot fades without that minimum).
@@ -589,26 +615,6 @@ void fadeSetOffscreenCallback(OffscreenCallback callback, void* param) {
 }
 
 /**
- * Captures the current frame (608x480) into image name through the evt_img capture helper,
- * for the pipe and page-flip transitions to animate.
- */
-static inline void fadeCapture(const char* name, const char* off, s32 mode) {
-    EventEntry evt;
-    EvtWord args[10];
-
-    evt.args = args;
-    args[0] = (EvtWord)name;
-    args[1] = 0;
-    args[2] = (EvtWord)off;
-    args[3] = mode;
-    args[4] = 0;
-    args[5] = 0;
-    args[6] = 608;
-    args[7] = 480;
-    evt_img_alloc_capture(&evt, TRUE);
-}
-
-/**
  * Once per frame: advances every active fade slot (progress from the render clock,
  * the pipe and page-flip sounds and captures, posing the curtain and story-book animations),
  * marks fades finished, and queues their draw callbacks plus the tec,
@@ -763,7 +769,7 @@ void fadeMain(void) {
                         entry->image->animTime = animTimeGetTime(entry->imageType);
                         entry->image->animName = entry->animName;
                         imgClearVirtualPoint(entry->image);
-                        fadeCapture("fImg_dokan", NULL, 0);
+                        test_img_alloc_capture((EvtWord)"fImg_dokan", 0, 0, 0, 0, 0, 608, 480);
                         switch (entry->type) {
                             case FADE_PIPE_LEFT_A1:
 #if VERSION <= VERSION_DEMO_JP
@@ -884,7 +890,8 @@ void fadeMain(void) {
                         switch (entry->type) {
                             case FADE_PAGE_FLIP_Z1_OFFSCREEN:
                                 offscreenEntry("fOff_peron");
-                                fadeCapture("fImg_peron", "fOff_peron", 0);
+                                test_img_alloc_capture((EvtWord)"fImg_peron", 0, (EvtWord)"fOff_peron", 0, 0, 0,
+                                                       608, 480);
                                 break;
 #if VERSION <= VERSION_DEMO_JP
                             case FADE_STORY_MARIO_A1:
@@ -895,7 +902,7 @@ void fadeMain(void) {
                             case 0x39:
                             case 0x3B:
 #endif
-                                fadeCapture("fImg_peron", NULL, 2);
+                                test_img_alloc_capture((EvtWord)"fImg_peron", 0, 0, 2, 0, 0, 608, 480);
                                 entry->image->camId = CAMERA_FADE2;
                                 entry->image->dispCamId = CAMERA_FADE2;
 #if VERSION <= VERSION_DEMO_JP
@@ -913,12 +920,12 @@ void fadeMain(void) {
                             case 0x3D:
                             case 0x3E:
 #endif
-                                fadeCapture("fImg_peron", NULL, 2);
+                                test_img_alloc_capture((EvtWord)"fImg_peron", 0, 0, 2, 0, 0, 608, 480);
                                 entry->image->camId = CAMERA_FADE;
                                 entry->image->dispCamId = CAMERA_FADE;
                                 break;
                             default:
-                                fadeCapture("fImg_peron", NULL, 2);
+                                test_img_alloc_capture((EvtWord)"fImg_peron", 0, 0, 2, 0, 0, 608, 480);
                                 break;
                         }
                         entry->state++;

@@ -397,9 +397,9 @@ function names) and `strupr` (a C library name).
 
 ## Inline helper names (2026-11-17)
 
-209 names of `static inline` (and a few plain `inline`) helpers in the game code that no map lists and no table
+208 names of `static inline` (and a few plain `inline`) helpers in the game code that no map lists and no table
 above names (GE4, 2026-11-18: mri_puni's puniModeCheckPos and puniMapDataSetI were copies of the file's own
-puniModePrehagure and puniMapDataSet, whose out-of-line copies the REL keeps; the callers call those now; GE7: win_root's nameTex + nameQuad, winSortTex and winWazaQuad were copies of the stripped chip and chip2, which the callers call now; GE10: mot_hammer's hamDir, party_move's party_move_mode_behind_mario_continue, mario_hit's marioChkGndOk and win_mario's fukiKey + fukiTool are the stripped hammerSwingDir, party_move_mode_slitwall, marioGravityChk and fukidashi_sub (one function with a mirror parameter), restored at their map slots and sizes). An inline function leaves no symbol when every call is inlined, so no map can name it: the names
+puniModePrehagure and puniMapDataSet, whose out-of-line copies the REL keeps; the callers call those now; GE7: win_root's nameTex + nameQuad, winSortTex and winWazaQuad were copies of the stripped chip and chip2, which the callers call now; GE10: mot_hammer's hamDir, party_move's party_move_mode_behind_mario_continue, mario_hit's marioChkGndOk and win_mario's fukiKey + fukiTool are the stripped hammerSwingDir, party_move_mode_slitwall, marioGravityChk and fukidashi_sub (one function with a mirror parameter), restored at their map slots and sizes; GE11: fadedrv's fadeCapture was the stripped test_img_alloc_capture, which the callers call now). An inline function leaves no symbol when every call is inlined, so no map can name it: the names
 were chosen when the code was decompiled (LLCOOLT or this fork) and are not original. Each helper reads as
 code a programmer would write (a small getter, a repeated draw or copy step, a private sine), so it is not
 listed as a fake; where a test was made, the written-out form builds different code (GB9: setChanMatColor,
@@ -447,7 +447,7 @@ helper: no written-out form builds the same; it should be a FAKES row.
 | src/driver/effdrv.c | `effMayaKeyInterp` (1), `effMayaSetGQR` (1) |
 | src/driver/envdrv.c | `env_sin`, `env_cos`, `envTexObj` (1), `envTexObjCI` (1), `envLoadTex`, `envWaterParent` (1), `envGetWork`, `dofQuad` |
 | src/driver/extdrv.c | `extGetWork` |
-| src/driver/fadedrv.c | `fadeCapture`, `fadeTecAlpha` (1) |
+| src/driver/fadedrv.c | `fadeTecAlpha` (1) |
 | src/driver/hitdrv.c | `hitDequant`, `checkTriVecDown`, `checkTriVecUp` (1), `checkTriVecDir` |
 | src/driver/icondrv.c | `iconGetWork`, `iconFindIn` |
 | src/driver/itemdrv.c | `itemGetWork`, `itemGetEnd` |
