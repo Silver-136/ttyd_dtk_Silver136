@@ -2724,6 +2724,11 @@ static s32 mobj_save_blk(MapObjectEntry* mobj) {
     return 0;
 }
 
+/**
+ * Places a save block (MOBJ_SaveBlock) hit from below. args: name, x, y, z, event to run when hit, and a literal
+ * flag variable stored as its flagVar. Not placed when GW_FLAG_NO_SAVE_BLOCK is set; blocks until the animation group
+ * has loaded.
+ */
 USER_FUNC(evt_mobj_save_blk) {
     s32 flagVar;
     s32 val;

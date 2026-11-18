@@ -695,7 +695,7 @@ static inline BOOL slitContinueChk(void) {
 #define SPEEDCHK_COND(m) ((m)->baseSpeed >= (m)->baseDashSpeed)
 #endif
 
-// Back from dashing to walking speed.
+/** Back from dashing to walking speed: pose M_R_1 unless MARIO_TRIG_FLAG_SLIT_KEEP_POSE, and SLIT_FLAG_SPEED_DOWN. */
 static inline void slitSpeedDown(MarioWork* m) {
     m->baseSpeed = m->baseWalkSpeed;
     if (!(m->trigFlags & MARIO_TRIG_FLAG_SLIT_KEEP_POSE)) {

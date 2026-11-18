@@ -275,6 +275,7 @@ void envMain(void) {
 /** Texture matrix slots (GX_TEXMTX0 to 9) by index, for the environment textures and depth of field. */
 static const s32 texmtx_tbl[] = {GX_TEXMTX0, GX_TEXMTX1, GX_TEXMTX2, GX_TEXMTX3, GX_TEXMTX4, GX_TEXMTX5, GX_TEXMTX6, GX_TEXMTX7, GX_TEXMTX8, GX_TEXMTX9};
 
+/** Sine of x in radians (polySinf). */
 // Private copies of polySinf/polyCosf. The polynomial is inline asm, as in poly_trig.h (see the note there).
 static inline f32 env_sin(register f32 x) {
     register f32 a = 0.00761f;
@@ -322,6 +323,7 @@ static inline f32 env_sin(register f32 x) {
     return a;
 }
 
+/** Cosine of x in radians (polyCosf). */
 static inline f32 env_cos(register f32 x) {
     register f32 a = 0.03705f;
     register f32 b = 0.4967f;

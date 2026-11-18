@@ -5135,11 +5135,13 @@ void BattleAudience_Case_AcrobatNoTry(void) {
 #endif
 }
 
+/** Empty: returns at once. */
 // Original names and sizes (0x4 each: a bare return) from the JP demo map (UNUSED there: nothing calls them):
 // empty hooks for a good and a bad Super Action Command, like BattleAudience_Case_JumpNewRecord below.
 void BattleAudience_Case_SuperActionCommandGood(void) {
 }
 
+/** Empty: returns at once. */
 void BattleAudience_Case_SuperActionCommandBad(void) {
 }
 

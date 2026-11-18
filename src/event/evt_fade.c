@@ -104,6 +104,7 @@ USER_FUNC(evt_fade_set_anim_ofs_pos) {
     return EVT_RETURN_DONE;
 }
 
+/** Places the curtain and stage animation of animated fades at the world position (args[0], args[1], args[2]). */
 USER_FUNC(evt_fade_set_anim_virtual_pos) {
     EvtWord* args = event->args;
     f32 x, y, z;

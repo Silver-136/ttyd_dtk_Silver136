@@ -904,6 +904,13 @@ EVT_BEGIN(evt_lecture_msg)
     RETURN
 EVT_END()
 
+/**
+ * Applies the item LW(10) used from the field Items menu, one step per call (static cnt, reset on the first call):
+ * it forces the status window open and adds the item's HP to Mario, or to the partner LW(11) when nonzero, and its FP
+ * and Star Power to Mario's; then it shows the HP number (if any) and some 60 frames later the FP number (if any)
+ * above the one who used it, and ends. JP and later set the partner's HP number's baseY to minus half the partner's
+ * height.
+ */
 USER_FUNC(itemUseFunc) {
     PartyEntry* party;
     MarioWork* mario;
@@ -1028,8 +1035,9 @@ static USER_FUNC(party_color) {
     return EVT_RETURN_DONE;
 }
 
-// Descriptive name (not in the symbol maps); placeholder unk_80177cf8, JP 0x80177CF8. See docs/NAME_PROVENANCE.md.
 #if VERSION >= VERSION_JP
+/** Forces every partner out of Paper Mode (allPartyForceSlitOff). */
+// Descriptive name (not in the symbol maps); placeholder unk_80177cf8, JP 0x80177CF8. See docs/NAME_PROVENANCE.md.
 USER_FUNC(all_party_slit_off) {
     allPartyForceSlitOff();
     return EVT_RETURN_DONE;
@@ -1637,6 +1645,7 @@ static USER_FUNC(wait) {
 
 #if VERSION >= VERSION_JP
 
+/** Clears WINDOW_FLAG_LECTURE_KEY_MASK in the menu work. */
 // Descriptive name (not in the symbol maps); placeholder unk_80175e98, JP 0x80175E98. See docs/NAME_PROVENANCE.md.
 USER_FUNC(lecture_key_mask_off) {
     wp->flags &= ~WINDOW_FLAG_LECTURE_KEY_MASK;

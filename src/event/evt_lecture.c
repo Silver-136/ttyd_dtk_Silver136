@@ -34,6 +34,7 @@ USER_FUNC(lect_set_systemlevel) {
     return EVT_RETURN_DONE;
 }
 
+/** Calls marioStGetSystemLevel and drops the result; nothing is returned to the script. */
 USER_FUNC(lect_test_systemlevel) {
     marioStGetSystemLevel();
     return EVT_RETURN_DONE;

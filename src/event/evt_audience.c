@@ -532,6 +532,7 @@ USER_FUNC(evt_audience_abnormal_natural_all) {
     return EVT_RETURN_DONE;
 }
 
+/** Starts the crowd's booing (BattleAudienceSoundBooing). */
 // evt_audience_sound_booing, _clap, _handbeat, _whistle, _set_vol, _set_vol_all and _stop: original names and sizes
 // from the JP demo map (UNUSED there: no script uses them). Each passes its arguments to the BattleAudienceSound
 // function its name gives, in the form of evt_audience_sound_cheer (two arguments, 0x60), evt_audience_joy_ending
@@ -541,6 +542,7 @@ USER_FUNC(evt_audience_sound_booing) {
     return EVT_RETURN_DONE;
 }
 
+/** Plays the crowd clapping (BattleAudienceSoundClap): args[0] duration, args[1] fade time. */
 USER_FUNC(evt_audience_sound_clap) {
     EvtWord* args = event->args;
     s32 a, b;
@@ -551,6 +553,7 @@ USER_FUNC(evt_audience_sound_clap) {
     return EVT_RETURN_DONE;
 }
 
+/** Plays the crowd's background noise once (BattleAudienceSoundNoise): args[0] duration, args[1] fade time. */
 // Original name and size (0x60) from the JP demo map (UNUSED there: no script uses it), between _clap and _cheer:
 // evt_audience_sound_clap's form for BattleAudienceSoundNoise.
 USER_FUNC(evt_audience_sound_noise) {
@@ -577,16 +580,19 @@ USER_FUNC(evt_audience_sound_cheer) {
     return EVT_RETURN_DONE;
 }
 
+/** Starts the crowd's rhythmic clapping loop (BattleAudienceSoundHandBeat). */
 USER_FUNC(evt_audience_sound_handbeat) {
     BattleAudienceSoundHandBeat();
     return EVT_RETURN_DONE;
 }
 
+/** Plays a whistle from a random idle member (BattleAudienceSoundWhistle). */
 USER_FUNC(evt_audience_sound_whistle) {
     BattleAudienceSoundWhistle();
     return EVT_RETURN_DONE;
 }
 
+/** Fades crowd sound channel args[0] to args[1] percent over args[2] frames (BattleAudienceSoundSetVol). */
 USER_FUNC(evt_audience_sound_set_vol) {
     EvtWord* args = event->args;
     s32 id, vol, length;
@@ -598,6 +604,7 @@ USER_FUNC(evt_audience_sound_set_vol) {
     return EVT_RETURN_DONE;
 }
 
+/** Fades all crowd sound channels to args[0] percent over args[1] frames (BattleAudienceSoundSetVolAll). */
 USER_FUNC(evt_audience_sound_set_vol_all) {
     EvtWord* args = event->args;
     s32 vol, length;
@@ -608,6 +615,7 @@ USER_FUNC(evt_audience_sound_set_vol_all) {
     return EVT_RETURN_DONE;
 }
 
+/** Stops the sound on crowd channel args[0] if it is playing (BattleAudienceSoundStop). */
 USER_FUNC(evt_audience_sound_stop) {
     BattleAudienceSoundStop(evtGetValue(event, event->args[0]));
     return EVT_RETURN_DONE;

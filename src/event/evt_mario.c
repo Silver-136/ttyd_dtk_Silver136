@@ -713,8 +713,12 @@ USER_FUNC(evt_mario_set_dir_npc) {
     return EVT_RETURN_DONE;
 }
 
-// Descriptive name (not in the symbol maps); placeholder unk_800e23e0, JP 0x800E23E0. See docs/NAME_PROVENANCE.md.
 #if VERSION >= VERSION_JP
+/**
+ * Turns Mario towards the point (args[0], args[1]) on the x-z plane: the angle to it, relative to the 3D camera yaw,
+ * becomes his move and view direction, and his display direction target is 180 for an angle under 180, else 0.
+ */
+// Descriptive name (not in the symbol maps); placeholder unk_800e23e0, JP 0x800E23E0. See docs/NAME_PROVENANCE.md.
 USER_FUNC(evt_mario_set_dir_pos) {
     EvtWord* args = event->args;
     MarioWork* mp = marioGetPtr();
@@ -974,6 +978,7 @@ USER_FUNC(evt_mario_set_motion) {
     return EVT_RETURN_DONE;
 }
 
+/** Returns 1 in args[0] while Mario is in MARIO_MOTION_HIP_2 and not just starting a new motion, else 0. */
 USER_FUNC(evt_mario_chk_hipbump) {
     EvtWord* args = event->args;
     s32 val;
@@ -1111,8 +1116,9 @@ USER_FUNC(evt_mario_mov_pos2) {
     return EVT_RETURN_DONE;
 }
 
-// Descriptive name (not in the symbol maps).
 #if VERSION >= VERSION_JP
+/** Sets PARTY_TRIG_HALF_PUSH (halved push box for a door move) on the partner and on the extra partner, if present. */
+// Descriptive name (not in the symbol maps).
 USER_FUNC(evt_mario_party_door_halve_hitbox) {
     PartyEntry* party = partyGetPtr(marioGetPartyId());
     if (party) {
@@ -1629,6 +1635,14 @@ USER_FUNC(evt_mario_jump_pos) {
     return EVT_RETURN_BLOCK;
 }
 
+/**
+ * Jump-stand jump (args[0] and args[2] are read but not used). On the first call it picks the path: when the start
+ * of Mario's last fall (fallStartPos.y) is not below his y and lies above 1.5 times his collision height plus args[1],
+ * a 550 ms hop to the point (args[6], args[7], args[8]); otherwise (JP and later also always for args[10] 3) a launch:
+ * he rises, timed by args[9] ms, until he reaches the height args[4] (moving across too unless args[10] bit 0 is set;
+ * the early demos: unless args[10] is nonzero), then hops 54 frames onto (args[3], args[4], args[5]). Both paths end
+ * in MARIO_MOTION_STAY with the camera following his height again; field battles are off meanwhile.
+ */
 USER_FUNC(evt_mario_jump_jumpstand) {
     EvtWord* args = event->args;
     MarioWork* mp = marioGetPtr();
@@ -2515,6 +2529,7 @@ USER_FUNC(evt_mario_dump_item) {
     return EVT_RETURN_DONE;
 }
 
+/** Returns MarioWork.hitobjHead (the hit object itself, not its name) in args[0]. */
 // evt_mario_get_hitobj_head, _ride, _under, _front and _push: original names and sizes (0x54 each) from the JP demo
 // map (UNUSED there: no script uses them). Each returns in args[0] the hit object whose name the
 // evt_mario_get_name_hitobj_ command of the same word returns, in the form of evt_mario_get_mode. The map's
@@ -2525,24 +2540,28 @@ USER_FUNC(evt_mario_get_hitobj_head) {
     return EVT_RETURN_DONE;
 }
 
+/** Returns MarioWork.hitobjStandOn, the hit object Mario stands on (not its name), in args[0]. */
 USER_FUNC(evt_mario_get_hitobj_ride) {
     s32 id = event->args[0];
     evtSetValue(event, id, (EvtWord)marioGetPtr()->hitobjStandOn);
     return EVT_RETURN_DONE;
 }
 
+/** Returns MarioWork.hitobjUnder (the hit object itself, not its name) in args[0]. */
 USER_FUNC(evt_mario_get_hitobj_under) {
     s32 id = event->args[0];
     evtSetValue(event, id, (EvtWord)marioGetPtr()->hitobjUnder);
     return EVT_RETURN_DONE;
 }
 
+/** Returns MarioWork.hitobjFront (the hit object itself, not its name) in args[0]. */
 USER_FUNC(evt_mario_get_hitobj_front) {
     s32 id = event->args[0];
     evtSetValue(event, id, (EvtWord)marioGetPtr()->hitobjFront);
     return EVT_RETURN_DONE;
 }
 
+/** Returns MarioWork.hitobjPush (the hit object itself, not its name) in args[0]. */
 USER_FUNC(evt_mario_get_hitobj_push) {
     s32 id = event->args[0];
     evtSetValue(event, id, (EvtWord)marioGetPtr()->hitobjPush);
@@ -2560,6 +2579,7 @@ HITOBJ(front, hitobjFront)
 
 HITOBJ(push, hitobjPush)
 
+/** Blocks while button input is switched off (marioKeyOffChk nonzero). */
 USER_FUNC(evt_mario_keyon_wait) {
     marioGetPtr();
     return marioKeyOffChk() ? EVT_RETURN_BLOCK : EVT_RETURN_DONE;
@@ -2575,6 +2595,12 @@ HITOBJ(front, hitobjFront)
 
 HITOBJ(push, hitobjPush)
 #endif
+/**
+ * Plane mode: a literal args[0] of 0 cancels it (mario_plane_cancel) and blocks until Mario stands
+ * (MARIO_MOTION_STAY on a hit object); any other value switches him to MARIO_MOTION_PLANE with
+ * MARIO_TRIG_FLAG_SHIP_PLANE_EVT_ON and blocks until he glides. The flag is cleared on landing (JP and later) or once
+ * he glides (early demos).
+ */
 USER_FUNC(evt_mario_paper_plane) {
     s32 mode;
     EvtWord* args = event->args;

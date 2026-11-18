@@ -37,7 +37,7 @@ EVT_END()
 
 // clang-format on
 
-// const char* npcDesc, const char* npcName
+/** Creates an NPC named args[0] with the animation group args[1]; blocks until the group has loaded. */
 USER_FUNC(evt_npc_entry) {
     EvtWord* args = event->args;
     const char *desc, *name;
@@ -477,6 +477,12 @@ USER_FUNC(evt_npc_set_rotate_offset) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Moves the NPC args[0] on the x-z plane towards (args[1], args[2]) and blocks until the move ends: at speed args[4]
+ * until it arrives or, when a time args[3] (ms) is given too, until that time has run; with only a time the speed
+ * comes from the distance, with neither it is 1. The literal args[5] holds NPC_MOVE_POSITION_FLAG_* bits. Plays the
+ * NPC's footstep sounds on the way.
+ */
 USER_FUNC(evt_npc_move_position) {
     EvtWord* args = event->args;
 
@@ -1323,7 +1329,7 @@ NPC_SET_TRIBE_ANIM(evt_npc_set_talk_anim, talkAnim)
 NPC_SET_TRIBE_ANIM(evt_npc_set_walk_anim, walkAnimation)
 NPC_SET_TRIBE_ANIM(evt_npc_set_run_anim, runAnimation)
 
-// const char* lookupName, const char* paperGroup
+/** Gives the NPC args[0] the paper animation group args[1] and switches its paper pose on (animPosePaperPeraOn). */
 USER_FUNC(evt_npc_set_paper) {
     EvtWord* args = event->args;
     const char* name;
@@ -2301,6 +2307,10 @@ USER_FUNC(evt_npc_set_unitwork) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Waits args[1] ms of event time while keeping the NPC args[0] updated (NPC_STATUS_UPDATE each frame); ends at once
+ * for 0.
+ */
 USER_FUNC(evt_npc_wait_msec) {
     EvtWord* args = event->args;
     const char* npcName = (const char*)evtGetValue(event, args[0]);
@@ -2938,6 +2948,7 @@ USER_FUNC(evt_npc_sound_data_set) {
     return EVT_RETURN_DONE;
 }
 
+/** Sets (args[0] nonzero) or clears NPC_WORK_FIELD_RELEASED, the flag that field NPC models are released. */
 USER_FUNC(evt_npc_release_filednpc) {
     BOOL set = evtGetValue(event, *event->args);
     NpcWork* wp = npcGetWorkPtr();

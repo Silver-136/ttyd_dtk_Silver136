@@ -237,11 +237,13 @@ EVT_BEGIN(house_open_se)
 EVT_END()
 
 #if VERSION >= VERSION_JP
+/** Sets PSND_FLAG_DOOR_IN: sound effects marked to mute behind doors stay silent until snd_door_out. */
 USER_FUNC(snd_door_in) {
     psndSetFlag(PSND_FLAG_DOOR_IN);
     return EVT_RETURN_DONE;
 }
 
+/** Clears PSND_FLAG_DOOR_IN, set by snd_door_in. */
 USER_FUNC(snd_door_out) {
     psndClearFlag(PSND_FLAG_DOOR_IN);
     return EVT_RETURN_DONE;
@@ -1397,6 +1399,7 @@ EVT_BEGIN(evt_door_entry)
     RETURN
 EVT_END()
 
+/** Returns the four hit object names of the house args[0] (its HouseWork) in args[1] to args[4]. */
 static USER_FUNC(inout_hit) {
     EvtWord* args = event->args;
     HouseWork* w = (HouseWork*)evtGetValue(event, args[0]);

@@ -1596,6 +1596,7 @@ void party_move_mode_stay(PartyEntry* party) {
     checkMapAttr(party);
 }
 
+/** Empty: returns at once. */
 // party_move_mode_stay_post, _walk_post, _behind_mario_post and _beside_mario_post: original names and sizes (0x4
 // each: a bare return) from the JP demo map (UNUSED there: nothing calls them); each follows its move mode's
 // function in the map, an empty hook for leaving that mode.
@@ -1638,6 +1639,7 @@ void party_move_mode_walk(PartyEntry* party) {
     checkMapAttr(party);
 }
 
+/** Empty: returns at once. */
 // Original name and size from the JP demo map (see party_move_mode_stay_post).
 void party_move_mode_walk_post(PartyEntry* party) {
 }
@@ -1675,6 +1677,7 @@ void party_move_mode_behind_mario(PartyEntry* party) {
     party->moveDir = party->targetDir;
 }
 
+/** Empty: returns at once. */
 // Original name and size from the JP demo map (see party_move_mode_stay_post).
 void party_move_mode_behind_mario_post(PartyEntry* party) {
 }
@@ -1705,6 +1708,7 @@ void party_move_mode_beside_mario(PartyEntry* party) {
     party->moveDir = party->targetDir;
 }
 
+/** Empty: returns at once. */
 // Original name and size from the JP demo map (see party_move_mode_stay_post).
 void party_move_mode_beside_mario_post(PartyEntry* party) {
 }

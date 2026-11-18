@@ -4153,6 +4153,12 @@ EVT_BEGIN(hbross_find_event)
     RETURN
 EVT_END()
 
+/**
+ * Chain of the Chain Chomp ("me") while it lunges (run every frame by wanwan_find_event): the links slaves[0] to
+ * slaves[2] hang between it and slaves[3]. Each link sags by 300 / len^2 and is then pulled to len from its neighbour
+ * (len: a quarter of the distance from the Chomp to slaves[3], at least 10), first outwards from the Chomp, then back
+ * from slaves[3]; no link goes below the Chomp's territoryBase y.
+ */
 static USER_FUNC(chain_main) {
     NpcEntry* me = evtNpcNameToPtr(event, "me");
     NpcEntry* end = me->slaves[3];
@@ -4639,6 +4645,13 @@ EVT_BEGIN(wanwan_find_event)
     RETURN
 EVT_END()
 
+/**
+ * Pipe spawner of the 2D troop grunts: the pipe NPC "me" ("軍団ザコがでる土管１" or "２") owns the grunts 1-3 or 4-6
+ * ("軍団ザコ土管N") and the pipe hit object MOBJ_mobj9 or MOBJ_mobj14. Unless Mario stands on that pipe (JP and later:
+ * or jumped from it or has it in front), the first of its grunts parked at y -75 or lower is put 35 below the pipe
+ * NPC with floor collision, gravity and hits back on, marked ZAKO_ENTRY_DOKAN in unitWork[0], and its move event
+ * restarted.
+ */
 #if VERSION <= VERSION_DEMO_JP
 static USER_FUNC(zakoEntryDokan) {
 #else

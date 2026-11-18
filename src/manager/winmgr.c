@@ -182,8 +182,12 @@ static const char name_party6[12];
 static const char* party_name_table_rtn(s32 id);
 static s32 iconid_conv(s32 icon);
 
-// Descriptive name (not in the symbol maps); placeholder unk_80239b2c, JP 0x80239B2C. See docs/NAME_PROVENANCE.md.
 #if VERSION >= VERSION_JP
+/**
+ * Sets args[0] to 1 when a joined partner can still be ranked up (rank below 1, or below 2 once
+ * GSWF_GOR_UP_ARROW_USED is set), otherwise 0.
+ */
+// Descriptive name (not in the symbol maps); placeholder unk_80239b2c, JP 0x80239B2C. See docs/NAME_PROVENANCE.md.
 USER_FUNC(evt_win_party_lankup_chk) {
     PouchData* pouch;
     u16* p;

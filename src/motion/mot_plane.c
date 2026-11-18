@@ -193,7 +193,7 @@ void marioForcePlaneAnime(void) {
     mario->dispFlags |= MARIO_DISP_FLAG_NO_DIR_FLIP;
 }
 
-// Eases turnSpeed toward max, signed by the facing direction (+ right, - left).
+/** Eases turnSpeed toward max, signed by the facing direction (+ right, - left). */
 static inline void planeRoll1(MarioWork* mp, f32 rate, f32 max) {
     f32* p = &mp->mot.plane.turnSpeed;
     f32 target = max * ((mp->motPlane->flags & MOT_PLANE_FLAG_RIGHT) ? 1.0f : -1.0f);

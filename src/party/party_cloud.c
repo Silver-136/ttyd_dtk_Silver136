@@ -203,6 +203,11 @@ f32 cloudGetBreathPower(Vec pos, f32 size) {
 static void getHitBreatheout2(PartyEntry* party, f32 tilt);
 #endif
 
+/**
+ * Returns the hit object that Flurrie's breath touches: which 0 the front hit, 1 the downward hit, 2 and 3 the two
+ * sweep hits (PartyCloud). NULL unless the partner (JP and later: Mario's partner, marioGetPartyId) is Flurrie in use
+ * and at least at CLOUD_USE_BREATH_INIT.
+ */
 struct HitEntry* cloudGetHitBreathout(s32 which) {
 #if VERSION >= VERSION_JP
     u32 partyId = marioGetPartyId();
@@ -347,7 +352,7 @@ void cloud_move(PartyEntry* party) {
     }
 }
 
-// Flurrie's move target: beside Mario (3.3 units to his left or right of the facing direction), 10 units up
+/** Flurrie's move target: beside Mario (3.3 units to his left or right of the facing direction), 10 units up. */
 // Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
 void set_cloud_hold_pos(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;

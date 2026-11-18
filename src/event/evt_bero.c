@@ -164,42 +164,51 @@ s32 bero_get_BeroNUM(void) {
     return BeroNUM;
 }
 
+/** Returns the x of the Mario display offset saved by evt_bero_disppos_save. */
 // bero_get_BeroOX, bero_get_BeroOY and bero_get_BeroOZ: original names and sizes (0x8 each) from the JP demo map
 // (UNUSED there: nothing calls them); the getters of the saved offset, like the six position getters below.
 f32 bero_get_BeroOX(void) {
     return BeroOX;
 }
 
+/** Returns the y of the Mario display offset saved by evt_bero_disppos_save. */
 f32 bero_get_BeroOY(void) {
     return BeroOY;
 }
 
+/** Returns the z of the Mario display offset saved by evt_bero_disppos_save. */
 f32 bero_get_BeroOZ(void) {
     return BeroOZ;
 }
 
+/** Returns the x of the start point stored by the last bero_get_position_* call. */
 // bero_get_BeroSX to bero_get_BeroEZ: start and end of the walk computed by the last bero_get_position_* call
 // (bero_get_position_normal, bero_get_position_pipe_pure, ...).
 f32 bero_get_BeroSX(void) {
     return BeroSX;
 }
 
+/** Returns the y of the start point stored by the last bero_get_position_* call. */
 f32 bero_get_BeroSY(void) {
     return BeroSY;
 }
 
+/** Returns the z of the start point stored by the last bero_get_position_* call. */
 f32 bero_get_BeroSZ(void) {
     return BeroSZ;
 }
 
+/** Returns the x of the end point stored by the last bero_get_position_* call. */
 f32 bero_get_BeroEX(void) {
     return BeroEX;
 }
 
+/** Returns the y of the end point stored by the last bero_get_position_* call. */
 f32 bero_get_BeroEY(void) {
     return BeroEY;
 }
 
+/** Returns the z of the end point stored by the last bero_get_position_* call. */
 f32 bero_get_BeroEZ(void) {
     return BeroEZ;
 }
@@ -650,6 +659,14 @@ USER_FUNC(evt_bero_get_info_num) {
 static inline f32 sind(f32 deg) { return sin(6.2831855f * deg / 360.0f); }
 static inline f32 cosd(f32 deg) { return cos(6.2831855f * deg / 360.0f); }
 
+/**
+ * Start and end points of a walk through the exit in LW(3) (hit object name), LW(5) (direction in eighths of a turn)
+ * and LW(6) (position, BERO_POS_AUTO: the hit object's): both start at the exit. With a nonzero distance args[1] the
+ * start moves 30 units back against the direction (turned half round when args[0] is 1), its y set to the floor
+ * below when there is one, and the end lies args[1] units beyond the exit. Stores them in BeroSX..BeroEZ. JP and
+ * later also make the end Mario's respawn point after a bottomless fall and call marioReloadMapOnBottomlessOn when
+ * he is in MARIO_MOTION_SHIP.
+ */
 USER_FUNC(bero_get_position_normal) {
     EvtWord* args = event->args;
 #if VERSION >= VERSION_JP
@@ -780,6 +797,11 @@ static void bero_get_position_pipe_sub(s32 id, s32 a, EvtWord name, s32 kind, Ve
     }
 }
 
+/**
+ * Start and end points of pipe travel through the exit in LW(3) and LW(5) (bero_get_position_pipe_sub: args[0] 0 goes
+ * into the pipe, otherwise out of it; args[1] the distance), both 37.5 lower for an up pipe (BERO_DIR_UP); stores them
+ * in BeroSX..BeroEZ. JP and later also make the end Mario's respawn point after a bottomless fall.
+ */
 #if VERSION <= VERSION_DEMO_JP
 static USER_FUNC(bero_get_position_pipe_pure) {
 #else
@@ -1080,7 +1102,11 @@ EVT_BEGIN(bero_play_out_anime)
     RETURN
 EVT_END()
 
-// LW(4): the exit's BeroEntry.type, LW(5): its direction kind
+/**
+ * Shifts Mario's display offset for pipe travel by the exit's direction kind LW(5) (LW(4): its BeroEntry.type):
+ * side pipes (BERO_DIR_E, BERO_DIR_W) by +3 y and -15 z unless BERO_TYPE_BG_MODE is set; up and down pipes by -13 z,
+ * or -20 z in BERO_TYPE_BG_MODE; other kinds not at all.
+ */
 static USER_FUNC(bero_set_disp_position_pipe) {
     switch (event->lwData[5]) {
         case 2:
@@ -1194,6 +1220,11 @@ static USER_FUNC(evt_bero_disppos_load) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Moves Mario in a straight line from (BeroSX, BeroSY) towards (BeroEX, BeroEY) at args[0] units per frame
+ * (sysFrame2SecFloat), timed from the first call, with z at BeroSZ; blocks until he has reached the end on both axes,
+ * then puts him at (BeroEX, BeroEY, BeroEZ).
+ */
 static USER_FUNC(evt_bero_move_mario_speed) {
     EvtWord* args = event->args;
     f32 speed = evtGetFloat(event, args[0]);
@@ -1473,6 +1504,10 @@ EVT_BEGIN(bero_case_exec_door)
     RETURN
 EVT_END()
 
+/**
+ * Starts a 500 ms sine ease of the 3D camera from its current position and target to those the road camera gives for
+ * Mario's x and z (camShiftMain, camRoadMain); bero_case_exec_pipe_sub runs it as the camera leaves road mode.
+ */
 static USER_FUNC(evt_camera_change_event_from_road) {
     MarioWork* mario = marioGetPtr();
     CameraEntry* cam = camGetPtr(CAMERA_3D);

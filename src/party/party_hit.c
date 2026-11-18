@@ -253,7 +253,7 @@ static inline HitEntry* partyHitCheckGnd(PartyEntry* party, Vec* pos, Vec* dir, 
 }
 #endif
 
-/* partyChkGnd's ground search: writes the party's own groundY/dropDepth */
+/** partyChkGnd's ground search: writes the party's own groundY/dropDepth. */
 HitEntry* partySearchGround(PartyEntry* party, f32 range, f32 depth) {
 #if VERSION <= VERSION_DEMO_JP
     HitEntry* hit;
@@ -402,8 +402,10 @@ HitEntry* partySearchGround(PartyEntry* party, f32 range, f32 depth) {
 
 #if VERSION <= VERSION_DEMO_JP
 
-/* the early demos' second ground search reports the floor height and drop depth through out-pointers and takes the first
-   acceptable probe instead of the highest one */
+/**
+ * The early demos' second ground search: reports the floor height and drop depth through out-pointers and takes the
+ * first acceptable probe instead of the highest one.
+ */
 HitEntry* _partySearchGround(PartyEntry* party, f32* outY, f32* outDepth, f32 range, f32 depth) {
     HitEntry* hit;
     s32 i;

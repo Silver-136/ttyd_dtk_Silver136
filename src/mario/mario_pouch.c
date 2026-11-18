@@ -264,9 +264,11 @@ BOOL pouchGetMaxAndList(ItemType type, s32* maximum, s16** table1, s16** table2)
     return FALSE;
 }
 
-// Puts type at the front of its list (pouchGetMaxAndList) if that has an empty slot: the entries above the last
-// empty slot move down one place (the worn-badge list, if any, moves in step and gets 0 at the front).
-// Returns 1, or 0 when the list is full or type is not a pouch item.
+/**
+ * Puts type at the front of its list (pouchGetMaxAndList) if that has an empty slot: the entries above the last
+ * empty slot move down one place (the worn-badge list, if any, moves in step and gets 0 at the front).
+ * Returns 1, or 0 when the list is full or type is not a pouch item.
+ */
 // Original name and place from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
 // Stand-alone it compiles to the map's 0x298 bytes.
 BOOL addHead(ItemType type) {

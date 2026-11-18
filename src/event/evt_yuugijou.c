@@ -602,6 +602,7 @@ static USER_FUNC(yuuminigame_end) {
 
 // Descriptive name (not in the symbol maps); placeholder unk_802243a4, JP 0x802243A4. See docs/NAME_PROVENANCE.md.
 #if VERSION >= VERSION_JP
+/** Returns the script set by evtYuuSetWindowEvt (the minigame's window event) in args[0]. */
 USER_FUNC(yuuminigame_get_window_evt) {
     evtSetValue(event, event->args[0], (EvtWord)yuu_window_evt);
     return EVT_RETURN_DONE;

@@ -151,6 +151,7 @@ static void __DEMOInitVI(void) {
     }
 }
 
+/** Empty: returns at once. */
 // Original name and size (0x4) from the JP demo map (UNUSED there), between __DEMOInitVI and DEMOBeforeRender:
 // an empty function in the form of the other __DEMOInit helpers. Whether DEMOInit called it (an empty call leaves no
 // code) is not visible in the bytes.

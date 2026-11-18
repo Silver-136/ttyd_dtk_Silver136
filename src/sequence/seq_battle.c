@@ -123,7 +123,6 @@ void seq_battleExit(SequenceWork* work) {
  * starts the battle via battle_init, then once the battle ends returns to the field (or game over on a kiosk
  * timeout; states 10/11 end a debug battle).
  */
-
 // A non-NULL map name tells seq_gameOver to skip its iris fade (the battle has already
 // faded out); seq_game does not read it.
 #if VERSION >= VERSION_JP

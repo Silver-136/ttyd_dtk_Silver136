@@ -204,6 +204,7 @@ USER_FUNC(evt_pouch_set_party_max_hp) {
     return EVT_RETURN_DONE;
 }
 
+/** Restores Mario's HP, FP and Star Power to their maximums. */
 USER_FUNC(evt_pouch_mario_recovery) {
     pouchSetHP(pouchGetMaxHP());
     pouchSetFP(pouchGetMaxFP());
@@ -229,6 +230,8 @@ GETTER(evt_pouch_get_equipbadgecnt, pouchGetEquipBadgeCnt)
 SETTER(evt_pouch_majinai_set, pouchMajinaiInit)
 SETTER(evt_pouch_receive_mail, pouchReceiveMail)
 SETTER(evt_pouch_open_mail, pouchOpenMail)
+
+/** Stores args[0] as the name the player gave Yoshi (pouchSetYoshiName). */
 USER_FUNC(evt_pouch_set_yoshiname) {
     pouchSetYoshiName((const char*)evtGetValue(event, event->args[0]));
     return EVT_RETURN_DONE;

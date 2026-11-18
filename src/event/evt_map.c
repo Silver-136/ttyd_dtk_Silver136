@@ -120,6 +120,7 @@ USER_FUNC(evt_map_fog_onoff) {
     return EVT_RETURN_DONE;
 }
 
+/** Sets the map blend colour (args[0] 0: mapSetBlend, otherwise mapSetBlend2) to RGBA (args[1] .. args[4]). */
 USER_FUNC(evt_map_set_blend) {
     EvtWord* args = event->args;
     s32 type = evtGetValue(event, args[0]);
@@ -309,6 +310,10 @@ USER_FUNC(evt_map_set_playrate) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Sets (args[1] nonzero) or clears the flag bits given literally in args[3] on the map object (args[0] 0) or the
+ * map group (otherwise) named args[2].
+ */
 USER_FUNC(evt_mapobj_flag_onoff) {
     EvtWord* args = event->args;
     s32 type = evtGetValue(event, args[0]);
@@ -370,6 +375,7 @@ USER_FUNC(evt_mapobj_get_position) {
     return EVT_RETURN_DONE;
 }
 
+/** Sets map TEV callback slot args[0] to the function args[1] (mapSetTevCallback). */
 USER_FUNC(evt_map_set_tevcallback) {
     EvtWord* args = event->args;
     s32 index = evtGetValue(event, args[0]);

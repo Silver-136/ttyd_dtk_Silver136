@@ -12,6 +12,7 @@ typedef struct FSTEntry {
     u32 entrySizeOrNext; // file = size, dir = next entry
 } FSTEntry;
 
+/** Lower-cases c through __lower_map; -1 (end of file) stays -1. */
 static inline int tolower(int c) {
     return (c == -1) ? -1 : (int)__lower_map[c & 0xFF];
 }

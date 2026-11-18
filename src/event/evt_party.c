@@ -225,6 +225,7 @@ USER_FUNC(evt_party_force_reset_outofscreen) {
     return EVT_RETURN_DONE;
 }
 
+/** Writes the float 1.0 to args[1] when the partner of slot args[0] is not out of the screen, else 0.0. */
 USER_FUNC(evt_party_outofscreen) {
     PartyEntry* p;
     EvtWord* args = event->args;
@@ -831,6 +832,7 @@ USER_FUNC(evt_party_auto_set_yoshi_color) {
     return EVT_RETURN_DONE;
 }
 
+/** Writes the partner's hitobjHead (the hit object itself, not its name) to args[1]; args[0] is the slot. */
 // evt_party_get_hitobj_head and evt_party_get_hitobj_ride: original names and sizes (0x70 each) from the JP demo
 // map (UNUSED there: no script uses them). Each writes to args[1] the hit object whose name the
 // evt_party_get_name_hitobj_ command of the same word writes. The map's other six forms (and the six missing
@@ -846,6 +848,7 @@ USER_FUNC(evt_party_get_hitobj_head) {
     return EVT_RETURN_DONE;
 }
 
+/** Writes the hit object the partner stands on (hitobjStandOn, not its name) to args[1]; args[0] is the slot. */
 USER_FUNC(evt_party_get_hitobj_ride) {
     PartyEntry* p;
     EvtWord* args = event->args;

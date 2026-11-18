@@ -77,6 +77,12 @@ EVT_BEGIN(evt_gazigazi_appear)
     RETURN
 EVT_END()
 
+/**
+ * For evt_gazigazi_appear: sets LW(3) to the biter's y rotation, the negated 3D camera yaw, and LW(4) to its z scale,
+ * the float +1.0 or -1.0. When Mario has a damage hit object whose return position lies more than 180 degrees round
+ * from the camera yaw as seen from (LW(0), LW(2)), the yaw is turned half round and the sign starts at -1; a yaw
+ * between 90 and 270 flips the sign.
+ */
 static USER_FUNC(camdir) {
     f32 yaw;
     s32 dir;

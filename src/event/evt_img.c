@@ -139,6 +139,7 @@ USER_FUNC(evt_img_free_capture) {
     return EVT_RETURN_DONE;
 }
 
+/** Shows (args[1] nonzero) or hides the image named args[0] by clearing or setting IMAGE_FLAG_HIDE. */
 USER_FUNC(evt_img_onoff) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);

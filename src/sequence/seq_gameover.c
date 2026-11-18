@@ -313,6 +313,7 @@ void seq_gameOverExit(SequenceWork* seq) {
 }
 
 #if VERSION >= VERSION_JP
+/** Clears SOUND_STREAM_FLAG_PAUSE on the stream of BGM channel 0, if it has one. */
 // Descriptive name (not in the symbol maps).
 USER_FUNC(evt_snd_bgm_unpause) {
     if (psbgm[0].streamId != -1) {

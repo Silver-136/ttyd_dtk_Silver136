@@ -426,6 +426,7 @@ static USER_FUNC(moving_floor_get_end) {
     return EVT_RETURN_DONE;
 }
 
+/** Sets args[1] to 1 while the moving floor has MOVING_FLOOR_PAUSE set, else 0. */
 static USER_FUNC(moving_floor_get_pause) {
     EvtWord* args = event->args;
     MovingFloor* w = movingFloorArg(event);
@@ -541,6 +542,10 @@ static USER_FUNC(moving_floor_reverse) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Starts the moving floor's sound (SFX_STG1_TIK_FLOOR_MOVE1) at the map object args[1] unless one is playing or
+ * the sound is halted; behind a door (PSND_FLAG_DOOR_IN) it is door-muted unless the object has a NO_MAP_BLEND flag.
+ */
 static USER_FUNC(moving_floor_set_se) {
     EvtWord* args = event->args;
     MovingFloor* w = movingFloorArg(event);

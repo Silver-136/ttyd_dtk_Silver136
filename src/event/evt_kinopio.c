@@ -257,8 +257,9 @@ static USER_FUNC(snd_on) {
     return EVT_RETURN_DONE;
 }
 
-// Descriptive name (not in the symbol maps).
 #if VERSION >= VERSION_JP
+/** Sets MAP_OBJ_FLAG_NO_MAP_BLEND and MAP_OBJ_FLAG_NO_MAP_BLEND2 on the materials of the inn's Lakitu cameraman NPC. */
+// Descriptive name (not in the symbol maps).
 USER_FUNC(cameraman_on) {
     NpcEntry* npc = npcNameToPtr("宿屋のカメラマン");
     animPoseSetMaterialFlagOn(npc->poseId, (MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2));

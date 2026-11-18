@@ -56,6 +56,7 @@ USER_FUNC(evt_item_delete_wait) {
     return EVT_RETURN_DONE;
 }
 
+/** Sets the ITEM_FLAG_* bits given literally in args[1] on the field item named args[0], if it exists. */
 USER_FUNC(evt_item_flag_on) {
     EvtWord* args = event->args;
     ItemEntry* item = itemNameToPtr((char*)evtGetValue(event, args[0]));
@@ -67,6 +68,7 @@ USER_FUNC(evt_item_flag_on) {
     return EVT_RETURN_DONE;
 }
 
+/** Clears the ITEM_FLAG_* bits given literally in args[1] on the field item named args[0], if it exists. */
 USER_FUNC(evt_item_flag_off) {
     EvtWord* args = event->args;
     ItemEntry* item = itemNameToPtr((char*)evtGetValue(event, args[0]));
@@ -78,6 +80,7 @@ USER_FUNC(evt_item_flag_off) {
     return EVT_RETURN_DONE;
 }
 
+/** Replaces the flags of the field item named args[0], if it exists, with the literal args[1]. */
 // Original name and size (0x54) from the JP demo map (UNUSED there: no script uses it); listed after
 // evt_item_flag_off. Same form with the flags stored whole (itemdrv has no setter function in the map).
 USER_FUNC(evt_item_flag_set) {
@@ -91,6 +94,7 @@ USER_FUNC(evt_item_flag_set) {
     return EVT_RETURN_DONE;
 }
 
+/** Sets the flags2 bits given literally in args[1] on the field item named args[0], if it exists. */
 USER_FUNC(evt_item_status_on) {
     EvtWord* args = event->args;
     ItemEntry* item = itemNameToPtr((char*)evtGetValue(event, args[0]));
@@ -102,6 +106,7 @@ USER_FUNC(evt_item_status_on) {
     return EVT_RETURN_DONE;
 }
 
+/** Clears the flags2 bits given literally in args[1] on the field item named args[0], if it exists. */
 // Original name and size (0x50) from the JP demo map (UNUSED there: no script uses it); evt_item_status_on with
 // itemStatusOff.
 USER_FUNC(evt_item_status_off) {
@@ -115,6 +120,7 @@ USER_FUNC(evt_item_status_off) {
     return EVT_RETURN_DONE;
 }
 
+/** Replaces the flags2 word of the field item named args[0], if it exists, with the literal args[1]. */
 // Original name and size (0x50) from the JP demo map (UNUSED there: no script uses it); listed after
 // evt_item_status_off. Same form with the status word stored whole (itemdrv has no setter function in the map).
 USER_FUNC(evt_item_status_set) {
@@ -190,6 +196,10 @@ USER_FUNC(evt_item_set_bound_limit) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Makes the field item named args[0] be collected at once (itemForceGet on the first call), then blocks until the
+ * item is gone or inactive or has ITEM_FLAG2_END_WAIT_UNUSED or ITEM_FLAG2_RELEASED set.
+ */
 USER_FUNC(evt_item_get_item) {
     EvtWord* args = event->args;
     ItemEntry* item = itemNameToPtr((char*)evtGetValue(event, args[0]));
@@ -237,6 +247,7 @@ USER_FUNC(evt_item_change_mode) {
     return EVT_RETURN_DONE;
 }
 
+/** Sets the speed (float args[1]) the field item named args[0] takes at its first bounce with ITEM_FLAG_BOUND_NEXT. */
 USER_FUNC(evt_item_set_bound_next_speed) {
     EvtWord* args = event->args;
     ItemEntry* item = itemNameToPtr((char*)evtGetValue(event, args[0]));
@@ -248,6 +259,7 @@ USER_FUNC(evt_item_set_bound_next_speed) {
     return EVT_RETURN_DONE;
 }
 
+/** Sets the direction (args[1]) the field item named args[0] takes at its first bounce with ITEM_FLAG_BOUND_NEXT. */
 USER_FUNC(evt_item_set_bound_next_dir) {
     EvtWord* args = event->args;
     ItemEntry* item = itemNameToPtr((char*)evtGetValue(event, args[0]));

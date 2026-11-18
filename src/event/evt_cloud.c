@@ -61,6 +61,16 @@ static EVT_BEGIN(evt_cloud_main_evt)
     RETURN
 EVT_END()
 
+/**
+ * Per-frame states of one blow-away piece (LW(0) = its CloudWork); it never finishes. It waits until one of the four
+ * breath hits (cloudGetHitBreathout) is on the piece's hit object, then loads the paper pose "P_oof_cloud_2" or
+ * "P_oof_cloud_1" (by Mario's facing), draws the map group(s) into the offscreen target, captures the piece's screen
+ * area into its image and shows the image in place of the group. While Mario stays in MARIO_MOTION_CLOUD each frame
+ * adds 2 to the counter, and 30 frames without breath pass before it gives up; past the limit the piece is blown away
+ * (end event, image animation "A_2", hit object off, 60 frames' wait); otherwise the group is shown again. Then the
+ * pose, image and offscreen target are freed and the slot returns to waiting. cloud_once_flag lets one piece at a time
+ * start; the early demos also wait while the partner is not Flurrie.
+ */
 static USER_FUNC(evt_cloud_main) {
     CloudWork* wp = (CloudWork*)event->lwData[0];
     s32 group = gp->inBattle != 0;

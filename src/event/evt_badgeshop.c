@@ -779,6 +779,10 @@ USER_FUNC(evt_badgeShop_bottakuru_get_kind_cnt) {
 }
 
 #if VERSION >= VERSION_JP
+/**
+ * Counts the item ids in Charlieton's stock table (bdsw->bottakuru_table, ids KEY_ITEM_MIN up to the last badge)
+ * with a stock above 0 and writes the count to args[0].
+ */
 USER_FUNC(evt_badgeShop_get_special_zaiko) {
     EvtWord* args = event->args;
     s16 badge;

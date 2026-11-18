@@ -1800,6 +1800,7 @@ USER_FUNC(evt_sub_get_dir) {
     return EVT_RETURN_DONE;
 }
 
+/** Returns the system flag word (gp->flags) in args[0]. */
 USER_FUNC(evt_sub_get_system_flag) {
     evtSetValue(event, event->args[0], gp->flags);
     return EVT_RETURN_DONE;
@@ -1818,6 +1819,7 @@ USER_FUNC(evt_sub_system_flag_onoff) {
     return EVT_RETURN_DONE;
 }
 
+/** Returns the stick and d-pad directions held on controller args[0] (keyGetDir) in args[1]. */
 USER_FUNC(evt_key_get_dir) {
     EvtWord* args = event->args;
     s32 chan = evtGetValue(event, args[0]);
@@ -1825,6 +1827,7 @@ USER_FUNC(evt_key_get_dir) {
     return EVT_RETURN_DONE;
 }
 
+/** Returns the buttons held on controller args[0] (keyGetButton) in args[1]. */
 USER_FUNC(evt_key_get_button) {
     EvtWord* args = event->args;
     s32 chan = evtGetValue(event, args[0]);
@@ -1832,6 +1835,7 @@ USER_FUNC(evt_key_get_button) {
     return EVT_RETURN_DONE;
 }
 
+/** Returns the directions pressed or auto-repeating on controller args[0] (keyGetDirRep) in args[1]. */
 // evt_key_get_dirrep, _buttonrep, _dirtrg, _stickx, _sticky, _substickx, _substicky, _triggerl and _triggerr:
 // original names and sizes (0x54 each) from the JP demo map (UNUSED there: no script uses them). They sit in the
 // order of system.c's keyGet* functions, of which evt_key_get_dir, _button and _buttontrg call the first, second
@@ -1843,6 +1847,7 @@ USER_FUNC(evt_key_get_dirrep) {
     return EVT_RETURN_DONE;
 }
 
+/** Returns the buttons pressed or auto-repeating on controller args[0] (keyGetButtonRep) in args[1]. */
 USER_FUNC(evt_key_get_buttonrep) {
     EvtWord* args = event->args;
     s32 chan = evtGetValue(event, args[0]);
@@ -1850,6 +1855,7 @@ USER_FUNC(evt_key_get_buttonrep) {
     return EVT_RETURN_DONE;
 }
 
+/** Returns the directions newly pressed this frame on controller args[0] (keyGetDirTrg) in args[1]. */
 USER_FUNC(evt_key_get_dirtrg) {
     EvtWord* args = event->args;
     s32 chan = evtGetValue(event, args[0]);
@@ -1857,6 +1863,7 @@ USER_FUNC(evt_key_get_dirtrg) {
     return EVT_RETURN_DONE;
 }
 
+/** Returns the buttons newly pressed this frame on controller args[0] (keyGetButtonTrg) in args[1]. */
 USER_FUNC(evt_key_get_buttontrg) {
     EvtWord* args = event->args;
     s32 chan = evtGetValue(event, args[0]);
@@ -1864,6 +1871,7 @@ USER_FUNC(evt_key_get_buttontrg) {
     return EVT_RETURN_DONE;
 }
 
+/** Returns the main stick's x position on controller args[0] (keyGetStickX) in args[1]. */
 USER_FUNC(evt_key_get_stickx) {
     EvtWord* args = event->args;
     s32 chan = evtGetValue(event, args[0]);
@@ -1871,6 +1879,7 @@ USER_FUNC(evt_key_get_stickx) {
     return EVT_RETURN_DONE;
 }
 
+/** Returns the main stick's y position on controller args[0] (keyGetStickY) in args[1]. */
 USER_FUNC(evt_key_get_sticky) {
     EvtWord* args = event->args;
     s32 chan = evtGetValue(event, args[0]);
@@ -1878,6 +1887,7 @@ USER_FUNC(evt_key_get_sticky) {
     return EVT_RETURN_DONE;
 }
 
+/** Returns the C stick's x position on controller args[0] (keyGetSubStickX) in args[1]. */
 USER_FUNC(evt_key_get_substickx) {
     EvtWord* args = event->args;
     s32 chan = evtGetValue(event, args[0]);
@@ -1885,6 +1895,7 @@ USER_FUNC(evt_key_get_substickx) {
     return EVT_RETURN_DONE;
 }
 
+/** Returns the C stick's y position on controller args[0] (keyGetSubStickY) in args[1]. */
 USER_FUNC(evt_key_get_substicky) {
     EvtWord* args = event->args;
     s32 chan = evtGetValue(event, args[0]);
@@ -1892,6 +1903,7 @@ USER_FUNC(evt_key_get_substicky) {
     return EVT_RETURN_DONE;
 }
 
+/** Returns the analog L trigger on controller args[0] (keyGetTriggerL) in args[1]. */
 USER_FUNC(evt_key_get_triggerl) {
     EvtWord* args = event->args;
     s32 chan = evtGetValue(event, args[0]);
@@ -1899,6 +1911,7 @@ USER_FUNC(evt_key_get_triggerl) {
     return EVT_RETURN_DONE;
 }
 
+/** Returns the analog R trigger on controller args[0] (keyGetTriggerR) in args[1]. */
 USER_FUNC(evt_key_get_triggerr) {
     EvtWord* args = event->args;
     s32 chan = evtGetValue(event, args[0]);
@@ -1906,6 +1919,7 @@ USER_FUNC(evt_key_get_triggerr) {
     return EVT_RETURN_DONE;
 }
 
+/** Returns the current map name (e.g. "gor_01") in args[0]. */
 USER_FUNC(evt_sub_get_mapname) {
     evtSetValue(event, event->args[0], (EvtWord)gp->currentMapName);
     return EVT_RETURN_DONE;

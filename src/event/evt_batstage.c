@@ -155,6 +155,11 @@ USER_FUNC(evt_batstage_light_set_upvec) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Spotlights the active unit: args[0] 1 switches on only the light "sys_activeUnit_3", in white; any other value
+ * all three lights "sys_activeUnit_1" to "_3", in grey (120). Each light (made when missing) is placed above the stage
+ * and set to follow the active unit; then the stage and the audience are darkened (level 140).
+ */
 USER_FUNC(evt_batstage_light_set_player_on) {
     EvtWord* args = event->args;
     BattleWork* bw = _battleWorkPointer;
@@ -204,6 +209,10 @@ USER_FUNC(evt_batstage_light_set_player_on) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Undoes evt_batstage_light_set_player_on: returns the audience and stage darkness to their base levels and releases
+ * those of the three "sys_activeUnit" lights that exist.
+ */
 USER_FUNC(evt_batstage_light_set_player_off) {
     s32 idx;
     BattleStageReturnAudDarkBase(0, 0);

@@ -594,6 +594,10 @@ USER_FUNC(unitwincoin_wait) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Shows (args[0] nonzero) or hides the Shine Sprite counter window, starting it from Mario's current Shine Sprites;
+ * the coin counter's form.
+ */
 // unitwinsupercoin_disp_onoff / _wait and unitwinstarpiece_disp_onoff / _wait: original names and sizes (0x7c,
 // 0x4c) from the JP demo map (UNUSED there: no script uses them). The coin pair above for the Shine Sprite and
 // Star Piece counters: the window draw shares the coin counter's fields and reads pouchGetSuperCoin under
@@ -614,6 +618,7 @@ USER_FUNC(unitwinsupercoin_disp_onoff) {
     return EVT_RETURN_DONE;
 }
 
+/** Blocks until the Shine Sprite counter window has caught up with Mario's Shine Sprite total. */
 USER_FUNC(unitwinsupercoin_wait) {
     UnitWinWork* wp = _wp;
     pouchGetPtr();
@@ -623,6 +628,10 @@ USER_FUNC(unitwinsupercoin_wait) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Shows (args[0] nonzero) or hides the Star Piece counter window, starting it from Mario's current Star Pieces; the
+ * coin counter's form.
+ */
 USER_FUNC(unitwinstarpiece_disp_onoff) {
     s32 on = evtGetValue(event, event->args[0]);
     UnitWinWork* wp;
@@ -638,6 +647,7 @@ USER_FUNC(unitwinstarpiece_disp_onoff) {
     return EVT_RETURN_DONE;
 }
 
+/** Blocks until the Star Piece counter window has caught up with Mario's Star Piece total. */
 USER_FUNC(unitwinstarpiece_wait) {
     UnitWinWork* wp = _wp;
     pouchGetPtr();
