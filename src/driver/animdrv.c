@@ -3573,11 +3573,18 @@ static void animPaperPoseDispSub(s32 unused, AnimationPose* arg) {
     pose->paperCapture1 = NULL;
 }
 
-/** Returns the id of the first used pose of type type loaded from animation file name, or -1. */
-// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
-inline s32 animPoseGetId(const char* name, s32 type) {
+/**
+ * Returns the id of the first used pose loaded from animation file name for the current mode (type 1 in battle,
+ * 0 outside), or -1.
+ */
+// Original name and size (0xe0) from the JP demo map (UNUSED there: its one call is inlined). The mode test inside
+// the function gives the map size with the caller unchanged; taking the type as a parameter (as the caller's
+// `gp->inBattle != 0`) gives 0xd0, a BOOL parameter tested inside 0xd8. Where the test is written (initializer or
+// statement) is not fixed by the bytes.
+s32 animPoseGetId(const char* name) {
     AnimationPose* pose;
     s32 i;
+    s32 type = gp->inBattle != 0;
 
     for (i = 0; i < wp->totalPoses; i++) {
         pose = &wp->poses[i];
@@ -3612,7 +3619,7 @@ void animPoseDisp_MakeExtTexture(const char* group, const char* anim, f32 frame,
     f32 hw, hh;
     s32 i;
 
-    i = animPoseGetId(group, gp->inBattle != 0);
+    i = animPoseGetId(group);
     if (i < 0) {
         return;
     }

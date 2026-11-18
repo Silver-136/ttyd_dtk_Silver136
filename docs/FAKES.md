@@ -122,7 +122,7 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | src/battle/battle_event_cmd.c | btlevtcmd_DrawLots | pick index and running sum kept in `s32 nv[2]` | two scalar locals: changes the object |
 | Both | src/battle/battle_mario.c | _mario_fire_ball_controll | `battle_mario_one`: a named global 1.0f constant for one effFireEntry scale | literal 1.0f at the call: changes the object |
 | Both | src/battle/battle_seq_command.c | _btlcmd_SetAttackEvent | compares the pointers as signed integers (cmpw); the plain pointer compare changes the object | see comment |
-| Demos | src/sound.c | SoundDemoStrippedRate | stand-in for an unidentified dead-stripped stream/DVD function between SoundDVDPlayCh and SoundSSPlayCh (JP demo map): it only keeps the doubles 3.5 and 4.0 (@3005/@3006) | see comment |
+| Demos | src/sound.c | SoundDemoStrippedRate | stand-in for a dead-stripped DVD audio function (JP demo @N numbering: the SoundDVDContinue/SoundDVDContinueCh slot, UNUSED in the map): it only keeps the doubles 3.5 and 4.0 (@3005/@3006) | see comment |
 | Demos | src/sound.c | SoundDVDStrippedName | stand-in for the dead-stripped SoundDVDPlay/SoundDVDPlayCh (JP demo map, UNUSED): it only keeps ".adp" (@3067); bodies unknown | see comment |
 | Demos | src/sound.c | SoundSongStrippedName | stand-in for a dead-stripped song loader, probably SoundSongLoadPlayCh (JP demo map, UNUSED 0x258): it only keeps ".song" (@3563); body unknown | see comment |
 | Both | src/system.c | systemStrippedPool1 | stand-in for the stripped intplStringData/intplStringToEnum and mtxGetScaleElement: the interpolation mode names, 1.0f and the sqrtf constants in pool order (table entry @491 unknown; JP and later lack three names) | see comment |

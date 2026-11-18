@@ -34,40 +34,44 @@ static EVT_BEGIN(kpa_score_disp_evt)
     RETURN
 EVT_END()
 
+/** Writes score (at most five digits) into str as decimal digits without leading zeros. */
+// Original name, size (0x194) and slot (before kpaScoreDispEntry) from the JP demo map (UNUSED there: its one call,
+// in kpaScoreDispEntry, is inlined). This body compiles to the map size and leaves the callers unchanged; not fixed
+// by the bytes: the order of the two parameters (both build the same) and the return type (void; returning n
+// makes the copy 0x198).
+void kpaScoreToString(char* str, s32 score) {
+    s32 t;
+    s8 d[5];
+    s32 j;
+    s32 n;
+    d[0] = score / 10000;
+    t = score % 10000;
+    d[1] = t / 1000;
+    t %= 1000;
+    d[2] = t / 100;
+    t %= 100;
+    d[3] = t / 10;
+    d[4] = t % 10;
+    n = 0;
+    for (j = 0; j < 5; j++) {
+        if (n != 0 || d[j] != 0) {
+            str[n++] = d[j] + '0';
+        }
+    }
+    str[n] = 0;
+}
+
 /**
  * Takes the first free popup slot and shows score (without leading zeros) centred 20 units above pos for 30
  * frames; does nothing when all 50 are in use.
  */
 // Original name, size (0x268) and slot (before kpaScoreDisp) from the JP demo map (UNUSED there: every call is
-// inlined, so the body has at most 30 statements; the first remainder is taken inside the d[1] line).
+// inlined).
 void kpaScoreDispEntry(s32 score, Vec* pos) {
-    char* p;
-    char* str;
-    s32 t;
-    s8 d[5];
-    s32 j;
-    s32 n;
     s32 i;
     for (i = 0; i < KPA_SCORE_SLOT_COUNT; i++) {
         if (ksdp[i].timer == 0) {
-            d[0] = score / 10000;
-            d[1] = (t = score % 10000) / 1000;
-            t %= 1000;
-            d[2] = t / 100;
-            t %= 100;
-            d[3] = t / 10;
-            d[4] = t % 10;
-            p = ksdp[i].str;
-
-            str = ksdp[i].str;
-            n = 0;
-            for (j = 0; j < 5; j++) {
-                if (n != 0 || d[j] != 0) {
-                    *p++ = d[j] + '0';
-                    n++;
-                }
-            }
-            str[n] = 0;
+            kpaScoreToString(ksdp[i].str, score);
             ksdp[i].timer = 30;
             ksdp[i].pos.x = pos->x - 0.5f * (10.0f * (f32)strlen(ksdp[i].str));
             ksdp[i].pos.y = 20.0f + pos->y;

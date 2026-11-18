@@ -71,8 +71,6 @@ static void rankingInit(void);
 static RankWork* rank_wp;
 static void rankingExit(void);
 static DispWork* dwp;
-static FighterData fighterDt[23];
-static FighterData fighterDt_re[21];
 static void rankingControll(void);
 
 // Count the visible fighters preceding the player entry.
@@ -104,9 +102,6 @@ static void insert(s32* list, s32 num, s32 from, s32 to);
         insert(list, n, k, pos);      \
     }
 static void printRanking(void);
-static RuleData ruleDt_2bu[10];
-static RuleData ruleDt_1bu[14];
-static RuleData ruleDt_re[14];
 
 static RankWork rank_work;
 static DispWork disp_work;
@@ -278,6 +273,115 @@ void _epilog(void) {
 /** Unresolved-import stub for the REL linker; does nothing. */
 void _unresolved(void) {
 }
+
+/**
+ * The Glitz Pit fighters during chapter 3, by FighterId:
+ * from the champion Rawk Hawk down to the Goomba Bros., then Mario (The Great Gonzales)
+ * and the late arrivals Wings of Night and The Destructors.
+ * Each has its name, title, battle setup, pre-match and victory lines and starting ranking points.
+ */
+static FighterData fighterDt[] = {
+    {FIGHT_CHAMPION, "stg3_tou_sensyu_00", "stg3_tou_sensyu2_00", 22, "stg3_tou_400_02", "stg3_tou_400_03", 250},
+    {FIGHT_KOOPATROL | FIGHT_MAJOR, "stg3_tou_sensyu_01", "stg3_tou_sensyu2_01", 19, "stg3_tou_118_00", "stg3_tou_118_01", 200},
+    {FIGHT_MAJOR, "stg3_tou_sensyu_02", "stg3_tou_sensyu2_02", 18, "stg3_tou_118_02", "stg3_tou_118_03", 180},
+    {FIGHT_MAJOR, "stg3_tou_sensyu_03", "stg3_tou_sensyu2_03", 17, "stg3_tou_118_04", "stg3_tou_118_05", 170},
+    {FIGHT_MAJOR, "stg3_tou_sensyu_04", "stg3_tou_sensyu2_04", 16, "stg3_tou_118_06", "stg3_tou_118_07", 160},
+    {FIGHT_MAJOR, "stg3_tou_sensyu_05", "stg3_tou_sensyu2_05", 15, "stg3_tou_118_08", "stg3_tou_118_09", 150},
+    {FIGHT_MAJOR, "stg3_tou_sensyu_06", "stg3_tou_sensyu2_06", 14, "stg3_tou_118_10", "stg3_tou_118_11", 140},
+    {FIGHT_MAJOR, "stg3_tou_sensyu_07", "stg3_tou_sensyu2_07", 13, "stg3_tou_118_12", "stg3_tou_118_13", 130},
+    {FIGHT_MAJOR, "stg3_tou_sensyu_08", "stg3_tou_sensyu2_08", 12, "stg3_tou_118_14", "stg3_tou_118_15", 120},
+    {FIGHT_MAJOR, "stg3_tou_sensyu_09", "stg3_tou_sensyu2_09", 11, "stg3_tou_118_16", "stg3_tou_118_17", 110},
+    {FIGHT_CLEFTS | FIGHT_MAJOR, "stg3_tou_sensyu_10", "stg3_tou_sensyu2_10", 10, "stg3_tou_118_18", "stg3_tou_118_19", 100},
+    {FIGHT_BANDITS | FIGHT_MINOR, "stg3_tou_sensyu_11", "stg3_tou_sensyu2_11", 9, "stg3_tou_118_20", "stg3_tou_118_21", 90},
+    {FIGHT_MINOR, "stg3_tou_sensyu_12", "stg3_tou_sensyu2_12", 8, "stg3_tou_118_22", "stg3_tou_118_23", 80},
+    {FIGHT_MINOR, "stg3_tou_sensyu_13", "stg3_tou_sensyu2_13", 7, "stg3_tou_118_24", "stg3_tou_118_25", 70},
+    {FIGHT_MINOR, "stg3_tou_sensyu_14", "stg3_tou_sensyu2_14", 6, "stg3_tou_118_26", "stg3_tou_118_27", 60},
+    {FIGHT_MINOR, "stg3_tou_sensyu_15", "stg3_tou_sensyu2_15", 5, "stg3_tou_118_28", "stg3_tou_118_29", 50},
+    {FIGHT_MINOR, "stg3_tou_sensyu_16", "stg3_tou_sensyu2_16", 4, "stg3_tou_118_30", "stg3_tou_118_31", 40},
+    {FIGHT_MINOR, "stg3_tou_sensyu_17", "stg3_tou_sensyu2_17", 3, "stg3_tou_118_32", "stg3_tou_118_33", 30},
+    {FIGHT_KOOPAS | FIGHT_MINOR, "stg3_tou_sensyu_18", "stg3_tou_sensyu2_18", 2, "stg3_tou_118_34", "stg3_tou_118_35", 20},
+    {FIGHT_GOOMBAS | FIGHT_MINOR, "stg3_tou_sensyu_19", "stg3_tou_sensyu2_19", 1, "stg3_tou_118_36", "stg3_tou_118_36_01", 10},
+    {FIGHT_PLAYER, "stg3_tou_sensyu_20", "stg3_tou_sensyu2_20", 1, 0, 0, 0},
+    {FIGHT_MINOR, "stg3_tou_sensyu_21", "stg3_tou_sensyu2_21", 20, "stg3_tou_118_36_02", "stg3_tou_118_36_03", 5},
+    {FIGHT_MINOR, "stg3_tou_sensyu_22", "stg3_tou_sensyu2_22", 21, "stg3_tou_118_36_04", "stg3_tou_118_36_05", 0},
+};
+
+static FighterData fighterDt_re[] = {
+    {FIGHT_CHAMPION, "stg3_tou_re_315", "stg3_tou_re_338", 22, "stg3_tou_re_289", "stg3_tou_re_290", 250},
+    {FIGHT_KOOPATROL | FIGHT_MAJOR, "stg3_tou_re_316", "stg3_tou_re_339", 19, "stg3_tou_re_179", "stg3_tou_re_180", 200},
+    {FIGHT_MAJOR, "stg3_tou_re_317", "stg3_tou_re_340", 18, "stg3_tou_re_181", "stg3_tou_re_182", 180},
+    {FIGHT_MAJOR, "stg3_tou_re_318", "stg3_tou_re_341", 17, "stg3_tou_re_183", "stg3_tou_re_184", 170},
+    {FIGHT_MAJOR, "stg3_tou_re_319", "stg3_tou_re_342", 16, "stg3_tou_re_185", "stg3_tou_re_186", 160},
+    {FIGHT_MAJOR, "stg3_tou_re_320", "stg3_tou_re_343", 15, "stg3_tou_re_187", "stg3_tou_re_188", 150},
+    {FIGHT_MAJOR, "stg3_tou_re_321", "stg3_tou_re_344", 14, "stg3_tou_re_189", "stg3_tou_re_190", 140},
+    {FIGHT_MAJOR, "stg3_tou_re_322", "stg3_tou_re_345", 13, "stg3_tou_re_191", "stg3_tou_re_192", 130},
+    {FIGHT_MAJOR, "stg3_tou_re_323", "stg3_tou_re_346", 12, "stg3_tou_re_193", "stg3_tou_re_194", 120},
+    {FIGHT_MAJOR, "stg3_tou_re_324", "stg3_tou_re_347", 11, "stg3_tou_re_195", "stg3_tou_re_196", 110},
+    {FIGHT_CLEFTS | FIGHT_MAJOR, "stg3_tou_re_325", "stg3_tou_re_348", 10, "stg3_tou_re_197", "stg3_tou_re_198", 100},
+    {FIGHT_BANDITS | FIGHT_MINOR, "stg3_tou_re_326", "stg3_tou_re_349", 9, "stg3_tou_re_199", "stg3_tou_re_200", 90},
+    {FIGHT_MINOR, "stg3_tou_re_327", "stg3_tou_re_350", 8, "stg3_tou_re_201", "stg3_tou_re_202", 80},
+    {FIGHT_MINOR, "stg3_tou_re_328", "stg3_tou_re_351", 7, "stg3_tou_re_203", "stg3_tou_re_204", 70},
+    {FIGHT_MINOR, "stg3_tou_re_329", "stg3_tou_re_352", 6, "stg3_tou_re_205", "stg3_tou_re_206", 60},
+    {FIGHT_MINOR, "stg3_tou_re_330", "stg3_tou_re_353", 5, "stg3_tou_re_207", "stg3_tou_re_208", 50},
+    {FIGHT_MINOR, "stg3_tou_re_331", "stg3_tou_re_354", 4, "stg3_tou_re_209", "stg3_tou_re_210", 40},
+    {FIGHT_MINOR, "stg3_tou_re_332", "stg3_tou_re_355", 3, "stg3_tou_re_211", "stg3_tou_re_212", 30},
+    {FIGHT_KOOPAS | FIGHT_MINOR, "stg3_tou_re_333", "stg3_tou_re_356", 2, "stg3_tou_re_213", "stg3_tou_re_214", 20},
+    {FIGHT_GOOMBAS | FIGHT_MINOR, "stg3_tou_re_334", "stg3_tou_re_357", 1, "stg3_tou_re_215", "stg3_tou_re_216", 10},
+    {FIGHT_PLAYER, "stg3_tou_re_335", "stg3_tou_re_358", 1, 0, 0, 0},
+};
+
+/**
+ * Grubba's special match conditions in the minor league (Mario ranked below 10th): the condition speech, the
+ * short condition shown in battle, the rule id and its two parameters.
+ */
+static RuleData ruleDt_2bu[] = {
+    {"stg3_tou_107_01", "stg3_tou_cp_000", 18, 3, 3},
+    {"stg3_tou_107_02", "stg3_tou_cp_001", 1, 1, 1},
+    {"stg3_tou_107_03", "stg3_tou_cp_002", 3, 1, 1},
+    {"stg3_tou_107_04", "stg3_tou_cp_003", 48, 1, 1},
+    {"stg3_tou_107_05", "stg3_tou_cp_004", 5, 1, 1},
+    {"stg3_tou_107_06", "stg3_tou_cp_005", 26, 1, 1},
+    {"stg3_tou_107_07", "stg3_tou_cp_006", 32, 1, 1},
+    {"stg3_tou_107_08", "stg3_tou_cp_007", 59, 5, 5},
+    {"stg3_tou_107_12", "stg3_tou_cp_008", 6, 1, 1},
+    {"stg3_tou_107_16", "stg3_tou_cp_009", 43, 1, 1},
+};
+
+/** Grubba's special match conditions in the major league, with stricter numbers and four extra rules. */
+static RuleData ruleDt_1bu[] = {
+    {"stg3_tou_107_01", "stg3_tou_cp_010", 18, 5, 5},
+    {"stg3_tou_107_02", "stg3_tou_cp_011", 1, 1, 1},
+    {"stg3_tou_107_03", "stg3_tou_cp_012", 3, 1, 1},
+    {"stg3_tou_107_04", "stg3_tou_cp_013", 48, 1, 1},
+    {"stg3_tou_107_05", "stg3_tou_cp_014", 5, 1, 1},
+    {"stg3_tou_107_06", "stg3_tou_cp_015", 26, 1, 1},
+    {"stg3_tou_107_07", "stg3_tou_cp_016", 32, 1, 1},
+    {"stg3_tou_107_08", "stg3_tou_cp_017", 59, 5, 5},
+    {"stg3_tou_107_12", "stg3_tou_cp_019", 6, 1, 1},
+    {"stg3_tou_107_13", "stg3_tou_cp_020", 11, 20, 20},
+    {"stg3_tou_107_16", "stg3_tou_cp_021", 43, 3, 3},
+    {"stg3_tou_107_17", "stg3_tou_cp_022", 65, 3, 3},
+    {"stg3_tou_107_19", "stg3_tou_cp_023", 64, 255, 255},
+    {"stg3_tou_107_20", "stg3_tou_cp_024", 63, 255, 255},
+};
+
+/** The match conditions after chapter 3, read out by Jolene instead of Grubba (the major-league rules). */
+static RuleData ruleDt_re[] = {
+    {"stg3_tou_re_362", "stg3_tou_cp_040", 18, 5, 5},
+    {"stg3_tou_re_363", "stg3_tou_cp_041", 1, 1, 1},
+    {"stg3_tou_re_364", "stg3_tou_cp_042", 3, 1, 1},
+    {"stg3_tou_re_365", "stg3_tou_cp_043", 48, 1, 1},
+    {"stg3_tou_re_366", "stg3_tou_cp_044", 5, 1, 1},
+    {"stg3_tou_re_367", "stg3_tou_cp_045", 26, 1, 1},
+    {"stg3_tou_re_368", "stg3_tou_cp_046", 32, 1, 1},
+    {"stg3_tou_re_369", "stg3_tou_cp_047", 59, 5, 5},
+    {"stg3_tou_re_371", "stg3_tou_cp_049", 6, 1, 1},
+    {"stg3_tou_re_372", "stg3_tou_cp_050", 11, 20, 20},
+    {"stg3_tou_re_373", "stg3_tou_cp_051", 43, 3, 3},
+    {"stg3_tou_re_374", "stg3_tou_cp_052", 65, 3, 3},
+    {"stg3_tou_re_375", "stg3_tou_cp_053", 64, 255, 255},
+    {"stg3_tou_re_376", "stg3_tou_cp_054", 63, 255, 255},
+};
 
 /**
  * Builds rank_wp, the Glitz Pit fighter ranking:
@@ -876,115 +980,6 @@ static void printRanking(void) {
     for (i = 0; i < rank_wp->count; i++) {
     }
 }
-
-/**
- * The Glitz Pit fighters during chapter 3, by FighterId:
- * from the champion Rawk Hawk down to the Goomba Bros., then Mario (The Great Gonzales)
- * and the late arrivals Wings of Night and The Destructors.
- * Each has its name, title, battle setup, pre-match and victory lines and starting ranking points.
- */
-static FighterData fighterDt[] = {
-    {FIGHT_CHAMPION, "stg3_tou_sensyu_00", "stg3_tou_sensyu2_00", 22, "stg3_tou_400_02", "stg3_tou_400_03", 250},
-    {FIGHT_KOOPATROL | FIGHT_MAJOR, "stg3_tou_sensyu_01", "stg3_tou_sensyu2_01", 19, "stg3_tou_118_00", "stg3_tou_118_01", 200},
-    {FIGHT_MAJOR, "stg3_tou_sensyu_02", "stg3_tou_sensyu2_02", 18, "stg3_tou_118_02", "stg3_tou_118_03", 180},
-    {FIGHT_MAJOR, "stg3_tou_sensyu_03", "stg3_tou_sensyu2_03", 17, "stg3_tou_118_04", "stg3_tou_118_05", 170},
-    {FIGHT_MAJOR, "stg3_tou_sensyu_04", "stg3_tou_sensyu2_04", 16, "stg3_tou_118_06", "stg3_tou_118_07", 160},
-    {FIGHT_MAJOR, "stg3_tou_sensyu_05", "stg3_tou_sensyu2_05", 15, "stg3_tou_118_08", "stg3_tou_118_09", 150},
-    {FIGHT_MAJOR, "stg3_tou_sensyu_06", "stg3_tou_sensyu2_06", 14, "stg3_tou_118_10", "stg3_tou_118_11", 140},
-    {FIGHT_MAJOR, "stg3_tou_sensyu_07", "stg3_tou_sensyu2_07", 13, "stg3_tou_118_12", "stg3_tou_118_13", 130},
-    {FIGHT_MAJOR, "stg3_tou_sensyu_08", "stg3_tou_sensyu2_08", 12, "stg3_tou_118_14", "stg3_tou_118_15", 120},
-    {FIGHT_MAJOR, "stg3_tou_sensyu_09", "stg3_tou_sensyu2_09", 11, "stg3_tou_118_16", "stg3_tou_118_17", 110},
-    {FIGHT_CLEFTS | FIGHT_MAJOR, "stg3_tou_sensyu_10", "stg3_tou_sensyu2_10", 10, "stg3_tou_118_18", "stg3_tou_118_19", 100},
-    {FIGHT_BANDITS | FIGHT_MINOR, "stg3_tou_sensyu_11", "stg3_tou_sensyu2_11", 9, "stg3_tou_118_20", "stg3_tou_118_21", 90},
-    {FIGHT_MINOR, "stg3_tou_sensyu_12", "stg3_tou_sensyu2_12", 8, "stg3_tou_118_22", "stg3_tou_118_23", 80},
-    {FIGHT_MINOR, "stg3_tou_sensyu_13", "stg3_tou_sensyu2_13", 7, "stg3_tou_118_24", "stg3_tou_118_25", 70},
-    {FIGHT_MINOR, "stg3_tou_sensyu_14", "stg3_tou_sensyu2_14", 6, "stg3_tou_118_26", "stg3_tou_118_27", 60},
-    {FIGHT_MINOR, "stg3_tou_sensyu_15", "stg3_tou_sensyu2_15", 5, "stg3_tou_118_28", "stg3_tou_118_29", 50},
-    {FIGHT_MINOR, "stg3_tou_sensyu_16", "stg3_tou_sensyu2_16", 4, "stg3_tou_118_30", "stg3_tou_118_31", 40},
-    {FIGHT_MINOR, "stg3_tou_sensyu_17", "stg3_tou_sensyu2_17", 3, "stg3_tou_118_32", "stg3_tou_118_33", 30},
-    {FIGHT_KOOPAS | FIGHT_MINOR, "stg3_tou_sensyu_18", "stg3_tou_sensyu2_18", 2, "stg3_tou_118_34", "stg3_tou_118_35", 20},
-    {FIGHT_GOOMBAS | FIGHT_MINOR, "stg3_tou_sensyu_19", "stg3_tou_sensyu2_19", 1, "stg3_tou_118_36", "stg3_tou_118_36_01", 10},
-    {FIGHT_PLAYER, "stg3_tou_sensyu_20", "stg3_tou_sensyu2_20", 1, 0, 0, 0},
-    {FIGHT_MINOR, "stg3_tou_sensyu_21", "stg3_tou_sensyu2_21", 20, "stg3_tou_118_36_02", "stg3_tou_118_36_03", 5},
-    {FIGHT_MINOR, "stg3_tou_sensyu_22", "stg3_tou_sensyu2_22", 21, "stg3_tou_118_36_04", "stg3_tou_118_36_05", 0},
-};
-
-static FighterData fighterDt_re[] = {
-    {FIGHT_CHAMPION, "stg3_tou_re_315", "stg3_tou_re_338", 22, "stg3_tou_re_289", "stg3_tou_re_290", 250},
-    {FIGHT_KOOPATROL | FIGHT_MAJOR, "stg3_tou_re_316", "stg3_tou_re_339", 19, "stg3_tou_re_179", "stg3_tou_re_180", 200},
-    {FIGHT_MAJOR, "stg3_tou_re_317", "stg3_tou_re_340", 18, "stg3_tou_re_181", "stg3_tou_re_182", 180},
-    {FIGHT_MAJOR, "stg3_tou_re_318", "stg3_tou_re_341", 17, "stg3_tou_re_183", "stg3_tou_re_184", 170},
-    {FIGHT_MAJOR, "stg3_tou_re_319", "stg3_tou_re_342", 16, "stg3_tou_re_185", "stg3_tou_re_186", 160},
-    {FIGHT_MAJOR, "stg3_tou_re_320", "stg3_tou_re_343", 15, "stg3_tou_re_187", "stg3_tou_re_188", 150},
-    {FIGHT_MAJOR, "stg3_tou_re_321", "stg3_tou_re_344", 14, "stg3_tou_re_189", "stg3_tou_re_190", 140},
-    {FIGHT_MAJOR, "stg3_tou_re_322", "stg3_tou_re_345", 13, "stg3_tou_re_191", "stg3_tou_re_192", 130},
-    {FIGHT_MAJOR, "stg3_tou_re_323", "stg3_tou_re_346", 12, "stg3_tou_re_193", "stg3_tou_re_194", 120},
-    {FIGHT_MAJOR, "stg3_tou_re_324", "stg3_tou_re_347", 11, "stg3_tou_re_195", "stg3_tou_re_196", 110},
-    {FIGHT_CLEFTS | FIGHT_MAJOR, "stg3_tou_re_325", "stg3_tou_re_348", 10, "stg3_tou_re_197", "stg3_tou_re_198", 100},
-    {FIGHT_BANDITS | FIGHT_MINOR, "stg3_tou_re_326", "stg3_tou_re_349", 9, "stg3_tou_re_199", "stg3_tou_re_200", 90},
-    {FIGHT_MINOR, "stg3_tou_re_327", "stg3_tou_re_350", 8, "stg3_tou_re_201", "stg3_tou_re_202", 80},
-    {FIGHT_MINOR, "stg3_tou_re_328", "stg3_tou_re_351", 7, "stg3_tou_re_203", "stg3_tou_re_204", 70},
-    {FIGHT_MINOR, "stg3_tou_re_329", "stg3_tou_re_352", 6, "stg3_tou_re_205", "stg3_tou_re_206", 60},
-    {FIGHT_MINOR, "stg3_tou_re_330", "stg3_tou_re_353", 5, "stg3_tou_re_207", "stg3_tou_re_208", 50},
-    {FIGHT_MINOR, "stg3_tou_re_331", "stg3_tou_re_354", 4, "stg3_tou_re_209", "stg3_tou_re_210", 40},
-    {FIGHT_MINOR, "stg3_tou_re_332", "stg3_tou_re_355", 3, "stg3_tou_re_211", "stg3_tou_re_212", 30},
-    {FIGHT_KOOPAS | FIGHT_MINOR, "stg3_tou_re_333", "stg3_tou_re_356", 2, "stg3_tou_re_213", "stg3_tou_re_214", 20},
-    {FIGHT_GOOMBAS | FIGHT_MINOR, "stg3_tou_re_334", "stg3_tou_re_357", 1, "stg3_tou_re_215", "stg3_tou_re_216", 10},
-    {FIGHT_PLAYER, "stg3_tou_re_335", "stg3_tou_re_358", 1, 0, 0, 0},
-};
-
-/**
- * Grubba's special match conditions in the minor league (Mario ranked below 10th): the condition speech, the
- * short condition shown in battle, the rule id and its two parameters.
- */
-static RuleData ruleDt_2bu[] = {
-    {"stg3_tou_107_01", "stg3_tou_cp_000", 18, 3, 3},
-    {"stg3_tou_107_02", "stg3_tou_cp_001", 1, 1, 1},
-    {"stg3_tou_107_03", "stg3_tou_cp_002", 3, 1, 1},
-    {"stg3_tou_107_04", "stg3_tou_cp_003", 48, 1, 1},
-    {"stg3_tou_107_05", "stg3_tou_cp_004", 5, 1, 1},
-    {"stg3_tou_107_06", "stg3_tou_cp_005", 26, 1, 1},
-    {"stg3_tou_107_07", "stg3_tou_cp_006", 32, 1, 1},
-    {"stg3_tou_107_08", "stg3_tou_cp_007", 59, 5, 5},
-    {"stg3_tou_107_12", "stg3_tou_cp_008", 6, 1, 1},
-    {"stg3_tou_107_16", "stg3_tou_cp_009", 43, 1, 1},
-};
-
-/** Grubba's special match conditions in the major league, with stricter numbers and four extra rules. */
-static RuleData ruleDt_1bu[] = {
-    {"stg3_tou_107_01", "stg3_tou_cp_010", 18, 5, 5},
-    {"stg3_tou_107_02", "stg3_tou_cp_011", 1, 1, 1},
-    {"stg3_tou_107_03", "stg3_tou_cp_012", 3, 1, 1},
-    {"stg3_tou_107_04", "stg3_tou_cp_013", 48, 1, 1},
-    {"stg3_tou_107_05", "stg3_tou_cp_014", 5, 1, 1},
-    {"stg3_tou_107_06", "stg3_tou_cp_015", 26, 1, 1},
-    {"stg3_tou_107_07", "stg3_tou_cp_016", 32, 1, 1},
-    {"stg3_tou_107_08", "stg3_tou_cp_017", 59, 5, 5},
-    {"stg3_tou_107_12", "stg3_tou_cp_019", 6, 1, 1},
-    {"stg3_tou_107_13", "stg3_tou_cp_020", 11, 20, 20},
-    {"stg3_tou_107_16", "stg3_tou_cp_021", 43, 3, 3},
-    {"stg3_tou_107_17", "stg3_tou_cp_022", 65, 3, 3},
-    {"stg3_tou_107_19", "stg3_tou_cp_023", 64, 255, 255},
-    {"stg3_tou_107_20", "stg3_tou_cp_024", 63, 255, 255},
-};
-
-/** The match conditions after chapter 3, read out by Jolene instead of Grubba (the major-league rules). */
-static RuleData ruleDt_re[] = {
-    {"stg3_tou_re_362", "stg3_tou_cp_040", 18, 5, 5},
-    {"stg3_tou_re_363", "stg3_tou_cp_041", 1, 1, 1},
-    {"stg3_tou_re_364", "stg3_tou_cp_042", 3, 1, 1},
-    {"stg3_tou_re_365", "stg3_tou_cp_043", 48, 1, 1},
-    {"stg3_tou_re_366", "stg3_tou_cp_044", 5, 1, 1},
-    {"stg3_tou_re_367", "stg3_tou_cp_045", 26, 1, 1},
-    {"stg3_tou_re_368", "stg3_tou_cp_046", 32, 1, 1},
-    {"stg3_tou_re_369", "stg3_tou_cp_047", 59, 5, 5},
-    {"stg3_tou_re_371", "stg3_tou_cp_049", 6, 1, 1},
-    {"stg3_tou_re_372", "stg3_tou_cp_050", 11, 20, 20},
-    {"stg3_tou_re_373", "stg3_tou_cp_051", 43, 3, 3},
-    {"stg3_tou_re_374", "stg3_tou_cp_052", 65, 3, 3},
-    {"stg3_tou_re_375", "stg3_tou_cp_053", 64, 255, 255},
-    {"stg3_tou_re_376", "stg3_tou_cp_054", 63, 255, 255},
-};
 
 /** Pointer to the live ranking (rank_work) that the ranking helpers in this file work on. */
 static RankWork* rank_wp = &rank_work;

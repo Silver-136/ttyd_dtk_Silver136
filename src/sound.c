@@ -610,9 +610,9 @@ BOOL SoundDropData(void) {
  * lists its out-of-line copy as stripped (SoundStopAll, 0x208 bytes, which this body compiles to there).
  */
 // The effect, DVD and stream loops call their channel stops (inlined: the same code as writing them out); with
-// them the body has 23 statements, so it would also be auto-inlined as a plain function. It keeps `inline`:
-// emitting the plain copy moves the unit's JP demo @N numbering further from the map (cleanup_notes\bf\GD9).
-inline void SoundStopAll(void) {
+// them the body has 23 statements, so as a plain function it is auto-inlined into SoundDropData and its own copy
+// is emitted at the map size.
+void SoundStopAll(void) {
     u32 i;
 
     for (i = 0; i < SOUND_SONG_MAX; i++) {
@@ -1337,6 +1337,20 @@ static void SoundDVDStopCh(u32 chan) {
     }
 }
 
+#if VERSION <= VERSION_DEMO_JP
+// FAKE: stand-in for a dead-stripped DVD audio function; nothing calls it. It only places the doubles 3.5 and 4.0
+// (JP demo map @3005/@3006, after the stripped .sdata2 float @3004) in the pool. The unit's JP demo @N numbering
+// puts their owner here, where the map lists the UNUSED SoundDVDContinue (0x1f8) and SoundDVDContinueCh (0x208)
+// between SoundDVDStopCh and SoundDVDSetPan: at this slot the numbers before the doubles (from SoundSSPlayChEx's
+// ".stm") and after them (to ".adp") both fall short of the map only by absent stripped functions. Which of the
+// two, and their bodies, are not known. Removing it changes the object.
+f64 SoundDemoStrippedRate(f64 t) {
+    f64 a = t * 3.5;
+    f64 b = t * 4.0;
+    return a + b;
+}
+#endif
+
 /** SoundDVDSetPanCh for DVD audio channel 0. */
 // Original name and size (0xd8) from the JP demo map (see SoundSongPlay).
 void SoundDVDSetPan(u8 pan) {
@@ -1551,14 +1565,15 @@ static inline u32 _ssCalcLen(SoundStreamEntry* entry) {
 // _ssDVDReadAsync_sub, _ssDVDReadAsync_l and _ssDVDReadAsync_r: original names, sizes (0x174, 0x16c, 0x180) and order
 // from the JP demo map (all UNUSED there: every call is inlined), between cache_flush and _ssDVDReadAsync_cache_aram.
 // _l and _r call _sub for the first and second channel (as the READ_L / READ_R flags name them); this form compiles to
-// exactly the three map sizes and leaves every caller unchanged. Not fixed by the bytes: the order of _sub's
+// exactly the three map sizes and leaves every caller unchanged (plain functions: every call is auto-inlined and the
+// copies are emitted, which also fits the unit's JP demo @N numbering). Not fixed by the bytes: the order of _sub's
 // parameters (all four orders tried build the same) and the order of its locals.
 
 /**
  * Starts the asynchronous disc read of the next chunk of one stream channel (entry), whose data starts extra bytes
  * into the stream's data.
  */
-inline void _ssDVDReadAsync_sub(SoundStream* stream, SoundStreamEntry* entry, u32 extra) {
+void _ssDVDReadAsync_sub(SoundStream* stream, SoundStreamEntry* entry, u32 extra) {
     u32 len;
     u32 aligned;
     u32 addr;
@@ -1585,14 +1600,14 @@ inline void _ssDVDReadAsync_sub(SoundStream* stream, SoundStreamEntry* entry, u3
 }
 
 /** Starts the asynchronous disc read of the next chunk of the stream's first (left) channel into its load buffer. */
-inline void _ssDVDReadAsync_l(SoundStream* stream) {
+void _ssDVDReadAsync_l(SoundStream* stream) {
     SoundStreamEntry* entry = &stream->entries[0];
 
     _ssDVDReadAsync_sub(stream, entry, 0);
 }
 
 /** The same for the second (right) channel, whose data follows the first's in the stream. */
-inline void _ssDVDReadAsync_r(SoundStream* stream) {
+void _ssDVDReadAsync_r(SoundStream* stream) {
     SoundStreamEntry* entry = &stream->entries[1];
 
     _ssDVDReadAsync_sub(stream, entry, entry->size + (0x20 - (entry->size % 0x20)));
@@ -2145,18 +2160,6 @@ static u32 _sscallback(void* p_b1, u32 p_l1, void* p_b2, u32 p_l2, u32 user) {
     return stream->samplePos;
 }
 
-#if VERSION <= VERSION_DEMO_JP
-// FAKE: stand-in for a dead-stripped stream or DVD function; nothing calls it. It only places the doubles 3.5 and
-// 4.0 (JP demo map @3005/@3006, after the stripped .sdata2 float @3004) in the pool. Their numbers lie between
-// SoundSSPlayChEx's constants and ".adp", so the owner is one of the UNUSED functions between SoundDVDPlayCh and
-// SoundSSPlayCh (the SoundDVD* setters and fades, the _ssDVDReadAsync_* readers, ssDecodePCM/ADPCM, SoundSSPlay);
-// which one is not known. Removing it changes the object.
-f64 SoundDemoStrippedRate(f64 t) {
-    f64 a = t * 3.5;
-    f64 b = t * 4.0;
-    return a + b;
-}
-#endif
 void SoundSSPlayChEx(s32 chan, const char* name, s32 aram);
 
 /** SoundSSPlayCh for stream channel 0. */
