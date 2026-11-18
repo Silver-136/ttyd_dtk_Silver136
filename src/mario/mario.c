@@ -456,6 +456,7 @@ BOOL marioCaseEventValidChk(void) {
     }
 }
 
+/** JP and later: FALSE while Mario is in the roll motion (MARIO_MOTION_ROLL) or in Paper Mode, else TRUE. */
 // Descriptive name (not in the symbol maps); placeholder unk_8005bb80, JP 0x8005BB80. See docs/NAME_PROVENANCE.md.
 #if VERSION >= VERSION_JP
 BOOL marioFrontActionValidChk(void) {
@@ -1780,6 +1781,10 @@ s32 marioAnimeId(void) {
     return id;
 }
 
+/**
+ * JP and later: puts Mario in the damage pose M_D_1, except in the boat, roll, plane, Spring Jump and Yoshi motions and
+ * while he is sideways (MARIO_DISP_FLAG_SLIT).
+ */
 // Descriptive name (not in the symbol maps); placeholder unk_80058374, JP 0x80058374. See docs/NAME_PROVENANCE.md.
 #if VERSION >= VERSION_JP
 void marioChgDamagePose(void) {

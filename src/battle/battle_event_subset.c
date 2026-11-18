@@ -1691,6 +1691,7 @@ EVT_BEGIN(subset_attack_ready_jump_event)
     RETURN
 EVT_END()
 
+/** Script: clears the command menu's remembered command (recCommand) and attackAudience. */
 static USER_FUNC(_disable_restore_command_cursor) {
     BattleWork* wp = _battleWorkPointer;
     wp->commandMenu.recCommand = 0;
@@ -1747,6 +1748,7 @@ USER_FUNC(_add_star_point_disp_offset) {
     return EVT_RETURN_DONE;
 }
 
+/** JP and later script: sets HP_GAUGE_FLAG_TIMED on the HP gauge of the unit args[0], if it exists. */
 // Descriptive name (not in the symbol maps); placeholder unk_8010ee30, JP 0x8010EE30. See docs/NAME_PROVENANCE.md.
 #if VERSION >= VERSION_JP
 USER_FUNC(_set_hp_gauge_fade_flag) {

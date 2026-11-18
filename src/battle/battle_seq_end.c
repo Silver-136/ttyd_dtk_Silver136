@@ -145,6 +145,10 @@ static EVT_BEGIN(_rank_up_event)
 EVT_END()
 #endif
 
+/**
+ * Returns the _rank_up_data entry whose startLevel is level, or NULL when an entry without rankUpMessage (the end of
+ * the table) comes first.
+ */
 static RankUpData* _get_rank_data(s32 level) {
     RankUpData* rank;
 
@@ -878,6 +882,10 @@ static void btlseqEnd_DispMain(CameraId camId, void* param) {
     }
 }
 
+/**
+ * Draw callback for the battle-end Star Point counter: a white window with the Star Point icon and seqEndWork->expDisp
+ * as two digits. Draws nothing without seqEndWork.
+ */
 static void _MarioExpDisp(CameraId camId, void* param) {
     BattleSeqEndWork* work = ((BattleWork*)param)->seqEndWork;
     char buf[0x10];
@@ -902,6 +910,10 @@ static void _MarioExpDisp(CameraId camId, void* param) {
     }
 }
 
+/**
+ * Draw callback for the level-up confirmation: a window with "btl_msg_lvup_ok", a yes/no window, and the Star Point
+ * icon as the cursor at cursor->absPos.
+ */
 static void _LvupParamConfirmDisp(CameraId camId, void* param) {
     Vec pos;
 
@@ -1460,6 +1472,7 @@ static EVT_BEGIN(_rank_up_event)
 EVT_END()
 #endif
 
+/** US and later script: sets the level-up selection (seqEndWork->selected) to args[0]. */
 #if VERSION >= VERSION_US
 // Descriptive name (not in the symbol maps).
 USER_FUNC(_set_initial_upgrade_cursor_position) {
@@ -2076,6 +2089,11 @@ static void _lvup_select_object_disp(CameraId camId, void* param) {
     }
 }
 
+/**
+ * Audience reactions to the win: Great Victory when the first enemy's level is above Mario's level plus 1, Fast Victory
+ * (with the turns to spare) when the battle took fewer turns than 2/3 of the enemies' summed levels divided by Mario's
+ * level plus 1.
+ */
 static void _check_audience_battle_end_exec(void) {
     BattleWork* wp = _battleWorkPointer;
     BattleGroupSetup* group = wp->fbatInfo->setup->groupSetup;
@@ -2103,6 +2121,10 @@ static void _check_audience_battle_end_exec(void) {
     }
 }
 
+/**
+ * During the battle-end steps from the Exp wait to the run-off, plays an audience whistle every 60 to 179 frames
+ * (whistleTimer); as built no step matches, so it never plays (see the BUG note).
+ */
 void _audience_Whistle_control(void) {
     BattleSeqEndWork* work = _battleWorkPointer->seqEndWork;
 

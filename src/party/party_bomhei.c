@@ -50,6 +50,7 @@ EVT_END()
 static s32 m_w_7_sync[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 9, 9, 8, 7, 5, 3, 1, 0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 9, 8, 6, 4, 3, 2, 1, 0, 0, 0, 0, 0};
 #endif
 
+/** Clears Bobbery's use flags: no-make-disp-dir, forced fall, event use and being used. */
 static inline void bomheiCleanFlags(PartyEntry* p) {
     p->flags2 &= ~PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
     p->flags &= ~PARTY_FLAG_FORCE_FALL;
@@ -57,6 +58,7 @@ static inline void bomheiCleanFlags(PartyEntry* p) {
     p->flags &= ~PARTY_FLAG_IS_BEING_USED;
 }
 
+/** Frees Bobbery's use work (useStruct), if any. */
 static inline void bomheiFree(PartyEntry* p) {
     if (p->useStruct != NULL) {
         __memFree(HEAP_DEFAULT, p->useStruct);
@@ -144,6 +146,10 @@ void bomhei_bye(PartyEntry* party) {
     }
 }
 
+/**
+ * Partner init for Bobbery: member kind, ground mover, 28x28 collision box, state 100, and no sounds playing
+ * (init_se_work).
+ */
 void bomhei_init(PartyEntry* party) {
     party->memberKind = PARTY_BOBBERY;
     party->moveKind = 0;
@@ -1189,6 +1195,7 @@ static HitEntry* check_front(PartyEntry* party) {
     return hit;
 }
 
+/** Whether a bomb breaks the hit: the MOBJ_BombRock map object, or a case event with the CASE_BOBBERY condition. */
 // Original name and size (0x90) from the JP demo map (UNUSED there: every call is inlined).
 BOOL chkBreakable(HitEntry* hit) {
     CaseEntry* c;

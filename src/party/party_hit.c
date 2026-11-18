@@ -44,6 +44,10 @@ static BOOL hiddenBlockFilter(HitCheckQuery* query, HitEntry* entry) {
     return TRUE;
 }
 
+/**
+ * Hit filter for the partner's collision rays (TRUE: the hit counts): TRUE for ship-only and roll-through surfaces,
+ * FALSE for NPC-only and door (bero) surfaces, otherwise hiddenBlockFilter.
+ */
 static BOOL chkfilter(HitCheckQuery* query, HitEntry* entry) {
     marioGetPtr();
     if (entry->attributes & (HIT_ATTR_SHIP_ONLY | HIT_ATTR_ROLL_THROUGH)) {
@@ -211,6 +215,11 @@ void partyChkGnd(PartyEntry* party) {
     }
 }
 
+/**
+ * Early demos: casts a ray from pos along dir for dist with the partner's filter (chkfilterYoshi when yoshiGetStatus is
+ * set, chkfilterNokotaro while Koops is in use, else chkfilter). On a hit writes its y, rounded to 0.001, and its
+ * normal; returns the hit or NULL.
+ */
 #if VERSION <= VERSION_DEMO_JP
 static inline HitEntry* partyHitCheckGnd(PartyEntry* party, Vec* pos, Vec* dir, f32 dist, f32* outY, Vec* outNrm) {
     HitCheckQuery query;

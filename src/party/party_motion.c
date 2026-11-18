@@ -44,6 +44,7 @@ static BOOL party_roll(PartyEntry* party);
 void hitcheck_party_motion_stay_fly(PartyEntry* party);
 void hitcheck_party_motion_stay(PartyEntry* party);
 
+/** JP and later: sets touch_wall_ct back to 60. */
 // Descriptive name (not in the symbol maps); placeholder unk_8014c47c, JP 0x8014C47C. See docs/NAME_PROVENANCE.md.
 #if VERSION >= VERSION_JP
 void partyResetTouchWallCt(void) {
@@ -99,6 +100,7 @@ static s32 getFrontFloor(PartyEntry* party, Vec* out, f32 dir);
 
 static void party_force_reset_outofscreen(PartyEntry* party);
 
+/** Early demos: footstep sounds, the same as the JP and later partyWalkSe in party_move.c. */
 #if VERSION <= VERSION_DEMO_JP
 void partyWalkSe(PartyEntry* party, s32 arg) {
     s32 a;
@@ -485,6 +487,10 @@ void hitcheck_party_motion_stay(PartyEntry* party) {
 }
 #endif
 
+/**
+ * Early demos: run pose and run footsteps at spd 1.25 or more, else the walk pose and walk footsteps (see the JP and
+ * later form in party_move.c).
+ */
 #if VERSION <= VERSION_DEMO_JP
 void partyMoveAnime(PartyEntry* party, f32 spd) {
     if (spd >= 1.25f) {
@@ -3387,6 +3393,10 @@ static inline void partyDownDirX(HitCheckQuery* q) {
     q->targetDir = (Vec){0.0f, -1.0f, 0.0f};
 }
 
+/**
+ * JP and later: height of the floor below the point 40 units from u in direction md, probed from touch_wall_ct above,
+ * rounded to 0.001, or -2000 when there is none.
+ */
 #if VERSION >= VERSION_JP
 static f32 partyGetDirGndY(Vec u, f32 md) {
     f32 k = 40.0f;
@@ -3414,6 +3424,7 @@ static f32 partyGetDirGndY(Vec u, f32 md) {
     return gy;
 }
 
+/** JP and later: height of the floor below (x, y + touch_wall_ct, z), rounded to 0.01, or -2000 when there is none. */
 static f32 partyGetGndY(f32 x, f32 y, f32 z) {
     f32 r;
     f32 hx, hy, hz, dist, nx, ny, nz;
@@ -3797,6 +3808,11 @@ void party_motion_jump(PartyEntry* party) {
     }
 }
 
+/**
+ * Early demos: moves the partner moveSpeed along targetDir, stopping at a front wall (partySearchFrontWall), and
+ * records the wall in hitobjFront (and hitobjPush while it moves). With PARTY_FLAG_DISABLE_FRONT_WALL_CHK it does not
+ * move.
+ */
 // Original name and size (0xa4) from the JP demo map (UNUSED there: every call is inlined).
 static void _moveCheckWall(PartyEntry* party) {
     Vec v;
@@ -4961,6 +4977,10 @@ void hitcheck_party_motion_stay(PartyEntry* party) {
     }
 }
 
+/**
+ * Early demos: keeps a flying partner 1 above the floor found under it, or eases it towards 10 above Mario when there
+ * is none; nothing with PARTY_FLAG_DISABLE_FLOORS.
+ */
 // Original name and size (0x90) from the JP demo map (UNUSED there: every call is inlined).
 void hitcheck_party_motion_stay_fly(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;
@@ -5070,6 +5090,7 @@ void allPartySlitOn(void) {
     }
 }
 
+/** Early demos: the same as the JP and later allPartySlitOff above. */
 void allPartySlitOff(void) {
     PartyEntry* party = partyGetPtr(marioGetPartyId());
     if (party) {
@@ -5081,6 +5102,7 @@ void allPartySlitOff(void) {
     }
 }
 
+/** Early demos: the same as the JP and later allPartyForceSlitOff above. */
 void allPartyForceSlitOff(void) {
     PartyEntry* party = partyGetPtr(marioGetPartyId());
     if (party) {
@@ -5262,6 +5284,10 @@ static BOOL party_slit(PartyEntry* party) {
     return ret;
 }
 
+/**
+ * Early demos: the same roll state as the JP and later party_roll above, setting moveSpeed directly instead of through
+ * partyForceSetSpd.
+ */
 static BOOL party_roll(PartyEntry* party) {
     BOOL ret = TRUE;
     f32 x;

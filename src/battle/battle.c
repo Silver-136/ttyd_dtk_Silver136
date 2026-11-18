@@ -1038,6 +1038,11 @@ BOOL battleDisableHResetCheck(void) {
     return (wp->flags & BATTLE_FLAG_DISABLE_HRESET) != 0;
 }
 
+/**
+ * Returns Merlee's pending spell (MAJINAI_*), or 0; called at the start of each turn from turn 2. While uses remain,
+ * counts down turnsUntilMerleeActivation (a negative count restarts it at 5 to 9); at 0 it picks a spell at random
+ * (30% Power, 30% Defence, 20% Exp, 20% Coins; 45/45/10 without coins for NPC_BATTLE_MERLEE_SAFE_CURSE_UNUSED battles).
+ */
 u8 BattleMajinaiCheck(void) {
     PouchData* pouch = pouchGetPtr();
     BattleWork* wp = _battleWorkPointer;

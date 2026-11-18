@@ -2135,6 +2135,11 @@ static BattleUnitSetup entry_koura = {
 };
 #endif
 
+/**
+ * Appends Koops' moves to the partner move list at *count, each disabled at first: partyWeapon_NokotarouKouraAttack
+ * always, then partyWeapon_NokotarouSyubibinKoura, _KouraGuard and _TsuranukiKoura from partner rank (partyGetTechLv)
+ * 0, 1 and 2.
+ */
 static void __makeTechMenuFunc(BattleCommand* command, s32* count) {
     s32 techLv;
 

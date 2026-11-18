@@ -1059,6 +1059,7 @@ static void zubastar_disp2D(CameraId cam, void* param) {
 static void zubastar_disp3D(CameraId cam, void* param) {
 }
 
+/** Sets the channel 0 material colour to grey level a (opaque). */
 static inline void setG(u8 a) {
     GXColor col = {0, 0, 0, 0xff};
     col.r = a;
@@ -1067,6 +1068,7 @@ static inline void setG(u8 a) {
     GXSetChanMatColor(GX_COLOR0A0, col);
 }
 
+/** Draws the ICON_SAC_GENKI1 icon with matrix m, fainter for higher i (alpha 255 - 50 * (i + 1)). */
 static inline void dispA(Mtx m, s32 i) {
     GXColor ca = {0xff, 0xff, 0xff, 0};
     ca.a = 0xff - (i + 1) * 50;

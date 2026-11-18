@@ -1546,6 +1546,12 @@ void marioHitStrippedPool2(f32* f) {
 }
 #endif
 
+/**
+ * Ceiling check above Mario (the Spring Jump, tube mode and Bowser use their own head searches): stores the ceiling in
+ * hitobjHead and sets or clears MARIO_FLAG_IS_TOUCHING_CEILING. A ceiling that pushes a grounded Mario below his last
+ * ground clamps him there and puts him back in his stand, walk or dash motion; one hit during a jump plays the head-
+ * bump sound and turns the jump into a fall. Returns the height from the search (Mario's own y in MARIO_MOTION_JUMP_3).
+ */
 f32 marioChkOverhead(void) {
 #if VERSION >= VERSION_JP
     // pa..pd are never read, in the original too: their stack slots and initializer templates are in the retail code

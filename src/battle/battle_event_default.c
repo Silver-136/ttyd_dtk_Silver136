@@ -1112,6 +1112,10 @@ EVT_BEGIN(btldefaultevt_DefendParty)
 EVT_END()
 #endif
 
+/**
+ * Script: a fire effect on the unit args[0] that swells and shrinks for 60 frames, then 1 fire damage to that unit
+ * (BattleDamageDirect). Returns EVT_RETURN_FINISH instead of EVT_RETURN_DONE when the unit is the script's own.
+ */
 static USER_FUNC(_backfire) {
     s32 id;
     BattleUnit* unit;

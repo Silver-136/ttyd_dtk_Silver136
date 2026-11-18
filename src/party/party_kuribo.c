@@ -241,6 +241,7 @@ static void kurio_msg(void) {
     evt->lwData[0] = (EvtWord)fbatNpcTalkCheck();
 }
 
+/** Partner init for Goombella: member kind, ground mover, height 24 and width 26, and msg_ep cleared. */
 void kuribo_init(PartyEntry* party) {
     party->memberKind = PARTY_GOOMBELLA;
     party->moveKind = 0;

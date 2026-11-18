@@ -570,6 +570,12 @@ u8 BattleAudience_CheckReaction(void) {
     return FALSE;
 }
 
+/**
+ * Whether an audience member may run its phase event: never while asleep, leaving, entering or in status 21 or 22. The
+ * early demos take the member and return TRUE otherwise; JP and later take a seat index and kind, and also need a
+ * member under system control (BattleAudience_GetSysCtrl), of that kind and in the front centre
+ * (AUDIENCE_MEMBER_FLAG_FRONT_CENTER).
+ */
 #if VERSION <= VERSION_DEMO_JP
 static u8 check_exe_phase_evt_status(BattleAudienceMember* member) {
     u8 status = member->status;
@@ -2847,6 +2853,11 @@ static void BattleAudienceDispWin(CameraId camId, void* param) {
     }
 }
 
+/**
+ * Seats an audience member of kind type with status at seat index: its x position comes from the seat column plus a
+ * small random offset. A wide kind (AUDIENCE_KIND_WIDE) needs an even seat and also takes the next one (marked
+ * AUDIENCE_MEMBER_FLAG_WIDE_SUB). FALSE when the seat is taken.
+ */
 BOOL BattleAudience_Entry(s32 index, u8 type, u8 status) {
     BattleAudienceMember* m;
     f32 x;
@@ -2888,6 +2899,11 @@ BOOL BattleAudience_Entry(s32 index, u8 type, u8 status) {
     return TRUE;
 }
 
+/**
+ * Fills in a newly seated member: kind, status, no item, the kind's animation table in the wait (back) pose, stage
+ * height and a depth from the seat row; an entering member starts hidden at y -2000. Members in the middle columns of
+ * each row get AUDIENCE_MEMBER_FLAG_FRONT_CENTER (columns 2-17 in the early demos, 4-15 from JP on).
+ */
 static void BattleAudience_Entry_Sub(s32 index, s32 type, u8 status) {
     BattleAudienceMember* m;
     BattleStage* stage;
@@ -3157,6 +3173,11 @@ void BattleAudience_GetItemOn2(s32* memberId, f32* x, f32* y, f32* z, ItemType* 
     }
 }
 
+/**
+ * Marks the member at seat index as targeted (AUDIENCE_MEMBER_FLAG_TARGETED) and sends every other member holding out
+ * an item (AUDIENCE_STATUS_ITEM_ON) back to waiting, dropping the item. The early demos do this only when the member is
+ * in status 7 with an item.
+ */
 void BattleAudience_SetTarget(s32 index) {
     BattleAudienceMember* member;
     s32 i;
@@ -3190,6 +3211,7 @@ void BattleAudience_SetTarget(s32 index) {
 #endif
 }
 
+/** Marks the member at seat index as attacked (AUDIENCE_MEMBER_FLAG_ATTACKED). */
 void BattleAudience_Attack(s32 index) {
     BattleAudienceGetPtr(index)->flags |= AUDIENCE_MEMBER_FLAG_ATTACKED;
 }
@@ -3250,6 +3272,10 @@ void BattleAudience_ChangeStatus(s32 index, s32 status) {
     }
 }
 
+/**
+ * Whether seat index holds a member: used, not the second seat of a wide member, and not
+ * AUDIENCE_MEMBER_FLAG_NOT_EXIST.
+ */
 u8 BattleAudience_GetExist(s32 index) {
     BattleAudienceMember* member;
 
@@ -3267,6 +3293,7 @@ u8 BattleAudience_GetExist(s32 index) {
     return TRUE;
 }
 
+/** Whether the member at seat index exists and is under system control (no AUDIENCE_MEMBER_FLAG_NO_SYS_CTRL). */
 u8 BattleAudience_GetSysCtrl(s32 index) {
     BattleAudienceMember* member;
 

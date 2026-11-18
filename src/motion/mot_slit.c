@@ -634,6 +634,11 @@ void marioReInit_slit(void) {
     allPartySlitOn();
 }
 
+/**
+ * Starts the slit (Paper Mode) motion: clears the slit work, the jump and fall flags and the new-motion trigger, sets
+ * the slit display flags and, when no paper pose is loaded, a grey (0xA8) paper ambient colour and the "p_slit" paper
+ * animation. Stand pose without stick input; paper frame PM_S_1A.
+ */
 // Original name and size (0xe4) from the JP demo map (UNUSED there: every call is inlined).
 void init_slit(void) {
     MarioWork* mario = marioGetPtr();
@@ -699,6 +704,7 @@ static inline void slitSpeedDown(MarioWork* m) {
     m->mot.slit.flags |= SLIT_FLAG_SPEED_DOWN;
 }
 
+/** Turns Mario to 260 or 280 degrees for Paper Mode, by which half of the camera's view his direction lies in. */
 static inline void slitSetDisplayDir(MarioWork* m) {
     m->displayDirection = (revise360(m->directionView - m->targetYaw) <= 180.0f) ? 260.0f : 280.0f;
 }

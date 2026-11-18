@@ -699,6 +699,7 @@ void partyClearJumpPara(PartyEntry* party) {
     party->gravity = 0.0f;
 }
 
+/** Speed factor for the partner: 0.75 in shallow water (PARTY_FLAG_IN_SHALLOW_WATER), else 1. */
 static inline f32 partySpdRate(PartyEntry* party) {
     return (party->flags & PARTY_FLAG_IN_SHALLOW_WATER) ? 0.75f : 1.0f;
 }
@@ -878,6 +879,10 @@ void partyChgStayPose(PartyEntry* party) {
 }
 #endif
 
+/**
+ * JP and later: picks the walk or run pose and footsteps for speed spd (always run in paper slit mode,
+ * PARTY_DISP_FLAG_SLIT); the walk/run choice also follows Mario's movement speed (see the BUG note on the speed bands).
+ */
 // Name from the JP demo map, where the smaller first form of this function (same arguments and callers) is
 // partyMoveAnime in party_motion.o; from JP on it lives here.
 #if VERSION >= VERSION_JP
@@ -1111,6 +1116,10 @@ static s32 partyMoveMain(PartyEntry* party, s32 hosei) {
     return 0;
 }
 
+/**
+ * Switches the partner's move mode to mode and sets PARTY_TRIG_CHG_MOVE_MODE; leaving
+ * PARTY_MOVE_MODE_CONTINUE_BEHIND_MARIO clears PARTY_FLAG_CONTINUE_FOLLOW_MARKER.
+ */
 void partyChgMoveMode(PartyEntry* party, s32 mode) {
     // FAKE: the copy p and its self-assignment in case 4/5 keep the empty case 4/5 arm; the plain switch changes the object
     PartyEntry* p = party;
@@ -1128,6 +1137,10 @@ void partyChgMoveMode(PartyEntry* party, s32 mode) {
     party->trigFlags |= PARTY_TRIG_CHG_MOVE_MODE;
 }
 
+/**
+ * Switches the partner's motion to mot and sets PARTY_TRIG_CHG_MOT. From JP on, leaving the fall motion clears the
+ * jump, fall, step, front-wall-check, forced-fall and no-floor flags.
+ */
 void partyChgMot(PartyEntry* party, s32 mot) {
 #if VERSION >= VERSION_JP
     if (party->motionId == PARTY_MOTION_FALL) {
@@ -1297,6 +1310,12 @@ void partyGetMoveDirSpd(PartyEntry* party, f32* dir, f32* spd) {
     *spd = mul * sqrtf(x * x + z * z);
 }
 
+/**
+ * Pushes the partner out of Mario: when it is inside a box around him (a share of their combined width and height,
+ * smaller with PARTY_TRIG_HALF_PUSH and, from JP on, while Mario pushes), sets pushVelX/Z away from him (turned 90
+ * degrees when he walks almost straight at it, stronger while he stands still) and counts pushCount up to 100;
+ * otherwise pushCount counts down. Returns pushCount.
+ */
 s32 partyMarioHosei(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;
     f32 kx;

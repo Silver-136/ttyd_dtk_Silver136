@@ -2838,6 +2838,10 @@ USER_FUNC(btlevtcmd_GetBodyId) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script: returns in args[1] the unit id that args[0] stands for, or UNIT_ID_NONE when there is no such unit or it is
+ * BATTLE_UNIT_FLAG_BROKEN.
+ */
 USER_FUNC(btlevtcmd_GetUnitId) {
     EvtWord* args = event->args;
     BattleWork* wp = _battleWorkPointer;
@@ -5989,6 +5993,10 @@ USER_FUNC(btlevtcmd_GetResultAC) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script: returns in args[2] the action command prize level (BattleActionCommandGetPrizeLv) for the level args[1] and
+ * the unit args[0]; -1 or UNIT_ID_SYSTEM in args[0] means no unit.
+ */
 USER_FUNC(btlevtcmd_GetResultPrizeLv) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;
@@ -6423,6 +6431,7 @@ USER_FUNC(btlevtcmd_ACRGetResult) {
     return EVT_RETURN_DONE;
 }
 
+/** Script: runs the audience reaction to an Appeal (BattleAudience_Case_Appeal) for the unit args[0], if it exists. */
 USER_FUNC(btlevtcmd_AudienceAppeal) {
     BattleWork* wp = _battleWorkPointer;
     BattleUnit* unit;
@@ -6482,6 +6491,7 @@ USER_FUNC(btlevtcmd_AnimeChangePose) {
     return EVT_RETURN_DONE;
 }
 
+/** Script: plays the animation for pose type args[2] on part args[1] of the unit args[0] (BtlUnit_SetAnimType). */
 USER_FUNC(btlevtcmd_AnimeChangePoseType) {
     EvtWord* args = event->args;
     s32 type;
@@ -8047,6 +8057,7 @@ USER_FUNC(btlevtcmd_StageDispellFog) {
     return EVT_RETURN_DONE;
 }
 
+/** Script: converts the frame count args[0] to milliseconds at 60 frames per second and returns it in args[1]. */
 USER_FUNC(btlevtcmd_ftomsec) {
     EvtWord* args = event->args;
     s32 value = evtGetValue(event, args[0]);

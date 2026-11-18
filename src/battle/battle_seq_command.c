@@ -97,6 +97,7 @@ static EVT_BEGIN(_btl_cmd_error_msg_event)
 EVT_END()
 #endif
 
+/** Starts command input: resets the command menu state to CMD_STATE_INIT and sets BATTLE_FLAG_COMMAND_INPUT. */
 void BattleCommandInit(BattleWork* wp) {
     wp->commandMenu.state = CMD_STATE_INIT;
     wp->flags |= BATTLE_FLAG_COMMAND_INPUT;
@@ -701,6 +702,11 @@ static EVT_BEGIN(_btl_cmd_error_msg_event)
 EVT_END()
 #endif
 
+/**
+ * Re-checks every entry of the weapon list for menu type `type` against the active unit: an entry is enabled when it
+ * has a target, otherwise its disable reason is set (no jump or hammer target, not selectable, or not enough FP, or SP
+ * for Specials).
+ */
 static void _btlcmd_UpdateSelectWeaponTable(BattleWork* wp, s32 type) {
     BattleUnit* unit;
     BattleCommand* cmd;
@@ -1114,6 +1120,11 @@ static s32 _btlcmd_MakePartyTable(BattleWork* wp) {
     return num;
 }
 
+/**
+ * Rebuilds the weapon list for menu type `type`, collects the targets of entry `index` for the active unit
+ * (BattleSamplingEnemy) and starts on the first one; TARGET_PROP_SAME_SIDE_FIRST starts on the last target of the
+ * unit's own side, TARGET_PROP_OPPOSITE_SIDE_FIRST on the first of the other side. Returns 0.
+ */
 static s32 _btlcmd_SelectWeaponDecide(BattleWork* wp, s32 type, s32 index) {
     BattleWorkWeaponTargets* targets;
     BattleWeapon* weapon;
@@ -1494,6 +1505,10 @@ s32 BattleCommandInput(BattleWork* work) {
     return 0;
 }
 
+/**
+ * Queues the 2D draw callbacks of the command menus: the enemy HP display always (layer 902; 501 in the early demos)
+ * and each menu whose CMD_MENU_* flag is set (layer 500). Also steps the highlight colour of the selected row.
+ */
 void BattleCommandDisplay(BattleWork* wp) {
     BattleCommand* cmd = &wp->commandMenu;
 
@@ -1755,6 +1770,7 @@ void BattleCommandDisplay_ActMenuDisp(CameraId camId, void* param) {
     BattleMenuDisp_ActSelect_Disp(wp);
 }
 
+/** Ends the action menu display and clears CMD_MENU_ACT. */
 void BattleCommandDisplay_ActMenuEnd(BattleWork* wp) {
     BattleMenuDisp_ActSelect_End(wp);
     wp->commandMenu.flags &= ~CMD_MENU_ACT;
@@ -1877,6 +1893,7 @@ void BattleCommandDisplay_WeaponSelectMenuDisp(CameraId camId, void* param) {
     BattleMenuDisp_WeaponSelect_Disp(param);
 }
 
+/** Ends the weapon list display and clears CMD_MENU_WEAPON_SELECT. */
 void BattleCommandDisplay_WeaponSelectMenuEnd(BattleWork* wp) {
     BattleMenuDisp_WeaponSelect_End(wp);
     wp->commandMenu.flags &= ~CMD_MENU_WEAPON_SELECT;
@@ -2102,6 +2119,7 @@ void BattleCommandDisplay_OperationMenuDisp(CameraId camId, void* param) {
     BattleMenuDisp_Operation_Disp(param);
 }
 
+/** Ends the Tactics menu display and clears CMD_MENU_OPERATION. */
 void BattleCommandDisplay_OperationMenuEnd(BattleWork* wp) {
     BattleMenuDisp_Operation_End(wp);
     wp->commandMenu.flags &= ~CMD_MENU_OPERATION;
@@ -2191,6 +2209,7 @@ void BattleCommandDisplay_MultiItemMenuDisp(CameraId camId, void* param) {
     BattleMenuDisp_MultiItem_Disp(param);
 }
 
+/** Ends the Double/Triple Dip menu display and clears CMD_MENU_MULTI_ITEM. */
 void BattleCommandDisplay_MultiItemMenuEnd(BattleWork* wp) {
     BattleMenuDisp_MultiItem_End(wp);
     wp->commandMenu.flags &= ~CMD_MENU_MULTI_ITEM;
@@ -2272,11 +2291,16 @@ void BattleCommandDisplay_ChangePartySelectMenuDisp(CameraId camId, void* param)
     BattleMenuDisp_ChangePartySelect_Disp(param);
 }
 
+/** Ends the Change Partner list display and clears CMD_MENU_CHANGE_PARTY. */
 void BattleCommandDisplay_ChangePartySelectMenuEnd(BattleWork* wp) {
     BattleMenuDisp_ChangePartySelect_End(wp);
     wp->commandMenu.flags &= ~CMD_MENU_CHANGE_PARTY;
 }
 
+/**
+ * Starts target selection: sets CMD_MENU_TARGET_SELECT and puts the active unit's body part in its walk pose
+ * (POSE_TYPE_WALK).
+ */
 void BattleCommandDisplay_TargetSelectMenuSetup(BattleWork* wp) {
     BattleUnit* unit = BattleGetUnitPtr(wp, wp->activeUnitId);
 
@@ -2412,6 +2436,7 @@ void BattleCommandDisplay_TargetSelectMenuEnd(BattleWork* wp) {
     cmd->flags &= ~CMD_MENU_ENEMY_HP;
 }
 
+/** Starts the protect-partner selection display: sets CMD_MENU_PROTECT_PARTNER and clears CMD_MENU_ENEMY_HP. */
 void BattleCommandDisplay_ProtectPartnerSelectMenuSetup(BattleWork* wp) {
     BattleUnit* unit = BattleGetUnitPtr(wp, wp->activeUnitId);
     BattleGetPartnerPtr(wp, unit);
@@ -2448,6 +2473,7 @@ void BattleCommandDisplay_ProtectPartnerSelectMenuDisp(CameraId camId, void* par
     FontDrawString(3.0f + icon.x - w, 77.0f + icon.y, msgSearch(unit->kindParams->name));
 }
 
+/** Ends the protect-partner selection display (clears CMD_MENU_PROTECT_PARTNER). */
 void BattleCommandDisplay_ProtectPartnerSelectMenuEnd(BattleWork* wp) {
     wp->commandMenu.flags &= ~CMD_MENU_PROTECT_PARTNER;
 }

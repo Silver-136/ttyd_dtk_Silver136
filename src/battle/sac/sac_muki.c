@@ -154,6 +154,11 @@ static EVT_BEGIN(nice_event_pow)
 EVT_END()
 #endif
 
+/**
+ * Script: the per-frame driver of Power Lift. The first call clears the work, takes the unit args[0] and creates the
+ * nine star-stone effects; each call steps the base, cursor, nine points and icons and the star, and queues the 2D and
+ * 3D draws. Always blocks.
+ */
 static USER_FUNC(main_muki) {
     MukiWork* w = get_ptr();
     EvtWord* args = event->args;

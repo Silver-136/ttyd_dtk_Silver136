@@ -217,6 +217,7 @@ void _marioRefresh(void) {
     mario->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
 }
 
+/** Sets the local time of Mario's paper animation (of the pose set in use) to mot.jabara.animFrame. */
 static inline void animStep(MarioWork* mario) {
     animPoseSetLocalTime(mario->paperAnimGroupId[marioAnimeId()], (f32)mario->mot.jabara.animFrame);
 }

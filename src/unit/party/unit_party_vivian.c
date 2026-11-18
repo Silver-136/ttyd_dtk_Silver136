@@ -1376,6 +1376,12 @@ static EVT_BEGIN(attack_audience_event)
     RETURN
 EVT_END()
 
+/**
+ * Script: sinks part args[1] of the unit args[0] into its shadow: grows the shadow from 1 to 2 over 30 frames (args[2]
+ * non-zero also sets BATTLE_UNIT_FLAG_SHADOW_WITH_PARTNER), plays the p_bibi sink animation (PM_B_1), then with the
+ * shadow sound hides the part (when args[3] is non-zero) and shrinks the shadow to 0 over 20 frames. Ends with the unit
+ * moved 500 down and the paper effect cleared. Blocks until done.
+ */
 USER_FUNC(battle_evt_majo_disp_off) {
     EvtWord* args = event->args;
     BattleUnit* unit;

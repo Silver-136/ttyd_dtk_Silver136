@@ -82,6 +82,7 @@ void flying_se_off(void) {
     }
 }
 
+/** Moves the camera in for the plane flight: z shift 0.4 at rate 0.01, zoom 2, with a 40-unit upward zoom offset. */
 // Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
 static void zoomUp(void) {
     MarioWork* mario = marioGetPtr();

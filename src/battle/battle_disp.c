@@ -895,6 +895,10 @@ void btlUnitPartsDisp(CameraId camId, void* param) {
     btlUnitPartsBlurControl(part, 0, blurMtx, *color, rotY);
 }
 
+/**
+ * Draws the icon of the unit's held item at its held-item offsets when an enemy can use that item
+ * (BtlUnit_EnemyItemCanUseCheck); with BATTLE_FLAG_FORCE_ITEM_ICONS_UNUSED a Mushroom stands in for any other item.
+ */
 // FAKE: per-function opt_dead_assignments off keeps the unused height store; without it the object changes
 #pragma push
 // Dead-assignment optimisation off for btlUnitItemDisp only (until the pop): the original register allocation needs it.
@@ -924,6 +928,10 @@ static void btlUnitItemDisp(CameraId camId, BattleUnit* unit) {
 }
 #pragma pop
 
+/**
+ * Draw callback for one unit's held item: for enemy kinds (UNIT_GOOMBA up to UNIT_UNUSED_TREE), Mario and the partners,
+ * draws it with BATTLE_FLAG_FORCE_ITEM_ICONS_UNUSED set for the call (btlUnitItemDisp).
+ */
 static void btlUnitItemDisp2(CameraId camId, void* payload) {
     BattleUnit* unit = payload;
     BattleWork* wp = _battleWorkPointer;
@@ -953,6 +961,10 @@ static void btlUnitStolenItemDisp(CameraId camId, void* param) {
     iconDispGx(&pos, 0, 1.0f, itemDataTable[item].icon_id);
 }
 
+/**
+ * Runs the part's motion blur (_partsBlurControl), drawing its blur entries (PART_BLUR_ENTRY_DRAW) only when the part
+ * has kMotionBlur.
+ */
 static void btlUnitPartsBlurControl(BattleUnitPart* part, s32 unused, Mtx orientation, GXColor color, f32 rotation) {
     if (part->attributes & kMotionBlur) {
         _partsBlurControl(part, PART_BLUR_ENTRY_DRAW, orientation, color, rotation);

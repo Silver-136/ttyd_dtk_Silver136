@@ -123,6 +123,10 @@ static EVT_BEGIN(enemy_slide_return_evt)
     RETURN
 EVT_END()
 
+/**
+ * Script: audience clapping, plus cheering by audience size (1 to 149: cheer kind 1; 150 or more: cheer kind 4 and a
+ * whistle).
+ */
 // functions are emitted in reverse definition order (-inline deferred)
 USER_FUNC(sac_wao) {
     s32 num = BattleAudience_GetAudienceNum();

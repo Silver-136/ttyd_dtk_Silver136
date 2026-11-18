@@ -581,6 +581,10 @@ void BattleStatusChangeMsgWorkInit(void) {
     }
 }
 
+/**
+ * Fills status-change announcement slot index for the unit: unit id, type, timer 0, changed, and a flag for Mario, the
+ * player's partner or any other unit.
+ */
 void BattleStatusChangeMsgSetAnnouce(BattleUnit* unit, s32 index, s32 changed) {
     StChgWork* st = &_battleWorkPointer->announce.stChg;
     StChgMsg* msg = &st->msg[index];

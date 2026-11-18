@@ -40,6 +40,8 @@ static void getHitBreatheout2(PartyEntry* party, f32 angle);
 
 // Flurrie's work (PartyEntry.useStruct). A macro, not an inline function: as a function the object changes.
 #define CLOUD_WORK(p) ((PartyCloud*)(p)->useStruct)
+
+/** Returns the particle work of Flurrie's gust effect (work.cloud.breathEffect). */
 static inline EffKumokumoN64Particle* breathParticles(PartyEntry* p) {
     return (EffKumokumoN64Particle*)p->work.cloud.breathEffect->userdata;
 }
@@ -703,6 +705,7 @@ void cloud_exit(PartyEntry* party) {
 
 #if VERSION <= VERSION_DEMO_JP
 
+/** Early demos: the same as the JP and later cloudGetBreathPower above. */
 f32 cloudGetBreathPower(Vec pos, f32 width) {
     PartyEntry* party = partyGetPtr(PARTY_SLOT_PARTY);
     f32 breathPower;
@@ -735,6 +738,7 @@ f32 cloudGetBreathPower(Vec pos, f32 width) {
     return breathPower;
 }
 
+/** Early demos: the same as the JP and later cloudGetBreathDir above. */
 f32 cloudGetBreathDir() {
     PartyEntry* party = partyGetPtr(PARTY_SLOT_PARTY);
     f32 breathDir;
@@ -885,6 +889,7 @@ static void getHitBreatheout2(PartyEntry* party, f32 angle) {
 }
 #if VERSION <= VERSION_DEMO_JP
 
+/** Early demos: the same as the JP and later cloudGetStatus above. */
 u8 cloudGetStatus() {
     u32 partyId = marioGetPartyId();
     PartyEntry* party = partyGetPtr(partyId);

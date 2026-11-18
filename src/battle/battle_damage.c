@@ -1893,6 +1893,11 @@ s32 BattleCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* 
     return ret;
 }
 
+/**
+ * Redirects an attack on *unitIdx to a unit guarding it: one whose protectId is the target, not damaged or already
+ * guarding this turn, able to guard, and with a kGuardTargetPart part. Both units play their guard hit events,
+ * BATTLE_FLAG_GUARD_MOVE is set, and *unitIdx/*partIdx become the guard and that part.
+ */
 void BattleAttackDeclare(s32* unitIdx, s32* partIdx) {
     s32 i;
     BattleUnit* unit;
@@ -2043,6 +2048,7 @@ void BattleAttackDeclareAll(BattleWork* wp) {
     wt->currentTarget = 0;
 }
 
+/** Clears a CounterWork and sets its hit count to 1. */
 void BattleInitCounterPreCheckWork(CounterWork* work) {
     memset(work, 0, sizeof(CounterWork));
     work->attackHits = 1;

@@ -133,6 +133,11 @@ static EVT_BEGIN(nice_event)
     RETURN
 EVT_END()
 
+/**
+ * Script: the per-frame driver of Showstopper. The first call clears the work, takes the unit args[0] and sets up the
+ * star positions and the sac_suki_img0-5 names; each call steps the base, seven buttons and the star, and queues the 2D
+ * and 3D draws. Always blocks.
+ */
 static USER_FUNC(main_suki) {
     SukiWork* w = get_ptr();
     EvtWord* args = event->args;

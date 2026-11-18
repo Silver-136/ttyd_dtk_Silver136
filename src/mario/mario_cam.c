@@ -371,6 +371,11 @@ BOOL marioCamZoomUp(void) {
     return TRUE;
 }
 
+/**
+ * Consumes MARIO_TRIG_FLAG_ZOOM_UP_LEVEL_UNUSED: outside background mode, sets MARIO_DISP_FLAG_ZOOM and moves the 3D
+ * camera in towards Mario's screen spot (distance by zoomLevel: 520, 475, 440, else 450) over 1500 ms with
+ * EASING_QUARTIC_IN. Returns TRUE when it started the move.
+ */
 BOOL marioCamZoomUpLevelMain(void) {
     MarioWork* mario;
     EventEntry event;

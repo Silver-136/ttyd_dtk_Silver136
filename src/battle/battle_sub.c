@@ -45,6 +45,7 @@ f32 atan2f_safety(f32 y, f32 x) {
     return atan2(y, x);
 }
 
+/** Moves (x, z) by speed in direction angle (degrees: 0 is -z, 90 is +x). */
 void btlMovePos(f32 speed, f32 angle, f32* x, f32* z) {
     f32 s;
     f32 c;
@@ -141,6 +142,11 @@ s32 BtlCompForwardLv(s32 dir, f32 x) {
     return 48 - lv;
 }
 
+/**
+ * Turns a script unit id into a battle unit id: UNIT_ID_SELF is the event's own unit, UNIT_ID_MARIO, UNIT_ID_PARTNER
+ * and UNIT_ID_SYSTEM those units (UNIT_ID_NONE when there is no partner), UNIT_ID_LECTURE the tutorial lecture unit;
+ * other ids come back as given.
+ */
 s32 BattleTransID(EventEntry* evt, s32 type) {
     BattleWork* work = _battleWorkPointer;
     BattleUnit* unit;

@@ -465,6 +465,12 @@ void BattleSamplingEnemyUpdate(BattleWorkWeaponTargets* d) {
     _btlSamplingEnemy(d);
 }
 
+/**
+ * Picks one target from a sampled target list for an AI attack and writes its unit and part to *unitOut/*partOut (-1
+ * and 0 when the list is empty). Each target gets a weight from the TARGET_WEIGHT_* flags (Mario, partner, front or
+ * back, side, HP), cut to 1 when the weapon's item would be wasted on it; then the heaviest target is taken, or with
+ * TARGET_WEIGHT_RANDOM one at random in proportion to the weights.
+ */
 void BattleChoiceSamplingEnemy(BattleWorkWeaponTargets* d, u32 flags, s32* unitOut, s32* partOut) {
     BattleUnit* unit;
     BattleWork* wp = _battleWorkPointer;

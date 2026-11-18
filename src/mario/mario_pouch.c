@@ -144,6 +144,7 @@ ItemType pouchHaveBadge(s32 id) {
     return mpp->badges[id];
 }
 
+/** Returns the badge in equipped-badge slot id. */
 // JP and the demos call nothing here and strip it (JP demo map: UNUSED, 0x14, the same size as in US).
 ItemType pouchEquipBadge(s32 id) {
     return mpp->equippedBadges[id];
@@ -586,6 +587,12 @@ BOOL pouchRemoveItemIndex(ItemType type, s32 index) {
 char* strupr(char* str);
 #endif
 
+/**
+ * JP and later: writes the sort key of a name to dst. Japanese text gets each hiragana (Shift-JIS 0x829F-0x82F1) turned
+ * into its katakana. From US on that applies only with the Japanese language; other languages copy the name, except in
+ * PAL and the PAL demo, which build a Latin key (no message tags, upper case, accents folded, OE spelled out, C-cedilla
+ * dropped).
+ */
 // Descriptive name (not in the symbol maps); placeholder unk_800d06b4, JP 0x800D06B4. See docs/NAME_PROVENANCE.md.
 #if VERSION >= VERSION_JP
 void pouchHiraToKata(const char* src, char* dst) {

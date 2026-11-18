@@ -143,6 +143,7 @@ u32 BattlePadGetTrigger(void) {
 // BattlePadGetRepeat, BattlePadGetUp and the four ...RecordNow / ...RecordRepeat functions below: original names and
 // sizes from the JP demo map (UNUSED there: nothing calls them). Each is its Trigger sibling reading the history
 // that the MultiCheckNow / MultiCheckUp / MultiCheckRepeat function of the same word reads.
+/** Buttons that fired their press-or-hold repeat this frame on controller 1, with the stick-direction bits. */
 u32 BattlePadGetRepeat(void) {
     return _battleWorkPointer->padWork[0].buttonsHeldHistory[0];
 }
@@ -152,6 +153,7 @@ u32 BattlePadGetNow(void) {
     return _battleWorkPointer->padWork[0].buttonsHistory[0];
 }
 
+/** Buttons released this frame on controller 1, with the stick-direction bits. */
 u32 BattlePadGetUp(void) {
     return _battleWorkPointer->padWork[0].buttonsReleasedHistory[0];
 }
@@ -203,10 +205,12 @@ u32 BattlePadMultiCheckUp(s32 chan, s32 mask) {
     return history[0] & mask;
 }
 
+/** Nonzero if any button in mask was held on controller 1 frame frames ago (0 = this frame, up to 29). */
 BOOL BattlePadCheckRecordNow(s32 frame, s32 mask) {
     return BattlePadMultiCheckRecordNow(0, frame, mask);
 }
 
+/** Nonzero if any button in mask was held on controller chan frame frames ago (0 = this frame, up to 29). */
 u32 BattlePadMultiCheckRecordNow(s32 chan, s32 frame, s32 mask) {
     BattleWorkPad* pad = &_battleWorkPointer->padWork[chan];
     return pad->buttonsHistory[frame] & mask;
@@ -223,10 +227,18 @@ u32 BattlePadMultiCheckRepeat(s32 chan, s32 mask) {
     return history[0] & mask;
 }
 
+/**
+ * Nonzero if any button in mask fired its press-or-hold repeat on controller 1 frame frames ago (0 = this frame, up to
+ * 29).
+ */
 BOOL BattlePadCheckRecordRepeat(s32 frame, s32 mask) {
     return BattlePadMultiCheckRecordRepeat(0, frame, mask);
 }
 
+/**
+ * Nonzero if any button in mask fired its press-or-hold repeat on controller chan frame frames ago (0 = this frame, up
+ * to 29).
+ */
 u32 BattlePadMultiCheckRecordRepeat(s32 chan, s32 frame, s32 mask) {
     BattleWorkPad* pad = &_battleWorkPointer->padWork[chan];
     return pad->buttonsHeldHistory[frame] & mask;

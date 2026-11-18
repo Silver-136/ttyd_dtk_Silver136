@@ -1730,6 +1730,7 @@ static EVT_BEGIN(party_win_reaction)
 EVT_END()
 #endif
 
+/** Script: allocates a BattleWeapon (BattleAlloc) as the script's own unit's countersetWeapon. */
 static USER_FUNC(_sanders_make_extra_work_area) {
     BattleWork* wp = _battleWorkPointer;
     BattleUnit* unit;

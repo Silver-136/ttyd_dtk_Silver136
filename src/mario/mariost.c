@@ -510,6 +510,10 @@ void marioStInit(void) {
 #endif
 }
 
+/**
+ * One game frame: waits while a DVD error is up, reads the pads and runs every manager's main function, then the reset
+ * check (gcResetCheck). In kiosk mode (GW_FLAG_E3) it also tracks input for the idle timeout.
+ */
 void marioStMain(void) {
     int i;
 

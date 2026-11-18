@@ -2761,6 +2761,11 @@ static EVT_BEGIN(_nozzle_work_event_1)
 EVT_END()
 #endif
 
+/**
+ * Script: tips over background layer args[0] and blocks until it is down. Layer A1/A2 pieces shake for their start
+ * delay, then turn to 90 degrees about x with a fall sound; layer B turns the whole background (bgRotation.x) to 90
+ * degrees over 60 frames.
+ */
 static USER_FUNC(_set_mobj_rotate_x) {
     BattleWork* wp;
     int j;
@@ -2862,6 +2867,7 @@ static EVT_BEGIN(_nozzle_work_event_1)
 EVT_END()
 #endif
 
+/** Script: sets the alpha of the map group of background layer args[0] (A1, A2, B or C) to args[1]. */
 static USER_FUNC(_mobj_set_alpha) {
     EvtWord* args = event->args;
     s32 layer = evtGetValue(event, args[0]);
@@ -3240,6 +3246,10 @@ void BattleStage_WallCloseCheck(void) {
     }
 }
 
+/**
+ * JP and the early demos: shows the wall banner (_disp_escape_wall_message) for about 60 frames, blocking until it
+ * ends.
+ */
 #if VERSION < VERSION_US
 static USER_FUNC(_announce_wall_message) {
     if (isFirstCall) {

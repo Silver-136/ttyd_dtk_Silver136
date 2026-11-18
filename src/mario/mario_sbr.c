@@ -211,6 +211,7 @@ f32 marioGetGravity(void) {
     return marioGetPtr()->playerGravity;
 }
 
+/** Returns the NPC Mario is touching (MarioWork.touchNpc). */
 void* marioGetTouchNpcPtr(void) {
     return marioGetPtr()->touchNpc;
 }

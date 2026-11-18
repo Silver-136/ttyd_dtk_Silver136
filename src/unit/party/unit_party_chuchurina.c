@@ -2474,13 +2474,6 @@ static USER_FUNC(_get_itemsteal_param) {
 }
 
 /**
- * Kiss Thief's steal from target args[0].
- * With AC_RESULT_SUCCESS (0x2) set in action command result args[2] and room in the pouch,
- * takes its held item (or, if none, a weighted roll of its drop table, falling back to a coin),
- * clears the item from the field battle setup and unequips it if it was a badge.
- * Returns the item in args[1], or 0 when nothing is stolen.
- */
-/**
  * Unequips everything from the unit when the stolen item is a badge.
  */
 static void _chuchu_item_check(BattleUnit* unit, u32 item) {
@@ -2495,6 +2488,12 @@ static void _chuchu_item_check(BattleUnit* unit, u32 item) {
     }
 }
 
+/**
+ * Script: steals from the unit args[0] its held item or, without one, an item rolled from its drop table (a coin when
+ * that gives none). Only when args[2] has AC_RESULT_SUCCESS and the pouch takes the item: clears the unit's held item
+ * (and the battle setup's held and stolen records), runs _chuchu_item_check and returns the item in args[1]; otherwise
+ * returns 0 there.
+ */
 static USER_FUNC(_chuchu_item_steal) {
     ItemType stolen;
     ItemDropData* table;

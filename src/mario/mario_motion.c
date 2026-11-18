@@ -642,6 +642,12 @@ f32 marioMakeJumpPara(void) {
     return mario->jumpVelocityY;
 }
 
+/**
+ * Per-frame rise of a jump: steps the jump curve (marioMakeJumpPara), cuts it short (-0.526) once A is let go after 4
+ * frames in the air, and at the peak records it and switches to falling (the fall motion, or only the falling curve
+ * while rolling, MARIO_STS_ROLL). Skipped during the roll event, before sub-motion 10, and in the switch, stand, second
+ * and third jump motions.
+ */
 void marioJump(void) {
     MarioWork* mario = marioGetPtr();
     f32 prev;

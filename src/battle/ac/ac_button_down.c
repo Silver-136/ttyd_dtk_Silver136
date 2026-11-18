@@ -28,6 +28,14 @@ static u32 _button_table[7] = {PAD_BUTTON_A, PAD_BUTTON_B, PAD_BUTTON_X, PAD_BUT
 
 static void actionCommandDisp(s32 unused, f32 x, f32 y);
 
+/**
+ * Press the buttons shown, in order, within params[0] frames. params[2] buttons are rolled at start by params[3] (-2: A
+ * or B, -4: B or X, -3: from the first four of _button_table, unique unless AC_BUTTON_DOWN_FLAG_ALLOW_REPEATS; else
+ * from all seven, unique). With params[1] == 1 only the next button is checked each frame. A wrong button or the
+ * timeout fails (AC_BUTTON_DOWN_FLAG_PARTIAL_SUCCESS keeps a partial sequence a success); outputParams[0] counts the
+ * buttons pressed.
+ * Auto Command presses for you; a confused auto-play always fails. Returns 0 when finished.
+ */
 s32 battleAcMain_ButtonDown(BattleWork* work) {
     BattleActions* ac = &work->actionCommands;
     BDWork* p = (BDWork*)work->actionCommands.work;

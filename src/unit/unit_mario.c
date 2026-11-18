@@ -377,6 +377,7 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/** Script: returns in args[0] the local frame of the animation on part 1 of the script's own unit. */
 static USER_FUNC(_get_local_frame) {
     EvtWord* args = event->args;
     s32 index = args[0];

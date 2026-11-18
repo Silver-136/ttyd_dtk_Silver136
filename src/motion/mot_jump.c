@@ -398,6 +398,11 @@ void mot_jumpNpc_post(void) {
 }
 #endif
 
+/**
+ * Jump motion (Bowser uses kpa_jump). On entry: marioPreJump, the takeoff pose and jump sounds (no voice for
+ * MARIO_MOTION_JUMP_3), and camera y-follow off (the third jump keeps it; from JP on it turns it on). After 2 frames
+ * the air pose and sub-motion 10 follow; counts airTimer.
+ */
 void mot_jump(void) {
     MarioWork* mario = marioGetPtr();
     if (mario->characterId == CHARACTER_BOWSER) {
@@ -517,6 +522,12 @@ void mot_upstairs(void) {
     }
 }
 
+/**
+ * Fall motion (Bowser uses kpa_fall). On entry: marks Mario falling, stops the looping sound in soundId[2] and sets the
+ * fall pose (MARIO_MOTION_FALL_2 stops air movement instead). Camera y-follow comes back on once he drops below his
+ * last ground (not in background mode); near the bottom of the screen the camera follow rate rises to 0.8. Counts
+ * airTimer; US and later also set the Spring Jump trigger flags (marioPriCheckJabara).
+ */
 void mot_fall(void) {
     MarioWork* mario = marioGetPtr();
     if (mario->characterId == CHARACTER_BOWSER) {

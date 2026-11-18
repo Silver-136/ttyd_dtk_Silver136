@@ -239,6 +239,10 @@ static EVT_BEGIN(wait_event)
     RETURN
 EVT_END()
 
+/**
+ * Script: shakes the stage object of the unit args[0] up and down by the 34 steps of _data, one a frame, blocking until
+ * done.
+ */
 static USER_FUNC(_rumble_tree) {
     BattleUnit* unit;
     BattleStageObject* object;

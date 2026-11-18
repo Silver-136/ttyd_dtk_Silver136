@@ -395,6 +395,10 @@ static void yoshiAnimeInit(PartyEntry* party) {
     mario->poseTime = 0;
 }
 
+/**
+ * Steps Yoshi's PYS_S_2 (52-frame loop), PYS_R_2 and PYS_F_1 (10-frame loops) poses on Mario's poseTime, copying it to
+ * party->poseTime and to Yoshi's paper animation.
+ */
 void yoshiAnimeCtrl(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;
 

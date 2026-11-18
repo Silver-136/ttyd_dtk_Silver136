@@ -1746,6 +1746,10 @@ const char* BtlUnit_GetPoseNameFromType(BattleUnitPart* part, s32 type) {
     return NULL;
 }
 
+/**
+ * Plays the part's animation for a pose type (see BtlUnit_GetPoseNameFromType); damage types 29..39 play as a hurt
+ * pose, and the fire damage types also mark the part PART_ANIM_BURNT.
+ */
 void BtlUnit_SetAnimType(BattleUnitPart* part, s32 type) {
     const char* name = BtlUnit_GetPoseNameFromType(part, type);
 

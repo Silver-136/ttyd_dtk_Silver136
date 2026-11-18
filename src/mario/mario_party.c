@@ -10,6 +10,12 @@
 #include "driver/npcdrv.h"
 #include "party/party_yoshi.h"
 
+/**
+ * JP and later partner button check: X arms MARIO_TRIG_FLAG_USE_PARTNER with a 5-frame partyUseDelay (counted down by
+ * marioUsePartyMain) while Mario stands, walks or dashes on the ground with a partner that can act (not in Paper Mode
+ * or already in use, Goombella grounded, Yoshi idle). Clears the trigger when the partner cannot be used now or control
+ * is lost. Returns 0.
+ */
 #if VERSION >= VERSION_JP
 s32 marioUseParty(void) {
     MarioWork* mario = marioGetPtr();

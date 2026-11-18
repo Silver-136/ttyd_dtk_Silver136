@@ -1104,7 +1104,6 @@ static void effFallDispInseki(CameraId cameraId, void* payload) {
     }
 }
 
-/** Opaque white, the tint register colour the falling water is drawn with in effFallDispWater. */
 /** Draws the falling water (type 3) as a translucent quad, plus the splash display lists once it has landed. */
 static void effFallDispWater(CameraId cameraId, void* payload) {
     EffectEntry* effect = payload;

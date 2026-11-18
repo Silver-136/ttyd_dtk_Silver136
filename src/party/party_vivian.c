@@ -112,6 +112,10 @@ void mot_vivian_post(void) {
     vivian_cancel_req = 1;
 }
 
+/**
+ * Partner init for Vivian: member kind, flying mover (moveKind 1), height 35 and width 24, shadow size 10, tail flags
+ * clear, trail at her position, no ripple, and vivian_cancel_req cleared.
+ */
 void vivian_init(PartyEntry* party) {
     party->memberKind = PARTY_VIVIAN;
     party->moveKind = 1;
@@ -295,8 +299,12 @@ void vivian_move(PartyEntry* party) {
     vivianShadow(party);
 }
 
-/** early demos: Vivian always hides 13 behind Mario, with no ground search outside the hidden state */
-
+/**
+ * Sets Vivian's move target from Mario's position: in the early demos 13 units behind him and 2.5 to the side. JP and
+ * later first set Mario on the ground below him (not hazard water or spikes), move the behind distance towards 13 (use
+ * motions 20 to 29) or back towards 0 (from use motion 4), take the side by his facing, and on eki_02 run a wall check
+ * around Mario. The early demos search the ground in vivian_use instead.
+ */
 // The early demos' set_vivian_pos/vivian_use are older (fixed hide offset, ground search in vivian_use): one copy each
 // Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
 // It keeps `inline`: as a plain function -inline auto leaves it out of line here (the link changes).

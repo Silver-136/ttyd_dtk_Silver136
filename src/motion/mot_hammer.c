@@ -456,11 +456,16 @@ static inline void mot_ham(f32 shiftZ, f32 zoom) {
     mario->camZoomOfs = (Vec){0.0f, 40.0f, 0.0f};
 }
 
+/** A spin hammer charge level is reached: moves the camera in (mot_ham) and sets HAMMER2_FLAG_LEVEL_UP. */
 static inline void h2LevelUp(MarioWork* mario, f32 shiftZ, f32 zoom) {
     mot_ham(shiftZ, zoom);
     mario->mot.hammer2.flags |= HAMMER2_FLAG_LEVEL_UP;
 }
 
+/**
+ * One frame of a spin hammer charge level (paper P_H_1A): animTime climbs 6 a frame to maxv, where hammerChargeLv
+ * becomes lvl (h2LevelUp); after that it sways between midv and minv, one a frame.
+ */
 static inline void h2Ramp(MarioWork* mario, f32 maxv, f32 midv, f32 minv, s32 lvl, f32 shiftZ, f32 zoom) {
     marioChgPaper("P_H_1A");
     if (!(mario->mot.hammer2.flags & HAMMER2_FLAG_AT_LEVEL)) {
@@ -486,6 +491,10 @@ static inline void h2Ramp(MarioWork* mario, f32 maxv, f32 midv, f32 minv, s32 lv
     }
 }
 
+/**
+ * Ends the spin hammer's paper animation: Paper off (before US also the paper light back on), stand pose M_S_1, and
+ * clears the no-rear-pose, no-flip and flip display flags.
+ */
 static inline void h2ClrPaper(MarioWork* mario) {
     marioPaperOff();
 #if VERSION < VERSION_US

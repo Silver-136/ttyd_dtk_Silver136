@@ -1819,6 +1819,11 @@ static void btlseqTurn(BattleWork* wp) {
     }
 }
 
+/**
+ * Draw callback for the battle-rule banner: the rule message for fbatInfo->ruleType, formatted with ruleParam, in a
+ * white window near the top. The text comes from _rule_msg_table_1bu while GSW_GLITZ_PIT_RANK is below 11, else
+ * _rule_msg_table_2bu, and from STG3_34_RETURN_TO_ROGUEPORT on from _rule_msg_table_after.
+ */
 static void _rule_disp(CameraId cameraId, void* param) {
     FieldBattleInfo* info = _battleWorkPointer->fbatInfo;
     char buf[256];
