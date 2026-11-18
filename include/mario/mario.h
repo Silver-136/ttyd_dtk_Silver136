@@ -375,7 +375,8 @@ typedef enum MarioDispFlags {
     MARIO_DISP_FLAG_BLUR = (1 << 27),             // 0x8000000, marioBlurOn
     MARIO_DISP_FLAG_EVT_POSE = (1 << 28),         // 0x10000000, event pose from the e_mario group (marioAnimeId)
     MARIO_DISP_FLAG_POSE_UNUSED = (1 << 29),      // 0x20000000, cleared by the pose changes and would block the rear
-                                                  // pose; nothing sets it (name from LLCOOLT's tree)
+                                                  // pose; nothing linked sets it (the stripped marioChgBtlPose
+                                                  // is taken to); name from LLCOOLT's tree
     MARIO_DISP_FLAG_PAPER = (1 << 30),            // 0x40000000, marioPaperOn
     MARIO_DISP_FLAG_REAR_POSE = (1 << 31),        // 0x80000000, a_mario_r (rear) pose group
 } MarioDispFlags;
@@ -671,6 +672,7 @@ BOOL marioChkPushAnime(void);
 s32 marioAnimeId(void);
 void marioChgDamagePose(void);
 void marioChgEvtPose(const char* name);
+void marioChgBtlPose(const char* name);
 const char* toDotMarioPose(const char* name);
 void marioChgPose(const char* name);
 void marioChgPoseTime(const char* name, s16 frames);

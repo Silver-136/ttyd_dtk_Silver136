@@ -1821,6 +1821,26 @@ void marioChgEvtPose(const char* name) {
     }
 }
 
+/** Shows a battle pose: marioChgEvtPose with the other pose-set flag (MARIO_DISP_FLAG_POSE_UNUSED). */
+// Original name and size (0x90) from the JP demo map (UNUSED there: nothing calls it), between marioChgEvtPose and
+// toDotMarioPose; marioChgEvtPose is the same size. Every pose change clears both MARIO_DISP_FLAG_EVT_POSE and
+// MARIO_DISP_FLAG_POSE_UNUSED and nothing linked sets the second, so this is taken to be its setter. Not fixed by the
+// bytes: which flag is set and which cleared (either way round is the same size), and their order.
+void marioChgBtlPose(const char* name) {
+    MarioWork* wp = mp;
+    const char* animName;
+
+    if (!(mp->dispFlags & MARIO_DISP_FLAG_POSE_LOCK) && !(mp->flags & MARIO_FLAG_IS_8_BIT)) {
+        animName = mp->animName;
+        if (!animName || strcmp(animName, name)) {
+            wp->animName = name;
+            wp->dispFlags &= ~MARIO_DISP_FLAG_EVT_POSE;
+            wp->dispFlags |= MARIO_DISP_FLAG_POSE_UNUSED;
+            wp->trigFlags |= MARIO_TRIG_FLAG_CHG_ANIM;
+        }
+    }
+}
+
 #if VERSION <= VERSION_DEMO_JP
 static const char* dotMarioPose[4][6] = {
     {"Z_1", "S_1", "W_1", "R_1", "U_1", "J_1"},
