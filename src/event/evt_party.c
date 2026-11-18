@@ -284,6 +284,7 @@ USER_FUNC(evt_party_get_pos) {
     return EVT_RETURN_DONE;
 }
 
+/** (a - b) * (c / n): the part of the way from b to a covered after c of n steps. */
 inline float partyStepSize(f32 a, f32 b, f32 c, s32 n) {
     return (a - b) * (c / (f32)n);
 }

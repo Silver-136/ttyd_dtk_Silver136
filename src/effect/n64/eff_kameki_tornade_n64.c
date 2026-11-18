@@ -19,6 +19,7 @@
 static void effKamekiTornadeMain(EffectEntry* effect);
 static void effKamekiTornadeDisp(CameraId cameraId, void* payload);
 
+/** Spawns a Magikoopa tornado at (x, y, z), scale times its size, for life frames (0 or less: until soft deleted). */
 EffectEntry* effKamekiTornadeN64Entry(s32 type, s32 life, f32 x, f32 y, f32 z, f32 scale) {
     EffectEntry* effect;
     EffKamekiTornadeN64Work* work;

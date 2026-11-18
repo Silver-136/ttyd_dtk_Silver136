@@ -785,6 +785,12 @@ FileEntry* fileAsyncf(s32 type, FileCallback callback, const char* format, ...) 
     return fileAsync(_filename, type, callback);
 }
 
+/**
+ * Starts loading filename without taking a reference. A file already listed is returned as it is (0 while its read is
+ * still running; a released one becomes preloaded again). Otherwise it takes a free entry (collecting garbage when none
+ * is left): a file in the startup archive is returned ready, one on the disc gets a buffer and an asynchronous read
+ * (callback runs when it ends) and 0 is returned; (FileEntry*)-1 when the file cannot be opened.
+ */
 FileEntry* fileAsync(const char* filename, s32 type, FileCallback callback) {
     FileEntry *search, *newentry, *temp;
     smartEntry* smart;

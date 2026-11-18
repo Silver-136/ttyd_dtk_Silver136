@@ -133,6 +133,11 @@ EffectEntry* effDogabonAttackN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 
     return effect;
 }
 
+/**
+ * Per frame: after its delay each piece grows in, then flies in to its inner spot (type 0; other types fly past it on
+ * the miss path). Once the last piece is in, all swirl for 70 frames; each piece is then thrown off, falls and leaves a
+ * stone smoke puff. Ends with its lifetime (64 frames after a soft delete).
+ */
 static void effDogabonAttackMain(EffectEntry* effect) {
     EffDogabonAttackN64Work* work = effect->userdata;
     Vec position;

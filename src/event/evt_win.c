@@ -202,6 +202,10 @@ EVT_END()
 
 // Descriptive name (not in the symbol maps); placeholder unk_8017599c, JP 0x8017599C. See docs/NAME_PROVENANCE.md.
 #if VERSION >= VERSION_JP
+/**
+ * Draw callback of the unitwin shop's name window (JP and later): the name of the item under the cursor at the top of
+ * the screen (once the window has opened) and each available item's discount price above its map object.
+ */
 void unitwin_name_disp(WinMgrEntry* entry) {
     UnitWinWork* wp = _wp;
     const char* msg = msgSearch(itemDataTable[wp->goods[wp->goodsIdx]].name);
@@ -676,6 +680,7 @@ USER_FUNC(unitwin_set_bought) {
     return EVT_RETURN_DONE;
 }
 
+/** Closes the two windows of the open selection, if any, and clears the selection. */
 static inline void unitWinClose(UnitWinWork* wp) {
     if (wp->selected != -1) {
         wp->selected = -1;

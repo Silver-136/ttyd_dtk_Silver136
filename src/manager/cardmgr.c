@@ -424,6 +424,10 @@ void cardWrite(s32 slot) {
     }
 }
 
+/**
+ * Probes slot A until it is no longer busy (a fatal error after 1,000,000 tries) and records the result: a card whose
+ * sector size is not 0x2000 counts as the wrong device; ready and wrong-device results select channel 0, others -1.
+ */
 static void memcard_probe(void) {
     s32 memSize, sectorSize;
     s32 result;
@@ -732,6 +736,12 @@ void cardReadAll(void) {
     }
 }
 
+/**
+ * Step machine for cardReadAll: probes, mounts and checks the card, opens the file, reads the header (an invalid one is
+ * rebuilt and flagged) and takes its sound, rumble and last-slot settings, then loads the newer valid copy of each of
+ * the four slots (or marks the slot CARD_SAVE_FLAG_NO_VALID_COPY). Ends by reading the card serial, closing and
+ * unmounting; a card error stops it and flags it failed.
+ */
 static void read_all_main(void) {
     s32 saveType; // invalid = -1, main = 0, backup = 1
 

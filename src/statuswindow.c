@@ -764,6 +764,7 @@ void statusAPBlink(s32 frames) {
 
 // Descriptive name (not in the symbol maps).
 #if VERSION >= VERSION_JP
+/** Clears every blink flag of the status window (STATUS_BLINK_*). Not in the early demos. */
 void statusClearBlink(void) {
     wp->blink = 0;
 }

@@ -223,6 +223,7 @@ static void effSstarMain(EffectEntry* effect) {
     }
 }
 
+/** Copies vertex `src` to `dst` and transforms its position by `mtx` (fast-cast s16 <-> f32 conversions). */
 static void vtx_copy(effN64Vtx* dst, effN64Vtx* src, Mtx mtx) {
     Vec v;
 

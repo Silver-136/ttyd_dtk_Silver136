@@ -83,6 +83,7 @@ static u32 npcMainCount = 0;
 static NpcFieldEntry* release_wp = NULL;
 static NpcWork2 work;
 
+/** The battle or field NPC list, by inBattle. */
 static inline NpcWork* npcGetWorkPtr2(BOOL inBattle) {
     return inBattle ? &work.battle : &work.field;
 }
@@ -222,6 +223,11 @@ inline void luigiMain(NpcEntry* entry) {
     }
 }
 
+/**
+ * Builds the model matrix of entry in mtx: its scale (z mirrored while it faces between 90 and 270 degrees), its z, x
+ * and y rotations about rotationOffset (y turned by the camera's view angle unless NPC_FLAG_NO_VIEW_CORRECTION or
+ * NPC_FLAG_2D), then the move to its position, or to positionHistory[history] when history is not -1.
+ */
 static void mtx_setup(NpcEntry* entry, Mtx mtx, s32 history) {
     f32 rotationAngle;
     f32 scaleSign;
@@ -272,6 +278,7 @@ static void mtx_setup(NpcEntry* entry, Mtx mtx, s32 history) {
     }
 }
 
+/** While NPC_STATUS_DARKEN is set, gives entry's pose its colour at half brightness as the event colour. */
 static inline void npcDimColor(NpcEntry* entry) {
     GXColor color = entry->color;
     if (entry->statusFlags & NPC_STATUS_DARKEN) {
@@ -678,6 +685,11 @@ void fbatEncountCheck(void);
 BOOL npcCheckInWater(NpcEntry* entry);
 void _fbatFitstAttackAnnounceMain(FirstStrikeInfo* firstStrike);
 
+/**
+ * Once per frame: updates every ready NPC of the current list (timers, movement and gravity, slower in water; pushing
+ * Mario out of non-enemy NPCs; the walk and run animations; the move-event checks) and queues the draws of those on
+ * screen (model, shadow, blur, offscreen copy). JP and later first clear Mario's targetNpc. Ends with fbatMain.
+ */
 void npcMain(void) {
     NpcWork* npcwork;
     NpcEntry* entry;
@@ -1119,6 +1131,11 @@ void npcSetMarioAutoTalkPose(const char* stayPose, const char* talkPose) {
     strcpy(MarioTalkPose, talkPose);
 }
 
+/**
+ * Called by msgdrv when a speaker starts talking: puts the named speaker into its talk animation ("party" / "extparty"
+ * use PARTY_POSE_TALK, "mario" MarioTalkPose, an NPC with NPC_FLAG_TALK_POSE its talkAnim). Empty names and
+ * "(^x^)party" are ignored.
+ */
 void npcSetTalkPose(char* name) {
     PartyEntry* party;
     NpcEntry* npc;
@@ -1187,6 +1204,11 @@ void npcSetStayPose(char* name) {
     }
 }
 
+/**
+ * Pushes Mario out of npc when they overlap (heights overlapping, within half their widths plus 5): npc first goes back
+ * to its previous x and z, and if they still overlap Mario is moved away, by a limited step, and wall-checked. Returns
+ * TRUE when it pushed; JP and later also make npc Mario's targetNpc.
+ */
 static BOOL npcCheckHitMarioSide(NpcEntry* npc) {
     MarioWork* mario;
     Vec marioPos;
@@ -2218,6 +2240,7 @@ static inline void fbatRecoverItems(NpcEntry* npc) {
     } while (i < 8);
 }
 
+/** Does nothing (an empty body). */
 // Original name and size (0x4: a bare return) from the JP demo map (UNUSED there: nothing calls it); an empty mode
 // function between fbatTalkMode and fbatBattleMode.
 void fbatTouchMode(void) {
@@ -2481,6 +2504,7 @@ void fbatBattleMode(void) {
     }
 }
 
+/** Does nothing (an empty body). */
 // Original name and size (0x4: a bare return) from the JP demo map (UNUSED there: nothing calls it); an empty mode
 // function after fbatBattleMode.
 void fbatWaitBattleMode(void) {
@@ -3182,6 +3206,11 @@ void npcSetupBattleAudienceRate(NpcBattleInfo* info, NpcSetupBattleInfo* setup) 
     }
 }
 
+/**
+ * Clears npc's battle info and, for a named setup, fills it: audience rates, flags, fixed item and BGM, an enemy group
+ * picked at random by weight (from altSelect when the setup's saved flag is set), a held item rolled from each enemy's
+ * drop table, and the first enemy's base coins. Then marks npc NPC_FLAG_STOP_FOR_EVENT.
+ */
 void npcSetupBattleInfo(NpcEntry* npc, NpcSetupBattleInfo* setup) {
     s32 i;
     s32 num;
@@ -3325,6 +3354,10 @@ void npcStopForEvent(void) {
     }
 }
 
+/**
+ * Freezes npc when it is ready and marked NPC_FLAG_STOP_FOR_EVENT: flags it stopped, stops its move event and halts its
+ * animation.
+ */
 void npcStopForOneEvent(NpcEntry* npc) {
     if (npc && npc->flags & NPC_FLAG_READY && npc->flags & NPC_FLAG_STOP_FOR_EVENT) {
         npc->statusFlags |= NPC_STATUS_STOPPED;

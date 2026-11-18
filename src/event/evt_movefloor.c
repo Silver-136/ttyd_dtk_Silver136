@@ -114,12 +114,15 @@ static f32 sintbl[450] = {
     0.999391f, 0.999848f,
 };
 
+/** The moving floor named by the command's first argument. */
 static inline MovingFloor* movingFloorArg(EventEntry* event) {
     return (MovingFloor*)evtGetValue(event, event->args[0]);
 }
 
-// Keeps the last bob offset in prevYoff, then sets the new one: kind 1 floors bob up and down (3 units, phase from
-// the frame counter and the event id)
+/**
+ * Keeps the last bob offset in prevYoff, then sets the new one: kind 1 floors bob up and down (3 units, phase from
+ * the frame counter and the event id).
+ */
 // Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
 void setsinnow(MovingFloor* w, EventEntry* event) {
     w->prevYoff = w->yoff;

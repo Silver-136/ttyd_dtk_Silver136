@@ -377,6 +377,11 @@ static inline f32 env_cos(register f32 x) {
 /** Opaque white, the TEV colour of the depth-of-field pass (envDisp_DepthOfField). */
 static const GXColor white = {0xFF, 0xFF, 0xFF, 0xFF};
 
+/**
+ * Draws the depth of field while ENV_FLAG_DOF_UNUSED is set (nothing sets it): for each enabled pass with a nonzero
+ * radius, a full-screen quad of the first capture sampled at four offsets around each pixel, kept where the second
+ * capture's red value is above the pass's level.
+ */
 static void envDisp_DepthOfField(void) {
     EnvironmentWork* wp = envGetWork();
     EnvironmentDof* dof = &wp->dof;
@@ -1040,6 +1045,7 @@ static void envTevLoadTexMtxImm(s32 type, GXTexMtx id, GXTexMtx id2, GXTexMtxTyp
     }
 }
 
+/** Fills to with texture id of pal, clamped, mipmapped when the texture has more than one LOD. */
 static inline void envTexObj(TEXPalette* pal, GXTexObj* to, u32 id) {
     GXBool mipMap;
     TEXDescriptor* tdp;
@@ -1054,6 +1060,7 @@ static inline void envTexObj(TEXPalette* pal, GXTexObj* to, u32 id) {
     GXInitTexObjLOD(to, tdp->textureHeader->minFilter, tdp->textureHeader->magFilter, tdp->textureHeader->minLOD, tdp->textureHeader->maxLOD, tdp->textureHeader->LODBias, GX_DISABLE, tdp->textureHeader->edgeLODEnable, GX_ANISO_1);
 }
 
+/** envTexObj for a colour-index texture: also fills tlo with its palette, for TLUT tluts. */
 static inline void envTexObjCI(TEXPalette* pal, GXTexObj* to, GXTlutObj* tlo, GXTlut tluts, u32 id) {
     GXBool mipMap;
     TEXDescriptor* tdp;
@@ -1069,6 +1076,7 @@ static inline void envTexObjCI(TEXPalette* pal, GXTexObj* to, GXTlutObj* tlo, GX
     GXInitTexObjLOD(to, tdp->textureHeader->minFilter, tdp->textureHeader->magFilter, tdp->textureHeader->minLOD, tdp->textureHeader->maxLOD, tdp->textureHeader->LODBias, GX_DISABLE, tdp->textureHeader->edgeLODEnable, GX_ANISO_1);
 }
 
+/** Loads env.tpl texture id into texture map `map`, with its palette in GX_TLUT0 when it has one. */
 static inline void envLoadTex(u32 id, s32 map) {
     GXTexObj obj;
     GXTlutObj tlut;
@@ -1417,6 +1425,11 @@ void envSetYamiView(Mtx view) {
     PSMTXCopy(view, wp->yamiView);
 }
 
+/**
+ * Darkness TEV callback (map materials, bom_01's crowd): projects env.tpl textures 9 and 10 from yamiView, scrolling
+ * them in opposite directions each retrace, and scales the surface colour by one minus the product of their alphas.
+ * Uses three TEV stages, two texture coordinates and two texture maps, and advances info's counters past them.
+ */
 void envSetYami(MapTevCallbackInfo* info) {
     static f32 u1 = 0.0f;
     static f32 u2 = 0.0f;

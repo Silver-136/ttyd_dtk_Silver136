@@ -324,6 +324,11 @@ void badgeShop_bteresaGeneration(void) {
     }
 }
 
+/**
+ * Adds each chapter's badges to the special stock once its story point is reached (chapters 1 to 6; 7 and 8 only set
+ * their check flags), then picks up to five stocked special badges at random as the bargain badges and makes
+ * bargain_table the special stock without them.
+ */
 void badgeShop_bargainGeneration(void) {
     s16 pickIndex;
     u8 table[0x19];
@@ -836,6 +841,7 @@ s32 badgeShop_ThrowCheck(s32 itemId) {
 }
 
 #if VERSION >= VERSION_JP
+/** Returns how many of the five bargain badge slots hold a badge. Not in the early demos. */
 s32 badgeShop_SpecialCheck(void) {
     s32 count;
     int i;

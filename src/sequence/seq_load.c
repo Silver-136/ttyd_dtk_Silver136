@@ -166,6 +166,10 @@ static EvtWord evt_shake[12];
 
 // Descriptive name (not in the symbol maps); placeholder unk_800f2398, JP 0x800F2398. See docs/NAME_PROVENANCE.md.
 #if VERSION >= VERSION_JP
+/**
+ * Script command (JP and later): resets fade slot 4 and keeps the calling event's print window id in the load
+ * sequence's work.
+ */
 s32 evt_seq_load_keep_msg_window(EventEntry* evt, BOOL isFirstCall) {
     fadeReset(4);
     wp->printWindowId = evt->printWindowId;
@@ -1442,6 +1446,11 @@ static EVT_BEGIN(evt_continue)
     CALL(evt_sub_animgroup_async, STRING("OFF_f_in_out_peach"))
     RETURN
 EVT_END()
+
+/**
+ * Loads the chosen save slot into the game, brings back the two saved partners, restarts the saved countdown and starts
+ * the map change GSW_SAVE_RESUME_POINT picks (0 the saved map; the others fixed maps, most with the story-book fades).
+ */
 static void continueGame(void) {
     cardCopy2Main(wp->slot);
     gp->saveSlot = wp->slot;

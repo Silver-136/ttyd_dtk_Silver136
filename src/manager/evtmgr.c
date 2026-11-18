@@ -183,6 +183,11 @@ static void evtEntryRunCheck(EventEntry* entry) {
     }
 }
 
+/**
+ * Starts script evtCode in a free event slot with priority and flags (default type, no owner, LW and LF variables
+ * cleared) and returns it. An EVENT_START_IMMEDIATE event entered while the manager is running events joins this
+ * frame's run list, and the current system level is re-applied so a paused game pauses it too.
+ */
 // BUG: none of the four entry functions (evtEntry, evtEntryType, evtChildEntry, evtBrotherEntry) checks that the search found a free entry; with the pool full they continue with the entry one past the array.
 EventEntry* evtEntry(void* evtCode, s32 priority, u8 flags) {
     EventWork* wp = evtGetWork();

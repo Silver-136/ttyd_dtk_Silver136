@@ -36,6 +36,7 @@ static effN64Vtx size16x16_tex32x32_vtx[] = {
 static void effAkariSflushMain(EffectEntry* effect);
 static void effAkariSflushDisp(CameraId cameraId, void* payload);
 
+/** Spawns a yellow flash of size `size` at (x, y, z) for lifetime frames (0 or less: until soft deleted). */
 EffectEntry* effAkariSflushN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 size) {
     EffectEntry* effect;
     EffAkariSflushN64Work* work;

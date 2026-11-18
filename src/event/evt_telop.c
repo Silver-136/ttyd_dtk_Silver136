@@ -108,6 +108,11 @@ USER_FUNC(evt_telop_entry) {
     return EVT_RETURN_BLOCK;
 }
 
+/**
+ * Draws the area name banner: its texture twice (a dark offset shadow, then white) at the banner's fade alpha plus a
+ * randomly offset second texture, and the area's name (msg_tbl, "???" for none) centred on it, squeezed to fit outside
+ * Japanese.
+ */
 static void telop(CameraId cameraId, void* param) {
     GXTexObj texObj;
     Mtx mtx;

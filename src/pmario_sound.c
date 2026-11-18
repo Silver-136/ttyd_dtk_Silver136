@@ -9064,8 +9064,10 @@ static s32 roundi(f32 x) {
     }
 }
 
-// Angle of the vector (x2 - x1, y2 - y1) in degrees: 0 toward -y, 90 toward +x, 180 toward +y, 270 toward -x. The
-// ratio of the smaller to the larger component, times 45, is corrected by angleABTBL.
+/**
+ * Angle of the vector (x2 - x1, y2 - y1) in degrees: 0 toward -y, 90 toward +x, 180 toward +y, 270 toward -x. The
+ * ratio of the smaller to the larger component, times 45, is corrected by angleABTBL.
+ */
 static f32 angleABf(f32 x1, f32 y1, f32 x2, f32 y2) {
     f32 xdiff, ydiff;
     f32 xabs, yabs;
@@ -9678,6 +9680,7 @@ static void psndBGM_vol(s32 id, u8 vol) {
     }
 }
 
+/** Sets the playback frequency of BGM channel id when it plays a stream; song BGM is left alone. */
 void psndBGM_rate(s32 id, u16 rate) {
     PaperSoundBGM* bgm = &psbgm[id & 0xF];
     SoundBGMEntry* entry;
@@ -10229,6 +10232,12 @@ BOOL psndBGMOff(u32 flags) {
     return psndBGMOff_f_d(flags, 1000, FALSE);
 }
 
+/**
+ * Stops BGM channel flags & 0xF, or fades it out (PSND_FADEOUT), pauses it (PSND_PAUSE) or dips it to the silent_tbl
+ * volume of bits 12-15 (PSND_SILENT) over fadetime ms. Returns FALSE for an empty channel and, unless force is set (JP
+ * and later), for the time-bomb BGM during STG2_23 and, in chapter 3 while channel 0 plays KUPPA2, for anything but the
+ * battle win jingle.
+ */
 BOOL psndBGMOff_f_d(s32 flags, u32 fadetime, u32 force) {
     PaperSoundBGM* bgm = &psbgm[flags & 0xF];
     s32 silent = silent_tbl[(flags >> 12) & 0xF];
@@ -10641,6 +10650,12 @@ sgfound:
     psnd.sfxDelay = 0;
 }
 
+/**
+ * Common body of the psndSFXOn family: puts effect name in a free one of the 40 effect slots (else in one of a
+ * lower-priority effect, which it stops), with volume vol (0xFF: 0x7F), pan (0xFF: the list's), pitch ms of extra delay
+ * and pos (3D unless posOnly). Returns the slot with the play serial from bit 8, or -1 (unknown effect, no slot, or
+ * sounds off without ignoreSfxOff).
+ */
 static s32 __psndSFXOn(const char* name, u8 vol, u8 pan, u16 pitch, Vec* pos, u32 posOnly, u16 dist, s32 ignoreSfxOff) {
     s32 sid;
     s32 k;
@@ -10761,6 +10776,7 @@ static s32 __psndSFXOn(const char* name, u8 vol, u8 pan, u16 pitch, Vec* pos, u3
     return idx;
 }
 
+/** psndSFXOn that plays even while sound effects are off (PSND_FLAG_NO_SFX). */
 s32 psndSFXOn_(const char* name) {
     return __psndSFXOn(name, 0xFF, 0xFF, 0, NULL, 0, 0x10, 1);
 }
@@ -11623,6 +11639,10 @@ BOOL psndENVOff(u32 flags) {
     return psndENVOff_f_d(flags, 1000, 0);
 }
 
+/**
+ * Stops environment channel flags & 0xF, or fades it out, pauses it or dips it by the flags as psndBGMOff_f_d does;
+ * FALSE when the channel has no environment.
+ */
 BOOL psndENVOff_f_d(u32 flags, u32 fadetime, s32 unused) {
     s32 silent = silent_tbl[(flags >> 12) & 0xF];
     PaperSoundFade* fade;

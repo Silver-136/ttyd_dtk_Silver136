@@ -66,6 +66,7 @@ static TEXPalette* icon_tpl;
 static void iconDisp(CameraId camId, void* param);
 static void iconGX(Mtx mtx, IconEntry* entry);
 
+/** The battle (work[1]) or field (work[0]) icon work, by gp->inBattle. */
 static inline IconWork* iconGetWork(void) {
     return gp->inBattle ? &work[1] : &work[0];
 }

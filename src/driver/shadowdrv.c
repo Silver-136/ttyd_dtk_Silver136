@@ -877,6 +877,10 @@ static void cylinderShadowDraw(CameraId cameraId, void* param) {
     }
 }
 
+/**
+ * Adds a character shadow (type cylinder) of size `size` at (x, y, z) for this frame on the 3D camera, with the default
+ * sizeY and mode and, when defaultEnabled is set, ground placement; returns its id.
+ */
 s32 shadowEntry(f32 x, f32 y, f32 z, f32 size) {
     // FAKE: unused: a stand-in for the (Vec){x, y, z} template of the stripped shadowEntryAllSetting (JP demo map:
     // UNUSED, 0xd4, just before shadowEntry), whose body is not known. The map's five Vec templates of these
@@ -1053,6 +1057,9 @@ void shadowSetCamId(s32 id, s32 camId) {
     entry->camId = camId;
 }
 
+/**
+ * Turns ground placement (SHADOW_ENTRY_GROUND: the shadow drops to the floor found below it) on or off for shadow id.
+ */
 void shadowSetCollision(s32 id, BOOL enable) {
     ShadowEntry* e = &cswp->entries[id];
 

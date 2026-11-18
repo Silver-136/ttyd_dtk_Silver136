@@ -316,6 +316,10 @@ void effTexSetup(void) {
     effTexSetupN64();
 }
 
+/**
+ * Fills obj with effect texture id: ids below EFF_NTEX come from effect.tpl, higher ids from the language's
+ * effect_<lang>.tpl (id - EFF_NTEX). Until the file is loaded, obj gets a blank 1x1 I4 texture.
+ */
 void effGetTexObj(s32 id, GXTexObj* obj) {
     if (id < EFF_NTEX) { // number of images in effect.tpl
         if (!wp->texLoaded) {
@@ -391,6 +395,11 @@ void effSetName(EffectEntry* effect, const char* name) {
     strcpy(effect->name, name);
 }
 
+/**
+ * Once per frame: runs the callback of every active effect of the current mode (battle effects during a battle, field
+ * effects outside one). When the game language has changed, frees the language texture file and, once fileAsyncf no
+ * longer returns NULL, takes effect_<lang>.tpl for the new language.
+ */
 void effMain(void) {
     const char *dvdroot, *prefix;
     int i;

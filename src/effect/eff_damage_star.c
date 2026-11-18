@@ -401,7 +401,7 @@ static void effDamageStarMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&calcPos), DISP_MODE_CUSTOM_MID, effDamageStarDisp, effect);
 }
 
-// One textured square of half-size h, u = horizontal texture repeat.
+/** One textured square of half-size h, u = horizontal texture repeat. */
 // Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
 void polyRectangle(f32 h, f32 u) {
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);

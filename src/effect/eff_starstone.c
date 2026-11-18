@@ -339,6 +339,7 @@ static u8* color_tbl[] = { diamond_1_color0_tbl, diamond_2_color0_tbl, diamond_3
     GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_A0, GX_CA_APREV, GX_CA_ZERO);        \
     GXSetTevColor(GX_TEVREG0, (GXColor){(w)->r, (w)->g, (w)->b, (w)->a});
 
+/** Blend setup of the star stone's passes: alpha blending, z test without z writes, no alpha test. */
 static inline void starStoneBlendState(void) {
     GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
     GXSetZCompLoc(GX_TRUE);

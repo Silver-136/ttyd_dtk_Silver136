@@ -80,6 +80,7 @@ static EVT_BEGIN(evt_shake)
 EVT_END()
 
 #if VERSION < VERSION_US
+/** TRUE when the game language is Japanese (versions before US). */
 static inline BOOL isJapanese(void) {
     return !gp->language;
 }

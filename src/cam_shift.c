@@ -22,6 +22,9 @@ static CamShiftWork work;
  */
 static CamShiftWork* wp = &work;
 
+/**
+ * Resets the camera shift to no lead, with its default stick threshold (300), top speed (3) and acceleration (0.002).
+ */
 void camShiftInit(void) {
     wp->current = 0.0f;
     wp->target = 0.0f;
@@ -35,6 +38,11 @@ void camShiftInit(void) {
     wp->lastZ = 0.0f;
 }
 
+/**
+ * Updates the sideways camera lead from Mario's horizontal stick and stores it in *out: holding the stick one way while
+ * Mario moves sets the target to the camera road's shift rate that way, and the lead eases toward it at a limited speed
+ * while the stick is held. CAMERA_FLAG_ROAD_SHIFT_OFF brings it back to 0.
+ */
 void camShiftMain(CameraEntry* camera, MarioWork* mario, f32* out) {
     f32 shiftRate;
     f32 stick;

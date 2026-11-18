@@ -251,6 +251,10 @@ static void effKissMain(EffectEntry* effect) {
     }
 }
 
+/**
+ * GX setup of the kiss quads: one TEV stage with the material colour and the texture alpha times the material alpha,
+ * direct positions and texture coordinates, no culling.
+ */
 static inline void effKissGXSetup(void) {
     GXSetNumChans(1);
     GXSetChanCtrl(GX_COLOR0A0, GX_DISABLE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);

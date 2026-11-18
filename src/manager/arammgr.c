@@ -116,6 +116,7 @@ static void aramMgrGarbage(void) {
     wp->nextAddr = addr;
 }
 
+/** ARQ callback when a copy into ARAM ends: marks the entry of that request ARAM_FLAG_IN_ARAM. */
 static void arqCallbackToAram(u32 request) {
     ARAMEntry* entry;
 
@@ -181,6 +182,10 @@ ARAMEntry* aramMgrToAram(void* src, u32 size) {
     return entry;
 }
 
+/**
+ * ARQ callback when a copy back to main memory ends: marks the entry of that request ARAM_FLAG_IN_MRAM and
+ * ARAM_FLAG_FREE and invalidates the data and instruction caches over its destination.
+ */
 static void arqCallbackToMram(u32 request) {
     ARAMEntry* entry;
 

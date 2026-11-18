@@ -312,6 +312,7 @@ static BOOL koopaRunFlag;
 //.bss
 static MapObjectWork work[MAX_MOBJ_WORK];
 
+/** The battle (work[1]) or field (work[0]) map object work, by inBattle. */
 static inline MapObjectWork* mobjGetWorkFlag(BOOL inBattle) {
     return inBattle ? &work[1] : &work[0];
 }
@@ -1259,6 +1260,11 @@ MapObjectEntry* mobjNearDistCheck(f32 x, f32 y, f32 z, f32 minMagnitude) {
     return ret;
 }
 #endif
+/**
+ * Returns the nearest active map object within minMagnitude of (x, y, z) whose animation name is in the NULL-terminated
+ * list names, or NULL. Treasure chests only count while closed and a MOBJ_KururinFloor only while its item is still
+ * there.
+ */
 MapObjectEntry* mobjNearDistCheck2(f32 x, f32 y, f32 z, f32 minMagnitude, char** names) {
     int entryCount;
     Vec pos;

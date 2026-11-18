@@ -188,6 +188,7 @@ s32 kpaGetStageType(void) {
 
 #define JUMP_PARAM(m, i) ((&(m)->jumpVelocityY)[i]) // jumpVelocityY..jumpSnapY as f32[4]
 
+/** Sets mp's jump parameters: y velocity, acceleration, jerk and snap. */
 static inline void kpaSetJumpParams(MarioWork* mp, f32 velocityY, f32 accelerationY, f32 jerkY, f32 snapY) {
     mp->jumpVelocityY = velocityY;
     mp->jumpAccelerationY = accelerationY;

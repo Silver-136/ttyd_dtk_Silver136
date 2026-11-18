@@ -522,6 +522,11 @@ inc:
     return infoId;
 }
 
+/**
+ * Scans the "<prefix>_NNNN" messages like uranaisi_data_make_next and keeps those whose story point is not past
+ * GSW_STORY_PROGRESS and whose Star Piece (uranai_table_starpiece) Mario does not have yet. Type bit 0 set fills the
+ * list. Returns the count.
+ */
 s32 uranaisi_data_make_starpiece(const char* prefix, s32 type) {
     UranaiWork* wp = &_udt;
     char label[64];
@@ -584,6 +589,7 @@ s32 uranaisi_data_make_starpiece(const char* prefix, s32 type) {
     return count;
 }
 
+/** uranaisi_data_make_starpiece for the Shine Sprite fortunes (uranai_table_supercoin). */
 s32 uranaisi_data_make_supercoin(const char* prefix, s32 type) {
     UranaiWork* wp = &_udt;
     char label[64];

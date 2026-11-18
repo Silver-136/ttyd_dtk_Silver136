@@ -964,6 +964,9 @@ void JUTFontSetup(u16 font) {
 }
 
 #if VERSION < VERSION_US
+/**
+ * Frees the loaded font file, so the next JUTFontSetup loads it again (the ending's language switch); only before US.
+ */
 void JUTFont_Free(void) {
     if (pfh) {
         __memFree(HEAP_DEFAULT, pfh);

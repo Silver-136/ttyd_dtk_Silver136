@@ -143,6 +143,11 @@ static f32 ABCtoAngleY(f32 nx, f32 ny, f32 nz) {
     return angleABf(0.0f, 0.0f, sqrtf(nx * nx + nz * nz), -ny);
 }
 
+/**
+ * Bowser's floor probe for mario_hit: casts rays down from three points (seven at level 3) to range below his feet,
+ * ignoring floors steeper than 50 degrees; a floor 2 or more below him gives the drop in *outDepth instead. Returns the
+ * last floor hit with its height in *outY (else his own y) and records each probe's hit for riding.
+ */
 HitEntry* kpaSearchGround(f32 range, f32* outY, f32* outDepth, f32* outAng) {
     s32 n, i;
     MarioWork* m;

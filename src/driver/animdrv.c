@@ -1064,6 +1064,7 @@ void animPoseSetMaterialLightFlagOff(s32 poseId, u32 mask) {
     pose->materialLightFlag &= ~mask;
 }
 
+/** Sets pose poseId's material colour (materialColor), the event colour its material flags can apply. */
 void animPoseSetMaterialEvtColor(s32 poseId, GXColor color) {
     AnimationPose* pose = &wp->poses[poseId];
     pose->materialColor = color;
@@ -3808,6 +3809,10 @@ BOOL animPoseTestXLU(s32 poseId) {
     return (animPoseGetAnimBaseDataPtr(poseId)->flags >> 3) & 1;
 }
 
+/**
+ * Evaluates all groups of pose's animation under matrix: turned by rotY degrees about y (not for paper poses,
+ * ANIM_POSE_FLAG_PERA) and scaled by scale, loaded as the GX model matrix.
+ */
 // Original name and size (0x120) from the JP demo map (UNUSED there: every call is inlined).
 void _animPoseEvalMtx(AnimationPose* pose, Mtx matrix, f32 rotY, f32 scale) {
     Mtx tmp;

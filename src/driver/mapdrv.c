@@ -133,6 +133,7 @@ static void mapGetJointsSub(MapFileJoint* joint, s32* numJoints) {
     }
 }
 
+/** Counts joint and all joints below it (children and their siblings); 0 for NULL. */
 s32 mapGetJoints(MapFileJoint* joint) {
     s32 numJoints;
 
@@ -635,6 +636,10 @@ MapEntryAnimData* mapSearchAnmObj(const char* animName) {
     return NULL;
 }
 
+/**
+ * Reports on map animation animName: *valid is TRUE once it has ended (also when no animation has that name) and
+ * *remainingMs is the time it has left in milliseconds (0 for an unknown name).
+ */
 void mapCheckAnimation(const char* animName, BOOL* valid, f32* remainingMs) {
     MapAnim* anim = mapSearchAnmObj_inl(animName);
 
@@ -742,6 +747,7 @@ void mapEntryAnimation(BOOL group) {
     }
 }
 
+/** Does nothing (an empty body). */
 // Original name and size (0x4: a bare return) from the JP demo map (UNUSED there: its one caller, the script
 // command evt_map_delanim, is unused too); evt_map_delanim's size shows the one argument it passes.
 void mapDeleteAnimation(const char* name) {
@@ -3584,6 +3590,10 @@ MapFileJoint* mapSearchDmdJoint(MapFileJoint* joint, const char* name) {
     return mapSearchDmdJointSub2(joint, name, "|");
 }
 
+/**
+ * Returns the data of the material called name from the material name tables of the active group's maps, or NULL; the
+ * search stops at the first map without such a table.
+ */
 // Original name and size (0xb8) from the JP demo map (UNUSED there: every call is inlined).
 MapMaterial* mapSearchDmdMaterial(const char* name) {
 #if VERSION <= VERSION_DEMO_JP
@@ -3645,6 +3655,10 @@ MapObject* mapGetMapObj(const char* name) {
     return NULL;
 }
 
+/**
+ * Sets flag bits flags on the map object name. An unknown name is recorded in the map error ring (type 0, as
+ * mapErrorEntry does). JP and later leave MAP_OBJ_FLAG_DISPLAY_LIST off an object without a display list.
+ */
 void mapObjFlagOn(const char* name, u32 flags) {
     MapObject* obj = mapGetMapObj(name);
 
@@ -3665,6 +3679,7 @@ void mapObjFlagOn(const char* name, u32 flags) {
 #endif
 }
 
+/** Clears flag bits flags on the map object name; an unknown name is recorded in the map error ring (type 0). */
 void mapObjFlagOff(const char* name, u32 flags) {
     MapObject* obj = mapGetMapObj(name);
 

@@ -154,6 +154,11 @@ static void effFallDisp(CameraId cameraId, void* payload);
 static void effFallDispInseki(CameraId cameraId, void* payload);
 static void effFallDispWater(CameraId cameraId, void* payload);
 
+/**
+ * Spawns falling stage object type at (x, y, z) (types in the file note): type 0 drops num pieces scattered at random
+ * within width of the point, the other types one object; width, drop, the y rotation dir and duration are kept for
+ * effFallMain.
+ */
 EffectEntry* effFallEntry(s32 type, f32 x, f32 y, f32 z, f32 width, f32 drop, f32 dir, s32 num, s32 duration) {
     const char* sfxName;
     EffectEntry* effect;
@@ -300,6 +305,11 @@ EffectEntry* effFallEntry(s32 type, f32 x, f32 y, f32 z, f32 width, f32 drop, f3
     return effect;
 }
 
+/**
+ * Per frame: moves each falling object of the effect's type through its states (falling, landing with its sound,
+ * bouncing or splashing; some impacts shake the camera with a smoke puff). A soft delete releases the poses, stops the
+ * sounds and deletes the effect at once.
+ */
 // The seven sound names go through the integer word at each call, as in the original: in this loop the
 // conversion is hoisted, which is what the retail code shows (see sfx_name_word.h).
 static void effFallMain(EffectEntry* effect) {

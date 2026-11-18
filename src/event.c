@@ -2218,6 +2218,7 @@ static void stg6_33_init(void) {
     pouchRemoveItem(ITEM_STATION_KEY_0x19);
 }
 
+/** Story point STG6_34 "3 Blue Blocks" (eki_06): marks eki_03's posters 5 to 15 blown away. */
 static void stg6_34_init(void) {
     swSet(GSWF_ID(GSWF_EKI_03_POSTER_5_BLOWN_AWAY));
     swSet(GSWF_ID(GSWF_EKI_03_POSTER_6_BLOWN_AWAY));

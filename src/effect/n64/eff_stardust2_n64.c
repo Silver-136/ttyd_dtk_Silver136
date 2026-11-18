@@ -78,6 +78,10 @@ static effN64Vtx size8x8_tex22x22_vtx[] = {
     {-8, 8, 0, 4928, 704, 0, 0, 0, 0xFF},
 };
 
+/**
+ * Spawns count sparkles at (x, y, z) living lifetime frames, spread evenly round a circle (turned at random for types
+ * above 1), with speeds from (vx, vy); type 6 is type 3 with the work flag set.
+ */
 EffectEntry* effStardust2N64Entry(s32 type, s32 count, s32 lifetime, f32 x, f32 y, f32 z, f32 vx, f32 vy) {
     s32 n;
     EffectEntry* effect;

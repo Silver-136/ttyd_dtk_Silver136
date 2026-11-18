@@ -205,6 +205,7 @@ void peachTransformOff(void) {
 /** Called by marioSetCharMode when the player becomes Peach; does nothing. */
 void peachPreInit(void) {}
 
+/** Does nothing (an empty body). */
 // Original name and size (0x4: a bare return) from the JP demo map (UNUSED there: nothing calls it); empty like
 // peachPreInit, which the map lists right before it.
 void peachPostClear(void) {}

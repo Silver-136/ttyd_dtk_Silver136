@@ -121,7 +121,7 @@ static f32 chuchu_dt[] = { 0.0f, 1.0f, 1.0f, -0.169270828f, 0.847395837f, 0.7859
 
 // work->npc holds an NpcEntry* or a negative FUKIDASHI_* speaker id, so it is compared as a signed EvtWord.
 
-// Sets work->position to origin + base, moved (16 + size) along the rotated y axis.
+/** Sets work->position to origin + base, moved (16 + size) along the rotated y axis. */
 static inline void fukidashiSetPos(EffFukidashiWork* work, Mtx rot, Vec* origin) {
     work->position.x = rot[0][1] * (16.0f + work->size) + (origin->x + work->base.x);
     work->position.y = rot[1][1] * (16.0f + work->size) + (origin->y + work->base.y);

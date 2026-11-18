@@ -181,6 +181,7 @@ OSTime e3GetTime(void) {
     return wp->initTime;
 }
 
+/** Alarm callback of the kiosk idle timer: sets GW_FLAG_E3_TIMEOUT. */
 static void alarm_handler(OSAlarm* alarm, OSContext* context) {
     gp->flags |= GW_FLAG_E3_TIMEOUT;
 }
@@ -986,6 +987,10 @@ static void e3DispShadow(f32 x, f32 y, f32 z) {
     GXTexCoord2f32(1.0f, 0.0f);
 }
 #else
+/**
+ * Draws the PRESS START text centred at (x, y) at alpha `alpha`, its colour scrolled through a gradient texture (the
+ * PAL demo picks the text by language).
+ */
 // seq_title.c has its own copy (global there from US on)
 static void pressStartGX(s32 alpha, f32 x, f32 y) {
     CameraEntry* camera = camGetCurPtr();

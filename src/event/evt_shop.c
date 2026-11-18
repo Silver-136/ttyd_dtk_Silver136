@@ -132,6 +132,10 @@ EvtWord shopper_talk_evt[];
 EvtWord unkeep_evt[];
 extern u16 point_disp_icons[];
 
+/**
+ * Draw callback of the shop's name window: the name of the item under the cursor at the top of the screen (once the
+ * window has opened) and each unsold item's price above its map object.
+ */
 static void name_disp(WinMgrEntry* entry) {
     ShopWork* wp = _wp;
     const char* name;

@@ -60,6 +60,10 @@ static void effKemuri11Main(EffectEntry* effect);
 static void effKemuri11Disp(CameraId cameraId, EffectEntry* effect);
 static void main_dl(EffectEntry* effect, Mtx camMtx);
 
+/**
+ * Spawns smoke effect 11 at (x, y, z): types 0-5 become the internal patterns 3, 2, 4, 5, 6 and 7 (other types 5), with
+ * three puffs for patterns 2 and 5 and two for the others.
+ */
 EffectEntry* effKemuri11N64Entry(s32 type, f32 x, f32 y, f32 z) {
     EffectEntry* effect;
     EffKemuri11N64Work* work;

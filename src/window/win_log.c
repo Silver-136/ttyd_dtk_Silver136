@@ -1750,6 +1750,7 @@ static void monoshiriGX(WindowWork* w, f32 x, f32 y) {
 #endif
 }
 
+/** Allocates a Tattle card for unit kind id from the map heap, to slide in to (x, y) from off screen (500, -300). */
 MonosiriWork* monosiriInit(s32 id, f32 x, f32 y) {
     MonosiriWork* m = _mapAlloc(sizeof(MonosiriWork));
     memset(m, 0, sizeof(MonosiriWork));

@@ -70,6 +70,10 @@ void windowTexSetup(void) {
     }
 }
 
+/**
+ * Loads the window texture file name into winTpl, from the startup archive when it holds it, else from the disc (a
+ * synchronous read), and unpacks it.
+ */
 void windowLoadTpl(const char* name) {
     DVDEntry* entry;
     u32 size;
@@ -1178,6 +1182,7 @@ void windowDispGX2_Waku_col(Mtx mtx, u16 gxTexMapID, GXColor color, f32 x, f32 y
     }
 }
 
+/** Nonzero while window id is busy (WINDOW_FLAG_BUSY); scripts wait on it. */
 s32 windowCheckID(s32 id) {
     return windowGetPointer(id)->flags & WINDOW_FLAG_BUSY;
 }

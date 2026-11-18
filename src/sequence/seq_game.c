@@ -78,6 +78,7 @@ void seq_gameMain(SequenceWork* wp) {
     }
 }
 
+/** Exit function of the game sequence: clears GW_FLAG_NO_ENTRANCE. */
 void seq_gameExit(SequenceWork* wp) {
     gp->flags &= ~GW_FLAG_NO_ENTRANCE;
 }

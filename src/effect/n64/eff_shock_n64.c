@@ -117,6 +117,10 @@ static effN64Vtx testsrc_shock_v[] = {
 static void effShockMain(EffectEntry* effect);
 static void effShockDisp(CameraId cameraId, void* param);
 
+/**
+ * Spawns a shock flash at (x, y, z) living 30 frames, yellow (green for type 2); half of a and half of b are kept as
+ * its two offsets.
+ */
 EffectEntry* effShockN64Entry(s32 type, f32 x, f32 y, f32 z, f32 a, f32 b) {
     EffectEntry* effect;
     EffShockN64Work* w;

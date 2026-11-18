@@ -1815,6 +1815,10 @@ s32 evt_debug_msg_clear(EventEntry* entry) { // 114
     return EVT_RETURN_DONE;
 }
 
+/**
+ * DEBUG_PUT_REG(reg): formats the kind and value of variable reg (address, float, a flag or work word with its index)
+ * into a static buffer, which nothing prints.
+ */
 s32 evt_debug_put_reg(EventEntry* entry) { // 115
     static char str[0x100];
     EvtWord* args;

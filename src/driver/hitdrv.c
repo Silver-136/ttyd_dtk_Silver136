@@ -52,6 +52,11 @@ void hitReInit(void) {
     }
 }
 
+/**
+ * Sets up the next free collision object of map mapIndex for joint: local and world matrices from the joint's transform
+ * and parentMtx, its centre (the middle of its bounding box, or its translation for a joint without parts), bounding
+ * radius and triangle list. Also widens the joint's bounding box by 0.1 on every side.
+ */
 static HitEntry* _hitEnt(MapFileJoint* joint, HitEntry* parent, Mtx parentMtx, s32 mapIndex) {
     MapWork* wp = mapGetWork();
     HitEntry* hit = wp->entries[mapIndex].hitEntries;
@@ -1050,6 +1055,11 @@ HitEntry* hitCheckVecFilter(HitCheckQuery* query, HitFilterCallback callback) {
 #endif
 }
 
+/**
+ * Casts a ray from (x, y, z) in direction (nx, ny, nz) up to *distance, accepting only the objects callback passes (all
+ * when NULL). On a hit stores the distance, hit point and normal through the pointers and returns the object; returns
+ * NULL and leaves them unchanged otherwise.
+ */
 HitEntry* hitCheckFilter(HitFilterCallback callback, f32 x, f32 y, f32 z, f32 nx, f32 ny, f32 nz, f32* hitX,
                          f32* hitY, f32* hitZ, f32* distance, f32* hitNX, f32* hitNY, f32* hitNZ) {
     HitCheckQuery temp;
@@ -1178,6 +1188,7 @@ static BOOL chkFilterAttr(HitCheckQuery* query, HitEntry* entry) {
     return (entry->attributes & query->user0) == 0;
 }
 
+/** hitCheckFilter with a filter that skips collision objects having any of the attribute bits user0. */
 HitEntry* hitCheckAttr(s32 user0, f32 x, f32 y, f32 z, f32 nx, f32 ny, f32 nz, f32* hitX, f32* hitY, f32* hitZ,
                        f32* distance, f32* hitNX, f32* hitNY, f32* hitNZ) {
     HitCheckQuery temp;
@@ -1217,6 +1228,7 @@ static BOOL chkFilterAttr2(HitCheckQuery* query, HitEntry* entry) {
     return ret;
 }
 
+/** hitCheckAttr with a second mask: also accepts objects that have any of the attribute bits user1. */
 // Original name and size (0x138) from the JP demo map (UNUSED there). Body: hitCheckAttr with a second mask,
 // rebuilt from it; the size and its two Vec templates (map UNUSED .rodata @942/@944) fit, and user1 second is the
 // parameter order that fits the size.
@@ -1245,6 +1257,12 @@ HitEntry* hitCheckAttrOnly(s32 user0, s32 user1, f32 x, f32 y, f32 z, f32 nx, f3
     return entry;
 }
 
+/**
+ * Finds the map-object collision (HIT_ATTR_MOBJ, with parts, not off or deleted) closest to (x, y, z) whose bounding
+ * sphere comes within distance, filtered by callback when given. Returns it only when a ray from the point toward its
+ * centre hits one of its triangles within distance (JP and later return it at once when the point is within half its
+ * radius); otherwise NULL.
+ */
 HitEntry* hitCheckSphereFilter(HitFilterCallback callback, f32 x, f32 y, f32 z,
                                f32 distance) {
     MapWork* wp = mapGetWork();

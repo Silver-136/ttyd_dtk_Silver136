@@ -68,6 +68,7 @@ WinMgrDesc itemdrv_window_desc[4] = {
     {0, 0, 8, -175, 120, 350, 42, {0xE1, 0xD7, 0x9B, 0xFF}, NULL, winNameDisp2},
 };
 
+/** The battle (work[1]) or field (work[0]) item work, by gp->inBattle. */
 // Always inlined: the symbol map has no itemGetWork function.
 static inline ItemWork* itemGetWork(void) {
     return gp->inBattle ? &work[1] : &work[0];
@@ -2147,16 +2148,19 @@ u16 itemFlag(ItemEntry* entry, u16 flags) {
     return entry->flags & flags;
 }
 
+/** Sets flags2 bits (ItemEntry_Flags2) on an item. */
 void itemStatusOn(ItemEntry* entry, u32 flags) {
     entry->flags2 |= flags;
 }
 
+/** Clears flags2 bits on an item. */
 // Original name and size (0x10) from the JP demo map (UNUSED there: nothing calls it); itemStatusOn's counterpart
 // in the form of itemFlagOff.
 void itemStatusOff(ItemEntry* entry, u32 flags) {
     entry->flags2 &= ~flags;
 }
 
+/** Returns which of the given flags2 bits are set on an item. */
 u32 itemStatus(ItemEntry* entry, u32 flags) {
     return entry->flags2 & flags;
 }

@@ -434,6 +434,11 @@ RomFontChar* searchRomFont(u16 code) {
     return table; // not found
 }
 
+/**
+ * Draws the printf-style message in the ROM font at (x, y), scaled by scale, in *color, one unit per pixel: a 24x24
+ * glyph per character advancing by its width, '\n' starting a line 24 lower. Shift-JIS double-byte codes are one glyph
+ * except when the ASCII font is active (US and later).
+ */
 void romFontPrintGX(f32 x, f32 y, f32 scale, GXColor* color, const char* msg, ...) {
     char buf[1024];
     Mtx mtx;

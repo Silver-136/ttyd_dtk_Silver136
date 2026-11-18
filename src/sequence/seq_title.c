@@ -81,6 +81,7 @@ void seq_titleMain(SequenceWork* work) {
 
 // Descriptive name (not in the symbol maps).
 #if VERSION >= VERSION_JP
+/** Returns the title sequence's debug flag (wp2->debug). Not in the early demos. */
 s32 getDebugMode(void) {
     return wp2->debug;
 }
@@ -517,6 +518,10 @@ static void disp2(CameraId cameraId, void* param) {
     GXSetViewport(vp[0], vp[1], vp[2], vp[3], vp[4], vp[5]);
 }
 
+/**
+ * Draws the PRESS START text centred at (x, y) at alpha `alpha`, its colour scrolled through a gradient texture (US and
+ * later pick the text by language).
+ */
 void pressStartGX(s32 alpha, f32 x, f32 y) {
     CameraEntry* camera = camGetCurPtr();
     GXTexObj startText, gradient;

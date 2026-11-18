@@ -1139,6 +1139,11 @@ USER_FUNC(evt_mobj_rideswitch_lightblue) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Main function of the red jump stands: being hit runs its event (lwData[0] 1 when Mario's fall started above the
+ * stand's position plus his height) with field battles off, plays the spring sound (with a random Mario voice, not for
+ * Bowser) and A_1; it goes back to S_1 once the event and the animation end.
+ */
 static s32 mobj_jumpstand_red(MapObjectEntry* mobj) {
     MarioWork* mario = marioGetPtr();
     EventEntry* ev;
@@ -1505,6 +1510,10 @@ USER_FUNC(evt_mobj_lv_blk) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Casts a ray straight down from 0.5 above map object m, as long as its fall speed plus 1; returns the collision object
+ * hit (as an EvtWord) or 0.
+ */
 // FAKE: the hit pointer is tested as a signed word (cmpwi); a pointer or BOOL test compiles to cmplwi
 // Original name and size (0x7c) from the JP demo map (UNUSED there: every call is inlined).
 EvtWord _mobj_check_ground(MapObjectEntry* m) {
@@ -1909,6 +1918,11 @@ static EVT_BEGIN(evt_lock_sound)
     RETURN
 EVT_END()
 
+/**
+ * Main function of a padlock: when checked, freezes Mario and the partner and runs its event; unless that cancels,
+ * takes the key (the first held key of a key list) or shows sys_no_key. An unlocked lock plays its sound, sets its
+ * flag, runs its second event, falls bouncing to the floor, blinks and is deleted.
+ */
 static s32 mobj_lock(MapObjectEntry* mobj) {
 #if VERSION >= VERSION_US
     s32 i;
@@ -2132,6 +2146,10 @@ static EVT_BEGIN(evt_box_sound3)
     RETURN
 EVT_END()
 
+/**
+ * Centres a chest map object's translation on its model's bounding box (the minimum z pushed out by a fifth of the box
+ * height) at height 0, enlarges its scale2 (y by 1.4, z by 1.2) and rebuilds its matrix.
+ */
 // Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
 void itemboxChgHitSize(MapObjectEntry* mobj) {
     AnimationPoseData* data = animPoseGetAnimBaseDataPtr(mobj->poseId);
@@ -2655,6 +2673,10 @@ static EVT_BEGIN(mobj_save_blk_sysevt)
     RETURN
 EVT_END()
 
+/**
+ * Main function of the save block: when hit, freezes Mario, plays the save sound and A_1 with the letterbox off; after
+ * the animation runs its event (if any), then the save system event, and gives control back once that ends.
+ */
 static s32 mobj_save_blk(MapObjectEntry* mobj) {
     switch (mobj->state) {
         case 0:
@@ -5474,6 +5496,11 @@ static EVT_BEGIN(kpa_move_to_toride)
     RETURN
 EVT_END()
 
+/**
+ * Main function of the goal pole: when Bowser touches it (at levels 0 and 1 only above height 25) it defeats every live
+ * 2D enemy, sets its flag and adds the bonus, runs kpa_pole with the score (levels 0 and 1) or kpa_pole_move (2 and 3),
+ * then kpa_move_to_toride, its second event and its final event.
+ */
 static s32 mobj_koopa_pole_evt(MapObjectEntry* mobj) {
     MarioWork* mario = marioGetPtr();
     s32 score;

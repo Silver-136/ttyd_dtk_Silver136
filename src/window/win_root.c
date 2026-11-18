@@ -1083,6 +1083,10 @@ void winKirinukiGX(WindowWork* wp, s32 type, f32 x, f32 y, f32 w, f32 h) {
 /** Local fabs on the __fabs intrinsic (math.h's inline), for nameTex and winSortTex below. */
 static inline double fabs(double x) { return __fabs(x); }
 
+/**
+ * Loads texture id of win.tpl into texture map 0 (linear filtering) with a texture matrix that maps a tw by th quad
+ * onto it.
+ */
 static inline void nameTex(WindowWork* wp, GXTexObj* obj, s32 id, Mtx mtx, f32 tw, f32 th) {
     TEXGetGXTexObjFromPalette((TEXPalette*)*wp->res->data, obj, id);
     GXInitTexObjLOD(obj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
@@ -3190,6 +3194,10 @@ static void winMailDisp(WindowWork* wp) {
 
 // Descriptive name (not in the symbol maps); placeholder unk_8014d5dc, JP 0x8014D5DC. See docs/NAME_PROVENANCE.md.
 #if VERSION >= VERSION_JP
+/**
+ * Draw callback (JP and later): copies the frame buffer into the window work's capture buffer (texBuf, RGB565), marks
+ * it valid and hides the map and the 3D camera.
+ */
 void winRootBgCaptureDisp(CameraId unused, void* param) {
     WindowWork* bg = param;
     GXSetTexCopySrc(0, 0, gp->fbWidth, gp->efbHeight);

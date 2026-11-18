@@ -263,6 +263,7 @@ static u32 boo_dl_2_31[] __attribute__((aligned(32))) = {0x98000389, 0x2504118A,
 /** Walk cycle of the Boos: which of the three Boo model frames to show on each of eight steps. */
 static u8 anime_data_walk[] = {1, 1, 2, 2, 1, 1, 0, 0};
 
+/** Sets the indexed position, normal, colour and texture coordinate arrays of the Boo model. */
 static inline void booSetArrays(void) {
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
@@ -427,6 +428,10 @@ static void effBoobooMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, 0.0f, DISP_MODE_OPAQUE, (DispCallback)effBoobooDisp, effect);
 }
 
+/**
+ * Loads N64 effect texture id into texture map 0 (through texObj) and sets one TEV stage: texture colour times vertex
+ * colour plus d, vertex alpha.
+ */
 static inline void booTexCommon(s32 id, GXTevColorArg d, GXTexObj* texObj) {
     effGetTexObjN64(id, texObj);
     GXLoadTexObj(texObj, GX_TEXMAP0);

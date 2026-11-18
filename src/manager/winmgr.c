@@ -337,6 +337,11 @@ void winMgrMain(void) {
     }
 }
 
+/**
+ * Runs one frame of window entry's open (state 1) or close (state 2) animation in its description's style: spin, fade
+ * or pop (WINMGR_SEQ_*). Sets WINMGR_FLAG_ANIMATING while one runs; closing hides the window and frees the slot of an
+ * auto-delete window.
+ */
 static void winMgrSeq(WinMgrEntry* entry) {
     entry->flags |= WINMGR_FLAG_ANIMATING;
     switch (entry->description->type) {
@@ -509,6 +514,7 @@ void winMgrDelete(s32 id) {
     wp->entries[id].flags &= ~WINMGR_FLAG_ACTIVE;
 }
 
+/** TRUE while window id's open or close animation runs (WINMGR_FLAG_ANIMATING). */
 BOOL winMgrAction(s32 id) {
     return (wp->entries[id].flags >> 2) & 1;
 }
@@ -974,6 +980,10 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL cancelOk) {
 
 // Descriptive name (not in the symbol maps); placeholder unk_80237a2c, JP 0x80237A2C. See docs/NAME_PROVENANCE.md.
 #if VERSION >= VERSION_JP
+/**
+ * qsort comparator for selection list items: by Star Piece price (PAL and the PAL demo: then by type order). Not in the
+ * early demos.
+ */
 // PAL and the PAL demo: equal prices fall back to the type order
 s32 select_comp_starpiece(const void* a, const void* b) {
     const WinMgrSelectItem* itemA = a;
@@ -1008,6 +1018,7 @@ s32 select_comp_starpiece(const void* a, const void* b) {
 
 // Descriptive name (not in the symbol maps); placeholder unk_802379e4, JP 0x802379E4. See docs/NAME_PROVENANCE.md.
 #if VERSION >= VERSION_JP
+/** qsort comparator for selection list items: by item type order. Not in the early demos. */
 s32 select_comp_type(const void* a, const void* b) {
     const WinMgrSelectItem* itemA = a;
     const WinMgrSelectItem* itemB = b;
@@ -1172,6 +1183,7 @@ s32 winMgrSelectOther(WinMgrSelect* sel, EventEntry* evt) {
     return 0;
 }
 
+/** Frees a selection list made by winMgrSelectEntry and its item array. */
 void winMgrSelectDelete(WinMgrSelect* sel) {
     WinMgrSelect* const s = sel;
     __memFree(HEAP_DEFAULT, s->items);
@@ -1180,11 +1192,18 @@ void winMgrSelectDelete(WinMgrSelect* sel) {
 
 // Descriptive name (not in the symbol maps); placeholder unk_80237448, JP 0x80237448. See docs/NAME_PROVENANCE.md.
 #if VERSION >= VERSION_JP
+/** Returns the cursor row of selection list sel. Not in the early demos. */
 s32 winMgrSelectGetCursor(WinMgrSelect* sel) {
     return sel->cursor;
 }
 #endif
 
+/**
+ * Main function of a selection list: opens its windows, then moves the cursor with the stick (wrapping on a fresh
+ * press, scrolling an eight-row view), confirms an enabled row with A and cancels with B when SELECT_CANCEL_OK is set;
+ * then closes and deletes its windows and sets SELECT_DONE. PAL and the PAL demo reset the help text when the cursor
+ * moves.
+ */
 static void select_main(WinMgrEntry* entry) {
     WinMgrSelect* sel = entry->param;
     s32 prev;
@@ -2128,6 +2147,10 @@ static void select_disp3(WinMgrEntry* entry) {
     }
 }
 
+/**
+ * Help window of a partner rank list: shows the help message named from help (helperr for a disabled row), lankup or
+ * lankdown by list type, the partner's rank (techLevel + 1) and its label, for the partner under the cursor.
+ */
 static void select_disp3_party(WinMgrEntry* entry) {
     WinMgrSelect* sel = entry->param;
     PouchData* pouch;
@@ -2156,6 +2179,10 @@ static void select_disp3_party(WinMgrEntry* entry) {
     }
 }
 
+/**
+ * Help window of Mario's stat list: shows the levelup or leveldown help of the stat under the cursor (helperr for a
+ * disabled row; JP and later helperr2 for a row over the maximum).
+ */
 static void select_disp3_mario(WinMgrEntry* entry) {
     WinMgrSelect* sel = entry->param;
     char buf[0x48];

@@ -34,6 +34,7 @@ static EVT_BEGIN(kpa_score_disp_evt)
     RETURN
 EVT_END()
 
+/** Draws the active score popups as half-size white text at their positions. */
 static void kpaScoreDisp(CameraId cameraId, void* param) {
     Mtx m;
     Mtx scale;

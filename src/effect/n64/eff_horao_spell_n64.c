@@ -151,6 +151,7 @@ static void effHoraoSpellMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effHoraoSpellDisp, effect);
 }
 
+/** Copies vertex `src` to `dst` and transforms its position by `mtx` (fast-cast s16 <-> f32 conversions). */
 static void vtx_copy(effN64Vtx* dst, effN64Vtx* src, Mtx mtx) {
     Vec v;
 

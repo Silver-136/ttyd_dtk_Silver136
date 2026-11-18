@@ -279,6 +279,10 @@ void camMain(void) {
     }
 }
 
+/**
+ * Sets camera's near and far planes from the eight corners of map 0's bounding box: the nearest and farthest corner in
+ * front of the camera (far at least 1). When a corner lies at or behind the camera plane, near becomes 1.
+ */
 static void camEvalNearFar(CameraEntry* camera) {
     MapWork* map;
     f32 m22;
@@ -442,6 +446,11 @@ void camSetCurNo(CameraId cameraId) {
     currentCamNo = cameraId;
 }
 
+/**
+ * Update callback of the main 3D camera; does nothing under camCtrlOff. In field mode it advances the two timed moves,
+ * follows Mario, runs the camera shift and camera road (when it has one) and builds the projection. In battle mode,
+ * during a battle, battleCameraMain moves it. Afterwards the second offscreen camera copies its view and projection.
+ */
 static void cam3dMain(CameraEntry* camera) {
     CameraParams work;
     CameraParams work2;

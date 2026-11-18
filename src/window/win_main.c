@@ -122,12 +122,14 @@ BOOL winCheck(void) {
     return FALSE;
 }
 
+/** Lets winMain open the pause menu again (clears WINDOW_FLAG_OPEN_DISABLE). */
 void winOpenEnable(void) {
     if (wp) {
         wp->flags &= ~WINDOW_FLAG_OPEN_DISABLE;
     }
 }
 
+/** Stops winMain from opening the pause menu (sets WINDOW_FLAG_OPEN_DISABLE). */
 void winOpenDisable(void) {
     if (wp) {
         wp->flags |= WINDOW_FLAG_OPEN_DISABLE;
@@ -1282,6 +1284,7 @@ void winFontSetLabel(Vec pos, Vec scale, GXColor color, const char* msg) {
 }
 
 #if VERSION < VERSION_US
+/** Draws the printf-style text at pos with scale, color and a character pitch of pitch. Only before US. */
 void winFontSetPitch(f32 pitch, Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
     char buf[0x400];
     va_list args;
@@ -1362,6 +1365,10 @@ void winTexSet(u32 textureId, Vec translate, Vec scale, GXColor color) {
 }
 #if VERSION >= VERSION_JP
 
+/**
+ * Draws texture textureId of the window textures (winTexTpl) on the 2D camera as a quad centred at translate, scale
+ * times its size, tinted color, with nearest filtering and alpha blending. JP and later.
+ */
 // Descriptive name (not in the symbol maps); placeholder unk_80177008, JP 0x80177008. See docs/NAME_PROVENANCE.md.
 void winTexSetNearest(u32 textureId, Vec translate, Vec scale, GXColor color) {
     Mtx trans;
@@ -1599,6 +1606,7 @@ void winIconSet(s32 iconId, Vec translate, Vec scale, GXColor color) {
     GXSetTevSwapMode(GX_TEVSTAGE2, GX_TEV_SWAP0, GX_TEV_SWAP0);
 }
 
+/** Does nothing (an empty body). */
 // Original name and size (0x4: a bare return) from the JP demo map (UNUSED there: nothing calls it); the empty
 // counterpart of winIconInit for the stripped winNumSet, which the map lists after it.
 void winNumInit(void) {

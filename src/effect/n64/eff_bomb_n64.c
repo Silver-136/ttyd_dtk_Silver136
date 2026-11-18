@@ -54,6 +54,10 @@ void effBombN64SetCamId(EffectEntry* effect, s32 camId) {
     ((EffBombN64Work*)effect->userdata)->camId = camId;
 }
 
+/**
+ * Spawns a bomb blast at (x, y, z) on the 3D camera for 60 frames: types 0-2 small to large, 3-5 the same sizes with
+ * the other smoke.
+ */
 EffectEntry* effBombN64Entry(s32 type, f32 x, f32 y, f32 z) {
     EffectEntry* effect;
     EffBombN64Work* work;

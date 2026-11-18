@@ -481,6 +481,11 @@ void seq_logoMain(SequenceWork* work) {
     }
 }
 
+/**
+ * Draw callback of the logo sequence: once its textures are loaded, sets the copy to the frame buffer for the current
+ * video mode and draws the current logo page (US and later by wp->page, earlier by wp->logoId), then restores the
+ * projection, viewport and scissor.
+ */
 static void logoDisp(CameraId camId, void* param) {
     GXRenderModeObj* rmode;
     f32 width, height, x, y;
