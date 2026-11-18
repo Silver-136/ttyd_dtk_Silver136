@@ -196,6 +196,10 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "S_1"},
 };
 
+/**
+ * Init event of the Spania: sets BATTLE_UNIT_FLAG_SOLID_MODEL, registers its wait and damage events and
+ * attack_event for both its attack and its confused action, then starts the wait event.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_OnUnitFlag, UNIT_ID_SELF, BATTLE_UNIT_FLAG_SOLID_MODEL)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))

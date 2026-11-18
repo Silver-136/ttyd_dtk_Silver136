@@ -178,6 +178,11 @@ static USER_FUNC(x_flag_wait) {
     return EVT_RETURN_BLOCK;
 }
 
+/**
+ * Draw callback of the two lecture button icons: draws each one without LECT_BUTTON_FLAG_HIDDEN on the 2D camera
+ * at its stored position and alpha (the nine stick icons, ICON_STICK_DOWN_LEFT to ICON_STICK_UP_RIGHT, 15 units
+ * lower in y).
+ */
 static void lecture_button_disp(CameraId camera, void* param) {
     s32 i;
 

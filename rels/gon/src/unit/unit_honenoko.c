@@ -305,6 +305,12 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Dead event of the Dull Bones: it spins for 48 frames with the death sounds, a smoke puff appears and the coins,
+ * experience and star points are paid out once (UNIT_WORK_REWARD_GIVEN); then it tips over and gives back an
+ * item it stole. With DAMAGE_RESULT_DEATH (for this undead unit only from fire or explosions) it is killed with
+ * KillUnit mode 0; otherwise it is only made inactive (mode KILL_UNIT_INACTIVE).
+ */
 static EVT_BEGIN(dead_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(0), 48)

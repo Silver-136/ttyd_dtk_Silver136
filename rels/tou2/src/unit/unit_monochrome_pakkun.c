@@ -338,6 +338,13 @@ static EVT_BEGIN(counter_damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Ceiling-fall event (registered by return_event while it hangs from the iron frame), run when the frame falls:
+ * it unregisters itself, sinks out of sight (PKF_E_4, SFX_ENM_PAKKUN_MOVE1, shadow shrinking), moves to the
+ * floor at its home x and pops back out of the ground with SFX_ENM_PAKKUN_MOVE2.
+ * It restores its ground hit, cursor, status-icon and kiss offsets, clears kCeiling, kShellTosslikeCannotTarget
+ * and kHammerlikeCannotTarget, and goes back to the ground pose table.
+ */
 static EVT_BEGIN(ceil_fall_ready_event)
     CALL(btlevtcmd_SetEventCeilFall, UNIT_ID_SELF, 0)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PAKKUN_MOVE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -372,6 +379,14 @@ static EVT_BEGIN(ceil_fall_ready_event)
     RETURN
 EVT_END()
 
+/**
+ * Sends the Pale Piranha back to a post after its bite or a counter: it sinks out of sight (shadow shrinking).
+ * While the arena's iron frame still exists (pakkun_ceil_exist) it picks at random between the floor and the
+ * frame; otherwise it takes the floor.
+ * On the floor it pops out of the ground at its home x with the ground offsets and pose table; on the frame it
+ * hangs at height 130 with kCeiling, kShellTosslikeCannotTarget and kHammerlikeCannotTarget, the ceiling pose
+ * table and ceil_fall_ready_event registered for when the frame falls.
+ */
 static EVT_BEGIN(return_event)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(pakkun_ceil_exist, LW(0))

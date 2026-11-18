@@ -359,6 +359,12 @@ static EVT_BEGIN(counter_damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Ceiling-fall event, registered by return_event while the Piranha Plant hangs from the stage's iron frame: it
+ * unregisters itself, hides (shadow shrinking), moves itself and its home to the floor (y 0) and comes back
+ * up with the floor hit offsets and pose table, kCeiling and the hammer and shell-toss cannot-target part
+ * attributes cleared.
+ */
 static EVT_BEGIN(ceil_fall_ready_event)
     CALL(btlevtcmd_SetEventCeilFall, UNIT_ID_SELF, 0)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PAKKUN_MOVE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -393,6 +399,12 @@ static EVT_BEGIN(ceil_fall_ready_event)
     RETURN
 EVT_END()
 
+/**
+ * Sends the Piranha Plant back: it ducks into the ground (shadow shrinking) and comes up again at its home x.
+ * While the stage's iron frame is still there (pakkun_ceil_exist) it picks at random between the floor (y 0)
+ * and hanging from the frame (y 130, kCeiling, kHammerlikeCannotTarget and kShellTosslikeCannotTarget,
+ * ceiling pose table and offsets, ceil_fall_ready_event registered); otherwise it always takes the floor.
+ */
 static EVT_BEGIN(return_event)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(pakkun_ceil_exist, LW(0))

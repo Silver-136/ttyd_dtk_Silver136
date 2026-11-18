@@ -52,7 +52,8 @@
 
 // Fan.flags
 enum {
-    FAN_FLAG_STAND_IN = 1, // the fan stands in for Mario or the champion (hidden, not counted; JP on: never knocked away)
+    FAN_FLAG_STAND_IN = 1, // the fan stands in for Mario or the champion (hidden, not counted; JP on: never knocked
+                           // away)
 };
 
 typedef struct Fan {

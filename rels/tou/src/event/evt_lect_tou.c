@@ -203,6 +203,11 @@ static USER_FUNC(x_flag_wait) {
     return EVT_RETURN_BLOCK;
 }
 
+/**
+ * 2D draw callback of the two lecture button icons (lbtn): draws each one without LECT_BUTTON_FLAG_HIDDEN at its
+ * position with its alpha; the nine stick icons (ICON_STICK_DOWN_LEFT to ICON_STICK_UP_RIGHT) are drawn with
+ * y lowered by 15.
+ */
 static void lecture_button_disp(CameraId camera, void* param) {
     s32 i;
 
@@ -792,6 +797,11 @@ static EVT_BEGIN(hammer_lv2_juyoitem_lecture_sub01)
     RETURN
 EVT_END()
 
+/**
+ * Super Hammer tutorial prompt, part 2: button 0 dimmed to alpha 128 with ICON_BUTTON_B_PRESSED, button 1 at full
+ * alpha; cycles button 1's icon through the eight stick directions (ICON_STICK_LEFT round to
+ * ICON_STICK_DOWN_LEFT) every 15 ms until the script is stopped.
+ */
 static EVT_BEGIN(hammer_lv2_juyoitem_lecture_sub02)
     CALL(lecture_button_set_alpha, 0, 128)
     CALL(lecture_button_set_alpha, 1, 255)

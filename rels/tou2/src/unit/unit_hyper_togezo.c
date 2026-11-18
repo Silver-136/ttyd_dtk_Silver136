@@ -446,6 +446,11 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Turn-over event (the Sky-Blue Spiny is flipped over): switches to the flipped defence, defence attribute,
+ * status-resistance, pose and data tables, sets UNIT_STATUS_FLAG_FLIPPED, clears kCounterTopSpiky and
+ * kCounterFrontSpiky, sets an over-turn count of 1, plays SFX_CONDITION_INSIDE and hops twice in place.
+ */
 static EVT_BEGIN(dmg_turn_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -467,6 +472,12 @@ static EVT_BEGIN(dmg_turn_event)
     RETURN
 EVT_END()
 
+/**
+ * Run by attack_event while the Sky-Blue Spiny is flipped: counts the over-turn count down and, while it is not
+ * zero, only starts the wait event. At zero it restores the upright defence, defence attribute, status-resistance,
+ * pose and data tables, clears UNIT_STATUS_FLAG_FLIPPED, turns kCounterTopSpiky and kCounterFrontSpiky back on,
+ * hops in place and starts the wait event.
+ */
 static EVT_BEGIN(wakeup_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)

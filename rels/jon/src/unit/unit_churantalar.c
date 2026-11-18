@@ -866,6 +866,13 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Resolves one web ball against target unit LW(3), part LW(4), with weapon LW(9); the web part is LW(7).
+ * Intangible, Lucky, Dodgy or a miss plays the target's avoid reaction (except intangible), lets the ball fly
+ * on (btlevtcmd_JumpPartsContinue) and hides it. A hit hides the ball and, in the chained attack (LW(10) = 1),
+ * sets the flag of this target in unit work 11 to 13 (the target pair found in unit work 5-7 and 8-10), then
+ * reads the defence action command result and deals the damage, with DAMAGE_RESULT_FINAL_HIT when LW(8) is 1.
+ */
 static EVT_BEGIN(damage_check_event_sub)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), 0, LW(0))
     SWITCH(LW(0))

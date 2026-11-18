@@ -332,6 +332,11 @@ static EVT_BEGIN(battle_entry_event)
     RETURN
 EVT_END()
 
+/**
+ * Init for Vivian: allocates her spare weapon, registers her wait, attack, damage, confusion and entry scripts,
+ * clears the Veil turns (VIVIAN_WORK_HIDE_TURNS) and SHADOW_TAIL_WORK_HOLD, spawns vivian_shadow_tail_event, sets
+ * her walk, run, dive and jump sounds and starts her wait event.
+ */
 static EVT_BEGIN(init_event)
     CALL(_vivian_make_extra_work_area)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
@@ -359,6 +364,11 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Veil's per-phase countdown: lowers VIVIAN_WORK_HIDE_TURNS by 1 and, when no turn is left, Mario and Vivian rise
+ * out of the shadow (battle_evt_majo_disp_on; kVeiled and the hidden attributes cleared) and walk back home, with
+ * an optional stylish.
+ */
 static EVT_BEGIN(vivian_hide_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, VIVIAN_WORK_HIDE_TURNS, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)

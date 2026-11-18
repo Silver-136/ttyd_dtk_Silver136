@@ -201,6 +201,11 @@ static USER_FUNC(x_flag_wait) {
     return EVT_RETURN_BLOCK;
 }
 
+/**
+ * Draw callback for the two lecture button icons: draws each one not flagged LECT_BUTTON_FLAG_HIDDEN on the 2D
+ * camera at its stored position and alpha; the nine stick icons (ICON_STICK_DOWN_LEFT to ICON_STICK_UP_RIGHT) are
+ * drawn 15 units lower in y.
+ */
 static void lecture_button_disp(CameraId camera, void* param) {
     s32 i;
 
@@ -983,6 +988,10 @@ EVT_BEGIN(roll_majin_lecture_init)
     RETURN
 EVT_END()
 
+/**
+ * Button-prompt loop for the roll lecture: dims button 1 (alpha 128, ICON_STICK_NEUTRAL) and flickers button 0
+ * between ICON_TRIGGER_R_PRESSED and ICON_TRIGGER_R every 300 ms.
+ */
 static EVT_BEGIN(roll_majin_lecture_sub01)
     CALL(lecture_button_set_alpha, 0, 255)
     CALL(lecture_button_set_alpha, 1, 128)
@@ -996,6 +1005,10 @@ static EVT_BEGIN(roll_majin_lecture_sub01)
     RETURN
 EVT_END()
 
+/**
+ * Button-prompt loop for the roll lecture: dims button 0 (ICON_TRIGGER_R_PRESSED) and turns button 1 through the
+ * eight stick directions, from ICON_STICK_LEFT clockwise to ICON_STICK_DOWN_LEFT, one every 15 ms.
+ */
 static EVT_BEGIN(roll_majin_lecture_sub02)
     CALL(lecture_button_set_alpha, 0, 128)
     CALL(lecture_button_set_alpha, 1, 255)

@@ -635,6 +635,13 @@ EVT_BEGIN(slit_majin_lecture_init)
     RETURN
 EVT_END()
 
+/**
+ * The Paper Mode lecture of the genie (ペラ魔人), run by gon_06 after he appears. He explains (stg1_gon_12_12 to
+ * 12_14) with flashes of light, then Mario practises: the R button icon blinks (ICON_TRIGGER_R and
+ * ICON_TRIGGER_R_PRESSED) while lect_slit_check watches for the paper form. Holding it for 180 frames passes;
+ * turning back sooner gets stg1_gon_12_15_1 and another try. After a pass he asks whether Mario understands
+ * (stg1_gon_12_15_yn): No gets stg1_gon_12_16 and the lesson repeats, Yes gets the farewell (stg1_gon_12_17).
+ */
 EVT_BEGIN(slit_majin_lecture)
     // Set up the lesson: the button prompt icon appears beside Mario and the genie floats in front of the
     // camera.

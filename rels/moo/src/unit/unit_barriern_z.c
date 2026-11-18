@@ -506,6 +506,13 @@ static Vec splineTableOut4_4[] = {
     {-25.0f, -25.0f, 0.0f},
 };
 
+/**
+ * Init event of the Z-Yux: installs its wait, unison phase, attack, damage and confusion events (the confusion
+ * event is the attack event too), sets BATTLE_UNIT_FLAG_FLOAT_CAPABLE and BATTLE_UNIT_FLAG_FLOAT_ACTIVE, sets
+ * the four satellite slots from UNIT_WORK_SATELLITE to -1 and spawns as many Mini-Z-Yux
+ * (entry_barriern_satellite) as UNIT_WORK_SATELLITE_COUNT says, placing them around it with
+ * battleGetBarriernSatelliteInitPos. Finally it calls outSplineTableSet with that count.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventUnisonPhase, UNIT_ID_SELF, PTR(unison_phase_event))
@@ -567,6 +574,10 @@ static EVT_BEGIN(barriern_dmg_first_attack_pos)
     RETURN
 EVT_END()
 
+/**
+ * Turns on the blur trail (kMotionBlur and a white blur with alpha 100) on the body part of every satellite the
+ * Z-Yux still has (the four slots from UNIT_WORK_SATELLITE that are not -1).
+ */
 static EVT_BEGIN(satellite_blur_on)
     SET_VALUE(LW(2), UNIT_WORK_SATELLITE)
     LOOP(4)

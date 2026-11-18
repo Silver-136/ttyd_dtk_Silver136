@@ -515,6 +515,12 @@ static EVT_BEGIN(dmg_avoid_counter_thorn_head_event)
     RETURN
 EVT_END()
 
+/**
+ * UNIT_DATA_DAMAGE_TURN_EVENT, run when a hit flips the Dark Koopatrol (DAMAGE_RESULT_FLIPPED): it lowers its hit
+ * offset and takes the flipped defence, defence attribute and status tables, the flipped pose table
+ * (pose_table_guard_turn when UNIT_WORK_GUARD is set) and data_table_turn, sets UNIT_STATUS_FLAG_FLIPPED, loses
+ * kCounterTopSpiky, sets the over-turn count to 2 and hops twice on its back with SFX_ENM_INSIDE1.
+ */
 static EVT_BEGIN(dmg_turn_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -544,6 +550,13 @@ static EVT_BEGIN(dmg_turn_event)
     RETURN
 EVT_END()
 
+/**
+ * Run by attack_event instead of attacking while the Dark Koopatrol is flipped: counts the over-turn count down
+ * and only starts the wait event while it is above 0.
+ * At 0 it restores the normal defence, defence attribute, status, pose and data tables, clears
+ * UNIT_STATUS_FLAG_FLIPPED, gets kCounterTopSpiky back, hops upright (S_1, SFX_ENM_INSIDE2), resets its
+ * hit offset and clears UNIT_WORK_GUARD.
+ */
 static EVT_BEGIN(wakeup_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)

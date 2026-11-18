@@ -277,6 +277,12 @@ static PoseSoundTiming pose_sound_timing_table[] = {
     {NULL, 0.0f, NULL, NULL, 0, POSE_SOUND_FLAG_PHASE_VOLUME},
 };
 
+/**
+ * Makes a ceiling-hanging Swooper let go: if kCeiling is set it clears it and sets kFloating, clears the
+ * held-item offset and the ceiling-fall event, switches to the normal pose table and walk pose, drops 30 units
+ * (its home 70), sets damage_event and the hit, cursor, kiss and status-icon offsets for the lowered body.
+ * Returns its home position in LW(0..2).
+ */
 static EVT_BEGIN(ceil_sky_event)
     CALL(btlevtcmd_CheckAttribute, UNIT_ID_SELF, kCeiling, LW(0))
     IF_INT_EQUAL(LW(0), 0)

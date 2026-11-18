@@ -138,6 +138,10 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/**
+ * Hit reaction: on earlier hits of a move it only wobbles the switch object (_rumble_switch); on the last hit
+ * (DAMAGE_RESULT_FINAL_HIT) it plays the stage's "switch_a" map animation and waits half a second.
+ */
 static EVT_BEGIN(damage_event)
     CALL(btlevtcmd_CheckDamageCode, UNIT_ID_SELF, DAMAGE_RESULT_FINAL_HIT, LW(0))
     IF_INT_EQUAL(LW(0), 0)

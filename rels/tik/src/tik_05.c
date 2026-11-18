@@ -396,7 +396,8 @@ static USER_FUNC(starstone_circle_link_func) {
 
 /** Script helper. Clears the shine-sound flag (bit 2) of the named Crystal Star effect to stop its shine sound. */
 static USER_FUNC(eff_starstone_sound_off) {
-    ((EffStarStoneWork*)effNameToPtr((const char*)evtGetValue(event, event->args[0]))->userdata)->flags &= ~STAR_STONE_FLAG_SHINE_SFX;
+    ((EffStarStoneWork*)effNameToPtr((const char*)evtGetValue(event, event->args[0]))->userdata)->flags &=
+        ~STAR_STONE_FLAG_SHINE_SFX;
     return EVT_RETURN_DONE;
 }
 

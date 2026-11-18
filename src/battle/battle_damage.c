@@ -325,6 +325,11 @@ void BattleDamageDirect(s32 unitId, BattleUnit* target, BattleUnitPart* part, s3
     BattleRunHitEvent(target, result);
 }
 
+/**
+ * Picks the Attack FX sound of a weapon with SPECIAL_ATTACK_FX: with several Attack FX badges equipped one of them
+ * is chosen at random, and its DAMAGE_RESULT_ATTACK_FX_* bit is added to *flags (when flags is not NULL) and
+ * returned with the other bits of *flags.
+ */
 static u32 BattleCheckPikkyoro(BattleWeapon* weapon, u32* flags) {
     BattleWork* wp = _battleWorkPointer;
     s32 table[5] = {0};
@@ -399,6 +404,18 @@ static u32 BattleCheckPikkyoro(BattleWeapon* weapon, u32* flags) {
     return result;
 }
 
+/**
+ * Computes the HP damage weapon deals to target's part. The base comes from the weapon's damage function; the
+ * attacker adds MAJINAI_POWER_UP (+3), Power Plus, P-Up D-Down, All or Nothing, Mega Rush and Power Rush (in the
+ * early demos only one of the two), Ice Power on parts weak to it, Charge, Huge and Attack Up, and loses P-Down
+ * D-Up, HP Drain, FP Drain, Tiny and Attack Down. The part's defence for the element is raised by Defend Plus,
+ * Damage Dodge (when guarding), the Defend command, Defense Up/Down, MAJINAI_DEFENCE_UP for Mario (+3) and the
+ * unit-work defence, and cleared by SPECIAL_PIERCE_DEFENSE. Then come the target's P-Up D-Down, the per-hit and
+ * per-target diminishing, the guard reduction, Ice Power against fire (in the early demos a defence bonus
+ * instead), P-Down D-Up, Double Pain, Last Stand and the defence attribute.
+ * An element the part absorbs sets DAMAGE_RESULT_ABSORBED and returns the heal amount as a negative number;
+ * the damage is zero when All or Nothing missed its command.
+ */
 static s32 BattleCalculateDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* part, BattleWeapon* weapon, u32* result, u32 flags) {
     u32 defaultResult;
     BattleWork* wp = _battleWorkPointer;
@@ -1468,6 +1485,11 @@ static s32 BattleSetStatusDamage(u32* result, BattleUnit* unit, BattleUnitPart* 
     return 1;
 }
 
+/**
+ * Tries every status the weapon can inflict on target (unless flags has DAMAGE_RESULT_NO_STATUS) and returns the
+ * result flags of those that took. Huge, Defense Up and Attack Up are skipped when they have neither turns nor
+ * strength.
+ */
 s32 BattleSetStatusDamageFromWeapon(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* part, BattleWeapon* weapon, u32 flags) {
     s32 rate;
     u32 i;
@@ -1589,6 +1611,10 @@ s32 BattlePreCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPar
     return 1;
 }
 
+/**
+ * Adds DAMAGE_RESULT_REVIVAL to *flags and returns 1 when the unit will be revived: Mario or a partner while the
+ * pouch holds a Life Shroom, or an enemy holding one.
+ */
 static s32 _checkDamageCode_EmergencyRevival(BattleUnit* unit, u32* flags) {
     s32 kind = unit->currentKind;
     if (kind == UNIT_MARIO) {

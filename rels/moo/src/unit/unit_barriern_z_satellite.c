@@ -183,6 +183,11 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/**
+ * Init event of the Mini-Z-Yux: installs its wait, unison phase, attack, damage and (default) confusion events,
+ * sets BATTLE_UNIT_FLAG_FLOAT_CAPABLE and BATTLE_UNIT_FLAG_FLOAT_ACTIVE (it floats with the bob) and starts the
+ * wait event.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventUnisonPhase, UNIT_ID_SELF, PTR(unison_phase_event))

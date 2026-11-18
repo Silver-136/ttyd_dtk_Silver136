@@ -393,6 +393,11 @@ static void effNanigaDisp2(CameraId cameraId, void* param) {
     animPoseDrawMtx(work->pose, mC, 3, 0.0f, 10.0f);
 }
 
+/**
+ * Draws the result as one icon 16 units below the effect, turned to the camera yaw: the chosen item's icon
+ * (ICON_ITEM_MYSTERY below state 4, a state this pass is never registered in). Registered in state 11 and later
+ * (state 11 waits until the pose has played 0.8 of its loop).
+ */
 static void effNanigaDisp3(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
     EffNanigaWork* work = effect->userdata;

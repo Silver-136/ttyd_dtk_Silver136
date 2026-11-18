@@ -231,6 +231,11 @@ static BattleUnitKindPart parts[] = {
     {1, "btl_un_cortez_saber", "c_buki1", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kNotTargetable | kHidden | kNoShadow, kCounterPreemptiveFrontSpiky | kCounterFrontSpiky, pose_table},
 };
 
+/**
+ * Init event of Cortez's saber weapon: sets BATTLE_UNIT_FLAG_SOLID_MODEL, installs its wait, phase, unison
+ * phase, attack, damage and (default) confusion events, sets CORTEZ_WEAPON_WORK_INDEX to 1 (the saber) and
+ * CORTEZ_WEAPON_WORK_DOWN_TURNS to 0, allows no movement and starts the wait event.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_OnUnitFlag, UNIT_ID_SELF, BATTLE_UNIT_FLAG_SOLID_MODEL)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))

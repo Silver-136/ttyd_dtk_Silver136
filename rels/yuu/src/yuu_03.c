@@ -116,6 +116,10 @@ USER_FUNC(yuu_03_cam_shift_reset) {
 
 // Descriptive name (not in the symbol maps); placeholder unk_yuu_0000365c, JP yuu .text+0x3590. See docs/NAME_PROVENANCE.md.
 #if VERSION >= VERSION_JP
+/**
+ * Draw callback of the marker icon (ICON_ARROW_DOWN) that yuu_03_icon_monte_entry keeps above Mario: draws each
+ * shown entry at its position, 5 units higher for 9 of every 32 frames.
+ */
 void yuu_03_icon_monte_disp(CameraId camera, void* param) {
     Monte* monte = param;
     s32 i;

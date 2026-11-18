@@ -157,6 +157,10 @@ static void effStarPointMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_ALPHA_TEST, (DispCallback)effStarPointDisp, effect);
 }
 
+/**
+ * Draws each visible star (alpha not 0; entries after the first, which holds the base position) as icon
+ * ICON_STAR_POINT at its offset from the base, turned to the camera yaw.
+ */
 static void effStarPointDisp(CameraId cameraId, EffectEntry* effect) {
     EffStarPointWork* work = effect->userdata;
     Mtx mtx;

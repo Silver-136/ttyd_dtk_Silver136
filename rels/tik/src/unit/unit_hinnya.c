@@ -190,6 +190,10 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "S_1"},
 };
 
+/**
+ * Init event of the Spinia: sets BATTLE_UNIT_FLAG_SOLID_MODEL, registers its wait, attack, damage and confusion
+ * events (the confusion event is the attack event too), then starts the wait event.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_OnUnitFlag, UNIT_ID_SELF, BATTLE_UNIT_FLAG_SOLID_MODEL)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))

@@ -339,6 +339,14 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/**
+ * Sets the Red Spike Top up for its current place (UNIT_WORK_ON_CEILING); run by init_event and by the events
+ * that bring it down. On the floor it uses the normal wait, attack, damage and confusion events, clears the
+ * ceiling-fall event and sets kIsShelled. Hanging from the ceiling it sets kCeiling, kShellTosslikeCannotTarget
+ * and kHammerlikeCannotTarget, the ceiling pose and data tables, puts the unit and its home at y 130 and uses the
+ * ceiling wait, attack, damage and ceiling-fall events and offsets for hanging upside down.
+ * Either way it sets the shell footstep sounds and clears the over-turn count.
+ */
 static EVT_BEGIN(init_event2)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ON_CEILING, LW(15))
     IF_INT_EQUAL(LW(15), 0)
@@ -408,6 +416,11 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Turn-over event (UNIT_DATA_DAMAGE_TURN_EVENT): switches to the flipped defence, defence attribute and pose
+ * tables, sets UNIT_STATUS_FLAG_FLIPPED with an over-turn count of 1, plays SFX_ENM_INSIDE1, hops twice to height 5
+ * (its home too) and clears kCounterTopSpiky (its spikes no longer hurt attackers).
+ */
 static EVT_BEGIN(dmg_turn_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -428,6 +441,12 @@ static EVT_BEGIN(dmg_turn_event)
     RETURN
 EVT_END()
 
+/**
+ * Run by the floor attack_event while the Red Spike Top is flipped: counts the over-turn count down and, while it
+ * is not zero, only starts the wait event. At zero it restores the upright defence, defence attribute and pose
+ * tables, clears UNIT_STATUS_FLAG_FLIPPED, hops back onto the floor (home y 0), turns kCounterTopSpiky back on and
+ * starts the wait event.
+ */
 static EVT_BEGIN(wakeup_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -658,6 +677,11 @@ static EVT_BEGIN(damage_event_ceil)
     RETURN
 EVT_END()
 
+/**
+ * Reaction to a counterattack while hanging: drops it off the ceiling (clears kCeiling and the ceiling part
+ * attributes, restores the floor pose and data tables and offsets, sets UNIT_WORK_ON_CEILING to 0 and its home y
+ * to 0), re-runs init_event2 for the floor state, then runs subsetevt_counter_damage with the damage code.
+ */
 static EVT_BEGIN(counter_damage_event_ceil)
     CALL(btlevtcmd_OffAttribute, UNIT_ID_SELF, kCeiling)
     CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kShellTosslikeCannotTarget)

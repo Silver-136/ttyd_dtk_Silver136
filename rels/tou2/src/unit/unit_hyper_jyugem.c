@@ -626,6 +626,16 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/**
+ * The Dark Lakitu's egg throw (weapon_jyugem_attack): it picks a target (flustered when confused with none), and either
+ * raises a new egg (JGM_A_1, JGM_A_2) or, when UNIT_WORK_HOLD says it is already holding one, clears the hold state,
+ * its kCounterTopSpiky counter, pose table and hit offset; then it throws the egg (part 2) in an arc at the target's
+ * hit position. A dodge plays the target's avoid reaction and the egg flies on; a hit applies the guard result and the
+ * damage. If UNIT_WORK_REBOUND_SPAWN is 1 and the target guarded (DAMAGE_RESULT_GUARD), the egg rebounds to a free spot
+ * near the Dark Lakitu and hatches there into a Sky-Blue Spiny (entry_togezo, given the Dark Lakitu's Huge or Tiny
+ * status by togezo_copy_status) that uncurls with a spin. Otherwise the egg bounces 150 units on to the floor and is
+ * hidden.
+ */
 static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
 

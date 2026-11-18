@@ -2783,6 +2783,10 @@ static void BattleAudienceDispItem(CameraId camId, void* param) {
     }
 }
 
+/**
+ * 2D display callback queued by BattleAudience_Disp: draws each active Star Power star (base->starpower, 100
+ * entries) as icon ICON_STATUS_SP at its screen position with its own scale and alpha.
+ */
 static void BattleAudienceDispApSrc(CameraId camId, void* param) {
     BattleAudience* base = BattleAudienceBaseGetPtr();
     BattleAudienceStar* star;

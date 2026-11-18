@@ -927,6 +927,7 @@ f32 BattleGetFloorHeight(BattleWork* wp, f32 x, f32 y, f32 z) {
     return stage->audienceSizeY;
 }
 
+/** Deletes every unit flagged BATTLE_UNIT_FLAG_BROKEN (BtlUnit_Delete); BattleMain calls it first each frame. */
 static void BattleCheckUnitBroken(BattleWork* wp) {
     s32 i;
 

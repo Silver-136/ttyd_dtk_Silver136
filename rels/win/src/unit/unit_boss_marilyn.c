@@ -348,6 +348,14 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Marilyn's defeat (UNIT_DATA_DEAD_EVENT): walks back to her home spot if displaced and waits for the attack to
+ * end. If Beldam is being knocked out (GW(11) = 1) she waits for that to finish and says nothing; otherwise the
+ * camera zooms on her and she says "btl_majo3_12" when Beldam (GW(11) = 2) and Vivian (GW(13) not 0) are both
+ * down, else "btl_majo3_09". Then GW(12) = 2 and the shared no-spin dead sequence runs.
+ * GW(11) to GW(13) (Beldam, Marilyn, Vivian) are 0 while alive, 1 after a hit with DAMAGE_RESULT_DEATH (set by
+ * their damage events) and 2 once their dead event has run.
+ */
 static EVT_BEGIN(dead_event)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(3), LW(4), LW(5))

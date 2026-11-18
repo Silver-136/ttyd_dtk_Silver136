@@ -242,6 +242,10 @@ static EVT_BEGIN(battle_entry_event)
     RETURN
 EVT_END()
 
+/**
+ * Init for Goombella: registers her wait, attack, damage, confusion and entry scripts and her walk, run and jump
+ * sounds, sets UNIT_WORK_DICTIONARY_STATE (the Tattle card state) to DICTIONARY_IDLE and starts her wait event.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
@@ -727,6 +731,10 @@ static EVT_BEGIN(partyChristineAttack_NormalAttack)
     RETURN
 EVT_END()
 
+/**
+ * Spawned by the Tattle attack: calls _dictionary every frame until UNIT_WORK_DICTIONARY_STATE reaches
+ * DICTIONARY_CLOSED, then sets it back to DICTIONARY_IDLE.
+ */
 static EVT_BEGIN(christine_dictionary_event)
     LABEL(0)
     CALL(_dictionary, LW(3), LW(4))
@@ -1654,6 +1662,12 @@ static USER_FUNC(_monosiri_flag_on) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Steps the Tattle card state machine once per call. The state is the running unit's UNIT_WORK_DICTIONARY_STATE
+ * and the card work UNIT_WORK_DICTIONARY_WORK: DICTIONARY_OPEN opens the card for target args[0]'s kind
+ * (monosiriInit), DICTIONARY_OPENED and DICTIONARY_SHOWN keep it running, DICTIONARY_CLOSE starts closing it,
+ * DICTIONARY_CLOSING waits for it to close and ends at DICTIONARY_CLOSED. args[1] is read and unused.
+ */
 static USER_FUNC(_dictionary) {
     EvtWord* args = event->args;
     s32 selfId;

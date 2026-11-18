@@ -1384,6 +1384,13 @@ static EVT_BEGIN(flying_chop_attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Rawk Hawk's foot stamp from the ceiling (weapon in LW(9)): he creeps along the ceiling above the target and
+ * drops onto it. The drop puts him back on the floor: his home y becomes 0, the floor pose table and offsets
+ * return, and kCeiling, kHammerlikeCannotTarget and kShellTosslikeCannotTarget are cleared. On a hit he stamps
+ * three times in hops of growing height (the last hit shakes the camera with a smoke puff); on a miss he lands
+ * beside the target. He then hops 100 units aside and jumps home.
+ */
 static EVT_BEGIN(foot_stamp_attack_event)
     // Choose a target; a confused Rawk Hawk with none is flustered.
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))

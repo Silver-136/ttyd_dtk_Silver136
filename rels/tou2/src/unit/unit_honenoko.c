@@ -323,6 +323,13 @@ static EVT_BEGIN(dead_event)
     RETURN
 EVT_END()
 
+/**
+ * UNIT_DATA_FAKE_DEAD_EVENT of the Dull Bones: it walks back to its home position and, the first time only
+ * (UNIT_WORK_REWARD_GIVEN), pays out its coins, experience and star points with a smoke puff. It then crumbles into
+ * a pile of bones (KRN_D_2, SFX_ENM_HONENOKO_CRUMBLE1) and after a second is killed with KILL_UNIT_INACTIVE (HP 0,
+ * statuses cleared, kInactive). UNIT_WORK_REBIRTH_TURNS gets a countdown of 2 to 4, which rebirth_event lowers by
+ * one each turn; the hit offset is set to (0, -20, 0) and the wait event restarts.
+ */
 static EVT_BEGIN(fake_dead_event)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(2), LW(3), LW(4))
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(4.0f))
@@ -361,6 +368,11 @@ static EVT_BEGIN(fake_dead_event)
     RETURN
 EVT_END()
 
+/**
+ * Run by attack_event while the Dull Bones is a heap of bones: counts UNIT_WORK_REBIRTH_TURNS down; when it reaches
+ * zero it plays the bones coming together (KRN_D_3 and KRN_D_4 with the unite sounds), clears kInactive, restores
+ * full HP and resets the hit offset.
+ */
 static EVT_BEGIN(rebirth_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_REBIRTH_TURNS, LW(0))
     SUBTRACT(LW(0), 1)

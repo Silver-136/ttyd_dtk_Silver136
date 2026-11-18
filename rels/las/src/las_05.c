@@ -376,8 +376,8 @@ static USER_FUNC(kurokaron_move_position) {
         kurokaron_stop_cnt--;
         return EVT_RETURN_BLOCK;
     }
-    if (!(kurokaron_move_flag & KUROKARON_MOVE_FLAG_FLEE) && vivianGetStatus() != VIVIAN_STATUS_SINKING && vivianGetStatus() != VIVIAN_STATUS_HIDDEN && vivianGetStatus() != VIVIAN_STATUS_RISING &&
-        marioDist < 80.0f) {
+    if (!(kurokaron_move_flag & KUROKARON_MOVE_FLAG_FLEE) && vivianGetStatus() != VIVIAN_STATUS_SINKING &&
+        vivianGetStatus() != VIVIAN_STATUS_HIDDEN && vivianGetStatus() != VIVIAN_STATUS_RISING && marioDist < 80.0f) {
         kurokaron_move_index = _kurokaron_run_away(npc->position.x, npc->position.z, mario->position.x, mario->position.z);
         kurokaron_run_cnt = 350;
         kurokaron_move_flag |= KUROKARON_MOVE_FLAG_FLEE;
@@ -482,8 +482,8 @@ static void senkaron_ext_init(void) {
 }
 
 /**
- * Marks bones that overlap in the same floor cell (sk.area) by setting SENKARON_FLAG_CROWDED on the one farther from Mario,
- * so crowded bones get pushed apart.
+ * Marks bones that overlap in the same floor cell (sk.area) by setting SENKARON_FLAG_CROWDED on the one farther from
+ * Mario, so crowded bones get pushed apart.
  */
 static void move_check(ExtdrvPose* pose, s32 idx) {
     MarioWork* mario;

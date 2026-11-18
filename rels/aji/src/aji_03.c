@@ -1236,6 +1236,11 @@ static USER_FUNC(evt_sousa_icon) {
     return EVT_RETURN_YIELD;
 }
 
+/**
+ * Draw callback of evt_sousa_icon: draws the button icon at the stored position, scaled by 1.5, with an arrow
+ * (ICON_ARROW) beside it: type 0 draws ICON_BUTTON_A with the arrow at x - 70; any other type draws ICON_BUTTON_B
+ * with the arrow turned 270 degrees at (x - 30, y + 100).
+ */
 static void icon_disp(CameraId camera, void* param) {
 
     EventEntry* event = param;

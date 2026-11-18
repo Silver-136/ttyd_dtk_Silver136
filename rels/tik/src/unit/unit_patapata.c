@@ -314,6 +314,15 @@ static EVT_BEGIN(patapata_dmg_first_attack_pos)
     RETURN
 EVT_END()
 
+/**
+ * Attack event of the flying Koopa Paratroopa: on a first strike it takes the first-attack target, otherwise it
+ * uses an enemy item if it has one or samples a target, and dives at it: it swoops to a point in front of and
+ * above the target, rears back (PTP_A_1) and dives (PTP_A_4) with the damage check (on a first strike with
+ * DAMAGE_RESULT_NO_EVADE added, which skips the evasion checks).
+ * A miss flies on past; a hit shakes the camera and it bounces back up while spinning three full turns.
+ * It then flies home and goes back to waiting. With no target, a confused unit runs subsetevt_confuse_flustered;
+ * otherwise it just ends its turn.
+ */
 static EVT_BEGIN(attack_event_patapata)
     // Choose the target: the First Strike target if the battle opened with one,
     // otherwise it may use an item or pick a normal target.
@@ -651,6 +660,11 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * UNIT_DATA_DAMAGE_TURN_EVENT of the grounded Koopa, also run by dmg_fall_event when the fall lands it flipped: lowers
+ * the hit offset, takes the flipped defence and pose tables, sets UNIT_STATUS_FLAG_FLIPPED with the over-turn count at
+ * 2, plays NKT_D_1 with SFX_ENM_INSIDE1, hops twice in place and ends in NKT_S_2.
+ */
 static EVT_BEGIN(dmg_turn_event)
     CALL(btlevtcmd_SetHitOffset, UNIT_ID_SELF, 1, 0, -15, 0)
     SET_VALUE(LW(10), UNIT_ID_SELF)

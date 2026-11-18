@@ -984,6 +984,11 @@ static EVT_BEGIN(wait_event)
     RETURN
 EVT_END()
 
+/**
+ * Damage event while hanging from the ceiling: after the default damage event, a hit that did damage makes it
+ * fall (ceil_fall_ready_event) while it is still kCeiling; a hit that leaves it at zero HP
+ * (DAMAGE_RESULT_ZERO_HP) does not, unless a Life Shroom revives it (DAMAGE_RESULT_REVIVAL).
+ */
 static EVT_BEGIN(damage_event_ceil)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)

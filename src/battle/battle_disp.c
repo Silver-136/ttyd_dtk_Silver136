@@ -1108,6 +1108,11 @@ f32 getGravityDispOffset(BattleUnitPart* part) {
     return 4.0f * sinfd((part->gravityTimer * 3 + 270) % 360) + 4.0f;
 }
 
+/**
+ * Advances the part's float bob timer while its unit floats (BATTLE_UNIT_FLAG_FLOAT_CAPABLE and
+ * BATTLE_UNIT_FLAG_FLOAT_ACTIVE, not STATUS_DEAD); otherwise the timer runs on to the end of its 90-frame cycle or
+ * back to its start, whichever is nearer.
+ */
 static void floatOffsetControl(BattleUnitPart* part) {
     BOOL active = TRUE;
     BattleUnit* unit = part->owner;

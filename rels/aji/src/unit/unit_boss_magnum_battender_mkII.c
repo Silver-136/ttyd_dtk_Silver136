@@ -1904,6 +1904,12 @@ EVT_BEGIN(aud_attack_event)
     RETURN
 EVT_END()
 
+/**
+ * One round (LW(10), 0 to 9) of the audience attack: plays SFX_BOSS_MBTN_MACHINEGUN1, pre-checks the damage on
+ * the target (intangible, Lucky, Dodgy, a miss or a hit), fires two audience members with aud_fire_hit or
+ * aud_fire_no_hit, and on a hit applies the damage, with DAMAGE_RESULT_FINAL_HIT only in the last round. Once a
+ * round has hit (UNIT_WORK_AUD_HIT), the last round hits without a new check.
+ */
 static EVT_BEGIN(aud_attack_event_sub)
     IF_INT_EQUAL(LW(10), 9)
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_AUD_HIT, LW(0))

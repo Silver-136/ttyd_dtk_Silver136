@@ -319,6 +319,11 @@ static EVT_BEGIN(damage_event_sub)
     RETURN
 EVT_END()
 
+/**
+ * Turn-over event (the Hyper Bald Cleft is flipped over): switches to the flipped defence and pose tables, sets
+ * UNIT_STATUS_FLAG_FLIPPED with an over-turn count of 2, plays SFX_ENM_INSIDE1 and SIS_D_2, hops twice and moves
+ * its position and home to a height of 5 with the hit offset lowered by 10.
+ */
 static EVT_BEGIN(dmg_turn_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -340,6 +345,12 @@ static EVT_BEGIN(dmg_turn_event)
     RETURN
 EVT_END()
 
+/**
+ * Run by attack_event while the Hyper Bald Cleft is flipped: counts the over-turn count down and, while it is not
+ * zero, only starts the wait event. At zero it restores the upright defence and pose tables, clears
+ * UNIT_STATUS_FLAG_FLIPPED, plays SIS_S_1, sets it back on the floor (home too), hops up with SFX_ENM_INSIDE2,
+ * resets the hit offset and starts the wait event.
+ */
 static EVT_BEGIN(wakeup_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)

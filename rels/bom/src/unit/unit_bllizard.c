@@ -45,6 +45,10 @@ static EvtWord normal_attack_event[386];
 static EvtWord charge_event[58];
 static EvtWord wait_event[12];
 
+/**
+ * Script helper: deletes the ice barrier effect of unit args[0] (UNIT_WORK_BARRIER_EFFECT), if there is one, and
+ * clears the slot.
+ */
 static USER_FUNC(eff_ice_barrier_end) {
     s32 id = BattleTransID(event, evtGetValue(event, event->args[0]));
     BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);

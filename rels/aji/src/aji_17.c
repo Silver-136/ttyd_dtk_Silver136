@@ -1235,9 +1235,9 @@ static s32 disp_horogram_evt(EventEntry* event, BOOL isFirstCall) {
 
 /**
  * Draw callback that renders the picture of the hologram:
- * with HOROGRAM_FLAG_MIRROR_NPC, picks the normal or mirrored hologram NPC by facing direction; otherwise uses the normal NPC,
- * sets up a 608 by 480 viewport and a close camera,
- * draws the NPC's pose into the frame buffer and copies the colour and depth into horogram_wp->buf0 and buf1.
+ * with HOROGRAM_FLAG_MIRROR_NPC, picks the normal or mirrored hologram NPC by facing direction; otherwise uses the
+ * normal NPC, sets up a 608 by 480 viewport and a close camera, draws the NPC's pose into the frame buffer and copies
+ * the colour and depth into horogram_wp->buf0 and buf1.
  */
 static void peach_capture(CameraId cameraId, void* param) {
     CameraEntry saved = *camGetCurPtr();
@@ -1428,7 +1428,10 @@ static EVT_BEGIN(dance_action_turn_sub)
     RETURN
 EVT_END()
 
-/** Dance action for a turn (button B): marks an action in progress (DANCE_FLAG_ACTION), does the half turn and clears the mark. */
+/**
+ * Dance action for a turn (button B): marks an action in progress (DANCE_FLAG_ACTION), does the half turn and clears
+ * the mark.
+ */
 static EVT_BEGIN(peach_dance_action_turn)
     CALL(dance_flag_onoff, DANCE_FLAG_ACTION, 1)
     CALL_CHILD(dance_action_turn_sub)

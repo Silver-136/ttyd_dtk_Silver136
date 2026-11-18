@@ -2525,6 +2525,7 @@ USER_FUNC(btlevtcmd_GetDamageCode) {
     return EVT_RETURN_DONE;
 }
 
+/** Script: returns 1 in args[2] when the damage code of unit args[0] has any of the bits args[1] (DAMAGE_RESULT_*). */
 USER_FUNC(btlevtcmd_CheckDamageCode) {
     EvtWord* args = event->args;
     s32 btlId, id, mask, index;
@@ -3082,6 +3083,9 @@ USER_FUNC(btlevtcmd_ResetFaceDirection) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script: returns 1 in args[2] when unit args[0] has any of the attribute flags args[1] (BattleUnitAttribute_Flags).
+ */
 USER_FUNC(btlevtcmd_CheckAttribute) {
     EvtWord* args = event->args;
     s32 btlId, id, mask, index;
@@ -6950,6 +6954,7 @@ USER_FUNC(btlevtcmd_CheckStatusFlag) {
     return EVT_RETURN_DONE;
 }
 
+/** Script: sets the status flags args[1] (UNIT_STATUS_FLAG_*, such as UNIT_STATUS_FLAG_DEFEND) on unit args[0]. */
 USER_FUNC(btlevtcmd_OnStatusFlag) {
     BattleUnit* unit;
     EvtWord* args = event->args;
@@ -7005,6 +7010,7 @@ USER_FUNC(btlevtcmd_GetACPossibility) {
     return EVT_RETURN_DONE;
 }
 
+/** Script: returns TRUE in args[2] when unit args[0] has any of the unit flags args[1] (BATTLE_UNIT_FLAG_*). */
 USER_FUNC(btlevtcmd_CheckUnitFlag) {
     EvtWord* args = event->args;
     BattleUnit* unit;

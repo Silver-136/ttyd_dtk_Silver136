@@ -2039,6 +2039,11 @@ static USER_FUNC(eff_magic_get_posX) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: starts the Dark Wizzerd's spell (effMahorn2Entry) just in front of the unit, toward x args[1]
+ * at the unit's own height and z (args[2] and args[3] are read but unused), at the speed that covers the
+ * distance in args[4] frames, and stores it in UNIT_WORK_MAGIC_EFFECT.
+ */
 static USER_FUNC(eff_magic) {
     EvtWord* args = event->args;
     s32 id = BattleTransID(event, evtGetValue(event, args[0]));

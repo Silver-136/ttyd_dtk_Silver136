@@ -492,6 +492,12 @@ static EVT_BEGIN(dmg_avoid_counter_thorn_head_event)
     RETURN
 EVT_END()
 
+/**
+ * UNIT_DATA_DAMAGE_TURN_EVENT, run when a hit flips the Koopatrol (DAMAGE_RESULT_FLIPPED): it lowers its hit offset and
+ * takes the flipped defence, defence attribute and status tables, the flipped pose table (pose_table_guard_turn when
+ * UNIT_WORK_GUARD is set) and data_table_turn, sets UNIT_STATUS_FLAG_FLIPPED, loses kCounterTopSpiky, sets the
+ * over-turn count to 2 and hops twice on its back with SFX_ENM_INSIDE1.
+ */
 static EVT_BEGIN(dmg_turn_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)

@@ -131,8 +131,8 @@ static void nok_stg2_013_cb(s32 type, void** work) {
 }
 
 /**
- * Makes the poster visible: sets POSTER_FLAG_DISP,
- * which draw_poster checks before drawing the Peach poster onto the Koopa's locator.
+ * Makes the poster visible: sets POSTER_FLAG_DISP, which draw_poster checks before drawing the Peach poster onto the
+ * Koopa's locator.
  */
 static USER_FUNC(pposter_nok_on) {
     poster->flags |= POSTER_FLAG_DISP;

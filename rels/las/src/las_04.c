@@ -511,7 +511,8 @@ static void _firebar_rot(FirebarWork* wp) {
         if (wp->callback != NULL) {
             wp->callback(wp, 2);
         }
-    } else if (dist > wp->radius && dist < limit && !(wp->flags & (2 | FIREBAR_FLAG_MARIO_HURT)) && hit == 0 && vivianGetStatus() != VIVIAN_STATUS_SINKING && vivianGetStatus() != VIVIAN_STATUS_HIDDEN) {
+    } else if (dist > wp->radius && dist < limit && !(wp->flags & (2 | FIREBAR_FLAG_MARIO_HURT)) && hit == 0 &&
+               vivianGetStatus() != VIVIAN_STATUS_SINKING && vivianGetStatus() != VIVIAN_STATUS_HIDDEN) {
         if (wp->speed > 0.0f) {
             if (wp->prevAngle < 0.0f && diff > 0.0f && wp->pos.y < mario->position.y) {
                 wp->hitCount++;
@@ -596,7 +597,8 @@ static void _firebar_trans(FirebarWork* wp) {
             if (wp->callback != NULL) {
                 wp->callback(wp, 2);
             }
-        } else if (!(wp->flags & (2 | FIREBAR_FLAG_MARIO_HURT)) && hit == 0 && vivianGetStatus() != VIVIAN_STATUS_SINKING && vivianGetStatus() != VIVIAN_STATUS_HIDDEN) {
+        } else if (!(wp->flags & (2 | FIREBAR_FLAG_MARIO_HURT)) && hit == 0 &&
+                   vivianGetStatus() != VIVIAN_STATUS_SINKING && vivianGetStatus() != VIVIAN_STATUS_HIDDEN) {
             if (wp->prevAngle < 0.0f && diff > 0.0f && wp->pos.y < mario->position.y) {
                 wp->hitCount++;
                 if (wp->callback != NULL) {

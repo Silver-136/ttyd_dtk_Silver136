@@ -293,6 +293,11 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Turn-over event (UNIT_DATA_DAMAGE_TURN_EVENT; its part is kIsBombFlippable): switches to the upside-down defence
+ * and pose tables, sets UNIT_STATUS_FLAG_FLIPPED with a 2-turn over-turn count, hops twice and settles at height
+ * 7 (home too) with a lowered hit offset, and turns off its kCounterTopSpiky counter.
+ */
 static EVT_BEGIN(dmg_turn_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)

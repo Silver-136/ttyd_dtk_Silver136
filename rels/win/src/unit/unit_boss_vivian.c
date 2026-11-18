@@ -391,6 +391,10 @@ static EVT_BEGIN(entry_event)
     RETURN
 EVT_END()
 
+/**
+ * Damage event of Vivian: sets GW(13) (her state for the sisters' scripts) to 1 when the hit carries
+ * DAMAGE_RESULT_DEATH, then runs the default damage event.
+ */
 static EVT_BEGIN(damage_event)
     CALL(btlevtcmd_CheckDamageCode, UNIT_ID_SELF, DAMAGE_RESULT_DEATH, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)

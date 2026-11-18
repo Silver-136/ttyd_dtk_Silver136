@@ -561,6 +561,14 @@ static Vec splineTableOut4_4[] = {
     {-25.0f, -25.0f, 0.0f},
 };
 
+/**
+ * Init event of the Z-Yux: registers its wait, unison phase, attack, damage and confusion events (the confusion
+ * event is the attack event too), scales its body part to 1.0, sets BATTLE_UNIT_FLAG_FLOAT_CAPABLE and
+ * BATTLE_UNIT_FLAG_FLOAT_ACTIVE and sets the four satellite slots from UNIT_WORK_SATELLITE to -1. It then spawns
+ * as many Mini-Z-Yux (entry_barriern_satellite) as UNIT_WORK_SATELLITE_COUNT says, stores their unit ids in those
+ * slots, gives each its owner (BARRIERN_SATELLITE_WORK_OWNER) and places them around it with
+ * battleGetBarriernSatelliteInitPos. Finally it calls outSplineTableSet with that count.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventUnisonPhase, UNIT_ID_SELF, PTR(unison_phase_event))
@@ -777,6 +785,10 @@ static s32 barriern_zanzou_sub(BOOL isFirstCall, BattleUnit* unit, f32* scales, 
     return EVT_RETURN_BLOCK;
 }
 
+/**
+ * Script helper: the type-0 afterimage (scales 1.7 to 4.5) of satellite args[1] of unit args[0], whose unit id is
+ * in UNIT_WORK_SATELLITE + args[1]; runs barriern_satellite_zanzou_sub.
+ */
 static USER_FUNC(barriern_satellite_zanzou) {
     EvtWord* args = event->args;
     s32 id = BattleTransID(event, evtGetValue(event, args[0]));
@@ -1923,6 +1935,13 @@ static void barriern_wawawa_get_next_target(s32* unitIdx, s32* partIdx) {
     }
 }
 
+/**
+ * Script helper: updates the Z-Yux's barrier from its satellites; slots (UNIT_WORK_SATELLITE to +3) whose unit is
+ * gone are set to -1. With no satellite left the barrier breaks if it was up (barrier effect deleted,
+ * SFX_ENM_BARRI_BARRIER_BREAK1, 20 glass shards), the body loses kImmuneToDamageAndStatus and args[0] = 0.
+ * While one is left the body is kImmuneToDamageAndStatus (a new barrier effect in UNIT_WORK_BARRIER_EFFECT with
+ * SFX_ENM_BARRI_BARRIER1 when it was not), the effect follows the unit and args[0] = 1.
+ */
 static USER_FUNC(_check_satellite) {
     s32 id = BattleTransID(event, UNIT_ID_SELF);
     BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);

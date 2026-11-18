@@ -803,6 +803,14 @@ static EVT_BEGIN(kamec_subset_bunsin_all_kill)
     RETURN
 EVT_END()
 
+/**
+ * UNIT_DATA_DEAD_EVENT of the Magikoopa's normal and flying data tables (the clone tables have none), for the
+ * unit in LW(10): runs its UNIT_DATA_PRE_DEAD_EVENT if it has one, hides its held item, spins round for 48
+ * frames with the death sounds, then pays out its coins, experience and star points with a smoke puff and tips
+ * over. It then gives back an item it stole (btlevtcmd_GetBackItem), clears its statuses, becomes hidden with no
+ * shadow (kUnitHidden, kUnitNoShadow), removes every clone (kamec_subset_bunsin_all_kill) and is killed:
+ * KillUnit mode 0 when the damage code has DAMAGE_RESULT_DEATH, otherwise KILL_UNIT_INACTIVE.
+ */
 static EVT_BEGIN(kamec_subset_dead_event)
     CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), UNIT_DATA_PRE_DEAD_EVENT)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -923,6 +931,13 @@ static EVT_BEGIN(phase_event)
     RETURN
 EVT_END()
 
+/**
+ * Fall event run when a hit knocks the flying Magikoopa out of the air: it clears kFloating, kIsWinged,
+ * kHammerlikeCannotTarget and kShellTosslikeCannotTarget, shows the hurt pose, goes back to the ground pose table
+ * and the real or clone data table (UNIT_WORK_BUNSIN), and drops to the floor (SFX_ENM_FALL1), which becomes its
+ * home, while part 2 (KMR_H_1) appears at its old spot and fades out. UNIT_WORK_SKY is cleared and init_event2 sets
+ * it up as a grounded unit.
+ */
 static EVT_BEGIN(dmg_fall_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)

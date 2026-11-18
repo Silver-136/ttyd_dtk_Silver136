@@ -238,6 +238,10 @@ USER_FUNC(yuu_02_icon_monte_onoff) {
 
 // Descriptive name (not in the symbol maps); placeholder unk_yuu_00001054, JP yuu .text+0xF88. See docs/NAME_PROVENANCE.md.
 #if VERSION >= VERSION_JP
+/**
+ * 2D draw callback of the arrow icons (ICON_ARROW): draws each shown entry at its position, mirrored by the side
+ * of the course Mario is on (sign of his z) and moved 5 units back along x for 9 of every 32 frames.
+ */
 void yuu_02_icon_monte_disp(CameraId camera, void* param) {
     Monte* monte = param;
     MarioWork* mario = marioGetPtr();

@@ -75,8 +75,10 @@ typedef struct ExchangeRyokin {
 
 // SlotWork.flags
 enum {
-    SLOT_FLAG_WON = 1,               // a winning line: the lever cases are deleted until the spin ends (phase 11 re-enters them)
-    SLOT_FLAG_LUCKY = 1 << 1,        // slow "lucky" spin with more neon flashes (slot_neon_sub clears it right after its roll)
+    SLOT_FLAG_WON = 1,               // a winning line: the lever cases are deleted until the spin ends (phase 11
+                                     // re-enters them)
+    SLOT_FLAG_LUCKY = 1 << 1,        // slow "lucky" spin with more neon flashes (slot_neon_sub clears it right after
+                                     // its roll)
     SLOT_FLAG_WINDOW_MATCH = 1 << 2, // the three faces of the small window above the reels are equal
     SLOT_FLAG_WIN_NEON = 1 << 3,     // the win neon animation (neon[2]) is looping
 };
@@ -778,6 +780,10 @@ static BOOL get_monte_check(Vec* a, Vec* b) {
     return FALSE;
 }
 
+/**
+ * Draw callback of the Pianta tokens of the slot machine (GMonte list): draws ICON_ITEM_PIANTA_TOKEN at each of
+ * the owner's monteCount entries that is not hidden.
+ */
 static void monte_disp(CameraId camera, void* param) {
     GMonte* monte = param;
     s32 i;
@@ -4115,6 +4121,11 @@ void goryuugijo_main_slot(EventEntry* event, BOOL isFirstCall) {
     }
 }
 
+/**
+ * Draw callback of the slot machine game (wp->disp, set by evt_goryuugijo_alloc for game 1): for the spinning
+ * reel under the cursor (state 2) it projects the reel's position to the screen and draws icon ICON_FUKIDASHI
+ * beside it with ICON_BUTTON_A_ALT just below.
+ */
 void goryuugijo_disp_slot(CameraId camera, void* param) {
     void iconDispGx2(Mtx mtx, s16 flags, u16 iconId); // the id is u16 here; before US the definition takes s16
     SlotWork* data = ((MiniGameWork*)param)->data;

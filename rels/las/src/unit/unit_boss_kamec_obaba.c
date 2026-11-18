@@ -1283,6 +1283,10 @@ static USER_FUNC(eff_magic_support) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: returns in args[1] the current x offset of the magic shot stored in unit args[0]'s
+ * KAMEC_OBABA_WORK_MAGIC_EFFECT.
+ */
 static USER_FUNC(eff_magic_get_posX) {
     EvtWord* args = event->args;
     s32 id = BattleTransID(event, evtGetValue(event, args[0]));
@@ -1292,6 +1296,11 @@ static USER_FUNC(eff_magic_get_posX) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: fires Kammy's magic shot (effMagic1N64Entry type 0) from the tip of her wand toward the point
+ * (args[1], args[2], args[3]), with args[4] as its life, scales it by her size and stores it in
+ * KAMEC_OBABA_WORK_MAGIC_EFFECT.
+ */
 static USER_FUNC(eff_magic) {
     EvtWord* args = event->args;
     s32 id = BattleTransID(event, evtGetValue(event, args[0]));

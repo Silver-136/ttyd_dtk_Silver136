@@ -787,6 +787,13 @@ static EVT_BEGIN(kamec_subset_bunsin_all_kill)
     RETURN
 EVT_END()
 
+/**
+ * Death script of the Magikoopa (UNIT_DATA_DEAD_EVENT), for the unit in LW(10): runs its UNIT_DATA_PRE_DEAD_EVENT if it
+ * has one, spins with the death sounds, puffs smoke, banks its coins, experience and star points, tips over, drops its
+ * held item, clears its statuses, hides itself and its shadow, kills all its clones (kamec_subset_bunsin_all_kill) and
+ * removes the unit: fully (KillUnit 0) when the damage code has DAMAGE_RESULT_DEATH, otherwise it is only marked
+ * inactive (KILL_UNIT_INACTIVE). Being blown away is handled by kamec_subset_blow_dead_event instead.
+ */
 static EVT_BEGIN(kamec_subset_dead_event)
     CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), UNIT_DATA_PRE_DEAD_EVENT)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -903,6 +910,12 @@ static EVT_BEGIN(phase_event)
     RETURN
 EVT_END()
 
+/**
+ * UNIT_DATA_DAMAGE_FALL_EVENT, run when a hit knocks the Magikoopa down (DAMAGE_RESULT_GROUNDED): it clears kFloating
+ * and part 1's kIsWinged, kHammerlikeCannotTarget and kShellTosslikeCannotTarget, takes the ground pose table and data
+ * table (data_table_bunsin for a clone), shows part 2 (KMK_H_1) where it was and fades it out, falls to the floor with
+ * SFX_ENM_FALL1, makes the landing spot its home, clears UNIT_WORK_SKY and reruns init_event2.
+ */
 static EVT_BEGIN(dmg_fall_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)

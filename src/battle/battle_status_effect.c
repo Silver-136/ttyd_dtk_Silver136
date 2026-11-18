@@ -336,6 +336,11 @@ static void BSE_FreezeDelete(BattleUnit* unit) {
     }
 }
 
+/**
+ * Kagegakure = hiding in the shadows (Vivian's Veil). While the command menu is up (BATTLE_DISP_FLAG_COMMAND_MENU)
+ * and the unit is kVeiled, shows icon ICON_MARIO_UNDER_GROUND_VEIL named "_biK_<unitId>" 5 units in front of the
+ * unit's body part; removes it otherwise.
+ */
 static void BSE_Kagegakure(BattleUnit* unit) {
     char name[0x10];
     f32 x, y, z;

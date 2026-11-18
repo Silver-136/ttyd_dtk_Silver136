@@ -1700,14 +1700,17 @@ void BtlUnit_OffStatusFlag(BattleUnit* unit, s32 flags) {
     unit->statusFlags &= ~flags;
 }
 
+/** Tests the unit's flags (BATTLE_UNIT_FLAG_*). */
 s32 BtlUnit_CheckUnitFlag(BattleUnit* unit, s32 flags) {
     return unit->flags & flags;
 }
 
+/** Sets unit flags (BATTLE_UNIT_FLAG_*). */
 void BtlUnit_OnUnitFlag(BattleUnit* unit, s32 flags) {
     unit->flags |= flags;
 }
 
+/** Clears unit flags (BATTLE_UNIT_FLAG_*). */
 void BtlUnit_OffUnitFlag(BattleUnit* unit, s32 flags) {
     unit->flags &= ~flags;
 }
@@ -2615,6 +2618,10 @@ s32 BtlUnit_EnemyItemCanUseCheck(s32 item) {
     return FALSE;
 }
 
+/**
+ * Whether the unit is hidden in the shadow and cannot be hit: a kVeiled unit (Vivian's Veil), or Vivian while her
+ * VIVIAN_WORK_HIDE_TURNS counter is above 0.
+ */
 BOOL BtlUnit_CheckShadowGuard(BattleUnit* unit) {
     if (unit->attributeFlags & kVeiled) {
         return TRUE;
