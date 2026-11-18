@@ -2333,15 +2333,6 @@ static USER_FUNC(_chuchu_make_extra_work_area) {
     return EVT_RETURN_DONE;
 }
 
-#define ADD_WEAPON(w)                                                               \
-    command->weapon[*count].index = -1;                                             \
-    command->weapon[*count].itemId = ITEM_NULL;                                             \
-    command->weapon[*count].weapon = (BattleWeapon*)(w);                            \
-    command->weapon[*count].enabled = 0;                                            \
-    command->weapon[*count].icon = command->weapon[*count].weapon->icon;            \
-    command->weapon[*count].name = msgSearch(command->weapon[*count].weapon->name); \
-    (*count)++;
-
 /**
  * Builds Ms. Mowz's battle move list (data tag 1):
  * Love Slap and Kiss Thief always, Tease from Super rank and Smooch from Ultra rank,

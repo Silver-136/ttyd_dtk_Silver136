@@ -68,7 +68,11 @@ static void polygon(f32 x, f32 y, f32 w, f32 h, f32 u, f32 v);
 static f32 randf(f32 min, f32 max);
 static USER_FUNC(evt_ryushi_init);
 BOOL yuuminigame4_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp, SlitWork* data);
-#define REVISE360(a) ((3600.0f + (a)) - (s32)((3600.0f + (a)) / 360.0f) * 360)
+
+/** Brings angle a (above -3600) into [0, 360) by whole turns, in one step (mario_sbr revise360 loops). */
+static inline f32 wrap360(f32 a) {
+    return (3600.0f + a) - (s32)((3600.0f + a) / 360.0f) * 360;
+}
 
 USER_FUNC(evt_ryushi);
 static USER_FUNC(evt_ryushi_clr);
@@ -1164,28 +1168,28 @@ BOOL yuuminigame4_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp
         case 1:
         case 2:
             data->rot1 += 36.0f * (120.0f - (data->timer - 1)) / 120.0f;
-            data->rot1 = REVISE360(data->rot1);
+            data->rot1 = wrap360(data->rot1);
             break;
         case 3:
             data->rot1 += 36.0f;
-            data->rot1 = REVISE360(data->rot1);
+            data->rot1 = wrap360(data->rot1);
             break;
         case 4:
             data->rot1 += 36.0f * (data->timer - 1) / 48.0f;
-            data->rot1 = REVISE360(data->rot1);
+            data->rot1 = wrap360(data->rot1);
             break;
         case 5:
         case 6:
             data->rot2 += 36.0f * (120.0f - (data->timer - 1)) / 120.0f;
-            data->rot2 = REVISE360(data->rot2);
+            data->rot2 = wrap360(data->rot2);
             break;
         case 7:
             data->rot2 += 36.0f;
-            data->rot2 = REVISE360(data->rot2);
+            data->rot2 = wrap360(data->rot2);
             break;
         case 8:
             data->rot2 += 36.0f * (data->timer - 1) / 48.0f;
-            data->rot2 = REVISE360(data->rot2);
+            data->rot2 = wrap360(data->rot2);
             break;
     }
     if (mario->position.x < 1500.0f) {

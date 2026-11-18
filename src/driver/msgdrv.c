@@ -25,9 +25,13 @@
 #include "eff/eff_magic1_n64.h"
 #include "battle/battle_unit.h"
 #include "driver/mapdrv.h"
+
 // MsgWinData.callback holds a function pointer in an s32 (msgWindow_Entry takes the callback as s32)
-// A message window's MsgWinData lives in its userdata block. A macro, not an inline function: as a function the object changes.
-#define WIN_DATA(w) ((MsgWinData*)(w)->userdata->address)
+/** A message window's MsgWinData, which lives in its userdata block. */
+static inline MsgWinData* msgWinData(WindowEntry* w) {
+    return (MsgWinData*)w->userdata->address;
+}
+
 static void msgWindow_Disp(CameraId camId, void* param);
 static void msgWindow_Main(WindowEntry* window);
 static void msgWindow_Clear_Main(WindowEntry* window);
@@ -2009,11 +2013,11 @@ s32 msgWindow_Entry(const char* msg, s32 callback, s16 priority) {
             break;
         case WINDOW_TYPE_SELECT:
             window->main = selectWindow_Main;
-            window->x = (s16)(-WIN_DATA(window)->selWidth / 2);
-            window->y = WIN_DATA(window)->selY;
-            window->width = WIN_DATA(window)->selWidth;
-            window->height = (s16)(WIN_DATA(window)->numSel * 36 + 40);
-            WIN_DATA(window)->sel = WIN_DATA(window)->defSel;
+            window->x = (s16)(-msgWinData(window)->selWidth / 2);
+            window->y = msgWinData(window)->selY;
+            window->width = msgWinData(window)->selWidth;
+            window->height = (s16)(msgWinData(window)->numSel * 36 + 40);
+            msgWinData(window)->sel = msgWinData(window)->defSel;
             data->cursorY = window->y - (data->sel * 31 + 58);
             break;
         case WINDOW_TYPE_SMALL:
@@ -2262,7 +2266,7 @@ static void msgWindow_Main(WindowEntry* window) {
  * it), and fades out at the end of the text; queues msgWindow_Disp.
  */
 static void msgWindow_Clear_Main(WindowEntry* window) {
-    MsgWinData* data = WIN_DATA(window);
+    MsgWinData* data = msgWinData(window);
 
     switch (window->state) {
         case MSG_WIN_STATE_OPEN:

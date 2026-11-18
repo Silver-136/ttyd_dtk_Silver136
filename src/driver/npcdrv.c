@@ -2198,8 +2198,6 @@ void fbatTalkMode(void) {
     }
 }
 
-#define NPC_ENEMY_LEVEL(npc) ((npc)->battleInfo.groupSetup->enemyData->unitKindParams->level)
-
 void marioChgMoveMotion(void);
 
 // FAKE: the recovered-item loop as a static inline helper (counter = inline-local @ temp, ptr r30), with

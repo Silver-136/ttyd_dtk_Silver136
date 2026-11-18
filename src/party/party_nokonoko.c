@@ -267,16 +267,6 @@ void nokonoko_use_post(PartyEntry* party) {
     party->work.nokonoko.word180 = 0;
 }
 
-#define NOKO_PICK_UP_NEAR_ITEM(party, body)                                                                        \
-    if (party->work.nokonoko.heldItem == NULL) {                                                                   \
-        party->work.nokonoko.heldItem = itemNearDistCheck(party->position.x, party->position.y, party->position.z, \
-        0.5f * party->width + 12.0f);                                                                              \
-        if (party->work.nokonoko.heldItem != NULL) {                                                               \
-            itemPickUp(party->work.nokonoko.heldItem);                                                             \
-            body                                                                                                   \
-        }                                                                                                          \
-    }
-
 /**
  * Shell Toss, run every frame while Koops is in use.
  * He tucks into his shell beside Mario, shoots forward 120 units (picking up the first item it touches),
@@ -489,7 +479,18 @@ void nokonoko_use(PartyEntry* party) {
                 break;
             }
 #if VERSION <= VERSION_DEMO_JP
-            NOKO_PICK_UP_NEAR_ITEM(party, party->useMotionId = 50; psndSFXOn_3D((const char*)PSND_SFX_PARTY_PNK_KOURA_WALL1, &party->position); hitstar(party, 1); se_off(); break;)
+            if (party->work.nokonoko.heldItem == NULL) {
+                party->work.nokonoko.heldItem = itemNearDistCheck(party->position.x, party->position.y, party->position.z,
+                                                                  0.5f * party->width + 12.0f);
+                if (party->work.nokonoko.heldItem != NULL) {
+                    itemPickUp(party->work.nokonoko.heldItem);
+                    party->useMotionId = 50;
+                    psndSFXOn_3D((const char*)PSND_SFX_PARTY_PNK_KOURA_WALL1, &party->position);
+                    hitstar(party, 1);
+                    se_off();
+                    break;
+                }
+            }
             if (!(party->flags & PARTY_FLAG_IS_EVT_USE)) {
                 if (mario->currMotionId == MARIO_MOTION_SHIP || mario->currMotionId == MARIO_MOTION_JABARA || mario->currMotionId == MARIO_MOTION_PLANE || mario->currMotionId == MARIO_MOTION_ROLL ||
 #else

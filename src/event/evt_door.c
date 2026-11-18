@@ -1551,14 +1551,6 @@ static USER_FUNC(get_noclip_map) {
     return EVT_RETURN_DONE;
 }
 
-#define DOOR_POS_GET(HIT)              \
-    if (!mario) {                      \
-        hitObjGetPos(HIT, &pos);       \
-    } else {                           \
-        pos = marioGetPtr()->position; \
-    }                                  \
-    hitObjGetNormal(HIT, &nrm);
-
 /**
  * Works out where Mario stands outside (out) and inside (in) a door from the hit objects' positions and normals;
  * the outside spot is offset sideways by half the door map object's width according to the hinge side (type).

@@ -76,7 +76,8 @@ static FighterData fighterDt_re[21];
 static void rankingControll(void);
 
 // Count the visible fighters preceding the player entry.
-// A macro, not an inline function: as a function the registers at the call sites change.
+// A macro, not an inline function: as an inline returning the rank, the loop index's start becomes a copy of the
+// rank's zero (mr instead of li) at every call site.
 #define GET_RANK(rank, i)                                       \
     rank = 0;                                                   \
     for (i = 0; i < rank_wp->count; i++) {                      \
@@ -88,29 +89,9 @@ static void rankingControll(void);
         }                                                       \
     }
 static void insert(s32* list, s32 num, s32 from, s32 to);
-#define SORT_SCORE(list, n)                                                                        \
-    for (i = 0; i < n - 1; i++) {                                                                  \
-        for (j = i + 1; j < n; j++) {                                                              \
-            if (rank_wp->entries[list[i]].points.total < rank_wp->entries[list[j]].points.total) { \
-                tmp = list[i];                                                                     \
-                list[i] = list[j];                                                                 \
-                list[j] = tmp;                                                                     \
-            }                                                                                      \
-        }                                                                                          \
-    }
-#define SORT_FLAG(list, n)                                                                                                       \
-    for (i = 0; i < n - 1; i++) {                                                                                                \
-        for (j = i + 1; j < n; j++) {                                                                                            \
-            pb = &fighterDt[rank_wp->entries[list[i]].id];                                                                       \
-            if ((fighterDt[rank_wp->entries[list[j]].id].flags & (FIGHT_MAJOR | FIGHT_CHAMPION)) && (pb->flags & FIGHT_MINOR)) { \
-                tmp = list[i];                                                                                                   \
-                list[i] = list[j];                                                                                               \
-                list[j] = tmp;                                                                                                   \
-            }                                                                                                                    \
-        }                                                                                                                        \
-    }
 
-// Find the first listed fighter carrying the requested FighterData flag.
+// Find the first listed fighter carrying the requested FighterData flag; MOVE_FLAG moves it to slot pos.
+// Macros, not inline functions: as inline functions the registers in rankingControll change.
 #define FIND_FLAG(k, list, n, flag)                                 \
     for (k = 0; k < n; k++) {                                       \
         if (fighterDt[rank_wp->entries[list[k]].id].flags & flag) { \
@@ -469,8 +450,29 @@ static void rankingControll(void) {
         }
     }
     if (nwin > 0) {
-        SORT_SCORE(win, nwin);
-        SORT_FLAG(win, nwin);
+        // Highest points first.
+        for (i = 0; i < nwin - 1; i++) {
+            for (j = i + 1; j < nwin; j++) {
+                if (rank_wp->entries[win[i]].points.total < rank_wp->entries[win[j]].points.total) {
+                    tmp = win[i];
+                    win[i] = win[j];
+                    win[j] = tmp;
+                }
+            }
+        }
+
+        // A FIGHT_MINOR fighter swaps with any later FIGHT_MAJOR or FIGHT_CHAMPION fighter.
+        for (i = 0; i < nwin - 1; i++) {
+            for (j = i + 1; j < nwin; j++) {
+                pb = &fighterDt[rank_wp->entries[win[i]].id];
+                if ((fighterDt[rank_wp->entries[win[j]].id].flags & (FIGHT_MAJOR | FIGHT_CHAMPION)) &&
+                    (pb->flags & FIGHT_MINOR)) {
+                    tmp = win[i];
+                    win[i] = win[j];
+                    win[j] = tmp;
+                }
+            }
+        }
         if (nwin > 0) {
             MOVE_FLAG(win, nwin, 0x4, 0);
         }
@@ -503,8 +505,29 @@ static void rankingControll(void) {
         }
     }
     if (nlose > 0) {
-        SORT_SCORE(lose, nlose);
-        SORT_FLAG(lose, nlose);
+        // Highest points first.
+        for (i = 0; i < nlose - 1; i++) {
+            for (j = i + 1; j < nlose; j++) {
+                if (rank_wp->entries[lose[i]].points.total < rank_wp->entries[lose[j]].points.total) {
+                    tmp = lose[i];
+                    lose[i] = lose[j];
+                    lose[j] = tmp;
+                }
+            }
+        }
+
+        // A FIGHT_MINOR fighter swaps with any later FIGHT_MAJOR or FIGHT_CHAMPION fighter.
+        for (i = 0; i < nlose - 1; i++) {
+            for (j = i + 1; j < nlose; j++) {
+                pb = &fighterDt[rank_wp->entries[lose[i]].id];
+                if ((fighterDt[rank_wp->entries[lose[j]].id].flags & (FIGHT_MAJOR | FIGHT_CHAMPION)) &&
+                    (pb->flags & FIGHT_MINOR)) {
+                    tmp = lose[i];
+                    lose[i] = lose[j];
+                    lose[j] = tmp;
+                }
+            }
+        }
         if (nlose > 0) {
             MOVE_FLAG(lose, nlose, 0x4, 0);
         }

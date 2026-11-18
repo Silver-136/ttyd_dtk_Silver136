@@ -52,17 +52,21 @@ static EVT_BEGIN(msg_heavy_bomb_fire)
     RETURN
 EVT_END()
 
-// A macro, not an inline function: as a function the registers in the callers change.
-#define AUD_SOUND_START(sound, dur, fade)                                                           \
-    if ((sound)->sfxId != -1) {                                                                     \
-        (sound)->flags |= AUD_SOUND_FLAG_PLAYING;                                                   \
-        (sound)->duration = (dur);                                                                  \
-        (sound)->fadeoutTime = (fade);                                                             \
-        (sound)->baseSfxVolume = (sound)->currentBaseSfxVolume = psndSFX_get_vol((sound)->sfxId); \
-        (sound)->forceFadeLength = 0;                                                              \
-        (sound)->forceFadeTimer = 0;                                                               \
-        (sound)->volumeMultiplier = 100;                                                           \
+/**
+ * If the slot has a sound id: marks it playing for dur frames (-1: no limit) with a fade-out over the last fade,
+ * takes the sound's volume as its base volume and resets the forced fade and the volume multiplier (100).
+ */
+static inline void audSoundStart(BattleAudienceSound* sound, s32 dur, s32 fade) {
+    if (sound->sfxId != -1) {
+        sound->flags |= AUD_SOUND_FLAG_PLAYING;
+        sound->duration = dur;
+        sound->fadeoutTime = fade;
+        sound->baseSfxVolume = sound->currentBaseSfxVolume = psndSFX_get_vol(sound->sfxId);
+        sound->forceFadeLength = 0;
+        sound->forceFadeTimer = 0;
+        sound->volumeMultiplier = 100;
     }
+}
 
 // local prototypes
 static void BattleAudienceSettingAudience(void);
@@ -4262,7 +4266,7 @@ void BattleAudienceSoundBooingKind(s32 kind) {
         sound->kind = 8;
     }
     sound->sfxId = BattleAudienceSound1(name, right, left);
-    AUD_SOUND_START(sound, -1, 0);
+    audSoundStart(sound, -1, 0);
 }
 
 /**
@@ -4301,7 +4305,7 @@ void BattleAudienceSoundClap(s32 duration, s32 fade) {
 
     // BUG: with no member taking part (sum 0) name is never written, so an uninitialised buffer is played.
     sound->sfxId = BattleAudienceSound1(name, right, left);
-    AUD_SOUND_START(sound, duration + fade, fade);
+    audSoundStart(sound, duration + fade, fade);
 }
 
 /**
@@ -4395,7 +4399,7 @@ void BattleAudienceSoundNoise(s32 duration, s32 fade) {
     // As in BattleAudienceSoundClap, whose form this stripped copy restores: with no member taking part (sum 0)
     // name is never written, so an uninitialised buffer would be played.
     sound->sfxId = BattleAudienceSound1(name, right, left);
-    AUD_SOUND_START(sound, duration + fade, fade);
+    audSoundStart(sound, duration + fade, fade);
 }
 
 /**
@@ -4485,7 +4489,7 @@ void BattleAudienceSoundCheerKind(s32 kind, s32 duration, s32 fade) {
     } else {
         sound->sfxId = BattleAudienceSound1(name, right, left);
     }
-    AUD_SOUND_START(sound, duration + fade, fade);
+    audSoundStart(sound, duration + fade, fade);
 }
 
 /**
@@ -4536,7 +4540,7 @@ void BattleAudienceSoundWhistleKind(s32 kind) {
                 sound->sfxId = BattleAudienceSound2("SFX_AUDIENCE_WHISTLE3", idx);
                 break;
         }
-        AUD_SOUND_START(sound, -1, 0);
+        audSoundStart(sound, -1, 0);
     }
 }
 
@@ -4561,7 +4565,7 @@ void BattleAudienceSoundCallKind(s32 kind) {
             sound->sfxId = BattleAudienceSound1("SFX_AUDIENCE_CALL_ALLY2", right, left);
             break;
     }
-    AUD_SOUND_START(sound, -1, 0);
+    audSoundStart(sound, -1, 0);
 }
 
 /**
@@ -4626,7 +4630,7 @@ void BattleAudienceSoundItemThrow(s32 kind, s32 index) {
             sound->sfxId = BattleAudienceSound2("SFX_AUDIENCE_THROW_OBJECT2", index);
             break;
     }
-    AUD_SOUND_START(sound, -1, 0);
+    audSoundStart(sound, -1, 0);
 }
 
 /**
@@ -4645,7 +4649,7 @@ void BattleAudienceSoundRun(s32 kind) {
             sound->sfxId = BattleAudienceSound0("SFX_AUDIENCE_RUN2");
             break;
     }
-    AUD_SOUND_START(sound, -1, 0);
+    audSoundStart(sound, -1, 0);
 }
 
 /**
@@ -4676,7 +4680,7 @@ void BattleAudienceSoundSleep(s32 index) {
             sound->sfxId = BattleAudienceSound2("SFX_AUDIENCE_SLEEP3", index);
             break;
     }
-    AUD_SOUND_START(sound, -1, 0);
+    audSoundStart(sound, -1, 0);
 }
 
 /**
@@ -4689,10 +4693,10 @@ void BattleAudienceSoundZZZ(s32 index) {
 
     BattleAudienceSoundStop(AUD_SOUND_ZZZ);
 
-    // BUG: the returned id is not stored in sound->sfxId, so AUD_SOUND_START tests and fetches the volume of the
+    // BUG: the returned id is not stored in sound->sfxId, so audSoundStart tests and fetches the volume of the
     // slot's previous id.
     BattleAudienceSound2("SFX_AUDIENCE_ZZZ1", index);
-    AUD_SOUND_START(sound, -1, 0);
+    audSoundStart(sound, -1, 0);
 }
 
 /** Plays the Crazee Dayzee's song (SFX_AUDIENCE_PANSY_SINGING1) at member index on channel 17. */
@@ -4701,7 +4705,7 @@ void BattleAudienceSoundSing(s32 index) {
 
     BattleAudienceSoundStop(AUD_SOUND_SING);
     sound->sfxId = BattleAudienceSound2("SFX_AUDIENCE_PANSY_SINGING1", index);
-    AUD_SOUND_START(sound, -1, 0);
+    audSoundStart(sound, -1, 0);
 }
 
 /**
@@ -4722,7 +4726,7 @@ void BattleAudienceSoundShell(s32 index) {
     sound = BattleAudienceSoundGetPtr(id);
     BattleAudienceSoundStop(id);
     sound->sfxId = BattleAudienceSound2("SFX_AUDIENCE_SHELL_TRANSFORM1", index);
-    AUD_SOUND_START(sound, -1, 0);
+    audSoundStart(sound, -1, 0);
 }
 
 /**
@@ -4734,7 +4738,7 @@ void BattleAudienceSoundBombIgnite(s32 index, s32 duration, s32 fade) {
 
     BattleAudienceSoundStop(AUD_SOUND_BOMB_IGNITE);
     sound->sfxId = BattleAudienceSound2("SFX_AUDIENCE_BOMB_READY1", index);
-    AUD_SOUND_START(sound, duration + fade, fade);
+    audSoundStart(sound, duration + fade, fade);
 }
 
 /**
@@ -4755,7 +4759,7 @@ void BattleAudienceSoundBombFire(s32 index) {
     sound = BattleAudienceSoundGetPtr(id);
     BattleAudienceSoundStop(id);
     sound->sfxId = BattleAudienceSound2("SFX_AUDIENCE_BOMB_BURST1", index);
-    AUD_SOUND_START(sound, -1, 0);
+    audSoundStart(sound, -1, 0);
 }
 
 /** Plays a Piranha Plant's bite (SFX_AUDIENCE_PAKU_EAT1) at member index on channel 23. */
@@ -4764,7 +4768,7 @@ void BattleAudienceSoundPakkunEat(s32 index) {
 
     BattleAudienceSoundStop(AUD_SOUND_PAKKUN_EAT);
     sound->sfxId = BattleAudienceSound2("SFX_AUDIENCE_PAKU_EAT1", index);
-    AUD_SOUND_START(sound, -1, 0);
+    audSoundStart(sound, -1, 0);
 }
 
 /**

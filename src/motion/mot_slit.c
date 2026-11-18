@@ -709,31 +709,6 @@ static inline void slitSetDisplayDir(MarioWork* m) {
     m->displayDirection = (revise360(m->directionView - m->targetYaw) <= 180.0f) ? 260.0f : 280.0f;
 }
 
-#if VERSION >= VERSION_US
-#define SLITSTOP(m)               \
-    if (!marioChkKey()) {         \
-        (m)->baseSpeed = 0.0f;    \
-        m->slitState = SLIT_STATE_READY;        \
-        m->mot.slit.count = 0;    \
-        marioChgPose("M_S_1");    \
-        marioChgPaper("PM_S_1B"); \
-        break;                    \
-    }
-#define SLITSTOP2(m)              \
-    if (!marioChkKey()) {         \
-        m->mot.slit.timer = 0;    \
-        (m)->baseSpeed = 0.0f;    \
-        m->slitState = SLIT_STATE_READY;        \
-        m->mot.slit.count = 0;    \
-        marioChgPose("M_S_1");    \
-        marioChgPaper("PM_S_1B"); \
-        break;                    \
-    }
-#else
-#define SLITSTOP(m)
-#define SLITSTOP2(m)
-#endif
-
 /**
  * Paper Mode motion (paper curse, hold R): Mario turns sideways and thin, walks and runs slowly,
  * slips through narrow gaps and bars (SLIT_STATE_GAP_ENTER to SLIT_STATE_GAP_EXIT, walls off while he passes),
@@ -917,7 +892,16 @@ void mot_slit(void) {
                 m->mot.slit.timer = 0;
                 marioChgPaper("PM_S_1D");
                 slitSetDisplayDir(m);
-                SLITSTOP(m)
+#if VERSION >= VERSION_US
+                if (!marioChkKey()) {
+                    m->baseSpeed = 0.0f;
+                    m->slitState = SLIT_STATE_READY;
+                    m->mot.slit.count = 0;
+                    marioChgPose("M_S_1");
+                    marioChgPaper("PM_S_1B");
+                    break;
+                }
+#endif
             }
 #endif
             if (marioChkKey()) {
@@ -983,7 +967,17 @@ void mot_slit(void) {
                         m->baseSpeed = _getWalkSpd();
 #if VERSION >= VERSION_JP
                         m->displayDirection = 260.0f;
-                        SLITSTOP2(m)
+#if VERSION >= VERSION_US
+                        if (!marioChkKey()) {
+                            m->mot.slit.timer = 0;
+                            m->baseSpeed = 0.0f;
+                            m->slitState = SLIT_STATE_READY;
+                            m->mot.slit.count = 0;
+                            marioChgPose("M_S_1");
+                            marioChgPaper("PM_S_1B");
+                            break;
+                        }
+#endif
 #endif
                     }
                 } else if (m->mot.slit.side == 2) {
@@ -995,7 +989,17 @@ void mot_slit(void) {
                         m->baseSpeed = _getWalkSpd();
 #if VERSION >= VERSION_JP
                         m->displayDirection = 280.0f;
-                        SLITSTOP2(m)
+#if VERSION >= VERSION_US
+                        if (!marioChkKey()) {
+                            m->mot.slit.timer = 0;
+                            m->baseSpeed = 0.0f;
+                            m->slitState = SLIT_STATE_READY;
+                            m->mot.slit.count = 0;
+                            marioChgPose("M_S_1");
+                            marioChgPaper("PM_S_1B");
+                            break;
+                        }
+#endif
 #endif
                     }
                 }
@@ -1003,8 +1007,16 @@ void mot_slit(void) {
             break;
         case SLIT_STATE_MOVE_PM_S_2:
             if (--m->mot.slit.timer > 0) {
-#if VERSION >= VERSION_JP
-                SLITSTOP2(m)
+#if VERSION >= VERSION_US
+                if (!marioChkKey()) {
+                    m->mot.slit.timer = 0;
+                    m->baseSpeed = 0.0f;
+                    m->slitState = SLIT_STATE_READY;
+                    m->mot.slit.count = 0;
+                    marioChgPose("M_S_1");
+                    marioChgPaper("PM_S_1B");
+                    break;
+                }
 #endif
                 break;
             }

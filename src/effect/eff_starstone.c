@@ -302,43 +302,6 @@ static f32 edge_color[] = { 0.331f, 0.314999998f, 0.231999993f, 0.158999994f, 0.
 static u8* color_tbl[] = { diamond_1_color0_tbl, diamond_2_color0_tbl, diamond_3_color0_tbl, diamond_4_color0_tbl, diamond_5_color0_tbl, diamond_6_color0_tbl, diamond_7_color0_tbl };
 #endif
 
-// A macro, not an inline function: as a function the GXColor temporaries move on the stack.
-#define DISP_START(w)                                                                    \
-    mapSetMaterialFog();                                                                 \
-    GXSetArray(GX_VA_CLR0, color_tbl[(w)->type], 4);                                     \
-    GXSetNumChans(1);                                                                    \
-    GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, 0, GX_DF_NONE, GX_AF_NONE);    \
-    GXSetChanMatColor(GX_COLOR0A0, (w)->color);                                          \
-    GXSetNumTexGens(0);                                                                  \
-    GXSetNumTevStages(2);                                                                \
-    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);          \
-    GXSetTevOp(GX_TEVSTAGE0, GX_PASSCLR);                                                \
-    GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR_NULL);        \
-    GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV); \
-    GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV); \
-    GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_ZERO, GX_CC_C0, GX_CC_CPREV, GX_CC_ZERO);        \
-    GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_A0, GX_CA_APREV, GX_CA_ZERO);        \
-    GXSetTevColor(GX_TEVREG0, (GXColor){(w)->r, (w)->g, (w)->b, (w)->a});
-
-#define DISP_MID(w)                                                                      \
-    GXSetNumChans(1);                                                                    \
-    GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_VTX, 0, GX_DF_NONE, GX_AF_NONE);    \
-    GXSetNumTexGens(1);                                                                  \
-    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0, GX_FALSE, GX_PTIDENTITY);               \
-    PSMTXTrans(m, (w)->texScrollX, (w)->texScrollY, 0.0f);                               \
-    GXLoadTexMtxImm(m, GX_TEXMTX0, GX_MTX2x4);                                                   \
-    GXSetNumTevStages(2);                                                                \
-    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);                  \
-    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV); \
-    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV); \
-    GXSetTevOp(GX_TEVSTAGE0, GX_MODULATE);                                               \
-    GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR_NULL);        \
-    GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV); \
-    GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV); \
-    GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_ZERO, GX_CC_C0, GX_CC_CPREV, GX_CC_ZERO);        \
-    GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_A0, GX_CA_APREV, GX_CA_ZERO);        \
-    GXSetTevColor(GX_TEVREG0, (GXColor){(w)->r, (w)->g, (w)->b, (w)->a});
-
 /** Blend setup of the star stone's passes: alpha blending, z test without z writes, no alpha test. */
 static inline void starStoneBlendState(void) {
     GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
@@ -723,7 +686,21 @@ static void effStarStoneDisp_1(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* cam = camGetPtr(cameraId);
     s32 type = w->type;
 
-    DISP_START(w)
+    mapSetMaterialFog();
+    GXSetArray(GX_VA_CLR0, color_tbl[w->type], 4);
+    GXSetNumChans(1);
+    GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
+    GXSetChanMatColor(GX_COLOR0A0, w->color);
+    GXSetNumTexGens(0);
+    GXSetNumTevStages(2);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
+    GXSetTevOp(GX_TEVSTAGE0, GX_PASSCLR);
+    GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR_NULL);
+    GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_ZERO, GX_CC_C0, GX_CC_CPREV, GX_CC_ZERO);
+    GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_A0, GX_CA_APREV, GX_CA_ZERO);
+    GXSetTevColor(GX_TEVREG0, (GXColor){w->r, w->g, w->b, w->a});
     PSMTXTrans(m, w->position.x, w->position.y, w->position.z);
     PSMTXScale(s, 1.1f * w->scale, 1.1f * w->scale, 1.1f * w->scale);
     PSMTXConcat(m, s, m);
@@ -741,7 +718,23 @@ static void effStarStoneDisp_1(CameraId cameraId, EffectEntry* effect) {
         diamond_7_polygon_0();
         diamond_7_polygon_1();
     }
-    DISP_MID(w)
+    GXSetNumChans(1);
+    GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_VTX, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0, GX_FALSE, GX_PTIDENTITY);
+    PSMTXTrans(m, w->texScrollX, w->texScrollY, 0.0f);
+    GXLoadTexMtxImm(m, GX_TEXMTX0, GX_MTX2x4);
+    GXSetNumTevStages(2);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevOp(GX_TEVSTAGE0, GX_MODULATE);
+    GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR_NULL);
+    GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_ZERO, GX_CC_C0, GX_CC_CPREV, GX_CC_ZERO);
+    GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_A0, GX_CA_APREV, GX_CA_ZERO);
+    GXSetTevColor(GX_TEVREG0, (GXColor){w->r, w->g, w->b, w->a});
     PSMTXTrans(m, w->position.x, w->position.y, w->position.z);
     PSMTXScale(s, w->scale, w->scale, w->scale);
     PSMTXConcat(m, s, m);

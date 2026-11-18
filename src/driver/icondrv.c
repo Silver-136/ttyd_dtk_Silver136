@@ -31,25 +31,6 @@ static TEXPalette* icon_tpl;
 
 //.sdata
 
-// A macro, not an inline function: as a function the code and stack frames change.
-#define ICON_ANIM_TPL_S(data, dst)               \
-    if ((data)->numIcons > 1) {                  \
-        s32 i;                                   \
-        s32 t;                                   \
-        s32 total = 0;                           \
-        for (i = 0; i < (data)->numIcons; i++) { \
-            total += (data)->frames[i].delay;    \
-        }                                        \
-        t = (s32)gp->retraceCount % total;       \
-        for (i = 0; i < (data)->numIcons; i++) { \
-            if (t < (data)->frames[i].delay) {   \
-                dst = (data)->frames[i].tplId;   \
-                break;                           \
-            }                                    \
-            t -= (data)->frames[i].delay;        \
-        }                                        \
-    }
-
 #if VERSION >= VERSION_US
     // US and later: the Power Rush and Power Rush P icons for each language (indexed by gp->language: JP, US, GE,
     // FR, SP, IT)
@@ -566,7 +547,22 @@ void iconDispGxCol(Mtx pos, u16 flags, s32 iconId, GXColor color) {
     entry.height = data->height;
     entry.tplId = data->frames[0].tplId;
     entry.frameDelay = data->frames[0].delay;
-    ICON_ANIM_TPL_S(data, entry.tplId);
+    if (data->numIcons > 1) {
+        s32 i;
+        s32 t;
+        s32 total = 0;
+        for (i = 0; i < data->numIcons; i++) {
+            total += data->frames[i].delay;
+        }
+        t = (s32)gp->retraceCount % total;
+        for (i = 0; i < data->numIcons; i++) {
+            if (t < data->frames[i].delay) {
+                entry.tplId = data->frames[i].tplId;
+                break;
+            }
+            t -= data->frames[i].delay;
+        }
+    }
     MTXConcat(camera->view, pos, m);
     iconGX(m, ep);
 }
@@ -589,7 +585,22 @@ void iconGetTexObj(GXTexObj* texObj, s32 iconId) {
 #endif
 
     tplId = data->frames[0].tplId;
-    ICON_ANIM_TPL_S(data, tplId);
+    if (data->numIcons > 1) {
+        s32 i;
+        s32 t;
+        s32 total = 0;
+        for (i = 0; i < data->numIcons; i++) {
+            total += data->frames[i].delay;
+        }
+        t = (s32)gp->retraceCount % total;
+        for (i = 0; i < data->numIcons; i++) {
+            if (t < data->frames[i].delay) {
+                tplId = data->frames[i].tplId;
+                break;
+            }
+            t -= data->frames[i].delay;
+        }
+    }
     TEXGetGXTexObjFromPalette(icon_tpl, texObj, tplId);
     GXInitTexObjLOD(texObj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
 }

@@ -45,7 +45,11 @@ typedef struct YukaAnim {
 #define YUKA_ANIM_FLAG_PAUSE 1 // set by yuka_anim_reverse_pause, cleared by yuka_anim_reverse_replay
 #define YUKA_ANIM_FLAG_END 2   // set by yuka_anim_reverse_end: yuka_anim_reverse_play returns
 
-#define YUKA_NOW() OSTicksToMilliseconds(gp->inBattle ? gp->renderTime : gp->renderFieldTime)
+/** The current render time in milliseconds (the battle clock in battle, else the field clock). */
+static inline OSTime yukaNow(void) {
+    return OSTicksToMilliseconds(gp->inBattle ? gp->renderTime : gp->renderFieldTime);
+}
+
 YukaAnim yuka_anim;
 s32 g_Kusuri1_No;
 s32 g_Kusuri_B;
@@ -2076,7 +2080,7 @@ static USER_FUNC(yuka_anim_reverse_play) {
     if (isFirstCall) {
         yuka_anim.anim = mapSearchAnmObj("yuka");
         yuka_anim.flags = 0;
-        yuka_anim.anim->startTime = YUKA_NOW();
+        yuka_anim.anim->startTime = yukaNow();
         yuka_anim.anim->flags |= MAP_ANIM_FLAG_PAUSE;
         yuka_anim.anim->flags &= ~MAP_ANIM_FLAG_RESTART;
     }
@@ -2084,7 +2088,7 @@ static USER_FUNC(yuka_anim_reverse_play) {
         return EVT_RETURN_DONE;
     }
     if (!(yuka_anim.flags & YUKA_ANIM_FLAG_PAUSE)) {
-        dt = 60.0f * (f32)(u64)(YUKA_NOW() - yuka_anim.anim->startTime) / 1000.0f;
+        dt = 60.0f * (f32)(u64)(yukaNow() - yuka_anim.anim->startTime) / 1000.0f;
 
         yuka_anim.anim->time -= dt * yuka_anim.anim->rate;
         if (yuka_anim.anim->time <= 0.0f) {
@@ -2095,7 +2099,7 @@ static USER_FUNC(yuka_anim_reverse_play) {
     }
 
     // Refresh the time baseline even while reverse playback is paused.
-    yuka_anim.anim->startTime = YUKA_NOW();
+    yuka_anim.anim->startTime = yukaNow();
     return EVT_RETURN_BLOCK;
 }
 

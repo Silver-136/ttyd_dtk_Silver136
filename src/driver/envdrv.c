@@ -18,9 +18,6 @@
 #include "driver/fadedrv.h"
 static void envGlare(EnvironmentGlare* glare);
 
-// the work of the current mode: work[1] in battle, work[0] in the field
-#define envGetWork() (gp->inBattle ? &work[1] : &work[0])
-
 //.data
 
 /** Glare pattern for filter type 1: the screen copy added back 16 times, up to 7 pixels off in a cross: a star glow. */
@@ -76,6 +73,11 @@ static EnvironmentGlare envGlare3 = {
 
 //.bss
 static EnvironmentWork work[2];
+
+/** The work of the current mode: work[1] in battle, work[0] in the field. */
+static inline EnvironmentWork* envGetWork(void) {
+    return gp->inBattle ? &work[1] : &work[0];
+}
 
 //.sbss
 static TEXPalette* env_tpl = NULL;
@@ -366,15 +368,17 @@ static inline f32 env_cos(register f32 x) {
     return a;
 }
 
-#define DOF_QUAD(g, half)                                                              \
-    GXPosition3f32(-(s32)(g)->fbWidth / (half), (g)->efbHeight / (half), 0.0f);        \
-    GXTexCoord2f32(0.0f, 0.0f);                                                        \
-    GXPosition3f32((g)->fbWidth / (half), (g)->efbHeight / (half), 0.0f);              \
-    GXTexCoord2f32(1.0f, 0.0f);                                                        \
-    GXPosition3f32((g)->fbWidth / (half), -(s32)(g)->efbHeight / (half), 0.0f);        \
-    GXTexCoord2f32(1.0f, 1.0f);                                                        \
-    GXPosition3f32(-(s32)(g)->fbWidth / (half), -(s32)(g)->efbHeight / (half), 0.0f);  \
-    GXTexCoord2f32(0.0f, 1.0f)
+/** Sends one screen-sized quad centred on the origin (half the frame buffer width and EFB height each way). */
+static inline void dofQuad(void) {
+    GXPosition3f32(-(s32)gp->fbWidth / 2.0f, gp->efbHeight / 2.0f, 0.0f);
+    GXTexCoord2f32(0.0f, 0.0f);
+    GXPosition3f32(gp->fbWidth / 2.0f, gp->efbHeight / 2.0f, 0.0f);
+    GXTexCoord2f32(1.0f, 0.0f);
+    GXPosition3f32(gp->fbWidth / 2.0f, -(s32)gp->efbHeight / 2.0f, 0.0f);
+    GXTexCoord2f32(1.0f, 1.0f);
+    GXPosition3f32(-(s32)gp->fbWidth / 2.0f, -(s32)gp->efbHeight / 2.0f, 0.0f);
+    GXTexCoord2f32(0.0f, 1.0f);
+}
 
 /** Opaque white, the TEV colour of the depth-of-field pass (envDisp_DepthOfField). */
 static const GXColor white = {0xFF, 0xFF, 0xFF, 0xFF};
@@ -458,7 +462,7 @@ static void envDisp_DepthOfField(void) {
             GXSetNumTexGens(coord);
             GXSetNumTevStages(stage);
             GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-            DOF_QUAD(gp, 2.0f);
+            dofQuad();
         }
         if ((dof->flags & ENV_DOF_PASS2) && dof->radius2) {
             coord = GX_TEXCOORD0;
@@ -505,7 +509,7 @@ static void envDisp_DepthOfField(void) {
             GXSetNumTexGens(coord);
             GXSetNumTevStages(stage);
             GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-            DOF_QUAD(gp, 2.0f);
+            dofQuad();
         }
     }
 }
@@ -578,7 +582,7 @@ static void envDisp_Blur(void) {
         GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
         GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
         GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-        DOF_QUAD(gp, 2.0f);
+        dofQuad();
     }
 }
 

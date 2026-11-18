@@ -397,7 +397,7 @@ function names) and `strupr` (a C library name).
 
 ## Inline helper names (2026-11-17)
 
-211 names of `static inline` (and a few plain `inline`) helpers in the game code that no map lists and no table
+217 names of `static inline` (and a few plain `inline`) helpers in the game code that no map lists and no table
 above names. An inline function leaves no symbol when every call is inlined, so no map can name it: the names
 were chosen when the code was decompiled (LLCOOLT or this fork) and are not original. Each helper reads as
 code a programmer would write (a small getter, a repeated draw or copy step, a private sine), so it is not
@@ -436,6 +436,7 @@ helper: no written-out form builds the same; it should be a FAKES row.
 | src/battle/ac/ac_shot.c | `shotRecord` |
 | src/battle/ac/ac_stick_rotate.c | `stickRotateEnd` |
 | src/battle/battle_ac.c | `gaugeQuad` |
+| src/battle/battle_audience.c | `audSoundStart` |
 | src/battle/battle_event_cmd.c | `bec_coin` |
 | src/battle/sac/sac_muki.c | `sacMukiAudienceCall` |
 | src/cam_road.c | `camRoadCos`, `camRoadSin`, `crSq`, `hokanRate` (1) |
@@ -443,14 +444,16 @@ helper: no written-out form builds the same; it should be a FAKES row.
 | src/driver/bgdrv.c | `bgGetWork`, `bgLoad` |
 | src/driver/camdrv.c | `clampScaled` |
 | src/driver/effdrv.c | `effMayaKeyInterp` (1), `effMayaSetGQR` (1) |
-| src/driver/envdrv.c | `env_sin`, `env_cos`, `envTexObj` (1), `envTexObjCI` (1), `envLoadTex`, `envWaterParent` (1) |
+| src/driver/envdrv.c | `env_sin`, `env_cos`, `envTexObj` (1), `envTexObjCI` (1), `envLoadTex`, `envWaterParent` (1), `envGetWork`, `dofQuad` |
+| src/driver/extdrv.c | `extGetWork` |
 | src/driver/fadedrv.c | `fadeCapture`, `fadeTecAlpha` (1) |
 | src/driver/hitdrv.c | `hitDequant`, `checkTriVecDown`, `checkTriVecUp` (1), `checkTriVecDir` |
 | src/driver/icondrv.c | `iconGetWork`, `iconFindIn` |
 | src/driver/itemdrv.c | `itemGetWork`, `itemGetEnd` |
+| src/driver/lightdrv.c | `lightGetWork` |
 | src/driver/mapdrv.c | `mapAnimFps`, `mapSearchAnmObj_inl`, `mapHermiteCh`, `mapObjIsTranslucent` |
 | src/driver/mobjdrv.c | `mobjGetWorkFlag` |
-| src/driver/msgdrv.c | `msgEntryText`, `msgCheckSkip` |
+| src/driver/msgdrv.c | `msgEntryText`, `msgCheckSkip`, `msgWinData` |
 | src/driver/npcdrv.c | `npcGetWorkPtr2`, `npcDimColor` |
 | src/driver/offscreendrv.c | `offscreenGetWorkGp` |
 | src/driver/shadowdrv.c | `shadowSetupPolygon`, `shadowSetMat`, `shadowDrawVolume`, `shadowSetTev` (1), `shadowSetMatZero` (1), `shadowRestoreView` |
@@ -516,6 +519,7 @@ helper: no written-out form builds the same; it should be a FAKES row.
 | src/window/win_log.c | `tubuCheck` |
 | src/window/win_mario.c | `fukiKey`, `fukiTool` |
 | src/window/win_root.c | `nameTex`, `nameQuad`, `winWazaQuad`, `winSortTex` |
+| rels/aji/src/aji_06.c | `yukaNow` |
 | rels/aji/src/aji_19.c | `beltSpeed` |
 | rels/bom/src/bom_01.c | `chb_sin`, `chb_cos` |
 | rels/eki/src/eki_00.c | `moa_cos` |
@@ -532,7 +536,9 @@ helper: no written-out form builds the same; it should be a FAKES row.
 | rels/tik/src/tik_05.c | `fid` (1) |
 | rels/tou/src/tou_01.c | `kanbanCopyFlags` |
 | rels/yuu/src/event/evt_yuunpc.c | `yuunpc_hit_get` |
+| rels/yuu/src/yuu_00.c | `randRange` |
 | rels/yuu/src/yuu_01.c | `randRange` |
+| rels/yuu/src/yuu_03.c | `wrap360` |
 | include/eff/eff_magic1_n64.h | `effMagic1SinDeg` |
 
 ## Invented names for objects the original left unnamed

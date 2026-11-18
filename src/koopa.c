@@ -186,8 +186,6 @@ s32 kpaGetStageType(void) {
     return (marioGetPtr()->stageFlags >> 1) & 1;
 }
 
-#define JUMP_PARAM(m, i) ((&(m)->jumpVelocityY)[i]) // jumpVelocityY..jumpSnapY as f32[4]
-
 /** Sets mp's jump parameters: y velocity, acceleration, jerk and snap. */
 static inline void kpaSetJumpParams(MarioWork* mp, f32 velocityY, f32 accelerationY, f32 jerkY, f32 snapY) {
     mp->jumpVelocityY = velocityY;
@@ -475,7 +473,7 @@ f32 kpaSetJumpPara(void) {
     f32* jd = marioJumpData;
     MarioWork* mario = marioGetPtr();
     for (i = 0; i < 4; i++) {
-        JUMP_PARAM(mario, i) = jd[i];
+        (&mario->jumpVelocityY)[i] = jd[i]; // jumpVelocityY..jumpSnapY as f32[4]
     }
     switch (mario->kpaWork->level) {
         case 0:

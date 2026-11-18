@@ -1290,7 +1290,8 @@ static void monte_disp(CameraId camera, void* param) {
     }
 }
 
-#define randRange(d) (irand(100.0f * (d)) / 100.0f)
+/** Returns a random float in [0, d) with two decimal digits of resolution (as in yuu_01). */
+static inline f32 randRange(f32 d) { return irand(100.0f * d) / 100.0f; }
 
 /**
  * Frame-by-frame coin spawner and collector for Plane Mode.

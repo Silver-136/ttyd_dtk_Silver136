@@ -1312,25 +1312,6 @@ static void calcHokanCamRoad(s32 type, CamRoadState* from, CamRoadState* to, Cam
     out->shiftXRate = r * (to->shiftXRate - from->shiftXRate) + from->shiftXRate;
 }
 
-// A macro, not an inline function: as a function camRoadMain changes.
-#define CAMROAD_HOKAN_START(src, flags)                                                           \
-    {                                                                                             \
-        wp->cmpFlags = flags;                                                                     \
-        wp->hokanOn = 1;                                                                             \
-        wp->time = gp->renderFieldTime;                                                           \
-        wp->hokanT = 0.0f;                                                                        \
-        wp->start = src;                                                                          \
-        wp->prev = wp->next;                                                                      \
-        if (wp->prev.hitFlags || wp->start.hitFlags ||                                                    \
-            (wp->state == CAM_ROAD_FORMAT_101 &&                                                                 \
-             ((wp->prev.cam && wp->prev.cam->fixYOn) || (wp->start.cam && wp->start.cam->fixYOn))) || \
-            (wp->prev.cam && wp->prev.cam->shiftXRate) || (wp->start.cam && wp->start.cam->shiftXRate)) {     \
-            wp->hokanType = 1;                                                                    \
-        } else {                                                                                  \
-            wp->hokanType = 0;                                                                    \
-        }                                                                                         \
-    }
-
 /**
  * Per frame camera road update: computes the road state for target (a, b, c)
  * and floor probe (d, e, f) (world units), starts a timed blend whenever the state jumps (compareCamRoad),
@@ -1353,7 +1334,20 @@ void camRoadMain(CameraParams* out, f32 xA, f32 yA, f32 zA, f32 xB, f32 yB, f32 
     if (wp->hokanOn) {
         flags = compareCamRoad(&wp->prev, &wp->next, &wp->hokanSpeed);
         if (flags) {
-            CAMROAD_HOKAN_START(wp->cur, flags)
+            wp->cmpFlags = flags;
+            wp->hokanOn = 1;
+            wp->time = gp->renderFieldTime;
+            wp->hokanT = 0.0f;
+            wp->start = wp->cur;
+            wp->prev = wp->next;
+            if (wp->prev.hitFlags || wp->start.hitFlags ||
+                (wp->state == CAM_ROAD_FORMAT_101 &&
+                 ((wp->prev.cam && wp->prev.cam->fixYOn) || (wp->start.cam && wp->start.cam->fixYOn))) ||
+                (wp->prev.cam && wp->prev.cam->shiftXRate) || (wp->start.cam && wp->start.cam->shiftXRate)) {
+                wp->hokanType = 1;
+            } else {
+                wp->hokanType = 0;
+            }
         } else {
             wp->prev = wp->next;
         }
@@ -1361,7 +1355,20 @@ void camRoadMain(CameraParams* out, f32 xA, f32 yA, f32 zA, f32 xB, f32 yB, f32 
     if (!wp->hokanOn) {
         flags = compareCamRoad(&wp->next, &wp->prev, &wp->hokanSpeed);
         if (flags) {
-            CAMROAD_HOKAN_START(wp->prev, flags)
+            wp->cmpFlags = flags;
+            wp->hokanOn = 1;
+            wp->time = gp->renderFieldTime;
+            wp->hokanT = 0.0f;
+            wp->start = wp->prev;
+            wp->prev = wp->next;
+            if (wp->prev.hitFlags || wp->start.hitFlags ||
+                (wp->state == CAM_ROAD_FORMAT_101 &&
+                 ((wp->prev.cam && wp->prev.cam->fixYOn) || (wp->start.cam && wp->start.cam->fixYOn))) ||
+                (wp->prev.cam && wp->prev.cam->shiftXRate) || (wp->start.cam && wp->start.cam->shiftXRate)) {
+                wp->hokanType = 1;
+            } else {
+                wp->hokanType = 0;
+            }
         }
     }
     if (wp->hokanOn) {

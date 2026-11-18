@@ -20,8 +20,10 @@
 
 static ExtdrvWork work[2];
 
-// Field or battle work. A macro: as an inline function the object changes.
-#define extGetWork() (gp->inBattle ? &work[1] : &work[0])
+/** The field or the battle work (work[1] in battle). */
+static inline ExtdrvWork* extGetWork(void) {
+    return gp->inBattle ? &work[1] : &work[0];
+}
 
 static void extMakeTexture(CameraId camId, void* param);
 static s32 compare(const void* a, const void* b);

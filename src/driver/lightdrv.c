@@ -18,8 +18,10 @@ static LightEntry paperLight3DImg;
 static LightEntry paperCraft;
 static LightEntry booLight;
 
-// Field (group 0) or battle (group 1) light work. A macro: as an inline function the object changes.
-#define lightGetWork() (mapGetActiveGroup() == 1 ? &work[1] : &work[0])
+/** The field (group 0) or battle (group 1) light work. */
+static inline LightWork* lightGetWork(void) {
+    return mapGetActiveGroup() == 1 ? &work[1] : &work[0];
+}
 
 /**
  * Allocates the field and battle light tables and sets up the fixed lights:
