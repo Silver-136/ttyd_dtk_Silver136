@@ -395,6 +395,14 @@ static const char* C_of_A_Attack[] = {
     NULL,
 };
 
+/**
+ * Attack of Smorg tentacle A: picks one target of weapon_moamoa_attack and chooses its front or back
+ * swing list (A_of_A_Attack_front or _back) by whether the target stands at x -120 or more
+ * (boss_moamoa_check_zenei_kouei). It clears the body's MOAMOA_UNIT_WORK_LIMB_HIT, sets the body to pose
+ * S_1_1 and makes tentacles B and C, when still there, swing along (evt_attack_other_arm with
+ * B_of_A_Attack and C_of_A_Attack). It then plays its list section by section with the arm sounds,
+ * damage-checks the target, sets MOAMOA_UNIT_WORK_LIMB_HIT again and plays the rest of the list.
+ */
 static EVT_BEGIN(evt_attack)
     // Choose the target for the tentacle's swat; a confused tentacle is flustered when there is none.
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))

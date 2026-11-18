@@ -456,6 +456,11 @@ static USER_FUNC(loop_onoff) {
     return EVT_RETURN_BLOCK;
 }
 
+/**
+ * Script function: hides every panel light (hikaru_01 to 30 and nashi_01 to 30) and clears HIT_ATTR_SPIKES on
+ * the 30 panel hit areas A_hikaru_NN, so no panel shocks any more (evt_box runs it once the elevator key is
+ * taken).
+ */
 static USER_FUNC(all_flag_off) {
     char name[64];
     s32 i;
@@ -471,6 +476,11 @@ static USER_FUNC(all_flag_off) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script function: lights the route chosen by GW(10) (index into root_data). Its panels show hikaru_NN,
+ * hide nashi_NN and lose HIT_ATTR_SPIKES; every other panel shows nashi_NN and gets HIT_ATTR_SPIKES, so
+ * standing on it puts Mario into MARIO_MOTION_DAMAGE_TOGE, which thunder_main turns into an electric shock.
+ */
 static USER_FUNC(hikaru_on_func) {
     char name[64];
     s32 idx = evtGetValue(event, GW(10));
@@ -508,7 +518,7 @@ static USER_FUNC(hikaru_on_func) {
     return EVT_RETURN_DONE;
 }
 
-// Hide both visual sets without changing the panel collision attributes.
+/** Script function: hides all panel lights (hikaru_01 to 30 and nashi_01 to 30) without touching the hit areas. */
 static USER_FUNC(hikaru_off_func) {
     char name[64];
     s32 i;

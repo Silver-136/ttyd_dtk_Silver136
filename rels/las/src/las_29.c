@@ -450,6 +450,11 @@ static USER_FUNC(rousoku_init) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper for the candles 39 to 62: with args[0] nonzero it hides their models S_rou39 to S_rou62 and
+ * sets the flames hi39 to hi62 to scale 0; with args[0] zero it shows the models and sets scale 0.5.
+ * args[1] is read but not used.
+ */
 static USER_FUNC(rou_hikari_front_onoff) {
     char name[8];
     EvtWord* args = event->args;

@@ -1524,6 +1524,12 @@ static EVT_BEGIN(drill_attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Boomerang attack of Magnus von Grapple 2.0 (weapon_batten_boomerang_attack): the boss splits off its
+ * boomerang (part 4; poses MGN_A6_1, MGN_A4_2 and MGN_A4_3, the SFX_BOSS_MBTN_BOOME_* sounds), which swings
+ * in two short arcs in front of it and then flies across the party to x = -400, checking and damaging
+ * each selected target in turn (the guard result is read once); the part is hidden again afterwards.
+ */
 static EVT_BEGIN(boomerang_attack_event)
     // Choose a target; the boomerang flies across every target.
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))

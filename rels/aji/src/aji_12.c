@@ -273,6 +273,15 @@ static USER_FUNC(thunder_main) {
     return EVT_RETURN_BLOCK;
 }
 
+/**
+ * Script function that runs the lit floor puzzle every frame until the card key is taken
+ * (GSWF_AJI_12_LIT_FLOOR_DONE). Each frame it darkens all 44 panels (nashi_NN shown) and sets
+ * HIT_ATTR_SPIKES on every panel of hit_list, then lights two consecutive panels of the hit_list route
+ * (three from the US release on) with the spikes cleared. While Mario stands on no panel, the start panel
+ * A_hikaru_01 is lit too. Stepping onto it restarts the walk at the first panel and slows it from one step
+ * every 21 calls to one every 61; leaving the panels brings back the fast rate. Outside the early demos the
+ * panel under Yoshi counts while Mario rides him.
+ */
 static USER_FUNC(mario_chk) {
     s32 n;
     char name[256];
@@ -386,6 +395,10 @@ static USER_FUNC(mario_chk) {
     return EVT_RETURN_BLOCK;
 }
 
+/**
+ * Script function: hides all 44 panel lights (hikaru_NN and nashi_NN) and clears HIT_ATTR_SPIKES on every
+ * panel A_hikaru_NN and on A_no1, ending the puzzle.
+ */
 static USER_FUNC(hikaru_off) {
     char name[256];
     s32 i;

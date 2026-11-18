@@ -222,6 +222,12 @@ static s32 bottakuruComp(const void* paramA, const void* paramB) {
     return a > b;
 }
 
+/**
+ * Picks Charlieton's four items on offer: gives each stocked unit (up to 16) a random key below 100, sorts,
+ * and stores the first four items' indexes into badge_bottakuru_table in GSW_BADGESHOP_CHARLIETON_STOCK..+3
+ * (16 = empty slot). Runs from badgeShop_init and on entering Rogueport's gor_01 after a restock
+ * (seq_mapchange.c).
+ */
 void badgeShop_bottakuruGeneration(void) {
     s32 table[0x11][2];
     s32 i;
@@ -674,6 +680,11 @@ USER_FUNC(evt_badgeShop_bottakuru_inc) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Removes one of the item in args[0] from Charlieton's stock;
+ * any of the four offer slots (GSW_BADGESHOP_CHARLIETON_STOCK..+3) showing that item is set to 16,
+ * the empty ITEM_NULL entry.
+ */
 USER_FUNC(evt_badgeShop_bottakuru_dec) {
     s32 value;
     s32 i;

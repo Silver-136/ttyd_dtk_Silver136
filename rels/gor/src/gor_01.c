@@ -2180,6 +2180,11 @@ static EVT_BEGIN(chusan1_naguru)
     RETURN
 EVT_END()
 
+/**
+ * Talk event of Mousimilian (チューさん１). During Trouble TROUBLE_HIT_ME_PLEASE Mario and the partners step
+ * up beside him and he explains the request (irai_05_001 and 003; see the BUG note for 002); otherwise one
+ * line per story stage (gor_01_029_00 to _08).
+ */
 static EVT_BEGIN(chusan1_talk)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_HIT_ME_PLEASE)
         CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)

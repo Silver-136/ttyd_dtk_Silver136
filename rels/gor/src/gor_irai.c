@@ -259,6 +259,10 @@ static EVT_BEGIN(irai_start_event_null)
     RETURN
 EVT_END()
 
+/**
+ * Start event of Trouble 1: moves the 盗賊団２ NPC (the second gang member) to (445, 0, 120) and gives the
+ * door in GW(11) the shorter NPC list door_data_05_npc_01, so that NPC is not shown inside house 05.
+ */
 static EVT_BEGIN(irai_start_event01)
     CALL(evt_npc_set_position, STRING("盗賊団２"), 445, 0, 120)
     CALL(evt_door_set_param, GW(11), 0, PTR(&door_data_05_npc_01))

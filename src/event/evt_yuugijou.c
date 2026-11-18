@@ -29,6 +29,11 @@ PiantaParlorWork* yuwp;
 EvtWord* yuu_window_evt;
 #endif
 
+/**
+ * Quits the current Pianta Parlor minigame: sets GW(0) = 2 and GSWF_GOR_RETURNING_FROM_MINIGAME,
+ * parks the partner positions, then sends Mario back through pipe A_dokan_02 of gor_03.
+ * JP and later also call evt_mario_set_enable_key first.
+ */
 static EVT_BEGIN(minigame_end)
     SET_VALUE(GW(0), 2)
     SET_VALUE(GSWF_GOR_RETURNING_FROM_MINIGAME, 1)

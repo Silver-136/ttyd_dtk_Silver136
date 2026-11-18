@@ -138,6 +138,11 @@ static NpcSetupInfo npcEnt[] = {
     {0},
 };
 
+/**
+ * Map init for kpa_05, side-scrolling stage 3: starts Bowser at (-1500, 150), resets the camera road, builds
+ * the stage's blocks and coins from kpa_act_stg3_mobj/item, plays the lava animation anm_magu and starts
+ * the pit watcher, the HUD, the intro and the clock. The red jump stand at the end leads to kpa_06.
+ */
 EVT_BEGIN(kpa_05_init_evt)
     CALL(evt_npc_setup, PTR(npcEnt))
     CALL_CHILD(kpa_init)

@@ -305,6 +305,12 @@ static void vtx_copy(effN64Vtx* dst, effN64Vtx* src, Mtx mtx) {
     OSf32tos16(&v.z, &dst->z);
 }
 
+/**
+ * Draws the flame: copies the 8-vertex mesh stg_flame_v (type 0), stg_flame_3_v (type 1) or stg_flame_2_v
+ * (other types) into work->vtx, transformed by the flame's position, turn and scale, and draws it in two
+ * halves with scrolling texture matrices. Types 0 and 1 use textures 47 and 48, type 2 textures 49 and 50
+ * (type 3 sets up no TEV stages). Type 2 is turned by work->rot about Y; the other types face the camera.
+ */
 static void effFlameDisp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
     CameraEntry* camera = camGetPtr(cameraId);

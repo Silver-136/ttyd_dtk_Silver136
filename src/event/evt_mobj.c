@@ -2628,6 +2628,11 @@ USER_FUNC(evt_mobj_recovery_blk) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Save block script: shows the "save_first_hit" tutorial the first time,
+ * sets GSWF_MAIN_SAVED_SINCE_GOOMBELLA_JOINED once Goombella has joined,
+ * then runs the memory card save menu with Mario's controls locked.
+ */
 static EVT_BEGIN(mobj_save_blk_sysevt)
     SET_TYPE(0)
     CALL(evt_mario_key_onoff, 0)

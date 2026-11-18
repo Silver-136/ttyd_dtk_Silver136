@@ -560,6 +560,12 @@ static EVT_BEGIN(counter_event)
     RETURN
 EVT_END()
 
+/**
+ * Phase event, before the player phase while it can act and part 1 has no kCounterPoisonStatus: with a
+ * 25 in 100 chance it changes height. When lowered (UNIT_WORK_LOWERED 1) it rises to y 40 and turns
+ * kHammerlikeCannotTarget and kShellTosslikeCannotTarget on; otherwise it drops to y 10 and turns them
+ * off. Each move has its own sound and toggles UNIT_WORK_LOWERED.
+ */
 static EVT_BEGIN(unison_phase_event)
     CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_BEFORE_PLAYER)
     IF_INT_EQUAL(LW(0), 0)

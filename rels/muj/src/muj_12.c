@@ -752,6 +752,12 @@ static EVT_BEGIN(korutesu_event_after)
     RETURN
 EVT_END()
 
+/**
+ * The bargain with Cortez, spawned by the map init at STG5_40_TRUE_IDENTITY: Cortez appears
+ * (korutesu_apper) and talks with Flavio (stg5_dou_31 to 36_06); Flavio brings out the Skull Gem, which
+ * floats over to Cortez and fades out. After stg5_dou_37 and 38 Cortez vanishes (korutesu_vanish), the
+ * story moves to STG5_41_RETURN_TO_THE_GROTTO and control returns.
+ */
 EVT_BEGIN(kosho_event)
     CALL(evt_snd_bgmoff, PSND_PAUSE)
     CALL(evt_mario_key_onoff, 0)

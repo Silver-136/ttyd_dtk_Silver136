@@ -31,6 +31,11 @@ USER_FUNC(evt_gra_vivian_pose_set) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * REL entry point of gra.rel: runs the static constructors, registers the init scripts of gra_00 to gra_06
+ * and the area's battle setup tables, and saves a copy of Vivian's pose table so that _epilog can restore
+ * it after the scripts' changes (evt_gra_vivian_pose_set).
+ */
 void _prolog(void) {
     voidfunctionptr* ctor;
 

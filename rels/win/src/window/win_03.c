@@ -338,6 +338,10 @@ static EVT_BEGIN(cloud_lostitem)
     RETURN
 EVT_END()
 
+/**
+ * Tree hit script for item_tree01: when that item is not out, spawns a Star Piece, collected only once
+ * (GSWF_STARPIECE_42).
+ */
 static EVT_BEGIN(tree_evt_01)
     CALL(evt_item_delete_check, STRING("item_tree01"), LW(0))
     IF_INT_EQUAL(LW(0), 1)

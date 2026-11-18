@@ -610,6 +610,10 @@ static EVT_BEGIN(childABC_talk_04)
     RETURN
 EVT_END()
 
+/**
+ * Init script of the aunt (human form): enables move/talk animation and hides her below the map
+ * if she has been turned into a pig (GSWF_USU_01_AUNT_TURNED_INTO_PIG) before the Doopliss fight.
+ */
 static EVT_BEGIN(aunt_init)
     CALL(evt_npc_flag_onoff, 1, STRING("おばさん"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     SWITCH(GSW_STORY_PROGRESS)
@@ -621,6 +625,10 @@ static EVT_BEGIN(aunt_init)
     RETURN
 EVT_END()
 
+/**
+ * Init script of the pig aunt: enables move/talk animation and hides her below the map unless the story is
+ * before STG4_10_DOOPLISS_BATTLE and she has been turned into a pig (GSWF_USU_01_AUNT_TURNED_INTO_PIG).
+ */
 static EVT_BEGIN(aunt_pig_init)
     CALL(evt_npc_flag_onoff, 1, STRING("ブタおばさん"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     SWITCH(GSW_STORY_PROGRESS)

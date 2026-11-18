@@ -1412,6 +1412,13 @@ static EVT_BEGIN(sekai_yami_evt)
     RETURN
 EVT_END()
 
+/**
+ * Cheering cutaway of the final battle (STG8_15_GRODUS, map entered at "minnnanokoe"): Mario and the
+ * partner are moved out of view, Pennington, the madam and the Goldbob family stand in the darkened map
+ * (envSetYami) around the floating, turning star stone (starstone); they worry and then cheer Mario on
+ * (stg8_las_148_53 to _61), Pennington wonders aloud (_62), and the scene moves on to bom_02 (entrance
+ * minnnanokoe).
+ */
 static EVT_BEGIN(minnnanokoe_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)

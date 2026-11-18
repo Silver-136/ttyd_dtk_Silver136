@@ -306,6 +306,7 @@ static USER_FUNC(thunder_main) {
     return EVT_RETURN_BLOCK;
 }
 
+/** Script function: hides all 24 panel lights (hikaru_01 to 24 and nashi_01 to 24). */
 static USER_FUNC(_hikaru_off) {
     char name[64];
     s32 i;

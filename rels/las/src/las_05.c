@@ -1170,6 +1170,15 @@ static void senkaron_ext_shadow_disp(CameraId camera, void* param) {
     extDrawShadow();
 }
 
+/**
+ * Dark Bones's ambush at STG8_00_START (nothing at other story values): Dark Bones speaks (stg8_las_02) and
+ * calls the swarm of 1000 Dry Bones (evt_ext_entry with the senkaron_ext_* callbacks), the partner reacts
+ * (stg8_las_03), Dark Bones speaks again (stg8_las_04) and the swarm pushes Mario back to x 370. With the
+ * west door (w_bero) shut, Mario has to reach Dark Bones or hit him with a partner move; standing idle in
+ * the swarm for too long sinks him and ends the game (stg8_las_05, 06). Reaching him starts the battle;
+ * after it the story moves to STG8_01_1000_DRY_BONES, the door works again and Dark Bones drops Palace Key
+ * 0x2E.
+ */
 static EVT_BEGIN(senkaron_event)
     // First visit: controls are off and Dark Bones appears with a rattling sound.
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_00_START)

@@ -366,6 +366,10 @@ static EVT_BEGIN(peach_mail)
     RETURN
 EVT_END()
 
+/**
+ * Tree hit script for item_ki03: when that item is not out, drops a coin, collected only once
+ * (GSWF_WIN_01_COIN_TREE).
+ */
 static EVT_BEGIN(ki_data_evt_03)
     CALL(evt_item_delete_check, STRING("item_ki03"), LW(0))
     IF_INT_EQUAL(LW(0), 1)

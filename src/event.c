@@ -2489,6 +2489,11 @@ static void stg8_05_init(void) {
     pouchGetItem(ITEM_STAR_KEY);
 }
 
+/**
+ * Story point STG8_06 "Moving Planets" (las_10): takes the Star Key and solves the Riddle Tower:
+ * all eight locks open (GSW_LAS_10_PALACE_KEYS_SET = 8), every las_11-las_18 puzzle, switch,
+ * big block and key chest flag set, GSW_LAS_17_ENEMY_ORDER_STATE = 4.
+ */
 static void stg8_06_init(void) {
     pouchRemoveItem(ITEM_STAR_KEY);
     swSet(GSWF_ID(GSWF_LAS_10_FIRST_CUTSCENE_SEEN));

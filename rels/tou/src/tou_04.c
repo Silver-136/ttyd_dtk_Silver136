@@ -1162,6 +1162,10 @@ static EVT_BEGIN(init_g_6)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of guard 6: stg3_tou_101 at a ranking below 1, stg3_tou_102_00 at ranking 163, otherwise
+ * stg3_tou_102.
+ */
 static EVT_BEGIN(talk_g_6)
     CALL(evt_tou_get_ranking, LW(0))
     SWITCH(LW(0))

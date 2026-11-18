@@ -1570,6 +1570,10 @@ EVT_BEGIN(evt_tou_monitor_init)
     RETURN
 EVT_END()
 
+/**
+ * The guard's remark after a partner stand-in's line (the dummy_party_msg_* scripts): when the guard
+ * (ガードマン) stands at z above 100 he says stg3_tou_304.
+ */
 static EVT_BEGIN(talk_gardman_doku)
     CALL(evt_npc_get_position, STRING("ガードマン"), LW(0), LW(1), LW(2))
     IF_INT_GREATER(LW(2), 100)

@@ -673,6 +673,12 @@ static EVT_BEGIN(dead_event)
     RETURN
 EVT_END()
 
+/**
+ * Phase event of Gloomtail, after the player phase while it can act: at attack stage 1 and HP at most 60 %
+ * it moves to stage 2 and says stg8_las_49_03; at stage 3 and HP at most 40 % it moves to stage 4 and says
+ * stg8_las_49_04; at stage 5 it says stg8_las_49_05; from stage 6 on, at HP at most 20 %, it says
+ * stg8_las_49_07 once (UNIT_WORK_LOW_HP_TALKED).
+ */
 static EVT_BEGIN(phase_event)
     CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_AFTER_PLAYER)
     IF_INT_EQUAL(LW(0), 0)

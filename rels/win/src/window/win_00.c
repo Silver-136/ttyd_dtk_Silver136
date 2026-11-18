@@ -1040,6 +1040,10 @@ static EVT_BEGIN(witchtrio_lose)
     RETURN
 EVT_END()
 
+/**
+ * Tree hit script for item_ki01: when that item is not out, drops a Sleepy Sheep, collected only once
+ * (GSWF_WIN_00_SLEEPY_SHEEP_TREE).
+ */
 static EVT_BEGIN(ki_data_evt_01)
     CALL(evt_item_delete_check, STRING("item_ki01"), LW(0))
     IF_INT_EQUAL(LW(0), 1)

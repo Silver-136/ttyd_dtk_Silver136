@@ -2164,6 +2164,12 @@ static EVT_BEGIN(sekai_yami_evt)
     RETURN
 EVT_END()
 
+/**
+ * Cheering cutaway of the final battle (STG8_15_GRODUS, map entered at "minnnanokoe"): Mario and the
+ * partner are moved out of view, the clerk is moved away, and the four sailors stand in the darkened map
+ * (envSetYami) around the floating, turning star stone (starstone); they cheer Mario on (stg8_las_148_38
+ * to _52), then the scene moves on to pik_01 (entrance minnnanokoe).
+ */
 static EVT_BEGIN(minnnanokoe_evt)
     // Everyone's voices: Mario loses control and the crew gathers.
     CALL(evt_mario_key_onoff, 0)

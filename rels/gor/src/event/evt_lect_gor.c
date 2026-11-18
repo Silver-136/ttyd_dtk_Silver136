@@ -653,6 +653,12 @@ static EVT_BEGIN(all_party_lecture_otosub)
     RETURN
 EVT_END()
 
+/**
+ * Ceremony for a new partner, run with the party id in LW(9) and the partner NPC's name in LW(8): except for
+ * Goombella (party 1, already beside Mario) the NPC is replaced by the real party member, the party-join
+ * music plays over an item-get style effect, the partner's explanation (lecture_friends_00 to _17) is
+ * shown, and for Goombella and Ms. Mowz the demonstration stage is played.
+ */
 EVT_BEGIN(all_party_lecture)
     // The new partner joins: unless it is Goombella (already beside Mario), the placeholder NPC is swapped for
     // the real party member at the same spot.

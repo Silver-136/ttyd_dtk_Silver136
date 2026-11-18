@@ -27,6 +27,13 @@ typedef struct KeijibanData {
 
 KeijibanData _kjdt[1];
 
+/**
+ * Builds the list of notice board entries for a message prefix: reads the messages prefix_0000,
+ * prefix_0001, ... until one lacks the "<!" header or its first field is "enddata"; that field names an
+ * event number (search_evt_no). Without fill it finds the highest event number not past the story progress
+ * and counts its entries; with fill (bit 0) it stores those entries (event number and message index) in
+ * the table, or returns 0 at once when none was found. Returns the number of entries.
+ */
 s32 keijiban_data_make(const char* prefix, BOOL fill) {
     char name[64];
     char buf[64];
@@ -119,6 +126,11 @@ s32 keijiban_data_make(const char* prefix, BOOL fill) {
     return count;
 }
 
+/**
+ * Script helper that builds the message label of notice board entry args[0] (the prefix and the entry's
+ * message index, "%s_%04d") into args[1] and remembers it as the current entry; gives an empty string
+ * when the index is out of range.
+ */
 USER_FUNC(keijiban_joho_makelabel) {
     EvtWord* args = event->args;
     s32 idx = evtGetValue(event, args[0]);

@@ -352,6 +352,10 @@ EVT_BEGIN(cortez_weapon_get_home_height)
     RETURN
 EVT_END()
 
+/**
+ * Sets the hit attributes of the body part of weapon LW(9) by its home height: at home Y 40 or more it
+ * turns kHammerlikeCannotTarget and kShellTosslikeCannotTarget on, lower it turns them off.
+ */
 EVT_BEGIN(cortez_weapon_set_formation_attribute)
     CALL(btlevtcmd_GetBodyId, LW(9), LW(0))
     CALL(btlevtcmd_GetHomePos, LW(9), EVT_NULLPTR, LW(1), EVT_NULLPTR)

@@ -6193,6 +6193,14 @@ static USER_FUNC(evt_puni_exit) {
 }
 #pragma pop
 
+/**
+ * Script call that brings Puni args[0] to life in mode args[1] (PUNI_MODE_*) at (args[2], args[3], args[4]).
+ * With args[5] set it first checks the story: the guide (1) only once he has joined and is not waiting at
+ * the jail, the sister (2), Jabble (3) and the rival (4) only once they have joined, any other Puni only
+ * when its number is below the follower count plus 5. The four named Punies are also stored in Punigp.
+ * Then it resets the Puni's state and gives it 60 HP (regen 10, interval 60), attack 20,
+ * defense 10 and hit rates 50 and 70.
+ */
 USER_FUNC(evt_puni_init_puni) {
     EvtWord* args = event->args;
     s32 idx = evtGetValue(event, args[0]);

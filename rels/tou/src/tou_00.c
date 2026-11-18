@@ -271,6 +271,11 @@ static EVT_BEGIN(evt_pos_keep)
     RETURN
 EVT_END()
 
+/**
+ * Departure cutscene for the blimp ride back to Rogueport: the gondola rises and the blimp flies off,
+ * then GSWF_TOU_BLIMP_TO_ROGUEPORT_UNUSED is set and the map changes to gor_04 (entrance
+ * "hikousen_return").
+ */
 static EVT_BEGIN(evt_to_gor)
     CALL(evt_cam3d_evt_set, 0, 241, 534, 0, 145, -8, 0, EASING_LINEAR)
     CALL(evt_mario_key_onoff, 0)

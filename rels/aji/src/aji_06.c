@@ -1636,6 +1636,14 @@ static EVT_BEGIN(peach_evt_memo4)
     RETURN
 EVT_END()
 
+/**
+ * Peach's chapter 5 potion scene: hides the dummy bottles S_dami and puts the red, blue, orange and green
+ * potions where S_dami1 to 4 stand; binds the potion scripts (peach_evt_kusuri_*) to A_kusuri1 to 4,
+ * peach_evt_kaihei1 to 4 to A_sui2 to 5 and the memo scripts to A_memo1 to 4, and sets the TEV colour
+ * callbacks of S_naka and S_mizu1 to 4. After the entry it replaces the s_bero exit with bero_peach_data,
+ * plays peach_aji_221 to 225, starts BGM_EVT_COOKING1 and opens all four hatches
+ * (peach_evt_kaihei_open_all).
+ */
 static EVT_BEGIN(peach_evt_stg5)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_dami"), MAP_OBJ_FLAG_HIDDEN)

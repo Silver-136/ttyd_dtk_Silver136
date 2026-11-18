@@ -1033,6 +1033,11 @@ static EVT_BEGIN(evt_ramp)
     RETURN
 EVT_END()
 
+/**
+ * Script of the blue switch bcv_sw: sets the story to STG7_17_CONVEYOR_BELT, pans the camera to the belt,
+ * hides the lamp objects meta_1_1 to meta_4_1 and shows meta_1_2 to meta_4_2, starts the conveyor sound,
+ * the looping kon animation and the ramp (evt_ramp), then gives the camera and control back.
+ */
 static EVT_BEGIN(evt_bcv_sw)
     SET_VALUE(GSW_STORY_PROGRESS, STG7_17_CONVEYOR_BELT)
     CALL(evt_mario_key_onoff, 0)

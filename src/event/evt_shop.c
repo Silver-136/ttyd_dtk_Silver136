@@ -1354,6 +1354,10 @@ EVT_BEGIN(shopper_talk_evt)
     RETURN
 EVT_END()
 
+/**
+ * Shop tutorial, run the first time Mario deals with any shop (GSWF_SHOP_TUTORIAL_SEEN): the shopkeeper
+ * faces Mario and explains how buying works, repeating the explanation until Mario's answer ends it.
+ */
 static EVT_BEGIN(first_shopping_evt)
     CALL(shopper_name, LW(9))
     CALL(evt_set_dir_to_target, LW(9), STRING("mario"))

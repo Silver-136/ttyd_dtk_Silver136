@@ -2064,12 +2064,20 @@ USER_FUNC(evt_mario_set_mode) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Writes Bowser's power-up level (kpaGetLevel; 0 when the player is not Bowser) to arg 0;
+ * kpa_03 and kpa_05 save it in GSW_KPA_BOWSER_LEVEL before the next Super Koopa Bros. map.
+ */
 USER_FUNC(evt_koopa_get_level) {
     EvtWord* args = event->args;
     evtSetValue(event, args[0], kpaGetLevel());
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Sets Bowser's power-up level to arg 0 (kpaSetLevel); kpa_04 and kpa_06 restore it from
+ * GSW_KPA_BOWSER_LEVEL.
+ */
 USER_FUNC(evt_koopa_set_level) {
     kpaSetLevel(evtGetValue(event, event->args[0]));
     return EVT_RETURN_DONE;

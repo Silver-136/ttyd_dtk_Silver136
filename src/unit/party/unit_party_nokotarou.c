@@ -647,6 +647,11 @@ static EVT_BEGIN(_change_koura_pose_fast)
     RETURN
 EVT_END()
 
+/**
+ * Ends Koops's shell spin: stops the spin loop (UNIT_WORK_SHELL_SPINNING = 0), resets his rotation and
+ * turns him through two short spins (6 frames of 45 degrees, then 6 of 15) while switching to the shell
+ * poses PNK_K_1 and PNK_K_2.
+ */
 static EVT_BEGIN(_restore_koura_pose)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SHELL_SPINNING, 0)
     CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
@@ -664,6 +669,13 @@ static EVT_BEGIN(_restore_koura_pose)
     RETURN
 EVT_END()
 
+/**
+ * Starts the shell-spin loop in an inline event. LW(0) is the starting spin speed and
+ * UNIT_WORK_SHELL_SPIN_SPEED the target speed in degrees per frame (negative = the other way); the speed
+ * moves 1 a frame toward it, a nonzero UNIT_WORK_SHELL_SPIN_REVERSE flips both (the loop clears it), and
+ * with part work PARTS_WORK_SPIN_DUST set a smoke puff appears each turn. Runs until
+ * UNIT_WORK_SHELL_SPINNING is cleared.
+ */
 static EVT_BEGIN(_koura_rotate_start)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SHELL_SPINNING, 1)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SHELL_SPIN_REVERSE, 0)
@@ -724,6 +736,7 @@ static EVT_BEGIN(_koura_rotate_start)
     RETURN
 EVT_END()
 
+/** Stops the shell-spin loop (UNIT_WORK_SHELL_SPINNING = 0) and resets Koops's rotation. */
 static EVT_BEGIN(_koura_rotate_stop)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SHELL_SPINNING, 0)
     CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)

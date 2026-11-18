@@ -163,6 +163,11 @@ static NpcSetupInfo npcEnt[] = {
     {0},
 };
 
+/**
+ * Map init for kpa_03, side-scrolling stage 2: starts Bowser at x = -1400, builds the stage's blocks and
+ * coins from kpa_act_stg2_mobj/item, plays the sea animation anm_umi and starts the pit watcher, the HUD,
+ * the intro, the sea current (kairyu_evt) and the clock. The red jump stand at the end leads to kpa_04.
+ */
 EVT_BEGIN(kpa_03_init_evt)
     CALL(evt_npc_setup, PTR(npcEnt))
     CALL_CHILD(kpa_init)

@@ -390,6 +390,14 @@ static EVT_BEGIN(hand_release)
     RETURN
 EVT_END()
 
+/**
+ * The crane game. The claw (map object S_kure; X in GW(10), Z in GW(11)) starts at (230, 100) while its arms
+ * open and close (ufo_hand). While GF(10) is set by the control panel scripts it slides along X down to
+ * -150, then while GF(11) is set along Z down to -100; GF(12) marks the crane busy from the first move.
+ * When the arm cycle ends (GF(9) clear) the claw lowers, closes (hand_success), looks for a prize keihinNN
+ * under it (item_chk) and rises; it carries a prize to Z 110 and then X 40, where the prize drops with a
+ * random bounce, and opens (hand_release).
+ */
 static EVT_BEGIN(ufo_main)
     SET_VALUE(GF(10), 0)
     SET_VALUE(GF(11), 0)

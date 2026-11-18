@@ -258,6 +258,11 @@ static USER_FUNC(elder_talk_sub_fadeoff) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Init event of the guide Puni (ガイド, Punio): from STG3_33_04_PEACH_BACK_TO_TEC to
+ * STG3_33_06_BOWSER_TREASURE its talk event is cleared; otherwise from STG2_26_PRAISE_FROM_THE_PUNI on,
+ * once GSWF_MRI_LEFT_AFTER_BOSS_BATTLE is set, it stands at (-20, 0, 40) facing 270.
+ */
 static EVT_BEGIN(guide_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG3_33_04_PEACH_BACK_TO_TEC, STG3_33_06_BOWSER_TREASURE)
@@ -630,6 +635,11 @@ static EVT_BEGIN(elder_talk)
     RETURN
 EVT_END()
 
+/**
+ * Init event of the first villager Puni: does nothing from STG3_33_04_PEACH_BACK_TO_TEC to
+ * STG3_33_06_BOWSER_TREASURE; otherwise from STG2_26_PRAISE_FROM_THE_PUNI on, once
+ * GSWF_MRI_LEFT_AFTER_BOSS_BATTLE is set, it stands at (-280, 0, 10) facing 270.
+ */
 static EVT_BEGIN(puni_1_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG3_33_04_PEACH_BACK_TO_TEC, STG3_33_06_BOWSER_TREASURE)

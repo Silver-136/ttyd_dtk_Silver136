@@ -432,6 +432,14 @@ static BattleUnitSetup entry_majolyne = {
     NULL, // itemDropTable
 };
 
+/**
+ * Doopliss's transformation. In his own form (UNIT_WORK_FORM 0) he copies Mario or the partner at random;
+ * as fake Mario he copies the partner; as a partner he copies Mario when that form is the current
+ * partner's, otherwise either at random. In his own form he first poses (A_3A, A_3B) and flashes his
+ * eyes. He vanishes in smoke, the scan effect and the transformation sounds play over his target, and he
+ * rebuilds himself through the matching init_event_* (UNIT_WORK_FORM 1 fake Mario, 2 Goombella, 3 Koops,
+ * 4 Yoshi, 5 Flurrie, 6 Vivian, 7 Bobbery, 8 Ms. Mowz) and rises out of the floor in the new shape.
+ */
 static EVT_BEGIN(mutate_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_FORM, LW(0))
     SWITCH(LW(0))

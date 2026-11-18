@@ -1554,6 +1554,11 @@ static EVT_BEGIN(epilogue_npc_entry)
     RETURN
 EVT_END()
 
+/**
+ * Background acting for the epilogue: Koops (ノコタロウ) and Koopie Koo (ノコリン) talk, Goombella walks up,
+ * Koopie Koo starts in surprise, Koops and Koopie Koo walk over, and the three take turns talking (PNK_*,
+ * T_1 and PKR_* animations) while Koops's father and the mayor walk in; the talking loops forever.
+ */
 static EVT_BEGIN(epilogue_evt_sub)
     CALL(evt_npc_set_anim, STRING("ノコタロウ"), STRING("PNK_T_1"))
     WAIT_MS(1000)

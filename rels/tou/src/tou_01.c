@@ -271,6 +271,12 @@ static USER_FUNC(proj_off) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Door animation script of the automatic double door, LW(0) the swing angle 0 to 180: at 0 it plays the
+ * automatic door sound at Mario's position (handle in GW(13)) unless GSWF_TOU_AUTO_DOOR_SFX_PLAYING is set,
+ * and sets it; at 180 it clears the flag and stops the sound. It turns door_1_b by a third of the angle and
+ * door_1_a the opposite way, then calls proj_off.
+ */
 static EVT_BEGIN(n_door_open)
     IF_FLOAT_EQUAL(LW(0), FLOAT(0.0f))
         IF_INT_EQUAL(GSWF_TOU_AUTO_DOOR_SFX_PLAYING, 0)
@@ -293,6 +299,11 @@ static EVT_BEGIN(n_door_open)
     RETURN
 EVT_END()
 
+/**
+ * Mirror image of n_door_open, run as the angle goes from 180 back to 0: the door sound starts at 180 and
+ * stops at 0, where GSWF_TOU_AUTO_DOOR_SFX_PLAYING is cleared; the doors turn the same way, without
+ * proj_off.
+ */
 static EVT_BEGIN(n_door_close)
     IF_FLOAT_EQUAL(LW(0), FLOAT(180.0f))
         IF_INT_EQUAL(GSWF_TOU_AUTO_DOOR_SFX_PLAYING, 0)

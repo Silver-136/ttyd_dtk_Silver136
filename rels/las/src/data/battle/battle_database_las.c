@@ -3466,6 +3466,10 @@ NpcTerritoryInfo btl_las_setup_no_tbl[] = {
     {0},
 };
 
+/**
+ * Background event of the gear battle stage: turns the gear pairs gear_01a/b, gear_02a/b and gear_03a/b
+ * forever (_gear_rotate), one full turn in 400, 600 and 800 frames, gear_01 in the other direction.
+ */
 static EVT_BEGIN(bgset_las_gear_event)
     SET_VALUE(LW(0), 0)
     SET_VALUE(LW(1), 0)

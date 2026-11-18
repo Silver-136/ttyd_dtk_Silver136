@@ -1972,6 +1972,13 @@ static EVT_BEGIN(maffia1_init)
     RETURN
 EVT_END()
 
+/**
+ * Talk event of the first henchman (マフィア１): mac_2 lines through Don Pianta's chapter 2 story (outside
+ * the early demos a mac_2_116 line after the ticket scene), the chapter 5 scenes shared with the second
+ * henchman (maffiaboss_nekomu00 to 02, mac_5_042), and otherwise one line per story stage (gor_03_02_02 to
+ * 02_08). The first case already takes every story value up to STG2_40_THOUSAND_YEAR_DOOR, so
+ * gor_03_02_01 is never printed.
+ */
 static EVT_BEGIN(maffia1_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS_OR_EQUAL(STG2_40_THOUSAND_YEAR_DOOR)
@@ -5291,6 +5298,14 @@ static const char* door_data_02_1_npc[] = {
     NULL,
 };
 
+/**
+ * Loop spawned by the map init (id in GW(15)) for Don Pianta's office: the talk target is Don Pianta at his
+ * desk ("A_i02_f2_set00C") before STG5_58_FAIR_WINDS, Don Pianta in bed ("A_i02_bed_l" or "A_i02_bed_m")
+ * until chapter 6, and Frankie (ピートン) at the desk after. While Mario faces that hit object (display
+ * direction 180, or also 0 for "A_i02_bed_m"), LSWF_GOR_03_TALK_SCENE_ACTIVE is clear and partner move 4
+ * is not in use, desk_talk_func shows the talk balloon over the NPC (held 5 more frames after he turns
+ * away).
+ */
 static EVT_BEGIN(desk_talk_check)
     CALL(desk_talk_init_func)
     SET_VALUE(LW(0), 0)
@@ -6962,6 +6977,11 @@ EVT_BEGIN(monte_evt_door_close)
     RETURN
 EVT_END()
 
+/**
+ * Map-init set-up of the Pianta Parlor's two ground-floor doors (door_data_02_0l and _0r): hides the inside
+ * models and collision named in the door parameters and binds the A-button scripts, monte_evt_door_close
+ * inside and evt_door_open outside. It also tests the door's flag 1, with nothing in that branch.
+ */
 EVT_BEGIN(monte_evt_door_entry)
     CALL(evt_door_param, LW(0), DOOR_PARAM_INSIDE, LW(1), LW(2))
     IF_INT_NOT_EQUAL(LW(1), 0)

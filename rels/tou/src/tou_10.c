@@ -994,6 +994,11 @@ static EVT_BEGIN(evt_saisyo_after)
     RETURN
 EVT_END()
 
+/**
+ * Scene after the Goomba Bros. match (opponent 19) of Mario's comeback, from STG3_34_RETURN_TO_ROGUEPORT
+ * on: Jolene (キノシコワ) gives her verdict and the fight money, stg3_tou_re_028 to 031 and 3 coins at a
+ * ranking below 20, otherwise stg3_tou_re_032 to 035 and 1 coin; then she leaves through the door.
+ */
 static EVT_BEGIN(evt_saisyo_after_re)
     // Mario, the partner and Jolene are placed in the room after the comeback's first match.
     CALL(evt_mario_key_onoff, 0)

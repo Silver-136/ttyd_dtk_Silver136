@@ -308,6 +308,11 @@ EVT_END()
 
 // Consume one x/z pair for every Puni index, including those not trapped.
 #if VERSION >= VERSION_JP
+/**
+ * Spawned by the map init from STG2_21_04_ESCAPE to STG2_21_06_WATER_SWITCH (JP and later). Once the Puni
+ * system is in mode 2 it re-creates every Puni 1 to 102 whose trap flag is set (evt_puni_get_trap_index)
+ * at its saved trap position (trap_position) in mode 16 and clears its PUNI_FLAG_NOT_IN_PARTY flag.
+ */
 EVT_BEGIN(trap_restore)
     CALL(evt_puni_wait_systemmode, 2)
     SET_VALUE(LW(10), 1)

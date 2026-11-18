@@ -59,6 +59,7 @@ static EvtWord evt_break_floor[7];
 static const char* fukitobashi_tbl[4];
 EvtWord gra_05_init_evt[108];
 
+/** Enter event of both holes (bero entries A_ana_1 and A_ana_2): only returns 1 in LW(0). */
 static EVT_BEGIN(gra_05_in_01)
     SET_VALUE(LW(0), 1)
     RETURN
@@ -128,6 +129,7 @@ EVT_BEGIN(gra_05_out_01)
     RETURN
 EVT_END()
 
+/** Same body as gra_05_in_01. No bero entry or script refers to it: both holes use gra_05_in_01. */
 static EVT_BEGIN(gra_05_in_02)
     SET_VALUE(LW(0), 1)
     RETURN

@@ -722,6 +722,10 @@ static EVT_BEGIN(chief_mario_talk_init)
     RETURN
 EVT_END()
 
+/**
+ * Trigger cutscene: the first time Mario comes within 100 units of the Mayor,
+ * the Mayor speaks "stg4_usu_23" and GSWF_USU_00_MAYOR_THANKED_FAKE_MARIO is set so it never repeats.
+ */
 static EVT_BEGIN(chief_mario_talk)
     IF_INT_NOT_EQUAL(GSWF_USU_00_MAYOR_THANKED_FAKE_MARIO, 0)
         RETURN
