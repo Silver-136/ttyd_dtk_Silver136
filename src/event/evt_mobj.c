@@ -2433,8 +2433,8 @@ USER_FUNC(evt_mobj_arrow) {
 
 // Restores Mario's HP and FP and the HP of every active partner that is not PARTY_FLAG_IS_GROUNDED, then
 // takes the block's price in coins (case 3 passes 0).
-// FAKE: case 4 repeats these steps inline instead of calling this helper; calling it there with the price
-// swaps the registers of the price and the pouch pointer
+// Case 4 writes these steps out instead of calling this helper (a call there gives the price and the pouch
+// pointer each other's registers).
 // Original name and size (0x11c) from the JP demo map (UNUSED there): every call is inlined.
 void mobj_recovery_blk_recover(s32 coins) {
     PouchPartyData* party;

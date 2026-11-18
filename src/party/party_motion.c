@@ -209,7 +209,7 @@ void party_motion_stay(PartyEntry* party) {
     if (!strcmp(gp->currentMapName, "aji_02") || !strcmp(gp->currentMapName, "aji_05") ||
         !strcmp(gp->currentMapName, "aji_12")) {
         if (!marioKeyOffChk()) {
-            // FAKE: hand-inlined copy of partyStayDist; the call changes the object
+            // partyStayDist written out (a call here compiles differently)
             {
                 f32 sd;
                 if (party->moveKind == 0) {
@@ -233,7 +233,7 @@ void party_motion_stay(PartyEntry* party) {
         }
     }
     if ((party->trigFlags >> 17) & 1) {
-        // FAKE: hand-inlined copy of partyStayDist; the call changes the object
+        // partyStayDist written out (a call here compiles differently)
         {
             f32 sd;
             if (party->moveKind == 0) {

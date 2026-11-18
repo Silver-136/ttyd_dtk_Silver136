@@ -29,6 +29,10 @@ Some code looks odd but is not a trick, because the original game's code shows i
   (`x *= k`, `n--`), a switch with a single case where a plain `if` compiles differently, `int` or `u32`
   declarations next to `s32` code (`s32` is `long`; `int` is a different type of the same size, and the implicit
   conversion is what the original compiler saw), and a named pointer to an array element instead of a byte offset.
+- **Written-out copies of a real function** (decided 2026-11-18): a function's body pasted into a caller where a
+  call to that function compiles differently (for example `partyStayDist` in `party_motion_stay`, the recovery
+  steps in `evt_mobj`'s case 4, the puni helpers). Copied code is a normal form in game source; such a site keeps a
+  short note naming the function it copies.
 
 Most of these were found with [mweppc](https://github.com/doldecomp/mweppc), a public-domain decompilation of the
 Metrowerks compiler the game was built with (GC 2.6), which shows why a given source form produces given code. The
@@ -142,7 +146,6 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | src/effect/n64/eff_sstar_n64.c | vtx_copy | the x store goes through an s16* view of dst (the restored stripped vtx_copy, 0x124 as in the JP demo map); &dst->x lets the caller loop fold the address | &dst->x, s16* parameters, an out pointer: changes the object |
 | Both | src/event/evt_bero.c | bero_get_kind | walk flag picks a pointer-walk loop (evt_bero_get_info_num) or the index loop (evt_bero_get_into_info); constant-folded per call site | see comment |
 | Both | src/event/evt_cam.c | evt_cam_debug_print | stand-in for the dead-stripped evt_cam3d_evt_set_xls / evt_cam3d_evt_set_rel_xls (JP demo map, UNUSED); it only keeps their format string and 100.0f. Bodies unknown (sscanf forms tried miss the map sizes). | see comment |
-| Both | src/event/evt_mobj.c | mobj_recovery_blk_recover | case 4 repeats these steps inline instead of calling this helper; `recover(mobj->typeData[1])` there gives the same instructions with the price and pouch registers swapped (24 declaration orders, parameter types tried) | see comment |
 | Both | src/event/evt_nannpc.c | evt_nannpc_entry | the value goes through a long long cast; plain name = evtGetValue(...) changes the object | see comment |
 | Both | src/event/evt_npc.c | npc_report_pos | stand-in for the dead-stripped evt_npc_set_position_xls (JP demo map, UNUSED 0xb4); it only keeps its "%f%f%f" (@2521) at the end of .rodata. Body unknown (16 tries, best 0xb0). | see comment |
 | Both | src/event/evt_party.c | evtPartyStrippedPool | stand-in that nothing calls; it only fixes the order of these literals in the constant pool; removing it changes the object; owners the stripped evt_party_jump_jumpstand (0x834, map @1454-@1504) and an earlier stripped command for 1.0f (@1357), bodies unknown | see comment |
@@ -160,7 +163,6 @@ work has brought it lower (the current count is in docs/PROGRESS.md).
 | Both | src/motion/mot_roll.c | marioRollStrippedPool | stand-in that nothing calls; it only places 270.0f and 360.0f in this object's constant pool, right after the restored makeOfs's own constants (JP demo map @1006, @1015); owners: the two stripped functions movedir2dispdir and rollMove (makeMovedir, chkReverseDir, chkReverseDir2 and chkDirSide are restored), bodies unknown | see comment |
 | Both | src/party/party_cloud.c | partyCloudStrippedPool | stand-in that nothing calls; it only puts 0.0f, 70.0f, 180.0f and the int-to-float conversion constant in this object's constant pool; owners the stripped cloudGetPow / cloudEffect / getStick (0x12c) / dircheck after cloudGetStatus (map @700-@723), bodies unknown | see comment |
 | Both | src/party/party_hit.c | partyHitStrippedPool | stand-in that nothing calls; it only places these literals and the int-to-float conversion constant in this object's constant pool | see comment |
-| Both | src/party/party_motion.c | party_motion_stay | hand-inlined copy of partyStayDist; the call changes the object | see comment |
 | Both | src/party/party_move.c | partyChgMoveMode | the copy p and its self-assignment in case 4/5 keep the empty case 4/5 arm; the plain switch changes the object | see comment |
 | Both | src/party/party_move.c | partyMoveStrippedPool | stand-in that nothing calls; it places 90.0f and 20.0f in the .sdata2 pool | see comment |
 | Both | src/party/party_nokonoko.c | nokoStrippedPool | stand-in that nothing calls; it only places 10.0f, 30.0f, 100.0f, 11.0f and 6.0f (ccwall's first new constants) in this object's constant pool; removing it changes the object; placed first by the stripped ccground (0xa4) or ccwall2 (0x580) in this slot (map @1227-@1233), bodies unknown | see comment |
