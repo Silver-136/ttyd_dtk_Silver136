@@ -114,10 +114,12 @@ const void* __OSStringTable AT_ADDRESS(OS_BASE_CACHED | 0x30D0);
   } while (0)
 
 // Empty notification hooks: Link calls OSNotifyLink with each module it links, OSUnlink calls OSNotifyUnlink.
-// The calls stay out of line because the unit is built with -inline noauto (configure.py).
+// The dont_inline pair keeps the calls out of line, as in the tp, mkdd and Animal Crossing decompilations of this SDK.
+#pragma dont_inline on
 __declspec(weak) void OSNotifyLink(OSModuleInfo* module) {}
 
 __declspec(weak) void OSNotifyUnlink(OSModuleInfo* module) {}
+#pragma dont_inline reset
 
 void OSSetStringTable(void* stringTable) {
     __OSStringTable = stringTable;

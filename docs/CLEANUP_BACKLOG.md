@@ -328,8 +328,9 @@ never copied in). What the raw counts above mean for the libraries:
 - **Padclamp:** done (ab2d48dfe, PD): `ClampRegion` is a plain `static const PADClampRegion`; the wrapper and its
   FAKES row are gone.
 - **sndSeqPlayEx:** done 2026-11-07: a separate `static inline _seqPlaySong` copy (AxioDL's 2.0.2-2.0.3 form).
-- **dont_inline:** OSLink's pair became the unit flag `-inline noauto` (round 16, both versions identical). VI's two
-  pairs (`__VIGetLatch0Position`, `__VIGetLatch1Position`) stay: a whole-unit flag changes other helpers.
+- **dont_inline:** OSLink's pair became the unit flag `-inline noauto` (round 16, both versions identical); since
+  2026-11-18 (GE9) the flag is back to the SDK's own dont_inline pair around the two hooks, and VI's two pairs
+  stay: the tp / mkdd / Animal Crossing decompilations of the same SDK have exactly these pairs (original form).
 - **Sources no build uses:** Codex round 22 G recounted 101 library sources that none of the five builds then compiled.
   The 39 it marked for removal are gone (2026-11-03, user OK): the AX sound stack (AX, AXART, AXFX, SYN, MIX, SEQ;
   the game plays sound through MusyX, and the JP demo link map has none of these archives), the SDK copies of

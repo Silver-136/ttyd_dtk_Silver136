@@ -1251,8 +1251,8 @@ void __VISetLatchMode(u32 mode) {
     __VIRegs[VI_DISP_CONFIG] = reg;
 }
 
-// kept: the JP demo map lists __VIGetLatchPosition at 0x40 bytes, so it called both latch readers (0x74 each) out of
-// line; all three are dead-stripped from the game, the pairs only shape the object
+// The SDK's own form (tp's vi.c of the same SDK has these pairs): the JP demo map lists __VIGetLatchPosition at 0x40
+// bytes, so it calls both latch readers (0x74 each) out of line; all three are dead-stripped from the game.
 #pragma dont_inline on
 int __VIGetLatch0Position(s16* px, s16* py) {
     u32 hcount;

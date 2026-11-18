@@ -1247,6 +1247,9 @@ config.libs = [
             Object(
                 MatchingFor("G8MJ01", "G8ME01"),
                 "exi/EXIBios.c",
+                # The SDK's own setting for this unit: the tp and tww decomps (same SDK; tp's EXIBios function sizes
+                # all equal ours) build EXIBios at -O3,p; pikmin2, mkdd and bfbb keep -O4,p with scheduling off
+                # over the whole file, which gives the same code.
                 cflags=[x for x in cflags_base if x != "-O4,p"] + ["-O3,p", "-DDOLPHIN_SDK"],
             ),
             Object(MatchingFor("G8MJ01", "G8ME01"), "exi/EXIUart.c"),
@@ -1323,7 +1326,7 @@ config.libs = [
             Object(MatchingFor("G8ME01_DEMO", "G8MJ01_DEMO"), "os/OSFatal.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "os/OSFont.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "os/OSInterrupt.c"),
-            Object(MatchingFor("G8MJ01", "G8ME01"), "os/OSLink.c", extra_cflags=["-inline noauto"]),
+            Object(MatchingFor("G8MJ01", "G8ME01"), "os/OSLink.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "os/OSMemory.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "os/OSMutex.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "os/OSReboot.c"),
