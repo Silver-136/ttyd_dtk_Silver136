@@ -96,10 +96,8 @@ typedef enum FadeFlags {
 
 typedef struct FadeEntry {
     u16 flags; // 0x0, FadeFlags
-    u8 pad_2[2]; // 0x2
     FadeType type; // 0x4
     s32 state; // 0x8, step within the fade type
-    u8 pad_0C[0x10 - 0xC]; // 0xC, never accessed
     s64 duration; // 0x10, fade duration
     GXColor color; // 0x18
     f32 fadeSpotX; // 0x1C

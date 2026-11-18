@@ -31,7 +31,6 @@ typedef enum LightEntryFlags {
 typedef struct LightEntry {
     u16 flags; // 0x0, LightEntryFlags
     char name[32]; // 0x2
-    u8 align_22[2]; // 0x22
     Vec position; // 0x24
     Vec rotation; // 0x30
     Vec basePosition; // 0x3C, position at lightEntry; evt_light offsets from it when following a map object

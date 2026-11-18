@@ -42,7 +42,6 @@ typedef struct MukiObj { // 0x38
     Vec rot;           // 0x24
     EffectEntry* eff;  // 0x30
     u8 alpha;          // 0x34
-    u8 pad35[3];
 } MukiObj;
 
 typedef struct Muki3D { // 0x24

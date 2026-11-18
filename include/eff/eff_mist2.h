@@ -20,7 +20,6 @@ typedef struct EffMist2Work {
     s32 timer;     // 0x30
     s32 life;      // 0x34
     u8 r, g, b8;   // 0x38
-    u8 pad;
     s32 delay;     // 0x3C
     f32 gravity;     // 0x40
     f32 vy;        // 0x44

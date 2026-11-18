@@ -51,21 +51,21 @@ typedef enum MapObjectFlags {
 
 typedef struct MapObjectEntry {
     s32 flags;                               // 0x0, MapObjectFlags
-    u8 camId;                                // 0x4
-    char name[16];                           // 0x5
-    char animName[16];                       // 0x15
+    u8 camId;                                // 0x4, camera the object is drawn with (CAMERA_3D; evt_mobj can change it)
+    char name[16];                           // 0x5, mobjEntry name; mobjNameToPtr finds the object by it
+    char animName[16];                       // 0x15, animPoseEntry name of the model
     u8 pad_25[0x38 - 0x25];                  // 0x25, never accessed
-    Vec position;                            // 0x38
+    Vec position;                            // 0x38, world position (dispEntry depth, animPoseDraw)
     Vec scale;                               // 0x44
-    Vec rotation;                            // 0x50
+    Vec rotation;                            // 0x50, degrees; animPoseDraw uses y, the hit matrices x/y/z
     Vec velocity;                            // 0x5C, y used for falling/bouncing
     f32 gravity;                             // 0x68, subtracted from velocity.y each frame
     f32 bounce;                              // 0x6C, restitution on landing (-0.5 * bounce * vy)
-    s32 poseId;                              // 0x70
-    MapObjectHitEntry hitObj[2];             // 0x74
-    Vec scale2;                              // 0x184
-    Vec translation;                         // 0x190
-    s32 offscreenId;                         // 0x19C
+    s32 poseId;                              // 0x70, animPoseEntry of the model
+    MapObjectHitEntry hitObj[2];             // 0x74, collision "MOBJ_<name>" / "MOBJ~<name>" (mobjHitEntry)
+    Vec scale2;                              // 0x184, collision box scale from the model's bounding box (mobjHitEntry)
+    Vec translation;                         // 0x190, collision box centre offset from position (mobjHitEntry)
+    s32 offscreenId;                         // 0x19C, -1: drawn normally; else its offscreen (evt_mobj)
     union {                      // 0x1A0, per-block-type data (item id / item list, cost, state, ...; evt_mobj.c)
         s32 typeData[4];
         u32 typeDataU[4];
@@ -77,16 +77,16 @@ typedef struct MapObjectEntry {
     s32 typeWork;                            // 0x1B4, per-type: timer switch reload length; fire bar loop SFX id (evt_mobj.c)
     char linkedName[0x1C8 - 0x1B8];          // 0x1B8, name of a paired mobj (mobjNameToPtr)
     struct EffectEntry* effect;              // 0x1C8, coin fukidashi effect (evt_mobj.c)
-    s32 eventId;                             // 0x1CC
-    s32 (*mainFunc)(struct MapObjectEntry*); // 0x1D0
-    EvtWord event;                           // 0x1D4
+    s32 eventId;                             // 0x1CC, last script mobjRunEvent started (no restart while it runs)
+    s32 (*mainFunc)(struct MapObjectEntry*); // 0x1D0, per-type update (mobjMain); -1 skips the rest of the update
+    EvtWord event;                           // 0x1D4, script mobjRunEvent starts when triggered (evt_mobj)
     EvtWord extraEvent;                      // 0x1D8, second event script run via mobjRunEvent
-    s32 state;                               // 0x1DC
+    s32 state;                               // 0x1DC, per-type state (evt_mobj); 99 = finished (opened chest, ...)
     s32 hitFlag;                             // 0x1E0, the MOBJ_FLAG_HIT_* bit that fired
-    s32 flagVar;                             // 0x1E4
-    GXTexObj paperTexObj;                    // 0x1E8
+    s32 flagVar;                             // 0x1E4, evt variable set to 1 when used; already set at entry: finished
+    GXTexObj paperTexObj;                    // 0x1E8, screen copy for MOBJ_FLAG_PAPER_TEX objects (evt_mobj)
     struct smartEntry* paperTexData;         // 0x208, texture data for paperTexObj
-    Mtx paperTexMtx;                         // 0x20C
+    Mtx paperTexMtx;                         // 0x20C, texture matrix for paperTexObj (identity)
 } MapObjectEntry;
 
 typedef struct MapObjectWork {

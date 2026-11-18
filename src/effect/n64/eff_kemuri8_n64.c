@@ -13,7 +13,6 @@
 
 typedef struct EffKemuri8N64Work {
     u16 type;       // 0x0
-    s16 pad_2;      // 0x2
     Vec position;   // 0x4
     f32 speed;      // 0x10, along (sinAngle, cosAngle)
     f32 accel;      // 0x14, added to speed each frame

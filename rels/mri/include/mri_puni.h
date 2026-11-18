@@ -174,7 +174,6 @@ typedef struct PuniData {
     f32 massTargetDistSq;               // 0x1B8
     s32 awayTarget;                     // 0x1BC
     f32 awayTargetDistSq;               // 0x1C0
-    u8 pad_1C4[0x1C8 - 0x1C4];          // 0x1C4
     union {
         OSTime startTime;               // 0x1C8, gp->renderTime when the timed move started
         struct {

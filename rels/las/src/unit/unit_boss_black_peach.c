@@ -53,14 +53,12 @@
 
 typedef struct HandElem {
     u16 flip;
-    u8 field_0x2[2];
     s32 animIdx;
     OSTime time;
     s16 ofs;
     s16 phase;
     f32 speed;
     Vec pos;
-    s32 field_0x24;
 } HandElem;
 typedef struct HandAnim {
     char name[16];

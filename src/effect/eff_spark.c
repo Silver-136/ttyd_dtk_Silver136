@@ -29,17 +29,19 @@ typedef struct EffSparkParticle {
     f32 scale;  // 0x34
 } EffSparkParticle;
 
+// Six EffSparkParticle entries (effect->count): effSparkMain and effSparkDisp read element 0 as the header
+// (position, life, counter, alpha, scale) and loop over the five sparks after it
 typedef struct EffSparkWork {
     s32 type;                  // 0x0
     f32 x;                     // 0x4
     f32 y;                     // 0x8
     f32 z;                     // 0xC
-    f32 unk10;                 // 0x10
-    f32 unk14;                 // 0x14
-    f32 unk18;                 // 0x18
-    f32 unk1C;                 // 0x1C
-    s32 unk20;                 // 0x20
-    f32 unk24;                 // 0x24
+    f32 unk10;                 // 0x10, EffSparkParticle velX; the header element never uses it
+    f32 unk14;                 // 0x14, EffSparkParticle velY; the header element never uses it
+    f32 unk18;                 // 0x18, EffSparkParticle destX; the header element never uses it
+    f32 unk1C;                 // 0x1C, EffSparkParticle destY; the header element never uses it
+    s32 unk20;                 // 0x20, EffSparkParticle seq; the header element never uses it
+    f32 unk24;                 // 0x24, EffSparkParticle angle; the header element never uses it
     s32 life;                  // 0x28
     s32 counter;               // 0x2C
     s32 alpha;                 // 0x30

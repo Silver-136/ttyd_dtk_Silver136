@@ -47,10 +47,8 @@ enum {
 
 typedef struct ExtMoamoa {
     u16 flags; // EXT_MOAMOA_FLAG_*
-    u8 field_0x2[2];
     Vec pos;
     s16 group;
-    u8 field_0x12[6];
     OSTime time;
     s16 chain;
     s16 order;
@@ -60,7 +58,6 @@ typedef struct ExtMoamoa {
     EvtWord* owner;
     Vec vel;
     Vec pos2;
-    u8 field_0x4c[4];
 } ExtMoamoa;
 typedef struct ExtMoamoaWork {
     s32 field_0x0;

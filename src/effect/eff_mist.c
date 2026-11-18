@@ -23,7 +23,6 @@ typedef struct EffMistWork {
     s32 life;      // 0x3C
     f32 yaw;       // 0x40
     u8 r, g, b;    // 0x44
-    u8 pad;
 } EffMistWork;
 
 static void effMistMain(EffectEntry* effect);

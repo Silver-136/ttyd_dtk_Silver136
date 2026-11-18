@@ -45,7 +45,6 @@ typedef struct DekaTiming {
     u8 pad1C[0x34 - 0x1C];
     u8 alpha;   // 0x34
     u8 hit;     // 0x35
-    u8 pad36[2];
 } DekaTiming;
 
 typedef struct YukaMesh {
@@ -79,7 +78,6 @@ typedef struct DekaWork {
     /* 0x058 */ f32 gaugeW;
     /* 0x05C */ Vec gaugePos;
     /* 0x068 */ u8 alpha;
-    /* 0x069 */ u8 pad69[3];
     /* 0x06C */ s32 sfx;
     /* 0x070 */ DekaTiming timing[8];
     /* 0x230 */ DekaTiming timing2[8];
@@ -101,7 +99,6 @@ typedef struct DekaWork {
     /* 0x478 */ Vec enemyVel[10];
     /* 0x4F0 */ f32 enemyRot[10];
     /* 0x518 */ u8 waveActive[6];
-    /* 0x51E */ u8 pad51E[2];
     /* 0x520 */ f32 waveSpeed[6];
     /* 0x538 */ s32 waveIdx[6];
     /* 0x550 */ f32 wavePos[6];

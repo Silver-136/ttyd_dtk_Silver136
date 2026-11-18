@@ -62,7 +62,6 @@ typedef struct ScissorWork {
     /* 0x018 */ s32 unitIds[16];
     /* 0x058 */ s32 power[16];
     /* 0x098 */ u8 audienceVolume;
-    /* 0x099 */ u8 pad99[3];
     /* 0x09C */ struct ScissorStars {
         /* 0x09C */ s32 count;
         /* 0x0A0 */ s32 unusedA0;

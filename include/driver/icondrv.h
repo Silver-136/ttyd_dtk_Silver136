@@ -80,7 +80,6 @@ typedef struct IconEntry {
         s16 flags;    // 0x0, IconFlags
         u16 uflags;   // 0x0, unsigned view (icondrv uses lhz)
     };
-    u8 pad_02;     // 0x2, never accessed
     Vec position;     // 0x4
     f32 scale;        // 0x10
     GXColor color;    // 0x14
@@ -92,7 +91,6 @@ typedef struct IconEntry {
     u16 currIcon;     // 0x30, if animated, currently displayed icon (starts at 0)
     u16 tplId;        // 0x32
     u16 frameDelay;   // 0x34
-    u8 pad_36[2]; // 0x36, never accessed
 } IconEntry;
 
 typedef struct IconWork {

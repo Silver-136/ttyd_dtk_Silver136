@@ -115,13 +115,11 @@ typedef struct GlobalWork {
     s32 resetType; // 0x1278, 0 = no reset, 1 = soft reset, 2 = menu
     BOOL resetButtonDown; // 0x127C, reset button was down (mariost.c)
     BOOL softResetWait; // 0x1280, B+X+Start is held (viPostCallback)
-    u8 pad_1284[0x1288 - 0x1284]; // 0x1284
     OSTime softResetTimeout; // 0x1288, time B+X+Start was first held; 0.5 s soft-resets
     BOOL restartChecked; // 0x1290, restart reset-combo check done
     BOOL rumbleEnabled; // 0x1294, rumble option, 0 = off
     u8 pad_1298[0x12C0 - 0x1298]; // 0x1298
     u8 rumbleStart[4]; // 0x12C0, the motor started rumbling (for the 30 s limit)
-    u8 pad_12C4[4]; // 0x12C4
     OSTime rumbleStartTime[4]; // 0x12C8, when it started
     u8 rumbleForcedOff[4]; // 0x12E8, rumble cut after 30 s
     u8 rumbleForcedOffLatch[4]; // 0x12EC, rumble cut latch

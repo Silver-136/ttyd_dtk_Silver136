@@ -24,7 +24,6 @@ typedef struct TstBattleUnit {
     u8 stolenCoins;                         // 0x310 (JP demo 0x30C)
     u8 moveColorLv;                         // 0x311 (JP demo 0x30D)
     u8 moveColorLvDisp;                     // 0x312 (JP demo 0x30E)
-    u8 pad_313;                             // 0x313 (JP demo 0x30F)
     struct BattleWeapon* countersetWeapon;  // 0x314 (JP demo 0x310)
     void (*deleteFunc)(struct BattleUnit*); // 0x318 (JP demo 0x314)
     struct smartEntry* screenTexBuf;        // 0x31C (JP demo 0x318)

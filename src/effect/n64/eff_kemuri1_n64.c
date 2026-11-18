@@ -28,7 +28,6 @@ typedef struct EffKemuri1Work {
     s32 frame;          // 0x3C, header: frames elapsed
     s32 animFrame;      // 0x40, header: texture frame (0..15); puffs with one above 15 are not drawn
     u8 r, g, b;         // 0x44, puff colour
-    u8 pad_47;          // 0x47
     s32 nextAnimFrame;  // 0x48, header: texture frame of the next frame
     s32 duration;       // 0x4C, header: frames for the 16 texture frames
 } EffKemuri1Work;

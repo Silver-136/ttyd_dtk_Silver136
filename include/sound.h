@@ -219,7 +219,6 @@ typedef struct SoundWork {
     u16 interruptDepth;        // 0x20C, OSDisableInterrupts nesting count
     BOOL interrupts;           // 0x210
     u16 coverState;            // 0x214, 0: closed, 1: cover opened, 2: waiting for streams to reload after close
-    u8 pad216[2];              // 0x216
     SND_OUTPUTMODE outputMode; // 0x218
     u32 aramAddr[2];           // 0x21C
     u16 slotCount;             // 0x224

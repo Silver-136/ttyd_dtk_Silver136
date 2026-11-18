@@ -181,7 +181,6 @@ typedef struct BattleAudienceStar {
     f32 angle;                // 0x54, spiral angle (radians)
     f32 angleSpeed;           // 0x58, spiral angle step per frame
     u8 alpha;                 // 0x5C
-    u8 pad_5D[0x60 - 0x5D];
 } BattleAudienceStar;
 
 // BattleAudience.presentItemType: a landed audience throw is a gift or junk that does damage.

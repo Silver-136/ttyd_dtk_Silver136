@@ -63,12 +63,12 @@ typedef enum EffectFlags {
 
 typedef struct EffectEntry {
     u32 flags;               // 0x0, EffectFlags
-    BOOL inBattle;           // 0x4
-    s32 count;               // 0x8
+    BOOL inBattle;           // 0x4, entered during a battle; effMain runs only the current mode's effects
+    s32 count;               // 0x8, element count of the effect's own userdata array (set by its entry function)
     void* userdata;          // 0xC, for effects to store their own data
-    EffectCallback callback; // 0x10
-    const char* type;        // 0x14
-    char name[16];           // 0x18
+    EffectCallback callback; // 0x10, run by effMain each frame
+    const char* type;        // 0x14, effect kind string set by its entry function ("Spark", "RippleN64", ...)
+    char name[16];           // 0x18, effSetName; effNameToPtr finds the effect by it
 } EffectEntry;
 
 typedef struct EffectSet {

@@ -29,7 +29,6 @@ typedef struct EffKemuri11N64Work {
     s32 delay;        // 0x4C
     u8 r1, g1, b1;    // 0x50
     u8 r2, g2, b2;    // 0x53
-    u8 pad[2];        // 0x56
 } EffKemuri11N64Work;
 
 /** Smoke body mesh (20 vertices, drawn as 18 triangles) each puff of smoke effect 11 is drawn with. */

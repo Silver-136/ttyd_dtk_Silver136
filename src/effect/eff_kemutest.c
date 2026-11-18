@@ -37,7 +37,6 @@ typedef struct KemuTestWork {
     u8 r;           // 0x4C
     u8 g;           // 0x4D
     u8 b;           // 0x4E
-    u8 pad4F;
     f32 rx; // 0x50
     f32 rz; // 0x54
 } KemuTestWork;

@@ -69,7 +69,6 @@ typedef struct ShadowEntry {
     f32 decay2; // 0x24
 #if VERSION >= VERSION_JP
     u8 alpha; // 0x28
-    u8 pad_29[3]; // 0x29
 #endif
     Mtx mtx; // 0x2C
 } ShadowEntry;

@@ -46,30 +46,29 @@ typedef enum StatusWindowFlags {
 typedef struct StatusWindowWork {
     u8 pad_0[0x4];  // 0x0
     u16 flags;          // 0x4, StatusWindowFlags
-    u8 align_0x6[2];    // 0x6
-    f32 timer;          // 0x8
-    f32 duration;       // 0xC
-    f32 t;              // 0x10
-    f32 tStart;         // 0x14
-    f32 tEnd;           // 0x18
-    f32 speed;          // 0x1C
-    f32 x;              // 0x20
+    f32 timer;          // 0x8, frames (at 60 Hz) into the current slide (winPositionCalc)
+    f32 duration;       // 0xC, slide length in frames: 16 to open, 28 to close, divided by speed
+    f32 t;              // 0x10, slide position, 0 closed .. 1 open (half-cosine ease)
+    f32 tStart;         // 0x14, t when the slide started
+    f32 tEnd;           // 0x18, 1 opening, 0 closing
+    f32 speed;          // 0x1C, slide speed factor (statusWinInit sets 1)
+    f32 x;              // 0x20, current HUD position, between closeX/Y and openX/Y by t
     f32 y;              // 0x24
     u8 pad_28[0x8]; // 0x28
-    f32 openX;          // 0x30
+    f32 openX;          // 0x30, position when open (-304, 208)
     f32 openY;          // 0x34
     u8 pad_38[0x8]; // 0x38
-    f32 closeX;         // 0x40
+    f32 closeX;         // 0x40, position when closed (-304, 334)
     f32 closeY;         // 0x44
     u8 pad_48[0x8]; // 0x48
-    StatusValue cur;    // 0x50
-    Vec prevPos;        // 0x68
-    s32 idle;           // 0x74
-    s32 forceTimer;     // 0x78
-    s32 forcedClose;    // 0x7C
-    s32 blink;          // 0x80
-    s32 pendingBlink;   // 0x84
-    s32 blinkTimer;     // 0x88
+    StatusValue cur;    // 0x50, values the HUD shows; valueUpdate counts them toward the real values
+    Vec prevPos;        // 0x68, Mario's position last frame (idle check)
+    s32 idle;           // 0x74, frames Mario has stood still; the HUD opens after 10 s
+    s32 forceTimer;     // 0x78, frames a Z press or a value change holds the HUD open/closed
+    s32 forcedClose;    // 0x7C, closed with Z; no idle reopen until Mario moves
+    s32 blink;          // 0x80, STATUS_BLINK_* values blinking now
+    s32 pendingBlink;   // 0x84, STATUS_BLINK_* values that changed; blink takes them once nothing changes
+    s32 blinkTimer;     // 0x88, frames of blinking left (2 s)
 } StatusWindowWork;
 
 void statusWinInit(void);

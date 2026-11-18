@@ -65,7 +65,6 @@
 
 typedef struct KpaSen {
     s8 state;
-    u8 field_0x1;
     u16 wait;
     f32 t;
     Vec start;

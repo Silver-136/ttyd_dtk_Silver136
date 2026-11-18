@@ -229,8 +229,6 @@ typedef struct PartyEntry {
 #if VERSION <= VERSION_DEMO_JP
     u8 pad_22;      // 0x22, never accessed
     s8 splashTimer;
-#else
-    u8 pad_22[0x24 - 0x22];             // 0x22, never accessed
 #endif
     s32 moveFrames;                     // 0x24, frames left in a move/jump (16 at jump start)
     s16 forceMoveFrames;                // 0x28, partySetForceMove frame count; evt_party_move waits for 0

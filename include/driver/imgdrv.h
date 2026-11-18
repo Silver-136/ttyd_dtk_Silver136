@@ -55,7 +55,6 @@ typedef struct ImageEntry {
     s32 shadowId; // 0x100
     s32 poseId; // 0x104
     const char* animName; // 0x108, anim to play, NULL = none
-    u8 pad_10C[0x110 - 0x10C]; // 0x10C, never accessed
     OSTime animTime; // 0x110, animTimeGetTime() at anim start
     f32 loopTimes; // 0x118, animPoseGetLoopTimes result
     f32 offsetZ; // 0x11C

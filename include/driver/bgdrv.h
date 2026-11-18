@@ -14,7 +14,6 @@ typedef enum BackgroundFlags {
 
 typedef struct BackgroundWork {
     u16 flags; // 0x0
-    u8 align2[2]; // 0x2
     f32 trans_x; // 0x4
     f32 trans_y; // 0x8
     f32 scrl_x; // 0xC

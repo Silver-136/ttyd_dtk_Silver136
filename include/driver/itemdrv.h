@@ -98,35 +98,34 @@ typedef enum ItemEntryMode {
 } ItemEntryMode;
 
 typedef struct ItemEntry {
-    u16 flags; // 0x0
+    u16 flags; // 0x0, ItemEntry_Flags
     u16 type; // 0x2, ItemEntryType
     s32 itemId; // 0x4
     s32 collectFlag; // 0x8, saved flag set when the item is collected (-1: none)
-    char name[0x10]; // 0xC
-    EffectEntry* effect; // 0x1C
+    char name[0x10]; // 0xC, itemEntry name; also the name of its icon (iconEntry, iconSetPos)
+    EffectEntry* effect; // 0x1C, Crystal Star effect drawn instead of an icon (effStarStoneEntry); NULL for other items
     EvtWord* evtCode; // 0x20, event script run on pickup (evtEntry)
     u16 mode; // 0x24, ItemEntryMode
     u16 subState; // 0x26, per-sequence state
-    s32 winId[3]; // 0x28
+    s32 winId[3]; // 0x28, winMgr windows of the get sequence (desc 0, 1 and 2)
     u8 pad_34[0x38 - 0x34]; // 0x34, never accessed
     u32 flags2; // 0x38, ItemEntry_Flags2
-    Vec position; // 0x3C
-    f32 scale; // 0x48
-    u8 alpha; // 0x4C
-    f32 speed; // 0x50
-    s32 direction; // 0x54
-    f32 velocityY; // 0x58
-    u8 pad_5C[0x60 - 0x5C]; // 0x5C, never accessed
-    s64 airTime; // 0x60
+    Vec position; // 0x3C, world position; the icon or effect is placed on it
+    f32 scale; // 0x48, icon scale (iconSetScale)
+    u8 alpha; // 0x4C, icon alpha (iconSetAlpha)
+    f32 speed; // 0x50, horizontal speed of the bounce arc, along direction
+    s32 direction; // 0x54, degrees; x += sin, z -= cos
+    f32 velocityY; // 0x58, upward speed at the start of the current arc (gravity -980 * gravityScale)
+    s64 airTime; // 0x60, ticks since the current arc started
     OSTime baseTime; // 0x68, timestamp elapsed time is measured from
-    OSTime curTime; // 0x70
-    s64 timer; // 0x78
-    f32 bounceFactor; // 0x80
-    f32 gravityScale; // 0x84
-    s32 maxBounces; // 0x88
-    s32 bounceCount; // 0x8C
-    s32 savedDirection; // 0x90
-    f32 savedSpeed; // 0x94
+    OSTime curTime; // 0x70, gp->renderTime of this update; baseTime takes it afterwards
+    s64 timer; // 0x78, despawn countdown in ms (itemVanishCountDown; 0 = none), blinks near the end
+    f32 bounceFactor; // 0x80, scales the upward speed after a bounce
+    f32 gravityScale; // 0x84, scales the -980 gravity of the arc
+    s32 maxBounces; // 0x88, bounces before the item settles on the ground (0 = no limit)
+    s32 bounceCount; // 0x8C, bounces so far in this fall
+    s32 savedDirection; // 0x90, direction after the first bounce with ITEM_FLAG_BOUND_NEXT (evt_item)
+    f32 savedSpeed; // 0x94, speed after the first bounce with ITEM_FLAG_BOUND_NEXT (evt_item)
 } ItemEntry;
 
 typedef struct ItemWork {

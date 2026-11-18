@@ -34,7 +34,6 @@ typedef struct {
 typedef struct {
     struct {
         u16 flags; // 0x0
-        u8 pad_2[0x8 - 0x2]; // 0x2
         GlobalWork global; // 0x8
         PouchData pouch; // 0x13E0
         NpcDeadInfo deadInfo[64]; // 0x19B4

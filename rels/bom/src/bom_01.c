@@ -89,7 +89,6 @@ typedef struct Bom {
     s16 timer;
     f32 vy;
     s32 anim;
-    u8 pad_24[4];
     OSTime time;
 } Bom;
 

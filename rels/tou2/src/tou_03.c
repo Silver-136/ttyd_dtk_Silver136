@@ -60,7 +60,6 @@ typedef struct Kyaku {
     u16 flags;
     Vec pos;
     s16 animIdx;
-    u8 pad_0x12[6];
     u64 time;
 } Kyaku;
 typedef struct KyakuAnim {

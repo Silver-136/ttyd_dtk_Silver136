@@ -28,20 +28,20 @@
 typedef struct EffFallWork {
     s32 type;       // 0x0
     Vec position;   // 0x4
-    u8 pad10[0x6C - 0x10];
+    u8 pad10[0x6C - 0x10]; // 0x10, element 0 width..sfx and element 1 type: not used through this view
     Vec pos2;       // 0x6C
-    u8 pad78[0x80 - 0x78];
+    u8 pad78[0x80 - 0x78]; // 0x78, element 1 width, drop: not used through this view
     f32 angle;      // 0x80
-    u8 pad84[0x8C - 0x84];
+    u8 pad84[0x8C - 0x84]; // 0x84, element 1 num, duration: not used through this view
     s32 timer;      // 0x8C
-    u8 pad90[0x94 - 0x90];
+    u8 pad90[0x94 - 0x90]; // 0x90, element 1 scroll: not used through this view
     f32 scale;      // 0x94
-    u8 pad98[0xA0 - 0x98];
+    u8 pad98[0xA0 - 0x98]; // 0x98, element 1 gravity, speedY: not used through this view
     s32 state;      // 0xA0
     u32 alpha;      // 0xA4
-    u8 padA8[0xB0 - 0xA8];
+    u8 padA8[0xB0 - 0xA8]; // 0xA8, element 1 vtx, sway: not used through this view
     f32 rotation;   // 0xB0
-    u8 padB4[0xB8 - 0xB4];
+    u8 padB4[0xB8 - 0xB4]; // 0xB4, element 1 rot3: not used through this view
     Vec pos3;       // 0xB8
     s32 pose0;      // 0xC4
     s32 pose1;      // 0xC8

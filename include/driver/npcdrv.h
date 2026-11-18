@@ -252,7 +252,6 @@ typedef struct NpcEntry {
     u8 pad_170[0x178 - 0x170];      // 0x170
     OSTime jumpTicks;               // 0x178, OSTime accumulated while jumping/falling, 0 on landing
     f32 jumpElapsed;                // 0x180, jumpTicks in seconds
-    u8 pad_184[0x188 - 0x184];      // 0x184
     OSTime moveTicks;               // 0x188, OSTime accumulated since the current evt move started
     OSTime dtTicks;                 // 0x190, frame delta (capped to 16 ms after a >500 ms gap)
     OSTime lastUpdateTicks;         // 0x198, gp->renderTime of the last update
@@ -297,7 +296,6 @@ typedef struct NpcEntry {
     u16 koopaEncounterType;         // 0x31C, NpcKoopaEncount
     u16 hazardFlags;                // 0x31E, NpcKoopaEncount bits the NPC is immune to
     u16 hitCooldown;                // 0x320, frames before the NPC can start a battle again (90 after one)
-    u8 pad_322[2];                  // 0x322
     struct NpcEntry* prev;          // 0x324, previous NPC of the group (npcSetLink)
     struct NpcEntry* next;          // 0x328, next NPC of the group
     struct NpcEntry* master;        // 0x32C, NPC this one is a slave of (npcSetSlave)

@@ -419,16 +419,16 @@ typedef struct MapTevCallbackInfo MapTevCallbackInfo;
 typedef void (*MapTevCallback)(MapTevCallbackInfo* info);
 
 typedef struct MapEntry {
-    u16 flags;                     // 0x0
-    char name[16];                 // 0x2
-    GXColor blend;                 // 0x12
-    GXColor blend2;                // 0x16
-    GXColor color;                 // 0x1A
+    u16 flags;                     // 0x0, MapEntryFlags
+    char name[16];                 // 0x2, name of the loaded map (its file folder)
+    GXColor blend;                 // 0x12, colour multiplied into map objects with MAP_ENTRY_BLEND (mapSetBlend)
+    GXColor blend2;                // 0x16, second multiply colour, MAP_ENTRY_BLEND2 (mapSetBlend2)
+    GXColor color;                 // 0x1A, multiply colour while MAP_ENTRY_COLOR is set
     s32 fogEnable;                 // 0x20, fog_table word 0
-    s32 fogType;                   // 0x24
-    f32 fogStart;                  // 0x28
-    f32 fogEnd;                    // 0x2C
-    GXColor fogColor;              // 0x30
+    s32 fogType;                   // 0x24, index into fog_type[] for GXSetFog (fog_table type; 0 without a table)
+    f32 fogStart;                  // 0x28, GXSetFog start (fog_table)
+    f32 fogEnd;                    // 0x2C, GXSetFog end (fog_table)
+    GXColor fogColor;              // 0x30, GXSetFog colour (fog_table)
     HSD_Archive header;            // 0x34
     void* dat;                     // 0x78, ./map/%s/map.dat
     u32 datSize;                   // 0x7C
@@ -441,15 +441,15 @@ typedef struct MapEntry {
     MapFileFog* fogTable;          // 0x98, "fog_table" chunk
     MapMaterialNameTable* materialNameTable; // 0x9C, "material_name_table" chunk
     MapVcdTable* vcdTable;         // 0xA0, "vcd_table" chunk
-    MapObject* rootMapObj;         // 0xA4
-    struct HitEntry* rootHitObj;     // 0xA8
-    Vec bbox[8];                   // 0xAC
-    MapTevCallback tevCallbacks[16];        // 0x10C
-    s32 numJoints;                 // 0x14C
+    MapObject* rootMapObj;         // 0xA4, root of the map object tree (mapEntry)
+    struct HitEntry* rootHitObj;     // 0xA8, root of the collision tree (hitEntry)
+    Vec bbox[8];                   // 0xAC, the eight corners of the map's bounding box (camEvalNearFar)
+    MapTevCallback tevCallbacks[16];        // 0x10C, mapSetTevCallback; an object picks one by its flags
+    s32 numJoints;                 // 0x14C, number of map objects in objects
     MapObject* objects;            // 0x150
-    s32 hitNumJoints;              // 0x154
+    s32 hitNumJoints;              // 0x154, number of collision objects in hitEntries
     struct HitEntry* hitEntries;     // 0x158
-    s32 numAnims;                  // 0x15C
+    s32 numAnims;                  // 0x15C, number of entries in animData
     MapEntryAnimData* animData;    // 0x160
     u32 dispListSize;              // 0x164, total display-list bytes (makeDisplayList)
     void* dispListBuf;             // 0x168, _mapAllocTail(dispListSize); freed in bmapLoad

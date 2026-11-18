@@ -16,7 +16,6 @@ typedef struct EffTorchWork {
     f32 scaleX;        // 0x14
     f32 scaleY;        // 0x18
     u8 state;     // 0x1C
-    u8 field_0x1D[3];  // 0x1D
 } EffTorchWork;
 
 // 0x3F0 bytes in the original; the 32x64 I4 texture GX reads is 0x400, so its last 16 (zero) bytes are the

@@ -22,7 +22,6 @@ typedef struct BreakSlotReel {
     f32 spinSpeed;    // 0x50, reel scroll per frame (eases to 22.5, decelerates by spinAccel to 20)
     f32 spinAccel;    // 0x54, added to spinSpeed after the stop press (negative)
     u8 alpha;        // 0x58
-    u8 pad_59[3];    // 0x59
 } BreakSlotReel;
 
 typedef struct BreakSlotWork {

@@ -127,7 +127,6 @@ typedef struct PaperSoundEnv {
     u8 state;           // 0xD
     u16 timer;          // 0xE, frames until the next play
     u16 dist;           // 0x10, __psndSFXOn dist
-    u16 pad_12;         // 0x12, never accessed
     u32 sfx;            // 0x14, playing SFX handle, 0xFFFFFFFF = none
     Vec position;       // 0x18
 } PaperSoundEnv;
@@ -138,7 +137,6 @@ typedef struct PaperSoundWork {
     u16 envLpf[2];                  // 0x1C, ENV low-pass per channel, set to 0x7D00 and ramped toward envFreq
     u16 envFreq[2];                 // 0x20, ENV play frequency per channel (default 0x7D00)
     u8 sfxFadeState;                // 0x24, global SFX fade (2 = fading out, 0 = idle)
-    u8 pad_25;                      // 0x25
     s16 sfxFadeMax;                 // 0x26, fade length in frames
     s16 sfxFadeTime;                // 0x28, frames left
     u8 pad_2A[0x30 - 0x2A];         // 0x2A
@@ -155,7 +153,6 @@ typedef struct PaperSoundWork {
     u8 sfxActiveCount; // 0x5B, active PaperSoundEffect slots counted by psndSFXMain
 #if VERSION >= VERSION_JP
     s8 sfxCooldown;                 // 0x5C, frames before certain repeating SFX may restart (set to 6)
-    u8 pad_5D[0x60 - 0x5D];         // 0x5D
 #endif
 } PaperSoundWork;
 

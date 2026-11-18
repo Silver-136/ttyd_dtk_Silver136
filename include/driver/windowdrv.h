@@ -46,7 +46,7 @@ typedef enum WindowTailFlags {
 
 struct WindowEntry {
     u16 state; // 0x0, message-window state
-    u16 flags; // 0x2
+    u16 flags; // 0x2, WindowEntryFlags
     s16 priority; // 0x4, windowEntry argument; display z = 400 - priority
     s16 alpha; // 0x6, window alpha
     s32 type; // 0x8, WindowType
@@ -54,14 +54,12 @@ struct WindowEntry {
     f32 y; // 0x10, window ypos
     f32 width; // 0x14, horizontal extent
     f32 height; // 0x18, vertical extent
-    u8 pad_1C[0x20 - 0x1C]; // 0x1C, never accessed
     OSTime timestamp;               // 0x20, gp->renderTime at the start of the current fade/scroll step
-    smartEntry* userdata; // 0x28
+    smartEntry* userdata; // 0x28, smart memory of the window's contents (msgdrv: MsgWinData)
     s16 tailMode; // 0x2C, WindowTailFlags; 0 = no tail, balloon drawn in place
     Vec speakerPos; // 0x30, speech-bubble tail target (world position unless WINDOW_TAIL_SCREEN_POS)
-    void (*main)(WindowEntry* entry); // 0x3C
-    void (*delete)(WindowEntry* entry); // 0x40
-    u8 pad_44[0x48 - 0x44]; // 0x44, never accessed
+    void (*main)(WindowEntry* entry); // 0x3C, per-frame callback run by windowMain
+    void (*delete)(WindowEntry* entry); // 0x40, run by windowDelete before the slot is freed
 };
 
 void windowInit(void);

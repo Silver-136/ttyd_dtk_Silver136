@@ -114,7 +114,6 @@ typedef struct GMonte {
     u8 state;
     s16 wait;
     s16 timer;
-    u8 unk6[2];
     GMonteSub sub;
     Vec vel;
     SlotWork* owner;

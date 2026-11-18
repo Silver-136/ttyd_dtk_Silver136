@@ -743,7 +743,6 @@ typedef struct BattleWorkUnitPart {
     f32 moveFrame;                                         // 0xB8, current frame of an interpolated parts move
     s8 moveDirection;                                      // 0xBC, +1/-1 move direction; 0 = use faceDirection
     s8 faceDirection;                                      // 0xBD, facing: >= 0 right, < 0 left
-    u8 pad_BE[0xC0 - 0xBE];                                // 0xBE, never accessed
     BecSndWork moveSnd;                                    // 0xC0, move-sound loop (BtlUnit_LoadSeMode / _MoveSoundControlCore)
     u8 pad_DC[0xF8 - 0xDC];                                // 0xDC, never accessed
     BtlPoseSoundTable moveSndTable;                        // 0xF8, btlevtcmd_SetPartsJump/Run/Walk/DiveSound
@@ -757,7 +756,6 @@ typedef struct BattleWorkUnitPart {
     s16 hitHeight;                                         // 0x1A4, copied from BattleUnitKindPart.hitHeight, never read
     u16 gravityTimer;                                      // 0x1A6, frame counter for the gravity bob offset
     u16 floatTimer;                                        // 0x1A8, frame counter for the floating offset
-    u8 pad_1AA[0x1AC - 0x1AA];                             // 0x1AA, never accessed
     PartsAttribute_Flags attributes;                       // 0x1AC, PartsAttribute_Flags
     PartsCounterAttribute_Flags counterAttributes;         // 0x1B0, PartsCounterAttribute_Flags: counters on contact
     BattleUnitDefense* defense;                            // 0x1B4, defense per element
@@ -781,7 +779,6 @@ typedef struct BattleWorkUnitPart {
     GXColor dispColor;                                     // 0x4F4, color with alpha = baseAlpha * color.a
     f32 dispZOffset;                                       // 0x4F8, added to z for the display sort
     s8 rotationOrder;                                      // 0x4FC, selects the rotation matrix concat order
-    u8 pad_4FD[0x500 - 0x4FD];                             // 0x4FD, never accessed
 } BattleUnitPart;
 
 typedef struct BattleWorkUnitBadgesEquipped {
@@ -890,7 +887,6 @@ typedef struct BattleUnit {
     s8 alliance;                                              // 0xC, side (ALLIANCE_PLAYER, ...)
     u8 level;                                                 // 0xD
     s8 groupSetupId;                                          // 0xE, index in the enemy group setup; -1 = none
-    u8 pad_0F;                                                // 0xF, never accessed
     struct BattleUnitKind* kindParams;                        // 0x10, the unit kind's data
     BattleUnitPart* parts;                                    // 0x14, first part (list via nextPart)
     BattleDataEntry* dataTable;                               // 0x18, tagged scripts/data (BtlUnit_GetData)
@@ -902,7 +898,6 @@ typedef struct BattleUnit {
     s8 activeTurns;                                           // 0x24, turns since entry (+1 per turn)
     s8 swallowRate;                                           // 0x25, chance Yoshi can swallow it (kind swallowChance)
     s8 swallowAttribute;                                      // 0x26, from the kind's swallowAttributes
-    u8 pad_27;                                                // 0x27, never accessed
     s32 movePriority;                                         // 0x28, turn order: kind turnOrder +- variance
     s32 attackPhase;                                          // 0x2C, phase the unit acts in
     Vec homePosition;                                         // 0x30, position set at entry (BtlUnit_SetHomePos)
@@ -988,7 +983,6 @@ typedef struct BattleUnit {
     f32 moveTotalFrames;                                      // 0x180, moveFrames at the move start (as f32)
     s8 moveDirection;                                         // 0x184
     s8 faceDirection;                                         // 0x185
-    u8 pad_186[0x188 - 0x186];                                // 0x186 (US 0x18A), never accessed
     BecSndWork moveSnd;                                       // 0x188 (US 0x18C)
     Vec jumpStep;                                             // 0x1A4 (US 0x1A8), per-frame XZ/Y step of btlevtcmd_MarioJumpPosition
     f32 jumpAngle;                                            // 0x1B0 (US 0x1B4), arc angle in degrees
@@ -1048,7 +1042,6 @@ typedef struct BattleUnit {
     u8 stolenCoins;                                           // 0x30C, coins a Bandit (borodo) stole; dropped back as its held coin item
     u8 moveColorLv;                                           // 0x30D, MOVE_COLOR_LV_*: the unit's colour scale (x/255)
     u8 moveColorLvDisp;                                       // 0x30E, current move colour level, ramps toward moveColorLv
-    u8 pad_30F;                                               // 0x30F, never accessed
     struct BattleWeapon* countersetWeapon;                    // 0x310, spare weapon (chuchurina); the UFO's UfoWork
     void (*deleteFunc)(struct BattleUnit*);                   // 0x314 (US 0x318), called by BtlUnit_Delete
     struct smartEntry* screenTexBuf;                          // 0x318 (US 0x31C), smartAlloc EFB copy (0x260x0x1E0, unit_party_chuchurina), freed on unit delete

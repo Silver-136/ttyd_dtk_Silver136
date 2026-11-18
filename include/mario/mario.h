@@ -546,7 +546,6 @@ typedef struct MarioWork {
     u8 pad_240[0x241 - 0x240];          // 0x240, never accessed
     s8 currPartySlotId[2];              // 0x241 JP, 0x245 US
     s8 prevPartyMemberId[2];            // 0x243 JP, 0x247 US
-    u8 pad_245[0x246 - 0x245];          // 0x245, never accessed
     u16 buttonHold;                     // 0x246, gp->button masked by enableKeyMask
     u16 buttonTrg;                      // 0x248, gp->buttonNew masked by enableKeyMask
     u16 buttonRepeat;                   // 0x24A, gp->buttonRepeat masked by enableKeyMask

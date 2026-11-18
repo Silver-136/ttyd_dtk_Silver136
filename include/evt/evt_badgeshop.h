@@ -12,7 +12,6 @@ typedef struct BadgeShopWork {
     u8 starmaniac_table[0x19]; // 0x32, Dazzle's Badges
     u8 bottakuru_table[0x55]; // 0x4B, Charlieton's Items
     u8 bteresa_table[0x55]; // 0xA0, Pianta Parlor
-    u8 align[3];
     s32 bargainBadges[5]; // 0xF8
     s32 bargainNum; // 0x10C
     s32 reserved_110; // 0x110, cleared and added to bargainNum in the restock loop, never set nonzero
