@@ -1914,6 +1914,10 @@ static EVT_BEGIN(maffiaboss_casino_init)
     RETURN
 EVT_END()
 
+/**
+ * Talk event of the casino Don Pianta: a line that changes with the story (gor_03_01_04 to gor_03_01_08),
+ * the last one from STG9_00_EPILOGUE on.
+ */
 static EVT_BEGIN(maffiaboss_casino_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG5_61_FRANKLYS_HOUSE_STG_5)
@@ -4260,6 +4264,7 @@ static EVT_BEGIN(exchange_set)
     RETURN
 EVT_END()
 
+/** Init event of the stall-4 NPC (roten_4): places it at (0, -5, 335) with floor collision and gravity. */
 static EVT_BEGIN(roten_4_init)
     CALL(evt_npc_set_position, STRING("me"), 0, -5, 335)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)

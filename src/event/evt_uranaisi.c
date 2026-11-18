@@ -250,6 +250,13 @@ s32 uranaisi_data_make_next(const char* prefix, s32 type);
         }                                           \
     }
 
+/**
+ * Builds the fortune list for a session with the fortune teller.
+ * args[0] is the kind (0 = where to go next, 1 = a missing Star Piece, 2 = a missing Shine Sprite),
+ * args[1] the message label prefix.
+ * Counts the matching "<prefix>_NNNN" messages, allocates the list on the map heap,
+ * then fills it in a second pass.
+ */
 USER_FUNC(uranaisi_data_alloc) {
     const char* prefix;
     UranaiWork* wp = &_udt;
@@ -323,6 +330,7 @@ USER_FUNC(uranaisi_next_check) {
     return EVT_RETURN_DONE;
 }
 
+/** Writes to args[1] the message label ("<prefix>_NNNN") of "where to go next" fortune number args[0]. */
 USER_FUNC(uranaisi_next_makelabel) {
     EvtWord* args = event->args;
     UranaiWork* wp = &_udt;
@@ -443,6 +451,12 @@ USER_FUNC(uranaisi_supercoin_setreadflag) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Scans the "<prefix>_NNNN" messages, whose leading <!tag> names a story point,
+ * and keeps those of the latest story point not past GSW_STORY_PROGRESS:
+ * the fortune about where Mario should go next.
+ * Type bit 0 clear only counts them (and finds that story point); set, it fills the list. Returns the count.
+ */
 s32 uranaisi_data_make_next(const char* prefix, s32 type) {
     s32 maxLabel;
     UranaiWork* wp = &_udt;

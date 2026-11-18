@@ -4366,6 +4366,11 @@ static s32 gans_white_off(EventEntry* event, BOOL isFirstCall) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * The Macho Grubba fight (battle setup 23), run once Mario steps onto the ring: Grubba's machine rises, he powers
+ * up and the battle starts; afterwards Jolene confronts him, Prince Mush is released from the machine and Jolene
+ * gives Mario the Crystal Star.
+ */
 static EVT_BEGIN(evt_boss)
     // Hide the stage props, lock the east door, place Grubba in the ring and set the Crystal Star spinning.
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("group34"), MAP_OBJ_FLAG_HIDDEN)

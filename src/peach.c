@@ -34,6 +34,7 @@ void peachSetStsNormal(void) {
     }
 }
 
+/** Condition 1 of evt_peach_set_condition: PEACH_FLAG_AFTERSHOWER, the P_*_2 poses (through peachChgPose). */
 void peachSetStsAftershower(void) {
     MarioWork* mario = marioGetPtr();
     mario->peachFlags &= ~PEACH_FLAG_STS_MASK;
@@ -41,6 +42,7 @@ void peachSetStsAftershower(void) {
     peachChgPose("P_S_1");
 }
 
+/** Condition 2 of evt_peach_set_condition: invisible Peach (PEACH_FLAG_INVISIBLE, the P_*_3 poses). */
 void peachSetStsInvisible(void) {
     MarioWork* mario = marioGetPtr();
     mario->peachFlags &= ~PEACH_FLAG_STS_MASK;
@@ -48,6 +50,7 @@ void peachSetStsInvisible(void) {
     peachChgPose("P_S_1");
 }
 
+/** Condition 3 of evt_peach_set_condition: happy Peach (PEACH_FLAG_HAPPY, the P_*_5 poses). */
 void peachSetStsHappy(void) {
     MarioWork* mario = marioGetPtr();
     mario->peachFlags &= ~PEACH_FLAG_STS_MASK;
@@ -55,6 +58,7 @@ void peachSetStsHappy(void) {
     peachChgPose("P_S_1");
 }
 
+/** Condition 4 of evt_peach_set_condition: uneasy Peach (PEACH_FLAG_UNEASY, the P_*_4 poses). */
 void peachSetStsUneasy(void) {
     MarioWork* mario = marioGetPtr();
     mario->peachFlags &= ~PEACH_FLAG_STS_MASK;
@@ -62,6 +66,7 @@ void peachSetStsUneasy(void) {
     peachChgPose("P_S_1");
 }
 
+/** Condition 5 of evt_peach_set_condition: angry Peach (PEACH_FLAG_ANGRY, the P_*_6 poses). */
 void peachSetStsAngry(void) {
     MarioWork* mario = marioGetPtr();
     mario->peachFlags &= ~PEACH_FLAG_STS_MASK;
@@ -69,6 +74,7 @@ void peachSetStsAngry(void) {
     peachChgPose("P_S_1");
 }
 
+/** Condition 6 of evt_peach_set_condition: PEACH_FLAG_ORDINARY, the P_*_7 poses with P_T_13 as her talk pose. */
 void peachSetStsOrdinary(void) {
     MarioWork* mario = marioGetPtr();
     mario->peachFlags &= ~PEACH_FLAG_STS_MASK;
@@ -76,6 +82,10 @@ void peachSetStsOrdinary(void) {
     peachChgPose("P_S_1");
 }
 
+/**
+ * Condition 7 of evt_peach_set_condition: PEACH_FLAG_CARRY, the P_*_8 poses with P_T_14 as her talk pose.
+ * No script in the tree sets condition 7.
+ */
 void peachSetStsCarry(void) {
     MarioWork* mario = marioGetPtr();
     mario->peachFlags &= ~PEACH_FLAG_STS_MASK;

@@ -2133,14 +2133,17 @@ void itemNokoForceGet(ItemEntry* entry) {
     }
 }
 
+/** Sets ITEM_FLAG_* bits on an item. */
 void itemFlagOn(ItemEntry* entry, u16 flags) {
     entry->flags |= flags;
 }
 
+/** Clears ITEM_FLAG_* bits on an item. */
 void itemFlagOff(ItemEntry* entry, u16 flags) {
     entry->flags &= ~flags;
 }
 
+/** Returns which of the given ITEM_FLAG_* bits are set on an item. */
 u16 itemFlag(ItemEntry* entry, u16 flags) {
     return entry->flags & flags;
 }

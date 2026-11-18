@@ -3459,6 +3459,11 @@ static EVT_BEGIN(puni_mario_wait)
     RETURN
 EVT_END()
 
+/**
+ * Bowser's chapter 3 interlude, part 1 (at STG3_33_04_PEACH_BACK_TO_TEC):
+ * Bowser and Kammy Koopa arrive in the village and a Puni sees them.
+ * Sets the story to STG3_33_05_BOWSER_THE_GREAT_TREE.
+ */
 static EVT_BEGIN(mri_01_koopa_first_evt)
     // Bowser and Kammy arrive in the village; the room's exits are disabled.
     CALL(evt_mario_key_onoff, 0)
@@ -3562,6 +3567,11 @@ static EVT_BEGIN(mri_01_koopa_first_evt)
     RETURN
 EVT_END()
 
+/**
+ * Bowser's chapter 3 interlude, part 2 (at STG3_33_05_BOWSER_THE_GREAT_TREE):
+ * Bowser leaps up to the Puni Elder, who grows huge, and they talk about the Crystal Star.
+ * Sets the story to STG3_33_06_BOWSER_TREASURE, saves and changes the map to tou_02.
+ */
 static EVT_BEGIN(mri_01_koopa_second_evt)
     // Bowser leaps up to the Puni Elder, who suddenly grows huge and shouts at him to begone.
     CALL(evt_snd_bgmoff, PSND_FADEOUT)

@@ -1304,6 +1304,10 @@ static EVT_BEGIN(init_g_10)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of guard 10: stg3_tou_102_03 during STG3_21_1ST_MATCH_WITH_RAWK_HAWK (while
+ * GSWF_TOU_RAWK_HAWK_OPENING_SEEN is clear), stg3_tou_102_04 during STG3_31_GRUBBAS_PLANS, otherwise nothing.
+ */
 static EVT_BEGIN(talk_g_10)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG3_21_1ST_MATCH_WITH_RAWK_HAWK)
@@ -1334,6 +1338,7 @@ static EVT_BEGIN(init_g_11)
     RETURN
 EVT_END()
 
+/** Talk script of guard 11: the same lines as guard 10 (stg3_tou_102_03 and 102_04). */
 static EVT_BEGIN(talk_g_11)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG3_21_1ST_MATCH_WITH_RAWK_HAWK)

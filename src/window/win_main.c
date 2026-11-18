@@ -529,6 +529,10 @@ void winDvdClose(void) {
     wp->res = NULL;
 }
 
+/**
+ * Puts the current partner into its item pose (the *_I_1 animations) when an item from the menu is used on them
+ * (evt_item_use). JP and later skip it while evt_party_nokotaro_get_status reports nonzero.
+ */
 static EVT_BEGIN(kime_pose)
 #if VERSION >= VERSION_JP
     CALL(evt_party_nokotaro_get_status, 0, LW(0))
@@ -557,6 +561,7 @@ static EVT_BEGIN(kime_pose)
     RETURN
 EVT_END()
 
+/** Like kime_pose with the *_Y_1 poses, played as the item takes effect (evt_item_use). */
 static EVT_BEGIN(kime_pose2)
 #if VERSION >= VERSION_JP
     CALL(evt_party_nokotaro_get_status, 0, LW(0))

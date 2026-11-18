@@ -37,12 +37,14 @@ static EvtWord evt_block[8];
 static EvtWord mobj_box00[34];
 EvtWord tik_07_init_evt[323];
 
+/** Opening hook of the door at bero_00: rotates door_1 about Y by the door's progress (LW(0)) times -0.444. */
 static EVT_BEGIN(bero_00_open_door)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door_1"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/** Closing hook of the door at bero_00: rotates door_1 by progress times 0.444, the reverse of bero_00_open_door. */
 static EVT_BEGIN(bero_00_close_door)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door_1"), 0, LW(0), 0)

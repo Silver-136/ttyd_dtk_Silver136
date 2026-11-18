@@ -807,6 +807,13 @@ static EVT_BEGIN(dead_event)
     RETURN
 EVT_END()
 
+/**
+ * Rawk Hawk's phase script, run after the player's phase while he can act. It moves UNIT_WORK_HP_STAGE on
+ * (attack_event reads it): from 0 to 1 at 67 % of max HP or below, and from 2 to 3 at 34 % or below unless he is
+ * Tiny (he then jumps, lowers the iron frame with down_ceil and registers ceil_fall_ready_event).
+ * His taunts (stg3_tou_436_02 to 436_05; 436_05 at 25 % in stage 4) play once each, only before
+ * STG3_30_A_NEW_CHAMPION.
+ */
 static EVT_BEGIN(phase_event)
     // Only acts after the player's phase and while Rawk Hawk is able to act.
     CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_AFTER_PLAYER)

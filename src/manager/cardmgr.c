@@ -194,6 +194,7 @@ BOOL cardIsExec(void) {
     return wp->busyFrames != 0;
 }
 
+/** Result of the last card operation as a CARD_RESULT_* code (READY on success, NOCARD, ...). */
 s32 cardGetCode(void) {
     return wp->result;
 }

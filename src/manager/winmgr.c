@@ -2033,6 +2033,10 @@ static void select_disp_luigi(WinMgrEntry* entry) {
     }
 }
 
+/**
+ * Draws the prompt of a selection list (msg_window_select_* by list type) centred in its window, once the window
+ * has finished opening. US and later squeeze the text to fit and resize the window to the prompt's line count.
+ */
 static void select_disp2(WinMgrEntry* entry) {
     WinMgrSelect* sel = entry->param;
     const char* msg;

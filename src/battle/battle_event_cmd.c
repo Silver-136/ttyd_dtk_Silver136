@@ -2511,6 +2511,7 @@ USER_FUNC(btlevtcmd_GetTotalDamage) {
     return EVT_RETURN_DONE;
 }
 
+/** Script: returns in args[1] the low byte of the damage code of unit args[0]. */
 USER_FUNC(btlevtcmd_GetDamageCode) {
     EvtWord* args = event->args;
     BattleUnit* unit;
@@ -2731,6 +2732,7 @@ USER_FUNC(btlevtcmd_GetProtectId) {
     return EVT_RETURN_DONE;
 }
 
+/** Script: returns in args[1] the unit kind (currentKind) of unit args[0]. */
 USER_FUNC(btlevtcmd_GetUnitKind) {
     EvtWord* args = event->args;
     s32 btlId, id, index;

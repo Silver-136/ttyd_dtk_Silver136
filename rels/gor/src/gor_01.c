@@ -1948,6 +1948,11 @@ static EVT_BEGIN(kuribo1_regl)
     RETURN
 EVT_END()
 
+/**
+ * Talk event of the first Goomba villager.
+ * While Trouble Center job 4 is active it gives the request (irai_04_001) and then a reminder (irai_04_002);
+ * otherwise one line per story stage (gor_01_026_00 to gor_01_026_08).
+ */
 static EVT_BEGIN(kuribo1_talk)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_FIND_THIS_GUY)
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
@@ -1996,6 +2001,7 @@ static EVT_BEGIN(kuribo2_regl)
     RETURN
 EVT_END()
 
+/** Talk event of the second Goomba villager: one line per story stage (gor_01_027_00 to gor_01_027_08). */
 static EVT_BEGIN(kuribo2_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG1_17_FATHER_SON_REUNITED)
@@ -2235,6 +2241,7 @@ static EVT_BEGIN(chusan2_init)
     RETURN
 EVT_END()
 
+/** Talk event of the second Chusan: one line per story stage (gor_01_030_00 to gor_01_030_08). */
 static EVT_BEGIN(chusan2_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG1_17_FATHER_SON_REUNITED)
@@ -2264,6 +2271,7 @@ static EVT_BEGIN(bomhei_init)
     RETURN
 EVT_END()
 
+/** Talk event of the Bob-omb villager: one line per story stage (gor_01_031_00 to gor_01_031_08). */
 static EVT_BEGIN(bomhei_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG1_17_FATHER_SON_REUNITED)
@@ -6866,6 +6874,10 @@ static USER_FUNC(set_fook_evt) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Result of cooking with the Mystery item: half the time one of the 20 results in naniga_okorukana_list,
+ * otherwise a Mistake.
+ */
 static s32 naniga_okorukana_cook(void) {
     s32 r = rand() % 100;
 

@@ -1440,6 +1440,10 @@ EVT_END()
 
 #if VERSION <= VERSION_DEMO_JP
 
+/**
+ * Early-demo parade script for the first Magnus von Grapple robot model (c_mb_robo_1b):
+ * rises up through the middle of the screen as a silhouette.
+ */
 EVT_BEGIN(end_credit_batten_evt)
     CALL(evt_npc_entry, STRING("batten"), STRING("c_mb_robo_1b")) // Magnus von Grapple in the credits parade
     CALL(evt_npc_set_anim, STRING("batten"), STRING("MGN_W_1"))
@@ -1625,6 +1629,10 @@ EVT_BEGIN(end_credit_para_evt)
     RETURN
 EVT_END()
 
+/**
+ * JP and later: parade script for the first robot model (c_mb_robo_1a) at 0.6 scale, as a silhouette:
+ * slides in from the right, stays for three seconds, then slides back out.
+ */
 EVT_BEGIN(end_credit_batten_evt)
     CALL(evt_npc_entry, STRING("batten"), STRING("c_mb_robo_1a"))
     CALL(evt_npc_set_anim, STRING("batten"), STRING("W_1"))

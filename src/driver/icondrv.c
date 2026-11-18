@@ -808,6 +808,7 @@ void iconSetPos(const char* name, f32 x, f32 y, f32 z) {
     }
 }
 
+/** Sets ICON_FLAG_* bits (hidden, flipped, gray, ...) on the named icon, if it exists. */
 void iconFlagOn(const char* name, s16 flags) {
     IconEntry* entry = iconNameToPtr(name); // inlined by the compiler
     if (entry) {
@@ -815,6 +816,7 @@ void iconFlagOn(const char* name, s16 flags) {
     }
 }
 
+/** Clears ICON_FLAG_* bits on the named icon, if it exists. */
 void iconFlagOff(const char* name, s16 mask) {
     IconEntry* entry = iconNameToPtr(name); // inlined by the compiler
     if (entry) {

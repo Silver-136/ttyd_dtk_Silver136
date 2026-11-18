@@ -53,6 +53,12 @@ void BtlPad_WorkInit(BattleWorkPad* pad) {
     pad->holdRepeatFrameCounter = 0;
 }
 
+/**
+ * Pushes one frame of controller chan into the 30-frame histories.
+ * Stick and C-stick tilts of 30 or more are added as extra button bits (BATTLE_PAD_STICK_*,
+ * BATTLE_PAD_SUBSTICK_*) with their own press, release and repeat edges; held tilts repeat after 16 frames,
+ * then every 8.
+ */
 void BtlPad_WorkUpdate(BattleWorkPad* pad, s32 chan) {
     int i;
 

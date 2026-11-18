@@ -9283,6 +9283,10 @@ void searchPSBGMList(const char* name, s32* pi) {
 }
 #endif
 
+/**
+ * Returns the pssfxlist index of the sound effect called name, 0 when there is none,
+ * or the id itself when name is a packed numeric id (SFX_NAME_IS_ID).
+ */
 s32 searchPSSFXList(const char* name) {
     SoundEffectEntry* entry = pssfxlist;
     int i;

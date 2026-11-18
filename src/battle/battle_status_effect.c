@@ -645,6 +645,12 @@ void BattleStatusChangeMsgAdjust(BattleWork* wp) {
     }
 }
 
+/**
+ * Shows the pending status-change message of highest priority (_st_pri_data), one per call:
+ * loads its text (msg_st_chg_*), keeps it up for 90 frames (A or B skips) and registers _st_chg_msg_disp.
+ * Returns TRUE while any message is pending.
+ * JP and later also clear every unit's status-change info once a message was pending.
+ */
 BOOL BattleStatusChangeMsgMain(BattleWork* wp) {
     StChgWork* base = &wp->announce.stChg;
     StChgMsg* msg;

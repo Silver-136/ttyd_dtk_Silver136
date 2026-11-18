@@ -1132,6 +1132,11 @@ static EVT_BEGIN(evt_1st_leagu)
     RETURN
 EVT_END()
 
+/**
+ * Spawned when Mario enters the air duct by the "fall" entrance before STG3_20_12_JOLENES_SECRET: repeats
+ * stg3_tou_316_03 and 316_04 in speech bubbles at x -50 and 50, a second apart, until evt_nozoki deletes it
+ * (event id in GW(9)).
+ */
 static EVT_BEGIN(evt_nozoki_msg)
     LOOP(0)
         CALL(evt_msg_toge, MSG_TOGE_AT_POS, -50, 100, 0)

@@ -304,6 +304,7 @@ static void moamoa_pose_change(Moamoa* moa, const char* model, const char* anim)
     }
 }
 
+/** Script helper: sets (args[0] nonzero) or clears the MOAMOA_WORK_* bits args[1] in the swarm's work flags. */
 static s32 evt_moamoa_flag_onoff(EventEntry* event, BOOL isFirstCall) {
     EvtWord* args = event->args;
     s32 on = evtGetValue(event, args[0]);

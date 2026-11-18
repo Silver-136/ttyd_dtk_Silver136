@@ -267,6 +267,11 @@ void badgeShop_bottakuruGeneration(void) {
     }
 }
 
+/**
+ * Adds each Pianta Parlor card's prize list to the Parlor stock (bteresa_table) the first time Mario holds that
+ * card (Special, Silver, Gold, Platinum), guarded by the GSWF_PARLOR_*_CARD_PRIZES_ADDED flags.
+ * Called from gor_03 (teresa_badge_item_list_init).
+ */
 void badgeShop_bteresaGeneration(void) {
     s32* ptr;
     s32* p2;

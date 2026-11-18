@@ -74,6 +74,13 @@ static EVT_BEGIN(evt_dakuto)
     RETURN
 EVT_END()
 
+/**
+ * Eavesdropping scene, spawned before STG3_30_03_EAVESDROPPING: once Mario walks past x 75 he stops and Grubba's
+ * voice comes through the wall (stg3_tou_455_01 to 455_04) while Mario and the partner step closer. Grubba
+ * gloats about what keeps his body strong, says he will hide the paper about it in his desk drawer and that the
+ * new champ may have to disappear; the partner recognises him (455_05).
+ * The story advances to STG3_30_03_EAVESDROPPING.
+ */
 static EVT_BEGIN(evt_nusumi)
     LABEL(0)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))

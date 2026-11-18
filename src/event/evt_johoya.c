@@ -66,6 +66,10 @@ const char* evtNoLabel[] = {
 // local prototypes
 s32 johoya_data_make(const char* prefix, s32 type);
 
+/**
+ * Builds the rumour list for the message prefix in args[0]: counts the rumours the story has reached,
+ * allocates the InformantInfo array on the map heap (with room for a label after it) and fills it.
+ */
 USER_FUNC(johoya_data_alloc) {
     InformantWork* wp = &_jdt;
 
@@ -251,6 +255,11 @@ USER_FUNC(johoya_luigi_newjoho_setreadflag) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Scans the messages "<prefix>_0000", "_0001", ... until one lacks a "<!label,...>" tag or the tag is "enddata".
+ * Counts those whose story label (search_evt_no) the story has reached;
+ * with type bit 0 also fills InformantInfo (cost 5). Returns the count.
+ */
 s32 johoya_data_make(const char* prefix, s32 type) {
     InformantWork* wp = &_jdt;
     char label[64];

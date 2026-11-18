@@ -597,6 +597,10 @@ int maxAreaInWorld(void) {
     return n;
 }
 
+/**
+ * Records a map's init script (<map>_init_evt) in its MapData entry, if the map exists.
+ * The area RELs call it for their maps when they are loaded.
+ */
 void relSetEvtAddr(const char* mapName, EvtWord* eventAddr) {
     MapData* map = mapDataPtr(mapName);
     if (map != NULL) {

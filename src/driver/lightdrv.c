@@ -118,6 +118,11 @@ static const Vec decay_tbl[] = {
     {0.0f, 0.0f, 0.01f}
 };
 
+/**
+ * Adds a light: type is ambient, point, directional or spot (LIGHT_TYPE_*), attenType picks the distance falloff
+ * from decay_tbl, and LIGHT_LFLAG_CHARA in flags marks it LIGHT_CHARA. A name already in use gets a "_%04d"
+ * suffix. Returns the slot index.
+ */
 s32 lightEntry(const char* name, s32 type, Vec* position, Vec* rotation, GXColor color, f32 spotAngle, f32 attenAngle, s32 attenType, s32 flags) {
     LightWork* wp = lightGetWork();
     LightEntry* entry;

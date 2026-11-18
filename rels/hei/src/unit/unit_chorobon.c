@@ -371,6 +371,11 @@ static EVT_BEGIN(return_event)
     RETURN
 EVT_END()
 
+/**
+ * The Fuzzy's drain attack (weapon_chorobon_drain_attack): hops over to a target and jumps onto it. On a hit, an
+ * electrified or Hold Fast counter (btlevtcmd_PreCheckCounter) switches to the zero-power counter weapon and
+ * ends the script; otherwise it drains HP, heals itself by the damage dealt (btlevtcmd_RecoverHp) and hops away.
+ */
 static EVT_BEGIN(drain_attack_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
 

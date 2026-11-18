@@ -17,6 +17,10 @@
 static void effMahorn2Main(EffectEntry* effect);
 static void effMahorn2Disp(CameraId cameraId, EffectEntry* effect);
 
+/**
+ * Starts the Wizzerd shot from (posX, posY, posZ) toward (dstX, dstY, dstZ).
+ * Called by the Wizzerd battle units (unit_mahorn, unit_mahorn_custom and unit_super_mahorn).
+ */
 EffectEntry* effMahorn2Entry(BOOL unused, f32 posX, f32 posY, f32 posZ, f32 dstX, f32 dstY, f32 dstZ, f32 scale, f32 radius) {
     EffectEntry* effect;
     effMahorn2Data *data;

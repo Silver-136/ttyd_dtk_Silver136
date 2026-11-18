@@ -393,6 +393,10 @@ USER_FUNC(evt_eff) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Like evt_eff, for the effect sets ported from Paper Mario 64 (the *_n64 effects):
+ * args[0] is the effect name, args[1] the set name, the rest as each entry function needs.
+ */
 USER_FUNC(evt_eff64) {
     EvtWord* args;
     s32* intArg;

@@ -72,6 +72,10 @@ USER_FUNC(evt_snd_bgm_scope) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Plays sound effect args[0] (a literal name, not read through evtGetValue) unpositioned;
+ * a nonzero args[1] names the variable that gets the sound id (for evt_snd_sfxoff).
+ */
 USER_FUNC(evt_snd_sfxon) {
     EvtWord* args = event->args;
     const char* name = (const char*)args[0];

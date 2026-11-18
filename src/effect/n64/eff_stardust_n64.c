@@ -82,6 +82,11 @@ static effN64Vtx size8x8_tex22x22_vtx[] = {
 static void effStardustMain(EffectEntry* effect);
 static void effStardustDisp(CameraId cameraId, void* param);
 
+/**
+ * Spawns a burst of sparkle stars at (x, y, z). type sets the number of sparkles (36, 4, 8, 4, otherwise 8);
+ * types 0-2 use `a` as the radius, the others 8.
+ * Used by the sac_* action command code, eff_break, eff_kiss, eff_starstone and others.
+ */
 EffectEntry* effStardustN64Entry(s32 type, f32 x, f32 y, f32 z, f32 a) {
     EffectEntry* effect;
     EffStardustN64Work* work;

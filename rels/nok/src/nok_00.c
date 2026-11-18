@@ -446,6 +446,10 @@ static EVT_BEGIN(init_white)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of General White: one line per stretch of the story (stg1_nok_19_01 before
+ * STG1_06_01_GOLD_FUZZY, _02 before STG1_16_HOOKTAIL, _03 before STG2_25_AFTER_THE_BOSS_BATTLE, _04 afterwards).
+ */
 static EVT_BEGIN(talk_white)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG1_06_01_GOLD_FUZZY)

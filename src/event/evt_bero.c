@@ -178,6 +178,8 @@ f32 bero_get_BeroOZ(void) {
     return BeroOZ;
 }
 
+// bero_get_BeroSX to bero_get_BeroEZ: start and end of the walk computed by the last bero_get_position_* call
+// (bero_get_position_normal, bero_get_position_pipe_pure, ...).
 f32 bero_get_BeroSX(void) {
     return BeroSX;
 }

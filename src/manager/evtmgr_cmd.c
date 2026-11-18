@@ -2848,6 +2848,10 @@ EvtWord* evtSearchEndSwitch(EventEntry* entry) {
     }
 }
 
+/**
+ * Returns the next case label (CASE_*, CASE_END) of the current switch, or its END_SWITCH,
+ * skipping nested switches.
+ */
 EvtWord* evtSearchCase(EventEntry* entry) {
     EvtWord* cmd;
     s32 opcode;

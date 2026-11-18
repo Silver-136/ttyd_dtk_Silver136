@@ -225,6 +225,10 @@ static ClankData clankDt[] = {
     {0},
 };
 
+/**
+ * Moves one connecting rod (map object LW(0)) round a small circle each frame in step with the wheels,
+ * from the train speed GW(0) or GW(1) (chosen by LW(2)); waits while GSWF_HOM_TRAIN_MOVING is clear.
+ */
 static EVT_BEGIN(evt_clank_main)
     SET_FLOAT_VALUE(LW(10), FLOAT(0.0f))
     SWITCH(LW(1))
@@ -321,6 +325,10 @@ static EVT_BEGIN(evt_bg)
     RETURN
 EVT_END()
 
+/**
+ * Rotates the star objects (hosi_left, hosi_center, hosi_right and their _c copies) each frame by the
+ * train speed GW(0); waits while GSWF_HOM_TRAIN_MOVING is clear.
+ */
 static EVT_BEGIN(evt_hoshi)
     SET_FLOAT_VALUE(LW(10), FLOAT(0.0f))
     LOOP(0)

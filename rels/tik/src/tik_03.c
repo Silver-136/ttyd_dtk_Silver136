@@ -64,6 +64,10 @@ static EVT_BEGIN(bero_05_custom_in)
     RETURN
 EVT_END()
 
+/**
+ * Custom exit hook for bero_05: if the guide Puni has just joined (STG1_35_PUNI_JOINS), advances the story to
+ * STG1_END_TO_STAGE_2. Returns 0 in LW(0).
+ */
 static EVT_BEGIN(bero_05_custom_out)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG1_35_PUNI_JOINS)
         SET_VALUE(GSW_STORY_PROGRESS, STG1_END_TO_STAGE_2)

@@ -96,6 +96,11 @@ static u8 poyon_scale[] = {0x64, 0x64, 0x69, 0x5E, 0x6E, 0x59, 0x75, 0x52, 0x7B,
                     0x8C, 0x3B, 0x8C, 0x3C, 0x85, 0x42, 0x77, 0x50, 0x67, 0x60, 0x58, 0x6F, 0x50, 0x78, 0x4E, 0x79,
                     0x52, 0x75, 0x58, 0x6F, 0x5E, 0x69, 0x64, 0x64};
 
+/**
+ * Spawns the mini-game banner at (x, y, z); type 0-2 selects start, finish or retire.
+ * Called by the Pianta Parlor events (evt_goryuugijo), the yuu mini-game (evt_yuuminigame) and, for the finish
+ * banner outside Japanese, effStageClearEntry.
+ */
 EffectEntry* effMiniGameEntry(s32 type, f32 x, f32 y, f32 z) {
     EffectEntry* effect;
     EffMiniGameWork* work;

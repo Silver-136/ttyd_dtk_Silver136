@@ -1029,6 +1029,10 @@ static void nameKirinukiGX(f32 x, f32 y, f32 w, f32 h) {
     chip(0x32, x + w - 8, y - (h - 8), 8, 8);
 }
 
+/**
+ * Draws a full-screen mask: image 1 of the fade texture (fadeGetTpl) in black at half opacity, its texture
+ * coordinates scaled about the centre by 1000 t^5.
+ */
 void nameMaskGX(f32 t) {
     Mtx a, b, c;
     GXTexObj obj;

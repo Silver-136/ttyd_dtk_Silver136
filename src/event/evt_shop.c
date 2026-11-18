@@ -729,6 +729,7 @@ static USER_FUNC(shopper_name) {
     return EVT_RETURN_DONE;
 }
 
+/** Clears SHOP_FLAG_ITEM_SELECTED on the ShopWork in args[0]. */
 static USER_FUNC(disp_off) {
     ShopWork* wp = (ShopWork*)evtGetValue(event, event->args[0]);
     wp->flags &= ~SHOP_FLAG_ITEM_SELECTED;

@@ -2387,6 +2387,11 @@ static EvtWord peach_evt_stg4_quiz_data[5][4] = {
     (EvtWord)("peach_aji_186"), (EvtWord)("peach_aji_187"), (EvtWord)("peach_aji_187_sel"), 2,
 };
 
+/**
+ * Peach's chapter 4 scene with TEC: TEC gives her a five-question quiz (read by peach_evt_stg4_read_quiz_data)
+ * and then lets her send a mail. The story advances to STG4_15_05_PEACH_X_NAUT_PHD_REPORT, a save runs and the
+ * map changes to gor_04.
+ */
 static EVT_BEGIN(peach_evt_stg4)
     CALL(evt_mario_key_onoff, 0)
 

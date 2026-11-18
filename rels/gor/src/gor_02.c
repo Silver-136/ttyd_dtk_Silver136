@@ -2852,6 +2852,7 @@ static EVT_BEGIN(chusan3_init)
     RETURN
 EVT_END()
 
+/** Talk event of the third Chusan: one line per story stage (gor_02_031_00 to gor_02_031_08). */
 static EVT_BEGIN(chusan3_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG1_17_FATHER_SON_REUNITED)
@@ -2972,6 +2973,7 @@ static EVT_BEGIN(borodo1_regl)
     RETURN
 EVT_END()
 
+/** Talk event of the first 'borodo' villager: one line per story stage (gor_02_033_00 to gor_02_033_08). */
 static EVT_BEGIN(borodo1_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG1_17_FATHER_SON_REUNITED)

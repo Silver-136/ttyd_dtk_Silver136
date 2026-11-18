@@ -349,6 +349,10 @@ static EVT_BEGIN(nokotarou_init)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of Koops (Nokotarou): stg1_nok_27 before STG1_02_TALKING_WITH_KROOP, _27_01 before
+ * STG1_03_PETALBURG_GATEKEEPER, stg1_nok_31 before STG1_04_BALD_CLEFT and _31_01 afterwards.
+ */
 static EVT_BEGIN(nokotarou_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG1_02_TALKING_WITH_KROOP)

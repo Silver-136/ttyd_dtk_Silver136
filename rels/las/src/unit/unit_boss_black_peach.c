@@ -5294,6 +5294,10 @@ static USER_FUNC(queen_hand_small_entry_evt) {
     return EVT_RETURN_BLOCK;
 }
 
+/**
+ * Script helper run at the end of queen_entry_event: forces the break slot's reels to Shine Sprite cards
+ * (BREAK_SLOT_FLAG_QUEEN_FORCE_SHINE); the early demos force Star cards (BREAK_SLOT_FLAG_QUEEN_FORCE_STAR).
+ */
 static USER_FUNC(slot_init) {
 #if VERSION <= VERSION_DEMO_JP
     BattleBreakSlotGetPtr()->flags |= BREAK_SLOT_FLAG_QUEEN_FORCE_STAR;
@@ -5664,7 +5668,11 @@ static USER_FUNC(eff_queen_set_alpha_evt) {
     return EVT_RETURN_DONE;
 }
 
-// Descriptive name (not in the symbol maps); placeholder unk_las_0000af38, JP las .text+0xAE6C. See docs/NAME_PROVENANCE.md.
+/**
+ * JP and later: script helper run at the end of peach_entry_event. Sets BREAK_SLOT_FLAG_NO_POISON_BINGO on the
+ * break slot, so a spinning reel does not stop on a third Poison Mushroom.
+ * Descriptive name (not in the symbol maps); placeholder unk_las_0000af38, JP las .text+0xAE6C. See docs/NAME_PROVENANCE.md.
+ */
 #if VERSION >= VERSION_JP
 USER_FUNC(queen_break_slot_flag2_on) {
     BattleBreakSlotGetPtr()->flags |= BREAK_SLOT_FLAG_NO_POISON_BINGO;

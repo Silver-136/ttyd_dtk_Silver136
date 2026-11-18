@@ -1809,6 +1809,11 @@ static s32 mobj_switch_float_blk(MapObjectEntry* mobj) {
     return 0;
 }
 
+/**
+ * Places a coloured switch block (MOBJ_*_FlowBlockSwitch).
+ * args: name, x, y, z, linked floating block name ("" for none), colour (literal: 0 green, 1 purple, 2 orange,
+ * 3 red, otherwise green), event, flag variable. A linked block is linked back to the switch.
+ */
 USER_FUNC(evt_mobj_switch_float_blk) {
     const char* name;
     const char* partner;
@@ -4293,6 +4298,11 @@ static s32 mobj_koopa_brickblk(MapObjectEntry* mobj) {
     return 0;
 }
 
+/**
+ * Places a block for the Bowser stages, hit by Bowser's head, body, hip and flame (MOBJ_FLAG_HIT_KOOPA_*).
+ * args: name, x, y, z, item (kept in typeData[0]), kind (literal: 0 MOBJ_FlowBrickBlock, 1 MOBJ_block_ky,
+ * 2 MOBJ_bigblock_01, 3 MOBJ_bigblock_02), event, flag variable.
+ */
 USER_FUNC(evt_mobj_koopa_brick) {
     const char* name;
     s32 flagVar;
@@ -4674,6 +4684,11 @@ static s32 mobj_koopa_dokan_evt(MapObjectEntry* mobj) {
     return 0;
 }
 
+/**
+ * Places a green pipe for the Bowser stages.
+ * args: kind (0 MOBJ_GreenPipe_ks, 1 MOBJ_GreenPipe_kl, 2 MOBJ_GreenPipe_ky), name, x, y, z, event,
+ * flag variable.
+ */
 USER_FUNC(evt_mobj_koopa_dokan) {
     s32 kind;
     s32 val;

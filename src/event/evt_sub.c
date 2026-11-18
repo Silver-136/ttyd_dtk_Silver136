@@ -809,6 +809,12 @@ EVT_BEGIN(evt_sub_mail_vibration)
     RETURN
 EVT_END()
 
+/**
+ * The incoming-mail scene: freezes Mario (off Yoshi), shows the surprise balloon, plays the mail jingle with the
+ * rumble and the message window (evt_win_one_message), then the hint about reading mail (mail_first_hit) the first time and
+ * again while GSWF_MAIL_TUTORIAL_REPEAT_OFF is clear.
+ * Run by the mail_evt_* scripts after they have put the mail in the pouch.
+ */
 static EVT_BEGIN(mail_evt)
     CALL(evt_cam_letter_box_disable, 1)
     CALL(evt_mario_key_onoff, 0)
@@ -2350,6 +2356,13 @@ USER_FUNC(evt_sub_check_intersect) {
             }                                                      \
         }                                                          \
     }
+
+/**
+ * Trouble Center follow-up mail ("irai" is request): for each of the six requests that send a thank-you letter,
+ * when the request is done, its mail flag (GSWF 0x17 to 0x1C) is clear and more than 7200 seconds (two hours) of
+ * play time have passed since the time saved for it, returns 1 in args[1]; with args[0] nonzero it also sets the
+ * mail flag and puts the mail (0x25 to 0x2A) in the pouch.
+ */
 static USER_FUNC(irai_mail_check) {
     EvtWord* args = event->args;
     s32 arg = evtGetValue(event, args[0]);

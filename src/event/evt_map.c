@@ -540,7 +540,11 @@ USER_FUNC(evt_map_replace_mapobj) {
     return EVT_RETURN_DONE;
 }
 
-// Descriptive name (not in the symbol maps).
+/**
+ * Turns all map drawing on (args[0] nonzero) or off; the battle tutorial (evt_lect_gor) hides and shows the map
+ * with it in JP and later.
+ * Descriptive name (not in the symbol maps).
+ */
 USER_FUNC(evt_mapdisp_onoff) {
     if (evtGetValue(event, event->args[0])) {
         mapDispOn();

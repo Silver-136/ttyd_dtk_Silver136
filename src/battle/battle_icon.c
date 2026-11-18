@@ -69,6 +69,10 @@ void BattleIconEnd(void) {
     }
 }
 
+/**
+ * Takes a free battle icon slot and creates an icondrv icon named "_biu_<slot in hex>" showing iconId at
+ * (x, y, z), scale 1. Returns the slot, or NULL when all 16 are in use.
+ */
 BattleIcon* BtlIcon_Entry(u16 iconId, f32 x, f32 y, f32 z) {
     BattleIcon* icon;
     int i;

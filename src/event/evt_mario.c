@@ -968,6 +968,7 @@ USER_FUNC(evt_mario_get_motion) {
     return EVT_RETURN_DONE;
 }
 
+/** Switches Mario to the motion id in arg 0 (MARIO_MOTION_*). */
 USER_FUNC(evt_mario_set_motion) {
     marioChgMot(evtGetValue(event, event->args[0]));
     return EVT_RETURN_DONE;
