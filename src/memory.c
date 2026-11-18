@@ -62,13 +62,7 @@ static SmartWork smartWork;
 void* mapalloc_base_ptr;
 u32 mapalloc_size;
 BOOL g_bFirstSmartAlloc;
-#if VERSION <= VERSION_DEMO_JP
 static u16 count;
-#define COUNT count
-#else
-static u32 count;
-#define COUNT (*(u16*)&count)
-#endif
 #define MAPBASE_PARAM
 #define MAPBASE mapalloc_base_ptr
 #endif
@@ -225,7 +219,7 @@ void _mapAllocInit(void) {
     entry->inuse = 0;
     mapalloc_base_ptr = entry;
     mapalloc_size = size;
-    COUNT = 0;
+    count = 0;
 #endif
 }
 
@@ -298,7 +292,7 @@ void* (_mapAlloc)(MAPBASE_PARAM u32 size) {
         bestEntry->size = usableSize;
         bestEntry->inuse = 1;
 #if VERSION < VERSION_US
-        bestEntry->currId = COUNT++;
+        bestEntry->currId = count++;
 #endif
 
         restEntry = bestEntry->next;
@@ -363,7 +357,7 @@ void* (_mapAllocTail)(MAPBASE_PARAM u32 size) {
         usedEntry->size = usableSize;
         usedEntry->inuse = 1;
 #if VERSION < VERSION_US
-        usedEntry->currId = COUNT++;
+        usedEntry->currId = count++;
 #endif
 
         memset(result, 0, usableSize);

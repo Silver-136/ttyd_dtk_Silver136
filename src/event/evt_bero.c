@@ -261,6 +261,53 @@ void bero_name_search(BeroEntry** table, const char* name, s32* index) {
     }
 }
 
+/**
+ * The entrance's direction id; for BERO_DIR_AUTO roads and doors, the direction from the hit name's prefix
+ * (n_, ne_, ... nw_).
+ */
+// This is the JP demo map's bero_get_dir (UNUSED there, 0x100, at this place: evt_bero is deferred, so the map's
+// .text order is the reverse of the source order). A plain bero_get_dir(BeroEntry*) adds exactly 0x100, but its
+// callers' registers differ (B3, B4, AC2).
+// FAKE: walk flag picks a pointer-walk loop (evt_bero_get_info_num) or the index loop (evt_bero_get_into_info); constant-folded per call site
+static inline s32 bero_get_kind(BeroEntry* bero, s32 walk) {
+    u32 i;
+    const char** p;
+    const char* dirs[8] = {"n_", "ne_", "e_", "se_", "s_", "sw_", "w_", "nw_"};
+    s32 kind = bero->directionId;
+    switch (kind) {
+        case BERO_DIR_AUTO:
+            // the original code compares kind here (it is 20000 in this case)
+            if (kind == BERO_DIR_NONE) {
+                kind = BERO_DIR_NONE;
+            } else {
+            switch (bero->type & BERO_TYPE_KIND_MASK) {
+                case BERO_TYPE_ROAD:
+                case BERO_TYPE_DOOR:
+                    if (walk) {
+                        for (i = 0, p = dirs; i < 8; i++, p++) {
+                            if (!strncmp(*p, bero->hitName, strlen(*p))) {
+                                break;
+                            }
+                        }
+                    } else {
+                        for (i = 0; i < 8; i++) {
+                            if (!strncmp(dirs[i], bero->hitName, strlen(dirs[i]))) {
+                                break;
+                            }
+                        }
+                    }
+                    break;
+                default:
+                    i = BERO_DIR_NONE;
+                    break;
+            }
+            kind = i;
+            }
+            break;
+    }
+    return kind;
+}
+
 /** The entrance's enter script, or default_entevt. */
 // Original name from the JP demo's link map (UNUSED there, 0x18): every call is inlined, so the linker strips it.
 // This early-return form compiles to that size (a local-variable form gives 0x1c).
@@ -476,46 +523,6 @@ USER_FUNC(evt_bero_get_info) {
     BeroNUM = i;
     BeroEXEC = 0;
     return EVT_RETURN_DONE;
-}
-
-// FAKE: walk flag picks a pointer-walk loop (evt_bero_get_info_num) or the index loop (evt_bero_get_into_info); constant-folded per call site
-static inline s32 bero_get_kind(BeroEntry* bero, s32 walk) {
-    u32 i;
-    const char** p;
-    const char* dirs[8] = {"n_", "ne_", "e_", "se_", "s_", "sw_", "w_", "nw_"};
-    s32 kind = bero->directionId;
-    switch (kind) {
-        case BERO_DIR_AUTO:
-            // the original code compares kind here (it is 20000 in this case)
-            if (kind == BERO_DIR_NONE) {
-                kind = BERO_DIR_NONE;
-            } else {
-            switch (bero->type & BERO_TYPE_KIND_MASK) {
-                case BERO_TYPE_ROAD:
-                case BERO_TYPE_DOOR:
-                    if (walk) {
-                        for (i = 0, p = dirs; i < 8; i++, p++) {
-                            if (!strncmp(*p, bero->hitName, strlen(*p))) {
-                                break;
-                            }
-                        }
-                    } else {
-                        for (i = 0; i < 8; i++) {
-                            if (!strncmp(dirs[i], bero->hitName, strlen(dirs[i]))) {
-                                break;
-                            }
-                        }
-                    }
-                    break;
-                default:
-                    i = BERO_DIR_NONE;
-                    break;
-            }
-            kind = i;
-            }
-            break;
-    }
-    return kind;
 }
 
 /**

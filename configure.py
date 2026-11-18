@@ -1710,7 +1710,7 @@ config.libs = [
             Object(MatchingFor("G8MJ01", "G8ME01"), "event/evt_lect_hei.c", extra_cflags=["-inline auto,deferred"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "unit/unit_kuriboo.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "unit/unit_chorobon_gundan.c", extra_cflags=["-inline auto,deferred"]),
-            Object(MatchingFor("G8MJ01", "G8ME01"), "hei_10.c", extra_cflags=["-opt nolifetimes", "-inline auto,deferred"]),
+            Object(MatchingFor("G8MJ01", "G8ME01"), "hei_10.c", extra_cflags=["-inline auto,deferred"]),
         ]
     ),
     Rel(

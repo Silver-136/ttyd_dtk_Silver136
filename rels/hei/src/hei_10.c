@@ -164,16 +164,6 @@ static EvtWord golden_se[55];
 static EvtWord evt_golden[319];
 EvtWord hei_10_init_evt[80];
 
-/** Returns a random float in 0..1 from the game's rand() (divided by 32767). */
-static inline f32 rand01(void) {
-    return rand() / 32767.0f;
-}
-
-/** Maps a random value r in 0..1 onto the range min..max. */
-static inline f32 randf_scale(f32 r, f32 min, f32 max) {
-    return r * (max - min) + min;
-}
-
 /** Returns a random float between min and max. */
 static f32 randf(f32 min, f32 max) {
     f32 r = rand() / 32767.0f;
@@ -345,26 +335,6 @@ static void chb_jump(ExtdrvPose* pose, Chorobon* chb, s32 next, f32 x, f32 y, f3
     chb->next = next;
 }
 
-/** Starts a hop of random speed and gravity from the given ranges for one Fuzzy. */
-static inline void jump(ExtdrvPose* pose, Chorobon* chb, s32 next, f32 x, f32 y, f32 z, f32 rs, f32 smin, f32 smax, f32 rg, f32 gmin, f32 gmax) {
-    chb_jump(pose, chb, next, x, y, z, rs * (smax - smin) + smin, rg * (gmax - gmin) + gmin);
-}
-
-/** Starts a hop for a fleeing Fuzzy: like jump, but at twice the speed. */
-static inline void escape(ExtdrvPose* pose, Chorobon* chb, s32 next, f32 x, f32 y, f32 z, f32 rs, f32 smin, f32 smax, f32 rg, f32 gmin, f32 gmax) {
-    chb_jump(pose, chb, next, x, y, z, 2.0f * (rs * (smax - smin) + smin), rg * (gmax - gmin) + gmin);
-}
-
-/** Random flee hop: speed 1.0..1.2 doubled, gravity 0.8. */
-// FAKE: invented one-use inline helper (no map name); writing it out changes the code (FAKES.md)
-static inline void escape_r(ExtdrvPose* pose, Chorobon* chb, f32 x, f32 y, f32 z) {
-    f32 rs = rand() / 32767.0f;
-    f32 rg = rand01();
-    escape(pose, chb, chb->state, x, y, z, rs, 1.0f, 1.2f, rg, 0.8f, 0.8f);
-}
-
-// Kept (pattern): lifetimes off for this unit (the -opt nolifetimes flag in configure.py, as in tou_02); with
-// lifetimes on ext_main takes other registers and no natural form was found (cleanup_notes/bf/T7/table.txt).
 /**
  * Per-frame update of the Fuzzy swarm: idle Fuzzies hop around randomly inside the room,
  * fleeing ones hop away from Mario (with an occasional escape sound), hopping ones follow their arc,
@@ -376,7 +346,7 @@ static void ext_main(void) {
     ExtdrvPose* pose;
     Chorobon* chb;
     f32 dist;
-    f32 speed;
+    f32 turn;
     f32 x;
     f32 z;
     f32 angle;
@@ -390,28 +360,28 @@ static void ext_main(void) {
         switch (chb->state) {
             case 0: {
                 f32 z, dist, x, y;
-                x = rand() / 32767.0f;
+                x = randf(0.0f, 360.0f);
                 dist = randf(4.0f, 7.0f);
                 {
-                    f32 rad = 3.1415927f * randf_scale(x, 0.0f, 360.0f) / 180.0f;
+                    f32 rad = 3.1415927f * x / 180.0f;
                     x = (*pose->mtx)[0][3] + chb_sin(rad) * dist;
                     y = (*pose->mtx)[1][3];
                     z = (*pose->mtx)[2][3] - dist * chb_cos(rad);
                 }
                 {
                     // random hop: speed 0.3..0.5, gravity 0.5..0.8, back to the current state afterwards
-                    f32 rs = rand() / 32767.0f;
-                    f32 rg = rand01();
+                    f32 speed = randf(0.3f, 0.5f);
+                    f32 gravity = randf(0.5f, 0.8f);
 
-                    jump(pose, chb, chb->state, x, y, z, rs, 0.3f, 0.5f, rg, 0.5f, 0.8f);
+                    chb_jump(pose, chb, chb->state, x, y, z, speed, gravity);
                 }
                 break;
             }
             case 1:
                 if (distABf(mario->position.x, mario->position.z, (*pose->mtx)[0][3], (*pose->mtx)[2][3]) < 800.0f) {
-                    speed = rand() / 32767.0f;
+                    turn = randf(-45.0f, 45.0f);
                     z = angleABf(mario->position.x, mario->position.z, (*pose->mtx)[0][3], (*pose->mtx)[2][3]);
-                    z = z + randf_scale(speed, -45.0f, 45.0f);
+                    z = z + turn;
                     dist = randf(15.0f, 20.0f);
                     {
                         f32 rad = 3.1415927f * z / 180.0f;
@@ -419,7 +389,13 @@ static void ext_main(void) {
                         y = (*pose->mtx)[1][3];
                         z = (*pose->mtx)[2][3] - dist * chb_cos(rad);
                     }
-                    escape_r(pose, chb, x, y, z);
+                    {
+                        // flee hop: speed 1.0..1.2 doubled, gravity 0.8 (randf over an empty range)
+                        f32 speed = randf(1.0f, 1.2f);
+                        f32 gravity = randf(0.8f, 0.8f);
+
+                        chb_jump(pose, chb, chb->state, x, y, z, 2.0f * speed, gravity);
+                    }
                     if (rand() % 150 == 0) {
                         pos = (Vec){(*pose->mtx)[0][3], (*pose->mtx)[1][3], (*pose->mtx)[2][3]};
                         psndSFXOn_3D(SFX_NAME_WORD("SFX_STG1_CHORO_ESCAPE1"), &pos);
