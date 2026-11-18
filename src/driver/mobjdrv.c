@@ -42,12 +42,12 @@ typedef struct CubeMesh {
 
 /** Draw mode of the built-in collision cube (hit attribute HIT_ATTR_MOBJ set), shared by the cube, head and front hit joints. */
 #if VERSION >= VERSION_JP
-static MapJointDrawMode cubeMSJ = {0, 1, 0, 0, 0, (s32)0x80000000};
+static MapJointDrawMode cubeMSJ = {0, 1, 0, 0, (s32)0x80000000};
 #endif
 
 /** Draw mode of the second part of a two-part object's collision (the MOBJ~ part). */
 #if VERSION >= VERSION_JP
-static MapJointDrawMode front2MSJ = {0, 1, 0, 0, 0, 0};
+static MapJointDrawMode front2MSJ = {0, 1, 0, 0, 0};
 #endif
 
 // cube vertex positions (cubeDVP) and normals (cubeDVN), listed in cubeDDT
@@ -260,7 +260,7 @@ static u32 cubeDN[1230] = {
 static CubeMesh cubeDP = {0, {0}, 0, 6, 0, cubeDDT, {cubeDN, &cubeDN[205], &cubeDN[410], &cubeDN[615], &cubeDN[820], &cubeDN[1025]}};
 
 #if VERSION <= VERSION_DEMO_JP
-static MapJointDrawMode cubeMSJ = {0, 1, 0, 0, 0, (s32)0x80000000};
+static MapJointDrawMode cubeMSJ = {0, 1, 0, 0, (s32)0x80000000};
 #endif
 
 /** Joint of the solid cube collision (type 0) that mobjHitEntry copies into a block's hit object. */
@@ -291,7 +291,7 @@ static MapFileJoint frontDJ = {
 };
 
 #if VERSION <= VERSION_DEMO_JP
-static MapJointDrawMode front2MSJ = {0, 1, 0, 0, 0, 0};
+static MapJointDrawMode front2MSJ = {0, 1, 0, 0, 0};
 #endif
 
 /** Mesh of a two-part object's second hit part: the five faces other than the front one. */

@@ -12,7 +12,6 @@ typedef struct {
     s16 tagEndPos; // 0x8
     s16 cost; // 0xA, always 5, handed to the evt script with the rumor message (meaning unconfirmed)
     s16 msgIndex; // 0xC
-    s16 pad_0E; // 0xE, never accessed
 } InformantInfo;
 
 typedef struct {

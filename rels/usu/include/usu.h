@@ -11,7 +11,6 @@ typedef struct BoobooName {
     const char* name; // NPC name
     u8 field_0x4;     // never read
     u8 field_0x5;     // never read
-    u8 pad_0x6[2];
 } BoobooName;
 
 extern EvtWord all_party_lecture[];

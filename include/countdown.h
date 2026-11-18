@@ -21,7 +21,6 @@ enum {
 
 typedef struct CountdownWork {
     u16 flags; // 0x0, CountdownFlags
-    u8 pad_2[0x8 - 0x2]; // 0x2
     s64 elapsed; // 0x8
     s64 prevTime; // 0x10
     u32 limit; // 0x18
@@ -33,7 +32,6 @@ typedef struct CountdownWork {
     s32 state; // 0x30
     s32 counter; // 0x34
     s32 sfxId; // 0x38
-    u8 pad_3C[0x40 - 0x3c]; // 0x3c
 } CountdownWork;
 
 void countDownInit(void);

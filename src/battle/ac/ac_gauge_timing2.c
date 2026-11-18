@@ -27,7 +27,6 @@ typedef struct GT2Work {
     u32 sfx[8];      // 0x48
     u16 width;       // 0x68
     s8 autoSuccess;  // 0x6A, result of the confused auto-play (1 = success)
-    u8 pad;
     s32 endTimer; // 0x6C
 } GT2Work;
 

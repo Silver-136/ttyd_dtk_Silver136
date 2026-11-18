@@ -59,7 +59,6 @@ typedef struct SoundEffectEntry {
 
 typedef struct PaperSoundFade {
     u8 state;       // 0x0
-    u8 pad_01;      // 0x1, never accessed
     s16 time;       // 0x2
     s16 timeMax;    // 0x4
     u8 dipState;    // 0x6, partial volume dip: 8 = going down (psndBGMOff_f_d), 0x10 = coming back (psndBGMOn_f_d), 0 = idle
@@ -79,7 +78,6 @@ typedef struct PaperSoundBGM {
     u8 scopeTimer;          // 0x10, psndBGMScope: 0xFF = full scope, 0 = none, else counts down
     u8 pad_11[0x20 - 0x11]; // 0x11
     PaperSoundFade fade;    // 0x20
-    u8 pad_2C[0x30 - 0x2C]; // 0x2C
     s64 startTime;          // 0x30, gp->renderTime when started (psndBGMPlayTime)
 } PaperSoundBGM;
 

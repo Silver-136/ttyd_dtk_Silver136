@@ -107,7 +107,6 @@ typedef enum UnitWinMode {
 
 typedef struct UnitWinWork {
     u16 flags;             // 0x0, UnitWinFlags
-    u16 pad2;              // 0x2
     UnitWinSell* entries;  // 0x4
     s32* goods;            // 0x8
 #if VERSION >= VERSION_JP
@@ -136,7 +135,6 @@ typedef struct UnitWinWork {
 #if VERSION <= VERSION_DEMO_JP
     s32 caseId[16];        // 0x4C, one case event per counter hit object
 #else
-    u8 pad56[2];           // 0x56
 #endif
     s32 count;             // 0x58
     s32 coinTick;          // 0x5C

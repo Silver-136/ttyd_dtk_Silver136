@@ -20,7 +20,6 @@ typedef struct PowerGaugeWork {
     s8 autoSuccess; // 0x10, result of the confused auto-play (1 = success)
     s8 phase;      // 0x11
     s8 mode;       // 0x12
-    u8 pad13;      // 0x13
     u32 button;    // 0x14
     s32 endTimer;  // 0x18
 } PowerGaugeWork;

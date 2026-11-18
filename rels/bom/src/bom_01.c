@@ -103,7 +103,6 @@ typedef struct BomWork {
     s32 count;
     BomAnim anims[8];
     s32 animCount;
-    u8 pad_ac[4];
     Bom bom[1000];
 } BomWork;
 static smartEntry* lp = NULL;

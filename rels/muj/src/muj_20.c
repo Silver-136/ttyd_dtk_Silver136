@@ -57,7 +57,6 @@ typedef struct MarcoShip {
     f32 max;
     s32 stopped;
     s32 state;
-    s32 field_0x14;
     OSTime time;
 } MarcoShip;
 static MarcoShip* marcoship;

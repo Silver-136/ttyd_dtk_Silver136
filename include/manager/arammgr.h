@@ -17,7 +17,6 @@ typedef enum ARAMEntryFlags {
 
 typedef struct ARAMEntry {
     vu16 flags; // 0x0, ARAMEntryFlags
-    u8 pad_0x2[2]; // 0x2
     ARQRequest request; // 0x4
     u32 size; // 0x24
     u32 aramAddr; // 0x28

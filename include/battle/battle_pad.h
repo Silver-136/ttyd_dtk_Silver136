@@ -26,7 +26,6 @@ typedef struct BattleWorkPad {
 
     s8 holdRepeatState; // 0x1F8
     s8 holdRepeatFrameCounter; // 0x1F9
-    u8 pad_0x1FA[2]; // 0x1FA
 } BattleWorkPad;
 
 void BattlePadInit(void);

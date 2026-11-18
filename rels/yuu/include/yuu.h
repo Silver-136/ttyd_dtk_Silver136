@@ -20,10 +20,8 @@ typedef struct MonteSub {
 } MonteSub;
 typedef struct Monte {
     u8 hidden;
-    u8 unk1;
     s16 num;
     u8 state;
-    u8 unk5[3];
     MonteSub sub;
     MiniGameWork* wp;
 } Monte;

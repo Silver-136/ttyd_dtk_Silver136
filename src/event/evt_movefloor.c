@@ -30,7 +30,6 @@ typedef struct MovingFloor {
     f32 speed;       // 0x8
     f32 pos;         // 0xC
     f32 cur;         // 0x10
-    u32 pad14;       // 0x14
     OSTime start;    // 0x18
     s32 mode;        // 0x20
     s32 phase;       // 0x24

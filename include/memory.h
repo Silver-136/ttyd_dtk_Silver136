@@ -38,7 +38,6 @@ typedef struct smartEntry {
     FileEntry* file; // 0x8, file whose data lives in this block (smartGarbage checks its state)
     u16 inUse; // 0xC, 1 from smartAlloc, 0 when freed; written only
     u8 type; // 0xE, allocation type passed to smartAlloc
-    u8 pad_F; // 0xF
     u32 spaceAfter; // 0x10, free bytes after this block (set from bytesLeft on allocation; prev->spaceAfter += size on free)
     struct smartEntry* next; // 0x14
     struct smartEntry* prev; // 0x18

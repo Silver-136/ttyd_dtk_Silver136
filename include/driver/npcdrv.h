@@ -111,7 +111,6 @@ typedef struct NpcBattleInfo {
         };
     };
     u8 battleRule[3];                  // 0xC4
-    u8 pad_C7;                         // 0xC7, never accessed
 } NpcBattleInfo;
 
 typedef struct NpcTribeInfo {
@@ -445,7 +444,6 @@ typedef struct FieldBattleInfo {
 typedef struct FieldBattleData {
     s16 mode;                    // 0x0
     u8 subState;                 // 0x2
-    u8 pad_03;                   // 0x3, never accessed
     NpcEntry* npc;               // 0x4, encounter npc
     NpcEntry* target;            // 0x8
     s32 evtId;                   // 0xC
@@ -461,7 +459,6 @@ typedef struct FieldBattleData {
     NpcDeadInfo deadInfo[64];    // 0x4C
     u8 merleeCoinBonus;          // 0x54C, Merlee coin curse fired: coin drops x3
     u8 sandersBombTrigger;       // 0x54D
-    u8 pad_54E[0x550 - 0x54E];   // 0x54E, never accessed
     FirstStrikeInfo firstStrike; // 0x550
 #if VERSION >= VERSION_JP
     s32 battleWait;              // 0x570, frames seq_battle has waited for the first-strike announce (gives up at 200)

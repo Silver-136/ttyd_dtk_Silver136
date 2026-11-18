@@ -90,7 +90,6 @@ typedef struct CameraParams {
 } CameraParams;
 typedef struct CamRoadWork {
     CamRoadMap* map;       // 0x0
-    u8 pad0[4];
     CamRoadState cur;      // 0x8
     CamRoadState next;     // 0x68
     s32 hokanOn;              // 0xc8
@@ -107,7 +106,6 @@ typedef struct CamRoadWork {
     f32 in[6];             // 0x1ec
     s32 keptIdx;
     s32 unusedFlag;
-    u8 pad6[0x210 - 0x20c];
 } CamRoadWork;
 
 CamRoadWork* camRoadGetWorkPtr(void);

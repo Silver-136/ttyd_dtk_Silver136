@@ -32,7 +32,6 @@ typedef struct GaugeWork {
     s8 passed;     // 0x14
     s8 phase;      // 0x15
     s8 pressMode;       // 0x16
-    u8 pad17;      // 0x17
     u32 button;   // 0x18
     s32 timer;    // 0x1C
     s32 hits;     // 0x20

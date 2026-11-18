@@ -134,7 +134,6 @@ typedef struct MapJointDrawMode {
     u8 blendType;            // 0x0, 0..3, selects MapObject.blendMode
     u8 cullMode;             // 0x1, MapCullMode
     u8 modeFlags;            // 0x2, MapDrawModeFlags
-    u8 pad_03;               // 0x3, never accessed
     u32 lightMask;           // 0x4, bit i = map light i applies (with DRAW_MODE_MAP_LIGHTS)
     s32 hitAttributes;       // 0x8, copied to HitEntry.attributes
     u8 pad_0C[0x14 - 0xC];   // 0xC, never accessed (the retail map files space the records 0x14 apart)
@@ -353,12 +352,10 @@ typedef enum MapAnimFlags {
 
 typedef struct MapEntryAnimData {
     u16 flags;                // 0x0, MapAnimFlags
-    u8 pad_02[0x8 - 0x2];     // 0x2
     OSTime startTime;         // 0x8
     f32 time;                 // 0x10
     f32 rate;                 // 0x14
     MapAnimHeader* anim;      // 0x18
-    u8 pad_1C[0x20 - 0x1C];   // 0x1C
 } MapEntryAnimData;
 
 // "light_table" chunk

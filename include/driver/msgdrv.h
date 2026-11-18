@@ -70,12 +70,10 @@ typedef struct MsgWinData {
     u16 pageState; // 0xA, 1: waiting for the key, 2: advance to the next page
     u16 pageAdvanced; // 0xC
     s32 nextEntry; // 0x10, index into entries
-    u8 pad_14[0x18 - 0x14]; // 0x14
     OSTime openTime; // 0x18, set when the window opens; drives the open anim (SPM openTime)
     s32 playTime; // 0x20, playback clock (ms) compared with entries[].time
     s32 scrollTarget; // 0x24
     s32 scrollPos; // 0x28, eases toward scrollTarget
-    u8 pad_2C[0x30 - 0x2C]; // 0x2C
     OSTime lastUpdateTime; // 0x30, reset every msgMain; the delta advances the scroll
     s32 charCount; // 0x38, MsgChar entries in use
 #if VERSION >= VERSION_US

@@ -33,7 +33,6 @@ typedef struct StarPowerInfo {
     u8 stylishCommandMultiplier; // 0x8
     s8 reserved_09;               // 0x9, copied from BattleWeapon.reserved_19, never read
     s8 bingoSlotChance;          // 0xA
-    s8 pad_0B;                    // 0xB, never accessed
 } StarPowerInfo;
 
 // BattleAudienceMember.status: one handler per state, BattleAudienceCtrlProcessKinopio<Name> for every member
@@ -260,7 +259,6 @@ typedef struct BattleAudienceSound {
     u8 volumeMultiplier;          // 0x1E
     u8 fadeStartVolumeMultiplier; // 0x1F
     u8 fadeEndVolumeMultiplier;   // 0x20
-    u8 pad_21[3];                  // 0x21, never accessed
 } BattleAudienceSound;
 
 typedef struct BattleAudienceWindow {

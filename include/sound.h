@@ -72,7 +72,6 @@ typedef struct SoundEffect {
     u16 checkDelay;         // 0xA, 3D voices: frames before SoundEfxCheckCh runs again (decremented, never set nonzero in C)
     SND_VOICEID voiceId;    // 0xC
     u16 fid;                // 0x10
-    u8 pad_12[0x14 - 0x12]; // 0x12
     SND_EMITTER emitter;    // 0x14
     SND_FVECTOR pos;        // 0x64
     SND_FVECTOR prevPos;    // 0x70

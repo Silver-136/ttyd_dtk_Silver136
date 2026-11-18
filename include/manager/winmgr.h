@@ -109,7 +109,6 @@ typedef enum WinMgrSelectType {
 
 typedef struct WinMgrSelect {
     u16 flags; // 0x0, WinMgrSelectFlags
-    u16 pad_2; // 0x2
     s32 type; // 0x4, WinMgrSelectType or an item list pointer
     s32 state; // 0x8
     s32 cursor; // 0xC

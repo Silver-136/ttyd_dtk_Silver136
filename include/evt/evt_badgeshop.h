@@ -17,7 +17,6 @@ typedef struct BadgeShopWork {
     s32 bargainNum; // 0x10C
     s32 reserved_110; // 0x110, cleared and added to bargainNum in the restock loop, never set nonzero
     u16 restockFlags; // 0x114, bit0: regenerate bargain/bottakuru stock on next entry to gor_01
-    u16 pad_116; // 0x116, never accessed
     u32 pad_118; // 0x118, never accessed
     u32 pad_11C; // 0x11C, never accessed
     u32 pad_120; // 0x120, never accessed

@@ -260,12 +260,10 @@ struct EventEntry {
         Vec msgPosVec;                  // 0x184, x/y/z as one Vec (evt_msg speaker position)
     };
     u32 msgPriority;            // 0x190
-    u32 field_0x194;            // 0x194
     OSTime savedTime;           // 0x198
     void* restartFrom;          // 0x1A0, validated
     const char* name;           // 0x1A4
     void* currCommand;          // 0x1A8
-    u32 field_0x1AC;            // 0x1AC
 };
 
 typedef struct EventWork {
@@ -273,7 +271,6 @@ typedef struct EventWork {
     EvtWord gwData[32];  // 0x4
     s32 gfData[3];       // 0x84
     EventEntry* entries; // 0x90
-    u32 pad_94;      // 0x94
     OSTime lastUpdate;   // 0x98
 } EventWork;
 

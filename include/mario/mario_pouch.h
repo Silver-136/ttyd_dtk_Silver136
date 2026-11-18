@@ -408,7 +408,6 @@ typedef struct PouchData {
     s16 maximumSP;                     // 0x7C
     s16 currentPP;                     // 0x7E, read only by the stripped pouchGetPP / pouchSetPP; pouchInit zeroes it
     s16 maximumPP;                     // 0x80, the cap pouchSetPP clamps to; only pouchInit writes it
-    s16 pad_82;                    // 0x82, never accessed
     f32 audienceCount;                 // 0x84
     s16 rank;                          // 0x88
     s16 level;                         // 0x8A

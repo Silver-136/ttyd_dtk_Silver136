@@ -138,7 +138,6 @@ typedef struct BattleActions {
     s32 outputParams[8];             // 0x58
     s32 gaugeParams[4];              // 0x78, btlevtcmd_AcSetGaugeParam
     s16 countdown;                   // 0x88, automatic successes left: while above 0 a command or guard check passes and uses one (battle_ac.c, most ac_*.c)
-    u8 pad_8A[0x8C - 0x8A];          // 0x8A, never accessed
     BattleWorkPad pad;               // 0x8C
     u32 seId;                        // 0x288, power gauge SFX id (battle_ac.c)
     f32 seValue;                     // 0x28C, power gauge SFX value

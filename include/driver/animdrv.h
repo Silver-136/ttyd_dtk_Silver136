@@ -330,7 +330,6 @@ typedef struct AnimationPose {
     s32 numWorldPositions;              // 0x160
     smartEntry* worldMatrices;                // 0x164, filled while animPoseWorldMatrixEvalOn is set
     s32 numWorldMatrices;               // 0x168
-    u8 pad_16C[0x170 - 0x16C];          // 0x16C, never accessed
 } AnimationPose;
 
 typedef struct AnimationPoseFile {

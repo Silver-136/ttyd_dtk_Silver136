@@ -77,10 +77,8 @@ typedef struct EnvTexMtxWork {
 // EnvironmentWork.blur (envBlurOn, envDisp_Blur)
 typedef struct EnvBlurWork {
     u16 flags;     // 0x0, ENV_BLUR_FLAG_FADE_OUT
-    u8 pad_02[6];  // 0x2, never accessed
     OSTime time;   // 0x8
     s32 msec;      // 0x10
-    u8 pad_14[4];  // 0x14, never accessed
 } EnvBlurWork;
 
 typedef struct EnvironmentWork {
@@ -93,7 +91,6 @@ typedef struct EnvironmentWork {
     GXTexObj envBlurObj; // 0x50
     EnvTexMtxWork texMtxWork; // 0x70
     EnvironmentDof dof; // 0x88
-    u8 pad_94[0x98 - 0x94]; // 0x94, never accessed
     EnvBlurWork blur; // 0x98
     EnvironmentGlareFilter filter; // 0xB0
     Mtx yamiView; // 0xC0, set by envSetYamiView

@@ -33,7 +33,6 @@ typedef struct DVDEntry {
     u16 status; // 0x90
     u16 priority; // 0x92
     u16 unknown; // 0x94
-    u8 pad_96[2]; // 0x96
 } DVDEntry;
 
 void DVDMgrInit(void);

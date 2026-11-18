@@ -31,7 +31,6 @@ typedef struct YuuCounterWork {
     f32 x;
     f32 y;
     s32 data;
-    s32 field_0x1C;
     s64 elapsed;
     OSTime lastTime;
     s32 limit;

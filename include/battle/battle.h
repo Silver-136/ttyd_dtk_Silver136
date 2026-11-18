@@ -217,7 +217,6 @@ typedef struct StChgMsg {
     s8 type;     // 0x0, -1 = free
     u8 flags;    // 0x1
     u8 timer;    // 0x2, frames left on screen; a 0x300 press clears it
-    u8 pad_3;    // 0x3
     s32 unitId;  // 0x4
     s32 changed; // 0x8, 1: strength changed / newly inflicted (selects msg1), as StChgInfo.changed
 } StChgMsg;
@@ -272,7 +271,6 @@ typedef struct BattleWorkTarget {
     s16 posX;              // 0x4, cursor point (_btlSamplingEnemy)
     s16 posY;              // 0x6
     s16 posZ;              // 0x8
-    s16 pad_0A;            // 0xA
     s32 x;                 // 0xC
     s32 y;                 // 0x10
     s32 z;                 // 0x14

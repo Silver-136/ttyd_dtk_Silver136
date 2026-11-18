@@ -95,7 +95,6 @@ typedef struct {
     BOOL validSave2; // 0xB8, is backup save valid?
     s32 writeFirst; // 0xBC
     s32 writeSecond; // 0xC0
-    u8 pad_C4[0xC8 - 0xC4]; // 0xC4
     OSTime lastSaveTime1; // 0xC8
     OSTime lastSaveTime2; // 0xD0
     s32 opStep; // 0xD8, step within the current operation
