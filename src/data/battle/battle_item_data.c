@@ -4805,7 +4805,7 @@ BattleWeapon ItemWeaponData_PoisonKinoko = {
     {0, 0, 0, 100, 0, 5, 5, 5, 5, 0, 0, 0}, // stageEffectRates
 };
 
-// _nancy_mirage keeps x/y/z as three s32 words from userdata3 on (over wInterpRelatedTime)
+// _nancy_mirage keeps x/y/z as integers in the scratch words userWork[3..5] (0x84-0x8F)
 
 typedef struct ThrowWork {
     Vec start;    // 0x0
@@ -4911,7 +4911,6 @@ static void _disp_item_icon(CameraId cameraId, void* param) {
  * Shows the cook's ghostly image (c_cook) at args[0..2] for 60 frames, fading and growing in the last 30,
  * for Zess Dynamite.
  */
-// FAKE: the image position is read/written as three s32 words through ((s32*)&event->userdata3)[0..2] (FAKES.md)
 static USER_FUNC(_nancy_mirage) {
     EvtWord* args = event->args;
     f32 x = evtGetFloat(event, args[0]);
@@ -4923,10 +4922,10 @@ static USER_FUNC(_nancy_mirage) {
         event->userdata[1] = animPoseEntry("c_cook", 1);
         event->userdata[2] = 0;
 
-        // x/y/z go into three s32 words from userdata3 on (over wInterpRelatedTime), converted to integers
-        ((s32*)&event->userdata3)[0] = x;
-        ((s32*)&event->userdata3)[1] = y;
-        ((s32*)&event->userdata3)[2] = z;
+        // x/y/z go into the scratch words userWork[3..5], converted to integers
+        event->userWork[3] = x;
+        event->userWork[4] = y;
+        event->userWork[5] = z;
         animPoseSetAnim(event->userdata[1], "A_2", 1);
         animPoseSetEffectAnim(event->userdata[1], "PM_Y_1A", 1);
     }
@@ -4942,7 +4941,6 @@ static USER_FUNC(_nancy_mirage) {
 }
 
 /** Draws the cook's image for _nancy_mirage, scaled up and translucent as it fades. */
-// FAKE: the image position is read/written as three s32 words through ((s32*)&event->userdata3)[0..2] (FAKES.md)
 static void _nancy_disp(CameraId cameraId, void* param) {
     EventEntry* event = param;
     Mtx mtx;
@@ -4960,7 +4958,7 @@ static void _nancy_disp(CameraId cameraId, void* param) {
         s = 4.0f;
         alpha = 128;
     }
-    PSMTXTrans(trans, ((s32*)&event->userdata3)[0], ((s32*)&event->userdata3)[1], ((s32*)&event->userdata3)[2]);
+    PSMTXTrans(trans, event->userWork[3], event->userWork[4], event->userWork[5]);
     PSMTXScale(scale, s, s, 1.0f);
     PSMTXIdentity(mtx);
     PSMTXConcat(scale, mtx, mtx);
