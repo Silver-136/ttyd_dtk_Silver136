@@ -264,3 +264,140 @@ void vsSampleUpdates() {
     }
   }
 }
+
+bool sndVirtualSampleAllocateBuffers(u8 numInstances, u32 numSamples, u32 flags) {
+  s32 i;
+  u32 len;
+  MUSY_ASSERT_MSG(sndActive, "Sound system is not initialized.");
+  MUSY_ASSERT_MSG(numInstances <= 64, "Parameter exceeded maximum number of instances allowable");
+
+  hwDisableIrq();
+  vs.numBuffers = numInstances;
+  len = sndStreamAllocLength(numSamples, (flags & 1) ? 0 : 1);
+  if (flags & 1) {
+    vs.bufferLength = len >> 1;
+  } else {
+    vs.bufferLength = (len / SND_STREAM_ADPCM_BLKBYTES) * SND_STREAM_ADPCM_BLKSIZE;
+  }
+
+  for (i = 0; i < vs.numBuffers; ++i) {
+    if ((vs.streamBuffer[i].hwId = aramAllocateStreamBuffer(len)) == 0xFF) {
+      i--;
+      while (i > 0) {
+        aramFreeStreamBuffer(vs.streamBuffer[i].hwId);
+        --i;
+      }
+      hwEnableIrq();
+      return 0;
+    }
+    vs.streamBuffer[i].state = VS_STATE_FREE;
+    vs.voices[vs.streamBuffer[i].voice] = 0xFF;
+  }
+
+  hwEnableIrq();
+  return 1;
+}
+
+void sndVirtualSampleFreeBuffers() {
+  u8 i;
+  MUSY_ASSERT_MSG(sndActive, "Sound system is not initialized.");
+
+  for (i = 0; i < vs.numBuffers; ++i) {
+    aramFreeStreamBuffer(vs.streamBuffer[i].hwId);
+  }
+
+  vs.numBuffers = 0;
+}
+
+void sndVirtualSampleSetCallback(u32 (*callback)(u8 reason, const SND_VIRTUALSAMPLE_INFO* info)) {
+  MUSY_ASSERT_MSG(sndActive, "Sound system is not initialized.");
+  vs.callback = callback;
+}
+
+void vsARAMDMACallback(size_t user) {
+  if (vs.callback == NULL) {
+    return;
+  }
+
+  vs.callback(SND_VIRTUALSAMPLE_REASON_ARAMDMADONE, &((VS_BUFFER*)user)->info);
+}
+
+void sndVirtualSampleARAMUpdate(SND_INSTID instID, void* base, u32 off1, u32 len1, u32 off2,
+                                u32 len2) {
+  u8 i;
+  MUSY_ASSERT_MSG(sndActive, "Sound system is not initialized.");
+
+  hwDisableIrq();
+
+  for (i = 0; i < vs.numBuffers; ++i) {
+    if (vs.streamBuffer[i].state == VS_STATE_FREE || vs.streamBuffer[i].info.instID != instID) {
+      continue;
+    }
+
+    switch ((s32)vs.streamBuffer[i].smpType) {
+    case SAMPLE_COMP_ADPCM_VIRTUAL:
+      off1 = (off1 / SND_STREAM_ADPCM_BLKSIZE) * SND_STREAM_ADPCM_BLKBYTES;
+      len1 = ((len1 + 13) / SND_STREAM_ADPCM_BLKSIZE) * SND_STREAM_ADPCM_BLKBYTES;
+      off2 = (off2 / SND_STREAM_ADPCM_BLKSIZE) * SND_STREAM_ADPCM_BLKBYTES;
+      len2 = ((len2 + 13) / SND_STREAM_ADPCM_BLKSIZE) * SND_STREAM_ADPCM_BLKBYTES;
+      break;
+    case SAMPLE_COMP_PCM16_VIRTUAL:
+      off1 *= 2;
+      len1 *= 2;
+      off2 *= 2;
+      len2 *= 2;
+      break;
+    default:
+      break;
+    }
+
+    if (len1 != 0) {
+      hwFlushStream(base, off1, len1, vs.streamBuffer[i].hwId, vsARAMDMACallback,
+                    (u32)&vs.streamBuffer[i]);
+    }
+    if (len2 != 0) {
+      hwFlushStream(base, off2, len2, vs.streamBuffer[i].hwId, vsARAMDMACallback,
+                    (u32)&vs.streamBuffer[i]);
+    }
+
+    if (vs.streamBuffer[i].smpType == SAMPLE_COMP_ADPCM_VIRTUAL) {
+      hwSetStreamLoopPS(vs.streamBuffer[i].voice, *(u32*)(OSCachedToUncached(base)) >> 24);
+    }
+    break;
+  }
+
+  hwEnableIrq();
+}
+
+void sndVirtualSampleEndPlayback(SND_INSTID instID, bool sampleEndedNormally, u32 numLastGoodSamples) {
+  u8 i;
+
+  hwDisableIrq();
+
+  for (i = 0; i < vs.numBuffers; ++i) {
+    if ((vs.streamBuffer[i].state != VS_STATE_FREE) && (vs.streamBuffer[i].info.instID == instID)) {
+      vs.streamBuffer[i].finalLast = hwGetPos(vs.streamBuffer[i].voice);
+      vs.streamBuffer[i].finalGoodSamples = numLastGoodSamples;
+      vs.streamBuffer[i].state = sampleEndedNormally ? VS_STATE_DRAINING : VS_STATE_DRAINING_ABORT;
+      break;
+    }
+  }
+  hwEnableIrq();
+}
+
+s32 sndVirtualSampleGetARAMAddress(u16 instID, s32* aramAddr) {
+  u8 i;
+  u32 ret;
+
+  ret = 0;
+  hwDisableIrq();
+  for (i = 0; i < vs.numBuffers; ++i) {
+    if ((vs.streamBuffer[i].state != VS_STATE_FREE) && (vs.streamBuffer[i].info.instID == instID)) {
+      *aramAddr = hwGetStreamARAMAddr(vs.streamBuffer[i].hwId);
+      ret = 1;
+      break;
+    }
+  }
+  hwEnableIrq();
+  return ret;
+}

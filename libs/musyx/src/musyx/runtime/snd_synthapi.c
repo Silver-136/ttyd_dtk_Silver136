@@ -770,6 +770,8 @@ bool sndRemoveStudioInput(u8 studio, SND_STUDIO_INPUT* in_desc) {
   return ret;
 }
 
+// Only in the debug library: the JP demo map has no sndDbgGetActiveVoices, not even as UNUSED.
+#ifdef _DEBUG
 u8 sndDbgGetActiveVoices() {
   u8 n;
   hwDisableIrq();
@@ -777,3 +779,4 @@ u8 sndDbgGetActiveVoices() {
   hwEnableIrq();
   return n;
 }
+#endif

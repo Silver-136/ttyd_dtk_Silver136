@@ -19,18 +19,25 @@ static GSROOT* gsRoot;
 static GSROOT* gsCurrent;
 static s32 gsNextID;
 
+static void dataInitStackInstance(GSROOT* inst, unsigned long id, unsigned long aramBase,
+                                  unsigned long aramSize) {
+  inst->id = id;
+  inst->sp = 0;
+  inst->aramInfo.aramBase = aramBase;
+  inst->aramInfo.aramWrite = aramBase;
+  inst->aramInfo.aramTop = aramBase + aramSize;
+  inst->next = gsRoot;
+  gsRoot = inst;
+}
+
 void dataInitStack(unsigned long aramBase, unsigned long aramSize) {
   gsRoot = NULL;
-  gsDefault.id = -2;
-  gsDefault.sp = 0;
-  gsDefault.aramInfo.aramBase = aramBase;
-  gsDefault.aramInfo.aramWrite = aramBase;
-  gsDefault.aramInfo.aramTop = aramBase + aramSize;
-  gsDefault.next = NULL;
-  gsRoot = &gsDefault;
+  dataInitStackInstance(&gsDefault, -2, aramBase, aramSize);
   gsNextID = 0;
   gsCurrent = &gsDefault;
 }
+
+ARAMInfo* dataARAMGetInfo() { return &gsCurrent->aramInfo; }
 
 ARAMInfo* dataARAMDefaultGetInfo() { return &gsDefault.aramInfo; }
 
@@ -300,6 +307,99 @@ bool sndPopGroup() {
 
 
 
+
+u32 sndStackGetSize() { return 0x618; }
+
+u32 sndStackAdd(void* stackWorkMem, u32 aramBase, u32 aramSize) {
+  GSROOT* gs;
+  u32 id;
+
+  MUSY_ASSERT_MSG(sndActive != FALSE, "Sound system is not initialized.");
+  MUSY_ASSERT_MSG((aramBase & 31) == 0, "ARAM area base must be 32-byte aligned.");
+  MUSY_ASSERT_MSG((aramSize & 31) == 0, "ARAM area size must be a multiple of 32 bytes.");
+  do {
+    for (;;) {
+      id = gsNextID;
+      gsNextID = id + 1;
+      if (id == -2) {
+        continue;
+      }
+      if (id == -1) {
+        continue;
+      }
+      break;
+    }
+    for (gs = gsRoot; gs != NULL; gs = gs->next) {
+      if (gs->id == id) {
+        break;
+      }
+    }
+  } while (gs != NULL);
+  dataInitStackInstance((GSROOT*)stackWorkMem, id, aramBase, aramSize);
+  return id;
+}
+
+u32 sndStackRemove(u32 id) {
+  GSROOT* gs;
+  GSROOT* lgs;
+
+  MUSY_ASSERT_MSG(sndActive != FALSE, "Sound system is not initialized.");
+  MUSY_ASSERT_MSG(id != -2, "Default sound stack cannot be removed.");
+
+  lgs = NULL;
+  for (gs = gsRoot; gs != NULL; gs = gs->next) {
+    if (gs->id == id) {
+      MUSY_ASSERT_MSG(gs->sp == 0, "Sound stack is not empty.");
+      if (lgs == NULL) {
+        gsRoot = gs->next;
+      } else {
+        lgs->next = gs->next;
+      }
+      return 1;
+    }
+    lgs = gs;
+  }
+  return 0;
+}
+
+bool sndStackSetCurrent(u32 id) {
+  GSROOT* gs;
+
+  MUSY_ASSERT_MSG(sndActive != FALSE, "Sound system is not initialized.");
+  for (gs = gsRoot; gs != NULL; gs = gs->next) {
+    if (gs->id == id) {
+      gsCurrent = gs;
+      return 1;
+    }
+  }
+  return 0;
+}
+
+u32 sndStackGetARAMAddressRange(u32 id, u32* start, u32* end) {
+  GSROOT* gs;
+
+  MUSY_ASSERT_MSG(sndActive != FALSE, "Sound system is not initialized.");
+  for (gs = gsRoot; gs != NULL; gs = gs->next) {
+    if (gs->id == id) {
+      *start = gs->aramInfo.aramBase;
+      *end = gs->aramInfo.aramTop;
+      return 1;
+    }
+  }
+  return 0;
+}
+
+u32 sndStackGetAvailableSampleMemory(unsigned long id) {
+  GSROOT* gs;
+
+  MUSY_ASSERT_MSG(sndActive != FALSE, "Sound system is not initialized.");
+  for (gs = gsRoot; gs != NULL; gs = gs->next) {
+    if (gs->id == id) {
+      return hwGetAvailableSampleMemory(&gs->aramInfo);
+    }
+  }
+  return 0;
+}
 
 u32 seqPlaySong(u16 sgid, u16 sid, void* arrfile, SND_PLAYPARA* para, u8 irq_call, u8 studio) {
   int i;

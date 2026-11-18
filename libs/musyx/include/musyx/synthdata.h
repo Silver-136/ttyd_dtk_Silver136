@@ -214,6 +214,15 @@ void dataInitStack(unsigned long aramBase, unsigned long aramSize);
 #else
 void dataInitStack(); /* extern */
 #endif
+#if MUSY_VERSION >= MUSY_VERSION_CHECK(2, 0, 2)
+u32 sndStackGetSize();
+u32 sndStackAdd(void* stackWorkMem, u32 aramBase, u32 aramSize);
+u32 sndStackRemove(u32 id);
+bool sndStackSetCurrent(u32 id);
+u32 sndStackGetARAMAddressRange(u32 id, u32* start, u32* end);
+u32 sndStackGetAvailableSampleMemory(unsigned long id);
+ARAMInfo* dataARAMGetInfo();
+#endif
 bool dataInsertSDir(SDIR_DATA* sdir, void* smp_data);
 bool dataRemoveSDir(SDIR_DATA* sdir);
 bool dataInsertMacro(u16 mid, void* macroaddr);

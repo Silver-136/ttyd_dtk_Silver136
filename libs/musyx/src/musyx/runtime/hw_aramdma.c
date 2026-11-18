@@ -177,6 +177,13 @@ void aramSetUploadCallback(void* (*callback)(unsigned long, unsigned long),
   aramUploadCallback = callback;
 }
 
+u32 aramGetAvailableBytes(ARAMInfo* ai) {
+  if (ai->aramBase == aramGetFirstUserAddress()) {
+    return aramStream - ai->aramWrite;
+  }
+  return ai->aramTop - ai->aramWrite;
+}
+
 #if MUSY_VERSION >= MUSY_VERSION_CHECK(2, 0, 2)
 void* aramStoreData(void* src, unsigned long len, ARAMInfo* info) {
   unsigned long addr;

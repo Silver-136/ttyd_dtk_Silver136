@@ -159,7 +159,14 @@ typedef struct SND_HOOKS {
   void (*free)(void* addr);
 } SND_HOOKS;
 
+typedef struct SND_HOOKS_EX {
+  void* (*malloc)(size_t);
+  void* (*mallocPhysical)(size_t);
+  void (*free)(void*);
+} SND_HOOKS_EX;
+
 void sndSetHooks(SND_HOOKS* hooks);
+void sndSetHooksEx(SND_HOOKS_EX* hooks);
 
 // Misc flags to influence the way the sound system works internally
 // (support may vary from platform to platform)
@@ -412,7 +419,8 @@ void sndVirtualSampleSetCallback(u32 (*callback)(u8 reason, const SND_VIRTUALSAM
 void sndVirtualSampleARAMUpdate(SND_INSTID instID, void* base, u32 off1, u32 len1, u32 off2,
                                 u32 len2);
 
-void sndVirtualSampleEndPlayback(SND_INSTID instID, bool sampleEndedNormally);
+void sndVirtualSampleEndPlayback(SND_INSTID instID, bool sampleEndedNormally, u32 numLastGoodSamples);
+s32 sndVirtualSampleGetARAMAddress(u16 instID, s32* aramAddr);
 
 #define SND_AUX_BLOCKSIZE 160 // Size of block passed to the AUX FX hanler (in samples)
 

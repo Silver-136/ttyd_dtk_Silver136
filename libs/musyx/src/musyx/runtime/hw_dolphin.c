@@ -45,7 +45,7 @@ static SND_SOME_CALLBACK userCallback = NULL;
 #define DMA_BUFFER_LEN 0x280
 
 u32 salGetStartDelay();
-static void callUserCallback() {
+static inline void callUserCallback() {
   if (salLogicActive) {
     return;
   }
@@ -156,10 +156,10 @@ u32 salInitDsp() {
 }
 
 u32 salExitDsp() {
-  DSPHalt();
-  while (DSPGetDMAStatus())
-    ;
-  DSPReset();
+  int old = OSDisableInterrupts();
+  DSPCancelTask(&dsp_task);
+  OSSleepThread(&salWaitForDSPThreadQueue);
+  OSRestoreInterrupts(old);
 
   return TRUE;
 }

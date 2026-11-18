@@ -182,6 +182,27 @@ void salInitHRTFBuffer() {
 #endif
 }
 
+bool salExitDspCtrl() {
+  u8 i;
+  salFree(dspHrtfHistoryBuffer);
+
+  for (i = 0; i < salNumVoices; ++i) {
+    salFree(dspVoice[i].pb);
+    salFree(dspVoice[i].patchData);
+  }
+
+  for (i = 0; i < salMaxStudioNum; ++i) {
+    salFree(dspStudio[i].spb);
+    salFree(dspStudio[i].main[0]);
+  }
+
+  salFree(dspITDBuffer);
+  salFree(dspVoice);
+  salFree(dspSurround);
+  salFree(dspCmdList);
+  return TRUE;
+}
+
 void salActivateStudio(u8 studio, u32 isMaster, SND_STUDIO_TYPE type) {
   memset(dspStudio[studio].main[0], 0, 0x3c00);
 #if MUSY_TARGET == MUSY_TARGET_DOLPHIN
@@ -504,6 +525,13 @@ static u16 dspSRCCycles[3][3] = {
 static const u16 dspMixerCyclesMain[16] = {
     0, 760, 760, 1470, 760, 1520, 1520, 2230, 0, 1265, 1265, 2470, 1265, 2530, 2530, 3735,
 };
+
+static const u16 dspMixerCyclesAux[32] = {
+    0, 760, 760, 1470, 0, 1265, 1265, 2470, 760,  1520, 1520, 2230, 760,  2025, 2025, 3230,
+    0, 760, 760, 1470, 0, 1265, 1265, 2470, 1265, 2025, 2025, 2735, 1265, 2530, 2530, 3735,
+};
+
+void salDeactivateStudio(u8 studio) { dspStudio[studio].state = DSP_STUDIO_STATE_INACTIVE; }
 
 static u32 salCheckVolErrorAndResetDelta(u16* dsp_vol, u16* dsp_delta, u16* last_vol, u16 targetVol,
                                          u16* resetFlags, u16 resetMask) {
@@ -1790,6 +1818,63 @@ void salDeactivateVoice(DSPvoice* dsp_vptr) {
   }
 
   dsp_vptr->state = DSP_VOICE_STATE_INACTIVE;
+}
+
+void salReconnectVoice(DSPvoice* dsp_vptr, u8 studio) {
+  if (dsp_vptr->state != DSP_VOICE_STATE_INACTIVE) {
+    if (dsp_vptr->prev != NULL) {
+      dsp_vptr->prev->next = dsp_vptr->next;
+    } else {
+      dspStudio[dsp_vptr->studio].voiceRoot = dsp_vptr->next;
+    }
+
+    if (dsp_vptr->next != NULL) {
+      dsp_vptr->next->prev = dsp_vptr->prev;
+    }
+
+    if ((dsp_vptr->next = dspStudio[studio].voiceRoot) != NULL) {
+      dsp_vptr->next->prev = dsp_vptr;
+    }
+
+    dsp_vptr->prev = NULL;
+    dspStudio[studio].voiceRoot = dsp_vptr;
+    if (dsp_vptr->state == DSP_VOICE_STATE_PLAYING) {
+      dsp_vptr->nextAlien = dspStudio[dsp_vptr->studio].alienVoiceRoot;
+      dspStudio[dsp_vptr->studio].alienVoiceRoot = dsp_vptr;
+    }
+  }
+
+  dsp_vptr->studio = studio;
+}
+
+bool salAddStudioInput(DSPstudioinfo* stp, SND_STUDIO_INPUT* desc) {
+  if (stp->numInputs < 7) {
+    stp->in[stp->numInputs].studio = desc->srcStudio;
+    stp->in[stp->numInputs].vol = ((u16)desc->vol << 8) | ((u16)desc->vol << 1);
+    stp->in[stp->numInputs].volA = ((u16)desc->volA << 8) | ((u16)desc->volA << 1);
+    stp->in[stp->numInputs].volB = ((u16)desc->volB << 8) | ((u16)desc->volB << 1);
+    stp->in[stp->numInputs].desc = desc;
+    ++stp->numInputs;
+    return 1;
+  }
+
+  return 0;
+}
+
+bool salRemoveStudioInput(DSPstudioinfo* stp, SND_STUDIO_INPUT* desc) {
+  long i;
+
+  for (i = 0; i < stp->numInputs; ++i) {
+    if (stp->in[i].desc == desc) {
+      for (; i <= stp->numInputs - 2; ++i) {
+        stp->in[i] = stp->in[i + 1];
+      }
+      --stp->numInputs;
+      return 1;
+    }
+  }
+
+  return 0;
 }
 
 void salHandleAuxProcessing() {

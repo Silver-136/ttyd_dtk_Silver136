@@ -482,6 +482,11 @@ void* hwGetStreamPlayBuffer(u8 hwStreamHandle) {
   return (void*)aramGetStreamBufferAddress(hwStreamHandle, NULL);
 }
 
+u32 hwGetStreamARAMAddr(u8 hwStreamHandle) {
+  size_t len;
+  return aramGetStreamBufferAddress(hwStreamHandle, &len);
+}
+
 void* hwTransAddr(void* samples) { return samples; }
 
 u32 hwFrq2Pitch(u32 frq) { return (frq * 4096.f) / synthInfo.mixFrq; }
@@ -530,6 +535,8 @@ void hwSaveSample(void* header, void* data
 #endif
 }
 
+u32 hwGetAvailableSampleMemory(ARAMInfo* ai) { return aramGetAvailableBytes(ai); }
+
 void hwSetSaveSampleCallback(ARAMUploadCallback callback, unsigned long chunkSize) {
   aramSetUploadCallback(callback, chunkSize);
 }
@@ -568,6 +575,12 @@ void sndSetHooks(SND_HOOKS* hooks) {
 #else
 void sndSetHooks(SND_HOOKS* hooks) { salHooks = *hooks; }
 #endif
+
+void sndSetHooksEx(SND_HOOKS_EX* hooks) {
+  salHooks.malloc = hooks->malloc;
+  salHooks.mallocPhysical = hooks->mallocPhysical;
+  salHooks.free = hooks->free;
+}
 
 void hwEnableHRTF() {
   if (dspHRTFOn != FALSE) {

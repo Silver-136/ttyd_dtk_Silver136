@@ -424,25 +424,22 @@ _fail:
   return -1;
 }
 
-u32 voiceAllocate(u8 priority, u8 maxVoices, u32 allocId, u8 fxFlag) {
-  s32 voice;
-  SYNTH_VOICELIST* sfv;
+static u32 voiceAllocateDo(s32 voice, u8 fxFlag) {
   s32 i;
+  SYNTH_VOICELIST* sfv;
 
-  voice = voiceAllocateFind(priority, maxVoices, allocId, fxFlag);
   if (voice != -1) {
     if (voiceList[voice].user == 1) {
-      sfv = voiceList + voice;
+      sfv = &voiceList[voice];
       i = sfv->prev;
-
-      if (i != 0xff) {
+      if (i != 0xFF) {
         voiceList[i].next = sfv->next;
       } else {
         voiceListRoot = sfv->next;
       }
 
       i = sfv->next;
-      if (i != 0xff) {
+      if (i != 0xFF) {
         voiceList[i].prev = sfv->prev;
       }
 
@@ -451,18 +448,22 @@ u32 voiceAllocate(u8 priority, u8 maxVoices, u32 allocId, u8 fxFlag) {
       }
 
       sfv->user = 0;
-    } else if (synthVoice[voice].fxFlag) {
-      voiceFxRunning--;
+    } else if (synthVoice[voice].fxFlag != 0) {
+      voiceFxRunning -= 1;
     } else {
-      voiceMusicRunning--;
+      voiceMusicRunning -= 1;
     }
-    if (fxFlag != FALSE) {
-      ++voiceFxRunning;
+    if (fxFlag != 0) {
+      voiceFxRunning++;
     } else {
-      ++voiceMusicRunning;
+      voiceMusicRunning++;
     }
   }
   return voice;
+}
+
+u32 voiceAllocate(u8 priority, u8 maxVoices, u32 allocId, u8 fxFlag) {
+  return voiceAllocateDo(voiceAllocateFind(priority, maxVoices, allocId, fxFlag), fxFlag);
 }
 
 int voiceAllocatePeek(u8 priority, u8 maxVoices, u32 allocId, u8 fxFlag, u32* currentAllocId) {

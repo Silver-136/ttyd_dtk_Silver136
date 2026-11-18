@@ -104,6 +104,8 @@ void hwSetStreamLoopPS(u32 voice, u8 ps);
 void hwFlushStream(void* base, u32 offset, u32 bytes, u8 hwStreamHandle, void (*callback)(size_t),
                    u32 user);
 void hwSetSaveSampleCallback(ARAMUploadCallback callback, unsigned long chunkSize);
+u32 hwGetStreamARAMAddr(u8 hwStreamHandle);
+u32 hwGetAvailableSampleMemory(ARAMInfo* ai);
 void hwSyncSampleMem();
 void hwSetAUXProcessingCallbacks(u8 studio, SND_AUX_CALLBACK auxA, void* userA,
                                  SND_AUX_CALLBACK auxB, void* userB);
@@ -156,6 +158,7 @@ void aramRemoveData(void* aram, u32 len);
 #if MUSY_VERSION >= MUSY_VERSION_CHECK(2, 0, 1)
 u32 aramGetFirstUserAddress();
 u32 aramGetUserBytes(u32 len);
+u32 aramGetAvailableBytes(ARAMInfo* ai);
 #endif
 #if MUSY_VERSION >= MUSY_VERSION_CHECK(2, 0, 2)
 ARAMInfo* dataARAMDefaultGetInfo();
