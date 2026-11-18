@@ -89,6 +89,7 @@ static s32 tpl_ok = 0;
 static void envDisp_DepthOfField(void);
 static void envDisp_Blur(void);
 static void envDisp_FF(void);
+static void envDisp_Glare(void);
 
 /**
  * DVD read callback for the asynchronous env.tpl load:
@@ -237,31 +238,10 @@ static void envDisp(CameraId camId, void* param) {
 static void envDisp2(CameraId camId, void* param) {
     f32 vp[GX_VIEWPORT_SZ];
     f32 pm[GX_PROJECTION_SZ];
-    EnvironmentWork* wp;
-    EnvironmentGlareFilter* filter;
 
     GXGetViewportv(vp);
     GXGetProjectionv(pm);
-    wp = envGetWork();
-    filter = &wp->filter;
-    if (wp->flags & ENV_FLAG_GLARE_FILTER) {
-        switch (filter->type) {
-            case 0:
-                break;
-            case 1:
-                envGlare(&envGlare0);
-                break;
-            case 2:
-                envGlare(&envGlare1);
-                break;
-            case 3:
-                envGlare(&envGlare2);
-                break;
-            case 4:
-                envGlare(&envGlare3);
-                break;
-        }
-    }
+    envDisp_Glare();
     GXSetViewport(vp[0], vp[1], vp[2], vp[3], vp[4], vp[5]);
     GXSetProjectionv(pm);
 }
@@ -752,9 +732,9 @@ static void envGlare(EnvironmentGlare* glare) {
 }
 
 /** Draws the glare filter the current type picks (envGlare0..3), without envDisp2's viewport save. */
-// Original name and size (0xac) from the JP demo map (UNUSED there: nothing calls it), between envGlare and
-// envGlareFilter. Body: envDisp2's glare switch on its own; the size fits exactly (without the empty case 0
-// 0xa8). envDisp2 comes earlier in the file, so it cannot have inlined this copy.
+// Original name and size (0xac) from the JP demo map (UNUSED there: every call is inlined), between envGlare and
+// envGlareFilter. envDisp2 calls it (the unit is compiled with deferred inlining, so the later definition is
+// inlined there); the size fits exactly (without the empty case 0 0xa8).
 static void envDisp_Glare(void) {
     EnvironmentWork* wp;
     EnvironmentGlareFilter* filter;

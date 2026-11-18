@@ -221,23 +221,15 @@ void seq_mapChangeMain(SequenceWork* work) {
             work->state++;
             break;
         case 1:
-#if VERSION <= VERSION_DEMO_JP
-            if (fadeIsFinish()) {
-                if (gp->relocationBase) {
-                    ((void (*)(void))((OSModuleHeader*)gp->relocationBase)->epilog)();
-                    OSUnlink(gp->relocationBase);
-                    if (gp->relocationBase != gp->mapAlloc) {
-                        _mapFree(gp->relocationBase);
-                    }
-                    gp->relocationBase = NULL;
-                }
-                _unload(gp->currentMapName, _next_map, _next_bero);
-                psndMapChange();
-#else
+#if VERSION >= VERSION_JP
             psndSFXAllOff();
+#endif
             if (fadeIsFinish()) {
                 _relUnLoad();
                 _unload(gp->currentMapName, _next_map, _next_bero);
+#if VERSION <= VERSION_DEMO_JP
+                psndMapChange();
+#else
                 if (strcmp(_next_map, "dmo_00") && strcmp(_next_map, "title")) {
                     if (OSGetSoundMode() == OS_SOUND_MODE_MONO) {
                         SoundSetOutputMode(SND_OUTPUTMODE_MONO);

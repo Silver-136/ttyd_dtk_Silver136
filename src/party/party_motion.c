@@ -1071,10 +1071,7 @@ found:
             party->hitobjPush = hit;
             if (hitGetAttr(hit) & HIT_ATTR_SLIT) {
                 if (party->slitOn != 1) {
-                    if (!(party->playerPtr->trigFlags & MARIO_TRIG_FLAG_NORMALIZING)) {
-                        party->trigFlags |= PARTY_TRIG_SLIT_INIT;
-                        party->slitOn = 1;
-                    }
+                    partySlitOn(party);
                 } else if (party->moveSpeed) {
                     v.x = party->position.x;
                     v.z = party->position.z;
@@ -1418,8 +1415,7 @@ void party_motion_homing_walk(PartyEntry* party) {
             party->hitobjPush = hit;
             if (hitGetAttr(hit) & HIT_ATTR_SLIT) {
                 if (party->slitOn != 1) {
-                    party->trigFlags |= PARTY_TRIG_SLIT_INIT;
-                    party->slitOn = 1;
+                    partySlitOn(party);
                 } else if (party->moveSpeed) {
                     v.x = party->position.x;
                     v.z = party->position.z;
@@ -1794,10 +1790,7 @@ void party_motion_homing_fly(PartyEntry* party) {
             party->hitobjPush = hit;
             if (hitGetAttr(hit) & HIT_ATTR_SLIT) {
                 if (party->slitOn != 1) {
-                    if (!(party->playerPtr->trigFlags & MARIO_TRIG_FLAG_NORMALIZING)) {
-                        party->trigFlags |= PARTY_TRIG_SLIT_INIT;
-                        party->slitOn = 1;
-                    }
+                    partySlitOn(party);
                 } else if (party->moveSpeed) {
                     v.x = party->position.x;
                     v.z = party->position.z;
@@ -4085,8 +4078,7 @@ void party_motion_homing_fly(PartyEntry* party) {
             party->hitobjPush = hit;
             if (hitGetAttr(hit) & HIT_ATTR_SLIT) {
                 if (party->slitOn != 1) {
-                    party->trigFlags |= PARTY_TRIG_SLIT_INIT;
-                    party->slitOn = 1;
+                    partySlitOn(party);
                 } else if (party->moveSpeed) {
                     v.x = party->position.x;
                     v.z = party->position.z;

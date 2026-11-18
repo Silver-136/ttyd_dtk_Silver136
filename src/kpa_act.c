@@ -156,13 +156,8 @@ void _kpaAddCoin(s32 coins) {
  * 10000. Called when a Bowser-stage ? block gives a coin (evt_mobj).
  */
 void kpaAddCoin(s32 coins) {
-    s32 score;
     _kpaAddCoin(coins);
-    score = coins * KPA_SCORE_PER_COIN;
-    if (score > KPA_SCORE_PICKUP_CAP) {
-        score = KPA_SCORE_PICKUP_CAP;
-    }
-    pouchAddKpaScore(score);
+    _kpaAddScore(coins * KPA_SCORE_PER_COIN);
 }
 
 /**
@@ -170,14 +165,8 @@ void kpaAddCoin(s32 coins) {
  * kpa.rel's kpa_add_coin calls it for each stage coin Bowser picks up (kpa_coin_evt).
  */
 void kpaAddCoinPos(s32 coins, Vec* pos) {
-    s32 score;
     _kpaAddCoin(coins);
-    score = coins * KPA_SCORE_PER_COIN;
-    if (score > KPA_SCORE_PICKUP_CAP) {
-        score = KPA_SCORE_PICKUP_CAP;
-    }
-    pouchAddKpaScore(score);
-    kpaScoreDispEntry(score, pos);
+    kpaScoreDispEntry(_kpaAddScore(coins * KPA_SCORE_PER_COIN), pos);
 }
 
 /** Adds score points, capped at 10000 per call, to the Super Bowser total and returns the points added. */

@@ -549,11 +549,7 @@ HitEntry* partyChkFrontStep(PartyEntry* party, f32 range, f32* outY, f32* outDis
         hit = partyHitCheck(party, &pos, &dir, &outPos, &outNrm, &dist);
     }
     if (hit) {
-        Vec n = outNrm;
-        party->groundRot.x = (s32)(angleABf(0.0f, 0.0f, 100.0f * n.z, 100.0f * n.y) - 180.0f);
-        party->groundRotY = 0.0f;
-        party->groundRotZ = (s32)(angleABf(0.0f, 0.0f, 100.0f * n.x, 100.0f * n.y) - 180.0f);
-        party->groundSlope = partyNrmTo(&n);
+        party->groundSlope = ABCtoAngleY(party, outNrm);
         gy = outPos.y;
         if (gy < oy && __fabsf(gy - oy) >= 2.0f) {
             *outDist = oy - gy;

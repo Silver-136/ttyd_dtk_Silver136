@@ -201,13 +201,7 @@ DVDEntry* DVDMgrOpen(const char* path, u8 priority, u16 unknown) {
  */
 // Waits until the read has finished; returns the file length (not the number of bytes read).
 s32 DVDMgrRead(DVDEntry* entry, void* address, u32 size, s32 offset) {
-    entry->address = address;
-    entry->bytesLeft = size;
-    entry->offset = offset;
-    entry->status |= DVDMGR_READING;
-    entry->status &= ~DVDMGR_FINISHED;
-    entry->callback = NULL;
-    entry->position = 0;
+    DVDMgrReadAsync(entry, address, size, offset, NULL);
     while (TRUE) {
         if (entry->status & DVDMGR_FINISHED) {
             break;

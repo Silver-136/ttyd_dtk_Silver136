@@ -16,6 +16,7 @@
 #include "mario/mario_pouch.h"
 #include "mot/mot_jabara.h"
 #include "mot/mot_hammer.h"
+#include "mot/mot_stay.h"
 
 #if VERSION >= VERSION_US
 #include "mario/mariost.h"
@@ -31,11 +32,7 @@ void stopVoice(void) {
         psndSFXOff(mario->soundId[0]);
         mario->soundId[0] = -1;
     }
-    mario = marioGetPtr();
-    if (mario->soundId[1] != (u32)-1) {
-        psndSFXOff(mario->soundId[1]);
-        mario->soundId[1] = -1;
-    }
+    marioVoiceGlareOff();
 }
 
 /** Mario's yawn (SFX_VOICE_MARIO_YAWN1) in mario->soundId[0] as he gets sleepy in the idle animation. */

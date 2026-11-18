@@ -1069,55 +1069,12 @@ void winKirinukiGX(WindowWork* wp, s32 type, f32 x, f32 y, f32 w, f32 h) {
     }
 }
 
-/** Local fabs on the __fabs intrinsic (math.h's inline), for nameTex and winSortTex below. */
-static inline double fabs(double x) { return __fabs(x); }
-
-/**
- * Loads texture id of win.tpl into texture map 0 (linear filtering) with a texture matrix that maps a tw by th quad
- * onto it.
- */
-static inline void nameTex(WindowWork* wp, GXTexObj* obj, s32 id, Mtx mtx, f32 tw, f32 th) {
-    TEXGetGXTexObjFromPalette((TEXPalette*)*wp->res->data, obj, id);
-    GXInitTexObjLOD(obj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
-    GXLoadTexObj(obj, GX_TEXMAP0);
-    GXSetNumTexGens(1);
-    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0, GX_FALSE, GX_PTIDENTITY);
-    MTXScale(mtx, (f32)fabs(tw) / (f32)GXGetTexObjWidth(obj), (f32)fabs(th) / (f32)GXGetTexObjHeight(obj), 1.0f);
-    GXLoadTexMtxImm(mtx, GX_TEXMTX0, GX_MTX2x4);
-}
-
-/** Emits one qw x qh textured quad with its top-left at (x0, y0) for winNameGX, using the texture nameTex loaded. */
-static inline void nameQuad(f32 x0, f32 y0, f32 qw, f32 qh) {
-    GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-    GXPosition3f32(x0, y0, 0.0f);
-    GXTexCoord2f32(0.0f, 0.0f);
-    GXPosition3f32(x0, y0 - qh, 0.0f);
-    GXTexCoord2f32(0.0f, 1.0f);
-    GXPosition3f32(x0 + qw, y0 - qh, 0.0f);
-    GXTexCoord2f32(1.0f, 1.0f);
-    GXPosition3f32(x0 + qw, y0, 0.0f);
-    GXTexCoord2f32(1.0f, 0.0f);
-}
-
 /**
  * Draws a name plate w wide at (x, y): a stretched body plus a rounded right end.
  * Type 0 is the Party page's partner name (32 high), 1 the help box title (32 high),
  * 2 the 24-high plate on Mario's page. h is not used.
  */
 void winNameGX(WindowWork* wp, s32 type, f32 x, f32 y, f32 w, f32 h) {
-    Mtx m0a;
-    Mtx m0b;
-    Mtx m1a;
-    Mtx m1b;
-    Mtx m2a;
-    Mtx m2b;
-    GXTexObj t0a;
-    GXTexObj t0b;
-    GXTexObj t1a;
-    GXTexObj t1b;
-    GXTexObj t2a;
-    GXTexObj t2b;
-
     GXSetBlendMode(GX_BM_NONE, GX_BL_ONE, GX_BL_ZERO, GX_LO_CLEAR);
     GXSetZCompLoc(GX_FALSE);
     GXSetAlphaCompare(GX_GEQUAL, 0x80, GX_AOP_OR, GX_NEVER, 0);
@@ -1138,23 +1095,14 @@ void winNameGX(WindowWork* wp, s32 type, f32 x, f32 y, f32 w, f32 h) {
     GXSetCurrentMtx(GX_PNMTX0);
 
     if (type == 0) {
-        nameTex(wp, &t0a, 0x13, m0a, w - 16.0f, 32.0f);
-        nameQuad(x, y, w - 16.0f, 32.0f);
-        nameTex(wp, &t0b, 0x14, m0b, 16.0f, 32.0f);
-
-        nameQuad((x + w) - 16.0f, y, 16.0f, 32.0f);
+        chip(wp, 0x13, x, y, w - 16.0f, 32.0f);
+        chip(wp, 0x14, (x + w) - 16.0f, y, 16.0f, 32.0f);
     } else if (type == 1) {
-        nameTex(wp, &t1a, 0x15, m1a, w - 16.0f, 32.0f);
-        nameQuad(x, y, w - 16.0f, 32.0f);
-        nameTex(wp, &t1b, 0x16, m1b, 16.0f, 32.0f);
-
-        nameQuad((x + w) - 16.0f, y, 16.0f, 32.0f);
+        chip(wp, 0x15, x, y, w - 16.0f, 32.0f);
+        chip(wp, 0x16, (x + w) - 16.0f, y, 16.0f, 32.0f);
     } else if (type == 2) {
-        nameTex(wp, &t2a, 0x78, m2a, w - 8.0f, 24.0f);
-        nameQuad(x, y, w - 8.0f, 24.0f);
-        nameTex(wp, &t2b, 0x79, m2b, 8.0f, 24.0f);
-
-        nameQuad((x + w) - 8.0f, y, 8.0f, 24.0f);
+        chip(wp, 0x78, x, y, w - 8.0f, 24.0f);
+        chip(wp, 0x79, (x + w) - 8.0f, y, 8.0f, 24.0f);
     }
 }
 
@@ -1253,7 +1201,7 @@ void winBookGX(WindowWork* w, s32 type, f32 x, f32 y) {
     }
 }
 
-/** Draws texture id of the given TPL stretched over a w x h quad at (x, y), for winHalfBookGX. */
+/** Draws texture id of the given TPL stretched over a w x h quad at (x, y), for winHalfBookGX and winWazaGX. */
 // Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
 static void chip2(TEXPalette* tpl, s32 id, f32 x, f32 y, f32 w, f32 h) {
     GXTexObj obj;
@@ -1600,33 +1548,6 @@ void winHakoGX(WindowWork* w, s32 type, f32 x, f32 y) {
                (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
 }
 
-/** Draws win.tpl texture id stretched over a w x h quad at (x, y), for winWazaGX. */
-static inline void winWazaQuad(WindowWork* wp, s32 id, f32 x, f32 y, f32 w, f32 h) {
-    GXTexObj obj;
-    Mtx m;
-    f64 aw;
-    f64 ah;
-
-    TEXGetGXTexObjFromPalette((TEXPalette*)*wp->res->data, &obj, id);
-    GXInitTexObjLOD(&obj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
-    GXLoadTexObj(&obj, GX_TEXMAP0);
-    GXSetNumTexGens(1);
-    GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0);
-    ah = __fabs(h);
-    aw = __fabs(w);
-    MTXScale(m, (f32)aw / (f32)GXGetTexObjWidth(&obj), (f32)ah / (f32)GXGetTexObjHeight(&obj), 1.0f);
-    GXLoadTexMtxImm(m, GX_TEXMTX0, GX_MTX2x4);
-    GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-    GXPosition3f32(x, y, 0.0f);
-    GXTexCoord2f32(0.0f, 0.0f);
-    GXPosition3f32(x, y - h, 0.0f);
-    GXTexCoord2f32(0.0f, 1.0f);
-    GXPosition3f32(x + w, y - h, 0.0f);
-    GXTexCoord2f32(1.0f, 1.0f);
-    GXPosition3f32(x + w, y, 0.0f);
-    GXTexCoord2f32(1.0f, 0.0f);
-}
-
 /**
  * Draws the w x h panel behind a move list ("waza" = moves) at (x, y), with a 32-high header strip;
  * used on Mario's and the Party page. a is not used.
@@ -1654,17 +1575,17 @@ void winWazaGX(WindowWork* wp, s32 a, f32 x, f32 y, f32 w, f32 h) {
     GXSetCurrentMtx(GX_PNMTX0);
 
     w1 = 0.75f * w;
-    winWazaQuad(wp, 0x98, x, y, w1, 32.0f);
-    winWazaQuad(wp, 0x9A, x + w1, y, w - w1 - 16.0f, 32.0f);
-    winWazaQuad(wp, 0x9B, x + (w - 16.0f), y, 16.0f, 32.0f);
-    winWazaQuad(wp, 0xA2, x, y - 32.0f, w1, h - 32.0f - 16.0f);
-    winWazaQuad(wp, 0x9E, x + w1, y - 32.0f, w - w1 - 8.0f, h - 32.0f - 16.0f);
-    winWazaQuad(wp, 0xA1, x + (w - 8.0f), y - 32.0f, 8.0f, h - 32.0f - 16.0f);
-    winWazaQuad(wp, 0x9E, x + w1, y - (h - 16.0f), w - w1 - 8.0f, 8.0f);
-    winWazaQuad(wp, 0xA1, x + (w - 8.0f), y - (h - 16.0f), 8.0f, 8.0f);
-    winWazaQuad(wp, 0x9C, x, y - (h - 16.0f), w1, 16.0f);
-    winWazaQuad(wp, 0x9F, x + w1, y - (h - 8.0f), w - w1 - 16.0f, 8.0f);
-    winWazaQuad(wp, 0x9D, x + (w - 16.0f), y - (h - 16.0f), 16.0f, 16.0f);
+    chip2((TEXPalette*)*wp->res->data, 0x98, x, y, w1, 32.0f);
+    chip2((TEXPalette*)*wp->res->data, 0x9A, x + w1, y, w - w1 - 16.0f, 32.0f);
+    chip2((TEXPalette*)*wp->res->data, 0x9B, x + (w - 16.0f), y, 16.0f, 32.0f);
+    chip2((TEXPalette*)*wp->res->data, 0xA2, x, y - 32.0f, w1, h - 32.0f - 16.0f);
+    chip2((TEXPalette*)*wp->res->data, 0x9E, x + w1, y - 32.0f, w - w1 - 8.0f, h - 32.0f - 16.0f);
+    chip2((TEXPalette*)*wp->res->data, 0xA1, x + (w - 8.0f), y - 32.0f, 8.0f, h - 32.0f - 16.0f);
+    chip2((TEXPalette*)*wp->res->data, 0x9E, x + w1, y - (h - 16.0f), w - w1 - 8.0f, 8.0f);
+    chip2((TEXPalette*)*wp->res->data, 0xA1, x + (w - 8.0f), y - (h - 16.0f), 8.0f, 8.0f);
+    chip2((TEXPalette*)*wp->res->data, 0x9C, x, y - (h - 16.0f), w1, 16.0f);
+    chip2((TEXPalette*)*wp->res->data, 0x9F, x + w1, y - (h - 8.0f), w - w1 - 16.0f, 8.0f);
+    chip2((TEXPalette*)*wp->res->data, 0x9D, x + (w - 16.0f), y - (h - 16.0f), 16.0f, 16.0f);
 }
 
 /** Sort options (Z) of the Items list: by name or by type. */
@@ -2694,37 +2615,13 @@ static void winSortMain(WindowWork* wp) {
     wp->sortPosY += (wp->sortTgtY - wp->sortPosY) / 8.0f;
 }
 
-/** Draws win.tpl texture id over a w x h quad at (x, y), one texel per pixel as chip does, for the sort menu panel. */
-static inline void winSortTex(WindowWork* wp, s32 id, f32 x, f32 y, f32 w, f32 h) {
-    GXTexObj obj;
-    Mtx m;
-
-    TEXGetGXTexObjFromPalette((TEXPalette*)*wp->res->data, &obj, id);
-    GXInitTexObjLOD(&obj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
-    GXLoadTexObj(&obj, GX_TEXMAP0);
-    GXSetNumTexGens(1);
-    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0, GX_FALSE, GX_PTIDENTITY);
-    PSMTXScale(m, (f32)fabs(w) / (f32)GXGetTexObjWidth(&obj), (f32)fabs(h) / (f32)GXGetTexObjHeight(&obj),
-               1.0f);
-    GXLoadTexMtxImm(m, GX_TEXMTX0, GX_MTX2x4);
-    GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-    GXPosition3f32(x, y, 0.0f);
-    GXTexCoord2f32(0.0f, 0.0f);
-    GXPosition3f32(x, y - h, 0.0f);
-    GXTexCoord2f32(0.0f, 1.0f);
-    GXPosition3f32(x + w, y - h, 0.0f);
-    GXTexCoord2f32(1.0f, 1.0f);
-    GXPosition3f32(x + w, y, 0.0f);
-    GXTexCoord2f32(1.0f, 0.0f);
-}
-
 /**
  * Draws the sort menu panel at sortPosX/Y with one 40-high row per option,
  * each showing its label texture (chosen from the option's message tag);
  * the selected row is lit with a shadow, the rest grey. The mail sort is clipped to the mail window.
  *
  * (x, y) = (sortPosX, sortPosY) is the top-left corner; the panel is 152 wide and 48 + 40 * sortNum high.
- * Pieces (winSortTex, one texel per pixel; sizes and wrap modes from the US win.tpl): the top and bottom bars
+ * Pieces (chip, one texel per pixel; sizes and wrap modes from the US win.tpl): the top and bottom bars
  * 0xA5 and 0xA7 (32x24, repeating across) 128 wide, the right corners 0xA3 and 0xA4 (24x24) at x + 128, one
  * right edge piece 0xA6 (16x40) per row at x + 136, and the fill 0xA8 (8x8, clamped) 136 wide. There is no left
  * edge: the panel slides in from x -1000 (winSortEntry) and stops at -310, 6 pixels past the screen's left
@@ -2769,14 +2666,14 @@ static void winSortGX(WindowWork* wp) {
                      (u32)(40.0f + (240.0f - wp->item.mailY)), 0x200, 0xC0);
     }
 
-    winSortTex(wp, 0xA5, x, y, w, 24.0f);
-    winSortTex(wp, 0xA3, x + w, y, 24.0f, 24.0f);
+    chip(wp, 0xA5, x, y, w, 24.0f);
+    chip(wp, 0xA3, x + w, y, 24.0f, 24.0f);
     for (i = 0; i < wp->sortNum; i++) {
-        winSortTex(wp, 0xA6, 8.0f + (x + 128.0f), (y - 24.0f) - (f32)(i * 40), 16.0f, 40.0f);
+        chip(wp, 0xA6, 8.0f + (x + 128.0f), (y - 24.0f) - (f32)(i * 40), 16.0f, 40.0f);
     }
-    winSortTex(wp, 0xA4, x + w, (y - 24.0f) - (f32)(wp->sortNum * 40), 24.0f, 24.0f);
-    winSortTex(wp, 0xA7, x, (y - 24.0f) - (f32)(wp->sortNum * 40), w, 24.0f);
-    winSortTex(wp, 0xA8, x, y - 24.0f, w2, wp->sortNum * 40);
+    chip(wp, 0xA4, x + w, (y - 24.0f) - (f32)(wp->sortNum * 40), 24.0f, 24.0f);
+    chip(wp, 0xA7, x, (y - 24.0f) - (f32)(wp->sortNum * 40), w, 24.0f);
+    chip(wp, 0xA8, x, y - 24.0f, w2, wp->sortNum * 40);
 
     for (i = 0; i < wp->sortNum; i++) {
         WinSortData* sd = sort_data[wp->sortType];

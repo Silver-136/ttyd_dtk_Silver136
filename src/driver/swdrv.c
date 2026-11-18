@@ -12,8 +12,7 @@
 void swInit(void) {
     memset(gp->gSWF, 0, sizeof(gp->gSWF));
     memset(gp->gSW, 0, sizeof(gp->gSW));
-    memset(gp->lSWF, 0, sizeof(gp->lSWF));
-    memset(gp->lSW, 0, sizeof(gp->lSW));
+    swReInit();
     gp->gSW0 = 0;
 }
 

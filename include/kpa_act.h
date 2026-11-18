@@ -6,6 +6,7 @@
 #include "dolphin/mtx.h"
 
 void kpaAddCoin(s32 coins);
+s32 _kpaAddScore(s32 score);
 void kpaAddScore(s32 score);
 void kpaAddScorePos(s32 score, Vec* pos);
 

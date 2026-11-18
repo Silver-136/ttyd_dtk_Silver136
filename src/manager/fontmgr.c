@@ -217,10 +217,7 @@ void FontDrawCode(f32 x, f32 y, u16 code) {
 
     PSMTXScale(mtx, fontScale.x, fontScale.y, fontScale.z);
     PSMTXTransApply(mtx, mtx, x, y, 0.0f);
-    PSMTXConcat(camGetCurPtr()->view, mtx, mtx);
-    GXLoadPosMtxImm(mtx, GX_PNMTX0);
-    GXSetCurrentMtx(GX_PNMTX0);
-    JUTFont_Draw(code);
+    FontDrawCodeMtx(mtx, code);
 }
 
 /**

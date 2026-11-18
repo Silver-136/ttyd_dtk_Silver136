@@ -62,9 +62,7 @@ static void kemuri_dosun2(EffKemuri1Work* work) {
     work->position.x += work->hSpeed * work->dirX;
     work->position.z += work->hSpeed * work->dirZ;
     work->hSpeed *= work->hStep;
-    work->position.y += work->vSpeed;
-    work->vSpeed += work->vStep;
-    work->vStep *= work->vStep2;
+    kemuri_dosun(work);
     work->vSpeed *= work->vStep3;
 }
 

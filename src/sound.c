@@ -1015,6 +1015,8 @@ void calcVectListener(void) {
 }
 
 /** Stops the sound effect on effect channel chan and frees the channel (and its 3D emitter). */
+// SoundEfxStop's body with an unsigned channel: calling SoundEfxStop (s32) from the u32 loops of SoundDropData,
+// SoundStopAll and SoundEfxMain changes their code, so those callers use this copy.
 inline void SoundEfxMuteCh(u32 chan) {
     SoundEffect* sfx = &sound.effects[chan];
     if (sfx->flags) {
@@ -1044,7 +1046,7 @@ s32 SoundEfxPlayEx(SND_FXID fid, u8 priority, u8 vol, u8 pan) {
         sfx = sound.effects;
         for (chan = 0; chan < SOUND_EFFECT_MAX; chan++, sfx++) {
             if (sfx->priority <= priority) {
-                SoundEfxMuteCh(chan);
+                SoundEfxStop(chan);
                 break;
             }
         }
@@ -1116,7 +1118,7 @@ static void SoundEfxStopAll(void) {
     s32 chan;
 
     for (chan = 0; chan < SOUND_EFFECT_MAX; chan++) {
-        SoundEfxMuteCh(chan);
+        SoundEfxStop(chan);
     }
 }
 

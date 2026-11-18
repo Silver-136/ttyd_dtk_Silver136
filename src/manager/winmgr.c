@@ -484,9 +484,7 @@ void winMgrOpen(s32 id) {
     if (entry->flags & WINMGR_FLAG_ACTIVE) {
         entry->state = 1;
         entry->timer = 0;
-        entry->scroll = 0;
-        entry->lines = 0;
-        entry->msg = NULL;
+        winMgrHelpInit(entry);
     }
 }
 

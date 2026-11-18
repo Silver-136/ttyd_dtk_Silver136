@@ -186,23 +186,13 @@ s32 bomheiGetStatus(void) {
 
 /**
  * Party table exit handler: drops Mario's carry flag, stops the bomb sounds and frees the use work. The early demos
- * do this on the given partner; JP and later on the current partner when it is Bobbery in use (as bomhei_use_cancel).
+ * do this on the given partner; JP and later on the current partner when it is Bobbery in use, through
+ * bomhei_use_cancel.
  */
 void bomhei_exit(PartyEntry* party) {
 #if VERSION >= VERSION_JP
-    PartyEntry* p;
     party->playerPtr->flags &= ~MARIO_FLAG_IS_CARRYING_BOBBERY;
-    p = partyGetPtr(marioGetPartyId());
-    if (p != NULL && p->currentMemberId == PARTY_BOBBERY && (p->flags & PARTY_FLAG_IS_BEING_USED)) {
-        p->playerPtr->flags &= ~MARIO_FLAG_IS_CARRYING_BOBBERY;
-        if (p->runMode != PARTY_RUN_FORCE_WALK) {
-            partyChgRunMode(p, PARTY_RUN_MOVE);
-            p->moveMode = PARTY_MOVE_MODE_STAY;
-        }
-        bomheiCleanFlags(p);
-        se_all_off(p);
-        bomheiFree(p);
-    }
+    bomhei_use_cancel();
 #else
     party->playerPtr->flags &= ~(MARIO_FLAG_ACTIVE << 13);
     se_all_off(party);

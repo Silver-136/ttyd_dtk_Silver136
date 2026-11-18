@@ -747,9 +747,7 @@ ItemEntry* itemEntry(f32 x, f32 y, f32 z, const char* name, s32 itemId, u16 type
 
     memset(entry, 0, sizeof(ItemEntry));
     strcpy(entry->name, name);
-    entry->position.x = x;
-    entry->position.y = y;
-    entry->position.z = z;
+    itemSetPosition(entry, x, y, z);
     entry->itemId = itemId;
     entry->type = type;
 #if VERSION <= VERSION_DEMO_JP

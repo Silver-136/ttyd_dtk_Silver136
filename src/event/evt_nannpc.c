@@ -590,19 +590,7 @@ USER_FUNC(evt_nannpc_set_animtbl) {
     char* name = (char*)evtGetValue(event, args[0]);
     NanNPC* npc = nanNPCNameToPtr(name);
     s16* tbl = (s16*)evtGetValue(event, args[1]);
-    s32 n;
-    npc->animtbl = tbl;
-    n = 0;
-    while (TRUE) {
-        if (tbl[n] == -1) {
-            break;
-        }
-        n++;
-    }
-    npc->animnum = n;
-    if (npc->animnum == 0) {
-        npc->animtbl = NULL;
-    }
+    evt_nannpc_set_animtbl_sub(npc, tbl);
     return EVT_RETURN_DONE;
 }
 

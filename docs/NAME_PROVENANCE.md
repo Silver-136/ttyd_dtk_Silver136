@@ -397,9 +397,9 @@ function names) and `strupr` (a C library name).
 
 ## Inline helper names (2026-11-17)
 
-218 names of `static inline` (and a few plain `inline`) helpers in the game code that no map lists and no table
+214 names of `static inline` (and a few plain `inline`) helpers in the game code that no map lists and no table
 above names (GE4, 2026-11-18: mri_puni's puniModeCheckPos and puniMapDataSetI were copies of the file's own
-puniModePrehagure and puniMapDataSet, whose out-of-line copies the REL keeps; the callers call those now). An inline function leaves no symbol when every call is inlined, so no map can name it: the names
+puniModePrehagure and puniMapDataSet, whose out-of-line copies the REL keeps; the callers call those now; GE7: win_root's nameTex + nameQuad, winSortTex and winWazaQuad were copies of the stripped chip and chip2, which the callers call now). An inline function leaves no symbol when every call is inlined, so no map can name it: the names
 were chosen when the code was decompiled (LLCOOLT or this fork) and are not original. Each helper reads as
 code a programmer would write (a small getter, a repeated draw or copy step, a private sine), so it is not
 listed as a fake; where a test was made, the written-out form builds different code (GB9: setChanMatColor,
@@ -519,7 +519,6 @@ helper: no written-out form builds the same; it should be a FAKES row.
 | src/system.c | `getDemoPadStatus` |
 | src/window/win_log.c | `tubuCheck` |
 | src/window/win_mario.c | `fukiKey`, `fukiTool`, `colorAnimName` |
-| src/window/win_root.c | `nameTex`, `nameQuad`, `winWazaQuad`, `winSortTex` |
 | rels/aji/src/aji_06.c | `yukaNow` |
 | rels/aji/src/aji_19.c | `beltSpeed` |
 | rels/bom/src/bom_01.c | `chb_sin`, `chb_cos` |

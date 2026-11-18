@@ -32,23 +32,8 @@ typedef enum WakuTexId {
  * JP and later also forget the frame texture so windowTexSetup reloads it.
  */
 void windowInit(void) {
-    WindowEntry* w;
-
-    w = WinObjects = __memAlloc(HEAP_DEFAULT, sizeof(WindowEntry) * WINDOW_MAX);
-    w[0].flags = 0;
-    w[0].userdata = NULL;
-    w[1].flags = 0;
-    w[1].userdata = NULL;
-    w[2].flags = 0;
-    w[2].userdata = NULL;
-    w[3].flags = 0;
-    w[3].userdata = NULL;
-    w[4].flags = 0;
-    w[4].userdata = NULL;
-    w[5].flags = 0;
-    w[5].userdata = NULL;
-    w[6].flags = 0;
-    w[6].userdata = NULL;
+    WinObjects = __memAlloc(HEAP_DEFAULT, sizeof(WindowEntry) * WINDOW_MAX);
+    windowReInit();
 #if VERSION >= VERSION_JP
     winTpl = NULL;
     tpl_loaded = FALSE;
@@ -195,12 +180,7 @@ BOOL windowDeleteID(s32 id) {
     if (!(entry->flags & WINDOW_FLAG_ACTIVE)) {
         return FALSE;
     }
-    if (entry->delete) {
-        entry->delete(entry);
-    }
-    entry->flags = 0;
-    entry->userdata = NULL;
-    return TRUE;
+    return windowDelete(entry);
 }
 
 /**

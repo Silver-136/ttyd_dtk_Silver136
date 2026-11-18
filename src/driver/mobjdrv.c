@@ -440,20 +440,7 @@ static void mobjDisp_OffscreenXLU(CameraId camId, void* param) {
 
     sysWaitDrawSync();
     GXClearBoundingBox();
-    if (entry->flags & MOBJ_FLAG_PAPER_TEX) {
-        animSetPaperTexMtx(entry->paperTexMtx, NULL, NULL);
-        animSetPaperTexObj(&entry->paperTexObj, NULL, NULL, entry->paperTexData, NULL, NULL, 1, 1);
-    }
-    animPoseDraw(entry->poseId, entry->position.x, entry->position.y, entry->position.z, entry->rotation.y,
-                 10.0f * entry->scale.x, 1);
-    animPoseDraw(entry->poseId, entry->position.x, entry->position.y, entry->position.z, entry->rotation.y,
-                 10.0f * entry->scale.x, 2);
-    animPoseDraw(entry->poseId, entry->position.x, entry->position.y, entry->position.z, entry->rotation.y,
-                 10.0f * entry->scale.x, 3);
-    if (entry->flags & MOBJ_FLAG_PAPER_TEX) {
-        animSetPaperTexMtx(NULL, NULL, NULL);
-        animSetPaperTexObj(NULL, NULL, NULL, NULL, NULL, NULL, 1, 1);
-    }
+    mobjDispXLU(camId, entry);
     sysWaitDrawSync();
     GXReadBoundingBox(&left, &top, &right, &bottom);
     offscreenAddBoundingBox(entry->offscreenId, left, top, right, bottom);
@@ -669,18 +656,7 @@ void mobjDelete(const char* name) {
 
 /** Moves the named map object to (x, y, z). */
 void mobjSetPosition(const char* name, f32 x, f32 y, f32 z) {
-    MapObjectWork* wp = mobjGetWork();
-    MapObjectEntry* entry;
-    s32 entryCount;
-    int i;
-
-    entryCount = wp->count;
-    entry = wp->entries;
-    for (i = 0; i < entryCount; i++, entry++) {
-        if ((entry->flags & MOBJ_FLAG_ACTIVE) && strcmp(entry->name, name) == 0) {
-            break;
-        }
-    }
+    MapObjectEntry* entry = mobjNameToPtr(name);
 
     entry->position.x = x;
     entry->position.y = y + 0.1f;
@@ -689,20 +665,10 @@ void mobjSetPosition(const char* name, f32 x, f32 y, f32 z) {
 
 /** Reads the position of the named map object. */
 // Original name and size (0xc4) from the JP demo map (UNUSED there: nothing calls it), between mobjSetPosition and
-// mobjMain: mobjSetPosition's lookup with the position read out (without its 0.1 lift; with it 0xcc, a Vec out 0xbc).
+// mobjMain: mobjSetPosition's form (mobjNameToPtr) with the position read out (without its 0.1 lift; with it 0xcc,
+// a Vec out 0xbc).
 void mobjGetPosition(const char* name, f32* x, f32* y, f32* z) {
-    MapObjectWork* wp = mobjGetWork();
-    MapObjectEntry* entry;
-    s32 entryCount;
-    int i;
-
-    entryCount = wp->count;
-    entry = wp->entries;
-    for (i = 0; i < entryCount; i++, entry++) {
-        if ((entry->flags & MOBJ_FLAG_ACTIVE) && strcmp(entry->name, name) == 0) {
-            break;
-        }
-    }
+    MapObjectEntry* entry = mobjNameToPtr(name);
 
     *x = entry->position.x;
     *y = entry->position.y;
