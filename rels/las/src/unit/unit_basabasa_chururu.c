@@ -275,15 +275,15 @@ static BattleWeapon weapon_basabasa_attack = {
 
 /** Sound table of the Swoopula: for each pose name, the sound that plays with its animation. */
 static PoseSoundTiming pose_sound_timing_table[] = {
-    {"CYU_S_1", 0.01f, NULL, "SFX_ENM_BASA_WAIT1", 0, 1},
-    {"CYU_W_1", 0.01f, NULL, "SFX_ENM_BASA_MOVE1", 0, 1},
-    {"CYU_R_1", 0.01f, NULL, "SFX_ENM_BASA_MOVE1", 0, 1},
-    {"CYU_T_1", 0.01f, NULL, "SFX_ENM_BASA_WAIT1", 0, 1},
-    {"CYU_A_1", 0.01f, NULL, "SFX_ENM_BASA_WAIT1", 0, 1},
-    {"CYU_N_1", 0.01f, NULL, "SFX_ENM_BASA_WAIT1", 0, 1},
-    {"CYU_K_1", 0.01f, NULL, "SFX_ENM_BASA_WAIT1", 0, 1},
-    {"CYU_X_1", 0.01f, NULL, "SFX_ENM_BASA_WAIT1", 0, 1},
-    {NULL, 0.0f, NULL, NULL, 0, 1},
+    {"CYU_S_1", 0.01f, NULL, "SFX_ENM_BASA_WAIT1", 0, POSE_SOUND_FLAG_PHASE_VOLUME},
+    {"CYU_W_1", 0.01f, NULL, "SFX_ENM_BASA_MOVE1", 0, POSE_SOUND_FLAG_PHASE_VOLUME},
+    {"CYU_R_1", 0.01f, NULL, "SFX_ENM_BASA_MOVE1", 0, POSE_SOUND_FLAG_PHASE_VOLUME},
+    {"CYU_T_1", 0.01f, NULL, "SFX_ENM_BASA_WAIT1", 0, POSE_SOUND_FLAG_PHASE_VOLUME},
+    {"CYU_A_1", 0.01f, NULL, "SFX_ENM_BASA_WAIT1", 0, POSE_SOUND_FLAG_PHASE_VOLUME},
+    {"CYU_N_1", 0.01f, NULL, "SFX_ENM_BASA_WAIT1", 0, POSE_SOUND_FLAG_PHASE_VOLUME},
+    {"CYU_K_1", 0.01f, NULL, "SFX_ENM_BASA_WAIT1", 0, POSE_SOUND_FLAG_PHASE_VOLUME},
+    {"CYU_X_1", 0.01f, NULL, "SFX_ENM_BASA_WAIT1", 0, POSE_SOUND_FLAG_PHASE_VOLUME},
+    {NULL, 0.0f, NULL, NULL, 0, POSE_SOUND_FLAG_PHASE_VOLUME},
 };
 
 /**

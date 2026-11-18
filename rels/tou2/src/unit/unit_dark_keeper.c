@@ -245,8 +245,8 @@ static BattleWeapon weapon_monban_throw_attack = {
  * pose, such as SFX_ENM_MONBAN_WAIT1.
  */
 static PoseSoundTiming pose_sound_timing_table[] = {
-    {"S_2", 0.6666667f, NULL, "SFX_ENM_MONBAN_WAIT1", 0, 1},
-    {NULL, 0.0f, NULL, NULL, 0, 1},
+    {"S_2", 0.6666667f, NULL, "SFX_ENM_MONBAN_WAIT1", 0, POSE_SOUND_FLAG_PHASE_VOLUME},
+    {NULL, 0.0f, NULL, NULL, 0, POSE_SOUND_FLAG_PHASE_VOLUME},
 };
 
 /**

@@ -651,8 +651,16 @@ typedef struct BtlPoseSoundData {
     s32 (*callback)(struct BattleUnit*, struct BtlPoseSoundData*, void*); // 0x8
     const char* sfxName;  // 0xC
     s16 pitch;            // 0x10
-    u16 flags;            // 0x12
+    u16 flags;            // 0x12, BtlPoseSoundFlags
 } BtlPoseSoundData;
+
+// BtlPoseSoundData.flags and the units' PoseSoundTiming.flags (data_tables.h), read by BtlUnit_ControlPoseSoundMain.
+// Every table entry in the game sets POSE_SOUND_FLAG_PHASE_VOLUME.
+typedef enum BtlPoseSoundFlags {
+    // Set the sound to full volume, then to 70% when the owner's attackPhase is not the current battle phase.
+    // Clear: the sound keeps its default volume.
+    POSE_SOUND_FLAG_PHASE_VOLUME = 0x1,
+} BtlPoseSoundFlags;
 
 typedef struct BtlPartPoseSound {
     BtlPoseSoundData* table; // 0x0

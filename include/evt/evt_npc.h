@@ -57,6 +57,27 @@ USER_FUNC(evt_npc_set_rotate_offset);
 USER_FUNC(evt_npc_get_rotate_offset);
 USER_FUNC(evt_npc_move_position);
 
+// evt_npc_move_position's last argument (a plain word, not evaluated). Bit 0x1, which 300 calls pass, is read by
+// nothing here (the command always re-aims; see NPC_KAMEK_MOVE_POSITION_FLAG_AIM).
+typedef enum NpcMovePositionFlags {
+    NPC_MOVE_POSITION_FLAG_NO_FIND = 0x2,   // NPC_STATUS_NO_FIND_ONCE every frame of the move
+    NPC_MOVE_POSITION_FLAG_WALL_STOP = 0x4, // end the move when the NPC hits a wall more than 5 frames in
+} NpcMovePositionFlags;
+
+// evt_npc_glide_position's last argument (a plain word, not evaluated). Not the same bits as evt_npc_move_position.
+typedef enum NpcGlidePositionFlags {
+    NPC_GLIDE_POSITION_FLAG_WALL_STOP = 0x1, // end the glide when the NPC hits a wall
+    NPC_GLIDE_POSITION_FLAG_FIND = 0x2,      // keep find/lost interrupts; clear: NPC_STATUS_NO_FIND_ONCE every frame
+} NpcGlidePositionFlags;
+
+// evt_npc_kamek_move_position's last argument (a plain word, not evaluated).
+typedef enum NpcKamekMovePositionFlags {
+    NPC_KAMEK_MOVE_POSITION_FLAG_AIM = 0x1,       // re-aim at the target each frame (unless airborne)
+    NPC_KAMEK_MOVE_POSITION_FLAG_NO_FIND = 0x2,   // NPC_STATUS_NO_FIND_ONCE every frame of the move
+    NPC_KAMEK_MOVE_POSITION_FLAG_WALL_STOP = 0x4, // end the move at once when the NPC hits a wall
+    NPC_KAMEK_MOVE_POSITION_FLAG_NO_SMOKE = 0x8,  // no broom smoke (_kamek_houki_kemuri)
+} NpcKamekMovePositionFlags;
+
 NpcEntry* evtNpcNameToPtr(EventEntry* event, const char* name);
 NpcEntry* evtNpcNameToPtr_NoAssert(EventEntry* evt, const char* name);
 
@@ -115,6 +136,11 @@ USER_FUNC(evt_npc_get_reglid);
 USER_FUNC(evt_npc_get_unitwork);
 USER_FUNC(evt_npc_getback_item_entry);
 USER_FUNC(evt_npc_homing_target);
+
+// evt_npc_homing_target's last argument (a plain word, not evaluated).
+typedef enum NpcHomingTargetFlags {
+    NPC_HOMING_TARGET_FLAG_WALL_STOP = 0x4, // end the move when the NPC hits a wall
+} NpcHomingTargetFlags;
 USER_FUNC(evt_npc_jump_position);
 USER_FUNC(evt_npc_kamek_kemuri1);
 USER_FUNC(evt_npc_kamek_kemuri2);

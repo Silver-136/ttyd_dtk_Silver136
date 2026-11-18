@@ -235,10 +235,10 @@ static BattleWeapon weapon_gold_chorobon_attack = {
  * the sound effect played at set points of its idle animation.
  */
 static PoseSoundTiming pose_sound_timing_table[] = {
-    {"CBN_S_1", 0.5833333f, NULL, "SFX_BOSS_G_CHORO_MOVE1", 0, 1},
-    {"CBN_S_1", 0.8333333f, NULL, "SFX_BOSS_G_CHORO_WAIT2", 0, 1},
-    {"CBN_S_1", 1.5833334f, NULL, "SFX_BOSS_G_CHORO_WAIT1", 0, 1},
-    {NULL, 0.0f, NULL, NULL, 0, 1},
+    {"CBN_S_1", 0.5833333f, NULL, "SFX_BOSS_G_CHORO_MOVE1", 0, POSE_SOUND_FLAG_PHASE_VOLUME},
+    {"CBN_S_1", 0.8333333f, NULL, "SFX_BOSS_G_CHORO_WAIT2", 0, POSE_SOUND_FLAG_PHASE_VOLUME},
+    {"CBN_S_1", 1.5833334f, NULL, "SFX_BOSS_G_CHORO_WAIT1", 0, POSE_SOUND_FLAG_PHASE_VOLUME},
+    {NULL, 0.0f, NULL, NULL, 0, POSE_SOUND_FLAG_PHASE_VOLUME},
 };
 
 /**

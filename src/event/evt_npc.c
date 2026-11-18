@@ -497,7 +497,7 @@ USER_FUNC(evt_npc_move_position) {
     s32 sfxFlag;
 
     npc->statusFlags |= NPC_STATUS_UPDATE;
-    if (moveFlags & 0x2) {
+    if (moveFlags & NPC_MOVE_POSITION_FLAG_NO_FIND) {
         npc->statusFlags |= NPC_STATUS_NO_FIND_ONCE;
     }
 
@@ -536,8 +536,8 @@ USER_FUNC(evt_npc_move_position) {
 
     event->userdata[0]++;
 
-    // flag 0x4: bail if blocked more than 5 frames after the move started
-    if ((moveFlags & 0x4) && npc->wallHit && event->userdata[0] > 5) {
+    // NPC_MOVE_POSITION_FLAG_WALL_STOP: bail if blocked more than 5 frames after the move started
+    if ((moveFlags & NPC_MOVE_POSITION_FLAG_WALL_STOP) && npc->wallHit && event->userdata[0] > 5) {
         return EVT_RETURN_DONE;
     }
 
@@ -884,7 +884,7 @@ USER_FUNC(evt_npc_glide_position) {
     s32 sfxFlag;
 
     npc->statusFlags |= NPC_STATUS_UPDATE;
-    if (!(moveFlags & 0x2)) {
+    if (!(moveFlags & NPC_GLIDE_POSITION_FLAG_FIND)) {
         npc->statusFlags |= NPC_STATUS_NO_FIND_ONCE;
     }
 
@@ -920,8 +920,8 @@ USER_FUNC(evt_npc_glide_position) {
         return EVT_RETURN_BLOCK;
     }
 
-    // flag 0x1: bail if blocked
-    if ((moveFlags & 0x1) && npc->wallHit) {
+    // NPC_GLIDE_POSITION_FLAG_WALL_STOP: bail if blocked
+    if ((moveFlags & NPC_GLIDE_POSITION_FLAG_WALL_STOP) && npc->wallHit) {
         return EVT_RETURN_DONE;
     }
 
@@ -1122,7 +1122,7 @@ USER_FUNC(evt_npc_homing_target) {
         finished = TRUE;
     } else if (stopDistance > 0.0f && dist < stopDistance) {
         finished = TRUE;
-    } else if ((moveFlags & 0x4) && npc->wallHit) {
+    } else if ((moveFlags & NPC_HOMING_TARGET_FLAG_WALL_STOP) && npc->wallHit) {
         finished = TRUE;
     }
     if (finished) {
@@ -2638,9 +2638,10 @@ static void _kamek_houki_kemuri(NpcEntry* npc, s32 animState) {
 
 /**
  * Flies Kamek on his broom to x = args[1], z = args[2] like evt_npc_move_position,
- * bobbing up and down by args[3] units over the trip and leaving broom smoke (unless args[6] has 0x8).
- * args[4] time in ms, args[5] speed, args[6] flags:
- * 0x1 re-aims each frame, 0x2 as in evt_npc_move_position, 0x4 stops on a wall at once (no 5-frame grace).
+ * bobbing up and down by args[3] units over the trip and leaving broom smoke (unless args[6] has
+ * NPC_KAMEK_MOVE_POSITION_FLAG_NO_SMOKE). args[4] time in ms, args[5] speed, args[6] NpcKamekMovePositionFlags
+ * (AIM re-aims each frame, NO_FIND as in evt_npc_move_position, WALL_STOP stops on a wall at once, with no 5-frame
+ * grace).
  */
 USER_FUNC(evt_npc_kamek_move_position) {
     EvtWord* args = event->args;
@@ -2664,7 +2665,7 @@ USER_FUNC(evt_npc_kamek_move_position) {
     f32 temp;
 
     npc->statusFlags |= NPC_STATUS_UPDATE;
-    if (moveFlags & 0x2) {
+    if (moveFlags & NPC_KAMEK_MOVE_POSITION_FLAG_NO_FIND) {
         npc->statusFlags |= NPC_STATUS_NO_FIND_ONCE;
     }
 
@@ -2697,8 +2698,8 @@ USER_FUNC(evt_npc_kamek_move_position) {
         }
     }
 
-    // flag 0x4: bail if blocked
-    if ((moveFlags & 0x4) && npc->wallHit) {
+    // NPC_KAMEK_MOVE_POSITION_FLAG_WALL_STOP: bail if blocked
+    if ((moveFlags & NPC_KAMEK_MOVE_POSITION_FLAG_WALL_STOP) && npc->wallHit) {
         return EVT_RETURN_DONE;
     }
 
@@ -2726,8 +2727,8 @@ USER_FUNC(evt_npc_kamek_move_position) {
         }
     }
 
-    // flag 0x1: re-aim at the target unless airborne
-    if ((moveFlags & 0x1) && !(npc->statusFlags & NPC_STATUS_AIRBORNE)) {
+    // NPC_KAMEK_MOVE_POSITION_FLAG_AIM: re-aim at the target unless airborne
+    if ((moveFlags & NPC_KAMEK_MOVE_POSITION_FLAG_AIM) && !(npc->statusFlags & NPC_STATUS_AIRBORNE)) {
         npc->moveDir = angleABf(0.0f, 0.0f, diff.x, diff.z);
     }
 
@@ -2748,7 +2749,7 @@ USER_FUNC(evt_npc_kamek_move_position) {
     sinCurr = (f32)sin(3.1415927f * (2.0f * (((npc->moveSpeed * npc->moveDt) + delta) / dist1)));
     npc->moveOffset.y += (arcHeight * sinCurr) - (arcHeight * sinPrev);
 
-    if ((moveFlags & 8) == 0) {
+    if ((moveFlags & NPC_KAMEK_MOVE_POSITION_FLAG_NO_SMOKE) == 0) {
         _kamek_houki_kemuri(npc, npc->moveAnimState);
     }
 

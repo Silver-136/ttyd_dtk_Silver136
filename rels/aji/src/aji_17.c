@@ -3219,11 +3219,11 @@ static EVT_BEGIN(peach_evt_stg6)
     CALL(evt_msg_print, 0, STRING("peach_aji_312"), 0, STRING("手下２"))
     WAIT_FRAMES(1)
     BEGIN_INLINE_EVENT
-        CALL(evt_npc_move_position, STRING("手下１"), 105, -95, 0, 70, 4)
+        CALL(evt_npc_move_position, STRING("手下１"), 105, -95, 0, 70, NPC_MOVE_POSITION_FLAG_WALL_STOP)
         CALL(evt_npc_set_ry, STRING("手下１"), 270)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
-        CALL(evt_npc_move_position, STRING("手下２"), -105, -95, 0, 60, 4)
+        CALL(evt_npc_move_position, STRING("手下２"), -105, -95, 0, 60, NPC_MOVE_POSITION_FLAG_WALL_STOP)
         CALL(evt_npc_set_ry, STRING("手下２"), 90)
     END_INLINE_EVENT
     WAIT_MS(1400)

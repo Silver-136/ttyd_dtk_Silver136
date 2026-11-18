@@ -538,15 +538,15 @@ static BattleDataEntry data_table[] = {
  * Sound cues of the Bulky Bob-omb: SFX_ENM_HEAVYB_WAIT3 plays at fixed points of the animations S_3A, S_4A.
  */
 static PoseSoundTiming pose_sound_timing_table[] = {
-    {"S_3A", 0.01f, NULL, "SFX_ENM_HEAVYB_WAIT3", 0, 1},
-    {"S_3A", 0.26666668f, NULL, "SFX_ENM_HEAVYB_WAIT3", 0, 1},
-    {"S_3A", 0.53333336f, NULL, "SFX_ENM_HEAVYB_WAIT3", 0, 1},
-    {"S_3A", 0.8f, NULL, "SFX_ENM_HEAVYB_WAIT3", 0, 1},
-    {"S_4A", 0.01f, NULL, "SFX_ENM_HEAVYB_WAIT3", 0, 1},
-    {"S_4A", 0.16666667f, NULL, "SFX_ENM_HEAVYB_WAIT3", 0, 1},
-    {"S_4A", 0.33333334f, NULL, "SFX_ENM_HEAVYB_WAIT3", 0, 1},
-    {"S_4A", 0.5f, NULL, "SFX_ENM_HEAVYB_WAIT3", 0, 1},
-    {NULL, 0.0f, NULL, NULL, 0, 1},
+    {"S_3A", 0.01f, NULL, "SFX_ENM_HEAVYB_WAIT3", 0, POSE_SOUND_FLAG_PHASE_VOLUME},
+    {"S_3A", 0.26666668f, NULL, "SFX_ENM_HEAVYB_WAIT3", 0, POSE_SOUND_FLAG_PHASE_VOLUME},
+    {"S_3A", 0.53333336f, NULL, "SFX_ENM_HEAVYB_WAIT3", 0, POSE_SOUND_FLAG_PHASE_VOLUME},
+    {"S_3A", 0.8f, NULL, "SFX_ENM_HEAVYB_WAIT3", 0, POSE_SOUND_FLAG_PHASE_VOLUME},
+    {"S_4A", 0.01f, NULL, "SFX_ENM_HEAVYB_WAIT3", 0, POSE_SOUND_FLAG_PHASE_VOLUME},
+    {"S_4A", 0.16666667f, NULL, "SFX_ENM_HEAVYB_WAIT3", 0, POSE_SOUND_FLAG_PHASE_VOLUME},
+    {"S_4A", 0.33333334f, NULL, "SFX_ENM_HEAVYB_WAIT3", 0, POSE_SOUND_FLAG_PHASE_VOLUME},
+    {"S_4A", 0.5f, NULL, "SFX_ENM_HEAVYB_WAIT3", 0, POSE_SOUND_FLAG_PHASE_VOLUME},
+    {NULL, 0.0f, NULL, NULL, 0, POSE_SOUND_FLAG_PHASE_VOLUME},
 };
 
 /** Parts of the Bulky Bob-omb: 2 parts (model c_heavy). */

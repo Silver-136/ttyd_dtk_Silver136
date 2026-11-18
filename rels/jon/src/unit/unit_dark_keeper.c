@@ -230,8 +230,8 @@ static BattleWeapon weapon_monban_throw_attack = {
 
 /** Sound table of the Dark Craw: the sound each animation plays while it runs. */
 static PoseSoundTiming pose_sound_timing_table[] = {
-    {"S_2", 0.6666667f, NULL, "SFX_ENM_MONBAN_WAIT1", 0, 1},
-    {NULL, 0.0f, NULL, NULL, 0, 1},
+    {"S_2", 0.6666667f, NULL, "SFX_ENM_MONBAN_WAIT1", 0, POSE_SOUND_FLAG_PHASE_VOLUME},
+    {NULL, 0.0f, NULL, NULL, 0, POSE_SOUND_FLAG_PHASE_VOLUME},
 };
 
 /**

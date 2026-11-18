@@ -266,15 +266,15 @@ static BattleWeapon weapon_basabasa_attack = {
 
 /** Sounds the Swooper's poses play as they animate: wing flaps while waiting and moving. */
 static PoseSoundTiming pose_sound_timing_table[] = {
-    {"BSA_S_1", 0.01f, NULL, "SFX_ENM_BASA_WAIT1", 0, 1},
-    {"BSA_W_1", 0.01f, NULL, "SFX_ENM_BASA_MOVE1", 0, 1},
-    {"BSA_R_1", 0.01f, NULL, "SFX_ENM_BASA_MOVE1", 0, 1},
-    {"BSA_T_1", 0.01f, NULL, "SFX_ENM_BASA_WAIT1", 0, 1},
-    {"BSA_A_1", 0.01f, NULL, "SFX_ENM_BASA_WAIT1", 0, 1},
-    {"BSA_N_1", 0.01f, NULL, "SFX_ENM_BASA_WAIT1", 0, 1},
-    {"BSA_K_1", 0.01f, NULL, "SFX_ENM_BASA_WAIT1", 0, 1},
-    {"BSA_X_1", 0.01f, NULL, "SFX_ENM_BASA_WAIT1", 0, 1},
-    {NULL, 0.0f, NULL, NULL, 0, 1},
+    {"BSA_S_1", 0.01f, NULL, "SFX_ENM_BASA_WAIT1", 0, POSE_SOUND_FLAG_PHASE_VOLUME},
+    {"BSA_W_1", 0.01f, NULL, "SFX_ENM_BASA_MOVE1", 0, POSE_SOUND_FLAG_PHASE_VOLUME},
+    {"BSA_R_1", 0.01f, NULL, "SFX_ENM_BASA_MOVE1", 0, POSE_SOUND_FLAG_PHASE_VOLUME},
+    {"BSA_T_1", 0.01f, NULL, "SFX_ENM_BASA_WAIT1", 0, POSE_SOUND_FLAG_PHASE_VOLUME},
+    {"BSA_A_1", 0.01f, NULL, "SFX_ENM_BASA_WAIT1", 0, POSE_SOUND_FLAG_PHASE_VOLUME},
+    {"BSA_N_1", 0.01f, NULL, "SFX_ENM_BASA_WAIT1", 0, POSE_SOUND_FLAG_PHASE_VOLUME},
+    {"BSA_K_1", 0.01f, NULL, "SFX_ENM_BASA_WAIT1", 0, POSE_SOUND_FLAG_PHASE_VOLUME},
+    {"BSA_X_1", 0.01f, NULL, "SFX_ENM_BASA_WAIT1", 0, POSE_SOUND_FLAG_PHASE_VOLUME},
+    {NULL, 0.0f, NULL, NULL, 0, POSE_SOUND_FLAG_PHASE_VOLUME},
 };
 
 static EVT_BEGIN(ceil_sky_event)

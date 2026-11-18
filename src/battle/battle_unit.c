@@ -2415,7 +2415,8 @@ void BtlUnit_PoseSoundInit(BattleUnitPart* part) {
  * Plays the sound effects tied to a part's current animation:
  * each frame, entries in the part's pose sound table whose time (in seconds of the animation) was just passed
  * fire their sound or callback, restarting on each loop.
- * Entries with flag 1 play at 70% volume when the unit is outside the current phase.
+ * Entries with POSE_SOUND_FLAG_PHASE_VOLUME play at full volume, or at 70% when the owner's attackPhase is not the
+ * current phase; other entries keep the sound's default volume.
  */
 void BtlUnit_ControlPoseSoundMain(BattleUnitPart* part) {
     BattleWork* wp = _battleWorkPointer;
@@ -2471,7 +2472,7 @@ void BtlUnit_ControlPoseSoundMain(BattleUnitPart* part) {
             continue;
         }
         if (entry->time <= state->time && entry->time > state->prevTime) {
-            if (entry->flags & 1) {
+            if (entry->flags & POSE_SOUND_FLAG_PHASE_VOLUME) {
                 if (entry->callback) {
                     id = entry->callback(part->owner, entry, state);
                 } else {

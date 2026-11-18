@@ -494,10 +494,10 @@ EVT_END()
 
 /** Sound table of the Flower Fuzzy: the sound each animation plays while it runs. */
 static PoseSoundTiming pose_sound_timing_table[] = {
-    {"CBN_S_1", 0.5833333f, NULL, "SFX_ENM_CHORO2_MOVE1", 0, 1},
-    {"CBN_S_1", 0.8333333f, NULL, "SFX_ENM_CHORO2_WAIT2", 0, 1},
-    {"CBN_S_1", 1.5833334f, NULL, "SFX_ENM_CHORO2_WAIT1", 0, 1},
-    {NULL, 0.0f, NULL, NULL, 0, 1},
+    {"CBN_S_1", 0.5833333f, NULL, "SFX_ENM_CHORO2_MOVE1", 0, POSE_SOUND_FLAG_PHASE_VOLUME},
+    {"CBN_S_1", 0.8333333f, NULL, "SFX_ENM_CHORO2_WAIT2", 0, POSE_SOUND_FLAG_PHASE_VOLUME},
+    {"CBN_S_1", 1.5833334f, NULL, "SFX_ENM_CHORO2_WAIT1", 0, POSE_SOUND_FLAG_PHASE_VOLUME},
+    {NULL, 0.0f, NULL, NULL, 0, POSE_SOUND_FLAG_PHASE_VOLUME},
 };
 
 /**

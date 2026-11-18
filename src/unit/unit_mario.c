@@ -344,8 +344,8 @@ static s32 mario_pinch_pose_sound_callback(BattleUnit* unit);
 
 #if VERSION <= VERSION_DEMO_JP
 static PoseSoundTiming pose_sound_timing_table[] = {
-    {"M_S_3", 0.25f, mario_pinch_pose_sound_callback, NULL, 0, 1},
-    {NULL, 0.0f, NULL, NULL, 0, 1},
+    {"M_S_3", 0.25f, mario_pinch_pose_sound_callback, NULL, 0, POSE_SOUND_FLAG_PHASE_VOLUME},
+    {NULL, 0.0f, NULL, NULL, 0, POSE_SOUND_FLAG_PHASE_VOLUME},
 };
 #endif
 
@@ -860,8 +860,8 @@ EVT_END()
  */
 #if VERSION >= VERSION_JP
 static PoseSoundTiming pose_sound_timing_table[] = {
-    {"M_S_3", 0.25f, mario_pinch_pose_sound_callback, NULL, 0, 1},
-    {NULL, 0.0f, NULL, NULL, 0, 1},
+    {"M_S_3", 0.25f, mario_pinch_pose_sound_callback, NULL, 0, POSE_SOUND_FLAG_PHASE_VOLUME},
+    {NULL, 0.0f, NULL, NULL, 0, POSE_SOUND_FLAG_PHASE_VOLUME},
 };
 
 static EVT_BEGIN(damage_event)

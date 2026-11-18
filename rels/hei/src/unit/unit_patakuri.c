@@ -212,13 +212,13 @@ static BattleDataEntry data_table_patakuri[] = {
  * the sound effect played at set points of its idle, walk and run animations.
  */
 static PoseSoundTiming pose_sound_timing_table[] = {
-    {"PTK_S_1", 0.01f, NULL, "SFX_ENM_PATAKURI_WAIT1", 0, 1},
-    {"PTK_W_1", 0.01f, NULL, "SFX_ENM_PATAKURI_MOVE1", 0, 1},
-    {"PTK_R_1", 0.01f, NULL, "SFX_ENM_PATAKURI_MOVE1", 0, 1},
-    {"PTK_K_1", 0.01f, NULL, "SFX_ENM_PATAKURI_WAIT1", 0, 1},
-    {"PTK_N_1", 0.01f, NULL, "SFX_ENM_PATAKURI_WAIT1", 0, 1},
-    {"PTK_I_1", 0.01f, NULL, "SFX_ENM_PATAKURI_WAIT1", 0, 1},
-    {NULL, 0.0f, NULL, NULL, 0, 1},
+    {"PTK_S_1", 0.01f, NULL, "SFX_ENM_PATAKURI_WAIT1", 0, POSE_SOUND_FLAG_PHASE_VOLUME},
+    {"PTK_W_1", 0.01f, NULL, "SFX_ENM_PATAKURI_MOVE1", 0, POSE_SOUND_FLAG_PHASE_VOLUME},
+    {"PTK_R_1", 0.01f, NULL, "SFX_ENM_PATAKURI_MOVE1", 0, POSE_SOUND_FLAG_PHASE_VOLUME},
+    {"PTK_K_1", 0.01f, NULL, "SFX_ENM_PATAKURI_WAIT1", 0, POSE_SOUND_FLAG_PHASE_VOLUME},
+    {"PTK_N_1", 0.01f, NULL, "SFX_ENM_PATAKURI_WAIT1", 0, POSE_SOUND_FLAG_PHASE_VOLUME},
+    {"PTK_I_1", 0.01f, NULL, "SFX_ENM_PATAKURI_WAIT1", 0, POSE_SOUND_FLAG_PHASE_VOLUME},
+    {NULL, 0.0f, NULL, NULL, 0, POSE_SOUND_FLAG_PHASE_VOLUME},
 };
 
 /**

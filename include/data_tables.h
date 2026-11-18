@@ -16,7 +16,7 @@ typedef struct PoseSoundTiming {
     void* callback;       // 0x8
     const char* sfxName;  // 0xC
     s16 pitch;            // 0x10
-    u16 flags;            // 0x12
+    u16 flags;            // 0x12, BtlPoseSoundFlags (battle/battle_unit.h)
 } PoseSoundTiming;
 
 /* evt_ext_entry: ExtTexInfo tables (driver/extdrv.h) */

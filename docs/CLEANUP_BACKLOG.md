@@ -159,8 +159,9 @@ in `docs/FAKES.md` and in the mweppc review record.
   2026-11-08 after community feedback: more clutter than help, since text editing tools already show the
   messages; the 95 existing ones stay).
 - Raw flag masks: about 230 bit tests/sets by number are left outside sound tables and counter/byte arithmetic
-  (2026-10-26, down from about 1,800). Left: words whose bits mean different things per caller (evt_npc move
-  functions' moveFlags), evt_mobj typeData words (per object kind; the switch block's high bits are never read in C),
+  (2026-10-26, down from about 1,800). Left: words whose bits mean different things per caller (the evt_npc move
+  commands' moveFlags now have one enum per command, GC3 2026-11-17; move_position bit 0x1, passed by 300
+  calls, has no reader and stays `1`), evt_mobj typeData words (per object kind; the switch block's high bits are never read in C),
   tou.c's own FighterData copy (tou2.c has the FighterFlags names), matrix-part masks in animdrv (fine as numbers),
   and bits with no setter or no known meaning (kept numeric: MapObjectFlags 0x20, GlobalWorkFlags 0x40,
   MarioDispFlags bit 29, PartyFlags bits 15/18, MarioTrigFlags bit 15, HitAttributes bit 10, ItemEntry flags bit 7,
@@ -184,8 +185,9 @@ in `docs/FAKES.md` and in the mweppc review record.
   shop restock clear (u16 field, so `~1` is exact). Its scan (scratchpad GC0\scan2.py, which adds `*x` and bare
   local / static forms) counts 31 field and 72 local hits left. The locals are mostly per-function argument words,
   return-value accumulators, index masks and animdrv matrix bits. Kept numeric with reasons:
-  compareCamRoad's return bits (cmpFlags is never read), PoseSoundTiming.flags bit 0 (every table entry sets it),
-  las_04 fire bar bits 0x1/0x2 and MoamoaSprite 0x2 and PunidrvPose 0x4/0x10 (read, never set),
+  compareCamRoad's return bits (cmpFlags is never read; each bit's trigger is in its doc comment).
+  PoseSoundTiming.flags bit 0 is named POSE_SOUND_FLAG_PHASE_VOLUME (GC3, 2026-11-17: full volume, 70% outside the
+  owner's phase; all 511 table entries set it). Also kept numeric: las_04 fire bar bits 0x1/0x2 and MoamoaSprite 0x2 and PunidrvPose 0x4/0x10 (read, never set),
   Senkaron `&= 0xFFFE` (u32 field: also clears the upper half, not `~1`), YuuRankingWork dispFlags 0x2 (never
   read), tou_03 kyaku 0x1 and evt_yuunpc pose 0x1 (only set), eff_peach_fukidashi `& 3` (a button
   index), tst unit_yoshi ac flags (uncalled; the AC is not identified). Also kept numeric with reasons: EventEntry 0x80 (tested only) and 0x40 (set by inline/sibling events, never

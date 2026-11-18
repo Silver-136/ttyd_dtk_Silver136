@@ -3192,7 +3192,7 @@ static EVT_BEGIN(usu_00_koopa_second_evt)
     END_INLINE_EVENT
     CALL(evt_cam3d_evt_set, 75, 116, 612, 75, 50, 268, 1500, EASING_SINE_IN_OUT)
     CALL(evt_npc_flag_onoff, 1, STRING("カンブー"), NPC_FLAG_NO_HIT)
-    CALL(evt_npc_move_position, STRING("カンブー"), 75, 275, 1500, 0, 4)
+    CALL(evt_npc_move_position, STRING("カンブー"), 75, 275, 1500, 0, NPC_MOVE_POSITION_FLAG_WALL_STOP)
     WAIT_MS(300)
     CALL(evt_npc_flag_onoff, 0, STRING("カンブー"), NPC_FLAG_NO_HIT)
     CALL(evt_npc_get_position, STRING("カンブー"), LW(0), LW(1), LW(2))

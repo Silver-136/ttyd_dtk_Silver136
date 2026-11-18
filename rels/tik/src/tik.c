@@ -128,7 +128,7 @@ EVT_BEGIN(tik_villager_urouro)
         CALL(evt_sub_get_dir, LW(10), LW(12), LW(0), LW(2), LW(3))
         CALL(evt_npc_set_ry, STRING("me"), LW(3))
         WAIT_MS(500)
-        CALL(evt_npc_move_position, STRING("me"), LW(0), LW(2), 0, FLOAT(30.0f), 4)
+        CALL(evt_npc_move_position, STRING("me"), LW(0), LW(2), 0, FLOAT(30.0f), NPC_MOVE_POSITION_FLAG_WALL_STOP)
         WAIT_MS(1000)
     END_LOOP
 EVT_END()
