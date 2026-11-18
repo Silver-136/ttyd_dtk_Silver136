@@ -397,8 +397,9 @@ function names) and `strupr` (a C library name).
 
 ## Inline helper names (2026-11-17)
 
-220 names of `static inline` (and a few plain `inline`) helpers in the game code that no map lists and no table
-above names. An inline function leaves no symbol when every call is inlined, so no map can name it: the names
+218 names of `static inline` (and a few plain `inline`) helpers in the game code that no map lists and no table
+above names (GE4, 2026-11-18: mri_puni's puniModeCheckPos and puniMapDataSetI were copies of the file's own
+puniModePrehagure and puniMapDataSet, whose out-of-line copies the REL keeps; the callers call those now). An inline function leaves no symbol when every call is inlined, so no map can name it: the names
 were chosen when the code was decompiled (LLCOOLT or this fork) and are not original. Each helper reads as
 code a programmer would write (a small getter, a repeated draw or copy step, a private sine), so it is not
 listed as a fake; where a test was made, the written-out form builds different code (GB9: setChanMatColor,
@@ -529,7 +530,7 @@ helper: no written-out form builds the same; it should be a FAKES row.
 | rels/gor/src/gor_irai.c | `iraiLineY` |
 | rels/hei/src/hei_10.c | `chb_sin`, `chb_cos` |
 | rels/las/src/unit/unit_boss_black_peach.c | `hand_pose_inl` (1) |
-| rels/mri/src/mri_puni.c | `puniModeDeadSfx`, `puniModeWonderSfx`, `puniModeCheckPos`, `puniMapDataSetI`, `puni_swget_idx`, `puniFloor`, `puni_exit_swset`, `puniSpreadLevel`, `puniTrapStandIn` |
+| rels/mri/src/mri_puni.c | `puniModeDeadSfx`, `puniModeWonderSfx`, `puni_swget_idx`, `puniFloor`, `puni_exit_swset`, `puniSpreadLevel`, `puniTrapStandIn` |
 | rels/muj/src/muj_00.c | `sinf_l`, `cosf_l`, `orbit_update` (1) |
 | rels/rsh/src/rsh_06.c | `moa_cos`, `moa_sinx`, `moa_cosx` |
 | rels/sys/src/sys.c | `setChanMatColor` |

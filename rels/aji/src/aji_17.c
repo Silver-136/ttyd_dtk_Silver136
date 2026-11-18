@@ -1215,15 +1215,7 @@ static void disp_horogram(CameraId cameraId, void* param) {
         GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_A0, GX_CA_ZERO, GX_CA_TEXA, GX_CA_ZERO);
         GXSetCullMode(GX_CULL_NONE);
         GXLoadPosMtxImm(mtx, GX_PNMTX0);
-        GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-        GXPosition3f32(-28.0f, 55.0f, 0.0f);
-        GXTexCoord2f32(0.0f, 0.0f);
-        GXPosition3f32(28.0f, 55.0f, 0.0f);
-        GXTexCoord2f32(1.0f, 0.0f);
-        GXPosition3f32(28.0f, 0.0f, 0.0f);
-        GXTexCoord2f32(1.0f, 1.0f);
-        GXPosition3f32(-28.0f, 0.0f, 0.0f);
-        GXTexCoord2f32(0.0f, 1.0f);
+        polygon(-28.0f, 55.0f, 56.0f, 55.0f, 1.0f, 1.0f);
         GXSetCullMode(cull);
     }
 }

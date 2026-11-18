@@ -88,8 +88,7 @@ void statusWinInit(void) {
     wp->closeY = 334.0f;
     wp->idle = 0;
     wp->forceTimer = 0;
-    wp->flags &= ~(STATUS_WINDOW_FLAG_CLOSED | STATUS_WINDOW_FLAG_CLOSE_REQ);
-    wp->flags |= (STATUS_WINDOW_FLAG_OPEN | STATUS_WINDOW_FLAG_OPEN_REQ);
+    statusWinOpen();
 }
 
 /** Resets the HUD's idle timers on a map change and turns a pending forced open/close into a normal open/close. */
@@ -98,19 +97,15 @@ void statusWinReInit(void) {
     wp->forceTimer = 0;
     if (wp->flags & STATUS_WINDOW_FLAG_FORCE_OPEN) {
         wp->flags &= ~STATUS_WINDOW_FLAG_FORCE_OPEN;
-        wp->flags &= ~(STATUS_WINDOW_FLAG_CLOSED | STATUS_WINDOW_FLAG_CLOSE_REQ);
-        wp->flags |= (STATUS_WINDOW_FLAG_OPEN | STATUS_WINDOW_FLAG_OPEN_REQ);
+        statusWinOpen();
     } else if (wp->flags & STATUS_WINDOW_FLAG_OPEN) {
-        wp->flags &= ~(STATUS_WINDOW_FLAG_CLOSED | STATUS_WINDOW_FLAG_CLOSE_REQ);
-        wp->flags |= (STATUS_WINDOW_FLAG_OPEN | STATUS_WINDOW_FLAG_OPEN_REQ);
+        statusWinOpen();
     }
     if (wp->flags & STATUS_WINDOW_FLAG_FORCE_CLOSE) {
         wp->flags &= ~STATUS_WINDOW_FLAG_FORCE_CLOSE;
-        wp->flags |= (STATUS_WINDOW_FLAG_CLOSED | STATUS_WINDOW_FLAG_CLOSE_REQ);
-        wp->flags &= ~(STATUS_WINDOW_FLAG_OPEN | STATUS_WINDOW_FLAG_OPEN_REQ);
+        statusWinClose();
     } else if (wp->flags & STATUS_WINDOW_FLAG_CLOSED) {
-        wp->flags |= (STATUS_WINDOW_FLAG_CLOSED | STATUS_WINDOW_FLAG_CLOSE_REQ);
-        wp->flags &= ~(STATUS_WINDOW_FLAG_OPEN | STATUS_WINDOW_FLAG_OPEN_REQ);
+        statusWinClose();
     }
 }
 
