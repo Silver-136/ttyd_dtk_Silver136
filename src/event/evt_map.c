@@ -136,6 +136,27 @@ USER_FUNC(evt_map_set_blend) {
     return EVT_RETURN_DONE;
 }
 
+/** Returns the map blend colour (args[0] 0: mapGetBlend, otherwise mapGetBlend2) as RGBA in args[1] .. args[4]. */
+// Original name, size (0x9c) and slot (between evt_map_set_blend and evt_map_blend_off) from the JP demo map
+// (UNUSED there: no script uses it). Body as evt_map_set_blend in the other direction (same size whether args[0]
+// is read into a local or tested directly); with it the JP demo .sbss2 numbering between evt_map_set_blend and
+// evt_mapobj_color closes (6 labels short before).
+USER_FUNC(evt_map_get_blend) {
+    EvtWord* args = event->args;
+    s32 type = evtGetValue(event, args[0]);
+    GXColor color;
+    if (type == 0) {
+        mapGetBlend(&color);
+    } else {
+        mapGetBlend2(&color);
+    }
+    evtSetValue(event, args[1], color.r);
+    evtSetValue(event, args[2], color.g);
+    evtSetValue(event, args[3], color.b);
+    evtSetValue(event, args[4], color.a);
+    return EVT_RETURN_DONE;
+}
+
 /** Turns off the map blend colour chosen by args[0] (0 first, else second). */
 USER_FUNC(evt_map_blend_off) {
     if (evtGetValue(event, event->args[0]) == 0) {

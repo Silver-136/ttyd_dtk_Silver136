@@ -2385,6 +2385,25 @@ static BOOL BattleAudienceApSrcEntry(void) {
     return TRUE;
 }
 
+/** Returns how many Star Power sparkles are in flight (active slots of the 100). */
+// Original name, size (0x58) and slot (between BattleAudienceApSrcEntry and BattleAudienceWinCtrlProcess) from the
+// JP demo map (UNUSED there: nothing calls it). The loop is BattleAudienceApSrcCtrlProcess's written-out count.
+// Not fixed by the bytes: the counter type (s16 here; s8 gives the same size, s32 is 0x54), the return type and
+// static (as its neighbours).
+static s32 BattleAudienceGetAPSrcNum(void) {
+    BattleAudience* base = BattleAudienceBaseGetPtr();
+    s16 cnt;
+    s32 i;
+
+    cnt = 0;
+    for (i = 0; i < AUDIENCE_ITEM_MAX; i++) {
+        if (base->starpower[i].flags & AUDIENCE_STAR_FLAG_ACTIVE) {
+            cnt++;
+        }
+    }
+    return cnt;
+}
+
 /**
  * Per-frame update of the audience-count window: the number shown moves toward the real count by a tenth of
  * the gap each frame (at least 0.1), and the window slides in from the left over 15 frames

@@ -1339,6 +1339,14 @@ static void mot_shadow(void) {
     }
 }
 
+/** Empty motion function that no motion table slot holds. */
+// Original name, size (0x20) and slot (between mot_shadow and mot_partyUse) from the JP demo map (UNUSED there:
+// nothing refers to it). Body as its empty siblings mot_partyUse and mot_dummy (same size); with it the JP demo
+// .sdata2 numbering between mot_bottomless and mot_kaze closes (one label short before). Static as its siblings.
+static void mot_zspin(void) {
+    marioGetPtr();
+}
+
 /** Empty motion slot MARIO_MOTION_PARTY_USE; nothing in the tree enters it. */
 static void mot_partyUse(void) {
     marioGetPtr();
