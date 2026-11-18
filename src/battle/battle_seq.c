@@ -2683,7 +2683,8 @@ BOOL BattleWaitAllActiveEvtEnd_NoBgSetEndWait(BattleWork* wp) {
     for (i = 0; i < BATTLE_UNIT_MAX; i++) {
         unit = BattleGetUnitPtr(w, i);
         if (unit) {
-            // FAKE: while loops that always break on the first pass, used as ifs; plain if/else changes the object
+            // Each test is a loop that always breaks on its first pass: the target has the loop layout (a jump to the
+            // test at the bottom), which an if/else does not give.
             while (unit->phaseEventId) {
                 if (evtCheckID(unit->phaseEventId)) {
                     done = FALSE;

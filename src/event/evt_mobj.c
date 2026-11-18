@@ -1511,15 +1511,15 @@ USER_FUNC(evt_mobj_lv_blk) {
 }
 
 /**
- * Casts a ray straight down from 0.5 above map object m, as long as its fall speed plus 1; returns the collision object
- * hit (as an EvtWord) or 0.
+ * Casts a ray straight down from 0.5 above map object m, as long as its fall speed plus 1; returns nonzero (the
+ * collision object hit) or 0.
  */
-// FAKE: the hit pointer is tested as a signed word (cmpwi); a pointer or BOOL test compiles to cmplwi
-// Original name and size (0x7c) from the JP demo map (UNUSED there: every call is inlined).
-EvtWord _mobj_check_ground(MapObjectEntry* m) {
+// Original name and size (0x7c) from the JP demo map (UNUSED there: every call is inlined). The callers test the
+// result as a signed integer (cmpwi), so the return type is an integer, not the hit pointer.
+BOOL _mobj_check_ground(MapObjectEntry* m) {
     f32 hx, hy, hz, dist, nx, ny, nz;
     dist = 1.0f + (f32)__fabs(m->velocity.y);
-    return (EvtWord)hitCheckFilter(NULL, m->position.x, m->position.y + 0.5f, m->position.z, 0.0f, -1.0f, 0.0f, &hx, &hy, &hz, &dist, &nx, &ny, &nz);
+    return (BOOL)hitCheckFilter(NULL, m->position.x, m->position.y + 0.5f, m->position.z, 0.0f, -1.0f, 0.0f, &hx, &hy, &hz, &dist, &nx, &ny, &nz);
 }
 
 /**
