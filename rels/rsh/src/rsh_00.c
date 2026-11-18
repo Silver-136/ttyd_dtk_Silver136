@@ -42,9 +42,10 @@
 #include "moamoa.h"
 
 // The cab-window Smorg sprites: smaller records than the field swarm's Moamoa/MoamoaWork in moamoa.h.
-// MoamoaSprite.flags. Bit 1 (always use the c_n_moa_b model, moamoa_pose_change) is read but never set.
+// MoamoaSprite.flags
 enum {
     MOAMOA_SPRITE_FLAG_SIDEWAYS = 1, // the pose is turned to face sideways (done once); the pop-up then rises straight
+    MOAMOA_SPRITE_FLAG_MODEL_B_UNUSED = 1 << 1, // moamoa_pose_change always uses the c_n_moa_b model; read, never set
 };
 
 typedef struct MoamoaSprite {
@@ -264,14 +265,14 @@ static void moamoa_pose_main(void) {
 }
 
 /**
- * Switches one Smorg sprite to the named model/animation pair from the table (the b model is forced when flag 2
- * is set) and restarts its animation clock; does nothing if it is already playing it.
+ * Switches one Smorg sprite to the named model/animation pair from the table (the b model is forced by
+ * MOAMOA_SPRITE_FLAG_MODEL_B_UNUSED) and restarts its animation clock; does nothing if it is already playing it.
  */
 static void moamoa_pose_change(MoamoaSprite* moa, const char* model, const char* anim) {
     MoamoaPoseDef* def = wp->defs;
     s32 i;
 
-    if (moa->flags & 2) {
+    if (moa->flags & MOAMOA_SPRITE_FLAG_MODEL_B_UNUSED) {
         model = "c_n_moa_b";
     }
     for (i = 0; i < wp->numDefs; i++, def++) {

@@ -253,7 +253,7 @@ void BattleStatusIconDisp(CameraId camId, void* param) {
         p.z += icon->screenSpaceOffset.z;
         p.z -= (f32)(-(i * 2));
         if (!(e->flags & STATUS_ICON_NO_PLATE)) {
-            if (!(icon->flags & 1)) {
+            if (!(icon->flags & STATUS_ICON_WORK_FLAG_FLIP_PLATE_UNUSED)) {
                 btlDispTexPlane(p.x, p.y, p.z, 0.8f, 0.8f, VERSION_PICK(0x23, 0x30), col, 0);
             } else {
                 btlDispTexPlane(p.x, p.y, p.z, 0.8f, -0.8f, VERSION_PICK(0x23, 0x30), col, 0);

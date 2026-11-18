@@ -49,6 +49,13 @@ typedef enum Language {
     LANGUAGE_DU = 6, // "du": 7th prefix in effdrv, seq_mapchange and sys; cardmgr, evt_msg, muj_02 treat it as US
 } Language;
 
+// GlobalWork.soundMode: the surround choice of the sound option (seq_load); mono or stereo follows OSGetSoundMode.
+// seq_mapchange selects SND_OUTPUTMODE_SURROUND by it outside mono.
+enum {
+    GW_SOUND_MODE_NO_SURROUND = 0, // the mono or stereo option
+    GW_SOUND_MODE_SURROUND = 1,    // the surround option
+};
+
 // GlobalWork.resetType
 enum {
     RESET_TYPE_NONE = 0,
@@ -111,7 +118,7 @@ typedef struct GlobalWork {
     OSTime saveTime; // 0x11E8, OSGetTime of the last save
     s32 saveCount; // 0x11F0, number of saves
     u8 pad_11F4[0x1274 - 0x11F4]; // 0x11F4
-    s32 soundMode; // 0x1274, sound output option, kept in the save metadata
+    s32 soundMode; // 0x1274, GW_SOUND_MODE_*, kept in the save metadata
     s32 resetType; // 0x1278, 0 = no reset, 1 = soft reset, 2 = menu
     BOOL resetButtonDown; // 0x127C, reset button was down (mariost.c)
     BOOL softResetWait; // 0x1280, B+X+Start is held (viPostCallback)

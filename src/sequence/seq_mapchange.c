@@ -24,6 +24,7 @@
 #include "mario/mariost.h"
 #include "party.h"
 #include "pmario_sound.h"
+#include "sound.h"
 #include <stdio.h>
 #include <string.h>
 #include "evt/evt_lottery.h"
@@ -239,11 +240,11 @@ void seq_mapChangeMain(SequenceWork* work) {
                 _unload(gp->currentMapName, _next_map, _next_bero);
                 if (strcmp(_next_map, "dmo_00") && strcmp(_next_map, "title")) {
                     if (OSGetSoundMode() == OS_SOUND_MODE_MONO) {
-                        SoundSetOutputMode(0);
-                    } else if (gp->soundMode == 0) {
-                        SoundSetOutputMode(1);
+                        SoundSetOutputMode(SND_OUTPUTMODE_MONO);
+                    } else if (gp->soundMode == GW_SOUND_MODE_NO_SURROUND) {
+                        SoundSetOutputMode(SND_OUTPUTMODE_STEREO);
                     } else {
-                        SoundSetOutputMode(2);
+                        SoundSetOutputMode(SND_OUTPUTMODE_SURROUND);
                     }
                 }
 #endif

@@ -51,8 +51,10 @@ typedef struct FirebarSetup {
     f32 param;
     f32 radius;
 } FirebarSetup; // param: type 0 start angle, type 1 end x
-// FirebarWork.flags. Bits 0 (ball positions not updated) and 1 (no hit check) are read but never set.
+// FirebarWork.flags. Bits 0 and 1 are read but never set.
 enum {
+    FIREBAR_FLAG_NO_BALL_MOVE_UNUSED = 1 << 0, // the ball positions are not updated (both bar types' main loops)
+    FIREBAR_FLAG_NO_HIT_UNUSED = 1 << 1,       // the hit checks return 0 (_firebar_hitCheck and the type 1 check)
     FIREBAR_FLAG_MARIO_HURT = 1 << 2, // Mario is in a damage motion or invincible: the bar does not hit him
     FIREBAR_FLAG_REMOVE = 1 << 3,     // firebar_cb after the tenth jump over a rotating bar: the bar is deleted
 };
@@ -386,7 +388,7 @@ EVT_END()
 /**
  * Returns 1 when Mario touches fire bar ball `ball`: vertically within 0.8 * 15 * scale above it or his collision
  * height below it, and horizontally within a quarter of his collision width plus half the scaled ball spacing, while
- * Vivian is not sinking or hidden. Returns 0 while the bar has flag 2 or FIREBAR_FLAG_MARIO_HURT.
+ * Vivian is not sinking or hidden. Returns 0 while the bar has FIREBAR_FLAG_NO_HIT_UNUSED or FIREBAR_FLAG_MARIO_HURT.
  */
 static s32 _firebar_hitCheck(FirebarWork* wp, FirebarBall* ball) {
     MarioWork* mario = marioGetPtr();
@@ -395,7 +397,7 @@ static s32 _firebar_hitCheck(FirebarWork* wp, FirebarBall* ball) {
     f32 dy;
     BOOL near = FALSE;
 
-    if (wp->flags & (2 | FIREBAR_FLAG_MARIO_HURT)) {
+    if (wp->flags & (FIREBAR_FLAG_NO_HIT_UNUSED | FIREBAR_FLAG_MARIO_HURT)) {
         return 0;
     }
     dx = mario->position.x - ball->pos.x;
@@ -434,7 +436,7 @@ static s32 _firebar_hitCheck2(FirebarWork* wp) {
     f32 r;
     BOOL near;
 
-    if (wp->flags & (2 | FIREBAR_FLAG_MARIO_HURT)) {
+    if (wp->flags & (FIREBAR_FLAG_NO_HIT_UNUSED | FIREBAR_FLAG_MARIO_HURT)) {
         return 0;
     }
     dy = mario->position.y - wp->pos.y;
@@ -492,7 +494,7 @@ static void _firebar_rot(FirebarWork* wp) {
     sin(6.2831855f * wp->shadowAngle / 360.0f);
     for (i = 0; i < wp->count; i++, ball++) {
         animPoseMain(ball->pose);
-        if (!(wp->flags & 1)) {
+        if (!(wp->flags & FIREBAR_FLAG_NO_BALL_MOVE_UNUSED)) {
             r = wp->scale * (i * wp->spacing) + wp->radius;
             s = sin(wp->angle);
             c = cos(wp->angle);
@@ -516,7 +518,7 @@ static void _firebar_rot(FirebarWork* wp) {
         if (wp->callback != NULL) {
             wp->callback(wp, 2);
         }
-    } else if (dist > wp->radius && dist < limit && !(wp->flags & (2 | FIREBAR_FLAG_MARIO_HURT)) && hit == 0 &&
+    } else if (dist > wp->radius && dist < limit && !(wp->flags & (FIREBAR_FLAG_NO_HIT_UNUSED | FIREBAR_FLAG_MARIO_HURT)) && hit == 0 &&
                vivianGetStatus() != VIVIAN_STATUS_SINKING && vivianGetStatus() != VIVIAN_STATUS_HIDDEN) {
         if (wp->speed > 0.0f) {
             if (wp->prevAngle < 0.0f && diff > 0.0f && wp->pos.y < mario->position.y) {
@@ -584,7 +586,7 @@ static void _firebar_trans(FirebarWork* wp) {
     wp->pos.x += wp->speed;
     for (i = 0; i < wp->count; i++, ball++) {
         animPoseMain(ball->pose);
-        if (!(wp->flags & 1)) {
+        if (!(wp->flags & FIREBAR_FLAG_NO_BALL_MOVE_UNUSED)) {
             dz = k * (i * wp->spacing);
             dy = 0.5f * (20.0f * (1.0f - wp->scale));
             ball->pos.x = wp->pos.x;
@@ -602,7 +604,7 @@ static void _firebar_trans(FirebarWork* wp) {
             if (wp->callback != NULL) {
                 wp->callback(wp, 2);
             }
-        } else if (!(wp->flags & (2 | FIREBAR_FLAG_MARIO_HURT)) && hit == 0 &&
+        } else if (!(wp->flags & (FIREBAR_FLAG_NO_HIT_UNUSED | FIREBAR_FLAG_MARIO_HURT)) && hit == 0 &&
                    vivianGetStatus() != VIVIAN_STATUS_SINKING && vivianGetStatus() != VIVIAN_STATUS_HIDDEN) {
             if (wp->prevAngle < 0.0f && diff > 0.0f && wp->pos.y < mario->position.y) {
                 wp->hitCount++;

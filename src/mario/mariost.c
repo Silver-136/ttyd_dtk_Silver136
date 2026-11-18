@@ -55,6 +55,7 @@
 #include "nameent.h"
 #include "pmario_sound.h"
 #include "romfont.h"
+#include "sound.h"
 #include "statuswindow.h"
 #include "system.h"
 
@@ -360,7 +361,7 @@ void marioStInit(void) {
     gp->flags |= GW_FLAG_E3;
 #endif
     gp->rumbleEnabled = 1;
-    gp->soundMode = 0;
+    gp->soundMode = GW_SOUND_MODE_NO_SURROUND;
 
     gp->playTime = 0;
     gp->retraceDeltaTime = 0;
@@ -497,11 +498,11 @@ void marioStInit(void) {
     winMgrInit();
     seqInit_MARIOSTORY();
     seqSetSeq(SEQ_LOGO, NULL, NULL);
-    gp->soundMode = 0;
+    gp->soundMode = GW_SOUND_MODE_NO_SURROUND;
     if (OSGetSoundMode() == OS_SOUND_MODE_MONO) {
-        SoundSetOutputMode(0);
+        SoundSetOutputMode(SND_OUTPUTMODE_MONO);
     } else {
-        SoundSetOutputMode(1);
+        SoundSetOutputMode(SND_OUTPUTMODE_STEREO);
     }
 #if VERSION <= VERSION_DEMO_JP || VERSION == VERSION_DEMO_US_2 || VERSION == VERSION_DEMO_EU
     none_key = OSGetTime(); // every demo starts the idle timer

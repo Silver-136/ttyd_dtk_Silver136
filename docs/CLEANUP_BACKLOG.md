@@ -189,11 +189,13 @@ in `docs/FAKES.md` and in the mweppc review record.
   return-value accumulators, index masks and animdrv matrix bits. Kept numeric with reasons:
   compareCamRoad's return bits (cmpFlags is never read; each bit's trigger is in its doc comment).
   PoseSoundTiming.flags bit 0 is named POSE_SOUND_FLAG_PHASE_VOLUME (GC3, 2026-11-17: full volume, 70% outside the
-  owner's phase; all 511 table entries set it). Also kept numeric: las_04 fire bar bits 0x1/0x2 and MoamoaSprite 0x2 and PunidrvPose 0x4/0x10 (read, never set),
+  owner's phase; all 511 table entries set it). GD11 (2026-11-18) named the read-but-never-set bits whose reader fixes the meaning, with `_UNUSED` as
+  PART_BLUR_SKIP_FRAME_UNUSED: las_04 FIREBAR_FLAG_NO_BALL_MOVE / NO_HIT, PunidrvPose NO_SHADOW / SHADOW_POS (extdrv's
+  bits), MOAMOA_SPRITE_FLAG_MODEL_B, STATUS_ICON_WORK_FLAG_FLIP_PLATE (BattleWorkStatusIcon.flags). Also kept numeric:
   Senkaron `&= 0xFFFE` (u32 field: also clears the upper half, not `~1`), YuuRankingWork dispFlags 0x2 (never
   read), tou_03 kyaku 0x1 and evt_yuunpc pose 0x1 (only set), eff_peach_fukidashi `& 3` (a button
   index), tst unit_yoshi ac flags (uncalled; the AC is not identified). Also kept numeric with reasons: EventEntry 0x80 (tested only) and 0x40 (set by inline/sibling events, never
-  read), SeqEndDispFlags 0x1 (only cleared), BattleWorkStatusIcon.flags 0x1 (read only), FieldBattleData
+  read), SeqEndDispFlags 0x1 (only cleared), FieldBattleData
   firstAttackFlags (may be written by fbatHitCheck's 16-byte copy), party_bomhei 0x4 (read only). GC8
   (2026-11-17) named WindowEntry.tailMode WindowTailFlags (DRAW / RIGHT / TOP / SCREEN_POS, evt_msg setters,
   msgdrv and windowDispGX_Message readers; 0x2 is set with every tail mode and never tested alone, so it stays `2`)

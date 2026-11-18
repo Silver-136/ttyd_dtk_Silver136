@@ -21,6 +21,7 @@
 #include "driver/animdrv.h"
 #include "statuswindow.h"
 #include "battle/battle_stage.h"
+#include "battle/battle_sub.h"
 
 // Separate capacities: unit-slot indexes versus the after-reaction queue.
 enum { BATTLE_UNIT_SLOT_COUNT = 64, BATTLE_AFTER_REACTION_COUNT = 64 };
@@ -944,7 +945,7 @@ void BattleAfterReactionQueueInit(void) {
     BattleAfterReaction* base = _battleWorkPointer->afterReactions;
     s32 i;
     for (i = 0; i < BATTLE_AFTER_REACTION_COUNT; i++) {
-        base[i].unitId = -1;
+        base[i].unitId = UNIT_ID_NONE;
         base[i].tag = 0;
     }
 }
@@ -957,12 +958,12 @@ void BattleAfterReactionEntry(s32 unitId, s32 tag) {
     BattleAfterReaction* base = _battleWorkPointer->afterReactions;
     s32 i;
     for (i = 0; i < BATTLE_AFTER_REACTION_COUNT; i++) {
-        if (base[i].unitId != -1 && unitId == base[i].unitId) {
+        if (base[i].unitId != UNIT_ID_NONE && unitId == base[i].unitId) {
             return;
         }
     }
     for (i = 0; i < BATTLE_AFTER_REACTION_COUNT; i++) {
-        if (base[i].unitId == -1) {
+        if (base[i].unitId == UNIT_ID_NONE) {
             break;
         }
     }
@@ -978,12 +979,12 @@ void BattleAfterReactionRelease(s32 unitId, s32 tag) {
     s32 j;
     BattleAfterReaction* base = _battleWorkPointer->afterReactions;
     for (i = 0; i < BATTLE_AFTER_REACTION_COUNT; i++) {
-        if (base[i].unitId != -1 && unitId == base[i].unitId && tag == base[i].tag) {
+        if (base[i].unitId != UNIT_ID_NONE && unitId == base[i].unitId && tag == base[i].tag) {
             for (j = i; j < BATTLE_AFTER_REACTION_COUNT - 1; j++) {
                 base[j].unitId = base[j + 1].unitId;
                 base[j].tag = base[j + 1].tag;
             }
-            base[BATTLE_AFTER_REACTION_COUNT - 1].unitId = -1;
+            base[BATTLE_AFTER_REACTION_COUNT - 1].unitId = UNIT_ID_NONE;
             base[BATTLE_AFTER_REACTION_COUNT - 1].tag = 0;
             i--;
         }

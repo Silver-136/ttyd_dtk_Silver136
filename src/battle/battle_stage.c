@@ -295,7 +295,7 @@ static void BattleStageDispDark(CameraId camId, void* param) {
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
     GXSetNumChans(1);
-    GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_VTX, GX_SRC_VTX, 0, GX_DF_CLAMP, GX_AF_NONE);
+    GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_VTX, GX_SRC_VTX, GX_LIGHT_NULL, GX_DF_CLAMP, GX_AF_NONE);
     GXSetNumTexGens(0);
     GXLoadPosMtxImm(cam->view, GX_PNMTX0);
     GXSetNumTevStages(1);
@@ -342,7 +342,7 @@ static void BattleStageDispLight(CameraId camId, void* param) {
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
     GXSetNumChans(1);
-    GXSetChanCtrl(GX_ALPHA0, GX_FALSE, GX_SRC_VTX, GX_SRC_VTX, 0, GX_DF_CLAMP, GX_AF_NONE);
+    GXSetChanCtrl(GX_ALPHA0, GX_FALSE, GX_SRC_VTX, GX_SRC_VTX, GX_LIGHT_NULL, GX_DF_CLAMP, GX_AF_NONE);
     GXSetNumTexGens(0);
     GXSetNumTevStages(1);
     GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
@@ -812,14 +812,14 @@ static void batSpotDisp(CameraId camId, void* param) {
             GXSetColorUpdate(GX_FALSE);
             GXSetZMode(GX_TRUE, GX_LEQUAL, GX_FALSE);
             GXSetBlendMode(GX_BM_NONE, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
-            GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_VTX, 0, GX_DF_CLAMP, GX_AF_NONE);
+            GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_VTX, GX_LIGHT_NULL, GX_DF_CLAMP, GX_AF_NONE);
             drawCone(camId, e);
             GXSetCullMode(GX_CULL_FRONT);
             GXSetAlphaUpdate(GX_TRUE);
             GXSetColorUpdate(GX_FALSE);
             GXSetZMode(GX_TRUE, GX_LEQUAL, GX_FALSE);
             GXSetBlendMode(GX_BM_NONE, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
-            GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, 0, GX_DF_CLAMP, GX_AF_NONE);
+            GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_CLAMP, GX_AF_NONE);
             GXSetChanMatColor(GX_COLOR0A0, (GXColor){0, 0, 0, 0});
             drawCone(camId, e);
             GXSetCullMode(GX_CULL_BACK);
@@ -827,7 +827,7 @@ static void batSpotDisp(CameraId camId, void* param) {
             GXSetColorUpdate(GX_TRUE);
             GXSetZMode(GX_TRUE, GX_LEQUAL, GX_FALSE);
             GXSetBlendMode(GX_BM_BLEND, GX_BL_DSTALPHA, GX_BL_INVDSTALPHA, GX_LO_CLEAR);
-            GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, 0, GX_DF_CLAMP, GX_AF_NONE);
+            GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_CLAMP, GX_AF_NONE);
             GXSetChanMatColor(GX_COLOR0A0, e->color);
             drawCone(camId, e);
         }

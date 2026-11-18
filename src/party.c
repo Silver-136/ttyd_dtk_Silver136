@@ -309,7 +309,7 @@ s32 getExtraPartyEntryId(void) {
 /** Creates the partner memberId in a free slot and has it pop out of Mario (run mode 4). Returns the slot or -1. */
 s32 partyEntryHello(s32 memberId) {
     s32 id = partyEntryMain(memberId);
-    partyChgRunMode(partyGetPtr(id), 4);
+    partyChgRunMode(partyGetPtr(id), PARTY_RUN_HELLO);
     return id;
 }
 
@@ -643,7 +643,7 @@ s32 partyEntry2Hello(s32 memberId) {
     partyChgPose(party, partyChgPoseId(party, PARTY_POSE_STAND));
     party->paperAnimName = NULL;
     party_dp->init_func(party);
-    partyChgRunMode(party, 4);
+    partyChgRunMode(party, PARTY_RUN_HELLO);
     return slot;
 }
 
@@ -832,7 +832,7 @@ static inline void partyLeaveRunMode(PartyEntry* party) {
     if (party->runMode != PARTY_RUN_FORCE_WALK && party->runMode != PARTY_RUN_USE) {
         party->prevRunMode = party->runMode;
     }
-    if (party->runMode == 4) {
+    if (party->runMode == PARTY_RUN_HELLO) {
         mario = party->playerPtr;
         partyChgRunM(party);
         party->flags2 &= ~PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
@@ -859,8 +859,8 @@ void _partyChgRunMode(PartyEntry* party, s32 prev, s32 mode) {
     PartyFunc func;
 
     switch (prev) {
-        case 11:
-            if (mode != 8) {
+        case PARTY_RUN_RIDE:
+            if (mode != PARTY_RUN_GOODBYE) {
                 mario = party->playerPtr;
                 partyChgRunMo(party);
                 party->moveDir = mario->moveDirection;
@@ -874,7 +874,7 @@ void _partyChgRunMode(PartyEntry* party, s32 prev, s32 mode) {
                 partyShadowOn(party);
             }
             break;
-        case 4:
+        case PARTY_RUN_HELLO:
             mario = party->playerPtr;
             partyChgRunM(party);
             party->flags2 &= ~PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
@@ -887,17 +887,17 @@ void _partyChgRunMode(PartyEntry* party, s32 prev, s32 mode) {
             party->flags2 &= ~PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
             party->runMode = PARTY_RUN_WAIT;
             break;
-        case 12:
+        case PARTY_RUN_RIDE_YOSHI:
             partyShadowOn(party);
             break;
-        case 3:
+        case PARTY_RUN_USE:
             func = partyDataTbl[party->currentMemberId].post_func;
             if (func) {
                 func(party);
             }
             break;
-        case 1:
-        case 2:
+        case PARTY_RUN_WAIT:
+        case PARTY_RUN_MOVE:
             partyForceSlitOff(party);
             break;
     }
@@ -970,7 +970,7 @@ void partyPrevRunMode(PartyEntry* party) {
     if (party->runMode == party->prevRunMode) {
         return;
     }
-    if (party->runMode == 4) {
+    if (party->runMode == PARTY_RUN_HELLO) {
         MarioWork* mario = party->playerPtr;
         partyChgRunM(party);
         party->flags2 &= ~PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
@@ -1060,7 +1060,7 @@ static void driveParty(PartyEntry* party) {
         party->mutekiTimer--;
     }
     switch (party->runMode) {
-        case 4:
+        case PARTY_RUN_HELLO:
         case 5:
         case 6:
         case 7:
@@ -1128,20 +1128,20 @@ static void driveParty(PartyEntry* party) {
             party_move_mode_wait(party);
 #endif
             break;
-        case 2:
+        case PARTY_RUN_MOVE:
             if ((party->flags & PARTY_FLAG_CTRL_OFF) && !(party->flags & PARTY_FLAG_RUN_OFF)) {
                 break;
             }
             party_dp = &partyDataTbl[party->currentMemberId];
             party_dp->move_func(party);
             break;
-        case 9:
+        case PARTY_RUN_FORCE_WALK:
             if ((party->flags & PARTY_FLAG_CTRL_OFF) && !(party->flags & PARTY_FLAG_RUN_OFF)) {
                 break;
             }
             partyForceWalk(party);
             break;
-        case 3:
+        case PARTY_RUN_USE:
             if ((party->flags & PARTY_FLAG_CTRL_OFF) && !(party->flags & PARTY_FLAG_RUN_OFF)) {
                 break;
             }
@@ -1153,38 +1153,38 @@ static void driveParty(PartyEntry* party) {
                 fn(party);
             }
             break;
-        case 4:
+        case PARTY_RUN_HELLO:
         case 5:
         case 6:
         case 7:
             partyHello(party);
             break;
-        case 8:
+        case PARTY_RUN_GOODBYE:
             party_dp = &partyDataTbl[party->currentMemberId];
             party_dp->bye_func(party);
             break;
-        case 10:
+        case PARTY_RUN_PIPE:
             party_dokan(party);
             break;
-        case 11:
+        case PARTY_RUN_RIDE:
             if ((party->flags & PARTY_FLAG_CTRL_OFF) && !(party->flags & PARTY_FLAG_RUN_OFF)) {
                 break;
             }
             party_ride(party);
             break;
-        case 12:
+        case PARTY_RUN_RIDE_YOSHI:
             if ((party->flags & PARTY_FLAG_CTRL_OFF) && !(party->flags & PARTY_FLAG_RUN_OFF)) {
                 break;
             }
             party_ride_yoshi(party);
             break;
-        case 13:
+        case PARTY_RUN_DAMAGE_RETURN:
             if ((party->flags & PARTY_FLAG_CTRL_OFF) && !(party->flags & PARTY_FLAG_RUN_OFF)) {
                 break;
             }
             party_damage_return(party);
             break;
-        case 14:
+        case PARTY_RUN_DELETE:
             if (party->trigFlags & PARTY_TRIG_CHG_RUN_MODE) {
                 party->trigFlags &= ~PARTY_TRIG_CHG_RUN_MODE;
             }
@@ -1247,7 +1247,7 @@ static void partyHelloInit(PartyEntry* party) {
     mario = party->playerPtr;
     if (mario->currMotionId == MARIO_MOTION_ROLL || mario->currMotionId == MARIO_MOTION_PLANE || mario->currMotionId == MARIO_MOTION_SHIP) {
         party->motionStep = 30;
-    } else if (party->runMode == 4 || party->runMode == 5) {
+    } else if (party->runMode == PARTY_RUN_HELLO || party->runMode == 5) {
         party->flags2 |= PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
         party->scale = (Vec){0.0f, 0.0f, 0.0f};
         party->motionStep = 0;
@@ -1618,7 +1618,7 @@ s32 partyDokanInit(PartyEntry* party) {
             party->flags2 |= PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
             animPoseSetMaterialLightFlagOff(party->paperAnimGroup, MATERIAL_LIGHT_PAPER);
             break;
-        case 4:
+        case DOKAN_YOKO_IN:
             party->displayDirectionTarget = mario->displayDirection;
             partyPaperOn(party, "p_dokan_x");
             partyChgPaper(party, "PM_D_1A");
@@ -1645,7 +1645,7 @@ s32 partyDokanInit(PartyEntry* party) {
     }
 #else
         break;
-        case 4:
+        case DOKAN_YOKO_IN:
             partyPaperOn(party, "p_dokan_x");
             party->spinSpeed = -26.0f;
             party->motionStep = 10;
@@ -1963,7 +1963,7 @@ void allPartyForceRideOn(void) {
 #endif
     PartyEntry* party = partyGetPtr(marioGetPartyId());
     if (party) {
-        partyChgRunMode2(party, 11, 11);
+        partyChgRunMode2(party, PARTY_RUN_RIDE, 11);
 #if VERSION >= VERSION_JP
         party->flags2 |= PARTY_DISP_FLAG_HIDE;
 #endif
@@ -1971,7 +1971,7 @@ void allPartyForceRideOn(void) {
     }
     party = partyGetPtr(marioGetExtraPartyId());
     if (party) {
-        partyChgRunMode2(party, 11, 11);
+        partyChgRunMode2(party, PARTY_RUN_RIDE, 11);
 #if VERSION >= VERSION_JP
         party->flags2 |= PARTY_DISP_FLAG_HIDE;
 #endif
@@ -2789,7 +2789,7 @@ void party_force_ride_yoshi(PartyEntry* party) {
 #endif
     Vec pos;
 
-    partyChgRunMode2(party, 12, 10);
+    partyChgRunMode2(party, PARTY_RUN_RIDE_YOSHI, 10);
     party->flags &= ~PARTY_FLAG_IS_BEING_USED;
     getRidePos(party, &pos);
     party->position = pos;
@@ -3193,7 +3193,7 @@ static void partyPreDisp(PartyEntry* party) {
     if (party->currentMemberId != PARTY_VIVIAN) {
         party->trailPos = party->position;
     } else {
-        if (party->runMode == 4 || (party->runMode == PARTY_RUN_GOODBYE && !(party->flags & PARTY_FLAG_IS_BEING_USED))) {
+        if (party->runMode == PARTY_RUN_HELLO || (party->runMode == PARTY_RUN_GOODBYE && !(party->flags & PARTY_FLAG_IS_BEING_USED))) {
             party->trailPos = party->position;
         }
         if (party->flags & PARTY_FLAG_IS_BEING_USED) {

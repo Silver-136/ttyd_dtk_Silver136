@@ -32,12 +32,14 @@ typedef enum PartyMotion {
     PARTY_MOTION_DAMAGE = 7,
 } PartyMotion;
 
-// PartyEntry.runMode; 4..7 are distinct hello variants and remain unnamed here.
+// PartyEntry.runMode. 4..7 all run partyHello; only 4 is entered in the code (partyEntryHello), and partyHelloInit
+// starts 5 like 4 and 7 later in the sequence, so 5..7 remain unnamed here.
 typedef enum PartyRunMode {
     PARTY_RUN_MOVE_RESET = 0,
     PARTY_RUN_WAIT = 1,
     PARTY_RUN_MOVE = 2,
     PARTY_RUN_USE = 3,
+    PARTY_RUN_HELLO = 4, // partyEntryHello: the partner pops out of Mario (partyHello)
     PARTY_RUN_GOODBYE = 8,
     PARTY_RUN_FORCE_WALK = 9,
     PARTY_RUN_PIPE = 10,

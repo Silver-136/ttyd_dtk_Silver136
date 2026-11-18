@@ -21,7 +21,7 @@ typedef struct BattleWorkStatusIcon {
     Vec position; // 0x0
     Vec screenSpaceOffset; // 0xC
     f32 distanceBetweenIcons; // 0x18
-    s32 flags; // 0x1C
+    s32 flags; // 0x1C, STATUS_ICON_WORK_FLAG_*
     BattleWorkStatusIconEntry icons[28]; // 0x20
     f32 dizzyAngle; // 0x790, _bsi_guruguru: +4 per frame
     s16 numStatusIcons; // 0x794
@@ -40,4 +40,9 @@ void BattleStatusIconDelete(struct BattleUnit* unit);
 enum {
     STATUS_ICON_NO_PLATE = 1,
     STATUS_ICON_HIDDEN = 2,
+};
+
+// BattleWorkStatusIcon.flags. BattleStatusIconMain clears the word every frame; BattleStatusIconDisp only reads it.
+enum {
+    STATUS_ICON_WORK_FLAG_FLIP_PLATE_UNUSED = 1, // the backing plates are drawn upside down (y scale -0.8)
 };

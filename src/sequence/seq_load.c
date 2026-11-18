@@ -229,10 +229,10 @@ void seq_loadMain(SequenceWork* seq) {
 #endif
                     if (OSGetSoundMode() == OS_SOUND_MODE_MONO) {
                         SoundSetOutputMode(SND_OUTPUTMODE_MONO);
-                        gp->soundMode = 0;
+                        gp->soundMode = GW_SOUND_MODE_NO_SURROUND;
                         wp->soundMode = 0;
 #if VERSION <= VERSION_DEMO_JP
-                    } else if (gp->soundMode == 0) {
+                    } else if (gp->soundMode == GW_SOUND_MODE_NO_SURROUND) {
                         SoundSetOutputMode(SND_OUTPUTMODE_STEREO);
                         wp->soundMode = 1;
                     } else {
@@ -241,7 +241,7 @@ void seq_loadMain(SequenceWork* seq) {
 #else
                     } else {
                         SoundSetOutputMode(SND_OUTPUTMODE_STEREO);
-                        if (gp->soundMode == 0) {
+                        if (gp->soundMode == GW_SOUND_MODE_NO_SURROUND) {
                             wp->soundMode = 1;
                         } else {
                             wp->soundMode = 2;
@@ -759,21 +759,21 @@ static void loadMain(SequenceWork* seq) {
                     case 0:
                         OSSetSoundMode(OS_SOUND_MODE_MONO);
 #endif
-                        gp->soundMode = 0;
+                        gp->soundMode = GW_SOUND_MODE_NO_SURROUND;
                         break;
                     case 1:
                         OSSetSoundMode(OS_SOUND_MODE_STEREO);
 #if VERSION <= VERSION_DEMO_JP
                         SoundSetOutputMode(SND_OUTPUTMODE_STEREO);
 #endif
-                        gp->soundMode = 0;
+                        gp->soundMode = GW_SOUND_MODE_NO_SURROUND;
                         break;
                     case 2:
                         OSSetSoundMode(OS_SOUND_MODE_STEREO);
 #if VERSION <= VERSION_DEMO_JP
                         SoundSetOutputMode(SND_OUTPUTMODE_SURROUND);
 #endif
-                        gp->soundMode = 1;
+                        gp->soundMode = GW_SOUND_MODE_SURROUND;
                         break;
                 }
 #if VERSION <= VERSION_DEMO_JP

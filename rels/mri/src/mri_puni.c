@@ -4297,7 +4297,7 @@ static f32 shadow_coord[8] ATTRIBUTE_ALIGN(32) = { 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
 
 /**
  * Draw callback for one Puni's shadow: a dark translucent shadow quad (texture 0x2C) placed under the pose,
- * at the floor height when the pose has a shadow height; skipped for poses with flag 4.
+ * at the floor height when the pose has a shadow height; skipped for poses with PUNIDRV_POSE_FLAG_NO_SHADOW_UNUSED.
  */
 static void puni_puni_shadow_disp(CameraId camId, void* param) {
     static Mtx shadow_mt = { { 10.0f, 0.0f, 0.0f, 0.0f }, { 0.0f, 10.0f, 0.0f, 0.1f }, { 0.0f, 0.0f, 10.0f, 0.0f } };
@@ -4306,7 +4306,7 @@ static void puni_puni_shadow_disp(CameraId camId, void* param) {
     CameraEntry* cam = camGetPtr(camId);
     PunidrvPose* pose = param;
 
-    if (!(pose->flags & 4)) {
+    if (!(pose->flags & PUNIDRV_POSE_FLAG_NO_SHADOW_UNUSED)) {
         GXSetNumChans(1);
         GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_CLAMP, GX_AF_NONE);
         GXSetChanMatColor(GX_COLOR0A0, (GXColor){0x00, 0x00, 0x00, 0xC0});
@@ -4330,7 +4330,7 @@ static void puni_puni_shadow_disp(CameraId camId, void* param) {
         GXSetCullMode(GX_CULL_NONE);
         PSMTXConcat(cam->view, *pose->mtx, mtx);
         PSMTXConcat(mtx, shadow_mt, mtx);
-        if (pose->flags & 0x10) {
+        if (pose->flags & PUNIDRV_POSE_FLAG_SHADOW_POS_UNUSED) {
             PSMTXTransApply(mtx, mtx, 0.0f, 1.0f + (-(*pose->mtx)[1][3] + pose->shadowY), 0.0f);
         }
         GXLoadPosMtxImm(mtx, GX_PNMTX0);

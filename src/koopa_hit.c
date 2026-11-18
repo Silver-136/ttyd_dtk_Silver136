@@ -721,7 +721,7 @@ HitEntry* kpaSearchWallFront(Vec* pos, f32* h, f32 dx, f32 dz) {
 
     mario = marioGetPtr();
     sincosf(&s, &c, dz);
-    if (marioChkSts(0x10) && (__fabsf(mario->groundRot.x) >= 45.0f || __fabsf(mario->groundRot.z) >= 45.0f)) {
+    if (marioChkSts(MARIO_STS_ROLL) && (__fabsf(mario->groundRot.x) >= 45.0f || __fabsf(mario->groundRot.z) >= 45.0f)) {
         pos->x += dx * s;
         pos->z += dx * c;
         return NULL;

@@ -600,10 +600,10 @@ void puniDrawShadow(void) {
     sort = &wp->sort[wp->poseNum - 1];
     for (i = wp->poseNum - 1; i >= 0; i--, sort--) {
         pose = &wp->poses[sort->index];
-        if (!(pose->flags & 4)) {
+        if (!(pose->flags & PUNIDRV_POSE_FLAG_NO_SHADOW_UNUSED)) {
             PSMTXConcat(camGetCurPtr()->view, *pose->mtx, mtx);
             PSMTXConcat(mtx, wp->shadowMtx, mtx);
-            if (pose->flags & 0x10) {
+            if (pose->flags & PUNIDRV_POSE_FLAG_SHADOW_POS_UNUSED) {
                 PSMTXTransApply(mtx, mtx, 0.0f, -(*pose->mtx)[1][3] + pose->shadowY, 0.0f);
             }
             GXLoadPosMtxImm(mtx, GX_PNMTX0);

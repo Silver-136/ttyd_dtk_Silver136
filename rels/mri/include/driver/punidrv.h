@@ -16,10 +16,13 @@ typedef struct PunidrvTexInfo {
     f32 frame;   // 0x8
 } PunidrvTexInfo;
 
-// PunidrvPose.flags. Bits 2 (no shadow) and 4 (shadow at shadowY) are read but never set.
+// PunidrvPose.flags. Bits 2 and 4 are read but never set (the shadow readers treat them like extdrv's
+// EXT_POSE_FLAG_NO_SHADOW and EXT_POSE_FLAG_SHADOW_POS).
 enum {
     PUNIDRV_POSE_FLAG_DISP = 1,             // set at init (mri_puni); the pose is sorted and drawn
     PUNIDRV_POSE_FLAG_SMOOTH_TURN = 1 << 1, // set at init; the pose turns toward its camera-facing angle by 10% a frame
+    PUNIDRV_POSE_FLAG_NO_SHADOW_UNUSED = 1 << 2,  // the shadow is not drawn
+    PUNIDRV_POSE_FLAG_SHADOW_POS_UNUSED = 1 << 4, // the shadow is drawn at the fixed shadowY
 };
 
 typedef struct PunidrvPose {
