@@ -48,152 +48,15 @@ s32 roll_flyout_trig;
  */
 static f32 rollData[] = {3.0f, -0.05f, -0.5f, 0.5f, 7.0f, 180.0f, 140.0f, 10.0f, 1.2f, 2.0f, 0.8f};
 
-/** Truncates x to one decimal place (toward zero). */
-static inline f32 trunc10(f32 x) {
-    s32 i = (s32)(10.0f * x);
-    f32 f = (f32)i;
-    return f / 10.0f;
-}
-
-// Returns 1 when angle x lies outside center +/- half degrees (center truncated to 0.1 degree, range wrapping at 360).
-static inline s32 angOut(f32 center, f32 half, f32 x) {
-    s32 w = 0;
-    s32 r = w;
-    f32 c = trunc10(center);
-    f32 lo;
-    f32 hi;
-    lo = c - half;
-    if (lo < 0.0f) {
-        w = 1;
-        lo += 360.0f;
-    }
-    hi = c + half;
-    if (hi > 360.0f) {
-        hi -= 360.0f;
-        w = 2;
-    }
-    if (w == 1) {
-        if (hi < x && x < lo) {
-            r = 1;
-        }
-    } else if (w == 2) {
-        if (hi < x && x < lo) {
-            r = 1;
-        }
-    } else if (w == 0) {
-        if (x < lo || hi < x) {
-            r = 1;
-        }
-    }
-    return r;
-}
-
 /** sin and cos of an angle in degrees. */
 static inline f32 sind(f32 deg) { return sin(3.1415927f * deg / 180.0f); }
 static inline f32 cosd(f32 deg) { return cos(3.1415927f * deg / 180.0f); }
 
-/** 1 if the control stick points outside +/-half degrees of Mario's move direction (angOut with the stick angle). */
-// Returns 1 when the stick direction lies outside moveDirection +/- half degrees (angOut with both angles read here).
-static inline s32 stickAngOut(f32 half) {
-    s32 w = 0;
-    s32 r = w;
-    MarioWork* mario = marioGetPtr();
-    f32 c = (f32)(s32)(10.0f * mario->moveDirection) / 10.0f;
-    f32 x = angleABf(0.0f, 0.0f, (f32)mario->wStickDir1, (f32)mario->wStickDir2);
-    f32 lo;
-    f32 hi;
-    lo = c - half;
-    if (lo < 0.0f) {
-        w = 1;
-        lo += 360.0f;
-    }
-    hi = c + half;
-    if (hi > 360.0f) {
-        hi -= 360.0f;
-        w = 2;
-    }
-    if (w == 1) {
-        if (hi < x && x < lo) {
-            r = 1;
-        }
-    } else if (w == 2) {
-        if (hi < x && x < lo) {
-            r = 1;
-        }
-    } else if (w == 0) {
-        if (x < lo || hi < x) {
-            r = 1;
-        }
-    }
-    return r;
-}
-
-// FAKE: marioSetRollDispDir body: dd = tb_ - ty_ (the plain form is -(ty_ - tb_); differs only in the sign of zero, and dd is
-// only compared with 180) and a dead int-guarded re-def of ty_ (COLOURING M) keep ty_ as a named value created before tb_, as the target fsubs f1,f0,f1
-#define DISPDIR_BODY2(a, b, m2)                                                                                                                                                                   \
-    if (angOut(b, 135.0f, a) == 1) {                                                                                                                                                              \
-        b = revise360(180.0f + b);                                                                                                                                                                \
-    }                                                                                                                                                                                             \
-    {                                                                                                                                                                                             \
-        s32 g_; \
-        f32 ty_; \
-        f32 dd; \
-        s32 sgn; \
-        f32 tb_; \
-        ty_ = trunc10((m2)->targetYaw); \
-        tb_ = trunc10(b); \
-        g_ = 0; \
-        if (g_ != 0) { \
-            ty_ = 0.0f; \
-        } \
-        dd = revise360(tb_ - ty_); \
-        sgn = (dd < 180.0f) ? 0 : 1; \
-        if (sgn == 0) {                                                                                                                                                                           \
-            if (__fabsf(b - a) > 90.0f) {                                                                                                                                                         \
-                if (a > b) {                                                                                                                                                                      \
-                    b += 360.0f;                                                                                                                                                                  \
-                }                                                                                                                                                                                 \
-            }                                                                                                                                                                                     \
-        } else {                                                                                                                                                                                  \
-            if (__fabsf(b - a) > 90.0f) {                                                                                                                                                         \
-                if (a < b) {                                                                                                                                                                      \
-                    a += 360.0f;                                                                                                                                                                  \
-                }                                                                                                                                                                                 \
-            }                                                                                                                                                                                     \
-        }                                                                                                                                                                                         \
-    }                                                                                                                                                                                             \
-    if (angOut(b, 90.0f, a) == 0) {                                                                                                                                                               \
-        if (__fabsf(b - a) > 180.0f) {                                                                                                                                                            \
-            if (b > a) {                                                                                                                                                                          \
-                b -= 360.0f;                                                                                                                                                                      \
-            } else {                                                                                                                                                                              \
-                a -= 360.0f;                                                                                                                                                                      \
-            }                                                                                                                                                                                     \
-        }                                                                                                                                                                                         \
-    }                                                                                                                                                                                             \
-    b = 1.2f * (a - b) + b;                                                                                                                                                                       \
-    b = revise360(b);                                                                                                                                                                             \
-    {                                                                                                                                                                                             \
-        f32 md = toMovedir(mario->displayDirection);                                                                                                                                              \
-        if (mario->hammerDir) {                                                                                                                                                                   \
-            md = revise360(180.0f + md);                                                                                                                                                          \
-        }                                                                                                                                                                                         \
-        if (angOut(b, 135.0f, md) == 1) {                                                                                                                                                         \
-            mario->hammerDir = (mario->hammerDir + 1) & 1;                                                                                                                                        \
-        }                                                                                                                                                                                         \
-    }                                                                                                                                                                                             \
-    { \
-        f32 t_ = 270.0f + mario->targetYaw - b; \
-        mario->displayDirection = revise360(t_ + (mario->hammerDir ? -180.0f : 0.0f)); \
-    }                                                                    \
-    if (mario->displayDirection >= 200.0f) {                                                                                                                                                      \
-        mario->displayDirection = revise360(270.0f + mario->targetYaw - b + (mario->hammerDir ? -180.0f : 0.0f));                                                                                 \
-    }                                                                                                                                                                                             \
-    if (mario->displayDirection < 170.0f) {                                                                                                                                                       \
-        mario->displayDirection = revise360(270.0f + mario->targetYaw - b + (mario->hammerDir ? -180.0f : 0.0f));                                                                                 \
-    }
-
 void roll_upstairs(void);
+static f32 makeMovedir(f32 dir, f32 target);
+static s32 chkReverseDir(f32 center, f32 range, f32 x);
+static s32 chkReverseDir2(f32 range);
+static s32 chkDirSide(f32 dir, f32 target);
 static void makeOfs(void);
 
 /** Tuning value i of rollData. */
@@ -539,12 +402,29 @@ void marioRollForceCancel(void) {
 
 void marioSetRollDispDir(void) {
     MarioWork* mario = marioGetPtr();
-    f32 b, a;
-    MarioWork* m2;
-    a = mario->directionView;
-    b = mario->moveDirection;
-    m2 = marioGetPtr();
-    DISPDIR_BODY2(a, b, m2)
+    f32 dir = makeMovedir(mario->moveDirection, mario->directionView);
+
+    {
+        f32 md = toMovedir(mario->displayDirection);
+
+        if (mario->hammerDir) {
+            md = revise360(180.0f + md);
+        }
+        if (chkReverseDir(dir, 270.0f, md) == 1) {
+            mario->hammerDir = (mario->hammerDir + 1) & 1;
+        }
+    }
+    {
+        f32 t = 270.0f + mario->targetYaw - dir;
+
+        mario->displayDirection = revise360(t + (mario->hammerDir ? -180.0f : 0.0f));
+    }
+    if (mario->displayDirection >= 200.0f) {
+        mario->displayDirection = revise360(270.0f + mario->targetYaw - dir + (mario->hammerDir ? -180.0f : 0.0f));
+    }
+    if (mario->displayDirection < 170.0f) {
+        mario->displayDirection = revise360(270.0f + mario->targetYaw - dir + (mario->hammerDir ? -180.0f : 0.0f));
+    }
 }
 
 /** Starts a Tube Mode jump from the ground (A pressed): the jump speed curve, the jumping flag and the jump sound. */
@@ -656,7 +536,6 @@ void mot_roll(void) {
     f32 maxSpdZ;
     f32 s;
     f32 rd;
-    MarioWork* m2;
     s32 flip;
     f32 sgn;
     f32 mv;
@@ -1005,7 +884,7 @@ void mot_roll(void) {
 
         // FAKE: no-op (MarioWork*) cast on the directionView/groundRot reads below (were raw MWOFF offsets); the plain field reorders a const load
         tcA = ((MarioWork*)mario)->directionView;
-        if (angOut(tcA, 135.0f, inputAng) == 1) {
+        if (chkReverseDir(tcA, 270.0f, inputAng) == 1) {
             nz = distABf(0.0f, 0.0f, nx, nz);
             nx = -nz * sind(mario->directionView);
             nz = nz * cosd(((MarioWork*)mario)->directionView);
@@ -1075,7 +954,7 @@ void mot_roll(void) {
 
         // FAKE: no-op (MarioWork*) cast on the directionView/groundRot reads below (were raw MWOFF offsets); the plain field reorders a const load
         tcA = ((MarioWork*)mario)->directionView;
-        if (angOut(tcA, 135.0f, pushAng) == 1) {
+        if (chkReverseDir(tcA, 270.0f, pushAng) == 1) {
             nz = distABf(0.0f, 0.0f, nx, -nz);
             nx = -nz * sind(mario->directionView);
             nz = nz * cosd(((MarioWork*)mario)->directionView);
@@ -1134,7 +1013,7 @@ void mot_roll(void) {
         f32 accel = 0.025f;
         f32 slopeX;
         if ((mario->mot.roll.flags & ROLL_FLAG_SLOPE_DAMP_UNUSED) && mario->groundRot.z == 0.0f) {
-            if (stickAngOut(135.0f) == 1) {
+            if (chkReverseDir2(270.0f) == 1) {
                 spdX = 0.2f * -spdX + spdX;
                 spdZ = 0.2f * -spdZ + spdZ;
                 if (__fabsf(spdX) < 1.0f) {
@@ -1244,14 +1123,33 @@ void mot_roll(void) {
 
     // FAKE: no-op (MarioWork*) cast on the directionView/groundRot reads below (were raw MWOFF offsets); the plain field reorders a const load
     tcA = ((MarioWork*)mario)->directionView;
-    flip = angOut(tcA, 90.0f, mv);
+    flip = chkReverseDir(tcA, 180.0f, mv);
     pre = mario->baseSpeed * rd;
     sgn = (flip == 1) ? -1.0f : 1.0f;
     mario->rot.z = revise360(pre * sgn + mario->rot.z);
     if (mario->forceMoveTimer == 0 && !getRollEvtFlag() && s) {
-        dir = mario->moveDirection;
-        m2 = marioGetPtr();
-        DISPDIR_BODY2(moveAng, dir, m2)
+        dir = makeMovedir(mario->moveDirection, moveAng);
+        {
+            f32 md = toMovedir(mario->displayDirection);
+
+            if (mario->hammerDir) {
+                md = revise360(180.0f + md);
+            }
+            if (chkReverseDir(dir, 270.0f, md) == 1) {
+                mario->hammerDir = (mario->hammerDir + 1) & 1;
+            }
+        }
+        {
+            f32 t = 270.0f + mario->targetYaw - dir;
+
+            mario->displayDirection = revise360(t + (mario->hammerDir ? -180.0f : 0.0f));
+        }
+        if (mario->displayDirection >= 200.0f) {
+            mario->displayDirection = revise360(270.0f + mario->targetYaw - dir + (mario->hammerDir ? -180.0f : 0.0f));
+        }
+        if (mario->displayDirection < 170.0f) {
+            mario->displayDirection = revise360(270.0f + mario->targetYaw - dir + (mario->hammerDir ? -180.0f : 0.0f));
+        }
         ((MarioWork*)mario)->directionView = dir;
         mario->moveDirection = dir;
     }
@@ -1329,19 +1227,146 @@ void mot_fall_roll(void) {
     }
 }
 
-// FAKE: stand-in that nothing calls (the linker strips it); it only places 270.0f, 360.0f, 10.0f, 135.0f and 1.2f in
-// this object's constant pool. JP demo map: this is the slot of six stripped functions (makeMovedir 0x340,
-// chkReverseDir 0xe4, chkReverseDir2 0x17c, chkDirSide 0x9c, movedir2dispdir 0x118, rollMove 0xc8, in source order),
-// compiled right after makeOfs (the last function); makeOfs places its own constants first (@987-@1000), and these five
-// are the next first uses (@1006, @1015, @1019, @1101, @1102), so they belong to those six functions, whose bodies are
-// not known (chkReverseDir: three bodies fit its size).
+/**
+ * Turns the roll direction dir toward the target direction: a target more than 135 degrees off first flips dir
+ * around, the two are brought within 180 degrees of each other on the side chkDirSide gives, and dir then moves
+ * 1.2 times the way to the target (overshooting it).
+ */
+// Original name and size (0x340) from the JP demo map (UNUSED there: every call is inlined).
+static f32 makeMovedir(f32 dir, f32 target) {
+    MarioWork* mario = marioGetPtr();
+
+    if (chkReverseDir(dir, 270.0f, target) == 1) {
+        dir = revise360(180.0f + dir);
+    }
+    if (chkDirSide(dir, mario->targetYaw) == 0) {
+        if (__fabsf(dir - target) > 90.0f) {
+            if (target > dir) {
+                dir += 360.0f;
+            }
+        }
+    } else {
+        if (__fabsf(dir - target) > 90.0f) {
+            if (target < dir) {
+                target += 360.0f;
+            }
+        }
+    }
+    if (chkReverseDir(dir, 180.0f, target) == 0) {
+        if (__fabsf(dir - target) > 180.0f) {
+            if (dir > target) {
+                dir -= 360.0f;
+            } else {
+                target -= 360.0f;
+            }
+        }
+    }
+    dir = 1.2f * (target - dir) + dir;
+    dir = revise360(dir);
+    return dir;
+}
+
+/**
+ * Returns 1 when angle x lies outside the arc of range degrees centred on center (center cut to 0.1 degree, the
+ * arc wrapping at 360).
+ */
+// Original name and size (0xe4) from the JP demo map (UNUSED there: every call is inlined). The range parameter is
+// a disclosed guess: `range * 0.5f`, `range / 2.0f` and `180.0f - range` (callers 45 / 90) give the same size and
+// numbering, and the callers' constants fold.
+static s32 chkReverseDir(f32 center, f32 range, f32 x) {
+    s32 w = 0;
+    s32 r = w;
+    f32 c = (f32)(s32)(10.0f * center) / 10.0f;
+    f32 lo;
+    f32 hi;
+    f32 half = range * 0.5f;
+
+    lo = c - half;
+    if (lo < 0.0f) {
+        w = 1;
+        lo += 360.0f;
+    }
+    hi = c + half;
+    if (hi > 360.0f) {
+        hi -= 360.0f;
+        w = 2;
+    }
+    if (w == 1) {
+        if (hi < x && x < lo) {
+            r = 1;
+        }
+    } else if (w == 2) {
+        if (hi < x && x < lo) {
+            r = 1;
+        }
+    } else if (w == 0) {
+        if (x < lo || hi < x) {
+            r = 1;
+        }
+    }
+    return r;
+}
+
+/** chkReverseDir for the control stick's direction against the arc of range degrees around Mario's move direction. */
+// Original name and size (0x17c) from the JP demo map (UNUSED there: every call is inlined); `half` declared after
+// lo / hi (declared first: 0x178).
+static s32 chkReverseDir2(f32 range) {
+    s32 w = 0;
+    s32 r = w;
+    MarioWork* mario = marioGetPtr();
+    f32 c = (f32)(s32)(10.0f * mario->moveDirection) / 10.0f;
+    f32 x = angleABf(0.0f, 0.0f, (f32)mario->wStickDir1, (f32)mario->wStickDir2);
+    f32 lo;
+    f32 hi;
+    f32 half = range * 0.5f;
+
+    lo = c - half;
+    if (lo < 0.0f) {
+        w = 1;
+        lo += 360.0f;
+    }
+    hi = c + half;
+    if (hi > 360.0f) {
+        hi -= 360.0f;
+        w = 2;
+    }
+    if (w == 1) {
+        if (hi < x && x < lo) {
+            r = 1;
+        }
+    } else if (w == 2) {
+        if (hi < x && x < lo) {
+            r = 1;
+        }
+    } else if (w == 0) {
+        if (x < lo || hi < x) {
+            r = 1;
+        }
+    }
+    return r;
+}
+
+/** 0 when dir lies less than 180 degrees counterclockwise from target (both cut to 0.1 degree), else 1. */
+// Original name and size (0x9c) from the JP demo map (UNUSED there: every call is inlined).
+static s32 chkDirSide(f32 dir, f32 target) {
+    f32 d;
+    f32 diff;
+
+    target = (f32)(s32)(10.0f * target) / 10.0f;
+    d = (f32)(s32)(10.0f * dir) / 10.0f;
+    diff = revise360(d - target);
+    return (diff < 180.0f) ? 0 : 1;
+}
+
+// FAKE: stand-in that nothing calls (the linker strips it); it only places 270.0f and 360.0f in this object's
+// constant pool. JP demo map: this is the slot of the two stripped functions movedir2dispdir (0x118) and rollMove
+// (0xc8), compiled right after makeOfs (the last function); 270.0f (@1006) and 360.0f (@1015) are their first new
+// constants (chkDirSide's 10.0f follows at @1019, makeMovedir's 135.0f and 1.2f at @1101/@1102). Their bodies are
+// not known: no linked code holds an inlined copy.
 void marioRollStrippedPool(void) {
     MarioWork* mario = marioGetPtr();
     mario->rot.x = 270.0f;
     mario->rot.y = 360.0f;
-    mario->rot.z = 10.0f;
-    mario->scale.x = 135.0f;
-    mario->scale.y = 1.2f;
 }
 
 /**

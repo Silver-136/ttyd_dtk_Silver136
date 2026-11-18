@@ -427,7 +427,6 @@ cleanup_notes/bf/GB13/log.md):
 - placement: gor_03 fall_pos0 / fall_vel0 exist to put their Vec templates at the slot_mess_01 spot, so the
   original had a function there;
 - FAKE-marked or in docs/FAKES.md: _cosf, partyJumpHeight (inside partyJumpCalc), fontPos;
-- stickAngOut: not tried (the call is the condition of a long branch).
 - _ssCalcLen: one call now (in the restored _ssDVDReadAsync_sub); written out there, US differs (60 lines).
 gor_00 and tik_05 `fid` (identity on one of two otherwise identical atan2 lines) is a codegen device, not a
 helper: no written-out form builds the same; it should be a FAKES row.
@@ -496,7 +495,7 @@ helper: no written-out form builds the same; it should be a FAKES row.
 | src/motion/mot_jabara.c | `jabaraSetSpd`, `animStep` |
 | src/motion/mot_jump.c | `chgPoseB`, `chgPoseC`, `jumpSfx` |
 | src/motion/mot_plane.c | `planeRoll1` |
-| src/motion/mot_roll.c | `trunc10`, `angOut`, `sind`, `cosd`, `stickAngOut` (1), `rollChk` (1) |
+| src/motion/mot_roll.c | `sind`, `cosd`, `rollChk` (1) |
 | src/motion/mot_ship.c | `shipLerpTurn` |
 | src/motion/mot_slit.c | `slitContinueChk`, `slitSpeedDown`, `slitSetDisplayDir` |
 | src/party/party_bomhei.c | `bomheiCleanFlags`, `bomheiFree` |
