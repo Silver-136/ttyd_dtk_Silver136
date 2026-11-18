@@ -412,6 +412,12 @@ static NpcSetupInfo npc_data[] = {
     {0},
 };
 
+/**
+ * Drawbridge scene, spawned by hom_00's init while GSWF_EKI_BRIDGE_LOWERING_IN_PROGRESS is set (eki_00's
+ * bridge switch sets it): Mario and the partner are moved out of sight, the camera pans, station attendant 1
+ * (駅員1) notices and turns, the drawbridge "hasi" lowers with its machinery sounds and a camera shake,
+ * and the map changes back to eki_00 (s_bero).
+ */
 static EVT_BEGIN(evt_bridge_down)
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_party_cont_onoff, 0, 0)
@@ -499,6 +505,13 @@ static EVT_BEGIN(evt_train_door)
     RETURN
 EVT_END()
 
+/**
+ * Boarding scene, registered on n_bero_1 at STG6_42_DRAWBRIDGE_DOWN: the rear cars (train_4 to 6) are
+ * hidden, Mario and the partner walk to station attendant 2 (駅員2), the door closes and he says
+ * stg6_eki_05. The crossing barrier "shadanki" moves, the train departs (hom_10_evt_resha_start),
+ * then GSWF_HOM_TRAIN_BOARDED_UNUSED and GSWF_HOM_BOARDED_AT_RIVERSIDE_UNUSED are set, the story moves to
+ * STG6_43_CONDUCTOR_APPEARS and the map changes to rsh_02_c ("hom_hassya").
+ */
 static EVT_BEGIN(evt_train)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("train_4"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("train_5"), MAP_OBJ_FLAG_HIDDEN)

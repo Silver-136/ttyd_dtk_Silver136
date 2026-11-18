@@ -217,8 +217,8 @@ static BattleDataEntry data_table[] = {
 };
 
 /**
- * Init event of the Cleft: registers its wait, attack, damage and confusion events (confusion uses
- * attack_event) and its walk, run and jump sounds, then starts the wait event.
+ * Init event of the Cleft: registers its wait, attack, damage and confusion events (confusion uses attack_event) and
+ * its walk, run and jump sounds, then starts the wait event.
  */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))

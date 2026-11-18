@@ -136,7 +136,8 @@ void sweatEntry(PartyEntry* party) {
     f32 y = 18.0f + party->position.y;
     f32 z = party->position.z;
     if (YOSHI_WORK(party)->effect == NULL) {
-        YOSHI_WORK(party)->effect = effSweatN64Entry(1, x, y, z, 1.0f, 70.0f * (party->displayDirectionTarget == 180.0f ? -1.0f : 1.0f), 0x16);
+        YOSHI_WORK(party)->effect =
+            effSweatN64Entry(1, x, y, z, 1.0f, 70.0f * (party->displayDirectionTarget == 180.0f ? -1.0f : 1.0f), 0x16);
         YOSHI_WORK(party)->timer = 20;
     }
 }

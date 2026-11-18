@@ -473,6 +473,10 @@ static EVT_BEGIN(sekai_yami_evt)
     RETURN
 EVT_END()
 
+/**
+ * Event script: Bobbery blows up the cracked wall (S_ana_before1) with the paper explosion effect, swapping the
+ * wall for the opening (S_ana_after) and setting GSWF_LAS_26_WALL_BOMBED.
+ */
 static EVT_BEGIN(bomb_wall)
     CALL(evt_mario_key_onoff, 0)
     BEGIN_INLINE_EVENT

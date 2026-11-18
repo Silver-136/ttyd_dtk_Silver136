@@ -938,6 +938,14 @@ EVT_BEGIN(minigame03_start)
     RETURN
 EVT_END()
 
+/**
+ * Ends a Tube Mode round: while it runs, an inline event jumps Mario back up if he falls below y -50; removes the
+ * moving floors, plays the failure effect (LW(0) negative) or the success effect, shows the score and ranking
+ * screens and adds the Piantas won.
+ * Then asks whether to play again: with fewer than 10 Piantas, or on Quit, it sets
+ * GSWF_GOR_RETURNING_FROM_MINIGAME and sends Mario back through pipe A_dokan_02 of gor_03;
+ * continuing pays 10 Piantas and resets the course.
+ */
 EVT_BEGIN(minigame03_end)
 #if VERSION >= VERSION_JP
     CALL(evt_cam_letter_box_onoff, 1, 0)

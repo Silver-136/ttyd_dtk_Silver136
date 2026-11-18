@@ -261,6 +261,10 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Init script of the west door lamp: while the west door is locked (GSWF_MRI_05_DOOR_SWITCH_ON is 0) its loading
+ * zone is switched off, otherwise the lamp animation is shown lit.
+ */
 static EVT_BEGIN(door_switch_init)
     IF_INT_EQUAL(GSWF_MRI_05_DOOR_SWITCH_ON, 0)
         SET_VALUE(LW(0), STRING("w_bero"))
@@ -271,6 +275,11 @@ static EVT_BEGIN(door_switch_init)
     RETURN
 EVT_END()
 
+/**
+ * Hit script of the door switch: plays the unlock sound and, half a second later, the lamp sound, then toggles
+ * GSWF_MRI_05_DOOR_SWITCH_ON: unlocks the west loading zone and lights the lamp, or locks it again and pauses
+ * the lamp animation.
+ */
 static EVT_BEGIN(door_switch)
     CALL(evt_mapobj_get_position, STRING("S_lights"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG2_DOOR_UNLOCK"), LW(0), LW(1), LW(2), 0)
@@ -410,6 +419,10 @@ static USER_FUNC(mario_shabon_effdel) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Interaction with the second Puni Orb pedestal: lets Mario put the Puni Orb on it (item menu) or take it off
+ * again, toggling GSWF_MRI_05_PUNI_ORB_PLACED_2 and the light beam S_sui_hikari_02.
+ */
 static EVT_BEGIN(punipuni_ball01)
     CALL(evt_mario_key_onoff, 0)
     IF_INT_EQUAL(GSWF_MRI_05_PUNI_ORB_PLACED_2, 0)

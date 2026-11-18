@@ -811,8 +811,8 @@ EVT_END()
 
 /**
  * The incoming-mail scene: freezes Mario (off Yoshi), shows the surprise balloon, plays the mail jingle with the
- * rumble and the message window (evt_win_one_message), then the hint about reading mail (mail_first_hit) the first time and
- * again while GSWF_MAIL_TUTORIAL_REPEAT_OFF is clear.
+ * rumble and the message window (evt_win_one_message), then the hint about reading mail (mail_first_hit) the first
+ * time and again while GSWF_MAIL_TUTORIAL_REPEAT_OFF is clear.
  * Run by the mail_evt_* scripts after they have put the mail in the pouch.
  */
 static EVT_BEGIN(mail_evt)

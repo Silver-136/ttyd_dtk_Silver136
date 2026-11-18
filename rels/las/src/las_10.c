@@ -795,6 +795,11 @@ static s32 kagi_tbl[] = {
     -1,
 };
 
+/**
+ * Event script: Mario uses a key on stand 1. Opens the item window with the keys from make_kagi_tbl, or prints
+ * stg8_las_32_01 if Mario carries none; on a pick removes the key, turns the stand, sets
+ * GSWF_LAS_10_KEY_SLOT_1_FILLED and counts it in GSW_LAS_10_PALACE_KEYS_SET. The eighth key runs tenkyugi_evt.
+ */
 EVT_BEGIN(kagi1_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(make_kagi_tbl, LW(0), LW(1))

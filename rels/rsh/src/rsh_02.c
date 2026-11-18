@@ -451,6 +451,13 @@ static EVT_BEGIN(talk_powan)
     RETURN
 EVT_END()
 
+/**
+ * Init event of the ghost (ゆうれい): does nothing before STG6_13_TALK_TO_THE_CONDUCTOR. The first time
+ * (GSWF_RSH_GHOST_APPEARED clear) she waits until Mario, inside cabin 4 (GSWF_RSH_02_IN_ROOM_4), has used
+ * Vivian's field ability (partner 6) for more than 240 frames, then fades in with SFX_STG6_GHOST_APPEAR1, gets
+ * talk_yuurei as her talk event and sets GSWF_RSH_GHOST_APPEARED; later visits place her at once. Then she
+ * pulses her transparency forever, pausing while GSWF_RSH_GHOST_FADE_HOLD is set (talk_yuurei sets it).
+ */
 static EVT_BEGIN(init_yuurei)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_13_TALK_TO_THE_CONDUCTOR)
@@ -1522,6 +1529,10 @@ static EVT_BEGIN(evt_access)
     RETURN
 EVT_END()
 
+/**
+ * Drawer trigger: the first time it prints stg6_rsh_266, gives a Dried Shroom and sets
+ * GSWF_RSH_02_DRIED_SHROOM_DRAWER; afterwards it only prints stg6_rsh_267.
+ */
 static EVT_BEGIN(evt_access2)
     CALL(evt_mario_key_onoff, 0)
     IF_INT_EQUAL(GSWF_RSH_02_DRIED_SHROOM_DRAWER, 0)

@@ -488,6 +488,10 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Init script of the east door lamp: while the door is locked (GSWF_MRI_15_DOOR_SWITCH_ON is 0, the same flag as
+ * in mri_15) its loading zone is switched off, otherwise the lamp animation is shown lit.
+ */
 static EVT_BEGIN(door_switch_init)
     IF_INT_EQUAL(GSWF_MRI_15_DOOR_SWITCH_ON, 0)
         SET_VALUE(LW(0), STRING("e_bero"))
@@ -498,6 +502,10 @@ static EVT_BEGIN(door_switch_init)
     RETURN
 EVT_END()
 
+/**
+ * Planter hit script 2: when its item is not out, the planter drops a Star Piece, collected only once
+ * (GSWF_STARPIECE_47).
+ */
 static EVT_BEGIN(ueki_evt_02)
     CALL(evt_item_delete_check, STRING("item_ueki02"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
@@ -676,6 +684,10 @@ static EVT_BEGIN(apper_toge)
     RETURN
 EVT_END()
 
+/**
+ * Wind event of the fake wall (S_nisekabe, registered with evt_cloud_ent): sets
+ * GSWF_MRI_06_FAKE_WALL_BLOWN_AWAY.
+ */
 static EVT_BEGIN(cloud_wind_event)
     SET_VALUE(GSWF_MRI_06_FAKE_WALL_BLOWN_AWAY, 1)
     RETURN

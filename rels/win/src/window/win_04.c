@@ -365,6 +365,12 @@ static EVT_BEGIN(clouda_inai)
     RETURN
 EVT_END()
 
+/**
+ * Flurrie's request through her door (front-door case at STG2_05_01_FLURRIE_LIVING_ROOM): she has lost her
+ * necklace; Punio volunteers Mario (stg2_win_e05_00_03 to 15, Sure or Nah; Nah earns a retort).
+ * The story becomes STG2_05_02_FLURRIE_REQUEST, GSWF_WIN_FLURRIE_REQUEST_ACCEPTED is set and the west door
+ * w_bero now leads to bero_witchtrio.
+ */
 EVT_BEGIN(clouda_irai)
     CALL(evt_mario_key_onoff, 0)
 #if VERSION >= VERSION_JP
@@ -649,6 +655,14 @@ static s32 item_list[] = {
     ITEM_NECKLACE, -1,
 };
 
+/**
+ * Flurrie joins the party (front-door case at STG2_08_SHADOW_SIRENS_LOSE with the necklace): Mario picks the
+ * necklace from the item menu and leaves it by the door, then the room darkens, the mirror ball lowers and
+ * spins, rose petals bloom and she comes out; she knocks the partners aside and kisses Mario, who keels over
+ * (stg2_win_e09_00 to 07_01). all_party_lecture runs, Punio comments, GSWF_WIN_FLURRIE_JOINED is set and the
+ * story becomes STG2_09_FLURRIE_JOINS.
+ * If Mario cancels the menu she laments her lost necklace (stg2_win_e09_00_01) and it returns with LW(0) = 0.
+ */
 EVT_BEGIN(clouda_nakama)
     // Mario picks an item to give; cancelling ends the scene with Flurrie lamenting her lost necklace.
     CALL(evt_npc_flag_onoff, 1, STRING("クラウダ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)

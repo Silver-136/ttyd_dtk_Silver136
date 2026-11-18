@@ -93,6 +93,10 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Blow-away event of s_win_1 (evt_cloud_ent: Flurrie blows it away): sets GSWF_TIK_18_WALL_BLOWN_AWAY, after
+ * which the map init hides it.
+ */
 static EVT_BEGIN(tik_18_cloud_evt)
     SET_VALUE(GSWF_TIK_18_WALL_BLOWN_AWAY, 1)
     RETURN

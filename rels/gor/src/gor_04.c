@@ -607,6 +607,11 @@ EVT_BEGIN(hom_10_evt_resha_start4)
     RETURN
 EVT_END()
 
+/**
+ * Train braking: sets GSWF_HOM_TRAIN_MOVING while it runs, plays this map's stop sound (gor_04, hom_00
+ * or pik_00) and eases the train model from 3000 to 0 over 10 seconds, writing the negated per-frame step
+ * into the train speeds GW(0) and GW(1); then clears GSWF_HOM_TRAIN_MOVING.
+ */
 static EVT_BEGIN(stop_1)
     SET_VALUE(GSWF_HOM_TRAIN_MOVING, 1)
     SET_FLOAT_VALUE(GW(0), FLOAT(0.0f))
@@ -676,6 +681,10 @@ static EVT_BEGIN(stop_2)
     RETURN
 EVT_END()
 
+/**
+ * Stops the train by map: stop_1 in pik_00, stop_2 in gor_04, and in hom_00 stop_1, or stop_2 while
+ * GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT is set.
+ */
 EVT_BEGIN(hom_10_evt_resha_stop)
     CALL(evt_sub_get_mapname, LW(0))
     IF_STR_EQUAL(LW(0), STRING("pik_00"))
@@ -822,6 +831,12 @@ EVT_BEGIN(hom_10_evt_resha_left)
     RETURN
 EVT_END()
 
+/**
+ * Map init of the train-exterior view: fades the music out, starts ENV_STG6_RSH2, moves Mario and the
+ * partners out of sight and sets up the train for the outbound view, or the return view while
+ * GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT is set (JP and later swap the coupling models on the outbound view).
+ * A letterboxed camera pan starts, and after 4 seconds the map changes to rsh_02_a ("nidome").
+ */
 EVT_BEGIN(hom_10_init_evt)
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_RSH2"))
@@ -862,6 +877,15 @@ EVT_BEGIN(hom_10_init_evt)
     RETURN
 EVT_END()
 
+/**
+ * Boarding scene of the train: the door "tobira" slides open, Mario and the partners walk in, it shuts and
+ * they are moved out of sight; the attendant (駅員) says train_07, the train leaves
+ * (hom_10_evt_resha_start). Then GSWF_RSH_NEW_PASSENGERS_PENDING is set from STG6_56 on,
+ * GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT cleared, GSWF_HOM_TRAIN_BOARDED_UNUSED set, GSW_HOM_TRAIN_LEG = 0, the
+ * train-location flags cleared, and the map changes to sys_01 ("stg_6") before STG6_00_START, else
+ * rsh_02_a ("nidome_start"). The early demos first clear GSWF_RSH_02_DRIED_SHROOM_DRAWER; JP and later
+ * instead move the partner to Mario when it is more than 100 away.
+ */
 static EVT_BEGIN(evt_train)
 #if VERSION <= VERSION_DEMO_JP
     SET_VALUE(GSWF_RSH_02_DRIED_SHROOM_DRAWER, 0)

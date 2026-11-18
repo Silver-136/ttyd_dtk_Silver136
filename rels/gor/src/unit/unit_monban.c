@@ -294,6 +294,10 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Phase event of Gus: once (GSWF_GOR_GATEKEEPER_RUN_HINT_SHOWN), in the player phase while Gus can act and
+ * Mario has 5 HP or less, the camera moves in and gor_02_008_01 is printed.
+ */
 static EVT_BEGIN(phase_event)
     IF_INT_EQUAL(GSWF_GOR_GATEKEEPER_RUN_HINT_SHOWN, 0)
         CALL(btlevtcmd_GetHp, UNIT_ID_MARIO, LW(0))

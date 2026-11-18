@@ -716,6 +716,7 @@ static USER_FUNC(goryuugijo_set_dataadr) {
     return EVT_RETURN_DONE;
 }
 
+/** Medal counter init callback: calls yuugijou_montemedal_keep unless GSWF_GOR_RETURNING_FROM_MINIGAME is set. */
 void goryuugijo_init_montemedal(EventEntry* event, BOOL isFirstCall) {
     if (!evtGetValue(event, GSWF_GOR_RETURNING_FROM_MINIGAME)) {
         yuugijou_montemedal_keep(event, isFirstCall);
@@ -801,6 +802,7 @@ static EVT_BEGIN(debug_event)
     RETURN
 EVT_END()
 
+/** Exit event: sets GSWF_GOR_03_DROP_TO_TIK_07_PENDING and returns 0 in LW(0). */
 static EVT_BEGIN(gor_03_down_evt)
     SET_VALUE(GSWF_GOR_03_DROP_TO_TIK_07_PENDING, 1)
     SET_VALUE(LW(0), 0)
@@ -1303,6 +1305,13 @@ EVT_BEGIN(maffiaboss_maffiaboss)
     RETURN
 EVT_END()
 
+/**
+ * Don Pianta's scene, spawned by the init at STG2_45_DAUGHTER_LOCATED until
+ * GSWF_GOR_DON_PIANTA_TICKET_SCENE_DONE: once Mario is in front of the desk, Don Pianta asks
+ * mac_2_088_yesno (first answer mac_2_089 and 090, the other 091); then Francesca (モニー) and Frankie
+ * (ピートン) come in (mac_2_092 to 115) and leave. It sets GSWF_GOR_DON_PIANTA_TICKET_SCENE_DONE, clears
+ * GF(15) and spawns maffiaboss_ticket_check.
+ */
 static EVT_BEGIN(maffiaboss_airship_ticket)
     // Wait until Mario reaches the area in front of Don Pianta's desk.
     LOOP(0)
@@ -2532,6 +2541,10 @@ static EVT_BEGIN(exchange_keep_sub)
     RETURN
 EVT_END()
 
+/**
+ * Init event of the minigame pipe (S_dokan_1): binds its collision to the model and shows it raised when
+ * GSWF_GOR_RETURNING_FROM_MINIGAME is set, otherwise lowered into the floor with its shadow moved away.
+ */
 EVT_BEGIN(gor_03_dokan_init_evt)
     CALL(evt_hit_bind_mapobj, STRING("A_dokan_l_02"), STRING("S_dokan_1"))
     IF_INT_NOT_EQUAL(GSWF_GOR_RETURNING_FROM_MINIGAME, 0)
@@ -2714,6 +2727,12 @@ EVT_BEGIN(bteresa_talk_sub_minigame)
     RETURN
 EVT_END()
 
+/**
+ * Prize exchange of Bunny Teresa ("me"): bunny_teresa_64 when no prizes are left; else she explains once
+ * (bunny_teresa_60, GSWF_GOR_PARLOR_PRIZE_INTRO_DONE), Mario picks a prize (evt_win_other_select), needs
+ * enough medals, confirms, and the item goes into the pouch (unless it is full) and the medals are paid.
+ * Then she offers another trade.
+ */
 static EVT_BEGIN(bteresa_talk_sub_keihin)
     // If Teresa has no prizes left, she apologizes.
     CALL(evt_badgeShop_bteresa_get_kind_cnt, LW(0))
@@ -3116,6 +3135,11 @@ static EVT_BEGIN(bteresa_init)
     RETURN
 EVT_END()
 
+/**
+ * Talk event of Bunny Teresa: a line by step (bunny_teresa_11 for steps 0 and 1, then 11_1 to 11_4). Each
+ * talk advances GSW_GOR_PARLOR_ATTENDANT_TALK_STAGE by one while it is not above the number of minigame
+ * top-score flags set (GSWF_GOR_*_GAME_TOP_SCORE).
+ */
 static EVT_BEGIN(bteresa_talk)
     SET_VALUE(LW(1), GSW_GOR_PARLOR_ATTENDANT_TALK_STAGE)
     SET_VALUE(LW(0), 0)
@@ -5171,6 +5195,11 @@ static EVT_BEGIN(door_data_02_0_open_sub)
     RETURN
 EVT_END()
 
+/**
+ * Door hook when door 02's door opens: hides the outside (S_i02_soto_kai), spawns door_data_02_0_open_sub,
+ * clears GSWF_GOR_PARLOR_GREETED_THIS_VISIT and the yup flag, runs teresa_badge_item_list_init, and pauses
+ * the music and ambience while BGM_STG0_CSN1 starts.
+ */
 static EVT_BEGIN(door_data_02_0_open)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_i02_soto_kai"), MAP_OBJ_FLAG_HIDDEN)
     SPAWN_EVENT(door_data_02_0_open_sub)
@@ -5801,6 +5830,11 @@ static EVT_BEGIN(evt_door_04_entry)
     RETURN
 EVT_END()
 
+/**
+ * Sets up the bombable wall: while GSWF_GOR_03_WALL_BOMBED is clear it loads the paper animation
+ * OFF_d_bom_ver2 and shows the intact wall; afterwards it shows the broken wall (S_ana_after_01) and turns
+ * the A_ana_ana collision off.
+ */
 static EVT_BEGIN(wall_bomb_init)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ana_before1"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ana_before"), MAP_OBJ_FLAG_HIDDEN)
@@ -5816,6 +5850,12 @@ static EVT_BEGIN(wall_bomb_init)
     RETURN
 EVT_END()
 
+/**
+ * Bobbery case event on A_ana_ana: after 200 ms plays the wall-break sound at S_ana_before, turns the
+ * A_ana_ana collision off, sets GSWF_GOR_03_WALL_BOMBED and plays the paper explosion OFF_d_bom_ver2 on a
+ * capture of an offscreen render of the wall (skipped when the capture box is empty); then only the broken
+ * wall (S_ana_after_01) is shown and the capture is freed.
+ */
 static EVT_BEGIN(wall_bomb)
     BEGIN_INLINE_EVENT
         WAIT_MS(200)
@@ -6434,6 +6474,16 @@ EVT_BEGIN(kuzi_bomb_talk_normal)
     RETURN
 EVT_END()
 
+/**
+ * Lottery talk of Lucky (グルメボム兵) when evt_lottery reports LOTTERY_FLAG_CLOCK_ERROR (husei, 不正).
+ * Without LOTTERY_FLAG_NEW_DAY (JP and later also once GSWF_GOR_LOTTERY_RESET_EXPLAINED is set, which this
+ * sets) he only says kuji_bomb_061 and offers a new number for 500 coins, or kuji_bomb_062 with
+ * LOTTERY_FLAG_REBOUGHT. Otherwise he questions Mario (kuji_bomb_037 to 048); one path leads to the offer
+ * (049, 050), the others to his threat: the screen shakes for up to 30 seconds (055 with
+ * kuji_bomb_055_callback), the view narrows and reopens, then 056 to 060 lead back to the offer or the
+ * threat. Paying removes the Lottery Pick, buys a new number (evt_lottery_buy; JP and later clear
+ * GSWF_GOR_LOTTERY_RESET_EXPLAINED) and gives a new pick (053).
+ */
 EVT_BEGIN(kuzi_bomb_talk_husei)
 #if VERSION <= VERSION_DEMO_JP
     CALL(evt_unitwin_alloc)

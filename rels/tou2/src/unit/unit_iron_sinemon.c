@@ -297,6 +297,11 @@ static EVT_BEGIN(dmg_avoid_counter_thorn_head_event)
     RETURN
 EVT_END()
 
+/**
+ * Damage event of an Iron Cleft: default damage reaction. The first time a Cleft whose UNIT_WORK_SILENT is 0
+ * takes damage (GSWF_TOU_ARMORED_HARRIERS_WEAK_POINT clear) the battle pauses on a close-up and both Clefts speak
+ * (stg3_tou_272, 273); the flag is then set.
+ */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -333,6 +338,13 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Phase event of the Iron Cleft whose UNIT_WORK_SILENT is 0, before the player's phase of turn 1, unless
+ * GSWF_TOU_ARMORED_HARRIERS_BEATEN is set: the camera pans over the two Clefts and the partner speaks
+ * (stg3_tou_266 the first time, 267 once GSWF_TOU_ARMORED_HARRIERS_INTRO_SEEN is set), then the Clefts answer
+ * with stg3_tou_268 and 269, or 270 and 271 once Yoshi has joined (yoshi_exist). Sets
+ * GSWF_TOU_ARMORED_HARRIERS_INTRO_SEEN.
+ */
 static EVT_BEGIN(phase_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_SILENT, LW(0))
     IF_INT_EQUAL(LW(0), 1)

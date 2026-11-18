@@ -1379,6 +1379,11 @@ static EVT_BEGIN(reg_kino_1)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of the first Toad spectator: one line before STG3_04_GONZALES_IS_BORN, a line by ranking until
+ * STG3_32_BOSS_BATTLE, and afterwards stg3_npc_01_04_07 until Mario re-registers (GSWF_TOU_REMATCH_REGISTERED);
+ * then lines by rematch ranking, where ranks above 10 also depend on GSWF_TOU_REMATCH_PROMOTED_TO_MAJORS.
+ */
 static EVT_BEGIN(talk_kino_1)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_04_GONZALES_IS_BORN)

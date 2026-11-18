@@ -272,6 +272,12 @@ static f32 randf(f32 min, f32 max) {
     return r * (max - min) + min;
 }
 
+/**
+ * Door animation script of the automatic double door, LW(0) the swing angle 0 to 180: at 0 it plays the
+ * automatic door sound at Mario's position (handle in GW(13)) unless GSWF_TOU_AUTO_DOOR_SFX_PLAYING is set,
+ * and sets it; at 180 it clears the flag and stops the sound. It moves door_1_b along X by a third of the angle
+ * and door_1_a the opposite way.
+ */
 static EVT_BEGIN(s_door_open)
     IF_FLOAT_EQUAL(LW(0), FLOAT(0.0f))
         IF_INT_EQUAL(GSWF_TOU_AUTO_DOOR_SFX_PLAYING, 0)
@@ -293,6 +299,10 @@ static EVT_BEGIN(s_door_open)
     RETURN
 EVT_END()
 
+/**
+ * Mirror image of s_door_open, run as the angle goes from 180 back to 0: the door sound starts at 180 and
+ * stops at 0, where GSWF_TOU_AUTO_DOOR_SFX_PLAYING is cleared; the doors move the same way.
+ */
 static EVT_BEGIN(s_door_close)
     IF_FLOAT_EQUAL(LW(0), FLOAT(180.0f))
         IF_INT_EQUAL(GSWF_TOU_AUTO_DOOR_SFX_PLAYING, 0)
@@ -482,6 +492,11 @@ static BeroEntry bero_data[] = {
     {0},
 };
 
+/**
+ * The two guards step aside to x = -530 and x = 530 and face Mario, and bero cases 3 and 4 are switched on.
+ * Before STG3_02_THE_GUARD_BACKS_OFF the story is advanced to it; otherwise GSWF_TOU_02_GUARD_STEPPED_ASIDE is
+ * set.
+ */
 static EVT_BEGIN(evt_move_g)
     CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
     ADD(LW(2), 100)
@@ -1566,6 +1581,13 @@ static NpcSetupInfo npcEnt[] = {
     {0},
 };
 
+/**
+ * Lobby scene after the arena intro in tou_03 (which sets GSWF_TOU_02_ARENA_TOUR_RETURN): Mario and the partner
+ * come in through door n_bero_1, or n_bero_2 on the upper floor; the partner asks how to get the Crystal Star
+ * (stg3_tou_33, choice stg3_tou_33_yn) and Goombella, Koops or Flurrie answers the choice (stg3_tou_34_* or
+ * 35_*); Mario nods, the partner speaks again (stg3_tou_36), the flag is cleared and the story is set to
+ * STG3_01_ARENA_INTRO_1F.
+ */
 EVT_BEGIN(evt_tougi2)
     // Mario and the partner wait behind the arena door they came out of (the upper one for n_bero_2).
     CALL(evt_mario_key_onoff, 0)
@@ -2366,41 +2388,75 @@ static s32 evt_end_count(EventEntry* event, BOOL isFirstCall) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Run when Flurrie blows lobby poster 1 away (registered with evt_cloud_ent): sets
+ * GSWF_TOU_02_POSTER_1_REMOVED.
+ */
 static EVT_BEGIN(evt_poster_1)
     SET_VALUE(GSWF_TOU_02_POSTER_1_REMOVED, 1)
     RETURN
 EVT_END()
 
+/**
+ * Run when Flurrie blows lobby poster 2 away (registered with evt_cloud_ent): sets
+ * GSWF_TOU_02_POSTER_2_REMOVED.
+ */
 static EVT_BEGIN(evt_poster_2)
     SET_VALUE(GSWF_TOU_02_POSTER_2_REMOVED, 1)
     RETURN
 EVT_END()
 
+/**
+ * Run when Flurrie blows lobby poster 3 away (registered with evt_cloud_ent): sets
+ * GSWF_TOU_02_POSTER_3_REMOVED.
+ */
 static EVT_BEGIN(evt_poster_3)
     SET_VALUE(GSWF_TOU_02_POSTER_3_REMOVED, 1)
     RETURN
 EVT_END()
 
+/**
+ * Run when Flurrie blows lobby poster 4 away (registered with evt_cloud_ent): sets
+ * GSWF_TOU_02_POSTER_4_REMOVED.
+ */
 static EVT_BEGIN(evt_poster_4)
     SET_VALUE(GSWF_TOU_02_POSTER_4_REMOVED, 1)
     RETURN
 EVT_END()
 
+/**
+ * Run when Flurrie blows lobby poster 5 away (registered with evt_cloud_ent): sets
+ * GSWF_TOU_02_POSTER_5_REMOVED.
+ */
 static EVT_BEGIN(evt_poster_5)
     SET_VALUE(GSWF_TOU_02_POSTER_5_REMOVED, 1)
     RETURN
 EVT_END()
 
+/**
+ * Run when Flurrie blows lobby poster 6 away (registered with evt_cloud_ent): sets
+ * GSWF_TOU_02_POSTER_6_REMOVED.
+ */
 static EVT_BEGIN(evt_poster_6)
     SET_VALUE(GSWF_TOU_02_POSTER_6_REMOVED, 1)
     RETURN
 EVT_END()
 
+/**
+ * Run when Flurrie blows lobby poster 7 away (registered with evt_cloud_ent): sets
+ * GSWF_TOU_02_POSTER_7_REMOVED.
+ */
 static EVT_BEGIN(evt_poster_7)
     SET_VALUE(GSWF_TOU_02_POSTER_7_REMOVED, 1)
     RETURN
 EVT_END()
 
+/**
+ * Run when Flurrie blows lobby poster 8 away (registered with evt_cloud_ent): sets GSWF_TOU_02_POSTER_8_REMOVED;
+ * at STG3_20_13_MAJORS_1ST_PL it also makes the Storage Key (ITEM_STORAGE_KEY_0x13) pop out of the poster
+ * (from the US release on, of p_m_8_e when the language is not Japanese), launched up and bouncing, with
+ * evt_key as its pickup callback.
+ */
 static EVT_BEGIN(evt_poster_8)
     SET_VALUE(GSWF_TOU_02_POSTER_8_REMOVED, 1)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_20_13_MAJORS_1ST_PL)
@@ -2424,6 +2480,10 @@ static EVT_BEGIN(evt_poster_8)
     RETURN
 EVT_END()
 
+/**
+ * Run when Flurrie blows lobby poster 9 away (registered with evt_cloud_ent): sets
+ * GSWF_TOU_02_POSTER_9_REMOVED.
+ */
 static EVT_BEGIN(evt_poster_9)
     SET_VALUE(GSWF_TOU_02_POSTER_9_REMOVED, 1)
     RETURN

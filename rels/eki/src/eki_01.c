@@ -237,31 +237,55 @@ static EVT_BEGIN(evt_lock)
     RETURN
 EVT_END()
 
+/**
+ * End event of paper kami_1 (evt_cloud_ent), run once Flurrie's breath blows it away: sets
+ * GSWF_EKI_01_PAPER_1_BLOWN_AWAY, so the init keeps it hidden.
+ */
 static EVT_BEGIN(evt_kami_1)
     SET_VALUE(GSWF_EKI_01_PAPER_1_BLOWN_AWAY, 1)
     RETURN
 EVT_END()
 
+/**
+ * End event of paper kami_2 (evt_cloud_ent), run once Flurrie's breath blows it away: sets
+ * GSWF_EKI_01_PAPER_2_BLOWN_AWAY, so the init keeps it hidden.
+ */
 static EVT_BEGIN(evt_kami_2)
     SET_VALUE(GSWF_EKI_01_PAPER_2_BLOWN_AWAY, 1)
     RETURN
 EVT_END()
 
+/**
+ * End event of paper kami_3 (evt_cloud_ent), run once Flurrie's breath blows it away: sets
+ * GSWF_EKI_01_PAPER_3_BLOWN_AWAY, so the init keeps it hidden.
+ */
 static EVT_BEGIN(evt_kami_3)
     SET_VALUE(GSWF_EKI_01_PAPER_3_BLOWN_AWAY, 1)
     RETURN
 EVT_END()
 
+/**
+ * End event of paper kami_4 (evt_cloud_ent), run once Flurrie's breath blows it away: sets
+ * GSWF_EKI_01_PAPER_4_BLOWN_AWAY, so the init keeps it hidden.
+ */
 static EVT_BEGIN(evt_kami_4)
     SET_VALUE(GSWF_EKI_01_PAPER_4_BLOWN_AWAY, 1)
     RETURN
 EVT_END()
 
+/**
+ * End event of paper kami_5 (evt_cloud_ent), run once Flurrie's breath blows it away: sets
+ * GSWF_EKI_01_PAPER_5_BLOWN_AWAY, so the init keeps it hidden.
+ */
 static EVT_BEGIN(evt_kami_5)
     SET_VALUE(GSWF_EKI_01_PAPER_5_BLOWN_AWAY, 1)
     RETURN
 EVT_END()
 
+/**
+ * End event of paper kami_6 (evt_cloud_ent), run once Flurrie's breath blows it away: sets
+ * GSWF_EKI_01_PAPER_6_BLOWN_AWAY, so the init keeps it hidden.
+ */
 static EVT_BEGIN(evt_kami_6)
     SET_VALUE(GSWF_EKI_01_PAPER_6_BLOWN_AWAY, 1)
     RETURN

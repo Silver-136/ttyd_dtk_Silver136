@@ -191,6 +191,13 @@ extern EvtWord zonbaba_first_event[];
 EvtWord zonbaba_first_event[677];
 #endif
 
+/**
+ * Map init of the Pit of 100 Trials maps. GSW_PIT_FLOOR is the 0-based floor; entering without an entrance sets
+ * it from the map name. Records the deepest floor reached, sets up the signboard, the mover, the peddler and the
+ * floor's enemy, then the layout: floor 100 is the Bonetail room, every other tenth floor a rest room, the floor
+ * before one leads into it, the rest are plain floors. On floor 50 (jon_04) it also sets up the graffiti of
+ * TROUBLE_ERASE_THAT_GRAFFITI. Plays BGM_STG0_100DN1 except on floor 100 (ENV_STG0_DAN1 only).
+ */
 static EVT_BEGIN(jon_init_evt)
     // When the map is entered without an entrance (GW_FLAG_NO_ENTRANCE, a direct map warp), the floor number is
     // derived from the name of the map.
@@ -1223,6 +1230,13 @@ static NpcSetupInfo npcEnt_zonbaba[] = {
     {0},
 };
 
+/**
+ * Spawns the floor's single enemy ("敵"), skipped when the mover is on the floor and on rest-room floors (every
+ * 10th except 100). enemy_info picks the species for the floor from enemy_100; the enemy appears on a random
+ * side of the room and gets the NPC setup of its kind (walker, flyer, plant, Spiny, Chain Chomp ...). Floor 100
+ * is Bonetail and starts zonbaba_first_event. When the enemy is beaten the exit pipe rises (dokan_open); on
+ * floor 100 GSWF_PIT_BONETAIL_DEFEATED is set instead. Also notifies the sailor job (iri_12_enemy_dead_event).
+ */
 EVT_BEGIN(enemy_setup)
     // No enemy on a floor where the mover is, nor on the rest-room floors (every tenth floor except floor
     // 100).
@@ -1656,6 +1670,10 @@ static EVT_BEGIN(move_event)
     RETURN
 EVT_END()
 
+/**
+ * Returns in LW(0) the map name for the floor number GSW_PIT_FLOOR + 1: jon_00 for floors 1-49, jon_01 for
+ * 51-79, jon_02 for 81-99, rest rooms jon_03 (10-40), jon_04 (50-70), jon_05 (80, 90) and jon_06 for floor 100.
+ */
 static EVT_BEGIN(get_map_name)
     SET_VALUE(LW(0), GSW_PIT_FLOOR)
     ADD(LW(0), 1)
@@ -2143,6 +2161,10 @@ static EVT_BEGIN(dokan_open2)
     RETURN
 EVT_END()
 
+/**
+ * Signpost event of the floor's entrance (case event on a_kanban, front A): stops NPC events, shows
+ * msg_jon_kanban_1 with the current floor number (GSW_PIT_FLOOR plus one) inserted, and gives control back.
+ */
 static EVT_BEGIN(evt_kanban)
     CALL(evt_npc_stop_for_event)
     CALL(evt_mario_key_onoff, 0)
@@ -2168,6 +2190,10 @@ static EVT_BEGIN(evt_kanban2)
     RETURN
 EVT_END()
 
+/**
+ * Exit event of the pipes to the next floor: spawns iri_12_dokan_in, then advances GSW_PIT_FLOOR by one. Returns
+ * 0 in LW(0).
+ */
 static EVT_BEGIN(floor_inc)
     SPAWN_EVENT(iri_12_dokan_in)
     ADD(GSW_PIT_FLOOR, 1)
@@ -2175,6 +2201,7 @@ static EVT_BEGIN(floor_inc)
     RETURN
 EVT_END()
 
+/** Exit event of the pipes out to tik_06: resets GSW_PIT_FLOOR to 0. Returns 0 in LW(0). */
 static EVT_BEGIN(floor_clear)
     SET_VALUE(GSW_PIT_FLOOR, 0)
     SET_VALUE(LW(0), 0)
@@ -3046,6 +3073,12 @@ static EVT_BEGIN(iri_12_init_fall)
     RETURN
 EVT_END()
 
+/**
+ * Map-init hook of Trouble Center request TROUBLE_HELP_MY_DADDY, only while it is accepted. On floor 18
+ * (GSW_PIT_FLOOR 17), before GSWF_TROUBLE_WORK(1) is set, the sailor マッキノ is set up with pose D_2 and
+ * iri_12_makkino_talk as his talk event; otherwise there, and on other floors while GSWF_TROUBLE_WORK(1) is set
+ * and GSWF_TROUBLE_WORK(2) is not, he drops in through iri_12_init_fall.
+ */
 static EVT_BEGIN(iri_12_init)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_HELP_MY_DADDY)
         SWITCH(GSW_PIT_FLOOR)
@@ -3222,6 +3255,14 @@ static EVT_BEGIN(gonbaba_down_shake)
     RETURN
 EVT_END()
 
+/**
+ * Floor 100 opening and fight with Bonetail (battle setup 51). If he was already beaten
+ * (GSWF_PIT_BONETAIL_DEFEATED), he is parked off the map and only the chest is set up. Otherwise Mario is
+ * startled, Bonetail rises with a roar while fog and the camera shake, and the battle starts. After it, Bonetail
+ * slumps, the chest tumbles out of his mouth, Mario notices it and GSWF_PIT_BONETAIL_DEFEATED is set. While
+ * TROUBLE_HELP_MY_DADDY is accepted with GSWF_TROUBLE_WORK(1) set and (2) clear, the sailor leaves through
+ * iri_12_makkino_return_zonbaba and GSWF_TROUBLE_WORK(2) is set.
+ */
 EVT_BEGIN(zonbaba_first_event)
     // If Bonetail was already beaten, he is moved far below the map and the room is set up with only the chest.
     IF_INT_EQUAL(GSWF_PIT_BONETAIL_DEFEATED, 1)

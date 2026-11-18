@@ -566,6 +566,10 @@ static HitDamageReturn hitDmgRetPoints[] = {
     {0},
 };
 
+/**
+ * Until GSWF_TIK_17_MUJ_PIPE_RAISED is set (by the tornado switch in the Rogueport sewers room tik_17), hides
+ * the warp pipe's model group S_dakan and turns off its hit A_dokan.
+ */
 static EVT_BEGIN(evt_switch_init)
     IF_INT_EQUAL(GSWF_TIK_17_MUJ_PIPE_RAISED, 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_dakan"), MAP_OBJ_FLAG_HIDDEN)

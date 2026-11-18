@@ -111,6 +111,10 @@ static EVT_BEGIN(switch_evt)
     RETURN
 EVT_END()
 
+/**
+ * Death event of the first enemy (Goomba) in the order puzzle: records order step 1 in
+ * GSW_LAS_17_ENEMY_ORDER_STATE if it was the first kill.
+ */
 static EVT_BEGIN(enemy1_dead_evt)
     CALL_CHILD(enemy_common_dead_event)
     IF_INT_EQUAL(GSW_LAS_17_ENEMY_ORDER_STATE, 0)
@@ -119,6 +123,10 @@ static EVT_BEGIN(enemy1_dead_evt)
     RETURN
 EVT_END()
 
+/**
+ * Death event of the second enemy (Spiky Goomba): advances GSW_LAS_17_ENEMY_ORDER_STATE to 2 only if the Goomba
+ * was beaten first.
+ */
 static EVT_BEGIN(enemy2_dead_evt)
     CALL_CHILD(enemy_common_dead_event)
     IF_INT_EQUAL(GSW_LAS_17_ENEMY_ORDER_STATE, 1)
@@ -127,6 +135,10 @@ static EVT_BEGIN(enemy2_dead_evt)
     RETURN
 EVT_END()
 
+/**
+ * Death event of the third enemy (Koopa Troopa): advances GSW_LAS_17_ENEMY_ORDER_STATE to 3 only if the first
+ * two were beaten in order.
+ */
 static EVT_BEGIN(enemy3_dead_evt)
     CALL_CHILD(enemy_common_dead_event)
     IF_INT_EQUAL(GSW_LAS_17_ENEMY_ORDER_STATE, 2)

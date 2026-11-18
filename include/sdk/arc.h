@@ -48,10 +48,6 @@ typedef struct ARCDirEntry {
 s32 ARCConvertPathToEntrynum(ARCHandle* handle, const char* path);
 BOOL ARCOpen(ARCHandle* handle, const char* filename, ARCFileInfo* info);
 BOOL ARCFastOpen(ARCHandle* handle, s32 entrynum, ARCFileInfo* info);
-BOOL ARCChangeDir(ARCHandle* handle, const char* dirName);
-BOOL ARCOpenDir(ARCHandle* handle, const char* dirName, ARCDir* dir);
-BOOL ARCReadDir(ARCDir* dir, ARCDirEntry* dirent);
-BOOL ARCCloseDir(ARCDir* dir);
 BOOL ARCInitHandle(void* arcStart, ARCHandle* handle);
 BOOL ARCGetCurrentDir(ARCHandle* handle, char* path, u32 maxlen);
 
@@ -59,3 +55,7 @@ void* ARCGetStartAddrInMem(ARCFileInfo* info);
 u32 ARCGetStartOffset(ARCFileInfo* info);
 u32 ARCGetLength(ARCFileInfo* info);
 BOOL ARCClose(ARCFileInfo* info);
+BOOL ARCChangeDir(ARCHandle* handle, const char* dirName);
+BOOL ARCOpenDir(ARCHandle* handle, const char* dirName, ARCDir* dir);
+BOOL ARCReadDir(ARCDir* dir, ARCDirEntry* dirent);
+BOOL ARCCloseDir(ARCDir* dir);

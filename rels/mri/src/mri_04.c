@@ -103,6 +103,11 @@ static EVT_BEGIN(chibitoge_init)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of the little Jabbi: he jumps to (-60, 67, -40) while saying stg2_mri_re_019, then jumps down
+ * beside Mario, gives him a Mushroom, walks off and is parked off the map; sets
+ * GSWF_MRI_04_BABY_JABBI_GIFT_THIS_VISIT.
+ */
 static EVT_BEGIN(chibitoge_talk)
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)

@@ -1290,6 +1290,11 @@ static EVT_BEGIN(evt_rsh_rnd_npc_4_7_talk)
     RETURN
 EVT_END()
 
+/**
+ * Talk script for passenger 4-8, a Goomba in random slot 2 of the car rsh_03 (stg6_rsh_c_42). Until
+ * GSWF_RSH_TRAVELER_SECRETS_HEARD is set it asks a two-way question; the first answer sets the flag, and
+ * later talks print only stg6_rsh_c_42_03.
+ */
 static EVT_BEGIN(evt_rsh_rnd_npc_4_8_talk)
     IF_INT_EQUAL(GSWF_RSH_TRAVELER_SECRETS_HEARD, 0)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_c_42"), 0, STRING("me"))
@@ -1342,6 +1347,11 @@ static EVT_BEGIN(evt_rsh_rnd_npc_5_2_talk)
     RETURN
 EVT_END()
 
+/**
+ * Talk script for passenger 5-3, a yellow-green child Toad in random slot 4 of the car rsh_04 (stg6_rsh_c_47).
+ * The first time it offers a three-way choice and sets GSWF_RSH_QUIZ_PASSENGER_DONE; later talks print only
+ * stg6_rsh_c_47_04.
+ */
 static EVT_BEGIN(evt_rsh_rnd_npc_5_3_talk)
     IF_INT_EQUAL(GSWF_RSH_QUIZ_PASSENGER_DONE, 0)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_c_47"), 0, STRING("me"))

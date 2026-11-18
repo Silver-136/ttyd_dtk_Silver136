@@ -225,7 +225,6 @@ EVT_END()
  * Battle script helper: stores who is attacking the Spiky Goomba in args[0]:
  * 0 for Mario, 1 for Goombella, 2 for anyone else.
  */
-// Tutorial speaker selector: Mario is 0, Goombella is 1, and other active attackers are 2.
 static USER_FUNC(get_attacker) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;

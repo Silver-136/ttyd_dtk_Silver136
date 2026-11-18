@@ -32,7 +32,8 @@ enum {
 
 // YuuRankingWork.dispFlags
 enum {
-    YUURANKING_DISP_FLAG_TALLY = 1 << 2, // mode 0: the token tally is still counting; yuuranking_wait_button ignores A/B
+    YUURANKING_DISP_FLAG_TALLY = 1 << 2, // mode 0: the token tally is still counting; yuuranking_wait_button
+                                         // ignores A/B
 };
 
 USER_FUNC(evt_yuuranking_alloc);

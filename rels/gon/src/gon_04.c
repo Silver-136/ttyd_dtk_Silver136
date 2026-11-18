@@ -859,6 +859,10 @@ static EVT_BEGIN(evt_kaidan_pera_anime)
     RETURN
 EVT_END()
 
+/**
+ * Map-init helper: shows only the stairs variant that matches GSWF_GON_04_PAPER_STAIRS_FLIPPED (neta_01 while
+ * clear, neta_02 when set) and switches off the hit object of the other.
+ */
 static EVT_BEGIN(evt_kaidan_pera_init)
     IF_INT_EQUAL(GSWF_GON_04_PAPER_STAIRS_FLIPPED, 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("neta_02"), MAP_OBJ_FLAG_HIDDEN)
@@ -870,6 +874,12 @@ static EVT_BEGIN(evt_kaidan_pera_init)
     RETURN
 EVT_END()
 
+/**
+ * Red switch event of mobj1: waits for GF(10) to clear; with Koops out it waits up to 1.5 seconds for him to
+ * come within 15 units of Mario. It raises the story to STG1_12_PAPER_STAIRS, pulls the fog in, flips the
+ * paper stairs (evt_kaidan_pera_anime) with a camera shot, toggles GSWF_GON_04_PAPER_STAIRS_FLIPPED and
+ * pushes the fog back out.
+ */
 static EVT_BEGIN(evt_kaidan_pera)
     CALL(evt_mobj_hitevt_onoff, STRING("me"), 0)
     CALL(evt_mario_key_onoff, 0)

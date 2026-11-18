@@ -268,6 +268,11 @@ static EVT_BEGIN(battle_entry_event)
     RETURN
 EVT_END()
 
+/**
+ * Init for Bobbery: registers his wait, attack, damage, confusion and entry scripts and his walk, run and jump
+ * sounds, sets unit work 0 to 2 to -1 (nothing in this file reads them), allocates his countersetWeapon
+ * (_sanders_make_extra_work_area) and starts his wait event.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))

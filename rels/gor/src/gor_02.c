@@ -1346,6 +1346,11 @@ EVT_BEGIN(powerupya_party_move)
     RETURN
 EVT_END()
 
+/**
+ * Cutscene when Mario hands Merlon the Up Arrow: Merlon spins up into the air, an Ultra Stone falls into the
+ * room, he lands and takes it, and the blue stone turns red (stonechangertn). It sets
+ * GSWF_GOR_UP_ARROW_USED, removes the Up Arrow and clears GSWF_GOR_MERLON_HINT_PENDING.
+ */
 EVT_BEGIN(powerupya_orb_use)
     // Mario holds out the Up Arrow; it is displayed beside him and then vanishes.
     CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
@@ -1975,6 +1980,12 @@ static EVT_BEGIN(oyabun_init)
     RETURN
 EVT_END()
 
+/**
+ * Talk event of Ishnail, the boss ("me"). Up to STG2_40 a first line (GSWF_GOR_ISHNAIL_FIRST_TALK_DONE),
+ * then a repeat line. At STG2_41_FRANKLYS_HOUSE_STG_2 he sells Mario the hint about the Pianta Parlor
+ * (mac_2_012 to 039, 64 coins) and sets GSWF_GOR_ISHNAIL_PASSWORD_TOLD; after that at STG2_41 only
+ * mac_2_040. From STG2_44 on a line per story stage.
+ */
 static EVT_BEGIN(oyabun_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS_OR_EQUAL(STG2_40_THOUSAND_YEAR_DOOR)
@@ -2126,6 +2137,12 @@ static EVT_BEGIN(tozokudan1_init)
     RETURN
 EVT_END()
 
+/**
+ * Talk event of Gus ("me"). Until GSWF_GOR_GATEKEEPER_DEFEATED: gor_02_006_01 once paid (GW(10) = 1),
+ * else gor_02_004 the first time (GSWF_GOR_GATEKEEPER_FIRST_TALK_DONE) or 005 and a choice of three:
+ * pay 10 coins (he steps aside, A_center_kabe_atr off, GW(10) = 1), gor_02_007, or battle 5. Winning
+ * sends him off and sets GSWF_GOR_GATEKEEPER_DEFEATED. Afterwards a line per story stage.
+ */
 static EVT_BEGIN(tozokudan1_talk)
     IF_INT_EQUAL(GSWF_GOR_GATEKEEPER_DEFEATED, 0)
         IF_INT_EQUAL(GW(10), 1)
@@ -3502,6 +3519,11 @@ static const char* door_data_01_npc[] = {
     NULL,
 };
 
+/**
+ * Door hook when house 01's door opens: JP and later spawn gor_02_hitobj_off. It turns the music and
+ * ambience down and low-passes the ambience, runs mapball_init, moves the items item_star1 to item_star3
+ * that are still out 1000 units down and clears GSWF_GOR_MERLON_GREETED_THIS_VISIT.
+ */
 static EVT_BEGIN(evt_door_01_open)
 #if VERSION >= VERSION_JP
     SPAWN_EVENT(gor_02_hitobj_off)
@@ -6647,6 +6669,12 @@ static EVT_BEGIN(epigraphy_map_after_stage5)
     RETURN
 EVT_END()
 
+/**
+ * Frankly's scene, spawned by the init at STG6_70_THOUSAND_YEAR_DOOR: he opens the book (mac_6_002 to
+ * 005_01), saves the play time to GSW_GOR_FRANKLY_STG6_START_TIME, sets GSWF_GOR_FRANKLY_STG6_SAID_WAIT
+ * and the story STG6_71_FRANKLYS_HOUSE_STG_6. JP and later also set the fall respawn point and restart
+ * the music and ambience.
+ */
 static EVT_BEGIN(epigraphy_map_after_stage6)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)
@@ -7012,6 +7040,10 @@ static EVT_BEGIN(evt_monosiri_follow)
     RETURN
 EVT_END()
 
+/**
+ * End event of the wall cover S_i04_kabe_msk (evt_cloud_ent), run once Flurrie's breath blows it away:
+ * sets GSWF_GOR_02_HIDDEN_WALL_BLOWN_AWAY and sets up door_data_04_ura (evt_door_entry).
+ */
 static EVT_BEGIN(evt_cloud)
     SET_VALUE(GSWF_GOR_02_HIDDEN_WALL_BLOWN_AWAY, 1)
     SET_VALUE(LW(0), PTR(&door_data_04_ura))
@@ -7107,6 +7139,10 @@ static EVT_BEGIN(epilogue_evt)
     RETURN
 EVT_END()
 
+/**
+ * Sets GSWF_GOR_MERLON_HINT_PENDING while the Up Arrow has not been used (GSWF_GOR_UP_ARROW_USED),
+ * otherwise clears it. The init spawns it from STG5_58_FAIR_WINDS on.
+ */
 EVT_BEGIN(dearu_event)
     IF_INT_EQUAL(GSWF_GOR_UP_ARROW_USED, 0)
         SET_VALUE(GSWF_GOR_MERLON_HINT_PENDING, 1)

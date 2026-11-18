@@ -5652,7 +5652,8 @@ USER_FUNC(btlevtcmd_MovePartsPosition) {
             if (part->moveTotalFrames == 0) {
                 part->moveTotalFrames = 1;
             }
-            part->moveSpeedXZ = part->moveSpeedXZ + (part->moveDistance - part->moveTotalFrames * part->moveSpeedXZ) / part->moveTotalFrames;
+            part->moveSpeedXZ = part->moveSpeedXZ +
+                (part->moveDistance - part->moveTotalFrames * part->moveSpeedXZ) / part->moveTotalFrames;
         } else {
             part->moveSpeedXZ = part->moveDistance / part->moveTotalFrames;
         }

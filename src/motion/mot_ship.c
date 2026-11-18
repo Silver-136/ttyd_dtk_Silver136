@@ -142,8 +142,8 @@ static f32 getShipVal(s32 i) {
 }
 
 /**
- * Facing bit of the boat (1 for SHIP_DIR_LEFT) for the partner follow code in party.c,
- * which seats the partners on the matching side; 0 when no boat work is allocated.
+ * Facing bit of the boat (1 for SHIP_DIR_LEFT) for the partner follow code in party.c, which seats the partners on the
+ * matching side; 0 when no boat work is allocated.
  * Descriptive name (not in the symbol maps).
  */
 s32 marioShipGetDir(void) {

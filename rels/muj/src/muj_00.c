@@ -1343,6 +1343,10 @@ EVT_BEGIN(koburon_regp)
     RETURN
 EVT_END()
 
+/**
+ * Talk event of the Whacka: the first time he introduces himself (koburon_01, GSWF_MUJ_WHACKA_FIRST_TALK_DONE),
+ * after that the line depends on GSW_MUJ_WHACKA_HIT_COUNT (0 to 7 bumps given so far).
+ */
 static EVT_BEGIN(koburon_talk)
     IF_INT_EQUAL(GSWF_MUJ_WHACKA_FIRST_TALK_DONE, 0)
         CALL(evt_msg_print, 0, STRING("koburon_01"), 0, STRING("me"))
@@ -1371,6 +1375,11 @@ static EVT_BEGIN(koburon_talk)
     RETURN
 EVT_END()
 
+/**
+ * Hit event of the Whacka: drops a Whacka Bump, says koburon_14 when GSW_MUJ_WHACKA_HIT_COUNT is 7 (the eighth
+ * bump), otherwise koburon_10, _11 or _13 by koburon_get_encount_info; adds one to the count, then leaves
+ * (parked off the map) and sets GSWF_MUJ_WHACKA_FIRST_TALK_DONE. JP and later play SFX_BTL_DAMAGED_PLIABLE1.
+ */
 EVT_BEGIN(koburon_dead)
 #if VERSION >= VERSION_JP
     CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))

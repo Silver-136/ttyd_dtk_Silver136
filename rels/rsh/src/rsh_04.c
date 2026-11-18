@@ -634,6 +634,10 @@ static EVT_BEGIN(evt_daijisouna_kami)
     RETURN
 EVT_END()
 
+/**
+ * Spawned by the rsh_04 init script at STG6_17_GHOST_DIARY when Mario enters through w_bero: the conductor
+ * speaks to Mario once (stg6_rsh_129), guarded by GSWF_RSH_CONDUCTOR_DIARY_TALK_DONE.
+ */
 static EVT_BEGIN(evt_syasyou_auto_talk)
     IF_INT_EQUAL(GSWF_RSH_CONDUCTOR_DIARY_TALK_DONE, 1)
         RETURN
@@ -647,6 +651,12 @@ static EVT_BEGIN(evt_syasyou_auto_talk)
     RETURN
 EVT_END()
 
+/**
+ * Init event of the conductor (車掌) in rsh_04: at (-395, 0, -145) from STG6_16_THE_BAGGAGE_CAR to
+ * STG6_17_GHOST_DIARY, off the map from STG6_45_DAY_3_STARTS to STG6_48_SMORG_MIASMA, otherwise at (-400, 0,
+ * -100) unless the train is bound for Rogueport (GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT: off the map). When parked
+ * below y 0, NPC_FLAG_GRAVITY is turned off.
+ */
 static EVT_BEGIN(init_syashou)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG6_16_THE_BAGGAGE_CAR, STG6_17_GHOST_DIARY)
@@ -1095,6 +1105,12 @@ static s32 item_tbl3[] = {
     ITEM_AUTOGRAPH, -1,
 };
 
+/**
+ * Talk script of the Narikin child. Before STG6_09_BUBS_REQUEST he asks Mario about his birthday wish (setting
+ * STG6_08_BUB) with a yes/no; yes sets STG6_09_BUBS_REQUEST. Before STG6_12_GIVE_AUTOGRAPH, when Mario has the
+ * Autograph and picks it in the item window, he gives a Shine Sprite (STG6_12_GIVE_AUTOGRAPH, GSWF_SHINE_35);
+ * otherwise lines by story stage.
+ */
 static EVT_BEGIN(talk_konari)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_06_PENNINGTONS_ASSISTANT)
@@ -1378,6 +1394,10 @@ static NpcSetupInfo npc_data[] = {
     {0},
 };
 
+/**
+ * Shelf trigger: the first time it gives the hidden Star Piece (GSWF_STARPIECE_85); afterwards it prints the
+ * shelf message in LW(1) (in JP and later, LW(3) from STG6_56_ROGUEPORT_STATION on).
+ */
 EVT_BEGIN(evt_tana_5)
 #if VERSION <= VERSION_DEMO_JP
     IF_INT_EQUAL(GSWF_STARPIECE_85, 1)
@@ -1537,6 +1557,11 @@ static EVT_BEGIN(evt_narikin_room)
     RETURN
 EVT_END()
 
+/**
+ * Watcher loop for cabin 3: at STG6_21_DAY_2, while Mario is inside (GSWF_RSH_04_IN_ROOM_3) and mario_flag
+ * reports no talk or Ghost Diary window, runs the repeating lines talk_sarary_repeat and talk_powan_repeat
+ * (GW(14), GW(15)); it stops them and closes their messages when a talk starts or Mario leaves.
+ */
 static EVT_BEGIN(evt_powan_room)
     SET_VALUE(LF(0), 0)
     LOOP(0)

@@ -354,6 +354,10 @@ EVT_BEGIN(gor_irai_init)
     RETURN
 EVT_END()
 
+/**
+ * First explanation of the Trouble Center board: irai_00 with the choice irai_01; the first answer gives
+ * irai_03 and sets GSWF_TROUBLE_BOARD_EXPLAINED, the other gives irai_02.
+ */
 static EVT_BEGIN(gor_irai_lecture)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_toge, MSG_TOGE_AT_POS, 150, 12, -156)
@@ -369,6 +373,13 @@ static EVT_BEGIN(gor_irai_lecture)
     RETURN
 EVT_END()
 
+/**
+ * The Trouble Center board: until GSWF_TROUBLE_BOARD_EXPLAINED is set it runs gor_irai_lecture (from the US
+ * release on Mario and the partners turn to the board first). Then it opens the request window
+ * (irai_init_func, irai_main_func); for a chosen request it shows its description and asks irai_01; the
+ * first answer prints irai_73, runs irai_start_func, spawns the request's start event and stores its id
+ * in GSW_TROUBLE_ACCEPTED.
+ */
 static EVT_BEGIN(gor_irai_main)
     IF_INT_EQUAL(GSWF_TROUBLE_BOARD_EXPLAINED, 0)
 #if VERSION >= VERSION_US

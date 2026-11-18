@@ -201,6 +201,11 @@ static BeroEntry bero_entry_data2[] = {
     {0},
 };
 
+/**
+ * Entry cutscene after Mario drops in from gor_03 (gor_03_down_evt sets GSWF_GOR_03_DROP_TO_TIK_07_PENDING; this
+ * clears it): Mario and both partners are placed at height 300, controls come back, and once Mario lands the
+ * camera is released. The September 2004 PAL demo and PAL also lower the partner to Mario.
+ */
 EVT_BEGIN(tik_07_down_evt)
     IF_INT_EQUAL(GSWF_GOR_03_DROP_TO_TIK_07_PENDING, 0)
         RETURN

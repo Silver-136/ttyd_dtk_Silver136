@@ -1154,7 +1154,8 @@ static u32 compareCamRoad(CamRoadState* a, CamRoadState* b, f32* outSpeed) {
     if (!b->on) {
         return 0;
     }
-    if (a->cam == b->cam && !(a->onCollCurve == 1 && b->onCollCurve == 0) && !(a->onCollCurve == 0 && b->hitFlags == CAM_ROAD_HIT_END)) {
+    if (a->cam == b->cam && !(a->onCollCurve == 1 && b->onCollCurve == 0) &&
+        !(a->onCollCurve == 0 && b->hitFlags == CAM_ROAD_HIT_END)) {
         d = (s32)a->segment - (s32)b->segment;
         if (__abs(d) <= 1) {
             return 0;
@@ -1339,7 +1340,8 @@ static void calcHokanCamRoad(s32 type, CamRoadState* from, CamRoadState* to, Cam
  * and some rooms (hei_00, pik_00).
  */
 void camRoadMain(CameraParams* out, f32 xA, f32 yA, f32 zA, f32 xB, f32 yB, f32 zB, f32 shiftWeight) {
-    void calcHokanCamRoad(s32 type, CamRoadState* from, CamRoadState* to, CamRoadState* unused, CamRoadState* out, f32 t);
+    void calcHokanCamRoad(s32 type, CamRoadState* from, CamRoadState* to, CamRoadState* unused, CamRoadState* out,
+                          f32 t);
     u32 flags;
     wp->in[0] = xA;
     wp->in[1] = yA;

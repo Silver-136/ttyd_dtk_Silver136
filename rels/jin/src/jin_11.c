@@ -18,6 +18,7 @@ static BeroEntry bero_entry_data[3];
 static EvtWord evt_yuka[5];
 EvtWord jin_11_init_evt[54];
 
+/** Exit event of the hole: sets GSWF_JIN_SCRIPTED_ENTRY_PENDING and changes the map to jin_07. */
 static EVT_BEGIN(jin_11_ana)
     SET_VALUE(GSWF_JIN_SCRIPTED_ENTRY_PENDING, 1)
     CALL(evt_bero_mapchange, STRING("jin_07"), 0)

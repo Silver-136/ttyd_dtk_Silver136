@@ -389,6 +389,10 @@ static s32 item_tbl_cook[] = {
     ITEM_GALLEY_POT, -1,
 };
 
+/**
+ * Talk script used when Mario returns the Galley Pot to the cook: asks for the item; unless Mario cancels, gives
+ * a Star Piece as thanks (GSWF_STARPIECE_83) and takes the Galley Pot.
+ */
 EVT_BEGIN(talk_cook_nabe_return)
     CALL(evt_msg_print, 0, STRING("stg6_rsh_70_00"), 0, STRING("コック"))
 #if VERSION <= VERSION_DEMO_JP
@@ -574,6 +578,11 @@ static s32 item_tbl_waitless[] = {
     ITEM_SHELL_EARRINGS, -1,
 };
 
+/**
+ * Talk script used when Mario returns the waitress's Shell Earrings: she asks for the item; unless Mario cancels
+ * (stg6_rsh_196_2), she thanks him, gives a Star Piece (GSWF_STARPIECE_84) and takes the earrings (from the US
+ * release on Mario first holds them up). Then the music is set back for the story stage.
+ */
 static EVT_BEGIN(talk_waitless_pias_return)
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_npc_get_reglid, STRING("ウェイトレス"), LW(10))
@@ -638,6 +647,11 @@ static EVT_BEGIN(talk_waitless_pias_return)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of the waitress. From STG6_06_PENNINGTONS_ASSISTANT on, until Mario has accepted
+ * (GSWF_RSH_WAITRESS_REQUEST_ACCEPTED), she asks for help with a yes/no; otherwise she runs
+ * talk_waitless_pias_return if Mario has the Shell Earrings, else says a line for the story stage.
+ */
 static EVT_BEGIN(talk_waitless)
     // From Pennington's assistant on, the waitress asks Mario for help.
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG6_06_PENNINGTONS_ASSISTANT)
@@ -1252,6 +1266,11 @@ static EVT_BEGIN(evt_lunch_talk)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of the shop clerk (店員), used as the shop's fook_evt: nothing before STG6_45_DAY_3_STARTS; before
+ * STG6_46_ENGINEER a line (stg6_rsh_236_00) with LW(0) = -1; before STG6_48_SMORG_MIASMA, once
+ * (GSWF_RSH_03_SHOP_CLERK_REVIVED), she gets up and says stg6_rsh_236_01. LW(0) is 0 in the other cases.
+ */
 static EVT_BEGIN(evt_shop_moamoa_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_45_DAY_3_STARTS)

@@ -3390,6 +3390,10 @@ static NpcSetupInfo npcEnt[] = {
     {0},
 };
 
+/**
+ * Case script of TEC's screen: plays the "moza" animation, prints stg7_aji_tec_00 the first time
+ * (GSWF_AJI_17_TEC_FIRST_TALK_DONE), later stg7_aji_tec_01, then pauses it.
+ */
 static EVT_BEGIN(tec_talk)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_map_replayanim, 0, STRING("moza"))

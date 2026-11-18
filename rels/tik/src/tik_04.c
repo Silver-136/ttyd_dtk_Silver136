@@ -306,6 +306,10 @@ static EVT_BEGIN(plane_tobashi_check)
     RETURN
 EVT_END()
 
+/**
+ * Blow-away event of win_1 (evt_cloud_ent: Flurrie blows it away): sets GSWF_TIK_04_WALL_BLOWN_AWAY, after
+ * which the map init hides it.
+ */
 static EVT_BEGIN(tik04_wall_blow_evt)
     SET_VALUE(GSWF_TIK_04_WALL_BLOWN_AWAY, 1)
     RETURN

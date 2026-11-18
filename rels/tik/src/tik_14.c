@@ -67,6 +67,10 @@ static EVT_BEGIN(item_get00)
     RETURN
 EVT_END()
 
+/**
+ * Map init script of tik_14: starts the sewer music and ambience, sets up the exits and places the chest
+ * holding a Mushroom (GSWF_TIK_14_MUSHROOM_CHEST).
+ */
 EVT_BEGIN(tik_14_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_TIK1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_TIK1"))

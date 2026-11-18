@@ -1402,10 +1402,10 @@ static void SoundDVDSetPanCh(u32 chan, u8 pan) {
 }
 
 // The DVD audio volume and fade setters below: original names and sizes from the JP demo map (UNUSED there:
-// nothing calls them; the map lists them in this order between SoundDVDSetPanCh and SoundDVDMain). With SoundDVDSetVolCh
-// they are the stream forms (SoundSSSetVolCh, SoundSSFadeoutCh, SoundSSFademuteCh) on the SoundDVD fields
-// SoundDVDMain fades, without the stream forms' in-use test, like SoundDVDSetPanCh (with it each is 0xc larger). The fades use
-// SoundSSFadeoutCh's frame time in each version (only the JP demo sizes are known).
+// nothing calls them; the map lists them in this order between SoundDVDSetPanCh and SoundDVDMain). With
+// SoundDVDSetVolCh they are the stream forms (SoundSSSetVolCh, SoundSSFadeoutCh, SoundSSFademuteCh) on the SoundDVD
+// fields SoundDVDMain fades, without the stream forms' in-use test, like SoundDVDSetPanCh (with it each is 0xc
+// larger). The fades use SoundSSFadeoutCh's frame time in each version (only the JP demo sizes are known).
 
 /** SoundDVDSetVolCh for DVD audio channel 0. */
 // Size 0xf8.
@@ -1588,7 +1588,7 @@ static inline u32 _ssCalcLen(SoundStreamEntry* entry) {
 // _ssDVDReadAsync_sub, _ssDVDReadAsync_l and _ssDVDReadAsync_r: original names, sizes (0x174, 0x16c, 0x180) and order
 // from the JP demo map (all UNUSED there: every call is inlined), between cache_flush and _ssDVDReadAsync_cache_aram.
 // _l and _r call _sub for the first and second channel (as the READ_L / READ_R flags name them); this form compiles to
-// exactly the three map sizes and leaves every caller unchanged (GB13). Not fixed by the bytes: the order of _sub's
+// exactly the three map sizes and leaves every caller unchanged. Not fixed by the bytes: the order of _sub's
 // parameters (all four orders tried build the same) and the order of its locals.
 
 /**

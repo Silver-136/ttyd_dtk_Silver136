@@ -1968,6 +1968,11 @@ EVT_BEGIN(hom_10_evt_resha_start4)
     RETURN
 EVT_END()
 
+/**
+ * Braking of the train: sets GSWF_HOM_TRAIN_MOVING, plays the stop sound for the current map (gor_04, hom_00 or
+ * pik_00), slides the train from 3000 to 0 over 10 seconds while feeding the wheel speeds GW(0)/GW(1), then
+ * clears GSWF_HOM_TRAIN_MOVING.
+ */
 static EVT_BEGIN(stop_1)
     SET_VALUE(GSWF_HOM_TRAIN_MOVING, 1)
     SET_FLOAT_VALUE(GW(0), FLOAT(0.0f))
@@ -2037,6 +2042,10 @@ static EVT_BEGIN(stop_2)
     RETURN
 EVT_END()
 
+/**
+ * Stops the train: stop_1 in pik_00, stop_2 in gor_04; in hom_00 stop_1, or stop_2 when the train is bound for
+ * Rogueport (GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT).
+ */
 EVT_BEGIN(hom_10_evt_resha_stop)
     CALL(evt_sub_get_mapname, LW(0))
     IF_STR_EQUAL(LW(0), STRING("pik_00"))
@@ -2204,6 +2213,10 @@ EVT_BEGIN(hom_10_init_evt)
     RETURN
 EVT_END()
 
+/**
+ * Runs hom_10_evt_resha_right, in JP and later sets GSWF_HOM_TRAIN_MOVING, and sets the wheel speeds GW(0) and
+ * GW(1) to -15.0.
+ */
 EVT_BEGIN(evt_resha_init)
 #if VERSION <= VERSION_DEMO_JP
     CALL_CHILD(hom_10_evt_resha_right)

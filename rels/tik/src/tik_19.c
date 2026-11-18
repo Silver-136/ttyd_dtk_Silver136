@@ -68,6 +68,11 @@ static s32 key_tbl[] = {
     ITEM_BLACK_KEY_0x21, -1,
 };
 
+/**
+ * The black chest talks to Mario (mac_majin_01 to 12). The first time it introduces itself and sets
+ * GSWF_TIK_19_BLACK_CHEST_FIRST_TALK_DONE. Later, without the Black Key it prints mac_majin_09; with it Mario
+ * picks the key from his items (backing out gives mac_majin_11) and the key is used up (mac_majin_12).
+ */
 static EVT_BEGIN(evt_majin)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)

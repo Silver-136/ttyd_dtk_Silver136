@@ -768,6 +768,12 @@ static EVT_BEGIN(sister_jump)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of Petuni: sets GF(11) and waits for GF(10) to clear. If she has given her prize this visit
+ * (GSWF_MRI_PETUNI_GAME_WON_THIS_VISIT) she only says stg2_mri_re_015. Otherwise she offers a quiz of four
+ * choices; the answers first, second, second, first win a Mystic Egg and set the flag, any other set gets
+ * stg2_mri_re_013. Declining the quiz runs sister_jump.
+ */
 static EVT_BEGIN(sister_talk)
     SET_VALUE(GF(11), 1)
     WAIT_WHILE(GF(10))
@@ -3401,6 +3407,11 @@ static EVT_BEGIN(evt_ueki_02)
     RETURN
 EVT_END()
 
+/**
+ * Planter hit script 3: at STG3_33_05_BOWSER_THE_GREAT_TREE a Puni runs out of it (once,
+ * GSWF_MRI_01_BOWSER_PLANT_SCENE_SEEN); at other times the planter drops a coin (GSWF_MRI_01_COIN_PLANT) when it
+ * is not already out.
+ */
 static EVT_BEGIN(evt_ueki_03)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_33_05_BOWSER_THE_GREAT_TREE)
         IF_INT_EQUAL(GSWF_MRI_01_BOWSER_PLANT_SCENE_SEEN, 0)

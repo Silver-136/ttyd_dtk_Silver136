@@ -116,6 +116,11 @@ static EVT_BEGIN(hint_plate)
     RETURN
 EVT_END()
 
+/**
+ * Event script: the wall-walking riddle of las_12. Unless GSWF_LAS_12_PASSED_THROUGH_WALL is set, waits until
+ * Mario has crossed to X >= 0, plays a success jingle and sets the flag. In the early demos it also locks
+ * Mario's controls and the letterbox while the jingle plays.
+ */
 EVT_BEGIN(kabenuke_check_evt)
     IF_INT_EQUAL(GSWF_LAS_12_PASSED_THROUGH_WALL, 1)
         RETURN

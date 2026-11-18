@@ -26,7 +26,10 @@ OSTime e3GetNoneKeyTime(void) {
     return none_key;
 }
 
-/** Field sequence entry: records the time (none_key, read only by the stripped e3GetNoneKeyTime), clears SYSTEM_LEVEL_NO_FIELD_BATTLE. */
+/**
+ * Field sequence entry: records the time (none_key, read only by the stripped e3GetNoneKeyTime), clears
+ * SYSTEM_LEVEL_NO_FIELD_BATTLE.
+ */
 void seq_gameInit(SequenceWork* wp) {
     none_key = OSGetTime();
     gp->systemLevelFlags &= ~SYSTEM_LEVEL_NO_FIELD_BATTLE;

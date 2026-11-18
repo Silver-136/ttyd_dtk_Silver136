@@ -68,7 +68,7 @@
  * Identity function on a float (returns x).
  */
 // FAKE: invented identity inline on one of two otherwise identical atan2 lines; written out, the FPR colouring
-// differs (12 forms, GB13). See FAKES.md.
+// differs (12 forms tried). See FAKES.md.
 static inline f32 fid(f32 x) { return x; }
 #include "cam_kaiten.h"
 typedef struct BrokenPiece {

@@ -433,6 +433,13 @@ static EVT_BEGIN(shop_woman_init)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of the shopkeeper's wife. Before STG4_03_SHOP_KEY the first talk
+ * (GSWF_USU_01_SHOP_WIFE_FIRST_TALK_DONE clear) is a long story during which Mario dozes
+ * off (snoring loop, yawn, wake-up voice and poses), then the flag is set;
+ * later talks print stg4_usu_56. Later lines by story: stg4_usu_58 (before
+ * STG4_04_STORAGE_ROOM_UNLOCKED), 58_01 (before STG4_10_DOOPLISS_BATTLE), then 59.
+ */
 static EVT_BEGIN(shop_woman_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG4_03_SHOP_KEY)
@@ -855,6 +862,16 @@ static EVT_BEGIN(iri_20_aunt_to_house)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of the aunt, shared by her pig form.
+ * While trouble 20 (TROUBLE_TELL_THAT_PERSON) is active she runs that request: the first talk takes Mario
+ * outside, where to music-box music she asks about Podley; once he has met Podley (GSWF_TROUBLE_WORK(1)) Mario
+ * tells the truth or makes something up, she gives him a Meteor Meal (left on the ground if his items are full)
+ * and the trouble is solved.
+ * Otherwise, before STG4_10_DOOPLISS_BATTLE, the first talk has her ask for food (a food item from the pouch
+ * earns a Shooting Star), then the bell rings and she turns into a pig (sets GSWF_USU_01_AUNT_TURNED_INTO_PIG);
+ * as a pig she oinks. Later talks give story text.
+ */
 EVT_BEGIN(aunt_talk)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_TELL_THAT_PERSON)
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
@@ -1886,6 +1903,15 @@ static EVT_BEGIN(usu01_check_vivian)
     RETURN
 EVT_END()
 
+/**
+ * Background watcher for crows F and G: when Mario is within 20 units of crow F a "..." balloon shows over him
+ * (from the US release on only in motions 0, 1, 2 and 28, and not while a partner other than Vivian is being
+ * used); pressing A makes crow F caw (stg4_jin_153).
+ * When Mario hides in Vivian's shadow (from STG4_13_VIVIAN_JOINS on) the crows talk instead, by story progress
+ * (stg4_usu_137 to 142_2_2); before STG4_14_NAME_GUESSING, the first time, Vivian then speaks
+ * (stg4_usu_149, 150) and GSWF_USU_01_CROWS_FG_PARTNER_TALK_DONE is set.
+ * After a crow talk GW(0) keeps the watcher quiet until usu01_check_vivian clears it.
+ */
 static EVT_BEGIN(usu01_crowFG_talk_event)
     // No balloon is showing yet; GW(0) keeps the watcher quiet once the crows have talked.
     SET_VALUE(LW(15), 0)
@@ -2565,6 +2591,11 @@ static EVT_BEGIN(mise_kiza_msg)
     RETURN
 EVT_END()
 
+/**
+ * Shop close callback: at STG4_01_THE_MAYORS_A_PIG with GSWF_USU_01_SHOP_WIFE_FIRST_TALK_DONE set it starts
+ * evt_monban_buta2; it stops the GW(3) event and closes its bubbles (stg4_usu_61_3, 61_4), hides house 3
+ * ("S_usu01_ie3") for one second, and restores the BGM and ambience.
+ */
 static EVT_BEGIN(mawari_house_delay)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG4_01_THE_MAYORS_A_PIG)
         IF_INT_EQUAL(GSWF_USU_01_SHOP_WIFE_FIRST_TALK_DONE, 1)
@@ -3102,6 +3133,11 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Sounds from inside the shop, heard once per run of the script: before STG4_16_LEAVING_TWILIGHT_TOWN and while
+ * GSWF_JIN_08_PARROT_SECRET_HEARD is clear, when Mario walks to 0 <= x <= 100 a bubble pointing at the shop shows
+ * stg4_usu_51 before STG4_10_DOOPLISS_BATTLE, or stg4_usu_61_1 and 61_2 after it.
+ */
 static EVT_BEGIN(usu01_gusun)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG4_16_LEAVING_TWILIGHT_TOWN)
         RETURN
@@ -3362,6 +3398,13 @@ static s32 key_tbl[] = {
     ITEM_BLACK_KEY_0x23, -1,
 };
 
+/**
+ * Open script of the black chest ("pera_box"): Mario and the partner step up to it.
+ * The first time the chest rattles and its voice talks (stg4_usu_majin3_01 to 07); sets
+ * GSWF_USU_01_BLACK_CHEST_FIRST_TALK_DONE. Later, without the Black Key it begs again (majin3_08); with it
+ * Mario may pick the key from the item menu (cancelling prints majin3_10), which uses it up (majin3_11).
+ * The open itself is evt_majin2 (evt_mobj_itembox).
+ */
 static EVT_BEGIN(evt_majin)
     // Mario's controls are off; he and his partner walk up to the black chest.
     CALL(evt_mario_key_onoff, 0)

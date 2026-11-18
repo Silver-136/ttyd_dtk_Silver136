@@ -474,6 +474,12 @@ static EVT_BEGIN(evt_taihou)
     RETURN
 EVT_END()
 
+/**
+ * General White's scene, run from "me"'s talk once GSWF_USU_GENERAL_WHITE_HINT_HEARD is set (until
+ * GSWF_BOM_GENERAL_WHITE_AGREED): the first time "me" says stg7_bom_39, White (ホワイト) comes out of the
+ * door, says stg7_bom_41, goes back in and is placed at (380, 45, -150) with N_1, while "me" says
+ * stg7_bom_40 and 40_02; sets GSWF_BOM_WHITE_MISSING_SCENE_SEEN. Later talks print stg7_bom_41_01.
+ */
 static EVT_BEGIN(urotuku_white)
     IF_INT_EQUAL(GSWF_BOM_WHITE_MISSING_SCENE_SEEN, 1)
         CALL(evt_msg_print, 0, STRING("stg7_bom_41_01"), 0, STRING("me"))

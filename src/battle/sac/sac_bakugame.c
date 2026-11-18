@@ -50,8 +50,10 @@ typedef struct BakuBtn {
 
 // BakuWork.flags, both set when bakuGameMain starts
 enum {
-    BAKU_FLAG_STAND_IN = 1,                 // a big (width 100+) or all-ceiling enemy party: the Shy Guy stand-in catches the bomb
-    BAKU_FLAG_NO_AUDIENCE_THROWER = 1 << 1, // no throwing audience seat is waiting: the crowd cannot throw the bomb back
+    BAKU_FLAG_STAND_IN = 1,                 // a big (width 100+) or all-ceiling enemy party: the Shy Guy stand-in
+                                            // catches the bomb
+    BAKU_FLAG_NO_AUDIENCE_THROWER = 1 << 1, // no throwing audience seat is waiting: the crowd
+                                            // cannot throw the bomb back
 };
 
 typedef struct BakuWork {

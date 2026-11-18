@@ -86,7 +86,8 @@ extern EvtWord minigame01_floor_delete[];
 enum {
     YUUCOUNTER_FLAG_HIDE = 1,              // the counter is not drawn
     YUUCOUNTER_FLAG_FREEZE = 1 << 1,       // the value is no longer updated (set when a round ends)
-    YUUCOUNTER_FLAG_RESTART_TIME = 1 << 2, // JP and later: the timer restarts its time baseline (after the pause window)
+    YUUCOUNTER_FLAG_RESTART_TIME = 1 << 2, // JP and later: the timer restarts its time baseline
+                                           // (after the pause window)
 };
 
 void yuucounter_flag_on(u32 mask);

@@ -237,6 +237,11 @@ static EVT_BEGIN(tensou_switch)
     RETURN
 EVT_END()
 
+/**
+ * Teleporter arrival, spawned by tensou_init: the ring "wa_pu" shows, Mario and the partner spin for four
+ * seconds, grow to full size (scale_func, 0.8 seconds) and settle from 70 above (JP and later with
+ * SFX_STG7_WARP1_2); then the ring fades out and control returns.
+ */
 EVT_BEGIN(evt_tensou2)
     CALL(evt_map_playanim, STRING("anm_wa-p"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("wa_pu"), MAP_OBJ_FLAG_HIDDEN)
@@ -310,6 +315,10 @@ EVT_BEGIN(evt_tensou2)
     RETURN
 EVT_END()
 
+/**
+ * Sets up the teleporter: the switch A__sui gets tensou_switch; when GSWF_TIK_TELEPORT_TO_AJI_PENDING is
+ * set it clears it, places Mario and the partners on the pad and spawns evt_tensou2.
+ */
 static EVT_BEGIN(tensou_init)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 0, STRING("sui__1"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("sui__2"), MAP_OBJ_FLAG_HIDDEN)
@@ -333,11 +342,18 @@ static EVT_BEGIN(tensou_init)
     RETURN
 EVT_END()
 
+/** Pick-up event of the Cog in aji_07: sets GSWF_AJI_07_COG, so the init does not place it again. */
 static EVT_BEGIN(evt_haguruma)
     SET_VALUE(GSWF_AJI_07_COG, 1)
     RETURN
 EVT_END()
 
+/**
+ * Init script of aji_07: BGM_STG7_DUN2 (JP and later also evt_snd_set_rev_mode), the exits, the
+ * teleporter (tensou_init) and the map animations; places the Cog (ITEM_COG) until GSWF_AJI_07_COG is set.
+ * Entered as "tenjo", Mario and the partners start 200 units up and land (the September 2004 PAL demo and
+ * PAL also bring the partner down to Mario). Spawns evt_emergency.
+ */
 EVT_BEGIN(aji_07_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI4"))

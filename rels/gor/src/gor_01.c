@@ -1758,6 +1758,10 @@ EVT_BEGIN(master_talk)
     RETURN
 EVT_END()
 
+/**
+ * Init event of the item shop clerk: before STG4_32_CHATTING_WITH_FLAVIO he stands at (-75, 0, -30) while
+ * GSWF_GOR_CONTACT_LENS_ARRIVED is set; from STG4_32 on he is hidden below the map.
+ */
 static EVT_BEGIN(shoptender_init)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG4_32_CHATTING_WITH_FLAVIO)
         IF_INT_EQUAL(GSWF_GOR_CONTACT_LENS_ARRIVED, 1)
@@ -1770,6 +1774,14 @@ static EVT_BEGIN(shoptender_init)
     RETURN
 EVT_END()
 
+/**
+ * Talk event of the item shop clerk. Until Zess T. has the lens (GSWF_GOR_ZESS_T_GOT_CONTACT_LENS): once
+ * it arrived (GSWF_GOR_CONTACT_LENS_ARRIVED) gor_01_015, or gor_01_015_01 while Mario holds a Contact
+ * Lens; after an order gor_01_014; otherwise gor_01_012, and while Zess T. blocks the west gate
+ * (GSWF_GOR_ZESS_T_BLOCKING_WEST_GATE) he takes the order (gor_01_013, 013_01): it sets
+ * GSWF_GOR_CONTACT_LENS_ORDERED_EARLY before STG1_17_FATHER_SON_REUNITED, else ..._ORDERED_LATE, and saves
+ * the play time in GSW_GOR_CONTACT_LENS_ORDER_TIME. Afterwards a line per story stage (gor_01_015_02 to 05).
+ */
 static EVT_BEGIN(shoptender_talk)
     DEBUG_PUT_MSG(STRING("店員TALK"))
     IF_INT_EQUAL(GSWF_GOR_ZESS_T_GOT_CONTACT_LENS, 0)
@@ -2301,6 +2313,11 @@ static EVT_BEGIN(bomhei_talk)
     RETURN
 EVT_END()
 
+/**
+ * Init event of Charlieton ("me"): hidden below the map before STG1_17_FATHER_SON_REUNITED
+ * (STG2_25_AFTER_THE_BOSS_BATTLE in the early demos); afterwards it ignores wall collision (JP and later
+ * also face him at 90) and clears GSWF_GOR_CHARLIETON_BOUGHT_THIS_VISIT.
+ */
 EVT_BEGIN(bottakuru_init)
 #if VERSION <= VERSION_DEMO_JP
     IF_INT_LESS(GSW_STORY_PROGRESS, STG2_25_AFTER_THE_BOSS_BATTLE)
@@ -4104,6 +4121,10 @@ static EVT_BEGIN(evt_door_04_open)
     RETURN
 EVT_END()
 
+/**
+ * Door hook when house 04's door closes: brings the music and ambience back and removes the low-pass;
+ * if GSWF_GOR_THIEF_FOUND_IN_HIDEOUT is set it sets GSWF_GOR_THIEF_HIDEOUT_LEFT.
+ */
 static EVT_BEGIN(evt_door_04_close)
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
     CALL(evt_snd_envon, PSND_CONTINUE | PSND_UNSILENT, 0)

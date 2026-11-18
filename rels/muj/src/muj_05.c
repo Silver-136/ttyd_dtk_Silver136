@@ -314,6 +314,13 @@ static EVT_BEGIN(sanders_talk_sub)
     RETURN
 EVT_END()
 
+/**
+ * Talk event of Bobbery. From STG5_15_RUNAWAY_SAILORS to STG5_17_WINE_OBTAINED: without a Chuckola Cola he says
+ * stg5_muj_34_03; with one the item window asks for it, and unless Mario cancels it is taken and
+ * sanders_talk_sub runs. At STG5_18_BOBBERY_RESCUE_2 the first time he says stg5_muj_47
+ * (GSWF_MUJ_05_BOBBERY_FIRST_TALK_DONE); after that stg5_muj_48 while the music slows and fades, and the partner
+ * says stg5_muj_49.
+ */
 static EVT_BEGIN(sanders_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG5_15_RUNAWAY_SAILORS, STG5_17_WINE_OBTAINED)
@@ -373,6 +380,10 @@ static EVT_BEGIN(sanders_talk)
     RETURN
 EVT_END()
 
+/**
+ * Init event of Flavio: at STG5_18_03_MARCOS_JEWEL he is placed at (279, 0, -67) facing right and, until
+ * GSWF_MUJ_05_FLAVIO_HUMMING_STOPPED is set, starts marco_hanauta (id in GW(2)).
+ */
 static EVT_BEGIN(marco_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG5_18_03_MARCOS_JEWEL)
@@ -452,6 +463,10 @@ static EVT_BEGIN(erumosu_regl)
     RETURN
 EVT_END()
 
+/**
+ * Death event of Ember 1 (エルモス１): sets GSWF_MUJ_05_EMBERS_DEFEATED, deletes the events in GW(0) and GW(2), parks
+ * the Ember off the map and lets Mario hammer the tree A_ki_02_01, which runs sanders_kyushutsu_sub.
+ */
 static EVT_BEGIN(erumosu_a_dead)
     SET_VALUE(GSWF_MUJ_05_EMBERS_DEFEATED, 1)
     DELETE_EVENT(GW(0))
@@ -1365,6 +1380,10 @@ static EVT_BEGIN(dokuroiwa_init)
     RETURN
 EVT_END()
 
+/**
+ * First scene on entering the map: plays BGM_EVT_DANGER4, waits for the entrance to finish, and Bobbery (サンダース)
+ * says stg5_muj_33; sets GSWF_MUJ_05_BOBBERY_FIRST_SCENE_SEEN.
+ */
 static EVT_BEGIN(muj_05_first)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_DANGER4"))
     CALL(evt_mario_key_onoff, 0)

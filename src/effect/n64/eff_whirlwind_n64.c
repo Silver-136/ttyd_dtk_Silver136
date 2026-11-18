@@ -19,9 +19,9 @@ static u8 col_r[3] = {0xFF, 0xFF, 0x40};
 static u8 col_g[3] = {0xFF, 0x40, 0x40};
 static u8 col_b[3] = {0xFF, 0x40, 0xFF};
 
-// Stripped: nothing reads it (JP demo map: UNUSED, 0x24, first in this file's .data). Every 0x24
-// color_rotation_data table of the other effects (eff_damage_star, eff_kiss, eff_recovery, eff_onpu_n64,
-// eff_peach_dust_n64, ...) holds these twelve colours, so this one takes them.
+// Stripped: nothing reads it (JP demo map: UNUSED, 0x24, first in this file's .data). Every 0x24 color_rotation_data
+// table of the other effects (eff_damage_star, eff_kiss, eff_recovery, eff_onpu_n64, eff_peach_dust_n64, ...) holds
+// these twelve colours, so this one takes them.
 static u8 color_rotation_data[] = {
     0xFE, 0xAC, 0xAC, 0xFE, 0xAC, 0xD5, 0xFE, 0xB4, 0x9A, 0xD5, 0xB4, 0xFE,
     0xB4, 0xB4, 0xFE, 0xB4, 0xDD, 0xFE, 0xB4, 0xFE, 0xFE, 0xB4, 0xFE, 0xD5,

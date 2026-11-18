@@ -55,7 +55,8 @@ typedef struct Muki3D { // 0x24
 
 // MukiWork.flags
 enum {
-    MUKI_FLAG_DIZZY = 1, // set by a poison mushroom hit, cleared after 120 frames (hazardTimer); the cursor moves slower
+    MUKI_FLAG_DIZZY = 1, // set by a poison mushroom hit, cleared after 120 frames (hazardTimer); the cursor moves
+                         // slower
 };
 
 typedef struct MukiWork {

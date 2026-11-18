@@ -328,6 +328,15 @@ static EVT_BEGIN(tegami_event)
     RETURN
 EVT_END()
 
+/**
+ * Scene of the thousand Dull Bones (senkaron, 千カロン), started by the leader's talk event; it does
+ * nothing after STG1_11_1000_DRY_BONES. The leader rebuilds himself (KRN_D_3, D_4), the danger music starts
+ * and the swarm (senkaron_entry_event) sweeps Mario back. Then it loops until Mario touches the leader
+ * (JP and later leader_touch_check; the early demos his x reaching 350) or reaches the west door: there he
+ * is flung out to gon_01 (e_bero) and GSWF_GON_03_PUSHED_OUT_PENDING and the ONCE / AGAIN counter flags are
+ * set. Touching the leader starts battle 6; afterwards he runs off, the story becomes
+ * STG1_11_1000_DRY_BONES and both doors are switched on.
+ */
 static EVT_BEGIN(senkaron_event)
     // Only before the Dull Bones leader fight has happened: the swarm is set up and the music stops.
     IF_INT_LESS_OR_EQUAL(GSW_STORY_PROGRESS, STG1_11_1000_DRY_BONES)

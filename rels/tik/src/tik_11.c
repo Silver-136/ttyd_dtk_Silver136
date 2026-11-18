@@ -859,6 +859,13 @@ static EVT_BEGIN(powerdownya_party_lank_rtn)
     RETURN
 EVT_END()
 
+/**
+ * Talk script at Chet Rippo's counter: the first talk greets Mario (powerdown_00) and sets
+ * GSWF_TIK_11_CHET_RIPPO_FIRST_TALK_DONE; later talks use powerdown_00_01 once per visit
+ * (GSWF_TIK_11_CHET_RIPPO_GREETED_VISIT, cleared by the map init), then powerdown_01. The menu (powerdown_02)
+ * trades Mario's stats (powerdownya_mario_level_rtn), trades partner ranks (powerdownya_party_lank_rtn), or
+ * leaves.
+ */
 static EVT_BEGIN(powerdownya_table_talk)
     CALL(setmertn, STRING("パワーダウン屋"))
     CALL(evt_mario_key_onoff, 0)

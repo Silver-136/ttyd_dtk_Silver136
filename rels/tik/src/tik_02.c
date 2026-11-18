@@ -794,6 +794,11 @@ static EVT_BEGIN(geso_battle)
     RETURN
 EVT_END()
 
+/**
+ * Bobbery trigger of the cracked wall: plays the break sound, enables the exit w_bwro_2 and its hit area, sets
+ * GSWF_TIK_01_EAST_WALL_BOMBED (the flag tik_01 sets for the same wall from its side) and plays the
+ * paper-style collapse animation.
+ */
 static EVT_BEGIN(wall_bomb)
     BEGIN_INLINE_EVENT
         WAIT_MS(200)

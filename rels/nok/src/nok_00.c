@@ -300,6 +300,13 @@ static s32 iri_15_item_tbl2[] = {
     ITEM_MOUSSE_CAKE, -1,
 };
 
+/**
+ * Talk script of the Koopa of Trouble Center request TROUBLE_THE_FOOD_I_WANT. While it is accepted: the first
+ * talk states the request; then Mario picks an item: two Hot Dogs (GSWF_TROUBLE_WORK(1), (2)), then a Mousse
+ * Cake, which he pays with a Dried Bouquet; that saves the play time (GSW_NOK_FOOD_I_WANT_DONE_TIME) and
+ * finishes the request. Once it is done he offers another Dried Bouquet for a Hot Dog. Otherwise lines by story
+ * stage.
+ */
 EVT_BEGIN(nokonoko_F_talk)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_THE_FOOD_I_WANT)
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)

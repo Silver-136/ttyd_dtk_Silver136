@@ -1533,6 +1533,10 @@ static EVT_BEGIN(evt_moamoa_escape0)
     RETURN
 EVT_END()
 
+/**
+ * Frees the conductor (spawns evt_moamoa_help with 車掌), sets GSWF_RSH_SMORG_CONDUCTOR_FREED and gives him
+ * talk_syashou as his talk event.
+ */
 static EVT_BEGIN(evt_moamoa_escape1)
     SET_VALUE(LW(0), STRING("車掌"))
     SPAWN_EVENT(evt_moamoa_help)
@@ -2053,6 +2057,10 @@ EVT_BEGIN(rsh_05_init_evt_nidome)
     RETURN
 EVT_END()
 
+/**
+ * Init script of rsh_05 for the nidome set-up: picks bero_data_a, b or c from GSWF_RSH_REVISIT_MAP_A, B or C,
+ * runs the door set-up and then rsh_05_init_evt_nidome.
+ */
 EVT_BEGIN(rsh_05_a_init_evt_nidome)
     IF_INT_EQUAL(GSWF_RSH_REVISIT_MAP_A, 1)
         SET_VALUE(LW(0), PTR(bero_data_a))

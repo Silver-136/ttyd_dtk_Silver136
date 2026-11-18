@@ -73,6 +73,7 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/** Wind event of the wall panel mekure (registered with evt_cloud_ent): sets GSWF_JIN_06_WALL_PANEL_BLOWN_AWAY. */
 static EVT_BEGIN(jin_06_wall_open_evt)
     SET_VALUE(GSWF_JIN_06_WALL_PANEL_BLOWN_AWAY, 1)
     RETURN

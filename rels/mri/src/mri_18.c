@@ -95,6 +95,10 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Planter hit script 4: when its item is not out, launches a coin out of the planter, collected only once
+ * (GSWF_MRI_18_COIN_PLANT).
+ */
 static EVT_BEGIN(evt_ueki_04)
     CALL(evt_item_delete_check, STRING("item_ueki_04"), LW(0))
     IF_INT_EQUAL(LW(0), 1)

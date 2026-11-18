@@ -1538,6 +1538,10 @@ static EVT_BEGIN(minnnanokoe_evt)
     RETURN
 EVT_END()
 
+/**
+ * Hides the pipe group S_dakan and turns off its hit A_dokan until GSWF_TIK_17_PIK_PIPE_RAISED is set (by the
+ * tornado switch switch00 in tik_17).
+ */
 static EVT_BEGIN(evt_switch_init)
     IF_INT_EQUAL(GSWF_TIK_17_PIK_PIPE_RAISED, 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_dakan"), MAP_OBJ_FLAG_HIDDEN)

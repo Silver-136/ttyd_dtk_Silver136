@@ -243,7 +243,6 @@ EVT_END()
  * dmg_avoid_counter_thorn_head_event uses it to pick the lecture unit's scolding line for whoever jumped on the
  * Spiky Goomba (mac_0_092_06 to Mario, mac_0_092_07 to Goombella).
  */
-// Return this tutorial's attacker category: Mario = 0, Goombella = 1, everyone else = 2.
 static USER_FUNC(get_attacker) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;

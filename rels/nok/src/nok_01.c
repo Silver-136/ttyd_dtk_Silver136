@@ -651,6 +651,12 @@ static EVT_BEGIN(nokorin_init)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of Koopie Koo. Before STG1_06_01_GOLD_FUZZY she introduces herself, then confides in Mario. From
+ * STG1_07_KOOPS_JOINS to STG1_17_FATHER_SON_REUNITED, the first time Koops is the active partner she speaks to
+ * him, sets GSWF_NOK_KOOPIE_KOO_BLESSING_DONE and walks off. Later lines depend on whether Koops is the active
+ * partner; after STG8_END_AFTER_THE_BATTLE only US and the September 2004 US demo keep that test.
+ */
 static EVT_BEGIN(nokorin_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG1_06_01_GOLD_FUZZY)

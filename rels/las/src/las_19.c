@@ -332,6 +332,7 @@ static EVT_BEGIN(change_map_evt)
     RETURN
 EVT_END()
 
+/** Event script: the first switch of las_19 was hit; toggles GSWF_LAS_19_SWITCH_1_ON. */
 static EVT_BEGIN(switch1_evt)
     IF_INT_EQUAL(GSWF_LAS_19_SWITCH_1_ON, 0)
         SET_VALUE(GSWF_LAS_19_SWITCH_1_ON, 1)
@@ -341,6 +342,7 @@ static EVT_BEGIN(switch1_evt)
     RETURN
 EVT_END()
 
+/** Event script: the second switch of las_19 was hit; toggles GSWF_LAS_19_SWITCH_2_ON. */
 static EVT_BEGIN(switch2_evt)
     IF_INT_EQUAL(GSWF_LAS_19_SWITCH_2_ON, 0)
         SET_VALUE(GSWF_LAS_19_SWITCH_2_ON, 1)

@@ -833,8 +833,14 @@ EVT_END()
 // Stripped (JP demo map: UNUSED, 0x14 each, between evt_diary_read and evt_lecture_msg): nothing reads them (their
 // user was probably the stripped winNumSet, 0x228, whose body is not known). Same names and sizes as icondrv's
 // linked digit icon tables, whose contents they take.
-static u16 suuji[] = { ICON_NUMBER_0, ICON_NUMBER_1, ICON_NUMBER_2, ICON_NUMBER_3, ICON_NUMBER_4, ICON_NUMBER_5, ICON_NUMBER_6, ICON_NUMBER_7, ICON_NUMBER_8, ICON_NUMBER_9 };   // 0-9
-static u16 suuji_s[] = { ICON_NUMBER_SMALL_0, ICON_NUMBER_SMALL_1, ICON_NUMBER_SMALL_2, ICON_NUMBER_SMALL_3, ICON_NUMBER_SMALL_4, ICON_NUMBER_SMALL_5, ICON_NUMBER_SMALL_6, ICON_NUMBER_SMALL_7, ICON_NUMBER_SMALL_8, ICON_NUMBER_SMALL_9 }; // 0-9 small
+static u16 suuji[] = { // 0-9
+    ICON_NUMBER_0, ICON_NUMBER_1, ICON_NUMBER_2, ICON_NUMBER_3, ICON_NUMBER_4,
+    ICON_NUMBER_5, ICON_NUMBER_6, ICON_NUMBER_7, ICON_NUMBER_8, ICON_NUMBER_9,
+};
+static u16 suuji_s[] = { // 0-9 small
+    ICON_NUMBER_SMALL_0, ICON_NUMBER_SMALL_1, ICON_NUMBER_SMALL_2, ICON_NUMBER_SMALL_3, ICON_NUMBER_SMALL_4,
+    ICON_NUMBER_SMALL_5, ICON_NUMBER_SMALL_6, ICON_NUMBER_SMALL_7, ICON_NUMBER_SMALL_8, ICON_NUMBER_SMALL_9,
+};
 
 /**
  * The badge tutorial's text (lecture_badge_00..07) shown over the pause menu;

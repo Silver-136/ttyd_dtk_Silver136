@@ -1374,6 +1374,11 @@ static EVT_BEGIN(starmaniac_get_event)
     RETURN
 EVT_END()
 
+/**
+ * Talk script for Dazzle: ends at once when he has no badges left; otherwise greets Mario (the first talk
+ * sets GSWF_TIK_00_DAZZLE_FIRST_TALK_DONE) and trades badges for Star Pieces, refusing when Mario has none.
+ * JP and later stop the room sound during the talk (tik_snd_off / tik_snd_on).
+ */
 static EVT_BEGIN(starmaniac_talk)
     // If Dazzle has no badges left to trade, he apologises and the talk ends.
     CALL(evt_badgeShop_starmaniac_get_kind_cnt, LW(0))
@@ -1506,6 +1511,12 @@ static EVT_BEGIN(starmaniac_talk)
     RETURN
 EVT_END()
 
+/**
+ * Talk script for Wonky (johoyaketi): the first talk prints johoyaketi_00, sets
+ * GSWF_TIK_00_WONKY_FIRST_TALK_DONE and ends. Afterwards he offers a random new piece of information for coins
+ * (refused when Mario cannot pay); with nothing new, or when Mario declines, he repeats a random one Mario
+ * already heard, if any.
+ */
 static EVT_BEGIN(johoyaketi_talk)
     IF_INT_EQUAL(GSWF_TIK_00_WONKY_FIRST_TALK_DONE, 0)
         CALL(evt_msg_print, 0, STRING("johoyaketi_00"), 0, STRING("me"))
@@ -2572,6 +2583,12 @@ EVT_BEGIN(evt_open_04_open)
     RETURN
 EVT_END()
 
+/**
+ * Close callback (evtClose) of the teleporter house door (door_data_04): restores the music and ambience.
+ * Before STG7_26_THE_HIDEOUT_EXPLODES, the first time only (GSWF_TIK_00_DOOR_04_TALK_DONE), the partner
+ * speaks (tik_00_tensou_1); at STG7_26 exactly it plays Professor Frankly's scene (kurihakase_event) instead
+ * (JP and later then set the bottomless-fall respawn point to Mario's position).
+ */
 static EVT_BEGIN(evt_door_04_close)
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
     CALL(evt_snd_envon, PSND_CONTINUE | PSND_UNSILENT, 0)
@@ -2901,6 +2918,11 @@ static USER_FUNC(scale_func) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Teleport to the X-Naut Fortress: Mario and his partner walk to the pad, spin faster for three seconds,
+ * shrink and float upward; GSWF_TIK_TELEPORT_TO_AJI_PENDING is set (aji_07 reads and clears it) and the map
+ * changes to aji_07.
+ */
 static EVT_BEGIN(tensou_event)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
@@ -3082,6 +3104,11 @@ static EVT_BEGIN(kurihakase_event)
     RETURN
 EVT_END()
 
+/**
+ * Bobbery trigger of the pillar (registered by hashira_bomb on a_bom_mae): plays the break sound, swaps the
+ * hit areas from before to after the blast, sets GSWF_TIK_00_PILLAR_BOMBED and plays the paper-capture
+ * animation (OFF_d_bom_ver2) of the pillar collapsing.
+ */
 static EVT_BEGIN(hashira_bomb_sub)
     BEGIN_INLINE_EVENT
         WAIT_MS(200)

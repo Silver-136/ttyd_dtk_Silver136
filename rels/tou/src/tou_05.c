@@ -717,6 +717,11 @@ static NpcSetupInfo npcEnt[] = {
     {0},
 };
 
+/**
+ * Grubba (stg3_tou_57) calls in Jolene (キノシコワ), who comes in through the door, walks to the desk and talks
+ * with Grubba and Mario (stg3_tou_58 to 61); then she leaves through the door with Mario following,
+ * GSWF_TOU_JOLENE_ESCORT_TO_MINORS is set and the map changes to tou_04.
+ */
 static EVT_BEGIN(evt_kinoshikowa)
     CALL(evt_msg_print, 0, STRING("stg3_tou_57"), 0, STRING("ガンス"))
     WAIT_MS(300)
@@ -792,6 +797,12 @@ static EVT_BEGIN(evt_kinoshikowa)
     RETURN
 EVT_END()
 
+/**
+ * First office scene, run from the map init before STG3_03_GRUBBA while GSWF_TOU_GRUBBA_WALK_TALK_PENDING is
+ * clear: Grubba (ガンス) greets Mario to his theme (BGM_EVT_STG3_GANCE1) and talks (stg3_tou_43 to 47, with a
+ * yes/no menu that either answer passes), circles Mario as the camera follows, then leaves through the door;
+ * GSWF_TOU_GRUBBA_WALK_TALK_PENDING is set and the map changes to tou_04.
+ */
 static EVT_BEGIN(evt_sensyu)
     // The map's music fades out and, after a pause, Grubba's theme starts as he notices Mario.
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
@@ -982,6 +993,12 @@ static EVT_BEGIN(evt_sensyu2)
     RETURN
 EVT_END()
 
+/**
+ * Promotion scene, run from the map init while GSWF_TOU_PROMOTION_TO_MAJORS_PENDING is set: Jolene (キノシコワ)
+ * comes in, Grubba jumps and shuts his desk drawer, and the two talk (stg3_tou_287 to 293); Grubba hands Mario
+ * 30 coins; Jolene leaves through the door, GSWF_TOU_JOLENE_ESCORT_TO_MAJORS is set and the map changes to
+ * tou_04.
+ */
 static EVT_BEGIN(evt_1st_leagu)
     // Mario, his partner and Jolene are placed just outside the office door (z -160 to -180); the camera frames Grubba's desk.
     CALL(evt_mario_key_onoff, 0)
@@ -1395,6 +1412,11 @@ static EVT_BEGIN(evt_nozoki)
     RETURN
 EVT_END()
 
+/**
+ * Re-registration scene, run from the map init from STG3_34_RETURN_TO_ROGUEPORT on while
+ * GSWF_TOU_REMATCH_REGISTERED is clear (not when Mario arrives by falling): Jolene (キノシコワ) talks while
+ * walking about the room (stg3_tou_re_003 to 007), then the flag is set.
+ */
 static EVT_BEGIN(evt_sensyu_reentry)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_set_dir, 90, 0, 0)

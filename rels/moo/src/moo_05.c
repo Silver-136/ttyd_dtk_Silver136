@@ -96,6 +96,11 @@ static EVT_BEGIN(rock_main)
 EVT_END()
 #endif
 
+/**
+ * Bobbery's (CASE_BOBBERY) event on rock S_iwa_07 of moo_05: removes the rock with the paper explosion
+ * (rock_main) and sets GSWF_MOO_05_ROCK_07_BLOWN. From the US release on the flag is set first; earlier versions
+ * lock Mario's controls and set it after the explosion.
+ */
 static EVT_BEGIN(rock_evt0)
 #if VERSION >= VERSION_US
     SET_VALUE(GSWF_MOO_05_ROCK_07_BLOWN, 1)

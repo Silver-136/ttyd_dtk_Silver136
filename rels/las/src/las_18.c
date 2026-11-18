@@ -132,6 +132,12 @@ static USER_FUNC(switch_alpha_off) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Event script: the hidden switch of las_18 shows only while Vivian is the partner and her status is 2: the
+ * switch's alpha rises by 4 per frame up to 160 while that holds and falls back otherwise. When it reaches 160
+ * for the first time it plays a success jingle and sets GSWF_LAS_18_HIDDEN_SWITCH_SHOWN. Ends when the switch's
+ * mobj sequence is past 0 (pressed).
+ */
 static EVT_BEGIN(vivian_check)
     CALL(evt_seq_wait, SEQ_GAME)
     SET_VALUE(LW(15), 0)

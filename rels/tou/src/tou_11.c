@@ -302,6 +302,10 @@ static EVT_BEGIN(evt_tojikome_msg)
     RETURN
 EVT_END()
 
+/**
+ * Blow-away event of the poster pos_1 (evt_cloud_ent: Flurrie blows it away): plays the success jingle and
+ * sets GSWF_TOU_11_POSTER_BLOWN_AWAY, after which the map init hides the poster.
+ */
 static EVT_BEGIN(evt_postar)
     BEGIN_INLINE_EVENT
         CALL(evt_snd_bgmoff, PSND_PAUSE)

@@ -904,6 +904,11 @@ static EVT_BEGIN(witchtrio_mess_mari)
     RETURN
 EVT_END()
 
+/**
+ * Cutscene after Mario beats the Shadow Sirens: they flee, a hidden stand-in drops the necklace for Mario to pick
+ * up (item flag GSWF_WIN_00_NECKLACE), the Boggly Woods music returns and the story becomes
+ * STG2_08_SHADOW_SIRENS_LOSE.
+ */
 static EVT_BEGIN(witchtrio_lose)
     // The Sirens and Mario's party are placed for the aftermath,
     // with a hidden stand-in Beldam that will carry the necklace.

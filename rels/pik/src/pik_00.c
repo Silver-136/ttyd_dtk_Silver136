@@ -667,6 +667,11 @@ EVT_BEGIN(hom_10_evt_resha_start4)
     RETURN
 EVT_END()
 
+/**
+ * Braking of the train: sets GSWF_HOM_TRAIN_MOVING, plays the stop sound for the current map (gor_04, hom_00 or
+ * pik_00), slides the train from 3000 to 0 over 10 seconds while feeding the wheel speeds GW(0)/GW(1), then
+ * clears GSWF_HOM_TRAIN_MOVING.
+ */
 static EVT_BEGIN(stop_1)
     SET_VALUE(GSWF_HOM_TRAIN_MOVING, 1)
     SET_FLOAT_VALUE(GW(0), FLOAT(0.0f))
@@ -886,6 +891,13 @@ EVT_BEGIN(hom_10_evt_resha_left)
     RETURN
 EVT_END()
 
+/**
+ * Init script of the train-exterior scene: fades the music out, starts ENV_STG6_RSH2, locks Mario and the
+ * partners and parks them off the map. Unless the train is bound for Rogueport
+ * (GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT) it runs hom_10_evt_resha_right and _start3 (JP and later also swap the
+ * renketu coupling groups); otherwise hom_10_evt_resha_left and _start4 with the train at -1500. A letterboxed
+ * camera pans along the train over 8 seconds; after 4 seconds the map changes to rsh_02_a ("nidome").
+ */
 EVT_BEGIN(hom_10_init_evt)
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_RSH2"))
@@ -1016,6 +1028,15 @@ EVT_BEGIN(evt_pik_yajirushi)
     RETURN
 EVT_END()
 
+/**
+ * Boarding the train back to Rogueport: the door (tobira) slides open, Mario and the partners walk aboard, the
+ * door slides shut and the station attendant (駅員) looks both ways and says train_07. Everyone is parked off the
+ * map and the train pulls out (hom_10_evt_resha_start2); ten seconds later GSWF_RSH_NEW_PASSENGERS_PENDING is
+ * set if the story has reached STG6_56_ROGUEPORT_STATION, GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT and
+ * GSWF_HOM_TRAIN_BOARDED_UNUSED are set, GSWF_HOM_TRAIN_AT_POSHLEY is cleared (JP and later also
+ * GSWF_HOM_TRAIN_AT_ROGUEPORT), GSW_HOM_TRAIN_LEG = 2, and the map changes to rsh_02_a (nidome_start). JP and
+ * later set GF(11) first; the early demos clear GSWF_RSH_02_DRIED_SHROOM_DRAWER.
+ */
 static EVT_BEGIN(evt_train)
 #if VERSION >= VERSION_JP
     SET_VALUE(GF(11), 1)
@@ -1651,6 +1672,11 @@ static s32 item_tbl_madam[] = {
     ITEM_GOLD_RING, -1,
 };
 
+/**
+ * Talk script for returning the Gold Ring to the madam: lowers the music and asks for the item (stg6_pik_04_06,
+ * item window of item_tbl_madam). Unless Mario cancels she pays 30 coins (stg6_pik_04_07 and 08), takes the Gold
+ * Ring and sets GSWF_PIK_MADAM_GOLD_RING_RETURNED; a cancel gets stg6_pik_04_10.
+ */
 static EVT_BEGIN(talk_madam_ring_return)
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_msg_print, 0, STRING("stg6_pik_04_06"), 0, STRING("マダム"))
@@ -1677,6 +1703,16 @@ static s32 iri_23_item_tbl[] = {
     ITEM_WRESTLING_MAG, -1,
 };
 
+/**
+ * Talk script of the madam (マダム). While Trouble Center request TROUBLE_I_MUST_HAVE_THAT_BOOK is accepted:
+ * without a Wrestling Mag she says irai_23_00; with one she asks for it (irai_23_01), and unless Mario cancels
+ * takes it, gives the Platinum Card and finishes the request. Otherwise, until Mario has accepted her ring
+ * request (GSWF_RSH_MADAM_RING_REQUEST_ACCEPTED), she lowers the music and asks (stg6_pik_04_01 the first time,
+ * stg6_pik_04_04 after) with a yes/no; yes sets the flag. Then, when Mario carries the Gold Ring, she runs
+ * talk_madam_ring_return; else she says stg6_pik_04, or from STG6_70_THOUSAND_YEAR_DOOR on, once the ring is
+ * returned (GSWF_PIK_MADAM_GOLD_RING_RETURNED), stg7_pik_clear_01 (stg7_pik_clear_01_1 after
+ * STG8_END_AFTER_THE_BATTLE).
+ */
 static EVT_BEGIN(talk_madam)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_I_MUST_HAVE_THAT_BOOK)
         CALL(evt_pouch_check_item, ITEM_WRESTLING_MAG, LW(0))

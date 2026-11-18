@@ -126,6 +126,10 @@ static EVT_BEGIN(n_door_close)
     RETURN
 EVT_END()
 
+/**
+ * Entrance script for the toilet pipe: clears GSWF_TOU_09_TOILET_WARP_PENDING and
+ * GSWF_TOU_08_TOILET_WARP_PENDING, spawns evt_toile and sets LW(0) to 0.
+ */
 static EVT_BEGIN(toile_in)
     SET_VALUE(GSWF_TOU_09_TOILET_WARP_PENDING, 0)
     SET_VALUE(GSWF_TOU_08_TOILET_WARP_PENDING, 0)
@@ -134,6 +138,11 @@ static EVT_BEGIN(toile_in)
     RETURN
 EVT_END()
 
+/**
+ * Exit script for the toilet pipe: plays the water ("anm_mizu") and, a second later, the lid ("anm_futa")
+ * animation with the flush sound, sets GSWF_TOU_08_TOILET_WARP_PENDING (read by tou_04's init) and sets LW(0)
+ * to 0.
+ */
 static EVT_BEGIN(toile_out)
     CALL(evt_map_playanim, STRING("anm_mizu"), MAP_ANIM_PLAY_ONCE, 0)
     BEGIN_INLINE_EVENT
@@ -356,6 +365,12 @@ static EVT_BEGIN(init_uranoko)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of the Shady Koopa: before STG3_34_RETURN_TO_ROGUEPORT he gives stg3_npc_08_04_13_01 at
+ * STG3_21_1ST_MATCH_WITH_RAWK_HAWK while GSWF_TOU_RAWK_HAWK_OPENING_SEEN is clear (nothing sets it, only clears),
+ * otherwise a line by Mario's ranking (10 down to 1). After that the line depends on
+ * GSWF_TOU_REMATCH_DEMOTED_TO_MINORS and GSWF_TOU_CHAMPION_TITLE_REGAINED.
+ */
 static EVT_BEGIN(talk_uranoko)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
         IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_21_1ST_MATCH_WITH_RAWK_HAWK)
@@ -917,6 +932,13 @@ static EVT_BEGIN(evt_toile_door2)
     RETURN
 EVT_END()
 
+/**
+ * Title-win scene, run from the map init after a match when Mario's ranking is 0; from the US release on the
+ * Hammer Bro's regular event is stopped first. Grubba (ガンス) speaks (stg3_tou_445) and gives Mario the Champ's
+ * Belt (from JP on the belt NPC and glow get their own camera, tou_08_belt_camid), Grubba and Jolene
+ * (キノシコワ) speak (447, 448) and she leaves through the door with Mario behind her;
+ * GSWF_TOU_JOLENE_ESCORT_TO_CHAMP_ROOM is set and the map changes to tou_04.
+ */
 static EVT_BEGIN(evt_champion_win)
     CALL(evt_mario_key_onoff, 0)
 #if VERSION >= VERSION_US
@@ -1023,6 +1045,10 @@ static EVT_BEGIN(bed_entry)
     RETURN
 EVT_END()
 
+/**
+ * Run from evt_tou_match_after_default at rank 5 while GSWF_TOU_CAKE_ON_TABLE is set: the camera turns to the
+ * Shady Koopa (ウラノコ), who speaks (stg3_tou_297_2); clears GSWF_TOU_CAKE_ON_TABLE.
+ */
 EVT_BEGIN(evt_tou_08_cake)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)

@@ -41,7 +41,8 @@ typedef struct ExtMoamoaGroup {
 
 // ExtMoamoa.flags
 enum {
-    EXT_MOAMOA_FLAG_DRIVEN = 1, // moved by the death scripts: picked for the swirl (moamoa_guruguru) or launched (moamoa_bomb)
+    EXT_MOAMOA_FLAG_DRIVEN = 1, // moved by the death scripts: picked for the swirl (moamoa_guruguru) or launched
+                                // (moamoa_bomb)
 };
 
 typedef struct ExtMoamoa {

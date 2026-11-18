@@ -154,6 +154,13 @@ static EVT_BEGIN(shake_evt)
     RETURN
 EVT_END()
 
+/**
+ * Open event of the chest gon07treasure; does nothing from STG1_13_A_SUSPICIOUS_ROOM on. Sets the story to
+ * STG1_13 and GSWF_GON_07_BLACK_KEY_CHEST, gives the Black Key (ITEM_BLACK_KEY_0x22), starts the quake
+ * (SFX_STG1_QUAKE4, shake_evt), raises the floor spikes (a_to_shita, hit object a_togeshita) and, with the
+ * danger music, the ceiling animation a_to_ue. The partner speaks stg1_gon_15 and 16. A countdown of the
+ * animation's remaining time starts: if it runs out before Mario leaves through an exit, the game is over.
+ */
 static EVT_BEGIN(item_evt)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG1_13_A_SUSPICIOUS_ROOM)
         RETURN

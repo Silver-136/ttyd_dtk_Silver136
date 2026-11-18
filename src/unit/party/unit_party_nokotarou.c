@@ -278,6 +278,12 @@ static EVT_BEGIN(battle_entry_event)
     RETURN
 EVT_END()
 
+/**
+ * Init for Koops: registers his wait, attack, damage, confusion and entry scripts and his walk, run and jump
+ * sounds; clears UNIT_WORK_SHELL_SPINNING, UNIT_WORK_SHELL_SPIN_SPEED and UNIT_WORK_SFX_PITCH_RATE and part
+ * 1's PARTS_WORK_SPIN_DUST and PARTS_WORK_EFFECT_END, sets the charge sound's base pitch
+ * (UNIT_WORK_SFX_PITCH_BASE) to 3410 and starts his wait event.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))

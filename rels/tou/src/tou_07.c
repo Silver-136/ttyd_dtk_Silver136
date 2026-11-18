@@ -241,6 +241,11 @@ static NpcSetupInfo npcEnt[] = {
     {0},
 };
 
+/**
+ * Grubba's tour, run from the map init while GSWF_TOU_GRUBBA_WALK_TALK_PENDING is set: Grubba (ガンス) opens
+ * the door and walks in ahead of Mario and the partner, the door shuts and he speaks (stg3_tou_49), then the
+ * map changes to tou_08 with a page-flip transition.
+ */
 static EVT_BEGIN(evt_sensyu)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
@@ -584,6 +589,11 @@ EVT_BEGIN(evt_champion_re)
     RETURN
 EVT_END()
 
+/**
+ * Hammer case event of the wall win_kabe: a camera shake and clang, the vent cover kankikuti is hidden and
+ * win_kabe switched off. Before STG3_30_01_AIR_DUCT_ENTRANCE the story advances to it; otherwise
+ * GSWF_TOU_07_VENT_REOPENED is set. The case event then exits.
+ */
 static EVT_BEGIN(evt_dakuto)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.049804688f), FLOAT(0.0f), 500)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG3_DUCT_KOUSHI_HIT1"), 135, 80, -95, 0)

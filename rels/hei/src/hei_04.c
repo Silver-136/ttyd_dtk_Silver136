@@ -62,6 +62,10 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Hit script for item_ki_3: when that item is not out, drops a coin, collected only once
+ * (GSWF_HEI_04_COIN_TREE).
+ */
 static EVT_BEGIN(evt_ki_3)
     CALL(evt_item_delete_check, STRING("item_ki_3"), LW(0))
     IF_INT_EQUAL(LW(0), 1)

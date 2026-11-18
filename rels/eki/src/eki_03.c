@@ -209,24 +209,40 @@ static EVT_BEGIN(evt_chk)
     RETURN
 EVT_END()
 
+/**
+ * End event of poster 1 (evt_cloud_ent), run once Flurrie's breath blows it away: sets
+ * GSWF_EKI_03_POSTER_1_BLOWN_AWAY and runs evt_chk.
+ */
 static EVT_BEGIN(evt_poster_1)
     SET_VALUE(GSWF_EKI_03_POSTER_1_BLOWN_AWAY, 1)
     CALL_CHILD(evt_chk)
     RETURN
 EVT_END()
 
+/**
+ * End event of poster 2 (evt_cloud_ent), run once Flurrie's breath blows it away: sets
+ * GSWF_EKI_03_POSTER_2_BLOWN_AWAY and runs evt_chk.
+ */
 static EVT_BEGIN(evt_poster_2)
     SET_VALUE(GSWF_EKI_03_POSTER_2_BLOWN_AWAY, 1)
     CALL_CHILD(evt_chk)
     RETURN
 EVT_END()
 
+/**
+ * End event of poster 3 (evt_cloud_ent), run once Flurrie's breath blows it away: sets
+ * GSWF_EKI_03_POSTER_3_BLOWN_AWAY and runs evt_chk.
+ */
 static EVT_BEGIN(evt_poster_3)
     SET_VALUE(GSWF_EKI_03_POSTER_3_BLOWN_AWAY, 1)
     CALL_CHILD(evt_chk)
     RETURN
 EVT_END()
 
+/**
+ * End event of poster 4 (evt_cloud_ent), run once Flurrie's breath blows it away: sets
+ * GSWF_EKI_03_POSTER_4_BLOWN_AWAY and runs evt_chk.
+ */
 static EVT_BEGIN(evt_poster_4)
     SET_VALUE(GSWF_EKI_03_POSTER_4_BLOWN_AWAY, 1)
     CALL_CHILD(evt_chk)

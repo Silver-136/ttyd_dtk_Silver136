@@ -622,6 +622,14 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/**
+ * Rawk Hawk's pre-fight talk at battle start, with the status window hidden.
+ * Before STG3_30_A_NEW_CHAMPION: the first time (GSWF_TOU_RAWK_HAWK_INTRO_SEEN) he poses and trades lines with
+ * the partner (stg3_tou_432 to 435_02); later attempts use a shorter exchange (stg3_tou_436, 436_01).
+ * From STG3_34_RETURN_TO_ROGUEPORT on it is the rematch: GSWF_TOU_RAWK_HAWK_67_HP_TALK is cleared and the lines
+ * depend on GSWF_TOU_CHAMPION_TITLE_REGAINED (stg3_tou_re_116 / 123, or re_124 / 131).
+ * Between those two story points there is no talk. It ends with the partner and Rawk Hawk in their idle poses.
+ */
 static EVT_BEGIN(entry_event)
     // The status window is hidden while Rawk Hawk and the partner trade words before the fight.
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)

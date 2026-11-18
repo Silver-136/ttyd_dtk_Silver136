@@ -52,6 +52,7 @@ static EVT_BEGIN(bero_s_doa_open)
     RETURN
 EVT_END()
 
+/** Pipe exit script: sets GSWF_MRI_15_CRUMP_GONE and returns 0 in LW(0). */
 static EVT_BEGIN(evt_dokan)
     IF_INT_EQUAL(GSWF_MRI_15_CRUMP_GONE, 0)
         SET_VALUE(GSWF_MRI_15_CRUMP_GONE, 1)
@@ -100,6 +101,10 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Init script of the west door lamp: while the west door is locked (GSWF_MRI_15_DOOR_SWITCH_ON is 0) its loading
+ * zone is switched off, otherwise the lamp animation is shown lit.
+ */
 static EVT_BEGIN(door_switch_init)
     IF_INT_EQUAL(GSWF_MRI_15_DOOR_SWITCH_ON, 0)
         SET_VALUE(LW(0), STRING("w_bero"))
@@ -110,6 +115,11 @@ static EVT_BEGIN(door_switch_init)
     RETURN
 EVT_END()
 
+/**
+ * Hit script of the door switch: plays the unlock sound and, half a second later, the lamp sound, then toggles
+ * GSWF_MRI_15_DOOR_SWITCH_ON: unlocks the west loading zone and lights the lamp, or locks it again and pauses
+ * the lamp animation.
+ */
 static EVT_BEGIN(door_switch)
     CALL(evt_mapobj_get_position, STRING("S_lights"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG2_DOOR_UNLOCK"), LW(0), LW(1), LW(2), 0)
@@ -225,6 +235,7 @@ static EVT_BEGIN(dai3_battle)
     RETURN
 EVT_END()
 
+/** Planter hit script: when its item is not out, drops a Star Piece, collected only once (GSWF_STARPIECE_49). */
 static EVT_BEGIN(ueki_evt_01)
     CALL(evt_item_delete_check, STRING("item_ueki01"), LW(0))
     IF_INT_EQUAL(LW(0), 1)

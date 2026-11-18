@@ -566,6 +566,14 @@ static EVT_BEGIN(mobj_box00)
     RETURN
 EVT_END()
 
+/**
+ * Map init script of tik_01: JP and later set GSWF_TIK_01_VISITED. Starts the sewer music (fading in only the
+ * first time, via GSWF_TIK_01_ENTERED) and ambience, sets up the exits, marks the contact lens as arrived
+ * once it was ordered late and the story reached STG1_17_FATHER_SON_REUNITED, and sets up the two bombable
+ * walls, the Defend Plus P chest, the Star Piece panel, the save block, the moving floor and the airport
+ * harbor. Removes the spiked Goomba before STG0_16_FRANKLYS_HOUSE; runs the bully scene up to
+ * STG0_10_01_FRANKLYS_TUTORIAL.
+ */
 EVT_BEGIN(tik_01_init_evt)
 #if VERSION >= VERSION_JP
     SET_VALUE(GSWF_TIK_01_VISITED, 1)

@@ -3352,9 +3352,8 @@ static USER_FUNC(_hpfp_change_declare_2) {
 }
 
 /**
- * Runs Mystery's roulette over unit args[0]: picks a random item from _item_table,
- * starts the roulette effect (effNaniga) showing it and returns the item id in args[1];
- * then waits until the effect is gone.
+ * Runs Mystery's roulette over unit args[0]: picks a random item from _item_table, starts the roulette effect
+ * (effNaniga) showing it and returns the item id in args[1]; then waits until the effect is gone.
  * JP and later also count the item in the battle's attack or support item record of Mario or the partner.
  */
 static USER_FUNC(_naniga_okorukana_check) {

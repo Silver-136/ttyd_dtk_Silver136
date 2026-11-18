@@ -544,6 +544,11 @@ EVT_BEGIN(hom_10_evt_resha_start4)
     RETURN
 EVT_END()
 
+/**
+ * Train braking: sets GSWF_HOM_TRAIN_MOVING while it runs, plays this map's stop sound (gor_04, hom_00
+ * or pik_00) and eases the train model from 3000 to 0 over 10 seconds, writing the negated per-frame step
+ * into the train speeds GW(0) and GW(1); then clears GSWF_HOM_TRAIN_MOVING.
+ */
 static EVT_BEGIN(stop_1)
     SET_VALUE(GSWF_HOM_TRAIN_MOVING, 1)
     SET_FLOAT_VALUE(GW(0), FLOAT(0.0f))

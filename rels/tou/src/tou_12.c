@@ -181,6 +181,10 @@ static EVT_BEGIN(talk_michel)
     RETURN
 EVT_END()
 
+/**
+ * NPC init for Brots (ブロッツ): before STG3_32_BOSS_BATTLE he lies rotated at (110, 3, -60) in the "S_1" pose,
+ * or "X_1" once Mario has talked to him (GSWF_TOU_12_BANDY_ANDY_WARNING_HEARD).
+ */
 static EVT_BEGIN(init_brots)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_32_BOSS_BATTLE)
         CALL(evt_npc_set_position, STRING("ブロッツ"), 110, 3, -60)
@@ -206,6 +210,11 @@ static EVT_BEGIN(init_brots_dummy)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of Brots: the first time, the partner is stopped and turns to him, he speaks (stg3_tou_307_12),
+ * takes the "X_1" pose and the partner speaks (stg3_tou_307_13); sets GSWF_TOU_12_BANDY_ANDY_WARNING_HEARD.
+ * Afterwards he only says stg3_tou_307_14.
+ */
 static EVT_BEGIN(talk_brots)
     IF_INT_EQUAL(GSWF_TOU_12_BANDY_ANDY_WARNING_HEARD, 0)
         CALL(evt_party_cont_onoff, 0, 0)

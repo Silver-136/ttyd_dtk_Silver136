@@ -1706,6 +1706,10 @@ static EVT_BEGIN(last_key_lock)
     RETURN
 EVT_END()
 
+/**
+ * Like last_key_lock, for the elevator panels (stg7_aji_45_01): counts tries in GSW_AJI_01_LOCKED_EXIT_TRIES
+ * up to 3, and on the third the partner says stg7_aji_45_03.
+ */
 static EVT_BEGIN(last_elv_lock)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_print, 0, STRING("stg7_aji_45_01"), 0, 0)

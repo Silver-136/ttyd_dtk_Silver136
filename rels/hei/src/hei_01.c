@@ -166,6 +166,10 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Hit script for item_kusa_2: when that item is not out, scatters a coin, collected only once
+ * (GSWF_HEI_01_COIN_BUSH_2).
+ */
 static EVT_BEGIN(evt_kusa_2)
     CALL(evt_item_delete_check, STRING("item_kusa_2"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
@@ -174,6 +178,10 @@ static EVT_BEGIN(evt_kusa_2)
     RETURN
 EVT_END()
 
+/**
+ * Hit script for item_kusa_4: when that item is not out, scatters a Mystery, collected only once
+ * (GSWF_HEI_01_MYSTERY_BUSH).
+ */
 static EVT_BEGIN(evt_kusa_4)
     CALL(evt_item_delete_check, STRING("item_kusa_4"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
@@ -182,6 +190,10 @@ static EVT_BEGIN(evt_kusa_4)
     RETURN
 EVT_END()
 
+/**
+ * Hit script for item_kusa_7: when that item is not out, scatters a coin, collected only once
+ * (GSWF_HEI_01_COIN_BUSH).
+ */
 static EVT_BEGIN(evt_kusa_7)
     CALL(evt_item_delete_check, STRING("item_kusa_7"), LW(0))
     IF_INT_EQUAL(LW(0), 1)

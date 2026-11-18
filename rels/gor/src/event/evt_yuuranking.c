@@ -882,6 +882,14 @@ s32 yuu_kesan(s32 type, s32 score, s32 bonus, s32 mul, s32 max) {
     return ret;
 }
 
+/**
+ * Opens the ranking board: allocates the work and fills it from the arguments (x, y, minigame type, mode,
+ * score, bonus, multiplier; type 1 also a maximum in args[7]). In mode 1 it inserts the score into that
+ * minigame's saved top five, shifting lower entries down (type 1 ranks lower scores first and only below
+ * the maximum), computes its value with yuu_kesan, and a new first place sets the type's top-score flag:
+ * GSWF_GOR_PLANE_GAME_TOP_SCORE (0), GSWF_GOR_PAPER_GAME_TOP_SCORE (1), GSWF_GOR_TUBE_GAME_TOP_SCORE (2) or
+ * GSWF_GOR_BOAT_GAME_TOP_SCORE (3). Then it starts main_evt.
+ */
 USER_FUNC(evt_yuuranking_alloc) {
     EvtWord* args = event->args;
     YuuRankingWork* wp = _mapAlloc(sizeof(YuuRankingWork));

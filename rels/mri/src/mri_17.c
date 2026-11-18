@@ -611,6 +611,11 @@ EVT_BEGIN(trap_event)
     RETURN
 EVT_END()
 
+/**
+ * Waits for the trap condition: at least 10 Punies in the area, the Puni Orb on its pedestal
+ * (GSWF_MRI_17_PUNI_ORB_PLACED) and Mario and his partner both in the area; then spawns trap_event, waits for
+ * GF(1) to clear and gives every active Puni inside the trap box trap index 1 (out of the party).
+ */
 static EVT_BEGIN(trap_check)
     SET_VALUE(LW(10), 50)
     SET_VALUE(LW(11), 0)

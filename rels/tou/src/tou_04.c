@@ -660,6 +660,11 @@ static EVT_BEGIN(move_g_1_dokimasen)
     RETURN
 EVT_END()
 
+/**
+ * NPC init for guard 1: his position depends on GSWF_TOU_04_GUARD_1_ESCORT_UNUSED and on the story
+ * (STG3_20_02_BACK_TO_THE_MINORS, STG3_20_03_THE_YELLOW_BLOCK). At STG3_20_04_CONFISCATED, the first time Mario
+ * comes in through s_bero_7 (GSWF_TOU_04_CONFISCATED_EXIT_SEEN), it starts move_g_1_dokimasen.
+ */
 static EVT_BEGIN(init_g_1)
     IF_INT_EQUAL(GSWF_TOU_04_GUARD_1_ESCORT_UNUSED, 0)
         CALL(evt_npc_set_position, STRING("me"), -580, 0, 300)
@@ -748,6 +753,12 @@ static EVT_BEGIN(talk_g_1)
     RETURN
 EVT_END()
 
+/**
+ * Movement script of guard 1: does nothing while GSWF_TOU_04_GUARD_1_ESCORT_UNUSED is set. Otherwise he steps
+ * out of Mario's way (move_g) before STG3_04_GONZALES_IS_BORN only while GSWF_TOU_JOLENE_ESCORT_TO_MINORS is
+ * set, then until STG3_34_RETURN_TO_ROGUEPORT whenever Mario's rank is above 10, and after that the same once
+ * Mario has re-registered (GSWF_TOU_REMATCH_REGISTERED).
+ */
 static EVT_BEGIN(move_g_1)
     IF_INT_EQUAL(GSWF_TOU_04_GUARD_1_ESCORT_UNUSED, 1)
         RETURN
@@ -1283,6 +1294,10 @@ static EVT_BEGIN(talk_g_9)
     RETURN
 EVT_END()
 
+/**
+ * Movement script of guard 9: he steps out of Mario's way (move_g) while
+ * GSWF_TOU_04_GUARD_3_ESCORT_TO_TOU_11 is set; otherwise he does nothing.
+ */
 static EVT_BEGIN(move_g_9)
     IF_INT_EQUAL(GSWF_TOU_04_GUARD_3_ESCORT_TO_TOU_11, 1)
         SET_VALUE(LW(0), 8)
@@ -1692,6 +1707,11 @@ static USER_FUNC(kemuri_stop) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Grubba's escort, run from the map init while GSWF_TOU_GRUBBA_WALK_TALK_PENDING is set: Grubba (ガンス) comes
+ * out of door 5 with Mario, walks along the corridor to door 3 with Mario following, opens it, and the map
+ * changes to tou_07.
+ */
 static EVT_BEGIN(evt_gans)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_npc_set_position, STRING("ガンス"), -350, 0, -570)
@@ -1814,6 +1834,11 @@ static EVT_BEGIN(evt_kinoshikowa)
     RETURN
 EVT_END()
 
+/**
+ * Jolene's escort to the majors, run from the map init while GSWF_TOU_JOLENE_ESCORT_TO_MAJORS is set: Jolene
+ * (キノシコワ) comes out of door 5 with Mario, walks along the corridor to door 6 with Mario following, opens it,
+ * clears the flag and the map changes to tou_08.
+ */
 static EVT_BEGIN(evt_kinoshikowa2)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_npc_set_position, STRING("キノシコワ"), -350, 0, -570)
@@ -1869,6 +1894,11 @@ static EVT_BEGIN(evt_kinoshikowa2)
     RETURN
 EVT_END()
 
+/**
+ * Jolene's escort to the champion's room, run from the map init while GSWF_TOU_JOLENE_ESCORT_TO_CHAMP_ROOM is
+ * set: Jolene (キノシコワ) comes out of door 6 with Mario and the partner, walks along the corridor to door 3,
+ * opens it, clears the flag and the map changes to tou_07.
+ */
 static EVT_BEGIN(evt_kinoshikowa3)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_set_pos, -625, 0, -300)
@@ -1930,6 +1960,13 @@ static EVT_BEGIN(evt_kinoshikowa3)
     RETURN
 EVT_END()
 
+/**
+ * Guard escort to a minor-league match, run from the map init while GSWF_TOU_04_GUARD_1_ESCORT_UNUSED is set
+ * (nothing sets it): door 7 opens, guard 1 (ガードマン１) walks out to (-550, -35) and faces Mario, Mario and the
+ * partner walk to him, the door closes and the guard says stg3_tou_76. Then door n2 opens, Mario walks on to
+ * x = -400, the flag is cleared, the story advances to STG3_05_MATCH if it was earlier, and the map changes to
+ * tou_03.
+ */
 static EVT_BEGIN(evt_gardman)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_seq_wait, SEQ_GAME)
@@ -1999,6 +2036,12 @@ static EVT_BEGIN(evt_gardman)
     RETURN
 EVT_END()
 
+/**
+ * Guard escort to a majors match, run from the map init while GSWF_TOU_04_GUARD_3_ESCORT_UNUSED is set (nothing
+ * sets it): guard 3 (ガードマン３) comes out of door 6 and walks to (-550, 35) with Mario and the partner
+ * following and says stg3_tou_328; door n2 opens, Mario walks through, the flag is cleared and the map changes
+ * to tou_03.
+ */
 static EVT_BEGIN(evt_gardman2)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_seq_wait, SEQ_GAME)
@@ -2063,6 +2106,12 @@ static EVT_BEGIN(evt_gardman2)
     RETURN
 EVT_END()
 
+/**
+ * Guard escort for a booked title match (the map init sets GSWF_TOU_04_GUARD_3_ESCORT_TO_TOU_11 then): guard 3
+ * (ガードマン３) leads Mario out of door 6; the partner and the guard speak (stg3_tou_407, 408). The other guards
+ * are made intangible and he leads Mario along the far corridor to door 1 while the partner speaks
+ * (stg3_tou_408_01); the flag is cleared and the map changes to tou_11.
+ */
 static EVT_BEGIN(evt_gardman3)
     // The guard opens the door of the major-league locker room.
     CALL(evt_mario_key_onoff, 0)
@@ -2174,6 +2223,11 @@ static EVT_BEGIN(evt_gardman3)
     RETURN
 EVT_END()
 
+/**
+ * Guard escort to a match, run from the map init while GSWF_TOU_04_GUARD_6_ESCORT_UNUSED is set (nothing sets
+ * it): guard 6 (ガードマン６) comes out of door 3 and walks along the corridor to (-550, 35) with Mario following
+ * and says stg3_tou_454; door n2 opens, Mario walks through, the flag is cleared and the map changes to tou_03.
+ */
 static EVT_BEGIN(evt_gardman4)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_seq_wait, SEQ_GAME)

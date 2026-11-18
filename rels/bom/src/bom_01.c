@@ -818,6 +818,12 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Arrival scene, spawned by the init from STG6_71_01 until STG7_01 (an earlier visit sets
+ * GSWF_BOM_01_EARLY_VISIT): letterboxed camera pan with the place name (telop 13); the partner says
+ * stg7_bom_01__2_00 after an early visit, else stg7_bom_01__2. Sets STG7_01_FAHR_OUTPOST_1ST_VISIT and
+ * switches the w_bero exit on (JP and later also set the fall respawn point).
+ */
 static EVT_BEGIN(first_evt)
     CALL(evt_snd_bgm_scope, 0, 1)
     CALL(evt_cam_letter_box_onoff, 1, 1)

@@ -190,6 +190,10 @@ static EVT_BEGIN(evt_switch_00)
     RETURN
 EVT_END()
 
+/**
+ * Map-init part for the Petalburg pipe: binds the pipe's hit to its model and, when
+ * GSWF_TIK_16_NOK_PIPE_RAISED is set, puts the pipe already risen and hides its cover.
+ */
 static EVT_BEGIN(evt_switch_01_init)
     CALL(evt_hit_bind_mapobj, STRING("a_dokan_2"), STRING("S_dakan_2"))
     IF_INT_EQUAL(GSWF_TIK_16_NOK_PIPE_RAISED, 1)
@@ -232,6 +236,11 @@ static EVT_BEGIN(evt_switch_01)
     RETURN
 EVT_END()
 
+/**
+ * Map init script of tik_16: sets up the two pipes and their tornado switches (GSWF_TIK_16_MRI_PIPE_RAISED,
+ * GSWF_TIK_16_NOK_PIPE_RAISED), the exits, fall recovery, the water animation, the large block, a moving floor
+ * and a Shine Sprite block.
+ */
 EVT_BEGIN(tik_16_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_TIK1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_TIK7"))

@@ -64,6 +64,11 @@ static EVT_BEGIN(erumosu_regl)
     RETURN
 EVT_END()
 
+/**
+ * Death event of the Ember ("me"): sets GSWF_DOU_07_EMBER_DEFEATED, spawns enemy_event_dead_event and
+ * drops the Black Key (ITEM_BLACK_KEY_0x24, GSWF_DOU_07_BLACK_KEY) at its position: from the US release on
+ * it falls from 150 above after one second; before, it scatters after half a second.
+ */
 static EVT_BEGIN(erumosu_dead)
     CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
     SET_VALUE(GSWF_DOU_07_EMBER_DEFEATED, 1)
@@ -130,6 +135,10 @@ static s32 key_tbl[] = {
     ITEM_BLACK_KEY_0x24, -1,
 };
 
+/**
+ * The Ember appears: sets GSWF_DOU_07_EMBER_APPEARED, places エルモス at (100, -6, -37) and fades it in over
+ * one second.
+ */
 static EVT_BEGIN(apper_elmos)
     SET_VALUE(GSWF_DOU_07_EMBER_APPEARED, 1)
     CALL(evt_npc_set_position, STRING("エルモス"), 100, -6, -37)

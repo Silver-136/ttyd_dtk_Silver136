@@ -83,6 +83,10 @@ static TreeAccess ki_data[] = {
     {7, NULL, NULL, NULL, 0, NULL},
 };
 
+/**
+ * Hit script for item_kusa_1: when that item is not out, scatters a Star Piece, collected only once
+ * (GSWF_STARPIECE_33).
+ */
 static EVT_BEGIN(evt_kusa_1)
     CALL(evt_item_delete_check, STRING("item_kusa_1"), LW(0))
     IF_INT_EQUAL(LW(0), 1)

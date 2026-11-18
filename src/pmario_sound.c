@@ -9284,8 +9284,8 @@ void searchPSBGMList(const char* name, s32* pi) {
 #endif
 
 /**
- * Returns the pssfxlist index of the sound effect called name, 0 when there is none,
- * or the id itself when name is a packed numeric id (SFX_NAME_IS_ID).
+ * Returns the pssfxlist index of the sound effect called name, 0 when there is none, or the id itself when name is a
+ * packed numeric id (SFX_NAME_IS_ID).
  */
 s32 searchPSSFXList(const char* name) {
     SoundEffectEntry* entry = pssfxlist;
@@ -9623,9 +9623,9 @@ void L_psndBGM_stop(void) {
 
 /**
  * Stops BGM channel id at once (ignored when the channel is free) and frees it.
- * Original name and size (0x80) from the JP demo map (UNUSED there: nothing calls it; listed after
- * psndGetSFXUseNum, before psndBGM_check). Body: psndBGM_vol's channel lookup with psndBGMOff_f_d's immediate-stop
- * arm (the stream or song stop, then the free slot mark); the size fits exactly (0x70 without the mark).
+ * Original name and size (0x80) from the JP demo map (UNUSED there: nothing calls it; listed after psndGetSFXUseNum,
+ * before psndBGM_check). Body: psndBGM_vol's channel lookup with psndBGMOff_f_d's immediate-stop arm (the stream or
+ * song stop, then the free slot mark); the size fits exactly (0x70 without the mark).
  */
 static void psndBGM_stop(s32 id) {
     PaperSoundBGM* bgm = &psbgm[id & 0xF];

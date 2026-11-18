@@ -78,7 +78,7 @@ static KaitenParam* ckpw;
 
 /** Returns its f32 argument unchanged. */
 // FAKE: invented identity inline on one of two otherwise identical atan2 lines; written out, the FPR colouring
-// differs (12 forms, GB13). See FAKES.md.
+// differs (12 forms tried). See FAKES.md.
 static inline f32 fid(f32 x) { return x; }
 static void gundan1000tai_seq01(NanNPC* npc);
 static void gundan1000tai_seq00(NanNPC* npc);
@@ -519,6 +519,12 @@ EVT_BEGIN(gor_00_mony_regl)
 EVT_END()
 #endif
 
+/**
+ * Talk scene of Francesca (モニー) and Frankie (ピートン), run from mony_talk at STG2_44_FINDING_DON_PIANTA:
+ * they talk (mac_2_072 to 083) and Mario answers mac_2_083_yesno; the first answer sets
+ * GSWF_GOR_00_RUNAWAYS_SECRET_KEPT, the other clears it. It registers mony_peton_after on A_oku_yuka_01,
+ * sets the story to STG2_45_DAUGHTER_LOCATED and brings the background music back.
+ */
 static EVT_BEGIN(mony_peton_talk)
     CALL(evt_snd_bgmoff_f, PSND_PAUSE, 3000)
     CALL(evt_mario_key_onoff, 0)
@@ -589,6 +595,10 @@ static EVT_BEGIN(mony_peton_talk)
     RETURN
 EVT_END()
 
+/**
+ * Talk event of Francesca (モニー): at STG2_44_FINDING_DON_PIANTA it runs mony_peton_talk; at
+ * STG2_45_DAUGHTER_LOCATED she says mac_2_087, or mac_2_085 when GSWF_GOR_00_RUNAWAYS_SECRET_KEPT is set.
+ */
 static EVT_BEGIN(mony_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG2_44_FINDING_DON_PIANTA)
@@ -725,6 +735,14 @@ EVT_BEGIN(marco_party_move)
 EVT_END()
 #endif
 
+/**
+ * Talk event of Flavio ("me", Marco). At STG4_32_CHATTING_WITH_FLAVIO the partner steps aside and Flavio
+ * talks with the sailors and shop staff (mac_4_030 to 044), then the story becomes STG4_33_MEET_BOBBERY.
+ * At STG4_33 he says mac_4_045, or mac_4_045_01 once GSWF_GOR_BOBBERY_FIRST_DENIAL_HEARD is set; before
+ * STG4_36_BOBBERYS_DECISION mac_4_045_02. At STG4_37_TO_THE_PORT (JP and later also spawn
+ * marco_party_move) he says mac_4_089 and 090 the first time (sets GSWF_GOR_FLAVIO_SET_SAIL_TALK_DONE),
+ * later mac_4_091, and asks mac_4_090_yesno; the first answer starts shukko_event, the departure.
+ */
 static EVT_BEGIN(marco_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG4_32_CHATTING_WITH_FLAVIO)
@@ -3416,6 +3434,10 @@ static EVT_BEGIN(gundan1000tai_afterbattle)
     RETURN
 EVT_END()
 
+/**
+ * Case event on A_oku_yuka_01, registered by mony_peton_talk: once the partner can be used, it speaks
+ * mac_2_088, sets GSWF_GOR_00_RUNAWAYS_REMARK_DONE and removes itself.
+ */
 static EVT_BEGIN(mony_peton_after)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)

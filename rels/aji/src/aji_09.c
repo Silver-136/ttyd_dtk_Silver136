@@ -445,6 +445,10 @@ static EVT_BEGIN(evt_rokka_init)
     RETURN
 EVT_END()
 
+/**
+ * Peach takes the X-Naut uniform: she says peach_aji_134, then peach_aji_135, GSWF_AJI_09_UNIFORM_TAKEN is
+ * set and R_fuku_g is hidden with its hit object.
+ */
 static EVT_BEGIN(peach_evt_fuku_g)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_print, 0, STRING("peach_aji_134"), 0, STRING("mario"))
@@ -489,6 +493,14 @@ static EVT_BEGIN(peach_evt_ka_close)
     RETURN
 EVT_END()
 
+/**
+ * Peach uses a changing booth (LW(0) the x position, LW(1) the curtain): it opens, she walks in, it closes.
+ * Only once GSWF_AJI_09_UNIFORM_TAKEN is set: from STG3_33_02_PEACH_INCOGNITO on, in the booth other than
+ * the one she changed in (GSWF_AJI_09_CHANGED_IN_BOOTH_1 means S_kou1_ka) she says peach_aji_137_02 and
+ * LW(15) = 1. At STG3_33_03 she says peach_aji_154 unless GSWF_AJI_09_PEACH_DRESS_BACK_ON; at STG3_33_01
+ * she says peach_aji_136 and 137 and the booth is recorded. Then GSWF_AJI_PEACH_IN_UNIFORM and her uniform
+ * toggle. Otherwise LW(15) = 0.
+ */
 static EVT_BEGIN(peach_evt_kou_in)
     SET_VALUE(LW(10), LW(0))
     SET_VALUE(LW(9), LW(1))

@@ -201,6 +201,7 @@ static USER_FUNC(setYoshiColor) {
     return EVT_RETURN_DONE;
 }
 
+/** Exit script (enterEvent of the bero data): sets GSWF_TOU_10_ENTERED_UNUSED; nothing reads that flag. */
 static EVT_BEGIN(room_out)
     SET_VALUE(GSWF_TOU_10_ENTERED_UNUSED, 1)
     SET_VALUE(LW(0), 0)
@@ -332,6 +333,10 @@ static EVT_BEGIN(init_michel)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of Michel: before STG3_34_RETURN_TO_ROGUEPORT the line depends on Mario's Glitz Pit ranking
+ * (20 down to 13; no line at other rankings); after that on GSWF_TOU_REMATCH_DEMOTED_TO_MINORS.
+ */
 static EVT_BEGIN(talk_michel)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
         CALL(evt_tou_get_ranking, LW(0))
@@ -440,6 +445,10 @@ static EVT_BEGIN(init_brots)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of Brots: before STG3_34_RETURN_TO_ROGUEPORT he speaks only when Mario's ranking number is
+ * 19 or more (stg3_npc_10_04_04); afterwards the line depends on GSWF_TOU_REMATCH_DEMOTED_TO_MINORS.
+ */
 static EVT_BEGIN(talk_brots)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
         CALL(evt_tou_get_ranking, LW(0))
@@ -1264,6 +1273,13 @@ EVT_BEGIN(evt_tou_chibi_yoshi)
     RETURN
 EVT_END()
 
+/**
+ * Promotion scene, spawned by the map init after a match against opponent 10 that leaves Mario at rank 10
+ * or better, before STG3_34_RETURN_TO_ROGUEPORT: Jolene (キノシコワ) hands over the fight money (stg3_tou_179_00,
+ * 179_01: 7 coins when GSWF_GLITZ_PIT_BEAT_LAST_OPPONENT is set, 1 otherwise, then the ranking message),
+ * prints stg3_tou_286 and leaves through the door; Mario follows her, GSWF_TOU_PROMOTION_TO_MAJORS_PENDING
+ * is set and the map changes to tou_05.
+ */
 static EVT_BEGIN(evt_1st_leagu)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_set_pos, -90, 0, -95)
@@ -1338,6 +1354,11 @@ static EVT_BEGIN(evt_1st_leagu)
     RETURN
 EVT_END()
 
+/**
+ * Promotion scene of the comeback: the same scene as evt_1st_leagu from STG3_34_RETURN_TO_ROGUEPORT on
+ * (6 coins after a win, 1 otherwise; stg3_tou_re_085). Jolene (キノシコワ) leaves, the door closes behind her,
+ * GSWF_TOU_REMATCH_PROMOTED_TO_MAJORS is set and Mario gets his controls back in tou_10.
+ */
 static EVT_BEGIN(evt_1st_leagu_re)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_set_pos, -90, 0, -95)
@@ -1637,6 +1658,13 @@ static EVT_BEGIN(evt_gardman)
     RETURN
 EVT_END()
 
+/**
+ * First match booking, run from evt_match_make when no match is reserved: Mario steps up to the terminal, the
+ * monitor shows Grubba (ガンス, stg3_tou_69) and rule 43 with parameters 1, 1 is set. Jolene (キノシコワ) repeats
+ * her explanation (stg3_tou_70) until Mario picks the first answer (72; the other gives 71 and the
+ * explanation again). Then GF(0) is set, evt_gardman is spawned, GSWF_GLITZ_PIT_MATCH_RESERVED is set and the
+ * opponent is set to 19 (the Goomba Bros.).
+ */
 static EVT_BEGIN(evt_match_make_sub)
     CALL(evt_cam3d_evt_set, -75, 91, 188, -75, 57, -1, 1000, EASING_SINE_IN_OUT)
     CALL(evt_party_stop, 0)

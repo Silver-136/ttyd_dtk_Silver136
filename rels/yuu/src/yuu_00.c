@@ -1037,6 +1037,13 @@ static EVT_BEGIN(minigame01_start)
     RETURN
 EVT_END()
 
+/**
+ * Ends a Plane Mode round: removes the moving floors, plays the failure effect (LW(0) negative) or the success
+ * effect with a pose by landing result, shows the score and ranking screens and adds the Piantas won.
+ * Then asks whether to play again: with fewer than 10 Piantas, or on Quit, it sets
+ * GSWF_GOR_RETURNING_FROM_MINIGAME and sends Mario back through pipe A_dokan_02 of gor_03;
+ * continuing pays 10 Piantas and resets the course.
+ */
 static EVT_BEGIN(minigame01_end)
 #if VERSION <= VERSION_DEMO_JP
     CALL(evt_snd_sfxon, STRING("SFX_EVT_GAME_AUDIENCE2"), 0)

@@ -455,6 +455,11 @@ static EVT_BEGIN(puni_win)
     RETURN
 EVT_END()
 
+/**
+ * Defeat scene of the Puni battle in mri_11: the camera moves to Puni 1 (the guide), who says
+ * stg2_mri_e17_01_05; GW(1) is cleared, the sound in GW(0) and the Puni sounds are stopped,
+ * GSWF_MRI_11_JABBI_BATTLE_LOST is set and Mario is sent to mri_06 through w_bero02 with a spotlight fade.
+ */
 static EVT_BEGIN(puni_lose)
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
     CALL(evt_mario_key_onoff, 0)

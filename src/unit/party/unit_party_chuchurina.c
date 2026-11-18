@@ -1650,8 +1650,8 @@ static EVT_BEGIN(partyChuchurinaAttack_MadowaseAttack)
 EVT_END()
 
 /**
- * Ms. Mowz's Kiss Thief: the screen turns grey around her (mono_capture_event, mono_on) while the
- * stop-the-gauge action command runs, then she leaps onto the enemy and _chuchu_item_steal tries to take its item.
+ * Ms. Mowz's Kiss Thief: the screen turns grey around her (mono_capture_event, mono_on) while the stop-the-gauge action
+ * command runs, then she leaps onto the enemy and _chuchu_item_steal tries to take its item.
  */
 static EVT_BEGIN(partyChuchurinaAttack_ItemSteal)
     // Declare the move and pay for it; with no target, skip to the end.

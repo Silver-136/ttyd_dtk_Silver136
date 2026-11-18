@@ -5671,7 +5671,8 @@ static USER_FUNC(eff_queen_set_alpha_evt) {
 /**
  * JP and later: script helper run at the end of peach_entry_event. Sets BREAK_SLOT_FLAG_NO_POISON_BINGO on the
  * break slot, so a spinning reel does not stop on a third Poison Mushroom.
- * Descriptive name (not in the symbol maps); placeholder unk_las_0000af38, JP las .text+0xAE6C. See docs/NAME_PROVENANCE.md.
+ * Descriptive name (not in the symbol maps); placeholder unk_las_0000af38, JP las .text+0xAE6C. See
+ * docs/NAME_PROVENANCE.md.
  */
 #if VERSION >= VERSION_JP
 USER_FUNC(queen_break_slot_flag2_on) {

@@ -80,6 +80,11 @@ static NpcSetupInfo npcEnt[] = {
     {0},
 };
 
+/**
+ * Map init for kpa_04: runs kpa_init, places Bowser at (-400, 500, -5), reads the blocks from kpa_act_stg2_mobj
+ * and starts the status display (stage 2), the music controller and the clock. Unless the map was entered
+ * without an entrance, Bowser's level is restored from GSW_KPA_BOWSER_LEVEL.
+ */
 EVT_BEGIN(kpa_04_init_evt)
     CALL(evt_cam_letter_box_disable, 1)
     CALL(evt_npc_setup, PTR(npcEnt))

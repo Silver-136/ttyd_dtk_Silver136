@@ -86,6 +86,10 @@ static EVT_BEGIN(item_get00)
     RETURN
 EVT_END()
 
+/**
+ * Map init script of tik_10: raises the pipe dokan_1_s, starts the music and ambience, sets up the exits and
+ * places the chest holding a Mushroom (GSWF_TIK_10_MUSHROOM_CHEST).
+ */
 EVT_BEGIN(tik_10_init_evt)
     CALL(evt_hit_bind_mapobj, STRING("a_dokan_3"), STRING("dokan_1_s"))
     CALL(evt_mapobj_trans, 1, STRING("dokan_1_s"), 0, 30, 0)

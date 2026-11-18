@@ -1000,7 +1000,7 @@ static inline void dispA(Mtx m, s32 i);
  * and the cursor with its trail while it slashes.
  */
 static void zubastar_disp2D(CameraId cam, void* param) {
-    void iconDispGx(Vec* position, u16 flags, f32 scale, s32 iconId); // the id is passed as s32; the definition takes u16
+    void iconDispGx(Vec* position, u16 flags, f32 scale, s32 iconId); // the id is s32 here; the definition takes u16
     ZubaStarWork* w = GetZubaStarPtr();
     ZSCursor* cur = &w->cursor;
     ZSLine* l;

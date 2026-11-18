@@ -1419,6 +1419,11 @@ static BeroEntry bero_data[] = {
     {0},
 };
 
+/**
+ * Blue switch event of bridge_sw: locks Mario's controls (the early demos also normalize him and turn the
+ * keys back on after; JP and later wait 500 ms), sets GSWF_EKI_BRIDGE_LOWERING_IN_PROGRESS and changes
+ * the map to hom_00 (n_bero_2), where evt_bridge_down plays.
+ */
 EVT_BEGIN(evt_bridge)
     CALL(evt_mario_key_onoff, 0)
 #if VERSION <= VERSION_DEMO_JP

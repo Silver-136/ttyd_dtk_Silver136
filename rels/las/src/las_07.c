@@ -142,6 +142,10 @@ static EVT_BEGIN(e2_door_open)
     RETURN
 EVT_END()
 
+/**
+ * Door hook: if GSWF_LAS_WRONG_DOOR_SFX_PENDING is set (las_08's door_matigai_evt sets it), plays
+ * SFX_STG8_DOOR_NG_OPEN1 and clears the flag; returns 0 in LW(0).
+ */
 static EVT_BEGIN(door_matigai_evt)
     IF_INT_EQUAL(GSWF_LAS_WRONG_DOOR_SFX_PENDING, 1)
         CALL(evt_snd_sfxon, STRING("SFX_STG8_DOOR_NG_OPEN1"), 0)

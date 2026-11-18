@@ -434,6 +434,10 @@ static EVT_BEGIN(e2_close)
     RETURN
 EVT_END()
 
+/**
+ * Exit event of the hole in the floor: sets GSWF_JIN_SCRIPTED_ENTRY_PENDING, changes the map to jin_06 and
+ * returns 1 in LW(0).
+ */
 static EVT_BEGIN(jin_00_dai)
     DEBUG_PUT_MSG(STRING("出る"))
     CALL(evt_mario_normalize)
@@ -1970,6 +1974,14 @@ static USER_FUNC(senteresa_huttobu) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * The Boo swarm scene: 200 Boos appear around Mario while their lines pop up in speech bubbles. If 20 of them
+ * cling to Mario they lift him up and carry him out (GSWF_JIN_BOOS_THREW_MARIO_OUT): to usu_00 at
+ * STG4_10_02_TRADING_PLACES, otherwise to gra_06. If he knocks 20 away the central Boo reappears and the Boos
+ * gather into the Atomic Boo, who speaks and fights Mario (battle setup 7). After the fight a Lucky Start drops
+ * (GSWF_JIN_00_LUCKY_START; JP and later also set the flag at once), the Boos are blown away and
+ * GSWF_JIN_00_ATOMIC_BOO_DEFEATED is set.
+ */
 EVT_BEGIN(senteresa_evt)
     // The swarm of 200 Boos is created and Mario waits until the Boos have appeared.
     CALL(evt_ext_entry, 200, PTR(senteresa_ext_entry_data), PTR(senteresa_ext_init), PTR(senteresa_ext_main), PTR(senteresa_ext_dispent))

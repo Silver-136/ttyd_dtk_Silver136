@@ -350,6 +350,11 @@ static EVT_BEGIN(init_toron)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of Zip Toad (Toron) in rsh_01: before STG6_05_GALLEY_KETTLE_DISCOVERED the first-meeting line
+ * (stg6_rsh_09, then 10); between STG6_09_BUBS_REQUEST and STG6_12_GIVE_AUTOGRAPH stg6_rsh_106, which sets
+ * GSWF_RSH_ZIP_TOAD_BUB_HINT_HEARD (read in rsh_04) and runs the partner's comment; other lines by story.
+ */
 static EVT_BEGIN(talk_toron)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_05_GALLEY_KETTLE_DISCOVERED)
@@ -429,6 +434,12 @@ static EVT_BEGIN(talk_madam_ring_return)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of the madam (マダム). From STG6_06_PENNINGTONS_ASSISTANT on, until Mario has accepted her request
+ * (GSWF_RSH_MADAM_RING_REQUEST_ACCEPTED), she lowers the music and asks him for help (stg6_rsh_80 the first
+ * time, stg6_rsh_83 after) with a yes/no; yes sets the flag. Otherwise, when Mario carries a Gold Ring, she runs
+ * talk_madam_ring_return; else she says a line for the story stage.
+ */
 static EVT_BEGIN(talk_madam)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG6_06_PENNINGTONS_ASSISTANT)
         IF_INT_EQUAL(GSWF_RSH_MADAM_RING_REQUEST_ACCEPTED, 0)

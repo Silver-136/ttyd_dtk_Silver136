@@ -118,6 +118,12 @@ static USER_FUNC(peach_set_pos) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Peach's shower (case script on A_furo): she says peach_aji_35, or 35_1 once
+ * GSWF_AJI_15_PEACH_SHOWER_EXAMINED is set, steps into the tub, hangs up her dress, showers humming (one of
+ * three random voices) in steam fog, says peach_aji_36, dries and dresses (evt_peach_set_condition 1),
+ * steps out and says peach_aji_37; then the flag is set.
+ */
 static EVT_BEGIN(peach_evt_syawa_main)
     // The music dips and Peach is led to the tub.
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(2))

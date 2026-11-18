@@ -159,6 +159,11 @@ static EVT_BEGIN(e2_door_open)
     RETURN
 EVT_END()
 
+/**
+ * Wrong-door hook of the corridor puzzle: while the story is at STG8_01_02_LOCK, resets the corridor streak
+ * GSW_LAS_08_CORRECT_DOOR_COUNT to 0 and sets GSWF_LAS_WRONG_DOOR_SFX_PENDING (the sound plays in las_07).
+ * Returns 0 in LW(0).
+ */
 static EVT_BEGIN(door_matigai_evt)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_01_02_LOCK)
         SET_VALUE(GSW_LAS_08_CORRECT_DOOR_COUNT, 0)
@@ -168,6 +173,11 @@ static EVT_BEGIN(door_matigai_evt)
     RETURN
 EVT_END()
 
+/**
+ * Door-enter hook for the correct door of the endless corridor: while the story is at STG8_01_02_LOCK it counts
+ * one more correct door in GSW_LAS_08_CORRECT_DOOR_COUNT, and after seven in a row advances the story to
+ * STG8_02_FOLLOW_THE_LIT_TORCHES. Returns 0 in LW(0).
+ */
 static EVT_BEGIN(door_seikai_evt)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_01_02_LOCK)
         ADD(GSW_LAS_08_CORRECT_DOOR_COUNT, 1)

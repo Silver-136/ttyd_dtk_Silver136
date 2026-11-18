@@ -80,6 +80,7 @@ static EVT_BEGIN(ne_open)
     RETURN
 EVT_END()
 
+/** Exit event: sets GSWF_JIN_SCRIPTED_ENTRY_PENDING and changes the map to jin_09. */
 static EVT_BEGIN(gra_06_ido)
     SET_VALUE(GSWF_JIN_SCRIPTED_ENTRY_PENDING, 1)
     CALL(evt_bero_mapchange, STRING("jin_09"), 0)
@@ -183,6 +184,12 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Gate script: the gate leaves and the chain (kusari) rattle first. From the far side (Mario's z above 160)
+ * the gate stays shut and the partner, if any, says stg4_gra_20 (the September 2004 PAL demo and PAL
+ * stop the partner first). Otherwise the leaves swing open, the chain drops away and is hidden, and
+ * GSWF_GRA_06_GATE_OPENED is set and the a_saku01 collision turned off.
+ */
 EVT_BEGIN(gra_06_saku_open)
     // The gate and its chain rattle, as if the gate were locked.
     CALL(evt_mapobj_get_position, STRING("kusari"), LW(10), LW(11), LW(12))

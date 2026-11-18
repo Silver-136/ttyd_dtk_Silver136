@@ -270,7 +270,8 @@ void bero_name_search(BeroEntry** table, const char* name, s32* index) {
 // Most likely the JP demo map's bero_get_dir (UNUSED there, 0x100, at this place: evt_bero is deferred, so the map's
 // .text order is the reverse of the source order). A plain bero_get_dir(BeroEntry*) of this body adds exactly 0x100,
 // but its callers' registers differ (B3, B4, AC2), so the name and the walk parameter stay ours.
-// FAKE: walk flag picks a pointer-walk loop (evt_bero_get_info_num) or the index loop (evt_bero_get_into_info); constant-folded per call site
+// FAKE: walk flag picks a pointer-walk loop (evt_bero_get_info_num) or the index loop (evt_bero_get_into_info);
+// constant-folded per call site
 static inline s32 bero_get_kind(BeroEntry* bero, s32 walk) {
     u32 i;
     const char** p;

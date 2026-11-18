@@ -855,9 +855,9 @@ BOOL tpl_loaded; // Set by the asynchronous setup callback after msgWindow.tpl i
 #endif
 static TEXPalette* winTpl = NULL;
 
-// Stripped: nothing reads or writes it (JP demo map: UNUSED, 2 bytes, in .sbss between winTpl and
-// windowDispGX_System's scrl; a declaration after that function and before the drawing code below gives this
-// slot). The 2-byte type is not shown by any byte (s16 chosen; u16 fits as well).
+// Stripped: nothing reads or writes it (JP demo map: UNUSED, 2 bytes, in .sbss between winTpl and windowDispGX_System's
+// scrl; a declaration after that function and before the drawing code below gives this slot). The 2-byte type is not
+// shown by any byte (s16 chosen; u16 fits as well).
 s16 windowTexNumber;
 
 /** Whether the window frame textures can be drawn; the early demos load them synchronously and need no check. */

@@ -3418,6 +3418,11 @@ EVT_BEGIN(evt_cake_init)
     RETURN
 EVT_END()
 
+/**
+ * Cake scene, run from the post-match events at rank 6 once (the caller sets GSWF_TOU_RANK_6_CAKE_DONE):
+ * registers evt_eat_cake as the case event of a_cake, moves the camera to the cake while トゲノコエース speaks
+ * (stg3_tou_295), then sets GSWF_TOU_CAKE_ON_TABLE.
+ */
 static EVT_BEGIN(evt_cake)
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_cake"), 0, PTR(evt_eat_cake), 0)
     CALL(evt_cam3d_evt_set, 55, 102, 362, 55, 45, -9, 1000, EASING_SINE_IN_OUT)

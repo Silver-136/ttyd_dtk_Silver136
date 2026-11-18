@@ -995,6 +995,12 @@ static BeroEntry bero_data[] = {
     {0},
 };
 
+/**
+ * Arena intro cutscene, run from the map init before STG3_01_ARENA_INTRO_1F: Mario and the partner come in
+ * through the south door they used (s_bero_2 = the upper one), Rawk Hawk flattens his opponent with a flying
+ * body slam, Grubba walks in and talks, the Champ's Belt sparkles and the partner comments.
+ * It then sets GSWF_TOU_02_ARENA_TOUR_RETURN and fades out to tou_02 (n_bero_1 or n_bero_2).
+ */
 static EVT_BEGIN(evt_tougi)
     // Place Mario and the partner at whichever south door they came through, facing the fight in the ring.
     CALL(evt_mario_key_onoff, 0)
@@ -2613,6 +2619,10 @@ EVT_BEGIN(evt_shinemon_opening)
     RETURN
 EVT_END()
 
+/**
+ * Victory scene against the Iron Clefts: sets GSWF_TOU_ARMORED_HARRIERS_BEATEN, the two beaten fighters and
+ * Grubba speak (stg3_tou_275 to 277), then confetti, Mario's victory pose and a slow high camera shot.
+ */
 EVT_BEGIN(evt_shinemon_win)
     SET_VALUE(GSWF_TOU_ARMORED_HARRIERS_BEATEN, 1)
     CALL(evt_cam3d_evt_set, 60, 143, 263, 60, 95, -8, 0, EASING_LINEAR)
@@ -3684,6 +3694,14 @@ static EVT_BEGIN(evt_default_lose)
     RETURN
 EVT_END()
 
+/**
+ * Title-match intro, run from the map init when the title match is booked and
+ * GSWF_TOU_03_TITLE_MATCH_INTRO_SEEN is clear: Rawk Hawk (敵１) gets the belt (tou_champion_belt) and Grubba
+ * (ガンス) speaks (stg3_tou_411, 412). The east door opens and Rawk Hawk walks to the ring and jumps onto it while
+ * the audience calls out (stg3_tou_413_01 to 04); GF(0) signals that he has arrived. Grubba and Rawk Hawk trade
+ * lines (stg3_tou_414 to 417), the flag is set and the map changes to tou_11 ("nidome") with an iris fade.
+ * The door sound plays only from JP on; from the US release on Mario and the partner are also moved aside.
+ */
 static EVT_BEGIN(evt_champion)
     // The title-match music starts; Grubba stands in the ring and Rawk Hawk gets his belt.
     // Mark the scene seen and move on to the passage beside the arena (tou_11).

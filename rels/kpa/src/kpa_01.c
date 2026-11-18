@@ -925,6 +925,10 @@ static EVT_BEGIN(togenoko_C_init_evt)
     RETURN
 EVT_END()
 
+/**
+ * Init of Hammer Bros. A and B: until Bowser has spoken to them once (GSWF_KPA_01_HAMMER_BROS_FIRST_TALK_DONE)
+ * they do not turn to face him.
+ */
 static EVT_BEGIN(hammer_AB_init_evt)
     CALL_CHILD(npc_init_evt)
     IF_INT_EQUAL(GSWF_KPA_01_HAMMER_BROS_FIRST_TALK_DONE, 0)
@@ -933,6 +937,10 @@ static EVT_BEGIN(hammer_AB_init_evt)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of the two Hammer Bros.: the first conversation sets GSWF_KPA_01_HAMMER_BROS_FIRST_TALK_DONE;
+ * afterwards they turn to Bowser and repeat a short line each.
+ */
 static EVT_BEGIN(hammer_AB_talk_evt)
     IF_INT_EQUAL(GSWF_KPA_01_HAMMER_BROS_FIRST_TALK_DONE, 0)
         CALL(evt_msg_print, 0, STRING("kpa_stg1_006"), 0, STRING("ハンマーＡ"))

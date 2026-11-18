@@ -228,6 +228,7 @@ static const char* cloud_kontena2_list[] = {
     NULL,
 };
 
+/** Hides the blown container's labels (fuda_1 to fuda_3) and sets GSWF_TOU_06_CONTAINER_2_BLOWN_AWAY. */
 static EVT_BEGIN(evt_kontena2)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("fuda_1"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("fuda_2"), MAP_OBJ_FLAG_HIDDEN)

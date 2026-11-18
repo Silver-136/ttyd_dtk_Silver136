@@ -268,7 +268,8 @@ void mot_jabara(void) {
         if (mario->dispFlags & MARIO_DISP_FLAG_SLIT) {
             mot_slit_post();
         }
-        mario->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
+        mario->flags &=
+            ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
         mario->currSubMotionId = 0;
         marioGetPtr()->motStruct = __memAlloc(HEAP_DEFAULT, sizeof(MotJabaraWork));
         memset(marioGetPtr()->motStruct, 0, sizeof(MotJabaraWork));
@@ -817,7 +818,8 @@ void landonJabaraEnd(f32 y, HitEntry* hit) {
     mario->hitobjStandOn = hit;
     mario->hitobjJumpFrom = NULL;
     mario->position.y = y;
-    mario->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
+    mario->flags &=
+        ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
     camFollowYOn();
     jabaraEnd();
 }
@@ -1084,6 +1086,7 @@ void mot_grasp(void) {
     MarioWork* mario = marioGetPtr();
     if (mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
         mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
-        mario->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
+        mario->flags &=
+            ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
     }
 }

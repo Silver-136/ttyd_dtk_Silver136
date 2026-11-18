@@ -681,6 +681,13 @@ static EVT_BEGIN(blink_sw)
     RETURN
 EVT_END()
 
+/**
+ * Case script of the crane's control panel (A_sui_01, registered once GSWF_AJI_03_SWITCH_PUZZLE_SOLVED is
+ * set): locks Mario's controls, starts evt_ufo_init and slides the crane S_kure to its start, prints
+ * stg7_aji_00_01 the first time (GSWF_AJI_03_CRANE_HELP_SEEN), then shows the A icon and sets GF(10) while A
+ * is held, then the B icon with GF(11) for B (from the US release on with a frame between steps). After GF(12)
+ * clears it slides the crane back, hides S_hikari and sets GF(14).
+ */
 static EVT_BEGIN(evt_ufo_sousaban)
     // Mario is locked in place while the crane powers up.
     CALL(evt_mario_key_onoff, 0)
@@ -856,6 +863,11 @@ static EVT_BEGIN(evt_sw)
     RETURN
 EVT_END()
 
+/**
+ * Resets the three crane switches after a wrong press: clears each pressed flag (GSWF_AJI_03_SWITCH_1_PRESSED
+ * to 3) and registers that switch's case script again, sets GF(15) for 5 frames while it deletes the blink
+ * events GW(13) to GW(15), and starts them again.
+ */
 static EVT_BEGIN(evt_sw_reinit)
     SET_VALUE(GF(15), 1)
     IF_INT_EQUAL(GSWF_AJI_03_SWITCH_1_PRESSED, 1)
@@ -887,6 +899,11 @@ static EVT_BEGIN(evt_sw_reinit)
     RETURN
 EVT_END()
 
+/**
+ * Case script of crane switch 1 (A_sui1). The switches go in the order 1, 3, 2: this one needs 2 and 3 not
+ * pressed; then it sets GSWF_AJI_03_SWITCH_1_PRESSED, ends its blinking, starts its light and needle
+ * (evt_kaitentou2, evt_hari), runs evt_sw and removes itself. A wrong press runs evt_sw_reinit.
+ */
 static EVT_BEGIN(evt_sw0)
     IF_INT_EQUAL(GSWF_AJI_03_SWITCH_2_PRESSED, 0)
         IF_INT_EQUAL(GSWF_AJI_03_SWITCH_3_PRESSED, 0)
@@ -915,6 +932,10 @@ static EVT_BEGIN(evt_sw0)
     RETURN
 EVT_END()
 
+/**
+ * Case script of crane switch 2 (A_sui2), the last in the order 1, 3, 2: needs switches 1 and 3 pressed, then
+ * sets GSWF_AJI_03_SWITCH_2_PRESSED like evt_sw0; otherwise it runs evt_sw_reinit.
+ */
 static EVT_BEGIN(evt_sw1)
     IF_INT_EQUAL(GSWF_AJI_03_SWITCH_1_PRESSED, 1)
         IF_INT_EQUAL(GSWF_AJI_03_SWITCH_3_PRESSED, 1)
@@ -943,6 +964,11 @@ static EVT_BEGIN(evt_sw1)
     RETURN
 EVT_END()
 
+/**
+ * Case script of crane switch 3 (A_sui3), second in the order 1, 3, 2: needs switch 1 pressed and 2 not, then
+ * sets GSWF_AJI_03_SWITCH_3_PRESSED like evt_sw0; otherwise it runs evt_sw_reinit. When all three are set,
+ * evt_sw sets GSWF_AJI_03_SWITCH_PUZZLE_SOLVED and registers the crane panel.
+ */
 static EVT_BEGIN(evt_sw2)
     IF_INT_EQUAL(GSWF_AJI_03_SWITCH_1_PRESSED, 1)
         IF_INT_EQUAL(GSWF_AJI_03_SWITCH_2_PRESSED, 0)
@@ -976,6 +1002,12 @@ static s32 haguruma_tbl[] = {
     85, -1,
 };
 
+/**
+ * Case script of the shelf door A_tanadoor_1: without a Cog it prints stg7_aji_00_00; otherwise it opens the
+ * item menu and, if one is chosen, plays a success jingle, swaps S_zenmais_nashi for S_zenmais_ari, starts
+ * evt_zenmai, removes the item, sets GSWF_AJI_03_COG_PLACED, registers the three switch scripts with their
+ * blink events and removes itself. The early demos call evt_win_item_select with fewer arguments.
+ */
 static EVT_BEGIN(evt_haguruma)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_pouch_check_item, ITEM_COG, LW(0))
@@ -1022,21 +1054,34 @@ static EVT_BEGIN(evt_haguruma)
     RETURN
 EVT_END()
 
+/**
+ * Pick-up event of the crane prize keihin04 (Feeling Fine): sets GSWF_AJI_03_FEELING_FINE, so the init does
+ * not place it again.
+ */
 static EVT_BEGIN(badge_evt)
     SET_VALUE(GSWF_AJI_03_FEELING_FINE, 1)
     RETURN
 EVT_END()
 
+/** Pick-up event of the crane prize keihin06 (Feeling Fine P): sets GSWF_AJI_03_FEELING_FINE_P. */
 static EVT_BEGIN(badge_evt2)
     SET_VALUE(GSWF_AJI_03_FEELING_FINE_P, 1)
     RETURN
 EVT_END()
 
+/** Pick-up event of the crane prize keihin08 (Star Piece): sets GSWF_STARPIECE_98. */
 static EVT_BEGIN(badge_evt3)
     SET_VALUE(GSWF_STARPIECE_98, 1)
     RETURN
 EVT_END()
 
+/**
+ * Init script of aji_03, the crane room: BGM_STG7_DUN2 (JP and later also evt_snd_set_rev_mode), the
+ * exits, and the room from the flags: the shelf door A_tanadoor_1 (evt_haguruma) until
+ * GSWF_AJI_03_COG_PLACED, then evt_zenmai and, until GSWF_AJI_03_SWITCH_PUZZLE_SOLVED, the three blinking
+ * switches, after it the crane panel and lights. It places the prizes (coins, and the two
+ * badges and the Star Piece unless taken) and spawns evt_emergency.
+ */
 EVT_BEGIN(aji_03_init_evt)
     // The room's music and ambience start, and S_hikari is hidden.
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))

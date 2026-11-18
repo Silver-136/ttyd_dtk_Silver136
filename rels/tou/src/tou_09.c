@@ -68,6 +68,11 @@ static EVT_BEGIN(toile_in)
     RETURN
 EVT_END()
 
+/**
+ * Exit script for the toilet pipe: plays the water ("anm_mizu") and, a second later, the lid ("anm_futa")
+ * animation with the flush sound, sets GSWF_TOU_09_TOILET_WARP_PENDING (read by tou_04's init) and sets LW(0)
+ * to 0.
+ */
 static EVT_BEGIN(toile_out)
     CALL(evt_map_playanim, STRING("anm_mizu"), MAP_ANIM_PLAY_ONCE, 0)
     BEGIN_INLINE_EVENT

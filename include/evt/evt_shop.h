@@ -67,7 +67,8 @@ enum {
 
 // ShopWork.flags (evtShopIsActive: any bit set). TALKING is a name from LLCOOLT's tree.
 enum {
-    SHOP_FLAG_ITEM_SELECTED = 1, // an item on the shelf is picked (its windows are up); evt_shop_main_func and disp_off clear it
+    SHOP_FLAG_ITEM_SELECTED = 1, // an item on the shelf is picked (its windows are up); evt_shop_main_func and
+                                 // disp_off clear it
     SHOP_FLAG_BUYING = 1 << 1,   // A pressed: the buy event runs, the shelf is not checked until it ends
     SHOP_FLAG_TALKING = 16384,
 };

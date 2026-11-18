@@ -86,6 +86,12 @@ static BeroEntry bero_data_c_nidome[] = {
     {0},
 };
 
+/**
+ * Init script of rsh_08_a: plays BGM_STG6_PIK1 when the train is at Poshley Heights (GSWF_RSH_TRAIN_AT_POSHLEY),
+ * BGM_STG0_GOR1 at Rogueport (GSWF_RSH_TRAIN_AT_ROGUEPORT; the early demos also start ENV_STG0_GOR5), otherwise
+ * the ENV_STG6_RSH1_3 ambience. Picks bero_data_a, b or c_nidome from GSWF_RSH_REVISIT_MAP_A, B or C (a by
+ * default) and loops the map animation "yure".
+ */
 EVT_BEGIN(rsh_08_a_init_evt)
     IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_POSHLEY, 1)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_PIK1"))
