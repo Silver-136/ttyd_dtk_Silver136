@@ -3898,7 +3898,7 @@ BOOL npcCheckEnableLookMario(void) {
  * while Vivian hides him, while he is hurt, or while the given NPC is in its post-battle hit cooldown.
  */
 // Original name and size (0xfc) from the JP demo map (UNUSED there: every call is inlined).
-inline BOOL npcCheckEnableTouchMario(NpcEntry* npc) {
+BOOL npcCheckEnableTouchMario(NpcEntry* npc) {
     MarioWork* m = marioGetPtr();
     NpcWork* wp = npcGetWorkPtrInline();
     if (m->flags & (MARIO_FLAG_BG_MODE | MARIO_FLAG_IS_8_BIT)) return FALSE;

@@ -62,7 +62,7 @@ NanNPC* nanNPCNameToPtr(char* name) {
  * a hit reflects the motion off the wall and pushes the NPC clear. Returns 1 if nothing was hit.
  */
 // Original name and size (0x238) from the JP demo map (UNUSED there: every call is inlined).
-inline s32 nanNPCMoveAtari(NanNPC* npc, Vec origin, Vec dir, f32 mag) {
+s32 nanNPCMoveAtari(NanNPC* npc, Vec origin, Vec dir, f32 mag) {
     s32 clear;
     f32 hitX;
     f32 hitY;
@@ -121,7 +121,7 @@ inline s32 nanNPCMoveAtari(NanNPC* npc, Vec origin, Vec dir, f32 mag) {
  * without collision.
  */
 // Original name and size (0x2f0) from the JP demo map (UNUSED there: every call is inlined).
-inline void nanNPCMoveDecel(NanNPC* npc) {
+void nanNPCMoveDecel(NanNPC* npc) {
     f32 mag;
     Vec origin;
     Vec dir;

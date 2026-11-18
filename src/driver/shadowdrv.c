@@ -249,7 +249,7 @@ static GXColor color_tbl_cube[3] ATTRIBUTE_ALIGN(32) = {
 };
 
 /** The character shadow work. */
-inline CharShadowWork* shadowGetCharShadowWork(void) {
+CharShadowWork* shadowGetCharShadowWork(void) {
     return cswp;
 }
 
@@ -393,7 +393,7 @@ s32 shadowGetConfigNum(void) {
 }
 
 /** The shadow config at index idx. */
-inline ShadowConfig* shadowGetConfig(s32 idx) {
+ShadowConfig* shadowGetConfig(s32 idx) {
     return &shadowConfig[idx];
 }
 
@@ -1111,7 +1111,7 @@ s32 shadowGetCharShadowProjection(void) {
 }
 
 /** Sets up the depth shadow work (config 0, colour black at alpha 0x40) and the 8-bit and 16-bit ramp textures. */
-inline void shadowDepthShadowInit(void) {
+void shadowDepthShadowInit(void) {
     dswp->flags = SHADOW_WORK_ALLOC;
     dswp->drawCount = 0;
     dswp->configIdx = 0;
@@ -1174,7 +1174,7 @@ ShadowConfig* shadowGetDepthShadowConfig(void) {
 }
 
 /** Resets the projected shadow work: config 0, colour black at alpha 0x40. */
-inline void shadowProjShadowInit(void) {
+void shadowProjShadowInit(void) {
     pswp->flags = SHADOW_WORK_ALLOC;
     pswp->drawCount = 0;
     pswp->configIdx = 0;
@@ -1269,7 +1269,7 @@ inline void GetTexProjMtx(ProjShadowWork* wp, Mtx texMtx, Mtx depthMtx) {
 }
 
 /** Sets a light camera's view matrix and projection (perspective or orthographic) from shadow config cfg. */
-inline void SetCamera(ShadowConfig* cfg, Mtx view, Mtx44 proj) {
+void SetCamera(ShadowConfig* cfg, Mtx view, Mtx44 proj) {
     Vec pos = cfg->pos;
 
     C_MTXLookAt(view, &pos, &cfg->up, &cfg->target);
@@ -1281,7 +1281,7 @@ inline void SetCamera(ShadowConfig* cfg, Mtx view, Mtx44 proj) {
 }
 
 /** Makes the 8-bit ramp texture (16x16 I8, texel value = index in the 4x4-tiled layout). */
-inline void CreateRampTex8(GXTexObj* obj) {
+void CreateRampTex8(GXTexObj* obj) {
     void* ramp;
     u32 size;
     u32 i;
@@ -1297,7 +1297,7 @@ inline void CreateRampTex8(GXTexObj* obj) {
 }
 
 /** Makes the 16-bit ramp texture (256x256 IA8, texel value = index in the 4x4-tiled layout). */
-inline void CreateRampTex16(GXTexObj* obj) {
+void CreateRampTex16(GXTexObj* obj) {
     void* ramp;
     u32 size;
     u32 i;
@@ -1359,7 +1359,7 @@ static inline void shadowRestoreView(void) {
  * Starts a projected shadow pass: saves the view, viewport and scissor and switches to the light's view and
  * projection from the shadow config.
  */
-inline void projShadowBegin(CameraId cameraId, void* param) {
+void projShadowBegin(CameraId cameraId, void* param) {
     ProjShadowWork* wp = param;
     u16 size;
 
@@ -1421,7 +1421,7 @@ static void projShadowEnd(CameraId cameraId, void* param) {
 /**
  * Starts the depth shadow pass like projShadowBegin, with colour writes off (depth only).
  */
-inline void depthShadowBegin(CameraId cameraId, void* param) {
+void depthShadowBegin(CameraId cameraId, void* param) {
     ProjShadowWork* wp = param;
     u16 size;
 

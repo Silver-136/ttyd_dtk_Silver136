@@ -11,8 +11,8 @@
 #include "libc_decls.h"
 
 // local prototypes
-static inline f32 check_float(s32 val);
-static inline s32 change_float(f32 val);
+static f32 check_float(s32 val);
+static s32 change_float(f32 val);
 
 EvtWord* evtSearchLabel(EventEntry* entry, EvtWord id);
 EvtWord* evtSearchElse(EventEntry* entry);

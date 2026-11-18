@@ -1000,8 +1000,9 @@ static void mario_controll(PartyEntry* party) {
  * All versions probe 4 units down from 2 above that point. The early demos keep the moved point's original height;
  * JP and later move pos to the floor hit, rounded to 0.001 units.
  */
-// Original name and size (0xf8) from the JP demo map (UNUSED there: every call is inlined).
-inline BOOL chkGndAttr(Vec* pos, f32 dist, f32 angle) {
+// Original name and size (0xf8) from the JP demo map (UNUSED there: every call is inlined). The JP+ roundings are
+// one-line selections, as in mario_hit.c's marioHitCheckVec: that keeps it within the 30-statement auto-inline limit.
+BOOL chkGndAttr(Vec* pos, f32 dist, f32 angle) {
 #if VERSION <= VERSION_DEMO_JP
     f32 x, y, z;
     f32 hx, hy, hz, d, nx, ny, nz;
@@ -1040,23 +1041,11 @@ inline BOOL chkGndAttr(Vec* pos, f32 dist, f32 angle) {
     }
     hit = hitCheckVecFilter(&query, NULL);
     if (hit != NULL && !(hitGetAttr(hit) & (HIT_ATTR_WATER_HAZARD | HIT_ATTR_DAMAGE_LIQUID | HIT_ATTR_SPIKES))) {
-        if (query.hitPos.x >= 0.0f) {
-            rf = 0.5f;
-        } else {
-            rf = -0.5f;
-        }
+        rf = (query.hitPos.x >= 0.0f) ? 0.5f : -0.5f;
         pos->x = (s32)((1000.0f * query.hitPos.x) + rf) / 1000.0f;
-        if (query.hitPos.y >= 0.0f) {
-            rf = 0.5f;
-        } else {
-            rf = -0.5f;
-        }
+        rf = (query.hitPos.y >= 0.0f) ? 0.5f : -0.5f;
         pos->y = (s32)((1000.0f * query.hitPos.y) + rf) / 1000.0f;
-        if (query.hitPos.z >= 0.0f) {
-            rf = 0.5f;
-        } else {
-            rf = -0.5f;
-        }
+        rf = (query.hitPos.z >= 0.0f) ? 0.5f : -0.5f;
         pos->z = (s32)((1000.0f * query.hitPos.z) + rf) / 1000.0f;
 #endif
         return TRUE;

@@ -39,8 +39,8 @@ static CameraId currentCamNo;
 // forward declarations
 CameraEntry* camEntryPersp(CameraCallback callback, f32 fovY, f32 aspect, f32 near, f32 far, f32 nearZ, f32 farZ,
                            const char* name);
-CameraEntry* camEntryOrtho(CameraCallback callback, f32 fovY, f32 aspect, f32 top, f32 bottom, f32 left, f32 right,
-                           f32 near, f32 far, f32 nearZ, f32 farZ, const char* name);
+CameraEntry* camEntryOrtho(CameraCallback callback, f32 top, f32 bottom, f32 left, f32 right, f32 near, f32 far,
+                           const char* name);
 static void cam3dMain(CameraEntry* camera);
 static void cam3dImgMain(CameraEntry* camera);
 static void camEffMain(CameraEntry* camera);
@@ -54,16 +54,13 @@ static void camEffMain(CameraEntry* camera);
 void camInit(void) {
     f32 tanHalfFov;
 
-    camPtrTbl[0] =
-        camEntryOrtho(NULL, 25.0f, 1.2666666f, 240.0f, -240.0f, -304.0f, 304.0f, 1.0f, 32768.0f, 0.0f, 1.0f, "off");
+    camPtrTbl[0] = camEntryOrtho(NULL, 240.0f, -240.0f, -304.0f, 304.0f, 1.0f, 32768.0f, "off");
 
-    camPtrTbl[1] =
-        camEntryOrtho(NULL, 25.0f, 1.2666666f, 0.0f, 480.0f, 0.0f, 608.0f, 1.0f, 32768.0f, 0.0f, 1.0f, "off2");
+    camPtrTbl[1] = camEntryOrtho(NULL, 0.0f, 480.0f, 0.0f, 608.0f, 1.0f, 32768.0f, "off2");
 
-    camPtrTbl[2] =
-        camEntryOrtho(NULL, 25.0f, 1.2666666f, 0.0f, 480.0f, 0.0f, 608.0f, 1.0f, 32768.0f, 0.0f, 1.0f, "shadow");
+    camPtrTbl[2] = camEntryOrtho(NULL, 0.0f, 480.0f, 0.0f, 608.0f, 1.0f, 32768.0f, "shadow");
 
-    camPtrTbl[3] = camEntryOrtho(NULL, 25.0f, 1.2666666f, 0.0f, 480.0f, 0.0f, 608.0f, 1.0f, 32768.0f, 0.0f, 1.0f, "bg");
+    camPtrTbl[3] = camEntryOrtho(NULL, 0.0f, 480.0f, 0.0f, 608.0f, 1.0f, 32768.0f, "bg");
 
     camPtrTbl[4] = camEntryPersp(cam3dMain, 25.0f, 1.2666666f, 1.0f, 32768.0f, 0.0f, 1.0f, "3d");
 
@@ -87,8 +84,7 @@ void camInit(void) {
     tanHalfFov = (f32)tan(HALF_FOVY_RAD);
     camSetPos(CAMERA_FADE2, 0.0f, 0.0f, 24.0f / tanHalfFov);
 
-    camPtrTbl[11] =
-        camEntryOrtho(NULL, 25.0f, 1.2666666f, 0.0f, 480.0f, 0.0f, 608.0f, 1.0f, 32768.0f, 0.0f, 1.0f, "dbg");
+    camPtrTbl[11] = camEntryOrtho(NULL, 0.0f, 480.0f, 0.0f, 608.0f, 1.0f, 32768.0f, "dbg");
 
     camPtrTbl[12] = camEntryPersp(NULL, 25.0f, 1.2666666f, 1.0f, 32768.0f, 0.0f, 1.0f, "dbg3d");
 }
@@ -150,12 +146,15 @@ CameraEntry* camEntryPersp(CameraCallback callback, f32 fovY, f32 aspect, f32 ne
 }
 
 /**
- * Allocates and initialises an orthographic camera (top/bottom/left/right box, near/far,
- * viewport depth nearZ..farZ) with the default eye, full-screen scissor and viewport and the given name.
- * camInit uses it for the 2D cameras ("off", "off2", "shadow", "bg", "dbg").
+ * Allocates and initialises an orthographic camera (top/bottom/left/right box, near/far) with the default eye,
+ * a fixed 25-degree fovY and 608/480 aspect, full-screen scissor and viewport (depth 0..1) and the given name.
+ * camInit uses it for the 2D cameras ("off", "off2", "shadow", "bg", "dbg"); every call is inlined there (the JP
+ * demo map lists this out-of-line copy as UNUSED, 0x24c).
+ * The six float parameters follow the out-of-line size (each extra float pair saved across the calls adds 0x20)
+ * and Super Paper Mario's camEntryOrtho (top, bottom, left, right, near, far).
  */
-inline CameraEntry* camEntryOrtho(CameraCallback callback, f32 fovY, f32 aspect, f32 top, f32 bottom, f32 left,
-                                  f32 right, f32 near, f32 far, f32 nearZ, f32 farZ, const char* name) {
+CameraEntry* camEntryOrtho(CameraCallback callback, f32 top, f32 bottom, f32 left, f32 right, f32 near, f32 far,
+                           const char* name) {
     CameraEntry* camera = __memAlloc(HEAP_DEFAULT, sizeof(CameraEntry));
     memset(camera, 0, sizeof(CameraEntry));
     MTXOrtho(camera->projection, top, bottom, left, right, near, far);
@@ -170,11 +169,9 @@ inline CameraEntry* camEntryOrtho(CameraCallback callback, f32 fovY, f32 aspect,
     camera->callback = callback;
     camera->mode = CAM_MODE_OFF;
     camera->rollAngle = 0.0f;
-    camera->viewOffset.z = 0.0f;
-    camera->viewOffset.y = 0.0f;
-    camera->viewOffset.x = 0.0f;
-    camera->aspect = aspect;
-    camera->fovY = fovY;
+    camera->viewOffset.x = camera->viewOffset.y = camera->viewOffset.z = 0.0f;
+    camera->aspect = 1.2666666f;
+    camera->fovY = 25.0f;
     camera->letterBoxCamId = CAMERA_2D;
     strcpy(camera->name, name);
     camera->scissor[0] = 0;
@@ -185,8 +182,8 @@ inline CameraEntry* camEntryOrtho(CameraCallback callback, f32 fovY, f32 aspect,
     camera->viewport[1] = 0.0f;
     camera->viewport[2] = (f32)DEMOGetRenderModeObj()->fbWidth;
     camera->viewport[3] = (f32)DEMOGetRenderModeObj()->efbHeight;
-    camera->viewport[4] = nearZ;
-    camera->viewport[5] = farZ;
+    camera->viewport[4] = 0.0f;
+    camera->viewport[5] = 1.0f;
     return camera;
 }
 

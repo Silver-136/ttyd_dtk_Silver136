@@ -218,9 +218,9 @@ HitEntry* marioHitCheckVec(Vec* pos, Vec* dir, Vec* outPos, Vec* outNrm, f32* di
 }
 
 /** marioHitCheckVec with chkFilterAttr2: skips 0x4 surfaces that lack 0x800000. */
-// Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
-// It keeps `inline`: as a plain function -inline auto leaves it out of line here (the link changes).
-inline HitEntry* marioHitCheckVec2(Vec* pos, Vec* dir, Vec* outPos, Vec* outNrm, f32* dist) {
+// Original name and size (0x25c) from the JP demo map (UNUSED there: every call is inlined). Its roundings are
+// written as one-line selections, as in marioHitCheckVec: that keeps it within the 30-statement auto-inline limit.
+HitEntry* marioHitCheckVec2(Vec* pos, Vec* dir, Vec* outPos, Vec* outNrm, f32* dist) {
     HitCheckQuery query;
     HitEntry* hit;
     f32 rf;
@@ -234,31 +234,15 @@ inline HitEntry* marioHitCheckVec2(Vec* pos, Vec* dir, Vec* outPos, Vec* outNrm,
     if (!hit) {
         return NULL;
     }
-    if (query.targetDistance >= 0.0f) {
-        rf = 0.5f;
-    } else {
-        rf = -0.5f;
-    }
+    rf = (query.targetDistance >= 0.0f) ? 0.5f : -0.5f;
     *dist = (s32)((1000.0f * query.targetDistance) + rf) / 1000.0f;
     if (outPos) {
         *outPos = query.hitPos;
-        if (outPos->x >= 0.0f) {
-            rf = 0.5f;
-        } else {
-            rf = -0.5f;
-        }
+        rf = (outPos->x >= 0.0f) ? 0.5f : -0.5f;
         outPos->x = (s32)((1000.0f * outPos->x) + rf) / 1000.0f;
-        if (outPos->y >= 0.0f) {
-            rf = 0.5f;
-        } else {
-            rf = -0.5f;
-        }
+        rf = (outPos->y >= 0.0f) ? 0.5f : -0.5f;
         outPos->y = (s32)((1000.0f * outPos->y) + rf) / 1000.0f;
-        if (outPos->z >= 0.0f) {
-            rf = 0.5f;
-        } else {
-            rf = -0.5f;
-        }
+        rf = (outPos->z >= 0.0f) ? 0.5f : -0.5f;
         outPos->z = (s32)((1000.0f * outPos->z) + rf) / 1000.0f;
     }
     if (outNrm) {

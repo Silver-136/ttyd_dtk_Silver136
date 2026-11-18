@@ -3346,7 +3346,7 @@ void animSetPaperTexObj(GXTexObj* obj1, GXTexObj* obj2, GXTexObj* obj3, void* da
  * and its texture file (when nobody else uses that).
  */
 // Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
-inline void animGroupRelease(s32 fileId) {
+void animGroupRelease(s32 fileId) {
     AnimationPoseFile* file = &wp->files[fileId];
     AnimationTextureFile* tex;
 

@@ -353,7 +353,7 @@ void party_kemuri(PartyEntry* party) {
  */
 // Original name and size (0xc8) from the JP demo map (UNUSED there: every call is inlined). Where the US water
 // test sits (here or in the callers) is not fixed by the bytes.
-static inline void partyKemuri(PartyEntry* party) {
+static void partyKemuri(PartyEntry* party) {
     f32 s, c;
 
     if (party->moveSpeed < 2.0f) {
