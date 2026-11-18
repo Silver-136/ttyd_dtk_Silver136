@@ -2343,17 +2343,17 @@ static void animSetMaterial_Texture(s32 texCount, s32* texIdRemap, AnimPoseTexEn
             wrapS = hdr->wrapS;
             wrapT = hdr->wrapT;
             if (wrapFlags >= 0) {
-                if (wrapFlags & 4) {
+                if (wrapFlags & ANIM_TEX_WRAP_S_MIRROR) {
                     wrapS = GX_MIRROR;
                 } else {
                     // FAKE: wrapS assigned in two steps; wrapS = wrapFlags & 1 changes the object
                     wrapS = wrapFlags;
                     wrapS = wrapS & 1;
                 }
-                if (wrapFlags & 8) {
+                if (wrapFlags & ANIM_TEX_WRAP_T_MIRROR) {
                     wrapT = GX_MIRROR;
                 } else {
-                    wrapT = (wrapFlags >> 1) & 1;
+                    wrapT = (wrapFlags & ANIM_TEX_WRAP_T_REPEAT) ? GX_REPEAT : GX_CLAMP;
                 }
             }
             mipmap = hdr->minLOD != hdr->maxLOD;
@@ -2373,7 +2373,7 @@ static void animSetMaterial_Texture(s32 texCount, s32* texIdRemap, AnimPoseTexEn
             wrapS = hdr->wrapS;
             wrapT = hdr->wrapT;
             if (wrapFlags >= 0) {
-                if (wrapFlags & 4) {
+                if (wrapFlags & ANIM_TEX_WRAP_S_MIRROR) {
                     wrapS = GX_MIRROR;
                 } else {
                     // FAKE: wrapS assigned in two steps; wrapS = wrapFlags & 1 changes the object
@@ -2385,10 +2385,10 @@ static void animSetMaterial_Texture(s32 texCount, s32* texIdRemap, AnimPoseTexEn
                     wrapS = wrapS & 1;
 #endif
                 }
-                if (wrapFlags & 8) {
+                if (wrapFlags & ANIM_TEX_WRAP_T_MIRROR) {
                     wrapT = GX_MIRROR;
                 } else {
-                    wrapT = (wrapFlags >> 1) & 1;
+                    wrapT = (wrapFlags & ANIM_TEX_WRAP_T_REPEAT) ? GX_REPEAT : GX_CLAMP;
                 }
             }
             GXInitTexObj(&obj, hdr->data, hdr->width, hdr->height, (GXTexFmt) hdr->format, wrapS, wrapT, hdr->minLOD != hdr->maxLOD);

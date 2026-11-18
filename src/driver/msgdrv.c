@@ -2339,7 +2339,7 @@ static void msgWindow_Disp(CameraId camId, void* param) {
         case WINDOW_TYPE_TEC:
         case WINDOW_TYPE_MAJO:
             if (window->tailMode != 0) {
-                if (window->tailMode & 0x10) {
+                if (window->tailMode & WINDOW_TAIL_SCREEN_POS) {
                     pos = window->speakerPos;
                 } else {
                     getScreenPoint(&window->speakerPos, &pos);
@@ -2361,7 +2361,7 @@ static void msgWindow_Disp(CameraId camId, void* param) {
                     break;
                 case WINDOW_TYPE_SMALL:
                     window->x = pos.x - (window->width / 2.0f);
-                    if (window->tailMode & 8) {
+                    if (window->tailMode & WINDOW_TAIL_TOP) {
                         window->y = pos.y - 80.0f;
                     } else {
                         window->y = 60.0f + pos.y;

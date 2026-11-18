@@ -34,6 +34,16 @@ typedef enum WindowEntryFlags {
     WINDOW_FLAG_NOWINSE = (1 << 3), // 0x8, message tag <nowinse>: no window sound
 } WindowEntryFlags;
 
+// WindowEntry.tailMode, the speech-balloon tail (set by evt_msg's print functions; read by msgdrv and
+// windowDispGX_Message). Any nonzero value makes msgdrv open the balloon from the speaker position. 0x2 is set
+// with every tail mode but no code tests it alone.
+typedef enum WindowTailFlags {
+    WINDOW_TAIL_DRAW = (1 << 0),       // 0x1, draw the tail
+    WINDOW_TAIL_RIGHT = (1 << 2),      // 0x4, tail base at 0.7 of the width (else 0.38): speaker to the right
+    WINDOW_TAIL_TOP = (1 << 3),        // 0x8, tail on the top edge pointing up; small windows sit below the speaker
+    WINDOW_TAIL_SCREEN_POS = (1 << 4), // 0x10, speakerPos is a screen position already (no getScreenPoint)
+} WindowTailFlags;
+
 struct WindowEntry {
     u16 state; // 0x0, message-window state
     u16 flags; // 0x2
@@ -47,8 +57,8 @@ struct WindowEntry {
     u8 pad_1C[0x20 - 0x1C]; // 0x1C, never accessed
     OSTime timestamp;               // 0x20, gp->renderTime at the start of the current fade/scroll step
     smartEntry* userdata; // 0x28
-    s16 tailMode; // 0x2C, speech-bubble tail: 0 none, 0x10 position already on screen, 8 window above the speaker
-    Vec speakerPos; // 0x30, speech-bubble tail target (world position unless tailMode & 0x10)
+    s16 tailMode; // 0x2C, WindowTailFlags; 0 = no tail, balloon drawn in place
+    Vec speakerPos; // 0x30, speech-bubble tail target (world position unless WINDOW_TAIL_SCREEN_POS)
     void (*main)(WindowEntry* entry); // 0x3C
     void (*delete)(WindowEntry* entry); // 0x40
     u8 pad_44[0x48 - 0x44]; // 0x44, never accessed

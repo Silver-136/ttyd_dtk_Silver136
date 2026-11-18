@@ -439,7 +439,7 @@ void windowDispGX_System(s32 type, u8 alpha, f32 x, f32 y, f32 width, f32 height
 /**
  * Draws one layer (dark = the shadow pass, else the face) of a speech balloon:
  * the frame for the window type (normal, boss, TEC-XX, Shadow Sirens)
- * and the tail from the balloon toward (tailX, tailY) as set by tailFlags.
+ * and the tail from the balloon toward (tailX, tailY) as set by tailFlags (WindowTailFlags).
  */
 static void _windowDispGX_Message(s32 type, s32 tailFlags, u8 alpha, BOOL dark, f32 x, f32 y, f32 width, f32 height, f32 tailX, f32 tailY) {
     CameraEntry* camera;
@@ -790,16 +790,15 @@ static void _windowDispGX_Message(s32 type, s32 tailFlags, u8 alpha, BOOL dark, 
     }
     GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
 
-    // the speech tail pointing at (tailX, tailY): tailFlags & 1 draws it, & 4 moves its base along the window, & 8
-    // puts it on the other edge
-    if (tailFlags & 1) {
-        if (tailFlags & 4) {
+    // the speech tail pointing at (tailX, tailY); tailFlags holds WindowTailFlags
+    if (tailFlags & WINDOW_TAIL_DRAW) {
+        if (tailFlags & WINDOW_TAIL_RIGHT) {
             tailBaseX = (0.7f * width) + x;
         } else {
             tailBaseX = (0.38f * width) + x;
         }
 
-        if (tailFlags & 8) {
+        if (tailFlags & WINDOW_TAIL_TOP) {
             tailBaseY = -((0.175f * height) - y);
             y = ((0.225f * height) + y);
             if (tailBaseY >= tailY) goto end;

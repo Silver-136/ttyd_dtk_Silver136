@@ -124,9 +124,18 @@ struct AnimTableEntry {
     AnimData* data; // 0x3C
 };
 
+// AnimPoseTexEntry.wrapFlags, the texture wrap modes (animSetMaterial_Texture). A clear repeat bit means GX_CLAMP;
+// a mirror bit wins over the repeat bit. A negative value keeps the texture header's modes.
+typedef enum AnimPoseTexWrapFlags {
+    ANIM_TEX_WRAP_S_REPEAT = (1 << 0), // 0x1, S: GX_REPEAT
+    ANIM_TEX_WRAP_T_REPEAT = (1 << 1), // 0x2, T: GX_REPEAT
+    ANIM_TEX_WRAP_S_MIRROR = (1 << 2), // 0x4, S: GX_MIRROR
+    ANIM_TEX_WRAP_T_MIRROR = (1 << 3), // 0x8, T: GX_MIRROR
+} AnimPoseTexWrapFlags;
+
 typedef struct AnimPoseTexEntry {
     s32 bindId;    // 0x0
-    s32 wrapFlags; // 0x4
+    s32 wrapFlags; // 0x4, AnimPoseTexWrapFlags
 } AnimPoseTexEntry;
 
 typedef struct AnimTexBind {

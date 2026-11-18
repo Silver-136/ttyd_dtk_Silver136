@@ -106,7 +106,7 @@ static s32 _evt_msg_print(EventEntry* event, BOOL isFirstCall, s32 flags, const 
             MSG_WIN_DATA(win)->flags |= MSG_WIN_FLAG_BATTLE_UNIT;
             MSG_WIN_DATA(win)->unitId = BattleTransID(event, name);
             BtlUnit_GetTalkTogePos(MSG_WIN_DATA(win)->unitId, &win->speakerPos.x, &win->speakerPos.y, &win->speakerPos.z);
-            win->tailMode = 3;
+            win->tailMode = WINDOW_TAIL_DRAW | 2;
         }
         switch (event->printWindowFlags & MSG_PRINT_WIN_TOGE_MASK) {
             case MSG_TOGE_AUTO:
@@ -115,15 +115,15 @@ static s32 _evt_msg_print(EventEntry* event, BOOL isFirstCall, s32 flags, const 
                     marioGetPtr();
                     getScreenPoint(&win->speakerPos, &scr);
                     if (win->type == WINDOW_TYPE_SMALL) {
-                        win->tailMode = 7;
+                        win->tailMode = WINDOW_TAIL_DRAW | WINDOW_TAIL_RIGHT | 2;
                     } else if (__fabsf(scr.x) >= 300.0f) {
                         win->tailMode = 2;
                     } else {
                         getScreenPoint(&marioGetPtr()->position, &mscr);
                         if (scr.x < mscr.x) {
-                            win->tailMode = 3;
+                            win->tailMode = WINDOW_TAIL_DRAW | 2;
                         } else {
-                            win->tailMode = 7;
+                            win->tailMode = WINDOW_TAIL_DRAW | WINDOW_TAIL_RIGHT | 2;
                         }
                     }
                 }
@@ -132,7 +132,7 @@ static s32 _evt_msg_print(EventEntry* event, BOOL isFirstCall, s32 flags, const 
                 win->tailMode = 0;
                 break;
             case MSG_TOGE_AT_POS:
-                win->tailMode = 7;
+                win->tailMode = WINDOW_TAIL_DRAW | WINDOW_TAIL_RIGHT | 2;
                 win->speakerPos = event->msgPosVec;
                 break;
             case MSG_TOGE_AT_POS_FAR:
@@ -141,16 +141,16 @@ static s32 _evt_msg_print(EventEntry* event, BOOL isFirstCall, s32 flags, const 
                 break;
         }
         if (event->printWindowFlags & MSG_PRINT_WIN_TOGELR) {
-            win->tailMode = 3;
+            win->tailMode = WINDOW_TAIL_DRAW | 2;
             if (event->printWindowFlags & MSG_PRINT_WIN_TOGELR_RIGHT) {
-                win->tailMode |= 4;
+                win->tailMode |= WINDOW_TAIL_RIGHT;
             }
             if (event->printWindowFlags & MSG_PRINT_WIN_TOGELR_ABOVE) {
-                win->tailMode |= 8;
+                win->tailMode |= WINDOW_TAIL_TOP;
             }
         }
         if (event->printWindowFlags & MSG_PRINT_WIN_SCREEN_POS) {
-            win->tailMode |= 0x10;
+            win->tailMode |= WINDOW_TAIL_SCREEN_POS;
         }
         event->printWindowFlags = 0;
     }
@@ -460,7 +460,10 @@ USER_FUNC(evt_msg_toge) {
     return EVT_RETURN_DONE;
 }
 
-/** Forces tail mode 3 on the next message window; args[0] adds tail bit 4 (1), bit 8 (2) or both (3). */
+/**
+ * Forces tail mode 3 (WINDOW_TAIL_DRAW | 2) on the next message window;
+ * args[0] adds WINDOW_TAIL_RIGHT (1), WINDOW_TAIL_TOP (2) or both (3).
+ */
 USER_FUNC(evt_msg_togelr) {
     s32 side = evtGetValue(event, *event->args);
     event->printWindowFlags |= MSG_PRINT_WIN_TOGELR;

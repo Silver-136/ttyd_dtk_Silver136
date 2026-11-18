@@ -192,7 +192,12 @@ in `docs/FAKES.md` and in the mweppc review record.
   read), tou_03 kyaku 0x1 and evt_yuunpc pose 0x1 (only set), eff_peach_fukidashi `& 3` (a button
   index), tst unit_yoshi ac flags (uncalled; the AC is not identified). Also kept numeric with reasons: EventEntry 0x80 (tested only) and 0x40 (set by inline/sibling events, never
   read), SeqEndDispFlags 0x1 (only cleared), BattleWorkStatusIcon.flags 0x1 (read only), FieldBattleData
-  firstAttackFlags (may be written by fbatHitCheck's 16-byte copy), party_bomhei 0x4 (read only).
+  firstAttackFlags (may be written by fbatHitCheck's 16-byte copy), party_bomhei 0x4 (read only). GC8
+  (2026-11-17) named WindowEntry.tailMode WindowTailFlags (DRAW / RIGHT / TOP / SCREEN_POS, evt_msg setters,
+  msgdrv and windowDispGX_Message readers; 0x2 is set with every tail mode and never tested alone, so it stays `2`)
+  and AnimPoseTexEntry.wrapFlags AnimPoseTexWrapFlags (S/T repeat and mirror; the FAKE two-step wrapS lines keep
+  `& 1`). GC5's copyscan (locals copied from a field, then masked) has no other clear case: index shifts
+  (mapdrv elementMask, star powers), timers, byte splits, opcodes.
 - **English identity for developer and Japanese names (user idea, 2026-11-08):** the original symbols and the
   Japanese strings name characters, NPCs, objects, items and maps in the developers' own words, which do not always
   map cleanly to the English game (example: the symbols `mony_*`/`peton_*` and the NPC strings モニー/ピートン are
