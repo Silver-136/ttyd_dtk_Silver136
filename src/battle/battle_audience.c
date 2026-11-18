@@ -4387,7 +4387,8 @@ void BattleAudienceSoundNoise(s32 duration, s32 fade) {
         sound->kind = 4;
     }
 
-    // BUG: with no member taking part (sum 0) name is never written, so an uninitialised buffer is played.
+    // As in BattleAudienceSoundClap, whose form this stripped copy restores: with no member taking part (sum 0)
+    // name is never written, so an uninitialised buffer would be played.
     sound->sfxId = BattleAudienceSound1(name, right, left);
     AUD_SOUND_START(sound, duration + fade, fade);
 }

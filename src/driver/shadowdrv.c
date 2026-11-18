@@ -878,10 +878,11 @@ static void cylinderShadowDraw(CameraId cameraId, void* param) {
 }
 
 s32 shadowEntry(f32 x, f32 y, f32 z, f32 size) {
-    // unused: a stand-in for the (Vec){x, y, z} template of the stripped shadowEntryAllSetting (JP demo map:
+    // FAKE: unused: a stand-in for the (Vec){x, y, z} template of the stripped shadowEntryAllSetting (JP demo map:
     // UNUSED, 0xd4, just before shadowEntry), whose body is not known. The map's five Vec templates of these
     // functions are evenly numbered: shadowEntryAllSetting, shadowEntry, shadowEntryOffscreen, shadowEntryMode and
-    // shadowSetPos, one compound literal each.
+    // shadowSetPos, one compound literal each. The local takes no stack space of its own (shadowEntry's frame is
+    // 32 bytes, as in shadowEntryOffscreen, which has no such local).
     Vec unused = {0.0f, 0.0f, 0.0f};
     s32 id = cswp->numEntries;
     ShadowEntry* entry = &cswp->entries[id];

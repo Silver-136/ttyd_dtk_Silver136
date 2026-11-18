@@ -432,7 +432,7 @@ typedef struct MapEntry {
     f32 fogStart;                  // 0x28
     f32 fogEnd;                    // 0x2C
     GXColor fogColor;              // 0x30
-    HSD_Archive header;             // 0x34
+    HSD_Archive header;            // 0x34
     void* dat;                     // 0x78, ./map/%s/map.dat
     u32 datSize;                   // 0x7C
     void* tpl;                     // 0x80, ./map/%s/texture.tpl

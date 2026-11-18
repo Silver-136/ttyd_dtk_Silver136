@@ -9593,7 +9593,7 @@ void psndSFXAllOff(void) {
 // The getter of the count psndSFXMain stores. The size fixes a sign extension (lbz + extsb): the s8 return type
 // is a choice, the count field may as well have been an s8 returned as s32 (a u8 read without it is 0x10).
 s8 psndGetSFXUseNum(void) {
-    return psnd.sfxActiveCount[0];
+    return psnd.sfxActiveCount;
 }
 
 #if VERSION >= VERSION_JP
@@ -10633,7 +10633,7 @@ sgfound:
             cnt = ((s32)e / (s32)w[0]) / ((s32)w[0] / (s32)e) + (i / gz) + (fade / gz) + (psnd.flags / gz) + (psnd.sfxVolume / gz);
         }
     }
-    psnd.sfxActiveCount[0] = cnt;
+    psnd.sfxActiveCount = cnt;
     psnd.sfxDelay = 0;
 }
 

@@ -36,7 +36,10 @@ in `docs/FAKES.md` and in the mweppc review record.
   (system.c interpolation modes, REL prolog/epilog, evt_ext/evt_nannpc script functions) and the tst REL's
   dbgDraw* macros, which call `_unresolved` for functions not in the build.
 - Disagreeing private declarations: FontDrawString (14 position-first copies fit; JP gor_irai needs its
-  string-first calls and includes fontmgr.h, so no header prototype yet), psndSFX_pit 9 (no width fits all).
+  string-first calls and includes fontmgr.h, so no header prototype yet), psndSFX_pit 9 (no width fits all),
+  and two block-scope prototypes that disagree with a header the same file includes (GA8, 2026-11-17):
+  zubastar_disp2D's iconDispGx with an s32 id (header u16) and the pre-US iconDispGx2 callers' u16 id (header s16
+  before US). The bytes need the callers' types; MWCC accepts the second declaration.
   Settled: BtlUnit_SetAnim, partyChgPose, effMarioBalloonEntry, spline_getvalue / spline_maketable, envAddTev,
   envSetYamiView, iconDispGxCol, iconGetTexObj (header prototypes); BattleAcDrawGauge (callers agree with the
   definition except ac_repeatedly, unprototyped, and ac_repeatedly_lv, ratio first: both change code otherwise).
@@ -81,7 +84,7 @@ in `docs/FAKES.md` and in the mweppc review record.
   makes three of those callers 0x18 bytes shorter (tested), so the name stays taken, and
   `L_psndBGM_stop` sits in a slot of four stripped demo functions while its body stops battle-start sound effects,
   not the BGM (new in JP; the demos clear the flag inline). Rechecked 2026-11-17: both still stand as described;
-  neither has a NAME_PROVENANCE.md row yet (row text proposed in cleanup_notes/bf/GB8/log.md).
+  both now have NAME_PROVENANCE.md rows ("Names added in this fork", GB9).
 - DONE (2026-10-27): descriptive function names (user): each of the 147 functions whose name is not in the symbol maps
   (docs/NAME_PROVENANCE.md, kind `function`) gets a comment at its definition saying the name is descriptive and
   giving the placeholder it replaced and its JP address (e.g. `unk_8013be14`, JP 0x8013BE14), so readers can search
