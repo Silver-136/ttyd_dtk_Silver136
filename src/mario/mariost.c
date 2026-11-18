@@ -292,6 +292,8 @@ GXRenderModeObj GXNtsc480ProgMarioStPal = {
 // local prototypes
 static void viPostCallback(u32 retraceCount);
 static void* gcDvdCheckThread(void* param);
+void gcDvdCheckInit(void);
+void gcDvdCheckCancel(void);
 void gcRumbleCheck(void);
 #if VERSION <= VERSION_DEMO_JP
 static void gcResetCheck(void);
@@ -307,8 +309,6 @@ void gcResetCheck(void);
  * PAL video modes on a PAL console.
  */
 void marioStInit(void) {
-    static u8 stack[0x1000];
-
 #if VERSION == VERSION_DEMO_US_2
     VIInit();
     if (VIGetTvFormat() != VI_NTSC) {
@@ -457,9 +457,7 @@ void marioStInit(void) {
 #endif
     VISetPostRetraceCallback(viPostCallback);
     romFontInit();
-    OSCreateThread(&DvdCheckThread, gcDvdCheckThread, NULL, stack + sizeof(stack), sizeof(stack), 16, OS_THREAD_ATTR_DETACH);
-    DvdCheckTreadOn = TRUE;
-    OSResumeThread(&DvdCheckThread);
+    gcDvdCheckInit();
     DVDMgrInit();
     psndInit();
     aramMgrInit();
@@ -878,6 +876,29 @@ static void* gcDvdCheckThread(void* param) {
     }
 }
 
+/** Starts the disc-check thread (gcDvdCheckThread) on its own 4 KiB stack. */
+// Original name and size (0x60) from the JP demo map (UNUSED there: its one call, in marioStInit, is inlined). The
+// JP demo map numbers its stack (stack$659) between viPostCallback's and gcRumbleCheck's labels, so the stack is
+// this function's static, not marioStInit's.
+void gcDvdCheckInit(void) {
+    static u8 stack[0x1000];
+
+    OSCreateThread(&DvdCheckThread, gcDvdCheckThread, NULL, stack + sizeof(stack), sizeof(stack), 16, OS_THREAD_ATTR_DETACH);
+    DvdCheckTreadOn = TRUE;
+    OSResumeThread(&DvdCheckThread);
+}
+
+/** Stops the disc-check thread if it is running. */
+// Original name and size (0x3c) from the JP demo map (UNUSED there: its one call, in the reset check, is inlined).
+// JP and later write the cancel out in gcResetCheck with an extra test (not on the disc-check thread itself); as a
+// call of a JP+ form of this function, JP retail inlines gcResetCheck into its callers and no longer matches.
+void gcDvdCheckCancel(void) {
+    if (DvdCheckTreadOn) {
+        OSCancelThread(&DvdCheckThread);
+        DvdCheckTreadOn = FALSE;
+    }
+}
+
 /**
  * Rumble safety, run from viPostCallback: forces a pad's motor off for 30 seconds
  * after 30 seconds of continuous rumble, and hard-stops all rumble during a disc error or
@@ -963,7 +984,7 @@ static inline void gcResetCheck(void) {
         VIWaitForRetrace();
         psndExit();
         DVDMgrDelete();
-        if (DvdCheckTreadOn) {
+        gcDvdCheckCancel();
 #else
 void gcResetCheck(void) {
     u32 code;
@@ -981,10 +1002,10 @@ void gcResetCheck(void) {
         psndExit();
         DVDMgrDelete();
         if ((OSGetCurrentThread() != &DvdCheckThread) && DvdCheckTreadOn) {
-#endif
             OSCancelThread(&DvdCheckThread);
             DvdCheckTreadOn = FALSE;
         }
+#endif
         while (cardIsExec()) {
             cardMain();
             VIWaitForRetrace();

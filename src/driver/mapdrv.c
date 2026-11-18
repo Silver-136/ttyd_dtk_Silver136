@@ -4033,6 +4033,14 @@ void mapSetProjTexObj(GXTexObj* obj, void* imgRef) {
     projTexImgRef = imgRef;
 }
 
+/** The texture of the MAP_OBJ_FLAG_PROJ_TEX texture stage, as mapSetMaterialTev loads it. */
+// Original name and size (0x2c) from the JP demo map (UNUSED there: nothing calls it); the getter of
+// mapSetProjTexObj's texture, between it and mapSetProjMtx. The body (smartTexObj on the stored texture and image,
+// as mapSetMaterialTev does) is the only form found that fits 0x2c; the return type is not fixed by the bytes.
+GXTexObj* mapGetProjTexObj(void) {
+    return smartTexObj(&projTexObj, projTexImgRef);
+}
+
 /** Stores the projection matrix of the MAP_OBJ_FLAG_PROJ_TEX texture stage; called by hei_00 and tou_01. */
 void mapSetProjMtx(Mtx mtx) {
     MTXCopy(mtx, projMtx);

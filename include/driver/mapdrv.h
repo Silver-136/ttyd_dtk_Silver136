@@ -575,6 +575,7 @@ void mapGetFog(s32* type, f32* start, f32* end, GXColor* color);
 void mapSetProjMtx(Mtx mtx);
 Mtx* mapGetProjMtx(void);
 void mapSetProjTexObj(GXTexObj* obj, void* imgRef);
+GXTexObj* mapGetProjTexObj(void);
 void mapObjSetOffScreen(const char* name, const char* offscreen);
 void mapGrpSetOffScreen(const char* name, const char* offscreen);
 void test_kururing_mapdisp(CameraId cam);
