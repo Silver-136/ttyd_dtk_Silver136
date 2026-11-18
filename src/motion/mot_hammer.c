@@ -26,6 +26,7 @@
 #include "libc_decls.h"
 
 static HitEntry* hitEstimate(int* out);
+static f32 hammerSwingDir(MarioWork* mario);
 
 // hitEstimate's *out: what the swing will hit; it picks the pose, the effect and the swing length.
 enum {
@@ -141,27 +142,6 @@ static void zoomOff(void) {
 }
 
 /**
- * The hammer swing direction: 180 (left) or 0 (right) from Mario's facing,
- * turned 30 degrees when Mario shows his back.
- */
-// The hammer swing direction: straight left or right, turned 30 degrees when Mario faces away from the camera.
-static inline f32 hamDir(MarioWork* mario) {
-    f32 a = mario->displayDirection;
-    MarioWork* p = marioGetPtr();
-    f32 r;
-    f32 off = 0.0f;
-    if (p->dispFlags & MARIO_DISP_FLAG_REAR_POSE) {
-        off = (p->displayDirection >= 90.0f && p->displayDirection <= 270.0f) ? 30.0f : -30.0f;
-    }
-    if (a >= 90.0f && a <= 270.0f) {
-        r = revise360(180.0f + off);
-    } else {
-        r = revise360(off);
-    }
-    return r;
-}
-
-/**
  * 1 if the hammer block mobj obj can be broken with Mario's current hammer level,
  * so the swing goes through instead of bouncing off.
  */
@@ -233,6 +213,27 @@ static f32 adjustdir2(MarioWork* mario) {
     return a;
 }
 
+/**
+ * The hammer swing direction: 180 (left) or 0 (right) from Mario's facing,
+ * turned 30 degrees when Mario shows his back.
+ */
+// Original name and size (0xbc) from the JP demo's link map (UNUSED there): every call is inlined.
+static f32 hammerSwingDir(MarioWork* mario) {
+    f32 a = mario->displayDirection;
+    MarioWork* p = marioGetPtr();
+    f32 r;
+    f32 off = 0.0f;
+    if (p->dispFlags & MARIO_DISP_FLAG_REAR_POSE) {
+        off = (p->displayDirection >= 90.0f && p->displayDirection <= 270.0f) ? 30.0f : -30.0f;
+    }
+    if (a >= 90.0f && a <= 270.0f) {
+        r = revise360(180.0f + off);
+    } else {
+        r = revise360(off);
+    }
+    return r;
+}
+
 /** The display direction for swing direction a: 180 (left) when a points left (90-270), else 0 (right). */
 // Original name and size (0x40) from the JP demo's link map (UNUSED there): every call is inlined.
 static f32 hammerSwingDir2(f32 a) {
@@ -264,7 +265,7 @@ void mot_hammer(void) {
         mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
         mario->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
         mario->flags |= MARIO_FLAG_STOP_AIR_MOVEMENT;
-        mario->mot.hammer.dir = hamDir(mario);
+        mario->mot.hammer.dir = hammerSwingDir(mario);
         mario->multiTimer = 0;
         mario->airTimer = 0;
         mario->currSubMotionId = HAMMER_SUB_SWING;
@@ -274,7 +275,7 @@ void mot_hammer(void) {
         mario->hitobjHammerNew = hit;
         if (hit) {
             mario->directionView = adjustdir(mario);
-            mario->mot.hammer.dir = hamDir(mario);
+            mario->mot.hammer.dir = hammerSwingDir(mario);
         }
         if (hitGetAttr(hit) & HIT_ATTR_MOBJ) {
             s32 ok = chkBlock(mobjHitObjPtrToPtr(hit));

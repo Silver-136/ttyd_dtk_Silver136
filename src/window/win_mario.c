@@ -404,26 +404,28 @@ char* winZenkakuStrPad(s32 n, s32 digits) {
 #endif
 #endif
 
-/** Draws a speech-bubble (fukidashi) with a curse's icon in it, plus a drop shadow. */
-static inline void fukiKey(WindowWork* w, u16 icon, f32 x, f32 y) {
+/**
+ * Draws a speech bubble (fukidashi) with an item icon in it, plus a drop shadow. mirror flips the bubble texture
+ * horizontally and puts the icon 6 to the left of the centre instead of 6 to the right: the hammer and boots bubbles
+ * use it, the curse bubbles do not.
+ */
+// Original name and size (0x358) from the JP demo's link map (UNUSED there, between winZenkakuStr and fukidashi): every
+// call is inlined. The bytes fix the body: two arms, the unmirrored one first (the order of the constant templates in\n// .rodata). The parameter's name and type are not known.
+static void fukidashi_sub(WindowWork* w, u16 icon, f32 x, f32 y, s32 mirror) {
     winTexInit(*w->res->data);
     GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_C0);
     GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_A0, GX_CA_TEXA, GX_CA_ZERO);
-    winTexSet(0xB1, (Vec){x + 5.0f, y - 5.0f, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, (GXColor){0x00, 0x00, 0x00, 0x80});
-    winTexSet(0xB1, (Vec){x, y, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, (GXColor){0xE1, 0xE1, 0xE1, 0xFE});
-    winIconInit();
-    winIconSet(icon, (Vec){x + 6.0f, y, 0.0f}, (Vec){0.7f, 0.7f, 0.7f}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
-}
-
-/** Mirrored speech bubble for the hammer or boots icon (the bubble texture flipped horizontally). */
-static inline void fukiTool(WindowWork* w, u16 icon, f32 x, f32 y) {
-    winTexInit(*w->res->data);
-    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_C0);
-    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_A0, GX_CA_TEXA, GX_CA_ZERO);
-    winTexSet(0xB1, (Vec){x + 5.0f, y - 5.0f, 0.0f}, (Vec){-0.8f, 0.8f, 0.8f}, (GXColor){0x00, 0x00, 0x00, 0x80});
-    winTexSet(0xB1, (Vec){x, y, 0.0f}, (Vec){-0.8f, 0.8f, 0.8f}, (GXColor){0xE1, 0xE1, 0xE1, 0xFE});
-    winIconInit();
-    winIconSet(icon, (Vec){x - 6.0f, y, 0.0f}, (Vec){0.7f, 0.7f, 0.7f}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+    if (!mirror) {
+        winTexSet(0xB1, (Vec){x + 5.0f, y - 5.0f, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, (GXColor){0x00, 0x00, 0x00, 0x80});
+        winTexSet(0xB1, (Vec){x, y, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, (GXColor){0xE1, 0xE1, 0xE1, 0xFE});
+        winIconInit();
+        winIconSet(icon, (Vec){x + 6.0f, y, 0.0f}, (Vec){0.7f, 0.7f, 0.7f}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+    } else {
+        winTexSet(0xB1, (Vec){x + 5.0f, y - 5.0f, 0.0f}, (Vec){-0.8f, 0.8f, 0.8f}, (GXColor){0x00, 0x00, 0x00, 0x80});
+        winTexSet(0xB1, (Vec){x, y, 0.0f}, (Vec){-0.8f, 0.8f, 0.8f}, (GXColor){0xE1, 0xE1, 0xE1, 0xFE});
+        winIconInit();
+        winIconSet(icon, (Vec){x - 6.0f, y, 0.0f}, (Vec){0.7f, 0.7f, 0.7f}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+    }
 }
 
 /**
@@ -434,32 +436,32 @@ static void fukidashi(WindowWork* w, u32 idx, f32 x, f32 y) {
     switch (idx) {
         case 2:
             if (pouchGetHammerLv() > 0) {
-                fukiTool(w, itemDataTable[pouchGetHammerLv() + (ITEM_HAMMER - 1)].icon_id, x - 230.0f, y + 72.0f);
+                fukidashi_sub(w, itemDataTable[pouchGetHammerLv() + (ITEM_HAMMER - 1)].icon_id, x - 230.0f, y + 72.0f, 1);
             }
             break;
         case 3:
             if (pouchGetJumpLv() > 0) {
-                fukiTool(w, itemDataTable[pouchGetJumpLv() + (ITEM_BOOTS - 1)].icon_id, x - 210.0f, y + 20.0f);
+                fukidashi_sub(w, itemDataTable[pouchGetJumpLv() + (ITEM_BOOTS - 1)].icon_id, x - 210.0f, y + 20.0f, 1);
             }
             break;
         case 7:
             if (pouchCheckItem(ITEM_PAPER_CURSE)) {
-                fukiKey(w, itemDataTable[ITEM_PAPER_CURSE].icon_id, x - 80.0f, y + 90.0f);
+                fukidashi_sub(w, itemDataTable[ITEM_PAPER_CURSE].icon_id, x - 80.0f, y + 90.0f, 0);
             }
             break;
         case 8:
             if (pouchCheckItem(ITEM_PLANE_CURSE)) {
-                fukiKey(w, itemDataTable[ITEM_PLANE_CURSE].icon_id, x - 80.0f, y + 20.0f);
+                fukidashi_sub(w, itemDataTable[ITEM_PLANE_CURSE].icon_id, x - 80.0f, y + 20.0f, 0);
             }
             break;
         case 9:
             if (pouchCheckItem(ITEM_BOAT_CURSE)) {
-                fukiKey(w, itemDataTable[ITEM_BOAT_CURSE].icon_id, x - 30.0f, y + 130.0f);
+                fukidashi_sub(w, itemDataTable[ITEM_BOAT_CURSE].icon_id, x - 30.0f, y + 130.0f, 0);
             }
             break;
         case 10:
             if (pouchCheckItem(ITEM_TUBE_CURSE)) {
-                fukiKey(w, itemDataTable[ITEM_TUBE_CURSE].icon_id, x - 30.0f, y + 60.0f);
+                fukidashi_sub(w, itemDataTable[ITEM_TUBE_CURSE].icon_id, x - 30.0f, y + 60.0f, 0);
             }
             break;
     }

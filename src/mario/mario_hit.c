@@ -43,6 +43,20 @@ static HitEntry* marioChkFrontStep(f32* y, f32* h, f32* ang);
 static const Vec zv0 = {0.0f, 0.0f, 0.0f};
 static const Vec zv1 = {0.0f, 0.0f, 0.0f};
 
+/** FALSE when floors are disabled for Mario or he is at y >= 5000 (out of the map), so marioChkGnd skips the floor. */
+// Original name and size (0x54) from the JP demo's link map (UNUSED there, first in mario_hit.o's source order):
+// every call is inlined.
+static BOOL marioGravityChk(void) {
+    MarioWork* mario = marioGetPtr();
+    if (mario->flags & MARIO_FLAG_FLOORS_DISABLED) {
+        return FALSE;
+    }
+    if (mario->position.y >= 5000.0f) {
+        return FALSE;
+    }
+    return TRUE;
+}
+
 /** Mario's collision height, or the riding partner's height (partyGetHeight) while he is on Yoshi. */
 // Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
 f32 marioGetHeight(void) {
@@ -441,18 +455,6 @@ HitEntry* searchUnder2(f32* out, f32 x, f32 y, f32 z) {
     return hit;
 }
 
-/** FALSE when floors are disabled for Mario or he is at y >= 5000 (out of the map), so marioChkGnd skips the floor. */
-static inline BOOL marioChkGndOk(void) {
-    MarioWork* mario = marioGetPtr();
-    if (mario->flags & MARIO_FLAG_FLOORS_DISABLED) {
-        return FALSE;
-    }
-    if (mario->position.y >= 5000.0f) {
-        return FALSE;
-    }
-    return TRUE;
-}
-
 /**
  * Mario's per-frame ground check while on the ground (mario.c, koopa.c, peach.c, the Spring Jump):
  * finds the floor he stands on, starts a fall when it is gone,
@@ -478,7 +480,7 @@ void marioChkGnd(void) {
     if (mario->flags & (MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING)) {
         return;
     }
-    if (!marioChkGndOk()) {
+    if (!marioGravityChk()) {
         return;
     }
     if (!(mario->flags & MARIO_FLAG_FORCE_WALL)) {

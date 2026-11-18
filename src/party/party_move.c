@@ -1714,6 +1714,42 @@ void party_move_mode_beside_mario_post(PartyEntry* party) {
 }
 
 /**
+ * Move mode 6: behind Mario, continued from move mode 2 (party_motion_behind_mario_continue), with jump, fall,
+ * step and damage motions.
+ */
+// Original name and size (0xd0) from the JP demo's link map (UNUSED there, after party_move_mode_beside_mario_post):
+// every call is inlined (walkMain, flyMain). The map's party_move_mode_slitwall_post (0x10) is not restored: no code
+// shows its body.
+void party_move_mode_slitwall(PartyEntry* party) {
+    if (party->trigFlags & PARTY_TRIG_CHG_MOVE_MODE) {
+        party->trigFlags &= ~PARTY_TRIG_CHG_MOVE_MODE;
+    }
+    switch (party->motionId) {
+        case PARTY_MOTION_STAY:
+        case PARTY_MOTION_WALK:
+            if (party->moveKind == 0) {
+                party_motion_behind_mario_continue(party);
+            } else {
+                party_motion_behind_mario_fly(party);
+            }
+            break;
+        case PARTY_MOTION_JUMP:
+            party_motion_jump2(party);
+            break;
+        case PARTY_MOTION_FALL:
+            party_motion_fall(party);
+            break;
+        case PARTY_MOTION_UPSTAIRS:
+            party_motion_upstairs(party);
+            break;
+        case PARTY_MOTION_DAMAGE:
+            party_motion_damage(party);
+            break;
+    }
+    party->moveDir = party->targetDir;
+}
+
+/**
  * Run mode 9 (partySetForceMove, evt_party.c): walks straight along targetDir at moveSpeed for forceMoveFrames
  * frames, then back to the previous run mode.
  * Entering it cancels Bobbery's or Koops's field move; a wall in front starts a jump (motion 2).
@@ -1875,39 +1911,6 @@ void partyFlyMain(PartyEntry* party) {
     flyMain(party);
 }
 
-/**
- * Move mode 6: behind Mario, continued from move mode 2 (party_motion_behind_mario_continue), with jump, fall,
- * step and damage motions.
- */
-static inline void party_move_mode_behind_mario_continue(PartyEntry* party) {
-    if (party->trigFlags & PARTY_TRIG_CHG_MOVE_MODE) {
-        party->trigFlags &= ~PARTY_TRIG_CHG_MOVE_MODE;
-    }
-    switch (party->motionId) {
-        case PARTY_MOTION_STAY:
-        case PARTY_MOTION_WALK:
-            if (party->moveKind == 0) {
-                party_motion_behind_mario_continue(party);
-            } else {
-                party_motion_behind_mario_fly(party);
-            }
-            break;
-        case PARTY_MOTION_JUMP:
-            party_motion_jump2(party);
-            break;
-        case PARTY_MOTION_FALL:
-            party_motion_fall(party);
-            break;
-        case PARTY_MOTION_UPSTAIRS:
-            party_motion_upstairs(party);
-            break;
-        case PARTY_MOTION_DAMAGE:
-            party_motion_damage(party);
-            break;
-    }
-    party->moveDir = party->targetDir;
-}
-
 /** Runs the current move mode for a walking partner. */
 static void walkMain(PartyEntry* party) {
     switch (party->moveMode) {
@@ -1924,7 +1927,7 @@ static void walkMain(PartyEntry* party) {
             party_move_mode_beside_mario(party);
             break;
         case PARTY_MOVE_MODE_CONTINUE_BEHIND_MARIO:
-            party_move_mode_behind_mario_continue(party);
+            party_move_mode_slitwall(party);
             break;
     }
 }
@@ -1945,7 +1948,7 @@ static void flyMain(PartyEntry* party) {
             party_move_mode_beside_mario(party);
             break;
         case PARTY_MOVE_MODE_CONTINUE_BEHIND_MARIO:
-            party_move_mode_behind_mario_continue(party);
+            party_move_mode_slitwall(party);
             break;
     }
 }

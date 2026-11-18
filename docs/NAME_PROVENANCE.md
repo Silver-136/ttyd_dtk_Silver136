@@ -397,9 +397,9 @@ function names) and `strupr` (a C library name).
 
 ## Inline helper names (2026-11-17)
 
-214 names of `static inline` (and a few plain `inline`) helpers in the game code that no map lists and no table
+209 names of `static inline` (and a few plain `inline`) helpers in the game code that no map lists and no table
 above names (GE4, 2026-11-18: mri_puni's puniModeCheckPos and puniMapDataSetI were copies of the file's own
-puniModePrehagure and puniMapDataSet, whose out-of-line copies the REL keeps; the callers call those now; GE7: win_root's nameTex + nameQuad, winSortTex and winWazaQuad were copies of the stripped chip and chip2, which the callers call now). An inline function leaves no symbol when every call is inlined, so no map can name it: the names
+puniModePrehagure and puniMapDataSet, whose out-of-line copies the REL keeps; the callers call those now; GE7: win_root's nameTex + nameQuad, winSortTex and winWazaQuad were copies of the stripped chip and chip2, which the callers call now; GE10: mot_hammer's hamDir, party_move's party_move_mode_behind_mario_continue, mario_hit's marioChkGndOk and win_mario's fukiKey + fukiTool are the stripped hammerSwingDir, party_move_mode_slitwall, marioGravityChk and fukidashi_sub (one function with a mirror parameter), restored at their map slots and sizes). An inline function leaves no symbol when every call is inlined, so no map can name it: the names
 were chosen when the code was decompiled (LLCOOLT or this fork) and are not original. Each helper reads as
 code a programmer would write (a small getter, a repeated draw or copy step, a private sine), so it is not
 listed as a fake; where a test was made, the written-out form builds different code (GB9: setChanMatColor,
@@ -417,7 +417,7 @@ cleanup_notes/bf/GB13/log.md):
   checkTriVecUp and partyHitCheckDistNrm (not tried: early returns, called as conditions), the eff_itemget /
   eff_kemuri3 sind and cosd and eff_opuku_wgun dsin (GC2: the inline's result temp colours differently from any
   named local; eff_kemuri3 builds the same only with one-store holder locals),
-  shadowSetTev, shadowSetMatZero, partyStepSize (one instruction short), marioChkGndOk, wallCopy, chkBlock, rollChk,
+  shadowSetTev, shadowSetMatZero, partyStepSize (one instruction short), wallCopy, chkBlock, rollChk,
   hand_pose_inl, CheckPrefetch, orbit_update, gor_00 / tik_05 fid (see below);
 - the same code only in a less natural form: marioChkCtrl2 (only `(x ? 0 : 1) ? 0 : 1`), mot_ham (only with a second
   marioGetPtr() pointer next to h2LevelUp's `mario`);
@@ -491,10 +491,10 @@ helper: no written-out form builds the same; it should be a FAKES row.
 | src/koopa_motion.c | `kpa_hip_launch` |
 | src/manager/fontmgr.c | `fontByteGlyph`, `fontDrawCodeEdgeXY`, `fontHueX`, `fontPos` (1) |
 | src/mario/mario.c | `marioCharPoseRelease`, `marioChkCtrl2` (1), `marioCtrlDisable`, `marioKeyDisable`, `marioChkRollMot2`, `marioChkRollMot`, `marioChkRevDir` |
-| src/mario/mario_hit.c | `sind`, `cosd`, `marioChkGndOk` (1), `wallBase`, `wallCopy` (1) |
+| src/mario/mario_hit.c | `sind`, `cosd`, `wallBase`, `wallCopy` (1) |
 | src/mario/mario_motion.c | `marioChkBackAngle` |
 | src/mario/mario_pouch.c | `pouchShift`, `pouchAiueoConv` |
-| src/motion/mot_hammer.c | `hamDir`, `chkBlock` (1), `mot_ham` (1), `h2LevelUp`, `h2Ramp`, `h2ClrPaper` |
+| src/motion/mot_hammer.c | `chkBlock` (1), `mot_ham` (1), `h2LevelUp`, `h2Ramp`, `h2ClrPaper` |
 | src/motion/mot_hip.c | `hip_snd_reset` (1), `hip_snd_on` (1), `hip_snd_off` (1) |
 | src/motion/mot_jabara.c | `jabaraSetSpd`, `animStep` |
 | src/motion/mot_jump.c | `chgPoseB`, `chgPoseC`, `jumpSfx` |
@@ -507,7 +507,7 @@ helper: no written-out form builds the same; it should be a FAKES row.
 | src/party/party_cloud.c | `breathParticles`, `cloudSweep` |
 | src/party/party_hit.c | `partyNrmTo`, `partyHitCheckGnd`, `partyHitCheckDistNrm` (1), `partyHitCheckNrm`, `partyHitNrm` |
 | src/party/party_motion.c | `partyBehindGround`, `partyFlyMoveY`, `partyJumpHeight` (1), `partyJumpCalc` (1), `partyChkWaterHazard` |
-| src/party/party_move.c | `partySpdRate`, `party_move_mode_behind_mario_continue`, `partyAppearMoveBack`, `partyAppearAdjustY` |
+| src/party/party_move.c | `partySpdRate`, `partyAppearMoveBack`, `partyAppearAdjustY` |
 | src/party/party_nokonoko.c | `nokoSin`, `nokoCos` |
 | src/party/party_yoshi.c | `yoshiSyncMario` |
 | src/party.c | `partyChgRunM`, `partyChgRunMo`, `partyAppearMoveBack` |
@@ -518,7 +518,7 @@ helper: no written-out form builds the same; it should be a FAKES row.
 | src/sound.c | `_ssGetStr`, `SoundEfxMuteCh`, `SoundEfxCheckCh`, `_ssCalcLen` (1), `_ssResetEntries` |
 | src/system.c | `getDemoPadStatus` |
 | src/window/win_log.c | `tubuCheck` |
-| src/window/win_mario.c | `fukiKey`, `fukiTool`, `colorAnimName` |
+| src/window/win_mario.c | `colorAnimName` |
 | rels/aji/src/aji_06.c | `yukaNow` |
 | rels/aji/src/aji_19.c | `beltSpeed` |
 | rels/bom/src/bom_01.c | `chb_sin`, `chb_cos` |
