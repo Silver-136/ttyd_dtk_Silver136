@@ -735,217 +735,6 @@ static USER_FUNC(radiation_set_pos) {
 }
 
 /**
- * Script helper: creates a named power-charge effect (Pokopi pcharge, N64 style) at args[1..3];
- * the effect name is args[0].
- */
-static USER_FUNC(pcharge_entry) {
-    EvtWord* args = event->args;
-    const char* name = (const char*)evtGetValue(event, args[0]);
-    f32 x = evtGetFloat(event, args[1]);
-    f32 y = evtGetFloat(event, args[2]);
-    f32 z = evtGetFloat(event, args[3]);
-
-    effSetName(effPokopiPchargeN64Entry(8, 0, x, y, z, 1.0f), name);
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper: moves the named power-charge effect args[0] to (args[1], args[2], args[3]). */
-static USER_FUNC(pcharge_set_pos) {
-    EvtWord* args = event->args;
-    const char* name = (const char*)evtGetValue(event, args[0]);
-    f32 x = evtGetFloat(event, args[1]);
-    f32 y = evtGetFloat(event, args[2]);
-    f32 z = evtGetFloat(event, args[3]);
-    EffectEntry* eff = effNameToPtr(name);
-
-    ((EffPokopiPchargeN64Elem*)eff->userdata)->position.x = x;
-    ((EffPokopiPchargeN64Elem*)eff->userdata)->position.y = y;
-    ((EffPokopiPchargeN64Elem*)eff->userdata)->position.z = z;
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper: creates seven Crystal Star effects ("starstone0..6") evenly spaced on a circle of radius
- * args[3] around (args[0], args[1], args[2]).
- */
-static USER_FUNC(starstone_entry) {
-    char name[16];
-    EvtWord* args = event->args;
-    f32 x;
-    f32 z;
-    f32 r;
-    f32 c;
-    f32 angle;
-    f32 y;
-    f32 s;
-    EffectEntry* eff;
-    s32 i;
-
-    x = evtGetFloat(event, args[0]);
-    y = evtGetFloat(event, args[1]);
-    z = evtGetFloat(event, args[2]);
-    r = evtGetFloat(event, args[3]);
-    for (i = 0; i < 7; i++) {
-        angle = 6.2831855f * i / 7.0f;
-        c = cos(angle);
-        s = sin(angle);
-        sprintf(name, "starstone%d", i);
-        eff = effStarStoneEntry(i, r * c + x, y, r * s + z, 1.0f);
-        effSetName(eff, name);
-        ((EffStarStoneWork*)eff->userdata)->flags &= ~STAR_STONE_FLAG_SHINE_SFX;
-    }
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper: repositions the seven Crystal Star effects on a circle around (args[0], args[1], args[2]) of
- * radius args[4], rotated by the phase args[3] in radians.
- */
-static USER_FUNC(starstone_set_pos) {
-    char name[16];
-    EvtWord* args = event->args;
-    f32 x = evtGetFloat(event, args[0]);
-    f32 y = evtGetFloat(event, args[1]);
-    f32 z = evtGetFloat(event, args[2]);
-    f32 phase = evtGetFloat(event, args[3]);
-    f32 r = evtGetFloat(event, args[4]);
-    f32 c;
-    f32 angle;
-    f32 s;
-    EffectEntry* eff;
-    s32 i;
-
-    for (i = 0; i < 7; i++) {
-        angle = 6.2831855f * i / 7.0f + phase;
-        if (angle >= 6.2831855f) {
-            angle -= 6.2831855f;
-        }
-        c = cos(angle);
-        s = sin(angle);
-        sprintf(name, "starstone%d", i);
-        eff = effNameToPtr(name);
-        ((EffStarStoneWork*)eff->userdata)->position.x = r * c + x;
-        ((EffStarStoneWork*)eff->userdata)->position.y = y;
-        ((EffStarStoneWork*)eff->userdata)->position.z = r * s + z;
-    }
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper: sets the Y rotation of all seven Crystal Star effects to args[0]. */
-static USER_FUNC(starstone_set_ry) {
-    char name[16];
-    f32 ry = evtGetFloat(event, event->args[0]);
-    s32 i;
-
-    for (i = 0; i < 7; i++) {
-        sprintf(name, "starstone%d", i);
-        ((EffStarStoneWork*)effNameToPtr(name)->userdata)->rot.y = ry;
-    }
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper: builds the message label "stg8_las_148_74_NN" for the voice number args[0] (wrapping to the
- * first voice if the number is 18 and Ms. Mowz has not joined) and returns it in args[1].
- */
-static USER_FUNC(make_koe_label) {
-    static char name[32];
-    EvtWord* args = event->args;
-    s32 n = evtGetValue(event, args[0]);
-
-    if (n == 18 && !partyChkJoin(PARTY_MS_MOWZ)) {
-        n = 1;
-        evtSetValue(event, args[0], 1);
-    }
-    sprintf(name, "stg8_las_148_74_%02d", n + 1);
-    evtSetValue(event, args[1], (EvtWord)name);
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper: picks a random screen position within about 200 by 190 units of the centre
- * where the next cheering voice message bubble appears; returns X, Y and Z (0) in args[0..2].
- */
-static USER_FUNC(make_koe_pos) {
-    EvtWord* args = event->args;
-    s32 a = ((rand() >> 1) % 41) * 10;
-    s32 b = ((rand() >> 1) % 33) * 10;
-    s32 x = a - 200;
-    s32 y = b - 190;
-
-    if (x > 0) {
-        x += rand() % 10;
-    } else {
-        x -= rand() % 10;
-    }
-    if (y > 0) {
-        y += rand() % 10;
-    } else {
-        y += rand() % 10;
-    }
-    evtSetValue(event, args[0], x);
-    evtSetValue(event, args[1], y);
-    evtSetValue(event, args[2], 0);
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper: blocks while the NPC named args[0] is still doing an instant turn. */
-static USER_FUNC(slowturnoff_check) {
-    return (npcNameToPtr((const char*)evtGetValue(event, event->args[0]))->flags & NPC_FLAG_INSTANT_TURN) ? EVT_RETURN_BLOCK : EVT_RETURN_DONE;
-}
-
-/** Script helper: creates a ripple effect on the floor under the Shadow Queen (possessing Peach). */
-static USER_FUNC(eff_b_peach_ripple) {
-    NpcEntry* npc = npcNameToPtr("ブラックピーチ");
-
-    effRippleSetRxRz(effRippleEntry(3, npc->position.x, 30.0f + npc->position.y, npc->position.z), 0.0f, 176.0f);
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper: puffs a mist effect beside Peach's NPC, 20 units away on the side facing away from the camera. */
-static USER_FUNC(eff_b_peach_mist) {
-    NpcEntry* npc = npcNameToPtr("ピーチ姫");
-    f32 s;
-    f32 angle;
-    f32 c;
-    f32 dx;
-    f32 dz;
-
-    s = 180.0f + camGetPtr(CAMERA_3D)->viewYaw;
-    angle = 6.2831855f * s / 360.0f;
-    s = sin(angle);
-    c = cos(angle);
-    dx = 20.0f * s;
-    dz = 20.0f * -c;
-
-    effMistEntry(6, 300, npc->position.x + dx, 30.0f + npc->position.y, npc->position.z + dz, 0.0f);
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper: builds the effect name "mist<args[0]>" and returns it in args[1]. */
-static USER_FUNC(make_mist_name) {
-    static char name[8];
-    EvtWord* args = event->args;
-
-    sprintf(name, "mist%d", evtGetValue(event, args[0]));
-    evtSetValue(event, args[1], (EvtWord)name);
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper: adds args[0] to the Y position of the ten mist effects "mist0..9". */
-static USER_FUNC(mist_add_vy) {
-    char name[16];
-    f32 vy = evtGetFloat(event, event->args[0]);
-    s32 i;
-
-    for (i = 0; i < 10; i++) {
-        sprintf(name, "mist%d", i);
-        ((EffMist2Work*)effNameToPtr(name)->userdata)->position.y += vy;
-    }
-    return EVT_RETURN_DONE;
-}
-
-/**
  * Event script: flashes the throne hall to a bright, flat-coloured look:
  * hides Grodus, turns the hall models into flat-colour objects without fog,
  * and shrinks all candle flames to nothing.
@@ -1879,6 +1668,116 @@ static EVT_BEGIN(b_peach_fuwafuwa)
 EVT_END()
 
 /**
+ * Script helper: creates a named power-charge effect (Pokopi pcharge, N64 style) at args[1..3];
+ * the effect name is args[0].
+ */
+static USER_FUNC(pcharge_entry) {
+    EvtWord* args = event->args;
+    const char* name = (const char*)evtGetValue(event, args[0]);
+    f32 x = evtGetFloat(event, args[1]);
+    f32 y = evtGetFloat(event, args[2]);
+    f32 z = evtGetFloat(event, args[3]);
+
+    effSetName(effPokopiPchargeN64Entry(8, 0, x, y, z, 1.0f), name);
+    return EVT_RETURN_DONE;
+}
+
+/** Script helper: moves the named power-charge effect args[0] to (args[1], args[2], args[3]). */
+static USER_FUNC(pcharge_set_pos) {
+    EvtWord* args = event->args;
+    const char* name = (const char*)evtGetValue(event, args[0]);
+    f32 x = evtGetFloat(event, args[1]);
+    f32 y = evtGetFloat(event, args[2]);
+    f32 z = evtGetFloat(event, args[3]);
+    EffectEntry* eff = effNameToPtr(name);
+
+    ((EffPokopiPchargeN64Elem*)eff->userdata)->position.x = x;
+    ((EffPokopiPchargeN64Elem*)eff->userdata)->position.y = y;
+    ((EffPokopiPchargeN64Elem*)eff->userdata)->position.z = z;
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script helper: creates seven Crystal Star effects ("starstone0..6") evenly spaced on a circle of radius
+ * args[3] around (args[0], args[1], args[2]).
+ */
+static USER_FUNC(starstone_entry) {
+    char name[16];
+    EvtWord* args = event->args;
+    f32 x;
+    f32 z;
+    f32 r;
+    f32 c;
+    f32 angle;
+    f32 y;
+    f32 s;
+    EffectEntry* eff;
+    s32 i;
+
+    x = evtGetFloat(event, args[0]);
+    y = evtGetFloat(event, args[1]);
+    z = evtGetFloat(event, args[2]);
+    r = evtGetFloat(event, args[3]);
+    for (i = 0; i < 7; i++) {
+        angle = 6.2831855f * i / 7.0f;
+        c = cos(angle);
+        s = sin(angle);
+        sprintf(name, "starstone%d", i);
+        eff = effStarStoneEntry(i, r * c + x, y, r * s + z, 1.0f);
+        effSetName(eff, name);
+        ((EffStarStoneWork*)eff->userdata)->flags &= ~STAR_STONE_FLAG_SHINE_SFX;
+    }
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script helper: repositions the seven Crystal Star effects on a circle around (args[0], args[1], args[2]) of
+ * radius args[4], rotated by the phase args[3] in radians.
+ */
+static USER_FUNC(starstone_set_pos) {
+    char name[16];
+    EvtWord* args = event->args;
+    f32 x = evtGetFloat(event, args[0]);
+    f32 y = evtGetFloat(event, args[1]);
+    f32 z = evtGetFloat(event, args[2]);
+    f32 phase = evtGetFloat(event, args[3]);
+    f32 r = evtGetFloat(event, args[4]);
+    f32 c;
+    f32 angle;
+    f32 s;
+    EffectEntry* eff;
+    s32 i;
+
+    for (i = 0; i < 7; i++) {
+        angle = 6.2831855f * i / 7.0f + phase;
+        if (angle >= 6.2831855f) {
+            angle -= 6.2831855f;
+        }
+        c = cos(angle);
+        s = sin(angle);
+        sprintf(name, "starstone%d", i);
+        eff = effNameToPtr(name);
+        ((EffStarStoneWork*)eff->userdata)->position.x = r * c + x;
+        ((EffStarStoneWork*)eff->userdata)->position.y = y;
+        ((EffStarStoneWork*)eff->userdata)->position.z = r * s + z;
+    }
+    return EVT_RETURN_DONE;
+}
+
+/** Script helper: sets the Y rotation of all seven Crystal Star effects to args[0]. */
+static USER_FUNC(starstone_set_ry) {
+    char name[16];
+    f32 ry = evtGetFloat(event, event->args[0]);
+    s32 i;
+
+    for (i = 0; i < 7; i++) {
+        sprintf(name, "starstone%d", i);
+        ((EffStarStoneWork*)effNameToPtr(name)->userdata)->rot.y = ry;
+    }
+    return EVT_RETURN_DONE;
+}
+
+/**
  * Event script: the scene after the possessed Peach's first defeat.
  * The Shadow Queen (possessing Peach) hovers and speaks, then the map changes to gor_01 ("minnnanokoe", the
  * voices of everyone) to continue with last_evt_3_2.
@@ -2043,6 +1942,51 @@ static EVT_BEGIN(last_evt_3_1)
 EVT_END()
 
 /**
+ * Script helper: builds the message label "stg8_las_148_74_NN" for the voice number args[0] (wrapping to the
+ * first voice if the number is 18 and Ms. Mowz has not joined) and returns it in args[1].
+ */
+static USER_FUNC(make_koe_label) {
+    static char name[32];
+    EvtWord* args = event->args;
+    s32 n = evtGetValue(event, args[0]);
+
+    if (n == 18 && !partyChkJoin(PARTY_MS_MOWZ)) {
+        n = 1;
+        evtSetValue(event, args[0], 1);
+    }
+    sprintf(name, "stg8_las_148_74_%02d", n + 1);
+    evtSetValue(event, args[1], (EvtWord)name);
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script helper: picks a random screen position within about 200 by 190 units of the centre
+ * where the next cheering voice message bubble appears; returns X, Y and Z (0) in args[0..2].
+ */
+static USER_FUNC(make_koe_pos) {
+    EvtWord* args = event->args;
+    s32 a = ((rand() >> 1) % 41) * 10;
+    s32 b = ((rand() >> 1) % 33) * 10;
+    s32 x = a - 200;
+    s32 y = b - 190;
+
+    if (x > 0) {
+        x += rand() % 10;
+    } else {
+        x -= rand() % 10;
+    }
+    if (y > 0) {
+        y += rand() % 10;
+    } else {
+        y += rand() % 10;
+    }
+    evtSetValue(event, args[0], x);
+    evtSetValue(event, args[1], y);
+    evtSetValue(event, args[2], 0);
+    return EVT_RETURN_DONE;
+}
+
+/**
  * Event script: shows the cheering voices of everyone Mario has met as speech bubbles at random places around
  * him, at least 300 ms apart, cycling through the voice messages stg8_las_148_74_NN.
  * After each spawn it waits until fewer than six voice messages remain active.
@@ -2081,6 +2025,11 @@ static EVT_BEGIN(koe_evt)
     END_LOOP
     RETURN
 EVT_END()
+
+/** Script helper: blocks while the NPC named args[0] is still doing an instant turn. */
+static USER_FUNC(slowturnoff_check) {
+    return (npcNameToPtr((const char*)evtGetValue(event, event->args[0]))->flags & NPC_FLAG_INSTANT_TURN) ? EVT_RETURN_BLOCK : EVT_RETURN_DONE;
+}
 
 /**
  * Event script: makes Beldam, Marilyn and Doopliss look around nervously:
@@ -2628,6 +2577,57 @@ static EVT_BEGIN(last_evt_3_2)
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
+
+/** Script helper: creates a ripple effect on the floor under the Shadow Queen (possessing Peach). */
+static USER_FUNC(eff_b_peach_ripple) {
+    NpcEntry* npc = npcNameToPtr("ブラックピーチ");
+
+    effRippleSetRxRz(effRippleEntry(3, npc->position.x, 30.0f + npc->position.y, npc->position.z), 0.0f, 176.0f);
+    return EVT_RETURN_DONE;
+}
+
+/** Script helper: puffs a mist effect beside Peach's NPC, 20 units away on the side facing away from the camera. */
+static USER_FUNC(eff_b_peach_mist) {
+    NpcEntry* npc = npcNameToPtr("ピーチ姫");
+    f32 s;
+    f32 angle;
+    f32 c;
+    f32 dx;
+    f32 dz;
+
+    s = 180.0f + camGetPtr(CAMERA_3D)->viewYaw;
+    angle = 6.2831855f * s / 360.0f;
+    s = sin(angle);
+    c = cos(angle);
+    dx = 20.0f * s;
+    dz = 20.0f * -c;
+
+    effMistEntry(6, 300, npc->position.x + dx, 30.0f + npc->position.y, npc->position.z + dz, 0.0f);
+    return EVT_RETURN_DONE;
+}
+
+/** Script helper: builds the effect name "mist<args[0]>" and returns it in args[1]. */
+static USER_FUNC(make_mist_name) {
+    static char name[8];
+    EvtWord* args = event->args;
+
+    sprintf(name, "mist%d", evtGetValue(event, args[0]));
+    evtSetValue(event, args[1], (EvtWord)name);
+    return EVT_RETURN_DONE;
+}
+
+/** Script helper: adds args[0] to the Y position of the ten mist effects "mist0..9". */
+static USER_FUNC(mist_add_vy) {
+    char name[16];
+    f32 vy = evtGetFloat(event, event->args[0]);
+    s32 i;
+
+    for (i = 0; i < 10; i++) {
+        sprintf(name, "mist%d", i);
+        ((EffMist2Work*)effNameToPtr(name)->userdata)->position.y += vy;
+    }
+    return EVT_RETURN_DONE;
+}
 
 /**
  * Event script: the ending of the main game in the throne hall.

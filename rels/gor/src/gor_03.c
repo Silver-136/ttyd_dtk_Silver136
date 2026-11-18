@@ -757,44 +757,6 @@ static USER_FUNC(evt_goryuugijo_get_caseid) {
 }
 
 /**
- * Script helper: sets the number of the slot machine currently played (nowSlot) in the minigame work block in
- * args[0] to args[1].
- */
-static USER_FUNC(evt_goryuugijo_set_nowslot) {
-    EvtWord* args = event->args;
-    SlotWork* data = ((MiniGameWork*)evtGetValue(event, args[0]))->data;
-
-    data->nowSlot = evtGetValue(event, args[1]);
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Returns TRUE when a falling Monte medal is close enough to the collecting point:
- * the distance under 20 units and the heights under 20 apart.
- */
-static BOOL get_monte_check(Vec* a, Vec* b) {
-    if (PSVECDistance(a, b) < 20.0f && __fabs(a->y - b->y) < 20.0) {
-        return TRUE;
-    }
-    return FALSE;
-}
-
-/**
- * Draw callback of the Pianta tokens of the slot machine (GMonte list): draws ICON_ITEM_PIANTA_TOKEN at each of
- * the owner's monteCount entries that is not hidden.
- */
-static void monte_disp(CameraId camera, void* param) {
-    GMonte* monte = param;
-    s32 i;
-
-    for (i = 0; i < monte->owner->monteCount; i++) {
-        if (monte[i].hidden == 0) {
-            iconDispGx(&monte[i].sub.pos, ICON_FLAG_NO_MAP_BLEND, 1.0f, ICON_ITEM_PIANTA_TOKEN);
-        }
-    }
-}
-
-/**
  * Enter event of the n_bero, e_bero, dokan_1 and s_bero exits: if system flag 64 is set it clears it, then returns 0 in LW(0).
  * Leftover of a debug mode switch.
  */
@@ -3264,6 +3226,18 @@ static inline Vec fall_pos0(void) { Vec v = {-113.0f, 70.0f, 0.0f}; return v; } 
 static inline Vec fall_vel0(void) { Vec v = {0.0f, 10.0f, 0.0f}; return v; } /* @place "slot_mess_01" */
 
 /**
+ * Script helper: sets the number of the slot machine currently played (nowSlot) in the minigame work block in
+ * args[0] to args[1].
+ */
+static USER_FUNC(evt_goryuugijo_set_nowslot) {
+    EvtWord* args = event->args;
+    SlotWork* data = ((MiniGameWork*)evtGetValue(event, args[0]))->data;
+
+    data->nowSlot = evtGetValue(event, args[1]);
+    return EVT_RETURN_DONE;
+}
+
+/**
  * Common talk script of slot machine number LW(8):
  * positions the camera next to the machine, shows how many medals Mario has,
  * and asks to play (slot_mess_00, slot_mess_01 if he has none).
@@ -3424,6 +3398,32 @@ static s32 upsidegara[2][3][8] = {
         {1, 0, 0, 2, 0, 0, 1, 0},
     },
 };
+
+/**
+ * Returns TRUE when a falling Monte medal is close enough to the collecting point:
+ * the distance under 20 units and the heights under 20 apart.
+ */
+static BOOL get_monte_check(Vec* a, Vec* b) {
+    if (PSVECDistance(a, b) < 20.0f && __fabs(a->y - b->y) < 20.0) {
+        return TRUE;
+    }
+    return FALSE;
+}
+
+/**
+ * Draw callback of the Pianta tokens of the slot machine (GMonte list): draws ICON_ITEM_PIANTA_TOKEN at each of
+ * the owner's monteCount entries that is not hidden.
+ */
+static void monte_disp(CameraId camera, void* param) {
+    GMonte* monte = param;
+    s32 i;
+
+    for (i = 0; i < monte->owner->monteCount; i++) {
+        if (monte[i].hidden == 0) {
+            iconDispGx(&monte[i].sub.pos, ICON_FLAG_NO_MAP_BLEND, 1.0f, ICON_ITEM_PIANTA_TOKEN);
+        }
+    }
+}
 
 /**
  * Script helper for a slot machine payout: on the first call it makes one medal (GMonte) per coin paid out at
@@ -5207,6 +5207,16 @@ static const char* door_data_02_0_npc[] = {
     NULL,
 };
 
+/** Script helper: blocks until marioChkKey() reports TRUE. */
+static USER_FUNC(mario_keyoff_wait) {
+    switch (!marioChkKey()) {
+        default:
+            return EVT_RETURN_BLOCK;
+        case 0:
+            return EVT_RETURN_YIELD;
+    }
+}
+
 /**
  * Sets up the slot machines while the Pianta Parlor door is opening:
  * re-seeds the reels of both slot machines and waits for Mario's keys to be free.
@@ -5218,6 +5228,15 @@ static EVT_BEGIN(door_data_02_0_open_sub)
     CALL(mario_keyoff_wait)
     RETURN
 EVT_END()
+
+/**
+ * Script helper that regenerates Bunny Teresa's list of badges for the prize exchange
+ * (badgeShop_bteresaGeneration).
+ */
+static USER_FUNC(teresa_badge_item_list_init) {
+    badgeShop_bteresaGeneration();
+    return EVT_RETURN_DONE;
+}
 
 /**
  * Door hook when door 02's door opens: hides the outside (S_i02_soto_kai), spawns door_data_02_0_open_sub,
@@ -5350,6 +5369,47 @@ static const char* door_data_02_1_npc[] = {
     "ピートン",
     NULL,
 };
+
+/** Script helper that allocates the work area for desk_talk_func: one NPC entry and one effect entry. */
+static USER_FUNC(desk_talk_init_func) {
+    npc = _mapAlloc(sizeof(NpcEntry));
+    eff = _mapAlloc(sizeof(EffectEntry));
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script helper for the desk balloon: args[0] is the on flag and args[1] its previous value;
+ * shows the speech balloon effect when it switches on, removes it when it switches off,
+ * and moves the balloon's NPC to (args[2], args[3], args[4]).
+ */
+static USER_FUNC(desk_talk_func) {
+    EvtWord* args = event->args;
+    s32 on = evtGetValue(event, args[0]);
+    s32 prev = evtGetValue(event, args[1]);
+    s32 x = evtGetValue(event, args[2]);
+    s32 y = evtGetValue(event, args[3]);
+    s32 z = evtGetValue(event, args[4]);
+
+    if (on == 1 && prev == 0) {
+        eff = effMarioBalloonEntry(1, npc);
+    }
+    if (on == 0 && prev == 1) {
+        effDelete(eff);
+    }
+    npc->position.x = x;
+    npc->position.y = y;
+    npc->position.z = z;
+    return EVT_RETURN_DONE;
+}
+
+/** Script helper that stores Mario's target display direction in args[0]. */
+static USER_FUNC(get_mario_dispReqDir) {
+    EvtWord* args = event->args;
+    MarioWork* mario = marioGetPtr();
+
+    evtSetValue(event, args[0], mario->displayDirectionTarget);
+    return EVT_RETURN_DONE;
+}
 
 /**
  * Loop spawned by the map init (id in GW(15)) for Don Pianta's office: the talk target is Don Pianta at his
@@ -6134,6 +6194,21 @@ static ShopperData35 shopper_data = {
 };
 
 /**
+ * Script helper that places a shadow of size args[3] at (args[0], args[1], args[2]) and blocks.
+ * Used for Beldam, who has no shadow of her own.
+ */
+static USER_FUNC(dummy_shadow) {
+    EvtWord* args = event->args;
+    f32 x = evtGetFloat(event, args[0]);
+    f32 y = evtGetFloat(event, args[1]);
+    f32 z = evtGetFloat(event, args[2]);
+    f32 size = evtGetFloat(event, args[3]);
+
+    shadowSetCollision(shadowEntry(x, y, z, 10.0f * size), 0);
+    return EVT_RETURN_BLOCK;
+}
+
+/**
  * Beldam's (マジョリン) eavesdropping scene after the Train Ticket is given (STG5_65_TRAIN_TICKET):
  * the camera shows Mario's party, Beldam appears with the witch music, and she and the partner speak (mac_5_900 to 905),
  * then leaves, and the story moves to STG5_66_BELDAM_FINDS_OUT.
@@ -6503,6 +6578,81 @@ EVT_BEGIN(kuzi_bomb_talk_normal)
 EVT_END()
 
 /**
+ * Script helper that sets the viewport of the background, 3D and 2D cameras
+ * to the rectangle (args[0], args[1], args[2], args[3]), and the scissor of the 3D camera only.
+ */
+static USER_FUNC(viewport) {
+    EvtWord* args = event->args;
+    f32 x = evtGetFloat(event, args[0]);
+    f32 y = evtGetFloat(event, args[1]);
+    f32 w = evtGetFloat(event, args[2]);
+    f32 h = evtGetFloat(event, args[3]);
+    CameraEntry* cam;
+
+    cam = camGetPtr(CAMERA_BACKGROUND);
+    cam->viewport[0] = x;
+    cam->viewport[1] = y;
+    cam->viewport[2] = w;
+    cam->viewport[3] = h;
+    cam = camGetPtr(CAMERA_3D);
+    cam->viewport[0] = x;
+    cam->scissor[0] = x;
+    cam->viewport[1] = y;
+    cam->scissor[1] = y;
+    cam->viewport[2] = w;
+    cam->scissor[2] = w;
+    cam->viewport[3] = h;
+    cam->scissor[3] = h;
+    cam = camGetPtr(CAMERA_2D);
+    cam->viewport[0] = x;
+    cam->viewport[1] = y;
+    cam->viewport[2] = w;
+    cam->viewport[3] = h;
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Message callback of Lucky's threat line kuji_bomb_055 in kuzi_bomb_talk_husei:
+ * when the text turns to its second
+ * page (msgdrv callback type 3) it sets GF(0), which starts the screen shake there; as each character is printed
+ * (type 5) it switches his animation (T_3, T_4 or B_1) at fixed text positions and turns his talk animation off
+ * near the end.
+ */
+static void kuji_bomb_055_callback(s32 type, MsgWinData** work) {
+    MsgWinData* wp = *work;
+    NpcEntry* npc = npcNameToPtr("グルメボム兵");
+
+    switch (type) {
+        case 3:
+            if (wp->curPage == 1) {
+                evtSetValue(NULL, GF(0), 1);
+            }
+            break;
+        case 5:
+            switch (wp->nextEntry) {
+                case 0x1D:
+                    animPoseSetAnim(npc->poseId, "T_3", 1);
+                    break;
+                case 0xC8:
+                    animPoseSetAnim(npc->poseId, "T_4", 1);
+                    break;
+                case 0x158:
+                    animPoseSetAnim(npc->poseId, "T_3", 1);
+                    break;
+                case 0x1F1:
+                    animPoseSetAnim(npc->poseId, "T_4", 1);
+                    break;
+                case 0x2B7:
+                case 0x2B8:
+                    npc->flags &= ~NPC_FLAG_TALK_POSE;
+                    animPoseSetAnim(npc->poseId, "B_1", 1);
+                    break;
+            }
+            break;
+    }
+}
+
+/**
  * Lottery talk of Lucky (グルメボム兵) when evt_lottery reports LOTTERY_FLAG_CLOCK_ERROR (husei, 不正).
  * Without LOTTERY_FLAG_NEW_DAY (JP and later also once GSWF_GOR_LOTTERY_RESET_EXPLAINED is set, which this
  * sets) he only says kuji_bomb_061 and offers a new number for 500 coins, or kuji_bomb_062 with
@@ -6736,6 +6886,104 @@ EVT_BEGIN(kuzi_bomb_talk_husei)
     CALL(evt_npc_set_autotalkpose, STRING("グルメボム兵"), STRING("S_1"), STRING("T_1"))
     RETURN
 EVT_END()
+
+/**
+ * Script helper that picks the lottery prize for rank args[0]:
+ * ranks 0 and 1 give a first-win item the first time (Power Plus or Lucky Day in the final versions,
+ * Mushroom in the early demos) and then Zess Dynamite or Zess Special, rank 2 gives an Ultra Shroom,
+ * rank 3 a Life Shroom, otherwise a Mushroom. The item goes to args[1].
+ */
+static USER_FUNC(kuzi_get_keihin) {
+    EvtWord* args = event->args;
+    s32 item;
+
+    switch (evtGetValue(event, args[0])) {
+        case 0:
+            if (!evtGetValue(NULL, GSWF_GOR_LOTTERY_NUMBER_1_PRIZE_GIVEN)) {
+#if VERSION <= VERSION_DEMO_JP
+                item = ITEM_MUSHROOM;
+#else
+                item = ITEM_POWER_PLUS;
+#endif
+                evtSetValue(NULL, GSWF_GOR_LOTTERY_NUMBER_1_PRIZE_GIVEN, 1);
+            } else {
+                item = ITEM_ZESS_DYNAMITE;
+            }
+            break;
+        case 1:
+            if (!evtGetValue(NULL, GSWF_GOR_LOTTERY_NUMBER_2_PRIZE_GIVEN)) {
+#if VERSION <= VERSION_DEMO_JP
+                item = ITEM_MUSHROOM;
+#else
+                item = ITEM_LUCKY_DAY;
+#endif
+                evtSetValue(NULL, GSWF_GOR_LOTTERY_NUMBER_2_PRIZE_GIVEN, 1);
+            } else {
+                item = ITEM_ZESS_SPECIAL;
+            }
+            break;
+        case 2:
+            item = ITEM_ULTRA_SHROOM;
+            break;
+        case 3:
+            item = ITEM_LIFE_SHROOM;
+            break;
+        default:
+            item = ITEM_MUSHROOM;
+            break;
+    }
+    evtSetValue(event, args[1], item);
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script helper for the lottery Bob-omb's explosion gag:
+ * for type 0, when his height passes 25, 50, 75 and 100 it spawns a small bomb effect beside him, alternating sides;
+ * type 1 skips the 50-height stage. Returns the next stage in args[2]; does nothing for types 2 and 3.
+ */
+static USER_FUNC(kuzi_bomb_bomb_eff) {
+    EvtWord* args = event->args;
+    s32 type = evtGetValue(event, args[0]);
+    s32 phase = evtGetValue(event, args[1]);
+    s32 next = phase;
+    NpcEntry* npc = npcNameToPtr("グルメボム兵");
+
+    if (type == 2 || type == 3) {
+        return EVT_RETURN_DONE;
+    }
+    switch (phase) {
+        case 0:
+            if (npc->position.y > 25.0f) {
+                effBombEntry(0, npc->position.x - 30.0f, npc->position.y, npc->position.z, 1.0f);
+                if (type == 0) {
+                    next = 1;
+                } else {
+                    next = 2;
+                }
+            }
+            break;
+        case 1:
+            if (npc->position.y > 50.0f) {
+                effBombEntry(0, 30.0f + npc->position.x, npc->position.y, npc->position.z, 1.0f);
+                next = 2;
+            }
+            break;
+        case 2:
+            if (npc->position.y > 75.0f) {
+                effBombEntry(0, npc->position.x - 30.0f, npc->position.y, npc->position.z, 1.0f);
+                next = 3;
+            }
+            break;
+        case 3:
+            if (npc->position.y > 100.0f) {
+                effBombEntry(0, 30.0f + npc->position.x, npc->position.y, npc->position.z, 1.0f);
+                next = 4;
+            }
+            break;
+    }
+    evtSetValue(event, args[2], next);
+    return EVT_RETURN_DONE;
+}
 
 /**
  * Lucky's explosion gag for a jackpot or second prize (from kuzi_keiziban_normal, prize level in LW(0)): after 40
@@ -7067,6 +7315,26 @@ static EVT_BEGIN(debug_event_mode)
     RETURN
 EVT_END()
 
+/** Script helper that saves all 16 local words (LW) of the script into the file's xlw array. */
+static USER_FUNC(enzan_lw_save) {
+    s32 i;
+
+    for (i = 0; i < 16; i++) {
+        xlw[i] = event->lwData[i];
+    }
+    return EVT_RETURN_DONE;
+}
+
+/** Script helper that restores the 16 local words saved by enzan_lw_save. */
+static USER_FUNC(enzan_lw_load) {
+    s32 i;
+
+    for (i = 0; i < 16; i++) {
+        event->lwData[i] = xlw[i];
+    }
+    return EVT_RETURN_DONE;
+}
+
 /**
  * Door-close case script of the doors set up by monte_evt_door_entry: saves the script's LW values, runs
  * exchange_keep_sub without control (the early demos also stop the partner), restores the values and runs
@@ -7329,271 +7597,3 @@ EVT_BEGIN(gor_03_init_evt)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kou_kabe"), MAP_OBJ_FLAG_CLIP)
     RETURN
 EVT_END()
-
-/** Script helper: blocks until marioChkKey() reports TRUE. */
-static USER_FUNC(mario_keyoff_wait) {
-    switch (!marioChkKey()) {
-        default:
-            return EVT_RETURN_BLOCK;
-        case 0:
-            return EVT_RETURN_YIELD;
-    }
-}
-
-/**
- * Script helper that regenerates Bunny Teresa's list of badges for the prize exchange
- * (badgeShop_bteresaGeneration).
- */
-static USER_FUNC(teresa_badge_item_list_init) {
-    badgeShop_bteresaGeneration();
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper that allocates the work area for desk_talk_func: one NPC entry and one effect entry. */
-static USER_FUNC(desk_talk_init_func) {
-    npc = _mapAlloc(sizeof(NpcEntry));
-    eff = _mapAlloc(sizeof(EffectEntry));
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper for the desk balloon: args[0] is the on flag and args[1] its previous value;
- * shows the speech balloon effect when it switches on, removes it when it switches off,
- * and moves the balloon's NPC to (args[2], args[3], args[4]).
- */
-static USER_FUNC(desk_talk_func) {
-    EvtWord* args = event->args;
-    s32 on = evtGetValue(event, args[0]);
-    s32 prev = evtGetValue(event, args[1]);
-    s32 x = evtGetValue(event, args[2]);
-    s32 y = evtGetValue(event, args[3]);
-    s32 z = evtGetValue(event, args[4]);
-
-    if (on == 1 && prev == 0) {
-        eff = effMarioBalloonEntry(1, npc);
-    }
-    if (on == 0 && prev == 1) {
-        effDelete(eff);
-    }
-    npc->position.x = x;
-    npc->position.y = y;
-    npc->position.z = z;
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper that stores Mario's target display direction in args[0]. */
-static USER_FUNC(get_mario_dispReqDir) {
-    EvtWord* args = event->args;
-    MarioWork* mario = marioGetPtr();
-
-    evtSetValue(event, args[0], mario->displayDirectionTarget);
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper that places a shadow of size args[3] at (args[0], args[1], args[2]) and blocks.
- * Used for Beldam, who has no shadow of her own.
- */
-static USER_FUNC(dummy_shadow) {
-    EvtWord* args = event->args;
-    f32 x = evtGetFloat(event, args[0]);
-    f32 y = evtGetFloat(event, args[1]);
-    f32 z = evtGetFloat(event, args[2]);
-    f32 size = evtGetFloat(event, args[3]);
-
-    shadowSetCollision(shadowEntry(x, y, z, 10.0f * size), 0);
-    return EVT_RETURN_BLOCK;
-}
-
-/**
- * Script helper that sets the viewport of the background, 3D and 2D cameras
- * to the rectangle (args[0], args[1], args[2], args[3]), and the scissor of the 3D camera only.
- */
-static USER_FUNC(viewport) {
-    EvtWord* args = event->args;
-    f32 x = evtGetFloat(event, args[0]);
-    f32 y = evtGetFloat(event, args[1]);
-    f32 w = evtGetFloat(event, args[2]);
-    f32 h = evtGetFloat(event, args[3]);
-    CameraEntry* cam;
-
-    cam = camGetPtr(CAMERA_BACKGROUND);
-    cam->viewport[0] = x;
-    cam->viewport[1] = y;
-    cam->viewport[2] = w;
-    cam->viewport[3] = h;
-    cam = camGetPtr(CAMERA_3D);
-    cam->viewport[0] = x;
-    cam->scissor[0] = x;
-    cam->viewport[1] = y;
-    cam->scissor[1] = y;
-    cam->viewport[2] = w;
-    cam->scissor[2] = w;
-    cam->viewport[3] = h;
-    cam->scissor[3] = h;
-    cam = camGetPtr(CAMERA_2D);
-    cam->viewport[0] = x;
-    cam->viewport[1] = y;
-    cam->viewport[2] = w;
-    cam->viewport[3] = h;
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Message callback of Lucky's threat line kuji_bomb_055 in kuzi_bomb_talk_husei:
- * when the text turns to its second
- * page (msgdrv callback type 3) it sets GF(0), which starts the screen shake there; as each character is printed
- * (type 5) it switches his animation (T_3, T_4 or B_1) at fixed text positions and turns his talk animation off
- * near the end.
- */
-static void kuji_bomb_055_callback(s32 type, MsgWinData** work) {
-    MsgWinData* wp = *work;
-    NpcEntry* npc = npcNameToPtr("グルメボム兵");
-
-    switch (type) {
-        case 3:
-            if (wp->curPage == 1) {
-                evtSetValue(NULL, GF(0), 1);
-            }
-            break;
-        case 5:
-            switch (wp->nextEntry) {
-                case 0x1D:
-                    animPoseSetAnim(npc->poseId, "T_3", 1);
-                    break;
-                case 0xC8:
-                    animPoseSetAnim(npc->poseId, "T_4", 1);
-                    break;
-                case 0x158:
-                    animPoseSetAnim(npc->poseId, "T_3", 1);
-                    break;
-                case 0x1F1:
-                    animPoseSetAnim(npc->poseId, "T_4", 1);
-                    break;
-                case 0x2B7:
-                case 0x2B8:
-                    npc->flags &= ~NPC_FLAG_TALK_POSE;
-                    animPoseSetAnim(npc->poseId, "B_1", 1);
-                    break;
-            }
-            break;
-    }
-}
-
-/**
- * Script helper that picks the lottery prize for rank args[0]:
- * ranks 0 and 1 give a first-win item the first time (Power Plus or Lucky Day in the final versions,
- * Mushroom in the early demos) and then Zess Dynamite or Zess Special, rank 2 gives an Ultra Shroom,
- * rank 3 a Life Shroom, otherwise a Mushroom. The item goes to args[1].
- */
-static USER_FUNC(kuzi_get_keihin) {
-    EvtWord* args = event->args;
-    s32 item;
-
-    switch (evtGetValue(event, args[0])) {
-        case 0:
-            if (!evtGetValue(NULL, GSWF_GOR_LOTTERY_NUMBER_1_PRIZE_GIVEN)) {
-#if VERSION <= VERSION_DEMO_JP
-                item = ITEM_MUSHROOM;
-#else
-                item = ITEM_POWER_PLUS;
-#endif
-                evtSetValue(NULL, GSWF_GOR_LOTTERY_NUMBER_1_PRIZE_GIVEN, 1);
-            } else {
-                item = ITEM_ZESS_DYNAMITE;
-            }
-            break;
-        case 1:
-            if (!evtGetValue(NULL, GSWF_GOR_LOTTERY_NUMBER_2_PRIZE_GIVEN)) {
-#if VERSION <= VERSION_DEMO_JP
-                item = ITEM_MUSHROOM;
-#else
-                item = ITEM_LUCKY_DAY;
-#endif
-                evtSetValue(NULL, GSWF_GOR_LOTTERY_NUMBER_2_PRIZE_GIVEN, 1);
-            } else {
-                item = ITEM_ZESS_SPECIAL;
-            }
-            break;
-        case 2:
-            item = ITEM_ULTRA_SHROOM;
-            break;
-        case 3:
-            item = ITEM_LIFE_SHROOM;
-            break;
-        default:
-            item = ITEM_MUSHROOM;
-            break;
-    }
-    evtSetValue(event, args[1], item);
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper for the lottery Bob-omb's explosion gag:
- * for type 0, when his height passes 25, 50, 75 and 100 it spawns a small bomb effect beside him, alternating sides;
- * type 1 skips the 50-height stage. Returns the next stage in args[2]; does nothing for types 2 and 3.
- */
-static USER_FUNC(kuzi_bomb_bomb_eff) {
-    EvtWord* args = event->args;
-    s32 type = evtGetValue(event, args[0]);
-    s32 phase = evtGetValue(event, args[1]);
-    s32 next = phase;
-    NpcEntry* npc = npcNameToPtr("グルメボム兵");
-
-    if (type == 2 || type == 3) {
-        return EVT_RETURN_DONE;
-    }
-    switch (phase) {
-        case 0:
-            if (npc->position.y > 25.0f) {
-                effBombEntry(0, npc->position.x - 30.0f, npc->position.y, npc->position.z, 1.0f);
-                if (type == 0) {
-                    next = 1;
-                } else {
-                    next = 2;
-                }
-            }
-            break;
-        case 1:
-            if (npc->position.y > 50.0f) {
-                effBombEntry(0, 30.0f + npc->position.x, npc->position.y, npc->position.z, 1.0f);
-                next = 2;
-            }
-            break;
-        case 2:
-            if (npc->position.y > 75.0f) {
-                effBombEntry(0, npc->position.x - 30.0f, npc->position.y, npc->position.z, 1.0f);
-                next = 3;
-            }
-            break;
-        case 3:
-            if (npc->position.y > 100.0f) {
-                effBombEntry(0, 30.0f + npc->position.x, npc->position.y, npc->position.z, 1.0f);
-                next = 4;
-            }
-            break;
-    }
-    evtSetValue(event, args[2], next);
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper that saves all 16 local words (LW) of the script into the file's xlw array. */
-static USER_FUNC(enzan_lw_save) {
-    s32 i;
-
-    for (i = 0; i < 16; i++) {
-        xlw[i] = event->lwData[i];
-    }
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper that restores the 16 local words saved by enzan_lw_save. */
-static USER_FUNC(enzan_lw_load) {
-    s32 i;
-
-    for (i = 0; i < 16; i++) {
-        event->lwData[i] = xlw[i];
-    }
-    return EVT_RETURN_DONE;
-}

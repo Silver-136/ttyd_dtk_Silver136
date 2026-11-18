@@ -216,6 +216,26 @@ static const char* nokotaro_pose[] = {
     "PNK_L_2",
 };
 
+/** Callback that changes the partner's pose: types 0 and 3 give nokotaro_pose[1], types 1 and 2 nokotaro_pose[0]. */
+static void nokotaro_callback(s32 type) {
+    PartyEntry* party = partyGetPtr(partyCtrlNo);
+
+    switch (type) {
+        case 0:
+            partyChgPose(party, (const char*)nokotaro_pose[1]);
+            break;
+        case 2:
+            partyChgPose(party, (const char*)nokotaro_pose[0]);
+            break;
+        case 3:
+            partyChgPose(party, (const char*)nokotaro_pose[1]);
+            break;
+        case 1:
+            partyChgPose(party, (const char*)nokotaro_pose[0]);
+            break;
+    }
+}
+
 /**
  * Cutscene run when Mario walks into the hall for the first time (before STG1_10_FATHERS_LETTER):
  * the partner is switched to Koops, who takes a skeleton for his father and finds a letter in its hand,
@@ -787,26 +807,6 @@ static EVT_BEGIN(senkaron_escape_event)
     CALL(senkaronToEscape)
     RETURN
 EVT_END()
-
-/** Callback that changes the partner's pose: types 0 and 3 give nokotaro_pose[1], types 1 and 2 nokotaro_pose[0]. */
-static void nokotaro_callback(s32 type) {
-    PartyEntry* party = partyGetPtr(partyCtrlNo);
-
-    switch (type) {
-        case 0:
-            partyChgPose(party, (const char*)nokotaro_pose[1]);
-            break;
-        case 2:
-            partyChgPose(party, (const char*)nokotaro_pose[0]);
-            break;
-        case 3:
-            partyChgPose(party, (const char*)nokotaro_pose[1]);
-            break;
-        case 1:
-            partyChgPose(party, (const char*)nokotaro_pose[0]);
-            break;
-    }
-}
 
 // Descriptive name (not in the symbol maps); placeholder unk_gon_00000374, JP gon .text+0x290. See docs/NAME_PROVENANCE.md.
 #if VERSION >= VERSION_JP

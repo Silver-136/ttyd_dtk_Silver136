@@ -187,93 +187,6 @@ static EvtWord evt_after_peach[188];
 EvtWord tou_02_init_evt[VERSION_PICK(576, 919)];
 
 /**
- * Builds the fan crowd's animation table (FanAnim) from ext_fan_data:
- * groups the per-frame texture entries by model name and animation,
- * recording each animation's first texture and frame count.
- */
-// Consecutive texture entries with the same group and pose form one animation range.
-static void pose_init(void) {
-    char name[32];
-    char anim[32];
-    ExtTexInfo* d = ext_fan_data;
-    s32 i = 0;
-    s32 start;
-
-    strcpy(name, "");
-    strcpy(anim, "");
-    fan_wp->animNum = -1;
-    do {
-        if (strcmp(d->group, name) != 0) {
-            strcpy(name, d->group);
-            strcpy(anim, "");
-        }
-        if (strcmp(d->anim, anim) != 0) {
-            strcpy(anim, d->anim);
-            start = i;
-            fan_wp->animNum++;
-        }
-        strcpy(fan_wp->anim[fan_wp->animNum].name, name);
-        strcpy(fan_wp->anim[fan_wp->animNum].anim, anim);
-        fan_wp->anim[fan_wp->animNum].start = start;
-        fan_wp->anim[fan_wp->animNum].count = i - start + 1;
-        fan_wp->anim[fan_wp->animNum].frames = d->frame;
-        fan_wp->anim[fan_wp->animNum].loop = 1;
-        i++;
-        d++;
-    } while (d->group != NULL);
-    fan_wp->animNum++;
-}
-
-/**
- * Per-frame update of the crowd's sprites: picks each fan's current texture frame from its animation
- * and the render time.
- */
-// Restart at frame zero after the pose duration; excess elapsed time is not carried into the next cycle.
-static void pose_main(void) {
-    s32 i;
-    ExtdrvPose* pose;
-    Fan* fan;
-    FanAnim* a;
-    f32 t;
-
-    pose = extGetPosePtr();
-    fan = fan_wp->fans;
-
-    for (i = 0; i < fan_wp->num; i++, fan++, pose++) {
-        a = &fan_wp->anim[fan->animIdx];
-        t = 60.0f * OSTicksToMilliseconds((u64)(gp->renderTime - fan->time)) / 1000.0f / a->frames;
-        if (t >= 1.0f) {
-            fan->time = gp->renderTime;
-            t = 0.0f;
-        }
-        pose->texId = a->start + (s32)((a->count - 1) * t);
-    }
-}
-
-/** Switches a fan to the animation named `anim` of model `name` (if it exists and differs) and restarts its timer. */
-static void pose_change(Fan* fan, const char* name, const char* anim) {
-    FanAnim* a;
-    s32 i;
-
-    for (i = 0, a = fan_wp->anim; i < fan_wp->animNum; i++, a++) {
-        if (strcmp(a->name, name) == 0 && strcmp(a->anim, anim) == 0) {
-            break;
-        }
-    }
-    if (i < fan_wp->animNum && fan->animIdx != i) {
-        fan->animIdx = i;
-        fan->time = gp->renderTime;
-    }
-}
-
-/** Returns a random float between min and max. */
-static f32 randf(f32 min, f32 max) {
-    f32 r = rand() / 32767.0f;
-
-    return r * (max - min) + min;
-}
-
-/**
  * Door animation script of the automatic double door, LW(0) the swing angle 0 to 180: at 0 it plays the
  * automatic door sound at Mario's position (handle in GW(13)) unless GSWF_TOU_AUTO_DOOR_SFX_PLAYING is set,
  * and sets it; at 180 it clears the flag and stops the sound. It moves door_1_b along X by a third of the angle
@@ -1733,6 +1646,93 @@ static ExtTexInfo ext_fan_data[] = {
     {"c_jugemu", "JGM_W_1", 28.0f},
     {0},
 };
+
+/**
+ * Builds the fan crowd's animation table (FanAnim) from ext_fan_data:
+ * groups the per-frame texture entries by model name and animation,
+ * recording each animation's first texture and frame count.
+ */
+// Consecutive texture entries with the same group and pose form one animation range.
+static void pose_init(void) {
+    char name[32];
+    char anim[32];
+    ExtTexInfo* d = ext_fan_data;
+    s32 i = 0;
+    s32 start;
+
+    strcpy(name, "");
+    strcpy(anim, "");
+    fan_wp->animNum = -1;
+    do {
+        if (strcmp(d->group, name) != 0) {
+            strcpy(name, d->group);
+            strcpy(anim, "");
+        }
+        if (strcmp(d->anim, anim) != 0) {
+            strcpy(anim, d->anim);
+            start = i;
+            fan_wp->animNum++;
+        }
+        strcpy(fan_wp->anim[fan_wp->animNum].name, name);
+        strcpy(fan_wp->anim[fan_wp->animNum].anim, anim);
+        fan_wp->anim[fan_wp->animNum].start = start;
+        fan_wp->anim[fan_wp->animNum].count = i - start + 1;
+        fan_wp->anim[fan_wp->animNum].frames = d->frame;
+        fan_wp->anim[fan_wp->animNum].loop = 1;
+        i++;
+        d++;
+    } while (d->group != NULL);
+    fan_wp->animNum++;
+}
+
+/**
+ * Per-frame update of the crowd's sprites: picks each fan's current texture frame from its animation
+ * and the render time.
+ */
+// Restart at frame zero after the pose duration; excess elapsed time is not carried into the next cycle.
+static void pose_main(void) {
+    s32 i;
+    ExtdrvPose* pose;
+    Fan* fan;
+    FanAnim* a;
+    f32 t;
+
+    pose = extGetPosePtr();
+    fan = fan_wp->fans;
+
+    for (i = 0; i < fan_wp->num; i++, fan++, pose++) {
+        a = &fan_wp->anim[fan->animIdx];
+        t = 60.0f * OSTicksToMilliseconds((u64)(gp->renderTime - fan->time)) / 1000.0f / a->frames;
+        if (t >= 1.0f) {
+            fan->time = gp->renderTime;
+            t = 0.0f;
+        }
+        pose->texId = a->start + (s32)((a->count - 1) * t);
+    }
+}
+
+/** Switches a fan to the animation named `anim` of model `name` (if it exists and differs) and restarts its timer. */
+static void pose_change(Fan* fan, const char* name, const char* anim) {
+    FanAnim* a;
+    s32 i;
+
+    for (i = 0, a = fan_wp->anim; i < fan_wp->animNum; i++, a++) {
+        if (strcmp(a->name, name) == 0 && strcmp(a->anim, anim) == 0) {
+            break;
+        }
+    }
+    if (i < fan_wp->animNum && fan->animIdx != i) {
+        fan->animIdx = i;
+        fan->time = gp->renderTime;
+    }
+}
+
+/** Returns a random float between min and max. */
+static f32 randf(f32 min, f32 max) {
+    f32 r = rand() / 32767.0f;
+
+    return r * (max - min) + min;
+}
 
 /**
  * Initializes FanWork and one Fan per extdrv pose with a random facing and one of the three walk animations.

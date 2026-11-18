@@ -68,6 +68,85 @@ EvtWord las_14_init_evt[81];
 #endif
 
 /**
+ * Door animation script (closing) for the west door, used as the enter/exit animation of this room's bero entry.
+ * LW(0) holds the angle step of the swing, and the script turns the door panel S_door1 by it.
+ */
+static EVT_BEGIN(w_door_close)
+    MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
+    CALL(evt_mapobj_rotate, 1, STRING("S_door1"), 0, LW(0), 0)
+    RETURN
+EVT_END()
+
+/**
+ * Door animation script (opening) for the west door, used as the enter/exit animation of this room's bero entry.
+ * LW(0) holds the angle step of the swing, and the script turns the door panel S_door1 by it.
+ */
+static EVT_BEGIN(w_door_open)
+    MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
+    CALL(evt_mapobj_rotate, 1, STRING("S_door1"), 0, LW(0), 0)
+    RETURN
+EVT_END()
+
+/** Exit of las_14: west door w_bero_1 to las_10 (se_bero_1). */
+static BeroEntry bero_entry_data[] = {
+    {
+        "w_bero_1", // hitName
+        1, // type
+        1, // sfxId
+        BERO_DIR_AUTO, // directionId
+        BERO_POS_AUTO, // centerPosition
+        0, 0, // centerPositionY..centerPositionZ
+        -1, // length
+        NULL, // enterEvent
+        -1, // caseType
+        NULL, // exitEvent
+        "las_10", // nextMapName
+        "se_bero_1", // nextBeroName
+        5, // enterAnimeType
+        5, // exitAnimeType
+        w_door_close, // enterAnimeArg
+        w_door_open, // exitAnimeArg
+    },
+    {0},
+};
+
+/** Event script: the key chest of las_14 opens and Mario receives Palace Key 0x29. */
+static EVT_BEGIN(box_evt)
+    CALL(evt_mario_key_onoff, 0)
+    CALL(evt_mobj_get_position, STRING("box"), LW(0), LW(1), LW(2))
+    CALL(evt_item_entry, STRING("key"), ITEM_PALACE_KEY_0x29, LW(0), LW(1), LW(2), ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
+    CALL(evt_mobj_wait_animation_end, STRING("box"))
+    CALL(evt_item_get_item, STRING("key"))
+    CALL(evt_mario_key_onoff, 1)
+    RETURN
+EVT_END()
+
+/**
+ * Map groups (S_kabe1, S_ten) that the cloud of this room (evt_las_cloud_ent) draws into its offscreen
+ * buffer; the cloud's paper animation is a capture of them. The empty string ends the list.
+ */
+static const char* capturemap[] = {
+    "S_kabe1",
+    "S_ten",
+    "",
+};
+
+/**
+ * The eight corners of a 100-unit box around a cloud's hit object; _get_boundingbox projects them to the
+ * screen to size the cloud capture.
+ */
+Vec v_list[] = {
+    {-50.0f, 100.0f, 50.0f},
+    {50.0f, 100.0f, 50.0f},
+    {50.0f, 0.0f, 50.0f},
+    {-50.0f, 0.0f, 50.0f},
+    {-50.0f, 100.0f, -50.0f},
+    {50.0f, 100.0f, -50.0f},
+    {50.0f, 0.0f, -50.0f},
+    {-50.0f, 0.0f, -50.0f},
+};
+
+/**
  * Calls the evt_img_alloc_capture script command from C:
  * builds a fake event with the eight arguments (image name, shadow id, offscreen name, alloc mode, and the x, y,
  * width, height of the capture rectangle).
@@ -188,156 +267,6 @@ static void _mapclsofs_all(CloudRoomWork* wp) {
         mapGrpClearOffScreen(wp->groupNames[i]);
     }
 }
-
-/**
- * Door animation script (closing) for the west door, used as the enter/exit animation of this room's bero entry.
- * LW(0) holds the angle step of the swing, and the script turns the door panel S_door1 by it.
- */
-static EVT_BEGIN(w_door_close)
-    MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
-    CALL(evt_mapobj_rotate, 1, STRING("S_door1"), 0, LW(0), 0)
-    RETURN
-EVT_END()
-
-/**
- * Door animation script (opening) for the west door, used as the enter/exit animation of this room's bero entry.
- * LW(0) holds the angle step of the swing, and the script turns the door panel S_door1 by it.
- */
-static EVT_BEGIN(w_door_open)
-    MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
-    CALL(evt_mapobj_rotate, 1, STRING("S_door1"), 0, LW(0), 0)
-    RETURN
-EVT_END()
-
-/** Exit of las_14: west door w_bero_1 to las_10 (se_bero_1). */
-static BeroEntry bero_entry_data[] = {
-    {
-        "w_bero_1", // hitName
-        1, // type
-        1, // sfxId
-        BERO_DIR_AUTO, // directionId
-        BERO_POS_AUTO, // centerPosition
-        0, 0, // centerPositionY..centerPositionZ
-        -1, // length
-        NULL, // enterEvent
-        -1, // caseType
-        NULL, // exitEvent
-        "las_10", // nextMapName
-        "se_bero_1", // nextBeroName
-        5, // enterAnimeType
-        5, // exitAnimeType
-        w_door_close, // enterAnimeArg
-        w_door_open, // exitAnimeArg
-    },
-    {0},
-};
-
-/** Event script: the key chest of las_14 opens and Mario receives Palace Key 0x29. */
-static EVT_BEGIN(box_evt)
-    CALL(evt_mario_key_onoff, 0)
-    CALL(evt_mobj_get_position, STRING("box"), LW(0), LW(1), LW(2))
-    CALL(evt_item_entry, STRING("key"), ITEM_PALACE_KEY_0x29, LW(0), LW(1), LW(2), ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
-    CALL(evt_mobj_wait_animation_end, STRING("box"))
-    CALL(evt_item_get_item, STRING("key"))
-    CALL(evt_mario_key_onoff, 1)
-    RETURN
-EVT_END()
-
-/**
- * Map groups (S_kabe1, S_ten) that the cloud of this room (evt_las_cloud_ent) draws into its offscreen
- * buffer; the cloud's paper animation is a capture of them. The empty string ends the list.
- */
-static const char* capturemap[] = {
-    "S_kabe1",
-    "S_ten",
-    "",
-};
-
-/**
- * The eight corners of a 100-unit box around a cloud's hit object; _get_boundingbox projects them to the
- * screen to size the cloud capture.
- */
-Vec v_list[] = {
-    {-50.0f, 100.0f, 50.0f},
-    {50.0f, 100.0f, 50.0f},
-    {50.0f, 0.0f, 50.0f},
-    {-50.0f, 0.0f, 50.0f},
-    {-50.0f, 100.0f, -50.0f},
-    {50.0f, 100.0f, -50.0f},
-    {50.0f, 0.0f, -50.0f},
-    {-50.0f, 0.0f, -50.0f},
-};
-
-/**
- * Event script: runs the cloud-blowing mechanism (evt_cloud_main) of las_14,
- * the room where Flurrie's gust uncovers the way.
- */
-static EVT_BEGIN(evt_cloud_main_evt)
-    CALL(evt_cloud_main)
-    RETURN
-EVT_END()
-
-/**
- * Event script: the cloud puzzle of las_14 is solved.
- * The key chest becomes visible and solid, the collision A_kura is turned off,
- * GSWF_LAS_14_WALL_BLOWN_AWAY is set and a success jingle plays.
- */
-static EVT_BEGIN(cloud_evt)
-    CALL(evt_mobj_flag_onoff, 0, STRING("box"), MOBJ_FLAG_NO_DISP)
-    CALL(evt_mobj_hit_onoff, STRING("box"), 1)
-    CALL(evt_hitobj_onoff, STRING("A_kura"), 1, 0)
-    SET_VALUE(GSWF_LAS_14_WALL_BLOWN_AWAY, 1)
-    CALL(evt_snd_bgmoff, PSND_PAUSE)
-    CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_ENV_SUCCESS1"))
-    WAIT_MS(2000)
-    CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
-    CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
-    RETURN
-EVT_END()
-
-/** A-button handler (facing the cloud hit area); empty. */
-static EVT_BEGIN(touch_evt)
-    RETURN
-EVT_END()
-
-/** Event script: reading the hint plate of las_14 (stg8_las_39). */
-static EVT_BEGIN(hint_plate)
-    CALL(evt_mario_key_onoff, 0)
-    CALL(evt_msg_print, 0, STRING("stg8_las_39"), 0, 0)
-    CALL(evt_mario_key_onoff, 1)
-    RETURN
-EVT_END()
-
-/**
- * Map init script for las_14, a Riddle Tower room (the chest holds Palace Key 0x29):
- * music, the door to las_10, the cloud Flurrie must blow away (hit area A_kura)
- * until GSWF_LAS_14_WALL_BLOWN_AWAY, the key chest (hidden until solved) and the hint plate.
- */
-EVT_BEGIN(las_14_init_evt)
-    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST2"))
-    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS1"))
-#if VERSION >= VERSION_JP
-    CALL(evt_snd_set_rev_mode, 2)
-#endif
-    SET_VALUE(LW(0), PTR(bero_entry_data))
-    CALL(evt_bero_get_info)
-    CALL_CHILD(evt_bero_info_run)
-    CALL(evt_hitobj_onoff, STRING("A_taka"), 1, 0)
-    IF_INT_EQUAL(GSWF_LAS_14_WALL_BLOWN_AWAY, 0)
-        CALL(evt_las_cloud_init)
-        CALL(evt_las_cloud_ent, PTR(&capturemap), STRING("A_kura"), PTR(cloud_evt))
-        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_kura"), 0, PTR(touch_evt), 0)
-    ELSE
-        CALL(evt_hitobj_onoff, STRING("A_kura"), 1, 0)
-    END_IF
-    CALL(evt_mobj_itembox, STRING("box"), 0, 0, 0, MOBJ_ITEMBOX_NORMAL, 0, PTR(box_evt), GSWF_LAS_14_PALACE_KEY_CHEST)
-    IF_INT_EQUAL(GSWF_LAS_14_WALL_BLOWN_AWAY, 0)
-        CALL(evt_mobj_flag_onoff, 1, STRING("box"), MOBJ_FLAG_NO_DISP)
-        CALL(evt_mobj_hit_onoff, STRING("box"), 0)
-    END_IF
-    CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_pure"), 0, PTR(hint_plate), 0)
-    RETURN
-EVT_END()
 
 /**
  * Script helper (runs as its own event, one per cloud): the state machine of the cloud puzzle.
@@ -496,6 +425,46 @@ static USER_FUNC(evt_cloud_main) {
 }
 
 /**
+ * Event script: runs the cloud-blowing mechanism (evt_cloud_main) of las_14,
+ * the room where Flurrie's gust uncovers the way.
+ */
+static EVT_BEGIN(evt_cloud_main_evt)
+    CALL(evt_cloud_main)
+    RETURN
+EVT_END()
+
+/**
+ * Event script: the cloud puzzle of las_14 is solved.
+ * The key chest becomes visible and solid, the collision A_kura is turned off,
+ * GSWF_LAS_14_WALL_BLOWN_AWAY is set and a success jingle plays.
+ */
+static EVT_BEGIN(cloud_evt)
+    CALL(evt_mobj_flag_onoff, 0, STRING("box"), MOBJ_FLAG_NO_DISP)
+    CALL(evt_mobj_hit_onoff, STRING("box"), 1)
+    CALL(evt_hitobj_onoff, STRING("A_kura"), 1, 0)
+    SET_VALUE(GSWF_LAS_14_WALL_BLOWN_AWAY, 1)
+    CALL(evt_snd_bgmoff, PSND_PAUSE)
+    CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_ENV_SUCCESS1"))
+    WAIT_MS(2000)
+    CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
+    CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
+    RETURN
+EVT_END()
+
+/** A-button handler (facing the cloud hit area); empty. */
+static EVT_BEGIN(touch_evt)
+    RETURN
+EVT_END()
+
+/** Event script: reading the hint plate of las_14 (stg8_las_39). */
+static EVT_BEGIN(hint_plate)
+    CALL(evt_mario_key_onoff, 0)
+    CALL(evt_msg_print, 0, STRING("stg8_las_39"), 0, 0)
+    CALL(evt_mario_key_onoff, 1)
+    RETURN
+EVT_END()
+
+/**
  * Script helper: allocates the 16 cloud slots of the room (CloudRoomWork), marks them unused, names their image and
  * off-screen entries i_name_<n> and o_name_<n> and clears cloud_once_flag.
  */
@@ -559,3 +528,34 @@ static USER_FUNC(evt_las_cloud_ent) {
     wp->evt->lwData[0] = (EvtWord)wp;
     return EVT_RETURN_DONE;
 }
+
+/**
+ * Map init script for las_14, a Riddle Tower room (the chest holds Palace Key 0x29):
+ * music, the door to las_10, the cloud Flurrie must blow away (hit area A_kura)
+ * until GSWF_LAS_14_WALL_BLOWN_AWAY, the key chest (hidden until solved) and the hint plate.
+ */
+EVT_BEGIN(las_14_init_evt)
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST2"))
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS1"))
+#if VERSION >= VERSION_JP
+    CALL(evt_snd_set_rev_mode, 2)
+#endif
+    SET_VALUE(LW(0), PTR(bero_entry_data))
+    CALL(evt_bero_get_info)
+    CALL_CHILD(evt_bero_info_run)
+    CALL(evt_hitobj_onoff, STRING("A_taka"), 1, 0)
+    IF_INT_EQUAL(GSWF_LAS_14_WALL_BLOWN_AWAY, 0)
+        CALL(evt_las_cloud_init)
+        CALL(evt_las_cloud_ent, PTR(&capturemap), STRING("A_kura"), PTR(cloud_evt))
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_kura"), 0, PTR(touch_evt), 0)
+    ELSE
+        CALL(evt_hitobj_onoff, STRING("A_kura"), 1, 0)
+    END_IF
+    CALL(evt_mobj_itembox, STRING("box"), 0, 0, 0, MOBJ_ITEMBOX_NORMAL, 0, PTR(box_evt), GSWF_LAS_14_PALACE_KEY_CHEST)
+    IF_INT_EQUAL(GSWF_LAS_14_WALL_BLOWN_AWAY, 0)
+        CALL(evt_mobj_flag_onoff, 1, STRING("box"), MOBJ_FLAG_NO_DISP)
+        CALL(evt_mobj_hit_onoff, STRING("box"), 0)
+    END_IF
+    CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_pure"), 0, PTR(hint_plate), 0)
+    RETURN
+EVT_END()

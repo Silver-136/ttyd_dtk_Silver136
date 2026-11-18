@@ -70,21 +70,6 @@ static EvtWord wait_event[6];
 static ExtTexInfo chorogun_ext_entry_data[21];
 EvtWord chorogun_entry[19];
 
-/** Finds the Fuzzy Horde unit (initial kind 0x15) among the battle's units and returns it, or NULL. */
-static BattleUnit* chorogun_get_ptr(void) {
-    s32 i;
-    BattleWork* wp = _battleWorkPointer;
-    BattleUnit* unit;
-
-    for (i = 0; i < 64; i++) {
-        unit = BattleGetUnitPtr(wp, i);
-        if (unit != NULL && unit->initialKind == UNIT_FUZZY_HORDE) {
-            return unit;
-        }
-    }
-    return NULL;
-}
-
 /**
  * Unit kind of the Fuzzy Horde:
  * 20 HP, level 19, with its size, sounds and the links to its parts, status vulnerability and scripts.
@@ -453,6 +438,21 @@ EVT_BEGIN(chorogun_entry)
     CALL(evt_ext_entry, 1000, PTR(chorogun_ext_entry_data), PTR(chorogun_ext_init), PTR(chorogun_ext_main), 0)
     RETURN
 EVT_END()
+
+/** Finds the Fuzzy Horde unit (initial kind 0x15) among the battle's units and returns it, or NULL. */
+static BattleUnit* chorogun_get_ptr(void) {
+    s32 i;
+    BattleWork* wp = _battleWorkPointer;
+    BattleUnit* unit;
+
+    for (i = 0; i < 64; i++) {
+        unit = BattleGetUnitPtr(wp, i);
+        if (unit != NULL && unit->initialKind == UNIT_FUZZY_HORDE) {
+            return unit;
+        }
+    }
+    return NULL;
+}
 
 /**
  * Ext-pose init of the Fuzzy Horde: allocates 1000 Chorogun entries, starts each pose visible at y -1000 and lays the

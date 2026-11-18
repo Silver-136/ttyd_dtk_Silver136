@@ -54,7 +54,6 @@
 static u8 kurokaron_prev_goal;
 static u8 kurokaron_move_index;
 static u8 kurokaron_move_flag;
-static f32 kurokaron_move_list[6][2];
 
 // kurokaron_move_flag: Dark Bones' patrol and flee state.
 enum {
@@ -106,8 +105,6 @@ static EvtWord e_door_close[22];
 static EvtWord e_door_open[22];
 static BeroEntry bero_entry_data[3];
 static EvtWord kurokaron_move[103];
-static ExtTexInfo senkaron_ext_entry_data[26];
-static s32 move_check_list[20];
 static EvtWord senkaron_event[917];
 static EvtWord kurokaron_init[29];
 static EvtWord kurokaron_talk[13];
@@ -129,6 +126,125 @@ extern EvtWord las_05_init_evt[];
 #else
 EvtWord las_05_init_evt[63];
 #endif
+
+/** Which of the six waypoints of kurokaron_move_list Dark Bones is currently heading for. */
+static u8 kurokaron_move_index = 0;
+
+/** State bits of Dark Bones (KUROKARON_MOVE_FLAG_*): patrol direction, fleeing from Mario, flee steering. */
+static u8 kurokaron_move_flag = 0;
+
+/** How many times in a row Dark Bones picked the same waypoint. */
+static u8 kurokaron_same_goal = 0;
+
+/** Vivian's status on the previous frame, used to notice when she stops hiding Mario. */
+static s32 kurokaron_vivian_prev_sts = 0;
+
+/** Frames Dark Bones stands still (set to 60 when Vivian stops hiding Mario next to him). */
+static u8 kurokaron_stop_cnt = 0;
+
+/** Frames Dark Bones has been running away. */
+static u16 kurokaron_run_cnt = 0;
+
+/**
+ * Door animation script (closing) for the west door, used as the enter/exit animation of this room's bero entry.
+ * LW(0) holds the angle step of the swing, and the script turns the door panels S_doa_l_01 and S_doa_l_02 by it,
+ * the second one the opposite way.
+ */
+static EVT_BEGIN(w_door_close)
+    MULTIPLY_FLOAT(LW(0), FLOAT(-0.38867188f))
+    CALL(evt_mapobj_rotate, 0, STRING("S_doa_l_01"), 0, LW(0), 0)
+    MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
+    CALL(evt_mapobj_rotate, 0, STRING("S_doa_l_02"), 0, LW(0), 0)
+    RETURN
+EVT_END()
+
+/**
+ * Door animation script (opening) for the west door, used as the enter/exit animation of this room's bero entry.
+ * LW(0) holds the angle step of the swing, and the script turns the door panels S_doa_l_01 and S_doa_l_02 by it,
+ * the second one the opposite way.
+ */
+static EVT_BEGIN(w_door_open)
+    MULTIPLY_FLOAT(LW(0), FLOAT(0.38867188f))
+    CALL(evt_mapobj_rotate, 0, STRING("S_doa_l_01"), 0, LW(0), 0)
+    MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
+    CALL(evt_mapobj_rotate, 0, STRING("S_doa_l_02"), 0, LW(0), 0)
+    RETURN
+EVT_END()
+
+/**
+ * Door animation script (closing) for the east door, used as the enter/exit animation of this room's bero entry.
+ * LW(0) holds the angle step of the swing, and the script turns the door panels S_doa_r_01 and S_doa_r_02 by it,
+ * the second one the opposite way.
+ */
+static EVT_BEGIN(e_door_close)
+    MULTIPLY_FLOAT(LW(0), FLOAT(0.38867188f))
+    CALL(evt_mapobj_rotate, 0, STRING("S_doa_r_01"), 0, LW(0), 0)
+    MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
+    CALL(evt_mapobj_rotate, 0, STRING("S_doa_r_02"), 0, LW(0), 0)
+    RETURN
+EVT_END()
+
+/**
+ * Door animation script (opening) for the east door, used as the enter/exit animation of this room's bero entry.
+ * LW(0) holds the angle step of the swing, and the script turns the door panels S_doa_r_01 and S_doa_r_02 by it,
+ * the second one the opposite way.
+ */
+static EVT_BEGIN(e_door_open)
+    MULTIPLY_FLOAT(LW(0), FLOAT(-0.38867188f))
+    CALL(evt_mapobj_rotate, 0, STRING("S_doa_r_01"), 0, LW(0), 0)
+    MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
+    CALL(evt_mapobj_rotate, 0, STRING("S_doa_r_02"), 0, LW(0), 0)
+    RETURN
+EVT_END()
+
+/** Exits of las_05: west door w_bero to las_04 (e_bero); east door e_bero_1 to las_06 (w_bero). */
+static BeroEntry bero_entry_data[] = {
+    {
+        "w_bero", // hitName
+        1, // type
+        6, // sfxId
+        BERO_DIR_AUTO, // directionId
+        BERO_POS_AUTO, // centerPosition
+        0, 0, // centerPositionY..centerPositionZ
+        -1, // length
+        NULL, // enterEvent
+        -1, // caseType
+        NULL, // exitEvent
+        "las_04", // nextMapName
+        "e_bero", // nextBeroName
+        5, // enterAnimeType
+        5, // exitAnimeType
+        w_door_close, // enterAnimeArg
+        w_door_open, // exitAnimeArg
+    },
+    {
+        "e_bero_1", // hitName
+        1, // type
+        6, // sfxId
+        BERO_DIR_AUTO, // directionId
+        BERO_POS_AUTO, // centerPosition
+        0, 0, // centerPositionY..centerPositionZ
+        -1, // length
+        NULL, // enterEvent
+        -1, // caseType
+        NULL, // exitEvent
+        "las_06", // nextMapName
+        "w_bero", // nextBeroName
+        5, // enterAnimeType
+        5, // exitAnimeType
+        e_door_close, // enterAnimeArg
+        e_door_open, // exitAnimeArg
+    },
+    {0},
+};
+
+/** The waypoint Dark Bones last reached. */
+static u8 kurokaron_prev_goal = 5;
+
+/** The six waypoints (x, z) around the room that Dark Bones patrols along. */
+static f32 kurokaron_move_list[6][2] = {
+    {500.0f, -130.0f}, {0.0f, -200.0f}, {-500.0f, -130.0f}, {-500.0f, 130.0f}, {0.0f, 200.0f}, {500.0f, 130.0f},
+};
 
 /**
  * Script helper: returns in args[1] the bits of kurokaron_move_flag selected by the mask args[0] (the script asks
@@ -223,24 +339,6 @@ static s32 _kurokaron_run_away(f32 x, f32 z, f32 tx, f32 tz) {
     // BUG: with no candidate (cnt == 0) and curDiff >= nextDiff, result is never initialised before it is returned.
     return result;
 }
-
-/** Which of the six waypoints of kurokaron_move_list Dark Bones is currently heading for. */
-static u8 kurokaron_move_index = 0;
-
-/** State bits of Dark Bones (KUROKARON_MOVE_FLAG_*): patrol direction, fleeing from Mario, flee steering. */
-static u8 kurokaron_move_flag = 0;
-
-/** How many times in a row Dark Bones picked the same waypoint. */
-static u8 kurokaron_same_goal = 0;
-
-/** Vivian's status on the previous frame, used to notice when she stops hiding Mario. */
-static s32 kurokaron_vivian_prev_sts = 0;
-
-/** Frames Dark Bones stands still (set to 60 when Vivian stops hiding Mario next to him). */
-static u8 kurokaron_stop_cnt = 0;
-
-/** Frames Dark Bones has been running away. */
-static u16 kurokaron_run_cnt = 0;
 
 /**
  * Per-frame flee steering for Dark Bones (KUROKARON_MOVE_FLAG_FLEE set):
@@ -447,6 +545,96 @@ static USER_FUNC(kurokaron_move_position) {
     return EVT_RETURN_BLOCK;
 }
 
+/**
+ * Event script: the patrol of Dark Bones in las_05. He moves between six waypoints, pausing when he runs.
+ * After 60 seconds (six ten-second periods) he gets slower
+ * and waits longer between runs (speed GW(0) 70 to 50 and waits GW(1) 200 to 300).
+ */
+static EVT_BEGIN(kurokaron_move)
+    SET_VALUE(LW(3), 0)
+    SET_FLOAT_VALUE(GW(0), FLOAT(70.0f))
+    SET_VALUE(GW(1), 200)
+    BEGIN_SIBLING_EVENT
+        SET_VALUE(LW(13), 0)
+        SPAWN_EVENT_GET_ID(PTR(evt_sub_stopwatch), LW(15))
+        LOOP(0)
+            CALL(evt_sub_get_stopwatch, LW(15), LW(14))
+            IF_INT_GREATER_OR_EQUAL(LW(14), 10000)
+                ADD(LW(13), 1)
+                IF_INT_EQUAL(LW(13), 6)
+                    BREAK_LOOP
+                END_IF
+                SPAWN_EVENT_GET_ID(PTR(evt_sub_stopwatch), LW(15))
+            END_IF
+            WAIT_FRAMES(1)
+        END_LOOP
+        SET_FLOAT_VALUE(GW(0), FLOAT(50.0f))
+        SET_VALUE(GW(1), 300)
+        DEBUG_PUT_MSG(STRING("kurokaron 1 minute late"))
+    END_SIBLING_EVENT
+    SET_VALUE(LF(0), 0)
+    LOOP(0)
+        CALL(kurokaron_get_move_pos, LW(0), LW(1))
+        CALL(kurokaron_move_position, STRING("黒カロン"), LW(0), LW(1), GW(0))
+        CALL(kurokaron_flag_check, KUROKARON_MOVE_FLAG_FLEE, LW(2))
+        IF_INT_NOT_EQUAL(LW(2), 0)
+            IF_INT_EQUAL(LW(3), 0)
+                IF_INT_EQUAL(LF(0), 0)
+                    WAIT_MS(GW(1))
+                    SET_VALUE(LF(0), 1)
+                ELSE
+                    CALL(evt_sub_random, 300, LW(5))
+                    ADD(LW(5), GW(1))
+                    WAIT_MS(LW(5))
+                END_IF
+            END_IF
+        END_IF
+        SET_VALUE(LW(3), LW(2))
+        WAIT_FRAMES(1)
+    END_LOOP
+    RETURN
+EVT_END()
+
+/**
+ * Texture overrides for the swarm of Dull Bones: 24 frames of KRN_R_1 for the head part c_karon_h,
+ * followed by one KRN_D_1 frame and a terminator.
+ */
+static ExtTexInfo senkaron_ext_entry_data[] = {
+    {"c_karon_h", "KRN_R_1", 0.0f},
+    {"c_karon_h", "KRN_R_1", 1.0f},
+    {"c_karon_h", "KRN_R_1", 2.0f},
+    {"c_karon_h", "KRN_R_1", 3.0f},
+    {"c_karon_h", "KRN_R_1", 4.0f},
+    {"c_karon_h", "KRN_R_1", 5.0f},
+    {"c_karon_h", "KRN_R_1", 6.0f},
+    {"c_karon_h", "KRN_R_1", 7.0f},
+    {"c_karon_h", "KRN_R_1", 8.0f},
+    {"c_karon_h", "KRN_R_1", 9.0f},
+    {"c_karon_h", "KRN_R_1", 10.0f},
+    {"c_karon_h", "KRN_R_1", 11.0f},
+    {"c_karon_h", "KRN_R_1", 12.0f},
+    {"c_karon_h", "KRN_R_1", 13.0f},
+    {"c_karon_h", "KRN_R_1", 14.0f},
+    {"c_karon_h", "KRN_R_1", 15.0f},
+    {"c_karon_h", "KRN_R_1", 16.0f},
+    {"c_karon_h", "KRN_R_1", 17.0f},
+    {"c_karon_h", "KRN_R_1", 18.0f},
+    {"c_karon_h", "KRN_R_1", 19.0f},
+    {"c_karon_h", "KRN_R_1", 20.0f},
+    {"c_karon_h", "KRN_R_1", 21.0f},
+    {"c_karon_h", "KRN_R_1", 22.0f},
+    {"c_karon_h", "KRN_R_1", 23.0f},
+    {"c_karon_h", "KRN_D_1", 0.0f},
+    {0},
+};
+
+/** Index boundaries used to split the swarm's cell and overlap checks across 20 frame groups. */
+static s32 move_check_list[] = {
+    25, 52, 79, 107, 136, 166, 197, 229,
+    263, 298, 335, 374, 416, 461, 510, 565,
+    628, 703, 806, 1000,
+};
+
 /** Returns a random float in [min, max] using rand(). */
 static f32 randf(f32 min, f32 max) {
     f32 r = rand() / 32767.0f;
@@ -593,197 +781,6 @@ static s32 party_hit_check(f32 x, f32 z, f32* dir) {
     }
     return hit;
 }
-
-/**
- * Door animation script (closing) for the west door, used as the enter/exit animation of this room's bero entry.
- * LW(0) holds the angle step of the swing, and the script turns the door panels S_doa_l_01 and S_doa_l_02 by it,
- * the second one the opposite way.
- */
-static EVT_BEGIN(w_door_close)
-    MULTIPLY_FLOAT(LW(0), FLOAT(-0.38867188f))
-    CALL(evt_mapobj_rotate, 0, STRING("S_doa_l_01"), 0, LW(0), 0)
-    MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
-    CALL(evt_mapobj_rotate, 0, STRING("S_doa_l_02"), 0, LW(0), 0)
-    RETURN
-EVT_END()
-
-/**
- * Door animation script (opening) for the west door, used as the enter/exit animation of this room's bero entry.
- * LW(0) holds the angle step of the swing, and the script turns the door panels S_doa_l_01 and S_doa_l_02 by it,
- * the second one the opposite way.
- */
-static EVT_BEGIN(w_door_open)
-    MULTIPLY_FLOAT(LW(0), FLOAT(0.38867188f))
-    CALL(evt_mapobj_rotate, 0, STRING("S_doa_l_01"), 0, LW(0), 0)
-    MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
-    CALL(evt_mapobj_rotate, 0, STRING("S_doa_l_02"), 0, LW(0), 0)
-    RETURN
-EVT_END()
-
-/**
- * Door animation script (closing) for the east door, used as the enter/exit animation of this room's bero entry.
- * LW(0) holds the angle step of the swing, and the script turns the door panels S_doa_r_01 and S_doa_r_02 by it,
- * the second one the opposite way.
- */
-static EVT_BEGIN(e_door_close)
-    MULTIPLY_FLOAT(LW(0), FLOAT(0.38867188f))
-    CALL(evt_mapobj_rotate, 0, STRING("S_doa_r_01"), 0, LW(0), 0)
-    MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
-    CALL(evt_mapobj_rotate, 0, STRING("S_doa_r_02"), 0, LW(0), 0)
-    RETURN
-EVT_END()
-
-/**
- * Door animation script (opening) for the east door, used as the enter/exit animation of this room's bero entry.
- * LW(0) holds the angle step of the swing, and the script turns the door panels S_doa_r_01 and S_doa_r_02 by it,
- * the second one the opposite way.
- */
-static EVT_BEGIN(e_door_open)
-    MULTIPLY_FLOAT(LW(0), FLOAT(-0.38867188f))
-    CALL(evt_mapobj_rotate, 0, STRING("S_doa_r_01"), 0, LW(0), 0)
-    MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
-    CALL(evt_mapobj_rotate, 0, STRING("S_doa_r_02"), 0, LW(0), 0)
-    RETURN
-EVT_END()
-
-/** Exits of las_05: west door w_bero to las_04 (e_bero); east door e_bero_1 to las_06 (w_bero). */
-static BeroEntry bero_entry_data[] = {
-    {
-        "w_bero", // hitName
-        1, // type
-        6, // sfxId
-        BERO_DIR_AUTO, // directionId
-        BERO_POS_AUTO, // centerPosition
-        0, 0, // centerPositionY..centerPositionZ
-        -1, // length
-        NULL, // enterEvent
-        -1, // caseType
-        NULL, // exitEvent
-        "las_04", // nextMapName
-        "e_bero", // nextBeroName
-        5, // enterAnimeType
-        5, // exitAnimeType
-        w_door_close, // enterAnimeArg
-        w_door_open, // exitAnimeArg
-    },
-    {
-        "e_bero_1", // hitName
-        1, // type
-        6, // sfxId
-        BERO_DIR_AUTO, // directionId
-        BERO_POS_AUTO, // centerPosition
-        0, 0, // centerPositionY..centerPositionZ
-        -1, // length
-        NULL, // enterEvent
-        -1, // caseType
-        NULL, // exitEvent
-        "las_06", // nextMapName
-        "w_bero", // nextBeroName
-        5, // enterAnimeType
-        5, // exitAnimeType
-        e_door_close, // enterAnimeArg
-        e_door_open, // exitAnimeArg
-    },
-    {0},
-};
-
-/** The waypoint Dark Bones last reached. */
-static u8 kurokaron_prev_goal = 5;
-
-/** The six waypoints (x, z) around the room that Dark Bones patrols along. */
-static f32 kurokaron_move_list[6][2] = {
-    {500.0f, -130.0f}, {0.0f, -200.0f}, {-500.0f, -130.0f}, {-500.0f, 130.0f}, {0.0f, 200.0f}, {500.0f, 130.0f},
-};
-
-/**
- * Event script: the patrol of Dark Bones in las_05. He moves between six waypoints, pausing when he runs.
- * After 60 seconds (six ten-second periods) he gets slower
- * and waits longer between runs (speed GW(0) 70 to 50 and waits GW(1) 200 to 300).
- */
-static EVT_BEGIN(kurokaron_move)
-    SET_VALUE(LW(3), 0)
-    SET_FLOAT_VALUE(GW(0), FLOAT(70.0f))
-    SET_VALUE(GW(1), 200)
-    BEGIN_SIBLING_EVENT
-        SET_VALUE(LW(13), 0)
-        SPAWN_EVENT_GET_ID(PTR(evt_sub_stopwatch), LW(15))
-        LOOP(0)
-            CALL(evt_sub_get_stopwatch, LW(15), LW(14))
-            IF_INT_GREATER_OR_EQUAL(LW(14), 10000)
-                ADD(LW(13), 1)
-                IF_INT_EQUAL(LW(13), 6)
-                    BREAK_LOOP
-                END_IF
-                SPAWN_EVENT_GET_ID(PTR(evt_sub_stopwatch), LW(15))
-            END_IF
-            WAIT_FRAMES(1)
-        END_LOOP
-        SET_FLOAT_VALUE(GW(0), FLOAT(50.0f))
-        SET_VALUE(GW(1), 300)
-        DEBUG_PUT_MSG(STRING("kurokaron 1 minute late"))
-    END_SIBLING_EVENT
-    SET_VALUE(LF(0), 0)
-    LOOP(0)
-        CALL(kurokaron_get_move_pos, LW(0), LW(1))
-        CALL(kurokaron_move_position, STRING("黒カロン"), LW(0), LW(1), GW(0))
-        CALL(kurokaron_flag_check, KUROKARON_MOVE_FLAG_FLEE, LW(2))
-        IF_INT_NOT_EQUAL(LW(2), 0)
-            IF_INT_EQUAL(LW(3), 0)
-                IF_INT_EQUAL(LF(0), 0)
-                    WAIT_MS(GW(1))
-                    SET_VALUE(LF(0), 1)
-                ELSE
-                    CALL(evt_sub_random, 300, LW(5))
-                    ADD(LW(5), GW(1))
-                    WAIT_MS(LW(5))
-                END_IF
-            END_IF
-        END_IF
-        SET_VALUE(LW(3), LW(2))
-        WAIT_FRAMES(1)
-    END_LOOP
-    RETURN
-EVT_END()
-
-/**
- * Texture overrides for the swarm of Dull Bones: 24 frames of KRN_R_1 for the head part c_karon_h,
- * followed by one KRN_D_1 frame and a terminator.
- */
-static ExtTexInfo senkaron_ext_entry_data[] = {
-    {"c_karon_h", "KRN_R_1", 0.0f},
-    {"c_karon_h", "KRN_R_1", 1.0f},
-    {"c_karon_h", "KRN_R_1", 2.0f},
-    {"c_karon_h", "KRN_R_1", 3.0f},
-    {"c_karon_h", "KRN_R_1", 4.0f},
-    {"c_karon_h", "KRN_R_1", 5.0f},
-    {"c_karon_h", "KRN_R_1", 6.0f},
-    {"c_karon_h", "KRN_R_1", 7.0f},
-    {"c_karon_h", "KRN_R_1", 8.0f},
-    {"c_karon_h", "KRN_R_1", 9.0f},
-    {"c_karon_h", "KRN_R_1", 10.0f},
-    {"c_karon_h", "KRN_R_1", 11.0f},
-    {"c_karon_h", "KRN_R_1", 12.0f},
-    {"c_karon_h", "KRN_R_1", 13.0f},
-    {"c_karon_h", "KRN_R_1", 14.0f},
-    {"c_karon_h", "KRN_R_1", 15.0f},
-    {"c_karon_h", "KRN_R_1", 16.0f},
-    {"c_karon_h", "KRN_R_1", 17.0f},
-    {"c_karon_h", "KRN_R_1", 18.0f},
-    {"c_karon_h", "KRN_R_1", 19.0f},
-    {"c_karon_h", "KRN_R_1", 20.0f},
-    {"c_karon_h", "KRN_R_1", 21.0f},
-    {"c_karon_h", "KRN_R_1", 22.0f},
-    {"c_karon_h", "KRN_R_1", 23.0f},
-    {"c_karon_h", "KRN_D_1", 0.0f},
-    {0},
-};
-
-/** Index boundaries used to split the swarm's cell and overlap checks across 20 frame groups. */
-static s32 move_check_list[] = {
-    25, 52, 79, 107, 136, 166, 197, 229,
-    263, 298, 335, 374, 416, 461, 510, 565,
-    628, 703, 806, 1000,
-};
 
 /**
  * Per-frame update callback of the bone swarm (senkaron_ext_main):

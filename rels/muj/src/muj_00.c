@@ -387,447 +387,6 @@ static USER_FUNC(tama_shoot_kemuri) {
 #endif
 
 /**
- * Script helper that keeps the X-Naut ship's crowd (mass NPCs 205 to 304) riding along with the ship:
- * adds the turn from angle args[0] to args[1] to each NPC's orbit angle
- * and places it on its circle around the ship centre (args[2], args[3]).
- */
-static USER_FUNC(dai3_butai_main_func) {
-    s32 d;
-    EvtWord* args = event->args;
-    f32 a = evtGetValue(event, args[0]);
-    f32 b = evtGetValue(event, args[1]);
-    f32 cx = evtGetValue(event, args[2]);
-    f32 cz = evtGetValue(event, args[3]);
-    s32 i;
-    NanNPC* npc;
-    f32 s;
-    f32 rad;
-    f32 r;
-    f32 c;
-    NanNPCWork* wp = nanNPCWork;
-
-    d = b - a;
-
-    for (i = 0; i < 100; i++) {
-        npc = &wp->npc[i + 205];
-        npc->angle += d;
-        r = npc->radius;
-        rad = npc->angle;
-        rad = 3.141592f * rad / 180.0f;
-        s = sinf_l(rad);
-        c = cosf_l(rad);
-        npc->pos.x = r * s + cx;
-        npc->pos.z = r * c + cz;
-    }
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper that does the same for the pirate ship's crowd (mass NPCs 10 to 104 and 105 to 204):
- * rotates each NPC's orbit by args[1] minus args[0] around the centre (args[2], args[3]).
- */
-static USER_FUNC(kaizoku_main_func) {
-    EvtWord* args = event->args;
-    f32 a = evtGetValue(event, args[0]);
-    f32 b = evtGetValue(event, args[1]);
-    f32 cx = evtGetValue(event, args[2]);
-    f32 cz = evtGetValue(event, args[3]);
-    s32 d = b - a;
-    s32 i;
-    NanNPC* npc;
-    f32 r;
-    f32 rad;
-    f32 s;
-    f32 c;
-    NanNPCWork* wp = nanNPCWork;
-
-    for (i = 0; i < 95; i++) {
-        npc = &wp->npc[i + 10];
-        npc->angle += d;
-        r = npc->radius;
-        rad = npc->angle;
-        rad = 3.141592f * rad / 180.0f;
-        s = sin(rad);
-        c = cos(rad);
-        npc->pos.x = r * s + cx;
-        npc->pos.z = r * c + cz;
-    }
-    for (i = 0; i < 100; i++) {
-        npc = &wp->npc[i + 105];
-        npc->angle += d;
-        s = npc->radius;
-        rad = npc->angle;
-        rad = 3.141592f * rad / 180.0f;
-        r = sin(rad);
-        c = cos(rad);
-        npc->pos.x = s * r + cx;
-        npc->pos.z = s * c + cz;
-    }
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper: allocates the 0x40-byte buffer that mario_main_setup_func fills with the orbit data of Mario,
- * his partner and six named NPCs.
- */
-static USER_FUNC(mario_main_init_func) {
-    _op = _mapAlloc(8 * sizeof(OrbitData));
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper: records the distance and angle from the ship centre (args[0], args[1]) of Mario,
- * his partner and the six NPCs on the ship (Flavio, Cortez, Francesca, Garawaru, Frankie, Odoodo),
- * so mario_main_func can swing them around as the pirate ship turns.
- */
-static USER_FUNC(mario_main_setup_func) {
-    EvtWord* args = event->args;
-    f32 cx = evtGetValue(event, args[0]);
-    f32 cz = evtGetValue(event, args[1]);
-    OrbitData* op = _op;
-    MarioWork* mario = marioGetPtr();
-    PartyEntry* party = partyGetPtr(0);
-    NpcEntry* npc1 = evtNpcNameToPtr(event, "マルコ");
-    NpcEntry* npc2 = evtNpcNameToPtr(event, "コルテス");
-    NpcEntry* npc3 = evtNpcNameToPtr(event, "モニー");
-    NpcEntry* npc4 = evtNpcNameToPtr(event, "ガラの悪い水夫");
-    NpcEntry* npc5 = evtNpcNameToPtr(event, "ピートン");
-    NpcEntry* npc6 = evtNpcNameToPtr(event, "オドオド水夫");
-
-    op[0].dist = distABf(cx, -cz, cx + mario->position.x, -(cz + mario->position.z));
-    op[0].angle = angleABf(cx, -cz, cx + mario->position.x, -(cz + mario->position.z));
-    op[1].dist = distABf(cx, -cz, cx + party->position.x, -(cz + party->position.z));
-    op[1].angle = angleABf(cx, -cz, cx + party->position.x, -(cz + party->position.z));
-    op[2].dist = distABf(cx, -cz, cx + npc1->position.x, -(cz + npc1->position.z));
-    op[2].angle = angleABf(cx, -cz, cx + npc1->position.x, -(cz + npc1->position.z));
-    op[3].dist = distABf(cx, -cz, cx + npc2->position.x, -(cz + npc2->position.z));
-    op[3].angle = angleABf(cx, -cz, cx + npc2->position.x, -(cz + npc2->position.z));
-    op[4].dist = distABf(cx, -cz, cx + npc3->position.x, -(cz + npc3->position.z));
-    op[4].angle = angleABf(cx, -cz, cx + npc3->position.x, -(cz + npc3->position.z));
-    op[5].dist = distABf(cx, -cz, cx + npc4->position.x, -(cz + npc4->position.z));
-    op[5].angle = angleABf(cx, -cz, cx + npc4->position.x, -(cz + npc4->position.z));
-    op[6].dist = distABf(cx, -cz, cx + npc5->position.x, -(cz + npc5->position.z));
-    op[6].angle = angleABf(cx, -cz, cx + npc5->position.x, -(cz + npc5->position.z));
-    op[7].dist = distABf(cx, -cz, cx + npc6->position.x, -(cz + npc6->position.z));
-    op[7].angle = angleABf(cx, -cz, cx + npc6->position.x, -(cz + npc6->position.z));
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper called every frame while the pirate ship turns (args[0] to args[1] is the turn in degrees,
- * args[2], args[3] the pivot): moves Mario, his partner and the six NPCs along their recorded orbits
- * so they stay on the deck.
- */
-static USER_FUNC(mario_main_func) {
-    EvtWord* args;
-    OrbitData* op;
-    MarioWork* mario;
-    PartyEntry* party;
-    NpcEntry* npc1;
-    NpcEntry* npc2;
-    NpcEntry* npc3;
-    NpcEntry* npc4;
-    NpcEntry* npc5;
-    NpcEntry* npc6;
-    f32 a;
-    f32 b;
-    f32 cx;
-    f32 cz;
-    f32 d;
-    f32 t;
-    f32 r;
-    f32 rad;
-    f32 x;
-
-    args = event->args;
-    a = evtGetValue(event, args[0]);
-    b = evtGetValue(event, args[1]);
-    cx = evtGetValue(event, args[2]);
-    cz = evtGetValue(event, args[3]);
-    op = _op;
-    mario = marioGetPtr();
-    party = partyGetPtr(0);
-    npc1 = evtNpcNameToPtr(event, "マルコ");
-    npc2 = evtNpcNameToPtr(event, "コルテス");
-    npc3 = evtNpcNameToPtr(event, "モニー");
-    npc4 = evtNpcNameToPtr(event, "ガラの悪い水夫");
-    npc5 = evtNpcNameToPtr(event, "ピートン");
-    npc6 = evtNpcNameToPtr(event, "オドオド水夫");
-    d = b - a;
-    ORBIT(0, mario->position);
-    ORBIT(1, party->position);
-    ORBIT(2, npc1->position);
-    ORBIT(3, npc2->position);
-    ORBIT(4, npc3->position);
-    ORBIT(5, npc4->position);
-    ORBIT(6, npc5->position);
-    ORBIT(7, npc6->position);
-    npc1->prevPosition = npc1->position;
-    npc2->prevPosition = npc2->position;
-    npc3->prevPosition = npc3->position;
-    npc4->prevPosition = npc4->position;
-    npc5->prevPosition = npc5->position;
-    npc6->prevPosition = npc6->position;
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Picks a random mass NPC for a jumping sailor to land on:
- * indices 205 to 304 for types 0 and 1, otherwise 10 to 104 or 105 to 204 at random.
- */
-static NanNPC* random_choice_target(s32 type) {
-    NanNPCWork* wp = nanNPCWork;
-    s32 idx;
-
-    switch (type) {
-        case 0:
-        case 1:
-            idx = irand(100) + 205;
-            break;
-        case 2:
-        default:
-            if (irand(2)) {
-                idx = irand(95) + 10;
-            } else {
-                idx = irand(100) + 105;
-            }
-            break;
-    }
-    return &wp->npc[idx];
-}
-
-/**
- * Per-frame behaviour of the sailors that jump during the fight (tobikakaru):
- * wait a random time, hop in a parabola onto a random member of the other crowd (random_choice_target), wait, then hop back to their home spot;
- * states 20 to 22 are the hop and the waits.
- */
-static void tobikakari_seq00(NanNPC* npc) {
-    TobiWork* work = npc->tobi;
-    NanNPC* target;
-    s32 r;
-    s32 elapsed;
-    f32 t;
-
-    switch (npc->state) {
-        case 0:
-            r = irand(1000);
-            if (r < 100) {
-                npc->state = 10;
-            } else if (r < 200) {
-                npc->startTime = (s32)gp->renderTime;
-                npc->duration = irand(500) + 1;
-                npc->state = 21;
-            } else {
-                npc->startTime = (s32)gp->renderTime;
-                npc->duration = irand(2000) + 500;
-                npc->state = 22;
-            }
-            break;
-        case 10:
-            npc->startTime = (s32)gp->renderTime;
-            npc->start = npc->pos;
-            target = random_choice_target(work->type);
-            npc->target = target->tobi->pos;
-            npc->target.z += 2.0f;
-            npc->vy = -4.0f * (f32)(irand(30) + 100);
-            npc->dy = npc->target.y - npc->start.y - npc->vy;
-            npc->duration = irand(500) + 400;
-            if (npc->start.x < npc->target.x) {
-                npc->dir = 90.0f;
-            } else {
-                npc->dir = 270.0f;
-            }
-            npc->state = 20;
-            npc->nextState = 21;
-            break;
-        case 11:
-            npc->startTime = (s32)gp->renderTime;
-            npc->start = npc->pos;
-            npc->target = work->pos;
-            npc->vy = -4.0f * (f32)(irand(30) + 100);
-            npc->dy = npc->target.y - npc->start.y - npc->vy;
-            npc->duration = irand(500) + 400;
-            npc->state = 20;
-            npc->nextState = 22;
-            break;
-        case 20:
-            elapsed = OSTicksToMilliseconds((u32)gp->renderTime - (u32)npc->startTime);
-            if (elapsed < npc->duration) {
-                t = (f32)elapsed / (f32)npc->duration;
-                npc->pos.x = intplGetValue(EASING_LINEAR, npc->start.x, npc->target.x, elapsed, npc->duration);
-                npc->pos.z = intplGetValue(EASING_LINEAR, npc->start.z, npc->target.z, elapsed, npc->duration);
-                npc->pos.y = npc->start.y + t * (npc->vy * t + npc->dy);
-            } else {
-                npc->pos = npc->target;
-                npc->startTime = (s32)gp->renderTime;
-                npc->duration = irand(2000) + 500;
-                npc->state = npc->nextState;
-            }
-            break;
-        case 21:
-            if ((s32)OSTicksToMilliseconds((u32)gp->renderTime - (u32)npc->startTime) > npc->duration) {
-                npc->state = 11;
-            }
-            break;
-        case 22:
-            if ((s32)OSTicksToMilliseconds((u32)gp->renderTime - (u32)npc->startTime) > npc->duration) {
-                npc->state = 10;
-            }
-            break;
-    }
-}
-
-/**
- * Script helper: allocates the jump work area (0x1310 bytes)
- * and gives mass NPCs 10 to 304 the tobikakari_seq00 behaviour;
- * running animation tables are assigned to ranges 10..104 and 205..304.
- */
-static USER_FUNC(tobikakaru_init) {
-    NanNPCWork* wp = nanNPCWork;
-    TobiWork* p;
-    s32 i;
-    NanNPC* npc;
-
-    // Preserve capacity for 305 records; the loops below initialize 295.
-    p = _mapAlloc(305 * sizeof(TobiWork));
-    Tobidat = p;
-    for (i = 0; i < 95; i++) {
-        npc = &wp->npc[i + 10];
-        npc->func = tobikakari_seq00;
-        npc->state = 0;
-        npc->tobi = p;
-        evt_nannpc_set_animtbl_sub(npc, suifu_animtbl_run);
-        p->pos = npc->pos;
-        p->type = 0;
-        p++;
-    }
-    for (i = 0; i < 100; i++) {
-        npc = &wp->npc[i + 105];
-        npc->func = tobikakari_seq00;
-        npc->state = 0;
-        npc->tobi = p;
-        p->pos = npc->pos;
-        p->type = 1;
-        p++;
-    }
-    for (i = 0; i < 100; i++) {
-        npc = &wp->npc[i + 205];
-        npc->func = tobikakari_seq00;
-        npc->state = 0;
-        npc->tobi = p;
-        evt_nannpc_set_animtbl_sub(npc, dai3_animtbl_run);
-        p->pos = npc->pos;
-        p->type = 2;
-        p++;
-    }
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper: ends the jumping crowd, removing the per-frame functions of mass NPCs 10 to 304
- * and restoring normal animation tables for ranges 10..104 and 205..304.
- */
-static USER_FUNC(tobikakaru_end) {
-    NanNPCWork* wp = nanNPCWork;
-    NanNPC* npc;
-    s32 i;
-
-    for (i = 0; i < 95; i++) {
-        npc = &wp->npc[i + 10];
-        npc->func = NULL;
-        evt_nannpc_set_animtbl_sub(npc, suifu_animtbl);
-    }
-    for (i = 0; i < 100; i++) {
-        npc = &wp->npc[i + 105];
-        npc->func = NULL;
-    }
-    for (i = 0; i < 100; i++) {
-        npc = &wp->npc[i + 205];
-        npc->func = NULL;
-        evt_nannpc_set_animtbl_sub(npc, dai3_animtbl);
-    }
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper: turns two map points (x1, z1) and (x2, z2) into the heading (angle minus 90 degrees) a ship
- * should face when moving between them; written to args[4].
- */
-static USER_FUNC(ship_rotate) {
-    EvtWord* args = event->args;
-    f32 x1 = evtGetFloat(event, args[0]);
-    f32 z1 = evtGetFloat(event, args[1]);
-    f32 x2 = evtGetFloat(event, args[2]);
-    f32 z2 = evtGetFloat(event, args[3]);
-
-    f32 angle = angleABf(x1, -z1, x2, -z2);
-
-    evtSetFloat(event, args[4], angle - 90.0f);
-    return EVT_RETURN_DONE;
-}
-
-/** Like ship_rotate but the result is turned a further 180 degrees, for a ship that sails stern first. */
-static USER_FUNC(ship_rotate_rev) {
-    EvtWord* args = event->args;
-    f32 x1 = evtGetFloat(event, args[0]);
-    f32 z1 = evtGetFloat(event, args[1]);
-    f32 x2 = evtGetFloat(event, args[2]);
-    f32 z2 = evtGetFloat(event, args[3]);
-
-    f32 angle;
-
-    angle = angleABf(x1, -z1, x2, -z2);
-    evtSetFloat(event, args[4], 180.0f + (angle - 90.0f));
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper for the battle camera: given a ship position (args[0], args[1]) computes the angle (args[2])
- * and distance (args[3]) from it to the camera centre at (70, 110, 0).
- */
-static USER_FUNC(cam_test_init_func) {
-    EvtWord* args = event->args;
-    Vec b;
-    Vec a;
-    f32 dist;
-
-    a.x = evtGetValue(event, args[0]);
-    a.y = 110.0f;
-    a.z = evtGetValue(event, args[1]);
-    b.x = 70.0f;
-    b.y = 110.0f;
-    b.z = 0.0f;
-    dist = PSVECDistance(&a, &b);
-    evtSetFloat(event, args[2], 57.29579f * (f32)atan2(-(b.x - a.x), b.z - a.z));
-    evtSetFloat(event, args[3], dist);
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper for the battle camera: from an angle
- * and distance (args[2], args[3]) around the centre (70, 110, 0) writes the camera x and z to args[0]
- * and args[1].
- */
-static USER_FUNC(cam_test_func) {
-    EvtWord* args = event->args;
-    s32* p0 = args++;
-    s32* p1 = args++;
-    f32 angle = evtGetFloat(event, *args++);
-    f32 dist = evtGetFloat(event, *args++);
-    f32 rad, s, c;
-    Vec center;
-    rad = 6.2831855f * angle / 360.0f;
-    s = sinf_l(rad);
-    c = cosf_l(rad);
-    center.x = 70.0f;
-    center.y = 110.0f;
-    center.z = 0.0f;
-    evtSetValue(event, *p0, center.x + dist * s);
-    evtSetValue(event, *p1, center.z - dist * c);
-    return EVT_RETURN_DONE;
-}
-
-/**
  * Mass-NPC figure table of the beach crowd: model, animation set and start offset of each sailor (c_boro_k),
  * X-Naut (c_zako_n) and c_elmos figure.
  */
@@ -2553,6 +2112,42 @@ static EVT_BEGIN(dai3_butai_setup)
 EVT_END()
 
 /**
+ * Script helper that keeps the X-Naut ship's crowd (mass NPCs 205 to 304) riding along with the ship:
+ * adds the turn from angle args[0] to args[1] to each NPC's orbit angle
+ * and places it on its circle around the ship centre (args[2], args[3]).
+ */
+static USER_FUNC(dai3_butai_main_func) {
+    s32 d;
+    EvtWord* args = event->args;
+    f32 a = evtGetValue(event, args[0]);
+    f32 b = evtGetValue(event, args[1]);
+    f32 cx = evtGetValue(event, args[2]);
+    f32 cz = evtGetValue(event, args[3]);
+    s32 i;
+    NanNPC* npc;
+    f32 s;
+    f32 rad;
+    f32 r;
+    f32 c;
+    NanNPCWork* wp = nanNPCWork;
+
+    d = b - a;
+
+    for (i = 0; i < 100; i++) {
+        npc = &wp->npc[i + 205];
+        npc->angle += d;
+        r = npc->radius;
+        rad = npc->angle;
+        rad = 3.141592f * rad / 180.0f;
+        s = sinf_l(rad);
+        c = cosf_l(rad);
+        npc->pos.x = r * s + cx;
+        npc->pos.z = r * c + cz;
+    }
+    return EVT_RETURN_DONE;
+}
+
+/**
  * Loop that keeps the X-Naut ship's crowd attached to the ship each frame (dai3_butai_main_func with the ship
  * heading in GW(1) and centre GW(2), GW(3)).
  */
@@ -2652,6 +2247,50 @@ static EVT_BEGIN(kaizoku_setup)
 EVT_END()
 
 /**
+ * Script helper that does the same for the pirate ship's crowd (mass NPCs 10 to 104 and 105 to 204):
+ * rotates each NPC's orbit by args[1] minus args[0] around the centre (args[2], args[3]).
+ */
+static USER_FUNC(kaizoku_main_func) {
+    EvtWord* args = event->args;
+    f32 a = evtGetValue(event, args[0]);
+    f32 b = evtGetValue(event, args[1]);
+    f32 cx = evtGetValue(event, args[2]);
+    f32 cz = evtGetValue(event, args[3]);
+    s32 d = b - a;
+    s32 i;
+    NanNPC* npc;
+    f32 r;
+    f32 rad;
+    f32 s;
+    f32 c;
+    NanNPCWork* wp = nanNPCWork;
+
+    for (i = 0; i < 95; i++) {
+        npc = &wp->npc[i + 10];
+        npc->angle += d;
+        r = npc->radius;
+        rad = npc->angle;
+        rad = 3.141592f * rad / 180.0f;
+        s = sin(rad);
+        c = cos(rad);
+        npc->pos.x = r * s + cx;
+        npc->pos.z = r * c + cz;
+    }
+    for (i = 0; i < 100; i++) {
+        npc = &wp->npc[i + 105];
+        npc->angle += d;
+        s = npc->radius;
+        rad = npc->angle;
+        rad = 3.141592f * rad / 180.0f;
+        r = sin(rad);
+        c = cos(rad);
+        npc->pos.x = s * r + cx;
+        npc->pos.z = s * c + cz;
+    }
+    return EVT_RETURN_DONE;
+}
+
+/**
  * Loop that keeps the pirate ship's crowd attached to the pirate ship each frame (kaizoku_main_func with heading
  * GW(4) and centre GW(5), GW(6)).
  */
@@ -2665,11 +2304,116 @@ static EVT_BEGIN(kaizoku_main)
     RETURN
 EVT_END()
 
+/**
+ * Script helper: allocates the 0x40-byte buffer that mario_main_setup_func fills with the orbit data of Mario,
+ * his partner and six named NPCs.
+ */
+static USER_FUNC(mario_main_init_func) {
+    _op = _mapAlloc(8 * sizeof(OrbitData));
+    return EVT_RETURN_DONE;
+}
+
 /** Allocates the orbit buffer for Mario and the deck NPCs (mario_main_init_func). */
 static EVT_BEGIN(mario_main_init)
     CALL(mario_main_init_func)
     RETURN
 EVT_END()
+
+/**
+ * Script helper: records the distance and angle from the ship centre (args[0], args[1]) of Mario,
+ * his partner and the six NPCs on the ship (Flavio, Cortez, Francesca, Garawaru, Frankie, Odoodo),
+ * so mario_main_func can swing them around as the pirate ship turns.
+ */
+static USER_FUNC(mario_main_setup_func) {
+    EvtWord* args = event->args;
+    f32 cx = evtGetValue(event, args[0]);
+    f32 cz = evtGetValue(event, args[1]);
+    OrbitData* op = _op;
+    MarioWork* mario = marioGetPtr();
+    PartyEntry* party = partyGetPtr(0);
+    NpcEntry* npc1 = evtNpcNameToPtr(event, "マルコ");
+    NpcEntry* npc2 = evtNpcNameToPtr(event, "コルテス");
+    NpcEntry* npc3 = evtNpcNameToPtr(event, "モニー");
+    NpcEntry* npc4 = evtNpcNameToPtr(event, "ガラの悪い水夫");
+    NpcEntry* npc5 = evtNpcNameToPtr(event, "ピートン");
+    NpcEntry* npc6 = evtNpcNameToPtr(event, "オドオド水夫");
+
+    op[0].dist = distABf(cx, -cz, cx + mario->position.x, -(cz + mario->position.z));
+    op[0].angle = angleABf(cx, -cz, cx + mario->position.x, -(cz + mario->position.z));
+    op[1].dist = distABf(cx, -cz, cx + party->position.x, -(cz + party->position.z));
+    op[1].angle = angleABf(cx, -cz, cx + party->position.x, -(cz + party->position.z));
+    op[2].dist = distABf(cx, -cz, cx + npc1->position.x, -(cz + npc1->position.z));
+    op[2].angle = angleABf(cx, -cz, cx + npc1->position.x, -(cz + npc1->position.z));
+    op[3].dist = distABf(cx, -cz, cx + npc2->position.x, -(cz + npc2->position.z));
+    op[3].angle = angleABf(cx, -cz, cx + npc2->position.x, -(cz + npc2->position.z));
+    op[4].dist = distABf(cx, -cz, cx + npc3->position.x, -(cz + npc3->position.z));
+    op[4].angle = angleABf(cx, -cz, cx + npc3->position.x, -(cz + npc3->position.z));
+    op[5].dist = distABf(cx, -cz, cx + npc4->position.x, -(cz + npc4->position.z));
+    op[5].angle = angleABf(cx, -cz, cx + npc4->position.x, -(cz + npc4->position.z));
+    op[6].dist = distABf(cx, -cz, cx + npc5->position.x, -(cz + npc5->position.z));
+    op[6].angle = angleABf(cx, -cz, cx + npc5->position.x, -(cz + npc5->position.z));
+    op[7].dist = distABf(cx, -cz, cx + npc6->position.x, -(cz + npc6->position.z));
+    op[7].angle = angleABf(cx, -cz, cx + npc6->position.x, -(cz + npc6->position.z));
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script helper called every frame while the pirate ship turns (args[0] to args[1] is the turn in degrees,
+ * args[2], args[3] the pivot): moves Mario, his partner and the six NPCs along their recorded orbits
+ * so they stay on the deck.
+ */
+static USER_FUNC(mario_main_func) {
+    EvtWord* args;
+    OrbitData* op;
+    MarioWork* mario;
+    PartyEntry* party;
+    NpcEntry* npc1;
+    NpcEntry* npc2;
+    NpcEntry* npc3;
+    NpcEntry* npc4;
+    NpcEntry* npc5;
+    NpcEntry* npc6;
+    f32 a;
+    f32 b;
+    f32 cx;
+    f32 cz;
+    f32 d;
+    f32 t;
+    f32 r;
+    f32 rad;
+    f32 x;
+
+    args = event->args;
+    a = evtGetValue(event, args[0]);
+    b = evtGetValue(event, args[1]);
+    cx = evtGetValue(event, args[2]);
+    cz = evtGetValue(event, args[3]);
+    op = _op;
+    mario = marioGetPtr();
+    party = partyGetPtr(0);
+    npc1 = evtNpcNameToPtr(event, "マルコ");
+    npc2 = evtNpcNameToPtr(event, "コルテス");
+    npc3 = evtNpcNameToPtr(event, "モニー");
+    npc4 = evtNpcNameToPtr(event, "ガラの悪い水夫");
+    npc5 = evtNpcNameToPtr(event, "ピートン");
+    npc6 = evtNpcNameToPtr(event, "オドオド水夫");
+    d = b - a;
+    ORBIT(0, mario->position);
+    ORBIT(1, party->position);
+    ORBIT(2, npc1->position);
+    ORBIT(3, npc2->position);
+    ORBIT(4, npc3->position);
+    ORBIT(5, npc4->position);
+    ORBIT(6, npc5->position);
+    ORBIT(7, npc6->position);
+    npc1->prevPosition = npc1->position;
+    npc2->prevPosition = npc2->position;
+    npc3->prevPosition = npc3->position;
+    npc4->prevPosition = npc4->position;
+    npc5->prevPosition = npc5->position;
+    npc6->prevPosition = npc6->position;
+    return EVT_RETURN_DONE;
+}
 
 /**
  * Loop that carries Mario, his partner and the deck NPCs around with the pirate ship as it turns,
@@ -2792,6 +2536,201 @@ static EVT_BEGIN(kaizoku_move_trace_se)
     DELETE_EVENT(LW(14))
     RETURN
 EVT_END()
+
+/**
+ * Picks a random mass NPC for a jumping sailor to land on:
+ * indices 205 to 304 for types 0 and 1, otherwise 10 to 104 or 105 to 204 at random.
+ */
+static NanNPC* random_choice_target(s32 type) {
+    NanNPCWork* wp = nanNPCWork;
+    s32 idx;
+
+    switch (type) {
+        case 0:
+        case 1:
+            idx = irand(100) + 205;
+            break;
+        case 2:
+        default:
+            if (irand(2)) {
+                idx = irand(95) + 10;
+            } else {
+                idx = irand(100) + 105;
+            }
+            break;
+    }
+    return &wp->npc[idx];
+}
+
+/**
+ * Per-frame behaviour of the sailors that jump during the fight (tobikakaru):
+ * wait a random time, hop in a parabola onto a random member of the other crowd (random_choice_target), wait, then hop back to their home spot;
+ * states 20 to 22 are the hop and the waits.
+ */
+static void tobikakari_seq00(NanNPC* npc) {
+    TobiWork* work = npc->tobi;
+    NanNPC* target;
+    s32 r;
+    s32 elapsed;
+    f32 t;
+
+    switch (npc->state) {
+        case 0:
+            r = irand(1000);
+            if (r < 100) {
+                npc->state = 10;
+            } else if (r < 200) {
+                npc->startTime = (s32)gp->renderTime;
+                npc->duration = irand(500) + 1;
+                npc->state = 21;
+            } else {
+                npc->startTime = (s32)gp->renderTime;
+                npc->duration = irand(2000) + 500;
+                npc->state = 22;
+            }
+            break;
+        case 10:
+            npc->startTime = (s32)gp->renderTime;
+            npc->start = npc->pos;
+            target = random_choice_target(work->type);
+            npc->target = target->tobi->pos;
+            npc->target.z += 2.0f;
+            npc->vy = -4.0f * (f32)(irand(30) + 100);
+            npc->dy = npc->target.y - npc->start.y - npc->vy;
+            npc->duration = irand(500) + 400;
+            if (npc->start.x < npc->target.x) {
+                npc->dir = 90.0f;
+            } else {
+                npc->dir = 270.0f;
+            }
+            npc->state = 20;
+            npc->nextState = 21;
+            break;
+        case 11:
+            npc->startTime = (s32)gp->renderTime;
+            npc->start = npc->pos;
+            npc->target = work->pos;
+            npc->vy = -4.0f * (f32)(irand(30) + 100);
+            npc->dy = npc->target.y - npc->start.y - npc->vy;
+            npc->duration = irand(500) + 400;
+            npc->state = 20;
+            npc->nextState = 22;
+            break;
+        case 20:
+            elapsed = OSTicksToMilliseconds((u32)gp->renderTime - (u32)npc->startTime);
+            if (elapsed < npc->duration) {
+                t = (f32)elapsed / (f32)npc->duration;
+                npc->pos.x = intplGetValue(EASING_LINEAR, npc->start.x, npc->target.x, elapsed, npc->duration);
+                npc->pos.z = intplGetValue(EASING_LINEAR, npc->start.z, npc->target.z, elapsed, npc->duration);
+                npc->pos.y = npc->start.y + t * (npc->vy * t + npc->dy);
+            } else {
+                npc->pos = npc->target;
+                npc->startTime = (s32)gp->renderTime;
+                npc->duration = irand(2000) + 500;
+                npc->state = npc->nextState;
+            }
+            break;
+        case 21:
+            if ((s32)OSTicksToMilliseconds((u32)gp->renderTime - (u32)npc->startTime) > npc->duration) {
+                npc->state = 11;
+            }
+            break;
+        case 22:
+            if ((s32)OSTicksToMilliseconds((u32)gp->renderTime - (u32)npc->startTime) > npc->duration) {
+                npc->state = 10;
+            }
+            break;
+    }
+}
+
+/**
+ * Script helper: allocates the jump work area (0x1310 bytes)
+ * and gives mass NPCs 10 to 304 the tobikakari_seq00 behaviour;
+ * running animation tables are assigned to ranges 10..104 and 205..304.
+ */
+static USER_FUNC(tobikakaru_init) {
+    NanNPCWork* wp = nanNPCWork;
+    TobiWork* p;
+    s32 i;
+    NanNPC* npc;
+
+    // Preserve capacity for 305 records; the loops below initialize 295.
+    p = _mapAlloc(305 * sizeof(TobiWork));
+    Tobidat = p;
+    for (i = 0; i < 95; i++) {
+        npc = &wp->npc[i + 10];
+        npc->func = tobikakari_seq00;
+        npc->state = 0;
+        npc->tobi = p;
+        evt_nannpc_set_animtbl_sub(npc, suifu_animtbl_run);
+        p->pos = npc->pos;
+        p->type = 0;
+        p++;
+    }
+    for (i = 0; i < 100; i++) {
+        npc = &wp->npc[i + 105];
+        npc->func = tobikakari_seq00;
+        npc->state = 0;
+        npc->tobi = p;
+        p->pos = npc->pos;
+        p->type = 1;
+        p++;
+    }
+    for (i = 0; i < 100; i++) {
+        npc = &wp->npc[i + 205];
+        npc->func = tobikakari_seq00;
+        npc->state = 0;
+        npc->tobi = p;
+        evt_nannpc_set_animtbl_sub(npc, dai3_animtbl_run);
+        p->pos = npc->pos;
+        p->type = 2;
+        p++;
+    }
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script helper: ends the jumping crowd, removing the per-frame functions of mass NPCs 10 to 304
+ * and restoring normal animation tables for ranges 10..104 and 205..304.
+ */
+static USER_FUNC(tobikakaru_end) {
+    NanNPCWork* wp = nanNPCWork;
+    NanNPC* npc;
+    s32 i;
+
+    for (i = 0; i < 95; i++) {
+        npc = &wp->npc[i + 10];
+        npc->func = NULL;
+        evt_nannpc_set_animtbl_sub(npc, suifu_animtbl);
+    }
+    for (i = 0; i < 100; i++) {
+        npc = &wp->npc[i + 105];
+        npc->func = NULL;
+    }
+    for (i = 0; i < 100; i++) {
+        npc = &wp->npc[i + 205];
+        npc->func = NULL;
+        evt_nannpc_set_animtbl_sub(npc, dai3_animtbl);
+    }
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script helper: turns two map points (x1, z1) and (x2, z2) into the heading (angle minus 90 degrees) a ship
+ * should face when moving between them; written to args[4].
+ */
+static USER_FUNC(ship_rotate) {
+    EvtWord* args = event->args;
+    f32 x1 = evtGetFloat(event, args[0]);
+    f32 z1 = evtGetFloat(event, args[1]);
+    f32 x2 = evtGetFloat(event, args[2]);
+    f32 z2 = evtGetFloat(event, args[3]);
+
+    f32 angle = angleABf(x1, -z1, x2, -z2);
+
+    evtSetFloat(event, args[4], angle - 90.0f);
+    return EVT_RETURN_DONE;
+}
 
 /**
  * Sails the pirate ship along the kaizoku_spline_dt spline toward the shore:
@@ -2946,6 +2885,67 @@ static EVT_BEGIN(tobikakari_kemuri)
     END_LOOP
     RETURN
 EVT_END()
+
+/** Like ship_rotate but the result is turned a further 180 degrees, for a ship that sails stern first. */
+static USER_FUNC(ship_rotate_rev) {
+    EvtWord* args = event->args;
+    f32 x1 = evtGetFloat(event, args[0]);
+    f32 z1 = evtGetFloat(event, args[1]);
+    f32 x2 = evtGetFloat(event, args[2]);
+    f32 z2 = evtGetFloat(event, args[3]);
+
+    f32 angle;
+
+    angle = angleABf(x1, -z1, x2, -z2);
+    evtSetFloat(event, args[4], 180.0f + (angle - 90.0f));
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script helper for the battle camera: given a ship position (args[0], args[1]) computes the angle (args[2])
+ * and distance (args[3]) from it to the camera centre at (70, 110, 0).
+ */
+static USER_FUNC(cam_test_init_func) {
+    EvtWord* args = event->args;
+    Vec b;
+    Vec a;
+    f32 dist;
+
+    a.x = evtGetValue(event, args[0]);
+    a.y = 110.0f;
+    a.z = evtGetValue(event, args[1]);
+    b.x = 70.0f;
+    b.y = 110.0f;
+    b.z = 0.0f;
+    dist = PSVECDistance(&a, &b);
+    evtSetFloat(event, args[2], 57.29579f * (f32)atan2(-(b.x - a.x), b.z - a.z));
+    evtSetFloat(event, args[3], dist);
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script helper for the battle camera: from an angle
+ * and distance (args[2], args[3]) around the centre (70, 110, 0) writes the camera x and z to args[0]
+ * and args[1].
+ */
+static USER_FUNC(cam_test_func) {
+    EvtWord* args = event->args;
+    s32* p0 = args++;
+    s32* p1 = args++;
+    f32 angle = evtGetFloat(event, *args++);
+    f32 dist = evtGetFloat(event, *args++);
+    f32 rad, s, c;
+    Vec center;
+    rad = 6.2831855f * angle / 360.0f;
+    s = sinf_l(rad);
+    c = cosf_l(rad);
+    center.x = 70.0f;
+    center.y = 110.0f;
+    center.z = 0.0f;
+    evtSetValue(event, *p0, center.x + dist * s);
+    evtSetValue(event, *p1, center.z - dist * c);
+    return EVT_RETURN_DONE;
+}
 
 /**
  * Orbits the camera slowly (0.27 degrees per frame) around the two ships during the pirates versus X-Nauts

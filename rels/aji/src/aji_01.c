@@ -1799,6 +1799,15 @@ static EVT_BEGIN(evt_key_init)
     RETURN
 EVT_END()
 
+/** Script helper: returns in args[0] the message text stg7_aji_password. */
+static USER_FUNC(get_password) {
+    EvtWord* args = event->args;
+
+    // Compare against the localized message text rather than a hard-coded password.
+    evtSetValue(event, args[0], (EvtWord)msgSearch("stg7_aji_password"));
+    return EVT_RETURN_DONE;
+}
+
 /**
  * Case script of the password door (A_kagi1): shows the paper-roll name-entry screen,
  * lets the player type a password and compares it with the text stg7_aji_password.
@@ -1874,6 +1883,14 @@ static EVT_BEGIN(peach_evt_stg1)
     CALL(evt_bero_mapchange, STRING("aji_02"), STRING("peach_evt_stg1"))
     RETURN
 EVT_END()
+
+/** Script function: sets Mario's pose to the animation named by args[0]; used while Mario is Peach. */
+static USER_FUNC(peach_set_pose) {
+    const char* pose = (const char*)evtGetValue(event, event->args[0]);
+    MarioWork* mario = marioGetPtr();
+    marioChgPose(pose);
+    return EVT_RETURN_DONE;
+}
 
 /**
  * Shows peach_aji_39 once, guarded by GSWF_AJI_01_PEACH_NOBODY_AROUND_SEEN,
@@ -2329,6 +2346,17 @@ static EVT_BEGIN(peach_evt_key_init)
 EVT_END()
 
 /**
+ * Script function: sets Mario's scale to 0 on all axes, making him invisible (toumei = transparent);
+ * used in Peach's sneaking scenes.
+ */
+static USER_FUNC(peach_evt_toumei) {
+    MarioWork* mario = marioGetPtr();
+
+    mario->scale.z = mario->scale.y = mario->scale.x = 0.0f;
+    return EVT_RETURN_DONE;
+}
+
+/**
  * Entry point for Peach's visits to the hall, called first by aji_01_init_evt:
  * sets up her NPCs, plays BGM_EVT_PEACH1 and starts the scene of the current story point (peach_evt_stg1_1 and
  * peach_evt_stg1_2, peach_evt_stg3, peach_evt_stg3_1, or the guard at the potion puzzle stage),
@@ -2689,31 +2717,3 @@ EVT_BEGIN(aji_01_init_evt)
     END_IF
     RETURN
 EVT_END()
-
-/** Script helper: returns in args[0] the message text stg7_aji_password. */
-static USER_FUNC(get_password) {
-    EvtWord* args = event->args;
-
-    // Compare against the localized message text rather than a hard-coded password.
-    evtSetValue(event, args[0], (EvtWord)msgSearch("stg7_aji_password"));
-    return EVT_RETURN_DONE;
-}
-
-/** Script function: sets Mario's pose to the animation named by args[0]; used while Mario is Peach. */
-static USER_FUNC(peach_set_pose) {
-    const char* pose = (const char*)evtGetValue(event, event->args[0]);
-    MarioWork* mario = marioGetPtr();
-    marioChgPose(pose);
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script function: sets Mario's scale to 0 on all axes, making him invisible (toumei = transparent);
- * used in Peach's sneaking scenes.
- */
-static USER_FUNC(peach_evt_toumei) {
-    MarioWork* mario = marioGetPtr();
-
-    mario->scale.z = mario->scale.y = mario->scale.x = 0.0f;
-    return EVT_RETURN_DONE;
-}

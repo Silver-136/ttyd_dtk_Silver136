@@ -69,6 +69,24 @@ static s32 key_tbl[] = {
 };
 
 /**
+ * Message callback for the black chest's speech: type 0 plays the chest's talking animation A_2, type 5 restarts it
+ * once it has looped, type 2 returns it to the idle S_1.
+ */
+static void majin_callback(s32 type) {
+    MapObjectEntry* mobj = mobjNameToPtr("box");
+
+    if (type == 0) {
+        animPoseSetAnim(mobj->poseId, "A_2", TRUE);
+    } else if (type == 5) {
+        if (animPoseGetLoopTimes(mobj->poseId) >= 1.0f) {
+            animPoseSetAnim(mobj->poseId, "A_2", TRUE);
+        }
+    } else if (type == 2) {
+        animPoseSetAnim(mobj->poseId, "S_1", TRUE);
+    }
+}
+
+/**
  * The black chest talks to Mario (mac_majin_01 to 12). The first time it introduces itself and sets
  * GSWF_TIK_19_BLACK_CHEST_FIRST_TALK_DONE. Later, without the Black Key it prints mac_majin_09; with it Mario
  * picks the key from his items (backing out gives mac_majin_11) and the key is used up (mac_majin_12).
@@ -217,6 +235,11 @@ static EVT_BEGIN(evt_majin)
     RETURN
 EVT_END()
 
+/** Script helper. Blocks while music channel 1 has a track that has not started. */
+static USER_FUNC(bgm_start_wait) {
+    return psndBGMStartCheck(1) ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
+}
+
 /**
  * Black chest "box" (GSWF_TIK_19_BLACK_CHEST_OPENED): gives ITEM_PLANE_CURSE, then the Paper Mage scene with
  * BGM_EVT_PERAMAJIN1 and the plane lecture (plane_majin_lecture), the partner's line mac_majin_20 and
@@ -316,26 +339,3 @@ EVT_BEGIN(tik_19_init_evt)
     CALL(evt_mobj_kururing_floor, STRING("kururin1"), 0, 0, 50, STRING("kakoi"), 125, GSWF_STARPIECE_30)
     RETURN
 EVT_END()
-
-/**
- * Message callback for the black chest's speech: type 0 plays the chest's talking animation A_2, type 5 restarts it
- * once it has looped, type 2 returns it to the idle S_1.
- */
-static void majin_callback(s32 type) {
-    MapObjectEntry* mobj = mobjNameToPtr("box");
-
-    if (type == 0) {
-        animPoseSetAnim(mobj->poseId, "A_2", TRUE);
-    } else if (type == 5) {
-        if (animPoseGetLoopTimes(mobj->poseId) >= 1.0f) {
-            animPoseSetAnim(mobj->poseId, "A_2", TRUE);
-        }
-    } else if (type == 2) {
-        animPoseSetAnim(mobj->poseId, "S_1", TRUE);
-    }
-}
-
-/** Script helper. Blocks while music channel 1 has a track that has not started. */
-static USER_FUNC(bgm_start_wait) {
-    return psndBGMStartCheck(1) ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
-}

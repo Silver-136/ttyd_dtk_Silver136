@@ -457,6 +457,122 @@ static USER_FUNC(effitemget_busaiku) {
 }
 
 /**
+ * Script helper: switches off the collision of the map object named args[0] ("me" for the running one): each
+ * of its (up to two) named hit objects gets HIT_FLAG_OFF through hitGrpFlagOn (nasi = none).
+ */
+USER_FUNC(lect_mobj_hit_nasi) {
+    const char* name = (const char*)evtGetValue(event, event->args[0]);
+    MapObjectEntry* mobj;
+    s32 i;
+
+    if (strcmp(name, "me") != 0) {
+        mobj = mobjNameToPtr(name);
+    } else {
+        mobj = event->thisMapObj;
+    }
+    for (i = 0; i < 2; i++) {
+        // hitObj[i].name is an array, so the NULL test is always true; the original code has it and MWCC still emits the compare.
+        if (mobj->hitObj[i].name != NULL && strcmp(mobj->hitObj[i].name, "") != 0) {
+            hitGrpFlagOn(mobj->hitObj[i].name, HIT_FLAG_OFF);
+        }
+    }
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script helper: computes a point args[1] units from the camera along the line to the partner's centre,
+ * and returns it in args[2..4]; the "itemget" effect is placed there.
+ * (0 uses the active partner, else partner 1.)
+ */
+static USER_FUNC(lect_itemget_kesan) {
+    EvtWord* args = event->args;
+    PartyEntry* party = partyGetPtr(args[0] == 0 ? partyCtrlNo : 1);
+    f32 dist = evtGetFloat(event, args[1]);
+    CameraEntry* cam = camGetPtr(CAMERA_3D);
+    Vec pos;
+    Vec dir;
+
+    if (party == NULL) {
+        evtSetFloat(event, args[2], 0.0f);
+        evtSetFloat(event, args[3], 0.0f);
+        evtSetFloat(event, args[4], 0.0f);
+        return EVT_RETURN_DONE;
+    }
+    pos = party->position;
+    pos.y += party->height / 2;
+    PSVECSubtract(&pos, &cam->cameraPos, &dir);
+    PSVECNormalize(&dir, &dir);
+    PSVECScale(&dir, &dir, dist);
+    PSVECAdd(&cam->cameraPos, &dir, &dir);
+    evtSetFloat(event, args[2], dir.x);
+    evtSetFloat(event, args[3], dir.y);
+    evtSetFloat(event, args[4], dir.z);
+    return EVT_RETURN_DONE;
+}
+
+/** Script helper: shows (args[1] non-zero) or removes the speech balloon effect of the named NPC, drawn on camera 7. */
+static USER_FUNC(lect_npc_balloon_on_off) {
+    EvtWord* args = event->args;
+    const char* name = (const char*)evtGetValue(event, args[0]);
+    NpcEntry* npc = evtNpcNameToPtr(event, name);
+
+    if (evtGetValue(event, args[1])) {
+        eff = effMarioBalloonEntry(1, npc);
+        ((MarioBalloonWork*)eff->userdata)->camera = CAMERA_3D_EFFECTB;
+    } else {
+        effDelete(eff);
+    }
+    return EVT_RETURN_DONE;
+}
+
+/** Script helper: changes which camera the named exclamation-bubble effect (fukidashi) draws on. */
+static USER_FUNC(efffukidashichange_cam) {
+    EvtWord* args = event->args;
+    const char* name = (const char*)evtGetValue(event, args[0]);
+    s32 camId = evtGetValue(event, args[1]);
+
+    ((EffFukidashiWork*)effNameToPtr(name)->userdata)->camera = camId;
+    return EVT_RETURN_DONE;
+}
+
+/** Linear interpolation for the partner glide, the same as lect_mario_ido_sub. */
+static f32 lect_party_ido_sub(f32 elapsed, f32 total, f32 end, f32 start) {
+    f32 rem = total - elapsed;
+
+    return (rem * end + elapsed * start) / total;
+}
+
+/**
+ * Script helper: slides the partner from its current position to (LW(0), LW(1), LW(2)) over args[1]
+ * milliseconds; the start position is stored in LW(3..5).
+ */
+static USER_FUNC(lect_party_ido_sum) {
+    EvtWord* args = event->args;
+    PartyEntry* party = partyGetPtr(args[0] == 0 ? partyCtrlNo : 1);
+    s32 frames = evtGetValue(event, args[1]);
+    s32 elapsed;
+
+    if (isFirstCall) {
+        wwstart = event->lifetime;
+        evtSetFloat(event, LW(3), party->position.x);
+        evtSetFloat(event, LW(4), party->position.y);
+        evtSetFloat(event, LW(5), party->position.z);
+        return EVT_RETURN_BLOCK;
+    }
+    elapsed = OSTicksToMilliseconds((u64)OSDiffTick(event->lifetime, wwstart));
+    if (elapsed > frames) {
+        elapsed = frames;
+    }
+    party->position.x = lect_party_ido_sub(elapsed, frames, evtGetFloat(event, LW(3)), evtGetFloat(event, LW(0)));
+    party->position.y = lect_party_ido_sub(elapsed, frames, evtGetFloat(event, LW(4)), evtGetFloat(event, LW(1)));
+    party->position.z = lect_party_ido_sub(elapsed, frames, evtGetFloat(event, LW(5)), evtGetFloat(event, LW(2)));
+    if (elapsed >= frames) {
+        return EVT_RETURN_DONE;
+    }
+    return EVT_RETURN_BLOCK;
+}
+
+/**
  * Starts the Koops lecture: Mario is placed at x=350 facing east, the camera frames the pair,
  * and the partner is walked in.
  */
@@ -610,6 +726,21 @@ static EVT_BEGIN(all_party_lecture_otosub)
 EVT_END()
 
 /**
+ * Script helper: turns the partner to face right
+ * or left according to args[0] (above 180 faces left, otherwise right).
+ */
+static USER_FUNC(set_dir) {
+    s32 dir = evtGetValue(event, event->args[0]);
+    PartyEntry* party = partyGetPtr(0);
+
+    if (party != NULL) {
+        s32 angle = dir > 180 ? 270 : 90;
+        party->displayDirectionTarget = party->displayDirection = 270 - angle;
+    }
+    return EVT_RETURN_DONE;
+}
+
+/**
  * Shared "partner joins" cutscene run by each partner's pickup scene (LW(8) the partner NPC, LW(9) the partner
  * id): the partner joins the party with a fanfare,
  * an "itemget" background appears and the lecture message for that partner plays, then the game is restored.
@@ -759,137 +890,6 @@ EVT_BEGIN(all_party_lecture)
     END_SWITCH
     RETURN
 EVT_END()
-
-/**
- * Script helper: switches off the collision of the map object named args[0] ("me" for the running one): each
- * of its (up to two) named hit objects gets HIT_FLAG_OFF through hitGrpFlagOn (nasi = none).
- */
-USER_FUNC(lect_mobj_hit_nasi) {
-    const char* name = (const char*)evtGetValue(event, event->args[0]);
-    MapObjectEntry* mobj;
-    s32 i;
-
-    if (strcmp(name, "me") != 0) {
-        mobj = mobjNameToPtr(name);
-    } else {
-        mobj = event->thisMapObj;
-    }
-    for (i = 0; i < 2; i++) {
-        // hitObj[i].name is an array, so the NULL test is always true; the original code has it and MWCC still emits the compare.
-        if (mobj->hitObj[i].name != NULL && strcmp(mobj->hitObj[i].name, "") != 0) {
-            hitGrpFlagOn(mobj->hitObj[i].name, HIT_FLAG_OFF);
-        }
-    }
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper: computes a point args[1] units from the camera along the line to the partner's centre,
- * and returns it in args[2..4]; the "itemget" effect is placed there.
- * (0 uses the active partner, else partner 1.)
- */
-static USER_FUNC(lect_itemget_kesan) {
-    EvtWord* args = event->args;
-    PartyEntry* party = partyGetPtr(args[0] == 0 ? partyCtrlNo : 1);
-    f32 dist = evtGetFloat(event, args[1]);
-    CameraEntry* cam = camGetPtr(CAMERA_3D);
-    Vec pos;
-    Vec dir;
-
-    if (party == NULL) {
-        evtSetFloat(event, args[2], 0.0f);
-        evtSetFloat(event, args[3], 0.0f);
-        evtSetFloat(event, args[4], 0.0f);
-        return EVT_RETURN_DONE;
-    }
-    pos = party->position;
-    pos.y += party->height / 2;
-    PSVECSubtract(&pos, &cam->cameraPos, &dir);
-    PSVECNormalize(&dir, &dir);
-    PSVECScale(&dir, &dir, dist);
-    PSVECAdd(&cam->cameraPos, &dir, &dir);
-    evtSetFloat(event, args[2], dir.x);
-    evtSetFloat(event, args[3], dir.y);
-    evtSetFloat(event, args[4], dir.z);
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper: shows (args[1] non-zero) or removes the speech balloon effect of the named NPC, drawn on camera 7. */
-static USER_FUNC(lect_npc_balloon_on_off) {
-    EvtWord* args = event->args;
-    const char* name = (const char*)evtGetValue(event, args[0]);
-    NpcEntry* npc = evtNpcNameToPtr(event, name);
-
-    if (evtGetValue(event, args[1])) {
-        eff = effMarioBalloonEntry(1, npc);
-        ((MarioBalloonWork*)eff->userdata)->camera = CAMERA_3D_EFFECTB;
-    } else {
-        effDelete(eff);
-    }
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper: changes which camera the named exclamation-bubble effect (fukidashi) draws on. */
-static USER_FUNC(efffukidashichange_cam) {
-    EvtWord* args = event->args;
-    const char* name = (const char*)evtGetValue(event, args[0]);
-    s32 camId = evtGetValue(event, args[1]);
-
-    ((EffFukidashiWork*)effNameToPtr(name)->userdata)->camera = camId;
-    return EVT_RETURN_DONE;
-}
-
-/** Linear interpolation for the partner glide, the same as lect_mario_ido_sub. */
-static f32 lect_party_ido_sub(f32 elapsed, f32 total, f32 end, f32 start) {
-    f32 rem = total - elapsed;
-
-    return (rem * end + elapsed * start) / total;
-}
-
-/**
- * Script helper: slides the partner from its current position to (LW(0), LW(1), LW(2)) over args[1]
- * milliseconds; the start position is stored in LW(3..5).
- */
-static USER_FUNC(lect_party_ido_sum) {
-    EvtWord* args = event->args;
-    PartyEntry* party = partyGetPtr(args[0] == 0 ? partyCtrlNo : 1);
-    s32 frames = evtGetValue(event, args[1]);
-    s32 elapsed;
-
-    if (isFirstCall) {
-        wwstart = event->lifetime;
-        evtSetFloat(event, LW(3), party->position.x);
-        evtSetFloat(event, LW(4), party->position.y);
-        evtSetFloat(event, LW(5), party->position.z);
-        return EVT_RETURN_BLOCK;
-    }
-    elapsed = OSTicksToMilliseconds((u64)OSDiffTick(event->lifetime, wwstart));
-    if (elapsed > frames) {
-        elapsed = frames;
-    }
-    party->position.x = lect_party_ido_sub(elapsed, frames, evtGetFloat(event, LW(3)), evtGetFloat(event, LW(0)));
-    party->position.y = lect_party_ido_sub(elapsed, frames, evtGetFloat(event, LW(4)), evtGetFloat(event, LW(1)));
-    party->position.z = lect_party_ido_sub(elapsed, frames, evtGetFloat(event, LW(5)), evtGetFloat(event, LW(2)));
-    if (elapsed >= frames) {
-        return EVT_RETURN_DONE;
-    }
-    return EVT_RETURN_BLOCK;
-}
-
-/**
- * Script helper: turns the partner to face right
- * or left according to args[0] (above 180 faces left, otherwise right).
- */
-static USER_FUNC(set_dir) {
-    s32 dir = evtGetValue(event, event->args[0]);
-    PartyEntry* party = partyGetPtr(0);
-
-    if (party != NULL) {
-        s32 angle = dir > 180 ? 270 : 90;
-        party->displayDirectionTarget = party->displayDirection = 270 - angle;
-    }
-    return EVT_RETURN_DONE;
-}
 
 /** Script helper: blocks until background music channel 1 has started. */
 static USER_FUNC(bgm_start_wait) {

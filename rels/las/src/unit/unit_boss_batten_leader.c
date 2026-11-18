@@ -1394,6 +1394,68 @@ static EVT_BEGIN(light_rod_anim_rtn)
 EVT_END()
 
 /**
+ * Script helper (args[0] = battle unit, args[1] = part number): returns in args[2] the part's current animation
+ * (animPoseGetCurrentAnim).
+ */
+static USER_FUNC(btlevtcmd_AnimeGetPose) {
+    s32 id;
+    EvtWord* args = event->args;
+    s32 partNo;
+    BattleUnitPart* part;
+
+    id = evtGetValue(event, args[0]);
+    id = BattleTransID(event, id);
+    partNo = evtGetValue(event, args[1]);
+    part = BattleGetUnitPartsPtr(id, partNo);
+
+    evtSetValue(event, args[2], (EvtWord)animPoseGetCurrentAnim(part->poseId));
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script helper: saves the 16 local variables LW(0..15) of the running event into the static array xlw
+ * so a sub-script can use the registers and restore them.
+ */
+static USER_FUNC(enzan_lw_save) {
+    s32 i;
+
+    for (i = 0; i < 16; i++) {
+        xlw[i] = event->lwData[i];
+    }
+    return EVT_RETURN_DONE;
+}
+
+/** Script helper: restores LW(0..15) from the array saved by enzan_lw_save. */
+static USER_FUNC(enzan_lw_load) {
+    s32 i;
+
+    for (i = 0; i < 16; i++) {
+        event->lwData[i] = xlw[i];
+    }
+    return EVT_RETURN_DONE;
+}
+
+/** Script helper: saves LW(0..15) into a second static array xlw2 (a separate slot from enzan_lw_save). */
+static USER_FUNC(enzan_lw_save2) {
+    s32 i;
+
+    for (i = 0; i < 16; i++) {
+        xlw2[i] = event->lwData[i];
+    }
+    return EVT_RETURN_DONE;
+}
+
+/** Script helper: restores LW(0..15) from the second array saved by enzan_lw_save2. */
+static USER_FUNC(enzan_lw_load2) {
+    s32 i;
+
+    for (i = 0; i < 16; i++) {
+        event->lwData[i] = xlw2[i];
+    }
+    return EVT_RETURN_DONE;
+}
+
+/**
  * Event script: when Grodus's body pose changes, chooses the matching lamp sequences.
  * For the casting poses A_1B, A_1C and A_2 the head lamps use their blinking sequences and the power lamp its normal sequence;
  * other poses select their own normal, quick, random, lit, dark or blinking sequences; restarts the lamp events accordingly.
@@ -1526,6 +1588,18 @@ static EVT_BEGIN(light_pose_change)
     RETURN
 EVT_END()
 
+/** Script helper: copies the string args[0] (at most 16 characters) into the static buffer xmemo. */
+static USER_FUNC(datastrcopy) {
+    s8* s = (s8*)evtGetValue(event, event->args[0]);
+    s32 i;
+
+    for (i = 0; i < 16 && s[i] != 0; i++) {
+        xmemo[i] = s[i];
+    }
+    xmemo[i] = 0;
+    return EVT_RETURN_DONE;
+}
+
 /**
  * Event script: watches Grodus's body animation every frame and runs light_pose_change whenever it changes,
  * so his lamps follow his pose.
@@ -1541,6 +1615,133 @@ static EVT_BEGIN(maiframeanimcheck)
     END_LOOP
     RETURN
 EVT_END()
+
+/**
+ * Script helper: starts maiframeanimcheck as a new event for this unit,
+ * storing it in xevt and giving it the xmemo buffer to compare poses against.
+ */
+static USER_FUNC(pose_check_evt_run) {
+    xevt = evtEntryType(maiframeanimcheck, event->priority, 0, event->type);
+    xevt->unitId = event->unitId;
+    xevt->ownerNPC = event->ownerNPC;
+    xmemo[0] = 0;
+    xevt->lwData[0] = (EvtWord)xmemo;
+    xevt->uwBase = event->uwBase;
+    xevt->ufBase = event->ufBase;
+    return EVT_RETURN_DONE;
+}
+
+/** Script helper: stops the pose-watching event that pose_check_evt_run started. */
+static USER_FUNC(pose_check_evt_stop) {
+    evtDeleteID(xevt->eventId);
+    return EVT_RETURN_DONE;
+}
+
+/** Script helper: sets hitOffsetX of part args[1] of the unit args[0] to args[2]. */
+static USER_FUNC(btl_hitoffsetx) {
+    s32 id;
+    EvtWord* args = event->args;
+    s32 partNo;
+    BattleUnitPart* part;
+
+    id = evtGetValue(event, args[0]);
+    id = BattleTransID(event, id);
+    partNo = evtGetValue(event, args[1]);
+    part = BattleGetUnitPartsPtr(id, partNo);
+
+    part->hitOffsetX = evtGetValue(event, args[2]);
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script helper: hooks the display callback _light_point_callback onto Grodus's body pose
+ * and hides the five lamp parts (3..7), which are drawn through the callback instead.
+ */
+static USER_FUNC(_set_draw_callback) {
+    BattleWork* wp = _battleWorkPointer;
+    s32 id = BattleTransID(event, UNIT_ID_SELF);
+    BattleUnit* unit = BattleGetUnitPtr(wp, id);
+    BattleUnitPart* part = BtlUnit_GetPartsPtr(unit, 1);
+    BattleUnitPart* p3;
+    BattleUnitPart* p4;
+    BattleUnitPart* p5;
+    BattleUnitPart* p6;
+    BattleUnitPart* p7;
+
+    animPoseSetDispCallBack(part->poseId, _light_point_callback, part);
+    p3 = BtlUnit_GetPartsPtr(unit, 3);
+    p4 = BtlUnit_GetPartsPtr(unit, 4);
+    p5 = BtlUnit_GetPartsPtr(unit, 5);
+    p6 = BtlUnit_GetPartsPtr(unit, 6);
+    p7 = BtlUnit_GetPartsPtr(unit, 7);
+    p3->attributes |= kHidden;
+    p4->attributes |= kHidden;
+    p5->attributes |= kHidden;
+    p6->attributes |= kHidden;
+    p7->attributes |= kHidden;
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Display callback for Grodus: when the pose group being drawn is one of his five lamp locators (locator6, 9, 8,
+ * 7, 5), draws the matching lamp part's plane shape at that locator.
+ */
+static void _light_point_callback(void* userdata, s32 group, Mtx* modeling) {
+    BattleUnitPart* part = userdata;
+    BattleUnit* unit;
+    s32 poseId;
+    s32 idx;
+    s32 pose;
+    s32 sh;
+
+    poseId = part->poseId;
+    unit = part->owner;
+
+    if (strcmp("locator6", animPoseGetGroupName(poseId, group)) == 0) {
+        idx = 0;
+    } else if (strcmp("locator9", animPoseGetGroupName(poseId, group)) == 0) {
+        idx = 1;
+    } else if (strcmp("locator8", animPoseGetGroupName(poseId, group)) == 0) {
+        idx = 2;
+    } else if (strcmp("locator7", animPoseGetGroupName(poseId, group)) == 0) {
+        idx = 3;
+    } else if (strcmp("locator5", animPoseGetGroupName(poseId, group)) == 0) {
+        idx = 4;
+    } else {
+        idx = -1;
+    }
+    switch (idx) {
+        case 0: {
+                s32 pose = BtlUnit_GetPartsPtr(unit, 3)->poseId;
+                s32 sh = animPoseGetShapeIdx(pose, "pPlaneShape34");
+                animPoseDrawShape(pose, sh);
+            }
+            break;
+        case 1: {
+                s32 pose = BtlUnit_GetPartsPtr(unit, 4)->poseId;
+                s32 sh = animPoseGetShapeIdx(pose, "pPlaneShape37");
+                animPoseDrawShape(pose, sh);
+            }
+            break;
+        case 2: {
+                s32 pose = BtlUnit_GetPartsPtr(unit, 5)->poseId;
+                s32 sh = animPoseGetShapeIdx(pose, "pPlaneShape36");
+                animPoseDrawShape(pose, sh);
+            }
+            break;
+        case 3: {
+                s32 pose = BtlUnit_GetPartsPtr(unit, 6)->poseId;
+                s32 sh = animPoseGetShapeIdx(pose, "pPlaneShape35");
+                animPoseDrawShape(pose, sh);
+            }
+            break;
+        case 4:
+            pose = BtlUnit_GetPartsPtr(unit, 7)->poseId;
+            sh = animPoseGetShapeIdx(pose, "pPlaneShape36");
+            animPoseDrawShape(pose, sh);
+            break;
+    }
+}
 
 /**
  * Init event of Sir Grodus: installs his wait, phase, attack, damage, confusion and entry events,
@@ -2868,207 +3069,6 @@ static EVT_BEGIN(wait_event)
     END_LOOP
     RETURN
 EVT_END()
-
-/**
- * Script helper (args[0] = battle unit, args[1] = part number): returns in args[2] the part's current animation
- * (animPoseGetCurrentAnim).
- */
-static USER_FUNC(btlevtcmd_AnimeGetPose) {
-    s32 id;
-    EvtWord* args = event->args;
-    s32 partNo;
-    BattleUnitPart* part;
-
-    id = evtGetValue(event, args[0]);
-    id = BattleTransID(event, id);
-    partNo = evtGetValue(event, args[1]);
-    part = BattleGetUnitPartsPtr(id, partNo);
-
-    evtSetValue(event, args[2], (EvtWord)animPoseGetCurrentAnim(part->poseId));
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper: saves the 16 local variables LW(0..15) of the running event into the static array xlw
- * so a sub-script can use the registers and restore them.
- */
-static USER_FUNC(enzan_lw_save) {
-    s32 i;
-
-    for (i = 0; i < 16; i++) {
-        xlw[i] = event->lwData[i];
-    }
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper: restores LW(0..15) from the array saved by enzan_lw_save. */
-static USER_FUNC(enzan_lw_load) {
-    s32 i;
-
-    for (i = 0; i < 16; i++) {
-        event->lwData[i] = xlw[i];
-    }
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper: saves LW(0..15) into a second static array xlw2 (a separate slot from enzan_lw_save). */
-static USER_FUNC(enzan_lw_save2) {
-    s32 i;
-
-    for (i = 0; i < 16; i++) {
-        xlw2[i] = event->lwData[i];
-    }
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper: restores LW(0..15) from the second array saved by enzan_lw_save2. */
-static USER_FUNC(enzan_lw_load2) {
-    s32 i;
-
-    for (i = 0; i < 16; i++) {
-        event->lwData[i] = xlw2[i];
-    }
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper: copies the string args[0] (at most 16 characters) into the static buffer xmemo. */
-static USER_FUNC(datastrcopy) {
-    s8* s = (s8*)evtGetValue(event, event->args[0]);
-    s32 i;
-
-    for (i = 0; i < 16 && s[i] != 0; i++) {
-        xmemo[i] = s[i];
-    }
-    xmemo[i] = 0;
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper: starts maiframeanimcheck as a new event for this unit,
- * storing it in xevt and giving it the xmemo buffer to compare poses against.
- */
-static USER_FUNC(pose_check_evt_run) {
-    xevt = evtEntryType(maiframeanimcheck, event->priority, 0, event->type);
-    xevt->unitId = event->unitId;
-    xevt->ownerNPC = event->ownerNPC;
-    xmemo[0] = 0;
-    xevt->lwData[0] = (EvtWord)xmemo;
-    xevt->uwBase = event->uwBase;
-    xevt->ufBase = event->ufBase;
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper: stops the pose-watching event that pose_check_evt_run started. */
-static USER_FUNC(pose_check_evt_stop) {
-    evtDeleteID(xevt->eventId);
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper: sets hitOffsetX of part args[1] of the unit args[0] to args[2]. */
-static USER_FUNC(btl_hitoffsetx) {
-    s32 id;
-    EvtWord* args = event->args;
-    s32 partNo;
-    BattleUnitPart* part;
-
-    id = evtGetValue(event, args[0]);
-    id = BattleTransID(event, id);
-    partNo = evtGetValue(event, args[1]);
-    part = BattleGetUnitPartsPtr(id, partNo);
-
-    part->hitOffsetX = evtGetValue(event, args[2]);
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper: hooks the display callback _light_point_callback onto Grodus's body pose
- * and hides the five lamp parts (3..7), which are drawn through the callback instead.
- */
-static USER_FUNC(_set_draw_callback) {
-    BattleWork* wp = _battleWorkPointer;
-    s32 id = BattleTransID(event, UNIT_ID_SELF);
-    BattleUnit* unit = BattleGetUnitPtr(wp, id);
-    BattleUnitPart* part = BtlUnit_GetPartsPtr(unit, 1);
-    BattleUnitPart* p3;
-    BattleUnitPart* p4;
-    BattleUnitPart* p5;
-    BattleUnitPart* p6;
-    BattleUnitPart* p7;
-
-    animPoseSetDispCallBack(part->poseId, _light_point_callback, part);
-    p3 = BtlUnit_GetPartsPtr(unit, 3);
-    p4 = BtlUnit_GetPartsPtr(unit, 4);
-    p5 = BtlUnit_GetPartsPtr(unit, 5);
-    p6 = BtlUnit_GetPartsPtr(unit, 6);
-    p7 = BtlUnit_GetPartsPtr(unit, 7);
-    p3->attributes |= kHidden;
-    p4->attributes |= kHidden;
-    p5->attributes |= kHidden;
-    p6->attributes |= kHidden;
-    p7->attributes |= kHidden;
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Display callback for Grodus: when the pose group being drawn is one of his five lamp locators (locator6, 9, 8,
- * 7, 5), draws the matching lamp part's plane shape at that locator.
- */
-static void _light_point_callback(void* userdata, s32 group, Mtx* modeling) {
-    BattleUnitPart* part = userdata;
-    BattleUnit* unit;
-    s32 poseId;
-    s32 idx;
-    s32 pose;
-    s32 sh;
-
-    poseId = part->poseId;
-    unit = part->owner;
-
-    if (strcmp("locator6", animPoseGetGroupName(poseId, group)) == 0) {
-        idx = 0;
-    } else if (strcmp("locator9", animPoseGetGroupName(poseId, group)) == 0) {
-        idx = 1;
-    } else if (strcmp("locator8", animPoseGetGroupName(poseId, group)) == 0) {
-        idx = 2;
-    } else if (strcmp("locator7", animPoseGetGroupName(poseId, group)) == 0) {
-        idx = 3;
-    } else if (strcmp("locator5", animPoseGetGroupName(poseId, group)) == 0) {
-        idx = 4;
-    } else {
-        idx = -1;
-    }
-    switch (idx) {
-        case 0: {
-                s32 pose = BtlUnit_GetPartsPtr(unit, 3)->poseId;
-                s32 sh = animPoseGetShapeIdx(pose, "pPlaneShape34");
-                animPoseDrawShape(pose, sh);
-            }
-            break;
-        case 1: {
-                s32 pose = BtlUnit_GetPartsPtr(unit, 4)->poseId;
-                s32 sh = animPoseGetShapeIdx(pose, "pPlaneShape37");
-                animPoseDrawShape(pose, sh);
-            }
-            break;
-        case 2: {
-                s32 pose = BtlUnit_GetPartsPtr(unit, 5)->poseId;
-                s32 sh = animPoseGetShapeIdx(pose, "pPlaneShape36");
-                animPoseDrawShape(pose, sh);
-            }
-            break;
-        case 3: {
-                s32 pose = BtlUnit_GetPartsPtr(unit, 6)->poseId;
-                s32 sh = animPoseGetShapeIdx(pose, "pPlaneShape35");
-                animPoseDrawShape(pose, sh);
-            }
-            break;
-        case 4:
-            pose = BtlUnit_GetPartsPtr(unit, 7)->poseId;
-            sh = animPoseGetShapeIdx(pose, "pPlaneShape36");
-            animPoseDrawShape(pose, sh);
-            break;
-    }
-}
 
 // Descriptive name (not in the symbol maps); placeholder unk_las_0000d538, JP las .text+0xD46C. See docs/NAME_PROVENANCE.md.
 #if VERSION >= VERSION_JP

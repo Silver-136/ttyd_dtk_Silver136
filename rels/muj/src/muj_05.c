@@ -116,65 +116,6 @@ static TreeAccess tree_tbl[6];
 static KusaAccess kusa_tbl[8];
 EvtWord muj_05_init_evt[146];
 
-/**
- * Script helper for the skull rock puzzle: compares the seven eye strikes Mario has made (command_work) with the
- * correct sequence (command_seikai).
- * Writes 0 to args[0] at the first empty slot, 1 at the first mismatch encountered before it, and 2 if all seven match.
- */
-static USER_FUNC(evt_dokuroiwa_command_check) {
-    s32 result;
-    s32 i;
-    EvtWord* args = event->args;
-
-    // retail runs this empty loop (mtctr/bdnz).
-    for (i = 0; i < 7; i++) {
-    }
-
-    // Report 0 for the first unfilled slot, 1 for a mismatch, or 2 when all seven match.
-    result = 2;
-    for (i = 0; i < 7; i++) {
-        s32 cmd = command_work[i];
-        if (cmd == 0) {
-            result = 0;
-            break;
-        }
-        if (cmd != command_seikai[i]) {
-            result = 1;
-            break;
-        }
-    }
-    evtSetValue(event, args[0], result);
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper: records one eye strike of the skull rock puzzle:
- * args[0] is the slot (0 to 6), args[1] the eye hit (1 = blue, 2 = red).
- */
-static USER_FUNC(evt_dokuroiwa_command_set) {
-    EvtWord* args = event->args;
-    s32 index = evtGetValue(event, args[0]);
-
-    // The caller must supply a nonnegative index; only the upper bound is checked here.
-    if (index < 7) {
-        command_work[index] = evtGetValue(event, args[1]);
-    }
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper: clears the seven recorded eye strikes so the puzzle starts over. */
-static USER_FUNC(evt_dokuroiwa_command_clear) {
-    memset(command_work, 0, 7 * sizeof(s32));
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper: allocates the seven-word eye strike buffer from map memory and clears it. */
-static USER_FUNC(evt_dokuroiwa_command_init) {
-    command_work = _mapAlloc(7 * sizeof(s32));
-    memset(command_work, 0, 7 * sizeof(s32));
-    return EVT_RETURN_DONE;
-}
-
 /** Turns the NPC in LW(10) from LW(1) to LW(2) degrees over LW(3) ms; Bobbery uses it to look around while he talks. */
 static EVT_BEGIN(sanders_rotate)
     CALL(evt_sub_intpl_msec_init, EASING_LINEAR, LW(1), LW(2), LW(3))
@@ -949,6 +890,58 @@ static EVT_BEGIN(case_event_delete)
 EVT_END()
 
 /**
+ * Script helper for the skull rock puzzle: compares the seven eye strikes Mario has made (command_work) with the
+ * correct sequence (command_seikai).
+ * Writes 0 to args[0] at the first empty slot, 1 at the first mismatch encountered before it, and 2 if all seven match.
+ */
+static USER_FUNC(evt_dokuroiwa_command_check) {
+    s32 result;
+    s32 i;
+    EvtWord* args = event->args;
+
+    // retail runs this empty loop (mtctr/bdnz).
+    for (i = 0; i < 7; i++) {
+    }
+
+    // Report 0 for the first unfilled slot, 1 for a mismatch, or 2 when all seven match.
+    result = 2;
+    for (i = 0; i < 7; i++) {
+        s32 cmd = command_work[i];
+        if (cmd == 0) {
+            result = 0;
+            break;
+        }
+        if (cmd != command_seikai[i]) {
+            result = 1;
+            break;
+        }
+    }
+    evtSetValue(event, args[0], result);
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script helper: records one eye strike of the skull rock puzzle:
+ * args[0] is the slot (0 to 6), args[1] the eye hit (1 = blue, 2 = red).
+ */
+static USER_FUNC(evt_dokuroiwa_command_set) {
+    EvtWord* args = event->args;
+    s32 index = evtGetValue(event, args[0]);
+
+    // The caller must supply a nonnegative index; only the upper bound is checked here.
+    if (index < 7) {
+        command_work[index] = evtGetValue(event, args[1]);
+    }
+    return EVT_RETURN_DONE;
+}
+
+/** Script helper: clears the seven recorded eye strikes so the puzzle starts over. */
+static USER_FUNC(evt_dokuroiwa_command_clear) {
+    memset(command_work, 0, 7 * sizeof(s32));
+    return EVT_RETURN_DONE;
+}
+
+/**
  * The penalty for a wrong eye sequence: Flavio's humming stops,
  * the three Embers (A, B, C) glide down beside Mario,
  * he turns to them with a "!" bubble and fights them (battle info 7).
@@ -1339,6 +1332,13 @@ static EVT_BEGIN(dokuroiwa_bomb)
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
+
+/** Script helper: allocates the seven-word eye strike buffer from map memory and clears it. */
+static USER_FUNC(evt_dokuroiwa_command_init) {
+    command_work = _mapAlloc(7 * sizeof(s32));
+    memset(command_work, 0, 7 * sizeof(s32));
+    return EVT_RETURN_DONE;
+}
 
 /**
  * Initialises the skull rock: hides the jewel, turns off the hit object A_dkr_iwa_futa02, clears the puzzle

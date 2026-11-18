@@ -93,154 +93,6 @@ static EvtWord party_change_event[196];
 static EvtWord wait_event_fmario[6];
 
 /**
- * Script helper: waits until the battle animation set of the party member unit args[0] (Goombella, Koops, Yoshi
- * or Flurrie, by unit kind) has loaded; blocks until BattlePartyAnimeLoad returns true.
- */
-static USER_FUNC(_anime_load_wait) {
-    BattleWork* wp = _battleWorkPointer;
-    EvtWord* args = event->args;
-    s32 id = evtGetValue(event, *args++);
-    BattleUnit* unit = BattleGetUnitPtr(wp, BattleTransID(event, id));
-    s32 anime;
-
-    switch (unit->currentKind) {
-        case UNIT_GOOMBELLA_CHAPTER4:
-            anime = 0xE0;
-            break;
-        case UNIT_KOOPS_CHAPTER4:
-            anime = 0xE1;
-            break;
-        case UNIT_FLURRIE_CHAPTER4:
-            anime = 0xE3;
-            break;
-        case UNIT_YOSHI_CHAPTER4:
-        default:
-            anime = 0xE2;
-            break;
-    }
-    if (BattlePartyAnimeLoad(anime)) {
-        return EVT_RETURN_DONE;
-    }
-    return EVT_RETURN_BLOCK;
-}
-
-/**
- * Script helper: starts loading the battle animation set of the party member unit args[0] (Goombella, Koops,
- * Yoshi or Flurrie by unit kind).
- */
-static USER_FUNC(_anime_load) {
-    BattleWork* wp = _battleWorkPointer;
-    EvtWord* args = event->args;
-    s32 id = evtGetValue(event, *args++);
-    BattleUnit* unit = BattleGetUnitPtr(wp, BattleTransID(event, id));
-    s32 anime;
-
-    switch (unit->currentKind) {
-        case UNIT_GOOMBELLA_CHAPTER4:
-            anime = 0xE0;
-            break;
-        case UNIT_KOOPS_CHAPTER4:
-            anime = 0xE1;
-            break;
-        case UNIT_FLURRIE_CHAPTER4:
-            anime = 0xE3;
-            break;
-        case UNIT_YOSHI_CHAPTER4:
-        default:
-            anime = 0xE2;
-            break;
-    }
-    BattlePartyAnimeLoad(anime);
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper: saves the HP, FP, size, status
- * and (US and later) disabled commands of the party member unit args[1] into the fake Mario's table,
- * so they are kept while that partner is swapped out.
- */
-static USER_FUNC(_save_param) {
-    BattleWork* wp = _battleWorkPointer;
-    EvtWord* args = event->args;
-    s32 id1 = evtGetValue(event, args[0]);
-    s32 id2 = evtGetValue(event, args[1]);
-    BattleUnit* unit = BattleGetUnitPtr(wp, BattleTransID(event, id1));
-    BattleUnit* party = BattleGetUnitPtr(wp, BattleTransID(event, id2));
-    FakerParam* params = (FakerParam*)unit->countersetWeapon;
-    FakerParam* p;
-
-    switch (party->currentKind) {
-        case UNIT_GOOMBELLA_CHAPTER4:
-            p = &params[0];
-            break;
-        case UNIT_KOOPS_CHAPTER4:
-            p = &params[1];
-            break;
-        case UNIT_FLURRIE_CHAPTER4:
-            p = &params[2];
-            break;
-        case UNIT_YOSHI_CHAPTER4:
-            p = &params[3];
-            break;
-    }
-    p->size = party->sizeMultiplier;
-    p->statusFlags = party->statusFlags;
-#if VERSION >= VERSION_US
-    p->commandDisabled[0] = party->usCommandDisabled[0];
-    p->commandDisabled[1] = party->usCommandDisabled[1];
-#endif
-    p->status = party->statusTurns;
-    p->maxHp = party->maxHp;
-    p->currentHp = party->currentHp;
-    p->maxFp = party->maxFp;
-    p->currentFp = party->currentFp;
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper: restores the saved HP, FP, size,
- * status and (US and later) disabled commands of the party member unit args[1] from the fake Mario's table
- * when the partner is swapped back in.
- */
-static USER_FUNC(_load_param) {
-    BattleWork* wp = _battleWorkPointer;
-    EvtWord* args = event->args;
-    s32 id1 = evtGetValue(event, args[0]);
-    s32 id2 = evtGetValue(event, args[1]);
-    BattleUnit* unit = BattleGetUnitPtr(wp, BattleTransID(event, id1));
-    BattleUnit* party = BattleGetUnitPtr(wp, BattleTransID(event, id2));
-    FakerParam* params = (FakerParam*)unit->countersetWeapon;
-    FakerParam* p;
-
-    switch (party->currentKind) {
-        case UNIT_GOOMBELLA_CHAPTER4:
-            p = &params[0];
-            break;
-        case UNIT_KOOPS_CHAPTER4:
-            p = &params[1];
-            break;
-        case UNIT_FLURRIE_CHAPTER4:
-            p = &params[2];
-            break;
-        case UNIT_YOSHI_CHAPTER4:
-            p = &params[3];
-            break;
-    }
-    party->sizeMultiplier = p->size;
-    party->statusFlags = p->statusFlags;
-#if VERSION >= VERSION_US
-    party->usCommandDisabled[0] = p->commandDisabled[0];
-    party->usCommandDisabled[1] = p->commandDisabled[1];
-#endif
-    party->statusTurns = p->status;
-    party->maxHp = p->maxHp;
-    party->currentHp = p->currentHp;
-    party->maxFp = p->maxFp;
-    party->currentFp = p->currentFp;
-    return EVT_RETURN_DONE;
-}
-
-/**
  * Unit kind of Doopliss as Mario:
  * 40 HP, level 54, with its size, sounds and the links to its parts, status vulnerability and scripts.
  */
@@ -617,6 +469,154 @@ static EVT_BEGIN(gparty_zoom)
     WAIT_FRAMES(37)
     RETURN
 EVT_END()
+
+/**
+ * Script helper: waits until the battle animation set of the party member unit args[0] (Goombella, Koops, Yoshi
+ * or Flurrie, by unit kind) has loaded; blocks until BattlePartyAnimeLoad returns true.
+ */
+static USER_FUNC(_anime_load_wait) {
+    BattleWork* wp = _battleWorkPointer;
+    EvtWord* args = event->args;
+    s32 id = evtGetValue(event, *args++);
+    BattleUnit* unit = BattleGetUnitPtr(wp, BattleTransID(event, id));
+    s32 anime;
+
+    switch (unit->currentKind) {
+        case UNIT_GOOMBELLA_CHAPTER4:
+            anime = 0xE0;
+            break;
+        case UNIT_KOOPS_CHAPTER4:
+            anime = 0xE1;
+            break;
+        case UNIT_FLURRIE_CHAPTER4:
+            anime = 0xE3;
+            break;
+        case UNIT_YOSHI_CHAPTER4:
+        default:
+            anime = 0xE2;
+            break;
+    }
+    if (BattlePartyAnimeLoad(anime)) {
+        return EVT_RETURN_DONE;
+    }
+    return EVT_RETURN_BLOCK;
+}
+
+/**
+ * Script helper: starts loading the battle animation set of the party member unit args[0] (Goombella, Koops,
+ * Yoshi or Flurrie by unit kind).
+ */
+static USER_FUNC(_anime_load) {
+    BattleWork* wp = _battleWorkPointer;
+    EvtWord* args = event->args;
+    s32 id = evtGetValue(event, *args++);
+    BattleUnit* unit = BattleGetUnitPtr(wp, BattleTransID(event, id));
+    s32 anime;
+
+    switch (unit->currentKind) {
+        case UNIT_GOOMBELLA_CHAPTER4:
+            anime = 0xE0;
+            break;
+        case UNIT_KOOPS_CHAPTER4:
+            anime = 0xE1;
+            break;
+        case UNIT_FLURRIE_CHAPTER4:
+            anime = 0xE3;
+            break;
+        case UNIT_YOSHI_CHAPTER4:
+        default:
+            anime = 0xE2;
+            break;
+    }
+    BattlePartyAnimeLoad(anime);
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script helper: saves the HP, FP, size, status
+ * and (US and later) disabled commands of the party member unit args[1] into the fake Mario's table,
+ * so they are kept while that partner is swapped out.
+ */
+static USER_FUNC(_save_param) {
+    BattleWork* wp = _battleWorkPointer;
+    EvtWord* args = event->args;
+    s32 id1 = evtGetValue(event, args[0]);
+    s32 id2 = evtGetValue(event, args[1]);
+    BattleUnit* unit = BattleGetUnitPtr(wp, BattleTransID(event, id1));
+    BattleUnit* party = BattleGetUnitPtr(wp, BattleTransID(event, id2));
+    FakerParam* params = (FakerParam*)unit->countersetWeapon;
+    FakerParam* p;
+
+    switch (party->currentKind) {
+        case UNIT_GOOMBELLA_CHAPTER4:
+            p = &params[0];
+            break;
+        case UNIT_KOOPS_CHAPTER4:
+            p = &params[1];
+            break;
+        case UNIT_FLURRIE_CHAPTER4:
+            p = &params[2];
+            break;
+        case UNIT_YOSHI_CHAPTER4:
+            p = &params[3];
+            break;
+    }
+    p->size = party->sizeMultiplier;
+    p->statusFlags = party->statusFlags;
+#if VERSION >= VERSION_US
+    p->commandDisabled[0] = party->usCommandDisabled[0];
+    p->commandDisabled[1] = party->usCommandDisabled[1];
+#endif
+    p->status = party->statusTurns;
+    p->maxHp = party->maxHp;
+    p->currentHp = party->currentHp;
+    p->maxFp = party->maxFp;
+    p->currentFp = party->currentFp;
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script helper: restores the saved HP, FP, size,
+ * status and (US and later) disabled commands of the party member unit args[1] from the fake Mario's table
+ * when the partner is swapped back in.
+ */
+static USER_FUNC(_load_param) {
+    BattleWork* wp = _battleWorkPointer;
+    EvtWord* args = event->args;
+    s32 id1 = evtGetValue(event, args[0]);
+    s32 id2 = evtGetValue(event, args[1]);
+    BattleUnit* unit = BattleGetUnitPtr(wp, BattleTransID(event, id1));
+    BattleUnit* party = BattleGetUnitPtr(wp, BattleTransID(event, id2));
+    FakerParam* params = (FakerParam*)unit->countersetWeapon;
+    FakerParam* p;
+
+    switch (party->currentKind) {
+        case UNIT_GOOMBELLA_CHAPTER4:
+            p = &params[0];
+            break;
+        case UNIT_KOOPS_CHAPTER4:
+            p = &params[1];
+            break;
+        case UNIT_FLURRIE_CHAPTER4:
+            p = &params[2];
+            break;
+        case UNIT_YOSHI_CHAPTER4:
+            p = &params[3];
+            break;
+    }
+    party->sizeMultiplier = p->size;
+    party->statusFlags = p->statusFlags;
+#if VERSION >= VERSION_US
+    party->usCommandDisabled[0] = p->commandDisabled[0];
+    party->usCommandDisabled[1] = p->commandDisabled[1];
+#endif
+    party->statusTurns = p->status;
+    party->maxHp = p->maxHp;
+    party->currentHp = p->currentHp;
+    party->maxFp = p->maxFp;
+    party->currentFp = p->currentFp;
+    return EVT_RETURN_DONE;
+}
 
 /**
  * Init event of the fake Mario in the second Doopliss battle:

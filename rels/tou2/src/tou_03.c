@@ -627,6 +627,29 @@ static void ext_kyaku_init(void) {
 }
 
 /**
+ * Draw callback of the ext poses: loads the ext render mode, vertices, textures and TEV, draws them and resets the
+ * textures.
+ */
+static void kyaku_disp(CameraId camera, void* param) {
+    extLoadRenderMode();
+    extLoadVertex();
+    extLoadTexture();
+    extLoadTev();
+    extDraw();
+    extLoadTextureExit();
+}
+
+/** Per-frame callback of the crowd billboard set: just runs pose_main. */
+static void ext_kyaku_main(void) {
+    pose_main();
+}
+
+/** Display callback of the crowd billboard set: queues kyaku_disp on the 3D camera. */
+static void ext_kyaku_dispent(void) {
+    dispEntry(CAMERA_3D, 0.0f, DISP_MODE_ALPHA_TEST, kyaku_disp, NULL);
+}
+
+/**
  * Spawns four spectators (kyaku1 Toad, kyaku2 female Toad, kyaku3 vendor Toad,
  * kyaku4 Lakitu), with their positions selected by whether the entrance is s_bero_2,
  * and registers the crowd billboard set with the extdrv drawer.
@@ -1862,6 +1885,186 @@ static EVT_BEGIN(evt_teki_nyuujyou)
 EVT_END()
 
 /**
+ * 2D draw callback that copies the current 608x480 frame buffer into the monitor texture
+ * and marks it ready for screen_tev.
+ */
+static void screen_capture(CameraId cameraId, void* param) {
+    GXSetTexCopySrc(0, 0, 0x260, 0x1E0);
+    GXSetTexCopyDst(0x130, 0xF0, GX_TF_RGB565, GX_TRUE);
+    GXCopyTex(screen_wp->buf, GX_FALSE);
+    GXPixModeSync();
+    screen_wp->ready = 1;
+}
+
+/**
+ * Script helper that allocates the big arena monitor's work area, texture buffers and noise texture;
+ * the monitor starts in static mode during STG3_31_GRUBBAS_PLANS.
+ */
+static s32 screen_init(EventEntry* event, BOOL isFirstCall) {
+    u32 size = GXGetTexBufferSize(0x260, 0x1E0, GX_TF_I4, GX_FALSE, 0);
+
+    screen_wp = _mapAlloc(sizeof(ScreenWork));
+    screen_wp->buf = _mapAlloc(size);
+    screen_wp->ready = 0;
+    screen_wp->scale = screen_wp->scaleTarget = 1.0f;
+    screen_wp->x = screen_wp->xTarget = 0.0f;
+    screen_wp->y = screen_wp->yTarget = 0.0f;
+    screen_wp->count = 0;
+    screen_wp->reserved_28 = -1.0f;
+#if VERSION >= VERSION_US
+    size = GXGetTexBufferSize(64, 64, GX_TF_I8, GX_FALSE, 0);
+    screen_wp->noise = _mapAlloc(size);
+#else
+    screen_wp->noise = _mapAlloc(GXGetTexBufferSize(64, 64, GX_TF_I8, GX_FALSE, 0));
+#endif
+    if (evtGetValue(event, GSW_STORY_PROGRESS) == STG3_31_GRUBBAS_PLANS) {
+        screen_wp->mode = 1;
+    }
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script helper that queues screen_capture every frame (blocks forever)
+ * so the monitor shows the live arena picture.
+ */
+static s32 screen_evt(EventEntry* event, BOOL isFirstCall) {
+    dispEntry(CAMERA_2D, 1000.0f, DISP_MODE_OPAQUE, screen_capture, NULL);
+    return EVT_RETURN_BLOCK;
+}
+
+/**
+ * TEV callback for the "monittor" map object, the big arena monitor.
+ * It draws the captured frame (or, in Grubba's finale, changing static noise) with scan-line texture.
+ * In live-picture mode it can choose new zoom or pan targets every 200 ready draws.
+ */
+static void screen_tev(MapTevCallbackInfo* info) {
+    GXTexObj tex;
+    Mtx mtx;
+    Mtx scale;
+    Mtx trans;
+    s32 by;
+    s32 ry;
+    u8* buf;
+    s32 i;
+    s32 j;
+    s32 k;
+    s32 n;
+    s32 len;
+    s32 off;
+    s32 w;
+    s32 start;
+    u8 col;
+    f32 lim;
+    f32 x;
+    f32 y;
+    CameraEntry* cam;
+
+    if (screen_wp->ready) {
+        if (screen_wp->mode) {
+            buf = screen_wp->noise;
+            for (i = 0; i < 64; i++) {
+                for (j = 0; j < 64; j++) {
+                    by = i / 4;
+                    ry = i % 4;
+                    off = j / 8;
+                    w = j % 8;
+                    buf[((off << 5) + (by << 8)) + (w + ry * 8)] = (i & 1) ? 0xFF : 0;
+                }
+                n = rand() % 100 + 100;
+                for (k = 0; k < n; k++) {
+                    len = rand() % 4 + 2;
+                    start = rand() % (65 - len);
+                    col = rand() % 256;
+                    for (j = start; j < start + len; j++) {
+                        by = i / 4;
+                        ry = i % 4;
+                        off = j / 8;
+                        w = j % 8;
+                        buf[((off << 5) + (by << 8)) + (w + ry * 8)] = col;
+                    }
+                }
+            }
+            DCFlushRange(buf, 0x1000);
+            GXInitTexObj(&tex, buf, 64, 64, GX_TF_I8, GX_REPEAT, GX_REPEAT, GX_FALSE);
+            GXInitTexObjLOD(&tex, GX_NEAR, GX_NEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
+            GXLoadTexObj(&tex, GX_TEXMAP0);
+        } else {
+            GXInitTexObj(&tex, screen_wp->buf, 0x130, 0xF0, GX_TF_RGB565, GX_CLAMP, GX_CLAMP, GX_FALSE);
+            GXInitTexObjLOD(&tex, GX_NEAR, GX_NEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
+        }
+        GXLoadTexObj(&tex, GX_TEXMAP0);
+        GXInitTexObj(&tex, inta_tex, 4, 8, GX_TF_I4, GX_REPEAT, GX_REPEAT, GX_FALSE);
+        GXInitTexObjLOD(&tex, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
+        GXLoadTexObj(&tex, GX_TEXMAP1);
+        GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
+        GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+        GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+        GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_TEXC);
+        GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO);
+        GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD1, GX_TEXMAP1, GX_COLOR_NULL);
+        GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+        GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+        GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_ZERO, GX_CC_TEXC, GX_CC_CPREV, GX_CC_ZERO);
+        GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_KONST);
+        if (screen_wp->mode == 0) {
+            screen_wp->count++;
+            if (screen_wp->count % 200 == 0) {
+                switch (rand() % 3) {
+                    case 0:
+                        screen_wp->xTarget = randf(0.0f, (1.0f - screen_wp->scale) / screen_wp->scale);
+                        screen_wp->yTarget = randf(0.0f, (1.0f - screen_wp->scale) / screen_wp->scale);
+                        break;
+                    case 1:
+                        screen_wp->scaleTarget = randf(1.0f, 0.25f);
+                        break;
+                    case 2:
+                        break;
+                }
+            }
+            screen_wp->scale += (screen_wp->scaleTarget - screen_wp->scale) / 60.0f;
+            screen_wp->x += (screen_wp->xTarget - screen_wp->x) / 60.0f;
+            screen_wp->y += (screen_wp->yTarget - screen_wp->y) / 60.0f;
+            PSMTXScale(scale, screen_wp->scale, screen_wp->scale, 1.0f);
+            lim = (1.0f - screen_wp->scale) / screen_wp->scale;
+            y = screen_wp->y > lim ? lim : screen_wp->y;
+            if (screen_wp->x > lim) {
+                x = lim;
+            } else {
+                x = screen_wp->x;
+            }
+            PSMTXTrans(trans, x, y, 0.0f);
+            PSMTXConcat(scale, trans, mtx);
+        } else {
+            PSMTXScale(mtx, 4.75f, 3.75f, 0.0f);
+        }
+        GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0);
+        GXLoadTexMtxImm(mtx, GX_TEXMTX0, GX_MTX2x4);
+        cam = camGetPtr(CAMERA_3D);
+        x = 100.0f - cam->cameraPos.z;
+        PSMTXScale(mtx, 1.0f, 6.0f * (x / 1000.0f) + 16.0f, 1.0f);
+        GXSetTexCoordGen(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX1);
+        GXLoadTexMtxImm(mtx, GX_TEXMTX1, GX_MTX2x4);
+        info->tevStage = 2;
+        info->texCoord = 2;
+        info->texMap = 2;
+    }
+}
+
+/** Script helper: arg0 = NPC name, arg1 = tribe name (Japanese); arg2 receives 1 if the NPC's tribe matches, else 0. */
+static s32 tribe_chk(EventEntry* event, BOOL isFirstCall) {
+    EvtWord* args = event->args;
+    const char* name = (const char*)evtGetValue(event, args[0]);
+    const char* tribe = (const char*)evtGetValue(event, args[1]);
+
+    if (strcmp(npcNameToPtr(name)->tribe->nameJp, tribe) == 0) {
+        evtSetValue(event, args[2], 1);
+    } else {
+        evtSetValue(event, args[2], 0);
+    }
+    return EVT_RETURN_DONE;
+}
+
+/**
  * Entrance walk used by the default opening: LW(0) = NPC name, LW(1) = index in the team,
  * LW(2) = 1 for the one-enemy layout.
  * The fighter walks in from the east and hops up three steps to its place; the flying green Magikoopa
@@ -1919,6 +2122,47 @@ EVT_BEGIN(evt_teki_nyuujyou_default)
     END_IF
     RETURN
 EVT_END()
+
+/**
+ * Script helper (blocks forever) that moves the chain links of the Chain Chomp NPC in arg0 (arg1 = chain
+ * number): link 0 follows the head; each next link sags 3 units and is adjusted using a 10-unit separation
+ * before its height is clamped to the floor.
+ */
+static s32 burst_chain(EventEntry* event, BOOL isFirstCall) {
+    EvtWord* args = event->args;
+    const char* name = (const char*)evtGetValue(event, args[0]);
+    s32 id = evtGetValue(event, args[1]);
+    NpcEntry* npc = npcNameToPtr(name);
+    NpcEntry* a;
+    NpcEntry* b;
+    char buf[32];
+    s32 i;
+    f32 t;
+    f32 dist;
+
+    sprintf(buf, "鎖%d_%d", id, 0);
+    npcNameToPtr(buf)->position = npc->position;
+    for (i = 0; i < 4; i++) {
+        sprintf(buf, "鎖%d_%d", id, i);
+        a = npcNameToPtr(buf);
+        sprintf(buf, "鎖%d_%d", id, i + 1);
+        b = npcNameToPtr(buf);
+        b->position.y -= 3.0f;
+        dist = PSVECDistance(&a->position, &b->position);
+        t = 1.0f - 10.0f / dist;
+        b->position.x += t * (a->position.x - b->position.x);
+        b->position.y += t * (a->position.y - b->position.y);
+        b->position.z += t * (a->position.z - b->position.z);
+        if (b->position.x > 210.0f || b->position.x < -210.0f) {
+            if (b->position.y < 0.0f) {
+                b->position.y = 0.0f;
+            }
+        } else if (b->position.y < 60.0f) {
+            b->position.y = 60.0f;
+        }
+    }
+    return EVT_RETURN_BLOCK;
+}
 
 /**
  * Creates the chain links for a Chain Chomp-type fighter:
@@ -2024,6 +2268,12 @@ static EVT_BEGIN(burst_wangwang)
     END_LOOP
     RETURN
 EVT_END()
+
+/** Script helper that stops the map's sound effects (psndMapChange) before leaving the ring. */
+static s32 snd_sfx_stop(EventEntry* event, BOOL isFirstCall) {
+    psndMapChange();
+    return EVT_RETURN_DONE;
+}
 
 /**
  * Main script of a match, run when the ring is entered with a match reserved.
@@ -3560,6 +3810,15 @@ EVT_BEGIN(evt_default_opening)
     RETURN
 EVT_END()
 
+/** Script helper: arg0 = NPC name; arg1 receives that NPC tribe's confused animation name. */
+static s32 confupose(EventEntry* event, BOOL isFirstCall) {
+    EvtWord* args = event->args;
+    NpcEntry* npc = npcNameToPtr((const char*)evtGetValue(event, args[0]));
+
+    evtSetValue(event, args[1], (EvtWord)npc->tribe->confuseAnimation);
+    return EVT_RETURN_DONE;
+}
+
 /**
  * Victory scene for every ordinary match: the belt effect is switched off (every time, whoever the opponent was),
  * the opponents take their confused pose, confetti falls,
@@ -3909,265 +4168,6 @@ static EVT_BEGIN(evt_champion2)
 EVT_END()
 
 /**
- * Draw callback of the ext poses: loads the ext render mode, vertices, textures and TEV, draws them and resets the
- * textures.
- */
-static void kyaku_disp(CameraId camera, void* param) {
-    extLoadRenderMode();
-    extLoadVertex();
-    extLoadTexture();
-    extLoadTev();
-    extDraw();
-    extLoadTextureExit();
-}
-
-/** Per-frame callback of the crowd billboard set: just runs pose_main. */
-static void ext_kyaku_main(void) {
-    pose_main();
-}
-
-/** Display callback of the crowd billboard set: queues kyaku_disp on the 3D camera. */
-static void ext_kyaku_dispent(void) {
-    dispEntry(CAMERA_3D, 0.0f, DISP_MODE_ALPHA_TEST, kyaku_disp, NULL);
-}
-
-/**
- * 2D draw callback that copies the current 608x480 frame buffer into the monitor texture
- * and marks it ready for screen_tev.
- */
-static void screen_capture(CameraId cameraId, void* param) {
-    GXSetTexCopySrc(0, 0, 0x260, 0x1E0);
-    GXSetTexCopyDst(0x130, 0xF0, GX_TF_RGB565, GX_TRUE);
-    GXCopyTex(screen_wp->buf, GX_FALSE);
-    GXPixModeSync();
-    screen_wp->ready = 1;
-}
-
-/**
- * Script helper that allocates the big arena monitor's work area, texture buffers and noise texture;
- * the monitor starts in static mode during STG3_31_GRUBBAS_PLANS.
- */
-static s32 screen_init(EventEntry* event, BOOL isFirstCall) {
-    u32 size = GXGetTexBufferSize(0x260, 0x1E0, GX_TF_I4, GX_FALSE, 0);
-
-    screen_wp = _mapAlloc(sizeof(ScreenWork));
-    screen_wp->buf = _mapAlloc(size);
-    screen_wp->ready = 0;
-    screen_wp->scale = screen_wp->scaleTarget = 1.0f;
-    screen_wp->x = screen_wp->xTarget = 0.0f;
-    screen_wp->y = screen_wp->yTarget = 0.0f;
-    screen_wp->count = 0;
-    screen_wp->reserved_28 = -1.0f;
-#if VERSION >= VERSION_US
-    size = GXGetTexBufferSize(64, 64, GX_TF_I8, GX_FALSE, 0);
-    screen_wp->noise = _mapAlloc(size);
-#else
-    screen_wp->noise = _mapAlloc(GXGetTexBufferSize(64, 64, GX_TF_I8, GX_FALSE, 0));
-#endif
-    if (evtGetValue(event, GSW_STORY_PROGRESS) == STG3_31_GRUBBAS_PLANS) {
-        screen_wp->mode = 1;
-    }
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper that queues screen_capture every frame (blocks forever)
- * so the monitor shows the live arena picture.
- */
-static s32 screen_evt(EventEntry* event, BOOL isFirstCall) {
-    dispEntry(CAMERA_2D, 1000.0f, DISP_MODE_OPAQUE, screen_capture, NULL);
-    return EVT_RETURN_BLOCK;
-}
-
-/**
- * TEV callback for the "monittor" map object, the big arena monitor.
- * It draws the captured frame (or, in Grubba's finale, changing static noise) with scan-line texture.
- * In live-picture mode it can choose new zoom or pan targets every 200 ready draws.
- */
-static void screen_tev(MapTevCallbackInfo* info) {
-    GXTexObj tex;
-    Mtx mtx;
-    Mtx scale;
-    Mtx trans;
-    s32 by;
-    s32 ry;
-    u8* buf;
-    s32 i;
-    s32 j;
-    s32 k;
-    s32 n;
-    s32 len;
-    s32 off;
-    s32 w;
-    s32 start;
-    u8 col;
-    f32 lim;
-    f32 x;
-    f32 y;
-    CameraEntry* cam;
-
-    if (screen_wp->ready) {
-        if (screen_wp->mode) {
-            buf = screen_wp->noise;
-            for (i = 0; i < 64; i++) {
-                for (j = 0; j < 64; j++) {
-                    by = i / 4;
-                    ry = i % 4;
-                    off = j / 8;
-                    w = j % 8;
-                    buf[((off << 5) + (by << 8)) + (w + ry * 8)] = (i & 1) ? 0xFF : 0;
-                }
-                n = rand() % 100 + 100;
-                for (k = 0; k < n; k++) {
-                    len = rand() % 4 + 2;
-                    start = rand() % (65 - len);
-                    col = rand() % 256;
-                    for (j = start; j < start + len; j++) {
-                        by = i / 4;
-                        ry = i % 4;
-                        off = j / 8;
-                        w = j % 8;
-                        buf[((off << 5) + (by << 8)) + (w + ry * 8)] = col;
-                    }
-                }
-            }
-            DCFlushRange(buf, 0x1000);
-            GXInitTexObj(&tex, buf, 64, 64, GX_TF_I8, GX_REPEAT, GX_REPEAT, GX_FALSE);
-            GXInitTexObjLOD(&tex, GX_NEAR, GX_NEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
-            GXLoadTexObj(&tex, GX_TEXMAP0);
-        } else {
-            GXInitTexObj(&tex, screen_wp->buf, 0x130, 0xF0, GX_TF_RGB565, GX_CLAMP, GX_CLAMP, GX_FALSE);
-            GXInitTexObjLOD(&tex, GX_NEAR, GX_NEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
-        }
-        GXLoadTexObj(&tex, GX_TEXMAP0);
-        GXInitTexObj(&tex, inta_tex, 4, 8, GX_TF_I4, GX_REPEAT, GX_REPEAT, GX_FALSE);
-        GXInitTexObjLOD(&tex, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
-        GXLoadTexObj(&tex, GX_TEXMAP1);
-        GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
-        GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-        GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-        GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_TEXC);
-        GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO);
-        GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD1, GX_TEXMAP1, GX_COLOR_NULL);
-        GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-        GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-        GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_ZERO, GX_CC_TEXC, GX_CC_CPREV, GX_CC_ZERO);
-        GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_KONST);
-        if (screen_wp->mode == 0) {
-            screen_wp->count++;
-            if (screen_wp->count % 200 == 0) {
-                switch (rand() % 3) {
-                    case 0:
-                        screen_wp->xTarget = randf(0.0f, (1.0f - screen_wp->scale) / screen_wp->scale);
-                        screen_wp->yTarget = randf(0.0f, (1.0f - screen_wp->scale) / screen_wp->scale);
-                        break;
-                    case 1:
-                        screen_wp->scaleTarget = randf(1.0f, 0.25f);
-                        break;
-                    case 2:
-                        break;
-                }
-            }
-            screen_wp->scale += (screen_wp->scaleTarget - screen_wp->scale) / 60.0f;
-            screen_wp->x += (screen_wp->xTarget - screen_wp->x) / 60.0f;
-            screen_wp->y += (screen_wp->yTarget - screen_wp->y) / 60.0f;
-            PSMTXScale(scale, screen_wp->scale, screen_wp->scale, 1.0f);
-            lim = (1.0f - screen_wp->scale) / screen_wp->scale;
-            y = screen_wp->y > lim ? lim : screen_wp->y;
-            if (screen_wp->x > lim) {
-                x = lim;
-            } else {
-                x = screen_wp->x;
-            }
-            PSMTXTrans(trans, x, y, 0.0f);
-            PSMTXConcat(scale, trans, mtx);
-        } else {
-            PSMTXScale(mtx, 4.75f, 3.75f, 0.0f);
-        }
-        GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0);
-        GXLoadTexMtxImm(mtx, GX_TEXMTX0, GX_MTX2x4);
-        cam = camGetPtr(CAMERA_3D);
-        x = 100.0f - cam->cameraPos.z;
-        PSMTXScale(mtx, 1.0f, 6.0f * (x / 1000.0f) + 16.0f, 1.0f);
-        GXSetTexCoordGen(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX1);
-        GXLoadTexMtxImm(mtx, GX_TEXMTX1, GX_MTX2x4);
-        info->tevStage = 2;
-        info->texCoord = 2;
-        info->texMap = 2;
-    }
-}
-
-/** Script helper: arg0 = NPC name, arg1 = tribe name (Japanese); arg2 receives 1 if the NPC's tribe matches, else 0. */
-static s32 tribe_chk(EventEntry* event, BOOL isFirstCall) {
-    EvtWord* args = event->args;
-    const char* name = (const char*)evtGetValue(event, args[0]);
-    const char* tribe = (const char*)evtGetValue(event, args[1]);
-
-    if (strcmp(npcNameToPtr(name)->tribe->nameJp, tribe) == 0) {
-        evtSetValue(event, args[2], 1);
-    } else {
-        evtSetValue(event, args[2], 0);
-    }
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper (blocks forever) that moves the chain links of the Chain Chomp NPC in arg0 (arg1 = chain
- * number): link 0 follows the head; each next link sags 3 units and is adjusted using a 10-unit separation
- * before its height is clamped to the floor.
- */
-static s32 burst_chain(EventEntry* event, BOOL isFirstCall) {
-    EvtWord* args = event->args;
-    const char* name = (const char*)evtGetValue(event, args[0]);
-    s32 id = evtGetValue(event, args[1]);
-    NpcEntry* npc = npcNameToPtr(name);
-    NpcEntry* a;
-    NpcEntry* b;
-    char buf[32];
-    s32 i;
-    f32 t;
-    f32 dist;
-
-    sprintf(buf, "鎖%d_%d", id, 0);
-    npcNameToPtr(buf)->position = npc->position;
-    for (i = 0; i < 4; i++) {
-        sprintf(buf, "鎖%d_%d", id, i);
-        a = npcNameToPtr(buf);
-        sprintf(buf, "鎖%d_%d", id, i + 1);
-        b = npcNameToPtr(buf);
-        b->position.y -= 3.0f;
-        dist = PSVECDistance(&a->position, &b->position);
-        t = 1.0f - 10.0f / dist;
-        b->position.x += t * (a->position.x - b->position.x);
-        b->position.y += t * (a->position.y - b->position.y);
-        b->position.z += t * (a->position.z - b->position.z);
-        if (b->position.x > 210.0f || b->position.x < -210.0f) {
-            if (b->position.y < 0.0f) {
-                b->position.y = 0.0f;
-            }
-        } else if (b->position.y < 60.0f) {
-            b->position.y = 60.0f;
-        }
-    }
-    return EVT_RETURN_BLOCK;
-}
-
-/** Script helper that stops the map's sound effects (psndMapChange) before leaving the ring. */
-static s32 snd_sfx_stop(EventEntry* event, BOOL isFirstCall) {
-    psndMapChange();
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper: arg0 = NPC name; arg1 receives that NPC tribe's confused animation name. */
-static s32 confupose(EventEntry* event, BOOL isFirstCall) {
-    EvtWord* args = event->args;
-    NpcEntry* npc = npcNameToPtr((const char*)evtGetValue(event, args[0]));
-
-    evtSetValue(event, args[1], (EvtWord)npc->tribe->confuseAnimation);
-    return EVT_RETURN_DONE;
-}
-
-/**
  * Script helper: makes the item named "stone" (the Star Stone) jump to the position in arg0..arg2 along a ballistic
  * arc (horizontal speed 1, gravity 0.5), one step each frame, and plays the Star Stone jump sound on landing.
  * Returns EVT_RETURN_BLOCK until it arrives.
@@ -4261,32 +4261,6 @@ static EVT_BEGIN(evt_shake)
 EVT_END()
 
 /**
- * Creates the Gold Star (ITEM_GOLD_STAR, not touchable) and keeps it bobbing 20 units above the turntable kaiten_souti,
- * with its sound on only while it is above height 50; its id goes to GW(10).
- */
-static EVT_BEGIN(evt_boss_stone)
-    SET_VALUE(LW(10), 0)
-    CALL(evt_item_entry, STRING("stone"), ITEM_GOLD_STAR, 0, 0, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
-    LOOP(0)
-        CALL(evt_mapobj_get_position, STRING("kaiten_souti"), LW(0), LW(1), LW(2))
-        ADD_FLOAT(LW(1), FLOAT(20.0f))
-        CALL(evt_sub_get_sincos, LW(10), LW(11), LW(12))
-        MULTIPLY_FLOAT(LW(12), FLOAT(10.0f))
-        ADD(LW(1), LW(12))
-        ADD(LW(10), FLOAT(2.5f))
-        MODULO(LW(10), 360)
-        IF_INT_LESS(LW(1), 50)
-            CALL(starstone_sound_onoff, 0)
-        ELSE
-            CALL(starstone_sound_onoff, 1)
-        END_IF
-        CALL(evt_item_set_position, STRING("stone"), LW(0), LW(1), LW(2))
-        WAIT_FRAMES(1)
-    END_LOOP
-    RETURN
-EVT_END()
-
-/**
  * Script helper: puts the NPC ガンス 100 units above map object block_5 while that is higher than group151, else at (0,
  * group151's y, 0).
  */
@@ -4322,6 +4296,32 @@ static s32 starstone_sound_onoff(EventEntry* event, BOOL isFirstCall) {
     }
     return EVT_RETURN_DONE;
 }
+
+/**
+ * Creates the Gold Star (ITEM_GOLD_STAR, not touchable) and keeps it bobbing 20 units above the turntable kaiten_souti,
+ * with its sound on only while it is above height 50; its id goes to GW(10).
+ */
+static EVT_BEGIN(evt_boss_stone)
+    SET_VALUE(LW(10), 0)
+    CALL(evt_item_entry, STRING("stone"), ITEM_GOLD_STAR, 0, 0, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
+    LOOP(0)
+        CALL(evt_mapobj_get_position, STRING("kaiten_souti"), LW(0), LW(1), LW(2))
+        ADD_FLOAT(LW(1), FLOAT(20.0f))
+        CALL(evt_sub_get_sincos, LW(10), LW(11), LW(12))
+        MULTIPLY_FLOAT(LW(12), FLOAT(10.0f))
+        ADD(LW(1), LW(12))
+        ADD(LW(10), FLOAT(2.5f))
+        MODULO(LW(10), 360)
+        IF_INT_LESS(LW(1), 50)
+            CALL(starstone_sound_onoff, 0)
+        ELSE
+            CALL(starstone_sound_onoff, 1)
+        END_IF
+        CALL(evt_item_set_position, STRING("stone"), LW(0), LW(1), LW(2))
+        WAIT_FRAMES(1)
+    END_LOOP
+    RETURN
+EVT_END()
 
 /** Script helper: sets the rotation (arg0, degrees) of the "stone" item's star-stone effect. */
 static s32 evt_boss_stone_r(EventEntry* event, BOOL isFirstCall) {

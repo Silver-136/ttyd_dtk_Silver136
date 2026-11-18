@@ -766,6 +766,18 @@ EVT_BEGIN(hom_10_evt_resha_stop)
     RETURN
 EVT_END()
 
+/**
+ * Script helper: writes into LW(10) a sine wobble (1.8 times |GW(0)| times sin(frame count / 15));
+ * evt_ramp rotates the lamps (ranpu, ranpu_c) by it, so they sway with the train's speed and stay still when it stops.
+ */
+static USER_FUNC(ramp_r) {
+    f32 amp = __fabsf(evtGetFloat(event, GW(0)));
+    f32 wave = sin(gp->retraceCount / 15.0f);
+
+    evtSetFloat(event, LW(10), 1.8f * amp * wave);
+    return EVT_RETURN_DONE;
+}
+
 /** Keeps the lamp objects (ranpu, ranpu_c) swinging every frame by the amount from ramp_r while the train is moving. */
 static EVT_BEGIN(evt_ramp)
     LOOP(0)
@@ -813,6 +825,11 @@ static const char* pika_tbl_rsh_06[] = {
     "pika_6",
     NULL,
 };
+
+/** Map TEV callback for the train model: forwards the map object's TEV info to envAddTev with index 7. */
+static void resha_tev(MapTevCallbackInfo* info) {
+    envAddTev(7, info);
+}
 
 /**
  * Common start of the train-exterior scenes: marks the train as not moving,
@@ -1204,23 +1221,6 @@ static EVT_BEGIN(init_papa)
     CALL(evt_npc_set_position, STRING("me"), -195, 0, 350)
     RETURN
 EVT_END()
-
-/**
- * Script helper: writes into LW(10) a sine wobble (1.8 times |GW(0)| times sin(frame count / 15));
- * evt_ramp rotates the lamps (ranpu, ranpu_c) by it, so they sway with the train's speed and stay still when it stops.
- */
-static USER_FUNC(ramp_r) {
-    f32 amp = __fabsf(evtGetFloat(event, GW(0)));
-    f32 wave = sin(gp->retraceCount / 15.0f);
-
-    evtSetFloat(event, LW(10), 1.8f * amp * wave);
-    return EVT_RETURN_DONE;
-}
-
-/** Map TEV callback for the train model: forwards the map object's TEV info to envAddTev with index 7. */
-static void resha_tev(MapTevCallbackInfo* info) {
-    envAddTev(7, info);
-}
 
 /**
  * Script helper for the Goldbob scene's camera:

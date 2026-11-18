@@ -2095,6 +2095,19 @@ EVT_BEGIN(hom_10_evt_resha_stop)
     RETURN
 EVT_END()
 
+/**
+ * Script helper used by evt_ramp: writes into LW(10) a swaying angle,
+ * 1.8 times the absolute value of GW(0) times sin(retraceCount / 15),
+ * which the script applies to the lamp objects (ranpu, ranpu_c) so they swing with the train.
+ */
+static s32 ramp_r(EventEntry* event, BOOL isFirstCall) {
+    f32 amp = __fabsf(evtGetFloat(event, GW(0)));
+    f32 wave = sin(gp->retraceCount / 15.0f);
+
+    evtSetFloat(event, LW(10), 1.8f * amp * wave);
+    return EVT_RETURN_DONE;
+}
+
 /** Keeps the lamp objects (ranpu, ranpu_c) swinging every frame by the amount from ramp_r while the train is moving. */
 static EVT_BEGIN(evt_ramp)
     LOOP(0)
@@ -2122,6 +2135,14 @@ static const char* pika_tbl_rsh_06[] = {
     "pika_1_1", "pika_1_2", "pika_1_3", "pika_1_4", "pika_2",
     "pika_3", "pika_4", "pika_5", "pika_6", NULL,
 };
+
+/**
+ * Map TEV callback 1, installed by the map init with evt_map_set_tevcallback: adds environment effect type 7
+ * (envAddTev) to the material of each map object that uses that callback slot.
+ */
+static void resha_tev(MapTevCallbackInfo* info) {
+    envAddTev(7, info);
+}
 
 /**
  * Common start of the train-exterior scenes: marks the train as not moving,
@@ -2329,6 +2350,19 @@ static EVT_BEGIN(evt_moamoa_init)
     END_INLINE_EVENT
     RETURN
 EVT_END()
+
+/**
+ * Script helper: blocks until the current animation of the base NPC (the giant Smorg model)
+ * has played through once.
+ */
+static s32 npc_anim_wait(EventEntry* event, BOOL isFirstCall) {
+    NpcEntry* npc = npcNameToPtr("base");
+
+    if (animPoseGetLoopTimes(npc->poseId) >= 1.0f) {
+        return EVT_RETURN_DONE;
+    }
+    return EVT_RETURN_BLOCK;
+}
 
 /**
  * Cutscene and boss fight with the giant Smorg (moamoa) on the roof of the train:
@@ -2689,37 +2723,3 @@ EVT_BEGIN(rsh_06_a_init_evt_nidome)
     CALL_CHILD(rsh_06_init_evt_nidome)
     RETURN
 EVT_END()
-
-/**
- * Script helper used by evt_ramp: writes into LW(10) a swaying angle,
- * 1.8 times the absolute value of GW(0) times sin(retraceCount / 15),
- * which the script applies to the lamp objects (ranpu, ranpu_c) so they swing with the train.
- */
-static s32 ramp_r(EventEntry* event, BOOL isFirstCall) {
-    f32 amp = __fabsf(evtGetFloat(event, GW(0)));
-    f32 wave = sin(gp->retraceCount / 15.0f);
-
-    evtSetFloat(event, LW(10), 1.8f * amp * wave);
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Map TEV callback 1, installed by the map init with evt_map_set_tevcallback: adds environment effect type 7
- * (envAddTev) to the material of each map object that uses that callback slot.
- */
-static void resha_tev(MapTevCallbackInfo* info) {
-    envAddTev(7, info);
-}
-
-/**
- * Script helper: blocks until the current animation of the base NPC (the giant Smorg model)
- * has played through once.
- */
-static s32 npc_anim_wait(EventEntry* event, BOOL isFirstCall) {
-    NpcEntry* npc = npcNameToPtr("base");
-
-    if (animPoseGetLoopTimes(npc->poseId) >= 1.0f) {
-        return EVT_RETURN_DONE;
-    }
-    return EVT_RETURN_BLOCK;
-}

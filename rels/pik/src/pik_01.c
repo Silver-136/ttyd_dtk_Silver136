@@ -118,21 +118,6 @@ extern EvtWord pik_01_init_evt[];
 EvtWord pik_01_init_evt[486];
 #endif
 
-/**
- * Script helper: stores 1 in args[0] if Mario is wearing the green Luigi colours (marioGetColor() == 1), else 0.
- * The souvenir shop owner reacts to Mario looking like Luigi.
- */
-static USER_FUNC(chk_luigi_color) {
-    EvtWord* args = event->args;
-
-    if (marioGetColor() == 1) {
-        evtSetValue(event, args[0], 1);
-    } else {
-        evtSetValue(event, args[0], 0);
-    }
-    return EVT_RETURN_DONE;
-}
-
 static HitDamageReturn dmgReturnPt[] = {
     {"mod_00", {0.0f, -1000.0f, 0.0f}},
     {"mod_01", {0.0f, -1000.0f, 0.0f}},
@@ -365,6 +350,21 @@ static EVT_BEGIN(talk_powan)
     CALL(evt_msg_print, 0, STRING("stg6_pik_11"), 0, STRING("me"))
     RETURN
 EVT_END()
+
+/**
+ * Script helper: stores 1 in args[0] if Mario is wearing the green Luigi colours (marioGetColor() == 1), else 0.
+ * The souvenir shop owner reacts to Mario looking like Luigi.
+ */
+static USER_FUNC(chk_luigi_color) {
+    EvtWord* args = event->args;
+
+    if (marioGetColor() == 1) {
+        evtSetValue(event, args[0], 1);
+    } else {
+        evtSetValue(event, args[0], 0);
+    }
+    return EVT_RETURN_DONE;
+}
 
 /**
  * Talk script for the souvenir shop owner (土産屋).
@@ -1228,6 +1228,33 @@ EVT_BEGIN(pik_01_koopa_evt)
 EVT_END()
 
 /**
+ * Stops the regular scripts of the three NPCs ターくん４, ５ and ６ before the chapter 8 cutscenes:
+ * for each one it fetches the running regular script,
+ * clears its move event (evt_npc_change_interrupt type 1) and
+ * deletes the script.
+ */
+static EVT_BEGIN(delete_npc_regl_evt)
+    CALL(evt_npc_get_reglid, STRING("ターくん４"), LW(0))
+    CALL(evt_npc_change_interrupt, STRING("ターくん４"), 1, 0)
+    DELETE_EVENT(LW(0))
+    CALL(evt_npc_get_reglid, STRING("ターくん５"), LW(0))
+    CALL(evt_npc_change_interrupt, STRING("ターくん５"), 1, 0)
+    DELETE_EVENT(LW(0))
+    CALL(evt_npc_get_reglid, STRING("ターくん６"), LW(0))
+    CALL(evt_npc_change_interrupt, STRING("ターくん６"), 1, 0)
+    DELETE_EVENT(LW(0))
+    RETURN
+EVT_END()
+
+/** Shakes the 3D camera vertically by a small amount every 500 ms, forever; used in the dark ending scene. */
+static EVT_BEGIN(sekai_yami_shake)
+    LOOP(0)
+        CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.009765625f), 500)
+    END_LOOP
+    RETURN
+EVT_END()
+
+/**
  * Script helper for the chapter 8 darkness scenes:
  * sets the "yami" (darkness) overlay view (envSetYamiView) to look from (0, 100, 100 + z) at (0, 0, z),
  * where z is args[0] (a float).
@@ -1257,111 +1284,6 @@ static USER_FUNC(anim_tevcallback) {
     animPoseSetMaterialFlagOn(npc->poseId, MAP_OBJ_TEV_CALLBACK(flag & 0xF));
     return EVT_RETURN_DONE;
 }
-
-/**
- * Script helper: creates a star stone effect (effStarStoneEntry) at position args[1..3] (floats)
- * and registers it under the effect name args[0].
- */
-static USER_FUNC(starstone_entry) {
-    EvtWord* args = event->args;
-    const char* name = (const char*)evtGetValue(event, args[0]);
-    f32 x = evtGetFloat(event, args[1]);
-    f32 y = evtGetFloat(event, args[2]);
-    f32 z = evtGetFloat(event, args[3]);
-
-    effSetName(effStarStoneEntry(5, x, y, z, 1.0f), name);
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper: moves the star stone effect named args[0] to the position args[1..3] (floats). */
-static USER_FUNC(starstone_set_pos) {
-    EvtWord* args = event->args;
-    const char* name = (const char*)evtGetValue(event, args[0]);
-    f32 x = evtGetFloat(event, args[1]);
-    f32 y = evtGetFloat(event, args[2]);
-    f32 z = evtGetFloat(event, args[3]);
-    EffectEntry* eff = effNameToPtr(name);
-
-    ((EffStarStoneWork*)eff->userdata)->position.x = x;
-    ((EffStarStoneWork*)eff->userdata)->position.y = y;
-    ((EffStarStoneWork*)eff->userdata)->position.z = z;
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper: sets the Y rotation of the star stone effect named args[0] to args[1] (float, degrees). */
-static USER_FUNC(starstone_set_ry) {
-    EvtWord* args = event->args;
-    const char* name = (const char*)evtGetValue(event, args[0]);
-    f32 ry = evtGetFloat(event, args[1]);
-
-    ((EffStarStoneWork*)effNameToPtr(name)->userdata)->rot.y = ry;
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper: turns the sanctum gate's "lock" map object to Y rotation -45 degrees. */
-static USER_FUNC(set_r) {
-    MapObjectEntry* mobj = mobjNameToPtr("lock");
-
-    mobj->rotation.y = -45.0f;
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper: doubles the x and y scale of the "lock" map object's hit area and recalculates its matrix,
- * so Bowser can reach the padlock.
- */
-static USER_FUNC(kpa_lock_hit_scale) {
-    MapObjectEntry* mobj = mobjNameToPtr("lock");
-
-    mobj->scale2.x *= 2.0f;
-    mobj->scale2.y *= 2.0f;
-    mobjCalcMtx2(mobj);
-    mobj->flags &= ~MOBJ_FLAG_UPDATE_MTX;
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Map TEV callback registered with evt_map_set_tevcallback in the init script:
- * forwards the map object's TEV info to envAddTev with index 4.
- */
-static void test_tev(MapTevCallbackInfo* info) {
-    envAddTev(4, info);
-}
-
-/**
- * Second map TEV callback of this map (used for the opuku and HEIPO objects):
- * forwards the TEV info to envAddTev with index 7.
- */
-static void test_tev2(MapTevCallbackInfo* info) {
-    envAddTev(7, info);
-}
-
-/**
- * Stops the regular scripts of the three NPCs ターくん４, ５ and ６ before the chapter 8 cutscenes:
- * for each one it fetches the running regular script,
- * clears its move event (evt_npc_change_interrupt type 1) and
- * deletes the script.
- */
-static EVT_BEGIN(delete_npc_regl_evt)
-    CALL(evt_npc_get_reglid, STRING("ターくん４"), LW(0))
-    CALL(evt_npc_change_interrupt, STRING("ターくん４"), 1, 0)
-    DELETE_EVENT(LW(0))
-    CALL(evt_npc_get_reglid, STRING("ターくん５"), LW(0))
-    CALL(evt_npc_change_interrupt, STRING("ターくん５"), 1, 0)
-    DELETE_EVENT(LW(0))
-    CALL(evt_npc_get_reglid, STRING("ターくん６"), LW(0))
-    CALL(evt_npc_change_interrupt, STRING("ターくん６"), 1, 0)
-    DELETE_EVENT(LW(0))
-    RETURN
-EVT_END()
-
-/** Shakes the 3D camera vertically by a small amount every 500 ms, forever; used in the dark ending scene. */
-static EVT_BEGIN(sekai_yami_shake)
-    LOOP(0)
-        CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.009765625f), 500)
-    END_LOOP
-    RETURN
-EVT_END()
 
 /**
  * Cutscene of the world going dark during the Grodus story point (STG8_15), played when the map is entered
@@ -1416,6 +1338,46 @@ static EVT_BEGIN(sekai_yami_evt)
     CALL(evt_bero_mapchange, STRING("bom_02"), STRING("sekai_yami2"))
     RETURN
 EVT_END()
+
+/**
+ * Script helper: creates a star stone effect (effStarStoneEntry) at position args[1..3] (floats)
+ * and registers it under the effect name args[0].
+ */
+static USER_FUNC(starstone_entry) {
+    EvtWord* args = event->args;
+    const char* name = (const char*)evtGetValue(event, args[0]);
+    f32 x = evtGetFloat(event, args[1]);
+    f32 y = evtGetFloat(event, args[2]);
+    f32 z = evtGetFloat(event, args[3]);
+
+    effSetName(effStarStoneEntry(5, x, y, z, 1.0f), name);
+    return EVT_RETURN_DONE;
+}
+
+/** Script helper: moves the star stone effect named args[0] to the position args[1..3] (floats). */
+static USER_FUNC(starstone_set_pos) {
+    EvtWord* args = event->args;
+    const char* name = (const char*)evtGetValue(event, args[0]);
+    f32 x = evtGetFloat(event, args[1]);
+    f32 y = evtGetFloat(event, args[2]);
+    f32 z = evtGetFloat(event, args[3]);
+    EffectEntry* eff = effNameToPtr(name);
+
+    ((EffStarStoneWork*)eff->userdata)->position.x = x;
+    ((EffStarStoneWork*)eff->userdata)->position.y = y;
+    ((EffStarStoneWork*)eff->userdata)->position.z = z;
+    return EVT_RETURN_DONE;
+}
+
+/** Script helper: sets the Y rotation of the star stone effect named args[0] to args[1] (float, degrees). */
+static USER_FUNC(starstone_set_ry) {
+    EvtWord* args = event->args;
+    const char* name = (const char*)evtGetValue(event, args[0]);
+    f32 ry = evtGetFloat(event, args[1]);
+
+    ((EffStarStoneWork*)effNameToPtr(name)->userdata)->rot.y = ry;
+    return EVT_RETURN_DONE;
+}
 
 /**
  * Cheering cutaway of the final battle (STG8_15_GRODUS, map entered at "minnnanokoe"): Mario and the
@@ -1567,6 +1529,44 @@ static EVT_BEGIN(iri_27_npc_entry)
     CALL(evt_npc_set_position, STRING("ルイージ"), 0, -1000, 0)
     RETURN
 EVT_END()
+
+/** Script helper: turns the sanctum gate's "lock" map object to Y rotation -45 degrees. */
+static USER_FUNC(set_r) {
+    MapObjectEntry* mobj = mobjNameToPtr("lock");
+
+    mobj->rotation.y = -45.0f;
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script helper: doubles the x and y scale of the "lock" map object's hit area and recalculates its matrix,
+ * so Bowser can reach the padlock.
+ */
+static USER_FUNC(kpa_lock_hit_scale) {
+    MapObjectEntry* mobj = mobjNameToPtr("lock");
+
+    mobj->scale2.x *= 2.0f;
+    mobj->scale2.y *= 2.0f;
+    mobjCalcMtx2(mobj);
+    mobj->flags &= ~MOBJ_FLAG_UPDATE_MTX;
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Map TEV callback registered with evt_map_set_tevcallback in the init script:
+ * forwards the map object's TEV info to envAddTev with index 4.
+ */
+static void test_tev(MapTevCallbackInfo* info) {
+    envAddTev(4, info);
+}
+
+/**
+ * Second map TEV callback of this map (used for the opuku and HEIPO objects):
+ * forwards the TEV info to envAddTev with index 7.
+ */
+static void test_tev2(MapTevCallbackInfo* info) {
+    envAddTev(7, info);
+}
 
 /**
  * Map init script for pik_01: sets the Bowser-interlude state when the story is between Lord Crump's defeat

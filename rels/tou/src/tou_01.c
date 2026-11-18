@@ -3128,6 +3128,52 @@ static USER_FUNC(yami_view) {
 }
 
 /**
+ * Script helper: args[0] is an NPC name and args[1] picks a TEV callback slot (low four bits); turns that callback on
+ * in the NPC's animation materials. Does nothing if the NPC does not exist.
+ */
+static USER_FUNC(anim_tevcallback) {
+    EvtWord* args = event->args;
+    const char* name = (const char*)evtGetValue(event, args[0]);
+    s32 index = evtGetValue(event, args[1]);
+    NpcEntry* obj = npcNameToPtr_NoAssert(name);
+
+    if (obj == NULL) {
+        return EVT_RETURN_DONE;
+    }
+    animPoseSetMaterialFlagOn(obj->poseId, MAP_OBJ_TEV_CALLBACK(index & 0xF));
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script helper: args[0] = mobj name, args[1] = index;
+ * enables TEV callback (index & 0xF) on that object's model.
+ */
+static USER_FUNC(anim_tevcallback_mobj) {
+    EvtWord* args = event->args;
+    const char* name = (const char*)evtGetValue(event, args[0]);
+    s32 index = evtGetValue(event, args[1]);
+    MapObjectEntry* obj = mobjNameToPtrNoAssert(name);
+
+    if (obj == NULL) {
+        return EVT_RETURN_DONE;
+    }
+    animPoseSetMaterialFlagOn(obj->poseId, MAP_OBJ_TEV_CALLBACK(index & 0xF));
+    return EVT_RETURN_DONE;
+}
+
+/** Script helper: args[0] = NPC name; stops and clears that NPC's regular (idle) event. */
+static USER_FUNC(delete_npc_regl_evt) {
+    NpcEntry* npc = npcNameToPtr((const char*)evtGetValue(event, event->args[0]));
+
+    if (npc->regularEvtId != 0) {
+        evtDeleteID(npc->regularEvtId);
+        npc->moveEvent = NULL;
+        npc->regularEvtId = 0;
+    }
+    return EVT_RETURN_DONE;
+}
+
+/**
  * Chapter 8 darkness scene setup: spawns キノシコワ at (4, 0, 420), parks the blimp,
  * ジュゲム1 and ロテン2 around the plaza, hides the family and two spectator Toads below the map,
  * and stops any existing regular events of キノピオ1 and ロテン1.
@@ -3151,6 +3197,32 @@ static EVT_BEGIN(sekai_yami_npc_init)
     CALL(delete_npc_regl_evt, STRING("ロテン1"))
     RETURN
 EVT_END()
+
+/**
+ * Script helper: args[0] = limit, args[1], args[2] = x, z;
+ * sets args[3] to TRUE when the point is behind the darkness cutoff for the current camera yaw.
+ */
+// Block until this point lies behind the camera-oriented darkness boundary.
+static USER_FUNC(yami_oowareru_check) {
+    EvtWord* args = event->args;
+    f32 limit = evtGetFloat(event, args[0]);
+    f32 x = evtGetFloat(event, args[1]);
+    f32 z = evtGetFloat(event, args[2]);
+    CameraEntry* camera = camGetPtr(CAMERA_3D);
+    f32 s;
+    f32 c;
+    f32 angle = 6.2831855f * (90.0f + camera->viewYaw) / 360.0f;
+
+    s = sin(angle);
+    c = cos(angle);
+
+    if (s * x + -c * z < limit) {
+        evtSetValue(event, args[3], TRUE);
+        return EVT_RETURN_DONE;
+    }
+    evtSetValue(event, args[3], FALSE);
+    return EVT_RETURN_BLOCK;
+}
 
 /**
  * Per-NPC part of sekai_yami_evt (NPC in LW(0)): waits until the darkness sweep GW(0) covers it (yami_oowareru_check),
@@ -3305,6 +3377,43 @@ static EVT_BEGIN(minnnanokoe_npc_entry)
     CALL(evt_npc_flag_onoff, 1, STRING("ウラノコ"), NPC_FLAG_TALK_POSE | NPC_FLAG_INSTANT_TURN)
     RETURN
 EVT_END()
+
+/** Script helper: args[0] = effect name, args[1..3] = x, y, z; creates a star-stone effect (type 2) with that name. */
+static USER_FUNC(starstone_entry) {
+    EvtWord* args = event->args;
+    const char* name = (const char*)evtGetValue(event, args[0]);
+    f32 x = evtGetFloat(event, args[1]);
+    f32 y = evtGetFloat(event, args[2]);
+    f32 z = evtGetFloat(event, args[3]);
+
+    effSetName(effStarStoneEntry(2, x, y, z, 1.0f), name);
+    return EVT_RETURN_DONE;
+}
+
+/** Script helper: args[0] = effect name, args[1..3] = x, y, z; moves the named star-stone effect. */
+static USER_FUNC(starstone_set_pos) {
+    EvtWord* args = event->args;
+    const char* name = (const char*)evtGetValue(event, args[0]);
+    f32 x = evtGetFloat(event, args[1]);
+    f32 y = evtGetFloat(event, args[2]);
+    f32 z = evtGetFloat(event, args[3]);
+    EffectEntry* eff = effNameToPtr(name);
+
+    ((EffStarStoneWork*)eff->userdata)->position.x = x;
+    ((EffStarStoneWork*)eff->userdata)->position.y = y;
+    ((EffStarStoneWork*)eff->userdata)->position.z = z;
+    return EVT_RETURN_DONE;
+}
+
+/** Script helper: args[0] = effect name, args[1] = degrees; sets the named star-stone effect's rotation about y. */
+static USER_FUNC(starstone_set_ry) {
+    EvtWord* args = event->args;
+    const char* name = (const char*)evtGetValue(event, args[0]);
+    f32 ry = evtGetFloat(event, args[1]);
+
+    ((EffStarStoneWork*)effNameToPtr(name)->userdata)->rot.y = ry;
+    return EVT_RETURN_DONE;
+}
 
 /**
  * Everyone's-voices scene (entrance minnnanokoe): hides Mario and the partner, darkens the town (envSetYami,
@@ -3535,115 +3644,6 @@ static EVT_BEGIN(evt_mail)
     CALL(evt_party_run, 0)
     RETURN
 EVT_END()
-
-/**
- * Script helper: args[0] is an NPC name and args[1] picks a TEV callback slot (low four bits); turns that callback on
- * in the NPC's animation materials. Does nothing if the NPC does not exist.
- */
-static USER_FUNC(anim_tevcallback) {
-    EvtWord* args = event->args;
-    const char* name = (const char*)evtGetValue(event, args[0]);
-    s32 index = evtGetValue(event, args[1]);
-    NpcEntry* obj = npcNameToPtr_NoAssert(name);
-
-    if (obj == NULL) {
-        return EVT_RETURN_DONE;
-    }
-    animPoseSetMaterialFlagOn(obj->poseId, MAP_OBJ_TEV_CALLBACK(index & 0xF));
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper: args[0] = mobj name, args[1] = index;
- * enables TEV callback (index & 0xF) on that object's model.
- */
-static USER_FUNC(anim_tevcallback_mobj) {
-    EvtWord* args = event->args;
-    const char* name = (const char*)evtGetValue(event, args[0]);
-    s32 index = evtGetValue(event, args[1]);
-    MapObjectEntry* obj = mobjNameToPtrNoAssert(name);
-
-    if (obj == NULL) {
-        return EVT_RETURN_DONE;
-    }
-    animPoseSetMaterialFlagOn(obj->poseId, MAP_OBJ_TEV_CALLBACK(index & 0xF));
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper: args[0] = NPC name; stops and clears that NPC's regular (idle) event. */
-static USER_FUNC(delete_npc_regl_evt) {
-    NpcEntry* npc = npcNameToPtr((const char*)evtGetValue(event, event->args[0]));
-
-    if (npc->regularEvtId != 0) {
-        evtDeleteID(npc->regularEvtId);
-        npc->moveEvent = NULL;
-        npc->regularEvtId = 0;
-    }
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper: args[0] = limit, args[1], args[2] = x, z;
- * sets args[3] to TRUE when the point is behind the darkness cutoff for the current camera yaw.
- */
-// Block until this point lies behind the camera-oriented darkness boundary.
-static USER_FUNC(yami_oowareru_check) {
-    EvtWord* args = event->args;
-    f32 limit = evtGetFloat(event, args[0]);
-    f32 x = evtGetFloat(event, args[1]);
-    f32 z = evtGetFloat(event, args[2]);
-    CameraEntry* camera = camGetPtr(CAMERA_3D);
-    f32 s;
-    f32 c;
-    f32 angle = 6.2831855f * (90.0f + camera->viewYaw) / 360.0f;
-
-    s = sin(angle);
-    c = cos(angle);
-
-    if (s * x + -c * z < limit) {
-        evtSetValue(event, args[3], TRUE);
-        return EVT_RETURN_DONE;
-    }
-    evtSetValue(event, args[3], FALSE);
-    return EVT_RETURN_BLOCK;
-}
-
-/** Script helper: args[0] = effect name, args[1..3] = x, y, z; creates a star-stone effect (type 2) with that name. */
-static USER_FUNC(starstone_entry) {
-    EvtWord* args = event->args;
-    const char* name = (const char*)evtGetValue(event, args[0]);
-    f32 x = evtGetFloat(event, args[1]);
-    f32 y = evtGetFloat(event, args[2]);
-    f32 z = evtGetFloat(event, args[3]);
-
-    effSetName(effStarStoneEntry(2, x, y, z, 1.0f), name);
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper: args[0] = effect name, args[1..3] = x, y, z; moves the named star-stone effect. */
-static USER_FUNC(starstone_set_pos) {
-    EvtWord* args = event->args;
-    const char* name = (const char*)evtGetValue(event, args[0]);
-    f32 x = evtGetFloat(event, args[1]);
-    f32 y = evtGetFloat(event, args[2]);
-    f32 z = evtGetFloat(event, args[3]);
-    EffectEntry* eff = effNameToPtr(name);
-
-    ((EffStarStoneWork*)eff->userdata)->position.x = x;
-    ((EffStarStoneWork*)eff->userdata)->position.y = y;
-    ((EffStarStoneWork*)eff->userdata)->position.z = z;
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper: args[0] = effect name, args[1] = degrees; sets the named star-stone effect's rotation about y. */
-static USER_FUNC(starstone_set_ry) {
-    EvtWord* args = event->args;
-    const char* name = (const char*)evtGetValue(event, args[0]);
-    f32 ry = evtGetFloat(event, args[1]);
-
-    ((EffStarStoneWork*)effNameToPtr(name)->userdata)->rot.y = ry;
-    return EVT_RETURN_DONE;
-}
 
 /**
  * Pickup callback of the Storage Key lying at (-745, 20, 435) (placed during "Rawk Hawk's Warning"):

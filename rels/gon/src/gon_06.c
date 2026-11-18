@@ -249,6 +249,11 @@ EVT_BEGIN(tsuritenjo_event)
     RETURN
 EVT_END()
 
+/** Items offered in the item menu at the chest: only the Black Key (0x22). */
+static s32 key_tbl[] = {
+    ITEM_BLACK_KEY_0x22, -1,
+};
+
 /**
  * Message callback for the black chest's speech: type 0 plays the chest's talking animation A_2, type 5 restarts it
  * once it has looped, type 2 returns it to the idle S_1.
@@ -266,16 +271,6 @@ static void majin_callback(s32 type) {
         animPoseSetAnim(mobj->poseId, "S_1", TRUE);
     }
 }
-
-/** Script helper: blocks until BGM channel 1 has started, or returns immediately if the channel is empty. */
-static USER_FUNC(bgm_start_wait) {
-    return psndBGMStartCheck(1) ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
-}
-
-/** Items offered in the item menu at the chest: only the Black Key (0x22). */
-static s32 key_tbl[] = {
-    ITEM_BLACK_KEY_0x22, -1,
-};
 
 /**
  * First script of the black chest (box, evt_mobj_itembox): the first time
@@ -415,6 +410,11 @@ static EVT_BEGIN(evt_majin)
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
+
+/** Script helper: blocks until BGM channel 1 has started, or returns immediately if the channel is empty. */
+static USER_FUNC(bgm_start_wait) {
+    return psndBGMStartCheck(1) ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
+}
 
 /**
  * Event after the black chest is opened: Mario receives the Paper Curse item (ITEM_PAPER_CURSE),

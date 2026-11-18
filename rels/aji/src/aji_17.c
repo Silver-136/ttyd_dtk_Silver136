@@ -376,6 +376,13 @@ static void noiseDisp(CameraId cameraId, void* param) {
     GXTexCoord2s16(0, 0);
 }
 
+/** Script helper: queues noiseDisp on the 2D camera for this frame, with args[0] as its alpha. */
+static s32 noise(EventEntry* event, BOOL isFirstCall) {
+    EvtWord alpha = evtGetValue(event, event->args[0]);
+    dispEntry(CAMERA_2D, 1100.0f, DISP_MODE_OPAQUE, noiseDisp, (void*)alpha);
+    return EVT_RETURN_DONE;
+}
+
 /**
  * Emergency lighting: waits until the story reaches STG7_25_THE_LAST_MAIL,
  * then fades the map's blend colour from white down to a red tint (green and blue to 96, 32 in the early demos) over
@@ -818,6 +825,14 @@ static EVT_BEGIN(mail_sousin_se)
     RETURN
 EVT_END()
 
+/** Script function: sets Mario's (Peach's) pose to the animation named in args[0]. */
+static s32 peach_set_pose(EventEntry* event, BOOL isFirstCall) {
+    const char* pose = (const char*)evtGetValue(event, event->args[0]);
+    MarioWork* mario = marioGetPtr();
+    marioChgPose(pose);
+    return EVT_RETURN_DONE;
+}
+
 /**
  * Peach's first meeting with TEC (chapter 1): doors open and close with sound,
  * dialogue peach_aji_42 through peach_aji_72 plays, the story progress becomes STG1_19_PEACH_TEC
@@ -1129,21 +1144,6 @@ static EVT_BEGIN(peach_evt_stg1)
     RETURN
 EVT_END()
 
-/** Script helper: queues noiseDisp on the 2D camera for this frame, with args[0] as its alpha. */
-static s32 noise(EventEntry* event, BOOL isFirstCall) {
-    EvtWord alpha = evtGetValue(event, event->args[0]);
-    dispEntry(CAMERA_2D, 1100.0f, DISP_MODE_OPAQUE, noiseDisp, (void*)alpha);
-    return EVT_RETURN_DONE;
-}
-
-/** Script function: sets Mario's (Peach's) pose to the animation named in args[0]. */
-static s32 peach_set_pose(EventEntry* event, BOOL isFirstCall) {
-    const char* pose = (const char*)evtGetValue(event, event->args[0]);
-    MarioWork* mario = marioGetPtr();
-    marioChgPose(pose);
-    return EVT_RETURN_DONE;
-}
-
 /**
  * Draws one textured quad of width w and height h with its top-left corner at (x, y)
  * and texture coordinates up to s and t.
@@ -1311,6 +1311,306 @@ static f32 move_pos_list[15][2] = {
     {-39.30409f, -74.71887f},
 };
 
+/** Script function that queues the capture of the hologram (peach_capture) every frame; blocks forever. */
+static s32 horogram_cap_evt(EventEntry* event, BOOL isFirstCall) {
+    dispEntry(CAMERA_3D, 1000.0f, DISP_MODE_OPAQUE, peach_capture, NULL);
+    return EVT_RETURN_BLOCK;
+}
+
+/**
+ * Script function: allocates the hologram's work area
+ * and its two texture buffers (RGBA8 colour and Z8 depth, 0x260 by 0x1E0 each) and clears its ready
+ * and flag words.
+ */
+static s32 horogram_init(EventEntry* event, BOOL isFirstCall) {
+    u32 size = GXGetTexBufferSize(0x260, 0x1E0, GX_TF_RGBA8, GX_FALSE, 0);
+
+    horogram_wp = _mapAlloc(sizeof(HorogramWork));
+    horogram_wp->buf0 = _mapAlloc(size);
+#if VERSION >= VERSION_US
+    size = GXGetTexBufferSize(0x260, 0x1E0, GX_TF_Z8, GX_FALSE, 0);
+    horogram_wp->buf1 = _mapAlloc(size);
+#else
+    horogram_wp->buf1 = _mapAlloc(GXGetTexBufferSize(0x260, 0x1E0, GX_TF_Z8, GX_FALSE, 0));
+#endif
+    horogram_wp->ready = 0;
+    horogram_wp->flags = 0;
+    return EVT_RETURN_DONE;
+}
+
+/** Script function: turns the hologram flag mask args[1] on (args[0] nonzero) or off. */
+static s32 horogram_flag_onoff(EventEntry* event, BOOL isFirstCall) {
+    EvtWord* args = event->args;
+    s32 on = evtGetValue(event, args[0]);
+    s32 mask = evtGetValue(event, args[1]);
+
+    if (on) {
+        horogram_wp->flags |= mask;
+    } else {
+        horogram_wp->flags &= ~mask;
+    }
+    return EVT_RETURN_DONE;
+}
+
+/** Script function: returns the dance's center point (dance_dt.cx, dance_dt.cy) in args[0] and args[1]. */
+static s32 get_center(EventEntry* event, BOOL isFirstCall) {
+    EvtWord* args = event->args;
+
+    evtSetFloat(event, args[0], dance_dt.cx);
+    evtSetFloat(event, args[1], dance_dt.cy);
+    return EVT_RETURN_DONE;
+}
+
+/** Script function: returns the dance's local rotation angle (radians) in args[0]. */
+static s32 get_local_rotate(EventEntry* event, BOOL isFirstCall) {
+    evtSetFloat(event, event->args[0], dance_dt.rot);
+    return EVT_RETURN_DONE;
+}
+
+/** Script function: sets the dance's local rotation angle to args[0] (radians), adjusting by at most one revolution. */
+static s32 set_local_rotate(EventEntry* event, BOOL isFirstCall) {
+    f32 r;
+
+    dance_dt.rot = evtGetFloat(event, event->args[0]);
+    r = dance_dt.rot;
+
+    // Adjust by at most one revolution rather than applying a full modulo.
+    if (r > 6.2831855f) {
+        dance_dt.rot = r - 6.2831855f;
+    }
+    if (dance_dt.rot < 0.0f) {
+        dance_dt.rot += 6.2831855f;
+    }
+    return EVT_RETURN_DONE;
+}
+
+/** Script function: returns the current dance step (0 to 2) in args[0]. */
+static s32 dance_get_step(EventEntry* event, BOOL isFirstCall) {
+    evtSetValue(event, event->args[0], dance_dt.step);
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script function: resets the dance data: flags cleared, center at (0, -80),
+ * rotation -0.471 radians (-27 degrees), step 0, waltz path index 0.
+ */
+static s32 dance_data_init(EventEntry* event, BOOL isFirstCall) {
+    dance_dt.flags = 0;
+    dance_dt.cx = 0.0f;
+    dance_dt.cy = -80.0f;
+    dance_dt.rot = -0.4712389f;
+    dance_dt.step = 0;
+    dance_dt.movePos = 0;
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script function: turns the dance flag mask args[0] (DANCE_FLAG_*) on (args[1] nonzero) or off.
+ */
+static s32 dance_flag_onoff(EventEntry* event, BOOL isFirstCall) {
+    EvtWord* args = event->args;
+    s32 mask = evtGetValue(event, args[0]);
+    s32 on = evtGetValue(event, args[1]);
+
+    if (on) {
+        dance_dt.flags |= mask;
+    } else {
+        dance_dt.flags &= ~mask;
+    }
+    return EVT_RETURN_DONE;
+}
+
+/** Script function: returns 1 in args[1] if any bit of the dance flag mask args[0] is set, else 0. */
+static s32 dance_flag_check(EventEntry* event, BOOL isFirstCall) {
+    EvtWord* args = event->args;
+    s32 mask = evtGetValue(event, args[0]);
+
+    if (dance_dt.flags & mask) {
+        evtSetValue(event, args[1], 1);
+    } else {
+        evtSetValue(event, args[1], 0);
+    }
+    return EVT_RETURN_DONE;
+}
+
+/** Script function: toggles DANCE_FLAG_REVERSE (the waltz path runs backwards). */
+static s32 dance_reverse(EventEntry* event, BOOL isFirstCall) {
+    if (dance_dt.flags & DANCE_FLAG_REVERSE) {
+        dance_dt.flags &= ~DANCE_FLAG_REVERSE;
+    } else {
+        dance_dt.flags |= DANCE_FLAG_REVERSE;
+    }
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script function: moves the dance center from (args[0], args[1]) to (args[2], args[3]) over args[4] ms with
+ * smooth interpolation (DANCE_FLAG_MOVING while moving), then advances the dance step modulo 3. Blocks until done.
+ */
+static s32 move_center(EventEntry* event, BOOL isFirstCall) {
+    EvtWord* args = event->args;
+    f32 x0 = evtGetFloat(event, args[0]);
+    f32 z0 = evtGetFloat(event, args[1]);
+    f32 x1 = evtGetFloat(event, args[2]);
+    f32 z1 = evtGetFloat(event, args[3]);
+    s32 frames = evtGetValue(event, args[4]);
+    OSTime now = gp->renderTime;
+    s32 elapsed;
+
+    if (isFirstCall) {
+        dance_dt.flags |= DANCE_FLAG_MOVING;
+        event->userdata[0] = ((u64)now >> 32) & 0xFFFFFFFF;
+        event->userdata[1] = now & 0xFFFFFFFF;
+        return EVT_RETURN_BLOCK;
+    }
+    elapsed = OSTicksToMilliseconds((u64)OSDiffTick(now, event->userdata[1]));
+    if (elapsed < frames) {
+        dance_dt.cx = intplGetValue(EASING_SINE_IN_OUT, x0, x1, elapsed, frames);
+        dance_dt.cy = intplGetValue(EASING_SINE_IN_OUT, z0, z1, elapsed, frames);
+        return EVT_RETURN_BLOCK;
+    }
+    dance_dt.cx = x1;
+    dance_dt.cy = z1;
+    dance_dt.flags &= ~DANCE_FLAG_MOVING;
+    if (++dance_dt.step >= 3) {
+        dance_dt.step = 0;
+    }
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script function: moves the waltz path pointer one point forward (or backward in reverse mode) around the 15
+ * points of move_pos_list and returns that point in args[0] and args[1].
+ */
+static s32 compute_move_pos(EventEntry* event, BOOL isFirstCall) {
+    EvtWord* args = event->args;
+
+    if (!(dance_dt.flags & DANCE_FLAG_REVERSE)) {
+        dance_dt.movePos = (dance_dt.movePos + 1) % 15;
+    } else if (dance_dt.movePos != 0) {
+        dance_dt.movePos--;
+    } else {
+        dance_dt.movePos = 14;
+    }
+    evtSetFloat(event, args[0], move_pos_list[dance_dt.movePos][0]);
+    evtSetFloat(event, args[1], move_pos_list[dance_dt.movePos][1]);
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script function: converts the dance center args[0],
+ * args[1] to Peach's position by offsetting 5.5 units along the dance rotation;
+ * returns it in args[2] and args[3].
+ */
+static s32 compute_peach_pos(EventEntry* event, BOOL isFirstCall) {
+    EvtWord* args = event->args;
+    f32 x = evtGetFloat(event, args[0]);
+    f32 z = evtGetFloat(event, args[1]);
+    f32 s = sin(dance_dt.rot);
+    f32 c = cos(dance_dt.rot);
+
+    evtSetFloat(event, args[2], x + 5.5f * s);
+    evtSetFloat(event, args[3], z - 5.5f * c);
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script function: converts the dance center args[0], args[1] to the hologram partner's position,
+ * 5.5 units on the opposite side from Peach; returns it in args[2] and args[3].
+ */
+static s32 compute_horogram_pos(EventEntry* event, BOOL isFirstCall) {
+    EvtWord* args = event->args;
+    f32 x = evtGetFloat(event, args[0]);
+    f32 z = evtGetFloat(event, args[1]);
+    f32 s = sin(dance_dt.rot);
+    f32 c = cos(dance_dt.rot);
+
+    evtSetFloat(event, args[2], x - 5.5f * s);
+    evtSetFloat(event, args[3], z + 5.5f * c);
+    return EVT_RETURN_DONE;
+}
+
+/** Script function: blocks while a dance action (DANCE_FLAG_ACTION) is in progress. */
+static s32 wait_action_end(EventEntry* event, BOOL isFirstCall) {
+    return (dance_dt.flags & DANCE_FLAG_ACTION) ? EVT_RETURN_BLOCK : EVT_RETURN_DONE;
+}
+
+/** Script function: blocks until a dance action (DANCE_FLAG_ACTION) begins. */
+static s32 wait_action_begin(EventEntry* event, BOOL isFirstCall) {
+    return (dance_dt.flags & DANCE_FLAG_ACTION) ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
+}
+
+/** Script function: blocks while the couple is moving (DANCE_FLAG_MOVING). */
+static s32 wait_move_end(EventEntry* event, BOOL isFirstCall) {
+    return (dance_dt.flags & DANCE_FLAG_MOVING) ? EVT_RETURN_BLOCK : EVT_RETURN_DONE;
+}
+
+/**
+ * Script function: reads the controller's new button presses
+ * and compares them with the expected button args[0] (1 = A, 2 = B, 0 = X).
+ * Returns in args[1] 1 for the expected A/B/X button without either other dance button,
+ * 2 for other dance buttons without the expected one, and 0 otherwise. Other buttons are ignored.
+ */
+static s32 btn_check(EventEntry* event, BOOL isFirstCall) {
+    EvtWord* args = event->args;
+    s32 dir = evtGetValue(event, args[0]);
+    u32 btn = keyGetButtonTrg(0);
+    s32 a = btn & PAD_BUTTON_A;
+    s32 b = btn & PAD_BUTTON_B;
+    s32 x = btn & PAD_BUTTON_X;
+    s32 ret = 0;
+
+    // A correct button combined with another dance button remains undecided.
+    switch (dir) {
+        case 1:
+            if (a && !(b | x)) {
+                ret = 1;
+            } else if (!a && (b | x)) {
+                ret = 2;
+            }
+            break;
+        case 2:
+            if (b && !(a | x)) {
+                ret = 1;
+            } else if (!b && (a | x)) {
+                ret = 2;
+            }
+            break;
+        case 0:
+            if (x && !(a | b)) {
+                ret = 1;
+            } else if (!x && (a | b)) {
+                ret = 2;
+            }
+            break;
+        default:
+            if (a | b | x) {
+                ret = 2;
+            }
+            break;
+    }
+    evtSetValue(event, args[1], ret);
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script function: sets the NPC named in args[0] to (args[1], args[2], args[3]),
+ * both its current and previous position.
+ */
+static s32 set_npc_pos(EventEntry* event, BOOL isFirstCall) {
+    EvtWord* args = event->args;
+    const char* name = (const char*)evtGetValue(event, args[0]);
+    f32 x = evtGetFloat(event, args[1]);
+    f32 y = evtGetFloat(event, args[2]);
+    f32 z = evtGetFloat(event, args[3]);
+    NpcEntry* npc = npcNameToPtr(name);
+
+    npc->position.x = npc->prevPosition.x = x;
+    npc->position.y = npc->prevPosition.y = y;
+    npc->position.z = npc->prevPosition.z = z;
+    return EVT_RETURN_DONE;
+}
+
 /**
  * Moves the dance one beat: advances the dancing couple's center to the next point of the waltz path
  * (move_center) over 0.6 seconds while the camera follows,
@@ -1345,6 +1645,67 @@ static EVT_BEGIN(peach_dance_move)
     END_LOOP
     RETURN
 EVT_END()
+
+/** Script function: after a stumble requests pose P_O_F_1 starting at frame 20. */
+static s32 peach_dance_after_fail(EventEntry* event, BOOL isFirstCall) {
+    marioChgPoseTime("P_O_F_1", 20);
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script function: creates a speech-bubble effect for the button prompt (effPeachFukidashiEntry):
+ * args[0] picks the bubble type, args[1] gives the effect a name,
+ * args[2] names the NPC it is attached to ("me" means the script's own NPC) and args[7] is the angle.
+ */
+static s32 evt_fuki_btn(EventEntry* event, BOOL isFirstCall) {
+    EvtWord* args = event->args;
+    s32 type = evtGetValue(event, args[0]);
+    const char* name = (const char*)evtGetValue(event, args[1]);
+    const char* npcName = (const char*)evtGetValue(event, args[2]);
+    f32 x = evtGetFloat(event, args[3]);
+    f32 y = evtGetFloat(event, args[4]);
+    f32 z = evtGetFloat(event, args[5]);
+    f32 size = evtGetFloat(event, args[6]);
+    f32 angle = evtGetFloat(event, args[7]);
+    f32 unk = evtGetFloat(event, args[8]);
+    NpcEntry* npc;
+    EffectEntry* eff;
+
+    if (strcmp(npcName, "me") == 0) {
+        npc = event->ownerNPC;
+    } else {
+        npc = npcNameToPtr(npcName);
+    }
+    eff = effPeachFukidashiEntry(type, npc, 10000, 0.0f, 0.0f, 0.0f, 0.0f, angle);
+    if (name != NULL && strcmp(name, "") != 0) {
+        effSetName(eff, name);
+    }
+    return EVT_RETURN_DONE;
+}
+
+/** Script function: marks the named button bubble effect (args[0]) with the cross used for wrong presses. */
+static s32 evt_fuki_btn_set_batu(EventEntry* event, BOOL isFirstCall) {
+    effSetPeachFukiBatu((const char*)evtGetValue(event, event->args[0]));
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script function: sets the pose args[0] on the hologram NPC
+ * and the matching mirrored pose (name plus "R") on the second hologram.
+ */
+static s32 horogram_set_pose(EventEntry* event, BOOL isFirstCall) {
+    char name[24];
+    const char* pose = (const char*)evtGetValue(event, event->args[0]);
+    NpcEntry* npc = npcNameToPtr("ホログラム");
+    NpcEntry* npc2 = npcNameToPtr("ホログラム2");
+    MarioWork* mario = marioGetPtr();
+
+    animPoseSetAnim(npc->poseId, pose, TRUE);
+    strcpy(name, pose);
+    strcat(name, "R");
+    animPoseSetAnim(npc2->poseId, name, TRUE);
+    return EVT_RETURN_DONE;
+}
 
 /**
  * Sets Peach's and the hologram's dance pose for the current beat:
@@ -3529,364 +3890,3 @@ EVT_BEGIN(aji_17_init_evt)
 #endif
     RETURN
 EVT_END()
-
-/** Script function that queues the capture of the hologram (peach_capture) every frame; blocks forever. */
-static s32 horogram_cap_evt(EventEntry* event, BOOL isFirstCall) {
-    dispEntry(CAMERA_3D, 1000.0f, DISP_MODE_OPAQUE, peach_capture, NULL);
-    return EVT_RETURN_BLOCK;
-}
-
-/**
- * Script function: allocates the hologram's work area
- * and its two texture buffers (RGBA8 colour and Z8 depth, 0x260 by 0x1E0 each) and clears its ready
- * and flag words.
- */
-static s32 horogram_init(EventEntry* event, BOOL isFirstCall) {
-    u32 size = GXGetTexBufferSize(0x260, 0x1E0, GX_TF_RGBA8, GX_FALSE, 0);
-
-    horogram_wp = _mapAlloc(sizeof(HorogramWork));
-    horogram_wp->buf0 = _mapAlloc(size);
-#if VERSION >= VERSION_US
-    size = GXGetTexBufferSize(0x260, 0x1E0, GX_TF_Z8, GX_FALSE, 0);
-    horogram_wp->buf1 = _mapAlloc(size);
-#else
-    horogram_wp->buf1 = _mapAlloc(GXGetTexBufferSize(0x260, 0x1E0, GX_TF_Z8, GX_FALSE, 0));
-#endif
-    horogram_wp->ready = 0;
-    horogram_wp->flags = 0;
-    return EVT_RETURN_DONE;
-}
-
-/** Script function: turns the hologram flag mask args[1] on (args[0] nonzero) or off. */
-static s32 horogram_flag_onoff(EventEntry* event, BOOL isFirstCall) {
-    EvtWord* args = event->args;
-    s32 on = evtGetValue(event, args[0]);
-    s32 mask = evtGetValue(event, args[1]);
-
-    if (on) {
-        horogram_wp->flags |= mask;
-    } else {
-        horogram_wp->flags &= ~mask;
-    }
-    return EVT_RETURN_DONE;
-}
-
-/** Script function: returns the dance's center point (dance_dt.cx, dance_dt.cy) in args[0] and args[1]. */
-static s32 get_center(EventEntry* event, BOOL isFirstCall) {
-    EvtWord* args = event->args;
-
-    evtSetFloat(event, args[0], dance_dt.cx);
-    evtSetFloat(event, args[1], dance_dt.cy);
-    return EVT_RETURN_DONE;
-}
-
-/** Script function: returns the dance's local rotation angle (radians) in args[0]. */
-static s32 get_local_rotate(EventEntry* event, BOOL isFirstCall) {
-    evtSetFloat(event, event->args[0], dance_dt.rot);
-    return EVT_RETURN_DONE;
-}
-
-/** Script function: sets the dance's local rotation angle to args[0] (radians), adjusting by at most one revolution. */
-static s32 set_local_rotate(EventEntry* event, BOOL isFirstCall) {
-    f32 r;
-
-    dance_dt.rot = evtGetFloat(event, event->args[0]);
-    r = dance_dt.rot;
-
-    // Adjust by at most one revolution rather than applying a full modulo.
-    if (r > 6.2831855f) {
-        dance_dt.rot = r - 6.2831855f;
-    }
-    if (dance_dt.rot < 0.0f) {
-        dance_dt.rot += 6.2831855f;
-    }
-    return EVT_RETURN_DONE;
-}
-
-/** Script function: returns the current dance step (0 to 2) in args[0]. */
-static s32 dance_get_step(EventEntry* event, BOOL isFirstCall) {
-    evtSetValue(event, event->args[0], dance_dt.step);
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script function: resets the dance data: flags cleared, center at (0, -80),
- * rotation -0.471 radians (-27 degrees), step 0, waltz path index 0.
- */
-static s32 dance_data_init(EventEntry* event, BOOL isFirstCall) {
-    dance_dt.flags = 0;
-    dance_dt.cx = 0.0f;
-    dance_dt.cy = -80.0f;
-    dance_dt.rot = -0.4712389f;
-    dance_dt.step = 0;
-    dance_dt.movePos = 0;
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script function: turns the dance flag mask args[0] (DANCE_FLAG_*) on (args[1] nonzero) or off.
- */
-static s32 dance_flag_onoff(EventEntry* event, BOOL isFirstCall) {
-    EvtWord* args = event->args;
-    s32 mask = evtGetValue(event, args[0]);
-    s32 on = evtGetValue(event, args[1]);
-
-    if (on) {
-        dance_dt.flags |= mask;
-    } else {
-        dance_dt.flags &= ~mask;
-    }
-    return EVT_RETURN_DONE;
-}
-
-/** Script function: returns 1 in args[1] if any bit of the dance flag mask args[0] is set, else 0. */
-static s32 dance_flag_check(EventEntry* event, BOOL isFirstCall) {
-    EvtWord* args = event->args;
-    s32 mask = evtGetValue(event, args[0]);
-
-    if (dance_dt.flags & mask) {
-        evtSetValue(event, args[1], 1);
-    } else {
-        evtSetValue(event, args[1], 0);
-    }
-    return EVT_RETURN_DONE;
-}
-
-/** Script function: toggles DANCE_FLAG_REVERSE (the waltz path runs backwards). */
-static s32 dance_reverse(EventEntry* event, BOOL isFirstCall) {
-    if (dance_dt.flags & DANCE_FLAG_REVERSE) {
-        dance_dt.flags &= ~DANCE_FLAG_REVERSE;
-    } else {
-        dance_dt.flags |= DANCE_FLAG_REVERSE;
-    }
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script function: moves the dance center from (args[0], args[1]) to (args[2], args[3]) over args[4] ms with
- * smooth interpolation (DANCE_FLAG_MOVING while moving), then advances the dance step modulo 3. Blocks until done.
- */
-static s32 move_center(EventEntry* event, BOOL isFirstCall) {
-    EvtWord* args = event->args;
-    f32 x0 = evtGetFloat(event, args[0]);
-    f32 z0 = evtGetFloat(event, args[1]);
-    f32 x1 = evtGetFloat(event, args[2]);
-    f32 z1 = evtGetFloat(event, args[3]);
-    s32 frames = evtGetValue(event, args[4]);
-    OSTime now = gp->renderTime;
-    s32 elapsed;
-
-    if (isFirstCall) {
-        dance_dt.flags |= DANCE_FLAG_MOVING;
-        event->userdata[0] = ((u64)now >> 32) & 0xFFFFFFFF;
-        event->userdata[1] = now & 0xFFFFFFFF;
-        return EVT_RETURN_BLOCK;
-    }
-    elapsed = OSTicksToMilliseconds((u64)OSDiffTick(now, event->userdata[1]));
-    if (elapsed < frames) {
-        dance_dt.cx = intplGetValue(EASING_SINE_IN_OUT, x0, x1, elapsed, frames);
-        dance_dt.cy = intplGetValue(EASING_SINE_IN_OUT, z0, z1, elapsed, frames);
-        return EVT_RETURN_BLOCK;
-    }
-    dance_dt.cx = x1;
-    dance_dt.cy = z1;
-    dance_dt.flags &= ~DANCE_FLAG_MOVING;
-    if (++dance_dt.step >= 3) {
-        dance_dt.step = 0;
-    }
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script function: moves the waltz path pointer one point forward (or backward in reverse mode) around the 15
- * points of move_pos_list and returns that point in args[0] and args[1].
- */
-static s32 compute_move_pos(EventEntry* event, BOOL isFirstCall) {
-    EvtWord* args = event->args;
-
-    if (!(dance_dt.flags & DANCE_FLAG_REVERSE)) {
-        dance_dt.movePos = (dance_dt.movePos + 1) % 15;
-    } else if (dance_dt.movePos != 0) {
-        dance_dt.movePos--;
-    } else {
-        dance_dt.movePos = 14;
-    }
-    evtSetFloat(event, args[0], move_pos_list[dance_dt.movePos][0]);
-    evtSetFloat(event, args[1], move_pos_list[dance_dt.movePos][1]);
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script function: converts the dance center args[0],
- * args[1] to Peach's position by offsetting 5.5 units along the dance rotation;
- * returns it in args[2] and args[3].
- */
-static s32 compute_peach_pos(EventEntry* event, BOOL isFirstCall) {
-    EvtWord* args = event->args;
-    f32 x = evtGetFloat(event, args[0]);
-    f32 z = evtGetFloat(event, args[1]);
-    f32 s = sin(dance_dt.rot);
-    f32 c = cos(dance_dt.rot);
-
-    evtSetFloat(event, args[2], x + 5.5f * s);
-    evtSetFloat(event, args[3], z - 5.5f * c);
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script function: converts the dance center args[0], args[1] to the hologram partner's position,
- * 5.5 units on the opposite side from Peach; returns it in args[2] and args[3].
- */
-static s32 compute_horogram_pos(EventEntry* event, BOOL isFirstCall) {
-    EvtWord* args = event->args;
-    f32 x = evtGetFloat(event, args[0]);
-    f32 z = evtGetFloat(event, args[1]);
-    f32 s = sin(dance_dt.rot);
-    f32 c = cos(dance_dt.rot);
-
-    evtSetFloat(event, args[2], x - 5.5f * s);
-    evtSetFloat(event, args[3], z + 5.5f * c);
-    return EVT_RETURN_DONE;
-}
-
-/** Script function: blocks while a dance action (DANCE_FLAG_ACTION) is in progress. */
-static s32 wait_action_end(EventEntry* event, BOOL isFirstCall) {
-    return (dance_dt.flags & DANCE_FLAG_ACTION) ? EVT_RETURN_BLOCK : EVT_RETURN_DONE;
-}
-
-/** Script function: blocks until a dance action (DANCE_FLAG_ACTION) begins. */
-static s32 wait_action_begin(EventEntry* event, BOOL isFirstCall) {
-    return (dance_dt.flags & DANCE_FLAG_ACTION) ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
-}
-
-/** Script function: blocks while the couple is moving (DANCE_FLAG_MOVING). */
-static s32 wait_move_end(EventEntry* event, BOOL isFirstCall) {
-    return (dance_dt.flags & DANCE_FLAG_MOVING) ? EVT_RETURN_BLOCK : EVT_RETURN_DONE;
-}
-
-/**
- * Script function: reads the controller's new button presses
- * and compares them with the expected button args[0] (1 = A, 2 = B, 0 = X).
- * Returns in args[1] 1 for the expected A/B/X button without either other dance button,
- * 2 for other dance buttons without the expected one, and 0 otherwise. Other buttons are ignored.
- */
-static s32 btn_check(EventEntry* event, BOOL isFirstCall) {
-    EvtWord* args = event->args;
-    s32 dir = evtGetValue(event, args[0]);
-    u32 btn = keyGetButtonTrg(0);
-    s32 a = btn & PAD_BUTTON_A;
-    s32 b = btn & PAD_BUTTON_B;
-    s32 x = btn & PAD_BUTTON_X;
-    s32 ret = 0;
-
-    // A correct button combined with another dance button remains undecided.
-    switch (dir) {
-        case 1:
-            if (a && !(b | x)) {
-                ret = 1;
-            } else if (!a && (b | x)) {
-                ret = 2;
-            }
-            break;
-        case 2:
-            if (b && !(a | x)) {
-                ret = 1;
-            } else if (!b && (a | x)) {
-                ret = 2;
-            }
-            break;
-        case 0:
-            if (x && !(a | b)) {
-                ret = 1;
-            } else if (!x && (a | b)) {
-                ret = 2;
-            }
-            break;
-        default:
-            if (a | b | x) {
-                ret = 2;
-            }
-            break;
-    }
-    evtSetValue(event, args[1], ret);
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script function: sets the NPC named in args[0] to (args[1], args[2], args[3]),
- * both its current and previous position.
- */
-static s32 set_npc_pos(EventEntry* event, BOOL isFirstCall) {
-    EvtWord* args = event->args;
-    const char* name = (const char*)evtGetValue(event, args[0]);
-    f32 x = evtGetFloat(event, args[1]);
-    f32 y = evtGetFloat(event, args[2]);
-    f32 z = evtGetFloat(event, args[3]);
-    NpcEntry* npc = npcNameToPtr(name);
-
-    npc->position.x = npc->prevPosition.x = x;
-    npc->position.y = npc->prevPosition.y = y;
-    npc->position.z = npc->prevPosition.z = z;
-    return EVT_RETURN_DONE;
-}
-
-/** Script function: after a stumble requests pose P_O_F_1 starting at frame 20. */
-static s32 peach_dance_after_fail(EventEntry* event, BOOL isFirstCall) {
-    marioChgPoseTime("P_O_F_1", 20);
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script function: creates a speech-bubble effect for the button prompt (effPeachFukidashiEntry):
- * args[0] picks the bubble type, args[1] gives the effect a name,
- * args[2] names the NPC it is attached to ("me" means the script's own NPC) and args[7] is the angle.
- */
-static s32 evt_fuki_btn(EventEntry* event, BOOL isFirstCall) {
-    EvtWord* args = event->args;
-    s32 type = evtGetValue(event, args[0]);
-    const char* name = (const char*)evtGetValue(event, args[1]);
-    const char* npcName = (const char*)evtGetValue(event, args[2]);
-    f32 x = evtGetFloat(event, args[3]);
-    f32 y = evtGetFloat(event, args[4]);
-    f32 z = evtGetFloat(event, args[5]);
-    f32 size = evtGetFloat(event, args[6]);
-    f32 angle = evtGetFloat(event, args[7]);
-    f32 unk = evtGetFloat(event, args[8]);
-    NpcEntry* npc;
-    EffectEntry* eff;
-
-    if (strcmp(npcName, "me") == 0) {
-        npc = event->ownerNPC;
-    } else {
-        npc = npcNameToPtr(npcName);
-    }
-    eff = effPeachFukidashiEntry(type, npc, 10000, 0.0f, 0.0f, 0.0f, 0.0f, angle);
-    if (name != NULL && strcmp(name, "") != 0) {
-        effSetName(eff, name);
-    }
-    return EVT_RETURN_DONE;
-}
-
-/** Script function: marks the named button bubble effect (args[0]) with the cross used for wrong presses. */
-static s32 evt_fuki_btn_set_batu(EventEntry* event, BOOL isFirstCall) {
-    effSetPeachFukiBatu((const char*)evtGetValue(event, event->args[0]));
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script function: sets the pose args[0] on the hologram NPC
- * and the matching mirrored pose (name plus "R") on the second hologram.
- */
-static s32 horogram_set_pose(EventEntry* event, BOOL isFirstCall) {
-    char name[24];
-    const char* pose = (const char*)evtGetValue(event, event->args[0]);
-    NpcEntry* npc = npcNameToPtr("ホログラム");
-    NpcEntry* npc2 = npcNameToPtr("ホログラム2");
-    MarioWork* mario = marioGetPtr();
-
-    animPoseSetAnim(npc->poseId, pose, TRUE);
-    strcpy(name, pose);
-    strcat(name, "R");
-    animPoseSetAnim(npc2->poseId, name, TRUE);
-    return EVT_RETURN_DONE;
-}

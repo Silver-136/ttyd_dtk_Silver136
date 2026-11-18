@@ -336,6 +336,48 @@ static EVT_BEGIN(marco_kyorokyoro)
 EVT_END()
 
 /**
+ * Script helper: copies Mario's held items (pouch->heldItems, up to 20) into a map-memory table ended by -1,
+ * stores the count in args[0] and the table address in LW(10), for an item selection menu.
+ */
+static USER_FUNC(make_itemsel_table) {
+    EvtWord* args = event->args;
+    PouchData* pouch = pouchGetPtr();
+    s32* p;
+    s32 count;
+    s32 i;
+
+    itemsel_table_ram = _mapAlloc(0x54);
+    p = itemsel_table_ram;
+    count = 0;
+    for (i = 0; i < 20; i++) {
+        s32 item = pouch->heldItems[i];
+
+        if (item > 0) {
+            *p++ = item;
+            count++;
+        }
+    }
+    *p = -1;
+    evtSetValue(event, args[0], count);
+    event->lwData[10] = (EvtWord)itemsel_table_ram;
+    return EVT_RETURN_DONE;
+}
+
+/** Script helper: frees the item selection table made by make_itemsel_table. */
+static USER_FUNC(delete_itemsel_table) {
+    _mapFree(itemsel_table_ram);
+    return EVT_RETURN_DONE;
+}
+
+/** Script helper: writes the direction Mario is currently requested to face (displayDirectionTarget) into args[0]. */
+static USER_FUNC(evt_mario_get_reqdir) {
+    EvtWord* args = event->args;
+
+    evtSetFloat(event, args[0], marioGetPtr()->displayDirectionTarget);
+    return EVT_RETURN_DONE;
+}
+
+/**
  * Talk event of Flavio: during STG5_13 to 17 he starts settoku_event_main
  * if the missing-sailor conversation has not yet run, then he talks according to the story stage.
  */
@@ -1210,6 +1252,28 @@ static BeroEntry bero_entry_data[] = {
 };
 
 /**
+ * Script helper: writes 1 into args[2] if Mario is within args[1] units (horizontal) of the door's outside hit
+ * box, otherwise 0. args[0] is the door parameter block.
+ */
+static USER_FUNC(muj_get_door_check) {
+    EvtWord* args = event->args;
+    DoorParam* door = (DoorParam*)evtGetValue(event, args[0]);
+    f32 range = evtGetFloat(event, args[1]);
+    Vec hitPos;
+    Vec marioPos;
+
+    hitObjGetPos(door->hitOut, &hitPos);
+    marioPos = marioGetPtr()->position;
+    marioPos.y = hitPos.y = 0.0f;
+    if (PSVECDistance(&hitPos, &marioPos) > range) {
+        evtSetValue(event, args[2], 0);
+    } else {
+        evtSetValue(event, args[2], 1);
+    }
+    return EVT_RETURN_DONE;
+}
+
+/**
  * Custom door-open event for the Keelhaul Key houses:
  * like the standard door-open event but does nothing when evt_mario_party_use_check returns 4 or
  * when Mario is more than 30 units from the door;
@@ -1889,70 +1953,6 @@ static EVT_BEGIN(sekai_yami_shake)
 EVT_END()
 
 /**
- * Script helper: copies Mario's held items (pouch->heldItems, up to 20) into a map-memory table ended by -1,
- * stores the count in args[0] and the table address in LW(10), for an item selection menu.
- */
-static USER_FUNC(make_itemsel_table) {
-    EvtWord* args = event->args;
-    PouchData* pouch = pouchGetPtr();
-    s32* p;
-    s32 count;
-    s32 i;
-
-    itemsel_table_ram = _mapAlloc(0x54);
-    p = itemsel_table_ram;
-    count = 0;
-    for (i = 0; i < 20; i++) {
-        s32 item = pouch->heldItems[i];
-
-        if (item > 0) {
-            *p++ = item;
-            count++;
-        }
-    }
-    *p = -1;
-    evtSetValue(event, args[0], count);
-    event->lwData[10] = (EvtWord)itemsel_table_ram;
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper: frees the item selection table made by make_itemsel_table. */
-static USER_FUNC(delete_itemsel_table) {
-    _mapFree(itemsel_table_ram);
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper: writes the direction Mario is currently requested to face (displayDirectionTarget) into args[0]. */
-static USER_FUNC(evt_mario_get_reqdir) {
-    EvtWord* args = event->args;
-
-    evtSetFloat(event, args[0], marioGetPtr()->displayDirectionTarget);
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper: writes 1 into args[2] if Mario is within args[1] units (horizontal) of the door's outside hit
- * box, otherwise 0. args[0] is the door parameter block.
- */
-static USER_FUNC(muj_get_door_check) {
-    EvtWord* args = event->args;
-    DoorParam* door = (DoorParam*)evtGetValue(event, args[0]);
-    f32 range = evtGetFloat(event, args[1]);
-    Vec hitPos;
-    Vec marioPos;
-
-    hitObjGetPos(door->hitOut, &hitPos);
-    marioPos = marioGetPtr()->position;
-    marioPos.y = hitPos.y = 0.0f;
-    if (PSVECDistance(&hitPos, &marioPos) > range) {
-        evtSetValue(event, args[2], 0);
-    } else {
-        evtSetValue(event, args[2], 1);
-    }
-    return EVT_RETURN_DONE;
-}
-
-/**
  * Script helper: sets the "dark world" view matrix,
  * a camera looking down from height 100 at the offset z in args[0];
  * used by the dark ending scenes (at STG8_15_GRODUS) where the camp goes dark.
@@ -2008,43 +2008,6 @@ static USER_FUNC(sekai_yami_omise) {
         icon = iconNameToPtr(name);
         icon->color = (GXColor){0x40, 0x40, 0x40, 0xFF};
     }
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper: creates a Star Stone effect (type 4) named args[0] at (args[1], args[2], args[3]). */
-static USER_FUNC(starstone_entry) {
-    EvtWord* args = event->args;
-    const char* name = (const char*)evtGetValue(event, args[0]);
-    f32 x = evtGetFloat(event, args[1]);
-    f32 y = evtGetFloat(event, args[2]);
-    f32 z = evtGetFloat(event, args[3]);
-
-    effSetName(effStarStoneEntry(4, x, y, z, 1.0f), name);
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper: moves the named Star Stone effect to (args[1], args[2], args[3]). */
-static USER_FUNC(starstone_set_pos) {
-    EvtWord* args = event->args;
-    const char* name = (const char*)evtGetValue(event, args[0]);
-    f32 x = evtGetFloat(event, args[1]);
-    f32 y = evtGetFloat(event, args[2]);
-    f32 z = evtGetFloat(event, args[3]);
-    EffectEntry* eff = effNameToPtr(name);
-
-    ((EffStarStoneWork*)eff->userdata)->position.x = x;
-    ((EffStarStoneWork*)eff->userdata)->position.y = y;
-    ((EffStarStoneWork*)eff->userdata)->position.z = z;
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper: rotates the named Star Stone effect around Y by args[1] degrees. */
-static USER_FUNC(starstone_set_ry) {
-    EvtWord* args = event->args;
-    const char* name = (const char*)evtGetValue(event, args[0]);
-    f32 ry = evtGetFloat(event, args[1]);
-
-    ((EffStarStoneWork*)effNameToPtr(name)->userdata)->rot.y = ry;
     return EVT_RETURN_DONE;
 }
 
@@ -2163,6 +2126,43 @@ static EVT_BEGIN(sekai_yami_evt)
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
+
+/** Script helper: creates a Star Stone effect (type 4) named args[0] at (args[1], args[2], args[3]). */
+static USER_FUNC(starstone_entry) {
+    EvtWord* args = event->args;
+    const char* name = (const char*)evtGetValue(event, args[0]);
+    f32 x = evtGetFloat(event, args[1]);
+    f32 y = evtGetFloat(event, args[2]);
+    f32 z = evtGetFloat(event, args[3]);
+
+    effSetName(effStarStoneEntry(4, x, y, z, 1.0f), name);
+    return EVT_RETURN_DONE;
+}
+
+/** Script helper: moves the named Star Stone effect to (args[1], args[2], args[3]). */
+static USER_FUNC(starstone_set_pos) {
+    EvtWord* args = event->args;
+    const char* name = (const char*)evtGetValue(event, args[0]);
+    f32 x = evtGetFloat(event, args[1]);
+    f32 y = evtGetFloat(event, args[2]);
+    f32 z = evtGetFloat(event, args[3]);
+    EffectEntry* eff = effNameToPtr(name);
+
+    ((EffStarStoneWork*)eff->userdata)->position.x = x;
+    ((EffStarStoneWork*)eff->userdata)->position.y = y;
+    ((EffStarStoneWork*)eff->userdata)->position.z = z;
+    return EVT_RETURN_DONE;
+}
+
+/** Script helper: rotates the named Star Stone effect around Y by args[1] degrees. */
+static USER_FUNC(starstone_set_ry) {
+    EvtWord* args = event->args;
+    const char* name = (const char*)evtGetValue(event, args[0]);
+    f32 ry = evtGetFloat(event, args[1]);
+
+    ((EffStarStoneWork*)effNameToPtr(name)->userdata)->rot.y = ry;
+    return EVT_RETURN_DONE;
+}
 
 /**
  * Cheering cutaway of the final battle (STG8_15_GRODUS, map entered at "minnnanokoe"): Mario and the

@@ -854,6 +854,83 @@ static USER_FUNC(enzan_cam_turn_keisan_f) {
     return EVT_RETURN_DONE;
 }
 
+/** Stores the float args[1] into the integer variable args[0] (float to integer conversion). */
+static USER_FUNC(enzan_set_i_f) {
+    EvtWord* args = event->args;
+    s32 var = args[0];
+
+    evtSetValue(event, var, evtGetFloat(event, args[1]));
+    return EVT_RETURN_DONE;
+}
+
+/** Stores the integer args[1] into the float variable args[0] (integer to float conversion). */
+static USER_FUNC(enzan_set_f_i) {
+    EvtWord* args = event->args;
+    s32 var = args[0];
+
+    evtSetFloat(event, var, evtGetValue(event, args[1]));
+    return EVT_RETURN_DONE;
+}
+
+/** Copies the event's 16 local words (LW) into a map-wide buffer so a nested script can reuse them. */
+static USER_FUNC(enzan_lw_save) {
+    s32 i;
+
+    for (i = 0; i < 16; i++) {
+        xlw[i] = event->lwData[i];
+    }
+    return EVT_RETURN_DONE;
+}
+
+/** Restores the 16 local words saved by enzan_lw_save. */
+static USER_FUNC(enzan_lw_load) {
+    s32 i;
+
+    for (i = 0; i < 16; i++) {
+        event->lwData[i] = xlw[i];
+    }
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Switches the map background texture to the file named by args[0] (the current map's name if NULL),
+ * from "./bg/" in the early demos and "./b/" in JP and later.
+ */
+static USER_FUNC(evt_set_bgtpl) {
+
+    char path[64];
+    const char* name = (const char*)evtGetValue(event, event->args[0]);
+
+    if (name == NULL) {
+        name = gp->currentMapName;
+    }
+#if VERSION <= VERSION_DEMO_JP
+    sprintf(path, "./bg/%s.tpl", name);
+#else
+    sprintf(path, "./b/%s.tpl", name);
+#endif
+    bgReEntry(path);
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Turns the camera-position contribution to background scrolling on (args[0] non-zero) or off (zero);
+ * the power-up ceremony turns it off while the interior is hidden.
+ */
+static USER_FUNC(bgScrollControll) {
+    if (evtGetValue(event, event->args[0]) == 0) {
+        bgTransOffsetOff();
+    } else {
+        bgTransOffsetOn();
+    }
+    return EVT_RETURN_DONE;
+}
+
+/** Blocks until the BGM stream on channel 1 has started playing, or returns immediately if that channel is empty. */
+static USER_FUNC(bgm_start_wait) {
+    return psndBGMStartCheck(1) ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
+}
+
 /**
  * Merlon's partner rank up ceremony in the power-up shop:
  * the stone glows, Merlon talks (powerup_12 and 14),
@@ -1202,6 +1279,12 @@ static EVT_BEGIN(powerupya_party_rtn)
     END_LOOP
     RETURN
 EVT_END()
+
+/** Sets the event's owner NPC to the NPC named in args[0]; used so that "me" refers to Merlon in his shop scripts. */
+static USER_FUNC(setmertn) {
+    event->ownerNPC = npcNameToPtr((const char*)evtGetValue(event, event->args[0]));
+    return EVT_RETURN_DONE;
+}
 
 /**
  * Talk event of Merlon at his table.
@@ -4678,89 +4761,6 @@ static EVT_BEGIN(evt_gor_door_open_sub)
     RETURN
 EVT_END()
 
-/** Stores the float args[1] into the integer variable args[0] (float to integer conversion). */
-static USER_FUNC(enzan_set_i_f) {
-    EvtWord* args = event->args;
-    s32 var = args[0];
-
-    evtSetValue(event, var, evtGetFloat(event, args[1]));
-    return EVT_RETURN_DONE;
-}
-
-/** Stores the integer args[1] into the float variable args[0] (integer to float conversion). */
-static USER_FUNC(enzan_set_f_i) {
-    EvtWord* args = event->args;
-    s32 var = args[0];
-
-    evtSetFloat(event, var, evtGetValue(event, args[1]));
-    return EVT_RETURN_DONE;
-}
-
-/** Copies the event's 16 local words (LW) into a map-wide buffer so a nested script can reuse them. */
-static USER_FUNC(enzan_lw_save) {
-    s32 i;
-
-    for (i = 0; i < 16; i++) {
-        xlw[i] = event->lwData[i];
-    }
-    return EVT_RETURN_DONE;
-}
-
-/** Restores the 16 local words saved by enzan_lw_save. */
-static USER_FUNC(enzan_lw_load) {
-    s32 i;
-
-    for (i = 0; i < 16; i++) {
-        event->lwData[i] = xlw[i];
-    }
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Switches the map background texture to the file named by args[0] (the current map's name if NULL),
- * from "./bg/" in the early demos and "./b/" in JP and later.
- */
-static USER_FUNC(evt_set_bgtpl) {
-
-    char path[64];
-    const char* name = (const char*)evtGetValue(event, event->args[0]);
-
-    if (name == NULL) {
-        name = gp->currentMapName;
-    }
-#if VERSION <= VERSION_DEMO_JP
-    sprintf(path, "./bg/%s.tpl", name);
-#else
-    sprintf(path, "./b/%s.tpl", name);
-#endif
-    bgReEntry(path);
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Turns the camera-position contribution to background scrolling on (args[0] non-zero) or off (zero);
- * the power-up ceremony turns it off while the interior is hidden.
- */
-static USER_FUNC(bgScrollControll) {
-    if (evtGetValue(event, event->args[0]) == 0) {
-        bgTransOffsetOff();
-    } else {
-        bgTransOffsetOn();
-    }
-    return EVT_RETURN_DONE;
-}
-
-/** Blocks until the BGM stream on channel 1 has started playing, or returns immediately if that channel is empty. */
-static USER_FUNC(bgm_start_wait) {
-    return psndBGMStartCheck(1) ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
-}
-
-/** Sets the event's owner NPC to the NPC named in args[0]; used so that "me" refers to Merlon in his shop scripts. */
-static USER_FUNC(setmertn) {
-    event->ownerNPC = npcNameToPtr((const char*)evtGetValue(event, event->args[0]));
-    return EVT_RETURN_DONE;
-}
-
 /**
  * Swaps the crystal on the shop's floor: for the name "S_i01_sui_ao" shows the blue one,
  * for "S_i01_sui_aka" shows the red one (the other is hidden).
@@ -4971,87 +4971,6 @@ static USER_FUNC(monosiri_check) {
 #endif
     evtSetValue(event, args[0], 0);
     evtSetValue(event, args[1], 0);
-    return EVT_RETURN_DONE;
-}
-
-/** Marks tattle entry args[0] as learned and returns in args[1] the pointer to its message. */
-static USER_FUNC(monosiri_on) {
-    EvtWord* args = event->args;
-    s32 id = evtGetValue(event, args[0]);
-    TattleEntry* tattle = battleGetUnitMonosiriPtr(id);
-
-    swSet(id + GSWF_TATTLE_BASE);
-    evtSetValue(event, args[1], (EvtWord)msgSearch(tattle->enemyTag));
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Returns in args[0] whether the 3D camera is facing the front of the house (yaw below 90 or at least 270 degrees),
- * 1 for yes. US and later return 0 when Mario is west of x=-300.
- */
-static USER_FUNC(camera_front_check) {
-    EvtWord* args = event->args;
-    f32 angle = reviseAngle((100.0f * camGetPtr(CAMERA_3D)->viewYaw + 5.0f) / 100.0f);
-
-#if VERSION >= VERSION_US
-    if (marioGetPtr()->position.x < -300.0f) {
-        evtSetValue(event, *args, 0);
-        return EVT_RETURN_DONE;
-    }
-#endif
-    if (angle >= 0.0f && angle < 90.0f) {
-        evtSetValue(event, *args++, 1);
-    }
-    if (angle >= 90.0f && angle < 270.0f) {
-        evtSetValue(event, *args++, 0);
-    }
-    if (angle >= 270.0f && angle < 360.0f) {
-        evtSetValue(event, *args++, 1);
-    }
-    return EVT_RETURN_DONE;
-}
-
-/** Allocates the 256-byte buffer that remembers the previous camera road name. */
-static USER_FUNC(get_camcurve_init) {
-    camstring = _mapAlloc(0x100);
-    camstring[0] = '\0';
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Returns in args[0] 1 when the tracked camera road changes from the remembered upper road "C_ue" to the ground road
- * "C_ground_ok", else 0; remembers the road name for the next call.
- */
-static USER_FUNC(get_camcurve) {
-    EvtWord* args = event->args;
-    CamRoadWork* road = camRoadGetWorkPtr();
-    s32 ret = 0;
-
-    if (road->prev.on != 0 && road->prev.cam != NULL) {
-        if (!strcmp(road->prev.cam->name, "|MarioSt_CameraRoad|C_ground_ok") && !strcmp(camstring, "|MarioSt_CameraRoad|C_ue")) {
-            ret = 1;
-        }
-        strcpy(camstring, road->prev.cam->name);
-    }
-    evtSetValue(event, args[0], ret);
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Blocks (returns not-done) for every frame the camera yaw has changed since the last call;
- * returns done when the camera has held still.
- */
-static USER_FUNC(camera_move_check) {
-    f32 angle;
-
-    if (isFirstCall) {
-        event->userdataf[0] = -1000.0f;
-    }
-    angle = reviseAngle((100.0f * camGetPtr(CAMERA_3D)->viewYaw + 5.0f) / 100.0f);
-    if (event->userdataf[0] != angle) {
-        event->userdataf[0] = angle;
-        return EVT_RETURN_BLOCK;
-    }
     return EVT_RETURN_DONE;
 }
 
@@ -6986,6 +6905,87 @@ static s32 stg2_list[] = {
 static s32 stg3_list[] = {
     65,
 };
+
+/** Marks tattle entry args[0] as learned and returns in args[1] the pointer to its message. */
+static USER_FUNC(monosiri_on) {
+    EvtWord* args = event->args;
+    s32 id = evtGetValue(event, args[0]);
+    TattleEntry* tattle = battleGetUnitMonosiriPtr(id);
+
+    swSet(id + GSWF_TATTLE_BASE);
+    evtSetValue(event, args[1], (EvtWord)msgSearch(tattle->enemyTag));
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Returns in args[0] whether the 3D camera is facing the front of the house (yaw below 90 or at least 270 degrees),
+ * 1 for yes. US and later return 0 when Mario is west of x=-300.
+ */
+static USER_FUNC(camera_front_check) {
+    EvtWord* args = event->args;
+    f32 angle = reviseAngle((100.0f * camGetPtr(CAMERA_3D)->viewYaw + 5.0f) / 100.0f);
+
+#if VERSION >= VERSION_US
+    if (marioGetPtr()->position.x < -300.0f) {
+        evtSetValue(event, *args, 0);
+        return EVT_RETURN_DONE;
+    }
+#endif
+    if (angle >= 0.0f && angle < 90.0f) {
+        evtSetValue(event, *args++, 1);
+    }
+    if (angle >= 90.0f && angle < 270.0f) {
+        evtSetValue(event, *args++, 0);
+    }
+    if (angle >= 270.0f && angle < 360.0f) {
+        evtSetValue(event, *args++, 1);
+    }
+    return EVT_RETURN_DONE;
+}
+
+/** Allocates the 256-byte buffer that remembers the previous camera road name. */
+static USER_FUNC(get_camcurve_init) {
+    camstring = _mapAlloc(0x100);
+    camstring[0] = '\0';
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Returns in args[0] 1 when the tracked camera road changes from the remembered upper road "C_ue" to the ground road
+ * "C_ground_ok", else 0; remembers the road name for the next call.
+ */
+static USER_FUNC(get_camcurve) {
+    EvtWord* args = event->args;
+    CamRoadWork* road = camRoadGetWorkPtr();
+    s32 ret = 0;
+
+    if (road->prev.on != 0 && road->prev.cam != NULL) {
+        if (!strcmp(road->prev.cam->name, "|MarioSt_CameraRoad|C_ground_ok") && !strcmp(camstring, "|MarioSt_CameraRoad|C_ue")) {
+            ret = 1;
+        }
+        strcpy(camstring, road->prev.cam->name);
+    }
+    evtSetValue(event, args[0], ret);
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Blocks (returns not-done) for every frame the camera yaw has changed since the last call;
+ * returns done when the camera has held still.
+ */
+static USER_FUNC(camera_move_check) {
+    f32 angle;
+
+    if (isFirstCall) {
+        event->userdataf[0] = -1000.0f;
+    }
+    angle = reviseAngle((100.0f * camGetPtr(CAMERA_3D)->viewYaw + 5.0f) / 100.0f);
+    if (event->userdataf[0] != angle) {
+        event->userdataf[0] = angle;
+        return EVT_RETURN_BLOCK;
+    }
+    return EVT_RETURN_DONE;
+}
 
 /** Demo Chapter 4 or (JP and later) Chapter 5 enemies whose Tattle entries Frankly's notes can fill in (enemy ids). */
 #if VERSION <= VERSION_DEMO_JP

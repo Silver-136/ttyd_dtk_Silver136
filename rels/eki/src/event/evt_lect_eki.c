@@ -552,6 +552,99 @@ static EVT_BEGIN(boots_lv3_juyoitem_lecture_sub02)
 EVT_END()
 
 /**
+ * Script helper: switches off the collision of the map object named args[0] ("me" for the running one): each
+ * of its (up to two) named hit objects gets HIT_FLAG_OFF through hitGrpFlagOn (nasi = none).
+ * Unused in this file.
+ */
+USER_FUNC(lect_mobj_hit_nasi) {
+    const char* name = (const char*)evtGetValue(event, event->args[0]);
+    MapObjectEntry* mobj;
+    s32 i;
+
+    if (strcmp(name, "me") != 0) {
+        mobj = mobjNameToPtr(name);
+    } else {
+        mobj = event->thisMapObj;
+    }
+    for (i = 0; i < 2; i++) {
+        // hitObj[i].name is an array, so the NULL test is always true; the original code has it and MWCC still emits the compare.
+        if (mobj->hitObj[i].name != NULL && strcmp(mobj->hitObj[i].name, "") != 0) {
+            hitGrpFlagOn(mobj->hitObj[i].name, 1);
+        }
+    }
+    return EVT_RETURN_DONE;
+}
+
+/** Script helper: writes the item id of the important item being shown (stored in event->lwData[8]) into args[0]. */
+static USER_FUNC(juyoitem_get_no) {
+    evtSetValue(event, event->args[0], ((ItemEntry*)event->lwData[8])->itemId);
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script helper: ends the important-item display:
+ * removes the item-get effect (lwData[9]), puts Mario back on camera 4 and clears the item's effect flag.
+ */
+static USER_FUNC(juyoitem_end) {
+    ItemEntry* item = (ItemEntry*)event->lwData[8];
+
+    effSoftDelete((EffectEntry*)event->lwData[9]);
+    marioSetCamId(CAMERA_3D);
+    iconFlagOff(item->name, ICON_FLAG_CAM_EFFECT_B);
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script helper: starts the lecture for an important item:
+ * clears the item icon's effect flag, parks the item below the map,
+ * puts Mario in his standing motion and sets the system level to 0.
+ */
+static USER_FUNC(juyoitem_gogo) {
+    ItemEntry* item = (ItemEntry*)event->lwData[8];
+
+    iconFlagOff(item->name, ICON_FLAG_CAM_EFFECT_B);
+    itemSetPosition(item, 0.0f, -1000.0f, 0.0f);
+    marioChgStayMotion();
+    marioStSystemLevel(0);
+    return EVT_RETURN_DONE;
+}
+
+/** Script helper: hides the important item's icon after the lecture. */
+static USER_FUNC(juyoitem_goato) {
+    iconFlagOn(((ItemEntry*)event->lwData[8])->name, ICON_FLAG_HIDDEN);
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script helper (args[0] = map object name, "me" for the script's own): sets the two no-map-blend material flags on the
+ * map object's pose.
+ */
+USER_FUNC(lect_mobj_set_nosysblend) {
+    const char* name = (const char*)evtGetValue(event, event->args[0]);
+    MapObjectEntry* mobj;
+
+    if (strcmp(name, "me") != 0) {
+        mobj = mobjNameToPtr(name);
+    } else {
+        mobj = event->thisMapObj;
+    }
+    animPoseSetMaterialFlagOn(mobj->poseId, (MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2));
+    return EVT_RETURN_DONE;
+}
+
+/** Script helper: writes TRUE into args[0] while controller 0 holds the A button, otherwise FALSE. */
+static USER_FUNC(lect_push_a_check) {
+    EvtWord* args = event->args;
+
+    if (keyGetButton(0) & PAD_BUTTON_A) {
+        evtSetValue(event, args[0], TRUE);
+    } else {
+        evtSetValue(event, args[0], FALSE);
+    }
+    return EVT_RETURN_DONE;
+}
+
+/**
  * The Ultra Boots lecture proper.
  * Kinopiko explains the spring jump (lecture_u_boots_04 to 08):
  * the player holds A and rotates the stick to crouch and releases A to launch, while the button icons show the
@@ -728,6 +821,23 @@ EVT_BEGIN(boots_lv3_juyoitem_lecture)
     RETURN
 EVT_END()
 
+/** Script helper: writes TRUE into args[0] while controller 0 holds the B button, otherwise FALSE. */
+static USER_FUNC(lect_push_b_check) {
+    EvtWord* args = event->args;
+
+    if (keyGetButton(0) & PAD_BUTTON_B) {
+        evtSetValue(event, args[0], TRUE);
+    } else {
+        evtSetValue(event, args[0], FALSE);
+    }
+    return EVT_RETURN_DONE;
+}
+
+/** Script helper: blocks until the lecture music (BGM channel 1) has actually started playing. */
+static USER_FUNC(bgm_start_wait) {
+    return psndBGMStartCheck(1) ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
+}
+
 /**
  * Entry point of the key-item lecture, run when Mario first picks up a key item such as the Ultra Boots (the
  * Ultra Boots case calls it through lect_juyoitem_rel_set):
@@ -813,113 +923,3 @@ EVT_BEGIN(all_juyoitem_lecture_rel)
     CALL(evt_party_run, 0)
     RETURN
 EVT_END()
-
-/**
- * Script helper: switches off the collision of the map object named args[0] ("me" for the running one): each
- * of its (up to two) named hit objects gets HIT_FLAG_OFF through hitGrpFlagOn (nasi = none).
- * Unused in this file.
- */
-USER_FUNC(lect_mobj_hit_nasi) {
-    const char* name = (const char*)evtGetValue(event, event->args[0]);
-    MapObjectEntry* mobj;
-    s32 i;
-
-    if (strcmp(name, "me") != 0) {
-        mobj = mobjNameToPtr(name);
-    } else {
-        mobj = event->thisMapObj;
-    }
-    for (i = 0; i < 2; i++) {
-        // hitObj[i].name is an array, so the NULL test is always true; the original code has it and MWCC still emits the compare.
-        if (mobj->hitObj[i].name != NULL && strcmp(mobj->hitObj[i].name, "") != 0) {
-            hitGrpFlagOn(mobj->hitObj[i].name, 1);
-        }
-    }
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper: writes the item id of the important item being shown (stored in event->lwData[8]) into args[0]. */
-static USER_FUNC(juyoitem_get_no) {
-    evtSetValue(event, event->args[0], ((ItemEntry*)event->lwData[8])->itemId);
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper: ends the important-item display:
- * removes the item-get effect (lwData[9]), puts Mario back on camera 4 and clears the item's effect flag.
- */
-static USER_FUNC(juyoitem_end) {
-    ItemEntry* item = (ItemEntry*)event->lwData[8];
-
-    effSoftDelete((EffectEntry*)event->lwData[9]);
-    marioSetCamId(CAMERA_3D);
-    iconFlagOff(item->name, ICON_FLAG_CAM_EFFECT_B);
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper: starts the lecture for an important item:
- * clears the item icon's effect flag, parks the item below the map,
- * puts Mario in his standing motion and sets the system level to 0.
- */
-static USER_FUNC(juyoitem_gogo) {
-    ItemEntry* item = (ItemEntry*)event->lwData[8];
-
-    iconFlagOff(item->name, ICON_FLAG_CAM_EFFECT_B);
-    itemSetPosition(item, 0.0f, -1000.0f, 0.0f);
-    marioChgStayMotion();
-    marioStSystemLevel(0);
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper: hides the important item's icon after the lecture. */
-static USER_FUNC(juyoitem_goato) {
-    iconFlagOn(((ItemEntry*)event->lwData[8])->name, ICON_FLAG_HIDDEN);
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper (args[0] = map object name, "me" for the script's own): sets the two no-map-blend material flags on the
- * map object's pose.
- */
-USER_FUNC(lect_mobj_set_nosysblend) {
-    const char* name = (const char*)evtGetValue(event, event->args[0]);
-    MapObjectEntry* mobj;
-
-    if (strcmp(name, "me") != 0) {
-        mobj = mobjNameToPtr(name);
-    } else {
-        mobj = event->thisMapObj;
-    }
-    animPoseSetMaterialFlagOn(mobj->poseId, (MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2));
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper: writes TRUE into args[0] while controller 0 holds the A button, otherwise FALSE. */
-static USER_FUNC(lect_push_a_check) {
-    EvtWord* args = event->args;
-
-    if (keyGetButton(0) & PAD_BUTTON_A) {
-        evtSetValue(event, args[0], TRUE);
-    } else {
-        evtSetValue(event, args[0], FALSE);
-    }
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper: writes TRUE into args[0] while controller 0 holds the B button, otherwise FALSE. */
-static USER_FUNC(lect_push_b_check) {
-    EvtWord* args = event->args;
-
-    if (keyGetButton(0) & PAD_BUTTON_B) {
-        evtSetValue(event, args[0], TRUE);
-    } else {
-        evtSetValue(event, args[0], FALSE);
-    }
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper: blocks until the lecture music (BGM channel 1) has actually started playing. */
-static USER_FUNC(bgm_start_wait) {
-    return psndBGMStartCheck(1) ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
-}

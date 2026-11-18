@@ -101,27 +101,6 @@ EvtWord las_10_init_evt[294];
 #endif
 
 /**
- * Script helper: collects the Riddle Tower keys (items 0x26..0x2D, the eight Palace keys) Mario carries into
- * kagi_tbl, terminated by -1, and returns the table in args[0] and the count in args[1].
- * Used to build the item picker at a key stand.
- */
-static USER_FUNC(make_kagi_tbl) {
-    EvtWord* args = event->args;
-    s32 n = 0;
-    s32 i;
-
-    for (i = 0; i < 8; i++) {
-        if ((s32)pouchCheckItem(i + ITEM_PALACE_KEY_0x26) > 0) {
-            kagi_tbl[n++] = i + ITEM_PALACE_KEY_0x26;
-        }
-    }
-    kagi_tbl[n] = -1;
-    evtSetValue(event, args[0], (EvtWord)kagi_tbl);
-    evtSetValue(event, args[1], n);
-    return EVT_RETURN_DONE;
-}
-
-/**
  * Door animation script (closing) for the south door,
  * used as the enter/exit animation of this room's bero entry.
  * LW(0) holds the angle step of the swing, and the script turns the door panels S_door1_1 and S_door1_2 by it,
@@ -794,6 +773,27 @@ static s32 kagi_tbl[] = {
     -1, -1, -1, -1, -1, -1, -1, -1,
     -1,
 };
+
+/**
+ * Script helper: collects the Riddle Tower keys (items 0x26..0x2D, the eight Palace keys) Mario carries into
+ * kagi_tbl, terminated by -1, and returns the table in args[0] and the count in args[1].
+ * Used to build the item picker at a key stand.
+ */
+static USER_FUNC(make_kagi_tbl) {
+    EvtWord* args = event->args;
+    s32 n = 0;
+    s32 i;
+
+    for (i = 0; i < 8; i++) {
+        if ((s32)pouchCheckItem(i + ITEM_PALACE_KEY_0x26) > 0) {
+            kagi_tbl[n++] = i + ITEM_PALACE_KEY_0x26;
+        }
+    }
+    kagi_tbl[n] = -1;
+    evtSetValue(event, args[0], (EvtWord)kagi_tbl);
+    evtSetValue(event, args[1], n);
+    return EVT_RETURN_DONE;
+}
 
 /**
  * Event script: Mario uses a key on stand 1. Opens the item window with the keys from make_kagi_tbl, or prints

@@ -55,17 +55,6 @@ static EvtWord evt_skip[43];
 EvtWord tou_00_init_evt[76];
 
 /**
- * Script helper: moves the 3D camera's start time back 2 s and the event's saved time back 3.5 s,
- */
-static USER_FUNC(time_shift) {
-    CameraEntry* cam = camGetPtr(CAMERA_3D);
-
-    cam->startTimeA += OSMillisecondsToTicks((OSTime)-2000);
-    event->savedTime += OSMillisecondsToTicks((OSTime)-3500);
-    return EVT_RETURN_DONE;
-}
-
-/**
  * Decoration loop for the Glitz Pit exterior: every 0.3 to 0.8 seconds a random "balloon_heiho_n64" balloon
  * effect floats out from a point near the tou_enkei arena object.
  */
@@ -170,6 +159,17 @@ static EVT_BEGIN(evt_wing)
     END_LOOP
     RETURN
 EVT_END()
+
+/**
+ * Script helper: moves the 3D camera's start time back 2 s and the event's saved time back 3.5 s,
+ */
+static USER_FUNC(time_shift) {
+    CameraEntry* cam = camGetPtr(CAMERA_3D);
+
+    cam->startTimeA += OSMillisecondsToTicks((OSTime)-2000);
+    event->savedTime += OSMillisecondsToTicks((OSTime)-3500);
+    return EVT_RETURN_DONE;
+}
 
 /**
  * Arrival cutscene when Mario comes from Rogueport by blimp:
@@ -369,6 +369,24 @@ static USER_FUNC(kpa_hikousen_yure) {
     // 飛クッパ
     npcNameToPtr("飛クッパ")->moveOffset.y = y;
     return EVT_RETURN_DONE;
+}
+
+/** Script helper: args[0] = smoke effect name, args[1] = distance; shifts that smoke puff along x after the first call. */
+// Follow the named effect until it disappears; the first call waits without moving it.
+static USER_FUNC(kemuri_move) {
+    EvtWord* args = event->args;
+    const char* name = (const char*)evtGetValue(event, args[0]);
+    f32 dy = evtGetFloat(event, args[1]);
+    EffectEntry* eff = effNameToPtr(name);
+
+    if (eff == NULL) {
+        return EVT_RETURN_DONE;
+    }
+    if (isFirstCall) {
+        return EVT_RETURN_BLOCK;
+    }
+    ((EffKemuri12N64Work*)eff->userdata)->position.x += dy;
+    return EVT_RETURN_BLOCK;
 }
 
 /**
@@ -629,24 +647,6 @@ static EVT_BEGIN(hkoopa_init)
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     RETURN
 EVT_END()
-
-/** Script helper: args[0] = smoke effect name, args[1] = distance; shifts that smoke puff along x after the first call. */
-// Follow the named effect until it disappears; the first call waits without moving it.
-static USER_FUNC(kemuri_move) {
-    EvtWord* args = event->args;
-    const char* name = (const char*)evtGetValue(event, args[0]);
-    f32 dy = evtGetFloat(event, args[1]);
-    EffectEntry* eff = effNameToPtr(name);
-
-    if (eff == NULL) {
-        return EVT_RETURN_DONE;
-    }
-    if (isFirstCall) {
-        return EVT_RETURN_BLOCK;
-    }
-    ((EffKemuri12N64Work*)eff->userdata)->position.x += dy;
-    return EVT_RETURN_BLOCK;
-}
 
 /** NPCs of this map: Bowser in his airship, who flies over Glitzville in the chapter 4 interlude. */
 static NpcSetupInfo npcEnt[] = {

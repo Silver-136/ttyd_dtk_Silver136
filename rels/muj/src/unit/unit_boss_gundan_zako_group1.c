@@ -64,97 +64,6 @@ static EvtWord wait_event[6];
 static ExtTexInfo zakogun_ext_entry_data[49];
 EvtWord zakogun_entry[19];
 
-/** Script helper: stores the battle unit id args[0] that the X-Naut horde is aiming at (work->targetId). */
-USER_FUNC(zakogun_set_target_id) {
-    work->targetId = evtGetValue(event, event->args[0]);
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Sets the animation of one horde member: which texture to start from (base),
- * how many (num) and the frames per texture (div), and restarts the animation counter.
- */
-void zakogun_set_pose(ZakoGun* zako, s32 base, s32 num, s32 div) {
-    zako->poseBase = base;
-    zako->poseNum = num;
-    zako->poseDiv = div;
-    zako->poseCount = 0;
-}
-
-/**
- * Script helper: when the horde takes damage, switches every one of the 500 X-Nauts to the hurt texture for the
- * current formation (group 1, 2 or 3), once on the first call.
- */
-USER_FUNC(zakogun_damage_pose) {
-    s32 i;
-    ZakoGun* zako;
-
-    if (isFirstCall) {
-        for (i = 0; i < 500; i++) {
-            zako = &zakogun[i];
-            if (zako != NULL) {
-                switch (work->flag) {
-                    case 0:
-                    case 2:
-                        zakogun_set_pose(zako, 0x21, 3, 3);
-                        break;
-                    case 1:
-                        zakogun_set_pose(zako, 0x2d, 3, 2);
-                        break;
-                }
-            }
-        }
-    }
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper: after the damage animation switches every X-Naut of the horde back to its idle texture for the
- * current formation, once on the first call.
- */
-USER_FUNC(zakogun_damage_pose_cancel) {
-    s32 i;
-    ZakoGun* zako;
-
-    if (isFirstCall) {
-        for (i = 0; i < 500; i++) {
-            zako = &zakogun[i];
-            if (zako != NULL) {
-                switch (work->flag) {
-                    case 0:
-                        zakogun_set_pose(zako, 0x15, 1, 1);
-                        break;
-                    case 1:
-                        zakogun_set_pose(zako, 0x25, 4, 6);
-                        break;
-                    case 2:
-                        zakogun_set_pose(zako, 0, 20, 2);
-                        break;
-                }
-            }
-        }
-    }
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Returns the battle unit of the horde: the first unit whose kind is 0x64,
- * 0x65 or 0x66 (the three horde groups), or NULL.
- */
-BattleUnit* zakogun_get_ptr(void) {
-    BattleUnit* unit;
-    s32 i;
-    BattleWork* wp = _battleWorkPointer;
-
-    for (i = 0; i < 64; i++) {
-        unit = BattleGetUnitPtr(wp, i);
-        if (unit != NULL && (unit->initialKind == UNIT_X_NAUTS_CRUMP_FORMATION1 || unit->initialKind == UNIT_X_NAUTS_CRUMP_FORMATION2 || unit->initialKind == UNIT_X_NAUTS_CRUMP_FORMATION3)) {
-            return unit;
-        }
-    }
-    return NULL;
-}
-
 /**
  * Unit data of X-Nauts: 6 HP, 50x50 units in size; ties together its sounds, parts, status vulnerability,
  * init event and event table.
@@ -321,6 +230,79 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
+
+/** Script helper: stores the battle unit id args[0] that the X-Naut horde is aiming at (work->targetId). */
+USER_FUNC(zakogun_set_target_id) {
+    work->targetId = evtGetValue(event, event->args[0]);
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Sets the animation of one horde member: which texture to start from (base),
+ * how many (num) and the frames per texture (div), and restarts the animation counter.
+ */
+void zakogun_set_pose(ZakoGun* zako, s32 base, s32 num, s32 div) {
+    zako->poseBase = base;
+    zako->poseNum = num;
+    zako->poseDiv = div;
+    zako->poseCount = 0;
+}
+
+/**
+ * Script helper: when the horde takes damage, switches every one of the 500 X-Nauts to the hurt texture for the
+ * current formation (group 1, 2 or 3), once on the first call.
+ */
+USER_FUNC(zakogun_damage_pose) {
+    s32 i;
+    ZakoGun* zako;
+
+    if (isFirstCall) {
+        for (i = 0; i < 500; i++) {
+            zako = &zakogun[i];
+            if (zako != NULL) {
+                switch (work->flag) {
+                    case 0:
+                    case 2:
+                        zakogun_set_pose(zako, 0x21, 3, 3);
+                        break;
+                    case 1:
+                        zakogun_set_pose(zako, 0x2d, 3, 2);
+                        break;
+                }
+            }
+        }
+    }
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script helper: after the damage animation switches every X-Naut of the horde back to its idle texture for the
+ * current formation, once on the first call.
+ */
+USER_FUNC(zakogun_damage_pose_cancel) {
+    s32 i;
+    ZakoGun* zako;
+
+    if (isFirstCall) {
+        for (i = 0; i < 500; i++) {
+            zako = &zakogun[i];
+            if (zako != NULL) {
+                switch (work->flag) {
+                    case 0:
+                        zakogun_set_pose(zako, 0x15, 1, 1);
+                        break;
+                    case 1:
+                        zakogun_set_pose(zako, 0x25, 4, 6);
+                        break;
+                    case 2:
+                        zakogun_set_pose(zako, 0, 20, 2);
+                        break;
+                }
+            }
+        }
+    }
+    return EVT_RETURN_DONE;
+}
 
 /**
  * Damage event of X-Naut group 1: when the hit did damage or the group has one of several statuses (KO, sleep,
@@ -587,6 +569,24 @@ EVT_BEGIN(zakogun_entry)
     CALL(evt_ext_entry, 500, PTR(zakogun_ext_entry_data), PTR(zakogun_ext_init), PTR(zakogun_ext_main), 0)
     RETURN
 EVT_END()
+
+/**
+ * Returns the battle unit of the horde: the first unit whose kind is 0x64,
+ * 0x65 or 0x66 (the three horde groups), or NULL.
+ */
+BattleUnit* zakogun_get_ptr(void) {
+    BattleUnit* unit;
+    s32 i;
+    BattleWork* wp = _battleWorkPointer;
+
+    for (i = 0; i < 64; i++) {
+        unit = BattleGetUnitPtr(wp, i);
+        if (unit != NULL && (unit->initialKind == UNIT_X_NAUTS_CRUMP_FORMATION1 || unit->initialKind == UNIT_X_NAUTS_CRUMP_FORMATION2 || unit->initialKind == UNIT_X_NAUTS_CRUMP_FORMATION3)) {
+            return unit;
+        }
+    }
+    return NULL;
+}
 
 /**
  * Ext-pose init of the X-Naut horde: allocates the work and 500 ZakoGun entries, moves the stage objects if_wire and

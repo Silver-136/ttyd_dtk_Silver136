@@ -488,6 +488,19 @@ static void alpha_tev(MapTevCallbackInfo* info) {
     info->tevStage++;
 }
 
+/** Allocates the one-byte alpha value read by alpha_tev and sets it to 255 (opaque). */
+static USER_FUNC(alpha_init_func) {
+    _ap = _mapAlloc(1);
+    *_ap = 255;
+    return EVT_RETURN_DONE;
+}
+
+/** Sets the alpha of the harbor wake mesh to args[0] (0 to 255) by writing the byte at _ap. */
+static USER_FUNC(alpha_set_func) {
+    *_ap = evtGetValue(event, event->args[0]);
+    return EVT_RETURN_DONE;
+}
+
 /**
  * Init event of Francesca (Francesca): while Mario is looking for Don Pianta (STG2_44 to STG2_45) she
  * stands at (130, 15, 250) facing 90 degrees.
@@ -1302,6 +1315,119 @@ static EVT_BEGIN(suifu_d_talk)
     CALL(evt_msg_print, 0, STRING("mac_4_027"), 0, STRING("me"))
     RETURN
 EVT_END()
+
+/**
+ * Interpolation curve for evt_sub_intpl_msec_init:
+ * starts at full speed and slows down linearly toward the end (the last 20% of the steps decelerate).
+ * Returns the value between start and end for the given step.
+ */
+static f32 lineardec_type(s32 step, s32 total, f32 start, f32 end) {
+    f32 cur;
+    f32 speed;
+    f32 sum;
+    s32 accel = total * 20 / 100;
+    s32 decel = total * 80 / 100;
+    s32 i;
+
+    speed = accel;
+    sum = speed;
+
+    for (i = 0; i < total; i++) {
+        if (i >= decel) {
+            speed -= 1.0f;
+        }
+        sum += speed;
+        if (i == step) {
+            cur = sum;
+        }
+    }
+    return start + cur * (end - start) / sum;
+}
+
+/**
+ * Interpolation curve for evt_sub_intpl_msec_init:
+ * speeds up over the first 10% of the steps, cruises, and slows down over the last 10%.
+ * Returns the value between start and end for the given step. Not used by the scripts in this file.
+ */
+static f32 accdec_type(s32 step, s32 total, f32 start, f32 end) {
+    f32 cur;
+    f32 speed;
+    f32 sum;
+    s32 accel = total * 10 / 100;
+    s32 decel = total * 90 / 100;
+    s32 i;
+
+    speed = 0.0f;
+    sum = 0.0f;
+
+    for (i = 0; i < total; i++) {
+        if (i <= accel) {
+            speed += 1.0f;
+        } else if (i >= decel) {
+            speed -= 1.0f;
+        }
+        sum += speed;
+        if (i == step) {
+            cur = sum;
+        }
+    }
+    return start + cur * (end - start) / sum;
+}
+
+/**
+ * Builds the list of food items Mario carries for Sailor Bob-omb A's Trouble Center request:
+ * every pouch item that is a recipe dish or ingredient (0xB3 to 0xEB,
+ * plus the plain restoratives 0x94 to 0xA0 and several ingredients), terminated with -1.
+ * Returns the count in args[0] and the table pointer in LW(10).
+ */
+static USER_FUNC(make_itemsel_table) {
+    EvtWord* args = event->args;
+    PouchData* pouch = pouchGetPtr();
+    s32* p;
+    s32 count;
+    s32 i;
+
+    itemsel_table_ram = _mapAlloc((MAX_HELD_ITEMS + 1) * sizeof(s32));
+    p = itemsel_table_ram;
+    count = 0;
+    for (i = 0; i < MAX_HELD_ITEMS; i++) {
+        s32 item = pouch->heldItems[i];
+
+        if (item >= ITEM_SHROOM_FRY && item < ITEM_AUDIENCE_CAN) {
+            *p++ = item;
+            count++;
+        }
+        if (item >= ITEM_MUSHROOM && item < ITEM_POINT_SWAP) {
+            *p++ = item;
+            count++;
+        }
+        switch (item) {
+            case ITEM_COCONUT:
+            case ITEM_DRIED_BOUQUET:
+            case ITEM_MYSTIC_EGG:
+            case ITEM_GOLDEN_LEAF:
+            case ITEM_KEEL_MANGO:
+            case ITEM_FRESH_PASTA:
+            case ITEM_HOT_SAUCE:
+            case ITEM_TURTLEY_LEAF:
+            case ITEM_HORSETAIL:
+            case ITEM_PEACHY_PEACH:
+                *p++ = item;
+                count++;
+                break;
+        }
+    }
+    *p = -1;
+    evtSetValue(event, args[0], count);
+    event->lwData[10] = (EvtWord)itemsel_table_ram;
+    return EVT_RETURN_DONE;
+}
+
+/** Frees the item list that make_itemsel_table allocated. */
+static USER_FUNC(delete_itemsel_table) {
+    _mapFree(itemsel_table_ram);
+    return EVT_RETURN_DONE;
+}
 
 /**
  * Loops forever: sailor Bob-omb A walks along x=-215 between z=215 and z=-150,
@@ -2253,6 +2379,51 @@ static NpcSetupInfo npcEnt[] = {
     {0},
 };
 
+/** Sets the starting angle (args[0]) of the ship's rocking in LW float 0. */
+static USER_FUNC(fune_yure_func_init) {
+    event->lwDataF[0] = evtGetFloat(event, event->args[0]);
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * One step of the ship's rocking: args[0] is the direction (0 rolls up toward +amplitude,
+ * 1 down toward -amplitude), args[1] the amplitude.
+ * Moves the angle in LW float 0 by an amount that crosses the full swing in 2 seconds,
+ * writes it to args[2] and returns 1 in args[3]
+ * when the end of the swing is reached (or when the amplitude is 0).
+ */
+static USER_FUNC(fune_yure_func) {
+    EvtWord* args = event->args;
+    s32 dir = evtGetValue(event, args[0]);
+    f32 amp = evtGetFloat(event, args[1]);
+    s32 done;
+    f32 step;
+
+    if (0.0f == amp) {
+        evtSetFloat(event, args[2], 0.0f);
+        evtSetValue(event, args[3], 1);
+        return EVT_RETURN_DONE;
+    }
+    done = 0;
+    step = 2.0f * amp / sysMsec2FrameFloat(2000.0f);
+    if (dir == 0) {
+        event->lwDataF[0] += step;
+        if (event->lwDataF[0] >= amp) {
+            event->lwDataF[0] = amp;
+            done = 1;
+        }
+    } else {
+        event->lwDataF[0] -= step;
+        if (event->lwDataF[0] <= -amp) {
+            event->lwDataF[0] = -amp;
+            done = 1;
+        }
+    }
+    evtSetFloat(event, args[2], event->lwDataF[0]);
+    evtSetValue(event, args[3], done);
+    return EVT_RETURN_DONE;
+}
+
 /**
  * Loops forever, easing the angle in GW(0) between 5 and -5 degrees over 2 seconds each way.
  * ship_a_animation applies it to the ship part "S_f_drin" (guess: the rudder or helm).
@@ -3041,6 +3212,386 @@ EVT_BEGIN(gundan1000tai_beforebattle)
 EVT_END()
 
 /**
+ * Picks a random point on the ellipse (x about +/-0.9 * radius, z about -300 +/- 0.5 * radius,
+ * radius 120 to 300) around the X-Naut army and stores it in pos. Not used by the scripts.
+ */
+static void geundan1000tai_circle_pos(Vec* pos) {
+    f32 s;
+    f32 angle;
+    f32 radius;
+    f32 c;
+
+    radius = irand(180) + 120;
+    angle = 6.2831855f * irand(360) / 360.0f;
+    s = sin(angle);
+    c = cos(angle);
+
+    pos->x = 0.9f * (radius * s);
+    pos->y = 15.0f;
+    pos->z = 0.5f * (radius * c) - 300.0f;
+}
+
+/**
+ * Script version of geundan1000tai_circle_pos: returns a random point on the army's ellipse in args[0] to
+ * args[2], used as the source position for the army's sound effects.
+ */
+static USER_FUNC(gundan1000tai_circle_pos_func) {
+    f32 radius;
+    f32 s;
+    f32 c;
+    f32 angle;
+    EvtWord* args = event->args;
+
+    radius = irand(180) + 120;
+    angle = 6.2831855f * irand(360) / 360.0f;
+    s = sin(angle);
+    c = cos(angle);
+
+    evtSetFloat(event, args[0], 0.9f * (radius * s));
+    evtSetFloat(event, args[1], 15.0f);
+    evtSetFloat(event, args[2], 0.5f * (radius * c) - 300.0f);
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Gives every extra in the X-Naut crowd a random destination on the ellipse around (0, 15, -300)
+ * and a start at the edge of the screen (to the left if the destination is left of the center,
+ * otherwise to the right), and starts their run behaviour (gundan1000tai_seq00).
+ */
+static USER_FUNC(gundan1000tai_init) {
+    f32 startRad;
+    f32 angle;
+    f32 s;
+    f32 radius;
+    f32 c;
+    f32 base;
+    f32 nv;
+    s32 i;
+    NanNPC* npc;
+    NanNPCWork* wp = nanNPCWork;
+
+    for (i = 0; i < wp->num; i++) {
+        npc = &wp->npc[i];
+        radius = irand(180) + 120;
+        angle = 6.2831855f * irand(360) / 360.0f;
+        s = sin(angle);
+        c = cos(angle);
+        npc->dest.x = 0.9f * (radius * s);
+        npc->dest.y = 15.0f;
+        npc->dest.z = 0.5f * (radius * c) - 300.0f;
+        if (npc->dest.x < 30.0f) {
+            base = -280.0f;
+            npc->dir = 90.0f;
+        } else {
+            base = 340.0f;
+            npc->dir = 270.0f;
+        }
+        radius = irand(100);
+        nv = 6.2831855f * irand(360);
+        startRad = nv / 360.0f;
+        s = sin(startRad);
+        c = cos(startRad);
+        npc->pos.x = radius * s + base;
+        npc->pos.y = 15.0f;
+        npc->pos.z = radius * c - 300.0f;
+        npc->func = gundan1000tai_seq00;
+        npc->state = 0;
+        npc->slot = i;
+    }
+    return EVT_RETURN_DONE;
+}
+
+/** Starts the charge: switches every crowd extra to gundan1000tai_seq01. */
+static USER_FUNC(gundan1000tai_totsugeki) {
+    s32 i;
+    NanNPC* npc;
+    NanNPCWork* wp = nanNPCWork;
+
+    for (i = 0; i < wp->num; i++) {
+        npc = &wp->npc[i];
+        npc->func = gundan1000tai_seq01;
+        npc->state = 0;
+    }
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Returns how strongly Mario (args[0]) and the partner (args[1]) are pushed along x during the army's charge,
+ * depending on where they stand: 16 left of x=60, 4 up to x=80, 2 up to x=100, 1 up to x=120,
+ * and 0 if they are higher than y=70 or further to the right.
+ */
+static USER_FUNC(gundan1000tai_areacheck) {
+    EvtWord* args = event->args;
+    MarioWork* mario = marioGetPtr();
+    PartyEntry* party = partyGetPtr(1);
+    s32 area;
+
+    if (mario->position.y > 70.0f) {
+        area = 0;
+    } else if (mario->position.x < 60.0f) {
+        area = 0x10;
+    } else if (mario->position.x < 80.0f) {
+        area = 4;
+    } else if (mario->position.x < 100.0f) {
+        area = 2;
+    } else if (mario->position.x < 120.0f) {
+        area = 1;
+    } else {
+        area = 0;
+    }
+    evtSetValue(event, args[0], area);
+    if (party->position.y > 70.0f) {
+        area = 0;
+    } else if (party->position.x < 60.0f) {
+        area = 0x10;
+    } else if (party->position.x < 80.0f) {
+        area = 4;
+    } else if (party->position.x < 100.0f) {
+        area = 2;
+    } else if (party->position.x < 120.0f) {
+        area = 1;
+    } else {
+        area = 0;
+    }
+    evtSetValue(event, args[1], area);
+    return EVT_RETURN_DONE;
+}
+
+/** Calls off the charge: sets the recall flag on every crowd extra so they run back to their resting spots. */
+static USER_FUNC(gundan1000tai_totsuend) {
+    s32 i;
+    NanNPCWork* wp = nanNPCWork;
+
+    for (i = 0; i < wp->num; i++) {
+        wp->npc[i].recall = 1;
+    }
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Per-frame behaviour of one crowd extra running into position:
+ * waits a staggered random delay, runs to its destination at a random speed with the run animation,
+ * then idles and keeps its position as base.
+ */
+static void gundan1000tai_seq00(NanNPC* npc) {
+    MarioWork* mario = marioGetPtr();
+    s32 wait;
+    f32 dist;
+    f32 speed;
+    f32 angle;
+
+    switch (npc->state) {
+        case 0:
+            npc->startTime = gp->renderTime;
+            wait = (npc->slot % 6) * 500;
+            npc->duration = wait + irand(500);
+            npc->state++;
+        case 1:
+            if ((s32)OSTicksToMilliseconds((u32)gp->renderTime - (u32)npc->startTime) > npc->duration) {
+                npc->state++;
+            }
+            break;
+        case 2:
+            dist = distABf(npc->pos.x, npc->pos.z, npc->dest.x, npc->dest.z);
+            angle = angleABf(npc->pos.x, npc->pos.z, npc->dest.x, npc->dest.z);
+            speed = dist / 2.0f + (irand(180) + 180);
+            speed = sysFrame2SecFloat(speed / 2.0f);
+            npc->speed = speed;
+            npc->moveDir = angle;
+            npc->frameNum = dist / speed;
+            npc->frame = 0;
+            npc->arrived = 0;
+            evt_nannpc_set_animtbl_sub(npc, dai3_run_animtbl);
+            npc->state++;
+        case 3:
+            movePos(&npc->pos.x, &npc->pos.z, npc->speed, npc->moveDir);
+            npc->frame++;
+            if (npc->frame >= npc->frameNum) {
+                npc->pos.x = npc->dest.x;
+                npc->pos.z = npc->dest.z;
+                npc->arrived = 1;
+                evt_nannpc_set_animtbl_sub(npc, dai3_animtbl);
+                npc->state++;
+            }
+            break;
+        case 4:
+            npc->basePos = npc->pos;
+            break;
+    }
+}
+
+/**
+ * Per-frame behaviour of one crowd extra during the charge:
+ * stands, hops around in random arcs (jumping in place, shuffling left and right),
+ * and when recalled either runs back to its destination and idles, or idles directly from the shuffle states.
+ */
+static void gundan1000tai_seq01(NanNPC* npc) {
+    f32 radius;
+    f32 s;
+    f32 angle;
+    f32 c;
+    f32 t;
+    f32 dist;
+    f32 speed;
+    f32 dir;
+    MarioWork* mario = marioGetPtr();
+    s32 r;
+    s32 elapsed;
+
+    switch (npc->state) {
+        case 0:
+            npc->basePos = npc->pos;
+            npc->arrived = 0;
+            npc->recall = 0;
+            r = irand(1000);
+            if (r < 50) {
+                npc->state = 10;
+            } else if (r < 150) {
+                npc->state = 1;
+                npc->duration = irand(500) + 300;
+                npc->startTime = gp->renderTime;
+            } else {
+                npc->state = 1;
+                npc->duration = irand(2500) + 500;
+                npc->startTime = gp->renderTime;
+            }
+            break;
+        case 1:
+            if (npc->recall) {
+                npc->state = 100;
+            } else if ((s32)OSTicksToMilliseconds((u32)gp->renderTime - (u32)npc->startTime) > npc->duration) {
+                evt_nannpc_set_animtbl_sub(npc, dai3_run_animtbl);
+                npc->state = 10;
+            }
+            break;
+        case 10:
+        case 11:
+            npc->startTime = gp->renderTime;
+            npc->dest = npc->pos;
+            if (npc->state == 10) {
+                radius = irand(25) + 25;
+            } else {
+                radius = irand(180) + 120;
+            }
+            angle = 6.2831855f * irand(360) / 360.0f;
+            s = sin(angle);
+            c = cos(angle);
+            npc->jumpEnd.x = 0.9f * (radius * s) + 30.0f;
+            npc->jumpEnd.y = 15.0f;
+            npc->jumpEnd.z = 0.5f * (radius * c) - 300.0f;
+            npc->speed = -4.0f * (irand(60) + 50);
+            npc->moveDir = npc->jumpEnd.y - npc->dest.y - npc->speed;
+            npc->duration = irand(500) + VERSION_PICK(600, 1200);
+            if (npc->state == 10) {
+                npc->nextState = 21;
+                if (npc->dest.x < npc->jumpEnd.x) {
+                    npc->dir = 90.0f;
+                } else {
+                    npc->dir = 270.0f;
+                }
+            } else {
+                npc->nextState = 22;
+                if (npc->dest.x < npc->jumpEnd.x) {
+                    npc->dir = 270.0f;
+                } else {
+                    npc->dir = 90.0f;
+                }
+            }
+            npc->state = 20;
+            evt_nannpc_set_animtbl_sub(npc, dai3_run_animtbl);
+            break;
+        case 20:
+            elapsed = OSTicksToMilliseconds((u32)gp->renderTime - (u32)npc->startTime);
+            if (elapsed < npc->duration) {
+                t = (f32)elapsed / (f32)npc->duration;
+                npc->pos.x = intplGetValue(EASING_LINEAR, npc->dest.x, npc->jumpEnd.x, elapsed, npc->duration);
+                npc->pos.z = intplGetValue(EASING_LINEAR, npc->dest.z, npc->jumpEnd.z, elapsed, npc->duration);
+                npc->pos.y = npc->dest.y + t * (npc->speed * t + npc->moveDir);
+            } else {
+                npc->pos = npc->jumpEnd;
+                npc->state = npc->nextState;
+                npc->startTime = gp->renderTime;
+                npc->duration = irand(2000) + 500;
+            }
+            break;
+        case 21:
+            if (npc->recall) {
+                npc->state = 100;
+            } else if ((s32)OSTicksToMilliseconds((u32)gp->renderTime - (u32)npc->startTime) > npc->duration) {
+                npc->state = 11;
+            }
+            break;
+        case 22:
+            if (npc->recall) {
+                npc->state = 102;
+                break;
+            }
+            npc->duration = irand(2000) + 500;
+            npc->startTime = gp->renderTime;
+            npc->basePos = npc->pos;
+            npc->maxX = 15.0f + npc->basePos.x;
+            npc->minX = npc->basePos.x - 15.0f;
+            if (irand(1)) {
+                npc->stepX = 1.0f;
+                npc->dir = 90.0f;
+            } else {
+                npc->stepX = -1.0f;
+                npc->dir = 270.0f;
+            }
+            npc->state = 30;
+            break;
+        case 30:
+            if (npc->recall) {
+                npc->state = 102;
+                break;
+            }
+            if ((s32)OSTicksToMilliseconds((u32)gp->renderTime - (u32)npc->startTime) > npc->duration) {
+                npc->state = 10;
+                break;
+            }
+            if (npc->maxX < npc->pos.x) {
+                npc->stepX = -1.0f;
+                npc->dir = 270.0f;
+            }
+            if (npc->minX > npc->pos.x) {
+                npc->stepX = 1.0f;
+                npc->dir = 90.0f;
+            }
+            npc->pos.x += npc->stepX;
+            break;
+        case 100:
+            dir = irand(180) + 120;
+            dist = 6.2831855f * irand(360) / 360.0f;
+            c = sin(dist);
+            s = cos(dist);
+            npc->jumpEnd.x = 0.9f * (dir * c) + 30.0f;
+            npc->jumpEnd.z = 0.5f * (dir * s) - 300.0f;
+            dist = distABf(npc->pos.x, npc->pos.z, npc->dest.x, npc->dest.z);
+            dir = angleABf(npc->pos.x, npc->pos.z, npc->dest.x, npc->dest.z);
+            speed = dist / 2.0f + (irand(180) + 180);
+            speed = sysFrame2SecFloat(speed);
+            npc->speed = speed;
+            npc->moveDir = dir;
+            npc->frameNum = dist / speed;
+            npc->frame = 0;
+            npc->state = 101;
+        case 101:
+            movePos(&npc->pos.x, &npc->pos.z, npc->speed, npc->moveDir);
+            npc->frame++;
+            if (npc->frame >= npc->frameNum) {
+                npc->pos.x = npc->dest.x;
+                npc->pos.z = npc->dest.z;
+                npc->state = 102;
+            }
+            break;
+        case 102:
+            evt_nannpc_set_animtbl_sub(npc, dai3_animtbl);
+            npc->arrived = 1;
+            break;
+    }
+}
+
+/**
  * Spawns one smoke puff (kemuri_test effect) at a random spot in the harbor with an explosion-like sound
  * (SFX_STG0_3RD_ATTACK3); gundan1000tai_kemuri starts it repeatedly during the X-Naut army's charge.
  */
@@ -3480,6 +4031,145 @@ static EVT_BEGIN(mony_peton_after)
 EVT_END()
 
 /**
+ * Sets up the camera swing used in the departure scene:
+ * args[0] to args[5] are the start camera position and target, args[6] to args[11] the end position and target.
+ * Computes the angle and distance around the target of each and sets the working copy to the start.
+ * It clears the end set twice instead of the working copy; harmless, since every field of the working copy is
+ * then written.
+ */
+static USER_FUNC(cam_kaiten_init) {
+    EvtWord* args = event->args;
+    Vec target;
+    Vec pos;
+    f32 dist;
+
+    ckp0 = _mapAlloc(sizeof(KaitenParam));
+    memset(ckp0, 0, sizeof(KaitenParam));
+    ckp1 = _mapAlloc(sizeof(KaitenParam));
+    memset(ckp1, 0, sizeof(KaitenParam));
+    ckpw = _mapAlloc(sizeof(KaitenParam));
+    memset(ckp1, 0, sizeof(KaitenParam));
+    ckp0->pos.x = evtGetFloat(event, args[0]);
+    ckp0->pos.y = evtGetFloat(event, args[1]);
+    ckp0->pos.z = evtGetFloat(event, args[2]);
+    ckp0->target.x = evtGetFloat(event, args[3]);
+    ckp0->target.y = evtGetFloat(event, args[4]);
+    ckp0->target.z = evtGetFloat(event, args[5]);
+    ckp1->pos.x = evtGetFloat(event, args[6]);
+    ckp1->pos.y = evtGetFloat(event, args[7]);
+    ckp1->pos.z = evtGetFloat(event, args[8]);
+    ckp1->target.x = evtGetFloat(event, args[9]);
+    ckp1->target.y = evtGetFloat(event, args[10]);
+    ckp1->target.z = evtGetFloat(event, args[11]);
+
+    pos = ckp0->pos;
+    target = ckp0->target;
+    target.y = 0.0f;
+    pos.y = 0.0f;
+    dist = PSVECDistance(&pos, &target);
+    ckp0->angle = 57.29579f * (f32)atan2(-(target.x - pos.x), fid(target.z - pos.z));
+    ckp0->dist = dist;
+
+    pos = ckp1->pos;
+    target = ckp1->target;
+    target.y = 0.0f;
+    pos.y = 0.0f;
+    dist = PSVECDistance(&pos, &target);
+    ckp1->angle = 57.29579f * (f32)atan2(-(target.x - pos.x), target.z - pos.z);
+    ckp1->dist = dist;
+
+    ckpw->pos = ckp0->pos;
+    ckpw->target = ckp0->target;
+    ckpw->angle = ckp0->angle;
+    ckpw->dist = ckp0->dist;
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Puts the 3D camera immediately on the swing's working parameters (position computed from angle and distance
+ * around the target); called once a frame while the swing runs.
+ */
+static USER_FUNC(cam_kaiten_set_direct) {
+    CameraEntry* camera = camGetPtr(CAMERA_3D);
+    f32 s = sin(6.2831855f * ckpw->angle / 360.0f);
+    f32 c = cos(6.2831855f * ckpw->angle / 360.0f);
+
+    ckpw->pos.x = ckpw->dist * s + ckpw->target.x;
+    ckpw->pos.z = ckpw->target.z - ckpw->dist * c;
+    camera->presetPos = camera->cameraPos;
+    camera->presetAt = camera->cameraAt;
+    camera->storedPos = ckpw->pos;
+    camera->storedAt = ckpw->target;
+    camera->startTimeA = gp->renderTime;
+    camera->durationA = 0;
+    camera->stateA = CAM_MOVE_TO_STORED;
+    camera->curveA = EASING_SINE_IN_OUT;
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Reads one set of camera swing parameters (args[0]: 0 start, 1 end, 2 working copy) into args[1] to args[8]:
+ * position xyz, target xyz, angle and distance.
+ */
+static USER_FUNC(cam_kaiten_get_para) {
+    EvtWord* args = event->args;
+    KaitenParam* p;
+
+    switch (evtGetValue(event, args[0])) {
+        case 0:
+            p = ckp0;
+            break;
+        case 1:
+            p = ckp1;
+            break;
+        case 2:
+        default:
+            p = ckpw;
+            break;
+    }
+    evtSetFloat(event, args[1], p->pos.x);
+    evtSetFloat(event, args[2], p->pos.y);
+    evtSetFloat(event, args[3], p->pos.z);
+    evtSetFloat(event, args[4], p->target.x);
+    evtSetFloat(event, args[5], p->target.y);
+    evtSetFloat(event, args[6], p->target.z);
+    evtSetFloat(event, args[7], p->angle);
+    evtSetFloat(event, args[8], p->dist);
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Writes one set of camera swing parameters (args[0]: 0 start, 1 end, 2 working copy) from args[1] to args[8]:
+ * position xyz, target xyz, angle and distance.
+ */
+static USER_FUNC(cam_kaiten_set_para) {
+    EvtWord* args = event->args;
+    KaitenParam* p;
+
+    switch (evtGetValue(event, args[0])) {
+        case 0:
+            p = ckp0;
+            break;
+        case 1:
+            p = ckp1;
+            break;
+        case 2:
+        default:
+            p = ckpw;
+            break;
+    }
+    p->pos.x = evtGetFloat(event, args[1]);
+    p->pos.y = evtGetFloat(event, args[2]);
+    p->pos.z = evtGetFloat(event, args[3]);
+    p->target.x = evtGetFloat(event, args[4]);
+    p->target.y = evtGetFloat(event, args[5]);
+    p->target.z = evtGetFloat(event, args[6]);
+    p->angle = evtGetFloat(event, args[7]);
+    p->dist = evtGetFloat(event, args[8]);
+    return EVT_RETURN_DONE;
+}
+
+/**
  * Plays the ship's engine sound ("SFX_STG4_SHIP_MOVE1") at the departing ship "S_fune_c" every 2 seconds,
  * six times.
  */
@@ -3518,6 +4208,40 @@ static const char* shukko_npc_list[] = {
     "店員",
     NULL,
 };
+
+/** Moves Mario by (args[0], args[1], args[2]) relative to where he is, so he keeps standing on the moving ship. */
+static USER_FUNC(hosei_mario_pos) {
+    EvtWord* args = event->args;
+    f32 x = evtGetFloat(event, args[0]);
+    f32 y = evtGetFloat(event, args[1]);
+    f32 z = evtGetFloat(event, args[2]);
+    MarioWork* mario = marioGetPtr();
+
+    mario->position.x += x;
+    mario->position.y += y;
+    mario->position.z += z;
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Moves the active partner by (args[0], args[1], args[2]) relative to where it is,
+ * so it keeps standing on the moving ship. Does nothing if there is no partner out.
+ */
+static USER_FUNC(hosei_party_pos) {
+    EvtWord* args = event->args;
+    f32 x = evtGetFloat(event, args[0]);
+    f32 y = evtGetFloat(event, args[1]);
+    f32 z = evtGetFloat(event, args[2]);
+    PartyEntry* party = partyGetPtr(partyCtrlNo);
+
+    if (party == NULL) {
+        return EVT_RETURN_DONE;
+    }
+    party->position.x += x;
+    party->position.y += y;
+    party->position.z += z;
+    return EVT_RETURN_DONE;
+}
 
 /**
  * Slides the Chapter 4 ship "S_fune_c" (with its collision,
@@ -3829,730 +4553,6 @@ static Vec suifu100kaidanUP[] = {
     {189.0f, 115.0f, -553.0f},
     {201.0f, 115.0f, -562.0f},
 };
-
-/** Allocates the one-byte alpha value read by alpha_tev and sets it to 255 (opaque). */
-static USER_FUNC(alpha_init_func) {
-    _ap = _mapAlloc(1);
-    *_ap = 255;
-    return EVT_RETURN_DONE;
-}
-
-/** Sets the alpha of the harbor wake mesh to args[0] (0 to 255) by writing the byte at _ap. */
-static USER_FUNC(alpha_set_func) {
-    *_ap = evtGetValue(event, event->args[0]);
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Interpolation curve for evt_sub_intpl_msec_init:
- * starts at full speed and slows down linearly toward the end (the last 20% of the steps decelerate).
- * Returns the value between start and end for the given step.
- */
-static f32 lineardec_type(s32 step, s32 total, f32 start, f32 end) {
-    f32 cur;
-    f32 speed;
-    f32 sum;
-    s32 accel = total * 20 / 100;
-    s32 decel = total * 80 / 100;
-    s32 i;
-
-    speed = accel;
-    sum = speed;
-
-    for (i = 0; i < total; i++) {
-        if (i >= decel) {
-            speed -= 1.0f;
-        }
-        sum += speed;
-        if (i == step) {
-            cur = sum;
-        }
-    }
-    return start + cur * (end - start) / sum;
-}
-
-/**
- * Interpolation curve for evt_sub_intpl_msec_init:
- * speeds up over the first 10% of the steps, cruises, and slows down over the last 10%.
- * Returns the value between start and end for the given step. Not used by the scripts in this file.
- */
-static f32 accdec_type(s32 step, s32 total, f32 start, f32 end) {
-    f32 cur;
-    f32 speed;
-    f32 sum;
-    s32 accel = total * 10 / 100;
-    s32 decel = total * 90 / 100;
-    s32 i;
-
-    speed = 0.0f;
-    sum = 0.0f;
-
-    for (i = 0; i < total; i++) {
-        if (i <= accel) {
-            speed += 1.0f;
-        } else if (i >= decel) {
-            speed -= 1.0f;
-        }
-        sum += speed;
-        if (i == step) {
-            cur = sum;
-        }
-    }
-    return start + cur * (end - start) / sum;
-}
-
-/**
- * Builds the list of food items Mario carries for Sailor Bob-omb A's Trouble Center request:
- * every pouch item that is a recipe dish or ingredient (0xB3 to 0xEB,
- * plus the plain restoratives 0x94 to 0xA0 and several ingredients), terminated with -1.
- * Returns the count in args[0] and the table pointer in LW(10).
- */
-static USER_FUNC(make_itemsel_table) {
-    EvtWord* args = event->args;
-    PouchData* pouch = pouchGetPtr();
-    s32* p;
-    s32 count;
-    s32 i;
-
-    itemsel_table_ram = _mapAlloc((MAX_HELD_ITEMS + 1) * sizeof(s32));
-    p = itemsel_table_ram;
-    count = 0;
-    for (i = 0; i < MAX_HELD_ITEMS; i++) {
-        s32 item = pouch->heldItems[i];
-
-        if (item >= ITEM_SHROOM_FRY && item < ITEM_AUDIENCE_CAN) {
-            *p++ = item;
-            count++;
-        }
-        if (item >= ITEM_MUSHROOM && item < ITEM_POINT_SWAP) {
-            *p++ = item;
-            count++;
-        }
-        switch (item) {
-            case ITEM_COCONUT:
-            case ITEM_DRIED_BOUQUET:
-            case ITEM_MYSTIC_EGG:
-            case ITEM_GOLDEN_LEAF:
-            case ITEM_KEEL_MANGO:
-            case ITEM_FRESH_PASTA:
-            case ITEM_HOT_SAUCE:
-            case ITEM_TURTLEY_LEAF:
-            case ITEM_HORSETAIL:
-            case ITEM_PEACHY_PEACH:
-                *p++ = item;
-                count++;
-                break;
-        }
-    }
-    *p = -1;
-    evtSetValue(event, args[0], count);
-    event->lwData[10] = (EvtWord)itemsel_table_ram;
-    return EVT_RETURN_DONE;
-}
-
-/** Frees the item list that make_itemsel_table allocated. */
-static USER_FUNC(delete_itemsel_table) {
-    _mapFree(itemsel_table_ram);
-    return EVT_RETURN_DONE;
-}
-
-/** Sets the starting angle (args[0]) of the ship's rocking in LW float 0. */
-static USER_FUNC(fune_yure_func_init) {
-    event->lwDataF[0] = evtGetFloat(event, event->args[0]);
-    return EVT_RETURN_DONE;
-}
-
-/**
- * One step of the ship's rocking: args[0] is the direction (0 rolls up toward +amplitude,
- * 1 down toward -amplitude), args[1] the amplitude.
- * Moves the angle in LW float 0 by an amount that crosses the full swing in 2 seconds,
- * writes it to args[2] and returns 1 in args[3]
- * when the end of the swing is reached (or when the amplitude is 0).
- */
-static USER_FUNC(fune_yure_func) {
-    EvtWord* args = event->args;
-    s32 dir = evtGetValue(event, args[0]);
-    f32 amp = evtGetFloat(event, args[1]);
-    s32 done;
-    f32 step;
-
-    if (0.0f == amp) {
-        evtSetFloat(event, args[2], 0.0f);
-        evtSetValue(event, args[3], 1);
-        return EVT_RETURN_DONE;
-    }
-    done = 0;
-    step = 2.0f * amp / sysMsec2FrameFloat(2000.0f);
-    if (dir == 0) {
-        event->lwDataF[0] += step;
-        if (event->lwDataF[0] >= amp) {
-            event->lwDataF[0] = amp;
-            done = 1;
-        }
-    } else {
-        event->lwDataF[0] -= step;
-        if (event->lwDataF[0] <= -amp) {
-            event->lwDataF[0] = -amp;
-            done = 1;
-        }
-    }
-    evtSetFloat(event, args[2], event->lwDataF[0]);
-    evtSetValue(event, args[3], done);
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Picks a random point on the ellipse (x about +/-0.9 * radius, z about -300 +/- 0.5 * radius,
- * radius 120 to 300) around the X-Naut army and stores it in pos. Not used by the scripts.
- */
-static void geundan1000tai_circle_pos(Vec* pos) {
-    f32 s;
-    f32 angle;
-    f32 radius;
-    f32 c;
-
-    radius = irand(180) + 120;
-    angle = 6.2831855f * irand(360) / 360.0f;
-    s = sin(angle);
-    c = cos(angle);
-
-    pos->x = 0.9f * (radius * s);
-    pos->y = 15.0f;
-    pos->z = 0.5f * (radius * c) - 300.0f;
-}
-
-/**
- * Script version of geundan1000tai_circle_pos: returns a random point on the army's ellipse in args[0] to
- * args[2], used as the source position for the army's sound effects.
- */
-static USER_FUNC(gundan1000tai_circle_pos_func) {
-    f32 radius;
-    f32 s;
-    f32 c;
-    f32 angle;
-    EvtWord* args = event->args;
-
-    radius = irand(180) + 120;
-    angle = 6.2831855f * irand(360) / 360.0f;
-    s = sin(angle);
-    c = cos(angle);
-
-    evtSetFloat(event, args[0], 0.9f * (radius * s));
-    evtSetFloat(event, args[1], 15.0f);
-    evtSetFloat(event, args[2], 0.5f * (radius * c) - 300.0f);
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Gives every extra in the X-Naut crowd a random destination on the ellipse around (0, 15, -300)
- * and a start at the edge of the screen (to the left if the destination is left of the center,
- * otherwise to the right), and starts their run behaviour (gundan1000tai_seq00).
- */
-static USER_FUNC(gundan1000tai_init) {
-    f32 startRad;
-    f32 angle;
-    f32 s;
-    f32 radius;
-    f32 c;
-    f32 base;
-    f32 nv;
-    s32 i;
-    NanNPC* npc;
-    NanNPCWork* wp = nanNPCWork;
-
-    for (i = 0; i < wp->num; i++) {
-        npc = &wp->npc[i];
-        radius = irand(180) + 120;
-        angle = 6.2831855f * irand(360) / 360.0f;
-        s = sin(angle);
-        c = cos(angle);
-        npc->dest.x = 0.9f * (radius * s);
-        npc->dest.y = 15.0f;
-        npc->dest.z = 0.5f * (radius * c) - 300.0f;
-        if (npc->dest.x < 30.0f) {
-            base = -280.0f;
-            npc->dir = 90.0f;
-        } else {
-            base = 340.0f;
-            npc->dir = 270.0f;
-        }
-        radius = irand(100);
-        nv = 6.2831855f * irand(360);
-        startRad = nv / 360.0f;
-        s = sin(startRad);
-        c = cos(startRad);
-        npc->pos.x = radius * s + base;
-        npc->pos.y = 15.0f;
-        npc->pos.z = radius * c - 300.0f;
-        npc->func = gundan1000tai_seq00;
-        npc->state = 0;
-        npc->slot = i;
-    }
-    return EVT_RETURN_DONE;
-}
-
-/** Starts the charge: switches every crowd extra to gundan1000tai_seq01. */
-static USER_FUNC(gundan1000tai_totsugeki) {
-    s32 i;
-    NanNPC* npc;
-    NanNPCWork* wp = nanNPCWork;
-
-    for (i = 0; i < wp->num; i++) {
-        npc = &wp->npc[i];
-        npc->func = gundan1000tai_seq01;
-        npc->state = 0;
-    }
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Returns how strongly Mario (args[0]) and the partner (args[1]) are pushed along x during the army's charge,
- * depending on where they stand: 16 left of x=60, 4 up to x=80, 2 up to x=100, 1 up to x=120,
- * and 0 if they are higher than y=70 or further to the right.
- */
-static USER_FUNC(gundan1000tai_areacheck) {
-    EvtWord* args = event->args;
-    MarioWork* mario = marioGetPtr();
-    PartyEntry* party = partyGetPtr(1);
-    s32 area;
-
-    if (mario->position.y > 70.0f) {
-        area = 0;
-    } else if (mario->position.x < 60.0f) {
-        area = 0x10;
-    } else if (mario->position.x < 80.0f) {
-        area = 4;
-    } else if (mario->position.x < 100.0f) {
-        area = 2;
-    } else if (mario->position.x < 120.0f) {
-        area = 1;
-    } else {
-        area = 0;
-    }
-    evtSetValue(event, args[0], area);
-    if (party->position.y > 70.0f) {
-        area = 0;
-    } else if (party->position.x < 60.0f) {
-        area = 0x10;
-    } else if (party->position.x < 80.0f) {
-        area = 4;
-    } else if (party->position.x < 100.0f) {
-        area = 2;
-    } else if (party->position.x < 120.0f) {
-        area = 1;
-    } else {
-        area = 0;
-    }
-    evtSetValue(event, args[1], area);
-    return EVT_RETURN_DONE;
-}
-
-/** Calls off the charge: sets the recall flag on every crowd extra so they run back to their resting spots. */
-static USER_FUNC(gundan1000tai_totsuend) {
-    s32 i;
-    NanNPCWork* wp = nanNPCWork;
-
-    for (i = 0; i < wp->num; i++) {
-        wp->npc[i].recall = 1;
-    }
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Per-frame behaviour of one crowd extra running into position:
- * waits a staggered random delay, runs to its destination at a random speed with the run animation,
- * then idles and keeps its position as base.
- */
-static void gundan1000tai_seq00(NanNPC* npc) {
-    MarioWork* mario = marioGetPtr();
-    s32 wait;
-    f32 dist;
-    f32 speed;
-    f32 angle;
-
-    switch (npc->state) {
-        case 0:
-            npc->startTime = gp->renderTime;
-            wait = (npc->slot % 6) * 500;
-            npc->duration = wait + irand(500);
-            npc->state++;
-        case 1:
-            if ((s32)OSTicksToMilliseconds((u32)gp->renderTime - (u32)npc->startTime) > npc->duration) {
-                npc->state++;
-            }
-            break;
-        case 2:
-            dist = distABf(npc->pos.x, npc->pos.z, npc->dest.x, npc->dest.z);
-            angle = angleABf(npc->pos.x, npc->pos.z, npc->dest.x, npc->dest.z);
-            speed = dist / 2.0f + (irand(180) + 180);
-            speed = sysFrame2SecFloat(speed / 2.0f);
-            npc->speed = speed;
-            npc->moveDir = angle;
-            npc->frameNum = dist / speed;
-            npc->frame = 0;
-            npc->arrived = 0;
-            evt_nannpc_set_animtbl_sub(npc, dai3_run_animtbl);
-            npc->state++;
-        case 3:
-            movePos(&npc->pos.x, &npc->pos.z, npc->speed, npc->moveDir);
-            npc->frame++;
-            if (npc->frame >= npc->frameNum) {
-                npc->pos.x = npc->dest.x;
-                npc->pos.z = npc->dest.z;
-                npc->arrived = 1;
-                evt_nannpc_set_animtbl_sub(npc, dai3_animtbl);
-                npc->state++;
-            }
-            break;
-        case 4:
-            npc->basePos = npc->pos;
-            break;
-    }
-}
-
-/**
- * Per-frame behaviour of one crowd extra during the charge:
- * stands, hops around in random arcs (jumping in place, shuffling left and right),
- * and when recalled either runs back to its destination and idles, or idles directly from the shuffle states.
- */
-static void gundan1000tai_seq01(NanNPC* npc) {
-    f32 radius;
-    f32 s;
-    f32 angle;
-    f32 c;
-    f32 t;
-    f32 dist;
-    f32 speed;
-    f32 dir;
-    MarioWork* mario = marioGetPtr();
-    s32 r;
-    s32 elapsed;
-
-    switch (npc->state) {
-        case 0:
-            npc->basePos = npc->pos;
-            npc->arrived = 0;
-            npc->recall = 0;
-            r = irand(1000);
-            if (r < 50) {
-                npc->state = 10;
-            } else if (r < 150) {
-                npc->state = 1;
-                npc->duration = irand(500) + 300;
-                npc->startTime = gp->renderTime;
-            } else {
-                npc->state = 1;
-                npc->duration = irand(2500) + 500;
-                npc->startTime = gp->renderTime;
-            }
-            break;
-        case 1:
-            if (npc->recall) {
-                npc->state = 100;
-            } else if ((s32)OSTicksToMilliseconds((u32)gp->renderTime - (u32)npc->startTime) > npc->duration) {
-                evt_nannpc_set_animtbl_sub(npc, dai3_run_animtbl);
-                npc->state = 10;
-            }
-            break;
-        case 10:
-        case 11:
-            npc->startTime = gp->renderTime;
-            npc->dest = npc->pos;
-            if (npc->state == 10) {
-                radius = irand(25) + 25;
-            } else {
-                radius = irand(180) + 120;
-            }
-            angle = 6.2831855f * irand(360) / 360.0f;
-            s = sin(angle);
-            c = cos(angle);
-            npc->jumpEnd.x = 0.9f * (radius * s) + 30.0f;
-            npc->jumpEnd.y = 15.0f;
-            npc->jumpEnd.z = 0.5f * (radius * c) - 300.0f;
-            npc->speed = -4.0f * (irand(60) + 50);
-            npc->moveDir = npc->jumpEnd.y - npc->dest.y - npc->speed;
-            npc->duration = irand(500) + VERSION_PICK(600, 1200);
-            if (npc->state == 10) {
-                npc->nextState = 21;
-                if (npc->dest.x < npc->jumpEnd.x) {
-                    npc->dir = 90.0f;
-                } else {
-                    npc->dir = 270.0f;
-                }
-            } else {
-                npc->nextState = 22;
-                if (npc->dest.x < npc->jumpEnd.x) {
-                    npc->dir = 270.0f;
-                } else {
-                    npc->dir = 90.0f;
-                }
-            }
-            npc->state = 20;
-            evt_nannpc_set_animtbl_sub(npc, dai3_run_animtbl);
-            break;
-        case 20:
-            elapsed = OSTicksToMilliseconds((u32)gp->renderTime - (u32)npc->startTime);
-            if (elapsed < npc->duration) {
-                t = (f32)elapsed / (f32)npc->duration;
-                npc->pos.x = intplGetValue(EASING_LINEAR, npc->dest.x, npc->jumpEnd.x, elapsed, npc->duration);
-                npc->pos.z = intplGetValue(EASING_LINEAR, npc->dest.z, npc->jumpEnd.z, elapsed, npc->duration);
-                npc->pos.y = npc->dest.y + t * (npc->speed * t + npc->moveDir);
-            } else {
-                npc->pos = npc->jumpEnd;
-                npc->state = npc->nextState;
-                npc->startTime = gp->renderTime;
-                npc->duration = irand(2000) + 500;
-            }
-            break;
-        case 21:
-            if (npc->recall) {
-                npc->state = 100;
-            } else if ((s32)OSTicksToMilliseconds((u32)gp->renderTime - (u32)npc->startTime) > npc->duration) {
-                npc->state = 11;
-            }
-            break;
-        case 22:
-            if (npc->recall) {
-                npc->state = 102;
-                break;
-            }
-            npc->duration = irand(2000) + 500;
-            npc->startTime = gp->renderTime;
-            npc->basePos = npc->pos;
-            npc->maxX = 15.0f + npc->basePos.x;
-            npc->minX = npc->basePos.x - 15.0f;
-            if (irand(1)) {
-                npc->stepX = 1.0f;
-                npc->dir = 90.0f;
-            } else {
-                npc->stepX = -1.0f;
-                npc->dir = 270.0f;
-            }
-            npc->state = 30;
-            break;
-        case 30:
-            if (npc->recall) {
-                npc->state = 102;
-                break;
-            }
-            if ((s32)OSTicksToMilliseconds((u32)gp->renderTime - (u32)npc->startTime) > npc->duration) {
-                npc->state = 10;
-                break;
-            }
-            if (npc->maxX < npc->pos.x) {
-                npc->stepX = -1.0f;
-                npc->dir = 270.0f;
-            }
-            if (npc->minX > npc->pos.x) {
-                npc->stepX = 1.0f;
-                npc->dir = 90.0f;
-            }
-            npc->pos.x += npc->stepX;
-            break;
-        case 100:
-            dir = irand(180) + 120;
-            dist = 6.2831855f * irand(360) / 360.0f;
-            c = sin(dist);
-            s = cos(dist);
-            npc->jumpEnd.x = 0.9f * (dir * c) + 30.0f;
-            npc->jumpEnd.z = 0.5f * (dir * s) - 300.0f;
-            dist = distABf(npc->pos.x, npc->pos.z, npc->dest.x, npc->dest.z);
-            dir = angleABf(npc->pos.x, npc->pos.z, npc->dest.x, npc->dest.z);
-            speed = dist / 2.0f + (irand(180) + 180);
-            speed = sysFrame2SecFloat(speed);
-            npc->speed = speed;
-            npc->moveDir = dir;
-            npc->frameNum = dist / speed;
-            npc->frame = 0;
-            npc->state = 101;
-        case 101:
-            movePos(&npc->pos.x, &npc->pos.z, npc->speed, npc->moveDir);
-            npc->frame++;
-            if (npc->frame >= npc->frameNum) {
-                npc->pos.x = npc->dest.x;
-                npc->pos.z = npc->dest.z;
-                npc->state = 102;
-            }
-            break;
-        case 102:
-            evt_nannpc_set_animtbl_sub(npc, dai3_animtbl);
-            npc->arrived = 1;
-            break;
-    }
-}
-
-/**
- * Sets up the camera swing used in the departure scene:
- * args[0] to args[5] are the start camera position and target, args[6] to args[11] the end position and target.
- * Computes the angle and distance around the target of each and sets the working copy to the start.
- * It clears the end set twice instead of the working copy; harmless, since every field of the working copy is
- * then written.
- */
-static USER_FUNC(cam_kaiten_init) {
-    EvtWord* args = event->args;
-    Vec target;
-    Vec pos;
-    f32 dist;
-
-    ckp0 = _mapAlloc(sizeof(KaitenParam));
-    memset(ckp0, 0, sizeof(KaitenParam));
-    ckp1 = _mapAlloc(sizeof(KaitenParam));
-    memset(ckp1, 0, sizeof(KaitenParam));
-    ckpw = _mapAlloc(sizeof(KaitenParam));
-    memset(ckp1, 0, sizeof(KaitenParam));
-    ckp0->pos.x = evtGetFloat(event, args[0]);
-    ckp0->pos.y = evtGetFloat(event, args[1]);
-    ckp0->pos.z = evtGetFloat(event, args[2]);
-    ckp0->target.x = evtGetFloat(event, args[3]);
-    ckp0->target.y = evtGetFloat(event, args[4]);
-    ckp0->target.z = evtGetFloat(event, args[5]);
-    ckp1->pos.x = evtGetFloat(event, args[6]);
-    ckp1->pos.y = evtGetFloat(event, args[7]);
-    ckp1->pos.z = evtGetFloat(event, args[8]);
-    ckp1->target.x = evtGetFloat(event, args[9]);
-    ckp1->target.y = evtGetFloat(event, args[10]);
-    ckp1->target.z = evtGetFloat(event, args[11]);
-
-    pos = ckp0->pos;
-    target = ckp0->target;
-    target.y = 0.0f;
-    pos.y = 0.0f;
-    dist = PSVECDistance(&pos, &target);
-    ckp0->angle = 57.29579f * (f32)atan2(-(target.x - pos.x), fid(target.z - pos.z));
-    ckp0->dist = dist;
-
-    pos = ckp1->pos;
-    target = ckp1->target;
-    target.y = 0.0f;
-    pos.y = 0.0f;
-    dist = PSVECDistance(&pos, &target);
-    ckp1->angle = 57.29579f * (f32)atan2(-(target.x - pos.x), target.z - pos.z);
-    ckp1->dist = dist;
-
-    ckpw->pos = ckp0->pos;
-    ckpw->target = ckp0->target;
-    ckpw->angle = ckp0->angle;
-    ckpw->dist = ckp0->dist;
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Puts the 3D camera immediately on the swing's working parameters (position computed from angle and distance
- * around the target); called once a frame while the swing runs.
- */
-static USER_FUNC(cam_kaiten_set_direct) {
-    CameraEntry* camera = camGetPtr(CAMERA_3D);
-    f32 s = sin(6.2831855f * ckpw->angle / 360.0f);
-    f32 c = cos(6.2831855f * ckpw->angle / 360.0f);
-
-    ckpw->pos.x = ckpw->dist * s + ckpw->target.x;
-    ckpw->pos.z = ckpw->target.z - ckpw->dist * c;
-    camera->presetPos = camera->cameraPos;
-    camera->presetAt = camera->cameraAt;
-    camera->storedPos = ckpw->pos;
-    camera->storedAt = ckpw->target;
-    camera->startTimeA = gp->renderTime;
-    camera->durationA = 0;
-    camera->stateA = CAM_MOVE_TO_STORED;
-    camera->curveA = EASING_SINE_IN_OUT;
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Reads one set of camera swing parameters (args[0]: 0 start, 1 end, 2 working copy) into args[1] to args[8]:
- * position xyz, target xyz, angle and distance.
- */
-static USER_FUNC(cam_kaiten_get_para) {
-    EvtWord* args = event->args;
-    KaitenParam* p;
-
-    switch (evtGetValue(event, args[0])) {
-        case 0:
-            p = ckp0;
-            break;
-        case 1:
-            p = ckp1;
-            break;
-        case 2:
-        default:
-            p = ckpw;
-            break;
-    }
-    evtSetFloat(event, args[1], p->pos.x);
-    evtSetFloat(event, args[2], p->pos.y);
-    evtSetFloat(event, args[3], p->pos.z);
-    evtSetFloat(event, args[4], p->target.x);
-    evtSetFloat(event, args[5], p->target.y);
-    evtSetFloat(event, args[6], p->target.z);
-    evtSetFloat(event, args[7], p->angle);
-    evtSetFloat(event, args[8], p->dist);
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Writes one set of camera swing parameters (args[0]: 0 start, 1 end, 2 working copy) from args[1] to args[8]:
- * position xyz, target xyz, angle and distance.
- */
-static USER_FUNC(cam_kaiten_set_para) {
-    EvtWord* args = event->args;
-    KaitenParam* p;
-
-    switch (evtGetValue(event, args[0])) {
-        case 0:
-            p = ckp0;
-            break;
-        case 1:
-            p = ckp1;
-            break;
-        case 2:
-        default:
-            p = ckpw;
-            break;
-    }
-    p->pos.x = evtGetFloat(event, args[1]);
-    p->pos.y = evtGetFloat(event, args[2]);
-    p->pos.z = evtGetFloat(event, args[3]);
-    p->target.x = evtGetFloat(event, args[4]);
-    p->target.y = evtGetFloat(event, args[5]);
-    p->target.z = evtGetFloat(event, args[6]);
-    p->angle = evtGetFloat(event, args[7]);
-    p->dist = evtGetFloat(event, args[8]);
-    return EVT_RETURN_DONE;
-}
-
-/** Moves Mario by (args[0], args[1], args[2]) relative to where he is, so he keeps standing on the moving ship. */
-static USER_FUNC(hosei_mario_pos) {
-    EvtWord* args = event->args;
-    f32 x = evtGetFloat(event, args[0]);
-    f32 y = evtGetFloat(event, args[1]);
-    f32 z = evtGetFloat(event, args[2]);
-    MarioWork* mario = marioGetPtr();
-
-    mario->position.x += x;
-    mario->position.y += y;
-    mario->position.z += z;
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Moves the active partner by (args[0], args[1], args[2]) relative to where it is,
- * so it keeps standing on the moving ship. Does nothing if there is no partner out.
- */
-static USER_FUNC(hosei_party_pos) {
-    EvtWord* args = event->args;
-    f32 x = evtGetFloat(event, args[0]);
-    f32 y = evtGetFloat(event, args[1]);
-    f32 z = evtGetFloat(event, args[2]);
-    PartyEntry* party = partyGetPtr(partyCtrlNo);
-
-    if (party == NULL) {
-        return EVT_RETURN_DONE;
-    }
-    party->position.x += x;
-    party->position.y += y;
-    party->position.z += z;
-    return EVT_RETURN_DONE;
-}
 
 /** Scatters the sailor crowd extras (the 100 waiting sailors) randomly on the pier at x -100 to 34 and z 190 to 240. */
 static USER_FUNC(suifu100taikikan_init) {
@@ -5102,6 +5102,19 @@ static EVT_BEGIN(mony_peton_event)
 EVT_END()
 #endif
 
+/** Message callback: on type 3 at page 1 it sets LSWF_GOR_00_KOOPA_MSG_CUE. */
+static void gor_stg4_018_cb(s32 type, smartEntry* smart) {
+    MsgWinData* info = smart->address;
+
+    switch (type) {
+        case 3:
+            if (info->curPage == 1) {
+                evtSetValue(NULL, LSWF_GOR_00_KOOPA_MSG_CUE, 1);
+            }
+            break;
+    }
+}
+
 /**
  * Chapter 4 interlude with Bowser on the Rogueport harbor (STG4_15_07_BOWSER_ACTION_STAGE):
  * he leaps out of the water onto the dock, the sailors panic and run, Kammy Koopa flies in looking for him,
@@ -5519,6 +5532,74 @@ static f32 gor_ship_puka_data[] = {
 };
 
 /**
+ * Per-frame task for the harbor: keeps two water spray effects (effFunemizuEntry) next to the arriving ship
+ * "S_fune_a" and spawns splash effects at its side when movement since the previous call exceeds 1 unit and the retrace count is a multiple of 15.
+ */
+static USER_FUNC(fune_eff) {
+    EffectEntry* eff1;
+    EffectEntry* eff2;
+    f32 oldX;
+    f32 oldZ;
+    f32 dist;
+    f32 angle;
+    f32 sign;
+    Vec pos;
+
+    if (isFirstCall) {
+        event->userdatap[0] = effFunemizuEntry(0, 0.0f, -1000.0f, 0.0f, 0.0f, 0.0f);
+        event->userdatap[1] = effFunemizuEntry(2, 0.0f, -1000.0f, 0.0f, 0.0f, 0.0f);
+        mapObjGetPos("S_fune_a", &pos);
+        event->userdataf[2] = pos.x;
+        event->userdata3f = pos.z;
+    }
+    eff1 = event->userdatap[0];
+    eff2 = event->userdatap[1];
+    oldX = event->userdataf[2];
+    oldZ = event->userdata3f;
+    mapObjGetPos("S_fune_a", &pos);
+    event->userdataf[2] = pos.x;
+    event->userdata3f = pos.z;
+    dist = distABf(oldX, oldZ, pos.x, pos.z);
+    angle = angleABf(oldX, oldZ, pos.x, pos.z);
+    if (angle < 180.0f) {
+        sign = 1.0f;
+    } else {
+        sign = -1.0f;
+    }
+    ((EffFunemizuWork*)eff1->userdata)->scale = 3.0f;
+    ((EffFunemizuWork*)eff1->userdata)->position.x = pos.x + 85.0f * sign;
+    ((EffFunemizuWork*)eff1->userdata)->position.y = pos.y - 51.0f;
+    ((EffFunemizuWork*)eff1->userdata)->position.z = 30.0f + pos.z;
+    ((EffFunemizuWork*)eff1->userdata)->size = dist;
+    if (angle < 180.0f) {
+        ((EffFunemizuWork*)eff1->userdata)->yaw = 135.0f + angle;
+    } else {
+        ((EffFunemizuWork*)eff1->userdata)->yaw = 45.0f + angle;
+    }
+    ((EffFunemizuWork*)eff2->userdata)->position.x = pos.x - 15.0f * sign;
+    ((EffFunemizuWork*)eff2->userdata)->position.y = pos.y - 51.0f;
+    ((EffFunemizuWork*)eff2->userdata)->position.z = 90.0f + pos.z;
+    ((EffFunemizuWork*)eff2->userdata)->size = dist;
+    ((EffFunemizuWork*)eff2->userdata)->yaw = 90.0f + angle;
+    if (dist > 1.0f && gp->retraceCount % 15 == 0) {
+        effWaterDamageN64Entry(5, 30, pos.x - 150.0f * sign, pos.y - 50.0f, pos.z, 2.0f);
+    }
+    return EVT_RETURN_BLOCK;
+}
+
+/**
+ * Looks up the bobbing table: args[0] is the step, args[1] a scale;
+ * returns gor_ship_puka_data[step & 15] * scale in args[2].
+ */
+static USER_FUNC(gor_ship_puka_func) {
+    EvtWord* args = event->args;
+    s32 idx = evtGetValue(event, args[0]);
+    f32 f = evtGetFloat(event, args[1]);
+    evtSetFloat(event, args[2], f * gor_ship_puka_data[idx & 0xF]);
+    return EVT_RETURN_DONE;
+}
+
+/**
  * Loops forever, bobbing the ship up and down: samples gor_ship_puka_data with a rising index every 130 ms,
  * scaled by LW(1), and writes it to the variable named by LW(0) (the ship's height offset).
  */
@@ -5651,87 +5732,6 @@ static EVT_BEGIN(gor_muj_ship_pera)
     RETURN
 EVT_END()
 
-/** Message callback: on type 3 at page 1 it sets LSWF_GOR_00_KOOPA_MSG_CUE. */
-static void gor_stg4_018_cb(s32 type, smartEntry* smart) {
-    MsgWinData* info = smart->address;
-
-    switch (type) {
-        case 3:
-            if (info->curPage == 1) {
-                evtSetValue(NULL, LSWF_GOR_00_KOOPA_MSG_CUE, 1);
-            }
-            break;
-    }
-}
-
-/**
- * Per-frame task for the harbor: keeps two water spray effects (effFunemizuEntry) next to the arriving ship
- * "S_fune_a" and spawns splash effects at its side when movement since the previous call exceeds 1 unit and the retrace count is a multiple of 15.
- */
-static USER_FUNC(fune_eff) {
-    EffectEntry* eff1;
-    EffectEntry* eff2;
-    f32 oldX;
-    f32 oldZ;
-    f32 dist;
-    f32 angle;
-    f32 sign;
-    Vec pos;
-
-    if (isFirstCall) {
-        event->userdatap[0] = effFunemizuEntry(0, 0.0f, -1000.0f, 0.0f, 0.0f, 0.0f);
-        event->userdatap[1] = effFunemizuEntry(2, 0.0f, -1000.0f, 0.0f, 0.0f, 0.0f);
-        mapObjGetPos("S_fune_a", &pos);
-        event->userdataf[2] = pos.x;
-        event->userdata3f = pos.z;
-    }
-    eff1 = event->userdatap[0];
-    eff2 = event->userdatap[1];
-    oldX = event->userdataf[2];
-    oldZ = event->userdata3f;
-    mapObjGetPos("S_fune_a", &pos);
-    event->userdataf[2] = pos.x;
-    event->userdata3f = pos.z;
-    dist = distABf(oldX, oldZ, pos.x, pos.z);
-    angle = angleABf(oldX, oldZ, pos.x, pos.z);
-    if (angle < 180.0f) {
-        sign = 1.0f;
-    } else {
-        sign = -1.0f;
-    }
-    ((EffFunemizuWork*)eff1->userdata)->scale = 3.0f;
-    ((EffFunemizuWork*)eff1->userdata)->position.x = pos.x + 85.0f * sign;
-    ((EffFunemizuWork*)eff1->userdata)->position.y = pos.y - 51.0f;
-    ((EffFunemizuWork*)eff1->userdata)->position.z = 30.0f + pos.z;
-    ((EffFunemizuWork*)eff1->userdata)->size = dist;
-    if (angle < 180.0f) {
-        ((EffFunemizuWork*)eff1->userdata)->yaw = 135.0f + angle;
-    } else {
-        ((EffFunemizuWork*)eff1->userdata)->yaw = 45.0f + angle;
-    }
-    ((EffFunemizuWork*)eff2->userdata)->position.x = pos.x - 15.0f * sign;
-    ((EffFunemizuWork*)eff2->userdata)->position.y = pos.y - 51.0f;
-    ((EffFunemizuWork*)eff2->userdata)->position.z = 90.0f + pos.z;
-    ((EffFunemizuWork*)eff2->userdata)->size = dist;
-    ((EffFunemizuWork*)eff2->userdata)->yaw = 90.0f + angle;
-    if (dist > 1.0f && gp->retraceCount % 15 == 0) {
-        effWaterDamageN64Entry(5, 30, pos.x - 150.0f * sign, pos.y - 50.0f, pos.z, 2.0f);
-    }
-    return EVT_RETURN_BLOCK;
-}
-
-/**
- * Looks up the bobbing table: args[0] is the step, args[1] a scale;
- * returns gor_ship_puka_data[step & 15] * scale in args[2].
- */
-static USER_FUNC(gor_ship_puka_func) {
-    EvtWord* args = event->args;
-    s32 idx = evtGetValue(event, args[0]);
-    f32 f = evtGetFloat(event, args[1]);
-    evtSetFloat(event, args[2], f * gor_ship_puka_data[idx & 0xF]);
-    return EVT_RETURN_DONE;
-}
-
 /**
  * Sets the scale of Mario and both partners (if present) to args[0] on all axes;
  * used to shrink them out of sight when the ship leaves.
@@ -5760,64 +5760,6 @@ static USER_FUNC(funeflag_save) {
     event->lwData[9] = c->flags & MAP_OBJ_FLAG_HIDDEN;
     return EVT_RETURN_DONE;
 }
-
-/** Hides the ships "S_fune_b" and "S_fune_c" (sets the hide flag on their groups). */
-static USER_FUNC(funeflag_reset) {
-    mapGrpFlagOn("S_fune_b", MAP_OBJ_FLAG_HIDDEN);
-    mapGrpFlagOn("S_fune_c", MAP_OBJ_FLAG_HIDDEN);
-    return EVT_RETURN_DONE;
-}
-
-/** Restores the hide state of the ships "S_fune_b" and "S_fune_c" saved in LW(8) and LW(9) by funeflag_save. */
-static USER_FUNC(funeflag_load) {
-    mapGrpFlagOff("S_fune_b", MAP_OBJ_FLAG_HIDDEN);
-    mapGrpFlagOn("S_fune_b", event->lwData[8]);
-    mapGrpFlagOff("S_fune_c", MAP_OBJ_FLAG_HIDDEN);
-    mapGrpFlagOn("S_fune_c", event->lwData[9]);
-    return EVT_RETURN_DONE;
-}
-
-/** Returns in args[0] whether Mario is currently switching ships (marioShipChanging). */
-static USER_FUNC(funechange_func) {
-    EvtWord* args = event->args;
-    evtSetValue(event, args[0], marioShipChanging());
-    return EVT_RETURN_DONE;
-}
-
-/** Returns in args[0] the color number of Mario's Yoshi partner (pouchGetPartyColor(PARTY_YOSHI)). */
-static USER_FUNC(get_yoshi_color) {
-    EvtWord* args = event->args;
-    evtSetValue(event, args[0], pouchGetPartyColor(PARTY_YOSHI));
-    return EVT_RETURN_DONE;
-}
-
-// Descriptive name (not in the symbol maps); placeholder unk_gor_000006d8, JP gor .text+0x60C. See docs/NAME_PROVENANCE.md.
-#if VERSION >= VERSION_JP
-/**
- * Deletes every NPC on the map, cancelling their regular events first. Used to clear the cast for the epilogue.
- * JP and later releases.
- */
-USER_FUNC(npc_all_delete) {
-    NpcWork* wp = npcGetWorkPtr();
-    s32 i;
-    s32 total = wp->total;
-    NpcEntry* npc = wp->entries;
-
-    for (i = 0; i < total; i++, npc++) {
-        if (npc->flags & NPC_FLAG_IN_USE) {
-            if (npc->moveEvent != NULL) {
-                if (npc->regularEvtId != 0) {
-                    evtDeleteID(npc->regularEvtId);
-                }
-                npc->regularEvtId = 0;
-                npc->moveEvent = NULL;
-            }
-            npcDelete(npc);
-        }
-    }
-    return EVT_RETURN_DONE;
-}
-#endif
 
 /**
  * Sets sail for Keelhaul Key after Cortez's talk:
@@ -5913,6 +5855,64 @@ static EVT_BEGIN(gor_muj_ship_start)
     CALL(evt_bero_mapchange, STRING("muj_20"), STRING(""))
     RETURN
 EVT_END()
+
+/** Hides the ships "S_fune_b" and "S_fune_c" (sets the hide flag on their groups). */
+static USER_FUNC(funeflag_reset) {
+    mapGrpFlagOn("S_fune_b", MAP_OBJ_FLAG_HIDDEN);
+    mapGrpFlagOn("S_fune_c", MAP_OBJ_FLAG_HIDDEN);
+    return EVT_RETURN_DONE;
+}
+
+/** Restores the hide state of the ships "S_fune_b" and "S_fune_c" saved in LW(8) and LW(9) by funeflag_save. */
+static USER_FUNC(funeflag_load) {
+    mapGrpFlagOff("S_fune_b", MAP_OBJ_FLAG_HIDDEN);
+    mapGrpFlagOn("S_fune_b", event->lwData[8]);
+    mapGrpFlagOff("S_fune_c", MAP_OBJ_FLAG_HIDDEN);
+    mapGrpFlagOn("S_fune_c", event->lwData[9]);
+    return EVT_RETURN_DONE;
+}
+
+/** Returns in args[0] whether Mario is currently switching ships (marioShipChanging). */
+static USER_FUNC(funechange_func) {
+    EvtWord* args = event->args;
+    evtSetValue(event, args[0], marioShipChanging());
+    return EVT_RETURN_DONE;
+}
+
+/** Returns in args[0] the color number of Mario's Yoshi partner (pouchGetPartyColor(PARTY_YOSHI)). */
+static USER_FUNC(get_yoshi_color) {
+    EvtWord* args = event->args;
+    evtSetValue(event, args[0], pouchGetPartyColor(PARTY_YOSHI));
+    return EVT_RETURN_DONE;
+}
+
+// Descriptive name (not in the symbol maps); placeholder unk_gor_000006d8, JP gor .text+0x60C. See docs/NAME_PROVENANCE.md.
+#if VERSION >= VERSION_JP
+/**
+ * Deletes every NPC on the map, cancelling their regular events first. Used to clear the cast for the epilogue.
+ * JP and later releases.
+ */
+USER_FUNC(npc_all_delete) {
+    NpcWork* wp = npcGetWorkPtr();
+    s32 i;
+    s32 total = wp->total;
+    NpcEntry* npc = wp->entries;
+
+    for (i = 0; i < total; i++, npc++) {
+        if (npc->flags & NPC_FLAG_IN_USE) {
+            if (npc->moveEvent != NULL) {
+                if (npc->regularEvtId != 0) {
+                    evtDeleteID(npc->regularEvtId);
+                }
+                npc->regularEvtId = 0;
+                npc->moveEvent = NULL;
+            }
+            npcDelete(npc);
+        }
+    }
+    return EVT_RETURN_DONE;
+}
+#endif
 
 /**
  * Background task of the harbor, named after its cargo (tsumini, 積荷): hides the cargo pile that doesn't fit the

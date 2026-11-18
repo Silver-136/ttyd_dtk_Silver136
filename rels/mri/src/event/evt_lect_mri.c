@@ -555,11 +555,6 @@ static USER_FUNC(lect_push_b_check) {
     return EVT_RETURN_DONE;
 }
 
-/** Blocks until the music on channel 1 has started playing. */
-static USER_FUNC(bgm_start_wait) {
-    return psndBGMStartCheck(1) ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
-}
-
 /**
  * Sets up the Super Boots lesson: puts Mario at the lesson spot,
  * puts Toadette next to him facing him (no hit, no wall collision, talk pose and automatic move animation on),
@@ -774,6 +769,11 @@ EVT_BEGIN(boots_lv2_juyoitem_lecture)
     CALL(evt_npc_set_position, STRING("キノピコ"), 0, -1000, 0)
     RETURN
 EVT_END()
+
+/** Blocks until the music on channel 1 has started playing. */
+static USER_FUNC(bgm_start_wait) {
+    return psndBGMStartCheck(1) ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
+}
 
 /**
  * Release script run when the Super Boots are collected:

@@ -434,6 +434,27 @@ static EVT_BEGIN(shop_woman_init)
 EVT_END()
 
 /**
+ * Script helper that blocks forever: each time Mario's sleep animation (M_N_5A) loops it plays
+ * "SFX_VOICE_MARIO_SLEEP1" at his position and stores the sound id in GW(10).
+ */
+static USER_FUNC(sleep_voice) {
+    MarioWork* mario = marioGetPtr();
+    s32 loops;
+
+    if (isFirstCall) {
+        event->userdata[0] = -1;
+    }
+    if (strcmp(mario->animName, "M_N_5A") == 0) {
+        loops = animPoseGetLoopTimes(mario->paperAnimGroupId[marioAnimeId()]);
+        if (loops != event->userdata[0]) {
+            event->userdata[0] = loops;
+            evtSetValue(event, GW(10), psndSFXOn_3D("SFX_VOICE_MARIO_SLEEP1", &mario->position));
+        }
+    }
+    return EVT_RETURN_BLOCK;
+}
+
+/**
  * Talk script of the shopkeeper's wife. Before STG4_03_SHOP_KEY the first talk
  * (GSWF_USU_01_SHOP_WIFE_FIRST_TALK_DONE clear) is a long story during which Mario dozes
  * off (snoring loop, yawn, wake-up voice and poses), then the flag is set;
@@ -861,6 +882,60 @@ static EVT_BEGIN(iri_20_aunt_to_house)
     END_IF
     RETURN
 EVT_END()
+
+/**
+ * Script helper: builds a -1 terminated list of the items in Mario's pouch (first 20 slots) in newly allocated
+ * memory, returns the pointer in args[0].
+ */
+static USER_FUNC(get_item_list) {
+    EvtWord* args = event->args;
+#if VERSION >= VERSION_US
+    s32 cnt = pouchGetHaveItemCnt();
+    s32* list = _mapAlloc((cnt + 1) * sizeof(s32));
+#else
+    s32* list = _mapAlloc((pouchGetHaveItemCnt() + 1) * sizeof(s32));
+#endif
+    s32 n;
+    s32 i;
+
+    for (i = 0, n = 0; i < MAX_HELD_ITEMS; i++) {
+        if (pouchHaveItem(i)) {
+            list[n] = pouchHaveItem(i);
+            n++;
+        }
+    }
+    list[n] = -1;
+    evtSetValue(event, args[0], (EvtWord)list);
+    return EVT_RETURN_DONE;
+}
+
+/** Script helper: frees the list that get_item_list allocated (pointer in args[0]). */
+static USER_FUNC(delete_item_list) {
+#if VERSION >= VERSION_US
+    void* p = (void*)evtGetValue(event, event->args[0]);
+    _mapFree(p);
+#else
+    _mapFree((void*)evtGetValue(event, event->args[0]));
+#endif
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script helper: returns in args[1] whether item args[0] counts as food for the aunt's request:
+ * its usable_locations has the menu-use bit (4); aunt_talk turns anything else down as not edible.
+ */
+static USER_FUNC(check_tabemono) {
+    EvtWord* args = event->args;
+    s32 id = evtGetValue(event, args[0]);
+    BOOL food = FALSE;
+    ItemData* item = &itemDataTable[id];
+
+    if (item->usable_locations & ITEM_USABLE_MENU) {
+        food = TRUE;
+    }
+    evtSetValue(event, args[1], food);
+    return EVT_RETURN_DONE;
+}
 
 /**
  * Talk script of the aunt, shared by her pig form.
@@ -2520,6 +2595,23 @@ static EVT_BEGIN(evt_wall_2_1)
 EVT_END()
 
 /**
+ * Script helper: returns in args[1] TRUE if the NPC that the A button would talk to this frame (talkTarget)
+ * is the one named args[0].
+ */
+static USER_FUNC(chk_fuki) {
+    EvtWord* args = event->args;
+    const char* name = (const char*)evtGetValue(event, args[0]);
+    NpcEntry* npc = npcGetWorkPtr()->talkTarget;
+
+    if (npc != NULL && strcmp(npc->description, name) == 0) {
+        evtSetValue(event, args[1], TRUE);
+        return EVT_RETURN_DONE;
+    }
+    evtSetValue(event, args[1], FALSE);
+    return EVT_RETURN_DONE;
+}
+
+/**
  * Background chatter for the shop quarrel (LW(0) speaker, LW(1) message id,
  * LW(2) a flag used as the "may speak" switch, LW(3) start delay in ms);
  * runs only from the Doopliss fight to STG4_15_05.
@@ -2654,98 +2746,6 @@ static DoorParam door_2_1 = {
     door_2_1_open, // evtOpen
     mawari_house_delay, // evtClose
 };
-
-/**
- * Script helper that blocks forever: each time Mario's sleep animation (M_N_5A) loops it plays
- * "SFX_VOICE_MARIO_SLEEP1" at his position and stores the sound id in GW(10).
- */
-static USER_FUNC(sleep_voice) {
-    MarioWork* mario = marioGetPtr();
-    s32 loops;
-
-    if (isFirstCall) {
-        event->userdata[0] = -1;
-    }
-    if (strcmp(mario->animName, "M_N_5A") == 0) {
-        loops = animPoseGetLoopTimes(mario->paperAnimGroupId[marioAnimeId()]);
-        if (loops != event->userdata[0]) {
-            event->userdata[0] = loops;
-            evtSetValue(event, GW(10), psndSFXOn_3D("SFX_VOICE_MARIO_SLEEP1", &mario->position));
-        }
-    }
-    return EVT_RETURN_BLOCK;
-}
-
-/**
- * Script helper: builds a -1 terminated list of the items in Mario's pouch (first 20 slots) in newly allocated
- * memory, returns the pointer in args[0].
- */
-static USER_FUNC(get_item_list) {
-    EvtWord* args = event->args;
-#if VERSION >= VERSION_US
-    s32 cnt = pouchGetHaveItemCnt();
-    s32* list = _mapAlloc((cnt + 1) * sizeof(s32));
-#else
-    s32* list = _mapAlloc((pouchGetHaveItemCnt() + 1) * sizeof(s32));
-#endif
-    s32 n;
-    s32 i;
-
-    for (i = 0, n = 0; i < MAX_HELD_ITEMS; i++) {
-        if (pouchHaveItem(i)) {
-            list[n] = pouchHaveItem(i);
-            n++;
-        }
-    }
-    list[n] = -1;
-    evtSetValue(event, args[0], (EvtWord)list);
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper: frees the list that get_item_list allocated (pointer in args[0]). */
-static USER_FUNC(delete_item_list) {
-#if VERSION >= VERSION_US
-    void* p = (void*)evtGetValue(event, event->args[0]);
-    _mapFree(p);
-#else
-    _mapFree((void*)evtGetValue(event, event->args[0]));
-#endif
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper: returns in args[1] whether item args[0] counts as food for the aunt's request:
- * its usable_locations has the menu-use bit (4); aunt_talk turns anything else down as not edible.
- */
-static USER_FUNC(check_tabemono) {
-    EvtWord* args = event->args;
-    s32 id = evtGetValue(event, args[0]);
-    BOOL food = FALSE;
-    ItemData* item = &itemDataTable[id];
-
-    if (item->usable_locations & ITEM_USABLE_MENU) {
-        food = TRUE;
-    }
-    evtSetValue(event, args[1], food);
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper: returns in args[1] TRUE if the NPC that the A button would talk to this frame (talkTarget)
- * is the one named args[0].
- */
-static USER_FUNC(chk_fuki) {
-    EvtWord* args = event->args;
-    const char* name = (const char*)evtGetValue(event, args[0]);
-    NpcEntry* npc = npcGetWorkPtr()->talkTarget;
-
-    if (npc != NULL && strcmp(npc->description, name) == 0) {
-        evtSetValue(event, args[1], TRUE);
-        return EVT_RETURN_DONE;
-    }
-    evtSetValue(event, args[1], FALSE);
-    return EVT_RETURN_DONE;
-}
 
 /** Script helper: hides the six shop display objects in obj_list. */
 static USER_FUNC(shop_item_disp_off) {
@@ -3399,6 +3399,26 @@ static s32 key_tbl[] = {
 };
 
 /**
+ * Message callback for the black chest's ("pera_box") lines:
+ * starts its A_2 animation when the message opens (type 0),
+ * restarts it each time it has looped while the text runs (type 5) and returns it to S_1
+ * when the text reaches a page's key-wait point (type 2).
+ */
+static void majin_callback(s32 type) {
+    MapObjectEntry* mobj = mobjNameToPtr("pera_box");
+
+    if (type == 0) {
+        animPoseSetAnim(mobj->poseId, "A_2", TRUE);
+    } else if (type == 5) {
+        if (animPoseGetLoopTimes(mobj->poseId) >= 1.0f) {
+            animPoseSetAnim(mobj->poseId, "A_2", TRUE);
+        }
+    } else if (type == 2) {
+        animPoseSetAnim(mobj->poseId, "S_1", TRUE);
+    }
+}
+
+/**
  * Open script of the black chest ("pera_box"): Mario and the partner step up to it.
  * The first time the chest rattles and its voice talks (stg4_usu_majin3_01 to 07); sets
  * GSWF_USU_01_BLACK_CHEST_FIRST_TALK_DONE. Later, without the Black Key it begs again (majin3_08); with it
@@ -3512,6 +3532,20 @@ static EVT_BEGIN(evt_majin)
     RETURN
 EVT_END()
 
+/** Script helper: turns the "pera_box" chest to face 135 degrees. */
+static USER_FUNC(box_r) {
+    MapObjectEntry* mobj = mobjNameToPtr("pera_box");
+
+    mobj->rotation.y = 135.0f;
+    mobj->flags |= MOBJ_FLAG_UPDATE_MTX;
+    return EVT_RETURN_DONE;
+}
+
+/** Script helper: blocks until the channel 1 BGM has started. */
+static USER_FUNC(bgm_start_wait) {
+    return psndBGMStartCheck(1) ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
+}
+
 /**
  * Black chest pera_box (GSWF_USU_01_BLACK_CHEST_OPENED): gives ITEM_TUBE_CURSE, then the Paper Mage scene with
  * BGM_EVT_PERAMAJIN1 and the curse lecture. The early demos normalize Mario first.
@@ -3590,40 +3624,6 @@ static EVT_BEGIN(evt_majin2)
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
-
-/**
- * Message callback for the black chest's ("pera_box") lines:
- * starts its A_2 animation when the message opens (type 0),
- * restarts it each time it has looped while the text runs (type 5) and returns it to S_1
- * when the text reaches a page's key-wait point (type 2).
- */
-static void majin_callback(s32 type) {
-    MapObjectEntry* mobj = mobjNameToPtr("pera_box");
-
-    if (type == 0) {
-        animPoseSetAnim(mobj->poseId, "A_2", TRUE);
-    } else if (type == 5) {
-        if (animPoseGetLoopTimes(mobj->poseId) >= 1.0f) {
-            animPoseSetAnim(mobj->poseId, "A_2", TRUE);
-        }
-    } else if (type == 2) {
-        animPoseSetAnim(mobj->poseId, "S_1", TRUE);
-    }
-}
-
-/** Script helper: turns the "pera_box" chest to face 135 degrees. */
-static USER_FUNC(box_r) {
-    MapObjectEntry* mobj = mobjNameToPtr("pera_box");
-
-    mobj->rotation.y = 135.0f;
-    mobj->flags |= MOBJ_FLAG_UPDATE_MTX;
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper: blocks until the channel 1 BGM has started. */
-static USER_FUNC(bgm_start_wait) {
-    return psndBGMStartCheck(1) ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
-}
 
 /** Script helper: turns the "mobj_box00" chest to face 135 degrees. */
 static USER_FUNC(mobj_ry) {

@@ -185,6 +185,78 @@ static EVT_BEGIN(mony_peton_setup)
 EVT_END()
 
 /**
+ * Draw callback: prints the counter GW(0) as "<n>回" with a small "かい" next to it. US and later pick the layout by
+ * language: 0 that Japanese one, 1 and 6 "times", 2 "-mal", 4 "veces", 3 and 5 the number alone.
+ */
+static void printCount(CameraId camera, void* param) {
+#if VERSION >= VERSION_US
+    char buf[32];
+#else
+    char buf[36];
+#endif
+    s32 n;
+
+    // %3d回
+    n = evtGetValue(NULL, GW(0));
+#if VERSION >= VERSION_US
+    FontDrawStart();
+    switch (gp->language) {
+        case LANGUAGE_JP:
+            // %3d回
+            sprintf(buf, "%3d回", n);
+            FontDrawStringPitch(90.0f, 120.0f, 20.0f, buf);
+
+            // かい
+            n = evtGetValue(NULL, GW(0));
+            sprintf(buf, "かい", n);
+            FontDrawScale(0.55f);
+            FontDrawStringPitch(148.0f, 131.0f, 20.0f, buf);
+            break;
+        case LANGUAGE_US:
+        case LANGUAGE_DU:
+            sprintf(buf, "%3d", n);
+            FontDrawStringPitch(68.0f, 120.0f, 16.0f, buf);
+            FontDrawString(125.0f, 120.0f, "times");
+            break;
+        case LANGUAGE_GE:
+            sprintf(buf, "%3d", n);
+            FontDrawStringPitch(73.0f, 120.0f, 16.0f, buf);
+            FontDrawString(125.0f, 120.0f, "-mal");
+            break;
+        case LANGUAGE_SP:
+            sprintf(buf, "%3d", n);
+            FontDrawStringPitch(68.0f, 120.0f, 16.0f, buf);
+            FontDrawString(125.0f, 120.0f, "veces");
+            break;
+        case LANGUAGE_FR:
+        case LANGUAGE_IT:
+            sprintf(buf, "%3d", n);
+            FontDrawString(110.0f, 120.0f, buf);
+            break;
+    }
+#else
+    sprintf(buf, "%3d回", n);
+    FontDrawStart();
+    FontDrawStringPitch(90.0f, 120.0f, 20.0f, buf);
+
+    // かい
+    n = evtGetValue(NULL, GW(0));
+    sprintf(buf, "かい", n);
+    FontDrawScale(0.55f);
+    FontDrawStringPitch(148.0f, 131.0f, 20.0f, buf);
+#endif
+}
+
+/**
+ * Display callback for Frankie's declaration count: queues a 2D draw each frame (always blocks, so it runs until
+ * killed).
+ */
+static USER_FUNC(countDisp) {
+    dispEntry(CAMERA_2D, 399.0f, DISP_MODE_OPAQUE, printCount, NULL);
+    return EVT_RETURN_BLOCK;
+}
+
+/**
  * Display event for Frankie's repeated declaration: runs countDisp so the repetition
  * count is drawn on screen each frame.
  */
@@ -700,75 +772,3 @@ EVT_BEGIN(muj_02_init_evt)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S"), MAP_OBJ_FLAG_CLIP)
     RETURN
 EVT_END()
-
-/**
- * Draw callback: prints the counter GW(0) as "<n>回" with a small "かい" next to it. US and later pick the layout by
- * language: 0 that Japanese one, 1 and 6 "times", 2 "-mal", 4 "veces", 3 and 5 the number alone.
- */
-static void printCount(CameraId camera, void* param) {
-#if VERSION >= VERSION_US
-    char buf[32];
-#else
-    char buf[36];
-#endif
-    s32 n;
-
-    // %3d回
-    n = evtGetValue(NULL, GW(0));
-#if VERSION >= VERSION_US
-    FontDrawStart();
-    switch (gp->language) {
-        case LANGUAGE_JP:
-            // %3d回
-            sprintf(buf, "%3d回", n);
-            FontDrawStringPitch(90.0f, 120.0f, 20.0f, buf);
-
-            // かい
-            n = evtGetValue(NULL, GW(0));
-            sprintf(buf, "かい", n);
-            FontDrawScale(0.55f);
-            FontDrawStringPitch(148.0f, 131.0f, 20.0f, buf);
-            break;
-        case LANGUAGE_US:
-        case LANGUAGE_DU:
-            sprintf(buf, "%3d", n);
-            FontDrawStringPitch(68.0f, 120.0f, 16.0f, buf);
-            FontDrawString(125.0f, 120.0f, "times");
-            break;
-        case LANGUAGE_GE:
-            sprintf(buf, "%3d", n);
-            FontDrawStringPitch(73.0f, 120.0f, 16.0f, buf);
-            FontDrawString(125.0f, 120.0f, "-mal");
-            break;
-        case LANGUAGE_SP:
-            sprintf(buf, "%3d", n);
-            FontDrawStringPitch(68.0f, 120.0f, 16.0f, buf);
-            FontDrawString(125.0f, 120.0f, "veces");
-            break;
-        case LANGUAGE_FR:
-        case LANGUAGE_IT:
-            sprintf(buf, "%3d", n);
-            FontDrawString(110.0f, 120.0f, buf);
-            break;
-    }
-#else
-    sprintf(buf, "%3d回", n);
-    FontDrawStart();
-    FontDrawStringPitch(90.0f, 120.0f, 20.0f, buf);
-
-    // かい
-    n = evtGetValue(NULL, GW(0));
-    sprintf(buf, "かい", n);
-    FontDrawScale(0.55f);
-    FontDrawStringPitch(148.0f, 131.0f, 20.0f, buf);
-#endif
-}
-
-/**
- * Display callback for Frankie's declaration count: queues a 2D draw each frame (always blocks, so it runs until
- * killed).
- */
-static USER_FUNC(countDisp) {
-    dispEntry(CAMERA_2D, 399.0f, DISP_MODE_OPAQUE, printCount, NULL);
-    return EVT_RETURN_BLOCK;
-}

@@ -426,6 +426,41 @@ static EVT_BEGIN(init_event)
 EVT_END()
 
 /**
+ * Script helper: args[0] = unit.
+ * Keeps the cold cloud effect (a Kumokumo particle,
+ * created on the first call and stored in work[1]) hovering at the Ice Puff's position, scaled by its size.
+ */
+static USER_FUNC(eff_ice_barrier) {
+    s32 id = BattleTransID(event, evtGetValue(event, event->args[0]));
+    BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
+    EffectEntry* eff;
+    f32 x, y, z;
+
+    if (isFirstCall && unit->work[UNIT_WORK_BARRIER_EFFECT] == 0) {
+        unit->work[UNIT_WORK_BARRIER_EFFECT] = (EvtWord)effKumokumoN64Entry(3, 1000, 0.0f, -1000.0f, 0.0f, 0.0f, 0.0f, 1.0f);
+    }
+    eff = (EffectEntry*)unit->work[UNIT_WORK_BARRIER_EFFECT];
+    BtlUnit_GetPos(unit, &x, &y, &z);
+    ((EffKumokumoN64Particle*)eff->userdata)->x = x;
+    ((EffKumokumoN64Particle*)eff->userdata)->y = 10.0f * unit->sizeMultiplier + y;
+    ((EffKumokumoN64Particle*)eff->userdata)->z = z;
+    ((EffKumokumoN64Particle*)eff->userdata)->scale = unit->sizeMultiplier;
+    return EVT_RETURN_DONE;
+}
+
+/** Script helper: args[0] = unit. Deletes the Ice Puff's cloud effect (work[1]) if it exists. */
+static USER_FUNC(eff_ice_barrier_end) {
+    s32 id = BattleTransID(event, evtGetValue(event, event->args[0]));
+    BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
+
+    if (unit->work[UNIT_WORK_BARRIER_EFFECT] != 0) {
+        effDelete((EffectEntry*)unit->work[UNIT_WORK_BARRIER_EFFECT]);
+        unit->work[UNIT_WORK_BARRIER_EFFECT] = 0;
+    }
+    return EVT_RETURN_DONE;
+}
+
+/**
  * Background loop of the Ice Puff, run for as long as it exists:
  * each frame it shows the ice barrier effect while part 1 carries counter attribute 64 and removes the effect
  * when the attribute is gone.
@@ -651,41 +686,6 @@ static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     RETURN
 EVT_END()
-
-/**
- * Script helper: args[0] = unit.
- * Keeps the cold cloud effect (a Kumokumo particle,
- * created on the first call and stored in work[1]) hovering at the Ice Puff's position, scaled by its size.
- */
-static USER_FUNC(eff_ice_barrier) {
-    s32 id = BattleTransID(event, evtGetValue(event, event->args[0]));
-    BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
-    EffectEntry* eff;
-    f32 x, y, z;
-
-    if (isFirstCall && unit->work[UNIT_WORK_BARRIER_EFFECT] == 0) {
-        unit->work[UNIT_WORK_BARRIER_EFFECT] = (EvtWord)effKumokumoN64Entry(3, 1000, 0.0f, -1000.0f, 0.0f, 0.0f, 0.0f, 1.0f);
-    }
-    eff = (EffectEntry*)unit->work[UNIT_WORK_BARRIER_EFFECT];
-    BtlUnit_GetPos(unit, &x, &y, &z);
-    ((EffKumokumoN64Particle*)eff->userdata)->x = x;
-    ((EffKumokumoN64Particle*)eff->userdata)->y = 10.0f * unit->sizeMultiplier + y;
-    ((EffKumokumoN64Particle*)eff->userdata)->z = z;
-    ((EffKumokumoN64Particle*)eff->userdata)->scale = unit->sizeMultiplier;
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper: args[0] = unit. Deletes the Ice Puff's cloud effect (work[1]) if it exists. */
-static USER_FUNC(eff_ice_barrier_end) {
-    s32 id = BattleTransID(event, evtGetValue(event, event->args[0]));
-    BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
-
-    if (unit->work[UNIT_WORK_BARRIER_EFFECT] != 0) {
-        effDelete((EffectEntry*)unit->work[UNIT_WORK_BARRIER_EFFECT]);
-        unit->work[UNIT_WORK_BARRIER_EFFECT] = 0;
-    }
-    return EVT_RETURN_DONE;
-}
 
 /**
  * The Ice Puff raises an ice barrier: it sets counter attribute 64 on part 1,

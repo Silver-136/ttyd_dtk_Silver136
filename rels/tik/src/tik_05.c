@@ -423,6 +423,19 @@ static void alpha_tev(MapTevCallbackInfo* info) {
     info->tevStage++;
 }
 
+/** Script helper. Allocates the one-byte alpha used by alpha_tev and sets it to 255. */
+static USER_FUNC(alpha_init_func) {
+    _ap = _mapAlloc(1);
+    *_ap = 255;
+    return EVT_RETURN_DONE;
+}
+
+/** Script helper. Sets the pedestal star's alpha byte to args[0]. */
+static USER_FUNC(alpha_set_func) {
+    *_ap = evtGetValue(event, event->args[0]);
+    return EVT_RETURN_DONE;
+}
+
 /**
  * Runs the fade of the glowing star (hosi_2) on the pedestal.
  * Every frame it adds the speed in GW(1) to an alpha clamped to 0..255 and stores it;
@@ -689,45 +702,6 @@ static EVT_BEGIN(mahojin_se_event_end)
 EVT_END()
 
 /**
- * Loop that keeps the glowing orb (map_ball) of the map scene on the Crystal Star item00,
- * calling disp_lighteffect_func with the item's position each frame.
- */
-static EVT_BEGIN(disp_lighteffect)
-    LOOP(0)
-        CALL(evt_item_get_position, STRING("item00"), LW(0), LW(1), LW(2))
-        CALL(disp_lighteffect_func, STRING("map_ball"), LW(0), LW(1), LW(2), GW(10))
-        WAIT_FRAMES(1)
-    END_LOOP
-    RETURN
-EVT_END()
-
-/**
- * Loop that keeps the treasure-map picture (map_map) of the map scene on item00,
- * calling disp_treasure_map_func each frame.
- */
-static EVT_BEGIN(disp_treasure_map)
-    LOOP(0)
-        CALL(evt_item_get_position, STRING("item00"), LW(0), LW(1), LW(2))
-        CALL(disp_treasure_map_func, STRING("map_map"), LW(0), LW(1), LW(2), GW(10), GW(11))
-        WAIT_FRAMES(1)
-    END_LOOP
-    RETURN
-EVT_END()
-
-/** Script helper. Allocates the one-byte alpha used by alpha_tev and sets it to 255. */
-static USER_FUNC(alpha_init_func) {
-    _ap = _mapAlloc(1);
-    *_ap = 255;
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper. Sets the pedestal star's alpha byte to args[0]. */
-static USER_FUNC(alpha_set_func) {
-    *_ap = evtGetValue(event, event->args[0]);
-    return EVT_RETURN_DONE;
-}
-
-/**
  * Script helper that prepares the rotating camera of the map scene.
  * args[0..5] and [6..11] are the position and target of two key camera views;
  * the helper allocates three work areas and computes each key view's yaw and distance around the target.
@@ -892,6 +866,19 @@ static USER_FUNC(disp_lighteffect_func) {
 }
 
 /**
+ * Loop that keeps the glowing orb (map_ball) of the map scene on the Crystal Star item00,
+ * calling disp_lighteffect_func with the item's position each frame.
+ */
+static EVT_BEGIN(disp_lighteffect)
+    LOOP(0)
+        CALL(evt_item_get_position, STRING("item00"), LW(0), LW(1), LW(2))
+        CALL(disp_lighteffect_func, STRING("map_ball"), LW(0), LW(1), LW(2), GW(10))
+        WAIT_FRAMES(1)
+    END_LOOP
+    RETURN
+EVT_END()
+
+/**
  * Script helper.
  * Places the treasure map effect args[0] at (args[1], args[2], args[3]) with rotation 180 + args[4]
  * and the alpha args[5].
@@ -913,6 +900,19 @@ static USER_FUNC(disp_treasure_map_func) {
     ((EffTreasureMapWork*)eff->userdata)->alpha = alpha;
     return EVT_RETURN_DONE;
 }
+
+/**
+ * Loop that keeps the treasure-map picture (map_map) of the map scene on item00,
+ * calling disp_treasure_map_func each frame.
+ */
+static EVT_BEGIN(disp_treasure_map)
+    LOOP(0)
+        CALL(evt_item_get_position, STRING("item00"), LW(0), LW(1), LW(2))
+        CALL(disp_treasure_map_func, STRING("map_map"), LW(0), LW(1), LW(2), GW(10), GW(11))
+        WAIT_FRAMES(1)
+    END_LOOP
+    RETURN
+EVT_END()
 
 /** Script helper. Sets the alpha (args[1]) of the named magic-circle effect. */
 static USER_FUNC(mahojin_effect_alpha) {

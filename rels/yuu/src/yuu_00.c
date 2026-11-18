@@ -71,7 +71,6 @@ static USER_FUNC(yuuminigame1_opening_on_off);
 static USER_FUNC(yuuminigame1_set_phase);
 BOOL yuuminigame1_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp, HikokiWork* data);
 
-static MonteTable montetable[4];
 static EvtWord minigame_view_monte[4];
 EvtWord yuu_00_kaijo_init[12];
 EvtWord yuu_00_kaijo_init2[12];
@@ -107,6 +106,362 @@ static MonteTable montetable[] = {
 #endif
     {0},
 };
+
+/** Script helper (JP and later): resets the camera shift (camShiftReset). */
+// Descriptive name (not in the symbol maps); placeholder unk_yuu_00004250, JP yuu .text+0x4184. See docs/NAME_PROVENANCE.md.
+#if VERSION >= VERSION_JP
+USER_FUNC(yuu_00_cam_shift_reset) {
+    camShiftReset();
+    return EVT_RETURN_DONE;
+}
+#endif
+
+/**
+ * Returns TRUE when two points are within 20 units in 3D and within 20 in height,
+ * i.e. Mario is touching a floating coin.
+ */
+static BOOL get_monte_check(Vec* a, Vec* b) {
+    if (PSVECDistance(a, b) < 20.0f && __fabs(a->y - b->y) < 20.0) {
+        return TRUE;
+    }
+    return FALSE;
+}
+
+/** Draw callback that renders every coin icon of a Monte array that has not been collected yet. */
+static void monte_disp(CameraId camera, void* param) {
+    Monte* monte = param;
+    s32 i;
+
+    if (monte != NULL) {
+        for (i = 0; i < monte->num; i++) {
+            if (monte[i].hidden == 0) {
+                iconDispGx(&monte[i].sub.pos, 0, 1.0f, ICON_ITEM_PIANTA_TOKEN);
+            }
+        }
+    }
+}
+
+/** Returns a random float in [0, d) with two decimal digits of resolution (as in yuu_01). */
+static inline f32 randRange(f32 d) { return irand(100.0f * d) / 100.0f; }
+
+/**
+ * Frame-by-frame coin spawner and collector for Plane Mode.
+ * On first call it allocates the Monte array and scatters coins at random spots within the rectangles of
+ * montetable (at least 20 units apart within each rectangle), then each frame it checks Mario against every coin,
+ * counting and hiding collected ones with a 3D sound. Blocks forever as a view event.
+ */
+static USER_FUNC(fall_rtn) {
+    MiniGameWork* wp = (MiniGameWork*)event->lwData[0];
+    BOOL exists = FALSE;
+    HikokiWork* data = wp->data;
+    s32 total;
+    s32 i;
+    s32 t;
+    s32 k;
+    SfxNameWord sfx;
+    s32 j;
+    MonteSub* sub;
+    f32 lo;
+    f32 hi;
+    Vec v;
+    Monte* m;
+
+    if (isFirstCall) {
+        if (monte_p != NULL) {
+            exists = TRUE;
+        }
+        total = 0;
+        for (i = 0; montetable[i].num; i++) {
+            total += montetable[i].num;
+        }
+        monte_p = _mapAlloc(total * sizeof(Monte));
+        memset(monte_p, 0, total * sizeof(Monte));
+        monte_p->num = total;
+        monte_p->wp = wp;
+        data->monteCount = 0;
+        t = 0;
+        k = 0;
+        for (i = 0; i < monte_p->num; i++) {
+            sub = &monte_p[i].sub;
+            sub->pos.z = 0.0f;
+            do {
+                if (montetable[t].x0 < montetable[t].x1) {
+                    lo = montetable[t].x0;
+                    hi = montetable[t].x1;
+                } else {
+                    lo = montetable[t].x1;
+                    hi = montetable[t].x0;
+                }
+                hi -= lo;
+                sub->pos.x = lo + randRange(hi);
+                if (montetable[t].y0 < montetable[t].y1) {
+                    lo = montetable[t].y0;
+                    hi = montetable[t].y1;
+                } else {
+                    lo = montetable[t].y1;
+                    hi = montetable[t].y0;
+                }
+                hi -= lo;
+                sub->pos.y = lo + randRange(hi);
+                for (j = 0; j < k; j++) {
+                    PSVECSubtract(&sub->pos, &(sub - (j + 1))->pos, &v);
+                    if (PSVECMag(&v) < 20.0f) {
+                        break;
+                    }
+                }
+            } while (j != k);
+            if (++k >= montetable[t].num) {
+                k = 0;
+                t++;
+            }
+            sub->scale = 1.0f;
+        }
+    }
+    for (i = 0; i < monte_p->num; i++) {
+        sfx = (SfxNameWord)"SFX_EVT_GAME_MONTE_COUNT1";
+        m = &monte_p[i];
+        switch (m->state) {
+            case 0:
+                if (get_monte_check(&m->sub.pos, &marioGetPtr()->position) == 1) {
+                    data->monteCount++;
+                    psndSFXOn_3D((const char*)sfx, &marioGetPtr()->position);
+                    m->hidden = 1;
+                    m->state = 1;
+                }
+                break;
+            case 1:
+                break;
+        }
+    }
+    if (!exists) {
+        dispEntry(CAMERA_3D, 0.0f, DISP_MODE_ALPHA_TEST, monte_disp, monte_p);
+    }
+    return EVT_RETURN_BLOCK;
+}
+
+/**
+ * Resets the coins for the next round: stops the view event,
+ * frees the Monte array and starts a fresh minigame_view_monte event.
+ */
+static USER_FUNC(re_fall_rtn) {
+    HikokiWork* data;
+
+    if (monte_p != NULL) {
+        data = monte_p->wp->data;
+        if (data->viewEvent != NULL) {
+            evtDeleteID(data->viewEvent->eventId);
+            data->viewEvent = NULL;
+            _mapFree(monte_p);
+            data->viewEvent = evtEntryType(minigame_view_monte, 0, 0, 0);
+            data->viewEvent->lwData[0] = (EvtWord)monte_p->wp;
+        }
+    }
+    return EVT_RETURN_DONE;
+}
+
+/** Script call that switches Mario's motion to 0x18, the airplane glide motion used in Plane Mode. */
+static USER_FUNC(evt_change_plane) {
+    marioChgMot(MARIO_MOTION_PLANE);
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * args[0] = minigame work pointer, args[1] = new phase for the Plane Mode state machine (0 idle, 1 start, 2
+ * playing, 3 finish).
+ */
+static USER_FUNC(yuuminigame1_set_phase) {
+    EvtWord* args = event->args;
+    HikokiWork* data = ((MiniGameWork*)evtGetValue(event, args[0]))->data;
+
+    data->phase = evtGetValue(event, args[1]);
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * args[0] = minigame work pointer, args[1] = on/off.
+ * Sets or clears HIKOKI_FLAG_OPENING (the opening cutscene is pending).
+ */
+static USER_FUNC(yuuminigame1_opening_on_off) {
+    EvtWord* args = event->args;
+    HikokiWork* data = ((MiniGameWork*)evtGetValue(event, args[0]))->data;
+
+    if (evtGetValue(event, args[1])) {
+        data->flags |= HIKOKI_FLAG_OPENING;
+    } else {
+        data->flags &= ~HIKOKI_FLAG_OPENING;
+    }
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * args[0] = minigame work pointer, args[1] = output.
+ * Writes 1 if the opening cutscene is still pending (HIKOKI_FLAG_OPENING), else 0.
+ */
+static USER_FUNC(yuuminigame1_opening_chk) {
+    EvtWord* args = event->args;
+    MiniGameWork* wp = (MiniGameWork*)evtGetValue(event, args[0]);
+
+    if (((HikokiWork*)wp->data)->flags & HIKOKI_FLAG_OPENING) {
+        evtSetValue(event, args[1], 1);
+    } else {
+        evtSetValue(event, args[1], 0);
+    }
+    return EVT_RETURN_DONE;
+}
+
+#if VERSION >= VERSION_US
+/** args[0] = minigame work pointer, args[1] = on/off. Sets or clears HIKOKI_FLAG_FLOOR (the platforms exist). */
+USER_FUNC(yuuminigame1_floor_on_off) {
+    EvtWord* args = event->args;
+    u32* flags = &((HikokiWork*)((MiniGameWork*)evtGetValue(event, args[0]))->data)->flags;
+
+    if (evtGetValue(event, args[1])) {
+        *flags |= HIKOKI_FLAG_FLOOR;
+    } else {
+        *flags &= ~HIKOKI_FLAG_FLOOR;
+    }
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * args[0] = minigame work pointer, args[1] = output.
+ * Writes 1 if the platforms currently exist (HIKOKI_FLAG_FLOOR), else 0.
+ */
+USER_FUNC(yuuminigame1_floor_chk) {
+    EvtWord* args = event->args;
+    u32* flags = &((HikokiWork*)((MiniGameWork*)evtGetValue(event, args[0]))->data)->flags;
+
+    if (*flags & HIKOKI_FLAG_FLOOR) {
+        evtSetValue(event, args[1], 1);
+    } else {
+        evtSetValue(event, args[1], 0);
+    }
+    return EVT_RETURN_DONE;
+}
+#endif
+
+/** Init callback for minigame 1: starts the coin view event and marks the opening cutscene as pending. */
+void yuuminigame_init_1hikoki(EventEntry* event, BOOL isFirstCall) {
+    HikokiWork* data = ((MiniGameWork*)event->lwData[0])->data;
+
+    data->viewEvent = evtEntryType(minigame_view_monte, 0, 0, 0);
+    data->viewEvent->lwData[0] = event->lwData[0];
+    data->flags |= HIKOKI_FLAG_OPENING;
+}
+
+/**
+ * Per-frame state machine for Plane Mode: phase 1 starts minigame01_start,
+ * phase 2 waits for the rules check to finish, phase 3 launches minigame01_end with the distance score,
+ * result and monte count.
+ */
+void yuuminigame_main_1hikoki(EventEntry* event, BOOL isFirstCall) {
+    MiniGameWork* wp = (MiniGameWork*)event->lwData[0];
+    HikokiWork* data = wp->data;
+
+    switch (data->phase) {
+        case 0:
+            break;
+        case 4:
+            data->phase = 1;
+        case 1:
+            wp->subEvent = evtEntry(minigame01_start, 0, 0);
+            wp->subEvent->lwData[0] = event->lwData[0];
+            data->phase++;
+            break;
+        case 2:
+            if (yuuminigame1_gamerule(event, isFirstCall, wp, data)) {
+                data->phase++;
+            }
+            break;
+        case 3:
+            wp->subEvent = evtEntry(minigame01_end, 0, 0);
+            wp->subEvent->lwData[0] = data->coins;
+            wp->subEvent->lwData[1] = data->result;
+            wp->subEvent->lwData[2] = data->monteCount;
+#if VERSION >= VERSION_US
+            wp->subEvent->lwData[3] = event->lwData[0];
+#endif
+            data->phase++;
+            break;
+    }
+}
+
+/** Draw callback for minigame 1: draws the collected-coin counter (monteCountDisp). */
+void yuuminigame_disp_1hikoki(CameraId camera, void* param) {
+    monteCountDisp();
+}
+
+/**
+ * Rule check of the plane minigame: once Mario stands on a hit object outside the plane motion, it stores the landing
+ * result (A_dai_01 to A_dai_05 give 2, 2, 2, 2, 3 in US and later and 2, 2, 2, 3, 5 before; the A_ground hits -5 to
+ * -20; anything else 1) and the coin count, freezes the counter and the keys and returns TRUE (US and later also start
+ * minigame01_floor_delete). Otherwise it returns FALSE.
+ */
+// With the motion local this body has more than 30 statements in every version, so the unit's auto-inlining
+// leaves it a call in yuuminigame_main_1hikoki, as in the target.
+BOOL yuuminigame1_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp, HikokiWork* data) {
+    MarioWork* mario = marioGetPtr();
+#if VERSION >= VERSION_US
+    EventEntry* sub;
+#endif
+
+    if (mario->hitobjStandOn != NULL) {
+        u16 motion;
+
+#if VERSION >= VERSION_US
+        sub = evtEntry(minigame01_floor_delete, 0, 0);
+        sub->lwData[0] = event->lwData[0];
+#endif
+        motion = (mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) ? mario->prevMotionId : mario->currMotionId;
+        if (motion != MARIO_MOTION_PLANE) {
+            data->result = 1;
+            data->coins = yuucounter_get_data();
+            if (!strcmp("A_dai_01", hitGetName(mario->hitobjStandOn))) {
+                data->result = 2;
+            }
+            if (!strcmp("A_dai_02", hitGetName(mario->hitobjStandOn))) {
+                data->result = 2;
+            }
+            if (!strcmp("A_dai_03", hitGetName(mario->hitobjStandOn))) {
+                data->result = 2;
+            }
+            if (!strcmp("A_dai_04", hitGetName(mario->hitobjStandOn))) {
+#if VERSION >= VERSION_US
+                data->result = 2;
+#else
+                data->result = 3;
+#endif
+            }
+            if (!strcmp("A_dai_05", hitGetName(mario->hitobjStandOn))) {
+#if VERSION >= VERSION_US
+                data->result = 3;
+#else
+                data->result = 5;
+#endif
+            }
+            if (!strcmp("A_ground_02", hitGetName(mario->hitobjStandOn))) {
+                data->result = -5;
+            }
+            if (!strcmp("A_ground_05", hitGetName(mario->hitobjStandOn))) {
+                data->result = -5;
+            }
+            if (!strcmp("A_ground_03", hitGetName(mario->hitobjStandOn))) {
+                data->result = -10;
+            }
+            if (!strcmp("A_ground_06", hitGetName(mario->hitobjStandOn))) {
+                data->result = -15;
+            }
+            if (!strcmp("A_ground_04", hitGetName(mario->hitobjStandOn))) {
+                data->result = -20;
+            }
+            marioKeyOff();
+            partyKeyOff();
+            yuucounter_flag_on(YUUCOUNTER_FLAG_FREEZE);
+            return TRUE;
+        }
+    }
+    return FALSE;
+}
 
 /** The Plane Mode game's coin event (data->viewEvent): runs fall_rtn, which scatters and collects the coins. */
 static EVT_BEGIN(minigame_view_monte)
@@ -1255,359 +1610,3 @@ EVT_BEGIN(yuu_00_init_evt)
 #endif
     RETURN
 EVT_END()
-
-/** Script helper (JP and later): resets the camera shift (camShiftReset). */
-// Descriptive name (not in the symbol maps); placeholder unk_yuu_00004250, JP yuu .text+0x4184. See docs/NAME_PROVENANCE.md.
-#if VERSION >= VERSION_JP
-USER_FUNC(yuu_00_cam_shift_reset) {
-    camShiftReset();
-    return EVT_RETURN_DONE;
-}
-#endif
-
-/**
- * Returns TRUE when two points are within 20 units in 3D and within 20 in height,
- * i.e. Mario is touching a floating coin.
- */
-static BOOL get_monte_check(Vec* a, Vec* b) {
-    if (PSVECDistance(a, b) < 20.0f && __fabs(a->y - b->y) < 20.0) {
-        return TRUE;
-    }
-    return FALSE;
-}
-
-/** Draw callback that renders every coin icon of a Monte array that has not been collected yet. */
-static void monte_disp(CameraId camera, void* param) {
-    Monte* monte = param;
-    s32 i;
-
-    if (monte != NULL) {
-        for (i = 0; i < monte->num; i++) {
-            if (monte[i].hidden == 0) {
-                iconDispGx(&monte[i].sub.pos, 0, 1.0f, ICON_ITEM_PIANTA_TOKEN);
-            }
-        }
-    }
-}
-
-/** Returns a random float in [0, d) with two decimal digits of resolution (as in yuu_01). */
-static inline f32 randRange(f32 d) { return irand(100.0f * d) / 100.0f; }
-
-/**
- * Frame-by-frame coin spawner and collector for Plane Mode.
- * On first call it allocates the Monte array and scatters coins at random spots within the rectangles of
- * montetable (at least 20 units apart within each rectangle), then each frame it checks Mario against every coin,
- * counting and hiding collected ones with a 3D sound. Blocks forever as a view event.
- */
-static USER_FUNC(fall_rtn) {
-    MiniGameWork* wp = (MiniGameWork*)event->lwData[0];
-    BOOL exists = FALSE;
-    HikokiWork* data = wp->data;
-    s32 total;
-    s32 i;
-    s32 t;
-    s32 k;
-    SfxNameWord sfx;
-    s32 j;
-    MonteSub* sub;
-    f32 lo;
-    f32 hi;
-    Vec v;
-    Monte* m;
-
-    if (isFirstCall) {
-        if (monte_p != NULL) {
-            exists = TRUE;
-        }
-        total = 0;
-        for (i = 0; montetable[i].num; i++) {
-            total += montetable[i].num;
-        }
-        monte_p = _mapAlloc(total * sizeof(Monte));
-        memset(monte_p, 0, total * sizeof(Monte));
-        monte_p->num = total;
-        monte_p->wp = wp;
-        data->monteCount = 0;
-        t = 0;
-        k = 0;
-        for (i = 0; i < monte_p->num; i++) {
-            sub = &monte_p[i].sub;
-            sub->pos.z = 0.0f;
-            do {
-                if (montetable[t].x0 < montetable[t].x1) {
-                    lo = montetable[t].x0;
-                    hi = montetable[t].x1;
-                } else {
-                    lo = montetable[t].x1;
-                    hi = montetable[t].x0;
-                }
-                hi -= lo;
-                sub->pos.x = lo + randRange(hi);
-                if (montetable[t].y0 < montetable[t].y1) {
-                    lo = montetable[t].y0;
-                    hi = montetable[t].y1;
-                } else {
-                    lo = montetable[t].y1;
-                    hi = montetable[t].y0;
-                }
-                hi -= lo;
-                sub->pos.y = lo + randRange(hi);
-                for (j = 0; j < k; j++) {
-                    PSVECSubtract(&sub->pos, &(sub - (j + 1))->pos, &v);
-                    if (PSVECMag(&v) < 20.0f) {
-                        break;
-                    }
-                }
-            } while (j != k);
-            if (++k >= montetable[t].num) {
-                k = 0;
-                t++;
-            }
-            sub->scale = 1.0f;
-        }
-    }
-    for (i = 0; i < monte_p->num; i++) {
-        sfx = (SfxNameWord)"SFX_EVT_GAME_MONTE_COUNT1";
-        m = &monte_p[i];
-        switch (m->state) {
-            case 0:
-                if (get_monte_check(&m->sub.pos, &marioGetPtr()->position) == 1) {
-                    data->monteCount++;
-                    psndSFXOn_3D((const char*)sfx, &marioGetPtr()->position);
-                    m->hidden = 1;
-                    m->state = 1;
-                }
-                break;
-            case 1:
-                break;
-        }
-    }
-    if (!exists) {
-        dispEntry(CAMERA_3D, 0.0f, DISP_MODE_ALPHA_TEST, monte_disp, monte_p);
-    }
-    return EVT_RETURN_BLOCK;
-}
-
-/**
- * Resets the coins for the next round: stops the view event,
- * frees the Monte array and starts a fresh minigame_view_monte event.
- */
-static USER_FUNC(re_fall_rtn) {
-    HikokiWork* data;
-
-    if (monte_p != NULL) {
-        data = monte_p->wp->data;
-        if (data->viewEvent != NULL) {
-            evtDeleteID(data->viewEvent->eventId);
-            data->viewEvent = NULL;
-            _mapFree(monte_p);
-            data->viewEvent = evtEntryType(minigame_view_monte, 0, 0, 0);
-            data->viewEvent->lwData[0] = (EvtWord)monte_p->wp;
-        }
-    }
-    return EVT_RETURN_DONE;
-}
-
-/** Script call that switches Mario's motion to 0x18, the airplane glide motion used in Plane Mode. */
-static USER_FUNC(evt_change_plane) {
-    marioChgMot(MARIO_MOTION_PLANE);
-    return EVT_RETURN_DONE;
-}
-
-/**
- * args[0] = minigame work pointer, args[1] = new phase for the Plane Mode state machine (0 idle, 1 start, 2
- * playing, 3 finish).
- */
-static USER_FUNC(yuuminigame1_set_phase) {
-    EvtWord* args = event->args;
-    HikokiWork* data = ((MiniGameWork*)evtGetValue(event, args[0]))->data;
-
-    data->phase = evtGetValue(event, args[1]);
-    return EVT_RETURN_DONE;
-}
-
-/**
- * args[0] = minigame work pointer, args[1] = on/off.
- * Sets or clears HIKOKI_FLAG_OPENING (the opening cutscene is pending).
- */
-static USER_FUNC(yuuminigame1_opening_on_off) {
-    EvtWord* args = event->args;
-    HikokiWork* data = ((MiniGameWork*)evtGetValue(event, args[0]))->data;
-
-    if (evtGetValue(event, args[1])) {
-        data->flags |= HIKOKI_FLAG_OPENING;
-    } else {
-        data->flags &= ~HIKOKI_FLAG_OPENING;
-    }
-    return EVT_RETURN_DONE;
-}
-
-/**
- * args[0] = minigame work pointer, args[1] = output.
- * Writes 1 if the opening cutscene is still pending (HIKOKI_FLAG_OPENING), else 0.
- */
-static USER_FUNC(yuuminigame1_opening_chk) {
-    EvtWord* args = event->args;
-    MiniGameWork* wp = (MiniGameWork*)evtGetValue(event, args[0]);
-
-    if (((HikokiWork*)wp->data)->flags & HIKOKI_FLAG_OPENING) {
-        evtSetValue(event, args[1], 1);
-    } else {
-        evtSetValue(event, args[1], 0);
-    }
-    return EVT_RETURN_DONE;
-}
-
-#if VERSION >= VERSION_US
-/** args[0] = minigame work pointer, args[1] = on/off. Sets or clears HIKOKI_FLAG_FLOOR (the platforms exist). */
-USER_FUNC(yuuminigame1_floor_on_off) {
-    EvtWord* args = event->args;
-    u32* flags = &((HikokiWork*)((MiniGameWork*)evtGetValue(event, args[0]))->data)->flags;
-
-    if (evtGetValue(event, args[1])) {
-        *flags |= HIKOKI_FLAG_FLOOR;
-    } else {
-        *flags &= ~HIKOKI_FLAG_FLOOR;
-    }
-    return EVT_RETURN_DONE;
-}
-
-/**
- * args[0] = minigame work pointer, args[1] = output.
- * Writes 1 if the platforms currently exist (HIKOKI_FLAG_FLOOR), else 0.
- */
-USER_FUNC(yuuminigame1_floor_chk) {
-    EvtWord* args = event->args;
-    u32* flags = &((HikokiWork*)((MiniGameWork*)evtGetValue(event, args[0]))->data)->flags;
-
-    if (*flags & HIKOKI_FLAG_FLOOR) {
-        evtSetValue(event, args[1], 1);
-    } else {
-        evtSetValue(event, args[1], 0);
-    }
-    return EVT_RETURN_DONE;
-}
-#endif
-
-/** Init callback for minigame 1: starts the coin view event and marks the opening cutscene as pending. */
-void yuuminigame_init_1hikoki(EventEntry* event, BOOL isFirstCall) {
-    HikokiWork* data = ((MiniGameWork*)event->lwData[0])->data;
-
-    data->viewEvent = evtEntryType(minigame_view_monte, 0, 0, 0);
-    data->viewEvent->lwData[0] = event->lwData[0];
-    data->flags |= HIKOKI_FLAG_OPENING;
-}
-
-/**
- * Per-frame state machine for Plane Mode: phase 1 starts minigame01_start,
- * phase 2 waits for the rules check to finish, phase 3 launches minigame01_end with the distance score,
- * result and monte count.
- */
-void yuuminigame_main_1hikoki(EventEntry* event, BOOL isFirstCall) {
-    MiniGameWork* wp = (MiniGameWork*)event->lwData[0];
-    HikokiWork* data = wp->data;
-
-    switch (data->phase) {
-        case 0:
-            break;
-        case 4:
-            data->phase = 1;
-        case 1:
-            wp->subEvent = evtEntry(minigame01_start, 0, 0);
-            wp->subEvent->lwData[0] = event->lwData[0];
-            data->phase++;
-            break;
-        case 2:
-            if (yuuminigame1_gamerule(event, isFirstCall, wp, data)) {
-                data->phase++;
-            }
-            break;
-        case 3:
-            wp->subEvent = evtEntry(minigame01_end, 0, 0);
-            wp->subEvent->lwData[0] = data->coins;
-            wp->subEvent->lwData[1] = data->result;
-            wp->subEvent->lwData[2] = data->monteCount;
-#if VERSION >= VERSION_US
-            wp->subEvent->lwData[3] = event->lwData[0];
-#endif
-            data->phase++;
-            break;
-    }
-}
-
-/** Draw callback for minigame 1: draws the collected-coin counter (monteCountDisp). */
-void yuuminigame_disp_1hikoki(CameraId camera, void* param) {
-    monteCountDisp();
-}
-
-/**
- * Rule check of the plane minigame: once Mario stands on a hit object outside the plane motion, it stores the landing
- * result (A_dai_01 to A_dai_05 give 2, 2, 2, 2, 3 in US and later and 2, 2, 2, 3, 5 before; the A_ground hits -5 to
- * -20; anything else 1) and the coin count, freezes the counter and the keys and returns TRUE (US and later also start
- * minigame01_floor_delete). Otherwise it returns FALSE.
- */
-// With the motion local this body has more than 30 statements in every version, so the unit's auto-inlining
-// leaves it a call in yuuminigame_main_1hikoki, as in the target.
-BOOL yuuminigame1_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp, HikokiWork* data) {
-    MarioWork* mario = marioGetPtr();
-#if VERSION >= VERSION_US
-    EventEntry* sub;
-#endif
-
-    if (mario->hitobjStandOn != NULL) {
-        u16 motion;
-
-#if VERSION >= VERSION_US
-        sub = evtEntry(minigame01_floor_delete, 0, 0);
-        sub->lwData[0] = event->lwData[0];
-#endif
-        motion = (mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) ? mario->prevMotionId : mario->currMotionId;
-        if (motion != MARIO_MOTION_PLANE) {
-            data->result = 1;
-            data->coins = yuucounter_get_data();
-            if (!strcmp("A_dai_01", hitGetName(mario->hitobjStandOn))) {
-                data->result = 2;
-            }
-            if (!strcmp("A_dai_02", hitGetName(mario->hitobjStandOn))) {
-                data->result = 2;
-            }
-            if (!strcmp("A_dai_03", hitGetName(mario->hitobjStandOn))) {
-                data->result = 2;
-            }
-            if (!strcmp("A_dai_04", hitGetName(mario->hitobjStandOn))) {
-#if VERSION >= VERSION_US
-                data->result = 2;
-#else
-                data->result = 3;
-#endif
-            }
-            if (!strcmp("A_dai_05", hitGetName(mario->hitobjStandOn))) {
-#if VERSION >= VERSION_US
-                data->result = 3;
-#else
-                data->result = 5;
-#endif
-            }
-            if (!strcmp("A_ground_02", hitGetName(mario->hitobjStandOn))) {
-                data->result = -5;
-            }
-            if (!strcmp("A_ground_05", hitGetName(mario->hitobjStandOn))) {
-                data->result = -5;
-            }
-            if (!strcmp("A_ground_03", hitGetName(mario->hitobjStandOn))) {
-                data->result = -10;
-            }
-            if (!strcmp("A_ground_06", hitGetName(mario->hitobjStandOn))) {
-                data->result = -15;
-            }
-            if (!strcmp("A_ground_04", hitGetName(mario->hitobjStandOn))) {
-                data->result = -20;
-            }
-            marioKeyOff();
-            partyKeyOff();
-            yuucounter_flag_on(YUUCOUNTER_FLAG_FREEZE);
-            return TRUE;
-        }
-    }
-    return FALSE;
-}

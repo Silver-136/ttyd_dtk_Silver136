@@ -159,48 +159,6 @@ USER_FUNC(tou_10_mario_free_wait) {
 }
 #endif
 
-/** Script helper: args[0] receives Yoshi's color (0-6) from the pouch. */
-static USER_FUNC(getYoshiColor) {
-    EvtWord* args = event->args;
-    evtSetValue(event, args[0], pouchGetPartyColor(PARTY_YOSHI));
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper: picks Yoshi's color from the real time that has passed since the egg was received (stored in
- * GSW_TOU_EGG_RECEIVED_TIME), modulo 20 minutes, and stores it in the pouch.
- */
-static USER_FUNC(setYoshiColor) {
-    OSTime start;
-    s32 i;
-    s32 minutes;
-
-    // the time the Yoshi egg was received
-    for (i = 0; i < 8; i++) {
-        ((u8*)&start)[i] = swByteGet(i + 508);
-    }
-    minutes = (s32)OSTicksToSeconds(gp->playTime - start) / 60;
-
-    // The elapsed whole-minute count repeats every 20 minutes across the seven color intervals.
-    minutes %= 20;
-    if (minutes <= 5) {
-        pouchSetPartyColor(PARTY_YOSHI, 0);
-    } else if (minutes <= 8) {
-        pouchSetPartyColor(PARTY_YOSHI, 1);
-    } else if (minutes <= 11) {
-        pouchSetPartyColor(PARTY_YOSHI, 2);
-    } else if (minutes <= 14) {
-        pouchSetPartyColor(PARTY_YOSHI, 3);
-    } else if (minutes <= 17) {
-        pouchSetPartyColor(PARTY_YOSHI, 4);
-    } else if (minutes <= 18) {
-        pouchSetPartyColor(PARTY_YOSHI, 5);
-    } else {
-        pouchSetPartyColor(PARTY_YOSHI, 6);
-    }
-    return EVT_RETURN_DONE;
-}
-
 /** Exit script (enterEvent of the bero data): sets GSWF_TOU_10_ENTERED_UNUSED; nothing reads that flag. */
 static EVT_BEGIN(room_out)
     SET_VALUE(GSWF_TOU_10_ENTERED_UNUSED, 1)
@@ -1139,6 +1097,48 @@ static EVT_BEGIN(evt_saisyo_after_re)
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
+
+/** Script helper: args[0] receives Yoshi's color (0-6) from the pouch. */
+static USER_FUNC(getYoshiColor) {
+    EvtWord* args = event->args;
+    evtSetValue(event, args[0], pouchGetPartyColor(PARTY_YOSHI));
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script helper: picks Yoshi's color from the real time that has passed since the egg was received (stored in
+ * GSW_TOU_EGG_RECEIVED_TIME), modulo 20 minutes, and stores it in the pouch.
+ */
+static USER_FUNC(setYoshiColor) {
+    OSTime start;
+    s32 i;
+    s32 minutes;
+
+    // the time the Yoshi egg was received
+    for (i = 0; i < 8; i++) {
+        ((u8*)&start)[i] = swByteGet(i + 508);
+    }
+    minutes = (s32)OSTicksToSeconds(gp->playTime - start) / 60;
+
+    // The elapsed whole-minute count repeats every 20 minutes across the seven color intervals.
+    minutes %= 20;
+    if (minutes <= 5) {
+        pouchSetPartyColor(PARTY_YOSHI, 0);
+    } else if (minutes <= 8) {
+        pouchSetPartyColor(PARTY_YOSHI, 1);
+    } else if (minutes <= 11) {
+        pouchSetPartyColor(PARTY_YOSHI, 2);
+    } else if (minutes <= 14) {
+        pouchSetPartyColor(PARTY_YOSHI, 3);
+    } else if (minutes <= 17) {
+        pouchSetPartyColor(PARTY_YOSHI, 4);
+    } else if (minutes <= 18) {
+        pouchSetPartyColor(PARTY_YOSHI, 5);
+    } else {
+        pouchSetPartyColor(PARTY_YOSHI, 6);
+    }
+    return EVT_RETURN_DONE;
+}
 
 /**
  * Scene where the hatched Yoshi joins (called from tou.c):

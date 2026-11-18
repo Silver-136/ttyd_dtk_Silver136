@@ -136,6 +136,19 @@ static USER_FUNC(switch_alpha_off) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: returns in args[1] the state of map object args[0], or 1 when it does not exist. */
+static USER_FUNC(get_mobj_seq) {
+    EvtWord* args = event->args;
+    MapObjectEntry* mobj = mobjNameToPtrNoAssert((const char*)evtGetValue(event, args[0]));
+
+    if (mobj == NULL) {
+        evtSetValue(event, args[1], 1);
+    } else {
+        evtSetValue(event, args[1], mobj->state);
+    }
+    return EVT_RETURN_DONE;
+}
+
 /**
  * Event script: the hidden switch of las_18 shows only while Vivian is the partner and her status is 2: the
  * switch's alpha rises by 4 per frame up to 160 while that holds and falls back otherwise. When it reaches 160
@@ -182,19 +195,6 @@ static EVT_BEGIN(vivian_check)
     END_LOOP
     RETURN
 EVT_END()
-
-/** Script helper: returns in args[1] the state of map object args[0], or 1 when it does not exist. */
-static USER_FUNC(get_mobj_seq) {
-    EvtWord* args = event->args;
-    MapObjectEntry* mobj = mobjNameToPtrNoAssert((const char*)evtGetValue(event, args[0]));
-
-    if (mobj == NULL) {
-        evtSetValue(event, args[1], 1);
-    } else {
-        evtSetValue(event, args[1], mobj->state);
-    }
-    return EVT_RETURN_DONE;
-}
 
 /**
  * Event script: the switch of las_18 was hit.

@@ -496,6 +496,126 @@ static USER_FUNC(effitemget_busaiku) {
 }
 
 /**
+ * Script helper: switches off the collision of the map object named args[0] ("me" for the running one): each
+ * of its (up to two) named hit objects gets HIT_FLAG_OFF through hitGrpFlagOn (nasi = none).
+ */
+USER_FUNC(lect_mobj_hit_nasi) {
+    const char* name = (const char*)evtGetValue(event, event->args[0]);
+    MapObjectEntry* mobj;
+    s32 i;
+
+    if (strcmp(name, "me") != 0) {
+        mobj = mobjNameToPtr(name);
+    } else {
+        mobj = event->thisMapObj;
+    }
+    for (i = 0; i < 2; i++) {
+        if (mobj->hitObj[i].name != NULL && strcmp(mobj->hitObj[i].name, "") != 0) {
+            hitGrpFlagOn(mobj->hitObj[i].name, 1);
+        }
+    }
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script helper that finds a point args[1] units from the camera in the direction of the partner (args[0] 0 =
+ * the active partner, otherwise partner slot 1) and stores it in args[2..4];
+ * stores 0 when there is no such partner.
+ */
+static USER_FUNC(lect_itemget_kesan) {
+    EvtWord* args = event->args;
+    PartyEntry* party = partyGetPtr(args[0] == 0 ? partyCtrlNo : 1);
+    f32 dist = evtGetFloat(event, args[1]);
+    CameraEntry* cam = camGetPtr(CAMERA_3D);
+    Vec pos;
+    Vec dir;
+
+    if (party == NULL) {
+        evtSetFloat(event, args[2], 0.0f);
+        evtSetFloat(event, args[3], 0.0f);
+        evtSetFloat(event, args[4], 0.0f);
+        return EVT_RETURN_DONE;
+    }
+    pos = party->position;
+    pos.y += party->height / 2;
+    PSVECSubtract(&pos, &cam->cameraPos, &dir);
+    PSVECNormalize(&dir, &dir);
+    PSVECScale(&dir, &dir, dist);
+    PSVECAdd(&cam->cameraPos, &dir, &dir);
+    evtSetFloat(event, args[2], dir.x);
+    evtSetFloat(event, args[3], dir.y);
+    evtSetFloat(event, args[4], dir.z);
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script helper that shows (args[1] nonzero) or removes Mario's speech balloon effect above the named NPC,
+ * drawn by camera 7.
+ */
+static USER_FUNC(lect_npc_balloon_on_off) {
+    EvtWord* args = event->args;
+    const char* name = (const char*)evtGetValue(event, args[0]);
+    NpcEntry* npc = evtNpcNameToPtr(event, name);
+
+    if (evtGetValue(event, args[1])) {
+        eff = effMarioBalloonEntry(1, npc);
+        ((MarioBalloonWork*)eff->userdata)->camera = CAMERA_3D_EFFECTB;
+    } else {
+        effDelete(eff);
+    }
+    return EVT_RETURN_DONE;
+}
+
+/** Script helper that sets the camera of the named speech-bubble effect args[0] to camera id args[1]. */
+static USER_FUNC(efffukidashichange_cam) {
+    EvtWord* args = event->args;
+    const char* name = (const char*)evtGetValue(event, args[0]);
+    s32 camId = evtGetValue(event, args[1]);
+
+    ((EffFukidashiWork*)effNameToPtr(name)->userdata)->camera = camId;
+    return EVT_RETURN_DONE;
+}
+
+/** Linear interpolation for the partner glide, the same as lect_mario_ido_sub. */
+static f32 lect_party_ido_sub(f32 elapsed, f32 total, f32 end, f32 start) {
+    f32 rem = total - elapsed;
+
+    return (rem * end + elapsed * start) / total;
+}
+
+/**
+ * Script helper that glides the partner (args[0] 0 = the active partner, otherwise slot 1) to a target over
+ * args[1] milliseconds.
+ * On the first call it stores the partner's position in LW(3..5);
+ * then it interpolates between LW(0..2) and that start. Finishes when the time is up.
+ */
+static USER_FUNC(lect_party_ido_sum) {
+    EvtWord* args = event->args;
+    PartyEntry* party = partyGetPtr(args[0] == 0 ? partyCtrlNo : 1);
+    s32 durationMs = evtGetValue(event, args[1]);
+    s32 elapsed;
+
+    if (isFirstCall) {
+        wwstart = event->lifetime;
+        evtSetFloat(event, LW(3), party->position.x);
+        evtSetFloat(event, LW(4), party->position.y);
+        evtSetFloat(event, LW(5), party->position.z);
+        return EVT_RETURN_BLOCK;
+    }
+    elapsed = OSTicksToMilliseconds((u64)OSDiffTick(event->lifetime, wwstart));
+    if (elapsed > durationMs) {
+        elapsed = durationMs;
+    }
+    party->position.x = lect_party_ido_sub(elapsed, durationMs, evtGetFloat(event, LW(3)), evtGetFloat(event, LW(0)));
+    party->position.y = lect_party_ido_sub(elapsed, durationMs, evtGetFloat(event, LW(4)), evtGetFloat(event, LW(1)));
+    party->position.z = lect_party_ido_sub(elapsed, durationMs, evtGetFloat(event, LW(5)), evtGetFloat(event, LW(2)));
+    if (elapsed >= durationMs) {
+        return EVT_RETURN_DONE;
+    }
+    return EVT_RETURN_BLOCK;
+}
+
+/**
  * Sets up Goombella's (クリスチーヌ) partner lecture:
  * Mario faces left, the camera moves in front of him and his partner glides next to him.
  */
@@ -652,6 +772,98 @@ static EVT_BEGIN(all_party_lecture_otosub)
     WAIT_MS(2000)
     RETURN
 EVT_END()
+
+/** Script helper that stores the item id of the item being picked up (the item entry in LW(8)) in args[0]. */
+static USER_FUNC(juyoitem_get_no) {
+    evtSetValue(event, event->args[0], ((ItemEntry*)event->lwData[8])->itemId);
+    return EVT_RETURN_DONE;
+}
+
+/** Script helper that ends the item-get effect (LW(9)), restores Mario's camera id and turns off the item's glow. */
+static USER_FUNC(juyoitem_end) {
+    ItemEntry* item = (ItemEntry*)event->lwData[8];
+
+    effSoftDelete((EffectEntry*)event->lwData[9]);
+    marioSetCamId(CAMERA_3D);
+    iconFlagOff(item->name, ICON_FLAG_CAM_EFFECT_B);
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script helper that prepares the item pick-up lecture:
+ * turns off the item's glow, moves the item out of sight, resets Mario's pose and system level.
+ */
+static USER_FUNC(juyoitem_gogo) {
+    ItemEntry* item = (ItemEntry*)event->lwData[8];
+
+    iconFlagOff(item->name, ICON_FLAG_CAM_EFFECT_B);
+    itemSetPosition(item, 0.0f, -1000.0f, 0.0f);
+    marioChgStayMotion();
+    marioStSystemLevel(0);
+    return EVT_RETURN_DONE;
+}
+
+/** Script helper that hides the picked-up item's icon once the lecture is over. */
+static USER_FUNC(juyoitem_goato) {
+    iconFlagOn(((ItemEntry*)event->lwData[8])->name, ICON_FLAG_HIDDEN);
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script helper that turns off screen blending on the map object named args[0] ("me" is the running event's
+ * object).
+ */
+USER_FUNC(lect_mobj_set_nosysblend) {
+    const char* name = (const char*)evtGetValue(event, event->args[0]);
+    MapObjectEntry* mobj;
+
+    if (strcmp(name, "me") != 0) {
+        mobj = mobjNameToPtr(name);
+    } else {
+        mobj = event->thisMapObj;
+    }
+    animPoseSetMaterialFlagOn(mobj->poseId, (MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2));
+    return EVT_RETURN_DONE;
+}
+
+/** Script helper that stores TRUE in args[0] while A is held, else FALSE. */
+static USER_FUNC(lect_push_a_check) {
+    EvtWord* args = event->args;
+
+    if (keyGetButton(0) & PAD_BUTTON_A) {
+        evtSetValue(event, args[0], TRUE);
+    } else {
+        evtSetValue(event, args[0], FALSE);
+    }
+    return EVT_RETURN_DONE;
+}
+
+/** Script helper that stores TRUE in args[0] while B is held, else FALSE. */
+static USER_FUNC(lect_push_b_check) {
+    EvtWord* args = event->args;
+
+    if (keyGetButton(0) & PAD_BUTTON_B) {
+        evtSetValue(event, args[0], TRUE);
+    } else {
+        evtSetValue(event, args[0], FALSE);
+    }
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script helper that turns the active partner to face left or right on screen:
+ * the display direction becomes 0 when the angle args[0] is over 180 and 180 otherwise.
+ */
+static USER_FUNC(set_dir) {
+    s32 dir = evtGetValue(event, event->args[0]);
+    PartyEntry* party = partyGetPtr(0);
+
+    if (party != NULL) {
+        s32 angle = dir > 180 ? 270 : 90;
+        party->displayDirectionTarget = party->displayDirection = 270 - angle;
+    }
+    return EVT_RETURN_DONE;
+}
 
 /**
  * Ceremony for a new partner, run with the party id in LW(9) and the partner NPC's name in LW(8): except for
@@ -1143,6 +1355,11 @@ EVT_BEGIN(hammer_lv3_juyoitem_lecture)
     RETURN
 EVT_END()
 
+/** Script helper that waits until the lecture music (BGM channel 1) has started. */
+static USER_FUNC(bgm_start_wait) {
+    return psndBGMStartCheck(1) ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
+}
+
 /**
  * Ceremony for picking up an important item (the item entry is in LW(8), its effect in LW(9)):
  * the item flies up to the item-get effect, the lecture jingle plays, a paper page cutout opens and,
@@ -1227,220 +1444,3 @@ EVT_BEGIN(all_juyoitem_lecture_rel)
     CALL(evt_party_run, 0)
     RETURN
 EVT_END()
-
-/**
- * Script helper: switches off the collision of the map object named args[0] ("me" for the running one): each
- * of its (up to two) named hit objects gets HIT_FLAG_OFF through hitGrpFlagOn (nasi = none).
- */
-USER_FUNC(lect_mobj_hit_nasi) {
-    const char* name = (const char*)evtGetValue(event, event->args[0]);
-    MapObjectEntry* mobj;
-    s32 i;
-
-    if (strcmp(name, "me") != 0) {
-        mobj = mobjNameToPtr(name);
-    } else {
-        mobj = event->thisMapObj;
-    }
-    for (i = 0; i < 2; i++) {
-        if (mobj->hitObj[i].name != NULL && strcmp(mobj->hitObj[i].name, "") != 0) {
-            hitGrpFlagOn(mobj->hitObj[i].name, 1);
-        }
-    }
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper that finds a point args[1] units from the camera in the direction of the partner (args[0] 0 =
- * the active partner, otherwise partner slot 1) and stores it in args[2..4];
- * stores 0 when there is no such partner.
- */
-static USER_FUNC(lect_itemget_kesan) {
-    EvtWord* args = event->args;
-    PartyEntry* party = partyGetPtr(args[0] == 0 ? partyCtrlNo : 1);
-    f32 dist = evtGetFloat(event, args[1]);
-    CameraEntry* cam = camGetPtr(CAMERA_3D);
-    Vec pos;
-    Vec dir;
-
-    if (party == NULL) {
-        evtSetFloat(event, args[2], 0.0f);
-        evtSetFloat(event, args[3], 0.0f);
-        evtSetFloat(event, args[4], 0.0f);
-        return EVT_RETURN_DONE;
-    }
-    pos = party->position;
-    pos.y += party->height / 2;
-    PSVECSubtract(&pos, &cam->cameraPos, &dir);
-    PSVECNormalize(&dir, &dir);
-    PSVECScale(&dir, &dir, dist);
-    PSVECAdd(&cam->cameraPos, &dir, &dir);
-    evtSetFloat(event, args[2], dir.x);
-    evtSetFloat(event, args[3], dir.y);
-    evtSetFloat(event, args[4], dir.z);
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper that shows (args[1] nonzero) or removes Mario's speech balloon effect above the named NPC,
- * drawn by camera 7.
- */
-static USER_FUNC(lect_npc_balloon_on_off) {
-    EvtWord* args = event->args;
-    const char* name = (const char*)evtGetValue(event, args[0]);
-    NpcEntry* npc = evtNpcNameToPtr(event, name);
-
-    if (evtGetValue(event, args[1])) {
-        eff = effMarioBalloonEntry(1, npc);
-        ((MarioBalloonWork*)eff->userdata)->camera = CAMERA_3D_EFFECTB;
-    } else {
-        effDelete(eff);
-    }
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper that sets the camera of the named speech-bubble effect args[0] to camera id args[1]. */
-static USER_FUNC(efffukidashichange_cam) {
-    EvtWord* args = event->args;
-    const char* name = (const char*)evtGetValue(event, args[0]);
-    s32 camId = evtGetValue(event, args[1]);
-
-    ((EffFukidashiWork*)effNameToPtr(name)->userdata)->camera = camId;
-    return EVT_RETURN_DONE;
-}
-
-/** Linear interpolation for the partner glide, the same as lect_mario_ido_sub. */
-static f32 lect_party_ido_sub(f32 elapsed, f32 total, f32 end, f32 start) {
-    f32 rem = total - elapsed;
-
-    return (rem * end + elapsed * start) / total;
-}
-
-/**
- * Script helper that glides the partner (args[0] 0 = the active partner, otherwise slot 1) to a target over
- * args[1] milliseconds.
- * On the first call it stores the partner's position in LW(3..5);
- * then it interpolates between LW(0..2) and that start. Finishes when the time is up.
- */
-static USER_FUNC(lect_party_ido_sum) {
-    EvtWord* args = event->args;
-    PartyEntry* party = partyGetPtr(args[0] == 0 ? partyCtrlNo : 1);
-    s32 durationMs = evtGetValue(event, args[1]);
-    s32 elapsed;
-
-    if (isFirstCall) {
-        wwstart = event->lifetime;
-        evtSetFloat(event, LW(3), party->position.x);
-        evtSetFloat(event, LW(4), party->position.y);
-        evtSetFloat(event, LW(5), party->position.z);
-        return EVT_RETURN_BLOCK;
-    }
-    elapsed = OSTicksToMilliseconds((u64)OSDiffTick(event->lifetime, wwstart));
-    if (elapsed > durationMs) {
-        elapsed = durationMs;
-    }
-    party->position.x = lect_party_ido_sub(elapsed, durationMs, evtGetFloat(event, LW(3)), evtGetFloat(event, LW(0)));
-    party->position.y = lect_party_ido_sub(elapsed, durationMs, evtGetFloat(event, LW(4)), evtGetFloat(event, LW(1)));
-    party->position.z = lect_party_ido_sub(elapsed, durationMs, evtGetFloat(event, LW(5)), evtGetFloat(event, LW(2)));
-    if (elapsed >= durationMs) {
-        return EVT_RETURN_DONE;
-    }
-    return EVT_RETURN_BLOCK;
-}
-
-/** Script helper that stores the item id of the item being picked up (the item entry in LW(8)) in args[0]. */
-static USER_FUNC(juyoitem_get_no) {
-    evtSetValue(event, event->args[0], ((ItemEntry*)event->lwData[8])->itemId);
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper that ends the item-get effect (LW(9)), restores Mario's camera id and turns off the item's glow. */
-static USER_FUNC(juyoitem_end) {
-    ItemEntry* item = (ItemEntry*)event->lwData[8];
-
-    effSoftDelete((EffectEntry*)event->lwData[9]);
-    marioSetCamId(CAMERA_3D);
-    iconFlagOff(item->name, ICON_FLAG_CAM_EFFECT_B);
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper that prepares the item pick-up lecture:
- * turns off the item's glow, moves the item out of sight, resets Mario's pose and system level.
- */
-static USER_FUNC(juyoitem_gogo) {
-    ItemEntry* item = (ItemEntry*)event->lwData[8];
-
-    iconFlagOff(item->name, ICON_FLAG_CAM_EFFECT_B);
-    itemSetPosition(item, 0.0f, -1000.0f, 0.0f);
-    marioChgStayMotion();
-    marioStSystemLevel(0);
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper that hides the picked-up item's icon once the lecture is over. */
-static USER_FUNC(juyoitem_goato) {
-    iconFlagOn(((ItemEntry*)event->lwData[8])->name, ICON_FLAG_HIDDEN);
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper that turns off screen blending on the map object named args[0] ("me" is the running event's
- * object).
- */
-USER_FUNC(lect_mobj_set_nosysblend) {
-    const char* name = (const char*)evtGetValue(event, event->args[0]);
-    MapObjectEntry* mobj;
-
-    if (strcmp(name, "me") != 0) {
-        mobj = mobjNameToPtr(name);
-    } else {
-        mobj = event->thisMapObj;
-    }
-    animPoseSetMaterialFlagOn(mobj->poseId, (MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2));
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper that stores TRUE in args[0] while A is held, else FALSE. */
-static USER_FUNC(lect_push_a_check) {
-    EvtWord* args = event->args;
-
-    if (keyGetButton(0) & PAD_BUTTON_A) {
-        evtSetValue(event, args[0], TRUE);
-    } else {
-        evtSetValue(event, args[0], FALSE);
-    }
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper that stores TRUE in args[0] while B is held, else FALSE. */
-static USER_FUNC(lect_push_b_check) {
-    EvtWord* args = event->args;
-
-    if (keyGetButton(0) & PAD_BUTTON_B) {
-        evtSetValue(event, args[0], TRUE);
-    } else {
-        evtSetValue(event, args[0], FALSE);
-    }
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper that turns the active partner to face left or right on screen:
- * the display direction becomes 0 when the angle args[0] is over 180 and 180 otherwise.
- */
-static USER_FUNC(set_dir) {
-    s32 dir = evtGetValue(event, event->args[0]);
-    PartyEntry* party = partyGetPtr(0);
-
-    if (party != NULL) {
-        s32 angle = dir > 180 ? 270 : 90;
-        party->displayDirectionTarget = party->displayDirection = 270 - angle;
-    }
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper that waits until the lecture music (BGM channel 1) has started. */
-static USER_FUNC(bgm_start_wait) {
-    return psndBGMStartCheck(1) ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
-}

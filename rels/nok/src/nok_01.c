@@ -1301,6 +1301,23 @@ static EVT_BEGIN(sekai_yami_npc)
 EVT_END()
 
 /**
+ * Script helper: args[0] is an NPC name and args[1] picks a TEV callback slot (low four bits); turns that callback on
+ * in the NPC's animation materials. Does nothing if the NPC does not exist.
+ */
+static USER_FUNC(anim_tevcallback) {
+    EvtWord* args = event->args;
+    const char* name = (const char*)evtGetValue(event, args[0]);
+    s32 flag = evtGetValue(event, args[1]);
+    NpcEntry* npc = npcNameToPtr_NoAssert(name);
+
+    if (npc == NULL) {
+        return EVT_RETURN_DONE;
+    }
+    animPoseSetMaterialFlagOn(npc->poseId, MAP_OBJ_TEV_CALLBACK(flag & 0xF));
+    return EVT_RETURN_DONE;
+}
+
+/**
  * The darkness passes over the village, spawned by the map's init script: hides Mario and the partner, stops three
  * Koopa NPCs' regular scripts, dims the background, switches the map and NPCs to the envSetYami TEV callback and sweeps
  * GW(0) from -600 to 600 while sekai_yami_npc reacts per NPC; Mayor Kroop says stg8_dark_01 and the map changes to
@@ -1378,6 +1395,46 @@ static EVT_BEGIN(sekai_yami_evt)
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
+
+/**
+ * Script helper: creates a star stone effect (effStarStoneEntry) at position args[1..3] (floats)
+ * and registers it under the effect name args[0] so later helpers can find it.
+ */
+static USER_FUNC(starstone_entry) {
+    EvtWord* args = event->args;
+    const char* name = (const char*)evtGetValue(event, args[0]);
+    f32 x = evtGetFloat(event, args[1]);
+    f32 y = evtGetFloat(event, args[2]);
+    f32 z = evtGetFloat(event, args[3]);
+
+    effSetName(effStarStoneEntry(0, x, y, z, 1.0f), name);
+    return EVT_RETURN_DONE;
+}
+
+/** Script helper: moves the star stone effect named args[0] to the position args[1..3] (floats). */
+static USER_FUNC(starstone_set_pos) {
+    EvtWord* args = event->args;
+    const char* name = (const char*)evtGetValue(event, args[0]);
+    f32 x = evtGetFloat(event, args[1]);
+    f32 y = evtGetFloat(event, args[2]);
+    f32 z = evtGetFloat(event, args[3]);
+    EffectEntry* eff = effNameToPtr(name);
+
+    ((EffStarStoneWork*)eff->userdata)->position.x = x;
+    ((EffStarStoneWork*)eff->userdata)->position.y = y;
+    ((EffStarStoneWork*)eff->userdata)->position.z = z;
+    return EVT_RETURN_DONE;
+}
+
+/** Script helper: sets the Y rotation of the star stone effect named args[0] to args[1] (float, degrees). */
+static USER_FUNC(starstone_set_ry) {
+    EvtWord* args = event->args;
+    const char* name = (const char*)evtGetValue(event, args[0]);
+    f32 ry = evtGetFloat(event, args[1]);
+
+    ((EffStarStoneWork*)effNameToPtr(name)->userdata)->rot.y = ry;
+    return EVT_RETURN_DONE;
+}
 
 /**
  * Chapter 8 'everyone's voices' scene in Petalburg: Mario and the partner are hidden, the village is darkened
@@ -1516,63 +1573,6 @@ static EVT_BEGIN(e3_talk)
     CALL(evt_bero_mapchange, STRING("kpa_02"), 0)
     RETURN
 EVT_END()
-
-/**
- * Script helper: args[0] is an NPC name and args[1] picks a TEV callback slot (low four bits); turns that callback on
- * in the NPC's animation materials. Does nothing if the NPC does not exist.
- */
-static USER_FUNC(anim_tevcallback) {
-    EvtWord* args = event->args;
-    const char* name = (const char*)evtGetValue(event, args[0]);
-    s32 flag = evtGetValue(event, args[1]);
-    NpcEntry* npc = npcNameToPtr_NoAssert(name);
-
-    if (npc == NULL) {
-        return EVT_RETURN_DONE;
-    }
-    animPoseSetMaterialFlagOn(npc->poseId, MAP_OBJ_TEV_CALLBACK(flag & 0xF));
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper: creates a star stone effect (effStarStoneEntry) at position args[1..3] (floats)
- * and registers it under the effect name args[0] so later helpers can find it.
- */
-static USER_FUNC(starstone_entry) {
-    EvtWord* args = event->args;
-    const char* name = (const char*)evtGetValue(event, args[0]);
-    f32 x = evtGetFloat(event, args[1]);
-    f32 y = evtGetFloat(event, args[2]);
-    f32 z = evtGetFloat(event, args[3]);
-
-    effSetName(effStarStoneEntry(0, x, y, z, 1.0f), name);
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper: moves the star stone effect named args[0] to the position args[1..3] (floats). */
-static USER_FUNC(starstone_set_pos) {
-    EvtWord* args = event->args;
-    const char* name = (const char*)evtGetValue(event, args[0]);
-    f32 x = evtGetFloat(event, args[1]);
-    f32 y = evtGetFloat(event, args[2]);
-    f32 z = evtGetFloat(event, args[3]);
-    EffectEntry* eff = effNameToPtr(name);
-
-    ((EffStarStoneWork*)eff->userdata)->position.x = x;
-    ((EffStarStoneWork*)eff->userdata)->position.y = y;
-    ((EffStarStoneWork*)eff->userdata)->position.z = z;
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper: sets the Y rotation of the star stone effect named args[0] to args[1] (float, degrees). */
-static USER_FUNC(starstone_set_ry) {
-    EvtWord* args = event->args;
-    const char* name = (const char*)evtGetValue(event, args[0]);
-    f32 ry = evtGetFloat(event, args[1]);
-
-    ((EffStarStoneWork*)effNameToPtr(name)->userdata)->rot.y = ry;
-    return EVT_RETURN_DONE;
-}
 
 /**
  * Creates Goombella (クリスチーヌ, model c_pkr) for the epilogue at (-200, 0, -65) facing 90, intangible,

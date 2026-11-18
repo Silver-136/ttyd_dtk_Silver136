@@ -175,142 +175,6 @@ static s32 randn(s32 min, s32 max) {
     return min + rand() % (max - min);
 }
 
-/** Returns a random float between min and max. */
-static f32 randf(f32 min, f32 max) {
-    f32 r = rand() / 32767.0f;
-
-    return r * (max - min) + min;
-}
-
-/**
- * Returns the angle (0..360, in the 3D rotation convention) from Mario to the Boo in the swarm,
- * used to turn the Boo sprite toward him.
- */
-static f32 computeAngle(ExtdrvPose* pose, MarioWork* mp) {
-    f32 a = angleABf(mp->position.x, mp->position.z, (*pose->mtx)[0][3], (*pose->mtx)[2][3]);
-
-    if (0.0f <= a && a < 90.0f) {
-        return 90.0f - a;
-    }
-    if (90.0f <= a && a < 180.0f) {
-        return 360.0f - (a - 90.0f);
-    }
-    if (180.0f <= a && a < 270.0f) {
-        return 180.0f + (270.0f - a);
-    }
-    return 90.0f + (360.0f - a);
-}
-
-/**
- * Builds the Y-rotation matrix for the given angle in degrees
- * and stores it in the rotation part of the Boo's pose matrix.
- */
-static void computeMtx(ExtdrvPose* pose, f32 angle) {
-    Mtx m;
-
-    PSMTXRotRad(m, 'Y', 0.017453292f * angle);
-    (*pose->mtx)[0][0] = m[0][0];
-    (*pose->mtx)[0][1] = m[0][1];
-    (*pose->mtx)[0][2] = m[0][2];
-    (*pose->mtx)[1][0] = m[1][0];
-    (*pose->mtx)[1][1] = m[1][1];
-    (*pose->mtx)[1][2] = m[1][2];
-    (*pose->mtx)[2][0] = m[2][0];
-    (*pose->mtx)[2][1] = m[2][1];
-    (*pose->mtx)[2][2] = m[2][2];
-}
-
-/**
- * Fades a Boo of the swarm in or out depending on the Mario-to-Boo angle
- * and Mario's facing direction (alpha 128..255); returns 1 when it is fully visible, else 0.
- */
-static s32 computeAlpha(Teresa* ter, MarioWork* mp, f32 angle) {
-    f32 dir;
-
-    if (angle > 180.0f) {
-        angle = 360.0f - angle;
-    }
-    dir = mp->displayDirectionTarget - 180.0f;
-    if (dir < 0.0f) {
-        dir += 360.0f;
-    }
-    if (dir < 90.0f) {
-        if (angle < 90.0f) {
-            ter->alpha = 128.0f * (angle / 90.0f) + 128.0f;
-            return 0;
-        }
-        ter->alpha = 255;
-        return 1;
-    } else {
-        if (angle > 90.0f) {
-            ter->alpha = 128.0f * ((180.0f - angle) / 90.0f) + 128.0f;
-            return 0;
-        }
-        ter->alpha = 255;
-        return 1;
-    }
-}
-
-/**
- * Rotates the Boo's offset from the swarm centre by its current angle around the vertical axis
- * and stores the result in out.
- */
-static void computePos(Teresa* ter, Vec* out) {
-    Vec v;
-    Mtx m;
-
-    v.x = ter->ofs.x;
-    v.y = 0.0f;
-    v.z = ter->ofs.z;
-
-    PSMTXRotRad(m, 'Y', 0.017453292f * ter->angle);
-    PSMTXMultVec(m, &v, out);
-}
-
-/**
- * Setup callback of the Boo swarm (ext pose effect):
- * allocates the state of the 200 Boos, scatters them at random offsets around Mario
- * and resets the swarm counters (Boos finished, clinging, blown away) and the swarm centre.
- */
-static void senteresa_ext_init(void) {
-    ExtdrvPose* pose = extGetPosePtr();
-    MarioWork* mp = marioGetPtr();
-    s32 n = extGetPoseNum();
-    s32 i;
-
-    // One record per pose in the 200-pose evt_ext_entry below.
-    pTeresa = _mapAlloc(sizeof(Teresa) * 200);
-    for (i = 0; i < n; i++, pose++) {
-        pose->flags = 3;
-        PSMTXIdentity(*pose->mtx);
-        pTeresa[i].angle = 0.0f;
-        pTeresa[i].wait = (i % 100 + 1) * 3;
-        pTeresa[i].alpha = 0;
-        pTeresa[i].seq = 0;
-        pTeresa[i].turnSpeed = randf(0.0f, 0.1f);
-        pTeresa[i].ofs.x = randf(-300.0f, 300.0f);
-        pTeresa[i].ofs.y = 0.0f;
-        pTeresa[i].ofs.z = randf(-235.0f, 235.0f);
-        (*pose->mtx)[0][3] = mp->position.x + pTeresa[i].ofs.x;
-        (*pose->mtx)[1][3] = randf(10.0f, 400.0f);
-        (*pose->mtx)[2][3] = mp->position.z + pTeresa[i].ofs.z;
-        if (mp->position.x < (*pose->mtx)[0][3]) {
-            pose->dir = 90.0f;
-        } else {
-            pose->dir = 270.0f;
-        }
-    }
-    g_nNumEndProc[0] = 0;
-    g_nNumHarituku[0] = 0;
-    g_nNumHuttobasu[0] = 0;
-    g_nMarioMoveCnt = 0;
-    g_fSpeed = 0.0f;
-    g_bMove = 0;
-    g_vecRotCenter.x = mp->position.x;
-    g_vecRotCenter.y = 0.0f;
-    g_vecRotCenter.z = mp->position.z;
-}
-
 /**
  * Door animation callback: opens door01L and door01R as Mario leaves through w_bero (to gra_06 and usu_00);
  * LW(0) is the door angle and the two leaves turn around Y by 0.39 times it in opposite directions.
@@ -1381,6 +1245,142 @@ static ExtTexInfo senteresa_ext_entry_data[] = {
     {"c_teresa", "A_2", 11.0f},
     {0},
 };
+
+/** Returns a random float between min and max. */
+static f32 randf(f32 min, f32 max) {
+    f32 r = rand() / 32767.0f;
+
+    return r * (max - min) + min;
+}
+
+/**
+ * Returns the angle (0..360, in the 3D rotation convention) from Mario to the Boo in the swarm,
+ * used to turn the Boo sprite toward him.
+ */
+static f32 computeAngle(ExtdrvPose* pose, MarioWork* mp) {
+    f32 a = angleABf(mp->position.x, mp->position.z, (*pose->mtx)[0][3], (*pose->mtx)[2][3]);
+
+    if (0.0f <= a && a < 90.0f) {
+        return 90.0f - a;
+    }
+    if (90.0f <= a && a < 180.0f) {
+        return 360.0f - (a - 90.0f);
+    }
+    if (180.0f <= a && a < 270.0f) {
+        return 180.0f + (270.0f - a);
+    }
+    return 90.0f + (360.0f - a);
+}
+
+/**
+ * Builds the Y-rotation matrix for the given angle in degrees
+ * and stores it in the rotation part of the Boo's pose matrix.
+ */
+static void computeMtx(ExtdrvPose* pose, f32 angle) {
+    Mtx m;
+
+    PSMTXRotRad(m, 'Y', 0.017453292f * angle);
+    (*pose->mtx)[0][0] = m[0][0];
+    (*pose->mtx)[0][1] = m[0][1];
+    (*pose->mtx)[0][2] = m[0][2];
+    (*pose->mtx)[1][0] = m[1][0];
+    (*pose->mtx)[1][1] = m[1][1];
+    (*pose->mtx)[1][2] = m[1][2];
+    (*pose->mtx)[2][0] = m[2][0];
+    (*pose->mtx)[2][1] = m[2][1];
+    (*pose->mtx)[2][2] = m[2][2];
+}
+
+/**
+ * Fades a Boo of the swarm in or out depending on the Mario-to-Boo angle
+ * and Mario's facing direction (alpha 128..255); returns 1 when it is fully visible, else 0.
+ */
+static s32 computeAlpha(Teresa* ter, MarioWork* mp, f32 angle) {
+    f32 dir;
+
+    if (angle > 180.0f) {
+        angle = 360.0f - angle;
+    }
+    dir = mp->displayDirectionTarget - 180.0f;
+    if (dir < 0.0f) {
+        dir += 360.0f;
+    }
+    if (dir < 90.0f) {
+        if (angle < 90.0f) {
+            ter->alpha = 128.0f * (angle / 90.0f) + 128.0f;
+            return 0;
+        }
+        ter->alpha = 255;
+        return 1;
+    } else {
+        if (angle > 90.0f) {
+            ter->alpha = 128.0f * ((180.0f - angle) / 90.0f) + 128.0f;
+            return 0;
+        }
+        ter->alpha = 255;
+        return 1;
+    }
+}
+
+/**
+ * Rotates the Boo's offset from the swarm centre by its current angle around the vertical axis
+ * and stores the result in out.
+ */
+static void computePos(Teresa* ter, Vec* out) {
+    Vec v;
+    Mtx m;
+
+    v.x = ter->ofs.x;
+    v.y = 0.0f;
+    v.z = ter->ofs.z;
+
+    PSMTXRotRad(m, 'Y', 0.017453292f * ter->angle);
+    PSMTXMultVec(m, &v, out);
+}
+
+/**
+ * Setup callback of the Boo swarm (ext pose effect):
+ * allocates the state of the 200 Boos, scatters them at random offsets around Mario
+ * and resets the swarm counters (Boos finished, clinging, blown away) and the swarm centre.
+ */
+static void senteresa_ext_init(void) {
+    ExtdrvPose* pose = extGetPosePtr();
+    MarioWork* mp = marioGetPtr();
+    s32 n = extGetPoseNum();
+    s32 i;
+
+    // One record per pose in the 200-pose evt_ext_entry below.
+    pTeresa = _mapAlloc(sizeof(Teresa) * 200);
+    for (i = 0; i < n; i++, pose++) {
+        pose->flags = 3;
+        PSMTXIdentity(*pose->mtx);
+        pTeresa[i].angle = 0.0f;
+        pTeresa[i].wait = (i % 100 + 1) * 3;
+        pTeresa[i].alpha = 0;
+        pTeresa[i].seq = 0;
+        pTeresa[i].turnSpeed = randf(0.0f, 0.1f);
+        pTeresa[i].ofs.x = randf(-300.0f, 300.0f);
+        pTeresa[i].ofs.y = 0.0f;
+        pTeresa[i].ofs.z = randf(-235.0f, 235.0f);
+        (*pose->mtx)[0][3] = mp->position.x + pTeresa[i].ofs.x;
+        (*pose->mtx)[1][3] = randf(10.0f, 400.0f);
+        (*pose->mtx)[2][3] = mp->position.z + pTeresa[i].ofs.z;
+        if (mp->position.x < (*pose->mtx)[0][3]) {
+            pose->dir = 90.0f;
+        } else {
+            pose->dir = 270.0f;
+        }
+    }
+    g_nNumEndProc[0] = 0;
+    g_nNumHarituku[0] = 0;
+    g_nNumHuttobasu[0] = 0;
+    g_nMarioMoveCnt = 0;
+    g_fSpeed = 0.0f;
+    g_bMove = 0;
+    g_vecRotCenter.x = mp->position.x;
+    g_vecRotCenter.y = 0.0f;
+    g_vecRotCenter.z = mp->position.z;
+}
 
 /**
  * Per-frame update of the 200-Boo swarm (the "1000 Boos" scene): a lagging swarm centre follows Mario's

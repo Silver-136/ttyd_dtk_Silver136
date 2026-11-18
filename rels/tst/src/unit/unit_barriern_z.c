@@ -921,6 +921,334 @@ static s32 barriern_satellite_zanzou_sub(BOOL isFirstCall, BattleUnit* unit, f32
 }
 
 /**
+ * Starts a satellite's flight along a spline: allocates the SatelliteSpline (5 points, 60 frames) in the Yux's
+ * work[UNIT_WORK_SATELLITE_SPLINE + n], builds its tables and remembers the table in the satellite's body part.
+ * Returns FALSE when slot n has no satellite.
+ */
+static u8 barriernSatelliteTo_Init(BattleUnit* unit, s32 n, Vec* table) {
+    SatelliteSpline* sp;
+
+    if (unit->work[UNIT_WORK_SATELLITE + n] == -1) {
+        return FALSE;
+    }
+    sp = BTL_ALLOC(sizeof(SatelliteSpline));
+    unit->work[UNIT_WORK_SATELLITE_SPLINE + n] = (EvtWord)sp;
+    sp->numPoints = 5;
+    sp->points = table;
+    sp->frame = 0;
+    spline_maketable(5, sp->points, sp->knots, sp->curvature);
+    BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE + n]), 1)->work[BARRIERN_SATELLITE_PARTS_WORK_SPLINE] = (EvtWord)table;
+    return TRUE;
+}
+
+/**
+ * Moves satellite n one frame along its spline:
+ * samples it with quadratic-out easing over 60 frames, places the satellite (and its home position) relative to the Yux with x mirrored by
+ * facing direction, and frees the spline after 60 frames. Returns TRUE while the satellite is still moving.
+ */
+static u8 barriernSatelliteTo_Main(BattleUnit* unit, s32 n) {
+    SatelliteSpline* sp;
+    BattleUnit* sat;
+    Vec upos;
+    Vec pos;
+
+    if (unit->work[UNIT_WORK_SATELLITE + n] == -1) {
+        return FALSE;
+    }
+    sp = (SatelliteSpline*)unit->work[UNIT_WORK_SATELLITE_SPLINE + n];
+    if (sp == NULL) {
+        return FALSE;
+    }
+    if (sp->frame >= 60) {
+        if (sp != NULL) {
+            BTL_FREE(sp);
+            unit->work[UNIT_WORK_SATELLITE_SPLINE + n] = 0;
+        }
+        return FALSE;
+    }
+    spline_getvalue(&pos, intplGetValue(EASING_QUADRATIC_OUT, 0.0f, 1.0f, sp->frame, 60), sp->numPoints, sp->points, sp->knots, sp->curvature);
+    sat = BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE + n]);
+    if (sat == NULL) {
+        return FALSE;
+    }
+    BtlUnit_GetPos(unit, &upos.x, &upos.y, &upos.z);
+    BtlUnit_SetPos(sat, upos.x + pos.x * unit->faceDirection, upos.y + pos.y, upos.z + pos.z);
+    BtlUnit_SetHomePos(sat, upos.x + pos.x * unit->faceDirection, upos.y + pos.y, upos.z + pos.z);
+    sp->frame++;
+    return TRUE;
+}
+
+/**
+ * Script helper: sends each satellite of the Yux args[0] from its outer orbit spline to the matching inner one
+ * (each outer table has an In counterpart). Blocks until every satellite has arrived.
+ */
+static USER_FUNC(barriernSatelliteToInside) {
+    EvtWord* args = event->args;
+    s32 id = evtGetValue(event, args[0]);
+    s32 num = evtGetValue(event, args[1]);
+    BattleUnit* unit;
+    u8 moving;
+    s32 i;
+
+    id = BattleTransID(event, id);
+    unit = BattleGetUnitPtr(_battleWorkPointer, id);
+    if (isFirstCall) {
+        for (i = 0; i < 4; i++) {
+            if (unit->work[UNIT_WORK_SATELLITE + i] != -1) {
+                EvtWord table = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE + i]), 1)->work[BARRIERN_SATELLITE_PARTS_WORK_SPLINE];
+
+                if (table == (EvtWord)splineTableOut1_1) {
+                    barriernSatelliteTo_Init(unit, i, splineTableIn1_1);
+                }
+                if (table == (EvtWord)splineTableOut2_1) {
+                    barriernSatelliteTo_Init(unit, i, splineTableIn2_1);
+                }
+                if (table == (EvtWord)splineTableOut2_2) {
+                    barriernSatelliteTo_Init(unit, i, splineTableIn2_2);
+                }
+                if (table == (EvtWord)splineTableOut3_1) {
+                    barriernSatelliteTo_Init(unit, i, splineTableIn3_1);
+                }
+                if (table == (EvtWord)splineTableOut3_2) {
+                    barriernSatelliteTo_Init(unit, i, splineTableIn3_2);
+                }
+                if (table == (EvtWord)splineTableOut3_3) {
+                    barriernSatelliteTo_Init(unit, i, splineTableIn3_3);
+                }
+                if (table == (EvtWord)splineTableOut4_1) {
+                    barriernSatelliteTo_Init(unit, i, splineTableIn4_1);
+                }
+                if (table == (EvtWord)splineTableOut4_2) {
+                    barriernSatelliteTo_Init(unit, i, splineTableIn4_2);
+                }
+                if (table == (EvtWord)splineTableOut4_3) {
+                    barriernSatelliteTo_Init(unit, i, splineTableIn4_3);
+                }
+                if (table == (EvtWord)splineTableOut4_4) {
+                    barriernSatelliteTo_Init(unit, i, splineTableIn4_4);
+                }
+            }
+        }
+    }
+    moving = FALSE;
+    for (i = 0; i < 4; i++) {
+        if (barriernSatelliteTo_Main(unit, i) == TRUE) {
+            moving = TRUE;
+        }
+    }
+    return moving == FALSE ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
+}
+
+/**
+ * Script helper: sends the Yux's args[1] satellites (1-4) from their inner positions out to their outer orbit
+ * splines, picking the spline set by the satellite count. Blocks until every satellite has arrived.
+ */
+static USER_FUNC(barriernSatelliteToOutside) {
+    EvtWord* args = event->args;
+    s32 id = evtGetValue(event, args[0]);
+    s32 num = evtGetValue(event, args[1]);
+    BattleUnit* unit;
+    u8 moving;
+    s32 i;
+
+    id = BattleTransID(event, id);
+    unit = BattleGetUnitPtr(_battleWorkPointer, id);
+    if (isFirstCall) {
+        switch (num) {
+            case 1:
+                i = 0;
+                while (TRUE) {
+                    if (barriernSatelliteTo_Init(unit, i, splineTableOut1_1) == TRUE) {
+                        break;
+                    }
+                    i++;
+                }
+                break;
+            case 2:
+                i = 0;
+                while (TRUE) {
+                    if (barriernSatelliteTo_Init(unit, i, splineTableOut2_1) == TRUE) {
+                        break;
+                    }
+                    i++;
+                }
+                i++;
+                while (TRUE) {
+                    if (barriernSatelliteTo_Init(unit, i, splineTableOut2_2) == TRUE) {
+                        break;
+                    }
+                    i++;
+                }
+                break;
+            case 3:
+                i = 0;
+                while (TRUE) {
+                    if (barriernSatelliteTo_Init(unit, i, splineTableOut3_1) == TRUE) {
+                        break;
+                    }
+                    i++;
+                }
+                i++;
+                while (TRUE) {
+                    if (barriernSatelliteTo_Init(unit, i, splineTableOut3_2) == TRUE) {
+                        break;
+                    }
+                    i++;
+                }
+                i++;
+                while (TRUE) {
+                    if (barriernSatelliteTo_Init(unit, i, splineTableOut3_3) == TRUE) {
+                        break;
+                    }
+                    i++;
+                }
+                break;
+            case 4:
+                i = 0;
+                while (TRUE) {
+                    if (barriernSatelliteTo_Init(unit, i, splineTableOut4_1) == TRUE) {
+                        break;
+                    }
+                    i++;
+                }
+                i++;
+                while (TRUE) {
+                    if (barriernSatelliteTo_Init(unit, i, splineTableOut4_2) == TRUE) {
+                        break;
+                    }
+                    i++;
+                }
+                i++;
+                while (TRUE) {
+                    if (barriernSatelliteTo_Init(unit, i, splineTableOut4_3) == TRUE) {
+                        break;
+                    }
+                    i++;
+                }
+                i++;
+                while (TRUE) {
+                    if (barriernSatelliteTo_Init(unit, i, splineTableOut4_4) == TRUE) {
+                        break;
+                    }
+                    i++;
+                }
+                break;
+            default:
+                return EVT_RETURN_DONE;
+        }
+    }
+    moving = FALSE;
+    for (i = 0; i < 4; i++) {
+        if (barriernSatelliteTo_Main(unit, i) == TRUE) {
+            moving = TRUE;
+        }
+    }
+    return moving == FALSE ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
+}
+
+/**
+ * Script helper: tells each of the Yux's args[1] satellites (1-4) which outer orbit spline it sits on,
+ * by storing the table in the satellite's body part; no movement.
+ */
+static USER_FUNC(outSplineTableSet) {
+    EvtWord* args = event->args;
+    s32 id = BattleTransID(event, evtGetValue(event, args[0]));
+    BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
+    BattleUnitPart* part;
+
+    switch (evtGetValue(event, args[1])) {
+        case 1:
+            part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE]), 1);
+            part->work[BARRIERN_SATELLITE_PARTS_WORK_SPLINE] = (EvtWord)splineTableOut1_1;
+            break;
+        case 2:
+            part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE]), 1);
+            part->work[BARRIERN_SATELLITE_PARTS_WORK_SPLINE] = (EvtWord)splineTableOut2_1;
+            part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE + 1]), 1);
+            part->work[BARRIERN_SATELLITE_PARTS_WORK_SPLINE] = (EvtWord)splineTableOut2_2;
+            break;
+        case 3:
+            part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE]), 1);
+            part->work[BARRIERN_SATELLITE_PARTS_WORK_SPLINE] = (EvtWord)splineTableOut3_1;
+            part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE + 1]), 1);
+            part->work[BARRIERN_SATELLITE_PARTS_WORK_SPLINE] = (EvtWord)splineTableOut3_2;
+            part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE + 2]), 1);
+            part->work[BARRIERN_SATELLITE_PARTS_WORK_SPLINE] = (EvtWord)splineTableOut3_3;
+            break;
+        case 4:
+            part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE]), 1);
+            part->work[BARRIERN_SATELLITE_PARTS_WORK_SPLINE] = (EvtWord)splineTableOut4_1;
+            part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE + 1]), 1);
+            part->work[BARRIERN_SATELLITE_PARTS_WORK_SPLINE] = (EvtWord)splineTableOut4_2;
+            part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE + 2]), 1);
+            part->work[BARRIERN_SATELLITE_PARTS_WORK_SPLINE] = (EvtWord)splineTableOut4_3;
+            part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE + 3]), 1);
+            part->work[BARRIERN_SATELLITE_PARTS_WORK_SPLINE] = (EvtWord)splineTableOut4_4;
+            break;
+    }
+    return EVT_RETURN_DONE;
+}
+
+/** Stores an orbit spline table pointer in the work[2] of the body part of satellite n. */
+static void outSplineTableSet_Sub(BattleUnit* unit, s32 n, Vec* table) {
+    BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE + n]), 1)->work[BARRIERN_SATELLITE_PARTS_WORK_SPLINE] = (EvtWord)table;
+}
+
+/**
+ * Script helper: picks five random targets from the weapon's current target list
+ * and writes them as (unit, part) pairs to args, one for each hit of the Yux's multi-hit attack.
+ */
+static USER_FUNC(barriern_wawawa_set_target) {
+    EvtWord* args = event->args;
+    s32 unitIdx[10];
+    s32 partIdx[10];
+    s32 i;
+    s32 num;
+
+    i = 0;
+    _battleWorkPointer->weaponTargets.currentTarget = 0;
+    barriern_wawawa_get_target(&unitIdx[0], &partIdx[0]);
+    while (TRUE) {
+        if (unitIdx[i] == -1) {
+            num = i;
+            break;
+        }
+        i++;
+        barriern_wawawa_get_next_target(&unitIdx[i], &partIdx[i]);
+    }
+    for (i = 0; i < 5; i++) {
+        s32 r = irand(num);
+        evtSetValue(event, *args++, unitIdx[r]);
+        evtSetValue(event, *args++, partIdx[r]);
+    }
+    return EVT_RETURN_DONE;
+}
+
+/** Returns the unit and part index of the weapon target currently selected in weaponTargets. */
+static void barriern_wawawa_get_target(s32* unitIdx, s32* partIdx) {
+    BattleWorkWeaponTargets* wt = &_battleWorkPointer->weaponTargets;
+    BattleWorkTarget* target = &wt->targets[wt->targetIndices[wt->currentTarget]];
+
+    *unitIdx = target->unitIdx;
+    *partIdx = target->partIdx;
+}
+
+/** Advances to the next weapon target and returns its unit and part index, or (-1, 0) after the last one. */
+static void barriern_wawawa_get_next_target(s32* unitIdx, s32* partIdx) {
+    BattleWorkWeaponTargets* wt = &_battleWorkPointer->weaponTargets;
+
+    wt->currentTarget++;
+    if (wt->currentTarget < wt->numTargets) {
+        BattleWorkTarget* target = &wt->targets[wt->targetIndices[wt->currentTarget]];
+        *unitIdx = target->unitIdx;
+        *partIdx = target->partIdx;
+    } else {
+        *unitIdx = -1;
+        *partIdx = 0;
+    }
+}
+
+/**
  * Start-of-turn event of the Yux (not on turn 1 and only while it can act):
  * after a short random delay, if it has fewer than four satellites,
  * the satellites merge into it (SFX_ENM_BARRI_ATTACK9 and SPLIT1) and it spawns one new Mini-Z-Yux,
@@ -1720,334 +2048,6 @@ static EVT_BEGIN(wait_event)
     GOTO(1)
     RETURN
 EVT_END()
-
-/**
- * Starts a satellite's flight along a spline: allocates the SatelliteSpline (5 points, 60 frames) in the Yux's
- * work[UNIT_WORK_SATELLITE_SPLINE + n], builds its tables and remembers the table in the satellite's body part.
- * Returns FALSE when slot n has no satellite.
- */
-static u8 barriernSatelliteTo_Init(BattleUnit* unit, s32 n, Vec* table) {
-    SatelliteSpline* sp;
-
-    if (unit->work[UNIT_WORK_SATELLITE + n] == -1) {
-        return FALSE;
-    }
-    sp = BTL_ALLOC(sizeof(SatelliteSpline));
-    unit->work[UNIT_WORK_SATELLITE_SPLINE + n] = (EvtWord)sp;
-    sp->numPoints = 5;
-    sp->points = table;
-    sp->frame = 0;
-    spline_maketable(5, sp->points, sp->knots, sp->curvature);
-    BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE + n]), 1)->work[BARRIERN_SATELLITE_PARTS_WORK_SPLINE] = (EvtWord)table;
-    return TRUE;
-}
-
-/**
- * Moves satellite n one frame along its spline:
- * samples it with quadratic-out easing over 60 frames, places the satellite (and its home position) relative to the Yux with x mirrored by
- * facing direction, and frees the spline after 60 frames. Returns TRUE while the satellite is still moving.
- */
-static u8 barriernSatelliteTo_Main(BattleUnit* unit, s32 n) {
-    SatelliteSpline* sp;
-    BattleUnit* sat;
-    Vec upos;
-    Vec pos;
-
-    if (unit->work[UNIT_WORK_SATELLITE + n] == -1) {
-        return FALSE;
-    }
-    sp = (SatelliteSpline*)unit->work[UNIT_WORK_SATELLITE_SPLINE + n];
-    if (sp == NULL) {
-        return FALSE;
-    }
-    if (sp->frame >= 60) {
-        if (sp != NULL) {
-            BTL_FREE(sp);
-            unit->work[UNIT_WORK_SATELLITE_SPLINE + n] = 0;
-        }
-        return FALSE;
-    }
-    spline_getvalue(&pos, intplGetValue(EASING_QUADRATIC_OUT, 0.0f, 1.0f, sp->frame, 60), sp->numPoints, sp->points, sp->knots, sp->curvature);
-    sat = BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE + n]);
-    if (sat == NULL) {
-        return FALSE;
-    }
-    BtlUnit_GetPos(unit, &upos.x, &upos.y, &upos.z);
-    BtlUnit_SetPos(sat, upos.x + pos.x * unit->faceDirection, upos.y + pos.y, upos.z + pos.z);
-    BtlUnit_SetHomePos(sat, upos.x + pos.x * unit->faceDirection, upos.y + pos.y, upos.z + pos.z);
-    sp->frame++;
-    return TRUE;
-}
-
-/**
- * Script helper: sends each satellite of the Yux args[0] from its outer orbit spline to the matching inner one
- * (each outer table has an In counterpart). Blocks until every satellite has arrived.
- */
-static USER_FUNC(barriernSatelliteToInside) {
-    EvtWord* args = event->args;
-    s32 id = evtGetValue(event, args[0]);
-    s32 num = evtGetValue(event, args[1]);
-    BattleUnit* unit;
-    u8 moving;
-    s32 i;
-
-    id = BattleTransID(event, id);
-    unit = BattleGetUnitPtr(_battleWorkPointer, id);
-    if (isFirstCall) {
-        for (i = 0; i < 4; i++) {
-            if (unit->work[UNIT_WORK_SATELLITE + i] != -1) {
-                EvtWord table = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE + i]), 1)->work[BARRIERN_SATELLITE_PARTS_WORK_SPLINE];
-
-                if (table == (EvtWord)splineTableOut1_1) {
-                    barriernSatelliteTo_Init(unit, i, splineTableIn1_1);
-                }
-                if (table == (EvtWord)splineTableOut2_1) {
-                    barriernSatelliteTo_Init(unit, i, splineTableIn2_1);
-                }
-                if (table == (EvtWord)splineTableOut2_2) {
-                    barriernSatelliteTo_Init(unit, i, splineTableIn2_2);
-                }
-                if (table == (EvtWord)splineTableOut3_1) {
-                    barriernSatelliteTo_Init(unit, i, splineTableIn3_1);
-                }
-                if (table == (EvtWord)splineTableOut3_2) {
-                    barriernSatelliteTo_Init(unit, i, splineTableIn3_2);
-                }
-                if (table == (EvtWord)splineTableOut3_3) {
-                    barriernSatelliteTo_Init(unit, i, splineTableIn3_3);
-                }
-                if (table == (EvtWord)splineTableOut4_1) {
-                    barriernSatelliteTo_Init(unit, i, splineTableIn4_1);
-                }
-                if (table == (EvtWord)splineTableOut4_2) {
-                    barriernSatelliteTo_Init(unit, i, splineTableIn4_2);
-                }
-                if (table == (EvtWord)splineTableOut4_3) {
-                    barriernSatelliteTo_Init(unit, i, splineTableIn4_3);
-                }
-                if (table == (EvtWord)splineTableOut4_4) {
-                    barriernSatelliteTo_Init(unit, i, splineTableIn4_4);
-                }
-            }
-        }
-    }
-    moving = FALSE;
-    for (i = 0; i < 4; i++) {
-        if (barriernSatelliteTo_Main(unit, i) == TRUE) {
-            moving = TRUE;
-        }
-    }
-    return moving == FALSE ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
-}
-
-/**
- * Script helper: sends the Yux's args[1] satellites (1-4) from their inner positions out to their outer orbit
- * splines, picking the spline set by the satellite count. Blocks until every satellite has arrived.
- */
-static USER_FUNC(barriernSatelliteToOutside) {
-    EvtWord* args = event->args;
-    s32 id = evtGetValue(event, args[0]);
-    s32 num = evtGetValue(event, args[1]);
-    BattleUnit* unit;
-    u8 moving;
-    s32 i;
-
-    id = BattleTransID(event, id);
-    unit = BattleGetUnitPtr(_battleWorkPointer, id);
-    if (isFirstCall) {
-        switch (num) {
-            case 1:
-                i = 0;
-                while (TRUE) {
-                    if (barriernSatelliteTo_Init(unit, i, splineTableOut1_1) == TRUE) {
-                        break;
-                    }
-                    i++;
-                }
-                break;
-            case 2:
-                i = 0;
-                while (TRUE) {
-                    if (barriernSatelliteTo_Init(unit, i, splineTableOut2_1) == TRUE) {
-                        break;
-                    }
-                    i++;
-                }
-                i++;
-                while (TRUE) {
-                    if (barriernSatelliteTo_Init(unit, i, splineTableOut2_2) == TRUE) {
-                        break;
-                    }
-                    i++;
-                }
-                break;
-            case 3:
-                i = 0;
-                while (TRUE) {
-                    if (barriernSatelliteTo_Init(unit, i, splineTableOut3_1) == TRUE) {
-                        break;
-                    }
-                    i++;
-                }
-                i++;
-                while (TRUE) {
-                    if (barriernSatelliteTo_Init(unit, i, splineTableOut3_2) == TRUE) {
-                        break;
-                    }
-                    i++;
-                }
-                i++;
-                while (TRUE) {
-                    if (barriernSatelliteTo_Init(unit, i, splineTableOut3_3) == TRUE) {
-                        break;
-                    }
-                    i++;
-                }
-                break;
-            case 4:
-                i = 0;
-                while (TRUE) {
-                    if (barriernSatelliteTo_Init(unit, i, splineTableOut4_1) == TRUE) {
-                        break;
-                    }
-                    i++;
-                }
-                i++;
-                while (TRUE) {
-                    if (barriernSatelliteTo_Init(unit, i, splineTableOut4_2) == TRUE) {
-                        break;
-                    }
-                    i++;
-                }
-                i++;
-                while (TRUE) {
-                    if (barriernSatelliteTo_Init(unit, i, splineTableOut4_3) == TRUE) {
-                        break;
-                    }
-                    i++;
-                }
-                i++;
-                while (TRUE) {
-                    if (barriernSatelliteTo_Init(unit, i, splineTableOut4_4) == TRUE) {
-                        break;
-                    }
-                    i++;
-                }
-                break;
-            default:
-                return EVT_RETURN_DONE;
-        }
-    }
-    moving = FALSE;
-    for (i = 0; i < 4; i++) {
-        if (barriernSatelliteTo_Main(unit, i) == TRUE) {
-            moving = TRUE;
-        }
-    }
-    return moving == FALSE ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
-}
-
-/**
- * Script helper: tells each of the Yux's args[1] satellites (1-4) which outer orbit spline it sits on,
- * by storing the table in the satellite's body part; no movement.
- */
-static USER_FUNC(outSplineTableSet) {
-    EvtWord* args = event->args;
-    s32 id = BattleTransID(event, evtGetValue(event, args[0]));
-    BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
-    BattleUnitPart* part;
-
-    switch (evtGetValue(event, args[1])) {
-        case 1:
-            part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE]), 1);
-            part->work[BARRIERN_SATELLITE_PARTS_WORK_SPLINE] = (EvtWord)splineTableOut1_1;
-            break;
-        case 2:
-            part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE]), 1);
-            part->work[BARRIERN_SATELLITE_PARTS_WORK_SPLINE] = (EvtWord)splineTableOut2_1;
-            part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE + 1]), 1);
-            part->work[BARRIERN_SATELLITE_PARTS_WORK_SPLINE] = (EvtWord)splineTableOut2_2;
-            break;
-        case 3:
-            part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE]), 1);
-            part->work[BARRIERN_SATELLITE_PARTS_WORK_SPLINE] = (EvtWord)splineTableOut3_1;
-            part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE + 1]), 1);
-            part->work[BARRIERN_SATELLITE_PARTS_WORK_SPLINE] = (EvtWord)splineTableOut3_2;
-            part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE + 2]), 1);
-            part->work[BARRIERN_SATELLITE_PARTS_WORK_SPLINE] = (EvtWord)splineTableOut3_3;
-            break;
-        case 4:
-            part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE]), 1);
-            part->work[BARRIERN_SATELLITE_PARTS_WORK_SPLINE] = (EvtWord)splineTableOut4_1;
-            part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE + 1]), 1);
-            part->work[BARRIERN_SATELLITE_PARTS_WORK_SPLINE] = (EvtWord)splineTableOut4_2;
-            part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE + 2]), 1);
-            part->work[BARRIERN_SATELLITE_PARTS_WORK_SPLINE] = (EvtWord)splineTableOut4_3;
-            part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE + 3]), 1);
-            part->work[BARRIERN_SATELLITE_PARTS_WORK_SPLINE] = (EvtWord)splineTableOut4_4;
-            break;
-    }
-    return EVT_RETURN_DONE;
-}
-
-/** Stores an orbit spline table pointer in the work[2] of the body part of satellite n. */
-static void outSplineTableSet_Sub(BattleUnit* unit, s32 n, Vec* table) {
-    BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE + n]), 1)->work[BARRIERN_SATELLITE_PARTS_WORK_SPLINE] = (EvtWord)table;
-}
-
-/**
- * Script helper: picks five random targets from the weapon's current target list
- * and writes them as (unit, part) pairs to args, one for each hit of the Yux's multi-hit attack.
- */
-static USER_FUNC(barriern_wawawa_set_target) {
-    EvtWord* args = event->args;
-    s32 unitIdx[10];
-    s32 partIdx[10];
-    s32 i;
-    s32 num;
-
-    i = 0;
-    _battleWorkPointer->weaponTargets.currentTarget = 0;
-    barriern_wawawa_get_target(&unitIdx[0], &partIdx[0]);
-    while (TRUE) {
-        if (unitIdx[i] == -1) {
-            num = i;
-            break;
-        }
-        i++;
-        barriern_wawawa_get_next_target(&unitIdx[i], &partIdx[i]);
-    }
-    for (i = 0; i < 5; i++) {
-        s32 r = irand(num);
-        evtSetValue(event, *args++, unitIdx[r]);
-        evtSetValue(event, *args++, partIdx[r]);
-    }
-    return EVT_RETURN_DONE;
-}
-
-/** Returns the unit and part index of the weapon target currently selected in weaponTargets. */
-static void barriern_wawawa_get_target(s32* unitIdx, s32* partIdx) {
-    BattleWorkWeaponTargets* wt = &_battleWorkPointer->weaponTargets;
-    BattleWorkTarget* target = &wt->targets[wt->targetIndices[wt->currentTarget]];
-
-    *unitIdx = target->unitIdx;
-    *partIdx = target->partIdx;
-}
-
-/** Advances to the next weapon target and returns its unit and part index, or (-1, 0) after the last one. */
-static void barriern_wawawa_get_next_target(s32* unitIdx, s32* partIdx) {
-    BattleWorkWeaponTargets* wt = &_battleWorkPointer->weaponTargets;
-
-    wt->currentTarget++;
-    if (wt->currentTarget < wt->numTargets) {
-        BattleWorkTarget* target = &wt->targets[wt->targetIndices[wt->currentTarget]];
-        *unitIdx = target->unitIdx;
-        *partIdx = target->partIdx;
-    } else {
-        *unitIdx = -1;
-        *partIdx = 0;
-    }
-}
 
 /**
  * Script helper run from the Yux's wait event.

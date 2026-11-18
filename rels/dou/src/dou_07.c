@@ -156,6 +156,25 @@ static EVT_BEGIN(apper_elmos)
 EVT_END()
 
 /**
+ * Message callback for the black chest's speech:
+ * type 0 (text starts) plays the chest's talking animation A_2,
+ * type 5 (while text runs) restarts it once it has looped, type 2 (text ends) returns it to the idle S_1.
+ */
+static void majin_callback(s32 type) {
+    MapObjectEntry* mobj = mobjNameToPtr("mobj_box00");
+
+    if (type == 0) {
+        animPoseSetAnim(mobj->poseId, "A_2", TRUE);
+    } else if (type == 5) {
+        if (animPoseGetLoopTimes(mobj->poseId) >= 1.0f) {
+            animPoseSetAnim(mobj->poseId, "A_2", TRUE);
+        }
+    } else if (type == 2) {
+        animPoseSetAnim(mobj->poseId, "S_1", TRUE);
+    }
+}
+
+/**
  * Interact event of the black chest (mobj_box00), run before it opens.
  * The first time the chest speaks to Mario and the partner (messages stg1_gon_majin4_01 to 07,
  * with its lid wobbling), the Ember appears and the story moves to STG5_21_GROTTO_KEY.
@@ -300,6 +319,15 @@ EVT_BEGIN(peramajin_before)
 EVT_END()
 
 /**
+ * Script helper: blocks until music channel 1 has started playing,
+ * so the genie's music is audible before the scene continues.
+ */
+static USER_FUNC(bgm_start_wait) {
+    // Wait for BGM slot 1 before beginning the curse presentation.
+    return psndBGMStartCheck(1) ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
+}
+
+/**
  * After-open script of the black chest mobj_box00 (GSWF_DOU_07_BOAT_CURSE_CHEST): gives the Boat Curse, plays
  * BGM_EVT_PERAMAJIN1, fades s02_moku and shows the paper genie image (OFF_d_kusya) with its sounds, runs the boat
  * lecture (ship_majin_lecture_init, ship_majin_lecture), flashes Mario back to his spot, removes the image, prints the
@@ -442,31 +470,3 @@ EVT_BEGIN(dou_07_init_evt)
     END_IF
     RETURN
 EVT_END()
-
-/**
- * Message callback for the black chest's speech:
- * type 0 (text starts) plays the chest's talking animation A_2,
- * type 5 (while text runs) restarts it once it has looped, type 2 (text ends) returns it to the idle S_1.
- */
-static void majin_callback(s32 type) {
-    MapObjectEntry* mobj = mobjNameToPtr("mobj_box00");
-
-    if (type == 0) {
-        animPoseSetAnim(mobj->poseId, "A_2", TRUE);
-    } else if (type == 5) {
-        if (animPoseGetLoopTimes(mobj->poseId) >= 1.0f) {
-            animPoseSetAnim(mobj->poseId, "A_2", TRUE);
-        }
-    } else if (type == 2) {
-        animPoseSetAnim(mobj->poseId, "S_1", TRUE);
-    }
-}
-
-/**
- * Script helper: blocks until music channel 1 has started playing,
- * so the genie's music is audible before the scene continues.
- */
-static USER_FUNC(bgm_start_wait) {
-    // Wait for BGM slot 1 before beginning the curse presentation.
-    return psndBGMStartCheck(1) ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
-}

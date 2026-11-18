@@ -705,6 +705,18 @@ EVT_BEGIN(hom_10_evt_resha_stop)
     RETURN
 EVT_END()
 
+/**
+ * Script helper: writes into LW(10) a sine wobble (1.8 times |GW(0)| times sin(frame count / 15)), which evt_ramp uses
+ * to sway the lamps.
+ */
+static USER_FUNC(ramp_r) {
+    f32 amp = __fabsf(evtGetFloat(event, GW(0)));
+    f32 wave = sin(gp->retraceCount / 15.0f);
+
+    evtSetFloat(event, LW(10), 1.8f * amp * wave);
+    return EVT_RETURN_DONE;
+}
+
 /** Keeps the lamp objects (ranpu, ranpu_c) swinging every frame by the amount from ramp_r while the train is moving. */
 static EVT_BEGIN(evt_ramp)
     LOOP(0)
@@ -752,6 +764,11 @@ static const char* pika_tbl_rsh_06[] = {
     "pika_6",
     NULL,
 };
+
+/** TEV callback for the train model: forwards to envAddTev with slot 7 to add the shared environment lighting. */
+static void resha_tev(MapTevCallbackInfo* info) {
+    envAddTev(7, info);
+}
 
 /**
  * Common start of the train-exterior scenes: marks the train as not moving,
@@ -1936,6 +1953,18 @@ static EVT_BEGIN(evt_hikousen_return)
 EVT_END()
 
 /**
+ * Script helper that lifts Bowser's airship NPC (飛クッパ) by setting its vertical move offset to args[0],
+ * used to bob it in gor_04_koopa_evt.
+ */
+static USER_FUNC(kpa_hikousen_yure) {
+    f32 y = evtGetFloat(event, event->args[0]);
+
+    // 飛クッパ
+    npcNameToPtr("飛クッパ")->moveOffset.y = y;
+    return EVT_RETURN_DONE;
+}
+
+/**
  * Bowser interlude at STG4_15_05_PEACH_X_NAUT_PHD_REPORT (the map init switches the player to Bowser,
  * mode 2):
  * Kammy Koopa (ババ, with her broom "houki") wants to ride the Cheep Blimp to Glitzville, where she has heard of a
@@ -2401,32 +2430,3 @@ EVT_BEGIN(gor_04_init_evt)
 #endif
     RETURN
 EVT_END()
-
-/**
- * Script helper: writes into LW(10) a sine wobble (1.8 times |GW(0)| times sin(frame count / 15)), which evt_ramp uses
- * to sway the lamps.
- */
-static USER_FUNC(ramp_r) {
-    f32 amp = __fabsf(evtGetFloat(event, GW(0)));
-    f32 wave = sin(gp->retraceCount / 15.0f);
-
-    evtSetFloat(event, LW(10), 1.8f * amp * wave);
-    return EVT_RETURN_DONE;
-}
-
-/** TEV callback for the train model: forwards to envAddTev with slot 7 to add the shared environment lighting. */
-static void resha_tev(MapTevCallbackInfo* info) {
-    envAddTev(7, info);
-}
-
-/**
- * Script helper that lifts Bowser's airship NPC (飛クッパ) by setting its vertical move offset to args[0],
- * used to bob it in gor_04_koopa_evt.
- */
-static USER_FUNC(kpa_hikousen_yure) {
-    f32 y = evtGetFloat(event, event->args[0]);
-
-    // 飛クッパ
-    npcNameToPtr("飛クッパ")->moveOffset.y = y;
-    return EVT_RETURN_DONE;
-}

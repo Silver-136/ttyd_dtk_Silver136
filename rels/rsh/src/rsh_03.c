@@ -217,33 +217,6 @@ static USER_FUNC(mario_flag) {
 static Vec camPt;
 static Vec camAt;
 
-/**
- * Script helper: saves the 3D camera's position and look-at point
- * before the shop transition ("omise" is the shop) so omiseFukki can restore it.
- */
-static USER_FUNC(omiseHozon) {
-    CameraEntry* cam = camGetPtr(CAMERA_3D);
-
-    camPt = cam->cameraPos;
-    camAt = cam->cameraAt;
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper: sends the 3D camera back to the position saved by omiseHozon, as a 500 ms eased move. */
-static USER_FUNC(omiseFukki) {
-    CameraEntry* cam = camGetPtr(CAMERA_3D);
-
-    cam->presetPos = cam->cameraPos;
-    cam->presetAt = cam->cameraAt;
-    cam->storedPos = camPt;
-    cam->storedAt = camAt;
-    cam->startTimeA = gp->renderTime;
-    cam->durationA = OSMillisecondsToTicks(500);
-    cam->stateA = CAM_MOVE_TO_STORED;
-    cam->curveA = EASING_SINE_IN_OUT;
-    return EVT_RETURN_DONE;
-}
-
 /** Doors and exits of rsh_03 variant a: w_bero to rsh_04_a; e_bero to rsh_02_a. */
 static BeroEntry bero_data_a[] = {
     {
@@ -1376,6 +1349,33 @@ static EVT_BEGIN(shop_door_close)
     RETURN
 EVT_END()
 
+/**
+ * Script helper: saves the 3D camera's position and look-at point
+ * before the shop transition ("omise" is the shop) so omiseFukki can restore it.
+ */
+static USER_FUNC(omiseHozon) {
+    CameraEntry* cam = camGetPtr(CAMERA_3D);
+
+    camPt = cam->cameraPos;
+    camAt = cam->cameraAt;
+    return EVT_RETURN_DONE;
+}
+
+/** Script helper: sends the 3D camera back to the position saved by omiseHozon, as a 500 ms eased move. */
+static USER_FUNC(omiseFukki) {
+    CameraEntry* cam = camGetPtr(CAMERA_3D);
+
+    cam->presetPos = cam->cameraPos;
+    cam->presetAt = cam->cameraAt;
+    cam->storedPos = camPt;
+    cam->storedAt = camAt;
+    cam->startTimeA = gp->renderTime;
+    cam->durationA = OSMillisecondsToTicks(500);
+    cam->stateA = CAM_MOVE_TO_STORED;
+    cam->curveA = EASING_SINE_IN_OUT;
+    return EVT_RETURN_DONE;
+}
+
 /** Script helper (JP and later): sets the alpha of every ready NPC except 店員 to args[0]. */
 // Descriptive name (not in the symbol maps); placeholder unk_rsh_00002634, JP rsh .text+0x2570. See docs/NAME_PROVENANCE.md.
 #if VERSION >= VERSION_JP
@@ -1615,20 +1615,6 @@ static EVT_BEGIN(evt_shop_close)
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
-
-/**
- * Script helper: disables map object args[0] and starts a fire effect (effFireEntry type 3, scale 0.5) 4 units below
- * it.
- */
-static USER_FUNC(fire) {
-    const char* name = (const char*)evtGetValue(event, event->args[0]);
-    Vec pos;
-
-    mapObjGetPos(name, &pos);
-    mapObjFlagOn(name, MAP_OBJ_FLAG_DISABLED);
-    effFireEntry(3, 0, pos.x, pos.y - 4.0f, pos.z, 0.5f);
-    return EVT_RETURN_DONE;
-}
 
 /**
  * Sets up the shop door triggers (tobira_omise to open, tobira_omise_heya to close), hides omise_masuku
@@ -1925,6 +1911,20 @@ static const char* window_tbl[] = {
     "mado_uturi_4",
     NULL,
 };
+
+/**
+ * Script helper: disables map object args[0] and starts a fire effect (effFireEntry type 3, scale 0.5) 4 units below
+ * it.
+ */
+static USER_FUNC(fire) {
+    const char* name = (const char*)evtGetValue(event, event->args[0]);
+    Vec pos;
+
+    mapObjGetPos(name, &pos);
+    mapObjFlagOn(name, MAP_OBJ_FLAG_DISABLED);
+    effFireEntry(3, 0, pos.x, pos.y - 4.0f, pos.z, 0.5f);
+    return EVT_RETURN_DONE;
+}
 
 /**
  * Init script of rsh_03_c (first visit): doors, shared init, window scenery,
