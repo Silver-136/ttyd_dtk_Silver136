@@ -283,6 +283,9 @@ BOOL SoundSongSetMIDICtrl(u8 channel, u8 ctrl, u8 value);
 BOOL SoundSongSetMIDICtrlCh(s32 chan, u8 channel, u8 ctrl, u8 value);
 void SoundSongMain(void);
 
+void sndMovePos(f32* x, f32* z, f32 dist, f32 dir);
+void calcVectEmitter(SoundEffect* effect);
+void calcVectListener(void);
 s32 SoundEfxPlayEx(SND_FXID fid, u8 priority, u8 vol, u8 pan);
 void SoundEfxSetPosDirListener(SND_FVECTOR* pos, f32 dir);
 void SoundEfxSetPosEmitter(s32 chan, SND_FVECTOR* pos);

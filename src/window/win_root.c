@@ -436,17 +436,6 @@ s32 winRootMain(WindowWork* w) {
     return 0;
 }
 
-// FAKE: stand-in that nothing calls; it only places 185.0f and 1000.0f (180.0f in the early demos) in this object's constant pool.
-// Removing it changes the object.
-void winRootStrippedPool(f32* f) {
-    f[0] = 185.0f;
-#if VERSION <= VERSION_DEMO_JP
-    f[1] = 180.0f;
-#else
-    f[1] = 1000.0f;
-#endif
-}
-
 static void winTabDisp(WindowWork* wp);
 
 /**
@@ -513,7 +502,7 @@ void winRootDisp(s32 camId, WindowWork* wp) {
  * states 10-13 (set when the menu closes) slide them back up, rightmost first.
  */
 // Original name and size (0x188) from the JP demo map (UNUSED there: every call is inlined).
-inline void winTabMain(WindowWork* w) {
+void winTabMain(WindowWork* w) {
     s32 i;
 
     for (i = 0; i < 5; i++) {

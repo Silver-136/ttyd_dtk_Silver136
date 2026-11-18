@@ -960,6 +960,60 @@ void SoundSongMain(void) {
     }
 }
 
+// sndMovePos, calcVectEmitter and calcVectListener: original names and sizes (0x98, 0x4c, 0xf8) from the JP demo map
+// (UNUSED there: their calls, all in SoundEfxMain, are inlined), listed in this order between SoundSongMain and
+// SoundEfxSetListener. Their bodies are the parts of SoundEfxMain they are named after; each out-of-line copy is
+// exactly the map size, and SoundEfxMain builds the same.
+
+/**
+ * Moves the point (*x, *z) by dist in direction dir (degrees): system.c's movePos form (the JP demo map also
+ * lists a stripped pmario_sound.c movePos of this size, 0x98).
+ */
+// The parameter types and order follow movePos. movePos's own form (sin and cos in two locals) is 0x10 larger;
+// its sums written out (`*x = dist * s + *x`) are the same size but change the copy inlined in SoundEfxMain.
+void sndMovePos(f32* x, f32* z, f32 dist, f32 dir) {
+    f32 angle = TWO_PI * dir / 360.0f;
+
+    *x += dist * (f32)sin(angle);
+    *z -= dist * (f32)cos(angle);
+}
+
+/** Updates the 3D emitter of effect: its velocity (pos - prevPos) and prevPos. */
+// The SoundEffect* parameter is a choice: three vector pointers build the same size.
+void calcVectEmitter(SoundEffect* effect) {
+    effect->dir.x = effect->pos.x - effect->prevPos.x;
+    effect->dir.y = effect->pos.y - effect->prevPos.y;
+    effect->dir.z = effect->pos.z - effect->prevPos.z;
+    effect->prevPos.x = effect->pos.x;
+    effect->prevPos.y = effect->pos.y;
+    effect->prevPos.z = effect->pos.z;
+}
+
+/**
+ * Updates the listener vectors for sndUpdateListener: velocity (pos - prevPos), heading from
+ * listenerDir (sndMovePos from the origin by 1), and up (0, 1, 0).
+ */
+// headingX is declared before headingZ: the inlined copy in SoundEfxMain numbers them in declaration order.
+void calcVectListener(void) {
+    f32 headingX;
+    f32 headingZ;
+
+    headingZ = headingX = 0.0f;
+    sound.dir.x = sound.pos.x - sound.prevPos.x;
+    sound.dir.y = sound.pos.y - sound.prevPos.y;
+    sound.dir.z = sound.pos.z - sound.prevPos.z;
+    sound.prevPos.x = sound.pos.x;
+    sound.prevPos.y = sound.pos.y;
+    sound.prevPos.z = sound.pos.z;
+    sndMovePos(&headingX, &headingZ, 1.0f, sound.listenerDir);
+    sound.heading.x = headingX;
+    sound.heading.y = 0.0f;
+    sound.heading.z = headingZ;
+    sound.up.x = 0.0f;
+    sound.up.y = 1.0f;
+    sound.up.z = 0.0f;
+}
+
 /** Stops the sound effect on effect channel chan and frees the channel (and its 3D emitter). */
 inline void SoundEfxMuteCh(u32 chan) {
     SoundEffect* sfx = &sound.effects[chan];
@@ -1246,47 +1300,17 @@ inline void SoundEfxCheckCh(u32 chan) {
  * and frees channels whose sound has ended.
  */
 static void SoundEfxMain(void) {
-    SND_FVECTOR* dir;
     SoundEffect* effect;
     int i;
-    f32 headingZ;
-    f32 headingX;
-    f32 r = 1.0f;
-    f32 angle;
-    f32 x, y, z;
 
-    headingZ = headingX = 0.0f;
-    x = sound.pos.x - sound.prevPos.x;
-    y = sound.pos.y - sound.prevPos.y;
-    z = sound.pos.z - sound.prevPos.z;
-    angle = (TWO_PI * sound.listenerDir / 360.0f);
-    sound.prevPos.x = sound.pos.x;
-    sound.prevPos.y = sound.pos.y;
-    sound.prevPos.z = sound.pos.z;
-    dir = &sound.dir;
-    dir->x = x;
-    dir->y = y;
-    dir->z = z;
-    headingX += r * (f32)sin(angle);
-    headingZ -= r * (f32)cos(angle);
-    sound.heading.x = headingX;
-    sound.heading.y = 0.0f;
-    sound.heading.z = headingZ;
-    sound.up.x = 0.0f;
-    sound.up.y = 1.0f;
-    sound.up.z = 0.0f;
-    sndUpdateListener(&sound.listener, &sound.pos, dir, &sound.heading, &sound.up, sound.listenerVol, NULL);
+    calcVectListener();
+    sndUpdateListener(&sound.listener, &sound.pos, &sound.dir, &sound.heading, &sound.up, sound.listenerVol, NULL);
 
     effect = sound.effects;
     for (i = 0; i < SOUND_EFFECT_MAX; i++, effect++) {
         if (effect->flags) {
             if (effect->flags & SOUND_EFX_FLAG_EMITTER_UNUSED) {
-                effect->dir.x = effect->pos.x - effect->prevPos.x;
-                effect->dir.y = effect->pos.y - effect->prevPos.y;
-                effect->dir.z = effect->pos.z - effect->prevPos.z;
-                effect->prevPos.x = effect->pos.x;
-                effect->prevPos.y = effect->pos.y;
-                effect->prevPos.z = effect->pos.z;
+                calcVectEmitter(effect);
                 sndUpdateEmitter(&effect->emitter, &effect->pos, &effect->dir, effect->vol, NULL);
             }
         }
