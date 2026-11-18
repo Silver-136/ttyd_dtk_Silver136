@@ -53,7 +53,7 @@ static inline int __fpclassifyd(double x) {
 #define isinf(x) (fpclassify(x) == FP_INFINITE)
 #define signbit(x) (__HI(x) & 0x80000000)
 
-static inline int __count_trailing_zerol(unsigned long x) {
+static int __count_trailing_zerol(unsigned long x) {
     int result = 0;
     int bits_not_checked = sizeof(unsigned long) * CHAR_BIT;
     int delta = sizeof(unsigned long) * CHAR_BIT / 2;
@@ -77,7 +77,7 @@ static inline int __count_trailing_zerol(unsigned long x) {
     return result;
 }
 
-static inline int __count_trailing_zero(double x) {
+static int __count_trailing_zero(double x) {
     unsigned long* l = (unsigned long*)&x;
     if (l[1] != 0)
         return __count_trailing_zerol(l[1]);
@@ -86,7 +86,7 @@ static inline int __count_trailing_zero(double x) {
     return (int)(sizeof(unsigned long) * CHAR_BIT + __count_trailing_zerol(l[0] | 0x00100000));
 }
 
-static inline int __must_round(const decimal* d, int digits) {
+static int __must_round(const decimal* d, int digits) {
     unsigned char const* i = d->sig.text + digits;
 
     if (*i > 5)
@@ -105,7 +105,7 @@ static inline int __must_round(const decimal* d, int digits) {
     return -1;
 }
 
-static inline void __dorounddecup(decimal* d, int digits) {
+static void __dorounddecup(decimal* d, int digits) {
     unsigned char* b = d->sig.text;
     unsigned char* i = b + digits - 1;
 
@@ -123,8 +123,10 @@ static inline void __dorounddecup(decimal* d, int digits) {
     }
 }
 
-static inline void __rounddec(decimal* d, int digits) {
-    if (digits > 0 && digits < d->sig.length) {
+static void __rounddec(decimal* d, int digits) {
+    if (digits <= 0 || digits >= d->sig.length)
+        return;
+    {
         int roundingResult = __must_round(d, digits);
         d->sig.length = digits;
         if (roundingResult >= 0)
@@ -132,7 +134,7 @@ static inline void __rounddec(decimal* d, int digits) {
     }
 }
 
-static inline void __ull2dec(decimal* result, unsigned long long val) {
+static void __ull2dec(decimal* result, unsigned long long val) {
     result->sign = 0;
 
     if (val == 0) {
@@ -225,7 +227,7 @@ static void __timesdec(decimal* result, const decimal* x, const decimal* y) {
     }
 }
 
-static inline void __str2dec(decimal* d, const char* s, short exp) {
+static void __str2dec(decimal* d, const char* s, short exp) {
     int i;
 
     d->exp = exp;
@@ -385,7 +387,7 @@ static BOOL __equals_dec(const decimal* x, const decimal* y) {
     return FALSE;
 }
 
-static inline BOOL __less_dec(const decimal* x, const decimal* y) {
+static BOOL __less_dec(const decimal* x, const decimal* y) {
     if (x->sig.text[0] == 0) {
         if (y->sig.text[0] != 0)
             return TRUE;

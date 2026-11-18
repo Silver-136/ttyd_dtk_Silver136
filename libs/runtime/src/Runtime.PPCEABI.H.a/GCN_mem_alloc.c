@@ -9,6 +9,7 @@ void* OSInitAlloc(void* arenaStart, void* arenaEnd, int maxHeaps);
 void OSSetArenaLo(void* newLo);
 OSHeapHandle OSCreateHeap(void* start, void* end);
 OSHeapHandle OSSetCurrentHeap(OSHeapHandle heap);
+void* OSAllocFromHeap(OSHeapHandle heap, unsigned long size);
 void OSFreeToHeap(OSHeapHandle heap, void* ptr);
 
 /* Local copies of the SDK declarations (dolphin/os.h): this runtime file does not include SDK headers. */
@@ -33,6 +34,13 @@ static void InitDefaultHeap(void) {
 
     OSSetCurrentHeap(OSCreateHeap(arenaLo, arenaHi));
     OSSetArenaLo(arenaHi);
+}
+
+__declspec(weak) void* __sys_alloc(unsigned long size) {
+    if (__OSCurrHeap == -1)
+        InitDefaultHeap();
+
+    return OSAllocFromHeap(__OSCurrHeap, size);
 }
 
 __declspec(weak) void __sys_free(void* ptr) {

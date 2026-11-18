@@ -9,6 +9,15 @@ unsigned long __strtoul(int base, int max_width, int (*ReadProc)(void*, int, int
                         int* chars_scanned, int* negative, int* overflow);
 unsigned long long __strtoull(int base, int max_width, int (*ReadProc)(void*, int, int), void* ReadProcArg,
                               int* chars_scanned, int* negative, int* overflow);
+
+/* The ReadProc argument for reading from a string (scanf.c __StringRead). */
+typedef struct {
+    char* str;
+    int eos;
+} __InStr;
+
+int __StringRead(void* arg, int ch, int behavior);
+
 long double __strtold(int max_width, int (*ReadProc)(void*, int, int), void* ReadProcArg, int* chars_scanned,
                       int* overflow);
 

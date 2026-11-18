@@ -1207,6 +1207,24 @@ int printf(const char* format, ...) {
     return res;
 }
 
+int fprintf(FILE* file, const char* format, ...) {
+    int res;
+
+    if (fwide(file, -1) >= 0) {
+        return -1;
+    }
+
+    {
+        va_list args;
+        __begin_critical_region(stdout_access);
+        va_start(args, format);
+        res = __pformatter(&__FileWrite, (void*)file, format, args);
+        __end_critical_region(stdout_access);
+    }
+
+    return res;
+}
+
 int vprintf(const char* format, va_list arg) {
     int ret;
 
@@ -1216,6 +1234,19 @@ int vprintf(const char* format, va_list arg) {
 
     __begin_critical_region(stdout_access);
     ret = __pformatter(&__FileWrite, (void*)stdout, format, arg);
+    __end_critical_region(stdout_access);
+    return ret;
+}
+
+int vfprintf(FILE* file, const char* format, va_list arg) {
+    int ret;
+
+    if (fwide(file, -1) >= 0) {
+        return -1;
+    }
+
+    __begin_critical_region(stdout_access);
+    ret = __pformatter(&__FileWrite, (void*)file, format, arg);
     __end_critical_region(stdout_access);
     return ret;
 }
@@ -1239,6 +1270,12 @@ int vsnprintf(char* s, size_t n, const char* format, va_list arg) {
 
 int vsprintf(char* s, const char* format, va_list arg) {
     return vsnprintf(s, 0xFFFFFFFF, format, arg); // no size limit
+}
+
+int snprintf(char* s, size_t n, const char* format, ...) {
+    va_list args;
+    va_start(args, format);
+    return vsnprintf(s, n, format, args);
 }
 
 int sprintf(char* s, const char* format, ...) {

@@ -45,6 +45,33 @@ double sqrt(double x);
 double tanh(double x);
 double trunc(double x);
 
+extern unsigned long __float_nan[];
+
+/* The bodies of fabs, sqrtf and __fpclassifyf are the inline ones of libs/msl/include/math.h (the game's MSL header):
+ * compiled out of line here they are exactly the sizes the JP demo map gives this unit (fabs 0x8, sqrtf 0xe4 with
+ * __fpclassifyf inlined, __fpclassifyf 0x64). The map's out-of-line __fpclassifyf (after scalbn, at the end of the
+ * unit) is not emitted here: nothing in this file refers to it without inlining it. */
+inline int __fpclassifyf(float x) {
+    switch (*(int*)&x & 0x7F800000) {
+        case 0x7F800000:
+            if (*(int*)&x & 0x007FFFFF) {
+                return 1; // FP_NAN
+            } else {
+                return 2; // FP_INFINITE
+            }
+            break;
+        case 0:
+            if (*(int*)&x & 0x007FFFFF) {
+                return 5; // FP_SUBNORMAL
+            } else {
+                return 3; // FP_ZERO
+            }
+            break;
+        default:
+            return 4; // FP_NORMAL
+    }
+}
+
 __declspec(weak) float fminf(float x, float y) {
     return fmin(x, y);
 }
@@ -147,6 +174,27 @@ __declspec(weak) float asinhf(float x) {
 
 __declspec(weak) float acoshf(float x) {
     return acosh(x);
+}
+
+__declspec(weak) double fabs(double x) {
+    return __fabs(x);
+}
+
+__declspec(weak) float sqrtf(float x) {
+    static const double _half = .5;
+    static const double _three = 3.0;
+
+    if (x > 0.0f) {
+        double guess = __frsqrte(x);
+        guess = _half * guess * (_three - guess * guess * x); // now have 12 sig bits
+        guess = _half * guess * (_three - guess * guess * x); // now have 24 sig bits
+        return x * (_half * guess * (_three - guess * guess * x)); // now have 32 sig bits
+    } else if (x < 0.0) {
+        return *(float*)__float_nan;
+    } else if (__fpclassifyf(x) == 1) {
+        return *(float*)__float_nan;
+    }
+    return x;
 }
 
 __declspec(weak) float fmodf(float x, float y) {

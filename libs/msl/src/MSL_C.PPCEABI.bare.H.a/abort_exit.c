@@ -7,6 +7,8 @@ void __end_critical_region(int region);
 void __kill_critical_regions(void);
 void __destroy_global_chain(void);
 void _ExitProcess(void);
+int raise(int sig);
+void __exit(int status);
 
 extern void (*_dtors[])(void);
 
@@ -19,6 +21,12 @@ int __atexit_curr_func = 0;
 
 void (*__stdio_exit)(void) = NULL;
 void (*__console_exit)(void) = NULL;
+
+void abort(void) {
+    raise(1);
+    __aborting = 1;
+    __exit(1);
+}
 
 void exit(int status) {
     void (**dtor)(void);
@@ -41,6 +49,10 @@ void exit(int status) {
         }
     }
 
+    __exit(status);
+}
+
+void __exit(int status) {
     __begin_critical_region(atexit_funcs_access);
     while (__atexit_curr_func > 0)
         (*__atexit_funcs[--__atexit_curr_func])();

@@ -30,18 +30,12 @@ typedef struct {
 static const char* parse_format(const char* format_string, scan_format* format);
 
 
-typedef struct {
-    char* str;
-    int eos;
-} __InStr;
-
 extern int mbtowc(unsigned short*, const char*, unsigned long);
 
 #define sc_isspace(c) (__ctype_map[(unsigned char)(c)] & __whitespace)
 #define tst_char_map(map, ch) (map[(unsigned char)(ch) >> 3] & (1 << ((ch) & 7)))
 
 static int __sformatter(int (*ReadProc)(void*, int, int), void* ReadProcArg, const char* format_str, va_list arg);
-int __StringRead(void* arg, int ch, int behavior);
 
 int sscanf(const char* buffer, const char* format, ...) {
     va_list args;
