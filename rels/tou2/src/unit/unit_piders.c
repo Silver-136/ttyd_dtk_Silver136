@@ -98,19 +98,6 @@ static USER_FUNC(piders_yarn_init) {
     return EVT_RETURN_DONE;
 }
 
-/** Out-of-line stand-in for the SDK's GXPosition3f32 inline: writes three floats to the GX FIFO. */
-void GXPosition3f32_(f32 x, f32 y, f32 z) {
-    GXWGFifo.f32 = x;
-    GXWGFifo.f32 = y;
-    GXWGFifo.f32 = z;
-}
-
-/** Out-of-line stand-in for the SDK's GXEnd inline, which does nothing. */
-
-// GXEnd_ is empty; GXPosition3f32_ writes three coordinates to the graphics FIFO.
-void GXEnd_(void) {
-}
-
 /**
  * Unit data of the Pider: hit points, level, size, sounds, parts, status vulnerability, init event and
  * event data table.
@@ -276,11 +263,11 @@ static void piders_draw_yarn_sub(CameraId camera, void* param) {
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
     GXLoadPosMtxImm(cam->view, GX_PNMTX0);
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-    GXPosition3f32_(yarn->x0 - 1.0f, yarn->y0, yarn->z0 - 5.0f);
-    GXPosition3f32_(1.0f + yarn->x0, yarn->y0, yarn->z0 - 5.0f);
-    GXPosition3f32_(1.0f + yarn->x1, yarn->y1, yarn->z1 - 5.0f);
-    GXPosition3f32_(yarn->x1 - 1.0f, yarn->y1, yarn->z1 - 5.0f);
-    GXEnd_();
+    GXPosition3f32(yarn->x0 - 1.0f, yarn->y0, yarn->z0 - 5.0f);
+    GXPosition3f32(1.0f + yarn->x0, yarn->y0, yarn->z0 - 5.0f);
+    GXPosition3f32(1.0f + yarn->x1, yarn->y1, yarn->z1 - 5.0f);
+    GXPosition3f32(yarn->x1 - 1.0f, yarn->y1, yarn->z1 - 5.0f);
+    GXEnd();
 }
 
 /**

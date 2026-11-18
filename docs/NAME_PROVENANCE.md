@@ -392,7 +392,6 @@ function names) and `strupr` (a C library name).
 | rsh | `moamoa_randf`, `moamoa_srand` |
 | sys | `sys_01_msg_tex_capture_func`, `sys_01_start_end_wait` |
 | tou | `tou_01_kanban_moji_flag_sync`, `tou_07_mario_keyoff_check`, `tou_10_mario_talk_end_wait`, `tou_mario_talk_end_wait` |
-| tou2 | `GXEnd_`, `GXPosition3f32_` (out-of-line copies of the SDK inlines `GXEnd` and `GXPosition3f32`; the original names are known: the JP demo's tou2 map lists local functions `GXEnd` 0x4 and `GXPosition3f32` 0x14 at this place of unit_piders.o, between piders_draw_yarn_sub and piders_yarn_init. Our copies keep the underscore because dolphin/gx.h already defines inlines with those names; compiling the SDK inlines out of line (`-inline off`) puts them in their own sections after the unit's code, not at this place) |
 | tst (PAL) | `_gundan_part_update`, `_intpl_last_step`, `_set_yoshi_anim_speed`, `_set_yoshi_anim_time`, `_yoshi_slide_ac_check`, `_yoshi_slide_distance`, `hatty_main`, `make_item_name`, `nokotarou_follow_test`, `powan_rider_follow`, `powan_set_post_battle_event`, `powan_set_post_battle_mode`, `tess_test`, `tess_test_begin`, `tess_test_capture`, `tess_test_combine`, `tess_test_cross`, `tess_test_disp`, `tess_test_disp_entry`, `tess_test_draw`, `tess_test_edge_flag`, `tess_test_end`, `tess_test_end_polygon`, `tess_test_error`, `tess_test_line_disp`, `tess_test_run`, `tess_test_vertex`, `tst_mobj_koopa_on` |
 | yuu | `yuuminigame1_floor_chk`, `yuuminigame1_floor_on_off`, `yuuranking_draw_msg_fit_center`, `yuuranking_draw_msg_fit_right` |
 

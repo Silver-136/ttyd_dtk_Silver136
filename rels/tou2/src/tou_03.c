@@ -3,7 +3,6 @@
 #include "version.h"
 #include "mario/mario_pouch.h"
 #include "driver/casedrv.h"
-#define GXSetTexCoordGen GXSetTexCoordGen_inline_hidden
 #include "mario/mario.h"
 #include "eff/n64/eff_pokopi_pcharge_n64.h"
 #include "eff/eff_starstone.h"
@@ -40,7 +39,6 @@
 #include "driver/seqdrv.h"
 #include "evt/evt_eff.h"
 #include "evt/evt_mario.h"
-#undef GXSetTexCoordGen
 typedef struct ScreenWork {
     void* buf;
     s32 ready;
@@ -3945,11 +3943,6 @@ static s32 screen_init(EventEntry* event, BOOL isFirstCall) {
 static s32 screen_evt(EventEntry* event, BOOL isFirstCall) {
     dispEntry(CAMERA_2D, 1000.0f, DISP_MODE_OPAQUE, screen_capture, NULL);
     return EVT_RETURN_BLOCK;
-}
-
-/** The unit's own out-of-line copy of the SDK's GXSetTexCoordGen, calling GXSetTexCoordGen2 with no normalisation. */
-static void GXSetTexCoordGen(GXTexCoordID dst, GXTexGenType func, GXTexGenSrc src, u32 mtx) {
-    GXSetTexCoordGen2(dst, func, src, mtx, GX_FALSE, GX_PTIDENTITY);
 }
 
 /**

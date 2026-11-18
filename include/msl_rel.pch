@@ -1,3 +1,8 @@
-/* Precompiled header of the REL units: the MSL math headers, compiled once and loaded before each unit. */
+/* Precompiled header of the REL units: the MSL math headers and the Dolphin GX header, compiled once and loaded
+ * before each unit. GX is part of it because MWCC puts an out-of-line copy of a header inline into a .text section of
+ * that header's own unless the definition comes from the precompiled header; in the inlining-off tou2 REL the JP demo
+ * map has GXEnd, GXPosition3f32 (unit_piders) and GXSetTexCoordGen (tou_03) as local functions inside the unit's
+ * .text, right after their first user, which only a precompiled definition gives. */
 #include <math.h>
 #include <dtrigf.h>
+#include <dolphin/gx.h>

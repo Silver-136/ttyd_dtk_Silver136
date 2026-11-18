@@ -2563,18 +2563,15 @@ s32 _getHammerMotionParam(void);
 void _getHammerPoint(f32 f, f32 r, f32 angle, f32* x, f32* y, f32* z);
 void _getKaitenHammerPoint(f32 angle, f32 r, f32* x, f32* y, f32* z);
 
-// FAKE (FAKES.md): the "== 0" tests below are one front-end node longer than the "!" form (same code); with the
-// "!" form fbatHitCheck's size estimate drops under MWCC's bottom-up inline budget and the deferred inliner would
-// expand _npcHitCheckSphere and _npcHitCheckHammerAllMotion into it, which the target calls.
 #define CONTINUE_IF_NPC_NOT_HITTABLE(f1000, bit)                                                                     \
     if (npc == NULL) continue;                                                                                       \
-    if ((npc->flags & NPC_FLAG_READY) == 0) continue;                                                                \
+    if (!(npc->flags & NPC_FLAG_READY)) continue;                                                                    \
     if (f1000) { \
         if (!(npc->flags & NPC_FLAG_ENEMY)) continue;                                                                \
     } else { \
         if (npc->flags & NPC_FLAG_ENEMY) continue;                                                                   \
     } \
-    if (soft && (npc->reactionFlags & (bit)) == 0) continue;                                                         \
+    if (soft && !(npc->reactionFlags & (bit))) continue;                                                             \
     if (npc->flags & NPC_FLAG_NO_PLAYER_ATTACK) continue;                                                            \
     if (npc->flags & NPC_FLAG_NO_HIT) continue;                                                                      \
     if (npc->statusFlags & NPC_STATUS_DEAD) continue;                                                                \
@@ -2591,6 +2588,8 @@ void _getKaitenHammerPoint(f32 angle, f32 r, f32* x, f32* y, f32* z);
  * touch/jump checks keep the closest hit, while the other checks stop at their first matching NPC.
  */
 void* fbatHitCheck(u32 flags, void* result) {
+    NpcEntry* _npcHitCheckSphere(NpcEntry* npc, f32* dist, f32 x, f32 y, f32 z, f32 r);
+    NpcEntry* _npcHitCheckHammerAllMotion(NpcEntry* npc, f32* dist, f32 r, f32 angle);
     u32 enemyOnly;
     u32 checkJump;
     u32 noJump;
@@ -3866,19 +3865,17 @@ BOOL npcCheckEnableLookMario(void) {
  * while Vivian hides him, while he is hurt, or while the given NPC is in its post-battle hit cooldown.
  */
 // Original name and size (0xfc) from the JP demo map (UNUSED there: every call is inlined).
-// FAKE (FAKES.md, fbatHitCheck row): the five (*(T*)&((S*)p)->field) reads below are byte-offset views left from
-// fbatHitCheck's inline-budget trick; written as plain fields the DOL changes.
 inline BOOL npcCheckEnableTouchMario(NpcEntry* npc) {
     MarioWork* m = marioGetPtr();
     NpcWork* wp = npcGetWorkPtrInline();
     if (m->flags & (MARIO_FLAG_BG_MODE | MARIO_FLAG_IS_8_BIT)) return FALSE;
     if (!(wp->flags & NPC_WORK_ALWAYS_ENCOUNT) && (m->flags & (MARIO_FLAG_CTRL_OFF | MARIO_FLAG_KEY_OFF))) return FALSE;
-    if ((*(s32*)&((GlobalWork*)gp)->mapEventId)) return FALSE;
+    if (gp->mapEventId) return FALSE;
     if (seqGetSeq() != SEQ_GAME) return FALSE;
-    if ((*(u16*)&((MarioWork*)m)->currMotionId) == MARIO_MOTION_SHIP) return FALSE;
+    if (m->currMotionId == MARIO_MOTION_SHIP) return FALSE;
     if (vivianGetStatus()) return FALSE;
-    if ((*(u16*)&((MarioWork*)m)->currMotionId) == MARIO_MOTION_DAMAGE || (*(u16*)&((MarioWork*)m)->currMotionId) == MARIO_MOTION_DAMAGE_TOGE) return FALSE;
-    if ((*(u16*)&((NpcEntry*)npc)->hitCooldown)) return FALSE;
+    if (m->currMotionId == MARIO_MOTION_DAMAGE || m->currMotionId == MARIO_MOTION_DAMAGE_TOGE) return FALSE;
+    if (npc->hitCooldown) return FALSE;
     return TRUE;
 }
 
