@@ -232,12 +232,6 @@ typedef struct PuniMap {
     u16* data;            // 0x20
 } PuniMap;
 
-typedef struct PuniTexInfo {
-    char* group; // 0x0
-    char* anim; // 0x4
-    f32 frame;   // 0x8
-} PuniTexInfo;
-
 USER_FUNC(evt_puni_mem_init);
 void PuniDokuritsu(PuniData* p);
 void puniMoveDecel(PuniData* p);

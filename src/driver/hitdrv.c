@@ -184,11 +184,6 @@ HitEntry* hitEntryMOBJ(MapFileJoint* joint, Mtx mtx) {
     return hitEntrySub(joint, NULL, mtx, TRUE, 0);
 }
 
-typedef struct HitAnimJointList {
-    s32 count;
-    void* joints[1];
-} HitAnimJointList;
-
 /**
  * Removes the collision object named name: it is flagged deleted (0x80) and the checks skip it from then on;
  * JP and later also rebuild the active list.
@@ -229,7 +224,7 @@ void hitMain(void) {
     s32 i;
     MapEntryAnimData* anim;
     BOOL recalc;
-    HitAnimJointList* list;
+    MapAnimJointList* list;
     HitEntry* hit;
     Mtx mtx;
 
@@ -238,7 +233,7 @@ void hitMain(void) {
         entry = &wp->entries[i];
         anim = entry->animData;
         for (recalc = FALSE, j = 0; j < entry->numAnims; j++, anim++) {
-            list = (HitAnimJointList*)anim->anim->jointAnims;
+            list = anim->anim->jointAnims;
             if (!(anim->flags & MAP_ANIM_FLAG_ACTIVE)) {
                 continue;
             }
@@ -249,9 +244,9 @@ void hitMain(void) {
                 continue;
             }
             for (k = 0; k < list->count; k++) {
-                hit = hitNameToPtr(*(const char**)list->joints[k]);
+                hit = hitNameToPtr(list->items[k]->name);
                 if (hit != NULL) {
-                    mapCalcAnimMatrix(hit->animMtx, hit->localMtx, anim, list->joints[k]);
+                    mapCalcAnimMatrix(hit->animMtx, hit->localMtx, anim, list->items[k]);
                     recalc = TRUE;
                     hit->flags |= HIT_FLAG_ANIM_MTX;
                     hit->flags |= HIT_FLAG_MTX_DIRTY;

@@ -110,7 +110,7 @@ static u16* toge_patern_table[] = { toge_nom_patern_data, toge_wlk_patern_data, 
 //.bss
 static PuniData* Punidat;
 static PuniWork* Punigp;
-static PuniTexInfo* Punitex;
+static PunidrvTexInfo* Punitex;
 PuniMap* Punimap;
 
 /**
@@ -127,7 +127,7 @@ PuniWork* puniGetPunigp(void) {
 }
 
 /** Returns the table of Puni texture frames built by evt_make_texbuf. */
-PuniTexInfo* puniGetTex(void) {
+PunidrvTexInfo* puniGetTex(void) {
     return Punitex;
 }
 
@@ -167,7 +167,7 @@ void evt_icon_disp_func(CameraId camId, void* param) {
     }
 }
 
-static PuniTexInfo* _make_texbuf(PuniTexInfo* texbuf, s32 count, const char* group, const char* anim, f32 frame) {
+static PunidrvTexInfo* _make_texbuf(PunidrvTexInfo* texbuf, s32 count, const char* group, const char* anim, f32 frame) {
     s32 i;
 
     for (i = 0; i < count; i++) {
@@ -188,7 +188,7 @@ static PuniTexInfo* _make_texbuf(PuniTexInfo* texbuf, s32 count, const char* gro
  * ended by an empty record.
  */
 static USER_FUNC(evt_make_texbuf) {
-    PuniTexInfo* texbuf = Punitex;
+    PunidrvTexInfo* texbuf = Punitex;
     texbuf = _make_texbuf(texbuf, 40, "c_puni", "S_1", 0.0f);
     texbuf = _make_texbuf(texbuf, 12, "c_puni", "S_1", 97.0f);
     texbuf = _make_texbuf(texbuf, 20, "c_puni", "W_1", 0.0f);
@@ -5325,8 +5325,8 @@ USER_FUNC(evt_puni_mem_init) {
     memset(Punigp, 0, sizeof(PuniWork));
     Punidat = _mapAlloc(sizeof(PuniData) * PUNI_DATA_MAX);
     memset(Punidat, 0, sizeof(PuniData) * PUNI_DATA_MAX);
-    Punitex = _mapAlloc(sizeof(PuniTexInfo) * PUNI_TEX_INFO_MAX);
-    memset(Punitex, 0, sizeof(PuniTexInfo) * PUNI_TEX_INFO_MAX);
+    Punitex = _mapAlloc(sizeof(PunidrvTexInfo) * PUNI_TEX_INFO_MAX);
+    memset(Punitex, 0, sizeof(PunidrvTexInfo) * PUNI_TEX_INFO_MAX);
     return EVT_RETURN_DONE;
 }
 
@@ -5339,7 +5339,7 @@ USER_FUNC(evt_puni_mem_init) {
 s32 evt_puni_init(EventEntry* event, BOOL isFirstCall) {
     EvtWord* args = event->args;
     s32 a = evtGetValue(event, args[0]);
-    PuniTexInfo* tex = Punitex;
+    PunidrvTexInfo* tex = Punitex;
     EvtWord b = evtGetValue(event, args[1]);
     EvtWord c = evtGetValue(event, args[2]);
     EvtWord d = evtGetValue(event, args[3]);
@@ -5349,7 +5349,7 @@ s32 evt_puni_init(EventEntry* event, BOOL isFirstCall) {
     }
     puniAnimationInit((s16**)puni_patern_table, (s16**)toge_patern_table);
     puniAnimationInit2();
-    puniEntry(a, (PunidrvTexInfo*)tex, (void*)b, (void*)c, (void*)d);
+    puniEntry(a, tex, (void*)b, (void*)c, (void*)d);
     return EVT_RETURN_DONE;
 }
 

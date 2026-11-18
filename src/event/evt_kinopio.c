@@ -20,6 +20,7 @@
 #include "pmario_sound.h"
 #include <string.h>
 #include "evt/evt_kinopio.h"
+#include "data_tables.h"
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
 #include "evt/evt_eff.h"
@@ -35,34 +36,19 @@
 // These values describe this shared inn event, not generic story progress.
 enum { INN_COMMEMORATIVE_STAY = 50, INN_STAY_COUNT_CAP = 100 };
 
-typedef struct KinopioWork {
-    s32 breakfastItem; // 0x0
-    Vec breakfastPos;  // 0x4
-    s32 ryoukin;       // 0x10
-    Vec bed;           // 0x14
-    Vec bedside;       // 0x20
-    f32 cam[6];        // 0x2C
-    f32 bedDeg;        // 0x44
-    Vec npcTalk;       // 0x48
-    char* npcName;     // 0x54
-    const char* msg[14];       // 0x58
-    EvtWord* toBedEvt;      // 0x90
-    EvtWord* fromBedEvt;    // 0x94
-} KinopioWork;
-
 //.sbss
-static KinopioWork* work;
+static KinopioData* work;
 
 //.sdata
-static KinopioWork** wp = &work;
+static KinopioData** wp = &work;
 
 /**
- * Registers a map's inn: args[0] is its KinopioWork (innkeeper name, price, bed and camera spots, messages).
+ * Registers a map's inn: args[0] is its KinopioData (innkeeper name, price, bed and camera spots, messages).
  * Waits for the "p_slit" paper animation to load,
  * then gives the innkeeper kinopio_house_talk_evt as his talk script.
  */
 USER_FUNC(evt_kinopio_setup) {
-    KinopioWork* w = (KinopioWork*)evtGetValue(event, event->args[0]);
+    KinopioData* w = (KinopioData*)evtGetValue(event, event->args[0]);
     NpcEntry* npc = npcNameToPtr(w->npcName);
     if (!animGroupBaseAsync("p_slit", 0, NULL)) {
         return EVT_RETURN_BLOCK;
@@ -72,7 +58,7 @@ USER_FUNC(evt_kinopio_setup) {
     return EVT_RETURN_DONE;
 }
 
-/** Writes the inn's message for slot args[0] (KinopioWork.msg: 0 greeting, 3 good night, 5 morning, ...) to args[1]. */
+/** Writes the inn's message for slot args[0] (KinopioData.msg: 0 greeting, 3 good night, 5 morning, ...) to args[1]. */
 static USER_FUNC(msg_no) {
     EvtWord* args = event->args;
     s32 idx = evtGetValue(event, args[0]);
@@ -245,13 +231,13 @@ static USER_FUNC(offset) {
 }
 
 /**
- * Puts the inn's breakfast item (KinopioWork.breakfastItem) at its spot as the fixed item "breakfast",
+ * Puts the inn's breakfast item (KinopioData.breakfastItem) at its spot as the fixed item "breakfast",
  * unless one is already there or the inn has none.
  */
 static USER_FUNC(breakfast) {
     ItemEntry* item = itemNameToPtr("breakfast");
     if (item == NULL || !(item->flags & ITEM_FLAG_ACTIVE)) {
-        KinopioWork* w = *wp;
+        KinopioData* w = *wp;
         if (w->breakfastItem != 0) {
             itemEntry(w->breakfastPos.x, w->breakfastPos.y, w->breakfastPos.z, "breakfast", w->breakfastItem, ITEM_TYPE_STILL, -1, NULL);
         }

@@ -11,9 +11,9 @@
 // Structurally a copy of the DOL extdrv.
 
 typedef struct PunidrvTexInfo {
-    const char* group; // 0x0
-    const char* anim;  // 0x4
-    f32 frame;         // 0x8
+    char* group; // 0x0, filled by strcpy into _mapAlloc buffers (mri_puni _make_texbuf)
+    char* anim;  // 0x4
+    f32 frame;   // 0x8
 } PunidrvTexInfo;
 
 typedef struct PunidrvPose {

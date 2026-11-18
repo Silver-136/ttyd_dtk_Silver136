@@ -59,8 +59,14 @@ in `docs/FAKES.md` and in the mweppc review record.
   `(f32)(s32)x` and conversions of u32 results, which are real conversions. Audience getters GetExist, GetSysCtrl,
   GetEscapeChangeOK and GetWaiting return u8 (0de024340).
 - Data declared through private views of another unit's struct: none left that has an owner type (2026-11-17,
-  `cleanup_tools/private_views.py` plus extern/cast scans): tst unit_yoshi now writes EffSweatN64Work, moo.h's
-  rock_main is EvtWord. Kept: koopa.c's unsized `extern f32 marioJumpData[]` (incomplete type gives the retail
+  `cleanup_tools/struct_views.py`: clang record layouts of every US unit, each .c / REL-local struct compared with
+  every header struct and with the other local structs; plus `private_views.py` and extern/cast scans). Fixed:
+  tst unit_yoshi writes EffSweatN64Work, moo.h's rock_main is EvtWord, aji_06 uses MapEntryAnimData, evt_kinopio
+  uses data_tables.h's KinopioData, hitdrv reads MapAnimJointList (MapAnimJoint now in mapdrv.h), mri_puni builds
+  punidrv's PunidrvTexInfo. Same-layout local structs left on purpose: each REL's own copy of copied code (the ext
+  crowd pose tables FanAnim / KyakuAnim / MoamoaPoseDef and KyakuWork / MoamoaSpriteWork, gor_03 GMonteSub / yuu
+  MonteSub, battle_item_data ThrowWork / unit_boss_koopa.h IconJumpWork, punidrv's copies of the extdrv types):
+  no code reaches the other copy's data, so a shared type would be a guess. Kept: koopa.c's unsized `extern f32 marioJumpData[]` (incomplete type gives the retail
   lis/addi addressing; comment there) and tst unit_yoshi's YoshiSlideAcWork (BattleActions.work of an AC with no
   struct of its own yet).
 

@@ -276,10 +276,33 @@ typedef struct MapError {
     s32 type;      // 0x20, mapErrorEntry type (0 for missing objects)
 } MapError;
 
+typedef struct MapAnimKeyCh {
+    f32 value;  // 0x0
+    f32 tanIn;  // 0x4
+    f32 tanOut; // 0x8
+    f32 unkC;   // 0xC
+    s32 step;   // 0x10
+} MapAnimKeyCh;
+
+typedef struct MapAnimKey {
+    f32 time;             // 0x0
+    MapAnimKeyCh ch[21];  // 0x4
+} MapAnimKey;
+
+// One animated joint of an "animation_table" entry; mapMain and hitMain look up the map object and the
+// collision object of this name.
+typedef struct MapAnimJoint {
+    const char* name;           // 0x0
+    f32 base[9];                // 0x4
+    u8 pad_28[0x58 - 0x28];     // 0x28
+    s32 keyCount;               // 0x58
+    MapAnimKey keys[];          // 0x5C
+} MapAnimJoint;
+
 // "animation_table" entry in map.dat (SPM MapFileAnimData)
 typedef struct MapAnimJointList {
     s32 count;
-    struct MapAnimJoint* items[1];
+    MapAnimJoint* items[1];
 } MapAnimJointList;
 
 typedef struct MapAnimMatDataList {
@@ -559,8 +582,7 @@ void mapObjSetOffScreen(const char* name, const char* offscreen);
 void mapGrpSetOffScreen(const char* name, const char* offscreen);
 void test_kururing_mapdisp(CameraId cam);
 
-struct MapAnimJoint;
-void mapCalcAnimMatrix(Mtx out, Mtx in, MapEntryAnimData* anim, struct MapAnimJoint* joint);
+void mapCalcAnimMatrix(Mtx out, Mtx in, MapEntryAnimData* anim, MapAnimJoint* joint);
 
 // Names from LLCOOLT's tree.
 #define MAPOBJ_SINGLE 0

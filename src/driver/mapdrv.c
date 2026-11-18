@@ -1258,27 +1258,6 @@ void bmapLoad(const char* map, const char* map2) {
     }
 }
 
-typedef struct MapAnimKeyCh {
-    f32 value;  // 0x0
-    f32 tanIn;  // 0x4
-    f32 tanOut; // 0x8
-    f32 unkC;   // 0xC
-    s32 step;   // 0x10
-} MapAnimKeyCh;
-
-typedef struct MapAnimKey {
-    f32 time;             // 0x0
-    MapAnimKeyCh ch[21];  // 0x4
-} MapAnimKey;
-
-typedef struct MapAnimJoint {
-    const char* name;           // 0x0, read through MapAnimNm (mapMain)
-    f32 base[9];                // 0x4
-    u8 pad_28[0x58 - 0x28];     // 0x28
-    s32 keyCount;               // 0x58
-    MapAnimKey keys[];          // 0x5C
-} MapAnimJoint;
-
 /**
  * Cubic Hermite interpolation of the map animation keys at time cur between key times t0 and t1:
  * from channel a's value and out tangent to channel b's value and in tangent.
@@ -1699,7 +1678,7 @@ void mapMain(void) {
             }
             if (jl) {
                 for (k = 0; k < jl->count; k++) {
-                    o = mapGetMapObj((const char*)jl->items[k]->name);
+                    o = mapGetMapObj(jl->items[k]->name);
                     if (o) {
                         mapCalcAnimMatrix(o->animMtx, o->localMtx, anim, jl->items[k]);
                         changed = TRUE;
