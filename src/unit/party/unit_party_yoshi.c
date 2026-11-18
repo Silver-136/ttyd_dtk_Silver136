@@ -2333,6 +2333,9 @@ USER_FUNC(btl_yoshi_yoroyoro_jump_move) {
 /**
  * Pose sound callback for Yoshi's walk, run and flutter poses:
  * plays the footstep sound at pitch UNIT_WORK_STEP_PITCH * UNIT_WORK_STEP_PITCH_SCALE / 100.
+ * BUG: it returns nothing, but every table entry that names it sets POSE_SOUND_FLAG_PHASE_VOLUME, so
+ * BtlUnit_ControlPoseSoundMain takes its return value as the sound id for psndSFX_vol. The compiled code leaves
+ * BtlUnit_snd_se's return value (the id of the sound just started) in place, so the volume reaches that sound.
  */
 static void _yoshi_slide_move_sound(BattleUnit* unit, PoseSoundTiming* s) {
     BtlUnit_snd_se(unit, s->sfxName, EVT_NULLPTR, (s16)(unit->work[UNIT_WORK_STEP_PITCH] * unit->work[UNIT_WORK_STEP_PITCH_SCALE] / 100)); // the slide sound's pitch

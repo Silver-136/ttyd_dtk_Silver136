@@ -399,10 +399,9 @@ USER_FUNC(evt_npc_get_rotate) {
 }
 
 /**
- * devs forgot to use evtGetFloat when copypasting, fix in rewrite const char* lookupName, f32 x, f32 y, f32 z
+ * const char* lookupName, f32 x, f32 y, f32 z: sets the NPC's rotation.
+ * BUG: reads the angles with evtGetValue (as integers) instead of evtGetFloat.
  */
-// BUG: reads the angles with evtGetValue (as integers) instead of evtGetFloat
-// const char* lookupName, f32 x, f32 y, f32 z
 USER_FUNC(evt_npc_set_rotate) {
     EvtWord* args = event->args;
     const char* name;
@@ -419,10 +418,9 @@ USER_FUNC(evt_npc_set_rotate) {
 }
 
 /**
- * devs forgot to use evtGetFloat when copypasting, fix in rewrite const char* lookupName, f32 x, f32 y, f32 z
+ * const char* lookupName, f32 x, f32 y, f32 z: adds to the NPC's rotation.
+ * BUG: reads the angles with evtGetValue (as integers) instead of evtGetFloat.
  */
-// BUG: reads the angles with evtGetValue (as integers) instead of evtGetFloat
-// const char* lookupName, f32 x, f32 y, f32 z
 USER_FUNC(evt_npc_add_rotate) {
     EvtWord* args = event->args;
     const char* name;
@@ -461,10 +459,9 @@ USER_FUNC(evt_npc_get_rotate_offset) {
 }
 
 /**
- * devs forgot to use evtGetFloat when copypasting, fix in rewrite const char* lookupName, f32 x, f32 y, f32 z
+ * const char* lookupName, f32 x, f32 y, f32 z: sets the NPC's rotationOffset.
+ * BUG: reads the offsets with evtGetValue (as integers) instead of evtGetFloat.
  */
-// BUG: reads the offsets with evtGetValue (as integers) instead of evtGetFloat
-// const char* lookupName, f32 x, f32 y, f32 z
 USER_FUNC(evt_npc_set_rotate_offset) {
     EvtWord* args = event->args;
     const char* name;
@@ -858,10 +855,9 @@ USER_FUNC(evt_npc_jump_position_nohit) {
 }
 
 /**
- * const char* lookupName, f32 x, f32 y, f32 z, s32 msec, f32 speed, f32 arcHeight, s32 intplMode, s32 flags
+ * const char* lookupName, f32 x, f32 y, f32 z, s32 msec, f32 speed, f32 arcHeight, s32 intplMode,
+ * NpcGlidePositionFlags flags (a plain word, not evaluated)
  */
-// const char* lookupName, f32 x, f32 y, f32 z, s32 msec, f32 speed, f32 arcHeight,
-// s32 intplMode, s32 flags
 USER_FUNC(evt_npc_glide_position) {
     EvtWord* args = event->args;
 
@@ -1009,10 +1005,9 @@ USER_FUNC(evt_npc_return_interrupt) {
 }
 
 /**
- * const char* lookupName, const char* targetName, s32 msec, f32 speed, f32 stopDistance, f32 turnRate, s32 flags
+ * const char* lookupName, const char* targetName, s32 msec, f32 speed, f32 stopDistance, f32 turnRate,
+ * NpcHomingTargetFlags flags (a plain word, not evaluated)
  */
-// const char* lookupName, const char* targetName, s32 msec, f32 speed, f32 stopDistance,
-// f32 turnRate, s32 flags
 USER_FUNC(evt_npc_homing_target) {
     EvtWord* args = event->args;
 
@@ -1724,7 +1719,6 @@ USER_FUNC(evt_npc_restart_regular_event) {
  * const char* name, f32 base, f32 amount: writes base + amount (subtracted when the NPC or Mario faces the other
  * way) back into the base argument as an integer
  */
-// const char* lookupName, f32 base, f32 amount, (out) s32 base storeIndex
 USER_FUNC(evt_npc_facedirection_add) {
     EvtWord* args = event->args;
     const char* name;
