@@ -684,6 +684,7 @@ typedef struct SND_DOOR {
 typedef struct SND_LISTENER {
   struct SND_LISTENER* next;
   struct SND_LISTENER* prev;
+
   // MusyX 2.0.1 and later have no room pointer here (the room code is gone) and oneMeter at the end; the
   // size stays 0x90 (sound.h's SoundWork.listener).
   u32 flags;
@@ -708,6 +709,7 @@ typedef struct SND_LISTENER {
 typedef struct SND_EMITTER {
   struct SND_EMITTER* next;
   struct SND_EMITTER* prev;
+
   // MusyX 2.0.1 and later: no room pointer here, userData at the end (0x50 bytes: sound.h's SoundEffect, the
   // JP demo map's static tmp_em in snd3d.c).
   SND_PARAMETER_INFO* paraInfo;

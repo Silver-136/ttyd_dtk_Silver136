@@ -2523,32 +2523,6 @@ static void BattleAudienceAnimProcess(void) {
     }
 }
 
-// A macro, not an inline function: as a function GXPosition3f32 changes BattleAudienceDispAudience (AUD_POS / AUD_POSS differ only by temporaries).
-// FAKE: AUD_POS copies its arguments into spare temporaries (AUD_POSS does not); AUD_POSS sites through AUD_POS
-// change the object
-#define AUD_POS(x, y, z)   \
-    do {                   \
-        f32 _x = (x);      \
-        f32 _y = (y);      \
-        f32 _z = (z);      \
-        GXWGFifo.f32 = _x; \
-        GXWGFifo.f32 = _y; \
-        GXWGFifo.f32 = _z; \
-    } while (0)
-#define AUD_POSS(x, y, z)   \
-    do {                    \
-        GXWGFifo.f32 = (x); \
-        GXWGFifo.f32 = (y); \
-        GXWGFifo.f32 = (z); \
-    } while (0)
-// A macro, not an inline function: as a function GXTexCoord2f32 changes BattleAudienceDispAudience.
-#define AUD_TEX(s, t)      \
-    do {                   \
-        f32 _s = (s);      \
-        f32 _t = (t);      \
-        GXWGFifo.f32 = _s; \
-        GXWGFifo.f32 = _t; \
-    } while (0)
 /**
  * Draws the audience: each present member as a camera-facing textured quad in its seat,
  * opaque members (colorA 0xFF) and translucent ones in separate passes (alpha-test and translucent render modes),
@@ -2720,25 +2694,25 @@ static void BattleAudienceDispAudience(CameraId camId, void* param) {
             off += 4;
         }
         GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-        AUD_POS(nhw + m->dispOffset.x, 40.0f + m->dispOffset.y, m->dispOffset.z);
+        GXPosition3f32(nhw + m->dispOffset.x, 40.0f + m->dispOffset.y, m->dispOffset.z);
         GXWGFifo.u8 = cr;
         GXWGFifo.u8 = cg;
         GXWGFifo.u8 = cb;
         GXWGFifo.u8 = ca;
-        AUD_TEX(uvs[off * 2], uvs[off * 2 + 1]);
-        AUD_POS(hw + m->dispOffset.x, 40.0f + m->dispOffset.y, m->dispOffset.z);
+        GXTexCoord2f32(uvs[off * 2], uvs[off * 2 + 1]);
+        GXPosition3f32(hw + m->dispOffset.x, 40.0f + m->dispOffset.y, m->dispOffset.z);
         GXWGFifo.u8 = cr;
         GXWGFifo.u8 = cg;
         GXWGFifo.u8 = cb;
         GXWGFifo.u8 = ca;
-        AUD_TEX(uvs[(off + 1) * 2], uvs[(off + 1) * 2 + 1]);
-        AUD_POSS(hw, 0.0f, 0.0f);
+        GXTexCoord2f32(uvs[(off + 1) * 2], uvs[(off + 1) * 2 + 1]);
+        GXPosition3f32(hw, 0.0f, 0.0f);
         GXWGFifo.u8 = cr;
         GXWGFifo.u8 = cg;
         GXWGFifo.u8 = cb;
         GXWGFifo.u8 = ca;
-        AUD_TEX(uvs[(off + 2) * 2], uvs[(off + 2) * 2 + 1]);
-        AUD_POSS(nhw, 0.0f, 0.0f);
+        GXTexCoord2f32(uvs[(off + 2) * 2], uvs[(off + 2) * 2 + 1]);
+        GXPosition3f32(nhw, 0.0f, 0.0f);
         GXWGFifo.u8 = cr;
         GXWGFifo.u8 = cg;
         GXWGFifo.u8 = cb;
@@ -2747,15 +2721,15 @@ static void BattleAudienceDispAudience(CameraId camId, void* param) {
         if (flip == 1) off += 4;
         GXSetChanMatColor(GX_COLOR0A0, (GXColor){cr, cg, cb, ca});
         GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-        AUD_POS(nhw + m->dispOffset.x, 40.0f + m->dispOffset.y, m->dispOffset.z);
-        AUD_TEX(uvs[off * 2], uvs[off * 2 + 1]);
-        AUD_POS(hw + m->dispOffset.x, 40.0f + m->dispOffset.y, m->dispOffset.z);
-        AUD_TEX(uvs[(off + 1) * 2], uvs[(off + 1) * 2 + 1]);
-        AUD_POSS(hw, 0.0f, 0.0f);
-        AUD_TEX(uvs[(off + 2) * 2], uvs[(off + 2) * 2 + 1]);
-        AUD_POSS(nhw, 0.0f, 0.0f);
+        GXPosition3f32(nhw + m->dispOffset.x, 40.0f + m->dispOffset.y, m->dispOffset.z);
+        GXTexCoord2f32(uvs[off * 2], uvs[off * 2 + 1]);
+        GXPosition3f32(hw + m->dispOffset.x, 40.0f + m->dispOffset.y, m->dispOffset.z);
+        GXTexCoord2f32(uvs[(off + 1) * 2], uvs[(off + 1) * 2 + 1]);
+        GXPosition3f32(hw, 0.0f, 0.0f);
+        GXTexCoord2f32(uvs[(off + 2) * 2], uvs[(off + 2) * 2 + 1]);
+        GXPosition3f32(nhw, 0.0f, 0.0f);
 #endif
-        AUD_TEX(uvs[(off + 3) * 2], uvs[(off + 3) * 2 + 1]);
+        GXTexCoord2f32(uvs[(off + 3) * 2], uvs[(off + 3) * 2 + 1]);
         }
     }
 }
