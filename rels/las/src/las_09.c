@@ -998,8 +998,8 @@ static EVT_BEGIN(majyorin_evt_main)
 EVT_END()
 
 /**
- * Waits until Mario is inside the area at (620, 90) on the floor (y 0 to -5, not riding mod_38) or past x 640, then
- * spawns majyorin_evt_main.
+ * Waits until Mario is within 100 of (x 620, z 90) on both axes and either on the floor (y 0 to -5, not riding
+ * mod_38) or at x 640 or more, then spawns majyorin_evt_main.
  */
 static EVT_BEGIN(majyorin_evt)
     CALL(evt_seq_wait, SEQ_GAME)

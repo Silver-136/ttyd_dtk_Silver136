@@ -135,7 +135,7 @@ typedef struct BattleSubMenu {
     s32 reserved_10;                // 0x10, cleared at setup and with every scroll start; never read
     u8 shown;                       // 0x14, set once the menu has finished opening; BattleMenuKeyOKInACT waits for it
     s32 prevAbsPos;                 // 0x18
-    s32 iconsArrived;               // 0x1C, 1 once the picked icon is 3 frames into its move (bubble facing)
+    s32 iconsArrived;               // 0x1C, 1 once an icon is 3 frames into its opening move or settled (bubble facing)
     s32 iconFlags[5];               // 0x20
     s32 iconState[5];               // 0x34
     s32 iconTimer[15];              // 0x48
@@ -149,7 +149,7 @@ typedef struct BattleSubMenu {
     s32 reserved_F8[7];             // 0xF8, cleared at setup; never read
     u8 reserved_114[8];             // 0x114, set to 0xFF; never read
     s32 bobTimer;                   // 0x11C, frame counter of the cursor bob (12 frames at 60 fps)
-    f32 partyBtnAngle;              // 0x120, partner change button swing: 90 off, down 5 a frame to 0
+    f32 partyBtnAngle;              // 0x120, button 5 swing while an audience member holds an item: 90, -5 a frame
 } BattleSubMenu;
 
 // BattleCommand.flags: the menus BattleCommandDisplay draws (set by each *MenuSetup, cleared by its *MenuEnd)

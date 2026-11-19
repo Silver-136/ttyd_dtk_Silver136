@@ -981,7 +981,7 @@ typedef struct BattleUnit {
     f32 mMoveDirection;                                       // 0x178 (US 0x17C), XZ angle of a unit move
     f32 moveDistance;                                         // 0x17C (US 0x180), XZ distance of the move;
                                                               // moveSpeedXZ = this / moveFrames
-    f32 moveTotalFrames;                                      // 0x180 (US 0x184), moveFrames at the move start (as f32)
+    f32 moveTotalFrames;                                      // 0x180 (US 0x184), elapsed frames (f32); jump arc height
     s8 moveDirection;                                         // 0x184 (US 0x188), last move's x sign (1/-1), 0 before
     s8 faceDirection;                                         // 0x185 (US 0x189), 1 or -1; starts as attackDirection
     BecSndWork moveSnd;                                       // 0x188 (US 0x18C), move-sound loop (BtlUnit_LoadSeMode)
@@ -998,12 +998,12 @@ typedef struct BattleUnit {
                                                               // SetUnitWorkFloat / GetUnitWorkFloat)
     BattleUnitPart* currentTarget;                            // 0x254 (US 0x258), part being targeted
     s32 reserved_258;                                         // 0x258 (US 0x25C), cleared when the unit's action ends (btlseqAct 0x6000009)
-    s16 hpDamageCount;                                        // 0x25C (US 0x260), hits taken this turn;
+    s16 hpDamageCount;                                        // 0x25C (US 0x260), hits taken this action;
                                                               // BattleCheckDamage counts them, SPECIAL_DIMINISH_BY_HIT
                                                               // subtracts it
     s32 totalHpDamageTaken;                                   // 0x260 (US 0x264), HP damage this action (reset per act)
-    s32 totalFpDamageTaken;                                   // 0x264 (US 0x268), sum of fpDamageTaken this turn
-    s32 totalFpLost;                                          // 0x268 (US 0x26C), sum of fpLost this turn
+    s32 totalFpDamageTaken;                                   // 0x264 (US 0x268), sum of fpDamageTaken this action
+    s32 totalFpLost;                                          // 0x268 (US 0x26C), sum of fpLost this action
     s8 hpDamageTaken;                                         // 0x26C (US 0x270), HP damage of the last hit
     s8 fpDamageTaken;                                         // 0x26D (US 0x271), FP damage of the last hit
     s8 fpLost;                                                // 0x26E (US 0x272), FP actually lost by the last hit (fpDamageTaken clamped to current FP)
@@ -1013,14 +1013,14 @@ typedef struct BattleUnit {
     s32 damageCode;                                           // 0x274 (US 0x278), DAMAGE_CODE_* of the last hit
     BattleUnitToken_Flags tokenFlags;                         // 0x278 (US 0x27C), BattleUnitToken_Flags
     s32 attackHitCount;                                       // 0x27C (US 0x280), hits this unit resolved as attacker
-                                                              // this turn (BattleCheckDamage counts every one);
+                                                              // this action (BattleCheckDamage counts every one);
                                                               // SPECIAL_DIMINISH_BY_TARGET subtracts it from damage
     s32 totalDamageDealt;                                     // 0x280 (US 0x284), damage this unit dealt as attacker
     s32 initEventId;                                          // 0x284 (US 0x288), id of the running init event
     EvtWord* waitEventCode;                                   // 0x288 (US 0x28C), idle script (btlevtcmd)
     s32 waitEventId;                                          // 0x28C (US 0x290), id of the running idle script
-    EvtWord* unisonPhaseEventCode;                            // 0x290 (US 0x294), phase script (BattleRunPhaseEvent)
-    EvtWord* phaseEventCode;                                  // 0x294 (US 0x298), phase script (BattleRunPhaseEvent)
+    EvtWord* unisonPhaseEventCode;                            // 0x290 (US 0x294), phase script run by all units at once
+    EvtWord* phaseEventCode;                                  // 0x294 (US 0x298), phase script, after the unison ones
     s32 phaseEventId;                                         // 0x298 (US 0x29C), id of the running phase script
     EvtWord* attackEventCode;                                 // 0x29C (US 0x2A0), btlevtcmd_SetEventAttack /
                                                               // BtlUnit_GetData(unit, 2/3)
@@ -1049,11 +1049,11 @@ typedef struct BattleUnit {
     ItemType heldItem;                                        // 0x304 (US 0x308), 4 bytes
     ItemDropData* dropTable;                                  // 0x308 (US 0x30C), item drop list (enemy setup)
     u8 stolenCoins;                                           // 0x30C (US 0x310), coins a Bandit (borodo) stole;
-                                                              // dropped back as its held coin item
+                                                              // heldItem is ITEM_COIN then; never read
     u8 moveColorLv;                                           // 0x30D (US 0x311), MOVE_COLOR_LV_*, colour scale x/255
     u8 moveColorLvDisp;                                       // 0x30E (US 0x312), shown level, ramps toward moveColorLv
-    struct BattleWeapon* countersetWeapon;                    // 0x310 (US 0x314), spare weapon (chuchurina);
-                                                              // the UFO keeps its UfoWork here
+    struct BattleWeapon* countersetWeapon;                    // 0x310 (US 0x314), spare weapon (chuchurina,
+                                                              // clauda, sanders); the UFO keeps its UfoWork here
     void (*deleteFunc)(struct BattleUnit*);                   // 0x314 (US 0x318), called by BtlUnit_Delete
     struct smartEntry* screenTexBuf;                          // 0x318 (US 0x31C), smartAlloc EFB copy (0x260x0x1E0, unit_party_chuchurina), freed on unit delete
     u8 pad_31C[0x320 - 0x31C];                                // 0x31C (US 0x320), never accessed
@@ -1111,7 +1111,7 @@ typedef struct BattleUnitKind {
     u8 hammerKnockbackChance;                 // 0x8C, percent chance Spin/Ultra Hammer knocks it away
     u8 itemStealParam;                        // 0x8D, Kiss Thief (_get_itemsteal_param) returns 100 - this
     Vec starPointDispOffset;                  // 0x90, where the Star Points pop up, from the unit
-    const char* damageSfxName;                // 0x9C, hurt sound on every damaging hit
+    const char* damageSfxName;                // 0x9C, hurt sound of a damaging hit without an FX or guard sound
     const char* fireDamageSfxName;            // 0xA0, extra hurt sound on fire hits
     const char* iceDamageSfxName;             // 0xA4, extra hurt sound on ice hits
     const char* electricDamageSfxName;       // 0xA8, extra hurt sound on electric hits

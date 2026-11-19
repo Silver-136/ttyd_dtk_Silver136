@@ -321,7 +321,7 @@ typedef enum BattleBadgeFlags {
 struct BattleWork {
     s16 turnCount;                      // 0x0, battle turn, +1 per turn (0 at BattleInit)
     u16 turnSubSeq;                     // 0x2, sub-step of turn step 0x3000009 (start-of-turn Burn)
-    s32 seqUnknownValue;                // 0x4, BattleSetSeq/BattleGetSeq SEQ_UNKNOWN step
+    s32 seqUnknownValue;                // 0x4, SEQ_UNKNOWN step (BATTLE_STAGE_*; BattleSetSeq / BattleGetSeq)
     BattleAlliance alliances[3];        // 0x8, per alliance (BattleUnit.alliance)
     BattleUnit* units[64];              // 0x20, by unitId (BattleGetUnitPtr); NULL = free
     s32 movePriorityQueue[64];          // 0x120, unit ids in turn order; -1 = none
@@ -331,7 +331,7 @@ struct BattleWork {
     BattleWorkWeaponTargets weaponTargets; // 0x428, targets of the weapon being aimed (battle_detect)
     u32 flags;                          // 0xEF4, BattleFlags
     s32 dispFlags;                      // 0xEF8, BATTLE_DISP_FLAG_*
-    s32 ruleDispTimer;                  // 0xEFC, frames left in first-act step 0x2000001
+    s32 ruleDispTimer;                  // 0xEFC, frames: first-act delay (0x2000001), rule display (0x3000004, 120)
     s32 stockExp;                       // 0xF00, BattleStoreExp/BattleGetStockExp
     s32 stockExpDisp;                   // 0xF04, counts up to stockExp in BattleStockExpDisp
     s32 stockExpTimer;                  // 0xF08, frame counter for that count-up
@@ -385,10 +385,10 @@ struct BattleWork {
 #if VERSION >= VERSION_US
     s32 commandDisabled[3]; // US and later
 #else
-    s32 commandDisabled[5];             // 0x19038 (US 0x19050), set to 3 by Bowser's command-blocking attacks
+    s32 commandDisabled[5];             // 0x19038 (US 0x19050), turns blocked by Bowser's attacks (3, -1 a turn)
 #endif
     s32 luckEventId;                    // 0x1904C (US 0x1905C), id of the running Lucky Start event
-    s32 reserveItems[4];                // 0x19050 (US 0x19060), items used this turn (BattleConsumeReserveItem)
+    s32 reserveItems[4];                // 0x19050 (US 0x19060), pouch items to remove (BattleConsumeReserveItem)
     u32 curtainSfxId;                    // 0x19060 (US 0x19070); u32: its -1 tests are unsigned in the retail code
     u8 lastAcSuccess;                   // 0x19064 (US 0x19074), 1 after a successful action command (btlevtcmd_AudienceDeclareACResult)
     u8 pad_19065[0x19068 - 0x19065];    // 0x19065 (US 0x19075), never accessed

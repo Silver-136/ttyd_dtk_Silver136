@@ -1341,7 +1341,7 @@ EVT_END()
 
 /**
  * From STG8_14_LOCK until STG8_15_GRODUS, sets up Grodus's light effects (evt_shuryolight_init) with their normal
- * power, head and staff scripts. Also run by las_29.
+ * power, head and staff scripts. las_29 has its own shuryolight_init.
  */
 static EVT_BEGIN(shuryolight_init)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG8_14_LOCK)

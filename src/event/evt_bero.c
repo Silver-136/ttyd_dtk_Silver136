@@ -994,9 +994,10 @@ EVT_END()
 /**
  * Plays the door animation of the arrival entrance LW(1) by its BeroEntry.enterAnimeType, with enterAnimeArg: 1 plays
  * the map animation, pauses it for 700 ms, then plays the shut sound and lets it finish (Mario may walk after 200 ms);
- * 2 swings the map object from -80 degrees shut over 500 ms; 4 spawns the script; 5 runs the script with LW(0) from 180
- * down to 0 over 500 ms. Calls evt_bero_mario_go when Mario may walk in (kind 4 leaves that to its script); spawned by
- * evt_bero_info_run_door.
+ * 2 sets the map object to -80 degrees, waits 500 ms, then plays the shut sound and swings it shut over 500 ms; 4
+ * spawns the script; 5 runs the script with LW(0) = 180, waits 500 ms, then plays the shut sound and runs it with LW(0)
+ * from 180 down to 0 over 500 ms. Calls evt_bero_mario_go when Mario may walk in (kind 4 leaves that to its script);
+ * spawned by evt_bero_info_run_door.
  */
 EVT_BEGIN(bero_play_enter_anime)
     CALL(evt_bero_get_info_anime, LW(1), LW(10), LW(11), LW(12), LW(13))

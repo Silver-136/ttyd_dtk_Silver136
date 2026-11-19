@@ -1769,7 +1769,7 @@ EVT_END()
 
 /**
  * Spawned by evt_syorui: Jolene waits in the room until Mario comes back past x -270, then scolds him (stg3_tou_297_16,
- * 17) and confiscates the Dubious Paper.
+ * 17, 19) and confiscates the Dubious Paper; the partner speaks (20, 21) and STG3_20_04_CONFISCATED is set.
  */
 static EVT_BEGIN(evt_okorareru)
     // Jolene waits in the room until Mario comes back out through the broken wall.

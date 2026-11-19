@@ -467,8 +467,8 @@ static EVT_BEGIN(mario_shabon_break_sound)
 EVT_END()
 
 /**
- * Bubble ride, spawned by the map's init script and again by itself at the end: waits until Mario has stood on
- * A_syabon_yuka for 60 frames out of state 1, then takes the controls and stops the partner, closes a bubble round him
+ * Bubble ride, spawned by the map's init script and again by itself at the end: waits until Mario rides A_syabon_yuka
+ * on his 60th frame in a row out of state 1, then takes the controls and stops the partner, closes a bubble round him
  * (mario_shabon_init, mario_shabon_eff) and lifts him 40 units over 1.5 s with the move sound, bursts it
  * (SFX_STG2_SOAPBALL_BREAK1) and drops him back, then gives control back.
  */

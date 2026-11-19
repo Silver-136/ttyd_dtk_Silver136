@@ -31,8 +31,8 @@ typedef struct NanNPC {
         Vec basePos;  // 0x30, muj_10: base position of the bob; gor_00: walk start / where it stopped
     };
     Vec move;         // 0x3C, per-frame step; nanNPCMoveDecel scales it by 0.6
-    f32 sizeX;        // 0x48, width (evt_nannpc_set_size; 32 default)
-    f32 sizeY;        // 0x4C, height; push-apart distance in nanNPCOption
+    f32 sizeX;        // 0x48, evt_nannpc_set_size first value (32 default); never read
+    f32 sizeY;        // 0x4C, nanNPCOption: push-apart distance, and 0.8x = target reached
     OSTime startTime; // 0x50, gp->renderTime at the start of a timed step (jump, rel states)
     s16* animtbl;     // 0x58, texture ids ended by -1; NULL = none
     s16 animnum;      // 0x5C, entries in animtbl

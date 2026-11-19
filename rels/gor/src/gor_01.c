@@ -802,7 +802,7 @@ EVT_END()
 #if VERSION <= VERSION_DEMO_JP
 /**
  * Early demos: the clerk's first-visit greeting (badgeshop_30), run once (GSWF(2)) by badgeshopper_talk_evt and
- * buy_evt in place of the menu.
+ * evt_badge_dummy (the shelf badges) in place of the menu or the price question.
  */
 static EVT_BEGIN(first_shopping_evt)
     CALL(evt_msg_print, 0, STRING("badgeshop_30"), 0, STRING("バッジ店員"))
@@ -2788,7 +2788,7 @@ EVT_END()
 /**
  * Talk event of the thief. From STG0_08_STOLEN_COINS to STG0_END_TO_STAGE_1 the first talk gives the stolen coins
  * back (GSW_GOR_STOLEN_COINS_LOW + 256 * GSW_GOR_STOLEN_COINS_HIGH; none, another line) and sets
- * GSWF_GOR_THIEF_FOUND_IN_HIDEOUT; later talks pick a line by GSWF_GOR_THIEF_HIDEOUT_LEFT. Later story stages give
+ * GSWF_GOR_THIEF_FOUND_IN_HIDEOUT; later talks pick a line by GSWF_GOR_THIEF_HIDEOUT_LEFT. Other story stages give
  * one line each (mac_0_065_04 to _12).
  */
 static EVT_BEGIN(thief_talk)
@@ -4508,10 +4508,10 @@ static EVT_BEGIN(christine_nakama_init)
 EVT_END()
 
 /**
- * Goombella joins (started by this map's joining check): she joins the party and walks up to Mario, kisses him
- * (mac_0_034 to 041), Toadsworth (mac_0_042 to 047_02) leads into the bar, the partner lecture (all_party_lecture)
- * runs, BGM_STG0_GOR1 starts and STG0_07_GOOMBELLA_JOINS is set; spawns maffia_assault meanwhile (synchronised through
- * GF(10) and GF(11)) and christine_nakama_after at the end.
+ * Goombella joins (started by christine_nakama_before, the s_bero enter event): she joins the party, walks up to
+ * Mario and kisses him (mac_0_034 to 041), Toadsworth (mac_0_042 to 047_02) leads into the bar, the partner lecture
+ * (all_party_lecture) runs, BGM_STG0_GOR1 starts and STG0_07_GOOMBELLA_JOINS is set; spawns maffia_assault meanwhile
+ * (synchronised through GF(10) and GF(11)) and christine_nakama_after at the end.
  */
 static EVT_BEGIN(christine_nakama)
     SET_VALUE(GF(10), 1)
@@ -4749,8 +4749,8 @@ EVT_END()
 
 /**
  * Background scene during christine_nakama: Vinny and Tony walk up and beat Gus and Garf of the Robbos (maffia_turn
- * three times, mac_0_054 to 061), then all four leave and are parked out of sight. Waits on GF(10) between parts; JP
- * and later hold GF(11) set while it runs.
+ * three times, mac_0_054 to 057) and walk off, then the Robbos talk (mac_0_058 to 061) and walk off; each is parked
+ * out of sight. Waits on GF(10) between parts; JP and later hold GF(11) set while it runs.
  */
 EVT_BEGIN(maffia_assault)
 #if VERSION >= VERSION_JP
@@ -5177,8 +5177,8 @@ EVT_END()
 
 /**
  * Moves the cockroach map object S_goki_01 without end: 50-unit hops in a wandering direction, kept within 70 of its
- * start (evt_gor_villager_urouro_check_func), each over 50 frames and facing its way, with 0.5 to 3.5 s pauses. Also
- * spawned by gor_02.
+ * start (evt_gor_villager_urouro_check_func), each over 50 frames and facing its way, with 0.5 to 3.5 s pauses. The
+ * map init spawns it; gor_02 has its own copy.
  */
 static EVT_BEGIN(gor_goki1_urouro)
     SET_VALUE(LW(4), 0)
@@ -5216,7 +5216,7 @@ static EVT_BEGIN(gor_goki1_urouro)
 EVT_END()
 
 /**
- * gor_goki1_urouro for the second cockroach S_goki_02 (another base offset, kept within 65). Also spawned by gor_02.
+ * gor_goki1_urouro for the second cockroach S_goki_02 (another base offset, kept within 65); gor_02 has its own copy.
  */
 static EVT_BEGIN(gor_goki2_urouro)
     SET_VALUE(LW(4), 0)

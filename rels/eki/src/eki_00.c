@@ -1498,7 +1498,7 @@ EVT_END()
  * (SFX_STG6_SWITCH_MOVE1), the camera turns to the wall, the anm_ori fold animation shows the stairs (kaidann, ori; the
  * new hit object kaidann_A on) with SFX_STG6_ORIGAMI_APPEAR1, then the bridge switch (bridge_sw, evt_bridge,
  * GSWF_EKI_00_BRIDGE_SWITCH_PRESSED) appears and grows; sets STG6_41_ORIGAMI_STAIRS. The early demos wait for the fold
- * animation's own length, later versions 1.6 s. eki_01 registers it on its origami switch too.
+ * animation's own length, later versions 1.6 s. (eki_01's origami switch runs eki_01's own evt_origami.)
  */
 static EVT_BEGIN(evt_origami)
     CALL(evt_mario_key_onoff, 0)
@@ -1648,9 +1648,9 @@ static EVT_BEGIN(evt_meet_moamoa)
 EVT_END()
 
 /**
- * Started (as escapeEvt) when the Smorg swarm has taken enough hits: the camera pulls back, the music fades, the swarm
- * leaves (evt_moamoa_end_wait, evt_moamoa_exit), and after 3 s the lever gets evt_origami; sets
- * STG6_40_SWATTING_SMORGS.
+ * Started (as escapeEvt) when the Smorg swarm has taken more than 250 hits: the camera pulls back, the music fades,
+ * the swarm leaves (evt_moamoa_end_wait, evt_moamoa_exit), after 3 s the camera returns and the lever gets evt_origami;
+ * sets STG6_40_SWATTING_SMORGS.
  */
 static EVT_BEGIN(evt_moamoa_escape)
     CALL(evt_mario_key_onoff, 0)

@@ -878,9 +878,9 @@ static EVT_BEGIN(first_evt)
 EVT_END()
 
 /**
- * Spins the map group named in LW(0) about Y without end: it speeds up over a second, turns at full speed for 30 to 300
- * frames (random), then slows down over a second. The early demos play SFX_STG7_AMB_WINDVANE1 at it for each spin.
- * bom_01_init_evt spawns it for group10 to group15 (bom_02 spawns its own copies).
+ * Spins the map group named in LW(0) about Y without end: it speeds up over a second, turns at full speed for 30 to 330
+ * frames (random, a multiple of 30), then slows down over a second. The early demos play SFX_STG7_AMB_WINDVANE1 at it
+ * for each spin. bom_01_init_evt spawns it for group10 to group15, bom_02's init for three more groups.
  */
 EVT_BEGIN(evt_bom_01_karakara)
     SET_VALUE(LW(9), LW(0))

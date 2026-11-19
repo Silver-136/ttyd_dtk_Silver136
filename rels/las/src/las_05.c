@@ -1731,8 +1731,8 @@ static EVT_BEGIN(key_check_evt)
 EVT_END()
 
 /**
- * Unlock script of the las_05 door lock (also registered by las_22 and las_25): sets STG8_01_02_LOCK and turns the
- * e_bero_1 exit on.
+ * Unlock script of the las_05 door lock (las_22 and las_25 have their own unlock_evt): sets STG8_01_02_LOCK and turns
+ * the e_bero_1 exit on.
  */
 static EVT_BEGIN(unlock_evt)
     SET_VALUE(GSW_STORY_PROGRESS, STG8_01_02_LOCK)

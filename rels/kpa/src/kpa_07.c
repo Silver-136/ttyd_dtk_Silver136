@@ -445,7 +445,7 @@ EVT_END()
 
 /**
  * Map init of kpa_07 (relSetEvtAddr in kpa.c): Mario mode 2 (Bowser), BGM_EVT_KUPPA1, the NPCs, the Champ's Belt NPC
- * ("belt", c_bred_h) placed flat at (190, 52, 0); at STG6_55_03_BOWSER_ACTION_STAGE spawns kpa_07_evt.
+ * ("belt", c_bred_h, pose C_1, pera off) at (190, 52, 0); at STG6_55_03_BOWSER_ACTION_STAGE spawns kpa_07_evt.
  */
 EVT_BEGIN(kpa_07_init_evt)
     CALL(evt_mario_set_mode, 2)

@@ -310,7 +310,7 @@ EVT_END()
 
 /**
  * Switch script of the moving platform (S_move_dai, A_move_dai): runs move_dai with a time of 7200 (US and later scaled
- * by las_24_adjust_for_framerate). las_20 and las_22 register it on their own switches too.
+ * by las_24_adjust_for_framerate). las_20 and las_22 have their own dai_evt.
  */
 static EVT_BEGIN(dai_evt)
     SET_VALUE(LW(0), STRING("S_move_dai"))
@@ -324,8 +324,8 @@ static EVT_BEGIN(dai_evt)
 EVT_END()
 
 /**
- * After-open script of the Palace Key chest ("box"): gives the key and sets STG8_13_KEY. las_11 to las_18 register it
- * on their chests too.
+ * After-open script of the Palace Key chest ("box"): gives the key and sets STG8_13_KEY. las_11 to las_18 and las_26
+ * have their own box_evt.
  */
 static EVT_BEGIN(box_evt)
     CALL(evt_mario_key_onoff, 0)

@@ -3165,10 +3165,10 @@ static EVT_BEGIN(murabito_out)
 EVT_END()
 
 /**
- * Second Bowser interlude (STG5_48_BOWSER_TWILIGHT_TOWN; spawned on entry from "player" or run by talking to Lord
- * Crump, kanbu_talk): Lord Crump, Kammy and Bowser talk (kpa_stg5_010 and on), an explosion (bakuhatu_evt) scatters the
- * townsfolk (murabito_out) and the army crowd appears; GSW_STORY_PROGRESS becomes STG5_49_BOWSER_TWILIGHT_TOWN_2 and
- * the map changes to muj_00.
+ * Second Bowser interlude (STG5_48_BOWSER_TWILIGHT_TOWN; spawned 1 s after entry unless the entrance is "player", then
+ * run by talking to Lord Crump, kanbu_talk): they talk (kpa_stg5_010 to 022), the army crowd appears and the townsfolk
+ * run off (murabito_out), later an explosion (bakuhatu_evt); STG5_49_BOWSER_TWILIGHT_TOWN_2 is set, the save prompt
+ * runs (evt_memcard_save; US and later through evt_memcard_save_wrapper), Mario mode 0 and the map changes to muj_00.
  */
 static EVT_BEGIN(usu_00_koopa_second_evt)
     CALL(evt_mario_key_onoff, 0)

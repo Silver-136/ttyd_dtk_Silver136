@@ -207,8 +207,8 @@ static BattleWeapon weapon_chorobon_gundan_attack = {
 
 /**
  * JP and later: the defeat reward of unit LW(10) without the death itself: SFX_BTL_ENEMY_DIE1_2, stores its coins and
- * Star Points (btlevtcmd_StoreCoin, btlevtcmd_StoreExp) and shows the "star_point" effect 30 units above it. The empty
- * loop over the Star Point count does nothing.
+ * Star Points (btlevtcmd_StoreCoin, btlevtcmd_StoreExp) and shows the "star_point" effect 30 units above it plus its
+ * starPointDispOffset (_add_star_point_disp_offset). The empty loop over the Star Point count does nothing.
  */
 #if VERSION >= VERSION_JP
 EVT_BEGIN(chorogun_dead_reward)

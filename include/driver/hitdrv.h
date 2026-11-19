@@ -105,7 +105,7 @@ struct HitEntry {
     struct HitEntry* child;         // 0xD8, first child object
     struct HitEntry* sibling;       // 0xDC, next object with the same parent
 #if VERSION >= VERSION_JP
-    struct HitEntry* siblingActive; // 0xE0, next live object with geometry (list from hitActiveListTop)
+    struct HitEntry* siblingActive; // 0xE0, next live object with geometry (hitActiveListTop list; JP and later)
 #endif
 };
 

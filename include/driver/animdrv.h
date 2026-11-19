@@ -267,7 +267,7 @@ typedef struct AnimationPose {
     u32 flags;                          // 0x0, AnimationPoseFlags
     u32 typeFlags;                      // 0x4, AnimPoseTypeFlags
     s32 references;                     // 0x8, extra users of a shared paper pose
-    s32 type;                           // 0xC, 0 field, 1 battle, 2 shared: archive and clock
+    s32 type;                           // 0xC, 0 field, 1 battle, 2 shared: archive, heap and clock
     s32 fileId;                         // 0x10, entry in the driver's files (animGroupEntry)
     s32 animId;                         // 0x14, current animation from AnimPoseData
     OSTime localTime;                   // 0x18, animTimeGetTime ms the animation counts from

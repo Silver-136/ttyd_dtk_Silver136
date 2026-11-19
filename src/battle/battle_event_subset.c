@@ -1647,8 +1647,8 @@ EVT_BEGIN(subsetevt_status_recovery)
 EVT_END()
 
 /**
- * JP and later: sets LW(0) to 0 when unit LW(3) is dead (STATUS_DEAD), frozen or stopped, otherwise 1. No script in
- * this tree runs it.
+ * JP and later: sets LW(0) to 0 when unit LW(3) is dead (STATUS_DEAD), frozen or stopped, otherwise 1. Goombella's and
+ * Ms. Mowz's Kiss scripts (partyChristineAttack_Kiss, partyChuchurinaAttack_Kiss) run it before the target reacts.
  */
 #if VERSION >= VERSION_JP
 EVT_BEGIN(subsetevt_check_target_movable)

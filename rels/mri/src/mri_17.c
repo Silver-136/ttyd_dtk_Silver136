@@ -743,8 +743,8 @@ EVT_END()
 
 /**
  * Breaking floor mobj_bf00 (evt_mobj_breaking_floor, GSWF_MRI_17_BREAKING_FLOOR_BROKEN): Mario and the Punis fall; the
- * guide Puni says stg2_mri_e18_00_13, the guide, its sister and the rival are hidden if trapped, every trapped Puni (1
- * to 102) is set to PUNI_MODE_HAGURE, and GSW_STORY_PROGRESS becomes STG2_21_04_ESCAPE with BGM_STG2_MRI1.
+ * guide Puni says stg2_mri_e18_00_13 and is hidden, its sister and the rival are hidden if trapped, every trapped Puni
+ * (1 to 102) is set to PUNI_MODE_HAGURE, and GSW_STORY_PROGRESS becomes STG2_21_04_ESCAPE with BGM_STG2_MRI1.
  */
 static EVT_BEGIN(breakyuka_main)
     CALL(evt_mario_key_onoff, 0)

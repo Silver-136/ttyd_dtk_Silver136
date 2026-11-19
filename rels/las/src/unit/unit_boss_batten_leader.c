@@ -2489,9 +2489,9 @@ EVT_END()
 /**
  * Thunder spell of Sir Grodus (weapon_batten_leader_thunder): raises his staff (poses A_1A, A_1B with eff_staff, then
  * A_2; SFX_BOSS_SRYO_STUFF_* sounds), sets the rod light to btl_shuryolight_rod_normal and rolls
- * UNIT_WORK_MISFIRE_CHANCE (cleared after the roll): on a misfire the spell fizzles into smoke and ends. Otherwise
- * lightning bolts (evt_eff_pokopi_thunder, SFX_BOSS_SRYO_THUNDER1) strike in pairs while every target the weapon
- * reaches is hit in turn; lucky, dodgy and miss results dodge. See the BUG note on the target check.
+ * UNIT_WORK_MISFIRE_CHANCE (cleared before the roll, so it is used once): on a misfire the spell fizzles into smoke and
+ * ends. Otherwise lightning bolts (evt_eff_pokopi_thunder, SFX_BOSS_SRYO_THUNDER1) strike in pairs while every target
+ * the weapon reaches is hit in turn; lucky, dodgy and miss results dodge. See the BUG note on the target check.
  */
 static EVT_BEGIN(batten_leader_thunder_attack_event)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_SRYO_STUFF_PUTOUT1"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -2614,9 +2614,10 @@ EVT_END()
 /**
  * Fire spell of Sir Grodus (weapon_batten_leader_fire): raises his staff (poses A_1A, A_1B with eff_staff, then A_2;
  * SFX_BOSS_SRYO_STUFF_* sounds), sets the rod light to btl_shuryolight_rod_normal and rolls UNIT_WORK_MISFIRE_CHANCE
- * (cleared after the roll): on a misfire the spell fizzles into smoke and ends. Otherwise a pillar of fire
- * ("hibashira", SFX_BOSS_SRYO_FIRE1) sweeps 400 units along the floor and every target the weapon reaches is hit 150 ms
- * apart, the first hit shaking the camera. See the BUG note on the target check.
+ * (cleared before the roll, so it is used once): on a misfire the spell fizzles into smoke and ends. Otherwise a pillar
+ * of fire ("hibashira", SFX_BOSS_SRYO_FIRE1) runs along the floor from 40 to 400 units toward -x of him and every
+ * target the weapon reaches is hit 150 ms apart, the first hit shaking the camera. See the BUG note on the target
+ * check.
  */
 static EVT_BEGIN(batten_leader_fire_attack_event)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_SRYO_STUFF_PUTOUT1"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -2744,9 +2745,9 @@ EVT_END()
 /**
  * Ice spell of Sir Grodus (weapon_batten_leader_ice) on one target: raises his staff (poses A_1A, A_1B with eff_staff,
  * then A_2; SFX_BOSS_SRYO_STUFF_* sounds), sets the rod light to btl_shuryolight_rod_normal and rolls
- * UNIT_WORK_MISFIRE_CHANCE (cleared after the roll): on a misfire the spell fizzles into smoke and ends. Otherwise an
- * ice shot (opuku_wgun_n64, SFX_BOSS_SRYO_ICE1) flies to the target, which is hit or dodges; he takes POSE_TYPE_ACTION
- * after. A confused Grodus with no target flusters (subsetevt_confuse_flustered).
+ * UNIT_WORK_MISFIRE_CHANCE (cleared before the roll, so it is used once): on a misfire the spell fizzles into smoke and
+ * ends. Otherwise an ice shot (opuku_wgun_n64, SFX_BOSS_SRYO_ICE1) flies to the target, which is hit or dodges; he
+ * takes POSE_TYPE_ACTION after. A confused Grodus with no target flusters (subsetevt_confuse_flustered).
  */
 static EVT_BEGIN(batten_leader_ice_attack_event)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_SRYO_STUFF_PUTOUT1"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -2846,8 +2847,8 @@ EVT_END()
 /**
  * Shikaeshi spell of Sir Grodus on himself (weapon_batten_leader_shikaeshi): raises his staff (poses A_1A, A_1B with
  * eff_staff, then A_1C; SFX_BOSS_SRYO_STUFF_* sounds), sets the rod light to btl_shuryolight_rod_normal and rolls
- * UNIT_WORK_MISFIRE_CHANCE (cleared after the roll): on a misfire the spell fizzles into smoke and ends. Otherwise the
- * camera homes in on him, UNIT_WORK_SELF_SPELL is set to 4 and the weapon hits him.
+ * UNIT_WORK_MISFIRE_CHANCE (cleared before the roll, so it is used once): on a misfire the spell fizzles into smoke and
+ * ends. Otherwise the camera homes in on him, UNIT_WORK_SELF_SPELL is set to 4 and the weapon hits him.
  */
 static EVT_BEGIN(batten_leader_shikaeshi_attack_event)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_SRYO_STUFF_PUTOUT1"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -2899,8 +2900,8 @@ EVT_END()
 /**
  * Yokeyoke spell of Sir Grodus on himself (weapon_batten_leader_yokeyoke, Dodgy): raises his staff (poses A_1A, A_1B
  * with eff_staff, then A_1C; SFX_BOSS_SRYO_STUFF_* sounds), sets the rod light to btl_shuryolight_rod_normal and rolls
- * UNIT_WORK_MISFIRE_CHANCE (cleared after the roll): on a misfire the spell fizzles into smoke and ends. Otherwise the
- * camera homes in on him, UNIT_WORK_SELF_SPELL is set to 5 and the weapon hits him.
+ * UNIT_WORK_MISFIRE_CHANCE (cleared before the roll, so it is used once): on a misfire the spell fizzles into smoke and
+ * ends. Otherwise the camera homes in on him, UNIT_WORK_SELF_SPELL is set to 5 and the weapon hits him.
  */
 static EVT_BEGIN(batten_leader_yokeyoke_attack_event)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_SRYO_STUFF_PUTOUT1"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -2952,9 +2953,9 @@ EVT_END()
 /**
  * Stop spell of Sir Grodus (weapon_batten_leader_stop): raises his staff (poses A_1A, A_1B with eff_staff, then A_2;
  * SFX_BOSS_SRYO_STUFF_* sounds), sets the rod light to btl_shuryolight_rod_normal and rolls UNIT_WORK_MISFIRE_CHANCE
- * (cleared after the roll): on a misfire the spell fizzles into smoke and ends. Otherwise the time-stop effect
- * (timestamp_n64, SFX_BOSS_SRYO_STOP1) plays for 2.5 s, then every target the weapon reaches is hit in turn. A confused
- * Grodus with no target flusters (subsetevt_confuse_flustered).
+ * (cleared before the roll, so it is used once): on a misfire the spell fizzles into smoke and ends. Otherwise the
+ * time-stop effect (timestamp_n64, SFX_BOSS_SRYO_STOP1) plays for 2.5 s, then every target the weapon reaches is hit in
+ * turn. A confused Grodus with no target flusters (subsetevt_confuse_flustered).
  */
 static EVT_BEGIN(batten_leader_stop_attack_event)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_SRYO_STUFF_PUTOUT1"), EVT_NULLPTR, 0, EVT_NULLPTR)

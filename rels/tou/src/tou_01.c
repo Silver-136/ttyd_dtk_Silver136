@@ -2897,9 +2897,9 @@ EVT_BEGIN(evt_gondora)
 EVT_END()
 
 /**
- * Departure by blimp gondola: walks Mario and the partners in, fades the music, raises the gondola and closes its door;
- * from STG3_34_RETURN_TO_ROGUEPORT the first time it sets GSWF_TOU_LEFT_AFTER_CHAPTER, and the map changes to tou_00
- * (entrance modoru). JP and later normalize Mario and bring a distant partner to him first.
+ * Departure by blimp gondola: the gondola comes down and opens, Mario and the partners walk in and it closes; from
+ * STG3_34_RETURN_TO_ROGUEPORT the first time it sets GSWF_TOU_LEFT_AFTER_CHAPTER and resets the ranking, then it rises
+ * and after 2 s the map changes to tou_00 (entrance modoru). JP+ normalize Mario and bring a distant partner first.
  */
 EVT_BEGIN(evt_gondora2)
     CALL(evt_mario_key_onoff, 0)

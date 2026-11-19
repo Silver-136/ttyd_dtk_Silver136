@@ -24,7 +24,7 @@ typedef struct PoseSoundTiming {
 /* door_entry / evt_door_set_param: per-door parameter block (npcs/mobjs/items are NULL-terminated name lists) */
 typedef struct DoorParam {
     s32 flags;              // 0x0, evt_door_param kind 9; 1 = hide/show NPCs through the door, 2 = skip the open SFX
-    s32 type;               // 0x4, hinge side for door_position_sub (0/1 or 2: which way the outside spot shifts)
+    s32 type;               // 0x4, door_position_sub: 0/1 or 2 = which way the outside spot shifts, 3 = no shift
     s32 se;                 // 0x8, door sound set (door_open_se; 0 = silent)
     const char* mapobj;     // 0xC, the door's map object; its width sets the outside spot's sideways shift
     const char* hitIn;      // 0x10, inside spot is measured from it (its normal); door sounds play there
@@ -35,7 +35,7 @@ typedef struct DoorParam {
     const char* insideHit;  // 0x24, hit object evt_door_open switches on with the inside
     EvtWord* evtIn;            // 0x28
     EvtWord* evtOut;           // 0x2C
-    EvtWord* evtWall;          // 0x30, script evt_door_open runs with house_open_se under DOOR_OPT_HOUSE_ANIM_FIRST
+    EvtWord* evtWall;          // 0x30, house wall script, run by the door open and close scripts
     const char** npcs;      // 0x34, NPCs left out of the map blend (door_dark_flag)
     const char** mobjs;     // 0x38, mobjs left out of the map blend
     const char** items;     // 0x3C, items left out of the map blend

@@ -1280,9 +1280,9 @@ EVT_BEGIN(vivian_shadow_tail_event)
 EVT_END()
 
 /**
- * Vivian's reaction to every contact counter (spiky, fiery, icy, electric, explosive, poison, payback, hold-fast): she
- * is knocked back and up; if SHADOW_TAIL_WORK_HOLD is set she dives to the stored shadow position, sinks, and
- * resurfaces at home, otherwise she drops straight back home.
+ * Vivian's reaction to every contact counter (preemptive and front spiky, fiery, icy, electric, explosive, volatile
+ * explosive, poison, electrified, payback, hold-fast): she is knocked back and up; if SHADOW_TAIL_WORK_HOLD is set
+ * she dives to the stored shadow position, sinks, and resurfaces at home, otherwise she drops straight back home.
  */
 static EVT_BEGIN(vivian_counter_damage_event)
     CALL(btlevtcmd_SetScale, UNIT_ID_SELF, FLOAT(1.0f), FLOAT(1.0f), FLOAT(1.0f))

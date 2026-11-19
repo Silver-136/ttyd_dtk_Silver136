@@ -2683,7 +2683,7 @@ EVT_END()
 
 /**
  * King K's talk at rank 17 (GSWF_TOU_RANK_17_KING_K_TALK_DONE): he speaks (stg3_tou_93_17, 18), Jolene comes in with
- * Bandy Andy, they talk (stg3_tou_93_19 to 23_01) and both leave through the door (evt_michel_3_sub).
+ * Bandy Andy and leaves after 93_19 / 20; King K and Bandy Andy talk (21 to 23_01) and he leaves (evt_michel_3_sub).
  */
 static EVT_BEGIN(evt_michel_3)
     CALL(evt_set_dir_to_target, STRING("マイケル"), STRING("mario"))

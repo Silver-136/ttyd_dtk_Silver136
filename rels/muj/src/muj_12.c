@@ -724,9 +724,9 @@ static EVT_BEGIN(korutesu_event)
 EVT_END()
 
 /**
- * After Cortez's defeat, spawned by the map's init script: places Mario, the partner and Cortez, opens the doors
- * S_t_doa02 / S_t_doa03, Cortez says stg5_dou_30, the screen darkens (back_dark) for stg5_dou_39, then
- * GSW_STORY_PROGRESS becomes STG5_33_CORTEZ_AND_THE_TREASURE and the map changes to muj_10.
+ * After Cortez's defeat, spawned by the map's init script at STG5_33_CORTEZ_AND_THE_TREASURE: places Mario, the partner
+ * and Cortez, opens the doors S_t_doa02 / S_t_doa03, Cortez says stg5_dou_30, the screen darkens (back_dark) for
+ * stg5_dou_39, GSW_STORY_PROGRESS is set to that same STG5_33 again and the map changes to muj_10.
  */
 static EVT_BEGIN(korutesu_event_after)
     CALL(evt_mario_key_onoff, 0)

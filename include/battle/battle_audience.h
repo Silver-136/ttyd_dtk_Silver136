@@ -126,7 +126,7 @@ typedef struct BattleAudienceMember {
                                // (unit_boss_magnum_battender_mkII) audience suction
     s32 interpFramesTotal;     // 0xFC, frames of the evt_audience move (and of the Magnus 2 suction)
     f32 startPosX;             // 0x100, start of evt_audience_move_position_frame (x; Y and Z follow)
-    f32 targetPosX;            // 0x104, end of the evt_audience moves, set when the move ends (x; Y and Z follow)
+    f32 targetPosX;            // 0x104, end of the evt_audience moves, where they leave the member (x; Y and Z follow)
     f32 startPosY;             // 0x108
     f32 targetPosY;            // 0x10C
     f32 startPosZ;             // 0x110
@@ -368,7 +368,7 @@ typedef struct BattleAudience {
     Vec itemOnMemberPos;              // 0x138C0, that member's position, z + 3
     s32 phaseList[14];                 // 0x138CC
     s32 phaseListCount;                // 0x13904
-    s32 turnEndPhaseEventChance;      // 0x13908, +3 per turn end, up to 100
+    s32 turnEndPhaseEventChance;      // 0x13908, +3 per turn end, up to 100; % roll for phase events, 0 after a hit
 #if VERSION <= VERSION_DEMO_JP
     BattleAudienceSound sounds[24];       // 0x135A0
     BattleAudienceWindow window;          // 0x13900

@@ -246,11 +246,10 @@ static USER_FUNC(get_attacker) {
 }
 
 /**
- * Top-spike reaction (UNIT_DATA_AVOID_THORN_HEAD_EVENT): after 30 frames the toge_flush spike flash above the
+ * Top-spike reaction (UNIT_DATA_AVOID_THORN_HEAD_EVENT): after 30 frames it shows the toge_flush spike flash above the
  * Spiky Gloomba's head (higher when Huge, lower when Tiny). If the lecture unit (UNIT_ID_LECTURE) exists and
- * LECTURE_KURIBOO_WORK_TOGEKURI_TALK_DONE is clear, and the attacker is Mario or Goombella (get_attacker), it
- * waits 2.5 s, hides the status window and prints mac_0_092_06 (Mario) or mac_0_092_07 (Goombella), and sets the
- * work.
+ * LECTURE_KURIBOO_WORK_TOGEKURI_TALK_DONE is clear, and the attacker is Mario or Goombella (get_attacker), it waits
+ * 2500 ms, hides the status window and prints mac_0_092_06 (Mario) or mac_0_092_07 (Goombella), and sets the work.
  */
 static EVT_BEGIN(dmg_avoid_counter_thorn_head_event)
     WAIT_FRAMES(30)

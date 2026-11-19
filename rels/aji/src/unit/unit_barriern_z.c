@@ -1705,9 +1705,10 @@ EVT_END()
 
 /**
  * Combined ring attack of the Z-Yux and its 4 Mini-Z-Yux (weapon_wawawa_attack) on every target: targets are picked
- * (barriern_wawawa_set_target) into part 1's work, then the Z-Yux and the satellites wind up together (poses F_1, F_2,
- * A_1 to A_4) and each fires a ring in turn (wawawa_attack_event_sub, the Z-Yux first); waits until all 5 rings are
- * done (UNIT_WORK_SHOTS_DONE). A confused Z-Yux with no target flusters (subsetevt_confuse_flustered).
+ * (barriern_wawawa_set_target) into part 1's work, then the Z-Yux and the satellites wind up together (it takes F_1 and
+ * then A_1 to A_4, the satellites F_2 and then S_2) and each fires a ring in turn (wawawa_attack_event_sub, the Z-Yux
+ * first); waits until all 5 rings are done (UNIT_WORK_SHOTS_DONE). A confused Z-Yux with no target flusters
+ * (subsetevt_confuse_flustered).
  */
 static EVT_BEGIN(wawawa_attack_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
@@ -1875,8 +1876,9 @@ EVT_END()
 
 /**
  * One ring of wawawa_attack_event (shooter LW(12), target slot LW(13)/LW(14) in part 1's work, ring part LW(15)), with
- * its sounds: when a later shooter in the volley aims at the same target it runs wawawa_attack_event_sub_no_last,
- * otherwise wawawa_attack_event_sub_last; then counts the ring in UNIT_WORK_SHOTS_DONE.
+ * its sounds: a ring in slots 0 to 2 runs wawawa_attack_event_sub_no_last when a later ring up to slot 3 aims at the
+ * same target; otherwise, and always for slots 3 and 4, wawawa_attack_event_sub_last (the fifth ring's target is never
+ * compared); then counts the ring in UNIT_WORK_SHOTS_DONE.
  */
 static EVT_BEGIN(wawawa_attack_event_sub)
     CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, 1, LW(13), LW(3))
@@ -1956,7 +1958,7 @@ EVT_END()
 
 /**
  * Wait event of the Z-Yux: sets each Mini-Z-Yux's idle-pose flag (BARRIERN_SATELLITE_WORK_IDLE_POSE), keeps
- * _check_satellite running every frame and, every 30 to 149 frames while it can act and is not confused, dizzy or
+ * _check_satellite running every frame and, every 30 to 150 frames while it can act and is not confused, dizzy or
  * poisoned, plays pose S_3 for 180 frames.
  */
 static EVT_BEGIN(wait_event)

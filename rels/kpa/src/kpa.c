@@ -289,8 +289,8 @@ static EVT_BEGIN(kpa_coin_evt)
 EVT_END()
 
 /**
- * Places the stage coins from the (x, y) table at LW(0), ended by -1: each gets a fresh name (kpa_make_item_name),
- * ITEM_FLAG_QUICK_GET and the pickup script kpa_coin_evt. Run by kpa_02, kpa_03 and kpa_05.
+ * Places the stage coins from the KPA_ITEM table at LW(0) (a 0 word, x and y per coin; ended by -1): each gets a fresh
+ * name (kpa_make_item_name), ITEM_FLAG_QUICK_GET and the pickup script kpa_coin_evt. Run by kpa_02, kpa_03, kpa_05.
  */
 EVT_BEGIN(kpa_read_item)
     SET_INT_READ_ADDR(LW(0))
@@ -396,7 +396,7 @@ EVT_BEGIN(kpa_dead)
 EVT_END()
 
 /**
- * Pit fall handler of Bowser's side-scrolling stages (kpa_02 to kpa_05): turns off the letterbox, controls and camera,
+ * Pit fall handler of Bowser's side-scrolling stages (kpa_02 to kpa_06): turns off the letterbox, controls and camera,
  * waits until Bowser rides some hit object again and runs kpa_dead.
  */
 EVT_BEGIN(kpa_fall_sub)

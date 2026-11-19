@@ -710,8 +710,8 @@ EVT_END()
 
 /**
  * Fades the first map blend colour (mapSetBlend) from white to black over 300 ms, then sets it to black with alpha 0;
- * spawned by the door scripts (evt_door_open, evt_door_open_roll, evt_door_open_bom_01) when Mario goes through a door,
- * unless DOOR_OPT_NO_DARK.
+ * spawned by the door scripts when Mario goes through a door: evt_door_open (unless DOOR_OPT_NO_DARK),
+ * evt_door_open_roll and evt_door_open_bom_01.
  */
 EVT_BEGIN(door_dark)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 255, 0, 300)
@@ -757,7 +757,10 @@ EVT_BEGIN(door_light)
     RETURN
 EVT_END()
 
-/** door_light for the second map blend colour; spawned at the start of evt_door_close and evt_door_close_roll. */
+/**
+ * door_light for the second map blend colour; spawned at the start of evt_door_close (unless DOOR_OPT_NO_DARK) and
+ * evt_door_close_roll.
+ */
 EVT_BEGIN(door_light2)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 255, 300)
     LABEL(0)
@@ -777,9 +780,10 @@ EVT_END()
  * DoorFLAG, runs the door's open script (evtOpen), saves and unclips the outside group, moves the camera to the inside
  * spot, shows the inside group and its hit object, exempts the door's NPCs, map objects and items from the blend
  * (door_dark_flag) and shows the DoorParam's NPCs (DOOR_FLAG_HIDE_NPCS). Walks Mario to the outside spot and then
- * inside while the door (evtIn), house wall (evtWall) and out-piece (evtOut) scripts swing from 0 to 180 and back with
- * their sounds, and the outside darkens (door_dark, door_dark2). Ends with the camera back on Mario, the controls back
- * and snd_door_in. JP and later halve the party hitbox for the walk.
+ * inside while the door script (evtIn) runs from 0 to 180 and back and the house wall (evtWall) and out-piece (evtOut)
+ * scripts from 0 to 180, with their sounds, and the outside darkens (door_dark, door_dark2; not with DOOR_OPT_NO_DARK).
+ * Ends with the camera back on Mario, the controls back and snd_door_in. JP and later halve the party hitbox for the
+ * walk.
  */
 EVT_BEGIN(evt_door_open)
     CALL(evt_cam_letter_box_disable, 1)
@@ -1170,10 +1174,10 @@ EVT_END()
  * Takes Mario and the partners back out through a door (DoorParam in LW(0), DOOR_OPT_* options in LW(15)); run by
  * evt_door_entry's case event on the hitIn hit object and by map scripts. The reverse of evt_door_open: the camera
  * moves to the outside spot (or one measured from Mario, DOOR_OPT_POS_FROM_MARIO), the outside lights up (door_light2,
- * door_light), the out-piece, house wall and door swing back from 180 to 0, Mario walks out (unless
- * DOOR_OPT_NO_MARIO_MOVE), then the inside group is hidden (unless DOOR_OPT_KEEP_INSIDE_SHOWN) with its hit object, the
- * no-blend flags and the outside group's saved flags are restored, the DoorParam's NPCs are hidden
- * (DOOR_FLAG_HIDE_NPCS), and snd_door_out ends it.
+ * door_light; not with DOOR_OPT_NO_DARK), the out-piece and house wall swing back from 180 to 0, the door opens (0 to
+ * 180), Mario walks out (unless DOOR_OPT_NO_MARIO_MOVE) and the door shuts (180 to 0), then the inside group is hidden
+ * (unless DOOR_OPT_KEEP_INSIDE_SHOWN) with its hit object, the no-blend flags and the outside group's saved flags are
+ * restored, the DoorParam's NPCs are hidden (DOOR_FLAG_HIDE_NPCS), and snd_door_out ends it.
  */
 EVT_BEGIN(evt_door_close)
     CALL(evt_cam_letter_box_disable, 1)

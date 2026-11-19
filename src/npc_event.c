@@ -2979,8 +2979,8 @@ EVT_BEGIN(dokugassun_init_event)
 EVT_END()
 
 /**
- * Move event of Poison Puffs: drifts in a wandering direction 25 units at a time, 10 above the floor, in four
- * half-second glides with alternating bob, stopping a glide when Mario is found.
+ * Move event of Poison Puffs: every 500 ms drifts in a wandering direction 25 units at a time, 10 above the floor, in
+ * four half-second glides with bobs of 6, -6, 6 and 6, stopping a glide when Mario is found.
  */
 EVT_BEGIN(dokugassun_move_event)
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_AUTO_MOVE_ANIM)
@@ -3528,7 +3528,7 @@ EVT_END()
 #endif
 
 /**
- * Move event of the hbom enemies: walks 100 units in a wandering direction at speed 20, resting a second between walks.
+ * Move event of the hbom enemies: walks 100 units in a wandering direction at speed 20, resting 1.5 s between walks.
  */
 EVT_BEGIN(hbom_move_event)
     CALL_CHILD(enemy_common_flag_init_event)
@@ -4421,7 +4421,7 @@ EVT_BEGIN(hbross_find_event)
 EVT_END()
 
 /**
- * Chain of the Chain Chomp ("me") while it lunges (run every frame by wanwan_find_event): the links slaves[0] to
+ * Chain of the Chain Chomp ("me"), run every frame by wanwan_move_event and wanwan_find_event: the links slaves[0] to
  * slaves[2] hang between it and slaves[3]. Each link sags by 300 / len^2 and is then pulled to len from its neighbour
  * (len: a quarter of the distance from the Chomp to slaves[3], at least 10), first outwards from the Chomp, then back
  * from slaves[3]; no link goes below the Chomp's territoryBase y.
@@ -4809,7 +4809,8 @@ EVT_END()
 
 /**
  * Init event of Chain Chomps: the common enemy flags without NPC_FLAG_AUTO_MOVE_ANIM, and four helpers from
- * mahoon_get_groupname set up by wanwan_init_event_sub: three chain links (WAN_S_1B) and the stake slave_3 (WAN_Z_2).
+ * mahoon_get_groupname set up by wanwan_init_event_sub: three chain links (WAN_S_1B) and the chain end slave_3
+ * (WAN_Z_2).
  */
 EVT_BEGIN(wanwan_init_event)
     CALL_CHILD(enemy_common_flag_init_event)

@@ -799,8 +799,8 @@ EVT_END()
 /**
  * Map init of hei_07 (relSetEvtAddr in hei.c): the entrances with the dokan pipe exit off, BGM_STG1_HEI1 held silent
  * (at once when entering by the pipe), ENV_STG1_HEI4, reverb mode 1, the anm_hokori animation and the hei_07_2 group
- * hidden away. Before STG1_06_QUIZ the statue (a_sekizou_1_a) gets the a_sekizou_1 case script; from then the statue
- * hits are off, the pipe exit is on and anm_sekizou is shown at its end. Also places the save block.
+ * hidden away. Before STG1_06_QUIZ a_sekizou_2 is off and a_sekizou_1_a gets the a_sekizou_1 case script; from then
+ * a_sekizou_2 is on, a_sekizou_1_a / _1_b are off, the pipe exit is on and anm_sekizou is at its end. Save block.
  */
 EVT_BEGIN(hei_07_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))

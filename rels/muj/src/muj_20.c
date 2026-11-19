@@ -1753,7 +1753,7 @@ EVT_END()
 /**
  * Sailing scene toward Keelhaul Key (GSWF_GOR_SAILING_TO_KEELHAUL), spawned by the map's init script: hides Mario and
  * the partners, shows ship S_b crossing the sea from x -1000 to 1000 over 15 s with its flag (kaizoku_hata) and a
- * day-night cycle; pressing A changes the map to muj_00.
+ * day-night cycle; the map changes to muj_00 at the end, or at once when A is pressed.
  */
 static EVT_BEGIN(gor_muj_ship)
     CALL(evt_mario_key_onoff, 0)
@@ -1816,7 +1816,7 @@ EVT_END()
 
 /**
  * gor_muj_ship in the other direction (GSWF_MUJ_SAILING_TO_ROGUEPORT): the ship faces the other way and crosses from x
- * 1000 to -1000; A changes the map to gor_00.
+ * 1000 to -1000; the map changes to gor_00 at the end or when A is pressed.
  */
 static EVT_BEGIN(muj_gor_ship)
     CALL(evt_mario_key_onoff, 0)

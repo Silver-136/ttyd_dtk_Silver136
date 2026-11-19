@@ -436,8 +436,8 @@ static EVT_BEGIN(peach_evt_stg3)
 EVT_END()
 
 /**
- * Peach scene at the peach_evt_stg6 entrance (from aji_10): after 2 s peach_aji_280 prints, she turns, the door opens,
- * peach_aji_281 prints, the e_bero exit is replaced with bero_peach_data and STG6_55_PEACH_GRODUS_X_NAUT is set.
+ * Peach scene at the peach_evt_stg6 entrance (from aji_10): after 2.5 s peach_aji_280 prints, she turns, the door
+ * opens, peach_aji_281 prints, the e_bero exit is replaced with bero_peach_data and STG6_55_PEACH_GRODUS_X_NAUT is set.
  */
 static EVT_BEGIN(peach_evt_stg6)
     CALL(evt_mario_key_onoff, 0)

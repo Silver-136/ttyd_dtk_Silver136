@@ -4538,9 +4538,10 @@ static EVT_BEGIN(attack_event_chuchurina)
 EVT_END()
 
 /**
- * Ms. Mowz's slaps as Doopliss uses them (weapon in LW(12)): walks up to the target and slaps it repeatedly (PCH_A1/A2
- * poses, SFX_BTL_CHUCHURINA_ATTACK1 to 3), switching between the enemyWeapon_ChuchurinaNormalAttack R/L and last
- * variants; a lucky, dodgy or miss result ends the series with a dodge. Then walks back home.
+ * Ms. Mowz's slaps as Doopliss uses them (weapon in LW(12)): walks up to the target and slaps it 2 to 4 times
+ * (PCH_A1/A2 poses, SFX_BTL_CHUCHURINA_ATTACK1 to 3), switching between the enemyWeapon_ChuchurinaNormalAttack R/L and
+ * last variants; any result but a hit ends the series (lucky, dodgy and miss with a dodge; the slaps after the first
+ * use DAMAGE_RESULT_NO_EVADE). Then walks back home.
  */
 static EVT_BEGIN(attack_event_chuchurina_normal)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))

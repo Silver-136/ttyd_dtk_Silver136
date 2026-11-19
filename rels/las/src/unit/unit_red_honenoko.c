@@ -656,7 +656,7 @@ static EVT_BEGIN(call_friend_event)
         WAIT_FRAMES(5)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KRN_A_4"))
 
-        // Then it throws the next bone (part 5) with a rattling sound.
+        // Then it throws the next bone (part 3) with a rattling sound.
         WAIT_FRAMES(15)
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_HONENOKO_SEND_GROUP1"), EVT_NULLPTR, 0, EVT_NULLPTR)
         SWITCH(LW(10))

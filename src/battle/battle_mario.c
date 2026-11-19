@@ -4691,7 +4691,10 @@ static EVT_BEGIN(marioAttackEvent_TugiTugiJump)
 EVT_END()
 
 #if VERSION <= VERSION_DEMO_JP
-/** Mario's plain Hammer attack: marioAttackEvent_NormalHammer_Core with LW(14) = 0 (the non-badge swing). */
+/**
+ * Mario's plain Hammer attack (marioDefaultWeapon_Hammer, also badgeWeapon_ConfuseHammer):
+ * marioAttackEvent_NormalHammer_Core with LW(14) = 0 (the non-badge swing).
+ */
 static EVT_BEGIN(marioAttackEvent_NormalHammer)
     SET_VALUE(LW(14), 0)
     CALL_CHILD(marioAttackEvent_NormalHammer_Core)
@@ -6868,7 +6871,10 @@ static EVT_BEGIN(marioAttackEvent_FunyafunyaJump)
     RETURN
 EVT_END()
 
-/** Mario's plain Hammer attack: marioAttackEvent_NormalHammer_Core with LW(14) = 0 (the non-badge swing). */
+/**
+ * Mario's plain Hammer attack (marioDefaultWeapon_Hammer, also badgeWeapon_ConfuseHammer):
+ * marioAttackEvent_NormalHammer_Core with LW(14) = 0 (the non-badge swing).
+ */
 static EVT_BEGIN(marioAttackEvent_NormalHammer)
     SET_VALUE(LW(14), 0)
     CALL_CHILD(marioAttackEvent_NormalHammer_Core)

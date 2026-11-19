@@ -81,7 +81,7 @@ EVT_END()
 
 /**
  * Deletes the item-get glow and the Magical Map effects ("sac_itemget", "sac_treasure") that sac_mario_item_on_evt put
- * above Mario; run at the end of each Star Power move.
+ * above Mario; each Star Power move's attack script runs it when its opening (the star appearing) ends.
  */
 EVT_BEGIN(sac_mario_item_on_end_evt)
     CALL(evt_eff_delete, STRING("sac_itemget"))

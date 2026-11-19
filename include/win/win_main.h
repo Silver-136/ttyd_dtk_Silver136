@@ -173,7 +173,7 @@ typedef struct WinLogState {
     f32 scrollX;                // 0xE38, map scroll x (0 to -148), keeps the cursor in view
     f32 scrollY;                // 0xE3C, map scroll y (0 to -240)
     s32 stoneNum;               // 0xE40, crystal stars Mario has (pouchCheckItem over stone_tbl)
-    struct EffectEntry* eff[7]; // 0xE44, star stone effect of each stone_tbl entry (grey for the ones Mario lacks)
+    struct EffectEntry* eff[7]; // 0xE44, star stone effects; slots from stoneNum on are grey (type i + 7)
     s32 stoneSel;               // 0xE60, selected crystal star (0-6, stone_tbl index; left/right wrap); help text when < stoneNum
     f32 stoneWinTgtX;           // 0xE64, target of stoneWinX
     f32 stoneWinX;              // 0xE68, x of the crystal star ring (texture 0x24, shadows, star stone effects); eases toward stoneWinTgtX
@@ -191,8 +191,8 @@ typedef struct WinLogState {
     f32 enemyTx;                // 0x102C (US 0x1034), 0 at init, 320 when the Tattle log closes; never read
     f32 enemyY;                 // 0x1030 (US 0x1038), cleared by winLogInit; never read
     f32 enemyTy;                // 0x1034 (US 0x103C), 0 at init, -240 when the Tattle log closes; never read
-    s32 enemyNum;               // 0x1038 (US 0x1040), entries in enemy (units with a tattleLogTag)
-    s32 enemyKnown;             // 0x103C (US 0x1044), entries with their GSWF_TATTLE flag set; shown as known/enemyNum
+    s32 enemyNum;               // 0x1038 (US 0x1040), entries in enemy (tattleLogTag units, one per story duplicate)
+    s32 enemyKnown;             // 0x103C (US 0x1044), tattled tattleLogTag kinds (4 duplicates skipped); known/enemyNum
     s32 enemySel;               // 0x1040 (US 0x1048), selected entry (index in enemy)
     s32 enemyPage;              // 0x1044 (US 0x104C), page shown (TATTLE_LIST_PAGE entries a page; L / R)
     f32 enemyScroll;            // 0x1048 (US 0x1050), cleared by winLogInit; never read

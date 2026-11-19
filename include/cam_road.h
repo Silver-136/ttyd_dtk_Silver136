@@ -74,7 +74,7 @@ typedef struct CamRoadState {
     f32 dist;              // 0x40, eye distance from pos
     f32 angle;             // 0x44, eye elevation in degrees
     f32 rot;               // 0x48, degrees the look-at is turned about the side axis
-    f32 segment;           // 0x4c, curve segment of the hit; compareCamRoad compares it
+    f32 segment;           // 0x4c, curve segment of the hit (else the previous one's); compareCamRoad compares it
     OSTime time;           // 0x50, renderFieldTime when computed
     f32 shiftWeight;       // 0x58, calcCamRoad's shiftWeight argument; the next frame scales its side shift by it
     f32 shiftXRate;        // 0x5c, the curve's shiftXRate (camRoadGetCurrentShiftXRate)

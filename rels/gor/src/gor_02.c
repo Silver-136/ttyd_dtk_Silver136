@@ -6788,8 +6788,8 @@ static HitDamageReturn hitDmgRetPoints[] = {
 
 /**
  * Loops forever, moving the cockroach object S_goki_01: it picks a random direction (evt_npc_get_loiter_dir), a
- * target 50 units away kept clear of the villagers (evt_gor_villager_urouro_check_func), moves there over 50
- * frames facing left or right, then waits 0.5 to 3.5 seconds.
+ * target 50 units away (back to the start when it is more than 70 from it, evt_gor_villager_urouro_check_func),
+ * moves there over 50 frames facing left or right, then waits 0.5 to 3.5 seconds.
  */
 static EVT_BEGIN(gor_goki1_urouro)
     SET_VALUE(LW(4), 0)
