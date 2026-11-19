@@ -918,6 +918,25 @@ void BtlUnit_SetDispOffset(BattleUnit* unit, f32 x, f32 y, f32 z) {
     }
 }
 
+/** Reads the unit's draw offset into the axes whose current value is not -250000000.0. */
+// Original name and size (0x4c) from the JP demo map (UNUSED there: only the stripped btlevtcmd_GetDispOffset
+// calls it), listed between BtlUnit_SetDispOffset and BtlUnit_AddDispOffset. Body: their -250000000.0 axis test,
+// here on the value each out-pointer holds. Plain reads give 0x1c and NULL tests 0x34; this form gives 0x4c, and
+// with BtlUnit_GetPartsDispOffset it closes the JP demo @N gap after the -250000000.0 constant exactly (7 numbers
+// each). The bytes of the stripped copy (operand order of the compares) are not known.
+void BtlUnit_GetDispOffset(BattleUnit* unit, f32* x, f32* y, f32* z) {
+    f32 noValue = -250000000.0f;
+    if (noValue != *x) {
+        *x = unit->displayOffset.x;
+    }
+    if (noValue != *y) {
+        *y = unit->displayOffset.y;
+    }
+    if (noValue != *z) {
+        *z = unit->displayOffset.z;
+    }
+}
+
 /** Adds to the unit's display offset; -250000000.0 keeps an axis. */
 // Original name and size (0x4c) from the JP demo map (UNUSED there: nothing calls it); BtlUnit_AddPartsDispOffset
 // for the unit.
@@ -945,6 +964,23 @@ void BtlUnit_SetPartsDispOffset(BattleUnitPart* part, f32 x, f32 y, f32 z) {
     }
     if (noValue != z) {
         part->displayOffset.z = z;
+    }
+}
+
+/** Reads the part's draw offset into the axes whose current value is not -250000000.0. */
+// Original name and size (0x4c) from the JP demo map (UNUSED there: only the stripped
+// btlevtcmd_GetPartsDispOffset calls it), listed between BtlUnit_SetPartsDispOffset and
+// BtlUnit_AddPartsDispOffset; the form of BtlUnit_GetDispOffset (see there for the evidence).
+void BtlUnit_GetPartsDispOffset(BattleUnitPart* part, f32* x, f32* y, f32* z) {
+    f32 noValue = -250000000.0f;
+    if (noValue != *x) {
+        *x = part->displayOffset.x;
+    }
+    if (noValue != *y) {
+        *y = part->displayOffset.y;
+    }
+    if (noValue != *z) {
+        *z = part->displayOffset.z;
     }
 }
 

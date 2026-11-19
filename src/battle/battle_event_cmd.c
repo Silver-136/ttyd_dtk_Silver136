@@ -466,6 +466,36 @@ USER_FUNC(btlevtcmd_SetDispOffset) {
     return EVT_RETURN_DONE;
 }
 
+/** s32* battleId, s32 indexX, s32 indexY, s32 indexZ (can be EVTDAT_POINTER_MAX for noret) */
+// Original name and size (0xe8) from the JP demo map (UNUSED there: no script uses it), listed between
+// btlevtcmd_SetDispOffset and btlevtcmd_AddDispOffset: btlevtcmd_GetPos (0xe8) with BtlUnit_GetDispOffset.
+USER_FUNC(btlevtcmd_GetDispOffset) {
+    EvtWord* args = event->args;
+    s32 indexX, indexY, indexZ;
+    BattleUnit* unit;
+    f32 x, y, z;
+    s32 id;
+
+    id = evtGetValue(event, args[0]);
+
+    id = BattleTransID(event, id);
+    unit = BattleGetUnitPtr(_battleWorkPointer, id);
+    indexX = args[1];
+    indexY = args[2];
+    indexZ = args[3];
+    BtlUnit_GetDispOffset(unit, &x, &y, &z);
+    if (indexX != EVTDAT_POINTER_MAX) {
+        evtSetValue(event, indexX, (s32)x);
+    }
+    if (indexY != EVTDAT_POINTER_MAX) {
+        evtSetValue(event, indexY, (s32)y);
+    }
+    if (indexZ != EVTDAT_POINTER_MAX) {
+        evtSetValue(event, indexZ, (s32)z);
+    }
+    return EVT_RETURN_DONE;
+}
+
 /** s32* battleId, s32* x, s32* y, s32* z */
 // Original name and size (0x128) from the JP demo map (UNUSED there: no script uses it); the form of
 // btlevtcmd_SetDispOffset.
@@ -503,6 +533,39 @@ USER_FUNC(btlevtcmd_SetPartsDispOffset) {
     BattleGetUnitPtr(_battleWorkPointer, id);
     part = BattleGetUnitPartsPtr(id, partId);
     BtlUnit_SetPartsDispOffset(part, x, y, z);
+    return EVT_RETURN_DONE;
+}
+
+/** s32* battleId, s32* partId, s32 indexX, s32 indexY, s32 indexZ (can be EVTDAT_POINTER_MAX for noret) */
+// Original name and size (0x10c) from the JP demo map (UNUSED there: no script uses it), listed between
+// btlevtcmd_SetPartsDispOffset and btlevtcmd_AddPartsDispOffset: btlevtcmd_GetPartsPos (0x10c) with
+// BtlUnit_GetPartsDispOffset.
+USER_FUNC(btlevtcmd_GetPartsDispOffset) {
+    EvtWord* args = event->args;
+    s32 id, partId;
+    s32 indexX, indexY, indexZ;
+    f32 currX, currY, currZ;
+    BattleUnitPart* part;
+
+    id = evtGetValue(event, args[0]);
+
+    id = BattleTransID(event, id);
+    partId = evtGetValue(event, args[1]);
+    BattleGetUnitPtr(_battleWorkPointer, id);
+    part = BattleGetUnitPartsPtr(id, partId);
+    indexX = args[2];
+    indexY = args[3];
+    indexZ = args[4];
+    BtlUnit_GetPartsDispOffset(part, &currX, &currY, &currZ);
+    if (indexX != EVTDAT_POINTER_MAX) {
+        evtSetValue(event, indexX, (s32)currX);
+    }
+    if (indexY != EVTDAT_POINTER_MAX) {
+        evtSetValue(event, indexY, (s32)currY);
+    }
+    if (indexZ != EVTDAT_POINTER_MAX) {
+        evtSetValue(event, indexZ, (s32)currZ);
+    }
     return EVT_RETURN_DONE;
 }
 
