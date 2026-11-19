@@ -187,6 +187,73 @@ static BattleWeapon weapon_pakkun_flower_attack = {
 };
 
 /**
+ * Script helper: writes 0 to args[0] if the stage ceiling frame is unavailable
+ * (STAGE_FLAG_NO_IRON_FRAME), otherwise 1;
+ * the plant uses it to decide whether it can hang from the ceiling.
+ */
+static USER_FUNC(pakkun_ceil_exist) {
+    EvtWord* args = event->args;
+
+    if (_battleWorkPointer->stageObjectWork.flags & STAGE_FLAG_NO_IRON_FRAME) {
+        evtSetValue(event, args[0], 0);
+    } else {
+        evtSetValue(event, args[0], 1);
+    }
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script helper: remembers the current shadow size of the plant's body part in unit work 0 for the shrink
+ * and grow helpers.
+ */
+static USER_FUNC(shadow_scale_memory) {
+    s32 id = BattleTransID(event, evtGetValue(event, event->args[0]));
+    BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
+    BattleUnitPart* part = BtlUnit_GetPartsPtr(unit, 1);
+
+    // Cache the scale as a numeric integer work value.
+    unit->work[0] = part->shadowScale;
+    return EVT_RETURN_DONE;
+}
+
+/** Script helper: shrinks the plant's shadow from its stored size to 0 over 15 frames as it burrows. */
+static USER_FUNC(shadow_scale_small) {
+    s32 id = BattleTransID(event, evtGetValue(event, event->args[0]));
+    BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
+    BattleUnitPart* part = BtlUnit_GetPartsPtr(unit, 1);
+
+    if (isFirstCall) {
+        unit->work[1] = 0;
+    }
+    part->shadowScale = intplGetValue(EASING_LINEAR, unit->work[0], 0.0f, unit->work[1], 15);
+    if (unit->work[1] >= 15) {
+        return EVT_RETURN_DONE;
+    }
+    unit->work[1]++;
+    return EVT_RETURN_BLOCK;
+}
+
+/**
+ * Script helper: grows the shadow of the plant's body part from 0 back to its stored size over 15 frames,
+ * after it comes out of the ground.
+ */
+static USER_FUNC(shadow_scale_return) {
+    s32 id = BattleTransID(event, evtGetValue(event, event->args[0]));
+    BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
+    BattleUnitPart* part = BtlUnit_GetPartsPtr(unit, 1);
+
+    if (isFirstCall) {
+        unit->work[1] = 0;
+    }
+    part->shadowScale = intplGetValue(EASING_LINEAR, 0.0f, unit->work[0], unit->work[1], 15);
+    if (unit->work[1] >= 15) {
+        return EVT_RETURN_DONE;
+    }
+    unit->work[1]++;
+    return EVT_RETURN_BLOCK;
+}
+
+/**
  * Attack event (also its confusion event) of the Piranha Plant: on a first strike it runs normal_attack_event;
  * otherwise it may use an item, and else it bites (normal_attack_event), its only attack.
  */
@@ -584,70 +651,3 @@ static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
-
-/**
- * Script helper: grows the shadow of the plant's body part from 0 back to its stored size over 15 frames,
- * after it comes out of the ground.
- */
-static USER_FUNC(shadow_scale_return) {
-    s32 id = BattleTransID(event, evtGetValue(event, event->args[0]));
-    BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
-    BattleUnitPart* part = BtlUnit_GetPartsPtr(unit, 1);
-
-    if (isFirstCall) {
-        unit->work[1] = 0;
-    }
-    part->shadowScale = intplGetValue(EASING_LINEAR, 0.0f, unit->work[0], unit->work[1], 15);
-    if (unit->work[1] >= 15) {
-        return EVT_RETURN_DONE;
-    }
-    unit->work[1]++;
-    return EVT_RETURN_BLOCK;
-}
-
-/** Script helper: shrinks the plant's shadow from its stored size to 0 over 15 frames as it burrows. */
-static USER_FUNC(shadow_scale_small) {
-    s32 id = BattleTransID(event, evtGetValue(event, event->args[0]));
-    BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
-    BattleUnitPart* part = BtlUnit_GetPartsPtr(unit, 1);
-
-    if (isFirstCall) {
-        unit->work[1] = 0;
-    }
-    part->shadowScale = intplGetValue(EASING_LINEAR, unit->work[0], 0.0f, unit->work[1], 15);
-    if (unit->work[1] >= 15) {
-        return EVT_RETURN_DONE;
-    }
-    unit->work[1]++;
-    return EVT_RETURN_BLOCK;
-}
-
-/**
- * Script helper: remembers the current shadow size of the plant's body part in unit work 0 for the shrink
- * and grow helpers.
- */
-static USER_FUNC(shadow_scale_memory) {
-    s32 id = BattleTransID(event, evtGetValue(event, event->args[0]));
-    BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
-    BattleUnitPart* part = BtlUnit_GetPartsPtr(unit, 1);
-
-    // Cache the scale as a numeric integer work value.
-    unit->work[0] = part->shadowScale;
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper: writes 0 to args[0] if the stage ceiling frame is unavailable
- * (STAGE_FLAG_NO_IRON_FRAME), otherwise 1;
- * the plant uses it to decide whether it can hang from the ceiling.
- */
-static USER_FUNC(pakkun_ceil_exist) {
-    EvtWord* args = event->args;
-
-    if (_battleWorkPointer->stageObjectWork.flags & STAGE_FLAG_NO_IRON_FRAME) {
-        evtSetValue(event, args[0], 0);
-    } else {
-        evtSetValue(event, args[0], 1);
-    }
-    return EVT_RETURN_DONE;
-}

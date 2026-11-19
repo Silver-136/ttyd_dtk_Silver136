@@ -405,6 +405,162 @@ static BattleUnitSetup entry_kamec_obaba = {
     NULL, // itemDropTable
 };
 
+/**
+ * Script helper: Bowser disables Mario's jump or hammer command (the first two command slots) for 3 turns at
+ * random. Returns in args[0] the matching command icon id and puts the announcement message key in LW(0).
+ */
+static USER_FUNC(mario_cannot_use_command) {
+    BattleWork* wp = _battleWorkPointer;
+    s32 r = irand(2); // 0 or 1: case 2 (the item command) is never chosen
+    s32 var = event->args[0];
+    s32 weapon = 0;
+
+    switch (r) {
+        case 0:
+            wp->commandDisabled[0] = 3;
+#if VERSION >= VERSION_US
+            weapon = 334;
+#else
+            weapon = 326;
+#endif
+            break;
+        case 1:
+            wp->commandDisabled[1] = 3;
+#if VERSION >= VERSION_US
+            weapon = 337;
+#else
+            weapon = 329;
+#endif
+            break;
+        case 2:
+            wp->commandDisabled[2] = 3;
+#if VERSION >= VERSION_US
+            weapon = 340;
+#else
+            weapon = 332;
+#endif
+            break;
+    }
+    event->lwData[0] = (EvtWord)cmd_disable_string[r];
+    evtSetValue(event, var, weapon);
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script helper: Bowser disables the partner's technique command for 3 turns (irand(1) always selects it;
+ * US and later versions store the turn count on the partner unit given in args[1]).
+ * Returns in args[0] the command icon id of the disabled command and puts the matching announcement message key in LW(0).
+ */
+static USER_FUNC(party_cannot_use_command) {
+    BattleWork* wp = _battleWorkPointer;
+    s32 r = irand(1); // always 0: case 1 (the partner's item command) is never chosen
+    s32 var = event->args[0];
+#if VERSION >= VERSION_US
+    s32 id = evtGetValue(event, event->args[1]);
+    s32 weapon = 0;
+    BattleUnit* unit;
+
+    id = BattleTransID(event, id);
+    unit = BattleGetUnitPtr(wp, id);
+#else
+    s32 weapon = 0;
+#endif
+    switch (r) {
+        case 0:
+#if VERSION >= VERSION_US
+            if (unit != NULL) {
+                unit->usCommandDisabled[0] = 3;
+            }
+            weapon = 344;
+            break;
+        case 1:
+            if (unit != NULL) {
+                unit->usCommandDisabled[1] = 3;
+            }
+            weapon = 340;
+#else
+            wp->commandDisabled[3] = 3;
+            weapon = 336;
+            break;
+        case 1:
+            wp->commandDisabled[4] = 3;
+            weapon = 332;
+#endif
+            break;
+    }
+    event->lwData[0] = (EvtWord)cmd_disable_string[r + 3];
+    evtSetValue(event, var, weapon);
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script helper: animates a command icon (icon id args[0]) on a parabolic jump from (args[1..3]) to (args[4..6])
+ * with gravity args[7] over args[8] frames, drawn each frame; blocks until it lands.
+ * Used to show a battle command icon being thrown away when Bowser disables it.
+ */
+static USER_FUNC(_icon_jump_icon) {
+    EvtWord* args = event->args;
+    s32 icon = evtGetValue(event, args[0]);
+    f32 x0 = evtGetFloat(event, args[1]);
+    f32 y0 = evtGetFloat(event, args[2]);
+    f32 z0 = evtGetFloat(event, args[3]);
+    f32 x1 = evtGetFloat(event, args[4]);
+    f32 y1 = evtGetFloat(event, args[5]);
+    f32 z1 = evtGetFloat(event, args[6]);
+    f32 gravity = evtGetFloat(event, args[7]);
+    s32 frames = evtGetValue(event, args[8]);
+    IconJumpWork* wk;
+
+    if (isFirstCall) {
+        Vec start;
+
+        event->userdatap[0] = BattleAlloc(sizeof(IconJumpWork));
+        wk = event->userdatap[0];
+        wk->end.x = x1;
+        wk->end.y = y1;
+        wk->end.z = z1;
+        start.x = x0;
+        start.y = y0;
+        start.z = z0;
+        wk->pos = start;
+        wk->start = start;
+        wk->gravity = gravity;
+        wk->frames = frames;
+        wk->vy = (wk->end.y - wk->start.y) / wk->frames + wk->gravity * wk->frames / 2;
+        wk->speed = distABf(wk->start.x, wk->start.z, wk->end.x, wk->end.z) / wk->frames;
+        event->userdata[1] = icon;
+        event->userdata[2] = 0;
+    }
+    wk = event->userdatap[0];
+    if (event->userdata[2]) {
+        BattleFree(wk);
+        return EVT_RETURN_DONE;
+    }
+    wk->pos.y += wk->vy;
+    wk->vy -= wk->gravity;
+    if (wk->vy < 0.0f && wk->pos.y < wk->end.y) {
+        wk->pos.y = wk->end.y;
+    }
+    btlMovePos(wk->speed, angleABf(wk->start.x, wk->start.z, wk->end.x, wk->end.z), &wk->pos.x, &wk->pos.z);
+    wk->frames--;
+    if (wk->frames <= 0) {
+        event->userdata[2] = 1;
+        wk->pos = wk->end;
+    }
+    dispEntry(CAMERA_3D, 900.0f, DISP_MODE_ALPHA_TEST, _disp_icon, event);
+    return EVT_RETURN_BLOCK;
+}
+
+/**
+ * Draw callback for the jumping command icon: draws the icon at the position stored in the IconJumpWork of the
+ * event.
+ */
+static void _disp_icon(CameraId camera, void* param) {
+    EventEntry* event = param;
+
+    iconDispGx(&((IconJumpWork*)event->userdatap[0])->pos, 0, 1.0f, event->userdata[1]);
+}
+
 /** Camera helper of the Bowser fight: moves the battle camera to a close view of Bowser at the X in LW(0). */
 static EVT_BEGIN(koopa_zoom)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
@@ -1237,159 +1393,3 @@ static const char* cmd_disable_string[] = {
     "btl_party_tech_cmd_disable",
     "btl_party_item_cmd_disable",
 };
-
-/**
- * Draw callback for the jumping command icon: draws the icon at the position stored in the IconJumpWork of the
- * event.
- */
-static void _disp_icon(CameraId camera, void* param) {
-    EventEntry* event = param;
-
-    iconDispGx(&((IconJumpWork*)event->userdatap[0])->pos, 0, 1.0f, event->userdata[1]);
-}
-
-/**
- * Script helper: animates a command icon (icon id args[0]) on a parabolic jump from (args[1..3]) to (args[4..6])
- * with gravity args[7] over args[8] frames, drawn each frame; blocks until it lands.
- * Used to show a battle command icon being thrown away when Bowser disables it.
- */
-static USER_FUNC(_icon_jump_icon) {
-    EvtWord* args = event->args;
-    s32 icon = evtGetValue(event, args[0]);
-    f32 x0 = evtGetFloat(event, args[1]);
-    f32 y0 = evtGetFloat(event, args[2]);
-    f32 z0 = evtGetFloat(event, args[3]);
-    f32 x1 = evtGetFloat(event, args[4]);
-    f32 y1 = evtGetFloat(event, args[5]);
-    f32 z1 = evtGetFloat(event, args[6]);
-    f32 gravity = evtGetFloat(event, args[7]);
-    s32 frames = evtGetValue(event, args[8]);
-    IconJumpWork* wk;
-
-    if (isFirstCall) {
-        Vec start;
-
-        event->userdatap[0] = BattleAlloc(sizeof(IconJumpWork));
-        wk = event->userdatap[0];
-        wk->end.x = x1;
-        wk->end.y = y1;
-        wk->end.z = z1;
-        start.x = x0;
-        start.y = y0;
-        start.z = z0;
-        wk->pos = start;
-        wk->start = start;
-        wk->gravity = gravity;
-        wk->frames = frames;
-        wk->vy = (wk->end.y - wk->start.y) / wk->frames + wk->gravity * wk->frames / 2;
-        wk->speed = distABf(wk->start.x, wk->start.z, wk->end.x, wk->end.z) / wk->frames;
-        event->userdata[1] = icon;
-        event->userdata[2] = 0;
-    }
-    wk = event->userdatap[0];
-    if (event->userdata[2]) {
-        BattleFree(wk);
-        return EVT_RETURN_DONE;
-    }
-    wk->pos.y += wk->vy;
-    wk->vy -= wk->gravity;
-    if (wk->vy < 0.0f && wk->pos.y < wk->end.y) {
-        wk->pos.y = wk->end.y;
-    }
-    btlMovePos(wk->speed, angleABf(wk->start.x, wk->start.z, wk->end.x, wk->end.z), &wk->pos.x, &wk->pos.z);
-    wk->frames--;
-    if (wk->frames <= 0) {
-        event->userdata[2] = 1;
-        wk->pos = wk->end;
-    }
-    dispEntry(CAMERA_3D, 900.0f, DISP_MODE_ALPHA_TEST, _disp_icon, event);
-    return EVT_RETURN_BLOCK;
-}
-
-/**
- * Script helper: Bowser disables the partner's technique command for 3 turns (irand(1) always selects it;
- * US and later versions store the turn count on the partner unit given in args[1]).
- * Returns in args[0] the command icon id of the disabled command and puts the matching announcement message key in LW(0).
- */
-static USER_FUNC(party_cannot_use_command) {
-    BattleWork* wp = _battleWorkPointer;
-    s32 r = irand(1); // always 0: case 1 (the partner's item command) is never chosen
-    s32 var = event->args[0];
-#if VERSION >= VERSION_US
-    s32 id = evtGetValue(event, event->args[1]);
-    s32 weapon = 0;
-    BattleUnit* unit;
-
-    id = BattleTransID(event, id);
-    unit = BattleGetUnitPtr(wp, id);
-#else
-    s32 weapon = 0;
-#endif
-    switch (r) {
-        case 0:
-#if VERSION >= VERSION_US
-            if (unit != NULL) {
-                unit->usCommandDisabled[0] = 3;
-            }
-            weapon = 344;
-            break;
-        case 1:
-            if (unit != NULL) {
-                unit->usCommandDisabled[1] = 3;
-            }
-            weapon = 340;
-#else
-            wp->commandDisabled[3] = 3;
-            weapon = 336;
-            break;
-        case 1:
-            wp->commandDisabled[4] = 3;
-            weapon = 332;
-#endif
-            break;
-    }
-    event->lwData[0] = (EvtWord)cmd_disable_string[r + 3];
-    evtSetValue(event, var, weapon);
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper: Bowser disables Mario's jump or hammer command (the first two command slots) for 3 turns at
- * random. Returns in args[0] the matching command icon id and puts the announcement message key in LW(0).
- */
-static USER_FUNC(mario_cannot_use_command) {
-    BattleWork* wp = _battleWorkPointer;
-    s32 r = irand(2); // 0 or 1: case 2 (the item command) is never chosen
-    s32 var = event->args[0];
-    s32 weapon = 0;
-
-    switch (r) {
-        case 0:
-            wp->commandDisabled[0] = 3;
-#if VERSION >= VERSION_US
-            weapon = 334;
-#else
-            weapon = 326;
-#endif
-            break;
-        case 1:
-            wp->commandDisabled[1] = 3;
-#if VERSION >= VERSION_US
-            weapon = 337;
-#else
-            weapon = 329;
-#endif
-            break;
-        case 2:
-            wp->commandDisabled[2] = 3;
-#if VERSION >= VERSION_US
-            weapon = 340;
-#else
-            weapon = 332;
-#endif
-            break;
-    }
-    event->lwData[0] = (EvtWord)cmd_disable_string[r];
-    evtSetValue(event, var, weapon);
-    return EVT_RETURN_DONE;
-}

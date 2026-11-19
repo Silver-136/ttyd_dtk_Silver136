@@ -586,6 +586,58 @@ static BattleUnitKindPart parts[] = {
 };
 
 /**
+ * Script helper: hooks _fire_point_callback onto the bomb's body (part 1), and hides part 2, the fuse flame, so the
+ * callback can draw it at the fuse's locator.
+ */
+static USER_FUNC(_set_draw_callback) {
+    BattleWork* wp = _battleWorkPointer;
+    s32 id = BattleTransID(event, UNIT_ID_SELF);
+    BattleUnit* unit = BattleGetUnitPtr(wp, id);
+    BattleUnitPart* part = BtlUnit_GetPartsPtr(unit, 1);
+
+    animPoseSetDispCallBack(part->poseId, _fire_point_callback, part);
+    BtlUnit_GetPartsPtr(unit, 2)->attributes |= kHidden;
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Pose draw callback of the bomb's body (userdata is part 1): while the fuse is lit (UNIT_WORK_FUSE_LIT), draws part
+ * 2's flame shape pPlaneShape3 when the drawn group is the fuse locator for the current countdown (UNIT_WORK_COUNTDOWN)
+ * value (0: locator11, 1: locator10, 2: locator9, otherwise locator8).
+ */
+static void _fire_point_callback(void* userdata, s32 group, Mtx* modeling) {
+    BattleUnitPart* part = userdata;
+    BattleUnit* unit = part->owner;
+    const char* name;
+    s32 poseId;
+
+    if (unit->work[UNIT_WORK_FUSE_LIT] == 0) {
+        return;
+    }
+    poseId = part->poseId;
+    switch (unit->work[UNIT_WORK_COUNTDOWN]) {
+        case 0:
+            name = "locator11";
+            break;
+        case 1:
+            name = "locator10";
+            break;
+        case 2:
+            name = "locator9";
+            break;
+        case 3:
+        default:
+            name = "locator8";
+            break;
+    }
+    if (strcmp(name, animPoseGetGroupName(poseId, group)) == 0) {
+        s32 shapePose = BtlUnit_GetPartsPtr(unit, 2)->poseId;
+        s32 shape = animPoseGetShapeIdx(shapePose, "pPlaneShape3");
+        animPoseDrawShape(shapePose, shape);
+    }
+}
+
+/**
  * Init event of the Bulky Bob-omb: installs its wait, phase, attack,
  * damage and confusion events and sets its unit work:
  * 0 = fuse lit, 1 = fuse length left (starts at 3), 2 = the fuse sound handle (-1 for none),
@@ -859,55 +911,3 @@ static EVT_BEGIN(explosion_event)
     CALL(btlevtcmd_KillUnit, UNIT_ID_SELF, 0)
     RETURN
 EVT_END()
-
-/**
- * Pose draw callback of the bomb's body (userdata is part 1): while the fuse is lit (UNIT_WORK_FUSE_LIT), draws part
- * 2's flame shape pPlaneShape3 when the drawn group is the fuse locator for the current countdown (UNIT_WORK_COUNTDOWN)
- * value (0: locator11, 1: locator10, 2: locator9, otherwise locator8).
- */
-static void _fire_point_callback(void* userdata, s32 group, Mtx* modeling) {
-    BattleUnitPart* part = userdata;
-    BattleUnit* unit = part->owner;
-    const char* name;
-    s32 poseId;
-
-    if (unit->work[UNIT_WORK_FUSE_LIT] == 0) {
-        return;
-    }
-    poseId = part->poseId;
-    switch (unit->work[UNIT_WORK_COUNTDOWN]) {
-        case 0:
-            name = "locator11";
-            break;
-        case 1:
-            name = "locator10";
-            break;
-        case 2:
-            name = "locator9";
-            break;
-        case 3:
-        default:
-            name = "locator8";
-            break;
-    }
-    if (strcmp(name, animPoseGetGroupName(poseId, group)) == 0) {
-        s32 shapePose = BtlUnit_GetPartsPtr(unit, 2)->poseId;
-        s32 shape = animPoseGetShapeIdx(shapePose, "pPlaneShape3");
-        animPoseDrawShape(shapePose, shape);
-    }
-}
-
-/**
- * Script helper: hooks _fire_point_callback onto the bomb's body (part 1), and hides part 2, the fuse flame, so the
- * callback can draw it at the fuse's locator.
- */
-static USER_FUNC(_set_draw_callback) {
-    BattleWork* wp = _battleWorkPointer;
-    s32 id = BattleTransID(event, UNIT_ID_SELF);
-    BattleUnit* unit = BattleGetUnitPtr(wp, id);
-    BattleUnitPart* part = BtlUnit_GetPartsPtr(unit, 1);
-
-    animPoseSetDispCallBack(part->poseId, _fire_point_callback, part);
-    BtlUnit_GetPartsPtr(unit, 2)->attributes |= kHidden;
-    return EVT_RETURN_DONE;
-}

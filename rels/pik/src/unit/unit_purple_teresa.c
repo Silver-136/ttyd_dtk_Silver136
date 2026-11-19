@@ -50,92 +50,6 @@ static EvtWord move_event_sub[103];
 static EvtWord wait_event[6];
 
 /**
- * Script helper: stores 1 in args[1] if the battle unit whose id is args[0] exists and is a Boo (kind 0x4B)
- * or a Dark Boo (0x6A), else 0. trans_event uses it to keep sampling until the target it picked is a Boo.
- */
-static USER_FUNC(teresa_check_teresa) {
-    EvtWord* args = event->args;
-    s32 id = evtGetValue(event, args[0]);
-    s32 result = 0;
-    BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
-
-    if (unit == NULL) {
-        evtSetValue(event, args[1], 0);
-        return EVT_RETURN_DONE;
-    }
-    if (unit->currentKind == UNIT_BOO) {
-        result = 1;
-    }
-    if (unit->currentKind == UNIT_DARK_BOO) {
-        result = 1;
-    }
-    evtSetValue(event, args[1], result);
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper: stores 1 in args[0] if at least one Boo
- * or Dark Boo on the field has UNIT_WORK_LIFTED equal to 0 (it has not yet done the group move), else 0;
- * attack_event stores it in LW(15), which allows the group-move option (move_event).
- */
-static USER_FUNC(teresa_check_move) {
-    EvtWord* args = event->args;
-    s32 num = 0;
-    s32 i;
-
-    for (i = 0; i < 64; i++) {
-        BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, i);
-        if (unit != NULL) {
-            if (unit->currentKind == UNIT_BOO && unit->work[UNIT_WORK_LIFTED] == 0) {
-                num++;
-            }
-            if (unit->currentKind == UNIT_DARK_BOO && unit->work[UNIT_WORK_LIFTED] == 0) {
-                num++;
-            }
-        }
-    }
-    if (num >= 1) {
-        evtSetValue(event, args[0], 1);
-    } else {
-        evtSetValue(event, args[0], 0);
-    }
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper: stores 1 in args[1] if the battle has another Boo
- * or Dark Boo (not the unit args[0] itself) that is not invisible (STATUS_INVISIBLE);
- * attack_event stores it in LW(14), which allows the make-an-ally-invisible option (trans_event).
- */
-static USER_FUNC(teresa_check_trans) {
-    EvtWord* args = event->args;
-    s32 num = 0;
-    s32 id = evtGetValue(event, args[0]);
-    s32 self;
-    s32 i;
-
-    self = BattleTransID(event, id);
-
-    for (i = 0; i < 64; i++) {
-        BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, i);
-        if (unit != NULL) {
-            if (unit->currentKind == UNIT_BOO && !BtlUnit_CheckStatus(unit, STATUS_INVISIBLE) && i != self) {
-                num++;
-            }
-            if (unit->currentKind == UNIT_DARK_BOO && !BtlUnit_CheckStatus(unit, STATUS_INVISIBLE) && i != self) {
-                num++;
-            }
-        }
-    }
-    if (num >= 1) {
-        evtSetValue(event, args[1], 1);
-    } else {
-        evtSetValue(event, args[1], 0);
-    }
-    return EVT_RETURN_DONE;
-}
-
-/**
  * Unit kind of the Dark Boo (HP 8, level 24): its size, offsets, damage sounds, status vulnerability,
  * parts and init event.
  */
@@ -412,6 +326,92 @@ static PoseTableEntry pose_table[] = {
 static BattleDataEntry data_table[] = {
     {0, NULL},
 };
+
+/**
+ * Script helper: stores 1 in args[1] if the battle has another Boo
+ * or Dark Boo (not the unit args[0] itself) that is not invisible (STATUS_INVISIBLE);
+ * attack_event stores it in LW(14), which allows the make-an-ally-invisible option (trans_event).
+ */
+static USER_FUNC(teresa_check_trans) {
+    EvtWord* args = event->args;
+    s32 num = 0;
+    s32 id = evtGetValue(event, args[0]);
+    s32 self;
+    s32 i;
+
+    self = BattleTransID(event, id);
+
+    for (i = 0; i < 64; i++) {
+        BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, i);
+        if (unit != NULL) {
+            if (unit->currentKind == UNIT_BOO && !BtlUnit_CheckStatus(unit, STATUS_INVISIBLE) && i != self) {
+                num++;
+            }
+            if (unit->currentKind == UNIT_DARK_BOO && !BtlUnit_CheckStatus(unit, STATUS_INVISIBLE) && i != self) {
+                num++;
+            }
+        }
+    }
+    if (num >= 1) {
+        evtSetValue(event, args[1], 1);
+    } else {
+        evtSetValue(event, args[1], 0);
+    }
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script helper: stores 1 in args[0] if at least one Boo
+ * or Dark Boo on the field has UNIT_WORK_LIFTED equal to 0 (it has not yet done the group move), else 0;
+ * attack_event stores it in LW(15), which allows the group-move option (move_event).
+ */
+static USER_FUNC(teresa_check_move) {
+    EvtWord* args = event->args;
+    s32 num = 0;
+    s32 i;
+
+    for (i = 0; i < 64; i++) {
+        BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, i);
+        if (unit != NULL) {
+            if (unit->currentKind == UNIT_BOO && unit->work[UNIT_WORK_LIFTED] == 0) {
+                num++;
+            }
+            if (unit->currentKind == UNIT_DARK_BOO && unit->work[UNIT_WORK_LIFTED] == 0) {
+                num++;
+            }
+        }
+    }
+    if (num >= 1) {
+        evtSetValue(event, args[0], 1);
+    } else {
+        evtSetValue(event, args[0], 0);
+    }
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script helper: stores 1 in args[1] if the battle unit whose id is args[0] exists and is a Boo (kind 0x4B)
+ * or a Dark Boo (0x6A), else 0. trans_event uses it to keep sampling until the target it picked is a Boo.
+ */
+static USER_FUNC(teresa_check_teresa) {
+    EvtWord* args = event->args;
+    s32 id = evtGetValue(event, args[0]);
+    s32 result = 0;
+    BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
+
+    if (unit == NULL) {
+        evtSetValue(event, args[1], 0);
+        return EVT_RETURN_DONE;
+    }
+    if (unit->currentKind == UNIT_BOO) {
+        result = 1;
+    }
+    if (unit->currentKind == UNIT_DARK_BOO) {
+        result = 1;
+    }
+    evtSetValue(event, args[1], result);
+    return EVT_RETURN_DONE;
+}
 
 /**
  * Init event of the Dark Boo: installs its wait, attack, damage and confusion events,

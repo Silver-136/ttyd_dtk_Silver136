@@ -174,6 +174,32 @@ static BattleWeapon weapon_chorobon_drain_attack = {
 };
 
 /**
+ * Script helper: copies the current HP (capped to the max HP),
+ * size change turns and strength of unit args[0] to unit args[1] and resets the second unit's HP gauge;
+ * friend_event uses it so a newly split Green Fuzzy starts with its parent's HP and size.
+ */
+static USER_FUNC(chorobon_copy_status) {
+    EvtWord* args = event->args;
+    s32 id1 = BattleTransID(event, evtGetValue(event, args[0]));
+    s32 id2 = BattleTransID(event, evtGetValue(event, args[1]));
+    BattleWork* wp = _battleWorkPointer;
+    BattleUnit* unit1 = BattleGetUnitPtr(wp, id1);
+    BattleUnit* unit2 = BattleGetUnitPtr(wp, id2);
+
+    // Copy HP and size-change state only; the other status fields are left unchanged.
+    unit2->currentHp = unit1->currentHp;
+    if (unit2->currentHp > unit2->maxHp) {
+        unit2->currentHp = unit2->maxHp;
+    }
+    unit2->sizeChangeTurns = unit1->sizeChangeTurns;
+    unit2->sizeChangeStrength = unit1->sizeChangeStrength;
+    unit2->hpGauge.prevHp = unit2->currentHp;
+    unit2->hpGauge.targetHp = unit2->currentHp;
+    unit2->hpGauge.barRatio = unit2->hpGauge.trailRatio = (f32)unit2->currentHp / unit2->maxHp;
+    return EVT_RETURN_DONE;
+}
+
+/**
  * Attack event (also its confusion event) of the Green Fuzzy: may use an item;
  * otherwise half the time it drains a target (drain_attack_event).
  * The other half it looks for a free spot behind it (out to x = 170) and then in front of it and,
@@ -773,32 +799,6 @@ static EVT_BEGIN(drain_attack_event)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
-
-/**
- * Script helper: copies the current HP (capped to the max HP),
- * size change turns and strength of unit args[0] to unit args[1] and resets the second unit's HP gauge;
- * friend_event uses it so a newly split Green Fuzzy starts with its parent's HP and size.
- */
-static USER_FUNC(chorobon_copy_status) {
-    EvtWord* args = event->args;
-    s32 id1 = BattleTransID(event, evtGetValue(event, args[0]));
-    s32 id2 = BattleTransID(event, evtGetValue(event, args[1]));
-    BattleWork* wp = _battleWorkPointer;
-    BattleUnit* unit1 = BattleGetUnitPtr(wp, id1);
-    BattleUnit* unit2 = BattleGetUnitPtr(wp, id2);
-
-    // Copy HP and size-change state only; the other status fields are left unchanged.
-    unit2->currentHp = unit1->currentHp;
-    if (unit2->currentHp > unit2->maxHp) {
-        unit2->currentHp = unit2->maxHp;
-    }
-    unit2->sizeChangeTurns = unit1->sizeChangeTurns;
-    unit2->sizeChangeStrength = unit1->sizeChangeStrength;
-    unit2->hpGauge.prevHp = unit2->currentHp;
-    unit2->hpGauge.targetHp = unit2->currentHp;
-    unit2->hpGauge.barRatio = unit2->hpGauge.trailRatio = (f32)unit2->currentHp / unit2->maxHp;
-    return EVT_RETURN_DONE;
-}
 
 /** Wait (idle) event of the Green Fuzzy, installed by its init (btlevtcmd_SetEventWait): sets the idle pose from its pose table. */
 static EVT_BEGIN(wait_event)

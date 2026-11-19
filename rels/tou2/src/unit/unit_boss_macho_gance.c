@@ -560,6 +560,189 @@ static BattleWeapon weapon_gance_body_attack = {
 };
 
 /**
+ * Integer-result version of wariai_enzan_1f: args[4] receives (a * args[2] + (b - a) * args[3]) / b with a =
+ * args[0] - 1 and b = args[1]. Not called in this unit.
+ */
+static USER_FUNC(wariai_enzan_1) {
+    EvtWord* args = event->args;
+    f32 a = evtGetFloat(event, args[0]) - 1.0f;
+    f32 b = evtGetFloat(event, args[1]);
+    f32 c = evtGetFloat(event, args[2]);
+    f32 d = evtGetFloat(event, args[3]);
+
+    evtSetValue(event, args[4], (a * c + d * (b - a)) / b);
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Linear blend helper: with a = args[0] - 1 and b = args[1],
+ * args[4] receives (a * args[2] + (b - a) * args[3]) / b as a float,
+ * so step 1 gives args[3] and the value reaches args[2] one step after args[1].
+ * Used for the turns and growth in phase_event and gance_body_attack_attack_event.
+ */
+static USER_FUNC(wariai_enzan_1f) {
+    EvtWord* args = event->args;
+    f32 a = evtGetFloat(event, args[0]) - 1.0f;
+    f32 b = evtGetFloat(event, args[1]);
+    f32 c = evtGetFloat(event, args[2]);
+    f32 d = evtGetFloat(event, args[3]);
+
+    evtSetFloat(event, args[4], (a * c + d * (b - a)) / b);
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Curve blend of args[2] and args[3] at step args[0] of args[1]:
+ * args[5] is an intplGetValue mode (0 to 13; 14 to 27 run mode minus 14 mirrored;
+ * 28 or more give args[2] outright), and args[4] receives (1 - r) * args[2] + r * args[3] as a float,
+ * with curve time args[1] - (args[0] - 1). gance_body_attack_attack_event uses it with mode 5 for its roll.
+ */
+static USER_FUNC(wariai_enzan_1f_intpl) {
+    EvtWord* args = event->args;
+    f32 a = evtGetFloat(event, args[0]) - 1.0f;
+    f32 b = evtGetFloat(event, args[1]);
+    f32 c = evtGetFloat(event, args[2]);
+    f32 d = evtGetFloat(event, args[3]);
+    s32 out = args[4];
+    f32 t = evtGetFloat(event, args[5]);
+    f32 r;
+
+    if (t >= 14.0f) {
+        t -= 14.0f;
+        if (t >= 14.0f) {
+            evtSetFloat(event, out, c);
+            return EVT_RETURN_DONE;
+        }
+        r = 1.0f - intplGetValue(t, 1.0f, 0.0f, b - a, b);
+    } else {
+        r = intplGetValue(t, 0.0f, 1.0f, b - a, b);
+    }
+    evtSetFloat(event, out, (1.0f - r) * c + r * d);
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Curve blend of args[2] and args[3] at step args[0] of args[1],
+ * weighted by the product of two interpolation curves:
+ * args[5] and args[6] are intplGetValue modes, where 14 to 27 run mode minus 14 mirrored and 28
+ * or more give args[2] outright. The float result goes to args[4].
+ * The mirrored branch of the second curve takes its mode from args[5] rather than args[6].
+ * Not called in this unit.
+ */
+static USER_FUNC(wariai_enzan_1f_intpl_w) {
+    EvtWord* args = event->args;
+    f32 a = evtGetFloat(event, args[0]) - 1.0f;
+    f32 b = evtGetFloat(event, args[1]);
+    f32 c = evtGetFloat(event, args[2]);
+    f32 d = evtGetFloat(event, args[3]);
+    s32 out = args[4];
+    f32 t1 = evtGetFloat(event, args[5]);
+    f32 t2 = evtGetFloat(event, args[6]);
+    f32 r1;
+    f32 r2;
+    f32 w;
+
+    if (t1 >= 14.0f) {
+        t1 -= 14.0f;
+        if (t1 >= 14.0f) {
+            evtSetFloat(event, out, c);
+            return EVT_RETURN_DONE;
+        }
+        r1 = 1.0f - intplGetValue(t1, 1.0f, 0.0f, b - a, b);
+    } else {
+        r1 = intplGetValue(t1, 0.0f, 1.0f, b - a, b);
+    }
+    if (t2 >= 14.0f) {
+        // BUG: subtracts from t1 instead of t2 (the branch above does t1 -= 14), so the second mode
+        // comes from the first one.
+        t2 = t1 - 14.0f;
+        if (t2 >= 14.0f) {
+            evtSetFloat(event, out, c);
+            return EVT_RETURN_DONE;
+        }
+        r2 = 1.0f - intplGetValue(t2, 1.0f, 0.0f, b - a, b);
+    } else {
+        r2 = intplGetValue(t2, 0.0f, 1.0f, b - a, b);
+    }
+    w = r1 * r2;
+    evtSetFloat(event, out, c * (1.0f - w) + d * w);
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Integer-result version of wariai_enzan_0f: args[4] receives (a * args[2] + (b - a) * args[3]) / b with a =
+ * args[0] - 1 and b = args[1] - 1. Not called in this unit.
+ */
+static USER_FUNC(wariai_enzan_0) {
+    EvtWord* args = event->args;
+    f32 a = evtGetFloat(event, args[0]) - 1.0f;
+    f32 b = evtGetFloat(event, args[1]) - 1.0f;
+    f32 c = evtGetFloat(event, args[2]);
+    f32 d = evtGetFloat(event, args[3]);
+
+    evtSetValue(event, args[4], (a * c + d * (b - a)) / b);
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Proportion helper (wariai enzan, ratio calculation): a linear blend over steps 1 to args[1] inclusive.
+ * With a = args[0] - 1 and b = args[1] - 1, args[4] receives (a * args[2] + (b - a) * args[3]) / b as a float,
+ * so step 1 gives args[3] and step args[1] gives args[2]. Not called in this unit.
+ */
+static USER_FUNC(wariai_enzan_0f) {
+    EvtWord* args = event->args;
+    f32 a = evtGetFloat(event, args[0]) - 1.0f;
+    f32 b = evtGetFloat(event, args[1]) - 1.0f;
+    f32 c = evtGetFloat(event, args[2]);
+    f32 d = evtGetFloat(event, args[3]);
+
+    evtSetFloat(event, args[4], (a * c + d * (b - a)) / b);
+    return EVT_RETURN_DONE;
+}
+
+/** Script helper: sets x_flag_data[arg0] to arg1. */
+static USER_FUNC(x_flag_set) {
+    EvtWord* args = event->args;
+    s32 index = evtGetValue(event, args[0]);
+
+    x_flag_data[index] = evtGetValue(event, args[1]);
+    return EVT_RETURN_DONE;
+}
+
+/** Script helper: adds arg1 to x_flag_data[arg0]. */
+static USER_FUNC(x_flag_add) {
+    EvtWord* args = event->args;
+    s32 index = evtGetValue(event, args[0]);
+
+    x_flag_data[index] += evtGetValue(event, args[1]);
+    return EVT_RETURN_DONE;
+}
+
+/** Script helper: arg1 receives x_flag_data[arg0]. */
+static USER_FUNC(x_flag_get) {
+    EvtWord* args = event->args;
+    s32 index = evtGetValue(event, args[0]);
+
+    evtSetValue(event, args[1], x_flag_data[index]);
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script helper: blocks until x_flag_data[arg0] equals arg1 (a small array of flags the Macho Grubba scripts use
+ * to synchronise their sibling events).
+ */
+static USER_FUNC(x_flag_wait) {
+    EvtWord* args = event->args;
+    s32 index = evtGetValue(event, args[0]);
+    s32 value = evtGetValue(event, args[1]);
+
+    if (value == x_flag_data[index]) {
+        return EVT_RETURN_DONE;
+    }
+    return EVT_RETURN_BLOCK;
+}
+
+/**
  * Battle camera move to frame Macho Grubba: LW(0) = 2 snaps instantly, anything else moves in over 30 frames;
  * the framing depends on how big he currently is. LW(0) = 1 also waits 600 ms for the camera to settle.
  */
@@ -1778,186 +1961,3 @@ static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
-
-/**
- * Script helper: blocks until x_flag_data[arg0] equals arg1 (a small array of flags the Macho Grubba scripts use
- * to synchronise their sibling events).
- */
-static USER_FUNC(x_flag_wait) {
-    EvtWord* args = event->args;
-    s32 index = evtGetValue(event, args[0]);
-    s32 value = evtGetValue(event, args[1]);
-
-    if (value == x_flag_data[index]) {
-        return EVT_RETURN_DONE;
-    }
-    return EVT_RETURN_BLOCK;
-}
-
-/** Script helper: arg1 receives x_flag_data[arg0]. */
-static USER_FUNC(x_flag_get) {
-    EvtWord* args = event->args;
-    s32 index = evtGetValue(event, args[0]);
-
-    evtSetValue(event, args[1], x_flag_data[index]);
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper: adds arg1 to x_flag_data[arg0]. */
-static USER_FUNC(x_flag_add) {
-    EvtWord* args = event->args;
-    s32 index = evtGetValue(event, args[0]);
-
-    x_flag_data[index] += evtGetValue(event, args[1]);
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper: sets x_flag_data[arg0] to arg1. */
-static USER_FUNC(x_flag_set) {
-    EvtWord* args = event->args;
-    s32 index = evtGetValue(event, args[0]);
-
-    x_flag_data[index] = evtGetValue(event, args[1]);
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Proportion helper (wariai enzan, ratio calculation): a linear blend over steps 1 to args[1] inclusive.
- * With a = args[0] - 1 and b = args[1] - 1, args[4] receives (a * args[2] + (b - a) * args[3]) / b as a float,
- * so step 1 gives args[3] and step args[1] gives args[2]. Not called in this unit.
- */
-static USER_FUNC(wariai_enzan_0f) {
-    EvtWord* args = event->args;
-    f32 a = evtGetFloat(event, args[0]) - 1.0f;
-    f32 b = evtGetFloat(event, args[1]) - 1.0f;
-    f32 c = evtGetFloat(event, args[2]);
-    f32 d = evtGetFloat(event, args[3]);
-
-    evtSetFloat(event, args[4], (a * c + d * (b - a)) / b);
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Integer-result version of wariai_enzan_0f: args[4] receives (a * args[2] + (b - a) * args[3]) / b with a =
- * args[0] - 1 and b = args[1] - 1. Not called in this unit.
- */
-static USER_FUNC(wariai_enzan_0) {
-    EvtWord* args = event->args;
-    f32 a = evtGetFloat(event, args[0]) - 1.0f;
-    f32 b = evtGetFloat(event, args[1]) - 1.0f;
-    f32 c = evtGetFloat(event, args[2]);
-    f32 d = evtGetFloat(event, args[3]);
-
-    evtSetValue(event, args[4], (a * c + d * (b - a)) / b);
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Curve blend of args[2] and args[3] at step args[0] of args[1],
- * weighted by the product of two interpolation curves:
- * args[5] and args[6] are intplGetValue modes, where 14 to 27 run mode minus 14 mirrored and 28
- * or more give args[2] outright. The float result goes to args[4].
- * The mirrored branch of the second curve takes its mode from args[5] rather than args[6].
- * Not called in this unit.
- */
-static USER_FUNC(wariai_enzan_1f_intpl_w) {
-    EvtWord* args = event->args;
-    f32 a = evtGetFloat(event, args[0]) - 1.0f;
-    f32 b = evtGetFloat(event, args[1]);
-    f32 c = evtGetFloat(event, args[2]);
-    f32 d = evtGetFloat(event, args[3]);
-    s32 out = args[4];
-    f32 t1 = evtGetFloat(event, args[5]);
-    f32 t2 = evtGetFloat(event, args[6]);
-    f32 r1;
-    f32 r2;
-    f32 w;
-
-    if (t1 >= 14.0f) {
-        t1 -= 14.0f;
-        if (t1 >= 14.0f) {
-            evtSetFloat(event, out, c);
-            return EVT_RETURN_DONE;
-        }
-        r1 = 1.0f - intplGetValue(t1, 1.0f, 0.0f, b - a, b);
-    } else {
-        r1 = intplGetValue(t1, 0.0f, 1.0f, b - a, b);
-    }
-    if (t2 >= 14.0f) {
-        // BUG: subtracts from t1 instead of t2 (the branch above does t1 -= 14), so the second mode
-        // comes from the first one.
-        t2 = t1 - 14.0f;
-        if (t2 >= 14.0f) {
-            evtSetFloat(event, out, c);
-            return EVT_RETURN_DONE;
-        }
-        r2 = 1.0f - intplGetValue(t2, 1.0f, 0.0f, b - a, b);
-    } else {
-        r2 = intplGetValue(t2, 0.0f, 1.0f, b - a, b);
-    }
-    w = r1 * r2;
-    evtSetFloat(event, out, c * (1.0f - w) + d * w);
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Curve blend of args[2] and args[3] at step args[0] of args[1]:
- * args[5] is an intplGetValue mode (0 to 13; 14 to 27 run mode minus 14 mirrored;
- * 28 or more give args[2] outright), and args[4] receives (1 - r) * args[2] + r * args[3] as a float,
- * with curve time args[1] - (args[0] - 1). gance_body_attack_attack_event uses it with mode 5 for its roll.
- */
-static USER_FUNC(wariai_enzan_1f_intpl) {
-    EvtWord* args = event->args;
-    f32 a = evtGetFloat(event, args[0]) - 1.0f;
-    f32 b = evtGetFloat(event, args[1]);
-    f32 c = evtGetFloat(event, args[2]);
-    f32 d = evtGetFloat(event, args[3]);
-    s32 out = args[4];
-    f32 t = evtGetFloat(event, args[5]);
-    f32 r;
-
-    if (t >= 14.0f) {
-        t -= 14.0f;
-        if (t >= 14.0f) {
-            evtSetFloat(event, out, c);
-            return EVT_RETURN_DONE;
-        }
-        r = 1.0f - intplGetValue(t, 1.0f, 0.0f, b - a, b);
-    } else {
-        r = intplGetValue(t, 0.0f, 1.0f, b - a, b);
-    }
-    evtSetFloat(event, out, (1.0f - r) * c + r * d);
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Linear blend helper: with a = args[0] - 1 and b = args[1],
- * args[4] receives (a * args[2] + (b - a) * args[3]) / b as a float,
- * so step 1 gives args[3] and the value reaches args[2] one step after args[1].
- * Used for the turns and growth in phase_event and gance_body_attack_attack_event.
- */
-static USER_FUNC(wariai_enzan_1f) {
-    EvtWord* args = event->args;
-    f32 a = evtGetFloat(event, args[0]) - 1.0f;
-    f32 b = evtGetFloat(event, args[1]);
-    f32 c = evtGetFloat(event, args[2]);
-    f32 d = evtGetFloat(event, args[3]);
-
-    evtSetFloat(event, args[4], (a * c + d * (b - a)) / b);
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Integer-result version of wariai_enzan_1f: args[4] receives (a * args[2] + (b - a) * args[3]) / b with a =
- * args[0] - 1 and b = args[1]. Not called in this unit.
- */
-static USER_FUNC(wariai_enzan_1) {
-    EvtWord* args = event->args;
-    f32 a = evtGetFloat(event, args[0]) - 1.0f;
-    f32 b = evtGetFloat(event, args[1]);
-    f32 c = evtGetFloat(event, args[2]);
-    f32 d = evtGetFloat(event, args[3]);
-
-    evtSetValue(event, args[4], (a * c + d * (b - a)) / b);
-    return EVT_RETURN_DONE;
-}

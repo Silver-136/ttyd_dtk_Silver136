@@ -489,6 +489,42 @@ static BattleWeapon weapon_majolyne_powder_attack5 = {
 };
 
 /**
+ * Script helper: sorts three (HP, Siren tag) pairs held in LW(0..2) (HP) and LW(3..5) (tag: 1 the third Siren,
+ * 2 Marilyn, 3 Beldam, as majo_unison_phase_event sets them) by descending HP, leaving the ordered tags in LW(0..2).
+ */
+static USER_FUNC(majo3_sort) {
+    MajoSortEntry tbl[3];
+    MajoSortEntry tmp1;
+    MajoSortEntry tmp3;
+    MajoSortEntry tmp2;
+    s32 i;
+
+    for (i = 0; i < 3; i++) {
+        tbl[i].id = event->lwData[3 + i];
+        tbl[i].value = event->lwData[i];
+    }
+    if (tbl[0].value < tbl[1].value) {
+        tmp1 = tbl[0];
+        tbl[0] = tbl[1];
+        tbl[1] = tmp1;
+    }
+    if (tbl[1].value < tbl[2].value) {
+        tmp2 = tbl[1];
+        tbl[1] = tbl[2];
+        tbl[2] = tmp2;
+    }
+    if (tbl[0].value < tbl[1].value) {
+        tmp3 = tbl[0];
+        tbl[0] = tbl[1];
+        tbl[1] = tmp3;
+    }
+    for (i = 0; i < 3; i++) {
+        event->lwData[i] = tbl[i].id;
+    }
+    return EVT_RETURN_DONE;
+}
+
+/**
  * Event script: Beldam sinks into her shadow (the shadow-step sound SFX_BOSS_MAJO_SHADOW1 plays after 250 ms and
  * battle_evt_majo_disp_off hides her).
  */
@@ -1335,39 +1371,3 @@ EVT_BEGIN(majo3_shadow_tail_event)
     GOTO(0)
     RETURN
 EVT_END()
-
-/**
- * Script helper: sorts three (HP, Siren tag) pairs held in LW(0..2) (HP) and LW(3..5) (tag: 1 the third Siren,
- * 2 Marilyn, 3 Beldam, as majo_unison_phase_event sets them) by descending HP, leaving the ordered tags in LW(0..2).
- */
-static USER_FUNC(majo3_sort) {
-    MajoSortEntry tbl[3];
-    MajoSortEntry tmp1;
-    MajoSortEntry tmp3;
-    MajoSortEntry tmp2;
-    s32 i;
-
-    for (i = 0; i < 3; i++) {
-        tbl[i].id = event->lwData[3 + i];
-        tbl[i].value = event->lwData[i];
-    }
-    if (tbl[0].value < tbl[1].value) {
-        tmp1 = tbl[0];
-        tbl[0] = tbl[1];
-        tbl[1] = tmp1;
-    }
-    if (tbl[1].value < tbl[2].value) {
-        tmp2 = tbl[1];
-        tbl[1] = tbl[2];
-        tbl[2] = tmp2;
-    }
-    if (tbl[0].value < tbl[1].value) {
-        tmp3 = tbl[0];
-        tbl[0] = tbl[1];
-        tbl[1] = tmp3;
-    }
-    for (i = 0; i < 3; i++) {
-        event->lwData[i] = tbl[i].id;
-    }
-    return EVT_RETURN_DONE;
-}

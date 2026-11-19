@@ -97,20 +97,6 @@ static EvtWord spawn_event[66];
 static EvtWord wait_event[55];
 
 /**
- * Script helper.
- * Reads the X offset of the unit's current magic effect (the one stored in its work slot 5) into args[1];
- * args[0] is the unit id.
- */
-static USER_FUNC(eff_magic_get_posX) {
-    EvtWord* args = event->args;
-    s32 id = BattleTransID(event, evtGetValue(event, args[0]));
-    BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
-
-    evtSetFloat(event, args[1], ((EffMagic1N64Work*)((EffectEntry*)unit->work[UNIT_WORK_MAGIC_EFFECT])->userdata)->offset.x);
-    return EVT_RETURN_DONE;
-}
-
-/**
  * Unit kind of the Magikoopa (HP 7, level 25): its size, offsets, damage sounds, status vulnerability,
  * parts and init event.
  */
@@ -637,6 +623,219 @@ static BattleUnitSetup entry_kamec = {
     {0}, // unitWork
     NULL, // itemDropTable
 };
+
+/**
+ * Script helper.
+ * Counts the enemy-side units (alliance 1) that do not have STATUS_DEAD, and stores the number in args[0].
+ */
+static USER_FUNC(kamec_get_live_num) {
+    s32 i;
+    EvtWord* args = event->args;
+    s32 num = 0;
+    BattleWork* wp = _battleWorkPointer;
+    BattleUnit* unit;
+
+    for (i = 0; i < 64; i++) {
+        unit = wp->units[i];
+        if (unit != NULL && unit->alliance == ALLIANCE_ENEMY && !BtlUnit_CheckStatus(unit, STATUS_DEAD)) {
+            num++;
+        }
+    }
+    evtSetValue(event, args[0], num);
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script helper.
+ * Writes the unit ids of up to four Magikoopa clones (bunsin) to the first four arguments, -1 for empty slots,
+ * and the number of clones to the fifth.
+ */
+static USER_FUNC(kamec_get_bunsin) {
+    EvtWord* args = event->args;
+    s32 copies[4];
+    s32 n = 0;
+    s32 i;
+    BattleWork* wp = _battleWorkPointer;
+    BattleUnit* unit;
+
+    // indices of the magikoopa's copies
+    for (i = 0; i < 64; i++) {
+        unit = wp->units[i];
+        if (unit != NULL && unit->currentKind == UNIT_MAGIKOOPA_CLONE) {
+            copies[n] = i;
+            n++;
+        }
+    }
+    for (i = 0; i < 4; i++) {
+        if (i < n) {
+            evtSetValue(event, *args++, copies[i]);
+        } else {
+            evtSetValue(event, *args++, -1);
+        }
+    }
+    evtSetValue(event, *args, n);
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script helper.
+ * Randomly swaps the stage positions (X and Z, current and home) of the Magikoopa and its clones ten times,
+ * so the player cannot tell which is the real one.
+ */
+static USER_FUNC(kamec_shuffle) {
+    BattleWork* wp = _battleWorkPointer;
+    BattleUnit* kamecs[6];
+    s32 n = 0;
+    s32 i;
+
+    // Collect the original and clones, then perform ten random pair swaps of their current and home X/Z.
+    for (i = 0; i < 64; i++) {
+        kamecs[n] = wp->units[i];
+        if (kamecs[n] != NULL && (kamecs[n]->currentKind == UNIT_MAGIKOOPA || kamecs[n]->currentKind == UNIT_MAGIKOOPA_CLONE)) {
+            n++;
+        }
+    }
+    for (i = 0; i < 10; i++) {
+        s32 a = irand(n);
+        s32 b = irand(n);
+        BattleUnit* ua = kamecs[a];
+        BattleUnit* ub = kamecs[b];
+        f32 tmp;
+
+        tmp = ua->position.x;
+        ua->position.x = ub->position.x;
+        ub->position.x = tmp;
+        tmp = ua->homePosition.x;
+        ua->homePosition.x = ub->homePosition.x;
+        ub->homePosition.x = tmp;
+        tmp = ua->position.z;
+        ua->position.z = ub->position.z;
+        ub->position.z = tmp;
+        tmp = ua->homePosition.z;
+        ua->homePosition.z = ub->homePosition.z;
+        ub->homePosition.z = tmp;
+    }
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script helper.
+ * Copies the real Magikoopa args[0]'s HP and status effects to the Magikoopa clone args[1]
+ * (the copy's HP gauge is refreshed).
+ */
+static USER_FUNC(kamec_copy_status) {
+    EvtWord* args = event->args;
+    s32 id1 = evtGetValue(event, args[0]);
+    s32 id2 = evtGetValue(event, args[1]);
+    BattleWork* wp = _battleWorkPointer;
+    BattleUnit* unit1 = BattleGetUnitPtr(wp, id1);
+    BattleUnit* unit2 = BattleGetUnitPtr(wp, id2);
+
+    // Copy the original's current HP and status bytes, then synchronize the clone's HP gauge.
+    unit2->currentHp = unit1->currentHp;
+    memcpy(&unit2->sleepTurns, &unit1->sleepTurns, 0x1E);
+    unit2->hpGauge.prevHp = unit2->currentHp;
+    unit2->hpGauge.targetHp = unit2->currentHp;
+    unit2->hpGauge.barRatio = unit2->hpGauge.trailRatio = (f32)unit2->currentHp / unit2->maxHp;
+    return EVT_RETURN_DONE;
+}
+
+/** Script helper. The same as eff_staff2 with a thunder-flare effect instead of the charge light. */
+static USER_FUNC(eff_staff1) {
+    s32 id = BattleTransID(event, evtGetValue(event, event->args[0]));
+    BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
+    f32 x;
+    f32 y;
+    f32 z;
+    f32* wk;
+
+    if (isFirstCall) {
+        unit->work[UNIT_WORK_STAFF_EFFECT] = (EvtWord)effThunderflareN64Entry(0, 60, 0.0f, -1000.0f, 0.0f, 1.0f);
+    }
+    if (!(((EffectEntry*)unit->work[UNIT_WORK_STAFF_EFFECT])->flags & EFFECT_FLAG_ACTIVE)) {
+        return EVT_RETURN_DONE;
+    }
+    wk = ((EffectEntry*)unit->work[UNIT_WORK_STAFF_EFFECT])->userdata;
+    wk[10] = unit->sizeMultiplier;
+    BtlUnit_GetPos(unit, &x, &y, &z);
+    wk[2] = x + 22.5f * unit->sizeMultiplier * unit->faceDirection;
+    wk[3] = y + 40.0f * unit->sizeMultiplier;
+    wk[4] = 5.0f + z;
+    return EVT_RETURN_BLOCK;
+}
+
+/**
+ * Script helper.
+ * Keeps a charging-light effect at the Magikoopa's staff tip;
+ * the effect is created on the first call in work slot 4 and the script blocks until the effect ends.
+ */
+static USER_FUNC(eff_staff2) {
+    s32 id = BattleTransID(event, evtGetValue(event, event->args[0]));
+    BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
+    f32 x;
+    f32 y;
+    f32 z;
+    f32* wk;
+
+    if (isFirstCall) {
+        unit->work[UNIT_WORK_STAFF_EFFECT] = (EvtWord)effPokopiPchargeN64Entry(0, 60, 0.0f, -1000.0f, 0.0f, 1.0f);
+    }
+    if (!(((EffectEntry*)unit->work[UNIT_WORK_STAFF_EFFECT])->flags & EFFECT_FLAG_ACTIVE)) {
+        return EVT_RETURN_DONE;
+    }
+    wk = ((EffectEntry*)unit->work[UNIT_WORK_STAFF_EFFECT])->userdata;
+    wk[13] = unit->sizeMultiplier;
+    BtlUnit_GetPos(unit, &x, &y, &z);
+    wk[1] = x + 22.5f * unit->sizeMultiplier * unit->faceDirection;
+    wk[2] = y + 40.0f * unit->sizeMultiplier;
+    wk[3] = 5.0f + z;
+    return EVT_RETURN_BLOCK;
+}
+
+/**
+ * Script helper that fires a Magikoopa's magic shot: args[0] is the caster, args[1] to args[3] the target point and
+ * args[4] the lifetime in frames (effMagic1N64Entry type 0 flies from the start to the target over that time). It
+ * starts at the wand tip (25 units ahead, 20 up, scaled by size, 5 toward the camera); the effect is kept in the
+ * caster's UNIT_WORK_MAGIC_EFFECT and scaled to the caster's size.
+ */
+static USER_FUNC(eff_magic) {
+    EvtWord* args = event->args;
+    s32 id = BattleTransID(event, evtGetValue(event, args[0]));
+    BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
+    f32 tx = evtGetFloat(event, args[1]);
+    f32 ty = evtGetFloat(event, args[2]);
+    f32 tz = evtGetFloat(event, args[3]);
+    s32 lifetime = evtGetValue(event, args[4]);
+    f32 x;
+    f32 y;
+    f32 z;
+    EffectEntry* eff;
+
+    BtlUnit_GetPos(unit, &x, &y, &z);
+
+    // from the tip of the wand
+    x += 25.0f * unit->sizeMultiplier * unit->faceDirection;
+    y += 20.0f * unit->sizeMultiplier;
+    z += 5.0f;
+    eff = effMagic1N64Entry(0, lifetime, x, y, z, tx, ty, tz);
+    unit->work[UNIT_WORK_MAGIC_EFFECT] = (EvtWord)eff;
+    ((EffMagic1N64Work*)eff->userdata)->scale = unit->sizeMultiplier;
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script helper.
+ * Reads the X offset of the unit's current magic effect (the one stored in its work slot 5) into args[1];
+ * args[0] is the unit id.
+ */
+static USER_FUNC(eff_magic_get_posX) {
+    EvtWord* args = event->args;
+    s32 id = BattleTransID(event, evtGetValue(event, args[0]));
+    BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
+
+    evtSetFloat(event, args[1], ((EffMagic1N64Work*)((EffectEntry*)unit->work[UNIT_WORK_MAGIC_EFFECT])->userdata)->offset.x);
+    return EVT_RETURN_DONE;
+}
 
 /** Init script of the real Magikoopa. Registers its wait, attack, damage and other scripts and starts it waiting. */
 static EVT_BEGIN(init_event)
@@ -1889,205 +2088,6 @@ static EVT_BEGIN(bunsin_magic_event)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     RETURN
 EVT_END()
-
-/**
- * Script helper that fires a Magikoopa's magic shot: args[0] is the caster, args[1] to args[3] the target point and
- * args[4] the lifetime in frames (effMagic1N64Entry type 0 flies from the start to the target over that time). It
- * starts at the wand tip (25 units ahead, 20 up, scaled by size, 5 toward the camera); the effect is kept in the
- * caster's UNIT_WORK_MAGIC_EFFECT and scaled to the caster's size.
- */
-static USER_FUNC(eff_magic) {
-    EvtWord* args = event->args;
-    s32 id = BattleTransID(event, evtGetValue(event, args[0]));
-    BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
-    f32 tx = evtGetFloat(event, args[1]);
-    f32 ty = evtGetFloat(event, args[2]);
-    f32 tz = evtGetFloat(event, args[3]);
-    s32 lifetime = evtGetValue(event, args[4]);
-    f32 x;
-    f32 y;
-    f32 z;
-    EffectEntry* eff;
-
-    BtlUnit_GetPos(unit, &x, &y, &z);
-
-    // from the tip of the wand
-    x += 25.0f * unit->sizeMultiplier * unit->faceDirection;
-    y += 20.0f * unit->sizeMultiplier;
-    z += 5.0f;
-    eff = effMagic1N64Entry(0, lifetime, x, y, z, tx, ty, tz);
-    unit->work[UNIT_WORK_MAGIC_EFFECT] = (EvtWord)eff;
-    ((EffMagic1N64Work*)eff->userdata)->scale = unit->sizeMultiplier;
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper.
- * Keeps a charging-light effect at the Magikoopa's staff tip;
- * the effect is created on the first call in work slot 4 and the script blocks until the effect ends.
- */
-static USER_FUNC(eff_staff2) {
-    s32 id = BattleTransID(event, evtGetValue(event, event->args[0]));
-    BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
-    f32 x;
-    f32 y;
-    f32 z;
-    f32* wk;
-
-    if (isFirstCall) {
-        unit->work[UNIT_WORK_STAFF_EFFECT] = (EvtWord)effPokopiPchargeN64Entry(0, 60, 0.0f, -1000.0f, 0.0f, 1.0f);
-    }
-    if (!(((EffectEntry*)unit->work[UNIT_WORK_STAFF_EFFECT])->flags & EFFECT_FLAG_ACTIVE)) {
-        return EVT_RETURN_DONE;
-    }
-    wk = ((EffectEntry*)unit->work[UNIT_WORK_STAFF_EFFECT])->userdata;
-    wk[13] = unit->sizeMultiplier;
-    BtlUnit_GetPos(unit, &x, &y, &z);
-    wk[1] = x + 22.5f * unit->sizeMultiplier * unit->faceDirection;
-    wk[2] = y + 40.0f * unit->sizeMultiplier;
-    wk[3] = 5.0f + z;
-    return EVT_RETURN_BLOCK;
-}
-
-/** Script helper. The same as eff_staff2 with a thunder-flare effect instead of the charge light. */
-static USER_FUNC(eff_staff1) {
-    s32 id = BattleTransID(event, evtGetValue(event, event->args[0]));
-    BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
-    f32 x;
-    f32 y;
-    f32 z;
-    f32* wk;
-
-    if (isFirstCall) {
-        unit->work[UNIT_WORK_STAFF_EFFECT] = (EvtWord)effThunderflareN64Entry(0, 60, 0.0f, -1000.0f, 0.0f, 1.0f);
-    }
-    if (!(((EffectEntry*)unit->work[UNIT_WORK_STAFF_EFFECT])->flags & EFFECT_FLAG_ACTIVE)) {
-        return EVT_RETURN_DONE;
-    }
-    wk = ((EffectEntry*)unit->work[UNIT_WORK_STAFF_EFFECT])->userdata;
-    wk[10] = unit->sizeMultiplier;
-    BtlUnit_GetPos(unit, &x, &y, &z);
-    wk[2] = x + 22.5f * unit->sizeMultiplier * unit->faceDirection;
-    wk[3] = y + 40.0f * unit->sizeMultiplier;
-    wk[4] = 5.0f + z;
-    return EVT_RETURN_BLOCK;
-}
-
-/**
- * Script helper.
- * Copies the real Magikoopa args[0]'s HP and status effects to the Magikoopa clone args[1]
- * (the copy's HP gauge is refreshed).
- */
-static USER_FUNC(kamec_copy_status) {
-    EvtWord* args = event->args;
-    s32 id1 = evtGetValue(event, args[0]);
-    s32 id2 = evtGetValue(event, args[1]);
-    BattleWork* wp = _battleWorkPointer;
-    BattleUnit* unit1 = BattleGetUnitPtr(wp, id1);
-    BattleUnit* unit2 = BattleGetUnitPtr(wp, id2);
-
-    // Copy the original's current HP and status bytes, then synchronize the clone's HP gauge.
-    unit2->currentHp = unit1->currentHp;
-    memcpy(&unit2->sleepTurns, &unit1->sleepTurns, 0x1E);
-    unit2->hpGauge.prevHp = unit2->currentHp;
-    unit2->hpGauge.targetHp = unit2->currentHp;
-    unit2->hpGauge.barRatio = unit2->hpGauge.trailRatio = (f32)unit2->currentHp / unit2->maxHp;
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper.
- * Randomly swaps the stage positions (X and Z, current and home) of the Magikoopa and its clones ten times,
- * so the player cannot tell which is the real one.
- */
-static USER_FUNC(kamec_shuffle) {
-    BattleWork* wp = _battleWorkPointer;
-    BattleUnit* kamecs[6];
-    s32 n = 0;
-    s32 i;
-
-    // Collect the original and clones, then perform ten random pair swaps of their current and home X/Z.
-    for (i = 0; i < 64; i++) {
-        kamecs[n] = wp->units[i];
-        if (kamecs[n] != NULL && (kamecs[n]->currentKind == UNIT_MAGIKOOPA || kamecs[n]->currentKind == UNIT_MAGIKOOPA_CLONE)) {
-            n++;
-        }
-    }
-    for (i = 0; i < 10; i++) {
-        s32 a = irand(n);
-        s32 b = irand(n);
-        BattleUnit* ua = kamecs[a];
-        BattleUnit* ub = kamecs[b];
-        f32 tmp;
-
-        tmp = ua->position.x;
-        ua->position.x = ub->position.x;
-        ub->position.x = tmp;
-        tmp = ua->homePosition.x;
-        ua->homePosition.x = ub->homePosition.x;
-        ub->homePosition.x = tmp;
-        tmp = ua->position.z;
-        ua->position.z = ub->position.z;
-        ub->position.z = tmp;
-        tmp = ua->homePosition.z;
-        ua->homePosition.z = ub->homePosition.z;
-        ub->homePosition.z = tmp;
-    }
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper.
- * Writes the unit ids of up to four Magikoopa clones (bunsin) to the first four arguments, -1 for empty slots,
- * and the number of clones to the fifth.
- */
-static USER_FUNC(kamec_get_bunsin) {
-    EvtWord* args = event->args;
-    s32 copies[4];
-    s32 n = 0;
-    s32 i;
-    BattleWork* wp = _battleWorkPointer;
-    BattleUnit* unit;
-
-    // indices of the magikoopa's copies
-    for (i = 0; i < 64; i++) {
-        unit = wp->units[i];
-        if (unit != NULL && unit->currentKind == UNIT_MAGIKOOPA_CLONE) {
-            copies[n] = i;
-            n++;
-        }
-    }
-    for (i = 0; i < 4; i++) {
-        if (i < n) {
-            evtSetValue(event, *args++, copies[i]);
-        } else {
-            evtSetValue(event, *args++, -1);
-        }
-    }
-    evtSetValue(event, *args, n);
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper.
- * Counts the enemy-side units (alliance 1) that do not have STATUS_DEAD, and stores the number in args[0].
- */
-static USER_FUNC(kamec_get_live_num) {
-    s32 i;
-    EvtWord* args = event->args;
-    s32 num = 0;
-    BattleWork* wp = _battleWorkPointer;
-    BattleUnit* unit;
-
-    for (i = 0; i < 64; i++) {
-        unit = wp->units[i];
-        if (unit != NULL && unit->alliance == ALLIANCE_ENEMY && !BtlUnit_CheckStatus(unit, STATUS_DEAD)) {
-            num++;
-        }
-    }
-    evtSetValue(event, args[0], num);
-    return EVT_RETURN_DONE;
-}
 
 /**
  * Spawns one clone (entry_kamec) into LW(3) at LW(0) to LW(2), which becomes its home: part 1 at alpha 0

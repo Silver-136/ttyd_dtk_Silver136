@@ -45,21 +45,6 @@ static EvtWord normal_attack_event[386];
 static EvtWord charge_event[58];
 static EvtWord wait_event[12];
 
-/**
- * Script helper: deletes the ice barrier effect of unit args[0] (UNIT_WORK_BARRIER_EFFECT), if there is one, and
- * clears the slot.
- */
-static USER_FUNC(eff_ice_barrier_end) {
-    s32 id = BattleTransID(event, evtGetValue(event, event->args[0]));
-    BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
-
-    if (unit->work[UNIT_WORK_BARRIER_EFFECT] != 0) {
-        effDelete((EffectEntry*)unit->work[UNIT_WORK_BARRIER_EFFECT]);
-        unit->work[UNIT_WORK_BARRIER_EFFECT] = 0;
-    }
-    return EVT_RETURN_DONE;
-}
-
 /** Unit data of the Ice Puff: 9 HP, level 25; the battle starts it from init_event. */
 BattleUnitKind unit_bllizard = {
     UNIT_ICE_PUFF, // unitType
@@ -233,6 +218,43 @@ static BattleWeapon weapon_bllizard_bllizard_attack = {
     NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
+
+/**
+ * Script helper: args[0] = unit. Keeps the cold cloud effect (a Kumokumo particle, created on the first call and stored
+ * in UNIT_WORK_BARRIER_EFFECT) hovering at the Ice Puff's position, scaled by its size.
+ */
+static USER_FUNC(eff_ice_barrier) {
+    s32 id = BattleTransID(event, evtGetValue(event, event->args[0]));
+    BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
+    EffectEntry* eff;
+    f32 x, y, z;
+
+    if (isFirstCall && unit->work[UNIT_WORK_BARRIER_EFFECT] == 0) {
+        unit->work[UNIT_WORK_BARRIER_EFFECT] = (EvtWord)effKumokumoN64Entry(3, 1000, 0.0f, -1000.0f, 0.0f, 0.0f, 0.0f, 1.0f);
+    }
+    eff = (EffectEntry*)unit->work[UNIT_WORK_BARRIER_EFFECT];
+    BtlUnit_GetPos(unit, &x, &y, &z);
+    ((EffKumokumoN64Particle*)eff->userdata)->x = x;
+    ((EffKumokumoN64Particle*)eff->userdata)->y = 10.0f * unit->sizeMultiplier + y;
+    ((EffKumokumoN64Particle*)eff->userdata)->z = z;
+    ((EffKumokumoN64Particle*)eff->userdata)->scale = unit->sizeMultiplier;
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script helper: deletes the ice barrier effect of unit args[0] (UNIT_WORK_BARRIER_EFFECT), if there is one, and
+ * clears the slot.
+ */
+static USER_FUNC(eff_ice_barrier_end) {
+    s32 id = BattleTransID(event, evtGetValue(event, event->args[0]));
+    BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
+
+    if (unit->work[UNIT_WORK_BARRIER_EFFECT] != 0) {
+        effDelete((EffectEntry*)unit->work[UNIT_WORK_BARRIER_EFFECT]);
+        unit->work[UNIT_WORK_BARRIER_EFFECT] = 0;
+    }
+    return EVT_RETURN_DONE;
+}
 
 /**
  * Attack script of the Ice Puff: lets an enemy item be used if ready;
@@ -676,28 +698,6 @@ static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     RETURN
 EVT_END()
-
-/**
- * Script helper: args[0] = unit. Keeps the cold cloud effect (a Kumokumo particle, created on the first call and stored
- * in UNIT_WORK_BARRIER_EFFECT) hovering at the Ice Puff's position, scaled by its size.
- */
-static USER_FUNC(eff_ice_barrier) {
-    s32 id = BattleTransID(event, evtGetValue(event, event->args[0]));
-    BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
-    EffectEntry* eff;
-    f32 x, y, z;
-
-    if (isFirstCall && unit->work[UNIT_WORK_BARRIER_EFFECT] == 0) {
-        unit->work[UNIT_WORK_BARRIER_EFFECT] = (EvtWord)effKumokumoN64Entry(3, 1000, 0.0f, -1000.0f, 0.0f, 0.0f, 0.0f, 1.0f);
-    }
-    eff = (EffectEntry*)unit->work[UNIT_WORK_BARRIER_EFFECT];
-    BtlUnit_GetPos(unit, &x, &y, &z);
-    ((EffKumokumoN64Particle*)eff->userdata)->x = x;
-    ((EffKumokumoN64Particle*)eff->userdata)->y = 10.0f * unit->sizeMultiplier + y;
-    ((EffKumokumoN64Particle*)eff->userdata)->z = z;
-    ((EffKumokumoN64Particle*)eff->userdata)->scale = unit->sizeMultiplier;
-    return EVT_RETURN_DONE;
-}
 
 /**
  * Charges up an ice barrier: zooms the camera, plays SFX_ENM_BLIZ_KUMO_CHARGE1,

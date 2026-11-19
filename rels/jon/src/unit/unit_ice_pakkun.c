@@ -173,6 +173,73 @@ static BattleWeapon weapon_ice_pakkun_attack = {
 };
 
 /**
+ * Script helper: returns in args[0] 1 if the stage's iron frame is still in place
+ * and 0 once it has been knocked away.
+ */
+static USER_FUNC(pakkun_ceil_exist) {
+    EvtWord* args = event->args;
+
+    if (_battleWorkPointer->stageObjectWork.flags & STAGE_FLAG_NO_IRON_FRAME) {
+        evtSetValue(event, args[0], 0);
+    } else {
+        evtSetValue(event, args[0], 1);
+    }
+    return EVT_RETURN_DONE;
+}
+
+/** Script helper: args[0] = unit. Remembers the current shadow scale of part 1 in work[0]. */
+static USER_FUNC(shadow_scale_memory) {
+    s32 id = BattleTransID(event, evtGetValue(event, event->args[0]));
+    BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
+    BattleUnitPart* part = BtlUnit_GetPartsPtr(unit, 1);
+
+    unit->work[0] = part->shadowScale;
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script helper: args[0] = unit.
+ * Over 15 frames shrinks part 1's shadow from the size remembered by shadow_scale_memory to nothing,
+ * as the plant dives; blocks until done.
+ */
+static USER_FUNC(shadow_scale_small) {
+    s32 id = BattleTransID(event, evtGetValue(event, event->args[0]));
+    BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
+    BattleUnitPart* part = BtlUnit_GetPartsPtr(unit, 1);
+
+    if (isFirstCall) {
+        unit->work[1] = 0;
+    }
+    part->shadowScale = intplGetValue(EASING_LINEAR, unit->work[0], 0.0f, unit->work[1], 15);
+    if (unit->work[1] >= 15) {
+        return EVT_RETURN_DONE;
+    }
+    unit->work[1]++;
+    return EVT_RETURN_BLOCK;
+}
+
+/**
+ * Script helper: args[0] = unit.
+ * Over 15 frames grows part 1's shadow from nothing back to the size remembered by shadow_scale_memory;
+ * blocks until done.
+ */
+static USER_FUNC(shadow_scale_return) {
+    s32 id = BattleTransID(event, evtGetValue(event, event->args[0]));
+    BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
+    BattleUnitPart* part = BtlUnit_GetPartsPtr(unit, 1);
+
+    if (isFirstCall) {
+        unit->work[1] = 0;
+    }
+    part->shadowScale = intplGetValue(EASING_LINEAR, 0.0f, unit->work[0], unit->work[1], 15);
+    if (unit->work[1] >= 15) {
+        return EVT_RETURN_DONE;
+    }
+    unit->work[1]++;
+    return EVT_RETURN_BLOCK;
+}
+
+/**
  * Attack script of the Frost Piranha: its normal attack on a first strike,
  * otherwise a selected item event, or the normal attack when none is selected.
  */
@@ -569,70 +636,3 @@ static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
-
-/**
- * Script helper: args[0] = unit.
- * Over 15 frames grows part 1's shadow from nothing back to the size remembered by shadow_scale_memory;
- * blocks until done.
- */
-static USER_FUNC(shadow_scale_return) {
-    s32 id = BattleTransID(event, evtGetValue(event, event->args[0]));
-    BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
-    BattleUnitPart* part = BtlUnit_GetPartsPtr(unit, 1);
-
-    if (isFirstCall) {
-        unit->work[1] = 0;
-    }
-    part->shadowScale = intplGetValue(EASING_LINEAR, 0.0f, unit->work[0], unit->work[1], 15);
-    if (unit->work[1] >= 15) {
-        return EVT_RETURN_DONE;
-    }
-    unit->work[1]++;
-    return EVT_RETURN_BLOCK;
-}
-
-/**
- * Script helper: args[0] = unit.
- * Over 15 frames shrinks part 1's shadow from the size remembered by shadow_scale_memory to nothing,
- * as the plant dives; blocks until done.
- */
-static USER_FUNC(shadow_scale_small) {
-    s32 id = BattleTransID(event, evtGetValue(event, event->args[0]));
-    BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
-    BattleUnitPart* part = BtlUnit_GetPartsPtr(unit, 1);
-
-    if (isFirstCall) {
-        unit->work[1] = 0;
-    }
-    part->shadowScale = intplGetValue(EASING_LINEAR, unit->work[0], 0.0f, unit->work[1], 15);
-    if (unit->work[1] >= 15) {
-        return EVT_RETURN_DONE;
-    }
-    unit->work[1]++;
-    return EVT_RETURN_BLOCK;
-}
-
-/** Script helper: args[0] = unit. Remembers the current shadow scale of part 1 in work[0]. */
-static USER_FUNC(shadow_scale_memory) {
-    s32 id = BattleTransID(event, evtGetValue(event, event->args[0]));
-    BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
-    BattleUnitPart* part = BtlUnit_GetPartsPtr(unit, 1);
-
-    unit->work[0] = part->shadowScale;
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper: returns in args[0] 1 if the stage's iron frame is still in place
- * and 0 once it has been knocked away.
- */
-static USER_FUNC(pakkun_ceil_exist) {
-    EvtWord* args = event->args;
-
-    if (_battleWorkPointer->stageObjectWork.flags & STAGE_FLAG_NO_IRON_FRAME) {
-        evtSetValue(event, args[0], 0);
-    } else {
-        evtSetValue(event, args[0], 1);
-    }
-    return EVT_RETURN_DONE;
-}

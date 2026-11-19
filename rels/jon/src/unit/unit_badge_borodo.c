@@ -49,137 +49,6 @@ static EvtWord _borodo_steal_attack[610];
 static EvtWord escape_event[115];
 static EvtWord wait_event[26];
 
-/**
- * Script helper for the Badge Bandit's steal attack:
- * args[0] = thief, args[1] = target, args[2..4] = variables that receive the stolen item id,
- * its icon and a coin count.
- * 40% of the time it takes up to 10 coins; otherwise it picks at random among all the badges
- * in the pouch, removes the chosen one (unequipping it from Mario or a partner if it was worn and
- * refreshing their stats) and keeps it in the unit's heldItem.
- */
-static USER_FUNC(_steal_item) {
-    EvtWord* args = event->args;
-    PouchData* pouch = pouchGetPtr();
-    BattleUnit* unit;
-    BattleUnit* target;
-    s32 itemVar;
-    s32 iconVar;
-    s32 numVar;
-    s32 id;
-    s32 tid;
-
-    id = evtGetValue(event, args[0]);
-    id = BattleTransID(event, id);
-    unit = BattleGetUnitPtr(_battleWorkPointer, id);
-    if (unit == NULL) {
-        return EVT_RETURN_DONE;
-    }
-    tid = evtGetValue(event, args[1]);
-    tid = BattleTransID(event, tid);
-    target = BattleGetUnitPtr(_battleWorkPointer, tid);
-    if (target == NULL) {
-        return EVT_RETURN_DONE;
-    }
-    itemVar = args[2];
-    iconVar = args[3];
-    numVar = args[4];
-    evtSetValue(event, itemVar, 0);
-    evtSetValue(event, iconVar, 0);
-    evtSetValue(event, numVar, 0);
-    if (irand(100) < 40) {
-        s32 coins = pouchGetCoin();
-        s32 num = 10;
-
-        if (coins < 10) {
-            num = coins;
-        }
-        if (num > 0) {
-            evtSetValue(event, itemVar, ITEM_COIN);
-#if VERSION >= VERSION_US
-            evtSetValue(event, iconVar, 403);
-#else
-            evtSetValue(event, iconVar, 395);
-#endif
-            evtSetValue(event, numVar, num);
-            unit->heldItem = ITEM_COIN;
-            unit->stolenCoins = num;
-            pouchSetCoin(coins - num);
-        }
-        return EVT_RETURN_DONE;
-    }
-    {
-        s32 item = 0;
-#if VERSION >= VERSION_DEMO_EU
-        s32 count;
-#else
-        s32 count = 0;
-#endif
-        s32 held = 0;
-        s32 r;
-        s32 i;
-#if VERSION >= VERSION_DEMO_EU
-        s32 heldMax = GetHeldItemCount; // PAL: read as in the Bandit thieves (unit_borodo, unit_borodo_king), but this one only takes badges
-
-        count = 0;
-#endif
-        for (i = 0; i < AUDIENCE_MEMBER_MAX; i++) {
-            if (pouch->badges[i] != 0) {
-                count++;
-            }
-        }
-        if (count <= 0) {
-            return EVT_RETURN_DONE;
-        }
-        r = irand(count);
-        if (r >= held) {
-            s32 j;
-
-            r -= held;
-            for (j = 0; j < AUDIENCE_MEMBER_MAX; j++) {
-                if (pouch->badges[j] != 0) {
-                    if (--r < 0) {
-                        item = pouch->badges[j];
-                        break;
-                    }
-                }
-            }
-        } else {
-            s32 k;
-
-#if VERSION >= VERSION_DEMO_EU
-            for (k = 0; k < heldMax; k++) {
-#else
-            for (k = 0; k < 20; k++) {
-#endif
-                if (pouch->heldItems[k] != 0) {
-                    if (--r < 0) {
-                        item = pouch->heldItems[k];
-                        break;
-                    }
-                }
-            }
-        }
-        if (item != 0) {
-            if (!pouchRemoveItem(item)) {
-                return EVT_RETURN_DONE;
-            }
-            unit->heldItem = item;
-            if (item >= BADGE_MIN && item < BADGE_MAX) {
-                if (target->currentKind == UNIT_MARIO) {
-                    BtlUnit_EquipItem(target, EQUIP_RESET | EQUIP_MARIO, ITEM_NULL);
-                } else if (target->currentKind >= TYPE_PARTNER_MIN && target->currentKind < TYPE_PARTNER_MAX) {
-                    BtlUnit_EquipItem(target, EQUIP_RESET | EQUIP_PARTNER, ITEM_NULL);
-                }
-                pouchReviseMarioParam();
-                pouchRevisePartyParam();
-            }
-            evtSetValue(event, itemVar, item);
-            evtSetValue(event, iconVar, itemDataTable[item].icon_id);
-        }
-    }
-    return EVT_RETURN_DONE;
-}
-
 /** Unit data of the Badge Bandit: stats, sounds, attributes, parts, init script and data table. */
 BattleUnitKind unit_badge_borodo = {
     UNIT_BADGE_BANDIT, // unitType
@@ -373,6 +242,137 @@ static BattleDataEntry data_table[] = {
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_badge_borodo", "c_borodo_t", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
 };
+
+/**
+ * Script helper for the Badge Bandit's steal attack:
+ * args[0] = thief, args[1] = target, args[2..4] = variables that receive the stolen item id,
+ * its icon and a coin count.
+ * 40% of the time it takes up to 10 coins; otherwise it picks at random among all the badges
+ * in the pouch, removes the chosen one (unequipping it from Mario or a partner if it was worn and
+ * refreshing their stats) and keeps it in the unit's heldItem.
+ */
+static USER_FUNC(_steal_item) {
+    EvtWord* args = event->args;
+    PouchData* pouch = pouchGetPtr();
+    BattleUnit* unit;
+    BattleUnit* target;
+    s32 itemVar;
+    s32 iconVar;
+    s32 numVar;
+    s32 id;
+    s32 tid;
+
+    id = evtGetValue(event, args[0]);
+    id = BattleTransID(event, id);
+    unit = BattleGetUnitPtr(_battleWorkPointer, id);
+    if (unit == NULL) {
+        return EVT_RETURN_DONE;
+    }
+    tid = evtGetValue(event, args[1]);
+    tid = BattleTransID(event, tid);
+    target = BattleGetUnitPtr(_battleWorkPointer, tid);
+    if (target == NULL) {
+        return EVT_RETURN_DONE;
+    }
+    itemVar = args[2];
+    iconVar = args[3];
+    numVar = args[4];
+    evtSetValue(event, itemVar, 0);
+    evtSetValue(event, iconVar, 0);
+    evtSetValue(event, numVar, 0);
+    if (irand(100) < 40) {
+        s32 coins = pouchGetCoin();
+        s32 num = 10;
+
+        if (coins < 10) {
+            num = coins;
+        }
+        if (num > 0) {
+            evtSetValue(event, itemVar, ITEM_COIN);
+#if VERSION >= VERSION_US
+            evtSetValue(event, iconVar, 403);
+#else
+            evtSetValue(event, iconVar, 395);
+#endif
+            evtSetValue(event, numVar, num);
+            unit->heldItem = ITEM_COIN;
+            unit->stolenCoins = num;
+            pouchSetCoin(coins - num);
+        }
+        return EVT_RETURN_DONE;
+    }
+    {
+        s32 item = 0;
+#if VERSION >= VERSION_DEMO_EU
+        s32 count;
+#else
+        s32 count = 0;
+#endif
+        s32 held = 0;
+        s32 r;
+        s32 i;
+#if VERSION >= VERSION_DEMO_EU
+        s32 heldMax = GetHeldItemCount; // PAL: read as in the Bandit thieves (unit_borodo, unit_borodo_king), but this one only takes badges
+
+        count = 0;
+#endif
+        for (i = 0; i < AUDIENCE_MEMBER_MAX; i++) {
+            if (pouch->badges[i] != 0) {
+                count++;
+            }
+        }
+        if (count <= 0) {
+            return EVT_RETURN_DONE;
+        }
+        r = irand(count);
+        if (r >= held) {
+            s32 j;
+
+            r -= held;
+            for (j = 0; j < AUDIENCE_MEMBER_MAX; j++) {
+                if (pouch->badges[j] != 0) {
+                    if (--r < 0) {
+                        item = pouch->badges[j];
+                        break;
+                    }
+                }
+            }
+        } else {
+            s32 k;
+
+#if VERSION >= VERSION_DEMO_EU
+            for (k = 0; k < heldMax; k++) {
+#else
+            for (k = 0; k < 20; k++) {
+#endif
+                if (pouch->heldItems[k] != 0) {
+                    if (--r < 0) {
+                        item = pouch->heldItems[k];
+                        break;
+                    }
+                }
+            }
+        }
+        if (item != 0) {
+            if (!pouchRemoveItem(item)) {
+                return EVT_RETURN_DONE;
+            }
+            unit->heldItem = item;
+            if (item >= BADGE_MIN && item < BADGE_MAX) {
+                if (target->currentKind == UNIT_MARIO) {
+                    BtlUnit_EquipItem(target, EQUIP_RESET | EQUIP_MARIO, ITEM_NULL);
+                } else if (target->currentKind >= TYPE_PARTNER_MIN && target->currentKind < TYPE_PARTNER_MAX) {
+                    BtlUnit_EquipItem(target, EQUIP_RESET | EQUIP_PARTNER, ITEM_NULL);
+                }
+                pouchReviseMarioParam();
+                pouchRevisePartyParam();
+            }
+            evtSetValue(event, itemVar, item);
+            evtSetValue(event, iconVar, itemDataTable[item].icon_id);
+        }
+    }
+    return EVT_RETURN_DONE;
+}
 
 /**
  * Init script of the Badge Bandit: registers its wait, attack,

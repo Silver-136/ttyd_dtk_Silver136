@@ -269,6 +269,174 @@ static BattleWeapon weapon_wanwan_attack = {
 };
 
 /**
+ * Script helper: sets up the Chain-Chomp's chain at the start of battle:
+ * puts links 2..7 on the chomp, link 8 and the stake (part 9) 20 units behind it,
+ * and sets their chain animations.
+ */
+static USER_FUNC(chain_init) {
+    BattleWork* wp = _battleWorkPointer;
+    EvtWord* args = event->args;
+    s32 id;
+    BattleUnit* unit;
+    BattleUnitPart* part;
+    f32 x;
+    f32 y;
+    f32 z;
+    s32 i;
+
+    id = evtGetValue(event, *args++);
+    id = BattleTransID(event, id);
+    unit = BattleGetUnitPtr(wp, id);
+    BtlUnit_GetPos(unit, &x, &y, &z);
+
+    // Initialize intermediate links 2 through 7 at the chomp.
+    for (i = 2; i <= 7; i++) {
+        part = BtlUnit_GetPartsPtr(unit, i);
+        BtlUnit_SetPartsPos(part, x, y, z);
+        BtlUnit_SetAnim(part, "WAN_S_1B");
+    }
+    part = BtlUnit_GetPartsPtr(unit, 8);
+    BtlUnit_SetPartsPos(part, x - 20.0f * unit->faceDirection, y, z);
+    BtlUnit_SetAnim(part, "WAN_S_1B");
+    part = BtlUnit_GetPartsPtr(unit, 9);
+    BtlUnit_SetPartsPos(part, x - 20.0f * unit->faceDirection, y, z);
+    BtlUnit_SetAnim(part, "WAN_Z_2");
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script helper (runs every frame): lays out the Chain-Chomp's chain.
+ * The chain has nine parts; part 9 is the stake behind the chomp and parts 2..8 are the links.
+ * Normally the links hang like a catenary between the chomp (part 1) and the stake,
+ * sagging by 300 / length squared; with work[2] == 2 it records the current shape
+ * and with work[2] == 1 it keeps the recorded shape fixed (used after the chomp is knocked loose).
+ */
+static USER_FUNC(chain_main) {
+    BattleWork* wp = _battleWorkPointer;
+    EvtWord* args = event->args;
+    s32 id;
+    BattleUnit* unit;
+    BattleUnitPart* part;
+    f32 x;
+    f32 y;
+    f32 z;
+    f32 x1;
+    f32 y1;
+    f32 z1;
+    f32 x2;
+    f32 y2;
+    f32 z2;
+    f32 len;
+    f32 sag;
+    s32 i;
+    f32 dx;
+    f32 dy;
+    f32 dz;
+    f32 t;
+
+    id = evtGetValue(event, *args++);
+    id = BattleTransID(event, id);
+    unit = BattleGetUnitPtr(wp, id);
+    if (unit == NULL) {
+        return EVT_RETURN_BLOCK;
+    }
+    part = BtlUnit_GetPartsPtr(unit, 1);
+    unit = BattleGetUnitPtr(wp, id);
+    BtlUnit_GetPos(unit, &x, &y, &z);
+    BtlUnit_SetPartsPos(BtlUnit_GetPartsPtr(unit, 9), x - 20.0f * unit->faceDirection, y, z);
+
+    // 2: remember the chain's shape relative to the stake
+    if (unit->work[UNIT_WORK_CHAIN_STATE] == 2) {
+        BtlUnit_GetPartsPos(BtlUnit_GetPartsPtr(unit, 9), &x, &y, &z);
+        for (i = 8; i >= 1; i--) {
+            part = BtlUnit_GetPartsPtr(unit, i);
+            BtlUnit_GetPartsPos(part, &x2, &y2, &z2);
+            part->work[PARTS_WORK_OFFSET_X] = x2 - x;
+            part->work[PARTS_WORK_OFFSET_Y] = y2 - y;
+        }
+        unit->work[UNIT_WORK_CHAIN_STATE] = 1;
+    }
+
+    // 1: keep that shape
+    if (unit->work[UNIT_WORK_CHAIN_STATE] == 1) {
+        BtlUnit_GetPartsPos(BtlUnit_GetPartsPtr(unit, 9), &x, &y, &z);
+        for (i = 8; i >= 1; i--) {
+            part = BtlUnit_GetPartsPtr(unit, i);
+            BtlUnit_SetPartsPos(part, x + part->work[PARTS_WORK_OFFSET_X], y + part->work[PARTS_WORK_OFFSET_Y], z);
+        }
+        return EVT_RETURN_DONE;
+    }
+
+    // otherwise hang the links between the chomp and the stake
+    BtlUnit_GetPartsPos(BtlUnit_GetPartsPtr(unit, 1), &x1, &y1, &z1);
+    BtlUnit_GetPartsPos(BtlUnit_GetPartsPtr(unit, 9), &x2, &y2, &z2);
+    dx = x1 - x2;
+    dy = y1 - y2;
+    dz = z1 - z2;
+#if VERSION <= VERSION_DEMO_JP
+    len = (f32)sqrt(dx * dx + dy * dy + dz * dz) / 7;
+#else
+    len = (f32)sqrt(dx * dx + dy * dy + dz * dz) / 8;
+#endif
+    if (len < 10.0f) {
+        len = 10.0f;
+    }
+    sag = 300.0f / (len * len);
+#if VERSION >= VERSION_JP
+    // keep the chomp below the top of the stage
+    part = BtlUnit_GetPartsPtr(unit, 1);
+    BtlUnit_GetPartsPos(part, &x, &y, &z);
+    if (y > 110.0f) {
+        y = 110.0f;
+    }
+    BtlUnit_SetPartsPos(part, x, y, z);
+#endif
+    BtlUnit_GetPartsPos(BtlUnit_GetPartsPtr(unit, 1), &x, &y, &z);
+    x += -(unit->faceDirection * 16);
+    y += 16.0f;
+    BtlUnit_SetPartsPos(BtlUnit_GetPartsPtr(unit, 2), x, y, z);
+#if VERSION <= VERSION_DEMO_JP
+    for (i = 2; i <= 6; i++) {
+#else
+    for (i = 2; i <= 7; i++) {
+#endif
+        BtlUnit_GetPartsPos(BtlUnit_GetPartsPtr(unit, i), &x1, &y1, &z1);
+        part = BtlUnit_GetPartsPtr(unit, i + 1);
+        BtlUnit_GetPartsPos(part, &x2, &y2, &z2);
+        y2 -= sag;
+        dx = x1 - x2;
+        dy = y1 - y2;
+        dz = z1 - z2;
+        t = 1.0f - len / (f32)sqrt(dx * dx + dy * dy + dz * dz);
+        x2 += dx * t;
+        y2 += dy * t;
+        z2 += dz * t;
+        if (y2 < 0.0f) {
+            y2 = 0.0f;
+        }
+        BtlUnit_SetPartsPos(part, x2, y2, z2);
+    }
+    for (i = 9; i >= 3; i--) {
+        BtlUnit_GetPartsPos(BtlUnit_GetPartsPtr(unit, i), &x1, &y1, &z1);
+        part = BtlUnit_GetPartsPtr(unit, i - 1);
+        BtlUnit_GetPartsPos(part, &x2, &y2, &z2);
+        y2 -= sag;
+        dx = x1 - x2;
+        dy = y1 - y2;
+        dz = z1 - z2;
+        t = 1.0f - len / (f32)sqrt(dx * dx + dy * dy + dz * dz);
+        x2 += dx * t;
+        y2 += dy * t;
+        z2 += dz * t;
+        if (y2 < 0.0f) {
+            y2 = 0.0f;
+        }
+        BtlUnit_SetPartsPos(part, x2, y2, z2);
+    }
+    return EVT_RETURN_DONE;
+}
+
+/**
  * Init event of the Chain-Chomp: installs its wait, attack, damage and confusion events,
  * sets up its chain (chain_init) and starts chain_event, sets the landing sound,
  * and sets UNIT_WORK_SOUND_VOLUME (the volume of its barking, 127 at the start) and unit work 0 = 1.
@@ -731,171 +899,3 @@ static EVT_BEGIN(wait_sound_event2)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_WAN_WAIT4"), LW(11), 0, EVT_NULLPTR)
     RETURN
 EVT_END()
-
-/**
- * Script helper (runs every frame): lays out the Chain-Chomp's chain.
- * The chain has nine parts; part 9 is the stake behind the chomp and parts 2..8 are the links.
- * Normally the links hang like a catenary between the chomp (part 1) and the stake,
- * sagging by 300 / length squared; with work[2] == 2 it records the current shape
- * and with work[2] == 1 it keeps the recorded shape fixed (used after the chomp is knocked loose).
- */
-static USER_FUNC(chain_main) {
-    BattleWork* wp = _battleWorkPointer;
-    EvtWord* args = event->args;
-    s32 id;
-    BattleUnit* unit;
-    BattleUnitPart* part;
-    f32 x;
-    f32 y;
-    f32 z;
-    f32 x1;
-    f32 y1;
-    f32 z1;
-    f32 x2;
-    f32 y2;
-    f32 z2;
-    f32 len;
-    f32 sag;
-    s32 i;
-    f32 dx;
-    f32 dy;
-    f32 dz;
-    f32 t;
-
-    id = evtGetValue(event, *args++);
-    id = BattleTransID(event, id);
-    unit = BattleGetUnitPtr(wp, id);
-    if (unit == NULL) {
-        return EVT_RETURN_BLOCK;
-    }
-    part = BtlUnit_GetPartsPtr(unit, 1);
-    unit = BattleGetUnitPtr(wp, id);
-    BtlUnit_GetPos(unit, &x, &y, &z);
-    BtlUnit_SetPartsPos(BtlUnit_GetPartsPtr(unit, 9), x - 20.0f * unit->faceDirection, y, z);
-
-    // 2: remember the chain's shape relative to the stake
-    if (unit->work[UNIT_WORK_CHAIN_STATE] == 2) {
-        BtlUnit_GetPartsPos(BtlUnit_GetPartsPtr(unit, 9), &x, &y, &z);
-        for (i = 8; i >= 1; i--) {
-            part = BtlUnit_GetPartsPtr(unit, i);
-            BtlUnit_GetPartsPos(part, &x2, &y2, &z2);
-            part->work[PARTS_WORK_OFFSET_X] = x2 - x;
-            part->work[PARTS_WORK_OFFSET_Y] = y2 - y;
-        }
-        unit->work[UNIT_WORK_CHAIN_STATE] = 1;
-    }
-
-    // 1: keep that shape
-    if (unit->work[UNIT_WORK_CHAIN_STATE] == 1) {
-        BtlUnit_GetPartsPos(BtlUnit_GetPartsPtr(unit, 9), &x, &y, &z);
-        for (i = 8; i >= 1; i--) {
-            part = BtlUnit_GetPartsPtr(unit, i);
-            BtlUnit_SetPartsPos(part, x + part->work[PARTS_WORK_OFFSET_X], y + part->work[PARTS_WORK_OFFSET_Y], z);
-        }
-        return EVT_RETURN_DONE;
-    }
-
-    // otherwise hang the links between the chomp and the stake
-    BtlUnit_GetPartsPos(BtlUnit_GetPartsPtr(unit, 1), &x1, &y1, &z1);
-    BtlUnit_GetPartsPos(BtlUnit_GetPartsPtr(unit, 9), &x2, &y2, &z2);
-    dx = x1 - x2;
-    dy = y1 - y2;
-    dz = z1 - z2;
-#if VERSION <= VERSION_DEMO_JP
-    len = (f32)sqrt(dx * dx + dy * dy + dz * dz) / 7;
-#else
-    len = (f32)sqrt(dx * dx + dy * dy + dz * dz) / 8;
-#endif
-    if (len < 10.0f) {
-        len = 10.0f;
-    }
-    sag = 300.0f / (len * len);
-#if VERSION >= VERSION_JP
-    // keep the chomp below the top of the stage
-    part = BtlUnit_GetPartsPtr(unit, 1);
-    BtlUnit_GetPartsPos(part, &x, &y, &z);
-    if (y > 110.0f) {
-        y = 110.0f;
-    }
-    BtlUnit_SetPartsPos(part, x, y, z);
-#endif
-    BtlUnit_GetPartsPos(BtlUnit_GetPartsPtr(unit, 1), &x, &y, &z);
-    x += -(unit->faceDirection * 16);
-    y += 16.0f;
-    BtlUnit_SetPartsPos(BtlUnit_GetPartsPtr(unit, 2), x, y, z);
-#if VERSION <= VERSION_DEMO_JP
-    for (i = 2; i <= 6; i++) {
-#else
-    for (i = 2; i <= 7; i++) {
-#endif
-        BtlUnit_GetPartsPos(BtlUnit_GetPartsPtr(unit, i), &x1, &y1, &z1);
-        part = BtlUnit_GetPartsPtr(unit, i + 1);
-        BtlUnit_GetPartsPos(part, &x2, &y2, &z2);
-        y2 -= sag;
-        dx = x1 - x2;
-        dy = y1 - y2;
-        dz = z1 - z2;
-        t = 1.0f - len / (f32)sqrt(dx * dx + dy * dy + dz * dz);
-        x2 += dx * t;
-        y2 += dy * t;
-        z2 += dz * t;
-        if (y2 < 0.0f) {
-            y2 = 0.0f;
-        }
-        BtlUnit_SetPartsPos(part, x2, y2, z2);
-    }
-    for (i = 9; i >= 3; i--) {
-        BtlUnit_GetPartsPos(BtlUnit_GetPartsPtr(unit, i), &x1, &y1, &z1);
-        part = BtlUnit_GetPartsPtr(unit, i - 1);
-        BtlUnit_GetPartsPos(part, &x2, &y2, &z2);
-        y2 -= sag;
-        dx = x1 - x2;
-        dy = y1 - y2;
-        dz = z1 - z2;
-        t = 1.0f - len / (f32)sqrt(dx * dx + dy * dy + dz * dz);
-        x2 += dx * t;
-        y2 += dy * t;
-        z2 += dz * t;
-        if (y2 < 0.0f) {
-            y2 = 0.0f;
-        }
-        BtlUnit_SetPartsPos(part, x2, y2, z2);
-    }
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper: sets up the Chain-Chomp's chain at the start of battle:
- * puts links 2..7 on the chomp, link 8 and the stake (part 9) 20 units behind it,
- * and sets their chain animations.
- */
-static USER_FUNC(chain_init) {
-    BattleWork* wp = _battleWorkPointer;
-    EvtWord* args = event->args;
-    s32 id;
-    BattleUnit* unit;
-    BattleUnitPart* part;
-    f32 x;
-    f32 y;
-    f32 z;
-    s32 i;
-
-    id = evtGetValue(event, *args++);
-    id = BattleTransID(event, id);
-    unit = BattleGetUnitPtr(wp, id);
-    BtlUnit_GetPos(unit, &x, &y, &z);
-
-    // Initialize intermediate links 2 through 7 at the chomp.
-    for (i = 2; i <= 7; i++) {
-        part = BtlUnit_GetPartsPtr(unit, i);
-        BtlUnit_SetPartsPos(part, x, y, z);
-        BtlUnit_SetAnim(part, "WAN_S_1B");
-    }
-    part = BtlUnit_GetPartsPtr(unit, 8);
-    BtlUnit_SetPartsPos(part, x - 20.0f * unit->faceDirection, y, z);
-    BtlUnit_SetAnim(part, "WAN_S_1B");
-    part = BtlUnit_GetPartsPtr(unit, 9);
-    BtlUnit_SetPartsPos(part, x - 20.0f * unit->faceDirection, y, z);
-    BtlUnit_SetAnim(part, "WAN_Z_2");
-    return EVT_RETURN_DONE;
-}

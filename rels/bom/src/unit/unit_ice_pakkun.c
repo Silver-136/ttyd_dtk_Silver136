@@ -178,6 +178,74 @@ static BattleWeapon weapon_ice_pakkun_attack = {
 };
 
 /**
+ * Script helper: returns in args[0] 0 if the stage's iron frame (the ceiling the piranha hangs from) is
+ * unavailable, otherwise 1.
+ */
+static USER_FUNC(pakkun_ceil_exist) {
+    EvtWord* args = event->args;
+
+    if (_battleWorkPointer->stageObjectWork.flags & STAGE_FLAG_NO_IRON_FRAME) {
+        evtSetValue(event, args[0], 0);
+    } else {
+        evtSetValue(event, args[0], 1);
+    }
+    return EVT_RETURN_DONE;
+}
+
+/** Script helper: args[0] = unit. Remembers the current shadow scale of part 1 in work[0]. */
+static USER_FUNC(shadow_scale_memory) {
+    s32 id = BattleTransID(event, evtGetValue(event, event->args[0]));
+    BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
+    BattleUnitPart* part = BtlUnit_GetPartsPtr(unit, 1);
+
+    unit->work[0] = part->shadowScale;
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script helper (args[0] is a battle unit): shrinks part 1's shadow from the saved scale to zero over 15 frames;
+ * blocks until done. return_event, ceil_fall_ready_event and normal_attack_event run it as the Frost Piranha
+ * ducks out of sight (poses PKF_E_2 or PKF_E_4) before it moves between the ground and the ceiling.
+ */
+static USER_FUNC(shadow_scale_small) {
+    s32 id = BattleTransID(event, evtGetValue(event, event->args[0]));
+    BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
+    BattleUnitPart* part = BtlUnit_GetPartsPtr(unit, 1);
+
+    if (isFirstCall) {
+        unit->work[1] = 0;
+    }
+    part->shadowScale = intplGetValue(EASING_LINEAR, unit->work[0], 0.0f, unit->work[1], 15);
+    if (unit->work[1] >= 15) {
+        return EVT_RETURN_DONE;
+    }
+    unit->work[1]++;
+    return EVT_RETURN_BLOCK;
+}
+
+/**
+ * Script helper (args[0] is a battle unit): grows part 1's shadow back from zero to the scale saved by
+ * shadow_scale_memory over 15 frames; blocks until done.
+ * return_event, ceil_fall_ready_event and normal_attack_event run it as the Frost Piranha pops back out
+ * (on the ground or hanging from the ceiling) after ducking out of sight.
+ */
+static USER_FUNC(shadow_scale_return) {
+    s32 id = BattleTransID(event, evtGetValue(event, event->args[0]));
+    BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
+    BattleUnitPart* part = BtlUnit_GetPartsPtr(unit, 1);
+
+    if (isFirstCall) {
+        unit->work[1] = 0;
+    }
+    part->shadowScale = intplGetValue(EASING_LINEAR, 0.0f, unit->work[0], unit->work[1], 15);
+    if (unit->work[1] >= 15) {
+        return EVT_RETURN_DONE;
+    }
+    unit->work[1]++;
+    return EVT_RETURN_BLOCK;
+}
+
+/**
  * Attack script of the Frost Piranha: if battle flag 2 is set it uses the normal attack;
  * otherwise lets an enemy item be used if ready, else uses the normal attack with weapon_ice_pakkun_attack.
  */
@@ -584,71 +652,3 @@ static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
-
-/**
- * Script helper (args[0] is a battle unit): grows part 1's shadow back from zero to the scale saved by
- * shadow_scale_memory over 15 frames; blocks until done.
- * return_event, ceil_fall_ready_event and normal_attack_event run it as the Frost Piranha pops back out
- * (on the ground or hanging from the ceiling) after ducking out of sight.
- */
-static USER_FUNC(shadow_scale_return) {
-    s32 id = BattleTransID(event, evtGetValue(event, event->args[0]));
-    BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
-    BattleUnitPart* part = BtlUnit_GetPartsPtr(unit, 1);
-
-    if (isFirstCall) {
-        unit->work[1] = 0;
-    }
-    part->shadowScale = intplGetValue(EASING_LINEAR, 0.0f, unit->work[0], unit->work[1], 15);
-    if (unit->work[1] >= 15) {
-        return EVT_RETURN_DONE;
-    }
-    unit->work[1]++;
-    return EVT_RETURN_BLOCK;
-}
-
-/**
- * Script helper (args[0] is a battle unit): shrinks part 1's shadow from the saved scale to zero over 15 frames;
- * blocks until done. return_event, ceil_fall_ready_event and normal_attack_event run it as the Frost Piranha
- * ducks out of sight (poses PKF_E_2 or PKF_E_4) before it moves between the ground and the ceiling.
- */
-static USER_FUNC(shadow_scale_small) {
-    s32 id = BattleTransID(event, evtGetValue(event, event->args[0]));
-    BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
-    BattleUnitPart* part = BtlUnit_GetPartsPtr(unit, 1);
-
-    if (isFirstCall) {
-        unit->work[1] = 0;
-    }
-    part->shadowScale = intplGetValue(EASING_LINEAR, unit->work[0], 0.0f, unit->work[1], 15);
-    if (unit->work[1] >= 15) {
-        return EVT_RETURN_DONE;
-    }
-    unit->work[1]++;
-    return EVT_RETURN_BLOCK;
-}
-
-/** Script helper: args[0] = unit. Remembers the current shadow scale of part 1 in work[0]. */
-static USER_FUNC(shadow_scale_memory) {
-    s32 id = BattleTransID(event, evtGetValue(event, event->args[0]));
-    BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
-    BattleUnitPart* part = BtlUnit_GetPartsPtr(unit, 1);
-
-    unit->work[0] = part->shadowScale;
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper: returns in args[0] 0 if the stage's iron frame (the ceiling the piranha hangs from) is
- * unavailable, otherwise 1.
- */
-static USER_FUNC(pakkun_ceil_exist) {
-    EvtWord* args = event->args;
-
-    if (_battleWorkPointer->stageObjectWork.flags & STAGE_FLAG_NO_IRON_FRAME) {
-        evtSetValue(event, args[0], 0);
-    } else {
-        evtSetValue(event, args[0], 1);
-    }
-    return EVT_RETURN_DONE;
-}

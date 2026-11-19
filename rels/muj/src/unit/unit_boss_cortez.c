@@ -966,6 +966,276 @@ static BattleUnitKindPart parts[] = {
 };
 
 /**
+ * Script helper: allocates Cortez's work area (CortezWork, used to track the audience drain)
+ * and stores it in the unit's countersetWeapon pointer.
+ */
+static USER_FUNC(_make_cortez_work_area) {
+    BattleWork* wp = _battleWorkPointer;
+    EvtWord* args = event->args;
+    BattleUnit* unit;
+    s32 id;
+
+    id = evtGetValue(event, *args++);
+    id = BattleTransID(event, id);
+    unit = BattleGetUnitPtr(wp, id);
+    unit->countersetWeapon = BattleAlloc(sizeof(CortezWork));
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script helper: writes the current volume of sound effect args[0] to args[1].
+ * Descriptive name (not in the symbol maps); placeholder unk_muj_0000652c, JP muj .text+0x6468. See docs/NAME_PROVENANCE.md.
+ */
+#if VERSION >= VERSION_JP
+USER_FUNC(_cortez_get_sfx_vol) {
+    EvtWord* args = event->args;
+    s32 id = evtGetValue(event, args[0]);
+    s32 out = args[1];
+
+    evtSetValue(event, out, psndSFX_get_vol(id));
+    return EVT_RETURN_DONE;
+}
+#endif
+
+/**
+ * Script helper: scans the 100 audience seats (10 rows of 10) and records
+ * which are occupied in Cortez's work area; writes the number of occupied seats to args[1].
+ */
+static USER_FUNC(_cortez_check_drain_audience) {
+    BattleWork* wp = _battleWorkPointer;
+    EvtWord* args = event->args;
+    s32 id = evtGetValue(event, args[0]);
+    s32 out = args[1];
+    s32 seat;
+    CortezWork* work;
+    s32 i;
+
+    id = BattleTransID(event, id);
+    work = (CortezWork*)BattleGetUnitPtr(wp, id)->countersetWeapon;
+    work->count = 0;
+    for (i = 0; i < 100; i++) {
+        work->audienceId[i] = -1;
+        work->eff[i] = NULL;
+        work->seq[i] = 0;
+
+        // Select the ten right-hand seats from each of ten twenty-seat rows.
+        seat = 10 + (i / 10) * 20 + i % 10;
+        if (BattleAudience_GetExist(seat)) {
+            work->audienceId[i] = seat;
+            work->count++;
+        }
+    }
+    evtSetValue(event, out, work->count);
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script helper for the audience drain (runs until finished):
+ * flags each audience member of the 100 seats as removed, plays their scared animation,
+ * sends a spirit effect from each seat to Cortez and a cloud at his position,
+ * then tips each member back by 90 degrees over 30 frames.
+ */
+static USER_FUNC(_cortez_collect_energy) {
+    BattleWork* wp = _battleWorkPointer;
+    EvtWord* args = event->args;
+    s32 id = evtGetValue(event, *args++);
+    BattleUnit* unit;
+    CortezWork* work;
+    BattleAudienceMember* member;
+    BOOL done;
+    s32 aid;
+    s32 i;
+    BOOL kumo;
+    f32 x, y, z;
+
+    id = BattleTransID(event, id);
+    unit = BattleGetUnitPtr(wp, id);
+    work = (CortezWork*)unit->countersetWeapon;
+    if (isFirstCall) {
+        work->state = 0;
+    }
+    switch (work->state) {
+        case 0:
+            kumo = FALSE;
+            for (i = 0; i < 100; i++) {
+                aid = work->audienceId[i];
+                if (aid != -1) {
+                    member = BattleAudienceGetPtr(aid);
+                    member->flags |= (AUDIENCE_MEMBER_FLAG_NOT_EXIST | AUDIENCE_MEMBER_FLAG_NO_SYS_CTRL);
+                    BattleAudience_SetAnim(aid, AUD_ANIM_DAMAGE_FRONT, TRUE);
+                    work->wait[i] = irand(60) + 30;
+                    work->srcPos[i] = member->position;
+                    BtlUnit_GetPos(unit, &work->dstPos[i].x, &work->dstPos[i].y, &work->dstPos[i].z);
+                    work->dstPos[i].y += 20.0f;
+                    effSpiritEntry(0, work->wait[i] + 60, work->srcPos[i].x, work->srcPos[i].y, work->srcPos[i].z,
+                                   work->dstPos[i].x, work->dstPos[i].y, work->dstPos[i].z, 2.0f);
+                    if (!kumo) {
+                        kumo = TRUE;
+                        effKumokumoN64Entry(1, 60, work->dstPos[i].x, work->dstPos[i].y, work->dstPos[i].z, 180.0f,
+                                            -1.0f, 1.0f);
+                    }
+                }
+            }
+            work->state++;
+        case 1:
+            done = TRUE;
+            for (i = 0; i < 100; i++) {
+                aid = work->audienceId[i];
+                if (aid != -1) {
+                    switch (work->seq[i]) {
+                        case 0:
+                            if (work->wait[i] > 0) {
+                                work->wait[i]--;
+                                done = FALSE;
+                                break;
+                            }
+                            work->seq[i]++;
+                            work->timer[i] = 0;
+                        case 1:
+                            work->timer[i]++;
+                            BattleAudience_GetRotate(aid, &x, &y, &z);
+                            x = intplGetValue(EASING_LINEAR, 0.0f, -90.0f, work->timer[i], 30);
+                            BattleAudience_SetRotate(aid, x, y, z);
+                            if (work->timer[i] >= 30) {
+                                work->seq[i]++;
+                            } else {
+                                done = FALSE;
+                                break;
+                            }
+                        case 2:
+                            work->timer[i] = 0;
+                            work->seq[i]++;
+                        case 3:
+                            work->timer[i]++;
+                            if (work->timer[i] >= 60) {
+                                work->seq[i]++;
+                            }
+                            done = FALSE;
+                            break;
+                        case 4:
+                            break;
+                    }
+                }
+            }
+            if (!done) {
+                break;
+            }
+        default:
+            return EVT_RETURN_DONE;
+    }
+    return EVT_RETURN_BLOCK;
+}
+
+/**
+ * Script helper: removes every spirit effect Cortez's audience drain created
+ * and writes the number of audience members he collected (work->count) to args[1].
+ */
+static USER_FUNC(_cortez_drain_energy) {
+    BattleWork* wp = _battleWorkPointer;
+    EvtWord* args = event->args;
+    s32 id = evtGetValue(event, args[0]);
+    s32 out = args[1];
+    CortezWork* work;
+    s32 i;
+
+    id = BattleTransID(event, id);
+    work = (CortezWork*)BattleGetUnitPtr(wp, id)->countersetWeapon;
+    for (i = 0; i < 100; i++) {
+        if (work->eff[i] != NULL) {
+            effDelete(work->eff[i]);
+            work->eff[i] = NULL;
+        }
+    }
+    evtSetValue(event, out, work->count);
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script helper for the audience drain (runs until finished):
+ * resets the 100 audience seat markers and immediately proceeds to delete each occupied seat's audience member
+ * and subtract it from the audience target count.
+ */
+static USER_FUNC(_cortez_recovery_audience) {
+    BattleWork* wp = _battleWorkPointer;
+    EvtWord* args = event->args;
+    s32 id = evtGetValue(event, *args++);
+    CortezWork* work;
+    BOOL done;
+    s32 i;
+    s32 aid;
+
+    id = BattleTransID(event, id);
+    work = (CortezWork*)BattleGetUnitPtr(wp, id)->countersetWeapon;
+    if (isFirstCall) {
+        work->state = 0;
+    }
+    switch (work->state) {
+        case 0:
+            for (i = 0; i < 100; i++) {
+                if (work->audienceId[i] != -1) {
+                    work->seq[i] = 0;
+                }
+            }
+            work->state++;
+        case 1:
+            done = TRUE;
+            for (i = 0; i < 100; i++) {
+                if (work->audienceId[i] != -1) {
+                    switch (work->seq[i]) {
+                        case 0:
+                            work->seq[i]++;
+                            work->timer[i] = 0;
+                        case 1:
+                            work->timer[i]++;
+                            done = TRUE;
+                            break;
+                    }
+                }
+            }
+
+            // No branch above clears done, so this call falls through to audience deletion.
+            if (!done) {
+                break;
+            }
+            work->state++;
+        case 2:
+            for (i = 0; i < 100; i++) {
+                aid = work->audienceId[i];
+                if (aid != -1) {
+                    BattleAudience_Delete(aid);
+                    BattleAudienceAddTargetNum(0.0f, -1.0f);
+                }
+            }
+            work->state++;
+            return EVT_RETURN_DONE;
+        default:
+            return EVT_RETURN_DONE;
+    }
+    return EVT_RETURN_BLOCK;
+}
+
+/**
+ * Script helper: writes 1 to args[1] if the unit args[0] stands left of x = -120 (the front or back guard side),
+ * otherwise 0; Cortez uses it to choose which attack pose to play.
+ */
+static USER_FUNC(_check_zenei_kouei) {
+    BattleWork* wp = _battleWorkPointer;
+    EvtWord* args = event->args;
+    s32 id = evtGetValue(event, args[0]);
+    s32 out = args[1];
+    f32 x, y, z;
+
+    id = BattleTransID(event, id);
+    BtlUnit_GetPos(BattleGetUnitPtr(wp, id), &x, &y, &z);
+    if (x >= -120.0f) {
+        evtSetValue(event, out, 0);
+    } else {
+        evtSetValue(event, out, 1);
+    }
+    return EVT_RETURN_DONE;
+}
+
+/**
  * Init event of Cortez: allocates the audience-drain work area and installs his wait, phase,
  * attack (attack_event_mode1), damage and confusion events.
  * It clears unit work 5 (his form: 0 the first form, 1 to 3 the second form's upper, middle and lower stance,
@@ -2760,273 +3030,3 @@ EVT_BEGIN(mode_change_event)
     END_SWITCH
     RETURN
 EVT_END()
-
-/**
- * Script helper: writes 1 to args[1] if the unit args[0] stands left of x = -120 (the front or back guard side),
- * otherwise 0; Cortez uses it to choose which attack pose to play.
- */
-static USER_FUNC(_check_zenei_kouei) {
-    BattleWork* wp = _battleWorkPointer;
-    EvtWord* args = event->args;
-    s32 id = evtGetValue(event, args[0]);
-    s32 out = args[1];
-    f32 x, y, z;
-
-    id = BattleTransID(event, id);
-    BtlUnit_GetPos(BattleGetUnitPtr(wp, id), &x, &y, &z);
-    if (x >= -120.0f) {
-        evtSetValue(event, out, 0);
-    } else {
-        evtSetValue(event, out, 1);
-    }
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper for the audience drain (runs until finished):
- * resets the 100 audience seat markers and immediately proceeds to delete each occupied seat's audience member
- * and subtract it from the audience target count.
- */
-static USER_FUNC(_cortez_recovery_audience) {
-    BattleWork* wp = _battleWorkPointer;
-    EvtWord* args = event->args;
-    s32 id = evtGetValue(event, *args++);
-    CortezWork* work;
-    BOOL done;
-    s32 i;
-    s32 aid;
-
-    id = BattleTransID(event, id);
-    work = (CortezWork*)BattleGetUnitPtr(wp, id)->countersetWeapon;
-    if (isFirstCall) {
-        work->state = 0;
-    }
-    switch (work->state) {
-        case 0:
-            for (i = 0; i < 100; i++) {
-                if (work->audienceId[i] != -1) {
-                    work->seq[i] = 0;
-                }
-            }
-            work->state++;
-        case 1:
-            done = TRUE;
-            for (i = 0; i < 100; i++) {
-                if (work->audienceId[i] != -1) {
-                    switch (work->seq[i]) {
-                        case 0:
-                            work->seq[i]++;
-                            work->timer[i] = 0;
-                        case 1:
-                            work->timer[i]++;
-                            done = TRUE;
-                            break;
-                    }
-                }
-            }
-
-            // No branch above clears done, so this call falls through to audience deletion.
-            if (!done) {
-                break;
-            }
-            work->state++;
-        case 2:
-            for (i = 0; i < 100; i++) {
-                aid = work->audienceId[i];
-                if (aid != -1) {
-                    BattleAudience_Delete(aid);
-                    BattleAudienceAddTargetNum(0.0f, -1.0f);
-                }
-            }
-            work->state++;
-            return EVT_RETURN_DONE;
-        default:
-            return EVT_RETURN_DONE;
-    }
-    return EVT_RETURN_BLOCK;
-}
-
-/**
- * Script helper: removes every spirit effect Cortez's audience drain created
- * and writes the number of audience members he collected (work->count) to args[1].
- */
-static USER_FUNC(_cortez_drain_energy) {
-    BattleWork* wp = _battleWorkPointer;
-    EvtWord* args = event->args;
-    s32 id = evtGetValue(event, args[0]);
-    s32 out = args[1];
-    CortezWork* work;
-    s32 i;
-
-    id = BattleTransID(event, id);
-    work = (CortezWork*)BattleGetUnitPtr(wp, id)->countersetWeapon;
-    for (i = 0; i < 100; i++) {
-        if (work->eff[i] != NULL) {
-            effDelete(work->eff[i]);
-            work->eff[i] = NULL;
-        }
-    }
-    evtSetValue(event, out, work->count);
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper for the audience drain (runs until finished):
- * flags each audience member of the 100 seats as removed, plays their scared animation,
- * sends a spirit effect from each seat to Cortez and a cloud at his position,
- * then tips each member back by 90 degrees over 30 frames.
- */
-static USER_FUNC(_cortez_collect_energy) {
-    BattleWork* wp = _battleWorkPointer;
-    EvtWord* args = event->args;
-    s32 id = evtGetValue(event, *args++);
-    BattleUnit* unit;
-    CortezWork* work;
-    BattleAudienceMember* member;
-    BOOL done;
-    s32 aid;
-    s32 i;
-    BOOL kumo;
-    f32 x, y, z;
-
-    id = BattleTransID(event, id);
-    unit = BattleGetUnitPtr(wp, id);
-    work = (CortezWork*)unit->countersetWeapon;
-    if (isFirstCall) {
-        work->state = 0;
-    }
-    switch (work->state) {
-        case 0:
-            kumo = FALSE;
-            for (i = 0; i < 100; i++) {
-                aid = work->audienceId[i];
-                if (aid != -1) {
-                    member = BattleAudienceGetPtr(aid);
-                    member->flags |= (AUDIENCE_MEMBER_FLAG_NOT_EXIST | AUDIENCE_MEMBER_FLAG_NO_SYS_CTRL);
-                    BattleAudience_SetAnim(aid, AUD_ANIM_DAMAGE_FRONT, TRUE);
-                    work->wait[i] = irand(60) + 30;
-                    work->srcPos[i] = member->position;
-                    BtlUnit_GetPos(unit, &work->dstPos[i].x, &work->dstPos[i].y, &work->dstPos[i].z);
-                    work->dstPos[i].y += 20.0f;
-                    effSpiritEntry(0, work->wait[i] + 60, work->srcPos[i].x, work->srcPos[i].y, work->srcPos[i].z,
-                                   work->dstPos[i].x, work->dstPos[i].y, work->dstPos[i].z, 2.0f);
-                    if (!kumo) {
-                        kumo = TRUE;
-                        effKumokumoN64Entry(1, 60, work->dstPos[i].x, work->dstPos[i].y, work->dstPos[i].z, 180.0f,
-                                            -1.0f, 1.0f);
-                    }
-                }
-            }
-            work->state++;
-        case 1:
-            done = TRUE;
-            for (i = 0; i < 100; i++) {
-                aid = work->audienceId[i];
-                if (aid != -1) {
-                    switch (work->seq[i]) {
-                        case 0:
-                            if (work->wait[i] > 0) {
-                                work->wait[i]--;
-                                done = FALSE;
-                                break;
-                            }
-                            work->seq[i]++;
-                            work->timer[i] = 0;
-                        case 1:
-                            work->timer[i]++;
-                            BattleAudience_GetRotate(aid, &x, &y, &z);
-                            x = intplGetValue(EASING_LINEAR, 0.0f, -90.0f, work->timer[i], 30);
-                            BattleAudience_SetRotate(aid, x, y, z);
-                            if (work->timer[i] >= 30) {
-                                work->seq[i]++;
-                            } else {
-                                done = FALSE;
-                                break;
-                            }
-                        case 2:
-                            work->timer[i] = 0;
-                            work->seq[i]++;
-                        case 3:
-                            work->timer[i]++;
-                            if (work->timer[i] >= 60) {
-                                work->seq[i]++;
-                            }
-                            done = FALSE;
-                            break;
-                        case 4:
-                            break;
-                    }
-                }
-            }
-            if (!done) {
-                break;
-            }
-        default:
-            return EVT_RETURN_DONE;
-    }
-    return EVT_RETURN_BLOCK;
-}
-
-/**
- * Script helper: scans the 100 audience seats (10 rows of 10) and records
- * which are occupied in Cortez's work area; writes the number of occupied seats to args[1].
- */
-static USER_FUNC(_cortez_check_drain_audience) {
-    BattleWork* wp = _battleWorkPointer;
-    EvtWord* args = event->args;
-    s32 id = evtGetValue(event, args[0]);
-    s32 out = args[1];
-    s32 seat;
-    CortezWork* work;
-    s32 i;
-
-    id = BattleTransID(event, id);
-    work = (CortezWork*)BattleGetUnitPtr(wp, id)->countersetWeapon;
-    work->count = 0;
-    for (i = 0; i < 100; i++) {
-        work->audienceId[i] = -1;
-        work->eff[i] = NULL;
-        work->seq[i] = 0;
-
-        // Select the ten right-hand seats from each of ten twenty-seat rows.
-        seat = 10 + (i / 10) * 20 + i % 10;
-        if (BattleAudience_GetExist(seat)) {
-            work->audienceId[i] = seat;
-            work->count++;
-        }
-    }
-    evtSetValue(event, out, work->count);
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper: writes the current volume of sound effect args[0] to args[1].
- * Descriptive name (not in the symbol maps); placeholder unk_muj_0000652c, JP muj .text+0x6468. See docs/NAME_PROVENANCE.md.
- */
-#if VERSION >= VERSION_JP
-USER_FUNC(_cortez_get_sfx_vol) {
-    EvtWord* args = event->args;
-    s32 id = evtGetValue(event, args[0]);
-    s32 out = args[1];
-
-    evtSetValue(event, out, psndSFX_get_vol(id));
-    return EVT_RETURN_DONE;
-}
-#endif
-
-/**
- * Script helper: allocates Cortez's work area (CortezWork, used to track the audience drain)
- * and stores it in the unit's countersetWeapon pointer.
- */
-static USER_FUNC(_make_cortez_work_area) {
-    BattleWork* wp = _battleWorkPointer;
-    EvtWord* args = event->args;
-    BattleUnit* unit;
-    s32 id;
-
-    id = evtGetValue(event, *args++);
-    id = BattleTransID(event, id);
-    unit = BattleGetUnitPtr(wp, id);
-    unit->countersetWeapon = BattleAlloc(sizeof(CortezWork));
-    return EVT_RETURN_DONE;
-}

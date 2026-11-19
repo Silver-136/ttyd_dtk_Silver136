@@ -180,6 +180,30 @@ static BattleWeapon weapon_chorobon_drain_attack = {
 };
 
 /**
+ * Script helper: arg0 = source unit, arg1 = destination unit;
+ * copies the HP (capped to the max) and size-change status so a replacement unit continues in the same state.
+ */
+static USER_FUNC(chorobon_copy_status) {
+    EvtWord* args = event->args;
+    s32 sourceId = BattleTransID(event, evtGetValue(event, args[0]));
+    s32 destinationId = BattleTransID(event, evtGetValue(event, args[1]));
+    BattleWork* wp = _battleWorkPointer;
+    BattleUnit* sourceUnit = BattleGetUnitPtr(wp, sourceId);
+    BattleUnit* destinationUnit = BattleGetUnitPtr(wp, destinationId);
+
+    destinationUnit->currentHp = sourceUnit->currentHp;
+    if (destinationUnit->currentHp > destinationUnit->maxHp) {
+        destinationUnit->currentHp = destinationUnit->maxHp;
+    }
+    destinationUnit->sizeChangeTurns = sourceUnit->sizeChangeTurns;
+    destinationUnit->sizeChangeStrength = sourceUnit->sizeChangeStrength;
+    destinationUnit->hpGauge.prevHp = destinationUnit->currentHp;
+    destinationUnit->hpGauge.targetHp = destinationUnit->currentHp;
+    destinationUnit->hpGauge.barRatio = destinationUnit->hpGauge.trailRatio = (f32)destinationUnit->currentHp / destinationUnit->maxHp;
+    return EVT_RETURN_DONE;
+}
+
+/**
  * Attack event of the Green Fuzzy: an enemy item if one fits. Otherwise a roll (0 to 99) under 50 runs
  * drain_attack_event; if not, it looks for a free spot 40 units at a time to one side (up to x 170), then the
  * other (btlevtcmd_CheckSpace), and splits there (friend_event), waiting half a second; with no free spot it rolls
@@ -781,30 +805,6 @@ static EVT_BEGIN(drain_attack_event)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
-
-/**
- * Script helper: arg0 = source unit, arg1 = destination unit;
- * copies the HP (capped to the max) and size-change status so a replacement unit continues in the same state.
- */
-static USER_FUNC(chorobon_copy_status) {
-    EvtWord* args = event->args;
-    s32 sourceId = BattleTransID(event, evtGetValue(event, args[0]));
-    s32 destinationId = BattleTransID(event, evtGetValue(event, args[1]));
-    BattleWork* wp = _battleWorkPointer;
-    BattleUnit* sourceUnit = BattleGetUnitPtr(wp, sourceId);
-    BattleUnit* destinationUnit = BattleGetUnitPtr(wp, destinationId);
-
-    destinationUnit->currentHp = sourceUnit->currentHp;
-    if (destinationUnit->currentHp > destinationUnit->maxHp) {
-        destinationUnit->currentHp = destinationUnit->maxHp;
-    }
-    destinationUnit->sizeChangeTurns = sourceUnit->sizeChangeTurns;
-    destinationUnit->sizeChangeStrength = sourceUnit->sizeChangeStrength;
-    destinationUnit->hpGauge.prevHp = destinationUnit->currentHp;
-    destinationUnit->hpGauge.targetHp = destinationUnit->currentHp;
-    destinationUnit->hpGauge.barRatio = destinationUnit->hpGauge.trailRatio = (f32)destinationUnit->currentHp / destinationUnit->maxHp;
-    return EVT_RETURN_DONE;
-}
 
 /** Wait event: sets the idle animation from the unit's pose table. */
 static EVT_BEGIN(wait_event)

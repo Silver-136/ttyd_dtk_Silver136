@@ -407,6 +407,229 @@ static BattleWeapon weapon_mahorn_recover_magic = {
 };
 
 /**
+ * Script helper: args[0] = unit.
+ * Gives each of the four hand parts (2-5) the idle animation MAH_Z_2
+ * and a zeroed destination block (work[0..3]).
+ */
+static USER_FUNC(hand_init) {
+    EvtWord* args = event->args;
+    BattleWork* wp = _battleWorkPointer;
+    s32 id = evtGetValue(event, *args++);
+    BattleUnit* unit = BattleGetUnitPtr(wp, BattleTransID(event, id));
+    f32 x;
+    f32 y;
+    f32 z;
+    f32* dest;
+    s32 i;
+    s32 j;
+
+    BtlUnit_GetPos(unit, &x, &y, &z);
+    for (j = 0, i = 2; i <= 5; i++, j++) {
+        BtlUnit_SetAnim(BtlUnit_GetPartsPtr(unit, i), "MAH_Z_2");
+        dest = BTL_ALLOC(12);
+        unit->work[j] = (EvtWord)dest;
+        dest[0] = 0.0f;
+        dest[1] = 0.0f;
+        dest[2] = 0.0f;
+    }
+    return EVT_RETURN_DONE;
+}
+
+/** Script helper: args[0] = unit. Frees the four hand destination blocks held in work[0..3]. */
+static USER_FUNC(hand_end) {
+    BattleWork* wp = _battleWorkPointer;
+    EvtWord* args = event->args;
+    s32 id = evtGetValue(event, *args++);
+    BattleUnit* unit = BattleGetUnitPtr(wp, BattleTransID(event, id));
+    s32 i;
+    s32 j;
+
+    for (i = 2, j = 0; i <= 5; i++, j++) {
+        if ((void*)unit->work[j] != NULL) {
+            BattleFree((void*)unit->work[j]);
+            unit->work[j] = 0;
+        }
+    }
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Per-frame script helper: args[0] = unit.
+ * Eases each of the four floating hand parts (2-5) a tenth of the way towards the destination set by
+ * set_hand_dest; does nothing while the Wizzerd is under certain statuses (ids 1, 2 and 9).
+ */
+static USER_FUNC(hand_ctrl) {
+    EvtWord* args = event->args;
+    BattleWork* wp = _battleWorkPointer;
+    s32 id = evtGetValue(event, *args++);
+    BattleUnit* unit = BattleGetUnitPtr(wp, BattleTransID(event, id));
+    s8 turns;
+    s8 strength;
+    BattleUnitPart* part;
+    f32* dest;
+    Vec* scale;
+    f32 x;
+    f32 y;
+    f32 z;
+    s32 i;
+    s32 j;
+
+    if (unit == NULL) {
+        return EVT_RETURN_BLOCK;
+    }
+    BtlUnit_GetStatus(unit, STATUS_STOP, &turns, &strength);
+    if (turns > 0) {
+        return EVT_RETURN_DONE;
+    }
+    BtlUnit_GetStatus(unit, STATUS_FREEZE, &turns, &strength);
+    if (turns > 0) {
+        return EVT_RETURN_DONE;
+    }
+    BtlUnit_GetStatus(unit, STATUS_SLEEP, &turns, &strength);
+    if (turns > 0) {
+        return EVT_RETURN_DONE;
+    }
+    for (j = 0, i = 2; i <= 5; i++, j++) {
+        part = BtlUnit_GetPartsPtr(unit, i);
+        dest = (f32*)unit->work[j];
+        scale = &part->baseScale;
+        x = part->positionOffset.x * scale->x;
+        y = part->positionOffset.y * scale->y;
+        z = part->positionOffset.z * scale->z;
+        x += (dest[0] - x) / 10.0f;
+        y += (dest[1] - y) / 10.0f;
+        z += (dest[2] - z) / 10.0f;
+        part->positionOffset.x = x;
+        part->positionOffset.y = y;
+        part->positionOffset.z = z;
+    }
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script helper: args[0] = unit, args[1] = hand (2-5), args[2..4] = x, y, z.
+ * Sets the target offset of one floating hand, mirrored in x and scaled by 1.25 or 0.75 when the Wizzerd is big
+ * or small.
+ */
+static USER_FUNC(set_hand_dest) {
+    s32 hand;
+    BattleUnit* unit;
+    BattleWork* wp = _battleWorkPointer;
+    EvtWord* args = event->args;
+    s32 id;
+    f32* dest;
+    f32 x;
+    f32 y;
+    f32 z;
+
+    id = evtGetValue(event, args[0]);
+    hand = evtGetValue(event, args[1]);
+    x = evtGetFloat(event, args[2]);
+    y = evtGetFloat(event, args[3]);
+    z = evtGetFloat(event, args[4]);
+    unit = BattleGetUnitPtr(wp, BattleTransID(event, id));
+    if (unit == NULL) {
+        return EVT_RETURN_BLOCK;
+    }
+    hand -= 2;
+    dest = (f32*)unit->work[hand];
+    if (BtlUnit_CheckStatus(unit, STATUS_HUGE)) {
+        dest[0] = 1.25f * -x;
+        dest[1] = 1.25f * y;
+        dest[2] = 1.25f * z;
+    } else if (BtlUnit_CheckStatus(unit, STATUS_TINY)) {
+        dest[0] = 0.75f * -x;
+        dest[1] = 0.75f * y;
+        dest[2] = 0.75f * z;
+    } else {
+        dest[0] = -x;
+        dest[1] = y;
+        dest[2] = z;
+    }
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script helper: finds the Wizzerd's copies on the field (kinds 0x81 and 0xAA)
+ * and returns up to four of their unit indices in args[0..3] (-1 for none) and the count in args[4].
+ */
+static USER_FUNC(mahorn_get_bunsin) {
+    EvtWord* args = event->args;
+    s32 copies[4];
+    s32 n = 0;
+    s32 i;
+    BattleWork* wp = _battleWorkPointer;
+    BattleUnit* unit;
+
+    // indices of the wizzerd's copies
+    for (i = 0; i < 64; i++) {
+        unit = wp->units[i];
+        if (unit != NULL && (unit->currentKind == UNIT_DARK_WIZZERD_CLONE || unit->currentKind == UNIT_ELITE_WIZZERD_CLONE)) {
+            copies[n] = i;
+            n++;
+        }
+    }
+    for (i = 0; i < 4; i++) {
+        if (i < n) {
+            evtSetValue(event, *args++, copies[i]);
+        } else {
+            evtSetValue(event, *args++, -1);
+        }
+    }
+    evtSetValue(event, *args, n);
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script helper: args[0] = unit, args[1] = target x, args[2..3] are unused, args[4] = travel time in frames.
+ * Starts the Wizzerd's magic effect from its wand towards the target x at its starting y and z and stores it in work[7];
+ * the speed is derived from the distance and time.
+ */
+static USER_FUNC(eff_magic) {
+    EvtWord* args = event->args;
+    s32 id = BattleTransID(event, evtGetValue(event, args[0]));
+    BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
+    f32 a = evtGetFloat(event, args[1]);
+    f32 b = evtGetFloat(event, args[2]);
+    f32 c = evtGetFloat(event, args[3]);
+    s32 time = evtGetValue(event, args[4]);
+    f32 x;
+    f32 y;
+    f32 z;
+
+    BtlUnit_GetPos(unit, &x, &y, &z);
+    x += unit->sizeMultiplier * unit->faceDirection;
+    y += 18.0f * unit->sizeMultiplier;
+    z += 5.0f;
+    unit->work[UNIT_WORK_MAGIC_EFFECT] = (EvtWord)effMahorn2Entry(0, x, y, z, a, y, z, unit->sizeMultiplier, fabs((a - x) / time));
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script helper: args[0] = unit; returns in args[1] the x position of the magic effect's type-3 particle (the
+ * moving orb), or 0 if none exists.
+ */
+static USER_FUNC(eff_magic_get_posX) {
+    EvtWord* args = event->args;
+    s32 id = BattleTransID(event, evtGetValue(event, *args++));
+    BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
+    EffectEntry* eff = (EffectEntry*)unit->work[UNIT_WORK_MAGIC_EFFECT];
+    effMahorn2Data* work = eff->userdata;
+    s32 i;
+
+    for (i = 0; i < eff->count; i++, work++) {
+        if (work->type == 3) {
+            evtSetFloat(event, *args++, work->position.x);
+            break;
+        }
+    }
+    if (i == eff->count) {
+        evtSetFloat(event, *args++, 0.0f);
+    }
+    return EVT_RETURN_DONE;
+}
+
+/**
  * Attack script of the Wizzerd. On a first strike it casts its single-target magic.
  * Otherwise, after an item check, it draws a spell:
  * single-target magic (50 in 120), magic on all enemies (30),
@@ -1561,226 +1784,3 @@ static EVT_BEGIN(wait_event)
     GOTO(3)
     RETURN
 EVT_END()
-
-/**
- * Script helper: args[0] = unit; returns in args[1] the x position of the magic effect's type-3 particle (the
- * moving orb), or 0 if none exists.
- */
-static USER_FUNC(eff_magic_get_posX) {
-    EvtWord* args = event->args;
-    s32 id = BattleTransID(event, evtGetValue(event, *args++));
-    BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
-    EffectEntry* eff = (EffectEntry*)unit->work[UNIT_WORK_MAGIC_EFFECT];
-    effMahorn2Data* work = eff->userdata;
-    s32 i;
-
-    for (i = 0; i < eff->count; i++, work++) {
-        if (work->type == 3) {
-            evtSetFloat(event, *args++, work->position.x);
-            break;
-        }
-    }
-    if (i == eff->count) {
-        evtSetFloat(event, *args++, 0.0f);
-    }
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper: args[0] = unit, args[1] = target x, args[2..3] are unused, args[4] = travel time in frames.
- * Starts the Wizzerd's magic effect from its wand towards the target x at its starting y and z and stores it in work[7];
- * the speed is derived from the distance and time.
- */
-static USER_FUNC(eff_magic) {
-    EvtWord* args = event->args;
-    s32 id = BattleTransID(event, evtGetValue(event, args[0]));
-    BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
-    f32 a = evtGetFloat(event, args[1]);
-    f32 b = evtGetFloat(event, args[2]);
-    f32 c = evtGetFloat(event, args[3]);
-    s32 time = evtGetValue(event, args[4]);
-    f32 x;
-    f32 y;
-    f32 z;
-
-    BtlUnit_GetPos(unit, &x, &y, &z);
-    x += unit->sizeMultiplier * unit->faceDirection;
-    y += 18.0f * unit->sizeMultiplier;
-    z += 5.0f;
-    unit->work[UNIT_WORK_MAGIC_EFFECT] = (EvtWord)effMahorn2Entry(0, x, y, z, a, y, z, unit->sizeMultiplier, fabs((a - x) / time));
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper: finds the Wizzerd's copies on the field (kinds 0x81 and 0xAA)
- * and returns up to four of their unit indices in args[0..3] (-1 for none) and the count in args[4].
- */
-static USER_FUNC(mahorn_get_bunsin) {
-    EvtWord* args = event->args;
-    s32 copies[4];
-    s32 n = 0;
-    s32 i;
-    BattleWork* wp = _battleWorkPointer;
-    BattleUnit* unit;
-
-    // indices of the wizzerd's copies
-    for (i = 0; i < 64; i++) {
-        unit = wp->units[i];
-        if (unit != NULL && (unit->currentKind == UNIT_DARK_WIZZERD_CLONE || unit->currentKind == UNIT_ELITE_WIZZERD_CLONE)) {
-            copies[n] = i;
-            n++;
-        }
-    }
-    for (i = 0; i < 4; i++) {
-        if (i < n) {
-            evtSetValue(event, *args++, copies[i]);
-        } else {
-            evtSetValue(event, *args++, -1);
-        }
-    }
-    evtSetValue(event, *args, n);
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper: args[0] = unit, args[1] = hand (2-5), args[2..4] = x, y, z.
- * Sets the target offset of one floating hand, mirrored in x and scaled by 1.25 or 0.75 when the Wizzerd is big
- * or small.
- */
-static USER_FUNC(set_hand_dest) {
-    s32 hand;
-    BattleUnit* unit;
-    BattleWork* wp = _battleWorkPointer;
-    EvtWord* args = event->args;
-    s32 id;
-    f32* dest;
-    f32 x;
-    f32 y;
-    f32 z;
-
-    id = evtGetValue(event, args[0]);
-    hand = evtGetValue(event, args[1]);
-    x = evtGetFloat(event, args[2]);
-    y = evtGetFloat(event, args[3]);
-    z = evtGetFloat(event, args[4]);
-    unit = BattleGetUnitPtr(wp, BattleTransID(event, id));
-    if (unit == NULL) {
-        return EVT_RETURN_BLOCK;
-    }
-    hand -= 2;
-    dest = (f32*)unit->work[hand];
-    if (BtlUnit_CheckStatus(unit, STATUS_HUGE)) {
-        dest[0] = 1.25f * -x;
-        dest[1] = 1.25f * y;
-        dest[2] = 1.25f * z;
-    } else if (BtlUnit_CheckStatus(unit, STATUS_TINY)) {
-        dest[0] = 0.75f * -x;
-        dest[1] = 0.75f * y;
-        dest[2] = 0.75f * z;
-    } else {
-        dest[0] = -x;
-        dest[1] = y;
-        dest[2] = z;
-    }
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Per-frame script helper: args[0] = unit.
- * Eases each of the four floating hand parts (2-5) a tenth of the way towards the destination set by
- * set_hand_dest; does nothing while the Wizzerd is under certain statuses (ids 1, 2 and 9).
- */
-static USER_FUNC(hand_ctrl) {
-    EvtWord* args = event->args;
-    BattleWork* wp = _battleWorkPointer;
-    s32 id = evtGetValue(event, *args++);
-    BattleUnit* unit = BattleGetUnitPtr(wp, BattleTransID(event, id));
-    s8 turns;
-    s8 strength;
-    BattleUnitPart* part;
-    f32* dest;
-    Vec* scale;
-    f32 x;
-    f32 y;
-    f32 z;
-    s32 i;
-    s32 j;
-
-    if (unit == NULL) {
-        return EVT_RETURN_BLOCK;
-    }
-    BtlUnit_GetStatus(unit, STATUS_STOP, &turns, &strength);
-    if (turns > 0) {
-        return EVT_RETURN_DONE;
-    }
-    BtlUnit_GetStatus(unit, STATUS_FREEZE, &turns, &strength);
-    if (turns > 0) {
-        return EVT_RETURN_DONE;
-    }
-    BtlUnit_GetStatus(unit, STATUS_SLEEP, &turns, &strength);
-    if (turns > 0) {
-        return EVT_RETURN_DONE;
-    }
-    for (j = 0, i = 2; i <= 5; i++, j++) {
-        part = BtlUnit_GetPartsPtr(unit, i);
-        dest = (f32*)unit->work[j];
-        scale = &part->baseScale;
-        x = part->positionOffset.x * scale->x;
-        y = part->positionOffset.y * scale->y;
-        z = part->positionOffset.z * scale->z;
-        x += (dest[0] - x) / 10.0f;
-        y += (dest[1] - y) / 10.0f;
-        z += (dest[2] - z) / 10.0f;
-        part->positionOffset.x = x;
-        part->positionOffset.y = y;
-        part->positionOffset.z = z;
-    }
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper: args[0] = unit. Frees the four hand destination blocks held in work[0..3]. */
-static USER_FUNC(hand_end) {
-    BattleWork* wp = _battleWorkPointer;
-    EvtWord* args = event->args;
-    s32 id = evtGetValue(event, *args++);
-    BattleUnit* unit = BattleGetUnitPtr(wp, BattleTransID(event, id));
-    s32 i;
-    s32 j;
-
-    for (i = 2, j = 0; i <= 5; i++, j++) {
-        if ((void*)unit->work[j] != NULL) {
-            BattleFree((void*)unit->work[j]);
-            unit->work[j] = 0;
-        }
-    }
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper: args[0] = unit.
- * Gives each of the four hand parts (2-5) the idle animation MAH_Z_2
- * and a zeroed destination block (work[0..3]).
- */
-static USER_FUNC(hand_init) {
-    EvtWord* args = event->args;
-    BattleWork* wp = _battleWorkPointer;
-    s32 id = evtGetValue(event, *args++);
-    BattleUnit* unit = BattleGetUnitPtr(wp, BattleTransID(event, id));
-    f32 x;
-    f32 y;
-    f32 z;
-    f32* dest;
-    s32 i;
-    s32 j;
-
-    BtlUnit_GetPos(unit, &x, &y, &z);
-    for (j = 0, i = 2; i <= 5; i++, j++) {
-        BtlUnit_SetAnim(BtlUnit_GetPartsPtr(unit, i), "MAH_Z_2");
-        dest = BTL_ALLOC(12);
-        unit->work[j] = (EvtWord)dest;
-        dest[0] = 0.0f;
-        dest[1] = 0.0f;
-        dest[2] = 0.0f;
-    }
-    return EVT_RETURN_DONE;
-}
