@@ -8,7 +8,7 @@ generated from (maps made before 2026-11-13 have no such line).
 One entry per push, newest first: date, the pushed commit, whether maps from the previous push are now obsolete,
 and what changed in plain words.
 
-## 2026-11-19 - pushed commit: the one that adds this entry (maps stamped 5a5887849)
+## 2026-11-19 - pushed commit: the one that adds this entry (maps stamped 60565c428)
 
 Old maps obsolete: **yes**. Regenerate them.
 
@@ -22,7 +22,7 @@ Old maps obsolete: **yes**. Regenerate them.
 - Names this project had made up are gone where the code was really a stripped original function (for example
   `fadeCapture` is `test_img_alloc_capture`, `marioChkGndOk` is `marioGravityChk`, win_root's `nameQuad` /
   `winWazaQuad` helpers are calls to `chip` / `chip2`).
-- Many REL functions moved to the places the JP demo numbering shows, and 32 battle units are built deferred as in
+- Many REL functions moved to the places the JP demo numbering shows, and about 75 REL units (44 battle units, 31 others) are built deferred as in
   the original, so function addresses inside those RELs' objects and many `@N` / `$N` numbers changed. No linked
   name was added or removed, and every output file is byte-identical to the original game.
 
