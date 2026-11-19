@@ -7263,8 +7263,8 @@ EVT_END()
 
 /**
  * Run by gor_03_init_evt when the map was entered with no entrance name at one of the story points STG2_41, STG2_45,
- * STG2_46, STG5_61, STG5_64_03 or STG5_65: if system flag 0x40 is set it clears it and places Mario and the partner at
- * (-327, 155, -432) with the camera reset there.
+ * STG2_46, STG5_61, STG5_64_03 or STG5_65: if system flag 0x40 is set it clears it and places Mario at (-327, 155,
+ * -432) and the partner at (-327, 155, -467), with the camera reset there.
  */
 static EVT_BEGIN(debug_event_mode)
     CALL(evt_bero_get_entername, LW(0))
@@ -7385,13 +7385,10 @@ EVT_BEGIN(monte_evt_door_entry)
 EVT_END()
 
 /**
- * Map init of gor_03 (relSetEvtAddr in gor.c): BGM_STG0_GOR1 and ENV_STG0_GOR4 (JP and later stay silent when returning
- * from a minigame, GSWF_GOR_RETURNING_FROM_MINIGAME), the pipe, exits, Luigi and NPCs, the ring tribes of Francesca and
- * Frankie by story point, the canal water, the doors (evt_door_entry, monte_evt_door_entry and the roll doors), the
- * bombable wall, the shop, Star Pieces and Shine Sprite blocks, the hedges by chapter, the parlor machines, ranking
- * board and Pianta Changer, the minigame return and Peach mail scenes, the bobbing shop clerk and casino staff, the
- * mail event, the lottery board, the Pianta syndicate scenes and the office desk and bed talk triggers. US and later
- * also switch the sign and slot-light map objects to the current language.
+ * Map init of gor_03 (relSetEvtAddr in gor.c): BGM_STG0_GOR1 / ENV_STG0_GOR4 (JP and later silent after a minigame,
+ * GSWF_GOR_RETURNING_FROM_MINIGAME); pipe, exits, doors, NPCs (Francesca and Frankie's ring tribes by story point),
+ * water, bombable wall, shop, item blocks, hedges, parlor machines, Pianta Changer, the minigame-return, mail, lottery
+ * and syndicate scenes, office talk triggers. US and later switch the sign and slot-light objects to the language.
  */
 EVT_BEGIN(gor_03_init_evt)
 #if VERSION <= VERSION_DEMO_JP

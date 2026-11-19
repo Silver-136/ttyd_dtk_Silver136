@@ -1138,8 +1138,8 @@ EVT_END()
 
 /**
  * While Trouble Center request TROUBLE_ROUST_THESE_CADS is accepted: counts the already-defeated target enemies in
- * GSW_TROUBLE_WORK(0) and hooks iri_28_enemy_dead into the dead event of each one still present (in JP and later a
- * Piranha Plant and a Cleft; in the early demos a Poison Puff and a monochrome Cleft); run by the map's init script.
+ * GSW_TROUBLE_WORK(0) and hooks iri_28_enemy_dead into the dead event of each one still present (in JP and later two
+ * Piranha Plants and a Cleft; in the early demos two Poison Puffs and a monochrome Cleft); run by the map init.
  */
 static EVT_BEGIN(iri_28_init)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_ROUST_THESE_CADS)

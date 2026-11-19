@@ -492,12 +492,10 @@ static EVT_BEGIN(peach_evt_door_stop)
 EVT_END()
 
 /**
- * Map init of aji_16 (relSetEvtAddr in aji.c): the "peach" entrance runs evt_last_mail_init and stops. Otherwise starts
- * the Peach scene of the entrance or story point (peach_evt_stg1 by entrance, peach_evt_stg1_1 at STG1_18 after
- * GSWF_AJI_15_VISITED, peach_evt_stg2 or peach_evt_stg2_1 at STG2_25, peach_evt_stg3 and peach_evt_stg6 by entrance),
- * runs the entrances, blocks the e_bero door with peach_evt_door_stop before STG1_18_01 and at STG2_25, puts Peach in
- * mode 1 without a partner before STG7_00_START (BGM_EVT_PEACH1 from then; JP and later set reverb mode 1), turns off
- * the four door hit objects and spawns evt_emergency.
+ * Map init of aji_16 (relSetEvtAddr in aji.c): the "peach" entrance only runs evt_last_mail_init. Otherwise starts the
+ * Peach scene of the entrance or story point (peach_evt_stg1 .. stg6), runs the entrances, blocks the e_bero door
+ * (peach_evt_door_stop) before STG1_18_01 and at STG2_25, removes the partner and sets mode 1 before STG7_00_START
+ * (BGM_EVT_PEACH1 from then; JP and later reverb mode 1), turns off the four door hit objects, spawns evt_emergency.
  */
 EVT_BEGIN(aji_16_init_evt)
     CALL(evt_bero_get_entername, LW(0))

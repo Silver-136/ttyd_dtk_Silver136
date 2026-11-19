@@ -1027,12 +1027,10 @@ static EVT_BEGIN(majyorin_evt)
 EVT_END()
 
 /**
- * Map init of las_09 (relSetEvtAddr in las.c): no music, ENV_STG8_LAS3 (JP and later reverb mode 2), the entrances (not
- * at STG8_02, which spawns first_evt), the damage return point, evt_gazigazi_entry, the water, the NPCs, recovery and
- * save blocks, the two Chain Chomp objects with Bobbery cases (GSWF_LAS_09_CHAIN_CHOMP_1/2_BLOWN_UP), the two blue
- * switches with their raised platforms and ship panels (GSWF_LAS_09_SWITCH_1/2_PRESSED), at STG8_06_MOVING_PLANETS the
- * Beldam scene (majyorin_evt_main at the majyorin_evt entrance, else majyorin_evt), and
- * GSWF_LAS_09_VISITED_AFTER_GLOOMTAIL from STG8_04_GLOOMTAIL.
+ * Map init of las_09 (relSetEvtAddr in las.c): no music, ENV_STG8_LAS3 (JP+ reverb mode 2), entrances (STG8_02 spawns
+ * first_evt instead), damage return point, evt_gazigazi_entry, water, NPCs, save and recovery blocks, two Chain Chomp
+ * objects with Bobbery cases, two blue switches with their platforms and panels; at STG8_06_MOVING_PLANETS the Beldam
+ * scene (majyorin_evt_main or majyorin_evt); from STG8_04_GLOOMTAIL sets GSWF_LAS_09_VISITED_AFTER_GLOOMTAIL.
  */
 EVT_BEGIN(las_09_init_evt)
     CALL(evt_snd_bgmoff, PSND_FADEOUT)

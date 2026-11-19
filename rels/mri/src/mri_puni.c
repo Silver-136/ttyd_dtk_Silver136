@@ -5288,7 +5288,7 @@ static f32 puni_init_posy(f32 y) {
 
 /**
  * Sets a new Puni up as a living ally at x, y, z:
- * hp 60, attack 20, defense 10, regen 10 per second, hit rate 50 (70 when guarding), radius 6 by 2 by 3;
+ * hp 60, attack 20, defense 10, regen 10 per second, hit rate 50 (70 against an escaping one), radius 6 by 2 by 3;
  * no parent or children yet.
  */
 static void puni_init_para(PuniData* p, f32 x, f32 y, f32 z) {

@@ -129,51 +129,51 @@ typedef struct PuniWork {
 } PuniWork;
 
 typedef struct PuniData {
-    NpcEntry* npc;                      // 0x0
+    NpcEntry* npc;                      // 0x0, slots 1-210: their PunidrvPose (draw pose) cast, set by puni_puni_init
     s32 flags;                          // 0x4, PuniFlags
     s32 flags2;                         // 0x8, PuniFlags2
-    u16 mode;                           // 0xC
-    u16 prevMode;                       // 0xE
+    u16 mode;                           // 0xC, PUNI_MODE_*
+    u16 prevMode;                       // 0xE, mode before a switch to wind, away jump etc. (dizzy mode returns to it)
 #if VERSION <= VERSION_DEMO_JP
     s32 modeHistIdx;   // 0x10, demo: index into modeHist (0-127)
     u16 modeHist[128];
 #else
     u8 pad_10[0x114 - 0x10];            // 0x10
 #endif
-    u16 modeStep;                       // 0x114
-    s16 index;                          // 0x116
-    s16 groupId;                        // 0x118
-    s16 depth;                          // 0x11A
-    u16 anim;                           // 0x11C
-    u16 prevAnim;                       // 0x11E
-    u8 animHoldCount;                   // 0x120
-    u8 flag1Timer;                      // 0x121
-    s32 animTime;                       // 0x124
-    s32 timer;                          // 0x128
+    u16 modeStep;                       // 0x114, step inside the current mode's handler (0 on entering a mode)
+    s16 index;                          // 0x116, slot number in Punidat (0 = Mario); staggers animation and searches
+    s16 groupId;                        // 0x118, follow-chain group, copied from the parent (-1: not in a chain)
+    s16 depth;                          // 0x11A, place in the follow chain: the parent's depth + 1 (0: head or none)
+    u16 anim;                           // 0x11C, anim id = animNames index (0 S_1 stand, 1 W_1 walk, 2 R_1 run, ...)
+    u16 prevAnim;                       // 0x11E, anim at the last draw (puniAnimation); 1000 on setup
+    u8 animHoldCount;                   // 0x120, frames a follower kept its old stand/walk anim (at most 8)
+    u8 flag1Timer;                      // 0x121, frames since PUNI_FLAG2_HEALED was set; cleared after 30
+    s32 animTime;                       // 0x124, anim frame (counts itself with PUNI_FLAG_OWN_ANIM_TIME)
+    s32 timer;                          // 0x128, per-mode frames (follower: time out of reach; others count down)
     Vec pos;                            // 0x12C
-    Vec prevPos;                        // 0x138
+    Vec prevPos;                        // 0x138, pos before this frame's mode and move step; moveDist = |pos - prevPos|
     Vec dispOfs;                        // 0x144, added to pos for the npc/shadow matrix
     Vec savedPos;                       // 0x150, pos saved on a wall hit; intpl target
-    Vec vel;                            // 0x15C
-    Vec pushDir;                        // 0x168
-    f32 maxSpeed;                       // 0x174
-    f32 accelStep;                      // 0x178
+    Vec vel;                            // 0x15C, added to pos by the move step
+    Vec pushDir;                        // 0x168, -wallNrm after an NPC-only wall hit (a ledge); it crosses that way
+    f32 maxSpeed;                       // 0x174, speed cap of the limited move steps (3 by default)
+    f32 accelStep;                      // 0x178, damage hop: vertical speed (5, -0.5 a frame); wind: added to modeF1
     u8 pad_17C[0x180 - 0x17C];          // 0x17C
-    f32 dir;                            // 0x180
-    f32 spin;                           // 0x184
-    f32 rotOffsetY;                     // 0x188
+    f32 dir;                            // 0x180, facing angle (90 or 270 from vel.x) -> npc->direction / pose dir
+    f32 spin;                           // 0x184, z rotation in degrees (wind: 10 a frame) -> npc rotation.z, pose rotZ
+    f32 rotOffsetY;                     // 0x188, rotation offset (8 while blown) -> npc->rotationOffset.y, pose offsetY
     f32 scale;                          // 0x18C, -> npc->scale.x/y and PunidrvPose.scale; ramps 0 -> 1
-    Vec radius;                         // 0x190
-    f32 followRange;                    // 0x19C
-    f32 breathPower;                    // 0x1A0
-    f32 marioDist;                      // 0x1A4
-    f32 parentDist;                     // 0x1A8
-    f32 moveDist;                       // 0x1AC
-    f32 prevParentDist;                 // 0x1B0
-    s32 massTarget;                     // 0x1B4
-    f32 massTargetDistSq;               // 0x1B8
-    s32 awayTarget;                     // 0x1BC
-    f32 awayTargetDistSq;               // 0x1C0
+    Vec radius;                         // 0x190, x: body radius; y, z: added for the push-apart range (6, 2, 3)
+    f32 followRange;                    // 0x19C, an attacker comes this close before it strikes this Puni (10)
+    f32 breathPower;                    // 0x1A0, Flurrie's breath here (cloudGetBreathPower); over 10 blows it away
+    f32 marioDist;                      // 0x1A4, distance to Mario (1000 when more than 32 units of height apart)
+    f32 parentDist;                     // 0x1A8, distance to the parent Puni
+    f32 moveDist;                       // 0x1AC, distance moved in the last frame
+    f32 prevParentDist;                 // 0x1B0, parentDist of the frame before (closing in resets the lost timer)
+    s32 massTarget;                     // 0x1B4, nearest gather target in Punigp->targets (-1: none), puniTargetSearch
+    f32 massTargetDistSq;               // 0x1B8, its squared distance (1000000: none)
+    s32 awayTarget;                     // 0x1BC, nearest flee target in Punigp->targets (-1: none)
+    f32 awayTargetDistSq;               // 0x1C0, its squared distance (1000000: none)
     union {
         OSTime startTime;               // 0x1C8, gp->renderTime when the timed move started
         struct {
@@ -181,42 +181,42 @@ typedef struct PuniData {
             s32 startTimeLo;            // 0x1CC, low word: elapsed ticks = renderTime - this
         };
     };
-    struct PuniData* parent;            // 0x1D0
-    struct PuniData* child1;            // 0x1D4
-    struct PuniData* child2;            // 0x1D8
-    struct PuniData* target;            // 0x1DC
-    s32 modeVar0;                       // 0x1E0
-    s32 modeVar1;                       // 0x1E4
-    s32 modeVar2;                       // 0x1E8
+    struct PuniData* parent;            // 0x1D0, the Puni this one follows in the chain
+    struct PuniData* child1;            // 0x1D4, first follower
+    struct PuniData* child2;            // 0x1D8, second follower
+    struct PuniData* target;            // 0x1DC, Puni it chases or fights (fight opponent; Mario's stand-in when blown)
+    s32 modeVar0;                       // 0x1E0, per-mode integer (wind: spin direction; fall: the mode after landing)
+    s32 modeVar1;                       // 0x1E4, per-mode integer (away jump: second pose set; gather: jitter frames)
+    s32 modeVar2;                       // 0x1E8, per-mode integer (a countdown copied from modeVar1)
     f32 modeF0;                         // 0x1EC, per-mode float (jump: base height; wind: speed)
     f32 modeF1;                         // 0x1F0, per-mode float (jump: initial vertical term; wind: acceleration)
     f32 modeF2;                         // 0x1F4, per-mode float (jump: linear term; wind: speed cap)
-    Vec moveStart;                      // 0x1F8
+    Vec moveStart;                      // 0x1F8, intpl start point; wind: blow direction; gather: jitter step
     Vec moveEnd;                        // 0x204, intpl end point (moveStart = start)
-    HitEntry* hitMove;                  // 0x210
-    HitEntry* hitCheck;                 // 0x214
-    EffectEntry* effect;                // 0x218
+    HitEntry* hitMove;                  // 0x210, wall hit by the last move ray (NULL: none)
+    HitEntry* hitCheck;                 // 0x214, wall hit by the slide check after it (slide undone; NULL: none)
+    EffectEntry* effect;                // 0x218, attached effect (the balloon before an updraft); puniDeleteEffect
     u8 pad_21C[0x2AC - 0x21C];          // 0x21C
     Vec bubblePos;                      // 0x2AC, hagure speech-bubble anchor; passed to effFukidashiEntry as a fake NpcEntry's position
     u8 pad_2B8[0x560 - 0x2B8];          // 0x2B8
     Vec wallNrm;                        // 0x560, wall normal at the last hit; pushDir = -wallNrm
-    void (*modeFunc)(struct PuniData*); // 0x56C
-    void (*moveFunc)(struct PuniData*); // 0x570
-    s16 hp;                             // 0x574
-    s16 maxHp;                          // 0x576
-    s16 regen;                          // 0x578
-    s16 regenTimer;                     // 0x57A
-    s16 regenInterval;                  // 0x57C
-    s16 attack;                         // 0x57E
+    void (*modeFunc)(struct PuniData*); // 0x56C, mode handler for PUNI_MODE_FUNC (puniModeCustom)
+    void (*moveFunc)(struct PuniData*); // 0x570, move step for puniMoveCustom
+    s16 hp;                             // 0x574, fight hp; 0 marks it dead (puniParaDamage)
+    s16 maxHp;                          // 0x576, maximum hp (60)
+    s16 regen;                          // 0x578, hp regained each regenInterval frames at rest (10)
+    s16 regenTimer;                     // 0x57A, frames until the next regen; reset while it moves, is blown or dizzy
+    s16 regenInterval;                  // 0x57C, frames between regens (60)
+    s16 attack;                         // 0x57E, damage dealt = attack - the loser's defense
     s16 defense;                        // 0x580
-    s16 reserved_582;                   // 0x582
-    s16 damage;                         // 0x584
-    s16 attacked;                       // 0x586
-    s16 hitRate;                        // 0x588
-    s16 hitRateGuard;                   // 0x58A
-    s32 recoverReason;                   // 0x58C
-    Vec recoverFromPos;                   // 0x590
-    Vec recoverToPos;                   // 0x59C
+    s16 reserved_582;                   // 0x582, set to 10 by the init functions, never read
+    s16 damage;                         // 0x584, pending damage, subtracted from hp by puniParaDamage
+    s16 attacked;                       // 0x586, already in an exchange this frame (puniParaAttack; cleared each frame)
+    s16 hitRate;                        // 0x588, hit weight against an opponent that is not escaping (50)
+    s16 hitRateGuard;                   // 0x58A, hit weight against an escaping opponent (70)
+    s32 recoverReason;                  // 0x58C, puniPositionCheck result (1, 2) of the last put-back; never read
+    Vec recoverFromPos;                 // 0x590, pos before the last put-back; never read
+    Vec recoverToPos;                   // 0x59C, pos after the last put-back; never read
 } PuniData;
 
 typedef struct PuniMap {

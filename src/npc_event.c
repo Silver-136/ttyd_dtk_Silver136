@@ -2733,7 +2733,7 @@ EVT_END()
 
 /**
  * Move event of Piders: hangs at home in pose PAI_S_1, drawing its thread every frame (piders_draw_yawn), bobbing 10
- * units down and back every 100 frames and swaying 2 degrees a frame left and right.
+ * units down and back with a 100-frame pause between bobs and swaying 2 degrees a frame left and right.
  */
 EVT_BEGIN(piders_move_event)
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_AUTO_MOVE_ANIM)

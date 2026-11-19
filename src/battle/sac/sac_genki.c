@@ -92,39 +92,39 @@ typedef struct GenkiStar {
 
 typedef struct GenkiWork {
     s32 pad0;
-    s32 state;        // 0x04
+    s32 state;               // 0x04, game state: 0 idle, 1 start (start_game), 2 running, 3 over (wait_game_end)
     s32 pad8;
-    s32 mode;         // 0x0C
-    s32 marioHp;       // 0x10
-    s32 partyHp;       // 0x14
-    s32 fp;       // 0x18
-    f32 marioHpDisp;        // 0x1C
-    f32 partyHpDisp;        // 0x20
-    f32 fpDisp;        // 0x24
-    s32 marioHpBlink;       // 0x28
-    s32 partyHpBlink;       // 0x2C
-    s32 fpBlink;       // 0x30
-    EffectEntry* marioHpEff; // 0x34
-    EffectEntry* partyHpEff; // 0x38
-    EffectEntry* fpEff; // 0x3C
-    s32 timeLeft;     // 0x40
-    s32 marioState;   // 0x44
-    s32 marioTimer;   // 0x48
-    s32 objTimer;     // 0x4C
-    s32 partyUnitId;     // 0x50
-    s32 marioCnt;     // 0x54
-    s32 weaponNum;    // 0x58
-    s32* table;       // 0x5C
-    s32 tableIdx;     // 0x60
-    s32 targetState;  // 0x64
-    s32 reticleSpin;  // 0x68
-    f32 aimAngle;    // 0x6C
-    f32 targetSpeed;  // 0x70
-    Vec targetPos;    // 0x74
-    GenkiRing ring[7]; // 0x80
-    GenkiWeapon weapon[7]; // 0x10C
-    GenkiObject object[10]; // 0x358
-    GenkiStar star[7]; // 0x510
+    s32 mode;                // 0x0C, 0 Sweet Treat, 1 Sweet Feast (main_genki's second argument)
+    s32 marioHp;             // 0x10, Mario's HP score (at most 99; get_score)
+    s32 partyHp;             // 0x14, the partner's HP score (at most 99)
+    s32 fp;                  // 0x18, FP score (at most 99)
+    f32 marioHpDisp;         // 0x1C, shown total, steps 1 a frame toward marioHp
+    f32 partyHpDisp;         // 0x20, shown total, steps 1 a frame toward partyHp
+    f32 fpDisp;              // 0x24, shown total, steps 1 a frame toward fp
+    s32 marioHpBlink;        // 0x28, 60 while its shown total changes, counts down (genki_blink)
+    s32 partyHpBlink;        // 0x2C, as marioHpBlink for the partner's total
+    s32 fpBlink;             // 0x30, as marioHpBlink for the FP total
+    EffectEntry* marioHpEff; // 0x34, effRecoveryEntry type 2 that shows the total over Mario
+    EffectEntry* partyHpEff; // 0x38, effRecoveryEntry type 2 over the partner
+    EffectEntry* fpEff;      // 0x3C, effRecoveryEntry type 3 for the FP total
+    s32 timeLeft;            // 0x40, frames left for new drops (900 at the start)
+    s32 marioState;          // 0x44, main_mario: 1 ready, 2 aiming, 3/4 dizzy, 5 done
+    s32 marioTimer;          // 0x48, frames of the dizzy state (stands up at 180)
+    s32 objTimer;            // 0x4C, frames until the next drop (37; Sweet Feast 18)
+    s32 partyUnitId;         // 0x50, the partner's unit (-1: none; partner hearts drop as Mario hearts)
+    s32 marioCnt;            // 0x54, aiming countdown from 10: pose change at 2, Sweet Feast fires at 0
+    s32 weaponNum;           // 0x58, shot slots in use (3; Sweet Feast 7)
+    s32* table;              // 0x5C, shuffled deck of GenkiObjectKind drops (25; Sweet Feast 50), then random
+    s32 tableIdx;            // 0x60, next card of the deck
+    s32 targetState;         // 0x64, main_target: 1 start, 2 swing up, 3 swing down, 4 hidden
+    s32 reticleSpin;         // 0x68, reticle texture spin (0-359); a fired ring's scale gets twice this
+    f32 aimAngle;            // 0x6C, aim in degrees, 0 to 60
+    f32 targetSpeed;         // 0x70, aim step a frame (+1.25 or -1.25)
+    Vec targetPos;           // 0x74, start position of a fired ring; never written (0 from the memset)
+    GenkiRing ring[7];       // 0x80
+    GenkiWeapon weapon[7];   // 0x10C
+    GenkiObject object[10];  // 0x358
+    GenkiStar star[7];       // 0x510
 } GenkiWork;
 
 static USER_FUNC(recover_cmd_disable);

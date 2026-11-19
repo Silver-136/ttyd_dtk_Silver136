@@ -695,7 +695,7 @@ EVT_END()
  * The Boos' group float-up (weapon_teresa_move, from attack_event): a confused Boo with no target flusters
  * (subsetevt_confuse_flustered; see the BUG note). Otherwise every Boo target that has not moved yet (UNIT_WORK_RAISED
  * 0) runs move_event_sub, and the caster waits for them (80 frames plus 20 per Boo) before its pose S_1. The PAL demo
- * and PAL also wait at least 145 frames for two or more Boos (see the BUG note).
+ * and PAL add a 145-frame minimum for two or more Boos, which never applies (see the BUG note).
  */
 static EVT_BEGIN(move_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
