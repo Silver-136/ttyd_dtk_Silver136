@@ -649,8 +649,12 @@ static USER_FUNC(kamec_get_live_num) {
 
     for (i = 0; i < 64; i++) {
         unit = wp->units[i];
-        if (unit != NULL && unit->alliance == ALLIANCE_ENEMY && !BtlUnit_CheckStatus(unit, STATUS_DEAD)) {
-            num++;
+        if (unit != NULL) {
+            if (unit->alliance == ALLIANCE_ENEMY) {
+                if (!BtlUnit_CheckStatus(unit, STATUS_DEAD)) {
+                    num++;
+                }
+            }
         }
     }
     evtSetValue(event, args[0], num);
@@ -672,9 +676,11 @@ static USER_FUNC(kamec_get_bunsin) {
     // indices of the magikoopa's copies
     for (i = 0; i < 64; i++) {
         unit = wp->units[i];
-        if (unit != NULL && unit->currentKind == UNIT_GREEN_MAGIKOOPA_CLONE) {
-            copies[n] = i;
-            n++;
+        if (unit != NULL) {
+            if (unit->currentKind == UNIT_GREEN_MAGIKOOPA_CLONE) {
+                copies[n] = i;
+                n++;
+            }
         }
     }
     for (i = 0; i < 4; i++) {
@@ -702,8 +708,10 @@ static USER_FUNC(kamec_shuffle) {
     // the real magikoopa and its copies
     for (i = 0; i < 64; i++) {
         kamecs[n] = wp->units[i];
-        if (kamecs[n] != NULL && (kamecs[n]->currentKind == UNIT_GREEN_MAGIKOOPA || kamecs[n]->currentKind == UNIT_GREEN_MAGIKOOPA_CLONE)) {
-            n++;
+        if (kamecs[n] != NULL) {
+            if (kamecs[n]->currentKind == UNIT_GREEN_MAGIKOOPA || kamecs[n]->currentKind == UNIT_GREEN_MAGIKOOPA_CLONE) {
+                n++;
+            }
         }
     }
     for (i = 0; i < 10; i++) {
@@ -758,14 +766,16 @@ static USER_FUNC(eff_staff1) {
     f32 y;
     f32 z;
     f32* wk;
+    EffectEntry* eff;
 
     if (isFirstCall) {
         unit->work[UNIT_WORK_STAFF_EFFECT] = (EvtWord)effThunderflareN64Entry(0, 60, 0.0f, -1000.0f, 0.0f, 1.0f);
     }
-    if (!(((EffectEntry*)unit->work[UNIT_WORK_STAFF_EFFECT])->flags & EFFECT_FLAG_ACTIVE)) {
+    eff = (EffectEntry*)unit->work[UNIT_WORK_STAFF_EFFECT];
+    if (!(eff->flags & EFFECT_FLAG_ACTIVE)) {
         return EVT_RETURN_DONE;
     }
-    wk = ((EffectEntry*)unit->work[UNIT_WORK_STAFF_EFFECT])->userdata;
+    wk = eff->userdata;
     wk[10] = unit->sizeMultiplier;
     BtlUnit_GetPos(unit, &x, &y, &z);
     wk[2] = x + 22.5f * unit->sizeMultiplier * unit->faceDirection;
@@ -782,14 +792,16 @@ static USER_FUNC(eff_staff2) {
     f32 y;
     f32 z;
     f32* wk;
+    EffectEntry* eff;
 
     if (isFirstCall) {
         unit->work[UNIT_WORK_STAFF_EFFECT] = (EvtWord)effPokopiPchargeN64Entry(0, 60, 0.0f, -1000.0f, 0.0f, 1.0f);
     }
-    if (!(((EffectEntry*)unit->work[UNIT_WORK_STAFF_EFFECT])->flags & EFFECT_FLAG_ACTIVE)) {
+    eff = (EffectEntry*)unit->work[UNIT_WORK_STAFF_EFFECT];
+    if (!(eff->flags & EFFECT_FLAG_ACTIVE)) {
         return EVT_RETURN_DONE;
     }
-    wk = ((EffectEntry*)unit->work[UNIT_WORK_STAFF_EFFECT])->userdata;
+    wk = eff->userdata;
     wk[13] = unit->sizeMultiplier;
     BtlUnit_GetPos(unit, &x, &y, &z);
     wk[1] = x + 22.5f * unit->sizeMultiplier * unit->faceDirection;

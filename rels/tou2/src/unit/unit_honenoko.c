@@ -42,24 +42,6 @@ static EvtWord call_friend_event[311];
 static EvtWord wait_event[6];
 
 /**
- * Script helper: arg0 = source unit, arg1 = destination unit;
- * copies the size-change status (Mini/Giant turns and strength),
- * used when a Dull Bones summons a new friend.
- */
-static USER_FUNC(honenoko_copy_status) {
-    EvtWord* args = event->args;
-    s32 sourceId = BattleTransID(event, evtGetValue(event, args[0]));
-    s32 destinationId = BattleTransID(event, evtGetValue(event, args[1]));
-    BattleWork* wp = _battleWorkPointer;
-    BattleUnit* sourceUnit = BattleGetUnitPtr(wp, sourceId);
-    BattleUnit* destinationUnit = BattleGetUnitPtr(wp, destinationId);
-
-    destinationUnit->sizeChangeTurns = sourceUnit->sizeChangeTurns;
-    destinationUnit->sizeChangeStrength = sourceUnit->sizeChangeStrength;
-    return EVT_RETURN_DONE;
-}
-
-/**
  * Unit data of the Dull Bones: 1 HP and level 9, with its parts, status vulnerability, init event and
  * event data table.
  */
@@ -241,6 +223,24 @@ static BattleDataEntry data_table[] = {
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0, NULL},
 };
+
+/**
+ * Script helper: arg0 = source unit, arg1 = destination unit;
+ * copies the size-change status (Mini/Giant turns and strength),
+ * used when a Dull Bones summons a new friend.
+ */
+static USER_FUNC(honenoko_copy_status) {
+    EvtWord* args = event->args;
+    s32 sourceId = BattleTransID(event, evtGetValue(event, args[0]));
+    s32 destinationId = BattleTransID(event, evtGetValue(event, args[1]));
+    BattleWork* wp = _battleWorkPointer;
+    BattleUnit* sourceUnit = BattleGetUnitPtr(wp, sourceId);
+    BattleUnit* destinationUnit = BattleGetUnitPtr(wp, destinationId);
+
+    destinationUnit->sizeChangeTurns = sourceUnit->sizeChangeTurns;
+    destinationUnit->sizeChangeStrength = sourceUnit->sizeChangeStrength;
+    return EVT_RETURN_DONE;
+}
 
 /**
  * Init event of the Dull Bones: registers its wait, attack, damage and confusion events,

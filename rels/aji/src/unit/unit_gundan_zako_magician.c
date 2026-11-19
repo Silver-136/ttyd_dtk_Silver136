@@ -51,35 +51,6 @@ static EvtWord yokeyoke_bottle_event_with_kanbu[15];
 static EvtWord ziwaziwa_bottle_event[15];
 static EvtWord wait_event[6];
 
-/**
- * Script function: finds the X-Naut officer (the unit with initialKind 99, the "kanbu") among the 64 battle
- * units and returns its unit ID in args[0] (-1 if absent) and its body part ID in args[1] (0 if absent);
- * the PhD's bottle events use it to aim at the officer.
- */
-static USER_FUNC(kanbu_get_id) {
-    EvtWord* args = event->args;
-    s32 id = -1;
-    s32 i;
-    BattleWork* wp = _battleWorkPointer;
-    BattleUnit* unit;
-
-    // Select the first occupied slot with this initial kind, without checking its current HP or alliance.
-    for (i = 0; i < 64; i++) {
-        unit = BattleGetUnitPtr(wp, i);
-        if (unit != NULL && unit->initialKind == UNIT_LORD_CRUMP_CHAPTER5) {
-            id = i;
-            break;
-        }
-    }
-    evtSetValue(event, args[0], id);
-    if (id != -1) {
-        evtSetValue(event, args[1], BtlUnit_GetBodyPartsId(unit));
-    } else {
-        evtSetValue(event, args[1], 0);
-    }
-    return EVT_RETURN_DONE;
-}
-
 /** Unit data of the X-Naut PhD: 9 HP, level 27; the battle starts it from init_event. */
 BattleUnitKind unit_gundan_zako_magician = {
     UNIT_X_NAUT_PHD, // unitType
@@ -488,6 +459,35 @@ static BattleWeapon weapon_gundan_zako_magician_ziwaziwa_bottle = {
     NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
+
+/**
+ * Script function: finds the X-Naut officer (the unit with initialKind 99, the "kanbu") among the 64 battle
+ * units and returns its unit ID in args[0] (-1 if absent) and its body part ID in args[1] (0 if absent);
+ * the PhD's bottle events use it to aim at the officer.
+ */
+static USER_FUNC(kanbu_get_id) {
+    EvtWord* args = event->args;
+    s32 id = -1;
+    s32 i;
+    BattleWork* wp = _battleWorkPointer;
+    BattleUnit* unit;
+
+    // Select the first occupied slot with this initial kind, without checking its current HP or alliance.
+    for (i = 0; i < 64; i++) {
+        unit = BattleGetUnitPtr(wp, i);
+        if (unit != NULL && unit->initialKind == UNIT_LORD_CRUMP_CHAPTER5) {
+            id = i;
+            break;
+        }
+    }
+    evtSetValue(event, args[0], id);
+    if (id != -1) {
+        evtSetValue(event, args[1], BtlUnit_GetBodyPartsId(unit));
+    } else {
+        evtSetValue(event, args[1], 0);
+    }
+    return EVT_RETURN_DONE;
+}
 
 /**
  * Battle init for the X-Naut PhD: registers its wait, attack,

@@ -260,6 +260,24 @@ static BattleDataEntry data_table[] = {
 };
 
 /**
+ * Script helper: args[0] = source unit, args[1] = destination unit.
+ * Copies the size-change status (turns and strength) from the Bones unit to the friend it has just spawned
+ * (entry_honenoko).
+ */
+static USER_FUNC(honenoko_copy_status) {
+    EvtWord* args = event->args;
+    s32 id1 = BattleTransID(event, evtGetValue(event, args[0]));
+    s32 id2 = BattleTransID(event, evtGetValue(event, args[1]));
+    BattleWork* wp = _battleWorkPointer;
+    BattleUnit* unit1 = BattleGetUnitPtr(wp, id1);
+    BattleUnit* unit2 = BattleGetUnitPtr(wp, id2);
+
+    unit2->sizeChangeTurns = unit1->sizeChangeTurns;
+    unit2->sizeChangeStrength = unit1->sizeChangeStrength;
+    return EVT_RETURN_DONE;
+}
+
+/**
  * Init script of the Dry Bones: registers its wait, attack, damage and confusion handlers,
  * puts its three bone parts (2 to 4) in the KRN_H_1 pose,
  * clears UNIT_WORK_REWARD_GIVEN (set once its reward has been paid out)
@@ -963,21 +981,3 @@ static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
-
-/**
- * Script helper: args[0] = source unit, args[1] = destination unit.
- * Copies the size-change status (turns and strength) from the Bones unit to the friend it has just spawned
- * (entry_honenoko).
- */
-static USER_FUNC(honenoko_copy_status) {
-    EvtWord* args = event->args;
-    s32 id1 = BattleTransID(event, evtGetValue(event, args[0]));
-    s32 id2 = BattleTransID(event, evtGetValue(event, args[1]));
-    BattleWork* wp = _battleWorkPointer;
-    BattleUnit* unit1 = BattleGetUnitPtr(wp, id1);
-    BattleUnit* unit2 = BattleGetUnitPtr(wp, id2);
-
-    unit2->sizeChangeTurns = unit1->sizeChangeTurns;
-    unit2->sizeChangeStrength = unit1->sizeChangeStrength;
-    return EVT_RETURN_DONE;
-}

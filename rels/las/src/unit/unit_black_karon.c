@@ -280,6 +280,23 @@ static BattleDataEntry data_table[] = {
 };
 
 /**
+ * Script helper (args[0], args[1] = battle units): copies only the size-change turns and strength of unit args[0] to
+ * unit args[1].
+ */
+static USER_FUNC(honenoko_copy_status) {
+    EvtWord* args = event->args;
+    s32 id1 = BattleTransID(event, evtGetValue(event, args[0]));
+    s32 id2 = BattleTransID(event, evtGetValue(event, args[1]));
+    BattleWork* wp = _battleWorkPointer;
+    BattleUnit* unit1 = BattleGetUnitPtr(wp, id1);
+    BattleUnit* unit2 = BattleGetUnitPtr(wp, id2);
+
+    unit2->sizeChangeTurns = unit1->sizeChangeTurns;
+    unit2->sizeChangeStrength = unit1->sizeChangeStrength;
+    return EVT_RETURN_DONE;
+}
+
+/**
  * Init event of the Dark Bones: installs its wait, attack, damage and confusion events,
  * sets the thrown-bone part poses (KRN_H_1) and the landing sound,
  * and clears UNIT_WORK_REWARD_GIVEN (the flag that the death reward was already given).
@@ -990,20 +1007,3 @@ static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
-
-/**
- * Script helper (args[0], args[1] = battle units): copies only the size-change turns and strength of unit args[0] to
- * unit args[1].
- */
-static USER_FUNC(honenoko_copy_status) {
-    EvtWord* args = event->args;
-    s32 id1 = BattleTransID(event, evtGetValue(event, args[0]));
-    s32 id2 = BattleTransID(event, evtGetValue(event, args[1]));
-    BattleWork* wp = _battleWorkPointer;
-    BattleUnit* unit1 = BattleGetUnitPtr(wp, id1);
-    BattleUnit* unit2 = BattleGetUnitPtr(wp, id2);
-
-    unit2->sizeChangeTurns = unit1->sizeChangeTurns;
-    unit2->sizeChangeStrength = unit1->sizeChangeStrength;
-    return EVT_RETURN_DONE;
-}

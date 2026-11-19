@@ -476,6 +476,34 @@ static BattleWeapon weapon_gundan_zako_magician_ziwaziwa_bottle = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Script helper: finds the battle unit of kind 99 (Lord Crump, the horde leader) and writes its id to args[0]
+ * and its body part id to args[1] (0 when none exists).
+ */
+static USER_FUNC(kanbu_get_id) {
+    EvtWord* args = event->args;
+    s32 id = -1;
+    s32 i;
+    BattleWork* wp = _battleWorkPointer;
+    BattleUnit* unit;
+
+    // Return the first occupied slot whose original kind is chapter-five Crump.
+    for (i = 0; i < 64; i++) {
+        unit = BattleGetUnitPtr(wp, i);
+        if (unit != NULL && unit->initialKind == UNIT_LORD_CRUMP_CHAPTER5) {
+            id = i;
+            break;
+        }
+    }
+    evtSetValue(event, args[0], id);
+    if (id != -1) {
+        evtSetValue(event, args[1], BtlUnit_GetBodyPartsId(unit));
+    } else {
+        evtSetValue(event, args[1], 0);
+    }
+    return EVT_RETURN_DONE;
+}
+
 /** Init event of the X-Naut PhD: installs its wait, attack, damage and confusion (the attack event) events. */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
@@ -1182,31 +1210,3 @@ static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
-
-/**
- * Script helper: finds the battle unit of kind 99 (Lord Crump, the horde leader) and writes its id to args[0]
- * and its body part id to args[1] (0 when none exists).
- */
-static USER_FUNC(kanbu_get_id) {
-    EvtWord* args = event->args;
-    s32 id = -1;
-    s32 i;
-    BattleWork* wp = _battleWorkPointer;
-    BattleUnit* unit;
-
-    // Return the first occupied slot whose original kind is chapter-five Crump.
-    for (i = 0; i < 64; i++) {
-        unit = BattleGetUnitPtr(wp, i);
-        if (unit != NULL && unit->initialKind == UNIT_LORD_CRUMP_CHAPTER5) {
-            id = i;
-            break;
-        }
-    }
-    evtSetValue(event, args[0], id);
-    if (id != -1) {
-        evtSetValue(event, args[1], BtlUnit_GetBodyPartsId(unit));
-    } else {
-        evtSetValue(event, args[1], 0);
-    }
-    return EVT_RETURN_DONE;
-}

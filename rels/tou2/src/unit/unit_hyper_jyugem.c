@@ -46,23 +46,6 @@ static EvtWord charge_event[102];
 static EvtWord wait_event[6];
 
 /**
- * Script helper: arg0 = source unit, arg1 = destination unit;
- * copies the size-change status, used when the Dark Lakitu's Spiny is swapped for the thrown one.
- */
-static USER_FUNC(togezo_copy_status) {
-    EvtWord* args = event->args;
-    s32 sourceId = BattleTransID(event, evtGetValue(event, args[0]));
-    s32 destinationId = BattleTransID(event, evtGetValue(event, args[1]));
-    BattleWork* wp = _battleWorkPointer;
-    BattleUnit* sourceUnit = BattleGetUnitPtr(wp, sourceId);
-    BattleUnit* destinationUnit = BattleGetUnitPtr(wp, destinationId);
-
-    destinationUnit->sizeChangeTurns = sourceUnit->sizeChangeTurns;
-    destinationUnit->sizeChangeStrength = sourceUnit->sizeChangeStrength;
-    return EVT_RETURN_DONE;
-}
-
-/**
  * Unit data of the Dark Lakitu: 13 HP and level 26, with its parts, status vulnerability, init event and
  * event data table.
  */
@@ -325,6 +308,23 @@ static BattleUnitSetup entry_togezo = {
     {0}, // unitWork
     NULL, // itemDropTable
 };
+
+/**
+ * Script helper: arg0 = source unit, arg1 = destination unit;
+ * copies the size-change status, used when the Dark Lakitu's Spiny is swapped for the thrown one.
+ */
+static USER_FUNC(togezo_copy_status) {
+    EvtWord* args = event->args;
+    s32 sourceId = BattleTransID(event, evtGetValue(event, args[0]));
+    s32 destinationId = BattleTransID(event, evtGetValue(event, args[1]));
+    BattleWork* wp = _battleWorkPointer;
+    BattleUnit* sourceUnit = BattleGetUnitPtr(wp, sourceId);
+    BattleUnit* destinationUnit = BattleGetUnitPtr(wp, destinationId);
+
+    destinationUnit->sizeChangeTurns = sourceUnit->sizeChangeTurns;
+    destinationUnit->sizeChangeStrength = sourceUnit->sizeChangeStrength;
+    return EVT_RETURN_DONE;
+}
 
 /**
  * Init event of the Dark Lakitu: registers its wait, unison-phase, attack, damage and confusion events,

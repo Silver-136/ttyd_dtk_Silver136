@@ -237,6 +237,24 @@ static BattleUnitSetup entry_togezo = {
 };
 
 /**
+ * Script helper: args[0] = source unit, args[1] = destination unit.
+ * Copies the size-change status (turns and strength) from the Lakitu to the Spiny it has just spawned
+ * (entry_togezo).
+ */
+static USER_FUNC(togezo_copy_status) {
+    EvtWord* args = event->args;
+    s32 id1 = BattleTransID(event, evtGetValue(event, args[0]));
+    s32 id2 = BattleTransID(event, evtGetValue(event, args[1]));
+    BattleWork* wp = _battleWorkPointer;
+    BattleUnit* unit1 = BattleGetUnitPtr(wp, id1);
+    BattleUnit* unit2 = BattleGetUnitPtr(wp, id2);
+
+    unit2->sizeChangeTurns = unit1->sizeChangeTurns;
+    unit2->sizeChangeStrength = unit1->sizeChangeStrength;
+    return EVT_RETURN_DONE;
+}
+
+/**
  * Init script of the Lakitu: registers its wait, unison-phase, attack, damage and confusion handlers,
  * clears UNIT_WORK_HOLD (set while it holds a Spiny egg) and unit work 2,
  * and puts its second part (the egg) in the JGM_P_1 pose.
@@ -787,21 +805,3 @@ static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
-
-/**
- * Script helper: args[0] = source unit, args[1] = destination unit.
- * Copies the size-change status (turns and strength) from the Lakitu to the Spiny it has just spawned
- * (entry_togezo).
- */
-static USER_FUNC(togezo_copy_status) {
-    EvtWord* args = event->args;
-    s32 id1 = BattleTransID(event, evtGetValue(event, args[0]));
-    s32 id2 = BattleTransID(event, evtGetValue(event, args[1]));
-    BattleWork* wp = _battleWorkPointer;
-    BattleUnit* unit1 = BattleGetUnitPtr(wp, id1);
-    BattleUnit* unit2 = BattleGetUnitPtr(wp, id2);
-
-    unit2->sizeChangeTurns = unit1->sizeChangeTurns;
-    unit2->sizeChangeStrength = unit1->sizeChangeStrength;
-    return EVT_RETURN_DONE;
-}

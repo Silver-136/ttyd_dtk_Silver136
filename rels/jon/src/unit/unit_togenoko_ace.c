@@ -57,22 +57,6 @@ static EvtWord guard_cancel_event[90];
 static EvtWord friend_event[88];
 static EvtWord wait_event[6];
 
-/** Script helper: returns in args[0] how many units of kind 0x3C are on the field. */
-static USER_FUNC(togenoko_getnum) {
-    EvtWord* args = event->args;
-    s32 num = 0;
-    s32 i;
-
-    for (i = 0; i < 64; i++) {
-        BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, i);
-        if (unit != NULL && unit->currentKind == UNIT_DARK_KOOPATROL) {
-            num++;
-        }
-    }
-    evtSetValue(event, args[0], num);
-    return EVT_RETURN_DONE;
-}
-
 /**
  * Unit data of the Dark Koopatrol in the Pit of 100 Trials: 25 HP, level 30;
  * names its parts, status table and init script.
@@ -486,6 +470,22 @@ static BattleWeapon weapon_togenoko_charge = {
     NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
+
+/** Script helper: returns in args[0] how many units of kind 0x3C are on the field. */
+static USER_FUNC(togenoko_getnum) {
+    EvtWord* args = event->args;
+    s32 num = 0;
+    s32 i;
+
+    for (i = 0; i < 64; i++) {
+        BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, i);
+        if (unit != NULL && unit->currentKind == UNIT_DARK_KOOPATROL) {
+            num++;
+        }
+    }
+    evtSetValue(event, args[0], num);
+    return EVT_RETURN_DONE;
+}
 
 /** Init script of the Dark Koopatrol. Registers its scripts and sets its run and walk sounds. */
 static EVT_BEGIN(init_event)

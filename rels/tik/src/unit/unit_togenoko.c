@@ -445,6 +445,22 @@ static BattleWeapon weapon_togenoko_charge = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Script helper: returns in args[0] the number of units whose current kind is Koopatrol (any alliance, any HP). */
+static USER_FUNC(togenoko_getnum) {
+    EvtWord* args = event->args;
+    s32 num = 0;
+    s32 i;
+
+    for (i = 0; i < 64; i++) {
+        BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, i);
+        if (unit != NULL && unit->currentKind == UNIT_KOOPATROL) {
+            num++;
+        }
+    }
+    evtSetValue(event, args[0], num);
+    return EVT_RETURN_DONE;
+}
+
 /** Init script of the Koopatrol. Registers its scripts and sets its run and walk sounds. */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
@@ -1156,19 +1172,3 @@ static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
-
-/** Script helper: returns in args[0] the number of units whose current kind is Koopatrol (any alliance, any HP). */
-static USER_FUNC(togenoko_getnum) {
-    EvtWord* args = event->args;
-    s32 num = 0;
-    s32 i;
-
-    for (i = 0; i < 64; i++) {
-        BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, i);
-        if (unit != NULL && unit->currentKind == UNIT_KOOPATROL) {
-            num++;
-        }
-    }
-    evtSetValue(event, args[0], num);
-    return EVT_RETURN_DONE;
-}

@@ -41,23 +41,6 @@ static EvtWord normal_attack_event[428];
 static EvtWord call_friend_event[311];
 static EvtWord wait_event[6];
 
-/**
- * Script helper: args[0] = source unit, args[1] = destination unit.
- * Copies the size-change status (turns and strength) from the Bones unit to the unit it has just summoned (entry_honenoko).
- */
-static USER_FUNC(honenoko_copy_status) {
-    EvtWord* args = event->args;
-    s32 id1 = BattleTransID(event, evtGetValue(event, args[0]));
-    s32 id2 = BattleTransID(event, evtGetValue(event, args[1]));
-    BattleWork* wp = _battleWorkPointer;
-    BattleUnit* unit1 = BattleGetUnitPtr(wp, id1);
-    BattleUnit* unit2 = BattleGetUnitPtr(wp, id2);
-
-    unit2->sizeChangeTurns = unit1->sizeChangeTurns;
-    unit2->sizeChangeStrength = unit1->sizeChangeStrength;
-    return EVT_RETURN_DONE;
-}
-
 /** Unit data of the Dull Bones: stats, sounds, attributes, parts, init script and data table. */
 BattleUnitKind unit_honenoko = {
     UNIT_DULL_BONES, // unitType
@@ -232,6 +215,23 @@ static BattleDataEntry data_table[] = {
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0, NULL},
 };
+
+/**
+ * Script helper: args[0] = source unit, args[1] = destination unit.
+ * Copies the size-change status (turns and strength) from the Bones unit to the unit it has just summoned (entry_honenoko).
+ */
+static USER_FUNC(honenoko_copy_status) {
+    EvtWord* args = event->args;
+    s32 id1 = BattleTransID(event, evtGetValue(event, args[0]));
+    s32 id2 = BattleTransID(event, evtGetValue(event, args[1]));
+    BattleWork* wp = _battleWorkPointer;
+    BattleUnit* unit1 = BattleGetUnitPtr(wp, id1);
+    BattleUnit* unit2 = BattleGetUnitPtr(wp, id2);
+
+    unit2->sizeChangeTurns = unit1->sizeChangeTurns;
+    unit2->sizeChangeStrength = unit1->sizeChangeStrength;
+    return EVT_RETURN_DONE;
+}
 
 /**
  * Init script of the Dull Bones: registers its wait, attack, damage and confusion handlers,

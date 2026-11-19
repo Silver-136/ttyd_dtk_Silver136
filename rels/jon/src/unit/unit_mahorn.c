@@ -407,6 +407,114 @@ static BattleWeapon weapon_mahorn_recover_magic = {
 };
 
 /**
+ * Attack script of the Wizzerd. On a first strike it casts its single-target magic.
+ * Otherwise, after an item check, it draws a spell:
+ * single-target magic (50 in 120), magic on all enemies (30),
+ * and 10 each for the size-up spell on an ally (dekadeka), the defence-up spell (katikati),
+ * the confusion spell and the heal (recover).
+ * The invisibility (trans) and dodgy (yokeyoke) spells are never picked here.
+ */
+static EVT_BEGIN(attack_event)
+    CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
+    IF_INT_NOT_EQUAL(LW(0), 0)
+        SET_VALUE(LW(9), PTR(&weapon_mahorn_attack_magic))
+        CALL_CHILD(attack_magic_event)
+        GOTO(99)
+    END_IF
+    CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
+    IF_INT_NOT_EQUAL(LW(0), 0)
+        CALL_CHILD(LW(0))
+        CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
+        RETURN
+    END_IF
+    LABEL(10)
+    SET_VALUE(LW(0), 0)
+    ADD(LW(0), 50)
+    ADD(LW(0), 30)
+    ADD(LW(0), 10)
+    ADD(LW(0), 10)
+    ADD(LW(0), 10)
+    ADD(LW(0), 10)
+    SUBTRACT(LW(0), 1)
+    CALL(evt_sub_random, LW(0), LW(1))
+    SET_VALUE(LW(0), 50)
+    IF_INT_LESS(LW(1), LW(0))
+        SET_VALUE(LW(9), PTR(&weapon_mahorn_attack_magic))
+        CALL_CHILD(attack_magic_event)
+        GOTO(99)
+    END_IF
+    ADD(LW(0), 30)
+    IF_INT_LESS(LW(1), LW(0))
+        SET_VALUE(LW(9), PTR(&weapon_mahorn_all_attack_magic))
+        CALL_CHILD(all_attack_magic_event)
+        GOTO(99)
+    END_IF
+    ADD(LW(0), 10)
+    IF_INT_LESS(LW(1), LW(0))
+        SET_VALUE(LW(9), PTR(&weapon_mahorn_dekadeka_magic))
+        CALL_CHILD(dekadeka_magic_event)
+        GOTO(99)
+    END_IF
+    ADD(LW(0), 10)
+    IF_INT_LESS(LW(1), LW(0))
+        SET_VALUE(LW(9), PTR(&weapon_mahorn_katikati_magic))
+        CALL_CHILD(katikati_magic_event)
+        GOTO(99)
+    END_IF
+    ADD(LW(0), 10)
+    IF_INT_LESS(LW(1), LW(0))
+        SET_VALUE(LW(9), PTR(&weapon_mahorn_confuse_magic))
+        CALL_CHILD(confuse_magic_event)
+        GOTO(99)
+    END_IF
+    ADD(LW(0), 10)
+    IF_INT_LESS(LW(1), LW(0))
+        SET_VALUE(LW(9), PTR(&weapon_mahorn_recover_magic))
+        CALL_CHILD(recover_magic_event)
+        GOTO(99)
+    END_IF
+    GOTO(10)
+    LABEL(99)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
+    RETURN
+EVT_END()
+
+/** Pose table of the Wizzerd: battle pose types mapped to animation names. */
+static PoseTableEntry pose_table[] = {
+    {POSE_TYPE_SLEEP, "MAH_N_1"},
+    {POSE_TYPE_STOP, "MAH_Y_1"},
+    {POSE_TYPE_FREEZE, "MAH_Y_1"},
+    {POSE_TYPE_CONFUSE, "MAH_K_1"},
+    {POSE_TYPE_POISON, "MAH_X_1"},
+    {POSE_TYPE_DIZZY, "MAH_X_1"},
+    {POSE_TYPE_NORMAL, "MAH_S_1"},
+    {POSE_TYPE_DAMAGE_FIRE, "MAH_Q_1"},
+    {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "MAH_Q_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "MAH_A_1"},
+    {POSE_TYPE_DAMAGE, "MAH_D_1"},
+    {POSE_TYPE_WALK, "MAH_W_1"},
+    {POSE_TYPE_RUN, "MAH_R_1"},
+    {POSE_TYPE_DANGER, "MAH_X_1"},
+    {POSE_TYPE_PERIL, "MAH_X_1"},
+    {POSE_TYPE_TALK, "MAH_T_1"},
+    {POSE_TYPE_ACTION, "MAH_S_1"},
+};
+
+/** Data table of the Wizzerd: event handlers keyed by tag (avoid_miss_event). */
+static BattleDataEntry data_table[] = {
+    {UNIT_DATA_AVOID_MISS_EVENT, avoid_miss_event},
+    {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
+    {0, NULL},
+};
+
+/** Data table of the Wizzerd, clone: event handlers keyed by tag (avoid_miss_event). */
+static BattleDataEntry data_table_bunsin[] = {
+    {UNIT_DATA_AVOID_MISS_EVENT, avoid_miss_event},
+    {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
+    {0},
+};
+
+/**
  * Script helper: args[0] = unit.
  * Gives each of the four hand parts (2-5) the idle animation MAH_Z_2
  * and a zeroed destination block (work[0..3]).
@@ -564,9 +672,11 @@ static USER_FUNC(mahorn_get_bunsin) {
     // indices of the wizzerd's copies
     for (i = 0; i < 64; i++) {
         unit = wp->units[i];
-        if (unit != NULL && (unit->currentKind == UNIT_DARK_WIZZERD_CLONE || unit->currentKind == UNIT_ELITE_WIZZERD_CLONE)) {
-            copies[n] = i;
-            n++;
+        if (unit != NULL) {
+            if (unit->currentKind == UNIT_DARK_WIZZERD_CLONE || unit->currentKind == UNIT_ELITE_WIZZERD_CLONE) {
+                copies[n] = i;
+                n++;
+            }
         }
     }
     for (i = 0; i < 4; i++) {
@@ -579,163 +689,6 @@ static USER_FUNC(mahorn_get_bunsin) {
     evtSetValue(event, *args, n);
     return EVT_RETURN_DONE;
 }
-
-/**
- * Script helper: args[0] = unit, args[1] = target x, args[2..3] are unused, args[4] = travel time in frames.
- * Starts the Wizzerd's magic effect from its wand towards the target x at its starting y and z and stores it in work[7];
- * the speed is derived from the distance and time.
- */
-static USER_FUNC(eff_magic) {
-    EvtWord* args = event->args;
-    s32 id = BattleTransID(event, evtGetValue(event, args[0]));
-    BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
-    f32 a = evtGetFloat(event, args[1]);
-    f32 b = evtGetFloat(event, args[2]);
-    f32 c = evtGetFloat(event, args[3]);
-    s32 time = evtGetValue(event, args[4]);
-    f32 x;
-    f32 y;
-    f32 z;
-
-    BtlUnit_GetPos(unit, &x, &y, &z);
-    x += unit->sizeMultiplier * unit->faceDirection;
-    y += 18.0f * unit->sizeMultiplier;
-    z += 5.0f;
-    unit->work[UNIT_WORK_MAGIC_EFFECT] = (EvtWord)effMahorn2Entry(0, x, y, z, a, y, z, unit->sizeMultiplier, fabs((a - x) / time));
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper: args[0] = unit; returns in args[1] the x position of the magic effect's type-3 particle (the
- * moving orb), or 0 if none exists.
- */
-static USER_FUNC(eff_magic_get_posX) {
-    EvtWord* args = event->args;
-    s32 id = BattleTransID(event, evtGetValue(event, *args++));
-    BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
-    EffectEntry* eff = (EffectEntry*)unit->work[UNIT_WORK_MAGIC_EFFECT];
-    effMahorn2Data* work = eff->userdata;
-    s32 i;
-
-    for (i = 0; i < eff->count; i++, work++) {
-        if (work->type == 3) {
-            evtSetFloat(event, *args++, work->position.x);
-            break;
-        }
-    }
-    if (i == eff->count) {
-        evtSetFloat(event, *args++, 0.0f);
-    }
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Attack script of the Wizzerd. On a first strike it casts its single-target magic.
- * Otherwise, after an item check, it draws a spell:
- * single-target magic (50 in 120), magic on all enemies (30),
- * and 10 each for the size-up spell on an ally (dekadeka), the defence-up spell (katikati),
- * the confusion spell and the heal (recover).
- * The invisibility (trans) and dodgy (yokeyoke) spells are never picked here.
- */
-static EVT_BEGIN(attack_event)
-    CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
-    IF_INT_NOT_EQUAL(LW(0), 0)
-        SET_VALUE(LW(9), PTR(&weapon_mahorn_attack_magic))
-        CALL_CHILD(attack_magic_event)
-        GOTO(99)
-    END_IF
-    CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
-    IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL_CHILD(LW(0))
-        CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
-        RETURN
-    END_IF
-    LABEL(10)
-    SET_VALUE(LW(0), 0)
-    ADD(LW(0), 50)
-    ADD(LW(0), 30)
-    ADD(LW(0), 10)
-    ADD(LW(0), 10)
-    ADD(LW(0), 10)
-    ADD(LW(0), 10)
-    SUBTRACT(LW(0), 1)
-    CALL(evt_sub_random, LW(0), LW(1))
-    SET_VALUE(LW(0), 50)
-    IF_INT_LESS(LW(1), LW(0))
-        SET_VALUE(LW(9), PTR(&weapon_mahorn_attack_magic))
-        CALL_CHILD(attack_magic_event)
-        GOTO(99)
-    END_IF
-    ADD(LW(0), 30)
-    IF_INT_LESS(LW(1), LW(0))
-        SET_VALUE(LW(9), PTR(&weapon_mahorn_all_attack_magic))
-        CALL_CHILD(all_attack_magic_event)
-        GOTO(99)
-    END_IF
-    ADD(LW(0), 10)
-    IF_INT_LESS(LW(1), LW(0))
-        SET_VALUE(LW(9), PTR(&weapon_mahorn_dekadeka_magic))
-        CALL_CHILD(dekadeka_magic_event)
-        GOTO(99)
-    END_IF
-    ADD(LW(0), 10)
-    IF_INT_LESS(LW(1), LW(0))
-        SET_VALUE(LW(9), PTR(&weapon_mahorn_katikati_magic))
-        CALL_CHILD(katikati_magic_event)
-        GOTO(99)
-    END_IF
-    ADD(LW(0), 10)
-    IF_INT_LESS(LW(1), LW(0))
-        SET_VALUE(LW(9), PTR(&weapon_mahorn_confuse_magic))
-        CALL_CHILD(confuse_magic_event)
-        GOTO(99)
-    END_IF
-    ADD(LW(0), 10)
-    IF_INT_LESS(LW(1), LW(0))
-        SET_VALUE(LW(9), PTR(&weapon_mahorn_recover_magic))
-        CALL_CHILD(recover_magic_event)
-        GOTO(99)
-    END_IF
-    GOTO(10)
-    LABEL(99)
-    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
-    RETURN
-EVT_END()
-
-/** Pose table of the Wizzerd: battle pose types mapped to animation names. */
-static PoseTableEntry pose_table[] = {
-    {POSE_TYPE_SLEEP, "MAH_N_1"},
-    {POSE_TYPE_STOP, "MAH_Y_1"},
-    {POSE_TYPE_FREEZE, "MAH_Y_1"},
-    {POSE_TYPE_CONFUSE, "MAH_K_1"},
-    {POSE_TYPE_POISON, "MAH_X_1"},
-    {POSE_TYPE_DIZZY, "MAH_X_1"},
-    {POSE_TYPE_NORMAL, "MAH_S_1"},
-    {POSE_TYPE_DAMAGE_FIRE, "MAH_Q_1"},
-    {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "MAH_Q_1"},
-    {POSE_TYPE_DAMAGE_GUARDED, "MAH_A_1"},
-    {POSE_TYPE_DAMAGE, "MAH_D_1"},
-    {POSE_TYPE_WALK, "MAH_W_1"},
-    {POSE_TYPE_RUN, "MAH_R_1"},
-    {POSE_TYPE_DANGER, "MAH_X_1"},
-    {POSE_TYPE_PERIL, "MAH_X_1"},
-    {POSE_TYPE_TALK, "MAH_T_1"},
-    {POSE_TYPE_ACTION, "MAH_S_1"},
-};
-
-/** Data table of the Wizzerd: event handlers keyed by tag (avoid_miss_event). */
-static BattleDataEntry data_table[] = {
-    {UNIT_DATA_AVOID_MISS_EVENT, avoid_miss_event},
-    {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
-    {0, NULL},
-};
-
-/** Data table of the Wizzerd, clone: event handlers keyed by tag (avoid_miss_event). */
-static BattleDataEntry data_table_bunsin[] = {
-    {UNIT_DATA_AVOID_MISS_EVENT, avoid_miss_event},
-    {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
-    {0},
-};
 
 /**
  * Init script of the Wizzerd: registers its wait, attack, damage and confusion handlers,
@@ -1324,6 +1277,55 @@ static EVT_BEGIN(attack_enemy_common_event_sub2)
     WAIT_FRAMES(55)
     RETURN
 EVT_END()
+
+/**
+ * Script helper: args[0] = unit, args[1] = target x, args[2..3] are unused, args[4] = travel time in frames.
+ * Starts the Wizzerd's magic effect from its wand towards the target x at its starting y and z and stores it in work[7];
+ * the speed is derived from the distance and time.
+ */
+static USER_FUNC(eff_magic) {
+    EvtWord* args = event->args;
+    s32 id = BattleTransID(event, evtGetValue(event, args[0]));
+    BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
+    f32 a = evtGetFloat(event, args[1]);
+    f32 b = evtGetFloat(event, args[2]);
+    f32 c = evtGetFloat(event, args[3]);
+    s32 time = evtGetValue(event, args[4]);
+    f32 x;
+    f32 y;
+    f32 z;
+
+    BtlUnit_GetPos(unit, &x, &y, &z);
+    x += unit->sizeMultiplier * unit->faceDirection;
+    y += 18.0f * unit->sizeMultiplier;
+    z += 5.0f;
+    unit->work[UNIT_WORK_MAGIC_EFFECT] = (EvtWord)effMahorn2Entry(0, x, y, z, a, y, z, unit->sizeMultiplier, fabs((a - x) / time));
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script helper: args[0] = unit; returns in args[1] the x position of the magic effect's type-3 particle (the
+ * moving orb), or 0 if none exists.
+ */
+static USER_FUNC(eff_magic_get_posX) {
+    EvtWord* args = event->args;
+    s32 id = BattleTransID(event, evtGetValue(event, *args++));
+    BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
+    EffectEntry* eff = (EffectEntry*)unit->work[UNIT_WORK_MAGIC_EFFECT];
+    effMahorn2Data* work = eff->userdata;
+    s32 i;
+
+    for (i = 0; i < eff->count; i++, work++) {
+        if (work->type == 3) {
+            evtSetFloat(event, *args++, work->position.x);
+            break;
+        }
+    }
+    if (i == eff->count) {
+        evtSetFloat(event, *args++, 0.0f);
+    }
+    return EVT_RETURN_DONE;
+}
 
 /**
  * A missed spell: the Wizzerd in LW(15), original or copy, sends its magic orb (eff_magic, 40 frames) to the far edge of the stage

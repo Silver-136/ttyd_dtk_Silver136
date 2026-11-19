@@ -621,296 +621,15 @@ static USER_FUNC(mahorn_get_live_num) {
 
     for (i = 0; i < 64; i++) {
         unit = wp->units[i];
-        if (unit != NULL && unit->alliance == ALLIANCE_ENEMY && !BtlUnit_CheckStatus(unit, STATUS_DEAD)) {
-            num++;
+        if (unit != NULL) {
+            if (unit->alliance == ALLIANCE_ENEMY) {
+                if (!BtlUnit_CheckStatus(unit, STATUS_DEAD)) {
+                    num++;
+                }
+            }
         }
     }
     evtSetValue(event, args[0], num);
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper: sets up the Dark Wizzerd's four hands:
- * starts each in the "MAH_Z_2" animation and allocates a three- float destination block in unit->work[0..3].
- */
-static USER_FUNC(hand_init) {
-    EvtWord* args = event->args;
-    BattleWork* wp = _battleWorkPointer;
-    s32 id = evtGetValue(event, *args++);
-    BattleUnit* unit = BattleGetUnitPtr(wp, BattleTransID(event, id));
-    f32 x;
-    f32 y;
-    f32 z;
-    f32* dest;
-    s32 i;
-    s32 j;
-
-    BtlUnit_GetPos(unit, &x, &y, &z);
-    for (j = 0, i = 2; i <= 5; i++, j++) {
-        BtlUnit_SetAnim(BtlUnit_GetPartsPtr(unit, i), "MAH_Z_2");
-        dest = BTL_ALLOC(sizeof(Vec));
-        unit->work[j] = (EvtWord)dest;
-        dest[0] = 0.0f;
-        dest[1] = 0.0f;
-        dest[2] = 0.0f;
-    }
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper: frees the four hand destination blocks of the Dark Wizzerd allocated by hand_init. */
-static USER_FUNC(hand_end) {
-    BattleWork* wp = _battleWorkPointer;
-    EvtWord* args = event->args;
-    s32 id = evtGetValue(event, *args++);
-    BattleUnit* unit = BattleGetUnitPtr(wp, BattleTransID(event, id));
-    s32 i;
-    s32 j;
-
-    for (i = 2, j = 0; i <= 5; i++, j++) {
-        if ((void*)unit->work[j] != NULL) {
-            BattleFree((void*)unit->work[j]);
-            unit->work[j] = 0;
-        }
-    }
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper (runs every frame): eases each of the four hand parts of the Dark Wizzerd toward its
- * destination offset, one tenth of the distance per call.
- * It does nothing while the unit is asleep, stopped or frozen (statuses 2, 9 and 1).
- */
-static USER_FUNC(hand_ctrl) {
-    EvtWord* args = event->args;
-    BattleWork* wp = _battleWorkPointer;
-    s32 id = evtGetValue(event, *args++);
-    BattleUnit* unit = BattleGetUnitPtr(wp, BattleTransID(event, id));
-    s8 turns;
-    s8 strength;
-    BattleUnitPart* part;
-    f32* dest;
-    Vec* scale;
-    f32 x;
-    f32 y;
-    f32 z;
-    s32 i;
-    s32 j;
-
-    if (unit == NULL) {
-        return EVT_RETURN_BLOCK;
-    }
-    BtlUnit_GetStatus(unit, STATUS_STOP, &turns, &strength);
-    if (turns > 0) {
-        return EVT_RETURN_DONE;
-    }
-    BtlUnit_GetStatus(unit, STATUS_FREEZE, &turns, &strength);
-    if (turns > 0) {
-        return EVT_RETURN_DONE;
-    }
-    BtlUnit_GetStatus(unit, STATUS_SLEEP, &turns, &strength);
-    if (turns > 0) {
-        return EVT_RETURN_DONE;
-    }
-    for (j = 0, i = 2; i <= 5; i++, j++) {
-        part = BtlUnit_GetPartsPtr(unit, i);
-        dest = (f32*)unit->work[j];
-        scale = &part->baseScale;
-        x = part->positionOffset.x * scale->x;
-        y = part->positionOffset.y * scale->y;
-        z = part->positionOffset.z * scale->z;
-        x += (dest[0] - x) / 10.0f;
-        y += (dest[1] - y) / 10.0f;
-        z += (dest[2] - z) / 10.0f;
-        part->positionOffset.x = x;
-        part->positionOffset.y = y;
-        part->positionOffset.z = z;
-    }
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper: sets where hand args[1] (part 2..5 of the Dark Wizzerd, one per hand) should float:
- * stores the offset (-x, y, z) in the hand's destination block,
- * scaled by 1.25 when the unit is grown or 0.75 when it is shrunk (STATUS_HUGE and STATUS_TINY).
- */
-static USER_FUNC(set_hand_dest) {
-    s32 hand;
-    BattleUnit* unit;
-    BattleWork* wp = _battleWorkPointer;
-    EvtWord* args = event->args;
-    s32 id;
-    f32* dest;
-    f32 x;
-    f32 y;
-    f32 z;
-
-    id = evtGetValue(event, args[0]);
-    hand = evtGetValue(event, args[1]);
-    x = evtGetFloat(event, args[2]);
-    y = evtGetFloat(event, args[3]);
-    z = evtGetFloat(event, args[4]);
-    unit = BattleGetUnitPtr(wp, BattleTransID(event, id));
-    if (unit == NULL) {
-        return EVT_RETURN_BLOCK;
-    }
-    hand -= 2;
-    dest = (f32*)unit->work[hand];
-    if (BtlUnit_CheckStatus(unit, STATUS_HUGE)) {
-        dest[0] = 1.25f * -x;
-        dest[1] = 1.25f * y;
-        dest[2] = 1.25f * z;
-    } else if (BtlUnit_CheckStatus(unit, STATUS_TINY)) {
-        dest[0] = 0.75f * -x;
-        dest[1] = 0.75f * y;
-        dest[2] = 0.75f * z;
-    } else {
-        dest[0] = -x;
-        dest[1] = y;
-        dest[2] = z;
-    }
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper: returns the battle unit indices of the Dark Wizzerd's clones (bunsin, kinds 0x81 and 0xAA) in
- * up to four script variables args[0..3] (-1 for unused), then the number of clones after them.
- */
-static USER_FUNC(mahorn_get_bunsin) {
-    EvtWord* args = event->args;
-    s32 copies[4];
-    s32 n = 0;
-    s32 i;
-    BattleWork* wp = _battleWorkPointer;
-    BattleUnit* unit;
-
-    // indices of the wizzerd's copies
-    for (i = 0; i < 64; i++) {
-        unit = wp->units[i];
-        if (unit != NULL && (unit->currentKind == UNIT_DARK_WIZZERD_CLONE || unit->currentKind == UNIT_ELITE_WIZZERD_CLONE)) {
-            copies[n] = i;
-            n++;
-        }
-    }
-    for (i = 0; i < 4; i++) {
-        if (i < n) {
-            evtSetValue(event, *args++, copies[i]);
-        } else {
-            evtSetValue(event, *args++, -1);
-        }
-    }
-    evtSetValue(event, *args, n);
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper: shuffles the positions of the Dark Wizzerd
- * and its copies (kinds 0x80, 0x81, 0xA9 and 0xAA) with ten random swaps of their X and Z,
- * so the player cannot tell which one is the real one.
- */
-static USER_FUNC(mahorn_shuffle) {
-    BattleWork* wp = _battleWorkPointer;
-    BattleUnit* kamecs[6];
-    s32 n = 0;
-    s32 i;
-
-    // the real wizzerd and its copies
-    for (i = 0; i < 64; i++) {
-        kamecs[n] = wp->units[i];
-        if (kamecs[n] != NULL && (kamecs[n]->currentKind == UNIT_DARK_WIZZERD || kamecs[n]->currentKind == UNIT_DARK_WIZZERD_CLONE || kamecs[n]->currentKind == UNIT_ELITE_WIZZERD || kamecs[n]->currentKind == UNIT_ELITE_WIZZERD_CLONE)) {
-            n++;
-        }
-    }
-    for (i = 0; i < 10; i++) {
-        s32 a = irand(n);
-        s32 b = irand(n);
-        BattleUnit* ua = kamecs[a];
-        BattleUnit* ub = kamecs[b];
-        f32 tmp;
-
-        tmp = ua->position.x;
-        ua->position.x = ub->position.x;
-        ub->position.x = tmp;
-        tmp = ua->homePosition.x;
-        ua->homePosition.x = ub->homePosition.x;
-        ub->homePosition.x = tmp;
-        tmp = ua->position.z;
-        ua->position.z = ub->position.z;
-        ub->position.z = tmp;
-        tmp = ua->homePosition.z;
-        ua->homePosition.z = ub->homePosition.z;
-        ub->homePosition.z = tmp;
-    }
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper: copies HP and status counters (0x1E bytes starting at sleepTurns)
- * from the unit in args[0] to the unit in args[1] and resets the destination's HP gauge,
- * so a clone of the Dark Wizzerd matches the original.
- */
-static USER_FUNC(mahorn_copy_status) {
-    EvtWord* args = event->args;
-    s32 id1 = evtGetValue(event, args[0]);
-    s32 id2 = evtGetValue(event, args[1]);
-    BattleWork* wp = _battleWorkPointer;
-    BattleUnit* unit1 = BattleGetUnitPtr(wp, id1);
-    BattleUnit* unit2 = BattleGetUnitPtr(wp, id2);
-
-    unit2->currentHp = unit1->currentHp;
-    memcpy(&unit2->sleepTurns, &unit1->sleepTurns, 0x1E);
-    unit2->hpGauge.prevHp = unit2->currentHp;
-    unit2->hpGauge.targetHp = unit2->currentHp;
-    unit2->hpGauge.barRatio = unit2->hpGauge.trailRatio = (f32)unit2->currentHp / unit2->maxHp;
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper: starts the Dark Wizzerd's spell (effMahorn2Entry) just in front of the unit, toward x args[1]
- * at the unit's own height and z (args[2] and args[3] are read but unused), at the speed that covers the
- * distance in args[4] frames, and stores it in UNIT_WORK_MAGIC_EFFECT.
- */
-static USER_FUNC(eff_magic) {
-    EvtWord* args = event->args;
-    s32 id = BattleTransID(event, evtGetValue(event, args[0]));
-    BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
-    f32 a = evtGetFloat(event, args[1]);
-    f32 b = evtGetFloat(event, args[2]);
-    f32 c = evtGetFloat(event, args[3]);
-    s32 time = evtGetValue(event, args[4]);
-    f32 x;
-    f32 y;
-    f32 z;
-
-    BtlUnit_GetPos(unit, &x, &y, &z);
-    x += unit->sizeMultiplier * unit->faceDirection;
-    y += 18.0f * unit->sizeMultiplier;
-    z += 5.0f;
-    unit->work[UNIT_WORK_MAGIC_EFFECT] = (EvtWord)effMahorn2Entry(0, x, y, z, a, y, z, unit->sizeMultiplier, fabs((a - x) / time));
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper: returns in args[1] the X of the first magic effect element of type 3 (the leading orb)
- * belonging to the unit in args[0], or 0 if there is none.
- * Used to track where the Dark Wizzerd's spell currently is.
- */
-static USER_FUNC(eff_magic_get_posX) {
-    EvtWord* args = event->args;
-    s32 id = BattleTransID(event, evtGetValue(event, *args++));
-    BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
-    EffectEntry* eff = (EffectEntry*)unit->work[UNIT_WORK_MAGIC_EFFECT];
-    effMahorn2Data* work = eff->userdata;
-    s32 i;
-
-    for (i = 0; i < eff->count; i++, work++) {
-        if (work->type == 3) {
-            evtSetFloat(event, *args++, work->position.x);
-            break;
-        }
-    }
-    if (i == eff->count) {
-        evtSetFloat(event, *args++, 0.0f);
-    }
     return EVT_RETURN_DONE;
 }
 
@@ -1089,6 +808,245 @@ static BattleDataEntry data_table_bunsin[] = {
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0},
 };
+
+/**
+ * Script helper: sets up the Dark Wizzerd's four hands:
+ * starts each in the "MAH_Z_2" animation and allocates a three- float destination block in unit->work[0..3].
+ */
+static USER_FUNC(hand_init) {
+    EvtWord* args = event->args;
+    BattleWork* wp = _battleWorkPointer;
+    s32 id = evtGetValue(event, *args++);
+    BattleUnit* unit = BattleGetUnitPtr(wp, BattleTransID(event, id));
+    f32 x;
+    f32 y;
+    f32 z;
+    f32* dest;
+    s32 i;
+    s32 j;
+
+    BtlUnit_GetPos(unit, &x, &y, &z);
+    for (j = 0, i = 2; i <= 5; i++, j++) {
+        BtlUnit_SetAnim(BtlUnit_GetPartsPtr(unit, i), "MAH_Z_2");
+        dest = BTL_ALLOC(sizeof(Vec));
+        unit->work[j] = (EvtWord)dest;
+        dest[0] = 0.0f;
+        dest[1] = 0.0f;
+        dest[2] = 0.0f;
+    }
+    return EVT_RETURN_DONE;
+}
+
+/** Script helper: frees the four hand destination blocks of the Dark Wizzerd allocated by hand_init. */
+static USER_FUNC(hand_end) {
+    BattleWork* wp = _battleWorkPointer;
+    EvtWord* args = event->args;
+    s32 id = evtGetValue(event, *args++);
+    BattleUnit* unit = BattleGetUnitPtr(wp, BattleTransID(event, id));
+    s32 i;
+    s32 j;
+
+    for (i = 2, j = 0; i <= 5; i++, j++) {
+        if ((void*)unit->work[j] != NULL) {
+            BattleFree((void*)unit->work[j]);
+            unit->work[j] = 0;
+        }
+    }
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script helper (runs every frame): eases each of the four hand parts of the Dark Wizzerd toward its
+ * destination offset, one tenth of the distance per call.
+ * It does nothing while the unit is asleep, stopped or frozen (statuses 2, 9 and 1).
+ */
+static USER_FUNC(hand_ctrl) {
+    EvtWord* args = event->args;
+    BattleWork* wp = _battleWorkPointer;
+    s32 id = evtGetValue(event, *args++);
+    BattleUnit* unit = BattleGetUnitPtr(wp, BattleTransID(event, id));
+    s8 turns;
+    s8 strength;
+    BattleUnitPart* part;
+    f32* dest;
+    Vec* scale;
+    f32 x;
+    f32 y;
+    f32 z;
+    s32 i;
+    s32 j;
+
+    if (unit == NULL) {
+        return EVT_RETURN_BLOCK;
+    }
+    BtlUnit_GetStatus(unit, STATUS_STOP, &turns, &strength);
+    if (turns > 0) {
+        return EVT_RETURN_DONE;
+    }
+    BtlUnit_GetStatus(unit, STATUS_FREEZE, &turns, &strength);
+    if (turns > 0) {
+        return EVT_RETURN_DONE;
+    }
+    BtlUnit_GetStatus(unit, STATUS_SLEEP, &turns, &strength);
+    if (turns > 0) {
+        return EVT_RETURN_DONE;
+    }
+    for (j = 0, i = 2; i <= 5; i++, j++) {
+        part = BtlUnit_GetPartsPtr(unit, i);
+        dest = (f32*)unit->work[j];
+        scale = &part->baseScale;
+        x = part->positionOffset.x * scale->x;
+        y = part->positionOffset.y * scale->y;
+        z = part->positionOffset.z * scale->z;
+        x += (dest[0] - x) / 10.0f;
+        y += (dest[1] - y) / 10.0f;
+        z += (dest[2] - z) / 10.0f;
+        part->positionOffset.x = x;
+        part->positionOffset.y = y;
+        part->positionOffset.z = z;
+    }
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script helper: sets where hand args[1] (part 2..5 of the Dark Wizzerd, one per hand) should float:
+ * stores the offset (-x, y, z) in the hand's destination block,
+ * scaled by 1.25 when the unit is grown or 0.75 when it is shrunk (STATUS_HUGE and STATUS_TINY).
+ */
+static USER_FUNC(set_hand_dest) {
+    s32 hand;
+    BattleUnit* unit;
+    BattleWork* wp = _battleWorkPointer;
+    EvtWord* args = event->args;
+    s32 id;
+    f32* dest;
+    f32 x;
+    f32 y;
+    f32 z;
+
+    id = evtGetValue(event, args[0]);
+    hand = evtGetValue(event, args[1]);
+    x = evtGetFloat(event, args[2]);
+    y = evtGetFloat(event, args[3]);
+    z = evtGetFloat(event, args[4]);
+    unit = BattleGetUnitPtr(wp, BattleTransID(event, id));
+    if (unit == NULL) {
+        return EVT_RETURN_BLOCK;
+    }
+    hand -= 2;
+    dest = (f32*)unit->work[hand];
+    if (BtlUnit_CheckStatus(unit, STATUS_HUGE)) {
+        dest[0] = 1.25f * -x;
+        dest[1] = 1.25f * y;
+        dest[2] = 1.25f * z;
+    } else if (BtlUnit_CheckStatus(unit, STATUS_TINY)) {
+        dest[0] = 0.75f * -x;
+        dest[1] = 0.75f * y;
+        dest[2] = 0.75f * z;
+    } else {
+        dest[0] = -x;
+        dest[1] = y;
+        dest[2] = z;
+    }
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script helper: returns the battle unit indices of the Dark Wizzerd's clones (bunsin, kinds 0x81 and 0xAA) in
+ * up to four script variables args[0..3] (-1 for unused), then the number of clones after them.
+ */
+static USER_FUNC(mahorn_get_bunsin) {
+    EvtWord* args = event->args;
+    s32 copies[4];
+    s32 n = 0;
+    s32 i;
+    BattleWork* wp = _battleWorkPointer;
+    BattleUnit* unit;
+
+    // indices of the wizzerd's copies
+    for (i = 0; i < 64; i++) {
+        unit = wp->units[i];
+        if (unit != NULL) {
+            if (unit->currentKind == UNIT_DARK_WIZZERD_CLONE || unit->currentKind == UNIT_ELITE_WIZZERD_CLONE) {
+                copies[n] = i;
+                n++;
+            }
+        }
+    }
+    for (i = 0; i < 4; i++) {
+        if (i < n) {
+            evtSetValue(event, *args++, copies[i]);
+        } else {
+            evtSetValue(event, *args++, -1);
+        }
+    }
+    evtSetValue(event, *args, n);
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script helper: shuffles the positions of the Dark Wizzerd
+ * and its copies (kinds 0x80, 0x81, 0xA9 and 0xAA) with ten random swaps of their X and Z,
+ * so the player cannot tell which one is the real one.
+ */
+static USER_FUNC(mahorn_shuffle) {
+    BattleWork* wp = _battleWorkPointer;
+    BattleUnit* kamecs[6];
+    s32 n = 0;
+    s32 i;
+
+    // the real wizzerd and its copies
+    for (i = 0; i < 64; i++) {
+        kamecs[n] = wp->units[i];
+        if (kamecs[n] != NULL) {
+            if (kamecs[n]->currentKind == UNIT_DARK_WIZZERD || kamecs[n]->currentKind == UNIT_DARK_WIZZERD_CLONE || kamecs[n]->currentKind == UNIT_ELITE_WIZZERD || kamecs[n]->currentKind == UNIT_ELITE_WIZZERD_CLONE) {
+                n++;
+            }
+        }
+    }
+    for (i = 0; i < 10; i++) {
+        s32 a = irand(n);
+        s32 b = irand(n);
+        BattleUnit* ua = kamecs[a];
+        BattleUnit* ub = kamecs[b];
+        f32 tmp;
+
+        tmp = ua->position.x;
+        ua->position.x = ub->position.x;
+        ub->position.x = tmp;
+        tmp = ua->homePosition.x;
+        ua->homePosition.x = ub->homePosition.x;
+        ub->homePosition.x = tmp;
+        tmp = ua->position.z;
+        ua->position.z = ub->position.z;
+        ub->position.z = tmp;
+        tmp = ua->homePosition.z;
+        ua->homePosition.z = ub->homePosition.z;
+        ub->homePosition.z = tmp;
+    }
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script helper: copies HP and status counters (0x1E bytes starting at sleepTurns)
+ * from the unit in args[0] to the unit in args[1] and resets the destination's HP gauge,
+ * so a clone of the Dark Wizzerd matches the original.
+ */
+static USER_FUNC(mahorn_copy_status) {
+    EvtWord* args = event->args;
+    s32 id1 = evtGetValue(event, args[0]);
+    s32 id2 = evtGetValue(event, args[1]);
+    BattleWork* wp = _battleWorkPointer;
+    BattleUnit* unit1 = BattleGetUnitPtr(wp, id1);
+    BattleUnit* unit2 = BattleGetUnitPtr(wp, id2);
+
+    unit2->currentHp = unit1->currentHp;
+    memcpy(&unit2->sleepTurns, &unit1->sleepTurns, 0x1E);
+    unit2->hpGauge.prevHp = unit2->currentHp;
+    unit2->hpGauge.targetHp = unit2->currentHp;
+    unit2->hpGauge.barRatio = unit2->hpGauge.trailRatio = (f32)unit2->currentHp / unit2->maxHp;
+    return EVT_RETURN_DONE;
+}
 
 /**
  * Init event of the Dark Wizzerd: installs its wait, attack, damage and confusion events,
@@ -1833,6 +1791,56 @@ static EVT_BEGIN(attack_enemy_common_event_sub2)
     WAIT_FRAMES(55)
     RETURN
 EVT_END()
+
+/**
+ * Script helper: starts the Dark Wizzerd's spell (effMahorn2Entry) just in front of the unit, toward x args[1]
+ * at the unit's own height and z (args[2] and args[3] are read but unused), at the speed that covers the
+ * distance in args[4] frames, and stores it in UNIT_WORK_MAGIC_EFFECT.
+ */
+static USER_FUNC(eff_magic) {
+    EvtWord* args = event->args;
+    s32 id = BattleTransID(event, evtGetValue(event, args[0]));
+    BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
+    f32 a = evtGetFloat(event, args[1]);
+    f32 b = evtGetFloat(event, args[2]);
+    f32 c = evtGetFloat(event, args[3]);
+    s32 time = evtGetValue(event, args[4]);
+    f32 x;
+    f32 y;
+    f32 z;
+
+    BtlUnit_GetPos(unit, &x, &y, &z);
+    x += unit->sizeMultiplier * unit->faceDirection;
+    y += 18.0f * unit->sizeMultiplier;
+    z += 5.0f;
+    unit->work[UNIT_WORK_MAGIC_EFFECT] = (EvtWord)effMahorn2Entry(0, x, y, z, a, y, z, unit->sizeMultiplier, fabs((a - x) / time));
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script helper: returns in args[1] the X of the first magic effect element of type 3 (the leading orb)
+ * belonging to the unit in args[0], or 0 if there is none.
+ * Used to track where the Dark Wizzerd's spell currently is.
+ */
+static USER_FUNC(eff_magic_get_posX) {
+    EvtWord* args = event->args;
+    s32 id = BattleTransID(event, evtGetValue(event, *args++));
+    BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
+    EffectEntry* eff = (EffectEntry*)unit->work[UNIT_WORK_MAGIC_EFFECT];
+    effMahorn2Data* work = eff->userdata;
+    s32 i;
+
+    for (i = 0; i < eff->count; i++, work++) {
+        if (work->type == 3) {
+            evtSetFloat(event, *args++, work->position.x);
+            break;
+        }
+    }
+    if (i == eff->count) {
+        evtSetFloat(event, *args++, 0.0f);
+    }
+    return EVT_RETURN_DONE;
+}
 
 /** Variant of the Wizzerd's casting that casts without hitting (the spell misses the target). */
 static EVT_BEGIN(attack_enemy_common_event_sub_no_hit)

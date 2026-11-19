@@ -36,22 +36,6 @@ static EvtWord phase_event[160];
 static EvtWord damage_event[10];
 static EvtWord wait_event[6];
 
-/** Script helper for Frankly's init script; does nothing. */
-static USER_FUNC(lecture_init) {
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper. Stores args[0] in the battle's lectureUnitId, the unit the lecture messages come from (Frankly registers himself). */
-static USER_FUNC(_battle_set_lecture_unit_id) {
-    BattleWork* wp = _battleWorkPointer;
-    EvtWord* args = event->args;
-    s32 value;
-
-    value = evtGetValue(event, *args++);
-    wp->lectureUnitId = value;
-    return EVT_RETURN_DONE;
-}
-
 /**
  * Unit kind of Prof. Frankly in the Goomba-battle lecture (HP 10, level 1): its size, offsets, damage sounds, status vulnerability,
  * parts and init event.
@@ -161,6 +145,22 @@ static BattleDataEntry data_table[] = {
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_frankli", "c_kuri_h", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kNotTargetable | kUntattleable | kNoHpLoss, 0, pose_table},
 };
+
+/** Script helper. Stores args[0] in the battle's lectureUnitId, the unit the lecture messages come from (Frankly registers himself). */
+static USER_FUNC(_battle_set_lecture_unit_id) {
+    BattleWork* wp = _battleWorkPointer;
+    EvtWord* args = event->args;
+    s32 value;
+
+    value = evtGetValue(event, *args++);
+    wp->lectureUnitId = value;
+    return EVT_RETURN_DONE;
+}
+
+/** Script helper for Frankly's init script; does nothing. */
+static USER_FUNC(lecture_init) {
+    return EVT_RETURN_DONE;
+}
 
 /**
  * Init script of Professor Frankly in the Goomba-battle lecture.
