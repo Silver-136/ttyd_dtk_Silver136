@@ -156,6 +156,26 @@ static const char* hit_list[] = {
 };
 
 /**
+ * Script function: hides all 44 panel lights (hikaru_NN and nashi_NN) and clears HIT_ATTR_SPIKES on every
+ * panel A_hikaru_NN and on A_no1, ending the puzzle.
+ */
+static USER_FUNC(hikaru_off) {
+    char name[256];
+    s32 i;
+
+    for (i = 1; i <= 44; i++) {
+        sprintf(name, "hikaru_%02d", i);
+        mapGrpFlagOn(name, MAP_OBJ_FLAG_HIDDEN);
+        sprintf(name, "nashi_%02d", i);
+        mapGrpFlagOn(name, MAP_OBJ_FLAG_HIDDEN);
+        sprintf(name, "A_hikaru_%02d", i);
+        hitGrpAttrOff(name, HIT_ATTR_SPIKES);
+    }
+    hitGrpAttrOff("A_no1", HIT_ATTR_SPIKES);
+    return EVT_RETURN_DONE;
+}
+
+/**
  * Item-box script for the chest at "box": gives Mario the card key (ITEM_CARD_KEY_0x1E),
  * sets GSWF_AJI_12_LIT_FLOOR_DONE, turns off the floor lights and makes Mario turn to face east.
  */
@@ -191,87 +211,6 @@ static HitDamageReturn dmgReturnPt[] = {
     {"mod_01", {0.0f, -1000.0f, 0.0f}},
     {0},
 };
-
-/**
- * Sets up the electrified-floor puzzle: places the chest, sets the damage return point,
- * starts the thunder effect (thunder_main) and the Mario position checker (mario_chk),
- * and starts the floor animation denyuka.
- */
-static EVT_BEGIN(hikaru_yuka_init)
-    CALL(evt_mobj_itembox, STRING("box"), -350, 10, -10, MOBJ_ITEMBOX_GRAY, 0, PTR(evt_box), GSWF_AJI_12_CARD_KEY_CHEST)
-    CALL(evt_hit_damage_return_set, PTR(dmgReturnPt))
-    BEGIN_INLINE_EVENT
-        CALL(thunder_main)
-    END_INLINE_EVENT
-    BEGIN_INLINE_EVENT
-        CALL(mario_chk)
-    END_INLINE_EVENT
-    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("yukayu1"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("yukayu2"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_map_playanim, STRING("denyuka"), MAP_ANIM_PLAY_LOOP, 0)
-    RETURN
-EVT_END()
-
-/**
- * Init script of aji_12, a glowing-floor room with 44 panels:
- * plays BGM_STG7_DUN2, sets up the exits and a ? block containing ITEM_HP_DRAIN_ITEM, and,
- * until the card key from the chest has been taken (GSWF_AJI_12_LIT_FLOOR_DONE),
- * runs the floor puzzle (hikaru_yuka_init); afterwards the floor is switched off.
- */
-EVT_BEGIN(aji_12_init_evt)
-    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))
-    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI1"))
-#if VERSION >= VERSION_JP
-    CALL(evt_snd_set_rev_mode, 1)
-#endif
-    SET_VALUE(LW(0), PTR(bero_entry_data))
-    CALL(evt_bero_get_info)
-    CALL_CHILD(evt_bero_info_run)
-    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("no1"), MAP_OBJ_FLAG_HIDDEN)
-    IF_INT_EQUAL(GSWF_AJI_12_LIT_FLOOR_DONE, 0)
-        CALL_CHILD(hikaru_yuka_init)
-        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("ato"), MAP_OBJ_FLAG_HIDDEN)
-    ELSE
-        CALL(hikaru_off)
-        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("yukayu1"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("yukayu2"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("ato"), MAP_OBJ_FLAG_HIDDEN)
-    END_IF
-    CALL(evt_mobj_badgeblk, STRING("mobj00"), 170, 60, 120, ITEM_HP_DRAIN_ITEM, 0, GSWF_AJI_12_HP_DRAIN_BLOCK, 0)
-    SPAWN_EVENT(evt_emergency)
-    RETURN
-EVT_END()
-
-/**
- * Script function that plays an electric shock when Mario is in the spike-damage motion
- * (MARIO_MOTION_DAMAGE_TOGE): SFX_STG7_ELECTRIC_SHOCK1 and a blue-green effect 30 units above his position,
- * once per entry into that motion.
- */
-static USER_FUNC(thunder_main) {
-    MarioWork* mario = marioGetPtr();
-
-    if (isFirstCall) {
-        event->userdata[0] = 0;
-    }
-    if (event->userdata[0] == 0) {
-        if (mario->currMotionId == MARIO_MOTION_DAMAGE_TOGE) {
-            EffectEntry* eff;
-
-            event->userdata[0] = 1;
-            psndSFXOn_3D("SFX_STG7_ELECTRIC_SHOCK1", &mario->position);
-            eff = effAkariChargeN64Entry(0, 100, mario->position.x, 30.0f + mario->position.y, mario->position.z, 1.0f);
-            ((EffAkariChargeN64Work*)eff->userdata)->r = 30;
-            ((EffAkariChargeN64Work*)eff->userdata)->g = 231;
-            ((EffAkariChargeN64Work*)eff->userdata)->b = 219;
-            ((EffAkariChargeN64Work*)eff->userdata)->r2 = 0;
-            ((EffAkariChargeN64Work*)eff->userdata)->g2 = 0;
-            ((EffAkariChargeN64Work*)eff->userdata)->b2 = 0;
-        }
-    } else if (mario->currMotionId != MARIO_MOTION_DAMAGE_TOGE) {
-        event->userdata[0] = 0;
-    }
-    return EVT_RETURN_BLOCK;
-}
 
 /**
  * Script function that runs the lit floor puzzle every frame until the card key is taken
@@ -396,21 +335,82 @@ static USER_FUNC(mario_chk) {
 }
 
 /**
- * Script function: hides all 44 panel lights (hikaru_NN and nashi_NN) and clears HIT_ATTR_SPIKES on every
- * panel A_hikaru_NN and on A_no1, ending the puzzle.
+ * Script function that plays an electric shock when Mario is in the spike-damage motion
+ * (MARIO_MOTION_DAMAGE_TOGE): SFX_STG7_ELECTRIC_SHOCK1 and a blue-green effect 30 units above his position,
+ * once per entry into that motion.
  */
-static USER_FUNC(hikaru_off) {
-    char name[256];
-    s32 i;
+static USER_FUNC(thunder_main) {
+    MarioWork* mario = marioGetPtr();
 
-    for (i = 1; i <= 44; i++) {
-        sprintf(name, "hikaru_%02d", i);
-        mapGrpFlagOn(name, MAP_OBJ_FLAG_HIDDEN);
-        sprintf(name, "nashi_%02d", i);
-        mapGrpFlagOn(name, MAP_OBJ_FLAG_HIDDEN);
-        sprintf(name, "A_hikaru_%02d", i);
-        hitGrpAttrOff(name, HIT_ATTR_SPIKES);
+    if (isFirstCall) {
+        event->userdata[0] = 0;
     }
-    hitGrpAttrOff("A_no1", HIT_ATTR_SPIKES);
-    return EVT_RETURN_DONE;
+    if (event->userdata[0] == 0) {
+        if (mario->currMotionId == MARIO_MOTION_DAMAGE_TOGE) {
+            EffectEntry* eff;
+
+            event->userdata[0] = 1;
+            psndSFXOn_3D("SFX_STG7_ELECTRIC_SHOCK1", &mario->position);
+            eff = effAkariChargeN64Entry(0, 100, mario->position.x, 30.0f + mario->position.y, mario->position.z, 1.0f);
+            ((EffAkariChargeN64Work*)eff->userdata)->r = 30;
+            ((EffAkariChargeN64Work*)eff->userdata)->g = 231;
+            ((EffAkariChargeN64Work*)eff->userdata)->b = 219;
+            ((EffAkariChargeN64Work*)eff->userdata)->r2 = 0;
+            ((EffAkariChargeN64Work*)eff->userdata)->g2 = 0;
+            ((EffAkariChargeN64Work*)eff->userdata)->b2 = 0;
+        }
+    } else if (mario->currMotionId != MARIO_MOTION_DAMAGE_TOGE) {
+        event->userdata[0] = 0;
+    }
+    return EVT_RETURN_BLOCK;
 }
+
+/**
+ * Sets up the electrified-floor puzzle: places the chest, sets the damage return point,
+ * starts the thunder effect (thunder_main) and the Mario position checker (mario_chk),
+ * and starts the floor animation denyuka.
+ */
+static EVT_BEGIN(hikaru_yuka_init)
+    CALL(evt_mobj_itembox, STRING("box"), -350, 10, -10, MOBJ_ITEMBOX_GRAY, 0, PTR(evt_box), GSWF_AJI_12_CARD_KEY_CHEST)
+    CALL(evt_hit_damage_return_set, PTR(dmgReturnPt))
+    BEGIN_INLINE_EVENT
+        CALL(thunder_main)
+    END_INLINE_EVENT
+    BEGIN_INLINE_EVENT
+        CALL(mario_chk)
+    END_INLINE_EVENT
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("yukayu1"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("yukayu2"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_map_playanim, STRING("denyuka"), MAP_ANIM_PLAY_LOOP, 0)
+    RETURN
+EVT_END()
+
+/**
+ * Init script of aji_12, a glowing-floor room with 44 panels:
+ * plays BGM_STG7_DUN2, sets up the exits and a ? block containing ITEM_HP_DRAIN_ITEM, and,
+ * until the card key from the chest has been taken (GSWF_AJI_12_LIT_FLOOR_DONE),
+ * runs the floor puzzle (hikaru_yuka_init); afterwards the floor is switched off.
+ */
+EVT_BEGIN(aji_12_init_evt)
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI1"))
+#if VERSION >= VERSION_JP
+    CALL(evt_snd_set_rev_mode, 1)
+#endif
+    SET_VALUE(LW(0), PTR(bero_entry_data))
+    CALL(evt_bero_get_info)
+    CALL_CHILD(evt_bero_info_run)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("no1"), MAP_OBJ_FLAG_HIDDEN)
+    IF_INT_EQUAL(GSWF_AJI_12_LIT_FLOOR_DONE, 0)
+        CALL_CHILD(hikaru_yuka_init)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("ato"), MAP_OBJ_FLAG_HIDDEN)
+    ELSE
+        CALL(hikaru_off)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("yukayu1"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("yukayu2"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("ato"), MAP_OBJ_FLAG_HIDDEN)
+    END_IF
+    CALL(evt_mobj_badgeblk, STRING("mobj00"), 170, 60, 120, ITEM_HP_DRAIN_ITEM, 0, GSWF_AJI_12_HP_DRAIN_BLOCK, 0)
+    SPAWN_EVENT(evt_emergency)
+    RETURN
+EVT_END()

@@ -107,6 +107,167 @@ static EVT_BEGIN(welcome_wonderforest_init)
     RETURN
 EVT_END()
 
+/** Script helper: sets the 3D camera's vertical field of view to 30 degrees. */
+static USER_FUNC(camps30) {
+    f32 fovY = 30.0f;
+
+    camGetPtr(CAMERA_3D)->fovY = fovY;
+    return EVT_RETURN_DONE;
+}
+
+/** Script helper: sets the 3D camera's vertical field of view to 25 degrees. */
+static USER_FUNC(camps25) {
+    f32 fovY = 25.0f;
+
+    camGetPtr(CAMERA_3D)->fovY = fovY;
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script helper: allocates the three orbit parameter sets,
+ * fills sets 0 and 1 from the two position/target vectors in args[0..11],
+ * computes each one's angle (degrees, around the target in the xz plane) and xz distance,
+ * and copies set 0 into the working set.
+ * The source clears set 1 twice instead of the working set;
+ * harmless, since every field of the working set is then written.
+ */
+static USER_FUNC(cam_kaiten_init) {
+    EvtWord* args = event->args;
+    Vec target;
+    Vec pos;
+    f32 dist;
+    f32 dz;
+
+    ckp0 = _mapAlloc(sizeof(KaitenParam));
+    memset(ckp0, 0, sizeof(KaitenParam));
+    ckp1 = _mapAlloc(sizeof(KaitenParam));
+    memset(ckp1, 0, sizeof(KaitenParam));
+    ckpw = _mapAlloc(sizeof(KaitenParam));
+
+    // Clears the end parameters again; all working fields are copied from ckp0 below.
+    memset(ckp1, 0, sizeof(KaitenParam));
+    ckp0->pos.x = evtGetFloat(event, args[0]);
+    ckp0->pos.y = evtGetFloat(event, args[1]);
+    ckp0->pos.z = evtGetFloat(event, args[2]);
+    ckp0->target.x = evtGetFloat(event, args[3]);
+    ckp0->target.y = evtGetFloat(event, args[4]);
+    ckp0->target.z = evtGetFloat(event, args[5]);
+    ckp1->pos.x = evtGetFloat(event, args[6]);
+    ckp1->pos.y = evtGetFloat(event, args[7]);
+    ckp1->pos.z = evtGetFloat(event, args[8]);
+    ckp1->target.x = evtGetFloat(event, args[9]);
+    ckp1->target.y = evtGetFloat(event, args[10]);
+    ckp1->target.z = evtGetFloat(event, args[11]);
+
+    pos = ckp0->pos;
+    target = ckp0->target;
+    target.y = 0.0f;
+    pos.y = 0.0f;
+    dist = PSVECDistance(&pos, &target);
+    dz = target.z - pos.z;
+    ckp0->angle = 57.29579f * (f32)atan2(-(target.x - pos.x), dz);
+    ckp0->dist = dist;
+
+    pos = ckp1->pos;
+    target = ckp1->target;
+    target.y = 0.0f;
+    pos.y = 0.0f;
+    dist = PSVECDistance(&pos, &target);
+    dz = target.z - pos.z;
+    ckp1->angle = 57.29579f * (f32)atan2(-(target.x - pos.x), dz);
+    ckp1->dist = dist;
+
+    ckpw->pos = ckp0->pos;
+    ckpw->target = ckp0->target;
+    ckpw->angle = ckp0->angle;
+    ckpw->dist = ckp0->dist;
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script helper: places the 3D camera at the working orbit's angle
+ * and distance around its target in one step (0 frames), so a loop can move the camera around it every frame.
+ */
+static USER_FUNC(cam_kaiten_set_direct) {
+    CameraEntry* camera = camGetPtr(CAMERA_3D);
+    f32 s = sin(6.2831855f * ckpw->angle / 360.0f);
+    f32 c = cos(6.2831855f * ckpw->angle / 360.0f);
+
+    ckpw->pos.x = ckpw->dist * s + ckpw->target.x;
+    ckpw->pos.z = ckpw->target.z - ckpw->dist * c;
+    camera->presetPos = camera->cameraPos;
+    camera->presetAt = camera->cameraAt;
+    camera->storedPos = ckpw->pos;
+    camera->storedAt = ckpw->target;
+    camera->startTimeA = gp->renderTime;
+    camera->durationA = 0;
+    camera->stateA = CAM_MOVE_TO_STORED;
+    camera->curveA = EASING_SINE_IN_OUT;
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script helper: reads the camera-orbit parameter set in slot args[0] back into args[1..8] (position, target,
+ * angle, distance).
+ */
+static USER_FUNC(cam_kaiten_get_para) {
+    EvtWord* args = event->args;
+    KaitenParam* p;
+
+    switch (evtGetValue(event, args[0])) {
+        case 0:
+            p = ckp0;
+            break;
+        case 1:
+            p = ckp1;
+            break;
+        case 2:
+        default:
+            p = ckpw;
+            break;
+    }
+    evtSetFloat(event, args[1], p->pos.x);
+    evtSetFloat(event, args[2], p->pos.y);
+    evtSetFloat(event, args[3], p->pos.z);
+    evtSetFloat(event, args[4], p->target.x);
+    evtSetFloat(event, args[5], p->target.y);
+    evtSetFloat(event, args[6], p->target.z);
+    evtSetFloat(event, args[7], p->angle);
+    evtSetFloat(event, args[8], p->dist);
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script helper: stores a camera-orbit parameter set in slot args[0] (0, 1 or the working copy):
+ * position (args[1..3]), target (args[4..6]), angle (args[7]) and distance (args[8]).
+ */
+static USER_FUNC(cam_kaiten_set_para) {
+    EvtWord* args = event->args;
+    KaitenParam* p;
+
+    switch (evtGetValue(event, args[0])) {
+        case 0:
+            p = ckp0;
+            break;
+        case 1:
+            p = ckp1;
+            break;
+        case 2:
+        default:
+            p = ckpw;
+            break;
+    }
+    p->pos.x = evtGetFloat(event, args[1]);
+    p->pos.y = evtGetFloat(event, args[2]);
+    p->pos.z = evtGetFloat(event, args[3]);
+    p->target.x = evtGetFloat(event, args[4]);
+    p->target.y = evtGetFloat(event, args[5]);
+    p->target.z = evtGetFloat(event, args[6]);
+    p->angle = evtGetFloat(event, args[7]);
+    p->dist = evtGetFloat(event, args[8]);
+    return EVT_RETURN_DONE;
+}
+
 /**
  * Arrival in Boggly Woods at STG1_END_TO_STAGE_2, spawned by win_06_init_evt: takes the controls, shows the area title
  * card (telop 4) after 5 s, orbits the camera around the map (cam_kaiten) and then lets Mario out of the pipe (GF(0)).
@@ -220,164 +381,3 @@ EVT_BEGIN(win_06_init_evt)
     CALL(evt_mobj_save_blk, STRING("mobj_save"), 275, 60, -50, 0, 0)
     RETURN
 EVT_END()
-
-/**
- * Script helper: stores a camera-orbit parameter set in slot args[0] (0, 1 or the working copy):
- * position (args[1..3]), target (args[4..6]), angle (args[7]) and distance (args[8]).
- */
-static USER_FUNC(cam_kaiten_set_para) {
-    EvtWord* args = event->args;
-    KaitenParam* p;
-
-    switch (evtGetValue(event, args[0])) {
-        case 0:
-            p = ckp0;
-            break;
-        case 1:
-            p = ckp1;
-            break;
-        case 2:
-        default:
-            p = ckpw;
-            break;
-    }
-    p->pos.x = evtGetFloat(event, args[1]);
-    p->pos.y = evtGetFloat(event, args[2]);
-    p->pos.z = evtGetFloat(event, args[3]);
-    p->target.x = evtGetFloat(event, args[4]);
-    p->target.y = evtGetFloat(event, args[5]);
-    p->target.z = evtGetFloat(event, args[6]);
-    p->angle = evtGetFloat(event, args[7]);
-    p->dist = evtGetFloat(event, args[8]);
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper: reads the camera-orbit parameter set in slot args[0] back into args[1..8] (position, target,
- * angle, distance).
- */
-static USER_FUNC(cam_kaiten_get_para) {
-    EvtWord* args = event->args;
-    KaitenParam* p;
-
-    switch (evtGetValue(event, args[0])) {
-        case 0:
-            p = ckp0;
-            break;
-        case 1:
-            p = ckp1;
-            break;
-        case 2:
-        default:
-            p = ckpw;
-            break;
-    }
-    evtSetFloat(event, args[1], p->pos.x);
-    evtSetFloat(event, args[2], p->pos.y);
-    evtSetFloat(event, args[3], p->pos.z);
-    evtSetFloat(event, args[4], p->target.x);
-    evtSetFloat(event, args[5], p->target.y);
-    evtSetFloat(event, args[6], p->target.z);
-    evtSetFloat(event, args[7], p->angle);
-    evtSetFloat(event, args[8], p->dist);
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper: places the 3D camera at the working orbit's angle
- * and distance around its target in one step (0 frames), so a loop can move the camera around it every frame.
- */
-static USER_FUNC(cam_kaiten_set_direct) {
-    CameraEntry* camera = camGetPtr(CAMERA_3D);
-    f32 s = sin(6.2831855f * ckpw->angle / 360.0f);
-    f32 c = cos(6.2831855f * ckpw->angle / 360.0f);
-
-    ckpw->pos.x = ckpw->dist * s + ckpw->target.x;
-    ckpw->pos.z = ckpw->target.z - ckpw->dist * c;
-    camera->presetPos = camera->cameraPos;
-    camera->presetAt = camera->cameraAt;
-    camera->storedPos = ckpw->pos;
-    camera->storedAt = ckpw->target;
-    camera->startTimeA = gp->renderTime;
-    camera->durationA = 0;
-    camera->stateA = CAM_MOVE_TO_STORED;
-    camera->curveA = EASING_SINE_IN_OUT;
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper: allocates the three orbit parameter sets,
- * fills sets 0 and 1 from the two position/target vectors in args[0..11],
- * computes each one's angle (degrees, around the target in the xz plane) and xz distance,
- * and copies set 0 into the working set.
- * The source clears set 1 twice instead of the working set;
- * harmless, since every field of the working set is then written.
- */
-static USER_FUNC(cam_kaiten_init) {
-    EvtWord* args = event->args;
-    Vec target;
-    Vec pos;
-    f32 dist;
-    f32 dz;
-
-    ckp0 = _mapAlloc(sizeof(KaitenParam));
-    memset(ckp0, 0, sizeof(KaitenParam));
-    ckp1 = _mapAlloc(sizeof(KaitenParam));
-    memset(ckp1, 0, sizeof(KaitenParam));
-    ckpw = _mapAlloc(sizeof(KaitenParam));
-
-    // Clears the end parameters again; all working fields are copied from ckp0 below.
-    memset(ckp1, 0, sizeof(KaitenParam));
-    ckp0->pos.x = evtGetFloat(event, args[0]);
-    ckp0->pos.y = evtGetFloat(event, args[1]);
-    ckp0->pos.z = evtGetFloat(event, args[2]);
-    ckp0->target.x = evtGetFloat(event, args[3]);
-    ckp0->target.y = evtGetFloat(event, args[4]);
-    ckp0->target.z = evtGetFloat(event, args[5]);
-    ckp1->pos.x = evtGetFloat(event, args[6]);
-    ckp1->pos.y = evtGetFloat(event, args[7]);
-    ckp1->pos.z = evtGetFloat(event, args[8]);
-    ckp1->target.x = evtGetFloat(event, args[9]);
-    ckp1->target.y = evtGetFloat(event, args[10]);
-    ckp1->target.z = evtGetFloat(event, args[11]);
-
-    pos = ckp0->pos;
-    target = ckp0->target;
-    target.y = 0.0f;
-    pos.y = 0.0f;
-    dist = PSVECDistance(&pos, &target);
-    dz = target.z - pos.z;
-    ckp0->angle = 57.29579f * (f32)atan2(-(target.x - pos.x), dz);
-    ckp0->dist = dist;
-
-    pos = ckp1->pos;
-    target = ckp1->target;
-    target.y = 0.0f;
-    pos.y = 0.0f;
-    dist = PSVECDistance(&pos, &target);
-    dz = target.z - pos.z;
-    ckp1->angle = 57.29579f * (f32)atan2(-(target.x - pos.x), dz);
-    ckp1->dist = dist;
-
-    ckpw->pos = ckp0->pos;
-    ckpw->target = ckp0->target;
-    ckpw->angle = ckp0->angle;
-    ckpw->dist = ckp0->dist;
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper: sets the 3D camera's vertical field of view to 25 degrees. */
-static USER_FUNC(camps25) {
-    f32 fovY = 25.0f;
-
-    camGetPtr(CAMERA_3D)->fovY = fovY;
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper: sets the 3D camera's vertical field of view to 30 degrees. */
-static USER_FUNC(camps30) {
-    f32 fovY = 30.0f;
-
-    camGetPtr(CAMERA_3D)->fovY = fovY;
-    return EVT_RETURN_DONE;
-}

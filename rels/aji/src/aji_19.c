@@ -209,6 +209,34 @@ static inline f32 beltSpeed(void) {
 }
 
 /**
+ * Searches by target joint name: visits node, then returns the child search directly when a child exists.
+ * Only a node without a child can continue to its following sibling when checkSibling is TRUE.
+ */
+static BOOL _hitIsGroupSub(HitEntry* target, HitEntry* node, BOOL checkSibling) {
+    if (strcmp(target->joint->name, node->joint->name) == 0) {
+        return TRUE;
+    }
+
+    // A child search returns immediately, so this node's siblings are not searched afterward.
+    if (node->child != NULL) {
+        return _hitIsGroupSub(target, node->child, TRUE);
+    }
+    if (checkSibling && node->sibling != NULL) {
+        return _hitIsGroupSub(target, node->sibling, TRUE);
+    }
+    return FALSE;
+}
+
+/**
+ * Returns whether hit entry target has the joint name of `group` or of an entry _hitIsGroupSub reaches below it (each
+ * node with a child descends without trying its siblings, so not every entry below is compared).
+ */
+static BOOL hitIsGroup(HitEntry* target, HitEntry* group) {
+    // Compare joint names through the child-first search, excluding the root's siblings.
+    return _hitIsGroupSub(target, group, FALSE);
+}
+
+/**
  * Script function that carries Mario and his partners on the conveyor belts of the room:
  * whoever stands on the upper belt A_b_ue is pushed along X at beltSpeed(),
  * on the lower belt A_b_shita the other way. Blocks forever.
@@ -243,32 +271,4 @@ static USER_FUNC(mario_chk) {
         }
     }
     return EVT_RETURN_BLOCK;
-}
-
-/**
- * Returns whether hit entry target has the joint name of `group` or of an entry _hitIsGroupSub reaches below it (each
- * node with a child descends without trying its siblings, so not every entry below is compared).
- */
-static BOOL hitIsGroup(HitEntry* target, HitEntry* group) {
-    // Compare joint names through the child-first search, excluding the root's siblings.
-    return _hitIsGroupSub(target, group, FALSE);
-}
-
-/**
- * Searches by target joint name: visits node, then returns the child search directly when a child exists.
- * Only a node without a child can continue to its following sibling when checkSibling is TRUE.
- */
-static BOOL _hitIsGroupSub(HitEntry* target, HitEntry* node, BOOL checkSibling) {
-    if (strcmp(target->joint->name, node->joint->name) == 0) {
-        return TRUE;
-    }
-
-    // A child search returns immediately, so this node's siblings are not searched afterward.
-    if (node->child != NULL) {
-        return _hitIsGroupSub(target, node->child, TRUE);
-    }
-    if (checkSibling && node->sibling != NULL) {
-        return _hitIsGroupSub(target, node->sibling, TRUE);
-    }
-    return FALSE;
 }

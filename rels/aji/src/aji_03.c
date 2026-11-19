@@ -391,6 +391,44 @@ static EVT_BEGIN(hand_release)
 EVT_END()
 
 /**
+ * Script function: finds the crane prize closest (within 20 units) to the claw position (GW(10), GW(11)) among
+ * the items named keihin00 to keihin31.
+ * Returns TRUE and the prize's name in args[0] and args[1], or FALSE and 0 when nothing is within reach.
+ */
+static USER_FUNC(item_chk) {
+    char name[256];
+    EvtWord* args = event->args;
+    f32 x = evtGetValue(event, GW(10));
+    f32 z = evtGetValue(event, GW(11));
+    f32 minDist = 20.0f;
+    s32 i;
+    ItemEntry* found = NULL;
+    ItemEntry* item;
+
+    for (i = 0; i < 32; i++) {
+        sprintf(name, "keihin%02d", i);
+        item = itemNameToPtr(name);
+        if (item != NULL) {
+            f32 dist = distABf(item->position.x, item->position.z, x, z);
+
+            // Choose the nearest item strictly within 20 units in XZ; equal distances keep the earlier index.
+            if (dist < minDist) {
+                minDist = dist;
+                found = item;
+            }
+        }
+    }
+    if (found != NULL) {
+        evtSetValue(event, args[0], TRUE);
+        evtSetValue(event, args[1], (EvtWord)found->name);
+    } else {
+        evtSetValue(event, args[0], FALSE);
+        evtSetValue(event, args[1], 0);
+    }
+    return EVT_RETURN_DONE;
+}
+
+/**
  * The crane game. The claw (map object S_kure; X in GW(10), Z in GW(11)) starts at (230, 100) while its arms
  * open and close (ufo_hand). While GF(10) is set by the control panel scripts it slides along X down to
  * -150, then while GF(11) is set along Z down to -100; GF(12) marks the crane busy from the first move.
@@ -680,6 +718,74 @@ static EVT_BEGIN(blink_sw)
     END_LOOP
     RETURN
 EVT_END()
+
+/** Script function: looks up the item named in args[0] and returns its item ID in args[1] and the name in args[2]. */
+static USER_FUNC(evt_itemNameToItemID) {
+    static char tmp[64];
+    EvtWord* args = event->args;
+    char* name = (char*)evtGetValue(event, args[0]);
+    ItemEntry* item = itemNameToPtr(name);
+
+    strncpy(tmp, name, sizeof(tmp));
+    evtSetValue(event, args[1], item->itemId);
+    evtSetValue(event, args[2], (EvtWord)name);
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Draw callback of evt_sousa_icon: draws the button icon at the stored position, scaled by 1.5, with an arrow
+ * (ICON_ARROW) beside it: type 0 draws ICON_BUTTON_A with the arrow at x - 70; any other type draws ICON_BUTTON_B
+ * with the arrow turned 270 degrees at (x - 30, y + 100).
+ */
+static void icon_disp(CameraId camera, void* param) {
+
+    EventEntry* event = param;
+    Mtx trans;
+    Mtx scale;
+    Mtx rot;
+
+    camGetPtr(camera);
+    if (event->userdata[0] == 0) {
+        PSMTXTrans(trans, event->userdata[1] - 70, event->userdata[2], 0.0f);
+        PSMTXScale(scale, 1.5f, 1.5f, 1.5f);
+        PSMTXRotRad(rot, 'z', 0.0f);
+        PSMTXConcat(trans, scale, trans);
+        PSMTXConcat(trans, rot, trans);
+        iconDispGx2(trans, ICON_FLAG_2D, ICON_ARROW);
+        PSMTXTrans(trans, event->userdata[1], event->userdata[2], 0.0f);
+        PSMTXScale(scale, 1.5f, 1.5f, 1.5f);
+        PSMTXConcat(trans, scale, trans);
+        iconDispGx2(trans, ICON_FLAG_2D, ICON_BUTTON_A);
+    } else {
+        PSMTXTrans(trans, event->userdata[1] - 30, event->userdata[2] + 100, 0.0f);
+        PSMTXScale(scale, 1.5f, 1.5f, 1.5f);
+        PSMTXRotRad(rot, 'z', 4.712389f);
+        PSMTXConcat(trans, scale, trans);
+        PSMTXConcat(trans, rot, trans);
+        iconDispGx2(trans, ICON_FLAG_2D, ICON_ARROW);
+        PSMTXTrans(trans, event->userdata[1], event->userdata[2], 0.0f);
+        PSMTXScale(scale, 1.5f, 1.5f, 1.5f);
+        PSMTXConcat(trans, scale, trans);
+        iconDispGx2(trans, ICON_FLAG_2D, ICON_BUTTON_B);
+    }
+}
+
+/**
+ * Script helper: queues icon_disp on the 2D camera for this frame with type args[0] at (args[1], args[2]), kept in the
+ * event's userdata.
+ */
+static USER_FUNC(evt_sousa_icon) {
+    EvtWord* args = event->args;
+    s32 type = evtGetValue(event, args[0]);
+    s32 x = evtGetValue(event, args[1]);
+    s32 y = evtGetValue(event, args[2]);
+
+    event->userdata[0] = type;
+    event->userdata[1] = x;
+    event->userdata[2] = y;
+    dispEntry(CAMERA_2D, 0.0f, DISP_MODE_OPAQUE, icon_disp, event);
+    return EVT_RETURN_YIELD;
+}
 
 /**
  * Case script of the crane's control panel (A_sui_01, registered once GSWF_AJI_03_SWITCH_PUZZLE_SOLVED is
@@ -1228,109 +1334,3 @@ EVT_BEGIN(aji_03_init_evt)
     SPAWN_EVENT(evt_emergency)
     RETURN
 EVT_END()
-
-/**
- * Script helper: queues icon_disp on the 2D camera for this frame with type args[0] at (args[1], args[2]), kept in the
- * event's userdata.
- */
-static USER_FUNC(evt_sousa_icon) {
-    EvtWord* args = event->args;
-    s32 type = evtGetValue(event, args[0]);
-    s32 x = evtGetValue(event, args[1]);
-    s32 y = evtGetValue(event, args[2]);
-
-    event->userdata[0] = type;
-    event->userdata[1] = x;
-    event->userdata[2] = y;
-    dispEntry(CAMERA_2D, 0.0f, DISP_MODE_OPAQUE, icon_disp, event);
-    return EVT_RETURN_YIELD;
-}
-
-/**
- * Draw callback of evt_sousa_icon: draws the button icon at the stored position, scaled by 1.5, with an arrow
- * (ICON_ARROW) beside it: type 0 draws ICON_BUTTON_A with the arrow at x - 70; any other type draws ICON_BUTTON_B
- * with the arrow turned 270 degrees at (x - 30, y + 100).
- */
-static void icon_disp(CameraId camera, void* param) {
-
-    EventEntry* event = param;
-    Mtx trans;
-    Mtx scale;
-    Mtx rot;
-
-    camGetPtr(camera);
-    if (event->userdata[0] == 0) {
-        PSMTXTrans(trans, event->userdata[1] - 70, event->userdata[2], 0.0f);
-        PSMTXScale(scale, 1.5f, 1.5f, 1.5f);
-        PSMTXRotRad(rot, 'z', 0.0f);
-        PSMTXConcat(trans, scale, trans);
-        PSMTXConcat(trans, rot, trans);
-        iconDispGx2(trans, ICON_FLAG_2D, ICON_ARROW);
-        PSMTXTrans(trans, event->userdata[1], event->userdata[2], 0.0f);
-        PSMTXScale(scale, 1.5f, 1.5f, 1.5f);
-        PSMTXConcat(trans, scale, trans);
-        iconDispGx2(trans, ICON_FLAG_2D, ICON_BUTTON_A);
-    } else {
-        PSMTXTrans(trans, event->userdata[1] - 30, event->userdata[2] + 100, 0.0f);
-        PSMTXScale(scale, 1.5f, 1.5f, 1.5f);
-        PSMTXRotRad(rot, 'z', 4.712389f);
-        PSMTXConcat(trans, scale, trans);
-        PSMTXConcat(trans, rot, trans);
-        iconDispGx2(trans, ICON_FLAG_2D, ICON_ARROW);
-        PSMTXTrans(trans, event->userdata[1], event->userdata[2], 0.0f);
-        PSMTXScale(scale, 1.5f, 1.5f, 1.5f);
-        PSMTXConcat(trans, scale, trans);
-        iconDispGx2(trans, ICON_FLAG_2D, ICON_BUTTON_B);
-    }
-}
-
-/** Script function: looks up the item named in args[0] and returns its item ID in args[1] and the name in args[2]. */
-static USER_FUNC(evt_itemNameToItemID) {
-    static char tmp[64];
-    EvtWord* args = event->args;
-    char* name = (char*)evtGetValue(event, args[0]);
-    ItemEntry* item = itemNameToPtr(name);
-
-    strncpy(tmp, name, sizeof(tmp));
-    evtSetValue(event, args[1], item->itemId);
-    evtSetValue(event, args[2], (EvtWord)name);
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script function: finds the crane prize closest (within 20 units) to the claw position (GW(10), GW(11)) among
- * the items named keihin00 to keihin31.
- * Returns TRUE and the prize's name in args[0] and args[1], or FALSE and 0 when nothing is within reach.
- */
-static USER_FUNC(item_chk) {
-    char name[256];
-    EvtWord* args = event->args;
-    f32 x = evtGetValue(event, GW(10));
-    f32 z = evtGetValue(event, GW(11));
-    f32 minDist = 20.0f;
-    s32 i;
-    ItemEntry* found = NULL;
-    ItemEntry* item;
-
-    for (i = 0; i < 32; i++) {
-        sprintf(name, "keihin%02d", i);
-        item = itemNameToPtr(name);
-        if (item != NULL) {
-            f32 dist = distABf(item->position.x, item->position.z, x, z);
-
-            // Choose the nearest item strictly within 20 units in XZ; equal distances keep the earlier index.
-            if (dist < minDist) {
-                minDist = dist;
-                found = item;
-            }
-        }
-    }
-    if (found != NULL) {
-        evtSetValue(event, args[0], TRUE);
-        evtSetValue(event, args[1], (EvtWord)found->name);
-    } else {
-        evtSetValue(event, args[0], FALSE);
-        evtSetValue(event, args[1], 0);
-    }
-    return EVT_RETURN_DONE;
-}

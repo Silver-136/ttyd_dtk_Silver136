@@ -79,6 +79,41 @@ static NpcSetupInfo npcEnt[13];
 static EvtWord shan_init[46];
 EvtWord kpa_01_init_evt[];
 
+#if VERSION == VERSION_EU
+
+/** PAL only: called at the start of kpa_03's jumpstand_evt. */
+USER_FUNC(kpa_cancel_attack_mode) {
+    kpaCancelAttackMode();
+    return EVT_RETURN_DONE;
+}
+#endif
+
+/**
+ * Script helper: rotates the point (args[2], args[3]) about the centre (args[0], args[1]) by args[4] degrees
+ * around Y, returning x in args[5] and z in args[6]. Moves the Koopatrol guards along an arc around the door.
+ */
+static USER_FUNC(get_togenoko_pos) {
+    EvtWord* args = event->args;
+    f32 cx = evtGetFloat(event, args[0]);
+    f32 cz = evtGetFloat(event, args[1]);
+    f32 x = evtGetFloat(event, args[2]);
+    f32 z = evtGetFloat(event, args[3]);
+    f32 angle = evtGetFloat(event, args[4]);
+    Mtx mtx;
+    Vec pos;
+
+    PSMTXRotRad(mtx, 'Y', 0.017453292f * angle);
+    pos.x = x - cx;
+    pos.y = 0.0f;
+    pos.z = z - cz;
+    PSMTXMultVec(mtx, &pos, &pos);
+    pos.x += cx;
+    pos.z += cz;
+    evtSetFloat(event, args[5], pos.x);
+    evtSetFloat(event, args[6], pos.z);
+    return EVT_RETURN_DONE;
+}
+
 /**
  * Throne-room door opens: the two Koopatrol guards walk to their posts and swing the double door open,
  * each door leaf rotating about 100 degrees over 2 s with a sound at the door. Used by the arrival cutscene.
@@ -313,6 +348,38 @@ EVT_BEGIN(kpa_01_touzyo_evt)
     CALL(evt_snd_bgm_scope, 0, 0)
     RETURN
 EVT_END()
+
+/**
+ * Message callback for kpa_stg1_034: sets LSWF_KPA_01_MSG_CUE once the text entry index exceeds 117,
+ * the cue for Kammy's next animation.
+ */
+static void kpa_stg1_034_cb(s32 type, smartEntry* smart) {
+    MsgWinData* info = smart->address;
+
+    switch (type) {
+        case 5:
+            if (info->nextEntry > 117) {
+                evtSetValue(NULL, LSWF_KPA_01_MSG_CUE, 1);
+            }
+            break;
+    }
+}
+
+/**
+ * Message callback for kpa_stg1_036: sets LSWF_KPA_01_MSG_CUE when the third page appears (curPage 2),
+ * which a waiting inline event of the departure cutscene reacts to.
+ */
+static void kpa_stg1_036_cb(s32 type, smartEntry* smart) {
+    MsgWinData* info = smart->address;
+
+    switch (type) {
+        case 3:
+            if (info->curPage == 2) {
+                evtSetValue(NULL, LSWF_KPA_01_MSG_CUE, 1);
+            }
+            break;
+    }
+}
 
 /**
  * Departure cutscene: the door opens, a startled Bowser meets the out-of-breath Kammy Koopa and the two talk,
@@ -881,6 +948,19 @@ static EVT_BEGIN(douzou_2_touch_evt)
     RETURN
 EVT_END()
 
+/** Message callback for kpa_stg1_014_2: sets LSWF_KPA_01_MSG_CUE on page 2, which plays the item jingle in douzou_3_touch_evt. */
+static void kpa_stg1_014_2_cb(s32 type, smartEntry* smart) {
+    MsgWinData* info = smart->address;
+
+    switch (type) {
+        case 3:
+            if (info->curPage == 2) {
+                evtSetValue(NULL, LSWF_KPA_01_MSG_CUE, 1);
+            }
+            break;
+    }
+}
+
 /**
  * Examine script for the third statue (a_zou_3): Bowser comments;
  * a jingle (BGM_FF_GET_ITEM1) plays when the message reaches its third page.
@@ -936,6 +1016,22 @@ static EVT_BEGIN(hammer_AB_init_evt)
     END_IF
     RETURN
 EVT_END()
+
+/**
+ * Message callback for kpa_stg1_008: when the text reaches page 1 it sets LSWF_KPA_01_MSG_CUE,
+ * which lets the Hammer Bro turn toward Bowser.
+ */
+static void kpa_stg1_008_cb(s32 type, smartEntry* smart) {
+    MsgWinData* info = smart->address;
+
+    switch (type) {
+        case 3:
+            if (info->curPage == 1) {
+                evtSetValue(NULL, LSWF_KPA_01_MSG_CUE, 1);
+            }
+            break;
+    }
+}
 
 /**
  * Talk script of the two Hammer Bros.: the first conversation sets GSWF_KPA_01_HAMMER_BROS_FIRST_TALK_DONE;
@@ -1158,6 +1254,16 @@ static NpcSetupInfo npcEnt[] = {
     {0},
 };
 
+/** Script helper: formats the name "hi_<args[0]>" into a static buffer and returns its address in args[1]. */
+static USER_FUNC(make_name) {
+    EvtWord* args = event->args;
+    static char name[8];
+
+    sprintf(name, "hi_%d", evtGetValue(event, args[0]));
+    evtSetValue(event, args[1], (EvtWord)name);
+    return EVT_RETURN_DONE;
+}
+
 /**
  * Prepares the twelve wall fire objects of the throne hall (named by make_name, numbers 1 to 12):
  * hides each map object and puts a small "fire" effect at its position, 2.5 units lower,
@@ -1212,109 +1318,3 @@ EVT_BEGIN(kpa_01_init_evt)
     END_SWITCH
     RETURN
 EVT_END()
-
-/** Script helper: formats the name "hi_<args[0]>" into a static buffer and returns its address in args[1]. */
-static USER_FUNC(make_name) {
-    EvtWord* args = event->args;
-    static char name[8];
-
-    sprintf(name, "hi_%d", evtGetValue(event, args[0]));
-    evtSetValue(event, args[1], (EvtWord)name);
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Message callback for kpa_stg1_008: when the text reaches page 1 it sets LSWF_KPA_01_MSG_CUE,
- * which lets the Hammer Bro turn toward Bowser.
- */
-static void kpa_stg1_008_cb(s32 type, smartEntry* smart) {
-    MsgWinData* info = smart->address;
-
-    switch (type) {
-        case 3:
-            if (info->curPage == 1) {
-                evtSetValue(NULL, LSWF_KPA_01_MSG_CUE, 1);
-            }
-            break;
-    }
-}
-
-/** Message callback for kpa_stg1_014_2: sets LSWF_KPA_01_MSG_CUE on page 2, which plays the item jingle in douzou_3_touch_evt. */
-static void kpa_stg1_014_2_cb(s32 type, smartEntry* smart) {
-    MsgWinData* info = smart->address;
-
-    switch (type) {
-        case 3:
-            if (info->curPage == 2) {
-                evtSetValue(NULL, LSWF_KPA_01_MSG_CUE, 1);
-            }
-            break;
-    }
-}
-
-/**
- * Message callback for kpa_stg1_036: sets LSWF_KPA_01_MSG_CUE when the third page appears (curPage 2),
- * which a waiting inline event of the departure cutscene reacts to.
- */
-static void kpa_stg1_036_cb(s32 type, smartEntry* smart) {
-    MsgWinData* info = smart->address;
-
-    switch (type) {
-        case 3:
-            if (info->curPage == 2) {
-                evtSetValue(NULL, LSWF_KPA_01_MSG_CUE, 1);
-            }
-            break;
-    }
-}
-
-/**
- * Message callback for kpa_stg1_034: sets LSWF_KPA_01_MSG_CUE once the text entry index exceeds 117,
- * the cue for Kammy's next animation.
- */
-static void kpa_stg1_034_cb(s32 type, smartEntry* smart) {
-    MsgWinData* info = smart->address;
-
-    switch (type) {
-        case 5:
-            if (info->nextEntry > 117) {
-                evtSetValue(NULL, LSWF_KPA_01_MSG_CUE, 1);
-            }
-            break;
-    }
-}
-
-/**
- * Script helper: rotates the point (args[2], args[3]) about the centre (args[0], args[1]) by args[4] degrees
- * around Y, returning x in args[5] and z in args[6]. Moves the Koopatrol guards along an arc around the door.
- */
-static USER_FUNC(get_togenoko_pos) {
-    EvtWord* args = event->args;
-    f32 cx = evtGetFloat(event, args[0]);
-    f32 cz = evtGetFloat(event, args[1]);
-    f32 x = evtGetFloat(event, args[2]);
-    f32 z = evtGetFloat(event, args[3]);
-    f32 angle = evtGetFloat(event, args[4]);
-    Mtx mtx;
-    Vec pos;
-
-    PSMTXRotRad(mtx, 'Y', 0.017453292f * angle);
-    pos.x = x - cx;
-    pos.y = 0.0f;
-    pos.z = z - cz;
-    PSMTXMultVec(mtx, &pos, &pos);
-    pos.x += cx;
-    pos.z += cz;
-    evtSetFloat(event, args[5], pos.x);
-    evtSetFloat(event, args[6], pos.z);
-    return EVT_RETURN_DONE;
-}
-
-#if VERSION == VERSION_EU
-
-/** PAL only: called at the start of kpa_03's jumpstand_evt. */
-USER_FUNC(kpa_cancel_attack_mode) {
-    kpaCancelAttackMode();
-    return EVT_RETURN_DONE;
-}
-#endif

@@ -234,18 +234,6 @@ static EvtWord stg_08_6_init_sub_event[46];
 
 EvtWord stg_08_6_init_event[4];
 
-// Descriptive name (not in the symbol maps); placeholder unk_las_0000775c, JP las .text+0x7690. See docs/NAME_PROVENANCE.md.
-#if VERSION >= VERSION_JP
-/**
- * Script helper: raises hi_fire_end_flag so hi_fire_main stops
- * and deletes the six torch flame effects at the end of a battle (JP and later).
- */
-USER_FUNC(hi_fire_end) {
-    hi_fire_end_flag[0] = 1;
-    return EVT_RETURN_DONE;
-}
-#endif
-
 /**
  * Scenery pieces of the Palace of Shadow battle stages
  * (floor, wall, rotating gears, pedestals, corridor segments); las_btlstage_data entries point into this
@@ -3467,6 +3455,34 @@ NpcTerritoryInfo btl_las_setup_no_tbl[] = {
 };
 
 /**
+ * Script helper: turns a pair of gear objects (names args[0] and args[1]) to the angle given by a frame counter:
+ * the counter is in the variable args[2], the full turn takes args[3] frames and args[4] is the step (+1 or -1);
+ * the counter wraps around.
+ */
+static USER_FUNC(_gear_rotate) {
+    EvtWord* args = event->args;
+    const char* name1 = (const char*)evtGetValue(event, args[0]);
+    const char* name2 = (const char*)evtGetValue(event, args[1]);
+    s32 frameVar = args[2];
+    s32 frame = evtGetValue(event, frameVar);
+    s32 total = evtGetValue(event, args[3]);
+    s32 step = evtGetValue(event, args[4]);
+    BattleStageObject* obj1 = BattleSearchObjectPtr(name1);
+    BattleStageObject* obj2 = BattleSearchObjectPtr(name2);
+
+    obj2->rotation.z = obj1->rotation.z = 360.0f * frame / total;
+    frame += step;
+    if (frame >= total) {
+        frame = 0;
+    }
+    if (frame < 0) {
+        frame = total - 1;
+    }
+    evtSetValue(event, frameVar, frame);
+    return EVT_RETURN_DONE;
+}
+
+/**
  * Background event of the gear battle stage: turns the gear pairs gear_01a/b, gear_02a/b and gear_03a/b
  * forever (_gear_rotate), one full turn in 400, 600 and 800 frames, gear_01 in the other direction.
  */
@@ -3482,6 +3498,11 @@ static EVT_BEGIN(bgset_las_gear_event)
     GOTO(0)
     RETURN
 EVT_END()
+
+/** Script helper: blocks until the battle sequence has ended. */
+static USER_FUNC(check_battle_end) {
+    return battleSeqEndCheck() ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
+}
 
 /**
  * Battle stage event for stage stg_08_1: lights three torch flames (hi1..hi3) on the stage's torch map objects
@@ -3533,6 +3554,35 @@ static EVT_BEGIN(stg_08_6_init_sub_event)
 EVT_END()
 #endif
 
+#if VERSION <= VERSION_DEMO_JP
+/**
+ * Battle stage event for stage stg_08_6: lights six dark-flame torches (hi1..hi6);
+ * in JP and later the flames follow the torch objects through hi_fire_main, and all are removed at battle end.
+ */
+static EVT_BEGIN(stg_08_6_init_sub_event)
+    CALL(evt_mapobj_get_position, STRING("hi1"), LW(0), LW(1), LW(2))
+    CALL(evt_eff, STRING("__hi1"), STRING("fire"), 8, LW(0), LW(1), LW(2), FLOAT(1.0f), 1000, 0, 0, 0, 0, 0, 0)
+    CALL(evt_mapobj_get_position, STRING("hi2"), LW(0), LW(1), LW(2))
+    CALL(evt_eff, STRING("__hi2"), STRING("fire"), 8, LW(0), LW(1), LW(2), FLOAT(1.0f), 1000, 0, 0, 0, 0, 0, 0)
+    CALL(evt_mapobj_get_position, STRING("hi3"), LW(0), LW(1), LW(2))
+    CALL(evt_eff, STRING("__hi3"), STRING("fire"), 8, LW(0), LW(1), LW(2), FLOAT(1.0f), 1000, 0, 0, 0, 0, 0, 0)
+    CALL(evt_mapobj_get_position, STRING("hi4"), LW(0), LW(1), LW(2))
+    CALL(evt_eff, STRING("__hi4"), STRING("fire"), 8, LW(0), LW(1), LW(2), FLOAT(1.0f), 1000, 0, 0, 0, 0, 0, 0)
+    CALL(evt_mapobj_get_position, STRING("hi5"), LW(0), LW(1), LW(2))
+    CALL(evt_eff, STRING("__hi5"), STRING("fire"), 8, LW(0), LW(1), LW(2), FLOAT(1.0f), 1000, 0, 0, 0, 0, 0, 0)
+    CALL(evt_mapobj_get_position, STRING("hi6"), LW(0), LW(1), LW(2))
+    CALL(evt_eff, STRING("__hi6"), STRING("fire"), 8, LW(0), LW(1), LW(2), FLOAT(1.0f), 1000, 0, 0, 0, 0, 0, 0)
+    CALL(check_battle_end)
+    CALL(evt_eff_softdelete, STRING("__hi1"))
+    CALL(evt_eff_softdelete, STRING("__hi2"))
+    CALL(evt_eff_softdelete, STRING("__hi3"))
+    CALL(evt_eff_softdelete, STRING("__hi4"))
+    CALL(evt_eff_softdelete, STRING("__hi5"))
+    CALL(evt_eff_softdelete, STRING("__hi6"))
+    RETURN
+EVT_END()
+#endif
+
 // Descriptive name (not in the symbol maps); placeholder unk_las_00007774, JP las .text+0x76A8. See docs/NAME_PROVENANCE.md.
 #if VERSION >= VERSION_JP
 /**
@@ -3571,67 +3621,17 @@ USER_FUNC(hi_fire_main) {
 }
 #endif
 
-#if VERSION <= VERSION_DEMO_JP
+// Descriptive name (not in the symbol maps); placeholder unk_las_0000775c, JP las .text+0x7690. See docs/NAME_PROVENANCE.md.
+#if VERSION >= VERSION_JP
 /**
- * Battle stage event for stage stg_08_6: lights six dark-flame torches (hi1..hi6);
- * in JP and later the flames follow the torch objects through hi_fire_main, and all are removed at battle end.
+ * Script helper: raises hi_fire_end_flag so hi_fire_main stops
+ * and deletes the six torch flame effects at the end of a battle (JP and later).
  */
-static EVT_BEGIN(stg_08_6_init_sub_event)
-    CALL(evt_mapobj_get_position, STRING("hi1"), LW(0), LW(1), LW(2))
-    CALL(evt_eff, STRING("__hi1"), STRING("fire"), 8, LW(0), LW(1), LW(2), FLOAT(1.0f), 1000, 0, 0, 0, 0, 0, 0)
-    CALL(evt_mapobj_get_position, STRING("hi2"), LW(0), LW(1), LW(2))
-    CALL(evt_eff, STRING("__hi2"), STRING("fire"), 8, LW(0), LW(1), LW(2), FLOAT(1.0f), 1000, 0, 0, 0, 0, 0, 0)
-    CALL(evt_mapobj_get_position, STRING("hi3"), LW(0), LW(1), LW(2))
-    CALL(evt_eff, STRING("__hi3"), STRING("fire"), 8, LW(0), LW(1), LW(2), FLOAT(1.0f), 1000, 0, 0, 0, 0, 0, 0)
-    CALL(evt_mapobj_get_position, STRING("hi4"), LW(0), LW(1), LW(2))
-    CALL(evt_eff, STRING("__hi4"), STRING("fire"), 8, LW(0), LW(1), LW(2), FLOAT(1.0f), 1000, 0, 0, 0, 0, 0, 0)
-    CALL(evt_mapobj_get_position, STRING("hi5"), LW(0), LW(1), LW(2))
-    CALL(evt_eff, STRING("__hi5"), STRING("fire"), 8, LW(0), LW(1), LW(2), FLOAT(1.0f), 1000, 0, 0, 0, 0, 0, 0)
-    CALL(evt_mapobj_get_position, STRING("hi6"), LW(0), LW(1), LW(2))
-    CALL(evt_eff, STRING("__hi6"), STRING("fire"), 8, LW(0), LW(1), LW(2), FLOAT(1.0f), 1000, 0, 0, 0, 0, 0, 0)
-    CALL(check_battle_end)
-    CALL(evt_eff_softdelete, STRING("__hi1"))
-    CALL(evt_eff_softdelete, STRING("__hi2"))
-    CALL(evt_eff_softdelete, STRING("__hi3"))
-    CALL(evt_eff_softdelete, STRING("__hi4"))
-    CALL(evt_eff_softdelete, STRING("__hi5"))
-    CALL(evt_eff_softdelete, STRING("__hi6"))
-    RETURN
-EVT_END()
-#endif
-
-/** Script helper: blocks until the battle sequence has ended. */
-static USER_FUNC(check_battle_end) {
-    return battleSeqEndCheck() ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
-}
-
-/**
- * Script helper: turns a pair of gear objects (names args[0] and args[1]) to the angle given by a frame counter:
- * the counter is in the variable args[2], the full turn takes args[3] frames and args[4] is the step (+1 or -1);
- * the counter wraps around.
- */
-static USER_FUNC(_gear_rotate) {
-    EvtWord* args = event->args;
-    const char* name1 = (const char*)evtGetValue(event, args[0]);
-    const char* name2 = (const char*)evtGetValue(event, args[1]);
-    s32 frameVar = args[2];
-    s32 frame = evtGetValue(event, frameVar);
-    s32 total = evtGetValue(event, args[3]);
-    s32 step = evtGetValue(event, args[4]);
-    BattleStageObject* obj1 = BattleSearchObjectPtr(name1);
-    BattleStageObject* obj2 = BattleSearchObjectPtr(name2);
-
-    obj2->rotation.z = obj1->rotation.z = 360.0f * frame / total;
-    frame += step;
-    if (frame >= total) {
-        frame = 0;
-    }
-    if (frame < 0) {
-        frame = total - 1;
-    }
-    evtSetValue(event, frameVar, frame);
+USER_FUNC(hi_fire_end) {
+    hi_fire_end_flag[0] = 1;
     return EVT_RETURN_DONE;
 }
+#endif
 
 /** Init event of battle stage stg_08_6: starts the six-torch flame event. */
 EVT_BEGIN(stg_08_6_init_event)

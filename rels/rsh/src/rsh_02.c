@@ -143,20 +143,11 @@ EvtWord rsh_02_b_init_evt_nidome[213];
 EvtWord rsh_02_c_init_evt_nidome[136];
 static EvtWord evt_nidome_bed[126];
 
-/**
- * Script helper (JP and later): blocks while Mario's roll cancel is disabled or his slit movement goes on
- * (marioRollCancelDisable, marioSlitContinueChk).
- */
-// Descriptive name (not in the symbol maps); placeholder unk_rsh_00002384, JP rsh .text+0x22C0. See docs/NAME_PROVENANCE.md.
-// Wait until neither roll-cancel protection nor continued slit movement prevents normalization.
-#if VERSION >= VERSION_JP
-USER_FUNC(mario_normalize_wait) {
-    if (!marioRollCancelDisable() && !marioSlitContinueChk()) {
-        return EVT_RETURN_DONE;
-    }
-    return EVT_RETURN_BLOCK;
+/** Script helper: sets the sound flag PSND_FLAG_BGM_WAIT_0. */
+static USER_FUNC(bgm_wait_stop) {
+    psndSetFlag(PSND_FLAG_BGM_WAIT_0);
+    return EVT_RETURN_DONE;
 }
-#endif
 
 /** Doors and exits of rsh_02 variant a: w_bero to rsh_03_a; e_bero to rsh_01_a. */
 static BeroEntry bero_data_a[] = {
@@ -294,6 +285,27 @@ static EVT_BEGIN(evt_powan_msg)
     CALL(evt_set_dir_to_target, STRING("グルメキノピオ"), STRING("mario"))
     RETURN
 EVT_END()
+
+/**
+ * Message-window callback for Pennington's speech in evt_nabe:
+ * on the second page turn it starts evt_powan_msg (counts pages in LW(10)).
+ */
+// Start the reaction on the second type-3 notification (the counter starts at zero).
+static void powan_callback(s32 type, void* param) {
+    MsgWinData* work = *(MsgWinData**)param;
+
+    if (type == 3) {
+        EventEntry* ev = work->event;
+        s32 count = evtGetValue(ev, LW(10));
+
+        switch (count) {
+            case 1:
+                evtEntry(evt_powan_msg, 0, 0);
+                break;
+        }
+        evtSetValue(ev, LW(10), count + 1);
+    }
+}
 
 /**
  * Trigger on the pot shelf (tana_3).
@@ -590,6 +602,24 @@ static s32 item_tbl2[] = {
 };
 
 /**
+ * Message callback: once LW(13) of the message's event is set, each type 3 counts LW(14); the first starts evt_shake
+ * (kept in LW(15)) and the second deletes it and starts evt_shake2.
+ */
+static void yuurei_callback(s32 type, void* param) {
+    EventEntry* ev = (*(MsgWinData**)param)->event;
+
+    if (ev->lwData[13] != 0 && type == 3) {
+        ev->lwData[14]++;
+        if (ev->lwData[14] == 1) {
+            ev->lwData[15] = (EvtWord)evtEntry(evt_shake, 0, 0);
+        } else if (ev->lwData[14] == 2 && (EventEntry*)ev->lwData[15] != NULL) {
+            evtDelete((EventEntry*)ev->lwData[15]);
+            evtEntry(evt_shake2, 0, 0);
+        }
+    }
+}
+
+/**
  * Talk script of the ghost.
  * Plays the ghost music and, by story stage, runs the ghost's quest:
  * introduces herself and asks for a favour (STG6_14_GHOST_T,
@@ -754,31 +784,6 @@ EVT_BEGIN(talk_yuurei)
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
     RETURN
 EVT_END()
-
-/**
- * Script helper: sets LW(10) to 1 when the NPC トロン is the one Mario touches (fbatHitCheckAll) while his keys and
- * control are on and the system level is 0, else 0.
- */
-static USER_FUNC(toron_check) {
-    NpcEntry* hit = fbatHitCheckAll();
-
-    // トロン
-    NpcEntry* npc = npcNameToPtr("トロン");
-    BOOL busy = FALSE;
-
-    if (marioKeyOffChk() || marioCtrlOffChk()) {
-        busy = TRUE;
-    }
-    if (marioStGetSystemLevel() != 0) {
-        busy = TRUE;
-    }
-    if (npc == hit && !busy) {
-        evtSetValue(event, LW(10), 1);
-    } else {
-        evtSetValue(event, LW(10), 0);
-    }
-    return EVT_RETURN_DONE;
-}
 
 /**
  * Init event of Zip Toad (Toron) in rsh_02: at STG6_25_ZIP_TOAD_APPEARS puts him at (-240, 0, -180)
@@ -946,49 +951,44 @@ static EVT_BEGIN(evt_1day_end)
 EVT_END()
 
 /**
- * Message callback: once LW(13) of the message's event is set, each type 3 counts LW(14); the first starts evt_shake
- * (kept in LW(15)) and the second deletes it and starts evt_shake2.
+ * Script helper: sets LW(10) to 1 when the NPC トロン is the one Mario touches (fbatHitCheckAll) while his keys and
+ * control are on and the system level is 0, else 0.
  */
-static void yuurei_callback(s32 type, void* param) {
-    EventEntry* ev = (*(MsgWinData**)param)->event;
+static USER_FUNC(toron_check) {
+    NpcEntry* hit = fbatHitCheckAll();
 
-    if (ev->lwData[13] != 0 && type == 3) {
-        ev->lwData[14]++;
-        if (ev->lwData[14] == 1) {
-            ev->lwData[15] = (EvtWord)evtEntry(evt_shake, 0, 0);
-        } else if (ev->lwData[14] == 2 && (EventEntry*)ev->lwData[15] != NULL) {
-            evtDelete((EventEntry*)ev->lwData[15]);
-            evtEntry(evt_shake2, 0, 0);
-        }
+    // トロン
+    NpcEntry* npc = npcNameToPtr("トロン");
+    BOOL busy = FALSE;
+
+    if (marioKeyOffChk() || marioCtrlOffChk()) {
+        busy = TRUE;
     }
+    if (marioStGetSystemLevel() != 0) {
+        busy = TRUE;
+    }
+    if (npc == hit && !busy) {
+        evtSetValue(event, LW(10), 1);
+    } else {
+        evtSetValue(event, LW(10), 0);
+    }
+    return EVT_RETURN_DONE;
 }
 
 /**
- * Message-window callback for Pennington's speech in evt_nabe:
- * on the second page turn it starts evt_powan_msg (counts pages in LW(10)).
+ * Script helper (JP and later): blocks while Mario's roll cancel is disabled or his slit movement goes on
+ * (marioRollCancelDisable, marioSlitContinueChk).
  */
-// Start the reaction on the second type-3 notification (the counter starts at zero).
-static void powan_callback(s32 type, void* param) {
-    MsgWinData* work = *(MsgWinData**)param;
-
-    if (type == 3) {
-        EventEntry* ev = work->event;
-        s32 count = evtGetValue(ev, LW(10));
-
-        switch (count) {
-            case 1:
-                evtEntry(evt_powan_msg, 0, 0);
-                break;
-        }
-        evtSetValue(ev, LW(10), count + 1);
+// Descriptive name (not in the symbol maps); placeholder unk_rsh_00002384, JP rsh .text+0x22C0. See docs/NAME_PROVENANCE.md.
+// Wait until neither roll-cancel protection nor continued slit movement prevents normalization.
+#if VERSION >= VERSION_JP
+USER_FUNC(mario_normalize_wait) {
+    if (!marioRollCancelDisable() && !marioSlitContinueChk()) {
+        return EVT_RETURN_DONE;
     }
+    return EVT_RETURN_BLOCK;
 }
-
-/** Script helper: sets the sound flag PSND_FLAG_BGM_WAIT_0. */
-static USER_FUNC(bgm_wait_stop) {
-    psndSetFlag(PSND_FLAG_BGM_WAIT_0);
-    return EVT_RETURN_DONE;
-}
+#endif
 
 /**
  * Bed scene at the end of day 2 (story STG6_43_CONDUCTOR_APPEARS):

@@ -465,6 +465,89 @@ EVT_BEGIN(kpa_07_init_evt)
     RETURN
 EVT_END()
 
+/** Script helper: args[0] = effect name; switches the star stone effect to state 1 (the falling/breaking animation). */
+static USER_FUNC(starstone_fall) {
+    EffectEntry* eff = effNameToPtr((const char*)evtGetValue(event, event->args[0]));
+
+    ((EffStarStoneWork*)eff->userdata)->state = 1;
+    return EVT_RETURN_DONE;
+}
+
+/** Script helper: args[0] = effect name, args[1] = degrees; rotates the star stone about Y. */
+static USER_FUNC(set_starstone_ry) {
+    EvtWord* args = event->args;
+    const char* name = (const char*)evtGetValue(event, args[0]);
+    f32 ry = evtGetFloat(event, args[1]);
+
+    ((EffStarStoneWork*)effNameToPtr(name)->userdata)->rot.y = ry;
+    return EVT_RETURN_DONE;
+}
+
+/** Script helper: args[0] = effect name, args[1..3] = x, y, z; moves the star stone. */
+static USER_FUNC(set_starstone_pos) {
+    EvtWord* args = event->args;
+    const char* name = (const char*)evtGetValue(event, args[0]);
+    f32 x = evtGetFloat(event, args[1]);
+    f32 y = evtGetFloat(event, args[2]);
+    f32 z = evtGetFloat(event, args[3]);
+    EffectEntry* eff = effNameToPtr(name);
+
+    ((EffStarStoneWork*)eff->userdata)->position.x = x;
+    ((EffStarStoneWork*)eff->userdata)->position.y = y;
+    ((EffStarStoneWork*)eff->userdata)->position.z = z;
+    return EVT_RETURN_DONE;
+}
+
+/** Script helper: args[0] = effect name; returns the star stone's x, y, z in args[1..3]. */
+static USER_FUNC(get_starstone_pos) {
+    EvtWord* args = event->args;
+    EffectEntry* eff = effNameToPtr((const char*)evtGetValue(event, args[0]));
+
+    evtSetFloat(event, args[1], ((EffStarStoneWork*)eff->userdata)->position.x);
+    evtSetFloat(event, args[2], ((EffStarStoneWork*)eff->userdata)->position.y);
+    evtSetFloat(event, args[3], ((EffStarStoneWork*)eff->userdata)->position.z);
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script helper: args = name, type, x, y, z, scale.
+ * Creates a star stone effect with the given name and turns off its jump sound.
+ */
+static USER_FUNC(starstone_entry) {
+    EvtWord* args = event->args;
+    const char* name = (const char*)evtGetValue(event, args[0]);
+    s32 type = evtGetValue(event, args[1]);
+    f32 x = evtGetFloat(event, args[2]);
+    f32 y = evtGetFloat(event, args[3]);
+    f32 z = evtGetFloat(event, args[4]);
+    f32 scale = evtGetFloat(event, args[5]);
+    EffectEntry* eff = effStarStoneEntry(type, x, y, z, scale);
+
+    effSetName(eff, name);
+    ((EffStarStoneWork*)eff->userdata)->flags |= STAR_STONE_FLAG_NO_JUMP_SFX;
+    return EVT_RETURN_DONE;
+}
+
+/** Message callback for kpa_stg6_012_1: plays Kammy's A_2B animation at the start and her T_1 animation at entry 8. */
+static void kpa_stg6_012_1_cb(s32 type, smartEntry* smart) {
+    MsgWinData* info = smart->address;
+
+    switch (type) {
+        case 0:
+
+            // ババ
+            animPoseSetAnim(npcNameToPtr("ババ")->poseId, "A_2B", TRUE);
+            break;
+        case 5:
+            if (info->nextEntry == 8) {
+
+                // ババ
+                animPoseSetAnim(npcNameToPtr("ババ")->poseId, "T_1", TRUE);
+            }
+            break;
+    }
+}
+
 /**
  * Message callback: on type 3 at page 1 it sets the stay and talk animations of the NPC ブレッドハート to S_5 and T_5, at page
  * 2 back to S_1 and T_1.
@@ -491,87 +574,4 @@ static void kpa_stg6_014_cb(s32 type, smartEntry* smart) {
             }
             break;
     }
-}
-
-/** Message callback for kpa_stg6_012_1: plays Kammy's A_2B animation at the start and her T_1 animation at entry 8. */
-static void kpa_stg6_012_1_cb(s32 type, smartEntry* smart) {
-    MsgWinData* info = smart->address;
-
-    switch (type) {
-        case 0:
-
-            // ババ
-            animPoseSetAnim(npcNameToPtr("ババ")->poseId, "A_2B", TRUE);
-            break;
-        case 5:
-            if (info->nextEntry == 8) {
-
-                // ババ
-                animPoseSetAnim(npcNameToPtr("ババ")->poseId, "T_1", TRUE);
-            }
-            break;
-    }
-}
-
-/**
- * Script helper: args = name, type, x, y, z, scale.
- * Creates a star stone effect with the given name and turns off its jump sound.
- */
-static USER_FUNC(starstone_entry) {
-    EvtWord* args = event->args;
-    const char* name = (const char*)evtGetValue(event, args[0]);
-    s32 type = evtGetValue(event, args[1]);
-    f32 x = evtGetFloat(event, args[2]);
-    f32 y = evtGetFloat(event, args[3]);
-    f32 z = evtGetFloat(event, args[4]);
-    f32 scale = evtGetFloat(event, args[5]);
-    EffectEntry* eff = effStarStoneEntry(type, x, y, z, scale);
-
-    effSetName(eff, name);
-    ((EffStarStoneWork*)eff->userdata)->flags |= STAR_STONE_FLAG_NO_JUMP_SFX;
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper: args[0] = effect name; returns the star stone's x, y, z in args[1..3]. */
-static USER_FUNC(get_starstone_pos) {
-    EvtWord* args = event->args;
-    EffectEntry* eff = effNameToPtr((const char*)evtGetValue(event, args[0]));
-
-    evtSetFloat(event, args[1], ((EffStarStoneWork*)eff->userdata)->position.x);
-    evtSetFloat(event, args[2], ((EffStarStoneWork*)eff->userdata)->position.y);
-    evtSetFloat(event, args[3], ((EffStarStoneWork*)eff->userdata)->position.z);
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper: args[0] = effect name, args[1..3] = x, y, z; moves the star stone. */
-static USER_FUNC(set_starstone_pos) {
-    EvtWord* args = event->args;
-    const char* name = (const char*)evtGetValue(event, args[0]);
-    f32 x = evtGetFloat(event, args[1]);
-    f32 y = evtGetFloat(event, args[2]);
-    f32 z = evtGetFloat(event, args[3]);
-    EffectEntry* eff = effNameToPtr(name);
-
-    ((EffStarStoneWork*)eff->userdata)->position.x = x;
-    ((EffStarStoneWork*)eff->userdata)->position.y = y;
-    ((EffStarStoneWork*)eff->userdata)->position.z = z;
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper: args[0] = effect name, args[1] = degrees; rotates the star stone about Y. */
-static USER_FUNC(set_starstone_ry) {
-    EvtWord* args = event->args;
-    const char* name = (const char*)evtGetValue(event, args[0]);
-    f32 ry = evtGetFloat(event, args[1]);
-
-    ((EffStarStoneWork*)effNameToPtr(name)->userdata)->rot.y = ry;
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper: args[0] = effect name; switches the star stone effect to state 1 (the falling/breaking animation). */
-static USER_FUNC(starstone_fall) {
-    EffectEntry* eff = effNameToPtr((const char*)evtGetValue(event, event->args[0]));
-
-    ((EffStarStoneWork*)eff->userdata)->state = 1;
-    return EVT_RETURN_DONE;
 }

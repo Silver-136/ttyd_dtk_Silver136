@@ -833,6 +833,24 @@ static EVT_BEGIN(majyorin_evt_npc_entry)
 EVT_END()
 
 /**
+ * Script helper (args[0] = effect name, args[1..3] = position, args[4] = last effect parameter): starts a named swirl
+ * effect (effGuruguruN64Entry 0, 3) at the position with scale 0.8.
+ */
+static USER_FUNC(eff_guruguru) {
+    EvtWord* args = event->args;
+    const char* name = (const char*)evtGetValue(event, args[0]);
+    f32 x = evtGetFloat(event, args[1]);
+    f32 y = evtGetFloat(event, args[2]);
+    f32 z = evtGetFloat(event, args[3]);
+    f32 w = evtGetFloat(event, args[4]);
+    EffectEntry* eff = effGuruguruN64Entry(0, 3, x, y, z, w);
+
+    ((EffGuruguruN64Work*)eff->userdata)->scale = 0.8f;
+    effSetName(eff, name);
+    return EVT_RETURN_DONE;
+}
+
+/**
  * Beldam's ambush at STG8_06: Beldam and Marilyn rise out of the shadows (evt_npc_majo_disp_on), a stand-in NPC walks
  * in and turns into Doopliss, they talk with Mario's partner (stg8_las_12 to 23, BGM_EVT_WITCH1) and the battle starts
  * (battle info 8); afterwards all three sit dazed (eff_guruguru, stg8_las_24 to 26) with goikkou_talk as their talk
@@ -1104,21 +1122,3 @@ EVT_BEGIN(las_09_init_evt)
     END_IF
     RETURN
 EVT_END()
-
-/**
- * Script helper (args[0] = effect name, args[1..3] = position, args[4] = last effect parameter): starts a named swirl
- * effect (effGuruguruN64Entry 0, 3) at the position with scale 0.8.
- */
-static USER_FUNC(eff_guruguru) {
-    EvtWord* args = event->args;
-    const char* name = (const char*)evtGetValue(event, args[0]);
-    f32 x = evtGetFloat(event, args[1]);
-    f32 y = evtGetFloat(event, args[2]);
-    f32 z = evtGetFloat(event, args[3]);
-    f32 w = evtGetFloat(event, args[4]);
-    EffectEntry* eff = effGuruguruN64Entry(0, 3, x, y, z, w);
-
-    ((EffGuruguruN64Work*)eff->userdata)->scale = 0.8f;
-    effSetName(eff, name);
-    return EVT_RETURN_DONE;
-}

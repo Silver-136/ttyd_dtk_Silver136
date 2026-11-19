@@ -529,6 +529,40 @@ EVT_BEGIN(eki_03_init_evt)
 EVT_END()
 
 /**
+ * Per-frame script helper (started inline from the map init, never finishes):
+ * keeps the screen glare filter on the sun.
+ * Switches the glare off when the sun's screen rectangle is off screen or empty,
+ * otherwise sets the glare box around it (50 pixels margin) and its depth limit.
+ */
+static USER_FUNC(test_glare) {
+    MapObject* sun = mapGetMapObj("sun");
+    u16* rect;
+
+    // the result is not used (the call is in the retail code)
+    marioGetPtr();
+    if (isFirstCall) {
+        sun->flags |= MAP_OBJ_FLAG_SCREEN_RECT;
+        return EVT_RETURN_BLOCK;
+    }
+
+    // 0x3FF marks off-screen bounds; an all-zero rectangle also disables glare.
+    rect = sun->screenRect;
+    if (rect[0] == 0x3FF || rect[1] == 0x3FF || rect[2] == 0x3FF || rect[3] == 0x3FF) {
+        envGlareFilter(0, 0, 0, 0, 0);
+    } else if (rect[0] == 0 && rect[1] == 0 && rect[2] == 0 && rect[3] == 0) {
+        envGlareFilter(0, 0, 0, 0, 0);
+    } else {
+        envGlareFilter(1, rect[1] - 50, rect[0] - 50, rect[3] + 50, rect[2] + 50);
+#if VERSION <= VERSION_DEMO_JP
+        envGlareFilterZ(0.998f);
+#else
+        envGlareFilterZ(1.148f);
+#endif
+    }
+    return EVT_RETURN_BLOCK;
+}
+
+/**
  * Map TEV callback for the "sun" object: redraws a 64x64 indirect texture every frame as a scrolling sine wave
  * and uses it to warp the sun's texture, giving a heat-haze shimmer.
  */
@@ -582,38 +616,4 @@ static void sun_tev(MapTevCallbackInfo* info) {
     info->texCoord = texCoord;
     info->indStage = indStage + 1;
     info->texMap = texMap + 1;
-}
-
-/**
- * Per-frame script helper (started inline from the map init, never finishes):
- * keeps the screen glare filter on the sun.
- * Switches the glare off when the sun's screen rectangle is off screen or empty,
- * otherwise sets the glare box around it (50 pixels margin) and its depth limit.
- */
-static USER_FUNC(test_glare) {
-    MapObject* sun = mapGetMapObj("sun");
-    u16* rect;
-
-    // the result is not used (the call is in the retail code)
-    marioGetPtr();
-    if (isFirstCall) {
-        sun->flags |= MAP_OBJ_FLAG_SCREEN_RECT;
-        return EVT_RETURN_BLOCK;
-    }
-
-    // 0x3FF marks off-screen bounds; an all-zero rectangle also disables glare.
-    rect = sun->screenRect;
-    if (rect[0] == 0x3FF || rect[1] == 0x3FF || rect[2] == 0x3FF || rect[3] == 0x3FF) {
-        envGlareFilter(0, 0, 0, 0, 0);
-    } else if (rect[0] == 0 && rect[1] == 0 && rect[2] == 0 && rect[3] == 0) {
-        envGlareFilter(0, 0, 0, 0, 0);
-    } else {
-        envGlareFilter(1, rect[1] - 50, rect[0] - 50, rect[3] + 50, rect[2] + 50);
-#if VERSION <= VERSION_DEMO_JP
-        envGlareFilterZ(0.998f);
-#else
-        envGlareFilterZ(1.148f);
-#endif
-    }
-    return EVT_RETURN_BLOCK;
 }

@@ -84,50 +84,6 @@ EvtWord muj_10_init_evt[204];
 #endif
 
 /**
- * Script helper: sets the transparency scale (args[1], 0.0 to 1.0) of the kameki_tornade_n64 effect named
- * args[0]; fades Cortez's tornado in and out (same as the helper in muj.c).
- */
-static USER_FUNC(tornade_alpha_func) {
-    EvtWord* args = event->args;
-    const char* name = (const char*)evtGetValue(event, args[0]);
-    f32 alpha = evtGetFloat(event, args[1]);
-
-    ((EffKamekiTornadeN64Work*)effNameToPtr(name)->userdata)->alphaScale = alpha;
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper: moves the whole crowd of 95 sailors (mass NPCs) up or down to their base height plus args[0],
- * so they bob with the ship (called from senin_event with the ship bobbing value).
- */
-static USER_FUNC(suifu_option_func) {
-    f32 y = evtGetFloat(event, event->args[0]);
-    NanNPCWork* wp = nanNPCWork;
-    s32 i;
-
-    for (i = 0; i < 95; i++) {
-        f32 baseY = wp->npc[i].basePos.y;
-
-        wp->npc[i].pos.y = baseY + y;
-    }
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper: remembers the current positions of the 95 crowd sailors as their base positions for
- * suifu_option_func.
- */
-static USER_FUNC(suifu_option_init_func) {
-    NanNPCWork* wp = nanNPCWork;
-    s32 i;
-
-    for (i = 0; i < 95; i++) {
-        wp->npc[i].basePos = wp->npc[i].pos;
-    }
-    return EVT_RETURN_DONE;
-}
-
-/**
  * Init event of the bespectacled sailor on the dock:
  * placed between STG5_31_FOUR_EYES and STG5_32_CORTEZS_WARNING.
  */
@@ -861,4 +817,48 @@ static void elmosalpha_func(NanNPC* npc) {
         case 3:
             break;
     }
+}
+
+/**
+ * Script helper: remembers the current positions of the 95 crowd sailors as their base positions for
+ * suifu_option_func.
+ */
+static USER_FUNC(suifu_option_init_func) {
+    NanNPCWork* wp = nanNPCWork;
+    s32 i;
+
+    for (i = 0; i < 95; i++) {
+        wp->npc[i].basePos = wp->npc[i].pos;
+    }
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script helper: moves the whole crowd of 95 sailors (mass NPCs) up or down to their base height plus args[0],
+ * so they bob with the ship (called from senin_event with the ship bobbing value).
+ */
+static USER_FUNC(suifu_option_func) {
+    f32 y = evtGetFloat(event, event->args[0]);
+    NanNPCWork* wp = nanNPCWork;
+    s32 i;
+
+    for (i = 0; i < 95; i++) {
+        f32 baseY = wp->npc[i].basePos.y;
+
+        wp->npc[i].pos.y = baseY + y;
+    }
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script helper: sets the transparency scale (args[1], 0.0 to 1.0) of the kameki_tornade_n64 effect named
+ * args[0]; fades Cortez's tornado in and out (same as the helper in muj.c).
+ */
+static USER_FUNC(tornade_alpha_func) {
+    EvtWord* args = event->args;
+    const char* name = (const char*)evtGetValue(event, args[0]);
+    f32 alpha = evtGetFloat(event, args[1]);
+
+    ((EffKamekiTornadeN64Work*)effNameToPtr(name)->userdata)->alphaScale = alpha;
+    return EVT_RETURN_DONE;
 }

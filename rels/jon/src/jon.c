@@ -1231,6 +1231,218 @@ static NpcSetupInfo npcEnt_zonbaba[] = {
 };
 
 /**
+ * REL entry point: runs the static constructors
+ * and registers jon_init_evt as the init script of the seven jon maps (jon_00..jon_06).
+ */
+void _prolog(void) {
+    voidfunctionptr* ctor;
+
+    for (ctor = _ctors; *ctor != NULL; ctor++) {
+        (*ctor)();
+    }
+    relSetEvtAddr("jon_00", jon_init_evt);
+    relSetEvtAddr("jon_01", jon_init_evt);
+    relSetEvtAddr("jon_02", jon_init_evt);
+    relSetEvtAddr("jon_03", jon_init_evt);
+    relSetEvtAddr("jon_04", jon_init_evt);
+    relSetEvtAddr("jon_05", jon_init_evt);
+    relSetEvtAddr("jon_06", jon_init_evt);
+    relSetBtlAddr("jon", btlsetup_jon_tbl, btl_jon_setup_no_tbl);
+}
+
+/** REL exit point: runs the static destructors. */
+void _epilog(void) {
+    voidfunctionptr* dtor;
+
+    for (dtor = _dtors; *dtor != NULL; dtor++) {
+        (*dtor)();
+    }
+}
+
+/** Unresolved-import stub for the REL (empty). */
+void _unresolved(void) {
+}
+
+/**
+ * Draw callback of the mover's warp: copies the screen to a texture
+ * and draws it back through a 64x64 sine-wave indirect texture (amplitude capped at 127),
+ * producing the wavy distortion.
+ */
+static void raster_disp(CameraId cameraId, void* param) {
+    EventEntry* event = param;
+    CameraEntry* cam = camGetPtr(cameraId);
+    f32 amp = event->lwDataF[0];
+    f32 phase = event->lwDataF[1];
+    f32 mtx[2][3];
+    GXTexObj obj;
+    void* copyBuf;
+    u8* buf;
+    f32 h;
+    f32 w;
+    s32 i;
+    s32 j;
+    if (amp > 127.0f) {
+        amp = 127.0f;
+    }
+    copyBuf = smartAlloc(GXGetTexBufferSize(608, 480, GX_TF_RGBA8, GX_FALSE, 0), SMART_GROUP_TEMP)->address;
+    buf = smartAlloc(GXGetTexBufferSize(64, 64, GX_TF_IA8, GX_FALSE, 0), SMART_GROUP_TEMP)->address;
+    phase = 6.2831855f * phase;
+    for (i = 0; i < 64; i++) {
+        for (j = 0; j < 64; j++) {
+            f32 v = sin(j + (gp->retraceCount / 4.0f + phase));
+            s32 o;
+
+            o = i / 4;
+            o = (o << 5) + ((j / 4) << 9);
+            o += ((i % 4) + ((j % 4) << 2)) * 2;
+
+            buf[o] = amp * v + 128.0f;
+            buf[o + 1] = 0x80;
+        }
+    }
+    DCFlushRange(buf, 0x2000);
+    GXSetTexCopySrc(0, 0, 608, 480);
+    GXSetTexCopyDst(608, 480, GX_TF_RGBA8, GX_FALSE);
+    GXCopyTex(copyBuf, GX_FALSE);
+    GXPixModeSync();
+    GXInitTexObj(&obj, copyBuf, 608, 480, GX_TF_RGBA8, GX_CLAMP, GX_CLAMP, GX_FALSE);
+    GXInitTexObjLOD(&obj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
+    GXLoadTexObj(&obj, GX_TEXMAP0);
+    GXInitTexObj(&obj, buf, 64, 64, GX_TF_IA8, GX_REPEAT, GX_REPEAT, GX_FALSE);
+    GXInitTexObjLOD(&obj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
+    GXLoadTexObj(&obj, GX_TEXMAP1);
+    GXSetBlendMode(GX_BM_NONE, GX_BL_ONE, GX_BL_ZERO, GX_LO_OR);
+    GXSetZCompLoc(GX_TRUE);
+    GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
+    GXSetZMode(GX_FALSE, GX_LEQUAL, GX_FALSE);
+    GXSetNumChans(0);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
+    mtx[0][0] = 0.5f;
+    mtx[0][1] = 0.0f;
+    mtx[0][2] = 0.0f;
+    mtx[1][0] = 0.0f;
+    mtx[1][1] = 0.5f;
+    mtx[1][2] = 0.0f;
+    GXSetIndTexMtx(GX_ITM_0, mtx, 1);
+    GXSetIndTexOrder(GX_INDTEXSTAGE0, GX_TEXCOORD0, GX_TEXMAP1);
+    GXSetIndTexCoordScale(GX_INDTEXSTAGE0, GX_ITS_8, GX_ITS_8);
+    GXSetTevIndWarp(GX_TEVSTAGE0, GX_INDTEXSTAGE0, GX_TRUE, GX_FALSE, GX_ITM_0);
+    GXSetNumIndStages(1);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevOp(GX_TEVSTAGE0, GX_REPLACE);
+    GXSetCullMode(GX_CULL_NONE);
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+    GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
+    GXLoadPosMtxImm(cam->view, GX_PNMTX0);
+    GXSetCurrentMtx(GX_PNMTX0);
+    w = 608.0f;
+    h = 480.0f;
+    GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+    GXPosition3f32(-w / 2, h / 2, 0.0f);
+    GXTexCoord2f32(0.0f, 0.0f);
+    GXPosition3f32(w / 2, h / 2, 0.0f);
+    GXTexCoord2f32(1.0f, 0.0f);
+    GXPosition3f32(w / 2, -h / 2, 0.0f);
+    GXTexCoord2f32(1.0f, 1.0f);
+    GXPosition3f32(-w / 2, -h / 2, 0.0f);
+    GXTexCoord2f32(0.0f, 1.0f);
+    GXEnd();
+    GXSetNumIndStages(0);
+    GXSetTevDirect(GX_TEVSTAGE0);
+}
+
+/**
+ * Script helper: the warp wobble shown during the mover's trip.
+ * Blocks forever, growing the amplitude 0.2 and phase 0.01 per frame,
+ * and queues raster_disp each frame on the 2D camera.
+ */
+static USER_FUNC(evt_raster) {
+    f32* work = event->lwDataF;
+
+    if (isFirstCall) {
+        work[0] = 0.0f;
+        work[1] = 0.0f;
+    }
+    work[0] += 0.2f;
+    work[1] += 0.01f;
+    dispEntry(CAMERA_2D, 0.0f, DISP_MODE_OPAQUE_NO_Z, raster_disp, event);
+    return EVT_RETURN_BLOCK;
+}
+
+/**
+ * Script helper: args[0] = floor index (0-99).
+ * Looks up its battle number in enemy_100 and returns the tribe's model name (args[1]),
+ * Japanese name (args[2]) and battle setup number (args[3]) from btlsetup_jon_tbl;
+ * falls back to Goomba when the name is not a tribe.
+ */
+static USER_FUNC(enemy_info) {
+    EvtWord* args = event->args;
+    s32 idx = evtGetValue(event, args[0]);
+    s32 no = enemy_100[idx];
+    NpcSetupBattleInfo* setup = &btlsetup_jon_tbl[no];
+    NpcTribeInfo* tribe = npcTribe;
+    const char* name;
+    BOOL found = FALSE;
+
+    for (; tribe->nameJp != NULL; tribe++) {
+        if (strcmp(tribe->nameJp, setup->name) == 0) {
+            found = TRUE;
+            break;
+        }
+    }
+    if (!found) {
+        // クリボー
+        name = "クリボー";
+        tribe = npcGetTribe(name);
+    } else {
+        name = tribe->nameJp;
+    }
+    evtSetValue(event, args[1], (EvtWord)tribe->modelName);
+    evtSetValue(event, args[2], (EvtWord)name);
+    evtSetValue(event, args[3], no);
+    return EVT_RETURN_DONE;
+}
+
+/** Script helper: sets NPC_BATTLE_NO_BUMP_ATTACK on the floor enemy's battle info. */
+static USER_FUNC(yattukeFlag) {
+    npcNameToPtr("敵")->battleInfo.battleFlags |= NPC_BATTLE_NO_BUMP_ATTACK;
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script helper: args[0] = NPC name; sets its loiter height to 50 and homing height to 180
+ * so flyers can chase over the room.
+ */
+static USER_FUNC(setup_npc_ex_para) {
+    const char* name = (const char*)evtGetValue(event, event->args[0]);
+    NpcEntry* npc = evtNpcNameToPtr(event, name);
+
+    npc->territoryLoiter.y = 50.0f;
+    npc->territoryHoming.y = 180.0f;
+    return EVT_RETURN_DONE;
+}
+
+/** Script helper: args[0..2] = x, y, z; writes them into the Chain Chomp setup's territoryBase before it is spawned. */
+static USER_FUNC(wanwan_set_home_pos) {
+    EvtWord* args = event->args;
+    s32 x = evtGetValue(event, args[0]);
+    s32 y = evtGetValue(event, args[1]);
+    s32 z = evtGetValue(event, args[2]);
+
+    npcEnt_wanwan[0].territoryBase.x = x;
+    npcEnt_wanwan[0].territoryBase.y = y;
+    npcEnt_wanwan[0].territoryBase.z = z;
+    return EVT_RETURN_DONE;
+}
+
+/**
  * Spawns the floor's single enemy ("敵"), skipped when the mover is on the floor and on rest-room floors (every
  * 10th except 100). enemy_info picks the species for the floor from enemy_100; the enemy appears on a random
  * side of the room and gets the NPC setup of its kind (walker, flyer, plant, Spiny, Chain Chomp ...). Floor 100
@@ -2033,6 +2245,31 @@ static EVT_BEGIN(gyousyou_setup)
 EVT_END()
 
 /**
+ * Script helper (args[0] = 0 to 3): sets one battle flag on the enemy NPC: 0 no partner change, 1 no hammer, 2 no jump,
+ * 3 extra coins.
+ */
+static USER_FUNC(shikakeFlag) {
+    s32 type = evtGetValue(event, event->args[0]);
+    NpcEntry* npc = npcNameToPtr("敵");
+
+    switch (type) {
+        case 0:
+            npc->battleInfo.battleFlags |= NPC_BATTLE_NO_PARTY_CHANGE;
+            break;
+        case 1:
+            npc->battleInfo.battleFlags |= NPC_BATTLE_NO_HAMMER;
+            break;
+        case 2:
+            npc->battleInfo.battleFlags |= NPC_BATTLE_NO_JUMP;
+            break;
+        case 3:
+            npc->battleInfo.battleFlags |= NPC_BATTLE_EXTRA_COINS;
+            break;
+    }
+    return EVT_RETURN_DONE;
+}
+
+/**
  * Floor "device" (shikake) set-up; nothing in the tree starts it.
  * 20% of the time, when the floor has an enemy,
  * it would flash the screen white on arrival and show one of four system messages (msg_jon_trick_1 to 4, "the
@@ -2668,6 +2905,15 @@ static EVT_BEGIN(setup_normal)
     RETURN
 EVT_END()
 
+/** Script helper: turns off paper-peraform bending and paper lighting on the sailor's model, for the pipe jump. */
+static USER_FUNC(iri_12_paper_init) {
+    NpcEntry* npc = npcNameToPtr("マッキノ");
+
+    animPosePaperPeraOff(npc->poseId);
+    animPoseSetMaterialLightFlagOff(npc->poseId, MATERIAL_LIGHT_PAPER);
+    return EVT_RETURN_DONE;
+}
+
 /**
  * Trouble Center job 12 (the lost sailor, マッキノ):
  * when Mario enters a pipe with the sailor following, he hops in too, spinning and shrinking as a paper model,
@@ -2767,6 +3013,14 @@ static EVT_BEGIN(iri_12_dokan_in)
     END_IF
     RETURN
 EVT_END()
+
+/** Script helper: args[0] = y; sets the sailor NPC's height directly. */
+static USER_FUNC(iri_12_makkino_set_y) {
+    f32 y = evtGetFloat(event, event->args[0]);
+
+    npcNameToPtr("マッキノ")->position.y = y;
+    return EVT_RETURN_DONE;
+}
 
 /**
  * Shared tail of the sailor's farewell scripts:
@@ -2876,6 +3130,17 @@ static EVT_BEGIN(iri_12_makkino_return_zonbaba)
     RETURN
 EVT_END()
 
+/** Script helper: blocks until the sailor NPC has landed on the floor (returns at once if he cannot land). */
+static USER_FUNC(wait_landon) {
+    // マッキノ
+    NpcEntry* npc = npcNameToPtr("マッキノ");
+
+    if (!(npc->flags & NPC_FLAG_FLOOR_COLLISION) || npc->groundHit != NULL) {
+        return EVT_RETURN_DONE;
+    }
+    return EVT_RETURN_BLOCK;
+}
+
 /**
  * Moves the sailor to the side of the exit pipe (x = -40), stopping his own movement script first.
  * If Mario stands in the way he is nudged aside. Afterwards the sailor talks again (iri_12_makkino_talk).
@@ -2967,6 +3232,19 @@ static EVT_BEGIN(iri_12_makkino_okiru)
     CALL(evt_set_dir_to_target, STRING("マッキノ"), STRING("mario"))
     RETURN
 EVT_END()
+
+/**
+ * Message window callback (msgdrv calls it with the window's smart-heap block):
+ * starts iri_12_makkino_okiru (マッキノ wakes up) when the message turns to its second page (type 3 = page
+ * advanced).
+ */
+static void iri_12_msgcb(s32 type, void* param) {
+    u8* msg = *(u8**)param;
+
+    if (type == 3 && *(u16*)(msg + 8) == 1) {
+        evtEntry(iri_12_makkino_okiru, 0, 0);
+    }
+}
 
 /**
  * Talk script of the sailor Makkino (マッキノ) in Trouble Center job 12.
@@ -3259,6 +3537,12 @@ static EVT_BEGIN(gonbaba_down_shake)
     RETURN
 EVT_END()
 
+/** Script helper: blocks until Bonetail's NPC is standing on the ground (groundHit set). */
+static USER_FUNC(gonbaba_wait_landon) {
+    // 敵
+    return npcNameToPtr("敵")->groundHit ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
+}
+
 /**
  * Floor 100 opening and fight with Bonetail (battle setup 51). If he was already beaten
  * (GSWF_PIT_BONETAIL_DEFEATED), he is parked off the map and only the chest is set up. Otherwise Mario is
@@ -3465,287 +3749,3 @@ EVT_BEGIN(zonbaba_first_event)
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
-
-/** Script helper: blocks until Bonetail's NPC is standing on the ground (groundHit set). */
-static USER_FUNC(gonbaba_wait_landon) {
-    // 敵
-    return npcNameToPtr("敵")->groundHit ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
-}
-
-/**
- * Message window callback (msgdrv calls it with the window's smart-heap block):
- * starts iri_12_makkino_okiru (マッキノ wakes up) when the message turns to its second page (type 3 = page
- * advanced).
- */
-static void iri_12_msgcb(s32 type, void* param) {
-    u8* msg = *(u8**)param;
-
-    if (type == 3 && *(u16*)(msg + 8) == 1) {
-        evtEntry(iri_12_makkino_okiru, 0, 0);
-    }
-}
-
-/** Script helper: blocks until the sailor NPC has landed on the floor (returns at once if he cannot land). */
-static USER_FUNC(wait_landon) {
-    // マッキノ
-    NpcEntry* npc = npcNameToPtr("マッキノ");
-
-    if (!(npc->flags & NPC_FLAG_FLOOR_COLLISION) || npc->groundHit != NULL) {
-        return EVT_RETURN_DONE;
-    }
-    return EVT_RETURN_BLOCK;
-}
-
-/** Script helper: args[0] = y; sets the sailor NPC's height directly. */
-static USER_FUNC(iri_12_makkino_set_y) {
-    f32 y = evtGetFloat(event, event->args[0]);
-
-    npcNameToPtr("マッキノ")->position.y = y;
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper: turns off paper-peraform bending and paper lighting on the sailor's model, for the pipe jump. */
-static USER_FUNC(iri_12_paper_init) {
-    NpcEntry* npc = npcNameToPtr("マッキノ");
-
-    animPosePaperPeraOff(npc->poseId);
-    animPoseSetMaterialLightFlagOff(npc->poseId, MATERIAL_LIGHT_PAPER);
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper (args[0] = 0 to 3): sets one battle flag on the enemy NPC: 0 no partner change, 1 no hammer, 2 no jump,
- * 3 extra coins.
- */
-static USER_FUNC(shikakeFlag) {
-    s32 type = evtGetValue(event, event->args[0]);
-    NpcEntry* npc = npcNameToPtr("敵");
-
-    switch (type) {
-        case 0:
-            npc->battleInfo.battleFlags |= NPC_BATTLE_NO_PARTY_CHANGE;
-            break;
-        case 1:
-            npc->battleInfo.battleFlags |= NPC_BATTLE_NO_HAMMER;
-            break;
-        case 2:
-            npc->battleInfo.battleFlags |= NPC_BATTLE_NO_JUMP;
-            break;
-        case 3:
-            npc->battleInfo.battleFlags |= NPC_BATTLE_EXTRA_COINS;
-            break;
-    }
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper: args[0..2] = x, y, z; writes them into the Chain Chomp setup's territoryBase before it is spawned. */
-static USER_FUNC(wanwan_set_home_pos) {
-    EvtWord* args = event->args;
-    s32 x = evtGetValue(event, args[0]);
-    s32 y = evtGetValue(event, args[1]);
-    s32 z = evtGetValue(event, args[2]);
-
-    npcEnt_wanwan[0].territoryBase.x = x;
-    npcEnt_wanwan[0].territoryBase.y = y;
-    npcEnt_wanwan[0].territoryBase.z = z;
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper: args[0] = NPC name; sets its loiter height to 50 and homing height to 180
- * so flyers can chase over the room.
- */
-static USER_FUNC(setup_npc_ex_para) {
-    const char* name = (const char*)evtGetValue(event, event->args[0]);
-    NpcEntry* npc = evtNpcNameToPtr(event, name);
-
-    npc->territoryLoiter.y = 50.0f;
-    npc->territoryHoming.y = 180.0f;
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper: sets NPC_BATTLE_NO_BUMP_ATTACK on the floor enemy's battle info. */
-static USER_FUNC(yattukeFlag) {
-    npcNameToPtr("敵")->battleInfo.battleFlags |= NPC_BATTLE_NO_BUMP_ATTACK;
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper: args[0] = floor index (0-99).
- * Looks up its battle number in enemy_100 and returns the tribe's model name (args[1]),
- * Japanese name (args[2]) and battle setup number (args[3]) from btlsetup_jon_tbl;
- * falls back to Goomba when the name is not a tribe.
- */
-static USER_FUNC(enemy_info) {
-    EvtWord* args = event->args;
-    s32 idx = evtGetValue(event, args[0]);
-    s32 no = enemy_100[idx];
-    NpcSetupBattleInfo* setup = &btlsetup_jon_tbl[no];
-    NpcTribeInfo* tribe = npcTribe;
-    const char* name;
-    BOOL found = FALSE;
-
-    for (; tribe->nameJp != NULL; tribe++) {
-        if (strcmp(tribe->nameJp, setup->name) == 0) {
-            found = TRUE;
-            break;
-        }
-    }
-    if (!found) {
-        // クリボー
-        name = "クリボー";
-        tribe = npcGetTribe(name);
-    } else {
-        name = tribe->nameJp;
-    }
-    evtSetValue(event, args[1], (EvtWord)tribe->modelName);
-    evtSetValue(event, args[2], (EvtWord)name);
-    evtSetValue(event, args[3], no);
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper: the warp wobble shown during the mover's trip.
- * Blocks forever, growing the amplitude 0.2 and phase 0.01 per frame,
- * and queues raster_disp each frame on the 2D camera.
- */
-static USER_FUNC(evt_raster) {
-    f32* work = event->lwDataF;
-
-    if (isFirstCall) {
-        work[0] = 0.0f;
-        work[1] = 0.0f;
-    }
-    work[0] += 0.2f;
-    work[1] += 0.01f;
-    dispEntry(CAMERA_2D, 0.0f, DISP_MODE_OPAQUE_NO_Z, raster_disp, event);
-    return EVT_RETURN_BLOCK;
-}
-
-/**
- * Draw callback of the mover's warp: copies the screen to a texture
- * and draws it back through a 64x64 sine-wave indirect texture (amplitude capped at 127),
- * producing the wavy distortion.
- */
-static void raster_disp(CameraId cameraId, void* param) {
-    EventEntry* event = param;
-    CameraEntry* cam = camGetPtr(cameraId);
-    f32 amp = event->lwDataF[0];
-    f32 phase = event->lwDataF[1];
-    f32 mtx[2][3];
-    GXTexObj obj;
-    void* copyBuf;
-    u8* buf;
-    f32 h;
-    f32 w;
-    s32 i;
-    s32 j;
-    if (amp > 127.0f) {
-        amp = 127.0f;
-    }
-    copyBuf = smartAlloc(GXGetTexBufferSize(608, 480, GX_TF_RGBA8, GX_FALSE, 0), SMART_GROUP_TEMP)->address;
-    buf = smartAlloc(GXGetTexBufferSize(64, 64, GX_TF_IA8, GX_FALSE, 0), SMART_GROUP_TEMP)->address;
-    phase = 6.2831855f * phase;
-    for (i = 0; i < 64; i++) {
-        for (j = 0; j < 64; j++) {
-            f32 v = sin(j + (gp->retraceCount / 4.0f + phase));
-            s32 o;
-
-            o = i / 4;
-            o = (o << 5) + ((j / 4) << 9);
-            o += ((i % 4) + ((j % 4) << 2)) * 2;
-
-            buf[o] = amp * v + 128.0f;
-            buf[o + 1] = 0x80;
-        }
-    }
-    DCFlushRange(buf, 0x2000);
-    GXSetTexCopySrc(0, 0, 608, 480);
-    GXSetTexCopyDst(608, 480, GX_TF_RGBA8, GX_FALSE);
-    GXCopyTex(copyBuf, GX_FALSE);
-    GXPixModeSync();
-    GXInitTexObj(&obj, copyBuf, 608, 480, GX_TF_RGBA8, GX_CLAMP, GX_CLAMP, GX_FALSE);
-    GXInitTexObjLOD(&obj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
-    GXLoadTexObj(&obj, GX_TEXMAP0);
-    GXInitTexObj(&obj, buf, 64, 64, GX_TF_IA8, GX_REPEAT, GX_REPEAT, GX_FALSE);
-    GXInitTexObjLOD(&obj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
-    GXLoadTexObj(&obj, GX_TEXMAP1);
-    GXSetBlendMode(GX_BM_NONE, GX_BL_ONE, GX_BL_ZERO, GX_LO_OR);
-    GXSetZCompLoc(GX_TRUE);
-    GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
-    GXSetZMode(GX_FALSE, GX_LEQUAL, GX_FALSE);
-    GXSetNumChans(0);
-    GXSetNumTexGens(1);
-    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
-    mtx[0][0] = 0.5f;
-    mtx[0][1] = 0.0f;
-    mtx[0][2] = 0.0f;
-    mtx[1][0] = 0.0f;
-    mtx[1][1] = 0.5f;
-    mtx[1][2] = 0.0f;
-    GXSetIndTexMtx(GX_ITM_0, mtx, 1);
-    GXSetIndTexOrder(GX_INDTEXSTAGE0, GX_TEXCOORD0, GX_TEXMAP1);
-    GXSetIndTexCoordScale(GX_INDTEXSTAGE0, GX_ITS_8, GX_ITS_8);
-    GXSetTevIndWarp(GX_TEVSTAGE0, GX_INDTEXSTAGE0, GX_TRUE, GX_FALSE, GX_ITM_0);
-    GXSetNumIndStages(1);
-    GXSetNumTevStages(1);
-    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
-    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-    GXSetTevOp(GX_TEVSTAGE0, GX_REPLACE);
-    GXSetCullMode(GX_CULL_NONE);
-    GXClearVtxDesc();
-    GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
-    GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
-    GXLoadPosMtxImm(cam->view, GX_PNMTX0);
-    GXSetCurrentMtx(GX_PNMTX0);
-    w = 608.0f;
-    h = 480.0f;
-    GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-    GXPosition3f32(-w / 2, h / 2, 0.0f);
-    GXTexCoord2f32(0.0f, 0.0f);
-    GXPosition3f32(w / 2, h / 2, 0.0f);
-    GXTexCoord2f32(1.0f, 0.0f);
-    GXPosition3f32(w / 2, -h / 2, 0.0f);
-    GXTexCoord2f32(1.0f, 1.0f);
-    GXPosition3f32(-w / 2, -h / 2, 0.0f);
-    GXTexCoord2f32(0.0f, 1.0f);
-    GXEnd();
-    GXSetNumIndStages(0);
-    GXSetTevDirect(GX_TEVSTAGE0);
-}
-
-/** Unresolved-import stub for the REL (empty). */
-void _unresolved(void) {
-}
-
-/** REL exit point: runs the static destructors. */
-void _epilog(void) {
-    voidfunctionptr* dtor;
-
-    for (dtor = _dtors; *dtor != NULL; dtor++) {
-        (*dtor)();
-    }
-}
-
-/**
- * REL entry point: runs the static constructors
- * and registers jon_init_evt as the init script of the seven jon maps (jon_00..jon_06).
- */
-void _prolog(void) {
-    voidfunctionptr* ctor;
-
-    for (ctor = _ctors; *ctor != NULL; ctor++) {
-        (*ctor)();
-    }
-    relSetEvtAddr("jon_00", jon_init_evt);
-    relSetEvtAddr("jon_01", jon_init_evt);
-    relSetEvtAddr("jon_02", jon_init_evt);
-    relSetEvtAddr("jon_03", jon_init_evt);
-    relSetEvtAddr("jon_04", jon_init_evt);
-    relSetEvtAddr("jon_05", jon_init_evt);
-    relSetEvtAddr("jon_06", jon_init_evt);
-    relSetBtlAddr("jon", btlsetup_jon_tbl, btl_jon_setup_no_tbl);
-}

@@ -524,6 +524,55 @@ EVT_END()
 #endif
 
 /**
+ * Message callback (JP and later): on type 5 it starts the event UNK_0x00022c3c and keeps it in LW(8), unless the one
+ * there is still running.
+ */
+// Descriptive name (not in the symbol maps); placeholder unk_aji_00000ed0, JP aji .text+0xE0C. See docs/NAME_PROVENANCE.md.
+#if VERSION >= VERSION_JP
+void kuti_callback(s32 type, void** work) {
+    EventEntry* evt = ((MsgWinData*)*work)->event;
+
+    if (((EventEntry*)evt->lwData[8] == NULL || !evtCheckID(((EventEntry*)evt->lwData[8])->eventId)) && type == 5) {
+        evt->lwData[8] = (EvtWord)evtEntry(UNK_0x00022c3c, 0, 0);
+    }
+}
+#endif
+
+/**
+ * Message callback for the quiz texts: on the stg7_aji_06 question counts page-advance notifications (type 3) to play
+ * SFX_STG7_QUIZ_START1 on the third notification and switch to BGM_EVT_QUIZ2 on the fourth,
+ * and on the other texts switches to BGM_EVT_QUIZ2 on the first type-3 notification;
+ * from the JP release on, text type 5 also makes the statue's mouth flap.
+ */
+static void callback(s32 type, void** work) {
+    EventEntry* evt = ((MsgWinData*)*work)->event;
+
+    if (strcmp(*(const char**)*work, "stg7_aji_06") == 0) {
+        if (type == 3) {
+            evt->lwData[5]++;
+            if (evt->lwData[5] == 3) {
+                psndSFXOn("SFX_STG7_QUIZ_START1");
+            } else if (evt->lwData[5] == 4) {
+                psndBGMOff(PSND_PAUSE);
+                psndBGMOn(PSND_SLOT(1), "BGM_EVT_QUIZ2");
+            }
+        }
+    } else if (type == 3) {
+        evt->lwData[5]++;
+        if (evt->lwData[5] == 1) {
+            psndBGMOff(PSND_PAUSE);
+            psndBGMOn(PSND_SLOT(1), "BGM_EVT_QUIZ2");
+        }
+    }
+#if VERSION >= VERSION_JP
+    evt = ((MsgWinData*)*work)->event;
+    if (((EventEntry*)evt->lwData[8] == NULL || !evtCheckID(((EventEntry*)evt->lwData[8])->eventId)) && type == 5) {
+        evt->lwData[8] = (EvtWord)evtEntry(UNK_0x00022c3c, 0, 0);
+    }
+#endif
+}
+
+/**
  * The statue's quiz, the case script of a_sekizou_1_a.
  * The statue wakes up and asks whether to take its quiz (stg7_aji_02);
  * on yes it moves Mario onto the quiz set (BGM_EVT_QUIZ1/2)
@@ -962,55 +1011,6 @@ static EVT_BEGIN(sekizou_init)
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_sekizou_1_a"), 0, PTR(kuizu_sekizou), 0)
     RETURN
 EVT_END()
-
-/**
- * Message callback for the quiz texts: on the stg7_aji_06 question counts page-advance notifications (type 3) to play
- * SFX_STG7_QUIZ_START1 on the third notification and switch to BGM_EVT_QUIZ2 on the fourth,
- * and on the other texts switches to BGM_EVT_QUIZ2 on the first type-3 notification;
- * from the JP release on, text type 5 also makes the statue's mouth flap.
- */
-static void callback(s32 type, void** work) {
-    EventEntry* evt = ((MsgWinData*)*work)->event;
-
-    if (strcmp(*(const char**)*work, "stg7_aji_06") == 0) {
-        if (type == 3) {
-            evt->lwData[5]++;
-            if (evt->lwData[5] == 3) {
-                psndSFXOn("SFX_STG7_QUIZ_START1");
-            } else if (evt->lwData[5] == 4) {
-                psndBGMOff(PSND_PAUSE);
-                psndBGMOn(PSND_SLOT(1), "BGM_EVT_QUIZ2");
-            }
-        }
-    } else if (type == 3) {
-        evt->lwData[5]++;
-        if (evt->lwData[5] == 1) {
-            psndBGMOff(PSND_PAUSE);
-            psndBGMOn(PSND_SLOT(1), "BGM_EVT_QUIZ2");
-        }
-    }
-#if VERSION >= VERSION_JP
-    evt = ((MsgWinData*)*work)->event;
-    if (((EventEntry*)evt->lwData[8] == NULL || !evtCheckID(((EventEntry*)evt->lwData[8])->eventId)) && type == 5) {
-        evt->lwData[8] = (EvtWord)evtEntry(UNK_0x00022c3c, 0, 0);
-    }
-#endif
-}
-
-/**
- * Message callback (JP and later): on type 5 it starts the event UNK_0x00022c3c and keeps it in LW(8), unless the one
- * there is still running.
- */
-// Descriptive name (not in the symbol maps); placeholder unk_aji_00000ed0, JP aji .text+0xE0C. See docs/NAME_PROVENANCE.md.
-#if VERSION >= VERSION_JP
-void kuti_callback(s32 type, void** work) {
-    EventEntry* evt = ((MsgWinData*)*work)->event;
-
-    if (((EventEntry*)evt->lwData[8] == NULL || !evtCheckID(((EventEntry*)evt->lwData[8])->eventId)) && type == 5) {
-        evt->lwData[8] = (EvtWord)evtEntry(UNK_0x00022c3c, 0, 0);
-    }
-}
-#endif
 
 /**
  * Init script of aji_04, the quiz room: plays BGM_STG7_DUN2, sets up the exits,

@@ -57,6 +57,43 @@ EvtWord gra_00_init_evt[74];
 #endif
 
 /**
+ * Script helper that shakes the camera for args[0] frames:
+ * a three-cycle sine that fades out over the duration,
+ * applied as a view offset to both the 3D camera and the 3D image camera. Blocks until the frames are used up.
+ */
+static USER_FUNC(camera_yure) {
+    s32 frames = evtGetValue(event, event->args[0]);
+    CameraEntry* cam = camGetPtr(CAMERA_3D);
+    Vec v;
+    f32 amp;
+    s32 left;
+
+    if (isFirstCall) {
+        event->userdata[0] = 0;
+        event->userdata[1] = frames;
+    }
+
+    // shake three times, fading out
+    amp = sin(18.849556f * event->userdata[0] / event->userdata[1]);
+    left = event->userdata[1] - event->userdata[0];
+    amp = left * (0.1f * amp) / event->userdata[1];
+    PSVECSubtract(&cam->cameraAt, &cam->cameraPos, &v);
+    PSVECScale(&v, &v, amp);
+    cam->viewOffset.x = v.x;
+    cam->viewOffset.y = v.y;
+    cam->viewOffset.z = v.z;
+    cam = camGetPtr(CAMERA_3D_IMAGE);
+    cam->viewOffset.x = v.x;
+    cam->viewOffset.y = v.y;
+    cam->viewOffset.z = v.z;
+    event->userdata[0]++;
+    if (event->userdata[0] > event->userdata[1]) {
+        return EVT_RETURN_DONE;
+    }
+    return EVT_RETURN_BLOCK;
+}
+
+/**
  * Doopliss's torn-paper entrance: loads the torn-paper cutout (OFF_d_yabu_small) as an image,
  * plays the Doopliss (Lanpel) appear sound, shakes the camera for 20 frames and starts the tear animation.
  */
@@ -122,6 +159,82 @@ static EVT_BEGIN(evt_nameent)
     CALL(evt_cam_letter_box_disable, 0)
     RETURN
 EVT_END()
+
+/**
+ * Script helper that works out a camera framing close to the current camera:
+ * writes the point 60 percent of the way from the camera target back to the camera into args[0..2]
+ * and the current camera target into args[3..5], ready for evt_cam3d_evt_set.
+ */
+static USER_FUNC(zoom) {
+    EvtWord* args = event->args;
+    CameraEntry* cam = camGetPtr(CAMERA_3D);
+    Vec v;
+
+    PSVECSubtract(&cam->cameraPos, &cam->cameraAt, &v);
+    PSVECScale(&v, &v, 0.6f);
+    PSVECAdd(&cam->cameraAt, &v, &v);
+    evtSetFloat(event, args[0], v.x);
+    evtSetFloat(event, args[1], v.y);
+    evtSetFloat(event, args[2], v.z);
+    evtSetFloat(event, args[3], cam->cameraAt.x);
+    evtSetFloat(event, args[4], cam->cameraAt.y);
+    evtSetFloat(event, args[5], cam->cameraAt.z);
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Message window callback that nothing in this file installs.
+ * By msgdrv's callback types: when the window opens (0)
+ * it clears GW(0), GW(1) and its counter; for each printed character (5) it counts
+ * and turns Mario's controls off at
+ * the fourth; at the end of the text (1) it sets GW(1); on a page turn (3) it sets GW(0).
+ */
+static void msg_callback(s32 type, void* param) {
+    EventEntry* ev = (*(MsgWinData**)param)->event;
+
+    switch (type) {
+        case 0:
+            evtSetValue(ev, GW(0), 0);
+            evtSetValue(ev, GW(1), 0);
+            ev->lwData[15] = 0;
+            break;
+        case 5:
+            if (ev->lwData[15] == 3) {
+                marioKeyOff();
+            }
+            ev->lwData[15]++;
+            break;
+        case 1:
+            evtSetValue(ev, GW(1), 1);
+            break;
+        case 3:
+            evtSetValue(ev, GW(0), 1);
+            break;
+    }
+}
+
+/**
+ * Script helper that rolls the 3D camera: args[0] is the roll angle in degrees (0 resets the roll and z view offset).
+ * While rolled it also bobs the camera with the frame counter and lowers the camera to y 97 looking at y 45.
+ * Used for the tilted camera in Doopliss's scenes.
+ */
+static USER_FUNC(cam_r) {
+    f32 roll = evtGetFloat(event, event->args[0]);
+    CameraEntry* cam = camGetPtr(CAMERA_3D);
+    f32 s;
+
+    if (!roll) {
+        cam->rollAngle = 0.0f;
+        cam->viewOffset.z = 0.0f;
+    } else {
+        cam->rollAngle = roll;
+        s = sin(gp->retraceCount / 10.0f);
+        cam->viewOffset.z = -__fabsf(15.0f * s);
+        cam->cameraPos.y = 97.0f;
+        cam->cameraAt.y = 45.0f;
+    }
+    return EVT_RETURN_DONE;
+}
 
 /**
  * Doopliss's (the fake Mario) reaction when the player guessed his name right:
@@ -679,116 +792,3 @@ EVT_BEGIN(gra_00_init_evt)
     END_SWITCH
     RETURN
 EVT_END()
-
-/**
- * Script helper that rolls the 3D camera: args[0] is the roll angle in degrees (0 resets the roll and z view offset).
- * While rolled it also bobs the camera with the frame counter and lowers the camera to y 97 looking at y 45.
- * Used for the tilted camera in Doopliss's scenes.
- */
-static USER_FUNC(cam_r) {
-    f32 roll = evtGetFloat(event, event->args[0]);
-    CameraEntry* cam = camGetPtr(CAMERA_3D);
-    f32 s;
-
-    if (!roll) {
-        cam->rollAngle = 0.0f;
-        cam->viewOffset.z = 0.0f;
-    } else {
-        cam->rollAngle = roll;
-        s = sin(gp->retraceCount / 10.0f);
-        cam->viewOffset.z = -__fabsf(15.0f * s);
-        cam->cameraPos.y = 97.0f;
-        cam->cameraAt.y = 45.0f;
-    }
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Message window callback that nothing in this file installs.
- * By msgdrv's callback types: when the window opens (0)
- * it clears GW(0), GW(1) and its counter; for each printed character (5) it counts
- * and turns Mario's controls off at
- * the fourth; at the end of the text (1) it sets GW(1); on a page turn (3) it sets GW(0).
- */
-static void msg_callback(s32 type, void* param) {
-    EventEntry* ev = (*(MsgWinData**)param)->event;
-
-    switch (type) {
-        case 0:
-            evtSetValue(ev, GW(0), 0);
-            evtSetValue(ev, GW(1), 0);
-            ev->lwData[15] = 0;
-            break;
-        case 5:
-            if (ev->lwData[15] == 3) {
-                marioKeyOff();
-            }
-            ev->lwData[15]++;
-            break;
-        case 1:
-            evtSetValue(ev, GW(1), 1);
-            break;
-        case 3:
-            evtSetValue(ev, GW(0), 1);
-            break;
-    }
-}
-
-/**
- * Script helper that works out a camera framing close to the current camera:
- * writes the point 60 percent of the way from the camera target back to the camera into args[0..2]
- * and the current camera target into args[3..5], ready for evt_cam3d_evt_set.
- */
-static USER_FUNC(zoom) {
-    EvtWord* args = event->args;
-    CameraEntry* cam = camGetPtr(CAMERA_3D);
-    Vec v;
-
-    PSVECSubtract(&cam->cameraPos, &cam->cameraAt, &v);
-    PSVECScale(&v, &v, 0.6f);
-    PSVECAdd(&cam->cameraAt, &v, &v);
-    evtSetFloat(event, args[0], v.x);
-    evtSetFloat(event, args[1], v.y);
-    evtSetFloat(event, args[2], v.z);
-    evtSetFloat(event, args[3], cam->cameraAt.x);
-    evtSetFloat(event, args[4], cam->cameraAt.y);
-    evtSetFloat(event, args[5], cam->cameraAt.z);
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper that shakes the camera for args[0] frames:
- * a three-cycle sine that fades out over the duration,
- * applied as a view offset to both the 3D camera and the 3D image camera. Blocks until the frames are used up.
- */
-static USER_FUNC(camera_yure) {
-    s32 frames = evtGetValue(event, event->args[0]);
-    CameraEntry* cam = camGetPtr(CAMERA_3D);
-    Vec v;
-    f32 amp;
-    s32 left;
-
-    if (isFirstCall) {
-        event->userdata[0] = 0;
-        event->userdata[1] = frames;
-    }
-
-    // shake three times, fading out
-    amp = sin(18.849556f * event->userdata[0] / event->userdata[1]);
-    left = event->userdata[1] - event->userdata[0];
-    amp = left * (0.1f * amp) / event->userdata[1];
-    PSVECSubtract(&cam->cameraAt, &cam->cameraPos, &v);
-    PSVECScale(&v, &v, amp);
-    cam->viewOffset.x = v.x;
-    cam->viewOffset.y = v.y;
-    cam->viewOffset.z = v.z;
-    cam = camGetPtr(CAMERA_3D_IMAGE);
-    cam->viewOffset.x = v.x;
-    cam->viewOffset.y = v.y;
-    cam->viewOffset.z = v.z;
-    event->userdata[0]++;
-    if (event->userdata[0] > event->userdata[1]) {
-        return EVT_RETURN_DONE;
-    }
-    return EVT_RETURN_BLOCK;
-}

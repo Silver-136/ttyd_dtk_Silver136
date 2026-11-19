@@ -143,18 +143,6 @@ EVT_BEGIN(moo_03_init_evt)
 EVT_END()
 
 /**
- * Script helper: stores in LW(0) the camera distance, as an event float,
- * at which 240 units fit the field of view (tan of 12.5 degrees).
- */
-static USER_FUNC(z) {
-    f32 t = tan(0.21816612780094147);
-
-    // evt float encoding of the distance that fits 240 units in the fov
-    event->lwData[0] = FLOAT(240.0f / t / 2);
-    return EVT_RETURN_DONE;
-}
-
-/**
  * Script helper (runs every frame, blocking): spins Mario
  * and the partner about their centres (10 degrees per call) while they fly through space.
  */
@@ -176,4 +164,16 @@ static USER_FUNC(mario_kirimomi) {
         party->rotation = fmod(party->rotation, 360.0);
     }
     return EVT_RETURN_BLOCK;
+}
+
+/**
+ * Script helper: stores in LW(0) the camera distance, as an event float,
+ * at which 240 units fit the field of view (tan of 12.5 degrees).
+ */
+static USER_FUNC(z) {
+    f32 t = tan(0.21816612780094147);
+
+    // evt float encoding of the distance that fits 240 units in the fov
+    event->lwData[0] = FLOAT(240.0f / t / 2);
+    return EVT_RETURN_DONE;
 }

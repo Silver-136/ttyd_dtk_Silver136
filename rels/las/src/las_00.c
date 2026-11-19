@@ -202,6 +202,16 @@ static EVT_BEGIN(first_evt)
     RETURN
 EVT_END()
 
+/** Script helper: builds the torch map-object name "S_shan_rou_0<args[0]>" and returns it in args[1]. */
+static USER_FUNC(make_name) {
+    EvtWord* args = event->args;
+    static char name[16];
+
+    sprintf(name, "S_shan_rou_0%d", evtGetValue(event, args[0]));
+    evtSetValue(event, args[1], (EvtWord)name);
+    return EVT_RETURN_DONE;
+}
+
 /**
  * Map-init helper: hides the 12 numbered candle map objects (names from make_name)
  * and puts a flame effect 9 units below the origin of each one.
@@ -244,13 +254,3 @@ EVT_BEGIN(las_00_init_evt)
     CALL_CHILD(shan_init)
     RETURN
 EVT_END()
-
-/** Script helper: builds the torch map-object name "S_shan_rou_0<args[0]>" and returns it in args[1]. */
-static USER_FUNC(make_name) {
-    EvtWord* args = event->args;
-    static char name[16];
-
-    sprintf(name, "S_shan_rou_0%d", evtGetValue(event, args[0]));
-    evtSetValue(event, args[1], (EvtWord)name);
-    return EVT_RETURN_DONE;
-}

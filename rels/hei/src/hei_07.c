@@ -838,6 +838,35 @@ EVT_BEGIN(hei_07_init_evt)
 EVT_END()
 
 /**
+ * Script helper: turns Mario over args[1] frames toward the direction args[0] (degrees) by the shortest way
+ * round, using his move direction.
+ */
+static USER_FUNC(mario_set_dir) {
+    EvtWord* args = event->args;
+    MarioWork* mario = marioGetPtr();
+
+    if (isFirstCall) {
+        event->userdataf[1] = mario->moveDirection;
+        event->userdataf[2] = evtGetFloat(event, args[0]) - event->userdataf[1];
+        event->userdata3 = evtGetValue(event, args[1]);
+        mario->multiTimer = 0;
+        if (event->userdataf[2] < -180.0f) {
+            event->userdataf[2] = 360.0f + event->userdataf[2];
+        }
+        if (event->userdataf[2] > 180.0f) {
+            event->userdataf[2] -= 360.0f;
+        }
+    }
+    if (event->userdata3 > 0) {
+        mario->multiTimer++;
+        mario->moveDirection = reviseAngle(event->userdataf[1] + event->userdataf[2] * mario->multiTimer / event->userdata3);
+        return mario->multiTimer >= event->userdata3;
+    }
+    mario->moveDirection = reviseAngle(mario->moveDirection + event->userdataf[2]);
+    return EVT_RETURN_DONE;
+}
+
+/**
  * Message callback: for stg1_hei_23 each type 3 adds 1 to LW(14), and SFX_QUIZ_START1 plays when it reaches 3. By
  * LW(15) it plays anm_kuti_1 (modes 0, 2) or anm_egao (1) on type 5; mode 2 turns 1 and 1 turns 0 as LW(14) counts.
  */
@@ -897,33 +926,4 @@ static void callback(s32 type, void** work) {
             }
             break;
     }
-}
-
-/**
- * Script helper: turns Mario over args[1] frames toward the direction args[0] (degrees) by the shortest way
- * round, using his move direction.
- */
-static USER_FUNC(mario_set_dir) {
-    EvtWord* args = event->args;
-    MarioWork* mario = marioGetPtr();
-
-    if (isFirstCall) {
-        event->userdataf[1] = mario->moveDirection;
-        event->userdataf[2] = evtGetFloat(event, args[0]) - event->userdataf[1];
-        event->userdata3 = evtGetValue(event, args[1]);
-        mario->multiTimer = 0;
-        if (event->userdataf[2] < -180.0f) {
-            event->userdataf[2] = 360.0f + event->userdataf[2];
-        }
-        if (event->userdataf[2] > 180.0f) {
-            event->userdataf[2] -= 360.0f;
-        }
-    }
-    if (event->userdata3 > 0) {
-        mario->multiTimer++;
-        mario->moveDirection = reviseAngle(event->userdataf[1] + event->userdataf[2] * mario->multiTimer / event->userdata3);
-        return mario->multiTimer >= event->userdata3;
-    }
-    mario->moveDirection = reviseAngle(mario->moveDirection + event->userdataf[2]);
-    return EVT_RETURN_DONE;
 }

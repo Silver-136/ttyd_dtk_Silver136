@@ -148,6 +148,62 @@ static RootRoute root_data[] = {
     {root_2, 15},
 };
 
+/** Script function: hides all panel lights (hikaru_01 to 30 and nashi_01 to 30) without touching the hit areas. */
+static USER_FUNC(hikaru_off_func) {
+    char name[64];
+    s32 i;
+
+    for (i = 1; i <= 30; i++) {
+        sprintf(name, "hikaru_%02d", i);
+        mapGrpFlagOn(name, MAP_OBJ_FLAG_HIDDEN);
+        sprintf(name, "nashi_%02d", i);
+        mapGrpFlagOn(name, MAP_OBJ_FLAG_HIDDEN);
+    }
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script function: lights the route chosen by GW(10) (index into root_data). Its panels show hikaru_NN,
+ * hide nashi_NN and lose HIT_ATTR_SPIKES; every other panel shows nashi_NN and gets HIT_ATTR_SPIKES, so
+ * standing on it puts Mario into MARIO_MOTION_DAMAGE_TOGE, which thunder_main turns into an electric shock.
+ */
+static USER_FUNC(hikaru_on_func) {
+    char name[64];
+    s32 idx = evtGetValue(event, GW(10));
+
+    // root_data holds {panel list, panel count} for each route
+    u8* panels = root_data[idx].panels;
+    s32 count = root_data[idx].count;
+    s32 i;
+
+    // Show the selected route and clear its hazards; every other panel is hidden and hazardous.
+    for (i = 1; i <= 30; i++) {
+        u8* p = panels;
+        s32 j;
+
+        for (j = 0; j < count; j++, p++) {
+            if (i == *p) {
+                sprintf(name, "hikaru_%02d", i);
+                mapGrpFlagOff(name, MAP_OBJ_FLAG_HIDDEN);
+                sprintf(name, "nashi_%02d", i);
+                mapGrpFlagOn(name, MAP_OBJ_FLAG_HIDDEN);
+                sprintf(name, "A_hikaru_%02d", i);
+                hitGrpAttrOff(name, HIT_ATTR_SPIKES);
+                break;
+            }
+        }
+        if (j >= count) {
+            sprintf(name, "hikaru_%02d", i);
+            mapGrpFlagOn(name, MAP_OBJ_FLAG_HIDDEN);
+            sprintf(name, "nashi_%02d", i);
+            mapGrpFlagOff(name, MAP_OBJ_FLAG_HIDDEN);
+            sprintf(name, "A_hikaru_%02d", i);
+            hitGrpAttrOn(name, HIT_ATTR_SPIKES);
+        }
+    }
+    return EVT_RETURN_DONE;
+}
+
 /** Turns the glowing floor panels on by calling the hikaru_on_func script function. */
 static EVT_BEGIN(hikaru_on)
     CALL(hikaru_on_func)
@@ -177,6 +233,26 @@ static EVT_BEGIN(hikaru_yuka)
     WAIT_MS(500)
     RETURN
 EVT_END()
+
+/**
+ * Script function: hides every panel light (hikaru_01 to 30 and nashi_01 to 30) and clears HIT_ATTR_SPIKES on
+ * the 30 panel hit areas A_hikaru_NN, so no panel shocks any more (evt_box runs it once the elevator key is
+ * taken).
+ */
+static USER_FUNC(all_flag_off) {
+    char name[64];
+    s32 i;
+
+    for (i = 1; i <= 30; i++) {
+        sprintf(name, "hikaru_%02d", i);
+        mapGrpFlagOn(name, MAP_OBJ_FLAG_HIDDEN);
+        sprintf(name, "nashi_%02d", i);
+        mapGrpFlagOn(name, MAP_OBJ_FLAG_HIDDEN);
+        sprintf(name, "A_hikaru_%02d", i);
+        hitGrpAttrOff(name, HIT_ATTR_SPIKES);
+    }
+    return EVT_RETURN_DONE;
+}
 
 /**
  * Item-box script for the chest at "box": gives Mario the elevator key (ITEM_ELEVATOR_KEY_0x1B)
@@ -217,6 +293,149 @@ static HitDamageReturn dmgReturnPt[] = {
     {"mod_01", {0.0f, -1000.0f, 0.0f}},
     {0},
 };
+
+/**
+ * Script function that runs the panel light-up show:
+ * lights the panels one after another, twice (see the comment in the body), with timing kept in event->userdata.
+ */
+static USER_FUNC(loop_onoff) {
+    char name[64];
+    s32 i;
+
+    if (isFirstCall) {
+        event->userdata[0] = 0;
+        event->userdata[1] = 0;
+        event->userdata[2] = 0;
+    }
+
+    // light the panels up one after another, twice
+    event->userdata[0]++;
+    if (event->userdata[0] > 2) {
+        event->userdata[0] = 0;
+        event->userdata[1]++;
+        if (event->userdata[1] > 30) {
+            event->userdata[1] = 0;
+            event->userdata[2]++;
+            if (event->userdata[2] > 1) {
+                return EVT_RETURN_DONE;
+            }
+        }
+    }
+    for (i = 1; i <= 30; i++) {
+        if (i == event->userdata[1]) {
+            sprintf(name, "hikaru_%02d", i);
+            mapGrpFlagOff(name, MAP_OBJ_FLAG_HIDDEN);
+            sprintf(name, "nashi_%02d", i);
+            mapGrpFlagOn(name, MAP_OBJ_FLAG_HIDDEN);
+        } else {
+            sprintf(name, "hikaru_%02d", i);
+            mapGrpFlagOn(name, MAP_OBJ_FLAG_HIDDEN);
+            sprintf(name, "nashi_%02d", i);
+            mapGrpFlagOff(name, MAP_OBJ_FLAG_HIDDEN);
+        }
+    }
+    return EVT_RETURN_BLOCK;
+}
+
+/**
+ * Script function that plays an electric shock when Mario is in the spike-damage motion
+ * (MARIO_MOTION_DAMAGE_TOGE): the sound SFX_STG7_ELECTRIC_SHOCK1 and a blue-green effect 30 units above his position,
+ * once per continuous entry into that motion.
+ */
+static USER_FUNC(thunder_main) {
+    MarioWork* mario = marioGetPtr();
+
+    if (isFirstCall) {
+        event->userdata[0] = 0;
+    }
+    if (event->userdata[0] == 0) {
+        if (mario->currMotionId == MARIO_MOTION_DAMAGE_TOGE) {
+            EffectEntry* eff;
+
+            event->userdata[0] = 1;
+            psndSFXOn_3D("SFX_STG7_ELECTRIC_SHOCK1", &mario->position);
+            eff = effAkariChargeN64Entry(0, 100, mario->position.x, 30.0f + mario->position.y, mario->position.z, 1.0f);
+            ((EffAkariChargeN64Work*)eff->userdata)->r = 30;
+            ((EffAkariChargeN64Work*)eff->userdata)->g = 231;
+            ((EffAkariChargeN64Work*)eff->userdata)->b = 219;
+            ((EffAkariChargeN64Work*)eff->userdata)->r2 = 0;
+            ((EffAkariChargeN64Work*)eff->userdata)->g2 = 0;
+            ((EffAkariChargeN64Work*)eff->userdata)->b2 = 0;
+        }
+    } else if (mario->currMotionId != MARIO_MOTION_DAMAGE_TOGE) {
+        event->userdata[0] = 0;
+    }
+    return EVT_RETURN_BLOCK;
+}
+
+/**
+ * Script helper for the lit floor tiles: while Mario's hitobjUnder is A_hikaru_NN (JP and later, while Yoshi carries
+ * him: hitobjStandOn, else hitobjJumpFrom), tile NN is lit (hikaru_NN shown, nashi_NN hidden), and for 28 frames
+ * after; then it goes dark. 30 tiles; blocks until the story reaches STG7_09_ELEVATOR_KEY_A_LIT_FLOOR.
+ */
+static USER_FUNC(ride_chk) {
+    static s32 onoff[30];
+    char hitName[64];
+    char name[64];
+#if VERSION >= VERSION_JP
+    MarioWork* mario = marioGetPtr();
+    PartyEntry* party = partyGetPtr(0);
+#endif
+    s32 i;
+    HitEntry* hit;
+    if (isFirstCall) {
+        memset(onoff, 0, sizeof(onoff));
+    }
+#if VERSION >= VERSION_JP
+    if (party != NULL && party->currentMemberId == PARTY_YOSHI && (party->flags & PARTY_FLAG_IS_BEING_USED)) {
+        hit = mario->hitobjStandOn;
+        if (hit == NULL) {
+            hit = mario->hitobjJumpFrom;
+        }
+    } else {
+        hit = mario->hitobjUnder;
+    }
+#endif
+    // Contact resets the counter to 30; this call decrements it before testing visibility.
+    for (i = 0; i < 30; i++) {
+#if VERSION <= VERSION_DEMO_JP
+        MarioWork* mario = marioGetPtr();
+
+        if (mario->hitobjUnder != NULL) {
+#else
+        if (hit != NULL) {
+#endif
+            sprintf(hitName, "A_hikaru_%02d", i + 1);
+#if VERSION <= VERSION_DEMO_JP
+            if (strcmp(mario->hitobjUnder->joint->name, hitName) == 0) {
+#else
+            if (strcmp(hit->joint->name, hitName) == 0) {
+#endif
+                onoff[i] = 30;
+            }
+        }
+    }
+    for (i = 0; i < 30; i++) {
+        if (onoff[i] > 0) {
+            onoff[i]--;
+        }
+        if (onoff[i] != 0) {
+            sprintf(name, "hikaru_%02d", i + 1);
+            mapGrpFlagOff(name, MAP_OBJ_FLAG_HIDDEN);
+            sprintf(name, "nashi_%02d", i + 1);
+            mapGrpFlagOn(name, MAP_OBJ_FLAG_HIDDEN);
+        } else {
+            sprintf(name, "hikaru_%02d", i + 1);
+            mapGrpFlagOn(name, MAP_OBJ_FLAG_HIDDEN);
+            sprintf(name, "nashi_%02d", i + 1);
+            mapGrpFlagOff(name, MAP_OBJ_FLAG_HIDDEN);
+        }
+    }
+    if (evtGetValue(event, GSW_STORY_PROGRESS) >= STG7_09_ELEVATOR_KEY_A_LIT_FLOOR) {
+        return EVT_RETURN_DONE;
+    }
+    return EVT_RETURN_BLOCK;
+}
 
 /**
  * Setup script of the electrified floor room: resets the panels, places the treasure chest holding the
@@ -324,222 +543,3 @@ EVT_BEGIN(aji_02_init_evt)
     SPAWN_EVENT(evt_emergency)
     RETURN
 EVT_END()
-
-/**
- * Script helper for the lit floor tiles: while Mario's hitobjUnder is A_hikaru_NN (JP and later, while Yoshi carries
- * him: hitobjStandOn, else hitobjJumpFrom), tile NN is lit (hikaru_NN shown, nashi_NN hidden), and for 28 frames
- * after; then it goes dark. 30 tiles; blocks until the story reaches STG7_09_ELEVATOR_KEY_A_LIT_FLOOR.
- */
-static USER_FUNC(ride_chk) {
-    static s32 onoff[30];
-    char hitName[64];
-    char name[64];
-#if VERSION >= VERSION_JP
-    MarioWork* mario = marioGetPtr();
-    PartyEntry* party = partyGetPtr(0);
-#endif
-    s32 i;
-    HitEntry* hit;
-    if (isFirstCall) {
-        memset(onoff, 0, sizeof(onoff));
-    }
-#if VERSION >= VERSION_JP
-    if (party != NULL && party->currentMemberId == PARTY_YOSHI && (party->flags & PARTY_FLAG_IS_BEING_USED)) {
-        hit = mario->hitobjStandOn;
-        if (hit == NULL) {
-            hit = mario->hitobjJumpFrom;
-        }
-    } else {
-        hit = mario->hitobjUnder;
-    }
-#endif
-    // Contact resets the counter to 30; this call decrements it before testing visibility.
-    for (i = 0; i < 30; i++) {
-#if VERSION <= VERSION_DEMO_JP
-        MarioWork* mario = marioGetPtr();
-
-        if (mario->hitobjUnder != NULL) {
-#else
-        if (hit != NULL) {
-#endif
-            sprintf(hitName, "A_hikaru_%02d", i + 1);
-#if VERSION <= VERSION_DEMO_JP
-            if (strcmp(mario->hitobjUnder->joint->name, hitName) == 0) {
-#else
-            if (strcmp(hit->joint->name, hitName) == 0) {
-#endif
-                onoff[i] = 30;
-            }
-        }
-    }
-    for (i = 0; i < 30; i++) {
-        if (onoff[i] > 0) {
-            onoff[i]--;
-        }
-        if (onoff[i] != 0) {
-            sprintf(name, "hikaru_%02d", i + 1);
-            mapGrpFlagOff(name, MAP_OBJ_FLAG_HIDDEN);
-            sprintf(name, "nashi_%02d", i + 1);
-            mapGrpFlagOn(name, MAP_OBJ_FLAG_HIDDEN);
-        } else {
-            sprintf(name, "hikaru_%02d", i + 1);
-            mapGrpFlagOn(name, MAP_OBJ_FLAG_HIDDEN);
-            sprintf(name, "nashi_%02d", i + 1);
-            mapGrpFlagOff(name, MAP_OBJ_FLAG_HIDDEN);
-        }
-    }
-    if (evtGetValue(event, GSW_STORY_PROGRESS) >= STG7_09_ELEVATOR_KEY_A_LIT_FLOOR) {
-        return EVT_RETURN_DONE;
-    }
-    return EVT_RETURN_BLOCK;
-}
-
-/**
- * Script function that plays an electric shock when Mario is in the spike-damage motion
- * (MARIO_MOTION_DAMAGE_TOGE): the sound SFX_STG7_ELECTRIC_SHOCK1 and a blue-green effect 30 units above his position,
- * once per continuous entry into that motion.
- */
-static USER_FUNC(thunder_main) {
-    MarioWork* mario = marioGetPtr();
-
-    if (isFirstCall) {
-        event->userdata[0] = 0;
-    }
-    if (event->userdata[0] == 0) {
-        if (mario->currMotionId == MARIO_MOTION_DAMAGE_TOGE) {
-            EffectEntry* eff;
-
-            event->userdata[0] = 1;
-            psndSFXOn_3D("SFX_STG7_ELECTRIC_SHOCK1", &mario->position);
-            eff = effAkariChargeN64Entry(0, 100, mario->position.x, 30.0f + mario->position.y, mario->position.z, 1.0f);
-            ((EffAkariChargeN64Work*)eff->userdata)->r = 30;
-            ((EffAkariChargeN64Work*)eff->userdata)->g = 231;
-            ((EffAkariChargeN64Work*)eff->userdata)->b = 219;
-            ((EffAkariChargeN64Work*)eff->userdata)->r2 = 0;
-            ((EffAkariChargeN64Work*)eff->userdata)->g2 = 0;
-            ((EffAkariChargeN64Work*)eff->userdata)->b2 = 0;
-        }
-    } else if (mario->currMotionId != MARIO_MOTION_DAMAGE_TOGE) {
-        event->userdata[0] = 0;
-    }
-    return EVT_RETURN_BLOCK;
-}
-
-/**
- * Script function that runs the panel light-up show:
- * lights the panels one after another, twice (see the comment in the body), with timing kept in event->userdata.
- */
-static USER_FUNC(loop_onoff) {
-    char name[64];
-    s32 i;
-
-    if (isFirstCall) {
-        event->userdata[0] = 0;
-        event->userdata[1] = 0;
-        event->userdata[2] = 0;
-    }
-
-    // light the panels up one after another, twice
-    event->userdata[0]++;
-    if (event->userdata[0] > 2) {
-        event->userdata[0] = 0;
-        event->userdata[1]++;
-        if (event->userdata[1] > 30) {
-            event->userdata[1] = 0;
-            event->userdata[2]++;
-            if (event->userdata[2] > 1) {
-                return EVT_RETURN_DONE;
-            }
-        }
-    }
-    for (i = 1; i <= 30; i++) {
-        if (i == event->userdata[1]) {
-            sprintf(name, "hikaru_%02d", i);
-            mapGrpFlagOff(name, MAP_OBJ_FLAG_HIDDEN);
-            sprintf(name, "nashi_%02d", i);
-            mapGrpFlagOn(name, MAP_OBJ_FLAG_HIDDEN);
-        } else {
-            sprintf(name, "hikaru_%02d", i);
-            mapGrpFlagOn(name, MAP_OBJ_FLAG_HIDDEN);
-            sprintf(name, "nashi_%02d", i);
-            mapGrpFlagOff(name, MAP_OBJ_FLAG_HIDDEN);
-        }
-    }
-    return EVT_RETURN_BLOCK;
-}
-
-/**
- * Script function: hides every panel light (hikaru_01 to 30 and nashi_01 to 30) and clears HIT_ATTR_SPIKES on
- * the 30 panel hit areas A_hikaru_NN, so no panel shocks any more (evt_box runs it once the elevator key is
- * taken).
- */
-static USER_FUNC(all_flag_off) {
-    char name[64];
-    s32 i;
-
-    for (i = 1; i <= 30; i++) {
-        sprintf(name, "hikaru_%02d", i);
-        mapGrpFlagOn(name, MAP_OBJ_FLAG_HIDDEN);
-        sprintf(name, "nashi_%02d", i);
-        mapGrpFlagOn(name, MAP_OBJ_FLAG_HIDDEN);
-        sprintf(name, "A_hikaru_%02d", i);
-        hitGrpAttrOff(name, HIT_ATTR_SPIKES);
-    }
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script function: lights the route chosen by GW(10) (index into root_data). Its panels show hikaru_NN,
- * hide nashi_NN and lose HIT_ATTR_SPIKES; every other panel shows nashi_NN and gets HIT_ATTR_SPIKES, so
- * standing on it puts Mario into MARIO_MOTION_DAMAGE_TOGE, which thunder_main turns into an electric shock.
- */
-static USER_FUNC(hikaru_on_func) {
-    char name[64];
-    s32 idx = evtGetValue(event, GW(10));
-
-    // root_data holds {panel list, panel count} for each route
-    u8* panels = root_data[idx].panels;
-    s32 count = root_data[idx].count;
-    s32 i;
-
-    // Show the selected route and clear its hazards; every other panel is hidden and hazardous.
-    for (i = 1; i <= 30; i++) {
-        u8* p = panels;
-        s32 j;
-
-        for (j = 0; j < count; j++, p++) {
-            if (i == *p) {
-                sprintf(name, "hikaru_%02d", i);
-                mapGrpFlagOff(name, MAP_OBJ_FLAG_HIDDEN);
-                sprintf(name, "nashi_%02d", i);
-                mapGrpFlagOn(name, MAP_OBJ_FLAG_HIDDEN);
-                sprintf(name, "A_hikaru_%02d", i);
-                hitGrpAttrOff(name, HIT_ATTR_SPIKES);
-                break;
-            }
-        }
-        if (j >= count) {
-            sprintf(name, "hikaru_%02d", i);
-            mapGrpFlagOn(name, MAP_OBJ_FLAG_HIDDEN);
-            sprintf(name, "nashi_%02d", i);
-            mapGrpFlagOff(name, MAP_OBJ_FLAG_HIDDEN);
-            sprintf(name, "A_hikaru_%02d", i);
-            hitGrpAttrOn(name, HIT_ATTR_SPIKES);
-        }
-    }
-    return EVT_RETURN_DONE;
-}
-
-/** Script function: hides all panel lights (hikaru_01 to 30 and nashi_01 to 30) without touching the hit areas. */
-static USER_FUNC(hikaru_off_func) {
-    char name[64];
-    s32 i;
-
-    for (i = 1; i <= 30; i++) {
-        sprintf(name, "hikaru_%02d", i);
-        mapGrpFlagOn(name, MAP_OBJ_FLAG_HIDDEN);
-        sprintf(name, "nashi_%02d", i);
-        mapGrpFlagOn(name, MAP_OBJ_FLAG_HIDDEN);
-    }
-    return EVT_RETURN_DONE;
-}

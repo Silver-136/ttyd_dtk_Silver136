@@ -55,14 +55,34 @@ static NpcSetupInfo npcEnt[2];
 EvtWord dou_04_init_evt[96];
 
 /**
- * Script helper: stores in args[0] whether Mario's menu is currently disabled (marioCheckMenuDisable),
- * the lift scripts store it in LF(11) but never test it.
+ * Script helper: moves the map group args[0] to (args[1], args[2], args[3]) and,
+ * if Mario stands on the hit area named by args[4],
+ * pushes him along by the movement since the last call (stored in the script's lwDataF[6..8]).
  */
-static USER_FUNC(evt_mario_check_menu) {
-    // Return the menu-disabled state, not whether a menu is currently open.
+static USER_FUNC(evt_mapgrp_translate2) {
     EvtWord* args = event->args;
+    MarioWork* mario = marioGetPtr();
+    const char* name = (const char*)evtGetValue(event, args[0]);
+    f32 x = evtGetFloat(event, args[1]);
+    f32 y = evtGetFloat(event, args[2]);
+    f32 z = evtGetFloat(event, args[3]);
+    const char* hitName = (const char*)evtGetValue(event, args[4]);
+    f32* prev = &event->lwDataF[6];
+    HitEntry* hit;
 
-    evtSetValue(event, args[0], marioCheckMenuDisable());
+    mapObjTranslate(name, x, y, z);
+    x = 10.0f * (x / 10.0f);
+    y = 10.0f * (y / 10.0f);
+    z = 10.0f * (z / 10.0f);
+    hit = marioGetPtr()->hitobjStandOn;
+    if (hit != NULL && strcmp(hitName, hitGetName(hit)) == 0) {
+        mario->floorMove.x = x - prev[0];
+        mario->floorMove.y = y - prev[1];
+        mario->floorMove.z = z - prev[2];
+    }
+    prev[0] = 10.0f * (x / 10.0f);
+    prev[1] = 10.0f * (y / 10.0f);
+    prev[2] = 10.0f * (z / 10.0f);
     return EVT_RETURN_DONE;
 }
 
@@ -117,6 +137,26 @@ static EVT_BEGIN(box_trans)
     END_LOOP
     RETURN
 EVT_END()
+
+/**
+ * Script helper (never finishes): writes into args[0] each frame a bobbing height: -25 plus two sine waves of 1.5 and
+ * 0.7 units (2 and 1 degrees per frame), each shifted so its top is 0.
+ */
+static USER_FUNC(evt_box_pukapuka) {
+    EvtWord* args = event->args;
+    f32 y;
+
+    if (isFirstCall) {
+        event->userdata[0] = 0;
+        event->userdata[1] = 0;
+    }
+    y = 1.5f * sinfd(event->userdata[0]) - 1.5f + (0.7f * sinfd(event->userdata[1]) - 0.7f);
+    event->userdata[0] = reviseAngle(event->userdata[0] + 2);
+    event->userdata[1] = reviseAngle(event->userdata[1] + 1);
+    y -= 25.0f;
+    evtSetFloat(event, args[0], y);
+    return EVT_RETURN_BLOCK;
+}
 
 /** Runs evt_box_pukapuka, which writes the idle bobbing offset of the box into GW(1). */
 static EVT_BEGIN(box_pukapuka)
@@ -209,6 +249,18 @@ static EVT_BEGIN(box_event)
     END_LOOP
     RETURN
 EVT_END()
+
+/**
+ * Script helper: stores in args[0] whether Mario's menu is currently disabled (marioCheckMenuDisable),
+ * the lift scripts store it in LF(11) but never test it.
+ */
+static USER_FUNC(evt_mario_check_menu) {
+    // Return the menu-disabled state, not whether a menu is currently open.
+    EvtWord* args = event->args;
+
+    evtSetValue(event, args[0], marioCheckMenuDisable());
+    return EVT_RETURN_DONE;
+}
 
 /**
  * One step of the first lift platform (s04_m_hako_b, hit area a04_m_hako_02):
@@ -775,55 +827,3 @@ EVT_BEGIN(dou_04_init_evt)
     END_IF
     RETURN
 EVT_END()
-
-/**
- * Script helper (never finishes): writes into args[0] each frame a bobbing height: -25 plus two sine waves of 1.5 and
- * 0.7 units (2 and 1 degrees per frame), each shifted so its top is 0.
- */
-static USER_FUNC(evt_box_pukapuka) {
-    EvtWord* args = event->args;
-    f32 y;
-
-    if (isFirstCall) {
-        event->userdata[0] = 0;
-        event->userdata[1] = 0;
-    }
-    y = 1.5f * sinfd(event->userdata[0]) - 1.5f + (0.7f * sinfd(event->userdata[1]) - 0.7f);
-    event->userdata[0] = reviseAngle(event->userdata[0] + 2);
-    event->userdata[1] = reviseAngle(event->userdata[1] + 1);
-    y -= 25.0f;
-    evtSetFloat(event, args[0], y);
-    return EVT_RETURN_BLOCK;
-}
-
-/**
- * Script helper: moves the map group args[0] to (args[1], args[2], args[3]) and,
- * if Mario stands on the hit area named by args[4],
- * pushes him along by the movement since the last call (stored in the script's lwDataF[6..8]).
- */
-static USER_FUNC(evt_mapgrp_translate2) {
-    EvtWord* args = event->args;
-    MarioWork* mario = marioGetPtr();
-    const char* name = (const char*)evtGetValue(event, args[0]);
-    f32 x = evtGetFloat(event, args[1]);
-    f32 y = evtGetFloat(event, args[2]);
-    f32 z = evtGetFloat(event, args[3]);
-    const char* hitName = (const char*)evtGetValue(event, args[4]);
-    f32* prev = &event->lwDataF[6];
-    HitEntry* hit;
-
-    mapObjTranslate(name, x, y, z);
-    x = 10.0f * (x / 10.0f);
-    y = 10.0f * (y / 10.0f);
-    z = 10.0f * (z / 10.0f);
-    hit = marioGetPtr()->hitobjStandOn;
-    if (hit != NULL && strcmp(hitName, hitGetName(hit)) == 0) {
-        mario->floorMove.x = x - prev[0];
-        mario->floorMove.y = y - prev[1];
-        mario->floorMove.z = z - prev[2];
-    }
-    prev[0] = 10.0f * (x / 10.0f);
-    prev[1] = 10.0f * (y / 10.0f);
-    prev[2] = 10.0f * (z / 10.0f);
-    return EVT_RETURN_DONE;
-}

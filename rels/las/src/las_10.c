@@ -500,6 +500,43 @@ static const char* kabe_list_3[] = {
     "S113_kabe3",
 };
 
+/**
+ * Script helper: each frame hides the near walls in the camera's octant and its two neighbours,
+ * so walls do not block the view of Mario.
+ */
+static USER_FUNC(temae_kesu) {
+    CameraEntry* cam = camGetPtr(CAMERA_3D);
+    s32 idx;
+    s32 prev;
+    s32 next;
+
+    mapGrpFlagOff("S_kesu", MAP_OBJ_FLAG_HIDDEN);
+    mapGrpFlagOff("S11_kabe", MAP_OBJ_FLAG_HIDDEN);
+    mapGrpFlagOff("S112_kabe", MAP_OBJ_FLAG_HIDDEN);
+    mapGrpFlagOff("S113_kabe", MAP_OBJ_FLAG_HIDDEN);
+
+    // Hide walls in the camera's octant and its neighbours.
+    idx = (157.5f + cam->viewYaw) / 45.0f;
+    idx %= 8;
+    prev = idx != 0 ? idx - 1 : 7;
+    next = idx == 7 ? 0 : idx + 1;
+    mapGrpFlagOn((const char*)kabe_list_1[idx], MAP_OBJ_FLAG_HIDDEN);
+    mapGrpFlagOn((const char*)kabe_list_1[prev], MAP_OBJ_FLAG_HIDDEN);
+    mapGrpFlagOn((const char*)kabe_list_1[next], MAP_OBJ_FLAG_HIDDEN);
+    mapGrpFlagOn((const char*)kabe_list_2[idx], MAP_OBJ_FLAG_HIDDEN);
+    mapGrpFlagOn((const char*)kabe_list_2[prev], MAP_OBJ_FLAG_HIDDEN);
+    mapGrpFlagOn((const char*)kabe_list_2[next], MAP_OBJ_FLAG_HIDDEN);
+    mapGrpFlagOn((const char*)kabe_list_3[idx], MAP_OBJ_FLAG_HIDDEN);
+    mapGrpFlagOn((const char*)kabe_list_3[prev], MAP_OBJ_FLAG_HIDDEN);
+    mapGrpFlagOn((const char*)kabe_list_3[next], MAP_OBJ_FLAG_HIDDEN);
+    if (idx >= 2 && idx <= 4) {
+        mapGrpFlagOn("S14_hashira", MAP_OBJ_FLAG_HIDDEN);
+        mapGrpFlagOn("S115_hashira", MAP_OBJ_FLAG_HIDDEN);
+        mapGrpFlagOn("S116_hashira", MAP_OBJ_FLAG_HIDDEN);
+    }
+    return EVT_RETURN_DONE;
+}
+
 /** Event script: runs forever each frame, calling temae_kesu to hide the near walls that block the camera. */
 static EVT_BEGIN(las_10_temae_kabe)
     CALL(evt_seq_wait, SEQ_GAME)
@@ -509,6 +546,23 @@ static EVT_BEGIN(las_10_temae_kabe)
     END_LOOP
     RETURN
 EVT_END()
+
+/** Script helper: returns in args[0] 1 when there is no partner or the partner is at y >= 360, else 0. */
+static USER_FUNC(check_party_pos) {
+    EvtWord* args = event->args;
+    PartyEntry* party = partyGetPtr(partyCtrlNo);
+
+    if (party == NULL) {
+        evtSetValue(event, args[0], 1);
+        return EVT_RETURN_DONE;
+    }
+    if (party->position.y >= 360.0f) {
+        evtSetValue(event, args[0], 1);
+    } else {
+        evtSetValue(event, args[0], 0);
+    }
+    return EVT_RETURN_DONE;
+}
 
 /**
  * Event script: the first entry to the Riddle Tower hall.
@@ -1459,57 +1513,3 @@ EVT_BEGIN(las_10_init_evt)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S113_kabe1"), MAP_OBJ_FLAG_CLIP)
     RETURN
 EVT_END()
-
-/** Script helper: returns in args[0] 1 when there is no partner or the partner is at y >= 360, else 0. */
-static USER_FUNC(check_party_pos) {
-    EvtWord* args = event->args;
-    PartyEntry* party = partyGetPtr(partyCtrlNo);
-
-    if (party == NULL) {
-        evtSetValue(event, args[0], 1);
-        return EVT_RETURN_DONE;
-    }
-    if (party->position.y >= 360.0f) {
-        evtSetValue(event, args[0], 1);
-    } else {
-        evtSetValue(event, args[0], 0);
-    }
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper: each frame hides the near walls in the camera's octant and its two neighbours,
- * so walls do not block the view of Mario.
- */
-static USER_FUNC(temae_kesu) {
-    CameraEntry* cam = camGetPtr(CAMERA_3D);
-    s32 idx;
-    s32 prev;
-    s32 next;
-
-    mapGrpFlagOff("S_kesu", MAP_OBJ_FLAG_HIDDEN);
-    mapGrpFlagOff("S11_kabe", MAP_OBJ_FLAG_HIDDEN);
-    mapGrpFlagOff("S112_kabe", MAP_OBJ_FLAG_HIDDEN);
-    mapGrpFlagOff("S113_kabe", MAP_OBJ_FLAG_HIDDEN);
-
-    // Hide walls in the camera's octant and its neighbours.
-    idx = (157.5f + cam->viewYaw) / 45.0f;
-    idx %= 8;
-    prev = idx != 0 ? idx - 1 : 7;
-    next = idx == 7 ? 0 : idx + 1;
-    mapGrpFlagOn((const char*)kabe_list_1[idx], MAP_OBJ_FLAG_HIDDEN);
-    mapGrpFlagOn((const char*)kabe_list_1[prev], MAP_OBJ_FLAG_HIDDEN);
-    mapGrpFlagOn((const char*)kabe_list_1[next], MAP_OBJ_FLAG_HIDDEN);
-    mapGrpFlagOn((const char*)kabe_list_2[idx], MAP_OBJ_FLAG_HIDDEN);
-    mapGrpFlagOn((const char*)kabe_list_2[prev], MAP_OBJ_FLAG_HIDDEN);
-    mapGrpFlagOn((const char*)kabe_list_2[next], MAP_OBJ_FLAG_HIDDEN);
-    mapGrpFlagOn((const char*)kabe_list_3[idx], MAP_OBJ_FLAG_HIDDEN);
-    mapGrpFlagOn((const char*)kabe_list_3[prev], MAP_OBJ_FLAG_HIDDEN);
-    mapGrpFlagOn((const char*)kabe_list_3[next], MAP_OBJ_FLAG_HIDDEN);
-    if (idx >= 2 && idx <= 4) {
-        mapGrpFlagOn("S14_hashira", MAP_OBJ_FLAG_HIDDEN);
-        mapGrpFlagOn("S115_hashira", MAP_OBJ_FLAG_HIDDEN);
-        mapGrpFlagOn("S116_hashira", MAP_OBJ_FLAG_HIDDEN);
-    }
-    return EVT_RETURN_DONE;
-}

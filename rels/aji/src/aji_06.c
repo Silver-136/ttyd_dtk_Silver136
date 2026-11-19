@@ -349,6 +349,208 @@ static s32 kusuri_id[] = {
     102, 101, 103, 104,
 };
 
+/** Script function: resets the tank colour and the accumulated mix to black (0, 0, 0). */
+static USER_FUNC(kusuri_color_init) {
+    g_Kusuri_Col.r = 0;
+    g_Kusuri_Col.g = 0;
+    g_Kusuri_Col.b = 0;
+    g_Kusuri_R = 0;
+    g_Kusuri_G = 0;
+    g_Kusuri_B = 0;
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script function: blends potion colour number args[0] into the tank colour over args[1] ms:
+ * adds the potion's source colour to what was already mixed,
+ * scales the result so the largest channel is 255 and stores the sum when finished. Blocks until the time is up.
+ */
+static USER_FUNC(kusuri_color_set) {
+    EvtWord* args = event->args;
+    s32 no = evtGetValue(event, args[0]);
+    s32 frames = evtGetValue(event, args[1]);
+    OSTime now = gp->renderTime;
+    s32 elapsed;
+    BOOL done;
+    f32 t;
+    s32 r, g, b;
+
+    if (isFirstCall) {
+        event->lwData[8] = frames;
+        event->lwData[9] = (g_Kusuri_Col.r << 16) | (g_Kusuri_Col.g << 8) | g_Kusuri_Col.b;
+        event->userdata[0] = ((u64)now >> 32) & 0xFFFFFFFF;
+        event->userdata[1] = now & 0xFFFFFFFF;
+    }
+    elapsed = OSTicksToMilliseconds((u64)OSDiffTick(now, event->userdata[1]));
+    if (elapsed < event->lwData[8]) {
+        done = FALSE;
+        t = (f32)elapsed / (f32)event->lwData[8];
+    } else {
+        done = TRUE;
+        t = 1.0f;
+    }
+    r = t * g_Kusuri_Src_Col[no - 1].r + g_Kusuri_R;
+    g = t * g_Kusuri_Src_Col[no - 1].g + g_Kusuri_G;
+    b = t * g_Kusuri_Src_Col[no - 1].b + g_Kusuri_B;
+    if (r > g) {
+        if (r > b) {
+            g_Kusuri_Col.r = 255;
+            g_Kusuri_Col.g = 255.0f * ((f32)g / (f32)r);
+            g_Kusuri_Col.b = 255.0f * ((f32)b / (f32)r);
+        } else {
+            g_Kusuri_Col.r = 255.0f * ((f32)r / (f32)b);
+            g_Kusuri_Col.g = 255.0f * ((f32)g / (f32)b);
+            g_Kusuri_Col.b = 255;
+        }
+    } else if (g > b) {
+        g_Kusuri_Col.r = 255.0f * ((f32)r / (f32)g);
+        g_Kusuri_Col.g = 255;
+        g_Kusuri_Col.b = 255.0f * ((f32)b / (f32)g);
+    } else {
+        g_Kusuri_Col.r = 255.0f * ((f32)r / (f32)b);
+        g_Kusuri_Col.g = 255.0f * ((f32)g / (f32)b);
+        g_Kusuri_Col.b = 255;
+    }
+    if (done) {
+        g_Kusuri_R = r;
+        g_Kusuri_G = g;
+        g_Kusuri_B = b;
+    }
+    if (done) {
+        return EVT_RETURN_DONE;
+    }
+    return EVT_RETURN_BLOCK;
+}
+
+/** Script helper: sets the red, green and blue of g_Kusuri_Col to args[0], args[1] and args[2]. */
+static USER_FUNC(kusuri_color_set_rgb) {
+    EvtWord* args = event->args;
+    s32 r = evtGetValue(event, args[0]);
+    s32 g = evtGetValue(event, args[1]);
+    s32 b = evtGetValue(event, args[2]);
+
+    g_Kusuri_Col.r = r;
+    g_Kusuri_Col.g = g;
+    g_Kusuri_Col.b = b;
+    return EVT_RETURN_DONE;
+}
+
+/** Script helper: returns the red, green and blue of g_Kusuri_Col in args[0], args[1] and args[2]. */
+static USER_FUNC(kusuri_color_get) {
+    EvtWord* args = event->args;
+
+    evtSetValue(event, args[0], g_Kusuri_Col.r);
+    evtSetValue(event, args[1], g_Kusuri_Col.g);
+    evtSetValue(event, args[2], g_Kusuri_Col.b);
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Map TEV callback: replaces stage 0 by one that outputs the colour g_Kusuri_Col with the rasterized alpha, and resets
+ * the stage, texture coordinate and texture map counters to 1, 0 and 0.
+ */
+static void kusuri_naka_color_tev(MapTevCallbackInfo* info) {
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_C0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO);
+    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_RASA, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO);
+    GXSetTevColor(GX_TEVREG0, g_Kusuri_Col);
+    info->tevStage = 1;
+    info->texCoord = 0;
+    info->texMap = 0;
+}
+
+/** Texture-environment callback for the first potion tube: the same as kusuri_4_color_tev with its own colour. */
+static void kusuri_1_color_tev(MapTevCallbackInfo* info) {
+    GXTevStageID stage = info->tevStage;
+
+    GXSetTevOrder(stage, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
+    GXSetTevColorOp(stage, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevAlphaOp(stage, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevColorIn(stage, GX_CC_C0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO);
+    GXSetTevAlphaIn(stage, GX_CA_APREV, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO);
+    GXSetTevColor(GX_TEVREG0, g_Kusuri_Src_Col[g_Kusuri1_No]);
+    info->tevStage++;
+}
+
+/** Texture-environment callback for the second potion tube: the same as kusuri_4_color_tev with its own colour. */
+static void kusuri_2_color_tev(MapTevCallbackInfo* info) {
+    GXTevStageID stage = info->tevStage;
+
+    GXSetTevOrder(stage, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
+    GXSetTevColorOp(stage, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevAlphaOp(stage, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevColorIn(stage, GX_CC_C0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO);
+    GXSetTevAlphaIn(stage, GX_CA_APREV, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO);
+    GXSetTevColor(GX_TEVREG0, g_Kusuri_Src_Col[g_Kusuri2_No]);
+    info->tevStage++;
+}
+
+/** Texture-environment callback for the third potion tube: the same as kusuri_4_color_tev with its own colour. */
+static void kusuri_3_color_tev(MapTevCallbackInfo* info) {
+    GXTevStageID stage = info->tevStage;
+
+    GXSetTevOrder(stage, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
+    GXSetTevColorOp(stage, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevAlphaOp(stage, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevColorIn(stage, GX_CC_C0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO);
+    GXSetTevAlphaIn(stage, GX_CA_APREV, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO);
+    GXSetTevColor(GX_TEVREG0, g_Kusuri_Src_Col[g_Kusuri3_No]);
+    info->tevStage++;
+}
+
+/**
+ * Map TEV callback: adds a stage that outputs the colour g_Kusuri_Src_Col[g_Kusuri4_No] and keeps the previous alpha.
+ */
+static void kusuri_4_color_tev(MapTevCallbackInfo* info) {
+    GXTevStageID stage = info->tevStage;
+
+    GXSetTevOrder(stage, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
+    GXSetTevColorOp(stage, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevAlphaOp(stage, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevColorIn(stage, GX_CC_C0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO);
+    GXSetTevAlphaIn(stage, GX_CA_APREV, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO);
+    GXSetTevColor(GX_TEVREG0, g_Kusuri_Src_Col[g_Kusuri4_No]);
+    info->tevStage++;
+}
+
+/** Script function: clears the potion menu list (kusuri_list) to empty (-1 entries). */
+static USER_FUNC(kusuri_list_init) {
+    s32 i;
+
+    for (i = 0; i < 5; i++) {
+        kusuri_list[i] = -1;
+    }
+    return EVT_RETURN_DONE;
+}
+
+/** Script function: appends the item ID of potion number args[0] (1 to 4) to the potion menu list kusuri_list. */
+static USER_FUNC(kusuri_list_add) {
+    s32 no = evtGetValue(event, event->args[0]);
+    s32 i;
+
+    for (i = 0; kusuri_list[i] != -1; i++) {
+    }
+    kusuri_list[i] = kusuri_id[no - 1];
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script function: converts an item ID in args[0] (red 102, blue 101, orange 103, green 104,
+ * the table kusuri_id) into its potion number 1 to 4 and returns it in args[1].
+ */
+static USER_FUNC(kusuri_list_get_no) {
+    EvtWord* args = event->args;
+    s32 id = evtGetValue(event, args[0]);
+    s32 i;
+
+    for (i = 0; id != kusuri_id[i]; i++) {
+    }
+    evtSetValue(event, args[1], i + 1);
+    return EVT_RETURN_DONE;
+}
+
 /**
  * Peach's potion pick: builds the list of potions she still holds (red, blue, orange, green,
  * from the local flags LSWF_AJI_06_RED_POTION_HELD .. GREEN_POTION_HELD) and shows the item menu.
@@ -526,6 +728,23 @@ static EVT_BEGIN(peach_evt_seikai_evt)
     END_LOOP
     RETURN
 EVT_END()
+
+/**
+ * Script function: checks whether the potion number in args[1] equals step args[0] of kusuri_tyogo_list (1, 2,
+ * 3, 2, 3, 1, 3, 4); returns 1 or 0 in args[2].
+ */
+static USER_FUNC(peach_evt_seikai_check) {
+    EvtWord* args = event->args;
+    s32 idx = evtGetValue(event, args[0]);
+    s32 v = evtGetValue(event, args[1]);
+
+    if (v == kusuri_tyogo_list[idx]) {
+        evtSetValue(event, args[2], 1);
+    } else {
+        evtSetValue(event, args[2], 0);
+    }
+    return EVT_RETURN_DONE;
+}
 
 /**
  * Case script of the first mixing slot (A_sui2).
@@ -925,6 +1144,22 @@ static EVT_BEGIN(peach_evt_hari_off)
 EVT_END()
 
 /**
+ * Script function: sets Peach's size to the float in args[0] (Mario's scale on x, y and z),
+ * scaling her collision box (20 by 47 units at scale 1) with it.
+ */
+static USER_FUNC(peach_set_scale) {
+    f32 scale = evtGetFloat(event, event->args[0]);
+    MarioWork* mario = marioGetPtr();
+
+    mario->scale.x = scale;
+    mario->scale.y = scale;
+    mario->scale.z = scale;
+    mario->wPlayerCollisionBox.x = 20.0f * scale;
+    mario->wPlayerCollisionBox.y = 47.0f * scale;
+    return EVT_RETURN_DONE;
+}
+
+/**
  * After Peach has grown or shrunk from a wrong potion,
  * scales her back to normal size over time (peach_set_scale), starting from big or small depending on LSW_AJI_06_WRONG_POTION_EFFECT.
  */
@@ -958,6 +1193,29 @@ static EVT_BEGIN(peach_evt_sugata_modoru)
     END_SWITCH
     RETURN
 EVT_END()
+
+/** Script function: args[0] = 1 makes Peach invisible by setting Mario's scale to 0 on all axes; 0 restores scale 1. */
+static USER_FUNC(peach_evt_toumei_onoff) {
+    EvtWord* args = event->args;
+    MarioWork* mario = marioGetPtr();
+
+    if (evtGetValue(event, args[0])) {
+        mario->scale.x = 0.0f;
+        mario->scale.y = 0.0f;
+        mario->scale.z = 0.0f;
+    } else {
+        mario->scale.x = 1.0f;
+        mario->scale.y = 1.0f;
+        mario->scale.z = 1.0f;
+    }
+    return EVT_RETURN_DONE;
+}
+
+/** Script function: sets Mario's (Peach's) pose to the animation named in args[0]. */
+static USER_FUNC(peach_chg_pose) {
+    marioChgPose((const char*)evtGetValue(event, event->args[0]));
+    return EVT_RETURN_DONE;
+}
 
 /**
  * Case script on the machine's cup A_bika1.
@@ -1162,6 +1420,60 @@ static s32 peach_evt_bika_move_data[] = {
     1, 203, 3780, 2, 0, 266, 1890, 3,
     0,
 };
+
+/**
+ * Script function: plays the map animation "yuka" backwards (peach_evt_tyogo_sub runs it while the beaker moves
+ * back toward a lower slot).
+ * Each frame it subtracts the elapsed time times the animation speed from the animation frame
+ * and wraps around at the start. Blocks until yuka_anim_reverse_end.
+ */
+static USER_FUNC(yuka_anim_reverse_play) {
+    f32 frame;
+    f32 dt;
+
+    if (isFirstCall) {
+        yuka_anim.anim = mapSearchAnmObj("yuka");
+        yuka_anim.flags = 0;
+        yuka_anim.anim->startTime = yukaNow();
+        yuka_anim.anim->flags |= MAP_ANIM_FLAG_PAUSE;
+        yuka_anim.anim->flags &= ~MAP_ANIM_FLAG_RESTART;
+    }
+    if (yuka_anim.flags & YUKA_ANIM_FLAG_END) {
+        return EVT_RETURN_DONE;
+    }
+    if (!(yuka_anim.flags & YUKA_ANIM_FLAG_PAUSE)) {
+        dt = 60.0f * (f32)(u64)(yukaNow() - yuka_anim.anim->startTime) / 1000.0f;
+
+        yuka_anim.anim->time -= dt * yuka_anim.anim->rate;
+        if (yuka_anim.anim->time <= 0.0f) {
+            for (frame = yuka_anim.anim->time; frame < 0.0f; frame += yuka_anim.anim->anim->length) {
+            }
+            yuka_anim.anim->time = frame;
+        }
+    }
+
+    // Refresh the time baseline even while reverse playback is paused.
+    yuka_anim.anim->startTime = yukaNow();
+    return EVT_RETURN_BLOCK;
+}
+
+/** Script function: resumes the reverse playback of the "yuka" animation after a pause. */
+static USER_FUNC(yuka_anim_reverse_replay) {
+    yuka_anim.flags &= ~YUKA_ANIM_FLAG_PAUSE;
+    return EVT_RETURN_DONE;
+}
+
+/** Script function: pauses the reverse playback of the "yuka" animation. */
+static USER_FUNC(yuka_anim_reverse_pause) {
+    yuka_anim.flags |= YUKA_ANIM_FLAG_PAUSE;
+    return EVT_RETURN_DONE;
+}
+
+/** Script function: ends the reverse playback of the "yuka" animation (yuka_anim_reverse_play returns). */
+static USER_FUNC(yuka_anim_reverse_end) {
+    yuka_anim.flags |= YUKA_ANIM_FLAG_END;
+    return EVT_RETURN_DONE;
+}
 
 /**
  * Part of the machine's run (peach_evt_tyogo_sub), after the potions are in:
@@ -2048,315 +2360,3 @@ EVT_BEGIN(aji_06_init_evt)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("sui_6_2"), MAP_OBJ_FLAG_HIDDEN)
     RETURN
 EVT_END()
-
-/** Script function: ends the reverse playback of the "yuka" animation (yuka_anim_reverse_play returns). */
-static USER_FUNC(yuka_anim_reverse_end) {
-    yuka_anim.flags |= YUKA_ANIM_FLAG_END;
-    return EVT_RETURN_DONE;
-}
-
-/** Script function: pauses the reverse playback of the "yuka" animation. */
-static USER_FUNC(yuka_anim_reverse_pause) {
-    yuka_anim.flags |= YUKA_ANIM_FLAG_PAUSE;
-    return EVT_RETURN_DONE;
-}
-
-/** Script function: resumes the reverse playback of the "yuka" animation after a pause. */
-static USER_FUNC(yuka_anim_reverse_replay) {
-    yuka_anim.flags &= ~YUKA_ANIM_FLAG_PAUSE;
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script function: plays the map animation "yuka" backwards (peach_evt_tyogo_sub runs it while the beaker moves
- * back toward a lower slot).
- * Each frame it subtracts the elapsed time times the animation speed from the animation frame
- * and wraps around at the start. Blocks until yuka_anim_reverse_end.
- */
-static USER_FUNC(yuka_anim_reverse_play) {
-    f32 frame;
-    f32 dt;
-
-    if (isFirstCall) {
-        yuka_anim.anim = mapSearchAnmObj("yuka");
-        yuka_anim.flags = 0;
-        yuka_anim.anim->startTime = yukaNow();
-        yuka_anim.anim->flags |= MAP_ANIM_FLAG_PAUSE;
-        yuka_anim.anim->flags &= ~MAP_ANIM_FLAG_RESTART;
-    }
-    if (yuka_anim.flags & YUKA_ANIM_FLAG_END) {
-        return EVT_RETURN_DONE;
-    }
-    if (!(yuka_anim.flags & YUKA_ANIM_FLAG_PAUSE)) {
-        dt = 60.0f * (f32)(u64)(yukaNow() - yuka_anim.anim->startTime) / 1000.0f;
-
-        yuka_anim.anim->time -= dt * yuka_anim.anim->rate;
-        if (yuka_anim.anim->time <= 0.0f) {
-            for (frame = yuka_anim.anim->time; frame < 0.0f; frame += yuka_anim.anim->anim->length) {
-            }
-            yuka_anim.anim->time = frame;
-        }
-    }
-
-    // Refresh the time baseline even while reverse playback is paused.
-    yuka_anim.anim->startTime = yukaNow();
-    return EVT_RETURN_BLOCK;
-}
-
-/** Script function: sets Mario's (Peach's) pose to the animation named in args[0]. */
-static USER_FUNC(peach_chg_pose) {
-    marioChgPose((const char*)evtGetValue(event, event->args[0]));
-    return EVT_RETURN_DONE;
-}
-
-/** Script function: args[0] = 1 makes Peach invisible by setting Mario's scale to 0 on all axes; 0 restores scale 1. */
-static USER_FUNC(peach_evt_toumei_onoff) {
-    EvtWord* args = event->args;
-    MarioWork* mario = marioGetPtr();
-
-    if (evtGetValue(event, args[0])) {
-        mario->scale.x = 0.0f;
-        mario->scale.y = 0.0f;
-        mario->scale.z = 0.0f;
-    } else {
-        mario->scale.x = 1.0f;
-        mario->scale.y = 1.0f;
-        mario->scale.z = 1.0f;
-    }
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script function: sets Peach's size to the float in args[0] (Mario's scale on x, y and z),
- * scaling her collision box (20 by 47 units at scale 1) with it.
- */
-static USER_FUNC(peach_set_scale) {
-    f32 scale = evtGetFloat(event, event->args[0]);
-    MarioWork* mario = marioGetPtr();
-
-    mario->scale.x = scale;
-    mario->scale.y = scale;
-    mario->scale.z = scale;
-    mario->wPlayerCollisionBox.x = 20.0f * scale;
-    mario->wPlayerCollisionBox.y = 47.0f * scale;
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script function: checks whether the potion number in args[1] equals step args[0] of kusuri_tyogo_list (1, 2,
- * 3, 2, 3, 1, 3, 4); returns 1 or 0 in args[2].
- */
-static USER_FUNC(peach_evt_seikai_check) {
-    EvtWord* args = event->args;
-    s32 idx = evtGetValue(event, args[0]);
-    s32 v = evtGetValue(event, args[1]);
-
-    if (v == kusuri_tyogo_list[idx]) {
-        evtSetValue(event, args[2], 1);
-    } else {
-        evtSetValue(event, args[2], 0);
-    }
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script function: converts an item ID in args[0] (red 102, blue 101, orange 103, green 104,
- * the table kusuri_id) into its potion number 1 to 4 and returns it in args[1].
- */
-static USER_FUNC(kusuri_list_get_no) {
-    EvtWord* args = event->args;
-    s32 id = evtGetValue(event, args[0]);
-    s32 i;
-
-    for (i = 0; id != kusuri_id[i]; i++) {
-    }
-    evtSetValue(event, args[1], i + 1);
-    return EVT_RETURN_DONE;
-}
-
-/** Script function: appends the item ID of potion number args[0] (1 to 4) to the potion menu list kusuri_list. */
-static USER_FUNC(kusuri_list_add) {
-    s32 no = evtGetValue(event, event->args[0]);
-    s32 i;
-
-    for (i = 0; kusuri_list[i] != -1; i++) {
-    }
-    kusuri_list[i] = kusuri_id[no - 1];
-    return EVT_RETURN_DONE;
-}
-
-/** Script function: clears the potion menu list (kusuri_list) to empty (-1 entries). */
-static USER_FUNC(kusuri_list_init) {
-    s32 i;
-
-    for (i = 0; i < 5; i++) {
-        kusuri_list[i] = -1;
-    }
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Map TEV callback: adds a stage that outputs the colour g_Kusuri_Src_Col[g_Kusuri4_No] and keeps the previous alpha.
- */
-static void kusuri_4_color_tev(MapTevCallbackInfo* info) {
-    GXTevStageID stage = info->tevStage;
-
-    GXSetTevOrder(stage, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
-    GXSetTevColorOp(stage, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-    GXSetTevAlphaOp(stage, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-    GXSetTevColorIn(stage, GX_CC_C0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO);
-    GXSetTevAlphaIn(stage, GX_CA_APREV, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO);
-    GXSetTevColor(GX_TEVREG0, g_Kusuri_Src_Col[g_Kusuri4_No]);
-    info->tevStage++;
-}
-
-/** Texture-environment callback for the third potion tube: the same as kusuri_4_color_tev with its own colour. */
-static void kusuri_3_color_tev(MapTevCallbackInfo* info) {
-    GXTevStageID stage = info->tevStage;
-
-    GXSetTevOrder(stage, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
-    GXSetTevColorOp(stage, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-    GXSetTevAlphaOp(stage, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-    GXSetTevColorIn(stage, GX_CC_C0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO);
-    GXSetTevAlphaIn(stage, GX_CA_APREV, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO);
-    GXSetTevColor(GX_TEVREG0, g_Kusuri_Src_Col[g_Kusuri3_No]);
-    info->tevStage++;
-}
-
-/** Texture-environment callback for the second potion tube: the same as kusuri_4_color_tev with its own colour. */
-static void kusuri_2_color_tev(MapTevCallbackInfo* info) {
-    GXTevStageID stage = info->tevStage;
-
-    GXSetTevOrder(stage, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
-    GXSetTevColorOp(stage, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-    GXSetTevAlphaOp(stage, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-    GXSetTevColorIn(stage, GX_CC_C0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO);
-    GXSetTevAlphaIn(stage, GX_CA_APREV, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO);
-    GXSetTevColor(GX_TEVREG0, g_Kusuri_Src_Col[g_Kusuri2_No]);
-    info->tevStage++;
-}
-
-/** Texture-environment callback for the first potion tube: the same as kusuri_4_color_tev with its own colour. */
-static void kusuri_1_color_tev(MapTevCallbackInfo* info) {
-    GXTevStageID stage = info->tevStage;
-
-    GXSetTevOrder(stage, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
-    GXSetTevColorOp(stage, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-    GXSetTevAlphaOp(stage, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-    GXSetTevColorIn(stage, GX_CC_C0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO);
-    GXSetTevAlphaIn(stage, GX_CA_APREV, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO);
-    GXSetTevColor(GX_TEVREG0, g_Kusuri_Src_Col[g_Kusuri1_No]);
-    info->tevStage++;
-}
-
-/**
- * Map TEV callback: replaces stage 0 by one that outputs the colour g_Kusuri_Col with the rasterized alpha, and resets
- * the stage, texture coordinate and texture map counters to 1, 0 and 0.
- */
-static void kusuri_naka_color_tev(MapTevCallbackInfo* info) {
-    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
-    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_C0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO);
-    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_RASA, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO);
-    GXSetTevColor(GX_TEVREG0, g_Kusuri_Col);
-    info->tevStage = 1;
-    info->texCoord = 0;
-    info->texMap = 0;
-}
-
-/** Script helper: returns the red, green and blue of g_Kusuri_Col in args[0], args[1] and args[2]. */
-static USER_FUNC(kusuri_color_get) {
-    EvtWord* args = event->args;
-
-    evtSetValue(event, args[0], g_Kusuri_Col.r);
-    evtSetValue(event, args[1], g_Kusuri_Col.g);
-    evtSetValue(event, args[2], g_Kusuri_Col.b);
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper: sets the red, green and blue of g_Kusuri_Col to args[0], args[1] and args[2]. */
-static USER_FUNC(kusuri_color_set_rgb) {
-    EvtWord* args = event->args;
-    s32 r = evtGetValue(event, args[0]);
-    s32 g = evtGetValue(event, args[1]);
-    s32 b = evtGetValue(event, args[2]);
-
-    g_Kusuri_Col.r = r;
-    g_Kusuri_Col.g = g;
-    g_Kusuri_Col.b = b;
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script function: blends potion colour number args[0] into the tank colour over args[1] ms:
- * adds the potion's source colour to what was already mixed,
- * scales the result so the largest channel is 255 and stores the sum when finished. Blocks until the time is up.
- */
-static USER_FUNC(kusuri_color_set) {
-    EvtWord* args = event->args;
-    s32 no = evtGetValue(event, args[0]);
-    s32 frames = evtGetValue(event, args[1]);
-    OSTime now = gp->renderTime;
-    s32 elapsed;
-    BOOL done;
-    f32 t;
-    s32 r, g, b;
-
-    if (isFirstCall) {
-        event->lwData[8] = frames;
-        event->lwData[9] = (g_Kusuri_Col.r << 16) | (g_Kusuri_Col.g << 8) | g_Kusuri_Col.b;
-        event->userdata[0] = ((u64)now >> 32) & 0xFFFFFFFF;
-        event->userdata[1] = now & 0xFFFFFFFF;
-    }
-    elapsed = OSTicksToMilliseconds((u64)OSDiffTick(now, event->userdata[1]));
-    if (elapsed < event->lwData[8]) {
-        done = FALSE;
-        t = (f32)elapsed / (f32)event->lwData[8];
-    } else {
-        done = TRUE;
-        t = 1.0f;
-    }
-    r = t * g_Kusuri_Src_Col[no - 1].r + g_Kusuri_R;
-    g = t * g_Kusuri_Src_Col[no - 1].g + g_Kusuri_G;
-    b = t * g_Kusuri_Src_Col[no - 1].b + g_Kusuri_B;
-    if (r > g) {
-        if (r > b) {
-            g_Kusuri_Col.r = 255;
-            g_Kusuri_Col.g = 255.0f * ((f32)g / (f32)r);
-            g_Kusuri_Col.b = 255.0f * ((f32)b / (f32)r);
-        } else {
-            g_Kusuri_Col.r = 255.0f * ((f32)r / (f32)b);
-            g_Kusuri_Col.g = 255.0f * ((f32)g / (f32)b);
-            g_Kusuri_Col.b = 255;
-        }
-    } else if (g > b) {
-        g_Kusuri_Col.r = 255.0f * ((f32)r / (f32)g);
-        g_Kusuri_Col.g = 255;
-        g_Kusuri_Col.b = 255.0f * ((f32)b / (f32)g);
-    } else {
-        g_Kusuri_Col.r = 255.0f * ((f32)r / (f32)b);
-        g_Kusuri_Col.g = 255.0f * ((f32)g / (f32)b);
-        g_Kusuri_Col.b = 255;
-    }
-    if (done) {
-        g_Kusuri_R = r;
-        g_Kusuri_G = g;
-        g_Kusuri_B = b;
-    }
-    if (done) {
-        return EVT_RETURN_DONE;
-    }
-    return EVT_RETURN_BLOCK;
-}
-
-/** Script function: resets the tank colour and the accumulated mix to black (0, 0, 0). */
-static USER_FUNC(kusuri_color_init) {
-    g_Kusuri_Col.r = 0;
-    g_Kusuri_Col.g = 0;
-    g_Kusuri_Col.b = 0;
-    g_Kusuri_R = 0;
-    g_Kusuri_G = 0;
-    g_Kusuri_B = 0;
-    return EVT_RETURN_DONE;
-}

@@ -94,6 +94,17 @@ static EVT_BEGIN(box_evt)
     RETURN
 EVT_END()
 
+/** Script helper: spawns a small star sparkle effect above the point (args[0], args[1], args[2]). */
+static USER_FUNC(small_star) {
+    EvtWord* args = event->args;
+    f32 x = evtGetFloat(event, args[0]);
+    f32 y = evtGetFloat(event, args[1]);
+    f32 z = evtGetFloat(event, args[2]);
+
+    effSmallStarEntry(0, 4, x, 12.5f + y, z, 0.0f, -1.0f, 0.0f);
+    return EVT_RETURN_DONE;
+}
+
 /**
  * Event script: checks the red switch riddle after each press.
  * When switch 1 has been hit twice and switch 2 three times (switch 2 only counts before switch 1 is touched),
@@ -198,14 +209,3 @@ EVT_BEGIN(las_13_init_evt)
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_pure"), 0, PTR(hint_plate), 0)
     RETURN
 EVT_END()
-
-/** Script helper: spawns a small star sparkle effect above the point (args[0], args[1], args[2]). */
-static USER_FUNC(small_star) {
-    EvtWord* args = event->args;
-    f32 x = evtGetFloat(event, args[0]);
-    f32 y = evtGetFloat(event, args[1]);
-    f32 z = evtGetFloat(event, args[2]);
-
-    effSmallStarEntry(0, 4, x, 12.5f + y, z, 0.0f, -1.0f, 0.0f);
-    return EVT_RETURN_DONE;
-}

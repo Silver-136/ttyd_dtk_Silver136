@@ -161,6 +161,249 @@ static const char* namiyoke_mapobj[] = {
 };
 
 /**
+ * Script helper (wave table): allocates a table of args[1] slots from the map heap, zeroed,
+ * and returns its address in args[0].
+ */
+static USER_FUNC(evt_sub_entrymgr_init) {
+    EvtWord* args = event->args;
+    EntryMgr* mgr = _mapAlloc(sizeof(EntryMgr));
+
+    evtSetValue(event, args[0], (EvtWord)mgr);
+    mgr->count = evtGetValue(event, args[1]);
+    mgr->entries = _mapAlloc(mgr->count * sizeof(EntryMgrEntry));
+    memset(mgr->entries, 0, mgr->count * sizeof(EntryMgrEntry));
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script helper (wave table): claims the first free slot in the table args[0] for id args[1];
+ * args[2] is 1 on success and 0 if the table is full.
+ */
+static USER_FUNC(evt_sub_entrymgr_entry) {
+    EvtWord* args = event->args;
+    EntryMgr* mgr = (EntryMgr*)evtGetValue(event, args[0]);
+    EntryMgrEntry* e = mgr->entries;
+    s32 id = evtGetValue(event, args[1]);
+    BOOL ok = FALSE;
+    s32 i;
+
+    for (i = 0; i < mgr->count; i++, e++) {
+        if (!e->used) {
+            e->used = TRUE;
+            e->id = id;
+            ok = TRUE;
+            break;
+        }
+    }
+    evtSetValue(event, args[2], ok);
+    return EVT_RETURN_DONE;
+}
+
+/** Script helper (wave table): frees the slot with id args[1] in the table args[0]; args[2] is 1 if it was found. */
+static USER_FUNC(evt_sub_entrymgr_delete) {
+    EvtWord* args = event->args;
+    EntryMgr* mgr = (EntryMgr*)evtGetValue(event, args[0]);
+    EntryMgrEntry* e = mgr->entries;
+    s32 id = evtGetValue(event, args[1]);
+    BOOL ok = FALSE;
+    s32 i;
+
+    for (i = 0; i < mgr->count; i++, e++) {
+        if (e->id == id) {
+            e->used = FALSE;
+            e->id = 0;
+            ok = TRUE;
+            break;
+        }
+    }
+    evtSetValue(event, args[2], ok);
+    return EVT_RETURN_DONE;
+}
+
+/** Script helper (wave table): sets args[2] to 1 if id args[1] is in use in the table args[0], else 0. */
+static USER_FUNC(evt_sub_entrymgr_check) {
+    // BUG: an unused entry does not advance e, so later entries are not checked.
+    EvtWord* args = event->args;
+    EntryMgr* mgr = (EntryMgr*)evtGetValue(event, args[0]);
+    EntryMgrEntry* e = mgr->entries;
+    s32 id = evtGetValue(event, args[1]);
+    BOOL ok = FALSE;
+    s32 i;
+
+    for (i = 0; i < mgr->count; i++) {
+        if (e->used) {
+            if (e->id == id) {
+                ok = TRUE;
+                break;
+            }
+            e++;
+        }
+    }
+    evtSetValue(event, args[2], ok);
+    return EVT_RETURN_DONE;
+}
+
+/** Script helper (wave table): args[0] is the table; stores the floats args[2..4] with id args[1]. */
+static USER_FUNC(evt_sub_entrymgr_setreg) {
+    EvtWord* args = event->args;
+    EntryMgr* mgr = (EntryMgr*)evtGetValue(event, args[0]);
+    EntryMgrEntry* e = mgr->entries;
+    s32 id = evtGetValue(event, args[1]);
+    s32 i;
+
+    for (i = 0; i < mgr->count; i++, e++) {
+        if (e->id == id) {
+            break;
+        }
+    }
+
+    // BUG: nothing checks that id was found; a missing id writes the entry one past the table.
+    e->reg[0] = evtGetFloat(event, args[2]);
+
+    e->reg[1] = evtGetFloat(event, args[3]);
+    e->reg[2] = evtGetFloat(event, args[4]);
+    return EVT_RETURN_DONE;
+}
+
+/** Script helper (wave table): args[0] is the table; copies the three floats stored with id args[1] into args[2..4]. */
+static USER_FUNC(evt_sub_entrymgr_getreg) {
+    EvtWord* args = event->args;
+    EntryMgr* mgr = (EntryMgr*)evtGetValue(event, args[0]);
+    EntryMgrEntry* e = mgr->entries;
+    s32 id = evtGetValue(event, args[1]);
+    s32 i;
+
+    for (i = 0; i < mgr->count; i++, e++) {
+        if (e->id == id) {
+            break;
+        }
+    }
+
+    // BUG: nothing checks that id was found; a missing id reads the entry one past the table.
+    evtSetFloat(event, args[2], e->reg[0]);
+    evtSetFloat(event, args[3], e->reg[1]);
+    evtSetFloat(event, args[4], e->reg[2]);
+    return EVT_RETURN_DONE;
+}
+
+/** Script helper: moves map object namiyoke_mapobj[args[0]] to (args[1], args[2], args[3]). */
+static USER_FUNC(namiyoke_set_mapobj) {
+    EvtWord* args = event->args;
+    s32 idx = evtGetValue(event, args[0]);
+    f32 x = evtGetFloat(event, args[1]);
+    f32 y = evtGetFloat(event, args[2]);
+    f32 z = evtGetFloat(event, args[3]);
+
+    mapObjTranslate(namiyoke_mapobj[idx], x, y, z);
+    return EVT_RETURN_DONE;
+}
+
+/** Script helper: copies the start position of a wave (LW(11) to LW(13)) into its working floats. */
+static USER_FUNC(nami_running_init_func) {
+    f32* lwf = event->lwDataF;
+
+    lwf[6] = event->lwData[11];
+    lwf[7] = event->lwData[12];
+    lwf[8] = event->lwData[13];
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script helper: moves one wave forward by 1.35 per frame (X) and bobs it with a sine;
+ * the wave rises out of the water at the start and sinks again past X = 200 (or -340 in the lanes Z = 25 and 100).
+ * Writes the position to args[0..2] and sets LW(15) to 1 once the wave has finished its run (X < 0, or < -540 in
+ * the lanes Z = 25 and 100).
+ */
+static USER_FUNC(nami_running_func) {
+    f32* lwf = event->lwDataF;
+    EvtWord* args = event->args;
+    f32 s;
+
+    lwf[6] -= 1.3499999f;
+    if (lwf[6] > 840.0f) {
+        lwf[7] += 0.35f;
+        if (lwf[7] > 0.0f) {
+            lwf[7] = 0.0f;
+        }
+    }
+    switch (event->lwData[14]) {
+        case 0:
+        case 1:
+            if (lwf[6] < 200.0f) {
+                lwf[7] -= 0.4f;
+            }
+            break;
+        case 2:
+        case 3:
+            if (lwf[6] < -340.0f) {
+                lwf[7] -= 0.4f;
+            }
+            break;
+    }
+    event->lwData[15] = 0;
+    switch (event->lwData[14]) {
+        case 0:
+        case 1:
+            if (lwf[6] < 0.0f) {
+                event->lwData[15] = 1;
+            }
+            break;
+        case 2:
+        case 3:
+            if (lwf[6] < -540.0f) {
+                event->lwData[15] = 1;
+            }
+            break;
+    }
+    s = sin(6.2831855f * (2.0f * gp->retraceCount) / 360.0f);
+    evtSetFloat(event, args[0], lwf[6]);
+    evtSetFloat(event, args[1], lwf[7] + (5.0f * s - 5.0f));
+    evtSetFloat(event, args[2], lwf[8]);
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script helper: args[0..2] is a wave's position; sets args[3] to 1 if Mario is touching it.
+ * The hit box is 30 wide and deep plus margins of 20 in X and 10 in Z,
+ * shrinking while the wave sinks (y between -5 and -45); a wave lower than -45 never hits.
+ */
+static USER_FUNC(dou_namiatari_check) {
+    // Waves at Y <= -45 are inactive; between -45 and -5 their X/Z extents grow linearly.
+    EvtWord* args = event->args;
+    MarioWork* mario = marioGetPtr();
+    f32 x = evtGetFloat(event, args[0]);
+    f32 y = evtGetFloat(event, args[1]);
+    f32 z = evtGetFloat(event, args[2]);
+    f32 w = 30.0f;
+    f32 d = w;
+    f32 mx = mario->position.x;
+    f32 mz = mario->position.z;
+    f32 marginX = 20.0f;
+    f32 marginZ = 10.0f;
+    BOOL hit;
+    if (y <= -45.0f) {
+        evtSetValue(event, args[3], 0);
+        return EVT_RETURN_DONE;
+    }
+    if (y <= -5.0f) {
+        f32 r = (50.0f + y) / 45.0f;
+
+        w *= r;
+        d *= r;
+    }
+    hit = TRUE;
+
+    if (__fabsf(x - mx) > __fabsf(w + marginX)) {
+        hit = FALSE;
+    }
+    if (__fabsf(z - mz) > __fabsf(d + marginZ)) {
+        hit = FALSE;
+    }
+    evtSetValue(event, args[3], hit);
+    return EVT_RETURN_DONE;
+}
+
+/**
  * One travelling wave of the wave-dodging section:
  * takes a free slot in the wave table (LW(9) = table, LW(10) = wave id),
  * moves the wave object namiyoke_mapobj[id] along the lane from the start values in LW(11) to LW(13)
@@ -302,6 +545,12 @@ static EVT_BEGIN(namiyoke_fail_recover)
     END_LOOP
     RETURN
 EVT_END()
+
+/** Script helper: stops Mario's boat immediately (marioShipForceStop). */
+static USER_FUNC(namiyoke_fail_stop) {
+    marioShipForceStop();
+    return EVT_RETURN_DONE;
+}
 
 /**
  * Mario was hit by a wave: stops the boat, aims the camera, spins and sinks Mario,
@@ -451,6 +700,30 @@ static EVT_BEGIN(namiyoke_init)
     CALL(evt_hitobj_onoff, STRING("A_nami15"), 1, 0)
     RETURN
 EVT_END()
+
+/**
+ * Script helper: when the squared distance (as an integer) from point (args[0], args[1], args[2]) to Mario is below
+ * LW(7), stores that squared distance in LW(7) and copies LW(10) into LW(6).
+ */
+static USER_FUNC(namiyoke_se_check) {
+    EvtWord* args = event->args;
+    MarioWork* mario = marioGetPtr();
+    f32 x = evtGetFloat(event, args[0]);
+    f32 y = evtGetFloat(event, args[1]);
+    f32 z = evtGetFloat(event, args[2]);
+    Vec pos;
+    s32 dist;
+
+    pos.x = x;
+    pos.y = y;
+    pos.z = z;
+    dist = PSVECSquareDistance(&pos, &mario->position);
+    if (dist < event->lwData[7]) {
+        event->lwData[6] = event->lwData[10];
+        event->lwData[7] = dist;
+    }
+    return EVT_RETURN_DONE;
+}
 
 /**
  * Sound loop for the waves (namiyoke_check spawns it): every frame it finds the active wave nearest Mario among
@@ -642,276 +915,3 @@ EVT_BEGIN(dou_10_init_evt)
     CALL(evt_mobj_powerupblk, STRING("pblk00"), 130, 50, -135, 0, GSWF_SHINE_33, 0)
     RETURN
 EVT_END()
-
-/**
- * Script helper: when the squared distance (as an integer) from point (args[0], args[1], args[2]) to Mario is below
- * LW(7), stores that squared distance in LW(7) and copies LW(10) into LW(6).
- */
-static USER_FUNC(namiyoke_se_check) {
-    EvtWord* args = event->args;
-    MarioWork* mario = marioGetPtr();
-    f32 x = evtGetFloat(event, args[0]);
-    f32 y = evtGetFloat(event, args[1]);
-    f32 z = evtGetFloat(event, args[2]);
-    Vec pos;
-    s32 dist;
-
-    pos.x = x;
-    pos.y = y;
-    pos.z = z;
-    dist = PSVECSquareDistance(&pos, &mario->position);
-    if (dist < event->lwData[7]) {
-        event->lwData[6] = event->lwData[10];
-        event->lwData[7] = dist;
-    }
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper: stops Mario's boat immediately (marioShipForceStop). */
-static USER_FUNC(namiyoke_fail_stop) {
-    marioShipForceStop();
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper: args[0..2] is a wave's position; sets args[3] to 1 if Mario is touching it.
- * The hit box is 30 wide and deep plus margins of 20 in X and 10 in Z,
- * shrinking while the wave sinks (y between -5 and -45); a wave lower than -45 never hits.
- */
-static USER_FUNC(dou_namiatari_check) {
-    // Waves at Y <= -45 are inactive; between -45 and -5 their X/Z extents grow linearly.
-    EvtWord* args = event->args;
-    MarioWork* mario = marioGetPtr();
-    f32 x = evtGetFloat(event, args[0]);
-    f32 y = evtGetFloat(event, args[1]);
-    f32 z = evtGetFloat(event, args[2]);
-    f32 w = 30.0f;
-    f32 d = w;
-    f32 mx = mario->position.x;
-    f32 mz = mario->position.z;
-    f32 marginX = 20.0f;
-    f32 marginZ = 10.0f;
-    BOOL hit;
-    if (y <= -45.0f) {
-        evtSetValue(event, args[3], 0);
-        return EVT_RETURN_DONE;
-    }
-    if (y <= -5.0f) {
-        f32 r = (50.0f + y) / 45.0f;
-
-        w *= r;
-        d *= r;
-    }
-    hit = TRUE;
-
-    if (__fabsf(x - mx) > __fabsf(w + marginX)) {
-        hit = FALSE;
-    }
-    if (__fabsf(z - mz) > __fabsf(d + marginZ)) {
-        hit = FALSE;
-    }
-    evtSetValue(event, args[3], hit);
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper: moves one wave forward by 1.35 per frame (X) and bobs it with a sine;
- * the wave rises out of the water at the start and sinks again past X = 200 (or -340 in the lanes Z = 25 and 100).
- * Writes the position to args[0..2] and sets LW(15) to 1 once the wave has finished its run (X < 0, or < -540 in
- * the lanes Z = 25 and 100).
- */
-static USER_FUNC(nami_running_func) {
-    f32* lwf = event->lwDataF;
-    EvtWord* args = event->args;
-    f32 s;
-
-    lwf[6] -= 1.3499999f;
-    if (lwf[6] > 840.0f) {
-        lwf[7] += 0.35f;
-        if (lwf[7] > 0.0f) {
-            lwf[7] = 0.0f;
-        }
-    }
-    switch (event->lwData[14]) {
-        case 0:
-        case 1:
-            if (lwf[6] < 200.0f) {
-                lwf[7] -= 0.4f;
-            }
-            break;
-        case 2:
-        case 3:
-            if (lwf[6] < -340.0f) {
-                lwf[7] -= 0.4f;
-            }
-            break;
-    }
-    event->lwData[15] = 0;
-    switch (event->lwData[14]) {
-        case 0:
-        case 1:
-            if (lwf[6] < 0.0f) {
-                event->lwData[15] = 1;
-            }
-            break;
-        case 2:
-        case 3:
-            if (lwf[6] < -540.0f) {
-                event->lwData[15] = 1;
-            }
-            break;
-    }
-    s = sin(6.2831855f * (2.0f * gp->retraceCount) / 360.0f);
-    evtSetFloat(event, args[0], lwf[6]);
-    evtSetFloat(event, args[1], lwf[7] + (5.0f * s - 5.0f));
-    evtSetFloat(event, args[2], lwf[8]);
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper: copies the start position of a wave (LW(11) to LW(13)) into its working floats. */
-static USER_FUNC(nami_running_init_func) {
-    f32* lwf = event->lwDataF;
-
-    lwf[6] = event->lwData[11];
-    lwf[7] = event->lwData[12];
-    lwf[8] = event->lwData[13];
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper: moves map object namiyoke_mapobj[args[0]] to (args[1], args[2], args[3]). */
-static USER_FUNC(namiyoke_set_mapobj) {
-    EvtWord* args = event->args;
-    s32 idx = evtGetValue(event, args[0]);
-    f32 x = evtGetFloat(event, args[1]);
-    f32 y = evtGetFloat(event, args[2]);
-    f32 z = evtGetFloat(event, args[3]);
-
-    mapObjTranslate(namiyoke_mapobj[idx], x, y, z);
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper (wave table): args[0] is the table; copies the three floats stored with id args[1] into args[2..4]. */
-static USER_FUNC(evt_sub_entrymgr_getreg) {
-    EvtWord* args = event->args;
-    EntryMgr* mgr = (EntryMgr*)evtGetValue(event, args[0]);
-    EntryMgrEntry* e = mgr->entries;
-    s32 id = evtGetValue(event, args[1]);
-    s32 i;
-
-    for (i = 0; i < mgr->count; i++, e++) {
-        if (e->id == id) {
-            break;
-        }
-    }
-
-    // BUG: nothing checks that id was found; a missing id reads the entry one past the table.
-    evtSetFloat(event, args[2], e->reg[0]);
-    evtSetFloat(event, args[3], e->reg[1]);
-    evtSetFloat(event, args[4], e->reg[2]);
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper (wave table): args[0] is the table; stores the floats args[2..4] with id args[1]. */
-static USER_FUNC(evt_sub_entrymgr_setreg) {
-    EvtWord* args = event->args;
-    EntryMgr* mgr = (EntryMgr*)evtGetValue(event, args[0]);
-    EntryMgrEntry* e = mgr->entries;
-    s32 id = evtGetValue(event, args[1]);
-    s32 i;
-
-    for (i = 0; i < mgr->count; i++, e++) {
-        if (e->id == id) {
-            break;
-        }
-    }
-
-    // BUG: nothing checks that id was found; a missing id writes the entry one past the table.
-    e->reg[0] = evtGetFloat(event, args[2]);
-
-    e->reg[1] = evtGetFloat(event, args[3]);
-    e->reg[2] = evtGetFloat(event, args[4]);
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper (wave table): sets args[2] to 1 if id args[1] is in use in the table args[0], else 0. */
-static USER_FUNC(evt_sub_entrymgr_check) {
-    // BUG: an unused entry does not advance e, so later entries are not checked.
-    EvtWord* args = event->args;
-    EntryMgr* mgr = (EntryMgr*)evtGetValue(event, args[0]);
-    EntryMgrEntry* e = mgr->entries;
-    s32 id = evtGetValue(event, args[1]);
-    BOOL ok = FALSE;
-    s32 i;
-
-    for (i = 0; i < mgr->count; i++) {
-        if (e->used) {
-            if (e->id == id) {
-                ok = TRUE;
-                break;
-            }
-            e++;
-        }
-    }
-    evtSetValue(event, args[2], ok);
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper (wave table): frees the slot with id args[1] in the table args[0]; args[2] is 1 if it was found. */
-static USER_FUNC(evt_sub_entrymgr_delete) {
-    EvtWord* args = event->args;
-    EntryMgr* mgr = (EntryMgr*)evtGetValue(event, args[0]);
-    EntryMgrEntry* e = mgr->entries;
-    s32 id = evtGetValue(event, args[1]);
-    BOOL ok = FALSE;
-    s32 i;
-
-    for (i = 0; i < mgr->count; i++, e++) {
-        if (e->id == id) {
-            e->used = FALSE;
-            e->id = 0;
-            ok = TRUE;
-            break;
-        }
-    }
-    evtSetValue(event, args[2], ok);
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper (wave table): claims the first free slot in the table args[0] for id args[1];
- * args[2] is 1 on success and 0 if the table is full.
- */
-static USER_FUNC(evt_sub_entrymgr_entry) {
-    EvtWord* args = event->args;
-    EntryMgr* mgr = (EntryMgr*)evtGetValue(event, args[0]);
-    EntryMgrEntry* e = mgr->entries;
-    s32 id = evtGetValue(event, args[1]);
-    BOOL ok = FALSE;
-    s32 i;
-
-    for (i = 0; i < mgr->count; i++, e++) {
-        if (!e->used) {
-            e->used = TRUE;
-            e->id = id;
-            ok = TRUE;
-            break;
-        }
-    }
-    evtSetValue(event, args[2], ok);
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Script helper (wave table): allocates a table of args[1] slots from the map heap, zeroed,
- * and returns its address in args[0].
- */
-static USER_FUNC(evt_sub_entrymgr_init) {
-    EvtWord* args = event->args;
-    EntryMgr* mgr = _mapAlloc(sizeof(EntryMgr));
-
-    evtSetValue(event, args[0], (EvtWord)mgr);
-    mgr->count = evtGetValue(event, args[1]);
-    mgr->entries = _mapAlloc(mgr->count * sizeof(EntryMgrEntry));
-    memset(mgr->entries, 0, mgr->count * sizeof(EntryMgrEntry));
-    return EVT_RETURN_DONE;
-}

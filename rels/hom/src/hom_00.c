@@ -959,6 +959,48 @@ EVT_BEGIN(hom_00_init_evt)
 EVT_END()
 
 /**
+ * Script helper: sets the hour and minute hand rotation of the station clock (LW(0) and LW(1)) from the
+ * console's real-time clock.
+ */
+static USER_FUNC(tokei) {
+    s32 min;
+    OSCalendarTime time;
+    u32 sec;
+
+    OSTicksToCalendarTime(OSGetTime(), &time);
+    min = time.min * 60;
+    sec = time.hour * 3600 + min + time.sec;
+    event->lwData[0] = FLOAT(-(360.0f * (sec / 3600.0f) / 12.0f));
+    event->lwData[1] = FLOAT(-(360.0f * (sec / 60.0f) / 60.0f));
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script helper, runs forever: draws a glare filter over the sun's screen rectangle (grown by 50 pixels),
+ * switching it off when the sun is off screen or the train has left (GF(15)).
+ */
+static USER_FUNC(test_glare) {
+    MapObject* sun = mapGetMapObj("sun");
+    u16* rect;
+
+    if (isFirstCall) {
+        sun->flags |= MAP_OBJ_FLAG_SCREEN_RECT;
+        return EVT_RETURN_BLOCK;
+    }
+    rect = sun->screenRect;
+    if (rect[0] == 0x3FF || rect[1] == 0x3FF || rect[2] == 0x3FF || rect[3] == 0x3FF) {
+        envGlareFilter(0, 0, 0, 0, 0);
+    } else if (rect[0] == 0 && rect[1] == 0 && rect[2] == 0 && rect[3] == 0) {
+        envGlareFilter(0, 0, 0, 0, 0);
+    } else if (evtGetValue(event, GF(15))) {
+        envGlareFilter(0, 0, 0, 0, 0);
+    } else {
+        envGlareFilter(1, rect[1] - 50, rect[0] - 50, rect[3] + 50, rect[2] + 50);
+    }
+    return EVT_RETURN_BLOCK;
+}
+
+/**
  * Texture-environment callback for the sun: every frame it fills a 64x64 indirect texture with a scrolling sine
  * wave and sets up an indirect warp so the sun shimmers like a heat haze.
  */
@@ -1012,46 +1054,4 @@ static void sun_tev(MapTevCallbackInfo* info) {
     info->texCoord = texCoord;
     info->indStage = indStage + 1;
     info->texMap = texMap + 1;
-}
-
-/**
- * Script helper, runs forever: draws a glare filter over the sun's screen rectangle (grown by 50 pixels),
- * switching it off when the sun is off screen or the train has left (GF(15)).
- */
-static USER_FUNC(test_glare) {
-    MapObject* sun = mapGetMapObj("sun");
-    u16* rect;
-
-    if (isFirstCall) {
-        sun->flags |= MAP_OBJ_FLAG_SCREEN_RECT;
-        return EVT_RETURN_BLOCK;
-    }
-    rect = sun->screenRect;
-    if (rect[0] == 0x3FF || rect[1] == 0x3FF || rect[2] == 0x3FF || rect[3] == 0x3FF) {
-        envGlareFilter(0, 0, 0, 0, 0);
-    } else if (rect[0] == 0 && rect[1] == 0 && rect[2] == 0 && rect[3] == 0) {
-        envGlareFilter(0, 0, 0, 0, 0);
-    } else if (evtGetValue(event, GF(15))) {
-        envGlareFilter(0, 0, 0, 0, 0);
-    } else {
-        envGlareFilter(1, rect[1] - 50, rect[0] - 50, rect[3] + 50, rect[2] + 50);
-    }
-    return EVT_RETURN_BLOCK;
-}
-
-/**
- * Script helper: sets the hour and minute hand rotation of the station clock (LW(0) and LW(1)) from the
- * console's real-time clock.
- */
-static USER_FUNC(tokei) {
-    s32 min;
-    OSCalendarTime time;
-    u32 sec;
-
-    OSTicksToCalendarTime(OSGetTime(), &time);
-    min = time.min * 60;
-    sec = time.hour * 3600 + min + time.sec;
-    event->lwData[0] = FLOAT(-(360.0f * (sec / 3600.0f) / 12.0f));
-    event->lwData[1] = FLOAT(-(360.0f * (sec / 60.0f) / 60.0f));
-    return EVT_RETURN_DONE;
 }

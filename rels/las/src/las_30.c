@@ -131,6 +131,24 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/** Script helper: builds the torch map-object name "hi<args[0]>" and returns it in args[1]. */
+static USER_FUNC(make_name) {
+    EvtWord* args = event->args;
+#if VERSION <= VERSION_DEMO_JP
+    char name[8];
+    s32 number;
+#endif
+
+#if VERSION <= VERSION_DEMO_JP
+    number = evtGetValue(event, args[0]);
+    sprintf(name, "hi%d", number);
+#else
+    sprintf(name, "hi%d", evtGetValue(event, args[0]));
+#endif
+    evtSetValue(event, args[1], (EvtWord)name);
+    return EVT_RETURN_DONE;
+}
+
 /**
  * Map-init helper: hides the 12 numbered torch map objects (names from make_name)
  * and puts a flame effect 7 units below the origin of each one.
@@ -212,21 +230,3 @@ EVT_BEGIN(las_30_init_evt)
     CALL_CHILD(rousoku_init)
     RETURN
 EVT_END()
-
-/** Script helper: builds the torch map-object name "hi<args[0]>" and returns it in args[1]. */
-static USER_FUNC(make_name) {
-    EvtWord* args = event->args;
-#if VERSION <= VERSION_DEMO_JP
-    char name[8];
-    s32 number;
-#endif
-
-#if VERSION <= VERSION_DEMO_JP
-    number = evtGetValue(event, args[0]);
-    sprintf(name, "hi%d", number);
-#else
-    sprintf(name, "hi%d", evtGetValue(event, args[0]));
-#endif
-    evtSetValue(event, args[1], (EvtWord)name);
-    return EVT_RETURN_DONE;
-}

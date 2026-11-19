@@ -503,6 +503,70 @@ static EVT_BEGIN(iri_13_pants_00_evt)
     RETURN
 EVT_END()
 
+/** Script helper: builds a shuffled table of the 25 candidate locations for the Battle Trunks. */
+// Shuffle indices with 50 random pair swaps; this is not a Fisher-Yates shuffle.
+static USER_FUNC(make_tbl) {
+    s32 i;
+    s32 a;
+    s32 b;
+    s32 tmp;
+
+    tbl = _mapAlloc(100);
+    for (i = 0; i < 25; i++) {
+        tbl[i] = i;
+    }
+    for (i = 0; i < 50; i++) {
+        a = rand() % 25;
+        b = rand() % 25;
+        tmp = tbl[a];
+        tbl[a] = tbl[b];
+        tbl[b] = tmp;
+    }
+
+    // Before the special pickup is recorded, keep coordinate entry zero first.
+    if (!evtGetValue(NULL, GSWF_TROUBLE_WORK(3))) {
+        for (i = 0; i < 25; i++) {
+            if (tbl[i] == 0) {
+                tmp = tbl[0];
+                tbl[0] = tbl[i];
+                tbl[i] = tmp;
+                break;
+            }
+        }
+    }
+    return EVT_RETURN_DONE;
+}
+
+/** Script helper: args[0] = index; args[1..3] receive the x, y, z of the index'th shuffled trunks location. */
+static USER_FUNC(get_pos) {
+    EvtWord* args = event->args;
+    s32 n = evtGetValue(event, args[0]);
+    s32* t = tbl;
+    s32 idx = t[n];
+
+    evtSetValue(event, args[1], list[idx * 3 + 0]);
+    evtSetValue(event, args[2], list[idx * 3 + 1]);
+    evtSetValue(event, args[3], list[idx * 3 + 2]);
+    return EVT_RETURN_DONE;
+}
+
+/** Script helper: frees the shuffled location table made by make_tbl. */
+static USER_FUNC(free_tbl) {
+    _mapFree(tbl);
+    tbl = NULL;
+    return EVT_RETURN_DONE;
+}
+
+/** Script helper: formats "pants<args[0]>" (two digits) into one static buffer and returns it in args[1]. */
+static USER_FUNC(iri_13_make_name) {
+    static char name[8];
+    EvtWord* args = event->args;
+
+    sprintf(name, "pants%02d", evtGetValue(event, args[0]));
+    evtSetValue(event, args[1], (EvtWord)name);
+    return EVT_RETURN_DONE;
+}
+
 /**
  * Sets up Trouble Center job 13 (Jolene's storeroom garbage) when the room loads,
  * unless GSWF_TROUBLE_WORK_1 shows Mario already reported all 20:
@@ -794,67 +858,3 @@ EVT_BEGIN(tou_06_init_evt)
 #endif
     RETURN
 EVT_END()
-
-/** Script helper: formats "pants<args[0]>" (two digits) into one static buffer and returns it in args[1]. */
-static USER_FUNC(iri_13_make_name) {
-    static char name[8];
-    EvtWord* args = event->args;
-
-    sprintf(name, "pants%02d", evtGetValue(event, args[0]));
-    evtSetValue(event, args[1], (EvtWord)name);
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper: frees the shuffled location table made by make_tbl. */
-static USER_FUNC(free_tbl) {
-    _mapFree(tbl);
-    tbl = NULL;
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper: args[0] = index; args[1..3] receive the x, y, z of the index'th shuffled trunks location. */
-static USER_FUNC(get_pos) {
-    EvtWord* args = event->args;
-    s32 n = evtGetValue(event, args[0]);
-    s32* t = tbl;
-    s32 idx = t[n];
-
-    evtSetValue(event, args[1], list[idx * 3 + 0]);
-    evtSetValue(event, args[2], list[idx * 3 + 1]);
-    evtSetValue(event, args[3], list[idx * 3 + 2]);
-    return EVT_RETURN_DONE;
-}
-
-/** Script helper: builds a shuffled table of the 25 candidate locations for the Battle Trunks. */
-// Shuffle indices with 50 random pair swaps; this is not a Fisher-Yates shuffle.
-static USER_FUNC(make_tbl) {
-    s32 i;
-    s32 a;
-    s32 b;
-    s32 tmp;
-
-    tbl = _mapAlloc(100);
-    for (i = 0; i < 25; i++) {
-        tbl[i] = i;
-    }
-    for (i = 0; i < 50; i++) {
-        a = rand() % 25;
-        b = rand() % 25;
-        tmp = tbl[a];
-        tbl[a] = tbl[b];
-        tbl[b] = tmp;
-    }
-
-    // Before the special pickup is recorded, keep coordinate entry zero first.
-    if (!evtGetValue(NULL, GSWF_TROUBLE_WORK(3))) {
-        for (i = 0; i < 25; i++) {
-            if (tbl[i] == 0) {
-                tmp = tbl[0];
-                tbl[0] = tbl[i];
-                tbl[i] = tmp;
-                break;
-            }
-        }
-    }
-    return EVT_RETURN_DONE;
-}

@@ -114,32 +114,6 @@ static EvtWord nok_00_koopa_evt[1250];
 EvtWord nok_00_init_evt[205];
 
 /**
- * Message callback for Kammy's line kpa_stg2_013 in the Petalburg cutscene.
- * Once the message entry index exceeds 49 it sets the local flag LSWF_NOK_00_KOOPA_MSG_CUE,
- * which releases the parallel thread waiting to switch Kammy's animation.
- */
-static void nok_stg2_013_cb(s32 type, void** work) {
-    s32* msg = *work;
-
-    switch (type) {
-        case 5:
-            if (msg[4] > 0x31) {
-                evtSetValue(NULL, LSWF_NOK_00_KOOPA_MSG_CUE, 1);
-            }
-            break;
-    }
-}
-
-/**
- * Makes the poster visible: sets POSTER_FLAG_DISP, which draw_poster checks before drawing the Peach poster onto the
- * Koopa's locator.
- */
-static USER_FUNC(pposter_nok_on) {
-    poster->flags |= POSTER_FLAG_DISP;
-    return EVT_RETURN_DONE;
-}
-
-/**
  * Init for the first Petalburg Koopa (ノコノコA, the one who greets Mario):
  * turns on the move and talk animations and puts him at his post by the gate once the first visit is over;
  * during the Bowser cutscene (STG2_25_04) he stands near the shop doors.
@@ -894,6 +868,37 @@ static HitDamageReturn hitDmgRetPoints[] = {
 };
 
 /**
+ * Display callback of the Koopa A model: when the group drawn is the poster's locator
+ * and the poster has been switched on, draws the poster's plane shape there.
+ */
+static void draw_poster(void* userdata, s32 group, Mtx* modeling) {
+    NpcEntry* npc = npcNameToPtr("poster");
+
+    if (group != poster->group || !(poster->flags & POSTER_FLAG_DISP)) {
+        return;
+    }
+    animPoseDrawShape(npc->poseId, poster->shape);
+}
+
+/**
+ * Script helper: allocates the poster work, finds shape pPlaneShape2 of the NPC "poster" and group locator7 of the NPC
+ * ノコノコA, and gives ノコノコA's pose the draw callback draw_poster.
+ */
+static USER_FUNC(pposter_init) {
+    NpcEntry* npc;
+
+    poster = _mapAlloc(sizeof(PosterWork));
+    memset(poster, 0, sizeof(PosterWork));
+    poster->shape = animPoseGetShapeIdx(npcNameToPtr("poster")->poseId, "pPlaneShape2");
+
+    // ノコノコA
+    npc = npcNameToPtr("ノコノコA");
+    poster->group = animPoseGetGroupIdx(npc->poseId, "locator7");
+    animPoseSetDispCallBack(npc->poseId, draw_poster, NULL);
+    return EVT_RETURN_DONE;
+}
+
+/**
  * Creates the "poster" NPC (model c_p_peach, the Peach poster) used in the Bowser interlude:
  * intangible, placed just in front of the S_ie_mad02 wall object, and then hooks it up with pposter_init.
  */
@@ -908,6 +913,32 @@ static EVT_BEGIN(nok_00_koopa_npc_entry)
     CALL(pposter_init)
     RETURN
 EVT_END()
+
+/**
+ * Makes the poster visible: sets POSTER_FLAG_DISP, which draw_poster checks before drawing the Peach poster onto the
+ * Koopa's locator.
+ */
+static USER_FUNC(pposter_nok_on) {
+    poster->flags |= POSTER_FLAG_DISP;
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Message callback for Kammy's line kpa_stg2_013 in the Petalburg cutscene.
+ * Once the message entry index exceeds 49 it sets the local flag LSWF_NOK_00_KOOPA_MSG_CUE,
+ * which releases the parallel thread waiting to switch Kammy's animation.
+ */
+static void nok_stg2_013_cb(s32 type, void** work) {
+    s32* msg = *work;
+
+    switch (type) {
+        case 5:
+            if (msg[4] > 0x31) {
+                evtSetValue(NULL, LSWF_NOK_00_KOOPA_MSG_CUE, 1);
+            }
+            break;
+    }
+}
 
 /**
  * Bowser interlude in Petalburg (STG2_25_04_BOWSER_ACTION_STAGE):
@@ -1304,34 +1335,3 @@ EVT_BEGIN(nok_00_init_evt)
     CALL(evt_mobj_kururing_floor, STRING("kururin1"), -70, 0, 350, STRING("S_ground03"), 125, GSWF_STARPIECE_34)
     RETURN
 EVT_END()
-
-/**
- * Script helper: allocates the poster work, finds shape pPlaneShape2 of the NPC "poster" and group locator7 of the NPC
- * ノコノコA, and gives ノコノコA's pose the draw callback draw_poster.
- */
-static USER_FUNC(pposter_init) {
-    NpcEntry* npc;
-
-    poster = _mapAlloc(sizeof(PosterWork));
-    memset(poster, 0, sizeof(PosterWork));
-    poster->shape = animPoseGetShapeIdx(npcNameToPtr("poster")->poseId, "pPlaneShape2");
-
-    // ノコノコA
-    npc = npcNameToPtr("ノコノコA");
-    poster->group = animPoseGetGroupIdx(npc->poseId, "locator7");
-    animPoseSetDispCallBack(npc->poseId, draw_poster, NULL);
-    return EVT_RETURN_DONE;
-}
-
-/**
- * Display callback of the Koopa A model: when the group drawn is the poster's locator
- * and the poster has been switched on, draws the poster's plane shape there.
- */
-static void draw_poster(void* userdata, s32 group, Mtx* modeling) {
-    NpcEntry* npc = npcNameToPtr("poster");
-
-    if (group != poster->group || !(poster->flags & POSTER_FLAG_DISP)) {
-        return;
-    }
-    animPoseDrawShape(npc->poseId, poster->shape);
-}
