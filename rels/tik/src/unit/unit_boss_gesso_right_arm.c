@@ -545,6 +545,10 @@ EVT_BEGIN(gesso_fall_check)
         RETURN
     END_IF
     CALL(btlevtcmd_SetUnitWork, LW(3), GESSO_UNIT_WORK_BUSY, 2)
+
+    // BUG: GetUnitWork where SetUnitWork was meant: the target is the number 0, which evtSetValue does not write,
+    // so GESSO_UNIT_WORK_STATE_TURNS keeps its count. If the body falls while awake (state 2) after one counted
+    // turn, phase_event sees 2 after one fallen turn and the Blooper rises a turn early.
     CALL(btlevtcmd_GetUnitWork, LW(3), GESSO_UNIT_WORK_STATE_TURNS, 0)
     CALL(btlevtcmd_StopWaitEvent, LW(3))
     CALL(btlevtcmd_AnimeChangePose, LW(3), 1, STRING("GSO_F_1"))
