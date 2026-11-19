@@ -8,6 +8,24 @@ generated from (maps made before 2026-11-13 have no such line).
 One entry per push, newest first: date, the pushed commit, whether maps from the previous push are now obsolete,
 and what changed in plain words.
 
+## 2026-11-19 - pushed commit: the one that adds this entry (maps stamped 5a5887849)
+
+Old maps obsolete: **yes**. Regenerate them.
+
+- About 300 more UNUSED entries in every version (US 2,047 -> 2,339): stripped functions restored under their JP
+  demo map names, for example the MusyX snd3d / synth / hardware functions (`AddEmitter`, `sndAddListenerEx`,
+  `voiceAllocateDo`, the `sndVirtualSample*` set), the TRK request and buffer functions (`TRKHandleRequestEvent`,
+  `TRKStandardACK`, the `TRKAppendBuffer*` / `TRKReadBuffer*` siblings), MSL `strtoul` / `strtol` / `atoi`,
+  `fprintf`, `vsscanf`, the `is*` ctype set and the math_ppc wrappers, and game functions such as `camEntryOrtho`,
+  `BtlUnit_GetDispOffset`, `BattleAudienceGetAPSrcNum`, `MTXInvXposeNormal`, `cube`, `test_img_alloc_capture`,
+  `fukidashi_sub`, `hammerSwingDir` and `marioGravityChk`.
+- Names this project had made up are gone where the code was really a stripped original function (for example
+  `fadeCapture` is `test_img_alloc_capture`, `marioChkGndOk` is `marioGravityChk`, win_root's `nameQuad` /
+  `winWazaQuad` helpers are calls to `chip` / `chip2`).
+- Many REL functions moved to the places the JP demo numbering shows, and 32 battle units are built deferred as in
+  the original, so function addresses inside those RELs' objects and many `@N` / `$N` numbers changed. No linked
+  name was added or removed, and every output file is byte-identical to the original game.
+
 ## 2026-11-18 - pushed commit: the one that adds this entry (maps stamped ae3f60062)
 
 Old maps obsolete: **yes**. Regenerate them.
