@@ -3498,10 +3498,21 @@ static u32 getFrontFloorAttr2(PartyEntry* party, f32 dir, f32 dist) {
     return hit ? hitGetAttr(hit) : 0;
 }
 
-/* Unused (sets a hit query's direction to straight down), but the compiler still emits its {0, -1, 0} Vec constant. */
-// FAKE: pool stand-in with an invented name
-static inline void partyDownDirY(HitCheckQuery* q) {
-    q->targetDir = (Vec){0.0f, -1.0f, 0.0f};
+/**
+ * hit attributes of the floor under the partner (probed from 20 up, 40 down), 0 if none.
+ * Original name and size (0x8c) from the JP demo map (UNUSED there; no caller in our source), between getFrontFloorAttr2 and
+ * getNewMovedir: getFrontFloorAttr's form without the direction. The position copy is what gives 0x8c (x, y and z
+ * set one by one is 0x84); the probe offsets 20 and 40 are getFrontFloorAttr's and are not fixed by the bytes.
+ */
+static u32 getFloorAttr(PartyEntry* party) {
+    HitCheckQuery q;
+    HitEntry* hit;
+    q.targetDistance = 40.0f;
+    q.targetPos = party->position;
+    q.targetPos.y += 20.0f;
+    q.targetDir = (Vec){0.0f, -1.0f, 0.0f};
+    hit = hitCheckVecFilter(&q, NULL);
+    return hit ? hitGetAttr(hit) : 0;
 }
 
 /**

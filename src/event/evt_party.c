@@ -713,6 +713,25 @@ USER_FUNC(evt_party_shadow_onoff) {
     return EVT_RETURN_DONE;
 }
 
+// FAKE: stand-in that nothing calls; it only fixes the order of these literals in the constant pool; removing it
+// changes the object. JP demo map: 1.0f (@1357) comes first, then the UNUSED @1454 and 0.5f, 20.0f, 0.0f
+// (@1455-@1457), then -1000.0f (@1504); all are evt_party_jump_pos's values, but the run after @1454 is placed by
+// the stripped evt_party_jump_jumpstand (UNUSED 0x834, compiled right before evt_party_jump_pos), and 1.0f by an
+// earlier stripped command (evt_party_set_size 0xc0 is the likely one). Bodies not known. It sits in
+// evt_party_set_size's slot (between evt_party_shadow_onoff and evt_party_get_pose in the map): functions are
+// generated in reverse source order, so its literals are created after evt_party_set_homing_dist's and before
+// evt_party_jump_pos's, as the map numbers them (at the end of the file they came first).
+void evtPartyStrippedPool(f32* f) {
+    f[0] = 1.0f;
+    f[1] = 0.5f;
+    f[2] = 20.0f;
+    f[3] = 0.0f;
+#if VERSION >= VERSION_JP
+    f[4] = 37.0f;
+#endif
+    f[5] = -1000.0f;
+}
+
 /** Writes the name of the partner's current animation pose to args[1]. args: slot, out. */
 // Original name and size (0x70) from the JP demo map (UNUSED there: no script uses it), between the stripped
 // evt_party_set_size and evt_party_set_pose: evt_party_set_pose's form with evt_mario_get_pose's field (animName).
@@ -1223,19 +1242,3 @@ USER_FUNC(evt_party_cloud_lock_animations_on_off) {
     return EVT_RETURN_DONE;
 }
 #endif
-
-// FAKE: stand-in that nothing calls; it only fixes the order of these literals in the constant pool; removing it
-// changes the object. JP demo map: 1.0f (@1357) comes first, then the UNUSED @1454 and 0.5f, 20.0f, 0.0f
-// (@1455-@1457), then -1000.0f (@1504); all are evt_party_jump_pos's values, but the run after @1454 is placed by
-// the stripped evt_party_jump_jumpstand (UNUSED 0x834, compiled right before evt_party_jump_pos), and 1.0f by an
-// earlier stripped command (evt_party_set_size 0xc0 is the likely one). Bodies not known.
-void evtPartyStrippedPool(f32* f) {
-    f[0] = 1.0f;
-    f[1] = 0.5f;
-    f[2] = 20.0f;
-    f[3] = 0.0f;
-#if VERSION >= VERSION_JP
-    f[4] = 37.0f;
-#endif
-    f[5] = -1000.0f;
-}
