@@ -785,14 +785,23 @@ static void cylinder(ShadowEntry* entry) {
     GXCallDisplayList(cylinder_dl_side, 0x40);
 }
 
+/**
+ * Draws one shadow volume as a cube (top, bottom and sides) with the cube's colour table.
+ * Original name and size (0x60) from the JP demo map (UNUSED there, between cylinderShadowDraw and cylinder:
+ * every call is inlined). Whether it took the entry like cylinder is not known; it reads nothing from it.
+ */
+static void cube(void) {
+    GXSetArray(GX_VA_CLR0, color_tbl_cube, 4);
+    GXCallDisplayList(cube_dl_top, 0x40);
+    GXCallDisplayList(cube_dl_bottom, 0x20);
+    GXCallDisplayList(cube_dl_side, 0x20);
+}
+
 /** Draws a shadow's volume shape: a cube for type 1, otherwise the cylinder. */
 static inline void shadowDrawVolume(ShadowEntry* entry) {
     switch (entry->type) {
         case SHADOW_TYPE_CUBE:
-            GXSetArray(GX_VA_CLR0, color_tbl_cube, 4);
-            GXCallDisplayList(cube_dl_top, 0x40);
-            GXCallDisplayList(cube_dl_bottom, 0x20);
-            GXCallDisplayList(cube_dl_side, 0x20);
+            cube();
             break;
         case SHADOW_TYPE_CYLINDER:
         default:
