@@ -28,8 +28,8 @@ typedef struct CamRoadHit {
     u32 flags;             // 0x28, CamRoadHitFlags
 } CamRoadHit;
 
-// CamRoadHit.flags and CamRoadState.hitFlags: where collisionCurve held the point back. calcCamRoad resets the
-// matching follow rate (tuning[4] along the curve, tuning[5] sideways) when a bit clears.
+// CamRoadHit.flags and CamRoadState.hitFlags: where collisionCurve held the point back. When a bit clears, calcCamRoad
+// sets the matching follow rate to 0 (tuning[4] across the view direction, tuning[5] along it); both climb back to 1.
 enum CamRoadHitFlags {
     CAM_ROAD_HIT_END = 1 << 0,        // snapped to an end of the curve (idxA or idxB); a group strip sets both bits
     CAM_ROAD_HIT_SIDE_LIMIT = 1 << 1, // sideways distance clamped to the curve's limA / limB, or back into the strip

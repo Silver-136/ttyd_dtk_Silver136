@@ -653,9 +653,9 @@ static void evt_yuuranking_disp_func(CameraId camera, void* param) {
 }
 
 /**
- * Body of the ranking event, run every frame. In mode 0 it steps the score tally through its phases (wait, count the
- * score up with a sound, show the bonus, count the monte up, apply the multiplier, finish); it always queues the draw
- * callback and stops once the free request flag is set.
+ * Body of the ranking event, run every frame. It stops once YUURANKING_FLAG_QUIT is set (evt_yuuranking_free);
+ * otherwise it queues the draw callback and, in mode 0, steps the score tally through its phases (wait, move the shown
+ * score to the score with a sound, add the bonus monte, apply the multiplier, clear the tally display).
  */
 static USER_FUNC(evt_yuuranking_main_func) {
     YuuRankingWork* wp = (YuuRankingWork*)event->lwData[0];
@@ -893,8 +893,9 @@ s32 yuu_kesan(s32 type, s32 score, s32 bonus, s32 mul, s32 max) {
 /**
  * Opens the ranking board: allocates the work and fills it from the arguments (x, y, minigame type, mode,
  * score, bonus, multiplier; type 1 also a maximum in args[7]). In mode 1 it inserts the score into that
- * minigame's saved top five, shifting lower entries down (type 1 ranks lower scores first and only below
- * the maximum), computes its value with yuu_kesan, and a new first place sets the type's top-score flag:
+ * minigame's saved top five, shifting lower entries down (other types only scores >= 0; type 1 ranks lower
+ * scores first and only below the maximum), computes its value with yuu_kesan, and a first place that pushes an
+ * existing record down (not one in an empty table) sets the type's top-score flag:
  * GSWF_GOR_PLANE_GAME_TOP_SCORE (0), GSWF_GOR_PAPER_GAME_TOP_SCORE (1), GSWF_GOR_TUBE_GAME_TOP_SCORE (2) or
  * GSWF_GOR_BOAT_GAME_TOP_SCORE (3). Then it starts main_evt.
  */

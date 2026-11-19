@@ -1630,8 +1630,8 @@ EVT_BEGIN(end_credit_para_evt)
 EVT_END()
 
 /**
- * JP and later: parade script for the first robot model (c_mb_robo_1a) at 0.6 scale, as a silhouette:
- * slides in from the right, stays for three seconds, then slides back out.
+ * JP and later: parade script for the first Magnus von Grapple robot model (c_mb_robo_1a) at 0.6 scale, as a
+ * silhouette: slides in from the right, stays for three seconds, then slides back out to the right.
  */
 EVT_BEGIN(end_credit_batten_evt)
     CALL(evt_npc_entry, STRING("batten"), STRING("c_mb_robo_1a"))

@@ -90,10 +90,10 @@ static void _img_alloc_capture(EvtWord name, EvtWord slot, EvtWord off, EvtWord 
  * breath hits (cloudGetHitBreathout) is on the piece's hit object, then loads the paper pose "P_oof_cloud_2" or
  * "P_oof_cloud_1" (by Mario's facing), draws the map group(s) into the offscreen target, captures the piece's screen
  * area into its image and shows the image in place of the group. While Mario stays in MARIO_MOTION_CLOUD each frame
- * adds 2 to the counter, and 30 frames without breath pass before it gives up; past the limit the piece is blown away
- * (end event, image animation "A_2", hit object off, 60 frames' wait); otherwise the group is shown again. Then the
- * pose, image and offscreen target are freed and the slot returns to waiting. cloud_once_flag lets one piece at a time
- * start; the early demos also wait while the partner is not Flurrie.
+ * adds 2 to the counter; a breath frame that takes it past the limit blows the piece away (end event, image animation
+ * "A_2", hit object off, 60 frames' wait), while 30 frames without breath or leaving the motion show the group. Then
+ * the pose, image and offscreen target are freed and the slot returns to waiting. cloud_once_flag lets one piece at a
+ * time start; the early demos also wait while the partner is not Flurrie.
  */
 static USER_FUNC(evt_cloud_main) {
     CloudWork* wp = (CloudWork*)event->lwData[0];

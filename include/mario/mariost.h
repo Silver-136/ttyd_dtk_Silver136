@@ -68,7 +68,7 @@ typedef struct GlobalWork {
     s32 framerate; // 0x4, display rate, 60 or 50
     s32 debugFlag; // 0x8, only cleared (cardmgr); nameent takes input only while 0
     s32 debugBattle; // 0xC, seq_battle copies it to debug_battle_flag
-    BOOL dvdError; // 0x10, set while the drive reports an error; renderTime stops meanwhile
+    BOOL dvdError; // 0x10, set while the drive reports an error; marioStMain waits, renderTime stops meanwhile
     s32 inBattle; // 0x14, verified s32
     u32 systemLevelFlags; // 0x18, SystemLevelFlags
     u32 retraceCount; // 0x1C, VI retrace count (viPostCallback); frame timer for blinking etc.
@@ -77,7 +77,7 @@ typedef struct GlobalWork {
     OSTime retraceTime; // 0x30, time of the last retrace
     OSTime renderTime; // 0x38, time outside menus; saved with the file, so it adds up across sessions
     OSTime renderFieldTime; // 0x40, the same outside battle
-    OSTime systemLv0Time; // 0x48, clock that runs unless system level 0 stops it (SYSTEM_LEVEL_STOP_LV0)
+    OSTime systemLv0Time; // 0x48, runs unless SYSTEM_LEVEL_STOP_LV0 is set (US and later: not on dvdError / winCheck)
     OSTime systemLv1Time; // 0x50, same for level 1
     OSTime systemLv2Time; // 0x58, same for level 2
     OSTime systemLv3Time; // 0x60, same for level 3
@@ -99,9 +99,9 @@ typedef struct GlobalWork {
     char currentAreaName[0x10]; // 0x13C, area name, e.g. "gor"
     char lastMapBeforeTitle[0x10]; // 0x14C, map left when the game last went to the title (only written)
     void* relocationBase; // 0x15C, loaded map REL module (OSLink/OSUnlink in seq_mapchange)
-    void* mapAlloc; // 0x160, map heap block (_mapAlloc)
+    void* mapAlloc; // 0x160, map REL load buffer (HEAP_DEFAULT, 660 KB, US and later 670 KB); not for tst / jon
     s32 mapEventId; // 0x164, map init event id (seq_mapchange.c)
-    FieldBattleData* fbatData; // 0x168, field battle data of the battle being started (npcdrv)
+    FieldBattleData* fbatData; // 0x168, field battle state (mode, first strike), allocated once by fbatInit (npcdrv)
     u32 language; // 0x16C, Language
     u16 fbWidth; // 0x170, frame buffer width (GXSetScissor)
     u16 efbHeight; // 0x172, EFB height
@@ -112,7 +112,7 @@ typedef struct GlobalWork {
     u8 lSW[0x400]; // 0xDB8, LSW byte values (cleared on an area change, swReInit)
     s32 lastSlot; // 0x11B8, last used save slot, start cursor on load screen
     u8 playerName[0x11D0 - 0x11BC]; // 0x11BC, file name typed at file creation (seq_load)
-    s32 saveSlot; // 0x11D0, memory card slot the game saves to
+    s32 saveSlot; // 0x11D0, save file slot the game saves to (seq_load; cardWrite)
     Vec savePlayerPos; // 0x11D4, Mario's position when saved (cardmgr)
     s32 savePartyId[2]; // 0x11E0, partners out when saved
     OSTime saveTime; // 0x11E8, OSGetTime of the last save

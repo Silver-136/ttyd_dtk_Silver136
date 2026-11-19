@@ -854,7 +854,7 @@ void iconSetAlpha(const char* name, u8 alpha) {
     }
 }
 
-/** Icons of the digits 0 to 9, large and small, used by the number drawing (iconNumberDispGx). */
+/** Icons of the digits 0 to 9, large and small, used by iconNumberDispGx and iconNumberDispGx3D. */
 static u16 suuji[] = { // 0-9
     ICON_NUMBER_0, ICON_NUMBER_1, ICON_NUMBER_2, ICON_NUMBER_3, ICON_NUMBER_4,
     ICON_NUMBER_5, ICON_NUMBER_6, ICON_NUMBER_7, ICON_NUMBER_8, ICON_NUMBER_9,

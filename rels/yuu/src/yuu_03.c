@@ -752,9 +752,9 @@ EVT_BEGIN(minigame04_start)
 EVT_END()
 
 /**
- * Ends a Paper Mode round: lets Mario land and, from JP on only when LW(0) is below 701, walks him to x 1650;
- * plays the failure effect (LW(0) 701 or more) or the success effect, shows the score and ranking screens and
- * adds the Piantas won.
+ * Ends a Paper Mode round: lets Mario land and walks him to x 1650 (from JP on only when LW(0) is below 701 and he
+ * landed above y -100; otherwise he is just normalized once he stands); plays the failure effect (LW(0) 701 or
+ * more) or the success effect, shows the score and ranking screens and adds the Piantas won.
  * Then asks whether to play again: with fewer than 10 Piantas, or on Quit, it sets
  * GSWF_GOR_RETURNING_FROM_MINIGAME and sends Mario back through pipe A_dokan_02 of gor_03;
  * continuing pays 10 Piantas and resets the course.

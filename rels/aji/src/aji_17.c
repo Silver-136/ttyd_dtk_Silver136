@@ -3748,8 +3748,9 @@ static NpcSetupInfo npcEnt[] = {
 };
 
 /**
- * Case script of TEC's screen: plays the "moza" animation, prints stg7_aji_tec_00 the first time
- * (GSWF_AJI_17_TEC_FIRST_TALK_DONE), later stg7_aji_tec_01, then pauses it.
+ * Case script of the keyboard (CASE_FRONT_A, set up by the init after the final battle): with Mario's keys off,
+ * plays the "moza" animation, prints stg7_aji_tec_00 the first time (GSWF_AJI_17_TEC_FIRST_TALK_DONE), later
+ * stg7_aji_tec_01, then pauses it.
  */
 static EVT_BEGIN(tec_talk)
     CALL(evt_mario_key_onoff, 0)

@@ -179,7 +179,7 @@ static EVT_BEGIN(evt_kusa_2)
 EVT_END()
 
 /**
- * Hit script for item_kusa_4: when that item is not out, scatters a Mystery, collected only once
+ * Script of the grass patch a_kusa_4 (kusa_data): when item_kusa_4 is not out, scatters it, a Mystery, collected once
  * (GSWF_HEI_01_MYSTERY_BUSH).
  */
 static EVT_BEGIN(evt_kusa_4)
@@ -191,7 +191,7 @@ static EVT_BEGIN(evt_kusa_4)
 EVT_END()
 
 /**
- * Hit script for item_kusa_7: when that item is not out, scatters a coin, collected only once
+ * Script of the grass patch a_kusa_7 (kusa_data): when item_kusa_7 is not out, scatters it, a coin, collected once
  * (GSWF_HEI_01_COIN_BUSH).
  */
 static EVT_BEGIN(evt_kusa_7)

@@ -220,8 +220,9 @@ static BattleWeapon weapon_bllizard_bllizard_attack = {
 };
 
 /**
- * Script helper: args[0] = unit. Keeps the cold cloud effect (a Kumokumo particle, created on the first call and stored
- * in UNIT_WORK_BARRIER_EFFECT) hovering at the Ice Puff's position, scaled by its size.
+ * Script helper: args[0] = unit. Moves the cold cloud effect (a Kumokumo particle, created when
+ * UNIT_WORK_BARRIER_EFFECT is empty and stored there) to the Ice Puff's position, raised by 10 x its size, and scales
+ * it by its size.
  */
 static USER_FUNC(eff_ice_barrier) {
     s32 id = BattleTransID(event, evtGetValue(event, event->args[0]));

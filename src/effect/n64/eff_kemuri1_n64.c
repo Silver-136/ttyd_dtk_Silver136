@@ -67,8 +67,9 @@ static void kemuri_dosun2(EffKemuri1Work* work) {
 }
 
 /**
- * Spawns smoke effect 1 at (x, y, z): two landing puffs for types 0 and 1 (15 frames), three rising puffs for type 3
- * (129 frames), a ring of eight puffs starting at angle angleOfs for types 4-7 (65 frames); type 2 has no puffs.
+ * Spawns smoke effect 1 at (x, y, z): two puffs out to the sides for types 0 and 1 (15 frames), three rising
+ * puffs for type 3 (129 frames), a ring of eight puffs starting at angle angleOfs for types 4-7 (65 frames); type 2
+ * has no puffs.
  */
 EffectEntry* effKemuri1N64Entry(s32 type, f32 x, f32 y, f32 z, f32 angleOfs) {
     EffectEntry* effect;

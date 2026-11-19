@@ -308,7 +308,7 @@ static EVT_BEGIN(first_evt)
     RETURN
 EVT_END()
 
-/** Script helper: puts the effect "baria" on the NPC ピーチ姫, offset (0, -8, 10) turned to face the 3D camera. */
+/** Script helper: moves the effect "baria" to the NPC ピーチ姫, offset (0, -8, 10) turned to face the 3D camera. */
 static USER_FUNC(syuryo_baria_recalc_pos) {
     // ピーチ単
     NpcEntry* npc = npcNameToPtr("ピーチ姫");
@@ -1467,8 +1467,8 @@ EVT_BEGIN(las_28_init_evt)
 EVT_END()
 
 /**
- * Script helper: builds the torch map-object name "hi<args[0]>" and returns it in args[1] (in the early demos the
- * buffer is a local array).
+ * Script helper: builds the candle-flame map-object name "hi<args[0]>" and returns it in args[1] (the early demos
+ * build it in a local array, so the pointer returned is to the finished call's stack).
  */
 static USER_FUNC(make_name) {
     EvtWord* args = event->args;

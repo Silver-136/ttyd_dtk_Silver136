@@ -10290,7 +10290,7 @@ BOOL psndBGMOff(u32 flags) {
  * Stops BGM channel flags & 0xF, or fades it out (PSND_FADEOUT), pauses it (PSND_PAUSE) or dips it to the silent_tbl
  * volume of bits 12-15 (PSND_SILENT) over fadetime ms. Returns FALSE for an empty channel and, unless force is set (JP
  * and later), for the time-bomb BGM during STG2_23 and, in chapter 3 while channel 0 plays KUPPA2, for anything but the
- * battle win jingle.
+ * battle win jingle (JP and later: stopping that jingle there first continues channel 0's BGM, fading in).
  */
 BOOL psndBGMOff_f_d(s32 flags, u32 fadetime, u32 force) {
     PaperSoundBGM* bgm = &psbgm[flags & 0xF];
@@ -10682,8 +10682,9 @@ sgfound:
 /**
  * Common body of the psndSFXOn family: puts effect name in a free one of the 40 effect slots (else in one of a
  * lower-priority effect, which it stops), with volume vol (0xFF: 0x7F), pan (0xFF: the list's), pitch ms of extra delay
- * and pos (3D unless posOnly). Returns the slot with the play serial from bit 8, or -1 (unknown effect, no slot, or
- * sounds off without ignoreSfxOff).
+ * and pos (3D unless posOnly). Returns the slot with the play serial from bit 8, or -1 (unknown effect, no slot, sounds
+ * off without ignoreSfxOff, list entry 0x365 up to STG0_02_MARIOS_HOUSE, or (JP and later) the coin sound and three
+ * others within their shared 6-frame cooldown).
  */
 static s32 __psndSFXOn(const char* name, u8 vol, u8 pan, u16 pitch, Vec* pos, u32 posOnly, u16 dist, s32 ignoreSfxOff) {
     s32 sid;

@@ -838,8 +838,8 @@ EVT_BEGIN(hei_07_init_evt)
 EVT_END()
 
 /**
- * Message callback: for stg1_hei_23 each type 3 counts LW(14) and the third plays SFX_QUIZ_START1. By the mode in
- * LW(15) it plays the mouth animation anm_kuti_1 or the smile anm_egao on type 5, switching modes as LW(14) counts.
+ * Message callback: for stg1_hei_23 each type 3 adds 1 to LW(14), and SFX_QUIZ_START1 plays when it reaches 3. By
+ * LW(15) it plays anm_kuti_1 (modes 0, 2) or anm_egao (1) on type 5; mode 2 turns 1 and 1 turns 0 as LW(14) counts.
  */
 // The message callback shares LW14 (mouth/marker count) and LW15 (mouth-animation mode) with the event.
 static void callback(s32 type, void** work) {

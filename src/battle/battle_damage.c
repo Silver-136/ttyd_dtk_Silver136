@@ -1894,9 +1894,10 @@ s32 BattleCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* 
 }
 
 /**
- * Redirects an attack on *unitIdx to a unit guarding it: one whose protectId is the target, not damaged or already
- * guarding this turn, able to guard, and with a kGuardTargetPart part. Both units play their guard hit events,
- * BATTLE_FLAG_GUARD_MOVE is set, and *unitIdx/*partIdx become the guard and that part.
+ * Redirects an attack on *unitIdx to a unit guarding it: one whose protectId is the target, without kDamagedThisTurn
+ * or kProtectedByBodyguard, able to guard, and with a kGuardTargetPart part. Both units play their guard hit events,
+ * the target gets kProtectedByBodyguard and the guard kBodyguarding, BATTLE_FLAG_GUARD_MOVE is set, and
+ * *unitIdx/*partIdx become the guard and that part.
  */
 void BattleAttackDeclare(s32* unitIdx, s32* partIdx) {
     s32 i;

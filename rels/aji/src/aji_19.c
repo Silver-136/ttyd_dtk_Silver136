@@ -246,8 +246,8 @@ static USER_FUNC(mario_chk) {
 }
 
 /**
- * Returns whether hit entry target is the hit group `group` or one of the hit entries below it, comparing joint names
- * (_hitIsGroupSub).
+ * Returns whether hit entry target has the joint name of `group` or of an entry _hitIsGroupSub reaches below it (each
+ * node with a child descends without trying its siblings, so not every entry below is compared).
  */
 static BOOL hitIsGroup(HitEntry* target, HitEntry* group) {
     // Compare joint names through the child-first search, excluding the root's siblings.

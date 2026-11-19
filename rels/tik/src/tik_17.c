@@ -264,9 +264,9 @@ static EVT_BEGIN(mobj_box01)
 EVT_END()
 
 /**
- * Map init script of tik_17: sets up the two pipes and their tornado switches (GSWF_TIK_17_PIK_PIPE_RAISED,
- * GSWF_TIK_17_MUJ_PIPE_RAISED), the exits, fall recovery, the water animation, the large block, the FP Plus
- * chest and a moving floor.
+ * Map init script of tik_17: starts the sewer music and ambience, sets up the two pipes and their tornado switches
+ * (GSWF_TIK_17_PIK_PIPE_RAISED, GSWF_TIK_17_MUJ_PIPE_RAISED), the exits, fall recovery and the Gazigazi hazard NPC,
+ * the water animation, the large block, the FP Plus chest and a moving floor.
  */
 EVT_BEGIN(tik_17_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_TIK1"))

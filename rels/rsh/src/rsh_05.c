@@ -358,9 +358,9 @@ static s32 evt_moamoa_end_wait(EventEntry* event, BOOL isFirstCall) {
 }
 
 /**
- * Script helper: puts every Moamoa in MOAMOA_STATE_FUSION_WAIT with staggered timers and blocks until all have
- * MOAMOA_FLAG_FUSION_ARRIVED; then it marks them all as merged into the big Smorg (MOAMOA_FLAG_FUSED, no shadow) and
- * gives them the c_n_moa_a standing pose.
+ * Script helper: resets every Moamoa's scale to 1 and puts it in MOAMOA_STATE_FUSION_WAIT (MOAMOA_FLAG_FUSING) with
+ * staggered timers, and blocks until all have MOAMOA_FLAG_FUSION_ARRIVED; then it gives them all MOAMOA_FLAG_FUSED,
+ * MOAMOA_STATE_FUSED and no shadow, and the pose c_n_moa_a S_1.
  */
 static s32 evt_moamoa_fusion(EventEntry* event, BOOL isFirstCall) {
     s32 i;
@@ -2081,8 +2081,9 @@ EVT_BEGIN(rsh_05_init_evt_nidome)
 EVT_END()
 
 /**
- * Init script of rsh_05 for the nidome set-up: picks bero_data_a, b or c from GSWF_RSH_REVISIT_MAP_A, B or C,
- * runs the door set-up and then rsh_05_init_evt_nidome.
+ * Init script of rsh_05 for the nidome set-up: picks bero_data_a, b or c from GSWF_RSH_REVISIT_MAP_A, B or C
+ * (separate checks, C over B over A; with none set LW(0) is left as it was), runs the door set-up and then
+ * rsh_05_init_evt_nidome.
  */
 EVT_BEGIN(rsh_05_a_init_evt_nidome)
     IF_INT_EQUAL(GSWF_RSH_REVISIT_MAP_A, 1)

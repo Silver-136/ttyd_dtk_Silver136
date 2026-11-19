@@ -1375,7 +1375,7 @@ static EVT_BEGIN(starmaniac_get_event)
 EVT_END()
 
 /**
- * Talk script for Dazzle: ends at once when he has no badges left; otherwise greets Mario (the first talk
+ * Talk script for Dazzle: only says starmaniac_02 when he has no badges left; otherwise greets Mario (the first talk
  * sets GSWF_TIK_00_DAZZLE_FIRST_TALK_DONE) and trades badges for Star Pieces, refusing when Mario has none.
  * JP and later stop the room sound during the talk (tik_snd_off / tik_snd_on).
  */
@@ -3124,8 +3124,8 @@ EVT_END()
 
 /**
  * Bobbery trigger of the pillar (registered by hashira_bomb on a_bom_mae): plays the break sound, swaps the
- * hit areas from before to after the blast, sets GSWF_TIK_00_PILLAR_BOMBED and plays the paper-capture
- * animation (OFF_d_bom_ver2) of the pillar collapsing.
+ * hit areas from before to after the blast (ro_ru off too), sets GSWF_TIK_00_PILLAR_BOMBED and swaps the models,
+ * playing the paper-capture animation (OFF_d_bom_ver2) unless the capture's bounding box is empty.
  */
 static EVT_BEGIN(hashira_bomb_sub)
     BEGIN_INLINE_EVENT

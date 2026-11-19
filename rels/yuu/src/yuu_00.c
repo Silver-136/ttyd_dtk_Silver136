@@ -394,8 +394,8 @@ void yuuminigame_disp_1hikoki(CameraId camera, void* param) {
 /**
  * Rule check of the plane minigame: once Mario stands on a hit object outside the plane motion, it stores the landing
  * result (A_dai_01 to A_dai_05 give 2, 2, 2, 2, 3 in US and later and 2, 2, 2, 3, 5 before; the A_ground hits -5 to
- * -20; anything else 1) and the coin count, freezes the counter and the keys and returns TRUE (US and later also start
- * minigame01_floor_delete). Otherwise it returns FALSE.
+ * -20; anything else 1) and the coin count, freezes the counter and the keys and returns TRUE. Otherwise it returns
+ * FALSE. US and later start minigame01_floor_delete on every call while he stands on a hit object, plane or not.
  */
 // With the motion local this body has more than 30 statements in every version, so the unit's auto-inlining
 // leaves it a call in yuuminigame_main_1hikoki, as in the target.

@@ -1643,7 +1643,7 @@ USER_FUNC(evt_mario_jump_pos) {
  * of Mario's last fall (fallStartPos.y) is not below his y and lies above 1.5 times his collision height plus args[1],
  * a 550 ms hop to the point (args[6], args[7], args[8]); otherwise (JP and later also always for args[10] 3) a launch:
  * he rises, timed by args[9] ms, until he reaches the height args[4] (moving across too unless args[10] bit 0 is set;
- * the early demos: unless args[10] is nonzero), then hops 54 frames onto (args[3], args[4], args[5]). Both paths end
+ * the early demos: unless args[10] is nonzero), then hops (27 frames) onto (args[3], args[4], args[5]). Both paths end
  * in MARIO_MOTION_STAY with the camera following his height again; field battles are off meanwhile.
  */
 USER_FUNC(evt_mario_jump_jumpstand) {

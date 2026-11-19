@@ -1708,7 +1708,7 @@ static s32 iri_23_item_tbl[] = {
  * without a Wrestling Mag she says irai_23_00; with one she asks for it (irai_23_01), and unless Mario cancels
  * takes it, gives the Platinum Card and finishes the request. Otherwise, until Mario has accepted her ring
  * request (GSWF_RSH_MADAM_RING_REQUEST_ACCEPTED), she lowers the music and asks (stg6_pik_04_01 the first time,
- * stg6_pik_04_04 after) with a yes/no; yes sets the flag. Then, when Mario carries the Gold Ring, she runs
+ * stg6_pik_04_04 after) with a yes/no; yes sets the flag. Later, when Mario carries the Gold Ring, she runs
  * talk_madam_ring_return; else she says stg6_pik_04, or from STG6_70_THOUSAND_YEAR_DOOR on, once the ring is
  * returned (GSWF_PIK_MADAM_GOLD_RING_RETURNED), stg7_pik_clear_01 (stg7_pik_clear_01_1 after
  * STG8_END_AFTER_THE_BATTLE).

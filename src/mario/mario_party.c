@@ -13,8 +13,9 @@
 /**
  * JP and later partner button check: X arms MARIO_TRIG_FLAG_USE_PARTNER with a 5-frame partyUseDelay (counted down by
  * marioUsePartyMain) while Mario stands, walks or dashes on the ground with a partner that can act (not in Paper Mode
- * or already in use, Goombella grounded, Yoshi idle). Clears the trigger when the partner cannot be used now or control
- * is lost. Returns 0.
+ * or already in use, Goombella grounded, Yoshi idle; not as 8-bit Mario). Clears the trigger on a D-pad or Start press,
+ * while control or (once armed) keys are off, while fbatPreventMarioEventChk is set, in the air, in other motions or
+ * with no partner slot. Returns 0.
  */
 #if VERSION >= VERSION_JP
 s32 marioUseParty(void) {

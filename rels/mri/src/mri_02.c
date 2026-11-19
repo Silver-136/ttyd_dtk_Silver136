@@ -380,7 +380,7 @@ EVT_END()
 
 /**
  * Init script of the orb pedestal: runs mri_punipuni_setup; if the orb is on the pedestal
- * (GSWF_MRI_02_PUNI_ORB_PLACED) it is placed there and target flags 3 are cleared, otherwise the beam
+ * (GSWF_MRI_02_PUNI_ORB_PLACED) it is placed there and target flags 3 are set, otherwise the beam
  * S_sui_hikari is hidden. Then the target is moved to (0, 0, -8) and GF(15) is cleared.
  */
 static EVT_BEGIN(punipuni_ball00_init)

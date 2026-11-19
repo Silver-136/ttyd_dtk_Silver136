@@ -1838,7 +1838,7 @@ USER_FUNC(evt_sub_system_flag_onoff) {
     return EVT_RETURN_DONE;
 }
 
-/** Returns the stick and d-pad directions held on controller args[0] (keyGetDir) in args[1]. */
+/** Returns the main and C stick directions held on controller args[0] (keyGetDir, DEMO_*STICK_*) in args[1]. */
 USER_FUNC(evt_key_get_dir) {
     EvtWord* args = event->args;
     s32 chan = evtGetValue(event, args[0]);

@@ -4318,9 +4318,9 @@ static void puni_puni_init(void) {
 }
 
 /**
- * JP and later: runs Puni p's current mode handler (puniMode*) and sets or clears PUNI_FLAG_STRAY for it. In idle mode
- * it switches to wind mode when blown (breathPower over 10) or to join mode when Mario is within 150; join mode hangs
- * it under a parent (searchParent).
+ * JP and later: runs Puni p's current mode handler (puniMode*) and sets or clears PUNI_FLAG_STRAY for it (stop mode
+ * does neither). In idle mode it switches to wind mode when blown (breathPower over 10) or to join mode when Mario
+ * is within 150; join mode hangs it under a parent (searchParent).
  */
 // Descriptive name (not in the symbol maps); placeholder unk_mri_00012d58, JP mri .text+0x12C94. See docs/NAME_PROVENANCE.md.
 #if VERSION >= VERSION_JP
@@ -4503,9 +4503,9 @@ void puniMoveMain(PuniData* p) {
 
 /**
  * Pushes the active, colliding Punis apart, friends (slots below PUNI_ENEMY_FIRST) among slots 0 to 109 and enemies
- * among PUNI_ENEMY_FIRST to 209. An obstacle pushes back by the overlap; others in range set PUNI_FLAG_NEAR and, with
- * PUNI_FLAG_PUSHING on, share a small push. Then PUNI_FLAG_PUSHING is cleared where not near and (JP and later) speeds
- * are capped at 8.
+ * among PUNI_ENEMY_FIRST to 209. An obstacle pushes back by the overlap; others in range set PUNI_FLAG_NEAR, turn
+ * PUNI_FLAG_PUSHING on when they overlap and, with it on, share a small push. Then PUNI_FLAG_PUSHING is cleared
+ * where not near and (JP and later) speeds are capped at 8.
  */
 void puniOption(void) {
 #else

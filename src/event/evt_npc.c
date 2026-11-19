@@ -41,7 +41,7 @@ EVT_END()
 
 // clang-format on
 
-/** Creates an NPC named args[0] with the animation group args[1]; blocks until the group has loaded. */
+/** Blocks until the animation group args[1] has loaded, then creates the NPC named args[0] with it. */
 USER_FUNC(evt_npc_entry) {
     EvtWord* args = event->args;
     const char *desc, *name;
@@ -2952,7 +2952,7 @@ USER_FUNC(evt_npc_sound_data_set) {
     return EVT_RETURN_DONE;
 }
 
-/** Sets (args[0] nonzero) or clears NPC_WORK_FIELD_RELEASED, the flag that field NPC models are released. */
+/** Sets (args[0] nonzero) or clears NPC_WORK_FIELD_RELEASED, which lets npcReleaseFiledNpc free field NPC models. */
 USER_FUNC(evt_npc_release_filednpc) {
     BOOL set = evtGetValue(event, *event->args);
     NpcWork* wp = npcGetWorkPtr();

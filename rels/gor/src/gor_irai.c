@@ -376,9 +376,9 @@ EVT_END()
 /**
  * The Trouble Center board: until GSWF_TROUBLE_BOARD_EXPLAINED is set it runs gor_irai_lecture (from the US
  * release on Mario and the partners turn to the board first). Then it opens the request window
- * (irai_init_func, irai_main_func); for a chosen request it shows its description and asks irai_01; the
- * first answer prints irai_73, runs irai_start_func, spawns the request's start event and stores its id
- * in GSW_TROUBLE_ACCEPTED.
+ * (irai_init_func, irai_main_func); for a chosen request it prints its irai_msg_exposition text and the message in
+ * LW(12) and asks irai_01; the first answer prints irai_73, runs irai_start_func, spawns the request's start event
+ * and stores its id in GSW_TROUBLE_ACCEPTED, the other goes back to the list.
  */
 static EVT_BEGIN(gor_irai_main)
     IF_INT_EQUAL(GSWF_TROUBLE_BOARD_EXPLAINED, 0)

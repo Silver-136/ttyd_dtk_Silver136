@@ -139,7 +139,7 @@ USER_FUNC(kpa_mobj_on) {
 /**
  * Shared init of the Super Koopa Bros. stages: puts the player in Bowser mode (evt_mario_set_mode 2), removes
  * the partner and sets up the blocks and the score display. Entering through "kpa_replay" resets the time to
- * 180; any other entrance except "kpa_next_map" also resets GSW_KPA_TRY_COUNT to 1. Clears
+ * 180; any other entrance except "kpa_next_map" resets the time and GSW_KPA_TRY_COUNT (to 1). Clears
  * LSWF_KPA_TIMER_STARTED, LSWF_KPA_STAGE_ENDED, LSWF_KPA_BOWSER_DEAD and LSWF_KPA_GOAL_WALK_STARTED.
  */
 EVT_BEGIN(kpa_init)

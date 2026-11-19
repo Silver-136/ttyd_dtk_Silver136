@@ -3657,7 +3657,8 @@ MapObject* mapGetMapObj(const char* name) {
 
 /**
  * Sets flag bits flags on the map object name. An unknown name is recorded in the map error ring (type 0, as
- * mapErrorEntry does). JP and later leave MAP_OBJ_FLAG_DISPLAY_LIST off an object without a display list.
+ * mapErrorEntry does). JP and later set nothing when flags include MAP_OBJ_FLAG_DISPLAY_LIST and the object has no
+ * display list.
  */
 void mapObjFlagOn(const char* name, u32 flags) {
     MapObject* obj = mapGetMapObj(name);
@@ -3696,7 +3697,7 @@ void mapObjFlagOff(const char* name, u32 flags) {
 
 /**
  * Sets flags on obj and its whole subtree, and its later siblings when doNext;
- * JP and later skip the display-list flag on objects without a display list.
+ * JP and later set nothing on an object without a display list when flags include MAP_OBJ_FLAG_DISPLAY_LIST.
  */
 static void mapFlgOn(MapObject* obj, u32 flags, BOOL doNext) {
 #if VERSION <= VERSION_DEMO_JP

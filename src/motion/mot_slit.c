@@ -635,9 +635,9 @@ void marioReInit_slit(void) {
 }
 
 /**
- * Starts the slit (Paper Mode) motion: clears the slit work, the jump and fall flags and the new-motion trigger, sets
- * the slit display flags and, when no paper pose is loaded, a grey (0xA8) paper ambient colour and the "p_slit" paper
- * animation. Stand pose without stick input; paper frame PM_S_1A.
+ * Starts the slit (Paper Mode) motion: clears the slit work, the jump, fall, stepping and jump-input flags and the
+ * new-motion trigger, sets the slit display flags and, when no paper pose is loaded, a grey (0xA8) paper ambient
+ * colour and the "p_slit" paper animation. Stand pose without stick input; paper frame PM_S_1A.
  */
 // Original name and size (0xe4) from the JP demo map (UNUSED there: every call is inlined).
 void init_slit(void) {

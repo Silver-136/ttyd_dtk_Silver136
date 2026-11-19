@@ -137,8 +137,8 @@ void mario_kemuri_landon(void) {
 
 /**
  * Water effects at Mario's feet: a splash and a ripple on the first frame of a jump (at most every 10 frames), a
- * ripple every 30 to 49 frames while he stands, walks, dashes or lands, and a splash every 20 frames while he walks or
- * dashes and on landing. JP and later use other splash types in mri_05.
+ * ripple every 30 to 49 frames while he stands, walks or dashes (and at once on landing), and a splash every 20 frames
+ * while he walks or dashes and on landing. JP and later use other splash types in mri_05.
  */
 #if VERSION <= VERSION_DEMO_JP
 static inline

@@ -139,8 +139,8 @@ static EVT_BEGIN(toile_in)
 EVT_END()
 
 /**
- * Exit script for the toilet pipe: plays the water ("anm_mizu") and, a second later, the lid ("anm_futa")
- * animation with the flush sound, sets GSWF_TOU_08_TOILET_WARP_PENDING (read by tou_04's init) and sets LW(0)
+ * Exit script for the toilet pipe: plays the water animation ("anm_mizu") and the flush sound (the lid, "anm_futa",
+ * a second later), sets GSWF_TOU_08_TOILET_WARP_PENDING (read by tou_04's init) and sets LW(0)
  * to 0.
  */
 static EVT_BEGIN(toile_out)
@@ -1047,8 +1047,9 @@ static EVT_BEGIN(bed_entry)
 EVT_END()
 
 /**
- * Run from evt_tou_match_after_default at rank 5 while GSWF_TOU_CAKE_ON_TABLE is set: the camera turns to the
- * Shady Koopa (ウラノコ), who speaks (stg3_tou_297_2); clears GSWF_TOU_CAKE_ON_TABLE.
+ * Run from evt_tou_match_after_default at rank 5 and from the map init (not after a match) while
+ * GSWF_TOU_CAKE_ON_TABLE is set: the camera turns to the Shady Koopa (ウラノコ), who speaks (stg3_tou_297_2);
+ * clears GSWF_TOU_CAKE_ON_TABLE.
  */
 EVT_BEGIN(evt_tou_08_cake)
     CALL(evt_mario_key_onoff, 0)

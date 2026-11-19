@@ -108,8 +108,8 @@ static KusaAccess ueki_access_data[] = {
 };
 
 /**
- * Wind event when Flurrie blows the cloud away: plays the success jingle for 2 seconds, then registers the
- * hidden airport panel (hikou and hikou1) as plane-mode harbors, switches the panel's collision attribute on and
+ * Wind event when Flurrie blows the cloud away: plays the success jingle for 2 seconds (an inline event) while it
+ * registers the hidden airport panel (hikou and hikou1) as plane-mode harbors, switches attribute 16 of a_hi on and
  * sets GSWF_MRI_19_PLANE_PANEL_UNCOVERED.
  */
 static EVT_BEGIN(cloud_wind_event)

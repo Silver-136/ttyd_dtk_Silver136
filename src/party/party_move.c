@@ -1139,7 +1139,7 @@ void partyChgMoveMode(PartyEntry* party, s32 mode) {
 
 /**
  * Switches the partner's motion to mot and sets PARTY_TRIG_CHG_MOT. From JP on, leaving the fall motion clears the
- * jump, fall, step, front-wall-check, forced-fall and no-floor flags.
+ * jump, fall, step, front-wall-check, forced-fall and floors-disabled flags.
  */
 void partyChgMot(PartyEntry* party, s32 mot) {
 #if VERSION >= VERSION_JP
@@ -1313,8 +1313,8 @@ void partyGetMoveDirSpd(PartyEntry* party, f32* dir, f32* spd) {
 /**
  * Pushes the partner out of Mario: when it is inside a box around him (a share of their combined width and height,
  * smaller with PARTY_TRIG_HALF_PUSH and, from JP on, while Mario pushes), sets pushVelX/Z away from him (turned 90
- * degrees when he walks almost straight at it, stronger while he stands still) and counts pushCount up to 100;
- * otherwise pushCount counts down. Returns pushCount.
+ * degrees when he walks almost straight at it, stronger while he stands still) and, while he moves, counts pushCount
+ * up to 100; outside the box pushCount counts down. Returns pushCount.
  */
 s32 partyMarioHosei(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;

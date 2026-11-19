@@ -179,8 +179,8 @@ void BattleAcDrawGauge(s32 x, s32 y, f32 ratio, s32 width, s32 level, s32 a, s32
 
 // BattleAcDrawGauge flags: how the gauge fill is coloured (else the plain green fill and the level bands).
 enum {
-    AC_GAUGE_FLAG_FULL = 1 << 0,     // gauge full: the fill takes the pulsing AC display colour
-    AC_GAUGE_FLAG_OVERHEAT = 1 << 1, // the fill is red (ac_repeatedly_lv's overheat state -1)
+    AC_GAUGE_FLAG_FULL = 1 << 0,     // gauge full: the green fill is tinted by the pulsing AC display colour
+    AC_GAUGE_FLAG_OVERHEAT = 1 << 1, // the fill is red (state -1 of ac_repeatedly and ac_repeatedly_lv)
 };
 
 // Names from LLCOOLT's tree.

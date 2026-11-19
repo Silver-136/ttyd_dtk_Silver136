@@ -185,8 +185,8 @@ EVT_END()
 /**
  * Shared map init of the three rsh_07 variants: plays the scenery animations unless the train is stopped
  * (GSWF_HOM_TRAIN_STOPPED_AT_RIVERSIDE, GSWF_HOM_TRAIN_AT_POSHLEY, GSWF_HOM_TRAIN_AT_ROGUEPORT), sets up the driver,
- * the signboards and the save block (mobj_save at 210, 60, -145), then starts the music of the station the train
- * is at or the variant's train music (rsh_07_b leaves the audio as it is).
+ * the signboards and the save block (mobj_save at 210, 60, -145), then starts the music of the station the train is
+ * at (GSWF_RSH_TRAIN_AT_*, silenced to level 6) or the variant's train music (rsh_07_b leaves the audio as it is).
  */
 EVT_BEGIN(rsh_07_init_evt)
     IF_INT_EQUAL(GSWF_HOM_TRAIN_STOPPED_AT_RIVERSIDE, 0)

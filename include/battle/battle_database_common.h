@@ -155,7 +155,7 @@ typedef struct BattleWeapon {
     u16 icon;                         // 0x4, IconType shown in the battle menu
     u8 pad_06[0x8 - 0x6];             // 0x6, always 0, never accessed
     s32 itemId;                       // 0x8, item or badge the move belongs to (0 = none)
-    const char* description;          // 0xC, msg tag of the battle menu help text
+    const char* description;          // 0xC, msg tag of the battle menu help text (shown when itemId is 0)
     u8 baseAccuracy;                  // 0x10, hit chance % (halved when the attacker is dizzy or in fog)
     u8 baseFpCost;                    // 0x11, FP cost
     s8 baseSpCost;                    // 0x12, Star Power cost
@@ -165,9 +165,9 @@ typedef struct BattleWeapon {
     s8 reserved_19;                   // 0x19, 1 (5 on player moves); copied to StarPowerInfo.weaponParam, never read
     s8 bingoSlotChance;              // 0x1A, % chance to fill a bingo slot (battle_audience)
     s8 reserved_1B;                   // 0x1B, 1 (50 on player moves), never read
-    BattleWeaponDamageFn hpDamageFn;                 // 0x1C, computes the HP damage (default: hpDamageWork[0])
+    BattleWeaponDamageFn hpDamageFn;                 // 0x1C, computes the HP damage; NULL = no HP damage
     u32 hpDamageWork[8];              // 0x20, parameters of hpDamageFn
-    BattleWeaponDamageFn fpDamageFn;                 // 0x40, computes the FP damage (default: fpDamageWork[0])
+    BattleWeaponDamageFn fpDamageFn;                 // 0x40, computes the FP damage; NULL = no FP damage
     u32 fpDamageWork[8];              // 0x44, parameters of fpDamageFn
     u32 targetClassFlags;             // 0x64, TARGET_CLASS_* (who can be targeted)
     u32 targetPropertyFlags;          // 0x68, TARGET_PROP_* (which parts can be targeted)

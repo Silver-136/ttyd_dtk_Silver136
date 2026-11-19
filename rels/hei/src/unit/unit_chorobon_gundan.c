@@ -456,8 +456,8 @@ static BattleUnit* chorogun_get_ptr(void) {
 
 /**
  * Ext-pose init of the Fuzzy Horde: allocates 1000 Chorogun entries, starts each pose visible at y -1000 and lays the
- * Fuzzies on a 50-wide grid (5 units apart in x, 7 in z, with a little random jitter) with a random start delay (22 for
- * the first). Then it swaps the positions of 500 random pairs.
+ * Fuzzies on a 50-wide grid (5 units apart in x with up to 5 random jitter, 7 in z with up to 2.5) with a random start
+ * delay below 45 (22 for the first). Then it swaps the positions of 500 random pairs.
  */
 static void chorogun_ext_init(void) {
     s32 i;

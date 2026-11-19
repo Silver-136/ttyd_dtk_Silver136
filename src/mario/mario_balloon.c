@@ -58,10 +58,10 @@ void marioBalloonOff(void) {
 }
 
 /**
- * Shows or hides the balloon over Mario: the A-button balloon (type 0) for something he touches, faces or stands on and
- * for treasure boxes in front, or the talk balloon of the NPC fbatNpcTalkCheck finds. Hidden while he has no control,
- * is in the air, in Paper Mode or the slit, or not standing, walking or dashing; left alone while an event balloon is
- * up (MARIO_DISP_FLAG_EVT_BALLOON).
+ * Shows or hides the balloon over Mario: the A-button balloon (type 0) for something he touches, faces or stands on (a
+ * treasure box in front decides by treasureBox's result), or the NPC balloon (its balloonType) of the NPC
+ * fbatNpcTalkCheck finds. Hidden while his keys are off (marioChkKey), he is in the air, in Paper Mode or the slit,
+ * or not standing, walking or dashing; left alone while an event balloon is up (MARIO_DISP_FLAG_EVT_BALLOON).
  */
 void marioBalloonMain(void) {
     MarioWork* mario;

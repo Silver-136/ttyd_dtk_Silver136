@@ -480,7 +480,7 @@ EVT_BEGIN(mri_punipuni_itemremove)
 EVT_END()
 
 /**
- * Script helper: while args[1] <= args[2], colours map group args[0] with a hue that cycles with the retrace count;
+ * Script helper: when args[1] <= args[2], colours map group args[0] with a hue that cycles with the retrace count;
  * otherwise sets it white.
  */
 static USER_FUNC(hakari_color) {

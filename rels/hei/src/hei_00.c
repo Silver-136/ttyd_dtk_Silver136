@@ -1195,8 +1195,8 @@ EVT_BEGIN(moon_stone_set_event)
 EVT_END()
 
 /**
- * Hit script for item_ki01: when that item is not out, drops a Star Piece, collected only once
- * (GSWF_STARPIECE_31).
+ * Hit script of the first tree (a_ki_1): when item_ki01 is not out, drops a Star Piece from it, collected
+ * only once (GSWF_STARPIECE_31).
  */
 static EVT_BEGIN(ki_data_evt_01)
     CALL(evt_item_delete_check, STRING("item_ki01"), LW(0))

@@ -507,7 +507,7 @@ EVT_END()
 
 /**
  * Boarding scene, registered on n_bero_1 at STG6_42_DRAWBRIDGE_DOWN: the rear cars (train_4 to 6) are
- * hidden, Mario and the partner walk to station attendant 2 (駅員2), the door closes and he says
+ * shown, Mario and the partner move in and face station attendant 2 (駅員2), the door closes and he says
  * stg6_eki_05. The crossing barrier "shadanki" moves, the train departs (hom_10_evt_resha_start),
  * then GSWF_HOM_TRAIN_BOARDED_UNUSED and GSWF_HOM_BOARDED_AT_RIVERSIDE_UNUSED are set, the story moves to
  * STG6_43_CONDUCTOR_APPEARS and the map changes to rsh_02_c ("hom_hassya").

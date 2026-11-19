@@ -1162,7 +1162,7 @@ void windowDispGX2_Waku_col(Mtx mtx, u16 gxTexMapID, GXColor color, f32 x, f32 y
     }
 }
 
-/** Nonzero while window id is busy (WINDOW_FLAG_BUSY); scripts wait on it. */
+/** Nonzero while window id is busy (WINDOW_FLAG_BUSY); callers (evt_msg, evt_mobj, itemdrv, end_00) wait on it. */
 s32 windowCheckID(s32 id) {
     return windowGetPointer(id)->flags & WINDOW_FLAG_BUSY;
 }

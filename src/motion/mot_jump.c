@@ -523,10 +523,10 @@ void mot_upstairs(void) {
 }
 
 /**
- * Fall motion (Bowser uses kpa_fall). On entry: marks Mario falling, stops the looping sound in soundId[2] and sets the
- * fall pose (MARIO_MOTION_FALL_2 stops air movement instead). Camera y-follow comes back on once he drops below his
- * last ground (not in background mode); near the bottom of the screen the camera follow rate rises to 0.8. Counts
- * airTimer; US and later also set the Spring Jump trigger flags (marioPriCheckJabara).
+ * Fall motion (Bowser uses kpa_fall). On entry: marks Mario falling, stops any sound in soundId[2] (nothing sets it)
+ * and sets the fall pose (MARIO_MOTION_FALL_2 stops air movement instead). Camera y-follow comes back on once he
+ * drops to his last ground height (not in background mode); at screenY 430 or more the follow rate rises 0.1 a frame
+ * to 0.8. Counts airTimer; US and later also set the Spring Jump trigger flags (marioPriCheckJabara).
  */
 void mot_fall(void) {
     MarioWork* mario = marioGetPtr();
@@ -597,7 +597,7 @@ void mot_fall(void) {
     }
 }
 
-/** Stops the looping sound in mario->soundId[2] when the fall motion ends. */
+/** Stops any sound in mario->soundId[2] (nothing sets it) when the fall motion ends. */
 void mot_fall_post(void) {
     MarioWork* mario = marioGetPtr();
     if (mario->soundId[2] != (u32)-1) {
@@ -607,8 +607,8 @@ void mot_fall_post(void) {
 }
 
 /**
- * Landing: clears the jump state and the looping sound,
- * then goes to the stay motion at once or after mario->multiTimer frames.
+ * Landing: clears the jump state and stops any sound in soundId[2] (nothing sets it), then goes to the stay
+ * motion at once or after mario->multiTimer frames.
  */
 void mot_land(void) {
     MarioWork* mario = marioGetPtr();

@@ -76,7 +76,10 @@ USER_FUNC(evt_snd_bgm_freq) {
     return EVT_RETURN_DONE;
 }
 
-/** Passes args[1] to psndBGMScope for BGM channel args[0] (a literal): how long it ignores the master BGM volume. */
+/**
+ * Passes args[1] to psndBGMScope for BGM channel args[0] (a literal): the channel ignores the master BGM volume for
+ * good (> 0), not at all (< 0) or for 30 more frames (0).
+ */
 USER_FUNC(evt_snd_bgm_scope) {
     EvtWord* args = event->args;
     s32 id = args[0];

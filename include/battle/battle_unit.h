@@ -722,8 +722,8 @@ typedef struct BattleWorkUnitPart {
     BattleUnitKindPart* kindPartParams;                    // 0x4, the unit kind's data for this part
     const char* partName;                                  // 0x8, from kindPartParams
     Vec homePosition;                                      // 0xC
-    Vec position;                                          // 0x18, part's world position
-    Vec positionOffset;                                    // 0x24, offset from the unit position (draw, hit cursor)
+    Vec position;                                          // 0x18, own position (used for kAbsolutePosition parts)
+    Vec positionOffset;                                    // 0x24, offset from the unit position (x mirrored)
     Vec displayOffset;                                     // 0x30, draw-only translation
     Vec baseRotation;                                      // 0x3C, added to rotation when drawing
     Vec rotation;                                          // 0x48, rotation in degrees
@@ -769,7 +769,7 @@ typedef struct BattleWorkUnitPart {
     void (*dispCallback)(struct BattleWorkUnitPart*, s32); // 0x210, called before (0) and after (1) drawing
     u8 poseState;                                          // 0x214, step of the look effect (_pose_*)
     u8 look;                                               // 0x215, PART_LOOK_*
-    u16 poseTimer;                                         // 0x216, frames until the look effect restarts
+    u16 poseTimer;                                         // 0x216, frames until the look effect's next step
     GXColor drawColor;                                     // 0x218, material colour set per frame from dispColor
     BattleWorkUnitPartBlur blurWork;                       // 0x21C, after-image work (btlevtcmd_SetPartsBlur)
     BtlPartPoseSound poseSound;                            // 0x4D0, btlevtcmd_AnimeSetPoseSoundTable
@@ -895,10 +895,10 @@ typedef struct BattleUnit {
     s8 maxMoveCount;                                          // 0x21, moves per turn; caps movesRemaining
     s8 movesRemaining;                                        // 0x22, moves left this turn
     s8 maxMovesThisTurn;                                      // 0x23, movesRemaining at the turn start
-    s8 activeTurns;                                           // 0x24, turns since entry (+1 per turn)
+    s8 activeTurns;                                           // 0x24, +1 per turn; 0 once its moves run out
     s8 swallowRate;                                           // 0x25, chance Yoshi can swallow it (kind swallowChance)
     s8 swallowAttribute;                                      // 0x26, from the kind's swallowAttributes
-    s32 movePriority;                                         // 0x28, turn order: kind turnOrder +- variance
+    s32 movePriority;                                         // 0x28, turn order: turnOrder + irand(var) - var / 2
     s32 attackPhase;                                          // 0x2C, phase the unit acts in
     Vec homePosition;                                         // 0x30, position set at entry (BtlUnit_SetHomePos)
     Vec position;                                             // 0x3C, battle position (stage coordinates)
@@ -996,7 +996,7 @@ typedef struct BattleUnit {
                                                               // work pointers, floats stored in the word
                                                               // (btlevtcmd_SetUnitWork / GetUnitWork,
                                                               // SetUnitWorkFloat / GetUnitWorkFloat)
-    BattleUnitPart* currentTarget;                            // 0x254 (US 0x258), part being targeted
+    BattleUnitPart* currentTarget;                            // 0x254 (US 0x258), part hit last (battle_damage)
     s32 reserved_258;                                         // 0x258 (US 0x25C), cleared when the unit's action ends (btlseqAct 0x6000009)
     s16 hpDamageCount;                                        // 0x25C (US 0x260), hits taken this action;
                                                               // BattleCheckDamage counts them, SPECIAL_DIMINISH_BY_HIT
@@ -1010,7 +1010,7 @@ typedef struct BattleUnit {
     s8 attackerHitCountTaken;                                 // 0x26F (US 0x273), the attacker's attackHitCount after its hit on this unit
     u32 damagePattern;                                        // 0x270 (US 0x274), damage pattern of the last hit
                                                               // (selects the hurt pose), 0 when cleared
-    s32 damageCode;                                           // 0x274 (US 0x278), DAMAGE_CODE_* of the last hit
+    s32 damageCode;                                           // 0x274 (US 0x278), code of the last hit event + flags
     BattleUnitToken_Flags tokenFlags;                         // 0x278 (US 0x27C), BattleUnitToken_Flags
     s32 attackHitCount;                                       // 0x27C (US 0x280), hits this unit resolved as attacker
                                                               // this action (BattleCheckDamage counts every one);
@@ -1039,7 +1039,7 @@ typedef struct BattleUnit {
     s32 slideReturnEventId;                                   // PAL and the PAL demo (+4 from here): enemy_slide_return_evt of sac_enemy_slide_return, waited on by BattleWaitAllActiveEvtEnd_NoBgSetEndWait
 #endif
     EvtWord* hitEventCode;                                    // 0x2CC (US 0x2D0), run on the attacker by BattleRunHitEventDirect
-    s32 talkPartId;                                           // 0x2D0 (US 0x2D4), part that plays the talk pose
+    s32 talkPartId;                                           // 0x2D0 (US 0x2D4), part for talkPose / stayPose
     const char* talkPose;                                     // 0x2D4 (US 0x2D8), POSE_TYPE_TALK (btlevtcmd talk anim)
     const char* stayPose;                                     // 0x2D8 (US 0x2DC), POSE_TYPE_NEUTRAL
     union {

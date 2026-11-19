@@ -456,8 +456,8 @@ static EVT_BEGIN(evt_rokka_init)
 EVT_END()
 
 /**
- * Peach takes the X-Naut uniform: she says peach_aji_134, then peach_aji_135, GSWF_AJI_09_UNIFORM_TAKEN is
- * set and R_fuku_g is hidden with its hit object.
+ * Peach takes the X-Naut uniform: she says peach_aji_134, then peach_aji_135 is shown with no speaker,
+ * GSWF_AJI_09_UNIFORM_TAKEN is set and R_fuku_g is hidden with its hit object.
  */
 static EVT_BEGIN(peach_evt_fuku_g)
     CALL(evt_mario_key_onoff, 0)

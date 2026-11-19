@@ -4008,8 +4008,9 @@ static EVT_BEGIN(gundan1000tai_afterbattle)
 EVT_END()
 
 /**
- * Case event on A_oku_yuka_01, registered by mony_peton_talk: once the partner can be used, it speaks
- * mac_2_088, sets GSWF_GOR_00_RUNAWAYS_REMARK_DONE and removes itself.
+ * Stand-on case event of A_oku_yuka_01, registered by mony_peton_talk and, at STG2_45_DAUGHTER_LOCATED while
+ * GSWF_GOR_00_RUNAWAYS_REMARK_DONE is clear, by the map init: once no partner action is in use, the partner
+ * speaks mac_2_088; it sets GSWF_GOR_00_RUNAWAYS_REMARK_DONE and removes itself.
  */
 static EVT_BEGIN(mony_peton_after)
     CALL(evt_mario_key_onoff, 0)

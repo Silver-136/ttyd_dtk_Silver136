@@ -159,8 +159,8 @@ static USER_FUNC(muj_item_move_3d_position) {
 }
 
 /**
- * Eased value for step `step` of `total`: the speed rises by 1 per step over the first 20 % and falls over the last 20
- * %, and the result is start + (end - start) times the distance covered at step over the whole distance.
+ * Eased value for step `step` of `total`: the speed rises by 1 per step up to step total * 20 / 100 and falls by 1 per
+ * step from total * 80 / 100 on; the result is start + (end - start) times the distance covered at step over the whole.
  */
 // Requires 0 <= step < total and a nonzero accumulated speed.
 static f32 accdec_type(s32 step, s32 total, f32 start, f32 end) {

@@ -922,9 +922,9 @@ static s32 barriern_satellite_zanzou_sub(BOOL isFirstCall, BattleUnit* unit, f32
 }
 
 /**
- * Starts satellite n's flight along the 5-point spline `table`: allocates its SatelliteSpline in the unit's work,
- * builds the spline and stores `table` in the satellite's part 1 work. Returns FALSE when satellite slot n is empty
- * (-1), else TRUE.
+ * Starts satellite n's flight along the 5-point spline `table`: allocates its SatelliteSpline (BTL_ALLOC, pointer
+ * kept in the unit's work), builds the spline and stores `table` in the satellite's part 1 work. Returns FALSE
+ * when satellite slot n is empty (-1), else TRUE.
  */
 static u8 barriernSatelliteTo_Init(BattleUnit* unit, s32 n, Vec* table) {
     SatelliteSpline* sp;

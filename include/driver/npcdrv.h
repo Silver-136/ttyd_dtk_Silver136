@@ -217,9 +217,9 @@ typedef struct NpcEntry {
     u32 reactionFlags;              // 0x4, NPC_REACTION_* (soft touch/hammer reactions; setup file)
     char description[32];           // 0x8, NPC name, the key of npcNameToPtr
     NpcTribeInfo* tribe;            // 0x28, tribe data: anims, size, sounds
-    char currentAnim[32];           // 0x2C, anim set at entry (tribe initialAnim)
-    char stayAnim[32];              // 0x4C, standing anim (tribe stayAnim)
-    char talkAnim[32];              // 0x6C, talking anim (tribe talkAnim)
+    char currentAnim[32];           // 0x2C, entry anim (tribe initialAnim), or evt_npc_set_anim's in a move event
+    char stayAnim[32];              // 0x4C, anim set back after talking (tribe stayAnim; evt_npc_set_autotalkpose)
+    char talkAnim[32];              // 0x6C, anim while talking (tribe talkAnim; evt_npc_set_autotalkpose)
     Vec position;                   // 0x8C
     Vec prevPosition;               // 0x98, position of the last npcMain frame
     Vec positionHistory[5];         // 0xA4, last 5 positions for NPC_FLAG_BLUR, every 2nd frame
@@ -232,7 +232,7 @@ typedef struct NpcEntry {
     s32 offscreenId;                // 0x110, offscreen buffer drawn into, -1 = none
     GXColor color;                  // 0x114, material colour, white = none (npcSetColor)
     s32 initEvtId;                  // 0x118, id of the running initEvent, 0 = none
-    s32 regularEvtId;               // 0x11C, id of the running move/find/lost/return event
+    s32 regularEvtId;               // 0x11C, id of the running regular event (move, find, lost, return, blow or dead)
     EvtWord* initEvent;             // 0x120
     EvtWord* moveEvent;             // 0x124
     EvtWord* talkEvt;               // 0x128
@@ -295,7 +295,7 @@ typedef struct NpcEntry {
     u32 fbatHitKind;                // 0x318, kind from fbatHitCheck when this NPC triggered the battle
     u16 koopaEncounterType;         // 0x31C, NpcKoopaEncount
     u16 hazardFlags;                // 0x31E, NpcKoopaEncount bits the NPC is immune to
-    u16 hitCooldown;                // 0x320, frames before the NPC can start a battle again (90 after one)
+    u16 hitCooldown;                // 0x320, no-touch frames, blinking (90 after a won battle when it stole items)
     struct NpcEntry* prev;          // 0x324, previous NPC of the group (npcSetLink)
     struct NpcEntry* next;          // 0x328, next NPC of the group
     struct NpcEntry* master;        // 0x32C, NPC this one is a slave of (npcSetSlave)

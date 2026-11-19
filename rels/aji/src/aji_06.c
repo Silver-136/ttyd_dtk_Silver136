@@ -1740,9 +1740,9 @@ static EVT_BEGIN(peach_evt_matigai_kusuri)
 EVT_END()
 
 /**
- * Case script of the right potion (kusuri_mid): removes the three potion case events, Peach drinks it
- * (P_M_5 to P_M_8, SFX_PEACH_DRINK_MEDICINE1, SFX_PEACH_TOUMEI2 and smoke), evt_peach_set_condition 0, she
- * says peach_aji_257 and 258 follows, GSWF_AJI_06_RIGHT_POTION_CHOSEN is set and the hatches close.
+ * Case script of the right potion (kusuri_mid): removes the three potion case events, Peach drinks it (poses
+ * P_M_5, P_M_7 and P_M_8, SFX_PEACH_DRINK_MEDICINE1, SFX_PEACH_TOUMEI2 and smoke), evt_peach_set_condition 0, she
+ * looks round, says peach_aji_257 and 258 follows, GSWF_AJI_06_RIGHT_POTION_CHOSEN is set and the hatches close.
  */
 static EVT_BEGIN(peach_evt_tadashii_kusuri)
     CALL(evt_mario_key_onoff, 0)

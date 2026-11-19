@@ -507,7 +507,7 @@ static USER_FUNC(get_value) {
     return EVT_RETURN_DONE;
 }
 
-/** Script helper: blocks until marioChkKey() reports TRUE. */
+/** Script helper: blocks until marioChkKey() reports TRUE, then returns EVT_RETURN_YIELD (not DONE). */
 static USER_FUNC(mario_keyoff_wait) {
     switch (!marioChkKey()) {
         default:
@@ -1789,7 +1789,8 @@ EVT_END()
  * Lens; after an order gor_01_014; otherwise gor_01_012, and while Zess T. blocks the west gate
  * (GSWF_GOR_ZESS_T_BLOCKING_WEST_GATE) he takes the order (gor_01_013, 013_01): it sets
  * GSWF_GOR_CONTACT_LENS_ORDERED_EARLY before STG1_17_FATHER_SON_REUNITED, else ..._ORDERED_LATE, and saves
- * the play time in GSW_GOR_CONTACT_LENS_ORDER_TIME. Afterwards a line per story stage (gor_01_015_02 to 05).
+ * the play time in GSW_GOR_CONTACT_LENS_ORDER_TIME. Afterwards a line per story stage (gor_01_015_02 to 05),
+ * none from STG5_43_X_NAUTS_RETREAT on.
  */
 static EVT_BEGIN(shoptender_talk)
     DEBUG_PUT_MSG(STRING("店員TALK"))

@@ -172,8 +172,8 @@ EVT_BEGIN(las_02_init_evt)
 EVT_END()
 
 /**
- * Script helper: builds the torch map-object name "hi<args[0]>" and returns it in args[1] (in the early demos the
- * buffer is a local array).
+ * Script helper: builds the candle-flame map-object name "hi<args[0]>" and returns it in args[1] (the early demos
+ * build it in a local array, so the pointer returned is to the finished call's stack).
  */
 static USER_FUNC(make_name) {
     EvtWord* args = event->args;

@@ -546,8 +546,8 @@ EVT_END()
 
 /**
  * Train braking: sets GSWF_HOM_TRAIN_MOVING while it runs, plays this map's stop sound (gor_04, hom_00
- * or pik_00) and eases the train model from 3000 to 0 over 10 seconds, writing the negated per-frame step
- * into the train speeds GW(0) and GW(1); then clears GSWF_HOM_TRAIN_MOVING.
+ * or pik_00) and eases the train model's x offset from 3000 to 0 over 10 seconds, writing each frame's change
+ * (new minus old) into the train speeds GW(0) and GW(1); then clears GSWF_HOM_TRAIN_MOVING.
  */
 static EVT_BEGIN(stop_1)
     SET_VALUE(GSWF_HOM_TRAIN_MOVING, 1)
@@ -817,7 +817,7 @@ EVT_BEGIN(hom_10_init_evt)
 EVT_END()
 
 /**
- * Script helper: writes into LW(10) a sine wobble (1.8 times |GW(0)| times sin(frame count / 15)), which evt_ramp uses
+ * Script helper: writes into LW(10) a sine wobble (1.8 times |GW(0)| times sin(retraceCount / 15)), which evt_ramp uses
  * to sway the lamps.
  */
 static USER_FUNC(ramp_r) {

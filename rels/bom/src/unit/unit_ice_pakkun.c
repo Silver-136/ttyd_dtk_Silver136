@@ -192,7 +192,7 @@ static USER_FUNC(pakkun_ceil_exist) {
     return EVT_RETURN_DONE;
 }
 
-/** Script helper: args[0] = unit. Remembers the current shadow scale of part 1 in work[0]. */
+/** Script helper: args[0] = unit. Keeps part 1's shadow scale in work[0] (an int word: the fraction is cut). */
 static USER_FUNC(shadow_scale_memory) {
     s32 id = BattleTransID(event, evtGetValue(event, event->args[0]));
     BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);

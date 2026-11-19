@@ -407,9 +407,9 @@ static BeroEntry bero_data[] = {
 };
 
 /**
- * The two guards step aside to x = -530 and x = 530 and face Mario, and bero cases 3 and 4 are switched on.
- * Before STG3_02_THE_GUARD_BACKS_OFF the story is advanced to it; otherwise GSWF_TOU_02_GUARD_STEPPED_ASIDE is
- * set.
+ * Mario walks to 100 units in front (+z) of the talking guard, the two guards step aside to x = -530 and x = 530
+ * and face Mario, and bero cases 3 and 4 are switched on. Before STG3_02_THE_GUARD_BACKS_OFF the story is
+ * advanced to it; otherwise GSWF_TOU_02_GUARD_STEPPED_ASIDE is set.
  */
 static EVT_BEGIN(evt_move_g)
     CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))

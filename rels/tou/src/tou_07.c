@@ -299,9 +299,10 @@ EVT_END()
 
 /**
  * Scene in the champion's room, spawned before STG3_30_A_NEW_CHAMPION: Jolene (キノシコワ) shows Mario and
- * the partner in, says stg3_tou_449 and leaves; the partner and Mario talk (stg3_tou_450 to 450_05) until
- * Mario's mail arrives with the mail jingle, the rumble and a "!" balloon. He reads it (stg3_tou_450_06,
- * 450_07), mail 43 is received and opened, and the story moves to STG3_30_A_NEW_CHAMPION.
+ * the partner in, says stg3_tou_449 and leaves; the partner talks and the room shows two bubbles twice
+ * (stg3_tou_450 to 450_04) until Mario's mail arrives with the mail jingle, the rumble and a "!" balloon (the
+ * partner says 450_05). He reads it (450_06), the partner reacts (450_07), mail 43 is received and opened, and
+ * the story moves to STG3_30_A_NEW_CHAMPION.
  */
 static EVT_BEGIN(evt_champion)
     // Mario and his partner stand at the door of the champion's room with Jolene; she opens the door

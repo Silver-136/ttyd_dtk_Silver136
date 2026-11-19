@@ -31,8 +31,8 @@ OSTime e3GetNoneKeyTime(void) {
 }
 
 /**
- * Field sequence entry: records the time (none_key, read only by the stripped e3GetNoneKeyTime), clears
- * SYSTEM_LEVEL_NO_FIELD_BATTLE.
+ * Field sequence entry: records the time in this file's static none_key (not mariost's idle timer; read only by the
+ * stripped e3GetNoneKeyTime) and clears SYSTEM_LEVEL_NO_FIELD_BATTLE.
  */
 void seq_gameInit(SequenceWork* wp) {
     none_key = OSGetTime();

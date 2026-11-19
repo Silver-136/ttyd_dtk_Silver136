@@ -415,7 +415,7 @@ typedef struct MarioWork {
     const char* paperAnimName;          // 0x1C, current paper animation name (marioChgPaper)
     void* reserved_20;                  // 0x20, only cleared (marioInit, Vivian hide)
     u8 pad_24[0x28 - 0x24];             // 0x24, never accessed
-    u16 poseTime;                       // 0x28, frame the new pose starts at (0, or marioChgPoseTime's frames)
+    u16 poseTime;                       // 0x28, start frame of the pose / paper pose (0 or a *Time setter's frames)
     u8 pad_2A[0x2E - 0x2A];             // 0x2A, never accessed
     u16 currMotionId;                   // 0x2E, a MarioMotion
     u16 prevMotionId;                   // 0x30, a MarioMotion: currMotionId before the last motion change (marioChgMot)
@@ -475,8 +475,8 @@ typedef struct MarioWork {
     Vec scale;                          // 0xC8
     Vec fallStartPos;                   // 0xD4, position when airTimer was 0 (jump/fall start)
     Vec returnPos;                      // 0xE0, pipe entry position; bg-mode damage returns here
-    Vec camTarget;                      // 0xEC, point the 3D camera follows (position + camShift)
-    Vec camCollision;                   // 0xF8, copied to the camera's marioAt; set by evt_cam
+    Vec camTarget;                      // 0xEC, point the 3D camera follows (position + camShift; evt_cam sets it too)
+    Vec camCollision;                   // 0xF8, the camera's marioAt (set by marioUpdateCamCollision, evt_cam)
     u8 pad_104[0x110 - 0x104];          // 0x104, never accessed
     Vec basePos;                        // 0x110, reference position (init, Bowser/Peach motion 8)
     Vec lastGroundPos;                  // 0x11C, position copied when leaving the ground (jump/roll/stay start), y = landing height
@@ -489,7 +489,7 @@ typedef struct MarioWork {
     f32 camShiftTargetY;                // 0x140, camShiftY eases towards this
     f32 camShiftY;                      // 0x144, camera target height offset
     f32 camShiftTargetZ;                // 0x148, camShiftZ eases towards this
-    f32 camShiftZ;                      // 0x14C, camera zoom shift (copied to camZoomWeight)
+    f32 camShiftZ;                      // 0x14C, copied to camZoomWeight; follow-y off also adds it along screen x
     Vec camShiftRate;                   // 0x150, easing rate per axis for the three camShift values
     f32 camFollowRate;                  // 0x15C, camdrv's y-follow rate (0.2 default; marioGetCamFollowRate)
     f32 prevCamPosX;                    // 0x160, camera x of the last frame (marioCamStopChk)
@@ -512,7 +512,7 @@ typedef struct MarioWork {
     f32 directionView;                  // 0x1A0
     f32 forceDir;                       // 0x1A4, forced view direction while MARIO_FLAG_USE_FORCE_DIRECTION (evt_mario_set_force_dir)
     f32 displayDirection;               // 0x1A8, drawn paper turn angle, eases to displayDirectionTarget
-    f32 displayDirectionTarget;         // 0x1AC, side the paper turn heads for (marioMakeDispDir: 0 or 180)
+    f32 displayDirectionTarget;         // 0x1AC, paper turn target, mostly 0 or 180 (evt_mario_set_dispdir: any angle)
     f32 savedDisplayDirection;          // 0x1B0, displayDirection saved by mot_hammer
     Vec wPlayerCollisionBox;            // 0x1B4 JP, 0x1B8 US
     f32 groundY;                        // 0x1C0, floor height under Mario (shadow)
@@ -564,7 +564,7 @@ typedef struct MarioWork {
     void* balloonNpc;                   // 0x264, NpcEntry*
     s32 slitPosSet;                     // 0x268, mot_slit: slitPos is valid
     Vec slitPos;                        // 0x26C, mot_slit saved position
-    s32 soundId[3];                     // 0x278, looping sound ids, -1 when none (mot_jump stops [2])
+    s32 soundId[3];                     // 0x278, -1 = none: [0]/[1] mot_stay idle and charge voices, [2] never set
 #if VERSION >= VERSION_US
     // mot_hip's drop sound and voice; JP keeps them in the hip motion work. Outside the shared work they stay -1
     // when idle, which likely was the point (see the BUG in mot_hip_post).

@@ -1346,8 +1346,8 @@ static void ext_moamoa_main(void) {
 }
 
 /**
- * Registers the swarm's draw callbacks each frame (sprites and shadows on the 3D camera and, if enabled, on the
- * offscreen camera).
+ * Registers the swarm's draw callbacks each frame: sprites and shadows on the 3D camera while MOAMOA_WORK_FLAG_ACTIVE
+ * is set, and on CAMERA_OFFSCREEN2 while MOAMOA_WORK_FLAG_DRAW_OFFSCREEN is set.
  */
 static void ext_moamoa_dispent(void) {
     if (wp->flags & MOAMOA_WORK_FLAG_ACTIVE) {

@@ -113,7 +113,7 @@ static inline void hip_snd_reset(MarioWork* mario) {
     HIP_SFX_VOICE = -1;
 }
 
-/** Starts the hip-drop sound and Mario's voice at his position; US and later start each only when it is not playing. */
+/** Starts the hip-drop sound and Mario's voice at his position; US and later start each only while its id is -1. */
 static inline void hip_snd_on(MarioWork* mario) {
 #if VERSION >= VERSION_US
     mario = marioGetPtr();
@@ -129,7 +129,7 @@ static inline void hip_snd_on(MarioWork* mario) {
 #endif
 }
 
-/** Stops whichever of the two hip-drop sounds is playing and marks it as not playing. */
+/** Stops each of the two hip-drop sounds whose id is not -1 (psndSFXOff) and sets that id back to -1. */
 static inline void hip_snd_off(MarioWork* mario) {
 #if VERSION >= VERSION_US
     mario = marioGetPtr();

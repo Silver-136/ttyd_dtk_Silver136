@@ -113,7 +113,7 @@ EVT_END()
 
 /**
  * Death event of the first enemy (Goomba) in the order puzzle: records order step 1 in
- * GSW_LAS_17_ENEMY_ORDER_STATE if it was the first kill.
+ * GSW_LAS_17_ENEMY_ORDER_STATE while no step is recorded yet (state 0).
  */
 static EVT_BEGIN(enemy1_dead_evt)
     CALL_CHILD(enemy_common_dead_event)

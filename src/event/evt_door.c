@@ -237,7 +237,7 @@ EVT_BEGIN(house_open_se)
 EVT_END()
 
 #if VERSION >= VERSION_JP
-/** Sets PSND_FLAG_DOOR_IN: sound effects marked to mute behind doors stay silent until snd_door_out. */
+/** Sets PSND_FLAG_DOOR_IN: door-muted sound effects stay silent until snd_door_out or psndMapChange clears it. */
 USER_FUNC(snd_door_in) {
     psndSetFlag(PSND_FLAG_DOOR_IN);
     return EVT_RETURN_DONE;

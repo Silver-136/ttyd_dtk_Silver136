@@ -133,8 +133,8 @@ EvtWord unkeep_evt[];
 extern u16 point_disp_icons[];
 
 /**
- * Draw callback of the shop's name window: the name of the item under the cursor at the top of the screen (once the
- * window has opened) and each unsold item's price above its map object.
+ * Draw callback of the shop's name window: the name of the shelf item whose hit object Mario is at (wp->cur) at the top
+ * of the screen (once the window has opened) and each unsold item's price above its map object.
  */
 static void name_disp(WinMgrEntry* entry) {
     ShopWork* wp = _wp;
@@ -1360,7 +1360,8 @@ EVT_END()
 
 /**
  * Shop tutorial, run the first time Mario deals with any shop (GSWF_SHOP_TUTORIAL_SEEN): the shopkeeper
- * faces Mario and explains how buying works, repeating the explanation until Mario's answer ends it.
+ * faces Mario and explains the shop-point system (shopper messages 30 and 31), repeating it while Mario asks
+ * for it again.
  */
 static EVT_BEGIN(first_shopping_evt)
     CALL(shopper_name, LW(9))

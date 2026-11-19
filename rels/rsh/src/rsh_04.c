@@ -639,8 +639,8 @@ static EVT_BEGIN(evt_daijisouna_kami)
 EVT_END()
 
 /**
- * Spawned by the rsh_04 init script at STG6_17_GHOST_DIARY when Mario enters through w_bero: the conductor
- * speaks to Mario once (stg6_rsh_129), guarded by GSWF_RSH_CONDUCTOR_DIARY_TALK_DONE.
+ * Spawned by rsh_04_c_init_evt at STG6_17_GHOST_DIARY when Mario enters through w_bero: once Mario can move, the
+ * conductor speaks to him once (stg6_rsh_129), guarded by GSWF_RSH_CONDUCTOR_DIARY_TALK_DONE.
  */
 static EVT_BEGIN(evt_syasyou_auto_talk)
     IF_INT_EQUAL(GSWF_RSH_CONDUCTOR_DIARY_TALK_DONE, 1)
@@ -1110,10 +1110,10 @@ static s32 item_tbl3[] = {
 };
 
 /**
- * Talk script of the Narikin child. Before STG6_09_BUBS_REQUEST he asks Mario about his birthday wish (setting
- * STG6_08_BUB) with a yes/no; yes sets STG6_09_BUBS_REQUEST. Before STG6_12_GIVE_AUTOGRAPH, when Mario has the
- * Autograph and picks it in the item window, he gives a Shine Sprite (STG6_12_GIVE_AUTOGRAPH, GSWF_SHINE_35);
- * otherwise lines by story stage.
+ * Talk script of the Narikin child. From STG6_07_SYLVIA until STG6_09_BUBS_REQUEST he asks Mario about his birthday
+ * wish (setting STG6_08_BUB) with a yes/no; yes sets STG6_09_BUBS_REQUEST. Before STG6_12_GIVE_AUTOGRAPH, when Mario
+ * has the Autograph and picks it in the item window, he gives a Shine Sprite (STG6_12_GIVE_AUTOGRAPH, GSWF_SHINE_35);
+ * otherwise lines by story stage (none from STG6_44_END_OF_DAY_2 on).
  */
 static EVT_BEGIN(talk_konari)
     SWITCH(GSW_STORY_PROGRESS)

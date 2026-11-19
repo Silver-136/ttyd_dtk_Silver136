@@ -2899,7 +2899,7 @@ BOOL BattleAudience_Entry(s32 index, u8 type, u8 status) {
 /**
  * Fills in a newly seated member: kind, status, no item, the kind's animation table in the wait (back) pose, stage
  * height and a depth from the seat row; an entering member starts hidden at y -2000. Members in the middle columns of
- * each row get AUDIENCE_MEMBER_FLAG_FRONT_CENTER (columns 2-17 in the early demos, 4-15 from JP on).
+ * the first three rows get AUDIENCE_MEMBER_FLAG_FRONT_CENTER (columns 2-17 in the early demos, 4-15 from JP on).
  */
 static void BattleAudience_Entry_Sub(s32 index, s32 type, u8 status) {
     BattleAudienceMember* m;
@@ -3172,8 +3172,8 @@ void BattleAudience_GetItemOn2(s32* memberId, f32* x, f32* y, f32* z, ItemType* 
 
 /**
  * Marks the member at seat index as targeted (AUDIENCE_MEMBER_FLAG_TARGETED) and sends every other member holding out
- * an item (AUDIENCE_STATUS_ITEM_ON) back to waiting, dropping the item. The early demos do this only when the member is
- * in status 7 with an item.
+ * an item (AUDIENCE_STATUS_ITEM_ON) back to waiting, dropping the item. The early demos do this only when the member
+ * itself holds out an item (AUDIENCE_STATUS_ITEM_ON, itemId set).
  */
 void BattleAudience_SetTarget(s32 index) {
     BattleAudienceMember* member;

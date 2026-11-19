@@ -876,9 +876,9 @@ EVT_END()
 
 /**
  * Red switch event of mobj1: waits for GF(10) to clear; with Koops out it waits up to 1.5 seconds for him to
- * come within 15 units of Mario. It raises the story to STG1_12_PAPER_STAIRS, pulls the fog in, flips the
- * paper stairs (evt_kaidan_pera_anime) with a camera shot, toggles GSWF_GON_04_PAPER_STAIRS_FLIPPED and
- * pushes the fog back out.
+ * come within 15 units of Mario in x. It raises the story to STG1_12_PAPER_STAIRS, moves the fog start 250 out,
+ * flips the paper stairs (evt_kaidan_pera_anime) with a camera shot, toggles GSWF_GON_04_PAPER_STAIRS_FLIPPED and
+ * brings the fog start back.
  */
 static EVT_BEGIN(evt_kaidan_pera)
     CALL(evt_mobj_hitevt_onoff, STRING("me"), 0)

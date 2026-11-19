@@ -241,8 +241,8 @@ EVT_END()
 
 /**
  * Map init script of tik_16: sets up the two pipes and their tornado switches (GSWF_TIK_16_MRI_PIPE_RAISED,
- * GSWF_TIK_16_NOK_PIPE_RAISED), the exits, fall recovery, the water animation, the large block, a moving floor
- * and a Shine Sprite block.
+ * GSWF_TIK_16_NOK_PIPE_RAISED), the exits, fall recovery, the Gazigazi hazard (evt_gazigazi_entry), the water
+ * animation, the large block, a moving floor and a Shine Sprite block.
  */
 EVT_BEGIN(tik_16_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_TIK1"))

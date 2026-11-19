@@ -633,7 +633,7 @@ void makeKey(void) {
     gp->keyDataValid = 1;
 }
 
-/** Returns the stick and d-pad directions held on controller chan. */
+/** Returns the main and C stick directions held on controller chan (DEMO_STICK_*, DEMO_SUBSTICK_*). */
 u32 keyGetDir(u32 chan) {
     return gp->dirs[chan];
 }

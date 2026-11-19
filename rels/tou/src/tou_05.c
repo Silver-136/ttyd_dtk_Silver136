@@ -1009,9 +1009,9 @@ EVT_END()
 
 /**
  * Promotion scene, run from the map init while GSWF_TOU_PROMOTION_TO_MAJORS_PENDING is set: Jolene (キノシコワ)
- * comes in, Grubba jumps and shuts his desk drawer, and the two talk (stg3_tou_287 to 293); Grubba hands Mario
- * 30 coins; Jolene leaves through the door, GSWF_TOU_JOLENE_ESCORT_TO_MAJORS is set and the map changes to
- * tou_04.
+ * comes in, Grubba jumps and shuts his desk drawer, and the two talk (stg3_tou_287 to 291); Grubba hands Mario
+ * 30 coins (292_02 to 293); Jolene leaves, Mario follows, GSWF_TOU_JOLENE_ESCORT_TO_MAJORS is set and the map
+ * changes to tou_04.
  */
 static EVT_BEGIN(evt_1st_leagu)
     // Mario, his partner and Jolene are placed just outside the office door (z -160 to -180); the camera frames Grubba's desk.

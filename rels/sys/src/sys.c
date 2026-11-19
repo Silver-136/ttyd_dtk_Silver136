@@ -1348,8 +1348,9 @@ EVT_END()
 /**
  * Script helper (args[0] = title type; never finishes): shows the title's letters. The first call lays the letters of
  * lang_tbl out in a row; state 0 loads effect_sys.tpl, and in state 2 each letter waits its turn (20 frames apart),
- * starts with a stardust burst and spins in over 90 frames, after which the angle turns and the alpha rises. Once
- * loading has finished it queues display_func (US and later also sys_01_msg_tex_capture_func).
+ * starts with a stardust burst and spins in over 90 frames; once the last one has, the shared angle turns and the
+ * alpha rises each frame. Once loading has finished it queues display_func (US and later also
+ * sys_01_msg_tex_capture_func).
  */
 #if VERSION <= VERSION_DEMO_JP
 static USER_FUNC(display) {

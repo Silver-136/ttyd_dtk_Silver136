@@ -2230,8 +2230,9 @@ EVT_END()
 /**
  * Talk event of Gus ("me"). Until GSWF_GOR_GATEKEEPER_DEFEATED: gor_02_006_01 once paid (GW(10) = 1),
  * else gor_02_004 the first time (GSWF_GOR_GATEKEEPER_FIRST_TALK_DONE) or 005 and a choice of three:
- * pay 10 coins (he steps aside, A_center_kabe_atr off, GW(10) = 1), gor_02_007, or battle 5. Winning
- * sends him off and sets GSWF_GOR_GATEKEEPER_DEFEATED. Afterwards a line per story stage.
+ * pay 10 coins (with fewer only gor_02_006_02; else he steps aside, A_center_kabe_atr off, GW(10) = 1),
+ * gor_02_007, or battle 5. Winning sends him off and sets GSWF_GOR_GATEKEEPER_DEFEATED. Afterwards a line
+ * per story stage.
  */
 static EVT_BEGIN(tozokudan1_talk)
     IF_INT_EQUAL(GSWF_GOR_GATEKEEPER_DEFEATED, 0)

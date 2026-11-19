@@ -39,7 +39,7 @@ static void effHokoriDisp(CameraId cameraId, void* payload);
 
 /**
  * Spawns dust puffs at (x, y, z) for lifetime frames: four scattered up to 100 units to each side for types 0 and 1
- * (type 1's growth speeding up faster), three small ones close together for other types.
+ * (type 1's growth speeding up faster), three within 2 units of the point (growth 0.4) for other types.
  */
 EffectEntry* effHokoriN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z) {
     s32 count;

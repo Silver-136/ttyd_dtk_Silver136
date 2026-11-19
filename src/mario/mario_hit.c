@@ -1535,8 +1535,9 @@ void marioHitStrippedPool2(f32* f) {
 /**
  * Ceiling check above Mario (the Spring Jump, tube mode and Bowser use their own head searches): stores the ceiling in
  * hitobjHead and sets or clears MARIO_FLAG_IS_TOUCHING_CEILING. A ceiling that pushes a grounded Mario below his last
- * ground clamps him there and puts him back in his stand, walk or dash motion; one hit during a jump plays the head-
- * bump sound and turns the jump into a fall. Returns the height from the search (Mario's own y in MARIO_MOTION_JUMP_3).
+ * ground clamps him there and (not in tube, ship or Vivian motion, JP and later plane either, nor as Bowser) puts him
+ * back in stand, walk or dash; a hit in MARIO_MOTION_JUMP / _JUMP_STAND plays the head-bump sound and ends the jump
+ * (a fall, not for Bowser). Returns the height from the search (Mario's own y in MARIO_MOTION_JUMP_3).
  */
 f32 marioChkOverhead(void) {
 #if VERSION >= VERSION_JP

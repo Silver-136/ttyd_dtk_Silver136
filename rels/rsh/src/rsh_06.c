@@ -543,9 +543,9 @@ static s32 evt_moamoa_end_wait(EventEntry* event, BOOL isFirstCall) {
 }
 
 /**
- * Script helper: puts every Moamoa in MOAMOA_STATE_FUSION_WAIT with staggered timers and blocks until all have
- * MOAMOA_FLAG_FUSION_ARRIVED; then it marks them all as merged into the big Smorg (MOAMOA_FLAG_FUSED, no shadow) and
- * gives them the c_n_moa_a standing pose.
+ * Script helper: resets every Moamoa's scale to 1 and puts it in MOAMOA_STATE_FUSION_WAIT (MOAMOA_FLAG_FUSING) with
+ * staggered timers, and blocks until all have MOAMOA_FLAG_FUSION_ARRIVED; then it marks them all as merged into the
+ * big Smorg (MOAMOA_STATE_FUSED, MOAMOA_FLAG_FUSED, no shadow) and gives them the pose c_n_moa_a S_1.
  */
 static s32 evt_moamoa_fusion(EventEntry* event, BOOL isFirstCall) {
     s32 i;
@@ -1999,8 +1999,8 @@ EVT_END()
 
 /**
  * Braking of the train: sets GSWF_HOM_TRAIN_MOVING, plays the stop sound for the current map (gor_04, hom_00 or
- * pik_00), slides the train from 3000 to 0 over 10 seconds while feeding the wheel speeds GW(0)/GW(1), then
- * clears GSWF_HOM_TRAIN_MOVING.
+ * pik_00), slides the train from 3000 to 0 over 10 seconds, writing each frame's change (new minus old) into the
+ * wheel speeds GW(0)/GW(1), then clears GSWF_HOM_TRAIN_MOVING.
  */
 static EVT_BEGIN(stop_1)
     SET_VALUE(GSWF_HOM_TRAIN_MOVING, 1)

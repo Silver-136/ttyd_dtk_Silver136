@@ -159,7 +159,7 @@ USER_FUNC(tou_10_mario_free_wait) {
 }
 #endif
 
-/** Exit script (enterEvent of the bero data): sets GSWF_TOU_10_ENTERED_UNUSED; nothing reads that flag. */
+/** Entry script of n_bero (its enterEvent): sets GSWF_TOU_10_ENTERED_UNUSED; nothing reads that flag. */
 static EVT_BEGIN(room_out)
     SET_VALUE(GSWF_TOU_10_ENTERED_UNUSED, 1)
     SET_VALUE(LW(0), 0)
@@ -968,9 +968,10 @@ static EVT_BEGIN(evt_saisyo_after)
 EVT_END()
 
 /**
- * Scene after the Goomba Bros. match (opponent 19) of Mario's comeback, from STG3_34_RETURN_TO_ROGUEPORT
- * on: Jolene (キノシコワ) gives her verdict and the fight money, stg3_tou_re_028 to 031 and 3 coins at a
- * ranking below 20, otherwise stg3_tou_re_032 to 035 and 1 coin; then she leaves through the door.
+ * Scene after the first Goomba Bros. match (opponent 19, GSWF_TOU_GOOMBA_BROS_AFTER_MATCH_SEEN clear) of Mario's
+ * comeback, from STG3_34_RETURN_TO_ROGUEPORT on: Jolene (キノシコワ) gives her verdict and the fight money,
+ * stg3_tou_re_028 to 031 and 3 coins at a ranking below 20, otherwise stg3_tou_re_032 to 035 and 1 coin; then
+ * she leaves through the door.
  */
 static EVT_BEGIN(evt_saisyo_after_re)
     // Mario, the partner and Jolene are placed in the room after the comeback's first match.

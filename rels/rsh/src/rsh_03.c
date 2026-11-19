@@ -1248,7 +1248,8 @@ EVT_END()
 /**
  * Talk script of the shop clerk (店員), used as the shop's fook_evt: nothing before STG6_45_DAY_3_STARTS; before
  * STG6_46_ENGINEER a line (stg6_rsh_236_00) with LW(0) = -1; before STG6_48_SMORG_MIASMA, once
- * (GSWF_RSH_03_SHOP_CLERK_REVIVED), she gets up and says stg6_rsh_236_01. LW(0) is 0 in the other cases.
+ * (GSWF_RSH_03_SHOP_CLERK_REVIVED), the clerk plays O_1, may turn and use talk poses again and says
+ * stg6_rsh_236_01. LW(0) is 0 in the other cases.
  */
 static EVT_BEGIN(evt_shop_moamoa_talk)
     SWITCH(GSW_STORY_PROGRESS)

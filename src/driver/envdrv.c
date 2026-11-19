@@ -1404,9 +1404,10 @@ void envSetYamiView(Mtx view) {
 }
 
 /**
- * Darkness TEV callback (map materials, bom_01's crowd): projects env.tpl textures 9 and 10 from yamiView, scrolling
- * them in opposite directions each retrace, and scales the surface colour by one minus the product of their alphas.
- * Uses three TEV stages, two texture coordinates and two texture maps, and advances info's counters past them.
+ * Darkness TEV callback (evt_map_set_tevcallback; called directly by bom_01's crowd and mri_puni): projects env.tpl
+ * textures 9 and 10 from yamiView, scrolling them in opposite directions each retrace, and scales the surface colour
+ * by one minus the product of their alphas. Uses three TEV stages, two texture coordinates and two texture maps, and
+ * advances info's counters past them.
  */
 void envSetYami(MapTevCallbackInfo* info) {
     static f32 u1 = 0.0f;

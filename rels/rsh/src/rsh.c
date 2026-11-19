@@ -1292,8 +1292,8 @@ EVT_END()
 
 /**
  * Talk script for passenger 4-8, a Goomba in random slot 2 of the car rsh_03 (stg6_rsh_c_42). Until
- * GSWF_RSH_TRAVELER_SECRETS_HEARD is set it asks a two-way question; the first answer sets the flag, and
- * later talks print only stg6_rsh_c_42_03.
+ * GSWF_RSH_TRAVELER_SECRETS_HEARD is set it asks stg6_rsh_c_42_sel; the first answer sets the flag (any other
+ * gets stg6_rsh_c_42_02), and later talks print only stg6_rsh_c_42_03.
  */
 static EVT_BEGIN(evt_rsh_rnd_npc_4_8_talk)
     IF_INT_EQUAL(GSWF_RSH_TRAVELER_SECRETS_HEARD, 0)

@@ -316,9 +316,10 @@ static USER_FUNC(chain_init) {
 
 /**
  * Per-frame script helper that animates the Chomp's chain (parts 2-9). args[0] = unit. Part 9 is the stake, behind the
- * chomp; when work[2] is 2 the current link layout is recorded relative to the stake and when it is 1 the links keep
- * that shape. Otherwise the links hang as a sagging chain between the Chomp (part 1, capped at y = 110 in JP and later)
- * and the stake, each link moved to a fixed distance from its neighbour and held above the floor.
+ * chomp; when UNIT_WORK_CHAIN_MODE is 2 the positions of parts 1-8 (the Chomp too) are recorded relative to the stake
+ * and when it is 1 they keep that shape. Otherwise the links hang as a sagging chain between the Chomp (part 1,
+ * capped at y = 110 in JP and later) and the stake, each link moved to a fixed distance from its neighbour and held
+ * above the floor.
  */
 static USER_FUNC(chain_main) {
     BattleWork* wp = _battleWorkPointer;

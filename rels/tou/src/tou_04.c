@@ -756,8 +756,8 @@ EVT_END()
 /**
  * Movement script of guard 1: does nothing while GSWF_TOU_04_GUARD_1_ESCORT_UNUSED is set. Otherwise he steps
  * out of Mario's way (move_g) before STG3_04_GONZALES_IS_BORN only while GSWF_TOU_JOLENE_ESCORT_TO_MINORS is
- * set, then until STG3_34_RETURN_TO_ROGUEPORT whenever Mario's rank is above 10, and after that the same once
- * Mario has re-registered (GSWF_TOU_REMATCH_REGISTERED).
+ * set, then until STG3_34_RETURN_TO_ROGUEPORT whenever Mario's ranking number (evt_tou_get_ranking) is above
+ * 10, and after that the same once Mario has re-registered (GSWF_TOU_REMATCH_REGISTERED).
  */
 static EVT_BEGIN(move_g_1)
     IF_INT_EQUAL(GSWF_TOU_04_GUARD_1_ESCORT_UNUSED, 1)

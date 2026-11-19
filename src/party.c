@@ -1880,7 +1880,8 @@ void allPartyRideShip(void) {
 #if VERSION <= VERSION_DEMO_JP
 /**
  * The early demos' bellows (jabara) ride, called as Mario's bellows motion (mot_jabara) starts: both partners go
- * into the ride mode with PARTY_FLAG_IS_RIDING_JABARA set. Later versions call allPartyRideOn instead.
+ * into the ride mode with PARTY_FLAG_IS_RIDING_JABARA set, cancelling Bobbery's ability first. Later versions
+ * call allPartyRideOn instead.
  */
 void allPartyRideJabara(void) {
     PartyEntry* party = partyGetPtr(marioGetPartyId());

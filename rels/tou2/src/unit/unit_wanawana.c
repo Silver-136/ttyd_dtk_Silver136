@@ -219,8 +219,9 @@ static void replace_callback(BattleUnitPart* part, s32 type) {
 }
 
 /**
- * Script helper: allocates a WanaWork with a texture half the size of the body pose's bounding box (x by z, doubled),
- * gives part 1 replace_callback as its draw callback and queues replace_disp to render into the texture.
+ * Script helper: allocates a WanaWork (kept in countersetWeapon) with a texture the size of part 1's pose bounding box
+ * (x by z; replace_disp renders it at twice that), gives part 1 replace_callback as its draw callback and queues
+ * replace_disp to render into the texture.
  */
 static USER_FUNC(replace_evt) {
     BattleUnitPart* part = BattleGetUnitPartsPtr(BattleTransID(event, UNIT_ID_SELF), 1);

@@ -69,7 +69,7 @@ static EVT_BEGIN(bero_05_custom_in)
 EVT_END()
 
 /**
- * Custom exit hook for bero_05: if the guide Puni has just joined (STG1_35_PUNI_JOINS), advances the story to
+ * Exit hook of the stand-in pipe to sys_01 (bero_entry_data2): at STG1_35_PUNI_JOINS it advances the story to
  * STG1_END_TO_STAGE_2. Returns 0 in LW(0).
  */
 static EVT_BEGIN(bero_05_custom_out)

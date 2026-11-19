@@ -3417,7 +3417,10 @@ static f32 partyGetDirGndY(Vec u, f32 md) {
     return gy;
 }
 
-/** JP and later: height of the floor below (x, y + touch_wall_ct, z), rounded to 0.01, or -2000 when there is none. */
+/**
+ * JP and later: height of the floor below (x, y + touch_wall_ct, z) in steps of 0.01 (+0.005, then cut toward 0), or
+ * -2000 when there is none.
+ */
 static f32 partyGetGndY(f32 x, f32 y, f32 z) {
     f32 r;
     f32 hx, hy, hz, dist, nx, ny, nz;

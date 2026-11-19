@@ -644,8 +644,8 @@ EVT_BEGIN(dou_10_init_evt)
 EVT_END()
 
 /**
- * Script helper: when point (args[0], args[1], args[2]) is closer to Mario than the squared distance in LW(7) (as an
- * integer), stores its distance in LW(7) and copies LW(10) into LW(6).
+ * Script helper: when the squared distance (as an integer) from point (args[0], args[1], args[2]) to Mario is below
+ * LW(7), stores that squared distance in LW(7) and copies LW(10) into LW(6).
  */
 static USER_FUNC(namiyoke_se_check) {
     EvtWord* args = event->args;

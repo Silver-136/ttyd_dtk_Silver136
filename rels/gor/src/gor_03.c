@@ -1951,7 +1951,7 @@ EVT_END()
 /**
  * Talk event of the first henchman (マフィア１): mac_2 lines through Don Pianta's chapter 2 story (outside
  * the early demos a mac_2_116 line after the ticket scene), the chapter 5 scenes shared with the second
- * henchman (maffiaboss_nekomu00 to 02, mac_5_042), and otherwise one line per story stage (gor_03_02_02 to
+ * henchman (maffiaboss_nekomu00 to 02) and then mac_5_042, and otherwise one line per story stage (gor_03_02_02 to
  * 02_08). The first case already takes every story value up to STG2_40_THOUSAND_YEAR_DOOR, so
  * gor_03_02_01 is never printed.
  */
@@ -2704,7 +2704,7 @@ EVT_END()
  * Prize exchange of Bunny Teresa ("me"): bunny_teresa_64 when no prizes are left; else she explains once
  * (bunny_teresa_60, GSWF_GOR_PARLOR_PRIZE_INTRO_DONE), Mario picks a prize (evt_win_other_select), needs
  * enough medals, confirms, and the item goes into the pouch (unless it is full) and the medals are paid.
- * Then she offers another trade.
+ * Then she offers another trade, unless no prizes or no medals are left (bunny_teresa_69).
  */
 static EVT_BEGIN(bteresa_talk_sub_keihin)
     // If Teresa has no prizes left, she apologizes.
@@ -3222,7 +3222,7 @@ EVT_END()
 /** The fall start position of a payout medal: (-113, 70, 0). Placed at the slot_mess_01 spot in the original. */
 static inline Vec fall_pos0(void) { Vec v = {-113.0f, 70.0f, 0.0f}; return v; } /* @place "slot_mess_01" */
 
-/** The start velocity of a payout medal: (0, 10, 0); also placed at the slot_mess_01 spot. */
+/** Start velocity template of a payout medal: (0, 10, 0); the caller replaces x and z. Placed like fall_pos0. */
 static inline Vec fall_vel0(void) { Vec v = {0.0f, 10.0f, 0.0f}; return v; } /* @place "slot_mess_01" */
 
 /**

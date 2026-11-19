@@ -609,8 +609,8 @@ EVT_END()
 
 /**
  * Train braking: sets GSWF_HOM_TRAIN_MOVING while it runs, plays this map's stop sound (gor_04, hom_00
- * or pik_00) and eases the train model from 3000 to 0 over 10 seconds, writing the negated per-frame step
- * into the train speeds GW(0) and GW(1); then clears GSWF_HOM_TRAIN_MOVING.
+ * or pik_00) and eases the train model's x offset from 3000 to 0 over 10 seconds, writing each frame's change
+ * (new minus old) into the train speeds GW(0) and GW(1); then clears GSWF_HOM_TRAIN_MOVING.
  */
 static EVT_BEGIN(stop_1)
     SET_VALUE(GSWF_HOM_TRAIN_MOVING, 1)
@@ -706,7 +706,7 @@ EVT_BEGIN(hom_10_evt_resha_stop)
 EVT_END()
 
 /**
- * Script helper: writes into LW(10) a sine wobble (1.8 times |GW(0)| times sin(frame count / 15)), which evt_ramp uses
+ * Script helper: writes into LW(10) a sine wobble (1.8 times |GW(0)| times sin(retraceCount / 15)), which evt_ramp uses
  * to sway the lamps.
  */
 static USER_FUNC(ramp_r) {
@@ -899,9 +899,9 @@ EVT_END()
  * they are moved out of sight; the attendant (駅員) says train_07, the train leaves
  * (hom_10_evt_resha_start). Then GSWF_RSH_NEW_PASSENGERS_PENDING is set from STG6_56 on,
  * GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT cleared, GSWF_HOM_TRAIN_BOARDED_UNUSED set, GSW_HOM_TRAIN_LEG = 0, the
- * train-location flags cleared, and the map changes to sys_01 ("stg_6") before STG6_00_START, else
- * rsh_02_a ("nidome_start"). The early demos first clear GSWF_RSH_02_DRIED_SHROOM_DRAWER; JP and later
- * instead move the partner to Mario when it is more than 100 away.
+ * train-location flags cleared (two in the early demos, four from JP on), and the map changes to sys_01
+ * ("stg_6") before STG6_00_START, else rsh_02_a ("nidome_start"). The early demos first clear
+ * GSWF_RSH_02_DRIED_SHROOM_DRAWER; JP and later instead move the partner to Mario when it is more than 100 away.
  */
 static EVT_BEGIN(evt_train)
 #if VERSION <= VERSION_DEMO_JP

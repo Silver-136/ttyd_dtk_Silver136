@@ -11,7 +11,7 @@
 static void effUranokoDisp(CameraId cameraId, EffectEntry* effect);
 static void effUranokoMain(EffectEntry* effect);
 
-/** Spawns the uranoko animation at (x, y, z) for duration frames (0 or less: until soft deleted). */
+/** Spawns the uranoko animation at (x, y, z) for duration frames (0 or less, or 1000 and more: until soft deleted). */
 EffectEntry* effUranokoEntry(s32 type, s32 duration, f32 x, f32 y, f32 z) {
     EffectEntry* effect;
     EffUranokoWork* work;

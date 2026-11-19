@@ -63,7 +63,7 @@ static BeroEntry bero_entry_data[] = {
 };
 
 /**
- * Hit script for item_ki_3: when that item is not out, drops a coin, collected only once
+ * Hit script of tree a_ki_3 (ki_data): when no item item_ki_3 is out, drops a coin as item_ki_3, collected only once
  * (GSWF_HEI_04_COIN_TREE).
  */
 static EVT_BEGIN(evt_ki_3)

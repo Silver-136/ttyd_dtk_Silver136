@@ -183,7 +183,7 @@ struct EventEntry {
     u8 opcode;                         // 0xA, EventOpcode
     u8 priority;                       // 0xB, validated, run order, highest first; a child gets parent + 1
     u8 type;                           // 0xC, stop/start mask (EVENT_TYPE_DEFAULT)
-    u8 blocked;                        // 0xD, FALSE on a command's first call; commands that wait set TRUE
+    u8 blocked;                        // 0xD, 0 when a command starts; a waiting command sets it (some use 2, 3)
     s8 loopDepth;                      // 0xE, validated, current DO nesting, index into loopStartPtrs / loopCounters
     s8 switchDepth;                    // 0xF, validated, current SWITCH nesting, index into switchValues / switchStates
     u8 wNpcEventType;                  // 0x10, NpcEventType
@@ -228,10 +228,10 @@ struct EventEntry {
         EvtWord lwData[16];    // 0x9C, validated
         f32 lwDataF[16];       // 0x9C, the same words used as floats
     };
-    s32 lfData[3];             // 0xDC, validated, LF flag words (copied from and back to the parent)
+    s32 lfData[3];             // 0xDC, validated, LF flag words (copied into new events; a child copies back)
     EvtWord* loopStartPtrs[8];    // 0xE8, start of each open DO loop
-    EvtWord loopCounters[8];   // 0x108, count left in each open DO loop
-    s8 switchStates[8];        // 0x128, validated, per depth: 1 no CASE matched yet, 0 matched
+    EvtWord loopCounters[8];   // 0x108, count left in each open DO loop (0 = forever, or the variable counted down)
+    s8 switchStates[8];        // 0x128, validated, per depth: 1 none matched yet, 0 matched, -1 / -2 OR / AND states
     EvtWord switchValues[8];   // 0x130, validated, per depth: the SWITCH value
     union {                    // Current addr for read/readf instructions
         EvtWord* readAddr;
@@ -261,7 +261,7 @@ struct EventEntry {
     };
     u32 msgPriority;            // 0x190, priority for the next message window (msgWindow_Entry); 0 after use
     OSTime savedTime;           // 0x198, start time saved by timed user functions
-    void* restartFrom;          // 0x1A0, validated, script start; evtRestart runs it again from here
+    void* restartFrom;          // 0x1A0, validated, restart point: script start or RESTART_EVENT
     const char* name;           // 0x1A4, DEBUG_NAME string, NULL by default
     void* currCommand;          // 0x1A8, command being run
 };

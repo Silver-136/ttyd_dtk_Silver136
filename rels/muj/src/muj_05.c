@@ -1381,8 +1381,8 @@ static EVT_BEGIN(dokuroiwa_init)
 EVT_END()
 
 /**
- * First scene on entering the map: plays BGM_EVT_DANGER4, waits for the entrance to finish, and Bobbery (サンダース)
- * says stg5_muj_33; sets GSWF_MUJ_05_BOBBERY_FIRST_SCENE_SEEN.
+ * First scene, spawned by the init at STG5_13_BOBBERY_THE_BRIDGE until GSWF_MUJ_05_BOBBERY_FIRST_SCENE_SEEN is set:
+ * plays BGM_EVT_DANGER4, waits for the entrance to finish, Bobbery (サンダース) says stg5_muj_33; sets the flag.
  */
 static EVT_BEGIN(muj_05_first)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_DANGER4"))

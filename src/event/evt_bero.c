@@ -164,19 +164,19 @@ s32 bero_get_BeroNUM(void) {
     return BeroNUM;
 }
 
-/** Returns the x of the Mario display offset saved by evt_bero_disppos_save. */
 // bero_get_BeroOX, bero_get_BeroOY and bero_get_BeroOZ: original names and sizes (0x8 each) from the JP demo map
 // (UNUSED there: nothing calls them); the getters of the saved offset, like the six position getters below.
+/** Returns the x of the Mario display offset saved by evt_bero_disppos_save (zeroed by bero_clear_Offset). */
 f32 bero_get_BeroOX(void) {
     return BeroOX;
 }
 
-/** Returns the y of the Mario display offset saved by evt_bero_disppos_save. */
+/** Returns the y of the Mario display offset saved by evt_bero_disppos_save (zeroed by bero_clear_Offset). */
 f32 bero_get_BeroOY(void) {
     return BeroOY;
 }
 
-/** Returns the z of the Mario display offset saved by evt_bero_disppos_save. */
+/** Returns the z of the Mario display offset saved by evt_bero_disppos_save (zeroed by bero_clear_Offset). */
 f32 bero_get_BeroOZ(void) {
     return BeroOZ;
 }
@@ -661,11 +661,11 @@ static inline f32 cosd(f32 deg) { return cos(6.2831855f * deg / 360.0f); }
 
 /**
  * Start and end points of a walk through the exit in LW(3) (hit object name), LW(5) (direction in eighths of a turn)
- * and LW(6) (position, BERO_POS_AUTO: the hit object's): both start at the exit. With a nonzero distance args[1] the
- * start moves 30 units back against the direction (turned half round when args[0] is 1), its y set to the floor
- * below when there is one, and the end lies args[1] units beyond the exit. Stores them in BeroSX..BeroEZ. JP and
- * later also make the end Mario's respawn point after a bottomless fall and call marioReloadMapOnBottomlessOn when
- * he is in MARIO_MOTION_SHIP.
+ * and LW(6) (position): both start at LW(6) (with BERO_POS_AUTO only the start takes the hit object's position, the
+ * end keeps the raw values). With a nonzero distance args[1] the start moves 30 units back against the direction
+ * (turned half round when args[0] is 1), its y set to the floor below when there is one, and the end lies args[1]
+ * units beyond the exit at that y. Stores them in BeroSX..BeroEZ. JP and later also make the end Mario's respawn
+ * point after a bottomless fall and call marioReloadMapOnBottomlessOn when he is in MARIO_MOTION_SHIP.
  */
 USER_FUNC(bero_get_position_normal) {
     EvtWord* args = event->args;

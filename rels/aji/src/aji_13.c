@@ -134,8 +134,8 @@ static BOOL _hitIsGroupSub(HitEntry* target, HitEntry* node, BOOL checkSibling) 
 }
 
 /**
- * Returns whether hit entry target is the hit group `group` or one of the hit entries below it, comparing joint names
- * (_hitIsGroupSub).
+ * Returns whether hit entry target is the hit group `group` or an entry _hitIsGroupSub reaches below it, comparing
+ * joint names (not every entry below: a node with a child never goes on to its siblings).
  */
 static BOOL hitIsGroup(HitEntry* target, HitEntry* group) {
     // Search by joint name, excluding the root sibling chain; child recursion skips the current node's siblings.

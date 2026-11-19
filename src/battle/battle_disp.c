@@ -897,7 +897,7 @@ void btlUnitPartsDisp(CameraId camId, void* param) {
 
 /**
  * Draws the icon of the unit's held item at its held-item offsets when an enemy can use that item
- * (BtlUnit_EnemyItemCanUseCheck); with BATTLE_FLAG_FORCE_ITEM_ICONS_UNUSED a Mushroom stands in for any other item.
+ * (BtlUnit_EnemyItemCanUseCheck); with BATTLE_FLAG_FORCE_ITEM_ICONS_UNUSED a Mushroom is drawn otherwise (no item too).
  */
 // FAKE: per-function opt_dead_assignments off keeps the unused height store; without it the object changes
 #pragma push
@@ -929,8 +929,8 @@ static void btlUnitItemDisp(CameraId camId, BattleUnit* unit) {
 #pragma pop
 
 /**
- * Draw callback for one unit's held item: for enemy kinds (UNIT_GOOMBA up to UNIT_UNUSED_TREE), Mario and the partners,
- * draws it with BATTLE_FLAG_FORCE_ITEM_ICONS_UNUSED set for the call (btlUnitItemDisp).
+ * Draw callback for one unit's held item: for enemy kinds (UNIT_GOOMBA to before UNIT_UNUSED_TREE), Mario and the
+ * partners, draws it with BATTLE_FLAG_FORCE_ITEM_ICONS_UNUSED set for the call (btlUnitItemDisp).
  */
 static void btlUnitItemDisp2(CameraId camId, void* payload) {
     BattleUnit* unit = payload;

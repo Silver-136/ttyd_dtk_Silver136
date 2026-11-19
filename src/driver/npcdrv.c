@@ -222,8 +222,9 @@ void luigiMain(NpcEntry* entry) {
 
 /**
  * Builds the model matrix of entry in mtx: its scale (z mirrored while it faces between 90 and 270 degrees), its z, x
- * and y rotations about rotationOffset (y turned by the camera's view angle unless NPC_FLAG_NO_VIEW_CORRECTION or
- * NPC_FLAG_2D), then the move to its position, or to positionHistory[history] when history is not -1.
+ * and y rotations about rotationOffset (y plus the angle between the camera's view direction and the camera-to-NPC
+ * direction, unless NPC_FLAG_NO_VIEW_CORRECTION or NPC_FLAG_2D), then the move to its position, or to
+ * positionHistory[history] when history is not -1.
  */
 static void mtx_setup(NpcEntry* entry, Mtx mtx, s32 history) {
     f32 rotationAngle;
@@ -275,7 +276,7 @@ static void mtx_setup(NpcEntry* entry, Mtx mtx, s32 history) {
     }
 }
 
-/** While NPC_STATUS_DARKEN is set, gives entry's pose its colour at half brightness as the event colour. */
+/** While NPC_STATUS_DARKEN is set: entry's colour, RGB halved, as its pose's event colour (MAP_OBJ_FLAG_COLOR). */
 static inline void npcDimColor(NpcEntry* entry) {
     GXColor color = entry->color;
     if (entry->statusFlags & NPC_STATUS_DARKEN) {
@@ -683,9 +684,10 @@ BOOL npcCheckInWater(NpcEntry* entry);
 void _fbatFitstAttackAnnounceMain(FirstStrikeInfo* firstStrike);
 
 /**
- * Once per frame: updates every ready NPC of the current list (timers, movement and gravity, slower in water; pushing
- * Mario out of non-enemy NPCs; the walk and run animations; the move-event checks) and queues the draws of those on
- * screen (model, shadow, blur, offscreen copy). JP and later first clear Mario's targetNpc. Ends with fbatMain.
+ * Once per frame: updates every ready NPC of the current list (update time; movement and gravity, fall speed capped at
+ * 100 in water; pushing Mario out of non-enemy NPCs; stay / walk / run animations; blow and territory interrupts of its
+ * regular event) and queues the draws of those on screen (model, shadow, blur, offscreen copy). JP and later first
+ * clear Mario's targetNpc. Ends with fbatMain.
  */
 void npcMain(void) {
     NpcWork* npcwork;
@@ -1202,9 +1204,10 @@ void npcSetStayPose(char* name) {
 }
 
 /**
- * Pushes Mario out of npc when they overlap (heights overlapping, within half their widths plus 5): npc first goes back
- * to its previous x and z, and if they still overlap Mario is moved away, by a limited step, and wall-checked. Returns
- * TRUE when it pushed; JP and later also make npc Mario's targetNpc.
+ * Pushes Mario out of npc when they overlap (heights overlapping, within (both widths + 5) / 2): npc first goes back to
+ * its previous x and z, and if they still overlap Mario is moved away (a step longer than 3, or 1.5 when his collision
+ * box z is at most 4, is cut to 1, JP and later 2) and wall-checked. Returns TRUE when it pushed; JP and later also
+ * make npc Mario's targetNpc.
  */
 static BOOL npcCheckHitMarioSide(NpcEntry* npc) {
     MarioWork* mario;

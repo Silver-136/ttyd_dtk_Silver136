@@ -884,7 +884,7 @@ static void btlseqEnd_DispMain(CameraId camId, void* param) {
 
 /**
  * Draw callback for the battle-end Star Point counter: a white window with the Star Point icon and seqEndWork->expDisp
- * as two digits. Draws nothing without seqEndWork.
+ * ("%2d", at least two characters wide). Draws nothing without seqEndWork.
  */
 static void _MarioExpDisp(CameraId camId, void* param) {
     BattleSeqEndWork* work = ((BattleWork*)param)->seqEndWork;

@@ -1940,8 +1940,8 @@ EVT_END()
 
 /**
  * Main function of a padlock: when checked, freezes Mario and the partner and runs its event; unless that cancels,
- * takes the key (the first held key of a key list) or shows sys_no_key. An unlocked lock plays its sound, sets its
- * flag, runs its second event, falls bouncing to the floor, blinks and is deleted.
+ * takes the key (of a key list, the first held one; see the BUG note) or shows sys_no_key. An unlocked lock plays
+ * its sound, sets its flag, runs its second event, falls bouncing to the floor, blinks and is deleted.
  */
 static s32 mobj_lock(MapObjectEntry* mobj) {
 #if VERSION >= VERSION_US
@@ -2175,8 +2175,8 @@ static EVT_BEGIN(evt_box_sound3)
 EVT_END()
 
 /**
- * Centres a chest map object's translation on its model's bounding box (the minimum z pushed out by a fifth of the box
- * height) at height 0, enlarges its scale2 (y by 1.4, z by 1.2) and rebuilds its matrix.
+ * Sets a chest map object's translation to 10 times its model's bounding-box centre (the minimum z pushed out by a
+ * fifth of the box height) at height 0, enlarges its scale2 (y by 1.4, z by 1.2) and rebuilds its matrix.
  */
 // Original name from the JP demo's link map (UNUSED there): every call is inlined, so the linker strips it.
 void itemboxChgHitSize(MapObjectEntry* mobj) {
@@ -4315,9 +4315,9 @@ static s32 mobj_koopa_brickblk(MapObjectEntry* mobj) {
 }
 
 /**
- * Places a block for the Bowser stages, hit by Bowser's head, body, hip and flame (MOBJ_FLAG_HIT_KOOPA_*).
- * args: name, x, y, z, item (kept in typeData[0]), kind (literal: 0 MOBJ_FlowBrickBlock, 1 MOBJ_block_ky,
- * 2 MOBJ_bigblock_01, 3 MOBJ_bigblock_02), event, flag variable.
+ * Places a block for the Bowser stages, hit by Bowser's head, body (power level 3), hip and flame
+ * (MOBJ_FLAG_HIT_KOOPA_*). args: name, x, y, z, item (kept in typeData[0]), kind (literal: 0 MOBJ_FlowBrickBlock,
+ * 1 MOBJ_block_ky, 2 MOBJ_bigblock_01, 3 or other MOBJ_bigblock_02), event, flag variable.
  */
 USER_FUNC(evt_mobj_koopa_brick) {
     const char* name;

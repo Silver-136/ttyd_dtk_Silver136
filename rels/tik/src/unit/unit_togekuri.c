@@ -318,8 +318,9 @@ static s32 krb_comp_dir(f32 x, f32 z) {
 }
 
 /**
- * Script helper (args[0..3] = x1, z1, x2, z2; args[4] = direction in and out): sets args[4] to the angle of the step
- * from (x1, z1) to (x2, z2), or keeps its value when the two points are the same.
+ * Script helper (args[0..3] = x1, z1, x2, z2; args[4] = direction in and out): sets args[4] to the angle (angleABf,
+ * as an integer) from (x2 - x1, z2 - z1) to the origin, that is of the step back from (x2, z2) to (x1, z1); keeps
+ * its value when the two points are the same.
  */
 static USER_FUNC(krb_get_dir) {
     EvtWord* args = event->args;
