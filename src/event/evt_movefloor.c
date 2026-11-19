@@ -25,28 +25,28 @@
 #define MOVING_FLOOR_PAUSE 2        // read by moving_floor_get_pause; nothing in this file sets it
 
 typedef struct MovingFloor {
-    u32 flags;       // 0x0
-    s32 kind;        // 0x4
-    f32 speed;       // 0x8
-    f32 pos;         // 0xC
-    f32 cur;         // 0x10
-    OSTime start;    // 0x18
-    s32 mode;        // 0x20
-    s32 phase;       // 0x24
-    s32 idx;         // 0x28
-    f32 a[3];        // 0x2C
-    f32 b[3];        // 0x38
-    f32 pos3[3];     // 0x44
-    f32 prev[3];     // 0x50
-    f32 yoff;        // 0x5C
-    f32 prevYoff;    // 0x60
-    f32 scale;       // 0x64
-    s32 time[3];     // 0x68
-    s32 stmsec;      // 0x74
-    u32 seHalt;      // 0x78
-    u32 seId;        // 0x7C
-    f32 turn;        // 0x80
-    f32 angle;       // 0x84
+    u32 flags;       // 0x0, MOVING_FLOOR_*
+    s32 kind;        // 0x4, LW(12): 0 carries riders and plays the moving sound, 1 bobs up and down (setsinnow)
+    f32 speed;       // 0x8, signed units per ms along axis idx for the current leg
+    f32 pos;         // 0xC, current coordinate on axis idx
+    f32 cur;         // 0x10, ms spent on the current leg
+    OSTime start;    // 0x18, event lifetime at the last step (evt_moving_floor_main2)
+    s32 mode;        // 0x20, LW(6): 0-2 back and forth on X, Y or Z, 3 and 4 on X and Z, 5 stays put
+    s32 phase;       // 0x24, leg number within the mode's cycle; for modes 0-2 the direction
+    s32 idx;         // 0x28, axis of the current leg (0 X, 1 Y, 2 Z)
+    f32 a[3];        // 0x2C, per axis: one end of the travel (LW(2), LW(8) for Z in modes 3 and 4)
+    f32 b[3];        // 0x38, per axis: the other end (LW(3), LW(9))
+    f32 pos3[3];     // 0x44, floor position X, Y, Z (without the bob)
+    f32 prev[3];     // 0x50, pos3 before the last step (moving_floor_getf_now_bpoint)
+    f32 yoff;        // 0x5C, kind 1 bob added to Y
+    f32 prevYoff;    // 0x60, yoff before the last refresh
+    f32 scale;       // 0x64, fraction of time[idx] that ends the leg (0.5 for mode 3's half-legs)
+    s32 time[3];     // 0x68, per axis: travel time in ms (LW(4), LW(10))
+    s32 stmsec;      // 0x74, LW(5): stop time at each end in ms
+    u32 seHalt;      // 0x78, set by moving_floor_halt_se: the sound is never started or stopped again
+    u32 seId;        // 0x7C, moving sound (SFX_STG1_TIK_FLOOR_MOVE1), 0 when none
+    f32 turn;        // 0x80, LW(11): Y turn per frame in degrees
+    f32 angle;       // 0x84, Y rotation (0-360), stepped by moving_floor_update_turn
 } MovingFloor;
 
 /**

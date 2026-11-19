@@ -23,13 +23,13 @@ typedef enum ExtPoseFlags {
 
 typedef struct ExtdrvPose {
     u32 flags;     // 0x0, ExtPoseFlags
-    f32 dir;       // 0x4
-    f32 shadowY;   // 0x8
-    Mtx* mtx;      // 0xC
-    s32 texId;     // 0x10
-    f32 ry;        // 0x14
-    u8 pad_18[4];   // 0x18
-    f32 targetRy;  // 0x1C
+    f32 dir;       // 0x4, facing in degrees; a billboard pose shows the camera its front or its back by it
+    f32 shadowY;   // 0x8, shadow height with EXT_POSE_FLAG_SHADOW_POS
+    Mtx* mtx;      // 0xC, its matrix in ExtdrvWork.mtxs (the translation is its position)
+    s32 texId;     // 0x10, texture and display list drawn
+    f32 ry;        // 0x14, current turn of a billboard pose; moves a tenth of the way to targetRy each frame
+    u8 pad_18[4];  // 0x18
+    f32 targetRy;  // 0x1C, camera turn, or that plus 180 when the pose faces away
 } ExtdrvPose;
 
 typedef struct ExtdrvTex {

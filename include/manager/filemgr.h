@@ -27,17 +27,17 @@ enum {
 };
 
 typedef struct FileEntry {
-    u8 state; // 0x0
+    u8 state; // 0x0, FILE_STATE_*
     s8 type; // 0x1, FileType
-    s16 references; // 0x2
+    s16 references; // 0x2, holders: fileAlloc adds one, fileFree drops one (0 marks it released); 0 after fileAsync
     void* dataSlot; // 0x4, data points here unless the data is in a smart block
     u8 pad_8[0x20 - 0x8]; // 0x8
-    char filename[64]; // 0x20
+    char filename[64]; // 0x20, path it was loaded from; fileAlloc and fileAsync find cached files by it
     u8 pad_60[0xA0 - 0x60]; // 0x60
-    void** data; // 0xA0
-    struct FileEntry* next; // 0xA4
-    FileCallback callback; // 0xA8
-    DVDEntry* entry; // 0xAC
+    void** data; // 0xA0, &dataSlot or the smart block's address field; *data is the file's data
+    struct FileEntry* next; // 0xA4, next entry in the used or the free list
+    FileCallback callback; // 0xA8, fileAsync's callback, run when the read ends
+    DVDEntry* entry; // 0xAC, fileAsync's DVD read while it runs, then NULL
 } FileEntry;
 
 typedef struct FileManagerWork {

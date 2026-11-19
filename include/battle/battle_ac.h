@@ -119,26 +119,27 @@ enum {
 };
 
 typedef struct BattleActions {
-    struct BattleUnit* acUnit;      // 0x0
+    struct BattleUnit* acUnit;       // 0x0, unit doing the command (BattleActionCommandSetup)
     s32 setupFlags;                  // 0x4, BattleActionCommandSetup a4; bit0: auto-play while confused
     s32 setupParam;                  // 0x8, BattleActionCommandSetup a5
-    s32 acState;                    // 0xC
-    BattleACMainCallback maincb;     // 0x10
-    BattleACResultCallback resultcb; // 0x14
-    DispCallback dispcb;             // 0x18
-    BattleACDeleteCallback deletecb; // 0x1C
-    s32 defenseResult;              // 0x20
-    s32 resultCount;                // 0x24
+    s32 acState;                     // 0xC, AC_STATE_*: INIT at setup, START from BattleActionCommandStart
+    BattleACMainCallback maincb;     // 0x10, run every frame by BattleActionCommandManager until it returns 0
+    BattleACResultCallback resultcb; // 0x14, BattleActionCommandResult's source; without one, result's
+                                     // AC_RESULT_SUCCESS bit
+    DispCallback dispcb;             // 0x18, draw callback; not installed for a confused unit
+    BattleACDeleteCallback deletecb; // 0x1C, called by BattleActionCommandStop
+    s32 defenseResult;               // 0x20, GUARD_RESULT_* of the last BattleActionCommandCheckDefence
+    s32 resultCount;                 // 0x24, completions the command counted (btlevtcmd_GetResultCountAC); 0 at setup
     s32 result;                      // 0x28, BattleACResultFlags
-    s8 baseAcDifficulty;            // 0x2C
-    u8 acDifficulty;                // 0x2D
+    s8 baseAcDifficulty;             // 0x2C, difficulty as set, before Simplifier / Unsimplifier; never read
+    u8 acDifficulty;                 // 0x2D, adjusted difficulty (0-6); BattleActionCommandGetPrizeLv adds it
     s32 doneFlags;                   // 0x30, bit 0: AC finished (delete handler forces the end state otherwise)
     u32 acFlags;                     // 0x34, btlevtcmd_AcSetFlag; Ac<Command>Flags above
     s32 params[8];                   // 0x38, btlevtcmd_AcSetParam/AcSetParamAll/AcGetParam
-    s32 outputParams[8];             // 0x58
+    s32 outputParams[8];             // 0x58, btlevtcmd_AcGetOutputParam/AcSetOutputParam: values the command hands back
     s32 gaugeParams[4];              // 0x78, btlevtcmd_AcSetGaugeParam
     s16 countdown;                   // 0x88, automatic successes left: while above 0 a command or guard check passes and uses one (battle_ac.c, most ac_*.c)
-    BattleWorkPad pad;               // 0x8C
+    BattleWorkPad pad;               // 0x8C, pad history, updated each frame; the commands and the guard check read it
     u32 seId;                        // 0x288, power gauge SFX id (battle_ac.c)
     f32 seValue;                     // 0x28C, power gauge SFX value
     BattleACDispParams disp;         // 0x290, gauge display parameters

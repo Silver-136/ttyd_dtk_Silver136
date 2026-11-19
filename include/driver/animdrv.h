@@ -188,48 +188,52 @@ typedef enum AnimDataFlags {
 } AnimDataFlags;
 
 typedef struct AnimationPoseData {
-    u32 size;                     // 0x0
-    char fileName[64];             // 0x4
-    char textureName[64];          // 0x44
-    char buildTime[64];           // 0x84
+    u32 size;                      // 0x0, never read
+    char fileName[64];             // 0x4, model name: animGroupEntry, animPoseGetId and the paper lookups match it;
+                                   // mobjCalcMtx gives "HOBJ_" models a thin fixed depth
+    char textureName[64];          // 0x44, texture file that animGroupEntry loads (textureGroupEntry)
+    char buildTime[64];            // 0x84, never read
     u32 flags;                     // 0xC4, AnimDataFlags
-    s32 radius;                    // 0xC8
-    s32 height;                    // 0xCC
-    Vec bboxMin;                   // 0xD0
-    Vec bboxMax;                   // 0xDC
-    s32 shapeCount;                // 0xE8
-    u8 pad_EC[0xF0 - 0xEC];    // 0xEC, no access found
-    u32 bufferPosNum;             // 0xF0
-    u32 bufferPosIdxNum;          // 0xF4
-    u32 bufferNrmNum;             // 0xF8
-    u32 bufferNrmIdxNum;          // 0xFC
-    u8 pad_100[0x12C - 0x100]; // 0x100, no access found
-    u32 bufferTexAnimNum;         // 0x12C
-    s32 texDataCount;              // 0x130
-    s32 texBindCount;              // 0x134
-    u8 pad_138[0x13C - 0x138]; // 0x138, no access found
-    u32 bufferVisibilityNum;      // 0x13C
-    u32 bufferNodeNum;            // 0x140
-    s32 groupCount;                // 0x144
-    s32 animCount;                // 0x148
+    s32 radius;                    // 0xC8, half of animPoseGetRadius
+    s32 height;                    // 0xCC, half of animPoseGetHeight
+    Vec bboxMin;                   // 0xD0, model bounds; map-object hit boxes are 10 times them (mobjHitEntry,
+                                   // mobjCalcMtx)
+    Vec bboxMax;                   // 0xDC, model bounds, other corner
+    s32 shapeCount;                // 0xE8, entries of shapes (animPoseGetShapeIdx)
+    u8 pad_EC[0xF0 - 0xEC];        // 0xEC, no access found
+    u32 bufferPosNum;              // 0xF0, entries of bufferVtxPos; sizes the pose's position buffers
+    u32 bufferPosIdxNum;           // 0xF4, never read
+    u32 bufferNrmNum;              // 0xF8, entries of nrmVtxBuffer; sizes the pose's normal buffers
+    u32 bufferNrmIdxNum;           // 0xFC, never read
+    u8 pad_100[0x12C - 0x100];     // 0x100, no access found
+    u32 bufferTexAnimNum;          // 0x12C, entries of texAnimEntries; sizes the pose's copy
+    s32 texDataCount;              // 0x130, never read
+    s32 texBindCount;              // 0x134, entries of texBinds; a bind index outside it falls back to 0
+    u8 pad_138[0x13C - 0x138];     // 0x138, no access found
+    u32 bufferVisibilityNum;       // 0x13C, entries of groupVisibility; sizes the pose's copy
+    u32 bufferNodeNum;             // 0x140, entries of nodeData; sizes the pose's node buffers
+    s32 groupCount;                // 0x144, entries of groups; the pose gets one world position and matrix each
+    s32 animCount;                 // 0x148, entries of anims
+    // From shapes on, the fields are file offsets in the stored file; fileGarbageDataAdrSet turns them into
+    // pointers when the file is loaded or moved.
     AnimPoseShape* shapes;         // 0x14C
     AnimDrawCallEntry* drawCalls;  // 0x150, finished name
-    Vec* bufferVtxPos;             // 0x154
+    Vec* bufferVtxPos;             // 0x154, base vertex positions, copied into the pose buffer each keyframe reset
     u32* posIndex;                 // 0x158, 32-bit index entries; GX draws use the low 16 bits
-    Vec* nrmVtxBuffer;             // 0x15C
+    Vec* nrmVtxBuffer;             // 0x15C, base normals, copied into the pose buffer each keyframe reset
     u32* nrmIndex;                 // 0x160, same entries as posIndex
     GXColor* clr0VtxBuffer;        // 0x164, finished name
     u32* clr0Index;                // 0x168, finished name, same entries as posIndex
     u32* texIndex[8];              // 0x16C, finished name, same entries as posIndex
     f32* texVtxBuffer;             // 0x18C, finished name, pointer to list of [S, T]
     AnimTexMtx* texAnimEntries;    // 0x190, copied into the pose buffer each keyframe reset
-    AnimPoseTexEntry* texData;     // 0x194
+    AnimPoseTexEntry* texData;     // 0x194, per texture slot: bind index and wrap modes
     AnimTexBind* texBinds;         // 0x198
-    AnimPoseShapeDraw* draws;      // 0x19C
+    AnimPoseShapeDraw* draws;      // 0x19C, indexed from each shape's shapeDrawStart
     s8* groupVisibility;           // 0x1A0, copied into the pose buffer each keyframe reset
-    f32* nodeData;        // 0x1A4, copied into the pose buffer each keyframe reset
-    AnimPoseGroup* groups;         // 0x1A8
-    AnimTableEntry* anims;       // 0x1AC
+    f32* nodeData;                 // 0x1A4, copied into the pose buffer each keyframe reset
+    AnimPoseGroup* groups;         // 0x1A8, node tree (brotherGroupId / childGroupId); animPoseGetGroupIdx
+    AnimTableEntry* anims;         // 0x1AC, the animations by name (getAnimDataId)
 } AnimationPoseData;
 
 // AnimationPose.flags, named from their setters and drawing consumers. The kururing capture in evt_mobj

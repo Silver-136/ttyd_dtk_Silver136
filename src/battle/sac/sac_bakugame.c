@@ -39,13 +39,15 @@ static EvtWord hitCheck_EnemyTeam[53];
 static EvtWord hitCheck_AudienceTeam[15];
 
 typedef struct BakuBtn {
-    s32 state;  // 0x0
-    s32 timer;  // 0x4
-    s32 button; // 0x8
-    s32 target; // 0xC
-    f32 hp;     // 0x10
-    Vec pos;    // 0x14
-    f32 scale;  // 0x20
+    s32 state;  // 0x0, 0 -> 5 waiting, 10 -> 15 shown and pressable, 12 grows in (nothing sets it), 20 hidden
+    s32 timer;  // 0x4, grow-in frame of state 12
+    s32 button; // 0x8, PAD_BUTTON_A, B or X
+    s32 target; // 0xC, side the button throws to: 0 Mario's side, 1 the enemies, 2 the audience
+    f32 hp;     // 0x10, 100 after each throw; a press takes 100, and while an enemy or the crowd holds the bomb
+                // the button aimed at one of the other two loses 5 a frame (2.5 in US and later); the bomb is
+                // thrown to target when it reaches 0
+    Vec pos;    // 0x14, icon position over the target (bakuGameDecideButton)
+    f32 scale;  // 0x20, icon draw scale
 } BakuBtn;
 
 // BakuWork.flags, both set when bakuGameMain starts
@@ -58,60 +60,66 @@ enum {
 
 typedef struct BakuWork {
     u32 flags;          // 0x0, BAKU_FLAG_*
-    s32 state;          // 0x4
-    s32 timer;          // 0x8
-    BakuBtn btn[3];     // 0xC
-    s32 unk78;          // 0x78
+    s32 state;          // 0x4, bakuGameMain state: 0 waits for the buttons, the bomb's landing and the stand-in,
+                        // 5 starts the fuse, 10 game running, 20 the fuse ran out, 25 waits for the blast,
+                        // 30 returns the result
+    s32 timer;          // 0x8, frames since the last button shuffle (a random reshuffle after 60, always at 180)
+    BakuBtn btn[3];     // 0xC, the A, B and X buttons
+    s32 unk78;          // 0x78, never accessed
     s32 phase;          // 0x7C, step of the move (bakuGameMain switch)
     s32 frame;          // 0x80, frame counter of the current phase
     s32 frameTotal;     // 0x84, length of the current timed move
-    Vec pos;            // 0x88
-    Vec from;           // 0x94
-    Vec to;             // 0xA0
-    f32 unkac;          // 0xAC
-    f32 vy;             // 0xB0
+    Vec pos;            // 0x88, bomb position
+    Vec from;           // 0x94, start of the bomb's drop, lift or throw
+    Vec to;             // 0xA0, end of the bomb's drop, lift or throw
+    f32 unkac;          // 0xAC, never accessed
+    f32 vy;             // 0xB0, bomb vertical speed of the drop and the throw (-0.5 a frame)
     u8 padb4[0xC];      // 0xB4
-    f32 c0;             // 0xC0
+    f32 c0;             // 0xC0, set to 90, then 70 when the game starts; the early demos also sway it by 0.7 a
+                        // frame on a 28-frame cycle; never read otherwise
     f32 bombScale;      // 0xC4, bomb draw scale and camera shake amount (2 -> 6 as the fuse burns)
-    f32 c8;             // 0xC8
+    f32 c8;             // 0xC8, written with bombScale; never read
     u8 holder;          // 0xCC, who holds the bomb: 0 Mario, 1 an enemy, 2 the audience
     u8 throwTarget;     // 0xCD, target of the button whose gauge ran out
-    f32 gauge;          // 0xD0
-    f32 vel;            // 0xD4
-    f32 acc;            // 0xD8
-    f32 gaugeX;         // 0xDC, gauge position (BattleAcDrawGauge)
-    f32 gaugeY;         // 0xE0
-    f32 e4;             // 0xE4
-    f32 rate;           // 0xE8
-    s32 poseId;         // 0xEC
+    f32 gauge;          // 0xD0, mash gauge (0-110); its value at the end sets the Stop level and chance
+    f32 vel;            // 0xD4, gauge rise per frame: 1.5 on an A, B or X press, then 0.25 less each frame
+    f32 acc;            // 0xD8, gauge drain per frame (always -0.3)
+    f32 gaugeX;         // 0xDC, gauge position (BattleAcDrawGauge); slides in from -1000 to 50
+    f32 gaugeY;         // 0xE0, gauge position y (50)
+    f32 e4;             // 0xE4, never accessed
+    f32 rate;           // 0xE8, gauge fill drawn (gauge / 100, at most 1)
+    s32 poseId;         // 0xEC, c_star_bom pose (bakuGameBombEntry); -1 once released
     s32 fuseTimer;      // 0xF0, frames until the bomb goes off (540-659 at the start)
     s32 pressWait;      // 0xF4, frames before a button press counts again
-    BattleWeapon weapon;    // 0xF8
-    s32 sfx1;           // 0x1B8
-    s32 sfx2;           // 0x1BC
-    s32 hstate;         // 0x1C0
-    s32 htimer;         // 0x1C4
-    s32 hsteps;         // 0x1C8
-    s8 hmirror;           // 0x1CC
-    Vec hpos;           // 0x1D0
-    Vec hfrom;          // 0x1DC
-    Vec hto;            // 0x1E8
-    f32 unk1f4;         // 0x1F4
-    f32 hvy;            // 0x1F8
-    f32 unk1fc;         // 0x1FC
-    s32 texIdx;         // 0x200
-    SacStarStone star;  // 0x204
-    Vec mfrom;          // 0x258
-    Vec mto;            // 0x264
+    BattleWeapon weapon; // 0xF8, copy of the move's weapon; bakuGameDecideWeapon sets its Stop chance and time
+    s32 sfx1;           // 0x1B8, SFX_BTL_SAC_TIME1 loop while the gauge is above 0; its pitch follows the gauge
+    s32 sfx2;           // 0x1BC, SFX_BTL_SAC_TIME3 of the bomb in flight
+    s32 hstate;         // 0x1C0, stand-in Shy Guy step; bakuGameMain: 0 starts, 2 walks in, 5 stands,
+                        // 10 holds the bomb, 15 hops with it; bakuGameHeihoReturn: 0 drops to the floor,
+                        // 5 and 10 walk off
+    s32 htimer;         // 0x1C4, stand-in walk frame
+    s32 hsteps;         // 0x1C8, stand-in walk length (30 frames)
+    s8 hmirror;         // 0x1CC, stand-in facing: -1 walking in, 1 walking off (flips the quad's texture)
+    Vec hpos;           // 0x1D0, stand-in position; without a stand-in hpos.y is the enemies' hop height
+    Vec hfrom;          // 0x1DC, start of the stand-in's walk
+    Vec hto;            // 0x1E8, end of the stand-in's walk
+    f32 unk1f4;         // 0x1F4, never accessed
+    f32 hvy;            // 0x1F8, vertical speed of the stand-in's or the enemies' hop
+    f32 unk1fc;         // 0x1FC, never accessed
+    s32 texIdx;         // 0x200, stand-in frame in the audience texture palette (0x5A-0x5C walking, 0x52
+                        // standing, 0x54 holding the bomb)
+    SacStarStone star;  // 0x204, the Crystal Star above Mario (main_star)
+    Vec mfrom;          // 0x258, start of Mario's walk to the bomb or back home
+    Vec mto;            // 0x264, end of Mario's walk to the bomb or back home
     u8 pad270[4];       // 0x270
-    f32 mvy;            // 0x274
-    u8 pad278[0x298 - 0x278];
-    f32 pvy;            // 0x298
-    u8 pad29c[8];
-    f32 audY;           // 0x2A4
-    u8 pad2a8[8];
-    f32 audVy;          // 0x2B0
-    u8 pad2b4[4];
+    f32 mvy;            // 0x274, vertical speed of Mario's random hops (1 in 80 frames) while his side holds the bomb
+    u8 pad278[0x298 - 0x278]; // 0x278
+    f32 pvy;            // 0x298, the same for the partner
+    u8 pad29c[8];       // 0x29C
+    f32 audY;           // 0x2A4, hop height of the throwing audience seats
+    u8 pad2a8[8];       // 0x2A8
+    f32 audVy;          // 0x2B0, vertical speed of that hop
+    u8 pad2b4[4];       // 0x2B4
 } BakuWork;
 
 static void bakuGameDecideButton(s32 first);

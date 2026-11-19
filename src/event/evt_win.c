@@ -107,42 +107,48 @@ typedef enum UnitWinMode {
 
 typedef struct UnitWinWork {
     u16 flags;             // 0x0, UnitWinFlags
-    UnitWinSell* entries;  // 0x4
-    s32* goods;            // 0x8
+    UnitWinSell* entries;  // 0x4, counter table from evt_unitwin_selltable_setup: map object, hit object and
+                           // purchase script per slot, ended by a NULL map object
+    s32* goods;            // 0x8, item id per slot (0: no item); set_new_goods_list replaces the selected one
 #if VERSION >= VERSION_JP
-    u16 itemFlags[6];      // 0xC
+    u16 itemFlags[6];      // 0xC, UnitWinItemFlags per slot (JP and later)
 #endif
-    s32 goodsMax;          // 0x18
-    EventEntry* evt;       // 0x1C
-    EventEntry* childEvt;  // 0x20
-    s32 goodsIdx;          // 0x24
-    s32 timer;             // 0x28
-    s32 coin;              // 0x2C
-    s32 coinDisp;          // 0x30
-    f32 cursor;            // 0x34
+    s32 goodsMax;          // 0x18 (0xC early demos), number of slots (rows of entries)
+    EventEntry* evt;       // 0x1C (0x10 early demos), main_evt from evt_unitwin_alloc; JP and later replace it
+                           // with the select_evt that evt_unitwin_selltable_setup starts
+    EventEntry* childEvt;  // 0x20 (0x14 early demos), the selected slot's purchase script, polled until it ends
+    s32 goodsIdx;          // 0x24 (0x18 early demos), selected slot
+    s32 timer;             // 0x28 (0x1C early demos), early demos: select_func sets 1 while Mario stands on a slot
+                           // with an item; evt_unitwin_main_func counts it down, then clears UNITWIN_FLAG_SELECTED
+    s32 coin;              // 0x2C (0x20 early demos), shown count of the coin, Shine Sprite or Star Piece counter;
+                           // steps toward the pouch total on odd coinTick frames
+    s32 coinDisp;          // 0x30 (0x24 early demos), shown count of the shop-point window (JP and later) and of
+                           // the UNITWIN_FLAG_SHINE_WINDOW_UNUSED counter (pouch shineSpriteCount)
+    f32 cursor;            // 0x34 (0x28 early demos), early demos: highlighted row of the list window
 #if VERSION <= VERSION_DEMO_JP
-    f32 scrollTop;         // 0x2C
+    f32 scrollTop;         // 0x2C, early demos only: first visible row (the list shows 8)
 #else
     u8 pad38[4];           // 0x38
 #endif
-    f32 cursorX;           // 0x3C
-    f32 cursorY;           // 0x40
-    f32 scroll;            // 0x44
-    u8 pad48[4];           // 0x48
-    s32 skipEntry;         // offset 0x4C in JP and later; starts at 0, the early demos set it from the excluded-list entry argument
-    s32 mode;              // 0x50, UnitWinMode
-    u16 flags2;            // 0x54, UNITWIN_FREE_*
+    f32 cursorX;           // 0x3C (0x30 early demos), early demos: finger cursor x; eases toward -25
+    f32 cursorY;           // 0x40 (0x34 early demos), early demos: finger cursor y; eases toward the cursor row
+    f32 scroll;            // 0x44 (0x38 early demos), early demos: list draw offset; eases toward 24 * scrollTop
+    u8 pad48[4];           // 0x48 (0x3C early demos)
+    s32 skipEntry;         // 0x4C (0x40 early demos), early demos: entry left out of the list; modes 7 and 10 set it
+                           // from lwData[1] (a partner id, a stat index)
+    s32 mode;              // 0x50 (0x44 early demos), UnitWinMode
+    u16 flags2;            // 0x54 (0x48 early demos), UNITWIN_FREE_*
 #if VERSION <= VERSION_DEMO_JP
-    s32 caseId[16];        // 0x4C, one case event per counter hit object
+    s32 caseId[16];        // 0x4C, early demos only: case event id per slot (its hit object runs select_evt)
 #else
 #endif
-    s32 count;             // 0x58
-    s32 coinTick;          // 0x5C
+    s32 count;             // 0x58 (0x8C early demos), early demos: rows in the list window for the mode
+    s32 coinTick;          // 0x5C (0x90 early demos), frames the counter has been catching up (mod 1200)
 #if VERSION >= VERSION_JP
-    s32 winId[3];          // 0x60
+    s32 winId[3];          // 0x60, window-manager windows of unitwin_desc: name plate, help text, points
     u8 pad6C[0xE0 - 0x6C]; // 0x6C
-    s32 selected;          // 0xE0
-    s32 bought;            // 0xE4
+    s32 selected;          // 0xE0, slot whose name and help windows are open, -1 when none
+    s32 bought;            // 0xE4, from unitwin_set_bought; nonzero at the purchase script's end marks the slot sold
 #endif
 } UnitWinWork;
 
