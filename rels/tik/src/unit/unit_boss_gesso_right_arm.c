@@ -547,8 +547,8 @@ EVT_BEGIN(gesso_fall_check)
     CALL(btlevtcmd_SetUnitWork, LW(3), GESSO_UNIT_WORK_BUSY, 2)
 
     // BUG: GetUnitWork where SetUnitWork was meant: the target is the number 0, which evtSetValue does not write,
-    // so GESSO_UNIT_WORK_STATE_TURNS keeps its count. If the body falls while awake (state 2) after one counted
-    // turn, phase_event sees 2 after one fallen turn and the Blooper rises a turn early.
+    // so GESSO_UNIT_WORK_STATE_TURNS is not reset here. Harmless as shipped: the tentacles only exist while the body
+    // is on the ceiling (state 0), and phase_event resets the counter when it climbs back up, so it is already 0.
     CALL(btlevtcmd_GetUnitWork, LW(3), GESSO_UNIT_WORK_STATE_TURNS, 0)
     CALL(btlevtcmd_StopWaitEvent, LW(3))
     CALL(btlevtcmd_AnimeChangePose, LW(3), 1, STRING("GSO_F_1"))
