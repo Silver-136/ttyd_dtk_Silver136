@@ -1947,6 +1947,42 @@ static u8* ssDecodeDPCM(SoundStream* stream, SoundStreamEntry* entry, s16* out, 
     return src;
 }
 
+/**
+ * Copies count 16-bit PCM samples from src into out, wrapping through the stream's load buffers and its loop,
+ * keeping the position in entry; returns the new source pointer.
+ */
+// Original name and size (0x100) from the JP demo map (UNUSED there: both calls in _sscallback are inlined, so the
+// linker strips it), between ssDecodeDPCM and _sscallback: _sscallback's PCM loop, in ssDecodeDPCM's form.
+static s16* ssDecodePCM(SoundStream* stream, SoundStreamEntry* entry, s16* out, u32 count, s16* src) {
+    while (count != 0) {
+        *(out++) = *(src++);
+        count--;
+        stream->samplePos++;
+        entry->srcPos += 2;
+        if (entry->srcPos >= entry->loadedLen[entry->curBuf]) {
+            if (entry->loaded == 0 && !(stream->flags & SOUND_STREAM_FLAG_READ_END)) {
+                entry->pos -= entry->srcPos;
+                entry->srcPos = 0;
+                src = (s16*)entry->loadBuffer[entry->curBuf];
+                continue;
+            }
+            entry->loaded = 0;
+            entry->srcPos = 0;
+            entry->curBuf = 1 - entry->curBuf;
+            src = (s16*)entry->loadBuffer[entry->curBuf];
+        }
+        entry->pos += 2;
+        if (entry->pos >= stream->loopEnd) {
+            entry->pos = stream->loopStart;
+            if (!(stream->flags & SOUND_STREAM_FLAG_LOOP)) {
+                stream->flags |= SOUND_STREAM_FLAG_END;
+                break;
+            }
+        }
+    }
+    return src;
+}
+
 /** Early-demo and JP signature of _sscallback: the first buffer's length arrives as len1. */
 #if VERSION < VERSION_US
 static u32 _sscallback(void* p_b1, u32 len1, void* p_b2, u32 p_l2, u32 user) {
@@ -1960,8 +1996,6 @@ static u32 _sscallback(void* p_b1, u32 p_l1, void* p_b2, u32 p_l2, u32 user) {
     unsigned int len2;
     s16* buffer1;
     s16* buffer2;
-    s16* src16;
-    u32 i;
     u32 n;
     s32 j;
     u8* src8;
@@ -2125,63 +2159,9 @@ static u32 _sscallback(void* p_b1, u32 p_l1, void* p_b2, u32 p_l2, u32 user) {
         }
         stream->samplePos = len1 + len2;
     } else {
-        i = len1;
-        dst = buffer1;
-        src16 = (s16*)(entry->loadBuffer[entry->curBuf] + (entry->srcPos & (~1)));
-        while (i != 0) {
-            *(dst++) = *(src16++);
-            i--;
-            stream->samplePos++;
-            entry->srcPos += 2;
-            if (entry->srcPos >= entry->loadedLen[entry->curBuf]) {
-                if (entry->loaded == 0 && !(stream->flags & SOUND_STREAM_FLAG_READ_END)) {
-                    entry->pos -= entry->srcPos;
-                    entry->srcPos = 0;
-                    src16 = (s16*)entry->loadBuffer[entry->curBuf];
-                    continue;
-                }
-                entry->loaded = 0;
-                entry->srcPos = 0;
-                entry->curBuf = 1 - entry->curBuf;
-                src16 = (s16*)entry->loadBuffer[entry->curBuf];
-            }
-            entry->pos += 2;
-            if (entry->pos >= stream->loopEnd) {
-                entry->pos = stream->loopStart;
-                if (!(stream->flags & SOUND_STREAM_FLAG_LOOP)) {
-                    stream->flags |= SOUND_STREAM_FLAG_END;
-                    break;
-                }
-            }
-        }
-        i = len2;
-        dst = buffer2;
-        while (i != 0) {
-            *(dst++) = *(src16++);
-            i--;
-            stream->samplePos++;
-            entry->srcPos += 2;
-            if (entry->srcPos >= entry->loadedLen[entry->curBuf]) {
-                if (entry->loaded == 0 && !(stream->flags & SOUND_STREAM_FLAG_READ_END)) {
-                    entry->pos -= entry->srcPos;
-                    entry->srcPos = 0;
-                    src16 = (s16*)entry->loadBuffer[entry->curBuf];
-                    continue;
-                }
-                entry->loaded = 0;
-                entry->srcPos = 0;
-                entry->curBuf = 1 - entry->curBuf;
-                src16 = (s16*)entry->loadBuffer[entry->curBuf];
-            }
-            entry->pos += 2;
-            if (entry->pos >= stream->loopEnd) {
-                entry->pos = stream->loopStart;
-                if (!(stream->flags & SOUND_STREAM_FLAG_LOOP)) {
-                    stream->flags |= SOUND_STREAM_FLAG_END;
-                    break;
-                }
-            }
-        }
+        ssDecodePCM(stream, entry, buffer2, len2,
+                    ssDecodePCM(stream, entry, buffer1, len1,
+                                (s16*)(entry->loadBuffer[entry->curBuf] + (entry->srcPos & (~1)))));
     }
     return stream->samplePos;
 }

@@ -79,6 +79,13 @@ void seq_titleMain(SequenceWork* work) {
     titleMain(work);
 }
 
+/** Blocks until the music started on channel 1 has begun playing. */
+// Original name and size (0x38) from the JP demo map (UNUSED there: nothing in this file calls it), listed between
+// seq_titleMain and titleInit: evt_sub.c's static bgm_start_wait (0x38), the same name and size.
+static USER_FUNC(bgm_start_wait) {
+    return psndBGMStartCheck(1) ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
+}
+
 // Descriptive name (not in the symbol maps).
 #if VERSION >= VERSION_JP
 /** Returns the title sequence's debug flag (wp2->debug). Not in the early demos. */

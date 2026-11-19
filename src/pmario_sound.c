@@ -9133,6 +9133,32 @@ static f32 compAngle(f32 from, f32 to) {
 }
 
 /**
+ * Returns the 2D distance between (x1, y1) and (x2, y2) (this file's copy of system.c's distABf).
+ * Original name and size (0x100) from the JP demo map (UNUSED there: nothing in this file calls it).
+ */
+// The body is system.c's distABf; compiled here it is 0x100, the map size (system.o's own copy is 0xfc).
+static f32 distABf(f32 x1, f32 y1, f32 x2, f32 y2) {
+    f32 xdiff, ydiff;
+
+    ydiff = y2 - y1;
+    xdiff = x2 - x1;
+    return sqrtf((xdiff * xdiff) + (ydiff * ydiff));
+}
+
+/** Returns the 3D distance between (x1, y1, z1) and (x2, y2, z2). */
+// Original name and size (0x108) from the JP demo map (UNUSED there), between distABf and movePos: distABf's form in
+// three axes, the distance calc3D writes out (dx, dy, dz and the math.h sqrtf). Nothing calls it: as a call in calc3D
+// the distance and the angle temp swap registers (f30/f31). Parameter order and axis order follow distABf.
+static f32 distABf3D(f32 x1, f32 y1, f32 z1, f32 x2, f32 y2, f32 z2) {
+    f32 xdiff, ydiff, zdiff;
+
+    xdiff = x2 - x1;
+    ydiff = y2 - y1;
+    zdiff = z2 - z1;
+    return sqrtf((xdiff * xdiff) + (ydiff * ydiff) + (zdiff * zdiff));
+}
+
+/**
  * Moves the point (*x, *z) by dist in direction dir (degrees) (this file's copy of system.c's movePos).
  * Original name and size (0x98) from the JP demo map (UNUSED there).
  */
@@ -9340,6 +9366,19 @@ s32 searchPSENVList(const char* name) {
         id = 0;
     }
     return id;
+}
+
+/** Clamps a volume to 0-127. */
+// Original name and size (0x1c) from the JP demo's link map (UNUSED there: every call is inlined, so the linker
+// strips it), between searchPSENVList and psndInit: the 0-127 clamp of sfxvol and of psndSFXMain's three 3D volumes.
+static s32 volchk(s32 v) {
+    if (v < 0) {
+        v = 0;
+    }
+    if (v > 127) {
+        v = 127;
+    }
+    return v;
 }
 
 /**
@@ -10388,14 +10427,7 @@ s32 psndBGMPlayTime(s32 id) {
 
 /** Returns an effect's playing volume: its volume scaled by its list entry's volume, minus its attenuation, 0-127. */
 static inline s32 sfxvol(PaperSoundEffect* s) {
-    s32 v = s->volume * s->entryVolume / 127 - s->attenuation;
-    if (v < 0) {
-        v = 0;
-    }
-    if (v > 127) {
-        v = 127;
-    }
-    return v;
+    return volchk(s->volume * s->entryVolume / 127 - s->attenuation);
 }
 
 /**
@@ -10557,33 +10589,15 @@ sgfound:
             f = e->fxId;
             if (f & SFX_FLAG_STREAM) {
                 SoundSSSetPanCh(sfx[0]->channel, b[1]);
-                r = (b[0] * psnd.sfxVolume) / 100;
-                if (r < 0) {
-                    r = 0;
-                }
-                if (r > 127) {
-                    r = 127;
-                }
+                r = volchk((b[0] * psnd.sfxVolume) / 100);
                 SoundSSSetVolCh(sfx[0]->channel, r);
                 SoundSSSetSrndPanCh(sfx[0]->channel, b[2]);
             } else if (f & SFX_FLAG_SONG) {
-                r = (b[0] * psnd.sfxVolume) / 100;
-                if (r < 0) {
-                    r = 0;
-                }
-                if (r > 127) {
-                    r = 127;
-                }
+                r = volchk((b[0] * psnd.sfxVolume) / 100);
                 SoundSongSetVolCh(sfx[0]->channel, r);
             } else {
                 SoundEfxSetPan(sfx[0]->channel, b[1]);
-                r = (b[0] * psnd.sfxVolume) / 100;
-                if (r < 0) {
-                    r = 0;
-                }
-                if (r > 127) {
-                    r = 127;
-                }
+                r = volchk((b[0] * psnd.sfxVolume) / 100);
                 SoundEfxSetVolume(sfx[0]->channel, r);
                 SoundEfxSetSrndPan(sfx[0]->channel, b[2]);
             }
